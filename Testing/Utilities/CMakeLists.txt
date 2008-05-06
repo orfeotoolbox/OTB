@@ -150,65 +150,65 @@ ADD_TEST(utOssimRadarSatSupport ${UTILITIES_TESTS}
 
 # -------            lib Galib   ------------------------------
 
-FOREACH(num 1 12 14 16 17 25 27)
-ADD_TEST( utTuGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
-        galibTests${num}
-        seed 555 )
-ENDFOREACH(num)
+#                   FOREACH(num 1 12 14 16 17 25 27)
+#                   ADD_TEST( utTuGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
+#                           galibTests${num}
+#                           seed 555 )
+#                   ENDFOREACH(num)
 
-FOREACH(num 6 8 19 20)
-        ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
-        --compare-ascii ${TOL}  
-                        ${BASELINE_FILES}/utGalibTest${num}_bog.dat 
-                        ${TEMP}/utGalibTest${num}_bog.dat
-        galibTests${num}
-        score_filename ${TEMP}/utGalibTest${num}_bog.dat 
-        seed 555 )
-ENDFOREACH(num)
-FOREACH(num 2 4 9 11 15)
-ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
-        --compare-ascii ${TOL}  
-                        ${BASELINE_FILES}/utGalibTest${num}_bog.dat 
-                        ${TEMP}/utGalibTest${num}_bog.dat
-        galibTests${num}
-        ${TEMP}/utGalibTest${num}_bog.dat 
-        seed 555 )
-ENDFOREACH(num)
+#                   FOREACH(num 6 8 19 20)
+#                           ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
+#                           --compare-ascii ${TOL}  
+#                                           ${BASELINE_FILES}/utGalibTest${num}_bog.dat 
+#                                           ${TEMP}/utGalibTest${num}_bog.dat
+#                           galibTests${num}
+#                           score_filename ${TEMP}/utGalibTest${num}_bog.dat 
+#                           seed 555 )
+#                   ENDFOREACH(num)
+#                   FOREACH(num 2 4 9 11 15)
+#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
+#                           --compare-ascii ${TOL}  
+#                                           ${BASELINE_FILES}/utGalibTest${num}_bog.dat 
+#                                           ${TEMP}/utGalibTest${num}_bog.dat
+#                           galibTests${num}
+#                           ${TEMP}/utGalibTest${num}_bog.dat 
+#                           seed 555 )
+#                   ENDFOREACH(num)
 
 
 
-SET(num 13)
-ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
-        --compare-ascii ${TOL}  
-                        ${BASELINE_FILES}/utGalibTest${num}_bog.dat 
-                        ${TEMP}/utGalibTest${num}_bog.dat
-        galibTests${num}
-        ${INPUTDATA}/galib-smiley.txt
-        score_filename ${TEMP}/utGalibTest${num}_bog.dat 
-        seed 555 )
+#                   SET(num 13)
+#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
+#                           --compare-ascii ${TOL}  
+#                                           ${BASELINE_FILES}/utGalibTest${num}_bog.dat 
+#                                           ${TEMP}/utGalibTest${num}_bog.dat
+#                           galibTests${num}
+#                           ${INPUTDATA}/galib-smiley.txt
+#                           score_filename ${TEMP}/utGalibTest${num}_bog.dat 
+#                           seed 555 )
 
-FOREACH(num 3 18)
-ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
-        --compare-ascii ${TOL}  
-                        ${BASELINE_FILES}/utGalibTest${num}_bog.dat 
-                        ${TEMP}/utGalibTest${num}_bog.dat
-                
-        galibTests${num}
-        file ${INPUTDATA}/galib-smiley.txt
-        score_filename ${TEMP}/utGalibTest${num}_bog.dat 
-        seed 555 )
-ENDFOREACH(num)
+#                   FOREACH(num 3 18)
+#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
+#                           --compare-ascii ${TOL}  
+#                                           ${BASELINE_FILES}/utGalibTest${num}_bog.dat 
+#                                           ${TEMP}/utGalibTest${num}_bog.dat
+#                                   
+#                           galibTests${num}
+#                           file ${INPUTDATA}/galib-smiley.txt
+#                           score_filename ${TEMP}/utGalibTest${num}_bog.dat 
+#                           seed 555 )
+#                   ENDFOREACH(num)
 
-SET(num 5)
-ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}  
-        --compare-ascii ${TOL}  
-                        ${BASELINE_FILES}/utGalibTest${num}_bog.dat 
-                        ${TEMP}/utGalibTest${num}_bog.dat
-         galibTests${num}
-         score_filename ${TEMP}/utGalibTest${num}_bog.dat 
-         graph ${INPUTDATA}/galib-smiley.txt
-         values ${INPUTDATA}/galib-values.txt
-         seed 555 )
+#                   SET(num 5)
+#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}  
+#                           --compare-ascii ${TOL}  
+#                                           ${BASELINE_FILES}/utGalibTest${num}_bog.dat 
+#                                           ${TEMP}/utGalibTest${num}_bog.dat
+#                            galibTests${num}
+#                            score_filename ${TEMP}/utGalibTest${num}_bog.dat 
+#                            graph ${INPUTDATA}/galib-smiley.txt
+#                            values ${INPUTDATA}/galib-values.txt
+#                            seed 555 )
 
 # Test 7 commented becasue impossible to specific he bog.dat file name in the process ;-(
 #SET(num 7)
@@ -223,103 +223,103 @@ ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
 #        seed 555 )
 
 
-SET(num 10)
-ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
-        --compare-n-ascii ${TOL} 4 
-                        ${BASELINE_FILES}/utGalibTest${num}_sinusoid.dat 
-                        ${TEMP}/utGalibTest${num}_sinusoid.dat 
-                        ${BASELINE_FILES}/utGalibTest${num}_pop.nospec.dat 
-                        ${TEMP}/utGalibTest${num}_pop.nospec.dat 
-                        ${BASELINE_FILES}/utGalibTest${num}_pop.genespec.dat 
-                        ${TEMP}/utGalibTest${num}_pop.genespec.dat 
-                        ${BASELINE_FILES}/utGalibTest${num}_pop.phenespec.dat 
-                        ${TEMP}/utGalibTest${num}_pop.phenespec.dat 
-        galibTests${num}
-        ${TEMP}/utGalibTest${num}_sinusoid.dat 
-        ${TEMP}/utGalibTest${num}_pop.nospec.dat 
-        ${TEMP}/utGalibTest${num}_pop.genespec.dat 
-        ${TEMP}/utGalibTest${num}_pop.phenespec.dat 
-        seed 555 )
+#                   SET(num 10)
+#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
+#                           --compare-n-ascii ${TOL} 4 
+#                                           ${BASELINE_FILES}/utGalibTest${num}_sinusoid.dat 
+#                                           ${TEMP}/utGalibTest${num}_sinusoid.dat 
+#                                           ${BASELINE_FILES}/utGalibTest${num}_pop.nospec.dat 
+#                                           ${TEMP}/utGalibTest${num}_pop.nospec.dat 
+#                                           ${BASELINE_FILES}/utGalibTest${num}_pop.genespec.dat 
+#                                           ${TEMP}/utGalibTest${num}_pop.genespec.dat 
+#                                           ${BASELINE_FILES}/utGalibTest${num}_pop.phenespec.dat 
+#                                           ${TEMP}/utGalibTest${num}_pop.phenespec.dat 
+#                           galibTests${num}
+#                           ${TEMP}/utGalibTest${num}_sinusoid.dat 
+#                           ${TEMP}/utGalibTest${num}_pop.nospec.dat 
+#                           ${TEMP}/utGalibTest${num}_pop.genespec.dat 
+#                           ${TEMP}/utGalibTest${num}_pop.phenespec.dat 
+#                           seed 555 )
 
-SET(num 21)
-ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
-        --compare-n-ascii ${TOL} 5
-                        ${BASELINE_FILES}/utGalibTest${num}_bog1.dat 
-                        ${TEMP}/utGalibTest${num}_bog1.dat 
-                        ${BASELINE_FILES}/utGalibTest${num}_bog2.dat 
-                        ${TEMP}/utGalibTest${num}_bog2.dat 
-                        ${BASELINE_FILES}/utGalibTest${num}_bog2a.dat 
-                        ${TEMP}/utGalibTest${num}_bog2a.dat 
-                        ${BASELINE_FILES}/utGalibTest${num}_bog3.dat 
-                        ${TEMP}/utGalibTest${num}_bog3.dat 
-                        ${BASELINE_FILES}/utGalibTest${num}_bog4.dat 
-                        ${TEMP}/utGalibTest${num}_bog4.dat 
-        galibTests${num}
-        ${TEMP}/utGalibTest${num}_bog1.dat 
-        ${TEMP}/utGalibTest${num}_bog2.dat 
-        ${TEMP}/utGalibTest${num}_bog2a.dat 
-        ${TEMP}/utGalibTest${num}_bog3.dat 
-        ${TEMP}/utGalibTest${num}_bog4.dat 
-        seed 555 )
+#                   SET(num 21)
+#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
+#                           --compare-n-ascii ${TOL} 5
+#                                           ${BASELINE_FILES}/utGalibTest${num}_bog1.dat 
+#                                           ${TEMP}/utGalibTest${num}_bog1.dat 
+#                                           ${BASELINE_FILES}/utGalibTest${num}_bog2.dat 
+#                                           ${TEMP}/utGalibTest${num}_bog2.dat 
+#                                           ${BASELINE_FILES}/utGalibTest${num}_bog2a.dat 
+#                                           ${TEMP}/utGalibTest${num}_bog2a.dat 
+#                                           ${BASELINE_FILES}/utGalibTest${num}_bog3.dat 
+#                                           ${TEMP}/utGalibTest${num}_bog3.dat 
+#                                           ${BASELINE_FILES}/utGalibTest${num}_bog4.dat 
+#                                           ${TEMP}/utGalibTest${num}_bog4.dat 
+#                           galibTests${num}
+#                           ${TEMP}/utGalibTest${num}_bog1.dat 
+#                           ${TEMP}/utGalibTest${num}_bog2.dat 
+#                           ${TEMP}/utGalibTest${num}_bog2a.dat 
+#                           ${TEMP}/utGalibTest${num}_bog3.dat 
+#                           ${TEMP}/utGalibTest${num}_bog4.dat 
+#                           seed 555 )
 
 
-SET(num 22)
-ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
-        --compare-n-ascii ${TOL} 4
-                        ${BASELINE_FILES}/utGalibTest${num}_sinusoid.dat 
-                        ${TEMP}/utGalibTest${num}_sinusoid.dat 
-                        ${BASELINE_FILES}/utGalibTest${num}_pop.initial.dat 
-                        ${TEMP}/utGalibTest${num}_pop.initial.dat 
-                        ${BASELINE_FILES}/utGalibTest${num}_pop.final.dat 
-                        ${TEMP}/utGalibTest${num}_pop.final.dat 
-                        ${BASELINE_FILES}/utGalibTest${num}_blog.dat 
-                        ${TEMP}/utGalibTest${num}_blog.dat 
-        galibTests${num}
-        ${TEMP}/utGalibTest${num}_sinusoid.dat 
-        ${TEMP}/utGalibTest${num}_pop.initial.dat 
-        ${TEMP}/utGalibTest${num}_pop.final.dat 
-        score_filename ${TEMP}/utGalibTest${num}_blog.dat 
-        seed 555 )
+#                   SET(num 22)
+#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
+#                           --compare-n-ascii ${TOL} 4
+#                                           ${BASELINE_FILES}/utGalibTest${num}_sinusoid.dat 
+#                                           ${TEMP}/utGalibTest${num}_sinusoid.dat 
+#                                           ${BASELINE_FILES}/utGalibTest${num}_pop.initial.dat 
+#                                           ${TEMP}/utGalibTest${num}_pop.initial.dat 
+#                                           ${BASELINE_FILES}/utGalibTest${num}_pop.final.dat 
+#                                           ${TEMP}/utGalibTest${num}_pop.final.dat 
+#                                           ${BASELINE_FILES}/utGalibTest${num}_blog.dat 
+#                                           ${TEMP}/utGalibTest${num}_blog.dat 
+#                           galibTests${num}
+#                           ${TEMP}/utGalibTest${num}_sinusoid.dat 
+#                           ${TEMP}/utGalibTest${num}_pop.initial.dat 
+#                           ${TEMP}/utGalibTest${num}_pop.final.dat 
+#                           score_filename ${TEMP}/utGalibTest${num}_blog.dat 
+#                           seed 555 )
 
-SET(num 23)
-ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
-        --compare-n-ascii ${TOL} 4
-                        ${BASELINE_FILES}/utGalibTest${num}_popi.dat 
-                        ${TEMP}/utGalibTest${num}_popi.dat 
-                        ${BASELINE_FILES}/utGalibTest${num}_popf.dat 
-                        ${TEMP}/utGalibTest${num}_popf.dat 
-                        ${BASELINE_FILES}/utGalibTest${num}_sinusoid.dat 
-                        ${TEMP}/utGalibTest${num}_sinusoid.dat 
-                        ${BASELINE_FILES}/utGalibTest${num}_blog.dat 
-                        ${TEMP}/utGalibTest${num}_blog.dat 
-        galibTests${num}
-        ${TEMP}/utGalibTest${num}_popi.dat 
-        ${TEMP}/utGalibTest${num}_popf.dat 
-        ${TEMP}/utGalibTest${num}_sinusoid.dat 
-        score_filename ${TEMP}/utGalibTest${num}_blog.dat 
-        seed 555 )
+#                   SET(num 23)
+#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
+#                           --compare-n-ascii ${TOL} 4
+#                                           ${BASELINE_FILES}/utGalibTest${num}_popi.dat 
+#                                           ${TEMP}/utGalibTest${num}_popi.dat 
+#                                           ${BASELINE_FILES}/utGalibTest${num}_popf.dat 
+#                                           ${TEMP}/utGalibTest${num}_popf.dat 
+#                                           ${BASELINE_FILES}/utGalibTest${num}_sinusoid.dat 
+#                                           ${TEMP}/utGalibTest${num}_sinusoid.dat 
+#                                           ${BASELINE_FILES}/utGalibTest${num}_blog.dat 
+#                                           ${TEMP}/utGalibTest${num}_blog.dat 
+#                           galibTests${num}
+#                           ${TEMP}/utGalibTest${num}_popi.dat 
+#                           ${TEMP}/utGalibTest${num}_popf.dat 
+#                           ${TEMP}/utGalibTest${num}_sinusoid.dat 
+#                           score_filename ${TEMP}/utGalibTest${num}_blog.dat 
+#                           seed 555 )
 
-SET(num 24)
-ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num} 
-        --compare-n-ascii ${TOL} 3
-                        ${BASELINE_FILES}/utGalibTest${num}_population.dat 
-                        ${TEMP}/utGalibTest${num}_population.dat 
-                        ${BASELINE_FILES}/utGalibTest${num}_sinusoid.dat 
-                        ${TEMP}/utGalibTest${num}_sinusoid.dat 
-                        ${BASELINE_FILES}/utGalibTest${num}_blog.dat 
-                        ${TEMP}/utGalibTest${num}_blog.dat 
-        galibTests${num}
-        ${INPUTDATA}/galib-settings.txt
-        ${TEMP}/utGalibTest${num}_population.dat 
-        ${TEMP}/utGalibTest${num}_sinusoid.dat 
-        score_filename ${TEMP}/utGalibTest${num}_blog.dat 
-        seed 555 )
+#                   SET(num 24)
+#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num} 
+#                           --compare-n-ascii ${TOL} 3
+#                                           ${BASELINE_FILES}/utGalibTest${num}_population.dat 
+#                                           ${TEMP}/utGalibTest${num}_population.dat 
+#                                           ${BASELINE_FILES}/utGalibTest${num}_sinusoid.dat 
+#                                           ${TEMP}/utGalibTest${num}_sinusoid.dat 
+#                                           ${BASELINE_FILES}/utGalibTest${num}_blog.dat 
+#                                           ${TEMP}/utGalibTest${num}_blog.dat 
+#                           galibTests${num}
+#                           ${INPUTDATA}/galib-settings.txt
+#                           ${TEMP}/utGalibTest${num}_population.dat 
+#                           ${TEMP}/utGalibTest${num}_sinusoid.dat 
+#                           score_filename ${TEMP}/utGalibTest${num}_blog.dat 
+#                           seed 555 )
 
-SET(num 26)
-ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
-        galibTests${num}
-        ${INPUTDATA}/galib-tsp_rect_20.txt 
-        seed 555 )
+#                   SET(num 26)
+#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
+#                           galibTests${num}
+#                           ${INPUTDATA}/galib-tsp_rect_20.txt 
+#                           seed 555 )
 
 
 
@@ -425,13 +425,13 @@ IF(UNIX)
 ENDIF(UNIX)
 
 # -------       CXX and EXECUTABLES files for GALIB Tests -----------------------------------
-FOREACH(loop_var RANGE 1 27 1)
-        ADD_EXECUTABLE(otbGalibTests${loop_var} galibTests${loop_var}.cxx)
-        IF(UNIX)
-                TARGET_LINK_LIBRARIES (otbGalibTests${loop_var} m)
-        ENDIF(UNIX)
-        TARGET_LINK_LIBRARIES(otbGalibTests${loop_var} otbgalib OTBIO OTBCommon)
-ENDFOREACH(loop_var)
+#FOREACH(loop_var RANGE 1 27 1)
+#        ADD_EXECUTABLE(otbGalibTests${loop_var} galibTests${loop_var}.cxx)
+#        IF(UNIX)
+#                TARGET_LINK_LIBRARIES (otbGalibTests${loop_var} m)
+#        ENDIF(UNIX)
+#        TARGET_LINK_LIBRARIES(otbGalibTests${loop_var} otbgalib OTBIO OTBCommon)
+#ENDFOREACH(loop_var)
 
 
 # ROMAIN
