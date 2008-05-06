@@ -31,6 +31,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbImageToPointSetFilter.h"
 #include "otbImageList.h"
+#include "otbMath.h"
 
 namespace otb
 {
