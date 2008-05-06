@@ -80,8 +80,8 @@ public itk::ImageToImageFilter<TInputImage,TClassifiedImage>
   typedef typename TInputImage::RegionType           InputImageRegionType;
   
   /** Type definition for the input image region iterator */
-  typedef itk::ImageRegionIterator<TInputImage>       InputImageRegionIterator;
-  typedef itk::ImageRegionConstIterator<TInputImage>  InputImageRegionConstIterator;
+  typedef itk::ImageRegionIterator<TInputImage>      InputImageRegionIterator;
+  typedef itk::ImageRegionConstIterator<TInputImage> InputImageRegionConstIterator;
   
   /** Image dimension */
   itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
@@ -150,7 +150,7 @@ public itk::ImageToImageFilter<TInputImage,TClassifiedImage>
   typedef MRFEnergy< TClassifiedImage, TClassifiedImage> EnergyRegularizationType;
   typedef MRFEnergy< TInputImage, TClassifiedImage>      EnergyFidelityType;
   typedef typename EnergyRegularizationType::Pointer     EnergyRegularizationPointer;
-  typedef typename EnergyFidelityType::Pointer            EnergyFidelityPointer;        
+  typedef typename EnergyFidelityType::Pointer           EnergyFidelityPointer;        
   
   // typedef RandomMRFSampler< TInputImage, TClassifiedImage> SamplerType;
   // typedef MRFSamplerMAP< TInputImage, TClassifiedImage> SamplerType;
