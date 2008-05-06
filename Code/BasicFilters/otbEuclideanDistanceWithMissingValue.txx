@@ -102,7 +102,7 @@ bool
 EuclideanDistanceWithMissingValue< TVector >
 ::IsMissingValue ( const ValueType & v) 
 {
-	return static_cast<bool>( _isnan( const_cast<double>( v ) ) ); 
+	return static_cast<bool>( _isnan( static_cast<double>( v ) ) ); 
 }
 
 #elif HAVE_IEEE_COMPARISONS
