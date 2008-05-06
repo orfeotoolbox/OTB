@@ -135,7 +135,8 @@ void
 EuclideanDistanceWithMissingValue< TVector >
 ::SetToMissingValue ( ValueType & v )
 {
-	v = static_cast<ValueType>( 0.0/0.0 );
+  //v = static_cast<ValueType>( 0.0/0.0 );
+  v = std::numeric_limits<ValueType>::quiet_NaN();
 }
 
 
