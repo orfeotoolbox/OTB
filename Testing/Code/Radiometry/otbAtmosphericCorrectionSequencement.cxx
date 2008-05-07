@@ -168,21 +168,21 @@ int otbAtmosphericCorrectionSequencementTest( int argc, char *argv[] )
   AtmosphericCorrectionParametersType::Pointer dataAtmosphericCorrectionParameters = AtmosphericCorrectionParametersType::New();
   AtmosphericRadiativeTermsType::Pointer  dataAtmosphericRadiativeTerms = AtmosphericRadiativeTermsType::New();
 
-  float minSpectralValue(0.);
-  float maxSpectralValue(0.);
-  float userStep(0.);
-  float value(0.);
+  double minSpectralValue(0.);
+  double maxSpectralValue(0.);
+  double userStep(0.);
+  double value(0.);
 
   unsigned int nbBands(0);
   unsigned int nbValuesPerBand(0);
   std::string sString;
-  ValuesVectorType vector;
+  ValuesVectorType valuesVector;
   
   fin.open(argv[16]);
   fin >> nbBands;
   for(unsigned int i=0 ; i<nbBands ; i++)
   {
-        vector.clear();
+        valuesVector.clear();
         fin >> sString;
         fin >> minSpectralValue;
         fin >> maxSpectralValue;
@@ -191,10 +191,10 @@ int otbAtmosphericCorrectionSequencementTest( int argc, char *argv[] )
         for( unsigned int j=0 ; j < nbValuesPerBand ; j++)
         {
                 fin >> value;
-                vector.push_back(value);
+                valuesVector.push_back(value);
         }
         FilterFunctionValuesType::Pointer functionValues = FilterFunctionValuesType::New();
-        functionValues->SetFilterFunctionValues(vector);
+        functionValues->SetFilterFunctionValues(valuesVector);
         functionValues->SetMinSpectralValue(minSpectralValue);
         functionValues->SetMaxSpectralValue(maxSpectralValue);
         functionValues->SetUserStep( userStep );
