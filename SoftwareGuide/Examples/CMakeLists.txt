@@ -253,6 +253,8 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Classification/BayesianPluginClassifier.cxx
   ${OTB_SOURCE_DIR}/Examples/Classification/ExpectationMaximizationMixtureModelEstimator.cxx
   ${OTB_SOURCE_DIR}/Examples/Classification/ScalarImageMarkovRandomField1.cxx
+  ${OTB_SOURCE_DIR}/Examples/Markov/MarkovClassification1Example.cxx
+  ${OTB_SOURCE_DIR}/Examples/Markov/MarkovClassification2Example.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMPointSetModelEstimatorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMPointSetClassificationExample.cxx  
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageModelEstimatorExample.cxx
