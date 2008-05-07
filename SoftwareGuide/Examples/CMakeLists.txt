@@ -260,7 +260,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageModelEstimatorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageClassificationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageEstimatorClassificationMultiExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Learning/SOMExample.cxx
+  #${OTB_SOURCE_DIR}/Examples/Learning/SOMExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SOMClassifierExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SEMModelEstimatorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMGenericKernelImageClassificationExample.cxx
