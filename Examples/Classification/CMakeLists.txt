@@ -7,6 +7,9 @@ TARGET_LINK_LIBRARIES(KdTreeBasedKMeansClustering OTBCommon ITKCommon ITKStatist
 ADD_EXECUTABLE(ScalarImageKmeansClassifier ScalarImageKmeansClassifier.cxx )
 TARGET_LINK_LIBRARIES(ScalarImageKmeansClassifier OTBIO OTBCommon ITKIO ITKCommon )
 
+ADD_EXECUTABLE(KMeansImageClassificationExample KMeansImageClassificationExample.cxx )
+TARGET_LINK_LIBRARIES(KMeansImageClassificationExample OTBCommon OTBLearning ITKCommon ITKStatistics)
+
 ADD_EXECUTABLE(ScalarImageKmeansModelEstimator ScalarImageKmeansModelEstimator.cxx )
 TARGET_LINK_LIBRARIES(ScalarImageKmeansModelEstimator  OTBIO OTBCommon ITKIO ITKCommon )
 
@@ -19,6 +22,11 @@ TARGET_LINK_LIBRARIES(ExpectationMaximizationMixtureModelEstimator OTBIO OTBComm
 ADD_EXECUTABLE(ScalarImageMarkovRandomField1 ScalarImageMarkovRandomField1.cxx )
 TARGET_LINK_LIBRARIES(ScalarImageMarkovRandomField1 OTBIO OTBCommon ITKIO ITKCommon )
 
+ADD_EXECUTABLE(SOMImageClassificationExample SOMImageClassificationExample.cxx )
+TARGET_LINK_LIBRARIES(SOMImageClassificationExample OTBCommon OTBLearning ITKCommon ITKStatistics)
+
+ADD_EXECUTABLE(SVMImageClassificationExample SVMImageClassificationExample.cxx )
+TARGET_LINK_LIBRARIES(SVMImageClassificationExample OTBCommon OTBLearning ITKCommon ITKStatistics)
 
 #ADD_EXECUTABLE( BayesianClassifierInitializer BayesianClassifierInitializer.cxx )
 #TARGET_LINK_LIBRARIES(BayesianClassifierInitializer ITKCommon ITKStatistics ITKIO)
