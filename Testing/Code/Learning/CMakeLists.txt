@@ -209,6 +209,39 @@ ADD_TEST(leTvSOMClassifier ${LEARNING_TESTS3}
 	${TEMP}/leSOMPoupeesClassified.hdr
 	)
 
+# -------            otb::SOMImageClassificationFilter   -----------------------------	
+
+ADD_TEST(leTuSOMImageClassificationFilterNew ${LEARNING_TESTS3}  
+        otbSOMImageClassificationFilterNew)
+
+ADD_TEST(leTvSOMImageClassificationFilter ${LEARNING_TESTS3}  
+        --compare-image ${TOL}
+	${BASELINE}/leSOMPoupeesClassified.hdr
+	${TEMP}/leSOMImageClassificationFilterOuptut.hdr
+	otbSOMImageClassificationFilter
+	${INPUTDATA}/poupees_sub.png
+	${BASELINE}/leSOMPoupeesSubOutputMap1.hdr
+	${TEMP}/leSOMImageClassificationFilterOuptut.hdr
+	)
+
+
+# -------            otb::KMeansImageClassificationFilter   -----------------------------	
+
+ADD_TEST(leTuKMeansImageClassificationFilterNew ${LEARNING_TESTS3}  
+        otbKMeansImageClassificationFilterNew)
+
+ADD_TEST(leTvKMeansImageClassificationFilter ${LEARNING_TESTS3}  
+        --compare-image ${TOL}
+	${BASELINE}/leKMeansImageClassificationFilterOuptut.hdr
+	${TEMP}/leKMeansImageClassificationFilterOuptut.hdr
+	otbKMeansImageClassificationFilter
+	${INPUTDATA}/poupees_sub.png
+	${TEMP}/leKMeansImageClassificationFilterOuptut.hdr
+	2
+	0 0 0 0
+	255 255 255 255
+	)
+
 # -------            otb::SEMClassifier   -----------------------------	
 
 ADD_TEST(leTuSEMClassifierNew ${LEARNING_TESTS3}  
@@ -289,6 +322,10 @@ otbSOMActivationBuilder.cxx
 SET(BasicLearning_SRCS3
 otbSOMClassifierNew.cxx
 otbSOMClassifier.cxx
+otbSOMImageClassificationFilterNew.cxx
+otbSOMImageClassificationFilter.cxx
+otbKMeansImageClassificationFilterNew.cxx
+otbKMeansImageClassificationFilter.cxx
 otbSEMClassifierNew.cxx
 otbSVMImageClassificationFilterNew.cxx
 otbSVMImageClassificationFilter.cxx

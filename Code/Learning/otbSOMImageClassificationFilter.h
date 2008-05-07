@@ -15,19 +15,18 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbSVMImageClassificationFilter_h
-#define _otbSVMImageClassificationFilter_h
+#ifndef _otbSOMImageClassificationFilter_h
+#define _otbSOMImageClassificationFilter_h
 
-#include "otbSVMClassifier.h"
+#include "otbSOMClassifier.h"
 #include "itkInPlaceImageFilter.h"
 #include "itkFixedArray.h"
 #include "itkListSample.h"
-#include "otbSVMClassifier.h"
 
 namespace otb
 {
-  /** \class SVMImageClassificationFilter
-   *  \brief This filter performs the classification of a VectorImage using a SVM Model.
+  /** \class SOMImageClassificationFilter
+   *  \brief This filter performs the classification of a VectorImage using a given SOM map.
    *
    *  This filter is streamed and threaded, allowing to classify huge images. Because the
    *  internal sample type has to be an itk::FixedArray, one must specify at compilation time
@@ -38,13 +37,13 @@ namespace otb
    * \ingroup Streamed
    * \ingroup Threaded
    */
-  template <class TInputImage, class TOutputImage, unsigned int VMaxSampleDimension = 10, class TMaskImage = TOutputImage>
-  class ITK_EXPORT SVMImageClassificationFilter
+  template <class TInputImage, class TOutputImage,class TSOMMap, class TMaskImage = TOutputImage>
+  class ITK_EXPORT SOMImageClassificationFilter
   : public itk::InPlaceImageFilter<TInputImage,TOutputImage>
   {
     public:
     /** Standard typedefs */
-    typedef SVMImageClassificationFilter                      Self;
+    typedef SOMImageClassificationFilter                      Self;
     typedef itk::InPlaceImageFilter<TInputImage,TOutputImage> Superclass;
     typedef itk::SmartPointer<Self>                           Pointer;
     typedef itk::SmartPointer<const Self>                     ConstPointer;
@@ -53,13 +52,7 @@ namespace otb
     itkNewMacro(Self);
     
     /** Creation through object factory macro */
-    itkTypeMacro(SVMImageClassificationFilter,InPlaceImageFilter);
-
-    /** The max dimension of the sample to classify.
-     *  This filter internally uses itk::FixedArray as input for the classifier,
-     *  so the max sample size has to be fixed at compilation time.
-     */
-    itkStaticConstMacro(MaxSampleDimension,unsigned int,VMaxSampleDimension);
+    itkTypeMacro(SOMImageClassificationFilter,InPlaceImageFilter);
 
     typedef TInputImage                                InputImageType;
     typedef typename InputImageType::ConstPointer      InputImageConstPointerType;
@@ -74,17 +67,18 @@ namespace otb
     typedef typename OutputImageType::RegionType       OutputImageRegionType;
     typedef typename OutputImageType::PixelType        LabelType;
 
-    typedef itk::FixedArray<ValueType,VMaxSampleDimension>     MeasurementVectorType;
-    typedef itk::Statistics::ListSample<MeasurementVectorType> ListSampleType;
-    typedef typename ListSampleType::Pointer                   ListSamplePointerType;
-    typedef otb::SVMClassifier<ListSampleType, LabelType>      ClassifierType;
-    typedef typename ClassifierType::Pointer                   ClassifierPointerType;
-    typedef SVMModel< ValueType, LabelType >                   ModelType;
-    typedef typename ModelType::Pointer                        ModelPointerType;
+    typedef TSOMMap                                    SOMMapType;
+    typedef typename SOMMapType::Pointer               SOMMapPointerType;
+    typedef typename SOMMapType::PixelType             SampleType;
+
+    typedef itk::Statistics::ListSample<SampleType>                      ListSampleType;
+    typedef typename ListSampleType::Pointer                             ListSamplePointerType;
+    typedef otb::SOMClassifier<ListSampleType,SOMMapType,LabelType>      ClassifierType;
+    typedef typename ClassifierType::Pointer                             ClassifierPointerType;
     
     /** Set/Get the svm model */
-    itkSetObjectMacro(Model,ModelType);
-    itkGetObjectMacro(Model,ModelType);
+    itkSetObjectMacro(Map,SOMMapType);
+    itkGetObjectMacro(Map,SOMMapType);
 
     /** Set/Get the default label */
     itkSetMacro(DefaultLabel,LabelType);
@@ -104,9 +98,9 @@ namespace otb
 
     protected:
     /** Constructor */
-    SVMImageClassificationFilter();
+    SOMImageClassificationFilter();
     /** Destructor */
-    virtual ~SVMImageClassificationFilter() {};
+    virtual ~SOMImageClassificationFilter() {};
 
     /** Threaded generate data */
     virtual void ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread,int threadId);
@@ -116,11 +110,11 @@ namespace otb
     virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
     
     private:
-    SVMImageClassificationFilter(const Self&); //purposely not implemented
+    SOMImageClassificationFilter(const Self&); //purposely not implemented
     void operator=(const Self&); //purposely not implemented
 
-    /** The SVM model used for classification */
-    ModelPointerType m_Model;
+    /** The SOM model used for classification */
+    SOMMapPointerType m_Map;
     /** Default label for invalid pixels (when using a mask) */
     LabelType m_DefaultLabel;
 
@@ -128,7 +122,7 @@ namespace otb
   };
 }// End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSVMImageClassificationFilter.txx"
+#include "otbSOMImageClassificationFilter.txx"
 #endif
 
 #endif

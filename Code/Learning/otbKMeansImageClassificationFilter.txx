@@ -15,10 +15,10 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbSVMImageClassificationFilter_txx
-#define _otbSVMImageClassificationFilter_txx
+#ifndef _otbKMeansImageClassificationFilter_txx
+#define _otbKMeansImageClassificationFilter_txx
 
-#include "otbSVMImageClassificationFilter.h"
+#include "otbKMeansImageClassificationFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkNumericTraits.h"
 
@@ -28,8 +28,8 @@ namespace otb
  * Constructor
  */
 template <class TInputImage, class TOutputImage, unsigned int VMaxSampleDimension, class TMaskImage>
-SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskImage>
-::SVMImageClassificationFilter()
+KMeansImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskImage>
+::KMeansImageClassificationFilter()
 {
   this->SetNumberOfInputs(2);
   this->SetNumberOfRequiredInputs(1);
@@ -38,16 +38,16 @@ SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskI
 
 template <class TInputImage, class TOutputImage, unsigned int VMaxSampleDimension, class TMaskImage>
 void
-SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskImage>
+KMeansImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskImage>
 ::SetInputMask(const MaskImageType * mask)
 {
   this->itk::ProcessObject::SetNthInput(1,const_cast<MaskImageType *>(mask));
 }
 
 template <class TInputImage, class TOutputImage, unsigned int VMaxSampleDimension, class TMaskImage>
-const typename SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskImage>
+const typename KMeansImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskImage>
 ::MaskImageType *
-SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskImage>
+KMeansImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskImage>
 ::GetInputMask()
 {
   if(this->GetNumberOfInputs()<2)
@@ -59,18 +59,28 @@ SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskI
 
 template <class TInputImage, class TOutputImage, unsigned int VMaxSampleDimension, class TMaskImage>
 void
-SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskImage>
+KMeansImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskImage>
 ::BeforeThreadedGenerateData()
 {
-  if(!m_Model)
+  unsigned int sample_size = MaxSampleDimension;
+  unsigned int nb_classes = m_Centroids.Size()/sample_size;
+
+  for(LabelType label = 1;label<=static_cast<LabelType>(nb_classes);++label)
     {
-      itkGenericExceptionMacro(<<"No model for classification");
+      SampleType new_centroid;
+      new_centroid.Fill(0);
+      m_CentroidsMap[label]=new_centroid;
+
+      for(unsigned int i=0;i<MaxSampleDimension;++i)
+	{
+	  m_CentroidsMap[label][i]=m_Centroids[MaxSampleDimension*(label-1)+i];
+	}
     }
 }
 
 template <class TInputImage, class TOutputImage, unsigned int VMaxSampleDimension, class TMaskImage>
 void
-SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskImage>
+KMeansImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskImage>
 ::ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, int threadId)
 {
   InputImageConstPointerType inputPtr     = this->GetInput();
@@ -80,10 +90,9 @@ SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskI
   typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
   typedef itk::ImageRegionConstIterator<MaskImageType> MaskIteratorType;
   typedef itk::ImageRegionIterator<OutputImageType> OutputIteratorType;
-  
-  ListSamplePointerType listSample = ListSampleType::New();
-  
+   
   InputIteratorType inIt(inputPtr,outputRegionForThread);
+  OutputIteratorType outIt(outputPtr,outputRegionForThread);
 
   MaskIteratorType maskIt;
   if(inputMaskPtr)
@@ -91,45 +100,13 @@ SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskI
       maskIt = MaskIteratorType(inputMaskPtr,outputRegionForThread);
       maskIt.GoToBegin();
     }
-    
+  unsigned int maxDimension = SampleType::Dimension;
   unsigned int sampleSize = std::min(inputPtr->GetNumberOfComponentsPerPixel(),
-				     VMaxSampleDimension);
+				    maxDimension);
 
   bool validPoint = true;
 
-  for(inIt.GoToBegin();!inIt.IsAtEnd();++inIt)
-    {
-      if(inputMaskPtr)
-	{
-	  validPoint = maskIt.Get()>0;
-	  ++maskIt;
-	}
-      if(validPoint)
-	{
-	  MeasurementVectorType sample;
-	  sample.Fill(itk::NumericTraits<ValueType>::ZeroValue());
-	  for(unsigned int i=0;i<sampleSize;i++)
-	    {
-	      sample[i]=inIt.Get()[i];
-	    }
-	  listSample->PushBack(sample);
-	}
-    }
-  ClassifierPointerType classifier =ClassifierType::New();
-  classifier->SetModel(m_Model);
-  classifier->SetNumberOfClasses(m_Model->GetNumberOfClasses());
-  classifier->SetSample(listSample);
-  classifier->Update();
-  
-  typename ClassifierType::OutputType::Pointer membershipSample = classifier->GetOutput();
-  typename ClassifierType::OutputType::ConstIterator sampleIter = membershipSample->Begin();
-  typename ClassifierType::OutputType::ConstIterator sampleLast = membershipSample->End();
-  
-  OutputIteratorType outIt(outputPtr,outputRegionForThread);
-  
-  outIt.GoToBegin();
-
-  while(!outIt.IsAtEnd()&&(sampleIter!=sampleLast))
+  while(!outIt.IsAtEnd())
     {
       outIt.Set(m_DefaultLabel);
        ++outIt;
@@ -137,13 +114,11 @@ SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskI
 
   outIt.GoToBegin();
 
-   if(inputMaskPtr)
-    {
-      maskIt.GoToBegin();
-    }
    validPoint = true;
 
-   while(!outIt.IsAtEnd()&&(sampleIter!=sampleLast))
+   typename DistanceType::Pointer distance = DistanceType::New();
+
+   while(!outIt.IsAtEnd()&&(!inIt.IsAtEnd()))
      {
        if(inputMaskPtr)
 	 {
@@ -152,10 +127,31 @@ SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskI
 	 }
        if(validPoint)
 	 {
-	   outIt.Set(sampleIter.GetClassLabel());
-	   ++sampleIter;
+	   LabelType label =1;
+	   LabelType current_label =1;
+	   SampleType pixel;
+	   pixel.Fill(0);
+	   for(unsigned int i=0;i<sampleSize;++i)
+	     {
+	       pixel[i]=inIt.Get()[i];
+	     }
+	   
+	   double current_distance = distance->Evaluate(pixel,m_CentroidsMap[label]);
+
+	   for(label=2;label<=static_cast<LabelType>(m_CentroidsMap.size());++label)
+	     {
+	       double tmp_dist = distance->Evaluate(pixel,m_CentroidsMap[label]);
+	       if(tmp_dist<current_distance)
+		 {
+		   current_label = label;
+		   current_distance = tmp_dist;
+		 }
+	     }
+	   std::cout<<"Pixel: "<<pixel<<" label: "<<current_label<<" centroid: "<<m_CentroidsMap[current_label]<<std::endl;
+	   outIt.Set(current_label);
 	 }
        ++outIt;
+       ++inIt; 
      }
 }
 /**
@@ -163,7 +159,7 @@ SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskI
  */
 template <class TInputImage, class TOutputImage, unsigned int VMaxSampleDimension, class TMaskImage>
 void
-SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskImage>
+KMeansImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
