@@ -25,7 +25,7 @@
 #endif
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {QB_Suburb.png RandomImage.png}
+//    INPUTS: {QB_Suburb.png}, {RandomImage.png}
 //    OUTPUTS: {MarkovClassification2.png}
 //    1.0 30 1.0
 //  Software Guide : EndCommandLineArgs
@@ -308,6 +308,19 @@ int main(int argc, char* argv[] )
   // Software Guide : EndCodeSnippet
   
   return 0;
+    //  Software Guide : BeginLatex
+// Figure \ref{fig:MARKOVCLASS1} shows the result of the MRF classification.
+// \begin{figure}
+// \center
+// \includegraphics[width=0.45\textwidth]{QB_Suburb.eps}
+// \includegraphics[width=0.45\textwidth]{MarkovClassification2.eps}
+// \itkcaption[Markov Random Field Image Classification]{Result of the MRF
+// classification using an ICM algorithm with a MAP estimator
+// and a Potts regularization energy and a Gaussian fidelity. Left: Original image. Right: image of classes.} 
+// \label{fig:MARKOVCLASS1}
+// \end{figure}
+//  Software Guide : EndLatex
+
   
 }
 
