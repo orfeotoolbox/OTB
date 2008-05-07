@@ -33,17 +33,35 @@
 
 #ifndef OPENJPEG_H
 #define OPENJPEG_H
-#if defined(OPJ_STATIC) || !(defined(WIN32) || defined(__WIN32__))
-	#define OPJ_API
-	#define OPJ_CALLCONV
-#else
-	#define OPJ_CALLCONV 
-	#ifdef OPJ_EXPORTS
-		#define OPJ_API __declspec(dllexport)
-	#else
-		#define OPJ_API __declspec(dllimport)
-	#endif /* OPJ_EXPORTS */
-#endif /* !OPJ_STATIC || !WIN32 */
+
+//#if defined(OPJ_STATIC) || !(defined(WIN32) || defined(__WIN32__))
+//#define OPJ_API
+//#define OPJ_CALLCONV
+//#else
+//#define OPJ_CALLCONV __stdcall
+/*
+The following ifdef block is the standard way of creating macros which make exporting 
+from a DLL simpler. All files within this DLL are compiled with the OPJ_EXPORTS
+symbol defined on the command line. this symbol should not be defined on any project
+that uses this DLL. This way any other project whose source files include this file see 
+OPJ_API functions as being imported from a DLL, wheras this DLL sees symbols
+defined with this macro as being exported.
+*/
+//#ifdef OPJ_EXPORTS
+//#define OPJ_API __declspec(dllexport)
+//#else
+//#define OPJ_API __declspec(dllimport)
+//#endif /* OPJ_EXPORTS */
+//#endif /* !OPJ_STATIC || !WIN32 */
+
+
+// Modified by OTB developpers. /TODO check this
+#if defined(WIN32) || defined(__WIN32__)
+#define OPJ_CALLCONV __stdcall
+#define OPJ_API __declspec(dllexport)
+#endif
+
+
 
 #ifndef __cplusplus
 	#if defined(HAVE_STDBOOL_H)
@@ -1079,6 +1097,7 @@ OPJ_API void OPJ_CALLCONV _ProfPrint(void);
 #ifdef __cplusplus
 }
 #endif
+
 #endif /* OPENJPEG_H */
 
 
