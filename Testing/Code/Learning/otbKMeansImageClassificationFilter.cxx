@@ -46,15 +46,19 @@ int otbKMeansImageClassificationFilter(int argc, char * argv[])
   reader->SetFileName(infname);
   reader->GenerateOutputInformation();
 
-  unsigned int parameterSize = nbClasses * reader->GetOutput()->GetNumberOfComponentsPerPixel();
+  const unsigned int sampleSize = ClassificationFilterType::MaxSampleDimension;
+  const unsigned int parameterSize = nbClasses * sampleSize;
    KMeansParametersType parameters;
 
    parameters.SetSize(parameterSize);
    parameters.Fill(0);
 
-   for(unsigned int i = 0; i < parameterSize;++i)
+   for(unsigned int i = 0; i<nbClasses;++i)
      {
-       parameters[i]=atof(argv[4+i]);
+       for(unsigned int j = 0; j < reader->GetOutput()->GetNumberOfComponentsPerPixel();++j)
+	 {
+	   parameters[i*sampleSize+j]=atof(argv[4+i*reader->GetOutput()->GetNumberOfComponentsPerPixel()+j]);
+	 }
      }
      
    std::cout<<"Parameters: "<<parameters<<std::endl;

@@ -147,7 +147,6 @@ KMeansImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMa
 		   current_distance = tmp_dist;
 		 }
 	     }
-	   std::cout<<"Pixel: "<<pixel<<" label: "<<current_label<<" centroid: "<<m_CentroidsMap[current_label]<<std::endl;
 	   outIt.Set(current_label);
 	 }
        ++outIt;
