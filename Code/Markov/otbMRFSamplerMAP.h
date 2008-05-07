@@ -74,7 +74,8 @@ class ITK_EXPORT MRFSamplerMAP : public MRFSampler< TInput1, TInput2 >
       //Try all possible value (how to be generic ?)
       this->SetEnergyAfter( this->GetEnergyBefore() ); //default values to current one
       this->SetValue( itRegul.GetCenterPixel() );
-      for (LabelledImagePixelType valueCurrent = 0; valueCurrent< this->m_NumberOfClasses; ++valueCurrent)
+    /*
+      fofor (LabelledImagePixelType valueCurrent = 0; valueCurrent< this->m_NumberOfClasses; ++valueCurrent)
 	{
 	  this->SetEnergyCurrent( this->GetEnergyFidelity()->GetValue(itData, valueCurrent)
 				  + this->GetLambda() * this->GetEnergyRegularization()->GetValue(itRegul, valueCurrent) );  
@@ -85,6 +86,26 @@ class ITK_EXPORT MRFSamplerMAP : public MRFSampler< TInput1, TInput2 >
 	    }
 	  if (valueCurrent == itk::NumericTraits<LabelledImagePixelType>::max()) break;
 	}
+          */
+    LabelledImagePixelType valueCurrent = 0;
+    while( valueCurrent<static_cast<LabelledImagePixelType>(this->GetNumberOfClasses()) && valueCurrent != itk::NumericTraits<LabelledImagePixelType>::max() )
+    {
+        this->SetEnergyCurrent( this->GetEnergyFidelity()->GetValue(itData, valueCurrent)
+		                      + this->GetLambda() 
+                              * this->GetEnergyRegularization()->GetValue(itRegul, valueCurrent) );  
+	    if ( this->GetEnergyCurrent() < this->GetEnergyAfter() )
+	    {
+	      this->SetEnergyAfter( this->GetEnergyCurrent() );
+	      this->SetValue( valueCurrent );
+	    }
+        valueCurrent++;
+    }
+   
+    // TODO avoir la confirmation cnesienne : premier indince ou dernier
+    if ( valueCurrent==itk::NumericTraits<LabelledImagePixelType>::max() )
+    {
+        valueCurrent = 0;
+    }
       
       this->SetDeltaEnergy( this->GetEnergyAfter() - this->GetEnergyBefore() );
       

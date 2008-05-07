@@ -97,12 +97,20 @@ class ITK_EXPORT MRFSamplerRandomMAP : public MRFSampler< TInput1, TInput2>
     
     inline int Compute( const InputImageNeighborhoodIterator & itData, const LabelledImageNeighborhoodIterator & itRegul)             
       {
+        if(this->GetNumberOfClasses() == 0)
+        {
+            itkExceptionMacro(<<"m_NumberOfClasses has to be greater than 0.");
+        }
+        std::cout<<this->GetEnergyAfter()<<std::endl;
+        std::cout<<this->GetEnergyBefore()<<std::endl;
+        
 	this->SetEnergyBefore( this->GetEnergyFidelity()->GetValue(itData, itRegul.GetCenterPixel())
 			       + this->GetLambda() * this->GetEnergyRegularization()->GetValue(itRegul, itRegul.GetCenterPixel()) );
-	
+		std::cout<<this->GetEnergyBefore()<<std::endl;
 	//Try all possible value (how to be generic ?)
 	this->SetEnergyAfter( this->GetEnergyBefore() ); //default values to current one
 	this->SetValue( itRegul.GetCenterPixel() );
+	std::cout<<this->GetEnergyAfter()<<std::endl;
 	// otbDebugMacro(<< "Computing MAP for pix " << itData.GetIndex());
 	// Compute probability for each possibility
 	double totalProba=0.0;
@@ -111,8 +119,12 @@ class ITK_EXPORT MRFSamplerRandomMAP : public MRFSampler< TInput1, TInput2>
 	    // otbDebugMacro(<< " --> Proposed value " << static_cast<double>(valueCurrent)); 
 	    this->SetEnergyCurrent( this->GetEnergyFidelity()->GetValue(itData, valueCurrent)
 	      + this->GetLambda() * this->GetEnergyRegularization()->GetValue(itRegul, valueCurrent) );
-	    
+          
+        std::cout<<this->GetEnergyFidelity()->GetValue(itData, valueCurrent)<<" °°° "<<this->GetLambda()<<" °°° "<<this->GetEnergyRegularization()->GetValue(itRegul, valueCurrent)<<std::endl;
+	    std::cout<<this->GetEnergyCurrent()<<std::endl;
+        std::cout<<valueCurrent<<" ### "<<m_Energy[valueCurrent] <<std::endl;
 	    m_Energy[valueCurrent] = this->GetEnergyCurrent();
+        std::cout<<valueCurrent<<" ### "<<m_Energy[valueCurrent] <<std::endl;
 	    m_RepartitionFunction[valueCurrent] = vcl_exp(-this->GetEnergyCurrent())+totalProba;
 	    totalProba = m_RepartitionFunction[valueCurrent];
 	    // otbDebugMacro("valueCurrent, m_RepartitionFunction[valueCurrent] " << (unsigned int)  valueCurrent << ", " << m_RepartitionFunction[valueCurrent]);
@@ -136,15 +148,22 @@ class ITK_EXPORT MRFSamplerRandomMAP : public MRFSampler< TInput1, TInput2>
 	
 	// otbDebugMacro("select, totalProba " <<  select << ", " << totalProba);
 	unsigned int valueCurrent = 0;
-	for (valueCurrent = 0; valueCurrent < this->m_NumberOfClasses; ++valueCurrent)
-	  {
-	    if (m_RepartitionFunction[valueCurrent] > select) break;
-	  }
-	
-	if ( this->GetValue() != static_cast<LabelledImagePixelType>(valueCurrent))
+    while( valueCurrent<this->GetNumberOfClasses() && m_RepartitionFunction[valueCurrent] <= select)
+    {
+        valueCurrent++;
+    }
+   
+    // TODO avoir la confirmation cnesienne : premier indince ou dernier
+    if ( valueCurrent==this->GetNumberOfClasses() )
+    {
+        valueCurrent = 0;
+    }
+    
+    if ( this->GetValue() != static_cast<LabelledImagePixelType>(valueCurrent))
 	  {
 	    this->SetValue( valueCurrent );
 	    this->SetEnergyAfter( m_Energy[valueCurrent] );
+        	std::cout<<valueCurrent<<"##### "<<m_Energy[valueCurrent] <<std::endl;
 	  }
 	
 	this->SetDeltaEnergy( this->GetEnergyAfter() - this->GetEnergyBefore() );
@@ -160,6 +179,17 @@ class ITK_EXPORT MRFSamplerRandomMAP : public MRFSampler< TInput1, TInput2>
 	this->Modified();
       };
 
+    void SetNumberOfClasses(unsigned int nb)
+        {
+            Superclass::SetNumberOfClasses( nb );
+            free(m_Energy);
+            free(m_RepartitionFunction);
+            m_Energy = (double *) calloc(nb, sizeof(double));
+            m_RepartitionFunction = (double *) calloc(nb, sizeof(double));
+                std::cout<<m_Energy[0]<<std::endl;
+            this->Modified(); 
+        };
+      
   private:
     double * m_RepartitionFunction ;   
     double * m_Energy; 

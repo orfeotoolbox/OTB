@@ -57,7 +57,7 @@ class ITK_EXPORT MRFSampler:public itk::Object
     itkTypeMacro(MRFSampler,itk::Object);
  
     // Accessors
-    itkSetMacro(NumberOfClasses, unsigned int);
+    virtual void SetNumberOfClasses(unsigned int nb){ m_NumberOfClasses = nb; this->Modified(); };
     itkGetMacro(NumberOfClasses, unsigned int);
 
     itkSetMacro(Lambda, double);
@@ -107,6 +107,7 @@ class ITK_EXPORT MRFSampler:public itk::Object
 	m_EnergyRegularization = EnergyRegularizationType::New();
 	m_EnergyFidelity = EnergyFidelityType::New();
 
+    m_NumberOfClasses = 1;
 	m_Lambda = 1.;
 	m_EnergyCurrent = 1.;
 	m_DeltaEnergy = 1.;
