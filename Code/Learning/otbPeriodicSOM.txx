@@ -33,7 +33,7 @@ namespace otb {
  * Update the output map with a new sample.
  * \param sample The new sample to learn,
  * \param beta The learning coefficient,
- * \param radius The radius of the nieghbourhood.
+ * \param radius The radius of the neighbourhood.
  */
 template < class TListSample, class TMap,
 	class TSOMLearningBehaviorFunctor,

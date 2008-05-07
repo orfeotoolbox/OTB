@@ -36,6 +36,7 @@ namespace otb
 								   TOutputImage,
 								   TInterpolatorPrecision>()
   {
+    
     m_SensorModel = SensorModelType::New();
     m_MapProjection = MapProjectionType::New();
     m_CompositeTransform = CompositeTransformType::New();

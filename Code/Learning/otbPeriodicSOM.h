@@ -28,7 +28,7 @@ namespace otb {
 /**
  * \class PeriodicSOM
  * \brief This class is responsible for the learning of a self organizing 
- * map when considered to as a torus.
+ * map when considered as a torus.
  *
  * This class extends the SOM object which implements the Self 
  * Organizing Map (or Kohonen map) learning.

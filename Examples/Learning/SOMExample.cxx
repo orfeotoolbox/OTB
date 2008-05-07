@@ -465,4 +465,28 @@ try {
 		return EXIT_FAILURE;
 	}
 	return EXIT_SUCCESS;
+
+
+	//  Software Guide : BeginLatex
+// 	The class \doxygen{otb}{PeriodicSOM} extends the SOM class for
+// 	the learning of a self organizing map when considered as a
+// 	torus. The learning process iteratively selects the
+// 	best-response neuron for each input vector, enhancing its
+// 	response and the response of its neighbors with respect to a
+// 	certain radius, computed from an initial radius, and to a
+// 	certain learning factor, decreasing at each iteration. The
+// 	behavior of the neighborhood is given by a functor (templated)
+// 	which parameter is the current iteration. It returns a
+// 	neighborhood of type \code{SizeType}. The behavior of the
+// 	learning factor (hold by a $\beta$ variable) is given by an
+// 	other functor which parameter is the current iteration. It
+// 	returns a beta value of type \code{double}.
+ 
+// 	    The SOMMap produced as output can be either initialized
+// 	    with a constant custom value or randomly generated
+// 	    following a normal law. The seed for the random
+// 	    intialization can be modified.
+
+	//  Software Guide : EndLatex
+ 
 }
