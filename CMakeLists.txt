@@ -116,51 +116,9 @@ IF(OTB_USE_VISU_GUI)
                         MESSAGE(FATAL_ERROR
 	                        "Cannot build OTB project without FLTK.  Please set FLTK_DIR  or  set OTB_USE_VISU to OFF  or  set OTB_USE_EXTERNAL_FLTK OFF to use INTERNAL FLTK set on OTB/Utilities repository.")
                 ENDIF(FLTK_FOUND)
-
-                #-----------------------------------------------------------------------------
-                # This lines come from FLTK CMakeLists.txt. We need the FLTK_PLATFORM_DEPENDENT_LIBS 
-                # information, but this VAR is not include in the FLTKConfig.cmake.
-                IF(WIN32)
-                  IF(NOT CYGWIN)
-                    IF(BORLAND)
-                      SET( FLTK_PLATFORM_DEPENDENT_LIBS import32 )
-                    ELSE(BORLAND)
-                      SET( FLTK_PLATFORM_DEPENDENT_LIBS wsock32 comctl32 )
-                    ENDIF(BORLAND)
-                  ENDIF(NOT CYGWIN)
-                ENDIF(WIN32)
-
-                SET(FLTK_X11 1)
-                SET(FLTK_APPLE 0)
-                IF(APPLE)
-                  OPTION(FLTK_APPLE_X11 "Use X11 on Mac instead of Carbon" OFF)
-                  MARK_AS_ADVANCED(FLTK_APPLE_X11)
-                  IF(NOT FLTK_APPLE_X11)
-                    SET(FLTK_APPLE 1)
-                    SET(FLTK_X11 0)
-                  ENDIF(NOT FLTK_APPLE_X11)
-                ENDIF(APPLE)
-                IF(UNIX)
-                  FIND_PACKAGE(X11)
-                  SET( FLTK_PLATFORM_DEPENDENT_LIBS ${X11_LIBRARIES} -lm)
-                ENDIF(UNIX)
-                IF(APPLE AND NOT FLTK_APPLE_X11)
-                  SET( FLTK_PLATFORM_DEPENDENT_LIBS
-                    "-framework Carbon -framework Cocoa -framework ApplicationServices -lz")
-                ENDIF(APPLE AND NOT FLTK_APPLE_X11)
-                IF(CYGWIN)
-                  ADD_DEFINITIONS(-DWIN32)  
-                  SET( FLTK_PLATFORM_DEPENDENT_LIBS ole32 uuid comctl32 wsock32 supc++ -lm -lgdi32)
-                ENDIF(CYGWIN)
-                IF(MINGW)
-                  ADD_DEFINITIONS(-DWIN32)
-                  SET( FLTK_PLATFORM_DEPENDENT_LIBS ole32 uuid wsock32 gdi32 comdlg32)
-                ENDIF(MINGW)
-
-#                SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES} ${OTB_VISU_GUI_LIBRARIES}")
-#                SET(OTB_FLTK_FLUID_EXECUTABLE "${FLTK_FLUID_EXECUTABLE}")
                 
         ELSE(OTB_USE_EXTERNAL_FLTK)
+                
                 SET( FLTK_PLATFORM_DEPENDENT_LIBS "")
                 IF(EXISTS "${OTB_BINARY_DIR}/Utilities/FLTK/FLTKConfig.cmake") 
                         INCLUDE(${OTB_BINARY_DIR}/Utilities/FLTK/FLTKConfig.cmake)
@@ -168,7 +126,7 @@ IF(OTB_USE_VISU_GUI)
                 #----------------------------------------------------------------
                 # RESUME Alls VISU GUI libraries use by OTB in a single VARIABLE
                 SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES} ")
-
+        
         ENDIF(OTB_USE_EXTERNAL_FLTK)
         
 ENDIF(OTB_USE_VISU_GUI)
