@@ -56,17 +56,6 @@ class ITK_EXPORT MRFSamplerRandomMAP : public MRFSampler< TInput1, TInput2>
     typedef typename Superclass::EnergyFidelityPointer             EnergyFidelityPointer;
     typedef typename Superclass::EnergyRegularizationPointer       EnergyRegularizationPointer;
   
-    /*
-    typedef itk::ConstNeighborhoodIterator< TInput1 >  InputImageNeighborhoodIterator;
-    //typedef itk::NeighborhoodIterator< TInput1 >  InputImageNeighborhoodIterator;
-    typedef itk::NeighborhoodIterator< TInput2 >       LabelledImageNeighborhoodIterator;
-    typedef typename TInput2::PixelType                LabelledImagePixelType;
-    
-    typedef MRFEnergy<TInput1, TInput2>                EnergyFidelityType;
-    typedef MRFEnergy<TInput2, TInput2>                EnergyRegularizationType;
-    typedef typename EnergyFidelityType::Pointer       EnergyFidelityPointer;
-    typedef typename EnergyRegularizationType::Pointer EnergyRegularizationPointer;
-    */
     itkNewMacro(Self);
     
     itkTypeMacro(MRFSamplerRandomMAP, MRFSampler);
@@ -101,16 +90,14 @@ class ITK_EXPORT MRFSamplerRandomMAP : public MRFSampler< TInput1, TInput2>
         {
             itkExceptionMacro(<<"m_NumberOfClasses has to be greater than 0.");
         }
-        std::cout<<this->GetEnergyAfter()<<std::endl;
-        std::cout<<this->GetEnergyBefore()<<std::endl;
-        
+          
 	this->SetEnergyBefore( this->GetEnergyFidelity()->GetValue(itData, itRegul.GetCenterPixel())
 			       + this->GetLambda() * this->GetEnergyRegularization()->GetValue(itRegul, itRegul.GetCenterPixel()) );
-		std::cout<<this->GetEnergyBefore()<<std::endl;
+
 	//Try all possible value (how to be generic ?)
 	this->SetEnergyAfter( this->GetEnergyBefore() ); //default values to current one
 	this->SetValue( itRegul.GetCenterPixel() );
-	std::cout<<this->GetEnergyAfter()<<std::endl;
+
 	// otbDebugMacro(<< "Computing MAP for pix " << itData.GetIndex());
 	// Compute probability for each possibility
 	double totalProba=0.0;
@@ -120,11 +107,7 @@ class ITK_EXPORT MRFSamplerRandomMAP : public MRFSampler< TInput1, TInput2>
 	    this->SetEnergyCurrent( this->GetEnergyFidelity()->GetValue(itData, valueCurrent)
 	      + this->GetLambda() * this->GetEnergyRegularization()->GetValue(itRegul, valueCurrent) );
           
-        std::cout<<this->GetEnergyFidelity()->GetValue(itData, valueCurrent)<<" °°° "<<this->GetLambda()<<" °°° "<<this->GetEnergyRegularization()->GetValue(itRegul, valueCurrent)<<std::endl;
-	    std::cout<<this->GetEnergyCurrent()<<std::endl;
-        std::cout<<valueCurrent<<" ### "<<m_Energy[valueCurrent] <<std::endl;
 	    m_Energy[valueCurrent] = this->GetEnergyCurrent();
-        std::cout<<valueCurrent<<" ### "<<m_Energy[valueCurrent] <<std::endl;
 	    m_RepartitionFunction[valueCurrent] = vcl_exp(-this->GetEnergyCurrent())+totalProba;
 	    totalProba = m_RepartitionFunction[valueCurrent];
 	    // otbDebugMacro("valueCurrent, m_RepartitionFunction[valueCurrent] " << (unsigned int)  valueCurrent << ", " << m_RepartitionFunction[valueCurrent]);
@@ -163,7 +146,6 @@ class ITK_EXPORT MRFSamplerRandomMAP : public MRFSampler< TInput1, TInput2>
 	  {
 	    this->SetValue( valueCurrent );
 	    this->SetEnergyAfter( m_Energy[valueCurrent] );
-        	std::cout<<valueCurrent<<"##### "<<m_Energy[valueCurrent] <<std::endl;
 	  }
 	
 	this->SetDeltaEnergy( this->GetEnergyAfter() - this->GetEnergyBefore() );
@@ -186,7 +168,7 @@ class ITK_EXPORT MRFSamplerRandomMAP : public MRFSampler< TInput1, TInput2>
             free(m_RepartitionFunction);
             m_Energy = (double *) calloc(nb, sizeof(double));
             m_RepartitionFunction = (double *) calloc(nb, sizeof(double));
-                std::cout<<m_Energy[0]<<std::endl;
+
             this->Modified(); 
         };
       

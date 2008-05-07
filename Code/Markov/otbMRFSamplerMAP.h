@@ -49,18 +49,6 @@ class ITK_EXPORT MRFSamplerMAP : public MRFSampler< TInput1, TInput2 >
   typedef typename Superclass::EnergyFidelityPointer             EnergyFidelityPointer;
   typedef typename Superclass::EnergyRegularizationPointer       EnergyRegularizationPointer;
   
-   
-  /*
-  typedef itk::ConstNeighborhoodIterator< TInput1 >  InputImageNeighborhoodIterator;
-  typedef itk::NeighborhoodIterator< TInput2 >  LabelledImageNeighborhoodIterator;
-  typedef typename TInput2::PixelType LabelledImagePixelType;
-  
-  typedef MRFEnergy<TInput1, TInput2>  EnergyFidelityType;
-  typedef MRFEnergy<TInput2, TInput2>  EnergyRegularizationType;
-            
-  typedef typename EnergyFidelityType::Pointer EnergyFidelityPointer;
-  typedef typename EnergyRegularizationType::Pointer EnergyRegularizationPointer;
-  */
   itkNewMacro(Self);
   
   itkTypeMacro(MRFSamplerMAP,MRFSampler);
@@ -74,33 +62,21 @@ class ITK_EXPORT MRFSamplerMAP : public MRFSampler< TInput1, TInput2 >
       //Try all possible value (how to be generic ?)
       this->SetEnergyAfter( this->GetEnergyBefore() ); //default values to current one
       this->SetValue( itRegul.GetCenterPixel() );
-    /*
-      fofor (LabelledImagePixelType valueCurrent = 0; valueCurrent< this->m_NumberOfClasses; ++valueCurrent)
+   
+      LabelledImagePixelType valueCurrent = 0;
+      while( valueCurrent<static_cast<LabelledImagePixelType>(this->GetNumberOfClasses()) && valueCurrent != itk::NumericTraits<LabelledImagePixelType>::max() )
 	{
 	  this->SetEnergyCurrent( this->GetEnergyFidelity()->GetValue(itData, valueCurrent)
-				  + this->GetLambda() * this->GetEnergyRegularization()->GetValue(itRegul, valueCurrent) );  
+				  + this->GetLambda() 
+				  * this->GetEnergyRegularization()->GetValue(itRegul, valueCurrent) );  
 	  if ( this->GetEnergyCurrent() < this->GetEnergyAfter() )
 	    {
 	      this->SetEnergyAfter( this->GetEnergyCurrent() );
 	      this->SetValue( valueCurrent );
 	    }
-	  if (valueCurrent == itk::NumericTraits<LabelledImagePixelType>::max()) break;
+	  valueCurrent++;
 	}
-          */
-    LabelledImagePixelType valueCurrent = 0;
-    while( valueCurrent<static_cast<LabelledImagePixelType>(this->GetNumberOfClasses()) && valueCurrent != itk::NumericTraits<LabelledImagePixelType>::max() )
-    {
-        this->SetEnergyCurrent( this->GetEnergyFidelity()->GetValue(itData, valueCurrent)
-		                      + this->GetLambda() 
-                              * this->GetEnergyRegularization()->GetValue(itRegul, valueCurrent) );  
-	    if ( this->GetEnergyCurrent() < this->GetEnergyAfter() )
-	    {
-	      this->SetEnergyAfter( this->GetEnergyCurrent() );
-	      this->SetValue( valueCurrent );
-	    }
-        valueCurrent++;
-    }
-   
+      
     // TODO avoir la confirmation cnesienne : premier indince ou dernier
     if ( valueCurrent==itk::NumericTraits<LabelledImagePixelType>::max() )
     {
