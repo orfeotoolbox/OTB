@@ -21,7 +21,7 @@
 #ifndef __otbEuclideanDistanceWithMissingValue_h
 #define __otbEuclideanDistanceWithMissingValue_h
 
-#include <itkEuclideanDistance.h>
+#include "itkEuclideanDistance.h"
 
 namespace otb {
 

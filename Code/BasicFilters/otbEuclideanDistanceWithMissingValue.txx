@@ -22,6 +22,7 @@
 #define __otbEuclideanDistanceWithMissingValue_txx
 
 #include "itkNumericTraits.h"
+#include "vnl/vnl_math.h"
 
 namespace otb {
 
@@ -93,50 +94,20 @@ EuclideanDistanceWithMissingValue< TVector >
 	return ::vcl_sqrt(temp * temp) ;
 }
 
-#if defined(_MSC_VER) /* Microsoft Visual C++ */
-#include <float.h>
-
 template< class TVector >
-/*static */
 bool
 EuclideanDistanceWithMissingValue< TVector >
 ::IsMissingValue ( const ValueType & v) 
 {
-	return static_cast<bool>( _isnan( static_cast<double>( v ) ) ); 
+	return vnl_math_isnan(v); 
 }
 
-#elif HAVE_IEEE_COMPARISONS
-
 template< class TVector >
-/*static */
-bool
-EuclideanDistanceWithMissingValue< TVector >
-::IsMissingValue ( const ValueType & v) 
-{
-	return (v!=v);
-}
-
-#else
-
-template< class TVector >
-/*static */
-bool
-EuclideanDistanceWithMissingValue< TVector >
-::IsMissingValue ( const ValueType & v) 
-{
-	return static_cast<bool>( isnan(v) );
-}
-
-#endif 
-
-template< class TVector >
-/* static */
 void
 EuclideanDistanceWithMissingValue< TVector >
 ::SetToMissingValue ( ValueType & v )
 {
-  //v = static_cast<ValueType>( 0.0/0.0 );
-  v = std::numeric_limits<ValueType>::quiet_NaN();
+        v = vcl_numeric_limits<ValueType>::quiet_NaN();
 }
 
 
