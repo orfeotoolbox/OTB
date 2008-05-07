@@ -59,6 +59,9 @@ defined with this macro as being exported.
 #if defined(WIN32) || defined(__WIN32__)
 #define OPJ_CALLCONV __stdcall
 #define OPJ_API __declspec(dllexport)
+#else
+#define OPJ_CALLCONV
+#define OPJ_API
 #endif
 
 
