@@ -415,8 +415,6 @@ ossimRadarSatSupport.cxx
 #openJpegEncoder.cxx
 #openJpegDecoder.cxx
 itkScaleInvariantFeatureImageFilterTest.cxx
-itkScaleInvariantFeatureImageFilterHistTest.cxx
-itkScaleInvariantFeatureImageFilterRHistTest.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
