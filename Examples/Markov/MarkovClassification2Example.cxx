@@ -26,7 +26,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Suburb.png RandomImage.png}
-//    OUTPUTS: {MarkovClassification1.png}
+//    OUTPUTS: {MarkovClassification2.png}
 //    1.0 30 1.0
 //  Software Guide : EndCommandLineArgs
 
@@ -54,7 +54,7 @@
 
 // Software Guide : BeginLatex
 //
-// The first step toward the use of this filter is the inclusion of the proper 
+// The first step towards the use of this filter is the inclusion of the proper 
 // header files.
 //
 // Software Guide : EndLatex 
@@ -63,13 +63,8 @@
 #include "otbMRFEnergy.h"
 #include "otbMRFEnergyPotts.h"
 #include "otbMRFEnergyGaussianClassification.h"
-// #include "otbMRFEnergyPotts.h"
-// #include "otbMRFEnergyGaussianClassification.h"
-// #include "otbMRFOptimizerICM.h"
-// #include "otbMRFSamplerMAP.h"
 #include "otbMRFSamplerRandomMAP.h"
 #include "otbMRFOptimizerICM.h"
-// #include "otbMRFSamplerRandom.h"
 // Software Guide : EndCodeSnippet
 
 
@@ -154,7 +149,7 @@ int main(int argc, char* argv[] )
   //  An \doxygen{otb}{MRFSamplerRandomMAP}, which derives from the 
   // \doxygen{otb}{MRFSampler}, is instanciated. The sampler is in charge of 
   // proposing a modification for a given site. The 
-  // \doxygen{otb}{MRFSamplerRandomMAP}, randomly pick one possible value 
+  // \doxygen{otb}{MRFSamplerRandomMAP}, randomly picks one possible value 
   // according to the MAP probability.
   //
   //  Software Guide : EndLatex 
@@ -171,7 +166,7 @@ int main(int argc, char* argv[] )
   //  An \doxygen{otb}{MRFOptimizerMetropoli}, which derives from the 
   // \doxygen{otb}{MRFOptimizer}, is instanciated. The optimizer is in charge 
   // of accepting or rejecting the value proposed by the sampler. The 
-  // \doxygen{otb}{MRFSamplerRandomMAP}, accept the proposal according to the 
+  // \doxygen{otb}{MRFSamplerRandomMAP}, accepts the proposal according to the 
   // variation of energy it causes and a temperature parameter.
   //
   //  Software Guide : EndLatex 
@@ -184,9 +179,9 @@ int main(int argc, char* argv[] )
 
   //  Software Guide : BeginLatex
   //
-  // Two energy, deriving from the \doxygen{otb}{MRFEnergy} class need to be instanciated. One energy
-  // is required for the regularization, taking into account the relashionship between neighborhing pixels
-  // in the classified image. Here it is done with the \doxygen{otb}{MRFEnergyPotts} which implement
+  // Two energies, deriving from the \doxygen{otb}{MRFEnergy} class need to be instanciated. One energy
+  // is required for the regularization, taking into account the relationship between neighborhing pixels
+  // in the classified image. Here it is done with the \doxygen{otb}{MRFEnergyPotts} which implements
   // a Potts model.
   //
   // The second energy is for the fidelity to the original data. Here it is done with an
@@ -222,7 +217,7 @@ int main(int argc, char* argv[] )
   
   // Software Guide : BeginLatex
   //
-  // Parameter for the \doxygen{otb}{MRFEnergyGaussianClassification} class, meand
+  // Parameters for the \doxygen{otb}{MRFEnergyGaussianClassification} class, meand
   // and standard deviation are created.
   //
   // Software Guide : EndLatex
@@ -243,7 +238,7 @@ int main(int argc, char* argv[] )
   
   // Software Guide : BeginLatex
   //
-  // Parameters are given to the different class an the sampler, optimizer and
+  // The parameters are given to the different class an the sampler, optimizer and
   // energies are connected with the Markov filter.
   //
   // Software Guide : EndLatex
@@ -302,7 +297,7 @@ int main(int argc, char* argv[] )
   
   // Software Guide : BeginLatex
   //
-  // Finally, the pipeline execution is trigerred.
+  // Finally, the pipeline execution is triggered.
   //
   // Software Guide : EndLatex
   

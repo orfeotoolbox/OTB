@@ -1,4 +1,4 @@
-PROJECT(HelloWorld)
+PROJECT(Classif)
 
 FIND_PACKAGE(OTB)
 IF(OTB_FOUND)
@@ -8,6 +8,6 @@ ELSE(OTB_FOUND)
           "Cannot build HelloWorld application without OTB.  Please set OTB_DIR.")
 ENDIF(OTB_FOUND)
 
-ADD_EXECUTABLE(HelloWorld HelloWorld.cxx )
+ADD_EXECUTABLE(SVMImageEstimatorClassificationMultiExample SVMImageEstimatorClassificationMultiExample.cxx )
 
-TARGET_LINK_LIBRARIES(HelloWorld OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(SVMImageEstimatorClassificationMultiExample ITKIO OTBIO OTBCommon ITKCommon  OTBLearning)

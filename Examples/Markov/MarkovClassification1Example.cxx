@@ -54,7 +54,7 @@
 
 // Software Guide : BeginLatex
 //
-// The first step toward the use of this filter is the inclusion of the proper 
+// The first step towards the use of this filter is the inclusion of the proper 
 // header files.
 //
 // Software Guide : EndLatex 
@@ -63,11 +63,6 @@
 #include "otbMRFEnergy.h"
 #include "otbMRFEnergyPotts.h"
 #include "otbMRFEnergyGaussianClassification.h"
-// #include "otbMRFEnergyPotts.h"
-// #include "otbMRFEnergyGaussianClassification.h"
-// #include "otbMRFOptimizerICM.h"
-// #include "otbMRFSamplerMAP.h"
-// #include "otbMRFSamplerRandomMAP.h"
 #include "otbMRFOptimizerMetropolis.h"
 #include "otbMRFSamplerRandom.h"
 // Software Guide : EndCodeSnippet
@@ -89,7 +84,7 @@ int main(int argc, char* argv[] )
   //
   //  Then we must decide what pixel type to use for the image. We
   //  choose to make all computations with double precision.
-  //  The labelled image is of type unsigned char to allow up to 256 different 
+  //  The labeled image is of type unsigned char to allow up to 256 different 
   //  classes.
   //
   //  Software Guide : EndLatex 
@@ -138,7 +133,7 @@ int main(int argc, char* argv[] )
   //
   //  Finally, we define the different classes necessary for the Markov classification. 
   //  A \doxygen{otb}{MarkovClassificationFilter} is instanciated, this is the 
-  // main class which connect the other to do the Markov classification.
+  // main class which connects the others to do the Markov classification.
   //
   //  Software Guide : EndLatex 
 
@@ -154,7 +149,7 @@ int main(int argc, char* argv[] )
   //  An \doxygen{otb}{MRFSamplerRandomMAP}, which derives from the 
   // \doxygen{otb}{MRFSampler}, is instanciated. The sampler is in charge of 
   // proposing a modification for a given site. The 
-  // \doxygen{otb}{MRFSamplerRandomMAP}, randomly pick one possible value 
+  // \doxygen{otb}{MRFSamplerRandomMAP}, randomly picks one possible value 
   // according to the MAP probability.
   //
   //  Software Guide : EndLatex 
@@ -183,9 +178,9 @@ int main(int argc, char* argv[] )
 
   //  Software Guide : BeginLatex
   //
-  // Two energy, deriving from the \doxygen{otb}{MRFEnergy} class need to be instanciated. One energy
-  // is required for the regularization, taking into account the relashionship between neighborhing pixels
-  // in the classified image. Here it is done with the \doxygen{otb}{MRFEnergyPotts} which implement
+  // Two energies, deriving from the \doxygen{otb}{MRFEnergy} class needs to be instanciated. One energy
+  // is required for the regularization, taking into account the relationship between neighborhing pixels
+  // in the classified image. Here, this is done with the \doxygen{otb}{MRFEnergyPotts} which implements
   // a Potts model.
   //
   // The second energy is for the fidelity to the original data. Here it is done with an
@@ -221,7 +216,7 @@ int main(int argc, char* argv[] )
   
   // Software Guide : BeginLatex
   //
-  // Parameter for the \doxygen{otb}{MRFEnergyGaussianClassification} class, meand
+  // Variables for the \doxygen{otb}{MRFEnergyGaussianClassification} class, meand
   // and standard deviation are created.
   //
   // Software Guide : EndLatex
@@ -242,7 +237,7 @@ int main(int argc, char* argv[] )
   
   // Software Guide : BeginLatex
   //
-  // Parameters are given to the different class an the sampler, optimizer and
+  // These parameters are passed to the different classs and the sampler, optimizer and
   // energies are connected with the Markov filter.
   //
   // Software Guide : EndLatex
@@ -264,7 +259,6 @@ int main(int argc, char* argv[] )
   optimizer->SetTemperature(atof(argv[6]));
   itk::Array<double> array(1);
   array.Fill(atof(argv[6]));
-  //optimizer->SetParameters(array);
   markovFilter->SetValueInsteadRandom(500); // Unable rand() calculation
   markovFilter->SetNumberOfClasses(nClass);  
   markovFilter->SetMaximumNumberOfIterations(atoi(argv[5]));
@@ -282,7 +276,7 @@ int main(int argc, char* argv[] )
   // Software Guide : BeginLatex
   //
   // The pipeline is connected. An \doxygen{itk}{RescaleIntensityImageFilter} 
-  // rescale the classified image before saving it.
+  // rescales the classified image before saving it.
   //
   // Software Guide : EndLatex
   
@@ -305,7 +299,7 @@ int main(int argc, char* argv[] )
   
   // Software Guide : BeginLatex
   //
-  // Finally, the pipeline execution is trigerred.
+  // Finally, the pipeline execution is triggered.
   //
   // Software Guide : EndLatex
   
