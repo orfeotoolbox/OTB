@@ -194,7 +194,7 @@ try {
 // 
 // As an alternative to standart \code{SOMType}, one can decide to use 
 // an \doxygen{otb}{PeriodicSOM}, which behaves like \doxygen{otb}{SOM} but 
-// is to be considered to as a torrus instead of a simple map. Hence, the 
+// is to be considered to as a torus instead of a simple map. Hence, the 
 // neighborhood behavior of the winning neuron does not depend on its location
 // on the map...
 // \doxygen{otb}{PeriodicSOM} is defined in otbPeriodicSOM.h.
@@ -288,7 +288,7 @@ try {
     som->SetNumberOfIterations(nbIterations);
     som->SetBetaInit(betaInit);
     som->SetBetaEnd(betaEnd);
-	som->SetMaxWeight(static_cast<PixelType>(initValue));
+    som->SetMaxWeight(static_cast<PixelType>(initValue));
 
 // Software Guide : EndCodeSnippet
 //
@@ -300,12 +300,13 @@ try {
 
 // Software Guide : BeginCodeSnippet        
 
-	LearningBehaviorFunctorType learningFunctor;
-	learningFunctor.SetIterationThreshold( radius, nbIterations );
-	som->SetBetaFunctor( learningFunctor );
+    LearningBehaviorFunctorType learningFunctor;
+    learningFunctor.SetIterationThreshold( radius, nbIterations );
+    som->SetBetaFunctor( learningFunctor );
 
-	NeighborhoodBehaviorFunctorType neighborFunctor;
-	som->SetNeighborhoodSizeFunctor( neighborFunctor );
+    NeighborhoodBehaviorFunctorType neighborFunctor;
+    som->SetNeighborhoodSizeFunctor( neighborFunctor );
+    som->Update();
 
 // Software Guide : EndCodeSnippet
 //
@@ -319,13 +320,6 @@ try {
 //
 //  Software Guide : EndLatex 
 
-// Software Guide : BeginCodeSnippet
-    
-    typedef otb::ImageFileWriter< ImageType > WriterType;
-    WriterType::Pointer writer = WriterType::New();
-    writer->SetFileName(outputFileName);
-
-// Software Guide : EndCodeSnippet          
 
     //Just for visualization purposes, we zoom the image, and pass it to the printable image filter
     typedef otb::Image<PixelType,2> SingleImageType;
@@ -338,11 +332,18 @@ try {
 
     InterpolatorType::Pointer interpolator = InterpolatorType::New();
     VectorExpandType::Pointer expand = VectorExpandType::New();
-    expand->SetInput(som->GetOutput());
-    expand->GetFilter()->SetExpandFactors( 40 );
-    expand->GetFilter()->SetInterpolator( interpolator );
-    expand->GetFilter()->SetEdgePaddingValue(255);
+    ExpandType::Pointer scalarExpand = ExpandType::New();
 
+    scalarExpand->SetExpandFactors( 40 );
+    scalarExpand->SetInterpolator( interpolator );
+    scalarExpand->SetEdgePaddingValue(255);
+
+    expand->SetFilter( scalarExpand );
+    
+    expand->SetInput(som->GetOutput());
+
+    expand->UpdateOutputInformation();
+    
     PrintableFilterType::Pointer printFilter = PrintableFilterType::New();
     printFilter->SetInput(expand->GetOutput());
     
@@ -421,6 +422,7 @@ try {
                                    = SOMActivationBuilderType::New();
     somAct->SetInput(som->GetOutput());
     somAct->SetListSample( sampleList );
+    somAct->Update();
 
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
@@ -434,8 +436,8 @@ try {
     
 	if ( actMapFileName != NULL )
 	{
-		ActivationWriterType::Pointer actWriter = ActivationWriterType::New();
-		actWriter->SetFileName(actMapFileName);
+	ActivationWriterType::Pointer actWriter = ActivationWriterType::New();
+	actWriter->SetFileName(actMapFileName);
 
 // Software Guide : EndCodeSnippet    
 
@@ -444,7 +446,7 @@ try {
 // map obtained.
 //
 //  Software Guide : EndLatex     
-
+		
 		//Just for visualization purposes, we zoom the image.
 		typedef itk::ExpandImageFilter< OutputImageType, OutputImageType > ExpandType2;
 		typedef itk::NearestNeighborInterpolateImageFunction< OutputImageType,double > InterpolatorType2;
@@ -455,11 +457,18 @@ try {
 		expand2->SetExpandFactors( 20 );
 		expand2->SetInterpolator( interpolator2 );
 		expand2->SetEdgePaddingValue(255);
+		expand2->UpdateOutputInformation();
 
-		actWriter->SetInput(expand2->GetOutput());
+		//actWriter->SetInput(expand2->GetOutput());
+		actWriter->SetInput(somAct->GetOutput());
 		actWriter->Update();
 
 	}
+	else
+	  {
+	  std::cerr << "The activation map file name is null" << std::endl;
+	  return EXIT_FAILURE;
+	  }
 
 	} catch ( ... ) {
 		return EXIT_FAILURE;
@@ -467,26 +476,5 @@ try {
 	return EXIT_SUCCESS;
 
 
-	//  Software Guide : BeginLatex
-// 	The class \doxygen{otb}{PeriodicSOM} extends the SOM class for
-// 	the learning of a self organizing map when considered as a
-// 	torus. The learning process iteratively selects the
-// 	best-response neuron for each input vector, enhancing its
-// 	response and the response of its neighbors with respect to a
-// 	certain radius, computed from an initial radius, and to a
-// 	certain learning factor, decreasing at each iteration. The
-// 	behavior of the neighborhood is given by a functor (templated)
-// 	which parameter is the current iteration. It returns a
-// 	neighborhood of type \code{SizeType}. The behavior of the
-// 	learning factor (hold by a $\beta$ variable) is given by an
-// 	other functor which parameter is the current iteration. It
-// 	returns a beta value of type \code{double}.
- 
-// 	    The SOMMap produced as output can be either initialized
-// 	    with a constant custom value or randomly generated
-// 	    following a normal law. The seed for the random
-// 	    intialization can be modified.
-
-	//  Software Guide : EndLatex
  
 }
