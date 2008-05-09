@@ -23,7 +23,7 @@ SET(MARKOV_TESTS2 ${CXX_TEST_PATH}/otbMarkovTests2)
 ADD_TEST(maTuMarkovClassificationFilterNew ${MARKOV_TESTS1}  
         otbMarkovClassificationFilterNew )
       
-ADD_TEST(maTuMarkovClassificationFilter ${MARKOV_TESTS1}  
+ADD_TEST(maTvMarkovClassificationFilter ${MARKOV_TESTS1}  
   --compare-image ${TOL}  ${BASELINE}/maTvMarkovClassification.png
                   	  ${TEMP}/maTvMarkovClassification.png
         otbMarkovClassificationFilter

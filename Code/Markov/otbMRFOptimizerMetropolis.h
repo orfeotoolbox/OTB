@@ -45,7 +45,14 @@ class ITK_EXPORT MRFOptimizerMetropolis : public MRFOptimizer
     
     itkTypeMacro(MRFOptimizerMetropolis,MRFOptimizer);
     
-    itkSetMacro(Temperature, double);
+    /** Set m_Temperature value, and update m_Parameter setting its value at m_Temperature */
+    void SetTemperature(double temp)
+      {
+	m_Temperature = temp;
+	this->m_Parameters[0] = temp;
+	this->Modified();
+      }
+    //itkSetMacro(Temperature, double);
     itkGetMacro(Temperature, double);
 
     /** Store a value to be used instead of random value.. FOR TEST ONLY*/

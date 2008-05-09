@@ -256,9 +256,10 @@ int main(int argc, char* argv[] )
   parameters[6]=220.0;//Class 3 mean
   parameters[7]=10.0; //Class 3 stde
   energyFidelity->SetParameters(parameters);
-  optimizer->SetTemperature(atof(argv[6]));
+  //optimizer->SetTemperature(atof(argv[6]));
   itk::Array<double> array(1);
   array.Fill(atof(argv[6]));
+  optimizer->SetParameters(array);
   markovFilter->SetValueInsteadRandom(500); // Unable rand() calculation
   markovFilter->SetNumberOfClasses(nClass);  
   markovFilter->SetMaximumNumberOfIterations(atoi(argv[5]));
