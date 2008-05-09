@@ -104,10 +104,9 @@ int otbMarkovClassificationFilter( int argc, char* argv[] )
   parameters[6]=220.0;//Class 3 mean
   parameters[7]=10.0; //Class 3 stde
   energyFidelity->SetParameters(parameters);
-  itk::Array<double> array(1);
-  array.Fill(atof(argv[6]));
-  optimizer->SetParameters(array);
-  //optimizer->SetTemperature(atof(argv[6]));
+  OptimizerType::ParametersType paramOpt(1);
+  paramOpt.Fill(atof(argv[6]));
+  optimizer->SetParameters(paramOpt);
   markovFilter->SetNumberOfClasses(nClass);
   markovFilter->SetValueInsteadRandom(500); // Unable rand() calculation
   markovFilter->SetMaximumNumberOfIterations(atoi(argv[5]));

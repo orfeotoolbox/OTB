@@ -37,25 +37,17 @@ class ITK_EXPORT MRFOptimizerMetropolis : public MRFOptimizer
   public:
     
     typedef MRFOptimizerMetropolis Self;
-    typedef itk::Object Superclass;
+    typedef MRFOptimizer Superclass;
     typedef itk::SmartPointer<Self>  Pointer;
     typedef itk::SmartPointer<const Self>  ConstPointer;
     
+    typedef Superclass::ParametersType ParametersType;
+
     itkNewMacro(Self);
     
     itkTypeMacro(MRFOptimizerMetropolis,MRFOptimizer);
     
-    /** Set m_Temperature value, and update m_Parameter setting its value at m_Temperature */
-    void SetTemperature(double temp)
-      {
-	m_Temperature = temp;
-	this->m_Parameters[0] = temp;
-	this->Modified();
-      }
-    //itkSetMacro(Temperature, double);
-    itkGetMacro(Temperature, double);
-
-    /** Store a value to be used instead of random value.. FOR TEST ONLY*/
+      /** Store a value to be used instead of random value.. FOR TEST ONLY*/
      void SetValueInsteadRandom( double val )
       {
 	m_ValueInsteadRandom = val;
@@ -104,7 +96,6 @@ class ITK_EXPORT MRFOptimizerMetropolis : public MRFOptimizer
 	m_ValueInsteadRandom=itk::NumericTraits<double>::min();
       }
     virtual ~MRFOptimizerMetropolis() {}
-    double m_Temperature;
   /** Store a value to be used instead of random value.. FOR TEST ONLY*/
     double m_ValueInsteadRandom;
   };       

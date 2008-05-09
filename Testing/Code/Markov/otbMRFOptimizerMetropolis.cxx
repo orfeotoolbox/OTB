@@ -29,8 +29,11 @@ int otbMRFOptimizerMetropolis(int argc, char * argv[])
   typedef otb::MRFOptimizerMetropolis MRFOptimizerType;
 
   MRFOptimizerType::Pointer object = MRFOptimizerType::New();
-  
-  object->SetTemperature( 10. );
+
+  MRFOptimizerType::ParametersType param(1);
+  param.Fill(10.);
+  object->SetParameters(param);
+
   // USED TO OVERPASS RANDOM CALCULATION
   object->SetValueInsteadRandom(1);
 
