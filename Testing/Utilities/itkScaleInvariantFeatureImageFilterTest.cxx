@@ -40,6 +40,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "itkNumericSeriesFileNames.h"
 #include "itkPointSetToImageFilter.h"
 #include "itkImageFileWriter.h"
+#include "otbMath.h"
 
 int itk2DScaleInvariantFeatureImageFilterTest( int argc, char **argv)
 {
