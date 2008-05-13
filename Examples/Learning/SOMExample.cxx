@@ -81,8 +81,6 @@
 
 int main(int argc, char* argv[])
 {
-try
-  {
   const char * inputFileName = argv[1];
   const char * outputFileName = argv[2];
   const char * actMapFileName = argv[3];
@@ -94,7 +92,7 @@ try
   double betaInit = atof( argv[9] );
   double betaEnd= atof( argv[10] );
   double initValue = atof( argv[11] );
-      
+  
 //  Software Guide : BeginLatex
 // 
 // The Self Organizing Map itself is actually an N-dimensional image
@@ -182,12 +180,12 @@ try
 // Software Guide : BeginCodeSnippet
     
   typedef otb::Functor::CzihoSOMLearningBehaviorFunctor 
-                                                        LearningBehaviorFunctorType;
+                                                          LearningBehaviorFunctorType;
   typedef otb::Functor::CzihoSOMNeighborhoodBehaviorFunctor 
-                                                    NeighborhoodBehaviorFunctorType;
+                                                      NeighborhoodBehaviorFunctorType;
   typedef otb::SOM< SampleListType, MapType,
-                    LearningBehaviorFunctorType, NeighborhoodBehaviorFunctorType > 
-                                                                             SOMType;
+                       LearningBehaviorFunctorType, NeighborhoodBehaviorFunctorType > 
+                                                                              SOMType;
   
 // Software Guide : EndCodeSnippet
 //
@@ -210,7 +208,7 @@ try
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFileName);
   reader->Update();
-      
+  
   SampleListType::Pointer sampleList = SampleListType::New();
   sampleList->SetMeasurementVectorSize( reader->GetOutput()->GetVectorLength() );
   
@@ -272,7 +270,7 @@ try
   radius[0] = neighInitX;
   radius[1] = neighInitY;
   som->SetNeighborhoodSizeInit(radius);
-
+  
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -308,7 +306,7 @@ try
   NeighborhoodBehaviorFunctorType neighborFunctor;
   som->SetNeighborhoodSizeFunctor( neighborFunctor );
   som->Update();
-
+  
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -326,24 +324,24 @@ try
   typedef itk::ExpandImageFilter< SingleImageType, SingleImageType >    ExpandType;
   typedef otb::PerBandVectorImageFilter<MapType,MapType,ExpandType>     VectorExpandType; 
   typedef itk::NearestNeighborInterpolateImageFunction< SingleImageType,
-                                                        double >        InterpolatorType;
+    double >        InterpolatorType;
   typedef otb::PrintableImageFilter<MapType>                            PrintableFilterType;
   typedef otb::ImageFileWriter<PrintableFilterType::OutputImageType>    PrintableWriterType;
-
+  
   InterpolatorType::Pointer interpolator = InterpolatorType::New();
   VectorExpandType::Pointer expand       = VectorExpandType::New();
   ExpandType::Pointer       scalarExpand = ExpandType::New();
-
+  
   scalarExpand->SetExpandFactors( 40 );
   scalarExpand->SetInterpolator( interpolator );
   scalarExpand->SetEdgePaddingValue(255);
- 
+  
   expand->SetFilter( scalarExpand );
   
   expand->SetInput(som->GetOutput());
   
   expand->UpdateOutputInformation();
-
+    
   PrintableFilterType::Pointer printFilter = PrintableFilterType::New();
   printFilter->SetInput(expand->GetOutput());
  
@@ -352,7 +350,7 @@ try
   printFilter->SetChannel(3);
   
   PrintableWriterType::Pointer printWriter = PrintableWriterType::New();
-
+  
   printWriter->SetInput(printFilter->GetOutput());
   printWriter->SetFileName(outputFileName);
   
@@ -393,12 +391,12 @@ try
 
 // Software Guide : BeginCodeSnippet        
     
-
+  
   typedef unsigned char OutputPixelType;
   
   typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
   typedef otb::ImageFileWriter<OutputImageType> ActivationWriterType;
-
+  
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
 // 
@@ -412,7 +410,7 @@ try
 // Software Guide : BeginCodeSnippet        
     
   typedef otb::SOMActivationBuilder< SampleListType, MapType,
-                             OutputImageType> SOMActivationBuilderType;
+                                              OutputImageType> SOMActivationBuilderType;
 
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
@@ -425,7 +423,7 @@ try
 // Software Guide : BeginCodeSnippet
     
   SOMActivationBuilderType::Pointer somAct
-                                   = SOMActivationBuilderType::New();
+                                       = SOMActivationBuilderType::New();
   somAct->SetInput(som->GetOutput());
   somAct->SetListSample( sampleList );
   somAct->Update();
@@ -466,17 +464,12 @@ try
       
       actWriter->SetInput(somAct->GetOutput());
       actWriter->Update();
-    }
+      }
   else
     {
       std::cerr << "The activation map file name is null" << std::endl;
       return EXIT_FAILURE;
     }
-  }// try 
-catch ( ... ) 
-  { 
-    return EXIT_FAILURE; 
-    } 
   
   return EXIT_SUCCESS;
  
