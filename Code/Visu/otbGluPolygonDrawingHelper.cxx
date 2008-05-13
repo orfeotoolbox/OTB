@@ -28,8 +28,9 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef CALLBACK 
 	#if defined(__CYGWIN__)
 		#define CALLBACK __stdcall
-	#else
+        #else
 		#define CALLBACK
+        #endif
 #endif
 
 extern "C"
