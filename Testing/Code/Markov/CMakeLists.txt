@@ -18,18 +18,18 @@ SET(MARKOV_TESTS2 ${CXX_TEST_PATH}/otbMarkovTests2)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbMARKOV_TESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# -------            otb::MarkovClassificationFilter   ------------------------------
+# -------            otb::MarkovRandomFieldFilter   ------------------------------
 
-ADD_TEST(maTuMarkovClassificationFilterNew ${MARKOV_TESTS1}  
-        otbMarkovClassificationFilterNew )
+ADD_TEST(maTuMarkovRandomFieldFilterNew ${MARKOV_TESTS1}  
+        otbMarkovRandomFieldFilterNew )
       
-ADD_TEST(maTvMarkovClassificationFilter ${MARKOV_TESTS1}  
-  --compare-image ${TOL}  ${BASELINE}/maTvMarkovClassification.png
-                  	  ${TEMP}/maTvMarkovClassification.png
-        otbMarkovClassificationFilter
+ADD_TEST(maTvMarkovRandomFieldFilter ${MARKOV_TESTS1}  
+  --compare-image ${TOL}  ${BASELINE}/maTvMarkovRandomField.png
+                  	  ${TEMP}/maTvMarkovRandomField.png
+        otbMarkovRandomFieldFilter
             ${INPUTDATA}/QB_Suburb.png	
 	    ${INPUTDATA}/RandomImage.png
-	    ${TEMP}/maTvMarkovClassification.png
+	    ${TEMP}/maTvMarkovRandomField.png
 	    1.0
 	    30
 	    1.0
@@ -164,8 +164,8 @@ ADD_TEST(maTvMRFSamplerRandomMAP ${MARKOV_TESTS2}
 
 # A enrichir
 SET(Markov_SRCS1
-otbMarkovClassificationFilterNew.cxx
-otbMarkovClassificationFilter.cxx
+otbMarkovRandomFieldFilterNew.cxx
+otbMarkovRandomFieldFilter.cxx
 otbMRFEnergyNew.cxx
 otbMRFEnergy.cxx
 otbMRFEnergyPottsNew.cxx

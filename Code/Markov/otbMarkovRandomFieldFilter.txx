@@ -16,16 +16,16 @@
 
 =========================================================================*/
 
-#ifndef _otbMarkovClassificationFilter_txx
-#define _otbMarkovClassificationFilter_txx
-#include "otbMarkovClassificationFilter.h"
+#ifndef _otbMarkovRandomFieldFilter_txx
+#define _otbMarkovRandomFieldFilter_txx
+#include "otbMarkovRandomFieldFilter.h"
 
 namespace otb
 {
 
 template<class TInputImage, class TClassifiedImage>
-MarkovClassificationFilter<TInputImage,TClassifiedImage>
-::MarkovClassificationFilter(void):
+MarkovRandomFieldFilter<TInputImage,TClassifiedImage>
+::MarkovRandomFieldFilter(void):
   m_NumberOfClasses(0),
   m_MaximumNumberOfIterations(50),
   m_ErrorCounter(0),
@@ -65,15 +65,15 @@ MarkovClassificationFilter<TInputImage,TClassifiedImage>
 }
   
 template<class TInputImage, class TClassifiedImage>
-MarkovClassificationFilter<TInputImage, TClassifiedImage>
-::~MarkovClassificationFilter(void)
+MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
+::~MarkovRandomFieldFilter(void)
 {
 }
   
 
 template<class TInputImage, class TClassifiedImage>
 void
-MarkovClassificationFilter<TInputImage, TClassifiedImage>
+MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 ::SetTrainingInput(const TrainingImageType * trainingImage)
 {
   // Process object is not const-correct so the const_cast is required here
@@ -83,8 +83,8 @@ MarkovClassificationFilter<TInputImage, TClassifiedImage>
 
 
 template <class TInputImage, class TClassifiedImage>
-typename MarkovClassificationFilter<TInputImage, TClassifiedImage>::TrainingImageType*
-MarkovClassificationFilter<TInputImage, TClassifiedImage>
+typename MarkovRandomFieldFilter<TInputImage, TClassifiedImage>::TrainingImageType*
+MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 ::GetTrainingInput(void) 
 {
   if (this->GetNumberOfInputs() < 2)
@@ -98,7 +98,7 @@ MarkovClassificationFilter<TInputImage, TClassifiedImage>
 
 template<class TInputImage, class TClassifiedImage>
 void
-MarkovClassificationFilter<TInputImage, TClassifiedImage>
+MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 ::PrintSelf( std::ostream& os, itk::Indent indent ) const
 {
   Superclass::PrintSelf(os,indent);
@@ -119,7 +119,7 @@ MarkovClassificationFilter<TInputImage, TClassifiedImage>
  */
 template <class TInputImage, class TClassifiedImage>
 void
-MarkovClassificationFilter<TInputImage, TClassifiedImage>
+MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 ::GenerateInputRequestedRegion()
 {  
   // this filter requires the all of the input images 
@@ -135,7 +135,7 @@ MarkovClassificationFilter<TInputImage, TClassifiedImage>
  */
 template <class TInputImage, class TClassifiedImage>
 void
-MarkovClassificationFilter<TInputImage, TClassifiedImage>
+MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 ::EnlargeOutputRequestedRegion( itk::DataObject *output )
 {
   // this filter requires the all of the output image to be in
@@ -152,7 +152,7 @@ MarkovClassificationFilter<TInputImage, TClassifiedImage>
  */
 template <class TInputImage, class TClassifiedImage>
 void
-MarkovClassificationFilter<TInputImage, TClassifiedImage>
+MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 ::GenerateOutputInformation()
 {
   typename TInputImage::ConstPointer input  = this->GetInput();
@@ -165,7 +165,7 @@ MarkovClassificationFilter<TInputImage, TClassifiedImage>
 
 template<class TInputImage, class TClassifiedImage>
 void
-MarkovClassificationFilter<TInputImage, TClassifiedImage>
+MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 ::GenerateData()
 {
   //First run the Gaussian classifier calculator and
@@ -191,7 +191,7 @@ MarkovClassificationFilter<TInputImage, TClassifiedImage>
 //-------------------------------------------------------
 template<class TInputImage, class TClassifiedImage>
 void
-MarkovClassificationFilter<TInputImage, TClassifiedImage>
+MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 ::SetNeighborhoodRadius( const unsigned long radiusValue)
 {
   //Set up the neighbor hood 
@@ -208,7 +208,7 @@ MarkovClassificationFilter<TInputImage, TClassifiedImage>
 
 template<class TInputImage, class TClassifiedImage>
 void
-MarkovClassificationFilter<TInputImage, TClassifiedImage>
+MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 ::SetNeighborhoodRadius( const unsigned long *radiusArray)
 {
   NeighborhoodRadiusType  radius;
@@ -227,7 +227,7 @@ MarkovClassificationFilter<TInputImage, TClassifiedImage>
 //Set the neighborhood radius
 template<class TInputImage, class TClassifiedImage>
 void
-MarkovClassificationFilter<TInputImage, TClassifiedImage>
+MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 ::SetNeighborhoodRadius( const NeighborhoodRadiusType &radius)
 {
   //Set up the neighbor hood 
@@ -248,7 +248,7 @@ MarkovClassificationFilter<TInputImage, TClassifiedImage>
 //-------------------------------------------------------
 template<class TInputImage, class TClassifiedImage>
 void
-MarkovClassificationFilter<TInputImage, TClassifiedImage>
+MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 ::Allocate()
 {
   if( m_NumberOfClasses <= 0 )
@@ -326,7 +326,7 @@ MarkovClassificationFilter<TInputImage, TClassifiedImage>
 
 template<class TInputImage, class TClassifiedImage>
 void
-MarkovClassificationFilter<TInputImage, TClassifiedImage>
+MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 ::Initialize() throw (itk::ExceptionObject)
 { 
   if( m_ValueInsteadRandom == itk::NumericTraits<int>::min() )
@@ -369,7 +369,7 @@ MarkovClassificationFilter<TInputImage, TClassifiedImage>
 //-------------------------------------------------------
 template<class TInputImage, class TClassifiedImage>
 void 
-MarkovClassificationFilter<TInputImage, TClassifiedImage>
+MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 ::ApplyMarkovClassificationFilter()
 {
   InputImageSizeType inputImageSize = this->GetInput()->GetBufferedRegion().GetSize();
@@ -419,7 +419,7 @@ MarkovClassificationFilter<TInputImage, TClassifiedImage>
 
 template<class TInputImage, class TClassifiedImage>
 void 
-MarkovClassificationFilter<TInputImage, TClassifiedImage>
+MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 ::MinimizeOnce()
 {
   LabelledImageNeighborhoodIterator labelledIterator(m_LabelledImageNeighborhoodRadius, this->GetOutput(), this->GetOutput()->GetLargestPossibleRegion() );

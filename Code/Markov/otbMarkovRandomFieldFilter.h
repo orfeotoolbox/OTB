@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbMarkovClassificationFilter_h
-#define _otbMarkovClassificationFilter_h
+#ifndef _otbMarkovRandomFieldFilter_h
+#define _otbMarkovRandomFieldFilter_h
 
 #include "otbMacro.h"
 
@@ -51,19 +51,19 @@ namespace otb
 {
 
 template <class TInputImage, class TClassifiedImage>
-class ITK_EXPORT MarkovClassificationFilter : 
+class ITK_EXPORT MarkovRandomFieldFilter : 
 public itk::ImageToImageFilter<TInputImage,TClassifiedImage>
 {
  public:       
   /** Standard class typedefs. */
-  typedef MarkovClassificationFilter                            Self;
+  typedef MarkovRandomFieldFilter                            Self;
   typedef itk::ImageToImageFilter<TInputImage,TClassifiedImage> Superclass;
   typedef itk::SmartPointer<Self>                               Pointer;
   typedef itk::SmartPointer<const Self>                         ConstPointer;
   typedef typename Superclass::OutputImagePointer               OutputImagePointer;
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MarkovClassificationFilter,itk::ImageToImageFilter);
+  itkTypeMacro(MarkovRandomFieldFilter,itk::ImageToImageFilter);
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -280,8 +280,8 @@ public itk::ImageToImageFilter<TInputImage,TClassifiedImage>
   
   
  protected:
-  MarkovClassificationFilter();
-  ~MarkovClassificationFilter();
+  MarkovRandomFieldFilter();
+  ~MarkovRandomFieldFilter();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   
   /** Allocate memory for labelled images. */
@@ -296,7 +296,7 @@ public itk::ImageToImageFilter<TInputImage,TClassifiedImage>
   virtual void GenerateOutputInformation();
   
   
-  MarkovClassificationFilter(const Self&); //purposely not implemented
+  MarkovRandomFieldFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   
   typedef typename TInputImage::SizeType InputImageSizeType;
@@ -339,13 +339,13 @@ public itk::ImageToImageFilter<TInputImage,TClassifiedImage>
   /** Store a value to be used instead of random value.. FOR TEST ONLY*/
   int m_ValueInsteadRandom;
   
-}; // class MarkovClassificationFilter
+}; // class MarkovRandomFieldFilter
  
  
 } // namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "otbMarkovClassificationFilter.txx"
+#include "otbMarkovRandomFieldFilter.txx"
 #endif
 
 #endif
