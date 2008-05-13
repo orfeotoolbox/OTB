@@ -28,26 +28,20 @@ PURPOSE.  See the above copyright notices for more information.
 #include <iostream>
 #include <fstream>
 
-int otbImageToSIFTKeyPointSetFilter(int argc, char * argv[])
+int otbImageToSIFTKeyPointSetFilterOutputImage(int argc, char * argv[])
 {
   const char * infname = argv[1];
-  const char * outfname = argv[2];
-  const char * outputImageFilename = argv[3];
+  const char * outputImageFilename = argv[2];
 
-  const unsigned int octaves = atoi(argv[4]);
-  const unsigned int scales = atoi(argv[5]);
-  float threshold = .0;
-  float ratio = .0;
+  const unsigned int octaves = atoi(argv[3]);
+  const unsigned int scales = atoi(argv[4]);
   
-  if (argc > 6)
-    {
-      threshold = atof(argv[6]);
-      ratio = atof(argv[7]);
-    }
+  float threshold = atof(argv[5]);
+  float ratio = atof(argv[6]);
   
   typedef float RealType;
   const unsigned int Dimension =2;
-
+  
   typedef otb::Image<RealType,Dimension> ImageType;
   typedef itk::VariableLengthVector<RealType> RealVectorType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
@@ -57,8 +51,6 @@ int otbImageToSIFTKeyPointSetFilter(int argc, char * argv[])
   // PointSet iterator types
   typedef PointSetType::PointsContainer PointsContainerType;
   typedef PointsContainerType::Iterator PointsIteratorType;
-  typedef PointSetType::PointDataContainer PointDataContainerType;
-  typedef PointDataContainerType::Iterator PointDataIteratorType;
   
   // Instantiating object
   ReaderType::Pointer reader = ReaderType::New();
@@ -68,12 +60,8 @@ int otbImageToSIFTKeyPointSetFilter(int argc, char * argv[])
   filter->SetInput(0,reader->GetOutput());
   filter->SetOctavesNumber(octaves);
   filter->SetScalesNumber(scales);
-  
-  if (argc>6)
-    {
-      filter->SetDoGThreshold(threshold);
-      filter->SetEdgeThreshold(ratio);
-    }
+  filter->SetDoGThreshold(threshold);
+  filter->SetEdgeThreshold(ratio);
   
   filter->Update();
   
@@ -94,31 +82,30 @@ int otbImageToSIFTKeyPointSetFilter(int argc, char * argv[])
   outputImage->Allocate();
   
   itk::ImageRegionIterator<OutputImageType> iterOutput(outputImage,
-						       outputImage->GetRequestedRegion());
+						       outputImage->GetLargestPossibleRegion());
+  itk::ImageRegionIterator<ImageType> iterInput(reader->GetOutput(),
+						reader->GetOutput()->GetLargestPossibleRegion());
   
-  for (iterOutput.GoToBegin(); !iterOutput.IsAtEnd(); ++iterOutput)
+  for (iterOutput.GoToBegin(), iterInput.GoToBegin();
+       !iterOutput.IsAtEnd();
+       ++iterOutput, ++iterInput)
     {
-      ImageType::IndexType index = iterOutput.GetIndex();
-      ImageType::PixelType grayPix = reader->GetOutput()->GetPixel(index);
       OutputImageType::PixelType rgbPixel;
-      rgbPixel.SetRed( static_cast<unsigned char>(grayPix) );
-      rgbPixel.SetGreen( static_cast<unsigned char>(grayPix) );
-      rgbPixel.SetBlue( static_cast<unsigned char>(grayPix) );
+      rgbPixel.SetRed( static_cast<unsigned char>(iterInput.Get()) );
+      rgbPixel.SetGreen( static_cast<unsigned char>(iterInput.Get()) );
+      rgbPixel.SetBlue( static_cast<unsigned char>(iterInput.Get()) );
       
       iterOutput.Set(rgbPixel);
     }
+  
+  std::cout << "Copy Input image in Output image" << std::endl;
   
   PointsIteratorType pIt = filter->GetOutput()->GetPoints()->Begin();
   ImageType::SpacingType spacing = reader->GetOutput()->GetSpacing();
   ImageType::PointType origin = reader->GetOutput()->GetOrigin();
   OutputImageType::SizeType size = outputImage->GetLargestPossibleRegion().GetSize();
   
-  PointDataIteratorType pDataIt = filter->GetOutput()->GetPointData()->Begin();
-  
-  std::ofstream outfile(outfname);
-  outfile << filter;
-
-  while( pIt!=filter->GetOutput()->GetPoints()->End() )
+  while( pIt != filter->GetOutput()->GetPoints()->End() )
     {
       ImageType::IndexType index;
       
@@ -136,28 +123,25 @@ int otbImageToSIFTKeyPointSetFilter(int argc, char * argv[])
       keyPixel.SetBlue(0);
       
       outputImage->SetPixel(index,keyPixel);
-      if (static_cast<unsigned int>(index[1]) < static_cast<unsigned int>(size[1]) )
+
+      if (static_cast<unsigned int>(index[1]) < static_cast<unsigned int>(size[1]-1) )
 	outputImage->SetPixel(index+t,keyPixel);
       if (index[1] > 0)
 	outputImage->SetPixel(index+b,keyPixel);
-      if (static_cast<unsigned int>(index[0]) < static_cast<unsigned int>(size[0]) )
+      if (static_cast<unsigned int>(index[0]) < static_cast<unsigned int>(size[0]-1) )
 	outputImage->SetPixel(index+l,keyPixel);
       if (index[0] > 0)
 	outputImage->SetPixel(index+r,keyPixel);
-      
-      outfile << pIt.Value() << " " \
-	      << pDataIt.Value() \
-	      << std::endl;
       ++pIt;
-      ++pDataIt;
     }
   
-  outfile.close();
+  std::cout << "Copy sift key" << std::endl;
   
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(outputImage);
   writer->SetFileName(outputImageFilename);
   writer->Update();
   
+  std::cout << "Write image" << std::endl;
   return EXIT_SUCCESS;
 }

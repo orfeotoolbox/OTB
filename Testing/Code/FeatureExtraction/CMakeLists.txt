@@ -748,15 +748,64 @@ ADD_TEST(feTuImageToCarvingPathFilterNew ${FEATUREEXTRACTION_TESTS8}
 ADD_TEST(feTuImageToSIFTKeyPointSetFilterNew ${FEATUREEXTRACTION_TESTS9} 
          otbImageToSIFTKeyPointSetFilterNew)
 
-ADD_TEST(feTvImageToSIFTKeyPointSetFilter ${FEATUREEXTRACTION_TESTS9} 
---compare-ascii ${EPS}  
-		${BASELINE_FILES}/feTvImageToSIFTKeyPointSetFilterOutput.txt
-		${TEMP}/feTvImageToSIFTKeyPointSetFilterOutput.txt
-         otbImageToSIFTKeyPointSetFilter
-		${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-		${TEMP}/feTvImageToSIFTKeyPointSetFilterOutput.txt
-		${TEMP}/feTvImageToSIFTKeyPointSetFilterImageOutput.tif	
-		2 3							
+ADD_TEST(feTvImageToSIFTKeyPointSetFilterSceneOutputImage ${FEATUREEXTRACTION_TESTS9}
+--compare-image ${EPSILON}  
+		${BASELINE}/feTvImageToSIFTKeyPointSetFilterSceneImageOutput.png
+		${TEMP}/feTvImageToSIFTKeyPointSetFilterSceneImageOutput.png
+         otbImageToSIFTKeyPointSetFilterOutputImage
+		${INPUTDATA}/scene.png
+		${TEMP}/feTvImageToSIFTKeyPointSetFilterSceneImageOutput.png
+		6 3 0.08 10 
+)
+
+ADD_TEST(feTvImageToSIFTKeyPointSetFilterSceneOutputAscii ${FEATUREEXTRACTION_TESTS9}
+--compare-ascii ${EPS}
+		${BASELINE_FILES}/feTvImageToSIFTKeyPointSetFilterSceneKeysOutput.txt
+		${TEMP}/feTvImageToSIFTKeyPointSetFilterSceneKeysOutput.txt
+         otbImageToSIFTKeyPointSetFilterOutputAscii
+		${INPUTDATA}/scene.png
+		${TEMP}/feTvImageToSIFTKeyPointSetFilterSceneKeysOutput.txt
+		6 3 0.08 10 
+)
+
+ADD_TEST(feTvImageToSIFTKeyPointSetFilterSquareOutputImage ${FEATUREEXTRACTION_TESTS9}
+--compare-image ${EPSILON}
+		${BASELINE}/feTvImageToSIFTKeyPointSetFilterSquareImageOutput.png
+		${TEMP}/feTvImageToSIFTKeyPointSetFilterSquareImageOutput.png
+         otbImageToSIFTKeyPointSetFilterOutputImage
+		${INPUTDATA}/carre.png
+		${TEMP}/feTvImageToSIFTKeyPointSetFilterSquareImageOutput.png
+		7 3 0.01 10 
+)
+
+ADD_TEST(feTvImageToSIFTKeyPointSetFilterSquareOutputAscii ${FEATUREEXTRACTION_TESTS9}
+--compare-ascii ${EPS}
+		${BASELINE_FILES}/feTvImageToSIFTKeyPointSetFilterSquareKeysOutput.txt
+		${TEMP}/feTvImageToSIFTKeyPointSetFilterSquareKeysOutput.txt
+         otbImageToSIFTKeyPointSetFilterOutputAscii
+		${INPUTDATA}/carre.png
+		${TEMP}/feTvImageToSIFTKeyPointSetFilterSquareKeysOutput.txt
+		7 3 0.01 10 
+)
+
+ADD_TEST(feTvImageToSIFTKeyPointSetFilterGridOutputImage ${FEATUREEXTRACTION_TESTS9}
+--compare-image ${EPSILON}
+		${BASELINE}/feTvImageToSIFTKeyPointSetFilterGridImageOutput.png
+		${TEMP}/feTvImageToSIFTKeyPointSetFilterGridImageOutput.png
+         otbImageToSIFTKeyPointSetFilterOutputImage
+		${INPUTDATA}/damier.png
+		${TEMP}/feTvImageToSIFTKeyPointSetFilterGridImageOutput.png
+		7 3 0.01 10 
+)
+
+ADD_TEST(feTvImageToSIFTKeyPointSetFilterGridOutputAscii ${FEATUREEXTRACTION_TESTS9}
+--compare-ascii ${EPS}
+		${BASELINE_FILES}/feTvImageToSIFTKeyPointSetFilterGridKeysOutput.txt
+		${TEMP}/feTvImageToSIFTKeyPointSetFilterGridKeysOutput.txt
+         otbImageToSIFTKeyPointSetFilterOutputAscii
+		${INPUTDATA}/damier.png
+		${TEMP}/feTvImageToSIFTKeyPointSetFilterGridKeysOutput.txt
+		7 3 0.01 10 
 )
 
 # A enrichir
@@ -855,7 +904,10 @@ otbImageToCarvingPathFilterNew.cxx
 SET(BasicFeatureExtraction_SRCS9
 otbImageToSIFTKeyPointSetFilterNew.cxx
 otbImageToSIFTKeyPointSetFilter.cxx
-otbImageToSIFTKeyPointSetFilterDistanceMap.cxx	
+otbImageToSIFTKeyPointSetFilterValid.cxx
+otbImageToSIFTKeyPointSetFilterDistanceMap.cxx
+otbImageToSIFTKeyPointSetFilterOutputImage.cxx
+otbImageToSIFTKeyPointSetFilterOutputAscii.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
