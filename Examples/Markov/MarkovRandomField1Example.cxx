@@ -310,7 +310,7 @@ int main(int argc, char* argv[] )
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
-// Figure \ref{fig:MARKOVCLASS1} shows the result of the SVM classification.
+// Figure \ref{fig:MARKOVCLASS1} shows the result of the MRF classification.
 // \begin{figure}
 // \center
 // \includegraphics[width=0.45\textwidth]{QB_Suburb.eps}
