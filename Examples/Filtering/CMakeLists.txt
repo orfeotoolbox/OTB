@@ -503,6 +503,17 @@ ADD_TEST(DerivativeImageFilterTest ${EXE_TESTS}
     1 0
 )
 
+# ------- RationalQuotientResampleImageFilterTest----------
+
+ADD_TEST(RationalQuotientResampleImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/RationalQuotientResampleImageFilterOutput.tif
+	${TEMP}/RationalQuotientResampleImageFilterOutput.tif
+	RationalQuotientResampleImageFilterTest
+	${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+	${TEMP}/RationalQuotientResampleImageFilterOutput.tif
+	2 3
+)
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
