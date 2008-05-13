@@ -26,7 +26,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Suburb.png}, {RandomImage.png}
-//    OUTPUTS: {MarkovClassification2.png}
+//    OUTPUTS: {MarkovClassification1.png}
 //    1.0 30 1.0
 //  Software Guide : EndCommandLineArgs
 
@@ -39,7 +39,7 @@
 //
 // This example applies the \doxygen{otb}{MarkovClassificationFilter} to 
 // classify an image into four classes defined by their mean and variance. The 
-// optimization is done using an ICM algorithm with a MAP estimator. The 
+// optimization is done using an Metropolis algorithm with a random sampler. The 
 // regularization energy is defined by a Potts model and the fidelity by a 
 // Gaussian model.
 //
@@ -48,7 +48,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
-#include "otbMarkovClassificationFilter.h"
+#include "otbMarkovRandomFieldFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
 
@@ -63,8 +63,8 @@
 #include "otbMRFEnergy.h"
 #include "otbMRFEnergyPotts.h"
 #include "otbMRFEnergyGaussianClassification.h"
-#include "otbMRFSamplerRandomMAP.h"
-#include "otbMRFOptimizerICM.h"
+#include "otbMRFOptimizerMetropolis.h"
+#include "otbMRFSamplerRandom.h"
 // Software Guide : EndCodeSnippet
 
 
@@ -84,7 +84,7 @@ int main(int argc, char* argv[] )
   //
   //  Then we must decide what pixel type to use for the image. We
   //  choose to make all computations with double precision.
-  //  The labelled image is of type unsigned char to allow up to 256 different 
+  //  The labeled image is of type unsigned char to allow up to 256 different 
   //  classes.
   //
   //  Software Guide : EndLatex 
@@ -133,14 +133,14 @@ int main(int argc, char* argv[] )
   //
   //  Finally, we define the different classes necessary for the Markov classification. 
   //  A \doxygen{otb}{MarkovClassificationFilter} is instanciated, this is the 
-  // main class which connect the other to do the Markov classification.
+  // main class which connects the others to do the Markov classification.
   //
   //  Software Guide : EndLatex 
 
   // Software Guide : BeginCodeSnippet
 
-  typedef otb::MarkovClassificationFilter
-	  <InputImageType,LabelledImageType> MarkovClassificationFilterType;
+  typedef otb::MarkovRandomFieldFilter
+	  <InputImageType,LabelledImageType> MarkovRandomFieldFilterType;
 
   // Software Guide : EndCodeSnippet
 
@@ -156,8 +156,7 @@ int main(int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
 
-  typedef otb::MRFSamplerRandomMAP< InputImageType, LabelledImageType> SamplerType;
-  
+  typedef otb::MRFSamplerRandom< InputImageType, LabelledImageType> SamplerType;
 
   // Software Guide : EndCodeSnippet
 
@@ -166,22 +165,22 @@ int main(int argc, char* argv[] )
   //  An \doxygen{otb}{MRFOptimizerMetropoli}, which derives from the 
   // \doxygen{otb}{MRFOptimizer}, is instanciated. The optimizer is in charge 
   // of accepting or rejecting the value proposed by the sampler. The 
-  // \doxygen{otb}{MRFSamplerRandomMAP}, accepts the proposal according to the 
+  // \doxygen{otb}{MRFSamplerRandomMAP}, accept the proposal according to the 
   // variation of energy it causes and a temperature parameter.
   //
   //  Software Guide : EndLatex 
 
   // Software Guide : BeginCodeSnippet
 
-  typedef otb::MRFOptimizerICM OptimizerType;
+  typedef otb::MRFOptimizerMetropolis OptimizerType;
 
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
   //
-  // Two energies, deriving from the \doxygen{otb}{MRFEnergy} class need to be instanciated. One energy
+  // Two energies, deriving from the \doxygen{otb}{MRFEnergy} class needs to be instanciated. One energy
   // is required for the regularization, taking into account the relationship between neighborhing pixels
-  // in the classified image. Here it is done with the \doxygen{otb}{MRFEnergyPotts} which implements
+  // in the classified image. Here, this is done with the \doxygen{otb}{MRFEnergyPotts} which implements
   // a Potts model.
   //
   // The second energy is for the fidelity to the original data. Here it is done with an
@@ -207,7 +206,7 @@ int main(int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
 
-  MarkovClassificationFilterType::Pointer markovFilter = MarkovClassificationFilterType::New();
+  MarkovRandomFieldFilterType::Pointer markovFilter = MarkovRandomFieldFilterType::New();
   EnergyRegularizationType::Pointer energyRegularization = EnergyRegularizationType::New();
   EnergyFidelityType::Pointer energyFidelity = EnergyFidelityType::New();
   OptimizerType::Pointer optimizer = OptimizerType::New();
@@ -217,7 +216,7 @@ int main(int argc, char* argv[] )
   
   // Software Guide : BeginLatex
   //
-  // Parameters for the \doxygen{otb}{MRFEnergyGaussianClassification} class, meand
+  // Variables for the \doxygen{otb}{MRFEnergyGaussianClassification} class, meand
   // and standard deviation are created.
   //
   // Software Guide : EndLatex
@@ -238,7 +237,7 @@ int main(int argc, char* argv[] )
   
   // Software Guide : BeginLatex
   //
-  // The parameters are given to the different class an the sampler, optimizer and
+  // These parameters are passed to the different classs and the sampler, optimizer and
   // energies are connected with the Markov filter.
   //
   // Software Guide : EndLatex
@@ -257,7 +256,10 @@ int main(int argc, char* argv[] )
   parameters[6]=220.0;//Class 3 mean
   parameters[7]=10.0; //Class 3 stde
   energyFidelity->SetParameters(parameters);
-
+  OptimizerType::ParametersType paramOpt(1);
+  paramOpt.Fill(atof(argv[6]));
+  optimizer->SetParameters(paramOpt);
+  markovFilter->SetValueInsteadRandom(500); // Unable rand() calculation
   markovFilter->SetNumberOfClasses(nClass);  
   markovFilter->SetMaximumNumberOfIterations(atoi(argv[5]));
   markovFilter->SetErrorTolerance(-1.0);
@@ -274,7 +276,7 @@ int main(int argc, char* argv[] )
   // Software Guide : BeginLatex
   //
   // The pipeline is connected. An \doxygen{itk}{RescaleIntensityImageFilter} 
-  // rescale the classified image before saving it.
+  // rescales the classified image before saving it.
   //
   // Software Guide : EndLatex
   
@@ -306,21 +308,22 @@ int main(int argc, char* argv[] )
   writer->Update();  
   
   // Software Guide : EndCodeSnippet
-  
-  return 0;
-    //  Software Guide : BeginLatex
-// Figure \ref{fig:MARKOVCLASS1} shows the result of the MRF classification.
+
+  //  Software Guide : BeginLatex
+// Figure \ref{fig:MARKOVCLASS1} shows the result of the SVM classification.
 // \begin{figure}
 // \center
 // \includegraphics[width=0.45\textwidth]{QB_Suburb.eps}
-// \includegraphics[width=0.45\textwidth]{MarkovClassification2.eps}
+// \includegraphics[width=0.45\textwidth]{MarkovClassification1.eps}
 // \itkcaption[Markov Random Field Image Classification]{Result of the MRF
-// classification using an ICM algorithm with a MAP estimator
+// classification using a Metropolis algorithm with a random sampler
 // and a Potts regularization energy and a Gaussian fidelity. Left: Original image. Right: image of classes.} 
 // \label{fig:MARKOVCLASS1}
 // \end{figure}
 //  Software Guide : EndLatex
 
+  
+  return 0;
   
 }
 
