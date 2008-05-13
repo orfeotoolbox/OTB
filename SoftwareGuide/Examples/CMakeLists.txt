@@ -253,14 +253,14 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Classification/BayesianPluginClassifier.cxx
   ${OTB_SOURCE_DIR}/Examples/Classification/ExpectationMaximizationMixtureModelEstimator.cxx
   ${OTB_SOURCE_DIR}/Examples/Classification/ScalarImageMarkovRandomField1.cxx
-  ${OTB_SOURCE_DIR}/Examples/Markov/MarkovClassification1Example.cxx
-  ${OTB_SOURCE_DIR}/Examples/Markov/MarkovClassification2Example.cxx
+  ${OTB_SOURCE_DIR}/Examples/Markov/MarkovRandomField1Example.cxx
+  ${OTB_SOURCE_DIR}/Examples/Markov/MarkovRandomField2Example.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMPointSetModelEstimatorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMPointSetClassificationExample.cxx  
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageModelEstimatorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageClassificationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageEstimatorClassificationMultiExample.cxx
-  #${OTB_SOURCE_DIR}/Examples/Learning/SOMExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/Learning/SOMExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SOMClassifierExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SEMModelEstimatorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMGenericKernelImageClassificationExample.cxx
