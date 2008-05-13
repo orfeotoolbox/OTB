@@ -33,6 +33,7 @@ REGISTER_TEST(NeighborhoodConnectedImageFilterTest);
 REGISTER_TEST(WatershedSegmentationTest);
 REGISTER_TEST(ConnectedThresholdImageFilterTest);
 REGISTER_TEST(OtsuMultipleThresholdImageFilterTest);
+REGISTER_TEST(LabelizeNeighborhoodConnectedImageFilterTest);
 }
 
 #undef main
@@ -67,3 +68,6 @@ REGISTER_TEST(OtsuMultipleThresholdImageFilterTest);
 #define main OtsuMultipleThresholdImageFilterTest
 #include "OtsuMultipleThresholdImageFilter.cxx"
 
+#undef main
+#define main LabelizeNeighborhoodConnectedImageFilterTest
+#include "LabelizeNeighborhoodConnectedImageFilter.cxx"

@@ -357,6 +357,19 @@ ADD_TEST(OtsuMultipleThresholdImageFilterTest ${EXE_TESTS}
 	${TEMP}/OtsuMultipleThresholdsOutput002.png
 )
 
+# ------- LabelizeNeighborhoodConnectedImageFilterTest----------
+
+ADD_TEST(LabelizeNeighborhoodConnectedImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/LabelizeNeighborhoodConnectedImageFilterOutput.png
+	${TEMP}/LabelizeNeighborhoodConnectedImageFilterOutput.png
+	LabelizeNeighborhoodConnectedImageFilterTest
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/LabelizeNeighborhoodConnectedImageFilterOutput.png
+	170 170
+	80 80
+)
+
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
