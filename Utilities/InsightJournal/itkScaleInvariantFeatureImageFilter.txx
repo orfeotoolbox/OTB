@@ -79,6 +79,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "itkScaleInvariantFeatureImageFilter.h"
 #include <cstdio>
+#include "vnl/vnl_math.h"
 
 #ifndef SIFTKEY_CLASS
 #define SIFTKEY_CLASS
@@ -401,7 +402,7 @@ namespace itk
 	// position 0 is the norm
 	p[0] = x[0];
 	
-	if (std::isnan(p[0]) || (p[0] == 0.0))
+	if (vnl_math_isnan(p[0]) || (p[0] == 0.0))
 	  continue;
 	
 	// multiply by m
