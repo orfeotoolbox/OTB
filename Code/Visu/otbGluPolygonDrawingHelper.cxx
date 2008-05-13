@@ -22,8 +22,14 @@ PURPOSE.  See the above copyright notices for more information.
 
 // This is defined in windows only, and it is needed for FunctionPointerType
 // to be properly defined.
-#ifndef CALLBACK
-#define CALLBACK
+
+// There are function prototype conflits under cygwin between standard w32 API 
+// and standard C ones
+#ifndef CALLBACK 
+	#if defined(__CYGWIN__)
+		#define CALLBACK __stdcall
+	#else
+		#define CALLBACK
 #endif
 
 extern "C"
