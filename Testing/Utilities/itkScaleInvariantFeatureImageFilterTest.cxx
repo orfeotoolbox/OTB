@@ -42,7 +42,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "itkImageFileWriter.h"
 #include "otbMath.h"
 
-int itk2DScaleInvariantFeatureImageFilterTest( int argc, char **argv)
+int itk2DScaleInvariantFeatureImageFilterTest( int argc, char *argv[])
 {
   const unsigned int Dimension = 2;
 
