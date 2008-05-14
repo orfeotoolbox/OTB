@@ -793,6 +793,9 @@ namespace itk
   ::getSiftFeatures(FixedImagePointer fixedImage) 
   {
     unsigned int numMin = 0, numMax = 0, numReject = 0;
+    const unsigned int lGaussianImagesNumber = m_GaussianImagesNumber;
+    const unsigned int lDifferenceOfGaussianImagesNumber = m_DifferenceOfGaussianImagesNumber;
+    
     m_KeypointSet = PointSetType::New();
 
     m_PointsCount = 0;      
@@ -802,17 +805,17 @@ namespace itk
       GaussianFilterType;
 
     typename GaussianFilterType::Pointer
-      gaussianFilter[m_GaussianImagesNumber];
+      gaussianFilter[lGaussianImagesNumber];
 
     typename TFixedImageType::Pointer
-      gaussianImage[m_GaussianImagesNumber];
+      gaussianImage[lGaussianImagesNumber];
 
 
     // Declare DoG 
     typedef itk::SubtractImageFilter<TFixedImageType, TFixedImageType, 
       TFixedImageType> DifferenceFilterType;
-    typename DifferenceFilterType::Pointer dogFilter[m_DifferenceOfGaussianImagesNumber];
-    typename TFixedImageType::Pointer dogImage[m_DifferenceOfGaussianImagesNumber];
+    typename DifferenceFilterType::Pointer dogFilter[lDifferenceOfGaussianImagesNumber];
+    typename TFixedImageType::Pointer dogImage[lDifferenceOfGaussianImagesNumber];
 
     // Resampled image filters
     typename ResampleFilterType::Pointer scaler[m_ImageScalesTestedNumber];
