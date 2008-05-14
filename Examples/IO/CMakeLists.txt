@@ -39,6 +39,10 @@ TARGET_LINK_LIBRARIES(MultibandImageReadWrite OTBCommon OTBIO ITKCommon ITKIO)
 ADD_EXECUTABLE(ExtractROI ExtractROI.cxx )
 TARGET_LINK_LIBRARIES(ExtractROI OTBCommon OTBIO ITKCommon ITKIO)
 
+ADD_EXECUTABLE(ImageSeriesIOExample ImageSeriesIOExample.cxx )
+TARGET_LINK_LIBRARIES(ImageSeriesIOExample OTBCommon OTBIO ITKCommon ITKIO)
+
+
 ADD_EXECUTABLE(MetadataExample MetadataExample.cxx )
 TARGET_LINK_LIBRARIES(MetadataExample OTBCommon OTBIO ITKCommon ITKIO)
 
