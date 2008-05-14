@@ -26,7 +26,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Suburb.png}
-//    OUTPUTS: {MarkovRandomField1.png}
+//    OUTPUTS: {MarkovRandomField2.png}
 //    1.0 5
 //  Software Guide : EndCommandLineArgs
 
