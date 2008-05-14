@@ -30,7 +30,7 @@
 //
 //  Usually, the streaming process is hidden within the pipeline. This
 //  allows the user to get rid of the annoying task of splitting the
-//  images into tiles, end so on. However, for some kinds of
+//  images into tiles, and so on. However, for some kinds of
 //  processing, we do not really need a pipeline: no writer is needed,
 //  only read access to pixel values is wanted. In these cases, one
 //  has to explicitly set up the streaming procedure. Fortunately, OTB
