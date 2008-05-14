@@ -27,6 +27,8 @@ namespace otb
 /**
  * \class MRFOptimizer
  * \brief This is the base class for optimizer used in the MRF framework.
+ *
+ * Derived class must reimplement Compute() method.
  */
 
 class ITK_EXPORT MRFOptimizer : public itk::Object
@@ -38,12 +40,17 @@ class ITK_EXPORT MRFOptimizer : public itk::Object
     typedef itk::SmartPointer<const Self> ConstPointer;
     typedef itk::Array< double >          ParametersType;
     
-    itkNewMacro(Self);
-    
+    /** Le new avait disparu donc plus de ::Pointer declare...*/
+    itkNewMacro(Self);   
+
     itkTypeMacro(MRFOptimizer, itk::Object);
     
+ /** Utilmisation des accessuers itk*/
+    /*
     unsigned int GetNumberOfParameters(void) const 
     { return m_NumberOfParameters; }
+    */
+    itkGetConstMacro(NumberOfParameters, unsigned int);
     
     // Get the parameters
     const ParametersType& GetParameters( void ) const
@@ -59,30 +66,33 @@ class ITK_EXPORT MRFOptimizer : public itk::Object
 	}
       m_Parameters = parameters;
       this->Modified();
-      /*
-	bool modified = false;
-	for( unsigned int i=0; i<m_NumberOfParameters; i++ )
-	{
-        if (m_Parameters[i] != parameters[i])
-        {
-	m_Parameters[i] = parameters[i];
-	modified = true;
-        }
-	}
-	if (modified)
-	{
-        this->Modified();
-	}
-      */
+      
+//       bool modified = false;
+//       for( unsigned int i=0; i<m_NumberOfParameters; i++ )
+//       {
+//         if (m_Parameters[i] != parameters[i])
+//         {
+//           m_Parameters[i] = parameters[i];
+//           modified = true;
+//         }
+//       }
+//       if (modified)
+//       {
+//         this->Modified();
+//       }
     }
     
+    /** Ne peut allouer un objet de type MRF::Optimizer parce que les fonctions virtuelles suivantes sont abstraites*/
     virtual bool Compute(double deltaEnergy)
-      {
-	return false;
-      }   
+{
+return 0;
+}
     
   protected:
-    MRFOptimizer() {}
+    MRFOptimizer() 
+    {
+      m_Parameters=0;
+    }
     virtual ~MRFOptimizer() {}
     unsigned int m_NumberOfParameters;
     ParametersType m_Parameters;

@@ -15,6 +15,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
 #ifndef _MRFSamplerRandomMAP_h
 #define _MRFSamplerRandomMAP_h
 
@@ -22,180 +23,138 @@
 
 namespace otb
 {
-/**
- * \class MRFSamplerRandomMAP
- * \brief This is the base class for sampler methods used in the MRF framework.
- * 
- * This is one sampler to be used int he MRF framework. This sampler select the 
- * value randomly according to the apriori probability.
- * 
- * The probability is defined from the energy as:
- * 
- *  \f[ P(X=x)= \frac{1}{Z} \exp^{-U(x)}  \f]
- * 
- * where \f$ Z = \sum_x \exp^{-U(x)}\f$
- * 
- */
-  
-template< class TInput1, class TInput2>    
-class ITK_EXPORT MRFSamplerRandomMAP : public MRFSampler< TInput1, TInput2>
-  {
-  public:
-    
-    typedef MRFSamplerRandomMAP           Self;
-    typedef MRFSampler< TInput1, TInput2> Superclass;
-    typedef itk::SmartPointer<Self>       Pointer;
-    typedef itk::SmartPointer<const Self> ConstPointer;
-    
-    typedef typename Superclass::InputImageNeighborhoodIterator    InputImageNeighborhoodIterator;
-    typedef typename Superclass::LabelledImageNeighborhoodIterator LabelledImageNeighborhoodIterator;
-    typedef typename Superclass::LabelledImagePixelType            LabelledImagePixelType;
-    typedef typename Superclass::InputImagePixelType               InputImagePixelType;
-    typedef typename Superclass::EnergyFidelityType                EnergyFidelityType;
-    typedef typename Superclass::EnergyRegularizationType          EnergyRegularizationType;
-    typedef typename Superclass::EnergyFidelityPointer             EnergyFidelityPointer;
-    typedef typename Superclass::EnergyRegularizationPointer       EnergyRegularizationPointer;
-  
-    itkNewMacro(Self);
-    
-    itkTypeMacro(MRFSamplerRandomMAP, MRFSampler);
-    
-    /*  
-	void SetNumberOfClasses(unsigned int arg) 
-	{ 
-        otbDebugMacro("setting NumberOfClasses to " << arg); 
-        if (this->m_NumberOfClasses != arg) 
-	{
-	this->m_NumberOfClasses = arg;
-	m_RepartitionFunction = (double *) calloc(m_NumberOfClasses, sizeof(double));
-	m_Energy = (double *) calloc(m_NumberOfClasses, sizeof(double));
-	this->Modified();
-	} 
-	}
-	itkGetMacro(NumberOfClasses, unsigned int);
-	
-	itkSetMacro(Lambda, double);
-	itkGetMacro(Lambda, double);
-	
-	itkGetMacro(DeltaEnergy, double);
-	itkGetMacro(Value, LabelledImagePixelType);
-	
-	itkSetObjectMacro( EnergyRegularization, EnergyRegularizationType);
-	itkSetObjectMacro( EnergyFidelity, EnergyFidelityType);
-    */    
-    
-    inline int Compute( const InputImageNeighborhoodIterator & itData, const LabelledImageNeighborhoodIterator & itRegul)             
+        /**
+   * \class MRFSamplerRandomMAP
+   * \brief This is the base class for sampler methods used in the MRF framework.
+   * 
+   * This is one sampler to be used int he MRF framework. This sampler select the 
+   * value randomly according to the apriori probability.
+   * 
+        * The probability is defined from the energy as:
+   * 
+   *  \f[ P(X=x)= \frac{1}{Z} \exp^{-U(x)}  \f]
+   * 
+   * where \f$ Z = \sum_x \exp^{-U(x)}\f$
+   * 
+         */
+
+  template< class TInput1, class TInput2>    
+      class ITK_EXPORT MRFSamplerRandomMAP: public MRFSampler< TInput1, TInput2>
       {
-        if(this->GetNumberOfClasses() == 0)
-        {
-            itkExceptionMacro(<<"m_NumberOfClasses has to be greater than 0.");
-        }
+        public:
+            
+          typedef MRFSamplerRandomMAP Self;
+          typedef otb::MRFSampler< TInput1, TInput2> Superclass;
+          typedef itk::SmartPointer<Self>  Pointer;
+          typedef itk::SmartPointer<const Self>  ConstPointer;
+            
+          typedef typename Superclass::InputImageNeighborhoodIterator    InputImageNeighborhoodIterator;
+          typedef typename Superclass::LabelledImageNeighborhoodIterator LabelledImageNeighborhoodIterator;
+          typedef typename Superclass::LabelledImagePixelType            LabelledImagePixelType;
+          typedef typename Superclass::InputImagePixelType               InputImagePixelType;
+          typedef typename Superclass::EnergyFidelityType                EnergyFidelityType;
+          typedef typename Superclass::EnergyRegularizationType          EnergyRegularizationType;
+          typedef typename Superclass::EnergyFidelityPointer             EnergyFidelityPointer;
+          typedef typename Superclass::EnergyRegularizationPointer       EnergyRegularizationPointer;     
           
-	this->SetEnergyBefore( this->GetEnergyFidelity()->GetValue(itData, itRegul.GetCenterPixel())
-			       + this->GetLambda() * this->GetEnergyRegularization()->GetValue(itRegul, itRegul.GetCenterPixel()) );
-
-	//Try all possible value (how to be generic ?)
-	this->SetEnergyAfter( this->GetEnergyBefore() ); //default values to current one
-	this->SetValue( itRegul.GetCenterPixel() );
-
-	// otbDebugMacro(<< "Computing MAP for pix " << itData.GetIndex());
-	// Compute probability for each possibility
-	double totalProba=0.0;
-	for (unsigned int valueCurrent = 0; valueCurrent < this->GetNumberOfClasses(); ++valueCurrent)
-	  {
-	    // otbDebugMacro(<< " --> Proposed value " << static_cast<double>(valueCurrent)); 
-	    this->SetEnergyCurrent( this->GetEnergyFidelity()->GetValue(itData, valueCurrent)
-	      + this->GetLambda() * this->GetEnergyRegularization()->GetValue(itRegul, valueCurrent) );
-          
-	    m_Energy[valueCurrent] = this->GetEnergyCurrent();
-	    m_RepartitionFunction[valueCurrent] = vcl_exp(-this->GetEnergyCurrent())+totalProba;
-	    totalProba = m_RepartitionFunction[valueCurrent];
-	    // otbDebugMacro("valueCurrent, m_RepartitionFunction[valueCurrent] " << (unsigned int)  valueCurrent << ", " << m_RepartitionFunction[valueCurrent]);
-	    
-	  }
-	
-	//Pick a value according to probability
-	
-	double select;
-	if (m_ValueInsteadRandom == itk::NumericTraits<double>::min())
-	  {
-	    select = (rand()/(double(RAND_MAX)+1) * totalProba);
-	  } 
-	else
-	  {
-	    select = m_ValueInsteadRandom;
-	  }
-	// otbDebugMacro("m_RepartitionFunction " <<  m_RepartitionFunction[0] << " " 
-	//                 <<  m_RepartitionFunction[1] << " " <<  m_RepartitionFunction[2] << " " 
-	//                 <<  m_RepartitionFunction[3] << " ");
-	
-	// otbDebugMacro("select, totalProba " <<  select << ", " << totalProba);
-	unsigned int valueCurrent = 0;
-    while( valueCurrent<this->GetNumberOfClasses() && m_RepartitionFunction[valueCurrent] <= select)
-    {
-        valueCurrent++;
-    }
-   
-    // TODO avoir la confirmation cnesienne : premier indince ou dernier
-    if ( valueCurrent==this->GetNumberOfClasses() )
-    {
-        valueCurrent = 0;
-    }
+          itkNewMacro(Self);
     
-    if ( this->GetValue() != static_cast<LabelledImagePixelType>(valueCurrent))
-	  {
-	    this->SetValue( valueCurrent );
-	    this->SetEnergyAfter( m_Energy[valueCurrent] );
-	  }
-	
-	this->SetDeltaEnergy( this->GetEnergyAfter() - this->GetEnergyBefore() );
-	// otbDebugMacro("Decision " << (unsigned int) valueCurrent);
-	return 0;
-      }
-    
-    /** Store a value to be used instead of random value.. FOR TEST ONLY*/
-    void SetValueInsteadRandom( double val )
-      {
-	m_ValueInsteadRandom = val;
-	std::cout<<"The m_ValueInsteadRandom varaible has to be used only for tests..."<<std::endl;
-	this->Modified();
-      };
-
-    void SetNumberOfClasses(unsigned int nb)
-        {
-            Superclass::SetNumberOfClasses( nb );
-            free(m_Energy);
-            free(m_RepartitionFunction);
-            m_Energy = (double *) calloc(nb, sizeof(double));
-            m_RepartitionFunction = (double *) calloc(nb, sizeof(double));
-
-            this->Modified(); 
-        };
+          itkTypeMacro(MRFSamplerRandomMAP,MRFSampler);
+            
+            
+          void SetNumberOfClasses(const unsigned int nClasses)
+          {
+            if (nClasses != this->m_NumberOfClasses)
+            {
+              this->m_NumberOfClasses = nClasses;
+              if (energy != NULL) free(energy);
+              if (repartitionFunction != NULL) free(repartitionFunction);
+              energy = (double *) calloc(this->m_NumberOfClasses, sizeof(double));
+              repartitionFunction = (double *) calloc(this->m_NumberOfClasses, sizeof(double));
+              this->Modified();
+            }
+          }
       
-  private:
-    double * m_RepartitionFunction ;   
-    double * m_Energy; 
+          inline int Compute( const InputImageNeighborhoodIterator & itData, 
+                              const LabelledImageNeighborhoodIterator & itRegul)
+          {
+            
+            this->m_EnergyBefore = this->m_EnergyFidelity->GetValue(itData, itRegul.GetCenterPixel());
+            this->m_EnergyBefore += this->m_Lambda 
+                 * this->m_EnergyRegularization->GetValue(itRegul, itRegul.GetCenterPixel());
+              
+              //Try all possible value (how to be generic ?)
+            this->m_EnergyAfter = this->m_EnergyBefore; //default values to current one
+            this->m_Value = itRegul.GetCenterPixel();
+              
+            //Compute probability for each possibility
+            double totalProba=0.0;
+            for (LabelledImagePixelType valueCurrent = 0; 
+                 valueCurrent < static_cast<LabelledImagePixelType>(this->m_NumberOfClasses); ++valueCurrent)
+            {
+              this->m_EnergyCurrent = this->m_EnergyFidelity->GetValue(itData, valueCurrent);
+              this->m_EnergyCurrent += this->m_Lambda 
+                  * this->m_EnergyRegularization->GetValue(itRegul, valueCurrent);
+
+              energy[static_cast<unsigned int>(valueCurrent)] = this->m_EnergyCurrent;
+              repartitionFunction[static_cast<unsigned int>(valueCurrent)] = vcl_exp(-this->m_EnergyCurrent)+totalProba;
+              totalProba = repartitionFunction[static_cast<unsigned int>(valueCurrent)];
+
+            }
+              
+              //Pick a value according to probability
+              
+            double select = (rand()/(double(RAND_MAX)+1) * totalProba);
+            
+        /*** POUR EVITER LE SEGFAULT : on sort de la taille du tableau si la condition du break n'est pas respectee...*/
+        /*
+            LabelledImagePixelType valueCurrent = 0;
+            for (valueCurrent = 0; 
+                 valueCurrent < static_cast<LabelledImagePixelType>(this->m_NumberOfClasses); ++valueCurrent)
+            {
+              if (repartitionFunction[static_cast<unsigned int>(valueCurrent)] > select) break;
+            }
+              */
+        unsigned int valueCurrent = 0;
+        while( valueCurrent<this->GetNumberOfClasses() && repartitionFunction[valueCurrent] <= select)
+        {
+            valueCurrent++;
+        }
+   
+        // TODO avoir la confirmation cnesienne : premier indince ou dernier
+        if ( valueCurrent==this->GetNumberOfClasses() )
+        {
+            valueCurrent = 0;
+        }
     
+            if ( this->m_Value != static_cast<LabelledImagePixelType>(valueCurrent))
+            {
+              this->m_Value = static_cast<LabelledImagePixelType>(valueCurrent);
+              this->m_EnergyAfter = energy[valueCurrent];
+            }
+                            
+            this->m_DeltaEnergy=  this->m_EnergyAfter - this->m_EnergyBefore;
+            
+            return 0;
+          }
+            
+        private:
+          double * repartitionFunction;
+          double * energy; 
+            
+        protected:
+          // The constructor and destructor.
+          MRFSamplerRandomMAP() {
+          energy=NULL;
+          repartitionFunction=NULL;
+          };
+          virtual ~MRFSamplerRandomMAP() {
+            if (energy != NULL) free(energy);
+            if (repartitionFunction != NULL) free(repartitionFunction);
+          };
     
-    
-  protected:
-    // The constructor and destructor.
-    MRFSamplerRandomMAP() 
-      {
-	m_Energy = (double *) calloc(this->GetNumberOfClasses(), sizeof(double));
-	m_RepartitionFunction = (double *) calloc(this->GetNumberOfClasses(), sizeof(double));
-	m_ValueInsteadRandom = itk::NumericTraits<double>::min();
-      }
-    virtual ~MRFSamplerRandomMAP()
-      {
-	free(m_Energy);
-	free(m_RepartitionFunction);
-      }
-    
-    /** Store a value to be used instead of random value.. FOR TEST ONLY*/
-    double m_ValueInsteadRandom;
-    
-  };
+      };
+  
   
 }
 

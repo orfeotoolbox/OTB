@@ -24,14 +24,21 @@
 
 namespace otb
 {
+  /**
+   * \class MRFEnergy
+   * \brief This is the base class for energy function used in the MRF framework
+   *  
+   * Derived class must reimplement the GetSingleValue() method.
+   */
 template< class TInput1, class TInput2 >
 class ITK_EXPORT MRFEnergy : public itk::Object
   {
   public:
-    typedef MRFEnergy                             Self;
-    typedef itk::Object                           Superclass;
-    typedef itk::SmartPointer<Self>               Pointer;
-    typedef itk::SmartPointer<const Self>         ConstPointer;
+    typedef MRFEnergy                     Self;
+    typedef itk::Object                   Superclass;
+    typedef itk::SmartPointer<Self>       Pointer;
+    typedef itk::SmartPointer<const Self> ConstPointer;
+    
     typedef TInput1                               InputImageType;
     typedef TInput2                               LabelledImageType;
     typedef typename InputImageType::PixelType    InputImagePixelType;
@@ -42,47 +49,58 @@ class ITK_EXPORT MRFEnergy : public itk::Object
     
     typedef itk::Array< double > ParametersType;
     
-    
+    /** Le new avait disparu...*/
     itkNewMacro(Self);
     
     itkTypeMacro(MRFEnergy,itk::Object);
     
+      /** Utilisation des accesseur itk*/
+    /*
+    void SetNumberOfParameters(unsigned int nb) 
+     { m_NumberOfParameters = nb; this->Modified(); }  
     unsigned int GetNumberOfParameters(void) const 
       { return m_NumberOfParameters; }
-    void SetNumberOfParameters(unsigned int nb) 
-      { m_NumberOfParameters = nb; this->Modified(); }
+    */
 
+    itkSetMacro(NumberOfParameters, unsigned int);
+    itkGetConstMacro(NumberOfParameters, unsigned int);
+    
     // Get the parameters
     const ParametersType& GetParameters( void ) const
       {
 	return this->m_Parameters;
       }
+  
     
     void SetParameters( const ParametersType & parameters )
-      {	
-	if( parameters.Size() != m_NumberOfParameters )
+      {
+      	if( parameters.Size() != m_NumberOfParameters )
 	  {	
 	    itkExceptionMacro(<<"Invalid number of parameters");
 	  }
 	m_Parameters = parameters;
 	this->Modified();
-	/*
-	  for( unsigned int i=0; i<m_NumberOfParameters; i++ )
-	  {
-	  if (m_Parameters[i] != parameters[i])
-	  {
-	  m_Parameters[i] = parameters[i];
-	  modified = true;
-	  }
-	  }
-	  if (modified)
-	  {
-	  this->Modified();
-	  }
-	*/
+        
+// 	bool modified = false;
+// 	for( unsigned int i=0; i<m_NumberOfParameters; i++ )
+// 	  {
+// 	    if (m_Parameters[i] != parameters[i])
+// 	      {
+//                 m_Parameters[i] = parameters[i];
+//                 modified = true;
+// 	      }
+// 	  }
+// 	if (modified)
+// 	  {
+// 	    this->Modified();
+// 	  }
       }
     
-    virtual double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2){return 0.;};
+    /** Ne peut allouer un objet de type MRF::Energy parce que les fonctions virtuelles suivantes sont abstraites*/
+    virtual double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)
+{
+return 0;
+}
     
     double GetValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)
       {
@@ -156,15 +174,22 @@ class ITK_EXPORT MRFEnergy<TInput2,TInput2> : public itk::Object
     typedef itk::ConstNeighborhoodIterator< LabelledImageType >  LabelledNeighborhoodIterator;
     typedef itk::Array< double >                                 ParametersType;
     
+    /** Le new avait disparu...*/
     itkNewMacro(Self);
     
     itkTypeMacro(MRFEnergy,itk::Object);
     
+    /** Utilisation des accesseur itk*/
+    /*
+    void SetNumberOfParameters(unsigned int nb) 
+     { m_NumberOfParameters = nb; this->Modified(); }  
     unsigned int GetNumberOfParameters(void) const 
       { return m_NumberOfParameters; }
-    void SetNumberOfParameters(unsigned int nb) 
-      { m_NumberOfParameters = nb; this->Modified(); }
+    */
 
+    itkSetMacro(NumberOfParameters, unsigned int);
+    itkGetConstMacro(NumberOfParameters, unsigned int);
+    
     // Get the parameters
     const ParametersType& GetParameters( void ) const
       {
@@ -173,32 +198,33 @@ class ITK_EXPORT MRFEnergy<TInput2,TInput2> : public itk::Object
     
     void SetParameters( const ParametersType & parameters )
       {
-	if( parameters.Size() != m_NumberOfParameters )
+        if( parameters.Size() != m_NumberOfParameters )
 	  {	
 	    itkExceptionMacro(<<"Invalid number of parameters");
 	  }
 	m_Parameters = parameters;
 	this->Modified();
-	/*
-	  bool modified = false;
-	  for( unsigned int i=0; i<(unsigned int)m_NumberOfParameters; i++ )
+        /*
+	bool modified = false;
+	for( unsigned int i=0; i<m_NumberOfParameters; i++ )
 	  {
-	  if (m_Parameters[i] != parameters[i])
+	    if (m_Parameters[i] != parameters[i])
+	      {
+                m_Parameters[i] = parameters[i];
+                modified = true;
+	      }
+	  }
+	if (modified)
 	  {
-	  m_Parameters[i] = parameters[i];
-	  modified = true;
-	  }
-	  }
-	  if (modified)
-	  {
-	  this->Modified();
-	  }
-	*/
+	    this->Modified();
+	  }*/
       }
     
-    virtual double GetSingleValue(const LabelledImagePixelType & value1,  const LabelledImagePixelType & value2){return 0.;};
-    
-    
+        /** Ne peut allouer un objet de type MRF::Energy parce que les fonctions virtuelles suivantes sont abstraites*/
+    virtual double GetSingleValue(const LabelledImagePixelType & value1,  const LabelledImagePixelType & value2)
+    {
+    return 0;
+    }
     
     double GetValue(const LabelledImagePixelType & value1,  const LabelledImagePixelType & value2)
       {
@@ -230,7 +256,10 @@ class ITK_EXPORT MRFEnergy<TInput2,TInput2> : public itk::Object
     
   protected:
     // The constructor and destructor.
-    MRFEnergy() {};
+    MRFEnergy() 
+    {
+      m_Parameters=0;
+    };
     virtual ~MRFEnergy() {};
     unsigned int m_NumberOfParameters;
     ParametersType m_Parameters;
