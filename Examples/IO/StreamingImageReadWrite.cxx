@@ -23,6 +23,7 @@
 #define ITK_LEAN_AND_MEAN
 #endif
 
+
 //  Software Guide : BeginLatex
 //
 //  As we have seen, the reading of images is managed by the class \doxygen{otb}{ImageFileReader}
