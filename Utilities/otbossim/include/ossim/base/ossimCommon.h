@@ -58,7 +58,7 @@ namespace ossim
      *
      * @see nan()
      */
-#if defined(WIN32) || defined(_MSC_VER) && !defined(__CYGWIN__) && !defined(__MWERKS__)
+#if (defined(WIN32) || defined(_MSC_VER)) && !defined(__CYGWIN__) && !defined(__MWERKS__)
     inline bool isnan(const float& v) { return _isnan(v); }
     inline bool isnan(const double& v) {return _isnan(v); }
 #elif defined(sun) || defined(__sun)
