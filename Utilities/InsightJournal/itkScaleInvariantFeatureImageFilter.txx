@@ -130,7 +130,7 @@ namespace itk
   ScaleInvariantFeatureImageFilter<TFixedImageType,VDimension>
   ::GetGaussianScale( int j ) 
   {
-    return (pow(2, (double) j / (double) m_DifferenceOfGaussianTestsNumber) * m_GaussianSigma);
+    return (vcl_pow(2, (double) j / (double) m_DifferenceOfGaussianTestsNumber) * m_GaussianSigma);
   }
 
   template <class TFixedImageType, unsigned int VDimension> 
@@ -718,9 +718,9 @@ namespace itk
   template <class TFixedImageType, unsigned int VDimension> 
   typename ScaleInvariantFeatureImageFilter<TFixedImageType,VDimension>::ResampleFilterType::Pointer
   ScaleInvariantFeatureImageFilter<TFixedImageType,VDimension>
-  ::getScaleResampleFilter ( typename TFixedImageType::Pointer fixedImage, float scale )
+  ::getScaleResampleFilter ( typename FixedImagePointer fixedImage, float scale )
   {
-    typename ResampleFilterType::Pointer scaler = ResampleFilterType::New();
+    ResampleFilterPointerType scaler = ResampleFilterType::New();
     
     scaler->SetInput( fixedImage );
     
@@ -793,8 +793,6 @@ namespace itk
   ::getSiftFeatures(FixedImagePointer fixedImage) 
   {
     unsigned int numMin = 0, numMax = 0, numReject = 0;
-    const unsigned int lGaussianImagesNumber = m_GaussianImagesNumber;
-    const unsigned int lDifferenceOfGaussianImagesNumber = m_DifferenceOfGaussianImagesNumber;
     
     m_KeypointSet = PointSetType::New();
 
@@ -804,31 +802,29 @@ namespace itk
     typedef itk::DiscreteGaussianImageFilter<TFixedImageType, TFixedImageType > 
       GaussianFilterType;
 
-    typename GaussianFilterType::Pointer
-      gaussianFilter[lGaussianImagesNumber];
-
-    typename TFixedImageType::Pointer
-      gaussianImage[lGaussianImagesNumber];
-
+    std::vector<typename GaussianFilterType::Pointer> gaussianFilter(m_GaussianImagesNumber);
+	
+    std::vector<typename TFixedImageType::Pointer>
+      gaussianImage(m_GaussianImagesNumber);
 
     // Declare DoG 
     typedef itk::SubtractImageFilter<TFixedImageType, TFixedImageType, 
       TFixedImageType> DifferenceFilterType;
-    typename DifferenceFilterType::Pointer dogFilter[lDifferenceOfGaussianImagesNumber];
-    typename TFixedImageType::Pointer dogImage[lDifferenceOfGaussianImagesNumber];
+    std::vector<typename DifferenceFilterType::Pointer> dogFilter(m_DifferenceOfGaussianImagesNumber);
+    std::vector<typename TFixedImageType::Pointer> dogImage(m_DifferenceOfGaussianImagesNumber);
 
     // Resampled image filters
-    typename ResampleFilterType::Pointer scaler[m_ImageScalesTestedNumber];
-    typename TFixedImageType::Pointer scaleImage[m_ImageScalesTestedNumber];
+    std::vector<typename ResampleFilterType::Pointer> scaler(m_ImageScalesTestedNumber);
+    std::vector<typename TFixedImageType::Pointer> scaleImage(m_ImageScalesTestedNumber);
 
 #ifdef GENERATE_KEYS
     // Declare Gradient
-    typename GradientFilterType::Pointer gradFilter[m_ImageScalesTestedNumber];
-    typename GradientImageType::Pointer gradImage[m_ImageScalesTestedNumber];
-    typename GradientImageType::Pointer hgradImage[m_ImageScalesTestedNumber];
+    std::vector<typename GradientFilterType::Pointer> gradFilter(m_ImageScalesTestedNumber);
+    std::vector<typename GradientImageType::Pointer> gradImage(m_ImageScalesTestedNumber);
+    std::vector<typename GradientImageType::Pointer> hgradImage(m_ImageScalesTestedNumber);
 
-    typename GradientMagFilterType::Pointer gradMagFilter[m_ImageScalesTestedNumber];
-    FixedImagePointer gradMagImage[m_ImageScalesTestedNumber];
+    std::vector<typename GradientMagFilterType::Pointer> gradMagFilter(m_ImageScalesTestedNumber);
+    std::vector<FixedImagePointer> gradMagImage(m_ImageScalesTestedNumber);
 #endif
 
 
