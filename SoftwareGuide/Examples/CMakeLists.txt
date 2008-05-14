@@ -181,6 +181,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/IO/ComplexImageReadWrite.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/MultibandImageReadWrite.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/ExtractROI.cxx
+  ${OTB_SOURCE_DIR}/Examples/IO/ImageSeriesIOExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/MetadataExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/DXFReaderExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/DEMToImageGenerator.cxx
