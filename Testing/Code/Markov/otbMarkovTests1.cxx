@@ -29,15 +29,12 @@ void RegisterTests()
 {
 REGISTER_TEST(otbMarkovRandomFieldFilterNew);
 REGISTER_TEST(otbMarkovRandomFieldFilter);
-REGISTER_TEST(otbMRFEnergyNew);
-REGISTER_TEST(otbMRFEnergy);
 REGISTER_TEST(otbMRFEnergyEdgeFidelityNew);
 REGISTER_TEST(otbMRFEnergyEdgeFidelity);
 REGISTER_TEST(otbMRFEnergyPottsNew);
 REGISTER_TEST(otbMRFEnergyPotts);
 REGISTER_TEST(otbMRFEnergyGaussianClassificationNew);
 REGISTER_TEST(otbMRFEnergyGaussianClassification);
-REGISTER_TEST(otbMRFOptimizerNew);
 REGISTER_TEST(otbMRFOptimizerICMNew);
 REGISTER_TEST(otbMRFOptimizerICM);
 }

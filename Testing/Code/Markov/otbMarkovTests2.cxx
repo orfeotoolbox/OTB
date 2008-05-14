@@ -29,7 +29,6 @@ void RegisterTests()
 {
 REGISTER_TEST(otbMRFOptimizerMetropolisNew);
 REGISTER_TEST(otbMRFOptimizerMetropolis);
-REGISTER_TEST(otbMRFSamplerNew);
 REGISTER_TEST(otbMRFSamplerMAPNew);
 REGISTER_TEST(otbMRFSamplerMAP);
 REGISTER_TEST(otbMRFSamplerRandomNew);

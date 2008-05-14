@@ -35,18 +35,6 @@ ADD_TEST(maTvMarkovRandomFieldFilter ${MARKOV_TESTS1}
 	    1.0
 	    )
 
-# -------            otb::MRFEnergy       ------------------------------
-ADD_TEST(maTuMRFEnergyNew ${MARKOV_TESTS1}  
-        otbMRFEnergyNew )
-
-ADD_TEST(maTvMRFEnergy ${MARKOV_TESTS1} 
---compare-ascii ${TOL} ${BASELINE_FILES}/maTvMRFEnergy.txt
-                         ${TEMP}/maTvMRFEnergy.txt
-     otbMRFEnergy
-	${INPUTDATA}/poupees_sub_c1.png
-	${INPUTDATA}/poupees_sub_c2.png
-	${TEMP}/maTvMRFEnergy.txt 
-	)
 
 # -------            otb::MRFEnergyEdgeFidelity       ------------------------------
 ADD_TEST(maTuMRFEnergyEdgeFidelityNew ${MARKOV_TESTS1}  
@@ -84,9 +72,6 @@ ADD_TEST(maTvMRFEnergyPotts ${MARKOV_TESTS1}
 	${TEMP}/maTvMRFEnergyPotts.txt 
 	)
 
-# -------            otbMRFOptimizer   ------------------------------
-ADD_TEST(maTuMRFOptimizerNew ${MARKOV_TESTS1}  
-        otbMRFOptimizerNew )
 
 # -------            otbMRFOptimizerICM   ------------------------------
 ADD_TEST(maTuMRFOptimizerICMNew ${MARKOV_TESTS1}  
@@ -112,11 +97,6 @@ ADD_TEST(maTvMRFOptimizerMetropolis ${MARKOV_TESTS2}
      otbMRFOptimizerMetropolis
 	${TEMP}/maTvMRFOptimizerMetropolis.txt 
 	)
-
-
-# -------            otbMRFSampler     ------------------------------  
-ADD_TEST(maTuMRFSamplerNew ${MARKOV_TESTS2}  
-        otbMRFSamplerNew )
 
 
 # -------            otbMRFSamplerMAP     ------------------------------  
@@ -166,15 +146,12 @@ ADD_TEST(maTvMRFSamplerRandomMAP ${MARKOV_TESTS2}
 SET(Markov_SRCS1
 otbMarkovRandomFieldFilterNew.cxx
 otbMarkovRandomFieldFilter.cxx
-otbMRFEnergyNew.cxx
-otbMRFEnergy.cxx
 otbMRFEnergyPottsNew.cxx
 otbMRFEnergyPotts.cxx
 otbMRFEnergyEdgeFidelityNew.cxx
 otbMRFEnergyEdgeFidelity.cxx
 otbMRFEnergyGaussianClassificationNew.cxx
 otbMRFEnergyGaussianClassification.cxx
-otbMRFOptimizerNew.cxx
 otbMRFOptimizerICMNew.cxx
 otbMRFOptimizerICM.cxx
 )
@@ -182,7 +159,6 @@ otbMRFOptimizerICM.cxx
 SET(Markov_SRCS2
 otbMRFOptimizerMetropolisNew.cxx
 otbMRFOptimizerMetropolis.cxx
-otbMRFSamplerNew.cxx
 otbMRFSamplerMAPNew.cxx
 otbMRFSamplerMAP.cxx
 otbMRFSamplerRandomNew.cxx
