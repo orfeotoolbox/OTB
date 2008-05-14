@@ -38,7 +38,7 @@ REGISTER_TEST(ExtractRoadByStepsExampleTest);
 REGISTER_TEST(ExtractRoadExampleTest);
 REGISTER_TEST(SeamCarvingExampleTest);
 REGISTER_TEST(SeamCarvingOtherExampleTest);
-REGISTER_TEST(ImageToSIFTKeyPointSetFilterTest);
+//REGISTER_TEST(ImageToSIFTKeyPointSetFilterTest);
 REGISTER_TEST(ScaleInvariantFeatureImageFilterTest);
 }
 
@@ -94,9 +94,9 @@ REGISTER_TEST(ScaleInvariantFeatureImageFilterTest);
 #define main SeamCarvingOtherExampleTest
 #include "SeamCarvingOtherExample.cxx"
 
-#undef main
-#define main ImageToSIFTKeyPointSetFilterTest
-#include "ImageToSIFTKeyPointSetFilter.cxx"
+//#undef main
+//#define main ImageToSIFTKeyPointSetFilterTest
+//#include "ImageToSIFTKeyPointSetFilter.cxx"
 
 #undef main
 #define main ScaleInvariantFeatureImageFilterTest

@@ -69,7 +69,6 @@ ADD_EXECUTABLE(SIFTExample SIFTExample.cxx)
 TARGET_LINK_LIBRARIES(SIFTExample OTBIO OTBCommon OTBFeatureExtraction
 ITKCommon ITKBasicFilters)
 
-
 IF( NOT OTB_DISABLE_CXX_TESTING AND NOT OTB_DISABLE_CXX_EXAMPLES_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/FeatureExtraction)
@@ -248,15 +247,15 @@ ADD_TEST(SeamCarvingOtherExampleTest ${EXE_TESTS}
 	50
 )
 
-ADD_TEST(ImageToSIFTKeyPointSetFilterTest ${EXE_TESTS}
-        --compare-image ${TOL}
-        ${BASELINE}/ImageToSIFTKeyPointSetFilterOutput.png
-        ${TEMP}/ImageToSIFTKeyPointSetFilterOutput.png
-        ImageToSIFTKeyPointSetFilterTest
-        ${INPUTDATA}/Scene.png
-        ${TEMP}/ImageToSIFTKeyPointSetFilterOutput.png
-	6 3 0.08 10
-)
+#ADD_TEST(ImageToSIFTKeyPointSetFilterTest ${EXE_TESTS}
+#        --compare-image ${TOL}
+#        ${BASELINE}/ImageToSIFTKeyPointSetFilterOutput.png
+#        ${TEMP}/ImageToSIFTKeyPointSetFilterOutput.png
+#        ImageToSIFTKeyPointSetFilterTest
+#        ${INPUTDATA}/Scene.png
+#        ${TEMP}/ImageToSIFTKeyPointSetFilterOutput.png
+#	6 3 0.08 10
+#)
 
 ADD_TEST(ScaleInvariantFeatureImageFilterTest ${EXE_TESTS}
         --compare-n-image ${TOL} 4
