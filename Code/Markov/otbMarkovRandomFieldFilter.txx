@@ -25,8 +25,7 @@ namespace otb
 /** ATTENTION : j'ai passe les initialisation dans le constructeur car certaines plateformes (dont NEMO) n'aiment cette maniere d'initialiser*/
 template<class TInputImage, class TClassifiedImage>
 MarkovRandomFieldFilter<TInputImage,TClassifiedImage>
-::MarkovRandomFieldFilter(void)
-/*
+::MarkovRandomFieldFilter(void) :
   m_NumberOfClasses(0),
   m_MaximumNumberOfIterations(50),
   m_ErrorCounter(0),
@@ -39,9 +38,9 @@ MarkovRandomFieldFilter<TInputImage,TClassifiedImage>
   m_NumberOfIterations(0),
   m_StopCondition(MaximumNumberOfIterations),
   m_ExternalClassificationSet(false)
-  */
+  
 {
-  m_NumberOfClasses = 0;
+  /*m_NumberOfClasses = 0;
   m_MaximumNumberOfIterations = 50;
   m_ErrorCounter = 0;
   m_ImageDeltaEnergy = 0.0;
@@ -52,7 +51,7 @@ MarkovRandomFieldFilter<TInputImage,TClassifiedImage>
   m_SmoothingFactor = 1;
   m_NumberOfIterations = 0;
   m_StopCondition = MaximumNumberOfIterations;
-  m_ExternalClassificationSet = false;
+  m_ExternalClassificationSet = false;*/
   this->SetNumberOfRequiredInputs(1);
   if( (int)InputImageDimension != (int)ClassifiedImageDimension )
     {
