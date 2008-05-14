@@ -18,12 +18,15 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef _otbImageToSIFTKeyPointSetFilter_h
 #define _otbImageToSIFTKeyPointSetFilter_h
 
+#include <vector>
+
 #include "itkExpandImageFilter.h"
 #include "itkDiscreteGaussianImageFilter.h"
 #include "itkRecursiveGaussianImageFilter.h"
 #include "itkSubtractImageFilter.h"
 #include "itkShrinkImageFilter.h"
 #include "itkConstNeighborhoodIterator.h"
+#include "itkImageRegionConstIterator.h"
 #include "itkVector.h"
 #include "itkMinimumMaximumImageCalculator.h"
 #include "itkUnaryFunctorImageFilter.h"
@@ -162,6 +165,14 @@ namespace otb
       itkSetMacro(EdgeThreshold, double);
       itkGetMacro(EdgeThreshold, double);
       
+      /** Set/Get Gauss sigma factor orientation */
+      itkSetMacro(SigmaFactorOrientation, double);
+      itkGetMacro(SigmaFactorOrientation, double);
+      
+      /** Set/Get Gauss sigma factor descriptor */
+      itkSetMacro(SigmaFactorDescriptor, double);
+      itkGetMacro(SigmaFactorDescriptor, double);
+      
       /** Internal typedefs */
       typedef itk::ExpandImageFilter<TInputImage, TInputImage> ExpandFilterType;
       typedef typename ExpandFilterType::Pointer ExpandFilterPointerType;
@@ -181,6 +192,8 @@ namespace otb
       typedef itk::ConstNeighborhoodIterator<InputImageType> NeighborhoodIteratorType;
       typedef typename NeighborhoodIteratorType::NeighborhoodType NeighborhoodType;
       typedef typename NeighborhoodType::OffsetType OffsetType;
+      
+      typedef itk::ImageRegionConstIterator<InputImageType> RegionIteratorType;
       
       typedef itk::MinimumMaximumImageCalculator<InputImageType> MinimumMaximumCalculatorType;
       typedef typename MinimumMaximumCalculatorType::Pointer MinimumMaximumCalculatorPointerType;
@@ -236,28 +249,45 @@ namespace otb
       
       /** Refine location key point
        *  
-       *  \param currentScale
-       *  \param previousScale
-       *  \param nextScale
+       *  \li Discard keypoints with low contrats DoG < DoGThreshold
+       *  \li Discard keypoints that have a ratio between the principles
+       *      curvature greater than EdgeTrhesold (=10)
+       *
+       *  \param currentScale iterator
+       *  \param previousScale iterator
+       *  \param nextScale iterator
        *  \param offset pixel location
        *
-       *  \return true if key point is rejected, false otherwise
+       *  \return true if key point is accepted, false otherwise
        */
       bool RefineLocationKeyPoint( const NeighborhoodIteratorType& currentScale,
 				   const NeighborhoodIteratorType& previousScale,
 				   const NeighborhoodIteratorType& nextScale,
-				   const PixelType& maximumDoG,
 				   VectorPointType& solution);
       
-      /** Compute key point orientation
-       * \param currentScale iterator pixel
+      /** Assign key point orientation
+       *
+       * \param currentScale neighborhood iterator
        * \param scale current scale
+       * \param translation refine offset pixel location
+       *
+       * \return orientation key point orientation
        */
-      void ComputeKeyPointDescriptor(const NeighborhoodIteratorType& currentScale,
-				     const unsigned int scale,
-				     const PixelType translation,
-				     PixelType& magitude,
-				     PixelType& orientation);
+      PixelType ComputeKeyPointOrientation(const NeighborhoodIteratorType& currentScale,
+					   const unsigned int scale,
+					   const PixelType translation);
+      
+      /** Compute local image descriptor
+       *
+       * \param currentScale neighborhood iterator
+       * \param scale
+       * \param orientation
+       *
+       * \return histogram descriptor
+       */
+      std::vector<PixelType> ComputeKeyPointDescriptor(const NeighborhoodIteratorType& currentScale,
+						       const unsigned int scale,
+						       const PixelType& orientation);
       
     private:
       ImageToSIFTKeyPointSetFilter(const Self&); //purposely not implemented
@@ -284,11 +314,20 @@ namespace otb
       /** Ratio threshold compute */
       double m_RatioEdgeThreshold;
       
+      /** Histogram sift keys descriptors gradient magnitude threshold */
+      PixelType  m_GradientMagnitudeThreshold;
+      
       /** Sigma 0 */
       typename GaussianFilterType::ScalarRealType m_Sigma0;
       
       /** Sigma k */
       double m_Sigmak;
+      
+      /** Gauss factor length for key point orientation */
+      double m_SigmaFactorOrientation;
+      
+      /** Descriptor size */
+      double m_SigmaFactorDescriptor;
       
       /** Expand filter */
       ExpandFilterPointerType m_ExpandFilter;
@@ -311,10 +350,7 @@ namespace otb
       
       /** Orientation image list */
       ImageListPointerType m_OrientationList;
-      
-      /** Gaussian weight orientation list */
-      ImageListPointerType m_GaussianWeightOrientationList;
-      
+            
       /** Subtract filter */
       SubtractFilterPointerType m_SubtractFilter;
 
@@ -326,11 +362,7 @@ namespace otb
 
       /** Orientation filter */
       OrientationFilterPointerType m_OrientationFilter;
-
-      /** Gaussian orientation filter */
-      GaussianFilterPointerType m_XOrientationGaussianFilter;
-      GaussianFilterPointerType m_YOrientationGaussianFilter;
-
+      
       /** Number of key points */
       OutputPointIdentifierType m_ValidatedKeyPoints;
       
