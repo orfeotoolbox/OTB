@@ -72,6 +72,15 @@ ADD_TEST(maTvMRFEnergyPotts ${MARKOV_TESTS1}
 	${TEMP}/maTvMRFEnergyPotts.txt 
 	)
 
+# -------            otb::MRFEnergyGaussian   ------------------------------
+ADD_TEST(maTuMRFEnergyGaussianNew ${MARKOV_TESTS1}  
+        otbMRFEnergyGaussianNew )
+
+ADD_TEST(maTvMRFEnergyGaussian ${MARKOV_TESTS1}  
+     otbMRFEnergyGaussian
+	)
+
+
 
 # -------            otbMRFOptimizerICM   ------------------------------
 ADD_TEST(maTuMRFOptimizerICMNew ${MARKOV_TESTS1}  
@@ -148,6 +157,8 @@ otbMarkovRandomFieldFilterNew.cxx
 otbMarkovRandomFieldFilter.cxx
 otbMRFEnergyPottsNew.cxx
 otbMRFEnergyPotts.cxx
+otbMRFEnergyGaussianNew.cxx
+otbMRFEnergyGaussian.cxx
 otbMRFEnergyEdgeFidelityNew.cxx
 otbMRFEnergyEdgeFidelity.cxx
 otbMRFEnergyGaussianClassificationNew.cxx

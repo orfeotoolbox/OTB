@@ -33,6 +33,8 @@ REGISTER_TEST(otbMRFEnergyEdgeFidelityNew);
 REGISTER_TEST(otbMRFEnergyEdgeFidelity);
 REGISTER_TEST(otbMRFEnergyPottsNew);
 REGISTER_TEST(otbMRFEnergyPotts);
+REGISTER_TEST(otbMRFEnergyGaussianNew);
+REGISTER_TEST(otbMRFEnergyGaussian);
 REGISTER_TEST(otbMRFEnergyGaussianClassificationNew);
 REGISTER_TEST(otbMRFEnergyGaussianClassification);
 REGISTER_TEST(otbMRFOptimizerICMNew);
