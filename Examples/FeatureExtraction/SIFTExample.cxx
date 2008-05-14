@@ -46,7 +46,16 @@ PURPOSE.  See the above copyright notices for more information.
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the \doxygen{otb}{ImageToSIFTKeyPointSetFilter}.
-// 
+// The Scale-Invariant Feature Transform (or SIFT) is an algorithm in
+// computer vision to detect and describe local features in
+// images. The algorithm was published by David Lowe
+// \cite{LoweSIFT}. The detection and description of local image
+// features can help in object recognition and image registration. The
+// SIFT features are local and based on the appearance of the object
+// at particular interest points, and are invariant to image scale and
+// rotation. They are also robust to changes in illumination, noise,
+// occlusion and minor changes in viewpoint.
+//
 // The first step required to use this filter is to include its header file. 
 //
 // Software Guide : EndLatex 
@@ -87,19 +96,38 @@ int main(int argc, char * argv[])
   typedef float RealType;
   const unsigned int Dimension =2;
 
+// Software Guide : BeginLatex
+// The \doxygen{otb}{ImageToSIFTKeyPointSetFilter} is templated over
+// its input image type and the output point set type. Therefore, we
+// start by defining the neede types.
+// Software Guide : EndLatex
+// Software Guide : BeginCodeSnippet  
   typedef otb::Image<RealType,Dimension> ImageType;
   typedef itk::VariableLengthVector<RealType> RealVectorType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef itk::PointSet<RealVectorType,Dimension> PointSetType;
   typedef otb::ImageToSIFTKeyPointSetFilter<ImageType,PointSetType> ImageToSIFTKeyPointSetFilterType;
+// Software Guide : EndCodeSnippet
 
-  // PointSet iterator types
+  
+// Software Guide : BeginLatex
+// Since the SIFT detector produces a point set, we will need
+// iterators for the coordinates of the points and the data associated
+// with them.
+// Software Guide : EndLatex
+// Software Guide : BeginCodeSnippet  
   typedef PointSetType::PointsContainer PointsContainerType;
   typedef PointsContainerType::Iterator PointsIteratorType;
   typedef PointSetType::PointDataContainer PointDataContainerType;
   typedef PointDataContainerType::Iterator PointDataIteratorType;
   
-  // Instantiating object
+// Software Guide : EndCodeSnippet
+
+  
+// Software Guide : BeginLatex
+// We can now instantiate the reader anf the SIFT filter and plug the pipeline.
+// Software Guide : EndLatex
+// Software Guide : BeginCodeSnippet  
   ReaderType::Pointer reader = ReaderType::New();
   ImageToSIFTKeyPointSetFilterType::Pointer filter = ImageToSIFTKeyPointSetFilterType::New();
   
@@ -107,11 +135,27 @@ int main(int argc, char * argv[])
 
     
   filter->SetInput(0,reader->GetOutput());
+
+// Software Guide : EndCodeSnippet
+
+  
+// Software Guide : BeginLatex
+// The SIFT filter needs the following parameters:
+// \begin{itemize}
+// \item the number of octaves, that is, the number of levels of undersampling,
+// \item the number of scales (blurring) per octave,
+// \item the threshold to be applied to each point for the detection
+// on the Difference of Gaussians image,
+// \item the threshold on the responses to consider a point as an adge.
+// \end{itemize}  
+// Software Guide : EndLatex
+// Software Guide : BeginCodeSnippet    
   filter->SetOctavesNumber(octaves);
   filter->SetScalesNumber(scales);
   
   filter->SetDoGThreshold(threshold);
   filter->SetEdgeThreshold(ratio);
+// Software Guide : EndCodeSnippet  
 
   filter->Update();
 
@@ -131,7 +175,7 @@ int main(int argc, char * argv[])
   // 1 and 2 respectively.} 
   // \label{fig:SIFT}
   // \end{figure}
-    // Figure~\ref{fig:SIFT} shows the result of applying the SIFT
+    // Figure~\ref{fig:SIFT2} shows the result of applying the SIFT
   // point detector to a small patch extracted from a Spot 5 image
   // using different threshold values.
   // \begin{figure}
@@ -142,8 +186,8 @@ int main(int argc, char * argv[])
   // \itkcaption[SIFT Application]{Result of applying the
   // \doxygen{otb}{ImageToSIFTKeyPointSetFilter} to a high resolution image
   // image. Left to right: original image and SIFT on the original
-  // anda rotated image respectively.} 
-  // \label{fig:SIFT}
+  // and a rotated image respectively.} 
+  // \label{fig:SIFT2}
   // \end{figure}
   //  Software Guide : EndLatex
   
