@@ -25,9 +25,9 @@
 #endif
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {QB_Suburb.png}
+//    INPUTS: {QB_Suburb.png RandomImage.png}
 //    OUTPUTS: {MarkovRandomField1.png}
-//    1.0 20 1.0
+//    1.0 30 1.0
 //  Software Guide : EndCommandLineArgs
 
 
@@ -43,6 +43,8 @@
 // regularization energy is defined by a Potts model and the fidelity by a 
 // Gaussian model.
 //
+// The starting state of classification is given by the image proposed as a second 
+// parameter. It could be a random image.
 //
 // Software Guide : EndLatex 
 
@@ -72,12 +74,11 @@
 int main(int argc, char* argv[] ) 
 {
   
-  if( argc != 6 )
+  if( argc != 7 )
   {
-    std::cerr << "Missing Parameters "<< argc << std::endl;
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr << " inputImage output lambda iterations temperature" << std::endl;
+    std::cerr << " inputImage inputInitialization output lambda iterations temperature" << std::endl;
     return 1;
   }
   
@@ -86,7 +87,7 @@ int main(int argc, char* argv[] )
   //
   //  Then we must decide what pixel type to use for the image. We
   //  choose to make all computations with double precision.
-  //  The labelled image is of type unsigned char which allows up to 256 different 
+  //  The labelled image is of type unsigned char to allow up to 256 different 
   //  classes.
   //
   //  Software Guide : EndLatex 
@@ -114,15 +115,19 @@ int main(int argc, char* argv[] )
   // Software Guide : BeginCodeSnippet
 
   typedef otb::ImageFileReader< InputImageType >  ReaderType;
+  typedef otb::ImageFileReader< LabelledImageType >  ReaderLabelledType;
   typedef otb::ImageFileWriter< LabelledImageType >  WriterType;
   
   ReaderType::Pointer reader = ReaderType::New();
+  ReaderLabelledType::Pointer reader2 = ReaderLabelledType::New();
   WriterType::Pointer writer = WriterType::New();
   
   const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char * labelledFilename  = argv[2];
+  const char * outputFilename = argv[3];
   
   reader->SetFileName( inputFilename );
+  reader2->SetFileName( labelledFilename );
   writer->SetFileName( outputFilename );
 
   // Software Guide : EndCodeSnippet
@@ -249,19 +254,15 @@ int main(int argc, char* argv[] )
   // Software Guide : BeginCodeSnippet
   
   
-  optimizer->SetParameters(atoi(argv[5]));
+  optimizer->SetParameters(atoi(argv[6]));
   markovFilter->SetNumberOfClasses(nClass);  
-  markovFilter->SetMaximumNumberOfIterations(atoi(argv[4]));
+  markovFilter->SetMaximumNumberOfIterations(atoi(argv[5]));
   markovFilter->SetErrorTolerance(0.0);
-  markovFilter->SetLambda(atof(argv[3]));
+  markovFilter->SetLambda(atof(argv[4]));
   markovFilter->SetNeighborhoodRadius(1);
+  
   markovFilter->SetEnergyRegularization(static_cast<MarkovRandomFieldFilterType::EnergyRegularizationPointer>(energyRegularization));
   markovFilter->SetEnergyFidelity(static_cast<MarkovRandomFieldFilterType::EnergyFidelityPointer>(energyFidelity));
-  /** Pas de finction concordante avec l'appel EnergyPotts*/
-  /*
-  markovFilter->SetEnergyRegularization(energyRegularization);
-  markovFilter->SetEnergyFidelity(energyFidelity);
-  */
   markovFilter->SetOptimizer(optimizer);
   markovFilter->SetSampler(sampler);
   
@@ -276,6 +277,7 @@ int main(int argc, char* argv[] )
   
   // Software Guide : BeginCodeSnippet
   
+  markovFilter->SetTrainingInput(reader2->GetOutput());
   markovFilter->SetInput(reader->GetOutput());
     
   typedef itk::RescaleIntensityImageFilter

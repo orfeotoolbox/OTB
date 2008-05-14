@@ -25,23 +25,20 @@
 #endif
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {QB_Suburb.png RandomImage.png}
-//    OUTPUTS: {MarkovClassification2.png}
-//    1.0 30 1.0
+//    INPUTS: {QB_Suburb.png}
+//    OUTPUTS: {MarkovRandomField1.png}
+//    1.0 5
 //  Software Guide : EndCommandLineArgs
 
 
 // Software Guide : BeginLatex
 //
-// This example illustrates the details of the \doxygen{otb}{MarkovClassificationFilter}. 
-// This filter is an application of the Markov Random Fields for classification, 
-// segmentation or restauration.
-//
-// This example applies the \doxygen{otb}{MarkovClassificationFilter} to 
-// classify an image into four classes defined by their mean and variance. The 
-// optimization is done using an ICM algorithm with a MAP estimator. The 
-// regularization energy is defined by a Potts model and the fidelity by a 
-// Gaussian model.
+// Using a similar structure as the previous program and the same energy 
+// function, we are now going to slightly alter the program to use a 
+// different sampler and optimizer. The proposed sample is proposed
+// randomly according to the MAP probability and the optimizer is the
+// ICM which accept the proposed sample if it enable a reduction of
+// the energy.
 //
 // Software Guide : EndLatex 
 
@@ -54,47 +51,31 @@
 
 // Software Guide : BeginLatex
 //
-// The first step toward the use of this filter is the inclusion of the proper 
-// header files.
+// First, we need to include header specific to these class:
 //
 // Software Guide : EndLatex 
 
-// Software Guide : BeginCodeSnippet
+
 #include "otbMRFEnergy.h"
 #include "otbMRFEnergyPotts.h"
 #include "otbMRFEnergyGaussianClassification.h"
-// #include "otbMRFEnergyPotts.h"
-// #include "otbMRFEnergyGaussianClassification.h"
-// #include "otbMRFOptimizerICM.h"
-// #include "otbMRFSamplerMAP.h"
+
+// Software Guide : BeginCodeSnippet
 #include "otbMRFSamplerRandomMAP.h"
 #include "otbMRFOptimizerICM.h"
-// #include "otbMRFSamplerRandom.h"
 // Software Guide : EndCodeSnippet
-
+#include "otbMRFSamplerRandom.h"
 
 int main(int argc, char* argv[] ) 
 {
   
-  if( argc < 6 )
+  if( argc != 5 )
   {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr << " inputImage inputInitialization output lambda iterations temperature" << std::endl;
+    std::cerr << " inputImage output lambda iterations" << std::endl;
     return 1;
   }
-  
-  
-  //  Software Guide : BeginLatex
-  //
-  //  Then we must decide what pixel type to use for the image. We
-  //  choose to make all computations with double precision.
-  //  The labelled image is of type unsigned char to allow up to 256 different 
-  //  classes.
-  //
-  //  Software Guide : EndLatex 
-
-  // Software Guide : BeginCodeSnippet
 
   const unsigned int Dimension = 2;
   
@@ -103,78 +84,35 @@ int main(int argc, char* argv[] )
   typedef otb::Image<InternalPixelType, Dimension>  InputImageType;
   typedef otb::Image<LabelledPixelType, Dimension>    LabelledImageType;
 
-  // Software Guide : EndCodeSnippet
-
-  
-  //  Software Guide : BeginLatex
-  //
-  //  We define a reader for the image to be classified, an initialisation for the 
-  //  classification (which could be random) and a writer for the final
-  //  classification.
-  //
-  //  Software Guide : EndLatex 
-
-  // Software Guide : BeginCodeSnippet
-
   typedef otb::ImageFileReader< InputImageType >  ReaderType;
-  typedef otb::ImageFileReader< LabelledImageType >  ReaderLabelledType;
   typedef otb::ImageFileWriter< LabelledImageType >  WriterType;
   
   ReaderType::Pointer reader = ReaderType::New();
-  ReaderLabelledType::Pointer reader2 = ReaderLabelledType::New();
   WriterType::Pointer writer = WriterType::New();
   
   const char * inputFilename  = argv[1];
-  const char * labelledFilename  = argv[2];
-  const char * outputFilename = argv[3];
+  const char * outputFilename = argv[2];
   
   reader->SetFileName( inputFilename );
-  reader2->SetFileName( labelledFilename );
   writer->SetFileName( outputFilename );
-
-  // Software Guide : EndCodeSnippet
-
-  //  Software Guide : BeginLatex
-  //
-  //  Finally, we define the different classes necessary for the Markov classification. 
-  //  A \doxygen{otb}{MarkovClassificationFilter} is instanciated, this is the 
-  // main class which connect the other to do the Markov classification.
-  //
-  //  Software Guide : EndLatex 
-
-  // Software Guide : BeginCodeSnippet
 
   typedef otb::MarkovRandomFieldFilter
 	  <InputImageType,LabelledImageType> MarkovRandomFieldFilterType;
 
-  // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
   //
-  //  An \doxygen{otb}{MRFSamplerRandomMAP}, which derives from the 
-  // \doxygen{otb}{MRFSampler}, is instanciated. The sampler is in charge of 
-  // proposing a modification for a given site. The 
-  // \doxygen{otb}{MRFSamplerRandomMAP}, randomly pick one possible value 
-  // according to the MAP probability.
+  //  And to declare these new type:
   //
   //  Software Guide : EndLatex 
 
   // Software Guide : BeginCodeSnippet
 
   typedef otb::MRFSamplerRandomMAP< InputImageType, LabelledImageType> SamplerType;
+//   typedef otb::MRFSamplerRandom< InputImageType, LabelledImageType> SamplerType;
   
-
   // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
-  //  An \doxygen{otb}{MRFOptimizerMetropoli}, which derives from the 
-  // \doxygen{otb}{MRFOptimizer}, is instanciated. The optimizer is in charge 
-  // of accepting or rejecting the value proposed by the sampler. The 
-  // \doxygen{otb}{MRFSamplerRandomMAP}, accept the proposal according to the 
-  // variation of energy it causes and a temperature parameter.
-  //
-  //  Software Guide : EndLatex 
 
   // Software Guide : BeginCodeSnippet
 
@@ -182,35 +120,10 @@ int main(int argc, char* argv[] )
 
   // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
-  // Two energy, deriving from the \doxygen{otb}{MRFEnergy} class need to be instanciated. One energy
-  // is required for the regularization, taking into account the relashionship between neighborhing pixels
-  // in the classified image. Here it is done with the \doxygen{otb}{MRFEnergyPotts} which implement
-  // a Potts model.
-  //
-  // The second energy is for the fidelity to the original data. Here it is done with an
-  // \doxygen{otb}{MRFEnergyGaussianClassification} class, which defines a gaussian model for the data.
-  //
-  //  Software Guide : EndLatex 
-
-  // Software Guide : BeginCodeSnippet
-
   typedef otb::MRFEnergyPotts
 		  <LabelledImageType, LabelledImageType>  EnergyRegularizationType;
   typedef otb::MRFEnergyGaussianClassification
 		  <InputImageType, LabelledImageType>  EnergyFidelityType;
-
-  // Software Guide : EndCodeSnippet
-  
-   // Software Guide : BeginLatex
-   //
-   // The different filters composing our pipeline are created by invoking their
-   // \code{New()} methods, assigning the results to smart pointers.
-   //
-   // Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
 
   MarkovRandomFieldFilterType::Pointer markovFilter = MarkovRandomFieldFilterType::New();
   EnergyRegularizationType::Pointer energyRegularization = EnergyRegularizationType::New();
@@ -218,38 +131,7 @@ int main(int argc, char* argv[] )
   OptimizerType::Pointer optimizer = OptimizerType::New();
   SamplerType::Pointer sampler = SamplerType::New();
 
-  // Software Guide : EndCodeSnippet
-  
-  // Software Guide : BeginLatex
-  //
-  // Parameter for the \doxygen{otb}{MRFEnergyGaussianClassification} class, meand
-  // and standard deviation are created.
-  //
-  // Software Guide : EndLatex
-  
-  
-  // Software Guide : BeginCodeSnippet
-  
   unsigned int nClass = 4;
-  itk::VariableLengthVector<double> mean;
-  itk::VariableLengthVector<double> stdDev;
-  mean.SetSize(nClass);
-  stdDev.SetSize(nClass);
-  mean[0]=10;mean[1]=80;mean[2]=150;mean[3]=220;
-  stdDev[0]=10;stdDev[1]=10;stdDev[2]=10;stdDev[3]=10;
-  
-  // Software Guide : EndCodeSnippet
-  
-  
-  // Software Guide : BeginLatex
-  //
-  // Parameters are given to the different class an the sampler, optimizer and
-  // energies are connected with the Markov filter.
-  //
-  // Software Guide : EndLatex
-  
-  // Software Guide : BeginCodeSnippet
-  
   energyFidelity->SetNumberOfParameters(2*nClass); 
   EnergyFidelityType::ParametersType parameters;
   parameters.SetSize(energyFidelity->GetNumberOfParameters());
@@ -262,30 +144,26 @@ int main(int argc, char* argv[] )
   parameters[6]=220.0;//Class 3 mean
   parameters[7]=10.0; //Class 3 stde
   energyFidelity->SetParameters(parameters);
-
-  markovFilter->SetNumberOfClasses(nClass);  
-  markovFilter->SetMaximumNumberOfIterations(atoi(argv[5]));
-  markovFilter->SetErrorTolerance(-1.0);
-  markovFilter->SetLambda(atof(argv[4]));
-  markovFilter->SetNeighborhoodRadius(1);
   
-  markovFilter->SetEnergyRegularization(energyRegularization);
-  markovFilter->SetEnergyFidelity(energyFidelity);
-  markovFilter->SetOptimizer(optimizer);
-  markovFilter->SetSampler(sampler);
-  
-  // Software Guide : EndCodeSnippet
   
   // Software Guide : BeginLatex
   //
-  // The pipeline is connected. An \doxygen{itk}{RescaleIntensityImageFilter} 
-  // rescale the classified image before saving it.
+  // As the \doxygen{otb}{MRFOptimizerICM} does not have any parameters,
+  // the call to \code{optimizer->SetParameters()} must be removed
   //
   // Software Guide : EndLatex
   
-  // Software Guide : BeginCodeSnippet
+  markovFilter->SetNumberOfClasses(nClass);  
+  markovFilter->SetMaximumNumberOfIterations(atoi(argv[4]));
+  markovFilter->SetErrorTolerance(0.0);
+  markovFilter->SetLambda(atof(argv[3]));
+  markovFilter->SetNeighborhoodRadius(1);
   
-  markovFilter->SetTrainingInput(reader2->GetOutput());
+  markovFilter->SetEnergyRegularization(static_cast<MarkovRandomFieldFilterType::EnergyRegularizationPointer>(energyRegularization));
+  markovFilter->SetEnergyFidelity(static_cast<MarkovRandomFieldFilterType::EnergyFidelityPointer>(energyFidelity));
+  markovFilter->SetOptimizer(optimizer);
+  markovFilter->SetSampler(sampler);
+  
   markovFilter->SetInput(reader->GetOutput());
     
   typedef itk::RescaleIntensityImageFilter
@@ -298,19 +176,13 @@ int main(int argc, char* argv[] )
   
   writer->SetInput( rescaleFilter->GetOutput() );
   
-  // Software Guide : EndCodeSnippet
+  writer->Update();
   
   // Software Guide : BeginLatex
   //
-  // Finally, the pipeline execution is trigerred.
+  // Apart from these, no further modification is required.
   //
   // Software Guide : EndLatex
-  
-  // Software Guide : BeginCodeSnippet
-  
-  writer->Update();  
-  
-  // Software Guide : EndCodeSnippet
   
   return 0;
   

@@ -25,12 +25,17 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(MarkovRandomField1ExampleTest);
+  REGISTER_TEST(MarkovRandomField1ExampleTest);
+  REGISTER_TEST(MarkovRandomField2ExampleTest);
 }
 
 #undef main
 #define main MarkovRandomField1ExampleTest
 #include "MarkovRandomField1Example.cxx"
+             
+#undef main
+#define main MarkovRandomField2ExampleTest
+#include "MarkovRandomField2Example.cxx"             
              
                           
              
