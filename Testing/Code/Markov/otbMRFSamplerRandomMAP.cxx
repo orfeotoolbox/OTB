@@ -52,7 +52,7 @@ int otbMRFSamplerRandomMAP(int argc, char * argv[])
   readerLab->Update();
 
   // USED TO OVERPASS RANDOM CALCULATION
-  object->SetValueInsteadRandom(300); 
+  //object->SetValueInsteadRandom(300); 
 
   ImageType::IndexType idIn;
   LabelType::IndexType idLab;

@@ -27,7 +27,7 @@ int otbMRFOptimizerICM(int argc, char * argv[])
 
   MRFOptimizerICMType::Pointer object = MRFOptimizerICMType::New();
   
-  if ( object->operator()(-1) != true || object->operator()(1) != false || object->operator()(0) != false )
+  if ( object->Compute(-1) != true || object->Compute(1) != false )
     {
       return EXIT_FAILURE;
     }

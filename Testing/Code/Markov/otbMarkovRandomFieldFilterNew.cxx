@@ -19,17 +19,17 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "otbMarkovClassificationFilter.h"
+#include "otbMarkovRandomFieldFilter.h"
 #include "otbImage.h"
 
 
-int otbMarkovClassificationFilterNew(int argc, char * argv[])
+int otbMarkovRandomFieldFilterNew(int argc, char * argv[])
 {
   typedef double PixelType;
-  typedef otb::Image<PixelType, 2>                                ImageType;
-  typedef otb::MarkovClassificationFilter< ImageType, ImageType>  MarkovClassificationFilterType;
+  typedef otb::Image<PixelType, 2>                             ImageType;
+  typedef otb::MarkovRandomFieldFilter< ImageType, ImageType>  MarkovRandomFieldFilterType;
 
-  MarkovClassificationFilterType::Pointer object = MarkovClassificationFilterType::New();
+  MarkovRandomFieldFilterType::Pointer object = MarkovRandomFieldFilterType::New();
   
   return EXIT_SUCCESS;
 }

@@ -31,7 +31,7 @@ int otbMRFSamplerNew(int argc, char * argv[])
   typedef otb::Image<PixelType, 2>               ImageType;
   typedef otb::MRFSampler< ImageType, ImageType> MRFSamplerType;
 
-  MRFSamplerType::Pointer object = MRFSamplerType::New();
+  //MRFSamplerType::Pointer object = MRFSamplerType::New();
   
   return EXIT_SUCCESS;
 }

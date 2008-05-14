@@ -35,7 +35,7 @@ int otbMRFOptimizerMetropolis(int argc, char * argv[])
   object->SetParameters(param);
 
   // USED TO OVERPASS RANDOM CALCULATION
-  object->SetValueInsteadRandom(1);
+  //object->SetValueInsteadRandom(1);
 
   std::ofstream file;
   file.open(outputFile);
@@ -43,7 +43,7 @@ int otbMRFOptimizerMetropolis(int argc, char * argv[])
   file<<"Compute(0)                                       : "<<object->Compute(0.)<<std::endl;
   file<<"Compute(-1.)                                     : "<<object->Compute(-1.)<<std::endl;
   file<<"Compute(1.) avec m_ValueInsteadRandom<proba*1000 : "<<object->Compute(1.)<<std::endl;
-  object->SetValueInsteadRandom( 10000 );
+  //object->SetValueInsteadRandom( 10000 );
   file<<"Compute(1.) avec m_ValueInsteadRandom>=proba*1000: "<<object->Compute(1.)<<std::endl;
 
   file.close();
