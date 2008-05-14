@@ -51,6 +51,8 @@ int otbMRFSamplerRandomMAP(int argc, char * argv[])
   readerIn->Update();
   readerLab->Update();
 
+  object->SetNumberOfClasses(1);
+
   // USED TO OVERPASS RANDOM CALCULATION
   //object->SetValueInsteadRandom(300); 
 
