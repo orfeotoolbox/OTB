@@ -65,6 +65,11 @@ ADD_EXECUTABLE(ThresholdToPointSetExample ThresholdToPointSetExample.cxx)
 TARGET_LINK_LIBRARIES(ThresholdToPointSetExample OTBIO OTBCommon OTBFeatureExtraction
 ITKCommon ITKBasicFilters)
 
+ADD_EXECUTABLE(SIFTExample SIFTExample.cxx)
+TARGET_LINK_LIBRARIES(SIFTExample OTBIO OTBCommon OTBFeatureExtraction
+ITKCommon ITKBasicFilters)
+
+
 IF( NOT OTB_DISABLE_CXX_TESTING AND NOT OTB_DISABLE_CXX_EXAMPLES_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/FeatureExtraction)

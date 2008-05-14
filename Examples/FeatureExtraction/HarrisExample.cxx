@@ -138,7 +138,7 @@ int main(int argc, char *argv[] )
   // \center
   // \includegraphics[width=0.25\textwidth]{ROISpot5.eps}
   // \includegraphics[width=0.25\textwidth]{ROISpot5Harris.eps}
-  // \itkcaption[Lee Filter Application]{Result of applying the
+  // \itkcaption[Harris Filter Application]{Result of applying the
   // \doxygen{otb}{HarrisImageFilter} to a Spot 5 image.} 
   // \label{fig:Harris}
   // \end{figure}
