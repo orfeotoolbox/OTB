@@ -40,16 +40,8 @@ class ITK_EXPORT MRFOptimizer : public itk::Object
     typedef itk::SmartPointer<const Self> ConstPointer;
     typedef itk::Array< double >          ParametersType;
     
-    /** Le new avait disparu donc plus de ::Pointer declare...*/
-    itkNewMacro(Self);   
-
     itkTypeMacro(MRFOptimizer, itk::Object);
-    
- /** Utilmisation des accessuers itk*/
-    /*
-    unsigned int GetNumberOfParameters(void) const 
-    { return m_NumberOfParameters; }
-    */
+       
     itkGetConstMacro(NumberOfParameters, unsigned int);
     
     // Get the parameters
@@ -82,11 +74,7 @@ class ITK_EXPORT MRFOptimizer : public itk::Object
 //       }
     }
     
-    /** Ne peut allouer un objet de type MRF::Optimizer parce que les fonctions virtuelles suivantes sont abstraites*/
-    virtual bool Compute(double deltaEnergy)
-{
-return 0;
-}
+    virtual bool Compute(double deltaEnergy) = 0;
     
   protected:
     MRFOptimizer() 

@@ -320,6 +320,8 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 	  outImageIt.Set( randomvalue );
 	  ++outImageIt;
 	}// end while
+      
+        
     }
   
   

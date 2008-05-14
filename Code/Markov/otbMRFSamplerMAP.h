@@ -69,6 +69,11 @@ namespace otb
           inline int Compute( const InputImageNeighborhoodIterator & itData, 
                               const LabelledImageNeighborhoodIterator & itRegul)             
           {
+          if (this->m_NumberOfClasses == 0)
+            {
+            itkExceptionMacro(<<"NumberOfClasse has to be greater than 0.");
+            }
+            
             this->m_EnergyBefore=this->m_EnergyFidelity->GetValue(itData, itRegul.GetCenterPixel());
             this->m_EnergyBefore  +=  this->m_Lambda 
                 * this->m_EnergyRegularization->GetValue(itRegul, itRegul.GetCenterPixel());
@@ -76,9 +81,7 @@ namespace otb
               //Try all possible value (how to be generic ?)
             this->m_EnergyAfter = this->m_EnergyBefore; //default values to current one
             this->m_Value = itRegul.GetCenterPixel();
-//             for (LabelledImagePixelType valueCurrent = 0; 
-//                  valueCurrent< this->m_NumberOfClasses; ++valueCurrent)
-//             {
+
             LabelledImagePixelType valueCurrent = 0;
             while( valueCurrent<static_cast<LabelledImagePixelType>(this->GetNumberOfClasses()) && valueCurrent != itk::NumericTraits<LabelledImagePixelType>::max() )
             {
@@ -93,6 +96,7 @@ namespace otb
               valueCurrent++;
             }
               
+                         
             this->m_DeltaEnergy=  this->m_EnergyAfter - this->m_EnergyBefore;
                
             return 0;

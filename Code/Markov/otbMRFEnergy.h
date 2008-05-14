@@ -49,19 +49,9 @@ class ITK_EXPORT MRFEnergy : public itk::Object
     
     typedef itk::Array< double > ParametersType;
     
-    /** Le new avait disparu...*/
-    itkNewMacro(Self);
-    
     itkTypeMacro(MRFEnergy,itk::Object);
     
-      /** Utilisation des accesseur itk*/
-    /*
-    void SetNumberOfParameters(unsigned int nb) 
-     { m_NumberOfParameters = nb; this->Modified(); }  
-    unsigned int GetNumberOfParameters(void) const 
-      { return m_NumberOfParameters; }
-    */
-
+    
     itkSetMacro(NumberOfParameters, unsigned int);
     itkGetConstMacro(NumberOfParameters, unsigned int);
     
@@ -70,7 +60,6 @@ class ITK_EXPORT MRFEnergy : public itk::Object
       {
 	return this->m_Parameters;
       }
-  
     
     void SetParameters( const ParametersType & parameters )
       {
@@ -96,11 +85,7 @@ class ITK_EXPORT MRFEnergy : public itk::Object
 // 	  }
       }
     
-    /** Ne peut allouer un objet de type MRF::Energy parce que les fonctions virtuelles suivantes sont abstraites*/
-    virtual double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)
-{
-return 0;
-}
+    virtual double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2) = 0;
     
     double GetValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)
       {
@@ -174,27 +159,21 @@ class ITK_EXPORT MRFEnergy<TInput2,TInput2> : public itk::Object
     typedef itk::ConstNeighborhoodIterator< LabelledImageType >  LabelledNeighborhoodIterator;
     typedef itk::Array< double >                                 ParametersType;
     
-    /** Le new avait disparu...*/
-    itkNewMacro(Self);
     
     itkTypeMacro(MRFEnergy,itk::Object);
     
-    /** Utilisation des accesseur itk*/
-    /*
-    void SetNumberOfParameters(unsigned int nb) 
-     { m_NumberOfParameters = nb; this->Modified(); }  
-    unsigned int GetNumberOfParameters(void) const 
-      { return m_NumberOfParameters; }
-    */
-
+    
     itkSetMacro(NumberOfParameters, unsigned int);
     itkGetConstMacro(NumberOfParameters, unsigned int);
+    
     
     // Get the parameters
     const ParametersType& GetParameters( void ) const
       {
 	return this->m_Parameters;
       }
+      
+      
     
     void SetParameters( const ParametersType & parameters )
       {
@@ -220,11 +199,7 @@ class ITK_EXPORT MRFEnergy<TInput2,TInput2> : public itk::Object
 	  }*/
       }
     
-        /** Ne peut allouer un objet de type MRF::Energy parce que les fonctions virtuelles suivantes sont abstraites*/
-    virtual double GetSingleValue(const LabelledImagePixelType & value1,  const LabelledImagePixelType & value2)
-    {
-    return 0;
-    }
+    virtual double GetSingleValue(const LabelledImagePixelType & value1,  const LabelledImagePixelType & value2) = 0;
     
     double GetValue(const LabelledImagePixelType & value1,  const LabelledImagePixelType & value2)
       {

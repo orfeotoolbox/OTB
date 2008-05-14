@@ -78,6 +78,10 @@ namespace otb
           inline int Compute( const InputImageNeighborhoodIterator & itData, 
                               const LabelledImageNeighborhoodIterator & itRegul)
           {
+            if (this->m_NumberOfClasses == 0)
+            {
+            itkExceptionMacro(<<"NumberOfClasse has to be greater than 0.");
+            }
             
             this->m_EnergyBefore = this->m_EnergyFidelity->GetValue(itData, itRegul.GetCenterPixel());
             this->m_EnergyBefore += this->m_Lambda 
@@ -90,47 +94,41 @@ namespace otb
             //Compute probability for each possibility
             double totalProba=0.0;
             for (LabelledImagePixelType valueCurrent = 0; 
-                 valueCurrent < static_cast<LabelledImagePixelType>(this->m_NumberOfClasses); ++valueCurrent)
+                 valueCurrent < static_cast<LabelledImagePixelType>(this->m_NumberOfClasses);
+                 ++valueCurrent)
             {
               this->m_EnergyCurrent = this->m_EnergyFidelity->GetValue(itData, valueCurrent);
               this->m_EnergyCurrent += this->m_Lambda 
                   * this->m_EnergyRegularization->GetValue(itRegul, valueCurrent);
 
-              energy[static_cast<unsigned int>(valueCurrent)] = this->m_EnergyCurrent;
-              repartitionFunction[static_cast<unsigned int>(valueCurrent)] = vcl_exp(-this->m_EnergyCurrent)+totalProba;
-              totalProba = repartitionFunction[static_cast<unsigned int>(valueCurrent)];
+              energy[static_cast<unsigned int>(valueCurrent)] 
+                  = this->m_EnergyCurrent;
+              repartitionFunction[static_cast<unsigned int>(valueCurrent)] 
+                  = vcl_exp(-this->m_EnergyCurrent)+totalProba;
+              totalProba 
+                  = repartitionFunction[static_cast<unsigned int>(valueCurrent)];
 
             }
               
               //Pick a value according to probability
               
             double select = (rand()/(double(RAND_MAX)+1) * totalProba);
-            
-        /*** POUR EVITER LE SEGFAULT : on sort de la taille du tableau si la condition du break n'est pas respectee...*/
-        /*
-            LabelledImagePixelType valueCurrent = 0;
-            for (valueCurrent = 0; 
-                 valueCurrent < static_cast<LabelledImagePixelType>(this->m_NumberOfClasses); ++valueCurrent)
-            {
-              if (repartitionFunction[static_cast<unsigned int>(valueCurrent)] > select) break;
-            }
-              */
-        unsigned int valueCurrent = 0;
+             unsigned int valueCurrent = 0;
         while( valueCurrent<this->GetNumberOfClasses() && repartitionFunction[valueCurrent] <= select)
         {
             valueCurrent++;
         }
    
-        // TODO avoir la confirmation cnesienne : premier indince ou dernier
         if ( valueCurrent==this->GetNumberOfClasses() )
         {
-            valueCurrent = 0;
+            valueCurrent = this->GetNumberOfClasses()-1;
         }
-    
+           
+              
             if ( this->m_Value != static_cast<LabelledImagePixelType>(valueCurrent))
             {
               this->m_Value = static_cast<LabelledImagePixelType>(valueCurrent);
-              this->m_EnergyAfter = energy[valueCurrent];
+              this->m_EnergyAfter = energy[static_cast<unsigned int>(valueCurrent)];
             }
                             
             this->m_DeltaEnergy=  this->m_EnergyAfter - this->m_EnergyBefore;
@@ -145,8 +143,8 @@ namespace otb
         protected:
           // The constructor and destructor.
           MRFSamplerRandomMAP() {
-          energy=NULL;
-          repartitionFunction=NULL;
+            energy=NULL;
+            repartitionFunction=NULL;
           };
           virtual ~MRFSamplerRandomMAP() {
             if (energy != NULL) free(energy);

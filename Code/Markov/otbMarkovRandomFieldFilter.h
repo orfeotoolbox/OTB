@@ -33,7 +33,7 @@
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkNeighborhood.h"
 #include "itkSize.h"
-
+#include "itkRandomImageSource.h"
 #include "otbMRFEnergy.h"
 #include "otbMRFOptimizer.h"
 #include "otbMRFSampler.h"
@@ -177,17 +177,17 @@ public itk::ImageToImageFilter<TInputImage,TClassifiedImage>
    ************ ACCESSORS ************
    */
 
-     void SetEnergyRegularization( EnergyRegularizationPointer enerReg ){ m_EnergyRegularization=enerReg; this->Modified(); };
-  EnergyRegularizationPointer GetEnergyRegularization(){ return m_EnergyRegularization; };
-  void SetEnergyFidelity( EnergyFidelityPointer enerFid ){ m_EnergyFidelity=enerFid; this->Modified(); };
-  EnergyFidelityPointer GetEnergyFidelity(){ return m_EnergyFidelity; };
-  /*
+//      void SetEnergyRegularization( EnergyRegularizationPointer enerReg ){ m_EnergyRegularization=enerReg; this->Modified(); };
+//   EnergyRegularizationPointer GetEnergyRegularization(){ return m_EnergyRegularization; };
+//   void SetEnergyFidelity( EnergyFidelityPointer enerFid ){ m_EnergyFidelity=enerFid; this->Modified(); };
+//   EnergyFidelityPointer GetEnergyFidelity(){ return m_EnergyFidelity; };
+  
   itkSetObjectMacro( EnergyRegularization, EnergyRegularizationType);
   itkGetObjectMacro( EnergyRegularization, EnergyRegularizationType);
   
   itkSetObjectMacro( EnergyFidelity, EnergyFidelityType);
   itkGetObjectMacro( EnergyFidelity, EnergyFidelityType);      
-  */
+  
    
     
     itkSetObjectMacro( Sampler, SamplerType);
