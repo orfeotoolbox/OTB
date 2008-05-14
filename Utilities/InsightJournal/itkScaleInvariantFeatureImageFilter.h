@@ -151,7 +151,8 @@ namespace itk
 
       /** Filters for scaling and resampling images for the multiple scales */
       typedef ResampleImageFilter< TFixedImageType, TFixedImageType > ResampleFilterType;
-
+      typedef typename ResampleFilterType::Pointer ResampleFilterPointerType;
+      
       /** Constructor to set default values */
       ScaleInvariantFeatureImageFilter();
 
@@ -159,7 +160,7 @@ namespace itk
       void writeImage(FixedImagePointer fixedImage, const char *filename);
       
       /** Create a filter that resamples the image (scale up or down)  */
-      typename ResampleFilterType::Pointer getScaleResampleFilter ( typename TFixedImageType::Pointer fixedImage, float scale );
+      ResampleFilterPointerType getScaleResampleFilter ( FixedImagePointer fixedImage, float scale );
 
       void SetDoubling (bool tmp);
       void SetNumBins( unsigned int tmp);

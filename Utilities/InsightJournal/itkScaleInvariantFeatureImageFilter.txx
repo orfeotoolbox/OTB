@@ -716,9 +716,9 @@ namespace itk
   
   // create a filter that resamples the image (scale up or down) 
   template <class TFixedImageType, unsigned int VDimension> 
-  typename ScaleInvariantFeatureImageFilter<TFixedImageType,VDimension>::ResampleFilterType::Pointer
+  typename ScaleInvariantFeatureImageFilter<TFixedImageType,VDimension>::ResampleFilterPointerType
   ScaleInvariantFeatureImageFilter<TFixedImageType,VDimension>
-  ::getScaleResampleFilter ( typename FixedImagePointer fixedImage, float scale )
+  ::getScaleResampleFilter ( FixedImagePointer fixedImage, float scale )
   {
     ResampleFilterPointerType scaler = ResampleFilterType::New();
     
