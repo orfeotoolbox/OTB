@@ -175,6 +175,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Path/PolyLineParametricPath1.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/ImageReadWrite.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/StreamingImageReadWrite.cxx
+  ${OTB_SOURCE_DIR}/Examples/IO/ExplicitStreamingExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/RGBImageReadWrite.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/ImageReadCastWrite.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/ImageReadRegionOfInterestWrite.cxx
