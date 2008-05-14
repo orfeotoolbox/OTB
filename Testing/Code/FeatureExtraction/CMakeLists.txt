@@ -788,6 +788,16 @@ ADD_TEST(feTvImageToSIFTKeyPointSetFilterSquareOutputAscii ${FEATUREEXTRACTION_T
 		7 3 0.01 10 
 )
 
+ADD_TEST(feTvImageToSIFTKeyPointSetFilterSquareRotatedOutputAscii ${FEATUREEXTRACTION_TESTS9}
+--compare-ascii ${EPS}
+		${BASELINE_FILES}/feTvImageToSIFTKeyPointSetFilterSquareRotatedKeysOutput.txt
+		${TEMP}/feTvImageToSIFTKeyPointSetFilterSquareRotatedKeysOutput.txt
+         otbImageToSIFTKeyPointSetFilterOutputAscii
+		${INPUTDATA}/carre_ori.png
+		${TEMP}/feTvImageToSIFTKeyPointSetFilterSquareRotatedKeysOutput.txt
+		7 3 0.01 10
+)
+
 ADD_TEST(feTvImageToSIFTKeyPointSetFilterGridOutputImage ${FEATUREEXTRACTION_TESTS9}
 --compare-image ${EPSILON}
 		${BASELINE}/feTvImageToSIFTKeyPointSetFilterGridImageOutput.png
@@ -806,6 +816,26 @@ ADD_TEST(feTvImageToSIFTKeyPointSetFilterGridOutputAscii ${FEATUREEXTRACTION_TES
 		${INPUTDATA}/damier.png
 		${TEMP}/feTvImageToSIFTKeyPointSetFilterGridKeysOutput.txt
 		7 3 0.01 10 
+)
+
+ADD_TEST(feTvImageToSIFTKeyPointSetFilterSquare2OutputAscii ${FEATUREEXTRACTION_TESTS9}
+--compare-ascii ${EPS}
+		${BASELINE_FILES}/feTvImageToSIFTKeyPointSetFilterSquareKeysOutput2.txt
+		${TEMP}/feTvImageToSIFTKeyPointSetFilterSquareKeysOutput2.txt
+         otbImageToSIFTKeyPointSetFilterOutputAscii
+		${INPUTDATA}/carre.png
+		${TEMP}/feTvImageToSIFTKeyPointSetFilterSquareKeysOutput2.txt
+		1 3 0.5 10 
+)
+
+ADD_TEST(feTvImageToSIFTKeyPointSetFilterSquareRotated2OutputAscii ${FEATUREEXTRACTION_TESTS9}
+--compare-ascii ${EPS}
+		${BASELINE_FILES}/feTvImageToSIFTKeyPointSetFilterSquareRotatedKeysOutput2.txt
+		${TEMP}/feTvImageToSIFTKeyPointSetFilterSquareRotatedKeysOutput2.txt
+         otbImageToSIFTKeyPointSetFilterOutputAscii
+		${INPUTDATA}/carre_ori.png
+		${TEMP}/feTvImageToSIFTKeyPointSetFilterSquareRotatedKeysOutput2.txt
+		1 3 0.215 10
 )
 
 # A enrichir
