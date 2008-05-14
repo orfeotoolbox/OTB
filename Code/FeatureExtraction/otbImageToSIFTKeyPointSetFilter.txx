@@ -692,8 +692,8 @@ namespace otb
 		      !lIterMagnitude.IsAtEnd();
 		      ++lIterMagnitude, ++lIterOrientation)
 		  { 
-		    unsigned int dx = vcl_abs(lIterMagnitude.GetIndex()[0]-currentScale.GetIndex()[0]);
-		    unsigned int dy = vcl_abs(lIterMagnitude.GetIndex()[1]-currentScale.GetIndex()[1]);
+		    float dx = vcl_abs(lIterMagnitude.GetIndex()[0]-currentScale.GetIndex()[0]);
+		    float dy = vcl_abs(lIterMagnitude.GetIndex()[1]-currentScale.GetIndex()[1]);
 		    
 		    float dist2 = dx*dx+dy*dy;
 		    if (dist2 <= 8*8)
