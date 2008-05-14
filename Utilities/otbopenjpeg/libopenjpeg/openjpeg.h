@@ -56,7 +56,7 @@ defined with this macro as being exported.
 
 
 // Modified by OTB developpers. /TODO check this
-#if defined(WIN32) || defined(__WIN32__)
+#if (defined(WIN32) || defined(__WIN32__) || defined(__CYGWIN__) || defined(__MINGW__))
 #define OPJ_CALLCONV __stdcall
 #define OPJ_API __declspec(dllexport)
 #else
