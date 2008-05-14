@@ -248,6 +248,37 @@ ADD_TEST(SeamCarvingOtherExampleTest ${EXE_TESTS}
 	50
 )
 
+ADD_TEST(ImageToSIFTKeyPointSetFilterTest ${EXE_TESTS}
+        --compare-image ${TOL}
+        ${BASELINE}/ImageToSIFTKeyPointSetFilterOutput.png
+        ${TEMP}/ImageToSIFTKeyPointSetFilterOutput.png
+        ImageToSIFTKeyPointSetFilterTest
+        ${INPUTDATA}/Scene.png
+        ${TEMP}/ImageToSIFTKeyPointSetFilterOutput.png
+	6 3 0.08 10
+)
+
+ADD_TEST(ScaleInvariantFeatureImageFilterTest ${EXE_TESTS}
+        --compare-n-image ${TOL} 4
+        ${BASELINE}/ScaleInvariantFeatureImageFilterOutput1.png
+        ${TEMP}/ScaleInvariantFeatureImageFilterOutput1.png
+	${BASELINE}/ScaleInvariantFeatureImageFilterOutput2.png
+        ${TEMP}/ScaleInvariantFeatureImageFilterOutput2.png
+	${BASELINE}/ScaleInvariantFeatureImageFilterOutputKeys1.png
+        ${TEMP}/ScaleInvariantFeatureImageFilterOutputKeys1.png
+	${BASELINE}/ScaleInvariantFeatureImageFilterOutputKeys2.png
+        ${TEMP}/ScaleInvariantFeatureImageFilterOutputKeys2.png
+	
+        ScaleInvariantFeatureImageFilterTest
+	
+        ${INPUTDATA}/Scene.png
+        ${TEMP}/ScaleInvariantFeatureImageFilterOutput1.png
+        ${TEMP}/ScaleInvariantFeatureImageFilterOutput2.png
+        ${TEMP}/ScaleInvariantFeatureImageFilterOutputKeys1.png
+        ${TEMP}/ScaleInvariantFeatureImageFilterOutputKeys2.png	
+	1 10 0.5 0
+)
+
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbFeatureExtractionExamplesTests otbFeatureExtractionExamplesTests.cxx)
