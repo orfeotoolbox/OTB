@@ -6,6 +6,9 @@ TARGET_LINK_LIBRARIES(ImageReadWrite OTBCommon OTBIO ITKCommon ITKIO)
 ADD_EXECUTABLE(StreamingImageReadWrite StreamingImageReadWrite.cxx )
 TARGET_LINK_LIBRARIES(StreamingImageReadWrite OTBCommon OTBIO ITKCommon ITKIO)
 
+ADD_EXECUTABLE(ExplicitStreamingExample ExplicitStreamingExample.cxx )
+TARGET_LINK_LIBRARIES(ExplicitStreamingExample OTBCommon OTBIO ITKCommon ITKIO)
+
 
 ADD_EXECUTABLE(ImageReadCastWrite ImageReadCastWrite.cxx )
 TARGET_LINK_LIBRARIES(ImageReadCastWrite OTBCommon OTBIO ITKCommon ITKIO)
