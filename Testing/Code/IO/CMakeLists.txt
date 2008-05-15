@@ -1536,51 +1536,51 @@ otbSHPVectorDataIONew.cxx
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbIOTests1 otbIOTests1.cxx ${BasicIO_SRCS1})
-TARGET_LINK_LIBRARIES(otbIOTests1 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests1 OTBIO OTBCommon otbopenjpeg  gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests2 otbIOTests2.cxx ${BasicIO_SRCS2})
-TARGET_LINK_LIBRARIES(otbIOTests2 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests2 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests3 otbIOTests3.cxx ${BasicIO_SRCS3})
-TARGET_LINK_LIBRARIES(otbIOTests3 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests3 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests4 otbIOTests4.cxx ${BasicIO_SRCS2})
-TARGET_LINK_LIBRARIES(otbIOTests4 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests4 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests5 otbIOTests5.cxx ${BasicIO_SRCS5})
-TARGET_LINK_LIBRARIES(otbIOTests5 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests5 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests6 otbIOTests6.cxx ${BasicIO_SRCS6})
-TARGET_LINK_LIBRARIES(otbIOTests6 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests6 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests7 otbIOTests7.cxx ${BasicIO_SRCS7})
-TARGET_LINK_LIBRARIES(otbIOTests7 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests7 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests8 otbIOTests8.cxx ${BasicIO_SRCS8})
-TARGET_LINK_LIBRARIES(otbIOTests8 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests8 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests9 otbIOTests9.cxx ${BasicIO_SRCS9})
-TARGET_LINK_LIBRARIES(otbIOTests9 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests9 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests10 otbIOTests10.cxx ${BasicIO_SRCS10})
-TARGET_LINK_LIBRARIES(otbIOTests10 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests10 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests11 otbIOTests11.cxx ${BasicIO_SRCS11})
-TARGET_LINK_LIBRARIES(otbIOTests11 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests11 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests12 otbIOTests12.cxx ${BasicIO_SRCS12})
-TARGET_LINK_LIBRARIES(otbIOTests12 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests12 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
 
 IF(NOT OTB_USE_EXTERNAL_ITK)
 ADD_EXECUTABLE(otbIOTests13 otbIOTests13.cxx ${BasicIO_SRCS13})
-TARGET_LINK_LIBRARIES(otbIOTests13 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests13 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
 ENDIF(NOT OTB_USE_EXTERNAL_ITK)
 
 ADD_EXECUTABLE(otbIOTests14 otbIOTests14.cxx ${BasicIO_SRCS14})
-TARGET_LINK_LIBRARIES(otbIOTests14 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests14 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests15 otbIOTests15.cxx ${BasicIO_SRCS15})
-TARGET_LINK_LIBRARIES(otbIOTests15 OTBIO OTBCommon gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests15 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
