@@ -629,7 +629,8 @@ namespace otb
      	sum = 0;
      	for(j=i-36;j<i;++j)
      	  {
-     	    sum+=lHistogram[i-j]*m_HistogramGaussianWeights[j+36];
+     	    sum+=lHistogram[i-j-1]*m_HistogramGaussianWeights[j+36];
+	    //std::cout << "Histo Ori index: " << i-j << " histo gauss: " << j+36 << std::endl;
      	  }
      	if(sum>max)
      	  {
