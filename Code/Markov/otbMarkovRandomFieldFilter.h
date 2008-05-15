@@ -108,6 +108,9 @@ public itk::ImageToImageFilter<TInputImage,TClassifiedImage>
     /** Type definition for the input image region iterator */
     typedef itk::ImageRegionIterator<TClassifiedImage>  
       LabelledImageRegionIterator;
+
+    typedef itk::ImageRegionConstIterator<TClassifiedImage>  
+      LabelledImageRegionConstIterator;
     
     /** Labelled Image dimension */
     itkStaticConstMacro(ClassifiedImageDimension, unsigned int,

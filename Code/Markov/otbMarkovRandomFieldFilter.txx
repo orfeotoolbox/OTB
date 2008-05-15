@@ -295,8 +295,8 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 
   if (m_ExternalClassificationSet)
     {
-      TrainingImagePointer  trainingImage = this->GetTrainingInput();
-      LabelledImageRegionIterator 
+      typename TrainingImageType::ConstPointer  trainingImage = this->GetTrainingInput();
+      LabelledImageRegionConstIterator 
           trainingImageIt( trainingImage, outputPtr->GetRequestedRegion() );
       
       while ( !outImageIt.IsAtEnd() )
