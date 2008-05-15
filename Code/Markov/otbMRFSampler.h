@@ -32,7 +32,7 @@ namespace otb
  */
     
 template< class TInput1, class TInput2>    
-class ITK_EXPORT MRFSampler:public itk::Object
+class ITK_EXPORT MRFSampler : public itk::Object
   {
   public:
     
@@ -68,11 +68,8 @@ class ITK_EXPORT MRFSampler:public itk::Object
     itkGetConstMacro(EnergyBefore, double);
     itkGetConstMacro(EnergyAfter, double);
     
-    
     itkSetObjectMacro( EnergyRegularization, EnergyRegularizationType);
     itkSetObjectMacro( EnergyFidelity, EnergyFidelityType);
-    
-    
     
     virtual int Compute( const InputImageNeighborhoodIterator & itData, 
 			 const LabelledImageNeighborhoodIterator & itRegul) = 0;
@@ -93,8 +90,18 @@ class ITK_EXPORT MRFSampler:public itk::Object
     
   protected:
     // The constructor and destructor.
-    MRFSampler() {}
-    virtual ~MRFSampler() {}
+    MRFSampler() 
+      {   
+	m_EnergyRegularization = EnergyRegularizationType::New();
+	m_EnergyFidelity =  EnergyFidelityType::New(),
+	m_NumberOfClasses =1;
+	m_EnergyBefore = 1.;
+	m_EnergyAfter = 1.;
+	m_DeltaEnergy = 1.;
+	m_EnergyCurrent = 1.;
+	m_Lambda = 1.;
+      };
+    virtual ~MRFSampler() {};
     
   };
   

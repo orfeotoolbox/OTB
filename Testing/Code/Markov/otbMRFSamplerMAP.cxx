@@ -22,6 +22,7 @@
 #include "otbMRFSamplerMAP.h"
 #include "otbImageFileReader.h"
 #include "otbImage.h"
+#include "otbMRFEnergyPotts.h"
 #include <fstream>
 
 
@@ -41,11 +42,19 @@ int otbMRFSamplerMAP(int argc, char * argv[])
   typedef MRFSamplerMAPType::LabelledImageNeighborhoodIterator LabelledNeighborhoodIterator;
   typedef MRFSamplerMAPType::InputImageNeighborhoodIterator    InputNeighborhoodIterator;
 
+  typedef otb::MRFEnergyPotts <ImageType, LabelType> EnergyFidelityType;
+  typedef otb::MRFEnergyPotts <LabelType, LabelType> EnergyRegularizationType;
 
-  MRFSamplerMAPType::Pointer object    = MRFSamplerMAPType::New();
-  ReaderInputType::Pointer   readerIn  = ReaderInputType::New();
-  ReaderLabelType::Pointer   readerLab = ReaderLabelType::New();
+
+  MRFSamplerMAPType::Pointer        object               = MRFSamplerMAPType::New();
+  EnergyRegularizationType::Pointer energyRegularization = EnergyRegularizationType::New();
+  EnergyFidelityType::Pointer       energyFidelity       = EnergyFidelityType::New();
+  ReaderInputType::Pointer          readerIn             = ReaderInputType::New();
+  ReaderLabelType::Pointer          readerLab            = ReaderLabelType::New();
  
+  object->SetEnergyFidelity(energyFidelity);
+  object->SetEnergyRegularization(energyRegularization);
+
   readerIn->SetFileName( inputImage );
   readerLab->SetFileName( labelImage );
   readerIn->Update();

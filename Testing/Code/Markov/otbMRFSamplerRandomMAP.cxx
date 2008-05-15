@@ -22,6 +22,8 @@
 #include "otbMRFSamplerRandomMAP.h"
 #include "otbImageFileReader.h"
 #include "otbImage.h"
+#include "otbMRFEnergyPotts.h"
+
 #include <fstream>
 
 
@@ -38,23 +40,30 @@ int otbMRFSamplerRandomMAP(int argc, char * argv[])
   typedef otb::ImageFileReader< ImageType >                          ReaderInputType;
   typedef otb::ImageFileReader< LabelType >                          ReaderLabelType;
   typedef otb::MRFSamplerRandomMAP< ImageType, LabelType>            MRFSamplerRandomMAPType;
+ 
+  typedef otb::MRFEnergyPotts <ImageType, LabelType>                 EnergyFidelityType;
+  typedef otb::MRFEnergyPotts <LabelType, LabelType>                 EnergyRegularizationType;
+
+
   typedef MRFSamplerRandomMAPType::LabelledImageNeighborhoodIterator LabelledNeighborhoodIterator;
   typedef MRFSamplerRandomMAPType::InputImageNeighborhoodIterator    InputNeighborhoodIterator;
 
+  MRFSamplerRandomMAPType::Pointer  object               = MRFSamplerRandomMAPType::New();
+  EnergyRegularizationType::Pointer energyRegularization = EnergyRegularizationType::New();
+  EnergyFidelityType::Pointer       energyFidelity       = EnergyFidelityType::New();
+  ReaderInputType::Pointer          readerIn             = ReaderInputType::New();
+  ReaderLabelType::Pointer          readerLab            = ReaderLabelType::New();
 
-  MRFSamplerRandomMAPType::Pointer object    = MRFSamplerRandomMAPType::New();
-  ReaderInputType::Pointer         readerIn  = ReaderInputType::New();
-  ReaderLabelType::Pointer         readerLab = ReaderLabelType::New();
- 
+
   readerIn->SetFileName( inputImage );
   readerLab->SetFileName( labelImage );
   readerIn->Update();
   readerLab->Update();
 
   object->SetNumberOfClasses(1);
-
-  // USED TO OVERPASS RANDOM CALCULATION
-  //object->SetValueInsteadRandom(300); 
+  object->SetEnergyFidelity(energyFidelity);
+  object->SetEnergyRegularization(energyRegularization);
+  object->InitializeSeed(0);// USED TO OVERPASS RANDOM CALCULATION
 
   ImageType::IndexType idIn;
   LabelType::IndexType idLab;

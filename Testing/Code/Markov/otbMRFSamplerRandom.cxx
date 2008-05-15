@@ -22,6 +22,7 @@
 #include "otbMRFSamplerRandom.h"
 #include "otbImageFileReader.h"
 #include "otbImage.h"
+#include "otbMRFEnergyPotts.h"
 #include <fstream>
 
 
@@ -41,18 +42,23 @@ int otbMRFSamplerRandom(int argc, char * argv[])
   typedef MRFSamplerRandomType::LabelledImageNeighborhoodIterator LabelledNeighborhoodIterator;
   typedef MRFSamplerRandomType::InputImageNeighborhoodIterator    InputNeighborhoodIterator;
 
+  typedef otb::MRFEnergyPotts <ImageType, LabelType>              EnergyFidelityType;
+  typedef otb::MRFEnergyPotts <LabelType, LabelType>              EnergyRegularizationType;
 
-  MRFSamplerRandomType::Pointer object    = MRFSamplerRandomType::New();
-  ReaderInputType::Pointer      readerIn  = ReaderInputType::New();
-  ReaderLabelType::Pointer      readerLab = ReaderLabelType::New();
+  MRFSamplerRandomType::Pointer     object               = MRFSamplerRandomType::New();
+  EnergyRegularizationType::Pointer energyRegularization = EnergyRegularizationType::New();
+  EnergyFidelityType::Pointer       energyFidelity       = EnergyFidelityType::New();
+  ReaderInputType::Pointer          readerIn             = ReaderInputType::New();
+  ReaderLabelType::Pointer          readerLab            = ReaderLabelType::New();
  
+  object->SetEnergyFidelity(energyFidelity);
+  object->SetEnergyRegularization(energyRegularization);
+  object->InitializeSeed(0);// USED TO OVERPASS RANDOM CALCULATION
+
   readerIn->SetFileName( inputImage );
   readerLab->SetFileName( labelImage );
   readerIn->Update();
   readerLab->Update();
-
-  // USED TO OVERPASS RANDOM CALCULATION
-  // object->SetValueInsteadRandom(300); 
 
   ImageType::IndexType idIn;
   LabelType::IndexType idLab;

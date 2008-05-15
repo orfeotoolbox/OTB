@@ -25,7 +25,7 @@ namespace otb
 /** ATTENTION : j'ai passe les initialisation dans le constructeur car certaines plateformes (dont NEMO) n'aiment cette maniere d'initialiser*/
 template<class TInputImage, class TClassifiedImage>
 MarkovRandomFieldFilter<TInputImage,TClassifiedImage>
-::MarkovRandomFieldFilter(void) :
+::MarkovRandomFieldFilter(void)/* :
   m_NumberOfClasses(0),
   m_MaximumNumberOfIterations(50),
   m_ErrorCounter(0),
@@ -38,9 +38,9 @@ MarkovRandomFieldFilter<TInputImage,TClassifiedImage>
   m_NumberOfIterations(0),
   m_StopCondition(MaximumNumberOfIterations),
   m_ExternalClassificationSet(false)
-  
+			       */			
 {
-  /*m_NumberOfClasses = 0;
+  m_NumberOfClasses = 0;
   m_MaximumNumberOfIterations = 50;
   m_ErrorCounter = 0;
   m_ImageDeltaEnergy = 0.0;
@@ -51,7 +51,10 @@ MarkovRandomFieldFilter<TInputImage,TClassifiedImage>
   m_SmoothingFactor = 1;
   m_NumberOfIterations = 0;
   m_StopCondition = MaximumNumberOfIterations;
-  m_ExternalClassificationSet = false;*/
+  m_ExternalClassificationSet = false;
+  m_Generator = RandomGeneratorType::New();
+  m_Generator->SetSeed();
+
   this->SetNumberOfRequiredInputs(1);
   if( (int)InputImageDimension != (int)ClassifiedImageDimension )
     {
@@ -66,7 +69,7 @@ MarkovRandomFieldFilter<TInputImage,TClassifiedImage>
   //     this->SetMRFNeighborhoodWeight( m_DummyVector );
   //     this->SetDefaultMRFNeighborhoodWeight();
   
-  srand((unsigned)time(0));
+  //srand((unsigned)time(0));
   
 }
   
@@ -315,7 +318,7 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
       while ( !outImageIt.IsAtEnd() )
 	{
 	  LabelledImagePixelType randomvalue = static_cast<LabelledImagePixelType>(
-              rand() % static_cast<int>(m_NumberOfClasses)
+              m_Generator->GetIntegerVariate() % static_cast<int>(m_NumberOfClasses)
             );
 	  outImageIt.Set( randomvalue );
 	  ++outImageIt;

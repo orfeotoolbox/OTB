@@ -50,28 +50,14 @@ class ITK_EXPORT MRFOptimizer : public itk::Object
       return this->m_Parameters;
     }
     
-    void SetParameters( const ParametersType & parameters )
+    virtual void SetParameters( const ParametersType & parameters )
     {
-      if( parameters.Size() != m_NumberOfParameters )
+      if( parameters.GetSize() != m_NumberOfParameters )
 	{	
-	  itkExceptionMacro(<<"Invalid number of parameters");
+	  itkExceptionMacro(<<"Invalid number of parameters ("<<parameters.GetSize()<<" , "<<m_NumberOfParameters<<")");
 	}
       m_Parameters = parameters;
       this->Modified();
-      
-//       bool modified = false;
-//       for( unsigned int i=0; i<m_NumberOfParameters; i++ )
-//       {
-//         if (m_Parameters[i] != parameters[i])
-//         {
-//           m_Parameters[i] = parameters[i];
-//           modified = true;
-//         }
-//       }
-//       if (modified)
-//       {
-//         this->Modified();
-//       }
     }
     
     virtual bool Compute(double deltaEnergy) = 0;
@@ -79,7 +65,7 @@ class ITK_EXPORT MRFOptimizer : public itk::Object
   protected:
     MRFOptimizer() 
     {
-      m_Parameters=0;
+      m_Parameters=1;
     }
     virtual ~MRFOptimizer() {}
     unsigned int m_NumberOfParameters;

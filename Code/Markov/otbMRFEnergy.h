@@ -49,6 +49,8 @@ class ITK_EXPORT MRFEnergy : public itk::Object
     
     typedef itk::Array< double > ParametersType;
     
+    itkNewMacro(Self);
+
     itkTypeMacro(MRFEnergy,itk::Object);
     
     
@@ -68,25 +70,14 @@ class ITK_EXPORT MRFEnergy : public itk::Object
 	    itkExceptionMacro(<<"Invalid number of parameters");
 	  }
 	m_Parameters = parameters;
-	this->Modified();
-        
-// 	bool modified = false;
-// 	for( unsigned int i=0; i<m_NumberOfParameters; i++ )
-// 	  {
-// 	    if (m_Parameters[i] != parameters[i])
-// 	      {
-//                 m_Parameters[i] = parameters[i];
-//                 modified = true;
-// 	      }
-// 	  }
-// 	if (modified)
-// 	  {
-// 	    this->Modified();
-// 	  }
+	this->Modified();       
+    }
+    
+    virtual double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)
+      {
+	itkExceptionMacro(<<"GetSingleValue() has to be declared in child classes.");
       }
-    
-    virtual double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2) = 0;
-    
+        
     double GetValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)
       {
 	return GetSingleValue(value1, value2);
@@ -137,7 +128,7 @@ class ITK_EXPORT MRFEnergy : public itk::Object
     
   protected:
     // The constructor and destructor.
-    MRFEnergy() {};
+    MRFEnergy() {m_NumberOfParameters = 1;};
     virtual ~MRFEnergy() {};
     unsigned int m_NumberOfParameters;
     ParametersType m_Parameters;
@@ -158,8 +149,9 @@ class ITK_EXPORT MRFEnergy<TInput2,TInput2> : public itk::Object
     
     typedef itk::ConstNeighborhoodIterator< LabelledImageType >  LabelledNeighborhoodIterator;
     typedef itk::Array< double >                                 ParametersType;
-    
-    
+
+    itkNewMacro(Self);
+
     itkTypeMacro(MRFEnergy,itk::Object);
     
     
@@ -183,24 +175,13 @@ class ITK_EXPORT MRFEnergy<TInput2,TInput2> : public itk::Object
 	  }
 	m_Parameters = parameters;
 	this->Modified();
-        /*
-	bool modified = false;
-	for( unsigned int i=0; i<m_NumberOfParameters; i++ )
-	  {
-	    if (m_Parameters[i] != parameters[i])
-	      {
-                m_Parameters[i] = parameters[i];
-                modified = true;
-	      }
-	  }
-	if (modified)
-	  {
-	    this->Modified();
-	  }*/
       }
     
-    virtual double GetSingleValue(const LabelledImagePixelType & value1,  const LabelledImagePixelType & value2) = 0;
-    
+    virtual double GetSingleValue(const LabelledImagePixelType & value1,  const LabelledImagePixelType & value2)
+      {
+	itkExceptionMacro(<<"GetSingleValue() has to be declared in child classes.");
+      }
+
     double GetValue(const LabelledImagePixelType & value1,  const LabelledImagePixelType & value2)
       {
 	return GetSingleValue(value1, value2);
@@ -233,6 +214,7 @@ class ITK_EXPORT MRFEnergy<TInput2,TInput2> : public itk::Object
     // The constructor and destructor.
     MRFEnergy() 
     {
+      m_NumberOfParameters = 1;
       m_Parameters=0;
     };
     virtual ~MRFEnergy() {};

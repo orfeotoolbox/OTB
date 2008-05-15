@@ -40,12 +40,12 @@ int otbMarkovRandomFieldFilter(int argc, char* argv[] )
 {
   const unsigned int Dimension = 2;
   
-  typedef double InternalPixelType;
-  typedef unsigned char LabelledPixelType;
+  typedef double                                    InternalPixelType;
+  typedef unsigned char                             LabelledPixelType;
   typedef otb::Image<InternalPixelType, Dimension>  InputImageType;
-  typedef otb::Image<LabelledPixelType, Dimension>    LabelledImageType;
-  typedef otb::ImageFileReader< InputImageType >  ReaderType;
-  typedef otb::ImageFileWriter< LabelledImageType >  WriterType;
+  typedef otb::Image<LabelledPixelType, Dimension>  LabelledImageType;
+  typedef otb::ImageFileReader< InputImageType >    ReaderType;
+  typedef otb::ImageFileWriter< LabelledImageType > WriterType;
   
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -56,24 +56,18 @@ int otbMarkovRandomFieldFilter(int argc, char* argv[] )
   reader->SetFileName( inputFilename );
   writer->SetFileName( outputFilename );
 
-  typedef otb::MarkovRandomFieldFilter
-	  <InputImageType,LabelledImageType> MarkovRandomFieldFilterType;
-
-  typedef otb::MRFSamplerRandom< InputImageType, LabelledImageType> SamplerType;
-
-  typedef otb::MRFOptimizerMetropolis OptimizerType;
-
-  typedef otb::MRFEnergyPotts
-		  <LabelledImageType, LabelledImageType>  EnergyRegularizationType;
-  typedef otb::MRFEnergyGaussianClassification
-		  <InputImageType, LabelledImageType>  EnergyFidelityType;
+  typedef otb::MarkovRandomFieldFilter<InputImageType,LabelledImageType>          MarkovRandomFieldFilterType;
+  typedef otb::MRFSamplerRandom< InputImageType, LabelledImageType>               SamplerType;
+  typedef otb::MRFOptimizerMetropolis                                             OptimizerType;
+  typedef otb::MRFEnergyPotts<LabelledImageType, LabelledImageType>               EnergyRegularizationType;
+  typedef otb::MRFEnergyGaussianClassification<InputImageType, LabelledImageType> EnergyFidelityType;
 
  
-  MarkovRandomFieldFilterType::Pointer markovFilter = MarkovRandomFieldFilterType::New();
-  EnergyRegularizationType::Pointer energyRegularization = EnergyRegularizationType::New();
-  EnergyFidelityType::Pointer energyFidelity = EnergyFidelityType::New();
-  OptimizerType::Pointer optimizer = OptimizerType::New();
-  SamplerType::Pointer sampler = SamplerType::New();
+  MarkovRandomFieldFilterType::Pointer markovFilter         = MarkovRandomFieldFilterType::New();
+  EnergyRegularizationType::Pointer    energyRegularization = EnergyRegularizationType::New();
+  EnergyFidelityType::Pointer          energyFidelity       = EnergyFidelityType::New();
+  OptimizerType::Pointer               optimizer            = OptimizerType::New();
+  SamplerType::Pointer                 sampler              = SamplerType::New();
 
  
   unsigned int nClass = 4;
@@ -90,16 +84,18 @@ int otbMarkovRandomFieldFilter(int argc, char* argv[] )
   parameters[7]=10.0; //Class 3 stde
   energyFidelity->SetParameters(parameters);
 
-  
-  optimizer->SetParameters(atoi(argv[5]));
+  optimizer->SetSingleParameter(atof(argv[5]));
+  markovFilter->InitializeSeed(0);
   markovFilter->SetNumberOfClasses(nClass);  
   markovFilter->SetMaximumNumberOfIterations(atoi(argv[4]));
   markovFilter->SetErrorTolerance(0.0);
   markovFilter->SetLambda(atof(argv[3]));
   markovFilter->SetNeighborhoodRadius(1);
   
-  markovFilter->SetEnergyRegularization(static_cast<MarkovRandomFieldFilterType::EnergyRegularizationPointer>(energyRegularization));
-  markovFilter->SetEnergyFidelity(static_cast<MarkovRandomFieldFilterType::EnergyFidelityPointer>(energyFidelity));
+  //markovFilter->SetEnergyRegularization(static_cast<MarkovRandomFieldFilterType::EnergyRegularizationPointer>(energyRegularization));
+  //markovFilter->SetEnergyFidelity(static_cast<MarkovRandomFieldFilterType::EnergyFidelityPointer>(energyFidelity));
+  markovFilter->SetEnergyRegularization(energyRegularization);
+  markovFilter->SetEnergyFidelity(energyFidelity);
   markovFilter->SetOptimizer(optimizer);
   markovFilter->SetSampler(sampler);
   

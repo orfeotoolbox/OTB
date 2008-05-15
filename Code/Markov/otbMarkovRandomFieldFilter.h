@@ -22,6 +22,7 @@
 
 #include "vnl/vnl_vector.h"
 #include "vnl/vnl_matrix.h"
+#include "itkMersenneTwisterRandomVariateGenerator.h"
 
 #include "itkImageClassifierBase.h"
 
@@ -157,7 +158,11 @@ public itk::ImageToImageFilter<TInputImage,TClassifiedImage>
     
     typedef typename LabelledImageFaceListType::iterator 
       LabelledImageFaceListIterator;
-    
+
+    /** Typedef for random values. */
+    typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
+
+
     /** Set the pointer to the classifer being used. */
     void SetClassifier( typename ClassifierType::Pointer ptrToClassifier );
     
@@ -179,19 +184,11 @@ public itk::ImageToImageFilter<TInputImage,TClassifiedImage>
    /**
    ************ ACCESSORS ************
    */
-
-//      void SetEnergyRegularization( EnergyRegularizationPointer enerReg ){ m_EnergyRegularization=enerReg; this->Modified(); };
-//   EnergyRegularizationPointer GetEnergyRegularization(){ return m_EnergyRegularization; };
-//   void SetEnergyFidelity( EnergyFidelityPointer enerFid ){ m_EnergyFidelity=enerFid; this->Modified(); };
-//   EnergyFidelityPointer GetEnergyFidelity(){ return m_EnergyFidelity; };
-  
-  itkSetObjectMacro( EnergyRegularization, EnergyRegularizationType);
-  itkGetObjectMacro( EnergyRegularization, EnergyRegularizationType);
-  
-  itkSetObjectMacro( EnergyFidelity, EnergyFidelityType);
-  itkGetObjectMacro( EnergyFidelity, EnergyFidelityType);      
-  
-   
+    itkSetObjectMacro( EnergyRegularization, EnergyRegularizationType);
+    itkGetObjectMacro( EnergyRegularization, EnergyRegularizationType);
+    
+    itkSetObjectMacro( EnergyFidelity, EnergyFidelityType);
+    itkGetObjectMacro( EnergyFidelity, EnergyFidelityType);        
     
     itkSetObjectMacro( Sampler, SamplerType);
     itkGetObjectMacro( Sampler, SamplerType);
@@ -282,7 +279,10 @@ public itk::ImageToImageFilter<TInputImage,TClassifiedImage>
 		    (itk::Concept::SameDimension<InputImageDimension, ClassifiedImageDimension>));
     /** End concept checking */
 #endif
-    
+
+    /** Methods to cancel random effects.*/
+    void InitializeSeed(int seed){ m_Generator->SetSeed(seed); }
+    void InitializeSeed(){ m_Generator->SetSeed(); }
 
   protected:
     MarkovRandomFieldFilter();
@@ -344,7 +344,8 @@ public itk::ImageToImageFilter<TInputImage,TClassifiedImage>
     std::vector<double>       m_NeighborInfluence;
     std::vector<double>       m_DummyVector;
     
-    
+    RandomGeneratorType::Pointer m_Generator;
+
     /** Pointer to different elements */
     
     EnergyRegularizationPointer m_EnergyRegularization;
@@ -353,7 +354,7 @@ public itk::ImageToImageFilter<TInputImage,TClassifiedImage>
     SamplerPointer              m_Sampler;        
     
     virtual void MinimizeOnce();
-    
+
   private: 
     
   }; // class MarkovRandomFieldFilter

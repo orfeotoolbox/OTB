@@ -37,13 +37,21 @@ int otbMRFEnergyGaussianClassification(int argc, char * argv[])
 
   MRFGaussianType::Pointer classif = MRFGaussianType::New();
 
- 
+  classif->SetNumberOfParameters(6);
+  MRFGaussianType::ParametersType param(6);
+  param[0] = 0;
+  param[1] = 1;
+  param[2] = 2;  
+  param[3] = 3;
+  param[4] = 4;
+  param[5] = 5;
+  classif->SetParameters(param);
   std::ofstream file;
   file.open(outputFile);
 
   file<<std::endl;
   file<<"Number of paramters: "<<classif->GetNumberOfParameters()<<std::endl;
-  file<<"GetSingleValue(10, 1): "<<classif->GetSingleValue(10, 1)<<std::endl;
+  file<<"GetSingleValue(10, 1): "<<classif->GetSingleValue(10, 2)<<std::endl;
 
   file.close();
 

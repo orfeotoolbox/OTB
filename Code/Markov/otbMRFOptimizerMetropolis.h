@@ -21,6 +21,7 @@
 #include "otbMRFOptimizer.h"
 #include "otbMath.h"
 #include "itkNumericTraits.h"
+#include "itkMersenneTwisterRandomVariateGenerator.h"
 
 namespace otb
 {
@@ -46,11 +47,23 @@ class ITK_EXPORT MRFOptimizerMetropolis : public MRFOptimizer
     typedef MRFOptimizer Superclass;
     typedef itk::SmartPointer<Self>  Pointer;
     typedef itk::SmartPointer<const Self>  ConstPointer;
+    typedef Superclass::ParametersType ParametersType;
+      
+    typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
     
     itkNewMacro(Self);
     
     itkTypeMacro(MRFOptimizerMetropolis,MRFOptimizer);
     
+    /** Set parameter to a one array filled with paramVal.*/
+    void SetSingleParameter( double parameterVal )
+      {
+	this->m_Parameters.SetSize(1);
+	this->m_Parameters.Fill(parameterVal);
+	this->Modified();
+    }
+    
+
     inline bool Compute(double deltaEnergy)
       {
 	if (deltaEnergy < 0)
@@ -64,24 +77,29 @@ class ITK_EXPORT MRFOptimizerMetropolis : public MRFOptimizer
 	else
               {
                 double proba = vcl_exp(-(deltaEnergy)/this->m_Parameters[0]);
-                if ( (rand() % 10000) < proba*10000)
+                if ( (m_Generator->GetIntegerVariate() % 10000) < proba*10000)
 		  {
-                    std::cerr << "Opti true " << std::endl;
 		    return true;
 		  }
               }
 	return false;
       }
     
-    
+    /** Methods to cancel random effects.*/
+    void InitializeSeed(int seed){ m_Generator->SetSeed(seed); }
+    void InitializeSeed(){ m_Generator->SetSeed(); }
+
   protected:
     MRFOptimizerMetropolis() {
       this->m_NumberOfParameters = 1;
-      this->m_Parameters.SetSize(this->m_NumberOfParameters);
+      this->m_Parameters.SetSize(1);
       this->m_Parameters[0]=1.0;
+      m_Generator = RandomGeneratorType::New();
+      m_Generator->SetSeed();
     }
     virtual ~MRFOptimizerMetropolis() {}
     double m_Temperature;
+    RandomGeneratorType::Pointer m_Generator;
   };       
  
 }
