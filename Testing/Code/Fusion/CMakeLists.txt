@@ -78,9 +78,9 @@ SET(Fusion_SRCS2
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbFusionTests1 otbFusionTests1.cxx ${Fusion_SRCS1})
-TARGET_LINK_LIBRARIES(otbFusionTests1  OTBFusion OTBCommon OTBIO gdal ITKIO ITKCommon ITKAlgorithms)
+TARGET_LINK_LIBRARIES(otbFusionTests1  OTBFusion OTBCommon OTBIO otbopenjpeg ggdal ITKIO ITKCommon ITKAlgorithms)
 ADD_EXECUTABLE(otbFusionTests2 otbFusionTests2.cxx ${Fusion_SRCS2})
-TARGET_LINK_LIBRARIES(otbFusionTests2  OTBFusion OTBCommon OTBIO gdal ITKIO ITKCommon ITKAlgorithms)
+TARGET_LINK_LIBRARIES(otbFusionTests2  OTBFusion OTBCommon OTBIO otbopenjpeg ggdal ITKIO ITKCommon ITKAlgorithms)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
