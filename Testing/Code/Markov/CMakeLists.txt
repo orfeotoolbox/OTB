@@ -184,7 +184,7 @@ ADD_EXECUTABLE(otbMarkovTests1 otbMarkovTests1.cxx ${Markov_SRCS1})
 TARGET_LINK_LIBRARIES(otbMarkovTests1 OTBMarkov OTBCommon OTBIO gdal ITKIO ITKCommon ITKBasicFilters)
 
 ADD_EXECUTABLE(otbMarkovTests2 otbMarkovTests2.cxx ${Markov_SRCS2})
-TARGET_LINK_LIBRARIES(otbMarkovTests2 OTBMarkov OTBCommon OTBIO gdal ITKIO ITKCommon ITKBasicFilters)
+TARGET_LINK_LIBRARIES(otbMarkovTests2 OTBMarkov OTBCommon OTBIO otbopenjpeg ggdal ITKIO ITKCommon ITKBasicFilters)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
 
