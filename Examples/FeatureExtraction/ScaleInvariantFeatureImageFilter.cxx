@@ -57,7 +57,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "itkPointSetToImageFilter.h"
 #include "itkImageFileWriter.h"
 
-int main( int argc, char **argv)
+int main( int argc, char *argv[])
 {
   if( argc < 6 )
     {
