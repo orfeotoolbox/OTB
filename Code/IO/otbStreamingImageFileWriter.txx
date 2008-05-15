@@ -24,6 +24,7 @@
 #include "itkObjectFactoryBase.h"
 #include "itkImageFileWriter.h"
 #include "itkImageRegionMultidimensionalSplitter.h"
+#include "otbImageIOFactory.h"
 
 #include "otbMacro.h"
 #include "otbConfigure.h"
@@ -324,7 +325,7 @@ StreamingImageFileWriter<TInputImage>
     {
     itkDebugMacro(<<"Attempting factory creation of ImageIO for file: " 
                   << m_FileName);
-    this->SetImageIO( itk::ImageIOFactory::CreateImageIO( m_FileName.c_str(), 
+    this->SetImageIO( ImageIOFactory::CreateImageIO( m_FileName.c_str(), 
                                                itk::ImageIOFactory::WriteMode ) );
 
 /*    m_ImageIO = ImageIOFactory::CreateImageIO( m_FileName.c_str(), 
@@ -339,7 +340,7 @@ StreamingImageFileWriter<TInputImage>
                     << m_FileName );
       itkDebugMacro(<<"Attempting creation of ImageIO with a factory for file:"
                     << m_FileName);
-      m_ImageIO = itk::ImageIOFactory::CreateImageIO( m_FileName.c_str(), 
+      m_ImageIO = ImageIOFactory::CreateImageIO( m_FileName.c_str(), 
                                                  itk::ImageIOFactory::WriteMode );
       m_FactorySpecifiedImageIO = true;
       }
