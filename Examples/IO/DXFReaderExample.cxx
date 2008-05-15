@@ -27,7 +27,7 @@
 
 //  Software Guide : BeginLatex
 //
-//  This example illustrates how to read a DXF file and how to draw objects 
+//  \label{DXFExample}This example illustrates how to read a DXF file and how to draw objects 
 //  on a $2D$ binary image. The graphical DXF objects which can be read are the following : Point, Line
 //  Polyline, Circle and 3DFace.
 //  The example begins by including the appropriate headers.
