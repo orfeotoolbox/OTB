@@ -24,7 +24,9 @@
 #define USE_OPJ_DEPRECATED
 #endif
 
+extern "C" {
 #include "openjpeg.h"
+}
 
 namespace otb
 {
