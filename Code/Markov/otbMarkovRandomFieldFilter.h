@@ -249,7 +249,7 @@ public itk::ImageToImageFilter<TInputImage,TClassifiedImage>
      * instead.
     */
     virtual void SetTrainingInput( const TrainingImageType * trainingImage);
-    TrainingImageType* GetTrainingInput(void);
+    const TrainingImageType* GetTrainingInput(void);
     
     
     //Enum to get the stopping condition of the MRF filter

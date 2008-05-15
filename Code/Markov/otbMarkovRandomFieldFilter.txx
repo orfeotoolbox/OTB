@@ -90,7 +90,7 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 
 
 template <class TInputImage, class TClassifiedImage>
-typename MarkovRandomFieldFilter<TInputImage, TClassifiedImage>::TrainingImageType*
+const typename MarkovRandomFieldFilter<TInputImage, TClassifiedImage>::TrainingImageType*
 MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 ::GetTrainingInput(void) 
 {
