@@ -258,7 +258,7 @@ ADD_TEST(SeamCarvingOtherExampleTest ${EXE_TESTS}
 #)
 
 ADD_TEST(ScaleInvariantFeatureImageFilterTest ${EXE_TESTS}
-        --compare-n-image ${TOL} 4
+        --compare-n-images ${TOL} 4
         ${BASELINE}/ScaleInvariantFeatureImageFilterOutput1.png
         ${TEMP}/ScaleInvariantFeatureImageFilterOutput1.png
 	${BASELINE}/ScaleInvariantFeatureImageFilterOutput2.png
