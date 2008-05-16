@@ -185,6 +185,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/IO/ImageSeriesIOExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/MetadataExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/DXFReaderExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/IO/VectorDataIOExample.cxx  
   ${OTB_SOURCE_DIR}/Examples/IO/DEMToImageGenerator.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/BinaryThresholdImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/ThresholdImageFilter.cxx
@@ -255,9 +256,9 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Classification/ScalarImageKmeansClassifier.cxx
   ${OTB_SOURCE_DIR}/Examples/Classification/BayesianPluginClassifier.cxx
   ${OTB_SOURCE_DIR}/Examples/Classification/ExpectationMaximizationMixtureModelEstimator.cxx
-  ${OTB_SOURCE_DIR}/Examples/Classification/ScalarImageMarkovRandomField1.cxx
-  ${OTB_SOURCE_DIR}/Examples/Markov/MarkovRandomField1Example.cxx
-  ${OTB_SOURCE_DIR}/Examples/Markov/MarkovRandomField2Example.cxx
+#   ${OTB_SOURCE_DIR}/Examples/Classification/ScalarImageMarkovRandomField1.cxx
+#   ${OTB_SOURCE_DIR}/Examples/Markov/MarkovRandomField1Example.cxx
+#   ${OTB_SOURCE_DIR}/Examples/Markov/MarkovRandomField2Example.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMPointSetModelEstimatorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMPointSetClassificationExample.cxx  
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageModelEstimatorExample.cxx
