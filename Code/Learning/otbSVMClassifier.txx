@@ -187,7 +187,9 @@ SVMClassifier< TSample, TLabel >
     
 
     ClassLabelType classLabel;
-    classLabel = static_cast<ClassLabelType>(v);
+    // Julien: Event if we support larger type for class labels,
+    // the AddInstance method wait for an unsigned int, so we cast it here.
+    classLabel = static_cast<unsigned int>(v);
 
   m_Output->AddInstance(classLabel, iterO.GetInstanceIdentifier()) ;
 
