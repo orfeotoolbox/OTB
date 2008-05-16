@@ -573,10 +573,10 @@ INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 # ${TIFF_LIBRARY}
 
 ADD_EXECUTABLE(otbCommonTests1 otbCommonTests1.cxx ${BasicCommon_SRCS1})
-TARGET_LINK_LIBRARIES(otbCommonTests1 OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
+TARGET_LINK_LIBRARIES(otbCommonTests1 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
 
 ADD_EXECUTABLE(otbCommonTests2 otbCommonTests2.cxx ${BasicCommon_SRCS2})
-TARGET_LINK_LIBRARIES(otbCommonTests2 OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
+TARGET_LINK_LIBRARIES(otbCommonTests2 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
 
 ADD_EXECUTABLE(otbCommonTests3 otbCommonTests3.cxx ${BasicCommon_SRCS3})
 TARGET_LINK_LIBRARIES(otbCommonTests3 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
