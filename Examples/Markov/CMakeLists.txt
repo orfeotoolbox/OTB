@@ -3,17 +3,17 @@ INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 SET(Markov_EXAMPLES ${CXX_TEST_PATH}/otbMarkovExamplesTests)
 
-#ADD_EXECUTABLE(testRandom testRandom.cxx )
-#TARGET_LINK_LIBRARIES(testRandom OTBMarkov OTBCommon OTBIO ITKNumerics ITKIO)
+ADD_EXECUTABLE(MarkovClassification1Example MarkovClassification1Example.cxx )
+TARGET_LINK_LIBRARIES(MarkovClassification1Example OTBMarkov OTBCommon OTBIO ITKNumerics ITKIO)
 
-ADD_EXECUTABLE(MarkovRandomField1Example MarkovRandomField1Example.cxx )
-TARGET_LINK_LIBRARIES(MarkovRandomField1Example OTBMarkov OTBCommon OTBIO ITKNumerics ITKIO)
+ADD_EXECUTABLE(MarkovClassification2Example MarkovClassification2Example.cxx )
+TARGET_LINK_LIBRARIES(MarkovClassification2Example OTBMarkov OTBCommon OTBIO ITKNumerics ITKIO)
 
-ADD_EXECUTABLE(MarkovRandomField2Example MarkovRandomField2Example.cxx )
-TARGET_LINK_LIBRARIES(MarkovRandomField2Example OTBMarkov OTBCommon OTBIO ITKNumerics ITKIO)
+ADD_EXECUTABLE(MarkovRestaurationExample MarkovRestaurationExample.cxx )
+TARGET_LINK_LIBRARIES(MarkovRestaurationExample OTBMarkov OTBCommon OTBIO ITKNumerics ITKIO)
 
-# ADD_EXECUTABLE(MarkovRandomField3Example MarkovRandomField3Example.cxx )
-# TARGET_LINK_LIBRARIES(MarkovRandomField3Example OTBMarkov OTBCommon OTBIO ITKNumerics ITKIO)
+ADD_EXECUTABLE(MarkovRegularizationExample MarkovRegularizationExample.cxx )
+TARGET_LINK_LIBRARIES(MarkovRegularizationExample OTBMarkov OTBCommon OTBIO ITKNumerics ITKIO)
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND NOT OTB_DISABLE_CXX_EXAMPLES_TESTING )
 
@@ -27,28 +27,55 @@ SET(EXE_TESTS ${CXX_TEST_PATH}/otbMarkovExamplesTests)
 SET(TOL 0.0)
 SET(EPSILON 0.00000001)
 
-ADD_TEST(MarkovRandomField1ExampleTest ${EXE_TESTS}
+ADD_TEST(MarkovClassification1ExampleTest ${EXE_TESTS}
 	--compare-image ${EPSILON}
-	${BASELINE}/MarkovRandomField1.png
-	${TEMP}/MarkovRandomField1.png
-        MarkovRandomField1ExampleTest
+                    ${BASELINE}/MarkovClassification1.png
+                    ${TEMP}/MarkovClassification1.png
+    MarkovClassification1ExampleTest
         ${INPUTDATA}/QB_Suburb.png
-	${TEMP}/MarkovRandomField1.png
-	1.0
-	20
-	1.0
+        ${TEMP}/MarkovClassification1.png
+        1.0
+        20
+        1.0
 )
 
-ADD_TEST(MarkovRandomField2ExampleTest ${EXE_TESTS}
+ADD_TEST(MarkovClassification2ExampleTest ${EXE_TESTS}
 	--compare-image ${EPSILON}
-	${BASELINE}/MarkovRandomField2.png
-	${TEMP}/MarkovRandomField2.png
-        MarkovRandomField1ExampleTest
+                    ${BASELINE}/MarkovClassification2.png
+                    ${TEMP}/MarkovClassification2.png
+    MarkovClassification2ExampleTest
         ${INPUTDATA}/QB_Suburb.png
-	${TEMP}/MarkovRandomField2.png
-	1.0
-	5
+        ${TEMP}/MarkovClassification2.png
+        1.0
+        5
 )
+
+ADD_TEST(MarkovRestaurationExampleTest ${EXE_TESTS}
+	--compare-image ${EPSILON}
+	                ${BASELINE}/MarkovRestauration.png
+	                ${TEMP}/MarkovRestauration.png
+    MarkovRestaurationExampleTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/MarkovRestauration.png
+        10.0
+        30.0
+        1.
+)
+
+
+#ADD_TEST(MarkovRegularizationExampleTest ${EXE_TESTS}
+#	--compare-image ${EPSILON}
+#                       ${BASELINE}/MarkovRegularization-scaled.png
+#                       ${TEMP}/MarkovRegularization-scaled.png
+#    MarkovRegularizationExample
+#        ${INPUTDATA}/***OutputOfAnEarlierClassif***
+#        ${TEMP}/MarkovRegularization.png
+#        ${TEMP}/MarkovRegularization-scaled.png
+#        0.2
+#        20
+#        1.0
+#))
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 

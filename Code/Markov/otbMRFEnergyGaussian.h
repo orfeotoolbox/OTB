@@ -31,14 +31,14 @@ namespace otb
  * \class MRFEnergyGaussian
  * \brief This is the implementation of the Gaussian model for Markov classification.
  *
- * This is the implementation of the Gaussian model for Markov classification, to be used for
- * data fidelity. Energy is:
- * \f[  U(x_s,x_t) = -\beta \textrm{ if } x_s = x_t \f]
- * \f[  U(x_s,x_t) = +\beta \textrm{ if } x_s \neq x_t \f]
+ * This is the implementation of the Gaussian model for Markov classification, 
+ * to be used for data fidelity. Energy is:
+ *
+ * \f[  U(x_s,x_t) = (x_s-x_t)^2 \f]
+ *
  * with
  * - \f$ x_s \f$ the label on site s
  * - \f$ y_s \f$ the value on the reference image
- * - \f$ \sigma^2_{x_s} \f$ the noise variance
  */
   
 template< class TInput1, class TInput2>    

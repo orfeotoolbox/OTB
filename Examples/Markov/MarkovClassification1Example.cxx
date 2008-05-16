@@ -25,9 +25,9 @@
 #endif
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {QB_Suburb.png RandomImage.png}
-//    OUTPUTS: {MarkovRandomField3.png}
-//    1.0 30 1.0
+//    INPUTS: {QB_Suburb.png}
+//    OUTPUTS: {MarkovClassification1.png}
+//    1.0 20 1.0
 //  Software Guide : EndCommandLineArgs
 
 
@@ -43,8 +43,6 @@
 // regularization energy is defined by a Potts model and the fidelity by a 
 // Gaussian model.
 //
-// The starting state of classification is given by the image proposed as a second 
-// parameter. It could be a random image.
 //
 // Software Guide : EndLatex 
 
@@ -63,7 +61,6 @@
 // Software Guide : EndLatex 
 
 // Software Guide : BeginCodeSnippet
-#include "otbMRFEnergy.h"
 #include "otbMRFEnergyPotts.h"
 #include "otbMRFEnergyGaussianClassification.h"
 #include "otbMRFOptimizerMetropolis.h"
@@ -74,11 +71,12 @@
 int main(int argc, char* argv[] ) 
 {
   
-  if( argc != 7 )
+  if( argc != 6 )
   {
+    std::cerr << "Missing Parameters "<< argc << std::endl;
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr << " inputImage inputInitialization output lambda iterations temperature" << std::endl;
+    std::cerr << " inputImage output lambda iterations optimizerTemperature" << std::endl;
     return 1;
   }
   
@@ -87,7 +85,7 @@ int main(int argc, char* argv[] )
   //
   //  Then we must decide what pixel type to use for the image. We
   //  choose to make all computations with double precision.
-  //  The labelled image is of type unsigned char to allow up to 256 different 
+  //  The labelled image is of type unsigned char which allows up to 256 different 
   //  classes.
   //
   //  Software Guide : EndLatex 
@@ -115,19 +113,15 @@ int main(int argc, char* argv[] )
   // Software Guide : BeginCodeSnippet
 
   typedef otb::ImageFileReader< InputImageType >  ReaderType;
-  typedef otb::ImageFileReader< LabelledImageType >  ReaderLabelledType;
   typedef otb::ImageFileWriter< LabelledImageType >  WriterType;
   
   ReaderType::Pointer reader = ReaderType::New();
-  ReaderLabelledType::Pointer reader2 = ReaderLabelledType::New();
   WriterType::Pointer writer = WriterType::New();
   
   const char * inputFilename  = argv[1];
-  const char * labelledFilename  = argv[2];
-  const char * outputFilename = argv[3];
+  const char * outputFilename = argv[2];
   
   reader->SetFileName( inputFilename );
-  reader2->SetFileName( labelledFilename );
   writer->SetFileName( outputFilename );
 
   // Software Guide : EndCodeSnippet
@@ -224,6 +218,10 @@ int main(int argc, char* argv[] )
   //
   // Software Guide : EndLatex
   
+  // Overpass random calculation(for test only):
+  sampler->InitializeSeed(0);
+  optimizer->InitializeSeed(0);
+  markovFilter->InitializeSeed(0);
   
   // Software Guide : BeginCodeSnippet
   
@@ -253,16 +251,17 @@ int main(int argc, char* argv[] )
   
   // Software Guide : BeginCodeSnippet
   
-  
-  optimizer->SetParameters(atoi(argv[6]));
+  OptimizerType::ParametersType param(1);
+  param.Fill(atof(argv[5]));
+  optimizer->SetParameters(param);
   markovFilter->SetNumberOfClasses(nClass);  
-  markovFilter->SetMaximumNumberOfIterations(atoi(argv[5]));
+  markovFilter->SetMaximumNumberOfIterations(atoi(argv[4]));
   markovFilter->SetErrorTolerance(0.0);
-  markovFilter->SetLambda(atof(argv[4]));
+  markovFilter->SetLambda(atof(argv[3]));
   markovFilter->SetNeighborhoodRadius(1);
   
-  markovFilter->SetEnergyRegularization(static_cast<MarkovRandomFieldFilterType::EnergyRegularizationPointer>(energyRegularization));
-  markovFilter->SetEnergyFidelity(static_cast<MarkovRandomFieldFilterType::EnergyFidelityPointer>(energyFidelity));
+  markovFilter->SetEnergyRegularization(energyRegularization);
+  markovFilter->SetEnergyFidelity(energyFidelity);
   markovFilter->SetOptimizer(optimizer);
   markovFilter->SetSampler(sampler);
   
@@ -277,7 +276,6 @@ int main(int argc, char* argv[] )
   
   // Software Guide : BeginCodeSnippet
   
-  markovFilter->SetTrainingInput(reader2->GetOutput());
   markovFilter->SetInput(reader->GetOutput());
     
   typedef itk::RescaleIntensityImageFilter
@@ -304,7 +302,27 @@ int main(int argc, char* argv[] )
   
   // Software Guide : EndCodeSnippet
   
-  return 0;
+  // Software Guide : BeginLatex
+  //
+  // Figure~\ref{fig:MRF_CLASSIFICATION1} shows the output of the Markov Random
+  // Field classification after 20 iterations with a 
+  // random sampler and a Metropolis optimizer.
+  //
+  // \begin{figure}
+  // \center
+  // \includegraphics[width=0.44\textwidth]{QB_Suburb.eps}
+  // \includegraphics[width=0.44\textwidth]{MarkovClassification1.eps}
+  // \itkcaption[MRF restauration]{Result of applying
+  // the \doxygen{otb}{MarkovRandomFieldFilter} to an extract from a PAN Quickbird
+  // image for classification. The result is obtained after 20 iterations with a 
+  // random sampler and a Metropolis optimizer. From left to right : original image,
+  // classification.}  
+  // \label{fig:MRF_CLASSIFICATION1} 
+  // \end{figure}
+  //
+  // Software Guide : EndLatex
+  
+  return EXIT_SUCCESS;
   
 }
 

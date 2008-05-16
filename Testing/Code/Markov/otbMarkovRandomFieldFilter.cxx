@@ -85,6 +85,7 @@ int otbMarkovRandomFieldFilter(int argc, char* argv[] )
   energyFidelity->SetParameters(parameters);
 
   optimizer->SetSingleParameter(atof(argv[5]));
+  //optimizer->SetParameters(atof(argv[5]));
   markovFilter->InitializeSeed(0);
   markovFilter->SetNumberOfClasses(nClass);  
   markovFilter->SetMaximumNumberOfIterations(atoi(argv[4]));

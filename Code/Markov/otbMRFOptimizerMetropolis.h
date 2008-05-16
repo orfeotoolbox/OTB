@@ -61,7 +61,7 @@ class ITK_EXPORT MRFOptimizerMetropolis : public MRFOptimizer
 	this->m_Parameters.SetSize(1);
 	this->m_Parameters.Fill(parameterVal);
 	this->Modified();
-    }
+      }
     
 
     inline bool Compute(double deltaEnergy)
@@ -98,7 +98,6 @@ class ITK_EXPORT MRFOptimizerMetropolis : public MRFOptimizer
       m_Generator->SetSeed();
     }
     virtual ~MRFOptimizerMetropolis() {}
-    double m_Temperature;
     RandomGeneratorType::Pointer m_Generator;
   };       
  

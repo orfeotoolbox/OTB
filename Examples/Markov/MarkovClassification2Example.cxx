@@ -26,7 +26,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Suburb.png}
-//    OUTPUTS: {MarkovRandomField2.png}
+//    OUTPUTS: {MarkovClassification1.png}
 //    1.0 5
 //  Software Guide : EndCommandLineArgs
 
@@ -56,7 +56,6 @@
 // Software Guide : EndLatex 
 
 
-#include "otbMRFEnergy.h"
 #include "otbMRFEnergyPotts.h"
 #include "otbMRFEnergyGaussianClassification.h"
 
@@ -64,7 +63,7 @@
 #include "otbMRFSamplerRandomMAP.h"
 #include "otbMRFOptimizerICM.h"
 // Software Guide : EndCodeSnippet
-#include "otbMRFSamplerRandom.h"
+//#include "otbMRFSamplerRandom.h"
 
 int main(int argc, char* argv[] ) 
 {
@@ -131,6 +130,10 @@ int main(int argc, char* argv[] )
   OptimizerType::Pointer optimizer = OptimizerType::New();
   SamplerType::Pointer sampler = SamplerType::New();
 
+  // Overpass random calculation(for test only):
+  sampler->InitializeSeed(0);
+  markovFilter->InitializeSeed(0);
+  
   unsigned int nClass = 4;
   energyFidelity->SetNumberOfParameters(2*nClass); 
   EnergyFidelityType::ParametersType parameters;
@@ -159,8 +162,8 @@ int main(int argc, char* argv[] )
   markovFilter->SetLambda(atof(argv[3]));
   markovFilter->SetNeighborhoodRadius(1);
   
-  markovFilter->SetEnergyRegularization(static_cast<MarkovRandomFieldFilterType::EnergyRegularizationPointer>(energyRegularization));
-  markovFilter->SetEnergyFidelity(static_cast<MarkovRandomFieldFilterType::EnergyFidelityPointer>(energyFidelity));
+  markovFilter->SetEnergyRegularization(energyRegularization);
+  markovFilter->SetEnergyFidelity(energyFidelity);
   markovFilter->SetOptimizer(optimizer);
   markovFilter->SetSampler(sampler);
   
@@ -184,7 +187,27 @@ int main(int argc, char* argv[] )
   //
   // Software Guide : EndLatex
   
-  return 0;
+  // Software Guide : BeginLatex
+  //
+  // Figure~\ref{fig:MRF_CLASSIFICATION2} shows the output of the Markov Random
+  // Field classification after 5 iterations with a 
+  // MAP random sampler and an ICM optimizer.
+  //
+  // \begin{figure}
+  // \center
+  // \includegraphics[width=0.44\textwidth]{QB_Suburb.eps}
+  // \includegraphics[width=0.44\textwidth]{MarkovClassification2.eps}
+  // \itkcaption[MRF restauration]{Result of applying
+  // the \doxygen{otb}{MarkovRandomFieldFilter} to an extract from a PAN Quickbird
+  // image for classification. The result is obtained after 5 iterations with a 
+  // MAP random sampler and an ICM optimizer. From left to right : original image,
+  // classification.}  
+  // \label{fig:MRF_CLASSIFICATION2} 
+  // \end{figure}
+  //
+  // Software Guide : EndLatex
+  
+  return EXIT_SUCCESS;
   
 }
 
