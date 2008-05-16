@@ -386,10 +386,16 @@ StreamingImageFileWriter<TInputImage>
 
   /** Control if the ImageIO is CanStreamWrite */
     if( m_ImageIO->CanStreamWrite() == false )
-    {
+      {
         otbMsgDebugMacro(<<"WARNING : The ImageFactory selected for the image file <"<<m_FileName.c_str()<<"> is not StreamWrite. So, the streaming method is not use.");
         numDivisions = 1;
-    }
+      }
+    else if( inputPtr->GetBufferedRegion() == inputPtr->GetLargestPossibleRegion())
+      {
+	otbMsgDebugMacro(<<"WARNING : Buffered region is the largest possible region, there is no need for streaming.");
+	numDivisions = 1;
+
+      }
     else
     {
                         numDivisions = static_cast<unsigned int>(CalculateNumberOfStreamDivisions());
@@ -461,11 +467,11 @@ StreamingImageFileWriter<TInputImage>
                 streamRegion = m_RegionSplitter->GetSplit(piece, numDivisions,
                                               outputRegion);
       
-                                                                otbDebugMacro(<< "Piece : " << piece );
-                                                                otbDebugMacro(<< "RegionSplit : Index(" << streamRegion.GetIndex()[0]
+		std::cout<< "Piece : " << piece <<std::endl;
+                                                               std::cout<< "RegionSplit : Index(" << streamRegion.GetIndex()[0]
                                   << "," << streamRegion.GetIndex()[1]
                                                                                                                 << ") Size(" << streamRegion.GetSize()[0]
-                                                                                                                << "," << streamRegion.GetSize()[1] << ")" );
+									<< "," << streamRegion.GetSize()[1] << ")"<<std::endl;
 
                         
                 inputPtr->SetRequestedRegion(streamRegion);
@@ -555,10 +561,10 @@ StreamingImageFileWriter<TInputImage>
     }
 
 
-otbMsgDevMacro( <<" InputImage GetImageDimensions : "<<input->GetImageDimension());
-otbMsgDevMacro( <<"     - GetRequestedRegion : "<<input->GetRequestedRegion());
-otbMsgDevMacro( <<"     - GetLargestPossibleRegion : "<<input->GetLargestPossibleRegion());
-otbMsgDevMacro( <<"     - GetBufferedRegion : "<<input->GetBufferedRegion());
+  std::cout <<" InputImage GetImageDimensions : "<<input->GetImageDimension()<<std::endl;
+  std::cout <<"     - GetRequestedRegion : "<<input->GetRequestedRegion() << std::endl;
+  std::cout <<"     - GetLargestPossibleRegion : "<<input->GetLargestPossibleRegion() << std::endl;
+  std::cout <<"     - GetBufferedRegion : "<<input->GetBufferedRegion()<<std::endl;
 
   // Setup the image IO for writing.
   //
