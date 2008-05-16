@@ -34,11 +34,14 @@
 #ifndef OPENJPEG_H
 #define OPENJPEG_H
 
-//#if defined(OPJ_STATIC) || !(defined(WIN32) || defined(__WIN32__))
-//#define OPJ_API
-//#define OPJ_CALLCONV
-//#else
-//#define OPJ_CALLCONV __stdcall
+// Modified by OTB developpers. /TODO check this
+// Add specific plateform CYGWIN and MINGW
+
+#if defined(OPJ_STATIC) || !(defined(WIN32) || defined(__WIN32__) || defined(__CYGWIN__) || defined(__MINGW__))
+#define OPJ_API
+#define OPJ_CALLCONV
+#else
+#define OPJ_CALLCONV __stdcall
 /*
 The following ifdef block is the standard way of creating macros which make exporting 
 from a DLL simpler. All files within this DLL are compiled with the OPJ_EXPORTS
@@ -47,24 +50,12 @@ that uses this DLL. This way any other project whose source files include this f
 OPJ_API functions as being imported from a DLL, wheras this DLL sees symbols
 defined with this macro as being exported.
 */
-//#ifdef OPJ_EXPORTS
-//#define OPJ_API __declspec(dllexport)
-//#else
-//#define OPJ_API __declspec(dllimport)
-//#endif /* OPJ_EXPORTS */
-//#endif /* !OPJ_STATIC || !WIN32 */
-
-
-// Modified by OTB developpers. /TODO check this
-#if (defined(WIN32) || defined(__WIN32__) || defined(__CYGWIN__) || defined(__MINGW__))
-#define OPJ_CALLCONV __stdcall
+#ifdef OPJ_EXPORTS
 #define OPJ_API __declspec(dllexport)
 #else
-#define OPJ_CALLCONV
-#define OPJ_API
-#endif
-
-
+#define OPJ_API __declspec(dllimport)
+#endif /* OPJ_EXPORTS */
+#endif /* !OPJ_STATIC || !WIN32 */
 
 #ifndef __cplusplus
 	#if defined(HAVE_STDBOOL_H)
