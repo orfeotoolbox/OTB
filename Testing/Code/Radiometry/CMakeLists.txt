@@ -532,13 +532,13 @@ otbAtmosphericCorrectionSequencement.cxx
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbRadiometryTests1 otbRadiometryTests1.cxx ${Radiometry_SRCS1})
-TARGET_LINK_LIBRARIES(otbRadiometryTests1 OTBRadiometry OTBCommon OTBIO otbopenjpeg ggdal ITKIO ITKCommon ITKBasicFilters otb6S)
+TARGET_LINK_LIBRARIES(otbRadiometryTests1 OTBRadiometry OTBCommon OTBIO otbopenjpeg gdal ITKIO ITKCommon ITKBasicFilters otb6S)
 ADD_EXECUTABLE(otbRadiometryTests2 otbRadiometryTests2.cxx ${Radiometry_SRCS2})
-TARGET_LINK_LIBRARIES(otbRadiometryTests2 OTBRadiometry OTBCommon OTBIO otbopenjpeg ggdal ITKIO ITKCommon ITKBasicFilters otb6S)
+TARGET_LINK_LIBRARIES(otbRadiometryTests2 OTBRadiometry OTBCommon OTBIO otbopenjpeg gdal ITKIO ITKCommon ITKBasicFilters otb6S)
 ADD_EXECUTABLE(otbRadiometryTests3 otbRadiometryTests3.cxx ${Radiometry_SRCS3})
-TARGET_LINK_LIBRARIES(otbRadiometryTests3 OTBRadiometry OTBCommon OTBIO otbopenjpeg ggdal ITKIO ITKCommon ITKBasicFilters otb6S)
+TARGET_LINK_LIBRARIES(otbRadiometryTests3 OTBRadiometry OTBCommon OTBIO otbopenjpeg gdal ITKIO ITKCommon ITKBasicFilters otb6S)
 ADD_EXECUTABLE(otbRadiometryTests4 otbRadiometryTests4.cxx ${Radiometry_SRCS4})
-TARGET_LINK_LIBRARIES(otbRadiometryTests4 OTBRadiometry OTBCommon OTBIO otbopenjpeg ggdal ITKIO ITKCommon ITKBasicFilters otb6S)
+TARGET_LINK_LIBRARIES(otbRadiometryTests4 OTBRadiometry OTBCommon OTBIO otbopenjpeg gdal ITKIO ITKCommon ITKBasicFilters otb6S)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
 
