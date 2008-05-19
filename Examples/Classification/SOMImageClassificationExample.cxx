@@ -31,6 +31,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 // Software Guide : BeginCodeSnippet
 #include "otbSOMImageClassificationFilter.h"
+// Software Guide : EndCodeSnippet
 #include "otbVectorImage.h"
 #include "otbImage.h"
 #include "otbSOMMap.h"
