@@ -57,12 +57,19 @@ without a proper win margin.
 
 \subsection{K-Means Classification}
 \label{sec:KMeansClassifier}
+\subsubsection{Simple version}
 \ifitkFullVersion
 \input{ScalarImageKmeansClassifier.tex}
 \fi
 \ifitkFullVersion
 \input{ScalarImageKmeansModelEstimator.tex}
 \fi
+
+\subsubsection{General approach}
+\ifitkFullVersion
+\input{KMeansImageClassificationExample.tex}
+\fi
+
 
 \subsection{Bayesian Plug-In Classifier}
 \label{sec:BayesianPluginClassifier}
@@ -351,6 +358,13 @@ presented in section \ref{sec:KullbackLeiblerProfile}.
 \input{SVMGenericKernelImageClassificationExample.tex}
 \fi
 
+\subsubsection{Multi-band, streamed classification}
+
+\ifitkFullVersion
+\input{SVMImageClassificationExample.tex}
+\fi
+
+
 \section{Kohonen's Self Organizing Map}
 \label{sec:SOM}
 \input{Kohonen}
@@ -361,6 +375,12 @@ presented in section \ref{sec:KullbackLeiblerProfile}.
 \subsection{SOM Classification}
 \label{sec:SOMClassification}
 \input{SOMClassifierExample}
+
+\subsection{Multi-band, streamed classification}
+
+\ifitkFullVersion
+\input{SVMImageClassificationExample.tex}
+\fi
 
 %%%2. Lecture SOM et ensemble de vecteurs autre image pour construire
 %%%ActivationMAP 
