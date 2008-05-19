@@ -25,7 +25,7 @@ TARGET_LINK_LIBRARIES(ScalarImageMarkovRandomField1 OTBIO OTBCommon ITKIO ITKCom
 ADD_EXECUTABLE(SOMImageClassificationExample SOMImageClassificationExample.cxx )
 TARGET_LINK_LIBRARIES(SOMImageClassificationExample OTBCommon OTBLearning ITKCommon ITKStatistics)
 
-ADD_EXECUTABLE(SVMImageClassificationExample2 SVMImageClassificationExample.cxx )
+ADD_EXECUTABLE(SVMImageClassificationExample2 SVMImageClassifierExample.cxx )
 TARGET_LINK_LIBRARIES(SVMImageClassificationExample2 OTBCommon OTBLearning ITKCommon ITKStatistics)
 
 #ADD_EXECUTABLE( BayesianClassifierInitializer BayesianClassifierInitializer.cxx )
