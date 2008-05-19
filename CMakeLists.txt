@@ -217,9 +217,10 @@ LINK_DIRECTORIES( ${GDAL_LIBRARY_DIRS} )
 # ITK Library
 #-------------------------------
 
-OPTION(OTB_USE_EXTERNAL_ITK "Use an outside build of ITK." ON)
+OPTION(OTB_USE_EXTERNAL_ITK "Use an outside build of ITK." OFF)
 IF(OTB_USE_EXTERNAL_ITK)
-  MESSAGE(STATUS "WARNING: Due to conflicting libraries, jpeg2000 support is disabled when using external ITK.")
+# Commented for release 2.2.0
+#  MESSAGE(STATUS "WARNING: Due to conflicting libraries, jpeg2000 support is disabled when using external ITK.")
   FIND_PACKAGE(ITK)
   IF(ITK_FOUND)
         INCLUDE(${ITK_USE_FILE})
