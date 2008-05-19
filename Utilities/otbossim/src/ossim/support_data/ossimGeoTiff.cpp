@@ -935,7 +935,7 @@ bool ossimGeoTiff::readTags(const ossimFilename& file, ossim_uint32 entryIdx)
 //       theTiePoint.push_back(0.0);
 //    }
    ossim_uint16 doubleParamSize;
-   double* tempDoubleParam;
+   double* tempDoubleParam=0;
    theDoubleParam.clear();
    if(TIFFGetField(theTiffPtr, TIFFTAG_GEODOUBLEPARAMS, &doubleParamSize, &tempDoubleParam))
    {
