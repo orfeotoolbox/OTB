@@ -328,11 +328,11 @@ SET(Projections_SRCS3
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbProjectionsTests1 otbProjectionsTests1.cxx ${Projections_SRCS1})
-TARGET_LINK_LIBRARIES(otbProjectionsTests1  OTBProjections OTBCommon OTBIO otbopenjpeg gdal ITKIO ITKCommon ITKBasicFilters otbossim)
+TARGET_LINK_LIBRARIES(otbProjectionsTests1  OTBProjections OTBCommon OTBIO gdal ITKIO ITKCommon ITKBasicFilters otbossim)
 ADD_EXECUTABLE(otbProjectionsTests2 otbProjectionsTests2.cxx ${Projections_SRCS2})
-TARGET_LINK_LIBRARIES(otbProjectionsTests2  OTBProjections OTBCommon OTBIO otbopenjpeg gdal ITKIO ITKCommon ITKBasicFilters otbossim)
+TARGET_LINK_LIBRARIES(otbProjectionsTests2  OTBProjections OTBCommon OTBIO gdal ITKIO ITKCommon ITKBasicFilters otbossim)
 ADD_EXECUTABLE(otbProjectionsTests3 otbProjectionsTests3.cxx ${Projections_SRCS3})
-TARGET_LINK_LIBRARIES(otbProjectionsTests3  OTBProjections OTBCommon OTBIO otbopenjpeg gdal ITKIO ITKCommon ITKBasicFilters otbossim)
+TARGET_LINK_LIBRARIES(otbProjectionsTests3  OTBProjections OTBCommon OTBIO gdal ITKIO ITKCommon ITKBasicFilters otbossim)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
 

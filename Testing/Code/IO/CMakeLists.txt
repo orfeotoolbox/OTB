@@ -1264,52 +1264,53 @@ ADD_TEST(ioTvossimElevManagerTest ${IO_TESTS12}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS13 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-IF(NOT OTB_USE_EXTERNAL_ITK)
-
+# Commented for release 2.2.0
+#IF(NOT OTB_USE_EXTERNAL_ITK)
+#
 # ---  JPEG2000 can read ---
-ADD_TEST(ioTuJ2KImageIOCanRead ${IO_TESTS13} 
-         otbJPEG2000ImageIOTestCanRead
-         ${INPUTDATA}/bretagne.j2k
-         )
+#ADD_TEST(ioTuJ2KImageIOCanRead ${IO_TESTS13} 
+#         otbJPEG2000ImageIOTestCanRead
+#         ${INPUTDATA}/bretagne.j2k
+#         )
 
-ADD_TEST(ioTuJP2ImageIOCanRead ${IO_TESTS13} 
-         otbJPEG2000ImageIOTestCanRead
-         ${IMAGEDATA}/JPEG2000/QB_multicomp.jpx
-         )
+#ADD_TEST(ioTuJP2ImageIOCanRead ${IO_TESTS13} 
+#         otbJPEG2000ImageIOTestCanRead
+#         ${IMAGEDATA}/JPEG2000/QB_multicomp.jpx
+#         )
 
-ADD_TEST(ioTuVectorImageFileReaderWriterJ2K2TIF ${IO_TESTS9} 
---compare-image ${TOL}  ${BASELINE}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
-                        ${TEMP}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
-         otbVectorImageFileReaderWriterTest
-         ${INPUTDATA}/bretagne.j2k
-	 ${TEMP}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
-         )
+#ADD_TEST(ioTuVectorImageFileReaderWriterJ2K2TIF ${IO_TESTS9} 
+#--compare-image ${TOL}  ${BASELINE}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
+#                        ${TEMP}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
+#         otbVectorImageFileReaderWriterTest
+#         ${INPUTDATA}/bretagne.j2k
+#	 ${TEMP}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
+#         )
 
-ADD_TEST(ioTuImageFileReaderWriterJ2K2TIF ${IO_TESTS2} 
---compare-image ${TOL}  ${BASELINE}/ioTvImageFileReaderWriterJ2K2TIFOutput.tif
-                        ${TEMP}/ioTvImageFileReaderWriterJ2K2TIFOutput.tif
-         otbDoubleImageIOTest
-         ${INPUTDATA}/bretagne.j2k
-	 ${TEMP}/ioTvImageFileReaderWriterJ2K2TIFOutput.tif
-         )
+#ADD_TEST(ioTuImageFileReaderWriterJ2K2TIF ${IO_TESTS2} 
+#--compare-image ${TOL}  ${BASELINE}/ioTvImageFileReaderWriterJ2K2TIFOutput.tif
+#                        ${TEMP}/ioTvImageFileReaderWriterJ2K2TIFOutput.tif
+#         otbDoubleImageIOTest
+#         ${INPUTDATA}/bretagne.j2k
+#	 ${TEMP}/ioTvImageFileReaderWriterJ2K2TIFOutput.tif
+#         )
 
 #NOTE: we are comparing with the kakadu output in raw format.
-ADD_TEST(ioTuVectorImageFileReaderWriterJP22TIF ${IO_TESTS9} 
---compare-image ${TOL}  ${BASELINE}/ioTvVectorImageFileReaderWriterJP22TIFOutput
-                        ${TEMP}/ioTvVectorImageFileReaderWriterJP22TIFOutput.tif
-         otbVectorImageFileReaderWriterTest
-         ${IMAGEDATA}/JPEG2000/QB_multicomp_small.jpx
-	 ${TEMP}/ioTvVectorImageFileReaderWriterJP22TIFOutput.tif
-         )
+#ADD_TEST(ioTuVectorImageFileReaderWriterJP22TIF ${IO_TESTS9} 
+#--compare-image ${TOL}  ${BASELINE}/ioTvVectorImageFileReaderWriterJP22TIFOutput
+#                        ${TEMP}/ioTvVectorImageFileReaderWriterJP22TIFOutput.tif
+#         otbVectorImageFileReaderWriterTest
+#         ${IMAGEDATA}/JPEG2000/QB_multicomp_small.jpx
+#	 ${TEMP}/ioTvVectorImageFileReaderWriterJP22TIFOutput.tif
+#         )
 
 
-ADD_TEST(ioTuImageFileReaderWriterJP22TIF ${IO_TESTS2} 
---compare-image ${TOL}  ${BASELINE}/ioTvImageFileReaderWriterJP22TIFOutput.tif
-                        ${TEMP}/ioTvImageFileReaderWriterJP22TIFOutput.tif
-         otbDoubleImageIOTest
-         ${IMAGEDATA}/JPEG2000/QB_multicomp_small.jpx
-	 ${TEMP}/ioTvImageFileReaderWriterJP22TIFOutput.tif
-         )
+#ADD_TEST(ioTuImageFileReaderWriterJP22TIF ${IO_TESTS2} 
+#--compare-image ${TOL}  ${BASELINE}/ioTvImageFileReaderWriterJP22TIFOutput.tif
+#                        ${TEMP}/ioTvImageFileReaderWriterJP22TIFOutput.tif
+#         otbDoubleImageIOTest
+#         ${IMAGEDATA}/JPEG2000/QB_multicomp_small.jpx
+#	 ${TEMP}/ioTvImageFileReaderWriterJP22TIFOutput.tif
+#         )
 
 
 
@@ -1318,7 +1319,7 @@ ADD_TEST(ioTuImageFileReaderWriterJP22TIF ${IO_TESTS2}
 #         otbJPEG2000ImageIOTestCanWrite
 #         ${INPUTDATA}/toto.j2k
 #         )
-ENDIF(NOT OTB_USE_EXTERNAL_ITK)
+#ENDIF(NOT OTB_USE_EXTERNAL_ITK)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS14 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1500,15 +1501,16 @@ otbOssimElevManagerTest.cxx
 )
 
 
-SET(BasicIO_SRCS13
-otbJPEG2000ImageIOTestCanRead.cxx
-otbJPEG2000ImageIOTestCanWrite.cxx
-)
+#SET(BasicIO_SRCS13
+#otbJPEG2000ImageIOTestCanRead.cxx
+#otbJPEG2000ImageIOTestCanWrite.cxx
+#)
 
-IF(OTB_USE_EXTERNAL_ITK)
-LIST(REMOVE_ITEM BasicIO_SRCS13 "${CMAKE_CURRENT_SOURCE_DIR}/otbJPEG2000ImageIOTestCanRead.cxx" )
-LIST(REMOVE_ITEM BasicIO_SRCS13 "${CMAKE_CURRENT_SOURCE_DIR}/otbJPEG2000ImageIOTestCanWrite.cxx" )
-ENDIF(OTB_USE_EXTERNAL_ITK)
+# Commented for release 2.2.0
+#IF(OTB_USE_EXTERNAL_ITK)
+#LIST(REMOVE_ITEM BasicIO_SRCS13 "${CMAKE_CURRENT_SOURCE_DIR}/otbJPEG2000ImageIOTestCanRead.cxx" )
+#LIST(REMOVE_ITEM BasicIO_SRCS13 "${CMAKE_CURRENT_SOURCE_DIR}/otbJPEG2000ImageIOTestCanWrite.cxx" )
+#ENDIF(OTB_USE_EXTERNAL_ITK)
 
 
 SET(BasicIO_SRCS14
@@ -1536,51 +1538,51 @@ otbSHPVectorDataIONew.cxx
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbIOTests1 otbIOTests1.cxx ${BasicIO_SRCS1})
-TARGET_LINK_LIBRARIES(otbIOTests1 OTBIO OTBCommon otbopenjpeg  gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests1 OTBIO OTBCommon   gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests2 otbIOTests2.cxx ${BasicIO_SRCS2})
-TARGET_LINK_LIBRARIES(otbIOTests2 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests2 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests3 otbIOTests3.cxx ${BasicIO_SRCS3})
-TARGET_LINK_LIBRARIES(otbIOTests3 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests3 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests4 otbIOTests4.cxx ${BasicIO_SRCS2})
-TARGET_LINK_LIBRARIES(otbIOTests4 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests4 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests5 otbIOTests5.cxx ${BasicIO_SRCS5})
-TARGET_LINK_LIBRARIES(otbIOTests5 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests5 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests6 otbIOTests6.cxx ${BasicIO_SRCS6})
-TARGET_LINK_LIBRARIES(otbIOTests6 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests6 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests7 otbIOTests7.cxx ${BasicIO_SRCS7})
-TARGET_LINK_LIBRARIES(otbIOTests7 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests7 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests8 otbIOTests8.cxx ${BasicIO_SRCS8})
-TARGET_LINK_LIBRARIES(otbIOTests8 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests8 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests9 otbIOTests9.cxx ${BasicIO_SRCS9})
-TARGET_LINK_LIBRARIES(otbIOTests9 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests9 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests10 otbIOTests10.cxx ${BasicIO_SRCS10})
-TARGET_LINK_LIBRARIES(otbIOTests10 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests10 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests11 otbIOTests11.cxx ${BasicIO_SRCS11})
-TARGET_LINK_LIBRARIES(otbIOTests11 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests11 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests12 otbIOTests12.cxx ${BasicIO_SRCS12})
-TARGET_LINK_LIBRARIES(otbIOTests12 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests12 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 
 IF(NOT OTB_USE_EXTERNAL_ITK)
 ADD_EXECUTABLE(otbIOTests13 otbIOTests13.cxx ${BasicIO_SRCS13})
-TARGET_LINK_LIBRARIES(otbIOTests13 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests13 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 ENDIF(NOT OTB_USE_EXTERNAL_ITK)
 
 ADD_EXECUTABLE(otbIOTests14 otbIOTests14.cxx ${BasicIO_SRCS14})
-TARGET_LINK_LIBRARIES(otbIOTests14 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests14 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests15 otbIOTests15.cxx ${BasicIO_SRCS15})
-TARGET_LINK_LIBRARIES(otbIOTests15 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests15 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )

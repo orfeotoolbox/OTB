@@ -187,13 +187,13 @@ ADD_TEST(FA-00070-vi_Streaming_Stat_bis ${CXX_TEST_PATH}/StreamingStat
          )
 
 ADD_EXECUTABLE(AlignementsQB  AlignementsQB.cxx)
-TARGET_LINK_LIBRARIES(AlignementsQB OTBFeatureExtraction OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(AlignementsQB OTBFeatureExtraction OTBIO OTBCommon gdal ITKIO ITKCommon)
 
 ADD_EXECUTABLE(MapActivation  MapActivation.cxx)
-TARGET_LINK_LIBRARIES(MapActivation OTBFeatureExtraction OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(MapActivation OTBFeatureExtraction OTBIO OTBCommon gdal ITKIO ITKCommon)
 
 ADD_EXECUTABLE(StreamingStat  StreamingStat.cxx)
-TARGET_LINK_LIBRARIES(StreamingStat OTBFeatureExtraction OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(StreamingStat OTBFeatureExtraction OTBIO OTBCommon gdal ITKIO ITKCommon)
 
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

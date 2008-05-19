@@ -573,25 +573,25 @@ INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 # ${TIFF_LIBRARY}
 
 ADD_EXECUTABLE(otbCommonTests1 otbCommonTests1.cxx ${BasicCommon_SRCS1})
-TARGET_LINK_LIBRARIES(otbCommonTests1 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
+TARGET_LINK_LIBRARIES(otbCommonTests1 OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
 
 ADD_EXECUTABLE(otbCommonTests2 otbCommonTests2.cxx ${BasicCommon_SRCS2})
-TARGET_LINK_LIBRARIES(otbCommonTests2 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
+TARGET_LINK_LIBRARIES(otbCommonTests2 OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
 
 ADD_EXECUTABLE(otbCommonTests3 otbCommonTests3.cxx ${BasicCommon_SRCS3})
-TARGET_LINK_LIBRARIES(otbCommonTests3 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
+TARGET_LINK_LIBRARIES(otbCommonTests3 OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
 
 ADD_EXECUTABLE(otbCommonTests4 otbCommonTests4.cxx ${BasicCommon_SRCS4})
-TARGET_LINK_LIBRARIES(otbCommonTests4 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
+TARGET_LINK_LIBRARIES(otbCommonTests4 OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
 
 ADD_EXECUTABLE(otbCommonTests5 otbCommonTests5.cxx ${BasicCommon_SRCS5})
-TARGET_LINK_LIBRARIES(otbCommonTests5 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
+TARGET_LINK_LIBRARIES(otbCommonTests5 OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
 
 ADD_EXECUTABLE(otbCommonTests6 otbCommonTests6.cxx ${BasicCommon_SRCS6})
-TARGET_LINK_LIBRARIES(otbCommonTests6 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
+TARGET_LINK_LIBRARIES(otbCommonTests6 OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
 
 ADD_EXECUTABLE(otbCommonTests7 otbCommonTests7.cxx ${BasicCommon_SRCS7})
-TARGET_LINK_LIBRARIES(otbCommonTests7 OTBIO OTBCommon otbopenjpeg gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
+TARGET_LINK_LIBRARIES(otbCommonTests7 OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )

@@ -1,7 +1,10 @@
 # Add an option to build or not build the FltkImageViewer Library
 
+
 IF(NOT OTB_USE_EXTERNAL_ITK)
-	SUBDIRS( ITK otbopenjpeg)
+# Commented for release 2.2.0
+#	SUBDIRS( ITK otbopenjpeg)
+SUBDIRS(ITK)
 ENDIF(NOT OTB_USE_EXTERNAL_ITK)
 
 IF(OTB_USE_VISU_GUI)

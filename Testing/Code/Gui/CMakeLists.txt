@@ -33,6 +33,6 @@ INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 # ${TIFF_LIBRARY}
 
 ADD_EXECUTABLE(otbGuiTests otbGuiTests.cxx ${Gui_SRCS})
-TARGET_LINK_LIBRARIES(otbGuiTests OTBIO OTBGui OTBVisu OTBCommon otbopenjpeg gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon fltk)
+TARGET_LINK_LIBRARIES(otbGuiTests OTBIO OTBGui OTBVisu OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon fltk)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )

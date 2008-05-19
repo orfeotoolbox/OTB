@@ -303,10 +303,10 @@ SET(BasicDisparityMap_SRCS3
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbDisparityMapTests1 otbDisparityMapTests1.cxx ${BasicDisparityMap_SRCS1})
-TARGET_LINK_LIBRARIES(otbDisparityMapTests1 OTBIO OTBDisparityMap otbopenjpeg gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon ITKNumerics itkvnl)
+TARGET_LINK_LIBRARIES(otbDisparityMapTests1 OTBIO OTBDisparityMap gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon ITKNumerics itkvnl)
 ADD_EXECUTABLE(otbDisparityMapTests2 otbDisparityMapTests2.cxx ${BasicDisparityMap_SRCS2})
-TARGET_LINK_LIBRARIES(otbDisparityMapTests2 OTBIO OTBDisparityMap otbopenjpeg gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon ITKNumerics itkvnl)
+TARGET_LINK_LIBRARIES(otbDisparityMapTests2 OTBIO OTBDisparityMap gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon ITKNumerics itkvnl)
 ADD_EXECUTABLE(otbDisparityMapTests3 otbDisparityMapTests3.cxx ${BasicDisparityMap_SRCS3})
-TARGET_LINK_LIBRARIES(otbDisparityMapTests3 OTBIO OTBDisparityMap otbopenjpeg gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon ITKNumerics itkvnl)
+TARGET_LINK_LIBRARIES(otbDisparityMapTests3 OTBIO OTBDisparityMap gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon ITKNumerics itkvnl)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
