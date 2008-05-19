@@ -28,8 +28,8 @@ namespace otb
 template<class TInputSampleList, 
          class TTrainingSampleList>
 SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList>
-::SVMSampleListModelEstimator(void):  SVMModelEstimator<ITK_TYPENAME TInputSampleList::ValueType::ValueType,
-							ITK_TYPENAME TTrainingSampleList::ValueType::ValueType>()
+::SVMSampleListModelEstimator(void):  SVMModelEstimator<ITK_TYPENAME TInputSampleList::MeasurementType,
+							ITK_TYPENAME TTrainingSampleList::MeasurementType>()
 
 {
 
@@ -118,7 +118,7 @@ SVMSampleListModelEstimator<TInputSampleList,  TTrainingSampleList>
 
     // If label != 0 
 
-    typename TTrainingSampleList::ValueType::ValueType label =
+    typename TTrainingSampleList::MeasurementType label =
       trIt.GetMeasurementVector()[0];
 
     this->m_Labels.push_back(label);
