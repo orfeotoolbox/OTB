@@ -28,7 +28,6 @@ ADD_TEST(maTvMarkovRandomFieldFilter ${MARKOV_TESTS1}
                   	  ${TEMP}/maTvMarkovRandomField.png
         otbMarkovRandomFieldFilter
             ${INPUTDATA}/QB_Suburb.png	
-	    ${INPUTDATA}/RandomImage.png
 	    ${TEMP}/maTvMarkovRandomField.png
 	    1.0
 	    30
