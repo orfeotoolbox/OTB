@@ -88,7 +88,7 @@ IF(OTB_USE_VISU_GUI)
                 FIND_PATH(OTB_GLU_INCLUDE_PATH "GL/glu.h" ${OPENGL_INCLUDE_PATH})
                 IF(NOT OTB_GLU_INCLUDE_PATH)
                         SET(OTB_GLU_INCLUDE_PATH "")
-                        MESSAGE("Impossible to find GLU files (include lib), detected by FIND_PACKAGE(OpenGL) command.\nCannot build OTB Visu module without GLU library.\n=> You must install GLU (Mesa package, etc.) on your system OR set OTB_USE_VISU to OFF to desactivated OTB Visu module generation !")
+                        MESSAGE("Impossible to find GLU files (include lib), detected by the FIND_PACKAGE(OpenGL) command.\nCannot build OTB Visu module without GLU library.\n=> You must install GLU (Mesa package, etc.) on your system OR set OTB_USE_VISU to OFF to disable OTB Visu module generation !")
                 ENDIF(NOT OTB_GLU_INCLUDE_PATH)
         ENDIF ( NOT HAVE_GL_GLU_H )
 
