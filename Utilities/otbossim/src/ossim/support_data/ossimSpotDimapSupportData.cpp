@@ -231,9 +231,11 @@ bool ossimSpotDimapSupportData::loadXmlFile(const ossimFilename& file,
    std::ifstream in(file.c_str(), std::ios::binary|std::ios::in);
    std::vector<char> fullBuffer;
    ossimString bufferedIo;
-   if(!in.fail())
+ 
+   if(in.good()&&(fileSize > 0))
    {
       char buf[100];
+	  fullBuffer.resize(fileSize);
       in.read(buf, ossim::min((ossim_int64)100, fileSize));
       if(!in.fail())
       {
