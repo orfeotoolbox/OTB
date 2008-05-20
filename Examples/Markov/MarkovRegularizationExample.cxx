@@ -111,10 +111,6 @@ int main(int argc, char* argv[] )
   OptimizerType::Pointer optimizer = OptimizerType::New();
   SamplerType::Pointer sampler = SamplerType::New();
 
-  // Overpass random calculation (for test only):
-  sampler->InitializeSeed(0);
-  optimizer->InitializeSeed(0);
-  markovFilter->InitializeSeed(0);
   
   // Software Guide : BeginLatex
   //
@@ -137,9 +133,8 @@ int main(int argc, char* argv[] )
   unsigned int nClass = labelledStat->GetNumberOfLabels();
   
   // Software Guide : EndCodeSnippet
-  OptimizerType::ParametersType param(1);
-  param.Fill(atof(argv[6]));
-  optimizer->SetParameters(param);
+  
+  optimizer->SetParameters(atoi(argv[6]));
   markovFilter->SetNumberOfClasses(nClass);  
   markovFilter->SetMaximumNumberOfIterations(atoi(argv[5]));
   markovFilter->SetErrorTolerance(0.0);

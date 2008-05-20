@@ -25,19 +25,19 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(MarkovRandomField1ExampleTest);
-  REGISTER_TEST(MarkovRandomField2ExampleTest);
+  REGISTER_TEST(MarkovClassification1ExampleTest);
+  REGISTER_TEST(MarkovClassification2ExampleTest);
   REGISTER_TEST(MarkovRestaurationExampleTest);
   REGISTER_TEST(MarkovRegularizationExampleTest);
 }
 
 #undef main
-#define main MarkovRandomField1ExampleTest
-#include "MarkovRandomField1Example.cxx"
+#define main MarkovClassification1ExampleTest
+#include "MarkovClassification1Example.cxx"
  
 #undef main
-#define main MarkovRandomField2ExampleTest
-#include "MarkovRandomField2Example.cxx"
+#define main MarkovClassification2ExampleTest
+#include "MarkovClassification2Example.cxx"
  
 #undef main
 #define main MarkovRestaurationExampleTest

@@ -3,11 +3,11 @@ INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 SET(Markov_EXAMPLES ${CXX_TEST_PATH}/otbMarkovExamplesTests)
 
-ADD_EXECUTABLE(MarkovRandomField1Example MarkovRandomField1Example.cxx )
-TARGET_LINK_LIBRARIES(MarkovRandomField1Example OTBMarkov OTBCommon OTBIO ITKNumerics ITKIO)
+ADD_EXECUTABLE(MarkovClassification1Example MarkovClassification1Example.cxx )
+TARGET_LINK_LIBRARIES(MarkovClassification1Example OTBMarkov OTBCommon OTBIO ITKNumerics ITKIO)
 
-ADD_EXECUTABLE(MarkovRandomField2Example MarkovRandomField2Example.cxx )
-TARGET_LINK_LIBRARIES(MarkovRandomField2Example OTBMarkov OTBCommon OTBIO ITKNumerics ITKIO)
+ADD_EXECUTABLE(MarkovClassification2Example MarkovClassification2Example.cxx )
+TARGET_LINK_LIBRARIES(MarkovClassification2Example OTBMarkov OTBCommon OTBIO ITKNumerics ITKIO)
 
 ADD_EXECUTABLE(MarkovRestaurationExample MarkovRestaurationExample.cxx )
 TARGET_LINK_LIBRARIES(MarkovRestaurationExample OTBMarkov OTBCommon OTBIO ITKNumerics ITKIO)
@@ -27,25 +27,25 @@ SET(EXE_TESTS ${CXX_TEST_PATH}/otbMarkovExamplesTests)
 SET(TOL 0.0)
 SET(EPSILON 0.00000001)
 
-ADD_TEST(MarkovRandomField1ExampleTest ${EXE_TESTS}
+ADD_TEST(MarkovClassification1ExampleTest ${EXE_TESTS}
 	--compare-image ${EPSILON}
-                    ${BASELINE}/MarkovRandomField1.png
-                    ${TEMP}/MarkovRandomField1.png
-    MarkovRandomField1ExampleTest
+                    ${BASELINE}/MarkovClassification1.png
+                    ${TEMP}/MarkovClassification1.png
+    MarkovClassification1ExampleTest
         ${INPUTDATA}/QB_Suburb.png
-        ${TEMP}/MarkovRandomField1.png
+        ${TEMP}/MarkovClassification1.png
         1.0
         20
         1.0
 )
 
-ADD_TEST(MarkovRandomField2ExampleTest ${EXE_TESTS}
+ADD_TEST(MarkovClassification2ExampleTest ${EXE_TESTS}
 	--compare-image ${EPSILON}
-                    ${BASELINE}/MarkovRandomField2.png
-                    ${TEMP}/MarkovRandomField2.png
-    MarkovRandomField2ExampleTest
+                    ${BASELINE}/MarkovClassification2.png
+                    ${TEMP}/MarkovClassification2.png
+    MarkovClassification2ExampleTest
         ${INPUTDATA}/QB_Suburb.png
-        ${TEMP}/MarkovRandomField2.png
+        ${TEMP}/MarkovClassification2.png
         1.0
         5
 )

@@ -1,3 +1,4 @@
+
 /*=========================================================================
 
   Program:   ORFEO Toolbox
@@ -169,10 +170,6 @@ int main(int argc, char* argv[] )
   //
   // Software Guide : EndLatex
   
-  // Overpass random calculation (for test only):
-  sampler->InitializeSeed(0);
-  optimizer->InitializeSeed(0);
-  markovFilter->InitializeSeed(0);
   
   // Software Guide : BeginCodeSnippet
   
@@ -181,9 +178,8 @@ int main(int argc, char* argv[] )
   // Software Guide : EndCodeSnippet
   
   
-  OptimizerType::ParametersType param(1);
-  param.Fill(atof(argv[6]));
-  optimizer->SetParameters(param);
+  
+  optimizer->SetParameters(atof(argv[6]));
   markovFilter->SetNumberOfClasses(nClass);  
   markovFilter->SetMaximumNumberOfIterations(atoi(argv[5]));
   markovFilter->SetErrorTolerance(0.0);
