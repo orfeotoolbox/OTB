@@ -22,7 +22,7 @@
 #define __otbSimpleRcsPanSharpeningFusionImageFilter_h
 
 #include "itkImageToImageFilter.h"
-#include "itkMeanImageFilter.h"
+#include "otbConvolutionImageFilter.h"
 #include "itkDivideImageFilter.h"
 #include "itkMultiplyImageFilter.h"
     
@@ -54,6 +54,9 @@ class ITK_EXPORT SimpleRcsPanSharpeningFusionImageFilter :
           typedef otb::Image<double,2>                InternalImageType;
           typedef otb::VectorImage<double>            InternalVectorImageType;
           
+          typedef typename InternalImageType::PixelType InternalPixelType;
+          typedef typename itk::NumericTraits<InternalPixelType>::RealType InternalRealType;
+          typedef typename itk::Array<InternalRealType> ArrayType;
           
           /** Method for creation through object factory */
           itkNewMacro(Self);
@@ -66,9 +69,14 @@ class ITK_EXPORT SimpleRcsPanSharpeningFusionImageFilter :
           void PrintSelf( std::ostream& os, itk::Indent indent ) const;
           
           typedef typename InternalImageType::SizeType RadiusType;
-
+          
+          /** Set the filter radius  */
           itkGetMacro( Radius, RadiusType);
           itkSetMacro( Radius, RadiusType);
+          
+          /** Set the input filter */
+          itkSetMacro(Filter, ArrayType);
+          itkGetConstReferenceMacro(Filter, ArrayType);
           
           virtual void SetPanInput( const TPanImageType * image);
           const TPanImageType * GetPanInput(void) const;
@@ -80,8 +88,8 @@ class ITK_EXPORT SimpleRcsPanSharpeningFusionImageFilter :
 
           SimpleRcsPanSharpeningFusionImageFilter();
 
-          typedef itk::MeanImageFilter
-              <TPanImageType, InternalImageType> MeanFilterType;
+          typedef otb::ConvolutionImageFilter
+              <TPanImageType, InternalImageType> ConvolutionFilterType;
           typedef itk::DivideImageFilter
               <TXsImageType,InternalImageType,
               InternalVectorImageType> DivideFilterType;
@@ -98,12 +106,13 @@ class ITK_EXPORT SimpleRcsPanSharpeningFusionImageFilter :
           SimpleRcsPanSharpeningFusionImageFilter(Self&);   // intentionally not implemented
           void operator=(const Self&);          // intentionally not implemented
 
-          typename MeanFilterType::Pointer     m_MeanFilter;
+          typename ConvolutionFilterType::Pointer     m_ConvolutionFilter;
           typename DivideFilterType::Pointer    m_DivideFilter;
           typename MultiplyFilterType::Pointer     m_MultiplyFilter;
 
           RadiusType m_Radius;
-
+          ArrayType m_Filter;
+          
       };
       
 } // end namespace otb

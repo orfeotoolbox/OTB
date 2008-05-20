@@ -32,15 +32,15 @@ namespace otb
   ::SimpleRcsPanSharpeningFusionImageFilter()
   {
     this->SetNumberOfRequiredInputs(2);
-    m_MeanFilter = MeanFilterType::New();
+    m_ConvolutionFilter = ConvolutionFilterType::New();
     m_DivideFilter = DivideFilterType::New();
     m_MultiplyFilter = MultiplyFilterType::New();
     
     m_Radius[0]=3;
     m_Radius[1]=3;
-    m_MeanFilter->SetRadius(m_Radius);
+    m_ConvolutionFilter->SetRadius(m_Radius);
     
-    m_DivideFilter->SetInput2(m_MeanFilter->GetOutput());
+    m_DivideFilter->SetInput2(m_ConvolutionFilter->GetOutput());
     m_MultiplyFilter->SetInput1(m_DivideFilter->GetOutput());
     
   }
@@ -110,7 +110,9 @@ namespace otb
           <TPanImageType, TXsImageType, TOutputImageType>
   ::GenerateData()
       {
-        m_MeanFilter->SetInput( this->GetPanInput() );
+        
+        m_ConvolutionFilter->SetInput( this->GetPanInput() );
+        m_ConvolutionFilter->SetRadius( this->m_Radius); 
         m_DivideFilter->SetInput1(this->GetXsInput());
 
         m_MultiplyFilter->SetInput2(this->GetPanInput());

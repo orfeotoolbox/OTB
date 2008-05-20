@@ -25,6 +25,7 @@
 
 #include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
 
+//int main( int argc, char * argv[] )
 int otbSimpleRcsPanSharpeningFusionImageFilter( int argc, char * argv[] )
 {
   try 
@@ -53,8 +54,17 @@ int otbSimpleRcsPanSharpeningFusionImageFilter( int argc, char * argv[] )
       multiSpectReader->SetFileName(multispect);
       panchroReader->SetFileName(panchro);
 
+      PanchroImageType::SizeType radius;
+      radius[0]=3;
+      radius[1]=3;
+      itk::Array< double > filterCoeffs;
+      filterCoeffs.SetSize(radius[0]*radius[1]);
+      filterCoeffs.Fill(1);
+      
       filter->SetXsInput(multiSpectReader->GetOutput());
       filter->SetPanInput(panchroReader->GetOutput());
+      filter->SetRadius(radius);
+      filter->SetFilter(filterCoeffs);
       writer->SetInput( filter->GetOutput() );
       writer->SetFileName(output);
       writer->Update();
