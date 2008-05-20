@@ -110,7 +110,8 @@ class ITK_EXPORT MRFSamplerRandomMAP: public MRFSampler< TInput1, TInput2>
 	
 	//Pick a value according to probability
 	
-	double select = (m_Generator->GetIntegerVariate()/(double(RAND_MAX)+1) * totalProba);
+	//double select = (m_Generator->GetIntegerVariate()/(double(RAND_MAX)+1) * totalProba);
+	double select = (m_Generator->GetIntegerVariate()/(double(itk::NumericTraits<RandomGeneratorType::IntegerType>::max())+1) * totalProba);
 	unsigned int valueCurrent = 0;
         while( valueCurrent<this->GetNumberOfClasses() && repartitionFunction[valueCurrent] <= select)
 	  {

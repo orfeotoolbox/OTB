@@ -69,7 +69,11 @@ int otbMarkovRandomFieldFilter(int argc, char* argv[] )
   OptimizerType::Pointer               optimizer            = OptimizerType::New();
   SamplerType::Pointer                 sampler              = SamplerType::New();
 
- 
+  // Overpass random calculation(for test only):
+  sampler->InitializeSeed(0);
+  optimizer->InitializeSeed(1);
+  markovFilter->InitializeSeed(2);
+
   unsigned int nClass = 4;
   energyFidelity->SetNumberOfParameters(2*nClass); 
   EnergyFidelityType::ParametersType parameters;
@@ -85,16 +89,12 @@ int otbMarkovRandomFieldFilter(int argc, char* argv[] )
   energyFidelity->SetParameters(parameters);
 
   optimizer->SetSingleParameter(atof(argv[5]));
-  //optimizer->SetParameters(atof(argv[5]));
-  markovFilter->InitializeSeed(0);
   markovFilter->SetNumberOfClasses(nClass);  
   markovFilter->SetMaximumNumberOfIterations(atoi(argv[4]));
   markovFilter->SetErrorTolerance(0.0);
   markovFilter->SetLambda(atof(argv[3]));
   markovFilter->SetNeighborhoodRadius(1);
   
-  //markovFilter->SetEnergyRegularization(static_cast<MarkovRandomFieldFilterType::EnergyRegularizationPointer>(energyRegularization));
-  //markovFilter->SetEnergyFidelity(static_cast<MarkovRandomFieldFilterType::EnergyFidelityPointer>(energyFidelity));
   markovFilter->SetEnergyRegularization(energyRegularization);
   markovFilter->SetEnergyFidelity(energyFidelity);
   markovFilter->SetOptimizer(optimizer);

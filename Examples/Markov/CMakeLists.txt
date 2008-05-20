@@ -37,6 +37,7 @@ ADD_TEST(MarkovClassification1ExampleTest ${EXE_TESTS}
         1.0
         20
         1.0
+	1 #true to use always the same rand() sample, false otherwise
 )
 
 ADD_TEST(MarkovClassification2ExampleTest ${EXE_TESTS}
@@ -47,7 +48,8 @@ ADD_TEST(MarkovClassification2ExampleTest ${EXE_TESTS}
         ${INPUTDATA}/QB_Suburb.png
         ${TEMP}/MarkovClassification2.png
         1.0
-        5
+	5
+	1 # true to use always the same rand() sample, false otherwise
 )
 
 ADD_TEST(MarkovRestaurationExampleTest ${EXE_TESTS}

@@ -178,8 +178,7 @@ int main(int argc, char* argv[] )
   // Software Guide : EndCodeSnippet
   
   
-  
-  optimizer->SetParameters(atof(argv[6]));
+  optimizer->SetSingleParameter(atof(argv[6]));
   markovFilter->SetNumberOfClasses(nClass);  
   markovFilter->SetMaximumNumberOfIterations(atoi(argv[5]));
   markovFilter->SetErrorTolerance(0.0);

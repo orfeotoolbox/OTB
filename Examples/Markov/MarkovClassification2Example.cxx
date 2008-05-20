@@ -26,7 +26,7 @@
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Suburb.png}
 //    OUTPUTS: {MarkovRandomField2.png}
-//    1.0 5
+//    1.0 5 1
 //  Software Guide : EndCommandLineArgs
 
 
@@ -67,11 +67,12 @@
 int main(int argc, char* argv[] ) 
 {
   
-  if( argc != 5 )
+  if( argc != 6 )
   {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImage output lambda iterations" << std::endl;
+    std::cerr << " useRandomValue" << std::endl;
     return 1;
   }
 
@@ -129,9 +130,12 @@ int main(int argc, char* argv[] )
   OptimizerType::Pointer optimizer = OptimizerType::New();
   SamplerType::Pointer sampler = SamplerType::New();
 
-  // Overpass random calculation(for test only):
-  sampler->InitializeSeed(0);
-  markovFilter->InitializeSeed(0);
+  if ((bool)(atoi(argv[5])) == true)
+    {
+      // Overpass random calculation(for test only):
+      sampler->InitializeSeed(0);
+      markovFilter->InitializeSeed(1);
+    }  
   
   unsigned int nClass = 4;
   energyFidelity->SetNumberOfParameters(2*nClass); 
