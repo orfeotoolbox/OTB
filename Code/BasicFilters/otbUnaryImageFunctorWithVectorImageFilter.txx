@@ -53,8 +53,6 @@ UnaryImageFunctorWithVectorImageFilter<TInputImage,TOutputImage,TFunction>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
-  // // do not call the superclass' implementation of this method since
-//   // this filter allows the input the output to be of different dimensions
  
   // get pointers to the input and output
   typename Superclass::OutputImagePointer      outputPtr = this->GetOutput();
@@ -66,7 +64,14 @@ UnaryImageFunctorWithVectorImageFilter<TInputImage,TOutputImage,TFunction>
     }
     outputPtr->SetNumberOfComponentsPerPixel( // propagate vector length info
         inputPtr->GetNumberOfComponentsPerPixel());
-
+ 
+    // TODO: Check this
+    // The Functor vector is not initialised !
+    for(unsigned int i = 0;i<inputPtr->GetNumberOfComponentsPerPixel();++i)
+    { 
+      FunctorType functor;
+      m_FunctorVector.push_back(functor);
+    }
 }
 
 /**
@@ -77,18 +82,11 @@ void
 UnaryImageFunctorWithVectorImageFilter<TInputImage,TOutputImage,TFunction>
 ::ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread, int threadId )
 {
-  typename InputImageType::Pointer  inputPtr  = const_cast<InputImageType *>(this->GetInput());
-  typename OutputImageType::Pointer outputPtr = static_cast<OutputImageType *>(this->GetOutput());
-  
-  // Define the portion of the input to walk for this thread, using
-  // the CallCopyOutputRegionToInputRegion method allows for the input
-  // and output images to be different dimensions
-  
-  InputImageRegionType inputRegionForThread;
-  this->CallCopyOutputRegionToInputRegion(inputRegionForThread, outputRegionForThread);
+  typename Superclass::OutputImagePointer      outputPtr = this->GetOutput();
+  typename Superclass::InputImageConstPointer  inputPtr  = this->GetInput(); 
   
   // Define the iterators
-  itk::ImageRegionConstIterator<InputImageType>  inputIt(inputPtr, inputRegionForThread);
+  itk::ImageRegionConstIterator<InputImageType>  inputIt(inputPtr, outputRegionForThread);
   itk::ImageRegionIterator<OutputImageType>      outputIt(outputPtr, outputRegionForThread);
   
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
@@ -96,20 +94,24 @@ UnaryImageFunctorWithVectorImageFilter<TInputImage,TOutputImage,TFunction>
   inputIt.GoToBegin();
   outputIt.GoToBegin();
 
-  // Null piuxel construction
+  // Null pixel construction
   InputPixelType nullPixel;
-  nullPixel.SetSize( outputIt.Get().GetSize() );
+  nullPixel.SetSize( inputPtr->GetNumberOfComponentsPerPixel() );
   nullPixel.Fill(itk::NumericTraits<OutputInternalPixelType>::Zero);
 
+  std::cout<<"in: "<<inputPtr->GetNumberOfComponentsPerPixel()<<std::endl;
+  std::cout<<"out: "<<outputPtr->GetNumberOfComponentsPerPixel()<<std::endl;
 
   while( !inputIt.IsAtEnd() ) 
     {
       InputPixelType inPixel = inputIt.Get();
-      OutputPixelType outPixel = nullPixel;//outputIt.Get();
+      OutputPixelType outPixel;
+      outPixel.SetSize( inputPtr->GetNumberOfComponentsPerPixel() );
+      outPixel.Fill(itk::NumericTraits<OutputInternalPixelType>::Zero);
       // if the input pixel in null, the output is considered as null ( no sensor informations )
       if( inPixel!= nullPixel)
 	{      
-      for (unsigned int j=0; j<inPixel.GetSize(); j++)
+      for (unsigned int j=0; j<inputPtr->GetNumberOfComponentsPerPixel(); j++)
 	{
 	  outPixel[j] = m_FunctorVector[j]( inPixel[j] );
 	}	
