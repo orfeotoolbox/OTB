@@ -462,7 +462,7 @@ int main(int argc, char* argv[])
       expand2->SetEdgePaddingValue(255);
       expand2->UpdateOutputInformation();
       
-      actWriter->SetInput(somAct->GetOutput());
+      actWriter->SetInput(expand2->GetOutput());
       actWriter->Update();
       }
   else
