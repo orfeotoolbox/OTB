@@ -66,18 +66,18 @@ ADD_TEST(MarkovRestaurationExampleTest ${EXE_TESTS}
 )
 
 
-#ADD_TEST(MarkovRegularizationExampleTest ${EXE_TESTS}
-#	--compare-image ${EPSILON}
-#                       ${BASELINE}/MarkovRegularization-scaled.png
-#                       ${TEMP}/MarkovRegularization-scaled.png
-#    MarkovRegularizationExample
-#        ${INPUTDATA}/***OutputOfAnEarlierClassif***
-#        ${TEMP}/MarkovRegularization.png
-#        ${TEMP}/MarkovRegularization-scaled.png
-#        0.2
-#        20
-#        1.0
-#))
+ADD_TEST(MarkovRegularizationExampleTest ${EXE_TESTS}
+	--compare-image ${EPSILON}
+                      ${BASELINE}/MarkovRegularization-scaled.png
+                      ${TEMP}/MarkovRegularization-scaled.png
+   MarkovRegularizationExampleTest
+       ${INPUTDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
+       ${TEMP}/MarkovRegularization.png
+       ${TEMP}/MarkovRegularization-scaled.png
+       0.2
+       20
+       1.0
+)
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
