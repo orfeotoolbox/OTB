@@ -27,7 +27,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROI_QB_MUL_1.png}, {ROI_mask_multi.png}
-//    OUTPUTS: {ROI_QB_MUL_1_SVN_CLASS_MULTI.png}
+//    OUTPUTS: {ROI_QB_MUL_1_SVN_CLASS_MULTI.png}, {ROI_QB_MUL_1_SVN_CLASS_MULTI_Rescaled.png}
 //    NORMALIZE_EPS_OUTPUT_OF: {ROI_mask_multi.png}
 //  Software Guide : EndCommandLineArgs
 
@@ -85,6 +85,7 @@ int main( int argc, char *argv[])
     const char* inputImageFileName = argv[1];
     const char* trainingImageFileName = argv[2];
     const char* outputImageFileName = argv[3];
+    const char* outputRescaledImageFileName = argv[4];
 //  const char* outputModelFileName = argv[4];
 
 //  Software Guide : BeginLatex
@@ -397,6 +398,16 @@ int main( int argc, char *argv[])
     std::cout << "---" << std::endl;
 // Software Guide : EndCodeSnippet
 
+    
+    typedef otb::ImageFileWriter<OutputImageType> WriterType;
+	
+    WriterType::Pointer writer = WriterType::New();
+
+    writer->SetFileName( outputImageFileName  );
+    writer->SetInput(outputImage );
+    
+    writer->Update();
+    
 // Software Guide : BeginLatex
 //
 // Only for visualization purposes, we choose a color mapping to the image of
@@ -408,6 +419,9 @@ int main( int argc, char *argv[])
 // converts scalar images to RGB images.
 //
 // Software Guide : EndLatex
+    
+    
+    
     
 // Software Guide : BeginCodeSnippet      
     
@@ -432,14 +446,14 @@ int main( int argc, char *argv[])
     
 // Software Guide : BeginCodeSnippet      
 
-    typedef otb::ImageFileWriter<RGBImageType> WriterType;
+    typedef otb::ImageFileWriter<RGBImageType> WriterRescaledType;
 	
-    WriterType::Pointer writer = WriterType::New();
+    WriterRescaledType::Pointer writerRescaled = WriterRescaledType::New();
 
-    writer->SetFileName( outputImageFileName  );
-    writer->SetInput( colormapper->GetOutput() );
+    writerRescaled->SetFileName( outputRescaledImageFileName  );
+    writerRescaled->SetInput( colormapper->GetOutput() );
     
-    writer->Update();
+    writerRescaled->Update();
 // Software Guide : EndCodeSnippet          
 
 
@@ -449,7 +463,7 @@ int main( int argc, char *argv[])
 // \begin{figure}
 // \center
 // \includegraphics[width=0.45\textwidth]{ROI_QB_MUL_1.eps}
-// \includegraphics[width=0.45\textwidth]{ROI_QB_MUL_1_SVN_CLASS_MULTI.eps}
+// \includegraphics[width=0.45\textwidth]{ROI_QB_MUL_1_SVN_CLASS_MULTI_Rescaled.eps}
 // \itkcaption[SVM Image Classification]{Result of the SVM
 // classification . Left: RGB image. Right: image of classes.} 
 // \label{fig:SVMCLASSMULTI}

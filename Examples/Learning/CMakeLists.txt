@@ -81,6 +81,7 @@ ADD_TEST(SVMImageEstimatorClassificationMultiExampleTest ${EXE_TESTS}
 	${INPUTDATA}/ROI_QB_MUL_1.png
 	${INPUTDATA}/ROI_mask_multi.png
 	${TEMP}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
+	${TEMP}/ROI_QB_MUL_1_SVN_CLASS_MULTI_Rescaled.png
 )
 
 # ------- GenerateTrainingImageExampleTest----------
