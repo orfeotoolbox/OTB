@@ -947,7 +947,7 @@ bool ossimGeoTiff::readTags(const ossimFilename& file, ossim_uint32 entryIdx)
    ossim_uint16 asciiParamSize;
    char* tempAsciiParam=0;
    theAsciiParam = "";
-   if(TIFFGetField(theTiffPtr, TIFFTAG_GEOASCIIPARAMS, &asciiParamSize, &tempAsciiParam))
+   if(TIFFGetField(theTiffPtr, TIFFTAG_GEOASCIIPARAMS, &tempAsciiParam))
    {
       theAsciiParam = tempAsciiParam;
    }
