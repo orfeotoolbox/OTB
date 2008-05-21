@@ -609,27 +609,31 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 	
 		while (buffstreamRef.peek() != EOF)
 		{
-			std::string strRef;
-			std::string strTest;
+			std::string strRef = "";
+			std::string strTest = "";
 			
-			std::string strNumRef;
-			std::string strCharRef;
-			std::string strNumTest;
-			std::string strCharTest;
+			std::string strNumRef = "";
+			std::string strCharRef = "";
+			std::string strNumTest = "";
+			std::string strCharTest = "";
 			
 			buffstreamRef >> strRef ;
 			buffstreamTest >> strTest ;
 			
 			bool chgt= false;
-			std::string charTmpRef;
-			std::string charTmpTest;
+			std::string charTmpRef = "";
+			std::string charTmpTest = "";
 			unsigned int i=0;
 			if(!isHexaPointerAddress(strRef))
 			  {
 			    while (i < strRef.size())
 			      {
 				charTmpRef=strRef[i];
-				charTmpTest=strTest[i];
+
+				if(i<strTest.size())
+				{
+				  charTmpTest=strTest[i];
+				}
 				
 				if (isNumeric(charTmpRef))
 				  etatCour = ETAT_NUM;
