@@ -168,9 +168,6 @@ namespace itk
       void SetNumScales ( unsigned int tmp);
       void SetMatchRatio ( float tmp);
 
-      void SetTemporaryDir(char* dir)
-      { m_TemporaryDir = dir;}
-      
       /** Generate and return the scale invariant keypoints and features */
       PointSetTypePointer getSiftFeatures(FixedImagePointer fixedImage);
 
