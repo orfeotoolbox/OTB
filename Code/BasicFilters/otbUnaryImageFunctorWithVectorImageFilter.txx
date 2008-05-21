@@ -99,9 +99,6 @@ UnaryImageFunctorWithVectorImageFilter<TInputImage,TOutputImage,TFunction>
   nullPixel.SetSize( inputPtr->GetNumberOfComponentsPerPixel() );
   nullPixel.Fill(itk::NumericTraits<OutputInternalPixelType>::Zero);
 
-  std::cout<<"in: "<<inputPtr->GetNumberOfComponentsPerPixel()<<std::endl;
-  std::cout<<"out: "<<outputPtr->GetNumberOfComponentsPerPixel()<<std::endl;
-
   while( !inputIt.IsAtEnd() ) 
     {
       InputPixelType inPixel = inputIt.Get();
