@@ -34,12 +34,6 @@ REGISTER_TEST(AssymmetricFusionOfLineDetectorExampleTest);
 REGISTER_TEST(ExtractSegmentsExampleTest);
 REGISTER_TEST(RatioLineDetectorExampleTest);
 REGISTER_TEST(AlignmentsExampleTest);
-//REGISTER_TEST(ExtractRoadByStepsExampleTest);
-//REGISTER_TEST(ExtractRoadExampleTest);
-//REGISTER_TEST(SeamCarvingExampleTest);
-//REGISTER_TEST(SeamCarvingOtherExampleTest);
-////REGISTER_TEST(ImageToSIFTKeyPointSetFilterTest);
-//REGISTER_TEST(ScaleInvariantFeatureImageFilterTest);
 }
 
 #undef main
@@ -77,28 +71,4 @@ REGISTER_TEST(AlignmentsExampleTest);
 #undef main
 #define main AlignmentsExampleTest
 #include "AlignmentsExample.cxx"
-/*
-#undef main
-#define main ExtractRoadByStepsExampleTest
-#include "ExtractRoadByStepsExample.cxx"
 
-#undef main
-#define main ExtractRoadExampleTest
-#include "ExtractRoadExample.cxx"
-
-#undef main
-#define main SeamCarvingExampleTest
-#include "SeamCarvingExample.cxx"
-
-#undef main
-#define main SeamCarvingOtherExampleTest
-#include "SeamCarvingOtherExample.cxx"
-
-//#undef main
-//#define main ImageToSIFTKeyPointSetFilterTest
-//#include "ImageToSIFTKeyPointSetFilter.cxx"
-
-#undef main
-#define main ScaleInvariantFeatureImageFilterTest
-#include "ScaleInvariantFeatureImageFilter.cxx"
-*/

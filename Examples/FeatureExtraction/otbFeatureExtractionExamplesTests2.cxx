@@ -25,15 +25,6 @@
 
 void RegisterTests()
 {
-//REGISTER_TEST(CorrelationLineDetectorExampleTest);
-//REGISTER_TEST(LocalHoughExampleTest);
-//REGISTER_TEST(HarrisExampleTest);
-//REGISTER_TEST(TouziEdgeDetectorExampleTest);
-//REGISTER_TEST(ExtractSegmentsByStepsExampleTest);
-//REGISTER_TEST(AssymmetricFusionOfLineDetectorExampleTest);
-//REGISTER_TEST(ExtractSegmentsExampleTest);
-//REGISTER_TEST(RatioLineDetectorExampleTest);
-//REGISTER_TEST(AlignmentsExampleTest);
 REGISTER_TEST(ExtractRoadByStepsExampleTest);
 REGISTER_TEST(ExtractRoadExampleTest);
 REGISTER_TEST(SeamCarvingExampleTest);
@@ -41,43 +32,7 @@ REGISTER_TEST(SeamCarvingOtherExampleTest);
 //REGISTER_TEST(ImageToSIFTKeyPointSetFilterTest);
 REGISTER_TEST(ScaleInvariantFeatureImageFilterTest);
 }
-/*
-#undef main
-#define main CorrelationLineDetectorExampleTest
-#include "CorrelationLineDetectorExample.cxx"
 
-#undef main
-#define main LocalHoughExampleTest
-#include "LocalHoughExample.cxx"
-
-#undef main
-#define main HarrisExampleTest
-#include "HarrisExample.cxx"
-
-#undef main
-#define main TouziEdgeDetectorExampleTest
-#include "TouziEdgeDetectorExample.cxx"
-
-#undef main
-#define main ExtractSegmentsByStepsExampleTest
-#include "ExtractSegmentsByStepsExample.cxx"
-
-#undef main
-#define main AssymmetricFusionOfLineDetectorExampleTest
-#include "AssymmetricFusionOfLineDetectorExample.cxx"
-
-#undef main
-#define main ExtractSegmentsExampleTest
-#include "ExtractSegmentsExample.cxx"
-
-#undef main
-#define main RatioLineDetectorExampleTest
-#include "RatioLineDetectorExample.cxx"
-
-#undef main
-#define main AlignmentsExampleTest
-#include "AlignmentsExample.cxx"
-*/
 #undef main
 #define main ExtractRoadByStepsExampleTest
 #include "ExtractRoadByStepsExample.cxx"
