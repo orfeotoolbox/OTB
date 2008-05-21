@@ -1,7 +1,7 @@
 PROJECT(ImageRadiometryExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
-SET(FUSION_EXAMPLES ${CXX_TEST_PATH}/RadiometryExamplesTests)
+SET(RADIOMETRY_EXAMPLES ${CXX_TEST_PATH}/RadiometryExamplesTests)
 
 
 ADD_EXECUTABLE(ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter.cxx )
