@@ -177,10 +177,18 @@ SIXSTraits::ComputeWavelenghtSpectralBandValuesFor6S(
 	        {
 	                // Search the User interval that surround the StepOfWavelenghtSpectralBandValues current value.
                         
-	                while(j*L_userStep <= value)
+			// removed the <= here, might be wrong
+	                while(j*L_userStep < value)
 	                {
 		                j++;
 	                }
+			
+			// Check if we are not out of bound
+			if(j>=FilterFunctionValues.size())
+			{
+				itkGenericExceptionMacro(<<"Index "<<j<<" out of bound for FilterFunctionValues vector (size: "<<FilterFunctionValues.size()<<").");
+			}
+
 	                double valueTemp;
 	                valueTemp = static_cast<double>(FilterFunctionValues[j-1]) 
 	                                + ((static_cast<double>(FilterFunctionValues[j])-static_cast<double>(FilterFunctionValues[j-1]))*invStep)

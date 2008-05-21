@@ -26,7 +26,7 @@ namespace otb
   { 
      m_MinSpectralValue = 0;
      m_MaxSpectralValue = 0;
-     m_FilterFunctionValues.empty();
+     m_FilterFunctionValues.clear();
   }
   
   /**PrintSelf method */
