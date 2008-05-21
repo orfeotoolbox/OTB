@@ -96,7 +96,8 @@ class ITK_EXPORT MRFSamplerRandomMAP: public MRFSampler< TInput1, TInput2>
 	
 	//Compute probability for each possibility
 	double totalProba=0.0;
-	for (unsigned int  valueCurrent = 0; valueCurrent < this->m_NumberOfClasses; ++valueCurrent)
+	unsigned int  valueCurrent = 0; 
+	for (valueCurrent = 0; valueCurrent < this->m_NumberOfClasses; ++valueCurrent)
 	  {
 	    this->m_EnergyCurrent = this->m_EnergyFidelity->GetValue(itData, static_cast<LabelledImagePixelType>(valueCurrent));
 	    this->m_EnergyCurrent += this->m_Lambda 
@@ -112,7 +113,7 @@ class ITK_EXPORT MRFSamplerRandomMAP: public MRFSampler< TInput1, TInput2>
 	
 	//double select = (m_Generator->GetIntegerVariate()/(double(RAND_MAX)+1) * totalProba);
 	double select = (m_Generator->GetIntegerVariate()/(double(itk::NumericTraits<RandomGeneratorType::IntegerType>::max())+1) * totalProba);
-	unsigned int valueCurrent = 0;
+	valueCurrent = 0;
         while( valueCurrent<this->GetNumberOfClasses() && repartitionFunction[valueCurrent] <= select)
 	  {
             valueCurrent++;
