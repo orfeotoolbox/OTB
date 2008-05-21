@@ -27,7 +27,8 @@ int main(int argc, char** argv)
     }
   catch( itk::ExceptionObject & err ) 
     { 
-      return EXIT_SUCCESS;
+	  std::cerr << err << std::endl;
+      return EXIT_FAILURE;
     }
 
   const unsigned int NbImages = argc-4;
