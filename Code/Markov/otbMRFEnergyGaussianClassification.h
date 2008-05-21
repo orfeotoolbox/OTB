@@ -57,7 +57,7 @@ class ITK_EXPORT MRFEnergyGaussianClassification:public MRFEnergy< TInput1, TInp
     
     itkTypeMacro(MRFEnergyGaussianClassification, MRFEnergy);
     
-    void SetNumberOfParameters(unsigned int nParameters)
+    void SetNumberOfParameters(const unsigned int nParameters)
       { 
 	Superclass::SetNumberOfParameters(nParameters);
 	this->m_Parameters.SetSize(nParameters);
