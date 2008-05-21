@@ -71,7 +71,7 @@ try
     AttributesMapType attr1 = vertex1->GetAttributesMap(); 
     otbControlConditionTestMacro( attr1["SegmentationLevel"].compare(std::string(argv[1]))!=0,
 				  "Test failed: vertex1->GetAttributesMap()[\"SegmentationLevel\"]!=std::string(argv[1])");
-    otbControlConditionTestMacro(atoi(attr1["SegmentationType"].c_str())!=imageType,
+    otbControlConditionTestMacro(atoi(attr1["SegmentationType"].c_str())!=static_cast<int>(imageType),
 				 "Test failed:atoi(attr1[\"SegmentationType\"].c_str())!=imageType ");
     
     otbControlConditionTestMacro( atof(attr1["P0x"].c_str())!=p1[0],
