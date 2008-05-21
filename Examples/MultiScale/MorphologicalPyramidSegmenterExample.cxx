@@ -73,8 +73,8 @@ int main(int argc, char * argv[])
 // Software Guide : BeginCodeSnippet
       
       const unsigned int Dimension = 2;
-      typedef unsigned char InputPixelType;
-      typedef unsigned long LabelPixelType;
+      typedef double InputPixelType;
+      typedef unsigned short LabelPixelType;
       typedef itk::RGBPixel<unsigned char>   RGBPixelType;
 
 
