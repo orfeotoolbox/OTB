@@ -27,7 +27,7 @@
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Suburb.png QB_Suburb.png}
 //    OUTPUTS: {MarkovRestauration.png}
-//    10.0 30 1.0
+//    10.0 30 1.0 1
 //  Software Guide : EndCommandLineArgs
 
 
@@ -78,11 +78,12 @@
 int main(int argc, char* argv[] ) 
 {
   
-  if( argc != 7 )
+  if( argc != 8 )
   {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImage inputInitialization output lambda iterations optimizerTemperature" << std::endl;
+    std::cerr << " useRandomValue" << std::endl;
     return 1;
   }
   
@@ -161,7 +162,14 @@ int main(int argc, char* argv[] )
   OptimizerType::Pointer optimizer = OptimizerType::New();
   SamplerType::Pointer sampler = SamplerType::New();
 
-  
+
+   if ((bool)(atoi(argv[7])) == true)
+    {
+      // Overpass random calculation(for test only):
+      sampler->InitializeSeed(0);
+      optimizer->InitializeSeed(1);
+      markovFilter->InitializeSeed(2);
+    }
   
   // Software Guide : BeginLatex
   //

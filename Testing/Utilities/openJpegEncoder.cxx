@@ -61,21 +61,21 @@ void warning_callback_file(const char *msg, void *client_data) {
 /**
 sample error debug callback expecting no client object
 */
-void error_callback(const char *msg, void *client_data) {
+void error__callback(const char *msg, void *client_data) {
 	(void)client_data;
 	fprintf(stdout, "[ERROR] %s", msg);
 }
 /**
 sample warning debug callback expecting no client object
 */
-void warning_callback(const char *msg, void *client_data) {
+void warning__callback(const char *msg, void *client_data) {
 	(void)client_data;
 	fprintf(stdout, "[WARNING] %s", msg);
 }
 /**
 sample debug callback expecting no client object
 */
-void info_callback(const char *msg, void *client_data) {
+void info__callback(const char *msg, void *client_data) {
 	(void)client_data;
 	fprintf(stdout, "[INFO] %s", msg);
 }
@@ -213,9 +213,9 @@ int openJpegEncoder(int argc, char * argv[])
 	}
 
 	/* catch events using our callbacks and give a local context */		
-	opj_set_info_handler(l_codec, info_callback,00);
-	opj_set_warning_handler(l_codec, warning_callback,00);
-	opj_set_error_handler(l_codec, error_callback,00);
+	opj_set_info_handler(l_codec, info__callback,00);
+	opj_set_warning_handler(l_codec, warning__callback,00);
+	opj_set_error_handler(l_codec, error__callback,00);
 	
 	l_image = opj_image_tile_create(NUM_COMPS,l_params,CLRSPC_SRGB);
 	if

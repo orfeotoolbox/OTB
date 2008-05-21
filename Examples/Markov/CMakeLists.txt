@@ -63,6 +63,7 @@ ADD_TEST(MarkovRestaurationExampleTest ${EXE_TESTS}
         10.0
         30.0
         1.
+	1 # true to use always the same rand() sample, false otherwise
 )
 
 
@@ -77,6 +78,7 @@ ADD_TEST(MarkovRegularizationExampleTest ${EXE_TESTS}
        0.2
        20
        1.0
+       1 # true to use always the same rand() sample, false otherwis
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

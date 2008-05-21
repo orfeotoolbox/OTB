@@ -27,7 +27,7 @@
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROI_QB_MUL_1_SVN_CLASS_MULTI.png}
 //    OUTPUTS: {MarkovRegularization.png MarkovRegularization-scaled.png}
-//    0.2 20 1.0
+//    0.2 20 1.0 1
 //  Software Guide : EndCommandLineArgs
 
 
@@ -62,11 +62,12 @@
 int main(int argc, char* argv[] ) 
 {
   
-  if( argc != 7 )
+  if( argc != 8 )
   {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputClassificationImage outputClassification outputClassificationScaled lambda iterations temperature " << std::endl;
+    std::cerr << " useRandomValue" << std::endl;
     return 1;
   }
 
@@ -110,6 +111,15 @@ int main(int argc, char* argv[] )
   EnergyFidelityType::Pointer energyFidelity = EnergyFidelityType::New();
   OptimizerType::Pointer optimizer = OptimizerType::New();
   SamplerType::Pointer sampler = SamplerType::New();
+
+
+   if ((bool)(atoi(argv[7])) == true)
+    {
+      // Overpass random calculation(for test only):
+      sampler->InitializeSeed(0);
+      optimizer->InitializeSeed(1);
+      markovFilter->InitializeSeed(2);
+    }
 
   
   // Software Guide : BeginLatex

@@ -73,7 +73,6 @@ int main(int argc, char* argv[] )
   if( argc != 7 )
   {
     std::cerr << "Missing Parameters "<< argc << std::endl;
-    std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImage output lambda iterations optimizerTemperature" << std::endl;
     std::cerr << " useRandomValue" << std::endl;
