@@ -51,6 +51,7 @@ int otbSVMComposedKernelFunctorTest( int argc, char* argv[] )
 
   struct svm_model *model;
   model = (struct svm_model *)malloc(sizeof(struct svm_model));
+  model->param.svm_type = 0;
   model->param.kernel_type = 6;
   model->nr_class = 2;
   model->l = 5;
