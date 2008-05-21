@@ -25,15 +25,15 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(CorrelationLineDetectorExampleTest);
-REGISTER_TEST(LocalHoughExampleTest);
-REGISTER_TEST(HarrisExampleTest);
-REGISTER_TEST(TouziEdgeDetectorExampleTest);
-REGISTER_TEST(ExtractSegmentsByStepsExampleTest);
-REGISTER_TEST(AssymmetricFusionOfLineDetectorExampleTest);
-REGISTER_TEST(ExtractSegmentsExampleTest);
-REGISTER_TEST(RatioLineDetectorExampleTest);
-REGISTER_TEST(AlignmentsExampleTest);
+//REGISTER_TEST(CorrelationLineDetectorExampleTest);
+//REGISTER_TEST(LocalHoughExampleTest);
+//REGISTER_TEST(HarrisExampleTest);
+//REGISTER_TEST(TouziEdgeDetectorExampleTest);
+//REGISTER_TEST(ExtractSegmentsByStepsExampleTest);
+//REGISTER_TEST(AssymmetricFusionOfLineDetectorExampleTest);
+//REGISTER_TEST(ExtractSegmentsExampleTest);
+//REGISTER_TEST(RatioLineDetectorExampleTest);
+//REGISTER_TEST(AlignmentsExampleTest);
 REGISTER_TEST(ExtractRoadByStepsExampleTest);
 REGISTER_TEST(ExtractRoadExampleTest);
 REGISTER_TEST(SeamCarvingExampleTest);
@@ -41,7 +41,7 @@ REGISTER_TEST(SeamCarvingOtherExampleTest);
 //REGISTER_TEST(ImageToSIFTKeyPointSetFilterTest);
 REGISTER_TEST(ScaleInvariantFeatureImageFilterTest);
 }
-
+/*
 #undef main
 #define main CorrelationLineDetectorExampleTest
 #include "CorrelationLineDetectorExample.cxx"
@@ -77,7 +77,7 @@ REGISTER_TEST(ScaleInvariantFeatureImageFilterTest);
 #undef main
 #define main AlignmentsExampleTest
 #include "AlignmentsExample.cxx"
-
+*/
 #undef main
 #define main ExtractRoadByStepsExampleTest
 #include "ExtractRoadByStepsExample.cxx"

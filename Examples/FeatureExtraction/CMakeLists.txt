@@ -76,14 +76,15 @@ SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/FeatureExtraction)
 SET(INPUTDATA ${OTB_SOURCE_DIR}/Examples/Data)
 SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
-SET(EXE_TESTS ${CXX_TEST_PATH}/otbFeatureExtractionExamplesTests)
+SET(EXE_TESTS1 ${CXX_TEST_PATH}/otbFeatureExtractionExamplesTests1)
+SET(EXE_TESTS2 ${CXX_TEST_PATH}/otbFeatureExtractionExamplesTests2)
 
 SET(TOL 0.0)
 
 
 # ------- CorrelationLineDetectorExampleTest----------
 
-ADD_TEST(CorrelationLineDetectorExampleTest ${EXE_TESTS}
+ADD_TEST(CorrelationLineDetectorExampleTest ${EXE_TESTS1}
 	--compare-n-images ${TOL} 2
 	${BASELINE}/amstLineCorrelations.png
 	${TEMP}/amstLineCorrelations.png
@@ -98,7 +99,7 @@ ADD_TEST(CorrelationLineDetectorExampleTest ${EXE_TESTS}
 
 # ------- LocalHoughExampleTest----------
 
-ADD_TEST(LocalHoughExampleTest ${EXE_TESTS}
+ADD_TEST(LocalHoughExampleTest ${EXE_TESTS1}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/detected_local_hough.png
 	${TEMP}/detected_local_hough.png
@@ -110,7 +111,7 @@ ADD_TEST(LocalHoughExampleTest ${EXE_TESTS}
 
 # ------- HarrisExampleTest----------
 
-ADD_TEST(HarrisExampleTest ${EXE_TESTS}
+ADD_TEST(HarrisExampleTest ${EXE_TESTS1}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/ROISpot5Harris.png
 	${TEMP}/ROISpot5Harris.png
@@ -122,7 +123,7 @@ ADD_TEST(HarrisExampleTest ${EXE_TESTS}
 
 # ------- TouziEdgeDetectorExampleTest----------
 
-ADD_TEST(TouziEdgeDetectorExampleTest ${EXE_TESTS}
+ADD_TEST(TouziEdgeDetectorExampleTest ${EXE_TESTS1}
 	--compare-n-images ${TOL} 2
 	${BASELINE}/amstTouziEdges.png
 	${TEMP}/amstTouziEdges.png
@@ -137,7 +138,7 @@ ADD_TEST(TouziEdgeDetectorExampleTest ${EXE_TESTS}
 
 # ------- ExtractSegmentsByStepsExampleTest----------
 
-ADD_TEST(ExtractSegmentsByStepsExampleTest ${EXE_TESTS}
+ADD_TEST(ExtractSegmentsByStepsExampleTest ${EXE_TESTS1}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/amstSegmentExtractionBySteps.png
 	${TEMP}/amstSegmentExtractionBySteps.png
@@ -149,7 +150,7 @@ ADD_TEST(ExtractSegmentsByStepsExampleTest ${EXE_TESTS}
 
 # ------- AssymmetricFusionOfLineDetectorExampleTest----------
 
-ADD_TEST(AssymmetricFusionOfLineDetectorExampleTest ${EXE_TESTS}
+ADD_TEST(AssymmetricFusionOfLineDetectorExampleTest ${EXE_TESTS1}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/amstLineFusion.png
 	${TEMP}/amstLineFusion.png
@@ -161,7 +162,7 @@ ADD_TEST(AssymmetricFusionOfLineDetectorExampleTest ${EXE_TESTS}
 
 # ------- ExtractSegmentsExampleTest----------
 
-ADD_TEST(ExtractSegmentsExampleTest ${EXE_TESTS}
+ADD_TEST(ExtractSegmentsExampleTest ${EXE_TESTS1}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/amstSegmentExtraction.png
 	${TEMP}/amstSegmentExtraction.png
@@ -173,7 +174,7 @@ ADD_TEST(ExtractSegmentsExampleTest ${EXE_TESTS}
 
 # ------- RatioLineDetectorExampleTest----------
 
-ADD_TEST(RatioLineDetectorExampleTest ${EXE_TESTS}
+ADD_TEST(RatioLineDetectorExampleTest ${EXE_TESTS1}
 	--compare-n-images ${TOL} 2
 	${BASELINE}/amstLineRatios.png
 	${TEMP}/amstLineRatios.png
@@ -188,7 +189,7 @@ ADD_TEST(RatioLineDetectorExampleTest ${EXE_TESTS}
 
 # ------- AlignmentsExampleTest----------
 
-ADD_TEST(AlignmentsExampleTest ${EXE_TESTS}
+ADD_TEST(AlignmentsExampleTest ${EXE_TESTS1}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/QB_SuburbAlign.png
 	${TEMP}/QB_SuburbAlign.png
@@ -201,7 +202,7 @@ ADD_TEST(AlignmentsExampleTest ${EXE_TESTS}
 # ------- RoadExtractionExamplesTest----------
 
 
-ADD_TEST(ExtractRoadByStepsExampleTest ${EXE_TESTS}
+ADD_TEST(ExtractRoadByStepsExampleTest ${EXE_TESTS2}
         --compare-n-images ${TOL} 2
 	${BASELINE}/qb_ExtractRoad_pretty.png
 	${TEMP}/qb_ExtractRoad_pretty.png
@@ -215,7 +216,7 @@ ADD_TEST(ExtractRoadByStepsExampleTest ${EXE_TESTS}
 )
 
 
-ADD_TEST(ExtractRoadExampleTest ${EXE_TESTS}
+ADD_TEST(ExtractRoadExampleTest ${EXE_TESTS2}
         --compare-image ${TOL}
         ${BASELINE}/ExtractRoadExampleOutput.png
         ${TEMP}/ExtractRoadExampleOutput.png
@@ -227,7 +228,7 @@ ADD_TEST(ExtractRoadExampleTest ${EXE_TESTS}
 
 # ------- SeamCarvingExamplesTest----------
 
-ADD_TEST(SeamCarvingExampleTest ${EXE_TESTS}
+ADD_TEST(SeamCarvingExampleTest ${EXE_TESTS2}
         --compare-image ${TOL}
         ${BASELINE}/SeamCarvingExampleOutput.png
         ${TEMP}/SeamCarvingExampleOutput.png
@@ -237,7 +238,7 @@ ADD_TEST(SeamCarvingExampleTest ${EXE_TESTS}
 	50
 )
 
-ADD_TEST(SeamCarvingOtherExampleTest ${EXE_TESTS}
+ADD_TEST(SeamCarvingOtherExampleTest ${EXE_TESTS2}
         --compare-image ${TOL}
         ${BASELINE}/SeamCarvingOtherExampleOutput.png
         ${TEMP}/SeamCarvingOtherExampleOutput.png
@@ -257,7 +258,7 @@ ADD_TEST(SeamCarvingOtherExampleTest ${EXE_TESTS}
 #	6 3 0.08 10
 #)
 
-ADD_TEST(ScaleInvariantFeatureImageFilterTest ${EXE_TESTS}
+ADD_TEST(ScaleInvariantFeatureImageFilterTest ${EXE_TESTS2}
         --compare-n-images ${TOL} 4
         ${BASELINE}/ScaleInvariantFeatureImageFilterOutput1.png
         ${TEMP}/ScaleInvariantFeatureImageFilterOutput1.png
@@ -280,7 +281,11 @@ ADD_TEST(ScaleInvariantFeatureImageFilterTest ${EXE_TESTS}
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
-ADD_EXECUTABLE(otbFeatureExtractionExamplesTests otbFeatureExtractionExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbFeatureExtractionExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+ADD_EXECUTABLE(otbFeatureExtractionExamplesTests1 otbFeatureExtractionExamplesTests1.cxx)
+TARGET_LINK_LIBRARIES(otbFeatureExtractionExamplesTests1 gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+
+ADD_EXECUTABLE(otbFeatureExtractionExamplesTests2 otbFeatureExtractionExamplesTests2.cxx)
+TARGET_LINK_LIBRARIES(otbFeatureExtractionExamplesTests2 gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND NOT OTB_DISABLE_CXX_EXAMPLES_TESTING )
