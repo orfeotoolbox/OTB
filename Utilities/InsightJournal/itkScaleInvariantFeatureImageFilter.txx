@@ -115,8 +115,6 @@ namespace itk
     m_SIFTHalfWidth = 8;  // This MUST be a multiple of m_SIFTSubfeatureWidth
     m_SIFTSubfeatureWidth = 4;
     m_SIFTSubfeatureBins = 8;
-
-    m_TemporaryDir = "";
     
     // Derived from above
     m_DifferenceOfGaussianImagesNumber = m_DifferenceOfGaussianTestsNumber+2;
@@ -691,16 +689,10 @@ namespace itk
     
     typename FixedWriterType::Pointer fixedWriter = FixedWriterType::New();
     
-    std::string str_filename = m_TemporaryDir;
-    if ( !str_filename.empty() )
-      {
-        str_filename+="/";
-      }
-    str_filename+=filename;
-    fixedWriter->SetFileName(str_filename.c_str());
+    fixedWriter->SetFileName(filename);
     fixedWriter->SetInput( resampler->GetOutput() );
 	
-    std::cout << "[Writing file << " << str_filename << "]";
+    std::cout << "[Writing file << " << filename << "]";
     
     try 
       {

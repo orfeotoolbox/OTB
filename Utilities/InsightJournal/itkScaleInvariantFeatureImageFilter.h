@@ -260,9 +260,6 @@ namespace itk
         * of the voxels in each subregion
         */
       unsigned int m_SIFTSubfeatureBins;
-  
-      /** Temporary directory where image file are written */
-      char * m_TemporaryDir;
       
       /** The sigma for the Gaussian filtering for the j-th image on a level
         * of the image pyramid
