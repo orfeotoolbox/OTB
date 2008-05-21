@@ -246,12 +246,7 @@ int main(int argc, char * argv[])
 
       // Writing the results images
       std::cout<<(itAnalyse!=(pyramid->GetOutput()->End()))<<std::endl;
-      while((itAnalyse!=pyramid->GetOutput()->End())
-	    &&(itSupFilter!=pyramid->GetSupFilter()->End())
-	    &&(itInfFilter!=pyramid->GetInfFilter()->End())
-	    &&(itInfDeci!=pyramid->GetInfDeci()->End())
-	    &&(itSupDeci!=pyramid->GetSupDeci()->End())
-	    )
+      while(itAnalyse!=pyramid->GetOutput()->End())
 	{
 	  writer->SetInput(itAnalyse.Get());
 	  writer->SetFileName(argv[0*4+i+1]);	  
