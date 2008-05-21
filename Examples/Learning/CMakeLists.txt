@@ -121,7 +121,7 @@ ADD_TEST(SOMExampleTest ${EXE_TESTS}
 	${INPUTDATA}/ROI_QB_MUL_1.png
 	${TEMP}/ROI_QB_MUL_SOM.png
 	${TEMP}/ROI_QB_MUL_SOMACT.png
-	4 4 4 4 20 1.0 0.1 128
+	4 4 4 4 15 1.0 0.1 128
 )
 
 # ------- SOMClassifierExampleTest----------
