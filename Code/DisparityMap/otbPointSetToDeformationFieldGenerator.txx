@@ -114,6 +114,7 @@ PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
 	}
       ++j;
     }
+
   
   ComparisonFunctorType comp;
   comp.SetDistanceVector(distanceVector);
@@ -135,8 +136,9 @@ PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
 ::EuclideanDistance(IndexType index, PointType p)
 {
   PointType pprime;
-  this->GetOutput()->TransformIndexToPhysicalPoint(index,pprime);
-  return vcl_sqrt(vcl_pow(pprime[0]-p[0],2)+vcl_pow(pprime[1]-p[1],2));
+  // our point are expressed in index and not in physical coordinates
+  //this->GetOutput()->TransformIndexToPhysicalPoint(index,pprime);
+  return vcl_sqrt(vcl_pow(index[0]-p[0],2)+vcl_pow(index[1]-p[1],2));
 }
 /**
  * PrintSelf Method
