@@ -75,7 +75,15 @@ int otbImageToSIFTKeyPointSetFilterOutputAscii(int argc, char * argv[])
   outfile << "Number of SIFT key points: " << filter->GetOutput()->GetNumberOfPoints() << std::endl;
   while( pIt!=filter->GetOutput()->GetPoints()->End() )
     {      
-      outfile << pIt.Value() << " " << pDataIt.Value() << std::endl;
+      outfile << pIt.Value() << "[";
+      
+      unsigned int lIterDesc=0;
+      while (lIterDesc < pDataIt.Value().Size())
+	{
+	  outfile << std::setprecision(3) << pDataIt.Value()[lIterDesc] << " ";
+	  lIterDesc++;
+	}
+      outfile << "]" << std::endl;
       ++pIt;
       ++pDataIt;
     }
