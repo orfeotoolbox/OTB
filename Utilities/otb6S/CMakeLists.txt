@@ -12,6 +12,7 @@ INCLUDE_DIRECTORIES(${OTB6S_SOURCE_DIR})
 # Inform header files they are being included from a source inside the
 # otb_6S library.
 ADD_DEFINITIONS(-DOTB_6S_SRC)
+ADD_DEFINITIONS(-DNON_POSIX_STDIO)
 
 # On Microsoft Visual
 IF(WIN32)

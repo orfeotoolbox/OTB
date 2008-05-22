@@ -4,6 +4,8 @@
 #include "otb_6S_f2c.h"
 #include "fio.h"
 #include "lio.h"
+#include <ctype.h>
+#include <stdio.h>
 
 #define MAX_NL_CACHE 3	/* maximum number of namelist hash tables to cache */
 #define MAXDIM 20	/* maximum number of subscripts */

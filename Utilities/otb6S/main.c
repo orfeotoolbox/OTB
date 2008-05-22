@@ -569,8 +569,12 @@ flectance  \002,t79,\002*\002,/,\002*\002,6x,\002 Lambertian case :  \002,1x\
 	    *, integer *, integer *, doublereal *, doublereal *, doublereal *)
 	    , roujbrdf_(doublereal *, doublereal *, doublereal *, integer *, 
 	    integer *, doublereal *, doublereal *, doublereal *);
-    doublereal sbrdftmp[3]	/* was [3][1] */, qlumet, ulumet, rqfet, 
-	    rufet, xtphi;
+    doublereal sbrdftmp[3]	/* was [3][1] */, 
+	    xtphi;
+	doublereal ulumet=0;
+	doublereal rqfet=0;
+	doublereal qlumet=0;
+	doublereal rufet=0;
     extern /* Subroutine */ int dirpopol_(doublereal *, doublereal *, 
 	    doublereal *), pressure_(doublereal *, doublereal *, doublereal *)
 	    ;
@@ -604,7 +608,8 @@ flectance  \002,t79,\002*\002,/,\002*\002,6x,\002 Lambertian case :  \002,1x\
 	    doublereal *, integer *, integer *, integer *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, integer *,
 	     doublereal *);
-    doublereal ul, ea0, ee0, elsesdpaer, pi2;
+    doublereal ea0, ee0, elsesdpaer, pi2;
+	doublereal ul=0;
     integer mu2;
     doublereal uo3;
     extern /* Subroutine */ int specinterp_(doublereal *, doublereal *, 

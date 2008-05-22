@@ -436,10 +436,15 @@ flectance  \002,t79,\002*\002,/,\002*\002,6x,\002 Lambertian case :  \002,1x\
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal rqatm2, ruatm2, tdirqu, rqmeas2, rumeas2, qlumeas, ulumeas, 
-	    qlumet, ulumet, rqfet, rufet, xtphi, refet_fi__[181], roatm_fi__[
-	    10860]	/* was [3][20][181] */, height_z__[101], phi_wind__, 
+	    xtphi, refet_fi__[181], roatm_fi__[
+	    10860]	/* was [3][20][181] */, height_z__[101],  
 	    rfoamave, brdfints[2499]	/* was [51][49] */, romix_fi__[181], 
 	    rglitave;
+	doublereal qlumet = 0;
+	doublereal phi_wind__ = 0;
+	doublereal rqfet = 0;
+    doublereal rufet = 0;
+	doublereal ulumet = 0;
     extern /* Subroutine */ int dirpopol_(doublereal *, doublereal *, 
 	    doublereal *), pressure_(doublereal *, doublereal *, doublereal *)
 	    ;
@@ -455,9 +460,11 @@ flectance  \002,t79,\002*\002,/,\002*\002,6x,\002 Lambertian case :  \002,1x\
     integer ik;
     doublereal sb, gp[49], fr, pi, es, xa, xb, xc;
     integer np;
-    doublereal rm[51], ro, rp[49], wl;
+    doublereal rm[51], ro, rp[49];
+	doublereal wl=0;
     integer nt, mu;
-    doublereal tu, ul, uw, ea0, ee0, elsesdpaer, pi2;
+    doublereal tu, uw, ea0, ee0, elsesdpaer, pi2;
+	doublereal ul=0;
     integer mu2;
     doublereal uo3;
     extern /* Subroutine */ int specinterp_(doublereal *, doublereal *, 
@@ -466,7 +473,8 @@ flectance  \002,t79,\002*\002,/,\002*\002,6x,\002 Lambertian case :  \002,1x\
     doublereal robarpstar, fae, cfi, ani[6]	/* was [2][3] */, rad, seb, 
 	    fra, sha, tdd, anr[6]	/* was [2][3] */, phi, roc, roe, etn, 
 	    rog, avr, dtr, esn, xle, tdu, tsd, its, swl, xpp, xlt, xps, puw, 
-	    tsu, azw, pps, pws, ea0n, ee0n;
+	    tsu, azw, pps, ea0n, ee0n;
+    doublereal pws=0;
     integer nfi;
     extern /* Subroutine */ int us62_();
     doublereal phi0;
@@ -490,7 +498,8 @@ flectance  \002,t79,\002*\002,/,\002*\002,6x,\002 Lambertian case :  \002,1x\
     char file2[80];
     doublereal palt, xla0n, ratm1, ratm2, ratm3, robarbarstar, puoz, xpol, 
 	    edifa, cscaa, coefa, uo3us, coefb, coefc;
-    integer iread, ibrdf, aerod;
+    integer iread, aerod;
+	integer ibrdf=0;
     doublereal dgasm, asaer, robar[1501], taer55, refet, tgasm, filut[1025]	
 	    /* was [25][41] */, rpfet, ugasm, tamoy, taerp, romix, trayp, 
 	    dtott, rqmix, rumix, rolut[1025]	/* was [25][41] */, astot, 
@@ -498,9 +507,10 @@ flectance  \002,t79,\002*\002,/,\002*\002,6x,\002 Lambertian case :  \002,1x\
 	    puwus, dgtot, tgtot, robar1, robar2, refet1, refet2, refet3, 
 	    coefp, ugtot, edifr, rpfet1, rpfet2, rpfet3, tdird, tdiru, tdifd, 
 	    tdifu, rsurf, tmdir, tmdif;
-    integer igeom, month, idatm, iaerp, iwave, igrou1;
+    integer igeom, month, idatm, iaerp, iwave;
+	integer igrou1 = 0;
     doublereal xnorm1, xnorm2;
-    integer igrou2;
+    integer igrou2 = 0;
     doublereal sddica, dtdica;
     integer isort, irapp;
     doublereal iscama, puo3us;

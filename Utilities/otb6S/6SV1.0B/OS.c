@@ -82,7 +82,8 @@ Extern struct {
     doublereal psl[51102]	/* was [1002][51] */, its, ron, spl, piz, xpl[
 	    51], xpk, trp;
     integer snt, ntp;
-    doublereal xpj, ypk, acu2, inm1[51], inm2[51];
+    doublereal xpj, ypk, inm1[51], inm2[51];
+	doublereal acu2 = 0.;
     integer mum1;
     doublereal ppp1, ppp2, aaaa, scaa, accu, altc[31], bpjk, xdel[31], ydel[
 	    31], nbmu, taup, beta0, xmus, accu2, beta2, cscaa, bpjmk;

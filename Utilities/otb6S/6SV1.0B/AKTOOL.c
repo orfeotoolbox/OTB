@@ -1771,7 +1771,7 @@ L130:
 	case 2: goto L73;
 	case 3: goto L74;
     }
-
+    return 0;
 /*<       end >*/
 } /* gmd92_ */
 
