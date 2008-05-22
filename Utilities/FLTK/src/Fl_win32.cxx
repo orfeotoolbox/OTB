@@ -1335,7 +1335,7 @@ static LRESULT CALLBACK s_TimerProc(HWND hwnd, UINT msg,
     switch (msg) {
     case WM_TIMER:
         {
-            unsigned int id = wParam - 1;
+            int id = wParam - 1;
             if (id < win32_timer_used && win32_timers[id].handle) {
                 Fl_Timeout_Handler cb   = win32_timers[id].callback;
                 void*              data = win32_timers[id].data;
