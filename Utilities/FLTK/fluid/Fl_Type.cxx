@@ -253,7 +253,7 @@ void Widget_Browser::item_draw(void *v, int X, int Y, int, int) const {
   Fl_Pixmap *pm = pixmap[l->pixmapID()];
   if (pm) pm->draw(X-18, Y);
   if (l->is_public() == 0) lock_pixmap.draw(X - 17, Y);
-  else if (l->is_public() > 0) ; //unlock_pixmap.draw(X - 17, Y);
+  //else if (l->is_public() > 0) ; //unlock_pixmap.draw(X - 17, Y);
   if (l->is_parent()) {
     if (!l->next || l->next->level <= l->level) {
       if (l->open_!=(l==pushedtitle)) {
