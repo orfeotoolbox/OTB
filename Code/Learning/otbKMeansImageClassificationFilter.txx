@@ -73,7 +73,7 @@ KMeansImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMa
 
       for(unsigned int i=0;i<MaxSampleDimension;++i)
 	{
-	  m_CentroidsMap[label][i]=m_Centroids[MaxSampleDimension*(static_cast<unsigned int>(label)-1)+i];
+	  m_CentroidsMap[label][i] = static_cast<ValueType>(m_Centroids[MaxSampleDimension*(static_cast<unsigned int>(label)-1)+i]);
 	}
     }
 }
