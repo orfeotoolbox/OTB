@@ -84,25 +84,25 @@ IF(CMAKE_COMPILER_IS_GNUCC)
         "-O[^ ]*( |$)" "" CMAKE_C_FLAGS${c} "${CMAKE_C_FLAGS${c}}")
     ENDFOREACH(c)
   ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" LESS 2.4)
-ELSE(CMAKE_COMPILER_IS_GNUCC)
-  IF(WIN32)
-    IF(NOT BORLAND)
-      IF(NOT CYGWIN)
-        IF(NOT MINGW)
-                SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /w")
-                # CMake versions before 2.4 did not put the source-file-specific flags
-                # after the directory-level flags.  Remove optimization flags from the
-                # CMAKE_C_FLAGS* variables so they can be overridden.
-                IF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" LESS 2.4)
-                        FOREACH(c "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
-                                STRING(REGEX REPLACE
-                                  "-O[^ ]*( |$)" "" CMAKE_C_FLAGS${c} "${CMAKE_C_FLAGS${c}}")
-                        ENDFOREACH(c)
-                ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" LESS 2.4)
-        ENDIF(NOT MINGW)
-      ENDIF(NOT CYGWIN)
-    ENDIF(NOT BORLAND)
-  ENDIF(WIN32)
+#ELSE(CMAKE_COMPILER_IS_GNUCC)
+#  IF(WIN32)
+#    IF(NOT BORLAND)
+#      IF(NOT CYGWIN)
+#        IF(NOT MINGW)
+#                SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /w")
+#                # CMake versions before 2.4 did not put the source-file-specific flags
+#                # after the directory-level flags.  Remove optimization flags from the
+#                # CMAKE_C_FLAGS* variables so they can be overridden.
+#                IF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" LESS 2.4)
+#                        FOREACH(c "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
+#                                STRING(REGEX REPLACE
+#                                  "-O[^ ]*( |$)" "" CMAKE_C_FLAGS${c} "${CMAKE_C_FLAGS${c}}")
+#                        ENDFOREACH(c)
+#                ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" LESS 2.4)
+#        ENDIF(NOT MINGW)
+#      ENDIF(NOT CYGWIN)
+#    ENDIF(NOT BORLAND)
+#  ENDIF(WIN32)
 ENDIF(CMAKE_COMPILER_IS_GNUCC)
 
 FILE(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
