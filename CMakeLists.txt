@@ -104,12 +104,17 @@ IF(OTB_USE_VISU_GUI)
         IF(OTB_USE_EXTERNAL_FLTK)
 
                 FIND_PACKAGE(FLTK)
+                # Mingw Option doesn't exist in the FindFLTK.cmake default configuration file in CMake installationj directory. 
+                # Copy  FLTK_PLATFORM_DEPENDENT_LIBS from FLTK CmakeList.txt
+                IF(MINGW)
+                    ADD_DEFINITIONS(-DWIN32)
+                    SET( FLTK_PLATFORM_DEPENDENT_LIBS ole32 uuid wsock32 gdi32 comdlg32)
+                ENDIF(MINGW)
                 IF (NOT FLTK_INCLUDE_DIR)
 		        SET( FLTK_INCLUDE_DIR /usr/include )
-		        FIND_PACKAGE(FLTK)
+                FIND_PACKAGE(FLTK)
 	        ENDIF(NOT FLTK_INCLUDE_DIR)
-
-                IF(FLTK_FOUND)
+               IF(FLTK_FOUND)
 		        INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIRS})
 		        LINK_DIRECTORIES(${FLTK_LIBRARY_DIRS})
                 ELSE(FLTK_FOUND)
@@ -411,6 +416,10 @@ IF(WIN32)
    ENDIF(BUILD_SHARED_LIBS)
    SET(BUILD_SHARED_LIBS OFF)
 ENDIF(WIN32)
+
+MESSAGE("tutu : ${OTB_USE_VISU_GUI}")
+
+MESSAGE("toto : ${FLTK_PLATFORM_DEPENDENT_LIBS}")
 
 IF(OTB_USE_VISU_GUI)
     SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES};${FLTK_PLATFORM_DEPENDENT_LIBS}")
