@@ -169,7 +169,7 @@ bool Rds2Annotation::Parse(ossimXmlDocument docXML) {
 	xpathTest = new ossimString("/product/imageGenerationParameters/slantRangeToGroundRange/zeroDopplerAzimuthTime") ; 
 	searchResult.clear();
 	docXML.findNodes(*xpathTest, searchResult) ;
-	for ( int i=0 ; i<searchResult.size() ; i++) {
+	for ( unsigned int i=0 ; i<searchResult.size() ; i++) {
 		foundNode = searchResult.at(i) ;
 		_SrGr_update.push_back(foundNode->getText()) ;
 	}
@@ -178,7 +178,7 @@ bool Rds2Annotation::Parse(ossimXmlDocument docXML) {
 	xpathTest = new ossimString("/product/imageGenerationParameters/slantRangeToGroundRange/groundRangeOrigin") ; 
 	searchResult.clear();
 	docXML.findNodes(*xpathTest, searchResult) ;
-	for ( int i=0 ; i<searchResult.size() ; i++) {
+	for ( unsigned int i=0 ; i<searchResult.size() ; i++) {
 		foundNode = searchResult.at(i) ;
 		_SrGr_R0.push_back(foundNode->getText().toDouble()) ;
 	}
@@ -189,7 +189,7 @@ bool Rds2Annotation::Parse(ossimXmlDocument docXML) {
 	std::string coefficients;
 	double coeff ;
 	int indexDeb, indexFin ; 
-	for ( int i=0 ; i<searchResult.size() ; i++) {
+	for ( unsigned int i=0 ; i<searchResult.size() ; i++) {
 		foundNode = searchResult.at(i) ;
 		coefficients = (foundNode->getText()) ; // list of coefficients ; separator : ' '
 		std::vector<double> coefficientVector;
@@ -226,7 +226,7 @@ bool Rds2Annotation::Parse(ossimXmlDocument docXML) {
 	_velY.clear(); 
 	_velZ.clear(); 
 
-	 for (int i=0 ; i<searchResult.size() ; i++) {
+	 for (unsigned int i=0 ; i<searchResult.size() ; i++) {
 		foundNode = searchResult.at(i) ;
 		
 		_ndata++;
@@ -264,7 +264,7 @@ bool Rds2Annotation::Parse(ossimXmlDocument docXML) {
 	 xpathTest = new ossimString("/product/imageAttributes/geographicInformation/geolocationGrid/imageTiePoint/geodeticCoordinate/longitude") ;
 	 searchResult.clear();
 	 docXML.findNodes(*xpathTest, searchResult) ;
-	 for (int i=0 ; i<searchResult.size() ; i++ ) {
+	 for (unsigned int i=0 ; i<searchResult.size() ; i++ ) {
 		foundNode = searchResult.at(i) ;
 		_cornersLon.push_back( (foundNode->getText()).toDouble() ) ;
 	 }
@@ -273,7 +273,7 @@ bool Rds2Annotation::Parse(ossimXmlDocument docXML) {
 	 xpathTest = new ossimString("/product/imageAttributes/geographicInformation/geolocationGrid/imageTiePoint/geodeticCoordinate/latitude") ;
 	 searchResult.clear();
 	 docXML.findNodes(*xpathTest, searchResult) ;
-	 for (int i=0 ; i<searchResult.size() ; i++ ) {
+	 for (unsigned int i=0 ; i<searchResult.size() ; i++ ) {
 		foundNode = searchResult.at(i) ;
 		_cornersLat.push_back( (foundNode->getText()).toDouble() ) ;
 	 }
@@ -282,7 +282,7 @@ bool Rds2Annotation::Parse(ossimXmlDocument docXML) {
 	 xpathTest = new ossimString("/product/imageAttributes/geographicInformation/geolocationGrid/imageTiePoint/geodeticCoordinate/height") ;
 	 searchResult.clear();
 	 docXML.findNodes(*xpathTest, searchResult) ;
-	 for (int i=0 ; i<searchResult.size() ; i++ ) {
+	 for (unsigned int i=0 ; i<searchResult.size() ; i++ ) {
 		foundNode = searchResult.at(i) ;
 		_cornersHeight.push_back( (foundNode->getText()).toDouble() ) ;
 	 }
@@ -291,7 +291,7 @@ bool Rds2Annotation::Parse(ossimXmlDocument docXML) {
 	 xpathTest = new ossimString("/product/imageAttributes/geographicInformation/geolocationGrid/imageTiePoint/imageCoordinate/pixel") ;
 	 searchResult.clear();
 	 docXML.findNodes(*xpathTest, searchResult) ;
-	 for (int i=0 ; i<searchResult.size() ; i++ ) {
+	 for (unsigned int i=0 ; i<searchResult.size() ; i++ ) {
 		foundNode = searchResult.at(i) ;
 		_cornersCol.push_back( (foundNode->getText()).toDouble() ) ;
 	 }
@@ -300,7 +300,7 @@ bool Rds2Annotation::Parse(ossimXmlDocument docXML) {
 	 xpathTest = new ossimString("/product/imageAttributes/geographicInformation/geolocationGrid/imageTiePoint/imageCoordinate/line") ;
 	 searchResult.clear();
 	 docXML.findNodes(*xpathTest, searchResult) ;
-	 for (int i=0 ; i<searchResult.size() ; i++ ) {
+	 for (unsigned int i=0 ; i<searchResult.size() ; i++ ) {
 		foundNode = searchResult.at(i) ;
 		_cornersLin.push_back( (foundNode->getText()).toDouble() ) ;
 	 }

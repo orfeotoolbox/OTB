@@ -192,7 +192,7 @@ bool ossimRadarSat2TileSource::getImageGeometry(ossimKeywordlist& kwl,const char
 	char name[64];
 	for(int i=0;i<nbCoeffs;i++)
 	{
-		for(int j=0;j<((_annotation->get_SrGr_coeffs())[i]).size();j++)
+		for(unsigned int j=0;j<((_annotation->get_SrGr_coeffs())[i]).size();j++)
 		{
 			sprintf(name,"SrGr_coeffs_%i_%i",i,j);
 			kwl.add(prefix, name,(_annotation->get_SrGr_coeffs())[i][j],true);
@@ -227,7 +227,7 @@ bool ossimRadarSat2TileSource::getImageGeometry(ossimKeywordlist& kwl,const char
 
 	kwl.add(prefix, "nTiePoints",(ossim_float64) _annotation->get_cornersLon().size(),true);
 
-	for(int i=0;i<_annotation->get_cornersLon().size();i++)
+	for(unsigned int i=0;i<_annotation->get_cornersLon().size();i++)
 	{
 		sprintf(name,"cornersLon%i",i);
 		kwl.add(prefix, name,(_annotation->get_cornersLon())[i],true);

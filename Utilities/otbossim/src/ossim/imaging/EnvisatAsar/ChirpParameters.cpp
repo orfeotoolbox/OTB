@@ -59,8 +59,8 @@ std::istream& operator>>(std::istream& is, ChirpParameters& data)
 	buf16[16]='\0';
 	char buf15[16];
 	buf15[15] = '\0';
-	char buf14[15];
-	buf14[15] = '\0';
+	//char buf14[15];
+	//buf14[15] = '\0';
 	char buf13[14];
 	buf13[13] = '\0';
 	char buf12[13];
@@ -85,7 +85,7 @@ std::istream& operator>>(std::istream& is, ChirpParameters& data)
 	buf3[3] = '\0'; 
 	char buf2[3];
 	buf2[2] = '\0';
-	char buf1[1]; 
+	//char buf1[1]; 
 
 	is.read(buf12,12);
 	data._zero_doppler_time = buf12;

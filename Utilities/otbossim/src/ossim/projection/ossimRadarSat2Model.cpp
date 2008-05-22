@@ -38,7 +38,7 @@ double ossimRadarSat2Model::getSlantRangeFromGeoreferenced(double col) const
 	 * @todo : could be improved (date choice)
 	 */
 
-	for (int i=0 ; i<_SrGr_coeffs[numSet].size() ; i++) {
+	for (int i=0 ; i<static_cast<int>(_SrGr_coeffs[numSet].size()) ; i++) {
 		slantRange += _SrGr_coeffs[numSet][i]*pow(relativeGroundRange,i) ;
 	}
 	

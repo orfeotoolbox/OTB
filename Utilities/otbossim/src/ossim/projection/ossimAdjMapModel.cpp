@@ -335,8 +335,9 @@ bool ossimAdjMapModel::loadState(const ossimKeywordlist& kwl, const char* prefix
          setParameterCenter(i, value);
       }
    }
-   catch (const char* message)
+   catch ( const char*)
    {
+      
       theErrorStatus++;
       success = false;
    }

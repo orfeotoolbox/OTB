@@ -287,7 +287,7 @@ bool ossimTerraSarModel::InitRefPoint(const ossimKeywordlist &kwl, const char *p
 	// (used for SlantRange computation relative to reference point, necessary for optimization)
 	if (_isProductGeoreferenced) {
 		double estimatedGroundRange = 0.0 ; 
-		for (int i=0; i<_SrToGr_coeffs.size(); i++) {
+		for (unsigned int i=0; i<_SrToGr_coeffs.size(); i++) {
 			estimatedGroundRange += _SrToGr_coeffs[i]*pow(_sceneCenterRangeTime-_SrToGr_R0,_SrToGr_exponent[i]);
 		}
 		// SrToGr update : estimatedGroundRange  = sc_pix * scaling_factor

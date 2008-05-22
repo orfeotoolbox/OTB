@@ -252,7 +252,7 @@ bool TsxAnnotation::Parse(ossimXmlDocument docXML) {
 	 ossimString exponent_str ;
 	 double coefficient;
 	 int exponent ;
-	 for ( int i=0 ; i<searchResult.size() ; i++) {
+	 for ( unsigned int i=0 ; i<searchResult.size() ; i++) {
 		foundNode = searchResult.at(i) ;
 		foundNode->getAttributeValue(exponent_str, *xpathExponent);
 		exponent = exponent_str.toInt() ;
@@ -286,7 +286,7 @@ bool TsxAnnotation::Parse(ossimXmlDocument docXML) {
 	_velY.clear(); 
 	_velZ.clear(); 
 
-	 for (int i=0 ; i<searchResult.size() ; i++) {
+	 for (unsigned int i=0 ; i<searchResult.size() ; i++) {
 		foundNode = searchResult.at(i) ;
 		foundNode->getAttributeValue(qualind, *xpathQualind);
 
