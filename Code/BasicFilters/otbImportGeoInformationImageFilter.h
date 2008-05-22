@@ -18,7 +18,7 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef _otbImportGeoInformationImageFilter_h
 #define _otbImportGeoInformationImageFilter_h
 
-#include "itkInPlaceImageFilter.h"
+#include "itkCastImageFilter.h"
 
 namespace otb
 {
@@ -36,12 +36,12 @@ namespace otb
  */
 template <class TImage, class TSourceImage>
 class ITK_EXPORT ImportGeoInformationImageFilter
-  : public itk::InPlaceImageFilter<TImage,TImage>
+  : public itk::CastImageFilter<TImage,TImage>
 {
  public:
   /** Standard typedefs */
   typedef ImportGeoInformationImageFilter Self;
-  typedef itk::InPlaceImageFilter<TImage,TImage> Superclass;
+  typedef itk::CastImageFilter<TImage,TImage> Superclass;
   typedef itk::SmartPointer<Self>         Pointer;
   typedef itk::SmartPointer<const Self>   ConstPointer;
   
@@ -49,7 +49,7 @@ class ITK_EXPORT ImportGeoInformationImageFilter
   itkNewMacro(Self);
   
   /** Creation through object factory macro */
-  itkTypeMacro(ImportGeoInformationImageFilter, InPlaceImageFilter);
+  itkTypeMacro(ImportGeoInformationImageFilter, CastImageFilter);
   
   /** Template parameters typedefs */
   typedef TImage ImageType;
@@ -76,12 +76,12 @@ protected:
   virtual ~ImportGeoInformationImageFilter() {};
  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  /** GenerateData */
-  virtual void GenerateData(void);
   /** Generate input requested region */
   virtual void GenerateInputRequestedRegion(void);
   /** Generate output information */
   virtual void GenerateOutputInformation(void);
+/*   /\** Generate data *\/ */
+/*   virtual void GenerateData(void); */
 private:
   ImportGeoInformationImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

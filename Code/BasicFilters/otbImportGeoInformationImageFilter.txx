@@ -34,8 +34,6 @@ ImportGeoInformationImageFilter<TImage,TSourceImage>
 ::ImportGeoInformationImageFilter()
 {
   this->SetNumberOfRequiredInputs(2);
-  this->SetNthInput(1,SourceImageType::New().GetPointer());
-  this->SetInPlace(true);
 }
 
 template <class TImage, class TSourceImage>
@@ -84,17 +82,25 @@ void
   SourceImageType * sourcePtr =const_cast<SourceImageType *>(this->GetSource());
   // Import metdata
   outputPtr->CopyInformation(sourcePtr);
+
+  outputPtr->SetLargestPossibleRegion(this->GetInput()->GetLargestPossibleRegion());
 }
-/**
- * Main computation method.
- */
-template <class TImage, class TSourceImage>
-void
- ImportGeoInformationImageFilter<TImage,TSourceImage>
-::GenerateData(void)
-{
-  this->AllocateOutputs();
-}
+
+// template <class TImage, class TSourceImage>
+// void
+//  ImportGeoInformationImageFilter<TImage,TSourceImage>
+// ::GenerateData(void)
+// {
+//   // Get output and source pointer
+//   ImagePointerType outputPtr = this->GetOutput();
+//   SourceImageType * sourcePtr =const_cast<SourceImageType *>(this->GetSource());
+//   // Import metdata
+//   outputPtr->CopyInformation(sourcePtr);
+//   // Don't forget to copy also the origin and spacing, not handled by the CopyInformation method.
+//   outputPtr->SetOrigin(sourcePtr->GetOrigin());
+//   outputPtr->SetSpacing(sourcePtr->GetSpacing());
+// }
+
 /**
  * PrintSelf Method
  */
