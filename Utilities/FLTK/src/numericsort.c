@@ -33,6 +33,7 @@
 #include "fltk-config.h"
 #include <stdlib.h>
 #include <sys/types.h>
+#include "flstring.h"
 
 #include <FL/filename.H>
 
