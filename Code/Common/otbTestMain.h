@@ -1090,9 +1090,9 @@ int RegressionTestMetaData (const char *testImageFilename, const char *baselineI
     {
       std::cerr << "The spacing of the Baseline image and Test image do not match!" << std::endl;
       std::cerr << "Baseline image: " << baselineImageFilename
-		<< " has origin " << blImPtr->GetSpacing() << std::endl;
+		<< " has spacing " << blImPtr->GetSpacing() << std::endl;
       std::cerr << "Test image:     " << testImageFilename
-		<< " has origin "<< testImPtr->GetSpacing() << std::endl;
+		<< " has spacing "<< testImPtr->GetSpacing() << std::endl;
       errcount++;
     }
 
