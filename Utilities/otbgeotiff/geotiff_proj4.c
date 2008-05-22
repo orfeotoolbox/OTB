@@ -106,6 +106,7 @@
 #include "geotiff.h"
 #include "geo_normalize.h"
 #include "geovalues.h"
+#include <string.h>
 
 /************************************************************************/
 /*                          GTIFGetProj4Defn()                          */
