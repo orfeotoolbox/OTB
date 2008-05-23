@@ -34,7 +34,7 @@ namespace otb
    *  Abstract class ProcessObject is the subject
    *  Event are oberservers
    *
-   *  \example Example usage
+   *  Usage example:
    *
    *  \code
    *  typedef itk::BinaryThresholdImageFilter<ImageType> FilterType;

@@ -26,7 +26,7 @@
 
 namespace otb
 {
-  /** \class
+  /** \class otbLabelizeImageFilterBase
    *  \brief
    *
    */

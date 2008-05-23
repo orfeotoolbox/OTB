@@ -103,10 +103,11 @@ public:
    * the mode does not need them.
    * \param image The image to stream, 
    * \param region the region to stream,
+   * \param splitter the splitter used for the division,
    * \param mode  the streaming mode,
    * \param numberOfStreamDivision the number of stream division if streaming mode is SET_NUMBER_OF_STREAM_DIVISIONS,
    * \param bufferMemorySize the buffer memory size in bytes if streaming mode is SET_BUFFER_MEMORY_SIZE,
-   * \param bufferNumberOfLinesDivision the buffer number of lines division if the streaming mode is SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS.
+   * \param bufferNumberOfLinesDivisions the buffer number of lines division if the streaming mode is SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS.
    * \return The number of streaming divisions.
    */
   static unsigned long CalculateNumberOfStreamDivisions(const TImage * image,

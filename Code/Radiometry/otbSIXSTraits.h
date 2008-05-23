@@ -68,10 +68,15 @@ public:
                 double &                UpwardDiffuseTransmittanceForRayleigh,  /** upward diffuse transmittance for rayleigh */
                 double &                UpwardDiffuseTransmittanceForAerosol    /** upward diffuse transmittance for aerosols */
         );
-  /** Check the correpondance between the vector value size and the interval number between min and max.
-    * If the vector step is not at 0.0025, the new values are computed.
-    * The utput vector values is store in the m_FilterFunctionValues6S of WavelenghtSpectralBand
-  . */
+  
+  /** 
+  * Check the correpondance between the vector value size and 
+  * the interval number between min and max.
+  * If the vector step is not at 0.0025, the new values are computed.
+  * The output vector values is store in the m_FilterFunctionValues6S 
+  * of WavelenghtSpectralBand
+  *
+  */
   static void ComputeWavelenghtSpectralBandValuesFor6S(
         const   double                  SIXSStepOfWavelenghtSpectralBandValues,
                 WavelenghtSpectralType* WavelenghtSpectralBand

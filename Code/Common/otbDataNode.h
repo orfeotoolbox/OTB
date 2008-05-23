@@ -85,7 +85,7 @@ class DataNode
 
    /**
     * Set the node type.
-    * \param The node type.
+    * \param type node type.
     */
    void SetNodeType(NodeType type);
    /**
@@ -114,23 +114,23 @@ class DataNode
    PolygonListPointerType GetPolygonInteriorRings() const;   
    /**
     * Set the point data. Node type is automatically set to FEATURE_POINT.
-    * \param The point.
+    * \param point the point.
     */
    void SetPoint(PointType point);
    /**
     * Set the line data. Node type is automatically set to FEATURE_LINE.
-    * \param The line.
+    * \param line The line.
     */
    void SetLine(LinePointerType line);
    /**
     * Set the polygon exterior ring. Node type is automatically set to FEATURE_POLYGON.
-    * \param The polygon exterior ring.
+    * \param polygon The polygon exterior ring.
     */
    void SetPolygonExteriorRing(PolygonPointerType polygon);
 
    /**
     * Set the polygon interior rings. Node type is automatically set to FEATURE_POLYGON.
-    * \param The polygon interior rings list.
+    * \param polygonList The polygon interior rings list.
     */
    void SetPolygonInteriorRings(PolygonListPointerType polygonList);
 
@@ -178,7 +178,7 @@ class DataNode
    /**
     * Add a field to the node.
     * \param key The name of the field.
-    * \param The value of the field.
+    * \param value The value of the field.
     */
    void SetField(std::string key, std::string value);
    /**

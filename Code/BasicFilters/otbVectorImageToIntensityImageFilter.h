@@ -28,7 +28,7 @@ namespace otb
  * The spectral mean 
  * is defined as:
  * 
- * \f[SM = \frac{1}{n_{b}} \times {\sum_{b=1}^{n_{b}}p(b) \f]
+ * \f[ SM = \frac{1}{n_{b}} \times \sum_{b=1}^{n_{b}}p(b) \f]
  * with \f$b\f$ being the spectral band and \f$p\f$ 
  * the current pixel.
  *

@@ -24,7 +24,7 @@
 namespace otb
 {
 
-  /** \class
+  /** \class otbLabelizeConnectedThresholdImageFilter
    *  \brief
    *
    */

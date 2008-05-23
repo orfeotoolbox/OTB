@@ -65,7 +65,7 @@ public:
   
   /**
    * Get the number of occurences of the given value
-   * \val The value.
+   * \return The value.
    */
   unsigned int GetRelationsCount(RCC8ValueType val);
 

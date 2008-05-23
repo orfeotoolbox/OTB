@@ -326,7 +326,7 @@ namespace otb
 
       /**
        * Set the view model
-       * \param flag True to turn on RGB view model
+       * \param viewModel True to turn on RGB view model
        */
       virtual void SetViewModel(ViewModelType viewModel);
 
