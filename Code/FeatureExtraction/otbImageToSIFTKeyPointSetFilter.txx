@@ -20,6 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "itkMatrix.h"
 #include "itkProcessObject.h"
+#include "otbMath.h"
 
 namespace otb
 {
