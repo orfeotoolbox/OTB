@@ -126,28 +126,28 @@ ConvolutionImageFilter< TInputImage, TOutputImage>
     //std::cout << m_Radius << std::endl;	    
     //std::cout << bit << std::endl;	    
     
-    unsigned int neighborhoodSize = bit.Size();
+
     it = itk::ImageRegionIterator<OutputImageType>(output, *fit);
     bit.OverrideBoundaryCondition(&nbc);
     bit.GoToBegin();
-
+    unsigned int neighborhoodSize = bit.Size();
+   
     while ( ! bit.IsAtEnd() )
       {
-      sum = itk::NumericTraits<InputRealType>::Zero;
-      norm = itk::NumericTraits<InputRealType>::Zero;
-      //std::cout << neighborhoodSize << std::endl;
-      for (i = 0; i < neighborhoodSize; ++i)
-        {
-        sum += static_cast<InputRealType>( bit.GetPixel(i)*m_Filter(i) );
-	norm += static_cast<InputRealType>( m_Filter(i) );
-        }
-      
-      // get the mean value
-      it.Set( static_cast<OutputPixelType>(sum / double(norm)) );
-      
-      ++bit;
-      ++it;
-      progress.CompletedPixel();
+	sum = itk::NumericTraits<InputRealType>::Zero;
+	norm = itk::NumericTraits<InputRealType>::Zero;
+	for (i = 0; i < neighborhoodSize; ++i)
+	  {
+	    sum += static_cast<InputRealType>( bit.GetPixel(i)*m_Filter(i) );
+	    norm += static_cast<InputRealType>( m_Filter(i) );
+	  }
+	
+	// get the mean value
+	it.Set( static_cast<OutputPixelType>(sum / double(norm)) );
+	
+	++bit;
+	++it;
+	progress.CompletedPixel();
       }
     }
 }

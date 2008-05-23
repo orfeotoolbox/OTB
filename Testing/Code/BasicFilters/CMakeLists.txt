@@ -814,6 +814,21 @@ ADD_TEST(bfTvEuclideanDistanceWithMissingValue ${BASICFILTERS_TESTS8}
 		    127 127 2 3 1
 )
 
+# -------            otb::ConvolutionImageFilter   ----------------------------
+
+  ADD_TEST(bfTuConvolutionImageFilterNew ${BASICFILTERS_TESTS8}
+         otbConvolutionImageFilterNew)
+
+  ADD_TEST(bfTuConvolutionImageFilter ${BASICFILTERS_TESTS8}
+		--compare-image ${EPSILON}
+		    ${BASELINE}/bfTuConvolutionImageFilter.tif
+		    ${TEMP}/bfTuConvolutionImageFilter.tif
+		    otbConvolutionImageFilter
+		    ${INPUTDATA}/QB_Suburb.png
+		    ${TEMP}/bfTuConvolutionImageFilter.tif
+)
+
+
 # A enrichir
 SET(BasicFilters_SRCS1
 otbLeeFilter.cxx
@@ -930,6 +945,8 @@ otbLabelizeConfidenceConnectedImageFilterNew.cxx
 otbLabelizeConfidenceConnectedImageFilter.cxx
 otbEuclideanDistanceWithMissingValueNew.cxx
 otbEuclideanDistanceWithMissingValue.cxx
+otbConvolutionImageFilterNew.cxx
+otbConvolutionImageFilter.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

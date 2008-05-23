@@ -25,7 +25,7 @@
 namespace otb
 {
 /** \class ConvolutionImageFilter
- * \brief Applies a convolution filter to an image
+ * \brief Applies a convolution filter to a mono channel image
  *
  * Computes an image which is the convolution of the input image
  * with a filter.
@@ -72,7 +72,9 @@ public:
   typedef typename InputImageType::PixelType InputPixelType;
   typedef typename OutputImageType::PixelType OutputPixelType;
   typedef typename itk::NumericTraits<InputPixelType>::RealType InputRealType;
-  
+
+  //typedef typename InputPixelType::InternalPixelType InputRealType;
+
   typedef typename InputImageType::RegionType InputImageRegionType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
@@ -102,9 +104,20 @@ public:
   itkGetConstReferenceMacro(Radius, InputSizeType);
   
   /** Set the input filter */
-  itkSetMacro(Filter, ArrayType);
+  void SetFilter( ArrayType filter )
+    {
+      if(filter.Size()!= m_Filter.Size())
+	{
+	  itkExceptionMacro("Error in SetFilter, invalid filter size:"<< filter.Size()<<" instead of 2*(m_Radius[0]+1)*(2*m_Radius[1]+1): "<<m_Filter.Size());
+	}
+      else
+	{
+	  m_Filter = filter;
+	}
+      this->Modified();
+    }
   itkGetConstReferenceMacro(Filter, ArrayType);
-  
+
   /** ConvolutionImageFilter needs a larger input requested region than
    * the output requested region.  As such, ConvolutionImageFilter needs
    * to provide an implementation for GenerateInputRequestedRegion()

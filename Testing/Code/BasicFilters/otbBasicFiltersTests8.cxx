@@ -35,4 +35,6 @@ void RegisterTests()
   REGISTER_TEST(otbLabelizeConfidenceConnectedImageFilter);
   REGISTER_TEST(otbEuclideanDistanceWithMissingValueNew);
   REGISTER_TEST(otbEuclideanDistanceWithMissingValue);
+  REGISTER_TEST(otbConvolutionImageFilterNew);
+  REGISTER_TEST(otbConvolutionImageFilter);
 }
