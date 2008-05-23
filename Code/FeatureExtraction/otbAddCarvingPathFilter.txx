@@ -110,7 +110,10 @@ AddCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
           typename InputImageType::PointType tmpIndex;
           inputImage->TransformContinuousIndexToPhysicalPoint(pathIterator.Value(),tmpIndex);
           inputImage->TransformPhysicalPointToIndex(tmpIndex,indexToAdd);
-          --pathIterator;
+          if(pathIterator != vertexList->Begin())
+          {
+            --pathIterator;
+          }
           if(index[dir1] != indexToAdd[dir1])
           {
             itkExceptionMacro(<< "Error : " << index[dir1] << " , " << indexToAdd[dir1]);
