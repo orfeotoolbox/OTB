@@ -474,10 +474,10 @@ bool DL_Dxf::processDXFGroup(DL_CreationInterface* creationInterface,
                                linetype);          // linetype
         creationInterface->setAttributes(attrib);
 
-        creationInterface->setExtrusion(toReal(values[210], 0.0),
-                                        toReal(values[220], 0.0),
-                                        toReal(values[230], 1.0),
-                                        toReal(values[30], 0.0));
+        creationInterface->setExtrusion(static_cast<float>(toReal(values[210], 0.0)),
+                                        static_cast<float>(toReal(values[220], 0.0)),
+                                        static_cast<float>(toReal(values[230], 1.0)),
+                                        static_cast<float>(toReal(values[30], 0.0)));
 
         // Add the last entity via creationInterface
         switch (currentEntity) {
