@@ -48,7 +48,8 @@ namespace otb
 template <class TInputImage, 
           class TTrainingImage>
 class ITK_EXPORT SVMImageModelEstimator: 
-    public SVMModelEstimator<ITK_TYPENAME TInputImage::PixelType::ComponentType, ITK_TYPENAME TTrainingImage::PixelType>
+public SVMModelEstimator<ITK_TYPENAME TInputImage::InternalPixelType, ITK_TYPENAME TTrainingImage::PixelType>
+    //public SVMModelEstimator<ITK_TYPENAME TInputImage::PixelType::ComponentType, ITK_TYPENAME TTrainingImage::PixelType>
 {
 public:
   /** Standard class typedefs. */
