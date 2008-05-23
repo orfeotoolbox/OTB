@@ -263,8 +263,49 @@ ADD_TEST(leTvSVMImageClassificationFilter ${LEARNING_TESTS3}
 	${INPUTDATA}/svm_model_image
 	${TEMP}/leSVMImageClassificationFilterOutput.tif)
 			        
-ADD_TEST(leTuSVMModelGenericKernelsTest ${LEARNING_TESTS3} 
-	otbSVMModelGenericKernelsTest)
+ADD_TEST(leTvSVMModelGenericKernelsTest ${LEARNING_TESTS3}
+    --compare-n-ascii ${TOL} 13
+        ${BASELINE_FILES}/leTvSVMModelGenericKernelsTest1.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest1.txt
+        ${BASELINE_FILES}/leTvSVMModelGenericKernelsTest2.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest2.txt
+        ${BASELINE_FILES}/leTvSVMModelGenericKernelsTest3.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest3.txt
+        ${BASELINE_FILES}/leTvSVMModelGenericKernelsTest4.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest4.txt
+        ${BASELINE_FILES}/leTvSVMModelGenericKernelsTest5.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest5.txt
+        ${BASELINE_FILES}/leTvSVMModelGenericKernelsTest6.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest6.txt
+        ${BASELINE_FILES}/leTvSVMModelGenericKernelsTest7.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest7.txt
+        ${BASELINE_FILES}/leTvSVMModelGenericKernelsTest8.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest8.txt
+        ${BASELINE_FILES}/leTvSVMModelGenericKernelsTest9.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest9.txt
+        ${BASELINE_FILES}/leTvSVMModelGenericKernelsTest10.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest10.txt
+        ${BASELINE_FILES}/leTvSVMModelGenericKernelsTest11.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest11.txt
+        ${BASELINE_FILES}/leTvSVMModelGenericKernelsTest12.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest12.txt
+        ${BASELINE_FILES}/leTvSVMModelGenericKernelsTest13.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest13.txt
+	otbSVMModelGenericKernelsTest
+        ${TEMP}/leTvSVMModelGenericKernelsTest1.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest2.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest3.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest4.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest5.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest6.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest7.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest8.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest9.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest10.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest11.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest12.txt
+        ${TEMP}/leTvSVMModelGenericKernelsTest13.txt
+    )
 
 
 ADD_TEST(leTvSVMModelCopy ${LEARNING_TESTS3}
