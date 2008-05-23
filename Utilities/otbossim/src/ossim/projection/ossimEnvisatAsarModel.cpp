@@ -109,9 +109,6 @@ bool ossimEnvisatAsarModel::InitSensorParams(const ossimKeywordlist &kwl, const 
 bool ossimEnvisatAsarModel::InitPlatformPosition(const ossimKeywordlist &kwl, const char *prefix)
 {
 	const int neph		= 5;
-	long val_long;
-	unsigned long val_ulong1;
-	unsigned long val_ulong2;
 	CivilDateTime ref_civil_date;
 	
 	Ephemeris** ephemeris = new Ephemeris*[neph];
