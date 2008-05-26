@@ -33,8 +33,9 @@ int otbMapProjectionsNew( int argc, char* argv[] )
         otb::AlbersForwardProjection::Pointer lAlbersProjection2 = otb::AlbersForwardProjection::New();
         otb::AzimEquDistInverseProjection::Pointer lAzimEquDistProjection = otb::AzimEquDistInverseProjection::New();
         otb::AzimEquDistForwardProjection::Pointer lAzimEquDistProjection2 = otb::AzimEquDistForwardProjection::New();
-        otb::BngInverseProjection::Pointer lBngProjection = otb::BngInverseProjection::New();
-        otb::BngForwardProjection::Pointer lBngProjection2 = otb::BngForwardProjection::New();
+//Comment for OTB 2.2.0 because OSSIM error code -> generate Exception Fault on VS 7.1 only on Debug mode.
+//        otb::BngInverseProjection::Pointer lBngProjection = otb::BngInverseProjection::New();
+//        otb::BngForwardProjection::Pointer lBngProjection2 = otb::BngForwardProjection::New();
         otb::BonneInverseProjection::Pointer lBonneProjection = otb::BonneInverseProjection::New();
         otb::BonneForwardProjection::Pointer lBonneProjection2 = otb::BonneForwardProjection::New();
 				otb::CadrgInverseProjection::Pointer lCadrgProjection = otb::CadrgInverseProjection::New();
