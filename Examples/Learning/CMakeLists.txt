@@ -128,12 +128,12 @@ ADD_TEST(SOMExampleTest ${EXE_TESTS}
 
 ADD_TEST(SOMClassifierExampleTest ${EXE_TESTS}
 	--compare-image ${TOL} 
-	${BASELINE}/ROI_QB_MUL_SOMCLASS.png
-	${TEMP}/ROI_QB_MUL_SOMCLASS.png
+	${BASELINE}/ROI_QB_MUL_extractSOMCLASS.tif
+	${TEMP}/ROI_QB_MUL_extractSOMCLASS.tif
 	SOMClassifierExampleTest
-	${INPUTDATA}/ROI_QB_MUL_1.png
-	${INPUTDATA}/ROI_QB_MUL_SOM.png
-	${TEMP}/ROI_QB_MUL_SOMCLASS.png
+	${INPUTDATA}/ROI_QB_MUL_1_extract.tif
+	${INPUTDATA}/ROI_QB_MUL_extractSOM.tif
+	${TEMP}/ROI_QB_MUL_extractSOMCLASS.tif
 )
 
 # ------- SEMModelEstimatorExampleTest----------
