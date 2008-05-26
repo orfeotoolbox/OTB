@@ -25,7 +25,7 @@
 #endif
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {QB_Suburb.png QB_Suburb.png}
+//    INPUTS: {QB_Suburb.png}, {QB_Suburb.png}
 //    OUTPUTS: {MarkovRestauration.png}
 //    10.0 30 1.0 1
 //  Software Guide : EndCommandLineArgs
@@ -33,7 +33,7 @@
 
 // Software Guide : BeginLatex
 //
-// The Markov Random Field framework and be used to apply an edge preserving 
+// The Markov Random Field framework can be used to apply an edge preserving 
 // filtering, thus playing a role of restauration.
 //
 // This example applies the \doxygen{otb}{MarkovRandomFieldFilter} for

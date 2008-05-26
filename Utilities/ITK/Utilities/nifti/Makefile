@@ -102,6 +102,14 @@ rebuild_cache:
 # Special rule for the target rebuild_cache
 rebuild_cache/fast: rebuild_cache
 
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
+	cd /usr/local/stok/OTB/trunk/OTB/Utilities/ITK/Utilities/nifti && /usr/bin/ctest --force-new-ctest-process $(ARGS)
+
+# Special rule for the target test
+test/fast: test
+
 # The main all target
 all: cmake_check_build_system
 	cd /usr/local/stok/OTB/trunk/OTB && $(CMAKE_COMMAND) -E cmake_progress_start /usr/local/stok/OTB/trunk/OTB/CMakeFiles $(CMAKE_ALL_PROGRESS)
@@ -127,12 +135,348 @@ preinstall/fast:
 depend:
 	$(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/Continuous.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/Continuous.dir/rule
+
+# Convenience name for target.
+Continuous: Utilities/ITK/Utilities/nifti/CMakeFiles/Continuous.dir/rule
+
+# fast build rule for target.
+Continuous/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/Continuous.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/Continuous.dir/build
+
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousBuild.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousBuild.dir/rule
+
+# Convenience name for target.
+ContinuousBuild: Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousBuild.dir/rule
+
+# fast build rule for target.
+ContinuousBuild/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousBuild.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousBuild.dir/build
+
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousConfigure.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousConfigure.dir/rule
+
+# Convenience name for target.
+ContinuousConfigure: Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousConfigure.dir/rule
+
+# fast build rule for target.
+ContinuousConfigure/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousConfigure.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousConfigure.dir/build
+
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousCoverage.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousCoverage.dir/rule
+
+# Convenience name for target.
+ContinuousCoverage: Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousCoverage.dir/rule
+
+# fast build rule for target.
+ContinuousCoverage/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousCoverage.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousCoverage.dir/build
+
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousMemCheck.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousMemCheck.dir/rule
+
+# Convenience name for target.
+ContinuousMemCheck: Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousMemCheck.dir/rule
+
+# fast build rule for target.
+ContinuousMemCheck/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousMemCheck.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousMemCheck.dir/build
+
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousStart.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousStart.dir/rule
+
+# Convenience name for target.
+ContinuousStart: Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousStart.dir/rule
+
+# fast build rule for target.
+ContinuousStart/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousStart.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousStart.dir/build
+
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousSubmit.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousSubmit.dir/rule
+
+# Convenience name for target.
+ContinuousSubmit: Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousSubmit.dir/rule
+
+# fast build rule for target.
+ContinuousSubmit/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousSubmit.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousSubmit.dir/build
+
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousTest.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousTest.dir/rule
+
+# Convenience name for target.
+ContinuousTest: Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousTest.dir/rule
+
+# fast build rule for target.
+ContinuousTest/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousTest.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousTest.dir/build
+
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousUpdate.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousUpdate.dir/rule
+
+# Convenience name for target.
+ContinuousUpdate: Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousUpdate.dir/rule
+
+# fast build rule for target.
+ContinuousUpdate/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousUpdate.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousUpdate.dir/build
+
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/Experimental.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/Experimental.dir/rule
+
+# Convenience name for target.
+Experimental: Utilities/ITK/Utilities/nifti/CMakeFiles/Experimental.dir/rule
+
+# fast build rule for target.
+Experimental/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/Experimental.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/Experimental.dir/build
+
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalBuild.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalBuild.dir/rule
+
+# Convenience name for target.
+ExperimentalBuild: Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalBuild.dir/rule
+
+# fast build rule for target.
+ExperimentalBuild/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalBuild.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalBuild.dir/build
+
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalConfigure.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalConfigure.dir/rule
+
+# Convenience name for target.
+ExperimentalConfigure: Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalConfigure.dir/rule
+
+# fast build rule for target.
+ExperimentalConfigure/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalConfigure.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalConfigure.dir/build
+
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalCoverage.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalCoverage.dir/rule
+
+# Convenience name for target.
+ExperimentalCoverage: Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalCoverage.dir/rule
+
+# fast build rule for target.
+ExperimentalCoverage/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalCoverage.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalCoverage.dir/build
+
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalMemCheck.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalMemCheck.dir/rule
+
+# Convenience name for target.
+ExperimentalMemCheck: Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalMemCheck.dir/rule
+
+# fast build rule for target.
+ExperimentalMemCheck/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalMemCheck.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalMemCheck.dir/build
+
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalStart.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalStart.dir/rule
+
+# Convenience name for target.
+ExperimentalStart: Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalStart.dir/rule
+
+# fast build rule for target.
+ExperimentalStart/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalStart.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalStart.dir/build
+
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalSubmit.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalSubmit.dir/rule
+
+# Convenience name for target.
+ExperimentalSubmit: Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalSubmit.dir/rule
+
+# fast build rule for target.
+ExperimentalSubmit/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalSubmit.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalSubmit.dir/build
+
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalTest.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalTest.dir/rule
+
+# Convenience name for target.
+ExperimentalTest: Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalTest.dir/rule
+
+# fast build rule for target.
+ExperimentalTest/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalTest.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalTest.dir/build
+
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalUpdate.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalUpdate.dir/rule
+
+# Convenience name for target.
+ExperimentalUpdate: Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalUpdate.dir/rule
+
+# fast build rule for target.
+ExperimentalUpdate/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalUpdate.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalUpdate.dir/build
+
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/Nightly.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/Nightly.dir/rule
+
+# Convenience name for target.
+Nightly: Utilities/ITK/Utilities/nifti/CMakeFiles/Nightly.dir/rule
+
+# fast build rule for target.
+Nightly/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/Nightly.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/Nightly.dir/build
+
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyBuild.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyBuild.dir/rule
+
+# Convenience name for target.
+NightlyBuild: Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyBuild.dir/rule
+
+# fast build rule for target.
+NightlyBuild/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyBuild.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyBuild.dir/build
+
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyConfigure.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyConfigure.dir/rule
+
+# Convenience name for target.
+NightlyConfigure: Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyConfigure.dir/rule
+
+# fast build rule for target.
+NightlyConfigure/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyConfigure.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyConfigure.dir/build
+
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyCoverage.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyCoverage.dir/rule
+
+# Convenience name for target.
+NightlyCoverage: Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyCoverage.dir/rule
+
+# fast build rule for target.
+NightlyCoverage/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyCoverage.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyCoverage.dir/build
+
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyMemCheck.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyMemCheck.dir/rule
+
+# Convenience name for target.
+NightlyMemCheck: Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyMemCheck.dir/rule
+
+# fast build rule for target.
+NightlyMemCheck/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyMemCheck.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyMemCheck.dir/build
+
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyMemoryCheck.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyMemoryCheck.dir/rule
+
+# Convenience name for target.
+NightlyMemoryCheck: Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyMemoryCheck.dir/rule
+
+# fast build rule for target.
+NightlyMemoryCheck/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyMemoryCheck.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyMemoryCheck.dir/build
+
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyStart.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyStart.dir/rule
+
+# Convenience name for target.
+NightlyStart: Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyStart.dir/rule
+
+# fast build rule for target.
+NightlyStart/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyStart.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyStart.dir/build
+
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/NightlySubmit.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlySubmit.dir/rule
+
+# Convenience name for target.
+NightlySubmit: Utilities/ITK/Utilities/nifti/CMakeFiles/NightlySubmit.dir/rule
+
+# fast build rule for target.
+NightlySubmit/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/NightlySubmit.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/NightlySubmit.dir/build
+
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyTest.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyTest.dir/rule
+
+# Convenience name for target.
+NightlyTest: Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyTest.dir/rule
+
+# fast build rule for target.
+NightlyTest/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyTest.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyTest.dir/build
+
+# Convenience name for target.
+Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyUpdate.dir/rule:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyUpdate.dir/rule
+
+# Convenience name for target.
+NightlyUpdate: Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyUpdate.dir/rule
+
+# fast build rule for target.
+NightlyUpdate/fast:
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyUpdate.dir/build.make Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyUpdate.dir/build
+
 # Help Target
 help::
 	@echo "The following are some of the valid targets for this Makefile:"
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
+	@echo "... Continuous"
+	@echo "... ContinuousBuild"
+	@echo "... ContinuousConfigure"
+	@echo "... ContinuousCoverage"
+	@echo "... ContinuousMemCheck"
+	@echo "... ContinuousStart"
+	@echo "... ContinuousSubmit"
+	@echo "... ContinuousTest"
+	@echo "... ContinuousUpdate"
+	@echo "... Experimental"
+	@echo "... ExperimentalBuild"
+	@echo "... ExperimentalConfigure"
+	@echo "... ExperimentalCoverage"
+	@echo "... ExperimentalMemCheck"
+	@echo "... ExperimentalStart"
+	@echo "... ExperimentalSubmit"
+	@echo "... ExperimentalTest"
+	@echo "... ExperimentalUpdate"
+	@echo "... Nightly"
+	@echo "... NightlyBuild"
+	@echo "... NightlyConfigure"
+	@echo "... NightlyCoverage"
+	@echo "... NightlyMemCheck"
+	@echo "... NightlyMemoryCheck"
+	@echo "... NightlyStart"
+	@echo "... NightlySubmit"
+	@echo "... NightlyTest"
+	@echo "... NightlyUpdate"
 	@echo "... edit_cache"
 	@echo "... install"
 	@echo "... install/local"
@@ -140,6 +484,7 @@ help::
 	@echo "... package"
 	@echo "... package_source"
 	@echo "... rebuild_cache"
+	@echo "... test"
 
 
 

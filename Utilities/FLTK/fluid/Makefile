@@ -102,6 +102,14 @@ rebuild_cache:
 # Special rule for the target rebuild_cache
 rebuild_cache/fast: rebuild_cache
 
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
+	cd /usr/local/stok/OTB/trunk/OTB/Utilities/FLTK/fluid && /usr/bin/ctest --force-new-ctest-process $(ARGS)
+
+# Special rule for the target test
+test/fast: test
+
 # The main all target
 all: cmake_check_build_system
 	cd /usr/local/stok/OTB/trunk/OTB && $(CMAKE_COMMAND) -E cmake_progress_start /usr/local/stok/OTB/trunk/OTB/CMakeFiles $(CMAKE_ALL_PROGRESS)
@@ -380,6 +388,7 @@ help::
 	@echo "... package"
 	@echo "... package_source"
 	@echo "... rebuild_cache"
+	@echo "... test"
 	@echo "... CodeEditor.o"
 	@echo "... CodeEditor.i"
 	@echo "... CodeEditor.s"
