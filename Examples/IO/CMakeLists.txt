@@ -124,7 +124,6 @@ ADD_TEST(ExtractROITest ${EXE_TESTS}
     0 0 100 100
 )
 
-
 ADD_TEST(DEMToImageGeneratorTest ${EXE_TESTS}
 --compare-image ${TOL}  ${BASELINE}/DEMToImageGenerator.tif
                         ${TEMP}/DEMToImageGenerator.tif
@@ -132,11 +131,11 @@ ADD_TEST(DEMToImageGeneratorTest ${EXE_TESTS}
          ${TEMP}/DEMToImageGenerator.tif
 	 ${TEMP}/pretty_DEMToImageGenerator.png
          6.5
-         44.5
+         45.5
          500
          500
 	 0.002
-	 0.002	
+	 -0.002	
 	  ${INPUTDATA}/DEM_srtm
          )
  
