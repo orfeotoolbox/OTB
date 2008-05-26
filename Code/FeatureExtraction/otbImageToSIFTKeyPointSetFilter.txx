@@ -707,27 +707,31 @@ namespace otb
 			nIndex[0] = static_cast<unsigned int>(vcl_floor(currentScale.GetIndex()[0]+nx+0.5));
 			nIndex[1] = static_cast<unsigned int>(vcl_floor(currentScale.GetIndex()[1]+ny+0.5));
 			
-			lIterNMagnitude.SetIndex(nIndex);
-			lIterNOrientation.SetIndex(nIndex);
-			
-			PixelType lMagnitude = lIterNMagnitude.Get();
-			PixelType lOrientation = lIterNOrientation.Get();
-			
-			unsigned int lHistoIndex = 0;
-			double diffAngle = lOrientation/(2*M_PI)*8 - orientation/45;
-			if (diffAngle>=0)
+			// test : if oriented index is in image
+			if (lIterNMagnitude.GetRegion().IsInside(nIndex))
 			  {
-			    lHistoIndex = static_cast<unsigned int>(diffAngle);
-			  }
-			else
-			  {
-			    lHistoIndex = static_cast<unsigned int>(diffAngle+8);
-			  }
+			    lIterNMagnitude.SetIndex(nIndex);
+			    lIterNOrientation.SetIndex(nIndex);
+			    
+			    PixelType lMagnitude = lIterNMagnitude.Get();
+			    PixelType lOrientation = lIterNOrientation.Get();
+			    
+			    unsigned int lHistoIndex = 0;
+			    double diffAngle = lOrientation/(2*M_PI)*8 - orientation/45;
+			    if (diffAngle>=0)
+			      {
+				lHistoIndex = static_cast<unsigned int>(diffAngle);
+			      }
+			    else
+			      {
+				lHistoIndex = static_cast<unsigned int>(diffAngle+8);
+			      }
+			    
+			    double lWeightMagnitude = vcl_exp(dist2/(2*lSigma*lSigma));
+			    PixelType lHistoEntry = lMagnitude*lWeightMagnitude;
 			
-			double lWeightMagnitude = vcl_exp(dist2/(2*lSigma*lSigma));
-			PixelType lHistoEntry = lMagnitude*lWeightMagnitude;
-			
-			lHistogram[lHDescriptors*4*8+lVDescriptors*8+lHistoIndex] += lHistoEntry;
+			    lHistogram[lHDescriptors*4*8+lVDescriptors*8+lHistoIndex] += lHistoEntry;
+			  }
 		      }
 		  }
 	      }
