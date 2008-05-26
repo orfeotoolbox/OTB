@@ -70,7 +70,8 @@ int main(int argc, char * argv[])
 //  approaches which are possible with the image type over which it is
 //  templated. The class \doxygen{itk}{ImageRegionSplitter} is
 //  templated over the number of dimensions of the image and will
-//  perform the actual image splitting.
+//  perform the actual image splitting. More information on splitter can be
+//  found in section~\ref{sec:Splitters}
 //
 //  Software Guide : EndLatex 
 
@@ -188,8 +189,8 @@ int main(int argc, char * argv[])
 
     while(!it.IsAtEnd())
     {
-    std::cout << it.Get() << std::endl;
-    ++it;
+      std::cout << it.Get() << std::endl;
+      ++it;
     }
 
 // Software Guide : EndCodeSnippet    

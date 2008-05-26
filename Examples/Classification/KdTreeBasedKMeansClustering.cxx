@@ -184,19 +184,19 @@ int main()
   double mean = 100;
   double standardDeviation = 30;
   for ( unsigned int i = 0 ; i < 100 ; ++i )
-    {
+  {
     mv[0] = ( normalGenerator->GetVariate() * standardDeviation ) + mean;
     sample->PushBack( mv );
-    }
+  }
 
   normalGenerator->Initialize( 3024 );
   mean = 200;
   standardDeviation = 30;
   for ( unsigned int i = 0 ; i < 100 ; ++i )
-    {
+  {
     mv[0] = ( normalGenerator->GetVariate() * standardDeviation ) + mean;
     sample->PushBack( mv );
-    }
+  }
   // Software Guide : EndCodeSnippet
 
 
@@ -209,7 +209,7 @@ int main()
 
   // Software Guide : BeginCodeSnippet
   typedef itk::Statistics::WeightedCentroidKdTreeGenerator< SampleType > 
-    TreeGeneratorType;
+      TreeGeneratorType;
   TreeGeneratorType::Pointer treeGenerator = TreeGeneratorType::New();
   
   treeGenerator->SetSample( sample );
@@ -263,10 +263,10 @@ int main()
   EstimatorType::ParametersType estimatedMeans = estimator->GetParameters();
 
   for ( unsigned int i = 0 ; i < 2 ; ++i )
-    {
+  {
     std::cout << "cluster[" << i << "] " << std::endl;
     std::cout << "    estimated mean : " << estimatedMeans[i] << std::endl;
-    }
+  }
   // Software Guide : EndCodeSnippet
 
 
@@ -300,7 +300,7 @@ int main()
 
   // Software Guide : BeginCodeSnippet
   typedef itk::Statistics::EuclideanDistance< MeasurementVectorType > 
-    MembershipFunctionType;
+      MembershipFunctionType;
   typedef itk::MinimumDecisionRule DecisionRuleType;
   DecisionRuleType::Pointer decisionRule = DecisionRuleType::New();
   
@@ -339,15 +339,15 @@ int main()
   MembershipFunctionType::OriginType origin( sample->GetMeasurementVectorSize() );
   int index = 0;
   for ( unsigned int i = 0 ; i < 2 ; i++ ) 
-    {
+  {
     membershipFunctions.push_back( MembershipFunctionType::New() );
     for ( unsigned int j = 0 ; j < sample->GetMeasurementVectorSize(); j++ )
-      {
+    {
       origin[j] = estimatedMeans[index++];
-      }
+    }
     membershipFunctions[i]->SetOrigin( origin );
     classifier->AddMembershipFunction( membershipFunctions[i].GetPointer() );
-    }
+  }
 
   classifier->Update();
   // Software Guide : EndCodeSnippet
@@ -364,12 +364,12 @@ int main()
   ClassifierType::OutputType::ConstIterator iter = membershipSample->Begin();
 
   while ( iter != membershipSample->End() )
-    {
+  {
     std::cout << "measurement vector = " << iter.GetMeasurementVector()
-              << "class label = " << iter.GetClassLabel()
-              << std::endl;
+        << "class label = " << iter.GetClassLabel()
+        << std::endl;
     ++iter;
-    }
+  }
   // Software Guide : EndCodeSnippet
 
   return 0;

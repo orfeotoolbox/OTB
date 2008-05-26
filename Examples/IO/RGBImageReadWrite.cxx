@@ -117,7 +117,7 @@ int main( int argc, char ** argv )
   //  Software Guide : BeginLatex
   //
   //  Finally, execution of the pipeline can be triggered by invoking the
-  //  Update() method in the writer.
+  //  \code{Update()} method in the writer.
   //
   //  Software Guide : EndLatex 
 

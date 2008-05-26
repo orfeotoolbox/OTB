@@ -99,7 +99,7 @@ int main(int argc, char * argv[])
 // Software Guide : BeginLatex
 // The \doxygen{otb}{ImageToSIFTKeyPointSetFilter} is templated over
 // its input image type and the output point set type. Therefore, we
-// start by defining the neede types.
+// start by defining the needed types.
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet  
   typedef otb::Image<RealType,Dimension> ImageType;
@@ -125,7 +125,7 @@ int main(int argc, char * argv[])
 
   
 // Software Guide : BeginLatex
-// We can now instantiate the reader anf the SIFT filter and plug the pipeline.
+// We can now instantiate the reader and the SIFT filter and plug the pipeline.
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet  
   ReaderType::Pointer reader = ReaderType::New();
@@ -145,8 +145,8 @@ int main(int argc, char * argv[])
 // \item the number of octaves, that is, the number of levels of undersampling,
 // \item the number of scales (blurring) per octave,
 // \item the threshold to be applied to each point for the detection
-// on the Difference of Gaussians image,
-// \item the threshold on the responses to consider a point as an adge.
+// on the difference of Gaussians image,
+// \item the threshold on the responses to consider a point as an edge.
 // \end{itemize}  
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet    
@@ -165,10 +165,10 @@ int main(int argc, char * argv[])
   // using different threshold values.
   // \begin{figure}
   // \center
-  // \includegraphics[width=0.20\textwidth]{ROISpot5.eps}
-  // \includegraphics[width=0.20\textwidth]{ROISpot5SIFT0.eps}
-  // \includegraphics[width=0.20\textwidth]{ROISpot5SIFT1.eps}
-  // \includegraphics[width=0.20\textwidth]{ROISpot5SIFT2.eps}
+  // \includegraphics[width=0.22\textwidth]{ROISpot5.eps}
+  // \includegraphics[width=0.22\textwidth]{ROISpot5SIFT0.eps}
+  // \includegraphics[width=0.22\textwidth]{ROISpot5SIFT1.eps}
+  // \includegraphics[width=0.22\textwidth]{ROISpot5SIFT2.eps}
   // \itkcaption[SIFT Application]{Result of applying the
   // \doxygen{otb}{ImageToSIFTKeyPointSetFilter} to a Spot 5
   // image. Left to right: original image and SIFT with thresholds 0,
@@ -180,9 +180,9 @@ int main(int argc, char * argv[])
   // using different threshold values.
   // \begin{figure}
   // \center
-  // \includegraphics[width=0.25\textwidth]{QB_Suburb.eps}
-  // \includegraphics[width=0.25\textwidth]{QB_SuburbSIFT5.eps}
-  // \includegraphics[width=0.25\textwidth]{QB_SuburbSIFT5Rotated10.eps}
+  // \includegraphics[width=0.30\textwidth]{QB_Suburb.eps}
+  // \includegraphics[width=0.30\textwidth]{QB_SuburbSIFT5.eps}
+  // \includegraphics[width=0.30\textwidth]{QB_SuburbSIFT5Rotated10.eps}
   // \itkcaption[SIFT Application]{Result of applying the
   // \doxygen{otb}{ImageToSIFTKeyPointSetFilter} to a high resolution image
   // image. Left to right: original image and SIFT on the original
