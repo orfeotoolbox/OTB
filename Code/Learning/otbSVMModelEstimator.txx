@@ -217,7 +217,7 @@ SVMModelEstimator< InputPixelType, LabelPixelType >
   otbMsgDebugMacro(  << "Processed " << i << " examples" );
 
   if(m_Model->GetKernelGamma() == 0 && m_Model->GetParameters().kernel_type != COMPOSED && m_Model->GetParameters().kernel_type != GENERIC)
-    m_Model->SetKernelGamma(1.0/max_index);
+    m_Model->SetKernelGamma(1.0/static_cast<double>(max_index));
 }
 
 template<class InputPixelType, class LabelPixelType >

@@ -27,8 +27,9 @@
 
 namespace otb
 {
+/*
 //Sous Visual, il n'aime pas l'appel à constructeur .. bizarre !!!
-//#if defined(WIN32) || defined(WIN32CE)
+#if defined(WIN32) || defined(WIN32CE)
 template<class TInputImage, class TTrainingImage>
 SVMImageModelEstimator<TInputImage, TTrainingImage>
 ::SVMImageModelEstimator()
@@ -52,15 +53,19 @@ SVMImageModelEstimator<TInputImage, TTrainingImage>
 	this->m_Model->DoShrinking(1);
 	this->m_Model->DoProbabilityEstimates(true);
 }
-/*#else
+#else
 template<class TInputImage, class TTrainingImage>
 SVMImageModelEstimator<TInputImage, TTrainingImage>
 ::SVMImageModelEstimator():  SVMModelEstimator<ITK_TYPENAME TInputImage::PixelType::ComponentType, ITK_TYPENAME TTrainingImage::PixelType >::SVMModelEstimator()
-
 {
 }
 #endif
 */
+template<class TInputImage, class TTrainingImage>
+SVMImageModelEstimator<TInputImage, TTrainingImage>
+::SVMImageModelEstimator()
+{
+}
 
 template<class TInputImage, 
          class TTrainingImage>
