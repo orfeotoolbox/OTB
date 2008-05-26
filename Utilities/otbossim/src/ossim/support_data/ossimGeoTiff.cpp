@@ -112,12 +112,12 @@ ossimGeoTiff::ossimGeoTiff(const ossimFilename& file, ossim_uint32 entryIdx)
       {
          ossimNotify(ossimNotifyLevel_DEBUG)
             << "DEBUG ossimGeoTiff::ossimGeoTiff: "
-            << "Unable to reade tags."
+            << "Unable to read tags."
             << std::endl;
       }
       ossimNotify(ossimNotifyLevel_FATAL)
          << "FATAL ossimGeoTiff::ossimGeoTiff: "
-         << "Unable to reade tags."
+         << "Unable to read tags."
          << std::endl;
    }
    if (traceDebug())
