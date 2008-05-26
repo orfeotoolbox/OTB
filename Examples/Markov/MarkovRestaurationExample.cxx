@@ -33,10 +33,12 @@
 
 // Software Guide : BeginLatex
 //
+// The Markov Random Field framework and be used to apply an edge preserving 
+// filtering, thus playing a role of restauration.
 //
 // This example applies the \doxygen{otb}{MarkovRandomFieldFilter} for
-// image restauration. The structure of the example is similar to the first example
-// ones. The original image is assumed to be coded in one byte, thus 256 states
+// image restauration. The structure of the example is similar to the other MRF example.
+// The original image is assumed to be coded in one byte, thus 256 states
 // are possible for each pixel. The only other modifications reside in the energy 
 // function chosen for the fidelity and for the regularization.
 //
@@ -88,13 +90,20 @@ int main(int argc, char* argv[] )
   }
   
   
+ //  Software Guide : BeginLatex
+  //
+  //  We declare the usual types:
+  //
+  //  Software Guide : EndLatex  
+  
+   // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
   
   typedef double InternalPixelType;
   typedef unsigned char LabelledPixelType;
   typedef otb::Image<InternalPixelType, Dimension>  InputImageType;
   typedef otb::Image<LabelledPixelType, Dimension>    LabelledImageType;
-
+  // Software Guide : EndCodeSnippet
 
   
   //  Software Guide : BeginLatex
@@ -104,17 +113,13 @@ int main(int argc, char* argv[] )
   //
   //  Software Guide : EndLatex 
 
-
-  typedef otb::ImageFileReader< InputImageType >  ReaderType;
   // Software Guide : BeginCodeSnippet
+  typedef otb::ImageFileReader< InputImageType >  ReaderType;
   typedef otb::ImageFileReader< LabelledImageType >  ReaderLabelledType;
-  // Software Guide : EndCodeSnippet
   typedef otb::ImageFileWriter< LabelledImageType >  WriterType;
   
   ReaderType::Pointer reader = ReaderType::New();
-  // Software Guide : BeginCodeSnippet
   ReaderLabelledType::Pointer reader2 = ReaderLabelledType::New();
-  // Software Guide : EndCodeSnippet
   WriterType::Pointer writer = WriterType::New();
   
   const char * inputFilename  = argv[1];
@@ -122,13 +127,18 @@ int main(int argc, char* argv[] )
   const char * outputFilename = argv[3];
   
   reader->SetFileName( inputFilename );
-  // Software Guide : BeginCodeSnippet
   reader2->SetFileName( labelledFilename );
-  // Software Guide : EndCodeSnippet
   writer->SetFileName( outputFilename );
+  // Software Guide : EndCodeSnippet
 
+  
+  //  Software Guide : BeginLatex
+  //
+  // We declare all the necessary types for the MRF:
+  //
+  //  Software Guide : EndLatex 
 
-
+  // Software Guide : BeginCodeSnippet
   typedef otb::MarkovRandomFieldFilter
 	  <InputImageType,LabelledImageType> MarkovRandomFieldFilterType;
 
@@ -153,15 +163,15 @@ int main(int argc, char* argv[] )
 
   // Software Guide : EndCodeSnippet
   
-
+ // Software Guide : BeginCodeSnippet
   MarkovRandomFieldFilterType::Pointer markovFilter = MarkovRandomFieldFilterType::New();
-  // Software Guide : BeginCodeSnippet
+  
   EnergyRegularizationType::Pointer energyRegularization = EnergyRegularizationType::New();
   EnergyFidelityType::Pointer energyFidelity = EnergyFidelityType::New();
-  // Software Guide : EndCodeSnippet
+  
   OptimizerType::Pointer optimizer = OptimizerType::New();
   SamplerType::Pointer sampler = SamplerType::New();
-
+  // Software Guide : EndCodeSnippet
 
    if ((bool)(atoi(argv[7])) == true)
     {
@@ -174,7 +184,7 @@ int main(int argc, char* argv[] )
   // Software Guide : BeginLatex
   //
   // The number of possible states for each pixel is 256 as the image is assumed
-  // to be coded on one byte:
+  // to be coded on one byte and we pass the parameters to the markovFilter.
   //
   // Software Guide : EndLatex
   
@@ -182,8 +192,6 @@ int main(int argc, char* argv[] )
   // Software Guide : BeginCodeSnippet
   
   unsigned int nClass = 256;
-  
-  // Software Guide : EndCodeSnippet
   
   
   optimizer->SetSingleParameter(atof(argv[6]));
@@ -197,7 +205,7 @@ int main(int argc, char* argv[] )
   markovFilter->SetEnergyFidelity(energyFidelity);
   markovFilter->SetOptimizer(optimizer);
   markovFilter->SetSampler(sampler);
-  
+  // Software Guide : EndCodeSnippet
   
   // Software Guide : BeginLatex
   //
@@ -210,6 +218,14 @@ int main(int argc, char* argv[] )
   markovFilter->SetTrainingInput(reader2->GetOutput());
  // Software Guide : EndCodeSnippet
   
+  
+  // Software Guide : BeginLatex
+  //
+  // And we plug the pipeline:
+  //
+  // Software Guide : EndLatex
+  
+  // Software Guide : BeginCodeSnippet
   markovFilter->SetInput(reader->GetOutput());
     
   typedef itk::RescaleIntensityImageFilter
@@ -223,7 +239,7 @@ int main(int argc, char* argv[] )
   writer->SetInput( rescaleFilter->GetOutput() );
   
   writer->Update();  
-  
+  // Software Guide : EndCodeSnippet
   
   // Software Guide : BeginLatex
   //
