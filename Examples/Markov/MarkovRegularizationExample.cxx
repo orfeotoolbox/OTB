@@ -34,7 +34,9 @@
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the \doxygen{otb}{MarkovRandomFieldFilter}. 
-// to regularize a classification obtained previously.
+// to regularize a classification obtained previously by another classifier. Here
+// we will apply the regularization to the output of an SVM classifier presented
+// in \ref{sec:ImageClassification}.
 //
 // The reference image and the starting image are both going to be the original 
 // classification. Both regularization and fidelity energy are defined by Potts model.
