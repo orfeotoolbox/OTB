@@ -7,6 +7,8 @@ Streaming and threading are a complex issue in computing in general. This
 chapter provides the keys to help you understand how it is working so you can
 make the right choices later.
 
+\section{Introduction}
+
 First, you have to be aware that streaming and threading are two different
 things even if they are linked to a certain extent. In OTB:
 
@@ -29,6 +31,8 @@ However, these two properties are not unrelated. Both rely on the filter ability
 to process parts of the image and combine the result, that what the
 ThreadedGenerateData() method can do.
 
+\section{Streaming and threading in OTB}
+
 For OTB, streaming is pipeline related while threading is filter related. If you
 build a pipeline where one filter is not streamable, the whole pipeline is not
 streamable: at one point, you would hold the entire image in memory. Whereas you
@@ -44,7 +48,34 @@ thread and you will notice two calls to the function.
 If you have some particular requirement and want to use only one thread, you can
 call the SetNumberOfThreads() method on each of your filter. 
 
+When you are writing your own filter, you have to follow some rules to make your
+filter streamable and threadable. Some details are provided in sections 
+\ref{sec:StreamingLargeData} and \ref{sec:ThreadedFilterExecution}.
+
+
+\section{Division strategies}
 %  TODO
 % Add details on the splitting strategies...
 %
+
+The division of the image occurs generally at the writer level. Different 
+strategies are available and can be specified explicitly. In OTB, these are 
+referred as {\em splitter}. Several available splitters are:
+
+\begin{itemize}
+\item \doxygen{itk}{ImageRegionSplitter}
+\item \doxygen{itk}{ImageRegionMultidimensionalSplitter}
+\item \doxygen{otb}{ImageRegionNonUniformMultidimensionalSplitter}
+\end{itemize}
+
+You can add your own strategies based on these examples.
+
+To change the splitting strategy of the writer, you can use the following model:
+
+\begin{verbatim}
+  typedef otb::ImageRegionNonUniformMultidimensionalSplitter<3> splitterType;
+  splitterType::Pointer splitter=splitterType::New() ;
+  writer->SetRegionSplitter(splitter);
+\end{verbatim}
+
 
