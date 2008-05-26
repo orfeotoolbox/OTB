@@ -708,7 +708,7 @@ namespace otb
 			nIndex[1] = static_cast<unsigned int>(vcl_floor(currentScale.GetIndex()[1]+ny+0.5));
 			
 			// test : if oriented index is in image
-			if (lIterNMagnitude.GetRegion().IsInside(nIndex))
+			if (lIterNMagnitude.GetImage()->GetLargestPossibleRegion().IsInside(nIndex))
 			  {
 			    lIterNMagnitude.SetIndex(nIndex);
 			    lIterNOrientation.SetIndex(nIndex);
