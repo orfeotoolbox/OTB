@@ -76,9 +76,20 @@ int otbImageToSIFTKeyPointSetFilterOutputImage(int argc, char * argv[])
   typedef otb::Image<RGBPixelType, 2> OutputImageType;
 
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
-  
   OutputImageType::Pointer outputImage = OutputImageType::New();
-  outputImage->SetRegions(reader->GetOutput()->GetLargestPossibleRegion());
+  OutputImageType::RegionType region;
+  
+  OutputImageType::SizeType outputSize;
+  outputSize[0] = reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0];
+  outputSize[1] = reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
+  region.SetSize(outputSize);
+  
+  OutputImageType::IndexType indexStart;
+  indexStart[0] = 0;
+  indexStart[1] = 1;
+  region.SetIndex(indexStart);
+  
+  outputImage->SetRegions(region);
   outputImage->Allocate();
   
   itk::ImageRegionIterator<OutputImageType> iterOutput(outputImage,
@@ -97,6 +108,11 @@ int otbImageToSIFTKeyPointSetFilterOutputImage(int argc, char * argv[])
       
       iterOutput.Set(rgbPixel);
     }
+  
+  WriterType::Pointer writerTmp = WriterType::New();
+  writerTmp->SetFileName(outputImageFilename);
+  writerTmp->SetInput(outputImage);
+  writerTmp->Update();
   
   std::cout << "Copy Input image in Output image" << std::endl;
   
@@ -137,10 +153,6 @@ int otbImageToSIFTKeyPointSetFilterOutputImage(int argc, char * argv[])
 	  
 	  if (outputImage->GetLargestPossibleRegion().IsInside(index+r))
 	    outputImage->SetPixel(index+r,keyPixel);
-	}
-      else
-	{
-	  std::cout << "Pb index " << index << std::endl;
 	}
       ++pIt;
     }
