@@ -122,24 +122,34 @@ int otbImageToSIFTKeyPointSetFilterOutputImage(int argc, char * argv[])
       keyPixel.SetGreen(255);
       keyPixel.SetBlue(0);
       
-      outputImage->SetPixel(index,keyPixel);
-
-      if (static_cast<unsigned int>(index[1]) < static_cast<unsigned int>(size[1]-1) )
-	outputImage->SetPixel(index+t,keyPixel);
-      if (index[1] > 0)
-	outputImage->SetPixel(index+b,keyPixel);
-      if (static_cast<unsigned int>(index[0]) < static_cast<unsigned int>(size[0]-1) )
-	outputImage->SetPixel(index+l,keyPixel);
-      if (index[0] > 0)
-	outputImage->SetPixel(index+r,keyPixel);
+      if (outputImage->GetLargestPossibleRegion().IsInside(index))
+	{
+	  outputImage->SetPixel(index,keyPixel);
+	  
+	  if (outputImage->GetLargestPossibleRegion().IsInside(index+t))
+	    outputImage->SetPixel(index+t,keyPixel);
+	  
+	  if (outputImage->GetLargestPossibleRegion().IsInside(index+b))
+	    outputImage->SetPixel(index+b,keyPixel);
+	  
+	  if (outputImage->GetLargestPossibleRegion().IsInside(index+l))
+	    outputImage->SetPixel(index+l,keyPixel);
+	  
+	  if (outputImage->GetLargestPossibleRegion().IsInside(index+r))
+	    outputImage->SetPixel(index+r,keyPixel);
+	}
+      else
+	{
+	  std::cout << "Pb index " << index << std::endl;
+	}
       ++pIt;
     }
   
   std::cout << "Copy sift key" << std::endl;
   
   WriterType::Pointer writer = WriterType::New();
-  writer->SetInput(outputImage);
   writer->SetFileName(outputImageFilename);
+  writer->SetInput(outputImage);
   writer->Update();
   
   std::cout << "Write image" << std::endl;
