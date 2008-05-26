@@ -33,12 +33,12 @@ ADD_TEST(utOssimKeywordlistToulouseQuickBirdTest ${UTILITIES_TESTS}
         ${TEMP}/utOssimKeywordlistToulouseQuickBird.txt
         )
 
-ADD_TEST(utOssimKeywordlistParisIkonosTest ${UTILITIES_TESTS}
---compare-ascii ${TOL}  ${BASELINE_FILES}/utOssimKeywordlistParisIkonos.txt
-                        ${TEMP}/utOssimKeywordlistParisIkonos.txt
+ADD_TEST(utOssimKeywordlistBlossevilleIkonosTest ${UTILITIES_TESTS}
+--compare-ascii ${TOL}  ${BASELINE_FILES}/utOssimKeywordlistBlossevilleIkonos.txt
+                        ${TEMP}/utOssimKeywordlistBlossevilleIkonos.txt
         ossimKeywordlistTest
-        ${IMAGEDATA}/PARIS/Ikonos/po_79039_pan_0000000.tif
-        ${TEMP}/utOssimKeywordlistParisIkonos.txt
+        ${IMAGEDATA}/IKONOS_BLOSSEVILLE/po_2619900_grn_0000000.tif
+        ${TEMP}/utOssimKeywordlistBlossevilleIkonos.txt
         )
 
 ADD_TEST(utOssimElevManagerTest ${UTILITIES_TESTS}
