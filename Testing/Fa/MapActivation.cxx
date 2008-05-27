@@ -170,13 +170,13 @@ int main(int argc, char* argv[] )
   */
   while (m_iter != m_last)
     {
-      std::cout<<" classlabel : "<<m_iter.GetClassLabel()<<
-	" ClassSize= "<< membershipSample->GetClassSampleSize(m_iter.GetClassLabel()) <<
-	" instance id = " << m_iter.GetInstanceIdentifier() <<
-	" measurement vector = " << m_iter.GetMeasurementVector() <<
-	
-	//" class sample: "<< membershipSample->GetClassSample(m_iter.GetClassLabel())<<
-	std::endl;
+//      std::cout<<" classlabel : "<<m_iter.GetClassLabel()<<
+//	" ClassSize= "<< membershipSample->GetClassSampleSize(m_iter.GetClassLabel()) <<
+//	" instance id = " << m_iter.GetInstanceIdentifier() <<
+//	" measurement vector = " << m_iter.GetMeasurementVector() <<
+//	
+//	" class sample: "<< membershipSample->GetClassSample(m_iter.GetClassLabel())<<
+//	std::endl;
       //count[m_iter.GetClassLabel()]++;
       ++m_iter ;
     }
@@ -191,7 +191,10 @@ int main(int argc, char* argv[] )
   
   for (int i=0 ; i< nbclass ; i++)
     {
-      std::cout<<"classlabel= "<< i << "  classSize= "<< membershipSample->GetClassSampleSize(i) <<std::endl;   
+      if(membershipSample->GetInternalClassLabel(i)!=-1)
+  	{	      
+          std::cout<<"classlabel= "<< i << "  classSize= "<< membershipSample->GetClassSampleSize(i) <<std::endl;   
+	}
     }
   
   
