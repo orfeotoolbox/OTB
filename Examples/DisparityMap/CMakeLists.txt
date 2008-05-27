@@ -24,12 +24,12 @@ ADD_TEST(SimpleDisparityMapEstimationExampleTest ${EXE_TESTS}
  ${BASELINE}/deformationFieldOutput.png
  ${TEMP}/deformationFieldOutput.png
  ${BASELINE}/resampledMovingOutput.png
- ${TEMP}/resampledFixedOutput.png
+ ${TEMP}/resampledMovingOutput.png
  SimpleDisparityMapEstimationExampleTest
- ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
- ${INPUTDATA}/ROI_IKO_PAN_LesHalles_warped.tif
+ ${INPUTDATA}/ROI_IKO_PAN_LesHalles_pos_spacing.tif
+ ${INPUTDATA}/ROI_IKO_PAN_LesHalles_warped_pos_spacing.tif
  ${TEMP}/deformationFieldOutput.png
- ${TEMP}/resampledMovingOutput.png 
+ ${TEMP}/resampledMovingOutput.png
  100 10 15 10 10 250 0.9
 )
 

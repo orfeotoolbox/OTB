@@ -195,6 +195,7 @@ int main (int argc, char* argv[])
 
   typedef otb::DisparityMapEstimationMethod<ImageType,
                ImageType,PointSetType> DMEstimationType;
+  typedef DMEstimationType::SizeType SizeType;
 
   // Software Guide : EndCodeSnippet
 
@@ -236,15 +237,15 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
 
-  ImageType::SizeType fixedSize = 
+  SizeType fixedSize = 
     fixedReader->GetOutput()->GetLargestPossibleRegion().GetSize();
-  unsigned int NumberOfXNodes = (fixedSize[0]-2*atoi(argv[6])-1)
+  unsigned int NumberOfXNodes = (fixedSize[0]-2*atoi(argv[7])-1)
     /atoi(argv[5]);
-  unsigned int NumberOfYNodes = (fixedSize[1]-2*atoi(argv[6])-1)
+  unsigned int NumberOfYNodes = (fixedSize[1]-2*atoi(argv[7])-1)
     /atoi(argv[6]);
 
   ImageType::IndexType firstNodeIndex;
-  firstNodeIndex[0] = atoi(argv[7]);
+  firstNodeIndex[0] = atoi(argv[7]); 
   firstNodeIndex[1] = atoi(argv[7]);
   
   PointSetType::Pointer  nodes = PointSetType::New();
@@ -315,6 +316,13 @@ int main (int argc, char* argv[])
   dmestimator->SetOptimizer(optimizer);
   dmestimator->SetInterpolator(interpolator);
   dmestimator->SetMetric(metric);
+  
+  SizeType windowSize, explorationSize;
+  explorationSize.Fill(atoi(argv[7]));
+  windowSize.Fill(atoi(argv[8]));
+		
+  dmestimator->SetWinSize(windowSize);
+  dmestimator->SetExploSize(explorationSize);
   
   // Software Guide : EndCodeSnippet
   
@@ -483,6 +491,8 @@ int main (int argc, char* argv[])
 
   warper->SetInput(movingReader->GetOutput());
   warper->SetDeformationField(generator->GetOutput());
+  warper->SetOutputOrigin(fixedReader->GetOutput()->GetOrigin());
+  warper->SetOutputSpacing(fixedReader->GetOutput()->GetSpacing());
 
   // Software Guide : EndCodeSnippet
 

@@ -107,6 +107,7 @@ PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
       p[1]=it.Value()[1];
       if(vcl_abs(this->GetPointSet()->GetPointData()->GetElement(j)[0])>=m_MetricThreshold)
 	{
+
 	  distanceVector.push_back(EuclideanDistance(index,p));
 	  sortVector.push_back(i);
 	  indexVector.push_back(j);
@@ -114,10 +115,9 @@ PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
 	}
       ++j;
     }
-
   
   ComparisonFunctorType comp;
-  comp.SetDistanceVector(distanceVector);
+  comp.SetDistanceVector(distanceVector); 
   sort(sortVector.begin(),sortVector.end(),comp);
   
   // building output vector
