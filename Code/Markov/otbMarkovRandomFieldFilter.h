@@ -41,7 +41,40 @@
 
 namespace otb
 {
-
+  /**
+   * \class MarkovRandomFieldFilter
+   * \brief This is the class to use the Markov Random Field framework in OTB.
+   * 
+   * This filter apply a Markov Random Field to an input image. Several
+   * components need to be specify:
+   * 
+   * - Fidelity energy (class derived from otb::MRFEnergy): the energy to make 
+   * sure that the output image is close enough to the reference.
+   * - Regularization energy (class derived from otb::MRFEnergy): the energy to
+   * make sure that neighborhood pixels have similar values.
+   * - Sampler (class derived from otb::MRFSampler): the strategy to propose 
+   * variations for each pixel.
+   * - Optimizer (class derived from otb::MRFOptimizer): the strategy to accept
+   * or reject the proposed modification.
+   * 
+   * An example of usage for this filter is:
+   * 
+   * \code
+   *   markovFilter->SetNumberOfClasses(4);  
+   *   markovFilter->SetMaximumNumberOfIterations(30);
+   *   markovFilter->SetErrorTolerance(0.0);
+   *   markovFilter->SetLambda(1.0);
+   *   markovFilter->SetNeighborhoodRadius(1);
+   *   
+   *   markovFilter->SetEnergyRegularization(energyRegularization);
+   *   markovFilter->SetEnergyFidelity(energyFidelity);
+   *   markovFilter->SetOptimizer(optimizer);
+   *   markovFilter->SetSampler(sampler);
+   * \endcode
+   * 
+   * \ingroup Markov
+   */
+  
 template <class TInputImage, class TClassifiedImage>
 class ITK_EXPORT MarkovRandomFieldFilter : 
 public itk::ImageToImageFilter<TInputImage,TClassifiedImage>

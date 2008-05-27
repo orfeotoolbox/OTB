@@ -29,6 +29,8 @@ namespace otb
    * \brief This is the base class for energy function used in the MRF framework
    *  
    * Derived class must reimplement the GetSingleValue() method.
+   * 
+   * \ingroup Markov
    */
 template< class TInput1, class TInput2 >
 class ITK_EXPORT MRFEnergy : public itk::Object

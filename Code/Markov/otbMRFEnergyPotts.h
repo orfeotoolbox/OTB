@@ -35,6 +35,8 @@ namespace otb
  * - \f$ x_s \f$ the label on site s
  * - \f$ y_s \f$ the value on the reference image
  * - \f$ \sigma^2_{x_s} \f$ the noise variance
+ * 
+ * \ingroup Markov
  */
   
 template< class TInput1, class TInput2>    

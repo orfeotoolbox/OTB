@@ -25,12 +25,14 @@
 namespace otb
 {
 /**
- * \class MRFSamplerRandom
- * \brief This is the base class for sampler methods used in the MRF framework.
- * 
- * This is one sampler to be used int he MRF framework. This sampler select the 
- * value randomly according to a uniform probability.
- * 
+   * \class MRFSamplerRandom
+   * \brief This is the base class for sampler methods used in the MRF framework.
+   * 
+   * This is one sampler to be used int he MRF framework. This sampler select the 
+   * value randomly according to a uniform probability.
+   * 
+   * 
+   * \ingroup Markov
  */
   
 template< class TInput1, class TInput2>    

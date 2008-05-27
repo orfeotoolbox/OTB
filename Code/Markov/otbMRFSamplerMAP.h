@@ -24,12 +24,14 @@
 namespace otb
 {
 /**
- * \class MRFSamplerMAP
- * \brief This is the base class for sampler methods used in the MRF framework.
- * 
- * This is one sampler to be used int he MRF framework. This sampler select the 
- * value which maximizes the apriori probability (minimum energy).
- *
+   * \class MRFSamplerMAP
+   * \brief This is the base class for sampler methods used in the MRF framework.
+   * 
+   * This is one sampler to be used int he MRF framework. This sampler select the 
+   * value which maximizes the apriori probability (minimum energy).
+   *
+   * 
+   * \ingroup Markov
  */
 
 template< class TInput1, class TInput2>    

@@ -25,18 +25,20 @@
 namespace otb
 {
 /**
- * \class MRFSamplerRandomMAP
- * \brief This is the base class for sampler methods used in the MRF framework.
- * 
- * This is one sampler to be used int he MRF framework. This sampler select the 
- * value randomly according to the apriori probability.
- * 
+   * \class MRFSamplerRandomMAP
+   * \brief This is the base class for sampler methods used in the MRF framework.
+   * 
+   * This is one sampler to be used int he MRF framework. This sampler select the 
+   * value randomly according to the apriori probability.
+   * 
  * The probability is defined from the energy as:
- * 
- *  \f[ P(X=x)= \frac{1}{Z} \exp^{-U(x)}  \f]
- * 
- * where \f$ Z = \sum_x \exp^{-U(x)}\f$
- * 
+   * 
+   *  \f[ P(X=x)= \frac{1}{Z} \exp^{-U(x)}  \f]
+   * 
+   * where \f$ Z = \sum_x \exp^{-U(x)}\f$
+   * 
+   * 
+   * \ingroup Markov
  */
   
 template< class TInput1, class TInput2>    

@@ -29,6 +29,8 @@ namespace otb
  * \brief This is the base class for optimizer used in the MRF framework.
  *
  * Derived class must reimplement Compute() method.
+ * 
+ * \ingroup Markov
  */
 
 class ITK_EXPORT MRFOptimizer : public itk::Object

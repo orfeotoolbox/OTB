@@ -37,6 +37,8 @@ namespace otb
    *
    *  \f[ e^{\frac{-\Delta E}{T}} \f]
    * 
+   * 
+   * \ingroup Markov
    */
   
 class ITK_EXPORT MRFOptimizerMetropolis : public MRFOptimizer

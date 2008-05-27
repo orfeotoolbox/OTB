@@ -24,11 +24,13 @@
 namespace otb
 {
 /**
- * \class MRFSampler
- * \brief This is the base class for sampler methods used in the MRF framework.
- *
- * Derived class must reimplement Compute() method.
- *
+   * \class MRFSampler
+   * \brief This is the base class for sampler methods used in the MRF framework.
+   *
+   * Derived class must reimplement Compute() method.
+   *
+   * 
+   * \ingroup Markov
  */
     
 template< class TInput1, class TInput2>    

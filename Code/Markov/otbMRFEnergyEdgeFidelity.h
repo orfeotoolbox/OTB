@@ -35,7 +35,9 @@ namespace otb
  * - \f$ x_s \f$ the label on site s
  * - \f$ x_t \f$ the label on site t, a neighbor of s
  * - \f$ \Phi \f$ an edge preserving function: 
- \f[ \Phi(u) = \frac{u^2}{1+u^2} \f]
+ *     \f[ \Phi(u) = \frac{u^2}{1+u^2} \f]
+ * 
+ * \ingroup Markov
 */
   
 template< class TInput1, class TInput2>    

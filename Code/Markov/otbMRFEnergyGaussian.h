@@ -39,6 +39,8 @@ namespace otb
  * with
  * - \f$ x_s \f$ the label on site s
  * - \f$ y_s \f$ the value on the reference image
+ * 
+ * \ingroup Markov
  */
   
 template< class TInput1, class TInput2>    
