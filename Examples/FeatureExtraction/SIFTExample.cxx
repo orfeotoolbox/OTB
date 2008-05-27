@@ -204,9 +204,20 @@ int main(int argc, char * argv[])
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
   
   OutputImageType::Pointer outputImage = OutputImageType::New();
-  outputImage->SetRegions(reader->GetOutput()->GetLargestPossibleRegion());
+  
+  OutputImageType::RegionType region;
+  OutputImageType::SizeType outputSize;
+  outputSize = reader->GetOutput()->GetLargestPossibleRegion().GetSize();
+  region.SetSize(outputSize);
+  
+  OutputImageType::IndexType indexStart;
+  indexStart[0] = 0;
+  indexStart[1] = 0;
+  region.SetIndex(indexStart);
+  
+  outputImage->SetRegions(region);
   outputImage->Allocate();
-
+  
   itk::ImageRegionIterator<OutputImageType> iterOutput(outputImage,
 						       reader->GetOutput()->GetLargestPossibleRegion());
 
@@ -255,24 +266,23 @@ int main(int argc, char * argv[])
 	&& static_cast<unsigned int>(index[0]) >=
 	static_cast<unsigned int>(0))
 	{
-	outputImage->SetPixel(index,keyPixel);
+	  outputImage->SetPixel(index,keyPixel);
       
-       if (static_cast<unsigned int>(index[1]) < static_cast<unsigned int>(size[1]-1) )
- 	outputImage->SetPixel(index+t,keyPixel);
-       if (index[1] > 0)
- 	outputImage->SetPixel(index+b,keyPixel);
-
-
-        if (static_cast<unsigned int>(index[0]) < static_cast<unsigned int>(size[0]-1) )
-	 
- 	 outputImage->SetPixel(index+r,keyPixel);
-	 
-        if (index[0] > 0)
-  	outputImage->SetPixel(index+l,keyPixel);
-      }
-       ++pIt;
+	  if (static_cast<unsigned int>(index[1]) < static_cast<unsigned int>(size[1]-1) )
+	    outputImage->SetPixel(index+t,keyPixel);
+	  
+	  if (index[1] > 0)
+	    outputImage->SetPixel(index+b,keyPixel);
+	  
+	  if (static_cast<unsigned int>(index[0]) < static_cast<unsigned int>(size[0]-1) )
+	    outputImage->SetPixel(index+r,keyPixel);
+	  
+	  if (index[0] > 0)
+	    outputImage->SetPixel(index+l,keyPixel);
+	}
+      ++pIt;
     }
-
+  
   std::ofstream outfile(outfname);
   outfile << filter;
   outfile.close();
