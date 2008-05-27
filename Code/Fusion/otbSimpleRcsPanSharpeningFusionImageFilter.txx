@@ -36,9 +36,10 @@ namespace otb
     m_DivideFilter = DivideFilterType::New();
     m_MultiplyFilter = MultiplyFilterType::New();
     
-    m_Radius[0]=3;
-    m_Radius[1]=3;
-    m_ConvolutionFilter->SetRadius(m_Radius);
+     
+    m_Radius.Fill(1);
+    m_Filter.SetSize(3*3);
+    m_Filter.Fill(1);
     
     m_DivideFilter->SetInput2(m_ConvolutionFilter->GetOutput());
     m_MultiplyFilter->SetInput1(m_DivideFilter->GetOutput());
@@ -113,6 +114,8 @@ namespace otb
         
         m_ConvolutionFilter->SetInput( this->GetPanInput() );
         m_ConvolutionFilter->SetRadius( this->m_Radius); 
+        m_ConvolutionFilter->SetFilter( this->m_Filter);
+        
         m_DivideFilter->SetInput1(this->GetXsInput());
 
         m_MultiplyFilter->SetInput2(this->GetPanInput());

@@ -58,7 +58,19 @@ int otbSimpleRcsPanSharpeningFusionImageFilter( int argc, char * argv[] )
       radius[0]=3;
       radius[1]=3;
       itk::Array< double > filterCoeffs;
-      filterCoeffs.SetSize(radius[0]*radius[1]);
+      filterCoeffs.SetSize((2*radius[0]+1)*(2*radius[1]+1));
+      
+//       double filterTmp[] = {
+//         0.00390625, 0.0078125, 0.0117188, 0.015625, 0.0117188, 0.0078125, 0.00390625,
+//         0.0078125, 0.015625, 0.0234375, 0.03125, 0.0234375, 0.015625, 0.0078125,
+//         0.0117188, 0.0234375, 0.0351562, 0.046875, 0.0351562, 0.0234375, 0.0117188,
+//         0.015625, 0.03125, 0.046875, 0.0625, 0.046875, 0.03125, 0.015625,
+//         0.0117188, 0.0234375, 0.0351562, 0.046875, 0.0351562, 0.0234375, 0.0117188,
+//         0.0078125, 0.015625, 0.0234375, 0.03125, 0.0234375, 0.015625, 0.0078125,
+//         0.00390625, 0.0078125, 0.0117188, 0.015625, 0.0117188, 0.0078125, 0.00390625  };
+//     
+//       filterCoeffs.SetData(filterTmp);
+
       filterCoeffs.Fill(1);
       
       filter->SetXsInput(multiSpectReader->GetOutput());
