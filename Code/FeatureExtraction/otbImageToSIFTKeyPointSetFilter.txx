@@ -583,7 +583,7 @@ namespace otb
     regionSize.Fill(3);
     region.SetSize(regionSize);
     indexStart[0] = currentScale.GetIndex()[0]-1;
-    indexStart[1] = currentScale.GetIndex()[0]-1;
+    indexStart[1] = currentScale.GetIndex()[1]-1;
     region.SetIndex(indexStart);
     
     region.Crop(m_OrientationList->GetNthElement(scale)->GetLargestPossibleRegion());
@@ -601,6 +601,7 @@ namespace otb
     while (!lIterOrientation.IsAtEnd() &&
 	   !lIterMagn.IsAtEnd())
       {
+	
 	PixelType lOrientation = lIterOrientation.Get();
 	PixelType lMagnitude = lIterMagn.Get();
 	
@@ -627,23 +628,22 @@ namespace otb
     
     for(i=0;i<36;++i)
       {
-     	sum = 0;
-     	for(j=i-36;j<i;++j)
-     	  {
-     	    sum+=lHistogram[i-j-1]*m_HistogramGaussianWeights[j+36];
+	sum = 0;
+	for(j=i-36;j<i;++j)
+	  {
+	    sum+=lHistogram[i-j-1]*m_HistogramGaussianWeights[j+36];
 	    //std::cout << "Histo Ori index: " << i-j << " histo gauss: " << j+36 << std::endl;
-     	  }
-     	if(sum>max)
-     	  {
-     	    max=sum;
-     	    maxIndex = i;
+	      }
+	if(sum>max)
+	  {
+	    max=sum;
+	    maxIndex = i;
 	  }
       }
     
     return static_cast<PixelType>(maxIndex*10);
   }
   
-
   /**
    * Compute key point descriptor
    */
