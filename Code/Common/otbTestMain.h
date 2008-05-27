@@ -495,6 +495,51 @@ bool isNumeric(std::string str)
 	return result;
 }
 
+bool isScientificNumeric(std::string str)
+{
+
+  int number(0);
+  number = str[0];
+  bool pointDetected(false);
+  bool eDetected(false);
+  bool signDetected(false);
+  
+  // Analyse first character (+, -, 0...9)
+  unsigned int cpt(0);
+  if( (str[0] != '+') && (str[0] != '-') && (!isNumber(number)) ) return false;
+  if( (str[0] == '+') || (str[0] == '-') ) { cpt++; signDetected = true; }
+  
+  while( cpt < str.size() )
+  {
+        if ( str[cpt] == '.' )
+        {
+                // Exit false if two points or if e already detected
+                if( ( pointDetected == true ) || ( eDetected == true ) ) return false;
+                pointDetected = true;
+        }
+        else if ( ( str[cpt] == 'e' )||( str[cpt] == 'E' ) )
+        {
+                // Exit false if two e 
+                if( eDetected == true ) return false;
+                eDetected = true;
+        }
+        else if ( ( str[cpt] == '-' )||( str[cpt] == '+' ) )
+        {
+                // Exit false if already sign with no E detected 
+                if ( ( signDetected == true ) && ( eDetected == false ) )return false;
+                signDetected = true;
+        }
+        else 
+        {
+                number = str[cpt];
+                if (!isNumber(number)) return false;
+        }
+        cpt++;  
+  }  
+
+  return true;
+}
+
 bool isHexaPointerAddress(std::string str)
 {
   unsigned int size(0);
@@ -626,6 +671,34 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 			unsigned int i=0;
 			if(!isHexaPointerAddress(strRef))
 			  {
+			    //Analyse if strRef contains scientific value (ex: "-142.124e-012")
+                            if(isScientificNumeric(strRef))
+                            {
+                                if(!isScientificNumeric(strTest))
+                                {
+					if( reportErrors )
+					{
+						fluxfilediff << "Diff at line " << numLine << " : compare numeric value with no numeric value ("<<strRef 
+						<< strRef << " != " << strTest <<")"<< std::endl ;
+                                                nblinediff++;
+					}
+					nbdiff++;
+                                
+                                }
+		                else if (vcl_abs(atof(strRef.c_str())-atof(strTest.c_str())) > epsilon)
+	                        {
+					if( reportErrors )
+					{
+						fluxfilediff << "Diff at line " << numLine << " : vcl_abs ( (" 
+						<< strRef << ") - (" << strTest
+						<< ") ) > " << epsilon << std::endl ;
+                                                nblinediff++;
+					}
+					nbdiff++;
+                                }
+                            }
+                            else
+			    {
 			    while (i < strRef.size())
 			      {
 				charTmpRef=strRef[i];
@@ -738,7 +811,8 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 				      }
 				  }
 			      }
-			  }
+                            } // else
+			  } // if(!isHexaPointerAddress(strRef))
 			else
 			  {
 			    	if( reportErrors )
