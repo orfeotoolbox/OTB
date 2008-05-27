@@ -103,7 +103,7 @@ VectorImageTo3DScalarImageFilter<TInputImage, TOutputImage>
     }
   inputRegion.SetSize(size);
   inputRegion.SetIndex(index);
-  
+ 
   InputIteratorType inIt(inputPtr,inputRegion);
   
   OutputIteratorType outIt(outputPtr,outputRegionForThread);
@@ -115,19 +115,28 @@ VectorImageTo3DScalarImageFilter<TInputImage, TOutputImage>
 
   while(!outIt.IsAtEnd())
     {
-      if(outIt.IsAtEndOfLine())
-	{
-	  outIt.NextLine();
-	}
-
-      if(inIt.IsAtEnd())
-	{
-	  inIt.GoToBegin();
-	  outIt.NextSlice();
-	}
       outIt.Set(static_cast<OutputPixelType>(inIt.Get()[outIt.GetIndex()[InputImageType::ImageDimension]]));
+      
+      if(inIt.IsAtEnd())
+      {
+ 	inIt.GoToBegin();
+      }
+      else
+      {
       ++inIt;
-      ++outIt;  
+      }
+      if(outIt.IsAtEndOfLine())
+      {
+ 	outIt.NextLine();
+      }
+      else if(outIt.IsAtEndOfSlice())
+      {
+        outIt.NextSlice();
+      }
+      else
+      {
+      	++outIt;  
+      }
     }
 }
 /**
