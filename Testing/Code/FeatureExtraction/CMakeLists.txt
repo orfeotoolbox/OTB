@@ -838,6 +838,16 @@ ADD_TEST(feTvImageToSIFTKeyPointSetFilterSquareRotated2OutputAscii ${FEATUREEXTR
 		1 3 0.215 10.0
 )
 
+ADD_TEST(feTvImageToSIFTKeyPointSetFilterQB_SuburbOutputAscii ${FEATUREEXTRACTION_TESTS9}
+--compare-ascii ${EPS}
+		${BASELINE_FILES}/feTvImageToSIFTKeyPointSetFilterQB_SuburbOutputAscii.txt
+		${TEMP}/feTvImageToSIFTKeyPointSetFilterQB_SuburbOutputAscii.txt
+         otbImageToSIFTKeyPointSetFilterOutputAscii
+		${INPUTDATA}/QB_Suburb.png
+		${TEMP}/feTvImageToSIFTKeyPointSetFilterQB_SuburbOutputAscii.txt
+		2 3 5.0 0.0
+)
+
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
 otbAlignImageToPath.cxx
