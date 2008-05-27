@@ -27,8 +27,8 @@
 #define __otbMath_h
 
 // For Windows MSVC, defines these macros. 
-#ifndef _USE_MATH_DEFINES
-#define _USE_MATH_DEFINES
+#ifdef _USE_MATH_DEFINES
+#define _MATH_DEFINES_DEFINED
 #endif
 
 #include "vcl_cmath.h"
@@ -122,7 +122,6 @@
 #endif
 
 #endif
-
 
 #endif //end of __otbMath_h
 
