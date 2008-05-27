@@ -116,14 +116,10 @@ VectorImageTo3DScalarImageFilter<TInputImage, TOutputImage>
   while(!outIt.IsAtEnd())
     {
       outIt.Set(static_cast<OutputPixelType>(inIt.Get()[outIt.GetIndex()[InputImageType::ImageDimension]]));
-      
+      ++inIt; 
       if(inIt.IsAtEnd())
       {
  	inIt.GoToBegin();
-      }
-      else
-      {
-      ++inIt;
       }
       if(outIt.IsAtEndOfLine())
       {
