@@ -86,7 +86,7 @@ int otbImageToSIFTKeyPointSetFilterOutputImage(int argc, char * argv[])
   
   OutputImageType::IndexType indexStart;
   indexStart[0] = 0;
-  indexStart[1] = 1;
+  indexStart[1] = 0;
   region.SetIndex(indexStart);
   
   outputImage->SetRegions(region);
