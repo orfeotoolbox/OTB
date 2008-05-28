@@ -37,7 +37,9 @@ namespace otb {
    * 
    * \f[ \frac{XS}{\mathrm{Filtered}(PAN)} PAN  \f]
    *
-   * 
+   * \ingroup Streamed
+   * \ingroup Multithreaded
+   * \ingroup Fusion
    * 
    **/
 

@@ -135,6 +135,9 @@ namespace otb
    * \ingroup Streamed
    * \ingroup Multithreaded
    * \ingroup MathematicalStatisticsImageFilters
+   * 
+   * \ingroup Fusion
+   * 
    */
 
 
