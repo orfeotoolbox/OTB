@@ -69,7 +69,8 @@ ImageFileWriter<TInputImage,toto>
 
   // Make sure that we can write the file given the name
   //
-  if ( this->GetFileName() == "" )
+  std::string strFileName(this->GetFileName()); // this->GetFileName() return a const char *
+  if ( strFileName == "" )
     {
     itkExceptionMacro(<<"No filename was specified");
     }
