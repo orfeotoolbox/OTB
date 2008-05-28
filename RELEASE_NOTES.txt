@@ -1,3 +1,62 @@
+OTB-v.2.2.0 - Changes since version 1.6.0 (2008/XX/XX)
+-----------------------------------------
+
+
+* BasicFilters: 
+  
+	Added classes for data importation:
+	- otb::ImportImageFilter
+	- otb::ImportVectorImageFilter
+	Added classes for interpolation:
+	- otb::WindowedSincInterpolateImageBlackmanFunction
+	- otb::WindowedSincInterpolateImageCosineFunction
+	- otb::WindowedSincInterpolateImageGaussianFunction
+	- otb::WindowedSincInterpolateImageHammingFunction
+	- otb::WindowedSincInterpolateImageLanczosFunction
+	- otb::WindowedSincInterpolateImageWelchFunction
+	- otb::ProlateInterpolateImageFunction
+
+* Radiometry:
+	
+	- Bug fixed on otb::DEMCarcteristicExtractor
+
+*IO:
+
+	- Add the complex image manipulation
+	Added classes for vector data use:
+	- otb::VectorDataFileReader
+	- otb::VectorDataFileWriter
+	- otb::VectorDataIOFactory
+	- otb::VectorDataSource
+	
+	
+* Common:	
+	
+	Added classes to create vector datas:
+	- otb::Polygon
+
+* Learning:
+
+	- Creation otb::SVMKernels containing a list a usefull kernel for SVM
+	- Correction in Kohonen	map classes
+
+*Utilities:
+ 
+	- Updated the internal version of ITK to 3.6.0
+	- Corrections on OSSIM integration 
+	- SVM lib:creation of otb::ComposedKernelFunctor allowing composed kernels
+	- Add of SAR model in OSSIM
+	Libraries added:
+	- Galib
+	- Expat
+	- KML
+
+*Applications:
+	- otbConvertGeoToCartoPoint and otbConvertCartoToGeoPoint map precision enhancement.
+	- Add of histogram manipulation functionality in otbImageViewer
+	- Add of shape file functionality in ICD application
+
+
 OTB-v.2.0.0 - Changes since version 1.6.0 (2007/12/14)
 -----------------------------------------
 
