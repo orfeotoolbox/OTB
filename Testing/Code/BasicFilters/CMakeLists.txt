@@ -534,6 +534,9 @@ ADD_TEST(bfTvProlateInterpolateImageFunction ${BASICFILTERS_TESTS6}
         otbProlateInterpolateImageFunction
 		${INPUTDATA}/poupees.tif
 		${TEMP}/bfProlateInterpolateImageFunctionOutput.txt
+		${TEMP}/bfProlateInterpolateImageFunctionCosOutput.tif
+		${TEMP}/bfProlateInterpolateImageFunctionITKCosOutput.tif
+		${TEMP}/bfProlateInterpolateImageFunctionProOutput.tif
 		3 # radius
 		0.5 0.5
 		127.33 44.9
