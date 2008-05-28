@@ -58,11 +58,7 @@ int otbAlternateViewerTest(int argc, char* argv[])
   viewer->Show();
   
   Fl::check();
-  // suppres child, without delete memory.
-  // delete memory is ITK respoability, since WidgetType::New()
-  window.remove(widget.GetPointer());
-  
-//   Fl::run();
+  //   Fl::run();
 
   return EXIT_SUCCESS;
 }
