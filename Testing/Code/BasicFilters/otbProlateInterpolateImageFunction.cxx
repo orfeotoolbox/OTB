@@ -35,13 +35,16 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
 {  
   const char * infname = argv[1];
   const char * outfname = argv[2];
+  const char * cosfname = argv[3];
+  const char * itkcosfname = argv[4];
+  const char * profname = argv[5];
 
   typedef otb::Image<double,2>                             ImageType;
   typedef otb::ProlateInterpolateImageFunction<ImageType>  InterpolatorType;
   typedef InterpolatorType::ContinuousIndexType            ContinuousIndexType;
   typedef otb::ImageFileReader<ImageType>                  ReaderType;
 
-   unsigned int i = 4;
+   unsigned int i = 7;
 
    std::vector<ContinuousIndexType> indicesList;
   while(i<static_cast<unsigned int>(argc) && (i+1)<static_cast<unsigned int>(argc))
@@ -53,13 +56,14 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
 
       i+=2;
     }
+
   // Instantiating object
   InterpolatorType::Pointer prolate = InterpolatorType::New();
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
   reader->Update();
   prolate->SetInputImage(reader->GetOutput());
-  prolate->SetRadius(atoi(argv[3]));
+  prolate->SetRadius(atoi(argv[6]));
 
   std::ofstream file;
   file.open(outfname);
@@ -82,7 +86,7 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
   InterpolatorType::Pointer        pro     = InterpolatorType::New();
   // Resampler connected to input image
   proresampler->SetInput(reader->GetOutput());
-  pro->SetRadius(atoi(argv[3]));
+  pro->SetRadius(atoi(argv[6]));
   proresampler->SetInterpolator(pro);
  StreamingResampleImageFilterType::SizeType size;
   size[0]=512;
@@ -93,7 +97,7 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
   // Result of resampler is written
   prowriter->SetInput(proresampler->GetOutput());
   //prowriter->SetNumberOfStreamDivisions(1);
- prowriter->SetFileName("proresample.tif");
+ prowriter->SetFileName(profname);
  prowriter->Update();
  
  typedef otb::WindowedSincInterpolateImageCosineFunction<ImageType>          CosInterpolatorType;
@@ -111,14 +115,14 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
  itkcosresampler->SetSize(size);
  itkcosresampler->SetOutputSpacing(tutu);
  cosresampler->SetInput(reader->GetOutput());
- cos->SetRadius(atoi(argv[3]));
+ cos->SetRadius(atoi(argv[6]));
  cosresampler->SetInterpolator(cos);
  itkcosresampler->SetInput(reader->GetOutput());
  itkcosresampler->SetInterpolator(itkcos);
  coswriter->SetInput(cosresampler->GetOutput());
- coswriter->SetFileName("cosresample.tif");
+ coswriter->SetFileName(cosfname);
  itkcoswriter->SetInput(itkcosresampler->GetOutput());
- itkcoswriter->SetFileName("itkcosresample.tif");
+ itkcoswriter->SetFileName(itkcosfname);
  coswriter->Update();
  itkcoswriter->Update();
   /*
