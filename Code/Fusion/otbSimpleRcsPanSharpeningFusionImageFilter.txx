@@ -37,8 +37,8 @@ namespace otb
     m_MultiplyFilter = MultiplyFilterType::New();
     
      
-    m_Radius.Fill(1);
-    m_Filter.SetSize(3*3);
+    m_Radius.Fill(3);
+    m_Filter.SetSize(7*7);
     m_Filter.Fill(1);
     
     m_DivideFilter->SetInput2(m_ConvolutionFilter->GetOutput());
