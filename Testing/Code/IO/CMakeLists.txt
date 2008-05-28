@@ -1336,20 +1336,6 @@ ADD_TEST(ioTuOGRDriverTest ${IO_TESTS14}
 				foo
 				)
 				
-#ADD_TEST(ioTuShapeFileDataReaderTest ${IO_TESTS14}
-#				otbShapeFileDataReaderTest
-#				${IMAGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_PRODUCT_SHAPE.shp
-#				foo
-#				)
-
-#ADD_TEST(ioTuShapeFileDataWriterTest ${IO_TESTS14}
-#				otbShapeFileDataWriterTest
-#				${IMAGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_PRODUCT_SHAPE.shp
-#				foo
-#				)
-
-        
-
 ADD_TEST(ioTvGDALDriverDoubleWritingTest ${IO_TESTS14}
 		--compare-n-images ${TOL} 4
 			${INPUTDATA}/poupees.tif
@@ -1521,8 +1507,6 @@ otbOssimElevManagerTest.cxx
 
 SET(BasicIO_SRCS14
 otbOGRDriverTest.cxx
-#otbShapeFileDataReaderTest.cxx
-#otbShapeFileDataWriterTest.cxx
 otbGDALDriverDoubleWritingTest.cxx
 otbReadingComplexDataIntoComplexImageTest.cxx
 otbWritingComplexDataWithComplexImageTest.cxx

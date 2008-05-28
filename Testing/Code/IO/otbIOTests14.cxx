@@ -29,8 +29,6 @@
 void RegisterTests()
 {
 REGISTER_TEST(otbOGRDriverTest);
-//REGISTER_TEST(otbShapeFileDataReaderTest);
-//REGISTER_TEST(otbShapeFileDataWriterTest);
 REGISTER_TEST(otbGDALDriverDoubleWritingTest);
 REGISTER_TEST(otbReadingComplexDataIntoComplexImageTest);
 REGISTER_TEST(otbWritingComplexDataWithComplexImageTest);
