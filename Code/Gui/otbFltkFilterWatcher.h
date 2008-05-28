@@ -35,7 +35,7 @@ namespace otb
  *         on pipeline filtering execution
  *
  */
-  class ITK_EXPORT FltkFilterWatcher : public otb::FilterWatcherBase
+  class ITK_EXPORT FltkFilterWatcher : public FilterWatcherBase
 {
 public:
   /** Classes that need access to filter's private data */
