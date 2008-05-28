@@ -173,8 +173,8 @@ int main( int argc, char *argv[] )
 
       it.Set(static_cast<OutputPixelType>(label));
 
-      //std::cout << static_cast<OutputPixelType>(label) << " -- ";
-      //std::cout << it.Get() << std::endl;
+      //std::cout << (int)static_cast<OutputPixelType>(label) << " -- ";
+      //std::cout << (int)it.Get() << std::endl;
       ++it;
       
       }
