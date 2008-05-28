@@ -560,12 +560,6 @@ StreamingImageFileWriter<TInputImage>
     m_ImageIO->SetPixelTypeInfo(typeid(ScalarType));  
     }
 
-
-  std::cout <<" InputImage GetImageDimensions : "<<input->GetImageDimension()<<std::endl;
-  std::cout <<"     - GetRequestedRegion : "<<input->GetRequestedRegion() << std::endl;
-  std::cout <<"     - GetLargestPossibleRegion : "<<input->GetLargestPossibleRegion() << std::endl;
-  std::cout <<"     - GetBufferedRegion : "<<input->GetBufferedRegion()<<std::endl;
-
   // Setup the image IO for writing.
   //
   //okay, now extract the data as a raw buffer pointer
