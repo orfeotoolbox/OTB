@@ -66,6 +66,23 @@ SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_
 #-----------------------------------------------------------------------------
 # FIND EXTERNAL LIBRAIRIES USE
 
+#-------------------------------
+# ITK Library
+#-------------------------------
+
+OPTION(OTB_USE_EXTERNAL_ITK "Use an outside build of ITK." OFF)
+IF(OTB_USE_EXTERNAL_ITK)
+# Commented for release 2.2.0
+#  MESSAGE(STATUS "WARNING: Due to conflicting libraries, jpeg2000 support is disabled when using external ITK.")
+  FIND_PACKAGE(ITK)
+  IF(ITK_FOUND)
+        INCLUDE(${ITK_USE_FILE})
+  ELSE(ITK_FOUND)
+        MESSAGE(FATAL_ERROR
+                  "Cannot build OTB project without ITK.  Please set ITK_DIR or set OTB_USE_EXTERNAL_ITK OFF to use INTERNAL ITK set on OTB/Utilities repository.")
+  ENDIF(ITK_FOUND)
+ENDIF(OTB_USE_EXTERNAL_ITK)
+
 #-----------------------------------------------------------------------------
 # Option for generate Visu tools !!!
 OPTION(OTB_USE_VISU_GUI "Generate Gui/Visu tools directory. If ON, find OpenGL and FLTK packages." ON)
@@ -218,22 +235,6 @@ LINK_DIRECTORIES( ${GDAL_LIBRARY_DIRS} )
 #       ENDIF(EXPAT_FOUND)
 
 
-#-------------------------------
-# ITK Library
-#-------------------------------
-
-OPTION(OTB_USE_EXTERNAL_ITK "Use an outside build of ITK." OFF)
-IF(OTB_USE_EXTERNAL_ITK)
-# Commented for release 2.2.0
-#  MESSAGE(STATUS "WARNING: Due to conflicting libraries, jpeg2000 support is disabled when using external ITK.")
-  FIND_PACKAGE(ITK)
-  IF(ITK_FOUND)
-        INCLUDE(${ITK_USE_FILE})
-  ELSE(ITK_FOUND)
-        MESSAGE(FATAL_ERROR
-                  "Cannot build OTB project without ITK.  Please set ITK_DIR or set OTB_USE_EXTERNAL_ITK OFF to use INTERNAL ITK set on OTB/Utilities repository.")
-  ENDIF(ITK_FOUND)
-ENDIF(OTB_USE_EXTERNAL_ITK)
 
 
 #-------------------------------
