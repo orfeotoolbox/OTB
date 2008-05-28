@@ -90,6 +90,9 @@ int otbImageWidgetPolygonForm( int argc, char * argv[] )
   widget->redraw();
   Fl::check();  
 
-
-return EXIT_SUCCESS;
+  // suppres child, without delete memory.
+  // delete memory is ITK respoability, since WidgetType::New()
+  window.remove(widget.GetPointer());
+  
+  return EXIT_SUCCESS;
 }
