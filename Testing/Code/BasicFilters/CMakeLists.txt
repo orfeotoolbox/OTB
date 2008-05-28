@@ -396,7 +396,7 @@ ADD_TEST(bfTvStreamingResampleImageFilter ${BASICFILTERS_TESTS5}
 				${TEMP}/bfTvStreamingResamplePoupeesTest.tif
 )
 
-ADD_TEST(StreamingResampleImageFilterCompareWithITK ${BASICFILTERS_TESTS5}  
+ADD_TEST(bfTvStreamingResampleImageFilterCompareWithITK ${BASICFILTERS_TESTS5}  
 		--compare-image ${TOL}
 					${TEMP}/bfTvStreamingResamplePoupeesTestITK.tif
 					${TEMP}/bfTvStreamingResamplePoupeesTestOTB.tif		
