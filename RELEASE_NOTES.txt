@@ -1,4 +1,4 @@
-OTB-v.2.2.0 - Changes since version 1.6.0 (2008/XX/XX)
+OTB-v.2.2.0 - Changes since version 2.0.0 (2008/XX/XX)
 -----------------------------------------
 
 
@@ -44,12 +44,8 @@ OTB-v.2.2.0 - Changes since version 1.6.0 (2008/XX/XX)
  
 	- Updated the internal version of ITK to 3.6.0
 	- Corrections on OSSIM integration 
-	- SVM lib:creation of otb::ComposedKernelFunctor allowing composed kernels
+	- SVM lib: creation of otb::ComposedKernelFunctor allowing composed kernels
 	- Add of SAR model in OSSIM
-	Libraries added:
-	- Galib
-	- Expat
-	- KML
 
 *Applications:
 	- otbConvertGeoToCartoPoint and otbConvertCartoToGeoPoint map precision enhancement.
