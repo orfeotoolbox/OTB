@@ -60,26 +60,29 @@ int otbFullResolutionImageWidget( int argc, char * argv[] )
       widget->Show();
       widget->redraw();
       Fl::check();
-
+      
       int StepX =(reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]-size[0])/100;
-   int StepY =(reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]-size[1])/100;
-    for(int i = 0;i<=100;i+=5)
+      int StepY =(reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]-size[1])/100;
+      for(int i = 0;i<=100;i+=5)
 	{
 	  Fl::check();
 	  window.resize(0,0,size[0]+i*StepX,size[1]+i*StepY);
 	  Fl::wait(0.2);
 	  Fl::check();
 	}
-
-  for(int i = 100;i>=0;i-=5)
+      
+      for(int i = 100;i>=0;i-=5)
 	{
 	  Fl::check();
 	  window.resize(0,0,size[0]+i*StepX,size[1]+i*StepY);
 	  Fl::wait(0.2);
 	  Fl::check();
 	}
-     } 
-
+      // suppres child, without delete memory.
+      // delete memory is ITK respoability, since WidgetType::New()
+      window.remove(widget.GetPointer());
+    } 
+  
   catch( itk::ExceptionObject & err ) 
     { 
       std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
@@ -91,7 +94,7 @@ int otbFullResolutionImageWidget( int argc, char * argv[] )
       std::cout << "Exception levee inconnue !" << std::endl; 
       return EXIT_FAILURE;
     } 
-
-
+  
+  
   return EXIT_SUCCESS;
 }

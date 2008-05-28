@@ -64,5 +64,9 @@ int otbHistogramAndTransfertFunctionWidget(int argc, char * argv[])
   Fl::check();
   // Fl::run();
 
+  // suppres child, without delete memory.
+  // delete memory is ITK respoability, since WidgetType::New()
+  window.remove(widget.GetPointer());
+  
   return EXIT_SUCCESS;
 }

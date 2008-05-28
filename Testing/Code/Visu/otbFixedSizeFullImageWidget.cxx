@@ -64,23 +64,26 @@ int otbFixedSizeFullImageWidget( int argc, char * argv[] )
       widget->redraw();
       Fl::check();
 
-    for(int i = 0;i<=400;i+=40)
+      for(int i = 0;i<=400;i+=40)
 	{
 	  Fl::check();
 	  window.resize(0,0,i,i);
 	  Fl::wait(0.2);
 	  Fl::check();
 	}
-
-  for(int i = 400;i>=0;i-=40)
+      
+      for(int i = 400;i>=0;i-=40)
 	{
 	  Fl::check();
 	  window.resize(0,0,i,i);
 	  Fl::wait(0.2);
 	  Fl::check();
 	}
-     } 
-
+      // suppres child, without delete memory.
+      // delete memory is ITK respoability, since WidgetType::New()
+      window.remove(widget.GetPointer());
+    } 
+  
   catch( itk::ExceptionObject & err ) 
     { 
       std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
@@ -92,7 +95,7 @@ int otbFixedSizeFullImageWidget( int argc, char * argv[] )
       std::cout << "Exception levee inconnue !" << std::endl; 
       return EXIT_FAILURE;
     } 
-
-
+  
+  
   return EXIT_SUCCESS;
 }

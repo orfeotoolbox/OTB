@@ -56,7 +56,7 @@ int otbZoomableImageWidget( int argc, char * argv[] )
       widget->redraw();
       Fl::check();
 
-    for(double zoom  = 1.0;zoom<10.;zoom++)
+      for(double zoom  = 1.0;zoom<10.;zoom++)
 	{
 	  Fl::check();
 	  
@@ -68,8 +68,8 @@ int otbZoomableImageWidget( int argc, char * argv[] )
 	  Fl::wait(0.2);
 	  Fl::check();
 	}
-
-  for(double zoom=10.;zoom>=1.;zoom--)
+      
+      for(double zoom=10.;zoom>=1.;zoom--)
 	{
 	  Fl::check();
 	  index[0]=size[0]/2-static_cast<int>(static_cast<double>(size[0])/(2*zoom)+0.5);
@@ -80,8 +80,12 @@ int otbZoomableImageWidget( int argc, char * argv[] )
 	  Fl::wait(0.2);
 	  Fl::check();
 	}
-     } 
-
+      
+      // suppres child, without delete memory.
+      // delete memory is ITK respoability, since WidgetType::New()
+      window.remove(widget.GetPointer());
+    } 
+  
   catch( itk::ExceptionObject & err ) 
     { 
       std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
@@ -94,6 +98,6 @@ int otbZoomableImageWidget( int argc, char * argv[] )
       return EXIT_FAILURE;
     } 
 
-
+  
   return EXIT_SUCCESS;
 }
