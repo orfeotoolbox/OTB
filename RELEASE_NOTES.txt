@@ -1,4 +1,4 @@
-OTB-v.2.2.0 - Changes since version 2.0.0 (2008/XX/XX)
+OTB-v.2.2.0 - Changes since version 2.0.0 (2008/05/29)
 -----------------------------------------
 
 
