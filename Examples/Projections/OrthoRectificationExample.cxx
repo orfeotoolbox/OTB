@@ -149,7 +149,8 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, OrthoRectifFilterType> PerBandFilterType;
+  typedef otb::PerBandVectorImageFilter<VectorImageType,
+          VectorImageType, OrthoRectifFilterType> PerBandFilterType;
   PerBandFilterType::Pointer perBandFilter=PerBandFilterType::New();
   perBandFilter->SetFilter(orthoRectifFilter);
   perBandFilter->SetInput(reader->GetOutput());
