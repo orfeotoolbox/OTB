@@ -24,7 +24,7 @@
 #endif
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {ROI_IKO_PAN_LesHalles.tif}, {ROI_IKO_PAN_LesHalles_warped.tif}
+//    INPUTS: {ROI_IKO_PAN_LesHalles_pos_spacing.tif}, {ROI_IKO_PAN_LesHalles_warped_pos_spacing.tif}
 //    OUTPUTS: {deformationFieldOutput.png},{resampledMovingOutput.png}
 //    100 10 15 10 10 250 0.9
 //  Software Guide : EndCommandLineArgs
