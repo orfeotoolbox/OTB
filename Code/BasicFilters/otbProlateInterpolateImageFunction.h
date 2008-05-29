@@ -60,7 +60,7 @@ class ProlateFunction
 	     }
 	   else
 	     {
-	       itkExceptionMacro(<<"Out of Profile limits ("<<ivalfloor<<" > 721");
+	       itkExceptionMacro(<<"Out of Profile limits ("<<ivalFloor<<" > 721");
 	     }
 	}
       else
