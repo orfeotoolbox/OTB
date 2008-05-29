@@ -36,7 +36,7 @@
 //
 // Software Guide : EndLatex 
 
-
+#include "itkNumericTraits.h"
 #include "otbImage.h"
 #include "otbImageFileWriter.h"
 #include "otbImageFileReader.h"
@@ -113,7 +113,9 @@ int main( int argc, char *argv[] )
   trainingImage->SetBufferedRegion( region );
   trainingImage->SetRequestedRegion( region );
   trainingImage->Allocate();
-
+  OutputPixelType pix;
+  pix = itk::NumericTraits<OutputPixelType>::Zero;
+  trainingImage->FillBuffer(pix);
 
 
   // For each line of the ROIs file, we create a region iterator and
