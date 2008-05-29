@@ -15,6 +15,13 @@ OTB-v.2.2.0 - Changes since version 2.0.0 (2008/XX/XX)
 	- otb::WindowedSincInterpolateImageLanczosFunction
 	- otb::WindowedSincInterpolateImageWelchFunction
 	- otb::ProlateInterpolateImageFunction
+        Add class for resampling
+        - otb::RationalQuotientResampleImageFilter
+        Add classes for labelization
+        - otb::LabelizeImageFilterBase
+        - otb::LabelizeConfidenceConnectedImageFilter
+        - otb::LabelizeConnectedThresholdImageFilter
+        - otb::LabelizeNeighborhoodConnectedImageFilter
 
 * Radiometry:
 	
@@ -29,29 +36,48 @@ OTB-v.2.2.0 - Changes since version 2.0.0 (2008/XX/XX)
 	- otb::VectorDataIOFactory
 	- otb::VectorDataSource
 	
-	
 * Common:	
 	
 	Added classes to create vector datas:
 	- otb::Polygon
+        Added classes to watch filter progression (ASCII mode)
+        - otb::StandardFilterWatcher
+        - otb::FilterWatcherBase
 
 * Learning:
 
 	- Creation otb::SVMKernels containing a list a usefull kernel for SVM
 	- Correction in Kohonen	map classes
 
+* FeatureExtraction:
+
+        Add implementation of Scalar Invariant Feature Transform
+        - otb::ImageToSIFTKeyPointSetFilter
+ 
 *Utilities:
  
 	- Updated the internal version of ITK to 3.6.0
 	- Corrections on OSSIM integration 
 	- SVM lib: creation of otb::ComposedKernelFunctor allowing composed kernels
 	- Add of SAR model in OSSIM
+        - Bug fixed in CMake configuration
+        - Add SIFT implementation in InsigthJournal
 
 *Applications:
 	- otbConvertGeoToCartoPoint and otbConvertCartoToGeoPoint map precision enhancement.
 	- Add of histogram manipulation functionality in otbImageViewer
 	- Add of shape file functionality in ICD application
+        - Bugs fixed
 
+*Examples:
+        - Add SIFT exemple (otb)
+        - Add SIFT exemple (ij)
+        - Add LabelizeNeighborhoodConnected exemple
+        - Add RationQuotientResample exemple
+
+*Platforms:
+
+	- Fixed some problems under Visual platform.
 
 OTB-v.2.0.0 - Changes since version 1.6.0 (2007/12/14)
 -----------------------------------------
