@@ -187,7 +187,7 @@ int main(int argc, char* argv[] )
   //
   // \begin{figure}
   // \center
-  // \includegraphics[width=0.44\textwidth]{***OutputOfAnEarlierClassif***.eps}
+  // \includegraphics[width=0.44\textwidth]{ROI_QB_MUL_1_SVN_CLASS_MULTI.eps}
   // \includegraphics[width=0.44\textwidth]{MarkovRegularization-scaled.eps}
   // \itkcaption[MRF restauration]{Result of applying
   // the \doxygen{otb}{MarkovRandomFieldFilter} to regularized the result of another
