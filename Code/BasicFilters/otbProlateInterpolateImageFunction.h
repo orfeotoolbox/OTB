@@ -54,7 +54,7 @@ class ProlateFunction
 	   double ival = static_cast<double>(m_OriginalProfileSize)*static_cast<double>(vcl_abs(A))/static_cast<double>(m_Radius);
 	   double ivalFloor = vcl_floor(ival);
 	   double left = ival - ivalFloor;
-	   if ( ivalFloor <720 )
+	   if ( ivalFloor < m_OriginalProfileSize-1 )
 	     {
 	       val = left*m_OriginalProfile[static_cast<unsigned int>(ivalFloor)] + (1-left)*m_OriginalProfile[static_cast<unsigned int>(ivalFloor)+1];
 	     }
