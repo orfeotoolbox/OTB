@@ -25,7 +25,7 @@ OTB-v.2.2.0 - Changes since version 2.0.0 (2008/05/29)
 
 *Radiometry:
 	
-        - Bug fixed on otb::DEMCarcteristicExtractor
+        - Bug fixed on otb::DEMCaracteristicExtractor
 
 *Visu
 
@@ -34,7 +34,7 @@ OTB-v.2.2.0 - Changes since version 2.0.0 (2008/05/29)
         
 *IO:
 
-        - Fixed bug in GDALImageIO to hanlde complex image
+        - Fixed bug in GDALImageIO to handle complex images
         Added classes for vector data use:
         - otb::VectorDataFileReader
         - otb::VectorDataFileWriter
@@ -43,7 +43,7 @@ OTB-v.2.2.0 - Changes since version 2.0.0 (2008/05/29)
 	
 *Common:	
 	
-        Added classes to handle vector datas:
+        Added classes to handle vector data:
         - otb::Polygon
         - otb::VectorData
         - otb::DataNode
@@ -54,9 +54,10 @@ OTB-v.2.2.0 - Changes since version 2.0.0 (2008/05/29)
 
 *Learning:
 
-        - Creation otb::SVMKernels containing a list a usefull kernel for SVM
+        - Creation otb::SVMKernels containing a list a useful kernel for SVM
         - Correction in Kohonen	map classes
         - Added convenience methods in SVMModel class
+        
         Added classification filters (streamed and threaded):
         - otb::SVMImageClassificationFilter
         - otb::SOMImageClassificationFilter
@@ -87,33 +88,32 @@ OTB-v.2.2.0 - Changes since version 2.0.0 (2008/05/29)
         - Corrections on OSSIM integration 
         - SVM library: creation of otb::ComposedKernelFunctor allowing composed kernels
         - Added SAR models in OSSIM library:
-                . Radarsat 1 
-                . SLC et PRI (i.e SGX et SGF)
-                . Envisat ASAR - SLC (IMS, APS) et PRI (IMP, APP)
-                . ERS - SLC et PRI
-                . Terrasar X - SLC et PRI
-                . Cosmo-Skymed - SLC et PRI
-                . Radarsat 2 - SLC et PRI 
+                . Radarsat 1 (SGX and SGF)
+                . Envisat ASAR - SLC (IMS, APS) and PRI (IMP, APP)
+                . ERS - SLC and PRI
+                . Terrasar X - SLC and PRI
+                . Cosmo-Skymed - SLC and PRI
+                . Radarsat 2 - SLC and PRI 
         - Bug fixed in CMake configuration
         - Added SIFT implementation in InsigthJournal
 
 *Applications:
         - Various Bug fix
-        - otbConvertGeoToCartoPoint and otbConvertCartoToGeoPoint map precision enhancement.
+        - otbConvertGeoToCartoPoint and otbConvertCartoToGeoPoint map precision enhancement
         - Added of histogram manipulation functionalities in otbImageViewer
         - Added of shape file functionalities and large image support in ICD application
-        - Added otbConcatenateImages application to concatenate multiple image in the spectral domain.
-        - Added an unsupervised image classification application based on the KMeans algorithm(otbKMeansClassification)
+        - Added otbConcatenateImages application to concatenate multiple image in the spectral domain
+        - Added an unsupervised image classification application based on the KMeans algorithm (otbKMeansClassification)
         - Added an unsupervised image classification application based on the SOM algorithm (otbSOMClassification)
         - Added an unsupervised image classification application based on the SVM algorithm (otbSVMClassification)
         - Added an application to create a contiguous unsigned short labeled image from a colored labeled image (otbUnsignedShortRelabeling)
         - Added an application to create a colored labeled image from an unsigned short labeled image (otbRgbRelabeling)
                 
 *Examples:
-        - Added SIFT exemple (otb)
-        - Added SIFT exemple (ij)
-        - Added LabelizeNeighborhoodConnected exemple
-        - Added RationQuotientResample exemple
+        - Added SIFT example (otb)
+        - Added SIFT example (ij)
+        - Added LabelizeNeighborhoodConnected example
+        - Added RationQuotientResample example
 
 *Platforms:
 
