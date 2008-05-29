@@ -2,82 +2,123 @@ OTB-v.2.2.0 - Changes since version 2.0.0 (2008/XX/XX)
 -----------------------------------------
 
 
-* BasicFilters: 
+*BasicFilters: 
   
-	Added classes for data importation:
-	- otb::ImportImageFilter
-	- otb::ImportVectorImageFilter
-	Added classes for interpolation:
-	- otb::WindowedSincInterpolateImageBlackmanFunction
-	- otb::WindowedSincInterpolateImageCosineFunction
-	- otb::WindowedSincInterpolateImageGaussianFunction
-	- otb::WindowedSincInterpolateImageHammingFunction
-	- otb::WindowedSincInterpolateImageLanczosFunction
-	- otb::WindowedSincInterpolateImageWelchFunction
-	- otb::ProlateInterpolateImageFunction
-        Add class for resampling
+        Added classes for data importation:
+        - otb::ImportImageFilter
+        - otb::ImportVectorImageFilter
+        Added classes for image interpolation:
+        - otb::WindowedSincInterpolateImageBlackmanFunction
+        - otb::WindowedSincInterpolateImageCosineFunction
+        - otb::WindowedSincInterpolateImageGaussianFunction
+        - otb::WindowedSincInterpolateImageHammingFunction
+        - otb::WindowedSincInterpolateImageLanczosFunction
+        - otb::WindowedSincInterpolateImageWelchFunction
+        - otb::ProlateInterpolateImageFunction
+        Added class for resampling
         - otb::RationalQuotientResampleImageFilter
-        Add classes for labelization
+        Added classes for labelization
         - otb::LabelizeImageFilterBase
         - otb::LabelizeConfidenceConnectedImageFilter
         - otb::LabelizeConnectedThresholdImageFilter
         - otb::LabelizeNeighborhoodConnectedImageFilter
 
-* Radiometry:
+*Radiometry:
 	
-	- Bug fixed on otb::DEMCarcteristicExtractor
+        - Bug fixed on otb::DEMCarcteristicExtractor
 
+*Visu
+
+        - Added histogram windows in otb::ImageViewer main class.
+        - Added polygon drawing support in otb::ImageViewer main class
+        
 *IO:
 
-	- Add the complex image manipulation
-	Added classes for vector data use:
-	- otb::VectorDataFileReader
-	- otb::VectorDataFileWriter
-	- otb::VectorDataIOFactory
-	- otb::VectorDataSource
+        - Fixed bug in GDALImageIO to hanlde complex image
+        Added classes for vector data use:
+        - otb::VectorDataFileReader
+        - otb::VectorDataFileWriter
+        - otb::VectorDataIOFactory
+        - otb::VectorDataSource
 	
-* Common:	
+*Common:	
 	
-	Added classes to create vector datas:
-	- otb::Polygon
-        Added classes to watch filter progression (ASCII mode)
+        Added classes to handle vector datas:
+        - otb::Polygon
+        - otb::VectorData
+        - otb::DataNode
+
+        Added classes to watch filter progression (ASCII mode):
         - otb::StandardFilterWatcher
         - otb::FilterWatcherBase
 
-* Learning:
+*Learning:
 
-	- Creation otb::SVMKernels containing a list a usefull kernel for SVM
-	- Correction in Kohonen	map classes
+        - Creation otb::SVMKernels containing a list a usefull kernel for SVM
+        - Correction in Kohonen	map classes
+        - Added convenience methods in SVMModel class
+        Added classification filters (streamed and threaded):
+        - otb::SVMImageClassificationFilter
+        - otb::SOMImageClassificationFilter
+        - otb::KMeansImageClassificationFilter
 
-* FeatureExtraction:
+*FeatureExtraction:
 
-        Add implementation of Scalar Invariant Feature Transform
+        Added implementation of Scalar Invariant Feature Transform
         - otb::ImageToSIFTKeyPointSetFilter
+
+*MultiScale:
+
+        Added mono and multi-scale convex/concave image classification based on geodesic morphology characteristics.
+        - otb::ConvexOrConcaveClassificationFilter
+        - otb::GeodesicMorphologyDecompositionImageFilter
+        - otb::GeodesicMorphologyIterativeDecompositionImageFilter
+        - otb::GeodesicMorphologyLevelingFilter
+        - otb::ImageToProfileFilter
+        - otb::MorphologicalClosingProfileFilter
+        - otb::MorphologicalOpeningProfileFilter
+        - otb::MultiScaleConvexOrConcaveClassificationFilter
+        - otb::ProfileDerivativeToMultiScaleCharacteristicsFilter
+        - otb::ProfileToProfileDerivativeFilter
  
 *Utilities:
  
-	- Updated the internal version of ITK to 3.6.0
-	- Corrections on OSSIM integration 
-	- SVM lib: creation of otb::ComposedKernelFunctor allowing composed kernels
-	- Add of SAR model in OSSIM
+        - Updated the internal version of ITK to 3.6.0
+        - Corrections on OSSIM integration 
+        - SVM library: creation of otb::ComposedKernelFunctor allowing composed kernels
+        - Added SAR models in OSSIM library:
+                . Radarsat 1 
+                . SLC et PRI (i.e SGX et SGF)
+                . Envisat ASAR - SLC (IMS, APS) et PRI (IMP, APP)
+                . ERS - SLC et PRI
+                . Terrasar X - SLC et PRI
+                . Cosmo-Skymed - SLC et PRI
+                . Radarsat 2 - SLC et PRI 
         - Bug fixed in CMake configuration
-        - Add SIFT implementation in InsigthJournal
+        - Added SIFT implementation in InsigthJournal
 
 *Applications:
-	- otbConvertGeoToCartoPoint and otbConvertCartoToGeoPoint map precision enhancement.
-	- Add of histogram manipulation functionality in otbImageViewer
-	- Add of shape file functionality in ICD application
-        - Bugs fixed
-
+        - Various Bug fix
+        - otbConvertGeoToCartoPoint and otbConvertCartoToGeoPoint map precision enhancement.
+        - Added of histogram manipulation functionalities in otbImageViewer
+        - Added of shape file functionalities and large image support in ICD application
+        - Added otbConcatenateImages application to concatenate multiple image in the spectral domain.
+        - Added an unsupervised image classification application based on the KMeans algorithm(otbKMeansClassification)
+        - Added an unsupervised image classification application based on the SOM algorithm (otbSOMClassification)
+        - Added an unsupervised image classification application based on the SVM algorithm (otbSVMClassification)
+        - Added an application to create a contiguous unsigned short labeled image from a colored labeled image (otbUnsignedShortRelabeling)
+        - Added an application to create a colored labeled image from an unsigned short labeled image (otbRgbRelabeling)
+                
 *Examples:
-        - Add SIFT exemple (otb)
-        - Add SIFT exemple (ij)
-        - Add LabelizeNeighborhoodConnected exemple
-        - Add RationQuotientResample exemple
+        - Added SIFT exemple (otb)
+        - Added SIFT exemple (ij)
+        - Added LabelizeNeighborhoodConnected exemple
+        - Added RationQuotientResample exemple
 
 *Platforms:
 
-	- Fixed some problems under Visual platform.
+	- Fixed some problems under Visual, Cygwin and MinGW platforms.
+
 
 OTB-v.2.0.0 - Changes since version 1.6.0 (2007/12/14)
 -----------------------------------------
