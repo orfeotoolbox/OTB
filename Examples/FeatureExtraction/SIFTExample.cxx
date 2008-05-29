@@ -144,7 +144,7 @@ int main(int argc, char * argv[])
 // \begin{itemize}
 // \item the number of octaves, that is, the number of levels of undersampling,
 // \item the number of scales (blurring) per octave,
-// \item the threshold to be applied to each point for the detection
+// \item the low contrast threshold to be applied to each point for the detection
 // on the difference of Gaussians image,
 // \item the threshold on the responses to consider a point as an edge.
 // \end{itemize}  
