@@ -51,10 +51,17 @@ class ProlateFunction
 	{
 	  //unsigned int ival = static_cast<unsigned int>(m_OriginalProfilSize*static_cast<double>(vcl_abs(A))/static_cast<double>(m_Radius));
 	  //val = m_OriginalProfil[ival];
-	   double ival = static_cast<int>(m_OriginalProfileSize)*static_cast<double>(vcl_abs(A))/static_cast<double>(m_Radius);
+	   double ival = static_cast<double>(m_OriginalProfileSize)*static_cast<double>(vcl_abs(A))/static_cast<double>(m_Radius);
 	   double ivalFloor = vcl_floor(ival);
 	   double left = ival - ivalFloor;
-	   val = left*m_OriginalProfile[static_cast<unsigned int>(ivalFloor)] + (1-left)*m_OriginalProfile[static_cast<unsigned int>(ivalFloor)+1];
+	   if ( ivalFloor <720 )
+	     {
+	       val = left*m_OriginalProfile[static_cast<unsigned int>(ivalFloor)] + (1-left)*m_OriginalProfile[static_cast<unsigned int>(ivalFloor)+1];
+	     }
+	   else
+	     {
+	       itkExceptionMacro(<<"Out of Profile limits ("<<ivalfloor<<" > 721");
+	     }
 	}
       else
 	{
