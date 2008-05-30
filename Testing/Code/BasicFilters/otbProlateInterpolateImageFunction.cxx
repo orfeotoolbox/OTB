@@ -71,7 +71,6 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
 
   for(std::vector<ContinuousIndexType>::iterator it = indicesList.begin();it!=indicesList.end();++it)
     {
-
       file<<(*it)<<" -> "<<prolate->EvaluateAtContinuousIndex((*it))<<std::endl;
     }
   file.close();
