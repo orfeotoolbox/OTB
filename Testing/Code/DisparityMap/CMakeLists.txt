@@ -136,8 +136,8 @@ ADD_TEST(dmTvBSplinesInterpolateTransformDeformationFieldGenerator ${DISPARITYMA
 
 # -------  Additional tests for deformation fields estimation   ----------
 
-ADD_TEST(dmTvTranslationDeformationFieldEstimation ${DISPARITYMAP_TESTS2} 
-              --compare-n-images ${EPSILON} 12
+ADD_TEST(dmTvTranslationDeformationFieldEstimation1 ${DISPARITYMAP_TESTS2} 
+              --compare-n-images ${EPSILON} 6
 	      ${BASELINE}/dmTvTranslationDeformationFieldEstimationOutput_bs_df.hdr  
 	      ${TEMP}/dmTvTranslationDeformationFieldEstimationOutput_bs_df.hdr 
 	      ${BASELINE}/dmTvTranslationDeformationFieldEstimationOutput_bs_oi.tif
@@ -150,6 +150,15 @@ ADD_TEST(dmTvTranslationDeformationFieldEstimation ${DISPARITYMAP_TESTS2}
 	      ${TEMP}/dmTvTranslationDeformationFieldEstimationOutput_nnp_df.hdr 
 	      ${BASELINE}/dmTvTranslationDeformationFieldEstimationOutput_nnp_oi.tif
 	      ${TEMP}/dmTvTranslationDeformationFieldEstimationOutput_nnp_oi.tif
+	 otbTranslationDeformationFieldEstimation
+	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
+	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub_warped_translation.tif
+	 ${TEMP}/dmTvTranslationDeformationFieldEstimationOutput
+	  15 10 10 250 0.95 4 50
+)
+
+ADD_TEST(dmTvTranslationDeformationFieldEstimation2 ${DISPARITYMAP_TESTS2} 
+              --compare-n-images ${EPSILON} 6
 	      ${BASELINE}/dmTvTranslationDeformationFieldEstimationOutput_nt_df.hdr
 	      ${TEMP}/dmTvTranslationDeformationFieldEstimationOutput_nt_df.hdr
 	      ${BASELINE}/dmTvTranslationDeformationFieldEstimationOutput_nt_oi.tif
@@ -202,8 +211,8 @@ ADD_TEST(dmTvEuler2DDeformationFieldEstimation ${DISPARITYMAP_TESTS2}
 	 15 10 0.01 250 0.95 4 50 128 128
 )
 
-ADD_TEST(dmTvCenteredRigidDeformationFieldEstimation ${DISPARITYMAP_TESTS2} 
-              --compare-n-images ${EPSILON} 12
+ADD_TEST(dmTvCenteredRigidDeformationFieldEstimation1 ${DISPARITYMAP_TESTS2} 
+              --compare-n-images ${EPSILON} 6
 	      ${BASELINE}/dmTvCenteredRigidDeformationFieldEstimationOutput_bs_df.hdr  
 	      ${TEMP}/dmTvCenteredRigidDeformationFieldEstimationOutput_bs_df.hdr 
 	      ${BASELINE}/dmTvCenteredRigidDeformationFieldEstimationOutput_bs_oi.tif
@@ -216,6 +225,15 @@ ADD_TEST(dmTvCenteredRigidDeformationFieldEstimation ${DISPARITYMAP_TESTS2}
 	      ${TEMP}/dmTvCenteredRigidDeformationFieldEstimationOutput_nnp_df.hdr 
 	      ${BASELINE}/dmTvCenteredRigidDeformationFieldEstimationOutput_nnp_oi.tif
 	      ${TEMP}/dmTvCenteredRigidDeformationFieldEstimationOutput_nnp_oi.tif
+	 otbCenteredRigidDeformationFieldEstimation
+	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
+	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub_warped_centered_rigid.tif
+	 ${TEMP}/dmTvCenteredRigidDeformationFieldEstimationOutput
+	 15 5 0.01 250 0.95 4 50 127 65 
+)
+
+ADD_TEST(dmTvCenteredRigidDeformationFieldEstimation2 ${DISPARITYMAP_TESTS2} 
+              --compare-n-images ${EPSILON} 6
 	      ${BASELINE}/dmTvCenteredRigidDeformationFieldEstimationOutput_nt_df.hdr
 	      ${TEMP}/dmTvCenteredRigidDeformationFieldEstimationOutput_nt_df.hdr
 	      ${BASELINE}/dmTvCenteredRigidDeformationFieldEstimationOutput_nt_oi.tif
@@ -235,8 +253,8 @@ ADD_TEST(dmTvCenteredRigidDeformationFieldEstimation ${DISPARITYMAP_TESTS2}
 	 15 5 0.01 250 0.95 4 50 127 65 
 )
 
-ADD_TEST(dmTvSinusoidDeformationFieldEstimation ${DISPARITYMAP_TESTS2} 
-              --compare-n-images ${EPSILON} 12	      
+ADD_TEST(dmTvSinusoidDeformationFieldEstimation1 ${DISPARITYMAP_TESTS2} 
+              --compare-n-images ${EPSILON} 6	      
 	      ${BASELINE}/dmTvSinusoidDeformationFieldEstimationOutput_bs_df.hdr  
 	      ${TEMP}/dmTvSinusoidDeformationFieldEstimationOutput_bs_df.hdr 
 	      ${BASELINE}/dmTvSinusoidDeformationFieldEstimationOutput_bs_oi.tif
@@ -249,6 +267,15 @@ ADD_TEST(dmTvSinusoidDeformationFieldEstimation ${DISPARITYMAP_TESTS2}
 	      ${TEMP}/dmTvSinusoidDeformationFieldEstimationOutput_nnp_df.hdr 
 	      ${BASELINE}/dmTvSinusoidDeformationFieldEstimationOutput_nnp_oi.tif
 	      ${TEMP}/dmTvSinusoidDeformationFieldEstimationOutput_nnp_oi.tif
+	 otbTranslationDeformationFieldEstimation
+	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
+	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub_warped_sinus.tif
+	 ${TEMP}/dmTvSinusoidDeformationFieldEstimationOutput
+	  15 10 10 250 0.95 4 25
+)
+
+ADD_TEST(dmTvSinusoidDeformationFieldEstimation2 ${DISPARITYMAP_TESTS2} 
+              --compare-n-images ${EPSILON} 6
 	      ${BASELINE}/dmTvSinusoidDeformationFieldEstimationOutput_nt_df.hdr
 	      ${TEMP}/dmTvSinusoidDeformationFieldEstimationOutput_nt_df.hdr
 	      ${BASELINE}/dmTvSinusoidDeformationFieldEstimationOutput_nt_oi.tif
