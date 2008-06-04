@@ -206,7 +206,7 @@ for details.
 ------------------
 
 Due to an unknown bug, Fltk can't compile on some versions of Cygwin (OpenGL problems).
-Put OTB_USE_VISU to OFF to avoid these problems.
+Put OTB_USE_VISU_GUI to OFF to avoid these problems.
 
 Some bugs can appear while compiling GDAL with JPEG2000 files : disable this format to resolve the problem.
 

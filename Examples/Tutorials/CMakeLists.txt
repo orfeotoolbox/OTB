@@ -21,10 +21,10 @@ TARGET_LINK_LIBRARIES(Multispectral OTBCommon OTBIO)
 ADD_EXECUTABLE(SmarterFilteringPipeline SmarterFilteringPipeline.cxx )
 TARGET_LINK_LIBRARIES(SmarterFilteringPipeline OTBCommon OTBIO)
 
-IF(OTB_USE_VISU)
+IF(OTB_USE_VISU_GUI)
   ADD_EXECUTABLE(SimpleViewer SimpleViewer.cxx )
   TARGET_LINK_LIBRARIES(SimpleViewer OTBCommon OTBIO OTBGui OTBVisu ${OTB_VISU_GUI_LIBRARIES})
-ENDIF(OTB_USE_VISU)
+ENDIF(OTB_USE_VISU_GUI)
 
 ADD_EXECUTABLE(OrthoFusion OrthoFusion.cxx )
 TARGET_LINK_LIBRARIES(OrthoFusion OTBFusion OTBProjections OTBCommon OTBIO)

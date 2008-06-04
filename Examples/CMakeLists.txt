@@ -26,9 +26,9 @@ SUBDIRS(
   Markov
 )
 
-IF(OTB_USE_VISU)
+IF(OTB_USE_VISU_GUI)
         SUBDIRS(Visu)
-ENDIF(OTB_USE_VISU)
+ENDIF(OTB_USE_VISU_GUI)
 
 IF(OTB_USE_PATENTED)
   SUBDIRS( Patented )
@@ -82,9 +82,9 @@ ELSE(OTB_BINARY_DIR)
         Markov
         )
 
-    IF(OTB_USE_VISU)
+    IF(OTB_USE_VISU_GUI)
         SUBDIRS(Visu)
-    ENDIF(OTB_USE_VISU)
+    ENDIF(OTB_USE_VISU_GUI)
 
     IF(OTB_USE_PATENTED)
         SUBDIRS( Patented )
