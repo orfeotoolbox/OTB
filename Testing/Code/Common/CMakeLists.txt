@@ -102,6 +102,14 @@ ADD_TEST(coTvExtractROI ${COMMON_TESTS2}
         ${INPUTDATA}/cthead1.png 
         ${TEMP}/coExtractROI_cthead1_26_97_209_100.png 
         26 97 209 100 )
+ADD_TEST(coTvExtractROI2 ${COMMON_TESTS2}  
+  --compare-image ${TOL}   ${BASELINE}/coExtractROI_cthead1_26_97_209_100.png
+                    ${TEMP}/coExtractROI2_cthead1_26_97_209_100.png
+        otbExtractROI2
+        ${INPUTDATA}/cthead1.png 
+        ${TEMP}/coExtractROI2_cthead1_26_97_209_100.png 
+        26 97 209 100 )        
+        
 ADD_TEST(coTvExtractROI_RGB ${COMMON_TESTS2}  
   --compare-image ${TOL}   ${BASELINE}/coExtractROI_RGB_sbuv_700_60_77_489.png
                     ${TEMP}/coExtractROI_RGB_sbuv_700_60_77_489.png
@@ -505,6 +513,7 @@ SET(BasicCommon_SRCS2
 otbLineSpatialObjectList.cxx
 otbExtractROINew.cxx
 otbExtractROI.cxx
+otbExtractROI2.cxx
 otbExtractROI_RGB.cxx
 otbMultiChannelExtractROI.cxx
 otbMultiChannelExtractROINew.cxx
