@@ -80,27 +80,33 @@ LUMImageIO::~LUMImageIO()
 bool LUMImageIO::CanReadFile( const char* filename )
 {
         std::string lFileName(filename);
-        if( System::IsADirName(lFileName) == true )
-        {
-                return false;
-        }
-        if( m_File.is_open() )
-        {
-                m_File.close();
-        }
-
-        std::fstream header_file;
-        header_file.open( filename,  std::ios::in | std::ios::binary );
-        if( header_file.fail() )
-        {
-                otbMsgDevMacro(<<"LUMImageIO::CanReadFile() failed header open ! " );
-                return false;
-        }
-
-        //Read header informations
-        bool lResult = InternalReadHeaderInformation(header_file,false);
-        header_file.close();
-        return (lResult);
+	// Test the extension
+	std::string extension = System::GetExtension(filename);
+	if ((extension!="LUM")&&(extension!="lum"))
+	  {
+	    return false;
+	  }
+	if( System::IsADirName(lFileName) == true )
+	  {
+	    return false;
+	  }
+	if( m_File.is_open() )
+	  {
+	    m_File.close();
+	  }
+	
+	std::fstream header_file;
+	header_file.open( filename,  std::ios::in | std::ios::binary );
+	if( header_file.fail() )
+	  {
+	    otbMsgDevMacro(<<"LUMImageIO::CanReadFile() failed header open ! " );
+	    return false;
+	  }
+	
+	//Read header informations
+	bool lResult = InternalReadHeaderInformation(header_file,false);
+	header_file.close();
+	return (lResult);
 }
 
 
@@ -306,6 +312,11 @@ bool LUMImageIO::InternalReadHeaderInformation(std::fstream & file, const bool r
 bool LUMImageIO::CanWriteFile( const char* filename )
 {
         std::string lFileName(filename);
+	std::string extension = System::GetExtension(filename);
+	if ((extension!="LUM")&&(extension!="lum"))
+	  {
+	    return false;
+	  }
         if( System::IsADirName(lFileName) == true )
         {
                 return false;
@@ -448,10 +459,12 @@ int LUMImageIO::CaiGetTypeLum(          const   char *          type_code,
 	int trouve,icr,taille;  /* indice pour la recherche                */
         int mod2;		/* modulo2				   */
         char* pch0;
-        char sens_code[3];        /* type code+ordre rangement octets dans entete*/
+        char sens_code[3];       /* type code+ordre rangement octets dans entete*/
         char cod_pix[5];
-       
-/* Initialisations diverses */
+	sens_code[0]='\0';
+	cod_pix[0]='\0';
+      
+	/* Initialisations diverses */
 	trouve = -1;
 	taille = -1;
 	int nbbits=-1;
@@ -523,11 +536,11 @@ int LUMImageIO::CaiGetTypeLum(          const   char *          type_code,
 		sprintf(cod_pix,"R8");
             }
         }
-        
-        
-        str_cod_pix = std::string(cod_pix);
+	
+	str_cod_pix = std::string(cod_pix);
         str_sens_code = std::string(sens_code);
-        inbbits = nbbits;
+              
+	inbbits = nbbits;
 	return(taille);
 }
 

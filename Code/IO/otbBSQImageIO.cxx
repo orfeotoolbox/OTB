@@ -83,6 +83,11 @@ bool BSQImageIO::CanReadFile( const char* filename )
 {
         std::fstream header_file;
         std::string lFileName(filename);
+	std::string extension = System::GetExtension(filename);
+	if ((extension!="HD")&&(extension!="hd"))
+	  {
+	    return false;
+	  }
         if( System::IsADirName(lFileName) == true )
         {
                 return false;
@@ -458,6 +463,11 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string & file_name, st
 bool BSQImageIO::CanWriteFile( const char* filename )
 {
         std::string lFileName(filename);
+	std::string extension = System::GetExtension(filename);
+	if ((extension!="HD")&&(extension!="hd"))
+	  {
+	    return false;
+	  }
         if( System::IsADirName(lFileName) == true )
         {
                 return false;
