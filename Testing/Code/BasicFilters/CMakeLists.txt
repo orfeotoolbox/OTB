@@ -961,7 +961,7 @@ ADD_EXECUTABLE(otbBasicFiltersTests2 otbBasicFiltersTests2.cxx ${BasicFilters_SR
 TARGET_LINK_LIBRARIES(otbBasicFiltersTests2  OTBBasicFilters OTBCommon OTBIO  gdal ITKIO ITKCommon ITKBasicFilters)
 
 ADD_EXECUTABLE(otbBasicFiltersTests3 otbBasicFiltersTests3.cxx ${BasicFilters_SRCS3})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests3  OTBBasicFilters OTBCommon OTBIO  gdal ITKIO ITKCommon ITKBasicFilters)
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests3  OTBBasicFilters otbossim OTBCommon OTBIO  gdal ITKIO ITKCommon ITKBasicFilters)
 
 ADD_EXECUTABLE(otbBasicFiltersTests4 otbBasicFiltersTests4.cxx ${BasicFilters_SRCS4})
 TARGET_LINK_LIBRARIES(otbBasicFiltersTests4  OTBBasicFilters OTBCommon OTBIO  gdal ITKIO ITKCommon ITKBasicFilters)

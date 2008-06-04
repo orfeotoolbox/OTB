@@ -112,6 +112,21 @@ ExtractROIBase<TInputImage,TOutputImage>
 
   m_OutputImageRegion.SetSize(outputSize);
   m_OutputImageRegion.SetIndex(outputIndex);
+
+  this->Modified();
+}
+
+
+template <class TInputImage, class TOutputImage>
+void 
+ExtractROIBase<TInputImage,TOutputImage>
+::SetROI(InputImageRegionType roi)
+{
+  m_SizeX = roi.GetSize()[0];
+  m_SizeY = roi.GetSize()[1];
+  m_StartX = roi.GetIndex()[0];
+  m_StartY = roi.GetIndex()[1];
+
   this->Modified();
 }
 
@@ -140,7 +155,6 @@ ExtractROIBase<TInputImage,TOutputImage>
   requestedRegion.SetIndex(index);  
   inputPtr->SetRequestedRegion(requestedRegion);
 }
-
 
 
 /** 

@@ -79,20 +79,17 @@ public:
   itk::ImageToImageFilterDetail::ExtractImageFilterRegionCopier<itkGetStaticConstMacro(InputImageDimension), 
                                                            itkGetStaticConstMacro(OutputImageDimension)> ExtractROIBaseRegionCopierType;
 
-  /** Set/Get the output image region. 
-   *  If any of the ExtractionRegion.Size = 0 for any particular dimension dim,
-   *  we have to collapse dimension dim.  This means the output image will have
-   *  'c' dimensions less than the input image, where c = # of 
-   *  ExtractionRegion.Size = 0. */
-  void SetExtractionRegion(InputImageRegionType extractRegion);
-  itkGetMacro(ExtractionRegion, InputImageRegionType);
+   itkGetMacro(ExtractionRegion, InputImageRegionType);
 
+  /** Give the region to extract, same effect as given m_StartX/Y and m_SizeX/Y*/
+  void SetROI(InputImageRegionType roi);
   
-  /** Set/Get Start methode */
+  /** Set/Get Start methods */
   itkSetMacro(StartX,unsigned long);
   itkGetConstMacro(StartX,unsigned long);
   itkSetMacro(StartY,unsigned long);
   itkGetConstMacro(StartY,unsigned long);
+  /** Set/Get Size methods */
   itkSetMacro(SizeX,unsigned long);
   itkGetConstMacro(SizeX,unsigned long);
   itkSetMacro(SizeY,unsigned long);
@@ -150,6 +147,15 @@ protected:
       {
       
       };
+
+ /** Set/Get the output image region. 
+  *  If any of the ExtractionRegion.Size = 0 for any particular dimension dim,
+  *  we have to collapse dimension dim.  This means the output image will have
+  *  'c' dimensions less than the input image, where c = # of 
+  *  ExtractionRegion.Size = 0. */
+  void SetExtractionRegion(InputImageRegionType extractRegion);
+
+
   InputImageRegionType m_ExtractionRegion;
   OutputImageRegionType m_OutputImageRegion;
 
@@ -157,10 +163,10 @@ private:
   ExtractROIBase(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  /** Coordonnees X/Y du premier point de la région à extraire  */
+  /** X/Y coordinates of the first point of the region to extract. */
   unsigned long m_StartX;
   unsigned long m_StartY;
-  /** Nombre de pixels en X/Y de la région à extraire  */
+  /** Number of X/Y pixels of the region to extract. */
   unsigned long m_SizeX;
   unsigned long m_SizeY;
 
