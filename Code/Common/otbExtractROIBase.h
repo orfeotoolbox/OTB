@@ -34,6 +34,8 @@ namespace otb
  * defined, the extracted region extend to the lower right corner of the input
  * image. If no parameter is defined all image is extracted.
  *
+ * Alternatively, a region can be specified using the SetROI() method.
+ *
  * \ingroup Common
  * 
  */
