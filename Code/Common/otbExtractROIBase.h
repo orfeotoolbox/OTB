@@ -27,11 +27,14 @@ namespace otb
 
 /** \class ExtractROIBase
  * \brief Classe de base, permettant d'extraire une partie d'une image.
-
- * La région a extraire peut se définir via les méthodes SetStartX/Y (positionne le début) et SetSizeX/Y précisant 
- * la taille de la région. Si la position de la région n'est pas précisée, alors le premier en haut à gauche est 
- * sélectionné. Si la taille de la région n'est pas positionnée, alors la taille de la région s'étend jusqu'aux bords extrêmes de l'image.
- * \note Si aucun paramètre n'est précisé, alors toute l'image est extraite.
+ *
+ * Extracted region can be defined by the methods SetStartX/Y (region origin) and
+ * SetSizeX/Y (region size). If the starting point is not defined, the extracted 
+ * region start from the upper left corner of the input image. If the size is not 
+ * defined, the extracted region extend to the lower right corner of the input
+ * image. If no parameter is defined all image is extracted.
+ *
+ * \ingroup Common
  * 
  */
 template <class TInputImage, class TOutputImage>
