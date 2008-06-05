@@ -1,3 +1,6 @@
+#
+#   $OTB-VERSION$
+#
 # Sources of non-templated classes.
 
 FILE(GLOB OTBCommon_SRCS "*.cxx" )
