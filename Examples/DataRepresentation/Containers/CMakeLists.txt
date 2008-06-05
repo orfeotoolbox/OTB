@@ -1,4 +1,4 @@
-SET(TEMP ${ITK_BINARY_DIR}/Testing/Temporary)
+PROJECT(ContainersExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 ADD_EXECUTABLE(TreeContainer TreeContainer.cxx )
