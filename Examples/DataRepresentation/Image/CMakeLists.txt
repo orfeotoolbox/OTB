@@ -1,8 +1,6 @@
 PROJECT(ImageExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
-SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
-
 ADD_EXECUTABLE(Image1 Image1.cxx )
 TARGET_LINK_LIBRARIES(Image1 OTBCommon ITKCommon OTBIO ITKIO)
 
