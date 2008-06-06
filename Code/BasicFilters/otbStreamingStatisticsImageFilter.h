@@ -156,7 +156,7 @@ namespace otb {
       itk::Array<PixelType> m_ThreadMax;
     }; // end of class PersistentStatisticsImageFilter
 
-  /**===========================================================================*/
+  /*===========================================================================*/
 
   /** \class StreamingStatisticsImageFilter
    * \brief This class streams the whole input image through the PersistentStatisticsImageFilter.
@@ -167,6 +167,16 @@ namespace otb {
    * to compute the statistics. The accessor on the results are wrapping the accessors of the 
    * internal PersistentStatisticsImageFilter.
    *
+   * This filter can be used as:
+   * \code
+   * typedef otb::StreamingStatisticsImageFilter<ImageType> StatisticsType;
+   * StatisticsType::Pointer statistics = StatisticsType::New();
+   * statistics->SetInput(reader->GetOutput());
+   * statistics->Update();
+   * std::cout << statistics-> GetMaximum() << std::endl;
+   * std::cout << statistics-> GetMinimum() << std::endl;
+   * \endcode
+   * 
    * \sa PersistentStatisticsImageFilter
    * \sa PersistentImageFilter
    * \sa PersistentFilterStreamingDecorator
