@@ -602,7 +602,7 @@ namespace otb
     std::cout << x << ", " << y  << std::endl;
     std::cout.flush();
     
-    XYToQuadTree(x, y, quad);
+    XYToQuadTree2(x, y, quad);
     
     std::ostringstream filename;
     BuildFileName(quad, filename);
