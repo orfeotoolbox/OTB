@@ -200,6 +200,21 @@ ADD_TEST(coTvMultiChannelROI_3c_BSQ ${COMMON_TESTS2}
          -startX 0 -startY 0 -sizeX 134  -sizeY 330 -channels 3 4 5 )
 
 
+ADD_TEST(coTvTestMultiExtractMultiUpdate ${COMMON_TESTS2}
+--compare-image  ${TOL}
+		 ${BASELINE}/coTvMultiExtractMultiUpdate.tif
+                 ${TEMP}/coTvMultiExtractMultiUpdate.tif
+     otbTestMultiExtractMultiUpdate
+      ${INPUTDATA}/poupees.tif 
+      ${TEMP}/coTvMultiExtractMultiUpdate.tif
+      70 # startX
+      60 # startY 
+      50 #sizeX 
+      50 #sizeY
+      1 # first channel
+      3 # last channel
+)
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
@@ -500,6 +515,7 @@ ADD_TEST(coTvVectorData ${COMMON_TESTS7}
      otbVectorData
 )
 
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
 otbSystemTest.cxx
@@ -517,6 +533,7 @@ otbExtractROI2.cxx
 otbExtractROI_RGB.cxx
 otbMultiChannelExtractROI.cxx
 otbMultiChannelExtractROINew.cxx
+otbTestMultiExtractMultiUpdate.cxx
 )
 SET(BasicCommon_SRCS3
 otbMultiToMonoChannelExtractROI.cxx

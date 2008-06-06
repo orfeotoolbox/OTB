@@ -60,7 +60,7 @@ int otbExtractROI2( int argc, char * argv[] )
   region.SetSize( size );
   region.SetIndex( start );
   
-  filter->SetROI(region);
+  filter->SetExtractionRegion(region);
   
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();

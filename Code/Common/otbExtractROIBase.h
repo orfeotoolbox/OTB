@@ -87,7 +87,7 @@ public:
    itkGetMacro(ExtractionRegion, InputImageRegionType);
 
   /** Give the region to extract, same effect as given m_StartX/Y and m_SizeX/Y*/
-  void SetROI(InputImageRegionType roi);
+  void SetExtractionRegion(InputImageRegionType roi);
   
   /** Set/Get Start methods */
   itkSetMacro(StartX,unsigned long);
@@ -158,7 +158,7 @@ protected:
   *  we have to collapse dimension dim.  This means the output image will have
   *  'c' dimensions less than the input image, where c = # of 
   *  ExtractionRegion.Size = 0. */
-  void SetExtractionRegion(InputImageRegionType extractRegion);
+  void SetInternalExtractionRegion(InputImageRegionType extractRegion);
 
 
   InputImageRegionType m_ExtractionRegion;

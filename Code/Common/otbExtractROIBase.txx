@@ -82,7 +82,7 @@ ExtractROIBase<TInputImage,TOutputImage>
 template <class TInputImage, class TOutputImage>
 void 
 ExtractROIBase<TInputImage,TOutputImage>
-::SetExtractionRegion(InputImageRegionType extractRegion)
+::SetInternalExtractionRegion(InputImageRegionType extractRegion)
 {
   m_ExtractionRegion = extractRegion;
 
@@ -120,7 +120,7 @@ ExtractROIBase<TInputImage,TOutputImage>
 template <class TInputImage, class TOutputImage>
 void 
 ExtractROIBase<TInputImage,TOutputImage>
-::SetROI(InputImageRegionType roi)
+::SetExtractionRegion(InputImageRegionType roi)
 {
   m_SizeX = roi.GetSize()[0];
   m_SizeY = roi.GetSize()[1];
@@ -200,7 +200,7 @@ ExtractROIBase<TInputImage,TOutputImage>
         desiredRegion.SetSize(  size  );
         desiredRegion.SetIndex( start );
         // Appel à la methode de base d'initialisation de la region
-        this->SetExtractionRegion( desiredRegion );
+        this->SetInternalExtractionRegion( desiredRegion );
 
 
   // do not call the superclass' implementation of this method since

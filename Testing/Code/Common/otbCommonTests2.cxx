@@ -33,4 +33,5 @@ REGISTER_TEST(otbExtractROINew);
 REGISTER_TEST(otbExtractROI_RGB);
 REGISTER_TEST(otbMultiChannelExtractROI );
 REGISTER_TEST(otbMultiChannelExtractROINew );
+REGISTER_TEST(otbTestMultiExtractMultiUpdate);
 }
