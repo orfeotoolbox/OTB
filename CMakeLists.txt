@@ -57,7 +57,7 @@ ADD_DEFINITIONS(
 # OTB version number.  An even minor number corresponds to releases.
 SET(OTB_VERSION_MAJOR "2")
 SET(OTB_VERSION_MINOR "2")
-SET(OTB_VERSION_PATCH "0")
+SET(OTB_VERSION_PATCH "1")
 
 # Version string should not include patch level.  The major.minor is
 # enough to distinguish available features of the toolkit.
@@ -95,19 +95,27 @@ IF(OTB_USE_VISU_GUI)
         # OpenGL Library
         #-------------------------------
         FIND_PACKAGE(OpenGL)
-        IF(OPENGL_INCLUDE_PATH)
-                INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
-        ENDIF(OPENGL_INCLUDE_PATH)
+        
+        IF( NOT OPENGL_FOUND )
+                MESSAGE(FATAL_ERROR "Impossible to find OpenGL on your system.\nCannot build OTB Visu module without OpenGL library.\nInstall OpenGL on your system OR set OTB_USE_VISU to OFF to disable OTB Visu module generation !")
+        ENDIF( NOT OPENGL_FOUND )
+        IF( NOT OPENGL_GLU_FOUND )
+                MESSAGE(FATAL_ERROR "Impossible to find GLU library on your system.\nCannot build OTB Visu module without GLU library.\nInstall GLU library on your system OR set OTB_USE_VISU to OFF to disable OTB Visu module generation !")
+        ENDIF( NOT OPENGL_GLU_FOUND )
 
-        INCLUDE(CheckIncludeFiles)
-        CHECK_INCLUDE_FILES("GL/glu.h"       HAVE_GL_GLU_H)
-        IF ( NOT HAVE_GL_GLU_H )
-                FIND_PATH(OTB_GLU_INCLUDE_PATH "GL/glu.h" ${OPENGL_INCLUDE_PATH})
-                IF(NOT OTB_GLU_INCLUDE_PATH)
-                        SET(OTB_GLU_INCLUDE_PATH "")
-                        MESSAGE("Impossible to find GLU files (include lib), detected by the FIND_PACKAGE(OpenGL) command.\nCannot build OTB Visu module without GLU library.\n=> You must install GLU (Mesa package, etc.) on your system OR set OTB_USE_VISU to OFF to disable OTB Visu module generation !")
-                ENDIF(NOT OTB_GLU_INCLUDE_PATH)
-        ENDIF ( NOT HAVE_GL_GLU_H )
+        IF(OPENGL_INCLUDE_DIR)
+                INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
+        ENDIF(OPENGL_INCLUDE_DIR)
+
+#        INCLUDE(CheckIncludeFiles)
+#        CHECK_INCLUDE_FILES("GL/glu.h"       HAVE_GL_GLU_H)
+#        IF ( NOT HAVE_GL_GLU_H )
+#                FIND_PATH(OTB_GLU_INCLUDE_PATH "GL/glu.h" ${OPENGL_INCLUDE_PATH})
+#                IF(NOT OTB_GLU_INCLUDE_PATH)
+#                        SET(OTB_GLU_INCLUDE_PATH "")
+#                        MESSAGE("Impossible to find GLU files (include lib), detected by the FIND_PACKAGE(OpenGL) command.\nCannot build OTB Visu module without GLU library.\n=> You must install GLU (Mesa package, etc.) on your system OR set OTB_USE_VISU to OFF to disable OTB Visu module generation !")
+#                ENDIF(NOT OTB_GLU_INCLUDE_PATH)
+#        ENDIF ( NOT HAVE_GL_GLU_H )
 
         
         #-------------------------------
@@ -131,7 +139,8 @@ IF(OTB_USE_VISU_GUI)
 		        SET( FLTK_INCLUDE_DIR /usr/include )
                 FIND_PACKAGE(FLTK)
 	        ENDIF(NOT FLTK_INCLUDE_DIR)
-               IF(FLTK_FOUND)
+                
+                IF(FLTK_FOUND)
 		        INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIRS})
 		        LINK_DIRECTORIES(${FLTK_LIBRARY_DIRS})
                 ELSE(FLTK_FOUND)
@@ -305,12 +314,11 @@ INCLUDE (${CMAKE_ROOT}/Modules/CMakeBackwardCompatibilityCXX.cmake)
 # MESSAGE(FATAL_ERROR ...) commands are invoked.
 INCLUDE(${CMAKE_ROOT}/Modules/Dart.cmake)
 MARK_AS_ADVANCED(TCL_TCLSH DART_ROOT)
-IF(BUILD_TESTING)
+IF(BUILD_TESTING OR BUILD_EXAMPLES_TESTING)
   ENABLE_TESTING()
   SET(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
   MARK_AS_ADVANCED(BUILDNAME)
-ENDIF(BUILD_TESTING)
-
+ENDIF(BUILD_TESTING OR BUILD_EXAMPLES_TESTING)
 
 
 #-----------------------------------------------------------------------------
@@ -366,11 +374,6 @@ MARK_AS_ADVANCED(OTB_SHOW_ALL_MSG_DEBUG)
 IF( OTB_SHOW_ALL_MSG_DEBUG )
  ADD_DEFINITIONS(-DOTB_ACTIVE_MSG_DEV_MACRO)
 ENDIF( OTB_SHOW_ALL_MSG_DEBUG )
-
-#-----------------------------------------------------------------------------
-# Option for disable example testing
-OPTION(OTB_DISABLE_CXX_EXAMPLES_TESTING "Disable examples testing." OFF)
-MARK_AS_ADVANCED(OTB_DISABLE_CXX_EXAMPLES_TESTING)
 
 #-----------------------------------------------------------------------------
 # Advanced option to avoid recompiling utilities at each cmake reconfiguration
@@ -470,6 +473,7 @@ SET(OTB_ALLS_UTILITIES_DEPENDENT_LIBRARIES "${OTB_IO_UTILITIES_DEPENDENT_LIBRARI
 
 
 OPTION(BUILD_EXAMPLES "Build the Examples directory." OFF)
+OPTION(BUILD_EXAMPLES_TESTING "Build the Examples testing." OFF)
 OPTION(BUILD_TESTING "Build testing." OFF)
 
 #-----------------------------------------------------------------------------
@@ -774,5 +778,3 @@ ELSE("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" GREATER 1.7)
           "This version of CMake is too old to build this version of OTB.  "
           "Please upgrade to CMake 1.8.")
 ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" GREATER 1.7)
-
-

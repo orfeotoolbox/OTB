@@ -1,5 +1,5 @@
  
-IF( NOT OTB_DISABLE_CXX_TESTING )
+IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
@@ -241,4 +241,4 @@ TARGET_LINK_LIBRARIES(otbSpatialReasoningTests1 OTBIO OTBSpatialReasoning gdal I
 ADD_EXECUTABLE(otbSpatialReasoningTests2 otbSpatialReasoningTests2.cxx ${BasicSpatialReasoning_SRCS2})
 TARGET_LINK_LIBRARIES(otbSpatialReasoningTests2 OTBIO OTBSpatialReasoning gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING )
+ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
