@@ -353,8 +353,8 @@ int main( int argc, char * argv[] )
   // \center
   // \includegraphics[width=0.44\textwidth]{LaplacianRecursiveGaussianImageFilterOutput3.eps}
   // \includegraphics[width=0.44\textwidth]{LaplacianRecursiveGaussianImageFilterOutput5.eps}
-  // \itkcaption[Output of the LaplacianRecursiveGaussianImageFilter.]{Effect of the
-  // LaplacianRecursiveGaussianImageFilter.}
+  // \itkcaption[Output of the RecursiveGaussianImageFilter.]{Effect of the
+  // RecursiveGaussianImageFilter.}
   // \label{fig:LaplacianRecursiveGaussianImageFilterInputOutput}
   // \end{figure}
   //
