@@ -9,7 +9,11 @@
 #include <string.h>
 #include <stdarg.h>
 #include "svm.h"
-typedef float Qfloat;
+//typedef float Qfloat;
+//#include <double.h>
+typedef double Qfloat;
+
+
 typedef signed char schar;
 #ifndef min
 template <class T> inline T min(T x,T y) { return (x<y)?x:y; }
