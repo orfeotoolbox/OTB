@@ -50,6 +50,14 @@ SpectralAngleDistanceImageFilter<TInputImage,TOutputImage>
   InputImageConstPointerType  inputPtr = this->GetInput();
   OutputImagePointerType outputPtr = this->GetOutput();
 
+  //inputPtr->UpdateOutputInformation();
+  // Check if the reference pixel size matches the input image number of components.
+  if (m_ReferencePixel.GetSize() != inputPtr->GetNumberOfComponentsPerPixel())
+    {
+      itkExceptionMacro(<<"Reference pixel size ("<<m_ReferencePixel.GetSize()<<" and input image pixel size ("
+			<<inputPtr->GetNumberOfComponentsPerPixel()<<") don't match!");
+    }
+
   
   // Define the portion of the input to walk for this thread, using
   // the CallCopyOutputRegionToInputRegion method allows for the input
