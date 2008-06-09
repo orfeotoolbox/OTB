@@ -467,12 +467,12 @@ StreamingImageFileWriter<TInputImage>
                 streamRegion = m_RegionSplitter->GetSplit(piece, numDivisions,
                                               outputRegion);
       
-		std::cout<< "Piece : " << piece <<std::endl;
-                                                               std::cout<< "RegionSplit : Index(" << streamRegion.GetIndex()[0]
-                                  << "," << streamRegion.GetIndex()[1]
-                                                                                                                << ") Size(" << streamRegion.GetSize()[0]
-									<< "," << streamRegion.GetSize()[1] << ")"<<std::endl;
-
+		otbMsgDebugMacro(<<"Piece : " << piece );
+		otbMsgDebugMacro(<<"RegionSplit : Index(" << streamRegion.GetIndex()[0]
+				 << "," << streamRegion.GetIndex()[1]
+				 << ") Size(" << streamRegion.GetSize()[0]
+				 << "," << streamRegion.GetSize()[1] << ")");
+		
                         
                 inputPtr->SetRequestedRegion(streamRegion);
                 inputPtr->PropagateRequestedRegion();
