@@ -35,7 +35,7 @@
 // \index{otb::DEMHandler}
 //
 //
-// The following example illustrates the use of the otb::DEMToImageGenerator class.
+// The following example illustrates the use of the \doxygen{otb}{DEMToImageGenerator} class.
 // The aim of this class is to generate an image from the srtm data (precising the start extraction 
 // latitude and longitude point). Each pixel is a geographic point and its intensity is 
 // the altitude of the point.
