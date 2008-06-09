@@ -822,15 +822,29 @@ ADD_TEST(bfTvEuclideanDistanceWithMissingValue ${BASICFILTERS_TESTS8}
   ADD_TEST(bfTuConvolutionImageFilterNew ${BASICFILTERS_TESTS8}
          otbConvolutionImageFilterNew)
 
-  ADD_TEST(bfTuConvolutionImageFilter ${BASICFILTERS_TESTS8}
+  ADD_TEST(bfTvConvolutionImageFilter ${BASICFILTERS_TESTS8}
 		--compare-image ${EPSILON}
-		    ${BASELINE}/bfTuConvolutionImageFilter.tif
-		    ${TEMP}/bfTuConvolutionImageFilter.tif
+		    ${BASELINE}/bfTvConvolutionImageFilter.tif
+		    ${TEMP}/bfTvConvolutionImageFilter.tif
 		    otbConvolutionImageFilter
 		    ${INPUTDATA}/QB_Suburb.png
-		    ${TEMP}/bfTuConvolutionImageFilter.tif
+		    ${TEMP}/bfTvConvolutionImageFilter.tif
 )
 
+
+# -------            otb::ScalarToRainbowRGBPixelFunctor  -----------------
+
+  ADD_TEST(bfTuScalarToRainbowRGBPixelFunctorNew ${BASICFILTERS_TESTS8}
+         otbConvolutionImageFilterNew)
+
+  ADD_TEST(bfTvScalarToRainbowRGBPixelFunctor ${BASICFILTERS_TESTS8}
+		--compare-image ${EPSILON}
+		    ${BASELINE}/bfTvScalarToRainbowRGBPixelFunctor.png
+		    ${TEMP}/bfTvScalarToRainbowRGBPixelFunctor.png
+		    otbScalarToRainbowRGBPixelFunctor
+		    ${INPUTDATA}/QB_Suburb.png
+		    ${TEMP}/bfTvScalarToRainbowRGBPixelFunctor.png
+)
 
 # A enrichir
 SET(BasicFilters_SRCS1
@@ -950,6 +964,8 @@ otbEuclideanDistanceWithMissingValueNew.cxx
 otbEuclideanDistanceWithMissingValue.cxx
 otbConvolutionImageFilterNew.cxx
 otbConvolutionImageFilter.cxx
+otbScalarToRainbowRGBPixelFunctorNew.cxx
+otbScalarToRainbowRGBPixelFunctor.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

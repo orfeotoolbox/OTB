@@ -26,9 +26,16 @@
 void RegisterTests()
 {
 REGISTER_TEST(LeeImageFilterTest);
+REGISTER_TEST(DEMToRainbowExampleTest);
 }
 
 #undef main
 #define main LeeImageFilterTest
 #include "LeeImageFilter.cxx"
+             
+#undef main
+#define main DEMToRainbowExampleTest
+#include "DEMToRainbowExample.cxx"
+             
+             
 

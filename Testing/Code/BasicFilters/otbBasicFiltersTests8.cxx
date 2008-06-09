@@ -37,4 +37,6 @@ void RegisterTests()
   REGISTER_TEST(otbEuclideanDistanceWithMissingValue);
   REGISTER_TEST(otbConvolutionImageFilterNew);
   REGISTER_TEST(otbConvolutionImageFilter);
+  REGISTER_TEST(otbScalarToRainbowRGBPixelFunctorNew);
+  REGISTER_TEST(otbScalarToRainbowRGBPixelFunctor);
 }
