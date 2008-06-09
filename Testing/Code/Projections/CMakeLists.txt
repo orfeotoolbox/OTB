@@ -177,9 +177,11 @@ ADD_TEST(prTvOrthoRectificationToulouse ${PROJECTIONS_TESTS2}
         4829184.8 
         500
         500 
-        220
+#         220
         0.5
         -0.5
+        31
+        N
         )
 
 # TEST 17
@@ -193,9 +195,11 @@ ADD_TEST(prTvOrthoRectificationCevennes ${PROJECTIONS_TESTS2}
         4.881e+06 
         500
         500 
-        220
+#         220
         0.5
         -0.5
+        31
+        N
         )
 #=======================================================================================				
 # TEST 18
@@ -243,12 +247,14 @@ ADD_TEST(prTvOrthoRectificationToulouseWithDEM ${PROJECTIONS_TESTS2}
         374100.8
         4829184.8 
         500
-				500 
-				220
-				0.5
-				-0.5
+        500 
+# 				220
+        0.5
+        -0.5
+        31
+        N
         ${INPUTDATA}/DEM/srtm_directory/ 
-        ${TEMP}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
+#         ${TEMP}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
         )
 
 # TEST 21
@@ -262,12 +268,35 @@ ADD_TEST(prTvOrthoRectificationCevennesWithDEM ${PROJECTIONS_TESTS2}
         4.881e+06 
         500 
         500 
-        200 
-				0.5
-				-0.5
+#         200 
+        0.5
+        -0.5
+        31
+        N
         ${INPUTDATA}/DEM/srtm_directory/ 
-        ${TEMP}/prTvOrthoRectificationCevennesWithDEM_UTM.tif
+#         ${TEMP}/prTvOrthoRectificationCevennesWithDEM_UTM.tif
         )
+        
+        
+#========================= Ortho rectif SPOT5 ===============================        
+
+ADD_TEST(prTvOrthoRectificationSPOT5 ${PROJECTIONS_TESTS2} 
+  --compare-image ${EPSILON}  ${BASELINE}/prTvOrthoRectificationSPOT5_UTM.tif
+                          ${TEMP}/prTvOrthoRectificationSPOT5_UTM.tif
+        otbOrthoRectificationFilter
+        ${IMAGEDATA}/SPOT5_SCENE01/IMAGERY.TIF
+        ${TEMP}/prTvOrthoRectificationSPOT5_UTM.tif
+        536187
+        3950748
+        500
+        500 
+        5
+        -5
+        39
+        N
+        )        
+        
+        
 #========================= TESTS SINGAPOUR ===============================
 
 #SET(EMMANUELDATA ${OTB_DATA_ROOT}/Emmanuel/Singapour/000000173549_01_P001_MUL)
