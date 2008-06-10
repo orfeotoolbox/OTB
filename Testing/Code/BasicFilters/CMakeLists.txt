@@ -21,6 +21,7 @@ SET(BASICFILTERS_TESTS5 ${CXX_TEST_PATH}/otbBasicFiltersTests5)
 SET(BASICFILTERS_TESTS6 ${CXX_TEST_PATH}/otbBasicFiltersTests6)
 SET(BASICFILTERS_TESTS7 ${CXX_TEST_PATH}/otbBasicFiltersTests7)
 SET(BASICFILTERS_TESTS8 ${CXX_TEST_PATH}/otbBasicFiltersTests8)
+SET(BASICFILTERS_TESTS9 ${CXX_TEST_PATH}/otbBasicFiltersTests9)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests1 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -846,6 +847,20 @@ ADD_TEST(bfTvEuclideanDistanceWithMissingValue ${BASICFILTERS_TESTS8}
 		    ${TEMP}/bfTvScalarToRainbowRGBPixelFunctor.png
 )
 
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests9 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ADD_TEST(bfTuChangeLabelImageFilterNew ${BASICFILTERS_TESTS9}
+	otbChangeLabelImageFilterNew
+)
+
+ ADD_TEST(bfTuChangeLabelImageFilter ${BASICFILTERS_TESTS9}
+	otbChangeLabelImageFilterTest
+)
+
+
 # A enrichir
 SET(BasicFilters_SRCS1
 otbLeeFilter.cxx
@@ -968,6 +983,13 @@ otbScalarToRainbowRGBPixelFunctorNew.cxx
 otbScalarToRainbowRGBPixelFunctor.cxx
 )
 
+# A enrichir
+SET(BasicFilters_SRCS9
+otbChangeLabelImageFilterNew.cxx
+otbChangeLabelImageFilter.cxx
+)
+
+
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbBasicFiltersTests1 otbBasicFiltersTests1.cxx ${BasicFilters_SRCS1})
@@ -993,5 +1015,8 @@ TARGET_LINK_LIBRARIES(otbBasicFiltersTests7  OTBBasicFilters OTBCommon OTBIO  gd
 
 ADD_EXECUTABLE(otbBasicFiltersTests8 otbBasicFiltersTests8.cxx ${BasicFilters_SRCS8})
 TARGET_LINK_LIBRARIES(otbBasicFiltersTests8  OTBBasicFilters OTBCommon OTBIO  gdal ITKIO ITKCommon ITKBasicFilters)
+
+ADD_EXECUTABLE(otbBasicFiltersTests9 otbBasicFiltersTests9.cxx ${BasicFilters_SRCS9})
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests9  OTBBasicFilters OTBCommon OTBIO  gdal ITKIO ITKCommon ITKBasicFilters)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
