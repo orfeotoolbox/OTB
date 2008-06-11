@@ -1,8 +1,13 @@
 OTB-v.2.2.2 - Changes since version 2.0.0 (2008/05/29)
 -----------------------------------------
 
+	- Added OTB_DISABLE_CXX_EXAMPLES_TESTING : allows to generate or not only examples testing
+
 *Common:
+
 	-Modification of the Extraction ROI Classes : added SetROI() method for region selection.
+
+	-
 
 OTB-v.2.2.0 - Changes since version 2.0.0 (2008/05/29)
 -----------------------------------------
