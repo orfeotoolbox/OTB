@@ -296,7 +296,21 @@ ADD_TEST(prTvOrthoRectificationSPOT5 ${PROJECTIONS_TESTS2}
         N
         )        
         
-        
+ ADD_TEST(prTvOrthoRectificationMonoThreadSPOT5 ${PROJECTIONS_TESTS2} 
+  --compare-image ${EPSILON}  ${BASELINE}/prTvOrthoRectificationSPOT5_UTM.tif
+                          ${TEMP}/prTvOrthoRectificationMonoThreadSPOT5_UTM.tif
+        otbOrthoRectificationMonoThreadFilter
+        ${IMAGEDATA}/SPOT5_SCENE01/IMAGERY.TIF
+        ${TEMP}/prTvOrthoRectificationMonoThreadSPOT5_UTM.tif
+        536187
+        3950748
+        500
+        500 
+        5
+        -5
+        39
+        N
+        )       
 #========================= TESTS SINGAPOUR ===============================
 
 #SET(EMMANUELDATA ${OTB_DATA_ROOT}/Emmanuel/Singapour/000000173549_01_P001_MUL)
@@ -347,6 +361,7 @@ SET(Projections_SRCS2
 otbOrthoRectificationFilterNew.cxx
 otbOrthoRectificationFilter.cxx
 otbOrthoRectificationFilterWithDEM.cxx
+otbOrthoRectificationMonoThreadFilter.cxx
 #otbSensorImageToCarto.cxx
 #otbSensorImageDEMToCarto.cxx
 )
