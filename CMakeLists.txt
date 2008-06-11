@@ -63,6 +63,8 @@ SET(OTB_VERSION_PATCH "1")
 # enough to distinguish available features of the toolkit.
 SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
+OPTION(BUILD_TESTING "Build testing." OFF)
+
 #-----------------------------------------------------------------------------
 # FIND EXTERNAL LIBRAIRIES USE
 
@@ -474,7 +476,7 @@ SET(OTB_ALLS_UTILITIES_DEPENDENT_LIBRARIES "${OTB_IO_UTILITIES_DEPENDENT_LIBRARI
 
 OPTION(BUILD_EXAMPLES "Build the Examples directory." OFF)
 OPTION(BUILD_EXAMPLES_TESTING "Build the Examples testing." OFF)
-OPTION(BUILD_TESTING "Build testing." OFF)
+
 
 #-----------------------------------------------------------------------------
 # Dispatch the build into the proper subdirectories.
