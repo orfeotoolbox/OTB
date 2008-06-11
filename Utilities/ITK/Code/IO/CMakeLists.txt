@@ -118,6 +118,13 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 # + be used by external code like contributions to the insight journal
 ADD_EXECUTABLE(itkTestDriver itkTestDriver.cxx) 
 TARGET_LINK_LIBRARIES(itkTestDriver ITKIO)
+
+# Need nsl to resolve gethostbyname on SunOS-5.8
+# and socket also
+IF(CMAKE_SYSTEM MATCHES "SunOS.*")
+  TARGET_LINK_LIBRARIES(itkTestDriver socket nsl)
+ENDIF(CMAKE_SYSTEM MATCHES "SunOS.*")
+
 IF(NOT ITK_INSTALL_NO_DEVELOPMENT)
   INSTALL(TARGETS itkTestDriver
     RUNTIME DESTINATION ${ITK_INSTALL_BIN_DIR_CM24} COMPONENT Development)
