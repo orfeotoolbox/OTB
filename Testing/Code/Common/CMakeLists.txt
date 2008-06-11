@@ -515,6 +515,18 @@ ADD_TEST(coTvVectorData ${COMMON_TESTS7}
      otbVectorData
 )
 
+ADD_TEST(coTuShiftScaleImageAdaptorNew ${COMMON_TESTS7}
+     otbShiftScaleImageAdaptorNew
+)
+
+ADD_TEST(coTvShiftScaleImageAdaptor ${COMMON_TESTS7}
+  --compare-image ${TOL}
+	          ${BASELINE}/coTvShiftScaleImageAdaptor.tif    # copie the input image
+		  ${TEMP}/coTvShiftScaleImageAdaptor.tif
+     otbShiftScaleImageAdaptor
+        ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+	${TEMP}/coTvShiftScaleImageAdaptor.tif
+)
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
@@ -592,6 +604,8 @@ otbStandardFilterWatcherNew.cxx
 otbDataNodeTest.cxx
 otbVectorDataNew.cxx
 otbVectorData.cxx
+otbShiftScaleImageAdaptorNew.cxx
+otbShiftScaleImageAdaptor.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

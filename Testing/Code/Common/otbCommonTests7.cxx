@@ -32,4 +32,6 @@ REGISTER_TEST(otbStandardFilterWatcherNew);
 REGISTER_TEST(otbDataNodeTest);
 REGISTER_TEST(otbVectorDataNew);
 REGISTER_TEST(otbVectorData);
+REGISTER_TEST(otbShiftScaleImageAdaptorNew);
+REGISTER_TEST(otbShiftScaleImageAdaptor);
 }
