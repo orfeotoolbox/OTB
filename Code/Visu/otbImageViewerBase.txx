@@ -119,7 +119,7 @@ namespace otb
 	  PixelType pixel = it.Get();
 	  for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
 	    {
-	      sl->GetNthElement(0)->PushBack(vcl_sqrt(pixel[m_RedChannelIndex]*pixel[m_RedChannelIndex]+pixel[m_GreenChannelIndex]*pixel[m_GreenChannelIndex]));
+	      sl->GetNthElement(0)->PushBack(vcl_sqrt(static_cast<double>(pixel[m_RedChannelIndex]*pixel[m_RedChannelIndex]+pixel[m_GreenChannelIndex]*pixel[m_GreenChannelIndex])));
 	    }
 	  ++it;
 	}
@@ -132,7 +132,7 @@ namespace otb
 	  PixelType pixel = it.Get();
 	  for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
 	    {
-	      sl->GetNthElement(0)->PushBack(vcl_atan2(pixel[m_RedChannelIndex],pixel[m_GreenChannelIndex]));
+	      sl->GetNthElement(0)->PushBack(vcl_atan2(static_cast<double>(pixel[m_RedChannelIndex]),static_cast<double>(pixel[m_GreenChannelIndex])));
 	    }
 	  ++it;
 	}
