@@ -28,8 +28,8 @@
 
 void RegisterTests()
 {
-  //# Case for release 2.2.0
-  if(OTB_USE_OPENJPEG)
+  //# Case for release 2.2.1
+  if(OTB_USE_JPEG2000)
     {
       REGISTER_TEST(otbJPEG2000ImageIOTestCanRead);
       REGISTER_TEST(otbJPEG2000ImageIOTestCanWrite);

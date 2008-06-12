@@ -1,4 +1,4 @@
- 
+$ 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
@@ -416,20 +416,20 @@ itkScaleInvariantFeatureImageFilterTest.cxx
 )
 
 # Case for release 2.2.1
-IF(OTB_USE_OPENJPEG)
+IF(OTB_USE_JPEG2000)
   SET(UtilitiesTests_SRCS ${UtilitiesTests_SRCS} openJpegEncoder.cxx openJpegDecoder.cxx)
-ENDIF(OTB_USE_OPENJPEG)
+ENDIF(OTB_USE_JPEG2000)
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}")
 
 ADD_EXECUTABLE(otbUtilitiesTests otbUtilitiesTests.cxx ${UtilitiesTests_SRCS})
-IF(OTB_USE_OPENJPEG)
+IF(OTB_USE_JPEG2000)
   TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon otbossim otbsvm otb6S tinyXML openjpeg)
-ELSE(OTB_USE_OPENJPEG)
+ELSE(OTB_USE_JPEG2000)
   TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon otbossim otbsvm otb6S tinyXML )
-ENDIF(OTB_USE_OPENJPEG)
+ENDIF(OTB_USE_JPEG2000)
 IF(UNIX)
     TARGET_LINK_LIBRARIES (otbUtilitiesTests m)
 ENDIF(UNIX)

@@ -1271,7 +1271,7 @@ ADD_TEST(ioTvossimElevManagerTest ${IO_TESTS12}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 
 # Case for release 2.2.1
-IF(OTB_USE_OPENJPEG)
+IF(OTB_USE_JPEG2000)
 IF(NOT OTB_USE_EXTERNAL_ITK)
 
 # ---  JPEG2000 can read ---
@@ -1327,7 +1327,7 @@ ADD_TEST(ioTuJPEG2000ImageIOCanWrite ${IO_TESTS13}
          ${INPUTDATA}/toto.j2k
          )
 ENDIF(NOT OTB_USE_EXTERNAL_ITK)
-ENDIF(OTB_USE_OPENJPEG)
+ENDIF(OTB_USE_JPEG2000)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS14 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1495,20 +1495,20 @@ otbOssimElevManagerTest.cxx
 )
 
 
-IF(OTB_USE_OPENJPEG)
+IF(OTB_USE_JPEG2000)
 SET(BasicIO_SRCS13
 otbJPEG2000ImageIOTestCanRead.cxx
 otbJPEG2000ImageIOTestCanWrite.cxx
 )
-ENDIF(OTB_USE_OPENJPEG)
+ENDIF(OTB_USE_JPEG2000)
 
 # Case for release 2.2.1
-IF(OTB_USE_OPENJPEG)
+IF(OTB_USE_JPEG2000)
   IF(OTB_USE_EXTERNAL_ITK)
     LIST(REMOVE_ITEM BasicIO_SRCS13 "${CMAKE_CURRENT_SOURCE_DIR}/otbJPEG2000ImageIOTestCanRead.cxx" )
     LIST(REMOVE_ITEM BasicIO_SRCS13 "${CMAKE_CURRENT_SOURCE_DIR}/otbJPEG2000ImageIOTestCanWrite.cxx" )
   ENDIF(OTB_USE_EXTERNAL_ITK)
-ENDIF(OTB_USE_OPENJPEG)
+ENDIF(OTB_USE_JPEG2000)
 
 SET(BasicIO_SRCS14
 otbOGRDriverTest.cxx
