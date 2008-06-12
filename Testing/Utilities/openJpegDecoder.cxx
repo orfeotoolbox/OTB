@@ -66,7 +66,8 @@ int openJpegDecoder(int argc, char * argv[])
 	OPJ_UINT32 l_max_data_size = 1000;
 	OPJ_UINT32 l_tile_index;
 	OPJ_BYTE * l_data = (OPJ_BYTE *) malloc(1000);
-	bool l_go_on = true;
+	//bool l_go_on = true;
+	OPJ_BOOL l_go_on = true;
 	OPJ_INT32 l_tile_x0,l_tile_y0;
 	OPJ_UINT32 l_tile_width,l_tile_height,l_nb_tiles_x,l_nb_tiles_y,l_nb_comps;
 	OPJ_INT32 l_current_tile_x0,l_current_tile_y0,l_current_tile_x1,l_current_tile_y1;
@@ -147,8 +148,7 @@ int openJpegDecoder(int argc, char * argv[])
 		(l_go_on)
 	{
 		if
-			(! opj_read_tile_header(
-						l_codec,
+			(! opj_read_tile_header(l_codec,
 						&l_tile_index,
 						&l_data_size,
 						&l_current_tile_x0,

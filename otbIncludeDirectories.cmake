@@ -36,14 +36,16 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/otbgeotiff
   ${OTB_SOURCE_DIR}/Utilities/otbgeotiff/libxtiff
   ${OTB_SOURCE_DIR}/Utilities/tinyXMLlib
-# Commented for release 2.2.0
-#  ${OTB_SOURCE_DIR}/Utilities/otbopenjpeg/libopenjpeg
 #  ${OTB_SOURCE_DIR}/Utilities/otbgalib
 #  ${OTB_SOURCE_DIR}/Utilities/otbkml
 #  ${OTB_SOURCE_DIR}/Utilities/otbkml/src
 #  ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party/zlib-1.2.3
 #  ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party/zlib-1.2.3/contrib
 )
+# Case for release 2.2.1
+IF(OTB_USE_OPENJPEG)
+  SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE} ${OTB_SOURCE_DIR}/Utilities/otbopenjpeg/libopenjpeg)
+ENDIF(OTB_USE_OPENJPEG)
 
 #-----------------------------------------------------------------------------
 # Include directories from the ossim build tree
@@ -187,13 +189,16 @@ SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbgeotiff
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbgeotiff/libxtiff
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/tinyXMLlib
-# Commented for release 2.2.0
-#  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbopenjpeg/libopenjpeg
 #  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbgalib
 #  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml
 #  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/third_party/zlib-1.2.3
 #  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/third_party/zlib-1.2.3/contrib
 )
+
+# Case for release 2.2.0
+IF(OTB_USE_OPENJPEG)
+  SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE} ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbopenjpeg/libopenjpeg)
+ENDIF(OTB_USE_OPENJPEG)
 
 #For GDAL header file
 SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}

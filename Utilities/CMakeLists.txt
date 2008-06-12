@@ -2,9 +2,11 @@
 
 
 IF(NOT OTB_USE_EXTERNAL_ITK)
-# Commented for release 2.2.0
-#	SUBDIRS( ITK otbopenjpeg)
-SUBDIRS(ITK)
+  SUBDIRS(ITK)
+  # Case for release 2.2.1
+  IF(NOT OTB_USE_OPENJPEG)
+    SUBDIRS( ITK otbopenjpeg)
+  ENDIF(NOT OTB_USE_OPENJPEG)
 ENDIF(NOT OTB_USE_EXTERNAL_ITK)
 
 IF(OTB_USE_VISU_GUI)

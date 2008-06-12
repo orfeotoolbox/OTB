@@ -1268,64 +1268,66 @@ ADD_TEST(ioTvossimElevManagerTest ${IO_TESTS12}
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS13 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 
-# Commented for release 2.2.0
-#IF(NOT OTB_USE_EXTERNAL_ITK)
-#
+# Case for release 2.2.1
+IF(OTB_USE_OPENJPEG)
+IF(NOT OTB_USE_EXTERNAL_ITK)
+
 # ---  JPEG2000 can read ---
-#ADD_TEST(ioTuJ2KImageIOCanRead ${IO_TESTS13} 
-#         otbJPEG2000ImageIOTestCanRead
-#         ${INPUTDATA}/bretagne.j2k
-#         )
+ADD_TEST(ioTuJ2KImageIOCanRead ${IO_TESTS13} 
+         otbJPEG2000ImageIOTestCanRead
+         ${INPUTDATA}/bretagne.j2k
+         )
 
-#ADD_TEST(ioTuJP2ImageIOCanRead ${IO_TESTS13} 
-#         otbJPEG2000ImageIOTestCanRead
-#         ${IMAGEDATA}/JPEG2000/QB_multicomp.jpx
-#         )
+ADD_TEST(ioTuJP2ImageIOCanRead ${IO_TESTS13} 
+         otbJPEG2000ImageIOTestCanRead
+         ${IMAGEDATA}/JPEG2000/QB_multicomp.jpx
+         )
 
-#ADD_TEST(ioTuVectorImageFileReaderWriterJ2K2TIF ${IO_TESTS9} 
-#--compare-image ${TOL}  ${BASELINE}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
-#                        ${TEMP}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
-#         otbVectorImageFileReaderWriterTest
-#         ${INPUTDATA}/bretagne.j2k
-#	 ${TEMP}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
-#         )
+ADD_TEST(ioTuVectorImageFileReaderWriterJ2K2TIF ${IO_TESTS9} 
+-compare-image ${TOL}  ${BASELINE}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
+                        ${TEMP}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
+         otbVectorImageFileReaderWriterTest
+         ${INPUTDATA}/bretagne.j2k
+	 ${TEMP}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
+         )
 
-#ADD_TEST(ioTuImageFileReaderWriterJ2K2TIF ${IO_TESTS2} 
-#--compare-image ${TOL}  ${BASELINE}/ioTvImageFileReaderWriterJ2K2TIFOutput.tif
-#                        ${TEMP}/ioTvImageFileReaderWriterJ2K2TIFOutput.tif
-#         otbDoubleImageIOTest
-#         ${INPUTDATA}/bretagne.j2k
-#	 ${TEMP}/ioTvImageFileReaderWriterJ2K2TIFOutput.tif
-#         )
+ADD_TEST(ioTuImageFileReaderWriterJ2K2TIF ${IO_TESTS2} 
+--compare-image ${TOL}  ${BASELINE}/ioTvImageFileReaderWriterJ2K2TIFOutput.tif
+                        ${TEMP}/ioTvImageFileReaderWriterJ2K2TIFOutput.tif
+         otbDoubleImageIOTest
+         ${INPUTDATA}/bretagne.j2k
+	 ${TEMP}/ioTvImageFileReaderWriterJ2K2TIFOutput.tif
+        )
 
 #NOTE: we are comparing with the kakadu output in raw format.
-#ADD_TEST(ioTuVectorImageFileReaderWriterJP22TIF ${IO_TESTS9} 
-#--compare-image ${TOL}  ${BASELINE}/ioTvVectorImageFileReaderWriterJP22TIFOutput
-#                        ${TEMP}/ioTvVectorImageFileReaderWriterJP22TIFOutput.tif
-#         otbVectorImageFileReaderWriterTest
-#         ${IMAGEDATA}/JPEG2000/QB_multicomp_small.jpx
-#	 ${TEMP}/ioTvVectorImageFileReaderWriterJP22TIFOutput.tif
-#         )
+ADD_TEST(ioTuVectorImageFileReaderWriterJP22TIF ${IO_TESTS9} 
+--compare-image ${TOL}  ${BASELINE}/ioTvVectorImageFileReaderWriterJP22TIFOutput
+                        ${TEMP}/ioTvVectorImageFileReaderWriterJP22TIFOutput.tif
+         otbVectorImageFileReaderWriterTest
+         ${IMAGEDATA}/JPEG2000/QB_multicomp_small.jpx
+	 ${TEMP}/ioTvVectorImageFileReaderWriterJP22TIFOutput.tif
+         )
 
 
-#ADD_TEST(ioTuImageFileReaderWriterJP22TIF ${IO_TESTS2} 
-#--compare-image ${TOL}  ${BASELINE}/ioTvImageFileReaderWriterJP22TIFOutput.tif
-#                        ${TEMP}/ioTvImageFileReaderWriterJP22TIFOutput.tif
-#         otbDoubleImageIOTest
-#         ${IMAGEDATA}/JPEG2000/QB_multicomp_small.jpx
-#	 ${TEMP}/ioTvImageFileReaderWriterJP22TIFOutput.tif
-#         )
+ADD_TEST(ioTuImageFileReaderWriterJP22TIF ${IO_TESTS2} 
+-compare-image ${TOL}  ${BASELINE}/ioTvImageFileReaderWriterJP22TIFOutput.tif
+                        ${TEMP}/ioTvImageFileReaderWriterJP22TIFOutput.tif
+         otbDoubleImageIOTest
+         ${IMAGEDATA}/JPEG2000/QB_multicomp_small.jpx
+	 ${TEMP}/ioTvImageFileReaderWriterJP22TIFOutput.tif
+         )
 
 
 
 # ---  JPEG2000 can write ---
-#ADD_TEST(ioTuJPEG2000ImageIOCanWrite ${IO_TESTS13} 
-#         otbJPEG2000ImageIOTestCanWrite
-#         ${INPUTDATA}/toto.j2k
-#         )
-#ENDIF(NOT OTB_USE_EXTERNAL_ITK)
+ADD_TEST(ioTuJPEG2000ImageIOCanWrite ${IO_TESTS13} 
+         otbJPEG2000ImageIOTestCanWrite
+         ${INPUTDATA}/toto.j2k
+         )
+ENDIF(NOT OTB_USE_EXTERNAL_ITK)
+ENDIF(OTB_USE_OPENJPEG)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS14 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1493,17 +1495,20 @@ otbOssimElevManagerTest.cxx
 )
 
 
-#SET(BasicIO_SRCS13
-#otbJPEG2000ImageIOTestCanRead.cxx
-#otbJPEG2000ImageIOTestCanWrite.cxx
-#)
+IF(OTB_USE_OPENJPEG)
+SET(BasicIO_SRCS13
+otbJPEG2000ImageIOTestCanRead.cxx
+otbJPEG2000ImageIOTestCanWrite.cxx
+)
+ENDIF(OTB_USE_OPENJPEG)
 
-# Commented for release 2.2.0
-#IF(OTB_USE_EXTERNAL_ITK)
-#LIST(REMOVE_ITEM BasicIO_SRCS13 "${CMAKE_CURRENT_SOURCE_DIR}/otbJPEG2000ImageIOTestCanRead.cxx" )
-#LIST(REMOVE_ITEM BasicIO_SRCS13 "${CMAKE_CURRENT_SOURCE_DIR}/otbJPEG2000ImageIOTestCanWrite.cxx" )
-#ENDIF(OTB_USE_EXTERNAL_ITK)
-
+# Case for release 2.2.1
+IF(OTB_USE_OPENJPEG)
+  IF(OTB_USE_EXTERNAL_ITK)
+    LIST(REMOVE_ITEM BasicIO_SRCS13 "${CMAKE_CURRENT_SOURCE_DIR}/otbJPEG2000ImageIOTestCanRead.cxx" )
+    LIST(REMOVE_ITEM BasicIO_SRCS13 "${CMAKE_CURRENT_SOURCE_DIR}/otbJPEG2000ImageIOTestCanWrite.cxx" )
+  ENDIF(OTB_USE_EXTERNAL_ITK)
+ENDIF(OTB_USE_OPENJPEG)
 
 SET(BasicIO_SRCS14
 otbOGRDriverTest.cxx

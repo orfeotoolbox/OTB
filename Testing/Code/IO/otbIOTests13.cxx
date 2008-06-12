@@ -28,7 +28,10 @@
 
 void RegisterTests()
 {
-  // Commented for release 2.2.0
-  // REGISTER_TEST(otbJPEG2000ImageIOTestCanRead);
-  // REGISTER_TEST(otbJPEG2000ImageIOTestCanWrite);
+  //# Case for release 2.2.0
+  if(OTB_USE_OPENJPEG)
+    {
+      REGISTER_TEST(otbJPEG2000ImageIOTestCanRead);
+      REGISTER_TEST(otbJPEG2000ImageIOTestCanWrite);
+    }
 }

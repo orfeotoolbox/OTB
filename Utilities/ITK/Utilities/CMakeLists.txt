@@ -23,9 +23,12 @@ SET(OPJ_PREFIX "itk")
 #-----------------------------
 # The folowing lines are commented for the otbopenjpeg pb.
 # In static, pb of linking between itkopenjpeg and otbopenjeg (method definided twice)
+# Case for release 2.2.1
 #-----------------------------
-#ITK_THIRD_PARTY_SUBDIR(OpenJPEG openjpeg)
-#ITK_THIRD_PARTY_SUBDIR(GDCM gdcm)
+IF(NOT OTB_USE_OPENJPEG)
+  ITK_THIRD_PARTY_SUBDIR(OpenJPEG openjpeg)
+  ITK_THIRD_PARTY_SUBDIR(GDCM gdcm)
+ENDIF(NOT OTB_USE_OPENJPEG)
 
 
 #------------------------------------------------------------------------------

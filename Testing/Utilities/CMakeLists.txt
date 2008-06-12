@@ -325,11 +325,11 @@ ADD_TEST(utOssimRadarSatSupport ${UTILITIES_TESTS}
 
 
 # -------            lib OpenJpeg   ------------------------------
-#ADD_TEST(utOpenJpegEncoder ${UTILITIES_TESTS}
-#	openJpegEncoder)
+ADD_TEST(utOpenJpegEncoder ${UTILITIES_TESTS}
+	openJpegEncoder)
 
-#ADD_TEST(utOpenJpegDecoder ${UTILITIES_TESTS}
-#	openJpegDecoder)
+ADD_TEST(utOpenJpegDecoder ${UTILITIES_TESTS}
+	openJpegDecoder)
 
 # -------            SIFT   -------------------------------------
 ADD_TEST(ut2DSiftImageSquareSyntheticRotate10 ${UTILITIES_TESTS}
@@ -412,18 +412,24 @@ tinyXMLlibTest.cxx
 svmGenericKernelBasicOperationsTest.cxx
 otbSVMComposedKernelFunctorTest.cxx
 ossimRadarSatSupport.cxx
-#openJpegEncoder.cxx
-#openJpegDecoder.cxx
 itkScaleInvariantFeatureImageFilterTest.cxx
 )
+
+# Case for release 2.2.1
+IF(OTB_USE_OPENJPEG)
+  SET(UtilitiesTests_SRCS ${UtilitiesTests_SRCS} openJpegEncoder.cxx openJpegDecoder.cxx)
+ENDIF(OTB_USE_OPENJPEG)
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}")
 
 ADD_EXECUTABLE(otbUtilitiesTests otbUtilitiesTests.cxx ${UtilitiesTests_SRCS})
-#TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon otbossim otbsvm otb6S tinyXML openjpeg)
-TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon otbossim otbsvm otb6S tinyXML )
+IF(OTB_USE_OPENJPEG)
+  TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon otbossim otbsvm otb6S tinyXML openjpeg)
+ELSE(OTB_USE_OPENJPEG)
+  TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon otbossim otbsvm otb6S tinyXML )
+ENDIF(OTB_USE_OPENJPEG)
 IF(UNIX)
     TARGET_LINK_LIBRARIES (otbUtilitiesTests m)
 ENDIF(UNIX)

@@ -63,9 +63,22 @@ SET(OTB_VERSION_PATCH "1")
 # enough to distinguish available features of the toolkit.
 SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
+
 OPTION(BUILD_TESTING "Build testing." OFF)
 
+
 #-----------------------------------------------------------------------------
+
+# Case for release 2.2.1
+# Use the openjpeg library.
+OPTION(OTB_USE_OPENJPEG "Use the openjpeg library." OFF)
+MARK_AS_ADVANCED(OTB_USE_OPENJPEG)
+# Add compiler option 
+ADD_DEFINITIONS(-DOTB_USE_OPENJPEG)
+
+#-----------------------------------------------------------------------------
+
+
 # FIND EXTERNAL LIBRAIRIES USE
 
 #-------------------------------
@@ -461,9 +474,13 @@ ENDIF(OTB_USE_VISU_GUI)
 SET(OTB_ALGO_UTILITIES_DEPENDENT_LIBRARIES "otb6S otbgalib InsightJournal otbsvm")
 
 IF(NOT OTB_USE_EXTERNAL_ITK)
-# Commented for release 2.2.0
-#        SET(OTB_UTILITIES_DEPENDENT_LIBRARIES  "${OTB_UTILITIES_DEPENDENT_LIBRARIES} otbopenjpeg")
-SET(OTB_UTILITIES_DEPENDENT_LIBRARIES  "${OTB_UTILITIES_DEPENDENT_LIBRARIES}")
+# Case for release 2.2.1
+# SET(OTB_UTILITIES_DEPENDENT_LIBRARIES "${OTB_UTILITIES_DEPENDENT_LIBRARIES}") 
+  IF(OTB_USE_OPENJPEG)
+     SET(OTB_UTILITIES_DEPENDENT_LIBRARIES "${OTB_UTILITIES_DEPENDENT_LIBRARIES} otbopenjpeg") 
+   ELSE(OTB_USE_OPENJPEG)
+     SET(OTB_UTILITIES_DEPENDENT_LIBRARIES "${OTB_UTILITIES_DEPENDENT_LIBRARIES} ") 
+   ENDIF(OTB_USE_OPENJPEG)
 ENDIF(NOT OTB_USE_EXTERNAL_ITK)
 
 # => Create OTB_ALLS_UTILITIES_DEPENDENT_LIBRARIES
@@ -471,7 +488,6 @@ SET(OTB_ALLS_UTILITIES_DEPENDENT_LIBRARIES "${OTB_IO_UTILITIES_DEPENDENT_LIBRARI
 
 
 #-----------------------------------------------------------------------------
-
 
 
 OPTION(BUILD_EXAMPLES "Build the Examples directory." OFF)
