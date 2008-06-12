@@ -1,13 +1,20 @@
-OTB-v.2.2.2 - Changes since version 2.0.0 (2008/05/29)
+OTB-v.2.2.1 - Changes since version 2.0.0 (2008/06/13)
 -----------------------------------------
 
 	- Added OTB_DISABLE_CXX_EXAMPLES_TESTING : allows to generate or not only examples testing
+	- Added OTB_USE_JPEG2000 : supports teh jpeg2000 files.	
 
 *Common:
 
-	-Modification of the Extraction ROI Classes : added SetROI() method for region selection.
+	Extraction ROI Classes : 
+	- Lifting of the otbExtractionBase classe
+	- Correction of the SetExtractionRegion method
 
-	-
+*BasicFilters:
+
+	- Added pixel size matching in otbSpectralAngleDistanceImageFilter.
+
+
 
 OTB-v.2.2.0 - Changes since version 2.0.0 (2008/05/29)
 -----------------------------------------
