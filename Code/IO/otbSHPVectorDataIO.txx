@@ -357,6 +357,11 @@ namespace otb
 				tree->Add(ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex)),multi);
 				break;
 			      }
+			    default:
+			      {
+				std::cout<<"Geometry type not found: "<<ogrMulti->getGeometryRef(geoIndex)->getGeometryType()<<std::endl;
+				break;
+			      }
 			    }
 			}
 		      break;
