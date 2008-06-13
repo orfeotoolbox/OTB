@@ -93,7 +93,7 @@ int openJpegEncoder(int argc, char * argv[])
 	OPJ_UINT32 l_nb_tiles = (IMAGE_WIDTH/TILE_WIDTH) * (IMAGE_HEIGHT/TILE_HEIGHT);
 	OPJ_UINT32 l_data_size = TILE_WIDTH * TILE_HEIGHT * NUM_COMPS * (COMP_PREC/8);
 
-	const OPJ_FLOAT32 l_mct [] = 
+	/*	const OPJ_FLOAT32 l_mct [] = 
 	{
 		1 , 0 , 0 ,
 		0 , 1 , 0 ,
@@ -103,7 +103,7 @@ int openJpegEncoder(int argc, char * argv[])
 	const OPJ_INT32 l_offsets [] = 
 	{
 		128 , 128 , 128
-	};
+		};*/
 
 	opj_image_cmptparm_t * l_current_param_ptr;
 	OPJ_UINT32 i;
