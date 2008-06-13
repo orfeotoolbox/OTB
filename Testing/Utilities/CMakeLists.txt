@@ -416,20 +416,21 @@ itkScaleInvariantFeatureImageFilterTest.cxx
 )
 
 # Case for release 2.2.1
-IF(OTB_USE_JPEG2000)
+IF(OTB_USE_JPEG2000 AND NOT OTB_USE_EXTERNAL_ITK)
   SET(UtilitiesTests_SRCS ${UtilitiesTests_SRCS} openJpegEncoder.cxx openJpegDecoder.cxx)
-ENDIF(OTB_USE_JPEG2000)
+ENDIF(OTB_USE_JPEG2000 AND NOT OTB_USE_EXTERNAL_ITK)
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}")
 
 ADD_EXECUTABLE(otbUtilitiesTests otbUtilitiesTests.cxx ${UtilitiesTests_SRCS})
-IF(OTB_USE_JPEG2000)
-  TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon otbossim otbsvm otb6S tinyXML openjpeg)
-ELSE(OTB_USE_JPEG2000)
-  TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon otbossim otbsvm otb6S tinyXML )
-ENDIF(OTB_USE_JPEG2000)
+TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon otbossim otbsvm otb6S tinyXML )
+
+IF(OTB_USE_JPEG2000 AND NOT OTB_USE_EXTERNAL_ITK)
+  TARGET_LINK_LIBRARIES(otbUtilitiesTests otbopenjpeg)
+ENDIF(OTB_USE_JPEG2000 AND NOT OTB_USE_EXTERNAL_ITK)
+
 IF(UNIX)
     TARGET_LINK_LIBRARIES (otbUtilitiesTests m)
 ENDIF(UNIX)
