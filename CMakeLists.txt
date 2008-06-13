@@ -72,11 +72,7 @@ OPTION(BUILD_TESTING "Build testing." OFF)
 # Case for release 2.2.1
 # Use the openjpeg library.
 OPTION(OTB_USE_JPEG2000 "Use to support jpeg2000 image file format." OFF)
-MARK_AS_ADVANCED(OTB_USE_JPEG2000)
-# Add compiler option
-IF(OTB_USE_JPEG2000)
-ADD_DEFINITIONS(-DOTB_USE_JPEG2000)
-ENDIF(OTB_USE_JPEG2000)
+#MARK_AS_ADVANCED(OTB_USE_JPEG2000)
 
 #-----------------------------------------------------------------------------
 
@@ -89,8 +85,10 @@ ENDIF(OTB_USE_JPEG2000)
 
 OPTION(OTB_USE_EXTERNAL_ITK "Use an outside build of ITK." OFF)
 IF(OTB_USE_EXTERNAL_ITK)
-# Commented for release 2.2.0
-#  MESSAGE(STATUS "WARNING: Due to conflicting libraries, jpeg2000 support is disabled when using external ITK.")
+  # Case for release 2.2.1
+  IF(OTB_USE_JPEG2000)
+        MESSAGE(STATUS "WARNING: Due to conflicting libraries, jpeg2000 support is disabled when using external ITK.")
+  ENDIF(OTB_USE_JPEG2000)
   FIND_PACKAGE(ITK)
   IF(ITK_FOUND)
         INCLUDE(${ITK_USE_FILE})
@@ -98,6 +96,11 @@ IF(OTB_USE_EXTERNAL_ITK)
         MESSAGE(FATAL_ERROR
                   "Cannot build OTB project without ITK.  Please set ITK_DIR or set OTB_USE_EXTERNAL_ITK OFF to use INTERNAL ITK set on OTB/Utilities repository.")
   ENDIF(ITK_FOUND)
+ELSE(OTB_USE_EXTERNAL_ITK)
+  # Add compiler option
+  IF(OTB_USE_JPEG2000)
+        ADD_DEFINITIONS(-DOTB_USE_JPEG2000)
+  ENDIF(OTB_USE_JPEG2000)
 ENDIF(OTB_USE_EXTERNAL_ITK)
 
 #-----------------------------------------------------------------------------
