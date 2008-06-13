@@ -23,7 +23,9 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-#define USE_OPJ_DEPRECATED
+
+// Modif Otb-dev, this option is set in CMakeLists.txt
+//#define USE_OPJ_DEPRECATED
 
 #include "openjpeg.h"
 #include "profile.h"

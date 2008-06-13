@@ -23,7 +23,10 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-#define USE_OPJ_DEPRECATED
+
+// Modif Otb-dev, this option is set in CMakeLists.txt
+//#define USE_OPJ_DEPRECATED
+
 /* set this macro to enable profiling for the given test */
 /* warning : in order to be effective, openjpeg must have been built with profiling enabled !! */
 //#define _PROFILE
