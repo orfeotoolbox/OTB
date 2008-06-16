@@ -323,13 +323,16 @@ ADD_TEST(utOssimRadarSatSupport ${UTILITIES_TESTS}
 
 
 
-
 # -------            lib OpenJpeg   ------------------------------
+# Case for release 2.2.1
+IF(OTB_USE_JPEG2000 AND NOT OTB_USE_EXTERNAL_ITK)
 ADD_TEST(utOpenJpegEncoder ${UTILITIES_TESTS}
 	openJpegEncoder)
 
 ADD_TEST(utOpenJpegDecoder ${UTILITIES_TESTS}
 	openJpegDecoder)
+ENDIF(OTB_USE_JPEG2000 AND NOT OTB_USE_EXTERNAL_ITK)
+
 
 # -------            SIFT   -------------------------------------
 ADD_TEST(ut2DSiftImageSquareSyntheticRotate10 ${UTILITIES_TESTS}
@@ -427,6 +430,7 @@ INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}")
 ADD_EXECUTABLE(otbUtilitiesTests otbUtilitiesTests.cxx ${UtilitiesTests_SRCS})
 TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon otbossim otbsvm otb6S tinyXML )
 
+# Case for release 2.2.1
 IF(OTB_USE_JPEG2000 AND NOT OTB_USE_EXTERNAL_ITK)
   TARGET_LINK_LIBRARIES(otbUtilitiesTests otbopenjpeg)
 ENDIF(OTB_USE_JPEG2000 AND NOT OTB_USE_EXTERNAL_ITK)
@@ -434,6 +438,7 @@ ENDIF(OTB_USE_JPEG2000 AND NOT OTB_USE_EXTERNAL_ITK)
 IF(UNIX)
     TARGET_LINK_LIBRARIES (otbUtilitiesTests m)
 ENDIF(UNIX)
+
 
 # -------       CXX and EXECUTABLES files for GALIB Tests -----------------------------------
 #FOREACH(loop_var RANGE 1 27 1)

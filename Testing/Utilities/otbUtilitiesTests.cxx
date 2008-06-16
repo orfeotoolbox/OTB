@@ -24,6 +24,12 @@
 #include <iostream>
 #include "otbTestMain.h" 
 
+// #define compile_jpeg2000 false
+
+// #if (defined OTB_USE_JPEG2000 and not OTB_USE_EXTERNAL_ITK)
+// compile_jpeg2000 true;
+// #endif
+
 void RegisterTests()
 {
 REGISTER_TEST(ossimIntegrationTest);
@@ -39,6 +45,10 @@ REGISTER_TEST(svmGenericKernelBasicOperationsTest);
 REGISTER_TEST(otbSVMComposedKernelFunctorTest);
 REGISTER_TEST(ossimRadarSatSupport);
 REGISTER_TEST(itk2DScaleInvariantFeatureImageFilterTest);
-//REGISTER_TEST(openJpegEncoder);
-//REGISTER_TEST(openJpegDecoder);
+// register openJpeg tests if necessary
+#if (defined OTB_USE_JPEG2000 and not OTB_USE_EXTERNAL_ITK)
+ REGISTER_TEST(openJpegEncoder);
+ REGISTER_TEST(openJpegDecoder);
+
+#endif
 }
