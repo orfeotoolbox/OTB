@@ -498,13 +498,17 @@ ossimProjection* ossimSensorModelFactory::createProjection(const ossimFilename& 
    }
 
    ossimFilename spot5Test = geomFile;
-   
-
-   if(!spot5Test.exists())
+    if(!spot5Test.exists())
    {
       spot5Test = geomFile.path();
-      spot5Test = spot5Test.dirCat(ossimFilename("metadata.dim"));
-   }
+      spot5Test = spot5Test.dirCat(ossimFilename("METADATA.DIM"));
+      if (spot5Test.exists() == false)
+      {
+         spot5Test = geomFile.path();
+         spot5Test = spot5Test.dirCat(ossimFilename("metadata.dim"));
+      }
+   }  
+
    if(spot5Test.exists())
    {
       ossimSpotDimapSupportData *meta = new ossimSpotDimapSupportData;

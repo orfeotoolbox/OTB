@@ -9,7 +9,7 @@
 // Contains definition of class ossimSpot5Model.
 // 
 //*****************************************************************************
-// $Id: ossimSpot5Model.cpp 12128 2007-12-06 15:50:33Z gpotts $
+// $Id$
 
 #include <iostream>
 #include <iomanip>
@@ -664,7 +664,12 @@ ossimSpot5Model::setupOptimizer(const ossimString& init_file)
    if(!spot5Test.exists())
    {
       spot5Test = geomFile.path();
-      spot5Test = spot5Test.dirCat(ossimFilename("metadata.dim"));
+      spot5Test = spot5Test.dirCat(ossimFilename("METADATA.DIM"));
+      if(spot5Test.exists() == false)
+      {
+         spot5Test = geomFile.path();
+         spot5Test = spot5Test.dirCat(ossimFilename("metadata.dim"));
+      }
    }
    if(spot5Test.exists())
    {
