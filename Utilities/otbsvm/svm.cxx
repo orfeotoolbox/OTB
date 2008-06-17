@@ -9,9 +9,9 @@
 #include <string.h>
 #include <stdarg.h>
 #include "svm.h"
-//typedef float Qfloat;
+typedef float Qfloat;
 //#include <double.h>
-typedef double Qfloat;
+//typedef double Qfloat;
 
 
 typedef signed char schar;
