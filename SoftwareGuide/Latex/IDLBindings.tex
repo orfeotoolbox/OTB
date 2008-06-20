@@ -243,31 +243,31 @@ Note that even for \code{unsigned int} input, we work with \code{IDL\_VPTR} of d
 \subsection{The link IDL-OTB}
 To be transformed into an IDL function, you have to declare the C++ functions that need to be exported, the name of the IDL function 
 that will be generated in IDL, the minimal number of inputs, the maximal number of inputs and the minimal and maximal number of keywords. \\
-This mechanism is performed by the \code{idl_load.cpp} C++ function.
+This mechanism is performed by the \code{idl\_load.cpp} C++ function.
 First you have to add a reference to your function using an include:\\
 \code{\#include "OTBToIDLFunction.h"}
 \\
-After that, you need to complete the \code{idl_load.cpp} code to declare your function, two cases appear:
+After that, you need to complete the \code{idl\_load.cpp} code to declare your function, two cases appear:
 \begin{itemize}
 \item The C++ function corresponds to a IDL procedure:
   \begin{itemize}
   \item Add the declaration (in the definition corpus):\\
-    \code{IDL_SYSFUN_DEF2 procedure_functionname[] = {{ (IDL_SYSRTN\_GENERIC)otbfunctionname, "OTBFUNCTIONNAME", minInput, maxInput, minKeyword, maxKeyword}}}
+    \code{IDL\_SYSFUN\_DEF2 procedure\_functionname[]=\{\{(IDL\_SYSRTN\_GENERIC)otbfunctionname, "OTBFUNCTIONNAME", minInput, maxInput, minKeyword, maxKeyword\}\}}
   \item Add the return (in the return corpus):\\
-    \code{IDL_SysRtnAdd(procedure_functionname, \textbf{FALSE}, IDL_CARRAY_ELTS(procedure_functionname))}
+    \code{IDL\_SysRtnAdd(procedure\_functionname, \textbf{FALSE}, IDL\_CARRAY\_ELTS(procedure\_functionname))}
   \end{itemize}
 \item The C++ function corresponds to an IDL function:
   \begin{itemize}
   \item Add the declaration (in the definition corpus):\\
-    \code{return IDL_SYSFUN_DEF2 function_functionname[] = {{ (IDL_SYSRTN_GENERIC)otbfunctionname, "OTBFUNCTIONNAME", minInput, maxInput, minKeyword, maxKeyword}}}
+    \code{return IDL\_SYSFUN\_DEF2 function\_functionname[] = \{\{ (IDL\_SYSRTN\_GENERIC)otbfunctionname, "OTBFUNCTIONNAME", minInput, maxInput, minKeyword, maxKeyword\}\}}
   \item Add the return (in the return corpus):\\
-    \code{return IDL_SysRtnAdd(function_functionname, \textbf{TRUE}, IDL_CARRAY_ELTS(function_functionname))}
+    \code{return IDL\_SysRtnAdd(function\_functionname, \textbf{TRUE}, IDL\_CARRAY\_ELTS(function\_functionname))}
   \end{itemize}
 \end{itemize}
 
 \textbf{Example:}\\
-      In the \code{idl_load.cpp} file, add the include:\\
-      \code{#include "idl_otborthorectification.h"}\\
+      In the \code{idl\_load.cpp} file, add the include:\\
+      \code{\#include "idl\_otborthorectification.h"}\\
 
       In the definition corpus area:\\
       orthorectification function declaration:\\
@@ -285,11 +285,9 @@ After that, you need to complete the \code{idl_load.cpp} code to declare your fu
 
 \underline{N.B:}
  \begin{itemize}
-\item The name definition (\code{procedure_functionname} or \code{function\_functionname}) doesn't have any importance, we chose those ones to be as clear as possible.
-\item If several C++ functions are declared, write only one \code{return} but separate its elements with \code{&&}:\\
-      \code{return
-            IDL_SysRtnAdd(procedure_function1, TRUE, IDL_CARRAY_ELTS(procedure_function1))
-            \textbf{&&} IDL_SysRtnAdd(procedure_function2, FALSE, IDL_CARRAY_ELTS(procedure_function2));} \\
+\item The name definition (\code{procedure\_functionname} or \code{function\_functionname}) doesn't have any importance, we chose those ones to be as clear as possible.
+\item If several C++ functions are declared, write only one \code{return} but separate its elements with \code{\&\&}:\\
+      \code{return IDL\_SysRtnAdd(procedure\_function1, TRUE, IDL\_CARRAY\_ELTS(procedure\_function1)) \textbf{\&\&} IDL\_SysRtnAdd(procedure\_function2, FALSE, IDL\_CARRAY\_ELTS(procedure\_function2));} \\
 \end{itemize}
 
 
@@ -300,9 +298,9 @@ We arbitrary chose to put them in \code{Code/PROFiles}.
 This file contains a path to the generated \code{lib} location. In our example, the path \code{binaries/bin/libsourceLib.so}.
 \begin{itemize}
 \item The C++ function corresponds to a IDL procedure:\\
-  \code{LINKIMAGE, 'otbfunctionname', file_dll, 1, /FUNCT, MAX_ARGS = 4, MIN_ARGS = 4}
+  \code{LINKIMAGE, 'otbfunctionname', file\_dll, 1, /FUNCT, MAX\_ARGS = 4, MIN\_ARGS = 4}
 \item The C++ function corresponds to a IDL function:\\
-  \code{LINKIMAGE, 'otbfunctionname', file_dll, 0, MAX_ARGS = 4, MIN_ARGS = 4}
+  \code{LINKIMAGE, 'otbfunctionname', file\_dll, 0, MAX\_ARGS = 4, MIN\_ARGS = 4}
 \end{itemize}
 IDL knows now our function under the name \code{OTBFUNCTIONNAME}.\\
 
@@ -323,7 +321,7 @@ The function is called using :\\
 \\
 \textbf{Example:}\\
       Note that this example creates an IDL GUI, a one line IDL routine which gives its arguments to the IDL orthorectification function works as well.\\
-      In the \code{orfeo_orthorectificationfilter.pro} file:\\
+      In the \code{orfeo\_orthorectificationfilter.pro} file:\\
 \begin{verbatim}
       PRO orfeo_orthorectificationfilter, ev
       ; Select an input file :
@@ -425,10 +423,10 @@ We describe here how to create the graphical user interface that will be launche
 
 \subsection{ENVI approach}\label{enviapp}
 In the example below, the GUI is developed using exclusively ENVI widgets. The main procedure is called \code{simpleENVIGUI}. 
-and takes one input parameter (even if this parameter is not used in the routine). The routines \code{WIDGET_AUTO_BASE}, \code{WIDGET_OUTF}, \code{WIDGET_PARAM} 
-and \code{AUTO_WID_MNG} correspond to ENVI routines. The parameters entered in the GUI by the user are automatically stored into the result structure. 
+and takes one input parameter (even if this parameter is not used in the routine). The routines \code{WIDGET\_AUTO\_BASE}, \code{WIDGET\_OUTF}, \code{WIDGET\_PARAM} 
+and \code{AUTO\_WID\_MNG} correspond to ENVI routines. The parameters entered in the GUI by the user are automatically stored into the result structure. 
 The fields from that structure are then passed as input parameters to the routine \code{OTBTOUZIEDGEDETECTOR} (this routine belongs to the Dynamically Loaded Module).
-Finally, the input and output files are loaded into ENVI using the routine \code{ENVI_OPEN_FILE}.
+Finally, the input and output files are loaded into ENVI using the routine \code{ENVI\_OPEN\_FILE}.
 
 The GUI should look like the figure~\ref{fig:fileselectiontest}.
 
@@ -514,9 +512,9 @@ The GUI should look like the figure ~\ref{simpleidlgui}.
 The source code contains two main routines:
 \begin{itemize}
     \item The \code{simpleIDLGUI} routine actually builds the GUI.
-    \item The  \code{simpleIDLGUI_event} routine allows handling user events, i.e. to process all user interactions.
+    \item The  \code{simpleIDLGUI\_event} routine allows handling user events, i.e. to process all user interactions.
     \item The processing itself is performed when the user hits the \code{OK} button. The  \code{OTBTOUZIEDGEDETECTOR} routine is then called, while passing to it the required parameters.
-    \item The loading of the data into ENVI is made by the \code{ENVI_OPEN_DATA_FILE} routine.
+    \item The loading of the data into ENVI is made by the \code{ENVI\_OPEN\_DATA\_FILE} routine.
 \end{itemize}
 
 \textbf{Example:}\\
