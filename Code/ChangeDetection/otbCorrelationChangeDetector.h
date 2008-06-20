@@ -58,8 +58,8 @@ public:
                              const TInput2 & itB)
   {
     
-    TOutput meanA = 0.0;
-    TOutput meanB = 0.0;
+    TOutput meanA = itk::NumericTraits<TOutput>::Zero;
+    TOutput meanB = itk::NumericTraits<TOutput>::Zero;
 
     for(unsigned long pos = 0; pos< itA.Size(); ++pos)
       {
@@ -73,8 +73,8 @@ public:
     meanA /= itA.Size();
     meanB /= itB.Size();
 
-    TOutput varA = 0.0;
-    TOutput varB = 0.0;
+    TOutput varA = itk::NumericTraits<TOutput>::Zero;
+    TOutput varB = itk::NumericTraits<TOutput>::Zero;
 
     for(unsigned long pos = 0; pos< itA.Size(); ++pos)
       {
@@ -87,20 +87,20 @@ public:
     varA /= itA.Size();
     varB /= itB.Size();
 
-    TOutput crossCorrel = 0.0;
+    TOutput crossCorrel = itk::NumericTraits<TOutput>::Zero;
 
-    if(varA!=0 && varB!=0)
+    if(varA!= itk::NumericTraits<TOutput>::Zero && varB!= itk::NumericTraits<TOutput>::Zero)
 	  {
 	    for(unsigned long pos = 0; pos< itA.Size(); ++pos)
 	      {
 		crossCorrel += (static_cast<TOutput>(itA.GetPixel(pos))-meanA)*(static_cast<TOutput>(itB.GetPixel(pos))-meanB)/(itA.Size()*vcl_sqrt(varA*varB));
 	      }
 	  }
-    else if(varA==0 && varB==0)
+    else if(varA==itk::NumericTraits<TOutput>::Zero && varB==itk::NumericTraits<TOutput>::Zero)
       {
-	crossCorrel = 1;	
+	crossCorrel = itk::NumericTraits<TOutput>::One;	
       }
-    return static_cast<TOutput>( 1.0-crossCorrel );
+    return static_cast<TOutput>( itk::NumericTraits<TOutput>::One - crossCorrel );
   }
 }; 
 }
