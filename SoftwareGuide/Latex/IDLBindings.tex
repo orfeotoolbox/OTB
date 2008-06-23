@@ -1,23 +1,42 @@
 
 \section{Introduction}
-  This documentation is teh result of a cooperation between the CNES (OTB developers) and ITT France (IDL/ENVI developers). Its aim to explain step by step how to wrap an OTB processing chain in IDL. First we describe how to create from OTB functions a dynamic library that can be called by an IDL function, then we show how to include such a function in an ENVI graphical user interface, GUI.
+
+This documentation is the result of a cooperation between the CNES (OTB developers) and ITT France (IDL/ENVI developers). Its aim to explain step by step how to wrap an OTB processing chain in IDL. First we describe how to create from OTB functions a dynamic library that can be called by an IDL function, then we show how to include such a function in an ENVI graphical user interface, GUI.
 
 The procedures presented here were tested on Windows platforms (with Visual C++) and Linux machines (with GCC). Most of GUIs were created using ENVI tools.
 
+\section{IDL Binding creation overview}
+
+To be able to use OTB classes from within IDL or ENVI, the main requirement is to translate variables from one space to the other one. Few steps are necessary to create the interface for each OTB class you want to use. Several files need to be created.
+
+%Ce serait pas mal de mettre un schema ici
+
+
 \section{How to Build the Project:\\ CMake and CMakeList}
+
 In this section, the way to build a CMake file and to compile will be described.
 Before going further, please check that the OTB is compiled on your computer.
 To be compatible with the following PROCEDURES, your tree folders has to look like this:
 \begin{itemize}
-\item BINDING\_IDL/binaries: where your .exe will be generateD.
+\item BINDING\_IDL/binaries: where your .exe will be generated.
 \item BINDING\_IDL/Code: where your sources are stored.
 \end{itemize}
 
 The \code{Code} folder can contain as many subfolders as you want. This allows you to organize your work space. The \code{Code} folder shipped along with this 
-documentation contains a \code{sources} folder where we put the C++ files while IDL files are stored in \code{IDLSources}.
+documentation contains a \code{sources} folder where we put the C++ files while IDL files are stored in \code{IDLSources}. This documentation will not detail every lines of these files and it is necessary to start from the source example.
 
-The \code{CMakeLists.txt} file located in the \code{Code} folder will take care of the CMake GUI and the compilation. Pay attention to add for each subfolder
-the following line in the \code{CMakeLists.txt} file:\\
+The \code{CMakeLists.txt} file located in the \code{Code} folder will take care of the CMake GUI and the compilation.
+
+First, try to compile the binding example without any change to check if all tools are available. Launch the ccmake process from the BINDING\_IDL/binaries directory. It will ask you the path to the OTB exe directory (\/otb\-build/OTB) and paths to IDL source and binaries (located in your IDL folder):
+
+\begin{itemize}
+\item \code {IDL\_INCLUDE\_DIRS} that targets the IDL includes (for example \code {usr/local/rsi/idl\_vXX/external/include}).
+\item \code {IDL\_LIBRARY\_DIRS} that targets the IDL binaries it is located in the IDL folder (for example \code {usr/local/rsi/idl\_vXX/bin/bin.linux.x86}).
+\end{itemize}
+
+Once the cmake has generated its file, you can go to the binaries folder and compile.
+
+Few things you should be aware when you are adapting the example to suit your needs: pay attention to add for each subfolder the following line in the \code{CMakeLists.txt} file:\\
 \code{SUBDIRS(sources)}\\
 
 Then the compiler will know that subfolders exist.
@@ -32,7 +51,7 @@ Code
         IDLSources
 \end{verbatim}
  
-In each subfolder, create a new CMakeLists.txt including the following lines:
+In each subfolder, create a new CMakeLists.txt including the following lines (as the file sources/CMakeLists.txt):
 \begin{itemize}
 \item The first one to gather the non-templated classes source (.cpp or .cxx) contained in the folder:\\ 
   \code {FILE(GLOB subdir1\_SRCS ``*.cxx'')}
@@ -42,14 +61,6 @@ In each subfolder, create a new CMakeLists.txt including the following lines:
 \code {TARGET\_LINK\_LIBRARIES (libName OTBCommon OTBBasicFilters OTBIO otbsvm \textbf{idl})}\\ 
 \end{itemize}
 
-Once this is done, launch the ccmake process. It will ask you the path to the OTB exe directory (\/otb\-build/OTB) and paths to IDL source and binaries (located in your IDL folder):
-\begin{itemize}
-\item \code {IDL\_INCLUDE\_DIRS} that targets the IDL includes (for example \code {usr/local/rsi/idl\_vXX/external/include}).
-\item \code {IDL\_LIBRARY\_DIRS} that targets the IDL binaries it is located in the IDL folder (for example \code {usr/local/rsi/idl\_6.2/bin/bin.linux.x86}).
-\end{itemize}
-Once the cmake has generated its file, you can go to the binaries folder and compile.
-\\
-\\
 \code{\textbf{Example:}}\\
       Here, we decide to create the example \code{Code} in the folder \code{source} (included in the folder \code{Code}).\\
       This is the contents of the \code{CMakeLists.txt file}:\\
@@ -59,6 +70,9 @@ Once the cmake has generated its file, you can go to the binaries folder and com
       ADD_LIBRARY(sourceLib ${source_SRCS})
       TARGET_LINK_LIBRARIES (sourceLib OTBCommon OTBBasicFilters OTBIO otbsvm idl)
 \end{verbatim}
+
+
+
 
 
 \section{C++ processing functions}
@@ -73,7 +87,7 @@ The C++ functions have to be defined as follows:\\
 Where:
 \begin{itemize}
     \item \code{argc} is the number of inputs;
-    \item \code{argv[]} id an IDL pointer (\code{IDL\_VPTR}) to a \code{char *} array;
+    \item \code{argv[]} is an IDL pointer (\code{IDL\_VPTR}) to a \code{char *} array;
     \item \code{argk} is a char pointer.
 \end{itemize}
 \code{IDL\_VPTR} is an idl pointer that can return any kind of IDL variable.
@@ -90,11 +104,11 @@ For the outputs, two solutions can be used :
 on Linux some extra characters are added to the name. In this case, when the \code{.pro} file is compiled, an error occurs since the symbol can't be found. \\
 \\
 \textbf{Example:}\\
-      We show here how to add an IDL function that performs image ortho rectification.\\
-      For the explanation of the algorithm, please refer to the OTB Software Guide.\\
-      In \code{idl\_otborthorectification.h}, the function is defined as:\\
+      We show here how to add an IDL function that performs image ortho rectification. For additional explanation of the algorithm, please refer to the OTB Software Guide.
+
+      In \code{idl\_otborthorectification.h}, the function is defined as:
 \begin{verbatim}
-      ORFEOANDIDL\_API void otborthorectification(int argc, IDL\_VPTR argv[], char *argk);\\
+      ORFEOANDIDL_API void otborthorectification(int argc, IDL_VPTR argv[], char *argk);
 \end{verbatim}
 
 Once the signature of the functions is written, we need to make the link IDL/OTB and OTB/IDL.
@@ -133,7 +147,7 @@ If the user has decided that the C++ function doesn't have to return anything, n
     \item Declare the output:\\ \code{IDL\_VPTR IDLOutput};
     \item Allocate the output:\\ \code{IDLOutput->Gettmp()};
     \item Declare the output variable type:\\ \code{IDLOutput->type = IDL\_TYP\_DOUBLE} for a double;
-    \item And fill the output:\\ \code{IDLOutput->value.d = filter->GetOuputValue()} if the pointer points to a double.
+    \item And fill the output:\\ \code{IDLOutput->value.d = filter->GetOutputValue()} if the pointer points to a double.
     \end{itemize}
 \end{itemize}
 
@@ -601,7 +615,7 @@ The source code contains two main routines:
       XSIZE = 40)
       wInputButton = WIDGET_BUTTON(baseInput, VALUE = "Browse ...", UVALUE = "browseinput")
 
-      ; Ouput base :
+      ; Output base :
       baseOut = WIDGET_BASE(base, /COLUMN, /FRAME)
       baseOutput = WIDGET_BASE(baseOut, /ROW)
       wOutputFile = CW_FIELD(baseOutput, TITLE = "O/P :", UVALUE = "outputFile", /STRING, $
