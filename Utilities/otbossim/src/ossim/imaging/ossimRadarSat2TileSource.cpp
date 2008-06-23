@@ -4,6 +4,7 @@
 #include <ossim/base/ossimIpt.h>
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimFilename.h>
+#include <ossim/base/ossimDirectory.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimEllipsoid.h>
@@ -78,8 +79,19 @@ bool ossimRadarSat2TileSource::open()
 	}
 
 	_annotation = new Rds2Annotation();
+	
+	/*
+	 * Uses XML annotation file corresponding to the input "image file"
+	 */
+	ossimFilename annotationFilename = theImageFile;
+	if ((annotationFilename.ext()).downcase() != "xml") {
+		// assigned to a "product.xml" file in the same directory
+		annotationFilename = annotationFilename.path();
+		annotationFilename +=  annotationFilename.thePathSeparator ; 
+		annotationFilename +=  "product.xml" ; 
+	}
 				
-	if (theImageFile.exists())
+	if (annotationFilename.exists())
 	{
 		if(traceDebug())
 		{
@@ -90,7 +102,7 @@ bool ossimRadarSat2TileSource::open()
 		/*
 		 * Checks whether the XML file corresponds to a RadarSat2 product
 		 */
-		ossimXmlDocument docXML(theImageFile) ; 
+		ossimXmlDocument docXML(annotationFilename) ; 
 		ossimString xpathTest("/product/sourceAttributes/satellite") ;
 		// note : the satellite name could be tested ("RADARSAT-1, RADARSAT-2)
 		std::vector<ossimRefPtr<ossimXmlNode> > listeResultat ; 
@@ -192,7 +204,7 @@ bool ossimRadarSat2TileSource::getImageGeometry(ossimKeywordlist& kwl,const char
 	char name[64];
 	for(int i=0;i<nbCoeffs;i++)
 	{
-		for(unsigned int j=0;j<((_annotation->get_SrGr_coeffs())[i]).size();j++)
+		for(int j=0;j<((_annotation->get_SrGr_coeffs())[i]).size();j++)
 		{
 			sprintf(name,"SrGr_coeffs_%i_%i",i,j);
 			kwl.add(prefix, name,(_annotation->get_SrGr_coeffs())[i][j],true);
@@ -225,9 +237,10 @@ bool ossimRadarSat2TileSource::getImageGeometry(ossimKeywordlist& kwl,const char
 		kwl.add(prefix, name,(_annotation->get_velZ()[i]),true);
 	}
 
-	kwl.add(prefix, "nTiePoints",(ossim_float64) _annotation->get_cornersLon().size(),true);
+	int cornersLonSize = (_annotation->get_cornersLon()).size() ;
+	kwl.add(prefix, "nTiePoints",cornersLonSize ,true);
 
-	for(unsigned int i=0;i<_annotation->get_cornersLon().size();i++)
+	for(int i=0;i<_annotation->get_cornersLon().size();i++)
 	{
 		sprintf(name,"cornersLon%i",i);
 		kwl.add(prefix, name,(_annotation->get_cornersLon())[i],true);

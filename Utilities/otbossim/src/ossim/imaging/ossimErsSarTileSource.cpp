@@ -102,7 +102,7 @@ bool ossimErsSarTileSource::open()
 	ossimFilename tempFilename = theImageFile;
 
 	/*
-	 * Creation de la classe permettant le stockage des metadonnées du Data file
+	 * Creation of the class allowing to store Data file metadata 
 	 */
 	if (_ErsSardata != NULL)
 	{
@@ -112,7 +112,7 @@ bool ossimErsSarTileSource::open()
 	_ErsSardata = new ErsSarData();
 
 	/*
-	 * Creation de la classe peremttant le stockage des métadonnées du Leader file
+	 * Creation of the class allowing to store Leader file metadata
 	 */
 	if(_ErsSarleader != NULL)
 	{
@@ -143,13 +143,13 @@ bool ossimErsSarTileSource::open()
 		{
 			record->Read(dataFile);
 			/*
-			 * On test si on a bien un fichier DAT de ErsSar
+			 * ErsSar DAT file verificationTest whether 
 			 */
 			std::string capteur = (((ErsSarImageOptionsFileDescriptor*)record)->get_file_name()).substr(0,3);
 			if ( capteur == "ERS")
 			{
 				/*
-				 * Nous somme bien dans un ficher Data d'une arborescence ErsSar, on lit le reste du fichier Data
+				 * We are in a ErsSar Data file tree, we read the remaining of the Data file
 				 */
 				
 				dataFile>>*_ErsSardata;
@@ -162,35 +162,34 @@ bool ossimErsSarTileSource::open()
 					<< "End reading DAT file" << std::endl;
 				}
 				/*
-				 * On construit le chemin du Leader file
+				 * Leader file path contruction from the DAT file path
 				 */ 
 				std::string leader_file = theImageFile;
 				string::size_type loc = leader_file.find( "DAT_01", 0 );
-				if( loc != string::npos ) leader_file.replace(loc, 6, "LEA_01" );
+				if( loc != string::npos ) leader_file.replace(loc, 6, "LEA_01" ); // upper case test
 				else {
-					ossimNotify(ossimNotifyLevel_DEBUG)
-						<< "File Name not coherent (searching for *DAT_01*)  : " << theImageFile << std::endl;
+					loc = leader_file.find( "dat_01", 0 );
+					if( loc != string::npos ) leader_file.replace(loc, 6, "lea_01" ); // lower case test
+					else {
+						ossimNotify(ossimNotifyLevel_DEBUG)
+							<< "File Name not coherent (searching for *DAT_01* or *dat_01*)  : " << theImageFile << std::endl;
+					}
 				}
 				ossimFilename leaderFilePath(leader_file);
 
 				if (!leaderFilePath.exists()){
-					if( loc != string::npos ) leader_file.replace(loc, 6, "lea_01" );
-					else {
 						ossimNotify(ossimNotifyLevel_DEBUG)
-						<< "File Name not coherent (searching for *lea_01*)  : " << theImageFile << std::endl;
-					}
-				}	
-
-
-				if (leaderFilePath.exists())
-				{
+							<< "Leader file not found (searching for *lea_01* coherent with *dat_01*)  : " << theImageFile << std::endl;
+						retValue = false;
+				}
+				else	{
 					if(traceDebug())
 					{
 						ossimNotify(ossimNotifyLevel_DEBUG)
 						<< "Begin reading Leader file" << std::endl;
 					}
 					/*
-					 * Lecture des données du leader file
+					 * Leader file data reading 
 					 */
 					ifstream leaderFile (leaderFilePath, ios::in|ios::binary);
 					leaderFile>>*_ErsSarleader;
@@ -200,12 +199,7 @@ bool ossimErsSarTileSource::open()
 						ossimNotify(ossimNotifyLevel_DEBUG)
 						<< "End reading Leader file" << std::endl;
 					}
-				}
-				else
-				{
-					retValue = false;
-				}
-				
+				}		
 			}
 			else
 			{
@@ -242,9 +236,9 @@ bool ossimErsSarTileSource::getImageGeometry(ossimKeywordlist& kwl,const char* p
 	char name[64];
 
 	kwl.add(prefix, ossimKeywordNames::TYPE_KW, "ossimErsSarModel", true);
-///*
-	// * Ajout des données nécessaires au modèle de capteur dans la liste des mots clefs
-	// */
+	/*
+	 * Adding metadata necessary to the sensor model in the keywordlist
+	 */
 	ErsSarFileDescriptor * leaderfiledesc = _ErsSarleader->get_ErsSarFileDescriptor();
 	if(leaderfiledesc != NULL)
 	{
@@ -254,13 +248,13 @@ bool ossimErsSarTileSource::getImageGeometry(ossimKeywordlist& kwl,const char* p
 	{
 		return false;
 	}
-	///*
-	// * Ajout des données nécessaires au modèle de capteur dans la liste des mots clefs
-	// */
+	/*
+	 * Adding metadata necessary to the sensor model in the keywordlist
+	 */
 	ErsSarDataSetSummary * datasetSummary = _ErsSarleader->get_ErsSarDataSetSummary();
 	if(datasetSummary != NULL)
 	{
-		kwl.add(prefix, "inp_sctim",datasetSummary->get_inp_sctim().c_str(),true);
+		kwl.add(prefix, "inp_sctim",(datasetSummary->get_inp_sctim()).c_str(),true);
 		kwl.add(prefix, "ellip_maj", datasetSummary->get_ellip_maj(),true); 
 		kwl.add(prefix, "ellip_min", datasetSummary->get_ellip_min(),true); 
 		kwl.add(prefix, "sc_lin", datasetSummary->get_sc_lin(),true); 
@@ -268,8 +262,8 @@ bool ossimErsSarTileSource::getImageGeometry(ossimKeywordlist& kwl,const char* p
 		kwl.add(prefix, "wave_length", datasetSummary->get_wave_length(),true); 
 		kwl.add(prefix, "fr", datasetSummary->get_fr(),true); 
 		kwl.add(prefix, "fa", datasetSummary->get_fa(),true); 
-		kwl.add(prefix, "time_dir_pix", datasetSummary->get_time_dir_pix().c_str(),true);  
-		kwl.add(prefix, "time_dir_lin", datasetSummary->get_time_dir_lin().c_str(),true);
+		kwl.add(prefix, "time_dir_pix", (datasetSummary->get_time_dir_pix()).c_str(),true);  
+		kwl.add(prefix, "time_dir_lin", (datasetSummary->get_time_dir_lin()).c_str(),true);
 		kwl.add(prefix, "line_spacing", datasetSummary->get_line_spacing(),true);
 		kwl.add(prefix, "pix_spacing", datasetSummary->get_pix_spacing(),true);
 		kwl.add(prefix, "nlooks_az", datasetSummary->get_n_azilok(),true);
@@ -285,9 +279,9 @@ bool ossimErsSarTileSource::getImageGeometry(ossimKeywordlist& kwl,const char* p
 	ErsSarMapProjectionData * mapprojectiondata = _ErsSarleader->get_ErsSarMapProjectionData();
 	if(mapprojectiondata != NULL)
 	{
-		kwl.add(prefix, "map_proj_des",mapprojectiondata->get_map_proj_des().c_str(),true);
-		kwl.add(prefix, "num_lines",static_cast<ossim_int32>(mapprojectiondata->get_num_lines()),true);
-		kwl.add(prefix, "num_pix",static_cast<ossim_int32>(mapprojectiondata->get_num_pix_in_line()),true);
+		kwl.add(prefix, "map_proj_des",(mapprojectiondata->get_map_proj_des()).c_str(),true);
+		kwl.add(prefix, "num_lines",(double) mapprojectiondata->get_num_lines(),true);
+		kwl.add(prefix, "num_pix",(double) mapprojectiondata->get_num_pix_in_line(),true);
 		kwl.add(prefix, "first_line_first_pixel_lat",mapprojectiondata->get_first_line_first_pixel_lat(), true);
 		kwl.add(prefix, "first_line_first_pixel_lon",mapprojectiondata->get_first_line_first_pixel_lon(), true);
 		kwl.add(prefix, "first_line_last_pixel_lat",mapprojectiondata->get_first_line_last_pixel_lat(), true);
@@ -334,9 +328,9 @@ bool ossimErsSarTileSource::getImageGeometry(ossimKeywordlist& kwl,const char* p
 	{
 		return false;
 	}
-	///*
-	// * Ajout des données nécessaires au modèle de capteur dans la liste des mots clefs
-	// */
+	/*
+	 * Adding metadata necessary to the sensor model in the keywordlist
+	 */
 	ErsSarFacilityData * facilitydata = _ErsSarleader->get_ErsSarFacilityData();
 	if(facilitydata != NULL)
 	{

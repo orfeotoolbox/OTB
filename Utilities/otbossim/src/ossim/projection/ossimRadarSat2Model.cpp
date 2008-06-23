@@ -38,7 +38,7 @@ double ossimRadarSat2Model::getSlantRangeFromGeoreferenced(double col) const
 	 * @todo : could be improved (date choice)
 	 */
 
-	for (int i=0 ; i<static_cast<int>(_SrGr_coeffs[numSet].size()) ; i++) {
+	for (int i=0 ; i<_SrGr_coeffs[numSet].size() ; i++) {
 		slantRange += _SrGr_coeffs[numSet][i]*pow(relativeGroundRange,i) ;
 	}
 	
@@ -222,7 +222,7 @@ bool ossimRadarSat2Model::InitRefPoint(const ossimKeywordlist &kwl, const char *
 	if(_platformPosition != NULL)
 	{
 		Ephemeris * ephemeris = _platformPosition->Interpolate((JSDDateTime)*date);
-	
+		if (ephemeris == NULL) return false ; 
 		_refPoint->set_ephemeris(ephemeris);
 
 		delete ephemeris;
@@ -246,7 +246,7 @@ bool ossimRadarSat2Model::InitRefPoint(const ossimKeywordlist &kwl, const char *
 
 	_refPoint->set_distance(distance);
 
-	// Ground Control Points extracted from the model : scene center and corners
+	// Ground Control Points extracted from the model 
 	std::list<ossimGpt> groundGcpCoordinates ; 
 	std::list<ossimDpt> imageGcpCoordinates ; 
 	const char* nTiePoints_str = kwl.find(prefix,"nTiePoints");

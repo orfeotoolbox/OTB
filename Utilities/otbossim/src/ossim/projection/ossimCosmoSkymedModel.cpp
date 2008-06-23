@@ -236,7 +236,8 @@ bool ossimCosmoSkymedModel::InitRefPoint(const ossimKeywordlist &kwl, const char
 	if(_platformPosition != NULL)
 	{
 		Ephemeris * ephemeris = _platformPosition->Interpolate((JSDDateTime)*date);
-	
+		if (ephemeris == NULL) return false ; 
+
 		_refPoint->set_ephemeris(ephemeris);
 
 		delete ephemeris;

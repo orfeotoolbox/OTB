@@ -37,6 +37,10 @@ std::istream& operator>>(std::istream& is, EnvisatAsarData& data)
 {
 	EnvisatAsarDataFactory factory;
 
+	if (sizeof(int)!=4) std::cout << "EnvisatAsarData WARNING : (int) not coded over 32 bits, metadata might not be byte swapped correctly"<< std::endl ;
+	if (sizeof(float)!=4) std::cout << "EnvisatAsarData WARNING : (float) not coded over 32 bits, metadata might not be byte swapped correctly"<< std::endl ;	
+	if (sizeof(double)!=8) std::cout << "EnvisatAsarData WARNING : (double) not coded over 64 bits, metadata might not be byte swapped correctly"<< std::endl ; 
+
 	data.ClearRecords();
 
 	// read the first record (MPH)

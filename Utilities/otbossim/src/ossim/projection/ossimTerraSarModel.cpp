@@ -37,7 +37,8 @@ double ossimTerraSarModel::getSlantRangeFromGeoreferenced(double col) const
 	return tn * (c/2.0);
 }
 
-/*
+/* 
+//	Version (1)
 double ossimTerraSarModel::getSlantRangeFromGeoreferenced(double col) const
 {
 	// iterative polynomial inversion
@@ -268,7 +269,8 @@ bool ossimTerraSarModel::InitRefPoint(const ossimKeywordlist &kwl, const char *p
 	if(_platformPosition != NULL)
 	{
 		Ephemeris * ephemeris = _platformPosition->Interpolate((JSDDateTime)*date);
-	
+		if (ephemeris == NULL) return false ; 
+
 		_refPoint->set_ephemeris(ephemeris);
 
 		delete ephemeris;
@@ -287,7 +289,7 @@ bool ossimTerraSarModel::InitRefPoint(const ossimKeywordlist &kwl, const char *p
 	// (used for SlantRange computation relative to reference point, necessary for optimization)
 	if (_isProductGeoreferenced) {
 		double estimatedGroundRange = 0.0 ; 
-		for (unsigned int i=0; i<_SrToGr_coeffs.size(); i++) {
+		for (int i=0; i<_SrToGr_coeffs.size(); i++) {
 			estimatedGroundRange += _SrToGr_coeffs[i]*pow(_sceneCenterRangeTime-_SrToGr_R0,_SrToGr_exponent[i]);
 		}
 		// SrToGr update : estimatedGroundRange  = sc_pix * scaling_factor

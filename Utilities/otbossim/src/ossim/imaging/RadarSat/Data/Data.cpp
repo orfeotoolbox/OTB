@@ -34,6 +34,10 @@ std::istream& operator>>(std::istream& is, Data& data)
 
 	data.ClearRecords();
 
+	if (sizeof(int)!=4) std::cout << "RadarSat Data WARNING : (int) not coded over 32 bits, metadata might not be byte swapped correctly"<< std::endl ;
+	if (sizeof(float)!=4) std::cout << "RadarSat Data WARNING : (float) not coded over 32 bits, metadata might not be byte swapped correctly"<< std::endl ;	
+	if (sizeof(double)!=8) std::cout << "RadarSat Data WARNING : (double) not coded over 64 bits, metadata might not be byte swapped correctly"<< std::endl ; 
+
 	RadarSatRecordHeader header;
 	bool eof = false;
 

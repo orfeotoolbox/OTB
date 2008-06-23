@@ -33,7 +33,7 @@ std::ostream& operator<<(std::ostream& os, const SRGRConversionParameters& data)
 std::istream& operator>>(std::istream& is, SRGRConversionParameters& data)
 {
 	char buf14[15];
-	buf14[15] = '\0';
+	buf14[14] = '\0';
 	char buf12[13];
 	buf12[12] = '\0';
 

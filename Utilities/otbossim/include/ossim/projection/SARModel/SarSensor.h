@@ -46,7 +46,7 @@ protected:
 	/**
 	 * @brief This function is able to convert image coordinates into rectangular world coordinates
 	 */
-	int localisationApriori ( GeographicEphemeris PosVit , double lambda ,
+	int localisationSAR ( GeographicEphemeris PosVit , double lambda ,
                         double dist , double fDop , int sensVisee ,
                         double rayonEqu , double rayonPol ,
                         double h , RectangularCoordinate* cart );

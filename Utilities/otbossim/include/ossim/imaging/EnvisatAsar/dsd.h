@@ -114,14 +114,14 @@ public:
 	/**				
 	* @brief Number of data set record	
 	*/				
-	long   get_num_dsr()	
+	int   get_num_dsr()	
 	{
 		return _num_dsr;
 	}
 	/**				
 	* @brief Data set record size
 	*/				
-	long   get_dsr_size()	
+	int   get_dsr_size()	
 	{
 		return _dsr_size;
 	}
@@ -149,11 +149,11 @@ public:
 	/**				
 	* @brief Number of data set record	
 	*/				
-	long	_num_dsr;	
+	int	_num_dsr;	
 	/**				
 	* @brief Data set record size
 	*/				
-	long	_dsr_size;	
+	int	_dsr_size;	
 
 private:
 

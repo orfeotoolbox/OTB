@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-const double CivilDateTime::RDR_JOURCIVIL = 86400.0 ;
+const double CivilDateTime::JOURCIVIL_LENGTH = 86400.0 ;
 
 CivilDateTime::CivilDateTime():
 	_year(0),
@@ -100,7 +100,7 @@ int CivilDateTime::AsJulianDate(JulianDate* julianDate)
 		i = (int) (365.25  * (double)an - d) ;
 		j = (int) (30.6001 * (double)(mois + 1)) ;
 		double jourJulien =   (double)(i + j) + (double)_day
-                  + ((double)_second + _decimal) / RDR_JOURCIVIL + b ;
+                  + ((double)_second + _decimal) / JOURCIVIL_LENGTH + b ;
 
 		julianDate->set_julianDate(jourJulien);
 	}
@@ -363,7 +363,7 @@ int CivilDateTime::AsJSDDateTime(JSDDateTime* JSDdate)
 		double day0hTU = (double)k + 0.5;
 		JSDdate->set_day0hTU(JulianDate(day0hTU));
 		
-		r = (jourJulien.get_julianDate() - day0hTU) * RDR_JOURCIVIL ;
+		r = (jourJulien.get_julianDate() - day0hTU) * JOURCIVIL_LENGTH ;
 		JSDdate->set_second(floor (r)) ;
 		JSDdate->set_decimal(r - JSDdate->get_second()) ;
 	}
@@ -373,8 +373,8 @@ int CivilDateTime::AsJSDDateTime(JSDDateTime* JSDdate)
 
 int CivilDateTime::AsGMSTDateTime(GMSTDateTime* GMST)
 {
-	const double RDR_DEUXPI      = 6.28318530717958647693 ;
-	const double RDR_OMEGATERRE  = 6.28318530717958647693 / 86164.09054 ;
+	const double DEUXPI      = 6.28318530717958647693 ;
+	const double OMEGATERRE  = 6.28318530717958647693 / 86164.09054 ;
 	int etat ;
 	JulianDate jourJulien;
 	double t , tsm0hTU ;
@@ -389,7 +389,7 @@ int CivilDateTime::AsGMSTDateTime(GMSTDateTime* GMST)
 		{
 			t = (jourJulien.get_julianDate() - 2415020.0) / 36525.0 ;
 			tsm0hTU = 23925.836 + t * (8640184.542 + t * 0.0929) ;
-			tsm0hTU = tsm0hTU * RDR_DEUXPI / RDR_JOURCIVIL ;
+			tsm0hTU = tsm0hTU * DEUXPI / JOURCIVIL_LENGTH ;
 		}
 		else if (GMST->get_origine() == GMSTDateTime::AN1950)
 		{
@@ -400,14 +400,14 @@ int CivilDateTime::AsGMSTDateTime(GMSTDateTime* GMST)
 		{
 			t = (jourJulien.get_julianDate() - 2451545.0) / 36525.0 ;
 			tsm0hTU =   24110.54841 + t * (8640184.812866 + t * (0.093103 - t * 6.210e-6)) ;
-			tsm0hTU = tsm0hTU * RDR_DEUXPI / RDR_JOURCIVIL ;
+			tsm0hTU = tsm0hTU * DEUXPI / JOURCIVIL_LENGTH ;
 		}
-		t = tsm0hTU + ((double)_second + _decimal) * RDR_OMEGATERRE ;
-		tsm = fmod (t, RDR_DEUXPI) ;
+		t = tsm0hTU + ((double)_second + _decimal) * OMEGATERRE ;
+		tsm = fmod (t, DEUXPI) ;
 	
 		if (tsm < 0.0)  
 		{
-			tsm = tsm + RDR_DEUXPI ;
+			tsm = tsm + DEUXPI ;
 		}
 		GMST->set_tms(tsm);
 	}

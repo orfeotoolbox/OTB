@@ -596,7 +596,7 @@ public:
 	/**				
 	* @brief num_dsd	
 	*/				
-	long   get_num_dsd()	
+	int   get_num_dsd()	
 	{						
 		return _num_dsd;		
 	}; 
@@ -610,7 +610,7 @@ public:
 	/**				
 	* @brief dsd_size	
 	*/				
-	long   get_dsd_size()	
+	int   get_dsd_size()	
 	{						
 		return _dsd_size;		
 	}; 
@@ -631,7 +631,7 @@ public:
 	/**				
 	* @brief num_data_sets	
 	*/				
-	long   get_num_data_sets()	
+	int   get_num_data_sets()	
 	{						
 		return _num_data_sets;		
 	}; 
@@ -946,7 +946,7 @@ public:
 	/**
 	* @brief num_dsd
 	*/
-	long   _num_dsd;
+	int   _num_dsd;
 	/**
 	* @brief size_of_dsd_title
 	*/
@@ -954,7 +954,7 @@ public:
 	/**
 	* @brief dsd_size
 	*/
-	long  _dsd_size;
+	int  _dsd_size;
 	/**
 	* @brief size_of_dsd_units
 	*/
@@ -966,7 +966,7 @@ public:
 	/**
 	* @brief num_data_sets
 	*/
-	long   _num_data_sets;
+	int   _num_data_sets;
 	
 private:
 

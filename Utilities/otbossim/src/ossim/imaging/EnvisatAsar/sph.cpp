@@ -197,7 +197,7 @@ std::istream& operator>>(std::istream& is, sph& data)
 	char buf15[16];
 	buf15[15] = '\0';
 	char buf14[15];
-	buf14[15] = '\0';
+	buf14[14] = '\0';
 	char buf13[14];
 	buf13[13] = '\0';
 	char buf12[13];

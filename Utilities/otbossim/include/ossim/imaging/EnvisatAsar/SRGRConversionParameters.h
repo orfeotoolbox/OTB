@@ -79,21 +79,21 @@ public:
 	/**				
 	* @brief first_zero_doppler_time day
 	*/				
-	long  get_first_zero_doppler_time_day()	
+	int  get_first_zero_doppler_time_day()	
 	{						
 		return _first_zero_doppler_time_day;		
 	}; 
 	/**				
 	* @brief first_zero_doppler_time second
 	*/				
-	unsigned long  get_first_zero_doppler_time_sec()	
+	unsigned int  get_first_zero_doppler_time_sec()	
 	{						
 		return _first_zero_doppler_time_sec;		
 	}; 
 	/**				
 	* @brief first_zero_doppler_time micro sec	
 	*/				
-	unsigned long  get_first_zero_doppler_time_microsec()	
+	unsigned int  get_first_zero_doppler_time_microsec()	
 	{						
 		return _first_zero_doppler_time_microsec;		
 	}; 
@@ -129,15 +129,15 @@ public:
 	/**
 	* @brief first_zero_doppler_time day
 	*/
-	long   _first_zero_doppler_time_day;
+	int   _first_zero_doppler_time_day;
 	/**
 	* @brief first_zero_doppler_time sec
 	*/
-	unsigned long   _first_zero_doppler_time_sec;
+	unsigned int   _first_zero_doppler_time_sec;
 	/**
 	* @brief first_zero_doppler_time microsec
 	*/
-	unsigned long   _first_zero_doppler_time_microsec;
+	unsigned int   _first_zero_doppler_time_microsec;
 	/**
 	 * @brief attach_flag
 	 */

@@ -59,7 +59,7 @@ int JulianDate::AsJSDDateTime(JSDDateTime* JSDdate)
 	double jJul0hTU = (double)k + 0.5;
   
 	JSDdate->set_day0hTU (jJul0hTU);
-	r = (_julianDate - jJul0hTU) * CivilDateTime::RDR_JOURCIVIL ;
+	r = (_julianDate - jJul0hTU) * CivilDateTime::JOURCIVIL_LENGTH ;
 	JSDdate->set_second(floor (r));
 	JSDdate->set_decimal(r - JSDdate->get_second()) ;
 
@@ -68,8 +68,8 @@ int JulianDate::AsJSDDateTime(JSDDateTime* JSDdate)
 
 int JulianDate::AsGMSTDateTime(GMSTDateTime* GMST)
 {
-	const double RDR_DEUXPI      = 6.28318530717958647693 ;
-	const double RDR_OMEGATERRE  = 6.28318530717958647693 / 86164.09054 ;
+	const double DEUXPI      = 6.28318530717958647693 ;
+	const double OMEGATERRE  = 6.28318530717958647693 / 86164.09054 ;
 	
 	int etat=0 , n ;
 	double j0hTU , tsm0hTU , t , d, tsm ;
@@ -85,7 +85,7 @@ int JulianDate::AsGMSTDateTime(GMSTDateTime* GMST)
 		{
 			t       = (j0hTU - 2415020.0) / 36525.0 ;
 			tsm0hTU = 23925.836 + t * (8640184.542 + t * 0.0929) ;
-			tsm0hTU = tsm0hTU * RDR_DEUXPI / CivilDateTime::RDR_JOURCIVIL ;
+			tsm0hTU = tsm0hTU * DEUXPI / CivilDateTime::JOURCIVIL_LENGTH ;
 		}
 		else if (GMST->get_origine() == GMSTDateTime::AN1950)
 		{
@@ -96,13 +96,13 @@ int JulianDate::AsGMSTDateTime(GMSTDateTime* GMST)
 		{
 			t       = (j0hTU - 2451545.0) / 36525.0 ;
 			tsm0hTU =   24110.54841 + t * (8640184.812866 + t * (0.093103 - t * 6.210e-6)) ;
-			tsm0hTU = tsm0hTU * RDR_DEUXPI / CivilDateTime::RDR_JOURCIVIL ;
+			tsm0hTU = tsm0hTU * DEUXPI / CivilDateTime::JOURCIVIL_LENGTH ;
 		}
-		t = tsm0hTU + d * CivilDateTime::RDR_JOURCIVIL * RDR_OMEGATERRE ;
-		tsm = fmod (t,RDR_DEUXPI) ;
+		t = tsm0hTU + d * CivilDateTime::JOURCIVIL_LENGTH * OMEGATERRE ;
+		tsm = fmod (t,DEUXPI) ;
 		if (tsm < 0.0)
 		{
-			tsm = tsm + RDR_DEUXPI ;
+			tsm = tsm + DEUXPI ;
 		}
 		
 		GMST->set_tms(tsm);

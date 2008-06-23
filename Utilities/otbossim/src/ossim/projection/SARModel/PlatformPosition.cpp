@@ -65,7 +65,7 @@ PlatformPosition::PlatformPosition(Ephemeris** data, int nbrData):
 
 Ephemeris* PlatformPosition::Interpolate(JSDDateTime date)
 {
-	const double RDR_JOURCIVIL = 86400.0 ;
+	const double JOURCIVIL_LENGTH = 86400.0 ;
 	Ephemeris* ephem = NULL;
 	if (_nbrData<=1)
 	{
@@ -91,7 +91,7 @@ Ephemeris* PlatformPosition::Interpolate(JSDDateTime date)
 		for (int i = 1 ; i < _nbrData ; i++)
 		{
 			x[i] =   (_data[i]->get_date().get_day0hTU().get_julianDate() - _data[0]->get_date().get_day0hTU().get_julianDate())
-             * RDR_JOURCIVIL
+             * JOURCIVIL_LENGTH
 			 + _data[i]->get_date().get_second()   - _data[0]->get_date().get_second()
              + _data[i]->get_date().get_decimal()     - _data[0]->get_date().get_decimal();
 			d = x[i] - x[i-1] ;
@@ -118,7 +118,7 @@ Ephemeris* PlatformPosition::Interpolate(JSDDateTime date)
 		{
 			ephem->set_date(date);
 
-			dt =  (date.get_day0hTU().get_julianDate() - _data[0]->get_date().get_day0hTU().get_julianDate()) * RDR_JOURCIVIL
+			dt =  (date.get_day0hTU().get_julianDate() - _data[0]->get_date().get_day0hTU().get_julianDate()) * JOURCIVIL_LENGTH
 			+ date.get_second()   - _data[0]->get_date().get_second()
 			+ date.get_decimal()     - _data[0]->get_date().get_decimal();
             

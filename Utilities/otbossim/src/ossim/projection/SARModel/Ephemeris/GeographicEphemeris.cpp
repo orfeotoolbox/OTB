@@ -30,7 +30,7 @@ GeographicEphemeris& GeographicEphemeris::operator=(const GeographicEphemeris& r
 
 void GeographicEphemeris::ToGalilean(GalileanEphemeris* vGal)
 {
-	const double RDR_OMEGATERRE  = 6.28318530717958647693 / 86164.09054 ;
+	const double OMEGATERRE  = 6.28318530717958647693 / 86164.09054 ;
 	GMSTDateTime h;
 	h.set_origine(GMSTDateTime::AN1950);
 	
@@ -48,8 +48,8 @@ void GeographicEphemeris::ToGalilean(GalileanEphemeris* vGal)
     pos[1] = _position[0] * s + _position[1] * c ;
     pos[2] = _position[2] ;
 	
-    vitesse[0]  =  _vitesse[0]  * c -  _vitesse[1] * s - RDR_OMEGATERRE * (_position[0] * s + _position[1] * c) ;
-    vitesse[1]  =  _vitesse[0]  * s +  _vitesse[1] * c + RDR_OMEGATERRE * (_position[0] * c - _position[1] * s) ;
+    vitesse[0]  =  _vitesse[0]  * c -  _vitesse[1] * s - OMEGATERRE * (_position[0] * s + _position[1] * c) ;
+    vitesse[1]  =  _vitesse[0]  * s +  _vitesse[1] * c + OMEGATERRE * (_position[0] * c - _position[1] * s) ;
     vitesse[2]  = _vitesse[2] ;
 	
 	vGal->set_position(pos);

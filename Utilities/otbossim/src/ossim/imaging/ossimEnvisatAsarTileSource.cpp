@@ -96,7 +96,7 @@ bool ossimEnvisatAsarTileSource::open()
 	}
 
 	/*
-	 * Creation de la classe peremttant le stockage des métadonnées du EnvisatAsarData file
+	 * Creation of the class allowing to store EnvisatAsarData file metadata
 	 */
 	if(_EnvisatAsarData != NULL)
 	{
@@ -105,7 +105,7 @@ bool ossimEnvisatAsarTileSource::open()
 	}
 
 	/*
-	 * Ouverture et test du fichier
+	 * Opening and test of the file
 	 */
 	ossimFilename Filename = theImageFile;
 	ifstream dataFile (Filename, ios::in|ios::binary);
@@ -128,7 +128,7 @@ bool ossimEnvisatAsarTileSource::open()
 				<< "Begin reading EnvisatAsar file" << std::endl;
 			}
 			/*
-			 * Lecture des données du EnvisatAsarData file
+			 * Reading EnvisatAsarData file data
 			 */
 			dataFile.seekg(0);
 			_EnvisatAsarData = new EnvisatAsarData();
@@ -174,8 +174,8 @@ bool ossimEnvisatAsarTileSource::getImageGeometry(ossimKeywordlist& kwl,const ch
 	kwl.add(prefix, ossimKeywordNames::TYPE_KW, "ossimEnvisatAsarModel", true);
 
 	/*
-	 * Ajout des données nécessaires au modèle de capteur dans la liste des mots clefs
-	 * Données issus du record SPH
+	 * Adding metadata necessary to the sensor model into the keywordlist
+	 * Data derived from the SPH record
 	 */
 	sph* sph_rec = _EnvisatAsarData->get_sph();
 	if(sph_rec != NULL)
@@ -188,8 +188,8 @@ bool ossimEnvisatAsarTileSource::getImageGeometry(ossimKeywordlist& kwl,const ch
 		return false;
 	}
 	/*
-	 * Ajout des données nécessaires au modèle de capteur dans la liste des mots clefs
-	 * Données issus du record Main Processing Parameters
+	 * Adding metadata necessary to the sensor model into the keywordlist
+	 * Data derived from the Main Processing Parameters record
 	 */
 	MainProcessingParameters* MPP_rec = _EnvisatAsarData->get_MainProcessingParameters();
 	if(MPP_rec != NULL)
@@ -201,64 +201,64 @@ bool ossimEnvisatAsarTileSource::getImageGeometry(ossimKeywordlist& kwl,const ch
 		kwl.add(prefix, "prf", MPP_rec->get_prf(), true );
 		kwl.add(prefix, "avg_scene_height", MPP_rec->get_avg_scene_height_ellpsoid(), true );
 		kwl.add(prefix, "is_groundrange", MPP_rec->get_srgr_flag(), true );
-		kwl.add(prefix, "state_vector_time_1_day",static_cast<ossim_int32>(MPP_rec->get_state_vector_time_1_day()), true );
+		kwl.add(prefix, "state_vector_time_1_day", (double)MPP_rec->get_state_vector_time_1_day(), true );
 		kwl.add(prefix, "state_vector_time_1_sec", (double)MPP_rec->get_state_vector_time_1_sec(), true );
 		kwl.add(prefix, "state_vector_time_1_microsec", (double)MPP_rec->get_state_vector_time_1_microsec(), true );
-		kwl.add(prefix, "x_pos_1",static_cast<ossim_int32>(MPP_rec->get_x_pos_1()), true );
-		kwl.add(prefix, "y_pos_1",static_cast<ossim_int32>(MPP_rec->get_y_pos_1()), true );
-		kwl.add(prefix, "z_pos_1",static_cast<ossim_int32>(MPP_rec->get_z_pos_1()), true );
-		kwl.add(prefix, "x_vel_1",static_cast<ossim_int32>(MPP_rec->get_x_vel_1()), true );
-		kwl.add(prefix, "y_vel_1",static_cast<ossim_int32>(MPP_rec->get_y_vel_1()), true );
-		kwl.add(prefix, "z_vel_1",static_cast<ossim_int32>(MPP_rec->get_z_vel_1()), true );
-		kwl.add(prefix, "state_vector_time_2_day", static_cast<ossim_int32>(MPP_rec->get_state_vector_time_2_day()), true );
+		kwl.add(prefix, "x_pos_1", (double)MPP_rec->get_x_pos_1(), true );
+		kwl.add(prefix, "y_pos_1", (double)MPP_rec->get_y_pos_1(), true );
+		kwl.add(prefix, "z_pos_1", (double)MPP_rec->get_z_pos_1(), true );
+		kwl.add(prefix, "x_vel_1", (double)MPP_rec->get_x_vel_1(), true );
+		kwl.add(prefix, "y_vel_1", (double)MPP_rec->get_y_vel_1(), true );
+		kwl.add(prefix, "z_vel_1", (double)MPP_rec->get_z_vel_1(), true );
+		kwl.add(prefix, "state_vector_time_2_day",(double) MPP_rec->get_state_vector_time_2_day(), true );
 		kwl.add(prefix, "state_vector_time_2_sec", (double)MPP_rec->get_state_vector_time_2_sec(), true );
 		kwl.add(prefix, "state_vector_time_2_microsec", (double)MPP_rec->get_state_vector_time_2_microsec(), true );
-		kwl.add(prefix, "x_pos_2", static_cast<ossim_int32>(MPP_rec->get_x_pos_2()), true );
-		kwl.add(prefix, "y_pos_2", static_cast<ossim_int32>(MPP_rec->get_y_pos_2()), true );
-		kwl.add(prefix, "z_pos_2", static_cast<ossim_int32>(MPP_rec->get_z_pos_2()), true );
-		kwl.add(prefix, "x_vel_2", static_cast<ossim_int32>(MPP_rec->get_x_vel_2()), true );
-		kwl.add(prefix, "y_vel_2", static_cast<ossim_int32>(MPP_rec->get_y_vel_2()), true );
-		kwl.add(prefix, "z_vel_2", static_cast<ossim_int32>(MPP_rec->get_z_vel_2()), true );
-		kwl.add(prefix, "state_vector_time_3_day", static_cast<ossim_int32>(MPP_rec->get_state_vector_time_3_day()), true );
+		kwl.add(prefix, "x_pos_2", (double)MPP_rec->get_x_pos_2(), true );
+		kwl.add(prefix, "y_pos_2", (double)MPP_rec->get_y_pos_2(), true );
+		kwl.add(prefix, "z_pos_2", (double)MPP_rec->get_z_pos_2(), true );
+		kwl.add(prefix, "x_vel_2", (double)MPP_rec->get_x_vel_2(), true );
+		kwl.add(prefix, "y_vel_2", (double)MPP_rec->get_y_vel_2(), true );
+		kwl.add(prefix, "z_vel_2", (double)MPP_rec->get_z_vel_2(), true );
+		kwl.add(prefix, "state_vector_time_3_day", (double)MPP_rec->get_state_vector_time_3_day(), true );
 		kwl.add(prefix, "state_vector_time_3_sec", (double)MPP_rec->get_state_vector_time_3_sec(), true );
 		kwl.add(prefix, "state_vector_time_3_microsec", (double)MPP_rec->get_state_vector_time_3_microsec(), true );
-		kwl.add(prefix, "x_pos_3", static_cast<ossim_int32>(MPP_rec->get_x_pos_3()), true );
-		kwl.add(prefix, "y_pos_3", static_cast<ossim_int32>(MPP_rec->get_y_pos_3()), true );
-		kwl.add(prefix, "z_pos_3", static_cast<ossim_int32>(MPP_rec->get_z_pos_3()), true );
-		kwl.add(prefix, "x_vel_3", static_cast<ossim_int32>(MPP_rec->get_x_vel_3()), true );
-		kwl.add(prefix, "y_vel_3", static_cast<ossim_int32>(MPP_rec->get_y_vel_3()), true );
-		kwl.add(prefix, "z_vel_3", static_cast<ossim_int32>(MPP_rec->get_z_vel_3()), true );
-		kwl.add(prefix, "state_vector_time_4_day", static_cast<ossim_int32>(MPP_rec->get_state_vector_time_4_day()), true );
+		kwl.add(prefix, "x_pos_3", (double)MPP_rec->get_x_pos_3(), true );
+		kwl.add(prefix, "y_pos_3", (double)MPP_rec->get_y_pos_3(), true );
+		kwl.add(prefix, "z_pos_3", (double)MPP_rec->get_z_pos_3(), true );
+		kwl.add(prefix, "x_vel_3", (double)MPP_rec->get_x_vel_3(), true );
+		kwl.add(prefix, "y_vel_3", (double)MPP_rec->get_y_vel_3(), true );
+		kwl.add(prefix, "z_vel_3", (double)MPP_rec->get_z_vel_3(), true );
+		kwl.add(prefix, "state_vector_time_4_day", (double)MPP_rec->get_state_vector_time_4_day(), true );
 		kwl.add(prefix, "state_vector_time_4_sec", (double)MPP_rec->get_state_vector_time_4_sec(), true );
 		kwl.add(prefix, "state_vector_time_4_microsec", (double)MPP_rec->get_state_vector_time_4_microsec(), true );
-		kwl.add(prefix, "x_pos_4",static_cast<ossim_int32>(MPP_rec->get_x_pos_4()), true );
-		kwl.add(prefix, "y_pos_4",static_cast<ossim_int32>(MPP_rec->get_y_pos_4()), true );
-		kwl.add(prefix, "z_pos_4",static_cast<ossim_int32>(MPP_rec->get_z_pos_4()), true );
-		kwl.add(prefix, "x_vel_4",static_cast<ossim_int32>(MPP_rec->get_x_vel_4()), true );
-		kwl.add(prefix, "y_vel_4",static_cast<ossim_int32>(MPP_rec->get_y_vel_4()), true );
-		kwl.add(prefix, "z_vel_4",static_cast<ossim_int32>(MPP_rec->get_z_vel_4()), true );
-		kwl.add(prefix, "state_vector_time_5_day",static_cast<ossim_int32>( MPP_rec->get_state_vector_time_5_day()), true );
+		kwl.add(prefix, "x_pos_4", (double)MPP_rec->get_x_pos_4(), true );
+		kwl.add(prefix, "y_pos_4", (double)MPP_rec->get_y_pos_4(), true );
+		kwl.add(prefix, "z_pos_4", (double)MPP_rec->get_z_pos_4(), true );
+		kwl.add(prefix, "x_vel_4", (double)MPP_rec->get_x_vel_4(), true );
+		kwl.add(prefix, "y_vel_4", (double)MPP_rec->get_y_vel_4(), true );
+		kwl.add(prefix, "z_vel_4", (double)MPP_rec->get_z_vel_4(), true );
+		kwl.add(prefix, "state_vector_time_5_day", (double)MPP_rec->get_state_vector_time_5_day(), true );
 		kwl.add(prefix, "state_vector_time_5_sec", (double)MPP_rec->get_state_vector_time_5_sec(), true );
 		kwl.add(prefix, "state_vector_time_5_microsec", (double)MPP_rec->get_state_vector_time_5_microsec(), true );
-		kwl.add(prefix, "x_pos_5",static_cast<ossim_int32>(MPP_rec->get_x_pos_5()), true );
-		kwl.add(prefix, "y_pos_5",static_cast<ossim_int32>(MPP_rec->get_y_pos_5()), true );
-		kwl.add(prefix, "z_pos_5",static_cast<ossim_int32>(MPP_rec->get_z_pos_5()), true );
-		kwl.add(prefix, "x_vel_5",static_cast<ossim_int32>(MPP_rec->get_x_vel_5()), true );
-		kwl.add(prefix, "y_vel_5",static_cast<ossim_int32>(MPP_rec->get_y_vel_5()), true );
-		kwl.add(prefix, "z_vel_5",static_cast<ossim_int32>(MPP_rec->get_z_vel_5()), true );
+		kwl.add(prefix, "x_pos_5", (double)MPP_rec->get_x_pos_5(), true );
+		kwl.add(prefix, "y_pos_5",(double) MPP_rec->get_y_pos_5(), true );
+		kwl.add(prefix, "z_pos_5", (double)MPP_rec->get_z_pos_5(), true );
+		kwl.add(prefix, "x_vel_5", (double)MPP_rec->get_x_vel_5(), true );
+		kwl.add(prefix, "y_vel_5", (double)MPP_rec->get_y_vel_5(), true );
+		kwl.add(prefix, "z_vel_5", (double)MPP_rec->get_z_vel_5(), true );
 	} 
 	else
 	{
 		return false;
 	}
 	/*
-	 * Ajout des données nécessaires au modèle de capteur dans la liste des mots clefs
-	 * Données issus du record Geolocation Grid - Point de reference
+	 * Adding metadata necessary to the sensor model into the keywordlist
+	 * Data derived from the Geolocation Grid record - Reference Point
 	 */
 	GeolocationGrid* GG_rec = _EnvisatAsarData->get_GeolocationGrid(0);
 	if(GG_rec != NULL)
 	{
-		kwl.add(prefix, "first_zero_doppler_time_day", static_cast<ossim_int32>(GG_rec->get_first_zero_doppler_time_day()), true ); 
+		kwl.add(prefix, "first_zero_doppler_time_day", (double)GG_rec->get_first_zero_doppler_time_day(), true ); 
 		kwl.add(prefix, "first_zero_doppler_time_sec", (double)GG_rec->get_first_zero_doppler_time_sec(), true ); 
 		kwl.add(prefix, "first_zero_doppler_time_microsec", (double)GG_rec->get_first_zero_doppler_time_microsec(), true ); 
 		kwl.add(prefix, "line_num", (double)GG_rec->get_line_num(), true );
@@ -270,8 +270,8 @@ bool ossimEnvisatAsarTileSource::getImageGeometry(ossimKeywordlist& kwl,const ch
 		return false;
 	}
 	/*
-	 * Ajout des données nécessaires au modèle de capteur dans la liste des mots clefs
-	 * Données issus du record Geolocation Grid - Coins
+	 * Adding metadata necessary to the sensor model into the keywordlist
+	 * Data derived from the Geolocation Grid record - Corners
 	 */
 	GG_rec = _EnvisatAsarData->get_GeolocationGrid(0);
 	if(GG_rec != NULL)
@@ -307,7 +307,7 @@ bool ossimEnvisatAsarTileSource::getImageGeometry(ossimKeywordlist& kwl,const ch
 	}
 
 	/*
-	 * Ajout des données nécessaires au modèle de capteur dans la liste des mots clefs
+	 * Adding metadata necessary to the sensor model into the keywordlist
 	 */
 	int n_srgr = 0;
 	SRGRConversionParameters * SRGRParameters = _EnvisatAsarData->get_SRGRConversionParameters(0);

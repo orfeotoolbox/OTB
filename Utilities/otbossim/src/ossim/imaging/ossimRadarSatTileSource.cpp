@@ -169,31 +169,28 @@ bool ossimRadarSatTileSource::open()
 					<< "End reading DAT file" << std::endl;
 				}
 				/*
-				 * Leader file path construction
+				 * Leader file path construction from the DAT file path
 				 * Warning : the filename case has to be homogenous
 				 */
 				std::string leader_file = theImageFile;
 				string::size_type loc = leader_file.find( "DAT_01", 0 );
-				if( loc != string::npos ) leader_file.replace(loc, 6, "LEA_01" );
+				if( loc != string::npos ) leader_file.replace(loc, 6, "LEA_01" ); // upper case test
 				else {
-					ossimNotify(ossimNotifyLevel_DEBUG)
-						<< "File Name not coherent (searching for *DAT_01*)  : " << theImageFile << std::endl;
+					loc = leader_file.find( "dat_01", 0 );
+					if( loc != string::npos ) leader_file.replace(loc, 6, "lea_01" ); // lower case test
+					else {
+						ossimNotify(ossimNotifyLevel_DEBUG)
+							<< "File Name not coherent (searching for *DAT_01* or *dat_01*)  : " << theImageFile << std::endl;
+					}
 				}
 				ossimFilename leaderFilePath(leader_file);
 
 				if (!leaderFilePath.exists()){
-					if( loc != string::npos ) leader_file.replace(loc, 6, "lea_01" );
-					else {
 						ossimNotify(ossimNotifyLevel_DEBUG)
-						<< "File Name not coherent (searching for *lea_01*)  : " << theImageFile << std::endl;
-					}
+							<< "Leader file not found (searching for *lea_01* coherent with *dat_01*)  : " << theImageFile << std::endl;
+						retValue = false;
 				}
-
-				//ossimFilename leaderFilePath = tempFilename.setFile("LEA_01");
- 			//	if (!leaderFilePath.exists())
- 			//	  leaderFilePath = tempFilename.setFile("lea_01");
-
-				if (leaderFilePath.exists())
+				else
 				{
 					if(traceDebug())
 					{
@@ -211,12 +208,7 @@ bool ossimRadarSatTileSource::open()
 						ossimNotify(ossimNotifyLevel_DEBUG)
 						<< "End reading Leader file" << std::endl;
 					}
-				}
-				else
-				{
-					retValue = false;
-				}
-				
+				}	
 			}
 			else
 			{

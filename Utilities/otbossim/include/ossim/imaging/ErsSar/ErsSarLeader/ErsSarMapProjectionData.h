@@ -86,14 +86,14 @@ public:
 	/**				
 	* @brief num_pix_in_line	
 	*/				
-	long   get_num_pix_in_line()	
+	int   get_num_pix_in_line()	
 	{						
 		return _num_pix_in_line;		
 	}; 
 	/**				
 	* @brief num_lines	
 	*/				
-	long   get_num_lines()	
+	int   get_num_lines()	
 	{						
 		return _num_lines;		
 	}; 
@@ -225,11 +225,11 @@ protected:
 	/**
 	* @brief num_pix_in_line
 	*/
-	long   _num_pix_in_line;
+	int   _num_pix_in_line;
 	/**
 	* @brief num_lines
 	*/
-	long   _num_lines;
+	int   _num_lines;
 	/**
 	* @brief nom_interpixel_dist
 	*/

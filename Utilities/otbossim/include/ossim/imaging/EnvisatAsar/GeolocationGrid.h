@@ -78,21 +78,21 @@ public:
 	/**				
 	* @brief first_zero_doppler_time day
 	*/				
-	long  get_first_zero_doppler_time_day()	
+	int  get_first_zero_doppler_time_day()	
 	{						
 		return _first_zero_doppler_time_day;		
 	}; 
 	/**				
 	* @brief first_zero_doppler_time second
 	*/				
-	unsigned long  get_first_zero_doppler_time_sec()	
+	unsigned int  get_first_zero_doppler_time_sec()	
 	{						
 		return _first_zero_doppler_time_sec;		
 	}; 
 	/**				
 	* @brief first_zero_doppler_time micro sec	
 	*/				
-	unsigned long  get_first_zero_doppler_time_microsec()	
+	unsigned int  get_first_zero_doppler_time_microsec()	
 	{						
 		return _first_zero_doppler_time_microsec;		
 	}; 
@@ -106,14 +106,14 @@ public:
 	/**				
 	* @brief line_num	
 	*/				
-	unsigned long   get_line_num()	
+	unsigned int   get_line_num()	
 	{						
 		return _line_num;		
 	}; 
 	/**				
 	* @brief num_lines	
 	*/				
-	unsigned long   get_num_lines()	
+	unsigned int   get_num_lines()	
 	{						
 		return _num_lines;		
 	}; 
@@ -127,7 +127,7 @@ public:
 	/**				
 	* @brief samp_numbvers	
 	*/				
-	unsigned long *  get_samp_numbers()	
+	unsigned int *  get_samp_numbers()	
 	{						
 		return _samp_numbers;		
 	};
@@ -148,14 +148,14 @@ public:
 	/**				
 	* @brief lats	
 	*/				
-	long *  get_lats()	
+	int *  get_lats()	
 	{						
 		return _lats;		
 	};
 	/**				
 	* @brief longs	
 	*/				
-	long *  get_longs()	
+	int *  get_longs()	
 	{						
 		return _longs;		
 	};
@@ -178,15 +178,15 @@ public:
 	/**
 	* @brief first_zero_doppler_time day
 	*/
-	long   _first_zero_doppler_time_day;
+	int   _first_zero_doppler_time_day;
 	/**
 	* @brief first_zero_doppler_time sec
 	*/
-	unsigned long   _first_zero_doppler_time_sec;
+	unsigned int   _first_zero_doppler_time_sec;
 	/**
 	* @brief first_zero_doppler_time microsec
 	*/
-	unsigned long   _first_zero_doppler_time_microsec;
+	unsigned int   _first_zero_doppler_time_microsec;
 	/**
 	* @brief attach_flag
 	*/
@@ -194,11 +194,11 @@ public:
 	/**
 	* @brief line_num
 	*/
-	unsigned long   _line_num;
+	unsigned int   _line_num;
 	/**
 	* @brief num_lines
 	*/
-	unsigned long   _num_lines;
+	unsigned int   _num_lines;
 	/**
 	* @brief sub_sat_track
 	*/
@@ -206,7 +206,7 @@ public:
 	/**
 	* @brief samp_numbers
 	*/
-	unsigned long  _samp_numbers[11];
+	unsigned int  _samp_numbers[11];
 	/**
 	* @brief slant_range_times[11]
 	*/
@@ -218,11 +218,11 @@ public:
 	/**
 	* @brief lats[11]
 	*/
-	long  _lats[11];
+	int  _lats[11];
 	/**
 	* @brief longs[11]
 	*/
-	long  _longs[11];
+	int  _longs[11];
 	/**
 	* @brief last_zero_doppler_time
 	*/

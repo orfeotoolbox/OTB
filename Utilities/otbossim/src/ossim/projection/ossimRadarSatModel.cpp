@@ -85,7 +85,7 @@ bool ossimRadarSatModel::InitSensorParams(const ossimKeywordlist &kwl, const cha
 	const char* ellip_maj_str = kwl.find(prefix,"ellip_maj");
 	double ellip_maj = atof(ellip_maj_str) * 1000.0;	// km -> m
 	const char* ellip_min_str = kwl.find(prefix,"ellip_min");
-	double ellip_min = atof(ellip_min_str) * 1000.0;  // km -> m
+	double ellip_min = atof(ellip_min_str) * 1000.0;	// km -> m
 
 	if(_sensor != NULL)
 	{
@@ -342,7 +342,8 @@ bool ossimRadarSatModel::InitRefPoint(const ossimKeywordlist &kwl, const char *p
 	if(_platformPosition != NULL)
 	{
 		Ephemeris * ephemeris = _platformPosition->Interpolate((JSDDateTime)date);
-	
+		if (ephemeris == NULL) return false ; 
+
 		_refPoint->set_ephemeris(ephemeris);
 
 		delete ephemeris;

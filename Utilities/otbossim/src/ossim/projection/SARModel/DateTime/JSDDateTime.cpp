@@ -81,7 +81,7 @@ JSDDateTime& JSDDateTime::operator=(const JSDDateTime& rhs)
 
 int JSDDateTime::AsJulianDate(JulianDate* julian)
 {
-	double jourJulien = _day0hTU.get_julianDate() + (_second + _decimal) / CivilDateTime::RDR_JOURCIVIL ;
+	double jourJulien = _day0hTU.get_julianDate() + (_second + _decimal) / CivilDateTime::JOURCIVIL_LENGTH ;
 	julian->set_julianDate(jourJulien);
 
 	return 0 ;
@@ -89,8 +89,8 @@ int JSDDateTime::AsJulianDate(JulianDate* julian)
 
 int JSDDateTime::AsGMSTDateTime(GMSTDateTime* GMST)
 {
-	const double RDR_DEUXPI      = 6.28318530717958647693 ;
-	const double RDR_OMEGATERRE  = 6.28318530717958647693 / 86164.09054 ;
+	const double DEUXPI      = 6.28318530717958647693 ;
+	const double OMEGATERRE  = 6.28318530717958647693 / 86164.09054 ;
 	
 	int etat ;
 	JulianDate jourJulien;
@@ -110,7 +110,7 @@ int JSDDateTime::AsGMSTDateTime(GMSTDateTime* GMST)
 		{
 			t       = (jourJulien.get_julianDate() - 2415020.0) / 36525.0 ;
 			tsm0hTU = 23925.836 + t * (8640184.542 + t * 0.0929) ;
-			tsm0hTU = tsm0hTU * RDR_DEUXPI / CivilDateTime::RDR_JOURCIVIL ;
+			tsm0hTU = tsm0hTU * DEUXPI / CivilDateTime::JOURCIVIL_LENGTH ;
 		}
 		else if (GMST->get_origine() == GMSTDateTime::AN1950)
 		{
@@ -122,13 +122,13 @@ int JSDDateTime::AsGMSTDateTime(GMSTDateTime* GMST)
 			t       = (jourJulien.get_julianDate() - 2451545.0) / 36525.0 ;
 			tsm0hTU =   24110.54841 + t * (8640184.812866 
                 + t * (0.093103 - t * 6.210e-6)) ;
-			tsm0hTU = tsm0hTU * RDR_DEUXPI / CivilDateTime::RDR_JOURCIVIL ;
+			tsm0hTU = tsm0hTU * DEUXPI / CivilDateTime::JOURCIVIL_LENGTH ;
 		}
-		t = tsm0hTU + (_second + _decimal) * RDR_OMEGATERRE ;
-		tsm = fmod (t,RDR_DEUXPI) ;
+		t = tsm0hTU + (_second + _decimal) * OMEGATERRE ;
+		tsm = fmod (t,DEUXPI) ;
 		if (tsm < 0.0)
 		{
-			tsm = tsm + RDR_DEUXPI ;
+			tsm = tsm + DEUXPI ;
 		}
 		
 		GMST->set_tms(tsm);
@@ -162,7 +162,7 @@ void JSDDateTime::NormDate()
 		}
 	}
 
-	v = _second + rw * CivilDateTime::RDR_JOURCIVIL ;
+	v = _second + rw * CivilDateTime::JOURCIVIL_LENGTH ;
 	if (fabs(v - fnint (v)) < epsilon)
 	{
 		iv = (int)inint (v) ;
@@ -189,13 +189,13 @@ void JSDDateTime::NormDate()
 	}
 
 	iv = iv + iu ;
-	k  = iv / ((int)inint(CivilDateTime::RDR_JOURCIVIL)) ;
+	k  = iv / ((int)inint(CivilDateTime::JOURCIVIL_LENGTH)) ;
 	iw = iw + k ;
-	iv = iv - k * ((int)inint(CivilDateTime::RDR_JOURCIVIL)) ;
+	iv = iv - k * ((int)inint(CivilDateTime::JOURCIVIL_LENGTH)) ;
 	if (iv < 0)
 	{
 		iw = iw - 1 ;
-		iv = iv + (int)inint(CivilDateTime::RDR_JOURCIVIL) ;
+		iv = iv + (int)inint(CivilDateTime::JOURCIVIL_LENGTH) ;
 	}
 
 	_decimal    = ru ;

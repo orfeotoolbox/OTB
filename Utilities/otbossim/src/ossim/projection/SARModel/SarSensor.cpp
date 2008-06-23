@@ -37,7 +37,7 @@ int SarSensor::ImageToWorld(double distance, JSDDateTime time, double height, do
 	RectangularCoordinate cart;
 
 	// note : the Doppler frequency is set to zero
-	int etatLoc = localisationApriori(*geoEph, lambda, distance, 0.0, sensVisee, semiMajorAxis , semiMinorAxis , height, &cart);
+	int etatLoc = localisationSAR(*geoEph, lambda, distance, 0.0, sensVisee, semiMajorAxis , semiMinorAxis , height, &cart);
 
 	GeodesicCoordinate geo;
 	cart.AsGeodesicCoordinates(semiMajorAxis , semiMinorAxis, &geo);
@@ -47,19 +47,16 @@ int SarSensor::ImageToWorld(double distance, JSDDateTime time, double height, do
 	return etatLoc ; 
 }
 
-int SarSensor::localisationApriori ( GeographicEphemeris PosVit , double lambda ,
+int SarSensor::localisationSAR ( GeographicEphemeris PosVit , double lambda ,
                         double dist , double fDop , int sensVisee ,
                         double rayonEqu , double rayonPol ,
                         double h , RectangularCoordinate* cart )
 {
-	const double KILO = 1.0e-3 ;
-	const double MEGA = 1.0e-6 ;
-	const double EPSILON = 1.0e-12 ;
 	double coordCart[3];
   
 	int* ordre;
 	int etat , fin , n , i , i1 , i2 , nRac , indice[4] ;
-	double xSat , ySat , zSat , vxSat , vySat , vzSat ;
+	double posX , posY , posZ , vitX , vitY , vitZ ;
 	double dist1 , fDop1 , he , hp ;
 	double rho2 , k , a , b , c , d , u , v , w ;
 	double x[4] , y[4] , z[4] , r[4] ;
@@ -74,54 +71,55 @@ int SarSensor::localisationApriori ( GeographicEphemeris PosVit , double lambda 
 	/*           - ranges are processed in mm			            */
 	/*           - velocities are processed in  km/s	         */
 	/*           - frequencies are processed in kHz		         */
-  
+  	const double KILO = 1.0e-3 ;
+	const double MEGA = 1.0e-6 ;
+	const double EPSILON = 1.0e-12 ;
+
 	etat  = 0 ;
   
 	dist1 = dist * MEGA ;
-  
 	fDop1 = fDop * KILO ;
   
 	he    = (rayonEqu + h) * MEGA ;       /* Equatorial radius + h */
 	hp    = (rayonPol + h) * MEGA ;       /* Polar radius + h    */
 
-	xSat  = PosVit.get_position()[0] * MEGA ;
-   ySat  = PosVit.get_position()[1] * MEGA ;
-   zSat  = PosVit.get_position()[2] * MEGA ;
-   vxSat = - PosVit.get_vitesse()[0] * KILO ;
-   vySat = - PosVit.get_vitesse()[1] * KILO ;
-   vzSat = - PosVit.get_vitesse()[2] * KILO ;
-
+	posX  = PosVit.get_position()[0] * MEGA ;
+	posY  = PosVit.get_position()[1] * MEGA ;
+	posZ  = PosVit.get_position()[2] * MEGA ;
+	vitX = - PosVit.get_vitesse()[0] * KILO ;
+	vitY = - PosVit.get_vitesse()[1] * KILO ;
+	vitZ = - PosVit.get_vitesse()[2] * KILO ;
+  
 
 	/* Coefficients computation and equation solving */
 	if (etat == 0)
 	{
-		rho2 = xSat * xSat + ySat * ySat + zSat * zSat ;
-		k    = xSat * vxSat + ySat * vySat + zSat * vzSat - 
+
+		u = vitX * posY - vitY * posX ;
+		a = (vitX / u) * (1.0 - (he / hp) * (he / hp)) / 2.0 ;
+		b = (vitX * posZ - vitZ * posX) / u ;
+		rho2 = posX * posX + posY * posY + posZ * posZ ;
+		k    = posX * vitX + posY * vitY + posZ * vitZ - 
            lambda * dist1 * fDop1 / 2.0 ;
+		c = (vitX * (he * he + rho2 - dist1 * dist1) - 2.0 * k * posX) / (2.0 * u);
 
-		u = vxSat * ySat - vySat * xSat ;
-		a = (vxSat / u) * (1.0 - (he / hp) * (he / hp)) / 2.0 ;
-		b = (vxSat * zSat - vzSat * xSat) / u ;
-		c = (vxSat * (he * he + rho2 - dist1 * dist1) - 2.0 * k * xSat) / (2.0 * u);
-
-		u     = vzSat - b * vySat ;
-		v     = c * vySat - k ;
-		w     = v * v - (vxSat * vxSat) * (he * he - c * c) ;
-		aa[0] = std::complex<double>(w,0.0);							 /* Constant coefficient     */
-		w     = 2.0 * (u * v - (b * c) * (vxSat * vxSat)) ;
+		u     = vitZ - b * vitY ;
+		v     = c * vitY - k ;
+		w     = v * v - (vitX * vitX) * (he * he - c * c) ;
+		aa[0] = std::complex<double>(w,0.0);					  /* Constant coefficient     */
+		w     = 2.0 * (u * v - (b * c) * (vitX * vitX)) ;
 		aa[1] = std::complex<double>(w,0.0) ;                     /* First order coefficient  */
-		w     = u * u + 2.0 * a * v * vySat + 
-            (vxSat * vxSat) * ((he / hp) * (he / hp) + b * b + 2.0 * a * c) ;
+		w     = u * u + 2.0 * a * v * vitY + 
+            (vitX * vitX) * ((he / hp) * (he / hp) + b * b + 2.0 * a * c) ;
 		aa[2] = std::complex<double>(w,0.0) ;                     /* Second order coefficient */
-		w     = 2.0 * a * (u * vySat - b * vxSat * vxSat) ;
+		w     = 2.0 * a * (u * vitY - b * vitX * vitX) ;
 		aa[3] = std::complex<double>(w,0.0) ;                     /* Third order coefficient  */
-		w     = (vxSat * vxSat + vySat * vySat) * a * a ;
+		w     = (vitX * vitX + vitY * vitY) * a * a ;
 		aa[4] = std::complex<double>(w,0.0) ;                     /* Fourth order coefficient */
 
-		Equation eq(4,aa);
+		Equation eq(4,aa);		/* Equation solving */
 		eq.Solve();
-
-		//equal ( 4 , aa , &n , root , order ) ;     /* Equation solving */
+   
 		n = eq.get_nbrSol();
 		racine = eq.get_solutions();
 		ordre = eq.get_order();
@@ -134,7 +132,7 @@ int SarSensor::localisationApriori ( GeographicEphemeris PosVit , double lambda 
 			{
 				z[nRac] = racine[i].real();
 				y[nRac] = (a * z[nRac] - b) * z[nRac] + c ;
-				x[nRac] = (k - (vySat * y[nRac] + vzSat * z[nRac])) / vxSat ;
+				x[nRac] = (k - (vitY * y[nRac] + vitZ * z[nRac])) / vitX ;
 				nRac    = nRac + 1 ;
 			}
 		}
@@ -148,13 +146,13 @@ int SarSensor::localisationApriori ( GeographicEphemeris PosVit , double lambda 
 		for (i = 0 ; i < nRac ; i++)
 		{
 			/* Computation of the "distance" between roots images and equation values */
-			u = x[i] - xSat ;
-			v = y[i] - ySat ;
-			w = z[i] - zSat ;
+			u = x[i] - posX ;
+			v = y[i] - posY ;
+			w = z[i] - posZ ;
 			r[i] = fabs ((u * u + v * v + w * w) / (dist1 * dist1) - 1.0 ) ;
-			u = u * vxSat ;
-			v = v * vySat ;
-			w = w * vzSat ;
+			u = u * vitX ;
+			v = v * vitY ;
+			w = w * vitZ ;
 			if (fabs (fDop) > EPSILON)
 				r[i] = r[i] + fabs (1.0 + 2.0 * (u + v + w) / (lambda * dist1 * fDop1));
 			else
@@ -190,12 +188,12 @@ int SarSensor::localisationApriori ( GeographicEphemeris PosVit , double lambda 
 		while ((fin == 0) && (i < nRac))
 		{
 			i1 = indice[i] ;
-			u  = ySat * vzSat - zSat * vySat ;
-			v  = zSat * vxSat - xSat * vzSat ;
-			w  = xSat * vySat - ySat * vxSat ;
-			a  = x[i1] - xSat ;
-			b  = y[i1] - ySat ;
-			c  = z[i1] - zSat ;
+			u  = posY * vitZ - posZ * vitY ;
+			v  = posZ * vitX - posX * vitZ ;
+			w  = posX * vitY - posY * vitX ;
+			a  = x[i1] - posX ;
+			b  = y[i1] - posY ;
+			c  = z[i1] - posZ ;
 			d  = (a * u + b * v + c * w) * sensVisee;  
 			if (d >= 0.0)
 			{

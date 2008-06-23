@@ -134,7 +134,7 @@ public:
 
 	operator GMSTDateTime() ;
 
-	static const double RDR_JOURCIVIL;
+	static const double JOURCIVIL_LENGTH;
 protected:
 	/**
 	 * @brief 

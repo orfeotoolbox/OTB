@@ -1,9 +1,9 @@
 #ifndef TsxAnnotation_h
 #define TsxAnnotation_h
 
+#include <string>
 #include <map>
 #include <vector>
-#include <string>
 
 class ossimXmlDocument ;
 

@@ -4,6 +4,7 @@
 #include <ossim/base/ossimIpt.h>
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimFilename.h>
+#include <ossim/base/ossimDirectory.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimEllipsoid.h>
@@ -78,8 +79,54 @@ bool ossimTerraSarTileSource::open()
 	}
 
 	_annotation = new TsxAnnotation();
+
+	/*
+	 * Finds the XML annotation file corresponding to the input "image file"
+	 */
+	ossimFilename annotationFilename = theImageFile;
+	if ((annotationFilename.ext()).downcase() != "xml") {
+		// search for a XML file in the same directory, beginning by "TSX"
+		ossimDirectory currentDir(annotationFilename.path());
+		std::vector<ossimFilename> searchRes ; 
+		ossimString searchedPattern("^(TSX)+[^(xml)]*(xml)+") ; 
+		currentDir.findAllFilesThatMatch(searchRes, searchedPattern) ; 
+		if (searchRes.size() == 1) {
+			annotationFilename = searchRes[0] ; 
+		} else if (searchRes.size() > 1) {
+			if(traceDebug())
+			{
+				ossimNotify(ossimNotifyLevel_DEBUG)
+				<< "ossimTerraSarTileSource::open() DEBUG: Several TSX XML files found in the current directory" << std::endl;
+			}
+			return false;
+		} else if (searchRes.size() == 0) {
+			// search for a XML file in the parent directory, beginning by "TSX"
+			ossimString parentDirPath = annotationFilename.path() ; 
+			parentDirPath += annotationFilename.thePathSeparator ; 
+			parentDirPath += ".." ; 
+			ossimDirectory parentDir(parentDirPath);
+			parentDir.findAllFilesThatMatch(searchRes, searchedPattern) ; 
+			if (searchRes.size() == 1) {
+				annotationFilename = searchRes[0] ; 
+			} else if (searchRes.size() == 0) {
+				if(traceDebug())
+				{
+					ossimNotify(ossimNotifyLevel_DEBUG)
+					<< "ossimTerraSarTileSource::open() DEBUG: No TSX XML file found in the current directory or in the parent directory" << std::endl;
+				}
+				return false;
+			} else {
+				if(traceDebug())
+				{
+					ossimNotify(ossimNotifyLevel_DEBUG)
+					<< "ossimTerraSarTileSource::open() DEBUG: Several TSX XML file found in the parent directory" << std::endl;
+				}
+				return false;
+			}
+		}
+	}
 				
-	if (theImageFile.exists())
+	if (annotationFilename.exists())
 	{
 		if(traceDebug())
 		{
@@ -90,7 +137,8 @@ bool ossimTerraSarTileSource::open()
 		/*
 		 * Checks whether the XML file corresponds to a Level1B TerraSar product
 		 */
-		ossimXmlDocument docXML(theImageFile) ; 
+		ossimXmlDocument docXML(annotationFilename) ; 
+		
 		ossimString xpathTest("/level1Product") ;
 		std::vector<ossimRefPtr<ossimXmlNode> > listeResultat ; 
 		docXML.findNodes(xpathTest, listeResultat) ; 

@@ -1,9 +1,9 @@
 #ifndef Rds2Annotation_h
 #define Rds2Annotation_h
 
+#include <string>
 #include <map>
 #include <vector>
-#include <string>
 
 class ossimXmlDocument ;
 

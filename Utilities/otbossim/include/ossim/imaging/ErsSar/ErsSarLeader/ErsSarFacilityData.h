@@ -892,7 +892,7 @@ public:
 	/**				
 	* @brief num_input_raw_data_lines	
 	*/				
-	long   get_num_input_raw_data_lines()	
+	int   get_num_input_raw_data_lines()	
 	{						
 		return _num_input_raw_data_lines;		
 	}; 
@@ -983,7 +983,7 @@ public:
 	/**				
 	* @brief sat_binary_time_of_first	
 	*/				
-	long   get_sat_binary_time_of_first()	
+	int   get_sat_binary_time_of_first()	
 	{						
 		return _sat_binary_time_of_first;		
 	}; 
@@ -1633,7 +1633,7 @@ protected:
 	/**
 	* @brief num_input_raw_data_lines
 	*/
-	long   _num_input_raw_data_lines;
+	int   _num_input_raw_data_lines;
 	/**
 	* @brief initial_doppler_ambiguity_num
 	*/
@@ -1685,7 +1685,7 @@ protected:
 	/**
 	* @brief sat_binary_time_of_first
 	*/
-	long   _sat_binary_time_of_first;
+	int   _sat_binary_time_of_first;
 	/**
 	* @brief num_valid_pixels_per_range
 	*/

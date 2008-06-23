@@ -12,8 +12,7 @@
 #include <ossim/imaging/ossimRadarSatTileSource.h>
 #include <ossim/imaging/ossimRadarSat2TileSource.h>
 #include <ossim/imaging/ossimTerraSarTileSource.h>
-// TODO: to uncomment once we have a proper hdf5 lib
-// #include <ossim/imaging/ossimCosmoSkymedTileSource.h>
+//#include <ossim/imaging/ossimCosmoSkymedTileSource.h>
 #include <ossim/imaging/ossimEnvisatAsarTileSource.h>
 #include <ossim/imaging/ossimErsSarTileSource.h>
 
@@ -131,22 +130,20 @@ ossimImageHandler* ossimImageHandlerSarFactory::open(const ossimFilename& fileNa
    }
    delete result;
    
-// TODO: to uncomment once we have a proper hdf5 lib
-/**
-   // Cosmo Skymed
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying CosmoSkymed"
-         << std::endl;
-   }
-   result = new ossimCosmoSkymedTileSource;
-   if(result->open(copyFilename))
-   {
-      return result;
-   }
-   delete result;
-*/
+   //// Cosmo Skymed
+   //if(traceDebug())
+   //{
+   //   ossimNotify(ossimNotifyLevel_DEBUG)
+   //      << "trying CosmoSkymed"
+   //      << std::endl;
+   //}
+   //result = new ossimCosmoSkymedTileSource;
+   //if(result->open(copyFilename))
+   //{
+   //   return result;
+   //}
+   //delete result;
+
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -230,22 +227,20 @@ ossimImageHandler* ossimImageHandlerSarFactory::open(const ossimKeywordlist& kwl
       return result;
    }
    delete result;
-    // TODO: uncomment once we have a proper hdf5 lib
-   /**
-   	if(traceDebug())
+
+   /*if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << "trying CosmoSkymed"
          << std::endl;
    }
-   
    result  = new ossimCosmoSkymedTileSource();
    if(result->loadState(kwl, prefix))
    {
       return result;
    }
-   delete result;
-   */
+   delete result;*/
+
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -269,13 +264,10 @@ ossimObject* ossimImageHandlerSarFactory::createObject(const ossimString& typeNa
    {
       return new ossimEnvisatAsarTileSource();
    }
-   // TODO: uncomment once we have a proper hdf5 lib
-   /**
-	if(STATIC_TYPE_NAME(ossimCosmoSkymedTileSource) == typeName)
+	/*if(STATIC_TYPE_NAME(ossimCosmoSkymedTileSource) == typeName)
    {
       return new ossimCosmoSkymedTileSource();
-   }
-   */
+   }*/
    if(STATIC_TYPE_NAME(ossimErsSarTileSource) == typeName)
    {
       return new ossimErsSarTileSource();
@@ -291,10 +283,7 @@ void ossimImageHandlerSarFactory::getSupportedExtensions(ossimImageHandlerFactor
 {
    extensionList.push_back("001");	// RadarSat, ERS
 	extensionList.push_back("xml");	// TerraSar, RadarSat2
-	// TODO: uncomment once we have a proper hdf5 lib
-	/**	
-	extensionList.push_back("h5");	// CosmoSkymed
-	*/
+	//extensionList.push_back("h5");	// CosmoSkymed
 	extensionList.push_back("n1");	// EnvisatAsar
 }
 
@@ -348,10 +337,7 @@ void ossimImageHandlerSarFactory::getTypeNameList(std::vector<ossimString>& type
 	typeList.push_back(STATIC_TYPE_NAME(ossimRadarSatTileSource));
 	typeList.push_back(STATIC_TYPE_NAME(ossimTerraSarTileSource));
 	typeList.push_back(STATIC_TYPE_NAME(ossimEnvisatAsarTileSource));
-	 // TODO: uncomment once we have a proper hdf5 lib
-	/**
-	typeList.push_back(STATIC_TYPE_NAME(ossimCosmoSkymedTileSource));
-	*/
+	//typeList.push_back(STATIC_TYPE_NAME(ossimCosmoSkymedTileSource));
 	typeList.push_back(STATIC_TYPE_NAME(ossimErsSarTileSource));
 	typeList.push_back(STATIC_TYPE_NAME(ossimRadarSat2TileSource));
 }

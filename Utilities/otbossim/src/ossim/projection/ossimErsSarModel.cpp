@@ -10,7 +10,7 @@
 #include <ossim/projection/SARModel/SensorParams.h>
 #include <ossim/projection/SARModel/RefPoint.h>
 #include <ossim/projection/SARModel/SarSensor.h>
-
+#include <ossim/base/ossimString.h>
 
 #include <math.h>
 #include <cctype> // for toupper
@@ -45,10 +45,12 @@ bool ossimErsSarModel::InitSensorParams(const ossimKeywordlist &kwl, const char 
 	const char* fa_str = kwl.find(prefix,"fa");
 	double fa = atof(fa_str);
 
-	std::string time_dir_pix = kwl.find(prefix,"time_dir_pix");
-	std::transform(time_dir_pix.begin(), time_dir_pix.end(), time_dir_pix.begin(),(int(*)(int))toupper);
-	std::string time_dir_lin = kwl.find(prefix,"time_dir_lin");
-	std::transform(time_dir_lin.begin(), time_dir_lin.end(), time_dir_lin.begin(),(int(*)(int))toupper);
+	ossimString time_dir_pix = kwl.find(prefix,"time_dir_pix");
+	time_dir_pix.upcase(); 
+	//std::transform(time_dir_pix.begin(), time_dir_pix.end(), time_dir_pix.begin(), toupper);
+	ossimString time_dir_lin = kwl.find(prefix,"time_dir_lin");
+	time_dir_lin.upcase(); 
+	//std::transform(time_dir_lin.begin(), time_dir_lin.end(), time_dir_lin.begin(), toupper);
 
 	//ellipsoid parameters
 	const char* ellip_maj_str = kwl.find(prefix,"ellip_maj");
@@ -287,7 +289,7 @@ bool ossimErsSarModel::InitRefPoint(const ossimKeywordlist &kwl, const char *pre
 	if(_platformPosition != NULL)
 	{
 		Ephemeris * ephemeris = _platformPosition->Interpolate((JSDDateTime)date);
-	
+		if (ephemeris == NULL) return false ; 
 		_refPoint->set_ephemeris(ephemeris);
 
 		delete ephemeris;
@@ -363,8 +365,9 @@ bool ossimErsSarModel::InitRefPoint(const ossimKeywordlist &kwl, const char *pre
 bool ossimErsSarModel::InitSRGR(const ossimKeywordlist &kwl, const char *prefix)
 {
 	// Product type = PRI
-	std::string filename(kwl.find("filename"));
-	std::transform(filename.begin(), filename.end(), filename.begin(),(int(*)(int))toupper);
+	ossimString filename(kwl.find("filename"));
+	filename.upcase(); 
+	//std::transform(filename.begin(), filename.end(), filename.begin(), toupper);
 	string::size_type loc = filename.find("PRI");
 	if( loc != string::npos ) {
      _isProductGeoreferenced = true;

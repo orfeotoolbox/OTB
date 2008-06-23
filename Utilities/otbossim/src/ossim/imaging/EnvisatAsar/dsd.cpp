@@ -38,7 +38,7 @@ std::istream& operator>>(std::istream& is, dsd& data)
 	char buf15[16];
 	buf15[15] = '\0';
 	char buf14[15];
-	buf14[15] = '\0';
+	buf14[14] = '\0';
 	char buf13[14];
 	buf13[13] = '\0';
 	char buf12[13];
@@ -113,8 +113,8 @@ std::istream& operator>>(std::istream& is, dsd& data)
 	std::string   _filename;	
 	double	_ds_offset;	
 	double	_ds_size;				
-	long	_num_dsr;			
-	long	_dsr_size;	
+	int	_num_dsr;			
+	int	_dsr_size;	
 
 dsd::dsd(const dsd& rhs):
 	EnvisatAsarRecord(rhs),

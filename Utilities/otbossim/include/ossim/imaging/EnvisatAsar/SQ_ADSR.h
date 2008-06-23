@@ -275,7 +275,7 @@ public:
 	/**				
 	* @brief lines_per_gaps	
 	*/				
-	unsigned long   get_lines_per_gaps()	
+	unsigned int   get_lines_per_gaps()	
 	{						
 		return _lines_per_gaps;		
 	}; 
@@ -324,7 +324,7 @@ public:
 	/**				
 	* @brief tot_errors	
 	*/				
-	unsigned long   get_tot_errors()	
+	unsigned int   get_tot_errors()	
 	{						
 		return _tot_errors;		
 	}; 
@@ -445,7 +445,7 @@ public:
 	/**
 	 * @brief lines_per_gaps
 	 */
-	unsigned long   _lines_per_gaps;
+	unsigned int   _lines_per_gaps;
 	/**
 	 * @brief input_mean[2]
 	 */
@@ -473,7 +473,7 @@ public:
 	/**
 	 * @brief tot_errors
 	 */
-	unsigned long   _tot_errors;
+	unsigned int   _tot_errors;
 
 	
 private:

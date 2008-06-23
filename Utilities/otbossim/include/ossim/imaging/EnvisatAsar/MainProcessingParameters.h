@@ -143,14 +143,14 @@ public:
 	/**				
 	* @brief num_output_lines	
 	*/				
-	unsigned long  get_num_output_lines()	
+	unsigned int  get_num_output_lines()	
 	{						
 		return _num_output_lines;		
 	}; 
 	/**				
 	* @brief num_samples_per_line	
 	*/				
-	unsigned long  get_num_samples_per_line()	
+	unsigned int  get_num_samples_per_line()	
 	{						
 		return _num_samples_per_line;		
 	}; 
@@ -164,7 +164,7 @@ public:
 	/**				
 	* @brief num_range_lines_per_burst	
 	*/				
-	unsigned long  get_num_range_lines_per_burst()	
+	unsigned int  get_num_range_lines_per_burst()	
 	{						
 		return _num_range_lines_per_burst;		
 	}; 
@@ -346,7 +346,7 @@ public:
 	/**				
 	* @brief first_proc_range_samp	
 	*/				
-	unsigned long  get_first_proc_range_samp()	
+	unsigned int  get_first_proc_range_samp()	
 	{						
 		return _first_proc_range_samp;		
 	}; 
@@ -409,7 +409,7 @@ public:
 	/**				
 	* @brief num_lines_proc	
 	*/				
-	unsigned long  get_num_lines_proc()	
+	unsigned int  get_num_lines_proc()	
 	{						
 		return _num_lines_proc;		
 	}; 
@@ -556,7 +556,7 @@ public:
 	/**				
 	* @brief beam_overlap[4]	
 	*/				
-	unsigned long* get_beam_overlap()	
+	unsigned int* get_beam_overlap()	
 	{						
 		return _beam_overlap;		
 	}; 
@@ -570,7 +570,7 @@ public:
 	/**				
 	* @brief lines_per_burst[5]	
 	*/				
-	unsigned long*  get_lines_per_burst()	
+	unsigned int*  get_lines_per_burst()	
 	{						
 		return _lines_per_burst;		
 	}; 
@@ -584,315 +584,315 @@ public:
 	/**				
 	* @brief state_vector_time_1 day	
 	*/
-	long get_state_vector_time_1_day()
+	int get_state_vector_time_1_day()
 	{						
 		return _state_vector_time_1_day;		
 	}; 
 	/**				
 	* @brief state_vector_time_1 sec	
 	*/
-	unsigned long get_state_vector_time_1_sec()
+	unsigned int get_state_vector_time_1_sec()
 	{						
 		return _state_vector_time_1_sec;		
 	}; 
 	/**				
 	* @brief state_vector_time_1 microsec	
 	*/
-	unsigned long get_state_vector_time_1_microsec()
+	unsigned int get_state_vector_time_1_microsec()
 	{						
 		return _state_vector_time_1_microsec;		
 	}; 
 	/**				
 	* @brief x_pos_1	
 	*/				
-	long   get_x_pos_1()	
+	int   get_x_pos_1()	
 	{						
 		return _x_pos_1;		
 	}; 
 	/**				
 	* @brief y_pos_1	
 	*/				
-	long   get_y_pos_1()	
+	int   get_y_pos_1()	
 	{						
 		return _y_pos_1;		
 	}; 
 	/**				
 	* @brief z_pos_1	
 	*/				
-	long   get_z_pos_1()	
+	int   get_z_pos_1()	
 	{						
 		return _z_pos_1;		
 	}; 
 	/**				
 	* @brief x_vel_1	
 	*/				
-	long   get_x_vel_1()	
+	int   get_x_vel_1()	
 	{						
 		return _x_vel_1;		
 	}; 
 	/**				
 	* @brief y_vel_1	
 	*/				
-	long   get_y_vel_1()	
+	int   get_y_vel_1()	
 	{						
 		return _y_vel_1;		
 	}; 
 	/**				
 	* @brief z_vel_1	
 	*/				
-	long   get_z_vel_1()	
+	int   get_z_vel_1()	
 	{						
 		return _z_vel_1;		
 	}; 
 	/**				
 	* @brief state_vector_time_2 day	
 	*/
-	long get_state_vector_time_2_day()
+	int get_state_vector_time_2_day()
 	{						
 		return _state_vector_time_2_day;		
 	}; 
 	/**				
 	* @brief state_vector_time_2 sec	
 	*/
-	unsigned long get_state_vector_time_2_sec()
+	unsigned int get_state_vector_time_2_sec()
 	{						
 		return _state_vector_time_2_sec;		
 	}; 
 	/**				
 	* @brief state_vector_time_1 microsec	
 	*/
-	unsigned long get_state_vector_time_2_microsec()
+	unsigned int get_state_vector_time_2_microsec()
 	{						
 		return _state_vector_time_2_microsec;		
 	}; 
 	/**				
 	* @brief x_pos_2	
 	*/				
-	long   get_x_pos_2()	
+	int   get_x_pos_2()	
 	{						
 		return _x_pos_2;		
 	}; 
 	/**				
 	* @brief y_pos_2	
 	*/				
-	long   get_y_pos_2()	
+	int   get_y_pos_2()	
 	{						
 		return _y_pos_2;		
 	}; 
 	/**				
 	* @brief z_pos_2	
 	*/				
-	long   get_z_pos_2()	
+	int   get_z_pos_2()	
 	{						
 		return _z_pos_2;		
 	}; 
 	/**				
 	* @brief x_vel_2	
 	*/				
-	long   get_x_vel_2()	
+	int   get_x_vel_2()	
 	{						
 		return _x_vel_2;		
 	}; 
 	/**				
 	* @brief y_vel_2	
 	*/				
-	long   get_y_vel_2()	
+	int   get_y_vel_2()	
 	{						
 		return _y_vel_2;		
 	}; 
 	/**				
 	* @brief z_vel_2	
 	*/				
-	long   get_z_vel_2()	
+	int   get_z_vel_2()	
 	{						
 		return _z_vel_2;		
 	}; 
 	/**				
 	* @brief state_vector_time_3 day	
 	*/
-	long get_state_vector_time_3_day()
+	int get_state_vector_time_3_day()
 	{						
 		return _state_vector_time_3_day;		
 	}; 
 	/**				
 	* @brief state_vector_time_3 sec	
 	*/
-	unsigned long get_state_vector_time_3_sec()
+	unsigned int get_state_vector_time_3_sec()
 	{						
 		return _state_vector_time_3_sec;		
 	}; 
 	/**				
 	* @brief state_vector_time_3 microsec	
 	*/
-	unsigned long get_state_vector_time_3_microsec()
+	unsigned int get_state_vector_time_3_microsec()
 	{						
 		return _state_vector_time_3_microsec;		
 	}; 
 	/**				
 	* @brief x_pos_3	
 	*/				
-	long   get_x_pos_3()	
+	int   get_x_pos_3()	
 	{						
 		return _x_pos_3;		
 	}; 
 	/**				
 	* @brief y_pos_3	
 	*/				
-	long   get_y_pos_3()	
+	int   get_y_pos_3()	
 	{						
 		return _y_pos_3;		
 	}; 
 	/**				
 	* @brief z_pos_3	
 	*/				
-	long   get_z_pos_3()	
+	int   get_z_pos_3()	
 	{						
 		return _z_pos_3;		
 	}; 
 	/**				
 	* @brief x_vel_3	
 	*/				
-	long   get_x_vel_3()	
+	int   get_x_vel_3()	
 	{						
 		return _x_vel_3;		
 	}; 
 	/**				
 	* @brief y_vel_3	
 	*/				
-	long   get_y_vel_3()	
+	int   get_y_vel_3()	
 	{						
 		return _y_vel_3;		
 	}; 
 	/**				
 	* @brief z_vel_3	
 	*/				
-	long   get_z_vel_3()	
+	int   get_z_vel_3()	
 	{						
 		return _z_vel_3;		
 	}; 
 	/**				
 	* @brief state_vector_time_4 day	
 	*/
-	long get_state_vector_time_4_day()
+	int get_state_vector_time_4_day()
 	{						
 		return _state_vector_time_4_day;		
 	}; 
 	/**				
 	* @brief state_vector_time_1 sec	
 	*/
-	unsigned long get_state_vector_time_4_sec()
+	unsigned int get_state_vector_time_4_sec()
 	{						
 		return _state_vector_time_4_sec;		
 	}; 
 	/**				
 	* @brief state_vector_time_4 microsec	
 	*/
-	unsigned long get_state_vector_time_4_microsec()
+	unsigned int get_state_vector_time_4_microsec()
 	{						
 		return _state_vector_time_4_microsec;		
 	}; 
 	/**				
 	* @brief x_pos_4	
 	*/				
-	long   get_x_pos_4()	
+	int   get_x_pos_4()	
 	{						
 		return _x_pos_4;		
 	}; 
 	/**				
 	* @brief y_pos_4	
 	*/				
-	long   get_y_pos_4()	
+	int   get_y_pos_4()	
 	{						
 		return _y_pos_4;		
 	}; 
 	/**				
 	* @brief z_pos_4	
 	*/				
-	long   get_z_pos_4()	
+	int   get_z_pos_4()	
 	{						
 		return _z_pos_4;		
 	}; 
 	/**				
 	* @brief x_vel_4	
 	*/				
-	long   get_x_vel_4()	
+	int   get_x_vel_4()	
 	{						
 		return _x_vel_4;		
 	}; 
 	/**				
 	* @brief y_vel_4	
 	*/				
-	long   get_y_vel_4()	
+	int   get_y_vel_4()	
 	{						
 		return _y_vel_4;		
 	}; 
 	/**				
 	* @brief z_vel_4	
 	*/				
-	long   get_z_vel_4()	
+	int   get_z_vel_4()	
 	{						
 		return _z_vel_4;		
 	}; 
 	/**				
 	* @brief state_vector_time_5 day	
 	*/
-	long get_state_vector_time_5_day()
+	int get_state_vector_time_5_day()
 	{						
 		return _state_vector_time_5_day;		
 	}; 
 	/**				
 	* @brief state_vector_time_5 sec	
 	*/
-	unsigned long get_state_vector_time_5_sec()
+	unsigned int get_state_vector_time_5_sec()
 	{						
 		return _state_vector_time_5_sec;		
 	}; 
 	/**				
 	* @brief state_vector_time_5 microsec	
 	*/
-	unsigned long get_state_vector_time_5_microsec()
+	unsigned int get_state_vector_time_5_microsec()
 	{						
 		return _state_vector_time_5_microsec;		
 	}; 
 	/**				
 	* @brief x_pos_5	
 	*/				
-	long   get_x_pos_5()	
+	int   get_x_pos_5()	
 	{						
 		return _x_pos_5;		
 	}; 
 	/**				
 	* @brief y_pos_5	
 	*/				
-	long   get_y_pos_5()	
+	int   get_y_pos_5()	
 	{						
 		return _y_pos_5;		
 	}; 
 	/**				
 	* @brief z_pos_5	
 	*/				
-	long   get_z_pos_5()	
+	int   get_z_pos_5()	
 	{						
 		return _z_pos_5;		
 	}; 
 	/**				
 	* @brief x_vel_5	
 	*/				
-	long   get_x_vel_5()	
+	int   get_x_vel_5()	
 	{						
 		return _x_vel_5;		
 	}; 
 	/**				
 	* @brief y_vel_5	
 	*/				
-	long   get_y_vel_5()	
+	int   get_y_vel_5()	
 	{						
 		return _y_vel_5;		
 	}; 
 	/**				
 	* @brief z_vel_5	
 	*/				
-	long   get_z_vel_5()	
+	int   get_z_vel_5()	
 	{						
 		return _z_vel_5;		
 	}; 
@@ -936,11 +936,11 @@ public:
 	/**
 	* @brief num_output_lines
 	*/
-	unsigned long   _num_output_lines;
+	unsigned int   _num_output_lines;
 	/**
 	* @brief num_samples_per_line
 	*/
-	unsigned long   _num_samples_per_line;
+	unsigned int   _num_samples_per_line;
 	/**
 	* @brief data_type
 	*/
@@ -948,7 +948,7 @@ public:
 	/**
 	* @brief num_range_lines_per_burst
 	*/
-	unsigned long   _num_range_lines_per_burst;
+	unsigned int   _num_range_lines_per_burst;
 	/**
 	* @brief time_diff_zero_doppler
 	*/
@@ -1048,7 +1048,7 @@ public:
 	/**
 	* @brief first_proc_range_samp
 	*/
-	unsigned long   _first_proc_range_samp;
+	unsigned int   _first_proc_range_samp;
 	/**
 	* @brief range_ref
 	*/
@@ -1084,7 +1084,7 @@ public:
 	/**
 	* @brief num_lines_proc
 	*/
-	unsigned long   _num_lines_proc;
+	unsigned int   _num_lines_proc;
 	/**
 	* @brief num_look_az
 	*/
@@ -1168,7 +1168,7 @@ public:
 	/**
 	* @brief beam_overlap[4]
 	*/
-	unsigned long   _beam_overlap[4];
+	unsigned int   _beam_overlap[4];
 	/**
 	* @brief beam_overlap[4]
 	*/
@@ -1176,7 +1176,7 @@ public:
 	/**
 	* @brief lines_per_burst[5]
 	*/
-	unsigned long   _lines_per_burst[5];
+	unsigned int   _lines_per_burst[5];
 	/**
 	* @brief time_first_SS1_echo
 	*/
@@ -1184,183 +1184,183 @@ public:
 	/**
 	* @brief state_vector_time_1_day
 	*/
-	long   _state_vector_time_1_day;
+	int   _state_vector_time_1_day;
 	/**
 	* @brief state_vector_time_1_sec
 	*/
-	unsigned long   _state_vector_time_1_sec;
+	unsigned int   _state_vector_time_1_sec;
 	/**
 	* @brief state_vector_time_1_microsec
 	*/
-	unsigned long   _state_vector_time_1_microsec;
+	unsigned int   _state_vector_time_1_microsec;
 	/**
 	* @brief x_pos_1
 	*/
-	long   _x_pos_1;
+	int   _x_pos_1;
 	/**
 	* @brief y_pos_1
 	*/
-	long   _y_pos_1;
+	int   _y_pos_1;
 	/**
 	* @brief z_pos_1
 	*/
-	long   _z_pos_1;
+	int   _z_pos_1;
 	/**
 	* @brief x_vel_1
 	*/
-	long   _x_vel_1;
+	int   _x_vel_1;
 	/**
 	* @brief y_vel_1
 	*/
-	long   _y_vel_1;
+	int   _y_vel_1;
 	/**
 	* @brief z_vel_1
 	*/
-	long   _z_vel_1;
+	int   _z_vel_1;
 	/**
 	* @brief state_vector_time_2_day
 	*/
-	long   _state_vector_time_2_day;
+	int   _state_vector_time_2_day;
 	/**
 	* @brief state_vector_time_2_sec
 	*/
-	unsigned long   _state_vector_time_2_sec;
+	unsigned int   _state_vector_time_2_sec;
 	/**
 	* @brief state_vector_time_2_microsec
 	*/
-	unsigned long   _state_vector_time_2_microsec;
+	unsigned int   _state_vector_time_2_microsec;
 	/**
 	* @brief x_pos_2
 	*/
-	long   _x_pos_2;
+	int   _x_pos_2;
 	/**
 	* @brief y_pos_2
 	*/
-	long   _y_pos_2;
+	int   _y_pos_2;
 	/**
 	* @brief z_pos_2
 	*/
-	long   _z_pos_2;
+	int   _z_pos_2;
 	/**
 	* @brief x_vel_2
 	*/
-	long   _x_vel_2;
+	int   _x_vel_2;
 	/**
 	* @brief y_vel_2
 	*/
-	long   _y_vel_2;
+	int   _y_vel_2;
 	/**
 	* @brief z_vel_2
 	*/
-	long   _z_vel_2;
+	int   _z_vel_2;
 	/**
 	* @brief state_vector_time_3_day
 	*/
-	long   _state_vector_time_3_day;
+	int   _state_vector_time_3_day;
 	/**
 	* @brief state_vector_time_3_sec
 	*/
-	unsigned long   _state_vector_time_3_sec;
+	unsigned int   _state_vector_time_3_sec;
 	/**
 	* @brief state_vector_time_3_microsec
 	*/
-	unsigned long   _state_vector_time_3_microsec;
+	unsigned int   _state_vector_time_3_microsec;
 	/**
 	* @brief x_pos_3
 	*/
-	long   _x_pos_3;
+	int   _x_pos_3;
 	/**
 	* @brief y_pos_3
 	*/
-	long   _y_pos_3;
+	int   _y_pos_3;
 	/**
 	* @brief z_pos_3
 	*/
-	long   _z_pos_3;
+	int   _z_pos_3;
 	/**
 	* @brief x_vel_3
 	*/
-	long   _x_vel_3;
+	int   _x_vel_3;
 	/**
 	* @brief y_vel_3
 	*/
-	long   _y_vel_3;
+	int   _y_vel_3;
 	/**
 	* @brief z_vel_3
 	*/
-	long   _z_vel_3;
+	int   _z_vel_3;
 	/**
 	* @brief state_vector_time_4_day
 	*/
-	long   _state_vector_time_4_day;
+	int   _state_vector_time_4_day;
 	/**
 	* @brief state_vector_time_4_sec
 	*/
-	unsigned long   _state_vector_time_4_sec;
+	unsigned int   _state_vector_time_4_sec;
 	/**
 	* @brief state_vector_time_4_microsec
 	*/
-	unsigned long   _state_vector_time_4_microsec;
+	unsigned int   _state_vector_time_4_microsec;
 	/**
 	* @brief x_pos_4
 	*/
-	long   _x_pos_4;
+	int   _x_pos_4;
 	/**
 	* @brief y_pos_4
 	*/
-	long   _y_pos_4;
+	int   _y_pos_4;
 	/**
 	* @brief z_pos_4
 	*/
-	long   _z_pos_4;
+	int   _z_pos_4;
 	/**
 	* @brief x_vel_4
 	*/
-	long   _x_vel_4;
+	int   _x_vel_4;
 	/**
 	* @brief y_vel_4
 	*/
-	long   _y_vel_4;
+	int   _y_vel_4;
 	/**
 	* @brief z_vel_4
 	*/
-	long   _z_vel_4;
+	int   _z_vel_4;
 	/**
 	* @brief state_vector_time_5_day
 	*/
-	long   _state_vector_time_5_day;
+	int   _state_vector_time_5_day;
 	/**
 	* @brief state_vector_time_5_sec
 	*/
-	unsigned long   _state_vector_time_5_sec;
+	unsigned int   _state_vector_time_5_sec;
 	/**
 	* @brief state_vector_time_5_microsec
 	*/
-	unsigned long   _state_vector_time_5_microsec;
+	unsigned int   _state_vector_time_5_microsec;
 	/**
 	* @brief x_pos_5
 	*/
-	long   _x_pos_5;
+	int   _x_pos_5;
 	/**
 	* @brief y_pos_5
 	*/
-	long   _y_pos_5;
+	int   _y_pos_5;
 	/**
 	* @brief z_pos_5
 	*/
-	long   _z_pos_5;
+	int   _z_pos_5;
 	/**
 	* @brief x_vel_5
 	*/
-	long   _x_vel_5;
+	int   _x_vel_5;
 	/**
 	* @brief y_vel_5
 	*/
-	long   _y_vel_5;
+	int   _y_vel_5;
 	/**
 	* @brief z_vel_5
 	*/
-	long   _z_vel_5;
+	int   _z_vel_5;
 
 	
 private:
