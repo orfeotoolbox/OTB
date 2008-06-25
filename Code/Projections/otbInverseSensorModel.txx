@@ -76,6 +76,14 @@ namespace otb
 			otbMsgDevMacro(<< "height : " << height) ;
 			ossimGPoint.height(height);
     }
+    else
+    {
+      if (this->m_AverageElevation != -10000)
+      {
+        ossimGPoint.height(this->m_AverageElevation);
+      }
+    }
+    
     
     ossimDpt ossimDPoint;
     
@@ -84,14 +92,11 @@ namespace otb
   		itkExceptionMacro(<<"TransformPoint(): Invalid Model pointer m_Model == NULL !");
     }
 		
-    this->m_Model->worldToLineSample(ossimGPoint, ossimDPoint); //"worldToLineSample" appelle la méthode "lineSampleHeightToWorld" pour prendre en compte l'élévation. 
+    this->m_Model->worldToLineSample(ossimGPoint, ossimDPoint); //"worldToLineSample" appelle la mï¿½thode "lineSampleHeightToWorld" pour prendre en compte l'ï¿½lï¿½vation. 
     
     OutputPointType outputPoint;
     
-    //	std::cout << "m_UpperLeftCorner[1] : " << m_UpperLeftCorner[1] << std::endl;
-    //	std::cout << "ossimDPoint.x : " << ossimDPoint.x << std::endl;
-    //	std::cout << "ossimDPoint.y : " << ossimDPoint.y << std::endl;
-    
+   
     
     outputPoint[0]=ossimDPoint.x;
     outputPoint[1]=ossimDPoint.y;

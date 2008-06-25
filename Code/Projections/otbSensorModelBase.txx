@@ -40,9 +40,10 @@ namespace otb
   ::SensorModelBase(): Superclass(OutputSpaceDimension, ParametersDimension)
   {
     m_Model = NULL;
-		m_DEMHandler = DEMHandlerType::New();
+    m_DEMHandler = DEMHandlerType::New();
     m_UseDEM = false;
-		m_DEMIsLoaded = false;
+    m_DEMIsLoaded = false;
+    m_AverageElevation = -10000;
 		
   }
   

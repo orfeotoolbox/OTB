@@ -82,7 +82,8 @@ ForwardSensorModel< TScalarType,
 	
   this->m_Model->lineSampleToWorld(ossimPoint, ossimGPoint); 
 	
-	if (this->m_UseDEM)
+  if ((this->m_UseDEM) || (this->m_AverageElevation != -10000))
+
 	{
 		ossimGpt ossimGPointRef = ossimGPoint;
 		double height, heightTmp ;
@@ -105,7 +106,14 @@ ForwardSensorModel< TScalarType,
 			point[1] = ossimGPointRef.lat;
 			
 //			otbMsgDevMacro(<< "PointP Before iter : (" << point[1] << "," << point[0] <<")");	
+                        if (this->m_UseDEM)
+                        {
 			heightTmp = this->m_DEMHandler->GetHeightAboveMSL(point);
+                        }
+                        else 
+                        {
+                          heightTmp = this->m_AverageElevation;
+                        }
 			otbMsgDevMacro(<< "height : " << heightTmp) ;
 			
 			this->m_Model->lineSampleHeightToWorld(ossimPoint, heightTmp, ossimGPointRef);	
