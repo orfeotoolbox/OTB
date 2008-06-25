@@ -33,7 +33,7 @@ namespace otb
   *
   * Based on ossimProjectionFactoryRegistry and ossimProjection methods.
   * It takes as input an index and computes the world coordinates.
-  * (i,j,h) -> (lat,lon).
+  * (i,j,h) -> (lon,lat).
   * Notice that the elevation h is optional. 
   *
   * \ingroup Transform 
