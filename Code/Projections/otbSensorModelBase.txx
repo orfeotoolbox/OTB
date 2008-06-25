@@ -33,10 +33,10 @@ namespace otb
 { 
   
   template < class TScalarType,
-	     unsigned int NInputDimensions,
-	     unsigned int NOutputDimensions,
-	     unsigned int NParametersDimensions >
-  SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
+  unsigned int NInputDimensions,
+  unsigned int NOutputDimensions,
+  unsigned int NParametersDimensions >
+      SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
   ::SensorModelBase(): Superclass(OutputSpaceDimension, ParametersDimension)
   {
     m_Model = NULL;
@@ -49,27 +49,27 @@ namespace otb
   
   
   template < class TScalarType,
-	     unsigned int NInputDimensions,
-	     unsigned int NOutputDimensions,
-	     unsigned int NParametersDimensions >
-  SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
+  unsigned int NInputDimensions,
+  unsigned int NOutputDimensions,
+  unsigned int NParametersDimensions >
+      SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
   ::~SensorModelBase()
   {
     if( m_Model != NULL)
     {
-			delete m_Model;
-			m_Model = NULL;
+      delete m_Model;
+      m_Model = NULL;
     }
   }
   
   
   /// Get the Geometry Keyword list
   template < class TScalarType,
-	     unsigned int NInputDimensions,
-	     unsigned int NOutputDimensions,
-           unsigned int NParametersDimensions >
-  ImageKeywordlist
-  SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
+  unsigned int NInputDimensions,
+  unsigned int NOutputDimensions,
+  unsigned int NParametersDimensions >
+      ImageKeywordlist
+      SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
   ::GetImageGeometryKeywordlist(void)const
   {
     return m_ImageKeywordlist;
@@ -77,11 +77,11 @@ namespace otb
   
   /// Get the Geometry Keyword list
   template < class TScalarType,
-	     unsigned int NInputDimensions,
-	     unsigned int NOutputDimensions,
-	     unsigned int NParametersDimensions >
-  ossimKeywordlist
-  SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
+  unsigned int NInputDimensions,
+  unsigned int NOutputDimensions,
+  unsigned int NParametersDimensions >
+      ossimKeywordlist
+      SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
   ::GetOssimKeywordlist(void)
   {
     ossimKeywordlist geom;
@@ -92,37 +92,37 @@ namespace otb
 
   /// Get the ossim model
   template < class TScalarType,
-	     unsigned int NInputDimensions,
-	     unsigned int NOutputDimensions,
-	     unsigned int NParametersDimensions >
-  ossimProjection*
-  SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
+  unsigned int NInputDimensions,
+  unsigned int NOutputDimensions,
+  unsigned int NParametersDimensions >
+      ossimProjection*
+      SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
   ::GetOssimModel(void)
   {
     
     return m_Model;
   }
   
-  /* Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
+  /** Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
   template < class TScalarType,
-	     unsigned int NInputDimensions,
-	     unsigned int NOutputDimensions,
-	     unsigned int NParametersDimensions >
-  void
-  SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
+  unsigned int NInputDimensions,
+  unsigned int NOutputDimensions,
+  unsigned int NParametersDimensions >
+      void
+      SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
   ::SetImageGeometry(const ImageKeywordlist image_kwl)
   {
     m_ImageKeywordlist = image_kwl;
     CreateProjection(m_ImageKeywordlist);
   }
   
-  /* Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
+  /** Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
   template < class TScalarType,
-	     unsigned int NInputDimensions,
-	     unsigned int NOutputDimensions,
-	     unsigned int NParametersDimensions >
-  void
-  SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
+  unsigned int NInputDimensions,
+  unsigned int NOutputDimensions,
+  unsigned int NParametersDimensions >
+      void
+      SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
   ::SetImageGeometry(const ossimKeywordlist & geom_kwl)
   {
     m_ImageKeywordlist.Clear();
@@ -131,13 +131,13 @@ namespace otb
   }
   
   
-  ///Instatiate the sensor model from metadata.
+  /** Instatiate the sensor model from metadata. */
   template < class TScalarType,
-	     unsigned int NInputDimensions,
-	     unsigned int NOutputDimensions,
-	     unsigned int NParametersDimensions >
-  void
-  SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
+  unsigned int NInputDimensions,
+  unsigned int NOutputDimensions,
+  unsigned int NParametersDimensions >
+      void
+      SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
   ::CreateProjection(const ImageKeywordlist & image_kwl)
   {
     ossimKeywordlist geom;
@@ -147,7 +147,7 @@ namespace otb
     m_Model = ossimProjectionFactoryRegistry::instance()->createProjection(geom);
     if( m_Model == NULL)
     {
-			itkExceptionMacro(<<"Invalid Model pointer m_Model == NULL !\n The ossim keywordlist is bad!");
+      itkExceptionMacro(<<"Invalid Model pointer m_Model == NULL !\n The ossim keywordlist is bad!");
     }
   }
   
@@ -155,11 +155,11 @@ namespace otb
    * PrintSelf method
    */
   template < class TScalarType,
-	     unsigned int NInputDimensions,
-	     unsigned int NOutputDimensions,
-	     unsigned int NParametersDimensions >
-  void
-  SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
+  unsigned int NInputDimensions,
+  unsigned int NOutputDimensions,
+  unsigned int NParametersDimensions >
+      void
+      SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
   ::PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os,indent);
