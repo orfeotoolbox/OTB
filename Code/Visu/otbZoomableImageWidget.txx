@@ -56,10 +56,10 @@ ZoomableImageWidget<TPixel>
   else
     {
       Superclass::Init(x,y,w,h,l);
-      if(this->GetImageOverlayVisible())
-	{
-	  this->GetInputOverlay()->Update();
-	}
+//       if(this->GetImageOverlayVisible())
+// 	{
+// 	  this->GetInputOverlay()->Update();
+// 	}
       this->label(l);
       this->resize(x, y, w, h);
     }
