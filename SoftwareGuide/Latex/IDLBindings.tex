@@ -91,14 +91,14 @@ In each subfolder, create a new CMakeLists.txt including the following lines (as
 \section{A complete simple example : Canny filter}
 \label{canny}
 Here we'll present a simple example of OTB wrapping for IDL.
-A canny filter has 2 parameters : input and output image name.
+A canny filter has 2 parameters : input and output image names.
 The complete example can be found in the tree example : \code{Code/Sources/Example1/idl\_otbcannyfilter.h} and \code{Code/Sources/Example1/idl\_otbcannyfilter.cxx}
 \subsection{C++ files}
-\subsubsection{.h and .cxx}
-Let's start with the \code{.h}. To avoid multiple definitions, a \code{ifndef/defined} bloc has to be written.
-The \code{idlotbdef.h} file has to be included, it contains usefull macros.
+\subsubsection{Header file: .h}
+Let's start with the \code{.h} file. To avoid multiple definitions, a \code{\#ifndef/\#defined} bloc has to be written.
+The \code{idlotbdef.h} file has to be included as it contains usefull macros.
 Finally, we declare the main using the macro \code{ORFEOANDIDL\_API} that will allow the IDL transcription.
-Note that \code{void} indicates the fuction doesn't return anything. The created image is written in the main.
+Note that \code{void} indicates the fuction does not return anything. The created image is written inside the main function.
 \code{IDL\_VPTR} is a tab containing the IDL inputs of the function 
 \begin{verbatim}
     #ifndef _idlotbcannyfilter_h
@@ -110,7 +110,8 @@ Note that \code{void} indicates the fuction doesn't return anything. The created
 
     #endif
 \end{verbatim}
-\subsubsection{idl\_load.cxx}
+
+\subsubsection{Source file: .cxx}
 Now the .cxx file.\\
 First classical includes:
 \begin{verbatim}
@@ -125,11 +126,11 @@ First classical includes:
 \end{verbatim}
 Then the function corpus starting with the function declaration:
 \begin{verbatim}
-ORFEOANDIDL\_API void otbcannyfilter(int argc, IDL\_VPTR argv[], char *argk)
+ORFEOANDIDL_API void otbcannyfilter(int argc, IDL_VPTR argv[], char *argk)
 {
 \end{verbatim}
 We transform function inputs (that are IDL datas) into C++ variables (here, input and ouput file name).
-First we instanciate \code{char*} that will contain input value. Quote that \code{char*} are used because inputs are strings.
+First we instanciate \code{char*} that will contain input value. Notice that \code{char*} are used because inputs are file names.
 \begin{verbatim}
   static char inputFilename[MAX_LENGTH];
   static char outputFilename[MAX_LENGTH];
@@ -184,13 +185,13 @@ Now we can work with our variables, using it in a classical C++ way.
 }
 \end{verbatim}
 Now the C++ main is done, you need to register the function into IDL. That's what \code{idl\_load.cxx} does.
-\\
-First, add the include:
+
+The first step is to add the include:
 \begin{verbatim}
 #include "idl_otbcannyfilter.h"
 \end{verbatim}
 In the \code{IDL\_Load()} method we add the function call.\\
-Remind that the IDL routines will take onlytwo arguments (input and ouput file name), this explain the "2" in the following extracted code and let's start with the IDL routine definition:
+Remind that the IDL routines will take only two arguments (input and ouput file name), this explain the "2" in the following extracted code and let's start with the IDL routine definition:
 \begin{verbatim}
 	IDL_SYSFUN_DEF2 procedure_canny[] = {  
 	{ (IDL_SYSRTN_GENERIC)otbcannyfilter, "OTBCANNYFILTER", 2, 2, 0, 0},  
@@ -203,7 +204,7 @@ Now the method return:
 	IDL_CARRAY_ELTS(procedure_canny));
 \end{verbatim}
 
-We've finished with the C++ part. Now, you can compile the project and then have a look to the IDL part with the \code{resoreroutines.pro} file.
+We are done with the C++ part. Now, you can compile the project and then have a look to the IDL part with the \code{restoreroutines.pro} file.
 
 \subsection{IDL Function creation}
 The \code{resoreroutines.pro} file creates a IDL routines from our C++ function.
@@ -213,7 +214,7 @@ Only one line need to be added. This line precises, the created IDL routines nam
 \end{verbatim}
 
 Here, \code{file\_dllExample1} target \code{../Binaries/bin/libOTBIDLExample.1.so} because the canny function was made and compile in the Example1 directory.
-Note taht when you call the restoreroutines routine, you have to precise as argument the path to your binaries (here \code{../Binaries/bin/}).\\
+Note that when you call the \code{restoreroutines} routine, you have to precise as argument the path to your binaries (here \code{../Binaries/bin/}).\\
 Congratulation, IDL knows now the OTBCANNYFILTER routine.\\
 It can be called from IDL with the following line:
 \emph {OTBCANNYFILTER, "InputImage", "OutputImage"}
