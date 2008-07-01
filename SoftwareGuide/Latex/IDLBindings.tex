@@ -30,11 +30,11 @@ To be compatible with the following PROCEDURES, your tree folders has to look li
 \end{itemize}
 
 The \code{Code} folder can contain as many subfolders as you want. This allows you to organize your work space. The \code{Code} folder shipped along with this 
-documentation contains a \code{Sources} folder where we put the C++ files while IDL files are stored in \code{IDLSources}. This documentation will not detail every lines of these files and it is necessary to start from the source example.
+documentation contains a \code{Sources} folder where we put the C++ files while IDL files are stored in \code{IDLSources}. This documentation will not detail every lines of these files and it is necessary to start with the source provided with this document.
 
 The \code{CMakeLists.txt} file located in the \code{Code} folder will take care of the CMake GUI and the compilation.
 
-First, try to compile the binding example without any change to check if all tools are available. Launch the ccmake process from the BINDING\_IDL/binaries directory. It will ask you the path to the OTB exe directory 
+First, try to compile the binding example without any change to check if all tools are available. Launch the ccmake process from the BINDING\_IDL/Binaries directory pointing to the BINDING\_IDL/Code directory. It will ask you the path to the OTB exe directory 
 (\/otb\-build/OTB) and paths to IDL source and binaries (located in your IDL folder):
 
 \begin{itemize}
