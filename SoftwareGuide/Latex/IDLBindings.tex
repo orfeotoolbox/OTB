@@ -7,15 +7,17 @@ The procedures presented here were tested on Windows platforms (with Visual C++)
 
 \section{IDL Binding creation overview}
 
-To be able to use OTB classes from within IDL or ENVI, the main requirement is to translate variables from one space to the other one. Few steps are necessary to create the interface for each OTB class you want to use. Several files need to be created.
+To be able to use OTB classes from within IDL or ENVI, the main requirement is to translate variables from one space to the other one. Few steps are necessary to create the interface for each OTB class you want to use. Several files need to be created as shown on Fig.~\ref{fig:overview}.
 
- \begin{minipage}[b]{.46\linewidth}
-        \centering\includegraphics[width=8cm]{intro.eps}
- \end{minipage}
+\begin{figure}[htp]
+     \centering
+      \includegraphics[width=8cm]{intro.eps}
+      \caption{Overview of the binding process}\label{fig:overview}
+\end{figure}
 
 As the diagram shows it, the mechanism is simple. A layer is added to call OTB main with IDL inputs and ouputs data, executable is created and finally an IDL mecanism will create IDL routines that will use our OTB main.
-First we will see how to create the project \ref{buildProject}. Then we will see how to wrap a simple OTB main (Canny filter) \ref{canny}, and later a complete explanation of
-the C++ \ref{cfiles} and IDL \ref{idlfiles} files contents will be studied. At last, we will see how to integer those new IDL routine in the ENVI GUI \ref{envi}.
+First we will see how to create the project in section~\ref{buildProject}. Then we will see how to wrap a simple OTB main (Canny filter) in section~\ref{canny}, and later a complete explanation of
+the C++ (section~\ref{cfiles}) and IDL files contents will be studied (section~\ref{idlfiles}) . At last, we will see how to integer those new IDL routine in the ENVI GUI (section~\ref{envi}).
 
 \section{How to Build the Project:\\ CMake and CMakeList}
 \label{buildProject}
