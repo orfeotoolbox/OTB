@@ -9,35 +9,45 @@ The procedures presented here were tested on Windows platforms (with Visual C++)
 
 To be able to use OTB classes from within IDL or ENVI, the main requirement is to translate variables from one space to the other one. Few steps are necessary to create the interface for each OTB class you want to use. Several files need to be created.
 
-%Ce serait pas mal de mettre un schema ici
+ \begin{minipage}[b]{.46\linewidth}
+        \centering\includegraphics[width=8cm]{intro.eps}
+ \end{minipage}
 
+As the diagram shows it, the mechanism is simple. A layer is added to call OTB main with IDL inputs and ouputs data, executable is created and finally an IDL mecanism will create IDL routines that will use our OTB main.
+First we will see how to create the project \ref{buildProject}. Then we will see how to wrap a simple OTB main (Canny filter) \ref{canny}, and later a complete explanation of
+the C++ \ref{cfiles} and IDL \ref{idlfiles} files contents will be studied. At last, we will see how to integer those new IDL routine in the ENVI GUI \ref{envi}.
 
 \section{How to Build the Project:\\ CMake and CMakeList}
-
+\label{buildProject}
 In this section, the way to build a CMake file and to compile will be described.
 Before going further, please check that the OTB is compiled on your computer.
 To be compatible with the following PROCEDURES, your tree folders has to look like this:
 \begin{itemize}
-\item BINDING\_IDL/binaries: where your .exe will be generated.
+\item BINDING\_IDL/Binaries: where your .exe will be generated.
 \item BINDING\_IDL/Code: where your sources are stored.
 \end{itemize}
 
 The \code{Code} folder can contain as many subfolders as you want. This allows you to organize your work space. The \code{Code} folder shipped along with this 
-documentation contains a \code{sources} folder where we put the C++ files while IDL files are stored in \code{IDLSources}. This documentation will not detail every lines of these files and it is necessary to start from the source example.
+documentation contains a \code{Sources} folder where we put the C++ files while IDL files are stored in \code{IDLSources}. This documentation will not detail every lines of these files and it is necessary to start from the source example.
 
 The \code{CMakeLists.txt} file located in the \code{Code} folder will take care of the CMake GUI and the compilation.
 
-First, try to compile the binding example without any change to check if all tools are available. Launch the ccmake process from the BINDING\_IDL/binaries directory. It will ask you the path to the OTB exe directory (\/otb\-build/OTB) and paths to IDL source and binaries (located in your IDL folder):
+First, try to compile the binding example without any change to check if all tools are available. Launch the ccmake process from the BINDING\_IDL/binaries directory. It will ask you the path to the OTB exe directory 
+(\/otb\-build/OTB) and paths to IDL source and binaries (located in your IDL folder):
 
 \begin{itemize}
-\item \code {IDL\_INCLUDE\_DIRS} that targets the IDL includes (for example \code {usr/local/rsi/idl\_vXX/external/include}).
-\item \code {IDL\_LIBRARY\_DIRS} that targets the IDL binaries it is located in the IDL folder (for example \code {usr/local/rsi/idl\_vXX/bin/bin.linux.x86}).
+\item \code {IDL\_INCLUDE\_DIRS} that targets the IDL export includes. The path targets the IDL tree directory that contains export files (for example \code {usr/local/rsi/idl\_vXX/external/include}).
+\item \code {IDL\_LIBRARY\_DIRS} that targets an IDL tree directory taht contains the IDL binaries (for example \code {usr/local/rsi/idl\_vXX/bin/bin.linux.x86}, for Linux 64bits target  \code {bin.linux.x86_64}).
 \end{itemize}
 
 Once the cmake has generated its file, you can go to the binaries folder and compile.
 
-Few things you should be aware when you are adapting the example to suit your needs: pay attention to add for each subfolder the following line in the \code{CMakeLists.txt} file:\\
-\code{SUBDIRS(sources)}\\
+Few things you should be aware when you are adapting the example to suit your needs: pay attention to add for each subfolder the following line in the \code{Code/Sources/CMakeLists.txt} file:\\
+\code{SUBDIRS(ExampleDir)}\\
+You'll also need to add in the \code{Code/CMakeLists.txt} file the following lines:
+\code{\$\{OTB\-IDL\_BINARY\_DIR\}/Sources/ExampleDir}\\
+\code{\$\{OTB\-IDL\_SOURCE\_DIR\}/Sources/ExampleDir}\\
+
 
 Then the compiler will know that subfolders exist.
  
@@ -46,12 +56,16 @@ This is the tree folder:
 Binaries
 Code
         CMakeLists.txt
-        sources
-                  CMakeLists.txt
+        Sources
+                CMakeLists.txt
+                Base
+                    CMakeLists.txt
+                Example1
+                    CMakeLists.txt
         IDLSources
 \end{verbatim}
  
-In each subfolder, create a new CMakeLists.txt including the following lines (as the file sources/CMakeLists.txt):
+In each subfolder, create a new CMakeLists.txt including the following lines (as the file Sources/Example1/CMakeLists.txt):
 \begin{itemize}
 \item The first one to gather the non-templated classes source (.cpp or .cxx) contained in the folder:\\ 
   \code {FILE(GLOB subdir1\_SRCS ``*.cxx'')}
@@ -62,25 +76,159 @@ In each subfolder, create a new CMakeLists.txt including the following lines (as
 \end{itemize}
 
 \code{\textbf{Example:}}\\
-      Here, we decide to create the example \code{Code} in the folder \code{source} (included in the folder \code{Code}).\\
+      Here, we decide to create the example \code{Code/Sources} in the folder \code{Example1}.\\
       This is the contents of the \code{CMakeLists.txt file}:\\
 \begin{verbatim}
       # Sources of non-templated classes.
-      FILE(GLOB source_SRCS "*.cpp")
-      ADD_LIBRARY(sourceLib ${source_SRCS})
-      TARGET_LINK_LIBRARIES (sourceLib OTBCommon OTBBasicFilters OTBIO otbsvm idl)
+      FILE(GLOB OTBIDLExample1_SRCS "*.cxx")
+      ADD_LIBRARY(OTBIDLExample1 ${OTBIDLExample1_SRCS})
+      TARGET_LINK_LIBRARIES (OTBIDLExample1 OTBCommon OTBBasicFilters OTBIO otbsvm idl)
 \end{verbatim}
 
 
+\section{A complete simple example : Canny filter}
+\label{canny}
+Here we'll present a simple example of OTB wrapping for IDL.
+A canny filter has 2 parameters : input and output image name.
+The complete example can be found in the tree example : \code{Code/Sources/Example1/idl_otbcannyfilter.h} and \code{Code/Sources/Example1/idl_otbcannyfilter.cxx}
+\subsection{C++ files}
+\subsubsection{.h and .cxx}
+Let's start with the \code{.h}. To avoid multiple definitions, a \code{ifndef/defined} bloc has to be written.
+The \code{idlotbdef.h} file has to be included, it contains usefull macros.
+Finally, we declare the main using the macro \code{ORFEOANDIDL\_API} that will allow the IDL transcription.
+Note that \code{void} indicates the fuction doesn't return anything. The created image is written in the main.
+\code{IDL\_VPTR} is a tab containing the IDL inputs of the function 
+\begin{verbatim}
+    #ifndef _idlotbcannyfilter_h
+    #define _idlotbcannyfilter_h
 
+    #include "idlotbdef.h"
 
+    ORFEOANDIDL_API void otbcannyfilter(int argc, IDL_VPTR argv[], char *argk);
+
+    #endif
+\end{verbatim}
+\subsubsection{idl\_load.cxx}
+Now the .cxx file.\\
+First classical includes:
+\begin{verbatim}
+    #include "idl_otbcannyfilter.h"
+
+    #include "otbImageFileReader.h"
+    #include "otbImageFileWriter.h"
+    #include "otbImage.h"
+    #include "itkCastImageFilter.h"
+    #include "itkRescaleIntensityImageFilter.h"
+    #include "itkCannyEdgeDetectionImageFilter.h"
+\end{verbatim}
+Then the function corpus starting with the function declaration:
+\begin{verbatim}
+ORFEOANDIDL\_API void otbcannyfilter(int argc, IDL\_VPTR argv[], char *argk)
+{
+\end{verbatim}
+We transform function inputs (that are IDL datas) into C++ variables (here, input and ouput file name).
+First we instanciate \code{char*} that will contain input value. Quote that \code{char*} are used because inputs are strings.
+\begin{verbatim}
+  static char inputFilename[MAX_LENGTH];
+  static char outputFilename[MAX_LENGTH];
+\end{verbatim} 
+Then will fill our C++ variables using memory copy.\\
+First we check the IDL input is not empty, then we copy its value in our C++ variable.
+\begin{verbatim}
+  if (argv[0]->value.str.s != NULL)
+    strcpy(inputFilename, argv[0]->value.str.s);
+  
+  if (argv[1]->value.str.s != NULL)
+		strcpy(outputFilename, argv[1]->value.str.s);
+\end{verbatim}
+Now we can work with our variables, using it in a classical C++ way.
+\begin{verbatim}
+  float variance = 2;
+  typedef unsigned char    CharPixelType;  //  IO
+  typedef double           RealPixelType;  //  Operations
+  const   unsigned int     Dimension = 2;
+  
+  typedef otb::Image<CharPixelType, Dimension>                             CharImageType;
+  typedef otb::Image<RealPixelType, Dimension>                             RealImageType;
+  typedef otb::ImageFileReader< CharImageType>                             ReaderType;
+  typedef otb::ImageFileWriter< CharImageType>                             WriterType;
+  typedef itk::CastImageFilter< CharImageType, RealImageType>              CastToRealFilterType;
+  typedef itk::RescaleIntensityImageFilter<RealImageType, CharImageType >  RescaleFilter;
+  typedef itk::CannyEdgeDetectionImageFilter<RealImageType, RealImageType> CannyFilter;
+  
+  //Setting the IO
+  ReaderType::Pointer           reader      = ReaderType::New();
+  WriterType::Pointer           writer      = WriterType::New();
+  CastToRealFilterType::Pointer toReal      = CastToRealFilterType::New();
+  RescaleFilter::Pointer        rescale     = RescaleFilter::New();
+  //Setting the ITK pipeline filter
+  CannyFilter::Pointer          cannyFilter = CannyFilter::New();
+  
+  reader->SetFileName( inputFilename  );
+  writer->SetFileName( outputFilename );
+  
+  //The output of an edge filter is 0 or 1
+  rescale->SetOutputMinimum(   0 );
+  rescale->SetOutputMaximum( 255 );
+  
+  toReal->SetInput( reader->GetOutput() );
+  
+  cannyFilter->SetInput( toReal->GetOutput() );
+  cannyFilter->SetVariance( variance );
+  rescale->SetInput( cannyFilter->GetOutput() );
+  writer->SetInput( rescale->GetOutput() );
+  
+  writer->Update();
+}
+\end{verbatim}
+Now the C++ main is done, you need to register the function into IDL. That's what \code{idl\_load.cxx} does.
+\\
+First, add the include:
+\begin{verbatim}
+#include "idl_otbcannyfilter.h"
+\end{verbatim}
+In the \code{IDL\_Load()} method we add the function call.\\
+Remind that the IDL routines will take onlytwo arguments (input and ouput file name), this explain the "2" in the following extracted code and let's start with the IDL routine definition:
+\begin{verbatim}
+	IDL_SYSFUN_DEF2 procedure_canny[] = {  
+	{ (IDL_SYSRTN_GENERIC)otbcannyfilter, "OTBCANNYFILTER", 2, 2, 0, 0},  
+	}; 
+\end{verbatim}
+This is generic lines. From a new treatment to an other, only name and number of inputs changes.\\
+Now the method return:
+\begin{verbatim}
+    return IDL_SysRtnAdd(procedure_canny, FALSE,   
+	IDL_CARRAY_ELTS(procedure_canny));
+\end{verbatim}
+
+We've finished with the C++ part. Now, you can compile the project and then have a look to the IDL part with the \code{resoreroutines.pro} file.
+
+\subsection{IDL Function creation}
+The \code{resoreroutines.pro} file creates a IDL routines from our C++ function.
+Only one line need to be added. This line precises, the created IDL routines name, the path to the lib that contains the exe made from our C++ main and tha maximum and miunimum number of arguments the IDL routine will takes.
+\begin{verbatim}
+     LINKIMAGE, 'otbcannyfilter', file_dllExample1, 0, MAX_ARGS = 2, MIN_ARGS = 2
+\end{verbatim}
+
+Here, \code{file\_dllExample1} target \code{../Binaries/bin/libOTBIDLExample.1.so} because the canny function was made and compile in the Example1 directory.
+Note taht when you call the restoreroutines routine, you have to precise as argument the path to your binaries (here \code{../Binaries/bin/}).\\
+Congratulation, IDL knows now the OTBCANNYFILTER routine.\\
+It can be called from IDL with the following line:
+\emph {OTBCANNYFILTER, "InputImage", "OutputImage"}
+
+After this simple example, let's see more complete (and complexe) explanations of the wrapping mecanism.
 
 \section{C++ processing functions}
-
+\label{cfiles}
 \subsection{Input and Output Types}
-To make things easy, we chose to create one C++ file for each wanted IDL function. Those files are \code{.h} files stored in \code{Code/sources} in the example tree.
+To make things easy, we chose to create one C++ file for each wanted IDL function. Those files are \code{.h} and \code{.cxx} files stored in \code{Code/Sources/Example1} in the example tree.
 
-Besides the header files needed for the code compilation, the following file has to be included: \code{idlotbdef.h}. This file is included in the package and contains the definition of the \code{ORFEOANDIDL\_API} macro defined below in this document.
+To avoid multiple definitions due to links between excutables, an ifndef/define bloc has to be writen:\\
+\code{#ifndef _myfunction_h}\\
+\code{#ifndef _myfunction_h}\\
+And, at the end of the \code{.h} file:
+\code{#endif}\\
+Besides the header files needed for the code compilation, the following file has to be included: \code{idlotbdef.h}. This file is stored in \code{Code/Sources/Base} and included in the package and contains the definition of the \code{ORFEOANDIDL\_API} macro defined below in this document.
 
 The C++ functions have to be defined as follows:\\
 \code {ORFEOANDIDL\_API void OTBToIDLFunction(\textbf {int argc, IDL\_VPTR argv[], char *argk})}\\
@@ -108,7 +256,15 @@ on Linux some extra characters are added to the name. In this case, when the \co
 
       In \code{idl\_otborthorectification.h}, the function is defined as:
 \begin{verbatim}
-      ORFEOANDIDL_API void otborthorectification(int argc, IDL_VPTR argv[], char *argk);
+    #ifndef _idlotborthorectification_h
+    #define _idlotborthorectification_h
+
+    #include "idlotbdef.h"
+
+    ORFEOANDIDL_API void otborthorectification(int argc, IDL_VPTR argv[], char *argk);
+
+    #endif
+
 \end{verbatim}
 
 Once the signature of the functions is written, we need to make the link IDL/OTB and OTB/IDL.
@@ -156,10 +312,9 @@ The user can now write his OTB processing function.
 \\
 \\
 \textbf{Example:}\\
-      In \code{idl\_otborthorectification.h}:\\
+      In \code{idl\_otborthorectification.cxx}:\\
       Include declaration:\\
 \begin{verbatim}
-      #include "idlotbdef.h"
       #include "otbImage.h"
       #include "otbVectorImage.h"
       #include "otbImageFileReader.h"
@@ -306,10 +461,14 @@ After that, you need to complete the \code{idl\_load.cpp} code to declare your f
 
 
 \section{IDL Function creation}
+label{idlfiles}
 \subsection{restoreroutines.pro}
 This file integrates in IDL the function included in the shared library. Its location doesn't have any importance, but it is better to gather all \code{.pro} files in the same folder.
-We arbitrary chose to put them in \code{Code/PROFiles}.
-This file contains a path to the generated \code{lib} location. In our example, the path \code{binaries/bin/libsourceLib.so}.
+We arbitrary chose to put them in \code{Code/IDLSources}.
+The aim of create an IDL routine from the created excecutable. For this you it needs to know the localization of the executable. This path has to be given as input to the routine.
+Pay attention to the fact that each created libraries contains only the binaries for the C++ functions of the directory used to generated the bin.
+Thus you may need to declare multiple file path (one for each interesting lib).
+
 \begin{itemize}
 \item The C++ function corresponds to a IDL procedure:\\
   \code{LINKIMAGE, 'otbfunctionname', file\_dll, 1, /FUNCT, MAX\_ARGS = 4, MIN\_ARGS = 4}
@@ -321,10 +480,12 @@ IDL knows now our function under the name \code{OTBFUNCTIONNAME}.\\
 \code{\textbf{Example:}}\\
       In the \code{restoreroutines.pro} file:\\
 \begin{verbatim}
-      LINKIMAGE, 'otborthorectification', file_dll, 0, MAX_ARGS = 10, MIN_ARGS = 10
+      LINKIMAGE, 'otborthorectification', file_dllExample1, 0, MAX_ARGS = 10, MIN_ARGS = 10
 \end{verbatim}
 
-IDL knows now our function under the name \code{OTBORTHORECTIFICATION}, and it must have 10 input arguments.\\
+Here file_dllExample1 targets Example1 library.
+IDL knows now our function under the name \code{OTBORTHORECTIFICATION}, and it must have 10 input arguments. The function can used like taht, but can be included too in a IDL GUI.
+That's the aim of the following section.\\
 
 
 
@@ -395,7 +556,9 @@ The function is called using :\\
 \end{verbatim}
 This GUI opens a browser to select the input and output images and displays it. It opens the parameter selection box. The used functions are part of ENVI, thus, you have to launch ENVI in background to be able to compile the file. This last part shows how to call the IDL function with a GUI. Another solution is to insert the call in the ENVI GUI.
 
+
 \section{Using OTB Routines in ENVI}
+\label{envi}
 This section aims to show the integration of OTB routines in the ENVI GUI.
 
 Before going further, the user needs to move or copy his dynamic library : \code{.dll} or \code{.so} and \code{.dlm} (Dynamically Loadable Module) 
