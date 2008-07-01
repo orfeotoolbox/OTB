@@ -37,7 +37,7 @@ First, try to compile the binding example without any change to check if all too
 
 \begin{itemize}
 \item \code {IDL\_INCLUDE\_DIRS} that targets the IDL export includes. The path targets the IDL tree directory that contains export files (for example \code {usr/local/rsi/idl\_vXX/external/include}).
-\item \code {IDL\_LIBRARY\_DIRS} that targets an IDL tree directory taht contains the IDL binaries (for example \code {usr/local/rsi/idl\_vXX/bin/bin.linux.x86}, for Linux 64bits target  \code {bin.linux.x86_64}).
+\item \code {IDL\_LIBRARY\_DIRS} that targets an IDL tree directory taht contains the IDL binaries (for example \code {usr/local/rsi/idl\_vXX/bin/bin.linux.x86}, for Linux 64bits target  \code{bin.linux.x86\_64}).
 \end{itemize}
 
 Once the cmake has generated its file, you can go to the binaries folder and compile.
@@ -90,7 +90,7 @@ In each subfolder, create a new CMakeLists.txt including the following lines (as
 \label{canny}
 Here we'll present a simple example of OTB wrapping for IDL.
 A canny filter has 2 parameters : input and output image name.
-The complete example can be found in the tree example : \code{Code/Sources/Example1/idl_otbcannyfilter.h} and \code{Code/Sources/Example1/idl_otbcannyfilter.cxx}
+The complete example can be found in the tree example : \code{Code/Sources/Example1/idl\_otbcannyfilter.h} and \code{Code/Sources/Example1/idl\_otbcannyfilter.cxx}
 \subsection{C++ files}
 \subsubsection{.h and .cxx}
 Let's start with the \code{.h}. To avoid multiple definitions, a \code{ifndef/defined} bloc has to be written.
@@ -224,10 +224,10 @@ After this simple example, let's see more complete (and complexe) explanations o
 To make things easy, we chose to create one C++ file for each wanted IDL function. Those files are \code{.h} and \code{.cxx} files stored in \code{Code/Sources/Example1} in the example tree.
 
 To avoid multiple definitions due to links between excutables, an ifndef/define bloc has to be writen:\\
-\code{#ifndef _myfunction_h}\\
-\code{#ifndef _myfunction_h}\\
+\code{\#ifndef \_myfunction\_h}\\
+\code{\#ifndef \_myfunction\_h}\\
 And, at the end of the \code{.h} file:
-\code{#endif}\\
+\code{\#endif}\\
 Besides the header files needed for the code compilation, the following file has to be included: \code{idlotbdef.h}. This file is stored in \code{Code/Sources/Base} and included in the package and contains the definition of the \code{ORFEOANDIDL\_API} macro defined below in this document.
 
 The C++ functions have to be defined as follows:\\
@@ -483,7 +483,7 @@ IDL knows now our function under the name \code{OTBFUNCTIONNAME}.\\
       LINKIMAGE, 'otborthorectification', file_dllExample1, 0, MAX_ARGS = 10, MIN_ARGS = 10
 \end{verbatim}
 
-Here file_dllExample1 targets Example1 library.
+Here file\_dllExample1 targets Example1 library.
 IDL knows now our function under the name \code{OTBORTHORECTIFICATION}, and it must have 10 input arguments. The function can used like taht, but can be included too in a IDL GUI.
 That's the aim of the following section.\\
 
