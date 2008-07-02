@@ -23,7 +23,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImageViewerScrollWidget.h"
 #include "otbImageViewerZoomWidget.h"
 #include "otbImageViewerFullWidget.h"
-#include "otbImageViewerHistogramAndTransfertFunctionWidget.h"
+#include "otbImageViewerHistogramAndTransferFunctionWidget.h"
 #include "otbStreamingShrinkImageFilter.h"
 #include "otbImageWidgetBoxForm.h"
 #include "otbImageWidgetPolygonForm.h"
@@ -90,9 +90,9 @@ namespace otb
       typedef Fl_Output * FlOutputPointerType;
 
       typedef typename ScrollWidgetType::ImageType ImageType;
-      typedef typename ScrollWidgetType::TransfertFunctionListType TransfertFunctionListType;
-      typedef typename TransfertFunctionListType::Pointer TransfertFunctionListPointerType;
-      typedef typename ScrollWidgetType::AffineTransfertFunctionType AffineTransfertFunctionType;
+      typedef typename ScrollWidgetType::TransferFunctionListType TransferFunctionListType;
+      typedef typename TransferFunctionListType::Pointer TransferFunctionListPointerType;
+      typedef typename ScrollWidgetType::AffineTransferFunctionType AffineTransferFunctionType;
       typedef typename ImageType::Pointer ImagePointerType;
       typedef typename ImageType::IndexType IndexType;
       typedef typename ImageType::PointType PointType;
@@ -118,7 +118,7 @@ namespace otb
       typedef otb::ObjectList<HistogramGeneratorType> HistogramGeneratorListType;
       typedef typename HistogramGeneratorListType::Pointer HistogramGeneratorListPointerType;
       typedef typename HistogramGeneratorType::HistogramType HistogramType;
-      typedef otb::ImageViewerHistogramAndTransfertFunctionWidget<HistogramType,InputPixelType,LabelType> HistogramWidgetType;
+      typedef otb::ImageViewerHistogramAndTransferFunctionWidget<HistogramType,InputPixelType,LabelType> HistogramWidgetType;
       typedef typename HistogramWidgetType::Pointer HistogramWidgetPointerType;
 
       /// Support for conversion from otb::Image to otb::VectorImage
@@ -216,7 +216,7 @@ namespace otb
       itkGetMacro(UseImageOverlay,bool);
       itkSetMacro(ShowHistograms,bool);
       itkGetMacro(ShowHistograms,bool);
-      itkGetObjectMacro(TransfertFunctionList,TransfertFunctionListType);
+      itkGetObjectMacro(TransferFunctionList,TransferFunctionListType);
 
 
       /** Set the input image (VectorImage version) */
@@ -343,7 +343,7 @@ namespace otb
        /**
        * Force redraw
        */
-      virtual void ChangeTransfertFunctions(void);
+      virtual void ChangeTransferFunctions(void);
 
       /**
        * Add a new color-label combination in the ROI color map. Note
@@ -486,8 +486,8 @@ namespace otb
       bool m_UseImageOverlay;
       /// List of histogram generators (one per channel)
       HistogramGeneratorListPointerType m_HistogramGeneratorList;
-      /// Transfert function list
-      TransfertFunctionListPointerType m_TransfertFunctionList;
+      /// Transfer function list
+      TransferFunctionListPointerType m_TransferFunctionList;
 
       /// Histogram widgets
       HistogramWidgetPointerType m_RedHistogramWidget;

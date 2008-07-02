@@ -15,10 +15,10 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbImageViewerHistogramAndTransfertFunctionWidget_h
-#define _otbImageViewerHistogramAndTransfertFunctionWidget_h
+#ifndef _otbImageViewerHistogramAndTransferFunctionWidget_h
+#define _otbImageViewerHistogramAndTransferFunctionWidget_h
 
-#include "otbHistogramAndTransfertFunctionWidget.h"
+#include "otbHistogramAndTransferFunctionWidget.h"
 
 namespace otb
 {
@@ -26,20 +26,20 @@ template <class TPixel, class TLabel> class ImageViewerBase;
 /** 
  * \brief Custom histogram widget for the image viewer.
  *
- * This class derives from otb::HistogramAndTransfertFunctionWidget, 
+ * This class derives from otb::HistogramAndTransferFunctionWidget, 
  * and implements behaviours specific to the image viewer.
  *
- * \sa ImageViewer, HistogramAndTransfertFunctionWidget
+ * \sa ImageViewer, HistogramAndTransferFunctionWidget
  *
  */
 template <class THistogram, class TPixel, class TLabel>
-class ITK_EXPORT ImageViewerHistogramAndTransfertFunctionWidget
-  : public HistogramAndTransfertFunctionWidget<THistogram,TPixel>
+class ITK_EXPORT ImageViewerHistogramAndTransferFunctionWidget
+  : public HistogramAndTransferFunctionWidget<THistogram,TPixel>
   {
     public:
   /** Standard typedefs */
-  typedef ImageViewerHistogramAndTransfertFunctionWidget         Self;
-  typedef HistogramAndTransfertFunctionWidget<THistogram,TPixel> Superclass;
+  typedef ImageViewerHistogramAndTransferFunctionWidget         Self;
+  typedef HistogramAndTransferFunctionWidget<THistogram,TPixel> Superclass;
   typedef itk::SmartPointer<Self>                                Pointer;
   typedef itk::SmartPointer<const Self>                          ConstPointer;
   
@@ -47,7 +47,7 @@ class ITK_EXPORT ImageViewerHistogramAndTransfertFunctionWidget
   itkNewMacro(Self);
   
   /** Creation through object factory macro */
-  itkTypeMacro(ImageViewerHistogramAndTransfertFunctionWidget,HistogramAndTransfertFunctionWidget);
+  itkTypeMacro(ImageViewerHistogramAndTransferFunctionWidget,HistogramAndTransferFunctionWidget);
 
   /** Parent app typedefs */
   typedef TPixel PixelType;
@@ -55,15 +55,15 @@ class ITK_EXPORT ImageViewerHistogramAndTransfertFunctionWidget
   typedef ImageViewerBase<PixelType, LabelType> ParentType;
   typedef ParentType* ParentPointerType;
 
-  typedef typename Superclass::TransfertFunctionPointerType TransfertFunctionPointerType;
-  typedef ImageWidgetAffineTransfertFunction<PixelType> AffineTransfertFunctionType;
-  typedef typename AffineTransfertFunctionType::Pointer AffineTransfertFunctionPointerType;
-  typedef ImageWidgetSquareRootTransfertFunction<PixelType> SquareRootTransfertFunctionType;
-  typedef typename SquareRootTransfertFunctionType::Pointer SquareRootTransfertFunctionPointerType;
-  typedef ImageWidgetLogTransfertFunction<PixelType> LogTransfertFunctionType;
-  typedef typename LogTransfertFunctionType::Pointer LogTransfertFunctionPointerType;
-  typedef ImageWidgetSquareTransfertFunction<PixelType> SquareonentialTransfertFunctionType;
-  typedef typename SquareonentialTransfertFunctionType::Pointer SquareonentialTransfertFunctionPointerType;
+  typedef typename Superclass::TransferFunctionPointerType TransferFunctionPointerType;
+  typedef ImageWidgetAffineTransferFunction<PixelType> AffineTransferFunctionType;
+  typedef typename AffineTransferFunctionType::Pointer AffineTransferFunctionPointerType;
+  typedef ImageWidgetSquareRootTransferFunction<PixelType> SquareRootTransferFunctionType;
+  typedef typename SquareRootTransferFunctionType::Pointer SquareRootTransferFunctionPointerType;
+  typedef ImageWidgetLogTransferFunction<PixelType> LogTransferFunctionType;
+  typedef typename LogTransferFunctionType::Pointer LogTransferFunctionPointerType;
+  typedef ImageWidgetSquareTransferFunction<PixelType> SquareonentialTransferFunctionType;
+  typedef typename SquareonentialTransferFunctionType::Pointer SquareonentialTransferFunctionPointerType;
     
   /** Set the parent application */
   itkSetMacro(Parent,ParentPointerType);
@@ -75,8 +75,8 @@ class ITK_EXPORT ImageViewerHistogramAndTransfertFunctionWidget
     {
       double factor = (this->GetHistogram()->Quantile(0,1.)-this->GetHistogram()->Quantile(0,0.))
 	/(static_cast<double>(this->w())-2*this->GetMarginX()-this->GetOutputHistogramMargin()*static_cast<double>(this->w()));
-      double xupper = this->GetMarginX() + static_cast<double>(this->GetTransfertFunction()->GetUpperBound()-this->GetHistogram()->Quantile(0,0.))/factor;
-      double xlower = this->GetMarginX() + static_cast<double>(this->GetTransfertFunction()->GetLowerBound()-this->GetHistogram()->Quantile(0,0.))/factor;
+      double xupper = this->GetMarginX() + static_cast<double>(this->GetTransferFunction()->GetUpperBound()-this->GetHistogram()->Quantile(0,0.))/factor;
+      double xlower = this->GetMarginX() + static_cast<double>(this->GetTransferFunction()->GetLowerBound()-this->GetHistogram()->Quantile(0,0.))/factor;
       switch(event)
 	{
 	case FL_PUSH:
@@ -99,7 +99,7 @@ class ITK_EXPORT ImageViewerHistogramAndTransfertFunctionWidget
 	  {
 	    m_ModifyLower = false;
 	    m_ModifyUpper = false;
-	    m_Parent->ChangeTransfertFunctions();
+	    m_Parent->ChangeTransferFunctions();
 	    m_Parent->Update();
 	    return 1;
 	  }
@@ -110,13 +110,13 @@ class ITK_EXPORT ImageViewerHistogramAndTransfertFunctionWidget
 	    if(m_ModifyLower && (x>this->GetMarginX()) && (x<static_cast<double>(this->w())-this->GetMarginX()-this->GetOutputHistogramMargin()*static_cast<double>(this->w())))
 	      {
 		x = (x>xupper ? xupper : x);
-		this->GetTransfertFunction()->SetLowerBound(static_cast<PixelType>(this->GetHistogram()->Quantile(0,0.)+(x-this->GetMarginX())*factor));
+		this->GetTransferFunction()->SetLowerBound(static_cast<PixelType>(this->GetHistogram()->Quantile(0,0.)+(x-this->GetMarginX())*factor));
 		this->redraw();
 	      }
 	    else if(m_ModifyUpper && (x<static_cast<double>(this->w())-this->GetMarginX()-this->GetOutputHistogramMargin()*static_cast<double>(this->w())))
 	      {
 		x = (x<xlower ? xlower : x);
-		this->GetTransfertFunction()->SetUpperBound(static_cast<PixelType>(this->GetHistogram()->Quantile(0,0.)+(x-this->GetMarginX())*factor));
+		this->GetTransferFunction()->SetUpperBound(static_cast<PixelType>(this->GetHistogram()->Quantile(0,0.)+(x-this->GetMarginX())*factor));
 		this->redraw();
 	      }
 	    return 1;
@@ -126,37 +126,37 @@ class ITK_EXPORT ImageViewerHistogramAndTransfertFunctionWidget
 	    int dy = Fl::event_dy();
 	    if(dy>0)
 	      {
-		m_TransfertFunctionCode++;
+		m_TransferFunctionCode++;
 	      }
 	    else
 	      {
-		m_TransfertFunctionCode--;
+		m_TransferFunctionCode--;
 	      }
-	    m_TransfertFunctionCode = vcl_abs(m_TransfertFunctionCode%4);
-	    TransfertFunctionPointerType newFunction;
-	    switch(m_TransfertFunctionCode)
+	    m_TransferFunctionCode = vcl_abs(m_TransferFunctionCode%4);
+	    TransferFunctionPointerType newFunction;
+	    switch(m_TransferFunctionCode)
 	      {
 	      case 0:
-		newFunction = AffineTransfertFunctionType::New();
-		this->SetTransfertFunctionLabel("Affine");
+		newFunction = AffineTransferFunctionType::New();
+		this->SetTransferFunctionLabel("Affine");
 		break;
 	      case 1:
-		newFunction = SquareRootTransfertFunctionType::New();
-		this->SetTransfertFunctionLabel("Square Root");
+		newFunction = SquareRootTransferFunctionType::New();
+		this->SetTransferFunctionLabel("Square Root");
 		break;
 	      case 2:
-		newFunction = LogTransfertFunctionType::New();
-		this->SetTransfertFunctionLabel("Logarithmic");
+		newFunction = LogTransferFunctionType::New();
+		this->SetTransferFunctionLabel("Logarithmic");
 		break;
 	      case 3:
-		newFunction = SquareonentialTransfertFunctionType::New();
-		this->SetTransfertFunctionLabel("Square");
+		newFunction = SquareonentialTransferFunctionType::New();
+		this->SetTransferFunctionLabel("Square");
 		break;
 	      }
-	    newFunction->SetLowerBound(this->GetTransfertFunction()->GetLowerBound());
-	    newFunction->SetUpperBound(this->GetTransfertFunction()->GetUpperBound());
-	    this->SetTransfertFunction(newFunction);
-	    m_Parent->ChangeTransfertFunctions();
+	    newFunction->SetLowerBound(this->GetTransferFunction()->GetLowerBound());
+	    newFunction->SetUpperBound(this->GetTransferFunction()->GetUpperBound());
+	    this->SetTransferFunction(newFunction);
+	    m_Parent->ChangeTransferFunctions();
 	    m_Parent->Update();
 	    return 1;
 
@@ -165,14 +165,14 @@ class ITK_EXPORT ImageViewerHistogramAndTransfertFunctionWidget
       return 0;
     }
   /** Constructor */
-  ImageViewerHistogramAndTransfertFunctionWidget()
+  ImageViewerHistogramAndTransferFunctionWidget()
     {
       m_ModifyLower = false;
       m_ModifyUpper = false;
-      m_TransfertFunctionCode = 0;
+      m_TransferFunctionCode = 0;
     }
   /** Destructor */
-  virtual ~ImageViewerHistogramAndTransfertFunctionWidget() 
+  virtual ~ImageViewerHistogramAndTransferFunctionWidget() 
     {
       m_Parent = NULL;
     }
@@ -182,12 +182,12 @@ class ITK_EXPORT ImageViewerHistogramAndTransfertFunctionWidget
       Superclass::PrintSelf(os,indent);
     }
   private:
-  ImageViewerHistogramAndTransfertFunctionWidget(const Self&); //purposely not implemented
+  ImageViewerHistogramAndTransferFunctionWidget(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   /** Modify lower/upper threshold flag */
   bool m_ModifyLower;
   bool m_ModifyUpper;
-  int m_TransfertFunctionCode;
+  int m_TransferFunctionCode;
   ParentPointerType m_Parent;
   };
 

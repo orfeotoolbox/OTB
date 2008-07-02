@@ -55,8 +55,8 @@ ImageWidgetBase<TPixel>
   m_ImageOverlay = NULL;
   m_OpenGlImageOverlayBuffer = NULL;
   m_ImageOverlayOpacity = 128;
-  m_TransfertFunctionList = TransfertFunctionListType::New();
-  m_TransfertFunctionList->PushBack(AffineTransfertFunctionType::New());
+  m_TransferFunctionList = TransferFunctionListType::New();
+  m_TransferFunctionList->PushBack(AffineTransferFunctionType::New());
   m_SubSamplingRate = 1;
 }
 /**
@@ -110,9 +110,9 @@ ImageWidgetBase<TPixel>
 {
   for(unsigned int i = 0; i<m_Image->GetNumberOfComponentsPerPixel();++i)
     {
-      if(i>=m_TransfertFunctionList->Size())
+      if(i>=m_TransferFunctionList->Size())
 	{
-	  m_TransfertFunctionList->PushBack(AffineTransfertFunctionType::New());
+	  m_TransferFunctionList->PushBack(AffineTransferFunctionType::New());
 	}
     }
 }
@@ -220,9 +220,9 @@ ImageWidgetBase<TPixel>
 template <class TPixel>
 void
 ImageWidgetBase<TPixel>
-::SetTransfertFunctionList(TransfertFunctionListType * list)
+::SetTransferFunctionList(TransferFunctionListType * list)
 {
-  m_TransfertFunctionList = list;
+  m_TransferFunctionList = list;
 }
 
 /** Get the input overlay image.
@@ -263,7 +263,7 @@ unsigned char
 ImageWidgetBase<TPixel>
 ::Normalize(PixelType value, unsigned int channelIndex)
 {
-  return m_TransfertFunctionList->GetNthElement(channelIndex)->Map(value);
+  return m_TransferFunctionList->GetNthElement(channelIndex)->Map(value);
 }
 
 /** 

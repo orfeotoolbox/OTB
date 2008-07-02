@@ -15,10 +15,10 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbHistogramAndTransfertFunctionWidget_txx
-#define _otbHistogramAndTransfertFunctionWidget_txx
+#ifndef _otbHistogramAndTransferFunctionWidget_txx
+#define _otbHistogramAndTransferFunctionWidget_txx
 
-#include "otbHistogramAndTransfertFunctionWidget.h"
+#include "otbHistogramAndTransferFunctionWidget.h"
 #include <FL/gl.h>
 #include <FL/Fl.H>
 
@@ -26,12 +26,12 @@ namespace otb
 {
 
 template <class THistogram, class TPixel>
-HistogramAndTransfertFunctionWidget<THistogram,TPixel>
-::HistogramAndTransfertFunctionWidget()
+HistogramAndTransferFunctionWidget<THistogram,TPixel>
+::HistogramAndTransferFunctionWidget()
   : Fl_Gl_Window(0,0,0,0,0)
 {
   m_Label = "Default label";
-  m_TransfertFunctionLabel = "Function label";
+  m_TransferFunctionLabel = "Function label";
   m_HistogramColor[0]=0.5;
   m_HistogramColor[1]=0.5;
   m_HistogramColor[2]=0.5;
@@ -47,13 +47,13 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
   m_GridColor[0]=0.75;
   m_GridColor[1]=0.75;
   m_GridColor[2]=0.75;
-  m_TransfertFunctionColor[0]=1;
-  m_TransfertFunctionColor[1]=0;
-  m_TransfertFunctionColor[2]=0;
+  m_TransferFunctionColor[0]=1;
+  m_TransferFunctionColor[1]=0;
+  m_TransferFunctionColor[2]=0;
   m_BoundColor[0]=0;
   m_BoundColor[1]=1;
   m_BoundColor[2]=0;
-  m_TransfertFunction = NULL;
+  m_TransferFunction = NULL;
   m_Histogram = NULL;
   m_MarginX = 30;
   m_MarginY = 30;
@@ -67,7 +67,7 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
 
 template <class THistogram, class TPixel>
 void
-HistogramAndTransfertFunctionWidget<THistogram,TPixel>
+HistogramAndTransferFunctionWidget<THistogram,TPixel>
 ::OpenGlSetup()
 {
   if (!this->valid())
@@ -92,7 +92,7 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
 
 template <class THistogram, class TPixel>
 void
-HistogramAndTransfertFunctionWidget<THistogram,TPixel>
+HistogramAndTransferFunctionWidget<THistogram,TPixel>
 ::GridRendering(double gridXSpacing, double gridYSpacing)
 {
   double x,y;
@@ -121,7 +121,7 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
 
 template <class THistogram, class TPixel>
 void
-HistogramAndTransfertFunctionWidget<THistogram,TPixel>
+HistogramAndTransferFunctionWidget<THistogram,TPixel>
 ::AxisRendering(void)
 {
   glBegin(GL_LINES);
@@ -135,7 +135,7 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
 
 template <class THistogram, class TPixel>
 void
-HistogramAndTransfertFunctionWidget<THistogram,TPixel>
+HistogramAndTransferFunctionWidget<THistogram,TPixel>
 ::HistogramRendering(double binWidth, double binHeightRatio, double maxFrequency)
 {
   HistogramIteratorType it;
@@ -165,7 +165,7 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
 
 template <class THistogram, class TPixel>
 void
-HistogramAndTransfertFunctionWidget<THistogram,TPixel>
+HistogramAndTransferFunctionWidget<THistogram,TPixel>
 ::BoundRendering(void)
 {
   double x,y;
@@ -176,13 +176,13 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
   double factor = (m_Histogram->Quantile(0,1.)-m_Histogram->Quantile(0,0.))
     /(static_cast<double>(this->w())-2*m_MarginX-m_OutputHistogramMargin*static_cast<double>(this->w()));
 
-  x = m_MarginX + static_cast<double>(m_TransfertFunction->GetLowerBound()-m_Histogram->Quantile(0,0.))/factor;
+  x = m_MarginX + static_cast<double>(m_TransferFunction->GetLowerBound()-m_Histogram->Quantile(0,0.))/factor;
   
   y = m_MarginY;
   glVertex2d(x,y);
   y = static_cast<double>(this->h())-m_MarginY;
   glVertex2d(x,y);
-  x = m_MarginX + static_cast<double>(m_TransfertFunction->GetUpperBound()-m_Histogram->Quantile(0,0.))/factor;
+  x = m_MarginX + static_cast<double>(m_TransferFunction->GetUpperBound()-m_Histogram->Quantile(0,0.))/factor;
   glVertex2d(x,y);
   y=  m_MarginY;
   glVertex2d(x,y);
@@ -192,7 +192,7 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
 
 template <class THistogram, class TPixel>
 void
-HistogramAndTransfertFunctionWidget<THistogram,TPixel>
+HistogramAndTransferFunctionWidget<THistogram,TPixel>
 ::LegendRendering(double gridXSpacing, double gridYSpacing, double maxFrequency)
 {
   double x,y;
@@ -231,10 +231,10 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
 
 template <class THistogram, class TPixel>
 void
-HistogramAndTransfertFunctionWidget<THistogram,TPixel>
-::TransfertFunctionRendering()
+HistogramAndTransferFunctionWidget<THistogram,TPixel>
+::TransferFunctionRendering()
 {
-  glColor3d(m_TransfertFunctionColor[0],m_TransfertFunctionColor[1],m_TransfertFunctionColor[2]);
+  glColor3d(m_TransferFunctionColor[0],m_TransferFunctionColor[1],m_TransferFunctionColor[2]);
   glBegin(GL_LINE_STRIP);
   double x,y;
   double step = (m_Histogram->Quantile(0,1.)-m_Histogram->Quantile(0,0.))
@@ -247,7 +247,7 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
 					       +static_cast<double>(i)*step);
 
       x = m_MarginX + static_cast<double>(i)*xscale;
-      y = m_MarginY + yscale * static_cast<double>(m_TransfertFunction->Map(value));
+      y = m_MarginY + yscale * static_cast<double>(m_TransferFunction->Map(value));
       glVertex2d(x,y);
     }
   glEnd();
@@ -255,7 +255,7 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
 
 template <class THistogram, class TPixel>
 void
-HistogramAndTransfertFunctionWidget<THistogram,TPixel>
+HistogramAndTransferFunctionWidget<THistogram,TPixel>
 ::OutputHistogramRendering()
 {
   std::vector<unsigned int> outputHistogram(256,0);
@@ -263,7 +263,7 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
   HistogramIteratorType it;
   for(it=m_Histogram->Begin();it!=m_Histogram->End();++it)
     {
-      outputHistogram[m_TransfertFunction->Map(static_cast<PixelType>(it.GetMeasurementVector()[0]))]+=static_cast<unsigned int>(it.GetFrequency());
+      outputHistogram[m_TransferFunction->Map(static_cast<PixelType>(it.GetMeasurementVector()[0]))]+=static_cast<unsigned int>(it.GetFrequency());
     }
   // Setting the extremity to 0 to avoid sides effect
   outputHistogram[0]=0;
@@ -292,7 +292,7 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
      for(vit=outputHistogram.begin();vit!=outputHistogram.end();++vit,starty+=binWidth)
        {
 	 glBegin(GL_POLYGON);
-	 glColor3d(m_TransfertFunctionColor[0],m_TransfertFunctionColor[1],m_TransfertFunctionColor[2]);
+	 glColor3d(m_TransferFunctionColor[0],m_TransferFunctionColor[1],m_TransferFunctionColor[2]);
 	 
 	 x =static_cast<double>(this->w())-m_OutputHistogramMargin*static_cast<double>(this->w())-m_MarginX/2;
 	 y = starty;
@@ -322,19 +322,19 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
 
 template <class THistogram, class TPixel>
 void
-HistogramAndTransfertFunctionWidget<THistogram,TPixel>
-::TransfertFunctionLabelRendering(void)
+HistogramAndTransferFunctionWidget<THistogram,TPixel>
+::TransferFunctionLabelRendering(void)
 {
  //rendering label
  gl_font(FL_COURIER_BOLD,12);
- gl_draw(m_TransfertFunctionLabel.c_str(),static_cast<float>(this->w()-m_MarginX/2-m_OutputHistogramMargin*static_cast<double>(this->w())),static_cast<float>(m_MarginY/2));
+ gl_draw(m_TransferFunctionLabel.c_str(),static_cast<float>(this->w()-m_MarginX/2-m_OutputHistogramMargin*static_cast<double>(this->w())),static_cast<float>(m_MarginY/2));
 
 }
 
 
 template <class THistogram, class TPixel>
 void
-HistogramAndTransfertFunctionWidget<THistogram,TPixel>
+HistogramAndTransferFunctionWidget<THistogram,TPixel>
 ::draw()
 {
   if(!m_Histogram)
@@ -371,19 +371,19 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
   LegendRendering(gridXSpacing,gridYSpacing,maxFrequency);
  
 
-  if(m_TransfertFunction)
+  if(m_TransferFunction)
     {
       BoundRendering();
-      TransfertFunctionRendering();
+      TransferFunctionRendering();
       OutputHistogramRendering();
-      TransfertFunctionLabelRendering();
+      TransferFunctionLabelRendering();
     }
   m_Updating = false;
 }
 
 template <class THistogram, class TPixel>
 void
-HistogramAndTransfertFunctionWidget<THistogram,TPixel>
+HistogramAndTransferFunctionWidget<THistogram,TPixel>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);

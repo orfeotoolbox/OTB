@@ -24,7 +24,7 @@
 #include "itkObject.h"
 #include "otbList.h"
 #include "otbImageWidgetFormBase.h"
-#include "otbImageWidgetTransfertFunction.h"
+#include "otbImageWidgetTransferFunction.h"
 
 namespace otb
 {
@@ -69,10 +69,10 @@ class ImageWidgetBase
     typedef typename FormListType::ReverseIterator ReverseIteratorType;
     typedef typename FormListType::Iterator IteratorType;
 
-    typedef otb::ImageWidgetTransfertFunction<PixelType> TransfertFunctionType;
-    typedef otb::ImageWidgetAffineTransfertFunction<PixelType> AffineTransfertFunctionType;
-    typedef List<TransfertFunctionType> TransfertFunctionListType;
-    typedef typename TransfertFunctionListType::Pointer TransfertFunctionListPointerType;
+    typedef otb::ImageWidgetTransferFunction<PixelType> TransferFunctionType;
+    typedef otb::ImageWidgetAffineTransferFunction<PixelType> AffineTransferFunctionType;
+    typedef List<TransferFunctionType> TransferFunctionListType;
+    typedef typename TransferFunctionListType::Pointer TransferFunctionListPointerType;
     
     itkSetMacro(BufferedRegion,RegionType);
     itkGetMacro(BufferedRegion,RegionType);
@@ -108,7 +108,7 @@ class ImageWidgetBase
     itkSetMacro(ImageOverlayOpacity,unsigned char);
 
     itkGetObjectMacro(FormList,FormListType);
-    itkGetObjectMacro(TransfertFunctionList,TransfertFunctionListType);
+    itkGetObjectMacro(TransferFunctionList,TransferFunctionListType);
 
     itkGetMacro(OpenGlIsotropicZoom,double);
     
@@ -138,7 +138,7 @@ class ImageWidgetBase
     /** Set the transfert function list
      *  \param list The transfert function list.
      */
-    void SetTransfertFunctionList(TransfertFunctionListType * list);
+    void SetTransferFunctionList(TransferFunctionListType * list);
 
     /** Show The widget */
     void Show(void);
@@ -233,7 +233,7 @@ class ImageWidgetBase
       */
      unsigned int m_SubSamplingRate;
      /** List of the transfert function by channel */
-     TransfertFunctionListPointerType m_TransfertFunctionList;
+     TransferFunctionListPointerType m_TransferFunctionList;
   };
 } // end namespace otb
 

@@ -69,7 +69,7 @@ namespace otb
     m_PolygonalROISelectionMode = false;
     m_UseImageOverlay = false;
     m_HistogramGeneratorList=HistogramGeneratorListType::New();
-    m_TransfertFunctionList = TransfertFunctionListType::New();
+    m_TransferFunctionList = TransferFunctionListType::New();
     m_RedHistogramWidget = HistogramWidgetType::New();
     m_GreenHistogramWidget = HistogramWidgetType::New();
     m_BlueHistogramWidget = HistogramWidgetType::New();
@@ -156,7 +156,7 @@ namespace otb
     }
 
   m_HistogramGeneratorList->Clear();
-  m_TransfertFunctionList->Clear();
+  m_TransferFunctionList->Clear();
   otbMsgDebugMacro(<<"Nb bands: "<<m_InputImage->GetNumberOfComponentsPerPixel());
   
   for(unsigned int i = 0;i<sl->Size();++i)
@@ -169,19 +169,19 @@ namespace otb
       generator->SetNumberOfBins(size);
       generator->Update();
       m_HistogramGeneratorList->PushBack(generator);
-      m_TransfertFunctionList->PushBack(AffineTransfertFunctionType::New());
+      m_TransferFunctionList->PushBack(AffineTransferFunctionType::New());
       double min = generator->GetOutput()->Quantile(0,m_NormalizationFactor);
       double max = generator->GetOutput()->Quantile(0,1-m_NormalizationFactor);
-      m_TransfertFunctionList->Back()->SetLowerBound(static_cast<InputPixelType>(min));
-      m_TransfertFunctionList->Back()->SetUpperBound(static_cast<InputPixelType>(max));
+      m_TransferFunctionList->Back()->SetLowerBound(static_cast<InputPixelType>(min));
+      m_TransferFunctionList->Back()->SetUpperBound(static_cast<InputPixelType>(max));
     }
 
   if(m_UseScroll)
     {
-      m_ScrollWidget->SetTransfertFunctionList(m_TransfertFunctionList);
+      m_ScrollWidget->SetTransferFunctionList(m_TransferFunctionList);
     }
-  m_ZoomWidget->SetTransfertFunctionList(m_TransfertFunctionList);
-  m_FullWidget->SetTransfertFunctionList(m_TransfertFunctionList);
+  m_ZoomWidget->SetTransferFunctionList(m_TransferFunctionList);
+  m_FullWidget->SetTransferFunctionList(m_TransferFunctionList);
   }
   
   /// Build the HMI
@@ -1077,22 +1077,22 @@ ImageViewerBase<TPixel,TLabel>
 	  blue[2]=0.5;
 
 	  m_RedHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(m_RedChannelIndex)->GetOutput());
-	  m_RedHistogramWidget->SetTransfertFunction(m_TransfertFunctionList->GetNthElement(m_RedChannelIndex));
+	  m_RedHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(m_RedChannelIndex));
 	  m_RedHistogramWidget->SetLabel("Red channel");
-	  m_RedHistogramWidget->SetTransfertFunctionLabel("Affine");
+	  m_RedHistogramWidget->SetTransferFunctionLabel("Affine");
 	  m_RedHistogramWidget->SetHistogramColor(red);
 	  m_RedHistogramWidget->SetTextColor(red);
 	  
 	  m_BlueHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(m_BlueChannelIndex)->GetOutput());
-	  m_BlueHistogramWidget->SetTransfertFunction(m_TransfertFunctionList->GetNthElement(m_BlueChannelIndex));
+	  m_BlueHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(m_BlueChannelIndex));
 	  m_BlueHistogramWidget->SetLabel("Blue channel");
-	  m_BlueHistogramWidget->SetTransfertFunctionLabel("Affine");
+	  m_BlueHistogramWidget->SetTransferFunctionLabel("Affine");
 	  m_BlueHistogramWidget->SetHistogramColor(blue);
 	  m_BlueHistogramWidget->SetTextColor(blue);
 	  m_GreenHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(m_GreenChannelIndex)->GetOutput());
-	  m_GreenHistogramWidget->SetTransfertFunction(m_TransfertFunctionList->GetNthElement(m_GreenChannelIndex));
+	  m_GreenHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(m_GreenChannelIndex));
 	  m_GreenHistogramWidget->SetLabel("Green channel");
-	  m_GreenHistogramWidget->SetTransfertFunctionLabel("Affine");
+	  m_GreenHistogramWidget->SetTransferFunctionLabel("Affine");
 	  m_GreenHistogramWidget->SetHistogramColor(green);
 	  m_GreenHistogramWidget->SetTextColor(green);
 	  break;
@@ -1116,9 +1116,9 @@ ImageViewerBase<TPixel,TLabel>
       gray.Fill(0.5);
       
       m_RedHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(m_RedChannelIndex)->GetOutput());
-      m_RedHistogramWidget->SetTransfertFunction(m_TransfertFunctionList->GetNthElement(m_RedChannelIndex));
+      m_RedHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(m_RedChannelIndex));
       m_RedHistogramWidget->SetLabel("Grayscale channel");
-      m_RedHistogramWidget->SetTransfertFunctionLabel("Affine");
+      m_RedHistogramWidget->SetTransferFunctionLabel("Affine");
       m_RedHistogramWidget->SetHistogramColor(gray);
       m_RedHistogramWidget->SetTextColor(gray);
       break;
@@ -1144,9 +1144,9 @@ ImageViewerBase<TPixel,TLabel>
       gray.Fill(0.5);
       
       m_RedHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(0)->GetOutput());
-      m_RedHistogramWidget->SetTransfertFunction(m_TransfertFunctionList->GetNthElement(0));
+      m_RedHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(0));
       m_RedHistogramWidget->SetLabel("Modulus");
-      m_RedHistogramWidget->SetTransfertFunctionLabel("Affine");
+      m_RedHistogramWidget->SetTransferFunctionLabel("Affine");
       m_RedHistogramWidget->SetHistogramColor(gray);
       m_RedHistogramWidget->SetTextColor(gray);
       break;
@@ -1172,9 +1172,9 @@ ImageViewerBase<TPixel,TLabel>
       gray.Fill(0.5);
       
       m_RedHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(0)->GetOutput());
-      m_RedHistogramWidget->SetTransfertFunction(m_TransfertFunctionList->GetNthElement(0));
+      m_RedHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(0));
       m_RedHistogramWidget->SetLabel("Phase");
-      m_RedHistogramWidget->SetTransfertFunctionLabel("Affine");
+      m_RedHistogramWidget->SetTransferFunctionLabel("Affine");
       m_RedHistogramWidget->SetHistogramColor(gray);
       m_RedHistogramWidget->SetTextColor(gray);
       break;
@@ -1214,13 +1214,13 @@ ImageViewerBase<TPixel,TLabel>
 template<class TPixel, class TLabel>
 void
 ImageViewerBase<TPixel,TLabel>
-::ChangeTransfertFunctions(void)
+::ChangeTransferFunctions(void)
 {
-  m_TransfertFunctionList->SetNthElement(m_RedChannelIndex, m_RedHistogramWidget->GetTransfertFunction());
+  m_TransferFunctionList->SetNthElement(m_RedChannelIndex, m_RedHistogramWidget->GetTransferFunction());
   if(m_FullWidget->GetViewModel()==ScrollWidgetType::RGB)
     {
-      m_TransfertFunctionList->SetNthElement(m_BlueChannelIndex, m_BlueHistogramWidget->GetTransfertFunction());
-      m_TransfertFunctionList->SetNthElement(m_GreenChannelIndex, m_GreenHistogramWidget->GetTransfertFunction());
+      m_TransferFunctionList->SetNthElement(m_BlueChannelIndex, m_BlueHistogramWidget->GetTransferFunction());
+      m_TransferFunctionList->SetNthElement(m_GreenChannelIndex, m_GreenHistogramWidget->GetTransferFunction());
     }
   m_FullWidget->ClearBufferedRegion();
   m_ZoomWidget->ClearBufferedRegion();

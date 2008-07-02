@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbImageWidgetTransfertFunction_h
-#define _otbImageWidgetTransfertFunction_h
+#ifndef _otbImageWidgetTransferFunction_h
+#define _otbImageWidgetTransferFunction_h
 
 #include "itkProcessObject.h"
 #include "itkMacro.h"
@@ -24,22 +24,22 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-/** \class ImageWidgetTransfertFunction
+/** \class ImageWidgetTransferFunction
  *  \brief Base class for visualisation transfert functions.
  */
 template <class TPixel>
-class ITK_EXPORT ImageWidgetTransfertFunction
+class ITK_EXPORT ImageWidgetTransferFunction
   : public itk::Object
 {
  public:
   /** Standard typedefs */
-  typedef ImageWidgetTransfertFunction      Self;
+  typedef ImageWidgetTransferFunction      Self;
   typedef itk::Object                       Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
   
   /** Creation through object factory macro */
-  itkTypeMacro(ImageWidgetTransfertFunction,Object);
+  itkTypeMacro(ImageWidgetTransferFunction,Object);
   
   /** Template parameters typedefs */
   typedef TPixel PixelType;
@@ -60,13 +60,13 @@ class ITK_EXPORT ImageWidgetTransfertFunction
 
 protected:
   /** Constructor */
-  ImageWidgetTransfertFunction()
+  ImageWidgetTransferFunction()
     {
       m_LowerBound = 0;
       m_UpperBound = 255;
     }
   /** Destructor */
-  virtual ~ImageWidgetTransfertFunction() {}
+  virtual ~ImageWidgetTransferFunction() {}
  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
     {
@@ -76,7 +76,7 @@ protected:
     }
 
 private:
-  ImageWidgetTransfertFunction(const Self&); //purposely not implemented
+  ImageWidgetTransferFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   /// lower bound (set to 0)
@@ -85,17 +85,17 @@ private:
   PixelType m_UpperBound;
 };
 
-/** \class ImageWidgetAffineTransfertFunction
+/** \class ImageWidgetAffineTransferFunction
  *  \brief Affine transfert function.
  */
 template <class TPixel>
-class ITK_EXPORT ImageWidgetAffineTransfertFunction
-  : public ImageWidgetTransfertFunction<TPixel>
+class ITK_EXPORT ImageWidgetAffineTransferFunction
+  : public ImageWidgetTransferFunction<TPixel>
 {
  public:
   /** Standard typedefs */
-  typedef ImageWidgetAffineTransfertFunction   Self;
-  typedef ImageWidgetTransfertFunction<TPixel> Superclass;
+  typedef ImageWidgetAffineTransferFunction   Self;
+  typedef ImageWidgetTransferFunction<TPixel> Superclass;
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
   
@@ -103,7 +103,7 @@ class ITK_EXPORT ImageWidgetAffineTransfertFunction
   itkNewMacro(Self);
   
   /** Creation through object factory macro */
-  itkTypeMacro(ImageWidgetAffineTransfertFunction,ImageWidgetTransfertFunction);
+  itkTypeMacro(ImageWidgetAffineTransferFunction,ImageWidgetTransferFunction);
   
   /** Template parameters typedefs */
   typedef TPixel PixelType;
@@ -126,25 +126,25 @@ class ITK_EXPORT ImageWidgetAffineTransfertFunction
     }
  protected:
   /** Constructor and  destructor */
-  ImageWidgetAffineTransfertFunction(){}
-  ~ImageWidgetAffineTransfertFunction(){}
+  ImageWidgetAffineTransferFunction(){}
+  ~ImageWidgetAffineTransferFunction(){}
  private:
-  ImageWidgetAffineTransfertFunction(const Self&); //purposely not implemented
+  ImageWidgetAffineTransferFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 };
 
 
-/** \class ImageWidgetSquareRootTransfertFunction
+/** \class ImageWidgetSquareRootTransferFunction
  *  \brief SquareRoot transfert function.
  */
 template <class TPixel>
-class ITK_EXPORT ImageWidgetSquareRootTransfertFunction
-  : public ImageWidgetTransfertFunction<TPixel>
+class ITK_EXPORT ImageWidgetSquareRootTransferFunction
+  : public ImageWidgetTransferFunction<TPixel>
 {
  public:
   /** Standard typedefs */
-  typedef ImageWidgetSquareRootTransfertFunction Self;
-  typedef ImageWidgetTransfertFunction<TPixel>   Superclass;
+  typedef ImageWidgetSquareRootTransferFunction Self;
+  typedef ImageWidgetTransferFunction<TPixel>   Superclass;
   typedef itk::SmartPointer<Self>                Pointer;
   typedef itk::SmartPointer<const Self>          ConstPointer;
   
@@ -152,7 +152,7 @@ class ITK_EXPORT ImageWidgetSquareRootTransfertFunction
   itkNewMacro(Self);
   
   /** Creation through object factory macro */
-  itkTypeMacro(ImageWidgetSquareRootTransfertFunction,ImageWidgetTransfertFunction);
+  itkTypeMacro(ImageWidgetSquareRootTransferFunction,ImageWidgetTransferFunction);
   
   /** Template parameters typedefs */
   typedef TPixel PixelType;
@@ -177,25 +177,25 @@ class ITK_EXPORT ImageWidgetSquareRootTransfertFunction
     }
  protected:
   /** Constructor and  destructor */
-  ImageWidgetSquareRootTransfertFunction(){}
-  ~ImageWidgetSquareRootTransfertFunction(){}
+  ImageWidgetSquareRootTransferFunction(){}
+  ~ImageWidgetSquareRootTransferFunction(){}
  private:
-  ImageWidgetSquareRootTransfertFunction(const Self&); //purposely not implemented
+  ImageWidgetSquareRootTransferFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 };
 
 
-/** \class ImageWidgetLogTransfertFunction
+/** \class ImageWidgetLogTransferFunction
  *  \brief Log transfert function.
  */
 template <class TPixel>
-class ITK_EXPORT ImageWidgetLogTransfertFunction
-  : public ImageWidgetTransfertFunction<TPixel>
+class ITK_EXPORT ImageWidgetLogTransferFunction
+  : public ImageWidgetTransferFunction<TPixel>
 {
  public:
   /** Standard typedefs */
-  typedef ImageWidgetLogTransfertFunction      Self;
-  typedef ImageWidgetTransfertFunction<TPixel> Superclass;
+  typedef ImageWidgetLogTransferFunction      Self;
+  typedef ImageWidgetTransferFunction<TPixel> Superclass;
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
   
@@ -203,7 +203,7 @@ class ITK_EXPORT ImageWidgetLogTransfertFunction
   itkNewMacro(Self);
   
   /** Creation through object factory macro */
-  itkTypeMacro(ImageWidgetLogTransfertFunction,ImageWidgetTransfertFunction);
+  itkTypeMacro(ImageWidgetLogTransferFunction,ImageWidgetTransferFunction);
   
   /** Template parameters typedefs */
   typedef TPixel PixelType;
@@ -228,24 +228,24 @@ class ITK_EXPORT ImageWidgetLogTransfertFunction
     }
  protected:
   /** Constructor and  destructor */
-  ImageWidgetLogTransfertFunction(){}
-  ~ImageWidgetLogTransfertFunction(){}
+  ImageWidgetLogTransferFunction(){}
+  ~ImageWidgetLogTransferFunction(){}
  private:
-  ImageWidgetLogTransfertFunction(const Self&); //purposely not implemented
+  ImageWidgetLogTransferFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 };
 
-/** \class ImageWidgetSquareTransfertFunction
+/** \class ImageWidgetSquareTransferFunction
  *  \brief Log transfert function.
  */
 template <class TPixel>
-class ITK_EXPORT ImageWidgetSquareTransfertFunction
-  : public ImageWidgetTransfertFunction<TPixel>
+class ITK_EXPORT ImageWidgetSquareTransferFunction
+  : public ImageWidgetTransferFunction<TPixel>
 {
  public:
   /** Standard typedefs */
-  typedef ImageWidgetSquareTransfertFunction      Self;
-  typedef ImageWidgetTransfertFunction<TPixel> Superclass;
+  typedef ImageWidgetSquareTransferFunction      Self;
+  typedef ImageWidgetTransferFunction<TPixel> Superclass;
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
   
@@ -253,7 +253,7 @@ class ITK_EXPORT ImageWidgetSquareTransfertFunction
   itkNewMacro(Self);
   
   /** Creation through object factory macro */
-  itkTypeMacro(ImageWidgetSquareTransfertFunction,ImageWidgetTransfertFunction);
+  itkTypeMacro(ImageWidgetSquareTransferFunction,ImageWidgetTransferFunction);
   
   /** Template parameters typedefs */
   typedef TPixel PixelType;
@@ -279,10 +279,10 @@ class ITK_EXPORT ImageWidgetSquareTransfertFunction
     }
  protected:
   /** Constructor and  destructor */
-  ImageWidgetSquareTransfertFunction(){}
-  ~ImageWidgetSquareTransfertFunction(){}
+  ImageWidgetSquareTransferFunction(){}
+  ~ImageWidgetSquareTransferFunction(){}
  private:
-  ImageWidgetSquareTransfertFunction(const Self&); //purposely not implemented
+  ImageWidgetSquareTransferFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 };
 }// End namespace otb
