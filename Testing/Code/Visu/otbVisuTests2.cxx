@@ -35,8 +35,8 @@ REGISTER_TEST(otbVectorImageToColorAnaglyphVectorImageFilter);
 REGISTER_TEST(otbAlternateViewerTest);
 REGISTER_TEST(otbImageWidgetPolygonFormNew);
 REGISTER_TEST(otbImageWidgetPolygonForm);
-REGISTER_TEST(otbHistogramAndTransfertFunctionWidgetNew);
-REGISTER_TEST(otbHistogramAndTransfertFunctionWidget);
-REGISTER_TEST(otbImageWidgetTransfertFunctionsNew);
-REGISTER_TEST(otbImageWidgetTransfertFunctions);
+REGISTER_TEST(otbHistogramAndTransferFunctionWidgetNew);
+REGISTER_TEST(otbHistogramAndTransferFunctionWidget);
+REGISTER_TEST(otbImageWidgetTransferFunctionsNew);
+REGISTER_TEST(otbImageWidgetTransferFunctions);
 }
