@@ -57,13 +57,15 @@ namespace otb
     prolateInterpolator->SetRadius(8);
     typename OtbWindowedSincInterpolatorType::Pointer otbwinsinc = OtbWindowedSincInterpolatorType::New();
     otbwinsinc->SetRadius(8);
+
+     typename DefaultInterpolatorType::Pointer defaultInterpolator = DefaultInterpolatorType::New();
     // m_ZoomInInterpolator = WindowedSincInterpolatorType::New();
-    m_ZoomInInterpolator=prolateInterpolator;
+    m_ZoomInInterpolator=defaultInterpolator;
     // m_ZoomInInterpolator=bsplineInterpolator;
 
-    m_ZoomOutInterpolator = prolateInterpolator;
+    m_ZoomOutInterpolator = defaultInterpolator;
    
-    IndexType index;
+    IndexType index; 
     SizeType size;
 
     index[0]=0;
