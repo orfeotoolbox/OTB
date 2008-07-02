@@ -151,29 +151,29 @@ ADD_TEST(coTuImageWidgetPolygonForm ${VISU_TESTS2}
 		20 100 70 100 70 90 50 90 50 80 70 80 70 60 90 60 90 50 70 50 70 30 20 30 
 )
 
-# -------       otb::HistogramAndTransfertFunctionWidgtet -----------------------------------
+# -------       otb::HistogramAndTransferFunctionWidgtet -----------------------------------
 
-ADD_TEST(viTuHistogramAndTransfertFunctionWidgetNew ${VISU_TESTS2} 
-        otbHistogramAndTransfertFunctionWidgetNew
+ADD_TEST(viTuHistogramAndTransferFunctionWidgetNew ${VISU_TESTS2} 
+        otbHistogramAndTransferFunctionWidgetNew
         )
 
-ADD_TEST(viTvHistogramAndTransfertFunctionWidget ${VISU_TESTS2} 
-        otbHistogramAndTransfertFunctionWidget
+ADD_TEST(viTvHistogramAndTransferFunctionWidget ${VISU_TESTS2} 
+        otbHistogramAndTransferFunctionWidget
 	${INPUTDATA}/GomaAvant.png
         )
 
-# -------       otb::ImageWidgetTransfertFunctions -----------------------------------
+# -------       otb::ImageWidgetTransferFunctions -----------------------------------
 
-ADD_TEST(viTuImageWidgetTransfertFunctionsNew ${VISU_TESTS2} 
-        otbImageWidgetTransfertFunctionsNew
+ADD_TEST(viTuImageWidgetTransferFunctionsNew ${VISU_TESTS2} 
+        otbImageWidgetTransferFunctionsNew
         )
 
-ADD_TEST(viTvImageWidgetTransfertFunctions ${VISU_TESTS2} 
+ADD_TEST(viTvImageWidgetTransferFunctions ${VISU_TESTS2} 
 --compare-ascii ${EPSILON}
-		${BASELINE_FILES}/viTvImageWidgetTransfertFunctionsOutput.txt
-		${TEMP}/viTvImageWidgetTransfertFunctionsOutput.txt
-        otbImageWidgetTransfertFunctions
-	${TEMP}/viTvImageWidgetTransfertFunctionsOutput.txt
+		${BASELINE_FILES}/viTvImageWidgetTransferFunctionsOutput.txt
+		${TEMP}/viTvImageWidgetTransferFunctionsOutput.txt
+        otbImageWidgetTransferFunctions
+	${TEMP}/viTvImageWidgetTransferFunctionsOutput.txt
         )
 
 # -------       Fichiers sources CXX -----------------------------------
@@ -199,10 +199,10 @@ otbVectorImageToColorAnaglyphVectorImageFilter.cxx
 otbAlternateViewerTest.cxx
 otbImageWidgetPolygonFormNew.cxx
 otbImageWidgetPolygonForm.cxx
-otbHistogramAndTransfertFunctionWidgetNew.cxx
-otbHistogramAndTransfertFunctionWidget.cxx
-otbImageWidgetTransfertFunctions.cxx
-otbImageWidgetTransfertFunctionsNew.cxx
+otbHistogramAndTransferFunctionWidgetNew.cxx
+otbHistogramAndTransferFunctionWidget.cxx
+otbImageWidgetTransferFunctions.cxx
+otbImageWidgetTransferFunctionsNew.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}") 

@@ -15,13 +15,13 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbHistogramAndTransfertFunctionWidget.h"
+#include "otbHistogramAndTransferFunctionWidget.h"
 #include "otbImageFileReader.h"
 #include "itkScalarImageToHistogramGenerator.h"
 #include "otbImage.h"
 #include <FL/Fl.H>
 
-int otbHistogramAndTransfertFunctionWidget(int argc, char * argv[])
+int otbHistogramAndTransferFunctionWidget(int argc, char * argv[])
 {
   typedef unsigned char PixelType;
   const unsigned int Dimension =2;
@@ -33,10 +33,10 @@ int otbHistogramAndTransfertFunctionWidget(int argc, char * argv[])
   typedef itk::Statistics::ScalarImageToHistogramGenerator<ImageType> GeneratorType;
   typedef GeneratorType::HistogramType HistogramType;
   
-  typedef otb::HistogramAndTransfertFunctionWidget<HistogramType,PixelType> WidgetType;
-  typedef otb::ImageWidgetAffineTransfertFunction<PixelType> TransfertFunctionType;
+  typedef otb::HistogramAndTransferFunctionWidget<HistogramType,PixelType> WidgetType;
+  typedef otb::ImageWidgetAffineTransferFunction<PixelType> TransferFunctionType;
 
-  TransfertFunctionType::Pointer function = TransfertFunctionType::New();
+  TransferFunctionType::Pointer function = TransferFunctionType::New();
   function->SetLowerBound(50);
   function->SetUpperBound(200);
 
@@ -54,7 +54,7 @@ int otbHistogramAndTransfertFunctionWidget(int argc, char * argv[])
   Fl_Window window(300,200);
   WidgetType::Pointer widget = WidgetType::New();
   widget->SetHistogram(generator->GetOutput());
-  widget->SetTransfertFunction(function);
+  widget->SetTransferFunction(function);
   widget->resize(0,0,300,200);
   window.resizable(widget.GetPointer());
   window.end();

@@ -15,16 +15,16 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbImageWidgetTransfertFunction.h"
+#include "otbImageWidgetTransferFunction.h"
 
 
-int otbImageWidgetTransfertFunctionsNew(int argc, char * argv[])
+int otbImageWidgetTransferFunctionsNew(int argc, char * argv[])
 {
   typedef double PixelType;
-  typedef otb::ImageWidgetAffineTransfertFunction<PixelType> AffineType;
-  typedef otb::ImageWidgetSquareRootTransfertFunction<PixelType> SquareRootType;
-  typedef otb::ImageWidgetLogTransfertFunction<PixelType> LogType;
-  typedef otb::ImageWidgetSquareTransfertFunction<PixelType> SquareType;
+  typedef otb::ImageWidgetAffineTransferFunction<PixelType> AffineType;
+  typedef otb::ImageWidgetSquareRootTransferFunction<PixelType> SquareRootType;
+  typedef otb::ImageWidgetLogTransferFunction<PixelType> LogType;
+  typedef otb::ImageWidgetSquareTransferFunction<PixelType> SquareType;
   
   // Instantiation
   AffineType::Pointer affine = AffineType::New();

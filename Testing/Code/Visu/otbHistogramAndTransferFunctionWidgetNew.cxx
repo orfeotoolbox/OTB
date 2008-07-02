@@ -16,10 +16,10 @@ PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #include "itkScalarImageToHistogramGenerator.h"
-#include "otbHistogramAndTransfertFunctionWidget.h"
+#include "otbHistogramAndTransferFunctionWidget.h"
 #include "otbImage.h"
 
-int otbHistogramAndTransfertFunctionWidgetNew(int argc, char * argv[])
+int otbHistogramAndTransferFunctionWidgetNew(int argc, char * argv[])
 {
   typedef unsigned char PixelType;
   const unsigned int Dimension =2;
@@ -27,7 +27,7 @@ int otbHistogramAndTransfertFunctionWidgetNew(int argc, char * argv[])
   typedef itk::Statistics::ScalarImageToHistogramGenerator<ImageType> GeneratorType;
   typedef GeneratorType::HistogramType HistogramType;
 
-  typedef otb::HistogramAndTransfertFunctionWidget<HistogramType,PixelType> WidgetType;
+  typedef otb::HistogramAndTransferFunctionWidget<HistogramType,PixelType> WidgetType;
 
   WidgetType::Pointer widget = WidgetType::New();
   
