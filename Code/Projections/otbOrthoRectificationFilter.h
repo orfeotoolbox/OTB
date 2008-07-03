@@ -96,8 +96,8 @@ namespace otb
       /** Specify where are DEM files, and load useful ones */
       virtual void SetDEMDirectory(const std::string& directory)
       {
-				m_SensorModel->SetDEMDirectory(directory);
-				this->Modified();
+	m_SensorModel->SetDEMDirectory(directory);
+	this->Modified();
       }	
       
       /** Methods to decide to use DEM */	
@@ -112,6 +112,17 @@ namespace otb
 		m_SensorModel->DisableDEM(); 
 		this->Modified();
 	}
+
+
+      /** Specify average elevation.*/
+      virtual void SetAverageElevation(double elevation)
+      {
+	m_SensorModel->SetAverageElevation(elevation);
+	this->Modified();
+      }
+
+
+
       
       protected:
       OrthoRectificationFilter();
