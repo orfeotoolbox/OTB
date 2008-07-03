@@ -46,15 +46,24 @@
 /**
 sample error debug callback expecting no client object
 */
-void error_callback(const char *msg, void *client_data);
+void error_callback(const char *msg, void *client_data) {
+	(void)client_data;
+	fprintf(stdout, "[ERROR] %s", msg);
+}
 /**
 sample warning debug callback expecting no client object
 */
-void warning_callback(const char *msg, void *client_data);
+void warning_callback(const char *msg, void *client_data) {
+	(void)client_data;
+	fprintf(stdout, "[WARNING] %s", msg);
+}
 /**
 sample debug callback expecting no client object
 */
-void info_callback(const char *msg, void *client_data);
+void info_callback(const char *msg, void *client_data) {
+	(void)client_data;
+	fprintf(stdout, "[INFO] %s", msg);
+}
 
 /* -------------------------------------------------------------------------- */
 
