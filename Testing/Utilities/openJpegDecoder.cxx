@@ -46,21 +46,21 @@
 /**
 sample error debug callback expecting no client object
 */
-void error_callback(const char *msg, void *client_data) {
+void _openJpegDecoder_error_callback(const char *msg, void *client_data) {
 	(void)client_data;
 	fprintf(stdout, "[ERROR] %s", msg);
 }
 /**
 sample warning debug callback expecting no client object
 */
-void warning_callback(const char *msg, void *client_data) {
+void _openJpegDecoder_warning_callback(const char *msg, void *client_data) {
 	(void)client_data;
 	fprintf(stdout, "[WARNING] %s", msg);
 }
 /**
 sample debug callback expecting no client object
 */
-void info_callback(const char *msg, void *client_data) {
+void _openJpegDecoder_info_callback(const char *msg, void *client_data) {
 	(void)client_data;
 	fprintf(stdout, "[INFO] %s", msg);
 }
@@ -113,9 +113,9 @@ int openJpegDecoder(int argc, char * argv[])
 	}
 
 	/* catch events using our callbacks and give a local context */		
-	opj_set_info_handler(l_codec, info_callback,00);
-	opj_set_warning_handler(l_codec, warning_callback,00);
-	opj_set_error_handler(l_codec, error_callback,00);
+	opj_set_info_handler(l_codec, _openJpegDecoder_info_callback,00);
+	opj_set_warning_handler(l_codec, _openJpegDecoder_warning_callback,00);
+	opj_set_error_handler(l_codec, _openJpegDecoder_error_callback,00);
 	
 	if
 		(! opj_setup_decoder(l_codec,&l_param))
