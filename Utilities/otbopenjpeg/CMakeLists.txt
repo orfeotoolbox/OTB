@@ -70,6 +70,16 @@ ENDIF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.in)
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/opj_configure.h.in 
                ${CMAKE_CURRENT_BINARY_DIR}/opj_configure.h)
 
+#-----------------------------------------------------------------------------
+IF(OTB_BUILD_SHARED_LIBS)
+    ADD_DEFINITIONS(-DOPJ_EXPORTS)
+ELSE(OTB_BUILD_SHARED_LIBS)
+    ADD_DEFINITIONS(-DOPJ_STATIC)
+ENDIF(OTB_BUILD_SHARED_LIBS)
+
+IF(CYGWIN OR MINGW)
+  ADD_DEFINITIONS(-DWIN32)  
+ENDIF(CYGWIN OR MINGW)
 
 #-----------------------------------------------------------------------------
 # Always build the library
