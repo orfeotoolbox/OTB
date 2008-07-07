@@ -37,7 +37,9 @@
 // Modified by OTB developpers. /TODO check this
 // Add specific plateform CYGWIN and MINGW
 
-#if defined(OPJ_STATIC) || !(defined(WIN32) || defined(__WIN32__) || defined(__CYGWIN__) || defined(__MINGW__))
+//THOMAS
+//#if defined(OPJ_STATIC) || !(defined(WIN32) || defined(__WIN32__) || defined(__CYGWIN__) || defined(__MINGW__))
+#if defined(OPJ_STATIC) || !(defined(WIN32) || defined(__WIN32__))
 #define OPJ_API
 #define OPJ_CALLCONV
 #else
