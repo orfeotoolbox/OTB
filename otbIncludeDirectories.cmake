@@ -44,7 +44,9 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
 )
 # Case for release 2.2.1
 IF(OTB_USE_JPEG2000)
-  SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE} ${OTB_SOURCE_DIR}/Utilities/otbopenjpeg/libopenjpeg)
+  SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE} 
+        ${OTB_SOURCE_DIR}/Utilities/otbopenjpeg
+        ${OTB_SOURCE_DIR}/Utilities/otbopenjpeg/libopenjpeg)
 ENDIF(OTB_USE_JPEG2000)
 
 #-----------------------------------------------------------------------------
@@ -197,7 +199,9 @@ SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
 
 # Case for release 2.2.1
 IF(OTB_USE_JPEG2000)
-  SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE} ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbopenjpeg/libopenjpeg)
+  SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE} 
+        ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbopenjpeg
+        ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbopenjpeg/libopenjpeg)
 ENDIF(OTB_USE_JPEG2000)
 
 #For GDAL header file
