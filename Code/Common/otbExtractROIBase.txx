@@ -216,7 +216,7 @@ ExtractROIBase<TInputImage,TOutputImage>
     }
 
   // Set the output image size to the same value as the extraction region.
-  outputPtr->SetRegions( m_OutputImageRegion );
+  outputPtr->SetLargestPossibleRegion( m_OutputImageRegion );
 
   // Set the output spacing and origin
   const itk::ImageBase<InputImageDimension> *phyData;
