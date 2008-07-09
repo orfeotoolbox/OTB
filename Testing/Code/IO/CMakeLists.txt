@@ -1290,7 +1290,7 @@ ADD_TEST(ioTuJP2ImageIOCanRead ${IO_TESTS13}
          )
 
 ADD_TEST(ioTuVectorImageFileReaderWriterJ2K2TIF ${IO_TESTS9} 
--compare-image ${TOL}  ${BASELINE}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
+--compare-image ${TOL}  ${BASELINE}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
                         ${TEMP}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
          otbVectorImageFileReaderWriterTest
          ${INPUTDATA}/bretagne.j2k
@@ -1316,7 +1316,7 @@ ADD_TEST(ioTuVectorImageFileReaderWriterJP22TIF ${IO_TESTS9}
 
 
 ADD_TEST(ioTuImageFileReaderWriterJP22TIF ${IO_TESTS2} 
--compare-image ${TOL}  ${BASELINE}/ioTvImageFileReaderWriterJP22TIFOutput.tif
+--compare-image ${TOL}  ${BASELINE}/ioTvImageFileReaderWriterJP22TIFOutput.tif
                         ${TEMP}/ioTvImageFileReaderWriterJP22TIFOutput.tif
          otbDoubleImageIOTest
          ${IMAGEDATA}/JPEG2000/QB_multicomp_small.jpx
