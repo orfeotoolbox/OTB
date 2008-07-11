@@ -420,12 +420,17 @@ itkScaleInvariantFeatureImageFilterTest.cxx
 
 # Case for release 2.2.1
 IF(OTB_USE_JPEG2000 AND NOT OTB_USE_EXTERNAL_ITK)
-  SET(UtilitiesTests_SRCS ${UtilitiesTests_SRCS} openJpegEncoder.cxx openJpegDecoder.cxx)
+  SET(UtilitiesTests_SRCS ${UtilitiesTests_SRCS}  openJpegEncoder.cxx openJpegDecoder.cxx)
 ENDIF(OTB_USE_JPEG2000 AND NOT OTB_USE_EXTERNAL_ITK)
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}")
+
+
+IF(NOT BUILD_SHARED_LIBS)
+  ADD_DEFINITIONS(-DOPJ_STATIC)
+ENDIF(NOT BUILD_SHARED_LIBS)
 
 ADD_EXECUTABLE(otbUtilitiesTests otbUtilitiesTests.cxx ${UtilitiesTests_SRCS})
 TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon otbossim otbsvm otb6S tinyXML )

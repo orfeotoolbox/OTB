@@ -27,6 +27,8 @@
 // Modif Otb-dev, this option is set in CMakeLists.txt
 //#define USE_OPJ_DEPRECATED
 
+//#define OPJ_STATIC
+
 #include "openjpeg.h"
 #include "profile.h"
 
