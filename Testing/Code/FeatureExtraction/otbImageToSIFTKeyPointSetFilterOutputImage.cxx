@@ -70,9 +70,10 @@ int otbImageToSIFTKeyPointSetFilterOutputImage(int argc, char * argv[])
   ImageType::OffsetType l = {{ 1, 0}};
   ImageType::OffsetType r = {{-1, 0}};
   
-  typedef otb::Image<unsigned char,2> UCharImageType;
+  typedef unsigned char PixelType;
+  typedef otb::Image<PixelType,2> UCharImageType;
   
-  typedef itk::RGBPixel<unsigned char> RGBPixelType;
+  typedef itk::RGBPixel<PixelType> RGBPixelType;
   typedef otb::Image<RGBPixelType, 2> OutputImageType;
 
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
@@ -102,9 +103,9 @@ int otbImageToSIFTKeyPointSetFilterOutputImage(int argc, char * argv[])
        ++iterOutput, ++iterInput)
     {
       OutputImageType::PixelType rgbPixel;
-      rgbPixel.SetRed( static_cast<unsigned char>(iterInput.Get()) );
-      rgbPixel.SetGreen( static_cast<unsigned char>(iterInput.Get()) );
-      rgbPixel.SetBlue( static_cast<unsigned char>(iterInput.Get()) );
+      rgbPixel.SetRed( static_cast<PixelType>(iterInput.Get()) );
+      rgbPixel.SetGreen( static_cast<PixelType>(iterInput.Get()) );
+      rgbPixel.SetBlue( static_cast<PixelType>(iterInput.Get()) );
       
       iterOutput.Set(rgbPixel);
     }
