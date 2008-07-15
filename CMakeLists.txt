@@ -71,7 +71,7 @@ OPTION(BUILD_TESTING "Build testing." OFF)
 
 # Case for release 2.2.1
 # Use the openjpeg library.
-OPTION(OTB_USE_JPEG2000 "Use to support jpeg2000 image file format." OFF)
+OPTION(OTB_USE_JPEG2000 "Use to support jpeg2000 image file format." ON)
 #MARK_AS_ADVANCED(OTB_USE_JPEG2000)
 
 #-----------------------------------------------------------------------------
