@@ -84,7 +84,7 @@ private:
   
 };
 
-std::ostream & operator<<(std::ostream &os, const ImageKeywordlist &kwl);
+extern std::ostream & operator<<(std::ostream &os, const ImageKeywordlist &kwl);
 
 } //namespace otb
 
