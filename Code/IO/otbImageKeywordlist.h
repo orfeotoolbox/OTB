@@ -38,7 +38,7 @@ namespace otb
  * \ingroup Projections
  *
  */
-class ITKCommon_EXPORT ImageKeywordlist
+class ITK_EXPORT ImageKeywordlist
 {
 public:
   /** Standard class typedefs. */
@@ -84,7 +84,7 @@ private:
   
 };
 
-ITK_EXPORT std::ostream & operator<<(std::ostream &os, const ImageKeywordlist &kwl);
+std::ostream & operator<<(std::ostream &os, const ImageKeywordlist &kwl);
 
 } //namespace otb
 
