@@ -52,7 +52,7 @@
 
 namespace otb
 {	         
-class ITKCommon_EXPORT ImageGeometryHandler: public itk::Object
+class ITK_EXPORT ImageGeometryHandler: public itk::Object
 {          
 public :
 //Déclaration des types:
@@ -62,11 +62,14 @@ public :
   typedef itk::SmartPointer<Self>                    Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
 
-static Pointer New()
-{ Pointer n = new Self; n->UnRegister(); return n; }
+  static Pointer New()
+  { 
+        Pointer n = new Self; 
+        n->UnRegister(); 
+        return n;
+  }
 
 itkTypeMacro( ImageGeometryHandler, Object);
-//itkNewMacro( Self );
 
 /***********************************/
 /*   Déclaration des méthodes      */

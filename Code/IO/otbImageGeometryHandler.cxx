@@ -18,7 +18,7 @@
 /*!
  *
  * PURPOSE:
- *2 m�thodes n�cessaires pour l'ortho (au niveau de l'instanciation des mod�les de capteurs).
+ *2 methodes necessaires pour l'ortho (au niveau de l'instanciation des modeles de capteurs).
  * 
  * 
  */
@@ -31,7 +31,7 @@ namespace otb
       /*     Constructeurs       */
       /***************************/
       
-// Constructeur par d�fault
+// Constructeur par default
 ImageGeometryHandler::ImageGeometryHandler()
 {
 //handler = new ImageGeometryHandler();
@@ -57,10 +57,10 @@ ImageGeometryHandler::~ImageGeometryHandler()
 }
       
       /***************************/
-      /*     M�thodes            */
+      /*     Methodes            */
       /***************************/
-//Ouvrir le fichier: On sp�cifie le nom de l'image en param�tres
-//Encapsulation de la m�thode "open"
+//Ouvrir le fichier: On specifie le nom de l'image en parametres
+//Encapsulation de la methode "open"
 void ImageGeometryHandler::SetFileName(char *src)
 {
 	otbDebugMacro(<<"Creation handler... ");
@@ -71,8 +71,8 @@ void ImageGeometryHandler::SetFileName(char *src)
     }
 }
         
-// R�cup�ration de la g�om�trie de l'image: 
-//Encapsulation de la m�thode "getImageGeometry"
+// Recuperation de la geometrie de l'image: 
+//Encapsulation de la methode "getImageGeometry"
 ossimKeywordlist ImageGeometryHandler::GetGeometryKeywordlist()
 {
 otbDebugMacro( << "Get geometry handler " );
