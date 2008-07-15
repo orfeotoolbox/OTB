@@ -168,7 +168,7 @@ whatever you want. Make sure that you have downloaded the source code for:
 
 \subsubsection{Unix/Linux Platforms}
 
-\textbf{Important note}: on some Linux distributions (eg. Debian, Ubuntu, Fedora), you may use 
+\textbf{Important note}: on some Linux distributions (eg. Debian, Ubuntu, Fedora), you should use 
 the official packages for CMake, GDAL and Fltk. Once you have installed these 
 packages, you can skip to step 4.
 
@@ -231,11 +231,11 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 \item Install OTB
   \begin{verbatim}
       cd INSTALL_DIR
-      gunzip OrfeoToolbox-2.0.0.tgz
-      tar xvf OrfeoToolbox-2.0.0.tar
+      gunzip OrfeoToolbox-2.4.0.tgz
+      tar xvf OrfeoToolbox-2.4.0.tar
       mkdir OTB-Binary
       cd OTB-Binary
-      ccmake ../OrfeoToolbox-2.0.0
+      ccmake ../OrfeoToolbox-2.4.0
       --> follow the CMake instructions, in particular:
 	  --> set BUILD_EXAMPLES to ON within CMake
 	  --> set BUILD_SHARED_LIBS to ON within CMake
@@ -257,7 +257,7 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
   with that, you can set \texttt{BUILD\_SHARED\_LIBS} to \texttt{OFF} but the 
   built size might reach 1~GB.
       
-  After these steps, you have the source of OTB in \texttt{INSTALL\_DIR/OrfeoToolbox-2.0.0}
+  After these steps, you have the source of OTB in \texttt{INSTALL\_DIR/OrfeoToolbox-2.4.0}
   and the compiled binaries and libraries in \texttt{INSTALL\_DIR/OTB-Binary}. Keeping
   the sources is important as most programs you will designed will need an access 
   to the txx files during compilation. However, the binaries directory knows were
@@ -516,8 +516,9 @@ versions, the second one is for minor versions and the last one is for
 bugfixes.
 
 The first version was 1.0.0 in July 2006. Version 1.2.0, 1.4.0 and 1.6.0 were 
-released in between and the current one 2.0.0 was released in December 2007. 
-The next one will probably be 2.2.0.
+released in between. The 2.0.0 major version  was released in December 2007. 
+The 2.2.0 and 2.4.0 update in June and July 2008 respectively.
+The next one will probably be 2.6.0.
 
 \subsubsection{What is a major version?}
 A major version of the library implies the addition of high-level
