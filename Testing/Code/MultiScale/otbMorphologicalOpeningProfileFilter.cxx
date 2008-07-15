@@ -30,7 +30,7 @@ int otbMorphologicalOpeningProfileFilter(int argc, char * argv[])
   const char * outputFilenameSuffix = argv[3];
   const unsigned int profileSize = atoi(argv[4]);
   const unsigned int initialValue = atoi(argv[5]);
-  const unsigned int step = atoi(argv[5]);
+  const unsigned int step = atoi(argv[6]);
        
 
   const unsigned int Dimension = 2;
