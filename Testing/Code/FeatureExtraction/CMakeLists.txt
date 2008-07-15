@@ -908,7 +908,6 @@ otbImageToCarvingPathFilterNew.cxx
 )
 SET(BasicFeatureExtraction_SRCS9
 otbImageToSIFTKeyPointSetFilterNew.cxx
-otbImageToSIFTKeyPointSetFilter.cxx
 otbImageToSIFTKeyPointSetFilterValid.cxx
 otbImageToSIFTKeyPointSetFilterDistanceMap.cxx
 otbImageToSIFTKeyPointSetFilterOutputImage.cxx
