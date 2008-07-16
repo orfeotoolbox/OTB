@@ -49,7 +49,14 @@ public:
   
   /** Destructor. */
   virtual ~FltkFilterWatcher();
-  
+
+
+  /** Callback method to show the EndEvent */
+  virtual void EndFilter()
+  {
+    m_Window->hide();
+  }
+
 protected:
 
   /** Callback method to show the ProgressEvent */
@@ -69,11 +76,7 @@ protected:
     m_Progress->show();
   }
 
-  /** Callback method to show the EndEvent */
-  virtual void EndFilter()
-  {
-    m_Window->hide();
-  }
+ 
 
 private:
   
