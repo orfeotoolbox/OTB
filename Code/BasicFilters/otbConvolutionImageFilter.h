@@ -34,6 +34,9 @@ namespace otb
  * The radius of the input filter is provided by the \code SetInput() \endcode 
  * method and the filters coefficients are given by an itk::Array passed to the 
  * \code SetFilter() \endcode method.
+ * 
+ * By default, the input filter is not normalized but it can be using the 
+ * NormalizeFilterOn() method.
  *
  * \sa Image
  * \sa Neighborhood
@@ -119,6 +122,14 @@ public:
     }
   itkGetConstReferenceMacro(Filter, ArrayType);
 
+  
+  /**
+   * Set/Get methods for the normalization of the filter
+  */
+  itkSetMacro(NormalizeFilter, bool);
+  itkGetMacro(NormalizeFilter, bool);
+  itkBooleanMacro(NormalizeFilter);
+  
   /** ConvolutionImageFilter needs a larger input requested region than
    * the output requested region.  As such, ConvolutionImageFilter needs
    * to provide an implementation for GenerateInputRequestedRegion()
@@ -158,6 +169,7 @@ private:
 
   InputSizeType m_Radius;
   ArrayType m_Filter;
+  bool m_NormalizeFilter;
   
 };
   

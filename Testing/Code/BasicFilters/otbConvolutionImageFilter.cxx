@@ -57,6 +57,7 @@ int otbConvolutionImageFilter( int argc, char * argv[] )
 
   convFilter->SetRadius(radius);
   convFilter->SetFilter(filterCoeffs);
+  convFilter->NormalizeFilterOn();
   
   convFilter->SetInput( reader->GetOutput() );
   writer->SetInput( convFilter->GetOutput() );

@@ -37,6 +37,7 @@ ConvolutionImageFilter<TInputImage, TOutputImage>
   m_Radius.Fill(1);
   m_Filter.SetSize(3*3);
   m_Filter.Fill(1);
+  m_NormalizeFilter = false;
 }
 
 template <class TInputImage, class TOutputImage>
@@ -124,9 +125,6 @@ ConvolutionImageFilter< TInputImage, TOutputImage>
     { 
     bit = itk::ConstNeighborhoodIterator<InputImageType>(m_Radius,
                                                     input, *fit);
-    //std::cout << m_Radius << std::endl;	    
-    //std::cout << bit << std::endl;	    
-    
 
     it = itk::ImageRegionIterator<OutputImageType>(output, *fit);
     bit.OverrideBoundaryCondition(&nbc);
@@ -138,13 +136,21 @@ ConvolutionImageFilter< TInputImage, TOutputImage>
 	sum = itk::NumericTraits<InputRealType>::Zero;
 	norm = itk::NumericTraits<InputRealType>::Zero;
 	for (i = 0; i < neighborhoodSize; ++i)
-	  {
+	{
 	    sum += static_cast<InputRealType>( bit.GetPixel(i)*m_Filter(i) );
 	    norm += static_cast<InputRealType>( m_Filter(i) );
-	  }
+	}
 	
 	// get the mean value
-	it.Set( static_cast<OutputPixelType>(sum / double(norm)) );
+        
+        if (m_NormalizeFilter)
+        {
+	  it.Set( static_cast<OutputPixelType>(sum / double(norm)) );
+        }
+        else
+        {
+          it.Set( static_cast<OutputPixelType>(sum));
+        }
 	
 	++bit;
 	++it;
