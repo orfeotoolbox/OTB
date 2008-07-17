@@ -29,8 +29,7 @@
 #include "otbLUMImageIOFactory.h"
 #include "otbBSQImageIOFactory.h"
 
-// Case for release 2.2.1
-#ifdef OTB_USE_JPEG2000
+#ifdef OTB_COMPILE_JPEG2000
 #include "otbJPEG2000ImageIOFactory.h"
 #endif
 
@@ -68,8 +67,7 @@ namespace otb
 	    // LUM format for OTB
             itk::ObjectFactoryBase::RegisterFactory( LUMImageIOFactory::New() );			
 
-#ifdef OTB_USE_JPEG2000
-	    // Case for release 2.2.1
+#ifdef OTB_COMPILE_JPEG2000
 	    // JPEG2000 : New format for OTB
             itk::ObjectFactoryBase::RegisterFactory( JPEG2000ImageIOFactory::New() );
 #endif

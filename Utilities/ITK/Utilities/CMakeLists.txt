@@ -25,10 +25,10 @@ SET(OPJ_PREFIX "itk")
 # In static, pb of linking between itkopenjpeg and otbopenjeg (method definided twice)
 # Case for release 2.2.1
 #-----------------------------
-IF(NOT OTB_USE_JPEG2000)
+IF(NOT OTB_COMPILE_JPEG2000)
   ITK_THIRD_PARTY_SUBDIR(OpenJPEG openjpeg)
   ITK_THIRD_PARTY_SUBDIR(GDCM gdcm)
-ENDIF(NOT OTB_USE_JPEG2000)
+ENDIF(NOT OTB_COMPILE_JPEG2000)
 
 
 #------------------------------------------------------------------------------

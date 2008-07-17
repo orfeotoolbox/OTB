@@ -88,10 +88,11 @@ SUBDIRS(libopenjpeg)
 
 #-----------------------------------------------------------------------------
 # For the documentation
-OPTION(BUILD_DOCUMENTATION "Build the doxygen documentation" OFF)
-IF(BUILD_DOCUMENTATION)
-  SUBDIRS(doc)
-ENDIF(BUILD_DOCUMENTATION)
+# Comment for 2.4.0
+#OPTION(BUILD_DOCUMENTATION "Build the doxygen documentation" OFF)
+#IF(BUILD_DOCUMENTATION)
+#  SUBDIRS(doc)
+#ENDIF(BUILD_DOCUMENTATION)
 
 #-----------------------------------------------------------------------------
 # For openjpeg team if they ever want Dart+CMake

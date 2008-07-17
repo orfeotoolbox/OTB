@@ -42,12 +42,11 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
 #  ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party/zlib-1.2.3
 #  ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party/zlib-1.2.3/contrib
 )
-# Case for release 2.2.1
-IF(OTB_USE_JPEG2000)
+IF(OTB_COMPILE_JPEG2000)
   SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE} 
         ${OTB_SOURCE_DIR}/Utilities/otbopenjpeg
         ${OTB_SOURCE_DIR}/Utilities/otbopenjpeg/libopenjpeg)
-ENDIF(OTB_USE_JPEG2000)
+ENDIF(OTB_COMPILE_JPEG2000)
 
 #-----------------------------------------------------------------------------
 # Include directories from the ossim build tree
@@ -197,12 +196,11 @@ SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
 #  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/third_party/zlib-1.2.3/contrib
 )
 
-# Case for release 2.2.1
-IF(OTB_USE_JPEG2000)
+IF(OTB_COMPILE_JPEG2000)
   SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE} 
         ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbopenjpeg
         ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbopenjpeg/libopenjpeg)
-ENDIF(OTB_USE_JPEG2000)
+ENDIF(OTB_COMPILE_JPEG2000)
 
 #For GDAL header file
 SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}

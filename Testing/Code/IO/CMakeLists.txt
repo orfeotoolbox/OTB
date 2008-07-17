@@ -31,10 +31,9 @@ SET(IO_TESTS10    ${CXX_TEST_PATH}/otbIOTests10)
 SET(IO_TESTS11    ${CXX_TEST_PATH}/otbIOTests11)
 SET(IO_TESTS12    ${CXX_TEST_PATH}/otbIOTests12)
 
-# Case for release 2.2.1
-IF(OTB_USE_JPEG2000 AND NOT OTB_USE_EXTERNAL_ITK)
+IF(OTB_COMPILE_JPEG2000)
    SET(IO_TESTS13    ${CXX_TEST_PATH}/otbIOTests13)
-ENDIF(OTB_USE_JPEG2000 AND NOT OTB_USE_EXTERNAL_ITK)
+ENDIF(OTB_COMPILE_JPEG2000)
 
 SET(IO_TESTS14    ${CXX_TEST_PATH}/otbIOTests14)
 SET(IO_TESTS15    ${CXX_TEST_PATH}/otbIOTests15)
@@ -1275,8 +1274,7 @@ ADD_TEST(ioTvossimElevManagerTest ${IO_TESTS12}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS13 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 
-# Case for release 2.2.1
-IF(OTB_USE_JPEG2000 AND NOT OTB_USE_EXTERNAL_ITK)
+IF(OTB_COMPILE_JPEG2000)
 
 # ---  JPEG2000 can read ---
 ADD_TEST(ioTuJ2KImageIOCanRead ${IO_TESTS13} 
@@ -1331,7 +1329,7 @@ ADD_TEST(ioTuJPEG2000ImageIOCanWrite ${IO_TESTS13}
          ${INPUTDATA}/toto.j2k
          )
 
-ENDIF(OTB_USE_JPEG2000 AND NOT OTB_USE_EXTERNAL_ITK)
+ENDIF(OTB_COMPILE_JPEG2000)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS14 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1499,13 +1497,12 @@ otbOssimElevManagerTest.cxx
 )
 
 
-# Case for release 2.2.1
-IF(OTB_USE_JPEG2000 AND NOT OTB_USE_EXTERNAL_ITK)
+IF(OTB_COMPILE_JPEG2000)
 SET(BasicIO_SRCS13
 otbJPEG2000ImageIOTestCanRead.cxx
 otbJPEG2000ImageIOTestCanWrite.cxx
 )
-ENDIF(OTB_USE_JPEG2000 AND NOT OTB_USE_EXTERNAL_ITK)
+ENDIF(OTB_COMPILE_JPEG2000)
 
 
 SET(BasicIO_SRCS14
@@ -1567,14 +1564,14 @@ ADD_EXECUTABLE(otbIOTests12 otbIOTests12.cxx ${BasicIO_SRCS12})
 TARGET_LINK_LIBRARIES(otbIOTests12 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 
 # Case for releae 2.2.1
-IF(OTB_USE_JPEG2000 AND NOT OTB_USE_EXTERNAL_ITK)
+IF(OTB_COMPILE_JPEG2000)
    IF(NOT BUILD_SHARED_LIBS)
       ADD_DEFINITIONS(-DOPJ_STATIC)
    ENDIF(NOT BUILD_SHARED_LIBS)
 
    ADD_EXECUTABLE(otbIOTests13 otbIOTests13.cxx ${BasicIO_SRCS13})
    TARGET_LINK_LIBRARIES(otbIOTests13 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf otbopenjpeg)
-ENDIF(OTB_USE_JPEG2000 AND NOT OTB_USE_EXTERNAL_ITK)
+ENDIF(OTB_COMPILE_JPEG2000)
 
 ADD_EXECUTABLE(otbIOTests14 otbIOTests14.cxx ${BasicIO_SRCS14})
 TARGET_LINK_LIBRARIES(otbIOTests14 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)

@@ -85,10 +85,6 @@ OPTION(OTB_USE_JPEG2000 "Use to support jpeg2000 image file format." ON)
 
 OPTION(OTB_USE_EXTERNAL_ITK "Use an outside build of ITK." OFF)
 IF(OTB_USE_EXTERNAL_ITK)
-  # Case for release 2.2.1
-  IF(OTB_USE_JPEG2000)
-        MESSAGE(STATUS "WARNING: Due to conflicting libraries, jpeg2000 support is disabled when using external ITK.")
-  ENDIF(OTB_USE_JPEG2000)
   FIND_PACKAGE(ITK)
   IF(ITK_FOUND)
         INCLUDE(${ITK_USE_FILE})
@@ -96,16 +92,36 @@ IF(OTB_USE_EXTERNAL_ITK)
         MESSAGE(FATAL_ERROR
                   "Cannot build OTB project without ITK.  Please set ITK_DIR or set OTB_USE_EXTERNAL_ITK OFF to use INTERNAL ITK set on OTB/Utilities repository.")
   ENDIF(ITK_FOUND)
-ELSE(OTB_USE_EXTERNAL_ITK)
-  # Add compiler option
-  IF(OTB_USE_JPEG2000)
-        ADD_DEFINITIONS(-DOTB_USE_JPEG2000 -DUSE_OPJ_DEPRECATED)
-  ENDIF(OTB_USE_JPEG2000)
+ENDIF(OTB_USE_EXTERNAL_ITK)
+
+
+# JPEG2000 specification control
+IF( OTB_USE_JPEG2000 )
+  SET(OTB_COMPILE_JPEG2000 1)
+  IF(OTB_USE_EXTERNAL_ITK)
+        MESSAGE(STATUS "WARNING: Due to conflicting libraries, jpeg2000 support is disabled when using external ITK.")
+        SET(OTB_COMPILE_JPEG2000 0)
+  ENDIF(OTB_USE_EXTERNAL_ITK)
+  IF(CMAKE_GENERATOR MATCHES "^Visual Studio 7$")
+        MESSAGE(STATUS "WARNING: In Visual Studio 7, jpeg2000 support is disable.")
+        SET(OTB_COMPILE_JPEG2000 0)
+  ENDIF(CMAKE_GENERATOR MATCHES "^Visual Studio 7$")
+  IF(CMAKE_GENERATOR MATCHES "^Visual Studio 7 .NET 2003$")
+        MESSAGE(STATUS "WARNING: In Visual Studio 7, jpeg2000 support is disable.")
+        SET(OTB_COMPILE_JPEG2000 0)
+  ENDIF(CMAKE_GENERATOR MATCHES "^Visual Studio 7 .NET 2003$")
+ENDIF( OTB_USE_JPEG2000 )
+# Check jpeg2000 support 
+IF(OTB_COMPILE_JPEG2000)
+  ADD_DEFINITIONS(-DOTB_COMPILE_JPEG2000 -DUSE_OPJ_DEPRECATED)
   IF(NOT BUILD_SHARED_LIBS)
         ADD_DEFINITIONS(-DOPJ_STATIC)
   ENDIF(NOT BUILD_SHARED_LIBS)
+ENDIF(OTB_COMPILE_JPEG2000)
 
-ENDIF(OTB_USE_EXTERNAL_ITK)
+
+
+
 
 #-----------------------------------------------------------------------------
 # Option for generate Visu tools !!!

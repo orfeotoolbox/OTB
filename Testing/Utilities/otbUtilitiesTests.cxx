@@ -40,11 +40,9 @@ REGISTER_TEST(otbSVMComposedKernelFunctorTest);
 REGISTER_TEST(ossimRadarSatSupport);
 REGISTER_TEST(itk2DScaleInvariantFeatureImageFilterTest);
 // register openJpeg tests if necessary
-#ifdef OTB_USE_JPEG2000 
-#ifndef OTB_USE_EXTERNAL_ITK
+#ifdef OTB_COMPILE_JPEG2000 
  REGISTER_TEST(openJpegEncoder);
  REGISTER_TEST(openJpegDecoder);
-#endif
 #endif
 }
 
