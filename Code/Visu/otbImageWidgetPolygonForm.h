@@ -22,7 +22,11 @@
 #include "itkIndex.h"
 #include "otbImageWidgetFormBase.h"
 #include "otbPolygon.h"
-#include "GL/glu.h"
+#  ifdef __APPLE__
+#    include <OpenGL/gl.h>
+#  else
+#    include <GL/gl.h>
+#  endif
 
 namespace otb
 {

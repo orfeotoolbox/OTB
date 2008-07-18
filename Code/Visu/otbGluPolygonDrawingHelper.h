@@ -19,7 +19,11 @@ PURPOSE.  See the above copyright notices for more information.
 #define _otbGluPolygonDrawingHelper_h
 
 #include <FL/gl.h>
-#include <GL/glu.h>
+#  ifdef __APPLE__
+#    include <OpenGL/gl.h>
+#  else
+#    include <GL/gl.h>
+#  endif
 
 #include "itkImageToImageFilter.h"
 #include "itkObject.h"
