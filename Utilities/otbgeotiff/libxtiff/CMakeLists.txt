@@ -3,7 +3,7 @@ PROJECT(libxtiff)
 FILE(GLOB libxtiff_SRCS "*.c")
 FILE(GLOB libxtiff_HDRS "*.h")
 ADD_LIBRARY(otbxtiff ${libxtiff_SRCS})
-TARGET_LINK_LIBRARIES(otbxtiff)
+TARGET_LINK_LIBRARIES(otbxtiff itktiff)
 
 INSTALL(TARGETS otbxtiff
 RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
