@@ -63,8 +63,8 @@ int generic_main_carto_geo(int argc, char* argv[], TMapProjection* mapProjection
 
     if(!parseResult->IsOptionPresent("--OTBTesting"))
     {
-      std::cout << std::setprecision(10) << "Cartographic Point  (x , y)  : (" << cartoPoint[0] << "," << cartoPoint[1] << ")" << std::endl;
-      std::cout << std::setprecision(10) << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," <<	geoPoint[0] << ")" << std::endl;
+      std::cout << std::setprecision(15) << "Cartographic Point  (x , y)  : (" << cartoPoint[0] << "," << cartoPoint[1] << ")" << std::endl;
+      std::cout << std::setprecision(15) << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," <<	geoPoint[0] << ")" << std::endl;
     }
     else
     {
@@ -73,8 +73,8 @@ int generic_main_carto_geo(int argc, char* argv[], TMapProjection* mapProjection
       ofstream outputTestFile;
       outputTestFile.open(outputTestFileName.c_str());
 					
-      outputTestFile << std::setprecision(10) << "Cartographic Point  (x , y)  : (" << cartoPoint[0] << "," << cartoPoint[1] << ")" << std::endl;
-      outputTestFile << std::setprecision(10) << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," <<	geoPoint[0] << ")" << std::endl;
+      outputTestFile << std::setprecision(15) << "Cartographic Point  (x , y)  : (" << cartoPoint[0] << "," << cartoPoint[1] << ")" << std::endl;
+      outputTestFile << std::setprecision(15) << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," <<	geoPoint[0] << ")" << std::endl;
 					
       outputTestFile.close();
     }
@@ -116,7 +116,7 @@ int main(int argc, char* argv[])
 
     parser->AddOption("--XCarto","X cartographic value of desired point","-x");
     parser->AddOption("--YCarto","Y cartographic value of desired point","-y");
-    parser->AddOptionNParams("--MapProjectionType","Type (UTM/LAMBERT/LAMBERT2/SINUS/ECKERT4/TRANSMERCATOR/MOLLWEID) and parameters of map projection used","-mapProj");				
+    parser->AddOptionNParams("--MapProjectionType","Type (UTM/LAMBERT/LAMBERT2/LAMBERT93/SINUS/ECKERT4/TRANSMERCATOR/MOLLWEID) and parameters of map projection used","-mapProj");				
 
     typedef otb::CommandLineArgumentParseResult ParserResultType;
     ParserResultType::Pointer  parseResult = ParserResultType::New();
@@ -184,6 +184,13 @@ int main(int argc, char* argv[])
 					
         return generic_main_carto_geo<Lambert2ProjectionType>(argc,argv, lambert2Projection, parseResult);
       }
+      else if ((typeMap == "LAMBERT93")&&(nbParams==0))
+      {
+        typedef otb::Lambert93InverseProjection Lambert93ProjectionType;
+        Lambert93ProjectionType::Pointer lambert93Projection = Lambert93ProjectionType::New();
+					
+        return generic_main_carto_geo<Lambert93ProjectionType>(argc,argv, lambert93Projection, parseResult);
+      }
       else if ((typeMap == "SINUS")&&(nbParams==2))
       {
         typedef otb::SinusoidalInverseProjection SinusoidalProjectionType;
@@ -222,7 +229,7 @@ int main(int argc, char* argv[])
       }
       else 
       {
-        itkGenericExceptionMacro(<< "TypeMap not recognized, choose one with (parameters) : UTM(2), LAMBERT(4), LAMBERT2(0), SINUS(2), ECKERT4(2), TRANSMERCATOR(3), MOLLWEID(2)");
+        itkGenericExceptionMacro(<< "TypeMap not recognized, choose one with (parameters) : UTM(2), LAMBERT(4), LAMBERT2(0), LAMBERT2(93), SINUS(2), ECKERT4(2), TRANSMERCATOR(3), MOLLWEID(2)");
       }
 					
     }
