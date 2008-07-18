@@ -33,6 +33,7 @@ namespace otb
   {
     this->SetNumberOfRequiredInputs(2);
     m_ConvolutionFilter = ConvolutionFilterType::New();
+    m_ConvolutionFilter->NormalizeFilterOn();
     m_DivideFilter = DivideFilterType::New();
     m_MultiplyFilter = MultiplyFilterType::New();
     
