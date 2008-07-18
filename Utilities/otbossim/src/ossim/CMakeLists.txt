@@ -23,8 +23,20 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
   ENDFOREACH(f)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
+IF(WIN32)
+  IF(NOT BORLAND)
+    IF(NOT CYGWIN)
+      IF(NOT MINGW)
+       SET(ossim_init_SRCS ${ossim_init_SRCS} ${ossim_dll_main_SRCS})
+      ENDIF(NOT MINGW)
+    ENDIF(NOT CYGWIN)
+  ENDIF(NOT BORLAND)
+ENDIF(WIN32)
+
 INCLUDE_DIRECTORIES(${OTB_BINARY_DIR}/Utilities/otbgeotiff/)
 
+# For alls platform (except MAC):
+IF( NOT APPLE )
 ADD_LIBRARY(otbossimKBool ${ossim_kbool_SRCS})
 
 ADD_LIBRARY(otbossimMatrix ${ossim_matrix_SRCS})
@@ -62,15 +74,6 @@ TARGET_LINK_LIBRARIES(otbossimElevation otbossimSupportData)
 ADD_LIBRARY(otbossimProjectionImaging ${ossim_imaging_SRCS} ${ossim_projection_SRCS} ${ossim_parallel_SRCS})
 TARGET_LINK_LIBRARIES(otbossimProjectionImaging otbossimElevation itktiff itkjpeg8 itkjpeg12 itkjpeg16)
 
-IF(WIN32)
-  IF(NOT BORLAND)
-    IF(NOT CYGWIN)
-      IF(NOT MINGW)
-       SET(ossim_init_SRCS ${ossim_init_SRCS} ${ossim_dll_main_SRCS})
-      ENDIF(NOT MINGW)
-    ENDIF(NOT CYGWIN)
-  ENDIF(NOT BORLAND)
-ENDIF(WIN32)
 
 ADD_LIBRARY(otbossim ${ossim_init_SRCS})
 TARGET_LINK_LIBRARIES(otbossim otbossimProjectionImaging)
@@ -140,3 +143,41 @@ INSTALL(TARGETS otbossim
 RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
 LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
 ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
+
+ELSE( NOT APPLE )
+
+ADD_LIBRARY(otbossimBase 
+${ossim_base_SRCS}
+${ossim_kbool_SRCS}
+${ossim_matrix_SRCS}
+${ossim_vec_SRCS}
+${ossim_vpfutil_SRCS}
+${ossim_plugin_SRCS}
+)
+TARGET_LINK_LIBRARIES(otbossimBase)
+
+ADD_LIBRARY(otbossim 
+${ossim_init_SRCS}
+${ossim_font_SRCS}
+${ossim_support_data_SRCS}
+${ossim_projection_SRCS}
+${ossim_imaging_SRCS} 
+${ossim_parallel_SRCS} 
+${ossim_elevation_SRCS}
+)
+
+TARGET_LINK_LIBRARIES(otbossim otbossimBase otbgeotiff otbxtiff itktiff itkjpeg8 itkjpeg12 itkjpeg16)
+
+INSTALL(TARGETS otbossimBase
+RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
+LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
+ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
+
+INSTALL(TARGETS otbossim
+RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
+LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
+ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
+
+
+
+ENDIF( NOT APPLE )
