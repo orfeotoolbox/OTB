@@ -1,6 +1,23 @@
-#ifndef _itkBSplineDecompositionImageFilter_txx
-#define _itkBSplineDecompositionImageFilter_txx
-#include "itkBSplineDecompositionImageFilter.h"
+/*=========================================================================
+
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+#ifndef _otbBSplineDecompositionImageFilter_txx
+#define _otbBSplineDecompositionImageFilter_txx
+#include "otbBSplineDecompositionImageFilter.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
