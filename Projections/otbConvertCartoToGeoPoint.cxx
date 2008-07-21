@@ -63,8 +63,8 @@ int generic_main_carto_geo(int argc, char* argv[], TMapProjection* mapProjection
 
     if(!parseResult->IsOptionPresent("--OTBTesting"))
     {
-      std::cout << std::setprecision(15) << "Cartographic Point  (x , y)  : (" << cartoPoint[0] << "," << cartoPoint[1] << ")" << std::endl;
-      std::cout << std::setprecision(15) << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," <<	geoPoint[0] << ")" << std::endl;
+      std::cout << std::setprecision(10) << "Cartographic Point  (x , y)  : (" << cartoPoint[0] << "," << cartoPoint[1] << ")" << std::endl;
+      std::cout << std::setprecision(10) << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," <<	geoPoint[0] << ")" << std::endl;
     }
     else
     {
@@ -73,8 +73,8 @@ int generic_main_carto_geo(int argc, char* argv[], TMapProjection* mapProjection
       ofstream outputTestFile;
       outputTestFile.open(outputTestFileName.c_str());
 					
-      outputTestFile << std::setprecision(15) << "Cartographic Point  (x , y)  : (" << cartoPoint[0] << "," << cartoPoint[1] << ")" << std::endl;
-      outputTestFile << std::setprecision(15) << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," <<	geoPoint[0] << ")" << std::endl;
+      outputTestFile << std::setprecision(10) << "Cartographic Point  (x , y)  : (" << cartoPoint[0] << "," << cartoPoint[1] << ")" << std::endl;
+      outputTestFile << std::setprecision(10) << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," <<	geoPoint[0] << ")" << std::endl;
 					
       outputTestFile.close();
     }
