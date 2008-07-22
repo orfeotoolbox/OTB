@@ -249,6 +249,7 @@ int main(int argc, char * argv[])
     typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
   
     WriterType::Pointer writer = WriterType::New();
+    writer->SetInput(outVectorData);
     writer->SetFileName(argv[2]);
     writer->Update();
 
