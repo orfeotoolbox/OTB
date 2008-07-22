@@ -9,6 +9,24 @@ CHECK_INCLUDE_FILE("dbmalloc.h" CMAKE_HAVE_DBMALLOC_H)
 CHECK_INCLUDE_FILE("malloc.h" CMAKE_HAVE_MALLOC_H)
 CHECK_INCLUDE_FILE("dlfcn.h" CMAKE_HAVE_DLFCN_H)
 
+# Cf OSSIM configurations : "nmake.opt" for Visual and "configure" for MinGW (and normaly Cygwin)
+IF(WIN32)
+  IF(NOT BORLAND)
+    IF(NOT CYGWIN)
+      # For MinGW and Visual platforms
+      IF(BUILD_SHARED_LIBS)
+        ADD_DEFINITIONS(-DOSSIMMAKINGDLL)
+      ENDIF(BUILD_SHARED_LIBS)
+      # For Visual
+      IF(NOT MINGW)  
+        SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /nologo /EHsc ")
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /nologo /EHsc ")
+      ENDIF(NOT MINGW)  
+    ENDIF(NOT CYGWIN)
+  ENDIF(NOT BORLAND)
+ENDIF(WIN32)
+
+
 # itkjpeg headers are not generated and put into the include dir automatically. 
 # Therefore we have to do it ourselves.
 
