@@ -12,7 +12,8 @@ OTB-v.2.4.0 - Changes since version 2.2.0 (2008/07/24)
 
 *BasicFilters:
 
-	- Added pixel size matching in otbSpectralAngleDistanceImageFilter.
+	- Added pixel size matching in otbSpectralAngleDistanceImageFilter
+	- Modification of otb::ConvolutionImageFilter class to allow the use of non-normalized convolution filters
 
 *Platforms:
 
@@ -24,6 +25,31 @@ OTB-v.2.4.0 - Changes since version 2.2.0 (2008/07/24)
         - Added an supervised image classification application (otbSupervisedClassification)
         - Added an orthorectifcation application (otbOrthoRectifAppli)
         - Added an orthofusion application (otbOrthoFusionAppli)
+
+*Markov:
+	Added full Markov framework for segmentation, restauration and filtering
+	Added related classes:
+	- otb::MarkovRandomFieldFilter
+	- otb::MRFEnergyEdgeFidelity
+	- otb::MRFEnergyGaussianClassification
+	- otb::MRFEnergyGaussian
+	- otb::MRFEnergy
+	- otb::MRFEnergyPotts
+	- otb::MRFOptimizer
+	- otb::MRFOptimizerICM
+	- otb::MRFOptimizerMetropolis
+	- otb::MRFSampler
+	- otb::MRFSamplerMAP
+	- otb::MRFSamplerRandom
+	- otb::MRFSamplerRandomMAP
+	Added related examples:
+	- MarkovClassification1Example
+	- MarkovClassification2Example
+	- MarkovRegularizationExample
+	- MarkovRestaurationExample
+
+*Projections
+	Added Lambert 93 cartographic projection with otb::Lambert93Projection class
 
 
 OTB-v.2.2.0 - Changes since version 2.0.0 (2008/05/29)
