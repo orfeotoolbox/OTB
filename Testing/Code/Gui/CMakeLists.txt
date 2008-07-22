@@ -32,6 +32,14 @@ INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 # ${TIFF_LIBRARY}
 
+# To suppress "ld: cycle in dylib re-exports with /usr/X11R6/lib/libGL.dylib" error on APPLE configuration 
+IF(APPLE)
+      FOREACH(c "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
+        SET(CMAKE_EXE_LINKER_FLAGS${c} "${CMAKE_EXE_LINKER_FLAGS${c}} -Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib")
+      ENDFOREACH(c)
+ENDIF(APPLE)
+
+
 ADD_EXECUTABLE(otbGuiTests otbGuiTests.cxx ${Gui_SRCS})
 TARGET_LINK_LIBRARIES(otbGuiTests OTBIO OTBGui OTBVisu OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon fltk)
 
