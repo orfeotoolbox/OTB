@@ -1,8 +1,8 @@
-OTB-v.2.2.1 - Changes since version 2.0.0 (2008/06/13)
+OTB-v.2.4.0 - Changes since version 2.2.0 (2008/07/24)
 -----------------------------------------
 
 	- Added OTB_DISABLE_CXX_EXAMPLES_TESTING : allows to generate or not only examples testing
-	- Added OTB_USE_JPEG2000 : supports teh jpeg2000 files.	
+	- Added OTB_USE_JPEG2000 : supports the jpeg2000 files.	
 
 *Common:
 
@@ -14,10 +14,16 @@ OTB-v.2.2.1 - Changes since version 2.0.0 (2008/06/13)
 
 	- Added pixel size matching in otbSpectralAngleDistanceImageFilter.
 
-
 *Platforms:
 
 	- Fixed compilation problems using external FLTK version < 1.1.9 under fedora unix distribution.
+        - Mac OS X 10.5 supported
+
+*Applications:
+
+        - Added an supervised image classification application (otbSupervisedClassification)
+        - Added an orthorectifcation application (otbOrthoRectifAppli)
+        - Added an orthofusion application (otbOrthoFusionAppli)
 
 
 OTB-v.2.2.0 - Changes since version 2.0.0 (2008/05/29)
@@ -397,7 +403,7 @@ OTB-v.1.4.0 - Changes since version 1.2.1
 
 	- Added a composite filter to perform road extraction.
 
-* ChangeDetection:
+*ChangeDetection:
   
     - Added the Kullback-Leibler distance change detector with optimized algorithm.
 
