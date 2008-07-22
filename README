@@ -19,16 +19,17 @@ Make sure that you have downloaded the source code for:
        - CMake (http://www.cmake.org)
        - GDAL (http://www.gdal.org/)
        - Fltk (http://www.fltk.org)
-            
 
 Installation on Linux/Unix platforms
 ------------------------------------
 
+NB: On some linux plateforme, you may (and should) use the official distribution packages for gdal, cmake and fltk
+
 1. Install GDAL:
       cd INSTALL_DIR
-      gunzip gdal.1.4.2.tar.gz
-      tar xvf gdal.1.4.2.tar
-      cd gdal.1.4.2
+      gunzip gdal.1.5.1.tar.gz
+      tar xvf gdal.1.5.1.tar
+      cd gdal.1.5.1
       ./configure --prefix=INSTALL_DIR
       make
       make install
@@ -66,11 +67,11 @@ Installation on Linux/Unix platforms
 4. Install OTB
 
       cd INSTALL_DIR
-      gunzip OrfeoToolbox-2.0.0.tgz
-      tar xvf OrfeoToolbox-2.0.0.tar
+      gunzip OrfeoToolbox-2.4.0.tgz
+      tar xvf OrfeoToolbox-2.4.0.tar
       mkdir OTB-Binary
       cd OTB-Binary
-      ccmake ../OrfeoToolbox-2.0.0
+      ccmake ../OrfeoToolbox-2.4.0
       --> follow the CMake instructions, in particular:
 	  --> set BUILD_EXAMPLES to ON within CMake
 	  --> set BUILD_SHARED_LIBS to OFF within CMake
