@@ -10,13 +10,16 @@ CHECK_INCLUDE_FILE("malloc.h" CMAKE_HAVE_MALLOC_H)
 CHECK_INCLUDE_FILE("dlfcn.h" CMAKE_HAVE_DLFCN_H)
 
 # Cf OSSIM configurations : "nmake.opt" for Visual and "configure" for MinGW (and normaly Cygwin)
+# For MinGW platforms
+IF(MINGW)  
+  IF(BUILD_SHARED_LIBS)
+    ADD_DEFINITIONS(-DOSSIMMAKINGDLL)
+  ENDIF(BUILD_SHARED_LIBS)
+ENDIF(MINGW)  
+
 IF(WIN32)
   IF(NOT BORLAND)
     IF(NOT CYGWIN)
-      # For MinGW and Visual platforms
-      IF(BUILD_SHARED_LIBS)
-        ADD_DEFINITIONS(-DOSSIMMAKINGDLL)
-      ENDIF(BUILD_SHARED_LIBS)
       # For Visual
       IF(NOT MINGW)  
         SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /nologo /EHsc ")
