@@ -1287,7 +1287,7 @@ ADD_TEST(ioTuJP2ImageIOCanRead ${IO_TESTS13}
          ${IMAGEDATA}/JPEG2000/QB_multicomp.jpx
          )
 
-ADD_TEST(ioTuVectorImageFileReaderWriterJ2K2TIF ${IO_TESTS9} 
+ADD_TEST(ioTvVectorImageFileReaderWriterJ2K2TIF ${IO_TESTS9} 
 --compare-image ${TOL}  ${BASELINE}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
                         ${TEMP}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
          otbVectorImageFileReaderWriterTest
@@ -1295,7 +1295,7 @@ ADD_TEST(ioTuVectorImageFileReaderWriterJ2K2TIF ${IO_TESTS9}
 	 ${TEMP}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
          )
 
-ADD_TEST(ioTuImageFileReaderWriterJ2K2TIF ${IO_TESTS2} 
+ADD_TEST(ioTvImageFileReaderWriterJ2K2TIF ${IO_TESTS2} 
 --compare-image ${TOL}  ${BASELINE}/ioTvImageFileReaderWriterJ2K2TIFOutput.tif
                         ${TEMP}/ioTvImageFileReaderWriterJ2K2TIFOutput.tif
          otbDoubleImageIOTest
@@ -1304,7 +1304,7 @@ ADD_TEST(ioTuImageFileReaderWriterJ2K2TIF ${IO_TESTS2}
         )
 
 #NOTE: we are comparing with the kakadu output in raw format.
-ADD_TEST(ioTuVectorImageFileReaderWriterJP22TIF ${IO_TESTS9} 
+ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF ${IO_TESTS9} 
 --compare-image ${TOL}  ${BASELINE}/ioTvVectorImageFileReaderWriterJP22TIFOutput
                         ${TEMP}/ioTvVectorImageFileReaderWriterJP22TIFOutput.tif
          otbVectorImageFileReaderWriterTest
@@ -1313,7 +1313,7 @@ ADD_TEST(ioTuVectorImageFileReaderWriterJP22TIF ${IO_TESTS9}
          )
 
 
-ADD_TEST(ioTuImageFileReaderWriterJP22TIF ${IO_TESTS2} 
+ADD_TEST(ioTvImageFileReaderWriterJP22TIF ${IO_TESTS2} 
 --compare-image ${TOL}  ${BASELINE}/ioTvImageFileReaderWriterJP22TIFOutput.tif
                         ${TEMP}/ioTvImageFileReaderWriterJP22TIFOutput.tif
          otbDoubleImageIOTest
