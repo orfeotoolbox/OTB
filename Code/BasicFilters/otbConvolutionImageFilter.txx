@@ -174,6 +174,6 @@ ConvolutionImageFilter<TInputImage, TOutput>
 
 }
 
-} // end namespace itk
+} // end namespace otb
 
 #endif
