@@ -2,7 +2,7 @@ OTB-v.2.4.0 - Changes since version 2.2.0 (2008/07/24)
 -----------------------------------------
 
 	- Added OTB_DISABLE_CXX_EXAMPLES_TESTING : allows to generate or not only examples testing
-	- Added OTB_USE_JPEG2000 : supports the jpeg2000 files.	
+	- Added OTB_USE_JPEG2000 : experimental support for jpeg2000 files.	
 
 *Common:
 
