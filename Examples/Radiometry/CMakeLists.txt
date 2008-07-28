@@ -91,8 +91,6 @@ ADD_TEST(AtmosphericCorrectionSequencementTest ${EXE_TESTS}
 
 
 
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
-
 ADD_EXECUTABLE(otbRadiometryExamplesTests otbRadiometryExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbRadiometryExamplesTests OTBBasicFilters OTBCommon OTBDisparityMap OTBRadiometry OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion  gdal ITKIO ITKAlgorithms ITKStatistics ITKNumerics ITKCommon )
 

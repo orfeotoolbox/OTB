@@ -516,7 +516,6 @@ ADD_TEST(RationalQuotientResampleImageFilterTest ${EXE_TESTS}
 	2 3
 )
 
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbFilteringExamplesTests otbFilteringExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbFilteringExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)

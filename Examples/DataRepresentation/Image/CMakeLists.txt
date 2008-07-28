@@ -98,8 +98,6 @@ ADD_TEST(Image6Test ${EXE_TESTS}
 )
 
 
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
-
 ADD_EXECUTABLE(otbImageExamplesTests otbImageExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbImageExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 

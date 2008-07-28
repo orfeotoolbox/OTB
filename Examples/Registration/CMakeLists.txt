@@ -556,8 +556,6 @@ ADD_TEST(ImageRegistration5Cas2ExampleTest ${EXE_TESTS}
 )
 
 
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
-
 ADD_EXECUTABLE(otbRegistrationExamplesTests otbRegistrationExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbRegistrationExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKNumerics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 

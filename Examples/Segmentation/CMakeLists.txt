@@ -371,8 +371,6 @@ ADD_TEST(LabelizeNeighborhoodConnectedImageFilterTest ${EXE_TESTS}
 )
 
 
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
-
 ADD_EXECUTABLE(otbSegmentationExamplesTests otbSegmentationExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbSegmentationExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 

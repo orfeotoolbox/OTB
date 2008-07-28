@@ -34,8 +34,6 @@ ADD_TEST(SimpleDisparityMapEstimationExampleTest ${EXE_TESTS}
 )
 
 
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
-
 ADD_EXECUTABLE(otbDisparityMapExamplesTests otbDisparityMapExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbDisparityMapExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 

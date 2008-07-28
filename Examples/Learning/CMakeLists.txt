@@ -173,8 +173,6 @@ ADD_TEST(SVMGenericKernelImageClassificationExampleTest ${EXE_TESTS}
 )
 
 
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
-
 ADD_EXECUTABLE(otbLearningExamplesTests otbLearningExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbLearningExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 

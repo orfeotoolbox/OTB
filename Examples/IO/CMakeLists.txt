@@ -140,7 +140,6 @@ ADD_TEST(DEMToImageGeneratorTest ${EXE_TESTS}
 	  ${INPUTDATA}/DEM_srtm
          )
  
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbIOExamplesTests otbIOExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbIOExamplesTests otbossim OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBProjections gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon dxf otbossim)

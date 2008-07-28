@@ -193,8 +193,6 @@ ADD_TEST(ShapedNeighborhoodIterators2Test ${EXE_TESTS}
 )
 
 
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
-
 ADD_EXECUTABLE(otbIteratorsExamplesTests otbIteratorsExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbIteratorsExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 

@@ -119,8 +119,6 @@ ADD_TEST(KullbackLeiblerProfileChDetTest ${EXE_TESTS}
 	5 51 1 12 24
 )
 
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
-
 ADD_EXECUTABLE(otbChangeDetectionExamplesTests otbChangeDetectionExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbChangeDetectionExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 

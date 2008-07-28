@@ -279,8 +279,6 @@ ADD_TEST(ScaleInvariantFeatureImageFilterTest ${EXE_TESTS2}
 	1 10 0.5 0
 )
 
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
-
 ADD_EXECUTABLE(otbFeatureExtractionExamplesTests1 otbFeatureExtractionExamplesTests1.cxx)
 TARGET_LINK_LIBRARIES(otbFeatureExtractionExamplesTests1 gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 

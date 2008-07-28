@@ -46,8 +46,6 @@ ADD_TEST(DEMToRainbowExampleTest ${EXE_TESTS}
     6.5 45.5 500 500 0.002 -0.002 ${OTB_SOURCE_DIR}/Examples/Data/DEM_srtm
 )
 
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
-
 ADD_EXECUTABLE(otbBasicFiltersExamplesTests otbBasicFiltersExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbBasicFiltersExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 

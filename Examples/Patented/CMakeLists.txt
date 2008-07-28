@@ -35,8 +35,6 @@ ADD_TEST(HybridSegmentationFuzzyVoronoiTest ${EXE_TESTS}
 )
 
 
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
-
 ADD_EXECUTABLE(otbPatentedExamplesTests otbPatentedExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbPatentedExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 

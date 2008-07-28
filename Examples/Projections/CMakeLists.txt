@@ -67,8 +67,6 @@ ADD_TEST(OrthoRectificationExampleXSTest ${EXE_TESTS}
 	
 )
 
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
-
 ADD_EXECUTABLE(otbProjectionsExamplesTests otbProjectionsExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbProjectionsExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKNumerics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion OTBProjections)
 
