@@ -90,10 +90,12 @@ namespace otb
       typedef Fl_Output * FlOutputPointerType;
 
       typedef typename ScrollWidgetType::ImageType ImageType;
+      typedef typename ScrollWidgetType::OverlayImageType OverlayImageType;
       typedef typename ScrollWidgetType::TransferFunctionListType TransferFunctionListType;
       typedef typename TransferFunctionListType::Pointer TransferFunctionListPointerType;
       typedef typename ScrollWidgetType::AffineTransferFunctionType AffineTransferFunctionType;
       typedef typename ImageType::Pointer ImagePointerType;
+      typedef typename OverlayImageType::Pointer OverlayImagePointerType;
       typedef typename ImageType::IndexType IndexType;
       typedef typename ImageType::PointType PointType;
       typedef typename ImageType::SizeType SizeType;
@@ -131,6 +133,8 @@ namespace otb
       /// Definition of streaming shrink image filter
       typedef otb::StreamingShrinkImageFilter<ImageType,ImageType> ShrinkFilterType;
       typedef typename ShrinkFilterType::Pointer ShrinkFilterPointerType;
+      typedef otb::StreamingShrinkImageFilter<OverlayImageType,OverlayImageType> OverlayShrinkFilterType;
+      typedef typename OverlayShrinkFilterType::Pointer OverlayShrinkFilterPointerType;
 
       /// Definition of box form to represent displayed regions.
       typedef otb::ImageWidgetBoxForm BoxType;
@@ -225,11 +229,8 @@ namespace otb
       /** Set the input image (Image version) */
       virtual void SetImage(SingleImageType * img);
 
-      /** Set the input image overlay (VectorImage version) */
-      virtual void SetImageOverlay(ImageType * img);
-
-      /** Set the input image overlay (Image version) */
-      virtual void SetImageOverlay(SingleImageType * img);
+      /** Set the input image overlay (VectorImage of unsigned char image with at least 3 channels) */
+      virtual void SetImageOverlay(OverlayImageType * img);
   
       /** Get the shrinked image if scroll is activated and else the input image */
       virtual ImageType * GetShrinkedImage(void);
@@ -426,7 +427,7 @@ namespace otb
       /// The image to view
       ImagePointerType m_InputImage;
       /// The image overlay
-      ImagePointerType m_InputImageOverlay;
+      OverlayImagePointerType m_InputImageOverlay;
       /// true if scroll widget is used
       bool m_UseScroll;
       /// Show the histograms
@@ -443,7 +444,7 @@ namespace otb
       FlOutputPointerType m_PixLocOutput;
       /// Pointer to the shrink filters
       ShrinkFilterPointerType m_Shrink;
-      ShrinkFilterPointerType m_ShrinkOverlay;
+      OverlayShrinkFilterPointerType m_ShrinkOverlay;
  
       /// The shrink factor 
       unsigned int m_ShrinkFactor;

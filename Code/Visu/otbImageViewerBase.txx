@@ -316,7 +316,7 @@ namespace otb
 
 	if(m_UseImageOverlay)
 	  {
-	    m_ShrinkOverlay = ShrinkFilterType::New();
+	    m_ShrinkOverlay = OverlayShrinkFilterType::New();
 	    m_ShrinkOverlay->SetInput(m_InputImageOverlay);
 	    m_ShrinkOverlay->SetShrinkFactor(m_ShrinkFactor);
 	    typedef otb::FltkFilterWatcher WatcherType;
@@ -370,9 +370,9 @@ namespace otb
   template <class TPixel, class TLabel>
   void
   ImageViewerBase<TPixel,TLabel>
-  ::SetImageOverlay(ImageType * img)
+  ::SetImageOverlay(OverlayImageType * img)
   {
-    m_InputImageOverlay = dynamic_cast<ImageType *>( img );
+    m_InputImageOverlay = dynamic_cast<OverlayImageType *>( img );
   } 
 
 
@@ -402,19 +402,6 @@ namespace otb
     m_VectorCastFilter->UpdateOutputInformation();
     m_InputImage = m_VectorCastFilter->GetOutput();
   } 
-
-  // /// Set the image overlay (Image version)
-  template <class TPixel, class TLabel>
-  void
-  ImageViewerBase<TPixel,TLabel>
-  ::SetImageOverlay(SingleImageType * img)
-  {
-    m_VectorCastFilterOverlay = VectorCastFilterType::New();
-    m_VectorCastFilterOverlay->SetInput(img);
-    m_VectorCastFilterOverlay->UpdateOutputInformation();
-    m_InputImageOverlay = m_VectorCastFilterOverlay->GetOutput();
-  }
-  
 
   /// Show the app
   template <class TPixel, class TLabel>

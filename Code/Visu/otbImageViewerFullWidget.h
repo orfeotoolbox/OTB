@@ -56,7 +56,8 @@ class ITK_EXPORT ImageViewerFullWidget
   typedef TLabel LabelType;
   typedef typename Superclass::IndexType IndexType;
   typedef typename Superclass::SizeType  SizeType;
-  typedef typename Superclass::ImageType ImageType;
+ typedef typename Superclass::ImageType ImageType;
+ typedef typename Superclass::OverlayImageType OverlayImageType;
   
   typedef ImageViewerBase<PixelType, LabelType>  ParentType;
   typedef ParentType*                    ParentPointerType;

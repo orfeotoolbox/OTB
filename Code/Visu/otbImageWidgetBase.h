@@ -58,6 +58,10 @@ class ImageWidgetBase
     typedef typename ImageType::IndexType IndexType;
     typedef typename ImageType::RegionType RegionType;
 
+    /// TODO: the type of this image should be templated
+    typedef otb::VectorImage<unsigned char,2> OverlayImageType;
+    typedef typename OverlayImageType::Pointer OverlayImagePointerType;
+
     /** View model */
     enum ViewModelType{GRAYSCALE,COMPLEX_MODULUS,COMPLEX_PHASE,RGB};
 
@@ -124,11 +128,11 @@ class ImageWidgetBase
     /** Set the input overlay image.
      * \param image The image to view.
      */
-    void SetInputOverlay(ImageType* image);
+    void SetInputOverlay(OverlayImageType* image);
     /** Get the input overlay image.
      * \return The image to view.
      */
-    ImageType * GetInputOverlay(void);
+    OverlayImageType * GetInputOverlay(void);
 
     /** Set the input overlay form list.
      * \param formList The form list to view.
@@ -221,7 +225,7 @@ class ImageWidgetBase
      /** The image Overlay opacity */
      unsigned char  m_ImageOverlayOpacity;
      /** Pointer to the overlay image */
-     ImagePointerType m_ImageOverlay;
+     OverlayImagePointerType m_ImageOverlay;
      /** OpenGl image overlay buffer */
      unsigned char * m_OpenGlImageOverlayBuffer;
      /** Max value for normalization */

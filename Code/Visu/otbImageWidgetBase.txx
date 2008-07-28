@@ -198,7 +198,7 @@ ImageWidgetBase<TPixel>
 template <class TPixel>
 void
 ImageWidgetBase<TPixel>
-::SetInputOverlay(ImageType * image)
+::SetInputOverlay(OverlayImageType * image)
 {
   m_ImageOverlay=image;
 }
@@ -230,7 +230,7 @@ ImageWidgetBase<TPixel>
  */
 template <class TPixel>
 typename ImageWidgetBase<TPixel>
-::ImageType *
+::OverlayImageType *
 ImageWidgetBase<TPixel>
 ::GetInputOverlay(void)
 {
@@ -440,7 +440,7 @@ ImageWidgetBase<TPixel>
   //otbMsgDebugMacro(<<"New buffer lenght: "<<bufferLenght);
   m_OpenGlImageOverlayBuffer = new unsigned char[bufferLenght];
 
- typedef itk::ImageRegionConstIterator<ImageType> IteratorType;
+ typedef itk::ImageRegionConstIterator<OverlayImageType> IteratorType;
 //   m_ImageOverlay->SetNumberOfComponentsPerPixel(3);
   IteratorType it(m_ImageOverlay,m_BufferedRegion);
   unsigned int index = 0;
