@@ -185,7 +185,8 @@ int main( int argc, char * argv[] )
 
   //  Software Guide : BeginLatex
   //
-  //  Use the Gaussian gradient filter compute the gradient direction and intensity
+  //  Use the Gaussian gradient filter compute the gradient in x and y direction
+  // respectively
   // (\doxygen{itk}{GradientRecursiveGaussianImageFilter}).
   //
   //  Software Guide : EndLatex
