@@ -284,6 +284,10 @@ SVM (see \cite{allwein00reducing,weston98multiclass}, and the
 comparison made by \cite{hsu01comparison}), but they are
 not used in our system.
 
+You have to be aware that to achieve better convergence of the algorithm it is 
+strongly advised to normalize feature vector components in the $[-1;1]$ 
+interval.
+
 For problems with $N > 2$ classes, one can choose either to train $N$
 SVM (one class against all the others), or to train $N\times(N-1)$ SVM
 (one class against each of the others). In the second approach, which
