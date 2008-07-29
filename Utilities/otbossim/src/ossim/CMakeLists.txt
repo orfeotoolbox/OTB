@@ -81,7 +81,6 @@ ${ossim_vec_SRCS}
 ${ossim_vpfutil_SRCS}
 ${ossim_plugin_SRCS}
 )
-TARGET_LINK_LIBRARIES(otbossimBase)
 
 ADD_LIBRARY(otbossimBase2 
 ${ossim_font_SRCS}
@@ -89,7 +88,7 @@ ${ossim_support_data_SRCS}
 ${ossim_projection_SRCS}
 ${ossim_elevation_SRCS}
 )
-TARGET_LINK_LIBRARIES(otbossimBase2 otbossimBase)
+
 
 ADD_LIBRARY(otbossim 
 ${ossim_init_SRCS}
@@ -97,6 +96,8 @@ ${ossim_imaging_SRCS}
 ${ossim_parallel_SRCS} 
 )
 
+TARGET_LINK_LIBRARIES(otbossimBase otbossimBase2 otbossim)
+TARGET_LINK_LIBRARIES(otbossimBase2 otbossimBase otbossim)
 TARGET_LINK_LIBRARIES(otbossim otbossimBase2 otbossimBase otbgeotiff otbxtiff itktiff itkjpeg8 itkjpeg12 itkjpeg16)
 
 INSTALL(TARGETS otbossimBase
