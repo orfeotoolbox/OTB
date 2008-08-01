@@ -9,9 +9,8 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Some parts of this code are covered by the GET copyright. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
   See GETCopyright.txt for details.
-
 
      This software is distributed WITHOUT ANY WARRANTY; without even 
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
@@ -21,19 +20,29 @@
 #ifndef __otbKullbackLeiblerDistanceImageFilter_txx
 #define __otbKullbackLeiblerDistanceImageFilter_txx
 
-#include "otbKullbackLeiblerDistanceImageFilter.h"
-#include "otbMacro.h"
+#include <vector>
 
+#include "itkImageRegionConstIterator.h"
+
+#include "otbMacro.h"
 
 namespace otb {
 
 /* *******************************************************************
- *	Classe CumulantsForEdgeworth
+ *	CumulantsForEdgeworth
  *********************************************************************
  */
-template <class TInput>
-CumulantsForEdgeworth<TInput>
+template < class TInput >
+CumulantsForEdgeworth< TInput >
 ::CumulantsForEdgeworth ( const TInput & input ) 
+{
+	MakeSumAndMoments( input );
+	MakeCumulants();
+}
+
+template < class TInput >
+CumulantsForEdgeworth< TInput >
+::CumulantsForEdgeworth ( const itk::Image< typename TInput::ImageType::PixelType, 1 > * input )
 {
 	MakeSumAndMoments( input );
 	MakeCumulants();
@@ -41,11 +50,11 @@ CumulantsForEdgeworth<TInput>
 
 /* ========================== Divergence de KL ======================= */
 
-template <class TInput> 
-template <class TInput2>
+template < class TInput >
+template < class TInput2 >
 double 
-CumulantsForEdgeworth<TInput>
-::KL_divergence ( const CumulantsForEdgeworth<TInput2> & cumulants ) 
+CumulantsForEdgeworth< TInput >
+::Divergence ( const CumulantsForEdgeworth<TInput2> & cumulants ) 
 { 
 	double cum1 = GetMean(); 
 	double cum2 = GetVariance();
@@ -60,7 +69,7 @@ CumulantsForEdgeworth<TInput>
 	double tilde_cum3 = cumulants.GetSkewness();
 	double tilde_cum4 = cumulants.GetKurtosis();
 
-	double tilde_cum2_2 = tilde_cum2 * tilde_cum2;
+	double tilde_cum2_2 = cum2 * cum2;
 	double tilde_cum2_3 = cum2 * tilde_cum2_2;
 	double tilde_cum2_6 = tilde_cum2_3 * tilde_cum2_3;
 	double tilde_cum3_2 = tilde_cum3 * tilde_cum3;
@@ -96,11 +105,11 @@ CumulantsForEdgeworth<TInput>
 	return resu < 0.0 ? 0.0 : resu;
 }
 
-/* ====== Estimation des moments à partir du voisinage initial ======= */
+/* ========== Moment estimation from initial neighborhood ============ */
 
-template <class TInput>
+template < class TInput >
 int	
-CumulantsForEdgeworth<TInput>
+CumulantsForEdgeworth< TInput >
 ::MakeSumAndMoments ( const TInput & input ) 
 {
 	
@@ -154,11 +163,89 @@ CumulantsForEdgeworth<TInput>
 	return 0;	
 }
 
-/* =========== transformation moment -> cumulants ==================== */
+/* ================= Moment estimation from raw data ================= */
 
-template <class TInput>
+template < class TInput >
+int	
+CumulantsForEdgeworth< TInput >
+::MakeSumAndMoments ( const itk::Image< typename TInput::ImageType::PixelType, 1 > * input ) 
+{
+	
+	fSum0 = fSum1 = fSum2 = fSum3 = fSum4 = 0.0;
+	double pixel,pixel_2;
+	
+	typedef itk::Image< typename TInput::ImageType::PixelType, 1 > LocalImageType;
+	typedef itk::ImageRegionConstIterator< LocalImageType > ImageRegionConstIteratorType;
+		
+	ImageRegionConstIteratorType inputIter ( input, input->GetRequestedRegion() );
+	inputIter.GoToBegin();
+	unsigned int inputSize = 0;
+
+	while ( !inputIter.IsAtEnd() )
+	{
+		pixel = static_cast<double> ( inputIter.Get() );
+		pixel_2 = pixel * pixel;
+
+		fSum0 += 1.0;
+		fSum1 += pixel;
+		fSum2 += pixel_2;
+		fSum3 += pixel_2 * pixel;
+		fSum4 += pixel_2 * pixel_2;
+
+		++inputIter;
+		++inputSize;
+	}
+	
+	fMu1 = fSum1 / fSum0;
+	fMu2 = fSum2 / fSum0 - fMu1 * fMu1;
+	
+	if ( fMu2 <= 0.0 )
+	{
+		otbGenericMsgDebugMacro( << "Potential NAN detected in function MakeSumAndMoments.");
+		fMu3 = 0.0;
+		fMu4 = 4.0;
+		return 1;
+	}
+
+	double sigma = sqrt( fMu2 );
+	
+	std::vector<double> tab ( inputSize );
+	std::vector<double>::iterator iterTab = tab.begin(); 
+
+	inputIter.GoToBegin();
+
+	while ( !inputIter.IsAtEnd() )
+	{
+		*iterTab = ( static_cast<double> ( inputIter.Get() ) - fMu1 ) / sigma;
+
+		++inputIter;
+		++iterTab;
+	}
+
+	fMu3 = fMu4 = 0.0;
+	for ( iterTab = tab.begin(); iterTab != tab.end(); ++iterTab )
+	{
+		pixel = *iterTab;
+		pixel_2 = pixel * pixel;
+		
+		fMu3 += pixel * pixel_2;
+		fMu4 += pixel_2 * pixel_2;
+	}
+	
+	fMu3 /= fSum0;
+	fMu4 /= fSum0;
+	
+	otbGenericMsgDebugMacro( << "Moments: " << fMu1 << ",\t" << fMu2 << ",\t" << fMu3 << ",\t" << fMu4 );
+
+	return 0;	
+}
+
+
+/* ================= moments -> cumulants transformation ============= */
+
+template < class TInput >
 int 
-CumulantsForEdgeworth<TInput>
+CumulantsForEdgeworth< TInput >
 ::MakeCumulants ()	
 {
 	fMean = fMu1;
@@ -168,7 +255,7 @@ CumulantsForEdgeworth<TInput>
 	return 0;
 }
 
-} // namespace otb
+} // end of namespace otb
 
 #endif
 

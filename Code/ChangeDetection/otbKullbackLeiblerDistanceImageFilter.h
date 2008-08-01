@@ -9,9 +9,8 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Some parts of this code are covered by the GET copyright. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
   See GETCopyright.txt for details.
-
 
      This software is distributed WITHOUT ANY WARRANTY; without even 
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
@@ -26,18 +25,18 @@
 
 namespace otb {
 
-template <class TInput>
+template < class TInput >
 class CumulantsForEdgeworth 
 {
 	public :
 		CumulantsForEdgeworth ( const TInput & input ); 
-		virtual ~CumulantsForEdgeworth () { };
+		CumulantsForEdgeworth ( const itk::Image< typename TInput::ImageType::PixelType, 1 > * input );
+		virtual ~CumulantsForEdgeworth () { }
 
-		// Divergence de KL 
+		/** KL Divergence calculation */
 		template <class TInput2>
-		double KL_divergence ( const CumulantsForEdgeworth<TInput2> & cumulants );
+		double Divergence ( const CumulantsForEdgeworth<TInput2> & cumulants );
 		
-		// access to attributes
 		inline	double	GetMean ()	const	{ return this->fMean; }
 		inline	double	GetVariance	()	const	{ return this->fVariance; }
 		inline	double	GetSkewness	()	const	{ return this->fSkewness; }
@@ -45,12 +44,13 @@ class CumulantsForEdgeworth
 	
 	protected :
 
-		// estimation des moments à partir du voisinage initial
+		/** Moment estimation from intial neighborhood */
 		int	MakeSumAndMoments	( const TInput & input );
-		// transformation moment -> cumulants (pour Edgeworth)
+		/** Moment estimation from raw data */
+		int	MakeSumAndMoments	( const itk::Image< typename TInput::ImageType::PixelType, 1 > * input );
+		/** transformation moment -> cumulants (for Edgeworth) */
 		int MakeCumulants(); 
 
-		// Attributs internes à la classe
 		double	fSum0, fSum1, fSum2, fSum3, fSum4;
 		double	fMu1, fMu2, fMu3, fMu4;
 		double	fMean, fVariance, fSkewness, fKurtosis;
@@ -69,8 +69,8 @@ namespace Functor {
 			TOutput operator () ( const TInput1 & it1, const TInput2 & it2 ) {
 				CumulantsForEdgeworth<TInput1> cum1 ( it1 );
 				CumulantsForEdgeworth<TInput2> cum2 ( it2 );
-				return static_cast<TOutput> ( cum1.KL_divergence( cum2 ) 
-												+ cum2.KL_divergence( cum1 ) );
+				return static_cast<TOutput> ( cum1.Divergence( cum2 ) 
+												+ cum2.Divergence( cum1 ) );
 			}
 	};
 
@@ -107,7 +107,7 @@ namespace Functor {
  */
 template <class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT KullbackLeiblerDistanceImageFilter :
-	public BinaryFunctorNeighborhoodImageFilter<
+	public otb::BinaryFunctorNeighborhoodImageFilter<
 			TInputImage1,TInputImage2,TOutputImage,
 			Functor::KullbackLeiblerDistance<
 				typename itk::ConstNeighborhoodIterator<TInputImage1>, 
@@ -117,7 +117,7 @@ class ITK_EXPORT KullbackLeiblerDistanceImageFilter :
 	public:
 		/** Standard class typedefs. */
 		typedef KullbackLeiblerDistanceImageFilter Self;
-		typedef BinaryFunctorNeighborhoodImageFilter<
+		typedef otb::BinaryFunctorNeighborhoodImageFilter<
 								TInputImage1,TInputImage2,TOutputImage, 
 								Functor::KullbackLeiblerDistance< 
 									typename itk::ConstNeighborhoodIterator<TInputImage1>,
