@@ -861,6 +861,14 @@ ADD_TEST(bfTvEuclideanDistanceWithMissingValue ${BASICFILTERS_TESTS8}
 )
 
 
+ ADD_TEST(bfTuContinuousMinimumMaximumImageCalculatorNew ${BASICFILTERS_TESTS9}
+	otbContinuousMinimumMaximumImageCalculatorNew
+)
+
+ ADD_TEST(bfTvContinuousMinimumMaximumImageCalculator ${BASICFILTERS_TESTS9}
+	otbContinuousMinimumMaximumImageCalculatorTest
+)
+
 # A enrichir
 SET(BasicFilters_SRCS1
 otbLeeFilter.cxx
@@ -987,6 +995,8 @@ otbScalarToRainbowRGBPixelFunctor.cxx
 SET(BasicFilters_SRCS9
 otbChangeLabelImageFilterNew.cxx
 otbChangeLabelImageFilter.cxx
+otbContinuousMinimumMaximumImageCalculatorNew.cxx
+otbContinuousMinimumMaximumImageCalculatorTest.cxx
 )
 
 

@@ -15,20 +15,23 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "itkExceptionObject.h"
 
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
 
-#include <iostream>
-#include "otbTestMain.h" 
+#include "otbImage.h"
+#include "otbContinuousMinimumMaximumImageCalculator.h"
 
-void RegisterTests()
+int otbContinuousMinimumMaximumImageCalculatorNew(int argc, char * argv[])
 {
-REGISTER_TEST(otbChangeLabelImageFilterNew);
-REGISTER_TEST(otbChangeLabelImageFilterTest);
-REGISTER_TEST(otbContinuousMinimumMaximumImageCalculatorNew);
-REGISTER_TEST(otbContinuousMinimumMaximumImageCalculatorTest);
+  const unsigned int ImageDimension = 2;
+
+  typedef otb::Image<unsigned int, ImageDimension> InputImageType;
+
+  typedef otb::ContinuousMinimumMaximumImageCalculator<InputImageType>   FilterType;
+
+  FilterType::Pointer filter = FilterType::New();
+
+
+  return EXIT_SUCCESS;
+
 }
