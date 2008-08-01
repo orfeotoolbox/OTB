@@ -35,6 +35,10 @@ TARGET_LINK_LIBRARIES(KullbackLeiblerDistanceChDet OTBIO OTBCommon gdal ITKCommo
 ADD_EXECUTABLE(KullbackLeiblerProfileChDet KullbackLeiblerProfileChDet.cxx)
 TARGET_LINK_LIBRARIES(KullbackLeiblerProfileChDet OTBIO OTBCommon gdal ITKCommon ITKIO ITKStatistics)
 
+ADD_EXECUTABLE(KullbackLeiblerSupervizedDistanceChDet KullbackLeiblerSupervizedDistanceChDet.cxx)
+TARGET_LINK_LIBRARIES(KullbackLeiblerSupervizedDistanceChDet OTBIO OTBCommon gdal ITKCommon ITKIO ITKStatistics)
+
+
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_EXAMPLES_TESTING )
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
