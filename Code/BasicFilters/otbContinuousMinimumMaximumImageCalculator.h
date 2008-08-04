@@ -62,7 +62,7 @@ namespace otb
     public:
       /** Standard class typedefs. */
       typedef ContinuousMinimumMaximumImageCalculator Self;
-      typedef Object  Superclass;
+      typedef itk::Object  Superclass;
       typedef itk::SmartPointer<Self>   Pointer;
       typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -70,7 +70,7 @@ namespace otb
       itkNewMacro(Self);
 
       /** Run-time type information (and related methods). */
-      itkTypeMacro(ContinuousMinimumMaximumImageCalculator, itk::MinimumMaximumImageCalculator);
+      itkTypeMacro(ContinuousMinimumMaximumImageCalculator, Object);
 
       /** Type definition for the input image. */
       typedef TInputImage  ImageType;
