@@ -84,6 +84,7 @@ public:
   void SetCoef(double Coef)
   {
 	this->GetFunctor().SetCoef( Coef );
+	this->Modified();
   }  
   double GetCoef(void)const
   {
