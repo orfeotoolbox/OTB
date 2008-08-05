@@ -2,8 +2,8 @@
 
   Program:   ORFEO Toolbox
   Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
+  Date:      2008-05-30
+  Version:   2.2.0
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.

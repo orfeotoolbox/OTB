@@ -101,6 +101,14 @@ static INLINE long lrintf(float f){
 }
 #endif
 
+/* SUN does not have lrintf */
+#ifdef __sun
+static INLINE long lrintf(float f){
+	int i = ((f>0) ? (int)(floor(f+0.5)):(int)(floor(f-0.5)));
+	return i;
+}
+#endif
+
 /* 
 ==========================================================
    Useful constant definitions
