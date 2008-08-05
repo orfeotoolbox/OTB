@@ -12,7 +12,7 @@ Projections
 Radiometry
 Fusion
 Markov
-RADAR
+Radar
 ) 
 
 IF(OTB_USE_VISU_GUI)
