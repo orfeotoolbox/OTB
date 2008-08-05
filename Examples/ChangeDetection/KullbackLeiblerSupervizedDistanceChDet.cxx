@@ -20,13 +20,12 @@
 
 
 #include <iostream>
-#include <getopt.h>
 
-#include <otbImage.h>
-#include <otbImageFileReader.h>
-#include <otbImageFileWriter.h>
-#include <otbCommandProgressUpdate.h>
-#include <otbCommandLineArgumentParser.h>
+#include "otbImage.h"
+#include "otbImageFileReader.h"
+#include "otbImageFileWriter.h"
+#include "otbCommandProgressUpdate.h"
+#include "otbCommandLineArgumentParser.h"
 
 #include "otbKullbackLeiblerSupervizedDistanceImageFilter.h"
 
@@ -34,11 +33,11 @@ int main ( int argc, char * argv[] )
 {
 	try {
 
-	typedef otb::CommandLineArgumentParser ParserType;
-	ParserType::Pointer parser = ParserType::New();
-	parser->AddOption( "--InputImage1", "Give Before image", "-1", 1, true );
+        typedef otb::CommandLineArgumentParser ParserType;
+        ParserType::Pointer parser = ParserType::New();
+        parser->AddOption( "--InputImage1", "Give Before image", "-1", 1, true );
 	parser->AddOption( "--InputImage2", "Give After image", "-2", 1, true );
-    parser->AddOption( "--Roi", "Give ROI image", "-r", 1, true );
+        parser->AddOption( "--Roi", "Give ROI image", "-r", 1, true );
 	parser->AddOption( "--winSize", "Sliding window size (def. 35)", "-w", 1, false );
 	parser->AddOutputImage();
 
@@ -46,8 +45,8 @@ int main ( int argc, char * argv[] )
 	ParserResultType::Pointer  parseResult = ParserResultType::New();
     
 	try
-    {	
-		parser->ParseCommandLine(argc,argv,parseResult);
+        {	
+                parser->ParseCommandLine(argc,argv,parseResult);
 	}
 	catch( itk::ExceptionObject & err )
 	{
