@@ -862,11 +862,13 @@ ADD_TEST(bfTvEuclideanDistanceWithMissingValue ${BASICFILTERS_TESTS8}
 
 
  ADD_TEST(bfTuContinuousMinimumMaximumImageCalculatorNew ${BASICFILTERS_TESTS9}
-	otbContinuousMinimumMaximumImageCalculatorNew
+        otbContinuousMinimumMaximumImageCalculatorNew
 )
 
  ADD_TEST(bfTvContinuousMinimumMaximumImageCalculator ${BASICFILTERS_TESTS9}
-	otbContinuousMinimumMaximumImageCalculatorTest
+        otbContinuousMinimumMaximumImageCalculatorTest
+        ${INPUTDATA}/QB_Suburb.png
+
 )
 
 # A enrichir
