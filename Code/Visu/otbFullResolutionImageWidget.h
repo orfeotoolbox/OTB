@@ -47,6 +47,7 @@ class FullResolutionImageWidget
   typedef typename Superclass::SizeType SizeType;
   typedef typename Superclass::IndexType IndexType;
   typedef typename Superclass::RegionType RegionType;
+  //typedef typename Superclass::ImageType ImageType;
 
   /** Unlarge OpenGlBuffer */
   virtual void UpdateOpenGlBufferedRegion(void);
