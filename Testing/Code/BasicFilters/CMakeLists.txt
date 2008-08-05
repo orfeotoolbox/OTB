@@ -852,24 +852,22 @@ ADD_TEST(bfTvEuclideanDistanceWithMissingValue ${BASICFILTERS_TESTS8}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests9 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ADD_TEST(bfTuChangeLabelImageFilterNew ${BASICFILTERS_TESTS9}
+ADD_TEST(bfTuChangeLabelImageFilterNew ${BASICFILTERS_TESTS9}
 	otbChangeLabelImageFilterNew
 )
 
- ADD_TEST(bfTuChangeLabelImageFilter ${BASICFILTERS_TESTS9}
+ADD_TEST(bfTuChangeLabelImageFilter ${BASICFILTERS_TESTS9}
 	otbChangeLabelImageFilterTest
 )
 
 
- ADD_TEST(bfTuContinuousMinimumMaximumImageCalculatorNew ${BASICFILTERS_TESTS9}
+ADD_TEST(bfTuContinuousMinimumMaximumImageCalculatorNew ${BASICFILTERS_TESTS9}
         otbContinuousMinimumMaximumImageCalculatorNew
 )
 
- ADD_TEST(bfTvContinuousMinimumMaximumImageCalculator ${BASICFILTERS_TESTS9}
+ADD_TEST(bfTvContinuousMinimumMaximumImageCalculatorTest ${BASICFILTERS_TESTS9}
         otbContinuousMinimumMaximumImageCalculatorTest
-        ${INPUTDATA}/QB_Suburb.png
-
-)
+        ${INPUTDATA}/QB_Suburb.png )
 
 # A enrichir
 SET(BasicFilters_SRCS1

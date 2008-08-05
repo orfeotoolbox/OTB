@@ -40,7 +40,9 @@ int otbContinuousMinimumMaximumImageCalculatorTest( int argc, char * argv[])
         ContinuousMinimumMaximumImageCalculatorType::Pointer continuous = ContinuousMinimumMaximumImageCalculatorType::New();
         continuous->SetImage(reader->GetOutput());
         //Compute values
-//        continuous->ComputeMinimum();
+        continuous->ComputeMinimum();
+        continuous->ComputeMaximum();
+        continuous->Compute();
 // PB Timeout. Test provisoirement en FAILURE
         
 //        std::cout << continuous->GetMinimum() <<std::endl;

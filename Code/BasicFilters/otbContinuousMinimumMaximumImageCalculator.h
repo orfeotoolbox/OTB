@@ -20,6 +20,7 @@
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
+#include "itkNumericTraits.h"
 
 namespace otb
 {

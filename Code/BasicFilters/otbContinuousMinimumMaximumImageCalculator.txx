@@ -161,9 +161,9 @@ namespace otb
     while( !it.IsAtEnd() )
     {
       const RealPixelType value = it.Get();  
-      if (value < m_Minimum) 
+      if (value < static_cast<RealPixelType>(m_Minimum)) 
       {
-        m_Minimum = value;
+        m_Minimum = static_cast<PixelType>(value);
         m_IndexOfMinimum = it.GetIndex();
       }
       ++it;
@@ -223,9 +223,9 @@ namespace otb
     while( !it.IsAtEnd() )
     {
       const RealPixelType value = it.Get();  
-      if (value > m_Maximum) 
+      if (value > static_cast<RealPixelType>(m_Maximum) )
       {
-        m_Maximum = value;
+        m_Maximum = static_cast<PixelType>(value);
         m_IndexOfMaximum = it.GetIndex();
       }
       ++it;
