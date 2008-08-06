@@ -19,9 +19,9 @@ SET(RADAR_TESTS1 ${CXX_TEST_PATH}/otbRadarTests1)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-ADD_TEST(rdTuPolarimetricSynthesisFilterNew ${RADAR_TESTS1}  
-        otbPolarimetricSynthesisFilterNew
-	)
+#ADD_TEST(rdTuPolarimetricSynthesisFilterNew ${RADAR_TESTS1}  
+#        otbPolarimetricSynthesisFilterNew
+#	)
 
 
 
@@ -33,7 +33,7 @@ otbPolarimetricSynthesisFilterNew.cxx
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
-ADD_EXECUTABLE(otbRadarTests1 otbRadarTests1.cxx ${RADAR_SRCS1})
-TARGET_LINK_LIBRARIES(otbRadarTests1 OTBRadar OTBCommon OTBIO gdal ITKIO ITKCommon ITKBasicFilters)
+#ADD_EXECUTABLE(otbRadarTests1 otbRadarTests1.cxx ${RADAR_SRCS1})
+#TARGET_LINK_LIBRARIES(otbRadarTests1 OTBRadar OTBCommon OTBIO gdal ITKIO ITKCommon ITKBasicFilters)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

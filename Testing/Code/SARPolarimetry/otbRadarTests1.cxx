@@ -27,6 +27,6 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbPolarimetricSynthesisFilterNew);
+//REGISTER_TEST(otbPolarimetricSynthesisFilterNew);
 }
 
