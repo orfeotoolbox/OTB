@@ -12,7 +12,7 @@ Projections
 Radiometry
 Fusion
 Markov
-Radar
+SARPolarimetry
 ) 
 
 IF(OTB_USE_VISU_GUI)
