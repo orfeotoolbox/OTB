@@ -12,7 +12,7 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 SET(TOL 0.0)
 SET(EPSILON 0.000000000001)
 SET(EPSILON_10e6 0.000001)
-SET(RADAR_TESTS1 ${CXX_TEST_PATH}/otbRadarTests1)
+SET(SARPOLARIMETRY_TESTS1 ${CXX_TEST_PATH}/otbSARPolarimetryTests1)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADAR_TESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -26,14 +26,14 @@ SET(RADAR_TESTS1 ${CXX_TEST_PATH}/otbRadarTests1)
 
 
 # A enrichir
-SET(RADAR_SRCS1
+SET(SARPOLARIMETRY_SRCS1
 otbPolarimetricSynthesisFilterNew.cxx
 )
 
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
-#ADD_EXECUTABLE(otbRadarTests1 otbRadarTests1.cxx ${RADAR_SRCS1})
-#TARGET_LINK_LIBRARIES(otbRadarTests1 OTBRadar OTBCommon OTBIO gdal ITKIO ITKCommon ITKBasicFilters)
+#ADD_EXECUTABLE(otbSARPolarimetryTests1 otbSARPolarimetryTests1.cxx ${SARPOLARIMETRY_SRCS1})
+#TARGET_LINK_LIBRARIES(otbSARPolarimetryTests1 OTBRadar OTBCommon OTBIO gdal ITKIO ITKCommon ITKBasicFilters)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
