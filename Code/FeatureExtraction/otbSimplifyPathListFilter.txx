@@ -84,6 +84,9 @@ namespace otb
     // input/output wiring
     PathListConstPointerType inputPtr = this->GetInput();
     PathListPointerType outputPtr = this->GetOutput();
+    
+    // Reset the output list in case of multiple updates
+    outputPtr->Clear();
 
     // path iterator typedef
     typedef typename PathListType::ConstIterator PathIteratorType;
