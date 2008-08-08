@@ -113,7 +113,7 @@ QuaternaryFunctorImageFilter<TInputImage1,TInputImage2,TInputImage3,TInputImage4
   Input3ImagePointer inputPtr3
     = dynamic_cast<const TInputImage3*>((itk::ProcessObject::GetInput(2)));
   Input4ImagePointer inputPtr4
-    = dynamic_cast<const TInputImage4*>((itk::ProcessObject::GetInput(4)));
+    = dynamic_cast<const TInputImage4*>((itk::ProcessObject::GetInput(3)));
   if (inputPtr1.IsNull() || inputPtr2.IsNull() || inputPtr3.IsNull() ||inputPtr4.IsNull())
     {
       itkExceptionMacro(<< "At least one input is missing."
