@@ -58,7 +58,7 @@ public:
 
 	/** Gets/Sets the input image */
 	InputImageType * GetInputImage () { 
-		this->Superclass::GetInput();
+		return this->Superclass::GetInput();
 	}
 	void SetInputImage ( const InputImageType * img ) {  
 		this->Superclass::SetInput(img); 
