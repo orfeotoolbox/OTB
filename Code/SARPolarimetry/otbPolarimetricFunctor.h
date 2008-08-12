@@ -30,66 +30,51 @@ namespace Functor
      *
      *  \ingroup Functor
      */
-    template <class TInput1, class TInput2, class TOutput>
-      class PolarimetricFunctor2Channels
+    template <class TInput1, class TInput2, class TInput3, class TInput4, class TOutput>
+      class PolarimetricFunctor
       {
       public:
-	PolarimetricFunctor2Channels() {};
-	~PolarimetricFunctor2Channels() {};
-	inline TOutput operator()(const TInput1 &r, const TInput2 &nir)
+        /** Some typedefs. */
+        typedef typename     std::complex <double>       ComplexType;        
+        typedef typename     itk::FixedArray<ComplexType,2>    ComplexArrayType;        
+        
+        /** Set the ElectroMagneticField Incident*/
+        void SetEi( ComplexArrayType ei ){
+                m_Ei = ei;
+        }
+        
+        /** Set the ElectroMagneticField Reflected*/        
+        void SetEr( ComplexArrayType er ){
+                m_Er = er;
+        }
+                  
+	PolarimetricFunctor() 
+        {
+                m_Ei[0] = 1;
+                m_Ei[1] = 1;
+                m_Er[0] = 1;
+                m_Er[1] = 1;
+        };
+	virtual ~PolarimetricFunctor() {};
+        inline TOutput operator()(const TInput1 &Shh, const TInput2 &Shv, const TInput3 &Svh, const TInput4 &Svv)
 	{
+                ComplexType tmp;
+                double scalar;
 
-                return ( static_cast<TOutput>(0) );
-	}
+                tmp = std::conj(m_Er[0])*( m_Ei[0]*Shh + m_Ei[1]*Shv ) + std::conj(m_Er[1])*( m_Ei[0]*Svh + m_Ei[1]*Svv );
+                
+                scalar=(double) ( vcl_pow(std::abs(tmp),2)  );
+                              
+                return ( static_cast<TOutput>(scalar) );
+        }
+      
+      private :
+        /** Electromagnetic Field Incident */
+        ComplexArrayType m_Ei;
+        /** Electromagnetic Field Reflected */
+        ComplexArrayType m_Er;         
+        
       };
-
-    /** \class PolarimetricSynthesis3Channels
-     *  \brief This functor calculate the
-     *  
-     *  
-     *
-     *  \ingroup Functor
-     */
-/*    template <class TInput1, class TInput2, class TInput3, class TOutput>
-      class PolarimetricSynthesis3Channels
-      {
-      public:
-	PolarimetricSynthesis3Channels() {};
-	~PolarimetricSynthesis3Channels() {};
-	inline TOutput operator()(const TInput1 &r, const TInput2 &nir)
-	{
-                double dr = static_cast<double>(r);
-                double dnir = static_cast<double>(nir);
-                if( r == 0 )
-                {
-                        return static_cast<TOutput>(0.);
-                }
-                return ( static_cast<TOutput>(dnir/dr));
-	}
-      };
-*/      
-    /** \class PolarimetricSynthesis4Channels
-     *  \brief This functor calculate the
-     *  
-     *  
-     *
-     *  \ingroup Functor
-     */
-/*    template <class TInput1, class TInput2, class TInput3, class TInput4, class TOutput>
-      class PolarimetricSynthesis4Channels
-      {
-      public:
-	PolarimetricSynthesis4Channels() {};
-	~PolarimetricSynthesis4Channels() {};
-	inline TOutput operator()(const TInput1 &r, const TInput2 &nir)
-	{
-                double dnir = static_cast<double>(nir);
-                double dr = static_cast<double>(r);
-                return ( static_cast<TOutput>(  (dnir - m_A*dr - m_B)*m_Coeff) );
-	 }
-
-       private:
-*/          
 
   } // namespace Functor
 } // namespace otb
