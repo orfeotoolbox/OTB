@@ -57,7 +57,7 @@ public:
 	typedef typename OutputImageType::SizeType::SizeValueType SizeValueType;
 
 	/** Gets/Sets the input image */
-	InputImageType * GetInputImage () { 
+	const InputImageType * GetInputImage () { 
 		return this->Superclass::GetInput();
 	}
 	void SetInputImage ( const InputImageType * img ) {  

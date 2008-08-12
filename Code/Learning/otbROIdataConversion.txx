@@ -53,7 +53,7 @@ void
 ROIdataConversion< TInputImage, TInputROIImage >
 ::GenerateInputRequestedRegion(void)
 {
-  typename InputImageType::Pointer inputImagePtr = this->GetInputImage();
+  typename InputImageType::Pointer inputImagePtr = const_cast<InputImageType *>(this->GetInputImage());
   typename InputROIImageType::Pointer inputROIPtr = this->GetROIImage();
   inputImagePtr->SetRequestedRegion(inputImagePtr->GetLargestPossibleRegion());
   inputROIPtr->SetRequestedRegion(inputROIPtr->GetLargestPossibleRegion());
@@ -69,7 +69,7 @@ ROIdataConversion< TInputImage, TInputROIImage >
   outputPtr->Allocate();
   outputPtr->FillBuffer(0);
 
-	typename InputImageType::Pointer inputImagePtr = this->GetInputImage();
+	typename InputImageType::Pointer inputImagePtr = const_cast<InputImageType *>(this->GetInputImage());
 	typename InputROIImageType::ConstPointer inputROIPtr = this->GetROIImage();
 
 	itk::ImageRegionConstIterator< InputImageType > inputIter
