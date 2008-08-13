@@ -75,6 +75,11 @@ int otbHHnVVPolarimetricSynthesisFilter( int argc, char * argv[] )
         
         polarimetricSynthesis->SetInputHH( reader1->GetOutput() );
         polarimetricSynthesis->SetInputVV( reader2->GetOutput() );
+
+        std::cout<<polarimetricSynthesis->GetNumberOfValidRequiredInputs()<<std::endl;
+        std::cout<<polarimetricSynthesis->GetInputs().size()<<std::endl;
+
+
         writer->SetInput( polarimetricSynthesis->GetOutput() );
            
         writer->Update(); 

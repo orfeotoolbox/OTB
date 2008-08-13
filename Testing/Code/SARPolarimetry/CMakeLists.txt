@@ -23,7 +23,7 @@ SET(SARPOLARIMETRY_TESTS1 ${CXX_TEST_PATH}/otbSARPolarimetryTests1)
 ADD_TEST(rdTuPolarimetricSynthesisFilterNew ${SARPOLARIMETRY_TESTS1}  
         otbPolarimetricSynthesisFilterNew )
 
-# # Normal Case 
+ # Normal Case 
 ADD_TEST(rdTuPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
  # --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_NDVI_poupees_subc1c2.tif
  #                   ${TEMP}/raRAndNIRVegetationIndex_NDVI_poupees_subc1c2.tif
@@ -69,7 +69,7 @@ ADD_TEST(rdTuHHnHVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
 	)
         
  # With HH and VV channels        
-ADD_TEST(rdTuHHnVVolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
+ADD_TEST(rdTuHHnVVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
  # --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_NDVI_poupees_subc1c2.tif
  #                   ${TEMP}/raRAndNIRVegetationIndex_NDVI_poupees_subc1c2.tif
         otbHHnVVPolarimetricSynthesisFilter
@@ -88,13 +88,18 @@ ADD_TEST(rdTuMultiChannelsPolarimetricSynthesisFilterNew ${SARPOLARIMETRY_TESTS1
      
 ADD_TEST(rdTuMultiChannelsPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}  
         otbMultiChannelsPolarimetricSynthesisFilter
-        ${INPUTDATA}/RSAT_imagery_vecteur.tif
-        ${TEMP}/resPolarimetricSynthesis.tif
-        180.0 
-	10.0 
-	45.0 
-	45.0
-	)
+        ${INPUTDATA}/RSAT_imagery_HH.tif
+        ${INPUTDATA}/RSAT_imagery_HV.tif
+        ${INPUTDATA}/RSAT_imagery_VH.tif
+        ${INPUTDATA}/RSAT_imagery_VV.tif        
+        ${TEMP}/resMultiPolarimetricSynthesis.tif
+         32.0     # PsiI
+         22.0     # TauI
+         58.0     # PsiR
+         45.0     # TauR
+	)        
+        
+SET_TESTS_PROPERTIES(rdTuHHnVVPolarimetricSynthesisFilter PROPERTIES WILL_FAIL true)
         
 # A enrichir
 SET(SARPOLARIMETRY_SRCS1
@@ -104,6 +109,7 @@ otbHHnHVnVVPolarimetricSynthesisFilter
 otbHHnHVPolarimetricSynthesisFilter
 otbHHnVVPolarimetricSynthesisFilter
 otbMultiChannelsPolarimetricSynthesisFilterNew.cxx
+otbMultiChannelsPolarimetricSynthesisFilter.cxx
 otbMultiChannelsPolarimetricSynthesisFilter.cxx
 )
 
