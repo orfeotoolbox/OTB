@@ -141,7 +141,7 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
 }
 
 /**
- * Verify and force the inputs, if only  2 or 3 channels are present
+ * Verify and force the inputs, if only 2 or 3 channels are present
  */
 template <class TInputImageHH,class TInputImageHV,class TInputImageVH,class TInputImageVV,class TOutputImage,class TFunction  >
 void
@@ -158,7 +158,6 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
     {
       typename HVInputImageType::ConstPointer hvImage =  dynamic_cast<const HVInputImageType*>((itk::ProcessObject::GetInput(2)));;
       this->SetInputHV(hvImage);
-      std::cout<<"Case 3 channels !!"<<std::endl;
     }
   else 
   // With 3 channels : HH HV VV  
@@ -251,27 +250,19 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
 }
 
 /**
- *
+ * BeforeThreadedGenerateData
  */
 template <class TInputImageHH,class TInputImageHV,class TInputImageVH,class TInputImageVV,class TOutputImage,class TFunction  >
 void
 PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImageVV,TOutputImage,TFunction>
 ::BeforeThreadedGenerateData()
 {
-   std::cout<<"Debut before !!"<<std::endl;    
    // First Part. Verify and force the inputs
    VerifyAndForceInputs();   
   
-   std::cout<<"image 1 "<<this->GetInput(0)<<std::endl;
-   std::cout<<"image 2 "<<this->GetInput(1)<<std::endl;
-   std::cout<<"image 3 "<<this->GetInput(2)<<std::endl;
-   std::cout<<"image 4 "<<this->GetInput(3)<<std::endl; 
-  
    // Second Part. Estimation of the incident field Ei and the reflected field Er
    ComputeElectromagneticFields();
-
 }
-
 
 }
 

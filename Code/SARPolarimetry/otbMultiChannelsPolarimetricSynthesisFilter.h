@@ -126,8 +126,9 @@ protected:
   MultiChannelsPolarimetricSynthesisFilter();
   virtual ~MultiChannelsPolarimetricSynthesisFilter(){};
 
-  /** MultiChannelsPolarimetricSynthesisFilter can produce an image which is a different
-   * resolution than its input image.  As such, MultiChannelsPolarimetricSynthesisFilter
+  /** MultiChannelsPolarimetricSynthesisFilter can produce an image which is a 
+   *
+   * As such, MultiChannelsPolarimetricSynthesisFilter
    * needs to provide an implementation for
    * GenerateOutputInformation() in order to inform the pipeline
    * execution model.  The original documentation of this method is

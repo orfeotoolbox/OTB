@@ -35,7 +35,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 ::MultiChannelsPolarimetricSynthesisFilter()
 {
   this->SetNumberOfRequiredInputs( 1 );
-  //this->InPlaceOff();
+  this->InPlaceOff();
 }
 
  /** PolarimetricSynthesisFilter
@@ -349,37 +349,18 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 }
 
 /**
- *
+ * BeforeThreadedGenerateData
  */
 template <class TInputImage, class TOutputImage, class TFunction  >
 void
 MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 ::BeforeThreadedGenerateData()
 {
-  try{
-        // First Part. Verify and force the inputs
-          VerifyAndForceInputs();   
+  // First Part. Verify and force the inputs
+  VerifyAndForceInputs();   
   
-        /*  std::cout<<"image 1 "<<this->GetInput(0)<<std::endl;
-          std::cout<<"image 2 "<<this->GetInput(1)<<std::endl;
-          std::cout<<"image 3 "<<this->GetInput(2)<<std::endl;
-          std::cout<<"image 4 "<<this->GetInput(3)<<std::endl; 
-  */
-          // Second Part. Estimation of the incident field Ei and the reflected field Er
-          ComputeElectromagneticFields();
-  }
-  catch( itk::ExceptionObject & err )
-  {
-          std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-          std::cout << "Exception in PolarimetricSynthesisFilter class :"<< err << std::endl; 
-          return;
-  }
-  catch (...) 
-  {
-         // itkGenericExceptionMacro( <<"Unknown exception in PolarimetricSynthesisFilter class (catch(...)");
-          std::cout << "Exception levee inconnue !" << std::endl; 
-          return;
-  }
+  // Second Part. Estimation of the incident field Ei and the reflected field Er
+  ComputeElectromagneticFields();
 
 }
 
