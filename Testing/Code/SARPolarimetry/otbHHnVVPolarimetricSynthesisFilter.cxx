@@ -43,7 +43,6 @@ int otbHHnVVPolarimetricSynthesisFilter( int argc, char * argv[] )
         double  TauI = strtod(argv[5],NULL);
         double  PsiR = strtod(argv[6],NULL);
         double  TauR = strtod(argv[7],NULL);
-
         
         typedef std::complex <double>                   InputPixelType;
         typedef double    	                        OutputPixelType;
@@ -57,7 +56,6 @@ int otbHHnVVPolarimetricSynthesisFilter( int argc, char * argv[] )
 
         typedef otb::PolarimetricSynthesisFilter<  InputImageType,InputImageType,InputImageType,InputImageType,OutputImageType >   FilterType;
 	
-
         FilterType::Pointer polarimetricSynthesis = FilterType::New();
         
 	polarimetricSynthesis->SetPsiI( PsiI );
@@ -79,9 +77,7 @@ int otbHHnVVPolarimetricSynthesisFilter( int argc, char * argv[] )
         std::cout<<polarimetricSynthesis->GetNumberOfValidRequiredInputs()<<std::endl;
         std::cout<<polarimetricSynthesis->GetInputs().size()<<std::endl;
 
-
         writer->SetInput( polarimetricSynthesis->GetOutput() );
-           
         writer->Update(); 
 
     } 

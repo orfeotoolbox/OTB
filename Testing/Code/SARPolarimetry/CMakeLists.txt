@@ -4,6 +4,7 @@ IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
+SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 #Images de teledetection (grosses images )
 SET(IMAGEDATA ${OTB_DATA_ROOT}/LargeInput )
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
@@ -24,9 +25,9 @@ ADD_TEST(rdTuPolarimetricSynthesisFilterNew ${SARPOLARIMETRY_TESTS1}
         otbPolarimetricSynthesisFilterNew )
 
  # Normal Case 
-ADD_TEST(rdTuPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
- # --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_NDVI_poupees_subc1c2.tif
- #                   ${TEMP}/raRAndNIRVegetationIndex_NDVI_poupees_subc1c2.tif
+ADD_TEST(rdTvPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
+  --compare-image ${TOL}   ${BASELINE}/rdTvPolarimetricSynthesis.tif
+                    ${TEMP}/resPolarimetricSynthesis.tif
         otbPolarimetricSynthesisFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
@@ -40,9 +41,9 @@ ADD_TEST(rdTuPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
 	)
         
  # With 3 channels
-ADD_TEST(rdTuHHnHVnVVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
- # --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_NDVI_poupees_subc1c2.tif
- #                   ${TEMP}/raRAndNIRVegetationIndex_NDVI_poupees_subc1c2.tif
+ADD_TEST(rdTvHHnHVnVVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
+  --compare-image ${TOL}   ${BASELINE}/rdTvPolarimetricSynthesis_HH_HV_VV.tif
+                    ${TEMP}/resPolarimetricSynthesis_HH_HV_VV.tif
         otbHHnHVnVVPolarimetricSynthesisFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
@@ -55,9 +56,9 @@ ADD_TEST(rdTuHHnHVnVVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
 	)
 
  # With HH and HV channels
-ADD_TEST(rdTuHHnHVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
- # --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_NDVI_poupees_subc1c2.tif
- #                   ${TEMP}/raRAndNIRVegetationIndex_NDVI_poupees_subc1c2.tif
+ADD_TEST(rdTvHHnHVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
+  --compare-image ${TOL}   ${BASELINE}/rdTvPolarimetricSynthesis_HH_HV.tif
+                    ${TEMP}/resPolarimetricSynthesis_HH_HV.tif
         otbHHnHVPolarimetricSynthesisFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
@@ -69,9 +70,7 @@ ADD_TEST(rdTuHHnHVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
 	)
         
  # With HH and VV channels        
-ADD_TEST(rdTuHHnVVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
- # --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_NDVI_poupees_subc1c2.tif
- #                   ${TEMP}/raRAndNIRVegetationIndex_NDVI_poupees_subc1c2.tif
+ADD_TEST(rdTvHHnVVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
         otbHHnVVPolarimetricSynthesisFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_VV.tif
@@ -86,7 +85,10 @@ ADD_TEST(rdTuMultiChannelsPolarimetricSynthesisFilterNew ${SARPOLARIMETRY_TESTS1
         otbMultiChannelsPolarimetricSynthesisFilterNew
 	)
      
-ADD_TEST(rdTuMultiChannelsPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}  
+ # With HH, HV, VH and VV channels      
+ADD_TEST(rdTvMultiChannelsPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}  
+  --compare-image ${TOL}   ${BASELINE}/rdTvMultiPolarimetricSynthesis.tif
+                    ${TEMP}/resMultiPolarimetricSynthesis.tif
         otbMultiChannelsPolarimetricSynthesisFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
@@ -99,7 +101,7 @@ ADD_TEST(rdTuMultiChannelsPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
          45.0     # TauR
 	)        
         
-SET_TESTS_PROPERTIES(rdTuHHnVVPolarimetricSynthesisFilter PROPERTIES WILL_FAIL true)
+SET_TESTS_PROPERTIES(rdTvHHnVVPolarimetricSynthesisFilter PROPERTIES WILL_FAIL true)
         
 # A enrichir
 SET(SARPOLARIMETRY_SRCS1
@@ -112,7 +114,6 @@ otbMultiChannelsPolarimetricSynthesisFilterNew.cxx
 otbMultiChannelsPolarimetricSynthesisFilter.cxx
 otbMultiChannelsPolarimetricSynthesisFilter.cxx
 )
-
 
 
 
