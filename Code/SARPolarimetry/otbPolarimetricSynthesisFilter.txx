@@ -33,8 +33,6 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
 {
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfInputs(4);
-  
-    std::cout<<"construct !!"<<std::endl;    
 }
 
 /**
@@ -167,10 +165,8 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
   if ( ( this->GetInput(0)!=0 && this->GetInput(1)!=0 )&&
        ( this->GetInput(2)==0 && this->GetInput(3)!=0 ) )
   {
-    //this->SetInputVH(static_cast<typename HVInputImageType::Pointer>(this->GetInput(1)));
 	typename VHInputImageType::ConstPointer vhImage =  dynamic_cast<const VHInputImageType*>((itk::ProcessObject::GetInput(1)));;
 	this->SetInputVH(vhImage);
-        std::cout<<"Case 3 channels !!"<<std::endl;
   }
   else
   // Only VH and VV are present
@@ -178,7 +174,6 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
        ( this->GetInput(2)!=0 && this->GetInput(3)!=0 ) )
   {
   
-        std::cout<<"Case VH VV present !!"<<std::endl;  
         // Forcing HH and HV to zero 
         typename HHInputImageType::Pointer inputHH = TInputImageHH::New();
         typename HVInputImageType::Pointer inputHV = TInputImageHV::New();        
@@ -215,7 +210,6 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
   if ( ( this->GetInput(0)!=0 && this->GetInput(1)!=0 ) &&
        ( this->GetInput(2)==0 && this->GetInput(3)==0 ) )
     {
-        std::cout<<"Case HH HV present !!"<<std::endl;      
         // Forcing HH and HV to zero 
         typename VVInputImageType::Pointer inputVV = TInputImageVV::New();
         typename VHInputImageType::Pointer inputVH = TInputImageVH::New();        
@@ -250,11 +244,10 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
   if ( ( this->GetInput(0)!=0 && this->GetInput(1)==0 )&&
        ( this->GetInput(2)==0 && this->GetInput(3)!=0 ) )  
   {
-        std::cout<<"Case HH VV present !!"<<std::endl;  
         itkExceptionMacro("Only the HH and VV channels are available : Polarimetric synthesis is impossible !");
         return;
   } 
-        std::cout<<"Fin VerifyAndForceInputs !!"<<std::endl;    
+
 }
 
 /**
