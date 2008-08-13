@@ -715,7 +715,12 @@ namespace otb
   void 
   ImageViewerBase<TPixel,TLabel>
   ::ClearPixLocVal(void)
-  {
+  { 
+    if(m_PixLocOutput == NULL)
+    {
+      //comment: std::cout<<"PixLocOutput == NULL, returning ..."<<std::endl;
+      return;
+    }
     m_PixLocOutput->value("");
     m_PixLocOutput->redraw();
     Fl::check();

@@ -202,6 +202,8 @@ namespace otb
       itkSetMacro(ZoomMaxInitialSize,unsigned int);
       itkGetMacro(ScrollMaxInitialSize,unsigned int);
       itkSetMacro(ScrollMaxInitialSize,unsigned int);
+      itkGetMacro(FullMaxInitialSize,unsigned int);
+      itkSetMacro(FullMaxInitialSize,unsigned int);
       itkGetMacro(PixLocOutput,FlOutputPointerType);
       itkSetMacro(PixLocOutput,FlOutputPointerType);
       itkSetMacro(RectangularROISelectionMode,bool);

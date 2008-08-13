@@ -19,6 +19,7 @@ PURPOSE.  See the above copyright notices for more information.
 #define _otbImageViewerFullWidget_h
 
 #include "otbFullResolutionImageWidget.h"
+#include "otbImageViewerFullResolutionEventsInterface.h"
 #include "otbImageWidgetBoxForm.h"
 #include "otbImageWidgetRectangleForm.h"
 #include "otbImageWidgetPointForm.h"
@@ -45,18 +46,24 @@ class ITK_EXPORT ImageViewerFullWidget
   typedef FullResolutionImageWidget<TPixel>  Superclass;
   typedef itk::SmartPointer<Self>            Pointer;
   typedef itk::SmartPointer<const Self>      ConstPointer;
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
   
   /** Run-time type information (and related methods). */
   itkTypeMacro(ImageViewerFullWidget, FullResolutionImageWidget);
+
+ /** This interface is provided in case some other application wants to intercept polygon an rectangle selection events */
+ typedef ImageViewerFullResolutionEventsInterface EventsInterfaceType;
+ typedef EventsInterfaceType::Pointer             EventsInterfacePointerType;
+
   
   typedef TPixel PixelType;
   typedef TLabel LabelType;
   typedef typename Superclass::IndexType IndexType;
   typedef typename Superclass::SizeType  SizeType;
  typedef typename Superclass::ImageType ImageType;
+ typedef typename Superclass::RegionType RegionType;
  typedef typename Superclass::OverlayImageType OverlayImageType;
   
   typedef ImageViewerBase<PixelType, LabelType>  ParentType;
@@ -73,6 +80,8 @@ class ITK_EXPORT ImageViewerFullWidget
   
   itkSetMacro(Parent,ParentPointerType);
   itkGetMacro(Parent,ParentPointerType);
+  itkGetObjectMacro(EventsInterface,EventsInterfaceType);
+  itkSetObjectMacro(EventsInterface,EventsInterfaceType);
   /** Handle method */
   
   
@@ -249,24 +258,36 @@ class ITK_EXPORT ImageViewerFullWidget
 	  boxIndex[1]=clickedIndex[1];
 	  boxSize[1]=m_LastIndex[1]-clickedIndex[1];
 	}
-	ContinuousIndexType newVertex;
-	// Up Left corner
-	newVertex[0] = boxIndex[0];
-	newVertex[1] = boxIndex[1];
-	m_Parent->GetPolygonROIList()->Back()->AddVertex(newVertex);
-	// Up Right corner
-	newVertex[0] += boxSize[0];
-	m_Parent->GetPolygonROIList()->Back()->AddVertex(newVertex);
-	// Down Right corner
-	newVertex[1] += boxSize[1];
-	m_Parent->GetPolygonROIList()->Back()->AddVertex(newVertex);
-	// Down Left corner
-	newVertex[0]= boxIndex[0];
-	m_Parent->GetPolygonROIList()->Back()->AddVertex(newVertex);     
-	m_Parent->GetPolygonROIList()->PushBack(PolygonType::New());
-	m_Parent->GetPolygonROIList()->Back()->SetValue(m_Parent->GetNextROILabel());
+
+	if(m_EventsInterface.IsNotNull())
+	{
+	  RegionType selectedRegion;
+	  selectedRegion.SetIndex(boxIndex);
+	  selectedRegion.SetSize(boxSize);
+	  m_EventsInterface->RegionSelected(selectedRegion);
+	}
+	if(m_EventsInterface.IsNull() || m_EventsInterface->GetForwardEvents())
+	{
+	  ContinuousIndexType newVertex;
+	  // Up Left corner
+	  newVertex[0] = boxIndex[0];
+	  newVertex[1] = boxIndex[1];
+	  m_Parent->GetPolygonROIList()->Back()->AddVertex(newVertex);
+	  // Up Right corner
+	  newVertex[0] += boxSize[0];
+	  m_Parent->GetPolygonROIList()->Back()->AddVertex(newVertex);
+	  // Down Right corner
+	  newVertex[1] += boxSize[1];
+	  m_Parent->GetPolygonROIList()->Back()->AddVertex(newVertex);
+	  // Down Left corner
+	  newVertex[0]= boxIndex[0];
+	  m_Parent->GetPolygonROIList()->Back()->AddVertex(newVertex);     
+	  m_Parent->GetPolygonROIList()->PushBack(PolygonType::New());
+	  m_Parent->GetPolygonROIList()->Back()->SetValue(m_Parent->GetNextROILabel());
+	  
+	  m_Parent->Update();
+	}
 	m_Drag=false;
-	m_Parent->Update();
 	return 1;
       } 
     }
@@ -470,6 +491,7 @@ class ITK_EXPORT ImageViewerFullWidget
   bool m_ShortCutRectangle;
   bool m_ShortCutPolygon;
   bool m_Drag;
+ EventsInterfacePointerType m_EventsInterface;
 };
 
 } // end namespace otb
