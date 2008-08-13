@@ -31,8 +31,10 @@ template <class TInputImageHH,class TInputImageHV,class TInputImageVH,class TInp
 PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImageVV,TOutputImage,TFunction>
 ::PolarimetricSynthesisFilter()
 {
-  this->SetNumberOfRequiredInputs(2);
+  this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfInputs(4);
+  
+    std::cout<<"construct !!"<<std::endl;    
 }
 
 /**
@@ -148,9 +150,9 @@ void
 PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImageVV,TOutputImage,TFunction>
 ::VerifyAndForceInputs()
 {
-InputPixelType pix;
-pix.imag()=0;
-pix.real()=0;
+  InputPixelType pix;
+  pix.imag()=0;
+  pix.real()=0;
 
   // With 3 channels : HH VH VV
   if ( ( this->GetInput(0)!=0 && this->GetInput(1)==0 )&&
@@ -175,6 +177,8 @@ pix.real()=0;
   if ( ( this->GetInput(0)==0 && this->GetInput(1)==0 ) &&
        ( this->GetInput(2)!=0 && this->GetInput(3)!=0 ) )
   {
+  
+        std::cout<<"Case VH VV present !!"<<std::endl;  
         // Forcing HH and HV to zero 
         typename HHInputImageType::Pointer inputHH = TInputImageHH::New();
         typename HVInputImageType::Pointer inputHV = TInputImageHV::New();        
@@ -211,6 +215,7 @@ pix.real()=0;
   if ( ( this->GetInput(0)!=0 && this->GetInput(1)!=0 ) &&
        ( this->GetInput(2)==0 && this->GetInput(3)==0 ) )
     {
+        std::cout<<"Case HH HV present !!"<<std::endl;      
         // Forcing HH and HV to zero 
         typename VVInputImageType::Pointer inputVV = TInputImageVV::New();
         typename VHInputImageType::Pointer inputVH = TInputImageVH::New();        
@@ -245,10 +250,11 @@ pix.real()=0;
   if ( ( this->GetInput(0)!=0 && this->GetInput(1)==0 )&&
        ( this->GetInput(2)==0 && this->GetInput(3)!=0 ) )  
   {
-        std::cout<<"HH VV Case !!"<<std::endl;
+        std::cout<<"Case HH VV present !!"<<std::endl;  
         itkExceptionMacro("Only the HH and VV channels are available : Polarimetric synthesis is impossible !");
-        //return -1;
+        return;
   } 
+        std::cout<<"Fin VerifyAndForceInputs !!"<<std::endl;    
 }
 
 /**
@@ -259,18 +265,18 @@ void
 PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImageVV,TOutputImage,TFunction>
 ::BeforeThreadedGenerateData()
 {
-  // try{
-  // First Part. Verify and force the inputs
-  VerifyAndForceInputs();   
+   std::cout<<"Debut before !!"<<std::endl;    
+   // First Part. Verify and force the inputs
+   VerifyAndForceInputs();   
   
-  std::cout<<"image 1 "<<this->GetInput(0)<<std::endl;
-  std::cout<<"image 2 "<<this->GetInput(1)<<std::endl;
-  std::cout<<"image 3 "<<this->GetInput(2)<<std::endl;
-  std::cout<<"image 4 "<<this->GetInput(3)<<std::endl; 
+   std::cout<<"image 1 "<<this->GetInput(0)<<std::endl;
+   std::cout<<"image 2 "<<this->GetInput(1)<<std::endl;
+   std::cout<<"image 3 "<<this->GetInput(2)<<std::endl;
+   std::cout<<"image 4 "<<this->GetInput(3)<<std::endl; 
   
-  // Second Part. Estimation of the incident field Ei and the reflected field Er
-  ComputeElectromagneticFields();
-  // }catch
+   // Second Part. Estimation of the incident field Ei and the reflected field Er
+   ComputeElectromagneticFields();
+
 }
 
 
