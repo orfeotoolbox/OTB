@@ -152,6 +152,13 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
   pix.imag()=0;
   pix.real()=0;
 
+  // With all the channels
+  if ( ( this->GetInput(0)!=0 && this->GetInput(1)!=0 )&&
+       ( this->GetInput(2)!=0 && this->GetInput(3)!=0 ) )
+    {
+    //nothing
+    }
+  else 
   // With 3 channels : HH VH VV
   if ( ( this->GetInput(0)!=0 && this->GetInput(1)==0 )&&
        ( this->GetInput(2)!=0 && this->GetInput(3)!=0 ) )
