@@ -59,6 +59,7 @@ public:
   itkTypeMacro(MultiChannelsPolarimetricSynthesisFilter, InPlaceImageFilter);  
   
   /** Some typedefs. */
+  typedef std::complex <double>                   InputPixelType;  
   typedef TFunction    FunctorType;
   typedef TInputImage  InputImageType;
   typedef typename     InputImageType::ConstPointer   InputImagePointer;
@@ -70,6 +71,8 @@ public:
   typedef typename     OutputImageType::PixelType     OutputImagePixelType;
   typedef typename     std::complex <double>          ComplexType;
   typedef typename     itk::FixedArray<ComplexType,2> ComplexArrayType;  
+  typedef enum {HH_HV_VH_VV=0,HH_HV_VV=1,HH_VH_VV=2,HH_HV=3,VH_VV=4} ArchitectureType;
+  
     
   /** Get the functor object.  The functor is returned by reference.
    * (Functors do not have to derive from itk::LightObject, so they do
@@ -120,6 +123,9 @@ public:
   /** Set/Get TauR */
   itkSetMacro(TauR,double);
   itkGetMacro(TauR,double);
+  /** Set/Get ArchitectureType */
+  itkGetMacro(ArchitectureType,int);
+  itkSetMacro(ArchitectureType,int);    
 
 
 protected:
@@ -180,7 +186,8 @@ private :
   /** Conversion coefficient Degre To Radian */
   static const double m_DTOR=M_PI/180;
   
-  /** Channel indexes 0 1 2 3 on verra */
+  /** Architecture Type */
+  int m_ArchitectureType;
 
   FunctorType m_Functor;
   

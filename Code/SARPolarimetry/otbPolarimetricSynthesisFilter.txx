@@ -245,7 +245,12 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
   {
         itkExceptionMacro("Only the HH and VV channels are available : Polarimetric synthesis is impossible !");
         return;
-  } 
+  }
+  else
+  {
+        itkExceptionMacro("Unknown architecture : Polarimetric synthesis is impossible !");
+        return;
+  }  
 
 }
 
