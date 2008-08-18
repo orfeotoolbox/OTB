@@ -86,7 +86,7 @@ public:
   	KeyType type; 
   } KeyTypeDef ;*/
 
-  typedef struct KeyTypeDef
+  struct KeyTypeDef
   {
   	std::string keyname;
   	KeyType type; 
