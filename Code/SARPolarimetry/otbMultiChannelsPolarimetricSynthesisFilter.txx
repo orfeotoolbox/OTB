@@ -259,17 +259,20 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   ComplexType Ei0,Ei1,Er0,Er1;
   ComplexArrayType AEi, AEr;
   
-  Ei0.real() = vcl_cos(m_DTOR*m_PsiI)*vcl_cos(m_DTOR*m_TauI);
-  Ei0.imag() = -vcl_sin(m_DTOR*m_PsiI)*vcl_sin(m_DTOR*m_TauI);
+  /** Conversion coefficient Degre To Radian */
+  double DTOR=M_PI/180;  
+  
+  Ei0.real() = vcl_cos(DTOR*m_PsiI)*vcl_cos(DTOR*m_TauI);
+  Ei0.imag() = -vcl_sin(DTOR*m_PsiI)*vcl_sin(DTOR*m_TauI);
 
-  Ei1.real() = vcl_sin(m_DTOR*m_PsiI)*vcl_cos(m_DTOR*m_TauI);
-  Ei1.imag() = vcl_cos(m_DTOR*m_PsiI)*vcl_sin(m_DTOR*m_TauI);
+  Ei1.real() = vcl_sin(DTOR*m_PsiI)*vcl_cos(DTOR*m_TauI);
+  Ei1.imag() = vcl_cos(DTOR*m_PsiI)*vcl_sin(DTOR*m_TauI);
 
-  Er0.real() = vcl_cos(m_DTOR*m_PsiR)*vcl_cos(m_DTOR*m_TauR);
-  Er0.imag() = -vcl_sin(m_DTOR*m_PsiR)*vcl_sin(m_DTOR*m_TauR);
+  Er0.real() = vcl_cos(DTOR*m_PsiR)*vcl_cos(DTOR*m_TauR);
+  Er0.imag() = -vcl_sin(DTOR*m_PsiR)*vcl_sin(DTOR*m_TauR);
 
-  Er1.real() = vcl_sin(m_DTOR*m_PsiR)*vcl_cos(m_DTOR*m_TauR);
-  Er1.imag() = vcl_cos(m_DTOR*m_PsiR)*vcl_sin(m_DTOR*m_TauR);
+  Er1.real() = vcl_sin(DTOR*m_PsiR)*vcl_cos(DTOR*m_TauR);
+  Er1.imag() = vcl_cos(DTOR*m_PsiR)*vcl_sin(DTOR*m_TauR);
   
   AEi[0]=Ei0;
   AEi[1]=Ei1;
@@ -294,7 +297,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   std::cout<<"Er1 im: "<<m_Er[1].imag()<<std::endl;
   std::cout<<"Er1 re: "<<m_Er[1].real()<<std::endl;
     
-  std::cout<<"DTOR: "<<m_DTOR<<std::endl;       
+  std::cout<<"DTOR: "<<DTOR<<std::endl;       
 }
 
 /**

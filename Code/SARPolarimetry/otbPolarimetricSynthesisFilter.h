@@ -99,7 +99,11 @@ public:
        this->GetFunctor().SetEr(er);
        this->Modified();
   }   
-
+  
+  void ForceCoPolar();  
+  
+  void ForceCrossPolar();
+  
 protected:
   PolarimetricSynthesisFilter();
   virtual ~PolarimetricSynthesisFilter() {};
@@ -115,7 +119,7 @@ protected:
 
   /** Verify and force the inputs, if only  2 or 3 channels are present */
   void VerifyAndForceInputs();
-
+  
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
@@ -131,15 +135,16 @@ private:
   double m_PsiR;
   /** Tau Reflected */
   double m_TauR;
+  
+  /** Emission mode */
+  bool m_EmissionH;
+  bool m_EmissionV;  
 
   /** Champs Electromagnetic Incident */
   ComplexArrayType m_Ei;
   /** Champs Electromagnetic Reflechi */
   ComplexArrayType m_Er;  
-  
-  /** Conversion coefficient Degre To Radian */
-  static const double m_DTOR=M_PI/180;
-  
+   
 };
 
 } // end namespace otb

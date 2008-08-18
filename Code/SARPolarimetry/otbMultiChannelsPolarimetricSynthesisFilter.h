@@ -182,10 +182,7 @@ private :
   ComplexArrayType m_Ei;
   /** Champs Electromagnetic Reflechi */
   ComplexArrayType m_Er;  
-  
-  /** Conversion coefficient Degre To Radian */
-  static const double m_DTOR=M_PI/180;
-  
+   
   /** Architecture Type */
   int m_ArchitectureType;
 
