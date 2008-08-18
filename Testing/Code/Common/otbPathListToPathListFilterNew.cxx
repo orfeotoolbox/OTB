@@ -17,6 +17,7 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
+#include <cstdlib>
 #include "otbPathListToPathListFilter.h"
 #include "itkPolyLineParametricPath.h"
 

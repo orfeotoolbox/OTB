@@ -2,6 +2,7 @@
 #include "itkMacro.h"
 
 #include <iostream>
+#include <cstdlib>
 #include "svm.h"
 
 namespace otb

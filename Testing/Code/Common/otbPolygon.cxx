@@ -17,6 +17,8 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 #include <fstream>
+#include <cstdlib>
+
 #include "otbPolygon.h"
 
 int otbPolygon(int argc, char * argv[])

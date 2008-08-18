@@ -35,6 +35,7 @@
 #define ossimCplUtil_HEADER
 
 #include <cstdio> /* to pick up "size_t" */
+#include <cstdlib>
 #include <ossim/base/ossimConstants.h>
 
 

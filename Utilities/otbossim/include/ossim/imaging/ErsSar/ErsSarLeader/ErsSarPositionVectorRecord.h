@@ -2,6 +2,7 @@
 #define ErsSarPositionVectorRecord_h
 
 #include <iostream>
+#include <cstdlib>
 #include <ossim/imaging/ErsSar/ErsSarRecord.h>
 /**
  * @ingroup PlatformPositionDataRecord

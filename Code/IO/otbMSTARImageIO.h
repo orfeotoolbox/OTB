@@ -23,6 +23,7 @@
 #endif
 
 #include <string>
+#include <cstring>
 #include <fstream>
 #include "itkImageIOBase.h"
 #include <stdio.h>

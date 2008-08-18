@@ -4,6 +4,8 @@
 
 #include <ossim/imaging/RadarSat/RadarSatRecordHeader.h>
 #include <iostream>
+#include <cstdlib>
+
 /**
  * @ingroup RadarSat
  * @brief This class is the base class of all the record classes

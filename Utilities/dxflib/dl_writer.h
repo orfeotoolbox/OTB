@@ -37,6 +37,7 @@
 #endif
 
 #include <iostream>
+#include <cstring>
 
 #include "dl_attributes.h"
 #include "dl_codes.h"

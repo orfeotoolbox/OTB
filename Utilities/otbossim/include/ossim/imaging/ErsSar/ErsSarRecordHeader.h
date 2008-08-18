@@ -2,7 +2,7 @@
 #define ErsSarRecordHeader_h
 
 #include<iostream>
-
+#include<cstring>
 
 /**
  * @ingroup ErsSar

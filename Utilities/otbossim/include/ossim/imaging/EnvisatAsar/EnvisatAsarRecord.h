@@ -2,6 +2,8 @@
 #define EnvisatAsarRecord_h
 
 #include <iostream>
+#include <cstdlib>
+#include <cstring>
 #include <ossim/base/ossimCommon.h>
 /**
  * @ingroup EnvisatAsar

@@ -16,6 +16,7 @@
 
 =========================================================================*/
 #include "itkExceptionObject.h"
+#include <cstdlib>
 
 #include "otbPolygon.h"
 

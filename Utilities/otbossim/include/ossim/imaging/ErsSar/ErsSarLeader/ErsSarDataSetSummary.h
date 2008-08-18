@@ -2,6 +2,7 @@
 #define ErsSarDataSetSummary_h
 
 #include <iostream>
+#include <cstdlib>
 #include <ossim/imaging/ErsSar/ErsSarRecordHeader.h>
 #include <ossim/imaging/ErsSar/ErsSarRecord.h>
 /**

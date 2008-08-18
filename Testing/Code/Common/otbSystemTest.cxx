@@ -22,6 +22,7 @@
 
 #include "itkExceptionObject.h"
 #include <iostream>
+#include <cstdlib>
 
 #include "itkMacro.h"
 #include "otbSystem.h"

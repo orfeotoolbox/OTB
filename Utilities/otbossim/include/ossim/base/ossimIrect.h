@@ -16,6 +16,7 @@
 #define ossimIrect_HEADER
 #include <iosfwd>
 #include <vector>
+#include <cstdlib>
 
 #include <ossim/base/ossimIpt.h>
 #include <ossim/base/ossimCommon.h>

@@ -2,7 +2,7 @@
 #define RadarSatRecordHeader_h
 
 #include<iostream>
-
+#include<cstring>
 
 /**
  * @ingroup RadarSat

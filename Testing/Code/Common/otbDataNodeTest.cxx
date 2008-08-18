@@ -17,6 +17,7 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 #include "otbMacro.h"
+#include <cstdlib>
 
 #include "otbDataNode.h"
 

@@ -13,6 +13,8 @@
 #define ossimString_HEADER
 
 #include <string>
+#include <cstring>
+#include <cstdlib>
 #include <vector>
 #include <ossim/base/ossimConstants.h>
 

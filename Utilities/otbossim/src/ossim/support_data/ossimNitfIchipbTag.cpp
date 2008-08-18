@@ -14,6 +14,7 @@
 // $Id: ossimNitfIchipbTag.cpp 10177 2007-01-03 19:22:09Z gpotts $
 
 #include <cstring> /* for memcpy */
+#include <istream>
 #include <iomanip>
 
 #include <ossim/support_data/ossimNitfIchipbTag.h>

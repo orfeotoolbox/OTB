@@ -20,6 +20,7 @@
 #include <iomanip>
 #include <fstream>
 #include <vector>
+#include <cstdlib>
 
 #include "otb_6S.h"
 #include "main_6s.h"

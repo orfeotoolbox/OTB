@@ -27,6 +27,7 @@
 #include "itkFastMutexLock.h"
 
 #include <string>
+#include <cstring>
 
 namespace itk
 {
@@ -188,11 +189,11 @@ namespace itk
        * from page 10.4.11 pg 256 of the Stroustrup book:
        * ========================================================================
        * The reinterpret_cast is the crudest and potentially nastiest of the type
-       * conversion operators.  In most caes, it simply yeilds a value with the
-       * same bit pattern as it's argument wit the type required .  Thus, it can
+       * conversion operators.ï¿½ In most caes, it simply yeilds a value with the
+       * same bit pattern as it's argument wit the type required .ï¿½ Thus, it can
        * be used for the inherently implementation-depend, dangerous, and
        * occasionally absolutely necessary activity of converting interger values
-       * to pointers, and  vice versa.
+       * to pointers, andï¿½ vice versa.
        */
       outval =
         reinterpret_cast<MetaDataObject <T> *>(Dictionary[key].GetPointer())->GetMetaDataObjectValue();

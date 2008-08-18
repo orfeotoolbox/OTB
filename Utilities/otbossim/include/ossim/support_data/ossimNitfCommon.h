@@ -13,6 +13,7 @@
 
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimString.h>
+#include <ios>
 
 class ossimDpt;
 

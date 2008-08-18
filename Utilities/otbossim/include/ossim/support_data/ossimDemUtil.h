@@ -17,6 +17,8 @@
 #define ossimDemUtil_HEADER
 
 #include <string>
+#include <cstring>
+#include <cstdlib>
 #include <iostream>
 
 class ossimDemUtil

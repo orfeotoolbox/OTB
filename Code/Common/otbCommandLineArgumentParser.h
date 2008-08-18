@@ -27,6 +27,7 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <cstdlib>
 
 #include "itkProcessObject.h"
 #include "otbMacro.h"

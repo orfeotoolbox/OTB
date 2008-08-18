@@ -2,6 +2,7 @@
 #define ErsSarImageOptionsFileDescriptor_h
 
 #include <iostream>
+#include <cstdlib>
 
 #include <ossim/imaging/ErsSar/ErsSarRecord.h>
 #include <ossim/imaging/ErsSar/ErsSarRecordHeader.h>
