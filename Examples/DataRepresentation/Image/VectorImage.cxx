@@ -128,8 +128,8 @@ int main(int, char *[])
   pixelValue.Reserve( 4 );
 
   pixelValue[0] =  1;   // Blue component
-  pixelValue[1] =  6;   // Red component
-  pixelValue[2] =  100; // Green component
+  pixelValue[1] =  6;   // Green component
+  pixelValue[2] =  100; // Red component
   pixelValue[3] =  100; // NIR component
   // Software Guide : EndCodeSnippet
 
