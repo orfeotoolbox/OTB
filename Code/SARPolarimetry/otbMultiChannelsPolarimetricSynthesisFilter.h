@@ -71,7 +71,7 @@ public:
   typedef typename     OutputImageType::PixelType     OutputImagePixelType;
   typedef typename     std::complex <double>          ComplexType;
   typedef typename     itk::FixedArray<ComplexType,2> ComplexArrayType;  
-  typedef enum {HH_HV_VH_VV=0,HH_HV_VV=1,HH_VH_VV=2,HH_HV=3,VH_VV=4} ArchitectureType;
+  typedef enum {HH_HV_VH_VV=0,HH_HV_VV=1,HH_HV=2,VH_VV=3,HH_VV=4} ArchitectureType; //HH_VH_VV=2
   
     
   /** Get the functor object.  The functor is returned by reference.
@@ -125,7 +125,20 @@ public:
   itkGetMacro(TauR,double);
   /** Set/Get ArchitectureType */
   itkGetMacro(ArchitectureType,int);
-  itkSetMacro(ArchitectureType,int);    
+  itkSetMacro(ArchitectureType,int);
+  /** Set/Get EmissionH */  
+  itkSetMacro(EmissionH,bool);
+  itkGetMacro(EmissionH,bool);
+  /** Set/Get EmissionV */    
+  itkSetMacro(EmissionV,bool);
+  itkGetMacro(EmissionV,bool);
+  /** Set/Get Mode */    
+  itkSetMacro(Mode,int);
+  itkGetMacro(Mode,int);  
+  
+  void ForceCoPolar();  
+  
+  void ForceCrossPolar();  
 
 
 protected:
@@ -158,13 +171,20 @@ protected:
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                             int threadId );  
   
+  /** */
+  void DetermineArchitecture();
+  
   /** Computation of the electromagnetic fields Ei Er */ 
   void ComputeElectromagneticFields();  
   
   /** Verify and force the inputs, if only  2 or 3 channels are present */
   void VerifyAndForceInputs();  
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;  
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  
+  void Print();    
+  
+
 
 private :
   MultiChannelsPolarimetricSynthesisFilter(const Self&); //purposely not implemented
@@ -177,6 +197,13 @@ private :
   double m_PsiR;
   /** Tau Relechi */
   double m_TauR;
+  
+  /** None = 0 , copolar = 1 , crosspolar = 2 */
+  int m_Mode;
+  
+  /** Emission mode */
+  bool m_EmissionH;
+  bool m_EmissionV;
 
   /** Champs Electromagnetic Incident */
   ComplexArrayType m_Ei;

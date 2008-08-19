@@ -85,6 +85,9 @@ public:
   /** Set/Get TauR */
   itkSetMacro(TauR,double);
   itkGetMacro(TauR,double);
+  /** Set/Get Mode */    
+  itkSetMacro(Mode,int);
+  itkGetMacro(Mode,int);
   
   void SetEi(ComplexArrayType ei)
   {
@@ -122,6 +125,8 @@ protected:
   
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
+  void Print();  
+
 private:
 
   PolarimetricSynthesisFilter(const Self&); //purposely not implemented
@@ -135,10 +140,9 @@ private:
   double m_PsiR;
   /** Tau Reflected */
   double m_TauR;
-  
-  /** Emission mode */
-  bool m_EmissionH;
-  bool m_EmissionV;  
+   
+  /** None = 0 , copolar = 1 , crosspolar = 2 */
+  int m_Mode;
 
   /** Champs Electromagnetic Incident */
   ComplexArrayType m_Ei;

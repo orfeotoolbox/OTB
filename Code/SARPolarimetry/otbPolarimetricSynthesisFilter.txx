@@ -31,8 +31,9 @@ template <class TInputImageHH,class TInputImageHV,class TInputImageVH,class TInp
 PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImageVV,TOutputImage,TFunction>
 ::PolarimetricSynthesisFilter()
 {
-  this->SetNumberOfRequiredInputs(1);
+  this->SetNumberOfRequiredInputs(0);
   this->SetNumberOfInputs(4);
+  SetMode(0);
 }
 
 /**
@@ -91,6 +92,27 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
   Superclass::PrintSelf(os,indent);
 }
 
+template <class TInputImageHH,class TInputImageHV,class TInputImageVH,class TInputImageVV,class TOutputImage,class TFunction  >
+void
+PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImageVV,TOutputImage,TFunction>
+::Print()
+{
+  std::cout<<"PsiI: "<<m_PsiI<<std::endl;
+  std::cout<<"TauI: "<<m_TauI<<std::endl;
+  std::cout<<"PsiR: "<<m_PsiR<<std::endl;
+  std::cout<<"TauR: "<<m_TauR<<std::endl;
+  
+  std::cout<<"Ei0 im: "<<m_Ei[0].imag()<<std::endl;
+  std::cout<<"Ei0 re: "<<m_Ei[0].real()<<std::endl;
+  std::cout<<"Ei1 im: "<<m_Ei[1].imag()<<std::endl;
+  std::cout<<"Ei1 re: "<<m_Ei[1].real()<<std::endl;
+  
+  std::cout<<"Er0 im: "<<m_Er[0].imag()<<std::endl;
+  std::cout<<"Er0 re: "<<m_Er[0].real()<<std::endl;
+  std::cout<<"Er1 im: "<<m_Er[1].imag()<<std::endl;
+  std::cout<<"Er1 re: "<<m_Er[1].real()<<std::endl;
+}
+
 /**
  * Force Copolar mode
  */
@@ -99,8 +121,9 @@ void
 PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImageVV,TOutputImage,TFunction>
 ::ForceCoPolar()
 {
-        this->SetPsiR(m_PsiI);
-        this->SetTauR(m_TauI);        
+        SetPsiR(m_PsiI);
+        SetTauR(m_TauI);        
+        SetMode(1);
 }
 
 /**
@@ -111,8 +134,9 @@ void
 PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImageVV,TOutputImage,TFunction>
 ::ForceCrossPolar()
 {
-        this->SetPsiR(m_PsiI+90);
-        this->SetTauR(-m_TauI);        
+        SetPsiR(m_PsiI+90);
+        SetTauR(-m_TauI);
+        SetMode(2);        
 }
 
 /**
@@ -148,23 +172,7 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
 
   this->SetEi(AEi);
   this->SetEr(AEr);  
-    
-  std::cout<<"PsiI: "<<m_PsiI<<std::endl;
-  std::cout<<"TauI: "<<m_TauI<<std::endl;
-  std::cout<<"PsiR: "<<m_PsiR<<std::endl;
-  std::cout<<"TauR: "<<m_TauR<<std::endl;
-  
-  std::cout<<"Ei0 im: "<<m_Ei[0].imag()<<std::endl;
-  std::cout<<"Ei0 re: "<<m_Ei[0].real()<<std::endl;
-  std::cout<<"Ei1 im: "<<m_Ei[1].imag()<<std::endl;
-  std::cout<<"Ei1 re: "<<m_Ei[1].real()<<std::endl;
-  
-  std::cout<<"Er0 im: "<<m_Er[0].imag()<<std::endl;
-  std::cout<<"Er0 re: "<<m_Er[0].real()<<std::endl;
-  std::cout<<"Er1 im: "<<m_Er[1].imag()<<std::endl;
-  std::cout<<"Er1 re: "<<m_Er[1].real()<<std::endl;
-    
-  std::cout<<"DTOR: "<<DTOR<<std::endl;       
+           
 }
 
 /**
@@ -237,6 +245,8 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
         // Forcing TauI=0 PsiI=90          
         this->SetTauI(0);
         this->SetPsiI(90);
+        if(GetMode()==1)ForceCoPolar();
+        else if(GetMode()==2)ForceCrossPolar();      
   }
   else
   // Only HH and HV are present
@@ -270,7 +280,9 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
         
 	// Forcing TauI=0 PsiI=0
         this->SetTauI(0);
-        this->SetPsiI(0);                      
+        this->SetPsiI(0);
+        if(GetMode()==1)ForceCoPolar();
+        else if(GetMode()==2)ForceCrossPolar();        
   }
   else
   // Only HH and VV are present  
@@ -301,6 +313,8 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
   
    // Second Part. Estimation of the incident field Ei and the reflected field Er
    ComputeElectromagneticFields();
+   
+   Print();
 }
 
 }

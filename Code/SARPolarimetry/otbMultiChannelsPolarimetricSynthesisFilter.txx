@@ -36,6 +36,8 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 {
   this->SetNumberOfRequiredInputs( 1 );
   this->InPlaceOff();
+  SetEmissionH(false);
+  SetEmissionV(false);  
   m_ArchitectureType=0;
 }
 
@@ -174,8 +176,6 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   switch (m_ArchitectureType)
   {
           case 0 :
-              if ( inputPtr->GetNumberOfComponentsPerPixel()==4 )
-              {
                 while( !inputIt.IsAtEnd() ) 
                 {
                 outputIt.Set( m_Functor( inputIt.Get()[0], inputIt.Get()[1], inputIt.Get()[2], inputIt.Get()[3] ) );
@@ -183,14 +183,10 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
                 ++outputIt;
                 progress.CompletedPixel();  // potential exception thrown here
                 }
-              }
-//              else
               break;  
 
           // With 3 channels : HH HV VV 
           case 1 :
-//              if ( inputPtr->GetNumberOfComponentsPerPixel()==3 )
-//              {
                 while( !inputIt.IsAtEnd() ) 
                 {
                 outputIt.Set( m_Functor( inputIt.Get()[0], inputIt.Get()[1], inputIt.Get()[1], inputIt.Get()[2] ) );
@@ -201,9 +197,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
               break;  
                 
           // With 3 channels : HH VH VV
-          case 2 :
-              if ( inputPtr->GetNumberOfComponentsPerPixel()==3 )
-              {
+/*          case 2 :
                 while( !inputIt.IsAtEnd() ) 
                 {
                 outputIt.Set( m_Functor( inputIt.Get()[0], inputIt.Get()[1], inputIt.Get()[1], inputIt.Get()[2] ) );
@@ -211,13 +205,10 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
                 ++outputIt;
                 progress.CompletedPixel();  // potential exception thrown here
                 }
-              }
               break;  
-                
+*/                
           // Only HH and HV are present                
-          case 3 :
-              if ( inputPtr->GetNumberOfComponentsPerPixel()==2 )
-              {
+          case 2 :
                 while( !inputIt.IsAtEnd() ) 
                 {
                 outputIt.Set( m_Functor( inputIt.Get()[0], inputIt.Get()[1], 0, 0 ) );
@@ -225,13 +216,10 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
                 ++outputIt;
                 progress.CompletedPixel();  // potential exception thrown here
                 }
-              }
               break;  
                                 
           // Only VH and VV are present
-          case 4 :
-              if ( inputPtr->GetNumberOfComponentsPerPixel()==2 )
-              {
+          case 3 :
                 while( !inputIt.IsAtEnd() ) 
                 {
                 outputIt.Set( m_Functor( 0, 0, inputIt.Get()[2], inputIt.Get()[3] ) );
@@ -239,13 +227,13 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
                 ++outputIt;
                 progress.CompletedPixel();  // potential exception thrown here
                 }
-              }
               break;  
        
           default :
               itkExceptionMacro("Unknown architecture : Polarimetric synthesis is impossible !");
               return;
-  }       
+  }    
+    
 }
 
 /**
@@ -281,24 +269,40 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 
   this->SetEi(AEi);
   this->SetEr(AEr);  
-    
-  std::cout<<"PsiI: "<<m_PsiI<<std::endl;
-  std::cout<<"TauI: "<<m_TauI<<std::endl;
-  std::cout<<"PsiR: "<<m_PsiR<<std::endl;
-  std::cout<<"TauR: "<<m_TauR<<std::endl;
-  
-  std::cout<<"Ei0 im: "<<m_Ei[0].imag()<<std::endl;
-  std::cout<<"Ei0 re: "<<m_Ei[0].real()<<std::endl;
-  std::cout<<"Ei1 im: "<<m_Ei[1].imag()<<std::endl;
-  std::cout<<"Ei1 re: "<<m_Ei[1].real()<<std::endl;
-  
-  std::cout<<"Er0 im: "<<m_Er[0].imag()<<std::endl;
-  std::cout<<"Er0 re: "<<m_Er[0].real()<<std::endl;
-  std::cout<<"Er1 im: "<<m_Er[1].imag()<<std::endl;
-  std::cout<<"Er1 re: "<<m_Er[1].real()<<std::endl;
-    
-  std::cout<<"DTOR: "<<DTOR<<std::endl;       
+      
 }
+
+/**
+ * Determine the kind of architecture
+ */
+template <class TInputImage, class TOutputImage, class TFunction  >
+void
+MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
+::DetermineArchitecture()
+{
+
+  int NumberOfImages = this->GetInput()->GetNumberOfComponentsPerPixel();
+
+  if ( NumberOfImages == 4 )
+        SetArchitectureType(0);
+        
+// METTRE ICI DES WARNINGS ou ERREUR si INCOHERENCE        
+        
+  if ( NumberOfImages == 3 ) 
+        SetArchitectureType(1);
+
+  if ( ( NumberOfImages == 2  ) &&
+       GetEmissionH() && !GetEmissionV() )
+        SetArchitectureType(2);
+
+  if ( ( NumberOfImages == 2  ) &&
+       !GetEmissionH() && GetEmissionV() )
+        SetArchitectureType(3);        
+
+  std::cout<<"Architecture: "<<GetArchitectureType()<<std::endl;
+
+}
+
 
 /**
  * Verify and force the inputs, if only  2 or 3 channels are present
@@ -311,8 +315,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   InputPixelType pix;
   pix.imag()=0;
   pix.real()=0;
-
-  // With 3 channels : HH VH VV
+  
   switch (m_ArchitectureType)
     {
           case 0 :
@@ -325,27 +328,32 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
                 break;
                 
           // With 3 channels : HH VH VV
-          case 2 :
+/*          case 2 :
                 std::cout<<"Case 3 channels !!"<<std::endl;
                 break;
-                
+*/                
           // Only HH and HV are present                
-          case 3 :
-                std::cout<<"Case HH HV present !!"<<std::endl;      
+          case 2 :
+                std::cout<<"Case HH HV !!"<<std::endl;      
                              
         	// Forcing TauI=0 PsiI=0
                 this->SetTauI(0);
-                this->SetPsiI(0);    
+                this->SetPsiI(0);
+                if(GetMode()==1)ForceCoPolar();
+                else if(GetMode()==2)ForceCrossPolar();                  
                 break;
                                 
           // Only VH and VV are present
-          case 4 :
-                std::cout<<"Case VH VV present !!"<<std::endl;  
+          case 3 :
+                std::cout<<"Case VH VV !!"<<std::endl;  
         
                 // Forcing TauI=0 PsiI=90          
                 this->SetTauI(0);
                 this->SetPsiI(90);
-        
+                if(GetMode()==1)ForceCoPolar();
+                else if(GetMode()==2)ForceCrossPolar();
+                break;
+                
           default :
                 itkExceptionMacro("Unknown architecture : Polarimetric synthesis is impossible !");
                 return;
@@ -361,12 +369,44 @@ void
 MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 ::BeforeThreadedGenerateData()
 {
+
+  // Determine the kind of architecture of the input picture
+  DetermineArchitecture();
+  
   // First Part. Verify and force the inputs
   VerifyAndForceInputs();   
   
   // Second Part. Estimation of the incident field Ei and the reflected field Er
   ComputeElectromagneticFields();
 
+  Print();
+  
+}
+
+/**
+ * Force Copolar mode
+ */
+template <class TInputImage, class TOutputImage, class TFunction  >
+void
+MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
+::ForceCoPolar()
+{
+        SetPsiR(m_PsiI);
+        SetTauR(m_TauI);        
+        std::cout<<"PsiI: "<<m_PsiI<<std::endl;  SetMode(1);
+}
+
+/**
+ * Force Crosspolar mode
+ */
+template <class TInputImage, class TOutputImage, class TFunction  >
+void
+MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
+::ForceCrossPolar()
+{
+        SetPsiR(m_PsiI+90);
+        SetTauR(-m_TauI);
+        SetMode(2);        
 }
 
 /**
@@ -378,10 +418,30 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os,indent);
-  os << indent << "Psi I: "<<m_PsiI<<std::endl;
-  os << indent << "Tau I: "<<m_TauI<<std::endl;
-  os << indent << "Psi R: "<<m_PsiR<<std::endl;
-  os << indent << "Tau R: "<<m_TauR<<std::endl;    
+}
+
+/**
+ * Print
+ */
+template <class TInputImage, class TOutputImage, class TFunction  >
+void
+MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
+::Print()
+{
+  std::cout<<"PsiI: "<<m_PsiI<<std::endl;
+  std::cout<<"TauI: "<<m_TauI<<std::endl;
+  std::cout<<"PsiR: "<<m_PsiR<<std::endl;
+  std::cout<<"TauR: "<<m_TauR<<std::endl;
+  
+  std::cout<<"Ei0 im: "<<m_Ei[0].imag()<<std::endl;
+  std::cout<<"Ei0 re: "<<m_Ei[0].real()<<std::endl;
+  std::cout<<"Ei1 im: "<<m_Ei[1].imag()<<std::endl;
+  std::cout<<"Ei1 re: "<<m_Ei[1].real()<<std::endl;
+  
+  std::cout<<"Er0 im: "<<m_Er[0].imag()<<std::endl;
+  std::cout<<"Er0 re: "<<m_Er[0].real()<<std::endl;
+  std::cout<<"Er1 im: "<<m_Er[1].imag()<<std::endl;
+  std::cout<<"Er1 re: "<<m_Er[1].real()<<std::endl;
 }
 
 } // end namespace otb
