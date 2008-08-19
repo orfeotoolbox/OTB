@@ -20,8 +20,8 @@
 #endif
 
 #include "itkExceptionObject.h"
-
 #include "otbAtmosphericRadiativeTerms.h"
+#include <cstdlib>
 
 int otbAtmosphericRadiativeTermsNew(int argc, char * argv[])
 {

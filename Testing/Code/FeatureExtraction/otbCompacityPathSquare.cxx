@@ -19,7 +19,7 @@
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
-
+#include <cstdlib>
 #include "otbCompacityPathFunction.h"
 #include "itkPolyLineParametricPath.h"
 #include "itkExceptionObject.h"

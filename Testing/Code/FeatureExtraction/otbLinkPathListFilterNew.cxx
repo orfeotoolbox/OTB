@@ -18,6 +18,7 @@
 #include "itkExceptionObject.h"
 #include "otbLinkPathListFilter.h"
 #include "itkPolyLineParametricPath.h"
+#include <cstdlib>
 
 int otbLinkPathListFilterNew(int argc, char * argv[])
 {

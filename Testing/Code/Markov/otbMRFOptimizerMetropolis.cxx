@@ -21,6 +21,7 @@
 
 #include "otbMRFOptimizerMetropolis.h"
 #include <fstream>
+#include <cstdlib>
 
 int otbMRFOptimizerMetropolis(int argc, char * argv[])
 {

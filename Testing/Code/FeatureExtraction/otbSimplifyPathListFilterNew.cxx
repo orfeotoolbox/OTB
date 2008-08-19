@@ -19,6 +19,7 @@
 
 #include "otbSimplifyPathListFilter.h"
 #include "itkPolyLineParametricPath.h"
+#include <cstdlib>
 
 int otbSimplifyPathListFilterNew(int argc, char * argv[])
 {

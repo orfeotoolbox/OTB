@@ -20,6 +20,7 @@
 #endif
 
 #include "otbMRFOptimizerMetropolis.h"
+#include <cstdlib>
 
 int otbMRFOptimizerMetropolisNew(int argc, char * argv[])
 {

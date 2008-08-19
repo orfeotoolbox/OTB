@@ -22,6 +22,7 @@
 #include <fstream>
 #include <vector>
 #include "otbMath.h"
+#include <cstdlib>
 
 int otbBreakAngularPathListFilter(int argc, char * argv[])
 {

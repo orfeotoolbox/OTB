@@ -16,6 +16,7 @@
 
 =========================================================================*/
 #include "otbInverseLogPolarTransform.h"
+#include <cstdlib>
 
 int otbInverseLogPolarTransformNew(int argc, char* argv[])
 {

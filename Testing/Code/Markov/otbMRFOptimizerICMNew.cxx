@@ -20,6 +20,7 @@
 #endif
 
 #include "otbMRFOptimizerICM.h"
+#include <cstdlib>
 
 int otbMRFOptimizerICMNew(int argc, char * argv[])
 {

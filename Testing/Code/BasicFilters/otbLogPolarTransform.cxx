@@ -20,6 +20,7 @@
 #include "otbMacro.h"
 #include "otbMath.h"
 #include <fstream>
+#include <cstdlib>
 
 int otbLogPolarTransform(int argc, char* argv[])
 {

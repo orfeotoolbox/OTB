@@ -20,6 +20,8 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+#include <cstdlib>
+
 #include "otbCompacityPathFunction.h"
 #include "itkPolyLineParametricPath.h"
 #include "itkExceptionObject.h"

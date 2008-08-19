@@ -17,6 +17,7 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 #include "otbRCC8Edge.h"
+#include <cstdlib>
 
 int otbRCC8Edge(int argc, char* argv[])
 {

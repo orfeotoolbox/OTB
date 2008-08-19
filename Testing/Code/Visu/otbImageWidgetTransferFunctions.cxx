@@ -17,6 +17,7 @@ PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 #include "otbImageWidgetTransferFunction.h"
 #include <fstream>
+#include <cstdlib>
 
 int otbImageWidgetTransferFunctions(int argc, char * argv[])
 {

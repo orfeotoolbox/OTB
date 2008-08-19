@@ -24,6 +24,7 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
+#include <cstdlib>
 
 int otbSIXSTraitsComputeAtmosphericParametersTest(int argc, char * argv[])
 {

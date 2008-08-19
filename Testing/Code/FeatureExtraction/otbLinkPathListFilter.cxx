@@ -19,8 +19,10 @@
 
 #include "otbLinkPathListFilter.h"
 #include "itkPolyLineParametricPath.h"
-#include <fstream>
 #include "otbMath.h"
+#include <fstream>
+#include <cstdlib>
+
 
 int otbLinkPathListFilter(int argc, char * argv[])
 {

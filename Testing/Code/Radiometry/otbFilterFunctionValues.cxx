@@ -23,6 +23,7 @@
 #include "otbAtmosphericCorrectionParameters.h"
 #include "otbSIXSTraits.h"
 #include <fstream>
+#include <cstdlib>
 
 int otbFilterFunctionValuesTest(int argc, char * argv[])
 {

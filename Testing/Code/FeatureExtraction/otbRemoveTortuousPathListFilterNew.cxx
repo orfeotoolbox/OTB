@@ -19,6 +19,7 @@
 
 #include "otbRemoveTortuousPathListFilter.h"
 #include "itkPolyLineParametricPath.h"
+#include <cstdlib>
 
 int otbRemoveTortuousPathListFilterNew(int argc, char * argv[])
 {

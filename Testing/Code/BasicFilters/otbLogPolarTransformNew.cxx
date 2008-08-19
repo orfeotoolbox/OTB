@@ -16,6 +16,7 @@
 
 =========================================================================*/
 #include "otbLogPolarTransform.h"
+#include <cstdlib>
 
 int otbLogPolarTransformNew(int argc, char* argv[])
 {

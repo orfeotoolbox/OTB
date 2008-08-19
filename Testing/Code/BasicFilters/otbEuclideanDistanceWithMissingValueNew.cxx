@@ -20,7 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 
 #include <iostream>
-
+#include <cstdlib>
 #include "itkVariableLengthVector.h"
 #include "otbEuclideanDistanceWithMissingValue.h"
 

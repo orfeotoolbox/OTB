@@ -17,6 +17,7 @@
 =========================================================================*/
 
 #include "otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.h"
+#include <cstdlib>
 
 int otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew(int argc, char * argv[])
 {

@@ -18,6 +18,7 @@
 #include "otbInverseLogPolarTransform.h"
 #include "otbMacro.h"
 #include <fstream>
+#include <cstdlib>
 #include "otbMath.h"
 
 int otbInverseLogPolarTransform(int argc, char* argv[])

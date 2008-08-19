@@ -23,6 +23,7 @@
 #include <fstream>
 #include <iostream>
 #include <iomanip>
+#include <cstdlib>
 
 int otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms(int argc, char * argv[])
 {

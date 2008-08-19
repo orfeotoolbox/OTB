@@ -18,6 +18,7 @@
 #include "itkExceptionObject.h"
 #include "otbBreakAngularPathListFilter.h"
 #include "itkPolyLineParametricPath.h"
+#include <cstdlib>
 
 int otbBreakAngularPathListFilterNew(int argc, char * argv[])
 {

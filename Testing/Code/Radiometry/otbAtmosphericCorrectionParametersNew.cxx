@@ -20,8 +20,9 @@
 #endif
 
 #include "itkExceptionObject.h"
-
 #include "otbAtmosphericCorrectionParameters.h"
+
+#include <cstdlib>
 
 int otbAtmosphericCorrectionParametersNew(int argc, char * argv[])
 {
