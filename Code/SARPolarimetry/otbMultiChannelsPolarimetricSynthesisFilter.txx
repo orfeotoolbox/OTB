@@ -370,13 +370,13 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 ::BeforeThreadedGenerateData()
 {
 
-  // Determine the kind of architecture of the input picture
+  // First Part. Determine the kind of architecture of the input picture
   DetermineArchitecture();
   
-  // First Part. Verify and force the inputs
+  // Second Part. Verify and force the inputs
   VerifyAndForceInputs();   
   
-  // Second Part. Estimation of the incident field Ei and the reflected field Er
+  // Third Part. Estimation of the incident field Ei and the reflected field Er
   ComputeElectromagneticFields();
 
   Print();
