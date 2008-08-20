@@ -27,7 +27,15 @@ int main(int argc, char* argv[] )
     }
   catch( itk::ExceptionObject & err ) 
     { 
-	  std::cerr << err << std::endl;
+      std::string descriptionException = err.GetDescription();   
+      if(descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos) 
+      {
+        return EXIT_SUCCESS;
+      }
+      if(descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos) 
+      {
+        return EXIT_SUCCESS;
+      }
       return EXIT_FAILURE;
     }
 
