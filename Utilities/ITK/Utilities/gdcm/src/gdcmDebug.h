@@ -25,6 +25,8 @@
 #include <fstream>
 #include <assert.h>
 #include <errno.h>
+#include <cstring>
+#include <cstdlib>
 
 namespace gdcm 
 {
