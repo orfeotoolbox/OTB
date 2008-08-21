@@ -100,9 +100,7 @@ int otbMultiChannelsPolarimetricSynthesisFilter( int argc, char * argv[] )
         outputPtr->Allocate();
         InputVectorImageType::PixelType pix0;
         pix0.SetSize(4);
-        InputPixelType complexpix;
-        complexpix.imag()=0;
-        complexpix.real()=0;
+        InputPixelType complexpix(0,0);
         pix0.Fill(complexpix);
         
         outputPtr->FillBuffer(pix0);
