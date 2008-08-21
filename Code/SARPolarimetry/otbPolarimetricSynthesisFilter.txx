@@ -147,23 +147,27 @@ void
 PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImageVV,TOutputImage,TFunction>
 ::ComputeElectromagneticFields()
 {
-  ComplexType Ei0,Ei1,Er0,Er1;
   ComplexArrayType AEi, AEr;
   
   /** Conversion coefficient Degre To Radian */
   double DTOR=M_PI/180;  
+  double real,imag;
   
-  Ei0.real() = vcl_cos(DTOR*m_PsiI)*vcl_cos(DTOR*m_TauI);
-  Ei0.imag() = -vcl_sin(DTOR*m_PsiI)*vcl_sin(DTOR*m_TauI);
-
-  Ei1.real() = vcl_sin(DTOR*m_PsiI)*vcl_cos(DTOR*m_TauI);
-  Ei1.imag() = vcl_cos(DTOR*m_PsiI)*vcl_sin(DTOR*m_TauI);
-
-  Er0.real() = vcl_cos(DTOR*m_PsiR)*vcl_cos(DTOR*m_TauR);
-  Er0.imag() = -vcl_sin(DTOR*m_PsiR)*vcl_sin(DTOR*m_TauR);
-
-  Er1.real() = vcl_sin(DTOR*m_PsiR)*vcl_cos(DTOR*m_TauR);
-  Er1.imag() = vcl_cos(DTOR*m_PsiR)*vcl_sin(DTOR*m_TauR);
+  real = vcl_cos(DTOR*m_PsiI)*vcl_cos(DTOR*m_TauI);
+  imag = -vcl_sin(DTOR*m_PsiI)*vcl_sin(DTOR*m_TauI);
+  ComplexType Ei0(real,imag);
+  
+  real = vcl_sin(DTOR*m_PsiI)*vcl_cos(DTOR*m_TauI);
+  imag = vcl_cos(DTOR*m_PsiI)*vcl_sin(DTOR*m_TauI);
+  ComplexType Ei1(real,imag);
+  
+  real = vcl_cos(DTOR*m_PsiR)*vcl_cos(DTOR*m_TauR);
+  imag = -vcl_sin(DTOR*m_PsiR)*vcl_sin(DTOR*m_TauR);
+  ComplexType Er0(real,imag);
+  
+  real = vcl_sin(DTOR*m_PsiR)*vcl_cos(DTOR*m_TauR);
+  imag = vcl_cos(DTOR*m_PsiR)*vcl_sin(DTOR*m_TauR);
+  ComplexType Er1(real,imag);
   
   AEi[0]=Ei0;
   AEi[1]=Ei1;
