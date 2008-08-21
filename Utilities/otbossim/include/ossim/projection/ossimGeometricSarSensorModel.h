@@ -12,6 +12,7 @@
 #include <ossim/base/ossimMatrix3x3.h>
 #include <iostream>
 #include <list>
+#include <cstdlib>
 
 #include <ossim/projection/SARModel/DateTime/CivilDateTime.h>
 
