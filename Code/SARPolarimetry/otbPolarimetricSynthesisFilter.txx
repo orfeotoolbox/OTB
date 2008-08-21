@@ -246,9 +246,7 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
 
         // Forcing KhiI=0 PsiI=90          
         this->SetKhiI(0);
-        this->SetPsiI(90);
-        if(GetMode()==1)ForceCoPolar();
-        else if(GetMode()==2)ForceCrossPolar();      
+        this->SetPsiI(90);   
   }
   else
   // Only HH and HV are present
@@ -283,8 +281,6 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
 	// Forcing KhiI=0 PsiI=0
         this->SetKhiI(0);
         this->SetPsiI(0);
-        if(GetMode()==1)ForceCoPolar();
-        else if(GetMode()==2)ForceCrossPolar();        
   }
   else
   // Only HH and VV are present  
@@ -298,7 +294,10 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
   {
         itkExceptionMacro("Unknown architecture : Polarimetric synthesis is impossible !");
         return;
-  }  
+  }
+  
+  if(GetMode()==1)ForceCoPolar();
+  else if(GetMode()==2)ForceCrossPolar();
 
 }
 
