@@ -250,20 +250,20 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   double DTOR=M_PI/180;  
   double real,imag;
   
-  real = vcl_cos(DTOR*m_PsiI)*vcl_cos(DTOR*m_TauI);
-  imag = -vcl_sin(DTOR*m_PsiI)*vcl_sin(DTOR*m_TauI);
+  real = vcl_cos(DTOR*m_PsiI)*vcl_cos(DTOR*m_KhiI);
+  imag = -vcl_sin(DTOR*m_PsiI)*vcl_sin(DTOR*m_KhiI);
   ComplexType Ei0(real,imag);
   
-  real = vcl_sin(DTOR*m_PsiI)*vcl_cos(DTOR*m_TauI);
-  imag = vcl_cos(DTOR*m_PsiI)*vcl_sin(DTOR*m_TauI);
+  real = vcl_sin(DTOR*m_PsiI)*vcl_cos(DTOR*m_KhiI);
+  imag = vcl_cos(DTOR*m_PsiI)*vcl_sin(DTOR*m_KhiI);
   ComplexType Ei1(real,imag);
   
-  real = vcl_cos(DTOR*m_PsiR)*vcl_cos(DTOR*m_TauR);
-  imag = -vcl_sin(DTOR*m_PsiR)*vcl_sin(DTOR*m_TauR);
+  real = vcl_cos(DTOR*m_PsiR)*vcl_cos(DTOR*m_KhiR);
+  imag = -vcl_sin(DTOR*m_PsiR)*vcl_sin(DTOR*m_KhiR);
   ComplexType Er0(real,imag);
   
-  real = vcl_sin(DTOR*m_PsiR)*vcl_cos(DTOR*m_TauR);
-  imag = vcl_cos(DTOR*m_PsiR)*vcl_sin(DTOR*m_TauR);
+  real = vcl_sin(DTOR*m_PsiR)*vcl_cos(DTOR*m_KhiR);
+  imag = vcl_cos(DTOR*m_PsiR)*vcl_sin(DTOR*m_KhiR);
   ComplexType Er1(real,imag);
     
   AEi[0]=Ei0;
@@ -340,8 +340,8 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
           case 2 :
                 std::cout<<"Case HH HV !!"<<std::endl;      
                              
-        	// Forcing TauI=0 PsiI=0
-                this->SetTauI(0);
+        	// Forcing KhiI=0 PsiI=0
+                this->SetKhiI(0);
                 this->SetPsiI(0);
                 if(GetMode()==1)ForceCoPolar();
                 else if(GetMode()==2)ForceCrossPolar();                  
@@ -351,8 +351,8 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
           case 3 :
                 std::cout<<"Case VH VV !!"<<std::endl;  
         
-                // Forcing TauI=0 PsiI=90          
-                this->SetTauI(0);
+                // Forcing KhiI=0 PsiI=90          
+                this->SetKhiI(0);
                 this->SetPsiI(90);
                 if(GetMode()==1)ForceCoPolar();
                 else if(GetMode()==2)ForceCrossPolar();
@@ -396,7 +396,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 ::ForceCoPolar()
 {
         SetPsiR(m_PsiI);
-        SetTauR(m_TauI);        
+        SetKhiR(m_KhiI);        
         std::cout<<"PsiI: "<<m_PsiI<<std::endl;  SetMode(1);
 }
 
@@ -409,7 +409,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 ::ForceCrossPolar()
 {
         SetPsiR(m_PsiI+90);
-        SetTauR(-m_TauI);
+        SetKhiR(-m_KhiI);
         SetMode(2);        
 }
 
@@ -433,9 +433,9 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 ::Print()
 {
   std::cout<<"PsiI: "<<m_PsiI<<std::endl;
-  std::cout<<"TauI: "<<m_TauI<<std::endl;
+  std::cout<<"KhiI: "<<m_KhiI<<std::endl;
   std::cout<<"PsiR: "<<m_PsiR<<std::endl;
-  std::cout<<"TauR: "<<m_TauR<<std::endl;
+  std::cout<<"KhiR: "<<m_KhiR<<std::endl;
   
   std::cout<<"Ei0 im: "<<m_Ei[0].imag()<<std::endl;
   std::cout<<"Ei0 re: "<<m_Ei[0].real()<<std::endl;

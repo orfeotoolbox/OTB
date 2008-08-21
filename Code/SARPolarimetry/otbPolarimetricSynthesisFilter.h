@@ -76,15 +76,15 @@ public:
   /** Set/Get PsiI */
   itkSetMacro(PsiI,double);
   itkGetMacro(PsiI,double);
-  /** Set/Get TauI */
-  itkSetMacro(TauI,double);
-  itkGetMacro(TauI,double);
+  /** Set/Get KhiI */
+  itkSetMacro(KhiI,double);
+  itkGetMacro(KhiI,double);
   /** Set/Get PsiR */
   itkSetMacro(PsiR,double);
   itkGetMacro(PsiR,double);
-  /** Set/Get TauR */
-  itkSetMacro(TauR,double);
-  itkGetMacro(TauR,double);
+  /** Set/Get KhiR */
+  itkSetMacro(KhiR,double);
+  itkGetMacro(KhiR,double);
   /** Set/Get Mode */    
   itkSetMacro(Mode,int);
   itkGetMacro(Mode,int);
@@ -134,12 +134,12 @@ private:
   
   /** Psi Incident */
   double m_PsiI;
-  /** Tau Incident */
-  double m_TauI;
+  /** Khi Incident */
+  double m_KhiI;
   /** Psi Reflected */
   double m_PsiR;
-  /** Tau Reflected */
-  double m_TauR;
+  /** Khi Reflected */
+  double m_KhiR;
    
   /** None = 0 , copolar = 1 , crosspolar = 2 */
   int m_Mode;
