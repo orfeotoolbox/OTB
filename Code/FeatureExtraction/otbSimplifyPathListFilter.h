@@ -94,14 +94,6 @@ protected:
    * \return True if the segment is valid.
    */
   virtual bool TestPathConsistency(VertexListConstPointerType vertexList, VertexListConstIteratorType begin, VertexListConstIteratorType end);
-  
-  /**
-   * Simplify one path of the list
-   * \param path pointer to path to be simplified,
-   * \return pointer to simplified path.
-   */
-  PathPointerType SimplifyPath(PathPointerType path);
-  
 private:
   SimplifyPathListFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
