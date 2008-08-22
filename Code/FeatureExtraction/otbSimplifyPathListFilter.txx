@@ -46,38 +46,7 @@ namespace otb
   bool 
   SimplifyPathListFilter<TPath>
   ::TestPathConsistency(VertexListConstPointerType vertexList, VertexListConstIteratorType begin, VertexListConstIteratorType end)
-  {
-//     bool resp = true;
-//     double a = end.Value()[1]-begin.Value()[1];
-//     double b = -(end.Value()[0]-begin.Value()[0]);
-//     double c = end.Value()[0]*begin.Value()[1] - end.Value()[1]*begin.Value()[0];
-//   
-//     //otbMsgDevMacro(<< "Points (" << begin.Value()[0] << "," << begin.Value()[1] << ") (" << end.Value()[0] << "," << end.Value()[1] << ")");
-//     //otbMsgDevMacro(<< "Coefficients a:  " << a << " b:  " << b << " c:  " << c);
-//   
-//     VertexListConstIteratorType segmentIt = begin;
-//   
-//     if (segmentIt  == end)
-//       {//should never happen
-// 	resp = true;
-//       }
-//     ++segmentIt;
-//     if (segmentIt == end)
-//       {
-// 	resp = true;
-//       }
-//     while (segmentIt != end && resp)
-//       {
-// 	double distsq = vcl_pow(a*segmentIt.Value()[0] + b * segmentIt.Value()[1] + c,2)/(vcl_pow(a,2)+vcl_pow(b,2));
-// 	// otbMsgDevMacro(<< "Testing segment: (" << segmentIt.Value()[0] << "," << segmentIt.Value()[1] << "=>" << distsq << ") ");
-// 	if (distsq > static_cast<double>(m_Tolerance) ) 
-// 	  {
-// 	    resp = false;
-// 	  }
-// 	++segmentIt;
-//       }
-//     return resp;
-    
+  {   
     VertexListConstIteratorType segmentIt = begin;
     ++segmentIt;
     //Compute the distance of a point to a segment based on the cross product
@@ -90,13 +59,48 @@ namespace otb
       if (lenghtSeg == 0) return false;
       double distsq = crossProduct*crossProduct/lenghtSeg;
       if (distsq > static_cast<double>(m_Tolerance) ) 
-        {
-          return false;
-        }
+      {
+        return false;
+      }
       ++segmentIt;
     }
     return true;
   }
+  
+    /**
+   * Simplify one path of the list
+   * \param path pointer to path to be simplified,
+   * \return pointer to simplified path.
+   */
+  template <class TPath>
+      typename SimplifyPathListFilter<TPath>::PathPointerType
+      SimplifyPathListFilter<TPath>
+  ::SimplifyPath(PathPointerType path)
+      {
+        PathPointerType newPath = PathType::New();
+        newPath->Initialize();
+	// Getting the verices list of the current input paths
+        VertexListConstPointerType  vertexList = path->GetVertexList();
+        VertexListConstIteratorType beginIt = vertexList->Begin();
+        VertexListConstIteratorType beforeTheEndIt = --(vertexList->End());
+       
+	// Add the first vertex
+        newPath->AddVertex(beginIt.Value());
+      
+        while ( beginIt != beforeTheEndIt)
+        {    
+          VertexListConstIteratorType endIt = beforeTheEndIt;
+      // while the segment is not consistent, decrement endIt
+          while (!this->TestPathConsistency(vertexList,beginIt, endIt))
+          {
+            --endIt;
+          }
+      // Add the final vertex
+          newPath->AddVertex(endIt.Value());
+          beginIt=endIt;
+        }
+      }
+  
   
   template <class TPath>
   void
@@ -116,36 +120,16 @@ namespace otb
     // iterator definition 
     PathIteratorType inputIt = inputPtr->Begin();
     while(inputIt != inputPtr->End())
-      {
-	// Creating a new path
-	PathPointerType newPath = PathType::New();
-	newPath->Initialize();
-	// Getting the verices list of the current input paths
-	VertexListConstPointerType  vertexList = inputIt.Get()->GetVertexList();
-	VertexListConstIteratorType beginIt = vertexList->Begin();
-	VertexListConstIteratorType beforeTheEndIt = --(vertexList->End());
-       
-	// Add the first vertex
-	newPath->AddVertex(beginIt.Value());
-      
-	while ( beginIt != beforeTheEndIt)
-	  {    
+    {
 
-	    VertexListConstIteratorType endIt = beforeTheEndIt;
-	    // while the segment is not consistent, decrement endIt
-	    while (!this->TestPathConsistency(vertexList,beginIt, endIt))
-	      {
-		--endIt;
-	      }
-	    // Add the final vertex
-	    newPath->AddVertex(endIt.Value());
-	    beginIt=endIt;
-	  }  
-	// otbMsgDevMacro(<< "Path  had " << vertexList->Size() << " now has " << newPath->GetVertexList()->Size());
-	outputPtr->PushBack(newPath);
-	++inputIt;
-      }
+      PathPointerType newPath = SimplifyPath(inputIt.Get());
+      // otbMsgDevMacro(<< "Path  had " << vertexList->Size() << " now has " << newPath->GetVertexList()->Size());
+      outputPtr->PushBack(newPath);
+      ++inputIt;
+    }
   }
+  
+  
   /**
    * PrintSelf Method
    */
