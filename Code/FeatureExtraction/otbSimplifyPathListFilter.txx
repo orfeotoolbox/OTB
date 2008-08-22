@@ -33,6 +33,7 @@ namespace otb
   {
     m_Tolerance = 1.0;
   }
+  
   /**
    * Test if the segment composed of the points in vertextlist between the begin and the end iterators is valid.
    * \param vertexList The list of vertices composing the segment,
@@ -40,42 +41,63 @@ namespace otb
    * \param end The end of the segment, 
    * \return True if the segment is valid.
    */
+  
   template <class TPath>
   bool 
   SimplifyPathListFilter<TPath>
   ::TestPathConsistency(VertexListConstPointerType vertexList, VertexListConstIteratorType begin, VertexListConstIteratorType end)
   {
-    bool resp = true;
-    double a = end.Value()[1]-begin.Value()[1];
-    double b = -(end.Value()[0]-begin.Value()[0]);
-    double c = end.Value()[0]*begin.Value()[1] - end.Value()[1]*begin.Value()[0];
-  
-    //otbMsgDevMacro(<< "Points (" << begin.Value()[0] << "," << begin.Value()[1] << ") (" << end.Value()[0] << "," << end.Value()[1] << ")");
-    //otbMsgDevMacro(<< "Coefficients a:  " << a << " b:  " << b << " c:  " << c);
-  
+//     bool resp = true;
+//     double a = end.Value()[1]-begin.Value()[1];
+//     double b = -(end.Value()[0]-begin.Value()[0]);
+//     double c = end.Value()[0]*begin.Value()[1] - end.Value()[1]*begin.Value()[0];
+//   
+//     //otbMsgDevMacro(<< "Points (" << begin.Value()[0] << "," << begin.Value()[1] << ") (" << end.Value()[0] << "," << end.Value()[1] << ")");
+//     //otbMsgDevMacro(<< "Coefficients a:  " << a << " b:  " << b << " c:  " << c);
+//   
+//     VertexListConstIteratorType segmentIt = begin;
+//   
+//     if (segmentIt  == end)
+//       {//should never happen
+// 	resp = true;
+//       }
+//     ++segmentIt;
+//     if (segmentIt == end)
+//       {
+// 	resp = true;
+//       }
+//     while (segmentIt != end && resp)
+//       {
+// 	double distsq = vcl_pow(a*segmentIt.Value()[0] + b * segmentIt.Value()[1] + c,2)/(vcl_pow(a,2)+vcl_pow(b,2));
+// 	// otbMsgDevMacro(<< "Testing segment: (" << segmentIt.Value()[0] << "," << segmentIt.Value()[1] << "=>" << distsq << ") ");
+// 	if (distsq > static_cast<double>(m_Tolerance) ) 
+// 	  {
+// 	    resp = false;
+// 	  }
+// 	++segmentIt;
+//       }
+//     return resp;
+    
     VertexListConstIteratorType segmentIt = begin;
-  
-    if (segmentIt  == end)
-      {//should never happen
-	resp = true;
-      }
     ++segmentIt;
-    if (segmentIt == end)
-      {
-	resp = true;
-      }
-    while (segmentIt != end && resp)
-      {
-	double distsq = vcl_pow(a*segmentIt.Value()[0] + b * segmentIt.Value()[1] + c,2)/(vcl_pow(a,2)+vcl_pow(b,2));
-	// otbMsgDevMacro(<< "Testing segment: (" << segmentIt.Value()[0] << "," << segmentIt.Value()[1] << "=>" << distsq << ") ");
-	if (distsq > static_cast<double>(m_Tolerance) ) 
-	  {
-	    resp = false;
-	  }
-	++segmentIt;
-      }
-    return resp;
+    //Compute the distance of a point to a segment based on the cross product
+    while (segmentIt != end)
+    {
+      double crossProduct = (end.Value()[0]-begin.Value()[0])*(segmentIt.Value()[1]-begin.Value()[1])
+            - (end.Value()[1]-begin.Value()[1])*(segmentIt.Value()[0]-begin.Value()[0]);
+      double lenghtSeg = (end.Value()[0]-begin.Value()[0])*(end.Value()[0]-begin.Value()[0])
+            +(end.Value()[1]-begin.Value()[1])*(end.Value()[1]-begin.Value()[1]);
+      if (lenghtSeg == 0) return false;
+      double distsq = crossProduct*crossProduct/lenghtSeg;
+      if (distsq > static_cast<double>(m_Tolerance) ) 
+        {
+          return false;
+        }
+      ++segmentIt;
+    }
+    return true;
   }
+  
   template <class TPath>
   void
   SimplifyPathListFilter<TPath>
