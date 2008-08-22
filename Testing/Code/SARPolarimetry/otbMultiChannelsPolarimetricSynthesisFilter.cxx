@@ -43,10 +43,10 @@ int otbMultiChannelsPolarimetricSynthesisFilter( int argc, char * argv[] )
            
         double  PsiI = strtod(argv[6],NULL);
         //double  TauI = strtod(argv[7],NULL);
-	double  KhiI = strtod(argv[6],NULL);
+	double  KhiI = strtod(argv[7],NULL);
         double  PsiR = strtod(argv[8],NULL);
         //double  TauR = strtod(argv[9],NULL);
-    	double  KhiR = strtod(argv[8],NULL);
+    	double  KhiR = strtod(argv[9],NULL);
 
         typedef std::complex <double>                           InputPixelType;
         typedef double    	                                OutputPixelType;
