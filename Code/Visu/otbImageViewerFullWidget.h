@@ -231,10 +231,13 @@ class ITK_EXPORT ImageViewerFullWidget
 	{
 	  m_Parent->GetInterfaceBoxesList()->PopBack();          
 	}
-	if(m_Parent->GetPolygonROIList()->Size()==0)
+	if(m_EventsInterface.IsNull() || m_EventsInterface->GetForwardEvents())
 	{
-	  m_Parent->GetPolygonROIList()->PushBack(PolygonType::New());
-	  m_Parent->GetPolygonROIList()->Back()->SetValue(m_Parent->GetNextROILabel());
+	  if(m_Parent->GetPolygonROIList()->Size()==0)
+	  {
+	    m_Parent->GetPolygonROIList()->PushBack(PolygonType::New());
+	    m_Parent->GetPolygonROIList()->Back()->SetValue(m_Parent->GetNextROILabel());
+	  }
 	}
 	IndexType boxIndex;
 	SizeType boxSize;
