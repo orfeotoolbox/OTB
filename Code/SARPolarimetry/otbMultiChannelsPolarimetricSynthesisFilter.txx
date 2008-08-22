@@ -316,9 +316,7 @@ void
 MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 ::VerifyAndForceInputs()
 {
-  InputPixelType pix;
-  pix.imag()=0;
-  pix.real()=0;
+  InputPixelType pix(0,0);
   
   switch (m_ArchitectureType)
     {
