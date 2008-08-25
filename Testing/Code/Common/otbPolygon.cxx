@@ -42,7 +42,7 @@ int otbPolygon(int argc, char * argv[])
       bool first = true; 
       while ( argv[cpt] != NULL && argv[cpt+1]!= NULL)
       {
-	if(argv[cpt][0]=='|')
+	if(argv[cpt][0]=='n')
 	  {
 	    first = false;
 	    ++cpt;
@@ -132,7 +132,12 @@ int otbPolygon(int argc, char * argv[])
       file<<"Bounding Box 2"<<std::endl; 
       file<<"Index : "<<r2.GetIndex()<<" , Size : "<<r2.GetSize()<<std::endl;
  
-
+      file<<std::endl<<std::endl;
+      file<<"Surface computation : "<<std::endl;
+      file<<"Surface 1 :" << (double) polygon1->GetSurface() << std::endl;
+      file<<"Surface 2 :" << polygon2->GetSurface() << std::endl;
+      
+      
       file.close();
     }
 

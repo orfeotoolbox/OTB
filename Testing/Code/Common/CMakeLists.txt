@@ -408,7 +408,7 @@ ADD_TEST(coTuPolygon ${COMMON_TESTS6}
          otbPolygon
 	        ${TEMP}/otbPolygonTest.txt	
 		2 10 7 10 7 9 5 9 5 8 7 8 7 6 9 6 9 5 7 5 7 3 2 3 
-		| 6 10 11 10 11 2 4 2 3 4 8 4 8 7 6 7
+		next 6 10 11 10 11 2 4 2 3 4 8 4 8 7 6 7
 )
 
 #-------- otb::PolyLineImageIterator -----------------------------------------

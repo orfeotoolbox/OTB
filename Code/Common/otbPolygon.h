@@ -120,6 +120,12 @@ class ITK_EXPORT Polygon
   */
  RegionType GetBoundingRegion(void);
 
+  /**
+  * Return the polygon surface.
+  * \return The surface.
+   */
+ double GetSurface();
+
 protected:
   /** Constructor */
   Polygon() 
@@ -131,11 +137,13 @@ protected:
  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
+  
 private:
   Polygon(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   double m_Epsilon;
+  double m_Surface;
 };
 }// End namespace otb
 

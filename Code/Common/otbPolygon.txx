@@ -473,6 +473,50 @@ Polygon<TValue>
   return region;
 }
 
+
+/**
+ * Surface computation including non convex polygons
+ */
+template<class TValue>
+    double
+    Polygon<TValue>
+  ::GetSurface()
+{
+  m_Surface = 0.0;
+  VertexListIteratorType it =  this->GetVertexList()->Begin();
+  
+  if(this->GetVertexList()->Size()>2)
+  {
+    VertexType origin = it.Value();
+    it++;
+    VertexType pt1 = it.Value();
+    VertexType pt2 = it.Value();
+    
+    while(it != this->GetVertexList()->End())
+    {
+      pt1=pt2;
+      pt2 = it.Value();
+          
+      double vector1x = pt1[0] - origin[0];
+      double vector1y = pt1[1] - origin[1];
+      double vector2x = pt2[0] - origin[0];
+      double vector2y = pt2[1] - origin[1];
+      double crossProdduct = vector1x*vector2y - vector2x*vector1y;
+      m_Surface += crossProdduct;
+      it++;
+    }
+    
+    m_Surface = fabs(m_Surface/2.0);
+
+  }
+  else //if there is strictly less than 3 points, surface is 0
+  {
+    m_Surface = 0.0;
+  }
+  
+  return m_Surface;
+}
+
 /**
  * PrintSelf Method
  */
