@@ -17,7 +17,7 @@
 =========================================================================*/
 #ifndef __otbPolarimetricFunctor_h
 #define __otbPolarimetricFunctor_h
-
+#include "vcl_complex.h"
 
 namespace otb
 {
@@ -50,10 +50,8 @@ namespace Functor
                   
 	PolarimetricFunctor() 
         {
-                m_Ei[0] = 1;
-                m_Ei[1] = 1;
-                m_Er[0] = 1;
-                m_Er[1] = 1;
+                m_Ei.Fill(1);
+                m_Er.Fill(1);
         };
 	virtual ~PolarimetricFunctor() {};
         inline TOutput operator()(const TInput1 &Shh, const TInput2 &Shv, const TInput3 &Svh, const TInput4 &Svv)
@@ -61,9 +59,9 @@ namespace Functor
                 ComplexType tmp;
                 double scalar;
 
-                tmp = std::conj(m_Er[0])*( m_Ei[0]*Shh + m_Ei[1]*Shv ) + std::conj(m_Er[1])*( m_Ei[0]*Svh + m_Ei[1]*Svv );
+                tmp = vcl_conj(m_Er[0])*( m_Ei[0]*Shh + m_Ei[1]*Shv ) + vcl_conj(m_Er[1])*( m_Ei[0]*Svh + m_Ei[1]*Svv );
                 
-                scalar=(double) ( vcl_pow(std::abs(tmp),2)  );
+                scalar=(double) ( vcl_pow( std::abs(tmp),2)  );
                               
                 return ( static_cast<TOutput>(scalar) );
         }

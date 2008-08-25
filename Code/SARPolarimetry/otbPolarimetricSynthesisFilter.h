@@ -60,10 +60,16 @@ public:
   typedef std::complex <double>                   InputPixelType;
   typedef otb::Image< InputPixelType,  2 >        InputImageType;  
   typedef typename Superclass::Input1ImageType    HHInputImageType;
+  typedef typename Superclass::Input1ImagePointer HHInputImagePointer;
   typedef typename Superclass::Input2ImageType    HVInputImageType;
+  typedef typename Superclass::Input2ImagePointer HVInputImagePointer;
   typedef typename Superclass::Input3ImageType    VHInputImageType;
+  typedef typename Superclass::Input3ImagePointer VHInputImagePointer;
   typedef typename Superclass::Input4ImageType    VVInputImageType;
+  typedef typename Superclass::Input4ImagePointer VVInputImagePointer;  
   typedef typename Superclass::OutputImageType    OutputImageType;
+  typedef typename OutputImageType::Pointer       OutputImagePointer;  
+  typedef typename OutputImageType::RegionType    OutputImageRegionType;  
   typedef typename Superclass::FunctorType        FunctorType;
   typedef typename std::complex <double>          ComplexType;
   typedef typename itk::FixedArray<ComplexType,2> ComplexArrayType;   
@@ -88,7 +94,10 @@ public:
   /** Set/Get Mode */    
   itkSetMacro(Mode,int);
   itkGetMacro(Mode,int);
-  
+  /** Set/Get ArchitectureType */
+  itkSetMacro(ArchitectureType,int);
+  itkGetMacro(ArchitectureType,int);
+    
   void SetEi(ComplexArrayType ei)
   {
        m_Ei = ei;
@@ -108,14 +117,24 @@ public:
   void ForceCrossPolar();
   
 protected:
-  PolarimetricSynthesisFilter();
-  virtual ~PolarimetricSynthesisFilter() {};
-
   /** PolarimetricSynthesisFilter
    *
    */
+  PolarimetricSynthesisFilter();
+  virtual ~PolarimetricSynthesisFilter() {};
+  
+  virtual void GenerateOutputInformation();
   
   virtual void BeforeThreadedGenerateData(); 
+  
+  /** ThreadedGenerateData().  ThreadedGenerateData can only write to the
+   * portion of the output image specified by the parameter
+   * "outputRegionForThread"
+   *
+   * \sa ImageToImageFilter::ThreadedGenerateData(),
+   *     ImageToImageFilter::GenerateData()  */
+  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                            int threadId );  
   
   /** Computation of the electromagnetic fields Ei Er */ 
   void ComputeElectromagneticFields();
@@ -124,8 +143,6 @@ protected:
   void VerifyAndForceInputs();
   
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
-  void Print();  
 
 private:
 
@@ -143,6 +160,9 @@ private:
    
   /** None = 0 , copolar = 1 , crosspolar = 2 */
   int m_Mode;
+  
+  /** Architecture Type */
+  int m_ArchitectureType;
 
   /** Champs Electromagnetic Incident */
   ComplexArrayType m_Ei;

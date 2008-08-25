@@ -34,6 +34,28 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
   this->SetNumberOfRequiredInputs(0);
   this->SetNumberOfInputs(4);
   SetMode(0);
+  SetArchitectureType(0);
+}
+
+template <class TInputImageHH,class TInputImageHV,class TInputImageVH,class TInputImageVV,class TOutputImage,class TFunction  >
+void
+PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImageVV,TOutputImage,TFunction>
+::GenerateOutputInformation()
+{
+  // if HH is set, use HH to generate output information
+  if(this->GetInput(0))
+  {
+        this->GetOutput()->CopyInformation(this->GetInput(0));
+  }
+  // else, use VH
+  else if(this->GetInput(2))
+  {
+        this->GetOutput()->CopyInformation(this->GetInput(2));        
+  }
+  else
+  {
+        itkExceptionMacro(<<"Bad input polarization images: neither HH image nor VH image is set!");
+  }
 }
 
 /**
@@ -90,27 +112,21 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
-}
-
-template <class TInputImageHH,class TInputImageHV,class TInputImageVH,class TInputImageVV,class TOutputImage,class TFunction  >
-void
-PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImageVV,TOutputImage,TFunction>
-::Print()
-{
-  std::cout<<"PsiI: "<<m_PsiI<<std::endl;
-  std::cout<<"KhiI: "<<m_KhiI<<std::endl;
-  std::cout<<"PsiR: "<<m_PsiR<<std::endl;
-  std::cout<<"KhiR: "<<m_KhiR<<std::endl;
   
-  std::cout<<"Ei0 im: "<<m_Ei[0].imag()<<std::endl;
-  std::cout<<"Ei0 re: "<<m_Ei[0].real()<<std::endl;
-  std::cout<<"Ei1 im: "<<m_Ei[1].imag()<<std::endl;
-  std::cout<<"Ei1 re: "<<m_Ei[1].real()<<std::endl;
+  os<<"PsiI: "<<m_PsiI<<std::endl;
+  os<<"KhiI: "<<m_KhiI<<std::endl;
+  os<<"PsiR: "<<m_PsiR<<std::endl;
+  os<<"KhiR: "<<m_KhiR<<std::endl;
   
-  std::cout<<"Er0 im: "<<m_Er[0].imag()<<std::endl;
-  std::cout<<"Er0 re: "<<m_Er[0].real()<<std::endl;
-  std::cout<<"Er1 im: "<<m_Er[1].imag()<<std::endl;
-  std::cout<<"Er1 re: "<<m_Er[1].real()<<std::endl;
+  os<<"Ei0 im: "<<m_Ei[0].imag()<<std::endl;
+  os<<"Ei0 re: "<<m_Ei[0].real()<<std::endl;
+  os<<"Ei1 im: "<<m_Ei[1].imag()<<std::endl;
+  os<<"Ei1 re: "<<m_Ei[1].real()<<std::endl;
+  
+  os<<"Er0 im: "<<m_Er[0].imag()<<std::endl;
+  os<<"Er0 re: "<<m_Er[0].real()<<std::endl;
+  os<<"Er1 im: "<<m_Er[1].imag()<<std::endl;
+  os<<"Er1 re: "<<m_Er[1].real()<<std::endl;
 }
 
 /**
@@ -137,6 +153,76 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
         SetPsiR(m_PsiI+90);
         SetKhiR(-m_KhiI);
         SetMode(2);        
+}
+
+/**
+ * Verify and force the inputs, if only 2 or 3 channels are present. Determine the kind of architecture.
+ */
+template <class TInputImageHH,class TInputImageHV,class TInputImageVH,class TInputImageVV,class TOutputImage,class TFunction  >
+void
+PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImageVV,TOutputImage,TFunction>
+::VerifyAndForceInputs()
+{
+  
+  // With all the channels
+  if ( ( this->GetInput(0)!=0 && this->GetInput(1)!=0 )&&
+       ( this->GetInput(2)!=0 && this->GetInput(3)!=0 ) )
+    {
+        SetArchitectureType(0);
+    }
+  else 
+  // With 3 channels : HH HV VV  
+  if ( ( this->GetInput(0)!=0 && this->GetInput(1)!=0 )&&
+       ( this->GetInput(2)==0 && this->GetInput(3)!=0 ) )
+  {
+        SetArchitectureType(1);  
+  }
+  else
+  // With 3 channels : HH VH VV
+  if ( ( this->GetInput(0)!=0 && this->GetInput(1)==0 )&&
+       ( this->GetInput(2)!=0 && this->GetInput(3)!=0 ) )
+  {
+        SetArchitectureType(2);
+  }
+  else    
+  // Only HH and HV are present
+  if ( ( this->GetInput(0)!=0 && this->GetInput(1)!=0 ) &&
+       ( this->GetInput(2)==0 && this->GetInput(3)==0 ) )
+    {
+        SetArchitectureType(3);
+ 
+	// Forcing KhiI=0 PsiI=0
+        this->SetKhiI(0);
+        this->SetPsiI(0);
+  }    
+  else
+  // Only VH and VV are present
+  if ( ( this->GetInput(0)==0 && this->GetInput(1)==0 ) &&
+       ( this->GetInput(2)!=0 && this->GetInput(3)!=0 ) )
+  {
+        SetArchitectureType(4);
+ 
+        // Forcing KhiI=0 PsiI=90          
+        this->SetKhiI(0);
+        this->SetPsiI(90);   
+  }
+  else
+  // Only HH and VV are present  
+  if ( ( this->GetInput(0)!=0 && this->GetInput(1)==0 )&&
+       ( this->GetInput(2)==0 && this->GetInput(3)!=0 ) )  
+  {
+        itkExceptionMacro("Only the HH and VV channels are available : Polarimetric synthesis is impossible !");
+        return;
+  }
+  else
+  {
+        itkExceptionMacro("Unknown architecture : Polarimetric synthesis is impossible !");
+        return;
+  }
+  
+  if(GetMode()==1)ForceCoPolar();
+  else if(GetMode()==2)ForceCrossPolar();
+
 }
 
 /**
@@ -180,128 +266,6 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
 }
 
 /**
- * Verify and force the inputs, if only 2 or 3 channels are present
- */
-template <class TInputImageHH,class TInputImageHV,class TInputImageVH,class TInputImageVV,class TOutputImage,class TFunction  >
-void
-PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImageVV,TOutputImage,TFunction>
-::VerifyAndForceInputs()
-{
-  InputPixelType pix(0,0);
-   
-  // With all the channels
-  if ( ( this->GetInput(0)!=0 && this->GetInput(1)!=0 )&&
-       ( this->GetInput(2)!=0 && this->GetInput(3)!=0 ) )
-    {
-    //nothing
-    }
-  else 
-  // With 3 channels : HH VH VV
-  if ( ( this->GetInput(0)!=0 && this->GetInput(1)==0 )&&
-       ( this->GetInput(2)!=0 && this->GetInput(3)!=0 ) )
-    {
-      typename HVInputImageType::ConstPointer hvImage =  dynamic_cast<const HVInputImageType*>((itk::ProcessObject::GetInput(2)));;
-      this->SetInputHV(hvImage);
-    }
-  else 
-  // With 3 channels : HH HV VV  
-  if ( ( this->GetInput(0)!=0 && this->GetInput(1)!=0 )&&
-       ( this->GetInput(2)==0 && this->GetInput(3)!=0 ) )
-  {
-	typename VHInputImageType::ConstPointer vhImage =  dynamic_cast<const VHInputImageType*>((itk::ProcessObject::GetInput(1)));;
-	this->SetInputVH(vhImage);
-  }
-  else
-  // Only VH and VV are present
-  if ( ( this->GetInput(0)==0 && this->GetInput(1)==0 ) &&
-       ( this->GetInput(2)!=0 && this->GetInput(3)!=0 ) )
-  {
-  
-        // Forcing HH and HV to zero 
-        typename HHInputImageType::Pointer inputHH = TInputImageHH::New();
-        typename HVInputImageType::Pointer inputHV = TInputImageHV::New();        
-
-        typename VHInputImageType::IndexType start;
-        start[0]=0;
-        start[1]=0;
-
-	typename VHInputImageType::SizeType size;
-	typename VHInputImageType::ConstPointer vhImage =  dynamic_cast<const VHInputImageType*>((itk::ProcessObject::GetInput(2)));
-	size = vhImage->GetLargestPossibleRegion().GetSize();
-
-        typename VHInputImageType::RegionType region;
-        region.SetSize(size);
-        region.SetIndex(start);
-        inputHH->SetRegions(region);
-        inputHH->Allocate();
-        
-        inputHH->FillBuffer(pix);
-        
-        inputHV->SetRegions(region);
-        inputHV->Allocate();
-        inputHV->FillBuffer(pix);        
-                   
-        this->SetInputHH(inputHH);
-        this->SetInputHV(inputHV);
-
-        // Forcing KhiI=0 PsiI=90          
-        this->SetKhiI(0);
-        this->SetPsiI(90);   
-  }
-  else
-  // Only HH and HV are present
-  if ( ( this->GetInput(0)!=0 && this->GetInput(1)!=0 ) &&
-       ( this->GetInput(2)==0 && this->GetInput(3)==0 ) )
-    {
-        // Forcing VH and VV to zero 
-        typename VVInputImageType::Pointer inputVV = TInputImageVV::New();
-        typename VHInputImageType::Pointer inputVH = TInputImageVH::New();        
-        typename VHInputImageType::IndexType start;
-        start[0]=0;
-        start[1]=0;
-        typename VHInputImageType::SizeType size;
-	typename VHInputImageType::ConstPointer vhImage =  dynamic_cast<const VHInputImageType*>((itk::ProcessObject::GetInput(1)));
-
-	size = vhImage->GetLargestPossibleRegion().GetSize();
-  
-	typename VHInputImageType::RegionType region;
-        region.SetSize(size);
-        region.SetIndex(start);
-        inputVV->SetRegions(region);
-        inputVV->Allocate();
-        inputVV->FillBuffer(pix);
-   
-	inputVH->SetRegions(region);
-        inputVH->Allocate();
-        inputVH->FillBuffer(pix);        
-       
-	this->SetInputVV(inputVV);
-        this->SetInputVH(inputVH);
-        
-	// Forcing KhiI=0 PsiI=0
-        this->SetKhiI(0);
-        this->SetPsiI(0);
-  }
-  else
-  // Only HH and VV are present  
-  if ( ( this->GetInput(0)!=0 && this->GetInput(1)==0 )&&
-       ( this->GetInput(2)==0 && this->GetInput(3)!=0 ) )  
-  {
-        itkExceptionMacro("Only the HH and VV channels are available : Polarimetric synthesis is impossible !");
-        return;
-  }
-  else
-  {
-        itkExceptionMacro("Unknown architecture : Polarimetric synthesis is impossible !");
-        return;
-  }
-  
-  if(GetMode()==1)ForceCoPolar();
-  else if(GetMode()==2)ForceCrossPolar();
-
-}
-
-/**
  * BeforeThreadedGenerateData
  */
 template <class TInputImageHH,class TInputImageHV,class TInputImageVH,class TInputImageVV,class TOutputImage,class TFunction  >
@@ -309,14 +273,197 @@ void
 PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImageVV,TOutputImage,TFunction>
 ::BeforeThreadedGenerateData()
 {
+
    // First Part. Verify and force the inputs
    VerifyAndForceInputs();   
   
    // Second Part. Estimation of the incident field Ei and the reflected field Er
    ComputeElectromagneticFields();
-   
-   Print();
+
 }
+
+/**
+ * ThreadedGenerateData function. Performs the pixel-wise addition
+ */
+template <class TInputImageHH,class TInputImageHV,class TInputImageVH,class TInputImageVV,class TOutputImage,class TFunction  >
+void
+PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImageVV,TOutputImage,TFunction>
+::ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread,
+                        int threadId)
+{
+
+  OutputImagePointer outputPtr = this->GetOutput(0);
+  itk::ImageRegionIterator<TOutputImage> outputIt(outputPtr, outputRegionForThread);
+  outputIt.GoToBegin();
+                
+  switch (m_ArchitectureType)
+  {
+        // With 4 channels :
+        case 0 :
+        {
+                // We use dynamic_cast since inputs are stored as DataObjects.  The
+                // ImageToImageFilter::GetInput(int) always returns a pointer to a
+                // TInputImage1 so it cannot be used for the second or third input.
+                HHInputImagePointer inputPtrHH
+                    = dynamic_cast<const TInputImageHH*>((itk::ProcessObject::GetInput(0)));
+                HVInputImagePointer inputPtrHV
+                    = dynamic_cast<const TInputImageHV*>((itk::ProcessObject::GetInput(1)));
+                VHInputImagePointer inputPtrVH 
+                    = dynamic_cast<const TInputImageVH*>((itk::ProcessObject::GetInput(2)));
+                VVInputImagePointer inputPtrVV
+                    = dynamic_cast<const TInputImageVV*>((itk::ProcessObject::GetInput(3)));
+  
+                itk::ImageRegionConstIterator<TInputImageHH> inputItHH(inputPtrHH, outputRegionForThread);
+                itk::ImageRegionConstIterator<TInputImageHV> inputItHV(inputPtrHV, outputRegionForThread);
+                itk::ImageRegionConstIterator<TInputImageVH> inputItVH(inputPtrVH, outputRegionForThread);
+                itk::ImageRegionConstIterator<TInputImageVV> inputItVV(inputPtrVV, outputRegionForThread);
+
+                itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
+        
+                inputItHH.GoToBegin();
+                inputItHV.GoToBegin();
+                inputItVH.GoToBegin();
+                inputItVV.GoToBegin();  
+         
+                while( !inputItHH.IsAtEnd() ) 
+                {
+                    outputIt.Set( m_Functor(inputItHH.Get(), inputItHV.Get(), inputItVH.Get(), inputItVV.Get()) );
+                    ++inputItHH;
+                    ++inputItHV;
+                    ++inputItVH;
+                    ++inputItVV;
+                    ++outputIt;
+                    progress.CompletedPixel(); // potential exception thrown here
+                }
+                break;
+        }
+        // With 3 channels : HH HV VV 
+        case 1 :
+
+        {
+                HHInputImagePointer inputPtrHH
+                    = dynamic_cast<const TInputImageHH*>((itk::ProcessObject::GetInput(0)));
+                HVInputImagePointer inputPtrHV
+                    = dynamic_cast<const TInputImageHV*>((itk::ProcessObject::GetInput(1)));
+                VVInputImagePointer inputPtrVV
+                    = dynamic_cast<const TInputImageVV*>((itk::ProcessObject::GetInput(3)));
+  
+                itk::ImageRegionConstIterator<TInputImageHH> inputItHH(inputPtrHH, outputRegionForThread);
+                itk::ImageRegionConstIterator<TInputImageHV> inputItHV(inputPtrHV, outputRegionForThread);
+                itk::ImageRegionConstIterator<TInputImageVV> inputItVV(inputPtrVV, outputRegionForThread);
+                itk::ImageRegionIterator<TOutputImage> outputIt(outputPtr, outputRegionForThread);
+        
+                itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
+        
+                inputItHH.GoToBegin();
+                inputItHV.GoToBegin();
+                inputItVV.GoToBegin();  
+
+                while( !inputItHH.IsAtEnd() ) 
+                {
+                    outputIt.Set( m_Functor(inputItHH.Get(), inputItHV.Get(), inputItHV.Get(), inputItVV.Get()) );
+                    ++inputItHH;
+                    ++inputItHV;
+                    ++inputItVV;
+                    ++outputIt;
+                    progress.CompletedPixel(); // potential exception thrown here
+                }
+                break;
+        }
+        // With 3 channels : HH VH VV
+        case 2 :
+        {
+          
+                HHInputImagePointer inputPtrHH
+                    = dynamic_cast<const TInputImageHH*>((itk::ProcessObject::GetInput(0)));
+                VHInputImagePointer inputPtrVH 
+                    = dynamic_cast<const TInputImageVH*>((itk::ProcessObject::GetInput(2)));
+                VVInputImagePointer inputPtrVV
+                    = dynamic_cast<const TInputImageVV*>((itk::ProcessObject::GetInput(3)));
+                OutputImagePointer outputPtr = this->GetOutput(0);
+  
+                itk::ImageRegionConstIterator<TInputImageHH> inputItHH(inputPtrHH, outputRegionForThread);
+                itk::ImageRegionConstIterator<TInputImageVH> inputItVH(inputPtrVH, outputRegionForThread);
+                itk::ImageRegionConstIterator<TInputImageVV> inputItVV(inputPtrVV, outputRegionForThread);
+        
+                itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
+        
+                inputItHH.GoToBegin();
+                inputItVH.GoToBegin();
+                inputItVV.GoToBegin();  
+                
+                while( !inputItHH.IsAtEnd() ) 
+                {
+                    outputIt.Set( m_Functor(inputItHH.Get(), inputItVH.Get(), inputItVH.Get(), inputItVV.Get()) );
+                    ++inputItHH;
+                    ++inputItVH;
+                    ++inputItVV;
+                    ++outputIt;
+                    progress.CompletedPixel(); // potential exception thrown here
+                }
+                break;
+        }        
+        // With 2 channels : HH HV
+        case 3 :
+        {
+        
+                HHInputImagePointer inputPtrHH
+                    = dynamic_cast<const TInputImageHH*>((itk::ProcessObject::GetInput(0)));
+                HVInputImagePointer inputPtrHV
+                    = dynamic_cast<const TInputImageHV*>((itk::ProcessObject::GetInput(1)));
+  
+                itk::ImageRegionConstIterator<TInputImageHH> inputItHH(inputPtrHH, outputRegionForThread);
+                itk::ImageRegionConstIterator<TInputImageHV> inputItHV(inputPtrHV, outputRegionForThread);
+                itk::ImageRegionIterator<TOutputImage> outputIt(outputPtr, outputRegionForThread);
+        
+                itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
+        
+                inputItHH.GoToBegin();
+                inputItHV.GoToBegin();
+          
+                while( !inputItHH.IsAtEnd() ) 
+                {
+                    outputIt.Set( m_Functor(inputItHH.Get(), inputItHV.Get(), 0,0 ));
+                    ++inputItHH;
+                    ++inputItHV;
+                    ++outputIt;
+                    progress.CompletedPixel(); // potential exception thrown here
+                }
+                break;
+        }       
+        // With 2 channels : VH VV                
+        case 4 :
+        {  
+                VHInputImagePointer inputPtrVH 
+                    = dynamic_cast<const TInputImageVH*>((itk::ProcessObject::GetInput(2)));
+                VVInputImagePointer inputPtrVV
+                    = dynamic_cast<const TInputImageVV*>((itk::ProcessObject::GetInput(3)));
+  
+                itk::ImageRegionConstIterator<TInputImageVH> inputItVH(inputPtrVH, outputRegionForThread);
+                itk::ImageRegionConstIterator<TInputImageVV> inputItVV(inputPtrVV, outputRegionForThread);
+                itk::ImageRegionIterator<TOutputImage> outputIt(outputPtr, outputRegionForThread);
+        
+                itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
+        
+                inputItVH.GoToBegin();
+                inputItVV.GoToBegin();  
+                
+                while( !inputItVH.IsAtEnd() ) 
+                {
+                    outputIt.Set( m_Functor(0,0, inputItVH.Get(), inputItVV.Get()) );
+                    ++inputItVH;
+                    ++inputItVV;
+                    ++outputIt;
+                    progress.CompletedPixel(); // potential exception thrown here
+                }
+                break;
+        }         
+        default :
+                itkExceptionMacro("Unknown architecture : Polarimetric synthesis is impossible !");
+              return;                                              
+  
+  }
+} // end namespace otb
 
 }
 
