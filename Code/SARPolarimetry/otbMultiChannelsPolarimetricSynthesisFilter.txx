@@ -38,7 +38,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   this->InPlaceOff();
   SetEmissionH(false);
   SetEmissionV(false);  
-  m_ArchitectureType=0;
+  SetArchitectureType(0);
 }
 
  /** PolarimetricSynthesisFilter
@@ -185,7 +185,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
                 }
               break;  
 
-          // With 3 channels : HH HV VV 
+          // With 3 channels : HH HV VV ou HH VH VV
           case 1 :
                 while( !inputIt.IsAtEnd() ) 
                 {
@@ -195,18 +195,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
                 progress.CompletedPixel();  // potential exception thrown here
                 }
               break;  
-                
-          // With 3 channels : HH VH VV
-/*          case 2 :
-                while( !inputIt.IsAtEnd() ) 
-                {
-                outputIt.Set( m_Functor( inputIt.Get()[0], inputIt.Get()[1], inputIt.Get()[1], inputIt.Get()[2] ) );
-                ++inputIt;
-                ++outputIt;
-                progress.CompletedPixel();  // potential exception thrown here
-                }
-              break;  
-*/                
+               
           // Only HH and HV are present                
           case 2 :
                 while( !inputIt.IsAtEnd() ) 
@@ -316,8 +305,10 @@ void
 MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 ::VerifyAndForceInputs()
 {
-  InputPixelType pix(0,0);
-  
+ /* InputPixelType pix;
+  pix.imag()=0;
+  pix.real()=0;
+  */
   switch (m_ArchitectureType)
     {
           case 0 :
