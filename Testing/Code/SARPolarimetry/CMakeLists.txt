@@ -35,9 +35,9 @@ ADD_TEST(rdTvPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
         ${INPUTDATA}/RSAT_imagery_VV.tif                        
         ${TEMP}/resPolarimetricSynthesis.tif
          32.0     # PsiI
-         22.0     # TauI
+         22.0     # KhiI
          58.0     # PsiR
-         45.0     # TauR
+         45.0     # KhiR
 	)
         
  # With 3 channels
@@ -69,6 +69,20 @@ ADD_TEST(rdTvHHnHVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
          45.0
 	)
         
+# With VH and VV channels
+ADD_TEST(rdTvVHnVVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
+#  --compare-image ${TOL}   ${BASELINE}/rdTvPolarimetricSynthesis_VH_VV.tif
+#                    ${TEMP}/resPolarimetricSynthesis_VH_VV.tif
+        otbHHnHVPolarimetricSynthesisFilter
+        ${INPUTDATA}/RSAT_imagery_VH.tif
+        ${INPUTDATA}/RSAT_imagery_VV.tif
+        ${TEMP}/resPolarimetricSynthesis_VH_VV.tif
+         32.0
+         22.0
+         58.0
+         45.0
+	)        
+        
  # With HH and VV channels        
 ADD_TEST(rdTvHHnVVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
         otbHHnVVPolarimetricSynthesisFilter
@@ -96,9 +110,9 @@ ADD_TEST(rdTvMultiChannelsPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
         ${INPUTDATA}/RSAT_imagery_VV.tif        
         ${TEMP}/resMultiPolarimetricSynthesis.tif
          32.0     # PsiI
-         22.0     # TauI
+         22.0     # KhiI
          58.0     # PsiR
-         45.0     # TauR
+         45.0     # KhiR
 	)        
         
 SET_TESTS_PROPERTIES(rdTvHHnVVPolarimetricSynthesisFilter PROPERTIES WILL_FAIL true)
@@ -109,6 +123,7 @@ otbPolarimetricSynthesisFilterNew.cxx
 otbPolarimetricSynthesisFilter.cxx
 otbHHnHVnVVPolarimetricSynthesisFilter.cxx
 otbHHnHVPolarimetricSynthesisFilter.cxx
+otbVHnVVPolarimetricSynthesisFilter.cxx
 otbHHnVVPolarimetricSynthesisFilter.cxx
 otbMultiChannelsPolarimetricSynthesisFilterNew.cxx
 otbMultiChannelsPolarimetricSynthesisFilter.cxx

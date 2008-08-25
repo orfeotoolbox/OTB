@@ -41,11 +41,10 @@ int otbHHnHVnVVPolarimetricSynthesisFilter( int argc, char * argv[] )
         const char * outputFilename = argv[4];
 
         double  PsiI = strtod(argv[5],NULL);
-        //double  TauI = strtod(argv[6],NULL);
-	double  KhiI = strtod(argv[6],NULL);
-	double  PsiR = strtod(argv[7],NULL);
-        //double  TauR = strtod(argv[8],NULL);
-	double  KhiR = strtod(argv[8],NULL);
+        double  KhiI = strtod(argv[6],NULL);
+        double  PsiR = strtod(argv[7],NULL);
+        double  KhiR = strtod(argv[8],NULL);
+
         
         typedef std::complex <double>                   InputPixelType;
         typedef double    	                        OutputPixelType;
@@ -63,10 +62,8 @@ int otbHHnHVnVVPolarimetricSynthesisFilter( int argc, char * argv[] )
         FilterType::Pointer polarimetricSynthesis = FilterType::New();
         
 	polarimetricSynthesis->SetPsiI( PsiI );
-	//polarimetricSynthesis->SetTauI( TauI );
 	polarimetricSynthesis->SetKhiI( KhiI );
         polarimetricSynthesis->SetPsiR( PsiR );
-	//polarimetricSynthesis->SetTauR( TauR );
 	polarimetricSynthesis->SetKhiR( KhiR );
 
         ReaderType::Pointer reader1 = ReaderType::New();
