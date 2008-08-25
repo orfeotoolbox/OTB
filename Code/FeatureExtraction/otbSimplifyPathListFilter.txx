@@ -99,6 +99,7 @@ namespace otb
           newPath->AddVertex(endIt.Value());
           beginIt=endIt;
         }
+        return newPath;
       }
   
   
