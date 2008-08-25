@@ -16,7 +16,7 @@ TARGET_LINK_LIBRARIES(MorphologicalPyramidSegmentationExample OTBCommon OTBIO OT
 
 
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_EXAMPLES_TESTING )
+IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/MultiScale)
 
@@ -96,4 +96,4 @@ ADD_TEST(MorphologicalPyramidSegmenterExampleTest ${EXE_TESTS}
 ADD_EXECUTABLE(otbMultiScaleExamplesTests otbMultiScaleExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbMultiScaleExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_EXAMPLES_TESTING )
+ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -11,7 +11,7 @@ ADD_EXECUTABLE(PanSharpeningExample PanSharpeningExample.cxx )
 TARGET_LINK_LIBRARIES(PanSharpeningExample OTBFusion OTBCommon OTBIO ITKNumerics ITKIO)
 
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_EXAMPLES_TESTING )
+IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Fusion)
 
@@ -55,4 +55,4 @@ ADD_TEST(PanSharpeningExampleTest ${EXE_TESTS}
 ADD_EXECUTABLE(otbFusionExamplesTests otbFusionExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbFusionExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKNumerics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_EXAMPLES_TESTING )
+ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

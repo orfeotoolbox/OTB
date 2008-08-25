@@ -27,7 +27,7 @@ ENDIF(OTB_USE_VISU_GUI)
 ADD_EXECUTABLE(OrthoFusion OrthoFusion.cxx )
 TARGET_LINK_LIBRARIES(OrthoFusion OTBFusion OTBProjections OTBCommon OTBIO)
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_EXAMPLES_TESTING )
+IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Tutorials)
 
@@ -108,4 +108,4 @@ ADD_TEST( TutorialsOrthoFusionTest ${EXE_TESTS}
 ADD_EXECUTABLE(otbTutorialsExamplesTests otbTutorialsExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbTutorialsExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKNumerics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_EXAMPLES_TESTING )
+ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

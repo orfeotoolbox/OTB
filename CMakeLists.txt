@@ -68,7 +68,7 @@ SET(OTB_VERSION_PATCH "0")
 SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
 
-OPTION(BUILD_TESTING "Build testing." OFF)
+#OPTION(BUILD_TESTING "Build testing." OFF)
 
 
 #-----------------------------------------------------------------------------
@@ -362,11 +362,11 @@ INCLUDE (${CMAKE_ROOT}/Modules/CMakeBackwardCompatibilityCXX.cmake)
 # MESSAGE(FATAL_ERROR ...) commands are invoked.
 INCLUDE(${CMAKE_ROOT}/Modules/Dart.cmake)
 MARK_AS_ADVANCED(TCL_TCLSH DART_ROOT)
-IF(BUILD_TESTING OR BUILD_EXAMPLES_TESTING)
+IF(BUILD_TESTING)
   ENABLE_TESTING()
   SET(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
   MARK_AS_ADVANCED(BUILDNAME)
-ENDIF(BUILD_TESTING OR BUILD_EXAMPLES_TESTING)
+ENDIF(BUILD_TESTING)
 
 
 #-----------------------------------------------------------------------------
@@ -516,10 +516,7 @@ SET(OTB_ALLS_UTILITIES_DEPENDENT_LIBRARIES "${OTB_IO_UTILITIES_DEPENDENT_LIBRARI
 
 
 #-----------------------------------------------------------------------------
-
-
 OPTION(BUILD_EXAMPLES "Build the Examples directory." OFF)
-OPTION(BUILD_EXAMPLES_TESTING "Build the Examples testing." OFF)
 
 
 #-----------------------------------------------------------------------------

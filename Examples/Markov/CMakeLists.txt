@@ -15,7 +15,7 @@ TARGET_LINK_LIBRARIES(MarkovRestaurationExample OTBMarkov OTBCommon OTBIO ITKNum
 ADD_EXECUTABLE(MarkovRegularizationExample MarkovRegularizationExample.cxx )
 TARGET_LINK_LIBRARIES(MarkovRegularizationExample OTBMarkov OTBCommon OTBIO ITKNumerics ITKIO)
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_EXAMPLES_TESTING )
+IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Markov)
 
@@ -86,5 +86,5 @@ ADD_EXECUTABLE(otbMarkovExamplesTests otbMarkovExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbMarkovExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKNumerics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBMarkov)
 
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_EXAMPLES_TESTING )
+ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 

@@ -115,7 +115,7 @@ TARGET_LINK_LIBRARIES(SVMImageClassificationExample2 OTBCommon OTBLearning ITKCo
 
 
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_EXAMPLES_TESTING )
+IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Classification)
@@ -157,4 +157,4 @@ ADD_TEST(ScalarImageKmeansClassifierTest ${EXE_TESTS}
 ADD_EXECUTABLE(otbClassificationExamplesTests otbClassificationExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbClassificationExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_EXAMPLES_TESTING )
+ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

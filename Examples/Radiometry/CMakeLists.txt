@@ -10,7 +10,7 @@ TARGET_LINK_LIBRARIES(NDVIRAndNIRVegetationIndexImageFilter OTBRadiometry OTBCom
 ADD_EXECUTABLE(AtmosphericCorrectionSequencement AtmosphericCorrectionSequencement.cxx )
 TARGET_LINK_LIBRARIES(AtmosphericCorrectionSequencement OTBRadiometry OTBCommon OTBIO ITKNumerics ITKIO)
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_EXAMPLES_TESTING )
+IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Radiometry)
 
@@ -94,4 +94,4 @@ ADD_TEST(AtmosphericCorrectionSequencementTest ${EXE_TESTS}
 ADD_EXECUTABLE(otbRadiometryExamplesTests otbRadiometryExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbRadiometryExamplesTests OTBBasicFilters OTBCommon OTBDisparityMap OTBRadiometry OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion  gdal ITKIO ITKAlgorithms ITKStatistics ITKNumerics ITKCommon )
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_EXAMPLES_TESTING )
+ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -46,7 +46,7 @@ TARGET_LINK_LIBRARIES(SVMGenericKernelImageClassificationExample otbsvm OTBCommo
 
 
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_EXAMPLES_TESTING )
+IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Learning)
 
@@ -176,4 +176,4 @@ ADD_TEST(SVMGenericKernelImageClassificationExampleTest ${EXE_TESTS}
 ADD_EXECUTABLE(otbLearningExamplesTests otbLearningExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbLearningExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_EXAMPLES_TESTING )
+ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -39,7 +39,7 @@ ADD_EXECUTABLE(KullbackLeiblerSupervizedDistanceChDet KullbackLeiblerSupervizedD
 TARGET_LINK_LIBRARIES(KullbackLeiblerSupervizedDistanceChDet OTBIO OTBCommon gdal ITKCommon ITKIO ITKStatistics)
 
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_EXAMPLES_TESTING )
+IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
   SET_SOURCE_FILES_PROPERTIES(
@@ -126,5 +126,5 @@ ADD_TEST(KullbackLeiblerProfileChDetTest ${EXE_TESTS}
 ADD_EXECUTABLE(otbChangeDetectionExamplesTests otbChangeDetectionExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbChangeDetectionExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_EXAMPLES_TESTING )
+ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 

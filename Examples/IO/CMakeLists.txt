@@ -97,7 +97,7 @@ TARGET_LINK_LIBRARIES(DEMToImageGenerator OTBProjections OTBIO OTBCommon ITKComm
 #ADD_EXECUTABLE(TransformReadWrite TransformReadWrite.cxx )
 #TARGET_LINK_LIBRARIES(TransformReadWrite ITKCommon ITKIO)
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_EXAMPLES_TESTING )
+IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/IO)
@@ -144,4 +144,4 @@ ADD_TEST(DEMToImageGeneratorTest ${EXE_TESTS}
 ADD_EXECUTABLE(otbIOExamplesTests otbIOExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbIOExamplesTests otbossim OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBProjections gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon dxf otbossim)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_EXAMPLES_TESTING )
+ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

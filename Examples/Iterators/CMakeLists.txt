@@ -53,7 +53,7 @@ TARGET_LINK_LIBRARIES(IteratorsExamples OTBIO OTBCommon ITKIO ITKBasicFilters )
 ENDIF(NOT BORLAND)
 
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_EXAMPLES_TESTING )
+IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Iterators)
 
@@ -196,4 +196,4 @@ ADD_TEST(ShapedNeighborhoodIterators2Test ${EXE_TESTS}
 ADD_EXECUTABLE(otbIteratorsExamplesTests otbIteratorsExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbIteratorsExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_EXAMPLES_TESTING )
+ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

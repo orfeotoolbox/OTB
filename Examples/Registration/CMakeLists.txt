@@ -497,7 +497,7 @@ TARGET_LINK_LIBRARIES(ImageRegistration5 OTBCommon OTBIO ITKNumerics ITKIO)
 
 
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_EXAMPLES_TESTING )
+IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Registration)
 
@@ -559,4 +559,4 @@ ADD_TEST(ImageRegistration5Cas2ExampleTest ${EXE_TESTS}
 ADD_EXECUTABLE(otbRegistrationExamplesTests otbRegistrationExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbRegistrationExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKNumerics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_EXAMPLES_TESTING )
+ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -10,7 +10,7 @@ TARGET_LINK_LIBRARIES(FuzzyConnectednessImageFilter OTBIO OTBCommon ITKNumerics 
 
 
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_EXAMPLES_TESTING )
+IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Patented)
 
@@ -38,4 +38,4 @@ ADD_TEST(HybridSegmentationFuzzyVoronoiTest ${EXE_TESTS}
 ADD_EXECUTABLE(otbPatentedExamplesTests otbPatentedExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbPatentedExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_EXAMPLES_TESTING )
+ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
