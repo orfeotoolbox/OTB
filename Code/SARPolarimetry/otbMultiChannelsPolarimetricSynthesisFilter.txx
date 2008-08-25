@@ -279,8 +279,6 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   if ( NumberOfImages == 4 )
         SetArchitectureType(0);
         
-// METTRE ICI DES WARNINGS ou ERREUR si INCOHERENCE        
-        
   if ( NumberOfImages == 3 ) 
         SetArchitectureType(1);
 
@@ -305,26 +303,18 @@ void
 MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 ::VerifyAndForceInputs()
 {
- /* InputPixelType pix;
-  pix.imag()=0;
-  pix.real()=0;
-  */
+
   switch (m_ArchitectureType)
     {
           case 0 :
                 std::cout<<"Case HH HV VH VV"<<std::endl;      
                 break;  
 
-          // With 3 channels : HH HV VV 
+          // With 3 channels : HH HV VV ou HH VH VV
           case 1 :
                 std::cout<<"Case 3 channels !!"<<std::endl;
                 break;
                 
-          // With 3 channels : HH VH VV
-/*          case 2 :
-                std::cout<<"Case 3 channels !!"<<std::endl;
-                break;
-*/                
           // Only HH and HV are present                
           case 2 :
                 std::cout<<"Case HH HV !!"<<std::endl;      
@@ -332,8 +322,6 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
         	// Forcing KhiI=0 PsiI=0
                 this->SetKhiI(0);
                 this->SetPsiI(0);
-                if(GetMode()==1)ForceCoPolar();
-                else if(GetMode()==2)ForceCrossPolar();                  
                 break;
                                 
           // Only VH and VV are present
@@ -343,14 +331,15 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
                 // Forcing KhiI=0 PsiI=90          
                 this->SetKhiI(0);
                 this->SetPsiI(90);
-                if(GetMode()==1)ForceCoPolar();
-                else if(GetMode()==2)ForceCrossPolar();
                 break;
                 
           default :
                 itkExceptionMacro("Unknown architecture : Polarimetric synthesis is impossible !");
                 return;
     }
+    
+  if(GetMode()==1)ForceCoPolar();
+  else if(GetMode()==2)ForceCrossPolar();    
         
 }
 
