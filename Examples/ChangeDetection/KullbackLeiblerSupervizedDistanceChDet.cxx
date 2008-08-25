@@ -79,7 +79,6 @@ int main ( int argc, char * argv[] )
 	 * Accès aux paramètres
 	 */
 	 
-	int c;
 	const char * inputImageFileName1 = parseResult->GetParameterString("--InputImage1").c_str();
 	const char * inputImageFileName2 = parseResult->GetParameterString("--InputImage2").c_str();
 	const char * inputTrainingImageFileName = parseResult->GetParameterString("--Roi").c_str();
