@@ -475,7 +475,7 @@ Polygon<TValue>
 
 
 /**
- * Surface computation including non convex polygons
+ * Surface computation (for non convex polygons as well)
  */
 template<class TValue>
     double

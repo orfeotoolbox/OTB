@@ -26,11 +26,13 @@ namespace otb
 /** \class Polygon
  *  \brief This class represent a 2D polygon.
  *
- *  It derives from otb::PolyLineParametricPathWithValue. The polygon is considered to be the closed
- *  path represented by the PolyLineParametricPathWithValue.
+ *  It derives from otb::PolyLineParametricPathWithValue. The polygon is 
+ * considered to be the closed path represented by the 
+ * PolyLineParametricPathWithValue.
  * 
- *  It implements some useful methods in the spatial reasoning context, such as IsInside, IsOnEdge, IsTouching,
- *  IsCrossing ...
+ *  It implements some useful methods to work with polygons, such as surface 
+ * computation, as well as method useful in the spatial reasoning context, such 
+ * as IsInside, IsOnEdge, IsTouching, IsCrossing. 
  *
  * \sa otb::PolyLineParametricPathWithValue
  */
@@ -38,13 +40,13 @@ template<class TValue=double>
 class ITK_EXPORT Polygon
   : public PolyLineParametricPathWithValue<TValue,2>
 {
- public:
- /** Standard typedefs */
- typedef Polygon                                   Self;
- typedef PolyLineParametricPathWithValue<TValue,2> Superclass;
- typedef itk::SmartPointer<Self>                   Pointer;
- typedef itk::SmartPointer<const Self>             ConstPointer;
- typedef TValue                                    ValueType;
+  public:
+  /** Standard typedefs */
+  typedef Polygon                                   Self;
+  typedef PolyLineParametricPathWithValue<TValue,2> Superclass;
+  typedef itk::SmartPointer<Self>                   Pointer;
+  typedef itk::SmartPointer<const Self>             ConstPointer;
+  typedef TValue                                    ValueType;
   /** Type macro */
   itkNewMacro(Self);
   
@@ -57,7 +59,7 @@ class ITK_EXPORT Polygon
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
   typedef typename VertexListType::ConstIterator   VertexListIteratorType;
 
- typedef itk::ImageRegion<2>                       RegionType;
+  typedef itk::ImageRegion<2>                       RegionType;
   typedef typename RegionType::SizeType            SizeType;
   typedef typename RegionType::IndexType           IndexType;
 
@@ -123,7 +125,7 @@ class ITK_EXPORT Polygon
   /**
   * Return the polygon surface.
   * \return The surface.
-   */
+  */
  double GetSurface();
 
 protected:
@@ -132,8 +134,10 @@ protected:
     {
       m_Epsilon = 0.000001;
     };
+    
   /** Destructor */
   virtual ~Polygon() {};
+  
  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
