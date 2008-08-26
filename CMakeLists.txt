@@ -36,17 +36,14 @@ IF(WIN32)
   ENDIF(NOT BORLAND)
 ENDIF(WIN32)
 
-# Don't build anything unless the version of CMake is high enough.
-# The matching ELSE/ENDIF should be the last lines in the file.
-IF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" GREATER 1.7)
-
 # If CMake is the version we're expecting, don't show the
-# CMAKE_BACKWARDS_COMPATIBILITY option.
-IF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^1\\.8$")
+# CMAKE_BACKWARDS_COMPATIBILITY option. If the version is higher than the
+# minimal version required, then show the backward compatibility option.
+IF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^2\\.4$")
   MARK_AS_ADVANCED(FORCE CMAKE_BACKWARDS_COMPATIBILITY)
-ELSE("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^1\\.8$")
+ELSE("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^2\\.4$")
   MARK_AS_ADVANCED(CLEAR CMAKE_BACKWARDS_COMPATIBILITY)
-ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^1\\.8$")
+ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^2\\.4$")
 
 #-----------------------------------------------------------------------------
 # OTB option to access large file (> 4Go).
@@ -68,6 +65,7 @@ SET(OTB_VERSION_PATCH "0")
 SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
 
+# => Comment for OTB 2.6.0
 #OPTION(BUILD_TESTING "Build testing." OFF)
 
 
@@ -407,13 +405,14 @@ LINK_DIRECTORIES(.)
 OPTION(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
 SET(OTB_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
 
+# => Comment for OTB 2.6.0
 # Options for building some of the most common core templates explicitly only
 # once.  This has only been tested on gcc compilers.
-OPTION(OTB_EXPLICIT_INSTANTIATION "BETA-Try to explicitly build some of the core templates explictitly rather than over and over again." OFF)
-MARK_AS_ADVANCED(OTB_EXPLICIT_INSTANTIATION)
-IF( OTB_EXPLICIT_INSTANTIATION )
- ADD_DEFINITIONS(-DOTB_EXPLICIT_INSTANTIATION)
-ENDIF( OTB_EXPLICIT_INSTANTIATION )
+#               OPTION(OTB_EXPLICIT_INSTANTIATION "BETA-Try to explicitly build some of the core templates explictitly rather than over and over again." OFF)
+#               MARK_AS_ADVANCED(OTB_EXPLICIT_INSTANTIATION)
+#               IF( OTB_EXPLICIT_INSTANTIATION )
+#                ADD_DEFINITIONS(-DOTB_EXPLICIT_INSTANTIATION)
+#               ENDIF( OTB_EXPLICIT_INSTANTIATION )
 
 #-----------------------------------------------------------------------------
 # Option for display all developpment message !!!
@@ -534,42 +533,47 @@ IF (BUILD_TESTING)
 ENDIF (BUILD_TESTING)
 
 #-----------------------------------------------------------------------------
+# => Comment for OTB 2.6.0: simplification : copy ITK values
 # OTB requires special compiler flags on some platforms.
-IF(CMAKE_COMPILER_IS_GNUCXX)
-  SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -ftemplate-depth-50")
-  IF(APPLE)
-    SET(OTB_REQUIRED_C_FLAGS "${OTB_REQUIRED_C_FLAGS} -no-cpp-precomp")
-    SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -no-cpp-precomp")
-    SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -Wno-long-double")
-  ENDIF(APPLE)
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+SET(OTB_REQUIRED_C_FLAGS "${ITK_REQUIRED_C_FLAGS}")
+SET(OTB_REQUIRED_CXX_FLAGS "${ITK_REQUIRED_CXX_FLAGS}")
+SET(OTB_REQUIRED_LINK_FLAGS "${ITK_REQUIRED_LINK_FLAGS}")
 
-IF(UNIX)
-  IF(NOT CMAKE_COMPILER_IS_GNUCXX)
-    INCLUDE(${OTB_SOURCE_DIR}/CMake/TestNO_ICC_IDYNAMIC_NEEDED.cmake)
-    TESTNO_ICC_IDYNAMIC_NEEDED(NO_ICC_IDYNAMIC_NEEDED ${OTB_SOURCE_DIR}/CMake )
-    IF(NO_ICC_IDYNAMIC_NEEDED)
-      SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS}")
-    ELSE(NO_ICC_IDYNAMIC_NEEDED)
-      SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -i_dynamic")
-    ENDIF(NO_ICC_IDYNAMIC_NEEDED)
-  ENDIF(NOT CMAKE_COMPILER_IS_GNUCXX)
-ENDIF(UNIX)
+#          IF(CMAKE_COMPILER_IS_GNUCXX)
+#            SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -ftemplate-depth-50")
+#            IF(APPLE)
+#              SET(OTB_REQUIRED_C_FLAGS "${OTB_REQUIRED_C_FLAGS} -no-cpp-precomp")
+#              SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -no-cpp-precomp")
+#              SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -Wno-long-double")
+#            ENDIF(APPLE)
+#          ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
+#          IF(UNIX)
+#            IF(NOT CMAKE_COMPILER_IS_GNUCXX)
+#              INCLUDE(${OTB_SOURCE_DIR}/CMake/TestNO_ICC_IDYNAMIC_NEEDED.cmake)
+#              TESTNO_ICC_IDYNAMIC_NEEDED(NO_ICC_IDYNAMIC_NEEDED ${OTB_SOURCE_DIR}/CMake )
+#              IF(NO_ICC_IDYNAMIC_NEEDED)
+#                SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS}")
+#              ELSE(NO_ICC_IDYNAMIC_NEEDED)
+#                SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -i_dynamic")
+#              ENDIF(NO_ICC_IDYNAMIC_NEEDED)
+#            ENDIF(NOT CMAKE_COMPILER_IS_GNUCXX)
+#          ENDIF(UNIX)
 
 # Force the use of ansi cxx flags (i.e. -LANG:std on sgi )
-IF("x${CMAKE_ANSI_CXXFLAGS}" MATCHES "^x.*[^ ]")
-  SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} ${CMAKE_ANSI_CXXFLAGS}")
-ENDIF("x${CMAKE_ANSI_CXXFLAGS}" MATCHES "^x.*[^ ]")
-IF("x${CMAKE_ANSI_CFLAGS}" MATCHES "^x.*[^ ]")
-  SET(OTB_REQUIRED_C_FLAGS "${OTB_REQUIRED_C_FLAGS} ${CMAKE_ANSI_CFLAGS}")
-ENDIF("x${CMAKE_ANSI_CFLAGS}" MATCHES "^x.*[^ ]")
+#          IF("x${CMAKE_ANSI_CXXFLAGS}" MATCHES "^x.*[^ ]")
+#            SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} ${CMAKE_ANSI_CXXFLAGS}")
+#          ENDIF("x${CMAKE_ANSI_CXXFLAGS}" MATCHES "^x.*[^ ]")
+#          IF("x${CMAKE_ANSI_CFLAGS}" MATCHES "^x.*[^ ]")
+#            SET(OTB_REQUIRED_C_FLAGS "${OTB_REQUIRED_C_FLAGS} ${CMAKE_ANSI_CFLAGS}")
+#          ENDIF("x${CMAKE_ANSI_CFLAGS}" MATCHES "^x.*[^ ]")
 
-IF(CMAKE_SYSTEM MATCHES "IRIX.*")
-  IF(NOT CMAKE_COMPILER_IS_GNUCXX)
-    SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -woff 15,84,1110,1209,1424,1468,3102,3210,3439  -no_auto_include -ptused -no_prelink")
-    SET(OTB_REQUIRED_LINK_FLAGS "${OTB_REQUIRED_LINK_FLAGS}  -Wl,-woff15")
-  ENDIF(NOT CMAKE_COMPILER_IS_GNUCXX)
-ENDIF(CMAKE_SYSTEM MATCHES "IRIX.*")
+#          IF(CMAKE_SYSTEM MATCHES "IRIX.*")
+#            IF(NOT CMAKE_COMPILER_IS_GNUCXX)
+#              SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -woff 15,84,1110,1209,1424,1468,3102,3210,3439  -no_auto_include -ptused -no_prelink")
+#              SET(OTB_REQUIRED_LINK_FLAGS "${OTB_REQUIRED_LINK_FLAGS}  -Wl,-woff15")
+#            ENDIF(NOT CMAKE_COMPILER_IS_GNUCXX)
+#          ENDIF(CMAKE_SYSTEM MATCHES "IRIX.*")
 
 IF(MINGW)
   LINK_LIBRARIES(gdi32)
@@ -577,20 +581,20 @@ ENDIF(MINGW)
 
 # for the gnu compiler a -D_PTHREADS is needed on sun
 # for the native compiler a -mt flag is needed on the sun
-IF(CMAKE_USE_PTHREADS)
-  IF(CMAKE_SYSTEM MATCHES "SunOS.*")
-    IF(CMAKE_COMPILER_IS_GNUCXX)
-      SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -D_PTHREADS")
-    ELSE(CMAKE_COMPILER_IS_GNUCXX)
-      SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -mt")
-      SET(OTB_REQUIRED_C_FLAGS "${OTB_REQUIRED_C_FLAGS} -mt")
-    ENDIF(CMAKE_COMPILER_IS_GNUCXX)
-  ENDIF(CMAKE_SYSTEM MATCHES "SunOS.*")
-ENDIF(CMAKE_USE_PTHREADS)
+#          IF(CMAKE_USE_PTHREADS)
+#            IF(CMAKE_SYSTEM MATCHES "SunOS.*")
+#              IF(CMAKE_COMPILER_IS_GNUCXX)
+#                SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -D_PTHREADS")
+#              ELSE(CMAKE_COMPILER_IS_GNUCXX)
+#                SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -mt")
+#                SET(OTB_REQUIRED_C_FLAGS "${OTB_REQUIRED_C_FLAGS} -mt")
+#              ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+#            ENDIF(CMAKE_SYSTEM MATCHES "SunOS.*")
+#          ENDIF(CMAKE_USE_PTHREADS)
 
-IF(WIN32)
-  SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -DNOMINMAX")
-ENDIF(WIN32)
+#          IF(WIN32)
+#            SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -DNOMINMAX")
+#          ENDIF(WIN32)
 
 #-----------------------------------------------------------------------------
 # Test for an Objective-C++ compiler.
@@ -612,119 +616,116 @@ IF(APPLE)
 ENDIF(APPLE)
 #-----------------------------------------------------------------------------
 # mingw thread support
-IF(MINGW)
-  SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -mthreads")
-  SET(OTB_REQUIRED_C_FLAGS "${OTB_REQUIRED_C_FLAGS} -mthreads")
-  SET(OTB_REQUIRED_LINK_FLAGS "${OTB_REQUIRED_LINK_FLAGS} -mthreads")
-ENDIF(MINGW)
+#          IF(MINGW)
+#            SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -mthreads")
+#            SET(OTB_REQUIRED_C_FLAGS "${OTB_REQUIRED_C_FLAGS} -mthreads")
+#            SET(OTB_REQUIRED_LINK_FLAGS "${OTB_REQUIRED_LINK_FLAGS} -mthreads")
+#          ENDIF(MINGW)
 
 
 #-----------------------------------------------------------------------------
+# => Comment for OTB 2.6.0
 #
 # See if compiler preprocessor has the __FUNCTION__ directive used by itkExceptionMacro
 #
-INCLUDE(${OTB_SOURCE_DIR}/CMake/CheckCPPDirective.cmake)
-CHECK_CPP_DIRECTIVE_EXISTS(__FUNCTION__ ITK_CPP_FUNCTION)
+#               INCLUDE(${OTB_SOURCE_DIR}/CMake/CheckCPPDirective.cmake)
+#               CHECK_CPP_DIRECTIVE_EXISTS(__FUNCTION__ ITK_CPP_FUNCTION)
 
 
 #-----------------------------------------------------------------------------
+# => Comment for OTB 2.6.0
 # Find platform-specific differences in the handling of IEEE floating point 
 # special values.
-INCLUDE(${OTB_SOURCE_DIR}/CMake/CheckBigBitfield.cmake)
-CHECK_BIG_BITFIELD(BIGBITFIELD_VALUE ${OTB_SOURCE_DIR}/CMake)
-IF(BIGBITFIELD_VALUE)
-   SET(BIGBITFIELD 1 CACHE INTERNAL "System handles bit-fields larger than 32 bits.")
-ELSE(BIGBITFIELD_VALUE)
-   SET(BIGBITFIELD 0 CACHE INTERNAL "System handles bit-fields larger than 32 bits.")
-ENDIF(BIGBITFIELD_VALUE)
+#          INCLUDE(${OTB_SOURCE_DIR}/CMake/CheckBigBitfield.cmake)
+#          CHECK_BIG_BITFIELD(BIGBITFIELD_VALUE ${OTB_SOURCE_DIR}/CMake)
+#          IF(BIGBITFIELD_VALUE)
+#             SET(BIGBITFIELD 1 CACHE INTERNAL "System handles bit-fields larger than 32 bits.")
+#          ELSE(BIGBITFIELD_VALUE)
+#             SET(BIGBITFIELD 0 CACHE INTERNAL "System handles bit-fields larger than 32 bits.")
+#          ENDIF(BIGBITFIELD_VALUE)
 
-INCLUDE(${OTB_SOURCE_DIR}/CMake/TestQnanhibit.cmake)
-TEST_QNANHIBIT(QNANHIBIT_VALUE ${OTB_SOURCE_DIR}/CMake)
-IF(QNANHIBIT_VALUE)
-   SET(QNANHIBIT 1 CACHE INTERNAL "The 22nd bit of 32-bit floating-point quiet NaN.")
-ELSE(QNANHIBIT_VALUE)
-   SET(QNANHIBIT 0 CACHE INTERNAL "The 22nd bit of 32-bit floating-point quiet NaN.")
-ENDIF(QNANHIBIT_VALUE)
+# => Comment for OTB 2.6.0
+#          INCLUDE(${OTB_SOURCE_DIR}/CMake/TestQnanhibit.cmake)
+#          TEST_QNANHIBIT(QNANHIBIT_VALUE ${OTB_SOURCE_DIR}/CMake)
+#          IF(QNANHIBIT_VALUE)
+#             SET(QNANHIBIT 1 CACHE INTERNAL "The 22nd bit of 32-bit floating-point quiet NaN.")
+#          ELSE(QNANHIBIT_VALUE)
+#             SET(QNANHIBIT 0 CACHE INTERNAL "The 22nd bit of 32-bit floating-point quiet NaN.")
+#          ENDIF(QNANHIBIT_VALUE)
 
-IF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" LESS 2.0)
-ELSE("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" LESS 2.0)
 INCLUDE(CheckTypeSize)
-ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" LESS 2.0)
 
 CHECK_TYPE_SIZE("long long" OTB_SIZEOF_LONG_LONG)
 CHECK_TYPE_SIZE("__int64"   OTB_SIZEOF___INT64)
-CHECK_TYPE_SIZE("float" OTB_SIZEOF_FLOAT)
-CHECK_TYPE_SIZE("double" OTB_SIZEOF_DOUBLE)
 CHECK_TYPE_SIZE("long int" OTB_SIZEOF_LONG_INT)
-CHECK_TYPE_SIZE("int" OTB_SIZEOF_INT)
 CHECK_TYPE_SIZE("short int" OTB_SIZEOF_SHORT_INT)
 
-IF(OTB_SIZEOF___INT64)
-  IF("OTB_TYPE_SAME_LONG_AND___INT64" MATCHES "^OTB_TYPE_SAME_LONG_AND___INT64$")
-    MESSAGE(STATUS "Checking whether long and __int64 are the same type")
-    TRY_COMPILE(OTB_TYPE_SAME_LONG_AND___INT64
-      ${OTB_BINARY_DIR}/CMakeTmp
-      ${OTB_SOURCE_DIR}/CMake/otbTestCompareTypes.cxx
-      COMPILE_DEFINITIONS
-      -DOTB_TEST_COMPARE_TYPE_1=long
-      -DOTB_TEST_COMPARE_TYPE_2=__int64
-      OUTPUT_VARIABLE OUTPUT)
-    IF(OTB_TYPE_SAME_LONG_AND___INT64)
-      MESSAGE(STATUS "Checking whether long and __int64 are the same type -- yes")
-      SET(OTB_TYPE_SAME_LONG_AND___INT64 1 CACHE INTERNAL "Whether long and __int64 are the same type")
-    ELSE(OTB_TYPE_SAME_LONG_AND___INT64)
-      MESSAGE(STATUS "Checking whether long and __int64 are the same type -- no")
-      SET(OTB_TYPE_SAME_LONG_AND___INT64 0 CACHE INTERNAL "Whether long and __int64 are the same type")
-      WRITE_FILE(${CMAKE_BINARY_DIR}/CMakeError.log
-        "Determining whether long and __int64 are the same type "
-        "failed with the following output:\n"
-        "${OUTPUT}\n" APPEND)
-    ENDIF(OTB_TYPE_SAME_LONG_AND___INT64)
-  ENDIF("OTB_TYPE_SAME_LONG_AND___INT64" MATCHES "^OTB_TYPE_SAME_LONG_AND___INT64$")
-ENDIF(OTB_SIZEOF___INT64)
-
-IF(OTB_SIZEOF_LONG_LONG)
-  CONFIGURE_FILE(${OTB_SOURCE_DIR}/CMake/otbTestStreamLongLong.cxx.in
-    ${OTB_BINARY_DIR}/otbTestStreamLongLong.cxx @ONLY IMMEDIATE)
-  IF("OTB_OSTREAM_SUPPORTS_LONG_LONG" MATCHES "^OTB_OSTREAM_SUPPORTS_LONG_LONG$")
-    MESSAGE(STATUS "Checking if ostream supports long long")
-    TRY_COMPILE(OTB_OSTREAM_SUPPORTS_LONG_LONG
-      ${OTB_BINARY_DIR}
-      ${OTB_BINARY_DIR}/otbTestStreamLongLong.cxx
-      COMPILE_DEFINITIONS -DOTB_TEST_OSTREAM_LONG_LONG
-      OUTPUT_VARIABLE OUTPUT)
-    IF(OTB_OSTREAM_SUPPORTS_LONG_LONG)
-      MESSAGE(STATUS "Checking if ostream supports long long -- yes")
-      SET(OTB_OSTREAM_SUPPORTS_LONG_LONG 1 CACHE INTERNAL "Whether ostream supports long long")
-    ELSE(OTB_OSTREAM_SUPPORTS_LONG_LONG)
-      MESSAGE(STATUS "Checking if ostream supports long long -- no")
-      SET(OTB_OSTREAM_SUPPORTS_LONG_LONG 0 CACHE INTERNAL "Whether ostream supports long long")
-      WRITE_FILE(${CMAKE_BINARY_DIR}/CMakeError.log
-        "Determining if ostream supports long long "
-        "failed with the following output:\n"
-        "${OUTPUT}\n" APPEND)
-    ENDIF(OTB_OSTREAM_SUPPORTS_LONG_LONG)
-  ENDIF("OTB_OSTREAM_SUPPORTS_LONG_LONG" MATCHES "^OTB_OSTREAM_SUPPORTS_LONG_LONG$")
-  IF("OTB_ISTREAM_SUPPORTS_LONG_LONG" MATCHES "^OTB_ISTREAM_SUPPORTS_LONG_LONG$")
-    MESSAGE(STATUS "Checking if istream supports long long")
-    TRY_COMPILE(OTB_ISTREAM_SUPPORTS_LONG_LONG
-      ${OTB_BINARY_DIR}
-      ${OTB_BINARY_DIR}/otbTestStreamLongLong.cxx
-      COMPILE_DEFINITIONS -DOTB_TEST_ISTREAM_LONG_LONG
-      OUTPUT_VARIABLE OUTPUT)
-    IF(OTB_ISTREAM_SUPPORTS_LONG_LONG)
-      MESSAGE(STATUS "Checking if istream supports long long -- yes")
-      SET(OTB_ISTREAM_SUPPORTS_LONG_LONG 1 CACHE INTERNAL "Whether istream supports long long")
-    ELSE(OTB_ISTREAM_SUPPORTS_LONG_LONG)
-      MESSAGE(STATUS "Checking if istream supports long long -- no")
-      SET(OTB_ISTREAM_SUPPORTS_LONG_LONG 0 CACHE INTERNAL "Whether istream supports long long")
-      WRITE_FILE(${CMAKE_BINARY_DIR}/CMakeError.log
-        "Determining if istream supports long long "
-        "failed with the following output:\n"
-        "${OUTPUT}\n" APPEND)
-    ENDIF(OTB_ISTREAM_SUPPORTS_LONG_LONG)
-  ENDIF("OTB_ISTREAM_SUPPORTS_LONG_LONG" MATCHES "^OTB_ISTREAM_SUPPORTS_LONG_LONG$")
-ENDIF(OTB_SIZEOF_LONG_LONG)
+# => Comment for OTB 2.6.0
+#          IF(OTB_SIZEOF___INT64)
+#            IF("OTB_TYPE_SAME_LONG_AND___INT64" MATCHES "^OTB_TYPE_SAME_LONG_AND___INT64$")
+#              MESSAGE(STATUS "Checking whether long and __int64 are the same type")
+#              TRY_COMPILE(OTB_TYPE_SAME_LONG_AND___INT64
+#                ${OTB_BINARY_DIR}/CMakeTmp
+#                ${OTB_SOURCE_DIR}/CMake/otbTestCompareTypes.cxx
+#                COMPILE_DEFINITIONS
+#                -DOTB_TEST_COMPARE_TYPE_1=long
+#                -DOTB_TEST_COMPARE_TYPE_2=__int64
+#                OUTPUT_VARIABLE OUTPUT)
+#              IF(OTB_TYPE_SAME_LONG_AND___INT64)
+#                MESSAGE(STATUS "Checking whether long and __int64 are the same type -- yes")
+#                SET(OTB_TYPE_SAME_LONG_AND___INT64 1 CACHE INTERNAL "Whether long and __int64 are the same type")
+#              ELSE(OTB_TYPE_SAME_LONG_AND___INT64)
+#                MESSAGE(STATUS "Checking whether long and __int64 are the same type -- no")
+#                SET(OTB_TYPE_SAME_LONG_AND___INT64 0 CACHE INTERNAL "Whether long and __int64 are the same type")
+#                WRITE_FILE(${CMAKE_BINARY_DIR}/CMakeError.log
+#                  "Determining whether long and __int64 are the same type "
+#                  "failed with the following output:\n"
+#                  "${OUTPUT}\n" APPEND)
+#              ENDIF(OTB_TYPE_SAME_LONG_AND___INT64)
+#            ENDIF("OTB_TYPE_SAME_LONG_AND___INT64" MATCHES "^OTB_TYPE_SAME_LONG_AND___INT64$")
+#          ENDIF(OTB_SIZEOF___INT64)
+#          IF(OTB_SIZEOF_LONG_LONG)
+#            CONFIGURE_FILE(${OTB_SOURCE_DIR}/CMake/otbTestStreamLongLong.cxx.in
+#              ${OTB_BINARY_DIR}/otbTestStreamLongLong.cxx @ONLY IMMEDIATE)
+#            IF("OTB_OSTREAM_SUPPORTS_LONG_LONG" MATCHES "^OTB_OSTREAM_SUPPORTS_LONG_LONG$")
+#              MESSAGE(STATUS "Checking if ostream supports long long")
+#              TRY_COMPILE(OTB_OSTREAM_SUPPORTS_LONG_LONG
+#                ${OTB_BINARY_DIR}
+#                ${OTB_BINARY_DIR}/otbTestStreamLongLong.cxx
+#                COMPILE_DEFINITIONS -DOTB_TEST_OSTREAM_LONG_LONG
+#                OUTPUT_VARIABLE OUTPUT)
+#              IF(OTB_OSTREAM_SUPPORTS_LONG_LONG)
+#                MESSAGE(STATUS "Checking if ostream supports long long -- yes")
+#                SET(OTB_OSTREAM_SUPPORTS_LONG_LONG 1 CACHE INTERNAL "Whether ostream supports long long")
+#              ELSE(OTB_OSTREAM_SUPPORTS_LONG_LONG)
+#                MESSAGE(STATUS "Checking if ostream supports long long -- no")
+#                SET(OTB_OSTREAM_SUPPORTS_LONG_LONG 0 CACHE INTERNAL "Whether ostream supports long long")
+#                WRITE_FILE(${CMAKE_BINARY_DIR}/CMakeError.log
+#                  "Determining if ostream supports long long "
+#                  "failed with the following output:\n"
+#                  "${OUTPUT}\n" APPEND)
+#              ENDIF(OTB_OSTREAM_SUPPORTS_LONG_LONG)
+#            ENDIF("OTB_OSTREAM_SUPPORTS_LONG_LONG" MATCHES "^OTB_OSTREAM_SUPPORTS_LONG_LONG$")
+#            IF("OTB_ISTREAM_SUPPORTS_LONG_LONG" MATCHES "^OTB_ISTREAM_SUPPORTS_LONG_LONG$")
+#              MESSAGE(STATUS "Checking if istream supports long long")
+#              TRY_COMPILE(OTB_ISTREAM_SUPPORTS_LONG_LONG
+#                ${OTB_BINARY_DIR}
+#                ${OTB_BINARY_DIR}/otbTestStreamLongLong.cxx
+#                COMPILE_DEFINITIONS -DOTB_TEST_ISTREAM_LONG_LONG
+#                OUTPUT_VARIABLE OUTPUT)
+#              IF(OTB_ISTREAM_SUPPORTS_LONG_LONG)
+#                MESSAGE(STATUS "Checking if istream supports long long -- yes")
+#                SET(OTB_ISTREAM_SUPPORTS_LONG_LONG 1 CACHE INTERNAL "Whether istream supports long long")
+#              ELSE(OTB_ISTREAM_SUPPORTS_LONG_LONG)
+#                MESSAGE(STATUS "Checking if istream supports long long -- no")
+#                SET(OTB_ISTREAM_SUPPORTS_LONG_LONG 0 CACHE INTERNAL "Whether istream supports long long")
+#                WRITE_FILE(${CMAKE_BINARY_DIR}/CMakeError.log
+#                  "Determining if istream supports long long "
+#                  "failed with the following output:\n"
+#                  "${OUTPUT}\n" APPEND)
+#              ENDIF(OTB_ISTREAM_SUPPORTS_LONG_LONG)
+#            ENDIF("OTB_ISTREAM_SUPPORTS_LONG_LONG" MATCHES "^OTB_ISTREAM_SUPPORTS_LONG_LONG$")
+#          ENDIF(OTB_SIZEOF_LONG_LONG)
 
 
 #-----------------------------------------------------------------------------
@@ -797,27 +798,20 @@ SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OTB_REQUIRED_LINK_
 SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${OTB_REQUIRED_LINK_FLAGS}")
 
 #-----------------------------------------------------------------------------
+# => Comment for OTB 2.6.0
 # The frename-registers option does not work due to a bug in the gnu compiler.
 # It must be removed or data errors will be produced and incorrect results
 # will be produced.  This is first documented in the gcc4 man page.
-IF(CMAKE_COMPILER_IS_GNUCXX)
-  SET(ALL_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_CXX_FLAGS} ${CMAKE_EXE_LINKER_FLAGS} ${CMAKE_SHARED_LINKER_FLAGS} ${CMAKE_MODULE_LINKER_FLAGS}" )
-  SEPARATE_ARGUMENTS(ALL_FLAGS)
-  FOREACH(COMP_OPTION ${ALL_FLAGS})
-    #  MESSAGE("${COMP_OPTION} being checked.")
-    IF("${COMP_OPTION}" STREQUAL "-frename-registers")
-      MESSAGE(FATAL_ERROR "-frename-registers causes runtime bugs.  It must be removed from your compilation options.")
-    ENDIF("${COMP_OPTION}" STREQUAL "-frename-registers")
-    IF("${COMP_OPTION}" STREQUAL "-ffloat-store")
-      MESSAGE(FATAL_ERROR "-ffloat-store causes runtime bugs on gcc 3.2.3 (appearently not on gcc 3.4.3, but the exact criteria is not known).  It must be removed from your compilation options.")
-    ENDIF("${COMP_OPTION}" STREQUAL "-ffloat-store")
-  ENDFOREACH(COMP_OPTION)
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
-
-# If the version of CMake was too old, complain and build nothing.
-# These should be the last lines in this file.
-ELSE("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" GREATER 1.7)
-  MESSAGE(SEND_ERROR
-          "This version of CMake is too old to build this version of OTB.  "
-          "Please upgrade to CMake 1.8.")
-ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" GREATER 1.7)
+#          IF(CMAKE_COMPILER_IS_GNUCXX)
+#            SET(ALL_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_CXX_FLAGS} ${CMAKE_EXE_LINKER_FLAGS} ${CMAKE_SHARED_LINKER_FLAGS} ${CMAKE_MODULE_LINKER_FLAGS}" )
+#            SEPARATE_ARGUMENTS(ALL_FLAGS)
+#            FOREACH(COMP_OPTION ${ALL_FLAGS})
+#              #  MESSAGE("${COMP_OPTION} being checked.")
+#              IF("${COMP_OPTION}" STREQUAL "-frename-registers")
+#                MESSAGE(FATAL_ERROR "-frename-registers causes runtime bugs.  It must be removed from your compilation options.")
+#              ENDIF("${COMP_OPTION}" STREQUAL "-frename-registers")
+#              IF("${COMP_OPTION}" STREQUAL "-ffloat-store")
+#                MESSAGE(FATAL_ERROR "-ffloat-store causes runtime bugs on gcc 3.2.3 (appearently not on gcc 3.4.3, but the exact criteria is not known).  It must be removed from your compilation options.")
+#              ENDIF("${COMP_OPTION}" STREQUAL "-ffloat-store")
+#            ENDFOREACH(COMP_OPTION)
+#          ENDIF(CMAKE_COMPILER_IS_GNUCXX)
