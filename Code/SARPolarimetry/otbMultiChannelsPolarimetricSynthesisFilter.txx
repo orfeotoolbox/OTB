@@ -39,6 +39,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   SetEmissionH(false);
   SetEmissionV(false);  
   SetArchitectureType(0);
+  SetGain(1);  
 }
 
  /** PolarimetricSynthesisFilter
@@ -178,7 +179,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
           case 0 :
                 while( !inputIt.IsAtEnd() ) 
                 {
-                outputIt.Set( m_Functor( inputIt.Get()[0], inputIt.Get()[1], inputIt.Get()[2], inputIt.Get()[3] ) );
+                outputIt.Set( m_Gain * m_Functor( inputIt.Get()[0], inputIt.Get()[1], inputIt.Get()[2], inputIt.Get()[3] ) );
                 ++inputIt;
                 ++outputIt;
                 progress.CompletedPixel();  // potential exception thrown here
@@ -189,7 +190,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
           case 1 :
                 while( !inputIt.IsAtEnd() ) 
                 {
-                outputIt.Set( m_Functor( inputIt.Get()[0], inputIt.Get()[1], inputIt.Get()[1], inputIt.Get()[2] ) );
+                outputIt.Set( m_Gain * m_Functor( inputIt.Get()[0], inputIt.Get()[1], inputIt.Get()[1], inputIt.Get()[2] ) );
                 ++inputIt;
                 ++outputIt;
                 progress.CompletedPixel();  // potential exception thrown here
@@ -200,7 +201,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
           case 2 :
                 while( !inputIt.IsAtEnd() ) 
                 {
-                outputIt.Set( m_Functor( inputIt.Get()[0], inputIt.Get()[1], 0, 0 ) );
+                outputIt.Set( m_Gain * m_Functor( inputIt.Get()[0], inputIt.Get()[1], 0, 0 ) );
                 ++inputIt;
                 ++outputIt;
                 progress.CompletedPixel();  // potential exception thrown here
@@ -211,7 +212,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
           case 3 :
                 while( !inputIt.IsAtEnd() ) 
                 {
-                outputIt.Set( m_Functor( 0, 0, inputIt.Get()[2], inputIt.Get()[3] ) );
+                outputIt.Set( m_Gain * m_Functor( 0, 0, inputIt.Get()[2], inputIt.Get()[3] ) );
                 ++inputIt;
                 ++outputIt;
                 progress.CompletedPixel();  // potential exception thrown here

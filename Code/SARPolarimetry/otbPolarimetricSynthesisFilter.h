@@ -97,7 +97,9 @@ public:
   /** Set/Get ArchitectureType */
   itkSetMacro(ArchitectureType,int);
   itkGetMacro(ArchitectureType,int);
-    
+  /** Set the gain */
+  itkSetMacro(Gain,double);
+  
   void SetEi(ComplexArrayType ei)
   {
        m_Ei = ei;
@@ -157,7 +159,10 @@ private:
   double m_PsiR;
   /** Khi Reflected */
   double m_KhiR;
-   
+
+  /** Gain */
+  double m_Gain;
+     
   /** None = 0 , copolar = 1 , crosspolar = 2 */
   int m_Mode;
   

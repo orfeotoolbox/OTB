@@ -134,7 +134,9 @@ public:
   itkGetMacro(EmissionV,bool);
   /** Set/Get Mode */    
   itkSetMacro(Mode,int);
-  itkGetMacro(Mode,int);  
+  itkGetMacro(Mode,int);
+  /** Set the gain */
+  itkSetMacro(Gain,double);  
   
   void ForceCoPolar();  
   
@@ -183,8 +185,6 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   
   void Print();    
-  
-
 
 private :
   MultiChannelsPolarimetricSynthesisFilter(const Self&); //purposely not implemented
@@ -197,6 +197,9 @@ private :
   double m_PsiR;
   /** Khi Relechi */
   double m_KhiR;
+  
+  /** Gain */
+  double m_Gain;
   
   /** None = 0 , copolar = 1 , crosspolar = 2 */
   int m_Mode;

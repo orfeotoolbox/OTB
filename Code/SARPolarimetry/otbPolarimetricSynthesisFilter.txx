@@ -34,6 +34,7 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
   this->SetNumberOfRequiredInputs(0);
   this->SetNumberOfInputs(4);
   SetMode(0);
+  SetGain(1);
   SetArchitectureType(0);
 }
 
@@ -327,7 +328,7 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
          
                 while( !inputItHH.IsAtEnd() ) 
                 {
-                    outputIt.Set( m_Functor(inputItHH.Get(), inputItHV.Get(), inputItVH.Get(), inputItVV.Get()) );
+                    outputIt.Set( m_Gain * m_Functor(inputItHH.Get(), inputItHV.Get(), inputItVH.Get(), inputItVV.Get()) );
                     ++inputItHH;
                     ++inputItHV;
                     ++inputItVH;
@@ -361,7 +362,7 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
 
                 while( !inputItHH.IsAtEnd() ) 
                 {
-                    outputIt.Set( m_Functor(inputItHH.Get(), inputItHV.Get(), inputItHV.Get(), inputItVV.Get()) );
+                    outputIt.Set( m_Gain * m_Functor(inputItHH.Get(), inputItHV.Get(), inputItHV.Get(), inputItVV.Get()) );
                     ++inputItHH;
                     ++inputItHV;
                     ++inputItVV;
@@ -394,7 +395,7 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
                 
                 while( !inputItHH.IsAtEnd() ) 
                 {
-                    outputIt.Set( m_Functor(inputItHH.Get(), inputItVH.Get(), inputItVH.Get(), inputItVV.Get()) );
+                    outputIt.Set( m_Gain * m_Functor(inputItHH.Get(), inputItVH.Get(), inputItVH.Get(), inputItVV.Get()) );
                     ++inputItHH;
                     ++inputItVH;
                     ++inputItVV;
@@ -423,7 +424,7 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
           
                 while( !inputItHH.IsAtEnd() ) 
                 {
-                    outputIt.Set( m_Functor(inputItHH.Get(), inputItHV.Get(), 0,0 ));
+                    outputIt.Set( m_Gain * m_Functor(inputItHH.Get(), inputItHV.Get(), 0,0 ));
                     ++inputItHH;
                     ++inputItHV;
                     ++outputIt;
@@ -450,7 +451,7 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
                 
                 while( !inputItVH.IsAtEnd() ) 
                 {
-                    outputIt.Set( m_Functor(0,0, inputItVH.Get(), inputItVV.Get()) );
+                    outputIt.Set( m_Gain * m_Functor(0,0, inputItVH.Get(), inputItVV.Get()) );
                     ++inputItVH;
                     ++inputItVV;
                     ++outputIt;
