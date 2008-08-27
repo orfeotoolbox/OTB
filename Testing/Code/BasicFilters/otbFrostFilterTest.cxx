@@ -38,6 +38,7 @@ int otbFrostFilterTest( int argc, char * argv[] )
   random = itk::RandomImageSource<FloatImage2DType>::New();
   random->SetMin(0.0);
   random->SetMax(1000.0);
+  random->SetNumberOfThreads(1);
 
   unsigned long randomSize[2];
   randomSize[0] = randomSize[1] = 8;

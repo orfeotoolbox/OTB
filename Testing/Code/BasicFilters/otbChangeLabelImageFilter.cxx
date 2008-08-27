@@ -46,6 +46,7 @@ int otbChangeLabelImageFilterTest(int argc, char * argv[])
   source->SetMin( itk::NumericTraits<InputPixelType>::Zero );
   source->SetMax( upper );
   source->SetSize( sizeArray );
+  source->SetNumberOfThreads(1);
 
   filter->SetNumberOfComponentsPerPixel(5);
 
