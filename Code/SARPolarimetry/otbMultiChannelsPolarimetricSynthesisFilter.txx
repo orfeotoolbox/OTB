@@ -291,7 +291,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
        !GetEmissionH() && GetEmissionV() )
         SetArchitectureType(3);        
 
-  std::cout<<"Architecture: "<<GetArchitectureType()<<std::endl;
+  // std::cout<<"Architecture: "<<GetArchitectureType()<<std::endl;
 
 }
 
@@ -308,17 +308,17 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   switch (m_ArchitectureType)
     {
           case 0 :
-                std::cout<<"Case HH HV VH VV"<<std::endl;      
+                //std::cout<<"Case HH HV VH VV"<<std::endl;      
                 break;  
 
           // With 3 channels : HH HV VV ou HH VH VV
           case 1 :
-                std::cout<<"Case 3 channels !!"<<std::endl;
+                //std::cout<<"Case 3 channels !!"<<std::endl;
                 break;
                 
           // Only HH and HV are present                
           case 2 :
-                std::cout<<"Case HH HV !!"<<std::endl;      
+                //std::cout<<"Case HH HV !!"<<std::endl;      
                              
         	// Forcing KhiI=0 PsiI=0
                 this->SetKhiI(0);
@@ -327,7 +327,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
                                 
           // Only VH and VV are present
           case 3 :
-                std::cout<<"Case VH VV !!"<<std::endl;  
+                //std::cout<<"Case VH VV !!"<<std::endl;  
         
                 // Forcing KhiI=0 PsiI=90          
                 this->SetKhiI(0);
@@ -376,7 +376,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 {
         SetPsiR(m_PsiI);
         SetKhiR(m_KhiI);        
-        std::cout<<"PsiI: "<<m_PsiI<<std::endl;  SetMode(1);
+        //std::cout<<"PsiI: "<<m_PsiI<<std::endl;  SetMode(1);
 }
 
 /**
@@ -411,20 +411,20 @@ void
 MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 ::Print()
 {
-  std::cout<<"PsiI: "<<m_PsiI<<std::endl;
-  std::cout<<"KhiI: "<<m_KhiI<<std::endl;
-  std::cout<<"PsiR: "<<m_PsiR<<std::endl;
-  std::cout<<"KhiR: "<<m_KhiR<<std::endl;
+  //std::cout<<"PsiI: "<<m_PsiI<<std::endl;
+  //std::cout<<"KhiI: "<<m_KhiI<<std::endl;
+  //std::cout<<"PsiR: "<<m_PsiR<<std::endl;
+  //std::cout<<"KhiR: "<<m_KhiR<<std::endl;
   
-  std::cout<<"Ei0 im: "<<m_Ei[0].imag()<<std::endl;
-  std::cout<<"Ei0 re: "<<m_Ei[0].real()<<std::endl;
-  std::cout<<"Ei1 im: "<<m_Ei[1].imag()<<std::endl;
-  std::cout<<"Ei1 re: "<<m_Ei[1].real()<<std::endl;
+  //std::cout<<"Ei0 im: "<<m_Ei[0].imag()<<std::endl;
+  //std::cout<<"Ei0 re: "<<m_Ei[0].real()<<std::endl;
+  //std::cout<<"Ei1 im: "<<m_Ei[1].imag()<<std::endl;
+  //std::cout<<"Ei1 re: "<<m_Ei[1].real()<<std::endl;
   
-  std::cout<<"Er0 im: "<<m_Er[0].imag()<<std::endl;
-  std::cout<<"Er0 re: "<<m_Er[0].real()<<std::endl;
-  std::cout<<"Er1 im: "<<m_Er[1].imag()<<std::endl;
-  std::cout<<"Er1 re: "<<m_Er[1].real()<<std::endl;
+  //std::cout<<"Er0 im: "<<m_Er[0].imag()<<std::endl;
+  //std::cout<<"Er0 re: "<<m_Er[0].real()<<std::endl;
+  //std::cout<<"Er1 im: "<<m_Er[1].imag()<<std::endl;
+  //std::cout<<"Er1 re: "<<m_Er[1].real()<<std::endl;
 }
 
 } // end namespace otb
