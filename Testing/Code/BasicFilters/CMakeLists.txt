@@ -869,6 +869,22 @@ ADD_TEST(bfTvContinuousMinimumMaximumImageCalculatorTest ${BASICFILTERS_TESTS9}
         otbContinuousMinimumMaximumImageCalculatorTest
         ${INPUTDATA}/QB_Suburb.png )
 
+
+ADD_TEST(bfTvFunctionToImageFilterNew ${BASICFILTERS_TESTS9}
+        otbFunctionToImageFilterNew
+)
+
+ADD_TEST(bfTuFunctionToImageFilterTest ${BASICFILTERS_TESTS9}
+	--compare-image ${EPSILON}
+	    ${BASELINE}/bfTuFunctionToImageFilterTest.tif
+	    ${TEMP}/bfTuFunctionToImageFilterTest.tif
+        otbFunctionToImageFilter
+	    ${INPUTDATA}/poupees_1canal.hd
+	    ${TEMP}/bfTuFunctionToImageFilterTest.tif
+	    2 # radius
+)
+		   
+
 # A enrichir
 SET(BasicFilters_SRCS1
 otbLeeFilter.cxx
@@ -997,6 +1013,8 @@ otbChangeLabelImageFilterNew.cxx
 otbChangeLabelImageFilter.cxx
 otbContinuousMinimumMaximumImageCalculatorNew.cxx
 otbContinuousMinimumMaximumImageCalculatorTest.cxx
+otbFunctionToImageFilterNew.cxx
+otbFunctionToImageFilter.cxx
 )
 
 

@@ -15,22 +15,22 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "itkExceptionObject.h"
+#include "otbImage.h"
+#include "otbFunctionToImageFilter.h"
+#include "itkVarianceImageFunction.h"
 
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
-
-#include <iostream>
-#include "otbTestMain.h" 
-
-void RegisterTests()
+int otbFunctionToImageFilterNew(int argc, char * argv[])
 {
-REGISTER_TEST(otbChangeLabelImageFilterNew);
-REGISTER_TEST(otbChangeLabelImageFilterTest);
-REGISTER_TEST(otbContinuousMinimumMaximumImageCalculatorNew);
-REGISTER_TEST(otbContinuousMinimumMaximumImageCalculatorTest);
-REGISTER_TEST(otbFunctionToImageFilterNew);
-REGISTER_TEST(otbFunctionToImageFilter);
+  const unsigned int Dimension = 2;
+  typedef double PixelType;
+  typedef otb::Image<PixelType,Dimension> ImageType;
+  typedef itk::VarianceImageFunction<ImageType> FunctionType;
+  
+  typedef otb::FunctionToImageFilter<ImageType, ImageType, FunctionType> FilterType;
+  
+  // Instantiating object
+  FilterType::Pointer object = FilterType::New();
+  
+  return EXIT_SUCCESS;
 }
