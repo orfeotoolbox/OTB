@@ -870,6 +870,27 @@ ADD_TEST(bfTvContinuousMinimumMaximumImageCalculatorTest ${BASICFILTERS_TESTS9}
         ${INPUTDATA}/QB_Suburb.png )
 
 
+#ADD_TEST(bfTvMeanShiftREF ${BASICFILTERS_TESTS9}
+#        MeanShiftRef
+#        ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+#        ${TEMP}/bfMeanShiftREF.tif
+#        2 2
+#        )
+#ADD_TEST(bfTvMeanShiftVectorImageREF ${BASICFILTERS_TESTS9}
+#        MeanShiftVectorImageRef
+#        ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+#        ${TEMP}/bfMeanShiftVectorImageREF.tif
+#        2 2
+#        )
+
+#ADD_TEST(bfTuMeanShiftImageFilterNew ${BASICFILTERS_TESTS9}
+#        otbMeanShiftImageFilterNew )
+
+#ADD_TEST(bfTvMeanShiftImageFilter ${BASICFILTERS_TESTS9}
+#        otbMeanShiftImageFilter )
+
+
+
 ADD_TEST(bfTvFunctionToImageFilterNew ${BASICFILTERS_TESTS9}
         otbFunctionToImageFilterNew
 )
@@ -883,7 +904,16 @@ ADD_TEST(bfTuFunctionToImageFilterTest ${BASICFILTERS_TESTS9}
 	    ${TEMP}/bfTuFunctionToImageFilterTest.tif
 	    2 # radius
 )
-		   
+
+ADD_TEST(bfTuScalarImageTextureFunctorNew ${BASICFILTERS_TESTS9}
+        otbScalarImageTextureFunctorNew )
+ADD_TEST(bfTvScalarImageTextureFunctor ${BASICFILTERS_TESTS9}
+        otbScalarImageTextureFunctor 
+	    ${INPUTDATA}/poupees_1canal.hd
+	    ${TEMP}/bfScalarImageTextureFunctorTest.tif
+	    2 # radius
+            0 # index feature
+)		   
 
 # A enrichir
 SET(BasicFilters_SRCS1
@@ -1013,8 +1043,14 @@ otbChangeLabelImageFilterNew.cxx
 otbChangeLabelImageFilter.cxx
 otbContinuousMinimumMaximumImageCalculatorNew.cxx
 otbContinuousMinimumMaximumImageCalculatorTest.cxx
+#MeanShift.cxx
+#MeanShiftVectorImage.cxx
+#otbMeanShiftImageFilterNew.cxx
+#otbMeanShiftImageFilter.cxx
 otbFunctionToImageFilterNew.cxx
 otbFunctionToImageFilter.cxx
+otbScalarImageTextureFunctorNew.cxx
+otbScalarImageTextureFunctor.cxx
 )
 
 

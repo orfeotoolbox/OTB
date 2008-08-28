@@ -31,6 +31,12 @@ REGISTER_TEST(otbChangeLabelImageFilterNew);
 REGISTER_TEST(otbChangeLabelImageFilterTest);
 REGISTER_TEST(otbContinuousMinimumMaximumImageCalculatorNew);
 REGISTER_TEST(otbContinuousMinimumMaximumImageCalculatorTest);
+//REGISTER_TEST(otbMeanShiftImageFilterNew);
+//REGISTER_TEST(otbMeanShiftImageFilter);
+//REGISTER_TEST(MeanShiftRef);
+//REGISTER_TEST(MeanShiftVectorImageRef);
 REGISTER_TEST(otbFunctionToImageFilterNew);
 REGISTER_TEST(otbFunctionToImageFilter);
+REGISTER_TEST(otbScalarImageTextureFunctorNew);
+REGISTER_TEST(otbScalarImageTextureFunctor);
 }
