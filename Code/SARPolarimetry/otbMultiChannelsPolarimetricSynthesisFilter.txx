@@ -176,10 +176,10 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   // Computation with 4 channels
   switch (m_ArchitectureType)
   {
-          case 0 :
+          case HH_HV_VH_VV :
                 while( !inputIt.IsAtEnd() ) 
                 {
-                outputIt.Set( m_Gain * m_Functor( inputIt.Get()[0], inputIt.Get()[1], inputIt.Get()[2], inputIt.Get()[3] ) );
+                outputIt.Set( m_Gain * GetFunctor()( inputIt.Get()[0], inputIt.Get()[1], inputIt.Get()[2], inputIt.Get()[3] ) );
                 ++inputIt;
                 ++outputIt;
                 progress.CompletedPixel();  // potential exception thrown here
@@ -187,10 +187,10 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
               break;  
 
           // With 3 channels : HH HV VV ou HH VH VV
-          case 1 :
+          case HH_HV_VV :
                 while( !inputIt.IsAtEnd() ) 
                 {
-                outputIt.Set( m_Gain * m_Functor( inputIt.Get()[0], inputIt.Get()[1], inputIt.Get()[1], inputIt.Get()[2] ) );
+                outputIt.Set( m_Gain * GetFunctor()( inputIt.Get()[0], inputIt.Get()[1], inputIt.Get()[1], inputIt.Get()[2] ) );
                 ++inputIt;
                 ++outputIt;
                 progress.CompletedPixel();  // potential exception thrown here
@@ -198,10 +198,10 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
               break;  
                
           // Only HH and HV are present                
-          case 2 :
+          case HH_HV :
                 while( !inputIt.IsAtEnd() ) 
                 {
-                outputIt.Set( m_Gain * m_Functor( inputIt.Get()[0], inputIt.Get()[1], 0, 0 ) );
+                outputIt.Set( m_Gain * GetFunctor()( inputIt.Get()[0], inputIt.Get()[1], 0, 0 ) );
                 ++inputIt;
                 ++outputIt;
                 progress.CompletedPixel();  // potential exception thrown here
@@ -209,10 +209,10 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
               break;  
                                 
           // Only VH and VV are present
-          case 3 :
+          case VH_VV :
                 while( !inputIt.IsAtEnd() ) 
                 {
-                outputIt.Set( m_Gain * m_Functor( 0, 0, inputIt.Get()[2], inputIt.Get()[3] ) );
+                outputIt.Set( m_Gain * GetFunctor()( 0, 0, inputIt.Get()[2], inputIt.Get()[3] ) );
                 ++inputIt;
                 ++outputIt;
                 progress.CompletedPixel();  // potential exception thrown here
@@ -291,7 +291,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
        !GetEmissionH() && GetEmissionV() )
         SetArchitectureType(3);        
 
-  // std::cout<<"Architecture: "<<GetArchitectureType()<<std::endl;
+  std::cout<<"Architecture: "<<GetArchitectureType()<<std::endl;
 
 }
 
@@ -307,17 +307,9 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 
   switch (m_ArchitectureType)
     {
-          case 0 :
-                //std::cout<<"Case HH HV VH VV"<<std::endl;      
-                break;  
-
-          // With 3 channels : HH HV VV ou HH VH VV
-          case 1 :
-                //std::cout<<"Case 3 channels !!"<<std::endl;
-                break;
                 
           // Only HH and HV are present                
-          case 2 :
+          case HH_HV :
                 //std::cout<<"Case HH HV !!"<<std::endl;      
                              
         	// Forcing KhiI=0 PsiI=0
@@ -326,7 +318,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
                 break;
                                 
           // Only VH and VV are present
-          case 3 :
+          case VH_VV :
                 //std::cout<<"Case VH VV !!"<<std::endl;  
         
                 // Forcing KhiI=0 PsiI=90          
@@ -376,7 +368,6 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 {
         SetPsiR(m_PsiI);
         SetKhiR(m_KhiI);        
-        //std::cout<<"PsiI: "<<m_PsiI<<std::endl;  SetMode(1);
 }
 
 /**
