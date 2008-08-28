@@ -25,6 +25,8 @@
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkProgressReporter.h"
+#include "otbImageFileWriter.h"
+#include "otbImageViewer.h"
 
 namespace otb
 {
@@ -44,14 +46,14 @@ FunctionToImageFilter<TInputImage,TOutputImage,TFunction>
 /**
  * Connect one of the operands for pixel-wise addition
  */
-template<class TInputImage, class TOutputImage, class TFunction >
-void
-FunctionToImageFilter<TInputImage,TOutputImage,TFunction>
-::SetInput( const TInputImage *image ) 
-{
-  // The ProcessObject is not const-correct so the const_cast is required here
-  SetNthInput( 0, const_cast<TInputImage *>( image ) );
-}
+// template<class TInputImage, class TOutputImage, class TFunction >
+// void
+// FunctionToImageFilter<TInputImage,TOutputImage,TFunction>
+// ::SetInput( const TInputImage *image ) 
+// {
+//   // The ProcessObject is not const-correct so the const_cast is required here
+//   SetNthInput( 0, const_cast<TInputImage *>( image ) );
+// }
 
 
 /**
@@ -70,7 +72,8 @@ FunctionToImageFilter<TInputImage,TOutputImage,TFunction>
 			<< " Input is missing :" << inputPtr.GetPointer();)
                      
     }
-  m_PixelFunction->SetInputImage(inputPtr);
+
+   m_PixelFunction->SetInputImage(inputPtr);
 }
 
 /**
@@ -82,9 +85,11 @@ FunctionToImageFilter<TInputImage,TOutputImage,TFunction>
 ::ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread,
                         int threadId)
 {
+  
   // We use dynamic_cast since inputs are stored as DataObjects.
   InputImagePointer inputPtr
     = dynamic_cast<const TInputImage*>((itk::ProcessObject::GetInput(0)));
+ 
   OutputImagePointer outputPtr = this->GetOutput(0);
   
   itk::ImageRegionConstIterator<TInputImage> inputIt(inputPtr, outputRegionForThread);
