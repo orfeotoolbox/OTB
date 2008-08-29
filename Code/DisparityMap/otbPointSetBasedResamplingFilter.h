@@ -27,9 +27,9 @@ namespace otb
 /** \class PointSetBasedResamplingFilter
  *  \brief 
  *
- * \ingroup 
- * \ingroup
+ * \ingroup DisparityMap
  */
+
 template <class TInputImage, class TPointSet, class TOutputImage>
 class ITK_EXPORT PointSetBasedResamplingFilter
   : public itk::ImageToImageFilter<TInputImage,TOutputImage>

@@ -26,7 +26,7 @@ namespace Functor
   {
     /** \class DistanceComparisonFunctor
      *  \brief This functor is used in nearest neighborhood sorting.
-     *  \ingroup 
+     *  \ingroup DisparityMap
      */
     class DistanceComparisonFunctor
       {
@@ -57,7 +57,7 @@ namespace Functor
  *  The output of the filters deriving from this base class can be passed to the itk::WarpImageFilter for image resampling.
  *  \sa DisparityMapEstimationMethod
  *   \sa itk::WarpImageFilter
- *  \ingroup 
+   *  \ingroup DisparityMap
  */
 template <class TPointSet, class TDeformationField>
 class ITK_EXPORT PointSetToDeformationFieldGenerator

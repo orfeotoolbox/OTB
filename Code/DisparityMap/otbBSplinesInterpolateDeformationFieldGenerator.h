@@ -26,8 +26,7 @@ namespace otb
  *  \brief This filters encapsulate the itk::DeformationFieldSource to produce a BSpline interpolation of the point in point set whose metric values are 
  * sufficient.
  * \sa itk::DeformationFieldSource
- * \ingroup 
- * \ingroup
+ * \ingroup DisparityMap
  */
 template <class TPointSet, class TDeformationField>
 class ITK_EXPORT BSplinesInterpolateDeformationFieldGenerator

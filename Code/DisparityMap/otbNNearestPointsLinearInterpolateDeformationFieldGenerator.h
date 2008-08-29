@@ -24,8 +24,7 @@ namespace otb
 {
 /** \class NNearestPointsLinearInterpolateDeformationFieldGenerator
  *  \brief This class generate the deformation field by performing a linear interpolation of the deformation induced by the n nearest point.
- * \ingroup 
- * \ingroup
+ * \ingroup DisparityMap
  */
 template <class TPointSet, class TDeformationField>
 class ITK_EXPORT NNearestPointsLinearInterpolateDeformationFieldGenerator

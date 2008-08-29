@@ -26,8 +26,7 @@ namespace otb
  *  \brief This class implements deformation field generation by taking into account the local transform of the
  *  nearest point in pointset.
  * 
- * \ingroup 
- * \ingroup
+ * \ingroup DisparityMap
  */
 template <class TPointSet, class TDeformationField>
 class ITK_EXPORT NearestTransformDeformationFieldGenerator

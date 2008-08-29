@@ -26,8 +26,7 @@ namespace otb
  *  \brief This class implements the simplest way to deformation field generation using a point set.
  *  In each pixel location, the deformation is considered to be the deformation of the nearest seed point in the point set.
  * 
- * \ingroup 
- * \ingroup
+ * \ingroup DisparityMap
  */
 template <class TPointSet, class TDeformationField>
 class ITK_EXPORT NearestPointDeformationFieldGenerator
