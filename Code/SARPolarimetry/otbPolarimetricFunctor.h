@@ -23,10 +23,9 @@ namespace otb
 {
 namespace Functor
   {
-    /** \class PolarimetricFunctor2Channels
-     *  \brief This functor calculate the
-     *  
-     *  
+    /** \class PolarimetricFunctor
+     *  \brief This functor calculate the polarimetric synthesis
+     *  using the electroMagneticField vectors.
      *
      *  \ingroup Functor
      */
@@ -38,21 +37,23 @@ namespace Functor
         typedef typename     std::complex <double>       ComplexType;        
         typedef typename     itk::FixedArray<ComplexType,2>    ComplexArrayType;        
         
-        /** Set the ElectroMagneticField Incident*/
+        /** Set the ElectroMagneticField Incident */
         void SetEi( ComplexArrayType ei ){
                 m_Ei = ei;
         }
         
-        /** Set the ElectroMagneticField Reflected*/        
+        /** Set the ElectroMagneticField Reflected */        
         void SetEr( ComplexArrayType er ){
                 m_Er = er;
         }
-                  
+               
+        /** Constructor */                  
 	PolarimetricFunctor() 
         {
                 m_Ei.Fill(1);
                 m_Er.Fill(1);
         };
+        /** Destructor */        
 	virtual ~PolarimetricFunctor() {};
         inline TOutput operator()(const TInput1 &Shh, const TInput2 &Shv, const TInput3 &Svh, const TInput4 &Svv)
 	{

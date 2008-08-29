@@ -28,6 +28,15 @@ namespace otb
 
 /** \class otbPolarimetricSynthesisFilter
  * \brief 
+ *
+ * This class compute the polarimetric synthesis from two to three 
+ * radar images.
+ * To resolve the synthesis, four parameters are required.
+ * The result of the synthesis is a scalar image.
+ *
+ * This class is parameterized over the type of the input images and
+ * the type of the output image.  It is also parameterized by the
+ * operation to be applied, using a Functor style.  
  * 
  */
 
@@ -99,30 +108,29 @@ public:
   itkGetMacro(ArchitectureType,int);
   /** Set the gain */
   itkSetMacro(Gain,double);
-  
+  /** Set the ElectroMagneticField Incident */  
   void SetEi(ComplexArrayType ei)
   {
        m_Ei = ei;
        this->GetFunctor().SetEi(ei);
        this->Modified();
   }
-  
+  /** Set the ElectroMagneticField Reflected */  
   void SetEr(ComplexArrayType er)
   {
        m_Er = er;
        this->GetFunctor().SetEr(er);
        this->Modified();
   }   
-  
+  /** Force the copolar mode */
   void ForceCoPolar();  
-  
+  /** Force the crosspolar mode */  
   void ForceCrossPolar();
   
 protected:
-  /** PolarimetricSynthesisFilter
-   *
-   */
+  /**  Constructor */
   PolarimetricSynthesisFilter();
+  /**  Destructor */  
   virtual ~PolarimetricSynthesisFilter() {};
   
   virtual void GenerateOutputInformation();
@@ -166,13 +174,13 @@ private:
   /** None = 0 , copolar = 1 , crosspolar = 2 */
   int m_Mode;
   
-  /** Architecture Type */
-  int m_ArchitectureType;
-
   /** Champs Electromagnetic Incident */
   ComplexArrayType m_Ei;
   /** Champs Electromagnetic Reflechi */
   ComplexArrayType m_Er;  
+  
+  /** Architecture Type */
+  int m_ArchitectureType;
    
 };
 

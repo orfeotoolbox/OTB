@@ -39,7 +39,13 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   SetEmissionH(false);
   SetEmissionV(false);  
   SetArchitectureType(0);
-  SetGain(1);  
+  SetGain(1);
+  IndexArrayType index;
+  index[0]=0;
+  index[1]=1;
+  index[2]=2;
+  index[3]=3;
+  SetIndex(index);    
 }
 
  /** PolarimetricSynthesisFilter
@@ -138,7 +144,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   else
     {
     // pointer could not be cast back down
-    itkExceptionMacro(<< "otb::MultiChannelRAndNIRVegetationIndexImageFilter::GenerateOutputInformation "
+    itkExceptionMacro(<< "otb::MultiChannelsPolarimetricSynthesisFilter::GenerateOutputInformation "
                       << "cannot cast input to "
                       << typeid(itk::ImageBase<Superclass::InputImageDimension>*).name() );
     }
@@ -179,7 +185,8 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
           case HH_HV_VH_VV :
                 while( !inputIt.IsAtEnd() ) 
                 {
-                outputIt.Set( m_Gain * GetFunctor()( inputIt.Get()[0], inputIt.Get()[1], inputIt.Get()[2], inputIt.Get()[3] ) );
+                outputIt.Set( m_Gain * GetFunctor()( inputIt.Get()[GetIndex()[0]], inputIt.Get()[GetIndex()[1]], 
+                                                     inputIt.Get()[GetIndex()[2]], inputIt.Get()[GetIndex()[3]] ) );
                 ++inputIt;
                 ++outputIt;
                 progress.CompletedPixel();  // potential exception thrown here
@@ -190,7 +197,8 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
           case HH_HV_VV :
                 while( !inputIt.IsAtEnd() ) 
                 {
-                outputIt.Set( m_Gain * GetFunctor()( inputIt.Get()[0], inputIt.Get()[1], inputIt.Get()[1], inputIt.Get()[2] ) );
+                outputIt.Set( m_Gain * GetFunctor()( inputIt.Get()[GetIndex()[0]], inputIt.Get()[GetIndex()[1]],
+                                                     inputIt.Get()[GetIndex()[1]], inputIt.Get()[GetIndex()[2]] ) );
                 ++inputIt;
                 ++outputIt;
                 progress.CompletedPixel();  // potential exception thrown here
@@ -201,7 +209,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
           case HH_HV :
                 while( !inputIt.IsAtEnd() ) 
                 {
-                outputIt.Set( m_Gain * GetFunctor()( inputIt.Get()[0], inputIt.Get()[1], 0, 0 ) );
+                outputIt.Set( m_Gain * GetFunctor()( inputIt.Get()[GetIndex()[0]], inputIt.Get()[GetIndex()[1]], 0, 0 ) );
                 ++inputIt;
                 ++outputIt;
                 progress.CompletedPixel();  // potential exception thrown here
@@ -212,7 +220,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
           case VH_VV :
                 while( !inputIt.IsAtEnd() ) 
                 {
-                outputIt.Set( m_Gain * GetFunctor()( 0, 0, inputIt.Get()[2], inputIt.Get()[3] ) );
+                outputIt.Set( m_Gain * GetFunctor()( 0, 0, inputIt.Get()[GetIndex()[2]], inputIt.Get()[GetIndex()[3]] ) );
                 ++inputIt;
                 ++outputIt;
                 progress.CompletedPixel();  // potential exception thrown here
@@ -291,8 +299,6 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
        !GetEmissionH() && GetEmissionV() )
         SetArchitectureType(3);        
 
-  std::cout<<"Architecture: "<<GetArchitectureType()<<std::endl;
-
 }
 
 
@@ -308,6 +314,10 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   switch (m_ArchitectureType)
     {
                 
+          case HH_HV_VH_VV :
+                  break;
+          case HH_HV_VV :
+                  break;                  
           // Only HH and HV are present                
           case HH_HV :
                 //std::cout<<"Case HH HV !!"<<std::endl;      

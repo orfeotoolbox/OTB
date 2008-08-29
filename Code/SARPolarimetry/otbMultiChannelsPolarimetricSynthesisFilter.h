@@ -29,12 +29,16 @@ namespace otb
 /** \class MultiChannelsPolarimetricSynthesisFilter
  * \brief Implements 
  *
+ * This class compute the polarimetric synthesis from radar images 
+ * contained into a vector. 
+ * To resolve the synthesis, four parameters are required.
+ * The result of the synthesis is a scalar image.
+ *
  * This class is parameterized over the type of the input image and
  * the type of the output image.  It is also parameterized by the
- * operation to be applied, using a Functor style.
+ * operation to be applied, using a Functor style. 
  *
  */
-
 
 template <class TInputImage, class TOutputImage,
         class TFunction = Functor::PolarimetricFunctor<        
@@ -70,8 +74,10 @@ public:
   typedef typename     OutputImageType::RegionType    OutputImageRegionType;
   typedef typename     OutputImageType::PixelType     OutputImagePixelType;
   typedef typename     std::complex <double>          ComplexType;
-  typedef typename     itk::FixedArray<ComplexType,2> ComplexArrayType;  
-  typedef enum {HH_HV_VH_VV=0,HH_HV_VV=1,HH_HV=2,VH_VV=3,HH_VV=4} ArchitectureType; //HH_VH_VV=2
+  typedef typename     itk::FixedArray<ComplexType,2> ComplexArrayType;
+  typedef typename     itk::FixedArray<int,4>         IndexArrayType;
+  typedef enum {HH=0,HV=1,VH=2,VV=3}                  IndexType;
+  typedef enum {HH_HV_VH_VV=0,HH_HV_VV=1,HH_HV=2,VH_VV=3,HH_VV=4} ArchitectureType;  
   
     
   /** Get the functor object.  The functor is returned by reference.
@@ -96,14 +102,14 @@ public:
       this->Modified();
       }
   }  
-  
+  /** Set the Incident ElectroMagneticField */ 
   void SetEi(ComplexArrayType ei)
   {
        m_Ei = ei;
        this->GetFunctor().SetEi(ei);
        this->Modified();
   }
-  
+  /** Set the Reflected ElectroMagneticField */
   void SetEr(ComplexArrayType er)
   {
        m_Er = er;
@@ -137,17 +143,23 @@ public:
   itkGetMacro(Mode,int);
   /** Set the gain */
   itkSetMacro(Gain,double);  
-  
+  /** Get/Set the index */  
+  itkSetMacro(Index,IndexArrayType);
+  itkGetMacro(Index,IndexArrayType);
+  /** Force the copolar mode */
   void ForceCoPolar();  
-  
+  /** Force the crosspolar mode */
   void ForceCrossPolar();  
 
 
 protected:
+  /** Constructor */
   MultiChannelsPolarimetricSynthesisFilter();
+  /** Destructor */
   virtual ~MultiChannelsPolarimetricSynthesisFilter(){};
 
-  /** MultiChannelsPolarimetricSynthesisFilter can produce an image which is a 
+  /** MultiChannelsPolarimetricSynthesisFilter can produce an image  
+   * which is a synthesis of channels HH, HV, VH and VV.
    *
    * As such, MultiChannelsPolarimetricSynthesisFilter
    * needs to provide an implementation for
@@ -173,7 +185,7 @@ protected:
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                             int threadId );  
   
-  /** */
+  /** Determine the kind of architecture of the input */
   void DetermineArchitecture();
   
   /** Computation of the electromagnetic fields Ei Er */ 
@@ -193,9 +205,9 @@ private :
   double m_PsiI;
   /** Khi Incident */
   double m_KhiI;
-  /** Psi Relechi */
+  /** Psi Reflected */
   double m_PsiR;
-  /** Khi Relechi */
+  /** Khi Reflected */
   double m_KhiR;
   
   /** Gain */
@@ -204,10 +216,6 @@ private :
   /** None = 0 , copolar = 1 , crosspolar = 2 */
   int m_Mode;
   
-  /** Emission mode */
-  bool m_EmissionH;
-  bool m_EmissionV;
-
   /** Champs Electromagnetic Incident */
   ComplexArrayType m_Ei;
   /** Champs Electromagnetic Reflechi */
@@ -217,6 +225,13 @@ private :
   int m_ArchitectureType;
 
   FunctorType m_Functor;
+  
+  /** Emission mode */
+  bool m_EmissionH;
+  bool m_EmissionV;
+  
+  /* Index of the images */
+  IndexArrayType m_Index;
   
 };
 
