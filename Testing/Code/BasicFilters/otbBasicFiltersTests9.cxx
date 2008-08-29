@@ -39,4 +39,6 @@ REGISTER_TEST(otbFunctionToImageFilterNew);
 REGISTER_TEST(otbFunctionToImageFilter);
 REGISTER_TEST(otbScalarImageTextureFunctorNew);
 REGISTER_TEST(otbScalarImageTextureFunctor);
+REGISTER_TEST(otbScalarVectorImageTextureFunctorNew);
+REGISTER_TEST(otbScalarVectorImageTextureFunctor);
 }

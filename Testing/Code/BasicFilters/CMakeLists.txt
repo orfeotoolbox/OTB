@@ -914,6 +914,15 @@ ADD_TEST(bfTvScalarImageTextureFunctor ${BASICFILTERS_TESTS9}
 	    2 # radius
             0 # index feature
 )		   
+ADD_TEST(bfTuScalarVectorImageTextureFunctorNew ${BASICFILTERS_TESTS9}
+        otbScalarVectorImageTextureFunctorNew )
+
+ADD_TEST(bfTvScalarVectorImageTextureFunctor ${BASICFILTERS_TESTS9}
+        otbScalarVectorImageTextureFunctor 
+	    ${INPUTDATA}/poupees_1canal.hd
+	    ${TEMP}/bfScalarVectorImageTextureFunctorTest.tif
+	    2 # radius
+)
 
 # A enrichir
 SET(BasicFilters_SRCS1
@@ -1051,6 +1060,8 @@ otbFunctionToImageFilterNew.cxx
 otbFunctionToImageFilter.cxx
 otbScalarImageTextureFunctorNew.cxx
 otbScalarImageTextureFunctor.cxx
+otbScalarVectorImageTextureFunctorNew.cxx
+otbScalarVectorImageTextureFunctor.cxx
 )
 
 
