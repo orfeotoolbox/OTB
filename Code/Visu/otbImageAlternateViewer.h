@@ -40,8 +40,7 @@ namespace otb
 /** \class ImageAlternateViewer
  *  \brief 
  *
- * \ingroup 
- * \ingroup
+ * \ingroup Visu
  */
 template <class TPixel>
 class ITK_EXPORT ImageAlternateViewer

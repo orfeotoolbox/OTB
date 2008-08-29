@@ -30,8 +30,7 @@ namespace otb
 /** \class HistogramAndTransferFunctionWidget
  *  \brief 
  *
- * \ingroup 
- * \ingroup
+ * \ingroup Visu
  */
 template <class THistogram, class TPixel>
 class ITK_EXPORT HistogramAndTransferFunctionWidget
