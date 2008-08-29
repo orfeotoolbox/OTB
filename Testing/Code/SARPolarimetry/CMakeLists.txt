@@ -81,41 +81,39 @@ ADD_TEST(rdTvVHnVVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
          22.0
          58.0
          45.0
-	)        
-        
- # With HH and VV channels        
-ADD_TEST(rdTvHHnVVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
-        otbHHnVVPolarimetricSynthesisFilter
-        ${INPUTDATA}/RSAT_imagery_HH.tif
-        ${INPUTDATA}/RSAT_imagery_VV.tif
-        ${TEMP}/resPolarimetricSynthesis_HH_VV.tif
-         32.0
-         22.0
-         58.0
-         45.0
-	)        
+	)             
         
 ADD_TEST(rdTuMultiChannelsPolarimetricSynthesisFilterNew ${SARPOLARIMETRY_TESTS1}  
         otbMultiChannelsPolarimetricSynthesisFilterNew
 	)
      
- # With HH, HV, VH and VV channels      
+ # With HH, HV, VH and VV channels turned into vectorImage      
 ADD_TEST(rdTvMultiChannelsPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}  
   --compare-image ${TOL}   ${BASELINE}/rdTvMultiPolarimetricSynthesis.tif
-                    ${TEMP}/resMultiPolarimetricSynthesis.tif
+                    ${TEMP}/resMultiPolarimetricSynthesis1.tif
         otbMultiChannelsPolarimetricSynthesisFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
         ${INPUTDATA}/RSAT_imagery_VH.tif
         ${INPUTDATA}/RSAT_imagery_VV.tif        
-        ${TEMP}/resMultiPolarimetricSynthesis.tif
+        ${TEMP}/resMultiPolarimetricSynthesis1.tif
          32.0     # PsiI
          22.0     # KhiI
          58.0     # PsiR
          45.0     # KhiR
-	)        
+	)
         
-SET_TESTS_PROPERTIES(rdTvHHnVVPolarimetricSynthesisFilter PROPERTIES WILL_FAIL true)
+ # With vector image HH, HV, VH and VV channels      
+#ADD_TEST(rdTvVectorMultiChannelsPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}  
+#        otbVectorMultiChannelsPolarimetricSynthesisFilter
+#        ${IMAGEDATA}/RSAT2/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
+#        ${TEMP}/resMultiPolarimetricSynthesis2.tif
+#         32.0     # PsiI
+#         22.0     # KhiI
+#         58.0     # PsiR
+#         45.0     # KhiR
+#	)        
+        
         
 # A enrichir
 SET(SARPOLARIMETRY_SRCS1
@@ -124,9 +122,9 @@ otbPolarimetricSynthesisFilter.cxx
 otbHHnHVnVVPolarimetricSynthesisFilter.cxx
 otbHHnHVPolarimetricSynthesisFilter.cxx
 otbVHnVVPolarimetricSynthesisFilter.cxx
-otbHHnVVPolarimetricSynthesisFilter.cxx
 otbMultiChannelsPolarimetricSynthesisFilterNew.cxx
 otbMultiChannelsPolarimetricSynthesisFilter.cxx
+#otbVectorMultiChannelsPolarimetricSynthesisFilter.cxx
 )
 
 
