@@ -42,8 +42,6 @@ int otbVectorMultiChannelsPolarimetricSynthesisFilter( int argc, char * argv[] )
         double  PsiR = strtod(argv[5],NULL);
         double  KhiR = strtod(argv[6],NULL);
     
-std::cout<<"test"<<std::endl;
-
         typedef std::complex <double>                           InputPixelType;
         typedef double    	                                OutputPixelType;
         const   unsigned int                                    Dimension = 2;
@@ -54,14 +52,14 @@ std::cout<<"test"<<std::endl;
         typedef itk::FixedArray<int,4>                          IndexArrayType;
         typedef otb::MultiChannelsPolarimetricSynthesisFilter< InputImageType,OutputImageType >   FilterType;
 
-std::cout<<"avant New"<<std::endl;
-
         FilterType::Pointer polarimetricSynthesis = FilterType::New();
         
 	polarimetricSynthesis->SetPsiI( PsiI );
 	polarimetricSynthesis->SetKhiI( KhiI );
         polarimetricSynthesis->SetPsiR( PsiR );
 	polarimetricSynthesis->SetKhiR( KhiR );
+	polarimetricSynthesis->SetEmissionH( true );
+	polarimetricSynthesis->SetEmissionV( true );        
         
         ReaderType::Pointer reader = ReaderType::New();
         WriterType::Pointer writer = WriterType::New();
@@ -72,7 +70,6 @@ std::cout<<"avant New"<<std::endl;
         polarimetricSynthesis->SetInput(reader->GetOutput());
         writer->SetInput( polarimetricSynthesis->GetOutput() );
        
-std::cout<<"avant update"<<std::endl;       
         writer->Update(); 
 
     } 

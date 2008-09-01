@@ -37,14 +37,13 @@ int otbMultiChannelsPolarimetricSynthesisFilter( int argc, char * argv[] )
         const char * inputFilename1  = argv[1];
         const char * inputFilename2  = argv[2];
         const char * inputFilename3  = argv[3];
-        const char * inputFilename4  = argv[4];
                                 
-        const char * outputFilename = argv[5];
+        const char * outputFilename = argv[4];
            
-        double  PsiI = strtod(argv[6],NULL);
-        double  KhiI = strtod(argv[7],NULL);
-        double  PsiR = strtod(argv[8],NULL);
-        double  KhiR = strtod(argv[9],NULL);
+        double  PsiI = strtod(argv[5],NULL);
+        double  KhiI = strtod(argv[6],NULL);
+        double  PsiR = strtod(argv[7],NULL);
+        double  KhiR = strtod(argv[8],NULL);
     
 
         typedef std::complex <double>                           InputPixelType;
@@ -69,20 +68,17 @@ int otbMultiChannelsPolarimetricSynthesisFilter( int argc, char * argv[] )
   
         ReaderType::Pointer reader1 = ReaderType::New();
         ReaderType::Pointer reader2 = ReaderType::New();
-        ReaderType::Pointer reader3 = ReaderType::New();
-        ReaderType::Pointer reader4 = ReaderType::New();                        
+        ReaderType::Pointer reader3 = ReaderType::New();                 
         WriterType::Pointer writer = WriterType::New();
 
         reader1->SetFileName( inputFilename1 );
         reader2->SetFileName( inputFilename2 );
-        reader3->SetFileName( inputFilename3 );
-        reader4->SetFileName( inputFilename4 );                        
+        reader3->SetFileName( inputFilename3 );                        
         writer->SetFileName( outputFilename );
         
         reader1->Update();
         reader2->Update();
         reader3->Update();
-        reader4->Update();
 
         InputVectorImageType::Pointer outputPtr = InputVectorImageType::New();        
 
@@ -96,10 +92,10 @@ int otbMultiChannelsPolarimetricSynthesisFilter( int argc, char * argv[] )
         region.SetSize(size);
         region.SetIndex(start);
         outputPtr->SetRegions(region);
-        outputPtr->SetNumberOfComponentsPerPixel(4);
+        outputPtr->SetNumberOfComponentsPerPixel(3);
         outputPtr->Allocate();
         InputVectorImageType::PixelType pix0;
-        pix0.SetSize(4);
+        pix0.SetSize(3);
         InputPixelType complexpix(0,0);
         pix0.Fill(complexpix);
         
@@ -111,13 +107,11 @@ int otbMultiChannelsPolarimetricSynthesisFilter( int argc, char * argv[] )
         itk::ImageRegionConstIterator<InputImageType> inputIt1(reader1->GetOutput(), reader1->GetOutput()->GetLargestPossibleRegion());
         itk::ImageRegionConstIterator<InputImageType> inputIt2(reader2->GetOutput(), reader2->GetOutput()->GetLargestPossibleRegion());
         itk::ImageRegionConstIterator<InputImageType> inputIt3(reader3->GetOutput(), reader3->GetOutput()->GetLargestPossibleRegion());
-        itk::ImageRegionConstIterator<InputImageType> inputIt4(reader4->GetOutput(), reader4->GetOutput()->GetLargestPossibleRegion());
         itk::ImageRegionIterator<InputVectorImageType> outputIt(outputPtr, outputPtr->GetLargestPossibleRegion());
 
         inputIt1.GoToBegin();
         inputIt2.GoToBegin();
         inputIt3.GoToBegin();
-        inputIt4.GoToBegin();
         outputIt.GoToBegin();
 
         while( !inputIt1.IsAtEnd() ) 
@@ -127,13 +121,11 @@ int otbMultiChannelsPolarimetricSynthesisFilter( int argc, char * argv[] )
           pix[0]=inputIt1.Get();
           pix[1]=inputIt2.Get();
           pix[2]=inputIt3.Get();
-          pix[3]=inputIt4.Get();
          
           outputIt.Set( pix );
           ++inputIt1;
           ++inputIt2;
           ++inputIt3;
-          ++inputIt4;
           ++outputIt;
           }
         
