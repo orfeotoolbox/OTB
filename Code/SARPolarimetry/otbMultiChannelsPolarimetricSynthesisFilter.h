@@ -77,7 +77,7 @@ public:
   typedef typename     itk::FixedArray<ComplexType,2> ComplexArrayType;
   typedef typename     itk::FixedArray<int,4>         IndexArrayType;
   typedef enum {HH=0,HV=1,VH=2,VV=3}                  IndexType;
-  typedef enum {HH_HV_VH_VV=0,HH_HV_VV=1,HH_HV=2,VH_VV=3,HH_VV=4} ArchitectureType;  
+  typedef enum {HH_HV_VH_VV=0,HH_HV_VV=1,HH_HV=2,VH_VV=3,HH_VV=4,UNKNOWN=5} ArchitectureType;  
   
     
   /** Get the functor object.  The functor is returned by reference.
@@ -143,9 +143,6 @@ public:
   itkGetMacro(Mode,int);
   /** Set the gain */
   itkSetMacro(Gain,double);  
-  /** Get/Set the index */  
-  itkSetMacro(Index,IndexArrayType);
-  itkGetMacro(Index,IndexArrayType);
   /** Force the copolar mode */
   void ForceCoPolar();  
   /** Force the crosspolar mode */
@@ -229,10 +226,7 @@ private :
   /** Emission mode */
   bool m_EmissionH;
   bool m_EmissionV;
-  
-  /* Index of the images */
-  IndexArrayType m_Index;
-  
+   
 };
 
 } // end namespace otb

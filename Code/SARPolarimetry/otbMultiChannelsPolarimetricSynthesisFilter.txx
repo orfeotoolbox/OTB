@@ -38,14 +38,8 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   this->InPlaceOff();
   SetEmissionH(false);
   SetEmissionV(false);  
-  SetArchitectureType(HH_HV_VH_VV);
+  SetArchitectureType(UNKNOWN);
   SetGain(1);
-  IndexArrayType index;
-  index[0]=0;
-  index[1]=1;
-  index[2]=2;
-  index[3]=3;
-  SetIndex(index);    
 }
 
  /** PolarimetricSynthesisFilter
@@ -185,8 +179,8 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
           case HH_HV_VH_VV :
                 while( !inputIt.IsAtEnd() ) 
                 {
-                outputIt.Set( m_Gain * GetFunctor()( inputIt.Get()[GetIndex()[0]], inputIt.Get()[GetIndex()[1]], 
-                                                     inputIt.Get()[GetIndex()[2]], inputIt.Get()[GetIndex()[3]] ) );
+                outputIt.Set( m_Gain * GetFunctor()( inputIt.Get()[0], inputIt.Get()[1], 
+                                                     inputIt.Get()[2], inputIt.Get()[3] ) );
                 ++inputIt;
                 ++outputIt;
                 progress.CompletedPixel();  // potential exception thrown here
@@ -197,8 +191,8 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
           case HH_HV_VV :
                 while( !inputIt.IsAtEnd() ) 
                 {
-                outputIt.Set( m_Gain * GetFunctor()( inputIt.Get()[GetIndex()[0]], inputIt.Get()[GetIndex()[1]],
-                                                     inputIt.Get()[GetIndex()[1]], inputIt.Get()[GetIndex()[2]] ) );
+                outputIt.Set( m_Gain * GetFunctor()( inputIt.Get()[0], inputIt.Get()[1],
+                                                     inputIt.Get()[1], inputIt.Get()[2] ) );
                 ++inputIt;
                 ++outputIt;
                 progress.CompletedPixel();  // potential exception thrown here
@@ -209,7 +203,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
           case HH_HV :
                 while( !inputIt.IsAtEnd() ) 
                 {
-                outputIt.Set( m_Gain * GetFunctor()( inputIt.Get()[GetIndex()[0]], inputIt.Get()[GetIndex()[1]], 0, 0 ) );
+                outputIt.Set( m_Gain * GetFunctor()( inputIt.Get()[0], inputIt.Get()[1], 0, 0 ) );
                 ++inputIt;
                 ++outputIt;
                 progress.CompletedPixel();  // potential exception thrown here
@@ -220,7 +214,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
           case VH_VV :
                 while( !inputIt.IsAtEnd() ) 
                 {
-                outputIt.Set( m_Gain * GetFunctor()( 0, 0, inputIt.Get()[GetIndex()[2]], inputIt.Get()[GetIndex()[3]] ) );
+                outputIt.Set( m_Gain * GetFunctor()( 0, 0, inputIt.Get()[2], inputIt.Get()[3] ) );
                 ++inputIt;
                 ++outputIt;
                 progress.CompletedPixel();  // potential exception thrown here
@@ -297,7 +291,11 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 
   if ( ( NumberOfImages == 2  ) &&
        !GetEmissionH() && GetEmissionV() )
-        SetArchitectureType(VH_VV);        
+        SetArchitectureType(VH_VV);      
+
+/*  std::cout<<"Nb Image: "<<NumberOfImages<<std::endl;
+  std::cout<<"Emission H: "<< GetEmissionH() <<std::endl;
+  std::cout<<"Emission V: "<< GetEmissionV() <<std::endl;  */
 
 }
 
@@ -320,7 +318,6 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
                   break;                  
           // Only HH and HV are present                
           case HH_HV :
-                //std::cout<<"Case HH HV !!"<<std::endl;      
                              
         	// Forcing KhiI=0 PsiI=0
                 this->SetKhiI(0);
@@ -329,7 +326,6 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
                                 
           // Only VH and VV are present
           case VH_VV :
-                //std::cout<<"Case VH VV !!"<<std::endl;  
         
                 // Forcing KhiI=0 PsiI=90          
                 this->SetKhiI(0);
@@ -364,7 +360,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   // Third Part. Estimation of the incident field Ei and the reflected field Er
   ComputeElectromagneticFields();
 
-  Print();
+//  Print();
   
 }
 
@@ -412,20 +408,20 @@ void
 MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 ::Print()
 {
-  //std::cout<<"PsiI: "<<m_PsiI<<std::endl;
-  //std::cout<<"KhiI: "<<m_KhiI<<std::endl;
-  //std::cout<<"PsiR: "<<m_PsiR<<std::endl;
-  //std::cout<<"KhiR: "<<m_KhiR<<std::endl;
+  std::cout<<"PsiI: "<<m_PsiI<<std::endl;
+  std::cout<<"KhiI: "<<m_KhiI<<std::endl;
+  std::cout<<"PsiR: "<<m_PsiR<<std::endl;
+  std::cout<<"KhiR: "<<m_KhiR<<std::endl;
   
-  //std::cout<<"Ei0 im: "<<m_Ei[0].imag()<<std::endl;
-  //std::cout<<"Ei0 re: "<<m_Ei[0].real()<<std::endl;
-  //std::cout<<"Ei1 im: "<<m_Ei[1].imag()<<std::endl;
-  //std::cout<<"Ei1 re: "<<m_Ei[1].real()<<std::endl;
+  std::cout<<"Ei0 im: "<<m_Ei[0].imag()<<std::endl;
+  std::cout<<"Ei0 re: "<<m_Ei[0].real()<<std::endl;
+  std::cout<<"Ei1 im: "<<m_Ei[1].imag()<<std::endl;
+  std::cout<<"Ei1 re: "<<m_Ei[1].real()<<std::endl;
   
-  //std::cout<<"Er0 im: "<<m_Er[0].imag()<<std::endl;
-  //std::cout<<"Er0 re: "<<m_Er[0].real()<<std::endl;
-  //std::cout<<"Er1 im: "<<m_Er[1].imag()<<std::endl;
-  //std::cout<<"Er1 re: "<<m_Er[1].real()<<std::endl;
+  std::cout<<"Er0 im: "<<m_Er[0].imag()<<std::endl;
+  std::cout<<"Er0 re: "<<m_Er[0].real()<<std::endl;
+  std::cout<<"Er1 im: "<<m_Er[1].imag()<<std::endl;
+  std::cout<<"Er1 re: "<<m_Er[1].real()<<std::endl;
 }
 
 } // end namespace otb
