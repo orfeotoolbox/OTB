@@ -81,10 +81,8 @@ int main( int argc, char* argv[] )
 
 
 
-   
-  typedef otb::Image<unsigned char, 2>    CharImageType;
-  typedef otb::Image<unsigned int, 2>     ImageType;
-  typedef otb::VectorImage<unsigned int, 2>     VectorImageType;
+  typedef otb::Image<int, 2>     ImageType;
+  typedef otb::VectorImage<int, 2>     VectorImageType;
   typedef otb::ImageFileReader<VectorImageType>  ReaderType;
   typedef otb::StreamingImageFileWriter<VectorImageType>  WriterType;
 

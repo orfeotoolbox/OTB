@@ -851,31 +851,35 @@ template <class TPixel, class TLabel>
   ImageViewerBase<TPixel,TLabel>
 ::ChangeZoomViewedRegion(IndexType clickedIndex)
 { 
+
   m_Updating = true;
   //comment: std::cout<<"ChangeZoomViewedRegion: "<<m_Label<<" Updating flag on"<<std::endl;
-  RegionType region = m_ZoomWidget->GetViewedRegion();
-  IndexType newIndex;
-  newIndex[0]=clickedIndex[0]-region.GetSize()[0]/2;
-  newIndex[1]=clickedIndex[1]-region.GetSize()[1]/2;
- 
-  region.SetIndex(newIndex);
-  RegionType newRegion = ComputeConstrainedRegion(region,m_FullWidget->GetViewedRegion());
-  m_ZoomWidget->SetZoomUpperLeftCorner(newRegion.GetIndex());
- 
-  typename ViewerListType::Iterator linkedIt = m_LinkedViewerList->Begin();
-  typename OffsetListType::iterator offIt = m_LinkedViewerOffsetList.begin();
-  
-  while(linkedIt!=m_LinkedViewerList->End()&&offIt!=m_LinkedViewerOffsetList.end())
+  if(m_ShowZoomWidget)
     {
-      if(!linkedIt.Get()->GetUpdating())
+      RegionType region = m_ZoomWidget->GetViewedRegion();
+      IndexType newIndex;
+      newIndex[0]=clickedIndex[0]-region.GetSize()[0]/2;
+      newIndex[1]=clickedIndex[1]-region.GetSize()[1]/2;
+      
+      region.SetIndex(newIndex);
+      RegionType newRegion = ComputeConstrainedRegion(region,m_FullWidget->GetViewedRegion());
+      m_ZoomWidget->SetZoomUpperLeftCorner(newRegion.GetIndex());
+      
+      typename ViewerListType::Iterator linkedIt = m_LinkedViewerList->Begin();
+      typename OffsetListType::iterator offIt = m_LinkedViewerOffsetList.begin();
+      
+      while(linkedIt!=m_LinkedViewerList->End()&&offIt!=m_LinkedViewerOffsetList.end())
 	{
-	  IndexType linkedIndex;
-	  linkedIndex[0] = clickedIndex[0]+(*offIt)[0];
-	  linkedIndex[1] = clickedIndex[1]+(*offIt)[1];
-	  linkedIt.Get()->ChangeZoomViewedRegion(linkedIndex);
+	  if(!linkedIt.Get()->GetUpdating())
+	    {
+	      IndexType linkedIndex;
+	      linkedIndex[0] = clickedIndex[0]+(*offIt)[0];
+	      linkedIndex[1] = clickedIndex[1]+(*offIt)[1];
+	      linkedIt.Get()->ChangeZoomViewedRegion(linkedIndex);
+	    }
+	  ++offIt;
+	  ++linkedIt;			    
 	}
-      ++offIt;
-      ++linkedIt;			    
     }
   //comment: std::cout<<"ChangeZoomViewedRegion: "<<m_Label<<" Updating flag off"<<std::endl;
   m_Updating = false; 

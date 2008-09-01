@@ -62,7 +62,7 @@ class FullResolutionImageWidget
    * Set upper left corner position in image.
    * \param index the upper left corner index.
    */
-  void SetUpperLeftCorner(IndexType index);
+  virtual void SetUpperLeftCorner(IndexType index);
   itkGetMacro(UpperLeftCorner,IndexType);
 
  protected:

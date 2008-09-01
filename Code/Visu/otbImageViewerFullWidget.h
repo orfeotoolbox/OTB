@@ -82,7 +82,17 @@ class ITK_EXPORT ImageViewerFullWidget
   itkGetMacro(Parent,ParentPointerType);
   itkGetObjectMacro(EventsInterface,EventsInterfaceType);
   itkSetObjectMacro(EventsInterface,EventsInterfaceType);
-  /** Handle method */
+ 
+ virtual void SetUpperLeftCorner(IndexType index)
+ {
+   Superclass::SetUpperLeftCorner(index);
+   if(m_EventsInterface.IsNotNull())
+     {
+       m_EventsInterface->ViewedRegionChanged();
+     }
+ }
+ 
+ /** Handle method */
   
   
   /** Default mode handling, without ROI selection */
@@ -99,8 +109,16 @@ class ITK_EXPORT ImageViewerFullWidget
 	  clickedIndex[0]=x;
 	  clickedIndex[1]=y;
           clickedIndex=this->WindowToImageCoordinates(clickedIndex);
-          m_Parent->ChangeZoomViewedRegion(clickedIndex);
-          m_Parent->Update();
+
+	  if(m_EventsInterface.IsNotNull())
+	  {
+	    m_EventsInterface->PixelClicked(clickedIndex);
+	  }
+	  if(m_EventsInterface.IsNotNull() && m_EventsInterface->GetForwardEvents())
+	  {
+	    m_Parent->ChangeZoomViewedRegion(clickedIndex);
+	    m_Parent->Update();
+	  }
           return 1;
           }
        case FL_KEYDOWN:

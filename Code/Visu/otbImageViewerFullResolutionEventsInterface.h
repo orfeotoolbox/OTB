@@ -38,13 +38,16 @@ class ImageViewerFullResolutionEventsInterface
   itkTypeMacro(ImageViewerFullResolutionEventsInterface,Superclass);
 
   typedef itk::ImageRegion<2> RegionType;
+  typedef RegionType::IndexType IndexType;
 
   itkSetMacro(ForwardEvents,bool);
   itkGetMacro(ForwardEvents,bool);
 
   /** Users actions */
-  virtual void RegionSelected(const RegionType & region) = 0;
-  
+  virtual void RegionSelected(const RegionType & region){};
+  virtual void ViewedRegionChanged(){};
+  virtual void PixelClicked(const IndexType& index){};
+
  protected:
   /** Constructor */
   ImageViewerFullResolutionEventsInterface()
