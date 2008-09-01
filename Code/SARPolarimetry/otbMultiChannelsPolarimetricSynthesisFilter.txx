@@ -38,7 +38,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   this->InPlaceOff();
   SetEmissionH(false);
   SetEmissionV(false);  
-  SetArchitectureType(0);
+  SetArchitectureType(HH_HV_VH_VV);
   SetGain(1);
   IndexArrayType index;
   index[0]=0;
@@ -286,18 +286,18 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   int NumberOfImages = this->GetInput()->GetNumberOfComponentsPerPixel();
 
   if ( NumberOfImages == 4 )
-        SetArchitectureType(0);
+        SetArchitectureType(HH_HV_VH_VV);
         
   if ( NumberOfImages == 3 ) 
-        SetArchitectureType(1);
+        SetArchitectureType(HH_HV_VV);
 
   if ( ( NumberOfImages == 2  ) &&
        GetEmissionH() && !GetEmissionV() )
-        SetArchitectureType(2);
+        SetArchitectureType(HH_HV);
 
   if ( ( NumberOfImages == 2  ) &&
        !GetEmissionH() && GetEmissionV() )
-        SetArchitectureType(3);        
+        SetArchitectureType(VH_VV);        
 
 }
 

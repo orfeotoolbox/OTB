@@ -130,8 +130,8 @@ public:
   itkSetMacro(KhiR,double);
   itkGetMacro(KhiR,double);
   /** Set/Get ArchitectureType */
-  itkGetMacro(ArchitectureType,int);
-  itkSetMacro(ArchitectureType,int);
+  itkGetMacro(ArchitectureType,ArchitectureType);
+  itkSetMacro(ArchitectureType,ArchitectureType);
   /** Set/Get EmissionH */  
   itkSetMacro(EmissionH,bool);
   itkGetMacro(EmissionH,bool);
@@ -222,7 +222,7 @@ private :
   ComplexArrayType m_Er;  
    
   /** Architecture Type */
-  int m_ArchitectureType;
+  ArchitectureType m_ArchitectureType;
 
   FunctorType m_Functor;
   
