@@ -36,21 +36,21 @@ namespace Functor {
 	*	PhD dissertation, University of Rennes I, Rennes, France. May 5th, 1999.
 	*
 	*	Its behavior is decomposed into two steps depending on the number of iterations:
-	*	\f{equation*}
-			\beta = \begn{cases}
-				\beta_0 \left( 1 - \frac{t}{t_0} \right) & \text{ if $t < t_0$} \\
-				\beta_{\text{end}} \left( 1- \frac{t-t_O}{t_{\text{end}}-t_0} \right) 
-					& \text{ if $ t_0 \leqslant t < t_{\text{end}}$}
-			\end{cases}
-		\f{equation*}
-		where \f$ t_0 \f$ stands for IterationThreshold.
+	*	\f[
+                \beta = 
+                \begin{cases} \beta_0 \left( 1 - \frac{t}{t_0} \right) & \textrm{ if $t < t_0$} 
+                \\
+                \beta_{\textrm{end}} \left( 1- \frac{t-t_O}{t_{\textrm{end}}-t_0} \right) & \textrm{ if $ t_0 \leqslant t < t_{\textrm{end}}$}
+                \end{cases}
+                \f]
+        * where \f$ t_0 \f$ stands for IterationThreshold.
 	*
 	*	CzihoSOMLearningBehaviorFunctor uses some parameters of the SOM class such as:
 	*	BetaInit, BetaEnd, NumberOfIterations, but also NeighborhoodSizeInit which may be 
 	*	(surprisingly) required for the IterationThreshold.
 	*
-	*	The functor function uses \code{NumberOfIterations}, \code{BetaInit}, \code{BetaEnd} parameters, that is 
-	*	why it is necessary to call a specific method for \code{IterationThreshold} intialisation.
+	*	The functor function uses \code NumberOfIterations \endcode, \code BetaInit \endcode, \code BetaEnd \endcode parameters, that is 
+	*	why it is necessary to call a specific method for \code IterationThreshold \endcode intialisation.
 	*
 	*	\sa SOM
 	*/

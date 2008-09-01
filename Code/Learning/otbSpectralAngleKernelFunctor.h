@@ -33,11 +33,11 @@ public:
 	 * Performs an inverse multiquadric kernel evaluation that suit
 	 * spectral data.
 	 * It is of kind:
-	 * $\frac{1}{\sqrt{ c_0 + \cos\text{SAM(x,y)} }}$ where $\text{SAM(x,y)}$ is
+	 * $\frac{1}{\sqrt{ c_0 + \cos\textrm{SAM(x,y)} }}$ where $\textrm{SAM(x,y)}$ is
 	 * Spectral Angle Measure: 
-	 * $\text{SAM(x,y) = \acos\left( \frac{x \cdot y}{\|x\| \|y\|} \right)$.
+	 * $\textrm{SAM(x,y) = \acos\left( \frac{x \cdot y}{\|x\| \|y\|} \right)$.
 	 *
-	 * The only parameter $c_0$ is to be fixed by the \code{SetValue}
+	 * The only parameter $c_0$ is to be fixed by the \code SetValue \endcode
 	 * interface with keyword Coef (def 2.0).
 	 */
 	double operator() ( const svm_node * x, const svm_node * y,
@@ -46,7 +46,7 @@ public:
 	SpectralAngleKernelFunctor ();
 	virtual ~SpectralAngleKernelFunctor () { }
 
-	/** Specific implementation of \code{Update} to split m_MapParameters
+	/** Specific implementation of \code Update \endcode to split m_MapParameters
 	 * into specific variables to speed up kernel evaluations */
 	void Update ();
 

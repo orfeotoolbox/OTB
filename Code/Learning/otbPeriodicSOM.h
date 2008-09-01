@@ -38,10 +38,10 @@ namespace otb {
  * computed from an initial radius, and to a certain learning factor, decreasing at each iteration.
  *
  * The behavior of the neighborhood is given by a functor (templated) which parameter is the current
- * iteration. It returns a neighborhood of type \code{SizeType}.
+ * iteration. It returns a neighborhood of type \code SizeType \endcode.
  *
  * The behavior of the learning factor (hold by a beta variable) is given by an other functor 
- * which parameter is the current iteration. It returns a beta value of type \code{double}.
+ * which parameter is the current iteration. It returns a beta value of type \code double \endcode.
  *
  * The SOMMap produced as output can be either initialized with a constant custom value or randomly 
  * generated following a normal law. The seed for the random intialization can be modified.

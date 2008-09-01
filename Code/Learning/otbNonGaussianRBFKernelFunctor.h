@@ -37,7 +37,7 @@ public:
 	 * where $0 \leqslant \alpha \leqslant 1$ and 
 	 * $0 \leqslant \beta \leqslant 2$.
 	 *
-	 * Variables to be instanciated (through \code{SetValue}) are:
+	 * Variables to be instanciated (through \code SetValue \endcode) are:
 	 * Alpha (def=1), Beta (def=2) and Gamma (def 1.0).
 	 * */
 	double operator() ( const svm_node * x, const svm_node * y,
@@ -46,7 +46,7 @@ public:
 	NonGaussianRBFKernelFunctor ();
 	virtual ~NonGaussianRBFKernelFunctor () { }
 
-	/** Specific implementation of \code{Update} to split m_MapParameters
+	/** Specific implementation of \code Update \endcode to split m_MapParameters
 	 * into specific variables to speed up kernel evaluations */
 	void Update ();
 	

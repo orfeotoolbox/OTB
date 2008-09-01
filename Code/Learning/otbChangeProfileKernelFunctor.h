@@ -35,10 +35,10 @@ public:
 	 * \subdoxygen{otb}{KullbackLeiblerProfileImageFilter}.
 	 *
 	 * It is implemented as a polynomial kernel:
-	 * $\exp - \left( \gamma \left( \max_i | x_i - y_i | \right)^\text{degree} + \text{coef} \right)$.
+	 * $\exp - \left( \gamma \left( \max_i | x_i - y_i | \right)^\textrm{degree} + \textrm{coef} \right)$.
 	 *
-	 * The parameters $\gamma$, $\text{coef}$ and $\text{degree}$ are 
-	 * to be fixed through \code{SetValue} with keywords: Gamma (def 1.0),
+	 * The parameters $\gamma$, $\textrm{coef}$ and $\textrm{degree}$ are 
+	 * to be fixed through \code SetValue \endcode with keywords: Gamma (def 1.0),
 	 * Coef (def 1.0) and Degree (def 1.0).
 	 */
 	double operator() ( const svm_node * x, const svm_node * y,
@@ -47,7 +47,7 @@ public:
 	ChangeProfileKernelFunctor ();
 	virtual ~ChangeProfileKernelFunctor () { }
 
-	/** Specific implementation of \code{Update} to split m_MapParameters
+	/** Specific implementation of \code Update \endcode to split m_MapParameters
 	 * into specific variables to speed up kernel evaluations */
 	void Update ();
 

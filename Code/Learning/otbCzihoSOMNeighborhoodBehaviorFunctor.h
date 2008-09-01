@@ -34,14 +34,14 @@ namespace Functor {
 	*	"Compression d'images et analyse de contenu par quantification vectorielle"
 	*	PhD dissertation, University of Rennes I, Rennes, France. May 5th, 1999.
 	*
-	*	The behavior of the radius r (\em ie. \code{SizeType} component 0, 1,...) is given by:
-	*	\f{equation*}
-			r = r_{\text{init}} \left( 1 - \frac{t}{t_{\text{end}}} \right)^2
-		\f{equation*}
+	*	The behavior of the radius r (\em ie. \code SizeType \endcode component 0, 1,...) is given by:
+	*	\f$
+			r = r_{\textrm{init}} \left( 1 - \frac{t}{t_{\textrm{end}}} \right)^2
+		\f$
 	*
 	*	CzihoSOMNeighborhoodBehaviorFunctor uses some parameters of the SOM class such as:
-	*	\code{NeighborhoodSizeInit}, \code{NumberOfIterations} which are parameters of the functor function.
-	*	\code{operator()} is templated with the dimension of the neighborhoodSize.
+	*	\code NeighborhoodSizeInit \endcode, \code NumberOfIterations \endcode which are parameters of the functor function.
+	*	\code operator() \endcode is templated with the dimension of the neighborhoodSize.
 	*
 	*	\sa SOM
 	*/

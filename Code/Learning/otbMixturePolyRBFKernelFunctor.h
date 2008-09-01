@@ -35,7 +35,7 @@ public:
 	 * polynomial kernel and 
 	 * $k_2(x,y) = \exp\left( - \gamma_2 \| x-y\-^2 \right)$ an RBF one. 
 	 *
-	 * Variable to be instanciated (through \code{SetValue}) are:
+	 * Variable to be instanciated (through \code SetValue \endcode) are:
 	 * Mixture (def=0.5), GammaPoly (def=1.0), CoefPoly (def=1.0),
 	 * DegreePoly (def=2), GammaRBF (def=1.0) */
 	double operator() ( const svm_node * x, const svm_node * y,
@@ -44,7 +44,7 @@ public:
 	MixturePolyRBFKernelFunctor ();
 	virtual ~MixturePolyRBFKernelFunctor () { }
 
-	/** Specific implementation of \code{Update} to split m_MapParameters
+	/** Specific implementation of \code Update \endcode to split m_MapParameters
 	 * into specific variables to speed up kernel evaluations */
 	void Update ();
 
