@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbMarkovRandomFieldFilter_h
-#define _otbMarkovRandomFieldFilter_h
+#ifndef __otbMarkovRandomFieldFilter_h
+#define __otbMarkovRandomFieldFilter_h
 
 #include "otbMacro.h"
 

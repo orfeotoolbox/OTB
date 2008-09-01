@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef _otbMorphologicalPyramidMRToMSConverter_h
-#define _otbMorphologicalPyramidMRToMSConverter_h
+#ifndef __otbMorphologicalPyramidMRToMSConverter_h
+#define __otbMorphologicalPyramidMRToMSConverter_h
 
 #include "otbImageListToImageListFilter.h"
 

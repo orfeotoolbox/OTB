@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbForwardFourierMellinTransformImageFilter_txx
-#define _otbForwardFourierMellinTransformImageFilter_txx
+#ifndef __otbForwardFourierMellinTransformImageFilter_txx
+#define __otbForwardFourierMellinTransformImageFilter_txx
 
 #include "otbForwardFourierMellinTransformImageFilter.h"
 #include "itkImageDuplicator.h"

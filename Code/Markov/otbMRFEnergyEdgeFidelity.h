@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef _otbMRFEnergyEdgeFidelity_h
-#define _otbMRFEnergyEdgeFidelity_h
+#ifndef __otbMRFEnergyEdgeFidelity_h
+#define __otbMRFEnergyEdgeFidelity_h
 
 #include "otbMRFEnergy.h"
 #define M_SQUARE(x) ((x)*(x))

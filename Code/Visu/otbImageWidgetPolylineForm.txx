@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbImageWidgetPolylineForm_txx
-#define _otbImageWidgetPolylineForm_txx
+#ifndef __otbImageWidgetPolylineForm_txx
+#define __otbImageWidgetPolylineForm_txx
 
 #include "otbImageWidgetPolylineForm.h"
 

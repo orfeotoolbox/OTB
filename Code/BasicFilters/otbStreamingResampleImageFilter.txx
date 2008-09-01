@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbStreamingResampleImageFilter_txx
-#define _otbStreamingResampleImageFilter_txx
+#ifndef __otbStreamingResampleImageFilter_txx
+#define __otbStreamingResampleImageFilter_txx
 
 #include "otbStreamingResampleImageFilter.h"
 #include "otbStreamingTraits.h"

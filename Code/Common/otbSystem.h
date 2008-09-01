@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbSystem_h
-#define _otbSystem_h
+#ifndef __otbSystem_h
+#define __otbSystem_h
 
 #include <string>
 #include <vector>

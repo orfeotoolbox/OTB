@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbImageToLineSpatialObjectListFilter_h
-#define _otbImageToLineSpatialObjectListFilter_h
+#ifndef __otbImageToLineSpatialObjectListFilter_h
+#define __otbImageToLineSpatialObjectListFilter_h
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbImageFileWriter_txx
-#define _otbImageFileWriter_txx
+#ifndef __otbImageFileWriter_txx
+#define __otbImageFileWriter_txx
 
 #include "otbImageFileWriter.h"
 #include "otbImageIOFactory.h"

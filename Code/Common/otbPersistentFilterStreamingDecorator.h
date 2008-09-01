@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbPersistentFilterStreamingDecorator_h
-#define _otbPersistentFilterStreamingDecorator_h
+#ifndef __otbPersistentFilterStreamingDecorator_h
+#define __otbPersistentFilterStreamingDecorator_h
 
 #include "otbStreamingImageVirtualWriter.h"
 #include "itkProcessObject.h"

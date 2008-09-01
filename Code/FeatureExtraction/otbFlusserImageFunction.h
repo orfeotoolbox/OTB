@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbFlusserImageFunction_h
-#define _otbFlusserImageFunction_h
+#ifndef __otbFlusserImageFunction_h
+#define __otbFlusserImageFunction_h
 
 #include "otbRealMomentImageFunction.h"
 

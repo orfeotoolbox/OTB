@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbImageToGrayscaleAnaglyphImageFilter_h
-#define _otbImageToGrayscaleAnaglyphImageFilter_h
+#ifndef __otbImageToGrayscaleAnaglyphImageFilter_h
+#define __otbImageToGrayscaleAnaglyphImageFilter_h
 
 #include "itkBinaryFunctorImageFilter.h"
 #include "itkNumericTraits.h"

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbRCC8Value_h
-#define _otbRCC8Value_h
+#ifndef __otbRCC8Value_h
+#define __otbRCC8Value_h
 
 namespace otb
 {

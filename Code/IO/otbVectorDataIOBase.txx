@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbVectorDataIOBase_txx
-#define _otbVectorDataIOBase_txx
+#ifndef __otbVectorDataIOBase_txx
+#define __otbVectorDataIOBase_txx
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )

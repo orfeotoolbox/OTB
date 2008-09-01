@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbVectorizationPathListFilter_txx
-#define _otbVectorizationPathListFilter_txx
+#ifndef __otbVectorizationPathListFilter_txx
+#define __otbVectorizationPathListFilter_txx
 
 #include "otbVectorizationPathListFilter.h"
 #include "otbMacro.h"

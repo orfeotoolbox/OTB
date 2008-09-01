@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbLogPolarTransform_txx
-#define _otbLogPolarTransform_txx
+#ifndef __otbLogPolarTransform_txx
+#define __otbLogPolarTransform_txx
 
 #include "otbLogPolarTransform.h"
 #include "otbMacro.h"

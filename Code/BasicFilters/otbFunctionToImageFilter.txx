@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbFunctionToImageFilter_txx
-#define _otbFunctionToImageFilter_txx
+#ifndef __otbFunctionToImageFilter_txx
+#define __otbFunctionToImageFilter_txx
 
 #include "otbFunctionToImageFilter.h"
 #include "itkImageRegionIterator.h"

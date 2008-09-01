@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbRealMomentImageFunction_h
-#define _otbRealMomentImageFunction_h
+#ifndef __otbRealMomentImageFunction_h
+#define __otbRealMomentImageFunction_h
 
 #include "otbGeometricMomentImageFunction.h"
 

@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbNonMaxRemovalByDirectionFilter_h
-#define _otbNonMaxRemovalByDirectionFilter_h
+#ifndef __otbNonMaxRemovalByDirectionFilter_h
+#define __otbNonMaxRemovalByDirectionFilter_h
 
 #include "otbModulusAndDirectionImageToImageFilter.h"
 #include "otbBinaryFunctorNeighborhoodImageFilter.h"

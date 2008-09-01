@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbOrthoRectificationFilter_txx
-#define _otbOrthoRectificationFilter_txx
+#ifndef __otbOrthoRectificationFilter_txx
+#define __otbOrthoRectificationFilter_txx
 
 #include "otbOrthoRectificationFilter.h"
 

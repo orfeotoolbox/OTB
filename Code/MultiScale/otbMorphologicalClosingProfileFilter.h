@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbMorphologicalClosingProfileFilter_h
-#define _otbMorphologicalClosingProfileFilter_h
+#ifndef __otbMorphologicalClosingProfileFilter_h
+#define __otbMorphologicalClosingProfileFilter_h
 
 #include "otbImageToProfileFilter.h"
 #include "itkClosingByReconstructionImageFilter.h"

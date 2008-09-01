@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef _otbSVMSampleListModelEstimator_txx
-#define _otbSVMSampleListModelEstimator_txx
+#ifndef __otbSVMSampleListModelEstimator_txx
+#define __otbSVMSampleListModelEstimator_txx
 
 #include "otbSVMSampleListModelEstimator.h"
 #include "itkCommand.h"

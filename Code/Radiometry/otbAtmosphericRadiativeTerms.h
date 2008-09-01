@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbAtmosphericRadiativeTerms_h
-#define _otbAtmosphericRadiativeTerms_h
+#ifndef __otbAtmosphericRadiativeTerms_h
+#define __otbAtmosphericRadiativeTerms_h
 
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"

@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef _otbForwardFourierMellinTransformImageFilter_h
-#define _otbForwardFourierMellinTransformImageFilter_h
+#ifndef __otbForwardFourierMellinTransformImageFilter_h
+#define __otbForwardFourierMellinTransformImageFilter_h
 
 #include "otbImage.h"
 #include "itkLinearInterpolateImageFunction.h"

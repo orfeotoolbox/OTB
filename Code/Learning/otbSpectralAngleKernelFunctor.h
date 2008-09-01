@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbSpectralAngleKernelFunctor_h
-#define _otbSpectralAngleKernelFunctor_h
+#ifndef __otbSpectralAngleKernelFunctor_h
+#define __otbSpectralAngleKernelFunctor_h
 
 #include "svm.h"
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbRCC8Graph_h
-#define _otbRCC8Graph_h
+#ifndef __otbRCC8Graph_h
+#define __otbRCC8Graph_h
 
 #include "otbRCC8Edge.h"
 #include <boost/graph/graph_traits.hpp>

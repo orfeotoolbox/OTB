@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbSpatialObjectToImageDrawingFilter_txx
-#define _otbSpatialObjectToImageDrawingFilter_txx
+#ifndef __otbSpatialObjectToImageDrawingFilter_txx
+#define __otbSpatialObjectToImageDrawingFilter_txx
 
 #include "otbSpatialObjectToImageDrawingFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"

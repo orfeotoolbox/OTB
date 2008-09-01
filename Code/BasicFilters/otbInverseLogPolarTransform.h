@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbInverseLogPolarTransform_h
-#define _otbInverseLogPolarTransform_h
+#ifndef __otbInverseLogPolarTransform_h
+#define __otbInverseLogPolarTransform_h
 
 #include "itkTransform.h"
 

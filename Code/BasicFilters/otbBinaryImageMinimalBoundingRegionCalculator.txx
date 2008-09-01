@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbBinaryImageMinimalBoundingRegionCalculator_txx
-#define _otbBinaryImageMinimalBoundingRegionCalculator_txx
+#ifndef __otbBinaryImageMinimalBoundingRegionCalculator_txx
+#define __otbBinaryImageMinimalBoundingRegionCalculator_txx
 
 #include "otbBinaryImageMinimalBoundingRegionCalculator.h"
 #include "itkImageSliceConstIteratorWithIndex.h"

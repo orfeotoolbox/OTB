@@ -18,8 +18,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbStreamingStatisticsImageFilter_txx
-#define _otbStreamingStatisticsImageFilter_txx
+#ifndef __otbStreamingStatisticsImageFilter_txx
+#define __otbStreamingStatisticsImageFilter_txx
 #include "otbStreamingStatisticsImageFilter.h"
 
 #include "itkImageRegionIterator.h"

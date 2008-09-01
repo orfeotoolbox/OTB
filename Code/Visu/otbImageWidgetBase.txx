@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbImageWidgetBase_txx
-#define _otbImageWidgetBase_txx
+#ifndef __otbImageWidgetBase_txx
+#define __otbImageWidgetBase_txx
 
 #include "itkImageRegionConstIterator.h"
 #include "itkMacro.h"

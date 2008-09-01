@@ -1,6 +1,6 @@
 
-#ifndef _otbDifferenceImageFilter_txx
-#define _otbDifferenceImageFilter_txx
+#ifndef __otbDifferenceImageFilter_txx
+#define __otbDifferenceImageFilter_txx
 
 #include "itkDifferenceImageFilter.h"
 

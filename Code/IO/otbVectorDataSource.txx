@@ -16,8 +16,8 @@ PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
-#ifndef _otbVectorDataSource_txx
-#define _otbVectorDataSource_txx
+#ifndef __otbVectorDataSource_txx
+#define __otbVectorDataSource_txx
 
 #include "otbVectorDataSource.h"
 

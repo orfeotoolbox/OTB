@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbSVMKernels_h
-#define _otbSVMKernels_h
+#ifndef __otbSVMKernels_h
+#define __otbSVMKernels_h
 
 #include "itkNumericTraits.h"
 #include "itkImageRegionIterator.h"

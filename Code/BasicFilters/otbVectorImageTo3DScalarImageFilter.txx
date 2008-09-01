@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbVectorImageTo3DScalarImageFilter_txx
-#define _otbVectorImageTo3DScalarImageFilter_txx
+#ifndef __otbVectorImageTo3DScalarImageFilter_txx
+#define __otbVectorImageTo3DScalarImageFilter_txx
 
 #include "otbVectorImageTo3DScalarImageFilter.h"
 #include "itkImageRegionConstIterator.h"

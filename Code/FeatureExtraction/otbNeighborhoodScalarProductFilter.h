@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbNeighborhoodScalarProductFilter_h
-#define _otbNeighborhoodScalarProductFilter_h
+#ifndef __otbNeighborhoodScalarProductFilter_h
+#define __otbNeighborhoodScalarProductFilter_h
 
 #include "otbImageToModulusAndDirectionImageFilter.h"
 

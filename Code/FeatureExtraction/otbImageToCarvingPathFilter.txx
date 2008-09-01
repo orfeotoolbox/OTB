@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbImageToCarvingPathFilter_txx
-#define _otbImageToCarvingPathFilter_txx
+#ifndef __otbImageToCarvingPathFilter_txx
+#define __otbImageToCarvingPathFilter_txx
 
 #include "otbImageToCarvingPathFilter.h"
 #include "otbMacro.h"

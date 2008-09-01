@@ -18,8 +18,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbSOMMap_txx
-#define _otbSOMMap_txx
+#ifndef __otbSOMMap_txx
+#define __otbSOMMap_txx
 
 #include "itkImageRegionIteratorWithIndex.h"
 

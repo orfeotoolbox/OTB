@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbSVMImageModelEstimator_txx
-#define _otbSVMImageModelEstimator_txx
+#ifndef __otbSVMImageModelEstimator_txx
+#define __otbSVMImageModelEstimator_txx
 
 #include "otbSVMImageModelEstimator.h"
 #include "otbMacro.h"

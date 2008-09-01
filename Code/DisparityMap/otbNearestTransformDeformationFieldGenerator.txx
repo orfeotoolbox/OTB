@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbNearestTransformDeformationFieldGenerator_txx
-#define _otbNearestTransformDeformationFieldGenerator_txx
+#ifndef __otbNearestTransformDeformationFieldGenerator_txx
+#define __otbNearestTransformDeformationFieldGenerator_txx
 
 #include "otbNearestTransformDeformationFieldGenerator.h"
 #include "itkImageRegionIteratorWithIndex.h"

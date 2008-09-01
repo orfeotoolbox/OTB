@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbSVMImageClassificationFilter_txx
-#define _otbSVMImageClassificationFilter_txx
+#ifndef __otbSVMImageClassificationFilter_txx
+#define __otbSVMImageClassificationFilter_txx
 
 #include "otbSVMImageClassificationFilter.h"
 #include "itkImageRegionIterator.h"

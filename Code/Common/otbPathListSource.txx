@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef _otbPathListSource_txx
-#define _otbPathListSource_txx
+#ifndef __otbPathListSource_txx
+#define __otbPathListSource_txx
 #include "otbPathListSource.h"
 
 namespace otb

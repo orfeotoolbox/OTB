@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbPolyLineImageConstIterator_h
-#define _otbPolyLineImageConstIterator_h
+#ifndef __otbPolyLineImageConstIterator_h
+#define __otbPolyLineImageConstIterator_h
 
 #include "itkIndex.h"
 #include "itkImage.h"

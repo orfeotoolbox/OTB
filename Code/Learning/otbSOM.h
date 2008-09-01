@@ -17,8 +17,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbSOM_h
-#define _otbSOM_h
+#ifndef __otbSOM_h
+#define __otbSOM_h
 
 #include "itkImageToImageFilter.h"
 #include "itkEuclideanDistance.h"

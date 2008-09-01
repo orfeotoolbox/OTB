@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbImageViewerScrollWidget_h
-#define _otbImageViewerScrollWidget_h
+#ifndef __otbImageViewerScrollWidget_h
+#define __otbImageViewerScrollWidget_h
 
 #include "otbFixedSizeFullImageWidget.h"
 #include "otbImageWidgetRectangleForm.h"

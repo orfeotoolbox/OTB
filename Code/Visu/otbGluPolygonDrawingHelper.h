@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbGluPolygonDrawingHelper_h
-#define _otbGluPolygonDrawingHelper_h
+#ifndef __otbGluPolygonDrawingHelper_h
+#define __otbGluPolygonDrawingHelper_h
 
 #include <FL/gl.h>
 #  ifdef __APPLE__

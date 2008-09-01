@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbDisparityMapEstimationMethod_txx
-#define _otbDisparityMapEstimationMethod_txx
+#ifndef __otbDisparityMapEstimationMethod_txx
+#define __otbDisparityMapEstimationMethod_txx
 
 #include "otbDisparityMapEstimationMethod.h"
 #include "itkImageRegistrationMethod.h"

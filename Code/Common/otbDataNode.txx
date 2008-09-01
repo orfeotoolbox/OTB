@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otb_DataNode_txx
-#define _otb_DataNode_txx
+#ifndef __otb_DataNode_txx
+#define __otb_DataNode_txx
 
 #include "otbDataNode.h"
 

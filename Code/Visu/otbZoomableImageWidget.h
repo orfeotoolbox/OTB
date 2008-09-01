@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbZoomableImageWidget_h
-#define _otbZoomableImageWidget_h
+#ifndef __otbZoomableImageWidget_h
+#define __otbZoomableImageWidget_h
 
 #include "otbImageWidgetBase.h"
 

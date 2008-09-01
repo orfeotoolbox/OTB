@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbLocalHoughFilter_h
-#define _otbLocalHoughFilter_h
+#ifndef __otbLocalHoughFilter_h
+#define __otbLocalHoughFilter_h
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )

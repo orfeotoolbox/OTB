@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbRoadExtractionFilter_h
-#define _otbRoadExtractionFilter_h
+#ifndef __otbRoadExtractionFilter_h
+#define __otbRoadExtractionFilter_h
 
 #include "itkCovariantVector.h"
 #include "itkGradientRecursiveGaussianImageFilter.h"

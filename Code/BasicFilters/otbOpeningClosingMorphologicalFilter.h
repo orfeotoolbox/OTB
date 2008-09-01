@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbOpeningClosingMorphologicalFilter_h
-#define _otbOpeningClosingMorphologicalFilter_h
+#ifndef __otbOpeningClosingMorphologicalFilter_h
+#define __otbOpeningClosingMorphologicalFilter_h
 
 #include "itkImageToImageFilter.h"
 

@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbRCC8VertexWithCompacity_h
-#define _otbRCC8VertexWithCompacity_h
+#ifndef __otbRCC8VertexWithCompacity_h
+#define __otbRCC8VertexWithCompacity_h
 
 #include "otbRCC8VertexBase.h"
 #include "itkObjectFactory.h"

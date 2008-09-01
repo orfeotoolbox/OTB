@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbPlaceNameToLonLat_txx
-#define _otbPlaceNameToLonLat_txx
+#ifndef __otbPlaceNameToLonLat_txx
+#define __otbPlaceNameToLonLat_txx
 
 #include "otbPlaceNameToLonLat.h"
 #include "tinyxml.h"

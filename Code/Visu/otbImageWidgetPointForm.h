@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbImageWidgetPointForm_h
-#define _otbImageWidgetPointForm_h
+#ifndef __otbImageWidgetPointForm_h
+#define __otbImageWidgetPointForm_h
 
 #include "itkIndex.h"
 #include "otbImageWidgetFormBase.h"

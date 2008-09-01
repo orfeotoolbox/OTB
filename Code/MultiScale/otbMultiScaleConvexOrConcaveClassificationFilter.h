@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbConvexOrConcaveClassificationFilter_h
-#define _otbConvexOrConcaveClassificationFilter_h
+#ifndef __otbConvexOrConcaveClassificationFilter_h
+#define __otbConvexOrConcaveClassificationFilter_h
 
 #include "otbQuaternaryFunctorImageFilter.h"
 namespace otb

@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbProfileToProfileDerivativeFilter_h
-#define _otbProfileToProfileDerivativeFilter_h
+#ifndef __otbProfileToProfileDerivativeFilter_h
+#define __otbProfileToProfileDerivativeFilter_h
 
 #include "otbImageListToImageListFilter.h"
 #include "itkSubtractImageFilter.h"

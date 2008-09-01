@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbImportGeoInformationImageFilter_txx
-#define _otbImportGeoInformationImageFilter_txx
+#ifndef __otbImportGeoInformationImageFilter_txx
+#define __otbImportGeoInformationImageFilter_txx
 
 #include "itkDataObject.h"
 #include "otbImportGeoInformationImageFilter.h"

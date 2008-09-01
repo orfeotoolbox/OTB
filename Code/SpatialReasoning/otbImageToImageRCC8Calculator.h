@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbImageToImageRCC8Calculator_h
-#define _otbImageToImageRCC8Calculator_h
+#ifndef __otbImageToImageRCC8Calculator_h
+#define __otbImageToImageRCC8Calculator_h
 
 #include "itkImageToImageFilter.h"
 #include "itkObjectFactory.h"

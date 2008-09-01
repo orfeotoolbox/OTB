@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbImageWidgetCircleForm_h
-#define _otbImageWidgetCircleForm_h
+#ifndef __otbImageWidgetCircleForm_h
+#define __otbImageWidgetCircleForm_h
 
 #include "itkSize.h"
 #include "itkIndex.h"

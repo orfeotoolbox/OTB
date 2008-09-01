@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbPointSetBasedResamplingFilter_txx
-#define _otbPointSetBasedResamplingFilter_txx
+#ifndef __otbPointSetBasedResamplingFilter_txx
+#define __otbPointSetBasedResamplingFilter_txx
 
 #include "otbPointSetBasedResamplingFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"

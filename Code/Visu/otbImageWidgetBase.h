@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbImageWidgetBase_h
-#define _otbImageWidgetBase_h
+#ifndef __otbImageWidgetBase_h
+#define __otbImageWidgetBase_h
 
 #include <FL/gl.h>
 #include "FL/Fl_Gl_Window.H"

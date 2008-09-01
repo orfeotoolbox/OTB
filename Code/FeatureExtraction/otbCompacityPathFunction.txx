@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbCompacityPathFunction_txx
-#define _otbCompacityPathFunction_txx
+#ifndef __otbCompacityPathFunction_txx
+#define __otbCompacityPathFunction_txx
 
 #include "otbPathFunction.h"
 #include "itkNumericTraits.h"

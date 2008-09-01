@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbWindowedSincInterpolateImageHammingFunction_h
-#define _otbWindowedSincInterpolateImageHammingFunction_h
+#ifndef __otbWindowedSincInterpolateImageHammingFunction_h
+#define __otbWindowedSincInterpolateImageHammingFunction_h
 
 #include "otbWindowedSincInterpolateImageFunctionBase.h"
 #include "itkSize.h"

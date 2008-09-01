@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbGeometricMomentPathFunction_h
-#define _otbGeometricMomentPathFunction_h
+#ifndef __otbGeometricMomentPathFunction_h
+#define __otbGeometricMomentPathFunction_h
 
 #include "otbPathFunction.h"
 

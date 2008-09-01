@@ -18,8 +18,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbSOMMap_h
-#define _otbSOMMap_h
+#ifndef __otbSOMMap_h
+#define __otbSOMMap_h
 
 #include "itkVariableLengthVector.h"
 #include "itkEuclideanDistance.h"

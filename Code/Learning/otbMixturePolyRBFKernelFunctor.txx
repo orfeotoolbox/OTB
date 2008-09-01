@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbMixturePolyRBFKernelFunctor_txx
-#define _otbMixturePolyRBFKernelFunctor_txx
+#ifndef __otbMixturePolyRBFKernelFunctor_txx
+#define __otbMixturePolyRBFKernelFunctor_txx
 
 #include <cmath>
 

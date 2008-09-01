@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbFileName_h
-#define _otbFileName_h
+#ifndef __otbFileName_h
+#define __otbFileName_h
 
 #include "itkDataObject.h"
 #include "ossim/base/ossimFilename.h"

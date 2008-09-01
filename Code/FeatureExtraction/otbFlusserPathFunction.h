@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbFlusserPathFunction_h
-#define _otbFlusserPathFunction_h
+#ifndef __otbFlusserPathFunction_h
+#define __otbFlusserPathFunction_h
 
 #include "otbRealMomentPathFunction.h"
 

@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbPointSetAndValuesFunction_h
-#define _otbPointSetAndValuesFunction_h
+#ifndef __otbPointSetAndValuesFunction_h
+#define __otbPointSetAndValuesFunction_h
 
 #include "itkFunctionBase.h"
 #include "itkPoint.h"

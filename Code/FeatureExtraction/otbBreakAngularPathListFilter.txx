@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbBreakAngularPathListFilter_txx
-#define _otbBreakAngularPathListFilter_txx
+#ifndef __otbBreakAngularPathListFilter_txx
+#define __otbBreakAngularPathListFilter_txx
 
 #include "otbBreakAngularPathListFilter.h"
 #include "otbMath.h"

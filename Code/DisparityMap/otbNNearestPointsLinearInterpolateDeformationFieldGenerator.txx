@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbNNearestPointsLinearInterpolateDeformationFieldGenerator_txx
-#define _otbNNearestPointsLinearInterpolateDeformationFieldGenerator_txx
+#ifndef __otbNNearestPointsLinearInterpolateDeformationFieldGenerator_txx
+#define __otbNNearestPointsLinearInterpolateDeformationFieldGenerator_txx
 
 #define EPSILON 1e-15
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbPlaceNameToLonLat_h
-#define _otbPlaceNameToLonLat_h
+#ifndef __otbPlaceNameToLonLat_h
+#define __otbPlaceNameToLonLat_h
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"

@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbPointSetToDeformationFieldGenerator_h
-#define _otbPointSetToDeformationFieldGenerator_h
+#ifndef __otbPointSetToDeformationFieldGenerator_h
+#define __otbPointSetToDeformationFieldGenerator_h
 
 #include "itkImageSource.h"
 

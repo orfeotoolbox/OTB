@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbVarianceImageFilter_txx
-#define _otbVarianceImageFilter_txx
+#ifndef __otbVarianceImageFilter_txx
+#define __otbVarianceImageFilter_txx
 
 #include "otbVarianceImageFilter.h"
 

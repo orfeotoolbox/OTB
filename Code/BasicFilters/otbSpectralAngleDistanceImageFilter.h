@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbSpectralAngleDistanceImageFilter_h
-#define _otbSpectralAngleDistanceImageFilter_h
+#ifndef __otbSpectralAngleDistanceImageFilter_h
+#define __otbSpectralAngleDistanceImageFilter_h
 
 #include "itkImageToImageFilter.h"
 

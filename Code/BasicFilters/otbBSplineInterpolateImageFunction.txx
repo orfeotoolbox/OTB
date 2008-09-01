@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbBSplineInterpolateImageFunction_txx
-#define _otbBSplineInterpolateImageFunction_txx
+#ifndef __otbBSplineInterpolateImageFunction_txx
+#define __otbBSplineInterpolateImageFunction_txx
 #include "itkBSplineInterpolateImageFunction.h"
 #include "itkImageLinearIteratorWithIndex.h"
 #include "itkImageRegionConstIteratorWithIndex.h"

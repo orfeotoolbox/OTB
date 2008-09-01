@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbImageFileReader_txx
-#define _otbImageFileReader_txx
+#ifndef __otbImageFileReader_txx
+#define __otbImageFileReader_txx
 #include "otbImageFileReader.h"
 
 #include "itkObjectFactory.h"

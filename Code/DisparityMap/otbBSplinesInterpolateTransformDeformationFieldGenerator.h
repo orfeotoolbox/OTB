@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbBSplinesInterpolateTransformDeformationFieldGenerator_h
-#define _otbBSplinesInterpolateTransformDeformationFieldGenerator_h
+#ifndef __otbBSplinesInterpolateTransformDeformationFieldGenerator_h
+#define __otbBSplinesInterpolateTransformDeformationFieldGenerator_h
 
 #include "otbPointSetWithTransformToDeformationFieldGenerator.h"
 #include "ijBSplineScatteredDataPointSetToImageFilter.h"

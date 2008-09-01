@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbChangeProfileKernelFunctor_txx
-#define _otbChangeProfileKernelFunctor_txx
+#ifndef __otbChangeProfileKernelFunctor_txx
+#define __otbChangeProfileKernelFunctor_txx
 
 #include "otbChangeProfileKernelFunctor.h"
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbOrientationPathFunction_txx
-#define _otbOrientationPathFunction_txx
+#ifndef __otbOrientationPathFunction_txx
+#define __otbOrientationPathFunction_txx
 
 #include "otbPathFunction.h"
 #include "itkNumericTraits.h"

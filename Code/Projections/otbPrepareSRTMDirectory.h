@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbPrepareSRTMDirectory_h
-#define _otbPrepareSRTMDirectory_h
+#ifndef __otbPrepareSRTMDirectory_h
+#define __otbPrepareSRTMDirectory_h
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"

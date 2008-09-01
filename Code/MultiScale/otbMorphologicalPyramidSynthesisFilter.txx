@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbMorphologicalPyramidSynthesisFilter_txx
-#define _otbMorphologicalPyramidSynthesisFilter_txx
+#ifndef __otbMorphologicalPyramidSynthesisFilter_txx
+#define __otbMorphologicalPyramidSynthesisFilter_txx
 
 #include "otbMorphologicalPyramidSynthesisFilter.h"
 

@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbNonGaussianRBFKernelFunctor_txx
-#define _otbNonGaussianRBFKernelFunctor_txx
+#ifndef __otbNonGaussianRBFKernelFunctor_txx
+#define __otbNonGaussianRBFKernelFunctor_txx
 
 #include <cmath>
 

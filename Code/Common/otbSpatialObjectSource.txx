@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbSpatialObjectSource_txx
-#define _otbSpatialObjectSource_txx
+#ifndef __otbSpatialObjectSource_txx
+#define __otbSpatialObjectSource_txx
 
 #include "otbSpatialObjectSource.h"
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbMRFEnergy_h
-#define _otbMRFEnergy_h
+#ifndef __otbMRFEnergy_h
+#define __otbMRFEnergy_h
 
 #include "itkConstNeighborhoodIterator.h"
 #include "itkObject.h"

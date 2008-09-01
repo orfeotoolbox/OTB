@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbFixedSizeFullImageWidget_h
-#define _otbFixedSizeFullImageWidget_h
+#ifndef __otbFixedSizeFullImageWidget_h
+#define __otbFixedSizeFullImageWidget_h
 
 #include "otbImageWidgetBase.h"
 

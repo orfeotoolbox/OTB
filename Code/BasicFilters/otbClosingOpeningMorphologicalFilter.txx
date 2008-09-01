@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbClosingOpeningMorphologicalFilter_txx
-#define _otbClosingOpeningMorphologicalFilter_txx
+#ifndef __otbClosingOpeningMorphologicalFilter_txx
+#define __otbClosingOpeningMorphologicalFilter_txx
 
 #include "otbClosingOpeningMorphologicalFilter.h"
 

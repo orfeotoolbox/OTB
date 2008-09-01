@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbTreeSource_txx
-#define _otbTreeSource_txx
+#ifndef __otbTreeSource_txx
+#define __otbTreeSource_txx
 
 #include "otbTreeSource.h"
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbImageWidgetRectangleForm_h
-#define _otbImageWidgetRectangleForm_h
+#ifndef __otbImageWidgetRectangleForm_h
+#define __otbImageWidgetRectangleForm_h
 
 #include "otbImageWidgetFormBase.h"
 #include "otbMacro.h"

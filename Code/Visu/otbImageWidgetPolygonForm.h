@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbImageWidgetPolygonForm_h
-#define _otbImageWidgetPolygonForm_h
+#ifndef __otbImageWidgetPolygonForm_h
+#define __otbImageWidgetPolygonForm_h
 
 #include "itkSize.h"
 #include "itkIndex.h"

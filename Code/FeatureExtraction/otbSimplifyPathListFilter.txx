@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbSimplifyPathListFilter_txx
-#define _otbSimplifyPathListFilter_txx
+#ifndef __otbSimplifyPathListFilter_txx
+#define __otbSimplifyPathListFilter_txx
 
 #include "otbSimplifyPathListFilter.h"
 #include "otbMacro.h"

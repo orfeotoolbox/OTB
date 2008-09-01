@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbImageWidgetFormBase_h
-#define _otbImageWidgetFormBase_h
+#ifndef __otbImageWidgetFormBase_h
+#define __otbImageWidgetFormBase_h
 
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"

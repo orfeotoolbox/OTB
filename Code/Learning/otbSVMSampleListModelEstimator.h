@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbSVMSampleListModelEstimator_h
-#define _otbSVMSampleListModelEstimator_h
+#ifndef __otbSVMSampleListModelEstimator_h
+#define __otbSVMSampleListModelEstimator_h
 
 #include "itkImageModelEstimatorBase.h"
 #include "itkImageRegionIterator.h"

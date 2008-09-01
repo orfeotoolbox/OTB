@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbGeometricMomentImageFunction_h
-#define _otbGeometricMomentImageFunction_h
+#ifndef __otbGeometricMomentImageFunction_h
+#define __otbGeometricMomentImageFunction_h
 
 #include "itkImageFunction.h"
 

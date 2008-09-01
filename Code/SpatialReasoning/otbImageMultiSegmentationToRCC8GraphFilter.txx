@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbImageMultiSegmentationToRCC8GraphFilter_txx
-#define _otbImageMultiSegmentationToRCC8GraphFilter_txx
+#ifndef __otbImageMultiSegmentationToRCC8GraphFilter_txx
+#define __otbImageMultiSegmentationToRCC8GraphFilter_txx
 
 #include "otbImageMultiSegmentationToRCC8GraphFilter.h"
 #include "itkMinimumMaximumImageCalculator.h"

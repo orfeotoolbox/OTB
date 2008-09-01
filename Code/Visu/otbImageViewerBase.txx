@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbImageViewerBase_txx
-#define _otbImageViewerBase_txx
+#ifndef __otbImageViewerBase_txx
+#define __otbImageViewerBase_txx
 
 #include "otbImageViewer.h"
 #include "otbFltkFilterWatcher.h"

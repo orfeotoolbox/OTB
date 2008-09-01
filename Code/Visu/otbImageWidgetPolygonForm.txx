@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbImageWidgetPolygonForm_txx
-#define _otbImageWidgetPolygonForm_txx
+#ifndef __otbImageWidgetPolygonForm_txx
+#define __otbImageWidgetPolygonForm_txx
 
 #include "otbImageWidgetPolygonForm.h"
 #include "otbGluPolygonDrawingHelper.h"

@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbNonGaussianRBFKernelFunctor_h
-#define _otbNonGaussianRBFKernelFunctor_h
+#ifndef __otbNonGaussianRBFKernelFunctor_h
+#define __otbNonGaussianRBFKernelFunctor_h
 
 #include "svm.h"
 

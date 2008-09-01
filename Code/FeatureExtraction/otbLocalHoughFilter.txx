@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbLocalHoughFilter_txx
-#define _otbLocalHoughFilter_txx
+#ifndef __otbLocalHoughFilter_txx
+#define __otbLocalHoughFilter_txx
 
 #include "otbLocalHoughFilter.h"
 

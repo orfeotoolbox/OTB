@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbRCC8GraphSource_h
-#define _otbRCC8GraphSource_h
+#ifndef __otbRCC8GraphSource_h
+#define __otbRCC8GraphSource_h
 
 #include "itkProcessObject.h"
 #include "otbImageList.h"

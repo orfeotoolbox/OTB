@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbSHPVectorDataIOFactory_txx
-#define _otbSHPVectorDataIOFactory_txx
+#ifndef __otbSHPVectorDataIOFactory_txx
+#define __otbSHPVectorDataIOFactory_txx
 
 #include "otbSHPVectorDataIOFactory.h"
 

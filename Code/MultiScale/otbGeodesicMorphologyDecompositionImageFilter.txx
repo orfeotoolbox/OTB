@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbGeodesicMorphologyDecompositionImageFilter_txx
-#define _otbGeodesicMorphologyDecompositionImageFilter_txx
+#ifndef __otbGeodesicMorphologyDecompositionImageFilter_txx
+#define __otbGeodesicMorphologyDecompositionImageFilter_txx
 
 #include "otbGeodesicMorphologyDecompositionImageFilter.h"
 

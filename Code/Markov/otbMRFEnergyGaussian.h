@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef _otbMRFEnergyGaussian_h
-#define _otbMRFEnergyGaussian_h
+#ifndef __otbMRFEnergyGaussian_h
+#define __otbMRFEnergyGaussian_h
 
 #include "otbMRFEnergy.h"
 

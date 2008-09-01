@@ -16,8 +16,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbImageRegionTileMapSplitter_txx
-#define _otbImageRegionTileMapSplitter_txx
+#ifndef __otbImageRegionTileMapSplitter_txx
+#define __otbImageRegionTileMapSplitter_txx
 #include "otbImageRegionTileMapSplitter.h"
 #include <math.h>
 

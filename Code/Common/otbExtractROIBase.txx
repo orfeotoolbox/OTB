@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbExtractROIBase_txx
-#define _otbExtractROIBase_txx
+#ifndef __otbExtractROIBase_txx
+#define __otbExtractROIBase_txx
 
 #include "otbExtractROIBase.h"
 #include "itkImageRegionIterator.h"

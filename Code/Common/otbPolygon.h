@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbPolygon_h
-#define _otbPolygon_h
+#ifndef __otbPolygon_h
+#define __otbPolygon_h
 
 #include "otbPolyLineParametricPathWithValue.h"
 #include "itkImageRegion.h"

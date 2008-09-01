@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbImageListToVectorImageFilter_h
-#define _otbImageListToVectorImageFilter_h
+#ifndef __otbImageListToVectorImageFilter_h
+#define __otbImageListToVectorImageFilter_h
 
 #include "otbImageListToImageFilter.h"
 
