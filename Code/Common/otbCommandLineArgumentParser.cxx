@@ -60,6 +60,12 @@ CommandLineArgumentParseResult
 {
   return (this->IsOptionPresent("--OutputImage"));
 }
+bool 
+CommandLineArgumentParseResult
+::IsOptionOTBTestingPresent(void)const
+{
+  return (this->IsOptionPresent("--OTBTesting"));
+}
 
 std::string 
 CommandLineArgumentParseResult

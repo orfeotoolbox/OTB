@@ -62,6 +62,9 @@ public:
 
   /** Check whether the output image option was passed in or not */
   bool IsOptionOutputImagePresent(void) const;
+  
+  /** Check whether the OTBTesting option was passed in or not */
+  bool IsOptionOTBTestingPresent(void)const;
 
   /** Get one of the parameters to the option */
 //  const char *GetOptionParameter(const char *option, unsigned int number = 0);
