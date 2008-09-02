@@ -57,6 +57,12 @@ public:
   /** Check whether the option was passed in or not */
   bool IsOptionPresent(std::string option) const;
 
+  /** Check whether the input image option was passed in or not */
+  bool IsOptionInputImagePresent(void) const;
+
+  /** Check whether the output image option was passed in or not */
+  bool IsOptionOutputImagePresent(void) const;
+
   /** Get one of the parameters to the option */
 //  const char *GetOptionParameter(const char *option, unsigned int number = 0);
   int GetNumberOfParameters(std::string option);
@@ -149,9 +155,9 @@ public:
   itkTypeMacro(CommandLineArgumentParser,itk::ProcessObject);
 
   /** Add an input image option */ 
-  void AddInputImage(void);
+  void AddInputImage(bool obligatory=true);
   /** Add an output image option */ 
-  void AddOutputImage(void);
+  void AddOutputImage(bool obligatory=true);
   
   /** Add an option with 0 or more parameters (words that follow it) */
 //  void AddOption(const char *name, const int nParameters, const char * comment);

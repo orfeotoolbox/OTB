@@ -48,6 +48,19 @@ CommandLineArgumentParseResult
   return (m_OptionMap.find(option) != m_OptionMap.end());
 }
 
+bool 
+CommandLineArgumentParseResult
+::IsOptionInputImagePresent(void)const
+{
+  return (this->IsOptionPresent("--InputImage"));
+}
+bool 
+CommandLineArgumentParseResult
+::IsOptionOutputImagePresent(void)const
+{
+  return (this->IsOptionPresent("--OutputImage"));
+}
+
 std::string 
 CommandLineArgumentParseResult
 ::GetParameterString(std::string option, unsigned int number)const
@@ -125,15 +138,15 @@ CommandLineArgumentParser
 
 void 
 CommandLineArgumentParser
-::AddInputImage(void)
+::AddInputImage(bool obligatory)
 {
-	AddOption("--InputImage","input image file name ","-in",1,true);	
+	AddOption("--InputImage","input image file name ","-in",1,obligatory);	
 }
 void 
 CommandLineArgumentParser
-::AddOutputImage(void)
+::AddOutputImage(bool obligatory)
 {
-	AddOption("--OutputImage","output image file name ","-out",1,true);	
+	AddOption("--OutputImage","output image file name ","-out",1,obligatory);	
 }
 
 void 
