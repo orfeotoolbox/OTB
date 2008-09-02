@@ -108,13 +108,12 @@ TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
 
   OutputImageDirectionType * direction = this->GetOutputDirection();
 
-  region.SetSize(output->GetLargestPossibleRegion().GetSize());
-  region.SetIndex(output->GetLargestPossibleRegion().GetIndex());
+  region.SetSize(output->GetRequestedRegion().GetSize());
+  region.SetIndex(output->GetRequestedRegion().GetIndex());
   direction->SetRegions( region );
   direction->SetOrigin(output->GetOrigin());
   direction->SetSpacing(output->GetSpacing());
   direction->Allocate();
-
 }
 
 template <class TInputImage, class TOutputImage, class TOutputImageDirection >
