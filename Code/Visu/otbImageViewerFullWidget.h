@@ -114,7 +114,7 @@ class ITK_EXPORT ImageViewerFullWidget
 	  {
 	    m_EventsInterface->PixelClicked(clickedIndex);
 	  }
-	  if(m_EventsInterface.IsNotNull() && m_EventsInterface->GetForwardEvents())
+	  if(m_EventsInterface.IsNull() ||  m_EventsInterface->GetForwardEvents())
 	  {
 	    m_Parent->ChangeZoomViewedRegion(clickedIndex);
 	    m_Parent->Update();
