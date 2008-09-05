@@ -1,0 +1,27 @@
+SET(CTEST_CUSTOM_MAXIMUM_PASSED_TEST_OUTPUT_SIZE 1000000)
+SET(CTEST_CUSTOM_MAXIMUM_NUMBER_OF_WARNINGS 1000)
+SET(CTEST_CUSTOM_MAXIMUM_NUMBER_OF_ERRORS 50)
+SET(CTEST_CUSTOM_WARNING_EXCEPTION
+  ${CTEST_CUSTOM_WARNING_EXCEPTION}
+  "warning LNK4221.*no public symbols found"
+  "ranlib:.*file:.*has no symbols"
+  "ranlib: file: .+ has no symbols"
+  "libtool:.*file:.*has no symbols"
+  "vxl.core.vnl.algo"
+  "vxl.core.vnl"
+  "CableSwig"
+  "vxl.v3p.netlib"
+  "usr.include.stdint.h"
+  "Warning itk::Statistics::Histogram"
+  "gdcmDocument.cxx:.*warning:.*__base_ctor.* is deprecated"
+  "gdcmDicomDir.cxx:.*warning:.*__base_ctor.* is deprecated"
+  "gdcmFileHelper.cxx:.*warning:.*__base_ctor.* is deprecated"
+  "/usr/bin/ld: warning: libnetcdf.so.3, needed by.*may conflict with libnetcdf.so.4"
+  )
+
+IF(APPLE)
+SET(CTEST_CUSTOM_WARNING_EXCEPTION
+  ${CTEST_CUSTOM_WARNING_EXCEPTION}
+  "warning -.: directory name .* does not exist"
+  )
+ENDIF(APPLE)
