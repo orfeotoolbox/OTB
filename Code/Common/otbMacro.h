@@ -118,6 +118,44 @@
 
 
 
+/** Set built-in type.  Creates member Set"name"() (e.g., SetVisibility()); */
+#define otbSetObjectMemberMacro(object,name,type) \
+  virtual void Set##name (const type _arg) \
+{ \
+    itkDebugMacro("setting member " #name " to " << _arg); \
+    this->m_##object->Set##name(_arg); \
+    this->Modified(); \
+} 
+
+/** Get built-in type.  Creates member Get"name"() (e.g., GetVisibility()); */
+#define otbGetObjectMemberMacro(object,name,type) \
+  virtual type Get##name () \
+{ \
+    itkDebugMacro("returning " << #name " of " << this->m_##object->Get##name() ); \
+    return this->m_##object->Get##name(); \
+}
+
+/** Get built-in type.  Creates member Get"name"() (e.g., GetVisibility());
+ * This is the "const" form of the itkGetMacro.  It should be used unless
+ * the member can be changed through the "Get" access routine. */
+#define otbGetObjectMemberConstMacro(object,name,type) \
+  virtual type Get##name () const \
+{ \
+    itkDebugMacro("returning " << #name " of " << this->m_##object->Get##name() ); \
+    return this->m_##object->Get##name(); \
+}
+
+/** Get built-in type.  Creates member Get"name"() (e.g., GetVisibility());
+ * This is the "const" form of the itkGetMacro.  It should be used unless
+ * the member can be changed through the "Get" access routine.
+ * This versions returns a const reference to the variable. */
+#define otbGetObjectMemberConstReferenceMacro(object,name,type) \
+  virtual const type & Get##name () const \
+{ \
+    itkDebugMacro("returning " << #name " of " << this->m_##object->Get##name() ); \
+    return this->m_##object->Get##name(); \
+}
+
 namespace otb
 {
 
