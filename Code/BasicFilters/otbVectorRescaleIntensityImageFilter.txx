@@ -82,13 +82,13 @@ VectorRescaleIntensityImageFilter<TInputImage, TOutputImage>
   InputImagePointer inputImage =   this->GetInput();
 
   typedef itk::ImageRegionConstIterator< InputImageType >  InputIterator;
-  typedef itk::Vector<typename InputImageType::ValueType,1> MeasurementVectorType;
+  typedef itk::Vector<typename InputImageType::InternalPixelType,1> MeasurementVectorType;
   typedef itk::Statistics::ListSample<MeasurementVectorType> ListSampleType;
   typedef float HistogramMeasurementType;
   typedef itk::Statistics::ListSampleToHistogramGenerator<ListSampleType,HistogramMeasurementType,
     itk::Statistics::DenseFrequencyContainer,1> HistogramGeneratorType;
 
-  typedef otb::ObjectList<ListSampleType> ListSampleListType;
+  typedef ObjectList<ListSampleType> ListSampleListType;
 
 
     InputPixelType maximum;
@@ -129,8 +129,8 @@ VectorRescaleIntensityImageFilter<TInputImage, TOutputImage>
       size.Fill(static_cast<unsigned int>(vcl_ceil(1/m_ClampThreshold)*10));
       generator->SetNumberOfBins(size);
       generator->Update();
-      minimum[i]=static_cast<typename InputImageType::ValueType>(generator->GetOutput()->Quantile(0,m_ClampThreshold));
-      maximum[i]=static_cast<typename InputImageType::ValueType>(generator->GetOutput()->Quantile(0,1-m_ClampThreshold));
+      minimum[i]=static_cast<typename InputImageType::InternalPixelType>(generator->GetOutput()->Quantile(0,m_ClampThreshold));
+      maximum[i]=static_cast<typename InputImageType::InternalPixelType>(generator->GetOutput()->Quantile(0,1-m_ClampThreshold));
     }
 
   // set up the functor values

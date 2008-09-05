@@ -111,7 +111,7 @@ ImageListToVectorImageFilter<TImageList,TVectorImage>
 	{
 	   if(!it->IsAtEnd())
 	     {
-	      pixel[counter]=static_cast<typename OutputVectorImageType::ValueType>(it->Get());
+	      pixel[counter]=static_cast<typename OutputVectorImageType::InternalPixelType>(it->Get());
 	      ++(*it);
 	      ++counter;
 	     }
