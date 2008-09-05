@@ -25,17 +25,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbVectorImage.h"
 #include "otbImageToPathListFilter.h"
 #include "otbSpectralAngleDistanceImageFilter.h"
-#include "itkSqrtImageFilter.h"
-#include "otbNeighborhoodScalarProductFilter.h"
-#include "otbNonMaxRemovalByDirectionFilter.h"
-#include "otbVectorizationPathListFilter.h"
-#include "otbSimplifyPathListFilter.h"
-#include "otbBreakAngularPathListFilter.h"
-#include "otbRemoveTortuousPathListFilter.h"
-#include "otbLinkPathListFilter.h"
-#include "otbRemoveIsolatedByDirectionFilter.h"
-#include "otbRemoveWrongDirectionFilter.h"
-#include "otbLikehoodPathListFilter.h"
+#include "otbGenericRoadExtractionFilter.h"
 
 namespace otb
 {
@@ -68,6 +58,7 @@ namespace otb
  * \sa RemoveTortuousPathListFilter
  * \sa LinkPathListFilter
  * \sa LikehoodPathListFilter
+ * \sa GenericRoadExtractionFilter
  */
 template <class TInputImage, class TOutputPath>
   class ITK_EXPORT RoadExtractionFilter
@@ -104,86 +95,50 @@ template <class TInputImage, class TOutputPath>
                         InputImageType,
                         SpectralAngleType>                      SpectralAngleDistanceImageFilterType;
 
-    typedef itk::SqrtImageFilter<
-                        SpectralAngleType,
-                        SpectralAngleType>                      SquareRootImageFilterType;
-
-    typedef itk::GradientRecursiveGaussianImageFilter<
-                        SpectralAngleType,
-                        CovariantVectorImageType>               GradientFilterType;
-
-    typedef NeighborhoodScalarProductFilter<
-                        CovariantVectorImageType,
-                        ModulusType,
-                        DirectionType>                          NeighborhoodScalarProductFilterType;
-
-    typedef RemoveIsolatedByDirectionFilter<
-                        ModulusType,
-                        DirectionType,
-                        ModulusType >                           RemoveIsolatedByDirectionFilterType;
-
-    typedef RemoveWrongDirectionFilter<
-                        ModulusType,
-                        DirectionType,
-                        ModulusType>                            RemoveWrongDirectionFilterType;
-
-    typedef NonMaxRemovalByDirectionFilter<
-                        ModulusType,
-                        DirectionType,
-                        ModulusType >                           NonMaxRemovalByDirectionFilterType;
-
-    typedef VectorizationPathListFilter<
-                        ModulusType,
-                        DirectionType,
-                        OutputPathType >                        VectorizationPathListFilterType;
-
-    typedef SimplifyPathListFilter<OutputPathType>              SimplifyPathListFilterType;
-    typedef BreakAngularPathListFilter<OutputPathType>          BreakAngularPathListFilterType;
-    typedef RemoveTortuousPathListFilter<OutputPathType>        RemoveTortuousPathListFilterType;
-    typedef LinkPathListFilter<OutputPathType>                  LinkPathListFilterType;
-    typedef LikehoodPathListFilter<OutputPathType, ModulusType>	LikehoodPathListFilterType;
+    typedef GenericRoadExtractionFilter<SpectralAngleType, OutputPathType>
+        GenericRoadExtractionFilterType;
+                        
     
     /** Template parameters typedefs for internals filters */
-    typedef typename GradientFilterType::RealType SigmaType;
-    typedef typename VectorizationPathListFilterType::InputPixelType AmplitudeThresholdType;
-    typedef typename SimplifyPathListFilterType::ToleranceType ToleranceType;
-    typedef typename BreakAngularPathListFilterType::MaxAngleType MaxAngleType;
-    typedef typename RemoveTortuousPathListFilterType::MeanDistanceThresholdType MeanDistanceThresholdType; 
-    typedef typename LinkPathListFilterType::RealType LinkRealType;
+        typedef typename GenericRoadExtractionFilterType::SigmaType SigmaType;
+        typedef typename GenericRoadExtractionFilterType::AmplitudeThresholdType AmplitudeThresholdType;
+        typedef typename GenericRoadExtractionFilterType::ToleranceType ToleranceType;
+        typedef typename GenericRoadExtractionFilterType::MaxAngleType MaxAngleType;
+        typedef typename GenericRoadExtractionFilterType::MeanDistanceThresholdType MeanDistanceThresholdType; 
+        typedef typename GenericRoadExtractionFilterType::LinkRealType LinkRealType;
      
   /** Get/Set the reference pixel (use by the SpectralAngleDistanceImageFilter)*/
-  itkGetConstReferenceMacro(ReferencePixel,InputPixelType);
-  itkSetMacro(ReferencePixel,InputPixelType);
+  otbGetObjectMemberConstReferenceMacro(SpectralAngleDistanceImageFilter,ReferencePixel,InputPixelType);
+  otbSetObjectMemberMacro(SpectralAngleDistanceImageFilter,ReferencePixel,InputPixelType);
 
   /** Get/Set the alpha value */
-  itkGetConstReferenceMacro(Alpha,double);
-  itkSetMacro(Alpha,double);
+  otbGetObjectMemberConstReferenceMacro(GenericRoadExtractionFilter,Alpha,double);
+  otbSetObjectMemberMacro(GenericRoadExtractionFilter,Alpha,double);
 
   /** Get/Set the amplitude threshold to start following a path (use by the VectorizationPathListFilter)*/
-  itkSetMacro(AmplitudeThreshold,AmplitudeThresholdType);
-  itkGetMacro(AmplitudeThreshold,AmplitudeThresholdType);
+  otbSetObjectMemberMacro(GenericRoadExtractionFilter,AmplitudeThreshold,AmplitudeThresholdType);
+  otbGetObjectMemberMacro(GenericRoadExtractionFilter,AmplitudeThreshold,AmplitudeThresholdType);
 
   /** Get/Set  the tolerance for segment consistency (tolerance in terms of distance) (use by the SimplifyPathListFilter)*/
-  itkGetMacro(Tolerance,ToleranceType);
-  itkSetMacro(Tolerance,ToleranceType);
+  otbGetObjectMemberMacro(GenericRoadExtractionFilter,Tolerance,ToleranceType);
+  otbSetObjectMemberMacro(GenericRoadExtractionFilter,Tolerance,ToleranceType);
 
   /** Set/Get the max angle (use bye the BreakAngularPathListFilter)*/
-  itkSetMacro(MaxAngle,MaxAngleType);
-  itkGetConstMacro(MaxAngle,MaxAngleType);
+  otbSetObjectMemberMacro(GenericRoadExtractionFilter,MaxAngle,MaxAngleType);
+  otbGetObjectMemberConstMacro(GenericRoadExtractionFilter,MaxAngle,MaxAngleType);
 
   /** Get/Set the tolerance for segment consistency (tolerance in terms of distance) (use by RemoveTortuousPathListFilter)*/
-  itkGetMacro(FirstMeanDistanceThreshold,MeanDistanceThresholdType);
-  itkSetMacro(FirstMeanDistanceThreshold,MeanDistanceThresholdType);
-  itkGetMacro(SecondMeanDistanceThreshold,MeanDistanceThresholdType);
-  itkSetMacro(SecondMeanDistanceThreshold,MeanDistanceThresholdType);
+  otbGetObjectMemberMacro(GenericRoadExtractionFilter,FirstMeanDistanceThreshold,MeanDistanceThresholdType);
+  otbSetObjectMemberMacro(GenericRoadExtractionFilter,FirstMeanDistanceThreshold,MeanDistanceThresholdType);
+  otbGetObjectMemberMacro(GenericRoadExtractionFilter,SecondMeanDistanceThreshold,MeanDistanceThresholdType);
+  otbSetObjectMemberMacro(GenericRoadExtractionFilter,SecondMeanDistanceThreshold,MeanDistanceThresholdType);
  
   /** Get/Set the angular threshold (use by LinkPathFilter)*/
-  itkSetMacro(AngularThreshold,LinkRealType);
-  itkGetMacro(AngularThreshold,LinkRealType);
+  otbSetObjectMemberMacro(GenericRoadExtractionFilter,AngularThreshold,LinkRealType);
+  otbGetObjectMemberMacro(GenericRoadExtractionFilter,AngularThreshold,LinkRealType);
   /** Get/Set the distance threshold (use by LinkPathFilter)*/
-  itkSetMacro(DistanceThreshold,LinkRealType);
-  itkGetMacro(DistanceThreshold,LinkRealType);
-  
+  otbSetObjectMemberMacro(GenericRoadExtractionFilter,DistanceThreshold,LinkRealType);
+  otbGetObjectMemberMacro(GenericRoadExtractionFilter,DistanceThreshold,LinkRealType);
   
   protected:
     /** Constructor */
@@ -206,45 +161,11 @@ template <class TInputImage, class TOutputPath>
 
     /** SpectralAngleDistanceImageFilter use by the composite filter */
     typename SpectralAngleDistanceImageFilterType::Pointer      m_SpectralAngleDistanceImageFilter;
-    typename SquareRootImageFilterType::Pointer                 m_SquareRootImageFilter;
-    typename GradientFilterType::Pointer                        m_GradientFilter;
-    typename NeighborhoodScalarProductFilterType::Pointer       m_NeighborhoodScalarProductFilter;
-    typename RemoveIsolatedByDirectionFilterType::Pointer       m_RemoveIsolatedByDirectionFilter;
-    typename RemoveWrongDirectionFilterType::Pointer            m_RemoveWrongDirectionFilter;
-    typename NonMaxRemovalByDirectionFilterType::Pointer        m_NonMaxRemovalByDirectionFilter;
-    typename VectorizationPathListFilterType::Pointer           m_VectorizationPathListFilter;
-    typename SimplifyPathListFilterType::Pointer                m_FirstSimplifyPathListFilter;
-    typename SimplifyPathListFilterType::Pointer                m_SecondSimplifyPathListFilter;
-    typename BreakAngularPathListFilterType::Pointer            m_BreakAngularPathListFilter;
-    typename RemoveTortuousPathListFilterType::Pointer          m_FirstRemoveTortuousPathListFilter;
-    typename RemoveTortuousPathListFilterType::Pointer          m_SecondRemoveTortuousPathListFilter;
-    typename LinkPathListFilterType::Pointer                    m_LinkPathListFilter;
-    typename LikehoodPathListFilterType::Pointer 		m_LikehoodPathListFilter;
+    typename GenericRoadExtractionFilterType::Pointer m_GenericRoadExtractionFilter;
 
   /** The reference pixel (use by the SpectralAngleDistanceImageFilter)*/
-  InputPixelType m_ReferencePixel;
-  /** Amplitude threshold to start following a path (use by the VectorizationPathListFilter)*/
-  AmplitudeThresholdType m_AmplitudeThreshold;
-  /** Tolerance for segment consistency (tolerance in terms of distance) (use by the SimplifyPathListFilter)*/
-  ToleranceType m_Tolerance;
-  /** Max angle (use bye the BreakAngularPathListFilter)*/
-  MaxAngleType m_MaxAngle;
-  /** Tolerance for segment consistency (tolerance in terms of distance) (use by RemoveTortuousPathListFilter)*/
-  MeanDistanceThresholdType m_FirstMeanDistanceThreshold;
-  MeanDistanceThresholdType m_SecondMeanDistanceThreshold;
-  /** The angular threshold (use by LinkPathListFilter) */
-  LinkRealType m_AngularThreshold;
+//   InputPixelType m_ReferencePixel;
 
-  /** The distance threshold (use by LinkPathListFilter) */
-  double m_DistanceThreshold;
-  
-  /** Alpha. Use to calculate the sigma value used by the GradientRecursiveGaussianImageFilter */
-  double m_Alpha;
-
-  /** Resolution of the image. Use to calculate the sigma value used by the GradientRecursiveGaussianImageFilter 
-  and the m_DistanceThreshold value used by the LinkPathListFilter
-  This value is set bye the image's spacing.*/
-  double m_Resolution;
 
   };
 
