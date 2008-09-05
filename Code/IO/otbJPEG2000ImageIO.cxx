@@ -83,13 +83,13 @@ namespace otb
     if(System::SetToLower(System::GetExtension(lFileName)) == "j2k")
       {
 	otbMsgDebugMacro(<<"Jpeg2000ImageIO: Creating J2K codec.");
-	codec = opj_create_decompress(CODEC_J2K);
+	codec = otb_openjpeg_opj_create_decompress(CODEC_J2K);
       }
     else if(System::SetToLower(System::GetExtension(lFileName)) == "jp2"
 	    || System::SetToLower(System::GetExtension(lFileName)) == "jpx")
       {
 	otbMsgDebugMacro(<<"Jpeg2000ImageIO: Creating JP2 codec.");
-	codec = opj_create_decompress(CODEC_JP2);
+	codec = otb_openjpeg_opj_create_decompress(CODEC_JP2);
       }
     else
       {
@@ -102,18 +102,18 @@ namespace otb
 	otbMsgDebugMacro(<<"Impossible to create codec.");
 	return false;
       }
-    opj_set_info_handler(codec, info_callback,00);
-    opj_set_warning_handler(codec, warning_callback,00);
-    opj_set_error_handler(codec, error_callback,00);
+    otb_openjpeg_opj_set_info_handler(codec, info_callback,00);
+    otb_openjpeg_opj_set_warning_handler(codec, warning_callback,00);
+    otb_openjpeg_opj_set_error_handler(codec, error_callback,00);
  
     // Setting default parameters
     opj_dparameters_t parameters;
-    opj_set_default_decoder_parameters(&parameters);
+    otb_openjpeg_opj_set_default_decoder_parameters(&parameters);
  
-    if(! opj_setup_decoder(codec,&parameters))
+    if(! otb_openjpeg_opj_setup_decoder(codec,&parameters))
       {
 	otbMsgDebugMacro(<<"Impossible to set parameter.");
-	opj_destroy_codec(codec);
+	otb_openjpeg_opj_destroy_codec(codec);
 	return false;
       }
 
@@ -122,15 +122,15 @@ namespace otb
     if(!file)
       {
 	otbMsgDebugMacro(<<"Impossible to open file.");
-	opj_destroy_codec(codec);
+	otb_openjpeg_opj_destroy_codec(codec);
 	return false;
       }
     // Creating a file stream
-    opj_stream_t * stream  = opj_stream_create_default_file_stream(file,true);
+    opj_stream_t * stream  = otb_openjpeg_opj_stream_create_default_file_stream(file,true);
     if(!stream)
       {
 	otbMsgDebugMacro(<<"Impossible to create stream.");
-	opj_destroy_codec(codec);
+	otb_openjpeg_opj_destroy_codec(codec);
 	fclose(file);
 	return false;
       }
@@ -140,7 +140,7 @@ namespace otb
     opj_image_t * image;
     OPJ_INT32 tile_x0,tile_y0;
     OPJ_UINT32 tile_width,tile_height,nb_tiles_x,nb_tiles_y;
-    bool resp = opj_read_header(codec,
+    bool resp = otb_openjpeg_opj_read_header(codec,
 				&image,
 				&tile_x0,
 				&tile_y0,
@@ -150,10 +150,10 @@ namespace otb
 				&nb_tiles_y,
 				stream);
     // Destroy the codec
-    opj_stream_destroy(stream);
+    otb_openjpeg_opj_stream_destroy(stream);
     fclose(file);
-    opj_destroy_codec(codec);
-    opj_image_destroy(image);
+    otb_openjpeg_opj_destroy_codec(codec);
+    otb_openjpeg_opj_image_destroy(image);
     return resp;
   }
 
@@ -192,17 +192,17 @@ namespace otb
     // Creating openjpeg objects
     if(System::SetToLower(System::GetExtension(m_FileName)) == "j2k")
       {
-	m_Codec = opj_create_decompress(CODEC_J2K);
+	m_Codec = otb_openjpeg_opj_create_decompress(CODEC_J2K);
       }
     else if(System::SetToLower(System::GetExtension(m_FileName)) == "jp2"
 	    || System::SetToLower(System::GetExtension(m_FileName)) == "jpx")
       {
-	m_Codec = opj_create_decompress(CODEC_JP2);
+	m_Codec = otb_openjpeg_opj_create_decompress(CODEC_JP2);
       }
 
-    opj_set_info_handler(m_Codec, info_callback,00);
-    opj_set_warning_handler(m_Codec, warning_callback,00);
-    opj_set_error_handler(m_Codec, error_callback,00);
+    otb_openjpeg_opj_set_info_handler(m_Codec, info_callback,00);
+    otb_openjpeg_opj_set_warning_handler(m_Codec, warning_callback,00);
+    otb_openjpeg_opj_set_error_handler(m_Codec, error_callback,00);
 
     if(!m_Codec)
       {
@@ -210,11 +210,11 @@ namespace otb
       }
 
     // Create default parameters
-    opj_set_default_decoder_parameters(&m_Parameters);
+    otb_openjpeg_opj_set_default_decoder_parameters(&m_Parameters);
     // Set the requested region
-    opj_restrict_decoding(&m_Parameters,buffer_x0,buffer_y0,buffer_x0+buffer_size_x-1,buffer_y0+buffer_size_y-1);
+    otb_openjpeg_opj_restrict_decoding(&m_Parameters,buffer_x0,buffer_y0,buffer_x0+buffer_size_x-1,buffer_y0+buffer_size_y-1);
 
-    if(!opj_setup_decoder(m_Codec,&m_Parameters))
+    if(!otb_openjpeg_opj_setup_decoder(m_Codec,&m_Parameters))
       {
 	itkExceptionMacro(<<"Failed to set up decoder parameters.");
       }
@@ -226,7 +226,7 @@ namespace otb
 	itkExceptionMacro(<<"Failed to open file: "<<m_FileName);
       }
   
-    m_OpenJpegStream = opj_stream_create_default_file_stream(m_File,true);
+    m_OpenJpegStream = otb_openjpeg_opj_stream_create_default_file_stream(m_File,true);
   
     if(!m_OpenJpegStream)
       {
@@ -236,7 +236,7 @@ namespace otb
     OPJ_INT32 tile_x0,tile_y0;
     OPJ_UINT32 tile_width,tile_height,nb_tiles_x,nb_tiles_y;
 
-    if(!opj_read_header(m_Codec,
+    if(!otb_openjpeg_opj_read_header(m_Codec,
 			&m_OpenJpegImage,
 			&tile_x0,
 			&tile_y0,
@@ -257,7 +257,7 @@ namespace otb
 
     while(goesOn)
       {
-      	if(! opj_read_tile_header(m_Codec,
+      	if(! otb_openjpeg_opj_read_tile_header(m_Codec,
 				  &tile_index,
 				  &data_size,
 				  &tile_x0,
@@ -284,7 +284,7 @@ namespace otb
 	    
 	    tile_data = new OPJ_BYTE[data_size];
 	    
-	    if(! opj_decode_tile_data(m_Codec,tile_index,tile_data,data_size,m_OpenJpegStream))
+	    if(! otb_openjpeg_opj_decode_tile_data(m_Codec,tile_index,tile_data,data_size,m_OpenJpegStream))
 	      {
 		itkExceptionMacro(<<"Error while reading tile data.");
 	      }
@@ -335,10 +335,10 @@ namespace otb
     otbMsgDebugMacro(<<"==========================");
 
    
-    opj_stream_destroy(m_OpenJpegStream);
+    otb_openjpeg_opj_stream_destroy(m_OpenJpegStream);
     fclose(m_File);
-    opj_destroy_codec(m_Codec);
-    opj_image_destroy(m_OpenJpegImage);
+    otb_openjpeg_opj_destroy_codec(m_Codec);
+    otb_openjpeg_opj_image_destroy(m_OpenJpegImage);
   }
 
 
@@ -352,17 +352,17 @@ namespace otb
     // Creating openjpeg objects
     if(System::SetToLower(System::GetExtension(m_FileName)) == "j2k")
       {
-	m_Codec = opj_create_decompress(CODEC_J2K);
+	m_Codec = otb_openjpeg_opj_create_decompress(CODEC_J2K);
       }
     else if(System::SetToLower(System::GetExtension(m_FileName)) == "jp2"
 	    || System::SetToLower(System::GetExtension(m_FileName)) == "jpx")
       {
-	m_Codec = opj_create_decompress(CODEC_JP2);
+	m_Codec = otb_openjpeg_opj_create_decompress(CODEC_JP2);
       }
 
-    opj_set_info_handler(m_Codec, info_callback,00);
-    opj_set_warning_handler(m_Codec, warning_callback,00);
-    opj_set_error_handler(m_Codec, error_callback,00);
+    otb_openjpeg_opj_set_info_handler(m_Codec, info_callback,00);
+    otb_openjpeg_opj_set_warning_handler(m_Codec, warning_callback,00);
+    otb_openjpeg_opj_set_error_handler(m_Codec, error_callback,00);
 
     if(!m_Codec)
       {
@@ -370,9 +370,9 @@ namespace otb
       }
 
     // Create default parameters
-    opj_set_default_decoder_parameters(&m_Parameters);
+    otb_openjpeg_opj_set_default_decoder_parameters(&m_Parameters);
 
-    if(!opj_setup_decoder(m_Codec,&m_Parameters))
+    if(!otb_openjpeg_opj_setup_decoder(m_Codec,&m_Parameters))
       {
 	itkExceptionMacro(<<"Failed to set up decoder parameters.");
       }
@@ -384,7 +384,7 @@ namespace otb
 	itkExceptionMacro(<<"Failed to open file: "<<m_FileName);
       }
   
-    m_OpenJpegStream = opj_stream_create_default_file_stream(m_File,true);
+    m_OpenJpegStream = otb_openjpeg_opj_stream_create_default_file_stream(m_File,true);
   
     if(!m_OpenJpegStream)
       {
@@ -394,7 +394,7 @@ namespace otb
     OPJ_INT32 tile_x0,tile_y0;
     OPJ_UINT32 tile_width,tile_height,nb_tiles_x,nb_tiles_y;
 
-    if(!opj_read_header(m_Codec,
+    if(!otb_openjpeg_opj_read_header(m_Codec,
 			&m_OpenJpegImage,
 			&tile_x0,
 			&tile_y0,
@@ -489,10 +489,10 @@ namespace otb
     otbMsgDebugMacro( <<"         ComponentSize      : "<<this->GetComponentSize());
     otbMsgDebugMacro( <<"         GetPixelSize       : "<<this->GetPixelSize());
 
-    opj_stream_destroy(m_OpenJpegStream);
+    otb_openjpeg_opj_stream_destroy(m_OpenJpegStream);
     fclose(m_File);
-    opj_destroy_codec(m_Codec);
-    opj_image_destroy(m_OpenJpegImage);
+    otb_openjpeg_opj_destroy_codec(m_Codec);
+    otb_openjpeg_opj_image_destroy(m_OpenJpegImage);
   }
 
 

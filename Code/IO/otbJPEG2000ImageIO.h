@@ -25,7 +25,7 @@
 #endif
 
 extern "C" {
-#include "openjpeg.h"
+#include "otb_openjpeg.h"
 }
 
 namespace otb
