@@ -34,7 +34,14 @@ namespace otb
  * \brief This class performs the extraction of roads from an image.
  * 
  * This composite filter implements a fast and robust road extraction
- * for high resolution satellite images. The algorithm uses all spectral
+ * for high resolution satellite images. This is a composite filter using the 
+ * SpectralAngleDistanceImageFilter and the GenericRoadExtractionFilter and is
+ * intended to be used with optical high resolution data. The full method is 
+ * described in E. Christophe and J. Inglada, "Robust Road Extraction for High 
+ * Resolution Satellite Images," in IEEE International Conference on 
+ * Image Processing, ICIP 2007.
+ * 
+ * The algorithm uses all spectral
  * bands based on the spectral angle with a reference pixel. Then, the line 
  * detection is done using a Gaussian gradient with a scalar product to find
  * the road directions. Finally, extracted roads are vectorized and 
@@ -46,18 +53,6 @@ namespace otb
  * used as an initialization for more complex algorithms.
  *
  * \sa SpectralAngleDistanceImageFilter
- * \sa itk::SqrtImageFilter
- * \sa itk::GradientRecursiveGaussianImageFilter
- * \sa NeighborhoodScalarProductFilter
- * \sa RemoveIsolatedByDirectionFilter
- * \sa RemoveWrongDirectionFilter
- * \sa NonMaxRemovalByDirectionFilter
- * \sa VectorizationPathListFilter
- * \sa SimplifyPathListFilter
- * \sa BreakAngularPathListFilter
- * \sa RemoveTortuousPathListFilter
- * \sa LinkPathListFilter
- * \sa LikehoodPathListFilter
  * \sa GenericRoadExtractionFilter
  */
 template <class TInputImage, class TOutputPath>
