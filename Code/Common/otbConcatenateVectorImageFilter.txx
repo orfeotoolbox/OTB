@@ -142,13 +142,13 @@ namespace otb {
 	for(unsigned int i=0;i<l1;i++)
 	  {
 	    // Fill the output pixel
-	    output[i]=static_cast<typename OutputImageType::ValueType>(input1It.Get()[i]);
+	    output[i]=static_cast<typename OutputImageType::InternalPixelType>(input1It.Get()[i]);
 	  }
 	// Loop though each band of the second image
 	for(unsigned int i = 0;i<l2;i++)
 	  {
 	    // Fill the output pixel
-	    output[i+l1]=static_cast<typename OutputImageType::ValueType>(input2It.Get()[i]);
+	    output[i+l1]=static_cast<typename OutputImageType::InternalPixelType>(input2It.Get()[i]);
 	  }
 	// Set the output pixel
 	outputIt.Set(output);
