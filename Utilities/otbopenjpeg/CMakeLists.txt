@@ -140,3 +140,8 @@ ENDIF(_MSC_VER)
 IF(CYGWIN OR MINGW)
   ADD_DEFINITIONS(-DWIN32)
 ENDIF(CYGWIN OR MINGW)
+
+# Install OTB specifics includes files
+INSTALL(FILES otb_openjpeg.h otb_openjpeg_mangle.h
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbopenjpeg
+    COMPONENT Development)
