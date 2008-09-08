@@ -46,7 +46,7 @@ PolarimetricData
   // With 3 channels : HH HV VV  
   if ( IsPresent[0] && IsPresent[1] && !IsPresent[2] && IsPresent[3] )
   {
-        SetArchitectureType( HH_HV_VV);  
+        SetArchitectureType(HH_HV_VV);  
   }
   else
   // With 3 channels : HH VH VV
@@ -83,6 +83,11 @@ PolarimetricData
 ::DetermineArchitecture(int NumberOfImages, bool EmissionH,bool EmissionV)
 {
 
+std::cout<<"DetermineArchitecture : NbOfImages"<<NumberOfImages<<std::endl;
+std::cout<<"DetermineArchitecture : EmissionH : "<<EmissionH<<std::endl;
+std::cout<<"DetermineArchitecture : EmissionV : "<<EmissionV<<std::endl;
+
+
   switch(NumberOfImages)
     {
       case 4 :
@@ -94,16 +99,27 @@ PolarimetricData
         break;
 
       case 2 :
+
+std::cout<<"case2 : "<<std::endl;       
+      
         if (EmissionH && !EmissionV )
-          SetArchitectureType(HH_HV);
+          {
+            SetArchitectureType(HH_HV);
+std::cout<<"SET HH HV !! "<<std::endl;              
+          }
         else if (!EmissionH && EmissionV )
-          SetArchitectureType(VH_VV);      
+          {
+            SetArchitectureType(VH_VV);
+          }
         break;
       
       default:
+std::cout<<"default : "<<std::endl;          
         itkExceptionMacro("Unknown architecture !");
         return;
-    }           
+    }        
+    
+std::cout<<"DetermineArchitecture : type "<<GetArchitectureType()<<std::endl;       
       
 }
 

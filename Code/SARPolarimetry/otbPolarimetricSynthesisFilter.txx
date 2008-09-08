@@ -35,7 +35,11 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
   this->SetNumberOfInputs(4);
   SetMode(0);
   SetGain(1);
-  SetArchitectureType(0);
+  m_PresentInputImages[0] = false;
+  m_PresentInputImages[1] = false;
+  m_PresentInputImages[2] = false;
+  m_PresentInputImages[3] = false;    
+  m_ArchitectureType = PolarimetricData::New();
 }
 
 template <class TInputImageHH,class TInputImageHV,class TInputImageVH,class TInputImageVV,class TOutputImage,class TFunction  >
@@ -44,12 +48,12 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
 ::GenerateOutputInformation()
 {
   // if HH is set, use HH to generate output information
-  if(this->GetInput(0))
+  if(m_PresentInputImages[0])  
   {
         this->GetOutput()->CopyInformation(this->GetInput(0));
   }
   // else, use VH
-  else if(this->GetInput(2))
+  else if(m_PresentInputImages[2])
   {
         this->GetOutput()->CopyInformation(this->GetInput(2));        
   }
@@ -69,6 +73,7 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
 {
   // Process object is not const-correct so the const casting is required.
   SetInput1( image );
+  m_PresentInputImages[0]=true;
 }
 
 /**
@@ -80,6 +85,7 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
 ::SetInputHV( const TInputImageHV * image ) 
 {
   SetInput2( image );
+  m_PresentInputImages[1]=true;  
 }
 
 /**
@@ -91,6 +97,7 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
 ::SetInputVH( const TInputImageVH * image ) 
 {
   SetInput3( image );
+  m_PresentInputImages[2]=true;  
 }
 
 /**
@@ -102,6 +109,7 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
 ::SetInputVV( const TInputImageVV * image ) 
 {
   SetInput4( image );
+  m_PresentInputImages[3]=true;  
 }
 
 /**
@@ -164,62 +172,33 @@ void
 PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImageVV,TOutputImage,TFunction>
 ::VerifyAndForceInputs()
 {
-  
-  // With all the channels
-  if ( ( this->GetInput(0)!=0 && this->GetInput(1)!=0 )&&
-       ( this->GetInput(2)!=0 && this->GetInput(3)!=0 ) )
+
+  switch(m_ArchitectureType->GetArchitectureType())
     {
-        SetArchitectureType(0);
-    }
-  else 
-  // With 3 channels : HH HV VV  
-  if ( ( this->GetInput(0)!=0 && this->GetInput(1)!=0 )&&
-       ( this->GetInput(2)==0 && this->GetInput(3)!=0 ) )
-  {
-        SetArchitectureType(1);  
-  }
-  else
-  // With 3 channels : HH VH VV
-  if ( ( this->GetInput(0)!=0 && this->GetInput(1)==0 )&&
-       ( this->GetInput(2)!=0 && this->GetInput(3)!=0 ) )
-  {
-        SetArchitectureType(2);
-  }
-  else    
-  // Only HH and HV are present
-  if ( ( this->GetInput(0)!=0 && this->GetInput(1)!=0 ) &&
-       ( this->GetInput(2)==0 && this->GetInput(3)==0 ) )
-    {
-        SetArchitectureType(3);
- 
-	// Forcing KhiI=0 PsiI=0
+      case HH_HV :
+      	// Forcing KhiI=0 PsiI=0
         this->SetKhiI(0);
         this->SetPsiI(0);
-  }    
-  else
-  // Only VH and VV are present
-  if ( ( this->GetInput(0)==0 && this->GetInput(1)==0 ) &&
-       ( this->GetInput(2)!=0 && this->GetInput(3)!=0 ) )
-  {
-        SetArchitectureType(4);
- 
+        break;
+      
+      case VH_VV :
         // Forcing KhiI=0 PsiI=90          
         this->SetKhiI(0);
-        this->SetPsiI(90);   
-  }
-  else
-  // Only HH and VV are present  
-  if ( ( this->GetInput(0)!=0 && this->GetInput(1)==0 )&&
-       ( this->GetInput(2)==0 && this->GetInput(3)!=0 ) )  
-  {
-        itkExceptionMacro("Only the HH and VV channels are available : Polarimetric synthesis is impossible !");
+        this->SetPsiI(90);
+        break;        
+        
+      case HH_VV :
+        itkExceptionMacro("Only the HH and VV channels are available : Polarimetric synthesis is not supported !");
         return;
-  }
-  else
-  {
+
+      case UNKNOWN :
         itkExceptionMacro("Unknown architecture : Polarimetric synthesis is impossible !");
-        return;
-  }
+        return;        
+      
+      default :
+        break;
+        
+   }
   
   if(GetMode()==1)ForceCoPolar();
   else if(GetMode()==2)ForceCrossPolar();
@@ -275,10 +254,13 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
 ::BeforeThreadedGenerateData()
 {
 
-   // First Part. Verify and force the inputs
+   // First Part. Determine the kind of architecture
+   m_ArchitectureType->DetermineArchitecture(m_PresentInputImages);
+   
+   // Second Part. Verify and force the inputs
    VerifyAndForceInputs();   
   
-   // Second Part. Estimation of the incident field Ei and the reflected field Er
+   // Third Part. Estimation of the incident field Ei and the reflected field Er
    ComputeElectromagneticFields();
 
 }
@@ -297,10 +279,10 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
   itk::ImageRegionIterator<TOutputImage> outputIt(outputPtr, outputRegionForThread);
   outputIt.GoToBegin();
                 
-  switch (m_ArchitectureType)
+  switch (m_ArchitectureType->GetArchitectureType())
   {
         // With 4 channels :
-        case 0 :
+        case HH_HV_VH_VV :
         {
                 // We use dynamic_cast since inputs are stored as DataObjects.  The
                 // ImageToImageFilter::GetInput(int) always returns a pointer to a
@@ -339,7 +321,7 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
                 break;
         }
         // With 3 channels : HH HV VV 
-        case 1 :
+        case HH_HV_VV :
 
         {
                 HHInputImagePointer inputPtrHH
@@ -372,7 +354,7 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
                 break;
         }
         // With 3 channels : HH VH VV
-        case 2 :
+        case HH_VH_VV :
         {
           
                 HHInputImagePointer inputPtrHH
@@ -405,7 +387,7 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
                 break;
         }        
         // With 2 channels : HH HV
-        case 3 :
+        case HH_HV :
         {
         
                 HHInputImagePointer inputPtrHH
@@ -433,7 +415,7 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
                 break;
         }       
         // With 2 channels : VH VV                
-        case 4 :
+        case VH_VV :
         {  
                 VHInputImagePointer inputPtrVH 
                     = dynamic_cast<const TInputImageVH*>((itk::ProcessObject::GetInput(2)));

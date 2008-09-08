@@ -38,15 +38,13 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   this->InPlaceOff();
   SetEmissionH(false);
   SetEmissionV(false);  
-  SetArchitectureType(UNKNOWN);
   SetGain(1);
+  m_ArchitectureType = PolarimetricData::New();
 }
 
- /** PolarimetricSynthesisFilter
-   *
-   *
- * \sa ProcessObject::GenerateOutputInformaton() 
- */
+ /** 
+  * GenerateOutputInformation() 
+  */
 template <class TInputImage, class TOutputImage, class TFunction>
 void 
 MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
@@ -173,8 +171,10 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   inputIt.GoToBegin();
   outputIt.GoToBegin();
 
+  int val = m_ArchitectureType->GetArchitectureType();
+
   // Computation with 4 channels
-  switch (m_ArchitectureType)
+  switch (val)
   {
           case HH_HV_VH_VV :
                 while( !inputIt.IsAtEnd() ) 
@@ -269,38 +269,6 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 }
 
 /**
- * Determine the kind of architecture
- */
-template <class TInputImage, class TOutputImage, class TFunction  >
-void
-MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
-::DetermineArchitecture()
-{
-
-  int NumberOfImages = this->GetInput()->GetNumberOfComponentsPerPixel();
-
-  if ( NumberOfImages == 4 )
-        SetArchitectureType(HH_HV_VH_VV);
-        
-  if ( NumberOfImages == 3 ) 
-        SetArchitectureType(HH_HV_VV);
-
-  if ( ( NumberOfImages == 2  ) &&
-       GetEmissionH() && !GetEmissionV() )
-        SetArchitectureType(HH_HV);
-
-  if ( ( NumberOfImages == 2  ) &&
-       !GetEmissionH() && GetEmissionV() )
-        SetArchitectureType(VH_VV);      
-
-/*  std::cout<<"Nb Image: "<<NumberOfImages<<std::endl;
-  std::cout<<"Emission H: "<< GetEmissionH() <<std::endl;
-  std::cout<<"Emission V: "<< GetEmissionV() <<std::endl;  */
-
-}
-
-
-/**
  * Verify and force the inputs, if only  2 or 3 channels are present
  */
 template <class TInputImage, class TOutputImage, class TFunction  >
@@ -308,13 +276,17 @@ void
 MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 ::VerifyAndForceInputs()
 {
-
-  switch (m_ArchitectureType)
+  
+  int val = m_ArchitectureType->GetArchitectureType();
+  
+  switch(val)
     {
                 
           case HH_HV_VH_VV :
                   break;
           case HH_HV_VV :
+                  break;           
+          case HH_VH_VV :
                   break;                  
           // Only HH and HV are present                
           case HH_HV :
@@ -333,7 +305,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
                 break;
                 
           default :
-                itkExceptionMacro("Unknown architecture : Polarimetric synthesis is impossible !");
+                itkExceptionMacro("Unknown architecture : Polarimetric synthesis is impossible !!");
                 return;
     }
     
@@ -351,17 +323,18 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 ::BeforeThreadedGenerateData()
 {
 
+  int NumberOfImages = this->GetInput()->GetNumberOfComponentsPerPixel();
+std::cout<<"BeforeThreadedGenerateData : NbOfImages"<<NumberOfImages<<std::endl;
+
   // First Part. Determine the kind of architecture of the input picture
-  DetermineArchitecture();
+  m_ArchitectureType->DetermineArchitecture(NumberOfImages,GetEmissionH(),GetEmissionV());
   
   // Second Part. Verify and force the inputs
   VerifyAndForceInputs();   
   
   // Third Part. Estimation of the incident field Ei and the reflected field Er
   ComputeElectromagneticFields();
-
-//  Print();
-  
+ 
 }
 
 /**
