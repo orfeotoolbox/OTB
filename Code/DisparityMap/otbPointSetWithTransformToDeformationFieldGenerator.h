@@ -57,7 +57,7 @@ class ITK_EXPORT PointSetWithTransformToDeformationFieldGenerator
   typedef typename DeformationFieldType::SizeType SizeType;
   typedef typename DeformationFieldType::SpacingType SpacingType;
   typedef typename DeformationFieldType::PointType PointType;
-  typedef typename DeformationFieldType::ValueType ValueType;
+  typedef typename DeformationFieldType::InternalPixelType ValueType;
 
   /** More typedefs */
   typedef typename Superclass::DistanceVectorType DistanceVectorType;
