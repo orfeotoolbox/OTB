@@ -76,6 +76,10 @@ DifferenceImageFilter<TInputImage, TOutputImage>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
+  if(this->GetInput(0)->GetNumberOfComponentsPerPixel()!=this->GetInput(1)->GetNumberOfComponentsPerPixel())
+    {
+      itkExceptionMacro(<<"Image 1 has "<<this->GetInput(0)->GetNumberOfComponentsPerPixel()<<" bands, whereas image 2 has "<<this->GetInput(1)->GetNumberOfComponentsPerPixel());
+    }
   this->GetOutput()->SetNumberOfComponentsPerPixel(this->GetInput(0)->GetNumberOfComponentsPerPixel());
 }
 //----------------------------------------------------------------------------

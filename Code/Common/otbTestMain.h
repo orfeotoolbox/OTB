@@ -26,6 +26,7 @@
 
 #include "itkNumericTraits.h"
 #include "itkMultiThreader.h"
+#include "otbVectorImage.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 
@@ -37,9 +38,10 @@
 
 #include "itkImageRegionConstIterator.h"
 #include "itkSubtractImageFilter.h"
-#include "itkRescaleIntensityImageFilter.h"
+//#include "itkRescaleIntensityImageFilter.h"
+#include "otbPrintableImageFilter.h"
 #include "itkExtractImageFilter.h"
-#include "itkDifferenceImageFilter.h"
+#include "otbDifferenceImageFilter.h"
 #include "itkImageRegion.h"
 
 #define ITK_TEST_DIMENSION_MAX 6
@@ -905,9 +907,9 @@ int RegressionTestImage (int cpt, const char *testImageFilename, const char *bas
 {
   // Use the factory mechanism to read the test and baseline files and convert them to double
 
-  typedef otb::Image<double,ITK_TEST_DIMENSION_MAX> ImageType;
-  typedef otb::Image<unsigned char,ITK_TEST_DIMENSION_MAX> OutputType;
-  typedef otb::Image<unsigned char,2> DiffOutputType;
+  typedef otb::VectorImage<double,2> ImageType;
+  typedef otb::VectorImage<unsigned char,2> OutputType;
+  typedef otb::VectorImage<unsigned char,2> DiffOutputType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
 
   // Read the baseline file
@@ -954,14 +956,14 @@ int RegressionTestImage (int cpt, const char *testImageFilename, const char *bas
 
 
   // Now compare the two images
-  typedef itk::DifferenceImageFilter<ImageType,ImageType> DiffType;
+  typedef otb::DifferenceImageFilter<ImageType,ImageType> DiffType;
   DiffType::Pointer diff = DiffType::New();
     diff->SetValidInput(baselineReader->GetOutput());
     diff->SetTestInput(testReader->GetOutput());
     diff->SetDifferenceThreshold(toleranceDiffPixelImage);
     diff->UpdateLargestPossibleRegion();
 
-  double status = diff->GetTotalDifference();
+  ImageType::PixelType status = diff->GetTotalDifference();
   unsigned long numberOfPixelsWithDifferences = diff->GetNumberOfPixelsWithDifferences();
 
   //Write only one this message
@@ -971,37 +973,17 @@ int RegressionTestImage (int cpt, const char *testImageFilename, const char *bas
     otbGenericMsgDebugMacro(<< "Status diff->GetTotalDifference:         "<<status<<" for "<<numberOfPixelsWithDifferences<<" pixel(s)." );
   }
   // if there are discrepencies, create an diff image
-  if (status && reportErrors)
+  if (status.GetSquaredNorm()>0 && reportErrors)
     {
-    typedef itk::RescaleIntensityImageFilter<ImageType,OutputType> RescaleType;
-    typedef itk::ExtractImageFilter<OutputType,DiffOutputType> ExtractType;
-    typedef otb::ImageFileWriter<DiffOutputType> WriterType;
-    typedef itk::ImageRegion<ITK_TEST_DIMENSION_MAX> RegionType;
-    OutputType::IndexType index; index.Fill(0);
-    OutputType::SizeType size; size.Fill(0);
+    typedef otb::PrintableImageFilter<ImageType> RescaleType;
+    typedef RescaleType::OutputImageType OutputType;
+/*     typedef itk::ExtractImageFilter<OutputType,DiffOutputType> ExtractType; */
+    typedef otb::ImageFileWriter<RescaleType::OutputImageType> WriterType;
 
     RescaleType::Pointer rescale = RescaleType::New();
-      rescale->SetOutputMinimum(itk::NumericTraits<unsigned char>::NonpositiveMin());
-      rescale->SetOutputMaximum(itk::NumericTraits<unsigned char>::max());
-      rescale->SetInput(diff->GetOutput());
-      rescale->UpdateLargestPossibleRegion();
-
-    RegionType region;
-    region.SetIndex(index);
-    
-    size = rescale->GetOutput()->GetLargestPossibleRegion().GetSize();
-    for (unsigned int i = 2; i < ITK_TEST_DIMENSION_MAX; i++)
-      {
-      size[i] = 0;
-      }
-    region.SetSize(size);
-
-    ExtractType::Pointer extract = ExtractType::New();
-      extract->SetInput(rescale->GetOutput());
-      extract->SetExtractionRegion(region);
 
     WriterType::Pointer writer = WriterType::New();
-      writer->SetInput(extract->GetOutput());
+      writer->SetInput(rescale->GetOutput());
 
 //    std::cout << "<DartMeasurement name=\"ImageError\" type=\"numeric/double\">";
     std::cout << "<DartMeasurement name=\"ImageError "<<cpt<<"\" type=\"numeric/double\">";
@@ -1020,8 +1002,14 @@ int RegressionTestImage (int cpt, const char *testImageFilename, const char *bas
       diffName << testImageFilename << ".diff.png";
     try
       {
-      rescale->SetInput(diff->GetOutput());
-      rescale->Update();
+	rescale->SetInput(diff->GetOutput());
+	
+	for(unsigned int i = 1;i<=min(diff->GetOutput()->GetNumberOfComponentsPerPixel(),3U);++i)
+	  {
+	    rescale->SetChannel(i);
+	  }
+
+	rescale->Update();
       }
     catch (...)
       {
@@ -1096,7 +1084,7 @@ int RegressionTestImage (int cpt, const char *testImageFilename, const char *bas
 
 
     }
-  return (status != 0) ? 1 : 0;
+  return (status.GetSquaredNorm()> 0) ? 1 : 0;
 }
 
 int RegressionTestMetaData (const char *testImageFilename, const char *baselineImageFilename, int reportErrors, const double toleranceDiffPixelImage)
