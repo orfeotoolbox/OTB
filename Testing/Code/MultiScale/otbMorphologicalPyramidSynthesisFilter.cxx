@@ -27,70 +27,55 @@ PURPOSE.  See the above copyright notices for more information.
 
 int otbMorphologicalPyramidSynthesisFilter(int argc, char * argv[])
 {
-  try
-    {
-      const char * inputFilename = argv[1];
-      const char * outputFilename = argv[2];
-      const unsigned int numberOfLevels = atoi(argv[3]);
-      const float decimationRatio = atof(argv[4]);
+  const char * inputFilename = argv[1];
+  const char * outputFilename = argv[2];
+  const unsigned int numberOfLevels = atoi(argv[3]);
+  const float decimationRatio = atof(argv[4]);
+  
+  const unsigned int Dimension = 2;
+  typedef unsigned char InputPixelType;
+  typedef unsigned char OutputPixelType;
+
+  typedef otb::Image<InputPixelType,Dimension> InputImageType;
+  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
+
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+
+  typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
+  typedef otb::OpeningClosingMorphologicalFilter<InputImageType,InputImageType,StructuringElementType>
+    OpeningClosingFilterType;
+  typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,OutputImageType,OpeningClosingFilterType>
+    PyramidAnalysisFilterType;
+  typedef otb::MorphologicalPyramidSynthesisFilter<InputImageType,OutputImageType>
+    PyramidSynthesisFilterType;
+
+  // Reading input image
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(inputFilename);
+
+  // Analysis
+  PyramidAnalysisFilterType::Pointer pyramidAnalysis = PyramidAnalysisFilterType::New();
+  pyramidAnalysis->SetNumberOfLevels(numberOfLevels);
+  pyramidAnalysis->SetDecimationRatio(decimationRatio);
+  pyramidAnalysis->SetInput(reader->GetOutput());
+  pyramidAnalysis->Update();
+
+  // Synthesis
+  PyramidSynthesisFilterType::Pointer pyramidSynthesis = PyramidSynthesisFilterType::New();      
+  pyramidSynthesis->SetInput(pyramidAnalysis->GetOutput()->Back());
+  pyramidSynthesis->SetSupFilter(pyramidAnalysis->GetSupFilter());
+  pyramidSynthesis->SetSupDeci(pyramidAnalysis->GetSupDeci());
+  pyramidSynthesis->SetInfFilter(pyramidAnalysis->GetInfFilter());
+  pyramidSynthesis->SetInfDeci(pyramidAnalysis->GetInfDeci());
+  pyramidSynthesis->Update();
+
+  // Writing the output image
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetFileName(outputFilename);
+  writer->SetInput(pyramidSynthesis->GetOutput()->Back());
+  writer->Update();
       
-      const unsigned int Dimension = 2;
-      typedef unsigned char InputPixelType;
-      typedef unsigned char OutputPixelType;
-
-      typedef otb::Image<InputPixelType,Dimension> InputImageType;
-      typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
-
-      typedef otb::ImageFileReader<InputImageType> ReaderType;
-      typedef otb::ImageFileWriter<OutputImageType> WriterType;
-
-      typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
-      typedef otb::OpeningClosingMorphologicalFilter<InputImageType,InputImageType,StructuringElementType>
-	OpeningClosingFilterType;
-      typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,OutputImageType,OpeningClosingFilterType>
-	PyramidAnalysisFilterType;
-      typedef otb::MorphologicalPyramidSynthesisFilter<InputImageType,OutputImageType>
-	PyramidSynthesisFilterType;
-
-      // Reading input image
-      ReaderType::Pointer reader = ReaderType::New();
-      reader->SetFileName(inputFilename);
-
-      // Analysis
-      PyramidAnalysisFilterType::Pointer pyramidAnalysis = PyramidAnalysisFilterType::New();
-      pyramidAnalysis->SetNumberOfLevels(numberOfLevels);
-      pyramidAnalysis->SetDecimationRatio(decimationRatio);
-      pyramidAnalysis->SetInput(reader->GetOutput());
-      pyramidAnalysis->Update();
-
-      // Synthesis
-      PyramidSynthesisFilterType::Pointer pyramidSynthesis = PyramidSynthesisFilterType::New();      
-      pyramidSynthesis->SetInput(pyramidAnalysis->GetOutput()->Back());
-      pyramidSynthesis->SetSupFilter(pyramidAnalysis->GetSupFilter());
-      pyramidSynthesis->SetSupDeci(pyramidAnalysis->GetSupDeci());
-      pyramidSynthesis->SetInfFilter(pyramidAnalysis->GetInfFilter());
-      pyramidSynthesis->SetInfDeci(pyramidAnalysis->GetInfDeci());
-      pyramidSynthesis->Update();
-
-      // Writing the output image
-      WriterType::Pointer writer = WriterType::New();
-      writer->SetFileName(outputFilename);
-      writer->SetInput(pyramidSynthesis->GetOutput()->Back());
-      writer->Update();
-      
-    }
-      catch( itk::ExceptionObject & err ) 
-	{ 
-	  std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-	  std::cout << err << std::endl; 
-	  return EXIT_FAILURE;
-	} 
-
-      catch( ... ) 
-	{ 
-	  std::cout << "Unknown exception thrown !" << std::endl; 
-	  return EXIT_FAILURE;
-	} 
-
-      return EXIT_SUCCESS;
-    }
+ 
+  return EXIT_SUCCESS;
+}

@@ -21,33 +21,19 @@ PURPOSE.  See the above copyright notices for more information.
 
 int otbMorphologicalPyramidResamplerNew(int argc, char * argv[])
 {
-  try
-    {
-      const unsigned int Dimension = 2;
-      typedef unsigned char InputPixelType;
-      typedef unsigned char OutputPixelType;
+  const unsigned int Dimension = 2;
+  typedef unsigned char InputPixelType;
+  typedef unsigned char OutputPixelType;
 
-      typedef otb::Image<InputPixelType,Dimension> InputImageType;
-      typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
+  typedef otb::Image<InputPixelType,Dimension> InputImageType;
+  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
 
-      typedef otb::MorphologicalPyramid::Resampler<InputImageType,OutputImageType>
-	ResamplerType;
+  typedef otb::MorphologicalPyramid::Resampler<InputImageType,OutputImageType>
+    ResamplerType;
 
-      // Instantiation
-      ResamplerType::Pointer resampler = ResamplerType::New();
-    }
-      catch( itk::ExceptionObject & err ) 
-	{ 
-	  std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-	  std::cout << err << std::endl; 
-	  return EXIT_FAILURE;
-	} 
+  // Instantiation
+  ResamplerType::Pointer resampler = ResamplerType::New();
+ 
 
-      catch( ... ) 
-	{ 
-	  std::cout << "Unknown exception thrown !" << std::endl; 
-	  return EXIT_FAILURE;
-	} 
-
-      return EXIT_SUCCESS;
-    }
+  return EXIT_SUCCESS;
+}

@@ -23,7 +23,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 int otbMorphologicalOpeningProfileFilterNew(int argc, char * argv[])
 {
-   const unsigned int Dimension = 2;
+  const unsigned int Dimension = 2;
   typedef double InputPixelType;
   typedef double OutputPixelType;
 
