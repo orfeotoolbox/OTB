@@ -1,3 +1,21 @@
+/*=========================================================================
+
+Program:   ORFEO Toolbox
+Language:  C++
+Date:      $Date$
+Version:   $Revision$
+
+
+Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+See OTBCopyright.txt for details.
+
+
+This software is distributed WITHOUT ANY WARRANTY; without even 
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+
 #include "otbVectorImage.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbImageFileReader.h"
@@ -7,7 +25,7 @@
 
 int otbAlternateViewerTest(int argc, char* argv[])
 {
- const unsigned int Dimension = 2;
+  const unsigned int Dimension = 2;
   typedef double PixelType;
   typedef otb::VectorImage<PixelType,Dimension> ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
@@ -24,23 +42,23 @@ int otbAlternateViewerTest(int argc, char* argv[])
   ImageType::PixelType min,max;
   min.SetSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
   max.SetSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
-//   min[0]=195;
-//   min[1]=241;
-//   min[2]=127;
-//   min[3]=130;
-//   max[0]=387;
-//   max[1]=602;
-//   max[2]=469;
-//   max[3]=740;
-    min.Fill(0);
-    max.Fill(255);
+  //   min[0]=195;
+  //   min[1]=241;
+  //   min[2]=127;
+  //   min[3]=130;
+  //   max[0]=387;
+  //   max[1]=602;
+  //   max[2]=469;
+  //   max[3]=740;
+  min.Fill(0);
+  max.Fill(255);
   
- //  RescalerType::Pointer rescaler = RescalerType::New();
-//   rescaler->SetOutputMinimum(min);
-//   rescaler->SetOutputMaximum(max);
-//   rescaler->SetInput(reader->GetOutput());
-//   rescaler->SetClampThreshold(atof(argv[2]));
-//   rescaler->GenerateOutputInformation();
+  //  RescalerType::Pointer rescaler = RescalerType::New();
+  //   rescaler->SetOutputMinimum(min);
+  //   rescaler->SetOutputMaximum(max);
+  //   rescaler->SetInput(reader->GetOutput());
+  //   rescaler->SetClampThreshold(atof(argv[2]));
+  //   rescaler->GenerateOutputInformation();
 
   Fl_Window window(512,512);
   ViewerType::Pointer viewer = ViewerType::New();

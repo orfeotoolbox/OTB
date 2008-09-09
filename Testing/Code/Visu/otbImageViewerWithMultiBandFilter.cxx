@@ -26,51 +26,38 @@
 
 int otbImageViewerWithMultiBandFilter( int argc, char * argv[] )
 {
-  try
-    {
-      char * filename = argv[1];
+  char * filename = argv[1];
       
-      // Parse command line parameters
-      typedef double PixelType;
-      typedef otb::ImageViewer<PixelType>  ImageViewerType;
-      typedef ImageViewerType::ImageType VectorImageType;
-      typedef ImageViewerType::SingleImageType ImageType;
-      typedef itk::SobelEdgeDetectionImageFilter<ImageType,ImageType> FilterType;
-      typedef otb::PerBandVectorImageFilter<VectorImageType,VectorImageType,FilterType>
-        PerBandFilterType;
-      typedef otb::ImageFileReader<VectorImageType> ReaderType;
+  // Parse command line parameters
+  typedef double PixelType;
+  typedef otb::ImageViewer<PixelType>  ImageViewerType;
+  typedef ImageViewerType::ImageType VectorImageType;
+  typedef ImageViewerType::SingleImageType ImageType;
+  typedef itk::SobelEdgeDetectionImageFilter<ImageType,ImageType> FilterType;
+  typedef otb::PerBandVectorImageFilter<VectorImageType,VectorImageType,FilterType>
+    PerBandFilterType;
+  typedef otb::ImageFileReader<VectorImageType> ReaderType;
 
-      // instantiation
-      ImageViewerType::Pointer viewer = ImageViewerType::New();
-      PerBandFilterType::Pointer filter = PerBandFilterType::New();
+  // instantiation
+  ImageViewerType::Pointer viewer = ImageViewerType::New();
+  PerBandFilterType::Pointer filter = PerBandFilterType::New();
 
-      // check for input images
-      ReaderType::Pointer reader = ReaderType::New();
-      reader->SetFileName(filename);
+  // check for input images
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(filename);
 
-      filter->SetInput(reader->GetOutput());
-      filter->UpdateOutputInformation();
+  filter->SetInput(reader->GetOutput());
+  filter->UpdateOutputInformation();
 
-      std::cout<<"Main - number of bands: "<<filter->GetOutput()->GetNumberOfComponentsPerPixel()<<std::endl;
-      std::cout<<"Main - largest region: "<<filter->GetOutput()->GetLargestPossibleRegion()<<std::endl;
+  std::cout<<"Main - number of bands: "<<filter->GetOutput()->GetNumberOfComponentsPerPixel()<<std::endl;
+  std::cout<<"Main - largest region: "<<filter->GetOutput()->GetLargestPossibleRegion()<<std::endl;
 
-      viewer->SetImage(filter->GetOutput());
+  viewer->SetImage(filter->GetOutput());
 
-      // build the app
-      viewer->Show();
-      Fl::check();     
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
- catch( ... ) 
-     { 
-       std::cout << "Exception levee inconnue !" << std::endl; 
-       return EXIT_FAILURE;
-     } 
+  // build the app
+  viewer->Show();
+  Fl::check();     
+ 
   return EXIT_SUCCESS;
 }
 

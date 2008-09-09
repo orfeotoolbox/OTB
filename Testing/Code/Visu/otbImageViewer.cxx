@@ -22,47 +22,35 @@
 
 int otbImageViewer( int argc, char * argv[] )
 {
-  try 
-    { 
-      char * filename = argv[1];
+  char * filename = argv[1];
 
-      // Parse command line parameters
-      typedef double PixelType;
-      typedef otb::ImageViewer<PixelType>  ImageViewerType;
-      typedef ImageViewerType::ImageType ImageType;
-      typedef ImageViewerType::ViewModelType ViewModelType;
-      typedef otb::ImageFileReader<ImageType> ReaderType;
+  // Parse command line parameters
+  typedef double PixelType;
+  typedef otb::ImageViewer<PixelType>  ImageViewerType;
+  typedef ImageViewerType::ImageType ImageType;
+  typedef ImageViewerType::ViewModelType ViewModelType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
       
-      ViewModelType mode = static_cast<ViewModelType>(atoi(argv[2]));
+  ViewModelType mode = static_cast<ViewModelType>(atoi(argv[2]));
 
-      // instantiation
-      ImageViewerType::Pointer viewer = ImageViewerType::New();
+  // instantiation
+  ImageViewerType::Pointer viewer = ImageViewerType::New();
       
-      // check for input images
-      ReaderType::Pointer reader = ReaderType::New();
-      reader->SetFileName(filename);
-      reader->GenerateOutputInformation();
-      viewer->SetImage(reader->GetOutput());  
+  // check for input images
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(filename);
+  reader->GenerateOutputInformation();
+  viewer->SetImage(reader->GetOutput());  
 	
-      // build the app
-      viewer->Build();
-      viewer->SetViewModel(mode);
-      viewer->Show();
+  // build the app
+  viewer->Build();
+  viewer->SetViewModel(mode);
+  viewer->Show();
       
-      Fl::check();
-      // Fl::run();
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
- catch( ... ) 
-     { 
-       std::cout << "Exception levee inconnue !" << std::endl; 
-       return EXIT_FAILURE;
-     } 
+  Fl::check();
+  // Fl::run();
+
+ 
   return EXIT_SUCCESS;
 }
 

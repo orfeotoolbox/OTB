@@ -19,26 +19,11 @@ PURPOSE.  See the above copyright notices for more information.
 
 int otbFullResolutionImageWidgetNew( int argc, char * argv[] )
 {
-  try 
-    { 
-      typedef float PixelType;
-      typedef otb::FullResolutionImageWidget<PixelType> WidgetType;
-      
-      WidgetType::Pointer widget = WidgetType::New();
-    } 
-
-  catch( itk::ExceptionObject & err ) 
-    { 
-      std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-      std::cout << err << std::endl; 
-      return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-      std::cout << "Exception levee inconnue !" << std::endl; 
-      return EXIT_FAILURE;
-    } 
-
+  typedef float PixelType;
+  typedef otb::FullResolutionImageWidget<PixelType> WidgetType;
+  
+  WidgetType::Pointer widget = WidgetType::New();
+  
 
   return EXIT_SUCCESS;
 }

@@ -22,25 +22,12 @@
 
 int otbImageViewerNew( int argc, char * argv[] )
 {
-  try 
-    { 
-      // Parse command line parameters
-      typedef double PixelType;
-      typedef otb::ImageViewer<PixelType>  ImageViewerType;
-      // instantiation
-      ImageViewerType::Pointer viewer = ImageViewerType::New();
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
- catch( ... ) 
-     { 
-       std::cout << "Exception levee inconnue !" << std::endl; 
-       return EXIT_FAILURE;
-     } 
+  // Parse command line parameters
+  typedef double PixelType;
+  typedef otb::ImageViewer<PixelType>  ImageViewerType;
+  // instantiation
+  ImageViewerType::Pointer viewer = ImageViewerType::New();
+ 
   return EXIT_SUCCESS;
 }
 

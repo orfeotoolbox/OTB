@@ -22,40 +22,28 @@
 
 int otbImageViewerWithOtbImage( int argc, char * argv[] )
 {
-  try 
-    { 
-      char * filename = argv[1];
+  char * filename = argv[1];
 
-      // Parse command line parameters
-      typedef double PixelType;
-      typedef otb::ImageViewer<PixelType>  ImageViewerType;
-      typedef ImageViewerType::SingleImageType ImageType;
-      typedef otb::ImageFileReader<ImageType> ReaderType;
+  // Parse command line parameters
+  typedef double PixelType;
+  typedef otb::ImageViewer<PixelType>  ImageViewerType;
+  typedef ImageViewerType::SingleImageType ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
       
-      // instantiation
-      ImageViewerType::Pointer viewer = ImageViewerType::New();
+  // instantiation
+  ImageViewerType::Pointer viewer = ImageViewerType::New();
       
-      // check for input images
-      ReaderType::Pointer reader = ReaderType::New();
-      reader->SetFileName(filename);
-      reader->GenerateOutputInformation();
-      viewer->SetImage(reader->GetOutput());      
+  // check for input images
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(filename);
+  reader->GenerateOutputInformation();
+  viewer->SetImage(reader->GetOutput());      
 	
-      // build the app
-      viewer->Show();
-      Fl::check();
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
- catch( ... ) 
-     { 
-       std::cout << "Exception levee inconnue !" << std::endl; 
-       return EXIT_FAILURE;
-     } 
+  // build the app
+  viewer->Show();
+  Fl::check();
+
+
   return EXIT_SUCCESS;
 }
 
