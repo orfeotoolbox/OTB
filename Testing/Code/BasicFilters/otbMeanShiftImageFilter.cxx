@@ -17,12 +17,12 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 #include "otbImage.h"
-#include "otbVectorImage.h"
+#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbMeanShiftVectorImageFilter.h"
+#include "otbMeanShiftImageFilter.h"
 
-int otbMeanShiftVectorImageFilter(int argc, char * argv[])
+int otbMeanShiftImageFilter(int argc, char * argv[])
 {
   if(argc != 8)
     {
@@ -40,10 +40,10 @@ int otbMeanShiftVectorImageFilter(int argc, char * argv[])
 
   const unsigned int Dimension = 2;
   typedef short PixelType;
-  typedef otb::VectorImage<PixelType,Dimension> ImageType;
+  typedef otb::Image<PixelType,Dimension> ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
-  typedef otb::MeanShiftVectorImageFilter<ImageType,ImageType> FilterType;
+  typedef otb::MeanShiftImageFilter<ImageType,ImageType> FilterType;
   
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();

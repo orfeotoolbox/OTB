@@ -883,14 +883,40 @@ ADD_TEST(bfTvContinuousMinimumMaximumImageCalculatorTest ${BASICFILTERS_TESTS9}
 #        2 2
 #        )
 
+ADD_TEST(bfTuMeanShiftImageFilterNew ${BASICFILTERS_TESTS9}
+        otbMeanShiftImageFilterNew )
+
+ADD_TEST(bfTvMeanShiftImageFilter ${BASICFILTERS_TESTS9}
+--compare-image ${EPSILON}
+		${BASELINE}/bfMeanShiftImageFilterOutput.tif
+		${TEMP}/bfMeanShiftImageFilterOutput.tif
+        otbMeanShiftImageFilter 
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/bfMeanShiftImageFilterOutput.tif
+	3 15 20 0 0.0001
+	)
+
 ADD_TEST(bfTuMeanShiftVectorImageFilterNew ${BASICFILTERS_TESTS9}
         otbMeanShiftVectorImageFilterNew )
 
 ADD_TEST(bfTvMeanShiftVectorImageFilter ${BASICFILTERS_TESTS9}
+--compare-image ${EPSILON}
+		${BASELINE}/bfMeanShiftVectorImageFilterOutput.tif
+		${TEMP}/bfMeanShiftVectorImageFilterOutput.tif
         otbMeanShiftVectorImageFilter 
 	${INPUTDATA}/qb_RoadExtract2sub200x200.tif
-	${TEMP}/bfTvvMeanShiftVectorImageFilterOutput.tif
+	${TEMP}/bfMeanShiftVectorImageFilterOutput.tif
 	3 15 20 0 0.0001
+	)
+
+ADD_TEST(bfTvMeanShiftVectorImageFilterUsingImageSpacing ${BASICFILTERS_TESTS9}
+--compare-image ${EPSILON}
+		${BASELINE}/bfMeanShiftVectorImageFilterOutputUsingImageSpacing.tif
+		${TEMP}/bfMeanShiftVectorImageFilterOutputUsingImageSpacing.tif
+        otbMeanShiftVectorImageFilter 
+	${INPUTDATA}/qb_RoadExtract2sub200x200.tif
+	${TEMP}/bfMeanShiftVectorImageFilterOutputUsingImageSpacing.tif
+	3 15 20 1 0.0001
 	)
 
 ADD_TEST(bfTvFunctionToImageFilterNew ${BASICFILTERS_TESTS9}
@@ -1054,8 +1080,8 @@ otbChangeLabelImageFilterNew.cxx
 otbChangeLabelImageFilter.cxx
 otbContinuousMinimumMaximumImageCalculatorNew.cxx
 otbContinuousMinimumMaximumImageCalculatorTest.cxx
-#MeanShift.cxx
-#MeanShiftVectorImage.cxx
+otbMeanShiftImageFilterNew.cxx
+otbMeanShiftImageFilter.cxx
 otbMeanShiftVectorImageFilterNew.cxx
 otbMeanShiftVectorImageFilter.cxx
 otbFunctionToImageFilterNew.cxx

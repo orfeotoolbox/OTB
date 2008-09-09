@@ -15,52 +15,46 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbMeanShiftVectorImageFilter_txx
-#define _otbMeanShiftVectorImageFilter_txx
+#ifndef _otbMeanShiftImageFilter_txx
+#define _otbMeanShiftImageFilter_txx
 
-#include "otbMeanShiftVectorImageFilter.h"
+#include "otbMeanShiftImageFilter.h"
 
-#include "itkImageRegionConstIteratorWithIndex.h"
-#include "itkImageRegionIterator.h"
-#include "itkOffset.h"
-#include "itkProgressReporter.h"
-
-#include "otbMacro.h"
 
 namespace otb
 {
   template <class TInputImage,class TOutputImage,class TPrecision>
   unsigned int 
-  MeanShiftVectorImageFilter<TInputImage,TOutputImage,TPrecision>
+  MeanShiftImageFilter<TInputImage,TOutputImage,TPrecision>
   ::GetNumberOfComponentsPerPixel()
   {
-    return this->GetInput()->GetNumberOfComponentsPerPixel();
+    return 1;
   }
 
   template <class TInputImage,class TOutputImage,class TPrecision>
   void
-  MeanShiftVectorImageFilter<TInputImage,TOutputImage,TPrecision>
+  MeanShiftImageFilter<TInputImage,TOutputImage,TPrecision>
   ::InitValue(PrecisionPixelType & value, const unsigned int& nbComponents)
   {
-    value.SetSize(nbComponents);
-    value.Fill(0);
+    value = 0;
   }
 
   template <class TInputImage,class TOutputImage,class TPrecision>
   double
-  MeanShiftVectorImageFilter<TInputImage,TOutputImage,TPrecision>
+  MeanShiftImageFilter<TInputImage,TOutputImage,TPrecision>
   ::SquaredNorm(const PrecisionPixelType & value)
-  {
-    return value.GetSquaredNorm();
+  {   
+    return value * value;
   }
 
   template <class TInputImage,class TOutputImage,class TPrecision>
   void
-  MeanShiftVectorImageFilter<TInputImage,TOutputImage,TPrecision>
+  MeanShiftImageFilter<TInputImage,TOutputImage,TPrecision>
   ::PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os,indent);
   }
+
 } // end namespace otb
 
 #endif
