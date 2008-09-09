@@ -10,11 +10,11 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
-=========================================================================*/
+  =========================================================================*/
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
@@ -31,71 +31,53 @@
 
 int otbStreamingShortImageFileWriterTest (int argc, char* argv[])
 {
-  try
-  {
-        // Verify the number of parameters in the command line
-        const char * inputFilename  = argv[1];
-        const char * outputFilename = argv[2];
-        int   iStreaming(::atoi(argv[3]));
-        bool streaming = (bool)(iStreaming);
-        int NumberOfStreamDivisions(10);
-        if( streaming == true )
-        {
-                NumberOfStreamDivisions = ::atoi(argv[4]);
-        }
+  // Verify the number of parameters in the command line
+  const char * inputFilename  = argv[1];
+  const char * outputFilename = argv[2];
+  int   iStreaming(::atoi(argv[3]));
+  bool streaming = (bool)(iStreaming);
+  int NumberOfStreamDivisions(10);
+  if( streaming == true )
+    {
+      NumberOfStreamDivisions = ::atoi(argv[4]);
+    }
                 
         
 
-        typedef unsigned short 	                                InputPixelType;
-        typedef unsigned short 	                                OutputPixelType;
-        const   unsigned int        	                        Dimension = 2;
+  typedef unsigned short 	                                InputPixelType;
+  typedef unsigned short 	                                OutputPixelType;
+  const   unsigned int        	                        Dimension = 2;
 
-        typedef otb::VectorImage< InputPixelType,  Dimension >        InputImageType;
-        typedef otb::VectorImage< OutputPixelType, Dimension >        OutputImageType;
+  typedef otb::VectorImage< InputPixelType,  Dimension >        InputImageType;
+  typedef otb::VectorImage< OutputPixelType, Dimension >        OutputImageType;
 
-        typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-        typedef otb::StreamingImageFileWriter< OutputImageType> StreamingWriterType;
-        typedef otb::ImageFileWriter< OutputImageType >         WriterType;
+  typedef otb::ImageFileReader< InputImageType  >         ReaderType;
+  typedef otb::StreamingImageFileWriter< OutputImageType> StreamingWriterType;
+  typedef otb::ImageFileWriter< OutputImageType >         WriterType;
         
-        ReaderType::Pointer reader = ReaderType::New();
-        reader->SetFileName( inputFilename  );
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName( inputFilename  );
 
-        if( streaming == true )
-        {
-                std::cout << "Streaming writing test"<<std::endl;
-                StreamingWriterType::Pointer writer = StreamingWriterType::New();
-                writer->SetFileName( outputFilename );
-                writer->SetNumberOfStreamDivisions( NumberOfStreamDivisions );
-                writer->SetInput( reader->GetOutput() );
-                writer->Update(); 
-        }
-        else
-        {
-                std::cout << "Writing test"<<std::endl;
-                WriterType::Pointer writer = WriterType::New();
-                writer->SetFileName( outputFilename );
-                writer->SetInput( reader->GetOutput() );
-                writer->Update(); 
-        }
+  if( streaming == true )
+    {
+      std::cout << "Streaming writing test"<<std::endl;
+      StreamingWriterType::Pointer writer = StreamingWriterType::New();
+      writer->SetFileName( outputFilename );
+      writer->SetNumberOfStreamDivisions( NumberOfStreamDivisions );
+      writer->SetInput( reader->GetOutput() );
+      writer->Update(); 
+    }
+  else
+    {
+      std::cout << "Writing test"<<std::endl;
+      WriterType::Pointer writer = WriterType::New();
+      writer->SetFileName( outputFilename );
+      writer->SetInput( reader->GetOutput() );
+      writer->Update(); 
+    }
 
         
-  } 
-  catch( itk::ExceptionObject & err ) 
-  { 
-    std::cerr << "Exception OTB attrappee dans exception ITK !" << std::endl; 
-    std::cerr << err << std::endl; 
-    return EXIT_FAILURE;
-  } 
-  catch( std::bad_alloc & err )
-  {
-    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl;
-    return EXIT_FAILURE;
-  }
-  catch( ... )
-  {
-    std::cerr << "Exception OTB non attrappee !" << std::endl; 
-    return EXIT_FAILURE;
-  }
+
   
   return EXIT_SUCCESS;
 }

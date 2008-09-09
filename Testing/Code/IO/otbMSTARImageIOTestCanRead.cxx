@@ -26,27 +26,13 @@
 
 int otbMSTARImageIOTestCanRead(int argc, char* argv[])
 {
-  try
-  {
-  	otb::MSTARImageIO::Pointer lMSTARImageIO = otb::MSTARImageIO::New();
-        bool lCanRead = lMSTARImageIO->CanReadFile(argv[1]);
-        if ( lCanRead == false)
-        {
-                std::cerr << "Erreur otb::MSTARImageIO : impossible d'ouvrir l'image MSTAR "<<argv[1]<<"."<<std::endl;
-                return EXIT_FAILURE;
-        }
-  }
-  catch( itk::ExceptionObject & err ) 
-  { 
-    std::cerr << "Exception OTB attrappee dans exception ITK !" << std::endl; 
-    std::cerr << err << std::endl; 
-    return EXIT_FAILURE;
-  } 
-  catch( ... )
-  {
-    std::cerr << "Exception OTB non attrappee !" << std::endl; 
-    return EXIT_FAILURE;
-  }
+  otb::MSTARImageIO::Pointer lMSTARImageIO = otb::MSTARImageIO::New();
+  bool lCanRead = lMSTARImageIO->CanReadFile(argv[1]);
+  if ( lCanRead == false)
+    {
+      std::cerr << "Erreur otb::MSTARImageIO : impossible d'ouvrir l'image MSTAR "<<argv[1]<<"."<<std::endl;
+      return EXIT_FAILURE;
+    }
   
   return EXIT_SUCCESS;
 }

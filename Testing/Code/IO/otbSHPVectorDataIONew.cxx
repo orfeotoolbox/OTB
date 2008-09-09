@@ -24,5 +24,6 @@ int otbSHPVectorDataIONew(int argc, char * argv[])
   typedef otb::VectorData<> VectorDataType;
   typedef otb::SHPVectorDataIO<VectorDataType> SHPVectorDataIOType;
   SHPVectorDataIOType::Pointer object = SHPVectorDataIOType::New();
-  return 0;
+
+  return EXIT_SUCCESS;
 }

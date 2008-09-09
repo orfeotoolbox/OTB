@@ -26,27 +26,14 @@
 
 int otbLUMImageIOTestCanWrite(int argc, char* argv[])
 {
-  try
-  {
-  	otb::LUMImageIO::Pointer lLUMImageIO = otb::LUMImageIO::New();
-        bool lCanRead = lLUMImageIO->CanWriteFile(argv[1]);
-        if ( lCanRead == false)
-        {
-                std::cerr << "Erreur otb::L'image "<<argv[1]<<" n'est pas une image LUM."<<std::endl;
-                return EXIT_FAILURE;
-        }
-  }
-  catch( itk::ExceptionObject & err ) 
-  { 
-    std::cerr << "Exception OTB attrappee dans exception ITK !" << std::endl; 
-    std::cerr << err << std::endl; 
-    return EXIT_FAILURE;
-  } 
-  catch( ... )
-  {
-    std::cerr << "Exception OTB non attrappee !" << std::endl; 
-    return EXIT_FAILURE;
-  }
+  otb::LUMImageIO::Pointer lLUMImageIO = otb::LUMImageIO::New();
+  bool lCanRead = lLUMImageIO->CanWriteFile(argv[1]);
+  if ( lCanRead == false)
+    {
+      std::cerr << "Erreur otb::L'image "<<argv[1]<<" n'est pas une image LUM."<<std::endl;
+      return EXIT_FAILURE;
+    }
+
   
   return EXIT_SUCCESS;
 }

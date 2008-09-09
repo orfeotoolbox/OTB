@@ -31,5 +31,5 @@ int otbVectorDataFileReader(int argc, char * argv[])
   VectorDataType::Pointer data = reader->GetOutput();
 
   std::cout<<data<<std::endl;
-  return 0;
+  return EXIT_SUCCESS;
 }
