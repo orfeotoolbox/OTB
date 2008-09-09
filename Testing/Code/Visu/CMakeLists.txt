@@ -142,10 +142,10 @@ ADD_TEST(viTvVectorImageToColorAnaglyphVectorImageFilter ${VISU_TESTS2}
 )
 
 # -------  otb::ImageWidgetPolygonForm -------------------------------------------
-ADD_TEST(coTuImageWidgetPolygonFormNew ${VISU_TESTS2} 
+ADD_TEST(viTuImageWidgetPolygonFormNew ${VISU_TESTS2} 
          otbImageWidgetPolygonFormNew)
   
-ADD_TEST(coTuImageWidgetPolygonForm ${VISU_TESTS2} 
+ADD_TEST(viTuImageWidgetPolygonForm ${VISU_TESTS2} 
          otbImageWidgetPolygonForm
 	      	${INPUTDATA}/poupees.tif	
 		20 100 70 100 70 90 50 90 50 80 70 80 70 60 90 60 90 50 70 50 70 30 20 30 
