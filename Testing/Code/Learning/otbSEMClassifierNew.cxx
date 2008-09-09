@@ -33,37 +33,19 @@
 
 int otbSEMClassifierNew( int argc, char* argv[] )
 {
-  try 
-    {         
-        typedef double PixelType;
-        typedef otb::VectorImage< PixelType, 2 > ImageType;
-        typedef itk::Image< unsigned char, 2 > OutputImageType;
-        typedef otb::SEMClassifier< ImageType, OutputImageType > ClassifType;
-        typedef itk::Statistics::ListSample< ImageType::PixelType > SampleType;
-        typedef itk::Statistics::Subsample< SampleType > ClassSampleType;
+  typedef double PixelType;
+  typedef otb::VectorImage< PixelType, 2 > ImageType;
+  typedef itk::Image< unsigned char, 2 > OutputImageType;
+  typedef otb::SEMClassifier< ImageType, OutputImageType > ClassifType;
+  typedef itk::Statistics::ListSample< ImageType::PixelType > SampleType;
+  typedef itk::Statistics::Subsample< SampleType > ClassSampleType;
   
-        typedef otb::Statistics::ModelComponentBase< ClassSampleType > ComponentType ; 
+  typedef otb::Statistics::ModelComponentBase< ClassSampleType > ComponentType ; 
 
-        ClassifType::Pointer classifier = ClassifType::New();
-        ComponentType::Pointer component = ComponentType::New();
-        
-        
-        
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "Unknown exception !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  // Software Guide : EndCodeSnippet
-
-//#endif
+  ClassifType::Pointer classifier = ClassifType::New();
+  ComponentType::Pointer component = ComponentType::New();
+          
+ 
   return EXIT_SUCCESS;
 }
 

@@ -14,7 +14,7 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
      PURPOSE.  See the above copyright notices for more information.
 
-=========================================================================*/
+     =========================================================================*/
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
@@ -32,44 +32,41 @@
 
 int otbSVMClassifierPointSet(int argc, char* argv[] )
 {
-
-  try
+  namespace stat = itk::Statistics ;
+  
+  if (argc != 2)
     {
-    namespace stat = itk::Statistics ;
- 
-    if (argc != 2)
-      {
       std::cout << "Usage : " << argv[0] << " modelFile" 
                 << std::endl ;
       return EXIT_FAILURE;
-      }
+    }
+  
+  const char * modelFilename  = argv[1];
 
-    const char * modelFilename  = argv[1];
-
-    std::cout << "Building the pointset" << std::endl;  
-
-
-    typedef double InputPixelType;
-    typedef int LabelPixelType;
-    typedef std::vector<InputPixelType>                             InputVectorType;
-    const   unsigned int        	                    Dimension = 2;
-
-    typedef itk::PointSet< InputVectorType,  Dimension >
-                                                       MeasurePointSetType;
+  std::cout << "Building the pointset" << std::endl;  
 
 
-    MeasurePointSetType::Pointer mPSet = MeasurePointSetType::New();
+  typedef double InputPixelType;
+  typedef int LabelPixelType;
+  typedef std::vector<InputPixelType>                             InputVectorType;
+  const   unsigned int        	                    Dimension = 2;
 
-    typedef MeasurePointSetType::PointType    MeasurePointType;
+  typedef itk::PointSet< InputVectorType,  Dimension >
+    MeasurePointSetType;
 
-    typedef MeasurePointSetType::PointsContainer      MeasurePointsContainer;
 
-    MeasurePointsContainer::Pointer mCont = MeasurePointsContainer::New();
+  MeasurePointSetType::Pointer mPSet = MeasurePointSetType::New();
+
+  typedef MeasurePointSetType::PointType    MeasurePointType;
+
+  typedef MeasurePointSetType::PointsContainer      MeasurePointsContainer;
+
+  MeasurePointsContainer::Pointer mCont = MeasurePointsContainer::New();
     
-    unsigned int pointId;
+  unsigned int pointId;
     
-    for(pointId = 0; pointId<20; pointId++)
-      {
+  for(pointId = 0; pointId<20; pointId++)
+    {
 
       MeasurePointType mP;
 
@@ -87,57 +84,57 @@ int otbSVMClassifierPointSet(int argc, char* argv[] )
       mPSet->SetPointData( pointId, measure );   
 
 
-      }
+    }
 
-    mPSet->SetPoints( mCont );
+  mPSet->SetPoints( mCont );
 
-    std::cout << "PointSet built" << std::endl;  
+  std::cout << "PointSet built" << std::endl;  
 
-    typedef itk::Statistics::PointSetToListAdaptor< MeasurePointSetType >
-      SampleType;
-    SampleType::Pointer sample = SampleType::New();
-    sample->SetPointSet( mPSet );
+  typedef itk::Statistics::PointSetToListAdaptor< MeasurePointSetType >
+    SampleType;
+  SampleType::Pointer sample = SampleType::New();
+  sample->SetPointSet( mPSet );
 
-    std::cout << "Sample set to Adaptor" << std::endl;  
+  std::cout << "Sample set to Adaptor" << std::endl;  
 
 
-    /** preparing classifier and decision rule object */
-    typedef otb::SVMModel< SampleType::MeasurementVectorType::ValueType, LabelPixelType > ModelType;
+  /** preparing classifier and decision rule object */
+  typedef otb::SVMModel< SampleType::MeasurementVectorType::ValueType, LabelPixelType > ModelType;
 
-    ModelType::Pointer model = ModelType::New();
+  ModelType::Pointer model = ModelType::New();
 
-    model->LoadModel( modelFilename );
+  model->LoadModel( modelFilename );
 
-    std::cout << "Model loaded" << std::endl;
+  std::cout << "Model loaded" << std::endl;
     
-    int numberOfClasses = model->GetNumberOfClasses();
+  int numberOfClasses = model->GetNumberOfClasses();
     
-    typedef otb::SVMClassifier< SampleType, LabelPixelType > ClassifierType ;
+  typedef otb::SVMClassifier< SampleType, LabelPixelType > ClassifierType ;
 
-    ClassifierType::Pointer classifier = ClassifierType::New() ;
+  ClassifierType::Pointer classifier = ClassifierType::New() ;
   
-    classifier->SetNumberOfClasses(numberOfClasses) ;
-    classifier->SetModel( model );
-    classifier->SetSample(sample.GetPointer()) ;
-    classifier->Update() ;
+  classifier->SetNumberOfClasses(numberOfClasses) ;
+  classifier->SetModel( model );
+  classifier->SetSample(sample.GetPointer()) ;
+  classifier->Update() ;
 
-    /* Build the class map */
+  /* Build the class map */
 
     
-    std::cout << "classifier get output" << std::endl;  
-    ClassifierType::OutputType* membershipSample =
-      classifier->GetOutput() ;
-    std::cout << "Sample iterators" << std::endl;  
-    ClassifierType::OutputType::ConstIterator m_iter =
-      membershipSample->Begin() ;
-    ClassifierType::OutputType::ConstIterator m_last =
-      membershipSample->End() ;
+  std::cout << "classifier get output" << std::endl;  
+  ClassifierType::OutputType* membershipSample =
+    classifier->GetOutput() ;
+  std::cout << "Sample iterators" << std::endl;  
+  ClassifierType::OutputType::ConstIterator m_iter =
+    membershipSample->Begin() ;
+  ClassifierType::OutputType::ConstIterator m_last =
+    membershipSample->End() ;
 
 
-    double error = 0.0;
-    pointId = 0;
-    while (m_iter != m_last)
-      {
+  double error = 0.0;
+  pointId = 0;
+  while (m_iter != m_last)
+    {
       ClassifierType::ClassLabelType label = m_iter.GetClassLabel();
       
       InputVectorType measure; 
@@ -153,24 +150,10 @@ int otbSVMClassifierPointSet(int argc, char* argv[] )
       
       ++pointId;
       ++m_iter ;
-      }
-    
-    std::cout << "Error = " << error/pointId << std::endl;
-    
-
-
     }
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "Unknown exception !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
+    
+  std::cout << "Error = " << error/pointId << std::endl;
+    
  
   return EXIT_SUCCESS;
 }

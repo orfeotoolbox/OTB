@@ -14,7 +14,7 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
      PURPOSE.  See the above copyright notices for more information.
 
-=========================================================================*/
+     =========================================================================*/
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
@@ -35,151 +35,135 @@
 
 int otbSVMImageModelEstimatorModelAccessor( int argc, char* argv[] )
 {
-  try 
-    {         
-    const char* inputImageFileName = argv[1];
-    const char* trainingImageFileName = argv[2];
-    const char* outputModelFileName = argv[3];
+  const char* inputImageFileName = argv[1];
+  const char* trainingImageFileName = argv[2];
+  const char* outputModelFileName = argv[3];
 
-    typedef double      InputPixelType;
-    const   unsigned int       Dimension = 2;
+  typedef double      InputPixelType;
+  const   unsigned int       Dimension = 2;
     
-    typedef otb::VectorImage< InputPixelType,  Dimension >        InputImageType;
+  typedef otb::VectorImage< InputPixelType,  Dimension >        InputImageType;
     
-    typedef otb::Image< int,  Dimension >     TrainingImageType;
+  typedef otb::Image< int,  Dimension >     TrainingImageType;
     
-    typedef otb::SVMImageModelEstimator< InputImageType,
-                                  TrainingImageType >   EstimatorType;
+  typedef otb::SVMImageModelEstimator< InputImageType,
+    TrainingImageType >   EstimatorType;
 
-    typedef otb::ImageFileReader< InputImageType > InputReaderType;
-    typedef otb::ImageFileReader< TrainingImageType > TrainingReaderType;
+  typedef otb::ImageFileReader< InputImageType > InputReaderType;
+  typedef otb::ImageFileReader< TrainingImageType > TrainingReaderType;
 
-    InputReaderType::Pointer inputReader = InputReaderType::New();
-    TrainingReaderType::Pointer trainingReader = TrainingReaderType::New();
+  InputReaderType::Pointer inputReader = InputReaderType::New();
+  TrainingReaderType::Pointer trainingReader = TrainingReaderType::New();
 
-    inputReader->SetFileName( inputImageFileName );
-    trainingReader->SetFileName( trainingImageFileName );
+  inputReader->SetFileName( inputImageFileName );
+  trainingReader->SetFileName( trainingImageFileName );
 
-    inputReader->Update();
-    trainingReader->Update();
+  inputReader->Update();
+  trainingReader->Update();
     
-    EstimatorType::Pointer svmEstimator = EstimatorType::New();
+  EstimatorType::Pointer svmEstimator = EstimatorType::New();
 
-    svmEstimator->SetInputImage( inputReader->GetOutput() );
-    svmEstimator->SetTrainingImage( trainingReader->GetOutput() );
-    svmEstimator->SetNumberOfClasses( 2 );
+  svmEstimator->SetInputImage( inputReader->GetOutput() );
+  svmEstimator->SetTrainingImage( trainingReader->GetOutput() );
+  svmEstimator->SetNumberOfClasses( 2 );
 
-    svmEstimator->Update();
+  svmEstimator->Update();
     
-    typedef EstimatorType::SVMModelPointer SVMModelPointer;
-    typedef EstimatorType::SVMModelType SVMModelType;
-    SVMModelPointer ptrModel = svmEstimator->GetModel();
+  typedef EstimatorType::SVMModelPointer SVMModelPointer;
+  typedef EstimatorType::SVMModelType SVMModelType;
+  SVMModelPointer ptrModel = svmEstimator->GetModel();
     
 
-    std::ofstream f;
-    unsigned int nbClass = ptrModel->GetNumberOfClasses();
-    unsigned int nbSupportVector = ptrModel->GetNumberOfSupportVectors();
+  std::ofstream f;
+  unsigned int nbClass = ptrModel->GetNumberOfClasses();
+  unsigned int nbSupportVector = ptrModel->GetNumberOfSupportVectors();
     
-    f.open(outputModelFileName);
-    f << "Test methods of SVMModel class:"<<std::endl;
-    f << " - GetNumberOfClasses()        "<< nbClass<<std::endl;
-    f << " - GetNumberOfHyperplane()     "<< ptrModel->GetNumberOfHyperplane()<<std::endl;
-    f << " - GetNumberOfSupportVectors() "<< nbSupportVector<<std::endl;
+  f.open(outputModelFileName);
+  f << "Test methods of SVMModel class:"<<std::endl;
+  f << " - GetNumberOfClasses()        "<< nbClass<<std::endl;
+  f << " - GetNumberOfHyperplane()     "<< ptrModel->GetNumberOfHyperplane()<<std::endl;
+  f << " - GetNumberOfSupportVectors() "<< nbSupportVector<<std::endl;
 
 
-    f << " - GetSupportVectors() [nb support vector][]"<<std::endl;
-    svm_node ** SVs = ptrModel->GetSupportVectors();
-    if( SVs == NULL )
+  f << " - GetSupportVectors() [nb support vector][]"<<std::endl;
+  svm_node ** SVs = ptrModel->GetSupportVectors();
+  if( SVs == NULL )
     {
-        itkGenericExceptionMacro(<<"SVs NULL"); 
+      itkGenericExceptionMacro(<<"SVs NULL"); 
     }
-    for(unsigned int i=0;i<nbSupportVector;i++)
+  for(unsigned int i=0;i<nbSupportVector;i++)
     {
-        if( SVs[i] == NULL ) itkGenericExceptionMacro(<<"SVs "<<i<<" NULL"); 
-        f << std::endl;
-        f << "  SV["<<i<<"]:";
-	const svm_node *p = SVs[i];
-/*        for(unsigned int j=0;j<nbSupportVector;j++)
-        {
+      if( SVs[i] == NULL ) itkGenericExceptionMacro(<<"SVs "<<i<<" NULL"); 
+      f << std::endl;
+      f << "  SV["<<i<<"]:";
+      const svm_node *p = SVs[i];
+      /*        for(unsigned int j=0;j<nbSupportVector;j++)
+		{
                 f << "       SV["<<i<<"]["<<j<<"]:";*/
-                if( svmEstimator->GetKernelType() == PRECOMPUTED)
-                {
-	                f << " "<<p->value;
+      if( svmEstimator->GetKernelType() == PRECOMPUTED)
+	{
+	  f << " "<<p->value;
                 
-                }
-                else
-                {
-			while(p->index != -1)
-			{
-				f << " ["<<p->index << ";"<<p->value<<"] ";
-				p++;
-			}
-                }
-                f << std::endl;
-//        }
+	}
+      else
+	{
+	  while(p->index != -1)
+	    {
+	      f << " ["<<p->index << ";"<<p->value<<"] ";
+	      p++;
+	    }
+	}
+      f << std::endl;
+      //        }
     }
 
-    f << " - GetRho() [nr_class*(nr_class-1)/2]"<<std::endl;
-    unsigned int taille = nbClass*(nbClass-1)/2;
-    double * rhos = ptrModel->GetRho();
-    if( rhos == NULL )
+  f << " - GetRho() [nr_class*(nr_class-1)/2]"<<std::endl;
+  unsigned int taille = nbClass*(nbClass-1)/2;
+  double * rhos = ptrModel->GetRho();
+  if( rhos == NULL )
     {
-        itkGenericExceptionMacro(<<"rhos NULL"); 
+      itkGenericExceptionMacro(<<"rhos NULL"); 
     }
-    f << std::setprecision(10) <<"      ";
-    for(unsigned int i=0;i<taille;i++)
+  f << std::setprecision(10) <<"      ";
+  for(unsigned int i=0;i<taille;i++)
     {
-        f << " " << rhos[i];
+      f << " " << rhos[i];
     }
 
 
-    f << std::endl;
-    f << " - GetAlpha() [nb class-1][nb support vector]"<<std::endl;
-    double ** alphas = ptrModel->GetAlpha();
-    if( alphas == NULL )
+  f << std::endl;
+  f << " - GetAlpha() [nb class-1][nb support vector]"<<std::endl;
+  double ** alphas = ptrModel->GetAlpha();
+  if( alphas == NULL )
     {
-        itkGenericExceptionMacro(<<"alphas NULL"); 
+      itkGenericExceptionMacro(<<"alphas NULL"); 
     }
-    for(unsigned int i=0;i<nbClass-1;i++)
+  for(unsigned int i=0;i<nbClass-1;i++)
     {
-        if( alphas[i] == NULL ) itkGenericExceptionMacro(<<"alphas "<<i<<" NULL"); 
-        f << "     ";
-        for(unsigned int j=0;j<nbSupportVector;j++)
+      if( alphas[i] == NULL ) itkGenericExceptionMacro(<<"alphas "<<i<<" NULL"); 
+      f << "     ";
+      for(unsigned int j=0;j<nbSupportVector;j++)
         {
-                f << "  " << alphas[i][j];
+	  f << "  " << alphas[i][j];
         }
     }
-    f << std::endl;
-    f << " - Evaluate() (double) -> "<<ptrModel->Evaluate()<<std::endl;
+  f << std::endl;
+  f << " - Evaluate() (double) -> "<<ptrModel->Evaluate()<<std::endl;
 
-    typedef SVMModelType::ValuesType ValuesType;
-    ValuesType _evaluateHyperplaneDistance;
-    _evaluateHyperplaneDistance = ptrModel->EvaluateHyperplaneDistance();
+  typedef SVMModelType::ValuesType ValuesType;
+  ValuesType _evaluateHyperplaneDistance;
+  _evaluateHyperplaneDistance = ptrModel->EvaluateHyperplaneDistance();
     
-    f << " - EvaluateHyperplaneDistance() VariableLenghtVector() nb value(s): "<<_evaluateHyperplaneDistance.Size()<<std::endl;
-    for(unsigned int i=0;i<_evaluateHyperplaneDistance.Size();i++)
+  f << " - EvaluateHyperplaneDistance() VariableLenghtVector() nb value(s): "<<_evaluateHyperplaneDistance.Size()<<std::endl;
+  for(unsigned int i=0;i<_evaluateHyperplaneDistance.Size();i++)
     {
-        f << "     "<<_evaluateHyperplaneDistance[i]<<std::endl;
+      f << "     "<<_evaluateHyperplaneDistance[i]<<std::endl;
     }
-    f << "end"<<std::endl;
-    f.close();
+  f << "end"<<std::endl;
+  f.close();
 
         
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "Unknown exception !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  // Software Guide : EndCodeSnippet
-
-//#endif
+ 
   return EXIT_SUCCESS;
 }
 

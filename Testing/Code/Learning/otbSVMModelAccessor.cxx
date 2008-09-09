@@ -30,115 +30,99 @@
 
 int otbSVMModelAccessor( int argc, char* argv[] )
 {
-  try 
-    {         
-        typedef unsigned char                                   InputPixelType;
-	typedef unsigned char                                   LabelPixelType;
-        const   unsigned int        	                        Dimension = 2;
-
-        typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
-
-        typedef otb::SVMModel< InputPixelType, LabelPixelType >   ModelType;
-	
-	
-        ModelType::Pointer ptrModel = ModelType::New();
-
-	ptrModel->LoadModel(argv[1]);
-
-    
-    // ototo
-    
-    std::ofstream f;
-        unsigned int nbClass = ptrModel->GetNumberOfClasses();
-        unsigned int nbSupportVector = ptrModel->GetNumberOfSupportVectors();
-    
-    f.open(argv[2]);
-    f << "Test methods of SVMModel class:"<<std::endl;
-    f << " - GetNumberOfClasses()        "<< nbClass<<std::endl;
-    f << " - GetNumberOfHyperplane()     "<< ptrModel->GetNumberOfHyperplane()<<std::endl;
-    f << " - GetNumberOfSupportVectors() "<< nbSupportVector<<std::endl;
-
-
-    f << " - GetSupportVectors() [nb support vector][]"<<std::endl;
-    svm_node ** SVs = ptrModel->GetSupportVectors();
-    if( SVs == NULL )
+  typedef unsigned char                                   InputPixelType;
+  typedef unsigned char                                   LabelPixelType;
+  const   unsigned int        	                        Dimension = 2;
+  
+  typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
+  
+  typedef otb::SVMModel< InputPixelType, LabelPixelType >   ModelType;
+  
+  
+  ModelType::Pointer ptrModel = ModelType::New();
+  
+  ptrModel->LoadModel(argv[1]);
+  
+  
+  // ototo
+  
+  std::ofstream f;
+  unsigned int nbClass = ptrModel->GetNumberOfClasses();
+  unsigned int nbSupportVector = ptrModel->GetNumberOfSupportVectors();
+  
+  f.open(argv[2]);
+  f << "Test methods of SVMModel class:"<<std::endl;
+  f << " - GetNumberOfClasses()        "<< nbClass<<std::endl;
+  f << " - GetNumberOfHyperplane()     "<< ptrModel->GetNumberOfHyperplane()<<std::endl;
+  f << " - GetNumberOfSupportVectors() "<< nbSupportVector<<std::endl;
+  
+  
+  f << " - GetSupportVectors() [nb support vector][]"<<std::endl;
+  svm_node ** SVs = ptrModel->GetSupportVectors();
+  if( SVs == NULL )
     {
-        itkGenericExceptionMacro(<<"SVs NULL"); 
+      itkGenericExceptionMacro(<<"SVs NULL"); 
     }
-    for(unsigned int i=0;i<nbSupportVector;i++)
+  for(unsigned int i=0;i<nbSupportVector;i++)
     {
-        if( SVs[i] == NULL ) itkGenericExceptionMacro(<<"SVs "<<i<<" NULL"); 
-        f << std::endl;
-        f << "  SV["<<i<<"]:";
-	const svm_node *p = SVs[i];
-			while(p->index != -1)
-			{
-				f << " ["<<p->index << ";"<<p->value<<"] ";
-				p++;
-			}
-                f << std::endl;
+      if( SVs[i] == NULL ) itkGenericExceptionMacro(<<"SVs "<<i<<" NULL"); 
+      f << std::endl;
+      f << "  SV["<<i<<"]:";
+      const svm_node *p = SVs[i];
+      while(p->index != -1)
+	{
+	  f << " ["<<p->index << ";"<<p->value<<"] ";
+	  p++;
+	}
+      f << std::endl;
     }
 
-    f << " - GetRho() [nr_class*(nr_class-1)/2]"<<std::endl;
-    unsigned int taille = nbClass*(nbClass-1)/2;
-    double * rhos = ptrModel->GetRho();
-    if( rhos == NULL )
+  f << " - GetRho() [nr_class*(nr_class-1)/2]"<<std::endl;
+  unsigned int taille = nbClass*(nbClass-1)/2;
+  double * rhos = ptrModel->GetRho();
+  if( rhos == NULL )
     {
-        itkGenericExceptionMacro(<<"rhos NULL"); 
+      itkGenericExceptionMacro(<<"rhos NULL"); 
     }
-    f << "      ";
-    for(unsigned int i=0;i<taille;i++)
+  f << "      ";
+  for(unsigned int i=0;i<taille;i++)
     {
-        f << " " << rhos[i];
+      f << " " << rhos[i];
     }
 
 
-    f << std::endl;
-    f << " - GetAlpha() [nb class-1][nb support vector]"<<std::endl;
-    double ** alphas = ptrModel->GetAlpha();
-    if( alphas == NULL )
+  f << std::endl;
+  f << " - GetAlpha() [nb class-1][nb support vector]"<<std::endl;
+  double ** alphas = ptrModel->GetAlpha();
+  if( alphas == NULL )
     {
-        itkGenericExceptionMacro(<<"alphas NULL"); 
+      itkGenericExceptionMacro(<<"alphas NULL"); 
     }
-    for(unsigned int i=0;i<nbClass-1;i++)
+  for(unsigned int i=0;i<nbClass-1;i++)
     {
-        if( alphas[i] == NULL ) itkGenericExceptionMacro(<<"alphas "<<i<<" NULL"); 
-        f << "     ";
-        for(unsigned int j=0;j<nbSupportVector;j++)
+      if( alphas[i] == NULL ) itkGenericExceptionMacro(<<"alphas "<<i<<" NULL"); 
+      f << "     ";
+      for(unsigned int j=0;j<nbSupportVector;j++)
         {
-                f << "  " << alphas[i][j];
+	  f << "  " << alphas[i][j];
         }
     }
-    f << std::endl;
-    f << " - Evaluate() (double) -> "<<ptrModel->Evaluate()<<std::endl;
+  f << std::endl;
+  f << " - Evaluate() (double) -> "<<ptrModel->Evaluate()<<std::endl;
 
-    typedef ModelType::ValuesType ValuesType;
-    ValuesType _evaluateHyperplaneDistance;
-    _evaluateHyperplaneDistance = ptrModel->EvaluateHyperplaneDistance();
+  typedef ModelType::ValuesType ValuesType;
+  ValuesType _evaluateHyperplaneDistance;
+  _evaluateHyperplaneDistance = ptrModel->EvaluateHyperplaneDistance();
     
-    f << " - EvaluateHyperplaneDistance() VariableLenghtVector() nb value(s): "<<_evaluateHyperplaneDistance.Size()<<std::endl;
-    for(unsigned int i=0;i<_evaluateHyperplaneDistance.Size();i++)
+  f << " - EvaluateHyperplaneDistance() VariableLenghtVector() nb value(s): "<<_evaluateHyperplaneDistance.Size()<<std::endl;
+  for(unsigned int i=0;i<_evaluateHyperplaneDistance.Size();i++)
     {
-        f << "     "<<_evaluateHyperplaneDistance[i]<<std::endl;
+      f << "     "<<_evaluateHyperplaneDistance[i]<<std::endl;
     }
-    f << "end"<<std::endl;
-    f.close();
+  f << "end"<<std::endl;
+  f.close();
         
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "Unknown exception !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  // Software Guide : EndCodeSnippet
-
-//#endif
+  
   return EXIT_SUCCESS;
 }
 

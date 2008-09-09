@@ -27,33 +27,21 @@
 
 int otbSOMActivationBuilderNew(int argc, char* argv[])
 {
-try
-  {
-    const unsigned int Dimension =2;
-    typedef float ComponentType;
-    typedef unsigned char OutputPixelType;
-    typedef itk::VariableLengthVector<ComponentType> PixelType;
-    typedef itk::Statistics::EuclideanDistance<PixelType> DistanceType;
+  const unsigned int Dimension =2;
+  typedef float ComponentType;
+  typedef unsigned char OutputPixelType;
+  typedef itk::VariableLengthVector<ComponentType> PixelType;
+  typedef itk::Statistics::EuclideanDistance<PixelType> DistanceType;
 
-    typedef otb::SOMMap<PixelType,DistanceType,Dimension> MapType;
-    typedef otb::VectorImage<ComponentType,Dimension> InputImageType;
-    typedef itk::Statistics::ListSample<PixelType> ListSampleType;
-    typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
-    typedef otb::SOMActivationBuilder<ListSampleType,MapType,OutputImageType> SOMActivationBuilderType;
+  typedef otb::SOMMap<PixelType,DistanceType,Dimension> MapType;
+  typedef otb::VectorImage<ComponentType,Dimension> InputImageType;
+  typedef itk::Statistics::ListSample<PixelType> ListSampleType;
+  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
+  typedef otb::SOMActivationBuilder<ListSampleType,MapType,OutputImageType> SOMActivationBuilderType;
 
-    // Instantiation
-    SOMActivationBuilderType::Pointer somAct = SOMActivationBuilderType::New();
-  } 
-catch( itk::ExceptionObject & err ) 
-  { 
-    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-  } 
-catch( ... ) 
-  { 
-    std::cout << "Unknown exception thrown !" << std::endl; 
-    return EXIT_FAILURE;
-  } 
- return EXIT_SUCCESS;
+  // Instantiation
+  SOMActivationBuilderType::Pointer somAct = SOMActivationBuilderType::New();
+
+
+  return EXIT_SUCCESS;
 }

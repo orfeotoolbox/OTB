@@ -24,30 +24,18 @@
 
 int otbPeriodicSOMNew(int argc, char* argv[])
 {
-try
-  {
-    const unsigned int Dimension = 2;
-    typedef float ComponentType;
-    typedef itk::VariableLengthVector<ComponentType> PixelType;
-    typedef itk::Statistics::EuclideanDistance<PixelType> DistanceType;
-    typedef otb::SOMMap<PixelType,DistanceType,Dimension> SOMMapType;
-//     typedef itk::Statistics::ImageToListAdaptor<SOMMapType> AdaptorType;
-    typedef itk::Statistics::ListSample<PixelType> ListSampleType;
-    typedef otb::PeriodicSOM<ListSampleType,SOMMapType> SOMType;
-
-    // Instantiation
-    SOMType::Pointer som = SOMType::New();
-  }
-catch( itk::ExceptionObject & err ) 
-  { 
-    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-  } 
-catch( ... ) 
-  { 
-    std::cout << "Unknown exception thrown !" << std::endl; 
-    return EXIT_FAILURE;
-  } 
- return EXIT_SUCCESS;
+   const unsigned int Dimension = 2;
+   typedef float ComponentType;
+   typedef itk::VariableLengthVector<ComponentType> PixelType;
+   typedef itk::Statistics::EuclideanDistance<PixelType> DistanceType;
+   typedef otb::SOMMap<PixelType,DistanceType,Dimension> SOMMapType;
+   //     typedef itk::Statistics::ImageToListAdaptor<SOMMapType> AdaptorType;
+   typedef itk::Statistics::ListSample<PixelType> ListSampleType;
+   typedef otb::PeriodicSOM<ListSampleType,SOMMapType> SOMType;
+   
+   // Instantiation
+   SOMType::Pointer som = SOMType::New();
+ 
+ 
+   return EXIT_SUCCESS;
 }

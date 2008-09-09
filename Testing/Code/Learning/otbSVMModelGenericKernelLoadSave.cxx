@@ -45,39 +45,24 @@ public:
 
 int otbSVMModelGenericKernelLoadSave( int argc, char* argv[] )
 {
-  try 
-    {         
-        typedef unsigned char                                   InputPixelType;
-	typedef unsigned char                                   LabelPixelType;
-        const   unsigned int        	                        Dimension = 2;
-
-        typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
-
-        typedef otb::SVMModel< InputPixelType, LabelPixelType >   ModelType;
-	
-	
-        ModelType::Pointer svmModel = ModelType::New();
-
-        otb::LinearKernelFunctor lFunctor;
-        
-        svmModel->SetKernelFunctor(&lFunctor);
-
-	svmModel->LoadModel(argv[1]);
-	svmModel->SaveModel(argv[2]);
-        
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "Unknown exception !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
-
+  typedef unsigned char                                   InputPixelType;
+  typedef unsigned char                                   LabelPixelType;
+  const   unsigned int        	                        Dimension = 2;
+  
+  typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
+  
+  typedef otb::SVMModel< InputPixelType, LabelPixelType >   ModelType;
+  
+  ModelType::Pointer svmModel = ModelType::New();
+  
+  otb::LinearKernelFunctor lFunctor;
+  
+  svmModel->SetKernelFunctor(&lFunctor);
+  
+  svmModel->LoadModel(argv[1]);
+  svmModel->SaveModel(argv[2]);
+  
+  
   return EXIT_SUCCESS;
 }
 
