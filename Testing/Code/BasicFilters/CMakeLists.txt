@@ -869,20 +869,6 @@ ADD_TEST(bfTvContinuousMinimumMaximumImageCalculatorTest ${BASICFILTERS_TESTS9}
         otbContinuousMinimumMaximumImageCalculatorTest
         ${INPUTDATA}/QB_Suburb.png )
 
-
-#ADD_TEST(bfTvMeanShiftREF ${BASICFILTERS_TESTS9}
-#        MeanShiftRef
-#        ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-#        ${TEMP}/bfMeanShiftREF.tif
-#        2 2
-#        )
-#ADD_TEST(bfTvMeanShiftVectorImageREF ${BASICFILTERS_TESTS9}
-#        MeanShiftVectorImageRef
-#        ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-#        ${TEMP}/bfMeanShiftVectorImageREF.tif
-#        2 2
-#        )
-
 ADD_TEST(bfTuMeanShiftImageFilterNew ${BASICFILTERS_TESTS9}
         otbMeanShiftImageFilterNew )
 
