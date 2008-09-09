@@ -26,26 +26,11 @@
 
 int otbAtmosphericCorrectionParametersNew(int argc, char * argv[])
 {
-  try
-    {
-      typedef otb::AtmosphericCorrectionParameters  AtmosphericCorrectionParametersType;
-      typedef otb::FilterFunctionValues FilterFunctionValuesType;
-      // Instantiating object
-      AtmosphericCorrectionParametersType::Pointer objectAtmo = AtmosphericCorrectionParametersType::New();
-      FilterFunctionValuesType::Pointer objectFilter = FilterFunctionValuesType::New();
-    }
-
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-
-  catch( ... ) 
-    { 
-    std::cout << "Unknown exception thrown !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
+  typedef otb::AtmosphericCorrectionParameters  AtmosphericCorrectionParametersType;
+  typedef otb::FilterFunctionValues FilterFunctionValuesType;
+  // Instantiating object
+  AtmosphericCorrectionParametersType::Pointer objectAtmo = AtmosphericCorrectionParametersType::New();
+  FilterFunctionValuesType::Pointer objectFilter = FilterFunctionValuesType::New();
+  
   return EXIT_SUCCESS;
 }

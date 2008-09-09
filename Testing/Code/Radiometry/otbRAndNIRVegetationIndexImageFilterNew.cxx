@@ -27,31 +27,16 @@
 
 int otbRAndNIRVegetationIndexImageFilterNew(int argc, char * argv[])
 {
-  try
-    {
-      const unsigned int Dimension = 2;
-      typedef unsigned char PixelType;
-      typedef otb::Image<PixelType,Dimension> InputRImageType;
-      typedef itk::Image<PixelType,Dimension> InputNIRImageType;
-      typedef itk::Image<PixelType,Dimension> OutputImageType;
+  const unsigned int Dimension = 2;
+  typedef unsigned char PixelType;
+  typedef otb::Image<PixelType,Dimension> InputRImageType;
+  typedef itk::Image<PixelType,Dimension> InputNIRImageType;
+  typedef itk::Image<PixelType,Dimension> OutputImageType;
+  
+  typedef otb::RAndNIRVegetationIndexImageFilter<InputRImageType,InputNIRImageType,OutputImageType>  RAndNIRVegetationIndexImageFilterType;
+  
+  // Instantiating object
+  RAndNIRVegetationIndexImageFilterType::Pointer object = RAndNIRVegetationIndexImageFilterType::New();
 
-      typedef otb::RAndNIRVegetationIndexImageFilter<InputRImageType,InputNIRImageType,OutputImageType>  RAndNIRVegetationIndexImageFilterType;
-
-      // Instantiating object
-      RAndNIRVegetationIndexImageFilterType::Pointer object = RAndNIRVegetationIndexImageFilterType::New();
-    }
-
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-
-  catch( ... ) 
-    { 
-    std::cout << "Unknown exception thrown !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
   return EXIT_SUCCESS;
 }

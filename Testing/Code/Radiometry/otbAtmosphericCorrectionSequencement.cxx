@@ -62,32 +62,9 @@ int otbAtmosphericCorrectionSequencementTest( int argc, char *argv[] )
 
   ReaderType::Pointer reader  = ReaderType::New();
   reader->SetFileName(argv[1]);
-  // Software Guide : BeginLatex
-  //  
-  // The invocation of the \code{GenerateOutputInformation()} method on the reader
-  // to known the number of component per pixel of the image.  It is recommended to 
-  // place GenerateOutputInformation calls in a \code{try/catch} block in case 
-  // errors occur and exceptions are thrown.
-  //
-  // Software Guide : EndLatex 
   
-  // Software Guide : BeginCodeSnippet
-  try
-    {
-      reader->GenerateOutputInformation();
-    }
-  catch( itk::ExceptionObject & excep )
-    {
-      std::cerr << "Exception caught !" << std::endl;
-      std::cerr << excep << std::endl;
-    }
-  // Software Guide : EndCodeSnippet
-  catch( ... ) 
-    { 
-      std::cout << "Unknown exception !" << std::endl; 
-      return EXIT_FAILURE;
-    } 
-
+  reader->GenerateOutputInformation();
+  
   unsigned int nbOfComponent = reader->GetOutput()->GetNumberOfComponentsPerPixel();
 
 

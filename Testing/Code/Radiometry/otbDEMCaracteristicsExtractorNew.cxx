@@ -23,27 +23,12 @@
 
 int otbDEMCaracteristicsExtractorNew(int argc, char * argv[])
 {
-  try
-    {
-      const unsigned int Dimension = 2;
-      typedef double PixelType;
-      typedef otb::Image<PixelType, Dimension> InputImageType;
-      typedef otb::DEMCaracteristicsExtractor< InputImageType, InputImageType > DEMCaracteristicsExtractorType;
-
-      DEMCaracteristicsExtractorType::Pointer filter = DEMCaracteristicsExtractorType::New();
-    }
+  const unsigned int Dimension = 2;
+  typedef double PixelType;
+  typedef otb::Image<PixelType, Dimension> InputImageType;
+  typedef otb::DEMCaracteristicsExtractor< InputImageType, InputImageType > DEMCaracteristicsExtractorType;
   
-  catch( itk::ExceptionObject & err ) 
-    { 
-      std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-      std::cout << err << std::endl; 
-      return EXIT_FAILURE;
-    } 
+  DEMCaracteristicsExtractorType::Pointer filter = DEMCaracteristicsExtractorType::New();
   
-  catch( ... ) 
-    { 
-      std::cout << "Unknown exception thrown !" << std::endl; 
-      return EXIT_FAILURE;
-    } 
   return EXIT_SUCCESS;
 }

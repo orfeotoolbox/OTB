@@ -25,25 +25,10 @@
 
 int otbAtmosphericRadiativeTermsNew(int argc, char * argv[])
 {
-  try
-    {
-      typedef otb::AtmosphericRadiativeTerms  AtmosphericRadiativeTermsType;
+  typedef otb::AtmosphericRadiativeTerms  AtmosphericRadiativeTermsType;
+  
+  // Instantiating object
+  AtmosphericRadiativeTermsType::Pointer object = AtmosphericRadiativeTermsType::New();
 
-      // Instantiating object
-      AtmosphericRadiativeTermsType::Pointer object = AtmosphericRadiativeTermsType::New();
-    }
-
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-
-  catch( ... ) 
-    { 
-    std::cout << "Unknown exception thrown !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
   return EXIT_SUCCESS;
 }

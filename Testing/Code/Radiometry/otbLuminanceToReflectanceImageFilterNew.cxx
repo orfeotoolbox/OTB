@@ -23,29 +23,15 @@
 
 int otbLuminanceToReflectanceImageFilterNew(int argc, char * argv[])
 {
-  try
-    {
-      const unsigned int Dimension = 2;
-      typedef double PixelType;
-      typedef otb::VectorImage<PixelType,Dimension> InputImageType;
-      
-      typedef otb::LuminanceToReflectanceImageFilter<InputImageType,InputImageType> LuminanceToReflectanceImageFilterType;
-      
-      // Instantiating object
-      LuminanceToReflectanceImageFilterType::Pointer filter = LuminanceToReflectanceImageFilterType::New();
-    }
+  const unsigned int Dimension = 2;
+  typedef double PixelType;
+  typedef otb::VectorImage<PixelType,Dimension> InputImageType;
+  
+  typedef otb::LuminanceToReflectanceImageFilter<InputImageType,InputImageType> LuminanceToReflectanceImageFilterType;
+  
+  // Instantiating object
+  LuminanceToReflectanceImageFilterType::Pointer filter = LuminanceToReflectanceImageFilterType::New();
 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
 
-  catch( ... ) 
-    { 
-    std::cout << "Unknown exception thrown !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
   return EXIT_SUCCESS;
 }

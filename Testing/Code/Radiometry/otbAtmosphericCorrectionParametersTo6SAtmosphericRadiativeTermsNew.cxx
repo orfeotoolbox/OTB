@@ -21,8 +21,9 @@
 
 int otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew(int argc, char * argv[])
 {
-        typedef otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms  AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsType;
-        // Instantiating object
-        AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsType::Pointer object = AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsType::New();
-        return EXIT_SUCCESS;
+  typedef otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms  AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsType;
+  // Instantiating object
+  AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsType::Pointer object = AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsType::New();
+  
+  return EXIT_SUCCESS;
 }

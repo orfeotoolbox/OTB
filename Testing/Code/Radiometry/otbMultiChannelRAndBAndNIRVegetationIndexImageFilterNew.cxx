@@ -21,30 +21,17 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 
+
 int otbMultiChannelRAndBAndNIRVegetationIndexImageFilterNew(int argc, char * argv[])
 {
-  try
-    {
-      const unsigned int Dimension = 2;
-      typedef otb::VectorImage<unsigned char,Dimension> InputImageType;
-      typedef otb::Image<float,Dimension> OutputImageType;
-      typedef otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter<InputImageType,OutputImageType> MultiChannelRAndBAndNIRVegetationIndexImageFilterType;
+  const unsigned int Dimension = 2;
+  typedef otb::VectorImage<unsigned char,Dimension> InputImageType;
+  typedef otb::Image<float,Dimension> OutputImageType;
+  typedef otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter<InputImageType,OutputImageType> MultiChannelRAndBAndNIRVegetationIndexImageFilterType;
+  
+  // Instantiating object
+  MultiChannelRAndBAndNIRVegetationIndexImageFilterType::Pointer object = MultiChannelRAndBAndNIRVegetationIndexImageFilterType::New();
 
-      // Instantiating object
-      MultiChannelRAndBAndNIRVegetationIndexImageFilterType::Pointer object = MultiChannelRAndBAndNIRVegetationIndexImageFilterType::New();
-    }
 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-
-  catch( ... ) 
-    { 
-    std::cout << "Unknown exception thrown !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
   return EXIT_SUCCESS;
 }
