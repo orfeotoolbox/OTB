@@ -883,13 +883,15 @@ ADD_TEST(bfTvContinuousMinimumMaximumImageCalculatorTest ${BASICFILTERS_TESTS9}
 #        2 2
 #        )
 
-#ADD_TEST(bfTuMeanShiftImageFilterNew ${BASICFILTERS_TESTS9}
-#        otbMeanShiftImageFilterNew )
+ADD_TEST(bfTuMeanShiftVectorImageFilterNew ${BASICFILTERS_TESTS9}
+        otbMeanShiftVectorImageFilterNew )
 
-#ADD_TEST(bfTvMeanShiftImageFilter ${BASICFILTERS_TESTS9}
-#        otbMeanShiftImageFilter )
-
-
+ADD_TEST(bfTvMeanShiftVectorImageFilter ${BASICFILTERS_TESTS9}
+        otbMeanShiftVectorImageFilter 
+	${INPUTDATA}/qb_RoadExtract2sub200x200.tif
+	${TEMP}/bfTvvMeanShiftVectorImageFilterOutput.tif
+	3 15 20 0 0.0001
+	)
 
 ADD_TEST(bfTvFunctionToImageFilterNew ${BASICFILTERS_TESTS9}
         otbFunctionToImageFilterNew
@@ -1054,8 +1056,8 @@ otbContinuousMinimumMaximumImageCalculatorNew.cxx
 otbContinuousMinimumMaximumImageCalculatorTest.cxx
 #MeanShift.cxx
 #MeanShiftVectorImage.cxx
-#otbMeanShiftImageFilterNew.cxx
-#otbMeanShiftImageFilter.cxx
+otbMeanShiftVectorImageFilterNew.cxx
+otbMeanShiftVectorImageFilter.cxx
 otbFunctionToImageFilterNew.cxx
 otbFunctionToImageFilter.cxx
 otbScalarImageTextureFunctorNew.cxx
