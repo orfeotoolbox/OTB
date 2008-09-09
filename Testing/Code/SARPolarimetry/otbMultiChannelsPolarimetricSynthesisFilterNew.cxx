@@ -28,18 +28,18 @@
 
 int otbMultiChannelsPolarimetricSynthesisFilterNew( int argc, char * argv[] )
 {
-        typedef double              InputPixelType;
-        typedef double    	    OutputPixelType;
-        const   unsigned int        Dimension = 2;
-
-        typedef otb::VectorImage< InputPixelType,  Dimension >        InputImageType;
-        typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
-
-        typedef otb::MultiChannelsPolarimetricSynthesisFilter< InputImageType,OutputImageType >   FilterType;
-	
-        FilterType::Pointer filter = FilterType::New();
-              
-        return EXIT_SUCCESS;
+  typedef double              InputPixelType;
+  typedef double    	    OutputPixelType;
+  const   unsigned int        Dimension = 2;
+  
+  typedef otb::VectorImage< InputPixelType,  Dimension >        InputImageType;
+  typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
+  
+  typedef otb::MultiChannelsPolarimetricSynthesisFilter< InputImageType,OutputImageType >   FilterType;
+  
+  FilterType::Pointer filter = FilterType::New();
+  
+  return EXIT_SUCCESS;
 }
 
 

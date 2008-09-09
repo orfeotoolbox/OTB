@@ -31,62 +31,45 @@
 
 int otbVectorMultiChannelsPolarimetricSynthesisFilter( int argc, char * argv[] )
 {
-  try 
-    { 
-       
-        const char * inputFilename  = argv[1];
-        const char * outputFilename = argv[2];
+  const char * inputFilename  = argv[1];
+  const char * outputFilename = argv[2];
            
-        double  PsiI = strtod(argv[3],NULL);
-        double  KhiI = strtod(argv[4],NULL);
-        double  PsiR = strtod(argv[5],NULL);
-        double  KhiR = strtod(argv[6],NULL);
+  double  PsiI = strtod(argv[3],NULL);
+  double  KhiI = strtod(argv[4],NULL);
+  double  PsiR = strtod(argv[5],NULL);
+  double  KhiR = strtod(argv[6],NULL);
     
-        typedef std::complex <double>                           InputPixelType;
-        typedef double    	                                OutputPixelType;
-        const   unsigned int                                    Dimension = 2;
-        typedef otb::VectorImage< InputPixelType,  Dimension >  InputImageType;
-        typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
-        typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-        typedef otb::ImageFileWriter< OutputImageType >         WriterType;
-        typedef itk::FixedArray<int,4>                          IndexArrayType;
-        typedef otb::MultiChannelsPolarimetricSynthesisFilter< InputImageType,OutputImageType >   FilterType;
+  typedef std::complex <double>                           InputPixelType;
+  typedef double    	                                OutputPixelType;
+  const   unsigned int                                    Dimension = 2;
+  typedef otb::VectorImage< InputPixelType,  Dimension >  InputImageType;
+  typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
+  typedef otb::ImageFileReader< InputImageType  >         ReaderType;
+  typedef otb::ImageFileWriter< OutputImageType >         WriterType;
+  typedef itk::FixedArray<int,4>                          IndexArrayType;
+  typedef otb::MultiChannelsPolarimetricSynthesisFilter< InputImageType,OutputImageType >   FilterType;
 
-        FilterType::Pointer polarimetricSynthesis = FilterType::New();
+  FilterType::Pointer polarimetricSynthesis = FilterType::New();
         
-	polarimetricSynthesis->SetPsiI( PsiI );
-	polarimetricSynthesis->SetKhiI( KhiI );
-        polarimetricSynthesis->SetPsiR( PsiR );
-	polarimetricSynthesis->SetKhiR( KhiR );
-	polarimetricSynthesis->SetEmissionH( true );
-	polarimetricSynthesis->SetEmissionV( true );        
+  polarimetricSynthesis->SetPsiI( PsiI );
+  polarimetricSynthesis->SetKhiI( KhiI );
+  polarimetricSynthesis->SetPsiR( PsiR );
+  polarimetricSynthesis->SetKhiR( KhiR );
+  polarimetricSynthesis->SetEmissionH( true );
+  polarimetricSynthesis->SetEmissionV( true );        
         
-        ReaderType::Pointer reader = ReaderType::New();
-        WriterType::Pointer writer = WriterType::New();
+  ReaderType::Pointer reader = ReaderType::New();
+  WriterType::Pointer writer = WriterType::New();
 
-        reader->SetFileName( inputFilename );                      
-        writer->SetFileName( outputFilename );
+  reader->SetFileName( inputFilename );                      
+  writer->SetFileName( outputFilename );
                     
-        polarimetricSynthesis->SetInput(reader->GetOutput());
-        writer->SetInput( polarimetricSynthesis->GetOutput() );
+  polarimetricSynthesis->SetInput(reader->GetOutput());
+  writer->SetInput( polarimetricSynthesis->GetOutput() );
        
-        writer->Update(); 
+  writer->Update(); 
 
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "Exception levee inconnue !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  // Software Guide : EndCodeSnippet
-
-//#endif
+ 
   return EXIT_SUCCESS;
 }
 
