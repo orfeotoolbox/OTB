@@ -1,0 +1,139 @@
+#!/bin/sh
+
+VERSION=`make -s version`
+
+list_files()
+{
+    cat <<- EOF
+include/OpenThreads/Barrier          include/OpenThreads
+include/OpenThreads/Condition        include/OpenThreads
+include/OpenThreads/Exports          include/OpenThreads
+include/OpenThreads/Mutex            include/OpenThreads
+include/OpenThreads/Thread           include/OpenThreads
+lib/Win32/OpenThreadsWin32.lib       lib
+lib/Win32/OpenThreadsWin32d.lib      lib
+bin/Win32/OpenThreadsWin32.dll       bin
+bin/Win32/OpenThreadsWin32d.dll      bin
+EOF
+}
+
+print_header()
+{
+    cat <<- EOF 
+[Setup]
+AppName=OpenThreads
+AppVerName=OpenThreads $VERSION
+AppPublisher=The Open Thread Group
+AppPublisherURL=http://www.andesengineering.com/OpenThreads
+AppSupportURL=http://www.andesengineering.com/OpenThreads
+AppUpdatesURL=http://www.andesengineering.com/OpenThreads
+DefaultDirName={pf}\OpenThreads
+DisableDirPage=yes
+DefaultGroupName=OpenThreads
+DisableProgramGroupPage=yes
+LicenseFile=COPYING.txt
+EOF
+}
+
+# Usage:
+# do_dir $DIR
+#
+
+print_file_entry()
+{
+    DIR=$1
+    FILE=$2
+    printf "Source: \"%s\\\%s\"; DestDir: \"{app}\\\%s\\\"; Flags: ignoreversion\n"\
+            $DIR $FILE  $DIR
+
+}
+
+print_files()
+{
+    echo "[Files]"
+
+    list_files | while read src dst
+    do
+        DOS_SRC=`echo $src | sed 's/\\//\\\/g'`
+        DOS_DST=`echo $dst | sed 's/\\//\\\/g'`
+
+        printf "Source: \"%s\"; DestDir: \"{app}\\\%s\\\"; Flags: ignoreversion\n"\
+            $DOS_SRC $DOS_DST
+    done
+}
+
+print_script()
+{
+    print_header 
+    print_files  
+}
+
+BUILD_ISS=1
+BUILD_DISTRIBUTION=1
+CLEAN_UP=1
+
+while [ $# -gt 0 ]
+do
+    case $1 in
+       -c )
+            BUILD_ISS=0
+            BUILD_DISTRIBUTION=0
+            CLEAN_UP=1
+            ;;
+
+       -d )
+	        BUILD_ISS=0
+            BUILD_DISTRIBUTION=1
+            CLEAN_UP=0
+		    ;;
+
+       -n )
+	        CLEAN_UP=0
+	        ;;
+
+       -s )
+           BUILD_ISS=1
+           BUILD_DISTRIBUTION=0
+           CLEAN_UP=0
+           ;;
+    esac
+
+    shift;
+done
+
+if [ $BUILD_ISS = 1 ]
+then
+    echo Building Inno Setup script ....
+    rm -f openthread.iss
+	
+    print_script | awk '{ printf "%s\r\n", $0 }' > openthread.iss
+fi
+
+if [ $BUILD_DISTRIBUTION = 1 ]
+then
+    echo Building distribution ...
+    OS=`uname | cut -b1-6`
+
+    if [ "$OS" = "CYGWIN" ]
+    then 
+        C:/Program\ Files/Inno\ Setup\ 3/iscc.exe openthread.iss
+        [ -d dist/Win32 ] || mkdir -p dist/Win32
+        mv Output/setup.exe dist/Win32/OpenThreads_"$VERSION"_setup.exe
+        rm -rf Output
+     else
+        echo "     Distribution may only be built under Cygwin with Inno Setup"
+    fi
+fi
+
+if [ $CLEAN_UP = 1 ]
+then
+    echo Cleaning up...
+    rm -f openthread.iss
+fi
+
+
+
+
+
+
+

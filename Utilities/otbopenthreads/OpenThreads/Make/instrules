@@ -1,0 +1,50 @@
+
+install : default instclean
+	@$(MAKE) __inst_lib
+	@$(MAKE) __inst_headers
+
+instlinks : instclean
+	$(LINK) `pwd`/include/OpenThreads $(INST_INCLUDE)/OpenThreads
+	[ -d $(INST_LIBS) ] || mkdir -p $(INST_LIBS)
+	$(LINK) `pwd`/lib/$(OS)$(ARCH)/$(LIB_PREFIX)OpenThreads.$(LIB_EXT) $(INST_LIBS)/$(LIB_PREFIX)OpenThreads.$(LIB_EXT)
+
+instclean :
+	rm -rf $(INST_INCLUDE)/OpenThreads
+	rm -f $(INST_LIBS)/$(LIB_PREFIX)OpenThreads.$(LIB_EXT)
+ifdef IMP_LIB_EXT
+	rm -f $(INST_IMP_LIBS)/libOpenThreads.$(IMP_LIB_EXT)
+endif
+
+instlibonly : 
+	@$(MAKE) __inst_lib
+
+__inst_lib:
+	@[ -d $(INST_LIBS) ] || mkdir -p $(INST_LIBS)
+	@$(INSTXCMD) $(LIBINST)/$(LIB_PREFIX)OpenThreads.$(LIB_EXT) $(INST_LIBS)/$(LIB_PREFIX)OpenThreads.$(LIB_EXT)
+ifdef IMP_LIB_EXT
+	@[ -d $(INST_IMP_LIBS) ] || mkdir -p $(INST_IMP_LIBS)
+	$(INSTXCMD) $(IMP_LIBINST)/libOpenThreads.$(IMP_LIB_EXT) $(INST_IMP_LIBS)/libOpenThreads.$(IMP_LIB_EXT)
+endif
+
+__inst_headers:
+	@[ -d $(INST_INCLUDE)/OpenThreads ] || mkdir -p $(INST_INCLUDE)/OpenThreads
+	for f in include/OpenThreads/* ; do \
+	if [ ! -d $$f ]; \
+	then \
+		[ "`head -1 $$f | cut -c 1-12`" = "/* -*-c++-*-"  ] && \
+			echo $(INSTRCMD) $$f $(INST_INCLUDE)/OpenThreads; \
+			     $(INSTRCMD) $$f $(INST_INCLUDE)/OpenThreads; \
+	fi; \
+	done
+
+
+__inst_share:
+	@for d in `find share/ -type d -print | grep -v CVS`; do \
+        [ -d $(INST_LOCATION)/$$d ] || mkdir -p $(INST_LOCATION)/$$d; \
+        done
+	@for f in `find share/ -type f -print | grep -v CVS`; do \
+        $(INSTRCMD) $$f $(INST_LOCATION)/$$f; \
+        done
+
+
+

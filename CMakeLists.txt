@@ -127,6 +127,26 @@ IF(OTB_COMPILE_JPEG2000)
   ENDIF(NOT BUILD_SHARED_LIBS)
 ENDIF(OTB_COMPILE_JPEG2000)
 
+#-----------------------------------------------------------------------------
+# Option for OpenThreads (necessary because used by the new version of OSSIM library
+# Find OpenThread library
+IF(EXISTS "${CMAKE_ROOT}/Modules/FindOpenThreads.cmake") 
+        FIND_PACKAGE(OpenThreads)
+ELSE(EXISTS "${CMAKE_ROOT}/Modules/FindOpenThreads.cmake") 
+        INCLUDE(${OTB_SOURCE_DIR}/FindOpenThreads.cmake)
+ENDIF(EXISTS "${CMAKE_ROOT}/Modules/FindOpenThreads.cmake") 
+
+SET(OTB_USE_EXTERNAL_OPENTHREADS 1)
+IF(OPENTHREADS_FOUND)
+        INCLUDE_DIRECTORIES(${OPENTHREADS_INCLUDE_DIR})
+        LINK_DIRECTORIES( ${OPENTHREADS_LIBRARY} )
+ELSE(OPENTHREADS_FOUND)
+        ADD_DEFINITIONS(-DOTB_USE_INTERNAL_OPENTHREADS)
+        SET(OTB_USE_EXTERNAL_OPENTHREADS 0)
+        SET(OPENTHREADS_INCLUDE_DIR "${OTB_SOURCE_DIR}/Utilities/otbopenthreads/OpenThreads/include")
+        SET(OPENTHREADS_LIBRARY "OpenThreads" )
+        INCLUDE_DIRECTORIES(${OPENTHREADS_INCLUDE_DIR})
+ENDIF(OPENTHREADS_FOUND)
 
 
 #-----------------------------------------------------------------------------

@@ -1,0 +1,573 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 39;
+	objects = {
+		034768DDFF38A45A11DB9C8B = {
+			children = (
+				8D07F2C80486CC7A007CD1D0,
+			);
+			isa = PBXGroup;
+			name = Products;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+//030
+//031
+//032
+//033
+//034
+//080
+//081
+//082
+//083
+//084
+		0867D690FE84028FC02AAC07 = {
+			buildSettings = {
+			};
+			buildStyles = (
+				4F0BB7EC011F40E904CA0E50,
+				4F0BB7ED011F40E904CA0E50,
+			);
+			hasScannedForEncodings = 1;
+			isa = PBXProject;
+			mainGroup = 0867D691FE84028FC02AAC07;
+			productRefGroup = 034768DDFF38A45A11DB9C8B;
+			projectDirPath = "";
+			targets = (
+				8D07F2BC0486CC7A007CD1D0,
+			);
+		};
+		0867D691FE84028FC02AAC07 = {
+			children = (
+				BE11833F05D7005800EB53E5,
+				08FB77ACFE841707C02AAC07,
+				089C1665FE841158C02AAC07,
+				0867D69AFE84028FC02AAC07,
+				034768DDFF38A45A11DB9C8B,
+			);
+			isa = PBXGroup;
+			name = OpenThreads;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		0867D69AFE84028FC02AAC07 = {
+			children = (
+				08FB77AAFE841565C02AAC07,
+			);
+			isa = PBXGroup;
+			name = "External Frameworks and Libraries";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		089C1665FE841158C02AAC07 = {
+			children = (
+				8D07F2C70486CC7A007CD1D0,
+				089C1666FE841158C02AAC07,
+			);
+			isa = PBXGroup;
+			name = Resources;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		089C1666FE841158C02AAC07 = {
+			children = (
+				089C1667FE841158C02AAC07,
+			);
+			isa = PBXVariantGroup;
+			name = InfoPlist.strings;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		089C1667FE841158C02AAC07 = {
+			fileEncoding = 10;
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
+			name = English;
+			path = English.lproj/InfoPlist.strings;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		08FB77AAFE841565C02AAC07 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = Carbon.framework;
+			path = /System/Library/Frameworks/Carbon.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		08FB77ACFE841707C02AAC07 = {
+			children = (
+				BE11832A05D6FE3800EB53E5,
+				BE11832B05D6FE3800EB53E5,
+				BE11832C05D6FE3800EB53E5,
+				BE11832D05D6FE3800EB53E5,
+				BE11832E05D6FE3800EB53E5,
+				BE11832F05D6FE3800EB53E5,
+				BE11833005D6FE3800EB53E5,
+				BE11833105D6FE3800EB53E5,
+				32BAE0B70371A74B00C91783,
+			);
+			isa = PBXGroup;
+			name = Source;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+//080
+//081
+//082
+//083
+//084
+//320
+//321
+//322
+//323
+//324
+		32BAE0B70371A74B00C91783 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = OpenThreads_Prefix.pch;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+//320
+//321
+//322
+//323
+//324
+//4F0
+//4F1
+//4F2
+//4F3
+//4F4
+		4F0BB7EC011F40E904CA0E50 = {
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUGGING_SYMBOLS = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OPTIMIZATION_CFLAGS = "-O0";
+				ZERO_LINK = YES;
+			};
+			isa = PBXBuildStyle;
+			name = Development;
+		};
+		4F0BB7ED011F40E904CA0E50 = {
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				ZERO_LINK = NO;
+			};
+			isa = PBXBuildStyle;
+			name = Deployment;
+		};
+//4F0
+//4F1
+//4F2
+//4F3
+//4F4
+//8D0
+//8D1
+//8D2
+//8D3
+//8D4
+		8D07F2BC0486CC7A007CD1D0 = {
+			buildPhases = (
+				8D07F2BD0486CC7A007CD1D0,
+				8D07F2BF0486CC7A007CD1D0,
+				8D07F2C10486CC7A007CD1D0,
+				8D07F2C30486CC7A007CD1D0,
+				8D07F2C50486CC7A007CD1D0,
+			);
+			buildRules = (
+			);
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_VERSION = A;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = OpenThreads_Prefix.pch;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				HEADER_SEARCH_PATHS = ../../include;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_STYLE = Dynamic;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "-seg1addr 0x1FF00000";
+				PRODUCT_NAME = OpenThreads;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = framework;
+			};
+			dependencies = (
+			);
+			isa = PBXNativeTarget;
+			name = OpenThreads;
+			productInstallPath = "$(HOME)/Library/Frameworks";
+			productName = OpenThreads;
+			productReference = 8D07F2C80486CC7A007CD1D0;
+			productType = "com.apple.product-type.framework";
+		};
+		8D07F2BD0486CC7A007CD1D0 = {
+			buildActionMask = 2147483647;
+			files = (
+				BE11837D05D7083B00EB53E5,
+				BE11837E05D7083B00EB53E5,
+				BE11837F05D7083B00EB53E5,
+				BE11838005D7083B00EB53E5,
+				BE11838105D7083B00EB53E5,
+				BE11838205D7083B00EB53E5,
+				8D07F2BE0486CC7A007CD1D0,
+				BE11833405D6FE3900EB53E5,
+				BE11833605D6FE3900EB53E5,
+				BE11833805D6FE3900EB53E5,
+				BE11833905D6FE3900EB53E5,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8D07F2BE0486CC7A007CD1D0 = {
+			fileRef = 32BAE0B70371A74B00C91783;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		8D07F2BF0486CC7A007CD1D0 = {
+			buildActionMask = 2147483647;
+			files = (
+				8D07F2C00486CC7A007CD1D0,
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8D07F2C00486CC7A007CD1D0 = {
+			fileRef = 089C1666FE841158C02AAC07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		8D07F2C10486CC7A007CD1D0 = {
+			buildActionMask = 2147483647;
+			files = (
+				BE11835105D7022C00EB53E5,
+				BE11835205D7022C00EB53E5,
+				BE11835405D7022C00EB53E5,
+				BE11835605D7022C00EB53E5,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8D07F2C30486CC7A007CD1D0 = {
+			buildActionMask = 2147483647;
+			files = (
+				8D07F2C40486CC7A007CD1D0,
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8D07F2C40486CC7A007CD1D0 = {
+			fileRef = 08FB77AAFE841565C02AAC07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		8D07F2C50486CC7A007CD1D0 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8D07F2C70486CC7A007CD1D0 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist;
+			path = Info.plist;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		8D07F2C80486CC7A007CD1D0 = {
+			explicitFileType = wrapper.framework;
+			includeInIndex = 0;
+			isa = PBXFileReference;
+			path = OpenThreads.framework;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+//8D0
+//8D1
+//8D2
+//8D3
+//8D4
+//BE0
+//BE1
+//BE2
+//BE3
+//BE4
+		BE11832A05D6FE3800EB53E5 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = "PThread.c++";
+			path = "../../pthread_src/PThread.c++";
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		BE11832B05D6FE3800EB53E5 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = "PThreadBarrier.c++";
+			path = "../../pthread_src/PThreadBarrier.c++";
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		BE11832C05D6FE3800EB53E5 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = PThreadBarrierPrivateData.h;
+			path = ../../pthread_src/PThreadBarrierPrivateData.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		BE11832D05D6FE3800EB53E5 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = "PThreadCondition.c++";
+			path = "../../pthread_src/PThreadCondition.c++";
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		BE11832E05D6FE3800EB53E5 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = PThreadConditionPrivateData.h;
+			path = ../../pthread_src/PThreadConditionPrivateData.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		BE11832F05D6FE3800EB53E5 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = "PThreadMutex.c++";
+			path = "../../pthread_src/PThreadMutex.c++";
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		BE11833005D6FE3800EB53E5 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = PThreadMutexPrivateData.h;
+			path = ../../pthread_src/PThreadMutexPrivateData.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		BE11833105D6FE3800EB53E5 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = PThreadPrivateData.h;
+			path = ../../pthread_src/PThreadPrivateData.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		BE11833405D6FE3900EB53E5 = {
+			fileRef = BE11832C05D6FE3800EB53E5;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		BE11833605D6FE3900EB53E5 = {
+			fileRef = BE11832E05D6FE3800EB53E5;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		BE11833805D6FE3900EB53E5 = {
+			fileRef = BE11833005D6FE3800EB53E5;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		BE11833905D6FE3900EB53E5 = {
+			fileRef = BE11833105D6FE3800EB53E5;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		BE11833F05D7005800EB53E5 = {
+			children = (
+				BE11835905D7027D00EB53E5,
+			);
+			isa = PBXGroup;
+			name = Header;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		BE11835105D7022C00EB53E5 = {
+			fileRef = BE11832A05D6FE3800EB53E5;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		BE11835205D7022C00EB53E5 = {
+			fileRef = BE11832B05D6FE3800EB53E5;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		BE11835405D7022C00EB53E5 = {
+			fileRef = BE11832D05D6FE3800EB53E5;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		BE11835605D7022C00EB53E5 = {
+			fileRef = BE11832F05D6FE3800EB53E5;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		BE11835905D7027D00EB53E5 = {
+			children = (
+				BE11836E05D7082A00EB53E5,
+				BE11836F05D7082A00EB53E5,
+				BE11837005D7082A00EB53E5,
+				BE11837105D7082A00EB53E5,
+				BE11837205D7082A00EB53E5,
+				BE11837305D7082A00EB53E5,
+			);
+			isa = PBXGroup;
+			name = OpenThreads;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		BE11836E05D7082A00EB53E5 = {
+			explicitFileType = sourcecode.cpp.h;
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = Barrier;
+			path = ../../include/OpenThreads/Barrier;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		BE11836F05D7082A00EB53E5 = {
+			explicitFileType = sourcecode.cpp.h;
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = Condition;
+			path = ../../include/OpenThreads/Condition;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		BE11837005D7082A00EB53E5 = {
+			explicitFileType = sourcecode.cpp.h;
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = Exports;
+			path = ../../include/OpenThreads/Exports;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		BE11837105D7082A00EB53E5 = {
+			explicitFileType = sourcecode.cpp.h;
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = Mutex;
+			path = ../../include/OpenThreads/Mutex;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		BE11837205D7082A00EB53E5 = {
+			explicitFileType = sourcecode.cpp.h;
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ScopedLock;
+			path = ../../include/OpenThreads/ScopedLock;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		BE11837305D7082A00EB53E5 = {
+			explicitFileType = sourcecode.cpp.h;
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = Thread;
+			path = ../../include/OpenThreads/Thread;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		BE11837D05D7083B00EB53E5 = {
+			fileRef = BE11836E05D7082A00EB53E5;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		BE11837E05D7083B00EB53E5 = {
+			fileRef = BE11836F05D7082A00EB53E5;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		BE11837F05D7083B00EB53E5 = {
+			fileRef = BE11837005D7082A00EB53E5;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		BE11838005D7083B00EB53E5 = {
+			fileRef = BE11837105D7082A00EB53E5;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		BE11838105D7083B00EB53E5 = {
+			fileRef = BE11837205D7082A00EB53E5;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		BE11838205D7083B00EB53E5 = {
+			fileRef = BE11837305D7082A00EB53E5;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+	};
+	rootObject = 0867D690FE84028FC02AAC07;
+}

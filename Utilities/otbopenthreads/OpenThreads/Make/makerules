@@ -1,0 +1,167 @@
+
+default : opt 
+
+opt   : $(LIB:=.opt) \
+        $(EXEC:=.opt) \
+
+debug : $(LIB:=.dbg) \
+        $(EXEC:=.dbg) \
+
+static: $(LIB:=.static) \
+        $(EXEC:=.opt) \
+
+staticdebug: $(LIB:=.staticdbg) \
+        $(EXEC:=.dbg)
+
+cleandepend : cleandependopt cleandependdbg
+
+cleandependopt :
+	@[ -d $(OPTDIR) ] && cd $(OPTDIR); rm -f Makedepend; rm -rf .depend
+
+cleandependdbg :
+	@[ -d $(DEBUGDIR) ] && cd $(DEBUGDIR); rm -f Makedepend; rm -rf .depend
+
+cleantarget : cleantargetopt cleantargetdbg
+
+cleantargetopt : 
+	@[ -d $(OPTDIR) ] && cd $(OPTDIR); rm -f $(EXEC)$(EXE_EXT) $(LIB).$(LIB_EXT) 
+
+cleantargetdbg : 
+	@[ -d $(DEBUGDIR) ] && cd $(DEBUGDIR); rm -f $(EXEC)$(EXE_EXT) $(LIB).$(LIB_EXT) 
+
+clean : cleanopt cleandbg
+
+cleanopt : 
+	@[ -d $(OPTDIR) ] && cd $(OPTDIR); rm -f $(OBJS) Makedepend; rm -rf .depend
+
+cleandbg : 
+	@[ -d $(DEBUGDIR) ] && cd $(DEBUGDIR); rm -f $(OBJS) Makedepend; rm -rf .depend
+
+clobber : clobberdbg clobberopt
+
+clobberopt : 
+	rm -rf $(OPTDIR)
+
+clobberdbg : 
+	rm -rf $(DEBUGDIR)
+
+
+$(EXEC): $(OBJS)
+	$(CXX) $(LDFLAGS) $(OBJS) $(LIBS) -o $@
+
+## Mac OSX makes the distinction between -dynamiclib and -bundle
+## causing us to have to make a special case here, rather than 
+## just redefining the SHARED argument.
+
+ifeq ($(OS),Darwin)
+  $(LIB) : $(OBJS)
+	  $(CXX) $(LDFLAGS) -dynamiclib $(OBJS) $(LIBS) -o $@.$(LIB_EXT)
+	  touch $@
+
+$(STATICLIB): $(OBJS)
+	ar rv $@ $?
+
+else
+
+    $(LIB) : $(OBJS)
+	$(CXX) $(LDFLAGS) $(SHARED) $(OBJS) $(LIBS) -o $@.$(LIB_EXT)
+
+    $(STATICLIB): $(OBJS)
+	    ar rv $@ $?
+
+endif # not Darwin
+
+$(EXEC:=.dbg) :
+	@[ -d $(DEBUGDIR) ] || mkdir $(DEBUGDIR)
+        @cd $(DEBUGDIR); \
+              $(MAKE) -f ../GNUmakefile "DOF=$(DBGF)"  TOPDIR=../${TOPDIR} \
+                        THISDIR=../$(THISDIR) \
+                                  MAKEDEPEND=Makedepend $(EXEC)
+        @$(MAKE) LNSRC=$(DEBUGDIR)/$(EXEC)$(EXE_EXT) LNDEST=$(BININST)/$(EXEC)$(EXE_EXT) __link
+
+
+$(LIB:=.dbg) :
+	@[ -d $(DEBUGDIR) ] || mkdir $(DEBUGDIR)
+	@cd $(DEBUGDIR); \
+	  $(MAKE) -f ../$(MAKEFILE) "DOF=$(DBGF)"  TOPDIR=../${TOPDIR} \
+	      THISDIR=../$(THISDIR) \
+	      MAKEDEPEND=Makedepend $(LIB)
+	@$(MAKE) LNSRC=$(DEBUGDIR)/$(LIB).$(LIB_EXT) LNDEST=$(LIBINST)/$(LIB).$(LIB_EXT) __link
+ifdef IMP_LIB_EXT
+	@$(MAKE) LNSRC=$(DEBUGDIR)/lib$(TARGET_BASENAME).$(IMP_LIB_EXT) LNDEST=$(IMP_LIBINST)/lib$(TARGET_BASENAME).$(IMP_LIB_EXT) __link
+endif
+
+$(LIB:=.staticdbg) : 
+	[ -d $(DEBUGDIR) ] || mkdir $(DEBUGDIR)
+	cd $(DEBUGDIR); \
+	  $(MAKE) -f ../$(MAKEFILE) "DOF=$(DBGF)" TOPDIR=../${TOPDIR} \
+	        THISDIR=../$(THISDIR) \
+	        MAKEDEPEND=Makedepend $(STATICLIB)
+	@$(MAKE) LNSRC=$(DEBUGDIR)/$(STATICLIB) LNDEST=$(LIBINST)/$(STATICLIB) __link
+
+$(EXEC:=.opt) :
+	@[ -d $(OPTDIR) ] || mkdir $(OPTDIR)
+	@cd $(OPTDIR); \
+      $(MAKE) -f ../GNUmakefile DOF=$(OPTF)  TOPDIR=../${TOPDIR} \
+          THISDIR=../$(THISDIR) \
+          MAKEDEPEND=Makedepend $(EXEC)
+	@$(MAKE) LNSRC=$(OPTDIR)/$(EXEC)$(EXE_EXT) LNDEST=$(BININST)/$(EXEC)$(EXE_EXT) __link
+
+
+$(LIB:=.opt) : 
+	@[ -d $(OPTDIR) ] || mkdir $(OPTDIR)
+	@cd $(OPTDIR); \
+	  $(MAKE) -f ../$(MAKEFILE) DOF=$(OPTF) TOPDIR=../${TOPDIR} \
+	        THISDIR=../$(THISDIR) \
+	        MAKEDEPEND=Makedepend $(LIB)
+	@$(MAKE) LNSRC=$(OPTDIR)/$(LIB).$(LIB_EXT) LNDEST=$(LIBINST)/$(LIB).$(LIB_EXT) __link
+ifdef IMP_LIB_EXT
+	@$(MAKE) LNSRC=$(OPTDIR)/lib$(TARGET_BASENAME).$(IMP_LIB_EXT) LNDEST=$(IMP_LIBINST)/lib$(TARGET_BASENAME).$(IMP_LIB_EXT) __link
+endif
+
+$(LIB:=.static) : 
+	[ -d $(OPTDIR) ] || mkdir $(OPTDIR)
+	cd $(OPTDIR); \
+	  $(MAKE) -f ../$(MAKEFILE) DOF=$(OPTF) TOPDIR=../${TOPDIR} \
+	        THISDIR=../$(THISDIR) \
+	        MAKEDEPEND=Makedepend $(STATICLIB)
+	@$(MAKE) LNSRC=$(OPTDIR)/$(STATICLIB) LNDEST=$(LIBINST)/$(STATICLIB) __link
+
+
+Makedepend : $(CXXFILES) $(C++FILES) $(CFILES) 
+ifeq ($(OS),IRIX)   
+	touch $@
+else
+	@ touch $@
+	@if [ ! -d .depend ] ; then  \
+	    mkdir .depend; \
+	    depfiles="$+"; \
+	else \
+	    depfiles="$?"; \
+	fi; \
+	if [ ! -z "$$depfiles" ]; then \
+	for f in $$depfiles; do \
+	    echo "$(CXX) $(DEPARG) $(INC) $$f  pipeto .depend/`basename $$f`"; \
+	    $(CXX) $(DEPARG) $(INC) $$f > .depend/`basename $$f`; \
+	    grep $$f $@ || echo include .depend/`basename $$f` >> Makedepend ; \
+	done; \
+	fi
+endif
+
+.SUFFIXES: .cpp .o
+.cpp.o:
+	$(CXX) $(CXXFLAGS) -c $<
+.SUFFIXES: .c++ .o
+.c++.o: 
+	$(CXX) $(CXXFLAGS) -c $<
+
+depend : $(MAKEDEPEND)
+
+__link :
+	@sh $(TOPDIR)/Make/dolink.sh $(TOPDIR) $(LNSRC) $(LNDEST) "$(LINK)"
+		
+__instfiles :
+	@echo $(INSTFILES)
+
+sinclude $(MAKEDEPEND)
+

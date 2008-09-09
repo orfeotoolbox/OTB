@@ -44,5 +44,10 @@ REGISTER_TEST(itk2DScaleInvariantFeatureImageFilterTest);
  REGISTER_TEST(openJpegEncoder);
  REGISTER_TEST(openJpegDecoder);
 #endif
+// register OPENTHREADS testing
+#ifdef OTB_USE_INTERNAL_OPENTHREADS
+ REGISTER_TEST(openthreadsSimpleThreader);
+ REGISTER_TEST(openthreadsWorkCrew);
+#endif
 }
 

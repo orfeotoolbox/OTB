@@ -1,0 +1,5 @@
+distribution : 
+	@sh $(MAKEDIST) OpenThreads Make/rpm.header Make/rpm.files
+
+cleandist:
+	@$(MAKECLEANDIST)

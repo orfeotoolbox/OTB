@@ -334,6 +334,19 @@ ADD_TEST(utOpenJpegDecoder ${UTILITIES_TESTS}
 ENDIF(OTB_COMPILE_JPEG2000)
 
 
+# -------            lib OpenThreads  ------------------------------
+IF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
+  ADD_TEST(utOpenthreadsSimpleThreader ${UTILITIES_TESTS}
+	openthreadsSimpleThreader
+	2 # [NUM_ELTS] 
+	1 # [NUM_THREADS]
+	)
+  ADD_TEST(utOpenthreadsWorkCrew ${UTILITIES_TESTS}
+	openthreadsWorkCrew
+	1 # [NUM_THREADS]
+	)
+ENDIF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
+
 # -------            SIFT   -------------------------------------
 ADD_TEST(ut2DSiftImageSquareSyntheticRotate10 ${UTILITIES_TESTS}
 	 itk2DScaleInvariantFeatureImageFilterTest
@@ -422,6 +435,16 @@ IF(OTB_COMPILE_JPEG2000)
   SET(UtilitiesTests_SRCS ${UtilitiesTests_SRCS}  openJpegEncoder.cxx openJpegDecoder.cxx)
 ENDIF(OTB_COMPILE_JPEG2000)
 
+
+
+IF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
+  SET(UtilitiesTests_SRCS ${UtilitiesTests_SRCS}  
+        openthreadsThreadObserver.cpp
+        openthreadsThreadReporter.cpp
+        openthreadsWorkCrew.cpp
+        openthreadsSimpleThreader.cpp )
+ENDIF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
+
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}")
@@ -437,6 +460,10 @@ TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms
 IF(OTB_COMPILE_JPEG2000)
   TARGET_LINK_LIBRARIES(otbUtilitiesTests otbopenjpeg)
 ENDIF(OTB_COMPILE_JPEG2000)
+
+IF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
+  TARGET_LINK_LIBRARIES(otbUtilitiesTests OpenThreads)
+ENDIF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
 
 IF(UNIX)
     TARGET_LINK_LIBRARIES (otbUtilitiesTests m)
@@ -486,6 +513,5 @@ ENDIF(UNIX)
 #     IF(UNIX)
 #         TARGET_LINK_LIBRARIES (otb6SMainWithCallFunction m)
 #     ENDIF(UNIX)
-
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

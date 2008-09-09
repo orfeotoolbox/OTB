@@ -1,0 +1,6 @@
+Summary: A light weight, cross-platform threading library
+Copyright: LGPL
+Group: Real-Time
+Description:
+This library is intended to provide a minimal & complete Object-Oriented (OO) thread interface for C++ programmers.  It is loosely modeled on the Java thread API, and the POSIX Threads standards. 
+

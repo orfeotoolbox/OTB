@@ -1,0 +1,10 @@
+
+################################################################
+# Directories traversed from the top level
+TOP_LEVEL_DIRS = src
+
+
+################################################################
+# Directories traversed in the TOPDIR/src directory
+SRC_DIRS = \
+
