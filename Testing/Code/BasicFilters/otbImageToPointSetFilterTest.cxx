@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
@@ -26,8 +26,6 @@
 
 int otbImageToPointSetFilterTest(int argc, char *argv[] )
 {
-
-
   const unsigned int Dimension = 2;
 
   typedef unsigned char  PixelType;
@@ -36,23 +34,8 @@ int otbImageToPointSetFilterTest(int argc, char *argv[] )
   typedef itk::PointSet<PixelType, Dimension>           PointSetType;
   typedef otb::ImageToPointSetFilter<ImageType,PointSetType> FunctionType;
 
-  try
-    {
-//    FunctionType::Pointer function = FunctionType::New();
-
-    } 
-  catch( itk::ExceptionObject & exp )
-    {
-    std::cerr << "Exception thrown during the excecution of the generator " << std::endl;
-    std::cerr << exp << std::endl;
-    return EXIT_FAILURE;
-    }
-  catch( ... ) 
-    { 
-    std::cout << "Exception levee inconnue !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
-
+  //FunctionType::Pointer function = FunctionType::New();
+ 
   return EXIT_SUCCESS;
 }
 

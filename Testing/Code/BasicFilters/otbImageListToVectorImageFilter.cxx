@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #include "itkExceptionObject.h"
@@ -26,67 +26,53 @@
 
 int otbImageListToVectorImageFilter(int argc, char * argv[])
 {
-  try
-    {
-      const unsigned int Dimension = 2;
-      typedef unsigned char PixelType;
+  const unsigned int Dimension = 2;
+  typedef unsigned char PixelType;
 
-      char * infname1 = argv[1];
-      char * infname2 = argv[2];
-      char * infname3 = argv[3];
-      char * outfname = argv[4];
+  char * infname1 = argv[1];
+  char * infname2 = argv[2];
+  char * infname3 = argv[3];
+  char * outfname = argv[4];
      
-      typedef otb::Image<PixelType,Dimension> ImageType;
-      typedef otb::VectorImage<PixelType,Dimension> VectorImageType;
-      typedef otb::ImageList<ImageType> ImageListType;
+  typedef otb::Image<PixelType,Dimension> ImageType;
+  typedef otb::VectorImage<PixelType,Dimension> VectorImageType;
+  typedef otb::ImageList<ImageType> ImageListType;
       
-      // IO
-      typedef otb::ImageFileReader<ImageType> ReaderType;
-      typedef otb::ImageFileWriter<VectorImageType> WriterType;
+  // IO
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<VectorImageType> WriterType;
 
-      typedef otb::ImageListToVectorImageFilter<ImageListType,VectorImageType> ImageListToVectorImageFilterType;
+  typedef otb::ImageListToVectorImageFilter<ImageListType,VectorImageType> ImageListToVectorImageFilterType;
 
-      // Instantiating object
-      ImageListToVectorImageFilterType::Pointer filter = ImageListToVectorImageFilterType::New();
+  // Instantiating object
+  ImageListToVectorImageFilterType::Pointer filter = ImageListToVectorImageFilterType::New();
 
-      // Building image list
+  // Building image list
 
-      ReaderType::Pointer reader1, reader2, reader3;
+  ReaderType::Pointer reader1, reader2, reader3;
 
-      reader1 = ReaderType::New();
-      reader1->SetFileName(infname1);
+  reader1 = ReaderType::New();
+  reader1->SetFileName(infname1);
 
-      reader2 = ReaderType::New();
-      reader2->SetFileName(infname2);
+  reader2 = ReaderType::New();
+  reader2->SetFileName(infname2);
 
-      reader3 = ReaderType::New();
-      reader3->SetFileName(infname3);
+  reader3 = ReaderType::New();
+  reader3->SetFileName(infname3);
 
-      ImageListType::Pointer imageList = ImageListType::New();
-      imageList->PushBack(reader1->GetOutput());
-      imageList->PushBack(reader2->GetOutput());
-      imageList->PushBack(reader3->GetOutput());
+  ImageListType::Pointer imageList = ImageListType::New();
+  imageList->PushBack(reader1->GetOutput());
+  imageList->PushBack(reader2->GetOutput());
+  imageList->PushBack(reader3->GetOutput());
 
-      filter->SetInput(imageList);
+  filter->SetInput(imageList);
  
-      WriterType::Pointer writer = WriterType::New();
-      writer->SetInput(filter->GetOutput());
-      writer->SetFileName(outfname);
-      writer->Update();
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetInput(filter->GetOutput());
+  writer->SetFileName(outfname);
+  writer->Update();
 
-    }
+  
 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-
-  catch( ... ) 
-    { 
-    std::cout << "Unknown exception thrown !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
   return EXIT_SUCCESS;
 }

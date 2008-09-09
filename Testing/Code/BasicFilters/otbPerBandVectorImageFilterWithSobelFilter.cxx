@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #include "itkExceptionObject.h"
@@ -26,50 +26,36 @@
 
 int otbPerBandVectorImageFilterWithSobelFilter(int argc, char * argv[])
 {
-  try
-    {
-      const char * infname = argv[1];
-      const char * outfname = argv[2];
+  const char * infname = argv[1];
+  const char * outfname = argv[2];
 
-      const unsigned int Dimension = 2;
-      typedef double PixelType;
-      typedef otb::Image<PixelType,Dimension> ImageType;
-      typedef otb::VectorImage<PixelType,Dimension> VectorImageType;
-      typedef itk::SobelEdgeDetectionImageFilter<ImageType,ImageType> SobelFilterType;
+  const unsigned int Dimension = 2;
+  typedef double PixelType;
+  typedef otb::Image<PixelType,Dimension> ImageType;
+  typedef otb::VectorImage<PixelType,Dimension> VectorImageType;
+  typedef itk::SobelEdgeDetectionImageFilter<ImageType,ImageType> SobelFilterType;
 
-      typedef otb::PerBandVectorImageFilter<VectorImageType,VectorImageType,SobelFilterType> 
-	PerBandVectorImageFilterType;
+  typedef otb::PerBandVectorImageFilter<VectorImageType,VectorImageType,SobelFilterType> 
+    PerBandVectorImageFilterType;
 
-      typedef otb::ImageFileReader<VectorImageType> ReaderType;
-      typedef otb::ImageFileWriter<VectorImageType> WriterType;
+  typedef otb::ImageFileReader<VectorImageType> ReaderType;
+  typedef otb::ImageFileWriter<VectorImageType> WriterType;
       
-      // Instantiating object
-      PerBandVectorImageFilterType::Pointer filter = PerBandVectorImageFilterType::New();
+  // Instantiating object
+  PerBandVectorImageFilterType::Pointer filter = PerBandVectorImageFilterType::New();
 
-      ReaderType::Pointer reader = ReaderType::New();
-      WriterType::Pointer writer = WriterType::New();
+  ReaderType::Pointer reader = ReaderType::New();
+  WriterType::Pointer writer = WriterType::New();
 
-      reader->SetFileName(infname);
-      writer->SetFileName(outfname);
+  reader->SetFileName(infname);
+  writer->SetFileName(outfname);
       
-      filter->SetInput(reader->GetOutput());
-      writer->SetInput(filter->GetOutput());
+  filter->SetInput(reader->GetOutput());
+  writer->SetInput(filter->GetOutput());
 
-      writer->Update();
+  writer->Update();
 
-    }
+  
 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-
-  catch( ... ) 
-    { 
-    std::cout << "Unknown exception thrown !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
   return EXIT_SUCCESS;
 }

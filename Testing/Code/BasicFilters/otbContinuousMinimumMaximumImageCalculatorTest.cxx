@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
@@ -112,12 +112,17 @@ otbContinuousMinimumMaximumImageCalculatorTest(int ,char *[] )
 
 
     // Return results of test 
-  if (flag != 0) {
-    std::cout << "*** Some tests failed" << std::endl;
-    return flag; }
-    else {
+  if (flag != 0) 
+    {
+      std::cout << "*** Some tests failed" << std::endl;
+      return flag; 
+    }
+  else 
+    {
       std::cout << "All tests successfully passed" << std::endl;
-      return EXIT_SUCCESS; }
+      return EXIT_SUCCESS; 
+    }
 
+  return EXIT_SUCCESS;
 }
 

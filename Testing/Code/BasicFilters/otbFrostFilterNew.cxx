@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #if defined(_MSC_VER)
@@ -31,30 +31,18 @@
 
 int otbFrostFilterNew( int argc, char * argv[] )
 {
-  try 
-    { 
-        typedef unsigned char                                   InputPixelType;
-        typedef unsigned char   	                        OutputPixelType;
-        const   unsigned int        	                        Dimension = 2;
+  typedef unsigned char                                   InputPixelType;
+  typedef unsigned char   	                        OutputPixelType;
+  const   unsigned int        	                        Dimension = 2;
+  
+  typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
+  typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
+  
+  typedef otb::FrostImageFilter< InputImageType,OutputImageType >   FilterType;
+  
+  FilterType::Pointer frost = FilterType::New();
+  
 
-        typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
-        typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
-
-        typedef otb::FrostImageFilter< InputImageType,OutputImageType >   FilterType;
-
-        FilterType::Pointer frost = FilterType::New();
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "Exception levee inconnue !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
 
   return EXIT_SUCCESS;
 }

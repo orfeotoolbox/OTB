@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #include "itkExceptionObject.h"
@@ -26,46 +26,32 @@
 
 int otbUnaryImageFunctorWithVectorImageFilter(int argc, char * argv[])
 {
-  try
-    {
-      const char * inputFileName  = argv[1];
-      const char * outputFileName = argv[2];
+  const char * inputFileName  = argv[1];
+  const char * outputFileName = argv[2];
+  
+  const unsigned int Dimension = 2;
+  typedef double PixelType;
+  typedef otb::VectorImage<PixelType,Dimension>                           InputImageType;
+  typedef InputImageType::InternalPixelType                               InternalPixelType;
+  typedef itk::Functor::Cast<InternalPixelType,InternalPixelType>          FunctorType;
+  typedef otb::VectorImage<PixelType,Dimension>                           OutputImageType;
+  typedef otb::ImageFileReader<InputImageType>                            ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType>                           WriterType;
+  typedef otb::UnaryImageFunctorWithVectorImageFilter<InputImageType,
+                                                      InputImageType,
+                                                      FunctorType    >    UnaryImageFunctorWithVectorImageFilterType;
+  
+  // Instantiating object
+  UnaryImageFunctorWithVectorImageFilterType::Pointer filter = UnaryImageFunctorWithVectorImageFilterType::New();
+  ReaderType::Pointer reader  = ReaderType::New();
+  WriterType::Pointer writer = WriterType::New();
+  
+  reader->SetFileName(inputFileName);
+  writer->SetFileName(outputFileName);
+  filter->SetInput(reader->GetOutput());
+  writer->SetInput(filter->GetOutput());
+  writer->Update();
 
-      const unsigned int Dimension = 2;
-      typedef double PixelType;
-      typedef otb::VectorImage<PixelType,Dimension>                           InputImageType;
-      typedef InputImageType::InternalPixelType                               InternalPixelType;
-      typedef itk::Functor::Cast<InternalPixelType,InternalPixelType>          FunctorType;
-      typedef otb::VectorImage<PixelType,Dimension>                           OutputImageType;
-      typedef otb::ImageFileReader<InputImageType>                            ReaderType;
-      typedef otb::ImageFileWriter<OutputImageType>                           WriterType;
-      typedef otb::UnaryImageFunctorWithVectorImageFilter<InputImageType,
-	                                                  InputImageType,
-	                                                  FunctorType    >    UnaryImageFunctorWithVectorImageFilterType;
-      
-      // Instantiating object
-      UnaryImageFunctorWithVectorImageFilterType::Pointer filter = UnaryImageFunctorWithVectorImageFilterType::New();
-      ReaderType::Pointer reader  = ReaderType::New();
-      WriterType::Pointer writer = WriterType::New();
 
-      reader->SetFileName(inputFileName);
-      writer->SetFileName(outputFileName);
-      filter->SetInput(reader->GetOutput());
-      writer->SetInput(filter->GetOutput());
-      writer->Update();
-    }
-
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-
-  catch( ... ) 
-    { 
-    std::cout << "Unknown exception thrown !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
   return EXIT_SUCCESS;
 }

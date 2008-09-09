@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #include "itkExceptionObject.h"
@@ -26,82 +26,68 @@
 
 int otbImageListToImageListApplyFilter(int argc, char * argv[])
 {
-  try
-    {
-      char * infname1  = argv[1];
-      char * infname2  = argv[2];
-      char * infname3  = argv[3];
-      char * outfname1 = argv[4];
-      char * outfname2 = argv[5];
-      char * outfname3 = argv[6];
+  char * infname1  = argv[1];
+  char * infname2  = argv[2];
+  char * infname3  = argv[3];
+  char * outfname1 = argv[4];
+  char * outfname2 = argv[5];
+  char * outfname3 = argv[6];
 
-      const unsigned int Dimension = 2;
-      typedef unsigned char PixelType;
-      typedef otb::Image<PixelType,Dimension>  ImageType;
-      typedef otb::ImageList<ImageType> ImageListType;
-      typedef itk::MeanImageFilter<ImageType,ImageType> MeanFilterType;
+  const unsigned int Dimension = 2;
+  typedef unsigned char PixelType;
+  typedef otb::Image<PixelType,Dimension>  ImageType;
+  typedef otb::ImageList<ImageType> ImageListType;
+  typedef itk::MeanImageFilter<ImageType,ImageType> MeanFilterType;
       
-      // IO
-      typedef otb::ImageFileReader<ImageType> ReaderType;
-      typedef otb::ImageFileWriter<ImageType> WriterType;
+  // IO
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
       
-      typedef otb::ImageListToImageListApplyFilter<ImageListType,ImageListType,MeanFilterType> 
-	ImageListToImageListApplyFilterType;
+  typedef otb::ImageListToImageListApplyFilter<ImageListType,ImageListType,MeanFilterType> 
+    ImageListToImageListApplyFilterType;
 
-      // Instantiating object
-      ImageListToImageListApplyFilterType::Pointer filter = ImageListToImageListApplyFilterType::New();
+  // Instantiating object
+  ImageListToImageListApplyFilterType::Pointer filter = ImageListToImageListApplyFilterType::New();
 
-      ReaderType::Pointer reader1,reader2,reader3;
+  ReaderType::Pointer reader1,reader2,reader3;
 
-      reader1 = ReaderType::New();
-      reader1->SetFileName(infname1);
+  reader1 = ReaderType::New();
+  reader1->SetFileName(infname1);
 
-      reader2 = ReaderType::New();
-      reader2->SetFileName(infname2);
+  reader2 = ReaderType::New();
+  reader2->SetFileName(infname2);
 
-      reader3 = ReaderType::New();
-      reader3->SetFileName(infname3);
+  reader3 = ReaderType::New();
+  reader3->SetFileName(infname3);
 
-      ImageListType::Pointer imageList = ImageListType::New();
-      imageList->PushBack(reader1->GetOutput());
-      imageList->PushBack(reader2->GetOutput());
-      imageList->PushBack(reader3->GetOutput());
+  ImageListType::Pointer imageList = ImageListType::New();
+  imageList->PushBack(reader1->GetOutput());
+  imageList->PushBack(reader2->GetOutput());
+  imageList->PushBack(reader3->GetOutput());
 
 
-      MeanFilterType::Pointer meanFilter = MeanFilterType::New();
+  MeanFilterType::Pointer meanFilter = MeanFilterType::New();
 
-      filter->SetInput(imageList);
-      filter->SetFilter(meanFilter);
-      filter->Update();
+  filter->SetInput(imageList);
+  filter->SetFilter(meanFilter);
+  filter->Update();
       
-      WriterType::Pointer writer = WriterType::New();
-      writer->SetFileName(outfname1);
-      writer->SetInput(filter->GetOutput()->GetNthElement(0));
-      writer->Update();
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetFileName(outfname1);
+  writer->SetInput(filter->GetOutput()->GetNthElement(0));
+  writer->Update();
       
-      writer = WriterType::New();
-      writer->SetFileName(outfname2);
-      writer->SetInput(filter->GetOutput()->GetNthElement(0));
-      writer->Update();
+  writer = WriterType::New();
+  writer->SetFileName(outfname2);
+  writer->SetInput(filter->GetOutput()->GetNthElement(0));
+  writer->Update();
 
-      writer = WriterType::New();
-      writer->SetFileName(outfname3);
-      writer->SetInput(filter->GetOutput()->GetNthElement(0));
-      writer->Update();
+  writer = WriterType::New();
+  writer->SetFileName(outfname3);
+  writer->SetInput(filter->GetOutput()->GetNthElement(0));
+  writer->Update();
       
-    }
+  
 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-
-  catch( ... ) 
-    { 
-    std::cout << "Unknown exception thrown !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
   return EXIT_SUCCESS;
 }

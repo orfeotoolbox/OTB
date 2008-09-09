@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #include "itkExceptionObject.h"
@@ -23,70 +23,59 @@
 
 int otbBinaryImageMinimalBoundingRegionCalculator(int argc, char* argv[])
 {
-try
-  {
-    const unsigned int Dimension = 2;
+  const unsigned int Dimension = 2;
 
-    int    nbImages  = atoi(argv[1]);
-    char * outfile   = argv[2];
+  int    nbImages  = atoi(argv[1]);
+  char * outfile   = argv[2];
 
-    typedef unsigned char PixelType;
-    typedef otb::Image<PixelType,Dimension> ImageType;
-    typedef otb::ImageFileReader<ImageType> ReaderType;
-    typedef otb::BinaryImageMinimalBoundingRegionCalculator<ImageType>
-      BoundingRegionCalculatorType;
-    typedef BoundingRegionCalculatorType::RegionType RegionType;
-    typedef otb::ImageList<ImageType> ImageListType;
-    typedef ImageListType::Iterator IteratorType;
-    // reference image list
-    ImageListType::Pointer images = ImageListType::New();
+  typedef unsigned char PixelType;
+  typedef otb::Image<PixelType,Dimension> ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::BinaryImageMinimalBoundingRegionCalculator<ImageType>
+    BoundingRegionCalculatorType;
+  typedef BoundingRegionCalculatorType::RegionType RegionType;
+  typedef otb::ImageList<ImageType> ImageListType;
+  typedef ImageListType::Iterator IteratorType;
+  // reference image list
+  ImageListType::Pointer images = ImageListType::New();
     
-    // Reading input images
-    std::ofstream out;
-    out.open(outfile,std::ios::out);
-    out<<"Test results from otbBinaryImageBoundingRegionCalculator test."<<std::endl;
-    for(int i=1;i<=nbImages;++i)
-      {
-	ReaderType::Pointer reader = ReaderType::New();
-	reader->SetFileName(argv[2+i]);
-	reader->Update();
-	images->PushBack(reader->GetOutput());
-      }
+  // Reading input images
+  std::ofstream out;
+  out.open(outfile,std::ios::out);
+  out<<"Test results from otbBinaryImageBoundingRegionCalculator test."<<std::endl;
+  for(int i=1;i<=nbImages;++i)
+    {
+      ReaderType::Pointer reader = ReaderType::New();
+      reader->SetFileName(argv[2+i]);
+      reader->Update();
+      images->PushBack(reader->GetOutput());
+    }
 
-    // Declaration
-    BoundingRegionCalculatorType::Pointer brct;
-    // Computing bounding region for each image
-    for(IteratorType it=images->Begin();it!=images->End();++it)
-      {
-	brct = BoundingRegionCalculatorType::New();
-	brct->SetInput(it.Get());
-	brct->Update();
-	RegionType region = brct->GetRegion();
-	out<<region.GetIndex()<<"\t"<<region.GetSize()<<std::endl;
-      }
- out<<std::endl<<"Testing the pad option"<<std::endl<<std::endl;
-for(IteratorType it=images->Begin();it!=images->End();++it)
-      {
-	brct = BoundingRegionCalculatorType::New();
-	brct->SetPad(1);
-	brct->SetInput(it.Get());
-	brct->Update();
-	RegionType region = brct->GetRegion();
-	out<<region.GetIndex()<<"\t"<<region.GetSize()<<std::endl;
-      }
+  // Declaration
+  BoundingRegionCalculatorType::Pointer brct;
+  // Computing bounding region for each image
+  for(IteratorType it=images->Begin();it!=images->End();++it)
+    {
+      brct = BoundingRegionCalculatorType::New();
+      brct->SetInput(it.Get());
+      brct->Update();
+      RegionType region = brct->GetRegion();
+      out<<region.GetIndex()<<"\t"<<region.GetSize()<<std::endl;
+    }
+  out<<std::endl<<"Testing the pad option"<<std::endl<<std::endl;
+  for(IteratorType it=images->Begin();it!=images->End();++it)
+    {
+      brct = BoundingRegionCalculatorType::New();
+      brct->SetPad(1);
+      brct->SetInput(it.Get());
+      brct->Update();
+      RegionType region = brct->GetRegion();
+      out<<region.GetIndex()<<"\t"<<region.GetSize()<<std::endl;
+    }
 
-    out.close();
- }
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "Unknown exception thrown !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
+  out.close();
+
+
+
   return EXIT_SUCCESS;
 }

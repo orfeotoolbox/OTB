@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #include "itkExceptionObject.h"
@@ -25,60 +25,45 @@
 
 int otbOpeningClosingMorphologicalFilter(int argc, char * argv[])
 {
-  try
-    {
-      const unsigned int Dimension = 2;
-      const unsigned int Radius = atoi(argv[3]);
+  const unsigned int Dimension = 2;
+  const unsigned int Radius = atoi(argv[3]);
 
-      const char * inputFilename = argv[1];
-      const char * outputFilename = argv[2];
+  const char * inputFilename = argv[1];
+  const char * outputFilename = argv[2];
 
-      typedef unsigned char InputPixelType;
-      typedef unsigned char OutputPixelType;
+  typedef unsigned char InputPixelType;
+  typedef unsigned char OutputPixelType;
 
-      typedef otb::Image<InputPixelType,Dimension> InputImageType;
-      typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
+  typedef otb::Image<InputPixelType,Dimension> InputImageType;
+  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
 
-      typedef otb::ImageFileReader<InputImageType> ReaderType;
-      typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
-      typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
-      typedef otb::OpeningClosingMorphologicalFilter<InputImageType,OutputImageType,
-	StructuringElementType> OpeningClosingFilterType;
+  typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
+  typedef otb::OpeningClosingMorphologicalFilter<InputImageType,OutputImageType,
+    StructuringElementType> OpeningClosingFilterType;
 
-      // Reading input image
-      ReaderType::Pointer reader = ReaderType::New();
-      reader->SetFileName(inputFilename);
+  // Reading input image
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(inputFilename);
            
-      // Creating Kernel
-      StructuringElementType structElt;
-      structElt.SetRadius(Radius);
-      structElt.CreateStructuringElement();
+  // Creating Kernel
+  StructuringElementType structElt;
+  structElt.SetRadius(Radius);
+  structElt.CreateStructuringElement();
  
-      // Instantiating the opening closing filter
-      OpeningClosingFilterType::Pointer openingClosing = OpeningClosingFilterType::New();
-      openingClosing->SetInput(reader->GetOutput());
-      openingClosing->SetKernel(structElt);
+  // Instantiating the opening closing filter
+  OpeningClosingFilterType::Pointer openingClosing = OpeningClosingFilterType::New();
+  openingClosing->SetInput(reader->GetOutput());
+  openingClosing->SetKernel(structElt);
 
-      // Write the result to file
-      WriterType::Pointer writer = WriterType::New();
-      writer->SetFileName(outputFilename);
-      writer->SetInput(openingClosing->GetOutput());
-      writer->Update();
-    }
-
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-
-  catch( ... ) 
-    { 
-    std::cout << "Unknown exception thrown !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
+  // Write the result to file
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetFileName(outputFilename);
+  writer->SetInput(openingClosing->GetOutput());
+  writer->Update();
+  
 
   return EXIT_SUCCESS;
 }

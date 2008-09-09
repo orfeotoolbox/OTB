@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #include "itkExceptionObject.h"
@@ -27,71 +27,58 @@
 
 int otbVectorImageTo3DScalarImageFilter(int argc, char * argv[])
 {
-  try
+  const unsigned int BiDimension  = 2;
+  const unsigned int TriDimension  = 3;
+
+  const char * infname = argv[1];
+  const char * outfname = argv[2];
+
+  typedef unsigned char PixelType;
+      
+  typedef otb::VectorImage<PixelType,BiDimension> VectorImageType;
+  typedef otb::Image<PixelType,TriDimension> ImageType;
+  typedef otb::Image<PixelType,BiDimension> OutImageType;
+      
+  typedef otb::ImageFileReader<VectorImageType> ReaderType;
+  typedef otb::ImageFileWriter<OutImageType> WriterType;
+  typedef otb::VectorImageTo3DScalarImageFilter<VectorImageType,ImageType> FilterType;
+
+  // Instantiating object
+  FilterType::Pointer filter = FilterType::New();
+  ReaderType::Pointer reader = ReaderType::New();
+      
+  reader->SetFileName(infname);
+  filter->SetInput(reader->GetOutput());
+  filter->Update();
+
+  // Build the first slice
+  OutImageType::Pointer outImage = OutImageType::New();
+  outImage->SetRegions(reader->GetOutput()->GetLargestPossibleRegion());
+  outImage->Allocate();
+  outImage->FillBuffer(0);
+
+  typedef itk::ImageRegionIterator<OutImageType> OutIteratorType;
+  typedef itk::ImageSliceConstIteratorWithIndex<ImageType> InIteratorType;
+
+  OutIteratorType outIt(outImage,outImage->GetLargestPossibleRegion());
+  InIteratorType inIt(filter->GetOutput(),filter->GetOutput()->GetLargestPossibleRegion());
+  inIt.SetFirstDirection(0);
+  inIt.SetSecondDirection(1);
+      
+  outIt.GoToBegin();
+      
+  while(!outIt.IsAtEnd()&&!inIt.IsAtEndOfSlice())
     {
-      const unsigned int BiDimension  = 2;
-      const unsigned int TriDimension  = 3;
-
-      const char * infname = argv[1];
-      const char * outfname = argv[2];
-
-      typedef unsigned char PixelType;
-      
-      typedef otb::VectorImage<PixelType,BiDimension> VectorImageType;
-      typedef otb::Image<PixelType,TriDimension> ImageType;
-      typedef otb::Image<PixelType,BiDimension> OutImageType;
-      
-      typedef otb::ImageFileReader<VectorImageType> ReaderType;
-      typedef otb::ImageFileWriter<OutImageType> WriterType;
-      typedef otb::VectorImageTo3DScalarImageFilter<VectorImageType,ImageType> FilterType;
-
-      // Instantiating object
-      FilterType::Pointer filter = FilterType::New();
-      ReaderType::Pointer reader = ReaderType::New();
-      
-      reader->SetFileName(infname);
-      filter->SetInput(reader->GetOutput());
-      filter->Update();
-
-      // Build the first slice
-      OutImageType::Pointer outImage = OutImageType::New();
-      outImage->SetRegions(reader->GetOutput()->GetLargestPossibleRegion());
-      outImage->Allocate();
-      outImage->FillBuffer(0);
-
-      typedef itk::ImageRegionIterator<OutImageType> OutIteratorType;
-      typedef itk::ImageSliceConstIteratorWithIndex<ImageType> InIteratorType;
-
-      OutIteratorType outIt(outImage,outImage->GetLargestPossibleRegion());
-      InIteratorType inIt(filter->GetOutput(),filter->GetOutput()->GetLargestPossibleRegion());
-      inIt.SetFirstDirection(0);
-      inIt.SetSecondDirection(1);
-      
-      outIt.GoToBegin();
-      
-      while(!outIt.IsAtEnd()&&!inIt.IsAtEndOfSlice())
-	{
-	  outIt.Set(inIt.Get());	  
-	  ++inIt;
-	  ++outIt;
-	}
-
-      WriterType::Pointer writer = WriterType::New();
-      writer->SetFileName(outfname);
-      writer->SetInput(outImage);
-      writer->Update();
+      outIt.Set(inIt.Get());	  
+      ++inIt;
+      ++outIt;
     }
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
 
-  catch( ... ) 
-    { 
-    std::cout << "Unknown exception thrown !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetFileName(outfname);
+  writer->SetInput(outImage);
+  writer->Update();
+
+
   return EXIT_SUCCESS;
 }

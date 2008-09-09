@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #if defined(_MSC_VER)
@@ -31,62 +31,48 @@
 
 int otbFrostFilter( int argc, char * argv[] )
 {
-  try 
-    { 
-        const char * inputFilename  = argv[1];
-        const char * outputFilename = argv[2];
+  const char * inputFilename  = argv[1];
+  const char * outputFilename = argv[2];
        
-        unsigned int  RadiusX((unsigned int)::atoi(argv[3]));
-        unsigned int  RadiusY((unsigned int)::atoi(argv[4]));
-        double        Deramp ((double)::atof(argv[5]));
+  unsigned int  RadiusX((unsigned int)::atoi(argv[3]));
+  unsigned int  RadiusY((unsigned int)::atoi(argv[4]));
+  double        Deramp ((double)::atof(argv[5]));
 
-        typedef double                                   InputPixelType;
-        typedef double     	                         OutputPixelType;
-        const   unsigned int        	                        Dimension = 2;
+  typedef double                                   InputPixelType;
+  typedef double     	                         OutputPixelType;
+  const   unsigned int        	                        Dimension = 2;
 
-        typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
-        typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
+  typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
+  typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
 
-        typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-        typedef otb::ImageFileWriter< OutputImageType >         WriterType;
+  typedef otb::ImageFileReader< InputImageType  >         ReaderType;
+  typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
-        typedef otb::FrostImageFilter< InputImageType,OutputImageType >   FilterType;
+  typedef otb::FrostImageFilter< InputImageType,OutputImageType >   FilterType;
 	
-	FilterType::SizeType Radius;
-	Radius[0]= RadiusX;
-	Radius[1]= RadiusY;
+  FilterType::SizeType Radius;
+  Radius[0]= RadiusX;
+  Radius[1]= RadiusY;
 
-        FilterType::Pointer filterFrost = FilterType::New();
+  FilterType::Pointer filterFrost = FilterType::New();
         
-	filterFrost->SetRadius( Radius );
-	filterFrost->SetDeramp( Deramp );
+  filterFrost->SetRadius( Radius );
+  filterFrost->SetDeramp( Deramp );
 
-        ReaderType::Pointer reader = ReaderType::New();
-        WriterType::Pointer writer = WriterType::New();
+  ReaderType::Pointer reader = ReaderType::New();
+  WriterType::Pointer writer = WriterType::New();
 
-        reader->SetFileName( inputFilename  );
-        writer->SetFileName( outputFilename );
+  reader->SetFileName( inputFilename  );
+  writer->SetFileName( outputFilename );
         
-        filterFrost->SetInput( reader->GetOutput() );
-        writer->SetInput( filterFrost->GetOutput() );
+  filterFrost->SetInput( reader->GetOutput() );
+  writer->SetInput( filterFrost->GetOutput() );
         
-        writer->Update(); 
+  writer->Update(); 
 
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "Exception levee inconnue !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  // Software Guide : EndCodeSnippet
+   
 
-//#endif
+
   return EXIT_SUCCESS;
 }
 

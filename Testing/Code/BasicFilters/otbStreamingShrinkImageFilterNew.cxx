@@ -21,27 +21,15 @@ PURPOSE.  See the above copyright notices for more information.
 
 int otbStreamingShrinkImageFilterNew( int argc, char * argv[] )
 {
-  try 
-    { 
-      const unsigned int Dimension = 2;
+  const unsigned int Dimension = 2;
+  
+  typedef unsigned char PixelType;
+  typedef otb::VectorImage<PixelType,Dimension> ImageType;
+  typedef otb::StreamingShrinkImageFilter<ImageType,ImageType> ShrinkType;
+  
+  ShrinkType::Pointer shrink = ShrinkType::New();
 
-      typedef unsigned char PixelType;
-      typedef otb::VectorImage<PixelType,Dimension> ImageType;
-      typedef otb::StreamingShrinkImageFilter<ImageType,ImageType> ShrinkType;
 
-      ShrinkType::Pointer shrink = ShrinkType::New();
-    }
-
-  catch( itk::ExceptionObject & err ) 
-    { 
-      std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-      std::cout << err << std::endl; 
-      return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-      std::cout << "Exception levee inconnue !" << std::endl; 
-      return EXIT_FAILURE;
-    } 
+ 
   return EXIT_SUCCESS;
 }
