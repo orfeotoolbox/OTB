@@ -24,13 +24,13 @@
 
 int otbOrthoRectificationFilterNew( int argc, char* argv[] )
 {
-        typedef otb::Image<double, 2>     ImageType;
-        typedef otb::UtmInverseProjection UtmMapProjectionType ;
-        typedef otb::OrthoRectificationFilter<ImageType, ImageType, UtmMapProjectionType> OrthoRectifFilterType ;
- 				
-        OrthoRectifFilterType::Pointer          orthoRectifFilter=OrthoRectifFilterType::New();
-				
-        return EXIT_SUCCESS;
-
- }//Fin main()
+  typedef otb::Image<double, 2>     ImageType;
+  typedef otb::UtmInverseProjection UtmMapProjectionType ;
+  typedef otb::OrthoRectificationFilter<ImageType, ImageType, UtmMapProjectionType> OrthoRectifFilterType ;
+  
+  OrthoRectifFilterType::Pointer          orthoRectifFilter=OrthoRectifFilterType::New();
+  
+  return EXIT_SUCCESS;
+  
+}
 

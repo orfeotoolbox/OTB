@@ -28,28 +28,12 @@
 
 int otbProjectionBaseNew( int argc, char* argv[] )
 {
-  try 
-    {        
-
-        otb::AlbersInverseProjection::Pointer lAlbersProjection = otb::AlbersInverseProjection::New();
-        otb::AzimEquDistForwardProjection::Pointer lAzimEquDistProjection = otb::AzimEquDistForwardProjection::New();
-        typedef otb::MapToMapProjection<otb::AlbersInverseProjection,otb::AzimEquDistForwardProjection> MapToMapProjectionType;
-        MapToMapProjectionType::Pointer lMapToMapProjection = MapToMapProjectionType::New();
+  otb::AlbersInverseProjection::Pointer lAlbersProjection = otb::AlbersInverseProjection::New();
+  otb::AzimEquDistForwardProjection::Pointer lAzimEquDistProjection = otb::AzimEquDistForwardProjection::New();
+  typedef otb::MapToMapProjection<otb::AlbersInverseProjection,otb::AzimEquDistForwardProjection> MapToMapProjectionType;
+  MapToMapProjectionType::Pointer lMapToMapProjection = MapToMapProjectionType::New();
         
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-      std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-      std::cout << err << std::endl; 
-      return EXIT_FAILURE;
-    } 
-
-  catch( ... ) 
-    { 
-      std::cout << "Unknown exception thrown !" << std::endl; 
-      return EXIT_FAILURE;
-    } 
-
+  
   return EXIT_SUCCESS;
 }
 

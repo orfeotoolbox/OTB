@@ -29,29 +29,15 @@
 
 int otbSensorModelsNew( int argc, char* argv[] )
 {
-  try 
-    {        
-        typedef otb::SensorModelBase<double> SensorModelBaseType;
-        SensorModelBaseType::Pointer lSensorModelBase = SensorModelBaseType::New();
-
-        typedef otb::InverseSensorModel<double> InverseSensorModelType;
-        InverseSensorModelType::Pointer lInverseSensorModel = InverseSensorModelType::New();
-
-        typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
-        ForwardSensorModelType::Pointer lForwardSensorModel = ForwardSensorModelType::New();
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-      std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-      std::cout << err << std::endl; 
-      return EXIT_FAILURE;
-    } 
-
-  catch( ... ) 
-    { 
-      std::cout << "Unknown exception thrown !" << std::endl; 
-      return EXIT_FAILURE;
-    } 
+  typedef otb::SensorModelBase<double> SensorModelBaseType;
+  SensorModelBaseType::Pointer lSensorModelBase = SensorModelBaseType::New();
+  
+  typedef otb::InverseSensorModel<double> InverseSensorModelType;
+  InverseSensorModelType::Pointer lInverseSensorModel = InverseSensorModelType::New();
+  
+  typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
+  ForwardSensorModelType::Pointer lForwardSensorModel = ForwardSensorModelType::New();
+  
 
   return EXIT_SUCCESS;
 }

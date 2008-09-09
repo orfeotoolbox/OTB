@@ -45,59 +45,37 @@
 
 int otbCreateInverseForwardSensorModel( int argc, char* argv[] )
 {
-  try
+  ossimInit::instance()->initialize(argc, argv);
+
+  if(argc!=2)
     {
-        ossimInit::instance()->initialize(argc, argv);
-
-        if(argc!=2)
-        {
-                std::cout << argv[0] <<" <input filename>" << std::endl;
-                return EXIT_FAILURE;
-        }
+      std::cout << argv[0] <<" <input filename>" << std::endl;
+      return EXIT_FAILURE;
+    }
    
-        typedef otb::Image<unsigned int, 2>     ImageType;
-        typedef otb::ImageFileReader<ImageType> ReaderType;
-        typedef otb::InverseSensorModel<double> InverseModelType;
-        typedef otb::ForwardSensorModel<double> ForwardModelType;
+  typedef otb::Image<unsigned int, 2>     ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::InverseSensorModel<double> InverseModelType;
+  typedef otb::ForwardSensorModel<double> ForwardModelType;
 
-        //Allocate pointer
-        InverseModelType::Pointer               inverse_model= InverseModelType::New();
-        ForwardModelType::Pointer               forward_model= ForwardModelType::New();
-        ReaderType::Pointer	                reader=ReaderType::New();
+  //Allocate pointer
+  InverseModelType::Pointer               inverse_model= InverseModelType::New();
+  ForwardModelType::Pointer               forward_model= ForwardModelType::New();
+  ReaderType::Pointer	                reader=ReaderType::New();
         
-        // Set parameters ...
-        reader->SetFileName(argv[1]);
+  // Set parameters ...
+  reader->SetFileName(argv[1]);
 
-        // Read meta data (ossimKeywordlist)
-        reader->GenerateOutputInformation();
-        ImageType::Pointer inputImage = reader->GetOutput();
+  // Read meta data (ossimKeywordlist)
+  reader->GenerateOutputInformation();
+  ImageType::Pointer inputImage = reader->GetOutput();
 
-        //Leve une exception si le model n'est pas créé
-        otbGenericMsgDebugMacro(<< "Inverse model creation..." ); 
-        inverse_model->SetImageGeometry(inputImage->GetImageKeywordlist());
-        otbGenericMsgDebugMacro(<< "Foreward model creation..." ); 
-        forward_model->SetImageGeometry(inputImage->GetImageKeywordlist());
+  //Leve une exception si le model n'est pas créé
+  otbGenericMsgDebugMacro(<< "Inverse model creation..." ); 
+  inverse_model->SetImageGeometry(inputImage->GetImageKeywordlist());
+  otbGenericMsgDebugMacro(<< "Foreward model creation..." ); 
+  forward_model->SetImageGeometry(inputImage->GetImageKeywordlist());
 
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( std::bad_alloc & err ) 
-    { 
-    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "Exception levee inconnue !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
+ 
   return EXIT_SUCCESS;
-
-
-
-}//Fin main()
-
+}

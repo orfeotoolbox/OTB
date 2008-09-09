@@ -57,106 +57,88 @@
 
 int otbRegionProjectionResampler( int argc, char* argv[] )
 {
-  try 
-    {        
-      ossimInit::instance()->initialize(argc, argv);
+  ossimInit::instance()->initialize(argc, argv);
       
-      if(argc!=10)
-        {
-	  std::cout << argv[0] <<" <input filename> <output filename> <latitude de l'origine> <longitude de l'origine> <taille_x> <taille_y> <NumberOfstreamDivisions>" << std::endl;
+  if(argc!=10)
+    {
+      std::cout << argv[0] <<" <input filename> <output filename> <latitude de l'origine> <longitude de l'origine> <taille_x> <taille_y> <NumberOfstreamDivisions>" << std::endl;
 
-	  return EXIT_FAILURE;
-        }
+      return EXIT_FAILURE;
+    }
       
       
-      typedef otb::Image<unsigned char, 2>                               CharImageType;
-      typedef otb::Image<double, 2>                                      ImageType;
-      typedef otb::ImageFileReader<ImageType>                            ReaderType;
-      typedef otb::StreamingImageFileWriter<ImageType>                   WriterType;
-      typedef otb::InverseSensorModel<double>                            ModelType;
-      typedef itk::LinearInterpolateImageFunction< ImageType, double >   InterpolatorType;
-      typedef itk::RescaleIntensityImageFilter<ImageType,CharImageType>  RescalerType;
-      typedef otb::StreamingResampleImageFilter< ImageType, ImageType >  ResamplerType;
-      typedef itk::TranslationTransform<double,2>                        TransformType;
-      typedef otb::CompositeTransform<ModelType,TransformType>           CompositeType;											
+  typedef otb::Image<unsigned char, 2>                               CharImageType;
+  typedef otb::Image<double, 2>                                      ImageType;
+  typedef otb::ImageFileReader<ImageType>                            ReaderType;
+  typedef otb::StreamingImageFileWriter<ImageType>                   WriterType;
+  typedef otb::InverseSensorModel<double>                            ModelType;
+  typedef itk::LinearInterpolateImageFunction< ImageType, double >   InterpolatorType;
+  typedef itk::RescaleIntensityImageFilter<ImageType,CharImageType>  RescalerType;
+  typedef otb::StreamingResampleImageFilter< ImageType, ImageType >  ResamplerType;
+  typedef itk::TranslationTransform<double,2>                        TransformType;
+  typedef otb::CompositeTransform<ModelType,TransformType>           CompositeType;											
 
-      ImageType::IndexType  	start;
-      ImageType::SizeType  	size;
-      ImageType::SpacingType  	spacing;
-      ImageType::PointType	origin;
-      ImageType::RegionType     region;
+  ImageType::IndexType  	start;
+  ImageType::SizeType  	size;
+  ImageType::SpacingType  	spacing;
+  ImageType::PointType	origin;
+  ImageType::RegionType     region;
 
-      //Allocate pointer
-      ModelType::Pointer         model        = ModelType::New();
-      ReaderType::Pointer	 reader       = ReaderType::New();
-      WriterType::Pointer	 writer       = WriterType::New();
-      InterpolatorType::Pointer	 interpolator = InterpolatorType::New();
-      RescalerType::Pointer	 rescaler     = RescalerType::New();
-      ResamplerType::Pointer     resampler    = ResamplerType::New();
+  //Allocate pointer
+  ModelType::Pointer         model        = ModelType::New();
+  ReaderType::Pointer	 reader       = ReaderType::New();
+  WriterType::Pointer	 writer       = WriterType::New();
+  InterpolatorType::Pointer	 interpolator = InterpolatorType::New();
+  RescalerType::Pointer	 rescaler     = RescalerType::New();
+  ResamplerType::Pointer     resampler    = ResamplerType::New();
       
-      // Set parameters ...
-      reader->SetFileName(argv[1]);
-      writer->SetFileName(argv[2]);
-      rescaler->SetOutputMinimum(0);
-      rescaler->SetOutputMaximum(255);
+  // Set parameters ...
+  reader->SetFileName(argv[1]);
+  writer->SetFileName(argv[2]);
+  rescaler->SetOutputMinimum(0);
+  rescaler->SetOutputMaximum(255);
       
-      // Read meta data (ossimKeywordlist)
-      reader->GenerateOutputInformation();
-      ImageType::ConstPointer inputImage = reader->GetOutput();
+  // Read meta data (ossimKeywordlist)
+  reader->GenerateOutputInformation();
+  ImageType::ConstPointer inputImage = reader->GetOutput();
 
-      model->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
+  model->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
 
-      start[0]=0;     
-      start[1]=0;     
-      size[0]=atoi(argv[5]);  // X size.
-      size[1]=atoi(argv[6]);  // Y size.
+  start[0]=0;     
+  start[1]=0;     
+  size[0]=atoi(argv[5]);  // X size.
+  size[1]=atoi(argv[6]);  // Y size.
       
-      region.SetSize(size);
-      region.SetIndex(start);
+  region.SetSize(size);
+  region.SetIndex(start);
 
-      spacing[0]=atof(argv[8]);
-      spacing[1]=atof(argv[9]);
+  spacing[0]=atof(argv[8]);
+  spacing[1]=atof(argv[9]);
 
-      origin[0]=strtod(argv[3], NULL);         // origin longitude.
-      origin[1]=strtod(argv[4], NULL);         // origin latitude.
+  origin[0]=strtod(argv[3], NULL);         // origin longitude.
+  origin[1]=strtod(argv[4], NULL);         // origin latitude.
 
-      otbGenericMsgDebugMacro(<< "Origin " << origin );
+  otbGenericMsgDebugMacro(<< "Origin " << origin );
 
-      resampler->SetOutputSpacing( spacing );
-      resampler->SetOutputOrigin(  origin  );
-      resampler->SetSize( region.GetSize() );
-      resampler->SetOutputStartIndex( start );
+  resampler->SetOutputSpacing( spacing );
+  resampler->SetOutputOrigin(  origin  );
+  resampler->SetSize( region.GetSize() );
+  resampler->SetOutputStartIndex( start );
 
-      //Connect pipeline
-      resampler->SetInput( reader->GetOutput() );
-      resampler->SetTransform( model );
-      resampler->SetInterpolator( interpolator );
+  //Connect pipeline
+  resampler->SetInput( reader->GetOutput() );
+  resampler->SetTransform( model );
+  resampler->SetInterpolator( interpolator );
 
-      otbGenericMsgDebugMacro(<< "Sensor Model :" << model);
+  otbGenericMsgDebugMacro(<< "Sensor Model :" << model);
        
-      writer->SetInput(resampler->GetOutput());
-      writer->SetTilingStreamDivisions(10);
-      otbGenericMsgDebugMacro(<< "Update writer ..." ); 
-      writer->Update();
-    } 
+  writer->SetInput(resampler->GetOutput());
+  writer->SetTilingStreamDivisions(10);
+  otbGenericMsgDebugMacro(<< "Update writer ..." ); 
+  writer->Update();
+ 
 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( std::bad_alloc & err ) 
-    { 
-    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "Exception levee inconnue !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
   return EXIT_SUCCESS;
 
- }//Fin main()
+}//Fin main()
 
