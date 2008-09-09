@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #include "itkExceptionObject.h"
@@ -41,31 +41,16 @@ namespace Functor
 
 int otbUnaryFunctorNeighborhoodImageFilterNew(int argc, char * argv[])
 {
-  try
-    {
-      typedef double InputPixelType;
-      const int Dimension = 2;
-      typedef otb::Image<InputPixelType,Dimension> ImageType;
-      typedef ImageType::PixelType PixelType;
-      typedef itk::ConstNeighborhoodIterator<ImageType>   IterType;;
-      typedef Functor::UnaryFunctorNeighborhoodImageFilterFunctorNewTest<IterType, PixelType>  FunctorType;
-      typedef otb::UnaryFunctorNeighborhoodImageFilter<ImageType, ImageType, FunctorType> UnaryFunctorNeighborhoodImageFilterType;
-      
-      // Instantiating object
-      UnaryFunctorNeighborhoodImageFilterType::Pointer object = UnaryFunctorNeighborhoodImageFilterType::New();
-    }
-
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-
-  catch( ... ) 
-    { 
-    std::cout << "Unknown exception thrown !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
+  typedef double InputPixelType;
+  const int Dimension = 2;
+  typedef otb::Image<InputPixelType,Dimension> ImageType;
+  typedef ImageType::PixelType PixelType;
+  typedef itk::ConstNeighborhoodIterator<ImageType>   IterType;;
+  typedef Functor::UnaryFunctorNeighborhoodImageFilterFunctorNewTest<IterType, PixelType>  FunctorType;
+  typedef otb::UnaryFunctorNeighborhoodImageFilter<ImageType, ImageType, FunctorType> UnaryFunctorNeighborhoodImageFilterType;
+  
+  // Instantiating object
+  UnaryFunctorNeighborhoodImageFilterType::Pointer object = UnaryFunctorNeighborhoodImageFilterType::New();
+  
   return EXIT_SUCCESS;
 }

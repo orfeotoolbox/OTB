@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
@@ -75,7 +75,7 @@ int otbPointSetSourceTest(int argc, char* argv[] )
 
   // All objects should be automatically destroyed at this point
 
-  return 0;
+  return EXIT_SUCCESS;
 
 }
 

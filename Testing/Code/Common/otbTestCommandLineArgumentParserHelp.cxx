@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
@@ -24,35 +24,19 @@
 // Test de sortie en erreur
 int otbTestCommandLineArgumentParserHelp( int argc, char * argv[] )
 {
-  try 
-    { 
-        // Parse command line parameters
-        typedef otb::CommandLineArgumentParser ParserType;
-	ParserType::Pointer parser = ParserType::New();
+  // Parse command line parameters
+  typedef otb::CommandLineArgumentParser ParserType;
+  ParserType::Pointer parser = ParserType::New();
   
-        parser->AddOption("-image","Nom d'une image","-i",1,true);
+  parser->AddOption("-image","Nom d'une image","-i",1,true);
   
-        typedef otb::CommandLineArgumentParseResult ParserResultType;
-        ParserResultType::Pointer  parseResult = ParserResultType::New();
-
-        parser->ParseCommandLine(argc,argv,parseResult) ;
-
-
-        std::cout << "Image : "<<parseResult->GetParameterString("-image")<<std::endl;
-
-    } 
-
-  catch(itk::ExceptionObject &err) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee ! Cas nominal" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_SUCCESS;
-     } 
-  catch( ... ) 
-    { 
-    std::cout << "Exception levee inconnue !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
+  typedef otb::CommandLineArgumentParseResult ParserResultType;
+  ParserResultType::Pointer  parseResult = ParserResultType::New();
+  
+  parser->ParseCommandLine(argc,argv,parseResult) ;
+  
+  
+  std::cout << "Image : "<<parseResult->GetParameterString("-image")<<std::endl;
 
 
   return EXIT_FAILURE;

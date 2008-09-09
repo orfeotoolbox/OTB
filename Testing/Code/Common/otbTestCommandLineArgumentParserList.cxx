@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
-
+  
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
+  
 =========================================================================*/
 
 #include <iostream>
@@ -23,59 +23,45 @@
 
 int otbTestCommandLineArgumentParserList( int argc, char * argv[] )
 {
-  try 
-    { 
-        // Parse command line parameters
-        typedef otb::CommandLineArgumentParser ParserType;	
-	ParserType::Pointer parser = ParserType::New();
+  // Parse command line parameters
+  typedef otb::CommandLineArgumentParser ParserType;	
+  ParserType::Pointer parser = ParserType::New();
 	  
-        parser->AddOption("-image","Nom d'une image","-i",1,true);
-        parser->AddOption("-entier","Une Valeur entiere (obligatoire)","-e");
-        parser->AddOption("-deuxentiers","Deux Valeurs entieres non obligatoire","-dede",2,false);
-        parser->AddOption("-double", "Valeur réelle double", "-d"); 
-        parser->AddOptionNParams("-doubles", "Liste de Valeurs réelles","-ld",false);
+  parser->AddOption("-image","Nom d'une image","-i",1,true);
+  parser->AddOption("-entier","Une Valeur entiere (obligatoire)","-e");
+  parser->AddOption("-deuxentiers","Deux Valeurs entieres non obligatoire","-dede",2,false);
+  parser->AddOption("-double", "Valeur réelle double", "-d"); 
+  parser->AddOptionNParams("-doubles", "Liste de Valeurs réelles","-ld",false);
   
-        typedef otb::CommandLineArgumentParseResult ParserResultType;
-        ParserResultType::Pointer  parseResult = ParserResultType::New();
+  typedef otb::CommandLineArgumentParseResult ParserResultType;
+  ParserResultType::Pointer  parseResult = ParserResultType::New();
   
-        parser->ParseCommandLine(argc,argv,parseResult) ;
+  parser->ParseCommandLine(argc,argv,parseResult) ;
 
 
-        std::cout << "Image : "<<parseResult->GetParameterString("-image")<<std::endl;
-        //unsigned int lEntier = otb::GetParameter<unsigned int>(parseResult,"-entier");
-		unsigned int lEntier = parseResult->GetParameterUInt("-entier");
-        std::cout << "Entier : "<<lEntier<<std::endl;
-	if( parseResult->IsOptionPresent("-deuxentiers"))
-	  {
-		//unsigned int lEntierDeux = otb::GetParameter<unsigned int>(parseResult,"-deuxentiers",1);
-		unsigned int lEntierDeux = parseResult->GetParameterUInt("-deuxentiers",1);
-          std::cout << "Entier : "<<lEntierDeux<<std::endl;
-	  }
-	//double lDouble = otb::GetParameter<double>(parseResult,"-double");
-	double lDouble = parseResult->GetParameterDouble("-double");
-        std::cout << "Double : "<<lDouble<<std::endl;
+  std::cout << "Image : "<<parseResult->GetParameterString("-image")<<std::endl;
+  //unsigned int lEntier = otb::GetParameter<unsigned int>(parseResult,"-entier");
+  unsigned int lEntier = parseResult->GetParameterUInt("-entier");
+  std::cout << "Entier : "<<lEntier<<std::endl;
+  if( parseResult->IsOptionPresent("-deuxentiers"))
+    {
+      //unsigned int lEntierDeux = otb::GetParameter<unsigned int>(parseResult,"-deuxentiers",1);
+      unsigned int lEntierDeux = parseResult->GetParameterUInt("-deuxentiers",1);
+      std::cout << "Entier : "<<lEntierDeux<<std::endl;
+    }
+  //double lDouble = otb::GetParameter<double>(parseResult,"-double");
+  double lDouble = parseResult->GetParameterDouble("-double");
+  std::cout << "Double : "<<lDouble<<std::endl;
 		
-        std::cout << "List de Double : "<<parseResult->GetNumberOfParameters("-doubles")<<std::endl;
-        for (int i =0 ; i<parseResult->GetNumberOfParameters("-doubles") ; i++)
-        {
-			//double value = otb::GetParameter<double>(parseResult,"-doubles",i);
-			double value = parseResult->GetParameterDouble("-doubles",i);
-                std::cout << "  "<<value;
-        }
-        std::cout << std::endl;
-    } 
-
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "Exception levee inconnue !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
+  std::cout << "List de Double : "<<parseResult->GetNumberOfParameters("-doubles")<<std::endl;
+  for (int i =0 ; i<parseResult->GetNumberOfParameters("-doubles") ; i++)
+    {
+      //double value = otb::GetParameter<double>(parseResult,"-doubles",i);
+      double value = parseResult->GetParameterDouble("-doubles",i);
+      std::cout << "  "<<value;
+    }
+  std::cout << std::endl;
+  
 
 
   return EXIT_SUCCESS;

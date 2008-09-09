@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #include "itkExceptionObject.h"
@@ -22,28 +22,14 @@
 
 int otbPolyLineParametricPathWithValueNew(int argc, char * argv[])
 {
-  try
-    {
-      const unsigned int Dimension = 2;
-      typedef double ValueType;
-      typedef otb::PolyLineParametricPathWithValue<ValueType, Dimension> PolyLineParametricPathWithValueType;
+  const unsigned int Dimension = 2;
+  typedef double ValueType;
+  typedef otb::PolyLineParametricPathWithValue<ValueType, Dimension> PolyLineParametricPathWithValueType;
+  
+  // Instantiating object
+  PolyLineParametricPathWithValueType::Pointer object = PolyLineParametricPathWithValueType::New();
+  object->SetValue(0);
 
-      // Instantiating object
-      PolyLineParametricPathWithValueType::Pointer object = PolyLineParametricPathWithValueType::New();
-      object->SetValue(0);
-    }
-
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-
-  catch( ... ) 
-    { 
-    std::cout << "Unknown exception thrown !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
+ 
   return EXIT_SUCCESS;
 }

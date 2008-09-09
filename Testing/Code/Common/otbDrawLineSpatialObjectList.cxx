@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
@@ -36,103 +36,101 @@
 
 int otbDrawLineSpatialObjectList( int argc, char* argv[] )
 {
-  try 
-    {  
-    	const char * inputFilename  = argv[1];
-        const char * outputFilename = argv[2];
+  const char * inputFilename  = argv[1];
+  const char * outputFilename = argv[2];
                        
-        typedef double		                                InputPixelType;
-        typedef unsigned char	   	                        OutputPixelType;
-        const   unsigned int        	                        Dimension = 2;
+  typedef double		                                InputPixelType;
+  typedef unsigned char	   	                        OutputPixelType;
+  const   unsigned int        	                        Dimension = 2;
 
-        typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
-        typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
+  typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
+  typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
 
-        typedef otb::DrawLineSpatialObjectListFilter< InputImageType,OutputImageType >   FilterType;
+  typedef otb::DrawLineSpatialObjectListFilter< InputImageType,OutputImageType >   FilterType;
 	
-        FilterType::Pointer filter = FilterType::New();
+  FilterType::Pointer filter = FilterType::New();
         
-        typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-        typedef otb::ImageFileWriter< OutputImageType >         WriterType;
+  typedef otb::ImageFileReader< InputImageType  >         ReaderType;
+  typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
         
-        ReaderType::Pointer reader = ReaderType::New();
-        WriterType::Pointer writer = WriterType::New();
+  ReaderType::Pointer reader = ReaderType::New();
+  WriterType::Pointer writer = WriterType::New();
 
-        reader->SetFileName( inputFilename  );
-        writer->SetFileName( outputFilename );
+  reader->SetFileName( inputFilename  );
+  writer->SetFileName( outputFilename );
         
-  	typedef otb::LineSpatialObjectList			LinesListType;
-  	typedef LinesListType::LineType	LineType;
-  	LinesListType::Pointer list = LinesListType::New();
+  typedef otb::LineSpatialObjectList			LinesListType;
+  typedef LinesListType::LineType	LineType;
+  LinesListType::Pointer list = LinesListType::New();
   	
-  	LineType::PointListType pointList;
-        LineType::LinePointType point;
+  LineType::PointListType pointList;
+  LineType::LinePointType point;
         
-        // Definition of the first line
-        double Ux, Uy, Vx, Vy;
-        Ux = 10.;
-        Uy = 12.;
-        Vx = 35.;
-        Vy = 29.;
+  // Definition of the first line
+  double Ux, Uy, Vx, Vy;
+  Ux = 10.;
+  Uy = 12.;
+  Vx = 35.;
+  Vy = 29.;
         
-        point.SetPosition(Ux,Uy);
-        pointList.push_back(point);
-        point.SetPosition(Vx,Vy);
-        pointList.push_back(point);
+  point.SetPosition(Ux,Uy);
+  pointList.push_back(point);
+  point.SetPosition(Vx,Vy);
+  pointList.push_back(point);
         
-        LineType::Pointer line = LineType::New();
-        line->SetId(0);
-        line->SetPoints( pointList );
-        line->ComputeBoundingBox();
+  LineType::Pointer line = LineType::New();
+  line->SetId(0);
+    line->SetPoints( pointList );
+    line->ComputeBoundingBox();
        
-        list->push_back(line);
+    list->push_back(line);
         
-        pointList.clear();
+    pointList.clear();
                         
-        // Definition of a second line
-        Ux = 8.;
-        Uy = 7.;
-        Vx = 8.;
-        Vy = 46.;
+    // Definition of a second line
+    Ux = 8.;
+    Uy = 7.;
+    Vx = 8.;
+    Vy = 46.;
         
-        point.SetPosition(Ux,Uy);
-        pointList.push_back(point);
-        point.SetPosition(Vx,Vy);
-        pointList.push_back(point);
+    point.SetPosition(Ux,Uy);
+    pointList.push_back(point);
+    point.SetPosition(Vx,Vy);
+    pointList.push_back(point);
         
         
-        LineType::Pointer line2 = LineType::New();
-        line2->SetId(0);
-        line2->SetPoints( pointList );
-        line2->ComputeBoundingBox();
+    LineType::Pointer line2 = LineType::New();
+    line2->SetId(0);
+      line2->SetPoints( pointList );
+      line2->ComputeBoundingBox();
        
-        list->push_back(line2); 
+      list->push_back(line2); 
         
-        pointList.clear();
+      pointList.clear();
         
-        // Definition of a third line
-        Ux = 52.;
-        Uy = 15.;
-        Vx = 22.;
-        Vy = 38.;
+      // Definition of a third line
+      Ux = 52.;
+      Uy = 15.;
+      Vx = 22.;
+      Vy = 38.;
         
-        point.SetPosition(Ux,Uy);
-        pointList.push_back(point);
-        point.SetPosition(Vx,Vy);
-        pointList.push_back(point);
+      point.SetPosition(Ux,Uy);
+      pointList.push_back(point);
+      point.SetPosition(Vx,Vy);
+      pointList.push_back(point);
         
-        LineType::Pointer line3 = LineType::New();
-        line3->SetId(0);
+      LineType::Pointer line3 = LineType::New();
+      line3->SetId(0);
         line3->SetPoints( pointList );
         line3->ComputeBoundingBox();
        
         list->push_back(line3); 
         
-/*        LinesListType::const_iterator it;
-        std::cout<<list.size()<<std::endl;
-        for (it=list.begin(); it!=list.end(); it++)
-           std::cout<< (*it) <<std::endl;*/
+	/*        LinesListType::const_iterator it;
+		  std::cout<<list.size()<<std::endl;
+		  for (it=list.begin(); it!=list.end(); it++)
+		  std::cout<< (*it) <<std::endl;*/
         
         filter->SetInputLineSpatialObjectList(list);
         
@@ -141,22 +139,9 @@ int otbDrawLineSpatialObjectList( int argc, char* argv[] )
         
         writer->Update();
         
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "Exception levee inconnue !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  // Software Guide : EndCodeSnippet
+  
 
-//#endif
-  return EXIT_SUCCESS;
+	return EXIT_SUCCESS;
 }
 
 

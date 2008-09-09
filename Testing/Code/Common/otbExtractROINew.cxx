@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
@@ -26,31 +26,14 @@
 
 int otbExtractROINew( int argc, char * argv[] )
 {
-  try 
-    { 
-        typedef std::complex<float>  	                                InputPixelType;
-        typedef std::complex<double>  	                                OutputPixelType;
-
-        typedef otb::ExtractROI< InputPixelType, 
-                                            OutputPixelType >   FilterType;
-
-
-        FilterType::Pointer filter = FilterType::New();
-        
-    } 
-
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "Exception levee inconnue !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
-
+  typedef std::complex<float>  	                              InputPixelType;
+  typedef std::complex<double>  	                      OutputPixelType;
+  
+  typedef otb::ExtractROI< InputPixelType, OutputPixelType >  FilterType;
+  
+  
+  FilterType::Pointer filter = FilterType::New();
+  
 
   return EXIT_SUCCESS;
 }

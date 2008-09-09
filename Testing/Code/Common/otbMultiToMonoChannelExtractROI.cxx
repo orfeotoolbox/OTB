@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
@@ -25,66 +25,47 @@
 template < typename  InputPixelType, typename OutputPixelType  >
 int generic_otbMultiToMonoChannelExtractROI ( int argc, char * argv[], const char * inputFilename,const char * outputFilename)
 {
-  try 
-    { 
-        typedef otb::MultiToMonoChannelExtractROI< InputPixelType, 
-                                             OutputPixelType >  ExtractROIFilterType;
+  typedef otb::MultiToMonoChannelExtractROI< InputPixelType, 
+    OutputPixelType >  ExtractROIFilterType;
 
-        typename ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
-        int cpt(0);
+  typename ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
+  int cpt(0);
 
-	while ( argv[cpt] != NULL )
-	{
-		std::string strArgv(argv[cpt]);
-		if ( strArgv == "-startX" ) 		{ extractROIFilter->SetStartX((unsigned long)::atoi(argv[cpt+1]));std::cout <<" ->SetStartX("<<::atoi(argv[cpt+1])<<")"<<std::endl;cpt += 2;}
-		else if ( strArgv == "-startY" ) 	{ extractROIFilter->SetStartY((unsigned long)::atoi(argv[cpt+1]));std::cout <<" ->SetStartY("<<::atoi(argv[cpt+1])<<")"<<std::endl;cpt += 2;}
-		else if ( strArgv == "-sizeX" ) 	{ extractROIFilter->SetSizeX((unsigned long)::atoi(argv[cpt+1]));std::cout <<" ->SetSizeX("<<::atoi(argv[cpt+1])<<")"<<std::endl;cpt += 2;}
-		else if ( strArgv == "-sizeY" ) 	{ extractROIFilter->SetSizeY((unsigned long)::atoi(argv[cpt+1]));std::cout <<" ->SetSizeY("<<::atoi(argv[cpt+1])<<")"<<std::endl;cpt += 2;}
-		else if ( strArgv == "-channel" )       { extractROIFilter->SetChannel((unsigned int)::atoi(argv[cpt+1]));std::cout <<" ->SetChannel("<<::atoi(argv[cpt+1])<<")"<<std::endl;cpt += 2;}
-	}
+  while ( argv[cpt] != NULL )
+    {
+      std::string strArgv(argv[cpt]);
+      if ( strArgv == "-startX" ) 		{ extractROIFilter->SetStartX((unsigned long)::atoi(argv[cpt+1]));std::cout <<" ->SetStartX("<<::atoi(argv[cpt+1])<<")"<<std::endl;cpt += 2;}
+      else if ( strArgv == "-startY" ) 	{ extractROIFilter->SetStartY((unsigned long)::atoi(argv[cpt+1]));std::cout <<" ->SetStartY("<<::atoi(argv[cpt+1])<<")"<<std::endl;cpt += 2;}
+      else if ( strArgv == "-sizeX" ) 	{ extractROIFilter->SetSizeX((unsigned long)::atoi(argv[cpt+1]));std::cout <<" ->SetSizeX("<<::atoi(argv[cpt+1])<<")"<<std::endl;cpt += 2;}
+      else if ( strArgv == "-sizeY" ) 	{ extractROIFilter->SetSizeY((unsigned long)::atoi(argv[cpt+1]));std::cout <<" ->SetSizeY("<<::atoi(argv[cpt+1])<<")"<<std::endl;cpt += 2;}
+      else if ( strArgv == "-channel" )       { extractROIFilter->SetChannel((unsigned int)::atoi(argv[cpt+1]));std::cout <<" ->SetChannel("<<::atoi(argv[cpt+1])<<")"<<std::endl;cpt += 2;}
+    }
 
-	// Resume de la ligne de commande
-	std::cout << " ROI selectionnee : startX "<<extractROIFilter->GetStartX()<<std::endl;
-	std::cout << "                    startY "<<extractROIFilter->GetStartY()<<std::endl;
-	std::cout << "                    sizeX  "<<extractROIFilter->GetSizeX()<<std::endl;
-	std::cout << "                    sizeY  "<<extractROIFilter->GetSizeY()<<std::endl;
-	std::cout << " Canal selectionne : ("<<extractROIFilter->GetChannel()<<") : ";
+  // Resume de la ligne de commande
+  std::cout << " ROI selectionnee : startX "<<extractROIFilter->GetStartX()<<std::endl;
+  std::cout << "                    startY "<<extractROIFilter->GetStartY()<<std::endl;
+  std::cout << "                    sizeX  "<<extractROIFilter->GetSizeX()<<std::endl;
+  std::cout << "                    sizeY  "<<extractROIFilter->GetSizeY()<<std::endl;
+  std::cout << " Canal selectionne : ("<<extractROIFilter->GetChannel()<<") : ";
 
-// OTB-FA-00008-CS
-//        typedef otb::ImageFileReader< typename ExtractROIFilterType::InputImageType, itk::DefaultConvertPixelTraits< InputPixelType >  >       ReaderType;
-        typedef otb::ImageFileReader< ITK_TYPENAME ExtractROIFilterType::InputImageType >       ReaderType;
-        typedef otb::ImageFileWriter< ITK_TYPENAME ExtractROIFilterType::OutputImageType >           WriterType;
-        typename ReaderType::Pointer reader = ReaderType::New();
-        typename WriterType::Pointer writer = WriterType::New();
+  // OTB-FA-00008-CS
+  //        typedef otb::ImageFileReader< typename ExtractROIFilterType::InputImageType, itk::DefaultConvertPixelTraits< InputPixelType >  >       ReaderType;
+  typedef otb::ImageFileReader< ITK_TYPENAME ExtractROIFilterType::InputImageType >       ReaderType;
+  typedef otb::ImageFileWriter< ITK_TYPENAME ExtractROIFilterType::OutputImageType >           WriterType;
+  typename ReaderType::Pointer reader = ReaderType::New();
+  typename WriterType::Pointer writer = WriterType::New();
 
-        reader->SetFileName( inputFilename  );
-//THOMAS
-//        reader->Update(); //Necessaire pour connaitre le nombre de canaux dans l'image
-        writer->SetFileName( outputFilename );
-        extractROIFilter->SetInput( reader->GetOutput() );
+  reader->SetFileName( inputFilename  );
+  //THOMAS
+  //        reader->Update(); //Necessaire pour connaitre le nombre de canaux dans l'image
+  writer->SetFileName( outputFilename );
+  extractROIFilter->SetInput( reader->GetOutput() );
         
-        writer->SetInput( extractROIFilter->GetOutput() );
-        writer->Update(); 
-        std::cout << " Nb canaux dans l'image d'entree : "<< reader->GetOutput()->GetNumberOfComponentsPerPixel()<<std::endl;
-        std::cout << " Nb canaux dans l'image de sortie : "<<extractROIFilter->GetOutput()->GetNumberOfComponentsPerPixel() <<std::endl;
-    } 
-
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( std::bad_alloc & err ) 
-    { 
-    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "Exception levee inconnue !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
+  writer->SetInput( extractROIFilter->GetOutput() );
+  writer->Update(); 
+  std::cout << " Nb canaux dans l'image d'entree : "<< reader->GetOutput()->GetNumberOfComponentsPerPixel()<<std::endl;
+  std::cout << " Nb canaux dans l'image de sortie : "<<extractROIFilter->GetOutput()->GetNumberOfComponentsPerPixel() <<std::endl;
+  
 
 
   return EXIT_SUCCESS;

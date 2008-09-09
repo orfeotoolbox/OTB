@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
@@ -21,31 +21,17 @@
 
 int otbMultiToMonoChannelExtractROINew ( int argc, char * argv[] )
 {
-  try 
-    { 
-//        typedef unsigned char  	                                InputPixelType;
-//        typedef unsigned char  	                                OutputPixelType;
-
-        typedef std::complex<float>  	                                InputPixelType;
-        typedef std::complex<double>  	                                OutputPixelType;
-
-        typedef otb::MultiToMonoChannelExtractROI< InputPixelType, 
-                                             OutputPixelType >  ExtractROIFilterType;
-
-        ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
-    } 
-
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "Exception levee inconnue !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
+  
+  //        typedef unsigned char  	                                InputPixelType;
+  //        typedef unsigned char  	                                OutputPixelType;
+  
+  typedef std::complex<float>  	                                InputPixelType;
+  typedef std::complex<double>  	                                OutputPixelType;
+  
+  typedef otb::MultiToMonoChannelExtractROI< InputPixelType, 
+    OutputPixelType >  ExtractROIFilterType;
+  
+  ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
 
 
   return EXIT_SUCCESS;
