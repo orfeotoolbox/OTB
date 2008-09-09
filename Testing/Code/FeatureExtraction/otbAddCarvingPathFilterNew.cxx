@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
@@ -26,7 +26,6 @@
 
 int otbAddCarvingPathFilterNew(int argc, char* argv[])
 {
-
   typedef double                                          PixelType;
   const   unsigned int        	                          Dimension = 2;
   
@@ -35,21 +34,10 @@ int otbAddCarvingPathFilterNew(int argc, char* argv[])
   typedef itk::PolyLineParametricPath<Dimension> PathType;
   
   typedef otb::AddCarvingPathFilter<InputImageType, PathType, 
-                  OutputImageType> 	AddCarvingPathFilterType;
-  try 
-    { 
-      AddCarvingPathFilterType::Pointer addCarvingPathFilter = AddCarvingPathFilterType::New();
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cerr << "itk::Exception detected: "  << err.GetDescription();
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "unknown exception detected !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
+                                    OutputImageType> 	AddCarvingPathFilterType;
+ 
+  AddCarvingPathFilterType::Pointer addCarvingPathFilter = AddCarvingPathFilterType::New();
+
   
   return EXIT_SUCCESS;
 }

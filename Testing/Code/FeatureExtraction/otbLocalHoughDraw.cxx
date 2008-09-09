@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
@@ -39,78 +39,62 @@
 
 int otbLocalHoughDraw( int argc, char* argv[] )
 {
-  try 
-    {  
-    	const char * inputFilename  = argv[1];
-    	const char * outputFilename = argv[2];
+  const char * inputFilename  = argv[1];
+  const char * outputFilename = argv[2];
     	
-    	unsigned int  RadiusX((unsigned int)::atoi(argv[3]));
-    	unsigned int  RadiusY((unsigned int)::atoi(argv[4]));
-    	unsigned int  NumberOfLines((unsigned int)::atoi(argv[5]));
+  unsigned int  RadiusX((unsigned int)::atoi(argv[3]));
+  unsigned int  RadiusY((unsigned int)::atoi(argv[4]));
+  unsigned int  NumberOfLines((unsigned int)::atoi(argv[5]));
                        
-        typedef unsigned char	                                InputPixelType;
-        typedef unsigned char	   	                        OutputPixelType;
-        const   unsigned int        	                        Dimension = 2;
+  typedef unsigned char	                                InputPixelType;
+  typedef unsigned char	   	                        OutputPixelType;
+  const   unsigned int        	                        Dimension = 2;
 
-        typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
-        typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
+  typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
+  typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
 
-        typedef otb::LocalHoughFilter< InputImageType >   FilterType;
-//typedef otb::ImageToLineSpatialObjectListFilter< InputImageType >   FilterType;
+  typedef otb::LocalHoughFilter< InputImageType >   FilterType;
+  //typedef otb::ImageToLineSpatialObjectListFilter< InputImageType >   FilterType;
 	
-        FilterType::Pointer filter = FilterType::New();
+  FilterType::Pointer filter = FilterType::New();
         
-        typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-        typedef otb::ImageFileWriter< OutputImageType >         WriterType;
+  typedef otb::ImageFileReader< InputImageType  >         ReaderType;
+  typedef otb::ImageFileWriter< OutputImageType >         WriterType;
         
-        ReaderType::Pointer reader = ReaderType::New();
-        WriterType::Pointer writer = WriterType::New();
+  ReaderType::Pointer reader = ReaderType::New();
+  WriterType::Pointer writer = WriterType::New();
 
-        reader->SetFileName( inputFilename  );
-        reader->Update();
+  reader->SetFileName( inputFilename  );
+  reader->Update();
         
-        writer->SetFileName( outputFilename ); 
+  writer->SetFileName( outputFilename ); 
         
-        FilterType::SizeType Radius;
-	Radius[0] = RadiusX;
-	Radius[1] = RadiusY;
+  FilterType::SizeType Radius;
+  Radius[0] = RadiusX;
+  Radius[1] = RadiusY;
         
                 
-	filter->SetRadius( Radius );
-	filter->SetNumberOfLines( NumberOfLines );
+  filter->SetRadius( Radius );
+  filter->SetNumberOfLines( NumberOfLines );
      
-        filter->SetInput( reader->GetOutput() ); 
-        filter->Update();
+  filter->SetInput( reader->GetOutput() ); 
+  filter->Update();
        
 
-        typedef otb::DrawLineSpatialObjectListFilter< InputImageType,OutputImageType >   DrawFilterType;
+  typedef otb::DrawLineSpatialObjectListFilter< InputImageType,OutputImageType >   DrawFilterType;
 	
-        DrawFilterType::Pointer drawfilter = DrawFilterType::New();
+  DrawFilterType::Pointer drawfilter = DrawFilterType::New();
         
        
-        drawfilter->SetInputLineSpatialObjectList(filter->GetOutput());
+  drawfilter->SetInputLineSpatialObjectList(filter->GetOutput());
         
-        drawfilter->SetInput( reader->GetOutput() );
-        writer->SetInput( drawfilter->GetOutput() );
+  drawfilter->SetInput( reader->GetOutput() );
+  writer->SetInput( drawfilter->GetOutput() );
         
-        writer->Update();
+  writer->Update();
 
         
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "Exception levee inconnue !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  // Software Guide : EndCodeSnippet
-
-//#endif
+  
   return EXIT_SUCCESS;
 }
 

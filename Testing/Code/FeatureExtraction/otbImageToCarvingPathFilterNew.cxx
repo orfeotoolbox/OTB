@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
@@ -27,27 +27,16 @@
 int otbImageToCarvingPathFilterNew(int argc, char* argv[])
 {
 
-  typedef double                                          PixelType;
-  const   unsigned int        	                          Dimension = 2;
+  typedef double                                  PixelType;
+  const   unsigned int        	                  Dimension = 2;
   
-  typedef otb::Image< PixelType, Dimension >        InputImageType;
-  typedef itk::PolyLineParametricPath<Dimension> PathType;
+  typedef otb::Image< PixelType, Dimension >      InputImageType;
+  typedef itk::PolyLineParametricPath<Dimension>  PathType;
   
   typedef otb::ImageToCarvingPathFilter<InputImageType, PathType> 	ImageToCarvingPathFilterType;
-  try 
-    { 
-      ImageToCarvingPathFilterType::Pointer addCarvingPathFilter = ImageToCarvingPathFilterType::New();
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cerr << "itk::Exception detected: "  << err.GetDescription();
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "unknown exception detected !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
+
+  ImageToCarvingPathFilterType::Pointer addCarvingPathFilter = ImageToCarvingPathFilterType::New();
+   
   
   return EXIT_SUCCESS;
 }

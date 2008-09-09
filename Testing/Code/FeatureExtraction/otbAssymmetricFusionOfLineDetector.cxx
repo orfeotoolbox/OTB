@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
@@ -32,59 +32,46 @@
 
 int otbAssymmetricFusionOfLineDetector( int argc, char * argv[] )
 {
-  try 
-    { 
-        const char * inputFilename  = argv[1];
-        const char * outputFilename = argv[2];
+  const char * inputFilename  = argv[1];
+  const char * outputFilename = argv[2];
         
-	// Width of the linear feature = 2*WidthLine+1
-        unsigned int  WidthLine((unsigned int)::atoi(argv[3]));
-        // Length of the linear feature = 2*LengthLine+1
-        unsigned int  LengthLine((unsigned int)::atoi(argv[4]));
+  // Width of the linear feature = 2*WidthLine+1
+  unsigned int  WidthLine((unsigned int)::atoi(argv[3]));
+  // Length of the linear feature = 2*LengthLine+1
+  unsigned int  LengthLine((unsigned int)::atoi(argv[4]));
         
-        typedef unsigned char                                   InputPixelType;
-        typedef double		   	                        OutputPixelType;
-        const   unsigned int        	                        Dimension = 2;
+  typedef unsigned char                                   InputPixelType;
+  typedef double		   	                        OutputPixelType;
+  const   unsigned int        	                        Dimension = 2;
 
-        typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
-        typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
-        typedef itk::Image< OutputPixelType, Dimension >        OutputImageDirectionType;
+  typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
+  typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
+  typedef itk::Image< OutputPixelType, Dimension >        OutputImageDirectionType;
 
-        typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-        typedef otb::ImageFileWriter< OutputImageType >         WriterType;
+  typedef otb::ImageFileReader< InputImageType  >         ReaderType;
+  typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
-        typedef itk::LinearInterpolateImageFunction< InputImageType, double >	InterpolatorType;
+  typedef itk::LinearInterpolateImageFunction< InputImageType, double >	InterpolatorType;
 	
-        typedef otb::AssymmetricFusionOfLineDetectorImageFilter< InputImageType, OutputImageType, OutputImageDirectionType, InterpolatorType >   FilterType;
+  typedef otb::AssymmetricFusionOfLineDetectorImageFilter< InputImageType, OutputImageType, OutputImageDirectionType, InterpolatorType >   FilterType;
   
-        FilterType::Pointer FilterAssSymSum = FilterType::New();
+  FilterType::Pointer FilterAssSymSum = FilterType::New();
         
-	FilterAssSymSum->SetWidthLine( WidthLine );
-	FilterAssSymSum->SetLengthLine( LengthLine );
+  FilterAssSymSum->SetWidthLine( WidthLine );
+  FilterAssSymSum->SetLengthLine( LengthLine );
 	
-        ReaderType::Pointer reader = ReaderType::New();
-        WriterType::Pointer writer = WriterType::New();
+  ReaderType::Pointer reader = ReaderType::New();
+  WriterType::Pointer writer = WriterType::New();
 
-        reader->SetFileName( inputFilename  );
-        writer->SetFileName( outputFilename );
+  reader->SetFileName( inputFilename  );
+  writer->SetFileName( outputFilename );
         
-        FilterAssSymSum->SetInput( reader->GetOutput() );
-        writer->SetInput( FilterAssSymSum->GetOutput() );
+  FilterAssSymSum->SetInput( reader->GetOutput() );
+  writer->SetInput( FilterAssSymSum->GetOutput() );
         
-        writer->Update();
+  writer->Update();
 
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "Exception levee inconnue !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
+
   return EXIT_SUCCESS;
 }
 

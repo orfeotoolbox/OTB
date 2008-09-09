@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
@@ -30,136 +30,123 @@
 
 int otbFillGapsFilter( int argc, char * argv[] )
 {
-  try 
-    { 
-    	const char * inputFilename  = argv[1];
-        const char * outputFilename = argv[2];
+  const char * inputFilename  = argv[1];
+  const char * outputFilename = argv[2];
                        
-        typedef double		                                InputPixelType;
-        typedef unsigned char	   	                        OutputPixelType;
-        const   unsigned int        	                        Dimension = 2;
+  typedef double		                                InputPixelType;
+  typedef unsigned char	   	                        OutputPixelType;
+  const   unsigned int        	                        Dimension = 2;
 
-        typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
-        typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
+  typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
+  typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
 
-        typedef otb::DrawLineSpatialObjectListFilter< InputImageType,OutputImageType >   FilterType;
+  typedef otb::DrawLineSpatialObjectListFilter< InputImageType,OutputImageType >   FilterType;
 
-	typedef otb::FillGapsFilter              FillGapsFilterType;
-  	typedef otb::LineSpatialObjectList	 LinesListType;
-  	typedef LinesListType::LineType	         LineType;
+  typedef otb::FillGapsFilter              FillGapsFilterType;
+  typedef otb::LineSpatialObjectList	 LinesListType;
+  typedef LinesListType::LineType	         LineType;
 	
-        FilterType::Pointer filter = FilterType::New();
+  FilterType::Pointer filter = FilterType::New();
         
-        typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-        typedef otb::ImageFileWriter< OutputImageType >         WriterType;
+  typedef otb::ImageFileReader< InputImageType  >         ReaderType;
+  typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
         
-        ReaderType::Pointer reader = ReaderType::New();
-        WriterType::Pointer writer = WriterType::New();
+  ReaderType::Pointer reader = ReaderType::New();
+  WriterType::Pointer writer = WriterType::New();
 
-        reader->SetFileName( inputFilename  );
-        writer->SetFileName( outputFilename );
+  reader->SetFileName( inputFilename  );
+  writer->SetFileName( outputFilename );
 
 
-	FillGapsFilterType::Pointer fillgaps = FillGapsFilterType::New();
+  FillGapsFilterType::Pointer fillgaps = FillGapsFilterType::New();
         
-	LinesListType::Pointer   linesListBeforeFillGaps = LinesListType::New();
-	const LinesListType *linesListAfterFillGaps ;
+  LinesListType::Pointer   linesListBeforeFillGaps = LinesListType::New();
+  const LinesListType *linesListAfterFillGaps ;
 
-  	LineType::PointListType  pointList;
-        LineType::LinePointType  point;
+  LineType::PointListType  pointList;
+  LineType::LinePointType  point;
 
-        // Definition of the first line
-        double Ux, Uy, Vx, Vy;
-        Ux = 10.;
-        Uy = 10.;
-        Vx = 10.;
-        Vy = 20.;
+  // Definition of the first line
+  double Ux, Uy, Vx, Vy;
+  Ux = 10.;
+  Uy = 10.;
+  Vx = 10.;
+  Vy = 20.;
 
-        point.SetPosition(Ux,Uy);
-        pointList.push_back(point);
-        point.SetPosition(Vx,Vy);
-        pointList.push_back(point);
+  point.SetPosition(Ux,Uy);
+  pointList.push_back(point);
+  point.SetPosition(Vx,Vy);
+  pointList.push_back(point);
 
-        LineType::Pointer line = LineType::New();
-        line->SetId(0);
-        line->SetPoints( pointList );
-        line->ComputeBoundingBox();
+  LineType::Pointer line = LineType::New();
+  line->SetId(0);
+  line->SetPoints( pointList );
+  line->ComputeBoundingBox();
        
-        linesListBeforeFillGaps->push_back(line);
+  linesListBeforeFillGaps->push_back(line);
         
-        pointList.clear();
+  pointList.clear();
 
-        // Definition of a second line
+  // Definition of a second line
 
-        Ux = 10.;
-        Uy = 30.;
-        Vx = 10.;
-        Vy = 50.;
+  Ux = 10.;
+  Uy = 30.;
+  Vx = 10.;
+  Vy = 50.;
 
-        point.SetPosition(Ux,Uy);
-        pointList.push_back(point);
-        point.SetPosition(Vx,Vy);
-        pointList.push_back(point);
+  point.SetPosition(Ux,Uy);
+  pointList.push_back(point);
+  point.SetPosition(Vx,Vy);
+  pointList.push_back(point);
         
-        LineType::Pointer line2 = LineType::New();
-        line2->SetId(0);
-        line2->SetPoints( pointList );
-        line2->ComputeBoundingBox();
+  LineType::Pointer line2 = LineType::New();
+  line2->SetId(0);
+  line2->SetPoints( pointList );
+  line2->ComputeBoundingBox();
        
-        linesListBeforeFillGaps->push_back(line2); 
+  linesListBeforeFillGaps->push_back(line2); 
         
-        pointList.clear();
+  pointList.clear();
 
 
-        // Definition of a third line
+  // Definition of a third line
 
-        Ux = 20.;
-        Uy = 50.;
-        Vx = 50.;
-        Vy = 50.;
+  Ux = 20.;
+  Uy = 50.;
+  Vx = 50.;
+  Vy = 50.;
 
-        point.SetPosition(Ux,Uy);
-        pointList.push_back(point);
-        point.SetPosition(Vx,Vy);
-        pointList.push_back(point);
+  point.SetPosition(Ux,Uy);
+  pointList.push_back(point);
+  point.SetPosition(Vx,Vy);
+  pointList.push_back(point);
         
-        LineType::Pointer line3 = LineType::New();
-        line3->SetId(0);
-        line3->SetPoints( pointList );
-        line3->ComputeBoundingBox();
+  LineType::Pointer line3 = LineType::New();
+  line3->SetId(0);
+  line3->SetPoints( pointList );
+  line3->ComputeBoundingBox();
        
-        linesListBeforeFillGaps->push_back(line3); 
+  linesListBeforeFillGaps->push_back(line3); 
         
-        pointList.clear();
-        //  FillGapsFilter parameters
+  pointList.clear();
+  //  FillGapsFilter parameters
 	
-	fillgaps->SetRadius(15.);
-	fillgaps->SetAngularBeam(1.0);  // Angle in Radian
-	fillgaps->SetInput(linesListBeforeFillGaps);
-	linesListAfterFillGaps = fillgaps->GetOutput();
-	fillgaps->Update();
+  fillgaps->SetRadius(15.);
+  fillgaps->SetAngularBeam(1.0);  // Angle in Radian
+  fillgaps->SetInput(linesListBeforeFillGaps);
+  linesListAfterFillGaps = fillgaps->GetOutput();
+  fillgaps->Update();
 	        
         
-        filter->SetInputLineSpatialObjectList(linesListAfterFillGaps);  
-        filter->SetInput( reader->GetOutput() );
-        writer->SetInput( filter->GetOutput() );
+  filter->SetInputLineSpatialObjectList(linesListAfterFillGaps);  
+  filter->SetInput( reader->GetOutput() );
+  writer->SetInput( filter->GetOutput() );
         
-        writer->Update();
+  writer->Update();
  
         
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "Exception levee inconnue !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
+  
   return EXIT_SUCCESS;
 }
 

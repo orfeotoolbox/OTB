@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
@@ -32,59 +32,43 @@
 
 int otbLineCorrelationDetector( int argc, char* argv[] )
 {
-  try 
-    { 
-        const char * inputFilename  = argv[1];
-        const char * outputFilename = argv[2];
+  const char * inputFilename  = argv[1];
+  const char * outputFilename = argv[2];
 
-	// Largeur de la ligne � detecter = 2*WidthLine+1
-        unsigned int  WidthLine((unsigned int)::atoi(argv[3]));
-        // Longueur de la ligne � detecter = 2*LengthLine+1
-        unsigned int  LengthLine((unsigned int)::atoi(argv[4]));
+  // Largeur de la ligne � detecter = 2*WidthLine+1
+  unsigned int  WidthLine((unsigned int)::atoi(argv[3]));
+  // Longueur de la ligne � detecter = 2*LengthLine+1
+  unsigned int  LengthLine((unsigned int)::atoi(argv[4]));
         
-        typedef unsigned char                                   InputPixelType;
-        typedef double		   	                        OutputPixelType;
-        const   unsigned int        	                        Dimension = 2;
+  typedef unsigned char                                   InputPixelType;
+  typedef double		   	                        OutputPixelType;
+  const   unsigned int        	                        Dimension = 2;
 
-        typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
-        typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
+  typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
+  typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
 
-        typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-        typedef otb::ImageFileWriter< OutputImageType >         WriterType;
+  typedef otb::ImageFileReader< InputImageType  >         ReaderType;
+  typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
-        typedef otb::LineCorrelationDetectorImageFilter< InputImageType, OutputImageType >   FilterType;
+  typedef otb::LineCorrelationDetectorImageFilter< InputImageType, OutputImageType >   FilterType;
 	
-        FilterType::Pointer FilterLineCorrelation = FilterType::New();
+  FilterType::Pointer FilterLineCorrelation = FilterType::New();
         
-	FilterLineCorrelation->SetWidthLine( WidthLine );
-	FilterLineCorrelation->SetLengthLine( LengthLine );
+  FilterLineCorrelation->SetWidthLine( WidthLine );
+  FilterLineCorrelation->SetLengthLine( LengthLine );
 	
-        ReaderType::Pointer reader = ReaderType::New();
-        WriterType::Pointer writer = WriterType::New();
+  ReaderType::Pointer reader = ReaderType::New();
+  WriterType::Pointer writer = WriterType::New();
 
-        reader->SetFileName( inputFilename  );
-        writer->SetFileName( outputFilename );
+  reader->SetFileName( inputFilename  );
+  writer->SetFileName( outputFilename );
         
-        FilterLineCorrelation->SetInput( reader->GetOutput() );
-        writer->SetInput( FilterLineCorrelation->GetOutput() );
+  FilterLineCorrelation->SetInput( reader->GetOutput() );
+  writer->SetInput( FilterLineCorrelation->GetOutput() );
         
-        writer->Update();
+  writer->Update();
 
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "Exception levee inconnue !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  // Software Guide : EndCodeSnippet
-
-//#endif
+   
   return EXIT_SUCCESS;
 }
 

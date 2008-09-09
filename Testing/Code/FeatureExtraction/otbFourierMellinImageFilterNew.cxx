@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
@@ -36,20 +36,9 @@ int otbFourierMellinImageFilterNew(int argc, char* argv[])
   typedef itk::LinearInterpolateImageFunction< InputImageType, double >		InterpolatorType;
   typedef otb::ForwardFourierMellinTransformImageFilter<PixelType,
   				InterpolatorType,Dimension> 			FourierMellinTransformType;
-  try 
-    { 
-     FourierMellinTransformType::Pointer fourierMellinTransform = FourierMellinTransformType::New();
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cerr << "itk::Exception detected: "  << err.GetDescription();
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "unknown exception detected !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
+ 
+  FourierMellinTransformType::Pointer fourierMellinTransform = FourierMellinTransformType::New();
   
+
   return EXIT_SUCCESS;
 }

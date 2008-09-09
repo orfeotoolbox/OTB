@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
@@ -26,27 +26,15 @@
 
 int otbHuPathNew( int argc, char * argv[] )
 {
-  try 
-    { 
-        const   unsigned int                                     Dimension = 2;
-	typedef itk::PolyLineParametricPath< Dimension >	 PathType;
-	typedef otb::HuPathFunction<PathType>                    FunctionType;
-	typedef FunctionType::RealType                           RealType;
-
-	FunctionType::Pointer function =FunctionType::New();
-
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "Exception levee inconnue !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
+  const   unsigned int                                     Dimension = 2;
+  typedef itk::PolyLineParametricPath< Dimension >	 PathType;
+  typedef otb::HuPathFunction<PathType>                    FunctionType;
+  typedef FunctionType::RealType                           RealType;
+  
+  FunctionType::Pointer function =FunctionType::New();
+  
+  
+ 
   return EXIT_SUCCESS;
 }
 

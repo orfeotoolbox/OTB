@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
@@ -27,67 +27,55 @@
 
 int otbCompacityPathCircle( int argc, char * argv[] )
 {
-  try 
-    { 
-        unsigned int  NbOfPoints((unsigned int)::atoi(argv[1]));
+  unsigned int  NbOfPoints((unsigned int)::atoi(argv[1]));
 
-        const   unsigned int                                   Dimension = 2;
-	typedef itk::PolyLineParametricPath< Dimension >       PathType;
-	typedef otb::CompacityPathFunction<PathType>           FunctionType;
-	typedef FunctionType::RealType                         RealType;
+  const   unsigned int                                   Dimension = 2;
+  typedef itk::PolyLineParametricPath< Dimension >       PathType;
+  typedef otb::CompacityPathFunction<PathType>           FunctionType;
+  typedef FunctionType::RealType                         RealType;
   
-	PathType::ContinuousIndexType cindex;
-	PathType::Pointer pathElt = PathType::New();
+  PathType::ContinuousIndexType cindex;
+  PathType::Pointer pathElt = PathType::New();
 
-        if(NbOfPoints<2)
-	{
-             std::cout << "NbOfPoints must be greater than 2 !" << std::endl; 
-             return EXIT_FAILURE;
-	} 
+  if(NbOfPoints<2)
+    {
+      std::cout << "NbOfPoints must be greater than 2 !" << std::endl; 
+      return EXIT_FAILURE;
+    } 
 
-        RealType    deltaTheta;
-        RealType    Rho = 100.0;
+  RealType    deltaTheta;
+  RealType    Rho = 100.0;
 	
-        deltaTheta = 2.* M_PI / static_cast<RealType>(NbOfPoints);
+  deltaTheta = 2.* M_PI / static_cast<RealType>(NbOfPoints);
 	
- 	pathElt->Initialize();
+  pathElt->Initialize();
         
-	for(unsigned int noTheta = 0 ; noTheta < NbOfPoints ; noTheta++)
-	{
-	     RealType Theta = deltaTheta * static_cast<RealType>(noTheta);
+  for(unsigned int noTheta = 0 ; noTheta < NbOfPoints ; noTheta++)
+    {
+      RealType Theta = deltaTheta * static_cast<RealType>(noTheta);
 	
-            cindex[0]= (Rho * vcl_cos(Theta) );
-            cindex[1]= (Rho * vcl_sin(Theta) );
-            pathElt->AddVertex(cindex);	
-	}
+      cindex[0]= (Rho * vcl_cos(Theta) );
+      cindex[1]= (Rho * vcl_sin(Theta) );
+      pathElt->AddVertex(cindex);	
+    }
 
-	FunctionType::Pointer function =FunctionType::New();
-        function->SetInputPath( pathElt );
+  FunctionType::Pointer function =FunctionType::New();
+  function->SetInputPath( pathElt );
 
-	RealType Result = function->Evaluate();
-	std::cout << "Compacity result: " << Result <<std::endl;
+  RealType Result = function->Evaluate();
+  std::cout << "Compacity result: " << Result <<std::endl;
 
-	RealType Error;
-	Error = vcl_abs(Result - static_cast<RealType>(1.0) );
+  RealType Error;
+  Error = vcl_abs(Result - static_cast<RealType>(1.0) );
 	
-	if(  Error > 1.E-5)
-	{
-		std::cout << "Error in estimation !" << std::endl;
-		return EXIT_FAILURE;
-	}
+  if(  Error > 1.E-5)
+    {
+      std::cout << "Error in estimation !" << std::endl;
+      return EXIT_FAILURE;
+    }
 
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "itk::ExceptionObject catch !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "unknown Exception catch !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
+  
+
   return EXIT_SUCCESS;
 }
 

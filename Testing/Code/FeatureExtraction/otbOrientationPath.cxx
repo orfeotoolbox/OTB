@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
@@ -28,53 +28,41 @@
 
 int otbOrientationPath( int argc, char * argv[] )
 {
-  try 
-    { 
-        double        Theta((double)::atof(argv[1]));
+  double        Theta((double)::atof(argv[1]));
 
-        const   unsigned int                                   Dimension = 2;
-	typedef itk::PolyLineParametricPath< Dimension >       PathType;
-	typedef otb::OrientationPathFunction<PathType>         FunctionType;
-	typedef FunctionType::RealType                         RealType;
+  const   unsigned int                                   Dimension = 2;
+  typedef itk::PolyLineParametricPath< Dimension >       PathType;
+  typedef otb::OrientationPathFunction<PathType>         FunctionType;
+  typedef FunctionType::RealType                         RealType;
   
-	PathType::ContinuousIndexType cindex;
-	PathType::Pointer pathElt = PathType::New();
+  PathType::ContinuousIndexType cindex;
+  PathType::Pointer pathElt = PathType::New();
 
-        Theta *= M_PI/180.;
+  Theta *= M_PI/180.;
 	
- 	pathElt->Initialize();
+  pathElt->Initialize();
 
-        cindex[0]=30;
-        cindex[1]=30;
-        pathElt->AddVertex(cindex);
-        cindex[0] += 100 * vcl_cos(Theta);
-        cindex[1] += 100 * vcl_sin(Theta);
-        pathElt->AddVertex(cindex);
+  cindex[0]=30;
+  cindex[1]=30;
+  pathElt->AddVertex(cindex);
+  cindex[0] += 100 * vcl_cos(Theta);
+  cindex[1] += 100 * vcl_sin(Theta);
+  pathElt->AddVertex(cindex);
 
-	FunctionType::Pointer function =FunctionType::New();
-        function->SetInputPath( pathElt );
+  FunctionType::Pointer function =FunctionType::New();
+  function->SetInputPath( pathElt );
 
-	RealType ResultTheta = function->Evaluate();
-	std::cout.precision(10);
-	std::cout << "Orientation found : " << ResultTheta <<std::endl;
-	if( vcl_abs(static_cast<double>(ResultTheta-Theta))>=10e-15)
-	{
-		std::cout << "Error in Theta estimation:" <<(ResultTheta-Theta)<<std::endl;
-		return EXIT_FAILURE;
-	}
+  RealType ResultTheta = function->Evaluate();
+  std::cout.precision(10);
+  std::cout << "Orientation found : " << ResultTheta <<std::endl;
+  if( vcl_abs(static_cast<double>(ResultTheta-Theta))>=10e-15)
+    {
+      std::cout << "Error in Theta estimation:" <<(ResultTheta-Theta)<<std::endl;
+      return EXIT_FAILURE;
+    }
 	
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "itk::ExceptionObject catch !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "unknown Exception catch !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
+ 
+
   return EXIT_SUCCESS;
 }
 

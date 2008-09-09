@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
@@ -27,68 +27,55 @@
 
 int otbCompacityPathSquare( int argc, char * argv[] )
 {
-  try 
-    { 
-        double        A ((double)::atof(argv[1]));
+  double        A ((double)::atof(argv[1]));
 
-        const   unsigned int                                   Dimension = 2;
-	typedef itk::PolyLineParametricPath< Dimension >       PathType;
-	typedef otb::CompacityPathFunction<PathType>           FunctionType;
-	typedef FunctionType::RealType                         RealType;
+  const   unsigned int                                   Dimension = 2;
+  typedef itk::PolyLineParametricPath< Dimension >       PathType;
+  typedef otb::CompacityPathFunction<PathType>           FunctionType;
+  typedef FunctionType::RealType                         RealType;
   
-	PathType::ContinuousIndexType cindex;
-	PathType::Pointer pathElt = PathType::New();
+  PathType::ContinuousIndexType cindex;
+  PathType::Pointer pathElt = PathType::New();
 
-        if(A<0)
-	{
-             std::cout << "square must be greater than 0.0 !" << std::endl; 
-             return EXIT_FAILURE;
-	} 
+  if(A<0)
+    {
+      std::cout << "square must be greater than 0.0 !" << std::endl; 
+      return EXIT_FAILURE;
+    } 
 
 	
- 	pathElt->Initialize();
+  pathElt->Initialize();
 
-       cindex[0]= 100;
-       cindex[1]= 100;
-       pathElt->AddVertex(cindex);	
-       cindex[0]= 100+A;
-       cindex[1]= 100;
-       pathElt->AddVertex(cindex);	
-       cindex[0]= 100+A;
-       cindex[1]= 100+A;
-       pathElt->AddVertex(cindex);	
-       cindex[0]= 100;
-       cindex[1]= 100+A;
-       pathElt->AddVertex(cindex);	
+  cindex[0]= 100;
+  cindex[1]= 100;
+  pathElt->AddVertex(cindex);	
+  cindex[0]= 100+A;
+  cindex[1]= 100;
+  pathElt->AddVertex(cindex);	
+  cindex[0]= 100+A;
+  cindex[1]= 100+A;
+  pathElt->AddVertex(cindex);	
+  cindex[0]= 100;
+  cindex[1]= 100+A;
+  pathElt->AddVertex(cindex);	
         
 
-	FunctionType::Pointer function =FunctionType::New();
-        function->SetInputPath( pathElt );
+  FunctionType::Pointer function =FunctionType::New();
+  function->SetInputPath( pathElt );
 
-	RealType Result = function->Evaluate();
-	std::cout << "Compacity result: " << Result <<std::endl;
+  RealType Result = function->Evaluate();
+  std::cout << "Compacity result: " << Result <<std::endl;
 
-	RealType Error;
-	Error = vcl_abs(Result - static_cast<RealType>(M_PI_4) );
+  RealType Error;
+  Error = vcl_abs(Result - static_cast<RealType>(M_PI_4) );
 	
-	if(  Error > 1.E-9)
-	{
-		std::cout << "Error in Theta estimation :" << std::endl;
-		return EXIT_FAILURE;
-	}
+  if(  Error > 1.E-9)
+    {
+      std::cout << "Error in Theta estimation :" << std::endl;
+      return EXIT_FAILURE;
+    }
 	
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "itk::ExceptionObject catch !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "unknown Exception catch !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
+  
   return EXIT_SUCCESS;
 }
 
