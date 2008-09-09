@@ -24,34 +24,21 @@
 
 int otbRCC8GraphIOEndToEnd(int argc, char* argv[])
 {
-try
-  {
-    char * inputFilename = argv[1];
-    char * outputFilename = argv[2];
-    typedef otb::Polygon<> PathType;
-    typedef otb::RCC8VertexBase<PathType> VertexType;
-    typedef otb::RCC8Graph<VertexType> RCC8GraphType;
-    typedef otb::RCC8GraphFileReader<RCC8GraphType> RCC8GraphFileReaderType;
-    typedef otb::RCC8GraphFileWriter<RCC8GraphType> RCC8GraphFileWriterType;
-    
-    // End to end test
-    RCC8GraphFileReaderType::Pointer rcc8GraphReader = RCC8GraphFileReaderType::New();
-    rcc8GraphReader->SetFileName(inputFilename);
-    RCC8GraphFileWriterType::Pointer rcc8GraphWriter = RCC8GraphFileWriterType::New();
-    rcc8GraphWriter->SetInput(rcc8GraphReader->GetOutput());
-    rcc8GraphWriter->SetFileName(outputFilename);
-    rcc8GraphWriter->Update();
-  }
-catch( itk::ExceptionObject & err ) 
-  { 
-    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-  } 
-catch( ... ) 
-  { 
-    std::cout << "Unknown exception thrown !" << std::endl; 
-    return EXIT_FAILURE;
-  } 
- return EXIT_SUCCESS;
+  char * inputFilename = argv[1];
+  char * outputFilename = argv[2];
+  typedef otb::Polygon<> PathType;
+  typedef otb::RCC8VertexBase<PathType> VertexType;
+  typedef otb::RCC8Graph<VertexType> RCC8GraphType;
+  typedef otb::RCC8GraphFileReader<RCC8GraphType> RCC8GraphFileReaderType;
+  typedef otb::RCC8GraphFileWriter<RCC8GraphType> RCC8GraphFileWriterType;
+  
+  // End to end test
+  RCC8GraphFileReaderType::Pointer rcc8GraphReader = RCC8GraphFileReaderType::New();
+  rcc8GraphReader->SetFileName(inputFilename);
+  RCC8GraphFileWriterType::Pointer rcc8GraphWriter = RCC8GraphFileWriterType::New();
+  rcc8GraphWriter->SetInput(rcc8GraphReader->GetOutput());
+  rcc8GraphWriter->SetFileName(outputFilename);
+  rcc8GraphWriter->Update();
+ 
+  return EXIT_SUCCESS;
 }

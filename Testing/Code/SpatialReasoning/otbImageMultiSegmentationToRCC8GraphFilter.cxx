@@ -27,58 +27,45 @@ PURPOSE.  See the above copyright notices for more information.
 
 int otbImageMultiSegmentationToRCC8GraphFilter(int argc, char* argv[])
 {
-try 
-  {
-    const unsigned int Dimension = 2;
-    char * outputFilename = argv[1];
-    int useOptimisation = atoi(argv[2]);
-    unsigned int nbImages = atoi(argv[3]);
-    
-    // typedefs
-    typedef unsigned short LabelPixelType;
-    typedef otb::Image<LabelPixelType,Dimension> LabelImageType;
-    typedef otb::Polygon<> PolygonType;
-    typedef otb::RCC8VertexBase<PolygonType> VertexType;
-    typedef otb::RCC8Graph<VertexType> RCC8GraphType;
-    typedef otb::ImageMultiSegmentationToRCC8GraphFilter<LabelImageType,RCC8GraphType>
-      RCC8GraphFilterType;
-    typedef otb::ImageList<LabelImageType> ImageListType;
-    typedef otb::ImageFileReader<LabelImageType> ReaderType;
-    typedef otb::RCC8GraphFileWriter<RCC8GraphType> GraphWriterType;
+  const unsigned int Dimension = 2;
+  char * outputFilename = argv[1];
+  int useOptimisation = atoi(argv[2]);
+  unsigned int nbImages = atoi(argv[3]);
+  
+  // typedefs
+  typedef unsigned short LabelPixelType;
+  typedef otb::Image<LabelPixelType,Dimension> LabelImageType;
+  typedef otb::Polygon<> PolygonType;
+  typedef otb::RCC8VertexBase<PolygonType> VertexType;
+  typedef otb::RCC8Graph<VertexType> RCC8GraphType;
+  typedef otb::ImageMultiSegmentationToRCC8GraphFilter<LabelImageType,RCC8GraphType>
+    RCC8GraphFilterType;
+  typedef otb::ImageList<LabelImageType> ImageListType;
+  typedef otb::ImageFileReader<LabelImageType> ReaderType;
+  typedef otb::RCC8GraphFileWriter<RCC8GraphType> GraphWriterType;
+  
+  ImageListType::Pointer inputList = ImageListType::New();
+  
+  // Reading input images
+  for(unsigned int i=0;i<nbImages;i++)
+    {
+      ReaderType::Pointer reader = ReaderType::New();
+      reader->SetFileName(argv[4+i]);
+      reader->Update();
+      inputList->PushBack(reader->GetOutput());
+    }
+  std::cout<<"Input image loaded into images list."<<std::endl;
+  // Instanatiation
+  RCC8GraphFilterType::Pointer filter = RCC8GraphFilterType::New();
+  filter->SetInput(inputList);
+  filter->SetOptimisation(useOptimisation>0);
+  
+  // Writing output graph
+  GraphWriterType::Pointer writer = GraphWriterType::New();
+  writer->SetFileName(outputFilename);
+  writer->SetInput(filter->GetOutput());
+  writer->Update();
+  
 
-    ImageListType::Pointer inputList = ImageListType::New();
-
-    // Reading input images
-    for(unsigned int i=0;i<nbImages;i++)
-      {
-	ReaderType::Pointer reader = ReaderType::New();
-	reader->SetFileName(argv[4+i]);
-	reader->Update();
-	inputList->PushBack(reader->GetOutput());
-      }
-    std::cout<<"Input image loaded into images list."<<std::endl;
-    // Instanatiation
-    RCC8GraphFilterType::Pointer filter = RCC8GraphFilterType::New();
-    filter->SetInput(inputList);
-    filter->SetOptimisation(useOptimisation>0);
-    
-    // Writing output graph
-    GraphWriterType::Pointer writer = GraphWriterType::New();
-    writer->SetFileName(outputFilename);
-    writer->SetInput(filter->GetOutput());
-    writer->Update();
-
-  }
-catch( itk::ExceptionObject & err ) 
-  { 
-    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-  } 
-catch( ... ) 
-  { 
-    std::cout << "Unknown exception thrown !" << std::endl; 
-    return EXIT_FAILURE;
-  } 
- return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }  

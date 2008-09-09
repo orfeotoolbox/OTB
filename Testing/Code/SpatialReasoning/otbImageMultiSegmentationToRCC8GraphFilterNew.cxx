@@ -24,31 +24,18 @@ PURPOSE.  See the above copyright notices for more information.
 
 int otbImageMultiSegmentationToRCC8GraphFilterNew(int argc, char* argv[])
 {
-try 
-  {
-    const unsigned int Dimension = 2;
-    typedef unsigned short LabelPixelType;
-    typedef otb::Polygon<> PolygonType;
-    typedef otb::Image<LabelPixelType,Dimension> LabelImageType;
-    typedef otb::RCC8VertexBase<PolygonType> VertexType;
-    typedef otb::RCC8Graph<VertexType> RCC8GraphType;
-    typedef otb::ImageMultiSegmentationToRCC8GraphFilter<LabelImageType,RCC8GraphType>
-      RCC8GraphFilterType;
+  const unsigned int Dimension = 2;
+  typedef unsigned short LabelPixelType;
+  typedef otb::Polygon<> PolygonType;
+  typedef otb::Image<LabelPixelType,Dimension> LabelImageType;
+  typedef otb::RCC8VertexBase<PolygonType> VertexType;
+  typedef otb::RCC8Graph<VertexType> RCC8GraphType;
+  typedef otb::ImageMultiSegmentationToRCC8GraphFilter<LabelImageType,RCC8GraphType>
+    RCC8GraphFilterType;
+  
+  // Instanatiation
+  RCC8GraphFilterType::Pointer filter = RCC8GraphFilterType::New();
+  
 
-    // Instanatiation
-    RCC8GraphFilterType::Pointer filter = RCC8GraphFilterType::New();
-
-  }
-catch( itk::ExceptionObject & err ) 
-  { 
-    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-  } 
-catch( ... ) 
-  { 
-    std::cout << "Unknown exception thrown !" << std::endl; 
-    return EXIT_FAILURE;
-  } 
- return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }  

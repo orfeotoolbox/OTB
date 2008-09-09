@@ -21,25 +21,12 @@
 
 int otbRCC8VertexWithCompacityNew(int argc, char* argv[])
 {
-try
-  {
-    typedef otb::Polygon<> PathType;
-    typedef float PrecisionType;
-    typedef otb::RCC8VertexWithCompacity<PathType,PrecisionType> RCC8VertexType;
+  typedef otb::Polygon<> PathType;
+  typedef float PrecisionType;
+  typedef otb::RCC8VertexWithCompacity<PathType,PrecisionType> RCC8VertexType;
     
-    // Instantiation
-    RCC8VertexType::Pointer rcc8Vertex= RCC8VertexType::New();
-  }
-catch( itk::ExceptionObject & err ) 
-  { 
-    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-  } 
-catch( ... ) 
-  { 
-    std::cout << "Unknown exception thrown !" << std::endl; 
-    return EXIT_FAILURE;
-  } 
- return EXIT_SUCCESS;
+  // Instantiation
+  RCC8VertexType::Pointer rcc8Vertex= RCC8VertexType::New();
+
+  return EXIT_SUCCESS;
 }

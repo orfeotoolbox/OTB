@@ -21,23 +21,11 @@
 
 int otbRCC8EdgeNew(int argc, char* argv[])
 {
-try
-  {
-    typedef otb::RCC8Edge RCC8EdgeType;
-    
-    // Instantiation
-    RCC8EdgeType::Pointer rcc8= RCC8EdgeType::New();
-  }
-catch( itk::ExceptionObject & err ) 
-  { 
-    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-  } 
-catch( ... ) 
-  { 
-    std::cout << "Unknown exception thrown !" << std::endl; 
-    return EXIT_FAILURE;
-  } 
+  typedef otb::RCC8Edge RCC8EdgeType;
+  
+  // Instantiation
+  RCC8EdgeType::Pointer rcc8= RCC8EdgeType::New();
+
+
  return EXIT_SUCCESS;
 }

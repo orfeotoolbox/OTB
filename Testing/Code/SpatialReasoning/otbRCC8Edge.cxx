@@ -21,33 +21,20 @@
 
 int otbRCC8Edge(int argc, char* argv[])
 {
-try
-  {
-    typedef otb::RCC8Edge RCC8EdgeType;
-    typedef RCC8EdgeType::RCC8ValueType RCC8ValueType;
-    RCC8ValueType value = otb::OTB_RCC8_DC;
+  typedef otb::RCC8Edge RCC8EdgeType;
+  typedef RCC8EdgeType::RCC8ValueType RCC8ValueType;
+  RCC8ValueType value = otb::OTB_RCC8_DC;
+  
+  // Instantiation
+  RCC8EdgeType::Pointer edge= RCC8EdgeType::New();
+  edge->SetValue(value);
+  
+  
+  if(edge->GetValue()!=value)
+    {
+      std::cout<<"Test failed: edge->GetValue()!=value"<<std::endl;
+      return EXIT_FAILURE;
+    }
 
-    // Instantiation
-    RCC8EdgeType::Pointer edge= RCC8EdgeType::New();
-    edge->SetValue(value);
-
-   
-    if(edge->GetValue()!=value)
-      {
-	std::cout<<"Test failed: edge->GetValue()!=value"<<std::endl;
-	return EXIT_FAILURE;
-      }
-  }
-catch( itk::ExceptionObject & err ) 
-  { 
-    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-  } 
-catch( ... ) 
-  { 
-    std::cout << "Unknown exception thrown !" << std::endl; 
-    return EXIT_FAILURE;
-  } 
- return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }

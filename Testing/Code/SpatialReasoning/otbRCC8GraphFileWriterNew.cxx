@@ -23,27 +23,14 @@
 
 int otbRCC8GraphFileWriterNew(int argc, char* argv[])
 {
-try
-  {
-    typedef otb::Polygon<>  PathType;
-    typedef otb::RCC8VertexBase<PathType> VertexType;
-    typedef otb::RCC8Graph<VertexType> RCC8GraphType;
-    typedef otb::RCC8GraphFileWriter<RCC8GraphType> RCC8GraphFileWriterType;
-    
-    // Instantiation
-    RCC8GraphFileWriterType::Pointer rcc8GraphWriter = RCC8GraphFileWriterType::New();
-  }
-catch( itk::ExceptionObject & err ) 
-  { 
-    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-  } 
-catch( ... ) 
-  { 
-    std::cout << "Unknown exception thrown !" << std::endl; 
-    return EXIT_FAILURE;
-  } 
- return EXIT_SUCCESS;
+  typedef otb::Polygon<>  PathType;
+  typedef otb::RCC8VertexBase<PathType> VertexType;
+  typedef otb::RCC8Graph<VertexType> RCC8GraphType;
+  typedef otb::RCC8GraphFileWriter<RCC8GraphType> RCC8GraphFileWriterType;
+  
+  // Instantiation
+  RCC8GraphFileWriterType::Pointer rcc8GraphWriter = RCC8GraphFileWriterType::New();
+
+  return EXIT_SUCCESS;
 }
 

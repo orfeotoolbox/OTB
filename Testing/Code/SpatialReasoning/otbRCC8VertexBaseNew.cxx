@@ -21,24 +21,11 @@
 
 int otbRCC8VertexBaseNew(int argc, char* argv[])
 {
-try
-  {
-    typedef otb::Polygon<>  PathType;
-    typedef otb::RCC8VertexBase<PathType> RCC8VertexType;
-    
-    // Instantiation
-    RCC8VertexType::Pointer rcc8Vertex= RCC8VertexType::New();
-  }
-catch( itk::ExceptionObject & err ) 
-  { 
-    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-  } 
-catch( ... ) 
-  { 
-    std::cout << "Unknown exception thrown !" << std::endl; 
-    return EXIT_FAILURE;
-  } 
- return EXIT_SUCCESS;
+  typedef otb::Polygon<>  PathType;
+  typedef otb::RCC8VertexBase<PathType> RCC8VertexType;
+  
+  // Instantiation
+  RCC8VertexType::Pointer rcc8Vertex= RCC8VertexType::New();
+  
+  return EXIT_SUCCESS;
 }

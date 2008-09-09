@@ -23,26 +23,13 @@
 
 int otbRCC8GraphSourceNew(int argc, char* argv[])
 {
-try
-  {
-    typedef otb::Polygon<>  PathType;
-    typedef otb::RCC8VertexBase<PathType> VertexType;
-    typedef otb::RCC8Graph<VertexType> RCC8GraphType;
-    typedef otb::RCC8GraphSource<RCC8GraphType> RCC8GraphSourceType;
+  typedef otb::Polygon<>  PathType;
+  typedef otb::RCC8VertexBase<PathType> VertexType;
+  typedef otb::RCC8Graph<VertexType> RCC8GraphType;
+  typedef otb::RCC8GraphSource<RCC8GraphType> RCC8GraphSourceType;
 
-    // Instantiation
-    RCC8GraphSourceType::Pointer rcc8GraphSource = RCC8GraphSourceType::New();
-  }
-catch( itk::ExceptionObject & err ) 
-  { 
-    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-  } 
-catch( ... ) 
-  { 
-    std::cout << "Unknown exception thrown !" << std::endl; 
-    return EXIT_FAILURE;
-  } 
- return EXIT_SUCCESS;
+  // Instantiation
+  RCC8GraphSourceType::Pointer rcc8GraphSource = RCC8GraphSourceType::New();
+  
+  return EXIT_SUCCESS;
 }
