@@ -57,7 +57,7 @@ int otbMorphologicalOpeningProfileFilter(int argc, char * argv[])
   profileFilter->SetProfileSize(profileSize);
   profileFilter->SetInitialValue(initialValue);
   profileFilter->SetStep(step);
-  profileFilter->GetOutput()->UpdateOutputInformation();
+  profileFilter->Update();
 
   WriterType::Pointer writer;
 
