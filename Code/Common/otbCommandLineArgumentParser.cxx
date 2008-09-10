@@ -71,16 +71,19 @@ std::string
 CommandLineArgumentParseResult
 ::GetParameterString(std::string option, unsigned int number)const
 {
-        if( this->IsOptionPresent(option) == false )
-        {
-		itkExceptionMacro(<<"GetParameterString(): The following '"<<option<<"' option is unknown !!");
-        }
-  
-        OptionMapType::const_iterator it = m_OptionMap.begin();
-        it = m_OptionMap.find(option);
-        ParameterArrayType pat = (*it).second;
-        std::string lString = pat[number];
-        return ( lString );
+  if( this->IsOptionPresent(option) == false )
+    {
+      itk::OStringStream msg;
+      msg<<"GetParameterString(): The following '"<<option<<"' option is unknown !!";
+      CommandLineArgumentParserArgumentErrorException e(__FILE__, __LINE__);
+      e.SetDescription(msg.str().c_str());
+      throw e;
+    }
+  OptionMapType::const_iterator it = m_OptionMap.begin();
+  it = m_OptionMap.find(option);
+  ParameterArrayType pat = (*it).second;
+  std::string lString = pat[number];
+  return ( lString );
 }
 
 std::string 
@@ -234,20 +237,26 @@ CommandLineArgumentParser
 	bool IsHelp = outResult->IsOptionPresent("--help");
 	if ( IsHelp == true )
 	{
-		PrintUsage(std::cout);
-		itkExceptionMacro(<<"ParseCommandLine(): Help Parser");
+	  PrintUsage(std::cout);
+	  CommandLineArgumentParserHelpException e(__FILE__, __LINE__);
+	  e.SetDescription("ParseCommandLine(): Help Parser");
+	  throw e;
 	}
 	bool IsVersion = outResult->IsOptionPresent("--version");
 	if ( IsVersion == true )
 	{
 		PrintVersion(std::cout);
-		itkExceptionMacro(<<"ParseCommandLine(): Version Parser");
+		CommandLineArgumentParserHelpException e(__FILE__, __LINE__);
+		e.SetDescription("ParseCommandLine(): Version Parser");
+		throw e;
 	}
 	tryParse = TryParseCommandLine(argc, argv, outResult, true, failOnUnknownTrailingParameters);
 	if ( (tryParse == false) )
   	{	
 		PrintUsage(std::cerr);
-		itkExceptionMacro(<<"ParseCommandLine() argument Error");
+		CommandLineArgumentParserArgumentErrorException e(__FILE__, __LINE__);
+		e.SetDescription("ParseCommandLine() argument Error");
+		throw e;
 	}
 }
 

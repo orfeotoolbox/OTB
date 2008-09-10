@@ -32,6 +32,79 @@
 #include "itkProcessObject.h"
 #include "otbMacro.h"
 
+
+/** \class CommandLineArgumentParserHelpException
+ * \brief This exception is thrown when the help menu is displayed.
+ */ 
+class ITK_EXPORT CommandLineArgumentParserHelpException 
+  : public itk::ExceptionObject 
+{
+public:
+  /** Run-time information. */
+  itkTypeMacro(CommandLineArgumentParserHelpException , ExceptionObject );
+
+  /** Constructor. */
+ CommandLineArgumentParserHelpException(const char *file, unsigned int line, 
+                           const char* message = "Help:",
+                           const char* loc = "Unknown" ) : 
+    ExceptionObject(file, line, message, loc)
+  {}
+  /** Constructor. */
+ CommandLineArgumentParserHelpException(const std::string &file, unsigned int line, 
+                           const char* message = "Help:",
+                           const char* loc = "Unknown" ) :
+    ExceptionObject(file, line, message, loc)
+  {}
+};
+
+/** \class CommandLineArgumentParserVersionException
+ * \brief This exception is thrown when the version is displayed.
+ */ 
+class ITK_EXPORT CommandLineArgumentParserVersionException 
+  : public itk::ExceptionObject 
+{
+public:
+  /** Run-time information. */
+  itkTypeMacro(CommandLineArgumentParserVersionException , ExceptionObject );
+
+  /** Constructor. */
+ CommandLineArgumentParserVersionException(const char *file, unsigned int line, 
+                           const char* message = "Version:",
+                           const char* loc = "Unknown" ) : 
+    ExceptionObject(file, line, message, loc)
+  {}
+  /** Constructor. */
+ CommandLineArgumentParserVersionException(const std::string &file, unsigned int line, 
+                           const char* message = "Version:",
+                           const char* loc = "Unknown" ) :
+    ExceptionObject(file, line, message, loc)
+  {}
+};
+
+/** \class CommandLineArgumentParserArgumentErrorException
+ * \brief This exception is thrown when the version is displayed.
+ */ 
+class ITK_EXPORT CommandLineArgumentParserArgumentErrorException 
+  : public itk::ExceptionObject 
+{
+public:
+  /** Run-time information. */
+  itkTypeMacro(CommandLineArgumentParserArgumentErrorException , ExceptionObject );
+
+  /** Constructor. */
+ CommandLineArgumentParserArgumentErrorException(const char *file, unsigned int line, 
+                           const char* message = "Argument error:",
+                           const char* loc = "Unknown" ) : 
+    ExceptionObject(file, line, message, loc)
+  {}
+  /** Constructor. */
+ CommandLineArgumentParserArgumentErrorException(const std::string &file, unsigned int line, 
+                           const char* message = "Argument error:",
+                           const char* loc = "Unknown" ) :
+    ExceptionObject(file, line, message, loc)
+  {}
+};
+
 namespace otb
 {
 
