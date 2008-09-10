@@ -77,7 +77,7 @@ namespace otb
 	    m_InternalSpacing[dimension] = vcl_abs(inputPtr->GetSpacing()[dimension]);
 	  }
       }
-    std::cout<<"MeanShiftImageFilterBase: Internal Spacing = "<<m_InternalSpacing<<std::endl;
+    otbMsgDevMacro(<<"MeanShiftImageFilterBase: Internal Spacing = "<<m_InternalSpacing);
 
     for(unsigned int dimension = 0; dimension < InputImageType::ImageDimension;++dimension)
       {
@@ -85,7 +85,7 @@ namespace otb
 									   / m_InternalSpacing[dimension]+0.5));
       }
       
-    std::cout<<"MeanShiftImageFilterBase: Internal radius = "<<m_InternalRadius<<std::endl;
+    otbMsgDevMacro(<<"MeanShiftImageFilterBase: Internal radius = "<<m_InternalRadius);
 
     // pad the input requested region by the operator radius
     inputRequestedRegion.PadByRadius( m_InternalRadius );
