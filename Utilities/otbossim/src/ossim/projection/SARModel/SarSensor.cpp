@@ -44,6 +44,8 @@ int SarSensor::ImageToWorld(double distance, JSDDateTime time, double height, do
 	lon = (geo.get_x())*360.0/DEUXPI;
 	lat = (geo.get_y())*360.0/DEUXPI;
 
+	delete satPosition;
+
 	return etatLoc ; 
 }
 
