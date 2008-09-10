@@ -361,7 +361,7 @@ ADD_TEST(coTuImageToVectorImageCastFilter ${COMMON_TESTS5}
 
 ADD_TEST(coTvImageToVectorImageCastFilter ${COMMON_TESTS5}
 --compare-image ${TOL}
-		${INPUTDATA}/coImageToVectorImageCastFilterOutput.tif
+		${BASELINE}/coImageToVectorImageCastFilterOutput.tif
 		${TEMP}/coImageToVectorImageCastFilterOutput.tif
 		otbImageToVectorImageCastFilter
 		${INPUTDATA}/poupees.hdr
