@@ -24,7 +24,7 @@
 #include "otbVegetationIndex.h"
 
 template<class TInputRImage, class TInputNIRImage, class TOutputImage, class TFunction>
-int generic_SetASetBRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
+void generic_SetASetBRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
 {
   typedef otb::ImageFileReader<TInputRImage> RReaderType;
   typedef otb::ImageFileReader<TInputNIRImage> NIRReaderType;
@@ -53,9 +53,6 @@ int generic_SetASetBRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
   filter->GetFunctor().SetB(b);
   writer->SetInput( filter->GetOutput() );
   writer->Update();
-
- 
-  return EXIT_SUCCESS;
 }
 
 
@@ -71,17 +68,15 @@ int otbSetASetBRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
   std::string strArgv(argv[1]);
   argc--;
   argv++;
-  if ( strArgv == "PVI" ) return( generic_SetASetBRAndNIRVegetationIndexImageFilter<InputRImageType, InputNIRImageType, OutputImageType,
-				  otb::Functor::PVI<     InputRImageType::PixelType,
-				  InputNIRImageType::PixelType,
-				  OutputImageType::PixelType> >
-				  (argc,argv) );
-  else if ( strArgv == "TSAVI" ) return( generic_SetASetBRAndNIRVegetationIndexImageFilter<InputRImageType, InputNIRImageType, OutputImageType,
-					 otb::Functor::TSAVI<     InputRImageType::PixelType,
-					 InputNIRImageType::PixelType,
-					 OutputImageType::PixelType> >
-					 (argc,argv) );
-  else
-    return EXIT_FAILURE;
+  if ( strArgv == "PVI" ) generic_SetASetBRAndNIRVegetationIndexImageFilter<InputRImageType, InputNIRImageType, OutputImageType,
+			    otb::Functor::PVI<     InputRImageType::PixelType,
+			    InputNIRImageType::PixelType,
+			    OutputImageType::PixelType> >
+			    (argc,argv);
+  else if ( strArgv == "TSAVI" ) generic_SetASetBRAndNIRVegetationIndexImageFilter<InputRImageType, InputNIRImageType, OutputImageType,
+				   otb::Functor::TSAVI<     InputRImageType::PixelType,
+				   InputNIRImageType::PixelType,
+				   OutputImageType::PixelType> >
+				   (argc,argv);
   return EXIT_SUCCESS;
 }

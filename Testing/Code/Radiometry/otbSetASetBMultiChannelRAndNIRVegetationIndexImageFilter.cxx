@@ -25,7 +25,7 @@
 #include "otbVegetationIndex.h"
 
 template<class TInputImage, class TOutputImage, class TFunction>
-int generic_SetASetBMultiChannelRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
+void generic_SetASetBMultiChannelRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
 {
   typedef otb::ImageFileReader<TInputImage> ReaderType;
   typedef otb::ImageFileWriter<TOutputImage> WriterType;
@@ -65,17 +65,15 @@ int otbSetASetBMultiChannelRAndNIRVegetationIndexImageFilter(int argc, char * ar
   std::string strArgv(argv[1]);
   argc--;
   argv++;
-  if ( strArgv == "PVI" ) return( generic_SetASetBMultiChannelRAndNIRVegetationIndexImageFilter<InputImageType, OutputImageType,
+  if ( strArgv == "PVI" ) generic_SetASetBMultiChannelRAndNIRVegetationIndexImageFilter<InputImageType, OutputImageType,
 				  otb::Functor::PVI<     InputImageType::InternalPixelType,
 				  InputImageType::InternalPixelType,
 				  OutputImageType::PixelType> >
-				  (argc,argv) );
-  else if ( strArgv == "TSAVI" ) return( generic_SetASetBMultiChannelRAndNIRVegetationIndexImageFilter<InputImageType, OutputImageType,
+				  (argc,argv);
+  else if ( strArgv == "TSAVI" ) generic_SetASetBMultiChannelRAndNIRVegetationIndexImageFilter<InputImageType, OutputImageType,
 					 otb::Functor::TSAVI<     InputImageType::InternalPixelType,
 					 InputImageType::InternalPixelType,
 					 OutputImageType::PixelType> >
-					 (argc,argv) );
-  else
-    return EXIT_FAILURE;
+					 (argc,argv);
   return EXIT_SUCCESS;
 }
