@@ -18,7 +18,7 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef _otbMeanShiftImageFilterBase_h
 #define _otbMeanShiftImageFilterBase_h
 
-#include "itkInPlaceImageFilter.h"
+#include "itkImageToImageFilter.h"
 #include "itkVariableLengthVector.h"
 
 namespace otb
@@ -59,17 +59,17 @@ namespace otb
 
   template <class TInputImage, class TOutputImage, class TPrecision = double>
     class ITK_EXPORT MeanShiftImageFilterBase
-    : public itk::InPlaceImageFilter<TInputImage,TOutputImage>
+    : public itk::ImageToImageFilter<TInputImage,TOutputImage>
     {
       public:
       /** Standard class typedef */
       typedef MeanShiftImageFilterBase                          Self;
-      typedef itk::InPlaceImageFilter<TInputImage,TOutputImage> Superclass;
+      typedef itk::ImageToImageFilter<TInputImage,TOutputImage> Superclass;
       typedef itk::SmartPointer<Self>                           Pointer;
       typedef itk::SmartPointer<const Self>                     ConstPointer;
 
       /** Type macro */
-      itkTypeMacro(MeanShiftImageFilterBase,InPlaceImageFilter);
+      itkTypeMacro(MeanShiftImageFilterBase,ImageToImageFilter);
     
       /** Template parameters typedefs */
       typedef TInputImage                                  InputImageType;
