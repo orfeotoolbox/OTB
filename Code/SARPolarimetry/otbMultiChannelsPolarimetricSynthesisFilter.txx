@@ -171,7 +171,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   inputIt.GoToBegin();
   outputIt.GoToBegin();
 
-  int val = m_ArchitectureType->GetArchitectureType();
+  ArchitectureType val = m_ArchitectureType->GetArchitectureType();
 
   // Computation with 4 channels
   switch (val)
@@ -277,7 +277,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 ::VerifyAndForceInputs()
 {
   
-  int val = m_ArchitectureType->GetArchitectureType();
+  ArchitectureType val = m_ArchitectureType->GetArchitectureType();
   
   switch(val)
     {
@@ -324,8 +324,9 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 {
 
   int NumberOfImages = this->GetInput()->GetNumberOfComponentsPerPixel();
-std::cout<<"BeforeThreadedGenerateData : NbOfImages"<<NumberOfImages<<std::endl;
+///std::cout<<"BeforeThreadedGenerateData : NbOfImages"<<NumberOfImages<<std::endl;
 
+//std::cout<<"BeforeThreadedGenerateData : H : "<<GetEmissionH()<<" V : "<<GetEmissionV()<<std::endl;
   // First Part. Determine the kind of architecture of the input picture
   m_ArchitectureType->DetermineArchitecture(NumberOfImages,GetEmissionH(),GetEmissionV());
   

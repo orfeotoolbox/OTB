@@ -163,7 +163,8 @@ public:
   itkSetMacro(Mode,int);
   itkGetMacro(Mode,int);
   /** Set the gain */
-  itkSetMacro(Gain,double);  
+  itkSetMacro(Gain,double);
+  itkGetMacro(Gain,double);  
   /** Force the copolar mode */
   void ForceCoPolar();  
   /** Force the crosspolar mode */

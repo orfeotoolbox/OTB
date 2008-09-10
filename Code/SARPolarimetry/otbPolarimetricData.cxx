@@ -105,7 +105,7 @@ std::cout<<"case2 : "<<std::endl;
         if (EmissionH && !EmissionV )
           {
             SetArchitectureType(HH_HV);
-std::cout<<"SET HH HV !! "<<std::endl;              
+std::cout<<"SET HH HV !! "<<std::endl;
           }
         else if (!EmissionH && EmissionV )
           {
