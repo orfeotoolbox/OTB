@@ -66,21 +66,21 @@ namespace otb
       virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
       /** Redefinition of the GetNumberOfComponentsPerPixel() adapted for VectorImages */
-      virtual unsigned int GetNumberOfComponentsPerPixel();
+      inline virtual unsigned int GetNumberOfComponentsPerPixel();
 
       /** Redefinition of the InitValue() method adapted for vector images 
        *  Please be aware that this function modifies the reference to value 
        */
-      virtual void InitValue(PrecisionPixelType & value, const unsigned int& nbComponents);
+      inline virtual void InitValue(PrecisionPixelType & value, const unsigned int& nbComponents);
 
       /** Redefinition of the SquaredNorm() method adapted for vector images */
-      virtual double SquaredNorm(const PrecisionPixelType & value);
+      inline virtual double SquaredNorm(const PrecisionPixelType & value);
 
       /** Redefinition of CastInputPixelToPrecisionPixel() method adapted form Image */
-      virtual const PrecisionPixelType CastInputPixelToPrecisionPixel(const InputPixelType & pixel);
+      inline virtual const PrecisionPixelType CastInputPixelToPrecisionPixel(const InputPixelType & pixel);
       
       /** Redefinition of CastPrecisionPixelToOutputPixel() method adapted form Image */
-      virtual const OutputPixelType CastPrecisionPixelToOutputPixel(const PrecisionPixelType & pixel);
+      inline virtual const OutputPixelType CastPrecisionPixelToOutputPixel(const PrecisionPixelType & pixel);
       
       private:
       MeanShiftVectorImageFilter(const Self&); //purposely not implemented
