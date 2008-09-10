@@ -361,11 +361,11 @@ ADD_TEST(coTuImageToVectorImageCastFilter ${COMMON_TESTS5}
 
 ADD_TEST(coTvImageToVectorImageCastFilter ${COMMON_TESTS5}
 --compare-image ${TOL}
-		${INPUTDATA}/poupees.hdr
-		${TEMP}/coVectorImageAdaptorOutput.hdr
+		${INPUTDATA}/coImageToVectorImageCastFilterOutput.tif
+		${TEMP}/coImageToVectorImageCastFilterOutput.tif
 		otbImageToVectorImageCastFilter
 		${INPUTDATA}/poupees.hdr
-		${TEMP}/coVectorImageAdaptorOutput.hdr
+		${TEMP}/coImageToVectorImageCastFilterOutput.tif
 )
 
 # -------            otb::ImageToPathFilterNew  -------------------------------------------
