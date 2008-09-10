@@ -26,11 +26,11 @@
 namespace Functor
 {
   template <class TIter, class TOutput>
-  class UnaryFunctorNeighborhoodImageFilterFunctorNewTest
+  class UnaryFunctorNeighborhoodImageFilterTest
   {
   public:
-    UnaryFunctorNeighborhoodImageFilterFunctorNewTest() {};
-    ~UnaryFunctorNeighborhoodImageFilterFunctorNewTest() {};
+    UnaryFunctorNeighborhoodImageFilterTest() {};
+    ~UnaryFunctorNeighborhoodImageFilterTest() {};
     
     inline TOutput operator() (const TIter & it)
     {
@@ -54,7 +54,7 @@ int otbUnaryFunctorNeighborhoodImageFilter(int argc, char * argv[])
   typedef otb::ImageFileWriter<ImageType> WriterType;
   
   typedef itk::ConstNeighborhoodIterator<ImageType>   IterType;;
-  typedef Functor::UnaryFunctorNeighborhoodImageFilterFunctorNewTest<IterType, PixelType>  FunctorType;
+  typedef Functor::UnaryFunctorNeighborhoodImageFilterTest<IterType, PixelType>  FunctorType;
   typedef otb::UnaryFunctorNeighborhoodImageFilter<ImageType, ImageType, FunctorType> UnaryFunctorNeighborhoodImageFilterType;
   
   // Instantiating object
