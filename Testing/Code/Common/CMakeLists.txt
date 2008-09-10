@@ -469,7 +469,7 @@ otbUnaryFunctorNeighborhoodImageFilterNew
 
 ADD_TEST(coTvUnaryFunctorNeighborhoodImageFilter ${COMMON_TESTS6}
 --compare-image ${TOL}
-		${INPUTDATA}/poupees_sub.png    # copie the input image
+		${BASELINE}/coTvUnaryFunctorNeighborhoodImageFilter.tif
 		${TEMP}/coTvUnaryFunctorNeighborhoodImageFilter.tif
     otbUnaryFunctorNeighborhoodImageFilter
         ${INPUTDATA}/poupees_sub.png
