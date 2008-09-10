@@ -46,7 +46,10 @@ class ITK_EXPORT MeanShiftImageFilter
     typedef itk::SmartPointer<const Self>                     ConstPointer;
    
     // Precision pixel type 
+    typedef typename Superclass::InputPixelType     InputPixelType;
     typedef typename Superclass::PrecisionPixelType PrecisionPixelType;
+    typedef typename Superclass::OutputPixelType    OutputPixelType;
+    
 
     /** New and Type macros */
     itkNewMacro(Self);
@@ -72,7 +75,13 @@ class ITK_EXPORT MeanShiftImageFilter
     
     /** Redefinition of the SquaredNorm() method adapted for Image */
     virtual double SquaredNorm(const PrecisionPixelType& value);
-    
+
+    /** Redefinition of CastInputPixelToPrecisionPixel() method adapted form Image */
+    virtual const PrecisionPixelType CastInputPixelToPrecisionPixel(const InputPixelType & pixel);
+
+    /** Redefinition of CastPrecisionPixelToOutputPixel() method adapted form Image */
+    virtual const OutputPixelType CastPrecisionPixelToOutputPixel(const PrecisionPixelType & pixel);
+
     private:
     MeanShiftImageFilter(const Self&); //purposely not implemented
     void operator=(const Self&);             //purposely not implemented

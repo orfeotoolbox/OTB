@@ -55,6 +55,26 @@ namespace otb
   }
 
   template <class TInputImage,class TOutputImage,class TPrecision>
+  const typename  MeanShiftVectorImageFilter<TInputImage,TOutputImage,TPrecision>
+  ::PrecisionPixelType 
+  MeanShiftVectorImageFilter<TInputImage,TOutputImage,TPrecision>
+  ::CastInputPixelToPrecisionPixel(const InputPixelType & pixel)
+  {
+    // Inplicit cast in construction by copy, nothing to do here
+    return pixel;
+  }
+
+  template <class TInputImage,class TOutputImage,class TPrecision>
+  const typename  MeanShiftVectorImageFilter<TInputImage,TOutputImage,TPrecision>
+  ::OutputPixelType 
+  MeanShiftVectorImageFilter<TInputImage,TOutputImage,TPrecision>
+  ::CastPrecisionPixelToOutputPixel(const PrecisionPixelType & pixel)
+  {   
+    // Inplicit cast in construction by copy, nothing to do here
+    return pixel;
+  }
+
+  template <class TInputImage,class TOutputImage,class TPrecision>
   void
   MeanShiftVectorImageFilter<TInputImage,TOutputImage,TPrecision>
   ::PrintSelf(std::ostream& os, itk::Indent indent) const

@@ -57,108 +57,124 @@ namespace otb
    * \ingroup Threaded
    */
 
-template <class TInputImage, class TOutputImage, class TPrecision = double>
-class ITK_EXPORT MeanShiftImageFilterBase
-  : public itk::InPlaceImageFilter<TInputImage,TOutputImage>
-  {
-  public:
-    /** Standard class typedef */
-    typedef MeanShiftImageFilterBase                          Self;
-    typedef itk::InPlaceImageFilter<TInputImage,TOutputImage> Superclass;
-    typedef itk::SmartPointer<Self>                           Pointer;
-    typedef itk::SmartPointer<const Self>                     ConstPointer;
+  template <class TInputImage, class TOutputImage, class TPrecision = double>
+    class ITK_EXPORT MeanShiftImageFilterBase
+    : public itk::InPlaceImageFilter<TInputImage,TOutputImage>
+    {
+      public:
+      /** Standard class typedef */
+      typedef MeanShiftImageFilterBase                          Self;
+      typedef itk::InPlaceImageFilter<TInputImage,TOutputImage> Superclass;
+      typedef itk::SmartPointer<Self>                           Pointer;
+      typedef itk::SmartPointer<const Self>                     ConstPointer;
 
-    /** Type macro */
-    itkTypeMacro(MeanShiftImageFilterBase,InPlaceImageFilter);
+      /** Type macro */
+      itkTypeMacro(MeanShiftImageFilterBase,InPlaceImageFilter);
     
-    /** Template parameters typedefs */
-    typedef TInputImage                                  InputImageType;
-    typedef typename InputImageType::Pointer             InputImagePointerType;
-    typedef typename InputImageType::PixelType           InputPixelType;
-    typedef typename InputImageType::PointType           PointType;
-    typedef TOutputImage                                 OutputImageType;
-    typedef typename OutputImageType::Pointer            OutputImagePointerType;
-    typedef typename OutputImageType::PixelType          OutputPixelType;
-    typedef typename OutputImageType::RegionType         RegionType;
-    typedef typename RegionType::SizeType                SizeType;
-    typedef typename RegionType::IndexType               IndexType;
-    typedef typename InputImageType::SpacingType         SpacingType;
-    typedef TPrecision                                   PrecisionPixelType;
+      /** Template parameters typedefs */
+      typedef TInputImage                                  InputImageType;
+      typedef typename InputImageType::Pointer             InputImagePointerType;
+      typedef typename InputImageType::PixelType           InputPixelType;
+      typedef typename InputImageType::PointType           PointType;
+      typedef TOutputImage                                 OutputImageType;
+      typedef typename OutputImageType::Pointer            OutputImagePointerType;
+      typedef typename OutputImageType::PixelType          OutputPixelType;
+      typedef typename OutputImageType::RegionType         RegionType;
+      typedef typename RegionType::SizeType                SizeType;
+      typedef typename RegionType::IndexType               IndexType;
+      typedef typename InputImageType::SpacingType         SpacingType;
+      typedef TPrecision                                   PrecisionPixelType;
 
-    /** Setters / Getters */
-    itkSetMacro(SpatialRadius,double);
-    itkGetMacro(SpatialRadius,double);
-    itkSetMacro(RangeRadius,double);
-    itkGetMacro(RangeRadius,double);
-    itkSetMacro(MaxNumberOfIterations,unsigned int);
-    itkGetMacro(MaxNumberOfIterations,unsigned int);
-    itkGetMacro(ConvergenceDistanceThreshold,double);
-    itkSetMacro(ConvergenceDistanceThreshold,double);
-    itkSetMacro(UseImageSpacing,bool);
-    itkGetMacro(UseImageSpacing,bool);
-    itkBooleanMacro(UseImageSpacing);
+      /** Setters / Getters */
+      itkSetMacro(SpatialRadius,double);
+      itkGetMacro(SpatialRadius,double);
+      itkSetMacro(RangeRadius,double);
+      itkGetMacro(RangeRadius,double);
+      itkSetMacro(MaxNumberOfIterations,unsigned int);
+      itkGetMacro(MaxNumberOfIterations,unsigned int);
+      itkGetMacro(ConvergenceDistanceThreshold,double);
+      itkSetMacro(ConvergenceDistanceThreshold,double);
+      itkSetMacro(UseImageSpacing,bool);
+      itkGetMacro(UseImageSpacing,bool);
+      itkBooleanMacro(UseImageSpacing);
 
-  protected:
-    /** This filters use a neighborhood around the pixel, so it needs to redfine the 
-     * input requested region */
-    virtual void GenerateInputRequestedRegion();
+      protected:
+      /** This filters use a neighborhood around the pixel, so it needs to redfine the 
+       * input requested region */
+      virtual void GenerateInputRequestedRegion();
 
-    /** Threaded generate data */
-    virtual void ThreadedGenerateData(const RegionType & outputRegionForThread,int threadId);
+      /** Threaded generate data */
+      virtual void ThreadedGenerateData(const RegionType & outputRegionForThread,int threadId);
 
-    /** Constructor */
-    MeanShiftImageFilterBase();
+      /** Constructor */
+      MeanShiftImageFilterBase();
 
-    /** destructor */
-    ~MeanShiftImageFilterBase(){};
+      /** destructor */
+      ~MeanShiftImageFilterBase(){};
 
-   /**PrintSelf method */
-    virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+      /**PrintSelf method */
+      virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-    /** 
-     * This method must be defined in order to handle VectorImage or Image.
-     * \return the number of components per pixel of the input image.
-     */
-    virtual unsigned int GetNumberOfComponentsPerPixel() = 0;
+      /** 
+       * This method must be defined in order to handle VectorImage or Image.
+       * \return the number of components per pixel of the input image.
+       */
+      virtual unsigned int GetNumberOfComponentsPerPixel() = 0;
 
-   /** 
-     * This method must be defined in order to handle VectorImage or Image.
-     * \param value The value to intialize (please note that the reference will be modified)
-     * \param nbComponents the number of components of the value to intialize.
-     */
-    virtual void InitValue(PrecisionPixelType & value, const unsigned int& nbComponents) = 0;
+      /** 
+       * This method must be defined in order to handle VectorImage or Image.
+       * \param value The value to intialize (please note that the reference will be modified)
+       * \param nbComponents the number of components of the value to intialize.
+       */
+      virtual void InitValue(PrecisionPixelType & value, const unsigned int& nbComponents) = 0;
 
-    /**
-     * This method must be defined in order to handle VectorImage or Image.
-     * \return The sqaured norm of the given value 
-     */
-    virtual double SquaredNorm(const PrecisionPixelType& value) = 0;
+      /**
+       * This method must be defined in order to handle VectorImage or Image.
+       * \return The sqaured norm of the given value 
+       */
+      virtual double SquaredNorm(const PrecisionPixelType& value) = 0;
 
-  private:
-    MeanShiftImageFilterBase(const Self&); //purposely not implemented
-    void operator=(const Self&);             //purposely not implemented
+      /**
+       * This method must be defined in order to handle VectorImage or Image.
+       * It casts a pixel of type InputPixelType to a pixel of type PrecisionPixelType.
+       * \param inputPixel the pixel to cast
+       * \return the casted pixel.
+       */
+      virtual const PrecisionPixelType CastInputPixelToPrecisionPixel(const InputPixelType & pixel) = 0;
+
+      /**
+       * This method must be defined in order to handle VectorImage or Image.
+       * It casts a pixel of type PrecisionPixelType to a pixel of type OutputPixelType.
+       * \param pixel the pixel to cast
+       * \return the casted pixel.
+       */
+      virtual const OutputPixelType CastPrecisionPixelToOutputPixel(const PrecisionPixelType & pixel) = 0;
+
+      private:
+      MeanShiftImageFilterBase(const Self&); //purposely not implemented
+      void operator=(const Self&);             //purposely not implemented
  
-    /** Spatial radius for mean shift convergence */
-    double m_SpatialRadius;
-    /** Range radius for mean shift convergence */
-    double m_RangeRadius;
-    /** Max number of iterations for convergence */
-    unsigned int m_MaxNumberOfIterations;
+      /** Spatial radius for mean shift convergence */
+      double m_SpatialRadius;
+      /** Range radius for mean shift convergence */
+      double m_RangeRadius;
+      /** Max number of iterations for convergence */
+      unsigned int m_MaxNumberOfIterations;
 
-    /** Internal radius used by the iterator. The value depends on the spatial radius
-     *  and the maximum number of iterations. This value is not intended to be accessed
-     *  by users, thus no getter or setter is provided */
-    SizeType m_InternalRadius;
+      /** Internal radius used by the iterator. The value depends on the spatial radius
+       *  and the maximum number of iterations. This value is not intended to be accessed
+       *  by users, thus no getter or setter is provided */
+      SizeType m_InternalRadius;
 
-    /** use image spacing */
-    bool m_UseImageSpacing;
+      /** use image spacing */
+      bool m_UseImageSpacing;
 
-    /** Internal spacing is [1.,1.] if UseImageSpacing is off */
-    SpacingType m_InternalSpacing;
+      /** Internal spacing is [1.,1.] if UseImageSpacing is off */
+      SpacingType m_InternalSpacing;
 
-    /** Distance threshold for convergence in the spatial domain */
-    double m_ConvergenceDistanceThreshold;
-  };
+      /** Distance threshold for convergence in the spatial domain */
+      double m_ConvergenceDistanceThreshold;
+    };
 }// end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

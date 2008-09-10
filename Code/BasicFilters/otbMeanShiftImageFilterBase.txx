@@ -159,7 +159,7 @@ namespace otb
 	goesOn = true;
 	convergencePoint[0]=static_cast<double>(inputIt.GetIndex()[0])*m_InternalSpacing[0];
 	convergencePoint[1]=static_cast<double>(inputIt.GetIndex()[1])*m_InternalSpacing[1];
-	convergenceValue = inputIt.Get();
+	convergenceValue = this->CastInputPixelToPrecisionPixel(inputIt.Get());
 	// While the max number of iterations has not been reached and the convergence index is still moving
 	while(nbIterations < m_MaxNumberOfIterations && goesOn)
 	  {
@@ -167,10 +167,10 @@ namespace otb
 	    this->InitValue(maxDensityValue,nbComponentsPerPixel);
 	    nbPixelsIntoAccount = 0;
 
-	    startx = vcl_floor((convergencePoint[0]-m_SpatialRadius)/m_InternalSpacing[0]);
-	    stopx  = vcl_ceil ((convergencePoint[0]+m_SpatialRadius)/m_InternalSpacing[0]);
-	    starty = vcl_floor((convergencePoint[1]-m_SpatialRadius)/m_InternalSpacing[1]);
-	    stopy  = vcl_ceil ((convergencePoint[1]+m_SpatialRadius)/m_InternalSpacing[1]);
+	    startx = static_cast<long>(vcl_floor((convergencePoint[0]-m_SpatialRadius)/m_InternalSpacing[0]));
+	    stopx  = static_cast<long>(vcl_ceil ((convergencePoint[0]+m_SpatialRadius)/m_InternalSpacing[0]));
+	    starty = static_cast<long>(vcl_floor((convergencePoint[1]-m_SpatialRadius)/m_InternalSpacing[1]));
+	    stopy  = static_cast<long>(vcl_ceil ((convergencePoint[1]+m_SpatialRadius)/m_InternalSpacing[1]));
 
 	    // loop on the neighborhood
 	    for(i = startx;i<=stopx;++i)
@@ -229,7 +229,7 @@ namespace otb
 	    ++nbIterations;
 	  }
 	// Set the output value
-	outputIt.Set(convergenceValue);
+	outputIt.Set(this->CastPrecisionPixelToOutputPixel(convergenceValue));
 	// Update progress
 	progress.CompletedPixel();
 	// Increment iterators

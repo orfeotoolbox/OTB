@@ -51,8 +51,10 @@ namespace otb
       itkTypeMacro(MeanShiftVectorImageFilter,MeanShiftImageFilterBase);
     
       /** Template parameters typedefs */
+      typedef typename Superclass::InputPixelType     InputPixelType;
       typedef typename Superclass::PrecisionPixelType PrecisionPixelType;
-
+      typedef typename Superclass::OutputPixelType    OutputPixelType;
+      
       protected:
       /** Constructor */
       MeanShiftVectorImageFilter(){};
@@ -74,6 +76,12 @@ namespace otb
       /** Redefinition of the SquaredNorm() method adapted for vector images */
       virtual double SquaredNorm(const PrecisionPixelType & value);
 
+      /** Redefinition of CastInputPixelToPrecisionPixel() method adapted form Image */
+      virtual const PrecisionPixelType CastInputPixelToPrecisionPixel(const InputPixelType & pixel);
+      
+      /** Redefinition of CastPrecisionPixelToOutputPixel() method adapted form Image */
+      virtual const OutputPixelType CastPrecisionPixelToOutputPixel(const PrecisionPixelType & pixel);
+      
       private:
       MeanShiftVectorImageFilter(const Self&); //purposely not implemented
       void operator=(const Self&);             //purposely not implemented

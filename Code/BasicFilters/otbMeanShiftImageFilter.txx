@@ -48,6 +48,24 @@ namespace otb
   }
 
   template <class TInputImage,class TOutputImage,class TPrecision>
+  const typename  MeanShiftImageFilter<TInputImage,TOutputImage,TPrecision>
+  ::PrecisionPixelType
+  MeanShiftImageFilter<TInputImage,TOutputImage,TPrecision>
+  ::CastInputPixelToPrecisionPixel(const InputPixelType & pixel)
+  {   
+    return static_cast<PrecisionPixelType>(pixel);
+  }
+
+  template <class TInputImage,class TOutputImage,class TPrecision>
+  const typename  MeanShiftImageFilter<TInputImage,TOutputImage,TPrecision>
+  ::OutputPixelType
+  MeanShiftImageFilter<TInputImage,TOutputImage,TPrecision>
+  ::CastPrecisionPixelToOutputPixel(const PrecisionPixelType & pixel)
+  {   
+    return static_cast<OutputPixelType>(pixel);
+  }
+
+  template <class TInputImage,class TOutputImage,class TPrecision>
   void
   MeanShiftImageFilter<TInputImage,TOutputImage,TPrecision>
   ::PrintSelf(std::ostream& os, itk::Indent indent) const
