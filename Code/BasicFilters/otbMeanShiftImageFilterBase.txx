@@ -129,8 +129,6 @@ namespace otb
     itk::ImageRegionConstIteratorWithIndex<InputImageType> inputIt(inputPtr,outputRegionForThread);
     itk::ImageRegionIterator<OutputImageType> outputIt(outputPtr,outputRegionForThread);
 
-    //TODO: Work with a floating point pixel type
-
     // local declarations 
     unsigned int nbIterations;
     IndexType      offset;
