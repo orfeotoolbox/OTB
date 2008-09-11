@@ -46,7 +46,7 @@ int otbUnaryFunctorNeighborhoodImageFilter(int argc, char * argv[])
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];
   
-  typedef double InputPixelType;
+  typedef unsigned char InputPixelType;
   const int Dimension = 2;
   typedef otb::Image<InputPixelType,Dimension> ImageType;
   typedef ImageType::PixelType PixelType;
