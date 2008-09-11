@@ -291,26 +291,29 @@ LINK_DIRECTORIES( ${GDAL_LIBRARY_DIRS} )
 # EXPAT Library
 #-------------------------------
 
-#       FIND_PACKAGE(EXPAT)
-#       IF(EXPAT_FOUND)
-#         INCLUDE_DIRECTORIES(${EXPAT_INCLUDE_DIR})
-#       	MESSAGE(${EXPAT_INCLUDE_DIR})
-#         LINK_DIRECTORIES( ${EXPAT_LIBRARY} )
-#         TRY_COMPILE(OTB_TYPE_COMPILE_EXPAT
-#             ${OTB_BINARY_DIR}/CMakeTmp
-#             ${OTB_SOURCE_DIR}/CMake/otbTestCompileExpat.cxx )
-#         IF(OTB_TYPE_COMPILE_EXPAT)
-#             SET(OTB_USE_EXTERNAL_EXPAT ON CACHE INTERNAL  "Use an outside build of EXPAT.")
-#         ELSE(OTB_TYPE_COMPILE_EXPAT)
-#             SET(OTB_USE_EXTERNAL_EXPAT OFF CACHE INTERNAL  "Use an OTB internal build of EXPAT.")
-#         ENDIF( OTB_TYPE_COMPILE_EXPAT)
-
-#       ELSE(EXPAT_FOUND)
-#             SET(OTB_USE_EXTERNAL_EXPAT OFF CACHE INTERNAL  "Use an OTB internal build of EXPAT.")
-#       ENDIF(EXPAT_FOUND)
-
-
-
+SET(OTB_USE_EXTERNAL_EXPAT 1)
+FIND_PACKAGE(EXPAT)
+IF(EXPAT_FOUND)
+        # Control expat compatibility
+        INCLUDE_DIRECTORIES(${EXPAT_INCLUDE_DIR})
+       	MESSAGE(${EXPAT_INCLUDE_DIR})
+        LINK_DIRECTORIES( ${EXPAT_LIBRARY} )
+        TRY_COMPILE(OTB_TYPE_COMPILE_EXPAT
+            ${OTB_BINARY_DIR}/CMakeTmp
+            ${OTB_SOURCE_DIR}/CMake/otbTestCompileExpat.cxx )
+        IF(OTB_TYPE_COMPILE_EXPAT)
+                SET(OTB_USE_EXTERNAL_EXPAT 1)
+        ELSE(OTB_TYPE_COMPILE_EXPAT)
+                SET(OTB_USE_EXTERNAL_EXPAT 0)
+        ENDIF( OTB_TYPE_COMPILE_EXPAT)
+ELSE(EXPAT_FOUND)
+        SET(OTB_USE_EXTERNAL_EXPAT 0)
+ENDIF(EXPAT_FOUND)
+IF(NOT OTB_USE_EXTERNAL_EXPAT)
+        ADD_DEFINITIONS(-DOTB_USE_INTERNAL_EXPAT)
+        INCLUDE_DIRECTORIES("${OTB_SOURCE_DIR}/Utilities/otbexpat")
+        INCLUDE_DIRECTORIES("${OTB_BINARY_DIR}/Utilities/otbexpat")
+ENDIF(NOT OTB_USE_EXTERNAL_EXPAT)
 
 #-------------------------------
 # End connections whith external libraries

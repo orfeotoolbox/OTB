@@ -2,6 +2,9 @@
    See the file COPYING for copying permission.
 */
 
+/* OTB Modifications */
+# include "otb_expat_mangle.h"
+
 #ifndef Expat_INCLUDED
 #define Expat_INCLUDED 1
 

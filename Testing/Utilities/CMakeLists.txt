@@ -333,6 +333,12 @@ ADD_TEST(utOpenJpegDecoder ${UTILITIES_TESTS}
 	openJpegDecoder)
 ENDIF(OTB_COMPILE_JPEG2000)
 
+# -------            lib expat  ------------------------------
+IF(NOT OTB_USE_EXTERNAL_EXPAT)
+ADD_TEST(utExpatRunTests ${UTILITIES_TESTS}
+        expatruntests
+        -q)
+ENDIF(NOT OTB_USE_EXTERNAL_EXPAT)
 
 # -------            lib OpenThreads  ------------------------------
 IF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
@@ -435,8 +441,6 @@ IF(OTB_COMPILE_JPEG2000)
   SET(UtilitiesTests_SRCS ${UtilitiesTests_SRCS}  openJpegEncoder.cxx openJpegDecoder.cxx)
 ENDIF(OTB_COMPILE_JPEG2000)
 
-
-
 IF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
   SET(UtilitiesTests_SRCS ${UtilitiesTests_SRCS}  
         openthreadsThreadObserver.cpp
@@ -445,8 +449,19 @@ IF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
         openthreadsSimpleThreader.cpp )
 ENDIF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
 
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
+IF(NOT OTB_USE_EXTERNAL_EXPAT)
+  SET(UtilitiesTests_SRCS ${UtilitiesTests_SRCS} 
+        expatchardata.cxx
+        expatminicheck.cxx
+        expatruntests.cxx )
+  IF(CMAKE_COMPILER_IS_GNUCXX)
+        SET_SOURCE_FILES_PROPERTIES( expatchardata.cxx expatminicheck.cxx expatruntests.cxx PROPERTIES COMPILE_FLAGS -w )
+  ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
+ENDIF(NOT OTB_USE_EXTERNAL_EXPAT)
+
+
+INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}")
 
 
@@ -464,6 +479,10 @@ ENDIF(OTB_COMPILE_JPEG2000)
 IF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
   TARGET_LINK_LIBRARIES(otbUtilitiesTests OpenThreads)
 ENDIF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
+
+IF(NOT OTB_USE_EXTERNAL_EXPAT)
+  TARGET_LINK_LIBRARIES(otbUtilitiesTests otbexpat)
+ENDIF(NOT OTB_USE_EXTERNAL_EXPAT)
 
 IF(UNIX)
     TARGET_LINK_LIBRARIES (otbUtilitiesTests m)

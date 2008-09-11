@@ -49,5 +49,8 @@ REGISTER_TEST(itk2DScaleInvariantFeatureImageFilterTest);
  REGISTER_TEST(openthreadsSimpleThreader);
  REGISTER_TEST(openthreadsWorkCrew);
 #endif
+#ifdef OTB_USE_INTERNAL_EXPAT
+ REGISTER_TEST(expatruntests);
+#endif
 }
 

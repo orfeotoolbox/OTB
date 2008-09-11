@@ -21,7 +21,7 @@ IF(OTB_USE_VISU_GUI)
 ENDIF(OTB_USE_VISU_GUI)
 
 IF(NOT OTB_USE_EXTERNAL_EXPAT)
-	#SUBDIRS( otbexpat )
+	SUBDIRS( otbexpat )
 ENDIF(NOT OTB_USE_EXTERNAL_EXPAT)
 
 #Supress libraries not used by the 2.2.0 version 
