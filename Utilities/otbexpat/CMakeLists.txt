@@ -66,13 +66,17 @@ RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
 LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
 ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
 
-SET(__files "${CMAKE_CURRENT_SOURCE_DIR}/lib/expat_external.h 
-                ${CMAKE_CURRENT_SOURCE_DIR}/otb_expat.h
-                ${CMAKE_CURRENT_SOURCE_DIR}/otb_expat_mangle.h
-                ${CMAKE_CURRENT_SOURCE_DIR}/lib/expat.h
-")
+SET(__files     ${CMAKE_CURRENT_SOURCE_DIR}/otb_expat.h
+                ${CMAKE_CURRENT_SOURCE_DIR}/otb_expat_mangle.h)
 
 INSTALL(FILES ${__files}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbexpat
+    COMPONENT Development)
+
+SET(__files2    ${CMAKE_CURRENT_SOURCE_DIR}/lib/expat_external.h 
+                ${CMAKE_CURRENT_SOURCE_DIR}/lib/expat.h)
+
+INSTALL(FILES ${__files2}
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbexpat/lib
     COMPONENT Development)
 

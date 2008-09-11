@@ -48,7 +48,7 @@ ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
 #	DESTINATION include/OpenThreads
 #)
 INSTALL(FILES ${OpenThreads_PUBLIC_HEADERS}
-	      DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbopenthreads/OpenThreads/include
+	      DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbopenthreads/OpenThreads/include/OpenThreads
 	      COMPONENT Development)
 
 
