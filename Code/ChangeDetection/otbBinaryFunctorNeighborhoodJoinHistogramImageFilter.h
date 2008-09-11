@@ -37,12 +37,12 @@ namespace otb
  */
 template <class TInputImage1, class TInputImage2, 
           class TOutputImage, class TFunction    >
-class ITK_EXPORT BinaryFunctorNeighborhoodJoinHistogramImageFilter : public itk::InPlaceImageFilter<TInputImage1,TOutputImage> 
+class ITK_EXPORT BinaryFunctorNeighborhoodJoinHistogramImageFilter : public itk::ImageToImageFilter<TInputImage1,TOutputImage> 
 {
 public:
   /** Standard class typedefs. */
   typedef BinaryFunctorNeighborhoodJoinHistogramImageFilter  Self;
-  typedef itk::BinaryFunctorImageFilter<TInputImage1,TInputImage2,TOutputImage,TFunction>   Superclass;
+  typedef itk::ImageToImageFilter<TInputImage1,TOutputImage>   Superclass;
   typedef itk::SmartPointer<Self>   Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -50,7 +50,7 @@ public:
   itkNewMacro(Self);
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BinaryFunctorNeighborhoodJoinHistogramImageFilter, BinaryFunctorImageFilter);
+  itkTypeMacro(BinaryFunctorNeighborhoodJoinHistogramImageFilter, ImageToImageFilter);
 
 
   /** Some convenient typedefs. */

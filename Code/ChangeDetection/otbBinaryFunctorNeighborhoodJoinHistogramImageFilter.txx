@@ -36,7 +36,6 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOut
 ::BinaryFunctorNeighborhoodJoinHistogramImageFilter()
 {
   this->SetNumberOfRequiredInputs( 2 );
-  this->InPlaceOff();
   m_Radius = 3;
   m_HistogramSize.Fill(256);
   m_UsePaddingValue = false;
