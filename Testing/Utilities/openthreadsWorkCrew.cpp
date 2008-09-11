@@ -16,9 +16,18 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 
+
 #include <cstdio>
 #include <sys/types.h>
-#include <unistd.h>
+// OTB Modifications
+//#include <unistd.h>
+#if defined(_WIN32) && !defined(__CYGWIN__)
+# include <io.h>
+# include <process.h>
+#else
+# include <unistd.h>
+#endif
+
 #include <iostream>
 #include <vector>
 #include <cassert>
