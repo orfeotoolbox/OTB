@@ -243,7 +243,8 @@ otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
 bool ONERAImageIO::OpenOneraDataFileForReading(const char* filename)                                       
 {
   // Make sure that we have a file to 
-  if ( filename == "" )
+  std::string lFileName(filename);
+  if ( lFileName.empty() )
     {
     itkExceptionMacro(<<"A FileName must be specified.");
     return false;
@@ -269,7 +270,8 @@ bool ONERAImageIO::OpenOneraDataFileForReading(const char* filename)
 bool ONERAImageIO::OpenOneraHeaderFileForReading(const char* filename)                                       
 {
   // Make sure that we have a file to 
-  if ( filename == "" )
+  std::string lFileName(filename);
+  if ( lFileName.empty() )
     {
     itkExceptionMacro(<<"A FileName must be specified.");
     return false;
@@ -405,7 +407,8 @@ otbMsgDebugMacro( <<"         File byte order    : "<<this->GetByteOrderAsString
 bool ONERAImageIO::OpenOneraDataFileForWriting(const char* filename)                                       
 {
   // Make sure that we have a file to 
-  if ( filename == "" )
+  std::string lFileName(filename);
+  if ( lFileName.empty() )
     {
     itkExceptionMacro(<<"A FileName must be specified.");
     return false;
@@ -433,7 +436,8 @@ bool ONERAImageIO::OpenOneraDataFileForWriting(const char* filename)
 bool ONERAImageIO::OpenOneraHeaderFileForWriting(const char* filename)                                       
 {
   // Make sure that we have a file to 
-  if ( filename == "" )
+  std::string lFileName(filename);
+  if ( lFileName.empty() )
     {
     itkExceptionMacro(<<"A FileName must be specified.");
     return false;
