@@ -18,7 +18,7 @@
 #ifndef __otbBinaryFunctorNeighborhoodImageFilter_h
 #define __otbBinaryFunctorNeighborhoodImageFilter_h
 
-#include "itkBinaryFunctorImageFilter.h"
+#include "itkImageToImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkConstNeighborhoodIterator.h"
 
@@ -36,12 +36,12 @@ namespace otb
  */
 template <class TInputImage1, class TInputImage2, 
           class TOutputImage, class TFunction    >
-class ITK_EXPORT BinaryFunctorNeighborhoodImageFilter : public itk::InPlaceImageFilter<TInputImage1,TOutputImage> 
+  class ITK_EXPORT BinaryFunctorNeighborhoodImageFilter : public itk::ImageToImageFilter<TInputImage1,TOutputImage>
 {
 public:
   /** Standard class typedefs. */
   typedef BinaryFunctorNeighborhoodImageFilter  Self;
-  typedef itk::BinaryFunctorImageFilter<TInputImage1,TInputImage2,TOutputImage,TFunction>   Superclass;
+  typedef itk::ImageToImageFilter<TInputImage1,TOutputImage> Superclass;
   typedef itk::SmartPointer<Self>   Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 

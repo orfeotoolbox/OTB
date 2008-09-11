@@ -36,7 +36,6 @@ BinaryFunctorNeighborhoodImageFilter<TInputImage1,TInputImage2,TOutputImage,TFun
 ::BinaryFunctorNeighborhoodImageFilter()
 {
   this->SetNumberOfRequiredInputs( 2 );
-  this->InPlaceOff();
   m_Radius = 3;
 }
 
