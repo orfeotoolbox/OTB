@@ -269,6 +269,11 @@ ADD_TEST(feTvHarrisPoupee ${FEATUREEXTRACTION_TESTS4}
 ADD_TEST(feTvMultiplyByScalarImage ${FEATUREEXTRACTION_TESTS4}  
          otbMultiplyByScalarImageFilterTest)
 
+ADD_TEST(feTuThresholdImageToPointSetFilterNew ${FEATUREEXTRACTION_TESTS4}
+         otbThresholdImageToPointSetFilterNew
+)
+
+
 ADD_TEST(feTuThresholdImageToPointSet1 ${FEATUREEXTRACTION_TESTS4}  
   --compare-ascii ${EPS} ${BASELINE_FILES}/feThresholdImageToPointSet_Threshold_0To255.txt
                    ${TEMP}/feThresholdImageToPointSet_Threshold_0To255.txt
@@ -813,6 +818,8 @@ ADD_TEST(feTvImageToSIFTKeyPointSetFilterQB_SuburbOutputAscii ${FEATUREEXTRACTIO
 		2 3 5.0 0.0
 )
 
+
+
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
 otbAlignImageToPath.cxx
@@ -856,6 +863,7 @@ otbAssymmetricFusionOfLineDetectorNew.cxx
 otbAssymmetricFusionOfLineDetector.cxx
 otbHarrisImage.cxx
 otbMultiplyByScalarImageTest.cxx
+otbThresholdImageToPointSetFilterNew.cxx
 otbThresholdImageToPointSetTest.cxx
 )
 SET(BasicFeatureExtraction_SRCS5
