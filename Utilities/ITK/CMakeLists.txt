@@ -272,7 +272,9 @@ IF(NOT ITK_INSTALL_BIN_DIR)
 ENDIF(NOT ITK_INSTALL_BIN_DIR)
 
 IF(NOT ITK_INSTALL_LIB_DIR)
-  SET(ITK_INSTALL_LIB_DIR "/lib/InsightToolkit")
+# OTB Modifications
+#  SET(ITK_INSTALL_LIB_DIR "/lib/InsightToolkit")
+  SET(ITK_INSTALL_LIB_DIR "/lib/otb")
 ENDIF(NOT ITK_INSTALL_LIB_DIR)
 
 IF(NOT ITK_INSTALL_DATA_DIR)
@@ -310,6 +312,9 @@ ELSE(ITK_BUILD_SHARED_LIBS)
     SET(ITK_INSTALL_NO_LIBRARIES 1)
   ENDIF(ITK_INSTALL_NO_DEVELOPMENT)
 ENDIF(ITK_BUILD_SHARED_LIBS)
+
+# OTB Modifications: force install lib directory
+SET(ITK_INSTALL_PACKAGE_DIR "lib/otb")
 
 # Because INSTALL_* commands require a leading / and because INSTALL (cmake 2.4
 # and newer) requires no leading / to install under INSTALL_PREFIX, we
