@@ -25,6 +25,7 @@
 #include "itkProgressReporter.h"
 #include "otbMirrorBoundaryCondition.h"
 #include "itkZeroFluxNeumannBoundaryCondition.h"
+#include "itkNeighborhoodAlgorithm.h"
 
 namespace otb
 {
@@ -36,7 +37,6 @@ UnaryFunctorNeighborhoodImageFilter<TInputImage,TOutputImage,TFunction>
 ::UnaryFunctorNeighborhoodImageFilter()
 {
   this->SetNumberOfRequiredInputs( 1 );
-  this->InPlaceOff();
   m_Radius = 1;
 }
 template <class TInputImage, class TOutputImage, class TFunction  >
@@ -98,36 +98,56 @@ void
 UnaryFunctorNeighborhoodImageFilter<TInputImage, TOutputImage, TFunction>
 ::ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread, int threadId)
 { 
+  std::cout<<threadId<<" "<<outputRegionForThread<<std::endl;
+  //unsigned int i;
   itk::ZeroFluxNeumannBoundaryCondition<TInputImage> nbc;
-  TInputImage * inputPtr = static_cast<TInputImage *>( ProcessObjectType::GetInput(0) );
+
+// We use dynamic_cast since inputs are stored as DataObjects.  The
+  // ImageToImageFilter::GetInput(int) always returns a pointer to a
+  // TInputImage so it cannot be used for the second input.
+  InputImagePointer inputPtr
+	  = dynamic_cast<const TInputImage*>(ProcessObjectType::GetInput(0));
+  OutputImagePointer outputPtr = this->GetOutput(0);
 
   RadiusType r;
   r.Fill(m_Radius);
-
-  OutputImagePointer outputPtr = this->GetOutput(); 
-
+  NeighborhoodIteratorType neighInputIt;
+    
   itk::ImageRegionIterator<TOutputImage> outputIt;
+
+
+  // Find the data-set boundary "faces"
+  typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>::FaceListType faceList;
+  typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage> bC;
+  faceList = bC(inputPtr, outputRegionForThread, r);
+
+
+  typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>::FaceListType::iterator fit;
 
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-
-  NeighborhoodIteratorType neighInputIt( r, inputPtr, outputRegionForThread );
-  neighInputIt.OverrideBoundaryCondition( &nbc );
-  neighInputIt.GoToBegin();
   
-  outputIt = itk::ImageRegionIterator<TOutputImage> ( outputPtr,outputRegionForThread );
-  outputIt.GoToBegin();
-  
-  while ( !outputIt.IsAtEnd() )
-    {
-      outputIt.Set( m_Functor( neighInputIt ) );
+  // Process each of the boundary faces.  These are N-d regions which border
+  // the edge of the buffer.
+  for (fit=faceList.begin(); fit != faceList.end(); ++fit)
+    { 
+    neighInputIt = itk::ConstNeighborhoodIterator<TInputImage>(r, inputPtr, *fit);
       
+    outputIt = itk::ImageRegionIterator<TOutputImage>(outputPtr, *fit);
+    neighInputIt.OverrideBoundaryCondition(&nbc);
+    neighInputIt.GoToBegin();
+
+    while ( ! outputIt.IsAtEnd() )
+      {
+
+      outputIt.Set( m_Functor( neighInputIt) );
+
       ++neighInputIt;
       ++outputIt;
-      
       progress.CompletedPixel();
-    }
- }
+      }
+    }  
+}
 
 } // end namespace otb
 

@@ -18,7 +18,7 @@
 #ifndef __otbUnaryFunctorNeighborhoodImageFilter_h
 #define __otbUnaryFunctorNeighborhoodImageFilter_h
 
-#include "itkInPlaceImageFilter.h"
+#include "itkImageToImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkProcessObject.h"
@@ -35,12 +35,12 @@ namespace otb {
  */	
 template <class TInputImage, class TOutputImage, class TFunction >
 class ITK_EXPORT UnaryFunctorNeighborhoodImageFilter 
-	: public itk::InPlaceImageFilter<TInputImage,TOutputImage> 
+	: public itk::ImageToImageFilter<TInputImage,TOutputImage> 
 {
 public:
   /** Standard class typedefs. */
   typedef UnaryFunctorNeighborhoodImageFilter           Self;
-  typedef itk::InPlaceImageFilter<TInputImage,TOutputImage >  Superclass;
+  typedef itk::ImageToImageFilter<TInputImage,TOutputImage >  Superclass;
   typedef itk::SmartPointer<Self>                             Pointer;
   typedef itk::SmartPointer<const Self>                       ConstPointer;
 
@@ -48,7 +48,7 @@ public:
   itkNewMacro(Self);
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(UnaryFunctorNeighborhoodImageFilter,InPlaceImageFilter);
+  itkTypeMacro(UnaryFunctorNeighborhoodImageFilter,ImageToImageFilter);
 
 
   /** Some convenient typedefs. */
@@ -128,11 +128,6 @@ protected:
    */
   virtual void GenerateInputRequestedRegion(void);
 
-  /**
-   * Allocate the output buffer before calling the ThreadedGenerateData.
-   */ 
- /*  virtual void BeforeThreadedGenerateData(void); */
-  
 private:
   UnaryFunctorNeighborhoodImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

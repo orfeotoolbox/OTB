@@ -62,8 +62,8 @@ namespace otb
 	    {	 
 	      unsigned int neighborhoodSize = it.Size();
 	      double contribution = 0.;
-	      double temp = 0.;
-	      TOutput outPixel = it.GetPixel(0);
+	      TOutput outPixel;
+	      outPixel.SetSize(it.GetCenterPixel().Size());
 
 	      // Loop over each component
 	      for (unsigned int j=0; j<outPixel.GetSize(); j++)
@@ -94,9 +94,7 @@ namespace otb
 		      contribution += static_cast<double>( tempPix[j] )*idVal;
 
 		    }
-		  temp = 0.; 
-		  temp = static_cast<double>(it.GetCenterPixel()[j])*m_UpwardTransmittanceRatio[j] + contribution*m_DiffuseRatio[j]; 
-		  outPixel[j] = static_cast<RealValueType>(temp);
+		  outPixel[j] = static_cast<RealValueType>(it.GetCenterPixel()[j])*m_UpwardTransmittanceRatio[j] + contribution*m_DiffuseRatio[j];
 		}
 	      return outPixel;
 	    }
