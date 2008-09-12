@@ -292,6 +292,7 @@ LINK_DIRECTORIES( ${GDAL_LIBRARY_DIRS} )
 #-------------------------------
 
 SET(OTB_USE_EXTERNAL_EXPAT 1)
+SET(EXPAT_FIND_REQUIRED 0) # To suppress cmake error message if not find
 FIND_PACKAGE(EXPAT)
 IF(EXPAT_FOUND)
         # Control expat compatibility
