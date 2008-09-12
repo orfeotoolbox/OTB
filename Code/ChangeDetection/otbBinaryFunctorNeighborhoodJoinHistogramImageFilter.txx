@@ -70,6 +70,110 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOut
   SetNthInput(1, const_cast<TInputImage2 *>( image2 ));
 }
 
+template <class TInputImage1, class TInputImage2, 
+          class TOutputImage, class TFunction  >
+const TInputImage1 *
+BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOutputImage,TFunction>
+::GetInput1()
+{
+  if(this->GetNumberOfInputs()<1)
+    {
+      return 0;
+    }
+  return static_cast<const TInputImage1 *>(this->itk::ProcessObject::GetInput(0));
+}
+
+template <class TInputImage1, class TInputImage2, 
+          class TOutputImage, class TFunction  >
+const TInputImage2 *
+BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOutputImage,TFunction>
+::GetInput2()
+{
+  if(this->GetNumberOfInputs()<2)
+    {
+      return 0;
+    }
+  return static_cast<const TInputImage2 *>(this->itk::ProcessObject::GetInput(1));
+}
+
+template <class TInputImage1, class TInputImage2, 
+          class TOutputImage, class TFunction  >
+void
+BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOutputImage,TFunction>
+::GenerateInputRequestedRegion()
+{
+  // call the superclass' implementation of this method
+  Superclass::GenerateInputRequestedRegion();
+  
+  // get pointers to the input and output
+    Input1ImagePointer  inputPtr1 =
+      const_cast< TInputImage1 * >( this->GetInput1());
+    Input2ImagePointer  inputPtr2 =
+      const_cast< TInputImage2 * >( this->GetInput2());
+    typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
+  
+  if ( !inputPtr1 || !inputPtr2 || !outputPtr )
+    {
+    return;
+    }
+  // get a copy of the input requested region (should equal the output
+  // requested region)
+  typename TInputImage1::RegionType inputRequestedRegion1, inputRequestedRegion2;
+  inputRequestedRegion1 = inputPtr1->GetRequestedRegion();
+  
+  // pad the input requested region by the operator radius
+  inputRequestedRegion1.PadByRadius( m_Radius );
+  inputRequestedRegion2 = inputRequestedRegion1;
+ 
+  // crop the input requested region at the input's largest possible region
+  if ( inputRequestedRegion1.Crop(inputPtr1->GetLargestPossibleRegion()))
+    {
+    inputPtr1->SetRequestedRegion( inputRequestedRegion1 );
+    }
+  else
+    {
+    // Couldn't crop the region (requested region is outside the largest
+    // possible region).  Throw an exception.
+
+    // store what we tried to request (prior to trying to crop)
+    inputPtr1->SetRequestedRegion( inputRequestedRegion1 );
+
+    // build an exception
+    itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
+    itk::OStringStream msg;
+    msg << this->GetNameOfClass()
+        << "::GenerateInputRequestedRegion()";
+    e.SetLocation(msg.str().c_str());
+    e.SetDescription("Requested region is (at least partially) outside the largest possible region of image 1.");
+    e.SetDataObject(inputPtr1);
+    throw e;
+    }
+  if ( inputRequestedRegion2.Crop(inputPtr2->GetLargestPossibleRegion()))
+    {
+    inputPtr2->SetRequestedRegion( inputRequestedRegion2 );
+    }
+  else
+    {
+    // Couldn't crop the region (requested region is outside the largest
+    // possible region).  Throw an exception.
+
+    // store what we tried to request (prior to trying to crop)
+    inputPtr2->SetRequestedRegion( inputRequestedRegion2 );
+
+    // build an exception
+    itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
+    itk::OStringStream msg;
+    msg << this->GetNameOfClass()
+        << "::GenerateInputRequestedRegion()";
+    e.SetLocation(msg.str().c_str());
+    e.SetDescription("Requested region is (at least partially) outside the largest possible region of image 1.");
+    e.SetDataObject(inputPtr2);
+    throw e;
+    }
+  return;
+}
+
+
 /**
  * Initialize the histogram
  */
@@ -81,7 +185,7 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOut
 ::ComputeHistogram( ) 
 {
   // Calculate min and max image values in input1 image.
-  Input1ImagePointer pInput1Image
+  Input1ImageConstPointer pInput1Image
     = dynamic_cast<const TInputImage1*>(ProcessObjectType::GetInput(0));
 
   Input1ImagePixelType minInput1, maxInput1;
@@ -108,7 +212,7 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOut
     }
     
   // Calculate min and max image values in input2 image.
-    Input2ImagePointer pInput2Image
+    Input2ImageConstPointer pInput2Image
     = dynamic_cast<const TInputImage2*>(ProcessObjectType::GetInput(1));
   Input2ImagePixelType minInput2, maxInput2;
   itk::ImageRegionConstIterator<Input2ImageType> miIt(pInput2Image,
@@ -203,9 +307,9 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
 // We use dynamic_cast since inputs are stored as DataObjects.  The
   // ImageToJoinHistogramImageFilter::GetInput(int) always returns a pointer to a
   // TInputImage1 so it cannot be used for the second input.
-  Input1ImagePointer inputPtr1
+  Input1ImageConstPointer inputPtr1
     = dynamic_cast<const TInputImage1*>(ProcessObjectType::GetInput(0));
-  Input2ImagePointer inputPtr2
+  Input2ImageConstPointer inputPtr2
     = dynamic_cast<const TInputImage2*>(ProcessObjectType::GetInput(1));
   OutputImagePointer outputPtr = this->GetOutput(0);
   

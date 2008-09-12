@@ -56,11 +56,13 @@ public:
   /** Some convenient typedefs. */
   typedef TFunction   FunctorType;
   typedef TInputImage1 Input1ImageType;
-  typedef typename Input1ImageType::ConstPointer Input1ImagePointer;
+  typedef typename Input1ImageType::Pointer      Input1ImagePointer;
+  typedef typename Input1ImageType::ConstPointer Input1ImageConstPointer;
   typedef typename Input1ImageType::RegionType Input1ImageRegionType; 
   typedef typename Input1ImageType::PixelType Input1ImagePixelType; 
   typedef TInputImage2 Input2ImageType;
-  typedef typename Input2ImageType::ConstPointer Input2ImagePointer;
+  typedef typename Input2ImageType::Pointer      Input2ImagePointer;
+  typedef typename Input2ImageType::ConstPointer Input2ImageConstPointer;
   typedef typename Input2ImageType::RegionType Input2ImageRegionType; 
   typedef typename Input2ImageType::PixelType Input2ImagePixelType; 
   typedef TOutputImage OutputImageType;
@@ -75,6 +77,10 @@ public:
 
   /** Connect one of the operands for pixel-wise addition */
   void SetInput2( const TInputImage2 * image2);
+
+  /** Get the inputs */
+  const TInputImage1 * GetInput1();
+  const TInputImage2 * GetInput2();
 
   /** Get the functor object.  The functor is returned by reference.
    * (Functors do not have to derive from itk::LightObject, so they do
@@ -156,6 +162,11 @@ protected:
    *     ImageToImageFilter::GenerateData()  */
   virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                             int threadId );
+
+  /**
+   * Pad the inputs requested regions by radius
+   */
+  virtual void GenerateInputRequestedRegion(void);
 
   RadiusSizeType m_Radius;
 
