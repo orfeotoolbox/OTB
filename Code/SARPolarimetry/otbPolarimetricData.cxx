@@ -83,11 +83,6 @@ PolarimetricData
 ::DetermineArchitecture(int NumberOfImages, bool EmissionH,bool EmissionV)
 {
 
-std::cout<<"DetermineArchitecture : NbOfImages"<<NumberOfImages<<std::endl;
-std::cout<<"DetermineArchitecture : EmissionH : "<<EmissionH<<std::endl;
-std::cout<<"DetermineArchitecture : EmissionV : "<<EmissionV<<std::endl;
-
-
   switch(NumberOfImages)
     {
       case 4 :
@@ -100,12 +95,9 @@ std::cout<<"DetermineArchitecture : EmissionV : "<<EmissionV<<std::endl;
 
       case 2 :
 
-std::cout<<"case2 : "<<std::endl;       
-      
         if (EmissionH && !EmissionV )
           {
             SetArchitectureType(HH_HV);
-std::cout<<"SET HH HV !! "<<std::endl;
           }
         else if (!EmissionH && EmissionV )
           {
@@ -114,13 +106,9 @@ std::cout<<"SET HH HV !! "<<std::endl;
         break;
       
       default:
-std::cout<<"default : "<<std::endl;          
         itkExceptionMacro("Unknown architecture !");
         return;
-    }        
-    
-std::cout<<"DetermineArchitecture : type "<<GetArchitectureType()<<std::endl;       
-      
+    }             
 }
 
 
