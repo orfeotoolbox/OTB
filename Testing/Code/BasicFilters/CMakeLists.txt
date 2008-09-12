@@ -938,6 +938,23 @@ ADD_TEST(bfTvScalarVectorImageTextureFunctor ${BASICFILTERS_TESTS9}
 	    2 # radius
 )
 
+ADD_TEST(bfTuGaborFilterGeneratorNew ${BASICFILTERS_TESTS9}
+	otbGaborFilterGeneratorNew
+	 )
+
+ADD_TEST(bfTvGaborFilterGenerator ${BASICFILTERS_TESTS9}
+	--compare-image ${TOL}
+	    ${BASELINE}/bfGaborFilterGeneratorTest.tif
+	    ${TEMP}/bfGaborFilterGeneratorTest.tif
+	 otbGaborFilterGenerator
+	 ${TEMP}/bfGaborFilterGeneratorTest.tif
+	 64 64 #Radius
+	 0.02 0.025 # a b
+	 -45 # theta
+	 0.0125 0.0125 #u0 v0
+	 0
+)
+
 # A enrichir
 SET(BasicFilters_SRCS1
 otbLeeFilter.cxx
@@ -1076,6 +1093,8 @@ otbScalarImageTextureFunctorNew.cxx
 otbScalarImageTextureFunctor.cxx
 otbScalarVectorImageTextureFunctorNew.cxx
 otbScalarVectorImageTextureFunctor.cxx
+otbGaborFilterGeneratorNew.cxx
+otbGaborFilterGenerator.cxx
 )
 
 
