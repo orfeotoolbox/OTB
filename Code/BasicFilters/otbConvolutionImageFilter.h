@@ -86,7 +86,7 @@ public:
 
   typedef typename itk::Array<InputRealType> ArrayType;
   
-  /** Set the radius of the neighborhood used to compute the mean. */
+  /** Set the radius of the neighborhood of the filter */
   virtual void SetRadius (const InputSizeType rad) 
   { 
       itkDebugMacro("setting radius to " << rad); 
@@ -104,7 +104,7 @@ public:
           } 
   }
 
-  /** Get the radius of the neighborhood used to compute the mean */
+  /** Get the radius of the neighborhood of the filter*/
   itkGetConstReferenceMacro(Radius, InputSizeType);
   
   /** Set the input filter */
