@@ -324,9 +324,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 {
 
   int NumberOfImages = this->GetInput()->GetNumberOfComponentsPerPixel();
-///std::cout<<"BeforeThreadedGenerateData : NbOfImages"<<NumberOfImages<<std::endl;
 
-//std::cout<<"BeforeThreadedGenerateData : H : "<<GetEmissionH()<<" V : "<<GetEmissionV()<<std::endl;
   // First Part. Determine the kind of architecture of the input picture
   m_ArchitectureType->DetermineArchitecture(NumberOfImages,GetEmissionH(),GetEmissionV());
   

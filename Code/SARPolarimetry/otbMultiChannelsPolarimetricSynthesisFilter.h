@@ -94,7 +94,7 @@ public:
   typedef typename     InputImageType::ConstPointer   InputImagePointer;
   typedef typename     InputImageType::RegionType     InputImageRegionType; 
   typedef typename     InputImageType::PixelType      InputImagePixelType; 
-  typedef TOutputImage OutputImageType;
+  typedef TOutputImage                                OutputImageType;
   typedef typename     OutputImageType::Pointer       OutputImagePointer;
   typedef typename     OutputImageType::RegionType    OutputImageRegionType;
   typedef typename     OutputImageType::PixelType     OutputImagePixelType;
