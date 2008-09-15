@@ -30,6 +30,7 @@
 #define KML_DOM_LINK_H__
 
 #include <string>
+#include <cstring>
 #include "kml/dom/kml22.h"
 #include "kml/dom/object.h"
 
