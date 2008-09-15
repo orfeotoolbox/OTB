@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+All style elements with non-default values.
+
+Note: XHTML in CDATA must conform to the HTML Compatibility guidelines as
+detailed in http://www.w3.org/TR/xhtml1/#guidelines. See in particular section
+C2, which requires <br /> over <br>.
+
+-->
+<kml xmlns="http://earth.google.com/kml/2.2">
+<Document>
+  <!-- IconStyle -->
+  <Style id="iconstyle">
+    <IconStyle>
+      <scale>1.2</scale>
+      <heading>90.5</heading>
+      <Icon>
+        <href>http://example.com/image.png</href>
+      </Icon>
+      <hotSpot x="0.1" y="10" xunits="fraction" yunits="pixels"/>
+    </IconStyle>
+  </Style>
+  <!-- LabelStyle -->
+  <Style id="labelstyle">
+    <LabelStyle>
+      <scale>0.8</scale>
+    </LabelStyle>
+  </Style>
+  <!-- LineStyle -->
+  <Style id="linestyle">
+    <LineStyle>
+      <width>2</width>
+    </LineStyle>
+  </Style>
+  <!-- PolyStyle -->
+  <Style id="polystyle">
+    <PolyStyle>
+      <fill>0</fill>
+      <outline>0</outline>
+    </PolyStyle>
+  </Style>
+  <!-- BalloonStyle -->
+  <Style id="balloonstyle">
+    <BalloonStyle>
+      <bgcolor>00112233</bgcolor>
+      <textColor>33221100</textColor>
+      <text><![CDATA[<b>$[name]</b><br /><br />$[description]]]></text>
+      <displayMode>hide</displayMode>
+    </BalloonStyle>
+  </Style>
+  <!-- ListStyle -->
+  <Style id="liststyle">
+    <ListStyle>
+      <listItemType>checkHideChildren</listItemType>
+      <bgcolor>00112233</bgcolor>
+      <ItemIcon>
+        <state>closed</state>
+        <href>http://example.com/image.png</href>
+      </ItemIcon>
+    </ListStyle>
+  </Style>
+  <!-- StyleMap -->
+  <StyleMap id="stylemap">
+    <Pair>
+      <key>normal</key>
+      <styleUrl>http://example.com/style.kml</styleUrl>
+    </Pair>
+    <Pair>
+      <key>highlight</key>
+      <Style> <!-- yes, inline style is fine -->
+        <LabelStyle>
+          <scale>0.8</scale>
+        </LabelStyle>
+      </Style>
+    </Pair>
+  </StyleMap>
+</Document>
+</kml>
+

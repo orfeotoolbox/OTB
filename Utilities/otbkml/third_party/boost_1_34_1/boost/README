@@ -1,0 +1,12 @@
+This is a sparse version of PREFIX/include/boost-1_34_1/boost:
+
+assert.hpp:
+config.hpp:
+intrusive_ptr.hpp:
+  These includes are in support of boost::intrusive_ptr and include further
+  files within the config and detail directory hierarchy.
+
+config:
+detail:
+  These directories are pruned to provide only those headers needed for
+  intrusive_ptr on Windows, Mac and Linux.

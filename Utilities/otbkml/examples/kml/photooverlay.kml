@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+http://kml-samples.googlecode.com/svn/trunk/kml/PhotoOverlay/ImagePyramid/space-needle.kml
+  
+-->
+<kml xmlns="http://earth.google.com/kml/2.2">
+  <PhotoOverlay id="space-needle">
+    <name>Seattle Space Needle</name>
+    <Snippet maxLines="1">
+      <![CDATA[<a href="#space-needle">Fly into picture</a>]]>
+    </Snippet>
+    <Camera>
+      <longitude>-122.3599987260313</longitude>
+      <latitude>47.62949781133496</latitude>
+      <altitude>15.49615401024533</altitude>
+      <heading>166.582375925239</heading>
+      <tilt>83.34022070550883</tilt>
+      <roll>-7.63333123551244e-014</roll>
+    </Camera>
+    <Style>
+      <IconStyle>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/pal4/icon38.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <Icon>
+      <href>http://mw1.google.com/mw-earth-vectordb/kml-samples/gp/seattle/gigapxl/$[level]/r$[y]_c$[x].jpg</href>
+    </Icon>
+    <ViewVolume>
+      <leftFov>-48.8176</leftFov>
+      <rightFov>48.8176</rightFov>
+      <bottomFov>-29.748</bottomFov>
+      <topFov>29.748</topFov>
+      <near>19.9512</near>
+    </ViewVolume>
+    <ImagePyramid>
+      <maxWidth>65536</maxWidth>
+      <maxHeight>32768</maxHeight>
+    </ImagePyramid>
+    <Point>
+      <coordinates>-122.36,47.6295,0</coordinates>
+    </Point>
+  </PhotoOverlay>
+</kml>

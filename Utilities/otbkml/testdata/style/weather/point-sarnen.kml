@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <Placemark id="SZXX0026">
+      <name>59°F / 15°C</name>
+      <styleUrl>style.kml#i27</styleUrl>
+      <ExtendedData>
+        <Data name="location">
+          <value>Sarnen, SZ as of 2008-07-18 23:00 UTC:</value>
+        </Data>
+        <Data name="00_Temperature">
+          <value>59°F / 15°C</value>
+        </Data>
+        <Data name="00_Icon">
+          <value>27</value>
+        </Data>
+        <Data name="00_Phrase">
+          <value>Mostly Cloudy</value>
+        </Data>
+        <Data name="00_Wind_Direction">
+          <value>SE</value>
+        </Data>
+        <Data name="00_Wind_Speed">
+          <value>1 mph</value>
+        </Data>
+        <Data name="00_Humidity">
+          <value>82%</value>
+        </Data>
+        <Data name="00_Feels_Like">
+          <value>59°F / 15°C</value>
+        </Data>
+        <Data name="01_Date">
+          <value>Tonight</value>
+        </Data>
+        <Data name="01_Temperature">
+          <value>58°F / 14°C</value>
+        </Data>
+        <Data name="01_Icon">
+          <value>45</value>
+        </Data>
+        <Data name="01_Phrase">
+          <value>Showers Early</value>
+        </Data>
+        <Data name="01_Precipitation">
+          <value>30</value>
+        </Data>
+        <Data name="01_Humidity">
+          <value>77%</value>
+        </Data>
+        <Data name="01_Wind_Speed">
+          <value>8 mph</value>
+        </Data>
+        <Data name="01_Wind_Direction">
+          <value>SW</value>
+        </Data> 
+      </ExtendedData>
+      <Point>
+        <coordinates>8.23,46.9,0</coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>

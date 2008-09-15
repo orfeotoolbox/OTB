@@ -1,0 +1,5 @@
+<Style>
+  <ListStyle>
+    <listItemType>checkHideChildren</listItemType>
+  </ListStyle>
+</Style>

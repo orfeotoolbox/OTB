@@ -1,0 +1,10 @@
+<Style>
+  <PolyStyle>
+    <color>01234567</color>
+    <colorMode>random</colorMode>
+    <fill>1</fill>
+  </PolyStyle>
+  <BalloonStyle>
+    <bgColor>ff332211</bgColor>
+  </BalloonStyle>
+</Style>

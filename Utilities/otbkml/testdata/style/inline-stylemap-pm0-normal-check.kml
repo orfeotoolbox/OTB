@@ -1,0 +1,10 @@
+<Style>
+  <LineStyle>
+    <color>01234567</color>
+    <colorMode>random</colorMode>
+    <width>2.34</width>
+  </LineStyle>
+  <BalloonStyle>
+    <bgColor>ff112233</bgColor>
+  </BalloonStyle>
+</Style>

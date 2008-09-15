@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+http://kml-samples.googlecode.com/svn/trunk/kml/Style/inline-stylemap.kml
+-->
+<kml xmlns="http://earth.google.com/kml/2.2">
+  <Placemark id="placemark">
+    <name>inline StyleMap</name>
+    <description>Example of inline StyleMap with inlined Styles</description>
+    <StyleMap>
+      <Pair>
+        <key>normal</key>
+        <Style>
+          <IconStyle>
+            <scale>1.1</scale>
+            <Icon>
+              <href>http://maps.google.com/mapfiles/kml/paddle/A.png</href>
+            </Icon>
+            <hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+          </IconStyle>
+        </Style>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <Style>
+          <IconStyle>
+            <scale>1.3</scale>
+            <Icon>
+              <href>http://maps.google.com/mapfiles/kml/paddle/B.png</href>
+            </Icon>
+            <hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+          </IconStyle>
+        </Style>
+      </Pair>
+    </StyleMap>
+    <Point>
+      <coordinates>-95.45175317119345,37.68193012013741,0</coordinates>
+    </Point>
+  </Placemark>
+</kml>

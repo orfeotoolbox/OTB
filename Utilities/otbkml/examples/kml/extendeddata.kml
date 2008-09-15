@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document>
+  <Schema name="TrailHeadType" id="TrailHeadTypeId">
+    <SimpleField type="string" name="TrailHeadName">
+      <displayName><![CDATA[<b>Trail Head Name</b>]]></displayName>
+    </SimpleField>
+    <SimpleField type="double" name="TrailLength">
+      <displayName><![CDATA[<i>The length in miles</i>]]></displayName>
+    </SimpleField>
+    <SimpleField type="int" name="ElevationGain">
+      <displayName><![CDATA[<i>change in altitude</i>]]></displayName>
+    </SimpleField>
+  </Schema>
+  <Placemark id="foo" targetId="bar">
+    <name>__NAME__</name>
+    <address>__ADDRESS__</address>
+    <Snippet>__SNIPPET__</Snippet>
+    <description>__DESCRIPTION__</description>
+    <Style>
+      <BalloonStyle>
+        <!--
+        XHTML in CDATA must conform to the HTML Compatibility guidelines as
+        detailed in http://www.w3.org/TR/xhtml1/#guidelines. See in particular section
+        C2, which requires <br /> over <br>.
+        -->
+        <text><![CDATA[
+          <b>$[name]</b><br /><br />
+          <i>$[description]<i><br /><br />
+          The $[TrailHeadType/TrailHeadName/displayName] is
+          <i>$[TrailHeadType/TrailHeadName]</i><br />
+          The trail is $[TrailHeadType/TrailLength] miles<br />
+          The climb is $[TrailHeadType/ElevationGain] meters<br /><br />
+          $[geDirections]
+        ]]></text>  <!-- TODO: decide on $[geDirections -->
+      </BalloonStyle>
+    </Style>
+    <ExtendedData>
+      <Data name="holeNumber">
+        <value>1</value>
+      </Data>
+      <Data name="holeYardage">
+        <value>234</value>
+      </Data>
+      <SchemaData schemaUrl="#TrailHeadTypeId">
+        <SimpleData name="TrailHeadName">Mount Everest</SimpleData>
+        <SimpleData name="TrailLength">347.45</SimpleData>
+        <SimpleData name="ElevationGain">10000</SimpleData>
+      </SchemaData>
+    </ExtendedData>
+  </Placemark>
+</Document>
+</kml>

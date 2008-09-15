@@ -1,0 +1,1829 @@
+<kml xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://earth.google.com/kml/2.2">
+   <Document>
+      <Folder>
+         <Region>
+            <LatLonAltBox>
+               <north>-45.0</north>
+               <south>-56.25</south>
+               <west>-78.75</west>
+               <east>-67.5</east>
+            </LatLonAltBox>
+            <Lod>
+               <minLodPixels>256</minLodPixels>
+               <maxLodPixels>-1</maxLodPixels>
+            </Lod>
+         </Region>
+         <Placemark id="CIXX0017">
+<name>32°F / 0°C</name>
+<styleUrl>http://www.example.com/style/weather/styles_new.kmz#s29</styleUrl>
+<Point><coordinates>-70.85,-53.03</coordinates></Point>
+<ExtendedData>
+<Data name="location">
+<value>Punta Arenas, CI as of 2008-08-04 00:00 UTC:</value>
+</Data>
+<Data name="00_Temperature">
+<value>32°F / 0°C</value>
+</Data>
+<Data name="00_Icon">
+<value>29</value>
+</Data>
+<Data name="00_Phrase">
+<value>Partly Cloudy</value>
+</Data>
+<Data name="00_Wind_Direction">
+<value>N</value>
+</Data>
+<Data name="00_Wind_Speed">
+<value>0 mph</value>
+</Data>
+<Data name="00_Pressure">
+<value>29.41 in.</value>
+</Data>
+<Data name="00_Humidity">
+<value>87%</value>
+</Data>
+<Data name="00_Dewpoint">
+<value>28°F / -1°C</value>
+</Data>
+<Data name="00_Feels_Like">
+<value>32°F / 0°C</value>
+</Data>
+<Data name="01_Date">
+<value>Tonight</value>
+</Data>
+<Data name="01_Temperature">
+<value>29°F / -1°C</value>
+</Data>
+<Data name="01_Icon">
+<value>29</value>
+</Data>
+<Data name="01_Phrase">
+<value>Partly Cloudy</value>
+</Data>
+<Data name="01_Precipitation">
+<value>20</value>
+</Data>
+<Data name="01_Humidity">
+<value>90%</value>
+</Data>
+<Data name="01_Wind_Speed">
+<value>6 mph</value>
+</Data>
+<Data name="01_Wind_Direction">
+<value>NW</value>
+</Data>
+<Data name="02_Date">
+<value>Tomorrow</value>
+</Data>
+<Data name="02_Temperature">
+<value>39°F / 4°C</value>
+</Data>
+<Data name="02_Icon">
+<value>39</value>
+</Data>
+<Data name="02_Phrase">
+<value>PM Showers</value>
+</Data>
+<Data name="02_Precipitation">
+<value>30</value>
+</Data>
+<Data name="02_Humidity">
+<value>79%</value>
+</Data>
+<Data name="02_Wind_Speed">
+<value>17 mph</value>
+</Data>
+<Data name="02_Wind_Direction">
+<value>N</value>
+</Data>
+<Data name="03_Date">
+<value>Tomorrow Night</value>
+</Data>
+<Data name="03_Temperature">
+<value>32°F / 0°C</value>
+</Data>
+<Data name="03_Icon">
+<value>11</value>
+</Data>
+<Data name="03_Phrase">
+<value>Showers</value>
+</Data>
+<Data name="03_Precipitation">
+<value>50</value>
+</Data>
+<Data name="03_Humidity">
+<value>84%</value>
+</Data>
+<Data name="03_Wind_Speed">
+<value>19 mph</value>
+</Data>
+<Data name="03_Wind_Direction">
+<value>NE</value>
+</Data>
+<Data name="04_Date">
+<value>Tuesday</value>
+</Data>
+<Data name="04_Temperature">
+<value>38°F / 3°C</value>
+</Data>
+<Data name="04_Icon">
+<value>39</value>
+</Data>
+<Data name="04_Phrase">
+<value>AM Showers</value>
+</Data>
+<Data name="04_Precipitation">
+<value>40</value>
+</Data>
+<Data name="04_Humidity">
+<value>73%</value>
+</Data>
+<Data name="04_Wind_Speed">
+<value>13 mph</value>
+</Data>
+<Data name="04_Wind_Direction">
+<value>NW</value>
+</Data>
+<Data name="05_Date">
+<value>Tuesday Night</value>
+</Data>
+<Data name="05_Temperature">
+<value>31°F / 0°C</value>
+</Data>
+<Data name="05_Icon">
+<value>05</value>
+</Data>
+<Data name="05_Phrase">
+<value>Rain / Snow</value>
+</Data>
+<Data name="05_Precipitation">
+<value>40</value>
+</Data>
+<Data name="05_Humidity">
+<value>79%</value>
+</Data>
+<Data name="05_Wind_Speed">
+<value>10 mph</value>
+</Data>
+<Data name="05_Wind_Direction">
+<value>W</value>
+</Data>
+</ExtendedData>
+</Placemark>
+         <Placemark id="CIXX0014">
+<name>34°F / 1°C</name>
+<styleUrl>http://www.example.com/style/weather/styles_new.kmz#s29</styleUrl>
+<Point><coordinates>-72.4,-45.4</coordinates></Point>
+<ExtendedData>
+<Data name="location">
+<value>Puerto Aisen, CI as of 2008-08-04 00:00 UTC:</value>
+</Data>
+<Data name="00_Temperature">
+<value>34°F / 1°C</value>
+</Data>
+<Data name="00_Icon">
+<value>29</value>
+</Data>
+<Data name="00_Phrase">
+<value>Partly Cloudy</value>
+</Data>
+<Data name="00_Wind_Direction">
+<value>NW</value>
+</Data>
+<Data name="00_Wind_Speed">
+<value>16 mph</value>
+</Data>
+<Data name="00_Pressure">
+<value>29.59 in.</value>
+</Data>
+<Data name="00_Humidity">
+<value>75%</value>
+</Data>
+<Data name="00_Dewpoint">
+<value>27°F / -2°C</value>
+</Data>
+<Data name="00_Feels_Like">
+<value>24°F / -3°C</value>
+</Data>
+<Data name="01_Date">
+<value>Tonight</value>
+</Data>
+<Data name="01_Temperature">
+<value>34°F / 1°C</value>
+</Data>
+<Data name="01_Icon">
+<value>05</value>
+</Data>
+<Data name="01_Phrase">
+<value>Rain / Snow Showers</value>
+</Data>
+<Data name="01_Precipitation">
+<value>60</value>
+</Data>
+<Data name="01_Humidity">
+<value>90%</value>
+</Data>
+<Data name="01_Wind_Speed">
+<value>1 mph</value>
+</Data>
+<Data name="01_Wind_Direction">
+<value>SE</value>
+</Data>
+<Data name="02_Date">
+<value>Tomorrow</value>
+</Data>
+<Data name="02_Temperature">
+<value>44°F / 7°C</value>
+</Data>
+<Data name="02_Icon">
+<value>11</value>
+</Data>
+<Data name="02_Phrase">
+<value>Showers</value>
+</Data>
+<Data name="02_Precipitation">
+<value>60</value>
+</Data>
+<Data name="02_Humidity">
+<value>78%</value>
+</Data>
+<Data name="02_Wind_Speed">
+<value>4 mph</value>
+</Data>
+<Data name="02_Wind_Direction">
+<value>SW</value>
+</Data>
+<Data name="03_Date">
+<value>Tomorrow Night</value>
+</Data>
+<Data name="03_Temperature">
+<value>37°F / 3°C</value>
+</Data>
+<Data name="03_Icon">
+<value>12</value>
+</Data>
+<Data name="03_Phrase">
+<value>Rain</value>
+</Data>
+<Data name="03_Precipitation">
+<value>100</value>
+</Data>
+<Data name="03_Humidity">
+<value>91%</value>
+</Data>
+<Data name="03_Wind_Speed">
+<value>7 mph</value>
+</Data>
+<Data name="03_Wind_Direction">
+<value>W</value>
+</Data>
+<Data name="04_Date">
+<value>Tuesday</value>
+</Data>
+<Data name="04_Temperature">
+<value>40°F / 4°C</value>
+</Data>
+<Data name="04_Icon">
+<value>11</value>
+</Data>
+<Data name="04_Phrase">
+<value>Light Rain</value>
+</Data>
+<Data name="04_Precipitation">
+<value>90</value>
+</Data>
+<Data name="04_Humidity">
+<value>83%</value>
+</Data>
+<Data name="04_Wind_Speed">
+<value>3 mph</value>
+</Data>
+<Data name="04_Wind_Direction">
+<value>SW</value>
+</Data>
+<Data name="05_Date">
+<value>Tuesday Night</value>
+</Data>
+<Data name="05_Temperature">
+<value>33°F / 1°C</value>
+</Data>
+<Data name="05_Icon">
+<value>05</value>
+</Data>
+<Data name="05_Phrase">
+<value>Rain / Snow</value>
+</Data>
+<Data name="05_Precipitation">
+<value>60</value>
+</Data>
+<Data name="05_Humidity">
+<value>88%</value>
+</Data>
+<Data name="05_Wind_Speed">
+<value>1 mph</value>
+</Data>
+<Data name="05_Wind_Direction">
+<value>SW</value>
+</Data>
+</ExtendedData>
+</Placemark>
+      </Folder>
+      <Folder>
+         <Region>
+            <LatLonAltBox>
+               <north>-45.0</north>
+               <south>-50.625</south>
+               <west>-73.125</west>
+               <east>-67.5</east>
+            </LatLonAltBox>
+            <Lod>
+               <minLodPixels>256</minLodPixels>
+               <maxLodPixels>-1</maxLodPixels>
+            </Lod>
+         </Region>
+         <Placemark id="ARSC0046">
+<name>N/A</name>
+<styleUrl>http://www.example.com/style/weather/styles_new.kmz#s99</styleUrl>
+<Point><coordinates>-72.3,-50.33</coordinates></Point>
+<ExtendedData>
+<Data name="location">
+<value>Lago Argentino, SC, AR as of 2008-08-04 00:00 UTC:</value>
+</Data>
+<Data name="00_Temperature">
+<value>N/A</value>
+</Data>
+<Data name="00_Icon">
+<value>thermometer</value>
+</Data>
+<Data name="00_Phrase">
+<value></value>
+</Data>
+<Data name="00_Wind_Direction">
+<value>N/A</value>
+</Data>
+<Data name="00_Wind_Speed">
+<value>N/A</value>
+</Data>
+<Data name="00_Pressure">
+<value>N/A</value>
+</Data>
+<Data name="00_Humidity">
+<value>N/A</value>
+</Data>
+<Data name="00_Dewpoint">
+<value>N/A</value>
+</Data>
+<Data name="00_Feels_Like">
+<value>N/A</value>
+</Data>
+<Data name="01_Date">
+<value>Tonight</value>
+</Data>
+<Data name="01_Temperature">
+<value>25°F / -3°C</value>
+</Data>
+<Data name="01_Icon">
+<value>27</value>
+</Data>
+<Data name="01_Phrase">
+<value>Mostly Cloudy</value>
+</Data>
+<Data name="01_Precipitation">
+<value>20</value>
+</Data>
+<Data name="01_Humidity">
+<value>77%</value>
+</Data>
+<Data name="01_Wind_Speed">
+<value>7 mph</value>
+</Data>
+<Data name="01_Wind_Direction">
+<value>SW</value>
+</Data>
+<Data name="02_Date">
+<value>Tomorrow</value>
+</Data>
+<Data name="02_Temperature">
+<value>43°F / 6°C</value>
+</Data>
+<Data name="02_Icon">
+<value>30</value>
+</Data>
+<Data name="02_Phrase">
+<value>Partly Cloudy</value>
+</Data>
+<Data name="02_Precipitation">
+<value>20</value>
+</Data>
+<Data name="02_Humidity">
+<value>68%</value>
+</Data>
+<Data name="02_Wind_Speed">
+<value>8 mph</value>
+</Data>
+<Data name="02_Wind_Direction">
+<value>W</value>
+</Data>
+<Data name="03_Date">
+<value>Tomorrow Night</value>
+</Data>
+<Data name="03_Temperature">
+<value>29°F / -1°C</value>
+</Data>
+<Data name="03_Icon">
+<value>46</value>
+</Data>
+<Data name="03_Phrase">
+<value>Snow Showers Late</value>
+</Data>
+<Data name="03_Precipitation">
+<value>40</value>
+</Data>
+<Data name="03_Humidity">
+<value>70%</value>
+</Data>
+<Data name="03_Wind_Speed">
+<value>10 mph</value>
+</Data>
+<Data name="03_Wind_Direction">
+<value>S</value>
+</Data>
+<Data name="04_Date">
+<value>Tuesday</value>
+</Data>
+<Data name="04_Temperature">
+<value>40°F / 4°C</value>
+</Data>
+<Data name="04_Icon">
+<value>14</value>
+</Data>
+<Data name="04_Phrase">
+<value>Snow Shower</value>
+</Data>
+<Data name="04_Precipitation">
+<value>50</value>
+</Data>
+<Data name="04_Humidity">
+<value>67%</value>
+</Data>
+<Data name="04_Wind_Speed">
+<value>7 mph</value>
+</Data>
+<Data name="04_Wind_Direction">
+<value>W</value>
+</Data>
+<Data name="05_Date">
+<value>Tuesday Night</value>
+</Data>
+<Data name="05_Temperature">
+<value>23°F / -4°C</value>
+</Data>
+<Data name="05_Icon">
+<value>14</value>
+</Data>
+<Data name="05_Phrase">
+<value>Snow Shower</value>
+</Data>
+<Data name="05_Precipitation">
+<value>40</value>
+</Data>
+<Data name="05_Humidity">
+<value>77%</value>
+</Data>
+<Data name="05_Wind_Speed">
+<value>5 mph</value>
+</Data>
+<Data name="05_Wind_Direction">
+<value>SW</value>
+</Data>
+</ExtendedData>
+</Placemark>
+         <Placemark id="CIXX0003">
+<name>34°F / 1°C</name>
+<styleUrl>http://www.example.com/style/weather/styles_new.kmz#s29</styleUrl>
+<Point><coordinates>-71.7,-45.92</coordinates></Point>
+<ExtendedData>
+<Data name="location">
+<value>Balmaceda, CI as of 2008-08-04 00:00 UTC:</value>
+</Data>
+<Data name="00_Temperature">
+<value>34°F / 1°C</value>
+</Data>
+<Data name="00_Icon">
+<value>29</value>
+</Data>
+<Data name="00_Phrase">
+<value>Partly Cloudy</value>
+</Data>
+<Data name="00_Wind_Direction">
+<value>NW</value>
+</Data>
+<Data name="00_Wind_Speed">
+<value>16 mph</value>
+</Data>
+<Data name="00_Pressure">
+<value>29.59 in.</value>
+</Data>
+<Data name="00_Humidity">
+<value>75%</value>
+</Data>
+<Data name="00_Dewpoint">
+<value>27°F / -2°C</value>
+</Data>
+<Data name="00_Feels_Like">
+<value>24°F / -3°C</value>
+</Data>
+<Data name="01_Date">
+<value>Tonight</value>
+</Data>
+<Data name="01_Temperature">
+<value>30°F / 0°C</value>
+</Data>
+<Data name="01_Icon">
+<value>46</value>
+</Data>
+<Data name="01_Phrase">
+<value>Snow Showers Late</value>
+</Data>
+<Data name="01_Precipitation">
+<value>40</value>
+</Data>
+<Data name="01_Humidity">
+<value>79%</value>
+</Data>
+<Data name="01_Wind_Speed">
+<value>8 mph</value>
+</Data>
+<Data name="01_Wind_Direction">
+<value>NW</value>
+</Data>
+<Data name="02_Date">
+<value>Tomorrow</value>
+</Data>
+<Data name="02_Temperature">
+<value>39°F / 4°C</value>
+</Data>
+<Data name="02_Icon">
+<value>05</value>
+</Data>
+<Data name="02_Phrase">
+<value>AM Rain / Snow Showers</value>
+</Data>
+<Data name="02_Precipitation">
+<value>40</value>
+</Data>
+<Data name="02_Humidity">
+<value>63%</value>
+</Data>
+<Data name="02_Wind_Speed">
+<value>14 mph</value>
+</Data>
+<Data name="02_Wind_Direction">
+<value>W</value>
+</Data>
+<Data name="03_Date">
+<value>Tomorrow Night</value>
+</Data>
+<Data name="03_Temperature">
+<value>31°F / 0°C</value>
+</Data>
+<Data name="03_Icon">
+<value>05</value>
+</Data>
+<Data name="03_Phrase">
+<value>Rain / Snow</value>
+</Data>
+<Data name="03_Precipitation">
+<value>80</value>
+</Data>
+<Data name="03_Humidity">
+<value>80%</value>
+</Data>
+<Data name="03_Wind_Speed">
+<value>16 mph</value>
+</Data>
+<Data name="03_Wind_Direction">
+<value>W</value>
+</Data>
+<Data name="04_Date">
+<value>Tuesday</value>
+</Data>
+<Data name="04_Temperature">
+<value>36°F / 2°C</value>
+</Data>
+<Data name="04_Icon">
+<value>16</value>
+</Data>
+<Data name="04_Phrase">
+<value>Snow</value>
+</Data>
+<Data name="04_Precipitation">
+<value>70</value>
+</Data>
+<Data name="04_Humidity">
+<value>73%</value>
+</Data>
+<Data name="04_Wind_Speed">
+<value>13 mph</value>
+</Data>
+<Data name="04_Wind_Direction">
+<value>W</value>
+</Data>
+<Data name="05_Date">
+<value>Tuesday Night</value>
+</Data>
+<Data name="05_Temperature">
+<value>29°F / -1°C</value>
+</Data>
+<Data name="05_Icon">
+<value>14</value>
+</Data>
+<Data name="05_Phrase">
+<value>Snow Shower</value>
+</Data>
+<Data name="05_Precipitation">
+<value>40</value>
+</Data>
+<Data name="05_Humidity">
+<value>79%</value>
+</Data>
+<Data name="05_Wind_Speed">
+<value>9 mph</value>
+</Data>
+<Data name="05_Wind_Direction">
+<value>W</value>
+</Data>
+</ExtendedData>
+</Placemark>
+      </Folder>
+      <Folder>
+         <Region>
+            <LatLonAltBox>
+               <north>-47.8125</north>
+               <south>-50.625</south>
+               <west>-73.125</west>
+               <east>-70.3125</east>
+            </LatLonAltBox>
+            <Lod>
+               <minLodPixels>256</minLodPixels>
+               <maxLodPixels>-1</maxLodPixels>
+            </Lod>
+         </Region>
+         <Placemark id="ARSC0134">
+<name>N/A</name>
+<styleUrl>http://www.example.com/style/weather/styles_new.kmz#s99</styleUrl>
+<Point><coordinates>-72.3,-50.3333</coordinates></Point>
+<ExtendedData>
+<Data name="location">
+<value>El Calafate, SC, AR as of 2008-08-04 00:00 UTC:</value>
+</Data>
+<Data name="00_Temperature">
+<value>N/A</value>
+</Data>
+<Data name="00_Icon">
+<value>thermometer</value>
+</Data>
+<Data name="00_Phrase">
+<value></value>
+</Data>
+<Data name="00_Wind_Direction">
+<value>N/A</value>
+</Data>
+<Data name="00_Wind_Speed">
+<value>N/A</value>
+</Data>
+<Data name="00_Pressure">
+<value>N/A</value>
+</Data>
+<Data name="00_Humidity">
+<value>N/A</value>
+</Data>
+<Data name="00_Dewpoint">
+<value>N/A</value>
+</Data>
+<Data name="00_Feels_Like">
+<value>N/A</value>
+</Data>
+<Data name="01_Date">
+<value>Tonight</value>
+</Data>
+<Data name="01_Temperature">
+<value>25°F / -3°C</value>
+</Data>
+<Data name="01_Icon">
+<value>27</value>
+</Data>
+<Data name="01_Phrase">
+<value>Mostly Cloudy</value>
+</Data>
+<Data name="01_Precipitation">
+<value>20</value>
+</Data>
+<Data name="01_Humidity">
+<value>77%</value>
+</Data>
+<Data name="01_Wind_Speed">
+<value>7 mph</value>
+</Data>
+<Data name="01_Wind_Direction">
+<value>SW</value>
+</Data>
+<Data name="02_Date">
+<value>Tomorrow</value>
+</Data>
+<Data name="02_Temperature">
+<value>43°F / 6°C</value>
+</Data>
+<Data name="02_Icon">
+<value>30</value>
+</Data>
+<Data name="02_Phrase">
+<value>Partly Cloudy</value>
+</Data>
+<Data name="02_Precipitation">
+<value>20</value>
+</Data>
+<Data name="02_Humidity">
+<value>68%</value>
+</Data>
+<Data name="02_Wind_Speed">
+<value>8 mph</value>
+</Data>
+<Data name="02_Wind_Direction">
+<value>W</value>
+</Data>
+<Data name="03_Date">
+<value>Tomorrow Night</value>
+</Data>
+<Data name="03_Temperature">
+<value>29°F / -1°C</value>
+</Data>
+<Data name="03_Icon">
+<value>46</value>
+</Data>
+<Data name="03_Phrase">
+<value>Snow Showers Late</value>
+</Data>
+<Data name="03_Precipitation">
+<value>40</value>
+</Data>
+<Data name="03_Humidity">
+<value>70%</value>
+</Data>
+<Data name="03_Wind_Speed">
+<value>10 mph</value>
+</Data>
+<Data name="03_Wind_Direction">
+<value>S</value>
+</Data>
+<Data name="04_Date">
+<value>Tuesday</value>
+</Data>
+<Data name="04_Temperature">
+<value>40°F / 4°C</value>
+</Data>
+<Data name="04_Icon">
+<value>14</value>
+</Data>
+<Data name="04_Phrase">
+<value>Snow Shower</value>
+</Data>
+<Data name="04_Precipitation">
+<value>50</value>
+</Data>
+<Data name="04_Humidity">
+<value>67%</value>
+</Data>
+<Data name="04_Wind_Speed">
+<value>7 mph</value>
+</Data>
+<Data name="04_Wind_Direction">
+<value>W</value>
+</Data>
+<Data name="05_Date">
+<value>Tuesday Night</value>
+</Data>
+<Data name="05_Temperature">
+<value>23°F / -4°C</value>
+</Data>
+<Data name="05_Icon">
+<value>14</value>
+</Data>
+<Data name="05_Phrase">
+<value>Snow Shower</value>
+</Data>
+<Data name="05_Precipitation">
+<value>40</value>
+</Data>
+<Data name="05_Humidity">
+<value>77%</value>
+</Data>
+<Data name="05_Wind_Speed">
+<value>5 mph</value>
+</Data>
+<Data name="05_Wind_Direction">
+<value>SW</value>
+</Data>
+</ExtendedData>
+</Placemark>
+      </Folder>
+      <Folder>
+         <Region>
+            <LatLonAltBox>
+               <north>-47.8125</north>
+               <south>-50.625</south>
+               <west>-70.3125</west>
+               <east>-67.5</east>
+            </LatLonAltBox>
+            <Lod>
+               <minLodPixels>256</minLodPixels>
+               <maxLodPixels>-1</maxLodPixels>
+            </Lod>
+         </Region>
+         <Placemark id="ARSC0133">
+<name>31°F / 0°C</name>
+<styleUrl>http://www.example.com/style/weather/styles_new.kmz#s31</styleUrl>
+<Point><coordinates>-67.75,-49.32</coordinates></Point>
+<ExtendedData>
+<Data name="location">
+<value>San Julian, SC, AR as of 2008-08-04 00:00 UTC:</value>
+</Data>
+<Data name="00_Temperature">
+<value>31°F / 0°C</value>
+</Data>
+<Data name="00_Icon">
+<value>31</value>
+</Data>
+<Data name="00_Phrase">
+<value>Clear</value>
+</Data>
+<Data name="00_Wind_Direction">
+<value>NW</value>
+</Data>
+<Data name="00_Wind_Speed">
+<value>10 mph</value>
+</Data>
+<Data name="00_Pressure">
+<value>29.37 in.</value>
+</Data>
+<Data name="00_Humidity">
+<value>87%</value>
+</Data>
+<Data name="00_Dewpoint">
+<value>28°F / -1°C</value>
+</Data>
+<Data name="00_Feels_Like">
+<value>22°F / -5°C</value>
+</Data>
+<Data name="01_Date">
+<value>Tonight</value>
+</Data>
+<Data name="01_Temperature">
+<value>30°F / 0°C</value>
+</Data>
+<Data name="01_Icon">
+<value>29</value>
+</Data>
+<Data name="01_Phrase">
+<value>Partly Cloudy</value>
+</Data>
+<Data name="01_Precipitation">
+<value>20</value>
+</Data>
+<Data name="01_Humidity">
+<value>91%</value>
+</Data>
+<Data name="01_Wind_Speed">
+<value>19 mph</value>
+</Data>
+<Data name="01_Wind_Direction">
+<value>SW</value>
+</Data>
+<Data name="02_Date">
+<value>Tomorrow</value>
+</Data>
+<Data name="02_Temperature">
+<value>42°F / 6°C</value>
+</Data>
+<Data name="02_Icon">
+<value>30</value>
+</Data>
+<Data name="02_Phrase">
+<value>Partly Cloudy</value>
+</Data>
+<Data name="02_Precipitation">
+<value>20</value>
+</Data>
+<Data name="02_Humidity">
+<value>81%</value>
+</Data>
+<Data name="02_Wind_Speed">
+<value>14 mph</value>
+</Data>
+<Data name="02_Wind_Direction">
+<value>W</value>
+</Data>
+<Data name="03_Date">
+<value>Tomorrow Night</value>
+</Data>
+<Data name="03_Temperature">
+<value>33°F / 1°C</value>
+</Data>
+<Data name="03_Icon">
+<value>27</value>
+</Data>
+<Data name="03_Phrase">
+<value>Mostly Cloudy</value>
+</Data>
+<Data name="03_Precipitation">
+<value>20</value>
+</Data>
+<Data name="03_Humidity">
+<value>88%</value>
+</Data>
+<Data name="03_Wind_Speed">
+<value>15 mph</value>
+</Data>
+<Data name="03_Wind_Direction">
+<value>N</value>
+</Data>
+<Data name="04_Date">
+<value>Tuesday</value>
+</Data>
+<Data name="04_Temperature">
+<value>42°F / 6°C</value>
+</Data>
+<Data name="04_Icon">
+<value>28</value>
+</Data>
+<Data name="04_Phrase">
+<value>Mostly Cloudy</value>
+</Data>
+<Data name="04_Precipitation">
+<value>20</value>
+</Data>
+<Data name="04_Humidity">
+<value>72%</value>
+</Data>
+<Data name="04_Wind_Speed">
+<value>17 mph</value>
+</Data>
+<Data name="04_Wind_Direction">
+<value>W</value>
+</Data>
+<Data name="05_Date">
+<value>Tuesday Night</value>
+</Data>
+<Data name="05_Temperature">
+<value>30°F / 0°C</value>
+</Data>
+<Data name="05_Icon">
+<value>05</value>
+</Data>
+<Data name="05_Phrase">
+<value>Rain / Snow Showers Early</value>
+</Data>
+<Data name="05_Precipitation">
+<value>30</value>
+</Data>
+<Data name="05_Humidity">
+<value>80%</value>
+</Data>
+<Data name="05_Wind_Speed">
+<value>16 mph</value>
+</Data>
+<Data name="05_Wind_Direction">
+<value>W</value>
+</Data>
+</ExtendedData>
+</Placemark>
+         <Placemark id="ARSC0035">
+<name>31°F / 0°C</name>
+<styleUrl>http://www.example.com/style/weather/styles_new.kmz#s31</styleUrl>
+<Point><coordinates>-70.17,-48.78</coordinates></Point>
+<ExtendedData>
+<Data name="location">
+<value>Gobernador Gregores, SC, AR as of 2008-08-04 00:00 UTC:</value>
+</Data>
+<Data name="00_Temperature">
+<value>31°F / 0°C</value>
+</Data>
+<Data name="00_Icon">
+<value>31</value>
+</Data>
+<Data name="00_Phrase">
+<value>Clear</value>
+</Data>
+<Data name="00_Wind_Direction">
+<value>NW</value>
+</Data>
+<Data name="00_Wind_Speed">
+<value>10 mph</value>
+</Data>
+<Data name="00_Pressure">
+<value>29.37 in.</value>
+</Data>
+<Data name="00_Humidity">
+<value>87%</value>
+</Data>
+<Data name="00_Dewpoint">
+<value>28°F / -1°C</value>
+</Data>
+<Data name="00_Feels_Like">
+<value>22°F / -5°C</value>
+</Data>
+<Data name="01_Date">
+<value>Tonight</value>
+</Data>
+<Data name="01_Temperature">
+<value>25°F / -3°C</value>
+</Data>
+<Data name="01_Icon">
+<value>29</value>
+</Data>
+<Data name="01_Phrase">
+<value>Partly Cloudy</value>
+</Data>
+<Data name="01_Precipitation">
+<value>20</value>
+</Data>
+<Data name="01_Humidity">
+<value>89%</value>
+</Data>
+<Data name="01_Wind_Speed">
+<value>19 mph</value>
+</Data>
+<Data name="01_Wind_Direction">
+<value>W</value>
+</Data>
+<Data name="02_Date">
+<value>Tomorrow</value>
+</Data>
+<Data name="02_Temperature">
+<value>41°F / 5°C</value>
+</Data>
+<Data name="02_Icon">
+<value>30</value>
+</Data>
+<Data name="02_Phrase">
+<value>Partly Cloudy</value>
+</Data>
+<Data name="02_Precipitation">
+<value>20</value>
+</Data>
+<Data name="02_Humidity">
+<value>78%</value>
+</Data>
+<Data name="02_Wind_Speed">
+<value>12 mph</value>
+</Data>
+<Data name="02_Wind_Direction">
+<value>W</value>
+</Data>
+<Data name="03_Date">
+<value>Tomorrow Night</value>
+</Data>
+<Data name="03_Temperature">
+<value>28°F / -1°C</value>
+</Data>
+<Data name="03_Icon">
+<value>27</value>
+</Data>
+<Data name="03_Phrase">
+<value>Mostly Cloudy</value>
+</Data>
+<Data name="03_Precipitation">
+<value>20</value>
+</Data>
+<Data name="03_Humidity">
+<value>85%</value>
+</Data>
+<Data name="03_Wind_Speed">
+<value>13 mph</value>
+</Data>
+<Data name="03_Wind_Direction">
+<value>N</value>
+</Data>
+<Data name="04_Date">
+<value>Tuesday</value>
+</Data>
+<Data name="04_Temperature">
+<value>39°F / 4°C</value>
+</Data>
+<Data name="04_Icon">
+<value>28</value>
+</Data>
+<Data name="04_Phrase">
+<value>Mostly Cloudy</value>
+</Data>
+<Data name="04_Precipitation">
+<value>20</value>
+</Data>
+<Data name="04_Humidity">
+<value>70%</value>
+</Data>
+<Data name="04_Wind_Speed">
+<value>16 mph</value>
+</Data>
+<Data name="04_Wind_Direction">
+<value>W</value>
+</Data>
+<Data name="05_Date">
+<value>Tuesday Night</value>
+</Data>
+<Data name="05_Temperature">
+<value>25°F / -3°C</value>
+</Data>
+<Data name="05_Icon">
+<value>46</value>
+</Data>
+<Data name="05_Phrase">
+<value>Snow Showers Early</value>
+</Data>
+<Data name="05_Precipitation">
+<value>30</value>
+</Data>
+<Data name="05_Humidity">
+<value>82%</value>
+</Data>
+<Data name="05_Wind_Speed">
+<value>13 mph</value>
+</Data>
+<Data name="05_Wind_Direction">
+<value>W</value>
+</Data>
+</ExtendedData>
+</Placemark>
+      </Folder>
+      <Folder>
+         <Region>
+            <LatLonAltBox>
+               <north>-50.625</north>
+               <south>-56.25</south>
+               <west>-73.125</west>
+               <east>-67.5</east>
+            </LatLonAltBox>
+            <Lod>
+               <minLodPixels>256</minLodPixels>
+               <maxLodPixels>-1</maxLodPixels>
+            </Lod>
+         </Region>
+         <Placemark id="ARSC0074">
+<name>32°F / 0°C</name>
+<styleUrl>http://www.example.com/style/weather/styles_new.kmz#s31</styleUrl>
+<Point><coordinates>-69.28,-51.62</coordinates></Point>
+<ExtendedData>
+<Data name="location">
+<value>Rio Gallegos, SC, AR as of 2008-08-04 00:00 UTC:</value>
+</Data>
+<Data name="00_Temperature">
+<value>32°F / 0°C</value>
+</Data>
+<Data name="00_Icon">
+<value>31</value>
+</Data>
+<Data name="00_Phrase">
+<value>Clear</value>
+</Data>
+<Data name="00_Wind_Direction">
+<value>N</value>
+</Data>
+<Data name="00_Wind_Speed">
+<value>7 mph</value>
+</Data>
+<Data name="00_Pressure">
+<value>29.47 in.</value>
+</Data>
+<Data name="00_Humidity">
+<value>87%</value>
+</Data>
+<Data name="00_Dewpoint">
+<value>28°F / -1°C</value>
+</Data>
+<Data name="00_Feels_Like">
+<value>26°F / -2°C</value>
+</Data>
+<Data name="01_Date">
+<value>Tonight</value>
+</Data>
+<Data name="01_Temperature">
+<value>25°F / -3°C</value>
+</Data>
+<Data name="01_Icon">
+<value>14</value>
+</Data>
+<Data name="01_Phrase">
+<value>Few Snow Showers</value>
+</Data>
+<Data name="01_Precipitation">
+<value>30</value>
+</Data>
+<Data name="01_Humidity">
+<value>86%</value>
+</Data>
+<Data name="01_Wind_Speed">
+<value>8 mph</value>
+</Data>
+<Data name="01_Wind_Direction">
+<value>W</value>
+</Data>
+<Data name="02_Date">
+<value>Tomorrow</value>
+</Data>
+<Data name="02_Temperature">
+<value>40°F / 4°C</value>
+</Data>
+<Data name="02_Icon">
+<value>34</value>
+</Data>
+<Data name="02_Phrase">
+<value>Mostly Sunny</value>
+</Data>
+<Data name="02_Precipitation">
+<value>20</value>
+</Data>
+<Data name="02_Humidity">
+<value>75%</value>
+</Data>
+<Data name="02_Wind_Speed">
+<value>12 mph</value>
+</Data>
+<Data name="02_Wind_Direction">
+<value>N</value>
+</Data>
+<Data name="03_Date">
+<value>Tomorrow Night</value>
+</Data>
+<Data name="03_Temperature">
+<value>33°F / 1°C</value>
+</Data>
+<Data name="03_Icon">
+<value>05</value>
+</Data>
+<Data name="03_Phrase">
+<value>Rain / Snow Showers Late</value>
+</Data>
+<Data name="03_Precipitation">
+<value>50</value>
+</Data>
+<Data name="03_Humidity">
+<value>80%</value>
+</Data>
+<Data name="03_Wind_Speed">
+<value>14 mph</value>
+</Data>
+<Data name="03_Wind_Direction">
+<value>N</value>
+</Data>
+<Data name="04_Date">
+<value>Tuesday</value>
+</Data>
+<Data name="04_Temperature">
+<value>37°F / 3°C</value>
+</Data>
+<Data name="04_Icon">
+<value>05</value>
+</Data>
+<Data name="04_Phrase">
+<value>AM Rain / Snow Showers</value>
+</Data>
+<Data name="04_Precipitation">
+<value>50</value>
+</Data>
+<Data name="04_Humidity">
+<value>72%</value>
+</Data>
+<Data name="04_Wind_Speed">
+<value>11 mph</value>
+</Data>
+<Data name="04_Wind_Direction">
+<value>W</value>
+</Data>
+<Data name="05_Date">
+<value>Tuesday Night</value>
+</Data>
+<Data name="05_Temperature">
+<value>27°F / -2°C</value>
+</Data>
+<Data name="05_Icon">
+<value>14</value>
+</Data>
+<Data name="05_Phrase">
+<value>Snow Shower</value>
+</Data>
+<Data name="05_Precipitation">
+<value>30</value>
+</Data>
+<Data name="05_Humidity">
+<value>79%</value>
+</Data>
+<Data name="05_Wind_Speed">
+<value>10 mph</value>
+</Data>
+<Data name="05_Wind_Direction">
+<value>W</value>
+</Data>
+</ExtendedData>
+</Placemark>
+         <Placemark id="ARTF0105">
+<name>34°F / 1°C</name>
+<styleUrl>http://www.example.com/style/weather/styles_new.kmz#s29</styleUrl>
+<Point><coordinates>-68.32,-54.8</coordinates></Point>
+<ExtendedData>
+<Data name="location">
+<value>Ushuaia, TF, AR as of 2008-08-04 00:00 UTC:</value>
+</Data>
+<Data name="00_Temperature">
+<value>34°F / 1°C</value>
+</Data>
+<Data name="00_Icon">
+<value>29</value>
+</Data>
+<Data name="00_Phrase">
+<value>Partly Cloudy</value>
+</Data>
+<Data name="00_Wind_Direction">
+<value>NW</value>
+</Data>
+<Data name="00_Wind_Speed">
+<value>5 mph</value>
+</Data>
+<Data name="00_Pressure">
+<value>29.38 in.</value>
+</Data>
+<Data name="00_Humidity">
+<value>87%</value>
+</Data>
+<Data name="00_Dewpoint">
+<value>30°F / 0°C</value>
+</Data>
+<Data name="00_Feels_Like">
+<value>30°F / 0°C</value>
+</Data>
+<Data name="01_Date">
+<value>Tonight</value>
+</Data>
+<Data name="01_Temperature">
+<value>29°F / -1°C</value>
+</Data>
+<Data name="01_Icon">
+<value>46</value>
+</Data>
+<Data name="01_Phrase">
+<value>Snow Showers Early</value>
+</Data>
+<Data name="01_Precipitation">
+<value>50</value>
+</Data>
+<Data name="01_Humidity">
+<value>74%</value>
+</Data>
+<Data name="01_Wind_Speed">
+<value>7 mph</value>
+</Data>
+<Data name="01_Wind_Direction">
+<value>NW</value>
+</Data>
+<Data name="02_Date">
+<value>Tomorrow</value>
+</Data>
+<Data name="02_Temperature">
+<value>39°F / 4°C</value>
+</Data>
+<Data name="02_Icon">
+<value>28</value>
+</Data>
+<Data name="02_Phrase">
+<value>Mostly Cloudy</value>
+</Data>
+<Data name="02_Precipitation">
+<value>20</value>
+</Data>
+<Data name="02_Humidity">
+<value>75%</value>
+</Data>
+<Data name="02_Wind_Speed">
+<value>11 mph</value>
+</Data>
+<Data name="02_Wind_Direction">
+<value>NW</value>
+</Data>
+<Data name="03_Date">
+<value>Tomorrow Night</value>
+</Data>
+<Data name="03_Temperature">
+<value>36°F / 2°C</value>
+</Data>
+<Data name="03_Icon">
+<value>26</value>
+</Data>
+<Data name="03_Phrase">
+<value>Cloudy</value>
+</Data>
+<Data name="03_Precipitation">
+<value>20</value>
+</Data>
+<Data name="03_Humidity">
+<value>76%</value>
+</Data>
+<Data name="03_Wind_Speed">
+<value>12 mph</value>
+</Data>
+<Data name="03_Wind_Direction">
+<value>N</value>
+</Data>
+<Data name="04_Date">
+<value>Tuesday</value>
+</Data>
+<Data name="04_Temperature">
+<value>39°F / 4°C</value>
+</Data>
+<Data name="04_Icon">
+<value>11</value>
+</Data>
+<Data name="04_Phrase">
+<value>Light Rain</value>
+</Data>
+<Data name="04_Precipitation">
+<value>70</value>
+</Data>
+<Data name="04_Humidity">
+<value>76%</value>
+</Data>
+<Data name="04_Wind_Speed">
+<value>9 mph</value>
+</Data>
+<Data name="04_Wind_Direction">
+<value>NW</value>
+</Data>
+<Data name="05_Date">
+<value>Tuesday Night</value>
+</Data>
+<Data name="05_Temperature">
+<value>33°F / 1°C</value>
+</Data>
+<Data name="05_Icon">
+<value>14</value>
+</Data>
+<Data name="05_Phrase">
+<value>Snow Shower</value>
+</Data>
+<Data name="05_Precipitation">
+<value>50</value>
+</Data>
+<Data name="05_Humidity">
+<value>75%</value>
+</Data>
+<Data name="05_Wind_Speed">
+<value>5 mph</value>
+</Data>
+<Data name="05_Wind_Direction">
+<value>W</value>
+</Data>
+</ExtendedData>
+</Placemark>
+      </Folder>
+      <Folder>
+         <Region>
+            <LatLonAltBox>
+               <north>-50.625</north>
+               <south>-52.03125</south>
+               <west>-73.125</west>
+               <east>-71.71875</east>
+            </LatLonAltBox>
+            <Lod>
+               <minLodPixels>256</minLodPixels>
+               <maxLodPixels>-1</maxLodPixels>
+            </Lod>
+         </Region>
+         <Placemark id="CIXX0016">
+<name>N/A</name>
+<styleUrl>http://www.example.com/style/weather/styles_new.kmz#s99</styleUrl>
+<Point><coordinates>-72.52,-51.73</coordinates></Point>
+<ExtendedData>
+<Data name="location">
+<value>Puerto Natales, CI as of 2008-08-04 00:00 UTC:</value>
+</Data>
+<Data name="00_Temperature">
+<value>N/A</value>
+</Data>
+<Data name="00_Icon">
+<value>thermometer</value>
+</Data>
+<Data name="00_Phrase">
+<value></value>
+</Data>
+<Data name="00_Wind_Direction">
+<value>N/A</value>
+</Data>
+<Data name="00_Wind_Speed">
+<value>N/A</value>
+</Data>
+<Data name="00_Pressure">
+<value>N/A</value>
+</Data>
+<Data name="00_Humidity">
+<value>N/A</value>
+</Data>
+<Data name="00_Dewpoint">
+<value>N/A</value>
+</Data>
+<Data name="00_Feels_Like">
+<value>N/A</value>
+</Data>
+<Data name="01_Date">
+<value>Tonight</value>
+</Data>
+<Data name="01_Temperature">
+<value>29°F / -1°C</value>
+</Data>
+<Data name="01_Icon">
+<value>29</value>
+</Data>
+<Data name="01_Phrase">
+<value>Partly Cloudy</value>
+</Data>
+<Data name="01_Precipitation">
+<value>20</value>
+</Data>
+<Data name="01_Humidity">
+<value>74%</value>
+</Data>
+<Data name="01_Wind_Speed">
+<value>2 mph</value>
+</Data>
+<Data name="01_Wind_Direction">
+<value>SW</value>
+</Data>
+<Data name="02_Date">
+<value>Tomorrow</value>
+</Data>
+<Data name="02_Temperature">
+<value>44°F / 7°C</value>
+</Data>
+<Data name="02_Icon">
+<value>30</value>
+</Data>
+<Data name="02_Phrase">
+<value>Partly Cloudy</value>
+</Data>
+<Data name="02_Precipitation">
+<value>20</value>
+</Data>
+<Data name="02_Humidity">
+<value>65%</value>
+</Data>
+<Data name="02_Wind_Speed">
+<value>9 mph</value>
+</Data>
+<Data name="02_Wind_Direction">
+<value>N</value>
+</Data>
+<Data name="03_Date">
+<value>Tomorrow Night</value>
+</Data>
+<Data name="03_Temperature">
+<value>31°F / 0°C</value>
+</Data>
+<Data name="03_Icon">
+<value>05</value>
+</Data>
+<Data name="03_Phrase">
+<value>Rain / Snow Showers Late</value>
+</Data>
+<Data name="03_Precipitation">
+<value>30</value>
+</Data>
+<Data name="03_Humidity">
+<value>74%</value>
+</Data>
+<Data name="03_Wind_Speed">
+<value>9 mph</value>
+</Data>
+<Data name="03_Wind_Direction">
+<value>N</value>
+</Data>
+<Data name="04_Date">
+<value>Tuesday</value>
+</Data>
+<Data name="04_Temperature">
+<value>42°F / 6°C</value>
+</Data>
+<Data name="04_Icon">
+<value>28</value>
+</Data>
+<Data name="04_Phrase">
+<value>Mostly Cloudy</value>
+</Data>
+<Data name="04_Precipitation">
+<value>20</value>
+</Data>
+<Data name="04_Humidity">
+<value>64%</value>
+</Data>
+<Data name="04_Wind_Speed">
+<value>5 mph</value>
+</Data>
+<Data name="04_Wind_Direction">
+<value>W</value>
+</Data>
+<Data name="05_Date">
+<value>Tuesday Night</value>
+</Data>
+<Data name="05_Temperature">
+<value>29°F / -1°C</value>
+</Data>
+<Data name="05_Icon">
+<value>14</value>
+</Data>
+<Data name="05_Phrase">
+<value>Few Snow Showers</value>
+</Data>
+<Data name="05_Precipitation">
+<value>30</value>
+</Data>
+<Data name="05_Humidity">
+<value>70%</value>
+</Data>
+<Data name="05_Wind_Speed">
+<value>3 mph</value>
+</Data>
+<Data name="05_Wind_Direction">
+<value>W</value>
+</Data>
+</ExtendedData>
+</Placemark>
+      </Folder>
+      <Folder>
+         <Region>
+            <LatLonAltBox>
+               <north>-50.625</north>
+               <south>-56.25</south>
+               <west>-78.75</west>
+               <east>-73.125</east>
+            </LatLonAltBox>
+            <Lod>
+               <minLodPixels>256</minLodPixels>
+               <maxLodPixels>-1</maxLodPixels>
+            </Lod>
+         </Region>
+         <Placemark id="CIXX0034">
+<name>N/A</name>
+<styleUrl>http://www.example.com/style/weather/styles_new.kmz#s99</styleUrl>
+<Point><coordinates>-75.1,-52.399999</coordinates></Point>
+<ExtendedData>
+<Data name="location">
+<value>Islotes Evangelistas, CI as of 2008-08-04 00:00 UTC:</value>
+</Data>
+<Data name="00_Temperature">
+<value>N/A</value>
+</Data>
+<Data name="00_Icon">
+<value>thermometer</value>
+</Data>
+<Data name="00_Phrase">
+<value></value>
+</Data>
+<Data name="00_Wind_Direction">
+<value>N/A</value>
+</Data>
+<Data name="00_Wind_Speed">
+<value>N/A</value>
+</Data>
+<Data name="00_Pressure">
+<value>N/A</value>
+</Data>
+<Data name="00_Humidity">
+<value>N/A</value>
+</Data>
+<Data name="00_Dewpoint">
+<value>N/A</value>
+</Data>
+<Data name="00_Feels_Like">
+<value>N/A</value>
+</Data>
+<Data name="01_Date">
+<value>Tonight</value>
+</Data>
+<Data name="01_Temperature">
+<value>37°F / 3°C</value>
+</Data>
+<Data name="01_Icon">
+<value>12</value>
+</Data>
+<Data name="01_Phrase">
+<value>Rain</value>
+</Data>
+<Data name="01_Precipitation">
+<value>80</value>
+</Data>
+<Data name="01_Humidity">
+<value>87%</value>
+</Data>
+<Data name="01_Wind_Speed">
+<value>14 mph</value>
+</Data>
+<Data name="01_Wind_Direction">
+<value>NW</value>
+</Data>
+<Data name="02_Date">
+<value>Tomorrow</value>
+</Data>
+<Data name="02_Temperature">
+<value>40°F / 4°C</value>
+</Data>
+<Data name="02_Icon">
+<value>11</value>
+</Data>
+<Data name="02_Phrase">
+<value>Showers / Wind</value>
+</Data>
+<Data name="02_Precipitation">
+<value>60</value>
+</Data>
+<Data name="02_Humidity">
+<value>82%</value>
+</Data>
+<Data name="02_Wind_Speed">
+<value>31 mph</value>
+</Data>
+<Data name="02_Wind_Direction">
+<value>N</value>
+</Data>
+<Data name="03_Date">
+<value>Tomorrow Night</value>
+</Data>
+<Data name="03_Temperature">
+<value>37°F / 3°C</value>
+</Data>
+<Data name="03_Icon">
+<value>12</value>
+</Data>
+<Data name="03_Phrase">
+<value>Rain</value>
+</Data>
+<Data name="03_Precipitation">
+<value>80</value>
+</Data>
+<Data name="03_Humidity">
+<value>80%</value>
+</Data>
+<Data name="03_Wind_Speed">
+<value>23 mph</value>
+</Data>
+<Data name="03_Wind_Direction">
+<value>NW</value>
+</Data>
+<Data name="04_Date">
+<value>Tuesday</value>
+</Data>
+<Data name="04_Temperature">
+<value>38°F / 3°C</value>
+</Data>
+<Data name="04_Icon">
+<value>11</value>
+</Data>
+<Data name="04_Phrase">
+<value>Light Rain</value>
+</Data>
+<Data name="04_Precipitation">
+<value>70</value>
+</Data>
+<Data name="04_Humidity">
+<value>77%</value>
+</Data>
+<Data name="04_Wind_Speed">
+<value>25 mph</value>
+</Data>
+<Data name="04_Wind_Direction">
+<value>NW</value>
+</Data>
+<Data name="05_Date">
+<value>Tuesday Night</value>
+</Data>
+<Data name="05_Temperature">
+<value>36°F / 2°C</value>
+</Data>
+<Data name="05_Icon">
+<value>11</value>
+</Data>
+<Data name="05_Phrase">
+<value>Showers</value>
+</Data>
+<Data name="05_Precipitation">
+<value>60</value>
+</Data>
+<Data name="05_Humidity">
+<value>79%</value>
+</Data>
+<Data name="05_Wind_Speed">
+<value>14 mph</value>
+</Data>
+<Data name="05_Wind_Direction">
+<value>NW</value>
+</Data>
+</ExtendedData>
+</Placemark>
+      </Folder>
+   </Document>
+</kml>

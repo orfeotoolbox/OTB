@@ -1,0 +1,20 @@
+The SConscript in this directory is a project-specific build file. Otherwise,
+all code here is strictly third-party contributions and platform-specific
+built libraries.
+
+For KMZ reading we use the minizip contrib package that comes with zlib (see
+DEPENDENCIES). To avoid compiling third-party sources into our code, we build
+minizip as a separate library. These are built from a temporary modification
+of the SConscript in src/kml/util:
+  env.Append(LIBS=[env['LIBZ']])
+  minizip_files = [
+    '#/third_party/zlib-1.2.3/contrib/minizip/unzip.c',
+    '#/third_party/zlib-1.2.3/contrib/minizip/ioapi.c',
+    '#/third_party/zlib-1.2.3/contrib/minizip/zip.c',
+  ]
+  env.Library(target='minizip', source=minizip_files)
+  env.SharedLibrary(target='minizip', source=minizip_files)
+The resultant binaries are then copied out to
+third_party/zlib-1.2.3.PLATFORM/{bin|lib}. For convenience, we supply
+pre-built copies of the minizip library for windows, mac and linux.
+

@@ -52,5 +52,19 @@ REGISTER_TEST(itk2DScaleInvariantFeatureImageFilterTest);
 #ifdef OTB_USE_INTERNAL_EXPAT
  REGISTER_TEST(expatruntests);
 #endif
+
+REGISTER_TEST(kmlcreatekml); 
+REGISTER_TEST(kmlparsekml); 
+REGISTER_TEST(kmlprintgeometry); 
+REGISTER_TEST(kmlhelloworld);
+REGISTER_TEST(kmlhellogeometry); 
+REGISTER_TEST(kmlhelloattrs); 
+REGISTER_TEST(kmlhelloenum); 
+REGISTER_TEST(kmlhellofeatures); 
+REGISTER_TEST(kmlhellofolder); 
+REGISTER_TEST(kmlhellohref); 
+REGISTER_TEST(kmlhellokmz); 
+REGISTER_TEST(kmlhelloregion); 
+REGISTER_TEST(kmlprettykml); 
 }
 

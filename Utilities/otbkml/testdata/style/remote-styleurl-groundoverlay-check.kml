@@ -1,0 +1,7 @@
+<Style id="plane-icon">
+  <ListStyle>
+    <ItemIcon>
+      <href>http://maps.google.com/mapfiles/kml/shapes/airports.png</href>
+    </ItemIcon>
+  </ListStyle>
+</Style>

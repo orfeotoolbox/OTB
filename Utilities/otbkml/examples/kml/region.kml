@@ -1,0 +1,18 @@
+<kml xmlns="http://earth.google.com/kml/2.1">
+<!-- Elements purposely in non-XSD order -->
+<Document id="doc">
+<name>has a Region</name>
+<Region id="region123">
+<Lod id="lod456">
+<maxLodPixels>-1</maxLodPixels>
+<minLodPixels>256</minLodPixels>
+</Lod>
+<LatLonAltBox id="llab987">
+<south>45.0</south>
+<east>11.25</east>
+<north>50.625</north>
+<west>5.625</west>
+</LatLonAltBox>
+</Region>
+</Document>
+</kml>

@@ -382,42 +382,45 @@ ADD_TEST(ut2DSiftImageSceneSyntheticRotate10 ${UTILITIES_TESTS}
 	 1 10 0.5 0 )
 
 # -------            lib Kml   ------------------------------
-#FOREACH(id_test createkml helloattrs helloenum hellofolder hellogeometry helloregion helloserializer helloworld parsekml      )
-#        ADD_TEST( utKml${id_test} ${CXX_TEST_PATH}/otbKmlTests${id_test}   
-#        kml${id_test}
-#        ${TEMP}/utkml${id_test}.txt
-#        )
-#ENDFOREACH(id_test)
+FOREACH(id_test createkml helloattrs helloenum hellofolder hellogeometry helloregion helloworld parsekml )
+        ADD_TEST( utKml${id_test} ${UTILITIES_TESTS} 
+        kml${id_test}
+        ${TEMP}/utkml${id_test}.txt
+        )
+ENDFOREACH(id_test)
 
 
-#ADD_TEST( utKmlhellofeatures  ${CXX_TEST_PATH}/otbKmlTestshellofeatures
-#        kmlhellofeatures
-#        ${INPUTDATA}/abstractview.kml
+ADD_TEST( utKmlhellofeatures   ${UTILITIES_TESTS}
+        kmlhellofeatures
+        ${INPUTDATA}/abstractview.kml
 #        ${TEMP}/utkmlhellofeatures.txt
-#        )
+        )
 
-#ADD_TEST( utKmlhellohref  ${CXX_TEST_PATH}/otbKmlTestshellohref
-#        kmlhellohref
-#        ${INPUTDATA}/abstractview.kml
+ADD_TEST( utKmlhellohref   ${UTILITIES_TESTS}
+        kmlhellohref
+        ${INPUTDATA}/abstractview.kml
 #        ${TEMP}/utkmlhellohref.txt
-#        )
-#ADD_TEST( utKmlhellokmz  ${CXX_TEST_PATH}/otbKmlTestshellokmz    
-#        kmlhellokmz
-#        ${INPUTDATA}/multikml-doc.kmz
+        )
+ADD_TEST( utKmlhellokmz   ${UTILITIES_TESTS}   
+        kmlhellokmz
+        ${INPUTDATA}/multikml-doc.kmz
 #        ${TEMP}/utkmlhellokmz.txt
-#        )
+        )
 
-#ADD_TEST( utKmlprettykml  ${CXX_TEST_PATH}/otbKmlTestsprettykml
-#        kmlprettykml
-#        ${INPUTDATA}/polygons2d.kml
-#        ${TEMP}/utkmlprettykml.txt
-#        )
-        
-#ADD_TEST( utKmlprintgeometry  ${CXX_TEST_PATH}/otbKmlTestsprintgeometry
-#        kmlprintgeometry
-#        ${INPUTDATA}/polygons2d.kml
+ADD_TEST( utKmlprettykml   ${UTILITIES_TESTS}
+        --compare-ascii ${TOL}  
+                        ${BASELINE_FILES}/utkmlprettykml.txt 
+                        ${TEMP}/utkmlprettykml.txt
+        kmlprettykml
+        ${INPUTDATA}/polygons2d.kml
+        ${TEMP}/utkmlprettykml.txt
+        )
+
+ADD_TEST( utKmlprintgeometry   ${UTILITIES_TESTS}
+        kmlprintgeometry
+        ${INPUTDATA}/polygons2d.kml
 #        ${TEMP}/utkmlprintgeometry.txt
-#        )
+        )
 
 
 # -------       Fichiers sources CXX -----------------------------------
@@ -435,6 +438,20 @@ svmGenericKernelBasicOperationsTest.cxx
 otbSVMComposedKernelFunctorTest.cxx
 ossimRadarSatSupport.cxx
 itkScaleInvariantFeatureImageFilterTest.cxx
+kmlcreatekml.cc
+kmlhelloattrs.cc 
+kmlhelloenum.cc 
+kmlhellofolder.cc
+kmlhellogeometry.cc 
+kmlhellohref.cc
+kmlhellokmz.cc 
+kmlhelloregion.cc
+kmlhelloworld.cc 
+kmlparsekml.cc
+kmlprettykml.cc
+kmlprintgeometry.cc
+kmlhellofeatures.cc
+kmlprint.cc
 )
 
 IF(OTB_COMPILE_JPEG2000)
@@ -470,7 +487,7 @@ IF(NOT BUILD_SHARED_LIBS)
 ENDIF(NOT BUILD_SHARED_LIBS)
 
 ADD_EXECUTABLE(otbUtilitiesTests otbUtilitiesTests.cxx ${UtilitiesTests_SRCS})
-TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon otbossim otbsvm otb6S tinyXML )
+TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon otbossim otbsvm otb6S tinyXML otbkml)
 
 IF(OTB_COMPILE_JPEG2000)
   TARGET_LINK_LIBRARIES(otbUtilitiesTests otbopenjpeg)
@@ -498,25 +515,6 @@ ENDIF(UNIX)
 #        TARGET_LINK_LIBRARIES(otbGalibTests${loop_var} otbgalib OTBIO OTBCommon)
 #ENDFOREACH(loop_var)
 
-
-# ROMAIN
-# -------       CXX and EXECUTABLES files for KML Tests -----------------------------------
-# hellofeatures
-#FOREACH(filename        createkml helloattrs helloenum hellofolder
-#                        hellogeometry hellohref hellokmz helloregion helloserializer
-#                        helloworld parsekml prettykml printgeometry
-#        )
-#        ADD_EXECUTABLE(otbKmlTests${filename} kml${filename}.cc )
-#        TARGET_LINK_LIBRARIES(otbKmlTests${filename} otbkml OTBIO OTBCommon)
-#        IF( OTB_USE_EXTERNAL_EXPAT )
-#                TARGET_LINK_LIBRARIES(otbKmlTests${filename} expat)
-#        ELSE( OTB_USE_EXTERNAL_EXPAT  )
-#                TARGET_LINK_LIBRARIES(otbKmlTests${filename} otbexpat)
-#        ENDIF( OTB_USE_EXTERNAL_EXPAT )
-#        IF(UNIX)
-#                TARGET_LINK_LIBRARIES (otbKmlTests${filename} m)
-#        ENDIF(UNIX)
-#ENDFOREACH(filename)
 
 
 # Original 6S main executable in C

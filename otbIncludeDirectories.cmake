@@ -38,8 +38,10 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/otbgeotiff/libxtiff
   ${OTB_SOURCE_DIR}/Utilities/tinyXMLlib
 #  ${OTB_SOURCE_DIR}/Utilities/otbgalib
-#  ${OTB_SOURCE_DIR}/Utilities/otbkml
-#  ${OTB_SOURCE_DIR}/Utilities/otbkml/src
+  ${OTB_SOURCE_DIR}/Utilities/otbkml
+  ${OTB_SOURCE_DIR}/Utilities/otbkml/src
+  ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party
+  ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party/boost_1_34_1
 #  ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party/zlib-1.2.3
 #  ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party/zlib-1.2.3/contrib
 )
@@ -199,7 +201,10 @@ SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbgeotiff/libxtiff
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/tinyXMLlib
 #  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbgalib
-#  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml
+  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml
+  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/src
+  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/third_party
+  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/third_party/boost_1_34_1
 #  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/third_party/zlib-1.2.3
 #  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/third_party/zlib-1.2.3/contrib
 )

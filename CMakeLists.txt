@@ -82,6 +82,35 @@ OPTION(OTB_USE_JPEG2000 "Use to support jpeg2000 image file format." ON)
 # FIND EXTERNAL LIBRAIRIES USE
 
 #-------------------------------
+# EXPAT Library
+#-------------------------------
+
+SET(OTB_USE_EXTERNAL_EXPAT 1)
+SET(EXPAT_FIND_REQUIRED 0) # To suppress cmake error message if not find
+FIND_PACKAGE(EXPAT)
+IF(EXPAT_FOUND)
+        # Control expat compatibility
+        INCLUDE_DIRECTORIES(BEFORE ${EXPAT_INCLUDE_DIR})
+       	MESSAGE(${EXPAT_INCLUDE_DIR})
+        LINK_DIRECTORIES( ${EXPAT_LIBRARY} )
+        TRY_COMPILE(OTB_TYPE_COMPILE_EXPAT
+            ${OTB_BINARY_DIR}/CMakeTmp
+            ${OTB_SOURCE_DIR}/CMake/otbTestCompileExpat.cxx )
+        IF(OTB_TYPE_COMPILE_EXPAT)
+                SET(OTB_USE_EXTERNAL_EXPAT 1)
+        ELSE(OTB_TYPE_COMPILE_EXPAT)
+                SET(OTB_USE_EXTERNAL_EXPAT 0)
+        ENDIF( OTB_TYPE_COMPILE_EXPAT)
+ELSE(EXPAT_FOUND)
+        SET(OTB_USE_EXTERNAL_EXPAT 0)
+ENDIF(EXPAT_FOUND)
+IF(NOT OTB_USE_EXTERNAL_EXPAT)
+        ADD_DEFINITIONS(-DOTB_USE_INTERNAL_EXPAT)
+        INCLUDE_DIRECTORIES(BEFORE "${OTB_SOURCE_DIR}/Utilities/otbexpat")
+        INCLUDE_DIRECTORIES(BEFORE "${OTB_BINARY_DIR}/Utilities/otbexpat")
+ENDIF(NOT OTB_USE_EXTERNAL_EXPAT)
+
+#-------------------------------
 # ITK Library
 #-------------------------------
 
@@ -89,6 +118,15 @@ OPTION(OTB_USE_EXTERNAL_ITK "Use an outside build of ITK." OFF)
 IF(OTB_USE_EXTERNAL_ITK)
   FIND_PACKAGE(ITK)
   IF(ITK_FOUND)
+        # Builf ITK_INCLUDE_DIRS list wihout expat path
+        SET(new_list "")
+        FOREACH(files_h ${ITK_INCLUDE_DIRS})
+                IF(NOT "${files_h}" MATCHES "expat")
+                        SET(new_list "${new_list};${files_h}")
+                ENDIF(NOT "${files_h}" MATCHES "expat")
+        ENDFOREACH(files_h ${ITK_INCLUDE_DIRS})
+        SET(ITK_INCLUDE_DIRS "${new_list}")
+
         INCLUDE(${ITK_USE_FILE})
   ELSE(ITK_FOUND)
         MESSAGE(FATAL_ERROR
@@ -287,34 +325,6 @@ ENDIF (NOT GDAL_INCLUDE_DIRS)
 INCLUDE_DIRECTORIES(${GDAL_INCLUDE_DIRS})
 LINK_DIRECTORIES( ${GDAL_LIBRARY_DIRS} )
 
-#-------------------------------
-# EXPAT Library
-#-------------------------------
-
-SET(OTB_USE_EXTERNAL_EXPAT 1)
-SET(EXPAT_FIND_REQUIRED 0) # To suppress cmake error message if not find
-FIND_PACKAGE(EXPAT)
-IF(EXPAT_FOUND)
-        # Control expat compatibility
-        INCLUDE_DIRECTORIES(${EXPAT_INCLUDE_DIR})
-       	MESSAGE(${EXPAT_INCLUDE_DIR})
-        LINK_DIRECTORIES( ${EXPAT_LIBRARY} )
-        TRY_COMPILE(OTB_TYPE_COMPILE_EXPAT
-            ${OTB_BINARY_DIR}/CMakeTmp
-            ${OTB_SOURCE_DIR}/CMake/otbTestCompileExpat.cxx )
-        IF(OTB_TYPE_COMPILE_EXPAT)
-                SET(OTB_USE_EXTERNAL_EXPAT 1)
-        ELSE(OTB_TYPE_COMPILE_EXPAT)
-                SET(OTB_USE_EXTERNAL_EXPAT 0)
-        ENDIF( OTB_TYPE_COMPILE_EXPAT)
-ELSE(EXPAT_FOUND)
-        SET(OTB_USE_EXTERNAL_EXPAT 0)
-ENDIF(EXPAT_FOUND)
-IF(NOT OTB_USE_EXTERNAL_EXPAT)
-        ADD_DEFINITIONS(-DOTB_USE_INTERNAL_EXPAT)
-        INCLUDE_DIRECTORIES("${OTB_SOURCE_DIR}/Utilities/otbexpat")
-        INCLUDE_DIRECTORIES("${OTB_BINARY_DIR}/Utilities/otbexpat")
-ENDIF(NOT OTB_USE_EXTERNAL_EXPAT)
 
 #-------------------------------
 # End connections whith external libraries
