@@ -27,7 +27,9 @@
 #include <cstddef>  // NULL
 #ifdef WIN32
 #include <windows.h>
-#include <winsock2.h>
+// OTB Modifications (bug reported on libkml google issues
+//#include <winsock2.h>
+#include <winsock.h>
 #include <time.h>
 #else
 #include <sys/time.h>
