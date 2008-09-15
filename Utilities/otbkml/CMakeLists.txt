@@ -21,11 +21,24 @@ SET(libkmlbase_la_SOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/kml/base)
 INCLUDE_DIRECTORIES(${libkmlbase_la_SOURCES_DIR})
 SET(libkmlbase_la_SOURCES 
 	${libkmlbase_la_SOURCES_DIR}/file.cc 
-	${libkmlbase_la_SOURCES_DIR}/file_posix.cc 
 	${libkmlbase_la_SOURCES_DIR}/referent.cc 
 	${libkmlbase_la_SOURCES_DIR}/string_util.cc 
 	${libkmlbase_la_SOURCES_DIR}/time_util.cc
 )
+IF(UNIX)
+        SET(libkmlbase_la_SOURCES ${libkmlbase_la_SOURCES} 
+	${libkmlbase_la_SOURCES_DIR}/file_posix.cc )
+ELSE(UNIX)
+        SET(libkmlbase_la_SOURCES ${libkmlbase_la_SOURCES} 
+	${libkmlbase_la_SOURCES_DIR}/file_win32.cc )
+ENDIF(UNIX)
+
+SET(libkmlbase_la_SOURCES ${libkmlbase_la_SOURCES} 
+	${CMAKE_CURRENT_SOURCE_DIR}/src/stdafx.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/stdafx.h
+)
+
+
 
 SET(libkmlconvenience_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/kml/convenience")
 INCLUDE_DIRECTORIES(${libkmlconvenience_la_SOURCES_DIR})
@@ -168,7 +181,7 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 IF(WIN32)
         IF(NOT CYGWIN)
-                ADD_DEFINITIONS(-DWIN32)
+                ADD_DEFINITIONS(-DWIN32 -DUNICODE -D_UNICODE)
         ENDIF(NOT CYGWIN)
 ENDIF(WIN32)
 
