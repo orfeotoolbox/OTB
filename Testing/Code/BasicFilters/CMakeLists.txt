@@ -922,8 +922,11 @@ ADD_TEST(bfTuFunctionToImageFilterTest ${BASICFILTERS_TESTS9}
 ADD_TEST(bfTuScalarImageTextureFunctorNew ${BASICFILTERS_TESTS9}
         otbScalarImageTextureFunctorNew )
 ADD_TEST(bfTvScalarImageTextureFunctor ${BASICFILTERS_TESTS9}
+        --compare-image ${EPSILON}
+            ${BASELINE}/bfScalarImageTextureFunctorTest.tif
+            ${TEMP}/bfScalarImageTextureFunctorTest.tif
         otbScalarImageTextureFunctor 
-	    ${INPUTDATA}/poupees_1canal.hd
+	    ${INPUTDATA}/small_poupees_1canal.hd
 	    ${TEMP}/bfScalarImageTextureFunctorTest.tif
 	    2 # radius
             0 # index feature
@@ -932,8 +935,11 @@ ADD_TEST(bfTuScalarVectorImageTextureFunctorNew ${BASICFILTERS_TESTS9}
         otbScalarVectorImageTextureFunctorNew )
 
 ADD_TEST(bfTvScalarVectorImageTextureFunctor ${BASICFILTERS_TESTS9}
+        --compare-image ${EPSILON}
+            ${BASELINE}/bfScalarImageTextureFunctorTest.tif # It the same of  bfTvScalarImageTextureFunctor test
+            ${TEMP}/bfScalarVectorImageTextureFunctorTest.tif
         otbScalarVectorImageTextureFunctor 
-	    ${INPUTDATA}/poupees_1canal.hd
+	    ${INPUTDATA}/small_poupees_1canal.hd
 	    ${TEMP}/bfScalarVectorImageTextureFunctorTest.tif
 	    2 # radius
 )
