@@ -365,7 +365,8 @@ ADD_TEST(bfTvStreamingStatisticsImageFilter ${BASICFILTERS_TESTS4}
  		   ${BASELINE_FILES}/bfStreamingStatisticsImageFilterResults.txt
  		   ${TEMP}/bfStreamingStatisticsImageFilterResults.txt
          otbStreamingStatisticsImageFilter
-		${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+#		${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+                ${INPUTDATA}/small_poupees_1canal.hd
 		${TEMP}/bfStreamingStatisticsImageFilterResults.txt)
 
 # -------            otb::VectorImageTo3DScalarImageFilter   ----------------------------
@@ -922,7 +923,7 @@ ADD_TEST(bfTuFunctionToImageFilterTest ${BASICFILTERS_TESTS9}
 ADD_TEST(bfTuScalarImageTextureFunctorNew ${BASICFILTERS_TESTS9}
         otbScalarImageTextureFunctorNew )
 ADD_TEST(bfTvScalarImageTextureFunctor ${BASICFILTERS_TESTS9}
-        --compare-image ${EPSILON}
+        --compare-image ${TOL}
             ${BASELINE}/bfScalarImageTextureFunctorTest.tif
             ${TEMP}/bfScalarImageTextureFunctorTest.tif
         otbScalarImageTextureFunctor 
@@ -935,7 +936,7 @@ ADD_TEST(bfTuScalarVectorImageTextureFunctorNew ${BASICFILTERS_TESTS9}
         otbScalarVectorImageTextureFunctorNew )
 
 ADD_TEST(bfTvScalarVectorImageTextureFunctor ${BASICFILTERS_TESTS9}
-        --compare-image ${EPSILON}
+        --compare-image ${TOL}
             ${BASELINE}/bfScalarImageTextureFunctorTest.tif # It the same of  bfTvScalarImageTextureFunctor test
             ${TEMP}/bfScalarVectorImageTextureFunctorTest.tif
         otbScalarVectorImageTextureFunctor 
