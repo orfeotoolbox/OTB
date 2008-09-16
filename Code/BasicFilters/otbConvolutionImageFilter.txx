@@ -23,26 +23,26 @@
 #include "itkNeighborhoodInnerProduct.h"
 #include "itkImageRegionIterator.h"
 #include "itkNeighborhoodAlgorithm.h"
-#include "itkZeroFluxNeumannBoundaryCondition.h"
 #include "itkOffset.h"
 #include "itkProgressReporter.h"
 
 namespace otb
 {
 
-template <class TInputImage, class TOutputImage>
-ConvolutionImageFilter<TInputImage, TOutputImage>
+template <class TInputImage, class TOutputImage, class TBoundaryCondition>
+ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
 ::ConvolutionImageFilter()
 {
+  typedef itk::ZeroFluxNeumannBoundaryCondition<InputImageType> DefaultBoundaryConditionType;
   m_Radius.Fill(1);
   m_Filter.SetSize(3*3);
   m_Filter.Fill(1);
   m_NormalizeFilter = false;
 }
 
-template <class TInputImage, class TOutputImage>
+template <class TInputImage, class TOutputImage, class TBoundaryCondition>
 void 
-ConvolutionImageFilter<TInputImage, TOutputImage>
+ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
 ::GenerateInputRequestedRegion() throw (itk::InvalidRequestedRegionError)
 {
   // call the superclass' implementation of this method
@@ -90,15 +90,15 @@ ConvolutionImageFilter<TInputImage, TOutputImage>
 }
 
 
-template< class TInputImage, class TOutputImage>
+template< class TInputImage, class TOutputImage, class TBoundaryCondition>
 void
-ConvolutionImageFilter< TInputImage, TOutputImage>
+ConvolutionImageFilter< TInputImage, TOutputImage, TBoundaryCondition>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                        int threadId)
 {
-  unsigned int i;
-  itk::ZeroFluxNeumannBoundaryCondition<InputImageType> nbc;
 
+  BoundaryConditionType nbc;
+  unsigned int i;
   itk::ConstNeighborhoodIterator<InputImageType> bit;
   itk::ImageRegionIterator<OutputImageType> it;
   
@@ -162,12 +162,10 @@ ConvolutionImageFilter< TInputImage, TOutputImage>
 /**
  * Standard "PrintSelf" method
  */
-template <class TInputImage, class TOutput>
+template <class TInputImage, class TOutput, class TBoundaryCondition>
 void
-ConvolutionImageFilter<TInputImage, TOutput>
-::PrintSelf(
-  std::ostream& os, 
-  itk::Indent indent) const
+ConvolutionImageFilter<TInputImage, TOutput, TBoundaryCondition>
+::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
   os << indent << "Radius: " << m_Radius << std::endl;

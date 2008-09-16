@@ -22,6 +22,7 @@
 #include "itkImage.h"
 #include "itkNumericTraits.h"
 #include "itkArray.h"
+#include "itkZeroFluxNeumannBoundaryCondition.h"
 
 namespace otb
 {
@@ -38,14 +39,25 @@ namespace otb
  * By default, the input filter is not normalized but it can be using the 
  * NormalizeFilterOn() method.
  *
+ * This filter allows the user to choose the boundary condtions in the template parameters. 
+ Default boundary conditions are zero flux Neumann boundary conditions.
+ *
+ * An optimized version of this filter using FFTW is available in the Orfeo ToolBox and
+ * will significantly improves performances especially for large kernels.
+ *
  * \sa Image
  * \sa Neighborhood
  * \sa NeighborhoodOperator
- * \sa NeighborhoodIterator
- * 
+ * \sa NeighborhoodIterator 
+ * \sa ImageBoundaryCondition
+ * \sa ZeroFluxNeumannBoundaryCondition
+ * \sa OverlapSaveConvolutionImageFilter
+ *
  * \ingroup IntensityImageFilters
+ * \ingroup Streamed
+ * \ingroup MultiThreaded
  */
-template <class TInputImage, class TOutputImage>
+template <class TInputImage, class TOutputImage, class TBoundaryCondition = itk::ZeroFluxNeumannBoundaryCondition<TInputImage> >
 class ITK_EXPORT ConvolutionImageFilter :
     public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
@@ -76,15 +88,11 @@ public:
   typedef typename InputImageType::PixelType InputPixelType;
   typedef typename OutputImageType::PixelType OutputPixelType;
   typedef typename itk::NumericTraits<InputPixelType>::RealType InputRealType;
-
-  //typedef typename InputPixelType::InternalPixelType InputRealType;
-
   typedef typename InputImageType::RegionType InputImageRegionType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
-
   typedef typename InputImageType::SizeType InputSizeType;
-
   typedef typename itk::Array<InputRealType> ArrayType;
+  typedef TBoundaryCondition BoundaryConditionType;
   
   /** Set the radius of the neighborhood of the filter */
   virtual void SetRadius (const InputSizeType rad) 
@@ -130,14 +138,6 @@ public:
   itkGetMacro(NormalizeFilter, bool);
   itkBooleanMacro(NormalizeFilter);
   
-  /** ConvolutionImageFilter needs a larger input requested region than
-   * the output requested region.  As such, ConvolutionImageFilter needs
-   * to provide an implementation for GenerateInputRequestedRegion()
-   * in order to inform the pipeline execution model.
-   *
-   * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  virtual void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError);
-
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
   itkConceptMacro(InputHasNumericTraitsCheck,
@@ -163,14 +163,24 @@ protected:
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                             int threadId );
 
+  /** ConvolutionImageFilter needs a larger input requested region than
+   * the output requested region.  As such, ConvolutionImageFilter needs
+   * to provide an implementation for GenerateInputRequestedRegion()
+   * in order to inform the pipeline execution model.
+   *
+   * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
+  virtual void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError);
+
 private:
   ConvolutionImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
+  /** Radius of the filter */
   InputSizeType m_Radius;
+  /** Array containing the filter values */
   ArrayType m_Filter;
+  /** Flag for filter coefficients normalization */
   bool m_NormalizeFilter;
-  
 };
   
 } // end namespace itk
