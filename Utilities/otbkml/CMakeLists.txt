@@ -30,15 +30,10 @@ IF(UNIX)
 	${libkmlbase_la_SOURCES_DIR}/file_posix.cc )
 ELSE(UNIX)
         SET(libkmlbase_la_SOURCES ${libkmlbase_la_SOURCES} 
-	${libkmlbase_la_SOURCES_DIR}/file_win32.cc )
+	${libkmlbase_la_SOURCES_DIR}/file_win32.cc 
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/stdafx.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/stdafx.h )
 ENDIF(UNIX)
-
-SET(libkmlbase_la_SOURCES ${libkmlbase_la_SOURCES} 
-	${CMAKE_CURRENT_SOURCE_DIR}/src/stdafx.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/stdafx.h
-)
-
-
 
 SET(libkmlconvenience_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/kml/convenience")
 INCLUDE_DIRECTORIES(${libkmlconvenience_la_SOURCES_DIR})
