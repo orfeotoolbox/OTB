@@ -43,4 +43,9 @@ REGISTER_TEST(otbScalarVectorImageTextureFunctorNew);
 REGISTER_TEST(otbScalarVectorImageTextureFunctor);
 REGISTER_TEST(otbGaborFilterGeneratorNew);
 REGISTER_TEST(otbGaborFilterGenerator);
+#if defined(USE_FFTWD)
+REGISTER_TEST(otbOverlapSaveConvolutionImageFilterNew);
+REGISTER_TEST(otbOverlapSaveConvolutionImageFilter);
+REGISTER_TEST(otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter);
+#endif
 }

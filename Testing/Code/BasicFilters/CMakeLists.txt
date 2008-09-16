@@ -938,6 +938,8 @@ ADD_TEST(bfTvScalarVectorImageTextureFunctor ${BASICFILTERS_TESTS9}
 	    2 # radius
 )
 
+# -------            otb::GaborFilterGenerator   ----------------------------
+
 ADD_TEST(bfTuGaborFilterGeneratorNew ${BASICFILTERS_TESTS9}
 	otbGaborFilterGeneratorNew
 	 )
@@ -954,6 +956,39 @@ ADD_TEST(bfTvGaborFilterGenerator ${BASICFILTERS_TESTS9}
 	 0.0125 0.0125 #u0 v0
 	 0
 )
+
+# -------            otb::OverlapSaveConvolutionImageFilter   ----------------------------
+
+IF(USE_FFTWD)
+
+  ADD_TEST(bfTuOverlapSaveConvolutionImageFilterNew ${BASICFILTERS_TESTS9}
+         otbOverlapSaveConvolutionImageFilterNew)
+
+  ADD_TEST(bfTvOverlapSaveConvolutionImageFilter ${BASICFILTERS_TESTS9}
+		--compare-image ${EPSILON}
+		    ${BASELINE}/bfTvConvolutionImageFilter.tif
+		    ${TEMP}/bfTvOverlapSaveConvolutionImageFilter.tif
+		    otbOverlapSaveConvolutionImageFilter
+		    ${INPUTDATA}/QB_Suburb.png
+		    ${TEMP}/bfTvOverlapSaveConvolutionImageFilter.tif
+)
+
+ ADD_TEST(bfTvCompareOverlapSaveAndClassicalConvolutionWithGaborFilter ${BASICFILTERS_TESTS9}
+		--compare-image ${EPSILON}
+		    ${TEMP}/bfTvCompareConvolutionOutput.tif
+		    ${TEMP}/bfTvCompareOSConvolutionoutput.tif
+		    otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter	
+		    ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
+		    ${TEMP}/bfTvCompareConvolutionOutput.tif
+		    ${TEMP}/bfTvCompareOSConvolutionoutput.tif
+		    64 64 #Radius
+		    0.02 0.025 # a b
+		    -45 # theta
+		    0.0125 0.0125 #u0 v0
+		    0
+)
+
+ENDIF(USE_FFTWD)
 
 # A enrichir
 SET(BasicFilters_SRCS1
@@ -1095,8 +1130,17 @@ otbScalarVectorImageTextureFunctorNew.cxx
 otbScalarVectorImageTextureFunctor.cxx
 otbGaborFilterGeneratorNew.cxx
 otbGaborFilterGenerator.cxx
+
 )
 
+IF(USE_FFTWD)
+SET(BasicFilters_SRCS9 
+${BasicFilters_SRCS9}
+otbOverlapSaveConvolutionImageFilterNew.cxx
+otbOverlapSaveConvolutionImageFilter.cxx
+otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter.cxx
+)
+ENDIF(USE_FFTWD)
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
