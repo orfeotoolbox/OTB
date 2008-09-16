@@ -85,30 +85,30 @@ OPTION(OTB_USE_JPEG2000 "Use to support jpeg2000 image file format." ON)
 # EXPAT Library
 #-------------------------------
 
-SET(OTB_USE_EXTERNAL_EXPAT 1)
-SET(EXPAT_FIND_REQUIRED 0) # To suppress cmake error message if not find
-FIND_PACKAGE(EXPAT)
-IF(EXPAT_FOUND)
+OPTION(OTB_USE_EXTERNAL_EXPAT "Use an outside build of EXPAT." OFF)
+MARK_AS_ADVANCED(OTB_USE_EXTERNAL_EXPAT)
+#SET(OTB_COMPILE_EXPAT ${OTB_USE_EXTERNAL_EXPAT})
+IF(OTB_USE_EXTERNAL_EXPAT)
+    FIND_PACKAGE(EXPAT)
+    IF(EXPAT_FOUND)
         # Control expat compatibility
         INCLUDE_DIRECTORIES(BEFORE ${EXPAT_INCLUDE_DIR})
-       	MESSAGE(${EXPAT_INCLUDE_DIR})
         LINK_DIRECTORIES( ${EXPAT_LIBRARY} )
-        TRY_COMPILE(OTB_TYPE_COMPILE_EXPAT
-            ${OTB_BINARY_DIR}/CMakeTmp
-            ${OTB_SOURCE_DIR}/CMake/otbTestCompileExpat.cxx )
-        IF(OTB_TYPE_COMPILE_EXPAT)
-                SET(OTB_USE_EXTERNAL_EXPAT 1)
-        ELSE(OTB_TYPE_COMPILE_EXPAT)
-                SET(OTB_USE_EXTERNAL_EXPAT 0)
-        ENDIF( OTB_TYPE_COMPILE_EXPAT)
-ELSE(EXPAT_FOUND)
-        SET(OTB_USE_EXTERNAL_EXPAT 0)
-ENDIF(EXPAT_FOUND)
-IF(NOT OTB_USE_EXTERNAL_EXPAT)
+#        TRY_COMPILE(OTB_TYPE_COMPILE_EXPAT
+#                        ${OTB_BINARY_DIR}/CMakeTmp
+#                        ${OTB_SOURCE_DIR}/CMake/otbTestCompileExpat.cxx )
+#        IF( NOT OTB_TYPE_COMPILE_EXPAT)
+#            SET(OTB_USE_EXTERNAL_EXPAT OFF)
+#        ENDIF( NOT OTB_TYPE_COMPILE_EXPAT)
+    ELSE(EXPAT_FOUND)
+        MESSAGE(FATAL_ERROR
+                  "Cannot build OTB project without lib EXPAT.  Please set EXPAT_DIR or set OTB_USE_EXTERNAL_EXPAT OFF to use INTERNAL EXPAT set on OTB/Utilities repository.")
+    ENDIF(EXPAT_FOUND)
+ELSE(OTB_USE_EXTERNAL_EXPAT)
         ADD_DEFINITIONS(-DOTB_USE_INTERNAL_EXPAT)
         INCLUDE_DIRECTORIES(BEFORE "${OTB_SOURCE_DIR}/Utilities/otbexpat")
         INCLUDE_DIRECTORIES(BEFORE "${OTB_BINARY_DIR}/Utilities/otbexpat")
-ENDIF(NOT OTB_USE_EXTERNAL_EXPAT)
+ENDIF(OTB_USE_EXTERNAL_EXPAT)
 
 #-------------------------------
 # ITK Library
@@ -251,9 +251,9 @@ IF(OTB_USE_VISU_GUI)
                         MESSAGE(FATAL_ERROR
 	                        "Cannot build OTB project without FLTK.  Please set FLTK_DIR  or  set OTB_USE_VISU to OFF  or  set OTB_USE_EXTERNAL_FLTK OFF to use INTERNAL FLTK set on OTB/Utilities repository.")
                 ENDIF(FLTK_FOUND)
-                
+
         ELSE(OTB_USE_EXTERNAL_FLTK)
-                
+
                 SET( FLTK_PLATFORM_DEPENDENT_LIBS "")
                 IF(EXISTS "${OTB_BINARY_DIR}/Utilities/FLTK/FLTKConfig.cmake") 
                         INCLUDE(${OTB_BINARY_DIR}/Utilities/FLTK/FLTKConfig.cmake)
@@ -261,9 +261,9 @@ IF(OTB_USE_VISU_GUI)
                 #----------------------------------------------------------------
                 # RESUME Alls VISU GUI libraries use by OTB in a single VARIABLE
                 SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES} ")
-        
+
         ENDIF(OTB_USE_EXTERNAL_FLTK)
-        
+
 ENDIF(OTB_USE_VISU_GUI)
 
 #-------------------------------
