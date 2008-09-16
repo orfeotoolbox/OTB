@@ -43,7 +43,8 @@ namespace otb
  Default boundary conditions are zero flux Neumann boundary conditions.
  *
  * An optimized version of this filter using FFTW is available in the Orfeo ToolBox and
- * will significantly improves performances especially for large kernels.
+ * will significantly improves performances especially for large kernels 
+ * (see OverlapSaveConvolutionImageFilter).
  *
  * \sa Image
  * \sa Neighborhood

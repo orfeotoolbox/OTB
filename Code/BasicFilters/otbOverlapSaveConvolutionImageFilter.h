@@ -44,7 +44,8 @@ namespace otb
    * especially with large kernels.
    *
    * \note ITK must be set to use FFTW (double implementation) for this filter to work properly. If not, exception
-   *  will be raised at filter creation.
+   *  will be raised at filter creation. Install fftw and set the variable 
+   *  USE_FFTWD  to ON in ccmake.
    *
    * \sa ConvolutionImageFilter
    *
