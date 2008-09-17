@@ -49,7 +49,7 @@ GenericRoadExtractionFilter<TInputImage, TOutputPath>
         m_LikehoodPathListFilter = LikehoodPathListFilterType::New();
         
         /** Amplitude threshold to start following a path (use by the VectorizationPathListFilter)*/
-        m_AmplitudeThreshold = static_cast<AmplitudeThresholdType>(1.);
+        m_AmplitudeThreshold = static_cast<AmplitudeThresholdType>(0.00005 );
         /** Tolerance for segment consistency (tolerance in terms of distance) (use by the SimplifyPathFilter)*/
         m_Tolerance = static_cast<ToleranceType>(1.);
         /** Max angle (use bye the BreakAngularPathListFilter)*/
@@ -65,7 +65,7 @@ GenericRoadExtractionFilter<TInputImage, TOutputPath>
 
         /** Alpha value */
         /** Use to calculate the sigma value use by the GradientRecursiveGaussianImageFilter */
-        m_Alpha = 0.;
+        m_Alpha = 1.0;
         
         /** Resolution of the image */
         m_Resolution = 1.;
