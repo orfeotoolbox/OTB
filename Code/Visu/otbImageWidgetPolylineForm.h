@@ -21,7 +21,7 @@
 #include "itkSize.h"
 #include "itkIndex.h"
 #include "otbImageWidgetFormBase.h"
-#include "otbPolylineParametricPathWithValue.h"
+#include "otbPolyLineParametricPathWithValue.h"
 
 namespace otb
 {
@@ -50,7 +50,7 @@ class ITK_EXPORT ImageWidgetPolylineForm
   /** Usefull typedef. */
   typedef itk::Size<2>                               SizeType;
   typedef itk::Index<2>                              IndexType;
-  typedef PolylineParametricPathWithValue<ValueType,2> PolylineType;
+  typedef PolyLineParametricPathWithValue<ValueType,2> PolylineType;
   typedef typename PolylineType::Pointer              PolylinePointerType;       
   typedef typename PolylineType::VertexType           VertexType;
   typedef typename PolylineType::VertexListType       VertexListType;
