@@ -55,7 +55,8 @@ class ITK_EXPORT PolyLineParametricPathWithValue
  typedef typename Superclass::VertexType VertexType;
  typedef typename Superclass::VertexListType VertexListType;
  typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
-
+ typedef typename VertexListType::ConstIterator   VertexListIteratorType;
+ 
  itkGetMacro(Key,std::string);
 
  void SetValue(ValueType value)

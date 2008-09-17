@@ -57,7 +57,7 @@ class ITK_EXPORT Polygon
   typedef typename Superclass::VertexType          VertexType;
   typedef typename Superclass::VertexListType      VertexListType;
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
-  typedef typename VertexListType::ConstIterator   VertexListIteratorType;
+  typedef typename Superclass::ConstIterator   VertexListIteratorType;
 
   typedef itk::ImageRegion<2>                       RegionType;
   typedef typename RegionType::SizeType            SizeType;
