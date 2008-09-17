@@ -19,7 +19,7 @@
 #define  __otb_DataNode_h
 
 #include "itkPoint.h"
-#include "itkPolyLineParametricPath.h"
+#include "otbPolyLineParametricPathWithValue.h"
 #include "otbPolygon.h"
 #include "otbObjectList.h"
 
@@ -67,7 +67,7 @@ class DataNode
 
    /** Internal data typedef */
    typedef itk::Point<PrecisionType,VDimension>       PointType;
-   typedef itk::PolyLineParametricPath<VDimension>    LineType;
+   typedef otb::PolyLineParametricPathWithValue<double,VDimension>    LineType;
    typedef typename LineType::Pointer                 LinePointerType;
    typedef Polygon<PrecisionType>                     PolygonType;
    typedef typename PolygonType::Pointer              PolygonPointerType; 
@@ -121,18 +121,18 @@ class DataNode
     * Set the line data. Node type is automatically set to FEATURE_LINE.
     * \param line The line.
     */
-   void SetLine(LinePointerType line);
+   void SetLine(LineType* line);
    /**
     * Set the polygon exterior ring. Node type is automatically set to FEATURE_POLYGON.
     * \param polygon The polygon exterior ring.
     */
-   void SetPolygonExteriorRing(PolygonPointerType polygon);
+   void SetPolygonExteriorRing(PolygonType* polygon);
 
    /**
     * Set the polygon interior rings. Node type is automatically set to FEATURE_POLYGON.
     * \param polygonList The polygon interior rings list.
     */
-   void SetPolygonInteriorRings(PolygonListPointerType polygonList);
+   void SetPolygonInteriorRings(PolygonListType* polygonList);
 
    /**
     * \return True if node type is DOCUMENT.

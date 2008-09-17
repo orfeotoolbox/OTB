@@ -75,7 +75,7 @@ public:
    * Append an element to the list.
    * \param element Pointer to the element to append.
    */
-  void PushBack(ObjectPointerType element);
+  void PushBack(ObjectType* element);
   /**
    * Set the nth element of the list.
    * \param index The index where to put the element.

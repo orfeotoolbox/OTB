@@ -52,7 +52,7 @@ DataNode<TPrecision,VDimension>
 
 template <class TPrecision, unsigned int VDimension>
   void DataNode<TPrecision,VDimension>
-::SetLine(LinePointerType line)
+::SetLine(LineType* line)
 {
   m_NodeType = FEATURE_LINE;
   m_Data.line = line;
@@ -61,7 +61,7 @@ template <class TPrecision, unsigned int VDimension>
 template <class TPrecision, unsigned int VDimension> 
  void 
 DataNode<TPrecision,VDimension>
-::SetPolygonExteriorRing(PolygonPointerType polygon)
+::SetPolygonExteriorRing(PolygonType* polygon)
 {
   m_NodeType = FEATURE_POLYGON;
   m_Data.exteriorRing = polygon;
@@ -75,7 +75,7 @@ DataNode<TPrecision,VDimension>
 template <class TPrecision, unsigned int VDimension> 
  void 
 DataNode<TPrecision,VDimension>
-::SetPolygonInteriorRings(PolygonListPointerType polygonList)
+  ::SetPolygonInteriorRings(PolygonListType* polygonList)
 {
   m_NodeType = FEATURE_POLYGON;
   m_Data.interiorRings = polygonList;

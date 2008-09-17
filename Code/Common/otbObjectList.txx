@@ -80,7 +80,7 @@ namespace otb
   template <class TObject>
   void 
   ObjectList<TObject>
-  ::PushBack(ObjectPointerType element)
+  ::PushBack(ObjectType* element)
   {
     m_InternalContainer.push_back(element);
   }
