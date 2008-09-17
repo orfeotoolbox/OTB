@@ -26,7 +26,7 @@ namespace otb
 {
 
 /** \class ExtractROIBase
- * \brief Classe de base, permettant d'extraire une partie d'une image.
+ * \brief Base class to extract area of images.
  *
  * Extracted region can be defined by the methods SetStartX/Y (region origin) and
  * SetSizeX/Y (region size). If the starting point is not defined, the extracted 
