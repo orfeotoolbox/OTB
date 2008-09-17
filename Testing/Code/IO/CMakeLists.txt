@@ -1412,6 +1412,9 @@ ADD_TEST(ioTvVectorDataFileReaderWriter ${IO_TESTS15}
 	${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp	
 	)
 
+ADD_TEST(ioTuKMLVectorDataIO ${IO_TESTS15} 
+        otbKMLVectorDataIONew )
+
 
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
@@ -1522,6 +1525,7 @@ otbVectorDataFileWriterNew.cxx
 otbVectorDataFileWriter.cxx
 otbVectorDataFileReaderWriter.cxx
 otbSHPVectorDataIONew.cxx
+otbKMLVectorDataIONew.cxx
 )
 
 
@@ -1577,7 +1581,7 @@ ADD_EXECUTABLE(otbIOTests14 otbIOTests14.cxx ${BasicIO_SRCS14})
 TARGET_LINK_LIBRARIES(otbIOTests14 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests15 otbIOTests15.cxx ${BasicIO_SRCS15})
-TARGET_LINK_LIBRARIES(otbIOTests15 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
+TARGET_LINK_LIBRARIES(otbIOTests15 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf otbkml)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
