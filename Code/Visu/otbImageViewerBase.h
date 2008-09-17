@@ -27,6 +27,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbStreamingShrinkImageFilter.h"
 #include "otbImageWidgetBoxForm.h"
 #include "otbImageWidgetPolygonForm.h"
+#include "otbImageWidgetPolylineForm.h"
 #include "otbImageWidgetCircleForm.h"
 #include "itkListSample.h"
 #include "otbObjectList.h"
@@ -165,6 +166,14 @@ namespace otb
       typedef typename ImageWidgetCircleFormType::Pointer ImageWidgetCircleFormPointerType;
       typedef std::map<LabelType,ColorType> ROIColorMapType;
 
+      typedef otb::PolyLineParametricPathWithValue<double,2> PathType;
+      typedef typename PathType::VertexListIteratorType PathIteratorType;
+      typedef otb::ObjectList<PathType> PathListType;
+      typedef typename PathListType::Pointer PathListPointerType;
+      typedef typename PathListType::Iterator PathListIteratorType;
+      typedef ImageWidgetPolylineForm<double> ImageWidgetPolylineFormType;
+      typedef typename ImageWidgetPolylineFormType::Pointer ImageWidgetPolylineFormPointerType;
+          
       /// Accessors
       itkGetMacro(Built,bool);
       itkGetMacro(ShrinkFactor,unsigned int);
@@ -184,6 +193,8 @@ namespace otb
       itkGetMacro(UseScroll,bool);
       itkGetObjectMacro(PolygonROIList, PolygonListType);
       itkSetObjectMacro(PolygonROIList, PolygonListType);
+      itkGetObjectMacro(PathList, PathListType);
+      itkSetObjectMacro(PathList, PathListType);
       itkGetObjectMacro(InterfaceBoxesList,FormListType);
       itkSetObjectMacro(InterfaceBoxesList,FormListType);
       itkSetMacro(InterfaceBoxesColor,ColorType);
@@ -473,6 +484,8 @@ namespace otb
       OffsetListType m_LinkedViewerOffsetList;
       /// PolygonList
       PolygonListPointerType m_PolygonROIList;
+      /// PathList
+      PathListPointerType m_PathList;
       /// Interface boxes
       FormListPointerType m_InterfaceBoxesList;
       /// Next ROI color 

@@ -60,6 +60,7 @@ namespace otb
     m_LinkedViewerList = ViewerListType::New();
     m_Updating = false;
     m_PolygonROIList = PolygonListType::New(); 
+    m_PathList = PathListType::New();
     m_InterfaceBoxesList = FormListType::New();
     m_ShowFullWidget = true;
     m_ShowScrollWidget = true;
@@ -564,6 +565,19 @@ namespace otb
               }
               new_list->PushBack(new_poly);
         }
+        
+        for(PathListIteratorType it2 = m_PathList->Begin();
+            it2!=m_PathList->End();++it2)
+        {
+          ImageWidgetPolylineFormPointerType new_line = ImageWidgetPolylineFormType::New();
+          new_line->SetPolyline(it2.Get());
+//           new_line->SetInternalValueToAlphaChannel(true);
+
+          new_line->SetColor(m_DefaultROIColor);
+
+          new_list->PushBack(new_line);
+        }
+        
         
         if(m_UseScroll)
         {
