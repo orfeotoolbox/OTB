@@ -12,6 +12,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <cstdlib>
 
 #include "elevation/ossimElevManager.h"
 
