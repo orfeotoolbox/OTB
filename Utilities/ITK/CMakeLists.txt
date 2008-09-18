@@ -68,25 +68,27 @@ INCLUDE (${CMAKE_ROOT}/Modules/CMakeBackwardCompatibilityCXX.cmake)
 # MESSAGE(FATAL_ERROR ...) commands are invoked.
 INCLUDE(${CMAKE_ROOT}/Modules/Dart.cmake)
 MARK_AS_ADVANCED(TCL_TCLSH DART_ROOT)
-ENABLE_TESTING()
-IF(BUILD_TESTING)
-  CONFIGURE_FILE(${ITK_SOURCE_DIR}/CMake/RemoveTemporaryFiles.cmake.in
-    ${ITK_BINARY_DIR}/CMake/RemoveTemporaryFiles.cmake @ONLY IMMEDIATE)
-  CONFIGURE_FILE(${ITK_SOURCE_DIR}/CMake/itkSampleBuildTest.cmake.in
-    ${ITK_BINARY_DIR}/CMake/itkSampleBuildTest.cmake @ONLY)
-  CONFIGURE_FILE(${ITK_SOURCE_DIR}/CMake/CTestCustom.ctest.in
-    ${ITK_BINARY_DIR}/CMake/CTestCustom.ctest @ONLY)
-  CONFIGURE_FILE(${ITK_SOURCE_DIR}/CMake/CTestCustom.ctest.in
-    ${ITK_BINARY_DIR}/Testing/Code/Common/CTestCustom.ctest @ONLY)
-  FILE(WRITE ${ITK_BINARY_DIR}/CTestCustom.cmake
-    "INCLUDE(\"${ITK_BINARY_DIR}/CMake/CTestCustom.ctest\")\n")
 
-  CONFIGURE_FILE(${ITK_SOURCE_DIR}/InsightLogo.gif
-                 ${ITK_BINARY_DIR}/Testing/HTML/TestingResults/Icons/Logo.gif
-                 COPYONLY IMMEDIATE)
-  SET(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
-  MARK_AS_ADVANCED(BUILDNAME)
-ENDIF(BUILD_TESTING)
+# Commented out by the Orfeo ToolBox development team.
+#ENABLE_TESTING()
+#IF(BUILD_TESTING)
+#  CONFIGURE_FILE(${ITK_SOURCE_DIR}/CMake/RemoveTemporaryFiles.cmake.in
+#    ${ITK_BINARY_DIR}/CMake/RemoveTemporaryFiles.cmake @ONLY IMMEDIATE)
+#  CONFIGURE_FILE(${ITK_SOURCE_DIR}/CMake/itkSampleBuildTest.cmake.in
+#    ${ITK_BINARY_DIR}/CMake/itkSampleBuildTest.cmake @ONLY)
+#  CONFIGURE_FILE(${ITK_SOURCE_DIR}/CMake/CTestCustom.ctest.in
+#    ${ITK_BINARY_DIR}/CMake/CTestCustom.ctest @ONLY)
+#  CONFIGURE_FILE(${ITK_SOURCE_DIR}/CMake/CTestCustom.ctest.in
+#    ${ITK_BINARY_DIR}/Testing/Code/Common/CTestCustom.ctest @ONLY)
+#  FILE(WRITE ${ITK_BINARY_DIR}/CTestCustom.cmake
+#    "INCLUDE(\"${ITK_BINARY_DIR}/CMake/CTestCustom.ctest\")\n")
+#
+#  CONFIGURE_FILE(${ITK_SOURCE_DIR}/InsightLogo.gif
+#                 ${ITK_BINARY_DIR}/Testing/HTML/TestingResults/Icons/Logo.gif
+#                 COPYONLY IMMEDIATE)
+#  SET(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
+#  MARK_AS_ADVANCED(BUILDNAME)
+#ENDIF(BUILD_TESTING)
 
 #-----------------------------------------------------------------------------
 # Output directories.
@@ -407,13 +409,14 @@ SUBDIRS(Utilities Code)
 
 SUBDIRS(Wrapping)
 
-IF (BUILD_TESTING)
-  SUBDIRS(Testing)
-ENDIF (BUILD_TESTING)
+# Commented out by the Orfeo ToolBox development team
+#IF (BUILD_TESTING)
+#  SUBDIRS(Testing)
+#ENDIF (BUILD_TESTING)
 
-IF(BUILD_EXAMPLES)
-  SUBDIRS(Examples)
-ENDIF(BUILD_EXAMPLES)
+#IF(BUILD_EXAMPLES)
+#  SUBDIRS(Examples)
+#ENDIF(BUILD_EXAMPLES)
 
 #-----------------------------------------------------------------------------
 # ITK requires special compiler flags on some platforms.
