@@ -3,7 +3,7 @@
 //
 // GLUT emulation routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2005 by Bill Spitzak and others.
+// Copyright 1998-2007 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -35,14 +35,18 @@
 // Although I have copied the GLUT API, none of my code is based on
 // any Glut implementation details and is therefore covered by the LGPL.
 
-/*OTB Modifications: conflict name with OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h*/
-/*#include <config.h>*/
-#include "fltk-config.h"
+#include "flstring.h"
 #if HAVE_GL
 
-#include <FL/glut.H>
-
-#define MAXWINDOWS 32
+#  include <FL/glut.H>
+#  ifdef HAVE_GLXGETPROCADDRESSARB
+#    define GLX_GLXEXT_LEGACY
+#    include <GL/glx.h>
+#  endif // HAVE_GLXGETPROCADDRESSARB
+#  ifdef HAVE_DLFCN_H
+#    include <dlfcn.h>
+#  endif // HAVE_DLFCN_H
+#  define MAXWINDOWS 32
 static Fl_Glut_Window *windows[MAXWINDOWS+1];
 
 Fl_Glut_Window *glut_window;
@@ -102,7 +106,6 @@ int Fl_Glut_Window::handle(int event) {
     while (button < 0) {mouse(3,GLUT_DOWN,ex,ey); ++button;}
     while (button > 0) {mouse(4,GLUT_DOWN,ex,ey); --button;}
     return 1;
-    break;
 
   case FL_RELEASE:
     for (button = 0; button < 3; button++) if (mouse_down & (1<<button)) {
@@ -223,6 +226,10 @@ void glutInitWindowSize(int w, int h) {
 }
 
 int glutCreateWindow(char *title) {
+  return glutCreateWindow((const char*)title);
+}
+
+int glutCreateWindow(const char *title) {
   Fl_Glut_Window *W;
   if (initpos) {
     W = new Fl_Glut_Window(initx,inity,initw,inith,title);
@@ -237,6 +244,8 @@ int glutCreateWindow(char *title) {
   } else {
     W->show();
   }
+  W->valid(0);
+  W->context_valid(0);
   W->make_current();
   return W->number;
 }
@@ -257,6 +266,10 @@ Fl_Glut_Window::~Fl_Glut_Window() {
 void glutDestroyWindow(int win) {
   // should destroy children!!!
   delete windows[win];
+}
+
+void glutPostWindowRedisplay(int win) {
+  windows[win]->redraw();
 }
 
 void glutSetWindow(int win) {
@@ -398,6 +411,7 @@ int glutGet(GLenum type) {
 	glutGet(GLUT_WINDOW_ALPHA_SIZE);
     else
       return glutGet(GLUT_WINDOW_COLORMAP_SIZE);
+  case GLUT_VERSION: return 20400;
   default: {GLint p; glGetIntegerv(type, &p); return p;}
   }
 }
@@ -414,7 +428,76 @@ int glutLayerGet(GLenum type) {
   }
 }
 
-#endif
+int glutDeviceGet(GLenum type) {
+  switch (type) {
+    case GLUT_HAS_KEYBOARD : return 1;
+    case GLUT_HAS_MOUSE : return 1;
+    case GLUT_NUM_MOUSE_BUTTONS : return 3;
+    default : return 0;
+  }
+}
+
+// Get extension function address...
+GLUTproc glutGetProcAddress(const char *procName) {
+#  ifdef WIN32
+  return (GLUTproc)wglGetProcAddress((LPCSTR)procName);
+
+#  elif defined(HAVE_DLSYM) && defined(HAVE_DLFCN_H)
+  char symbol[1024];
+
+  snprintf(symbol, sizeof(symbol), "_%s", procName);
+
+#    ifdef RTLD_DEFAULT
+  return (GLUTproc)dlsym(RTLD_DEFAULT, symbol);
+
+#    else // No RTLD_DEFAULT support, so open the current a.out symbols...
+  static void *rtld_default = 0;
+
+  if (!rtld_default) rtld_default = dlopen(0, RTLD_LAZY);
+
+  if (rtld_default) return (GLUTproc)dlsym(rtld_default, symbol);
+  else return 0;
+
+#    endif // RTLD_DEFAULT
+
+#  elif defined(HAVE_GLXGETPROCADDRESSARB)
+  return (GLUTproc)glXGetProcAddressARB((const GLubyte *)procName);
+
+#  else
+  return (GLUTproc)0;
+#  endif // WIN32
+}
+
+// Parse the GL_EXTENSIONS string to see if the named extension is
+// supported.
+//
+// This code was copied from FreeGLUT 2.4.0 which carries the
+// following notice:
+//
+//     Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
+int glutExtensionSupported( const char* extension )
+{
+  if (!extension || strchr(extension, ' ')) return 0;
+
+  const char *extensions, *start;
+  const int len = strlen( extension );
+  
+  start = extensions = (const char *) glGetString(GL_EXTENSIONS);
+
+  if (!extensions) return 0;
+
+  for (;;) {
+    const char *p = strstr(extensions, extension);
+    if (!p) return 0;  /* not found */
+    /* check that the match isn't a super string */
+    if ((p == start || p[-1] == ' ') &&
+        (p[len] == ' ' || p[len] == 0)) return 1;
+    /* skip the false match and continue */
+    extensions = p + len;
+  }
+}
+
+#endif // HAVE_GL
 
 //
 // End of "$Id$".

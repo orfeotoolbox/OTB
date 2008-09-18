@@ -35,10 +35,9 @@
 //
 
 #include <FL/Fl_BMP_Image.H>
-/*OTB Modifications: conflict name with OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h*/
-/*#include <config.h>*/
+// OTB Modifications
+//#include <config.h>
 #include "fltk-config.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 

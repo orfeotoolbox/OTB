@@ -11,7 +11,8 @@
 // instance of this object.  It could also have a "copy()" function,
 // but it was easier to implement this by using the file read/write
 // that is needed to save the setup anyways.
-// Copyright 1998-2005 by Bill Spitzak and others.
+//
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -131,6 +132,7 @@ public:
   virtual int is_widget() const;
   virtual int is_button() const;
   virtual int is_valuator() const;
+  virtual int is_spinner() const;
   virtual int is_menu_item() const;
   virtual int is_menu_button() const;
   virtual int is_group() const;
@@ -199,6 +201,7 @@ public:
 
 class Fl_Decl_Type : public Fl_Type {
   char public_;
+  char static_;
 public:
   Fl_Type *make();
   void write_code1();
@@ -438,6 +441,7 @@ public:
   virtual const char *type_name() {return scroll_type_name;}
   Fl_Widget_Type *_make() {return new Fl_Scroll_Type();}
   int pixmapID() { return 19; }
+  Fl_Widget *enter_live_mode(int top=0);
   void copy_properties();
 };
 
@@ -542,6 +546,7 @@ public:
   virtual const char *type_name() {return "widget_class";}
   int pixmapID() { return 48; }
   int is_parent() const {return 1;}
+  int is_code_block() const {return 1;}
   int is_decl_block() const {return 1;}
   int is_class() const {return 1;}
 };
@@ -716,6 +721,8 @@ Fl_Widget *make_widget_browser(int X,int Y,int W,int H);
 extern int modflag;
 void delete_all(int selected_only=0);
 void selection_changed(Fl_Type* new_current);
+void reveal_in_browser(Fl_Type*);
+int has_toplevel_function(const char *rtype, const char *sig);
 
 // file operations:
 #  ifdef __GNUC__
@@ -758,6 +765,7 @@ const char *c_check(const char *c, int type = 0);
 int storestring(const char *n, const char * & p, int nostrip=0);
 
 extern int include_H_from_C;
+extern int use_FL_COMMAND;
 
 //
 // End of "$Id$".

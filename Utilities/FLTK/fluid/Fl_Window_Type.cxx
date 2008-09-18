@@ -7,7 +7,7 @@
 // for interacting with the overlay, which allows the user to
 // select, move, and resize the children widgets.
 //
-// Copyright 1998-2005 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -49,6 +49,7 @@ extern int snap;
 extern int show_guides;
 
 int include_H_from_C = 1;
+int use_FL_COMMAND = 0;
 extern int i18n_type;
 extern const char* i18n_include;
 extern const char* i18n_function;
@@ -183,6 +184,7 @@ extern const char* code_file_name;
 void show_project_cb(Fl_Widget *, void *) {
   if(project_window==0) make_project_window();
   include_H_from_C_button->value(include_H_from_C);
+  use_FL_COMMAND_button->value(use_FL_COMMAND);
   header_file_input->value(header_file_name);
   code_file_input->value(code_file_name);
   i18n_type_chooser->value(i18n_type);
@@ -247,10 +249,17 @@ void code_input_cb(Fl_Input* i, void*) {
   code_file_name = i->value();
 }
 
-void include_H_from_C_button_cb(Fl_Light_Button* b, void*) {
+void include_H_from_C_button_cb(Fl_Check_Button* b, void*) {
   if (include_H_from_C != b->value()) {
     set_modflag(1);
     include_H_from_C = b->value();
+  }
+}
+
+void use_FL_COMMAND_button_cb(Fl_Check_Button* b, void*) {
+  if (use_FL_COMMAND != b->value()) {
+    set_modflag(1);
+    use_FL_COMMAND = b->value();
   }
 }
 
@@ -328,7 +337,15 @@ void Overlay_Window::draw_overlay() {
   window->draw_overlay();
 }
 int Overlay_Window::handle(int e) {
-  return window->handle(e);
+  int ret =  window->handle(e);
+  if (ret==0) {
+    switch (e) {
+      case FL_SHOW:
+      case FL_HIDE:
+        ret = Fl_Overlay_Window::handle(e);
+    }
+  }
+  return ret;
 }
 
 Fl_Type *Fl_Window_Type::make() {
@@ -484,6 +501,13 @@ Fl_Window_Type Fl_Window_type;
 // Resize from window manager...
 void Overlay_Window::resize(int X,int Y,int W,int H) {
   Fl_Widget* t = resizable(); resizable(0);
+
+  // do not set the mod flag if the window was not resized. In FLUID, all
+  // windows are opened without a given x/y position, so modifying x/y
+  // should not mark the project as dirty
+  if (W!=w() || H!=h())
+    set_modflag(1);
+
   Fl_Overlay_Window::resize(X,Y,W,H);
   resizable(t);
   update_xywh();
@@ -1127,7 +1151,11 @@ int Fl_Window_Type::handle(int event) {
       Fl_Widget_Type* myo = (Fl_Widget_Type*)i;
       for (Fl_Widget *o1 = myo->o; o1; o1 = o1->parent())
 	if (!o1->visible()) goto CONTINUE2;
-      if (Fl::event_inside(myo->o)) selection = myo;
+      if (Fl::event_inside(myo->o)) {
+        selection = myo;
+        if (Fl::event_clicks()==1)
+          reveal_in_browser(myo);
+      }
     CONTINUE2:;
     }}
     // see if user grabs edges of selected region:
@@ -1279,23 +1307,27 @@ void Fl_Window_Type::write_code1() {
 }
 
 void Fl_Window_Type::write_code2() {
+  const char *var = is_class() ? "this" : name() ? name() : "o";
   write_extra_code();
-  if (modal) write_c("%so->set_modal();\n", indent());
-  else if (non_modal) write_c("%so->set_non_modal();\n", indent());
-  if (!((Fl_Window*)o)->border()) write_c("%so->clear_border();\n", indent());
+  if (modal) write_c("%s%s->set_modal();\n", indent(), var);
+  else if (non_modal) write_c("%s%s->set_non_modal();\n", indent(), var);
+  if (!((Fl_Window*)o)->border()) {
+    write_c("%s%s->clear_border();\n", indent(), var);
+  }
   if (xclass) {
-    write_c("%so->xclass(", indent());
+    write_c("%s%s->xclass(", indent(), var);
     write_cstring(xclass);
     write_c(");\n");
   }
   if (sr_max_w || sr_max_h) {
-    write_c("%so->size_range(%d, %d, %d, %d);\n", indent(), sr_min_w, sr_min_h, sr_max_w, sr_max_h);
+    write_c("%s%s->size_range(%d, %d, %d, %d);\n", indent(), var,
+            sr_min_w, sr_min_h, sr_max_w, sr_max_h);
   } else if (sr_min_w || sr_min_h) {
-    write_c("%so->size_range(%d, %d);\n", indent(), sr_min_w, sr_min_h);
+    write_c("%s%s->size_range(%d, %d);\n", indent(), var, sr_min_w, sr_min_h);
   }
-  write_c("%so->end();\n", indent());
+  write_c("%s%s->end();\n", indent(), var);
   if (((Fl_Window*)o)->resizable() == o)
-    write_c("%so->resizable(o);\n", indent());
+    write_c("%s%s->resizable(%s);\n", indent(), var, var);
   write_block_close();
 }
 
@@ -1362,7 +1394,7 @@ Fl_Widget_Class_Type *current_widget_class = 0;
 
 Fl_Type *Fl_Widget_Class_Type::make() {
   Fl_Type *p = Fl_Type::current;
-  while (p && !p->is_decl_block()) p = p->parent;
+  while (p && (!p->is_decl_block() || (p->is_widget() && p->is_class()))) p = p->parent;
   Fl_Widget_Class_Type *myo = new Fl_Widget_Class_Type();
   myo->name("UserInterface");
 
@@ -1414,10 +1446,7 @@ void Fl_Widget_Class_Type::write_code1() {
   if (!c) c = "Fl_Group";
 
   write_h("\nclass %s : public %s {\n", name(), c);
-  if (!strcmp(c, "Fl_Window") ||
-      !strcmp(c, "Fl_Double_Window") ||
-      !strcmp(c, "Fl_Gl_Window") ||
-      !strcmp(c, "Fl_Overlay_Window")) {
+  if (strstr(c, "Window")) {
     write_h("  void _%s();\n", name());
     write_h("public:\n");
     write_h("  %s(int X, int Y, int W, int H, const char *L = 0);\n", name());
@@ -1435,7 +1464,7 @@ void Fl_Widget_Class_Type::write_code1() {
     write_c("}\n\n");
 
     write_c("void %s::_%s() {\n", name(), name());
-    write_c("  %s *w = this;\n", name());
+//    write_c("  %s *w = this;\n", name());
   } else {
     write_h("public:\n");
     write_h("  %s(int X, int Y, int W, int H, const char *L = 0);\n", name());
@@ -1447,7 +1476,7 @@ void Fl_Widget_Class_Type::write_code1() {
       write_c("  : %s(X, Y, W, H, L) {\n", c);
   }
 
-  write_c("  %s *o = this;\n", name());
+//  write_c("  %s *o = this;\n", name());
 
   write_widget_code();
 }
@@ -1472,7 +1501,7 @@ void Fl_Widget_Class_Type::write_code2() {
 ////////////////////////////////////////////////////////////////
 // live mode support
 
-Fl_Widget *Fl_Window_Type::enter_live_mode(int top) {
+Fl_Widget *Fl_Window_Type::enter_live_mode(int) {
   Fl_Window *win = new Fl_Window(o->x(), o->y(), o->w(), o->h());
   live_widget = win;
   if (live_widget) {

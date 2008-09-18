@@ -3,7 +3,7 @@
 //
 // Multi-threading support code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2005 by Bill Spitzak and others.
+// Copyright 1998-2007 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -27,9 +27,13 @@
 
 
 #include <FL/Fl.H>
-/*OTB Modifications: conflict name with OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h*/
-/*#include <config.h>*/
+// OTB Modifications
+//#include <config.h>
 #include "fltk-config.h"
+
+
+#include <stdlib.h>
+
 /*
    From Bill:
 
@@ -38,6 +42,14 @@
    wrapper libraries out there and FLTK should not be providing
    another.  This file is an attempt to make minimal additions
    and make them self-contained in this source file.
+
+   From Mike:
+
+   Starting with 1.1.8, we now have a callback so that you can
+   process awake() messages as they come in.
+
+
+   The API:
 
    Fl::lock() - recursive lock.  You must call this before the
    first call to Fl::wait()/run() to initialize the thread
@@ -49,12 +61,75 @@
    Fl::awake(void*) - Causes Fl::wait() to return (with the lock
    locked) even if there are no events ready.
 
+   Fl::awake(void (*cb)(void *), void*) - Call a function
+   in the main thread from within another thread of execution.
+
    Fl::thread_message() - returns an argument sent to an
    Fl::awake() call, or returns NULL if none.  WARNING: the
    current implementation only has a one-entry queue and only
    returns the most recent value!
 */
 
+Fl_Awake_Handler *Fl::awake_ring_;
+void **Fl::awake_data_;
+int Fl::awake_ring_size_;
+int Fl::awake_ring_head_;
+int Fl::awake_ring_tail_;
+static const int AWAKE_RING_SIZE = 1024;
+
+static void lock_ring();
+static void unlock_ring();
+
+
+int Fl::add_awake_handler_(Fl_Awake_Handler func, void *data)
+{
+  int ret = 0;
+  lock_ring();
+  if (!awake_ring_) {
+    awake_ring_size_ = AWAKE_RING_SIZE;
+    awake_ring_ = (Fl_Awake_Handler*)malloc(awake_ring_size_*sizeof(Fl_Awake_Handler));
+    awake_data_ = (void**)malloc(awake_ring_size_*sizeof(void*));
+  }
+  if (awake_ring_head_==awake_ring_tail_-1 || awake_ring_head_+1==awake_ring_tail_) {
+    // ring is full. Return -1 as an error indicator.
+    ret = -1;
+  } else {
+    awake_ring_[awake_ring_head_] = func;
+    awake_data_[awake_ring_head_] = data;
+    ++awake_ring_head_;
+    if (awake_ring_head_ == awake_ring_size_)
+      awake_ring_head_ = 0;
+  }
+  unlock_ring();
+  return ret;
+}
+
+int Fl::get_awake_handler_(Fl_Awake_Handler &func, void *&data)
+{
+  int ret = 0;
+  lock_ring();
+  if (!awake_ring_ || awake_ring_head_ == awake_ring_tail_) {
+    ret = -1;
+  } else {
+    func = awake_ring_[awake_ring_tail_];
+    data = awake_data_[awake_ring_tail_];
+    ++awake_ring_tail_;
+    if (awake_ring_tail_ == awake_ring_size_)
+      awake_ring_tail_ = 0;
+  }
+  unlock_ring();
+  return ret;
+}
+
+//
+// 'Fl::awake()' - Let the main thread know an update is pending
+//                 and have it cal a specific function
+//
+int Fl::awake(Fl_Awake_Handler func, void *data) {
+  int ret = add_awake_handler_(func, data);
+  Fl::awake();
+  return ret;
+}
 
 ////////////////////////////////////////////////////////////////
 // Windows threading...
@@ -72,6 +147,19 @@ static DWORD main_thread;
 
 // Microsoft's version of a MUTEX...
 CRITICAL_SECTION cs;
+CRITICAL_SECTION *cs_ring;
+
+void unlock_ring() {
+  LeaveCriticalSection(cs_ring);
+}
+
+void lock_ring() {
+  if (!cs_ring) {
+    cs_ring = (CRITICAL_SECTION*)malloc(sizeof(CRITICAL_SECTION));
+    InitializeCriticalSection(cs_ring);
+  }
+  EnterCriticalSection(cs_ring);
+}
 
 //
 // 'unlock_function()' - Release the lock.
@@ -128,36 +216,22 @@ void Fl::awake(void* msg) {
 // POSIX threading...
 #elif HAVE_PTHREAD
 #  include <unistd.h>
+#  include <fcntl.h>
 #  include <pthread.h>
 
-#  if defined (PTHREAD_MUTEX_RECURSIVE_NP)
-// Linux supports recursive locks, use them directly:
+// Pipe for thread messaging via Fl::awake()...
+static int thread_filedes[2];
 
-static bool minit;
+// Mutex and state information for Fl::lock() and Fl::unlock()...
 static pthread_mutex_t fltk_mutex;
-// this is needed for the Fl_Mutex constructor:
-pthread_mutexattr_t Fl_Mutex_attrib = {PTHREAD_MUTEX_RECURSIVE_NP};
-
-static void lock_function() {
-  if (!minit) {
-    pthread_mutex_init(&fltk_mutex, &Fl_Mutex_attrib);
-    minit = true;
-  }
-  pthread_mutex_lock(&fltk_mutex);
-}
-
-void Fl::unlock() {
-  pthread_mutex_unlock(&fltk_mutex);
-}
-
-#  else
-// Make a recursive lock out of the pthread mutex:
-
-static pthread_mutex_t fltk_mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_t owner;
 static int counter;
 
-static void lock_function() {
+static void lock_function_init_std() {
+  pthread_mutex_init(&fltk_mutex, NULL);
+}
+
+static void lock_function_std() {
   if (!counter || owner != pthread_self()) {
     pthread_mutex_lock(&fltk_mutex);
     owner = pthread_self();
@@ -165,18 +239,35 @@ static void lock_function() {
   counter++;
 }
 
-void Fl::unlock() {
+static void unlock_function_std() {
   if (!--counter) pthread_mutex_unlock(&fltk_mutex);
 }
 
-#  endif
+#  ifdef PTHREAD_MUTEX_RECURSIVE
+static bool lock_function_init_rec() {
+  pthread_mutexattr_t attrib;
+  pthread_mutexattr_init(&attrib);
+  if (pthread_mutexattr_settype(&attrib, PTHREAD_MUTEX_RECURSIVE)) {
+    pthread_mutexattr_destroy(&attrib);
+    return true;
+  }
 
-// Pipe for thread messaging...
-static int thread_filedes[2];
+  pthread_mutex_init(&fltk_mutex, &attrib);
+  return false;
+}
 
-// These pointers are in Fl_x.cxx:
-extern void (*fl_lock_function)();
-extern void (*fl_unlock_function)();
+static void lock_function_rec() {
+  pthread_mutex_lock(&fltk_mutex);
+}
+
+static void unlock_function_rec() {
+  pthread_mutex_unlock(&fltk_mutex);
+}
+#  endif // PTHREAD_MUTEX_RECURSIVE
+
+void Fl::awake(void* msg) {
+  write(thread_filedes[1], &msg, sizeof(void*));
+}
 
 static void* thread_message_;
 void* Fl::thread_message() {
@@ -187,24 +278,83 @@ void* Fl::thread_message() {
 
 static void thread_awake_cb(int fd, void*) {
   read(fd, &thread_message_, sizeof(void*));
-}
-
-void Fl::lock() {
-  lock_function();
-  if (!thread_filedes[1]) { // initialize the mt support
-    // Init threads communication pipe to let threads awake FLTK from wait
-    pipe(thread_filedes);
-    Fl::add_fd(thread_filedes[0], FL_READ, thread_awake_cb);
-    fl_lock_function   = lock_function;
-    fl_unlock_function = Fl::unlock;
+  Fl_Awake_Handler func;
+  void *data;
+  while (Fl::get_awake_handler_(func, data)==0) {
+    (*func)(data);
   }
 }
 
-void Fl::awake(void* msg) {
-  write(thread_filedes[1], &msg, sizeof(void*));
+// These pointers are in Fl_x.cxx:
+extern void (*fl_lock_function)();
+extern void (*fl_unlock_function)();
+
+void Fl::lock() {
+  if (!thread_filedes[1]) {
+    // Initialize thread communication pipe to let threads awake FLTK
+    // from Fl::wait()
+    pipe(thread_filedes);
+
+    // Make the write side of the pipe non-blocking to avoid deadlock
+    // conditions (STR #1537)
+    fcntl(thread_filedes[1], F_SETFL,
+          fcntl(thread_filedes[1], F_GETFL) | O_NONBLOCK);
+
+    // Monitor the read side of the pipe so that messages sent via
+    // Fl::awake() from a thread will "wake up" the main thread in
+    // Fl::wait().
+    Fl::add_fd(thread_filedes[0], FL_READ, thread_awake_cb);
+
+    // Set lock/unlock functions for this system, using a system-supplied
+    // recursive mutex if supported...
+#  ifdef PTHREAD_MUTEX_RECURSIVE
+    if (!lock_function_init_rec()) {
+      fl_lock_function   = lock_function_rec;
+      fl_unlock_function = unlock_function_rec;
+    } else {
+#  endif // PTHREAD_MUTEX_RECURSIVE
+      lock_function_init_std();
+      fl_lock_function   = lock_function_std;
+      fl_unlock_function = unlock_function_std;
+#  ifdef PTHREAD_MUTEX_RECURSIVE
+    }
+#  endif // PTHREAD_MUTEX_RECURSIVE
+  }
+
+  fl_lock_function();
 }
 
-#endif
+void Fl::unlock() {
+  fl_unlock_function();
+}
+
+// Mutex code for the awake ring buffer
+static pthread_mutex_t *ring_mutex;
+
+void unlock_ring() {
+  pthread_mutex_unlock(ring_mutex);
+}
+
+void lock_ring() {
+  if (!ring_mutex) {
+    ring_mutex = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t));
+    pthread_mutex_init(ring_mutex, NULL);
+  }
+  pthread_mutex_lock(ring_mutex);
+}
+
+#else
+
+void unlock_ring() {
+}
+
+void lock_ring() {
+}
+
+void Fl::awake(void*) {
+}
+
+#endif // WIN32
 
 //
 // End of "$Id$".

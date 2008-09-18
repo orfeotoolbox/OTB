@@ -3,7 +3,7 @@
 //
 // WIN32 image reading routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2005 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,9 +25,11 @@
 //     http://www.fltk.org/str.php
 //
 
-/*OTB Modifications: conflict name with OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h*/
-/*#include <config.h>*/
+// OTB Modifications
+//#include <config.h>
 #include "fltk-config.h"
+
+
 // warning: this function is only implemented in Quickdraw. The function
 //          below may not work If FLTK is compiled with Quartz enabled
 
@@ -44,7 +46,7 @@ fl_read_image(uchar *p,		// I - Pixel buffer or NULL to allocate
 	      int   alpha) {	// I - Alpha value for image (0 for none)
   Rect		src,		// Source rectangle
 		dst;		// Destination rectangle
-  Fl_Offscreen	osbuffer;	// Temporary off-screen buffer for copy
+  GWorldPtr	osbuffer;	// Temporary off-screen buffer for copy
   GrafPtr	srcPort;	// Source port
   RGBColor	rgb;		// RGB colors for copy mask...
   PixMapHandle	pm;		// Pixmap handle for off-screen buffer
@@ -54,12 +56,6 @@ fl_read_image(uchar *p,		// I - Pixel buffer or NULL to allocate
   int           idx, idy;	// Current X & Y in image
   int		d;		// Depth of image
   int		rowBytes;	// Number of bytes per row...
-
-
-  // Get an off-screen buffer for copying the image...
-  osbuffer = fl_create_offscreen(w,h);
-
-  if (!osbuffer) return 0;
 
   // Set the source and destination rectangles...
   src.top    = y;
@@ -71,6 +67,14 @@ fl_read_image(uchar *p,		// I - Pixel buffer or NULL to allocate
   dst.left   = 0;
   dst.bottom = h;
   dst.right  = w;
+
+  // Get an off-screen buffer for copying the image...
+  QDErr err = NewGWorld(&osbuffer, 0, &dst, 0L, 0L, 0);
+  if (!osbuffer) return 0;
+  if (err!=noErr) {
+    DisposeGWorld(osbuffer);
+    return 0;
+  }
 
   // Get the source port...
   GetPort(&srcPort);
@@ -109,15 +113,22 @@ fl_read_image(uchar *p,		// I - Pixel buffer or NULL to allocate
 
   // Copy the image from the off-screen buffer to the memory buffer.
   for (idy = 0, pdst = p; idy < h; idy ++)
+#ifdef __i386__
+    for (idx = 0, psrc = base + idy * rowBytes; idx < w; idx ++, psrc += 4, pdst += d) {
+      pdst[0] = psrc[2];
+      pdst[1] = psrc[1];
+      pdst[2] = psrc[0];
+    }
+#else
     for (idx = 0, psrc = base + idy * rowBytes + 1; idx < w; idx ++, psrc += 4, pdst += d) {
       pdst[0] = psrc[0];
       pdst[1] = psrc[1];
       pdst[2] = psrc[2];
     }
-
+#endif // __i386__
   // Unlock and delete the off-screen buffer, then return...
   UnlockPixels(pm);
-  fl_delete_offscreen(osbuffer);
+  DisposeGWorld(osbuffer);
 
   SetPort(srcPort);
   return p;

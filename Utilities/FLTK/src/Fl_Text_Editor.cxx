@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// Copyright 2001-2005 by Bill Spitzak and others.
+// Copyright 2001-2006 by Bill Spitzak and others.
 // Original code Copyright Mark Edel.  Permission to distribute under
 // the LGPL for the FLTK library granted by Mark Edel.
 //
@@ -30,6 +30,7 @@
 #include "flstring.h"
 #include <ctype.h>
 #include <FL/Fl.H>
+#include <FL/Fl_Window.H>
 #include <FL/Fl_Text_Editor.H>
 #include <FL/fl_ask.H>
 
@@ -431,15 +432,6 @@ void Fl_Text_Editor::maybe_do_callback() {
 int Fl_Text_Editor::handle(int event) {
   if (!buffer()) return 0;
 
-  if (event == FL_PUSH && Fl::event_button() == 2) {
-    dragType = -1;
-    Fl::paste(*this, 0);
-    Fl::focus(this);
-    set_changed();
-    if (when()&FL_WHEN_CHANGED) do_callback();
-    return 1;
-  }
-
   switch (event) {
     case FL_FOCUS:
       show_cursor(mCursorOn); // redraws the cursor
@@ -455,6 +447,8 @@ int Fl_Text_Editor::handle(int event) {
       return 1;
 
     case FL_KEYBOARD:
+      if (active_r() && window() && this == Fl::belowmouse()) 
+        window()->cursor(FL_CURSOR_NONE);
       return handle_key();
 
     case FL_PASTE:
@@ -475,6 +469,19 @@ int Fl_Text_Editor::handle(int event) {
 //    case FL_MOVE:
       show_cursor(mCursorOn);
       return 1;
+
+    case FL_PUSH:
+      if (Fl::event_button() == 2) {
+        // don't let the text_display see this event
+        if (Fl_Group::handle(event)) return 1;
+        dragType = -1;
+        Fl::paste(*this, 0);
+        Fl::focus(this);
+        set_changed();
+        if (when()&FL_WHEN_CHANGED) do_callback();
+        return 1;
+      }
+      break;
   }
 
   return Fl_Text_Display::handle(event);

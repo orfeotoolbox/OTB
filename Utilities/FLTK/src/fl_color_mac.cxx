@@ -33,11 +33,12 @@
 // matt: Neither Quartz nor Quickdraw support colormaps in this implementation
 // matt: Quartz support done
 
-/*OTB Modifications: conflict name with OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h*/
-/*#include <config.h>*/
+// OTB Modifications
+//#include <config.h>
 #include "fltk-config.h"
-#include <FL/x.H>
+
 #include <FL/Fl.H>
+#include <FL/x.H>
 #include <FL/fl_draw.H>
 
 static unsigned fl_cmap[256] = {

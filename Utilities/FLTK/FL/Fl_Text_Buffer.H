@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Buffer.H 4288 2005-04-16 00:13:17Z mike $"
+// "$Id: Fl_Text_Buffer.H 6010 2008-01-04 20:31:52Z matt $"
 //
 // Header file for Fl_Text_Buffer class.
 //
@@ -123,11 +123,13 @@ class FL_EXPORT Fl_Text_Buffer {
     void remove_selection();
     void replace_selection(const char* text);
     void secondary_select(int start, int end);
+    int secondary_selected() { return mSecondary.selected(); }
     void secondary_unselect();
 
     void secondary_select_rectangular(int start, int end, int rectStart,
                                       int rectEnd);
 
+    int secondary_selection_position(int* start, int* end);
     int secondary_selection_position(int* start, int* end, int* isRect,
                                      int* rectStart, int* rectEnd);
 
@@ -135,9 +137,11 @@ class FL_EXPORT Fl_Text_Buffer {
     void remove_secondary_selection();
     void replace_secondary_selection(const char* text);
     void highlight(int start, int end);
+    int highlight() { return mHighlight.selected(); }
     void unhighlight();
     void highlight_rectangular(int start, int end, int rectStart, int rectEnd);
 
+    int highlight_position(int* start, int* end);
     int highlight_position(int* start, int* end, int* isRect, int* rectStart,
                            int* rectEnd);
 
@@ -255,5 +259,5 @@ class FL_EXPORT Fl_Text_Buffer {
 #endif
 
 //
-// End of "$Id: Fl_Text_Buffer.H 4288 2005-04-16 00:13:17Z mike $".
+// End of "$Id: Fl_Text_Buffer.H 6010 2008-01-04 20:31:52Z matt $".
 //

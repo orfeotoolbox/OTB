@@ -37,9 +37,10 @@
 // be erased when the buffers are swapped (when double buffer hardware
 // is being used)
 
-/*OTB Modifications: conflict name with OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h*/
-/*#include <config.h>*/
+// OTB Modifications
+//#include <config.h>
 #include "fltk-config.h"
+
 #if HAVE_GL
 
 #include <FL/Fl.H>

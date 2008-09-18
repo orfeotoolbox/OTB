@@ -3,7 +3,7 @@
 //
 // FLUID undo support for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2005 by Bill Spitzak and others.
+// Copyright 1998-2007 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -34,9 +34,11 @@
 #  include <io.h>
 #  include <windows.h>
 #  define getpid (int)GetCurrentProcessId
+#  ifndef __WATCOMC__
 // Visual C++ 2005 incorrectly displays a warning about the use of POSIX APIs
 // on Windows, which is supposed to be POSIX compliant...
-#  define unlink _unlink
+#    define unlink _unlink
+#  endif // !__WATCOMC__
 #else
 #  include <unistd.h>
 #endif // WIN32 && !__CYGWIN__
@@ -124,6 +126,7 @@ void undo_cb(Fl_Widget *, void *) {
   // Update undo/redo menu items...
   if (undo_current <= 0) Main_Menu[UNDO_ITEM].deactivate();
   Main_Menu[REDO_ITEM].activate();
+  undo_resume();
 }
 
 // Save current file to undo buffer

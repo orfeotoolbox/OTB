@@ -80,7 +80,7 @@ static Fl_Window *makeform() {
   o->labelcolor(FL_BLUE);
  }
  button[0] = new Fl_Button(310, 70, 90, 23);
- button[0]->shortcut("^[");
+ button[0]->shortcut(FL_Escape);
  button[0]->align(FL_ALIGN_INSIDE|FL_ALIGN_WRAP);
  button[1] = new Fl_Return_Button(210, 70, 90, 23);
  button[1]->align(FL_ALIGN_INSIDE|FL_ALIGN_WRAP);
@@ -101,9 +101,10 @@ static Fl_Window *makeform() {
 void resizeform() {
   int	i;
   int	message_w, message_h;
-  int	icon_size;
+  int	text_height;
   int	button_w[3], button_h[3];
   int	x, w, h, max_w, max_h;
+	const int icon_size = 50;
 
   fl_font(fl_message_font_, fl_message_size_);
   message_w = message_h = 0;
@@ -136,8 +137,8 @@ void resizeform() {
         max_h = button_h[i];
     }
 
-  if (input->visible()) icon_size = message_h + 25;
-  else icon_size = message_h;
+  if (input->visible()) text_height = message_h + 25;
+  else text_height = message_h;
 
   max_w = message_w + 10 + icon_size;
   w     = button_w[0] + button_w[1] + button_w[2] - 10;
@@ -148,7 +149,7 @@ void resizeform() {
   message_w = max_w - 10 - icon_size;
 
   w = max_w + 20;
-  h = max_h + 30 + icon_size;
+  h = max_h + 30 + text_height;
 
   message_form->size(w, h);
   message_form->size_range(w, h, w, h);
@@ -198,8 +199,19 @@ static int innards(const char* fmt, va_list ap,
 
   resizeform();
 
+  if (button[1]->visible() && !input->visible()) 
+    button[1]->take_focus();
   message_form->hotspot(button[0]);
+  if (b0 && Fl_Widget::label_shortcut(b0))
+    button[0]->shortcut(0);
+  else
+    button[0]->shortcut(FL_Escape);
+
   message_form->show();
+  // deactivate Fl::grab(), because it is incompatible with Fl::readqueue()
+  Fl_Window* g = Fl::grab();
+  if (g) // do an alternative grab to avoid floating menus, if possible
+    Fl::grab(message_form);
   int r;
   for (;;) {
     Fl_Widget *o = Fl::readqueue();
@@ -209,6 +221,8 @@ static int innards(const char* fmt, va_list ap,
     else if (o == button[2]) {r = 2; break;}
     else if (o == message_form) {r = 0; break;}
   }
+  if (g) // regrab the previous popup menu, if there was one
+    Fl::grab(g);
   message_form->hide();
   icon->label(prev_icon_label);
   return r;

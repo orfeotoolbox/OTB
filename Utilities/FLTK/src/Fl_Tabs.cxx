@@ -35,6 +35,7 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Tabs.H>
 #include <FL/fl_draw.H>
+#include <FL/Fl_Tooltip.H>
 
 #define BORDER 2
 #define EXTRASPACE 10
@@ -49,6 +50,9 @@ int Fl_Tabs::tab_positions(int* p, int* wp) {
   int selected = 0;
   Fl_Widget*const* a = array();
   int i;
+  char prev_draw_shortcut = fl_draw_shortcut;
+  fl_draw_shortcut = 1;
+
   p[0] = Fl::box_dx(box());
   for (i=0; i<children(); i++) {
     Fl_Widget* o = *a++;
@@ -60,6 +64,8 @@ int Fl_Tabs::tab_positions(int* p, int* wp) {
     wp[i]  = wt+EXTRASPACE;
     p[i+1] = p[i]+wp[i]+BORDER;
   }
+  fl_draw_shortcut = prev_draw_shortcut;
+
   int r = w();
   if (p[i] <= r) return selected;
   // uh oh, they are too big:
@@ -118,6 +124,18 @@ Fl_Widget *Fl_Tabs::which(int event_x, int event_y) {
   return 0;
 }
 
+void Fl_Tabs::redraw_tabs()
+{
+  int H = tab_height();
+  if (H >= 0) {
+    H += Fl::box_dy(box());
+    damage(FL_DAMAGE_SCROLL, x(), y(), w(), H);
+  } else {
+    H = Fl::box_dy(box()) - H;
+    damage(FL_DAMAGE_SCROLL, x(), y() + h() - H, w(), H);
+  }
+}
+
 int Fl_Tabs::handle(int event) {
 
   Fl_Widget *o;
@@ -137,13 +155,34 @@ int Fl_Tabs::handle(int event) {
     o = which(Fl::event_x(), Fl::event_y());
     if (event == FL_RELEASE) {
       push(0);
+      if (o && Fl::visible_focus() && Fl::focus()!=this) { 
+        Fl::focus(this);
+        redraw_tabs();
+      }
       if (o && value(o)) {
         set_changed();
 	do_callback();
       }
-    } else push(o);
-    if (Fl::visible_focus() && event == FL_RELEASE) Fl::focus(this);
+      Fl_Tooltip::current(o);
+    } else {
+      push(o);
+    }
     return 1;
+  case FL_MOVE: {
+    int ret = Fl_Group::handle(event);
+    Fl_Widget *o = Fl_Tooltip::current(), *n = o;
+    int H = tab_height();
+    if ( (H>=0) && (Fl::event_y()>y()+H) )
+      return ret;
+    else if ( (H<0) && (Fl::event_y() < y()+h()+H) )
+      return ret;
+    else { 
+      n = which(Fl::event_x(), Fl::event_y());
+      if (!n) n = this;
+    }
+    if (n!=o)
+      Fl_Tooltip::enter(n);
+    return ret; }
   case FL_FOCUS:
   case FL_UNFOCUS:
     if (!Fl::visible_focus()) return Fl_Group::handle(event);
@@ -152,14 +191,7 @@ int Fl_Tabs::handle(int event) {
 	Fl::event() == FL_KEYBOARD ||
 	Fl::event() == FL_FOCUS ||
 	Fl::event() == FL_UNFOCUS) {
-      int H = tab_height();
-      if (H >= 0) {
-        H += Fl::box_dy(box());
-	damage(FL_DAMAGE_SCROLL, x(), y(), w(), H);
-      } else {
-        H = Fl::box_dy(box()) - H;
-        damage(FL_DAMAGE_SCROLL, x(), y() + h() - H, w(), H);
-      }
+      redraw_tabs();
       if (Fl::event() == FL_FOCUS || Fl::event() == FL_UNFOCUS) return 0;
       else return 1;
     } else return Fl_Group::handle(event);
@@ -187,6 +219,19 @@ int Fl_Tabs::handle(int event) {
       default:
         break;
     }
+    return Fl_Group::handle(event);
+  case FL_SHORTCUT:
+    for (i = 0; i < children(); ++i) {
+      Fl_Widget *c = child(i);
+      if (c->test_shortcut(c->label())) {
+        char sc = !c->visible();
+        value(c);
+        if (sc) set_changed();
+        do_callback();
+        return 1;
+      }
+    }
+    return Fl_Group::handle(event);
   case FL_SHOW:
     value(); // update visibilities and fall through
   default:
@@ -198,7 +243,7 @@ int Fl_Tabs::handle(int event) {
 int Fl_Tabs::push(Fl_Widget *o) {
   if (push_ == o) return 0;
   if (push_ && !push_->visible() || o && !o->visible())
-    redraw();
+    redraw_tabs();
   push_ = o;
   return 1;
 }
@@ -282,6 +327,10 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
   int sel = (what == SELECTED);
   int dh = Fl::box_dh(box());
   int dy = Fl::box_dy(box());
+  char prev_draw_shortcut = fl_draw_shortcut;
+  fl_draw_shortcut = 1;
+
+  Fl_Boxtype bt = (o==push_ &&!sel) ? fl_down(box()) : box();
 
   // compute offsets to make selected tab look bigger
   int yofs = sel ? 0 : BORDER;
@@ -296,7 +345,7 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
 
     Fl_Color c = sel ? selection_color() : o->selection_color();
 
-    draw_box(box(), x1, y() + yofs, W, H + 10 - yofs, c);
+    draw_box(bt, x1, y() + yofs, W, H + 10 - yofs, c);
 
     // Save the previous label color
     Fl_Color oc = o->labelcolor();
@@ -322,7 +371,7 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
 
     Fl_Color c = sel ? selection_color() : o->selection_color();
 
-    draw_box(box(), x1, y() + h() - H - 10, W, H + 10 - yofs, c);
+    draw_box(bt, x1, y() + h() - H - 10, W, H + 10 - yofs, c);
 
     // Save the previous label color
     Fl_Color oc = o->labelcolor();
@@ -339,6 +388,7 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
 
     fl_pop_clip();
   }
+  fl_draw_shortcut = prev_draw_shortcut;
 }
 
 Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l) :

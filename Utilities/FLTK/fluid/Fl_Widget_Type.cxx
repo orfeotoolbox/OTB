@@ -3,7 +3,7 @@
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2005 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -32,6 +32,7 @@
 #include "alignment_panel.h"
 #include <FL/fl_message.H>
 #include <FL/Fl_Slider.H>
+#include <FL/Fl_Spinner.H>
 #include <FL/Fl_Window.H>
 #include "../src/flstring.h"
 #include <stdio.h>
@@ -317,9 +318,35 @@ void name_cb(Fl_Input* o, void *v) {
   }
 }
 
-void name_public_cb(Fl_Light_Button* i, void* v) {
+void name_public_member_cb(Fl_Choice* i, void* v) {
   if (v == LOAD) {
     i->value(current_widget->public_);
+    if (current_widget->is_in_class()) i->show(); else i->hide();
+  } else {
+    int mod = 0;
+    for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
+      if (o->selected && o->is_widget()) {
+        Fl_Widget_Type *w = ((Fl_Widget_Type*)o);
+        if (w->is_in_class()) {
+          w->public_ = i->value();
+        } else {
+          // if this is not in a class, it can be only private or public
+          w->public_ = (i->value()>0);
+        }
+	mod = 1;
+      }
+    }
+    if (mod) {
+      set_modflag(1);
+      redraw_browser();
+    }
+  }
+}    
+
+void name_public_cb(Fl_Choice* i, void* v) {
+  if (v == LOAD) {
+    i->value(current_widget->public_>0);
+    if (current_widget->is_in_class()) i->hide(); else i->show();
   } else {
     int mod = 0;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
@@ -638,6 +665,14 @@ Fl_Menu_Item boxmenu[] = {
 {"PLASTIC_DOWN_BOX",0,0,(void *)FL_PLASTIC_DOWN_BOX},
 {"PLASTIC_THIN_UP_BOX",0,0,(void *)FL_PLASTIC_THIN_UP_BOX},
 {"PLASTIC_THIN_DOWN_BOX",0,0,(void *)FL_PLASTIC_THIN_DOWN_BOX},
+{"PLASTIC_ROUND_UP_BOX",0,0,(void *)FL_PLASTIC_ROUND_UP_BOX},
+{"PLASTIC_ROUND_DOWN_BOX",0,0,(void *)FL_PLASTIC_ROUND_DOWN_BOX},
+{"GTK_UP_BOX",0,0,(void *)FL_GTK_UP_BOX},
+{"GTK_DOWN_BOX",0,0,(void *)FL_GTK_DOWN_BOX},
+{"GTK_THIN_UP_BOX",0,0,(void *)FL_GTK_THIN_UP_BOX},
+{"GTK_THIN_DOWN_BOX",0,0,(void *)FL_GTK_THIN_DOWN_BOX},
+{"GTK_ROUND_UP_BOX",0,0,(void *)FL_GTK_ROUND_UP_BOX},
+{"GTK_ROUND_DOWN_BOX",0,0,(void *)FL_GTK_ROUND_DOWN_BOX},
 {0},
 {"frames",0,0,0,FL_SUBMENU},
 {"UP_FRAME",0,0,(void *)FL_UP_FRAME},
@@ -652,6 +687,10 @@ Fl_Menu_Item boxmenu[] = {
 {"OVAL_FRAME",0,0,(void *)FL_OVAL_FRAME},
 {"PLASTIC_UP_FRAME",0,0,(void *)FL_PLASTIC_UP_FRAME},
 {"PLASTIC_DOWN_FRAME",0,0,(void *)FL_PLASTIC_DOWN_FRAME},
+{"GTK_UP_FRAME",0,0,(void *)FL_GTK_UP_FRAME},
+{"GTK_DOWN_FRAME",0,0,(void *)FL_GTK_DOWN_FRAME},
+{"GTK_THIN_UP_FRAME",0,0,(void *)FL_GTK_THIN_UP_FRAME},
+{"GTK_THIN_DOWN_FRAME",0,0,(void *)FL_GTK_THIN_DOWN_FRAME},
 {0},
 {0}};
 
@@ -873,6 +912,13 @@ void visible_cb(Fl_Light_Button* i, void* v) {
 	n ? q->o->show() : q->o->hide();
 	q->redraw();
 	mod = 1;
+	if (n && q->parent && q->parent->type_name()) {
+	  if (!strcmp(q->parent->type_name(), "Fl_Tabs")) {
+	    ((Fl_Tabs *)q->o->parent())->value(q->o);
+	  } else if (!strcmp(q->parent->type_name(), "Fl_Wizard")) {
+	    ((Fl_Wizard *)q->o->parent())->value(q->o);
+	  }
+	}
       }
     }
     if (mod) set_modflag(1);
@@ -1421,7 +1467,7 @@ void slider_size_cb(Fl_Value_Input* i, void* v) {
       i->parent()->hide(); 
     else
       i->parent()->show();
-    if (current_widget->is_valuator()!=2) {i->deactivate(); return;}
+    if (current_widget->is_valuator()<2) {i->deactivate(); return;}
     i->activate();
     i->value(((Fl_Slider*)(current_widget->o))->slider_size());
   } else {
@@ -1430,7 +1476,7 @@ void slider_size_cb(Fl_Value_Input* i, void* v) {
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
       if (o->selected && o->is_widget()) {
 	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
-	if (q->is_valuator()==2) {
+	if (q->is_valuator()>=2) {
 	  ((Fl_Slider*)(q->o))->slider_size(n);
 	  q->o->redraw();
 	  mod = 1;
@@ -1443,9 +1489,16 @@ void slider_size_cb(Fl_Value_Input* i, void* v) {
 
 void min_cb(Fl_Value_Input* i, void* v) {
   if (v == LOAD) {
-    if (!current_widget->is_valuator()) {i->deactivate(); return;}
-    i->activate();
-    i->value(((Fl_Valuator*)(current_widget->o))->minimum());
+    if (current_widget->is_valuator()) {
+      i->activate();
+      i->value(((Fl_Valuator*)(current_widget->o))->minimum());
+    } else if (current_widget->is_spinner()) {
+      i->activate();
+      i->value(((Fl_Spinner*)(current_widget->o))->minimum());
+    } else {
+      i->deactivate();
+      return;
+    }
   } else {
     int mod = 0;
     double n = i->value();
@@ -1456,7 +1509,11 @@ void min_cb(Fl_Value_Input* i, void* v) {
 	  ((Fl_Valuator*)(q->o))->minimum(n);
 	  q->o->redraw();
 	  mod = 1;
-	}
+	} else if (q->is_spinner()) {
+          ((Fl_Spinner*)(q->o))->minimum(n);
+          q->o->redraw();
+          mod = 1;
+        }
       }
     }
     if (mod) set_modflag(1);
@@ -1465,9 +1522,16 @@ void min_cb(Fl_Value_Input* i, void* v) {
 
 void max_cb(Fl_Value_Input* i, void* v) {
   if (v == LOAD) {
-    if (!current_widget->is_valuator()) {i->deactivate(); return;}
-    i->activate();
-    i->value(((Fl_Valuator*)(current_widget->o))->maximum());
+    if (current_widget->is_valuator()) {
+      i->activate();
+      i->value(((Fl_Valuator*)(current_widget->o))->maximum());
+    } else if (current_widget->is_spinner()) {
+      i->activate();
+      i->value(((Fl_Spinner*)(current_widget->o))->maximum());
+    } else {
+      i->deactivate();
+      return;
+    }
   } else {
     int mod = 0;
     double n = i->value();
@@ -1478,6 +1542,10 @@ void max_cb(Fl_Value_Input* i, void* v) {
 	  ((Fl_Valuator*)(q->o))->maximum(n);
 	  q->o->redraw();
 	  mod = 1;
+        } else if (q->is_spinner()) {
+          ((Fl_Spinner*)(q->o))->maximum(n);
+          q->o->redraw();
+          mod = 1;
 	}
       }
     }
@@ -1487,9 +1555,16 @@ void max_cb(Fl_Value_Input* i, void* v) {
 
 void step_cb(Fl_Value_Input* i, void* v) {
   if (v == LOAD) {
-    if (!current_widget->is_valuator()) {i->deactivate(); return;}
-    i->activate();
-    i->value(((Fl_Valuator*)(current_widget->o))->step());
+    if (current_widget->is_valuator()) {
+      i->activate();
+      i->value(((Fl_Valuator*)(current_widget->o))->step());
+    } else if (current_widget->is_spinner()) {
+      i->activate();
+      i->value(((Fl_Spinner*)(current_widget->o))->step());
+    } else {
+      i->deactivate();
+      return;
+    }
   } else {
     int mod = 0;
     double n = i->value();
@@ -1497,9 +1572,13 @@ void step_cb(Fl_Value_Input* i, void* v) {
       if (o->selected && o->is_widget()) {
         Fl_Widget_Type* q = (Fl_Widget_Type*)o;
         if (q->is_valuator()) {
-	        ((Fl_Valuator*)(q->o))->step(n);
-	        q->o->redraw();
-	        mod = 1;
+          ((Fl_Valuator*)(q->o))->step(n);
+          q->o->redraw();
+          mod = 1;
+        } else if (q->is_spinner()) {
+          ((Fl_Spinner*)(q->o))->step(n);
+          q->o->redraw();
+          mod = 1;
         }
       }
     }
@@ -1515,6 +1594,9 @@ void value_cb(Fl_Value_Input* i, void* v) {
     } else if (current_widget->is_button()) {
       i->activate();
       i->value(((Fl_Button*)(current_widget->o))->value());
+    } else if (current_widget->is_spinner()) {
+      i->activate();
+      i->value(((Fl_Spinner*)(current_widget->o))->value());
     } else 
       i->deactivate();
   } else {
@@ -1530,6 +1612,9 @@ void value_cb(Fl_Value_Input* i, void* v) {
 	  ((Fl_Button*)(q->o))->value(n != 0);
 	  if (q->is_menu_item()) q->redraw();
 	  mod = 1;
+        } else if (q->is_spinner()) {
+          ((Fl_Spinner*)(q->o))->value(n);
+          mod = 1;
 	}
       }
     }
@@ -1551,7 +1636,11 @@ void subtype_cb(Fl_Choice* i, void* v) {
     int j;
     for (j = 0;; j++) {
       if (!m[j].text) {j = 0; break;}
-      if (m[j].argument() == current_widget->o->type()) break;
+      if (current_widget->is_spinner()) {
+        if (m[j].argument() == ((Fl_Spinner*)current_widget->o)->type()) break;
+      } else {
+        if (m[j].argument() == current_widget->o->type()) break;
+      }
     }
     i->value(j);
     i->activate();
@@ -1564,9 +1653,12 @@ void subtype_cb(Fl_Choice* i, void* v) {
       if (o->selected && o->is_widget()) {
         Fl_Widget_Type* q = (Fl_Widget_Type*)o;
         if (q->subtypes()==m) {
-	        q->o->type(n);
-	        q->redraw();
-	        mod = 1;
+          if (q->is_spinner())
+            ((Fl_Spinner*)q->o)->type(n);
+          else
+            q->o->type(n);
+          q->redraw();
+          mod = 1;
         }
       }
     }
@@ -1623,7 +1715,7 @@ void overlay_cb(Fl_Button*o,void *v) {
 
 void leave_live_mode_cb(Fl_Widget*, void*);
 
-void live_mode_cb(Fl_Button*o,void *v) {
+void live_mode_cb(Fl_Button*o,void *) {
   /// \todo live mode should end gracefully when the application quits
   ///       or when the user closes the live widget
   static Fl_Type *live_type = 0L;
@@ -1807,7 +1899,9 @@ int isdeclare(const char *c) {
 
 void Fl_Widget_Type::write_static() {
   const char* t = subclassname(this);
-  if (!subclass() || is_class()) write_declare("#include <FL/%s.H>", t);
+  if (!subclass() || (is_class() && !strncmp(t, "Fl_", 3))) {
+    write_declare("#include <FL/%s.H>", t);
+  }
   for (int n=0; n < NUM_EXTRA_CODE; n++) {
     if (extra_code(n) && isdeclare(extra_code(n)))
       write_declare("%s", extra_code(n));
@@ -1815,9 +1909,12 @@ void Fl_Widget_Type::write_static() {
   if (callback() && is_name(callback())) {
     int write_extern_declaration = 1;
     const Fl_Class_Type *cc = is_in_class();
+    char buf[1024]; snprintf(buf, 1023, "%s(*)",  callback());
     if (cc) {
-      char buf[1024]; snprintf(buf, 1023, "%s(*)",  callback());
       if (cc->has_function("static void", buf))
+        write_extern_declaration = 0;
+    } else {
+      if (has_toplevel_function(0L, buf))
         write_extern_declaration = 0;
     }
     if (write_extern_declaration)
@@ -1895,7 +1992,7 @@ const char *Fl_Type::callback_name() {
 }
 
 extern int varused_test, varused;
-  
+
 void Fl_Widget_Type::write_code1() {
   const char* t = subclassname(this);
   const char *c = array_name(this);
@@ -1913,17 +2010,49 @@ void Fl_Widget_Type::write_code1() {
     write_h("  static void %s(%s*, %s);\n", cn, t, ut);
   }
   // figure out if local variable will be used (prevent compiler warnings):
-  if (is_parent())
-    varused = 1;
-  else {
-    varused_test = 1; varused = 0;
-    write_widget_code();
-    varused_test = 0;
-    for (int n=0; n < NUM_EXTRA_CODE; n++)
-      if (extra_code(n) && !isdeclare(extra_code(n))) varused = 1;
+  int wused = !name() && is_window();
+  const char *ptr;
+
+  varused = wused;
+
+  if (!name() && !varused) {
+    varused |= is_parent();
+
+    if (!varused) {
+      varused_test = 1;
+      write_widget_code();
+      varused_test = 0;
+    }
   }
-  write_c(indent());
-  if (varused) write_c("{ %s* o = ", t);
+
+  if (!varused) {
+    for (int n=0; n < NUM_EXTRA_CODE; n++)
+      if (extra_code(n) && !isdeclare(extra_code(n)))
+      {
+        int instring = 0;
+	int inname = 0;
+        for (ptr = extra_code(n); *ptr; ptr ++) {
+	  if (instring) {
+	    if (*ptr == '\\') ptr++;
+	    else if (*ptr == '\"') instring = 0;
+	  } else if (inname && !isalnum(*ptr & 255)) inname = 0;
+          else if (*ptr == '\"') instring = 1;
+	  else if (isalnum(*ptr & 255) || *ptr == '_') {
+	    size_t len = strspn(ptr, "0123456789_"
+	                             "abcdefghijklmnopqrstuvwxyz"
+				     "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+
+            if (!strncmp(ptr, "o", len)) {
+	      varused = 1;
+	      break;
+	    } else ptr += len - 1;
+          }
+	}
+      }
+  }
+
+  write_c("%s{ ", indent());
+  if (varused) write_c("%s* o = ", t);
   if (name()) write_c("%s = ", name());
   if (is_window()) {
     // Handle special case where user is faking a Fl_Group type as a window,
@@ -1955,10 +2084,12 @@ void Fl_Widget_Type::write_code1() {
     }
   }
   write_c(");\n");
+
   indentation += 2;
 
-  if (is_window()) write_c("%sw = o;\n",indent());
-  if (varused) write_widget_code();
+  if (wused) write_c("%sw = o;\n", indent());
+
+  write_widget_code();
 }
 
 void Fl_Widget_Type::write_color(const char* field, Fl_Color color) {
@@ -1991,18 +2122,21 @@ void Fl_Widget_Type::write_color(const char* field, Fl_Color color) {
   case FL_DARK_CYAN:		color_name = "FL_DARK_CYAN";		break;
   case FL_WHITE:		color_name = "FL_WHITE";		break;
   }
+  const char *var = is_class() ? "this" : name() ? name() : "o";
   if (color_name) {
-    write_c("%so->%s(%s);\n", indent(), field, color_name);
+    write_c("%s%s->%s(%s);\n", indent(), var, field, color_name);
   } else {
-    write_c("%so->%s((Fl_Color)%d);\n", indent(), field, color);
+    write_c("%s%s->%s((Fl_Color)%d);\n", indent(), var, field, color);
   }
 }
 
 // this is split from write_code1() for Fl_Window_Type:
 void Fl_Widget_Type::write_widget_code() {
   Fl_Widget* tplate = ((Fl_Widget_Type*)factory)->o;
+  const char *var = is_class() ? "this" : name() ? name() : "o";
+
   if (tooltip() && *tooltip()) {
-    write_c("%so->tooltip(",indent());
+    write_c("%s%s->tooltip(",indent(), var);
     switch (i18n_type) {
     case 0 : /* None */
         write_cstring(tooltip());
@@ -2022,92 +2156,131 @@ void Fl_Widget_Type::write_widget_code() {
     write_c(");\n");
   }
 
-  if (o->type() != tplate->type() && !is_window())
-    write_c("%so->type(%d);\n", indent(), o->type());
+  if (is_spinner() && ((Fl_Spinner*)o)->type() != ((Fl_Spinner*)tplate)->type())
+    write_c("%s%s->type(%d);\n", indent(), var, ((Fl_Spinner*)o)->type());
+  else if (o->type() != tplate->type() && !is_window())
+    write_c("%s%s->type(%d);\n", indent(), var, o->type());
   if (o->box() != tplate->box() || subclass())
-    write_c("%so->box(FL_%s);\n", indent(), boxname(o->box()));
+    write_c("%s%s->box(FL_%s);\n", indent(), var, boxname(o->box()));
   if (is_button()) {
     Fl_Button* b = (Fl_Button*)o;
-    if (b->down_box()) write_c("%so->down_box(FL_%s);\n", indent(),
+    if (b->down_box()) write_c("%s%s->down_box(FL_%s);\n", indent(), var,
 			       boxname(b->down_box()));
-    if (b->value()) write_c("%so->value(1);\n", indent());
-    if (b->shortcut())
-      write_c("%so->shortcut(0x%x);\n", indent(), b->shortcut());
+    if (b->value()) write_c("%s%s->value(1);\n", indent(), var);
+    if (b->shortcut()) {
+			int s = b->shortcut();
+			if (use_FL_COMMAND && (s & (FL_CTRL|FL_META))) {
+		    write_c("%s%s->shortcut(FL_COMMAND|0x%x);\n", indent(), var, s & ~(FL_CTRL|FL_META));
+			} else {
+	      write_c("%s%s->shortcut(0x%x);\n", indent(), var, s);
+			}
+		}
   } else if (!strcmp(type_name(), "Fl_Input_Choice")) {
     Fl_Input_Choice* b = (Fl_Input_Choice*)o;
-    if (b->down_box()) write_c("%so->down_box(FL_%s);\n", indent(),
+    if (b->down_box()) write_c("%s%s->down_box(FL_%s);\n", indent(), var,
 			       boxname(b->down_box()));
   } else if (is_menu_button()) {
     Fl_Menu_* b = (Fl_Menu_*)o;
-    if (b->down_box()) write_c("%so->down_box(FL_%s);\n", indent(),
+    if (b->down_box()) write_c("%s%s->down_box(FL_%s);\n", indent(), var,
 			       boxname(b->down_box()));
   }
   if (o->color() != tplate->color() || subclass())
     write_color("color", o->color());
   if (o->selection_color() != tplate->selection_color() || subclass())
     write_color("selection_color", o->selection_color());
-  if (image) image->write_code();
-  if (inactive) inactive->write_code(1);
+  if (image) image->write_code(var);
+  if (inactive) inactive->write_code(var, 1);
   if (o->labeltype() != tplate->labeltype() || subclass())
-    write_c("%so->labeltype(FL_%s);\n", indent(),
+    write_c("%s%s->labeltype(FL_%s);\n", indent(), var,
 	    item_name(labeltypemenu, o->labeltype()));
   if (o->labelfont() != tplate->labelfont() || subclass())
-    write_c("%so->labelfont(%d);\n", indent(), o->labelfont());
+    write_c("%s%s->labelfont(%d);\n", indent(), var, o->labelfont());
   if (o->labelsize() != tplate->labelsize() || subclass())
-    write_c("%so->labelsize(%d);\n", indent(), o->labelsize());
+    write_c("%s%s->labelsize(%d);\n", indent(), var, o->labelsize());
   if (o->labelcolor() != tplate->labelcolor() || subclass())
     write_color("labelcolor", o->labelcolor());
   if (is_valuator()) {
     Fl_Valuator* v = (Fl_Valuator*)o;
     Fl_Valuator* f = (Fl_Valuator*)(tplate);
     if (v->minimum()!=f->minimum())
-      write_c("%so->minimum(%g);\n", indent(), v->minimum());
+      write_c("%s%s->minimum(%g);\n", indent(), var, v->minimum());
     if (v->maximum()!=f->maximum())
-      write_c("%so->maximum(%g);\n", indent(), v->maximum());
+      write_c("%s%s->maximum(%g);\n", indent(), var, v->maximum());
     if (v->step()!=f->step())
-      write_c("%so->step(%g);\n", indent(), v->step());
-    if (v->value())
-      write_c("%so->value(%g);\n", indent(), v->value());
-    if (is_valuator()==2) {
+      write_c("%s%s->step(%g);\n", indent(), var, v->step());
+    if (v->value()) {
+      if (is_valuator()==3) { // Fl_Scrollbar::value(double) is nott available
+        write_c("%s%s->Fl_Slider::value(%g);\n", indent(), var, v->value());
+      } else {
+        write_c("%s%s->value(%g);\n", indent(), var, v->value());
+      }
+    }
+    if (is_valuator()>=2) {
       double x = ((Fl_Slider*)v)->slider_size();
       double y = ((Fl_Slider*)f)->slider_size();
-      if (x != y) write_c("%so->slider_size(%g);\n", indent(), x);
+      if (x != y) write_c("%s%s->slider_size(%g);\n", indent(), var, x);
     }
   }
+  if (is_spinner()) {
+    Fl_Spinner* v = (Fl_Spinner*)o;
+    Fl_Spinner* f = (Fl_Spinner*)(tplate);
+    if (v->minimum()!=f->minimum())
+      write_c("%s%s->minimum(%g);\n", indent(), var, v->minimum());
+    if (v->maximum()!=f->maximum())
+      write_c("%s%s->maximum(%g);\n", indent(), var, v->maximum());
+    if (v->step()!=f->step())
+      write_c("%s%s->step(%g);\n", indent(), var, v->step());
+    if (v->value())
+      write_c("%s%s->value(%g);\n", indent(), var, v->value());
+  }
+
   {Fl_Font ff; int fs; Fl_Color fc; if (textstuff(4,ff,fs,fc)) {
     Fl_Font f; int s; Fl_Color c; textstuff(0,f,s,c);
-    if (f != ff) write_c("%so->textfont(%d);\n", indent(), f);
-    if (s != fs) write_c("%so->textsize(%d);\n", indent(), s);
-    if (c != fc) write_c("%so->textcolor(%d);\n",indent(), c);
+    if (f != ff) write_c("%s%s->textfont(%d);\n", indent(), var, f);
+    if (s != fs) write_c("%s%s->textsize(%d);\n", indent(), var, s);
+    if (c != fc) write_c("%s%s->textcolor(%d);\n",indent(), var, c);
   }}
   const char* ud = user_data();
   if (class_name(1) && !parent->is_widget()) ud = "this";
   if (callback()) {
-    write_c("%so->callback((Fl_Callback*)%s", indent(), callback_name());
+    write_c("%s%s->callback((Fl_Callback*)%s", indent(), var, callback_name());
     if (ud)
       write_c(", (void*)(%s));\n", ud);
     else
       write_c(");\n");
   } else if (ud) {
-    write_c("%so->user_data((void*)(%s));\n", indent(), ud);
+    write_c("%s%s->user_data((void*)(%s));\n", indent(), var, ud);
   }
   if (o->align() != tplate->align() || subclass()) {
     int i = o->align();
-    write_c("%so->align(%s", indent(),
+    write_c("%s%s->align(%s", indent(), var,
 	    item_name(alignmenu, i & ~FL_ALIGN_INSIDE));
     if (i & FL_ALIGN_INSIDE) write_c("|FL_ALIGN_INSIDE");
     write_c(");\n");
   }
-  if (o->when() != tplate->when() || subclass())
-    write_c("%so->when(%s);\n", indent(),item_name(whensymbolmenu, o->when()));
+  // avoid the unsupported combination of flegs when user sets 
+  // "when" to "FL_WHEN_NEVER", but keeps the "no change" set. 
+  // FIXME: This could be reflected in the GUI by graying out the button.
+  Fl_When ww = o->when();
+  if (ww==FL_WHEN_NOT_CHANGED)
+    ww = FL_WHEN_NEVER;
+  if (ww != tplate->when() || subclass())
+    write_c("%s%s->when(%s);\n", indent(), var,
+            item_name(whensymbolmenu, ww));
   if (!o->visible() && o->parent())
-    write_c("%so->hide();\n", indent());
+    write_c("%s%s->hide();\n", indent(), var);
   if (!o->active())
-    write_c("%so->deactivate();\n", indent());
+    write_c("%s%s->deactivate();\n", indent(), var);
   if (!is_group() && resizable())
-    write_c("%sFl_Group::current()->resizable(o);\n",indent());
-  if (hotspot())
-    write_c("%sw->hotspot(o);\n", indent());
+    write_c("%sFl_Group::current()->resizable(%s);\n", indent(), var);
+  if (hotspot()) {
+    if (is_class())
+      write_c("%shotspot(%s);\n", indent(), var);
+    else if (is_window())
+      write_c("%s%s->hotspot(%s);\n", indent(), var, var);
+    else
+      write_c("%s%s->window()->hotspot(%s);\n", indent(), var, var);
+  }
 }
 
 void Fl_Widget_Type::write_extra_code() {
@@ -2118,7 +2291,8 @@ void Fl_Widget_Type::write_extra_code() {
 
 void Fl_Widget_Type::write_block_close() {
   indentation -= 2;
-  if (is_parent() || varused) write_c("%s}\n", indent());
+  write_c("%s} // %s* %s\n", indent(), subclassname(this),
+          name() ? name() : "o");
 }
 
 void Fl_Widget_Type::write_code2() {
@@ -2131,7 +2305,11 @@ void Fl_Widget_Type::write_code2() {
 void Fl_Widget_Type::write_properties() {
   Fl_Type::write_properties();
   write_indent(level+1);
-  if (!public_) write_string("private");
+  switch (public_) {
+    case 0: write_string("private"); break;
+    case 1: break;
+    case 2: write_string("protected"); break;
+  }
   if (tooltip() && *tooltip()) {
     write_string("tooltip");
     write_word(tooltip());
@@ -2146,7 +2324,10 @@ void Fl_Widget_Type::write_properties() {
   }
   write_string("xywh {%d %d %d %d}", o->x(), o->y(), o->w(), o->h());
   Fl_Widget* tplate = ((Fl_Widget_Type*)factory)->o;
-  if (o->type() != tplate->type() || is_window()) {
+  if (is_spinner() && ((Fl_Spinner*)o)->type() != ((Fl_Spinner*)tplate)->type()) {
+    write_string("type");
+    write_word(item_name(subtypes(), ((Fl_Spinner*)o)->type()));
+  } else if (o->type() != tplate->type() || is_window()) {
     write_string("type");
     write_word(item_name(subtypes(), o->type()));
   }
@@ -2192,11 +2373,19 @@ void Fl_Widget_Type::write_properties() {
     if (v->maximum()!=f->maximum()) write_string("maximum %g",v->maximum());
     if (v->step()!=f->step()) write_string("step %g",v->step());
     if (v->value()!=0.0) write_string("value %g",v->value());
-    if (is_valuator()==2) {
+    if (is_valuator()>=2) {
       double x = ((Fl_Slider*)v)->slider_size();
       double y = ((Fl_Slider*)f)->slider_size();
       if (x != y) write_string("slider_size %g", x);
     }
+  }
+  if (is_spinner()) {
+    Fl_Spinner* v = (Fl_Spinner*)o;
+    Fl_Spinner* f = (Fl_Spinner*)(tplate);
+    if (v->minimum()!=f->minimum()) write_string("minimum %g",v->minimum());
+    if (v->maximum()!=f->maximum()) write_string("maximum %g",v->maximum());
+    if (v->step()!=f->step()) write_string("step %g",v->step());
+    if (v->value()!=0.0) write_string("value %g",v->value());
   }
   {Fl_Font ff; int fs; Fl_Color fc; if (textstuff(4,ff,fs,fc)) {
     Fl_Font f; int s; Fl_Color c; textstuff(0,f,s,c);
@@ -2226,6 +2415,8 @@ void Fl_Widget_Type::read_property(const char *c) {
   int x,y,w,h; Fl_Font f; int s; Fl_Color cc;
   if (!strcmp(c,"private")) {
     public_ = 0;
+  } else if (!strcmp(c,"protected")) {
+    public_ = 2;
   } else if (!strcmp(c,"xywh")) {
     if (sscanf(read_word(),"%d %d %d %d",&x,&y,&w,&h) == 4) {
       x += pasteoffset;
@@ -2239,7 +2430,10 @@ void Fl_Widget_Type::read_property(const char *c) {
   } else if (!strcmp(c,"deimage")) {
     inactive_name(read_word());
   } else if (!strcmp(c,"type")) {
-    o->type(item_number(subtypes(), read_word()));
+    if (is_spinner()) 
+      ((Fl_Spinner*)o)->type(item_number(subtypes(), read_word()));
+    else
+      o->type(item_number(subtypes(), read_word()));
   } else if (!strcmp(c,"box")) {
     const char* value = read_word();
     if ((x = boxnumber(value))) {
@@ -2298,14 +2492,18 @@ void Fl_Widget_Type::read_property(const char *c) {
     if (sscanf(read_word(),"%d",&x) == 1) o->align(x);
   } else if (!strcmp(c,"when")) {
     if (sscanf(read_word(),"%d",&x) == 1) o->when(x);
-  } else if (!strcmp(c,"minimum") && is_valuator()) {
-    ((Fl_Valuator*)o)->minimum(strtod(read_word(),0));
-  } else if (!strcmp(c,"maximum") && is_valuator()) {
-    ((Fl_Valuator*)o)->maximum(strtod(read_word(),0));
-  } else if (!strcmp(c,"step") && is_valuator()) {
-    ((Fl_Valuator*)o)->step(strtod(read_word(),0));
-  } else if (!strcmp(c,"value") && is_valuator()) {
-    ((Fl_Valuator*)o)->value(strtod(read_word(),0));
+  } else if (!strcmp(c,"minimum")) {
+    if (is_valuator()) ((Fl_Valuator*)o)->minimum(strtod(read_word(),0));
+    if (is_spinner()) ((Fl_Spinner*)o)->minimum(strtod(read_word(),0));
+  } else if (!strcmp(c,"maximum")) {
+    if (is_valuator()) ((Fl_Valuator*)o)->maximum(strtod(read_word(),0));
+    if (is_spinner()) ((Fl_Spinner*)o)->maximum(strtod(read_word(),0));
+  } else if (!strcmp(c,"step")) {
+    if (is_valuator()) ((Fl_Valuator*)o)->step(strtod(read_word(),0));
+    if (is_spinner()) ((Fl_Spinner*)o)->step(strtod(read_word(),0));
+  } else if (!strcmp(c,"value")) {
+    if (is_valuator()) ((Fl_Valuator*)o)->value(strtod(read_word(),0));
+    if (is_spinner()) ((Fl_Spinner*)o)->value(strtod(read_word(),0));
   } else if ((!strcmp(c,"slider_size")||!strcmp(c,"size"))&&is_valuator()==2) {
     ((Fl_Slider*)o)->slider_size(strtod(read_word(),0));
   } else if (!strcmp(c,"textfont")) {
@@ -2457,7 +2655,7 @@ void leave_live_mode_cb(Fl_Widget*, void*) {
   live_mode_cb(0, 0);
 }
 
-Fl_Widget *Fl_Widget_Type::enter_live_mode(int top) {
+Fl_Widget *Fl_Widget_Type::enter_live_mode(int) {
   live_widget = widget(o->x(), o->y(), o->w(), o->h());
   if (live_widget)
     copy_properties();
@@ -2503,10 +2701,19 @@ void Fl_Widget_Type::copy_properties() {
     d->maximum(s->maximum());
     d->step(s->step());
     d->value(s->value());
-    if (is_valuator()==2) {
+    if (is_valuator()>=2) {
       Fl_Slider *d = (Fl_Slider*)live_widget, *s = (Fl_Slider*)o;
       d->slider_size(s->slider_size());
     }
+  }
+
+  // copy all attributes specific to Fl_Spinner and derived classes
+  if (is_spinner()) {
+    Fl_Spinner* d = (Fl_Spinner*)live_widget, *s = (Fl_Spinner*)o;
+    d->minimum(s->minimum());
+    d->maximum(s->maximum());
+    d->step(s->step());
+    d->value(s->value());
   }
  
 /* TODO: implement this

@@ -3,7 +3,7 @@
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2005 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -36,6 +36,7 @@
 #include <FL/Fl_Menu_.H>
 #include <FL/fl_draw.H>
 #include <stdio.h>
+#include "flstring.h"
 
 #ifdef __APPLE__
 #  include <Carbon/Carbon.h>
@@ -93,6 +94,9 @@ class menuwindow : public Fl_Menu_Window {
 public:
   menutitle* title;
   int handle(int);
+#ifdef __APPLE__
+  int early_hide_handle(int);
+#endif
   int itemheight;	// zero == menubar
   int numitems;
   int selected;
@@ -107,6 +111,7 @@ public:
   int titlex(int);
   void autoscroll(int);
   void position(int x, int y);
+  int is_inside(int x, int y);
 };
 
 #define LEADING 4 // extra vertical leading
@@ -173,10 +178,22 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_* m,
     if (flags & FL_MENU_RADIO) {
       fl_draw_box(FL_ROUND_DOWN_BOX, x+2, y+d, W, W, FL_BACKGROUND2_COLOR);
       if (value()) {
-	fl_color(labelcolor_);
 	int tW = (W - Fl::box_dw(FL_ROUND_DOWN_BOX)) / 2 + 1;
 	if ((W - tW) & 1) tW++;	// Make sure difference is even to center
 	int td = Fl::box_dx(FL_ROUND_DOWN_BOX) + 1;
+        if (Fl::scheme()) {
+	  // Offset the radio circle...
+	  td ++;
+
+	  if (!strcmp(Fl::scheme(), "gtk+")) {
+	    fl_color(FL_SELECTION_COLOR);
+	    tW --;
+	    fl_pie(x + td + 1, y + d + td - 1, tW + 3, tW + 3, 0.0, 360.0);
+	    fl_arc(x + td + 1, y + d + td - 1, tW + 3, tW + 3, 0.0, 360.0);
+	    fl_color(fl_color_average(FL_WHITE, FL_SELECTION_COLOR, 0.2f));
+	  } else fl_color(labelcolor_);
+	} else fl_color(labelcolor_);
+
 	switch (tW) {
 	  // Larger circles draw fine...
 	  default :
@@ -202,11 +219,20 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_* m,
 	    fl_rectf(x + td + 2, y + d + td, tW, tW);
 	    break;
 	}
+
+	if (Fl::scheme() && !strcmp(Fl::scheme(), "gtk+")) {
+	  fl_color(fl_color_average(FL_WHITE, FL_SELECTION_COLOR, 0.5));
+	  fl_arc(x + td + 2, y + d + td, tW + 1, tW + 1, 60.0, 180.0);
+	}
       }
     } else {
       fl_draw_box(FL_DOWN_BOX, x+2, y+d, W, W, FL_BACKGROUND2_COLOR);
       if (value()) {
-	fl_color(labelcolor_);
+	if (Fl::scheme() && !strcmp(Fl::scheme(), "gtk+")) {
+	  fl_color(FL_SELECTION_COLOR);
+	} else {
+	  fl_color(labelcolor_);
+	}
 	int tx = x + 5;
 	int tw = W - 6;
 	int d1 = tw/3;
@@ -327,9 +353,15 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
   if (m) y(Y); else {y(Y-2); w(1); h(1);}
 
   if (t) {
-    int dy = menubar_title ? Fl::box_dy(button->box())+1 : 2;
-    int ht = menubar_title ? button->h()-dy*2 : Htitle+2*BW+3;
-    title = new menutitle(tx, ty-ht-dy, Wtitle, ht, t);
+    if (menubar_title) {
+      int dy = Fl::box_dy(button->box())+1;
+      int ht = button->h()-dy*2;
+      title = new menutitle(tx, ty-ht-dy, Wtitle, ht, t);
+    } else {
+      int dy = 2;
+      int ht = Htitle+2*BW+3;
+      title = new menutitle(X, Y-ht-dy, Wtitle, ht, t);
+    }
   } else
     title = 0;
 }
@@ -458,6 +490,15 @@ int menuwindow::titlex(int n) {
   return xx;
 }
 
+// return 1, if the given root coordinates are inside the window
+int menuwindow::is_inside(int mx, int my) {
+  if ( mx < x_root() || mx >= x_root() + w() ||
+       my < y_root() || my >= y_root() + h()) {
+    return 0;
+  }
+  return 1;
+}
+
 ////////////////////////////////////////////////////////////////
 // Fl_Menu_Item::popup(...)
 
@@ -488,8 +529,20 @@ struct menustate {
   int nummenus;
   int menubar; // if true p[0] is a menubar
   int state;
+  menuwindow* fakemenu; // kludge for buttons in menubar
+  int is_inside(int mx, int my);
 };
 static menustate* p;
+
+// return 1 if the coordinates are inside any of the menuwindows
+int menustate::is_inside(int mx, int my) {
+  int i;
+  for (i=nummenus-1; i>=0; i--) {
+    if (p[i]->is_inside(mx, my))
+      return 1;
+  }
+  return 0;
+}
 
 static inline void setitem(const Fl_Menu_Item* i, int m, int n) {
   p->current_item = i;
@@ -506,6 +559,9 @@ static void setitem(int m, int n) {
 
 static int forward(int menu) { // go to next item in menu menu if possible
   menustate &pp = *p;
+  // Fl_Menu_Button can geberate menu=-1. This line fixes it and selectes the first item.
+  if (menu==-1) 
+    menu = 0;
   menuwindow &m = *(pp.p[menu]);
   int item = (menu == pp.menu_number) ? pp.item_number : m.selected;
   while (++item < m.numitems) {
@@ -528,6 +584,35 @@ static int backward(int menu) { // previous item in menu menu if possible
 }
 
 int menuwindow::handle(int e) {
+#ifdef __APPLE__
+  // This off-route takes care of the "detached menu" bug on OS X.
+  // Apple event handler requires that we hide all menu windows right
+  // now, so that Carbon can continue undisturbed with handling window
+  // manager events, like dragging the application window.
+  int ret = early_hide_handle(e);
+  menustate &pp = *p;
+  if (pp.state == DONE_STATE) {
+    hide();
+    if (pp.fakemenu) {
+      pp.fakemenu->hide();
+      if (pp.fakemenu->title)
+        pp.fakemenu->title->hide();
+    }
+    int i = pp.nummenus;
+    while (i>0) {
+      menuwindow *mw = pp.p[--i];
+      if (mw) {
+        mw->hide();
+        if (mw->title) 
+          mw->title->hide();
+      }
+    }
+  }
+  return ret;
+}
+
+int menuwindow::early_hide_handle(int e) {
+#endif
   menustate &pp = *p;
   switch (e) {
   case FL_KEYBOARD:
@@ -549,8 +634,14 @@ int menuwindow::handle(int e) {
     case FL_Tab:
       if (Fl::event_shift()) goto BACKTAB;
     case FL_Down:
-      if (pp.menu_number || !pp.menubar) forward(pp.menu_number);
-      else if (pp.menu_number < pp.nummenus-1) forward(pp.menu_number+1);
+      if (pp.menu_number || !pp.menubar) {
+        if (!forward(pp.menu_number) && Fl::event_key()==FL_Tab) {
+          pp.item_number = -1;
+          forward(pp.menu_number);
+        }
+      } else if (pp.menu_number < pp.nummenus-1) {
+        forward(pp.menu_number+1);
+      }
       return 1;
     case FL_Right:
       if (pp.menubar && (pp.menu_number<=0 || pp.menu_number==1 && pp.nummenus==2))
@@ -595,20 +686,32 @@ int menuwindow::handle(int e) {
     int mx = Fl::event_x_root();
     int my = Fl::event_y_root();
     int item=0; int mymenu = pp.nummenus-1;
-    if (e == FL_PUSH && (!pp.menubar || mymenu) &&
-        (mx < pp.p[mymenu]->x_root() ||
-	 mx >= (pp.p[mymenu]->x_root() + pp.p[mymenu]->w()) ||
-         my < pp.p[mymenu]->y_root() ||
-	 my >= (pp.p[mymenu]->y_root() + pp.p[mymenu]->h()))) {
-      // Clicking outside menu cancels it...
+    // Clicking or dragging outside menu cancels it...
+    if ((!pp.menubar || mymenu) && !pp.is_inside(mx, my)) {
       setitem(0, -1, 0);
-      pp.state = DONE_STATE;
+      if (e==FL_PUSH)
+        pp.state = DONE_STATE;
       return 1;
     }
     for (mymenu = pp.nummenus-1; ; mymenu--) {
       item = pp.p[mymenu]->find_selected(mx, my);
-      if (item >= 0) break;
-      if (mymenu <= 0) return 0;
+      if (item >= 0) 
+        break;
+      if (mymenu <= 0) {
+        // buttons in menubars must be deselected if we move outside of them!
+        if (pp.menu_number==-1 && e==FL_PUSH) {
+          pp.state = DONE_STATE;
+          return 1;
+        }
+        if (pp.current_item && pp.menu_number==0 && !pp.current_item->submenu()) {
+          if (e==FL_PUSH)
+            pp.state = DONE_STATE;
+          setitem(0, -1, 0);
+          return 1;
+        }
+        // all others can stay selected
+        return 0;
+      }
     }
     if (my == 0 && item > 0) setitem(mymenu, item - 1);
     else setitem(mymenu, item);
@@ -621,14 +724,6 @@ int menuwindow::handle(int e) {
 	pp.state = PUSH_STATE;
     }} return 1;
   case FL_RELEASE:
-    // do nothing if they try to pick inactive items
-    if (pp.current_item && !pp.current_item->activevisible()) {
-      if (pp.state==INITIAL_STATE) {
-        setitem(0, -1, 0);
-        pp.state = DONE_STATE;
-      }
-      return 1;
-    }
     // Mouse must either be held down/dragged some, or this must be
     // the second click (not the one that popped up the menu):
     if (!Fl::event_is_click() || pp.state == PUSH_STATE ||
@@ -641,6 +736,8 @@ int menuwindow::handle(int e) {
 	pp.p[pp.menu_number]->redraw();
       } else
 #endif
+      // do nothing if they try to pick inactive items
+      if (!pp.current_item || pp.current_item->activevisible())
 	pp.state = DONE_STATE;
     }
     return 1;
@@ -674,8 +771,7 @@ const Fl_Menu_Item* Fl_Menu_Item::pulldown(
   pp.nummenus = 1;
   pp.menubar = menubar;
   pp.state = INITIAL_STATE;
-
-  menuwindow* fakemenu = 0; // kludge for buttons in menubar
+  pp.fakemenu = 0; // kludge for buttons in menubar
 
   // preselected item, pop up submenus if necessary:
   if (initial_item && mw.selected >= 0) {
@@ -712,7 +808,7 @@ const Fl_Menu_Item* Fl_Menu_Item::pulldown(
     if (pp.current_item == oldi) continue;}
     // only do rest if item changes:
 
-    delete fakemenu; fakemenu = 0; // turn off "menubar button"
+    delete pp.fakemenu; pp.fakemenu = 0; // turn off "menubar button"
 
     if (!pp.current_item) { // pointing at nothing
       // turn off selection in deepest menu, but don't erase other menus:
@@ -720,7 +816,7 @@ const Fl_Menu_Item* Fl_Menu_Item::pulldown(
       continue;
     }
 
-    delete fakemenu; fakemenu = 0;
+    delete pp.fakemenu; pp.fakemenu = 0;
     initial_item = 0; // stop the startup code
     pp.p[pp.menu_number]->autoscroll(pp.item_number);
 
@@ -782,17 +878,17 @@ const Fl_Menu_Item* Fl_Menu_Item::pulldown(
       while (pp.nummenus > pp.menu_number+1) delete pp.p[--pp.nummenus];
       if (!pp.menu_number && pp.menubar) {
 	// kludge so "menubar buttons" turn "on" by using menu title:
-	fakemenu = new menuwindow(0,
+	pp.fakemenu = new menuwindow(0,
 				  cw.x()+cw.titlex(pp.item_number),
 				  cw.y()+cw.h(), 0, 0,
 				  0, m, 0, 1);
-	fakemenu->title->show();
+	pp.fakemenu->title->show();
       }
     }
   }
   const Fl_Menu_Item* m = pp.current_item;
   Fl::release();
-  delete fakemenu;
+  delete pp.fakemenu;
   while (pp.nummenus>1) delete pp.p[--pp.nummenus];
   mw.hide();
   return m;

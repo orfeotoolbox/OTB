@@ -30,7 +30,7 @@ SET(CPPFILES
   Fl_Menu.cxx
   Fl_Menu_.cxx
   Fl_Menu_Bar.cxx
-  Fl_Sys_Menu_Bar.cxx
+	Fl_Sys_Menu_Bar.cxx
   Fl_Menu_Button.cxx
   Fl_Menu_Window.cxx
   Fl_Menu_add.cxx
@@ -104,8 +104,10 @@ SET(CPPFILES
   fl_engraved_label.cxx
   fl_file_dir.cxx
   fl_font.cxx
+  fl_gtk.cxx
   fl_labeltype.cxx
   fl_line_style.cxx
+  fl_open_uri.cxx
   fl_oval_box.cxx
   fl_overlay.cxx
   fl_overlay_visual.cxx
@@ -136,6 +138,10 @@ SET(GLCPPFILES
   Fl_Gl_Choice.cxx
   Fl_Gl_Overlay.cxx
   Fl_Gl_Window.cxx
+  freeglut_geometry.cxx
+  freeglut_stroke_mono_roman.cxx
+  freeglut_stroke_roman.cxx
+  freeglut_teapot.cxx
   gl_draw.cxx
   gl_start.cxx
   glut_compatability.cxx
@@ -174,10 +180,13 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 
 ADD_LIBRARY(fltk ${CPPFILES} ${CFILES})
+# OTB Modifications
+#INSTALL_TARGETS(/lib fltk)
 INSTALL(TARGETS fltk
         RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
         LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
         ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
+
 SET_TARGET_PROPERTIES(fltk
   PROPERTIES
   VERSION ${FLTK_VERSION_MAJOR}.${FLTK_VERSION_MINOR}
@@ -191,10 +200,13 @@ ENDIF(X11_FOUND)
 
 IF(OPENGL_FOUND)
   ADD_LIBRARY(fltk_gl ${GLCPPFILES})
+# OTB Modifications
+#  INSTALL_TARGETS(/lib fltk_gl)
   INSTALL(TARGETS fltk_gl
         RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
         LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
         ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
+
   TARGET_LINK_LIBRARIES(fltk_gl fltk ${OPENGL_LIBRARIES})
   SET_TARGET_PROPERTIES(fltk_gl
     PROPERTIES
@@ -203,6 +215,8 @@ IF(OPENGL_FOUND)
 ENDIF(OPENGL_FOUND)
 
 ADD_LIBRARY(fltk_forms ${FLCPPFILES})
+# OTB Modifications
+#INSTALL_TARGETS(/lib fltk_forms)
 INSTALL(TARGETS fltk_forms
         RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
         LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
@@ -214,6 +228,8 @@ SET_TARGET_PROPERTIES(fltk_forms
   SOVERSION ${FLTK_VERSION_PATCH})
 
 ADD_LIBRARY(fltk_images ${IMGCPPFILES})
+# OTB Modifications
+#INSTALL_TARGETS(/lib fltk_images)
 INSTALL(TARGETS fltk_images
         RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
         LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
@@ -224,3 +240,4 @@ SET_TARGET_PROPERTIES(fltk_images
   PROPERTIES
   VERSION ${FLTK_VERSION_MAJOR}.${FLTK_VERSION_MINOR}
   SOVERSION ${FLTK_VERSION_PATCH})
+

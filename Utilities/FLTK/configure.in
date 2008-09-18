@@ -1,11 +1,11 @@
 dnl -*- sh -*-
 dnl the "configure" script is made from this by running GNU "autoconf"
 dnl
-dnl "$Id: configure.in 4756 2006-01-15 18:36:16Z mike $"
+dnl "$Id: configure.in 6094 2008-04-11 16:53:01Z matt $"
 dnl
 dnl Configuration script for the Fast Light Tool Kit (FLTK).
 dnl
-dnl Copyright 1998-2006 by Bill Spitzak and others.
+dnl Copyright 1998-2007 by Bill Spitzak and others.
 dnl
 dnl This library is free software; you can redistribute it and/or
 dnl modify it under the terms of the GNU Library General Public
@@ -27,8 +27,8 @@ dnl
 dnl      http://www.fltk.org/str.php
 dnl
 
-dnl We need at least autoconf 2.13...
-AC_PREREQ(2.13)
+dnl We need at least autoconf 2.50...
+AC_PREREQ(2.50)
 
 dnl Required file in package...
 AC_INIT(src/Fl.cxx)
@@ -36,7 +36,7 @@ AC_INIT(src/Fl.cxx)
 dnl FLTK library versions...
 FL_MAJOR_VERSION=1
 FL_MINOR_VERSION=1
-FL_PATCH_VERSION=7
+FL_PATCH_VERSION=9
 FL_API_VERSION=${FL_MAJOR_VERSION}.${FL_MINOR_VERSION}
 
 AC_SUBST(FL_MAJOR_VERSION)
@@ -56,11 +56,15 @@ if test "x$uname" = x; then
 fi
 
 dnl Don't automatically add "-g" to compiler options...
+ARCHFLAGS="${ARCHFLAGS:=}"
 CFLAGS="${CFLAGS:=}"
 CPPFLAGS="${CPPFLAGS:=}"
 CXXFLAGS="${CXXFLAGS:=}"
+DSOFLAGS="${DSOFLAGS:=}"
+LDFLAGS="${LDFLAGS:=}"
 OPTIM="${OPTIM:=}"
 
+AC_SUBST(ARCHFLAGS)
 AC_SUBST(OPTIM)
 
 dnl OS-specific pre-tests...
@@ -69,10 +73,14 @@ case $uname in
         # Handle Cygwin option *first*, before all other tests.
 	AC_ARG_ENABLE(cygwin, [  --enable-cygwin         use the CygWin libraries [default=no]])
 	if test x$enable_cygwin != xyes; then
+	    # NOTE: We can't use ARCHFLAGS for this, since it does not work
+	    #       with some of the function tests - Cygwin uses a
+	    #       different C library...
 	    CFLAGS="$CFLAGS -mno-cygwin"
 	    CPPFLAGS="$CPPFLAGS -mno-cygwin"
 	    CXXFLAGS="$CXXFLAGS -mno-cygwin"
 	    LDFLAGS="$LDFLAGS -mno-cygwin"
+	    DSOFLAGS="$DSOFLAGS -mno-cygwin"
 	fi
 	;;
 esac
@@ -123,7 +131,7 @@ if test x$enable_shared = xyes; then
             FLDSONAME="libfltk_forms.$FL_API_VERSION.dylib"
             GLDSONAME="libfltk_gl.$FL_API_VERSION.dylib"
             IMGDSONAME="libfltk_images.$FL_API_VERSION.dylib"
-	    DSOCOMMAND="\$(CC) $DSOFLAGS -dynamiclib -lc -o"
+	    DSOCOMMAND="\$(CXX) \$(DSOFLAGS) -dynamiclib -lc -o"
 	    ;;
 
 	SunOS* | UNIX_S*)
@@ -131,7 +139,7 @@ if test x$enable_shared = xyes; then
             FLDSONAME="libfltk_forms.so.$FL_API_VERSION"
             GLDSONAME="libfltk_gl.so.$FL_API_VERSION"
             IMGDSONAME="libfltk_images.so.$FL_API_VERSION"
-	    DSOCOMMAND="\$(CXX) -h \$@ \$(LDLIBS) -G $DEBUGFLAG -o"
+	    DSOCOMMAND="\$(CXX) \$(DSOFLAGS) -h \$@ \$(LDLIBS) -G $DEBUGFLAG -o"
 	    if test "x$libdir" != "x/usr/lib"; then
 		    DSOLINK="-R$libdir"
             fi
@@ -141,7 +149,7 @@ if test x$enable_shared = xyes; then
             FLDSONAME="libfltk_forms.sl.$FL_API_VERSION"
             GLDSONAME="libfltk_gl.sl.$FL_API_VERSION"
             IMGDSONAME="libfltk_images.sl.$FL_API_VERSION"
-	    DSOCOMMAND="ld -b -z +h \$@ $DEBUGFLAG -o"
+	    DSOCOMMAND="ld \$(DSOFLAGS) -b -z +h \$@ $DEBUGFLAG -o"
 	    if test "x$libdir" != "x/usr/lib"; then
 		    DSOLINK="-Wl,-rpath,$libdir"
             fi
@@ -151,7 +159,7 @@ if test x$enable_shared = xyes; then
             FLDSONAME="libfltk_forms.so.$FL_API_VERSION"
             GLDSONAME="libfltk_gl.so.$FL_API_VERSION"
             IMGDSONAME="libfltk_images.so.$FL_API_VERSION"
-            DSOCOMMAND="\$(CXX) -Wl,-soname,\$@,-set_version,sgi1.1 \$(LDLIBS) -shared $DEBUGFLAG -o"
+            DSOCOMMAND="\$(CXX) \$(DSOFLAGS) -Wl,-soname,\$@,-set_version,sgi1.1 \$(LDLIBS) -shared $DEBUGFLAG -o"
 	    if test "x$libdir" != "x/usr/lib" -a "x$libdir" != "x/usr/lib32" -a "x$libdir" != "x/usr/lib64"; then
 		    DSOLINK="-Wl,-rpath,$libdir"
             fi
@@ -161,7 +169,7 @@ if test x$enable_shared = xyes; then
             FLDSONAME="libfltk_forms.so.$FL_API_VERSION"
             GLDSONAME="libfltk_gl.so.$FL_API_VERSION"
             IMGDSONAME="libfltk_images.so.$FL_API_VERSION"
-            DSOCOMMAND="\$(CXX) -Wl,-soname,\$@ \$(LDLIBS) -shared $DEBUGFLAG -o"
+            DSOCOMMAND="\$(CXX) \$(DSOFLAGS) -Wl,-soname,\$@ \$(LDLIBS) -shared $DEBUGFLAG -o"
 	    if test "x$libdir" != "x/usr/lib" -a "x$libdir" != "x/usr/lib32"; then
 		    DSOLINK="-Wl,-rpath,$libdir"
             fi
@@ -171,7 +179,7 @@ if test x$enable_shared = xyes; then
             FLDSONAME="libfltk_forms.so.$FL_API_VERSION"
             GLDSONAME="libfltk_gl.so.$FL_API_VERSION"
             IMGDSONAME="libfltk_images.so.$FL_API_VERSION"
-            DSOCOMMAND="\$(CXX) -Wl,-soname,\$@ \$(LDLIBS) -shared -fPIC $DEBUGFLAG -o"
+            DSOCOMMAND="\$(CXX) \$(DSOFLAGS) -Wl,-soname,\$@ \$(LDLIBS) -shared -fPIC $DEBUGFLAG -o"
 	    if test "x$libdir" != "x/usr/lib"; then
 		    DSOLINK="-Wl,-rpath,$libdir"
             fi
@@ -181,7 +189,7 @@ if test x$enable_shared = xyes; then
             FLDSONAME="libfltk_forms_s.a"
             GLDSONAME="libfltk_gl_s.a"
             IMGDSONAME="libfltk_images_s.a"
-            DSOCOMMAND="\$(CXX) -Wl,-bexpall,-bM:SRE,-bnoentry -o"
+            DSOCOMMAND="\$(CXX) \$(DSOFLAGS) -Wl,-bexpall,-bM:SRE,-bnoentry -o"
             SHAREDSUFFIX="_s"
             ;;
         CYGWIN* | MINGW*)
@@ -197,7 +205,15 @@ if test x$enable_shared = xyes; then
 		GLDSONAME="cygfltknox_gl-$FL_API_VERSION.dll"
 		IMGDSONAME="cygfltknox_images-$FL_API_VERSION.dll"
 	    fi
-	    DSOCOMMAND="\$(CXX) -shared -Wl,--whole-archive -Wl,--export-all-symbols -Wl,--enable-auto-import -o \$@"
+	    #-----------------------------------------------------------
+	    # -Wl,--enable-runtime-pseudo-reloc: See str 1585
+	    # appears to be necessary for older binutils versions < 2.16
+	    #-----------------------------------------------------------
+            LDFLAGS="$LDFLAGS -Wl,--enable-auto-import -Wl,--enable-runtime-pseudo-reloc"
+	    DSOCOMMAND="\$(CXX) \$(DSOFLAGS) -shared \
+	    	-Wl,--whole-archive -Wl,--export-all-symbols \
+		-Wl,--enable-runtime-pseudo-reloc -Wl,--enable-auto-import \
+		-Wl,--enable-auto-image-base -o \$@"
 	    ;;
 	*)
             AC_MSG_WARN(Shared libraries may not be supported.  Trying -shared option with compiler.)
@@ -205,7 +221,7 @@ if test x$enable_shared = xyes; then
             FLDSONAME="libfltk_forms.so.$FL_API_VERSION"
             GLDSONAME="libfltk_gl.so.$FL_API_VERSION"
             IMGDSONAME="libfltk_images.so.$FL_API_VERSION"
-            DSOCOMMAND="\$(CXX) -Wl,-soname,\$@ \$(LDLIBS) -shared $DEBUGFLAG -o"
+            DSOCOMMAND="\$(CXX) \$(DSOFLAGS) -Wl,-soname,\$@ \$(LDLIBS) -shared $DEBUGFLAG -o"
 	    ;;
     esac
 
@@ -224,6 +240,7 @@ else
 fi
 
 AC_SUBST(DSOCOMMAND)
+AC_SUBST(DSOFLAGS)
 AC_SUBST(DSOLINK)
 AC_SUBST(DSONAME)
 AC_SUBST(FLDSONAME)
@@ -236,6 +253,10 @@ AC_SUBST(FLUID)
 AC_ARG_ENABLE(threads, [  --enable-threads        enable multi-threading support])
 
 AC_ARG_WITH(optim, [  --with-optim="flags"    use custom optimization flags])
+
+AC_ARG_WITH(archflags, [  --with-archflags="flags"
+                          use custom architecture flags],
+    ARCHFLAGS="$withval")
 
 case $uname in
     Darwin*)
@@ -252,9 +273,19 @@ esac
 dnl Find commands...
 AC_PROG_CC
 AC_PROG_CXX
-dnl AC_PROG_INSTALL
+AC_PROG_INSTALL
+case $uname in
+    OSF1*)
+	INSTALL="`pwd`/install-sh -c"
+	;;
+esac
+if test "$INSTALL" = "$ac_install_sh"; then
+    # Use full path to install-sh script...
+    INSTALL="`pwd`/install-sh -c"
+fi
 AC_PATH_PROG(NROFF,nroff)
 if test "x$NROFF" = "x:"; then
+    # Try groff instead of nroff...
     AC_PATH_PROG(GROFF,groff)
     if test "x$GROFF" = "x:"; then
         NROFF="echo"
@@ -392,14 +423,14 @@ AC_SYS_LARGEFILE
 
 dnl Define largefile options as needed...
 LARGEFILE=""
-if test x$enable_largefile != xno; then
+if test x$enable_largefile = xyes; then
 	LARGEFILE="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE"
 
-	if test $ac_cv_sys_large_files = 1; then
+	if test x$ac_cv_sys_large_files = x1; then
 		LARGEFILE="$LARGEFILE -D_LARGE_FILES"
 	fi
 
-	if test $ac_cv_sys_file_offset_bits = 64; then
+	if test x$ac_cv_sys_file_offset_bits = x64; then
 		LARGEFILE="$LARGEFILE -D_FILE_OFFSET_BITS=64"
 	fi
 fi
@@ -420,6 +451,10 @@ if test $ac_cv_c_long_long = yes; then
 fi
 
 AC_CHECK_FUNC(strtoll, AC_DEFINE(HAVE_STRTOLL))
+
+dnl Check for dlopen/dlsym...
+AC_SEARCH_LIBS(dlsym, dl, AC_DEFINE(HAVE_DLSYM))
+AC_CHECK_HEADER(dlfcn.h, AC_DEFINE(HAVE_DLFCN_H))
 
 dnl Check for audio libraries...
 AUDIOLIBS=""
@@ -528,30 +563,44 @@ AC_EXEEXT
 
 dnl Check for pthreads for multi-threaded apps...
 have_pthread=no
+PTHREAD_FLAGS=""
 
 if test "x$enable_threads" = xyes; then
     AC_CHECK_HEADER(pthread.h, AC_DEFINE(HAVE_PTHREAD_H))
-    AC_CHECK_LIB(pthread, pthread_create)
 
-    if test "x$ac_cv_lib_pthread_pthread_create" = xyes -a x$ac_cv_header_pthread_h = xyes; then
-        have_pthread=yes
-    else
-        dnl *BSD uses -pthread option...
-        AC_MSG_CHECKING([for pthread_create using -pthread])
-	SAVELIBS="$LIBS"
-	LIBS="-pthread $LIBS"
-        AC_TRY_LINK([#include <pthread.h>],
-	    [pthread_create(0, 0, 0, 0);],
-            LIBS="-pthread $SAVELIBS"
-            have_pthread=yes,
-	    LIBS="$SAVELIBS")
-        AC_MSG_RESULT([$have_pthread])
+    if test x$ac_cv_header_pthread_h = xyes; then
+	dnl Check various threading options for the platforms we support
+	for flag in -lpthreads -lpthread -pthread; do
+            AC_MSG_CHECKING([for pthread_create using $flag])
+	    SAVELIBS="$LIBS"
+	    LIBS="$flag $LIBS"
+            AC_TRY_LINK([#include <pthread.h>],
+		[pthread_create(0, 0, 0, 0);],
+        	have_pthread=yes,
+		LIBS="$SAVELIBS")
+            AC_MSG_RESULT([$have_pthread])
+
+	    if test $have_pthread = yes; then
+	        AC_DEFINE(HAVE_PTHREAD)
+		PTHREAD_FLAGS="-D_THREAD_SAFE -D_REENTRANT"
+
+		# Solaris requires -D_POSIX_PTHREAD_SEMANTICS to
+		# be POSIX-compliant... :(
+		if test $uname = SunOS; then
+		    PTHREAD_FLAGS="$PTHREAD_FLAGS -D_POSIX_PTHREAD_SEMANTICS"
+		fi
+		break
+	    fi
+	done
     fi
 fi
+
+AC_SUBST(PTHREAD_FLAGS)
 
 dnl Define OS-specific stuff...
 HLINKS=
 POSTBUILD=:
+OSX_ONLY=:
 THREADS=
 
 AC_ARG_WITH(links, [  --with-links            make header links for common misspellings])
@@ -562,11 +611,19 @@ UNINSTALL_DESKTOP=""
 case $uname in
     CYGWIN* | MINGW*)
 	dnl Cygwin environment...
+	# Recent versions of Cygwin are seriously broken and the size
+	# checks don't work because the shell puts out \r\n instead of
+	# \n.  Here we just force U32 to be defined to "unsigned"...
+        AC_DEFINE(U32,unsigned)
 	CFLAGS="-mwindows -DWIN32 $CFLAGS"
 	CXXFLAGS="-mwindows -DWIN32 $CXXFLAGS"
 	LDFLAGS="-mwindows $LDFLAGS"
+	DSOFLAGS="-mwindows $DSOFLAGS"
 	LIBS="$LIBS -lole32 -luuid -lcomctl32 -lwsock32"
-	OPTIM="$OPTIM"
+	if test "x$with_optim" = x; then
+	    dnl Avoid -Os optimization on Cygwin/Mingw
+	    with_optim="-O3"
+	fi
 
 	if test x$enable_gl != xno; then
 	    AC_CHECK_HEADER(GL/gl.h,
@@ -624,6 +681,9 @@ case $uname in
 	# Add a postbuild step after linking applications
 	POSTBUILD="/Developer/Tools/Rez -t APPL -o"
 
+	# Some steps are only done for OS X package management
+	OSX_ONLY=
+
 	# Install/Uninstall FLUID application
 	INSTALL_DESKTOP="install-osx"
 	UNINSTALL_DESKTOP="uninstall-osx"
@@ -651,6 +711,7 @@ case $uname in
 	CFLAGS="$CFLAGS $X_CFLAGS"
 	CXXFLAGS="$CXXFLAGS $X_CFLAGS"
 	LDFLAGS="$X_LIBS $LDFLAGS"
+	DSOFLAGS="$X_LIBS $DSOFLAGS"
 
 	if test "x$x_includes" != x; then
 	    ac_cpp="$ac_cpp -I$x_includes"
@@ -662,10 +723,12 @@ case $uname in
 	if test x$enable_gl != xno; then
 	    AC_SEARCH_LIBS(dlopen, dl)
 	    AC_CHECK_HEADER(GL/gl.h,
-		AC_CHECK_LIB(GL, glXMakeCurrent, AC_DEFINE(HAVE_GL) GLLIB="-lGL", \
-		    AC_CHECK_LIB(MesaGL,glXMakeCurrent, AC_DEFINE(HAVE_GL) GLLIB=" -lMesaGL",,\
-			-lm), \
+		AC_CHECK_LIB(GL, glXMakeCurrent, AC_DEFINE(HAVE_GL) GLLIB="-lGL",
+		    AC_CHECK_LIB(MesaGL,glXMakeCurrent, AC_DEFINE(HAVE_GL) GLLIB=" -lMesaGL",,
+			-lm),
 		    -lm)
+		AC_CHECK_LIB(GL, glXGetProcAddressARB,
+		             AC_DEFINE(HAVE_GLXGETPROCADDRESSARB),, -lm)
 	    )
 	    AC_CHECK_HEADER(GL/glu.h,
         	AC_DEFINE(HAVE_GL_GLU_H)
@@ -705,7 +768,7 @@ case $uname in
 	if test x$enable_xft = xyes; then
             AC_PATH_PROG(FTCONFIG,freetype-config)
 
-	    if test "x$FTCONFIG" != "x:"; then
+	    if test "x$FTCONFIG" != x; then
 	        CPPFLAGS="`$FTCONFIG --cflags` $CPPFLAGS"
 	        CXXFLAGS="`$FTCONFIG --cflags` $CXXFLAGS"
 
@@ -725,9 +788,14 @@ case $uname in
 	fi
 
 	dnl Check for overlay visuals...
+	AC_PATH_PROG(XPROP, xprop)
 	AC_CACHE_CHECK(for X overlay visuals, ac_cv_have_overlay,
-	    if xprop -root 2>/dev/null | grep -c "SERVER_OVERLAY_VISUALS" >/dev/null; then
-        	ac_cv_have_overlay=yes
+	    if test "x$XPROP" != x; then
+		if $XPROP -root 2>/dev/null | grep -c "SERVER_OVERLAY_VISUALS" >/dev/null; then
+        	    ac_cv_have_overlay=yes
+		else
+        	    ac_cv_have_overlay=no
+		fi
 	    else
         	ac_cv_have_overlay=no
 	    fi)
@@ -751,6 +819,7 @@ AC_SUBST(GLDEMOS)
 AC_SUBST(GLLIB)
 AC_SUBST(HLINKS)
 AC_SUBST(POSTBUILD)
+AC_SUBST(OSX_ONLY)
 AC_SUBST(THREADS)
 
 AC_SUBST(INSTALL_DESKTOP)
@@ -774,7 +843,7 @@ case "$uname" in
 	# All others
 	CAT1EXT=1
 	CAT3EXT=3
-	CAT6EXT=3
+	CAT6EXT=6
 	;;
 esac
 
@@ -825,6 +894,12 @@ if test -n "$GCC"; then
     # The following additional warnings are useful for tracking down problems...
     #OPTIM="-Wshadow -Wconversion $OPTIM"
 
+    # We know that Carbon is deprecated on OS X 10.4. To avoid hundreds of warnings
+    # we will temporarily disable 'deprecated' warnings on OS X.
+    if test "$uname" = "Darwin" -a $uversion -ge 800; then
+        OPTIM="-Wno-deprecated-declarations $OPTIM"
+    fi
+
     # Set the default compiler optimizations...
     if test -z "$DEBUGFLAG"; then
     	#
@@ -859,6 +934,16 @@ if test -n "$GCC"; then
     CFLAGS="$CFLAGS -fno-exceptions"
     AC_TRY_COMPILE(,,
 	OPTIM="$OPTIM -fno-exceptions"
+	AC_MSG_RESULT(yes),
+	AC_MSG_RESULT(no))
+    CFLAGS="$OLDCFLAGS"
+
+    # See if GCC supports -fno-strict-aliasing...
+    AC_MSG_CHECKING(if GCC supports -fno-strict-aliasing)
+    OLDCFLAGS="$CFLAGS"
+    CFLAGS="$CFLAGS -fno-strict-aliasing"
+    AC_TRY_COMPILE(,,
+	OPTIM="$OPTIM -fno-strict-aliasing"
 	AC_MSG_RESULT(yes),
 	AC_MSG_RESULT(no))
     CFLAGS="$OLDCFLAGS"
@@ -922,15 +1007,11 @@ else
 		fi
 	    fi
 
-            if test "x$with_optim" = x; then
-		OPTIM="$OPTIM +DAportable"
-            fi
-
 	    if test $PICFLAG = 1; then
 		OPTIM="+z $OPTIM"
 	    fi
 
-	    OPTIM="$OPTIM +W336,501,736,740,749,829"
+	    CXXFLAGS="$CXXFLAGS +W336,501,736,740,749,829"
 	    ;;
 	OSF1*)
 	    # Running Digital/Tru64 UNIX; these options should work for the
@@ -993,13 +1074,87 @@ else
     AC_DEFINE_UNQUOTED(FLTK_DATADIR, "$prefix/share/fltk")
 fi
 
+dnl Summarize results of configure tests...
+echo ""
+echo "Configuration Summary"
+echo "-------------------------------------------------------------------------"
+
+case $uname in
+    CYGWIN* | MINGW*)
+        graphics="GDI"
+	;;
+    Darwin*)
+        if test x$enable_quartz = xyes; then
+            graphics="Quartz"
+	else
+            graphics="Quickdraw"
+	fi
+        ;;
+    *)
+        graphics="X11"
+	if test x$enable_xft = xyes; then
+	    graphics="$graphics+Xft"
+	fi
+	if test x$enable_xdbe = xyes; then
+	    graphics="$graphics+Xdbe"
+	fi
+	if test x$enable_xinerama = xyes; then
+	    graphics="$graphics+Xinerama"
+	fi
+        ;;
+esac
+
+echo "    Directories: prefix=$prefix"
+echo "                 bindir=$bindir"
+echo "                 datadir=$datadir"
+echo "                 datarootdir=$datarootdir"
+echo "                 exec_prefix=$exec_prefix"
+echo "                 includedir=$includedir"
+echo "                 libdir=$libdir"
+echo "                 mandir=$mandir"
+echo "       Graphics: $graphics"
+
+if test x$JPEG = x; then
+    echo "Image Libraries: JPEG=System"
+else
+    echo "Image Libraries: JPEG=Builtin"
+fi
+if test x$PNG = x; then
+    echo "                 PNG=System"
+else
+    echo "                 PNG=Builtin"
+fi
+if test x$ZLIB = x; then
+    echo "                 ZLIB=System"
+else
+    echo "                 ZLIB=Builtin"
+fi
+
+if test x$enable_largefile = xyes; then
+    echo "    Large Files: YES"
+else
+    echo "    Large Files: NO"
+fi
+
+if test x$GLDEMOS = x; then
+    echo "         OpenGL: NO"
+else
+    echo "         OpenGL: YES"
+fi
+
+if test x$THREADS = x; then
+    echo "        Threads: NO"
+else
+    echo "        Threads: YES"
+fi
+
 dnl Write all of the files...
 AC_CONFIG_HEADER(config.h:configh.in)
-AC_OUTPUT(makeinclude fltk.list fltk-config FL/Makefile)
+AC_OUTPUT(makeinclude fltk.list fltk-config fltk.spec FL/Makefile)
 
 dnl Make sure the fltk-config script is executable...
 chmod +x fltk-config
 
 dnl
-dnl End of "$Id: configure.in 4756 2006-01-15 18:36:16Z mike $".
+dnl End of "$Id: configure.in 6094 2008-04-11 16:53:01Z matt $".
 dnl

@@ -33,11 +33,12 @@
 // and copy the first 16 colors from the default colormap so that we won't
 // get huge color changes when switching windows.
 
-/*OTB Modifications: conflict name with OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h*/
-/*#include <config.h>*/
+// OTB Modifications
+//#include <config.h>
 #include "fltk-config.h"
-#include <FL/x.H>
+
 #include <FL/Fl.H>
+#include <FL/x.H>
 
 #ifdef WIN32
 // There is probably something relevant to do on MSWindows 8-bit displays

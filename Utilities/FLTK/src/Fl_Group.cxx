@@ -260,9 +260,7 @@ int Fl_Group::handle(int event) {
 
     if (children()) {
       for (int j = i;;) {
-        if (a[j]->takesevents() || event != FL_MOUSEWHEEL) {
-          if (send(a[j], event)) return 1;
-	}
+        if (a[j]->takesevents()) if (send(a[j], event)) return 1;
         j++;
         if (j >= children()) j = 0;
         if (j == i) break;
@@ -536,6 +534,14 @@ void Fl_Group::resize(int X, int Y, int W, int H) {
 
 void Fl_Group::draw_children() {
   Fl_Widget*const* a = array();
+
+  if (clip_children()) {
+    fl_push_clip(x() + Fl::box_dx(box()),
+                 y() + Fl::box_dy(box()),
+		 w() - Fl::box_dw(box()),
+		 h() - Fl::box_dh(box()));
+  }
+
   if (damage() & ~FL_DAMAGE_CHILD) { // redraw the entire thing:
     for (int i=children_; i--;) {
       Fl_Widget& o = **a++;
@@ -545,6 +551,8 @@ void Fl_Group::draw_children() {
   } else {	// only redraw the children that need it:
     for (int i=children_; i--;) update_child(**a++);
   }
+
+  if (clip_children()) fl_pop_clip();
 }
 
 void Fl_Group::draw() {

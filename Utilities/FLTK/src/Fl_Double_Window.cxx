@@ -3,7 +3,7 @@
 //
 // Double-buffered window code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2005 by Bill Spitzak and others.
+// Copyright 1998-2007 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,9 +25,11 @@
 //     http://www.fltk.org/str.php
 //
 
-/*OTB Modifications: conflict name with OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h*/
-/*#include <config.h>*/
+// OTB Modifications
+//#include <config.h>
 #include "fltk-config.h"
+
+#include <FL/Fl.H>
 #include <FL/Fl_Double_Window.H>
 #include <FL/x.H>
 #include <FL/fl_draw.H>
@@ -62,13 +64,6 @@ static int can_xdbe() {
 #endif
 
 void Fl_Double_Window::show() {
-#if !defined(WIN32) && !defined(__APPLE__)
-  if (!shown()) { // don't set the background pixel
-    fl_open_display();
-    Fl_X::make_xid(this);
-    return;
-  }
-#endif
   Fl_Window::show();
 }
 
@@ -76,6 +71,54 @@ void Fl_Double_Window::show() {
 
 // Code used to switch output to an off-screen window.  See macros in
 // win32.H which save the old state in local variables.
+
+typedef struct { BYTE a; BYTE b; BYTE c; BYTE d; } FL_BLENDFUNCTION;
+typedef BOOL (WINAPI* fl_alpha_blend_func)
+    (HDC,int,int,int,int,HDC,int,int,int,int,FL_BLENDFUNCTION);
+static fl_alpha_blend_func fl_alpha_blend = NULL;
+static FL_BLENDFUNCTION blendfunc = { 0, 0, 255, 1};
+
+/*
+ * This function checks if the version of MSWindows that we
+ * curently run on supports alpha blending for bitmap transfers
+ * and finds the required function if so.
+ */
+char fl_can_do_alpha_blending() {
+  static char been_here = 0;
+  static char can_do = 0;
+  // do this test only once
+  if (been_here) return can_do;
+  been_here = 1;
+  // load the library that implements alpha blending
+  HMODULE hMod = LoadLibrary("MSIMG32.DLL");
+  // give up if that doesn't exist (Win95?)
+  if (!hMod) return 0;
+  // now find the blending function inside that dll
+  fl_alpha_blend = (fl_alpha_blend_func)GetProcAddress(hMod, "AlphaBlend");
+  // give up if we can't find it (Win95)
+  if (!fl_alpha_blend) return 0;
+  // we have the  call, but does our display support alpha blending?
+  HDC dc = 0L;//fl_gc;
+  // get the current or the desktop's device context
+  if (!dc) dc = GetDC(0L);
+  if (!dc) return 0;
+  // check the device capabilities flags. However GetDeviceCaps
+  // does not return anything useful, so we have to do it manually:
+
+  HBITMAP bm = CreateCompatibleBitmap(dc, 1, 1);
+  HDC new_gc = CreateCompatibleDC(dc);
+  int save = SaveDC(new_gc);
+  SelectObject(new_gc, bm);
+  /*COLORREF set = */ SetPixel(new_gc, 0, 0, 0x01010101);
+  BOOL alpha_ok = fl_alpha_blend(dc, 0, 0, 1, 1, new_gc, 0, 0, 1, 1, blendfunc);
+  RestoreDC(new_gc, save);
+  DeleteDC(new_gc);
+  DeleteObject(bm);
+
+  if (!fl_gc) ReleaseDC(0L, dc);
+  if (alpha_ok) can_do = 1;
+  return can_do;
+}
 
 HDC fl_makeDC(HBITMAP bitmap) {
   HDC new_gc = CreateCompatibleDC(fl_gc);
@@ -97,9 +140,28 @@ void fl_copy_offscreen(int x,int y,int w,int h,HBITMAP bitmap,int srcx,int srcy)
   DeleteDC(new_gc);
 }
 
+void fl_copy_offscreen_with_alpha(int x,int y,int w,int h,HBITMAP bitmap,int srcx,int srcy) {
+  HDC new_gc = CreateCompatibleDC(fl_gc);
+  int save = SaveDC(new_gc);
+  SelectObject(new_gc, bitmap);
+  BOOL alpha_ok = 0;
+  // first try to alpha blend
+  if (fl_can_do_alpha_blending())
+    alpha_ok = fl_alpha_blend(fl_gc, x, y, w, h, new_gc, srcx, srcy, w, h, blendfunc);
+  // if that failed (it shouldn,t), still copy the bitmap over, but now alpha is 1
+  if (!alpha_ok)
+    BitBlt(fl_gc, x, y, w, h, new_gc, srcx, srcy, SRCCOPY);
+  RestoreDC(new_gc, save);
+  DeleteDC(new_gc);
+}
+
 extern void fl_restore_clip();
 
 #elif defined(__APPLE_QD__)
+
+char fl_can_do_alpha_blending() {
+  return 0;
+}
 
 GWorldPtr fl_create_offscreen(int w, int h) {
   GWorldPtr gw;
@@ -174,6 +236,10 @@ extern void fl_restore_clip();
 
 #elif defined(__APPLE_QUARTZ__)
 
+char fl_can_do_alpha_blending() {
+  return 1;
+}
+
 Fl_Offscreen fl_create_offscreen(int w, int h) {
   void *data = calloc(w*h,4);
   CGColorSpaceRef lut = CGColorSpaceCreateDeviceRGB();
@@ -203,7 +269,7 @@ void fl_copy_offscreen(int x,int y,int w,int h,Fl_Offscreen osrc,int srcx,int sr
   CGImageRef img = CGImageCreate( sw, sh, 8, 4*8, 4*sw, lut, alpha,
     src_bytes, 0L, false, kCGRenderingIntentDefault);
   // fl_push_clip();
-  CGRect rect = { x, y, w, h };
+  CGRect rect = { { x, y }, { w, h } };
   Fl_X::q_begin_image(rect, srcx, srcy, sw, sh);
   CGContextDrawImage(fl_gc, rect, img);
   Fl_X::q_end_image();
@@ -220,12 +286,19 @@ void fl_delete_offscreen(Fl_Offscreen ctx) {
   free(data);
 }
 
-static CGContextRef prev_gc = 0;
-static Window prev_window = 0;
+const int stack_max = 16;
+static int stack_ix = 0;
+static CGContextRef stack_gc[stack_max];
+static Window stack_window[stack_max];
 
 void fl_begin_offscreen(Fl_Offscreen ctx) {
-  prev_gc = fl_gc;
-  prev_window = fl_window;
+  if (stack_ix<stack_max) {
+    stack_gc[stack_ix] = fl_gc;
+    stack_window[stack_ix] = fl_window;
+  } else 
+    fprintf(stderr, "FLTK CGContext Stack overflow error\n");
+  stack_ix++;
+
   fl_gc = (CGContextRef)ctx;
   fl_window = 0;
   //fl_push_no_clip();
@@ -236,11 +309,24 @@ void fl_begin_offscreen(Fl_Offscreen ctx) {
 void fl_end_offscreen() {
   Fl_X::q_release_context();
   //fl_pop_clip();
-  fl_gc = prev_gc;
-  fl_window = prev_window;
+  if (stack_ix>0)
+    stack_ix--;
+  else
+    fprintf(stderr, "FLTK CGContext Stack underflow error\n");
+  if (stack_ix<stack_max) {
+    fl_gc = stack_gc[stack_ix];
+    fl_window = stack_window[stack_ix];
+  }
 }
 
 extern void fl_restore_clip();
+
+#else // X11
+
+// maybe someone feels inclined to implement alpha blending on X11?
+char fl_can_do_alpha_blending() {
+  return 0;
+}
 
 #endif
 
@@ -255,9 +341,11 @@ void Fl_Double_Window::flush(int eraseoverlay) {
   Fl_X *myi = Fl_X::i(this);
   if (!myi->other_xid) {
 #if USE_XDBE
-    if (can_xdbe()) myi->other_xid =
-      XdbeAllocateBackBufferName(fl_display, fl_xid(this), XdbeUndefined);
-    else
+    if (can_xdbe()) {
+      myi->other_xid =
+        XdbeAllocateBackBufferName(fl_display, fl_xid(this), XdbeCopied);
+      myi->backbuffer_bad = 1;
+    } else
 #endif
 #ifdef __APPLE_QD__
     if ( ( !QDIsPortBuffered( GetWindowPort(myi->xid) ) ) 
@@ -277,28 +365,27 @@ void Fl_Double_Window::flush(int eraseoverlay) {
   }
 #if USE_XDBE
   if (use_xdbe) {
-    // if this is true, copy rather than swap so back buffer is preserved:
-    int copy = (myi->region || eraseoverlay);
-    if (myi->backbuffer_bad) { // make sure we do a complete redraw...
+    if (myi->backbuffer_bad) {
+      // Make sure we do a complete redraw...
       if (myi->region) {XDestroyRegion(myi->region); myi->region = 0;}
       clear_damage(FL_DAMAGE_ALL);
+      myi->backbuffer_bad = 0;
     }
+
+    // Redraw as needed...
     if (damage()) {
       fl_clip_region(myi->region); myi->region = 0;
       fl_window = myi->other_xid;
       draw();
       fl_window = myi->xid;
     }
-    if (!copy) {
-      XdbeSwapInfo s;
-      s.swap_window = fl_xid(this);
-      s.swap_action = XdbeUndefined;
-      XdbeSwapBuffers(fl_display, &s, 1);
-      myi->backbuffer_bad = 1;
-      return;
-    }
-    // otherwise just use normal copy from back to front:
-    myi->backbuffer_bad = 0; // which won't destroy the back buffer...
+
+    // Copy contents of back buffer to window...
+    XdbeSwapInfo s;
+    s.swap_window = fl_xid(this);
+    s.swap_action = XdbeCopied;
+    XdbeSwapBuffers(fl_display, &s, 1);
+    return;
   } else
 #endif
   if (damage() & ~FL_DAMAGE_EXPOSE) {

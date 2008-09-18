@@ -28,10 +28,12 @@
 // A window using double-buffering and able to draw an overlay
 // on top of that.  Uses the hardware to draw the overlay if
 // possible, otherwise it just draws in the front buffer.
-#include <FL/Fl.H>
-/*OTB Modifications: conflict name with OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h*/
-/*#include <config.h>*/
+
+// OTB Modifications
+//#include <config.h>
 #include "fltk-config.h"
+
+#include <FL/Fl.H>
 #include <FL/Fl_Overlay_Window.H>
 #include <FL/fl_draw.H>
 #include <FL/x.H>

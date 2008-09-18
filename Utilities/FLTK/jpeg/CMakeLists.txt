@@ -32,5 +32,5 @@ jdsample.c jdcolor.c jquant1.c jquant2.c jdmerge.c
 )
 
 ADD_LIBRARY(fltk_jpeg ${systemdependent_SRCS} ${common_SRCS} ${compression_SRCS} ${decompression_SRCS})
-INSTALL_TARGETS(/lib/otb fltk_jpeg)
+INSTALL_TARGETS(/lib fltk_jpeg)
 

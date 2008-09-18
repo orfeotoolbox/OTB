@@ -3,7 +3,7 @@
 //
 // Code output routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2005 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -155,13 +155,16 @@ int write_declare(const char *format, ...) {
 
 // silly thing to prevent declaring unused variables:
 // When this symbol is on, all attempts to write code don't write
-// anything, but set a variable if it looks like the varaible "o" is used:
+// anything, but set a variable if it looks like the variable "o" is used:
 int varused_test;
 int varused;
 
 // write an array of C characters (adds a null):
 void write_cstring(const char *w, int length) {
-  if (varused_test) return;
+  if (varused_test) {
+    varused = 1;
+    return;
+  }
   const char *e = w+length;
   int linelength = 1;
   putc('\"', code_file);
@@ -228,7 +231,10 @@ void write_cstring(const char *w) {write_cstring(w,strlen(w));}
 
 // write an array of C binary data (does not add a null):
 void write_cdata(const char *s, int length) {
-  if (varused_test) return;
+  if (varused_test) {
+    varused = 1;
+    return;
+  }
   const unsigned char *w = (const unsigned char *)s;
   const unsigned char *e = w+length;
   int linelength = 1;
@@ -246,7 +252,10 @@ void write_cdata(const char *s, int length) {
 }
 
 void write_c(const char* format,...) {
-  if (varused_test) {varused = 1; return;}
+  if (varused_test) {
+    varused = 1;
+    return;
+  }
   va_list args;
   va_start(args, format);
   vfprintf(code_file, format, args);
@@ -264,6 +273,7 @@ void write_h(const char* format,...) {
 #include <FL/filename.H>
 int write_number;
 int write_sourceview;
+extern Fl_Widget_Class_Type *current_widget_class;
 
 // recursively dump code, putting children between the two parts
 // of the parent code:
@@ -305,6 +315,7 @@ static Fl_Type* write_code(Fl_Type* p) {
     }
 
     write_h("};\n");
+    current_widget_class = 0L;
   } else {
     for (q = p->next; q && q->level > p->level;) q = write_code(q);
     // write all code that come after the children 
@@ -319,6 +330,7 @@ static Fl_Type* write_code(Fl_Type* p) {
 }
 
 extern const char* header_file_name;
+extern Fl_Class_Type *current_class;
 
 int write_code(const char *s, const char *t) {
   const char *filemode = "w";
@@ -327,6 +339,8 @@ int write_code(const char *s, const char *t) {
   write_number++;
   delete id_root; id_root = 0;
   indentation = 0;
+  current_class = 0L;
+  current_widget_class = 0L;
   if (!s) code_file = stdout;
   else {
     FILE *f = fopen(s, filemode);

@@ -3,7 +3,7 @@
 //
 // Common input widget routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2005 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -84,8 +84,22 @@ const char* Fl_Input_::expand(const char* p, char* buf) const {
 	*o++ = '^';
 	*o++ = c ^ 0x40;
       }
+#ifdef __APPLE__
+    // In MacRoman, all characters are defined, and non-break-space is 0xca
+    } else if (c == 0xCA) { // nbsp
+      *o++ = ' ';
+#else
+    // in ISO 8859-1, undefined characters are rendered as octal
+    // this is commented out since most X11 seems to use MSWindows Latin-1
+    //} else if (c >= 128 && c < 0xA0) {
+      // these codes are not defined in ISO code, so we output the octal code instead
+    //  *o++ = '\\'; 
+    //  *o++ = ((c>>6)&0x03) + '0'; 
+    //  *o++ = ((c>>3)&0x07) + '0'; 
+    //  *o++ = (c&0x07) + '0';
     } else if (c == 0xA0) { // nbsp
       *o++ = ' ';
+#endif
     } else {
       *o++ = c;
     }
@@ -108,8 +122,14 @@ double Fl_Input_::expandpos(
     if (c < ' ' || c == 127) {
       if (c == '\t' && input_type()==FL_MULTILINE_INPUT) n += 8-(n%8);
       else n += 2;
-    } else if (c >= 128 && c < 0xA0) {
-      n += 4;
+#ifdef __APPLE__
+    // in MacRoman, all characters are defined
+#else
+    // in Windows Latin-1 all characters are defined
+    //} else if (c >= 128 && c < 0xA0) {
+      // these codes are not defined in ISO code, so we output the octal code instead
+    //  n += 4;
+#endif
     } else {
       n++;
     }
@@ -244,11 +264,11 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
       float r = (float)(X+W);
       float xx;
       if (p >= pp) {
-	xx = (float)(X);
+	xx = (float)X;
 	if (erase_cursor_only) r = xpos+2;
 	else if (readonly()) xx -= 3;
       } else {
-	xx = (float)(xpos+expandpos(p, pp, buf, 0));
+	xx = xpos + (float)expandpos(p, pp, buf, 0);
 	if (erase_cursor_only) r = xx+2;
 	else if (readonly()) xx -= 3;
       }
@@ -268,13 +288,13 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
       int offset1 = 0;
       if (pp > p) {
 	fl_color(tc);
-	x1 += (float)(expandpos(p, pp, buf, &offset1));
+	x1 += (float)expandpos(p, pp, buf, &offset1);
 	fl_draw(buf, offset1, xpos, (float)(Y+ypos+desc));
       }
       pp = value()+selend;
       float x2 = (float)(X+W);
       int offset2;
-      if (pp <= e) x2 = (float)(xpos+expandpos(p, pp, buf, &offset2));
+      if (pp <= e) x2 = xpos + (float)expandpos(p, pp, buf, &offset2);
       else offset2 = strlen(buf);
       fl_color(selection_color());
       fl_rectf((int)(x1+0.5), Y+ypos, (int)(x2-x1+0.5), height);
@@ -673,6 +693,7 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
   switch (event) {
 
   case FL_ENTER:
+  case FL_MOVE:
     if (active_r() && window()) window()->cursor(FL_CURSOR_INSERT);
     return 1;
 
@@ -688,15 +709,19 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
     return 1;
 
   case FL_UNFOCUS:
+    if (active_r() && window()) window()->cursor(FL_CURSOR_DEFAULT);
     if (mark_ == position_) {
       if (!(damage()&FL_DAMAGE_EXPOSE)) {minimal_update(position_); erase_cursor_only = 1;}
     } else //if (Fl::selection_owner() != this)
       minimal_update(mark_, position_);
   case FL_HIDE:
-    if (when() & FL_WHEN_RELEASE) maybe_do_callback();
+    if (!readonly() && (when() & FL_WHEN_RELEASE))
+      maybe_do_callback();
     return 1;
 
   case FL_PUSH:
+    if (active_r() && window()) window()->cursor(FL_CURSOR_INSERT);
+
     handle_mouse(X, Y, W, H, Fl::event_state(FL_SHIFT));
 
     if (Fl::focus() != this) {
@@ -848,7 +873,7 @@ int Fl_Input_::static_value(const char* str, int len) {
     xscroll_ = yscroll_ = 0;
     minimal_update(0);
   }
-  position(0, readonly() ? 0 : size());
+  position(readonly() ? 0 : size());
   return 1;
 }
 

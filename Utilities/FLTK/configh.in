@@ -1,10 +1,10 @@
 /*
- * "$Id: configh.in 4702 2005-12-14 00:39:55Z mike $"
+ * "$Id: configh.in 5678 2007-02-08 20:14:30Z mike $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  * @configure_input@
  *
- * Copyright 1998-2005 by Bill Spitzak and others.
+ * Copyright 1998-2007 by Bill Spitzak and others.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -66,6 +66,14 @@
  */
 
 #undef HAVE_GL_GLU_H
+
+/*
+ * HAVE_GLXGETPROCADDRESSARB:
+ *
+ * Do you have the OpenGL glXGetProcAddressARB() function?
+ */
+
+#undef HAVE_GLXGETPROCADDRESSARB
 
 /*
  * USE_COLORMAP:
@@ -280,5 +288,12 @@
 #endif /* !HAVE_STRTOLL */
 
 /*
- * End of "$Id: configh.in 4702 2005-12-14 00:39:55Z mike $".
+ * Do we have the dlsym() function and header?
+ */
+
+#undef HAVE_DLFCN_H
+#undef HAVE_DLSYM
+
+/*
+ * End of "$Id: configh.in 5678 2007-02-08 20:14:30Z mike $".
  */

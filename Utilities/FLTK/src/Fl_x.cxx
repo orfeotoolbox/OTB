@@ -3,7 +3,7 @@
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2006 by Bill Spitzak and others.
+// Copyright 1998-2007 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -38,6 +38,7 @@
 #  include <FL/Fl.H>
 #  include <FL/x.H>
 #  include <FL/Fl_Window.H>
+#  include <FL/Fl_Tooltip.H>
 #  include <stdio.h>
 #  include <stdlib.h>
 #  include "flstring.h"
@@ -366,14 +367,56 @@ void fl_close_display() {
   XCloseDisplay(fl_display);
 }
 
-int Fl::h() {
+static int fl_workarea_xywh[4] = { -1, -1, -1, -1 };
+
+static void fl_init_workarea() {
   fl_open_display();
-  return DisplayHeight(fl_display,fl_screen);
+
+  Atom _NET_WORKAREA = XInternAtom(fl_display, "_NET_WORKAREA", 0);
+  Atom actual;
+  unsigned long count, remaining;
+  int format;
+  unsigned *xywh;
+
+  if (XGetWindowProperty(fl_display, RootWindow(fl_display, fl_screen),
+                         _NET_WORKAREA, 0, 4 * sizeof(unsigned), False,
+			 XA_CARDINAL, &actual, &format, &count, &remaining,
+			 (unsigned char **)&xywh) || !xywh || !xywh[2] ||
+			 !xywh[3])
+  {
+    fl_workarea_xywh[0] = 0;
+    fl_workarea_xywh[1] = 0;
+    fl_workarea_xywh[2] = DisplayWidth(fl_display, fl_screen);
+    fl_workarea_xywh[3] = DisplayHeight(fl_display, fl_screen);
+  }
+  else
+  {
+    fl_workarea_xywh[0] = (int)xywh[0];
+    fl_workarea_xywh[1] = (int)xywh[1];
+    fl_workarea_xywh[2] = (int)xywh[2];
+    fl_workarea_xywh[3] = (int)xywh[3];
+    XFree(xywh);
+  }
+}
+
+int Fl::x() {
+  if (fl_workarea_xywh[0] < 0) fl_init_workarea();
+  return fl_workarea_xywh[0];
+}
+
+int Fl::y() {
+  if (fl_workarea_xywh[0] < 0) fl_init_workarea();
+  return fl_workarea_xywh[1];
 }
 
 int Fl::w() {
-  fl_open_display();
-  return DisplayWidth(fl_display,fl_screen);
+  if (fl_workarea_xywh[0] < 0) fl_init_workarea();
+  return fl_workarea_xywh[2];
+}
+
+int Fl::h() {
+  if (fl_workarea_xywh[0] < 0) fl_init_workarea();
+  return fl_workarea_xywh[3];
 }
 
 void Fl::get_mouse(int &xx, int &yy) {
@@ -595,8 +638,7 @@ int fl_handle(const XEvent& thisevent)
     if (e.target == TARGETS) {
       Atom a = XA_STRING;
       XChangeProperty(fl_display, e.requestor, e.property,
-		      XA_ATOM, sizeof(Atom)*8, 0, (unsigned char*)&a,
-		      sizeof(Atom));
+		      XA_ATOM, sizeof(Atom)*8, 0, (unsigned char*)&a, 1);
     } else if (/*e.target == XA_STRING &&*/ fl_selection_length[clipboard]) {
       XChangeProperty(fl_display, e.requestor, e.property,
 		      e.target, 8, 0,
@@ -841,6 +883,8 @@ int fl_handle(const XEvent& thisevent)
       // Map keypad keysym to character or keysym depending on
       // numlock state...
       unsigned long keysym1 = XKeycodeToKeysym(fl_display, keycode, 1);
+      if (keysym1 <= 0x7f || (keysym1 > 0xff9f && keysym1 <= FL_KP_Last))
+        Fl::e_original_keysym = (int)(keysym1 | FL_KP);
       if ((xevent.xkey.state & Mod2Mask) &&
           (keysym1 <= 0x7f || (keysym1 > 0xff9f && keysym1 <= FL_KP_Last))) {
 	// Store ASCII numeric keypad value...
@@ -856,6 +900,9 @@ int fl_handle(const XEvent& thisevent)
 	  0xff0b/*XK_Clear*/, FL_Insert, FL_Delete};
 	keysym = table[keysym-0xff91];
       }
+    } else {
+      // Store this so we can later know if the KP was used
+      Fl::e_original_keysym = (int)keysym;
     }
     Fl::e_keysym = int(keysym);
     set_event_xy();
@@ -1085,6 +1132,14 @@ void Fl_X::make_xid(Fl_Window* win, XVisualInfo *visual, Colormap colormap)
     if (X < scr_x) X = scr_x;
     if (Y+H > scr_y+scr_h) Y = scr_y+scr_h-H;
     if (Y < scr_y) Y = scr_y;
+  }
+
+  // if the window is a subwindow and our parent is not mapped yet, we
+  // mark this window visible, so that mapping the parent at a later
+  // point in time will call this function again to finally map the subwindow.
+  if (win->parent() && !Fl_X::i(win->window())) {
+    win->set_visible();
+    return;
   }
 
   ulong root = win->parent() ?
@@ -1324,9 +1379,13 @@ void Fl_Window::show() {
   } else {
     labeltype(FL_NO_LABEL);
   }
+  Fl_Tooltip::exit(this);
   if (!shown()) {
     fl_open_display();
-    if (can_boxcheat(box())) fl_background_pixel = int(fl_xpixel(color()));
+    // Don't set background pixel for double-buffered windows...
+    if (type() == FL_WINDOW && can_boxcheat(box())) {
+      fl_background_pixel = int(fl_xpixel(color()));
+    }
     Fl_X::make_xid(this);
   } else {
     XMapRaised(fl_display, i->xid);

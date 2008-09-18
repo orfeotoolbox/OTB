@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Font.H 4288 2005-04-16 00:13:17Z mike $"
+// "$Id: Fl_Font.H 5334 2006-08-19 15:24:55Z matt $"
 //
 // Font definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -38,10 +38,10 @@
 #ifndef FL_FONT_
 #define FL_FONT_
 
-/*OTB Modifications: conflict name with OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h*/
-/*#include <config.h>
-*/
+// OTB Modifications
+//#include <config.h>
 #include "fltk-config.h"
+
 
 #  if USE_XFT
 typedef struct _XftFont XftFont;
@@ -63,9 +63,13 @@ public:
   bool knowMetrics;
 #  elif defined(__APPLE_QUARTZ__)
   FL_EXPORT Fl_FontSize(const char* fontname, int size);
+  ATSUTextLayout layout;
+  ATSUStyle style;
+  short ascent, descent, q_width;
+  short width[256];
+  bool knowWidths;
   char *q_name;
   int size;
-  short ascent, descent, q_width;
 #  elif USE_XFT
   XftFont* font;
   const char* encoding;
@@ -106,5 +110,5 @@ FL_EXPORT char *fl_find_fontsize(char *name);
 #endif
 
 //
-// End of "$Id: Fl_Font.H 4288 2005-04-16 00:13:17Z mike $".
+// End of "$Id: Fl_Font.H 5334 2006-08-19 15:24:55Z matt $".
 //

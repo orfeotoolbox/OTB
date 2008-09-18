@@ -71,12 +71,18 @@ int		Fl::damage_,
 		Fl::e_state,
 		Fl::e_clicks,
 		Fl::e_is_click,
-		Fl::e_keysym;
+		Fl::e_keysym,
+                Fl::e_original_keysym;
 char		*Fl::e_text = (char *)"";
 int		Fl::e_length;
 int		Fl::visible_focus_ = 1,
 		Fl::dnd_text_ops_ = 1;
 
+
+Fl_Window *fl_xfocus;	// which window X thinks has focus
+Fl_Window *fl_xmousewin;// which window X thinks has FL_ENTER
+Fl_Window *Fl::grab_;	// most recent Fl::grab()
+Fl_Window *Fl::modal_;	// topmost modal() window
 
 //
 // 'Fl::version()' - Return the API version number...
@@ -254,7 +260,22 @@ void Fl::remove_check(Fl_Timeout_Handler cb, void *argp) {
   }
 }
 
-#if !defined(__APPLE__)
+/**
+ * Return 1, if a check with the same handler and data pointer 
+ * is pending, 0 otherwise.
+ */
+int Fl::has_check(Fl_Timeout_Handler cb, void *argp) {
+  for (Check** p = &first_check; *p;) {
+    Check* t = *p;
+    if (t->cb == cb && t->arg == argp) {
+      return 1;
+    } else {
+      p = &(t->next);
+    }
+  }
+  return 0;
+}
+
 static void run_checks()
 {
   // checks are a bit messy so that add/remove and wait may be called
@@ -268,9 +289,10 @@ static void run_checks()
     next_check = first_check;
   }
 }
-#endif // !__APPLE__
 
+#ifndef WIN32
 static char in_idle;
+#endif
 
 ////////////////////////////////////////////////////////////////
 // wait/run/check/ready:
@@ -290,7 +312,7 @@ double Fl::wait(double time_to_wait) {
 
 #elif defined(__APPLE__)
 
-  flush();
+  run_checks();
   if (idle) {
     if (!in_idle) {
       in_idle = 1;
@@ -300,6 +322,7 @@ double Fl::wait(double time_to_wait) {
     // the idle function may turn off idle, we can then wait:
     if (idle) time_to_wait = 0.0;
   }
+  flush();
   return fl_wait(time_to_wait);
 
 #else
@@ -355,15 +378,25 @@ double Fl::wait(double time_to_wait) {
 
 int Fl::run() {
   while (Fl_X::first) wait(FOREVER);
-#ifdef WIN32
-  fl_free_fonts();        // do some WIN32 cleanup
-  fl_cleanup_pens();
-  OleUninitialize();
-  fl_brush_action(1);
-  fl_cleanup_dc_list();
-#endif
   return 0;
 }
+
+#ifdef WIN32
+class Fl_Win32_At_Exit {
+public:
+  Fl_Win32_At_Exit() { }
+  ~Fl_Win32_At_Exit() {
+    fl_free_fonts();        // do some WIN32 cleanup
+    fl_cleanup_pens();
+    OleUninitialize();
+    fl_brush_action(1);
+    fl_cleanup_dc_list();
+  }
+};
+static Fl_Win32_At_Exit win32_at_exit;
+#endif
+
+
 
 int Fl::wait() {
   if (!Fl_X::first) return 0;
@@ -514,6 +547,14 @@ void Fl::focus(Fl_Widget *o) {
   if (o != p) {
     Fl::compose_reset();
     focus_ = o;
+    // make sure that fl_xfocus is set to the top level window
+    // of this widget, or fl_fix_focus will clear our focus again
+    if (o) {
+      Fl_Window *win = 0, *w1 = o->window();
+      while (w1) { win=w1; w1=win->window(); }
+      if (win) fl_xfocus = win;
+    }
+    // take focus from the old focused window
     fl_oldfocus = 0;
     int old_event = e_number;
     e_number = FL_UNFOCUS;
@@ -544,11 +585,6 @@ void Fl::belowmouse(Fl_Widget *o) {
 void Fl::pushed(Fl_Widget *o) {
   pushed_ = o;
 }
-
-Fl_Window *fl_xfocus;	// which window X thinks has focus
-Fl_Window *fl_xmousewin;// which window X thinks has FL_ENTER
-Fl_Window *Fl::grab_;	// most recent Fl::grab()
-Fl_Window *Fl::modal_;	// topmost modal() window
 
 static void nothing(Fl_Widget *) {}
 void (*Fl_Tooltip::enter)(Fl_Widget *) = nothing;
@@ -760,6 +796,20 @@ int Fl::handle(int e, Fl_Window* window)
     fl_fix_focus();
     return 1;
 
+  case FL_KEYUP:
+    // Send the key-up to the current focus. This is not 
+    // always the same widget that received the corresponding
+    // FL_KEYBOARD event because focus may have changed.
+    // Sending the KEYUP to the right KEYDOWN is possible, but
+    // would require that we track the KEYDOWN for every possible 
+    // key stroke (users may hold down multiple keys!) and then 
+    // make sure that the widget still exists before sending
+    // a KEYUP there. I believe that the current solution is
+    // "close enough".
+    for (wi = grab() ? grab() : focus(); wi; wi = wi->parent())
+      if (send(FL_KEYUP, wi, window)) return 1;
+    return 0;
+
   case FL_KEYBOARD:
 #ifdef DEBUG
     printf("Fl::handle(e=%d, window=%p);\n", e, window);
@@ -787,8 +837,17 @@ int Fl::handle(int e, Fl_Window* window)
     if (grab()) {wi = grab(); break;} // send it to grab window
 
     // Try it as shortcut, sending to mouse widget and all parents:
-    wi = belowmouse(); if (!wi) {wi = modal(); if (!wi) wi = window;}
-    for (; wi; wi = wi->parent()) if (send(FL_SHORTCUT, wi, window)) return 1;
+    wi = belowmouse();
+    if (!wi) {
+      wi = modal();
+      if (!wi) wi = window;
+    } else if (wi->window() != first_window()) {
+      if (send(FL_SHORTCUT, first_window(), first_window())) return 1;
+    }
+
+    for (; wi; wi = wi->parent()) {
+      if (send(FL_SHORTCUT, wi, wi->window())) return 1;
+    }
 
     // try using add_handle() functions:
     if (send_handlers(FL_SHORTCUT)) return 1;
@@ -827,10 +886,16 @@ int Fl::handle(int e, Fl_Window* window)
   case FL_MOUSEWHEEL:
     fl_xfocus = window; // this should not happen!  But maybe it does:
 
-    // Try sending it to the grab and then the window:
-    if (grab()) {
+    // Try sending it to the "grab" first
+    if (grab() && grab()!=modal() && grab()!=window) {
       if (send(FL_MOUSEWHEEL, grab(), window)) return 1;
     }
+    // Now try sending it to the "modal" window
+    if (modal()) {
+      send(FL_MOUSEWHEEL, modal(), window);
+      return 1;
+    }
+    // Finally try sending it to the window, the event occured in
     if (send(FL_MOUSEWHEEL, window, window)) return 1;
   default:
     break;
@@ -860,23 +925,13 @@ void Fl_Window::hide() {
   Fl_X** pp = &Fl_X::first;
   for (; *pp != ip; pp = &(*pp)->next) if (!*pp) return;
   *pp = ip->next;
-
-#ifdef __APPLE_QD__
-  // remove all childwindow links
-  for ( Fl_X *pc = Fl_X::first; pc; pc = pc->next )
-  { 
-    if ( pc->xidNext == ip ) pc->xidNext = ip->xidNext;
-    if ( pc->xidChildren == ip ) pc->xidChildren = ip->xidNext;   
-  }
-#elif defined(__APPLE_QUARTZ__)
-  // remove all childwindow links
-  for ( Fl_X *pc = Fl_X::first; pc; pc = pc->next )
-  {
-    if ( pc->xidNext == ip ) pc->xidNext = ip->xidNext;
-    if ( pc->xidChildren == ip ) pc->xidChildren = ip->xidNext;
-  }
-#endif // __APPLE__
-
+#ifdef __APPLE__
+  MacUnlinkWindow(ip);
+  // MacOS X manages a single pointer per application. Make sure that hiding
+  // a toplevel window will not leave us with some random pointer shape, or
+  // worst case, an invisible pointer
+  if (!parent()) cursor(FL_CURSOR_DEFAULT);
+#endif
   i = 0;
 
   // recursively remove any subwindows:
@@ -920,32 +975,28 @@ void Fl_Window::hide() {
       fl_gc = 0;
     }
 #elif defined(__APPLE_QD__)
-  if ( ip->xid == fl_window )
+  if ( ip->xid == fl_window && !parent() )
     fl_window = 0;
 #elif defined(__APPLE_QUARTZ__)
   Fl_X::q_release_context(ip);
-  if ( ip->xid == fl_window )
+  if ( ip->xid == fl_window && !parent() )
     fl_window = 0;
 #endif
 
   if (ip->region) XDestroyRegion(ip->region);
 
 #ifdef WIN32
+  // this little trickery seems to avoid the popup window stacking problem
+  HWND p = GetForegroundWindow();
+  if (p==GetParent(ip->xid)) {
+    ShowWindow(ip->xid, SW_HIDE);
+    ShowWindow(p, SW_SHOWNA);
+  }
   XDestroyWindow(fl_display, ip->xid);
 #elif defined(__APPLE_QD__)
-  if ( !parent() ) // don't destroy shared windows!
-  {
-    //+ RemoveTrackingHandler( dndTrackingHandler, ip->xid );
-    //+ RemoveReceiveHandler( dndReceiveHandler, ip->xid );
-    XDestroyWindow(fl_display, ip->xid);
-  }
+  MacDestroyWindow(this, ip->xid);
 #elif defined(__APPLE_QUARTZ__)
-  if ( !parent() ) // don't destroy shared windows!
-  {
-    //+ RemoveTrackingHandler( dndTrackingHandler, ip->xid );
-    //+ RemoveReceiveHandler( dndReceiveHandler, ip->xid );
-    XDestroyWindow(fl_display, ip->xid);
-  }
+  MacDestroyWindow(this, ip->xid);
 #else
 # if USE_XFT
   fl_destroy_xft_draw(ip->xid);
@@ -979,7 +1030,15 @@ int Fl_Window::handle(int ev)
     switch (ev) {
     case FL_SHOW:
       if (!shown()) show();
-      else XMapWindow(fl_display, fl_xid(this)); // extra map calls are harmless
+      else {
+#ifdef __APPLE_QD__
+        MacMapWindow(this, fl_xid(this));
+#elif defined(__APPLE_QUARTZ__)
+        MacMapWindow(this, fl_xid(this));
+#else
+        XMapWindow(fl_display, fl_xid(this)); // extra map calls are harmless
+#endif // __APPLE__
+      }
       break;
     case FL_HIDE:
       if (shown()) {
@@ -995,11 +1054,9 @@ int Fl_Window::handle(int ev)
 	 if (p->type() >= FL_WINDOW) break; // don't do the unmap
 	}
 #ifdef __APPLE_QD__
-        hide();
-	set_visible();
+	MacUnmapWindow(this, fl_xid(this));
 #elif defined(__APPLE_QUARTZ__)
-        hide();
-        set_visible();
+	MacUnmapWindow(this, fl_xid(this));
 #else
 	XUnmapWindow(fl_display, fl_xid(this));
 #endif // __APPLE__
@@ -1195,6 +1252,53 @@ Fl::do_widget_deletion() {
     delete dwidgets[i];
 
   num_dwidgets = 0;
+}
+
+static Fl_Widget ***widget_watch = 0;
+static int num_widget_watch = 0;
+static int max_widget_watch = 0;
+
+void Fl::watch_widget_pointer(Fl_Widget *&w) 
+{
+  Fl_Widget **wp = &w;
+  int i;
+  for (i=0; i<num_widget_watch; ++i) {
+    if (widget_watch[i]==wp) return;
+  }
+  for (i=0; i<num_widget_watch; ++i) {
+    if (widget_watch[i]==0L) {
+      widget_watch[i] = wp;
+      return;
+    }
+  }
+  if (num_widget_watch==max_widget_watch) {
+    max_widget_watch += 8;
+    widget_watch = (Fl_Widget***)realloc(widget_watch, sizeof(Fl_Widget**)*max_widget_watch);
+  }
+  widget_watch[num_widget_watch++] = wp;
+}
+
+void Fl::release_widget_pointer(Fl_Widget *&w)
+{
+  Fl_Widget **wp = &w;
+  int i;
+  for (i=0; i<num_widget_watch; ++i) {
+    if (widget_watch[i]==wp) {
+      widget_watch[i] = 0L;
+      return;
+    }
+  }
+}
+
+void Fl::clear_widget_pointer(Fl_Widget const *w) 
+{
+  if (w==0L) return;
+  int i;
+  for (i=0; i<num_widget_watch; ++i) {
+    if (widget_watch[i] && *widget_watch[i]==w) {
+      *widget_watch[i] = 0L;
+    }
+  }
 }
 
 

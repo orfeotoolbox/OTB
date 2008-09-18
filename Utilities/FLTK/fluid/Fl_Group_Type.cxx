@@ -7,7 +7,7 @@
 // the Fl_Tabs widget, with special stuff to select tab items and
 // insure that only one is visible.
 //
-// Copyright 1998-2005 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -124,9 +124,12 @@ void Fl_Group_Type::write_code1() {
 }
 
 void Fl_Group_Type::write_code2() {
+  const char *var = name() ? name() : "o";
   write_extra_code();
-  write_c("%so->end();\n", indent());
-  if (resizable()) write_c("%sFl_Group::current()->resizable(o);\n", indent());
+  write_c("%s%s->end();\n", indent(), var);
+  if (resizable()) {
+    write_c("%sFl_Group::current()->resizable(%s);\n", indent(), var);
+  }
   write_block_close();
 }
 
@@ -161,10 +164,14 @@ Fl_Type* Fl_Tabs_Type::click_test(int x, int y) {
   Fl_Tabs *t = (Fl_Tabs*)o;
   Fl_Widget *a = t->which(x,y);
   if (!a) return 0; // didn't click on tab
+  // changing the visible tab has an impact on the generated
+  // source code, so mark this project as changed.
+  int changed = (a!=t->value());
   // okay, run the tabs ui until they let go of mouse:
   t->handle(FL_PUSH);
   Fl::pushed(t);
   while (Fl::pushed()==t) Fl::wait();
+  if (changed) set_modflag(1);
   return (Fl_Type*)(t->value()->user_data());
 }
 
@@ -223,7 +230,7 @@ void Fl_Group_Type::move_child(Fl_Type* cc, Fl_Type* before) {
 ////////////////////////////////////////////////////////////////
 // live mode support
 
-Fl_Widget *Fl_Group_Type::enter_live_mode(int top) {
+Fl_Widget *Fl_Group_Type::enter_live_mode(int) {
   Fl_Group *grp = new Fl_Group(o->x(), o->y(), o->w(), o->h());
   live_widget = grp;
   if (live_widget) {
@@ -238,7 +245,7 @@ Fl_Widget *Fl_Group_Type::enter_live_mode(int top) {
   return live_widget;
 }
 
-Fl_Widget *Fl_Tabs_Type::enter_live_mode(int top) {
+Fl_Widget *Fl_Tabs_Type::enter_live_mode(int) {
   Fl_Tabs *grp = new Fl_Tabs(o->x(), o->y(), o->w(), o->h());
   live_widget = grp;
   if (live_widget) {
@@ -270,6 +277,22 @@ void Fl_Group_Type::copy_properties() {
 #include <FL/Fl_Scroll.H>
 
 const char scroll_type_name[] = "Fl_Scroll";
+
+Fl_Widget *Fl_Scroll_Type::enter_live_mode(int) {
+  Fl_Group *grp = new Fl_Scroll(o->x(), o->y(), o->w(), o->h());
+  grp->show();
+  live_widget = grp;
+  if (live_widget) {
+    copy_properties();
+    Fl_Type *n;
+    for (n = next; n && n->level > level; n = n->next) {
+      if (n->level == level+1)
+        n->enter_live_mode();
+    }
+    grp->end();
+  }
+  return live_widget;
+}
 
 Fl_Menu_Item scroll_type_menu[] = {
   {"BOTH", 0, 0, 0/*(void*)Fl_Scroll::BOTH*/},

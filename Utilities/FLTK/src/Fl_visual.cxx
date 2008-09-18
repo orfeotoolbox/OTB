@@ -27,11 +27,12 @@
 
 // Set the default visual according to passed switches:
 
-/*OTB Modifications: conflict name with OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h*/
-/*#include <config.h>*/
+// OTB Modifications
+//#include <config.h>
 #include "fltk-config.h"
-#include <FL/x.H>
+
 #include <FL/Fl.H>
+#include <FL/x.H>
 
 #ifdef WIN32
 int Fl::visual(int flags) {

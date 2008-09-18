@@ -1,10 +1,10 @@
 #!/bin/sh
 #
-# "$Id: fltk-config.in 4689 2005-12-07 20:13:12Z mike $"
+# "$Id: fltk-config.in 6032 2008-02-20 18:10:13Z matt $"
 # 
 # FLTK configuration utility.
 #
-# Copyright 2000-2005 by Bill Spitzak and others.
+# Copyright 2000-2007 by Bill Spitzak and others.
 # Original version Copyright 2000 by James Dean Palmer
 # Adapted by Vincent Penne and Michael Sweet
 #
@@ -53,10 +53,12 @@ CXX="@CXX@"
 POSTBUILD="@POSTBUILD@"
 
 # flags for C++ compiler:
-CFLAGS="@CFLAGS@"
-CXXFLAGS="@CXXFLAGS@"
+ARCHFLAGS="@ARCHFLAGS@"
+CFLAGS="@CFLAGS@ @LARGEFILE@ @PTHREAD_FLAGS@"
+CXXFLAGS="@CXXFLAGS@ @LARGEFILE@ @PTHREAD_FLAGS@"
 LDFLAGS="@LDFLAGS@"
 LDLIBS="@LIBS@"
+OPTIM="@OPTIM@"
 
 # Check for local invocation, and update paths accordingly...
 if test -f "$selfdir/FL/Fl_Window.H"; then
@@ -108,6 +110,7 @@ Options telling what we are doing:
 Options telling what information we request:
 	[--cc]            return C compiler used to compile FLTK
 	[--cxx]           return C++ compiler used to compile FLTK
+	[--optim]         return compiler optimization used to compile FLTK
 	[--cflags]        return flags to compile C using FLTK
 	[--cxxflags]      return flags to compile C++ using FLTK
 	[--ldflags]       return flags to link against FLTK
@@ -117,6 +120,7 @@ Options telling what information we request:
 
 Option to compile and link an application:
 	[-g]              compile the program with debugging information
+	[-Dname[=value]]  compile the program with the given define
 	[--compile program.cxx]
         [--post program]
 "
@@ -157,6 +161,9 @@ do
 	--cxx)
 	    echo $CXX
 	    ;;
+	--optim)
+	    echo_optim=yes
+	    ;;
 	--use-gl | --use-glut)
 	    use_gl=yes
 	    ;;
@@ -183,6 +190,9 @@ do
 	    ;;
 	-g)
 	    debug=-g
+	    ;;
+	-D*)
+	    CXXFLAGS="$CXXFLAGS $1"
 	    ;;
 	--compile)
 	    compile=$2
@@ -215,17 +225,14 @@ fi
 # Calculate needed libraries
 LDSTATIC="$libdir/libfltk.a $LDLIBS"
 LDLIBS="-lfltk$SHAREDSUFFIX $LDLIBS"
-LIBS="$libdir/libfltk.a"
 
 if test x$use_forms = xyes; then
     LDLIBS="-lfltk_forms$SHAREDSUFFIX $LDLIBS"
     LDSTATIC="$libdir/libfltk_forms.a $LDSTATIC"
-    LIBS="$LIBS $libdir/libfltk_forms.a"
 fi
 if test x$use_gl = xyes; then
     LDLIBS="-lfltk_gl$SHAREDSUFFIX @GLLIB@ $LDLIBS"
     LDSTATIC="$libdir/libfltk_gl.a @GLLIB@ $LDSTATIC"
-    LIBS="$LIBS $libdir/libfltk_gl.a"
 fi
 if test x$use_images = xyes; then
     LDLIBS="-lfltk_images$SHAREDSUFFIX $IMAGELIBS $LDLIBS"
@@ -233,7 +240,7 @@ if test x$use_images = xyes; then
 fi
 
 LDLIBS="$DSOLINK $LDFLAGS $libs $LDLIBS"
-LDSTATIC="$LDFLAGS $libs $LDSTATIC"
+LDSTATIC="$LDFLAGS $LDSTATIC"
 
 # Answer to user requests
 if test -n "$echo_help"; then
@@ -262,8 +269,14 @@ if test -n "$compile"; then
 	    
     post=$prog
 
-    echo $CXX $includes $CXXFLAGS $debug -o $prog $compile $LDSTATIC
-    $CXX $includes $CXXFLAGS $debug -o $prog $compile $LDSTATIC
+    echo $CXX $ARCHFLAGS $includes $CXXFLAGS $debug -o $prog $compile $LDSTATIC
+    $CXX $ARCHFLAGS $includes $CXXFLAGS $debug -o $prog $compile $LDSTATIC
+
+    # stop after compilation in case of errors
+    err=$?
+    if test $err != 0; then
+	exit $err
+    fi
 fi
 
 if test -n "$post" -a "$POSTBUILD" != ":"; then
@@ -277,6 +290,10 @@ fi
 
 if test "$echo_cxxflags" = "yes"; then
     echo $includes $CXXFLAGS
+fi
+
+if test "$echo_optim" = "yes"; then
+    echo $OPTIM
 fi
 
 if test "$echo_ldflags" = "yes"; then
@@ -300,9 +317,27 @@ if test "$echo_ldstaticflags" = "yes"; then
 fi
 
 if test "$echo_libs" = "yes"; then
-    echo $LIBS
+    echo $libdir/libfltk.a
+
+    if test x$use_forms = xyes; then
+        echo $libdir/libfltk_forms.a
+    fi
+
+    if test x$use_gl = xyes; then
+        echo $libdir/libfltk_gl.a
+    fi
+
+    if test x$use_images = xyes; then
+        echo $libdir/libfltk_images.a
+
+        for lib in fltk_jpeg fltk_png fltk_z; do
+            if test -f $libdir/lib$lib.a; then
+                echo $libdir/lib$lib.a
+            fi
+	done
+    fi
 fi
 
 #
-# End of "$Id: fltk-config.in 4689 2005-12-07 20:13:12Z mike $".
+# End of "$Id: fltk-config.in 6032 2008-02-20 18:10:13Z matt $".
 #

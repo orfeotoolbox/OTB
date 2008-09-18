@@ -60,7 +60,7 @@ public:
 
 Fl_Widget* Fl_Tooltip::widget_ = 0;
 static Fl_TooltipBox *window = 0;
-static int X,Y,W,H;
+static int Y,H;
 
 void Fl_TooltipBox::layout() {
   fl_font(Fl_Tooltip::font(), Fl_Tooltip::size());
@@ -71,10 +71,8 @@ void Fl_TooltipBox::layout() {
 
   // find position on the screen of the widget:
   int ox = Fl::event_x_root();
-  //int ox = X+W/2;
   int oy = Y + H+2;
   for (Fl_Widget* p = Fl_Tooltip::current(); p; p = p->window()) {
-    //ox += p->x();
     oy += p->y();
   }
   int scr_x, scr_y, scr_w, scr_h;
@@ -194,7 +192,7 @@ Fl_Tooltip::exit_(Fl_Widget *w) {
   widget_ = 0;
   Fl::remove_timeout(tooltip_timeout);
   Fl::remove_timeout(recent_timeout);
-  if (window) window->hide();
+  if (window && window->visible()) window->hide();
   if (recent_tooltip) {
     if (Fl::event_state() & FL_BUTTONS) recent_tooltip = 0;
     else Fl::add_timeout(Fl_Tooltip::hoverdelay(), recent_timeout);
@@ -208,6 +206,9 @@ Fl_Tooltip::exit_(Fl_Widget *w) {
 void
 Fl_Tooltip::enter_area(Fl_Widget* wid, int x,int y,int w,int h, const char* t)
 {
+  (void)x;
+  (void)w;
+
 #ifdef DEBUG
   printf("Fl_Tooltip::enter_area(wid=%p, x=%d, y=%d, w=%d, h=%d, t=\"%s\")\n",
          wid, x, y, w, h, t ? t : "(null)");
@@ -224,7 +225,7 @@ Fl_Tooltip::enter_area(Fl_Widget* wid, int x,int y,int w,int h, const char* t)
   Fl::remove_timeout(tooltip_timeout);
   Fl::remove_timeout(recent_timeout);
   // remember it:
-  widget_ = wid; X = x; Y = y; W = w; H = h; tip = t;
+  widget_ = wid; Y = y; H = h; tip = t;
   // popup the tooltip immediately if it was recently up:
   if (recent_tooltip) {
     if (window) window->hide();
@@ -233,11 +234,11 @@ Fl_Tooltip::enter_area(Fl_Widget* wid, int x,int y,int w,int h, const char* t)
 #ifdef WIN32
     // possible fix for the Windows titlebar, it seems to want the
     // window to be destroyed, moving it messes up the parenting:
-    if (window) window->hide();
+    if (window && window->visible()) window->hide();
 #endif // WIN32
     tooltip_timeout(0);
   } else {
-    if (window) window->hide();
+    if (window && window->visible()) window->hide();
     Fl::add_timeout(Fl_Tooltip::delay(), tooltip_timeout);
   }
 

@@ -1,9 +1,9 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0107 
+version 1.0108 
 header_name {../FL/Fl_File_Chooser.H} 
 code_name {.cxx}
 comment {//
-// "$Id: Fl_File_Chooser.fl 4723 2005-12-30 10:13:17Z matt $"
+// "$Id: Fl_File_Chooser.fl 6092 2008-04-11 12:57:37Z matt $"
 //
 // Fl_File_Chooser dialog for the Fast Light Tool Kit (FLTK).
 //
@@ -55,13 +55,14 @@ class FL_EXPORT Fl_File_Chooser {open
   decl {void update_preview();} {}
   Function {Fl_File_Chooser(const char *d, const char *p, int t, const char *title)} {open
   } {
+    code {Fl_Group *prev_current = Fl_Group::current();} {}
     Fl_Window window {
       label {Choose File}
       callback {fileName->value("");
 fileList->deselect();
 Fl::remove_timeout((Fl_Timeout_Handler)previewCB, this);
-window->hide();}
-      private xywh {387 242 490 380} type Double resizable
+window->hide();} open
+      private xywh {388 284 490 380} type Double resizable
       code0 {if (title) window->label(title);}
       code1 {\#include <stdio.h>}
       code2 {\#include <stdlib.h>}
@@ -99,11 +100,11 @@ window->hide();}
           code0 {\#include <FL/Fl_File_Browser.H>}
         }
         Fl_Box previewBox {
-          label {?}
+          label {?} selected
           private xywh {305 45 175 225} box DOWN_BOX labelsize 100 align 80
         }
       }
-      Fl_Group {} {
+      Fl_Group {} {open
         private xywh {10 275 470 95}
       } {
         Fl_Group {} {open
@@ -122,7 +123,7 @@ window->hide();}
         Fl_File_Input fileName {
           callback {fileNameCB();}
           private xywh {115 300 365 35} labelfont 1 when 8 resizable
-          code0 {fileName->when(FL_WHEN_CHANGED | FL_WHEN_ENTER_KEY_ALWAYS);}
+          code0 {fileName->when(FL_WHEN_CHANGED | FL_WHEN_ENTER_KEY);}
         }
         Fl_Box {} {
           label {Filename:}
@@ -134,11 +135,11 @@ window->hide();}
         } {
           Fl_Return_Button okButton {
             label OK
-            callback {// Do any callback that is registered...
-if (callback_)
-  (*callback_)(this, data_);
+            callback {window->hide();
 
-window->hide();} selected
+// Do any callback that is registered...
+if (callback_)
+  (*callback_)(this, data_);}
             private xywh {313 345 85 25}
             code0 {\#include <FL/fl_ask.H>}
             code1 {okButton->label(fl_ok);}
@@ -160,7 +161,7 @@ window->hide();}
     }
     Fl_Window favWindow {
       label {Manage Favorites}
-      private xywh {437 187 355 150} type Double resizable
+      private xywh {413 100 355 150} type Double resizable
       code0 {favWindow->label(manage_favorites_label);} modal size_range {181 150 0 0} visible
     } {
       Fl_File_Browser favList {
@@ -218,7 +219,8 @@ value(d);
 type(t);
 int e;
 prefs_.get("preview", e, 1);
-preview(e);} {}
+preview(e);
+Fl_Group::current(prev_current);} {}
   }
   Function {~Fl_File_Chooser()} {} {
     code {Fl::remove_timeout((Fl_Timeout_Handler)previewCB, this);
@@ -299,13 +301,15 @@ okButton->parent()->init_sizes();} {}
   }
   decl {void rescan();} {public
   }
-  Function {show()} {return_type void
+  decl {void rescan_keep_filename();} {public
+  }
+  Function {show()} {open return_type void
   } {
     code {window->hotspot(fileList);
 window->show();
 Fl::flush();
 fl_cursor(FL_CURSOR_WAIT);
-rescan();
+rescan_keep_filename();
 fl_cursor(FL_CURSOR_DEFAULT);
 fileName->take_focus();} {}
   }
@@ -417,6 +421,6 @@ decl {FL_EXPORT void fl_file_chooser_ok_label(const char*l);} {public
 
 comment {
 //
-// End of "$Id: Fl_File_Chooser.fl 4723 2005-12-30 10:13:17Z matt $".
+// End of "$Id: Fl_File_Chooser.fl 6092 2008-04-11 12:57:37Z matt $".
 //} {in_source in_header
 } 

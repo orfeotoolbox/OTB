@@ -27,9 +27,11 @@
 
 ////////////////////////////////////////////////////////////////
 
-/*OTB Modifications: conflict name with OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h*/
-/*#include <config.h>*/
+// OTB Modifications
+//#include <config.h>
 #include "fltk-config.h"
+
+#include <FL/Fl.H>
 #include <FL/fl_draw.H>
 #include <FL/x.H>
 
@@ -176,17 +178,21 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
       cb(userdata, 0, i, W, tmpBuf+i*W*delta);
     }
     array = (void*)tmpBuf;
-    linedelta = W;
+    linedelta = W*delta;
   }
   // create an image context
-  CGColorSpaceRef   lut = CGColorSpaceCreateDeviceRGB();
-  CGDataProviderRef src = CGDataProviderCreateWithData( 0L, array, linedelta*H*delta, 0L);
-  CGImageRef        img = CGImageCreate( W, H, 8, 8*delta, linedelta*delta,
+  CGColorSpaceRef   lut = 0;
+  if (delta<=2) 
+    lut = CGColorSpaceCreateDeviceGray();
+  else
+    lut = CGColorSpaceCreateDeviceRGB();
+  CGDataProviderRef src = CGDataProviderCreateWithData( 0L, array, linedelta*H, 0L);
+  CGImageRef        img = CGImageCreate( W, H, 8, 8*delta, linedelta,
                             lut, delta&1?kCGImageAlphaNone:kCGImageAlphaNoneSkipLast,
                             src, 0L, false, kCGRenderingIntentDefault);
   // draw the image into the destination context
   if (img) {
-    CGRect rect = { X, Y, W, H };
+    CGRect rect = { { X, Y }, { W, H } };
     Fl_X::q_begin_image(rect, 0, 0, W, H);
     CGContextDrawImage(fl_gc, rect, img);
     Fl_X::q_end_image();

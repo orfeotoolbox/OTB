@@ -19,7 +19,7 @@ SET(PNG_SRCS
   )
 
 ADD_LIBRARY(fltk_png ${PNG_SRCS})
-INSTALL_TARGETS(/lib/otb fltk_png)
+INSTALL_TARGETS(/lib fltk_png)
 
 
 IF(UNIX)

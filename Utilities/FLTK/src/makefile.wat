@@ -1,5 +1,5 @@
 #
-# "$Id: makefile.wat 4359 2005-05-19 16:07:13Z mike $"
+# "$Id: makefile.wat 5699 2007-02-20 17:02:41Z matt $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -126,11 +126,15 @@ CPPFILES = &
     fl_draw.obj &
     fl_draw_image.obj &
     fl_draw_pixmap.obj &
+    fl_encoding_latin1.obj &
+    fl_encoding_mac_roman.obj &
     fl_engraved_label.obj &
     fl_file_dir.obj &
     fl_font.obj &
+    fl_gtk.obj &
     fl_labeltype.obj &
     fl_line_style.obj &
+    fl_open_uri.obj &
     fl_oval_box.obj &
     fl_overlay.obj &
     fl_overlay_visual.obj &
@@ -146,7 +150,8 @@ CPPFILES = &
     fl_shortcut.obj &
     fl_show_colormap.obj &
     fl_symbols.obj &
-    fl_vertex.obj
+    fl_vertex.obj &
+    screen_xywh.obj
 
 FLCPPFILES = &
     forms_compatability.obj &
@@ -160,6 +165,10 @@ GLCPPFILES = &
     Fl_Gl_Choice.obj &
     Fl_Gl_Overlay.obj &
     Fl_Gl_Window.obj &
+    freeglut_geometry.obj &
+    freeglut_stroke_mono_roman.obj &
+    freeglut_stroke_roman.obj &
+    freeglut_teapot.obj &
     gl_draw.obj &
     gl_start.obj &
     glut_compatability.obj &

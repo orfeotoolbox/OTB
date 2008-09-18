@@ -1,9 +1,9 @@
 #
-# "$Id: fltk.spec.in 4756 2006-01-15 18:36:16Z mike $"
+# "$Id: fltk.spec.in 6059 2008-02-28 16:50:07Z mike $"
 #
 # RPM spec file for FLTK.
 #
-# Copyright 1998-2006 by Bill Spitzak and others.
+# Copyright 1998-2008 by Bill Spitzak and others.
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Library General Public
@@ -25,8 +25,8 @@
 #      http://www.fltk.org/str.php
 #
 
-%define version @VERSION@
-%define release @RELEASE@
+%define version @FL_MAJOR_VERSION@.@FL_MINOR_VERSION@.@FL_PATCH_VERSION@
+%define release 1
 %define prefix /usr
 
 Summary: Fast Light Tool Kit (FLTK)
@@ -62,13 +62,13 @@ Summary: FLTK Games
 Group: Games
 
 %description games
-Install fltk-games to play checkers or Sudoku on your computer.
+Install fltk-games to play Block Attack!, Checkers, or Sudoku on your computer.
 
 %prep
 %setup
 
 %build
-CFLAGS="$RPM_OPT_FLAGS" CXXFLAGS="$RPM_OPT_FLAGS" LDFLAGS="$RPM_OPT_FLAGS" ./configure --prefix=%{prefix} --mandir=%{_mandir} --enable-shared --enable-xft --enable-xdbe --enable-xinerama
+CFLAGS="$RPM_OPT_FLAGS" CXXFLAGS="$RPM_OPT_FLAGS" LDFLAGS="$RPM_OPT_FLAGS" ./configure --prefix=%{prefix} --mandir=%{_mandir} --enable-largefile --enable-shared --enable-threads --enable-xft --enable-xdbe --enable-xinerama
 
 # If we got this far, all prerequisite libraries must be here.
 make
@@ -113,8 +113,8 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{prefix}/share/doc/fltk
 %{prefix}/share/doc/fltk/*
 
-%dir %{prefix}/share/applnk
-%{prefix}/share/applnk/Development/*
+%dir %{prefix}/share/applications
+%{prefix}/share/applications/*
 
 %dir %{prefix}/share/icons
 %{prefix}/share/icons/hicolor/*/apps/fluid.png
@@ -124,6 +124,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files games
 %dir %{prefix}/bin
+%{prefix}/bin/blocks
 %{prefix}/bin/checkers
 %{prefix}/bin/sudoku
 
@@ -131,13 +132,14 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/cat6/*
 %{_mandir}/man6/*
 
-%dir %{prefix}/share/applnk
-%{prefix}/share/applnk/Games/*
+%dir %{prefix}/share/applications
+%{prefix}/share/applications/*
 
 %dir %{prefix}/share/icons
+%{prefix}/share/icons/hicolor/*/apps/blocks.png
 %{prefix}/share/icons/hicolor/*/apps/checkers.png
 %{prefix}/share/icons/hicolor/*/apps/sudoku.png
 
 #
-# End of "$Id: fltk.spec.in 4756 2006-01-15 18:36:16Z mike $".
+# End of "$Id: fltk.spec.in 6059 2008-02-28 16:50:07Z mike $".
 #

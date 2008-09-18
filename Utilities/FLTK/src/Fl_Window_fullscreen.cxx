@@ -39,8 +39,8 @@
 #include <FL/x.H>
 
 #ifdef __APPLE__
-/*OTB Modifications: conflict name with OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h*/
-/*#include <config.h>*/
+// OTB Modifications
+//#include <config.h>
 #include "fltk-config.h"
 #endif 
 

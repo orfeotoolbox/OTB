@@ -3,7 +3,7 @@
 //
 // Base Browser widget class for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2005 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -67,7 +67,19 @@ static void hscrollbar_callback(Fl_Widget* s, void*) {
   ((Fl_Browser_*)(s->parent()))->hposition(int(((Fl_Scrollbar*)s)->value()));
 }
 
+// Scrollbar size should be part of the Fl class, but is left here for
+// binary compatibility in 1.1.x - M. Sweet
 int Fl_Browser_::scrollbar_width_ = 16;
+
+// Get the standard scrollbar size
+int Fl::scrollbar_size() {
+  return Fl_Browser_::scrollbar_width();
+}
+
+// Set the standard scrollbar size
+void Fl::scrollbar_size(int W) {
+  Fl_Browser_::scrollbar_width(W);
+}
 
 // return where to draw the actual box:
 void Fl_Browser_::bbox(int& X, int& Y, int& W, int& H) const {
@@ -470,6 +482,15 @@ void Fl_Browser_::replacing(void* a, void* b) {
   if (a == max_width_item) {max_width_item = 0; max_width = 0;}
 }
 
+void Fl_Browser_::swapping(void* a, void* b) {
+  redraw_line(a);
+  redraw_line(b);
+  if (a == selection_) selection_ = b;
+  else if (b == selection_) selection_ = a;
+  if (a == top_) top_ = b;
+  else if (b == top_) top_ = a;
+}
+
 void Fl_Browser_::inserting(void* a, void* b) {
   if (displayed(a)) redraw_lines();
   if (a == top_) top_ = b;
@@ -554,47 +575,55 @@ int Fl_Browser_::handle(int event) {
     void* l1 = selection_;
     void* l = l1; if (!l) l = top_; if (!l) l = item_first();
     if (l) {
-      if (type()==FL_HOLD_BROWSER) switch (Fl::event_key()) {
-      case FL_Down:
-	while ((l = item_next(l)))
-	  if (item_height(l)>0) {select_only(l, 1); break;}
-	return 1;
-      case FL_Up:
-	while ((l = item_prev(l))) if (item_height(l)>0) {
-	  select_only(l, 1); break;}
-	return 1;
-      } else switch (Fl::event_key()) {
-      case FL_Enter:
-      case FL_KP_Enter:
-	select_only(l, 1);
-	return 1;
-      case ' ':
-	selection_ = l;
-	select(l, !item_selected(l), 1);
-	return 1;
-      case FL_Down:
-	while ((l = item_next(l))) {
-	  if (Fl::event_state(FL_SHIFT|FL_CTRL))
-	    select(l, l1 ? item_selected(l1) : 1, 1);
-	  if (item_height(l)>0) goto J1;
-	}
-	return 1;
-      case FL_Up:
-	while ((l = item_prev(l))) {
-	  if (Fl::event_state(FL_SHIFT|FL_CTRL))
-	    select(l, l1 ? item_selected(l1) : 1, 1);
-	  if (item_height(l)>0) goto J1;
-	}
-	return 1;
-      J1:
-	if (selection_) redraw_line(selection_);
-	selection_ = l; redraw_line(l);
-	display(l);
-	return 1;
+      if (type()==FL_HOLD_BROWSER) {
+        switch (Fl::event_key()) {
+        case FL_Down:
+          while ((l = item_next(l)))
+            if (item_height(l)>0) {select_only(l, when()); break;}
+            return 1;
+        case FL_Up:
+          while ((l = item_prev(l))) if (item_height(l)>0) {
+            select_only(l, when()); break;}
+          return 1;
+        } 
+      } else  {
+        switch (Fl::event_key()) {
+        case FL_Enter:
+        case FL_KP_Enter:
+          select_only(l, when() & ~FL_WHEN_ENTER_KEY);
+	  if (when() & FL_WHEN_ENTER_KEY) {
+	    set_changed();
+	    do_callback();
+	  }
+          return 1;
+        case ' ':
+          selection_ = l;
+          select(l, !item_selected(l), when() & ~FL_WHEN_ENTER_KEY);
+          return 1;
+        case FL_Down:
+          while ((l = item_next(l))) {
+            if (Fl::event_state(FL_SHIFT|FL_CTRL))
+              select(l, l1 ? item_selected(l1) : 1, when());
+            if (item_height(l)>0) goto J1;
+          }
+          return 1;
+        case FL_Up:
+          while ((l = item_prev(l))) {
+            if (Fl::event_state(FL_SHIFT|FL_CTRL))
+              select(l, l1 ? item_selected(l1) : 1, when());
+            if (item_height(l)>0) goto J1;
+          }
+          return 1;
+J1:
+          if (selection_) redraw_line(selection_);
+          selection_ = l; redraw_line(l);
+          display(l);
+          return 1;
+        }
       }
     }
   }
-
+  
   if (Fl_Group::handle(event)) return 1;
   int X, Y, W, H; bbox(X, Y, W, H);
   int my;
@@ -736,6 +765,12 @@ int Fl_Browser_::handle(int event) {
       if (when() & FL_WHEN_RELEASE) do_callback();
     } else {
       if (when() & FL_WHEN_NOT_CHANGED) do_callback();
+    }
+    
+    // double click calls the callback: (like Enter Key)
+    if (Fl::event_clicks() && (when() & FL_WHEN_ENTER_KEY)) {
+      set_changed();
+      do_callback();
     }
     return 1;
   case FL_FOCUS:

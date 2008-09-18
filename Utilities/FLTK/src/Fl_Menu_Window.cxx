@@ -32,9 +32,11 @@
 // which are used so that clicks outside the program's windows
 // can be used to dismiss the menus.
 
-/*OTB Modifications: conflict name with OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h*/
-/*#include <config.h>*/
+// OTB Modifications
+//#include <config.h>
 #include "fltk-config.h"
+
+#include <FL/Fl.H>
 #include <FL/x.H>
 #include <FL/fl_draw.H>
 #include <FL/Fl_Menu_Window.H>

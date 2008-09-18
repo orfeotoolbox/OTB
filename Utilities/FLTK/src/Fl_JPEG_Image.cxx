@@ -35,8 +35,8 @@
 //
 
 #include <FL/Fl_JPEG_Image.H>
-/*OTB Modifications: conflict name with OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h*/
-/*#include <config.h>*/
+// OTB Modifications : conflict name file with other config.h file
+//#include <config.h>
 #include "fltk-config.h"
 
 #include <stdio.h>
@@ -82,12 +82,10 @@ extern "C" {
   static void
   fl_jpeg_error_handler(j_common_ptr dinfo) {	// I - Decompressor info
     longjmp(((fl_jpeg_error_mgr *)(dinfo->err))->errhand_, 1);
-    return;
   }
 
   static void
-  fl_jpeg_output_handler(j_common_ptr dinfo) {	// I - Decompressor info
-    return;
+  fl_jpeg_output_handler(j_common_ptr) {	// I - Decompressor info (not used)
   }
 }
 #endif // HAVE_LIBJPEG

@@ -30,9 +30,10 @@
 // Also all fl_clip routines, since they are always linked in so
 // that minimal update works.
 
-/*OTB Modifications: conflict name with OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h*/
-/*#include <config.h>*/
+// OTB Modifications
+//#include <config.h>
 #include "fltk-config.h"
+
 #include <FL/Fl.H>
 #include <FL/Fl_Widget.H>
 #include <FL/fl_draw.H>
@@ -485,7 +486,7 @@ void fl_restore_clip() {
   }
 # endif
 #elif defined(__APPLE_QUARTZ__)
-  if ( fl_window )
+  if ( fl_window ) // clipping for a true window
   {
     GrafPtr port = GetWindowPort( fl_window );
     if ( port ) { 
@@ -499,6 +500,16 @@ void fl_restore_clip() {
       Fl_X::q_fill_context();
       DisposeRgn( portClip );
     }
+  } else if (fl_gc) { // clipping for an offscreen drawing world (CGBitmap)
+    Rect portRect;
+    portRect.top = 0;
+    portRect.left = 0;
+    portRect.bottom = CGBitmapContextGetHeight(fl_gc);
+    portRect.right = CGBitmapContextGetWidth(fl_gc);
+    Fl_X::q_clear_clipping();
+    if (r)
+      ClipCGContextToRegion(fl_gc, &portRect, r);
+    Fl_X::q_fill_context();
   }
 #else
   if (r) XSetRegion(fl_display, fl_gc, r);

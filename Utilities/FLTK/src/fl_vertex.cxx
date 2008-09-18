@@ -31,9 +31,11 @@
 // matt: the Quartz implementation purposly doesn't use the Quartz matrix
 //       operations for reasons of compatibility and maintainability
 
-/*OTB Modifications: conflict name with OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h*/
-/*#include <config.h>*/
+// OTB Modifications
+//#include <config.h>
 #include "fltk-config.h"
+
+#include <FL/fl_draw.H>
 #include <FL/x.H>
 #include <FL/Fl.H>
 #include <FL/math.h>

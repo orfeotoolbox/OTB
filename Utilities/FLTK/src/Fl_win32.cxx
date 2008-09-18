@@ -3,7 +3,7 @@
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2005 by Bill Spitzak and others.
+// Copyright 1998-2007 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -33,6 +33,7 @@
 #include <FL/x.H>
 #include <FL/Fl_Window.H>
 #include <FL/Enumerations.H>
+#include <FL/Fl_Tooltip.H>
 #include "flstring.h"
 #include "Fl_Font.H"
 #include <stdio.h>
@@ -223,6 +224,16 @@ MSG fl_msg;
 int fl_wait(double time_to_wait) {
   int have_message = 0;
 
+  run_checks();
+
+  // idle processing
+  static char in_idle;
+  if (Fl::idle && !in_idle) {
+    in_idle = 1;
+    Fl::idle();
+    in_idle = 0;
+  }
+  
 #ifndef USE_ASYNC_SELECT
   if (nfds) {
     // For WIN32 we need to poll for socket input FIRST, since
@@ -246,25 +257,26 @@ int fl_wait(double time_to_wait) {
 	if (fd[i].events & revents) fd[i].cb(f, fd[i].arg);
       }
       time_to_wait = 0.0; // just peek for any messages
-#ifdef __CYGWIN__
-    }
-#else
     } else {
       // we need to check them periodically, so set a short timeout:
       if (time_to_wait > .001) time_to_wait = .001;
     }
-#endif
   }
 #endif // USE_ASYNC_SELECT
 
   if (Fl::idle || Fl::damage()) 
     time_to_wait = 0.0;
 
+  // if there are no more windows and this timer is set
+  // to FOREVER, continue through or look up indefinetely
+  if (!Fl::first_window() && time_to_wait==1e20)
+    time_to_wait = 0.0;
+
   fl_unlock_function();
 
   time_to_wait = (time_to_wait > 10000 ? 10000 : time_to_wait);
   int t_msec = (int) (time_to_wait * 1000.0 + 0.5);
-  int ret_val = MsgWaitForMultipleObjects(0, NULL, FALSE, t_msec, QS_ALLINPUT);
+  MsgWaitForMultipleObjects(0, NULL, FALSE, t_msec, QS_ALLINPUT);
 
   fl_lock_function();
 
@@ -284,8 +296,15 @@ int fl_wait(double time_to_wait) {
       }
 #endif
 
-      if (fl_msg.message == fl_wake_msg)  // Used for awaking wait() from another thread
+      if (fl_msg.message == fl_wake_msg) {
+        // Used for awaking wait() from another thread
 	thread_message_ = (void*)fl_msg.wParam;
+        Fl_Awake_Handler func;
+        void *data;
+        while (Fl::get_awake_handler_(func, data)==0) {
+          func(data);
+        }
+      }
 
       TranslateMessage(&fl_msg);
       DispatchMessage(&fl_msg);
@@ -294,16 +313,6 @@ int fl_wait(double time_to_wait) {
   }
   Fl::flush();
 
-  // idle processing
-  static char in_idle;
-  if (Fl::idle && !in_idle) {
-    in_idle = 1;
-    Fl::idle();
-    in_idle = 0;
-  }
-
-  run_checks();
-  
   // This should return 0 if only timer events were handled:
   return 1;
 }
@@ -638,13 +647,13 @@ static void realloc_timers()
     if (win32_timer_alloc == 0) {
         win32_timer_alloc = 8;
     }
-    size_t size = sizeof(Win32Timer);
-    Win32Timer* new_timers = new Win32Timer[win32_timer_alloc * 2];
-    memmove(new_timers, win32_timers, sizeof(Win32Timer) * win32_timer_used);
+    win32_timer_alloc *= 2;
+    Win32Timer* new_timers = new Win32Timer[win32_timer_alloc];
+    memset(new_timers, 0, sizeof(Win32Timer) * win32_timer_used);
+    memcpy(new_timers, win32_timers, sizeof(Win32Timer) * win32_timer_used);
     Win32Timer* delete_me = win32_timers;
     win32_timers = new_timers;
     delete [] delete_me;
-    win32_timer_alloc *= 2;
 }
 
 static void delete_timer(Win32Timer& t)
@@ -714,12 +723,13 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
     if (i->region) {
       // Also tell WIN32 that we are drawing someplace else as well...
-      InvalidateRgn(hWnd, i->region, FALSE);
       CombineRgn(i->region, i->region, R, RGN_OR);
       XDestroyRegion(R);
     } else {
       i->region = R;
     }
+    if (window->type() == FL_DOUBLE_WINDOW) ValidateRgn(hWnd,0);
+    else ValidateRgn(hWnd,i->region);
 
     window->clear_damage((uchar)(window->damage()|FL_DAMAGE_EXPOSE));
     // These next two statements should not be here, so that all update
@@ -730,8 +740,6 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     fl_save_pen();
     i->flush();
     fl_restore_pen();
-    if (window->type() == FL_DOUBLE_WINDOW) ValidateRgn(hWnd,0);
-    else ValidateRgn(hWnd,i->region);
     window->clear_damage();
     } return 0;
 
@@ -804,7 +812,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_KEYUP:
   case WM_SYSKEYUP:
     // save the keysym until we figure out the characters:
-    Fl::e_keysym = ms2fltk(wParam,lParam&(1<<24));
+    Fl::e_keysym = Fl::e_original_keysym = ms2fltk(wParam,lParam&(1<<24));
     // See if TranslateMessage turned it into a WM_*CHAR message:
     if (PeekMessage(&fl_msg, hWnd, WM_CHAR, WM_SYSDEADCHAR, PM_REMOVE)) {
       uMsg = fl_msg.message;
@@ -833,10 +841,6 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     }
     if (GetKeyState(VK_SCROLL)) state |= FL_SCROLL_LOCK;
     Fl::e_state = state;
-    if (lParam & (1<<31)) { // key up events.
-      if (Fl::handle(FL_KEYUP, window)) return 0;
-      break;
-    }
     static char buffer[2];
     if (uMsg == WM_CHAR || uMsg == WM_SYSCHAR) {
       buffer[0] = char(wParam);
@@ -890,11 +894,15 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 	    break;
 	}
       }
-    } else {
+    } else if ((lParam & (1<<31))==0){
       buffer[0] = 0;
       Fl::e_length = 0;
     }
     Fl::e_text = buffer;
+    if (lParam & (1<<31)) { // key up events.
+      if (Fl::handle(FL_KEYUP, window)) return 0;
+      break;
+    }
     // for (int i = lParam&0xff; i--;)
     while (window->parent()) window = window->window();
     if (Fl::handle(FL_KEYBOARD,window)) return 0;
@@ -1110,7 +1118,13 @@ void Fl_Window::resize(int X,int Y,int W,int H) {
   }
   if (is_a_resize) {
     Fl_Group::resize(X,Y,W,H);
-    if (shown()) {redraw(); i->wait_for_expose = 1;}
+    if (visible_r()) {
+      redraw(); 
+      // only wait for exposure if this window has a size - a window 
+      // with no width or height will never get an exposure event
+      if (i && W>0 && H>0)
+        i->wait_for_expose = 1;
+    }
   } else {
     x(X); y(Y);
     flags |= SWP_NOSIZE;
@@ -1127,6 +1141,10 @@ void Fl_Window::resize(int X,int Y,int W,int H) {
       W += 2*bx;
       H += 2*by+bt;
     }
+    // avoid zero size windows. A zero sized window on Win32
+    // will cause continouly  new redraw events.
+    if (W<=0) W = 1;
+    if (H<=0) H = 1;
     SetWindowPos(i->xid, 0, X, Y, W, H, flags);
   }
 }
@@ -1175,6 +1193,14 @@ int fl_disable_transient_for; // secret method of removing TRANSIENT_FOR
 
 Fl_X* Fl_X::make(Fl_Window* w) {
   Fl_Group::current(0); // get rid of very common user bug: forgot end()
+
+  // if the window is a subwindow and our parent is not mapped yet, we
+  // mark this window visible, so that mapping the parent at a later
+  // point in time will call this function again to finally map the subwindow.
+  if (w->parent() && !Fl_X::i(w->window())) {
+    w->set_visible();
+    return 0L;
+  }
 
   static NameList class_name_list;
   static const char *first_class_name = 0L;
@@ -1303,7 +1329,7 @@ Fl_X* Fl_X::make(Fl_Window* w) {
     Fl::e_number = old_event;
     w->redraw(); // force draw to happen
   }
-  // If we've captured the mouse, we dont want do activate any
+  // If we've captured the mouse, we dont want to activate any
   // other windows from the code, or we loose the capture.
   ShowWindow(x->xid, !showit ? SW_SHOWMINNOACTIVE :
 	     (Fl::grab() || (style & WS_POPUP)) ? SW_SHOWNOACTIVATE : SW_SHOWNORMAL);
@@ -1335,8 +1361,8 @@ static LRESULT CALLBACK s_TimerProc(HWND hwnd, UINT msg,
     switch (msg) {
     case WM_TIMER:
         {
-            int id = wParam - 1;
-            if (id < win32_timer_used && win32_timers[id].handle) {
+            unsigned int id = wParam - 1;
+            if (id < (unsigned int)win32_timer_used && win32_timers[id].handle) {
                 Fl_Timeout_Handler cb   = win32_timers[id].callback;
                 void*              data = win32_timers[id].data;
                 delete_timer(win32_timers[id]);
@@ -1385,7 +1411,7 @@ void Fl::repeat_timeout(double time, Fl_Timeout_Handler cb, void* data)
         wc.lpfnWndProc = (WNDPROC)s_TimerProc;
         wc.hInstance = fl_display;
         wc.lpszClassName = timer_class;
-        ATOM atom = RegisterClassEx(&wc);
+        /*ATOM atom =*/ RegisterClassEx(&wc);
         // create a zero size window to handle timer events
         s_TimerWnd = CreateWindowEx(WS_EX_LEFT | WS_EX_TOOLWINDOW,
                                     timer_class, "",
@@ -1513,6 +1539,7 @@ void Fl_Window::show() {
   } else {
     labeltype(FL_NO_LABEL);
   }
+  Fl_Tooltip::exit(this);
   if (!shown()) {
     // if (can_boxcheat(box())) fl_background_pixel = fl_xpixel(color());
     Fl_X::make(this);
@@ -1577,7 +1604,7 @@ void fl_free_fonts(void)
     s = fl_fonts + i;
     for (f=s->first; f; f=ff) {
       ff = f->next;
-      delete(f);
+      delete f;
       s->first = ff;
     }
   }

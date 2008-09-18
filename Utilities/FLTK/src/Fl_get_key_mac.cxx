@@ -31,9 +31,10 @@
 
 #include <FL/Fl.H>
 #include <FL/x.H>
-/*OTB Modifications: conflict name with OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h*/
-/*#include <config.h>*/
+// OTB Modifications
+//#include <config.h>
 #include "fltk-config.h"
+
 // convert an FLTK (X) keysym to a MacOS symbol:
 // See also the inverse converter in Fl_mac.cxx
 // This table is in numeric order by FLTK symbol order for binary search:
@@ -97,8 +98,12 @@ int Fl::get_key(int k) {
   printf("%08x %08x %08x %08x\n", (ulong*)(foo)[3], (ulong*)(foo)[2], (ulong*)(foo)[1], (ulong*)(foo)[0]);
  }
 #endif
-  int i = fltk2mac(k);
   unsigned char *b = (unsigned char*)foo;
+  // KP_Enter can be at different locations for Powerbooks vs. desktop Macs
+  if (k==FL_KP_Enter) {
+    return (((b[0x34>>3]>>(0x34&7))&1)||((b[0x4c>>3]>>(0x4c&7))&1));
+  }
+  int i = fltk2mac(k);
   return (b[i>>3]>>(i&7))&1;
 }
 

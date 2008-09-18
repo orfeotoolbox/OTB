@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.H 4288 2005-04-16 00:13:17Z mike $"
+// "$Id: Enumerations.H 6096 2008-04-12 04:18:58Z mike $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -47,7 +47,7 @@
 
 #define FL_MAJOR_VERSION	1
 #define FL_MINOR_VERSION	1
-#define FL_PATCH_VERSION	7
+#define FL_PATCH_VERSION	9
 #define FL_VERSION		((double)FL_MAJOR_VERSION + \
 				 (double)FL_MINOR_VERSION * 0.01 + \
 				 (double)FL_PATCH_VERSION * 0.0001)
@@ -177,6 +177,11 @@ enum Fl_Boxtype { // boxtypes (if you change these you must fix fl_boxtype.C):
   _FL_PLASTIC_UP_FRAME,	_FL_PLASTIC_DOWN_FRAME,
   _FL_PLASTIC_THIN_UP_BOX,	_FL_PLASTIC_THIN_DOWN_BOX,
   _FL_PLASTIC_ROUND_UP_BOX,	_FL_PLASTIC_ROUND_DOWN_BOX,
+  _FL_GTK_UP_BOX,	_FL_GTK_DOWN_BOX,
+  _FL_GTK_UP_FRAME,	_FL_GTK_DOWN_FRAME,
+  _FL_GTK_THIN_UP_BOX,	_FL_GTK_THIN_DOWN_BOX,
+  _FL_GTK_THIN_UP_FRAME,	_FL_GTK_THIN_DOWN_FRAME,
+  _FL_GTK_ROUND_UP_BOX,	_FL_GTK_ROUND_DOWN_BOX,
   FL_FREE_BOXTYPE
 };
 extern FL_EXPORT Fl_Boxtype fl_define_FL_ROUND_UP_BOX();
@@ -211,9 +216,28 @@ extern FL_EXPORT Fl_Boxtype fl_define_FL_PLASTIC_UP_BOX();
 #define FL_PLASTIC_ROUND_UP_BOX (Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+6)
 #define FL_PLASTIC_ROUND_DOWN_BOX (Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+7)
 
+extern FL_EXPORT Fl_Boxtype fl_define_FL_GTK_UP_BOX();
+#define FL_GTK_UP_BOX fl_define_FL_GTK_UP_BOX()
+#define FL_GTK_DOWN_BOX (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+1)
+#define FL_GTK_UP_FRAME (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+2)
+#define FL_GTK_DOWN_FRAME (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+3)
+#define FL_GTK_THIN_UP_BOX (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+4)
+#define FL_GTK_THIN_DOWN_BOX (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+5)
+#define FL_GTK_THIN_UP_FRAME (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+6)
+#define FL_GTK_THIN_DOWN_FRAME (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+7)
+#define FL_GTK_ROUND_UP_BOX (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+8)
+#define FL_GTK_ROUND_DOWN_BOX (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+9)
+
 // conversions of box types to other boxtypes:
-inline Fl_Boxtype fl_down(Fl_Boxtype b) {return (Fl_Boxtype)(b|1);}
-inline Fl_Boxtype fl_frame(Fl_Boxtype b) {return (Fl_Boxtype)(b|2);}
+inline Fl_Boxtype fl_box(Fl_Boxtype b) {
+  return (Fl_Boxtype)((b<FL_UP_BOX||b%4>1)?b:(b-2));
+}
+inline Fl_Boxtype fl_down(Fl_Boxtype b) {
+  return (Fl_Boxtype)((b<FL_UP_BOX)?b:(b|1));
+}
+inline Fl_Boxtype fl_frame(Fl_Boxtype b) {
+  return (Fl_Boxtype)((b%4<2)?b:(b+2));
+}
 
 // back-compatability box types:
 #define FL_FRAME FL_ENGRAVED_FRAME
@@ -401,6 +425,10 @@ enum Fl_Mode { // visual types and Fl_Gl_Window::mode() (values match Glut)
   FL_FAKE_SINGLE = 512	// Fake single buffered windows using double-buffer
 };
 
+// image alpha blending
+
+#define FL_IMAGE_WITH_ALPHA 0x40000000
+
 // damage masks
 
 enum Fl_Damage {
@@ -424,5 +452,5 @@ enum Fl_Damage {
 #endif
 
 //
-// End of "$Id: Enumerations.H 4288 2005-04-16 00:13:17Z mike $".
+// End of "$Id: Enumerations.H 6096 2008-04-12 04:18:58Z mike $".
 //

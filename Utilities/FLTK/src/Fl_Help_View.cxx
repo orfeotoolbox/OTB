@@ -3,7 +3,7 @@
 //
 // Fl_Help_View widget routines.
 //
-// Copyright 1997-2005 by Easy Software Products.
+// Copyright 1997-2007 by Easy Software Products.
 // Image support donated by Matthias Melcher, Copyright 2000.
 //
 // This library is free software; you can redistribute it and/or
@@ -36,6 +36,7 @@
 //   Fl_Help_View::draw()            - Draw the Fl_Help_View widget.
 //   Fl_Help_View::format()          - Format the help text.
 //   Fl_Help_View::format_table()    - Format a table...
+//   Fl_Help_View::free_data()       - Free memory used for the document.
 //   Fl_Help_View::get_align()       - Get an alignment attribute.
 //   Fl_Help_View::get_attr()        - Get an attribute value from the string.
 //   Fl_Help_View::get_color()       - Get an alignment attribute.
@@ -55,7 +56,9 @@
 //
 
 #include <FL/Fl_Help_View.H>
+#include <FL/Fl_Window.H>
 #include <FL/Fl_Pixmap.H>
+#include <FL/x.H>
 #include <stdio.h>
 #include <stdlib.h>
 #include "flstring.h"
@@ -135,6 +138,140 @@ static const char *broken_xpm[] =
 		};
 
 static Fl_Pixmap broken_image(broken_xpm);
+
+//
+// Simple margin stack for Fl_Help_View::format()...
+//
+
+struct fl_margins {
+  int depth_;
+  int margins_[100];
+
+  fl_margins() { clear();  }
+
+  int clear() {
+//    puts("fl_margins::clear()");
+
+    depth_ = 0;
+    return margins_[0] = 4;
+  }
+
+  int current() { return margins_[depth_]; }
+
+  int pop() {
+//    printf("fl_margins::pop(): depth_=%d, xx=%d\n", depth_,
+//           depth_ > 0 ? margins_[depth_ - 1] : 4);
+
+    if (depth_ > 0) {
+      depth_ --;
+      return margins_[depth_];
+    } else return 4;
+  }
+
+  int push(int indent) {
+    int xx;
+
+    xx = margins_[depth_] + indent;
+
+//    printf("fl_margins::push(indent=%d): depth_=%d, xx=%d\n", indent,
+//           depth_ + 1, xx);
+
+    if (depth_ < 99) {
+      depth_ ++;
+      margins_[depth_] = xx;
+    }
+
+    return xx;
+  }
+};
+
+//
+// All the stuff needed to implement text selection in Fl_Help_View
+//
+
+/* matt:
+ * We are trying to keep binary compatibility with previous versions
+ * of FLTK. This means that we are limited to adding static variables
+ * only to not enlarge the Fl_Help_View class. Lucky for us, only one
+ * text can be selected system wide, so we can remember the selection
+ * in a single set of variables.
+ *
+ * Still to do:
+ * - &word; style characters mess up our count inside a word boundary
+ * - we can only select words, no individual characters
+ * - no dragging of the selection into another widget
+ * - selection must be cleared if another widget get focus!
+ * - write a comment for every new function
+ */
+
+/*
+The following functions are also used to draw stuff and should be replaced with
+local copies that are much faster when merely counting:
+
+fl_color(Fl_Color);
+fl_rectf(int, int, int, int);
+fl_push_clip(int, int, int, int);
+fl_xyline(int, int, int);
+fl_rect()
+fl_line()
+img->draw()
+*/
+
+// We don't put the offscreen buffer in the help view class because
+// we'd need to include x.H in the header...
+static Fl_Offscreen fl_help_view_buffer;
+int Fl_Help_View::selection_first = 0;
+int Fl_Help_View::selection_last = 0;
+int Fl_Help_View::selection_push_first = 0;
+int Fl_Help_View::selection_push_last = 0;
+int Fl_Help_View::selection_drag_first = 0;
+int Fl_Help_View::selection_drag_last = 0;
+int Fl_Help_View::selected = 0;
+int Fl_Help_View::draw_mode = 0;
+int Fl_Help_View::mouse_x = 0;
+int Fl_Help_View::mouse_y = 0;
+int Fl_Help_View::current_pos = 0;
+Fl_Help_View *Fl_Help_View::current_view = 0L;
+Fl_Color Fl_Help_View::hv_selection_color;
+Fl_Color Fl_Help_View::hv_selection_text_color;
+
+/*
+ * Limitation: if a word contains &code; notations, we will calculate a wrong length.
+ *
+ * This function must be optimized for speed!
+ */
+void Fl_Help_View::hv_draw(const char *t, int x, int y)
+{
+  if (selected && current_view==this && current_pos<selection_last && current_pos>=selection_first) {
+    Fl_Color c = fl_color();
+    fl_color(hv_selection_color);
+    int w = (int)fl_width(t);
+    if (current_pos+(int)strlen(t)<selection_last) 
+      w += (int)fl_width(' ');
+    fl_rectf(x, y+fl_descent()-fl_height(), w, fl_height());
+    fl_color(hv_selection_text_color);
+    fl_draw(t, x, y);
+    fl_color(c);
+  } else {
+    fl_draw(t, x, y);
+  }
+  if (draw_mode) {
+    int w = (int)fl_width(t);
+    if (mouse_x>=x && mouse_x<x+w) {
+      if (mouse_y>=y-fl_height()+fl_descent()&&mouse_y<=y+fl_descent()) {
+        int f = current_pos;
+        int l = f+strlen(t); // use 'quote_char' to calculate the true length of the HTML string
+        if (draw_mode==1) {
+          selection_push_first = f;
+          selection_push_last = l;
+        } else {
+          selection_drag_first = f;
+          selection_drag_last = l;
+        }
+      }
+    }
+  }
+}
 
 
 //
@@ -344,24 +481,31 @@ Fl_Help_View::draw()
 
   draw_box(b, x(), y(), ww, hh, bgcolor_);
 
+  int ss = Fl::scrollbar_size();
   if (hscrollbar_.visible()) {
     draw_child(hscrollbar_);
-    hh -= 17;
+    hh -= ss;
     i ++;
   }
   if (scrollbar_.visible()) {
     draw_child(scrollbar_);
-    ww -= 17;
+    ww -= ss;
     i ++;
   }
   if (i == 2) {
     fl_color(FL_GRAY);
     fl_rectf(x() + ww - Fl::box_dw(b) + Fl::box_dx(b),
-             y() + hh - Fl::box_dh(b) + Fl::box_dy(b), 17, 17);
+             y() + hh - Fl::box_dh(b) + Fl::box_dy(b), ss, ss);
   }
 
   if (!value_)
     return;
+
+  if (current_view == this && selected) {
+    hv_selection_color      = FL_SELECTION_COLOR;
+    hv_selection_text_color = fl_contrast(textcolor_, FL_SELECTION_COLOR);
+  }
+  current_pos = 0;
 
   // Clip the drawing to the inside of the box...
   fl_push_clip(x() + Fl::box_dx(b), y() + Fl::box_dy(b),
@@ -385,7 +529,7 @@ Fl_Help_View::draw()
 
       for (ptr = block->start, s = buf; ptr < block->end;)
       {
-	if ((*ptr == '<' || isspace(*ptr)) && s > buf)
+	if ((*ptr == '<' || isspace((*ptr)&255)) && s > buf)
 	{
 	  if (!head && !pre)
 	  {
@@ -406,12 +550,13 @@ Fl_Help_View::draw()
 	      hh = 0;
 	    }
 
-            fl_draw(buf, xx + x() - leftline_, yy + y());
+            hv_draw(buf, xx + x() - leftline_, yy + y());
 	    if (underline) {
-              xtra_ww = isspace(*ptr)?(int)fl_width(' '):0;
+              xtra_ww = isspace((*ptr)&255)?(int)fl_width(' '):0;
               fl_xyline(xx + x() - leftline_, yy + y() + 1,
 	                xx + x() - leftline_ + ww + xtra_ww);
             }
+            current_pos = ptr-value_;
 
             xx += ww;
 	    if ((fsize + 2) > hh)
@@ -421,18 +566,19 @@ Fl_Help_View::draw()
 	  }
 	  else if (pre)
 	  {
-	    while (isspace(*ptr))
+	    while (isspace((*ptr)&255))
 	    {
 	      if (*ptr == '\n')
 	      {
 	        *s = '\0';
                 s = buf;
 
-                fl_draw(buf, xx + x() - leftline_, yy + y());
+                hv_draw(buf, xx + x() - leftline_, yy + y());
 		if (underline) fl_xyline(xx + x() - leftline_, yy + y() + 1,
 	                        	 xx + x() - leftline_ +
 					     (int)fl_width(buf));
 
+                current_pos = ptr-value_;
 		if (line < 31)
 	          line ++;
 		xx = block->line[line];
@@ -459,11 +605,12 @@ Fl_Help_View::draw()
 	      *s = '\0';
 	      s = buf;
 
-              fl_draw(buf, xx + x() - leftline_, yy + y());
+              hv_draw(buf, xx + x() - leftline_, yy + y());
 	      ww = (int)fl_width(buf);
 	      if (underline) fl_xyline(xx + x() - leftline_, yy + y() + 1,
 	                               xx + x() - leftline_ + ww);
               xx += ww;
+              current_pos = ptr-value_;
 	    }
 
 	    needspace = 0;
@@ -472,8 +619,9 @@ Fl_Help_View::draw()
 	  {
             s = buf;
 
-	    while (isspace(*ptr))
+	    while (isspace((*ptr)&255))
               ptr ++;
+            current_pos = ptr-value_;
 	  }
 	}
 
@@ -494,7 +642,7 @@ Fl_Help_View::draw()
 	      break;
 	  }
 
-	  while (*ptr && *ptr != '>' && !isspace(*ptr))
+	  while (*ptr && *ptr != '>' && !isspace((*ptr)&255))
             if (s < (buf + sizeof(buf) - 1))
 	      *s++ = *ptr++;
 	    else
@@ -510,6 +658,8 @@ Fl_Help_View::draw()
 	  if (*ptr == '>')
             ptr ++;
 
+          // end of command reached, set the supposed start of printed eord here
+          current_pos = ptr-value_;
 	  if (strcasecmp(buf, "HEAD") == 0)
             head = 1;
 	  else if (strcasecmp(buf, "BR") == 0)
@@ -568,10 +718,10 @@ Fl_Help_View::draw()
 	    {
 #ifdef __APPLE_QUARTZ__
               fl_font(FL_SYMBOL, fsize); 
-              fl_draw("\245", xx - fsize + x() - leftline_, yy + y());
+              hv_draw("\245", xx - fsize + x() - leftline_, yy + y());
 #else
               fl_font(FL_SYMBOL, fsize);
-              fl_draw("\267", xx - fsize + x() - leftline_, yy + y());
+              hv_draw("\267", xx - fsize + x() - leftline_, yy + y());
 #endif
 	    }
 
@@ -739,9 +889,11 @@ Fl_Help_View::draw()
 	      hh = 0;
 	    }
 
-	    if (img) 
+	    if (img) {
 	      img->draw(xx + x() - leftline_,
 	                yy + y() - fl_height() + fl_descent() + 2);
+	      img->release();
+	    }
 
 	    xx += ww;
 	    if ((height + 2) > hh)
@@ -755,7 +907,7 @@ Fl_Help_View::draw()
 	  *s = '\0';
 	  s = buf;
 
-          fl_draw(buf, xx + x() - leftline_, yy + y());
+          hv_draw(buf, xx + x() - leftline_, yy + y());
 
 	  if (line < 31)
 	    line ++;
@@ -765,8 +917,9 @@ Fl_Help_View::draw()
 	  needspace = 0;
 
 	  ptr ++;
+          current_pos = ptr-value_;
 	}
-	else if (isspace(*ptr))
+	else if (isspace((*ptr)&255))
 	{
 	  if (pre)
 	  {
@@ -781,6 +934,7 @@ Fl_Help_View::draw()
 	  }
 
           ptr ++;
+          if (!pre) current_pos = ptr-value_;
 	  needspace = 1;
 	}
 	else if (*ptr == '&')
@@ -829,9 +983,10 @@ Fl_Help_View::draw()
 
       if (s > buf && !head)
       {
-        fl_draw(buf, xx + x() - leftline_, yy + y());
+        hv_draw(buf, xx + x() - leftline_, yy + y());
 	if (underline) fl_xyline(xx + x() - leftline_, yy + y() + 1,
 	                         xx + x() - leftline_ + ww);
+        current_pos = ptr-value_;
       }
     }
 
@@ -942,10 +1097,11 @@ Fl_Help_View::format()
   Fl_Color	tc, rc;		// Table/row background color
   Fl_Boxtype	b = box() ? box() : FL_DOWN_BOX;
 				// Box to draw...
+  fl_margins	margins;	// Left margin stack...
 
 
   // Reset document width...
-  hsize_ = w() - 24;
+  hsize_ = w() - Fl::scrollbar_size() - Fl::box_dw(b);
 
   done = 0;
   while (!done)
@@ -958,7 +1114,7 @@ Fl_Help_View::format()
     size_      = 0;
     bgcolor_   = color();
     textcolor_ = textcolor();
-    linkcolor_ = selection_color();
+    linkcolor_ = fl_contrast(FL_BLUE, color());
 
     tc = rc = bgcolor_;
 
@@ -972,7 +1128,7 @@ Fl_Help_View::format()
 
     line         = 0;
     links        = 0;
-    xx           = 4;
+    xx           = margins.clear();
     yy           = fsize + 2;
     ww           = 0;
     column       = 0;
@@ -990,7 +1146,7 @@ Fl_Help_View::format()
 
     for (ptr = value_, s = buf; *ptr;)
     {
-      if ((*ptr == '<' || isspace(*ptr)) && s > buf)
+      if ((*ptr == '<' || isspace((*ptr)&255)) && s > buf)
       {
         // Get width...
         *s = '\0';
@@ -1040,7 +1196,7 @@ Fl_Help_View::format()
 	    hh = fsize + 2;
 
           // Handle preformatted text...
-	  while (isspace(*ptr))
+	  while (isspace((*ptr)&255))
 	  {
 	    if (*ptr == '\n')
 	    {
@@ -1072,7 +1228,7 @@ Fl_Help_View::format()
 	else
 	{
           // Handle normal text or stuff in the <HEAD> section...
-	  while (isspace(*ptr))
+	  while (isspace((*ptr)&255))
             ptr ++;
 	}
 
@@ -1097,7 +1253,7 @@ Fl_Help_View::format()
 	    break;
 	}
 
-	while (*ptr && *ptr != '>' && !isspace(*ptr))
+	while (*ptr && *ptr != '>' && !isspace((*ptr)&255))
           if (s < (buf + sizeof(buf) - 1))
             *s++ = *ptr++;
 	  else
@@ -1146,7 +1302,7 @@ Fl_Help_View::format()
           textcolor_ = get_color(get_attr(attrs, "TEXT", attr, sizeof(attr)),
 	                	 textcolor());
           linkcolor_ = get_color(get_attr(attrs, "LINK", attr, sizeof(attr)),
-	                	 selection_color());
+	                	 fl_contrast(FL_BLUE, color()));
 	}
 	else if (strcasecmp(buf, "BR") == 0)
 	{
@@ -1176,6 +1332,7 @@ Fl_Help_View::format()
 	{
           block->end = start;
           line       = do_align(block, line, xx, newalign, links);
+	  newalign   = strcasecmp(buf, "CENTER") ? LEFT : CENTER;
           xx         = block->x;
           block->h   += hh;
 
@@ -1184,7 +1341,7 @@ Fl_Help_View::format()
 	      strcasecmp(buf, "DL") == 0)
           {
 	    block->h += fsize + 2;
-	    xx       += 4 * fsize;
+	    xx       = margins.push(4 * fsize);
 	  }
           else if (strcasecmp(buf, "TABLE") == 0)
 	  {
@@ -1300,16 +1457,13 @@ Fl_Help_View::format()
 	      strcasecmp(buf, "/OL") == 0 ||
 	      strcasecmp(buf, "/DL") == 0)
 	  {
-	    xx       -= 4 * fsize;
+	    xx       = margins.pop();
 	    block->h += fsize + 2;
 	  }
           else if (strcasecmp(buf, "/TABLE") == 0) 
           {
 	    block->h += fsize + 2;
-            // the current block is *not* the table block, so the current xx is 
-            // meaningless. Set it back to page x, so the next block will be aligned 
-            // reasonably. This fails fro table-in-table html!
-            xx = 4;
+            xx       = margins.current();
           }
 	  else if (strcasecmp(buf, "/PRE") == 0)
 	  {
@@ -1321,7 +1475,7 @@ Fl_Help_View::format()
 
           popfont(font, fsize);
 
-          while (isspace(*ptr))
+          while (isspace((*ptr)&255))
 	    ptr ++;
 
           block->h += hh;
@@ -1384,9 +1538,9 @@ Fl_Help_View::format()
           line       = do_align(block, line, xx, newalign, links);
           block->end = start;
 	  block->h   += hh;
+	  talign     = LEFT;
 
           xx = blocks_[row].x;
-
           yy = blocks_[row].y + blocks_[row].h;
 
 	  for (cell = blocks_ + row + 1; cell <= block; cell ++)
@@ -1404,7 +1558,7 @@ Fl_Help_View::format()
 	      cell->h = block->h;
 	    }
 
-	  yy        = block->y + block->h - 4;
+	  yy        = block->y + block->h /*- 4*/;
           block     = add_block(start, xx, yy, hsize_, 0);
 	  needspace = 0;
 	  row       = 0;
@@ -1430,6 +1584,8 @@ Fl_Help_View::format()
           xx = blocks_[row].x + fsize + 3 + table_offset;
 	  for (i = 0; i < column; i ++)
 	    xx += columns[i] + 6;
+
+          margins.push(xx - margins.current());
 
           if (get_attr(attrs, "COLSPAN", attr, sizeof(attr)) != NULL)
 	    colspan = atoi(attr);
@@ -1465,34 +1621,37 @@ Fl_Help_View::format()
 	else if ((strcasecmp(buf, "/TD") == 0 ||
                   strcasecmp(buf, "/TH") == 0) && row)
 	{
+          line = do_align(block, line, xx, newalign, links);
           popfont(font, fsize);
+	  xx = margins.pop();
+	  talign = LEFT;
 	}
-	  else if (strcasecmp(buf, "FONT") == 0)
-	  {
-            if (get_attr(attrs, "FACE", attr, sizeof(attr)) != NULL) {
-	      if (!strncasecmp(attr, "helvetica", 9) ||
-	          !strncasecmp(attr, "arial", 5) ||
-		  !strncasecmp(attr, "sans", 4)) font = FL_HELVETICA;
-              else if (!strncasecmp(attr, "times", 5) ||
-	               !strncasecmp(attr, "serif", 5)) font = FL_TIMES;
-              else if (!strncasecmp(attr, "symbol", 6)) font = FL_SYMBOL;
-	      else font = FL_COURIER;
-            }
+	else if (strcasecmp(buf, "FONT") == 0)
+	{
+          if (get_attr(attrs, "FACE", attr, sizeof(attr)) != NULL) {
+	    if (!strncasecmp(attr, "helvetica", 9) ||
+	        !strncasecmp(attr, "arial", 5) ||
+		!strncasecmp(attr, "sans", 4)) font = FL_HELVETICA;
+            else if (!strncasecmp(attr, "times", 5) ||
+	             !strncasecmp(attr, "serif", 5)) font = FL_TIMES;
+            else if (!strncasecmp(attr, "symbol", 6)) font = FL_SYMBOL;
+	    else font = FL_COURIER;
+          }
 
-            if (get_attr(attrs, "SIZE", attr, sizeof(attr)) != NULL) {
-              if (isdigit(attr[0] & 255)) {
-	        // Absolute size
-	        fsize = (int)(textsize_ * pow(1.2, atoi(attr) - 3.0));
-	      } else {
-	        // Relative size
-	        fsize = (int)(fsize * pow(1.2, atoi(attr)));
-	      }
+          if (get_attr(attrs, "SIZE", attr, sizeof(attr)) != NULL) {
+            if (isdigit(attr[0] & 255)) {
+	      // Absolute size
+	      fsize = (int)(textsize_ * pow(1.2, atoi(attr) - 3.0));
+	    } else {
+	      // Relative size
+	      fsize = (int)(fsize * pow(1.2, atoi(attr)));
 	    }
-
-            pushfont(font, fsize);
 	  }
-	  else if (strcasecmp(buf, "/FONT") == 0)
-	    popfont(font, fsize);
+
+          pushfont(font, fsize);
+	}
+	else if (strcasecmp(buf, "/FONT") == 0)
+	  popfont(font, fsize);
 	else if (strcasecmp(buf, "B") == 0 ||
         	 strcasecmp(buf, "STRONG") == 0)
 	  pushfont(font |= FL_BOLD, fsize);
@@ -1581,7 +1740,7 @@ Fl_Help_View::format()
 	needspace = 0;
 	ptr ++;
       }
-      else if (isspace(*ptr))
+      else if (isspace((*ptr)&255))
       {
 	needspace = 1;
 
@@ -1653,6 +1812,7 @@ Fl_Help_View::format()
     size_      = yy + hh;
   }
 
+//  printf("margins.depth_=%d\n", margins.depth_);
 
   if (ntargets_ > 1)
     qsort(targets_, ntargets_, sizeof(Fl_Help_Target),
@@ -1660,38 +1820,47 @@ Fl_Help_View::format()
 
   int dx = Fl::box_dw(b) - Fl::box_dx(b);
   int dy = Fl::box_dh(b) - Fl::box_dy(b);
+  int ss = Fl::scrollbar_size();
+  int dw = Fl::box_dw(b) + ss;
+  int dh = Fl::box_dh(b);
 
-  if (hsize_ > (w() - 24)) {
+  if (hsize_ > (w() - dw)) {
     hscrollbar_.show();
 
-    if (size_ < (h() - 24)) {
+    dh += ss;
+
+    if (size_ < (h() - dh)) {
       scrollbar_.hide();
-      hscrollbar_.resize(x() + Fl::box_dx(b), y() + h() - 17 - dy, w() - Fl::box_dw(b), 17);
+      hscrollbar_.resize(x() + Fl::box_dx(b), y() + h() - ss - dy,
+                         w() - Fl::box_dw(b), ss);
     } else {
       scrollbar_.show();
-      scrollbar_.resize(x() + w() - 17 - dx, y() + Fl::box_dy(b), 17, h() - 17 - Fl::box_dh(b));
-      hscrollbar_.resize(x() + Fl::box_dx(b), y() + h() - 17 - dy, w() - 17 - Fl::box_dw(b), 17);
+      scrollbar_.resize(x() + w() - ss - dx, y() + Fl::box_dy(b),
+                        ss, h() - ss - Fl::box_dh(b));
+      hscrollbar_.resize(x() + Fl::box_dx(b), y() + h() - ss - dy,
+                         w() - ss - Fl::box_dw(b), ss);
     }
   } else {
     hscrollbar_.hide();
 
-    if (size_ < (h() - 8)) scrollbar_.hide();
+    if (size_ < (h() - dh)) scrollbar_.hide();
     else {
-      scrollbar_.resize(x() + w() - 17 - dx, y() + Fl::box_dy(b), 17, h() - Fl::box_dh(b));
+      scrollbar_.resize(x() + w() - ss - dx, y() + Fl::box_dy(b),
+                        ss, h() - Fl::box_dh(b));
       scrollbar_.show();
     }
   }
 
   // Reset scrolling if it needs to be...
   if (scrollbar_.visible()) {
-    int temph = h() - 8;
-    if (hscrollbar_.visible()) temph -= 16;
+    int temph = h() - Fl::box_dh(b);
+    if (hscrollbar_.visible()) temph -= ss;
     if ((topline_ + temph) > size_) topline(size_ - temph);
     else topline(topline_);
   } else topline(0);
 
   if (hscrollbar_.visible()) {
-    int tempw = w() - 24;
+    int tempw = w() - ss - Fl::box_dw(b);
     if ((leftline_ + tempw) > hsize_) leftline(hsize_ - tempw);
     else leftline(leftline_);
   } else leftline(0);
@@ -1747,7 +1916,7 @@ Fl_Help_View::format_table(int        *table_width,	// O - Total table width
   // Scan the table...
   for (ptr = table, column = -1, width = 0, s = buf, incell = 0; *ptr;)
   {
-    if ((*ptr == '<' || isspace(*ptr)) && s > buf && incell)
+    if ((*ptr == '<' || isspace((*ptr)&255)) && s > buf && incell)
     {
       // Check width...
       if (needspace)
@@ -1773,7 +1942,7 @@ Fl_Help_View::format_table(int        *table_width,	// O - Total table width
     {
       start = ptr;
 
-      for (s = buf, ptr ++; *ptr && *ptr != '>' && !isspace(*ptr);)
+      for (s = buf, ptr ++; *ptr && *ptr != '>' && !isspace((*ptr)&255);)
         if (s < (buf + sizeof(buf) - 1))
           *s++ = *ptr++;
 	else
@@ -2012,7 +2181,7 @@ Fl_Help_View::format_table(int        *table_width,	// O - Total table width
       needspace = 0;
       ptr ++;
     }
-    else if (isspace(*ptr))
+    else if (isspace((*ptr)&255))
     {
       needspace = 1;
 
@@ -2069,7 +2238,7 @@ Fl_Help_View::format_table(int        *table_width,	// O - Total table width
   int scale_width = *table_width;
 
   if (scale_width == 0) {
-    if (width > (hsize_ - 24)) scale_width = hsize_ - 24;
+    if (width > (hsize_ - Fl::scrollbar_size())) scale_width = hsize_ - Fl::scrollbar_size();
     else scale_width = width;
   }
 
@@ -2131,6 +2300,113 @@ Fl_Help_View::format_table(int        *table_width,	// O - Total table width
 
 
 //
+// 'Fl_Help_View::free_data()' - Free memory used for the document.
+//
+
+void
+Fl_Help_View::free_data() {
+  // Releae all images...
+  if (value_) {
+    const char	*ptr,		// Pointer into block
+		*attrs;		// Pointer to start of element attributes
+    char	*s,		// Pointer into buffer
+		buf[1024],	// Text buffer
+		attr[1024],	// Attribute buffer
+		wattr[1024],	// Width attribute buffer
+		hattr[1024];	// Height attribute buffer
+
+
+    for (ptr = value_; *ptr;)
+    {
+      if (*ptr == '<')
+      {
+	ptr ++;
+
+        if (strncmp(ptr, "!--", 3) == 0)
+	{
+	  // Comment...
+	  ptr += 3;
+	  if ((ptr = strstr(ptr, "-->")) != NULL)
+	  {
+	    ptr += 3;
+	    continue;
+	  }
+	  else
+	    break;
+	}
+
+        s = buf;
+
+	while (*ptr && *ptr != '>' && !isspace((*ptr)&255))
+          if (s < (buf + sizeof(buf) - 1))
+            *s++ = *ptr++;
+	  else
+	    ptr ++;
+
+	*s = '\0';
+
+	attrs = ptr;
+	while (*ptr && *ptr != '>')
+          ptr ++;
+
+	if (*ptr == '>')
+          ptr ++;
+
+	if (strcasecmp(buf, "IMG") == 0)
+	{
+	  Fl_Shared_Image	*img;
+	  int		width;
+	  int		height;
+
+
+          get_attr(attrs, "WIDTH", wattr, sizeof(wattr));
+          get_attr(attrs, "HEIGHT", hattr, sizeof(hattr));
+	  width  = get_length(wattr);
+	  height = get_length(hattr);
+
+	  if (get_attr(attrs, "SRC", attr, sizeof(attr))) {
+	    // Release the image twice to free it from memory...
+	    img = get_image(attr, width, height);
+	    img->release();
+	    img->release();
+	  }
+	}
+      }
+      else
+        ptr ++;
+    }
+
+    free((void *)value_);
+    value_ = 0;
+  }
+
+  // Free all of the arrays...
+  if (nblocks_) {
+    free(blocks_);
+
+    ablocks_ = 0;
+    nblocks_ = 0;
+    blocks_  = 0;
+  }
+
+  if (nlinks_) {
+    free(links_);
+
+    alinks_ = 0;
+    nlinks_ = 0;
+    links_  = 0;
+  }
+
+  if (ntargets_) {
+    free(targets_);
+
+    atargets_ = 0;
+    ntargets_ = 0;
+    targets_  = 0;
+  }
+}
+
+//
 // 'Fl_Help_View::get_align()' - Get an alignment attribute.
 //
 
@@ -2172,13 +2448,13 @@ Fl_Help_View::get_attr(const char *p,		// I - Pointer to start of attributes
 
   while (*p && *p != '>')
   {
-    while (isspace(*p))
+    while (isspace((*p)&255))
       p ++;
 
     if (*p == '>' || !*p)
       return (NULL);
 
-    for (ptr = name; *p && !isspace(*p) && *p != '=' && *p != '>';)
+    for (ptr = name; *p && !isspace((*p)&255) && *p != '=' && *p != '>';)
       if (ptr < (name + sizeof(name) - 1))
         *ptr++ = *p++;
       else
@@ -2186,14 +2462,14 @@ Fl_Help_View::get_attr(const char *p,		// I - Pointer to start of attributes
 
     *ptr = '\0';
 
-    if (isspace(*p) || !*p || *p == '>')
+    if (isspace((*p)&255) || !*p || *p == '>')
       buf[0] = '\0';
     else
     {
       if (*p == '=')
         p ++;
 
-      for (ptr = buf; *p && !isspace(*p) && *p != '>';)
+      for (ptr = buf; *p && !isspace((*p)&255) && *p != '>';)
         if (*p == '\'' || *p == '\"')
 	{
 	  quote = *p++;
@@ -2356,12 +2632,274 @@ Fl_Help_View::get_length(const char *l) {	// I - Value
     if (val > 100) val = 100;
     else if (val < 0) val = 0;
 
-    val = val * (hsize_ - 24) / 100;
+    val = val * (hsize_ - Fl::scrollbar_size()) / 100;
   }
 
   return val;
 }
 
+
+Fl_Help_Link *Fl_Help_View::find_link(int xx, int yy)
+{
+  int		i;
+  Fl_Help_Link	*linkp;
+  for (i = nlinks_, linkp = links_; i > 0; i --, linkp ++) {
+    if (xx >= linkp->x && xx < linkp->w &&
+        yy >= linkp->y && yy < linkp->h)
+      break;
+  }
+  return i ? linkp : 0L;
+}
+
+void Fl_Help_View::follow_link(Fl_Help_Link *linkp)
+{
+  char		target[32];	// Current target
+
+  clear_selection();
+
+  strlcpy(target, linkp->name, sizeof(target));
+
+  set_changed();
+
+  if (strcmp(linkp->filename, filename_) != 0 && linkp->filename[0])
+  {
+    char	dir[1024];	// Current directory
+    char	temp[1024],	// Temporary filename
+	      *tempptr;	// Pointer into temporary filename
+
+
+    if (strchr(directory_, ':') != NULL &&
+        strchr(linkp->filename, ':') == NULL)
+    {
+      if (linkp->filename[0] == '/')
+      {
+        strlcpy(temp, directory_, sizeof(temp));
+        if ((tempptr = strrchr(strchr(directory_, ':') + 3, '/')) != NULL)
+	  strlcpy(tempptr, linkp->filename, sizeof(temp));
+	else
+	  strlcat(temp, linkp->filename, sizeof(temp));
+      }
+      else
+	snprintf(temp, sizeof(temp), "%s/%s", directory_, linkp->filename);
+    }
+    else if (linkp->filename[0] != '/' && strchr(linkp->filename, ':') == NULL)
+    {
+      if (directory_[0])
+	snprintf(temp, sizeof(temp), "%s/%s", directory_, linkp->filename);
+      else
+      {
+	getcwd(dir, sizeof(dir));
+	snprintf(temp, sizeof(temp), "file:%s/%s", dir, linkp->filename);
+      }
+    }
+    else
+      strlcpy(temp, linkp->filename, sizeof(temp));
+
+    if (linkp->name[0])
+      snprintf(temp + strlen(temp), sizeof(temp) - strlen(temp), "#%s",
+	       linkp->name);
+
+    load(temp);
+  }
+  else if (target[0])
+    topline(target);
+  else
+    topline(0);
+
+  leftline(0);
+}
+
+void Fl_Help_View::clear_selection()
+{
+  if (current_view==this)
+    clear_global_selection();
+}
+
+void Fl_Help_View::select_all()
+{
+  clear_global_selection();
+  if (!value_) return;
+  current_view = this;
+  selection_drag_last = selection_last = strlen(value_);
+  selected = 1;
+}
+
+void Fl_Help_View::clear_global_selection()
+{
+  if (selected) redraw();
+  selection_push_first = selection_push_last = 0;
+  selection_drag_first = selection_drag_last = 0;
+  selection_first = selection_last = 0;
+  selected = 0;
+}
+
+char Fl_Help_View::begin_selection()
+{
+  clear_global_selection();
+
+  if (!fl_help_view_buffer) fl_help_view_buffer = fl_create_offscreen(1, 1);
+
+  mouse_x = Fl::event_x();
+  mouse_y = Fl::event_y();
+  draw_mode = 1;
+
+    current_view = this;
+    fl_begin_offscreen(fl_help_view_buffer);
+    draw();
+    fl_end_offscreen();
+
+  draw_mode = 0;
+
+  if (selection_push_last) return 1;
+  else return 0;
+}
+
+char Fl_Help_View::extend_selection()
+{
+  if (Fl::event_is_click())
+    return 0;
+
+//  printf("old selection_first=%d, selection_last=%d\n",
+//         selection_first, selection_last);
+
+  int sf = selection_first, sl = selection_last;
+
+  selected = 1;
+  mouse_x = Fl::event_x();
+  mouse_y = Fl::event_y();
+  draw_mode = 2;
+
+    fl_begin_offscreen(fl_help_view_buffer);
+    draw();
+    fl_end_offscreen();
+
+  draw_mode = 0;
+
+  if (selection_push_first < selection_drag_first) {
+    selection_first = selection_push_first;
+  } else {
+    selection_first = selection_drag_first;
+  }
+
+  if (selection_push_last > selection_drag_last) {
+    selection_last = selection_push_last;
+  } else {
+    selection_last = selection_drag_last;
+  }
+
+//  printf("new selection_first=%d, selection_last=%d\n",
+//         selection_first, selection_last);
+
+  if (sf!=selection_first || sl!=selection_last) {
+//    puts("REDRAW!!!\n");
+    return 1;
+  } else {
+//    puts("");
+    return 0;
+  }
+}
+
+// convert a command with up to four letters into an unsigned int
+static unsigned int command(const char *cmd)
+{
+  unsigned int ret = (tolower(cmd[0])<<24);
+  char c = cmd[1];
+  if (c=='>' || c==' ' || c==0) return ret;
+  ret |= (tolower(c)<<16);
+  c = cmd[2];
+  if (c=='>' || c==' ' || c==0) return ret;
+  ret |= (tolower(c)<<8);
+  c = cmd[3];
+  if (c=='>' || c==' ' || c==0) return ret;
+  ret |= tolower(c);
+  c = cmd[4];
+  if (c=='>' || c==' ' || c==0) return ret;
+  return 0;
+}
+
+#define CMD(a, b, c, d) ((a<<24)|(b<<16)|(c<<8)|d)
+
+void Fl_Help_View::end_selection(int clipboard) 
+{
+  if (!selected || current_view!=this) 
+    return;
+  // convert the select part of our html text into some kind of somewhat readable ASCII
+  // and store it in the selection buffer
+  char p = 0, pre = 0;;
+  int len = strlen(value_);
+  char *txt = (char*)malloc(len+1), *d = txt;
+  const char *s = value_, *cmd, *src;
+  for (;;) {
+    char c = *s++;
+    if (c==0) break;
+    if (c=='<') { // begin of some html command. Skip until we find a '>'
+      cmd = s;
+      for (;;) {
+        c = *s++;
+        if (c==0 || c=='>') break;
+      }
+      if (c==0) break;
+      // do something with this command... .
+      // the replacement string must not be longer that the command itself plus '<' and '>'
+      src = 0;
+      switch (command(cmd)) {
+        case CMD('p','r','e', 0 ): pre = 1; break;
+        case CMD('/','p','r','e'): pre = 0; break;
+        case CMD('t','d', 0 , 0 ):
+        case CMD('p', 0 , 0 , 0 ):
+        case CMD('/','p', 0 , 0 ):
+        case CMD('b','r', 0 , 0 ): src = "\n"; break;
+        case CMD('l','i', 0 , 0 ): src = "\n * "; break;
+        case CMD('/','h','1', 0 ):
+        case CMD('/','h','2', 0 ):
+        case CMD('/','h','3', 0 ):
+        case CMD('/','h','4', 0 ):
+        case CMD('/','h','5', 0 ):
+        case CMD('/','h','6', 0 ): src = "\n\n"; break;
+        case CMD('t','r', 0 , 0 ):
+        case CMD('h','1', 0 , 0 ):
+        case CMD('h','2', 0 , 0 ):
+        case CMD('h','3', 0 , 0 ):
+        case CMD('h','4', 0 , 0 ):
+        case CMD('h','5', 0 , 0 ):
+        case CMD('h','6', 0 , 0 ): src = "\n\n"; break;
+        case CMD('d','t', 0 , 0 ): src = "\n "; break;
+        case CMD('d','d', 0 , 0 ): src = "\n - "; break;
+      }
+      int n = s-value_;
+      if (src && n>selection_first && n<=selection_last) {
+        while (*src) {
+          *d++ = *src++;
+        }
+        c = src[-1];
+        p = isspace(c&255) ? ' ' : c;
+      }
+      continue;
+    }
+    if (c=='&') { // special characters
+      int xx = quote_char(s);
+      if (xx>=0) {
+        c = (char)xx;
+        for (;;) {
+          char cc = *s++;
+          if (!cc || cc==';') break;
+        }
+      }
+    }
+    int n = s-value_;
+    if (n>selection_first && n<=selection_last) {
+      if (!pre && isspace(c&255)) c = ' ';
+      if (p!=' '||c!=' ')
+        *d++ = c;
+      p = c;
+    }
+  }
+  *d = 0;
+  Fl::copy(txt, strlen(txt), clipboard);
+  free(txt);
+}
+
+#define ctrl(x) ((x)&0x1f)
 
 //
 // 'Fl_Help_View::handle()' - Handle events in the widget.
@@ -2370,105 +2908,84 @@ Fl_Help_View::get_length(const char *l) {	// I - Value
 int				// O - 1 if we handled it, 0 otherwise
 Fl_Help_View::handle(int event)	// I - Event to handle
 {
-  int		i;		// Looping var
-  int		xx, yy;		// Adjusted mouse position
-  Fl_Help_Link	*linkp;		// Current link
-  char		target[32];	// Current target
+  static Fl_Help_Link *linkp;   // currently clicked link
 
+  int xx = Fl::event_x() - x() + leftline_;
+  int yy = Fl::event_y() - y() + topline_;
 
   switch (event)
   {
-    case FL_PUSH :
-	if (Fl_Group::handle(event))
-	  return (1);
-
-    case FL_MOVE :
-        xx = Fl::event_x() - x() + leftline_;
-	yy = Fl::event_y() - y() + topline_;
-	break;
-
+    case FL_FOCUS:
+      redraw();
+      return 1;
+    case FL_UNFOCUS:
+      clear_selection();
+      redraw();
+      return 1;
+    case FL_ENTER :
+      Fl_Group::handle(event);
+      return 1;
     case FL_LEAVE :
-        fl_cursor(FL_CURSOR_DEFAULT);
-
-    default :
-	return (Fl_Group::handle(event));
-  }
-
-  // Handle mouse clicks on links...
-  for (i = nlinks_, linkp = links_; i > 0; i --, linkp ++)
-    if (xx >= linkp->x && xx < linkp->w &&
-        yy >= linkp->y && yy < linkp->h)
+      fl_cursor(FL_CURSOR_DEFAULT);
       break;
-
-  if (!i)
-  {
-    fl_cursor(FL_CURSOR_DEFAULT);
-    return (1);
-  }
-
-  // Change the cursor for FL_MOTION events, and go to the link for
-  // clicks...
-  if (event == FL_MOVE)
-    fl_cursor(FL_CURSOR_HAND);
-  else
-  {
-    fl_cursor(FL_CURSOR_DEFAULT);
-
-    strlcpy(target, linkp->name, sizeof(target));
-
-    set_changed();
-
-    if (strcmp(linkp->filename, filename_) != 0 && linkp->filename[0])
-    {
-      char	dir[1024];	// Current directory
-      char	temp[1024],	// Temporary filename
-		*tempptr;	// Pointer into temporary filename
-
-
-      if (strchr(directory_, ':') != NULL &&
-          strchr(linkp->filename, ':') == NULL)
-      {
-	if (linkp->filename[0] == '/')
-	{
-          strlcpy(temp, directory_, sizeof(temp));
-          if ((tempptr = strrchr(strchr(directory_, ':') + 3, '/')) != NULL)
-	    strlcpy(tempptr, linkp->filename, sizeof(temp));
-	  else
-	    strlcat(temp, linkp->filename, sizeof(temp));
-	}
-	else
-	  snprintf(temp, sizeof(temp), "%s/%s", directory_, linkp->filename);
+    case FL_MOVE:
+      if (find_link(xx, yy)) fl_cursor(FL_CURSOR_HAND);
+      else fl_cursor(FL_CURSOR_DEFAULT);
+      return 1;
+    case FL_PUSH:
+      if (Fl_Group::handle(event)) return 1;
+      linkp = find_link(xx, yy);
+      if (linkp) {
+        fl_cursor(FL_CURSOR_HAND);
+        return 1;
       }
-      else if (linkp->filename[0] != '/' && strchr(linkp->filename, ':') == NULL)
-      {
-	if (directory_[0])
-	  snprintf(temp, sizeof(temp), "%s/%s", directory_, linkp->filename);
-	else
-	{
-	  getcwd(dir, sizeof(dir));
-	  snprintf(temp, sizeof(temp), "file:%s/%s", dir, linkp->filename);
-	}
+      if (begin_selection()) {
+        fl_cursor(FL_CURSOR_INSERT);
+        return 1;
       }
-      else
-        strlcpy(temp, linkp->filename, sizeof(temp));
-
-      if (linkp->name[0])
-        snprintf(temp + strlen(temp), sizeof(temp) - strlen(temp), "#%s",
-	         linkp->name);
-
-      load(temp);
-    }
-    else if (target[0])
-      topline(target);
-    else
-      topline(0);
-
-    leftline(0);
+      fl_cursor(FL_CURSOR_DEFAULT);
+      return 1;
+    case FL_DRAG:
+      if (linkp) {
+        if (Fl::event_is_click()) {
+          fl_cursor(FL_CURSOR_HAND);
+        } else {
+          fl_cursor(FL_CURSOR_DEFAULT); // should be "FL_CURSOR_CANCEL" if we had it
+        }
+        return 1;
+      }
+      if (current_view==this && selection_push_last) {
+        if (extend_selection()) redraw();
+        fl_cursor(FL_CURSOR_INSERT);
+        return 1;
+      }
+      fl_cursor(FL_CURSOR_DEFAULT);
+      return 1;
+    case FL_RELEASE:
+      if (linkp) {
+        if (Fl::event_is_click()) {
+          follow_link(linkp);
+        }
+        fl_cursor(FL_CURSOR_DEFAULT);
+        linkp = 0;
+        return 1;
+      }
+      if (current_view==this && selection_push_last) {
+        end_selection();
+        return 1;
+      }
+      return 1;
+    case FL_SHORTCUT: {
+      char ascii = Fl::event_text()[0];
+      switch (ascii) {
+        case ctrl('A'): select_all(); redraw(); return 1;
+        case ctrl('C'):
+        case ctrl('X'): end_selection(1); return 1;
+      }
+      break; }
   }
-
-  return (1);
+  return (Fl_Group::handle(event));
 }
-
 
 //
 // 'Fl_Help_View::Fl_Help_View()' - Build a Fl_Help_View widget.
@@ -2480,8 +2997,10 @@ Fl_Help_View::Fl_Help_View(int        xx,	// I - Left position
 			   int        hh,	// I - Height in pixels
 			   const char *l)
     : Fl_Group(xx, yy, ww, hh, l),
-      scrollbar_(xx + ww - 17, yy, 17, hh - 17),
-      hscrollbar_(xx, yy + hh - 17, ww - 17, 17)
+      scrollbar_(xx + ww - Fl::scrollbar_size(), yy,
+                 Fl::scrollbar_size(), hh - Fl::scrollbar_size()),
+      hscrollbar_(xx, yy + hh - Fl::scrollbar_size(),
+                  ww - Fl::scrollbar_size(), Fl::scrollbar_size())
 {
   color(FL_BACKGROUND2_COLOR, FL_SELECTION_COLOR);
 
@@ -2540,14 +3059,8 @@ Fl_Help_View::Fl_Help_View(int        xx,	// I - Left position
 
 Fl_Help_View::~Fl_Help_View()
 {
-  if (nblocks_)
-    free(blocks_);
-  if (nlinks_)
-    free(links_);
-  if (ntargets_)
-    free(targets_);
-  if (value_)
-    free((void *)value_);
+  clear_selection();
+  free_data();
 }
 
 
@@ -2566,6 +3079,8 @@ Fl_Help_View::load(const char *f)// I - Filename to load (may also have target)
   char		error[1024];	// Error buffer
   char		newname[1024];	// New filename buffer
 
+
+  clear_selection();
 
   strlcpy(newname, f, sizeof(newname));
   if ((target = strrchr(newname, '#')) != NULL)
@@ -2665,10 +3180,12 @@ Fl_Help_View::resize(int xx,	// I - New left position
 
   Fl_Widget::resize(xx, yy, ww, hh);
 
-  scrollbar_.resize(x() + w() - 17 - Fl::box_dw(b) + Fl::box_dx(b), y() + Fl::box_dy(b),
-                    17, h() - 17 - Fl::box_dh(b));
-  hscrollbar_.resize(x() + Fl::box_dx(b), y() + h() - 17 - Fl::box_dh(b) + Fl::box_dy(b),
-                     w() - 17 - Fl::box_dw(b), 17);
+  int ss = Fl::scrollbar_size();
+  scrollbar_.resize(x() + w() - ss - Fl::box_dw(b) + Fl::box_dx(b),
+                    y() + Fl::box_dy(b), ss, h() - ss - Fl::box_dh(b));
+  hscrollbar_.resize(x() + Fl::box_dx(b),
+                     y() + h() - ss - Fl::box_dh(b) + Fl::box_dy(b),
+                     w() - ss - Fl::box_dw(b), ss);
 
   format();
 }
@@ -2708,14 +3225,14 @@ Fl_Help_View::topline(int t)	// I - Top line number
   if (!value_)
     return;
 
-  if (size_ < (h() - 24) || t < 0)
+  if (size_ < (h() - Fl::scrollbar_size()) || t < 0)
     t = 0;
   else if (t > size_)
     t = size_;
 
   topline_ = t;
 
-  scrollbar_.value(topline_, h() - 24, 0, size_);
+  scrollbar_.value(topline_, h() - Fl::scrollbar_size(), 0, size_);
 
   do_callback();
 
@@ -2733,14 +3250,14 @@ Fl_Help_View::leftline(int l)	// I - Left position
   if (!value_)
     return;
 
-  if (hsize_ < (w() - 24) || l < 0)
+  if (hsize_ < (w() - Fl::scrollbar_size()) || l < 0)
     l = 0;
   else if (l > hsize_)
     l = hsize_;
 
   leftline_ = l;
 
-  hscrollbar_.value(leftline_, w() - 24, 0, hsize_);
+  hscrollbar_.value(leftline_, w() - Fl::scrollbar_size(), 0, hsize_);
 
   redraw();
 }
@@ -2753,21 +3270,29 @@ Fl_Help_View::leftline(int l)	// I - Left position
 void
 Fl_Help_View::value(const char *v)	// I - Text to view
 {
+  clear_selection();
+  free_data();
+  set_changed();
+
   if (!v)
     return;
-
-  if (value_ != NULL)
-    free((void *)value_);
 
   value_ = strdup(v);
 
   format();
 
-  set_changed();
   topline(0);
   leftline(0);
 }
 
+#ifdef ENC
+# undef ENC
+#endif
+#ifdef __APPLE__
+# define ENC(a, b) b
+#else
+# define ENC(a, b) a
+#endif
 
 //
 // 'quote_char()' - Return the character code associated with a quoted char.
@@ -2782,106 +3307,111 @@ quote_char(const char *p) {	// I - Quoted string
     int		code;
   }	*nameptr,		// Pointer into name array
 	names[] = {		// Quoting names
-    { "Aacute;", 7, 193 },
-    { "aacute;", 7, 225 },
-    { "Acirc;",  6, 194 },
-    { "acirc;",  6, 226 },
-    { "acute;",  6, 180 },
-    { "AElig;",  6, 198 },
-    { "aelig;",  6, 230 },
-    { "Agrave;", 7, 192 },
-    { "agrave;", 7, 224 },
-    { "amp;",    4, '&' },
-    { "Aring;",  6, 197 },
-    { "aring;",  6, 229 },
-    { "Atilde;", 7, 195 },
-    { "atilde;", 7, 227 },
-    { "Auml;",   5, 196 },
-    { "auml;",   5, 228 },
-    { "brvbar;", 7, 166 },
-    { "Ccedil;", 7, 199 },
-    { "ccedil;", 7, 231 },
-    { "cedil;",  6, 184 },
-    { "cent;",   5, 162 },
-    { "copy;",   5, 169 },
-    { "curren;", 7, 164 },
-    { "deg;",    4, 176 },
-    { "divide;", 7, 247 },
-    { "Eacute;", 7, 201 },
-    { "eacute;", 7, 233 },
-    { "Ecirc;",  6, 202 },
-    { "ecirc;",  6, 234 },
-    { "Egrave;", 7, 200 },
-    { "egrave;", 7, 232 },
-    { "ETH;",    4, 208 },
-    { "eth;",    4, 240 },
-    { "Euml;",   5, 203 },
-    { "euml;",   5, 235 },
-    { "frac12;", 7, 189 },
-    { "frac14;", 7, 188 },
-    { "frac34;", 7, 190 },
-    { "gt;",     3, '>' },
-    { "Iacute;", 7, 205 },
-    { "iacute;", 7, 237 },
-    { "Icirc;",  6, 206 },
-    { "icirc;",  6, 238 },
-    { "iexcl;",  6, 161 },
-    { "Igrave;", 7, 204 },
-    { "igrave;", 7, 236 },
-    { "iquest;", 7, 191 },
-    { "Iuml;",   5, 207 },
-    { "iuml;",   5, 239 },
-    { "laquo;",  6, 171 },
-    { "lt;",     3, '<' },
-    { "macr;",   5, 175 },
-    { "micro;",  6, 181 },
-    { "middot;", 7, 183 },
-    { "nbsp;",   5, ' ' },
-    { "not;",    4, 172 },
-    { "Ntilde;", 7, 209 },
-    { "ntilde;", 7, 241 },
-    { "Oacute;", 7, 211 },
-    { "oacute;", 7, 243 },
-    { "Ocirc;",  6, 212 },
-    { "ocirc;",  6, 244 },
-    { "Ograve;", 7, 210 },
-    { "ograve;", 7, 242 },
-    { "ordf;",   5, 170 },
-    { "ordm;",   5, 186 },
-    { "Oslash;", 7, 216 },
-    { "oslash;", 7, 248 },
-    { "Otilde;", 7, 213 },
-    { "otilde;", 7, 245 },
-    { "Ouml;",   5, 214 },
-    { "ouml;",   5, 246 },
-    { "para;",   5, 182 },
-    { "plusmn;", 7, 177 },
-    { "pound;",  6, 163 },
-    { "quot;",   5, '\"' },
-    { "raquo;",  6, 187 },
-    { "reg;",    4, 174 },
-    { "sect;",   5, 167 },
-    { "shy;",    4, 173 },
-    { "sup1;",   5, 185 },
-    { "sup2;",   5, 178 },
-    { "sup3;",   5, 179 },
-    { "szlig;",  6, 223 },
-    { "THORN;",  6, 222 },
-    { "thorn;",  6, 254 },
-    { "times;",  6, 215 },
-    { "Uacute;", 7, 218 },
-    { "uacute;", 7, 250 },
-    { "Ucirc;",  6, 219 },
-    { "ucirc;",  6, 251 },
-    { "Ugrave;", 7, 217 },
-    { "ugrave;", 7, 249 },
-    { "uml;",    4, 168 },
-    { "Uuml;",   5, 220 },
-    { "uuml;",   5, 252 },
-    { "Yacute;", 7, 221 },
-    { "yacute;", 7, 253 },
-    { "yen;",    4, 165 },
-    { "yuml;",   5, 255 }
+    { "Aacute;", 7, ENC(193,231) },
+    { "aacute;", 7, ENC(225,135) },
+    { "Acirc;",  6, ENC(194,229) },
+    { "acirc;",  6, ENC(226,137) },
+    { "acute;",  6, ENC(180,171) },
+    { "AElig;",  6, ENC(198,174) },
+    { "aelig;",  6, ENC(230,190) },
+    { "Agrave;", 7, ENC(192,203) },
+    { "agrave;", 7, ENC(224,136) },
+    { "amp;",    4, ENC('&','&') },
+    { "Aring;",  6, ENC(197,129) },
+    { "aring;",  6, ENC(229,140) },
+    { "Atilde;", 7, ENC(195,204) },
+    { "atilde;", 7, ENC(227,139) },
+    { "Auml;",   5, ENC(196,128) },
+    { "auml;",   5, ENC(228,138) },
+    { "brvbar;", 7, ENC(166, -1) },
+    { "bull;",   5, ENC(149,165) },
+    { "Ccedil;", 7, ENC(199,199) },
+    { "ccedil;", 7, ENC(231,141) },
+    { "cedil;",  6, ENC(184,252) },
+    { "cent;",   5, ENC(162,162) },
+    { "copy;",   5, ENC(169,169) },
+    { "curren;", 7, ENC(164, -1) },
+    { "deg;",    4, ENC(176,161) },
+    { "divide;", 7, ENC(247,214) },
+    { "Eacute;", 7, ENC(201,131) },
+    { "eacute;", 7, ENC(233,142) },
+    { "Ecirc;",  6, ENC(202,230) },
+    { "ecirc;",  6, ENC(234,144) },
+    { "Egrave;", 7, ENC(200,233) },
+    { "egrave;", 7, ENC(232,143) },
+    { "ETH;",    4, ENC(208, -1) },
+    { "eth;",    4, ENC(240, -1) },
+    { "Euml;",   5, ENC(203,232) },
+    { "euml;",   5, ENC(235,145) },
+    { "euro;",   5, ENC(128,219) },
+    { "frac12;", 7, ENC(189, -1) },
+    { "frac14;", 7, ENC(188, -1) },
+    { "frac34;", 7, ENC(190, -1) },
+    { "gt;",     3, ENC('>','>') },
+    { "Iacute;", 7, ENC(205,234) },
+    { "iacute;", 7, ENC(237,146) },
+    { "Icirc;",  6, ENC(206,235) },
+    { "icirc;",  6, ENC(238,148) },
+    { "iexcl;",  6, ENC(161,193) },
+    { "Igrave;", 7, ENC(204,237) },
+    { "igrave;", 7, ENC(236,147) },
+    { "iquest;", 7, ENC(191,192) },
+    { "Iuml;",   5, ENC(207,236) },
+    { "iuml;",   5, ENC(239,149) },
+    { "laquo;",  6, ENC(171,199) },
+    { "lt;",     3, ENC('<','<') },
+    { "macr;",   5, ENC(175,248) },
+    { "micro;",  6, ENC(181,181) },
+    { "middot;", 7, ENC(183,225) },
+    { "nbsp;",   5, ENC(' ',' ') },
+    { "not;",    4, ENC(172,194) },
+    { "Ntilde;", 7, ENC(209,132) },
+    { "ntilde;", 7, ENC(241,150) },
+    { "Oacute;", 7, ENC(211,238) },
+    { "oacute;", 7, ENC(243,151) },
+    { "Ocirc;",  6, ENC(212,239) },
+    { "ocirc;",  6, ENC(244,153) },
+    { "Ograve;", 7, ENC(210,241) },
+    { "ograve;", 7, ENC(242,152) },
+    { "ordf;",   5, ENC(170,187) },
+    { "ordm;",   5, ENC(186,188) },
+    { "Oslash;", 7, ENC(216,175) },
+    { "oslash;", 7, ENC(248,191) },
+    { "Otilde;", 7, ENC(213,205) },
+    { "otilde;", 7, ENC(245,155) },
+    { "Ouml;",   5, ENC(214,133) },
+    { "ouml;",   5, ENC(246,154) },
+    { "para;",   5, ENC(182,166) },
+    { "premil;", 7, ENC(137,228) },
+    { "plusmn;", 7, ENC(177,177) },
+    { "pound;",  6, ENC(163,163) },
+    { "quot;",   5, ENC('\"','\"') },
+    { "raquo;",  6, ENC(187,200) },
+    { "reg;",    4, ENC(174,168) },
+    { "sect;",   5, ENC(167,164) },
+    { "shy;",    4, ENC(173,'-') },
+    { "sup1;",   5, ENC(185, -1) },
+    { "sup2;",   5, ENC(178, -1) },
+    { "sup3;",   5, ENC(179, -1) },
+    { "szlig;",  6, ENC(223,167) },
+    { "THORN;",  6, ENC(222, -1) },
+    { "thorn;",  6, ENC(254, -1) },
+    { "times;",  6, ENC(215,'x') },
+    { "trade;",  6, ENC(153,170) },
+    { "Uacute;", 7, ENC(218,242) },
+    { "uacute;", 7, ENC(250,156) },
+    { "Ucirc;",  6, ENC(219,243) },
+    { "ucirc;",  6, ENC(251,158) },
+    { "Ugrave;", 7, ENC(217,244) },
+    { "ugrave;", 7, ENC(249,157) },
+    { "uml;",    4, ENC(168,172) },
+    { "Uuml;",   5, ENC(220,134) },
+    { "uuml;",   5, ENC(252,159) },
+    { "Yacute;", 7, ENC(221, -1) },
+    { "yacute;", 7, ENC(253, -1) },
+    { "yen;",    4, ENC(165,180) },
+    { "Yuml;",   5, ENC(159,217) },
+    { "yuml;",   5, ENC(255,216) }
   };
 
   if (!strchr(p, ';')) return -1;

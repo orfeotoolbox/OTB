@@ -3,7 +3,7 @@
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2005 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -130,8 +130,10 @@ Fl_RGB_Image::~Fl_RGB_Image() {
 
 void Fl_RGB_Image::uncache() {
 #ifdef __APPLE_QUARTZ__
-  if (id)
+  if (id) {
     CGImageRelease((CGImageRef)id);
+    id = 0;
+  }
 #else
   if (id) {
     fl_delete_offscreen((Fl_Offscreen)id);
@@ -156,9 +158,19 @@ Fl_Image *Fl_RGB_Image::copy(int W, int H) {
     if (array) {
       // Make a copy of the image data and return a new Fl_RGB_Image...
       new_array = new uchar[w() * h() * d()];
-      memcpy(new_array, array, w() * h() * d());
-
-      new_image = new Fl_RGB_Image(new_array, w(), h(), d(), ld());
+      if (ld() && ld()!=w()*d()) {
+        const uchar *src = array;
+        uchar *dst = new_array;
+        int dy, dh = h(), wd = w()*d(), wld = ld();
+        for (dy=0; dy<dh; dy++) {
+          memcpy(dst, src, wd);
+          src += wld;
+          dst += wd;
+        }
+      } else {
+        memcpy(new_array, array, w() * h() * d());
+      }
+      new_image = new Fl_RGB_Image(new_array, w(), h(), d());
       new_image->alloc_array = 1;
 
       return new_image;
@@ -174,7 +186,8 @@ Fl_Image *Fl_RGB_Image::copy(int W, int H) {
 		dx, dy,		// Destination coordinates
 		xerr, yerr,	// X & Y errors
 		xmod, ymod,	// X & Y moduli
-		xstep, ystep;	// X & Y step increments
+		xstep, ystep,	// X & Y step increments
+    line_d; // stride from line to line
 
 
   // Figure out Bresenheim step/modulus values...
@@ -182,6 +195,7 @@ Fl_Image *Fl_RGB_Image::copy(int W, int H) {
   xstep  = (w() / W) * d();
   ymod   = h() % H;
   ystep  = h() / H;
+  line_d = ld() ? ld() : w() * d();
 
   // Allocate memory for the new image...
   new_array = new uchar [W * H * d()];
@@ -190,9 +204,7 @@ Fl_Image *Fl_RGB_Image::copy(int W, int H) {
 
   // Scale the image using a nearest-neighbor algorithm...
   for (dy = H, sy = 0, yerr = H, new_ptr = new_array; dy > 0; dy --) {
-    for (dx = W, xerr = W, old_ptr = array + sy * (w() * d() + ld());
-	 dx > 0;
-	 dx --) {
+    for (dx = W, xerr = W, old_ptr = array + sy * line_d; dx > 0; dx --) {
       for (c = 0; c < d(); c ++) *new_ptr++ = old_ptr[c];
 
       old_ptr += xstep;
@@ -245,17 +257,18 @@ void Fl_RGB_Image::color_average(Fl_Color c, float i) {
   // Update the image data to do the blend...
   const uchar	*old_ptr;
   int		x, y;
+  int   line_i = ld() ? ld() - (w()*d()) : 0; // increment from line end to beginning of next line
 
   if (d() < 3) {
     ig = (r * 31 + g * 61 + b * 8) / 100 * (256 - ia);
 
-    for (new_ptr = new_array, old_ptr = array, y = 0; y < h(); y ++, old_ptr += ld())
+    for (new_ptr = new_array, old_ptr = array, y = 0; y < h(); y ++, old_ptr += line_i)
       for (x = 0; x < w(); x ++) {
 	*new_ptr++ = (*old_ptr++ * ia + ig) >> 8;
 	if (d() > 1) *new_ptr++ = *old_ptr++;
       }
   } else {
-    for (new_ptr = new_array, old_ptr = array, y = 0; y < h(); y ++, old_ptr += ld())
+    for (new_ptr = new_array, old_ptr = array, y = 0; y < h(); y ++, old_ptr += line_i)
       for (x = 0; x < w(); x ++) {
 	*new_ptr++ = (*old_ptr++ * ia + ir) >> 8;
 	*new_ptr++ = (*old_ptr++ * ia + ig) >> 8;
@@ -294,8 +307,9 @@ void Fl_RGB_Image::desaturate() {
   // Copy the image data, converting to grayscale...
   const uchar	*old_ptr;
   int		x, y;
+  int   line_i = ld() ? ld() - (w()*d()) : 0; // increment from line end to beginning of next line
 
-  for (new_ptr = new_array, old_ptr = array, y = 0; y < h(); y ++, old_ptr += ld())
+  for (new_ptr = new_array, old_ptr = array, y = 0; y < h(); y ++, old_ptr += line_i)
     for (x = 0; x < w(); x ++, old_ptr += d()) {
       *new_ptr++ = (uchar)((31 * old_ptr[0] + 61 * old_ptr[1] + 8 * old_ptr[2]) / 100);
       if (d() > 3) *new_ptr++ = old_ptr[3];
@@ -310,6 +324,64 @@ void Fl_RGB_Image::desaturate() {
   ld(0);
   d(new_d);
 }
+
+#if !defined(WIN32) && !USE_QUARTZ
+// Composite an image with alpha on systems that don't have accelerated
+// alpha compositing...
+static void alpha_blend(Fl_RGB_Image *img, int X, int Y, int W, int H, int cx, int cy) {
+  uchar *srcptr = (uchar*)img->array + img->d() * (img->w() * cy + cx);
+  int srcskip = img->d() * (img->w() - W);
+
+  uchar *dst = new uchar[W * H * 3];
+  uchar *dstptr = dst;
+
+  fl_read_image(dst, X, Y, W, H, 0);
+
+  uchar srcr, srcg, srcb, srca;
+  uchar dstr, dstg, dstb, dsta;
+
+  if (img->d() == 2) {
+    // Composite grayscale + alpha over RGB...
+    // Composite RGBA over RGB...
+    for (int y = H; y > 0; y--, srcptr+=srcskip)
+      for (int x = W; x > 0; x--) {
+	srcg = *srcptr++;
+	srca = *srcptr++;
+
+	dstr = dstptr[0];
+	dstg = dstptr[1];
+	dstb = dstptr[2];
+	dsta = 255 - srca;
+
+	*dstptr++ = (srcg * srca + dstr * dsta) >> 8;
+	*dstptr++ = (srcg * srca + dstg * dsta) >> 8;
+	*dstptr++ = (srcg * srca + dstb * dsta) >> 8;
+      }
+  } else {
+    // Composite RGBA over RGB...
+    for (int y = H; y > 0; y--, srcptr+=srcskip)
+      for (int x = W; x > 0; x--) {
+	srcr = *srcptr++;
+	srcg = *srcptr++;
+	srcb = *srcptr++;
+	srca = *srcptr++;
+
+	dstr = dstptr[0];
+	dstg = dstptr[1];
+	dstb = dstptr[2];
+	dsta = 255 - srca;
+
+	*dstptr++ = (srcr * srca + dstr * dsta) >> 8;
+	*dstptr++ = (srcg * srca + dstg * dsta) >> 8;
+	*dstptr++ = (srcb * srca + dstb * dsta) >> 8;
+      }
+  }
+
+  fl_draw_image(dst, X, Y, W, H, 3, 0);
+
+  delete[] dst;
+}
+#endif // !WIN32 && !USE_QUARTZ
 
 void Fl_RGB_Image::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
   // Don't draw an empty image...
@@ -337,13 +409,26 @@ void Fl_RGB_Image::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
         src, 0L, false, kCGRenderingIntentDefault);
     CGColorSpaceRelease(lut);
     CGDataProviderRelease(src);
-#else
+#elif defined(WIN32)
     id = fl_create_offscreen(w(), h());
-    fl_begin_offscreen((Fl_Offscreen)id);
-    fl_draw_image(array, 0, 0, w(), h(), d(), ld());
-    fl_end_offscreen();
-    if (d() == 2 || d() == 4) {
-      mask = fl_create_alphamask(w(), h(), d(), ld(), array);
+    if (d() == 2 || d() == 4 && fl_can_do_alpha_blending()) {
+      fl_begin_offscreen((Fl_Offscreen)id);
+      fl_draw_image(array, 0, 0, w(), h(), d()|FL_IMAGE_WITH_ALPHA, ld());
+      fl_end_offscreen();
+    } else {
+      fl_begin_offscreen((Fl_Offscreen)id);
+      fl_draw_image(array, 0, 0, w(), h(), d(), ld());
+      fl_end_offscreen();
+      if (d() == 2 || d() == 4) {
+        mask = fl_create_alphamask(w(), h(), d(), ld(), array);
+      }
+    }
+#else
+    if (d() == 1 || d() == 3) {
+      id = fl_create_offscreen(w(), h());
+      fl_begin_offscreen((Fl_Offscreen)id);
+      fl_draw_image(array, 0, 0, w(), h(), d(), ld());
+      fl_end_offscreen();
     }
 #endif
   }
@@ -357,6 +442,8 @@ void Fl_RGB_Image::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
     BitBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, SRCPAINT);
     RestoreDC(new_gc,save);
     DeleteDC(new_gc);
+  } else if (d()==2 || d()==4) {
+    fl_copy_offscreen_with_alpha(X, Y, W, H, (Fl_Offscreen)id, cx, cy);
   } else {
     fl_copy_offscreen(X, Y, W, H, (Fl_Offscreen)id, cx, cy);
   }
@@ -378,48 +465,47 @@ void Fl_RGB_Image::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
     rgb.red = 0x0000; rgb.green = 0x0000; rgb.blue = 0x0000;
     RGBForeColor(&rgb);
 
-#  if 0
-    // MRS: This *should* work, but doesn't on my system (iBook); change to
-    //      "#if 1" and restore the corresponding code in Fl_Bitmap.cxx
-    //      to test the real alpha channel support.
-    CopyDeepMask(GetPortBitMapForCopyBits((GrafPtr)id),
-	         GetPortBitMapForCopyBits((GrafPtr)mask), 
-	         GetPortBitMapForCopyBits(GetWindowPort(fl_window)),
-                 &src, &src, &dst, blend, NULL);
-#  else // Fallback to screen-door transparency...
     CopyMask(GetPortBitMapForCopyBits((GrafPtr)id),
 	     GetPortBitMapForCopyBits((GrafPtr)mask), 
 	     GetPortBitMapForCopyBits(GetWindowPort(fl_window)),
              &src, &src, &dst);
-#  endif // 0
-  } else {
-    fl_copy_offscreen(X, Y, W, H, (Fl_Offscreen)id, cx, cy);
+  } else if (id) fl_copy_offscreen(X, Y, W, H, (Fl_Offscreen)id, cx, cy);
+  else {
+    // Composite image with alpha manually each time...
+    alpha_blend(this, X, Y, W, H, cx, cy);
   }
 #elif defined(__APPLE_QUARTZ__)
   if (id && fl_gc) {
-    CGRect rect = { X, Y, W, H };
+    CGRect rect = { { X, Y }, { W, H } };
     Fl_X::q_begin_image(rect, cx, cy, w(), h());
     CGContextDrawImage(fl_gc, rect, (CGImageRef)id);
     Fl_X::q_end_image();
   }
 #else
-  if (mask) {
-    // I can't figure out how to combine a mask with existing region,
-    // so cut the image down to a clipped rectangle:
-    int nx, ny; fl_clip_box(X,Y,W,H,nx,ny,W,H);
-    cx += nx-X; X = nx;
-    cy += ny-Y; Y = ny;
-    // make X use the bitmap as a mask:
-    XSetClipMask(fl_display, fl_gc, mask);
-    int ox = X-cx; if (ox < 0) ox += w();
-    int oy = Y-cy; if (oy < 0) oy += h();
-    XSetClipOrigin(fl_display, fl_gc, X-cx, Y-cy);
-  }
-  fl_copy_offscreen(X, Y, W, H, id, cx, cy);
-  if (mask) {
-    // put the old clip region back
-    XSetClipOrigin(fl_display, fl_gc, 0, 0);
-    fl_restore_clip();
+  if (id) {
+    if (mask) {
+      // I can't figure out how to combine a mask with existing region,
+      // so cut the image down to a clipped rectangle:
+      int nx, ny; fl_clip_box(X,Y,W,H,nx,ny,W,H);
+      cx += nx-X; X = nx;
+      cy += ny-Y; Y = ny;
+      // make X use the bitmap as a mask:
+      XSetClipMask(fl_display, fl_gc, mask);
+      int ox = X-cx; if (ox < 0) ox += w();
+      int oy = Y-cy; if (oy < 0) oy += h();
+      XSetClipOrigin(fl_display, fl_gc, X-cx, Y-cy);
+    }
+
+    fl_copy_offscreen(X, Y, W, H, id, cx, cy);
+
+    if (mask) {
+      // put the old clip region back
+      XSetClipOrigin(fl_display, fl_gc, 0, 0);
+      fl_restore_clip();
+    }
+  } else {
+    // Composite image with alpha manually each time...
+    alpha_blend(this, X, Y, W, H, cx, cy);
   }
 #endif
 }

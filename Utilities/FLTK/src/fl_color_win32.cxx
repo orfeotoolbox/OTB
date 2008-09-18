@@ -34,11 +34,12 @@
 // being used to index arrays.  So I always copy them to an integer
 // before use.
 
-/*OTB Modifications: conflict name with OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h*/
-/*#include <config.h>*/
+// OTB Modifications
+//#include <config.h>
 #include "fltk-config.h"
-#include <FL/x.H>
+
 #include <FL/Fl.H>
+#include <FL/x.H>
 #include <FL/fl_draw.H>
 
 static unsigned fl_cmap[256] = {

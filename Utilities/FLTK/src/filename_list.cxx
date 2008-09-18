@@ -30,6 +30,9 @@
 #include <FL/filename.H>
 #include "flstring.h"
 #include <stdlib.h>
+
+// OTB Modifications
+//#include <config.h>
 #include "fltk-config.h"
 
 

@@ -30,9 +30,10 @@
 // Another disgusting X interface, based on code extracted and
 // purified with great difficulty from XLayerUtil.cxx:
 
-/*OTB Modifications: conflict name with OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h*/
-/*#include <config.h>*/
+// OTB Modifications
+//#include <config.h>
 #include "fltk-config.h"
+
 #if HAVE_OVERLAY
 #include <FL/Fl.H>
 #include <FL/x.H>

@@ -25,11 +25,12 @@
 //     http://www.fltk.org/str.php
 //
 
-/*OTB Modifications: conflict name with OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h*/
-/*#include <config.h>*/
+// OTB Modifications
+//#include <config.h>
 #include "fltk-config.h"
-#include <FL/x.H>
+
 #include <FL/Fl.H>
+#include <FL/x.H>
 
 ////////////////////////////////////////////////////////////////
 // "Grab" is done while menu systems are up.  This has several effects:

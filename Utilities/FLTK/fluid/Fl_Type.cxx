@@ -15,7 +15,7 @@
 // not in the linked list and are not written to files or
 // copied or otherwise examined.
 //
-// Copyright 1998-2005 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -49,9 +49,11 @@
 
 #include <FL/Fl_Pixmap.H>
 #include "pixmaps/lock.xpm"
+#include "pixmaps/protected.xpm"
 //#include "pixmaps/unlock.xpm"
 
 static Fl_Pixmap	lock_pixmap(lock_xpm);
+static Fl_Pixmap	protected_pixmap(protected_xpm);
 //static Fl_Pixmap	unlock_pixmap(unlock_xpm);
 
 #include "pixmaps/flWindow.xpm"
@@ -252,8 +254,10 @@ void Widget_Browser::item_draw(void *v, int X, int Y, int, int) const {
   else fl_color(FL_FOREGROUND_COLOR);
   Fl_Pixmap *pm = pixmap[l->pixmapID()];
   if (pm) pm->draw(X-18, Y);
-  if (l->is_public() == 0) lock_pixmap.draw(X - 17, Y);
-  //else if (l->is_public() > 0) ; //unlock_pixmap.draw(X - 17, Y);
+  switch (l->is_public()) {
+    case 0: lock_pixmap.draw(X - 17, Y); break;
+    case 2: protected_pixmap.draw(X - 17, Y); break;
+  }
   if (l->is_parent()) {
     if (!l->next || l->next->level <= l->level) {
       if (l->open_!=(l==pushedtitle)) {
@@ -622,6 +626,7 @@ Fl_Type::~Fl_Type() {
 int Fl_Type::is_parent() const {return 0;}
 int Fl_Type::is_widget() const {return 0;}
 int Fl_Type::is_valuator() const {return 0;}
+int Fl_Type::is_spinner() const {return 0;}
 int Fl_Type::is_button() const {return 0;}
 int Fl_Type::is_menu_item() const {return 0;}
 int Fl_Type::is_menu_button() const {return 0;}
@@ -708,7 +713,10 @@ void delete_all(int selected_only) {
       f = g;
     } else f = f->next;
   }
-  if(!selected_only)    include_H_from_C=1;
+  if(!selected_only) {
+		include_H_from_C=1;
+		use_FL_COMMAND=0;
+	}
 
   selection_changed(0);
 }
@@ -840,11 +848,45 @@ void Fl_Type::read_property(const char *c) {
 int Fl_Type::read_fdesign(const char*, const char*) {return 0;}
 
 /**
+ * Return 1 if the list contains a function with the given signature at the top level
+ */
+int has_toplevel_function(const char *rtype, const char *sig) {
+  Fl_Type *child;
+  for (child = Fl_Type::first; child; child = child->next) {
+    if (!child->is_in_class() && strcmp(child->type_name(), "Function")==0) {
+      const Fl_Function_Type *fn = (const Fl_Function_Type*)child;
+      if (fn->has_signature(rtype, sig))
+        return 1;
+    }
+  }
+  return 0;
+}
+
+/**
+ * Make sure that the given item is visible in the browser by opening
+ * all parent groups and moving the item into the visible space.
+ */
+void reveal_in_browser(Fl_Type *t) {
+  Fl_Type *p = t->parent;
+  if (p) {
+    for (;;) {
+      if (!p->open_)
+        p->open_ = 1;
+      if (!p->parent) break;
+      p = p->parent;
+    }
+    fixvisible(p);
+  }
+  widget_browser->display(t);
+  redraw_browser();
+}
+
+/**
  * Build widgets and dataset needed in live mode.
  * \return a widget pointer that the live mode initiator can 'show()'
  * \see leave_live_mode()
  */
-Fl_Widget *Fl_Type::enter_live_mode(int top) {
+Fl_Widget *Fl_Type::enter_live_mode(int) {
   return 0L;
 }
 

@@ -28,12 +28,13 @@
 /* My own scandir sorting function, useful for the film industry where
    we have many files with numbers in their names: */
 
-/*OTB Modifications: conflict name with OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h*/
-/*#include <config.h>*/
+// OTB Modifications
+//#include <config.h>
 #include "fltk-config.h"
+
+#include <ctype.h>
 #include <stdlib.h>
 #include <sys/types.h>
-#include "flstring.h"
 
 #include <FL/filename.H>
 

@@ -1,5 +1,5 @@
 //
-// "$Id: x.H 4288 2005-04-16 00:13:17Z mike $"
+// "$Id: x.H 5262 2006-07-18 11:23:20Z matt $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -69,6 +69,7 @@ extern FL_EXPORT Colormap fl_colormap;
 extern FL_EXPORT GC fl_gc;
 extern FL_EXPORT Window fl_window;
 extern FL_EXPORT XFontStruct* fl_xfont;
+extern FL_EXPORT void *fl_xftfont;
 FL_EXPORT ulong fl_xpixel(Fl_Color i);
 FL_EXPORT ulong fl_xpixel(uchar r, uchar g, uchar b);
 FL_EXPORT void fl_clip_region(Fl_Region);
@@ -143,5 +144,5 @@ extern FL_EXPORT int fl_parse_color(const char* p, uchar& r, uchar& g, uchar& b)
 #endif
 
 //
-// End of "$Id: x.H 4288 2005-04-16 00:13:17Z mike $".
+// End of "$Id: x.H 5262 2006-07-18 11:23:20Z matt $".
 //

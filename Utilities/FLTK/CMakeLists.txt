@@ -3,17 +3,21 @@
 
 PROJECT(FLTK)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.0)
+IF(COMMAND CMAKE_POLICY)
+  CMAKE_POLICY(SET CMP0003 NEW)
+ENDIF(COMMAND CMAKE_POLICY)
 
 # The FLTK version
 SET(FLTK_VERSION_MAJOR "1")
 SET(FLTK_VERSION_MINOR "1")
-SET(FLTK_VERSION_PATCH "7")
+SET(FLTK_VERSION_PATCH "9")
 SET(FLTK_VERSION "${FLTK_VERSION_MAJOR}.${FLTK_VERSION_MINOR}")
 SET(FLTK_VERSION_FULL "${FLTK_VERSION}.${FLTK_VERSION_PATCH}")
 
 SET(FLTK_LIBRARIES "fltk_images;fltk;fltk_gl;fltk_forms")
 
 # Executables and libraries should just go to bin
+#OTB Modifications
 SET(EXECUTABLE_OUTPUT_PATH "${OTB_BINARY_DIR}/bin" CACHE INTERNAL 
   "Where to put the executables for FLTK"
   )
@@ -26,46 +30,6 @@ OPTION(BUILD_SHARED_LIBS "Build FLTK as a shared library" OFF)
 
 # Search for modules in the FLTK source dir first
 SET(CMAKE_MODULE_PATH "${FLTK_SOURCE_DIR}/CMake")
-
-                #-----------------------------------------------------------------------------
-                # This lines come from FLTK CMakeLists.txt. We need the FLTK_PLATFORM_DEPENDENT_LIBS 
-                # information, but this VAR is not include in the FLTKConfig.cmake.
-                IF(WIN32)
-                  IF(NOT CYGWIN)
-                    IF(BORLAND)
-                      SET( FLTK_PLATFORM_DEPENDENT_LIBS import32 )
-                    ELSE(BORLAND)
-                      SET( FLTK_PLATFORM_DEPENDENT_LIBS wsock32 comctl32 )
-                    ENDIF(BORLAND)
-                  ENDIF(NOT CYGWIN)
-                ENDIF(WIN32)
-
-                SET(FLTK_X11 1)
-                SET(FLTK_APPLE 0)
-                IF(APPLE)
-                  OPTION(FLTK_APPLE_X11 "Use X11 on Mac instead of Carbon" OFF)
-                  MARK_AS_ADVANCED(FLTK_APPLE_X11)
-                  IF(NOT FLTK_APPLE_X11)
-                    SET(FLTK_APPLE 1)
-                    SET(FLTK_X11 0)
-                  ENDIF(NOT FLTK_APPLE_X11)
-                ENDIF(APPLE)
-                IF(UNIX)
-                  FIND_PACKAGE(X11)
-                  SET( FLTK_PLATFORM_DEPENDENT_LIBS ${X11_LIBRARIES} -lm)
-                ENDIF(UNIX)
-                IF(APPLE AND NOT FLTK_APPLE_X11)
-                  SET( FLTK_PLATFORM_DEPENDENT_LIBS
-                    "-framework Carbon -framework Cocoa -framework ApplicationServices -lz")
-                ENDIF(APPLE AND NOT FLTK_APPLE_X11)
-                IF(CYGWIN)
-                  ADD_DEFINITIONS(-DWIN32)  
-                  SET( FLTK_PLATFORM_DEPENDENT_LIBS ole32 uuid comctl32 wsock32 supc++ -lm -lgdi32)
-                ENDIF(CYGWIN)
-                IF(MINGW)
-                  ADD_DEFINITIONS(-DWIN32)
-                  SET( FLTK_PLATFORM_DEPENDENT_LIBS ole32 uuid wsock32 gdi32 comdlg32)
-                ENDIF(MINGW)
 
 #-----------------------------------------------------------------------------
 # Test for some required system information.
@@ -138,11 +102,6 @@ CHECK_INCLUDE_FILE_CONCAT("sys/select.h"   HAVE_SYS_SELECT_H)
 CHECK_INCLUDE_FILE_CONCAT("sys/stdtypes.h" HAVE_SYS_STDTYPES_H)
 CHECK_INCLUDE_FILE("pthread.h"      CMAKE_HAVE_PTHREAD_H)
 
-## Modif OTB-DEV , include specific visual for check strcasecmp
-CHECK_INCLUDE_FILES("unistd.h" HAVE_UNISTD_H)
-CHECK_INCLUDE_FILES("sys/types.h" HAVE_SYS_TYPES_H)
-CHECK_INCLUDE_FILES("stdlib.h" HAVE_STDLIB_H)
-
 FIND_PACKAGE(ZLIB)
 FIND_PACKAGE(PNG)
 FIND_PACKAGE(JPEG)
@@ -187,9 +146,6 @@ ENDIF(${SIZEOF_INT} MATCHES "^8$")
 # Set an option to build FLTK with OpenGL support
 SET(HAVE_GL 0)
 OPTION(USE_OPENGL "OpenGL Support" ON)
-# OTB Adds
-MARK_AS_ADVANCED(USE_OPENGL)
-
 IF(USE_OPENGL)
   FIND_PACKAGE(OpenGL)
   IF(OPENGL_FOUND)
@@ -234,8 +190,6 @@ ENDMACRO(PERFORM_CMAKE_TEST FILE TEST)
 
 # Set an option to build the zlib library or not
 OPTION(FLTK_USE_SYSTEM_ZLIB "Use's system zlib" OFF)
-# OTB Adds
-MARK_AS_ADVANCED(FLTK_USE_SYSTEM_ZLIBUS)
 IF(FLTK_USE_SYSTEM_ZLIB)
   IF(ZLIB_FOUND)
     SET(CMAKE_TEST_SPECIAL_LIBRARIES ${ZLIB_LIBRARIES})
@@ -255,9 +209,6 @@ ENDIF(FLTK_USE_SYSTEM_ZLIB)
 
 # Set an option to build the jpeg library or not
 OPTION(FLTK_USE_SYSTEM_JPEG "Use's system jpeg" OFF)
-# OTB Adds
-MARK_AS_ADVANCED(FLTK_USE_SYSTEM_JPEG)
-
 IF(FLTK_USE_SYSTEM_JPEG)
   IF(JPEG_FOUND)
     SET(CMAKE_TEST_SPECIAL_LIBRARIES ${JPEG_LIBRARIES})
@@ -277,8 +228,6 @@ ENDIF(FLTK_USE_SYSTEM_JPEG)
 
 # Set an option to build the png library or not
 OPTION(FLTK_USE_SYSTEM_PNG "Use's system png" OFF)
-# OTB Adds
-MARK_AS_ADVANCED(FLTK_USE_SYSTEM_PNG)
 IF(FLTK_USE_SYSTEM_PNG)
   IF(PNG_FOUND)
     SET(CMAKE_TEST_SPECIAL_LIBRARIES ${PNG_LIBRARIES})
@@ -304,8 +253,8 @@ SET(FLTK_DATADIR "${CMAKE_INSTALL_PREFIX}/share/FLTK")
 SET(FLTK_DOCDIR  "${CMAKE_INSTALL_PREFIX}/share/doc/FLTK")
 
 # Write out configuration header file
+# OTB MOdifications : conflict name file with the OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h
 CONFIGURE_FILE(${FLTK_SOURCE_DIR}/configh.cmake.in
-# OTB Modifications: conflict name file with the OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h
 #  ${FLTK_BINARY_DIR}/config.h)
   ${FLTK_BINARY_DIR}/fltk-config.h)
 
@@ -392,6 +341,18 @@ SUBDIRS(src)
 SUBDIRS(fluid)
 
 
+# Set an option to build the examples and testing
+#OPTION(BUILD_EXAMPLES "Build the tests" ON)
+#IF(BUILD_EXAMPLES)
+#  SUBDIRS(test)
+#ENDIF(BUILD_EXAMPLES)
+
+#OPTION(BUILD_TESTING "Build testing of FLTK" ON)
+#IF(BUILD_TESTING)
+#  ENABLE_TESTING()
+#  INCLUDE(Dart)
+#ENDIF(BUILD_TESTING)
+
 #-----------------------------------------------------------------------------
 # Help outside projects build FLTK projects.
 INCLUDE(CMakeExportBuildSettings)
@@ -448,7 +409,10 @@ CONFIGURE_FILE("${FLTK_SOURCE_DIR}/CMake/FLTKConfig.cmake.in"
 CONFIGURE_FILE("${FLTK_SOURCE_DIR}/fltk-config.in"
   "${FLTK_BINARY_DIR}/CMake/fltk-config" @ONLY IMMEDIATE)
 
+# OTB Modifications
+#INSTALL_FILES(/include/FL FILES ${FLTK_HEADER_FILES})
 INSTALL_FILES(/include/otb/Utilities/FLTK/FL FILES ${FLTK_HEADER_FILES})
+
 #INSTALL_FILES(/lib/FLTK-${FLTK_VERSION} FILES "${FLTK_SOURCE_DIR}/CMake/FLTKUse.cmake")
 #INSTALL_FILES(/lib/FLTK-${FLTK_VERSION} FILES "${FLTK_BINARY_DIR}/FLTKBuildSettings.cmake")
 #INSTALL_FILES(/lib/FLTK-${FLTK_VERSION} FILES "${FLTK_BINARY_DIR}/FLTKLibraryDepends.cmake")

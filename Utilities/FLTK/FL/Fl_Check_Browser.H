@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Browser.H 4461 2005-08-05 13:31:02Z dejan $"
+// "$Id: Fl_Check_Browser.H 5979 2007-11-19 15:46:24Z matt $"
 //
 // Fl_Check_Browser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -73,6 +73,7 @@ class FL_EXPORT Fl_Check_Browser : public Fl_Browser_ {
   int add(char *s);               // add an (unchecked) item
   int add(char *s, int b);        // add an item and set checked
 				  // both return the new nitems()
+  int remove(int item);           // delete an item. Returns nitems()
 
   // inline const char * methods to avoid breaking binary compatibility...
   int add(const char *s) { return add((char *)s); }
@@ -88,11 +89,15 @@ class FL_EXPORT Fl_Check_Browser : public Fl_Browser_ {
   void check_none();
   int value() const;              // currently selected item
   char *text(int item) const;     // returns pointer to internal buffer
+
+  protected:
+
+  int handle(int);
 };
 
 #endif // Fl_Check_Browser_H
 
 //
-// End of "$Id: Fl_Check_Browser.H 4461 2005-08-05 13:31:02Z dejan $".
+// End of "$Id: Fl_Check_Browser.H 5979 2007-11-19 15:46:24Z matt $".
 //
 

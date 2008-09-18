@@ -32,9 +32,10 @@
 #include <FL/Fl_Single_Window.H>
 #include <FL/fl_draw.H>
 #include <FL/fl_show_colormap.H>
-/*OTB Modifications: conflict name with OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h*/
-/*#include <config.h>*/
+// OTB Modifications
+//#include <config.h>
 #include "fltk-config.h"
+
 #define BOXSIZE 14
 #define BORDER 4
 

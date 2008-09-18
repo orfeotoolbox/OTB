@@ -11,7 +11,7 @@
 // to a factory instance for every class (both the ones defined
 // here and ones in other files)
 //
-// Copyright 1998-2005 by Bill Spitzak and others.
+// Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -378,8 +378,12 @@ int Fl_Counter_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
 ////////////////////////////////////////////////////////////////
 
 #include <FL/Fl_Spinner.H>
+static Fl_Menu_Item spinner_type_menu[] = {
+  {"Integer",0,0,(void*)FL_INT_INPUT},
+  {"Float",  0,0,(void*)FL_FLOAT_INPUT},
+  {0}};
 class Fl_Spinner_Type : public Fl_Widget_Type {
-  Fl_Menu_Item *subtypes() {return 0;}
+  Fl_Menu_Item *subtypes() {return spinner_type_menu;}
   int textstuff(int w, Fl_Font& f, int& s, Fl_Color& c);
   int pixmapID() { return 47; }
 public:
@@ -394,6 +398,7 @@ public:
     if (w < 40) w = 40	;
   }
   virtual const char *type_name() {return "Fl_Spinner";}
+  int is_spinner() const { return 1; }
   Fl_Widget *widget(int x,int y,int w,int h) {
     return new Fl_Spinner(x,y,w,h,"spinner:");}
   Fl_Widget_Type *_make() {return new Fl_Spinner_Type();}
@@ -619,8 +624,10 @@ public:
   virtual const char *type_name() {return "Fl_Help_View";}
   Fl_Widget *widget(int x,int y,int w,int h) {
     Fl_Help_View *myo = new Fl_Help_View(x,y,w,h);
-    myo->value("<HTML><BODY><H1>Fl_Help_View Widget</H1>"
-               "<P>This is a Fl_Help_View widget.</P></BODY></HTML>");
+    if (!compile_only) {
+      myo->value("<HTML><BODY><H1>Fl_Help_View Widget</H1>"
+                 "<P>This is a Fl_Help_View widget.</P></BODY></HTML>");
+    }
     return myo;}
   Fl_Widget_Type *_make() {return new Fl_Help_View_Type();}
   int pixmapID() { return 35; }
@@ -724,6 +731,7 @@ static Fl_Menu_Item scrollbar_type_menu[] = {
   {0}};
 class Fl_Scrollbar_Type : public Fl_Slider_Type {
   Fl_Menu_Item *subtypes() {return scrollbar_type_menu;}
+  int is_valuator() const {return 3;}
 public:
   virtual const char *type_name() {return "Fl_Scrollbar";}
   Fl_Widget *widget(int x,int y,int w,int h) {
