@@ -1,4 +1,4 @@
-PROJECT(Classif)
+PROJECT(HelloWorld)
 
 FIND_PACKAGE(OTB)
 IF(OTB_FOUND)
