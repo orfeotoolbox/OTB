@@ -59,7 +59,7 @@ GaborFilterGenerator<TPrecision>
   m_Filter.SetSize((2*m_Radius[0]+1)*(2*m_Radius[1]+1));
   m_Filter.Fill(0);
 
-  PrecisionType x,y,coef,xr,yr,costheta,sintheta;
+  PrecisionType coef,xr,yr,costheta,sintheta;
   unsigned int k = 0;
 
   costheta = vcl_cos(m_Theta*M_PI/180.);
