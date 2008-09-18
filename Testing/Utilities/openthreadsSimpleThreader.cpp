@@ -19,6 +19,7 @@
 #include <sys/types.h>
 #include <cassert>
 #include <cstdio>
+#include <cstdlib>
 #include <iostream>
 #include <vector>
 #include <OpenThreads/Thread>

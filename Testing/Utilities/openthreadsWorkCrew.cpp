@@ -29,6 +29,7 @@
 #endif
 
 #include <iostream>
+#include <stdlib.h>
 #include <vector>
 #include <cassert>
 #include <cerrno>
