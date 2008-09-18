@@ -1415,6 +1415,16 @@ ADD_TEST(ioTvVectorDataFileReaderWriter ${IO_TESTS15}
 ADD_TEST(ioTuKMLVectorDataIO ${IO_TESTS15} 
         otbKMLVectorDataIONew )
 
+# CanRead()
+ADD_TEST(ioTuKMLVectorDataIOCanRead ${IO_TESTS15} 
+        otbKMLVectorDataIOTestCanRead
+        ${INPUTDATA}/simple.kml)
+
+# CanWrite()
+ADD_TEST(ioTuKMLVectorDataIOCanWrite ${IO_TESTS15} 
+        otbKMLVectorDataIOTestCanWrite
+        ${TEMP}/simple.kml)
+
 
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
@@ -1526,6 +1536,8 @@ otbVectorDataFileWriter.cxx
 otbVectorDataFileReaderWriter.cxx
 otbSHPVectorDataIONew.cxx
 otbKMLVectorDataIONew.cxx
+otbKMLVectorDataIOTestCanRead.cxx
+otbKMLVectorDataIOTestCanWrite.cxx
 )
 
 

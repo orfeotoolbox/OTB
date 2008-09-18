@@ -36,4 +36,6 @@ REGISTER_TEST(otbVectorDataFileWriter);
 REGISTER_TEST(otbVectorDataFileReaderWriter);
 REGISTER_TEST(otbSHPVectorDataIONew);
 REGISTER_TEST(otbKMLVectorDataIONew);
+REGISTER_TEST(otbKMLVectorDataIOTestCanRead);
+REGISTER_TEST(otbKMLVectorDataIOTestCanWrite);
 }
