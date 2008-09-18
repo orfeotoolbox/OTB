@@ -10,7 +10,7 @@
 // derive from.
 //
 //********************************************************************
-// $Id: ossimImageHandler.h 10804 2007-04-30 14:48:08Z dburken $
+// $Id: ossimImageHandler.h 12558 2008-03-18 19:46:21Z gpotts $
 #ifndef ossimImageHandler_HEADER
 #define ossimImageHandler_HEADER
 
@@ -95,29 +95,29 @@ public:
    /**
     *  @return ossimFilename represents an external OSSIM overview filename.
     */
-   virtual ossimFilename createOverviewFilename() const;
+   virtual ossimFilename createDefaultOverviewFilename() const;
    
    /**
     *  @return ossimFilename represents an external OSSIM geometry filename.
     */
-   virtual ossimFilename createGeometryFilename() const;
+   virtual ossimFilename createDefaultGeometryFilename() const;
 
    /**
     *  @return ossimFilename represents an external OSSIM metadata filename.
     */
-   virtual ossimFilename createMetadataFilename() const;
+   virtual ossimFilename createDefaultMetadataFilename() const;
 
    
 
    /**
     *  @return ossimFilename represents an external OSSIM histogram filename.
     */
-   virtual ossimFilename createHistogramFilename() const;
+   virtual ossimFilename createDefaultHistogramFilename() const;
 
    /**
     *  @return ossimFilename represents an external OSSIM valid vertices filename.
     */
-   virtual ossimFilename createValidVerticesFilename() const;
+   virtual ossimFilename createDefaultValidVerticesFilename() const;
    
 
    /**
@@ -491,6 +491,7 @@ public:
    virtual void getEntryStringList(
       std::vector<ossimString>& entryStringList) const;
    
+   ossimFilename getOverviewFile()const;
    /**
     * @param entryIdx Entry number to select.
     *
@@ -548,6 +549,7 @@ protected:
   void completeOpen();
 
    ossimFilename        theImageFile;
+   ossimFilename        theOverviewFile;
    ossimTiffTileSource* theOverview;
    ossimIpt             theSubImageOffset;
    vector<ossimIpt>     theValidImageVertices;

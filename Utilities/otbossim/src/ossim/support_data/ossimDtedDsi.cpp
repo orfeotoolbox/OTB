@@ -11,8 +11,9 @@
 //               (DSI) of a DTED Level 1 file.
 //
 //********************************************************************
-// $Id: ossimDtedDsi.cpp 10279 2007-01-15 19:29:10Z dburken $
+// $Id: ossimDtedDsi.cpp 13025 2008-06-13 17:06:30Z sbortman $
 
+#include <cstdlib>
 #include <iostream>
 #include <fstream>
 

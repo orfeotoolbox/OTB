@@ -8,7 +8,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_0.cpp 10160 2007-01-02 15:38:54Z gpotts $
+// $Id: ossimNitfImageHeaderV2_0.cpp 13101 2008-07-01 18:44:31Z dburken $
 
 
 #include <iomanip>
@@ -21,7 +21,7 @@
 #include <ossim/base/ossimEndian.h>
 #include <ossim/support_data/ossimNitfVqCompressionHeader.h>
 #include <ossim/base/ossimTrace.h>
-
+#include <ossim/base/ossimStringProperty.h>
 // static const ossimTrace traceDebug("ossimNitfFileHeaderV2_0:debug");
 
 RTTI_DEF1(ossimNitfImageHeaderV2_0,
@@ -471,6 +471,11 @@ ossimString ossimNitfImageHeaderV2_0::getSecurityClassification()const
    return ossimString(theSecurityClassification);
 }
 
+ossimString  ossimNitfImageHeaderV2_0::getImageDateAndTime() const
+{
+   return ossimString(theDateTime);
+}
+
 ossimString ossimNitfImageHeaderV2_0::getAcquisitionDateMonthDayYear(ossim_uint8 separationChar)const
 {
    ossimString result;
@@ -760,4 +765,58 @@ const ossimRefPtr<ossimNitfImageBand> ossimNitfImageHeaderV2_0::getBandInformati
    }
    
    return NULL;
+}
+void ossimNitfImageHeaderV2_0::setProperty(ossimRefPtr<ossimProperty> property)
+{
+   ossimNitfImageHeaderV2_X::setProperty(property);
+}
+
+ossimRefPtr<ossimProperty> ossimNitfImageHeaderV2_0::getProperty(const ossimString& name)const
+{
+   ossimRefPtr<ossimProperty> property = 0;
+   if(name == ISCODE_KW)
+   {
+      property = new ossimStringProperty(name, theCodewords);
+   }
+   else if(name == ISCTLH_KW)
+   {
+      property = new ossimStringProperty(name, theControlAndHandling);
+   }
+   else if(name == ISREL_KW)
+   {
+      property = new ossimStringProperty(name, theReleasingInstructions);
+   }
+   else if(name == ISCAUT_KW)
+   {
+      property = new ossimStringProperty(name, theClassificationAuthority);
+   }
+   else if(name == CTLN_KW)
+   {
+      property = new ossimStringProperty(name, theSecurityControlNumber);
+   }
+   else if(name == ISDWNG_KW)
+   {
+      property = new ossimStringProperty(name, theSecurityDowngrade);
+   }
+   else if(name == ISDEVT_KW)
+   {
+      property = new ossimStringProperty(name, theDowngradingEvent);
+   }
+   else 
+   {
+      property = ossimNitfImageHeaderV2_X::getProperty(name);
+   }
+   return property;
+}
+
+void ossimNitfImageHeaderV2_0::getPropertyNames(std::vector<ossimString>& propertyNames)const
+{
+   ossimNitfImageHeaderV2_X::getPropertyNames(propertyNames);
+   propertyNames.push_back(ISCODE_KW);
+   propertyNames.push_back(ISCTLH_KW);
+   propertyNames.push_back(ISREL_KW);
+   propertyNames.push_back(ISCAUT_KW);
+   propertyNames.push_back(CTLN_KW);
+   propertyNames.push_back(ISDWNG_KW);
+   propertyNames.push_back(ISDEVT_KW);
 }

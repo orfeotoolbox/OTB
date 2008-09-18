@@ -115,7 +115,6 @@
 //////////////////////////////////////////////////////////////
 
 #include <cstring> // for strdup,strcmp
-#include <cstdlib>
 #include <ossim/base/ossimConstants.h>
 /////////////////////////////////////////////////////////////
 
@@ -275,7 +274,8 @@ inline RTTItypeid RTTItypeid::subclass(int i) const
 
 inline int RTTItypeid::num_baseclasses() const
 {
-  int i; for(i=0;theId->b[i];i++);
+  int i;
+  for(i=0;theId->b[i];i++){}
   return i;
 }
 

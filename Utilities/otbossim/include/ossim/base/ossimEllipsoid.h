@@ -16,15 +16,17 @@
 #ifndef ossimEllipsoid_HEADER
 #define ossimEllipsoid_HEADER
 
+#include <cmath> /* std::sqrt */
+
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimString.h>
-#include <ossim/base/ossimColumnVector3d.h>
-#include <ossim/base/ossimMatrix4x4.h>
-#include <ossim/base/ossimKeywordlist.h>
+#include <ossim/matrix/newmat.h>
 
 class OSSIMDLLEXPORT ossimEcefRay;
 class OSSIMDLLEXPORT ossimEcefPoint;
 class OSSIMDLLEXPORT ossimEcefVector;
+class OSSIMDLLEXPORT ossimMatrix4x4;
+class OSSIMDLLEXPORT ossimKeywordlist;
 
 /*!****************************************************************************
  *
@@ -47,33 +49,30 @@ public:
                   const double &minor_axis);
    ossimEllipsoid();
    
-   virtual ~ossimEllipsoid(){};
+   ~ossimEllipsoid(){};
 
    /*!
     * ACCESS METHOD...
     */
-   virtual const ossimString& name()const{return theName;}
-   virtual const ossimString& code()const{return theCode;}
+   const ossimString& name()const{return theName;}
+   const ossimString& code()const{return theCode;}
 
-   virtual const double&    a()const{return theA;} // major axis
-   virtual const double&    b()const{return theB;} // minor axis
+   const double&    a()const{return theA;} // major axis
+   const double&    b()const{return theB;} // minor axis
 
-   virtual const double& getA()const{return theA;}
-   virtual const double& getB()const{return theB;}
-   virtual const double& getFlattening()const{return theFlattening;}
+   const double& getA()const{return theA;}
+   const double& getB()const{return theB;}
+   const double& getFlattening()const{return theFlattening;}
    
-   virtual void setA(double a){theA = a;computeFlattening();}
-   virtual void setB(double b){theB = b;computeFlattening();}
-   virtual void setAB(double a, double b){theA = a; theB = b; computeFlattening();}
+   void setA(double a){theA = a;computeFlattening();}
+   void setB(double b){theB = b;computeFlattening();}
+   void setAB(double a, double b){theA = a; theB = b; computeFlattening();}
 
-   virtual double eccentricitySquared() const
-   { return theEccentricitySquared; }
+   double eccentricitySquared() const { return theEccentricitySquared; }
    
-   virtual double flattening()const
-   { return theFlattening; }
+   double flattening()const { return theFlattening; }
    
-   virtual double eccentricity()const
-   { return sqrt(theEccentricitySquared); }
+   double eccentricity()const { return std::sqrt(theEccentricitySquared); }
    
    /*!
     * METHOD: nearestIntersection()
@@ -83,81 +82,84 @@ public:
     * some offset outside (for positive offset) of the ellipsoid (think
     * elevation).
     */
-   virtual bool nearestIntersection(const ossimEcefRay&  ray,
-                                    ossimEcefPoint& rtnPt) const;
-   virtual bool nearestIntersection(const ossimEcefRay&  ray,
-                                    const double&        offset,
-                                    ossimEcefPoint& rtnPt) const;
-
+   bool nearestIntersection(const ossimEcefRay&  ray,
+                            ossimEcefPoint& rtnPt) const;
+   bool nearestIntersection(const ossimEcefRay&  ray,
+                            const double&        offset,
+                            ossimEcefPoint& rtnPt) const;
+   
    /*!
     * METHOD: evaluate()
     * evaluate will evalate the function at location x, y, z (ECEF).
     */
-   virtual double   evaluate(const ossimEcefPoint&)const;
+   double   evaluate(const ossimEcefPoint&)const;
 
    /*!
     * METHOD: gradient()
     * Compute the partials along location x, y, and z and place
     * the result in the result vector.
     */
-   virtual void gradient(const ossimEcefPoint& location,
-                         ossimEcefVector& result)const;
-   virtual ossimEcefVector gradient(const ossimEcefPoint& loc)const;
+   void gradient(const ossimEcefPoint& location,
+                 ossimEcefVector& result)const;
+   ossimEcefVector gradient(const ossimEcefPoint& loc)const;
    
    /*!
     * METHOD: prinRadiiOfCurv()
     * Computes the meridional radius and prime vertical at given point.
     */
-   virtual void prinRadiiOfCurv(const ossimEcefPoint& location,
-                                      double& merRadius,
-                                      double& primeVert)const;
+   void prinRadiiOfCurv(const ossimEcefPoint& location,
+                        double& merRadius,
+                        double& primeVert)const;
    
    /*!
     * METHOD: jacobianWrtEcef()
     * Forms Jacobian of partials of geodetic WRT ECF.
     */
-   virtual void jacobianWrtEcef(const ossimEcefPoint& location,
-                                      NEWMAT::Matrix& jMat)const;
+   void jacobianWrtEcef(const ossimEcefPoint& location,
+                        NEWMAT::Matrix& jMat)const;
    
    /*!
     * METHOD: jacobianWrtGeo()
     * Forms Jacobian of partials of ECF WRT geodetic.
     */
-   virtual void jacobianWrtGeo(const ossimEcefPoint& location,
-                                     NEWMAT::Matrix& jMat)const;
-
+   void jacobianWrtGeo(const ossimEcefPoint& location,
+                       NEWMAT::Matrix& jMat)const;
+   
    /*!
     * Computes the "geodetic" radius for a given latitude in DEGREES:
     */
    double geodeticRadius(const double& latitude) const;
-
+   
    void latLonHeightToXYZ(double lat, double lon, double height,
                           double &x, double &y, double &z)const;
    void XYZToLatLonHeight(double x, double y, double z,
                           double& lat, double& lon, double& height)const;
 
-   // this is a utility from open scene graph that allows you to create a local space rotational
+   //---
+   // this is a utility from open scene graph that allows you to create a
+   // local space rotational
    // and translation matrix
-   //
+   //---
    void computeLocalToWorldTransformFromXYZ(double x, double y, double z,
                                             ossimMatrix4x4& localToWorld)const;
    
-   virtual bool operator ==(const ossimEllipsoid& rhs)const
-      {
-         return ( (theName == rhs.theName)&&
-                  (theCode == rhs.theCode)&&
-                  (theB    == rhs.theB)&&
-                  (theFlattening == rhs.theFlattening));
-      }
-   virtual bool loadState(const ossimKeywordlist& kwl,
-                          const char* prefix=0);
-   virtual bool saveState(ossimKeywordlist& kwl,
-                          const char* prefix=0)const;
+   bool operator ==(const ossimEllipsoid& rhs)const
+   {
+      return ( (theName == rhs.theName)&&
+               (theCode == rhs.theCode)&&
+               (theB    == rhs.theB)&&
+               (theFlattening == rhs.theFlattening));
+   }
+
+   bool loadState(const ossimKeywordlist& kwl,
+                  const char* prefix=0);
+   bool saveState(ossimKeywordlist& kwl,
+                  const char* prefix=0)const;
 protected:
-   virtual void computeFlattening()
-      {
-         theFlattening = (theA - theB)/theA;
-      }
+   void computeFlattening()
+   {
+      theFlattening = (theA - theB)/theA;
+   }
    
    ossimString theName;
    ossimString theCode;

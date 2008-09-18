@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimDoqqTileSource.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimDoqqTileSource.h 12988 2008-06-04 16:49:43Z gpotts $
 #ifndef ossimDoqqTileSource_HEADER
 #define ossimDoqqTileSource_HEADER
 #include <ossim/imaging/ossimGeneralRasterTileSource.h>
@@ -32,7 +32,20 @@ public:
    bool open(const ossimGeneralRasterInfo& info);
 
    ossimString acqdate() const;
-
+	
+   /**
+    * @brief Gets a property for matching name.
+    * @param name The name of the property to get.
+    * @return Returns property matching "name".
+    */
+   virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
+   
+   /**
+    * @brief Gets a list of property names available.
+    * @param propertyNames The list to push back names to.
+    */
+   virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
+	
 protected:
   ossimRefPtr<ossimDoqq>   theHeaderInformation;
   ossimString  theAcqDate;

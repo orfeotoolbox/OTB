@@ -23,8 +23,8 @@
 #include <vector>
 #include <ossim/base/ossimConstants.h>
 #include <ossim/elevation/ossimElevSource.h>
-#include <ossim/base/ossimMutex.h>
 #include <ossim/elevation/ossimElevSourceFactory.h>
+#include <OpenThreads/ReadWriteMutex>
 
 class ossimDrect;
 class ossimKeywordlist;
@@ -209,6 +209,55 @@ public:
    bool loadElevationPath(const ossimFilename& elevationPath);
 
    const std::vector<ossimFilename>& elevationSearchPaths()const;
+
+   /**
+    * Method to determine if a file name is of dted format.
+    *
+    * @param f File to look at.
+    *
+    * @return true if dted format, false if not.
+    */
+   bool isDtedFilenameFormat(const ossimFilename& file) const;
+
+   /**
+    * Method to determine if a file name is of srtm format.
+    *
+    * @param f File to look at.
+    *
+    * @return true if dted format, false if not.
+    */
+   bool isSrtmFilenameFormat(const ossimFilename& file) const;
+
+   /**
+    * Method to determine if a directory is of dted structure.
+    *
+    * @param dir Directory to look at.
+    *
+    * @return true if dted directory structure, false if not.
+    */
+   bool isDtedDirectory(const ossimFilename& dir) const;
+
+   /**
+    * Method to determine if a directory looks like srtm.
+    *
+    * @param dir Directory to look at.
+    *
+    * @return true if srtm directory structure, false if not.
+    */
+   bool isSrtmDirectory(const ossimFilename& dir) const;
+
+   /**
+    * Method to determine if a file or directory looks like general raster.
+    *
+    * @param file File to look at.  This can be a file or directory.
+    *
+    * @note This should always be called after isSrtmDirectory as srtm is
+    * just a specialized general raster so you should use srtm first.
+    *
+    * @return true if general raster (directory or file), false if not.
+    */
+   bool isGeneralRaster(const ossimFilename& file)const;
+
 protected:
 
    /**
@@ -303,45 +352,6 @@ protected:
     * @prefix Prefix for keys.
     */
    void addElevCells(const ossimKeywordlist& kwl, const char* prefix=0);
-
-   /**
-    * Method to determine if a file name is of dted format.
-    *
-    * @param f File to look at.
-    *
-    * @return true if dted format, false if not.
-    */
-   bool isDtedFilenameFormat(const ossimFilename& file) const;
-
-   /**
-    * Method to determine if a file name is of srtm format.
-    *
-    * @param f File to look at.
-    *
-    * @return true if dted format, false if not.
-    */
-   bool isSrtmFilenameFormat(const ossimFilename& file) const;
-
-   /**
-    * Method to determine if a directory is of dted structure.
-    *
-    * @param dir Directory to look at.
-    *
-    * @return true if dted directory structure, false if not.
-    */
-   bool isDtedDirectory(const ossimFilename& dir) const;
-
-   /**
-    * Method to determine if a directory looks like srtm.
-    *
-    * @param dir Directory to look at.
-    *
-    * @return true if srtm directory structure, false if not.
-    */
-   bool isSrtmDirectory(const ossimFilename& dir) const;
-
-   bool isGeneralRaster(const ossimFilename& file)const;
-   
    
    bool openDtedCell(const ossimFilename& file);
 
@@ -384,7 +394,7 @@ protected:
    bool                theAutoLoadFlag;
    bool                theAutoSortFlag;
    ossimFilename       theDefaultElevationPath;
-   mutable ossimMutex  theMutex;
+   mutable OpenThreads::ReentrantMutex theMutex;
    std::vector<ossimFilename>  TheElevationSearchPaths;
 TYPE_DATA
 };

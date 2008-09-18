@@ -12,8 +12,9 @@
 // Contains class declaration for ossimDtedTileSource.
 //
 //********************************************************************
-// $Id: ossimDtedTileSource.cpp 11349 2007-07-23 13:30:44Z gpotts $
+// $Id: ossimDtedTileSource.cpp 12979 2008-06-04 00:25:14Z dburken $
 
+#include <cstdlib>
 #include <iostream>
 #include <fstream>
 using namespace std;
@@ -273,10 +274,13 @@ bool ossimDtedTileSource::open()
    {
       theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
       
-      ossimNotify(ossimNotifyLevel_WARN) << MODULE << " ERROR!"
-                                         << "\nCould not open file:  " << theImageFile.c_str()
-                                         << "\nReturning..." << endl;
-      if (traceDebug())  CLOG << "returning with error..." << endl;
+	  if(traceDebug())
+	  {
+		  ossimNotify(ossimNotifyLevel_WARN) << MODULE << " ERROR!"
+											 << "\nCould not open file:  " << theImageFile.c_str()
+											 << "\nReturning..." << endl;
+		  CLOG << "returning with error..." << endl;
+	  }
       return false;
    }
                                    

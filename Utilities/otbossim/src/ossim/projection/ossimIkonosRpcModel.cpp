@@ -11,21 +11,21 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimIkonosRpcModel.cpp 11719 2007-09-12 14:49:51Z gpotts $
+//  $Id: ossimIkonosRpcModel.cpp 13006 2008-06-08 20:29:37Z dburken $
+
+#include <cstdlib>
 #include <ossim/projection/ossimIkonosRpcModel.h>
-#include <ossim/base/ossimNotifyContext.h>
-
-RTTI_DEF1(ossimIkonosRpcModel, "ossimIkonosRpcModel", ossimRpcModel);
-
+#include <ossim/base/ossimNotify.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
-
 #include <ossim/imaging/ossimTiffTileSource.h>
+#include <ossim/base/ossimTrace.h>
+
+RTTI_DEF1(ossimIkonosRpcModel, "ossimIkonosRpcModel", ossimRpcModel);
 
 //***
 // Define Trace flags for use within this file:
 //***
-#include <ossim/base/ossimTrace.h>
 static ossimTrace traceExec  ("ossimIkonosRpcModel:exec");
 static ossimTrace traceDebug ("ossimIkonosRpcModel:debug");
 

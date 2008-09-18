@@ -1,7 +1,7 @@
 //---
 // License:  See top level LICENSE.txt file.
 //
-// $Id: ossimPolyArea2d.cpp 11955 2007-10-31 16:10:22Z gpotts $
+// $Id: ossimPolyArea2d.cpp 12966 2008-06-03 14:17:40Z gpotts $
 //---
 #include <ossim/base/ossimPolyArea2d.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -167,7 +167,7 @@ const ossimPolyArea2d& ossimPolyArea2d::operator =(const vector<ossimDpt>& polyg
 const ossimPolyArea2d& ossimPolyArea2d::operator =(const vector<ossimGpt>& polygon)
 {
    ossim_uint32 idx = 0;
-   ossim_uint32 maxIdx = polygon.size();
+   ossim_uint32 maxIdx = (ossim_uint32)polygon.size();
    clearEngine();
    
    theEngine->StartPolygonAdd(GROUP_A);
@@ -678,7 +678,7 @@ bool ossimPolyArea2d::loadState(const ossimKeywordlist& kwl,
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimPolyArea2d.cpp 11955 2007-10-31 16:10:22Z gpotts $
+// $Id: ossimPolyArea2d.cpp 12966 2008-06-03 14:17:40Z gpotts $
 #include <list>
 #include <sstream>
 using namespace std;

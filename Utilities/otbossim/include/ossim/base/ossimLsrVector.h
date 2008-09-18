@@ -14,20 +14,20 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimLsrVector.h 11428 2007-07-27 18:44:18Z gpotts $
+//  $Id: ossimLsrVector.h 12790 2008-05-05 13:41:33Z dburken $
 
 #ifndef ossimLsrVector_HEADER
 #define ossimLsrVector_HEADER
 
-#include <stdio.h>
+#include <iosfwd>
+
+#include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimLsrPoint.h>
 #include <ossim/base/ossimLsrSpace.h>
-#include <ossim/base/ossimEcefPoint.h>
 #include <ossim/base/ossimEcefVector.h>
 #include <ossim/base/ossimColumnVector3d.h>
-#include <ossim/base/ossimNotifyContext.h>
 
-class OSSIMDLLEXPORT ossimGpt;
+class ossimGpt;
 
 //*****************************************************************************
 //  CLASS: ossimLsrVector
@@ -122,10 +122,10 @@ public:
    /*!
     * Debug Dump: 
     */
-   void print(ostream& stream = ossimNotify(ossimNotifyLevel_INFO)) const;
+   std::ostream& print(ostream& stream) const;
 
-   friend ostream& operator<< (ostream& os , const ossimLsrVector& instance)
-      { instance.print(os); return os; }
+   friend std::ostream& operator<< (std::ostream& os ,
+                                    const ossimLsrVector& instance);
 
 protected:
    /*!
@@ -272,18 +272,6 @@ inline double ossimLsrVector::magnitude() const
 inline void ossimLsrVector::normalize()
 {
    theData /= theData.magnitude();
-}
-
-//*****************************************************************************
-//  INLINE METHOD: ossimLsrVector::print(ostream)
-//  
-//  Dumps contents for debug purposes.
-//*****************************************************************************
-inline void ossimLsrVector::print(ostream& os) const
-{
-   os << "(ossimLsrVector)\n"
-      << "  theData = " << theData
-      << "\n  theLsrSpace = " << theLsrSpace;
 }
 
 //*****************************************************************************

@@ -9,7 +9,9 @@
 //
 // This holds the class definition of DatumFactory.
 //*******************************************************************
-//  $Id: ossimDatumFactory.cpp 12077 2007-11-26 00:09:10Z dburken $
+//  $Id: ossimDatumFactory.cpp 13018 2008-06-10 16:11:57Z dburken $
+
+#include <utility> /* for std::make_pair */
 
 #include <ossim/base/ossimDatumFactory.h>
 #include <ossim/base/ossimEllipsoidFactory.h>
@@ -195,32 +197,32 @@ const ossimDatum* ossimDatumFactory::create(const ossimString &code)const
 {
    std::map<ossimString, ossimDatum*>::const_iterator
       datum = theDatumTable.find(code);
-
+   
    if(datum != theDatumTable.end())
    { 
       return (*datum).second;
    }
    else
    {
-     if(code == "NAR")
-       {
+      if(code == "NAR")
+      {
 	 std::map<ossimString, ossimDatum*>::const_iterator
-	   datum = theDatumTable.find("NAR-C");
+            datum = theDatumTable.find("NAR-C");
 	 if(datum != theDatumTable.end())
-	   {
-	     return (*datum).second;
-	   }
-       }
-     else if(code == "NAS")
-       {
+         {
+            return (*datum).second;
+         }
+      }
+      else if(code == "NAS")
+      {
 	 std::map<ossimString, ossimDatum*>::const_iterator
-	   datum = theDatumTable.find("NAS-C");
+            datum = theDatumTable.find("NAS-C");
 	 if(datum != theDatumTable.end())
-	   {
-	     return (*datum).second;
-	   }
-       }
-      return NULL;
+         {
+            return (*datum).second;
+         }
+      }
+      return 0;
    }
 }
 
@@ -229,14 +231,14 @@ const ossimDatum* ossimDatumFactory::create(const ossimDatum* aDatum)const
    if (aDatum)
       return create (aDatum->code());
    else
-      return NULL;
+      return 0;
 }
 
 std::list<ossimString> ossimDatumFactory::getList()const
 {
    std::map<ossimString, ossimDatum*>::const_iterator datum = theDatumTable.begin();
    std::list<ossimString> result;
-
+   
    while(datum != theDatumTable.end())
    {
       result.push_back((*datum).first);
@@ -275,9 +277,11 @@ void ossimDatumFactory::deleteAll()
 
 void ossimDatumFactory::initializeDefaults()
 {
-        //make the standards
-   theDatumTable.insert(make_pair(ossimString("WGE"), new ossimWgs84Datum));
-   theDatumTable.insert(make_pair(ossimString("WGD"), new ossimWgs72Datum));
+   //make the standards
+   theDatumTable.insert(make_pair(ossimString("WGE"),
+                                  (ossimDatum*)new ossimWgs84Datum));
+   theDatumTable.insert(make_pair(ossimString("WGD"),
+                                  (ossimDatum*)new ossimWgs72Datum));
 
    ossim_uint32 idx = 0;     
 
@@ -286,8 +290,8 @@ void ossimDatumFactory::initializeDefaults()
       if((threeParamDatum[idx].theCode != "WGE")&&
          (threeParamDatum[idx].theCode != "WGD"))
       {
-         theDatumTable.insert(make_pair(threeParamDatum[idx].theCode,
-                                        new ossimThreeParamDatum(threeParamDatum[idx].theCode, threeParamDatum[idx].theName,
+         theDatumTable.insert(std::make_pair(threeParamDatum[idx].theCode,
+                                             (ossimDatum*)new ossimThreeParamDatum(threeParamDatum[idx].theCode, threeParamDatum[idx].theName,
                                                                  ossimEllipsoidFactory::instance()->create(ossimString(threeParamDatum[idx].theEllipsoidCode)),
                                                                  threeParamDatum[idx].theSigmaX, threeParamDatum[idx].theSigmaY, threeParamDatum[idx].theSigmaZ, 
                                                                  threeParamDatum[idx].theWestLongitude, threeParamDatum[idx].theEastLongitude, threeParamDatum[idx].theSouthLatitude, 
@@ -300,8 +304,8 @@ void ossimDatumFactory::initializeDefaults()
       if((threeParamDatum[idx].theCode != "WGE")&&
          (threeParamDatum[idx].theCode != "WGD"))
       {
-         theDatumTable.insert(make_pair(sevenParamDatum[idx].theCode,
-                                        new ossimSevenParamDatum(sevenParamDatum[idx].theCode, sevenParamDatum[idx].theName,
+         theDatumTable.insert(std::make_pair(sevenParamDatum[idx].theCode,
+                                             (ossimDatum*)new ossimSevenParamDatum(sevenParamDatum[idx].theCode, sevenParamDatum[idx].theName,
                                                                  ossimEllipsoidFactory::instance()->create(ossimString(sevenParamDatum[idx].theEllipsoidCode)),
                                                                  sevenParamDatum[idx].theSigmaX, sevenParamDatum[idx].theSigmaY, sevenParamDatum[idx].theSigmaZ, 
                                                                  sevenParamDatum[idx].theWestLongitude, sevenParamDatum[idx].theEastLongitude, sevenParamDatum[idx].theSouthLatitude, 
@@ -331,9 +335,9 @@ void ossimDatumFactory::initializeDefaults()
          fileTest2.exists())
       {
          theDatumTable.insert(std::make_pair(ossimString("NAS"),
-                                             new ossimNadconNasDatum(file)));
+                                             (ossimDatum*)new ossimNadconNasDatum(file)));
          theDatumTable.insert(std::make_pair(ossimString("NAR"),
-                                             new ossimNadconNarDatum(file)));
+                                             (ossimDatum*)new ossimNadconNarDatum(file)));
       }
    }
 }

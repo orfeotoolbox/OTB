@@ -8,7 +8,9 @@
 //
 // Calls Geotrans Utm projection code.  
 //*******************************************************************
-//  $Id: ossimUtmProjection.cpp 11427 2007-07-27 17:33:32Z dburken $
+//  $Id: ossimUtmProjection.cpp 13012 2008-06-08 21:26:58Z dburken $
+
+#include <cstdlib>
 #include <cmath>
 using namespace std;
 

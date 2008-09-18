@@ -5,6 +5,7 @@
 #define WANT_MATH
 //#define WANT_STREAM
 
+#include <cmath>
 #include <ossim/matrix/include.h>
 
 #include <ossim/matrix/newmatap.h>
@@ -34,7 +35,7 @@ void QRZT(Matrix& X, LowerTriangularMatrix& L)
    {
       Real sum = 0.0;
       Real* xi0=xi; k=n; while(k--) { sum += square(*xi++); }
-      sum = sqrt(sum);
+      sum = std::sqrt(sum);
       if (sum == 0.0)
       {
          REPORT
@@ -88,7 +89,7 @@ void QRZ(Matrix& X, UpperTriangularMatrix& U)
 	{
 		Real sum = 0.0;
 		Real* xi = xi0; k=n; while(k--) { sum += square(*xi); xi+=s; }
-		sum = sqrt(sum);
+		sum = std::sqrt(sum);
 		U.element(i,i) = sum;
 		if (sum==0.0) Throw(SingularException(U));
 		Real* xj0=xi0; k=n; while(k--) { *xj0 /= sum; xj0+=s; }
@@ -125,7 +126,7 @@ void QRZ(Matrix& X, UpperTriangularMatrix& U)
          xi += s; xj0 += s;
       }
 
-      Real sum = sqrt(*u0); *u0 = sum; u = u0+1;
+      Real sum = std::sqrt(*u0); *u0 = sum; u = u0+1;
       if (sum == 0.0)
       {
          REPORT
@@ -231,7 +232,7 @@ void UpdateQRZT(Matrix& X, LowerTriangularMatrix& L)
       Real r = L.element(i,i); 
       Real sum = 0.0;
       Real* xi0=xi; k=n; while(k--) { sum += square(*xi++); }
-      sum = sqrt(sum + square(r));
+      sum = std::sqrt(sum + square(r));
       if (sum == 0.0)
       {
          REPORT
@@ -240,8 +241,8 @@ void UpdateQRZT(Matrix& X, LowerTriangularMatrix& L)
       }
       else
       {
-         Real frs = fabs(r) + sum;
-         Real a0 = sqrt(frs / sum); Real alpha = a0 / frs;
+         Real frs = std::fabs(r) + sum;
+         Real a0 = std::sqrt(frs / sum); Real alpha = a0 / frs;
          if (r <= 0) { REPORT L.element(i,i) = sum; alpha = -alpha; }
          else { REPORT L.element(i,i) = -sum; }
          Real* xj0=xi0; k=n; while(k--) { *xj0++ *= alpha; }
@@ -279,7 +280,7 @@ void UpdateQRZ(Matrix& X, UpperTriangularMatrix& U)
       }
 
       Real r = *u0;
-      Real sum = sqrt(*v0 + square(r));
+      Real sum = std::sqrt(*v0 + square(r));
       
       if (sum == 0.0)
       {
@@ -297,8 +298,8 @@ void UpdateQRZ(Matrix& X, UpperTriangularMatrix& U)
       }
       else
       {
-         Real frs = fabs(r) + sum;
-         Real a0 = sqrt(frs / sum); Real alpha = a0 / frs;
+         Real frs = std::fabs(r) + sum;
+         Real a0 = std::sqrt(frs / sum); Real alpha = a0 / frs;
          if (r <= 0) { REPORT alpha = -alpha; *u0 = sum; }
          else { REPORT *u0 = -sum; }
       

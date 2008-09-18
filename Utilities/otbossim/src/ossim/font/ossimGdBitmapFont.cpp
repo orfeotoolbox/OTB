@@ -6,7 +6,7 @@
 // Description: 
 // 
 //********************************************************************
-// $Id: ossimGdBitmapFont.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimGdBitmapFont.cpp 12276 2008-01-07 19:58:43Z dburken $
 #include <ossim/font/ossimGdBitmapFont.h>
 #include "string.h"
 
@@ -150,11 +150,11 @@ void ossimGdBitmapFont::rasterizeNormal()
    long outH = outBox.height();
    ossim_uint8* inBuf = new ossim_uint8[inBox.width()*inBox.height()];
       
-   for(long character = 0;
-       character < (long)theStringToRasterize.size();
+   for(std::string::size_type character = 0;
+       character < theStringToRasterize.size();
        ++character)
    {
-      charOffset = theStringToRasterize[(int)character];
+      charOffset = theStringToRasterize[character];
       
       // we need to shift the offset to a positive value.
       // if it goes negative we just add 256 to the value.

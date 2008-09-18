@@ -9,7 +9,7 @@
 //   Contains implementation of class ossimSensorModelFactory
 //
 //*****************************************************************************
-//  $Id: ossimSensorModelFactory.cpp 10430 2007-02-07 01:05:22Z dburken $
+//  $Id: ossimSensorModelFactory.cpp 13027 2008-06-15 01:37:00Z dburken $
 #include <fstream>
 #include <algorithm>
 #include <ossim/projection/ossimSensorModelFactory.h>
@@ -132,11 +132,7 @@ ossimSensorModelFactory::createProjection(const ossimString &name) const
    //***
    // Name should represent the model type:
    //***
-  if(name==STATIC_TYPE_NAME(ossimTileMapModel))
-    {
-      return new ossimTileMapModel;
-    }
- if(name == STATIC_TYPE_NAME(ossimCoarseGridModel))
+   if(name == STATIC_TYPE_NAME(ossimCoarseGridModel))
    {
       return new ossimCoarseGridModel;
    }
@@ -188,6 +184,10 @@ ossimSensorModelFactory::createProjection(const ossimString &name) const
       return new ossimSpot5Model;
    }
 
+   if(name==STATIC_TYPE_NAME(ossimTileMapModel))
+    {
+      return new ossimTileMapModel;
+    }
    if(name == STATIC_TYPE_NAME(ossimSarModel))
    {
       return new ossimSarModel;
@@ -223,46 +223,6 @@ ossimSensorModelFactory::createProjection(const ossimString &name) const
 //      return new myNewModel;
 
    return NULL;
-}
-
-
-//*****************************************************************************
-//  METHOD:  ossimSensorModelFactory::getList()
-//  
-//*****************************************************************************
-list<ossimString> ossimSensorModelFactory::getList() const
-{
-   list<ossimString> result;
-
-   //***
-   // Place the name of each model produced in the list:
-   //***
-   result.push_back(STATIC_TYPE_NAME(ossimCoarseGridModel));
-   result.push_back(STATIC_TYPE_NAME(ossimRpcModel));
-   result.push_back(STATIC_TYPE_NAME(ossimIkonosRpcModel));
-   result.push_back(STATIC_TYPE_NAME(ossimNitfRpcModel));
-   result.push_back(STATIC_TYPE_NAME(ossimQuickbirdRpcModel));
-   result.push_back(STATIC_TYPE_NAME(ossimLandSatModel));
-   result.push_back(STATIC_TYPE_NAME(ossimNitfMapModel));
-   result.push_back(STATIC_TYPE_NAME(ossimFcsiModel));
-   result.push_back(STATIC_TYPE_NAME(ossimApplanixUtmModel));
-   result.push_back(STATIC_TYPE_NAME(ossimApplanixEcefModel));
-   result.push_back(STATIC_TYPE_NAME(ossimSpot5Model));
-   result.push_back(STATIC_TYPE_NAME(ossimSarModel));
-   result.push_back(STATIC_TYPE_NAME(ossimRadarSatModel));
-   result.push_back(STATIC_TYPE_NAME(ossimRadarSat2Model));
-   result.push_back(STATIC_TYPE_NAME(ossimTerraSarModel));
-   //   result.push_back(STATIC_TYPE_NAME(ossimCosmoSkymedModel));
-   result.push_back(STATIC_TYPE_NAME(ossimEnvisatAsarModel));
-   result.push_back(STATIC_TYPE_NAME(ossimErsSarModel));
-   result.push_back(STATIC_TYPE_NAME(ossimTileMapModel));
-
-   //***
-   // ADD_MODEL: Please leave this comment for the next programmer. Add above.
-   //***
-   //result.push_back(ossimString(MY_NEW_MODEL));
-   
-   return result;
 }
 
 //*****************************************************************************
@@ -539,6 +499,7 @@ ossimProjection* ossimSensorModelFactory::createProjection(const ossimFilename& 
    }
    return model;
 }
+
 bool ossimSensorModelFactory::isTileMap(const ossimFilename& filename)const
 { 
   ossimFilename temp(filename);

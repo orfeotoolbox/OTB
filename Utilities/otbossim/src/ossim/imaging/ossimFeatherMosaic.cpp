@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimFeatherMosaic.cpp 11347 2007-07-23 13:01:59Z gpotts $
+// $Id: ossimFeatherMosaic.cpp 12912 2008-05-28 15:05:54Z gpotts $
 
 #include <ossim/imaging/ossimFeatherMosaic.h>
 #include <ossim/base/ossimDpt.h>
@@ -405,10 +405,10 @@ void ossimFeatherMosaic::ossimFeatherInputInformation::setVertexList(const std::
    theAxis2Length  = 1;
 
    double xSum=0.0, ySum=0.0;
-   long upperBound = validVertices.size();
+   ossim_uint32 upperBound = (ossim_uint32)validVertices.size();
    if(upperBound)
    {
-      for(long index = 0; index < upperBound; ++index)
+      for(ossim_uint32 index = 0; index < upperBound; ++index)
       {
          xSum += validVertices[index].x;
          ySum += validVertices[index].y;

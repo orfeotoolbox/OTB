@@ -16,7 +16,7 @@ extern "C"
 {
 #include <cstdio>                      /** for size_t  */
 #include <csetjmp>                     /** for jmp_buf */
-#include <itkjpeg/8/jpeglib.h>                  /** for jpeg stuff */
+#include <itkjpeg/8/jpeglib.h>                   /** for jpeg stuff */
 
 
 /** @brief Extended error handler struct. */

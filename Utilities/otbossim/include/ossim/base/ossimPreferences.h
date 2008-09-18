@@ -19,9 +19,6 @@
 
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimKeywordlist.h>
-#include <ossim/base/ossimObject.h>
-
-
 
 /*!****************************************************************************
  *
@@ -80,7 +77,10 @@ public:
    void addPreferences(const ossimKeywordlist& kwl,
                        const char* prefix=0,
                        bool stripPrefix=true);
-   
+
+   /** @return The preference filename. */ 
+   ossimFilename getPreferencesFilename() const;
+
 protected:
    /*!
     * Override the compiler default constructors:

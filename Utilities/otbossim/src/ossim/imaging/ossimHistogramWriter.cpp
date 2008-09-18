@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimHistogramWriter.cpp 11721 2007-09-13 13:19:34Z gpotts $
+// $Id: ossimHistogramWriter.cpp 12580 2008-03-26 18:54:03Z gpotts $
 #include <ossim/base/ossimProcessListener.h>
 #include <ossim/imaging/ossimHistogramWriter.h>
 #include <ossim/imaging/ossimImageSource.h>
@@ -16,7 +16,9 @@
 #include <ossim/base/ossimMultiResLevelHistogram.h>
 #include <ossim/base/ossimMultiBandHistogram.h>
 #include <ossim/imaging/ossimImageHistogramSource.h>
+#include <ossim/base/ossimTrace.h>
 
+static ossimTrace traceDebug("ossimHistogramWriter:debug");
 class ossimHistogramWriterProcessListener : public ossimProcessListener
 {
 public:
@@ -218,15 +220,6 @@ bool ossimHistogramWriter::execute()
 
 void ossimHistogramWriter::writeHistogram()
 {
-   if(!isOpen())
-   {
-      open();
-      if(!isOpen())
-      {
-         cerr << "unable to open file " << theFilename << endl;
-          return;
-      }
-   }
    if(!getInput(0))
    {
       cerr << "ossimHistogramWriter::writeHistogram is not connected" << endl;
@@ -260,8 +253,21 @@ void ossimHistogramWriter::writeHistogram()
    {
       ossimKeywordlist kwl;
       histo->saveState(kwl);
-
-      kwl.writeToStream(*theFileStream);
+		if(!isOpen())
+		{
+			open();
+			if(!isOpen())
+			{
+				if(traceDebug())
+				{
+					ossimNotify(ossimNotifyLevel_WARN) << "unable to open file " << theFilename << endl;
+				}
+			}
+		}
+		if(isOpen())
+		{
+			kwl.writeToStream(*theFileStream);
+		}
    }
    histoSource->removeListener(theProcessListener);
    

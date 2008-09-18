@@ -14,14 +14,12 @@
 //<
 //*****************************************************************************
 
-#include <stdlib.h>
-#include <iostream>
-using namespace std;
+#include <cstdlib> /* for getenv() */
 
 #include <ossim/base/ossimPreferences.h>
-#include <ossim/base/ossimNotifyContext.h>
+#include <ossim/base/ossimNotify.h>
 
-//RTTI_DEF1(ossimPreferences, "ossimPreferences", ossimObject)
+//RTTI_DEF1(ossimPreferences, "ossimPreferences" , ossimObject)
 
 //***
 // Define Trace flags for use within this file:
@@ -75,7 +73,11 @@ ossimPreferences* ossimPreferences::instance()
 bool ossimPreferences::loadPreferences()
 {
    static const char MODULE[] = "ossimPreferences::loadPreferences()";
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG: " << MODULE << " entering...\n";
+   if (traceExec())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "DEBUG: " << MODULE << " entering...\n";
+   }
 
    bool parsed_ok = false;
    
@@ -97,15 +99,17 @@ bool ossimPreferences::loadPreferences()
        */
       if (!parsed_ok)
       {
-         ossimNotify(ossimNotifyLevel_WARN) << "WARNING: " << MODULE << ", an error was encountered loading the prefererences "
-                                            << "file at \"" << thePrefFilename << "\" as specified by the "
-                                            << "environment variable \"" << PREF_FILE_ENV_VAR_NAME << "\"."
-                                            << "Preferences were not loaded.\n";
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "WARNING: " << MODULE
+            << ", an error was encountered loading the prefererences "
+            << "file at \"" << thePrefFilename << "\" as specified by the "
+            << "environment variable \"" << PREF_FILE_ENV_VAR_NAME << "\"."
+            << "Preferences were not loaded.\n";
       }
    }
 
-   else
-   {
+//   else
+//   {
 //       if (traceDebug())
 //       {
 //          // No ENV var found. Print warning:
@@ -115,9 +119,13 @@ bool ossimPreferences::loadPreferences()
 //               << "the full path to the preferences keywordlist file desired."
 //               << endl;
 //       }
-   }
+//   }
    
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG: " << MODULE << "returning...\n";
+   if (traceExec())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "DEBUG: " << MODULE << "returning...\n";
+   }
    return parsed_ok;
 }
 
@@ -130,7 +138,11 @@ bool ossimPreferences::loadPreferences()
 bool ossimPreferences::loadPreferences(const ossimFilename& pathname)
 {
    static const char MODULE[] = "ossimPreferences::loadPreferences(filename)";
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG: " << MODULE << ", entering...\n";
+   if (traceExec())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "DEBUG: " << MODULE << ", entering...\n";
+   }
 
    bool parsed_ok;
 
@@ -151,12 +163,19 @@ bool ossimPreferences::loadPreferences(const ossimFilename& pathname)
     */
    if (!parsed_ok)
    {
-      ossimNotify(ossimNotifyLevel_WARN) << "WARNING: " << MODULE << ", an error was encountered loading the prefererences "
-                                         << "file at \"" << pathname << "\". Preferences were not "
-                                         << "loaded.\n";
+      ossimNotify(ossimNotifyLevel_WARN)
+         << "WARNING: " << MODULE
+         << ", an error was encountered loading the prefererences "
+         << "file at \"" << pathname << "\". Preferences were not "
+         << "loaded.\n";
    }
 
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG: " << MODULE<< ", returning...\n";
+   if (traceExec())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "DEBUG: " << MODULE<< ", returning...\n";
+   }
+   
    return parsed_ok;
 }
 
@@ -169,7 +188,11 @@ bool ossimPreferences::loadPreferences(const ossimFilename& pathname)
 bool ossimPreferences::savePreferences() const
 {
    static const char MODULE[] = "ossimPreferences::savePreferences()";
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG: " << MODULE << ", entering...\n";
+   if (traceExec())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "DEBUG: " << MODULE << ", entering...\n";
+   }
    
    bool success = true;
    
@@ -182,7 +205,12 @@ bool ossimPreferences::savePreferences() const
       theInstanceIsModified = false;
    }
 
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG:" << MODULE << ", returning...\n";
+   if (traceExec())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "DEBUG:" << MODULE << ", returning...\n";
+   }
+   
    return success;
 }
 
@@ -195,7 +223,11 @@ bool ossimPreferences::savePreferences() const
 bool ossimPreferences::savePreferences(const ossimFilename& pathname)
 {
    static const char MODULE[] = "ossimPreferences::savePreferences()";
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG: "<< MODULE << ", entering...\n";
+   if (traceExec())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "DEBUG: "<< MODULE << ", entering...\n";
+   }
    
    bool success = true;
    
@@ -207,7 +239,12 @@ bool ossimPreferences::savePreferences(const ossimFilename& pathname)
    thePrefFilename = pathname;
    theInstanceIsModified = false;
    
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG: " << MODULE << ", returning...\n";
+   if (traceExec())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "DEBUG: " << MODULE << ", returning...\n";
+   }
+   
    return success;
 }
 
@@ -222,4 +259,10 @@ void ossimPreferences::addPreferences(const ossimKeywordlist& kwl,
                                       bool stripPrefix)
 {
    theKWL.add(kwl, prefix, stripPrefix);
+   theInstanceIsModified = true;
+}
+
+ossimFilename ossimPreferences::getPreferencesFilename() const
+{
+   return thePrefFilename;
 }

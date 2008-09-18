@@ -7,13 +7,13 @@
 // Description: Utility class for global nitf methods.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfCommon.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfCommon.h 13025 2008-06-13 17:06:30Z sbortman $
 #ifndef ossimNitfCommon_HEADER
 #define ossimNitfCommon_HEADER
 
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimString.h>
-#include <ios>
+#include <iostream>
 
 class ossimDpt;
 

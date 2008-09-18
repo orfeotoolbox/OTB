@@ -7,7 +7,7 @@
 // Description: This class provides manipulation of filenames.
 //
 //*************************************************************************
-// $Id: ossimFilename.h 11476 2007-08-02 19:30:40Z gpotts $
+// $Id: ossimFilename.h 12810 2008-05-08 14:16:30Z gpotts $
 
 #ifndef ossimFilename_HEADER
 #define ossimFilename_HEADER
@@ -142,6 +142,14 @@ public:
     */
    ossimFilename& setExtension(const ossimString& e);
    
+   /**
+    * Sets the file path and drive.
+    * Input: the drive to be set (this should come from the user's preferences)
+    * Example: "x:"
+    * Given: "/filepath/file.ext"
+    * @return @return "c:\filepath\file.ext".
+    */
+   ossimFilename& setDrive(const ossimString& d);
    ossimFilename& setPath(const ossimString& p);
    ossimFilename& setFile(const ossimString& f);
    

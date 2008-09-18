@@ -1,5 +1,5 @@
 #include <ossim/base/ossimEnvironmentUtility.h>
-#include <stdlib.h>
+#include <cstdlib>
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #define OSSIM_ENVIRONEMENT_UTILITY_UNIX 0
@@ -41,7 +41,14 @@ ossimEnvironmentUtility* ossimEnvironmentUtility::instance()
 
 ossimString ossimEnvironmentUtility::getEnvironmentVariable(const ossimString& variable)const
 {
-   return ossimString(getenv(variable.c_str()));
+   ossimString result;
+   char* lookup = getenv(variable.c_str());
+   // getenv returns NULL if not found.
+   if (lookup)
+   {
+      result = lookup;
+   }
+   return result;
 }
 
 ossimFilename ossimEnvironmentUtility::getUserOssimSupportDir()const
@@ -60,6 +67,15 @@ ossimFilename ossimEnvironmentUtility::getUserOssimSupportDir()const
 #endif
    
    return result;
+}
+
+ossimString   ossimEnvironmentUtility::getUserName()const
+{
+#if OSSIM_ENVIRONEMENT_UTILITY_UNIX
+   return getEnvironmentVariable("USER");
+#else
+   return getEnvironmentVariable("USERNAME");
+#endif
 }
 
 ossimFilename ossimEnvironmentUtility::getUserDir()const

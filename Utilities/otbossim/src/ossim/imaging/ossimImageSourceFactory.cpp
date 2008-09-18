@@ -13,7 +13,7 @@
 //              and image handlers (image readers)
 //
 //*************************************************************************
-// $Id: ossimImageSourceFactory.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimImageSourceFactory.cpp 12247 2008-01-03 19:42:33Z dburken $
 
 #include <ossim/imaging/ossimImageSourceFactory.h>
 #include <ossim/imaging/ossimConvolutionFilter1D.h>
@@ -426,7 +426,12 @@ ossimObject* ossimImageSourceFactory::createObject(const ossimKeywordlist& kwl,
 {
    static const char* MODULE = "ossimImageSourceFactory::createSource";
    
-   ossimString copyPrefix = prefix;
+   ossimString copyPrefix;
+   if (prefix)
+   {
+      copyPrefix = prefix;
+   }
+   
    ossimObject* result = NULL;
    
    if(traceDebug())

@@ -13,8 +13,9 @@ public:
    
    static ossimSharedPluginRegistry* instance();
 
-   bool registerPlugin(const ossimFilename& filename);
+   bool registerPlugin(const ossimFilename& filename, bool insertFrontFlag=false);
    bool unregisterPlugin(int idx);
+  bool unregisterPlugin(ossimPluginLibrary* plugin);
    const ossimPluginLibrary* getPlugin(const ossimFilename& filename)const;
    ossimPluginLibrary* getPlugin(const ossimFilename& filename);
 
@@ -23,6 +24,15 @@ public:
    const ossimPluginLibrary* getPlugin(ossim_uint32 idx)const;
    ossim_uint32 getNumberOfPlugins()const;
    
+   /**
+    * Checks if filename is already loaded to avoid duplication.
+    * 
+    * @param filename The file to check.
+    *
+    * @return true if any of the plugins match file name, false if not.
+    */
+   bool isLoaded(const ossimFilename& filename) const;
+
 protected:
    ossimSharedPluginRegistry(){}
    ossimSharedPluginRegistry(const ossimSharedPluginRegistry&){}

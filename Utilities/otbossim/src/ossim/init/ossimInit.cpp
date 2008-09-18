@@ -16,11 +16,11 @@
 //   24Apr2001  Oscar Kramer
 //              Initial coding.
 //*****************************************************************************
-// $Id: ossimInit.cpp 12181 2007-12-12 22:03:17Z dburken $
+// $Id: ossimInit.cpp 13100 2008-07-01 17:42:50Z dburken $
 
 
 #include <ossim/init/ossimInit.h>
-//#include <ossim/ossimVersion.h>
+#include <ossim/ossimVersion.h>
 #include <ossim/base/ossimPreferences.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimArgumentParser.h>
@@ -138,6 +138,14 @@ void ossimInit::initialize(int& argc, char** argv)
    {
       theInstance->initializePlugins();
    }
+
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "ossim preferences file: "
+         << theInstance->thePreferences->getPreferencesFilename()
+         << std::endl;
+   }
    
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG)
       << "DEBUG ossimInit::initialize(argc, argv): leaving..." << std::endl;
@@ -157,8 +165,10 @@ void ossimInit::initialize(ossimArgumentParser& parser)
    {
       if (traceDebug())
       {
-         ossimNotify(ossimNotifyLevel_DEBUG)<< "DEBUG ossimInit::initialize(parser): Already initialized, returning......"
-                                            << std::endl;
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "DEBUG ossimInit::initialize(parser):"
+            << " Already initialized, returning......"
+            << std::endl;
       }
       return;
    }
@@ -186,8 +196,11 @@ void ossimInit::initialize(ossimArgumentParser& parser)
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-      << "DEBUG ossimInit::initialize(parser): leaving..." << endl;
+         << "ossim preferences file: "
+         << theInstance->thePreferences->getPreferencesFilename()
+         << "\nDEBUG ossimInit::initialize(parser): leaving..." << endl;
    }
+   
    theInitializedFlag = true;
    return;
 }
@@ -592,8 +605,8 @@ void ossimInit::initializePlugins()
 
    vector<ossimString> keys = kwl.getSubstringKeyList( regExpressionDir );
 
-   ossim_uint32 numberOfDirs = keys.size();
-   ossim_uint32 offset = ossimString("plugin.dir").size();
+   ossim_uint32 numberOfDirs = (ossim_uint32)keys.size();
+   ossim_uint32 offset = (ossim_uint32)ossimString("plugin.dir").size();
    int idx = 0;
    
    std::vector<int> numberList(numberOfDirs);
@@ -689,8 +702,8 @@ void ossimInit::initializePlugins()
    }
    keys = kwl.getSubstringKeyList( regExpressionFile );
    
-   ossim_uint32 numberOfFiles = keys.size();
-   offset = ossimString("plugin.file").size();
+   ossim_uint32 numberOfFiles = (ossim_uint32)keys.size();
+   offset = (ossim_uint32)ossimString("plugin.file").size();
    numberList.resize(numberOfFiles);
    if(numberList.size()>0)
    {

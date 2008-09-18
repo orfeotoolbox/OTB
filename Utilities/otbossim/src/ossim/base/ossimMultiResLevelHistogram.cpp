@@ -7,7 +7,7 @@
 // Description: 
 //
 //*******************************************************************
-//  $Id: ossimMultiResLevelHistogram.cpp 11721 2007-09-13 13:19:34Z gpotts $
+//  $Id: ossimMultiResLevelHistogram.cpp 13133 2008-07-04 02:09:36Z gpotts $
 #include <ossim/base/ossimMultiResLevelHistogram.h>
 #include <ossim/base/ossimMultiBandHistogram.h>
 #include <ossim/base/ossimKeyword.h>
@@ -66,11 +66,11 @@ void ossimMultiResLevelHistogram::create(ossim_uint32 numberOfResLevels)
 
 ossimRefPtr<ossimMultiResLevelHistogram> ossimMultiResLevelHistogram::createAccumulationLessThanEqual()const
 {
-   ossimRefPtr<ossimMultiResLevelHistogram> result = NULL;
+   ossimRefPtr<ossimMultiResLevelHistogram> result = 0;
 
    if(theHistogramList.size() > 0)
    {
-      result = new ossimMultiResLevelHistogram(theHistogramList.size());
+      result = new ossimMultiResLevelHistogram((ossim_uint32)theHistogramList.size());
 
       for(ossim_uint32 idx=0; idx < (ossim_uint32) theHistogramList.size(); ++ idx)
       {
@@ -88,9 +88,6 @@ ossimRefPtr<ossimMultiResLevelHistogram> ossimMultiResLevelHistogram::createAccu
             result->theHistogramList[idx] = 0;
          }
       }
-      
-      result = 0;
-      
    }
    
    return result;
@@ -116,7 +113,7 @@ ossimRefPtr<ossimMultiResLevelHistogram> ossimMultiResLevelHistogram::createAccu
 
    if(theHistogramList.size() > 0)
    {
-      result = new ossimMultiResLevelHistogram(theHistogramList.size());
+      result = new ossimMultiResLevelHistogram((ossim_uint32)theHistogramList.size());
 
       for(ossim_uint32 idx=0; idx < (ossim_uint32) theHistogramList.size(); ++ idx)
       {
@@ -481,7 +478,8 @@ bool ossimMultiResLevelHistogram::loadState(const ossimKeywordlist& kwl,
          {
             ossimRefPtr<ossimMultiBandHistogram> histo = new ossimMultiBandHistogram;
 
-            newPrefix = prefix;
+            if (prefix) newPrefix = prefix;
+            
             newPrefix += "rr_level";
             newPrefix += ossimString::toString(idx);
             newPrefix += ".";

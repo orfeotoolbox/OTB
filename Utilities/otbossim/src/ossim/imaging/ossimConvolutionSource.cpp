@@ -7,7 +7,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimConvolutionSource.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimConvolutionSource.cpp 12912 2008-05-28 15:05:54Z gpotts $
 
 #include <ossim/imaging/ossimConvolutionSource.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -149,7 +149,7 @@ ossimRefPtr<ossimImageData> ossimConvolutionSource::getTile(
       }
       else
       {
-         ossim_uint32 upperBound = theConvolutionKernelList.size();
+         ossim_uint32 upperBound = (ossim_uint32)theConvolutionKernelList.size();
          ossim_uint32 idx;
          for(idx = 0; idx < upperBound; ++idx)
          {
@@ -172,7 +172,7 @@ ossimRefPtr<ossimImageData> ossimConvolutionSource::getTile(
       }
       else
       {
-         ossim_uint32 upperBound = theConvolutionKernelList.size();
+         ossim_uint32 upperBound = (ossim_uint32)theConvolutionKernelList.size();
          ossim_uint32 idx;
          for(idx = 0; idx < upperBound; ++idx)
          {
@@ -194,7 +194,7 @@ ossimRefPtr<ossimImageData> ossimConvolutionSource::getTile(
       }
       else
       {
-         ossim_uint32 upperBound = theConvolutionKernelList.size();
+         ossim_uint32 upperBound = (ossim_uint32)theConvolutionKernelList.size();
          ossim_uint32 idx;
          for(idx = 0; idx < upperBound; ++idx)
          {
@@ -217,7 +217,7 @@ ossimRefPtr<ossimImageData> ossimConvolutionSource::getTile(
       }
       else
       {
-         ossim_uint32 upperBound = theConvolutionKernelList.size();
+         ossim_uint32 upperBound = (ossim_uint32)theConvolutionKernelList.size();
          ossim_uint32 idx;
          for(idx = 0; idx < upperBound; ++idx)
          {
@@ -240,7 +240,7 @@ ossimRefPtr<ossimImageData> ossimConvolutionSource::getTile(
       }
       else
       {
-         ossim_uint32 upperBound = theConvolutionKernelList.size();
+         ossim_uint32 upperBound = (ossim_uint32)theConvolutionKernelList.size();
          ossim_uint32 idx;
          for(idx = 0; idx < upperBound; ++idx)
          {

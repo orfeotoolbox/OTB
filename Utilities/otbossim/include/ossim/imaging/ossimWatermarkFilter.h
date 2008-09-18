@@ -12,12 +12,12 @@
 // Density is base on alpha weight.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimWatermarkFilter.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimWatermarkFilter.h 12623 2008-04-07 14:10:08Z gpotts $
 #ifndef ossimWatermarkFilter_HEADER
 #define ossimWatermarkFilter_HEADER
 
 #include <ossim/base/ossimConstants.h>
-#include <ossim/base/ossimMutex.h>
+#include <OpenThreads/ReentrantMutex>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimIrect.h>
@@ -341,8 +341,6 @@ private:
     */
    bool theDirtyFlag;
 
-   /** For locking for threads. */
-   mutable ossimMutex theMutex;
 
 TYPE_DATA
       

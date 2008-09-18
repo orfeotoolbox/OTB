@@ -5,7 +5,7 @@
 // Author: Garrett Potts (gpotts@imagelinks.com)
 //
 //*************************************************************************
-// $Id: ossimMatrixProperty.cpp 11955 2007-10-31 16:10:22Z gpotts $
+// $Id: ossimMatrixProperty.cpp 12911 2008-05-28 13:36:06Z gpotts $
 #include <sstream>
 #include <ossim/base/ossimMatrixProperty.h>
 #include <ossim/base/ossimCommon.h>
@@ -219,7 +219,7 @@ int ossimMatrixProperty::getNumberOfCols()const
 {
    if(getNumberOfRows())
    {
-      return theValueArray[0].size();
+      return (int)theValueArray[0].size();
    }
 
    return 0;

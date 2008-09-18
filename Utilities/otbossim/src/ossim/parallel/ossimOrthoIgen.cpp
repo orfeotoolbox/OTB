@@ -1,4 +1,4 @@
-// $Id: ossimOrthoIgen.cpp 11425 2007-07-27 17:03:29Z dburken $
+// $Id: ossimOrthoIgen.cpp 13103 2008-07-03 01:06:37Z gpotts $
 #include <sstream>
 #include <ossim/parallel/ossimOrthoIgen.h>
 #include <ossim/parallel/ossimIgen.h>
@@ -642,7 +642,7 @@ bool ossimOrthoIgen::setupIgenKwl(ossimKeywordlist& kwl)
                      (ossim::isnan(theLowPercentClip) == false) ) ||
                    theUseAutoMinMaxFlag )
                {
-                  ossimFilename inputHisto = handler->createHistogramFilename();
+                  ossimFilename inputHisto = handler->createDefaultHistogramFilename();
                   if(inputHisto.exists())
                   {
                      tempChain->addLast(histRemapper);
@@ -1150,7 +1150,6 @@ bool ossimOrthoIgen::setupView(ossimKeywordlist& kwl)
                                          midGpt);
             
             utm->setZone(midGpt);
-            
             ossimDpt eastingNorthing;
             
             utm->setMetersPerPixel(ossimDpt(ossimUnitConversionTool(gsd.x,
@@ -1162,6 +1161,7 @@ bool ossimOrthoIgen::setupView(ossimKeywordlist& kwl)
             
             utm->setUlEastingNorthing(eastingNorthing);
             outputProjection = utm;
+            utm->setHemisphere(((midGpt.latd()<0.0)?'S':'N'));
             // Set the resolution.
 //             outputProjection->setMetersPerPixel(ossimDpt(gsd, gsd));
             // Save the state to keyword list.

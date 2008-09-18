@@ -1,6 +1,7 @@
 #include <ossim/base/ossimGeoref.h>
 
-#include <cstdio> // for geotrans stuff
+#include <cstdlib>
+#include <cstring>
 #include <cmath>
 #include <cctype>
 

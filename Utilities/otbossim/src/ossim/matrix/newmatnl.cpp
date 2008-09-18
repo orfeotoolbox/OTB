@@ -6,6 +6,9 @@
 #define WANT_MATH
 #define WANT_STREAM
 
+#include <cmath>
+#include <iostream>
+#include <iomanip>
 #include <ossim/matrix/newmatap.h>
 #include <ossim/matrix/newmatnl.h>
 

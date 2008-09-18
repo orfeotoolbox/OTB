@@ -18,7 +18,7 @@
 // would make the chunk 24 x 8 chips.
 //
 //*******************************************************************
-//  $Id: ossimCcfTileSource.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimCcfTileSource.h 12988 2008-06-04 16:49:43Z gpotts $
 
 #ifndef ossimCcfTileSource_HEADER
 #define ossimCcfTileSource_HEADER
@@ -142,7 +142,19 @@ public:
 
    virtual bool isOpen()const;
 
-
+   /**
+    * @brief Gets a property for matching name.
+    * @param name The name of the property to get.
+    * @return Returns property matching "name".
+    */
+   virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
+   
+   /**
+    * @brief Gets a list of property names available.
+    * @param propertyNames The list to push back names to.
+    */
+   virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
+	
    
 private:
 

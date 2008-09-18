@@ -10,13 +10,12 @@
 // Container class for four integer points representing a rectangle.
 //
 //*******************************************************************
-//  $Id: ossimIrect.h 11414 2007-07-27 15:10:00Z dburken $
+//  $Id: ossimIrect.h 12951 2008-06-01 16:12:29Z dburken $
 
 #ifndef ossimIrect_HEADER
-#define ossimIrect_HEADER
+#define ossimIrect_HEADER 1
 #include <iosfwd>
 #include <vector>
-#include <cstdlib>
 
 #include <ossim/base/ossimIpt.h>
 #include <ossim/base/ossimCommon.h>
@@ -413,8 +412,12 @@ public:
     */
    ossim_uint32 height() const
    {
-      return static_cast<ossim_uint32>(std::abs(theLlCorner.y -
-                                                theUlCorner.y) + 1);
+      ossim_int32 h = theLlCorner.y - theUlCorner.y;
+      if (h < 0)
+      {
+         h = -h;
+      }
+      return static_cast<ossim_uint32>( h + 1 );
    }
 
    /*!
@@ -422,8 +425,12 @@ public:
     */
    ossim_uint32 width()  const
    {
-      return static_cast<ossim_uint32>(std::abs(theLrCorner.x -
-                                                theLlCorner.x) + 1);
+      ossim_int32 w = theLrCorner.x - theLlCorner.x;
+      if (w < 0)
+      {
+         w = -w;
+      }
+      return static_cast<ossim_uint32>( w + 1 );
    }
  
    ossimIrect clipToRect(const ossimIrect& rect)const;

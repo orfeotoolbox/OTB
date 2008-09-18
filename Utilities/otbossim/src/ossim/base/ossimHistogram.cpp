@@ -15,7 +15,7 @@
 // frequency counts for each of these buckets.
 //
 //********************************************************************
-// $Id: ossimHistogram.cpp 11955 2007-10-31 16:10:22Z gpotts $
+// $Id: ossimHistogram.cpp 12953 2008-06-01 16:24:05Z dburken $
 //
 
 #include <stdio.h>
@@ -42,36 +42,36 @@ static const int MEAN_FLAG = 1, SD_FLAG = 2;
 RTTI_DEF1(ossimHistogram, "ossimHistogram", ossimObject);
 ossimHistogram::ossimHistogram()
 {
-    vals = new float [1];
-    vals[0] = 0.0;
-    counts = new float [1];
-    counts[0] = 0.0;
-    num = 0;
-    vmin = 0;
-    vmax = 0;
-    delta = 0.0;
-    mean = 0.0;
-    standard_dev = 0.0;
-    stats_consistent = 0;
-    stats_consistent |= (MEAN_FLAG | SD_FLAG);
+   vals = new float [1];
+   vals[0] = 0.0;
+   counts = new float [1];
+   counts[0] = 0.0;
+   num = 0;
+   vmin = 0;
+   vmax = 0;
+   delta = 0.0;
+   mean = 0.0;
+   standard_dev = 0.0;
+   stats_consistent = 0;
+   stats_consistent |= (MEAN_FLAG | SD_FLAG);
 }
 
 ossimHistogram::ossimHistogram(int xres, float val1, float val2)
 {
-  vals = new float [xres];
-  counts = new float [xres];
-  num = xres;
-  vmax = MAX(val1, val2);
-  vmin = MIN(val1, val2);
-  delta = (vmax - vmin) / xres;
-  mean = (float)((vmax + vmin)/2.0);
-  standard_dev = (float)((vmax - vmin)/(2.0*sqrt(3.0)));
-  stats_consistent = 0;
-  stats_consistent |= (MEAN_FLAG | SD_FLAG);
-  int i = 0;
+   vals = new float [xres];
+   counts = new float [xres];
+   num = xres;
+   vmax = MAX(val1, val2);
+   vmin = MIN(val1, val2);
+   delta = (vmax - vmin) / xres;
+   mean = (float)((vmax + vmin)/2.0);
+   standard_dev = (float)((vmax - vmin)/(2.0*sqrt(3.0)));
+   stats_consistent = 0;
+   stats_consistent |= (MEAN_FLAG | SD_FLAG);
+   int i = 0;
 
-  if (vals == NULL || counts == NULL)
-    {
+   if (vals == NULL || counts == NULL)
+   {
       fprintf(stderr, "Histogram : Ran out of memory for arrays.\n");
       vals = NULL;
       counts = NULL;
@@ -79,48 +79,48 @@ ossimHistogram::ossimHistogram(int xres, float val1, float val2)
       vmin = 0;
       vmax = 0;
       delta = 0.0;
-    }
-  else
-    {
+   }
+   else
+   {
       for(i = 0; i < xres; i++)
-        {
-          vals[i] = vmin + delta * (float)(i + 0.5);
-          counts[i] = 0.0;
-        }
-    }
+      {
+         vals[i] = vmin + delta * (float)(i + 0.5);
+         counts[i] = 0.0;
+      }
+   }
 }
 
 ossimHistogram::ossimHistogram(float* uvals, float* ucounts, int xres)
 {
-  vals = uvals;
-  counts = ucounts;
-  num = xres;
-  delta = vals[1] - vals[0]; // Changed this from delta = 1.0
+   vals = uvals;
+   counts = ucounts;
+   num = xres;
+   delta = vals[1] - vals[0]; // Changed this from delta = 1.0
 //  vmax = GetMaxVal();
 //  vmin = GetMinVal(); JAF version
-  vmin = uvals[0] - .5f*delta;
-  vmax = uvals[num-1] + .5f*delta;
-  mean = GetMean();
-  standard_dev = GetStandardDev();
-  stats_consistent = 0;
-  stats_consistent |= (MEAN_FLAG | SD_FLAG);
+   vmin = uvals[0] - .5f*delta;
+   vmax = uvals[num-1] + .5f*delta;
+   mean = GetMean();
+   standard_dev = GetStandardDev();
+   stats_consistent = 0;
+   stats_consistent |= (MEAN_FLAG | SD_FLAG);
 }
 //-----------------------------------------------------------
 // -- Copy constructor
 ossimHistogram::ossimHistogram(const ossimHistogram& his)
 {
 
-  int i = 0;
-  num = his.GetRes();
+   int i = 0;
+   num = his.GetRes();
 
-  vals = new float[num];
-  const float* his_vals = his.GetVals();
+   vals = new float[num];
+   const float* his_vals = his.GetVals();
 
-  counts = new float[num];
-  const float* his_counts = his.GetCounts();
+   counts = new float[num];
+   const float* his_counts = his.GetCounts();
 
-  if (vals == NULL || counts == NULL)
-    {
+   if (vals == NULL || counts == NULL)
+   {
       fprintf(stderr, "Histogram : Ran out of memory for arrays.\n");
       vals = NULL;
       counts = NULL;
@@ -130,22 +130,22 @@ ossimHistogram::ossimHistogram(const ossimHistogram& his)
       delta = 0.0;
       stats_consistent = 0;
       return;
-    }
+   }
 
-  mean = his.GetMean();
-  standard_dev = his.GetStandardDev();
+   mean = his.GetMean();
+   standard_dev = his.GetStandardDev();
 
-  for(i=0; i<num; i++)
-  {
+   for(i=0; i<num; i++)
+   {
       vals[i] = his_vals[i];
       counts[i] = his_counts[i];
-  }
-  vmax = his.GetMaxVal();
-  vmin = his.GetMinVal();
-  delta = his.GetBucketSize();
+   }
+   vmax = his.GetMaxVal();
+   vmin = his.GetMinVal();
+   delta = his.GetBucketSize();
 
-  stats_consistent = 0;
-  stats_consistent |= (MEAN_FLAG | SD_FLAG);
+   stats_consistent = 0;
+   stats_consistent |= (MEAN_FLAG | SD_FLAG);
 }
 
 
@@ -155,153 +155,153 @@ ossimHistogram::ossimHistogram(const ossimHistogram& his)
 ossimHistogram::ossimHistogram(const ossimHistogram* his, float width)
 {
 
-    stats_consistent =0;
+   stats_consistent =0;
 
 // Attributes of original histogram
 
-    float del = his->GetBucketSize();
-    int max_index = his->GetRes() - 1;
-    float minvalue = his->GetVals()[0] - del*.5f;
-    float maxvalue = his->GetVals()[max_index] + del*.5f;
+   float del = his->GetBucketSize();
+   int max_index = his->GetRes() - 1;
+   float minvalue = his->GetVals()[0] - del*.5f;
+   float maxvalue = his->GetVals()[max_index] + del*.5f;
 
 
 // Intialize a new histogram
-    if(width == del) num = his->GetRes();
-    else if(!(width == 0.0))
+   if(width == del) num = his->GetRes();
+   else if(!(width == 0.0))
       num = (int)ceil((maxvalue - minvalue)/width);
-    else
+   else
       num = 1; // This shouldn't happen anyway.
 
-    vals = new float [num];
-    counts = new float [num];
-    delta = width;
-    float mean_val = (maxvalue + minvalue)/2.0f;
-    float half_range = (num * delta)/2.0f;
-    vmax =  mean_val + half_range;
-    vmin =  mean_val - half_range;
+   vals = new float [num];
+   counts = new float [num];
+   delta = width;
+   float mean_val = (maxvalue + minvalue)/2.0f;
+   float half_range = (num * delta)/2.0f;
+   vmax =  mean_val + half_range;
+   vmin =  mean_val - half_range;
    int i = 0;
 
    if (vals == NULL || counts == NULL)
-     {
-       fprintf(stderr,
-	       "Histogram : Ran out of memory for arrays.\n");
-       vals = NULL;
-       counts = NULL;
-       num = 0;
-       vmin = 0;
-       vmax = 0;
-       delta = 0.0;
-       mean = 0.0;
-       standard_dev = 0.0;
-       stats_consistent |= (MEAN_FLAG | SD_FLAG);
-       return;
+   {
+      fprintf(stderr,
+              "Histogram : Ran out of memory for arrays.\n");
+      vals = NULL;
+      counts = NULL;
+      num = 0;
+      vmin = 0;
+      vmax = 0;
+      delta = 0.0;
+      mean = 0.0;
+      standard_dev = 0.0;
+      stats_consistent |= (MEAN_FLAG | SD_FLAG);
+      return;
        
-     }
+   }
    
    else
-     {
-       for(i = 0; i < num; i++)
-	 {
-	   vals[i] = vmin + delta * (i + 0.5f);
-	   counts[i] = 0.0;
-	 }
-     }
+   {
+      for(i = 0; i < num; i++)
+      {
+         vals[i] = vmin + delta * (i + 0.5f);
+         counts[i] = 0.0;
+      }
+   }
 
 
 // Cases:
 
 
-    if(width == del)    // Then just copy his
-	{
-	    const float* his_counts = his->GetCounts();
-	    for(i=0; i<num; i++)
-		counts[i] = his_counts[i];
-	    mean = GetMean();
-	    standard_dev = GetStandardDev();
-	    stats_consistent |= (MEAN_FLAG | SD_FLAG);
-	    return;
-	}
+   if(width == del)    // Then just copy his
+   {
+      const float* his_counts = his->GetCounts();
+      for(i=0; i<num; i++)
+         counts[i] = his_counts[i];
+      mean = GetMean();
+      standard_dev = GetStandardDev();
+      stats_consistent |= (MEAN_FLAG | SD_FLAG);
+      return;
+   }
 
 
-    if(del > width)     // Then interpolate his counts.
-	{
+   if(del > width)     // Then interpolate his counts.
+   {
 
 // Boundary conditions:
 //    Start
-	    float his_start = minvalue + .5f*del;
-            float start = vmin + .5f*delta;
-	    float c0 = his->GetCount(his_start);
-	    float c1 = his->GetCount(his_start + del);
-	    float s0 = (c1 - c0)/del;
+      float his_start = minvalue + .5f*del;
+      float start = vmin + .5f*delta;
+      float c0 = his->GetCount(his_start);
+      float c1 = his->GetCount(his_start + del);
+      float s0 = (c1 - c0)/del;
 
-	    for(float x = start; x <= (his_start + del + delta);)
-		{
-		float interp = s0 * (x - his_start) + c0;
-		if(interp < 0) interp = 0; //Can be negative
-	        SetCount(x,interp);
-		    x += width;
-		}
+      for(float x = start; x <= (his_start + del + delta);)
+      {
+         float interp = s0 * (x - his_start) + c0;
+         if(interp < 0) interp = 0; //Can be negative
+         SetCount(x,interp);
+         x += width;
+      }
 //    End
-	    float his_end = maxvalue - .5f*del;
-            float end = vmax - .5f*delta;
-	    float cn = his->GetCount(his_end);
-	    float cn_1 = his->GetCount(his_end - del);
-	    float sn = (cn_1 - cn)/del;
+      float his_end = maxvalue - .5f*del;
+      float end = vmax - .5f*delta;
+      float cn = his->GetCount(his_end);
+      float cn_1 = his->GetCount(his_end - del);
+      float sn = (cn_1 - cn)/del;
 
-	    for(float y = end; y >= (his_end - del + delta);)
-		{
- 		float interp = sn * (his_end - y) + cn;
-		if(interp < 0) interp = 0; //Can be negative
-		SetCount(y, interp);
-		y -= delta;
-		}
+      for(float y = end; y >= (his_end - del + delta);)
+      {
+         float interp = sn * (his_end - y) + cn;
+         if(interp < 0) interp = 0; //Can be negative
+         SetCount(y, interp);
+         y -= delta;
+      }
 // Interior Loop
 
-	    for(float z = his_start + del; z <= (his_end - del);)
-		{
-		    float ci = his->GetCount(z);
-		    float ci_1 = his->GetCount(z-del);
-		    float cip1 = his->GetCount(z+del);
-		    float deriv = (cip1 - ci_1)/(2.0f*del);
-		    float second_drv =
-			((cip1 + ci_1)/2.0f - ci)/(del*del);
-		    int fine_x_index = GetIndex(z);
-		    if (fine_x_index < 0)
-		      {
-			if (z<vmin) fine_x_index = 0;
-			else fine_x_index = num-1;
-		      }
-		    float fine_x = vals[fine_x_index];
-		    for(float xfine = fine_x; xfine < z + del;)
-			{
-		            float interp = ci + deriv*(xfine -z) +
-					 second_drv*(xfine - z)*(xfine - z);
+      for(float z = his_start + del; z <= (his_end - del);)
+      {
+         float ci = his->GetCount(z);
+         float ci_1 = his->GetCount(z-del);
+         float cip1 = his->GetCount(z+del);
+         float deriv = (cip1 - ci_1)/(2.0f*del);
+         float second_drv =
+            ((cip1 + ci_1)/2.0f - ci)/(del*del);
+         int fine_x_index = GetIndex(z);
+         if (fine_x_index < 0)
+         {
+            if (z<vmin) fine_x_index = 0;
+            else fine_x_index = num-1;
+         }
+         float fine_x = vals[fine_x_index];
+         for(float xfine = fine_x; xfine < z + del;)
+         {
+            float interp = ci + deriv*(xfine -z) +
+               second_drv*(xfine - z)*(xfine - z);
 
-		            if(interp < 0) interp = 0; //Can be negative
-			    SetCount(xfine, interp);
-			    xfine += width;
-			}
-		    z += del;
-		}
-	}
+            if(interp < 0) interp = 0; //Can be negative
+            SetCount(xfine, interp);
+            xfine += width;
+         }
+         z += del;
+      }
+   }
 
 
-    if(del < width)    //Just accumulate samples from his into larger bins
-	{
-	  if( del != 0.0){
-	    float his_start = minvalue + .5f*del;
-	    float his_end = maxvalue - .5f*del;
-	    for(float x = his_start; x <= his_end;)
-		{
-		SetCount(x, (GetCount(x) + his->GetCount(x)));
-		 x += del;
-		}
-	  }
-	}
-    mean = GetMean();
-    standard_dev = GetStandardDev();
-    stats_consistent =0;
-    stats_consistent |= (MEAN_FLAG | SD_FLAG);
+   if(del < width)    //Just accumulate samples from his into larger bins
+   {
+      if( del != 0.0){
+         float his_start = minvalue + .5f*del;
+         float his_end = maxvalue - .5f*del;
+         for(float x = his_start; x <= his_end;)
+         {
+            SetCount(x, (GetCount(x) + his->GetCount(x)));
+            x += del;
+         }
+      }
+   }
+   mean = GetMean();
+   standard_dev = GetStandardDev();
+   stats_consistent =0;
+   stats_consistent |= (MEAN_FLAG | SD_FLAG);
 }
 
 void ossimHistogram::create(int xres, float val1, float val2)
@@ -354,65 +354,65 @@ ossimHistogram* ossimHistogram::Scale(float scale_factor)
 // Extract attributes of self
 
 //    float lowvalue = vals[0];
-    float highvalue = vals[num-1];
+   float highvalue = vals[num-1];
 
 // Construct a new histogram
 
-    ossimHistogram* scaled_his = new ossimHistogram(this, delta);
-    float* new_counts = scaled_his->GetCounts();
-    int i = 0;
-    for(i=0; i < num; i++)  // Initialize
-	new_counts[i] = 0.0;
+   ossimHistogram* scaled_his = new ossimHistogram(this, delta);
+   float* new_counts = scaled_his->GetCounts();
+   int i = 0;
+   for(i=0; i < num; i++)  // Initialize
+      new_counts[i] = 0.0;
 
 // Compute scaled values
 // We assume that the new histogram is to be scaled down from his
 
-    float scale = scale_factor;
-    if(scale_factor > 1.0) scale = 1.0;
+   float scale = scale_factor;
+   if(scale_factor > 1.0) scale = 1.0;
 
-    for(float x = highvalue; x > vmin;)
-	{
-	    float trans_x = (x-vmin)*scale + vmin; // Scaled x.
- 	    int index = GetIndex(trans_x);
-	    if (index < 0)
-	      {
-		if (trans_x<vmin) index = 0;
-		else index = num-1;
-	      }
-	    float fraction = (trans_x - vals[index])/delta;
-	    float abs_fraction = (float)fabs(fraction);
-	    int x_index = GetIndex(x);
-	    if (x_index < 0)
-	      {
-		if (x<vmin) x_index = 0;
-		else x_index = num-1;
-	      }
+   for(float x = highvalue; x > vmin;)
+   {
+      float trans_x = (x-vmin)*scale + vmin; // Scaled x.
+      int index = GetIndex(trans_x);
+      if (index < 0)
+      {
+         if (trans_x<vmin) index = 0;
+         else index = num-1;
+      }
+      float fraction = (trans_x - vals[index])/delta;
+      float abs_fraction = (float)fabs(fraction);
+      int x_index = GetIndex(x);
+      if (x_index < 0)
+      {
+         if (x<vmin) x_index = 0;
+         else x_index = num-1;
+      }
 
 // Distribute the counts in proportion
 
-	    new_counts[index] += (1.0f - abs_fraction)*counts[x_index];
-	    if(fraction > 0)
-		if(index < (num-1))
-                   new_counts[index + 1] +=
-                      abs_fraction*counts[x_index];
-		else
-                   new_counts[index] +=
-                      abs_fraction*counts[x_index];
-	    else
-	        if(index > 0)
-                   new_counts[index - 1] +=
-                      abs_fraction*counts[x_index];
-		else
-                   new_counts[index] +=
-				 abs_fraction*counts[x_index];
-	    x -= delta;
-	}
+      new_counts[index] += (1.0f - abs_fraction)*counts[x_index];
+      if(fraction > 0)
+         if(index < (num-1))
+            new_counts[index + 1] +=
+               abs_fraction*counts[x_index];
+         else
+            new_counts[index] +=
+               abs_fraction*counts[x_index];
+      else
+         if(index > 0)
+            new_counts[index - 1] +=
+               abs_fraction*counts[x_index];
+         else
+            new_counts[index] +=
+               abs_fraction*counts[x_index];
+      x -= delta;
+   }
 
 // Compute new Histogram attributes
 
-    mean = scaled_his->GetMean();
-    standard_dev = scaled_his->GetStandardDev();
-    return scaled_his;
+   mean = scaled_his->GetMean();
+   standard_dev = scaled_his->GetStandardDev();
+   return scaled_his;
 }
 
 //---------------------------------------------------------------------
@@ -424,44 +424,44 @@ ossimHistogram* ossimHistogram::Scale(float scale_factor)
 //            {x | x <= (xi + .5*delta)}
 ossimHistogram* ossimHistogram::CumulativeGreaterThanEqual()const
 {
-  ossimHistogram* cum_his = new ossimHistogram(*this);
-  const float* density_counts = this->GetCounts();
-  int res = this->GetRes();
+   ossimHistogram* cum_his = new ossimHistogram(*this);
+   const float* density_counts = this->GetCounts();
+   int res = this->GetRes();
 
-  // Intitialize cumulative counts
-  float* cum_counts = cum_his->GetCounts();
-  int i = 0;
-  for(i=0; i < res; i++)
-     cum_counts[i] = 0;
+   // Intitialize cumulative counts
+   float* cum_counts = cum_his->GetCounts();
+   int i = 0;
+   for(i=0; i < res; i++)
+      cum_counts[i] = 0;
   
-  cum_counts[res-1] = density_counts[res-1];
-  for(i = res-2; i>=0; --i)
-  {
-     cum_counts[i] += (density_counts[i] + cum_counts[i+1]);
-  }
+   cum_counts[res-1] = density_counts[res-1];
+   for(i = res-2; i>=0; --i)
+   {
+      cum_counts[i] += (density_counts[i] + cum_counts[i+1]);
+   }
 
-  return cum_his;
+   return cum_his;
 }
 
 ossimHistogram* ossimHistogram::CumulativeLessThanEqual()const
 {
-  ossimHistogram* cum_his = new ossimHistogram(*this);
-  const float* density_counts = this->GetCounts();
-  int res = this->GetRes();
+   ossimHistogram* cum_his = new ossimHistogram(*this);
+   const float* density_counts = this->GetCounts();
+   int res = this->GetRes();
 
-  // Intitialize cumulative counts
-  float* cum_counts = cum_his->GetCounts();
-  int i = 0;
-  for(i=0; i < res; i++)
-    cum_counts[i] = 0;
+   // Intitialize cumulative counts
+   float* cum_counts = cum_his->GetCounts();
+   int i = 0;
+   for(i=0; i < res; i++)
+      cum_counts[i] = 0;
 
-  cum_counts[0] = density_counts[0];
-  for(i = 1; i < res; i++)
-  {
-     cum_counts[i] += (density_counts[i] + cum_counts[i-1]);
-  }
+   cum_counts[0] = density_counts[0];
+   for(i = 1; i < res; i++)
+   {
+      cum_counts[i] += (density_counts[i] + cum_counts[i-1]);
+   }
   
-  return cum_his;
+   return cum_his;
 }
 
 //Provides the correct values for histogram counts when the bin index 
@@ -471,22 +471,22 @@ ossimHistogram* ossimHistogram::CumulativeLessThanEqual()const
 //cnts[0] equivalent to cnts[n_bins-1]
 inline float GetExtendedCount(int bin, int n_bins, float* cnts, bool cyclic)
 {
-  int nbm = n_bins-1;
-  if(!cyclic)
-    {
+   int nbm = n_bins-1;
+   if(!cyclic)
+   {
       if(bin < 0)
-	return cnts[0];
+         return cnts[0];
       if(bin >= n_bins)
-	return cnts[nbm];
-    }
-  else
-    {
+         return cnts[nbm];
+   }
+   else
+   {
       if(bin<0)
-	return cnts[nbm+bin];
+         return cnts[nbm+bin];
       if(bin >= n_bins)
-	return cnts[bin-n_bins];
-    }
-  return cnts[bin];
+         return cnts[bin-n_bins];
+   }
+   return cnts[bin];
 }
 //Prune any sequences of more than one maxium value
 //That is, it is possible to have a "flat" top peak with an arbitarily
@@ -494,111 +494,113 @@ inline float GetExtendedCount(int bin, int n_bins, float* cnts, bool cyclic)
 //that the sequence wraps around, i.e. cnts[0] equivalent to cnts[nbins-1]
 inline void RemoveFlatPeaks(int nbins, float* cnts, bool cyclic)
 {
-  int nbm = nbins-1;
+   int nbm = nbins-1;
 
-  //Here we define a small state machine - parsing for runs of peaks
-  //init is the state corresponding to an initial run (starting at i ==0)
-  bool init=GetExtendedCount(0, nbins, cnts, cyclic);
-  int init_end =0;
+   //Here we define a small state machine - parsing for runs of peaks
+   //init is the state corresponding to an initial run (starting at i ==0)
+   bool init=GetExtendedCount(0, nbins, cnts, cyclic);
+   int init_end =0;
 
-  //start is the state corresponding to any other run of peaks
-  bool start=false;  
-  int start_index=0; 
-  int i = 0;
+   //start is the state corresponding to any other run of peaks
+   bool start=false;  
+   int start_index=0; 
+   int i = 0;
 
-  //The scan of the state machine
-  for(i = 0; i < nbins; i++)
-    {
+   //The scan of the state machine
+   for(i = 0; i < nbins; i++)
+   {
       float v = GetExtendedCount(i, nbins, cnts, cyclic);
 
       //State init: a string of non-zeroes at the begining.
       if(init&&v!=0)
-	continue;
+         continue;
 
       if(init&&v==0)
-	{
-	  init_end = i;
-	  init = false;
-	  continue;
-	}
+      {
+         init_end = i;
+         init = false;
+         continue;
+      }
 
       //State !init&&!start: a string of "0s"
       if(!start&&v==0)
-	continue;
+         continue;
 
       //State !init&&start: the first non-zero value
       if(!start&&v!=0)
-	{
-	  start_index = i;
-	  start = true;
-	  continue;
-	}
+      {
+         start_index = i;
+         start = true;
+         continue;
+      }
       //State ending flat peak: encountered a subsequent zero after starting
       if(start&&v==0)
-	{
-	  int peak_location = (start_index+i-1)/2;//The middle of the run
-	  int k = 0;
-	  for(k = start_index; k<=(i-1); k++)
+      {
+         int peak_location = (start_index+i-1)/2;//The middle of the run
+         int k = 0;
+         for(k = start_index; k<=(i-1); k++)
 	    if(k!=peak_location)
-	      cnts[k] = 0;
-	  start = false;
-	}
-    }
-  //Now handle the boundary conditions
-  //The non-cyclic case
-  if(!cyclic)
-    {
+               cnts[k] = 0;
+         start = false;
+      }
+   }
+   //Now handle the boundary conditions
+   //The non-cyclic case
+   if(!cyclic)
+   {
       if(init_end!=0)  //Was there an initial run of peaks?
-	{
-	  int init_location = (init_end-1)/2;
-	  int k = 0;
-	  for(k = 0; k<init_end; k++)
+      {
+         int init_location = (init_end-1)/2;
+         int k = 0;
+         for(k = 0; k<init_end; k++)
 	    if(k!=init_location)
-	      cnts[k] = 0;
-	}
+               cnts[k] = 0;
+      }
       if(start)       // Did we reach the end of the array in a run of pks?
-	{
-	  int end_location = (start_index + nbm)/2;
-	  int k = 0;
-	  for(k = start_index; k<nbins; k++)
+      {
+         int end_location = (start_index + nbm)/2;
+         int k = 0;
+         for(k = start_index; k<nbins; k++)
 	    if(k!=end_location)
-	      cnts[k] = 0;
-	}
-    }
-  else  //The cyclic case
-    {
+               cnts[k] = 0;
+      }
+   }
+   else  //The cyclic case
+   {
       if(init_end!=0)  //Is there a run which crosses the cyclic cut?
-	if(start)    
-	  { //Yes, so define the peak location accordingly
+      {
+         if(start)    
+         { //Yes, so define the peak location accordingly
 	    int peak_location = (start_index + init_end - nbm -1)/2;
 	    int k;
 	    if(peak_location < 0) //Is the peak to the left of the cut?
-	      {// Yes, to the left
-		peak_location += nbm; 
-		for( k = 0; k< init_end; k++)
+            {// Yes, to the left
+               peak_location += nbm; 
+               for( k = 0; k< init_end; k++)
 		  cnts[k]=0;
-		for( k= start_index; k <nbins; k++)
+               for( k= start_index; k <nbins; k++)
 		  if(k!=peak_location)
-		    cnts[k] = 0;
-	      }
+                     cnts[k] = 0;
+            }
 	    else   
-	      {//No, on the right.
-		for( k = start_index; k< nbins; k++)
+            {//No, on the right.
+               for( k = start_index; k< nbins; k++)
 		  cnts[k]=0;
-		for( k= 0; k < init_end; k++)
+               for( k= 0; k < init_end; k++)
 		  if(k!=peak_location)
-		    cnts[k] = 0;
-	      }
-	  }
-	else  
-	  {//There wasn't a final run so just clean up the initial run
+                     cnts[k] = 0;
+            }
+         }
+         else  
+         {//There wasn't a final run so just clean up the initial run
 	    int init_location = (init_end-1)/2;
 	    int k = 0;
 	    for(k = start_index; k<init_end; k++)
-	      if(k!=init_location)
-		cnts[k] = 0;
-	  }
-    }
+               if(k!=init_location)
+                  cnts[k] = 0;
+         }
+      }
+   }
 }
 
 //----------------------------------------------------------
@@ -611,105 +613,105 @@ inline void RemoveFlatPeaks(int nbins, float* cnts, bool cyclic)
 //    are in correspondence.
 ossimHistogram* ossimHistogram::NonMaximumSupress(int radius, bool cyclic)
 {
-  if((2*radius +1)> num/2)
-    {
-       ossimNotify(ossimNotifyLevel_WARN)<<"ossimHistogram::NonMaximumSupress the radius is too large \n";
-       return NULL;
-    }
-  //Get the counts array of "this"
-  ossimHistogram* h_new = new ossimHistogram(*this);
-  int n_buckets = h_new->GetRes();
-  float* counts_old = this->GetCounts();
+   if((2*radius +1)> num/2)
+   {
+      ossimNotify(ossimNotifyLevel_WARN)<<"ossimHistogram::NonMaximumSupress the radius is too large \n";
+      return NULL;
+   }
+   //Get the counts array of "this"
+   ossimHistogram* h_new = new ossimHistogram(*this);
+   int n_buckets = h_new->GetRes();
+   float* counts_old = this->GetCounts();
 
-  //Make a new Histogram for the suppressed version
-  float* counts_new = h_new->GetCounts();
-  int i;
-  for( i =0; i < n_buckets; i++)
-    counts_new[i] = 0;
+   //Make a new Histogram for the suppressed version
+   float* counts_new = h_new->GetCounts();
+   int i;
+   for( i =0; i < n_buckets; i++)
+      counts_new[i] = 0;
   
-  //Find local maxima
-  for( i = 0; i<  n_buckets; i++)
-    {
+   //Find local maxima
+   for( i = 0; i<  n_buckets; i++)
+   {
       //find the maxium value in the current kernel
       float max_count = counts_old[i];
       int k = 0;
       for(k = -radius; k <= radius ;k++)
-	{
-	  int index = i+k;
-	  float c = GetExtendedCount(index, n_buckets, counts_old, cyclic);
-	  if( c > max_count)
+      {
+         int index = i+k;
+         float c = GetExtendedCount(index, n_buckets, counts_old, cyclic);
+         if( c > max_count)
 	    max_count = c;
-	}
+      }
       //Is position i a local maxium?
       if(max_count == counts_old[i])
-	counts_new[i] = max_count;//Yes. So set the counts to the max value
-    }
-  RemoveFlatPeaks(n_buckets, counts_new, cyclic);
-  return h_new;
+         counts_new[i] = max_count;//Yes. So set the counts to the max value
+   }
+   RemoveFlatPeaks(n_buckets, counts_new, cyclic);
+   return h_new;
 }
 //----------------------------------------------------------
 // -- Compute the mean of the histogram population
 float ossimHistogram::GetMean()const
 {
-  float xsum = 0.0;
+   float xsum = 0.0;
 
-    if(MEAN_FLAG&stats_consistent)
-	return mean;
-    else
-	{
-	  if( this->GetBucketSize() > 0.0){
-	    for(float x=this->GetMinVal(); x<= this->GetMaxVal(); x +=this->GetBucketSize())
-	      xsum += x*GetCount(x);
-	  }
+   if(MEAN_FLAG&stats_consistent)
+      return mean;
+   else
+   {
+      if( this->GetBucketSize() > 0.0){
+         for(float x=this->GetMinVal(); x<= this->GetMaxVal(); x +=this->GetBucketSize())
+            xsum += x*GetCount(x);
+      }
 
-	  float area = ComputeArea(vmin, vmax);
-	  if(area <= 0.0)
-	    {
-	      //	      fprintf(stderr, "Histogram : Area <= 0.0\n");
-	      return 0.0;
-	    }
-	  else
-	    {
-	      stats_consistent |=1;
-	      mean = xsum/area;
-	      return mean;
-	    }
-	}
+      float area = ComputeArea(vmin, vmax);
+      if(area <= 0.0)
+      {
+         //	      fprintf(stderr, "Histogram : Area <= 0.0\n");
+         return 0.0;
+      }
+      else
+      {
+         stats_consistent |=1;
+         mean = xsum/area;
+         return mean;
+      }
+   }
 }
 
 
 
 float ossimHistogram::GetStandardDev()const
 {
-  float sum = 0.0;
+   float sum = 0.0;
 
-    if(SD_FLAG&stats_consistent)
-	return standard_dev;
-    else
-	{
-	    float xm = this -> GetMean(); // Force an Update of Mean
+   if(SD_FLAG&stats_consistent)
+      return standard_dev;
+   else
+   {
+      float xm = this -> GetMean(); // Force an Update of Mean
 
-	    if( this->GetBucketSize() > 0.0){
-	      for(float x=this->GetMinVal();
-		  x<= this->GetMaxVal();
-		  x +=this->GetBucketSize())
+      if( this->GetBucketSize() > 0.0){
+         for(float x=this->GetMinVal();
+             x<= this->GetMaxVal();
+             x +=this->GetBucketSize())
 
-		sum += (x-xm)*(x-xm)*GetCount(x);
-	    }
+            sum += (x-xm)*(x-xm)*GetCount(x);
+      }
 
-	float area = ComputeArea(vmin, vmax);
-	if(area <= 0.0)
-	{
-	  //	      fprintf(stderr, "Histogram : Area <= 0.0\n");
-	      return 0.0;
-        }
-	else
-	    {
-		stats_consistent |= 2;
-		standard_dev = (float)sqrt(sum/area);
-		return standard_dev;
-	    }
-	}
+      float area = ComputeArea(vmin, vmax);
+      if(area <= 0.0)
+      {
+         //	      fprintf(stderr, "Histogram : Area <= 0.0\n");
+         return 0.0;
+      }
+      else
+      {
+         stats_consistent |= 2;
+         standard_dev = (float)sqrt(sum/area);
+         return standard_dev;
+      }
+   }
 }
 
 int ossimHistogram::GetIndex(float pixelval)const
@@ -731,14 +733,14 @@ int ossimHistogram::GetIndex(float pixelval)const
 //    }
 //    return -1;
 #if 0
-  if ((pixelval > vmax) || (pixelval < vmin))
-    return -1;
+   if ((pixelval > vmax) || (pixelval < vmin))
+      return -1;
 
-  int idx = 0;
-  int i = 0;
+   int idx = 0;
+   int i = 0;
 
-  for(i = 0; i < num; i++)
-    {
+   for(i = 0; i < num; i++)
+   {
       // RWMC: This is very dangerous - might get an intermediate
       // value which is between vals[i]+0.5*delta and
       // vals[i+1]-0.5*delta, which would then return index of 0.
@@ -747,60 +749,60 @@ int ossimHistogram::GetIndex(float pixelval)const
       //       if ((pixelval > (vals[i] - 0.5 * delta)) &&
       //           (pixelval <= (vals[i] + 0.5 * delta)))
       if (pixelval <= (vals[i] + 0.5 * delta))
-	{
-	  idx = i;
-	  break;
-	}
-    }
+      {
+         idx = i;
+         break;
+      }
+   }
 
-  return idx;
+   return idx;
 #endif
 }
 
 
 int ossimHistogram::GetValIndex(float pixelval)const
 {
-  if ((pixelval > vmax) || (pixelval < vmin))
-    return -1;
+   if ((pixelval > vmax) || (pixelval < vmin))
+      return -1;
 
-  int idx = 0;
-  int i = 0;
+   int idx = 0;
+   int i = 0;
 
-  for(i = 0; i < num; i++)
-    {
+   for(i = 0; i < num; i++)
+   {
       if ((pixelval > (vals[i] - 0.5 * delta)) &&
           (pixelval <= (vals[i] + 0.5 * delta)))
-	{
-	  idx = i;
-	  break;
-	}
-    }
+      {
+         idx = i;
+         break;
+      }
+   }
 
-  return idx;
+   return idx;
 }
 
 
 
 float ossimHistogram::GetCount(float pixelval)const
 {
-  int index = GetIndex(pixelval);
+   int index = GetIndex(pixelval);
 
-  if (index < 0)
-    return -1;
-  else
-    return counts[index];
+   if (index < 0)
+      return -1;
+   else
+      return counts[index];
 }
 
 
 
 float ossimHistogram::GetMinVal()const
 {
-  register int i=0;
+   register int i=0;
 
-  while (i<num-1 && !counts[i])
-       i++;
+   while (i<num-1 && !counts[i])
+      i++;
 
-  return vals[i];
+   return vals[i];
 }
 
 
@@ -808,27 +810,27 @@ float ossimHistogram::GetMinVal()const
 
 float ossimHistogram::GetMaxVal()const
 {
-  register int i=num-1;
+   register int i=num-1;
 
-  while (i>0 && !counts[i])
-       i--;
+   while (i>0 && !counts[i])
+      i--;
 
-  if (i < 0)
-    return 0.0;
+   if (i < 0)
+      return 0.0;
 
-  return vals[i];
+   return vals[i];
 }
 
 
 float ossimHistogram::GetMaxCount()const
 {
-  register int i=0;
-  float max;
-  max = 0.0;
-  for (i=0; i < num; i++)
-    if (counts[i] > max)
-      max = counts[i];
-  return max;
+   register int i=0;
+   float max;
+   max = 0.0;
+   for (i=0; i < num; i++)
+      if (counts[i] > max)
+         max = counts[i];
+   return max;
 }
 
 
@@ -836,84 +838,84 @@ float ossimHistogram::GetMaxCount()const
 
 float ossimHistogram::SetCount(float pixelval, float count)
 {
-  stats_consistent = 0;
+   stats_consistent = 0;
 
-  int index = GetIndex(pixelval);
+   int index = GetIndex(pixelval);
 
-  if (index < 0)
-    return -1;
-  else
+   if (index < 0)
+      return -1;
+   else
    {
-    counts[index] = count;
-    return count;
-  }
+      counts[index] = count;
+      return count;
+   }
 }
 
 
 void ossimHistogram::UpCount(float pixelval)
 {
 
-  stats_consistent = 0;
-  int idx = GetIndex(pixelval);
-  if (idx >= 0)  // Originally (index > 0)
-  {
-     counts[idx] += 1.0;
-  }
+   stats_consistent = 0;
+   int idx = GetIndex(pixelval);
+   if (idx >= 0)  // Originally (index > 0)
+   {
+      counts[idx] += 1.0;
+   }
 }
 
 float ossimHistogram::ComputeArea(float low, float high)const
 {
-  float maxval = GetMaxVal();
-  float minval = GetMinVal();
+   float maxval = GetMaxVal();
+   float minval = GetMinVal();
 
-  if (low < minval) low = minval;
-  if (high > maxval) high = maxval;
+   if (low < minval) low = minval;
+   if (high > maxval) high = maxval;
 
-  if (low <= high)
-    {
+   if (low <= high)
+   {
       int indexlow, indexhigh;
       indexlow = (int) GetIndex(low);
       if (indexlow < 0)
-	{
-	  if (low<vmin) indexlow = 0;
-	  else indexlow = num-1;
-	}
+      {
+         if (low<vmin) indexlow = 0;
+         else indexlow = num-1;
+      }
       indexhigh = (int) GetIndex(high);
       if (indexhigh < 0)
-	{
-	  if (high<vmin) indexhigh = 0;
-	  else indexhigh = num-1;
-	}
+      {
+         if (high<vmin) indexhigh = 0;
+         else indexhigh = num-1;
+      }
       register int i=indexlow;
       float sum = 0.0;
 
       while (i<=indexhigh)
-	{
-	sum+= counts[i];
-	i++;
+      {
+         sum+= counts[i];
+         i++;
       }
       return sum;
-    }
-  else
-    {
+   }
+   else
+   {
       //      fprintf(stderr, "Histogram : Range for ComputeArea is out of bounds.\n");
       return 0.0;
-    }
+   }
 }
 //----------------------------------------------------------------------
 // --Compute the total area under the histogram
 //
 float ossimHistogram::ComputeArea()const
 {
-  float vmin = this->GetMinVal();
-  float vmax = this->GetMaxVal();
-  if(vmin>vmax)
-    {
+   float vmin = this->GetMinVal();
+   float vmax = this->GetMaxVal();
+   if(vmin>vmax)
+   {
       float temp = vmin;
       vmin = vmax;
       vmax = temp;
-    }
-  return this->ComputeArea(vmin, vmax);
+   }
+   return this->ComputeArea(vmin, vmax);
 }
 
 float ossimHistogram::getLowFractionFromValue(float val) const
@@ -938,7 +940,7 @@ float ossimHistogram::getLowFractionFromValue(float val) const
       {
          partial_sum += counts[i];
       }
-    }
+   }
 
    return (partial_sum/total_sum);
 }
@@ -964,7 +966,7 @@ float ossimHistogram::getHighFractionFromValue(float val) const
       {
          partial_sum += counts[i];
       }
-    }
+   }
 
    return (partial_sum/total_sum);
 }
@@ -975,25 +977,25 @@ float ossimHistogram::getHighFractionFromValue(float val) const
 //
 float ossimHistogram::LowClipVal(float clip_fraction)const
 {
-  if(clip_fraction<0) clip_fraction=0.0;
-  if(clip_fraction>1.0) clip_fraction=1.0;
-  float area = this->ComputeArea();
-  if(area==0.0) return this->GetMinVal();
-  if(clip_fraction==0.0) return this->GetMinVal();
-  if(clip_fraction==1.0) return this->GetMaxVal();
-  float clip_area = area*clip_fraction;
-  const float* COUNTS = this->GetCounts();
-  const float* VALS = this->GetVals();
-  int res = this->GetRes();
-  float sum = 0;
-  int i=0;
-  for(; i<res; i++)
-    {
+   if(clip_fraction<0) clip_fraction=0.0;
+   if(clip_fraction>1.0) clip_fraction=1.0;
+   float area = this->ComputeArea();
+   if(area==0.0) return this->GetMinVal();
+   if(clip_fraction==0.0) return this->GetMinVal();
+   if(clip_fraction==1.0) return this->GetMaxVal();
+   float clip_area = area*clip_fraction;
+   const float* COUNTS = this->GetCounts();
+   const float* VALS = this->GetVals();
+   int res = this->GetRes();
+   float sum = 0;
+   int i=0;
+   for(; i<res; i++)
+   {
       sum+=COUNTS[i];
       if(sum>=clip_area)
-	break;
-    }
-  return VALS[i];
+         break;
+   }
+   return VALS[i];
 }
 
 //----------------------------------------------------------------------
@@ -1002,25 +1004,25 @@ float ossimHistogram::LowClipVal(float clip_fraction)const
 //
 float ossimHistogram::HighClipVal(float clip_fraction)const
 {
-  if(clip_fraction<0) clip_fraction=0.0;
-  if(clip_fraction>1.0) clip_fraction=1.0;
-  float area = this->ComputeArea();
-  if(area==0.0) return this->GetMaxVal();
-  if(clip_fraction==0.0) return this->GetMaxVal();
-  if(clip_fraction==1.0) return this->GetMinVal();
-  float clip_area = area*clip_fraction;
-  const float* COUNTS = this->GetCounts();
-  const float* VALS = this->GetVals();
-  int res = this->GetRes();
-  float sum = 0;
-  int i = (res-1);
-  for(; i>=0; i--)
-    {
+   if(clip_fraction<0) clip_fraction=0.0;
+   if(clip_fraction>1.0) clip_fraction=1.0;
+   float area = this->ComputeArea();
+   if(area==0.0) return this->GetMaxVal();
+   if(clip_fraction==0.0) return this->GetMaxVal();
+   if(clip_fraction==1.0) return this->GetMinVal();
+   float clip_area = area*clip_fraction;
+   const float* COUNTS = this->GetCounts();
+   const float* VALS = this->GetVals();
+   int res = this->GetRes();
+   float sum = 0;
+   int i = (res-1);
+   for(; i>=0; i--)
+   {
       sum+=COUNTS[i];
       if(sum>=clip_area)
-	break;
-    }
-  return VALS[i];
+         break;
+   }
+   return VALS[i];
 }
 
 //--------------------------------------------------------------------------
@@ -1028,28 +1030,28 @@ float ossimHistogram::HighClipVal(float clip_fraction)const
 void ossimHistogram::Print()const
 {
    ostream& out = ossimNotify(ossimNotifyLevel_INFO);
-    const float* VALS = this->GetVals();
-    const float* COUNTS = this->GetCounts();
-    int res = this->GetRes();
-    int width = 0;
-    int i = 0;
-    for(i =0; i < res; i++)
+   const float* VALS = this->GetVals();
+   const float* COUNTS = this->GetCounts();
+   int res = this->GetRes();
+   int width = 0;
+   int i = 0;
+   for(i =0; i < res; i++)
+   {
+      if(width++ > 5)
       {
-	if(width++ > 5)
-	  {
-	    width = 0;
-	    out << "\n";
-	  }
-	out << VALS[i] << " "
-            << COUNTS[i] << " | " ;
+         width = 0;
+         out << "\n";
       }
-    out << "\n MaxVal " << this->GetMaxVal() << "\n";
-    out << " MinVal " << this->GetMinVal() << "\n";
-    out << " BucketSize " << this->GetBucketSize() << "\n";
-    out << " Resolution " << this->GetRes() << "\n";
-    out << " Area "
-        << this->ComputeArea(this->GetMinVal(),this->GetMaxVal()) << "\n";
-    out << "------------------------------------------------\n\n";
+      out << VALS[i] << " "
+          << COUNTS[i] << " | " ;
+   }
+   out << "\n MaxVal " << this->GetMaxVal() << "\n";
+   out << " MinVal " << this->GetMinVal() << "\n";
+   out << " BucketSize " << this->GetBucketSize() << "\n";
+   out << " Resolution " << this->GetRes() << "\n";
+   out << " Area "
+       << this->ComputeArea(this->GetMinVal(),this->GetMaxVal()) << "\n";
+   out << "------------------------------------------------\n\n";
 }
 
 //---------------------------------------------------------------------------
@@ -1057,20 +1059,20 @@ void ossimHistogram::Print()const
 
 void ossimHistogram::Dump(char *dumpfile)const
 {
-  FILE *dumpfp = fopen(dumpfile, "w");
+   FILE *dumpfp = fopen(dumpfile, "w");
 
-  if (!dumpfp)
-    {
+   if (!dumpfp)
+   {
       fprintf(stderr, "Error opening histogram data file.\n");
       return;
-    }
-  int i = 0;
+   }
+   int i = 0;
 
-  for(i = 0; i < num; i++)
-    fprintf(dumpfp, "%f %f\n", vals[i], counts[i]);
+   for(i = 0; i < num; i++)
+      fprintf(dumpfp, "%f %f\n", vals[i], counts[i]);
   
-  fclose(dumpfp);
-  return;
+   fclose(dumpfp);
+   return;
 }
 
 //---------------------------------------------------------------------------
@@ -1078,40 +1080,40 @@ void ossimHistogram::Dump(char *dumpfile)const
 
 int ossimHistogram::WritePlot(const char *fname)const
 {
-  FILE *fp = fopen(fname, "w");
+   FILE *fp = fopen(fname, "w");
 
-  if (!fp)
-    {
+   if (!fp)
+   {
       fprintf(stderr, "Error opening histogram plot file.\n");
       return 0;
-    }
+   }
 
-  int stat_res = this->GetRes();
+   int stat_res = this->GetRes();
 
-  float * x = new float[2*stat_res];
-  float * y = new float[2*stat_res];
+   float * x = new float[2*stat_res];
+   float * y = new float[2*stat_res];
 
-  const float * temp_x = this->GetVals();
-  const float * temp_y = this->GetCounts();
-  float     delt = this->GetBucketSize();
+   const float * temp_x = this->GetVals();
+   const float * temp_y = this->GetCounts();
+   float     delt = this->GetBucketSize();
 
-  for (register int i=0; i < stat_res ;i++)
-    {
+   for (register int i=0; i < stat_res ;i++)
+   {
       x[2*i] = temp_x[i] - 0.5f * delt;
       x[2*i+1] = temp_x[i] + 0.5f * delt;
       y[2*i] = temp_y[i];
       y[2*i+1] = temp_y[i];
-    }
+   }
 
 
-  for(register int j = 0; j < 2*stat_res; j++)
-    fprintf(fp, "%f %f\n", x[j], y[j]);
+   for(register int j = 0; j < 2*stat_res; j++)
+      fprintf(fp, "%f %f\n", x[j], y[j]);
 
-  delete [] x;
-  delete [] y;
+   delete [] x;
+   delete [] y;
 
-  fclose(fp);
-  return 1;
+   fclose(fp);
+   return 1;
 }
 
 void ossimHistogram::deleteAll()
@@ -1200,7 +1202,7 @@ bool ossimHistogram::ossimProprietaryHeaderInformation::parseStream(istream& in)
    getline(in, inputLine);  
    if(inputLine.find("File Type") != string::npos)
    {
-      unsigned long index = inputLine.find(":");
+      ossim_uint32 index = (ossim_uint32)inputLine.find(":");
       if(index != string::npos)
       {
          theFileType = inputLine.substr(index+1);
@@ -1220,7 +1222,7 @@ bool ossimHistogram::ossimProprietaryHeaderInformation::parseStream(istream& in)
    getline(in, inputLine);  
    if(inputLine.find("Version") != string::npos)
    {
-      unsigned long index = inputLine.find(":");
+      ossim_uint32 index = (ossim_uint32)inputLine.find(":");
       if(index != string::npos)
       {
          theVersion = inputLine.substr(index+1);
@@ -1239,7 +1241,7 @@ bool ossimHistogram::ossimProprietaryHeaderInformation::parseStream(istream& in)
    getline(in, inputLine);  
    if(inputLine.find("Mapper Type") != string::npos)
    {
-      unsigned long index = inputLine.find(":");
+      ossim_uint32 index = (ossim_uint32)inputLine.find(":");
       if(index != string::npos)
       {
          theMapperType = inputLine.substr(index+1);
@@ -1258,7 +1260,7 @@ bool ossimHistogram::ossimProprietaryHeaderInformation::parseStream(istream& in)
    getline(in, inputLine);  
    if(inputLine.find("Number of Bins") != string::npos)
    {
-      unsigned long index = inputLine.find(":");
+      ossim_uint32 index = (ossim_uint32)inputLine.find(":");
       if(index != string::npos)
       {
          theNumberOfBins = inputLine.substr(index+1);
@@ -1347,8 +1349,8 @@ bool ossimHistogram::loadState(const ossimKeywordlist& kwl,
          ossimString binNumber = "";
          ossimString regExpression =  ossimString("^(") + ossimString(prefix) + "bin[0-9]+)";
          vector<ossimString> keys = kwl.getSubstringKeyList( regExpression );
-         ossim_uint32 numberOfBins = keys.size();
-         ossim_uint32 offset = (ossimString(prefix)+"bin").size();
+         ossim_uint32 numberOfBins = (ossim_uint32)keys.size();
+         ossim_uint32 offset = (ossim_uint32)(ossimString(prefix)+"bin").size();
 
          std::vector<ossim_uint32> theNumberList(numberOfBins);
          ossim_uint32 idx = 0;
@@ -1374,54 +1376,54 @@ bool ossimHistogram::loadState(const ossimKeywordlist& kwl,
 
 bool ossimHistogram::loadState(const ossimRefPtr<ossimXmlNode> xmlNode)
 {
-  ossimRefPtr<ossimXmlNode> binValues =  xmlNode->findFirstNode("binValues");
-  ossimRefPtr<ossimXmlNode> minValueNode  =  xmlNode->findFirstNode("minValue");
-  ossimRefPtr<ossimXmlNode> maxValueNode  =  xmlNode->findFirstNode("maxValue");
+   ossimRefPtr<ossimXmlNode> binValues =  xmlNode->findFirstNode("binValues");
+   ossimRefPtr<ossimXmlNode> minValueNode  =  xmlNode->findFirstNode("minValue");
+   ossimRefPtr<ossimXmlNode> maxValueNode  =  xmlNode->findFirstNode("maxValue");
 
-  if(binValues.valid())
-  {
-     ossim_uint32 count = 0;
-     float minValue = 0.0;
-     float maxValue = 0.0;
-     std::vector<float> floatValues;
-     std::istringstream in(binValues->getText());
-     float v;
-     while(!in.fail())
-     {
-        in>>v;
-        if(!in.fail())
-        {
-           floatValues.push_back(v);
-        }
-     }
-     count = floatValues.size();
+   if(binValues.valid())
+   {
+      ossim_uint32 count = 0;
+      float minValue = 0.0;
+      float maxValue = 0.0;
+      std::vector<float> floatValues;
+      std::istringstream in(binValues->getText());
+      float v;
+      while(!in.fail())
+      {
+         in>>v;
+         if(!in.fail())
+         {
+            floatValues.push_back(v);
+         }
+      }
+      count = floatValues.size();
      
-     if(count)
-     {
-        minValue = 0;
-        maxValue = count - 1;
+      if(count)
+      {
+         minValue = 0;
+         maxValue = count - 1;
 
-        if(minValueNode.valid())
-        {
-           minValue = minValueNode->getText().toFloat32();
-        }
-        if(maxValueNode.valid())
-        {
-           maxValue = maxValueNode->getText().toFloat32();
-        }
+         if(minValueNode.valid())
+         {
+            minValue = minValueNode->getText().toFloat32();
+         }
+         if(maxValueNode.valid())
+         {
+            maxValue = maxValueNode->getText().toFloat32();
+         }
 
-        create(count, minValue, maxValue);
-        float* countsPtr = GetCounts();
-        ossim_uint32 idx = 0;
-        for(idx = 0; idx < count; ++idx)
-        {
-           countsPtr[idx] = floatValues[idx];
-        }
-        return true;
-     }
-  }
+         create(count, minValue, maxValue);
+         float* countsPtr = GetCounts();
+         ossim_uint32 idx = 0;
+         for(idx = 0; idx < count; ++idx)
+         {
+            countsPtr[idx] = floatValues[idx];
+         }
+         return true;
+      }
+   }
 
-  return false;
+   return false;
 }
 
 bool ossimHistogram::saveState(ossimRefPtr<ossimXmlNode> xmlNode)const

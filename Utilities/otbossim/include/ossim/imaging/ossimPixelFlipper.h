@@ -13,13 +13,13 @@
 // This was written to fix partial null pixels.
 // 
 //*************************************************************************
-// $Id: ossimPixelFlipper.h 9783 2006-10-24 18:21:42Z dburken $
+// $Id: ossimPixelFlipper.h 12623 2008-04-07 14:10:08Z gpotts $
 #ifndef ossimPixelFlipper_HEADER
 #define ossimPixelFlipper_HEADER
 
 #include <ossim/imaging/ossimImageSourceFilter.h>
 #include <ossim/base/ossimPolygon.h>
-#include <ossim/base/ossimMutex.h>
+#include <OpenThreads/ReentrantMutex>
 
 /**
  *  Class to scan pixels and flip target dn value to a replacement dn
@@ -232,7 +232,7 @@ protected:
    ClipMode        theClipMode;
    
    /** For lock and unlock. */
-   mutable ossimMutex      theMutex;
+   mutable OpenThreads::ReentrantMutex      theMutex;
 
    mutable std::vector<ossimPolygon> theValidVertices;
    mutable std::vector<ossimIrect>   theBoundingRects;

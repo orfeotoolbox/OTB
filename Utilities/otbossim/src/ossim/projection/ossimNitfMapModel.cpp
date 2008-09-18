@@ -10,19 +10,17 @@
 //
 //*****************************************************************************
 
+#include <cstdlib>
 #include <ossim/projection/ossimNitfMapModel.h>
-
-RTTI_DEF1(ossimNitfMapModel, "ossimNitfMapModel", ossimSensorModel);
-
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
-#include <stdio.h>
-#include <fstream>
+#include <ossim/base/ossimTrace.h>
+
+RTTI_DEF1(ossimNitfMapModel, "ossimNitfMapModel", ossimSensorModel);
 
 //***
 // Define Trace flags for use within this file:
 //***
-#include <ossim/base/ossimTrace.h>
 static ossimTrace traceExec  ("ossimNitfMapModel:exec");
 static ossimTrace traceDebug ("ossimNitfMapModel:debug");
 

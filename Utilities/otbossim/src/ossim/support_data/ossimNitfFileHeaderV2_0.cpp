@@ -7,7 +7,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeaderV2_0.cpp 11092 2007-05-30 14:40:11Z dburken $
+// $Id: ossimNitfFileHeaderV2_0.cpp 12988 2008-06-04 16:49:43Z gpotts $
 
 
 #include <sstream>
@@ -1158,6 +1158,7 @@ ossimRefPtr<ossimProperty> ossimNitfFileHeaderV2_0::getProperty(const ossimStrin
 {
    ossimProperty* property = 0;
 
+	
    if(name == CLEVEL_KW)
    {
       property = new ossimStringProperty(name, ossimString(theComplexityLevel).trim());
@@ -1180,28 +1181,12 @@ ossimRefPtr<ossimProperty> ossimNitfFileHeaderV2_0::getProperty(const ossimStrin
    }
    else
    {
-      return ossimNitfFileHeader::getProperty(name);
+      return ossimNitfFileHeaderV2_X::getProperty(name);
    }
    return property;
 }
 
 void ossimNitfFileHeaderV2_0::getPropertyNames(std::vector<ossimString>& propertyNames)const
 {
-   ossimNitfFileHeader::getPropertyNames(propertyNames);
-   propertyNames.push_back(CLEVEL_KW);
-   propertyNames.push_back(STYPE_KW);
-   propertyNames.push_back(OSTAID_KW);
-   propertyNames.push_back(FDT_KW);
-   propertyNames.push_back(FTITLE_KW);
-   propertyNames.push_back(FSCLAS_KW);
-   propertyNames.push_back(FSCODE_KW);
-   propertyNames.push_back(FSCTLH_KW);
-   propertyNames.push_back(FSREL_KW);
-   propertyNames.push_back(FSCAUT_KW);
-   propertyNames.push_back(FSCTLN_KW);
-   propertyNames.push_back(FSCOP_KW);
-   propertyNames.push_back(FSCPYS_KW);
-   propertyNames.push_back(ENCRYP_KW);
-   propertyNames.push_back(ONAME_KW);
-   propertyNames.push_back(OPHONE_KW);
+   ossimNitfFileHeaderV2_X::getPropertyNames(propertyNames);
 }

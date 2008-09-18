@@ -4,7 +4,7 @@
 //
 // Author: Garrett Potts
 //*******************************************************************
-//  $Id: ossimStatePlaneProjectionInfo.h 12096 2007-11-30 20:24:13Z dburken $
+//  $Id: ossimStatePlaneProjectionInfo.h 12442 2008-02-07 22:33:52Z dburken $
 #ifndef ossimStatePlaneProjectionInfo_HEADER
 #define ossimStatePlaneProjectionInfo_HEADER
 
@@ -39,18 +39,6 @@ public:
                                  const std::string&  units,
                                  const ossimDatum*   datum=0);
   
-   ossimStatePlaneProjectionInfo(const std::string&  name,
-                                 int                 pcsCode,
-                                 const std::string&  projCode,
-                                 const std::string&  param1,
-                                 const std::string&  param2,
-                                 double              param3,
-                                 double              param4,
-                                 double              falseEast,
-                                 double              falseNorth,
-                                 const std::string&  units,
-                                 const ossimDatum*   datum=0);
-   
    int                code()                  const;
    const ossimString& name()                  const;
    const ossimString& projName()              const;
@@ -65,7 +53,9 @@ public:
    double             falseEastingInMeters()  const;
    double             falseNorthingInMeters() const;
    double             scaleFactor()           const;
-   const ossimString& units()                 const;
+
+   /** Not stored as string; hence, returned by value. */
+   ossimString        units()                 const;
 
    /**
     * 
@@ -109,7 +99,7 @@ private:
    
    double               theScaleFactor;
    
-   ossimString          theUnits;        // "ft" or "m"
+   ossimUnitType        theUnits;        // "us_survey_ft" or "meters"
 };
 
 #endif /* #ifndef ossimStatePlaneProjectionInfo_HEADER */

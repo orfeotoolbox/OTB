@@ -5,7 +5,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimApplanixEOFile.cpp 11423 2007-07-27 16:59:22Z dburken $
+//  $Id: ossimApplanixEOFile.cpp 13021 2008-06-10 16:22:58Z dburken $
 #include <ossim/support_data/ossimApplanixEOFile.h>
 #include <iterator>
 #include <fstream>
@@ -55,9 +55,9 @@ std::ostream& operator <<(std::ostream& out, const ossimApplanixEOFile& src)
    if(src.theRecordFormat.size())
    {
       std::copy(src.theRecordFormat.begin(),
-                --src.theRecordFormat.end(),
+                src.theRecordFormat.end()-1,
                 std::ostream_iterator<ossimString>(out, ", "));
-      out << *(--src.theRecordFormat.end());
+      out << *(src.theRecordFormat.end()-1);
       out << std::endl;
    }
 
@@ -445,7 +445,7 @@ void ossimApplanixEOFile::indexRecordIds()
    ossimString id;
    ossim_uint32 idx;
    ossim_int32 idIdx = getFieldIdxLike("ID");
-   ossim_uint32 size = theApplanixRecordList.size();
+   ossim_uint32 size = (ossim_uint32)theApplanixRecordList.size();
    theRecordIdMap.clear();
 
    if(idIdx < 0) return;

@@ -14,21 +14,17 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimLsrPoint.h 11428 2007-07-27 18:44:18Z gpotts $
+//  $Id: ossimLsrPoint.h 12790 2008-05-05 13:41:33Z dburken $
 
 #ifndef ossimLsrPoint_HEADER
 #define ossimLsrPoint_HEADER
 
-#include <stdio.h>
-
 #include <ossim/base/ossimLsrSpace.h>
 #include <ossim/base/ossimColumnVector3d.h>
-#include <ossim/base/ossimEcefVector.h>
-#include <ossim/base/ossimEcefVector.h>
-#include <ossim/base/ossimNotifyContext.h>
+#include <ossim/base/ossimNotify.h>
 
-class OSSIMDLLEXPORT ossimGpt;
-class OSSIMDLLEXPORT ossimLsrVector;
+class ossimGpt;
+class ossimLsrVector;
 
 //*****************************************************************************
 //  CLASS: ossimLsrPoint

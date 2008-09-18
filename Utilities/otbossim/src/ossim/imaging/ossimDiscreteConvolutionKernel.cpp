@@ -5,7 +5,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimDiscreteConvolutionKernel.cpp 11419 2007-07-27 16:24:57Z dburken $
+//  $Id: ossimDiscreteConvolutionKernel.cpp 12912 2008-05-28 15:05:54Z gpotts $
 #include <ossim/imaging/ossimDiscreteConvolutionKernel.h>
 
  
@@ -45,13 +45,13 @@ ossimDiscreteConvolutionKernel::~ossimDiscreteConvolutionKernel()
 void ossimDiscreteConvolutionKernel::buildSymmetric(const std::vector<float>& coefficients,
                                                     NEWMAT::Matrix& result)
 {
-   long size = coefficients.size();
+   ossim_uint32 size = (ossim_uint32)coefficients.size();
    if(size > 0)
    {
 
       NEWMAT::RowVector row(size);
       NEWMAT::ColumnVector col(size);
-      for(long index = 0; index < size; ++index)
+      for(ossim_uint32 index = 0; index < size; ++index)
       {
          row[index] = coefficients[index];
          col[index] = coefficients[index];

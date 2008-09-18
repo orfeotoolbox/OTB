@@ -95,6 +95,7 @@
 
 #define WANT_MATH
 
+#include <cmath>
 #include <ossim/matrix/newmatap.h>
 
 #ifdef use_namespace
@@ -351,14 +352,14 @@ static void R_P_FTK (int N, int M, int P, Real* X, Real* Y)
    Real A [18], B [18], C [18], S [18];
    Real IA [9], IB [9], RA [9], RB [9];
 
-   TWOPI=8.0*atan(1.0);
+   TWOPI=8.0*std::atan(1.0);
    M_OVER_2=M/2+1; MP=M*P; PP=P/2; PM=P-1;
 
    for (U=0; U<PP; U++)
    {
       ANGLE=TWOPI*Real(U+1)/Real(P);
       JJ=P-U-2;
-      A[U]=cos(ANGLE); B[U]=sin(ANGLE);
+      A[U]=std::cos(ANGLE); B[U]=std::sin(ANGLE);
       A[JJ]=A[U]; B[JJ]= -B[U];
    }
 
@@ -373,7 +374,7 @@ static void R_P_FTK (int N, int M, int P, Real* X, Real* Y)
       NO_FOLD = (J==0 || 2*J==M);
       K0=J;
       ANGLE=TWOPI*Real(J)/Real(MP); ZERO=ANGLE==0.0;
-      C[0]=cos(ANGLE); S[0]=sin(ANGLE);
+      C[0]=std::cos(ANGLE); S[0]=std::sin(ANGLE);
       for (U=1; U<PM; U++)
       {
          C[U]=C[U-1]*C[0]-S[U-1]*S[0];
@@ -446,14 +447,14 @@ static void R_2_FTK (int N, int M, Real* X0, Real* Y0, Real* X1, Real* Y1)
    Real ANGLE,C,IS,IU,RS,RU,S,TWOPI;
 
    M2=M*2; M_OVER_2=M/2+1;
-   TWOPI=8.0*atan(1.0);
+   TWOPI=8.0*std::atan(1.0);
 
    for (J=0; J<M_OVER_2; J++)
    {
       NO_FOLD = (J==0 || 2*J==M);
       K0=J;
       ANGLE=TWOPI*Real(J)/Real(M2); ZERO=ANGLE==0.0;
-      C=cos(ANGLE); S=sin(ANGLE);
+      C=std::cos(ANGLE); S=std::sin(ANGLE);
       goto L200;
    L100:
       REPORT
@@ -487,15 +488,15 @@ static void R_3_FTK (int N, int M, Real* X0, Real* Y0, Real* X1, Real* Y1,
    Real ANGLE,A,B,C1,C2,S1,S2,T,TWOPI;
    Real I0,I1,I2,IA,IB,IS,R0,R1,R2,RA,RB,RS;
 
-   M3=M*3; M_OVER_2=M/2+1; TWOPI=8.0*atan(1.0);
-   A=cos(TWOPI/3.0); B=sin(TWOPI/3.0);
+   M3=M*3; M_OVER_2=M/2+1; TWOPI=8.0*std::atan(1.0);
+   A=std::cos(TWOPI/3.0); B=std::sin(TWOPI/3.0);
 
    for (J=0; J<M_OVER_2; J++)
    {
       NO_FOLD = (J==0 || 2*J==M);
       K0=J;
       ANGLE=TWOPI*Real(J)/Real(M3); ZERO=ANGLE==0.0;
-      C1=cos(ANGLE); S1=sin(ANGLE);
+      C1=std::cos(ANGLE); S1=std::sin(ANGLE);
       C2=C1*C1-S1*S1; S2=S1*C1+C1*S1;
       goto L200;
    L100:
@@ -542,14 +543,14 @@ static void R_4_FTK (int N, int M,
    Real I1,I2,I3,IS0,IS1,IU0,IU1,R1,R2,R3,RS0,RS1,RU0,RU1;
 
    M4=M*4; M_OVER_2=M/2+1;
-   TWOPI=8.0*atan(1.0);
+   TWOPI=8.0*std::atan(1.0);
 
    for (J=0; J<M_OVER_2; J++)
    {
       NO_FOLD = (J==0 || 2*J==M);
       K0=J;
       ANGLE=TWOPI*Real(J)/Real(M4); ZERO=ANGLE==0.0;
-      C1=cos(ANGLE); S1=sin(ANGLE);
+      C1=std::cos(ANGLE); S1=std::sin(ANGLE);
       C2=C1*C1-S1*S1; S2=S1*C1+C1*S1;
       C3=C2*C1-S2*S1; S3=S2*C1+C2*S1;
       goto L200;
@@ -609,16 +610,16 @@ static void R_5_FTK (int N, int M,
    Real I0,I1,I2,I3,I4,IA1,IA2,IB1,IB2,IS1,IS2,IU1,IU2;
 
    M5=M*5; M_OVER_2=M/2+1;
-   TWOPI=8.0*atan(1.0);
-   A1=cos(TWOPI/5.0); B1=sin(TWOPI/5.0);
-   A2=cos(2.0*TWOPI/5.0); B2=sin(2.0*TWOPI/5.0);
+   TWOPI=8.0*std::atan(1.0);
+   A1=std::cos(TWOPI/5.0); B1=std::sin(TWOPI/5.0);
+   A2=std::cos(2.0*TWOPI/5.0); B2=std::sin(2.0*TWOPI/5.0);
 
    for (J=0; J<M_OVER_2; J++)
    {
       NO_FOLD = (J==0 || 2*J==M);
       K0=J;
       ANGLE=TWOPI*Real(J)/Real(M5); ZERO=ANGLE==0.0;
-      C1=cos(ANGLE); S1=sin(ANGLE);
+      C1=std::cos(ANGLE); S1=std::sin(ANGLE);
       C2=C1*C1-S1*S1; S2=S1*C1+C1*S1;
       C3=C2*C1-S2*S1; S3=S2*C1+C2*S1;
       C4=C2*C2-S2*S2; S4=S2*C2+C2*S2;
@@ -691,14 +692,14 @@ static void R_8_FTK (int N, int M,
    Real ISS0,ISS1,ISU0,ISU1,IUS0,IUS1,IUU0,IUU1;
 
    M8=M*8; M_OVER_2=M/2+1;
-   TWOPI=8.0*atan(1.0); E=cos(TWOPI/8.0);
+   TWOPI=8.0*std::atan(1.0); E=std::cos(TWOPI/8.0);
 
    for (J=0;J<M_OVER_2;J++)
    {
       NO_FOLD= (J==0 || 2*J==M);
       K0=J;
       ANGLE=TWOPI*Real(J)/Real(M8); ZERO=ANGLE==0.0;
-      C1=cos(ANGLE); S1=sin(ANGLE);
+      C1=std::cos(ANGLE); S1=std::sin(ANGLE);
       C2=C1*C1-S1*S1; S2=C1*S1+S1*C1;
       C3=C2*C1-S2*S1; S3=S2*C1+C2*S1;
       C4=C2*C2-S2*S2; S4=S2*C2+C2*S2;
@@ -811,11 +812,11 @@ static void R_16_FTK (int N, int M,
    Real S1,S2,S3,S4,S5,S6,S7,S8,S9,S10,S11,S12,S13,S14,S15;
 
    M16=M*16; M_OVER_2=M/2+1;
-   TWOPI=8.0*atan(1.0);
-   ER1=cos(TWOPI/16.0); EI1=sin(TWOPI/16.0);
-   E2=cos(TWOPI/8.0);
-   ER3=cos(3.0*TWOPI/16.0); EI3=sin(3.0*TWOPI/16.0);
-   ER5=cos(5.0*TWOPI/16.0); EI5=sin(5.0*TWOPI/16.0);
+   TWOPI=8.0*std::atan(1.0);
+   ER1=std::cos(TWOPI/16.0); EI1=std::sin(TWOPI/16.0);
+   E2=std::cos(TWOPI/8.0);
+   ER3=std::cos(3.0*TWOPI/16.0); EI3=std::sin(3.0*TWOPI/16.0);
+   ER5=std::cos(5.0*TWOPI/16.0); EI5=std::sin(5.0*TWOPI/16.0);
 
    for (J=0; J<M_OVER_2; J++)
    {
@@ -823,7 +824,7 @@ static void R_16_FTK (int N, int M,
       K0=J;
       ANGLE=TWOPI*Real(J)/Real(M16);
       ZERO=ANGLE==0.0;
-      C1=cos(ANGLE); S1=sin(ANGLE);
+      C1=std::cos(ANGLE); S1=std::sin(ANGLE);
       C2=C1*C1-S1*S1; S2=C1*S1+S1*C1;
       C3=C2*C1-S2*S1; S3=S2*C1+C2*S1;
       C4=C2*C2-S2*S2; S4=S2*C2+C2*S2;

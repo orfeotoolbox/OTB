@@ -8,8 +8,9 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossim3x3ConvolutionFilter.cpp 11347 2007-07-23 13:01:59Z gpotts $
+// $Id: ossim3x3ConvolutionFilter.cpp 12956 2008-06-02 01:38:50Z dburken $
 
+#include <cstdlib>
 #include <ossim/imaging/ossim3x3ConvolutionFilter.h>
 #include <ossim/base/ossimIrect.h>
 #include <ossim/imaging/ossimImageDataFactory.h>

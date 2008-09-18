@@ -9,7 +9,7 @@
 // Contains class declaration for NitfTileSource.
 //
 //*******************************************************************
-//  $Id: ossimNitfTileSource.h 10919 2007-05-15 18:32:10Z dburken $
+//  $Id: ossimNitfTileSource.h 12218 2007-12-26 14:14:02Z dburken $
 #ifndef ossimNitfTileSource_HEADER
 #define ossimNitfTileSource_HEADER
 
@@ -296,6 +296,12 @@ protected:
    bool allocate();
 
    /**
+    * @param hdr Pointer to image header.
+    * @return true if reader can uncompress nitf.
+    * */
+   virtual bool canUncompress(const ossimNitfImageHeader* hdr) const;
+
+   /**
     * Initializes the data member "theScalarType" from the current entry.
     */
    void initializeScalarType();
@@ -308,7 +314,7 @@ protected:
    /**
     * Initializes the data member "theReadMode" from the current entry.
     */
-   void initializeReadMode();
+   virtual void initializeReadMode();
 
    /**
     * Initializes the data member "theNumberOfBands" from the current entry.
@@ -367,6 +373,11 @@ protected:
     * this will be the image width by the height of one tile.
     */
    void initializeCacheTile();
+
+   /**
+    * Initializes the data member theCompressedBuf.
+    */
+   virtual void initializeCompressedBuf();
 
    /**
     * Loads a block of data to theCacheTile.
@@ -433,7 +444,7 @@ protected:
     * @return true on success, false on error.  This checks for arrays being
     * the same size as number of blocks.
     */
-   bool scanForJpegBlockOffsets();
+   virtual bool scanForJpegBlockOffsets();
 
    /**
     * @brief Uncompresses a jpeg block using the jpeg-6b library.
@@ -441,7 +452,7 @@ protected:
     * @param y line location in image space.
     * @return true on success, false on error.
     */
-   bool uncompressJpegBlock(ossim_uint32 x, ossim_uint32 y);
+   virtual bool uncompressJpegBlock(ossim_uint32 x, ossim_uint32 y);
 
    /**
     * @brief Loads one of the default tables based on COMRAT value.

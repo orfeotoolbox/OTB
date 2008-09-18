@@ -4,6 +4,7 @@
 
 #define WANT_MATH
 
+#include <cmath>
 #include <ossim/matrix/newmat.h>
 #include <ossim/matrix/newmatrm.h>
 
@@ -183,7 +184,7 @@ void Rotate(RectMatrixCol& U, RectMatrixCol& V, Real tau, Real s)
 // misc procedures for numerical things
 
 Real pythag(Real f, Real g, Real& c, Real& s)
-// return z=sqrt(f*f+g*g), c=f/z, s=g/z
+// return z=std::sqrt(f*f+g*g), c=f/z, s=g/z
 // set c=1,s=0 if z==0
 // avoid floating point overflow or divide by zero
 {
@@ -193,14 +194,14 @@ Real pythag(Real f, Real g, Real& c, Real& s)
    if (ag<af)
    {
       REPORT
-      Real h = g/f; Real sq = sqrt(1.0+h*h);
+      Real h = g/f; Real sq = std::sqrt(1.0+h*h);
       if (f<0) sq = -sq;           // make return value non-negative
       c = 1.0/sq; s = h/sq; return sq*f;
    }
    else
    {
       REPORT
-      Real h = f/g; Real sq = sqrt(1.0+h*h);
+      Real h = f/g; Real sq = std::sqrt(1.0+h*h);
       if (g<0) sq = -sq;
       s = 1.0/sq; c = h/sq; return sq*g;
    }

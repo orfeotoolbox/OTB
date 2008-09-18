@@ -10,7 +10,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimGeoidManager.h 11496 2007-08-06 09:18:28Z dburken $
+//  $Id: ossimGeoidManager.h 12319 2008-01-16 19:55:24Z gpotts $
 
 #ifndef ossimGeoidManager_HEADER
 #define ossimGeoidManager_HEADER
@@ -18,7 +18,6 @@
 #include <vector>
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimGeoid.h>
-
 /*****************************************************************************
  *
  * CLASS: ossimGeoidManager 
@@ -66,7 +65,7 @@ public:
    /**
     * Permits adding additional geoids to the list: 
     */
-   virtual void addGeoid(ossimRefPtr<ossimGeoid> geoid);
+   virtual void addGeoid(ossimRefPtr<ossimGeoid> geoid, bool toFrontFlag=false);
 
    const ossimRefPtr<ossimGeoid> findGeoidByShortName(const ossimString& shortName,
                                                       bool caseSensitive=true)const;

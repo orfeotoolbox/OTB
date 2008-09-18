@@ -7,7 +7,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeader.cpp 11331 2007-07-19 18:35:33Z dburken $
+// $Id: ossimNitfImageHeader.cpp 12403 2008-02-04 17:59:13Z gpotts $
 
 #include <cmath> /* for fmod */
 #include <iomanip>
@@ -98,7 +98,7 @@ const ossimRefPtr<ossimNitfRegisteredTag> ossimNitfImageHeader::getTagData(
 
 ossim_uint32 ossimNitfImageHeader::getNumberOfTags()const
 {
-   return theTagList.size();
+   return static_cast<ossim_uint32>(theTagList.size());
 }
 
 void ossimNitfImageHeader::addTag(ossimNitfTagInformation tag)

@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimDate.h 12087 2007-11-29 15:13:58Z gpotts $
+// $Id: ossimDate.h 12992 2008-06-05 18:09:11Z gpotts $
 #ifndef ossimDate_HEADER
 #define ossimDate_HEADER
 #include <ctime>
@@ -172,6 +172,15 @@ public:
     time_t getTicks()const;
     time_t getEpoc()const;
     
+    void addSeconds(ossim_float64 n);
+    void addMinutes(ossim_float64 n);
+    void addHours(ossim_float64 n);
+    void addDays(ossim_float64 n);
+    
+    ossim_float64 deltaInSeconds(const ossimLocalTm& d)const;
+    ossim_float64 deltaInMinutes(const ossimLocalTm& d)const;
+    ossim_float64 delatInHours(const ossimLocalTm& d)const;
+    ossim_float64 deltaInDays(const ossimLocalTm& d)const;
     /**
      * Will not adjust for timezone.  The passed in value is based on seconds.
      */ 

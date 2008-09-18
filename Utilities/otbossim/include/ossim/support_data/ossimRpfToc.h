@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRpfToc.h 10277 2007-01-15 19:28:03Z dburken $
+// $Id: ossimRpfToc.h 12912 2008-05-28 15:05:54Z gpotts $
 #ifndef osimRpfToc_HEADER
 #define osimRpfToc_HEADER
 
@@ -32,7 +32,7 @@ public:
    ossimErrorCode parseFile(const ossimFilename &fileName);
    void print(std::ostream& out)const;
    
-   unsigned long getNumberOfEntries()const{return theTocEntryList.size();}
+   unsigned long getNumberOfEntries()const{return (ossim_uint32)theTocEntryList.size();}
    const ossimRpfTocEntry* getTocEntry(unsigned long index)const;
    /*!
     * Returns -1 if not found.

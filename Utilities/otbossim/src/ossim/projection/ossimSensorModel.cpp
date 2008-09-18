@@ -25,7 +25,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimSensorModel.cpp 12156 2007-12-10 15:16:54Z gpotts $
+//  $Id: ossimSensorModel.cpp 12253 2008-01-03 21:40:15Z dburken $
 #include <iostream>
 #include <sstream>
 using namespace std;
@@ -596,7 +596,14 @@ bool ossimSensorModel::saveState(ossimKeywordlist& kwl,
            ossimString::toString(theImageClipRect.lr().y),
            true);
 
-   saveAdjustments(kwl, prefix);
+   // Avoid passing null char* to method that takes an ossimString.
+   ossimString tmpStr;
+   if (prefix)
+   {
+      tmpStr = prefix;
+   }
+   saveAdjustments(kwl, tmpStr);
+      
    //
    // Also save the state of the elevation object:
    //
@@ -782,7 +789,14 @@ bool ossimSensorModel::loadState(const ossimKeywordlist& kwl,
       theImageClipRect = ossimDrect(0.0, 0.0,
                                     theImageSize.samp-1, theImageSize.line-1);
    }
-   loadAdjustments(kwl, prefix);
+   
+   // Avoid passing null char* to method that takes an ossimString.
+   ossimString tmpStr;
+   if (prefix)
+   {
+      tmpStr = prefix;
+   }
+   loadAdjustments(kwl, tmpStr);
 
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimSensorModel::loadState: returning..." << std::endl;
    return ossimProjection::loadState(kwl, prefix);;

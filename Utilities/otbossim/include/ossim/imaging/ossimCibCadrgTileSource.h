@@ -9,9 +9,9 @@
 //              CADRG file.
 //
 //-----------------------------------------------------------------------
-//$Id: ossimCibCadrgTileSource.h 9094 2006-06-13 19:12:40Z dburken $
+//$Id: ossimCibCadrgTileSource.h 12990 2008-06-04 19:14:34Z gpotts $
 #ifndef ossimCibCadrgTileSource_HEADER
-#define ossimCibCadrgTileSource_HEADER
+#define ossimCibCadrgTileSource_HEADER 1
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/support_data/ossimRpfFrameEntry.h>
 
@@ -126,6 +126,7 @@ public:
     */
    virtual ossimIrect getImageRectangle(ossim_uint32 reduced_res_level = 0) const;
    
+
    /**
     * Method to save the state of an object to a keyword list.
     *
@@ -357,7 +358,20 @@ public:
 
    ossimString getSecurityClassification()const;
    
+	/**
+    * @brief Gets a property for matching name.
+    * @param name The name of the property to get.
+    * @return Returns property matching "name".
+    */
+   virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
+   
    /**
+    * @brief Gets a list of property names available.
+    * @param propertyNames The list to push back names to.
+    */
+   virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
+
+	/**
     * CONSTANT representing the width of a Frame.  This should be 1536.
     */
    static const ossim_uint32 CIBCADRG_FRAME_WIDTH;
@@ -367,8 +381,10 @@ public:
     */
    static const ossim_uint32 CIBCADRG_FRAME_HEIGHT;
    
+
 protected:
 
+	void updatePropertiesToFirstValidFrame();
    /**
     * Sets the entry to be renderer.  The entry within the table
     * of contents are stored in an Toc entry object.
@@ -566,6 +582,10 @@ protected:
    ossimCibCadrgProductType     theProductType;
    
    mutable ossimRpfFrame*       theWorkFrame;
+	
+	
+	// data to use in property retrieval
+	
 TYPE_DATA
 };
 

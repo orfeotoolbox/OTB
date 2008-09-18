@@ -28,14 +28,13 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  ******************************************************************************
- * $Id&
+ * $Id: ossimCplUtil.h 13013 2008-06-10 13:34:01Z dburken $
  */
 
 #ifndef ossimCplUtil_HEADER
 #define ossimCplUtil_HEADER
 
 #include <cstdio> /* to pick up "size_t" */
-#include <cstdlib>
 #include <ossim/base/ossimConstants.h>
 
 

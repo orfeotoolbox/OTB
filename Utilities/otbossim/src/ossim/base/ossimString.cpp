@@ -6,7 +6,7 @@
 // Description: This class extends the stl's string class.
 // 
 //********************************************************************
-// $Id: ossimString.cpp 12047 2007-11-15 15:44:31Z gpotts $
+// $Id: ossimString.cpp 13141 2008-07-06 20:19:03Z dburken $
 
 #include <iostream>
 #include <iomanip>
@@ -21,23 +21,8 @@
 static ossimTrace traceDebug("ossimString:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static char OSSIM_ID[] = "$Id: ossimString.cpp 12047 2007-11-15 15:44:31Z gpotts $";
+static char OSSIM_ID[] = "$Id: ossimString.cpp 13141 2008-07-06 20:19:03Z dburken $";
 #endif
-
-ossimString::ossimString(char aChar)
-   :
-	std::string()
-{
-   char tmp[2];
-   tmp[0] = aChar;
-   tmp[1] = '\0';
-   append(tmp);
-}
-
-ossimString::ossimString(size_type n, char c)
-: std::string(n, c)
-{
-}
 
 ossimString ossimString::upcase(const ossimString& aString)
 {
@@ -102,8 +87,8 @@ char* ossimString::stringDup()const
    }
    else
    {  
-      long index = 0;
-      long len = length();
+      ossim_uint32 index = 0;
+      ossim_uint32 len = (ossim_uint32)length();
       result = new char[len+1];
       const char* sourceString = c_str();
 
@@ -1102,4 +1087,3 @@ ossimString ossimString::getOssimId() const
 #endif
    return ossimString("");
 }
-

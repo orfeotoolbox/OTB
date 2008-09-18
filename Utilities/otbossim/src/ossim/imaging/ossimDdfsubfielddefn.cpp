@@ -26,9 +26,10 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  ******************************************************************************
- * $Id: ossimDdfsubfielddefn.cpp 11347 2007-07-23 13:01:59Z gpotts $
+ * $Id: ossimDdfsubfielddefn.cpp 12978 2008-06-04 00:04:14Z dburken $
  */
 
+#include <cstring>
 #include <ossim/imaging/ossimIso8211.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimCommon.h>

@@ -7,8 +7,9 @@
 //              support data for a ADRG image file(s).
 //
 //********************************************************************
-// $Id: ossimAdrgHeader.cpp 11285 2007-07-11 16:37:33Z dburken $
+// $Id: ossimAdrgHeader.cpp 12956 2008-06-02 01:38:50Z dburken $
 
+#include <cstring>
 #include <iostream>
 
 #include <ossim/base/ossimNotify.h>
@@ -390,31 +391,19 @@ double ossimAdrgHeader::parseLongitudeString(const ossimString& lon) const
    tmp_str[3] = '\0';
    cstr++; // Increment past the sign. 
    strncpy(tmp_str, cstr, 3);
-
-   if (tmp_str)
-   {
-      degrees = atof(tmp_str);
-   }
+   degrees = atof(tmp_str);
    
    // Get the minutes.
    tmp_str[2] = '\0';
    cstr += 3; // Increment to the minutes.
    strncpy(tmp_str, cstr, 2);
-   
-   if (tmp_str)
-   {
-      degrees += atof(tmp_str) / 60.0;
-   }
+   degrees += atof(tmp_str) / 60.0;
    
    // Get the seconds.
    tmp_str[5] = '\0';
    cstr += 2; // Increment to seconds.
    strncpy(tmp_str, cstr, 5);
-   
-   if (tmp_str)
-   {
-      degrees += atof(tmp_str) / 3600.0;
-   }
+   degrees += atof(tmp_str) / 3600.0;
    
    // Set the sign.
    degrees *= sign;
@@ -451,31 +440,19 @@ double ossimAdrgHeader::parseLatitudeString(const ossimString& lat) const
    tmp_str[2] = '\0';
    cstr++; // Increment past the sign. 
    strncpy(tmp_str, cstr, 2);
-   
-   if (tmp_str)
-   {
-      degrees = atof(tmp_str);
-   }
+   degrees = atof(tmp_str);
    
    // Get the minutes.
    tmp_str[2] = '\0';
    cstr += 2; // Increment to the minutes.
    strncpy(tmp_str, cstr, 2);
-
-   if (tmp_str)
-   {
-      degrees += atof(tmp_str) / 60.0;
-   }
+   degrees += atof(tmp_str) / 60.0;
    
    // Get the seconds.
    tmp_str[5] = '\0';
    cstr += 2; // Increment to seconds.
    strncpy(tmp_str, cstr, 5);
-   
-   if (tmp_str)
-   {
-      degrees += atof(tmp_str) / 3600.0;
-   }
+   degrees += atof(tmp_str) / 3600.0;
    
    // Set the sign.
    degrees *= sign;

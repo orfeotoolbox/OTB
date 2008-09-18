@@ -9,7 +9,7 @@
 // Contains declaration of class ossimXmlNode.
 // 
 //*****************************************************************************
-// $Id: ossimXmlNode.h 11668 2007-09-04 17:09:44Z gpotts $
+// $Id: ossimXmlNode.h 12527 2008-03-04 17:02:55Z gpotts $
 #ifndef ossimXmlNode_HEADER
 #define ossimXmlNode_HEADER
 
@@ -27,13 +27,22 @@ class OSSIMDLLEXPORT ossimXmlNode : public ossimObject,
                                     public ossimErrorStatusInterface
 {
 public:
+   typedef std::vector<ossimRefPtr<ossimXmlNode> > ChildListType;
+   typedef std::vector<ossimRefPtr<ossimXmlAttribute> > AttributeListType;
+   
    ossimXmlNode(istream& xml_stream, ossimXmlNode* parent=0);
    ossimXmlNode();
-
+   ossimXmlNode(const ossimXmlNode& src);
+   virtual ossimObject* dup() const
+   {
+      return new ossimXmlNode(*this);
+   }
+	void duplicateAttributes(ossimXmlNode::AttributeListType result)const;
+   void duplicateChildren(ossimXmlNode::ChildListType& result)const;
    bool read(std::istream& in);
    // Appends any matching nodes to the list supplied
    void findChildNodes(const ossimString& rel_xpath,
-                       vector<ossimRefPtr<ossimXmlNode> >& nodelist)const;
+                       ossimXmlNode::ChildListType& nodelist)const;
    const ossimRefPtr<ossimXmlNode> findFirstNode(const ossimString& rel_xpath)const;
    ossimRefPtr<ossimXmlNode> findFirstNode(const ossimString& rel_xpath);
 
@@ -44,12 +53,24 @@ public:
    const ossimXmlNode*              getParentNode() const;
    ossimXmlNode*              getParentNode();
    void setParent(ossimXmlNode* parent);
-   const vector<ossimRefPtr<ossimXmlNode> >&      getChildNodes() const;
-   vector<ossimRefPtr<ossimXmlNode> >&      getChildNodes();
-   const vector<ossimRefPtr<ossimXmlAttribute> >& getAttributes() const;
+   const ossimXmlNode::ChildListType&      getChildNodes() const;
+   ossimXmlNode::ChildListType&      getChildNodes();
+   const  ossimXmlNode::AttributeListType& getAttributes() const;
    bool getAttributeValue(ossimString& value, const ossimString& name)const;
+   ossimString getAttributeValue(const ossimString& name)const
+   {
+      ossimString value;
+      getAttributeValue(value, name);
+      return value;
+   }
    bool getChildTextValue(ossimString& value,
                           const ossimString& relPath)const;
+   ossimString getChildTextValue(const ossimString& relPath)const
+   {
+      ossimString value;
+      getChildTextValue(value, relPath);
+      return value;
+   }
    void addAttribute(ossimRefPtr<ossimXmlAttribute> attribute);
    void addAttribute(const ossimString& name, const ossimString& value);
    bool setAttribute(const ossimString& name,
@@ -62,6 +83,10 @@ public:
    void addChildNode(ossimRefPtr<ossimXmlNode> node);
    ossimRefPtr<ossimXmlNode> addChildNode(const ossimString& tagName,
                                           const ossimString& text="");
+   void addChildren(ossimXmlNode::ChildListType& children);
+   void setChildren(ossimXmlNode::ChildListType& children);
+   void addAttributes(ossimXmlNode::AttributeListType& children);
+   void setAttributes(ossimXmlNode::AttributeListType& children);
    void setText(const ossimString& text);
    const ossimString&                      getText()       const;
    bool cdataFlag()const;
@@ -71,7 +96,10 @@ public:
 
    ossimRefPtr<ossimXmlNode> removeChild(ossimRefPtr<ossimXmlNode> node);
    ossimRefPtr<ossimXmlNode> removeChild(const ossimString& tag);
-
+   void clear();
+   void clearChildren();
+   void clearAttributes();
+   
    void toKwl(ossimKeywordlist& kwl,
               const ossimString& prefix="")const;
    void fromKwl(const ossimKeywordlist& kwlToConvert);

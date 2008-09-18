@@ -12,7 +12,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimPolygon.cpp 11428 2007-07-27 18:44:18Z gpotts $
+//  $Id: ossimPolygon.cpp 13019 2008-06-10 16:14:07Z dburken $
 
 #include <algorithm>
 #include <iterator>
@@ -36,24 +36,29 @@ static const int RECT_RIGHT_EDGE  = 2;
 static const int RECT_BOTTOM_EDGE = 3;
 
 ossimPolygon::ossimPolygon()
-   :theCurrentVertex(0),
+   :theVertexList(),
+    theCurrentVertex(0),
     theOrderingType(OSSIM_VERTEX_ORDER_UNKNOWN)
 {}
 
 ossimPolygon::ossimPolygon(const vector<ossimIpt>& polygon)
-   :theCurrentVertex(0),
-    theOrderingType(OSSIM_VERTEX_ORDER_UNKNOWN)
+   :
+   theVertexList(polygon.size()),
+   theCurrentVertex(0),
+   theOrderingType(OSSIM_VERTEX_ORDER_UNKNOWN)
 {
-   theVertexList.insert(theVertexList.end(),
-                        polygon.begin(),
-                        polygon.end());;
+   // Assign std::vector<ossimIpt> list to std::vector<ossimDpt> theVertexList.
+   for (std::vector<ossimIpt>::size_type i = 0; i < polygon.size(); ++i)
+   {
+      theVertexList[i] = polygon[i];
+   }
 }
 
 ossimPolygon::ossimPolygon(const vector<ossimDpt>& polygon)
-   :theCurrentVertex(0),
+   :theVertexList(polygon),
+    theCurrentVertex(0),
     theOrderingType(OSSIM_VERTEX_ORDER_UNKNOWN)
 {
-   theVertexList = polygon;
 }
 
 //*****************************************************************************
@@ -134,11 +139,11 @@ ossimPolygon::~ossimPolygon()
 double ossimPolygon::area()const
 {
    double area = 0;
-   int i=0;
-   int j=0;
-   int size = theVertexList.size();
+   ossim_uint32 i=0;
+   ossim_uint32 j=0;
+   ossim_uint32 size = theVertexList.size();
    
-   for (i=0;i<(int)size;i++)
+   for (i=0;i<size;i++)
    {
       j = (i + 1) % (int)size;
       area += theVertexList[i].x * theVertexList[j].y;
@@ -295,14 +300,14 @@ bool ossimPolygon::clipLineSegment(ossimDpt& P, ossimDpt& Q) const
    ossimLine edge, edgeE, edgeL;
    bool intersected=false;
    double num, denom, t;
-   int npol = theVertexList.size();
+   ossim_uint32 npol = theVertexList.size();
 
    checkOrdering();
    //***
    // clip the segment against each edge of the polygon
    //***
-   int i = 0;
-   int j = 0;
+   ossim_uint32 i = 0;
+   ossim_uint32 j = 0;
    for(i = 0, j = 1; i < npol;)
    {
       edge = ossimLine(theVertexList[i],
@@ -492,12 +497,15 @@ const ossimPolygon& ossimPolygon::operator= (const vector<ossimDpt>& vertexList)
    return *this;
 }
 
-const ossimPolygon& ossimPolygon::operator= (const vector<ossimIpt>& vertexList)
+const ossimPolygon& ossimPolygon::operator=(const vector<ossimIpt>& vertexList)
 {
-   theVertexList.clear();
-   theVertexList.insert(theVertexList.end(),
-                        vertexList.begin(),
-                        vertexList.end());
+   theVertexList.resize(vertexList.size());
+   
+   // Assign std::vector<ossimIpt> list to std::vector<ossimDpt> theVertexList.
+   for (std::vector<ossimIpt>::size_type i = 0; i < vertexList.size(); ++i)
+   {
+      theVertexList[i] = vertexList[i];
+   }
    
    theCurrentVertex = 0;
    theOrderingType = OSSIM_VERTEX_ORDER_UNKNOWN;
@@ -525,8 +533,8 @@ bool ossimPolygon::operator==(const ossimPolygon& polygon) const
 
 const ossimPolygon& ossimPolygon::operator *=(const ossimDpt& scale)
 {
-   int upper = theVertexList.size();
-   int i = 0;
+   ossim_uint32 upper = theVertexList.size();
+   ossim_uint32 i = 0;
    for(i = 0; i < upper; ++i)
    {
       theVertexList[i].x*=scale.x;
@@ -540,8 +548,8 @@ ossimPolygon ossimPolygon::operator *(const ossimDpt& scale)const
 {
    ossimPolygon result(*this);
 
-   int upper = theVertexList.size();
-   int i = 0;
+   ossim_uint32 upper = theVertexList.size();
+   ossim_uint32 i = 0;
    for(i = 0; i < upper; ++i)
    {
       result.theVertexList[i].x*=scale.x;
@@ -919,7 +927,7 @@ ossim_uint32 ossimPolygon::getVertexCount()const
 
 ossim_uint32 ossimPolygon::getNumberOfVertices()const
 {
-   return theVertexList.size();
+   return (ossim_uint32)theVertexList.size();
 }
 
 void ossimPolygon::getBoundingRect(ossimIrect& rect)const

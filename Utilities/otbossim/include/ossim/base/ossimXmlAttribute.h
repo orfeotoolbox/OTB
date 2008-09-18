@@ -10,7 +10,7 @@
 // Contains declaration of class ossimAttribute.
 //
 //*****************************************************************************
-// $Id: ossimXmlAttribute.h 10304 2007-01-18 18:13:13Z gpotts $
+// $Id: ossimXmlAttribute.h 12521 2008-02-28 20:09:25Z gpotts $
 #ifndef ossimXmlAttribute_HEADER
 #define ossimXmlAttribute_HEADER
 
@@ -27,6 +27,10 @@ public:
    ossimXmlAttribute(const ossimXmlAttribute& src);
    ossimXmlAttribute(const ossimString& name,
                      const ossimString& value);
+   virtual ossimObject* dup() const
+     {
+       return new ossimXmlAttribute(*this);
+     }
    ~ossimXmlAttribute();
 
    bool read(std::istream& in);

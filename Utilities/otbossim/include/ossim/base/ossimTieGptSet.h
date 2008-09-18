@@ -64,7 +64,7 @@ public:
   
    void getSlaveMasterPoints(std::vector<ossimDpt>& imv, std::vector<ossimGpt>& gdv)const;
 
-   inline unsigned int size()const { return theTies.size(); }
+   inline unsigned int size()const { return (unsigned int)theTies.size(); }
 
    /**
     * operations

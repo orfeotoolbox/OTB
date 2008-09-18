@@ -11,7 +11,7 @@
 // Rational Polynomial Coefficient extension.
 //
 //********************************************************************
-// $Id: ossimNitfRpcBase.cpp 11347 2007-07-23 13:01:59Z gpotts $
+// $Id: ossimNitfRpcBase.cpp 12772 2008-05-02 14:45:33Z gpotts $
 
 #include <algorithm>
 #include <iostream>
@@ -179,19 +179,16 @@ void ossimNitfRpcBase::clearFields()
    theLineDenominatorCoefficient.resize(20);
    theSampleNumeratorCoefficient.resize(20);
    theSampleDenominatorCoefficient.resize(20);
+   ossim_uint32 idx = 0;
+   const char* zeroString = "+0.000000E+0";
    
-   std::fill(theLineNumeratorCoefficient.begin(),
-             theLineNumeratorCoefficient.end(),
-             '0');
-   std::fill(theLineDenominatorCoefficient.begin(),
-             theLineDenominatorCoefficient.end(),
-             '0');
-   std::fill(theSampleNumeratorCoefficient.begin(),
-             theSampleNumeratorCoefficient.end(),
-             '0');
-   std::fill(theSampleDenominatorCoefficient.begin(),
-             theSampleDenominatorCoefficient.end(),
-             '0');
+   for(idx = 0; idx < theLineNumeratorCoefficient.size();++idx)
+   {
+      theLineNumeratorCoefficient[idx] = zeroString; 
+      theLineDenominatorCoefficient[idx] = zeroString;;
+      theSampleNumeratorCoefficient[idx] = zeroString;;
+      theSampleDenominatorCoefficient[idx] = zeroString;;
+   }
 }
 
 bool ossimNitfRpcBase::getSuccess()const

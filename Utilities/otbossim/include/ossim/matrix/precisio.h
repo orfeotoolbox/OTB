@@ -3,9 +3,9 @@
 #ifndef PRECISION_LIB
 #define PRECISION_LIB 0
 
-#ifdef _STANDARD_                 // standard library available
+#include <cmath>
 #include <limits>
-#endif
+
 
 #ifdef use_namespace
 namespace NEWMAT {
@@ -37,7 +37,7 @@ public:
       { return numeric_limits<Real>::max_exponent; }
 
    static Real LnMaximum()       // natural log of maximum
-      { return (Real)log(Maximum()); }
+      { return (Real)std::log(Maximum()); }
 
    static Real Minimum()         // minimum positive value
       { return numeric_limits<Real>::min(); } 
@@ -49,7 +49,7 @@ public:
       { return numeric_limits<Real>::min_exponent; }
 
    static Real LnMinimum()       // natural log of minimum
-      { return (Real)log(Minimum()); }
+      { return (Real)std::log(Minimum()); }
 
    static int Radix()            // exponent radix
       { return numeric_limits<Real>::radix; }
@@ -93,7 +93,7 @@ public:
       { return FLT_MAX_EXP; }    // maximum binary exponent
 
    static Real LnMaximum()
-      { return (Real)log(Maximum()); } // natural log of maximum
+      { return (Real)std::log(Maximum()); } // natural log of maximum
 
    static Real Minimum()
       { return FLT_MIN; }        // minimum positive value
@@ -105,7 +105,7 @@ public:
       { return FLT_MIN_EXP; }    // minimum binary exponent
 
    static Real LnMinimum()
-      { return (Real)log(Minimum()); } // natural log of minimum
+      { return (Real)std::log(Minimum()); } // natural log of minimum
 
    static int Radix()
       { return FLT_RADIX; }      // exponent radix
@@ -143,7 +143,7 @@ public:
       { return DBL_MAX_EXP; }    // maximum binary exponent
 
    static Real LnMaximum()
-      { return (Real)log(Maximum()); } // natural log of maximum
+      { return (Real)std::log(Maximum()); } // natural log of maximum
 
    static Real Minimum()
    {
@@ -161,7 +161,7 @@ public:
       { return DBL_MIN_EXP; }    // minimum binary exponent
 
    static Real LnMinimum()
-      { return (Real)log(Minimum()); } // natural log of minimum
+      { return (Real)std::log(Minimum()); } // natural log of minimum
 
 
    static int Radix()
@@ -190,13 +190,13 @@ public:
       { return MAXFLOAT; }            // maximum value
 
    static Real LnMaximum()
-      { return (Real)log(Maximum()); }  // natural log of maximum
+      { return (Real)std::log(Maximum()); }  // natural log of maximum
 
    static Real Minimum()
       { return MINFLOAT; }             // minimum positive value
 
    static Real LnMinimum()
-      { return (Real)log(Minimum()); }  // natural log of minimum
+      { return (Real)std::log(Minimum()); }  // natural log of minimum
 
 };
 

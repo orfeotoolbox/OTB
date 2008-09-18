@@ -694,7 +694,7 @@ ossimPolynomProjection::stringToExp(const ossimString& s, ossimPolynom< ossim_fl
       return false;
    }
    //check 1
-   if (ts[0] == '1')
+   if (ts[static_cast<std::string::size_type>(0)] == '1')
    {
       for(int i=0;i<3;i++) et.push_back(0);
       return true;
@@ -714,7 +714,10 @@ ossimPolynomProjection::stringToExp(const ossimString& s, ossimPolynom< ossim_fl
       int expo = getExponent(ts);
       if (ex[symb]>0)
       {
-         ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimPolynomProjection::stringToExp(): symbol appears twice: "<<tkeys[symb]<< std::endl;
+         ossimNotify(ossimNotifyLevel_FATAL)
+            << "FATAL ossimPolynomProjection::stringToExp(): symbol appears twice: "
+            <<tkeys[static_cast<std::string::size_type>(symb)]
+            << std::endl;
          return false;
       }
       ex[symb] = expo;

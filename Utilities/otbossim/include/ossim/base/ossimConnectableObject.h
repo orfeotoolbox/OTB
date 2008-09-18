@@ -11,7 +11,7 @@
 // all connectable objects.
 //
 //*************************************************************************
-// $Id: ossimConnectableObject.h 11959 2007-10-31 19:22:56Z gpotts $
+// $Id: ossimConnectableObject.h 12645 2008-04-09 21:02:33Z dburken $
 
 #ifndef ossimConnectableObject_HEADER
 #define ossimConnectableObject_HEADER
@@ -421,10 +421,10 @@ public:
 
    
    virtual bool loadState(const ossimKeywordlist& kwl,
-                          const char* prefix = (const char*)NULL);
+                          const char* prefix = 0);
    
    virtual bool saveState(ossimKeywordlist& kwl,
-                          const char* prefix = (const char*)NULL)const;
+                          const char* prefix = 0)const;
 
    /**
     * Save the state of all inputs to a keyword list.  This will do a
@@ -451,7 +451,36 @@ public:
                                              bool saveThisStateFlag=true,
                                              ossim_uint32 objectIndex=1,
                                              const char* prefix=0) const;
-   
+
+   /**
+    * Moves the input connection matching id up one in the connection list.
+    * @param id The id to move.
+    * @return true if action was performed, false if not.
+    */
+   bool moveInputUp(const ossimId& id);
+
+   /**
+    * Moves the input connection matching id down one in the connection list.
+    * @param id The id to move.
+    * @return true if action was performed, false if not.
+    */
+   bool moveInputDown(const ossimId& id);
+
+   /**
+    * Moves the input connection matching id to the top of the connection list.
+    * @param id The id to move.
+    * @return true if action was performed, false if not.
+    */   
+   bool moveInputToTop(const ossimId& id);
+
+   /**
+    * Moves the input connection matching id to the bottom of the connection
+    * list.
+    * @param id The id to move.
+    * @return true if action was performed, false if not.
+    */     
+   bool moveInputToBottom(const ossimId& id);
+    
 protected:
    ossimId      theId;
    ossimString  theDescription;

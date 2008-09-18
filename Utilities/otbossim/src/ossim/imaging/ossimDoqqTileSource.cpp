@@ -8,12 +8,14 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimDoqqTileSource.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimDoqqTileSource.cpp 12988 2008-06-04 16:49:43Z gpotts $
 #include <ossim/imaging/ossimDoqqTileSource.h>
 #include <ossim/support_data/ossimDoqq.h>
 #include <ossim/imaging/ossimGeneralRasterInfo.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
+#include <ossim/base/ossimStringProperty.h>
+#include <ossim/base/ossimContainerProperty.h>
 
 RTTI_DEF1(ossimDoqqTileSource,
           "ossimDoqqTileSource",
@@ -157,6 +159,35 @@ bool ossimDoqqTileSource::getImageGeometry(ossimKeywordlist& kwl,
       return true;
    }
    return false;
+}
+
+ossimRefPtr<ossimProperty> ossimDoqqTileSource::getProperty(const ossimString& name)const
+{
+	if(name == "acquisition_date")
+	{
+		if(theHeaderInformation.valid())
+		{
+			std::stringstream out;
+			out << std::setw(4) << std::setfill(' ') << theHeaderInformation->theAcqYear.c_str()
+			<< std::setw(2) << setfill('0') << theHeaderInformation->theAcqMonth.c_str()
+			<< std::setw(2) << setfill('0') << theHeaderInformation->theAcqDay.c_str();
+			return new ossimStringProperty("acquisition_date", out.str());
+		}
+		return 0;
+	}
+	else if(name == "file_type")
+	{
+		return new ossimStringProperty("file_type", "DOQQ");
+	}
+	return ossimImageHandler::getProperty(name);
+}
+
+void ossimDoqqTileSource::getPropertyNames(std::vector<ossimString>& propertyNames)const
+{
+	ossimImageHandler::getPropertyNames(propertyNames);
+	propertyNames.push_back("acquisition_date");
+	propertyNames.push_back("file_type");
+	
 }
 
 bool ossimDoqqTileSource::loadState(const ossimKeywordlist& kwl,

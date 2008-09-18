@@ -5,7 +5,7 @@
 
     Licence: wxWidgets Licence
 
-    RCS-ID: $Id: booleng.h 9094 2006-06-13 19:12:40Z dburken $
+    RCS-ID: $Id: booleng.h 12954 2008-06-01 16:26:32Z dburken $
 */
 
 #ifndef BOOLENG_H
@@ -47,7 +47,7 @@ class A2DKBOOLDLLEXP Bool_Engine {
    //! destructor   
    virtual ~Bool_Engine();
 
-   char* GetVersion() { return KBOOL_VERSION; }
+   const char* GetVersion() { return KBOOL_VERSION; }
 
 	//! reports progress of algorithm.
    virtual void SetState( char* = 0 );

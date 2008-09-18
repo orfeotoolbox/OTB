@@ -17,7 +17,7 @@
 //              Initial coding.
 //<
 //**************************************************************************
-// $Id: ossimElevManager.cpp 12194 2007-12-14 17:27:23Z dburken $
+// $Id: ossimElevManager.cpp 12857 2008-05-14 18:38:12Z gpotts $
 
 #include <algorithm>
 
@@ -35,7 +35,6 @@
 #include <ossim/base/ossimDirectory.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimTrace.h>
-#include <ossim/base/ossimScopedLock.h>
 #include <ossim/base/ossimElevationManagerEvent.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimEnvironmentUtility.h>
@@ -48,7 +47,7 @@ RTTI_DEF1(ossimElevManager, "ossimElevManager" , ossimElevSource)
 static ossimTrace traceDebug ("ossimElevManager:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimElevManager.cpp 12194 2007-12-14 17:27:23Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimElevManager.cpp 12857 2008-05-14 18:38:12Z gpotts $";
 #endif
 
 ossimElevManager* ossimElevManager::theInstance = 0;
@@ -124,7 +123,12 @@ bool ossimElevManager::loadState(const ossimKeywordlist& kwl,
          << "DEBUG ossimElevManager::loadState: Entered..."
          << std::endl;
    }
-   ossimString copyPrefix = prefix;
+   
+   ossimString copyPrefix;
+   if (prefix) // prefix can be NULL
+   {
+      copyPrefix = prefix;
+   }
 
    //---
    // Call the base class loadState.  This will pick up the enabled keyword.
@@ -560,50 +564,52 @@ double ossimElevManager::getHeightAboveMSL(const ossimGpt& gpt)
 {
    if (theEnableFlag)
    {
-      ossimScopedLock<ossimMutex> scopedLock(theMutex);
 
-      //---
-      // Temp set the index to alway start at zero until theElevSourceList is
-      // split by resolution so highest resolution list get searched first.
-      // (drb)
-      //---
-      theCurrentElevSourceIdx = 0;
-      
-      //---
-      // Search through the list of elevation sources for a valid elevation
-      // post.
-      //---
-      ossim_uint32 size = theElevSourceList.size();
-      for (ossim_uint32 i = 0; i < size; ++i)
-      {
-         //---
-         // Compute index using modulus (current % size) for round robin
-         // through cells starting at theCurrentElevSourceIdx.
-         //---
-         ossim_uint32 idx = theCurrentElevSourceIdx%size;
-
-         if (theElevSourceList[idx].get()) // pointer check
-         {
-            // Get the post.
-            double d = theElevSourceList[idx]->getHeightAboveMSL(gpt);
-
-            //---
-            // Check for null post; if so, go to next source as there may
-            // be a hole in the current cell that a lower resolution cell
-            // may have coverage for.
-            //---
-            if (!ossim::isnan(d))
-            {
-               return d;
-            }
-         
-            // Close not used cell to keep file descriptors down.
-            theElevSourceList[idx]->close();
-         }
-
-         // Increment the index.
-         ++theCurrentElevSourceIdx;
-      }
+		{
+			OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
+			//---
+			// Temp set the index to alway start at zero until theElevSourceList is
+			// split by resolution so highest resolution list get searched first.
+			// (drb)
+			//---
+			theCurrentElevSourceIdx = 0;
+			
+			//---
+			// Search through the list of elevation sources for a valid elevation
+			// post.
+			//---
+			ossim_uint32 size = theElevSourceList.size();
+			for (ossim_uint32 i = 0; i < size; ++i)
+			{
+				//---
+				// Compute index using modulus (current % size) for round robin
+				// through cells starting at theCurrentElevSourceIdx.
+				//---
+				ossim_uint32 idx = theCurrentElevSourceIdx%size;
+				
+				if (theElevSourceList[idx].get()) // pointer check
+				{
+					// Get the post.
+					double d = theElevSourceList[idx]->getHeightAboveMSL(gpt);
+					
+					//---
+					// Check for null post; if so, go to next source as there may
+					// be a hole in the current cell that a lower resolution cell
+					// may have coverage for.
+					//---
+					if ( !ossim::isnan(d) )
+					{
+						return d;
+					}
+					
+					// Close not used cell to keep file descriptors down.
+					theElevSourceList[idx]->close();
+				}
+				
+				// Increment the index.
+				++theCurrentElevSourceIdx;
+			}
+		}
 
       //---
       // Reset the search index to zero as any cells added will be sorted by
@@ -613,6 +619,7 @@ double ossimElevManager::getHeightAboveMSL(const ossimGpt& gpt)
 
       if (theAutoLoadFlag)
       {
+			OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
          //
          // If we got here there were no sources in the list that contained
          // coverage so go through the list of managers and see if they have
@@ -620,7 +627,7 @@ double ossimElevManager::getHeightAboveMSL(const ossimGpt& gpt)
          //
          ossimElevSourceFactoryConstIterator sf =
             theElevSourceFactoryList.begin();
-
+			
          while (sf != theElevSourceFactoryList.end())
          {
             ossimElevSource* source = (*sf)->getNewElevSource(gpt);
@@ -643,8 +650,7 @@ double ossimElevManager::getHeightAboveMSL(const ossimGpt& gpt)
                if ( !ossim::isnan(d) )
                {
                   // Add it to the list.
-                  protectedAddElevSource(source);
- 
+                  addElevSource(source);
                   return d;
                }
             }
@@ -652,7 +658,6 @@ double ossimElevManager::getHeightAboveMSL(const ossimGpt& gpt)
             
          } // End of while (sf != theElevSourceFactoryList.end())
       }
-      
    }  // End of "if (isSourceEnabled())"
 
    // If we get here return a null height value.
@@ -684,27 +689,23 @@ double ossimElevManager::getHeightAboveEllipsoid(const ossimGpt& gpt)
 
 double ossimElevManager::getAccuracyCE90(const ossimGpt& gpt) const
 {
-   theMutex.lock();
    double result = 0.0;
    ossimRefPtr<ossimElevSource>  elevSource = getElevSourceForPoint(gpt);
    if (elevSource.get())
    {
       result = elevSource->getAccuracyCE90(gpt);
    }
-   theMutex.unlock();
    return result;
 }
 
 double ossimElevManager::getAccuracyLE90(const ossimGpt& gpt) const
 {
-   theMutex.lock();
    double result = 0.0;
    ossimRefPtr<ossimElevSource>  elevSource = getElevSourceForPoint(gpt);
    if (elevSource.get())
    {
       result = elevSource->getAccuracyLE90(gpt);
    }
-   theMutex.unlock();
    return result; 
 }
 
@@ -721,91 +722,84 @@ double ossimElevManager::getMeanSpacingMeters() const
 
 bool ossimElevManager::pointHasCoverage(const ossimGpt& gpt) const
 {
-   theMutex.lock();
    bool result = false;
    ossimRefPtr<ossimElevSource>  elevSource = getElevSourceForPoint(gpt);
    if (elevSource.get())
    {
       result = elevSource->pointHasCoverage(gpt);
    }
-   theMutex.unlock();
    return result; 
 }
 
 void ossimElevManager::addElevSource(ossimElevSource* source)
 {
-   theMutex.lock();
-   protectedAddElevSource(source);
-   theMutex.unlock();
-      
-}
+	// Add it to the list...
+	if (traceDebug())
+	{
+		ossimNotify(ossimNotifyLevel_INFO)
+		<< "INFO ossimElevManager::addElevSource: Opened cell "
+		<< source->getFilename().c_str() << std::endl;
+	}
+	{
+		OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
 
-void ossimElevManager::protectedAddElevSource(ossimElevSource* source)
-{
-   // Add it to the list...
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_INFO)
-         << "INFO ossimElevManager::addElevSource: Opened cell "
-         << source->getFilename().c_str() << std::endl;
-   }
-   
-   theElevSourceList.push_back(source);
-   
-   if (theAutoSortFlag)
-   {
-      // Sort by highest resolution.
-      sort(theElevSourceList.begin(),
-           theElevSourceList.end(),
-           ossimElevLess());
-   }
-   
-   //---
-   // We have two choices for the theCurrentElevSourceIdx:
-   // 
-   // 1) Set to the beginning.
-   // 2) Set the the index of cell just added.
-   //
-   // Given that cells are sorted by resolution (usually) I am setting index
-   // back to the beginning.
-   //---
-   theCurrentElevSourceIdx = 0;
-
-   // Update the min / max values.
-   updateMinMax();
-   
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "DEBUG ossimElevManager::addElevSource Sorted elevation sources:"
-         << std::endl;
-      
-      int index = 0;
-      ossimElevSourceListConstIterator s = theElevSourceList.begin();
-      while (s != theElevSourceList.end())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "Elevation source[" << index << "]:  "
-            << (*s)->getFilename().c_str() << std::endl;
-         ++s;
-         ++index;
-      }
-   }
-
+		theElevSourceList.push_back(source);
+	
+		if (theAutoSortFlag)
+		{
+			// Sort by highest resolution.
+			std::sort(theElevSourceList.begin(),
+						 theElevSourceList.end(),
+						 ossimElevLess());
+		}
+	}
+	//---
+	// We have two choices for the theCurrentElevSourceIdx:
+	// 
+	// 1) Set to the beginning.
+	// 2) Set the the index of cell just added.
+	//
+	// Given that cells are sorted by resolution (usually) I am setting index
+	// back to the beginning.
+	//---
+	theCurrentElevSourceIdx = 0;
+	
+	// Update the min / max values.
+	updateMinMax();
+	
+	if (traceDebug())
+	{
+		OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
+		ossimNotify(ossimNotifyLevel_DEBUG)
+		<< "DEBUG ossimElevManager::addElevSource Sorted elevation sources:"
+		<< std::endl;
+		
+		int index = 0;
+		ossimElevSourceListConstIterator s = theElevSourceList.begin();
+		while (s != theElevSourceList.end())
+		{
+			ossimNotify(ossimNotifyLevel_DEBUG)
+			<< "Elevation source[" << index << "]:  "
+			<< (*s)->getFilename().c_str() << std::endl;
+			++s;
+			++index;
+		}
+	}
    ossimElevationManagerEvent event( this );
-
+	
    fireEvent( event );
+	
 }
 
 ossim_uint32 ossimElevManager::getNumberOfFactories()const
 {
-   ossimScopedLock<ossimMutex> scopedLock(theMutex);
+	OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    return theElevSourceFactoryList.size();
 }
 
 const ossimRefPtr<ossimElevSourceFactory> ossimElevManager::getFactory(ossim_uint32 idx)const
 {
-   ossimScopedLock<ossimMutex> scopedLock(theMutex);
+	OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
 
    if(idx < theElevSourceFactoryList.size())
    {
@@ -944,14 +938,12 @@ bool ossimElevManager::isCellOpen(const ossimFilename& cell) const
 ossimFilename ossimElevManager::getCellFilenameForPoint(
    const ossimGpt& gpt) const
 {
-   theMutex.lock();
    ossimFilename result;
    ossimRefPtr<ossimElevSource>  elevSource = getElevSourceForPoint(gpt);
    if (elevSource.get())
    {
       result = elevSource->getFilename();
    }
-   theMutex.unlock();
    return result; 
 }
 
@@ -1010,7 +1002,6 @@ bool ossimElevManager::openDirectory(const ossimFilename& dir)
    // a lock so we cannot do it here or the calls will never return as they
    // are waiting for an unlock...
    //---
-   // theMutex.lock();
    
    // make sure we don't have one opened already
    ossim_uint32 numberOfDatabases = getNumberOfFactories();
@@ -1027,7 +1018,6 @@ bool ossimElevManager::openDirectory(const ossimFilename& dir)
          }
       }
    }
-   // theMutex.unlock();
 
    if (dir == ossimFilename::NIL || !dir.isDir())
    {
@@ -1419,25 +1409,26 @@ bool ossimElevManager::isDtedFilenameFormat(const ossimFilename& file) const
    }
 
    // Must start with 'n' or 's'.
-   if ( (f[0] != 'n') && (f[0] != 's') )
+   if ( (f[static_cast<std::string::size_type>(0)] != 'n') &&
+        (f[static_cast<std::string::size_type>(0)] != 's') )
    {
       return false;
    }
 
    // Fourth character must be a dot '.'.
-   if (f[3] != '.')
+   if (f[static_cast<std::string::size_type>(3)] != '.')
    {
       return false;
    }
 
    // Fith character must be a 'd'.
-   if (f[4] != 'd')
+   if (f[static_cast<std::string::size_type>(4)] != 'd')
    {
       return false;
    }
 
    // Sixth character must be a 't'.
-   if (f[5] != 't')
+   if (f[static_cast<std::string::size_type>(5)] != 't')
    {
       return false;
    }
@@ -1466,19 +1457,21 @@ bool ossimElevManager::isSrtmFilenameFormat(const ossimFilename& file) const
    }
 
    // Must start with 'n' or 's'.
-   if ( (f[0] != 'n') && (f[0] != 's') )
+   if ( (f[static_cast<std::string::size_type>(0)] != 'n') &&
+        (f[static_cast<std::string::size_type>(0)] != 's') )
    {
       return false;
    }
 
    // Fourth character must be 'e' or 'w'.
-   if ( (f[3] != 'e') && (f[3] != 'w') )
+   if ( (f[static_cast<std::string::size_type>(3)] != 'e') &&
+        (f[static_cast<std::string::size_type>(3)] != 'w') )
    {
       return false;
    }
 
    // Eight character must be a dot '.'.
-   if (f[7] != '.')
+   if (f[static_cast<std::string::size_type>(7)] != '.')
    {
       return false;
    }
@@ -1855,6 +1848,7 @@ ossimRefPtr<ossimElevSource> ossimElevManager::getElevSourceForPoint(
    
    if (theEnableFlag)
    {
+		OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
       //---
       // Search through the list of elevation sources for a valid elevation
       // post.

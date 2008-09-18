@@ -28,7 +28,7 @@
 //   but is provided for convenience.
 //   
 //*************************************************************************
-// $Id: ossimHistogramRemapper.h 11910 2007-10-28 18:19:05Z dburken $
+// $Id: ossimHistogramRemapper.h 12961 2008-06-03 13:20:35Z gpotts $
 #ifndef ossimHistogramRemapper_HEADER
 #define ossimHistogramRemapper_HEADER
 
@@ -75,6 +75,8 @@ public:
     */
    void setStretchMode(StretchMode mode);
 
+   void setStretchModeAsString(const ossimString& mode);
+   
    /**
     * Returns the current enumerated node.
     */

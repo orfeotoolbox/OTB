@@ -6,9 +6,9 @@
 //
 // Description:
 //*******************************************************************
-//  $Id: ossimThreeParamDatum.cpp 9963 2006-11-28 21:11:01Z gpotts $
+//  $Id: ossimThreeParamDatum.cpp 13136 2008-07-06 14:50:09Z dburken $
 
-#include <math.h>
+#include <cmath>
 
 #include <ossim/base/ossimThreeParamDatum.h>
 #include <ossim/base/ossimConstants.h>

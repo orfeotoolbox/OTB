@@ -8,7 +8,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_0.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfImageHeaderV2_0.h 13101 2008-07-01 18:44:31Z dburken $
 #ifndef ossimNitfImageHeaderV2_0_HEADER
 #define ossimNitfImageHeaderV2_0_HEADER
 #include <ossim/support_data/ossimNitfImageHeaderV2_X.h>
@@ -25,6 +25,10 @@ public:
    virtual void writeStream(std::ostream &out);
    
    virtual std::ostream& print(std::ostream &out)const;
+   
+   virtual void setProperty(ossimRefPtr<ossimProperty> property);
+   virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
+   virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
    
    virtual ossimDrect  getImageRect()const;
    virtual ossimDrect  getBlockImageRect()const;
@@ -43,6 +47,10 @@ public:
    virtual ossim_int32  getActualBitsPerPixelPerBand()const;
    virtual ossimString  getIMode()const;
    virtual ossimString  getSecurityClassification()const;
+
+   /** @return The IDATIM field unparsed. */
+   virtual ossimString  getImageDateAndTime() const;
+   
    virtual ossimString  getAcquisitionDateMonthDayYear(
       ossim_uint8 separationChar='-')const;
    virtual ossimString  getCategory()const;
@@ -70,7 +78,7 @@ public:
    static const ossimString CTLN_KW;
    static const ossimString ISDWNG_KW;
    static const ossimString ISDEVT_KW;
-
+   
 TYPE_DATA
 private:
    //
@@ -129,6 +137,8 @@ private:
    char theDowngradingEvent[41];
 
    /**
+    * Will contain also the field NBANDS and we will have to recreate the prefix for
+    * 
     * Container for repetitive fields:
     * IREPBAND
     * ISUBCAT

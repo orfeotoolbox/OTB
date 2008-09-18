@@ -10,7 +10,7 @@
 // Contains class definition for ossimIrect.
 // 
 //*******************************************************************
-//  $Id: ossimIrect.cpp 11955 2007-10-31 16:10:22Z gpotts $
+//  $Id: ossimIrect.cpp 12953 2008-06-01 16:24:05Z dburken $
 
 #include <ostream>
 #include <ossim/base/ossimIrect.h>
@@ -205,8 +205,18 @@ void ossimIrect::stretchToTileBoundary(const ossimIpt& tileWidthHeight)
             ul.y += tileWidthHeight.y;
          }
       }
-      ossim_int32 w = std::abs(theLrCorner.x - ul.x) + 1;
-      ossim_int32 h = std::abs(theLrCorner.y - ul.y) + 1;
+      ossim_int32 w = theLrCorner.x - ul.x;
+      if (w < 0)
+      {
+         w = -w;
+      }
+      w += 1;
+      ossim_int32 h = theLrCorner.y - ul.y;
+      if (h < 0)
+      {
+         h = -h;
+      }
+      h += 1;
 
       ossim_int32 nw = (w / tileWidthHeight.x)*tileWidthHeight.x;
       ossim_int32 nh = (h / tileWidthHeight.y)*tileWidthHeight.y;

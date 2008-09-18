@@ -10,9 +10,9 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimGeneralRasterInfo.cpp 9854 2006-11-01 20:36:41Z gpotts $
+//  $Id: ossimGeneralRasterInfo.cpp 12980 2008-06-04 00:50:33Z dburken $
 
-  // #include <cstdlib>
+#include <cstdlib>
 #include <iostream>
 #include <iomanip>
 

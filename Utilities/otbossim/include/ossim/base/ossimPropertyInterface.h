@@ -6,7 +6,7 @@
 // Author: Garrett Potts (gpotts@imagelinks)
 //
 //*************************************************************************
-// $Id: ossimPropertyInterface.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimPropertyInterface.h 12989 2008-06-04 17:05:41Z gpotts $
 #ifndef ossimPropertyInterface_HEADER
 #define ossimPropertyInterface_HEADER
 #include <ossim/base/ossimKeywordlist.h>
@@ -27,7 +27,8 @@ public:
    virtual void setProperty(const ossimString& name,
                             const ossimString& value);
    virtual void setProperty(ossimRefPtr<ossimProperty> property);
-   virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
+   virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const; 
+   virtual ossimString getPropertyValueAsString(const ossimString& name)const;
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
    void getPropertyList(std::vector<ossimRefPtr<ossimProperty> >& propertyList)const;
    void setProperties(std::vector<ossimRefPtr<ossimProperty> >& propertyList);

@@ -21,7 +21,7 @@
 
 
 // Probability level specifiers
-typedef enum pqeProbLev_t
+enum pqeProbLev_t
 {
    ONE_SIGMA = 0,
    P50,

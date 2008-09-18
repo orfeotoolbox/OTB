@@ -6,7 +6,7 @@
 //
 // Description:
 //*******************************************************************
-//  $Id: ossimAtCorrGridRemapper.cpp 9963 2006-11-28 21:11:01Z gpotts $
+//  $Id: ossimAtCorrGridRemapper.cpp 12912 2008-05-28 15:05:54Z gpotts $
 #include <ossim/imaging/ossimAtCorrGridRemapper.h>
 
 RTTI_DEF1(ossimAtCorrGridRemapper, "ossimAtCorrGridRemapper", ossimAtCorrRemapper);
@@ -290,7 +290,7 @@ bool ossimAtCorrGridRemapper::saveState(ossimKeywordlist& kwl,
                                         const char* prefix)const
 {
 
-   ossim_uint32 bands = theAGrid.size();
+   ossim_uint32 bands = (ossim_uint32)theAGrid.size();
    
    for(ossim_uint32 band = 0; band < bands; ++band)
    {
@@ -301,12 +301,12 @@ bool ossimAtCorrGridRemapper::saveState(ossimKeywordlist& kwl,
       gridString += ossimString::toString(band+1);
       gridString += ".grid";
 
-      ossim_uint32 rows = theAGrid[band].size();
+      ossim_uint32 rows = (ossim_uint32)theAGrid[band].size();
       kwl.add(prefix,
               gridString+".rows",
               rows,
               true);
-      ossim_uint32 cols = theAGrid[band][0].size();
+      ossim_uint32 cols = (ossim_uint32)theAGrid[band][0].size();
       kwl.add(prefix,
               gridString+".cols",
               cols,

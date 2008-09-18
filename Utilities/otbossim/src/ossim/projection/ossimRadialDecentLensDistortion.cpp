@@ -10,8 +10,9 @@
 // MeanRadialLens distortion.
 //
 //*******************************************************************
-//  $Id: ossimRadialDecentLensDistortion.cpp 11347 2007-07-23 13:01:59Z gpotts $
+//  $Id: ossimRadialDecentLensDistortion.cpp 13010 2008-06-08 21:12:45Z dburken $
 
+#include <cstdlib>
 #include <ossim/projection/ossimRadialDecentLensDistortion.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimString.h>

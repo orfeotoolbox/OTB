@@ -5,7 +5,9 @@
 // Author: Garrett Potts (gpotts@imagelinks.com)
 // 
 //********************************************************************
-// $Id: ossimHexString.h 10632 2007-03-15 18:52:43Z gpotts $
+// $Id: ossimHexString.h 12952 2008-06-01 16:23:19Z dburken $
+
+#include <cstring>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimConstants.h>
 
@@ -48,10 +50,10 @@ public:
          assign(value);
       }
 
-   bool operator==(const ossimHexString& s) const {return (strcmp(this->c_str(),s.c_str())==0);}
-   bool operator==(const char* s) const {return (strcmp(this->c_str(),s)==0);}
-   bool operator!=(const ossimHexString& s) const {return (strcmp(this->c_str(),s.c_str())!=0);}
-   bool operator!=(const char* s) const {return (strcmp(this->c_str(),s)!=0);}
+   bool operator==(const ossimHexString& s) const {return (std::strcmp(this->c_str(),s.c_str())==0);}
+   bool operator==(const char* s) const {return (std::strcmp(this->c_str(),s)==0);}
+   bool operator!=(const ossimHexString& s) const {return (std::strcmp(this->c_str(),s.c_str())!=0);}
+   bool operator!=(const char* s) const {return (std::strcmp(this->c_str(),s)!=0);}
    operator const char*()const{return c_str();}
    const char* chars()const{return c_str();}
    char& operator[](int i)

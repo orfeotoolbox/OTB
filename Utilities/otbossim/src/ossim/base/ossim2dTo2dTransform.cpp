@@ -8,9 +8,12 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossim2dTo2dTransform.cpp 9094 2006-06-13 19:12:40Z dburken $
-#include <ossim/base/ossim2dTo2dTransform.h>
+// $Id: ossim2dTo2dTransform.cpp 12953 2008-06-01 16:24:05Z dburken $
+
+#include <cstdlib>
 #include <sstream>
+#include <ossim/base/ossim2dTo2dTransform.h>
+
 
 RTTI_DEF1(ossim2dTo2dTransform, "ossim2dTo2dTransform", ossimObject);
 

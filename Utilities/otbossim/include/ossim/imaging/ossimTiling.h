@@ -10,7 +10,7 @@
 // Description: implementation for image generator
 //
 //*************************************************************************
-// $Id: ossimTiling.h 9589 2006-09-21 17:59:50Z dburken $
+// $Id: ossimTiling.h 13135 2008-07-06 14:47:46Z dburken $
 #ifndef ossimTiling_HEADER
 #define ossimTiling_HEADER
 #include <ossim/base/ossimObject.h>
@@ -24,14 +24,14 @@
 class OSSIM_DLL ossimTiling : public ossimObject
 {
 public:
-   typedef enum ossimTilingDeltaType
-      {
-         ossimTilingDeltaType_TOTAL_PIXELS,
-         ossimTilingDeltaType_PER_PIXEL
-      };
-   ossimTiling();
 
-   
+   enum ossimTilingDeltaType
+   {
+      ossimTilingDeltaType_TOTAL_PIXELS,
+      ossimTilingDeltaType_PER_PIXEL
+   };
+
+   ossimTiling();
 
    bool initialize(const ossimMapProjection& proj,
                    const ossimIrect& boundingRect);

@@ -8,7 +8,7 @@
 //
 // Contains class definition for Degrees Minutes Seconds (ossimDms)
 //*******************************************************************
-//  $Id: ossimDms.h 12095 2007-11-30 16:06:06Z dburken $
+//  $Id: ossimDms.h 12952 2008-06-01 16:23:19Z dburken $
 #ifndef ossimDms_HEADER
 #define ossimDms_HEADER
 // #include <iostream>
@@ -90,8 +90,8 @@ public:
    static const ossim_uint8 theDegreeSign;
    
 private:
-   static char *DEFAULT_FORMAT;
-   static char *SPACES;
+   static const char* DEFAULT_FORMAT;
+   static const char* SPACES;
    
    double theDegrees;
    bool   theLatFlag;

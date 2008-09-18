@@ -15,6 +15,7 @@
 //
 //*****************************************************************************
 
+#include <cstdlib>
 #include <ossim/projection/ossimLandSatModel.h>
 
 RTTI_DEF1(ossimLandSatModel, "ossimLandSatModel", ossimSensorModel);

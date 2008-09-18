@@ -10,16 +10,19 @@
 // AUTHOR: Garrett Potts
 //
 //*****************************************************************************
-//  $Id: ossimRpcSolver.cpp 11412 2007-07-27 13:56:11Z dburken $
+//  $Id: ossimRpcSolver.cpp 13010 2008-06-08 21:12:45Z dburken $
+
+#include <cstdlib>
+#include <ctime>
+#include <iomanip>
+#include <iostream>
+#include <iterator>
+
 #include <ossim/projection/ossimRpcSolver.h>
 #include <ossim/projection/ossimRpcModel.h>
 #include <ossim/projection/ossimProjection.h>
 #include <ossim/matrix/newmatap.h>
 #include <ossim/matrix/newmatio.h>
-#include <iomanip>
-#include <iostream>
-#include <iterator>
-#include <time.h>
 #include <ossim/matrix/newmatnl.h>
 #include <ossim/matrix/newmatio.h>
 #include <ossim/elevation/ossimElevManager.h>
@@ -508,7 +511,7 @@ void ossimRpcSolver::solveInitialCoefficients(NEWMAT::ColumnVector& coeff,
 {
    ossim_uint32 idx = 0;
    NEWMAT::Matrix m;
-   NEWMAT::ColumnVector r(f.size());
+   NEWMAT::ColumnVector r((int)f.size());
    for(idx = 0; idx < f.size(); ++idx)
    {
       r[idx] = f[idx];

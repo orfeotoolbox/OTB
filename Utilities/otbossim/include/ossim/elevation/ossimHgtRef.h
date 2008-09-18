@@ -7,7 +7,7 @@
 // Description: Height reference class.
 //----------------------------------------------------------------------------
 #ifndef ossimHgtRef_HEADER
-#define ossimHgtRef_HEADER
+#define ossimHgtRef_HEADER 1
 
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimColumnVector3d.h>
@@ -15,7 +15,7 @@
 #include <ossim/matrix/newmatap.h>
 #include <ossim/matrix/newmatio.h>
 
-typedef enum HeightRefType_t
+enum HeightRefType_t
 {
    AT_HGT = 0,
    AT_DEM = 1

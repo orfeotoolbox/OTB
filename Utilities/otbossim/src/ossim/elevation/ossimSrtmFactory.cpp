@@ -10,8 +10,9 @@
 // ossimSrtmElevSource given a ground point.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmFactory.cpp 11179 2007-06-07 19:55:00Z dburken $
+// $Id: ossimSrtmFactory.cpp 12982 2008-06-04 01:12:46Z dburken $
 
+#include <cstdlib> /* abs() */
 #include <iostream>
 #include <iomanip>
 #include <sstream>

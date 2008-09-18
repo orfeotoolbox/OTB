@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*******************************************************************
-// $Id: ossimImageRenderer.h 9259 2006-07-14 18:42:04Z gpotts $
+// $Id: ossimImageRenderer.h 12668 2008-04-14 14:12:31Z gpotts $
 
 #ifndef ossimImageRenderer_HEADER
 #define ossimImageRenderer_HEADER
@@ -369,8 +369,6 @@ private:
    ossimRefPtr<ossimImageData> theBlankTile;
    ossimRefPtr<ossimImageData> theTile;
    ossimRefPtr<ossimImageData> theTemporaryBuffer;
-   ossimRefPtr<ossimImageData> theCachedTile;
-   ossim_uint32                theCachedTileResLevel;
 
    /**
     * This is going to allow us to chain multiple

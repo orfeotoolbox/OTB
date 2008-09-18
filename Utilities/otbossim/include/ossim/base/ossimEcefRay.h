@@ -13,19 +13,20 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimEcefRay.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimEcefRay.h 12769 2008-04-30 17:46:18Z dburken $
 
 #ifndef ossimEcefRay_HEADER
 #define ossimEcefRay_HEADER
 
-#include <stdio.h>
+#include <iosfwd>
+
 #include <ossim/base/ossimEcefPoint.h>
 #include <ossim/base/ossimEcefVector.h>
 #include <ossim/base/ossimDatumFactory.h>
-#include <ossim/base/ossimNotifyContext.h>
+#include <ossim/base/ossimNotify.h>
 
-class OSSIMDLLEXPORT ossimGpt;
-class OSSIMDLLEXPORT ossimLsrRay;
+class ossimGpt;
+class ossimLsrRay;
 
 //*****************************************************************************
 //  CLASS: ossimEcefRay
@@ -103,10 +104,11 @@ public:
    /*!
     * Debug Dump
     */
-   void print(ostream& os = ossimNotify(ossimNotifyLevel_INFO)) const; // inline below
+   std::ostream& print(
+      std::ostream& os = ossimNotify(ossimNotifyLevel_INFO))const;
    
-   friend ostream& operator<< (ostream& os , const ossimEcefRay& instance)
-      { instance.print(os); return os; }
+   friend std::ostream& operator<<(std::ostream& os ,
+                                   const ossimEcefRay& instance);
 
 private:
    ossimEcefPoint  theOrigin;
@@ -166,16 +168,6 @@ ossimEcefRay::reflectRay(const ossimEcefVector& normal) const
    return ossimEcefRay(theOrigin, new_dir);
 }
 
-//*****************************************************************************
-//  INLINE METHOD: ossimEcefRay::print(ostream)
-//  Dumps contents for debug purposes.
-//*****************************************************************************
-inline void ossimEcefRay::print(ostream& os) const
-{
-   os << "(ossimEcefRay)\n"
-      << "   theOrigin    = " << theOrigin
-      << "\n   theDirection = " << theDirection << ends;
-}
    
 #endif
 

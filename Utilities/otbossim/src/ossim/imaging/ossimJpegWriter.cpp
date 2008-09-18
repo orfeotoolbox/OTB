@@ -5,8 +5,9 @@
 // Author:  David Burken
 //
 //*******************************************************************
-//  $Id: ossimJpegWriter.cpp 10889 2007-05-11 14:20:08Z dburken $
+//  $Id: ossimJpegWriter.cpp 13134 2008-07-04 02:11:35Z gpotts $
 
+#include <cstdlib>
 #include <cstdio>
 
 //---
@@ -37,7 +38,7 @@ extern "C"
 RTTI_DEF1_INST(ossimJpegWriter, "ossimJpegWriter", ossimImageFileWriter)
 
 static const char DEFAULT_FILE_NAME[] = "output.jpg";
-static const ossim_int32 DEFAULT_JPEG_QUALITY = 75;
+static const ossim_int32 DEFAULT_JPEG_QUALITY = 100;
 static ossimTrace traceDebug("ossimJpegWriter:debug");
 
 ossimJpegWriter::ossimJpegWriter()

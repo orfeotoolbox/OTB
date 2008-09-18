@@ -7,7 +7,7 @@
 // Description: 
 //
 //*******************************************************************
-//  $Id: ossimMultiBandHistogram.cpp 11724 2007-09-13 19:28:07Z gpotts $
+//  $Id: ossimMultiBandHistogram.cpp 12911 2008-05-28 13:36:06Z gpotts $
 #include <ossim/base/ossimMultiBandHistogram.h>
 #include <ossim/base/ossimHistogram.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -80,7 +80,7 @@ void ossimMultiBandHistogram::create(long numberOfBands)
 
 ossim_uint32 ossimMultiBandHistogram::getNumberOfBands() const
 {
-   return theHistogramList.size();
+   return (ossim_uint32)theHistogramList.size();
 }
 
 ossimRefPtr<ossimHistogram> ossimMultiBandHistogram::getHistogram(long band)
@@ -197,7 +197,7 @@ bool ossimMultiBandHistogram::importHistogram(std::istream& in)
             getline(in, buffer);
             if(buffer.find("Band") != string::npos)
             {
-               unsigned long offset = buffer.find(":");
+				string::size_type offset = buffer.find(":");
                if(offset != string::npos)
                {
                   bandBuffer = buffer.substr(offset+1);
@@ -265,7 +265,7 @@ bool ossimMultiBandHistogram::ossimProprietaryHeaderInformation::parseStream(std
    getline(in, inputLine);  
    if(inputLine.find("File Type") != string::npos)
    {
-      unsigned long idx = inputLine.find(":");
+	   std::string::size_type idx = inputLine.find(":");
       if(idx != string::npos)
       {
          theFileType = inputLine.substr(idx+1);
@@ -285,7 +285,7 @@ bool ossimMultiBandHistogram::ossimProprietaryHeaderInformation::parseStream(std
    getline(in, inputLine);  
    if(inputLine.find("Version") != string::npos)
    {
-      unsigned long idx = inputLine.find(":");
+	   std::string::size_type idx = inputLine.find(":");
       if(idx != string::npos)
       {
          theVersion = inputLine.substr(idx+1);
@@ -304,7 +304,7 @@ bool ossimMultiBandHistogram::ossimProprietaryHeaderInformation::parseStream(std
    getline(in, inputLine);  
    if(inputLine.find("Number of Bands") != string::npos)
    {
-      unsigned long idx = inputLine.find(":");
+	   std::string::size_type idx = inputLine.find(":");
       if(idx != string::npos)
       {
          theNumberOfBands = inputLine.substr(idx+1);
@@ -413,7 +413,7 @@ bool ossimMultiBandHistogram::loadState(const ossimRefPtr<ossimXmlNode> xmlNode)
    const vector<ossimRefPtr<ossimXmlNode> >& childNodes = xmlNode->getChildNodes();
 
    ossim_uint32 idx = 0;
-   ossim_uint32 maxCount = childNodes.size();
+   ossim_uint32 maxCount = (ossim_uint32)childNodes.size();
    for(idx = 0; idx < maxCount; ++idx)
    {
       if(childNodes[idx]->getTag() == "Band")

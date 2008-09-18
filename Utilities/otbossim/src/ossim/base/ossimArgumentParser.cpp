@@ -4,11 +4,14 @@
 // OSSIM.
 //
 //-------------------------------------------------------------------------
-// $Id: ossimArgumentParser.cpp 9094 2006-06-13 19:12:40Z dburken $
-#include <ossim/base/ossimArgumentParser.h>
-#include <ossim/base/ossimApplicationUsage.h>
+// $Id: ossimArgumentParser.cpp 12953 2008-06-01 16:24:05Z dburken $
+
+#include <cstring>
 #include <set>
 #include <iostream>
+
+#include <ossim/base/ossimArgumentParser.h>
+#include <ossim/base/ossimApplicationUsage.h>
 #include <ossim/base/ossimString.h>
 
 bool ossimArgumentParser::isOption(const char* str)
@@ -38,7 +41,7 @@ bool ossimArgumentParser::isNumber(const char* str)
     const char* ptr = str;
 
     // check if could be a hex number.
-    if (strncmp(ptr,"0x",2)==0)
+    if (std::strncmp(ptr,"0x",2)==0)
     {
         // skip over leading 0x, and then go through rest of string
         // checking to make sure all values are 0...9 or a..f.

@@ -9,8 +9,9 @@
 //   from disk. This elevation files are memory mapped.
 //
 //*****************************************************************************
-// $Id: ossimDtedHandler.cpp 12053 2007-11-15 20:50:37Z dburken $
+// $Id: ossimDtedHandler.cpp 12982 2008-06-04 01:12:46Z dburken $
 
+#include <cstdlib>
 #include <cstring> /* for memcpy */
 #include <ossim/elevation/ossimDtedHandler.h>
 #include <ossim/support_data/ossimDtedVol.h>

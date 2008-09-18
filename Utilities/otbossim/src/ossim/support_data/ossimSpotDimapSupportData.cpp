@@ -9,10 +9,11 @@
 // Contains definition of class ossimSpotDimapSupportData.
 //
 //*****************************************************************************
-// $Id: ossimSpotDimapSupportData.cpp 12123 2007-12-06 15:21:16Z gpotts $
+// $Id: ossimSpotDimapSupportData.cpp 13025 2008-06-13 17:06:30Z sbortman $
 
 
 #include <iostream>
+#include <cstdlib>
 #include <iterator>
 #include <ossim/support_data/ossimSpotDimapSupportData.h>
 #include <ossim/base/ossimFilename.h>
@@ -221,9 +222,7 @@ bool ossimSpotDimapSupportData::loadXmlFile(const ossimFilename& file,
          << MODULE << " DEBUG:"
          << "\nFile: " << file << std::endl;
    }
-   
    clearFields();
-
    theSwirDataFlag = processSwir;
    theMetadataFile = file;
 
@@ -231,7 +230,6 @@ bool ossimSpotDimapSupportData::loadXmlFile(const ossimFilename& file,
    std::ifstream in(file.c_str(), std::ios::binary|std::ios::in);
    std::vector<char> fullBuffer;
    ossimString bufferedIo;
- 
    if(in.good()&&(fileSize > 0))
    {
       char buf[100];

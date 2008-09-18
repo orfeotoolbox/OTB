@@ -11,7 +11,7 @@
 //         David A. Horner (DAH) http://dave.thehorners.com
 //
 //*************************************************************************
-// $Id: ossimFilterResampler.cpp 11955 2007-10-31 16:10:22Z gpotts $
+// $Id: ossimFilterResampler.cpp 12245 2008-01-03 19:40:37Z dburken $
 
 #include <ossim/imaging/ossimFilterResampler.h>
 #include <ossim/base/ossimCommon.h>
@@ -882,19 +882,33 @@ bool ossimFilterResampler::saveState(ossimKeywordlist& kwl,
 bool ossimFilterResampler::loadState(const ossimKeywordlist& kwl,
                                      const char* prefix)
 {
-   ossimString scalex  = kwl.find(prefix,
-                                 ossimKeywordNames::SCALE_X_KW);
-   theScaleFactor.x = scalex.toDouble();
+   const char* lookup = 0;
 
-   ossimString scaley  = kwl.find(prefix,
-                                  ossimKeywordNames::SCALE_Y_KW);
-   theScaleFactor.y = scaley.toDouble();
-   
-   ossimString minify  = kwl.find(prefix,
-                                  "minify_type");
-   ossimString magnify = kwl.find(prefix,
-                                  "magnify_type");
-   
+   lookup = kwl.find(prefix, ossimKeywordNames::SCALE_X_KW);
+   if (lookup)
+   {
+      theScaleFactor.x = ossimString(lookup).toDouble();
+   }
+
+   lookup = kwl.find(prefix, ossimKeywordNames::SCALE_Y_KW);
+   if (lookup)
+   {
+      theScaleFactor.y = ossimString(lookup).toDouble();
+   }
+
+   ossimString minify;
+   lookup = kwl.find(prefix, "minify_type");
+   if (lookup)
+   {
+      minify = lookup;
+   }
+
+   ossimString magnify;
+   lookup = kwl.find(prefix, "magnify_type");
+   if (lookup)
+   {
+      magnify = lookup;
+   }
 
    if(fabs(theScaleFactor.x) <= FLT_EPSILON)
    {

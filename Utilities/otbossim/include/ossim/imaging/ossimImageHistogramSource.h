@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageHistogramSource.h 11960 2007-11-01 00:39:07Z dburken $
+// $Id: ossimImageHistogramSource.h 12579 2008-03-26 18:52:51Z gpotts $
 #ifndef ossimImageHistogramSource_HEADER
 #define ossimImageHistogramSource_HEADER
 #include <ossim/base/ossimHistogramSource.h>
@@ -25,6 +25,11 @@ class OSSIMDLLEXPORT ossimImageHistogramSource : public ossimHistogramSource,
                                                  public ossimProcessInterface
 {
 public:
+	enum ComputationMode
+	{
+		NORMAL = 0,
+		FAST
+	};
    ossimImageHistogramSource(ossimObject* owner = 0);
    
    virtual ~ossimImageHistogramSource();
@@ -63,6 +68,9 @@ public:
 
    void setMaxValueOverride(ossim_float32 maxValueOverride);
 
+	ComputationMode getComputationMode()const;
+	void setComputationMode(ComputationMode mode);
+	
    virtual void propertyEvent(ossimPropertyEvent& event);
    
    virtual void connectInputEvent(ossimConnectionEvent& event);
@@ -71,8 +79,14 @@ public:
                           const char* prefix=0);
    virtual bool saveState(ossimKeywordlist& kwl,
                           const char* prefix=0)const;
+
+	
 protected:
-   virtual void computeHistogram();
+	void getBinInformation(ossim_uint32& numberOfBins,
+								  ossim_float64& minValue,
+								  ossim_float64& maxValue)const;
+   virtual void computeNormalModeHistogram();
+   virtual void computeFastModeHistogram();
    
    /*!
     * Initialized to ossimNAN'S
@@ -89,7 +103,8 @@ protected:
    ossim_float64    theMinValueOverride;
    ossim_float64    theMaxValueOverride;
    ossim_int32      theNumberOfBinsOverride;
-
+	ComputationMode  theComputationMode;
+	ossim_uint32     theNumberOfTilesToUseInFastMode;
 TYPE_DATA
 };
 

@@ -8,8 +8,9 @@
 //               (ACC) of a DTED Level 1 file.
 //
 //********************************************************************
-// $Id: ossimDtedAcc.cpp 10261 2007-01-14 18:52:50Z dburken $
+// $Id: ossimDtedAcc.cpp 13025 2008-06-13 17:06:30Z sbortman $
 
+#include <cstdlib>
 #include <iostream>
 #include <fstream>
 

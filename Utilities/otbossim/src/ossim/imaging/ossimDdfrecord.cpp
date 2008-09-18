@@ -26,14 +26,15 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  ******************************************************************************
- * $Id: ossimDdfrecord.cpp 9094 2006-06-13 19:12:40Z dburken $
+ * $Id: ossimDdfrecord.cpp 12978 2008-06-04 00:04:14Z dburken $
  */
 
+#include <cstring>
 #include <ossim/imaging/ossimIso8211.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimCplUtil.h>
 
-// CPL_CVSID("$Id: ossimDdfrecord.cpp 9094 2006-06-13 19:12:40Z dburken $");
+// CPL_CVSID("$Id: ossimDdfrecord.cpp 12978 2008-06-04 00:04:14Z dburken $");
 
 static const size_t nLeaderSize = 24;
 

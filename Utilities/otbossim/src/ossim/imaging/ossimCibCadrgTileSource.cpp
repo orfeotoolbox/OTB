@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //********************************************************************
-// $Id: ossimCibCadrgTileSource.cpp 11347 2007-07-23 13:01:59Z gpotts $
+// $Id: ossimCibCadrgTileSource.cpp 12990 2008-06-04 19:14:34Z gpotts $
 #include <algorithm>
 using namespace std;
 
@@ -17,6 +17,8 @@ using namespace std;
 #include <ossim/imaging/ossimImageHistogramSource.h>
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimCommon.h>
+#include <ossim/base/ossimStringProperty.h>
+#include <ossim/base/ossimContainerProperty.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimEllipsoid.h>
@@ -37,7 +39,7 @@ using namespace std;
 static ossimTrace traceDebug = ossimTrace("ossimCibCadrgTileSource:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimCibCadrgTileSource.cpp 11347 2007-07-23 13:01:59Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimCibCadrgTileSource.cpp 12990 2008-06-04 19:14:34Z gpotts $";
 #endif
 
 RTTI_DEF1(ossimCibCadrgTileSource, "ossimCibCadrgTileSource", ossimImageHandler)
@@ -229,6 +231,10 @@ bool ossimCibCadrgTileSource::open()
       // Set the base class image file name.
       theImageFile = imageFile;
 
+		std::ifstream in(theImageFile.c_str(), std::ios::in|std::ios::binary);
+		if(in.good()&&theTableOfContents->getRpfHeader())
+		{
+		}
       completeOpen();
 
       theTile = ossimImageDataFactory::instance()->create(this, this);
@@ -829,7 +835,7 @@ vector<ossimString> ossimCibCadrgTileSource::getProductScaleList()const
             // the product list.
             if( ( std::find(scale.begin(), scale.end(), ':') != scale.end() )
                 ||
-                (scale[(int)scale.size()-1]=='M'))
+                (scale[scale.size()-1]=='M'))
             {
                // only add it if it doesn't already exist
                // on the list.
@@ -1410,6 +1416,37 @@ ossimString ossimCibCadrgTileSource::getSecurityClassification()const
    return result;
 }
 
+ossimRefPtr<ossimProperty> ossimCibCadrgTileSource::getProperty(const ossimString& name)const
+{
+   if(name == "file_type")
+	{
+		if(theProductType == OSSIM_PRODUCT_TYPE_CIB)
+		{
+			return new ossimStringProperty("file_type", "CIB");
+		}
+		else if(theProductType == OSSIM_PRODUCT_TYPE_CADRG)
+		{
+			return new ossimStringProperty("file_type", "CADRG");
+		}
+		return 0;
+	}
+	return ossimImageHandler::getProperty(name);
+}
+
+void ossimCibCadrgTileSource::getPropertyNames(std::vector<ossimString>& propertyNames)const
+{
+	ossimImageHandler::getPropertyNames(propertyNames);
+	propertyNames.push_back("file_type");
+   const ossimRpfHeader* header =
+	theTableOfContents->getRpfHeader();
+
+	if(header)
+	{
+		std::ifstream in(theImageFile.c_str(), std::ios::in|std::ios::binary);
+		
+	}
+}
+
 void ossimCibCadrgTileSource::populateLut()
 {
    theLut = 0;
@@ -1485,4 +1522,37 @@ void ossimCibCadrgTileSource::populateLut()
          }
       }
    }
+}
+
+void ossimCibCadrgTileSource::updatePropertiesToFirstValidFrame()
+{
+   if(theEntryToRender)
+   {
+      ossim_uint32 w = theEntryToRender->getNumberOfFramesHorizontal();
+      ossim_uint32 h = theEntryToRender->getNumberOfFramesVertical();
+      ossim_uint32 wi, hi;
+      bool found = false;
+      ossimRpfFrameEntry tempEntry;
+      ossimRpfFrame aFrame;
+      for(wi = 0; ((wi < w)&&(!found)); ++wi)
+      {
+         for(hi = 0; ((hi < h)&&(!found)); ++hi)
+         {
+            theEntryToRender->getEntry(hi,
+                                       wi,
+                                       tempEntry);
+            if(tempEntry.getFullPath().exists())
+            {
+               found = true;
+            }
+         }
+      }
+		if(found)
+		{
+			if(aFrame.parseFile(tempEntry.getFullPath()) == ossimErrorCodes::OSSIM_OK)
+			{
+				
+			}
+		}	
+	}
 }

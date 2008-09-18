@@ -12,7 +12,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimLsrVector.cpp 11428 2007-07-27 18:44:18Z gpotts $
+//  $Id: ossimLsrVector.cpp 12790 2008-05-05 13:41:33Z dburken $
 
 #include <ossim/base/ossimLsrVector.h>
 #include <ossim/base/ossimEcefVector.h>
@@ -93,5 +93,19 @@ ossimLsrVector ossimLsrVector::cross(const ossimLsrVector& v) const
                             theLsrSpace);
    }
    return ossimLsrVector(theData.cross(v.data()), theLsrSpace);
+}
+
+std::ostream& ossimLsrVector::print(std::ostream& os) const
+{
+   os << "(ossimLsrVector)\n"
+      << "  theData = " << theData
+      << "\n  theLsrSpace = " << theLsrSpace;
+   return os;
+}
+
+std::ostream& operator<< (std::ostream& os ,
+                          const ossimLsrVector& instance)
+{
+   return instance.print(os);
 }
 

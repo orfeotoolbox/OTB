@@ -9,7 +9,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimAtbMatchPoint.cpp 9963 2006-11-28 21:11:01Z gpotts $
+//  $Id: ossimAtbMatchPoint.cpp 12912 2008-05-28 15:05:54Z gpotts $
 
 #include <ossim/imaging/ossimAtbMatchPoint.h>
 #include <ossim/imaging/ossimAtbPointSource.h>
@@ -89,7 +89,7 @@ bool ossimAtbMatchPoint::assignRemapValues()
    //***
    // Determine the number of contributors. We require minimum of two:
    //***
-   int num_contributors = thePointSourceList.size();
+   ossim_uint32 num_contributors = (ossim_uint32)thePointSourceList.size();
    if (num_contributors < 2)
       return false;
 

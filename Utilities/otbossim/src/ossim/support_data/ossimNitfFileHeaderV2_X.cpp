@@ -13,6 +13,8 @@
 
 RTTI_DEF1(ossimNitfFileHeaderV2_X, "ossimNitfFileHeaderV2_X", ossimNitfFileHeader);
 
+const ossimString ossimNitfFileHeaderV2_X::FILE_TYPE_KW  = "file_type";
+const ossimString ossimNitfFileHeaderV2_X::VERSION_KW  = "version";
 const ossimString ossimNitfFileHeaderV2_X::CLEVEL_KW  = "clevel";
 const ossimString ossimNitfFileHeaderV2_X::STYPE_KW   = "stype";
 const ossimString ossimNitfFileHeaderV2_X::OSTAID_KW  = "ostaid";
@@ -247,7 +249,15 @@ ossimRefPtr<ossimProperty> ossimNitfFileHeaderV2_X::getProperty(const ossimStrin
 {
    ossimProperty* property = NULL;
 
-   if(name == CLEVEL_KW)
+	if(name == VERSION_KW)
+	{
+      property = new ossimStringProperty(name, ossimString(getVersion()));
+	}
+	else if(name == FILE_TYPE_KW)
+	{
+		property = new ossimStringProperty(name, "NITF");
+	}
+   else if(name == CLEVEL_KW)
    {
       ossimNumericProperty* numericProperty =
          new ossimNumericProperty(name,
@@ -332,13 +342,18 @@ ossimRefPtr<ossimProperty> ossimNitfFileHeaderV2_X::getProperty(const ossimStrin
                                          getEncryption().trim(),
                                          false);
    }
-   else return NULL;
+   else
+	{
+		property = ossimNitfFileHeader::getProperty(name).get();
+	}
 
    return property;
 }
 
 void ossimNitfFileHeaderV2_X::getPropertyNames(std::vector<ossimString>& propertyNames)const
 {
+   propertyNames.push_back(FILE_TYPE_KW);
+   propertyNames.push_back(VERSION_KW);
    propertyNames.push_back(CLEVEL_KW);
    propertyNames.push_back(STYPE_KW);
    propertyNames.push_back(OSTAID_KW);

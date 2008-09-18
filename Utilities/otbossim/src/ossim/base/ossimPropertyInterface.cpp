@@ -5,7 +5,7 @@
 // Author: Garrett Potts (gpotts@imagelinks)
 //
 //*************************************************************************
-// $Id: ossimPropertyInterface.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimPropertyInterface.cpp 12989 2008-06-04 17:05:41Z gpotts $
 #include <ossim/base/ossimPropertyInterface.h>
 #include <ossim/base/ossimStringProperty.h>
 
@@ -30,6 +30,17 @@ ossimRefPtr<ossimProperty> ossimPropertyInterface::getProperty(const ossimString
 
 void ossimPropertyInterface::getPropertyNames(std::vector<ossimString>& propertyNames)const
 {
+}
+
+ossimString ossimPropertyInterface::getPropertyValueAsString(const ossimString& name)const
+{
+	ossimRefPtr<ossimProperty> prop = getProperty(name);
+	if(prop.valid())
+	{
+		return prop->valueToString();
+	}
+	
+	return ossimString("");
 }
 
 

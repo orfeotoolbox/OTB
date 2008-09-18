@@ -6,7 +6,7 @@
 // Author: Garrett Potts (gpotts@imagelinks)
 //
 //*************************************************************************
-// $Id: ossimImagePolygonEvent.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimImagePolygonEvent.h 13016 2008-06-10 16:06:58Z dburken $
 #ifndef ossimImagePolygonEvent_HEADER
 #define ossimImagePolygonEvent_HEADER
 #include <vector>
@@ -20,17 +20,21 @@ class OSSIMDLLEXPORT ossimImagePolygonEvent : public ossimEvent
 {
 public:
    ossimImagePolygonEvent(const std::vector<ossimIpt>& polygon,
-                          ossimObject* obj=NULL)
+                          ossimObject* obj=0)
       : ossimEvent(obj,OSSIM_EVENT_AOI_POLYGON_ID) ,
         thePolygon(polygon)
       {
       }
+      
    ossimImagePolygonEvent(const std::vector<ossimDpt>& polygon,
-                          ossimObject* obj=NULL)
-      : ossimEvent(obj,OSSIM_EVENT_AOI_POLYGON_ID) ,
-        thePolygon(polygon.begin(),
-                   polygon.end())
+                          ossimObject* obj=0)
+      : ossimEvent(obj,OSSIM_EVENT_AOI_POLYGON_ID),
+        thePolygon(polygon.size())
       {
+         for (std::vector<ossimDpt>::size_type i = 0; i < polygon.size(); ++i)
+         {
+            thePolygon[i] = polygon[i];
+         }
       }
    virtual ossimObject* dup()const
       {
@@ -51,10 +55,11 @@ public:
       }
    void setPolygon(const std::vector<ossimDpt>& polygon)
       {
-         thePolygon.clear();
-         thePolygon.insert(thePolygon.begin(),
-                           polygon.begin(),
-                           polygon.end());
+         thePolygon.resize(polygon.size());
+         for (std::vector<ossimDpt>::size_type i = 0; i < polygon.size(); ++i)
+         {
+            thePolygon[i] = polygon[i];
+         }
       }
    
 protected:

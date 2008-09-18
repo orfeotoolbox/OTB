@@ -6,7 +6,7 @@
 
     Licence: wxWidgets Licence
 
-    RCS-ID: $Id: node.cpp 9094 2006-06-13 19:12:40Z dburken $
+    RCS-ID: $Id: node.cpp 12630 2008-04-07 17:19:58Z dburken $
 */
 #ifdef __GNUG__
 #pragma implementation 
@@ -15,7 +15,7 @@
 #include <ossim/kbool/node.h>
 #include <ossim/kbool/link.h>
 #include <ossim/kbool/line.h>
-#include <math.h>
+#include <cmath>
 #include <iostream>
 
 //this here is to initialize the static iterator of node
@@ -65,8 +65,8 @@ Node& Node::operator=(const Node &other_node)
 // xnew=N*grid and ynew=N*grid
 void Node::RoundInt(B_INT grid)
 {
-  _x=(B_INT) floor((_x + grid * 0.5) / grid) * grid;
-  _y=(B_INT) floor((_y + grid * 0.5) / grid) * grid;
+   _x=(B_INT) std::floor((_x + grid * 0.5) / grid) * grid;
+   _y=(B_INT) std::floor((_y + grid * 0.5) / grid) * grid;
 }
 
 Node::~Node()

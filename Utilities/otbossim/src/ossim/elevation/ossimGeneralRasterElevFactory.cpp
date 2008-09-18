@@ -51,8 +51,8 @@ void ossimGeneralRasterElevFactory::setDirectory(const ossimFilename& directory)
                   }
                }
             } while(dir.getNext(file) &&
-                    (!foundOne &&
-                     (count < maxCount)));
+                    (foundOne ||
+                     (!foundOne && (count < maxCount))));
          }
       }
    }  

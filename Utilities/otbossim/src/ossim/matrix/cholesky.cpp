@@ -5,6 +5,7 @@
 #define WANT_MATH
 //#define WANT_STREAM
 
+#include <cmath>
 #include <ossim/matrix/include.h>
 
 #include <ossim/matrix/newmat.h>
@@ -46,7 +47,7 @@ ReturnMatrix Cholesky(const SymmetricMatrix& S)
       while (k--) { sum += square(*ti++); }
       Real d = *s++ - sum;
       if (d<=0.0)  Throw(NPDException(S));
-      *ti++ = sqrt(d);
+      *ti++ = std::sqrt(d);
    }
    T.Release(); return T.ForReturn();
 }
@@ -75,7 +76,7 @@ ReturnMatrix Cholesky(const SymmetricBandMatrix& S)
       while (l--) { sum += square(*ti++); }
       Real d = *s++ - sum;
       if (d<=0.0)  Throw(NPDException(S));
-      *ti++ = sqrt(d);
+      *ti++ = std::sqrt(d);
    }
 
    T.Release(); return T.ForReturn();
@@ -142,7 +143,7 @@ void DowndateCholesky(UpperTriangularMatrix &chol, RowVector x)
    if (squareNormA >= 1.0)
       Throw(ProgramException("DowndateCholesky() fails", chol));
 
-   Real alpha = sqrt(1.0 - squareNormA);
+   Real alpha = std::sqrt(1.0 - squareNormA);
 
    // compute and apply Givens rotations to the vector a
    ColumnVector cGivens(nRC);  cGivens = 0.0;

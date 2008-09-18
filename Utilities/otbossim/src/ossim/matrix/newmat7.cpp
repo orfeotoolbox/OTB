@@ -388,7 +388,7 @@ static GeneralMatrix* GeneralMult(GeneralMatrix* gm1, GeneralMatrix* gm2,
          return GeneralMult2(gm1, gm2, mm, mtx);
       }
    }
-   return NULL;
+   return 0;
 }
 
 static GeneralMatrix* GeneralKP(GeneralMatrix* gm1, GeneralMatrix* gm2,

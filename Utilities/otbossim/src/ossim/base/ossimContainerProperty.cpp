@@ -2,10 +2,10 @@
 //
 // License:  See top level LICENSE.txt file.
 // 
-// Author: Garrett Potts (gpotts@imagelinks.com)
+// Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimContainerProperty.cpp 10174 2007-01-03 18:24:31Z gpotts $
+// $Id: ossimContainerProperty.cpp 12969 2008-06-03 17:17:43Z gpotts $
 #include <ossim/base/ossimContainerProperty.h>
 #include <ossim/base/ossimStringProperty.h>
 
@@ -58,7 +58,7 @@ void ossimContainerProperty::copyList(const ossimContainerProperty& rhs)
       }
       else
       {
-         theChildPropertyList.push_back((ossimProperty*)NULL);
+         theChildPropertyList.push_back((ossimProperty*)0);
       }
    }
 }
@@ -104,7 +104,10 @@ ossimRefPtr<ossimProperty> ossimContainerProperty::getProperty(const ossimString
 {
    ossim_uint32 idx = 0;
    std::vector<ossimRefPtr<ossimContainerProperty> > containers;
-   
+   if(name == getName())
+   {
+      return this;
+   }
    for(idx = 0; idx < theChildPropertyList.size(); ++idx)
    {
       if(theChildPropertyList[idx].valid())
@@ -132,7 +135,7 @@ ossimRefPtr<ossimProperty> ossimContainerProperty::getProperty(const ossimString
       }
    }
    
-   return (ossimProperty*)NULL;
+   return (ossimProperty*)0;
 }
 
 void ossimContainerProperty::deleteChildren()
@@ -142,7 +145,7 @@ void ossimContainerProperty::deleteChildren()
 //       if(theChildPropertyList[idx])
 //       {
 //          delete theChildPropertyList[idx];
-//          theChildPropertyList[idx] = (ossimProperty*)NULL;
+//          theChildPropertyList[idx] = (ossimProperty*)0;
 //       }
 //    }
    theChildPropertyList.clear();
@@ -170,10 +173,11 @@ ossimRefPtr<ossimProperty> ossimContainerProperty::getProperty(ossim_uint32 idx)
       return theChildPropertyList[idx];
    }
 
-   return (ossimProperty*)NULL;
+   return (ossimProperty*)0;
 }
 
-void ossimContainerProperty::getPropertyList(std::vector<ossimRefPtr<ossimProperty> >& children)
+void ossimContainerProperty::getPropertyList(
+   std::vector<ossimRefPtr<ossimProperty> >& children) const
 {
    children = theChildPropertyList;
 }

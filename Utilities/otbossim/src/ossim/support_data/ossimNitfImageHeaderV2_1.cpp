@@ -7,7 +7,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_1.cpp 11026 2007-05-23 18:27:16Z gpotts $
+// $Id: ossimNitfImageHeaderV2_1.cpp 13101 2008-07-01 18:44:31Z dburken $
 #include <sstream>
 #include <iomanip>
 #include <cstring> // for memset
@@ -564,6 +564,11 @@ ossimString ossimNitfImageHeaderV2_1::getIMode() const
 ossimString ossimNitfImageHeaderV2_1::getSecurityClassification()const
 {
    return theSecurityClassification;
+}
+
+ossimString  ossimNitfImageHeaderV2_1::getImageDateAndTime() const
+{
+   return ossimString(theDateTime);
 }
 
 ossimString ossimNitfImageHeaderV2_1::getAcquisitionDateMonthDayYear(ossim_uint8 separationChar)const

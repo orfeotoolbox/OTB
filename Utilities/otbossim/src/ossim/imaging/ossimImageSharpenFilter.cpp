@@ -8,7 +8,8 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageSharpenFilter.cpp 11347 2007-07-23 13:01:59Z gpotts $
+// $Id: ossimImageSharpenFilter.cpp 12981 2008-06-04 01:05:54Z dburken $
+#include <cstdlib> /* for abs() */
 #include <ossim/imaging/ossimImageSharpenFilter.h>
 #include <ossim/base/ossimIrect.h>
 #include <ossim/imaging/ossimImageDataFactory.h>

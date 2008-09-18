@@ -7,7 +7,7 @@
 // Description: Common file for global functions.
 //
 //*************************************************************************
-// $Id: ossimCommon.cpp 12129 2007-12-06 17:51:29Z gpotts $
+// $Id: ossimCommon.cpp 12334 2008-01-18 18:01:10Z dburken $
 
 #include <sstream>
 
@@ -325,10 +325,10 @@ std::string ossim::convertHtmlSpecialCharactersToNormalCharacter(const std::stri
    {
       std::string::size_type size = result.size();
 //       std::cout << "FOUND &" << std::endl;
-      std::string test1(&result[0] + pos, ossim::min(6, (int)(size-pos)));
+      std::string test1(&result[pos], ossim::min(6, (int)(size-pos)));
       //result.begin() + ossim::min(size, pos + 7));
-      std::string test2(&result[0] + pos, ossim::min(5, (int)(size-pos)));
-      std::string test3(&result[0] + pos, ossim::min(4, (int)(size-pos)));
+      std::string test2(&result[pos], ossim::min(5, (int)(size-pos)));
+      std::string test3(&result[pos], ossim::min(4, (int)(size-pos)));
       
 //       std::cout << "test1 " << test1 << std::endl;
 //       std::cout << "test2 " << test2 << std::endl;
@@ -482,7 +482,8 @@ void ossim::lexQuotedTokens(const std::string& str,
             start++;
             if (str[start] != closeQuote)
             {
-               end = start+1;
+               //               end = start+1;
+               end = start;
                while (static_cast<ossim_uint32>(end) < str.length() &&
                       openBraceCount > 0)
                {
@@ -500,7 +501,6 @@ void ossim::lexQuotedTokens(const std::string& str,
                end = start+1;
             }
          }
-	 
          if (openBraceCount == 0)
          {
             tokens.push_back(str.substr(start, end-1-start));
@@ -510,7 +510,6 @@ void ossim::lexQuotedTokens(const std::string& str,
             unbalancedQuotes = true;
             end = str.length();
          }
-	 
       }
       else if (str[start] == closeQuote)
       {

@@ -7,7 +7,7 @@
 // Description:  Contains class definition for ossimNitfTileSource.
 // 
 //*******************************************************************
-//  $Id: ossimNitfTileSource.cpp 11349 2007-07-23 13:30:44Z gpotts $
+//  $Id: ossimNitfTileSource.cpp 12988 2008-06-04 16:49:43Z gpotts $
 #include <itkjpeg/8/jerror.h>
 
 #include <ossim/imaging/ossimNitfTileSource.h>
@@ -44,7 +44,7 @@
 RTTI_DEF1_INST(ossimNitfTileSource, "ossimNitfTileSource", ossimImageHandler)
 
 #ifdef OSSIM_ID_ENABLED
-   static const char OSSIM_ID[] = "$Id: ossimNitfTileSource.cpp 11349 2007-07-23 13:30:44Z gpotts $";
+   static const char OSSIM_ID[] = "$Id: ossimNitfTileSource.cpp 12988 2008-06-04 16:49:43Z gpotts $";
 #endif
    
 //---
@@ -275,34 +275,19 @@ bool ossimNitfTileSource::parseFile()
       {
          theEntryList.push_back(i);
       }
-      else if (hdr->getCompressionCode() == "C3") // jpeg
+      else if ( canUncompress(hdr) )
       {
          theEntryList.push_back(i);
          theCacheEnabledFlag = true;
       }
       else
       {
-         if(isVqCompressed(hdr->getCompressionCode())&&
-            (hdr->getCompressionHeader().valid()))
+         if(traceDebug())
          {
-            // we will only support single band vq compressed NITFS
-            // basically CIB and CADRG products are single band code words.
-            //
-            if(hdr->getNumberOfBands() == 1)
-            {
-               theEntryList.push_back(i);
-            }
-            theCacheEnabledFlag = true;
-         }
-         else
-         {
-            if(traceDebug())
-            {
-               ossimNotify(ossimNotifyLevel_DEBUG)
-                  << "Entry " << i
-                  <<" has an unsupported compression code = "
-                  << hdr->getCompressionCode() << std::endl;
-            }
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "Entry " << i
+               <<" has an unsupported compression code = "
+               << hdr->getCompressionCode() << std::endl;
          }
       }
       theNitfImageHeader.push_back(hdr);
@@ -468,6 +453,11 @@ bool ossimNitfTileSource::allocate()
          newTileCache(theBlockImageRect, theCacheSize);
    }
 
+   //---
+   // Initialize the compressed buffer if needed.
+   //---
+   initializeCompressedBuf();
+
    // Make the tiles.  Note the blank tile is intentionally left blank.
    ossimImageDataFactory* idf = ossimImageDataFactory::instance();
    theTile = idf->create(this, this);
@@ -477,6 +467,30 @@ bool ossimNitfTileSource::allocate()
    completeOpen();
 
    return true;
+}
+
+bool ossimNitfTileSource::canUncompress(const ossimNitfImageHeader* hdr) const
+{
+   if (!hdr)
+   {
+      return false;
+   }
+   if (hdr->getCompressionCode() == "C3") // jpeg
+   {
+      return true;
+   }
+   else if(isVqCompressed(hdr->getCompressionCode())&&
+           (hdr->getCompressionHeader().valid()))
+   {
+      // we will only support single band vq compressed NITFS
+      // basically CIB and CADRG products are single band code words.
+      //
+      if(hdr->getNumberOfBands() == 1)
+      {
+         return true;
+      }
+   }
+   return false;
 }
 
 void ossimNitfTileSource::initializeReadMode()
@@ -1050,6 +1064,18 @@ void ossimNitfTileSource::initializeCacheTileInterLeaveType()
 
 void ossimNitfTileSource::initializeCacheTile()
 {
+   theCacheTile = ossimImageDataFactory::instance()->create(
+      this,
+      theScalarType,
+      theNumberOfOutputBands,
+      theCacheSize.x,
+      theCacheSize.y);
+
+   theCacheTile->initialize();
+}
+
+void ossimNitfTileSource::initializeCompressedBuf()
+{
    const ossimNitfImageHeader* hdr = getCurrentImageHeader();
    if (!hdr)
    {
@@ -1061,21 +1087,9 @@ void ossimNitfTileSource::initializeCacheTile()
       delete [] theCompressedBuf;
       theCompressedBuf = 0;
    }
-   
-   ossimImageDataFactory* idf = ossimImageDataFactory::instance();
-   theCacheTile = idf->create(this,
-                              theScalarType,
-                              theNumberOfOutputBands,
-                              theCacheSize.x,
-                              theCacheSize.y);
-   theCacheTile->initialize();
 
-   if(hdr->getRepresentation().upcase().contains("LUT"))
-   {
-      theCompressedBuf = new ossim_uint8[theReadBlockSizeInBytes];
-      memset(theCompressedBuf, '\0', theReadBlockSizeInBytes);
-   }
-   else if( isVqCompressed(hdr->getCompressionCode()) )
+   if( (hdr->getRepresentation().upcase().contains("LUT")) ||
+       ( isVqCompressed(hdr->getCompressionCode()) ) )
    {
       theCompressedBuf = new ossim_uint8[theReadBlockSizeInBytes];
       memset(theCompressedBuf, '\0', theReadBlockSizeInBytes);
@@ -2210,34 +2224,29 @@ ossimRefPtr<ossimProperty> ossimNitfTileSource::getProperty(const ossimString& n
       ossimProperty* p = new ossimBooleanProperty(name, theCacheEnabledFlag);
       return ossimRefPtr<ossimProperty>(p);
    }
-   else if(name == "file_header")
+   else 
    {
       if(theNitfFile)
       {
-         ossimContainerProperty* container = new ossimContainerProperty(name);
-         std::vector<ossimRefPtr<ossimProperty> > propertyList;
          if(theNitfFile->getHeader().valid())
          {
-            theNitfFile->getHeader()->getPropertyList(propertyList);
-            container->addChildren(propertyList);
-            return container;
+            ossimRefPtr<ossimProperty> p = theNitfFile->getHeader()->getProperty(name);
+				if(p.valid())
+				{
+					return p;
+				}
          }
       }
-      return 0;
-   }
-   else if(name == "image_header")
-   {
-      const ossimNitfImageHeader* imageHeader = getCurrentImageHeader();
-      if(imageHeader)
+		const ossimNitfImageHeader* imageHeader = getCurrentImageHeader();
+		if(imageHeader)
       {
-         ossimContainerProperty* container = new ossimContainerProperty(name);
-         std::vector<ossimRefPtr<ossimProperty> > propertyList;
-         
-         imageHeader->getPropertyList(propertyList);
-         container->addChildren(propertyList);
-      
-         return container;
-      }
+         ossimRefPtr<ossimProperty> p = imageHeader->getProperty(name);
+			if(p.valid())
+			{
+				return p;
+			}
+		}
+																		
       return 0;
    }
 
@@ -2267,13 +2276,18 @@ void ossimNitfTileSource::setProperty(ossimRefPtr<ossimProperty> property)
 
 void ossimNitfTileSource::getPropertyNames(std::vector<ossimString>& propertyNames)const
 {
-   propertyNames.push_back(ossimKeywordNames::ENABLE_CACHE_KW);
-   propertyNames.push_back("file_header");
-   propertyNames.push_back("image_header");
-   propertyNames.push_back("file_header_tags");
-   propertyNames.push_back("image_header_tags");
-
    ossimImageHandler::getPropertyNames(propertyNames);
+   propertyNames.push_back(ossimKeywordNames::ENABLE_CACHE_KW);
+	if(theNitfFile->getHeader().valid())
+	{
+		theNitfFile->getHeader()->getPropertyNames(propertyNames);
+	}
+	const ossimNitfImageHeader* imageHeader = getCurrentImageHeader();
+	if(imageHeader)
+	{
+		imageHeader->getPropertyNames(propertyNames);
+	}
+
 }
 
 ossimString ossimNitfTileSource::getSecurityClassification() const
@@ -2808,7 +2822,7 @@ bool ossimNitfTileSource::loadJpegQuantizationTables(
    {
       // COMRAT string like: "00.2" = use table 2. (between 1 and 5).
       ossimString s;
-      s.push_back(comrat[3]);
+      s.push_back(comrat[static_cast<std::string::size_type>(3)]);
       ossim_int32 comTbl = s.toInt32();
       if ( (comTbl > 0) && (comTbl < 6) )
       {

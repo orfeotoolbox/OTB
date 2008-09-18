@@ -3,7 +3,7 @@
 //
 // See LICENSE.txt file in the top level directory for more details.
 //*************************************************************************
-// $Id: ossimConvolutionFilter1D.cpp 11347 2007-07-23 13:01:59Z gpotts $
+// $Id: ossimConvolutionFilter1D.cpp 12912 2008-05-28 15:05:54Z gpotts $
 
 
 #include <ossim/imaging/ossimConvolutionFilter1D.h>
@@ -58,7 +58,7 @@ ossimRefPtr<ossimImageData> ossimConvolutionFilter1D::getTile(
    // so stretch the input rect out to cover the required pixels
    //---
    ossimIrect  newRect;
-   ossim_int32 kl = theKernel.size(); //kernel length
+   ossim_uint32 kl = (ossim_uint32)theKernel.size(); //kernel length
    if (theIsHz)
    {
       //horizontal kernel (row kernel)
@@ -195,7 +195,7 @@ template<class T> void ossimConvolutionFilter1D::convolvePartial(
    ossim_uint32 outputH       = outputData->getHeight();
    ossim_uint32 numberOfBands = inputData->getNumberOfBands();
    
-   ossim_uint32 klength=theKernel.size(),k;
+   ossim_uint32 klength=(ossim_uint32)theKernel.size(),k;
    ossim_int32 incrK = theIsHz ? 1 : inputW; //kernel increment in input : one col or one row
    ossim_int32 iRow  = inputW - outputW; //jump to go to next row
 
@@ -281,7 +281,7 @@ template<class T> void ossimConvolutionFilter1D::convolveFull(
    ossim_uint32 outputH       = outputData->getHeight();
    ossim_uint32 numberOfBands = inputData->getNumberOfBands();
    
-   ossim_uint32 klength=theKernel.size(), k;
+   ossim_uint32 klength=(ossim_uint32)theKernel.size(), k;
    ossim_int32 incrK = theIsHz ? 1 : inputW; //kernel increment in input : one col or one row
    ossim_int32 iRow  = inputW - outputW; //jump to go to next row
 

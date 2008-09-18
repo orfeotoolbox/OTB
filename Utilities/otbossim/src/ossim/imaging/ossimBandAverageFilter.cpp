@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBandAverageFilter.cpp 11347 2007-07-23 13:01:59Z gpotts $
+// $Id: ossimBandAverageFilter.cpp 12666 2008-04-13 13:24:29Z dburken $
 #include <ossim/imaging/ossimBandAverageFilter.h>
 
 // used for constructing and an ossimImageData object
@@ -241,9 +241,9 @@ void ossimBandAverageFilter::checkWeights()
    // value.  It does not matter if they sum to one since we will perform
    // a weighted average in the execution of the algorithm
    //
-   if(theWeights.size() != theTile->getNumberOfBands())
+   if(theWeights.size() != theInputConnection->getNumberOfOutputBands())
    {
-      theWeights.resize(theTile->getNumberOfBands());
+      theWeights.resize(theInputConnection->getNumberOfOutputBands());  
 
       std::fill(theWeights.begin(), theWeights.end(), 1);
    }

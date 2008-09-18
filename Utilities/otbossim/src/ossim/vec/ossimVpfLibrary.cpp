@@ -6,7 +6,7 @@
 // Description: This class extends the stl's string class.
 //
 //********************************************************************
-// $Id: ossimVpfLibrary.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimVpfLibrary.cpp 13023 2008-06-10 16:26:24Z dburken $
 #include <algorithm>
 
 #include <ossim/vec/ossimVpfLibrary.h>
@@ -16,12 +16,9 @@
 #include <ossim/vec/ossimVpfExtent.h>
 #include <ossim/vec/ossimVpfCoverage.h>
 #include <ossim/base/ossimErrorCodes.h>
-#ifndef NULL
-#include <stddef.h>
-#endif
 
 ossimVpfLibrary::ossimVpfLibrary()
-   :theDatabase(NULL),
+   :theDatabase(0),
     theLibraryName(""),
     theLibraryNameFullPath(""),
     theNumberOfCoverages(0)
@@ -30,7 +27,7 @@ ossimVpfLibrary::ossimVpfLibrary()
 
 ossimVpfLibrary::~ossimVpfLibrary()
 {
-   theDatabase = NULL;
+   theDatabase = 0;
 }
 
 bool ossimVpfLibrary::openLibrary(ossimVpfDatabase* database,
@@ -261,7 +258,7 @@ void ossimVpfLibrary::setTileNames()const
                                                              namePosition);;
          ossimString tileId   = table.getColumnValueAsString(row,
                                                              tileIdPosition);
-         theTileNameMap.insert(make_pair(tileId.toUInt32(), tileName.trim()));
+         theTileNameMap.insert(make_pair(tileId.toInt32(), tileName.trim()));
          free_row( row, *(table.getVpfTableData()) );
       }
    }

@@ -5,7 +5,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimImageRenderer.cpp 11955 2007-10-31 16:10:22Z gpotts $
+//  $Id: ossimImageRenderer.cpp 12738 2008-04-25 19:02:43Z gpotts $
 
 #include <iostream>
 using namespace std;
@@ -38,7 +38,7 @@ using namespace std;
 #include <ossim/projection/ossimEquDistCylProjection.h>
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageRenderer.cpp 11955 2007-10-31 16:10:22Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimImageRenderer.cpp 12738 2008-04-25 19:02:43Z gpotts $";
 #endif
 
 static ossimTrace traceDebug("ossimImageRenderer:debug");
@@ -535,7 +535,6 @@ ossimImageRenderer::ossimImageRenderer()
       theBlankTile(NULL),
       theTile(NULL),
       theTemporaryBuffer(NULL),
-      theCachedTile(NULL),
       theStartingResLevel(0),
       theImageViewTransform(NULL),
       theMaxRecursionLevel(5),
@@ -558,7 +557,6 @@ ossimImageRenderer::ossimImageRenderer(ossimImageSource* inputSource,
      theBlankTile(NULL),
      theTile(NULL),
      theTemporaryBuffer(NULL),
-     theCachedTile(NULL),
      theStartingResLevel(0),
      theImageViewTransform(imageViewTrans),
      theMaxRecursionLevel(5),
@@ -826,23 +824,27 @@ void ossimImageRenderer::fillTile(ossimRefPtr<ossimImageData> outputData,
    {
       return;
    }
-   ossimIrect vrect = rectInfo.getViewRect();
-
+   ossimDrect vrect = rectInfo.getViewRect();
+   
    ossimDpt imageToViewScale = rectInfo.getAbsValueImageToViewScales();
-
+   
    if(imageToViewScale.hasNans()) return;
    
    ossimDpt tile_size = ossimDpt(vrect.width(), vrect.height());
    double kernelSupportX, kernelSupportY;
-   double averageScale = (imageToViewScale.x + imageToViewScale.y)/2.0;
-   long   closestFitResLevel = (long)floor(log(1.0/averageScale)/
-                                           log(2.0));
    
-   ossim_uint32 resLevel = closestFitResLevel<0?0:closestFitResLevel;
+   double resLevelX = log( 1.0 / imageToViewScale.x )/ log( 2.0 );
+   double resLevelY = log( 1.0 / imageToViewScale.y )/ log( 2.0 );
+   double resLevel0 = resLevelX < resLevelY ? resLevelX : resLevelY;
+   long closestFitResLevel = (long)floor( resLevel0 );
+   
+   //double averageScale = (imageToViewScale.x + imageToViewScale.y) / 2.0;
+   //long closestFitResLevel = (long)floor( log( 1.0 / averageScale )/ log( 2.0 ) );
+   
+   ossim_uint32 resLevel = closestFitResLevel<0 ? 0:closestFitResLevel;
    resLevel += theStartingResLevel;
-   double closestScale = 1.0/pow((double)2.0,(double)resLevel);
    
-   ossimDrect requestRect = rectInfo.getImageRect()*ossimDpt(closestScale,closestScale);
+   double closestScale = 1.0 / pow( (double)2.0, (double)resLevel );
    
    ossimDpt nul(rectInfo.theIul.x*closestScale,
                 rectInfo.theIul.y*closestScale);
@@ -853,130 +855,56 @@ void ossimImageRenderer::fillTile(ossimRefPtr<ossimImageData> outputData,
    ossimDpt nur(rectInfo.theIur.x*closestScale,
                 rectInfo.theIur.y*closestScale);
    
-   ossimDpt newScale(imageToViewScale.x/closestScale,
-                     imageToViewScale.y/closestScale);
+   theResampler->getKernelSupport( kernelSupportX, kernelSupportY );
    
-   theResampler->setScaleFactor(newScale);
-
-   theResampler->getKernelSupport(kernelSupportX,
-                                  kernelSupportY);
-   
-   ossimDrect boundingRect = ossimDrect(nul,
- 					nll,
- 					nlr,
- 					nur);
+   ossimDrect boundingRect = ossimDrect( nul, nll, nlr, nur );
    
    boundingRect = ossimIrect((ossim_int32)floor(boundingRect.ul().x - (kernelSupportX)-.5),
                              (ossim_int32)floor(boundingRect.ul().y - (kernelSupportY)-.5),
-                             (ossim_int32)ceil(boundingRect.lr().x + (kernelSupportX)+.5),
-                             (ossim_int32)ceil(boundingRect.lr().y + (kernelSupportY)+.5));
-//    boundingRect = ossimIrect((ossim_int32)floor(boundingRect.ul().x - (kernelSupportX)),
-//                              (ossim_int32)floor(boundingRect.ul().y - (kernelSupportY)),
-//                              (ossim_int32)ceil(boundingRect.lr().x + (kernelSupportX)),
-//                              (ossim_int32)ceil(boundingRect.lr().y + (kernelSupportY)));
+                             (ossim_int32)ceil (boundingRect.lr().x + (kernelSupportX)+.5),
+                             (ossim_int32)ceil (boundingRect.lr().y + (kernelSupportY)+.5));
    
-   requestRect = boundingRect;
-
-   // ossimIrect reqRect = requestRect;
+   ossimDrect requestRect = boundingRect;
    
-   ossimRefPtr<ossimImageData> data;
-   if(theCachedTile.valid())
-   {
-      ossimIrect cachedTileRect = theCachedTile->getImageRectangle();
-#if 0
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "cached tile rect = " << cachedTileRect << endl
-         << "requestRect      = " << requestRect << endl;
-#endif
-#if 0      
-      if(requestRect.completely_within(cachedTileRect)&&
-         resLevel == theCachedTileResLevel)
-      {
-         // ossimNotify(ossimNotifyLevel_DEBUG)
-         // << "SETTING TO CACHED RECT" << endl;
-         data = theCachedTile;
-      }
-#endif
-   }
-   
-   if(!data.valid())
-   {
-#if 0
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "--------------------Wiping out old cached rect" << endl;
-#endif
-//       if( (requestRect.width() < 64 ) || (requestRect.height() < 64) )
-//       {
-// 	 requestRect.stretchToTileBoundary(ossimIpt(64, 64));
-//       }
-      data = getTileAtResLevel(requestRect, resLevel);
-      if(theCachedTile.valid())
-      {
-         theCachedTile = NULL;
-      }
-//       if(data)
-//       {
-//          theCachedTileResLevel = resLevel;
-//          theCachedTile = (ossimImageData*)data->dup();
-//       }
-   }
+   ossimRefPtr<ossimImageData> data = getTileAtResLevel(requestRect, resLevel);
    
    ossimDataObjectStatus status = OSSIM_NULL;
-   if(data.valid())
+   if( data.valid() )
    {
       status = data->getDataObjectStatus();
    }
    if( (status == OSSIM_NULL) ||
-       (status == OSSIM_EMPTY))
+      (status == OSSIM_EMPTY) )
    {
       return;
    }
    
    ossimDrect bounds = theBoundingRect;
-   // setup the clamp for the resampler
-   //
-//    if(static_cast<ossim_uint32>(resLevel) < theInputDecimationFactors.size())
-//    {
-//      bounds = bounds*theInputDecimationFactors[resLevel];
-//    }
-//    else if(theInputDecimationFactors.size() > 0)
-//    {
-                           
-//       bounds = bounds*theInputDecimationFactors[theInputDecimationFactors.size()-1];
-//    }
-
-//   theResampler->setBoundingInputRect(bounds);
-
+   
    bounds = bounds*ossimDpt(closestScale, closestScale);
    theResampler->setBoundingInputRect(bounds);
    
-   double denominatorX = 1.0;
    double denominatorY = 1.0;
-   
-   if(tile_size.x > 2)
-   {
-      denominatorX = tile_size.x-1.0;
-   }
    if(tile_size.y > 2)
    {
       denominatorY = tile_size.y-1.0;
    }
+   
+   ossimDpt newScale( imageToViewScale.x / closestScale,
+                     imageToViewScale.y / closestScale );
    theResampler->setScaleFactor(newScale);
+   
    theResampler->resample(data,
-			  outputData,
-			  rectInfo.getViewRect(),
-			  nul,
-			  nur,
-			  ossimDpt( ( (nll.x - nul.x)/denominatorY ),
-				    ( (nll.y - nul.y)/denominatorY ) ),
-			  ossimDpt( ( (nlr.x - nur.x)/denominatorY ),
-				    ( (nlr.y - nur.y)/denominatorY ) ),
-// 			  ossimDpt( ( (nll.x - nul.x)/denominatorX ),
-// 				    ( (nll.y - nul.y)/denominatorY ) ),
-// 			  ossimDpt( ( (nlr.x - nur.x)/denominatorX ),
-// 				    ( (nlr.y - nur.y)/denominatorY ) ),
-			  tile_size);
-//   outputData->validate();
+                          outputData,
+                          vrect,
+                          nul,
+                          nur,
+                          ossimDpt( ( (nll.x - nul.x)/denominatorY ),
+                                   ( (nll.y - nul.y)/denominatorY ) ),
+                          ossimDpt( ( (nlr.x - nur.x)/denominatorY ),
+                                   ( (nlr.y - nur.y)/denominatorY ) ),
+                          tile_size);
+   
 }
 
 long ossimImageRenderer::computeClosestResLevel(const std::vector<ossimDpt>& decimationFactors,
@@ -1139,7 +1067,6 @@ void ossimImageRenderer::deallocate()
    theTile            = NULL;
    theBlankTile       = NULL;
    theTemporaryBuffer = NULL;
-   theCachedTile      = NULL;
 }
 
 void ossimImageRenderer::allocate()
@@ -1494,7 +1421,7 @@ void ossimImageRenderer::checkTransform()
             mapProj->setOrigin(proj->origin());
             mapProj->setMetersPerPixel(meters);
          }
-         transform->setViewProjection(newProj);
+         transform->setViewProjection(newProj, true);
       }
 //       }
    }

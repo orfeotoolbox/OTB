@@ -8,8 +8,9 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimEquationCombiner.cpp 11347 2007-07-23 13:01:59Z gpotts $
+// $Id: ossimEquationCombiner.cpp 12979 2008-06-04 00:25:14Z dburken $
 
+#include <cstdlib>
 #include <sstream>
 using namespace std;
 

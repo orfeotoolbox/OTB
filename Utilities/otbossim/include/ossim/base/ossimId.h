@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimId.h 9431 2006-08-16 19:04:51Z gpotts $
+// $Id: ossimId.h 13014 2008-06-10 16:03:09Z dburken $
 #ifndef ossimId_HEADER
 #define ossimId_HEADER
 
@@ -25,17 +25,17 @@ public:
 
    virtual void print(std::ostream& out)const;
 
-   void setId(ossim_int32 id){theId = id;}
-   ossim_int32 getId()const{return theId;}
+   void setId(ossim_int64 id){theId = id;}
+   ossim_int64 getId()const{return theId;}
 
    bool operator ==(const ossimId& rhs)const
-      {
-         return (theId == rhs.theId);
-      }
+   {
+      return (theId == rhs.theId);
+   }
    bool operator !=(const ossimId& rhs)const
-      {
-         return (theId != rhs.theId);
-      }
+   {
+      return (theId != rhs.theId);
+   }
   
    bool operator == (ossim_int64 rhs)
    {
@@ -47,38 +47,38 @@ public:
    }
 
    bool operator <(const ossimId& rhs)const
-      {
-         return (theId < rhs.theId);
-      }
+   {
+      return (theId < rhs.theId);
+   }
    bool operator <=(const ossimId& rhs)const
-      {
-         return (theId <= rhs.theId);
-      }
+   {
+      return (theId <= rhs.theId);
+   }
    bool operator >(const ossimId& rhs)const
-      {
-         return (theId > rhs.theId);
-      }
+   {
+      return (theId > rhs.theId);
+   }
    bool operator >=(const ossimId& rhs)const
-      {
-         return (theId >= rhs.theId);
-      }
+   {
+      return (theId >= rhs.theId);
+   }
 
    bool operator <(ossim_int64 rhs)const
-      {
-         return (theId < rhs);
-      }
+   {
+      return (theId < rhs);
+   }
    bool operator >(ossim_int64 rhs)const
-      {
-         return (theId > rhs);
-      }
+   {
+      return (theId > rhs);
+   }
    bool operator <=(ossim_int64 rhs)const
-      {
-         return (theId <= rhs);
-      }
+   {
+      return (theId <= rhs);
+   }
    bool operator >=(ossim_int64 rhs)const
-      {
-         return (theId >= rhs);
-      }
+   {
+      return (theId >= rhs);
+   }
 
    static const ossim_int64 INVALID_ID;
 protected:

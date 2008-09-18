@@ -9,7 +9,7 @@
 //
 // Contains class definition for ossimNitfProjectionFactory.
 //
-// $Id: ossimNitfProjectionFactory.cpp 12082 2007-11-26 21:46:44Z dburken $
+// $Id: ossimNitfProjectionFactory.cpp 12276 2008-01-07 19:58:43Z dburken $
 //----------------------------------------------------------------------------
 
 #include <fstream>
@@ -707,7 +707,7 @@ void ossimNitfProjectionFactory::parseGeographicString(
       return;
    }
 
-   int geo_index = 0;
+   std::string::size_type geo_index = 0;
    for (int i=0; i<4; ++i)
    {
       //---
@@ -717,8 +717,8 @@ void ossimNitfProjectionFactory::parseGeographicString(
       // "dd mm ss X" has a string length of 10
       // "ddd mm ss X" has a string length of 11
       //---
-      int lat_index = 0;
-      int lon_index = 0;
+      std::string::size_type lat_index = 0;
+      std::string::size_type lon_index = 0;
       const char SPACE = ' ';
       ossimString latString(10, SPACE);
       ossimString lonString(11, SPACE);

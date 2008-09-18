@@ -12,13 +12,14 @@
 //   system. 
 //
 //*****************************************************************************
-//  $Id: ossimDblGrid.cpp 11428 2007-07-27 18:44:18Z gpotts $
+//  $Id: ossimDblGrid.cpp 12953 2008-06-01 16:24:05Z dburken $
 
-#include <ossim/base/ossimDblGrid.h>
-#include <limits.h>
+#include <cstring>
+#include <climits>
 #include <iostream>
 using namespace std;
 
+#include <ossim/base/ossimDblGrid.h>
 #include <ossim/base/ossimDrect.h>
 
 //***
@@ -561,7 +562,7 @@ bool ossimDblGrid::save(ostream& os, const char* descr) const
    // Verify the description string is not too long:
    //***
    char descr_buf[81];
-   strncpy(descr_buf, descr, 80);
+   std::strncpy(descr_buf, descr, 80);
    descr_buf[80] = '\0';
    
    //***
@@ -615,7 +616,7 @@ bool ossimDblGrid::load(istream& is)
    // Read magic number tag to insure it is an ossimDblGrid record:
    //***
    is >> strbuf;
-   if (strncmp(strbuf, MAGIC_NUMBER.c_str(), MAGIC_NUMBER.length()))
+   if (std::strncmp(strbuf, MAGIC_NUMBER.c_str(), MAGIC_NUMBER.length()))
    {
       ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Error reading OSSIM_DBL_GRID magic number from stream. "
                                           << "Aborting...\n";

@@ -58,7 +58,7 @@ ${ossim_imaging_SRCS}
 ${ossim_parallel_SRCS} 
 ${ossim_elevation_SRCS}
 )
-TARGET_LINK_LIBRARIES(otbossim otbossimBase otbgeotiff otbxtiff itktiff itkjpeg8 itkjpeg12 itkjpeg16)
+TARGET_LINK_LIBRARIES(otbossim otbossimBase otbgeotiff otbxtiff itktiff itkjpeg8 itkjpeg12 itkjpeg16 OpenThreads)
 
 INSTALL(TARGETS otbossimBase
 RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
@@ -98,7 +98,7 @@ ${ossim_parallel_SRCS}
 
 TARGET_LINK_LIBRARIES(otbossimBase otbossimBase2 otbossim)
 TARGET_LINK_LIBRARIES(otbossimBase2 otbossimBase otbossim)
-TARGET_LINK_LIBRARIES(otbossim otbossimBase2 otbossimBase otbgeotiff otbxtiff itktiff itkjpeg8 itkjpeg12 itkjpeg16)
+TARGET_LINK_LIBRARIES(otbossim otbossimBase2 otbossimBase otbgeotiff otbxtiff itktiff itkjpeg8 itkjpeg12 itkjpeg16 OpenThreads )
 
 INSTALL(TARGETS otbossimBase
 RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries

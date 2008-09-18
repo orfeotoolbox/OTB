@@ -369,10 +369,10 @@ public:
    
    std::ostream& print(std::ostream& os)const
    {
-      static char* monom_sep = " ; ";
-      static char* no_sep    = "";
+      static const char* monom_sep = " ; ";
+      static const char* no_sep    = "";
 
-      char* use_sep = no_sep;
+      const char* use_sep = no_sep;
 
       os<<"[";
       os<<std::setprecision(16); //16 for double, TBD TBC: adapt to epsilon

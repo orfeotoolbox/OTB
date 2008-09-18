@@ -4,6 +4,8 @@
 #include <ossim/base/ossimDirectory.h>
 #include <ossim/base/ossimEndian.h>
 #include <ossim/base/ossimUnitTypeLut.h>
+#include <OpenThreads/ScopedLock>
+
 RTTI_DEF1(ossimGeneralRasterElevHandler, "ossimGeneralRasterElevHandler", ossimElevCellHandler);
 
 ossimGeneralRasterElevHandler::ossimGeneralRasterElevHandler(const ossimFilename& file)
@@ -53,6 +55,7 @@ ossimGeneralRasterElevHandler::~ossimGeneralRasterElevHandler()
 
 double ossimGeneralRasterElevHandler::getHeightAboveMSL(const ossimGpt& gpt)
 {
+	OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    if(!theInputStream.valid())
    {
       return ossim::nan();
@@ -161,6 +164,7 @@ void ossimGeneralRasterElevHandler::close()
 
 bool ossimGeneralRasterElevHandler::setFilename(const ossimFilename& file)
 {
+	OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    if(file.trim() == "")
    {
       return false;

@@ -8,7 +8,7 @@
 // 
 //
 //----------------------------------------------------------------------------
-// $Id: ossimGeneralRasterElevHandler.h 11500 2007-08-06 09:23:13Z dburken $
+// $Id: ossimGeneralRasterElevHandler.h 12874 2008-05-17 01:12:54Z gpotts $
 #ifndef ossimGeneralRasterElevHandler_HEADER
 #define ossimGeneralRasterElevHandler_HEADER
 #include <list>
@@ -19,6 +19,7 @@
 #include <ossim/base/ossimDatum.h>
 #include <ossim/elevation/ossimElevCellHandler.h>
 #include <ossim/imaging/ossimGeneralRasterInfo.h>
+#include <OpenThreads/ReentrantMutex>
 
 /**
  * @class ossimGeneralRasterElevHandler Elevation source for an srtm file.
@@ -131,6 +132,7 @@ public:
    const ossimGeneralRasterElevHandler::GeneralRasterInfo& generalRasterInfo()const;
    
 private:
+	OpenThreads::ReentrantMutex theMutex;
    template <class T>
    double getHeightAboveMSLTemplate(T dummy,
                                     const ossimGeneralRasterElevHandler::GeneralRasterInfo& info,

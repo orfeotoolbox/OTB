@@ -12,7 +12,7 @@
 // Contains definition of class ossimXmlDocument. This class provides read-only
 // parsing and accessing of an XML document file.
 //*****************************************************************************
-// $Id: ossimXmlDocument.cpp 10805 2007-04-30 17:01:56Z gpotts $
+// $Id: ossimXmlDocument.cpp 12521 2008-02-28 20:09:25Z gpotts $
 
 #include <stack>
 #include <iostream>
@@ -61,6 +61,14 @@ ossimXmlDocument::ossimXmlDocument(const ossimFilename& xmlFileName)
    {
       openFile(xmlFileName);
    }
+}
+ossimXmlDocument::ossimXmlDocument(const ossimXmlDocument& src)
+:ossimObject(src),
+theRootNode(src.theRootNode.valid()?(ossimXmlNode*)src.theRootNode->dup():(ossimXmlNode*)0),
+theXmlHeader(src.theXmlHeader),
+theFilename(src.theFilename)
+{
+   
 }
 
 ossimXmlDocument::~ossimXmlDocument()
@@ -204,7 +212,8 @@ void ossimXmlDocument::findNodes(const ossimString& arg_xpath,
    //
    // Check if absolute path:
    //
-   if (xpath[0] != XPATH_DELIM[0])
+   if (xpath[static_cast<std::string::size_type>(0)] !=
+       XPATH_DELIM[static_cast<std::string::size_type>(0)])
    {
       if (traceDebug())
       {

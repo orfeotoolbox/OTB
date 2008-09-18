@@ -12,8 +12,9 @@
 // Remapper to adjust hue, saturation and intensity.
 //
 //*************************************************************************
-// $Id: ossimHsiRemapper.cpp 9216 2006-06-30 14:20:58Z dburken $
+// $Id: ossimHsiRemapper.cpp 12980 2008-06-04 00:50:33Z dburken $
 
+#include <cstdlib>
 #include <ossim/imaging/ossimHsiRemapper.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNormRgbVector.h>

@@ -9,7 +9,7 @@
 //              ADRG file.
 //
 //********************************************************************
-// $Id: ossimAdrgTileSource.cpp 11286 2007-07-11 16:38:46Z dburken $
+// $Id: ossimAdrgTileSource.cpp 12988 2008-06-04 16:49:43Z gpotts $
 
 #include <iostream>
 
@@ -23,6 +23,8 @@
 #include <ossim/base/ossimEllipsoid.h>
 #include <ossim/base/ossimDatum.h>
 #include <ossim/base/ossimUnitTypeLut.h>
+#include <ossim/base/ossimStringProperty.h>
+#include <ossim/base/ossimContainerProperty.h>
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/projection/ossimEquDistCylProjection.h>
 #include <ossim/imaging/ossimTiffTileSource.h>
@@ -603,6 +605,22 @@ ossim_uint32 ossimAdrgTileSource::getImageTileWidth() const
 ossim_uint32 ossimAdrgTileSource::getImageTileHeight() const
 {
    return ADRG_TILE_HEIGHT;
+}
+
+ossimRefPtr<ossimProperty> ossimAdrgTileSource::getProperty(const ossimString& name)const
+{
+	if(name == "file_type")
+	{
+		return new ossimStringProperty(name, "ADRG");
+	}
+	
+	return ossimImageHandler::getProperty(name);
+}
+
+void ossimAdrgTileSource::getPropertyNames(std::vector<ossimString>& propertyNames)const
+{
+	ossimImageHandler::getPropertyNames(propertyNames);
+	propertyNames.push_back("file_type");
 }
 
 ossimString ossimAdrgTileSource::getShortName()const

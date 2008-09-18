@@ -9,13 +9,15 @@
 // Contains class implementaiton for the class "ossim LandsatTileSource".
 //
 //*******************************************************************
-//  $Id: ossimLandsatTileSource.cpp 10752 2007-04-23 16:50:08Z dburken $
+//  $Id: ossimLandsatTileSource.cpp 12988 2008-06-04 16:49:43Z gpotts $
 
 #include <ossim/imaging/ossimLandsatTileSource.h>
 #include <ossim/base/ossimDirectory.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimKeywordNames.h>
+#include <ossim/base/ossimStringProperty.h>
+#include <ossim/base/ossimContainerProperty.h>
 #include <ossim/support_data/ossimFfL7.h>
 #include <ossim/support_data/ossimFfL5.h>
 #include <ossim/projection/ossimLandSatModel.h>
@@ -213,10 +215,13 @@ void ossimLandsatTileSource::openHeader(const ossimFilename& file)
    if ( hdr.contains("hpn") || hdr.contains("hrf") || hdr.contains("htm") )
    {
       theFfHdr = new ossimFfL7(file.c_str());      
-   } else if (hdr.contains("header.dat"))
+   } 
+	else if (hdr.contains("header.dat"))
    {
       theFfHdr = new ossimFfL5(file.c_str());
-   } else {
+   } 
+	else 
+	{
       theFfHdr = NULL;
       return;
    }
@@ -373,7 +378,18 @@ ossimRefPtr<ossimProperty> ossimLandsatTileSource::getProperty(
 {
    ossimRefPtr<ossimProperty> result = 0;
 
-   if (theFfHdr)
+	if(name == "file_type")
+	{
+		if(ossimString(getFilename()).downcase().contains("header"))
+		{
+			return (new ossimStringProperty(name, "landsat5"));
+		}
+		else
+		{
+			return (new ossimStringProperty(name, "landsat7"));
+		}
+	}
+   else if (theFfHdr)
    {
       result = theFfHdr->getProperty(name);
    }
@@ -389,6 +405,7 @@ ossimRefPtr<ossimProperty> ossimLandsatTileSource::getProperty(
 void ossimLandsatTileSource::getPropertyNames(
    std::vector<ossimString>& propertyNames)const
 {
+	propertyNames.push_back("file_type");
    if (theFfHdr)
    {
       theFfHdr->getPropertyNames(propertyNames);

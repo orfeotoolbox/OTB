@@ -1,12 +1,11 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
-// LICENSE: LGPL  see top level LICENSE.txt
+// LICENSE: See top level LICENSE.txt
 //
-// Author: Garrett Potts (gpotts@imagelinks.com)
+// Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimContainerProperty.h 10174 2007-01-03 18:24:31Z gpotts $
+// $Id: ossimContainerProperty.h 12515 2008-02-27 18:16:15Z dburken $
 #ifndef ossimContainerProperty_HEADER
 #define ossimContainerProperty_HEADER
 #include <vector>
@@ -44,7 +43,9 @@ public:
    virtual ossim_uint32 getNumberOfProperties()const;
    virtual ossimRefPtr<ossimProperty> getProperty(ossim_uint32 idx);
 
-   virtual void getPropertyList(std::vector<ossimRefPtr<ossimProperty> >& children);
+   virtual void getPropertyList(
+      std::vector<ossimRefPtr<ossimProperty> >& children) const;
+   
    ossimRefPtr<ossimXmlNode> toXml()const;
 
 protected:

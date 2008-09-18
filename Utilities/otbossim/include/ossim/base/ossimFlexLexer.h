@@ -41,13 +41,14 @@
 /* #include <ossim/base/FlexLexer.h> */
 //	...
 
-#ifndef __FLEX_LEXER_H
+#ifndef OSSIM__FLEX_LEXER_H
 // Never included before - need to define base class.
-#define __FLEX_LEXER_H
+#define OSSIM__FLEX_LEXER_H
 #include <iostream>
 #include <ossim/base/ossimConstants.h>
 using namespace std;
 
+   
 extern "C++" {
 
 struct yy_buffer_state;
@@ -184,5 +185,4 @@ protected:
 	int yy_more_offset;
 	int yy_prev_more_offset;
 };
-
 #endif

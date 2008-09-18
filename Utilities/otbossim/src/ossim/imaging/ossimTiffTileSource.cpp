@@ -10,8 +10,9 @@
 // Contains class definition for TiffTileSource.
 //
 //*******************************************************************
-//  $Id: ossimTiffTileSource.cpp 12200 2007-12-16 14:18:52Z dburken $
+//  $Id: ossimTiffTileSource.cpp 12988 2008-06-04 16:49:43Z gpotts $
 
+#include <cstdlib> /* for abs(int) */
 #include <ossim/imaging/ossimTiffTileSource.h>
 #include <ossim/support_data/ossimGeoTiff.h>
 #include <ossim/base/ossimConstants.h>
@@ -24,6 +25,7 @@
 #include <ossim/base/ossimEllipsoid.h>
 #include <ossim/base/ossimDatum.h>
 #include <ossim/base/ossimBooleanProperty.h>
+#include <ossim/base/ossimStringProperty.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/projection/ossimEquDistCylProjection.h>
 #include <ossim/projection/ossimAlbersProjection.h>
@@ -1869,14 +1871,18 @@ ossimRefPtr<ossimProperty> ossimTiffTileSource::getProperty(const ossimString& n
       property->setFullRefreshBit();
       return property;
    }
-   
+   else if(name == "file_type")
+	{
+		return new ossimStringProperty(name, "TIFF");
+	}
+	
    return ossimImageHandler::getProperty(name);
 }
 
 void ossimTiffTileSource::getPropertyNames(std::vector<ossimString>& propertyNames)const
 {
    ossimImageHandler::getPropertyNames(propertyNames);
-
+	propertyNames.push_back("file_type");
    // Assuming first directory...
    if(isColorMapped())
    {

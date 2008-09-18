@@ -13,7 +13,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimEllipsoid.cpp 11347 2007-07-23 13:01:59Z gpotts $
+//  $Id: ossimEllipsoid.cpp 12755 2008-04-29 13:33:56Z dburken $
 
 #include <ossim/base/ossimEllipsoid.h>
 
@@ -21,6 +21,8 @@
 #include <ossim/base/ossimEcefPoint.h>
 #include <ossim/base/ossimEcefVector.h>
 #include <ossim/base/ossimKeywordNames.h>
+#include <ossim/base/ossimKeywordlist.h>
+#include <ossim/base/ossimMatrix4x4.h>
 
 //***
 // Define Trace flags for use within this file:

@@ -525,6 +525,47 @@ time_t ossimLocalTm::getEpoc()const
    return mktime(&temp);
 }
 
+void ossimLocalTm::addSeconds(ossim_float64 n)
+{
+   // use julian to help in this addition.  Julian is in days
+   setDateFromJulian(getJulian() + (n/86400.0));
+}
+
+void ossimLocalTm::addMinutes(ossim_float64 n)
+{
+   setDateFromJulian(getJulian() + (n/1440.0));
+}
+
+void ossimLocalTm::addHours(ossim_float64 n)
+{
+   setDateFromJulian(getJulian() + (n/24.0));
+}
+
+void ossimLocalTm::addDays(ossim_float64 n)
+{
+   setDateFromJulian(getJulian() + n);
+}
+
+ossim_float64 ossimLocalTm::deltaInSeconds(const ossimLocalTm& d)const
+{
+   return (getJulian()-d.getJulian())*86400.0;
+}
+
+ossim_float64 ossimLocalTm::deltaInMinutes(const ossimLocalTm& d)const
+{
+   return (getJulian()-d.getJulian())*1440.0;
+}
+
+ossim_float64 ossimLocalTm::delatInHours(const ossimLocalTm& d)const
+{
+   return (getJulian()-d.getJulian())*24;
+}
+
+ossim_float64 ossimLocalTm::deltaInDays(const ossimLocalTm& d)const
+{
+   return (getJulian()-d.getJulian());
+}
+
 void ossimLocalTm::setTimeNoAdjustmentGivenEpoc(time_t ticks)
 {
    *this = *gmtime(&ticks);

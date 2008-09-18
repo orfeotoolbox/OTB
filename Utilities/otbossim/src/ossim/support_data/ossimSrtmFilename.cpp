@@ -126,11 +126,11 @@ bool ossimSrtmFilename::setFilename(const ossimFilename& srtmFilename)
       theSouthwestLatitude = ossimString(f.begin()+1,
                                          f.begin()+3).toDouble();//s.toDouble();
       // Get the latitude.
-      if (f[0] == 'S')
+      if (f[static_cast<std::string::size_type>(0)] == 'S')
       {
          theSouthwestLatitude *= -1;
       }
-      else if (f[0] != 'N')
+      else if (f[static_cast<std::string::size_type>(0)] != 'N')
       {
          return false; // Must be either 's' or 'n'.
       }
@@ -141,11 +141,11 @@ bool ossimSrtmFilename::setFilename(const ossimFilename& srtmFilename)
 //       s.push_back(f[6]);
       theSouthwestLongitude = ossimString(f.begin()+4,
                                           f.begin()+7).toDouble();//s.toDouble();
-      if (f[3] == 'W')
+      if (f[static_cast<std::string::size_type>(3)] == 'W')
       {
       theSouthwestLongitude *= -1;
       }
-      else if (f[3] != 'E')
+      else if (f[static_cast<std::string::size_type>(3)] != 'E')
       {
          return false; // Must be either 'e' or 'w'.
       }
@@ -159,11 +159,11 @@ bool ossimSrtmFilename::setFilename(const ossimFilename& srtmFilename)
 //       s.push_back(f[3]);
       theSouthwestLongitude =  ossimString(f.begin()+1,
                                            f.begin()+4).toDouble();//s.toDouble();
-      if (f[0] == 'W')
+      if (f[static_cast<std::string::size_type>(0)] == 'W')
       {
       theSouthwestLongitude *= -1;
       }
-      else if (f[0] != 'E')
+      else if (f[static_cast<std::string::size_type>(0)] != 'E')
       {
          return false; // Must be either 'e' or 'w'.
       }
@@ -174,11 +174,11 @@ bool ossimSrtmFilename::setFilename(const ossimFilename& srtmFilename)
       theSouthwestLatitude = ossimString(f.begin()+5,
                                          f.begin()+7).toDouble();//s.toDouble();
       // Get the latitude.
-      if (f[4] == 'S')
+      if (f[static_cast<std::string::size_type>(4)] == 'S')
       {
          theSouthwestLatitude *= -1;
       }
-      else if (f[4] != 'N')
+      else if (f[static_cast<std::string::size_type>(4)] != 'N')
       {
          return false; // Must be either 's' or 'n'.
       }

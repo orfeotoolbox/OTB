@@ -16,7 +16,6 @@
 #pragma interface
 #endif
 
-#include <math.h>
 #include <ossim/kbool/booleng.h>
 
 #include <ossim/kbool/lpoint.h>

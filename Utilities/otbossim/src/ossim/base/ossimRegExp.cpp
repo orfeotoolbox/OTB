@@ -115,8 +115,7 @@
 //      the line.  It would match "drepa qrepb" in "rep drepa qrepb".
 //
 
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstring>
 #include <ossim/base/ossimRegExp.h>
 
 // ossimRegExp -- Copies the given regular expression.
@@ -461,7 +460,7 @@ void ossimRegExp::compile (const char* exp) {
 	    for (; scan != NULL; scan = regnext(scan))
 		if (OP(scan) == EXACTLY && strlen(OPERAND(scan)) >= len) {
 		    longest = OPERAND(scan);
-		    len = strlen(OPERAND(scan));
+		    len = (unsigned long)strlen(OPERAND(scan));
 		}
 	    this->regmust = longest;
 	    this->regmlen = len;
@@ -760,7 +759,7 @@ char* ossimRegExp::regatom (int *flagp) {
 		register char   ender;
 
 		regparse--;
-		len = strcspn(regparse, META);
+		len = (int)strcspn(regparse, META);
 		if (len <= 0) {
 		    //RAISE Error, SYM(ossimRegExp), SYM(Internal_Error),
                     printf ("ossimRegExp::compile(): Internal error.\n");
@@ -1050,7 +1049,7 @@ int ossimRegExp::regmatch (const char* prog) {
 		    // Inline the first character, for speed.
 		    if (*opnd != *reginput)
 			return (0);
-		    len = strlen(opnd);
+		    len = (int)strlen(opnd);
 		    if (len > 1 && strncmp(opnd, reginput, len) != 0)
 			return (0);
 		    reginput += len;
@@ -1209,7 +1208,7 @@ int ossimRegExp::regrepeat (const char* p) {
     opnd = OPERAND(p);
     switch (OP(p)) {
 	case ANY:
-	    count = strlen(scan);
+	    count = (int)strlen(scan);
 	    scan += count;
 	    break;
 	case EXACTLY:

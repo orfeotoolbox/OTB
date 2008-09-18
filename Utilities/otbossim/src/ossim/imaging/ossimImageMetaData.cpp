@@ -10,7 +10,7 @@
 // Contains class definition for ossimImageMetaData.
 // 
 //*******************************************************************
-//  $Id: ossimImageMetaData.cpp 11955 2007-10-31 16:10:22Z gpotts $
+//  $Id: ossimImageMetaData.cpp 12246 2008-01-03 19:41:35Z dburken $
 #include <vector>
 #include <algorithm>
 #include <ossim/imaging/ossimImageMetaData.h>
@@ -220,7 +220,12 @@ bool ossimImageMetaData::loadState(const ossimKeywordlist& kwl,
 void ossimImageMetaData::loadBandInfo(const ossimKeywordlist& kwl,
                                       const char* prefix)
 {
-   ossimString copyPrefix = prefix;
+   ossimString copyPrefix;
+   if (prefix)
+   {
+      copyPrefix = prefix;
+   }
+   
    ossimString regExpression =  ossimString("^(") + copyPrefix + "band[0-9]+.)";
    std::vector<ossimString> keys =
       kwl.getSubstringKeyList( regExpression );

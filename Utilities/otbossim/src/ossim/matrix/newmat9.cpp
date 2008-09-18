@@ -38,7 +38,8 @@ ostream& operator<<(ostream& s, const BaseMatrix& X)
 ostream& operator<<(ostream& s, const GeneralMatrix& X)
 {
    MatrixRow mr((GeneralMatrix*)&X, LoadOnEntry);
-   int w = s.width();  int nr = X.Nrows();  ios_format_flags f = s.flags();
+   int w = s.width();  int nr = X.Nrows();
+   std::ios_base::fmtflags f = s.flags();
    s.setf(ios::fixed, ios::floatfield);
    for (int i=1; i<=nr; i++)
    {
@@ -49,7 +50,8 @@ ostream& operator<<(ostream& s, const GeneralMatrix& X)
 //      while (storage--) s << setw(w) << *store++ << " ";
       mr.Next();  s << "\n";
    }
-   s << flush;  s.flags(f); return s;
+   s << flush;  s.flags(f);
+   return s;
 }
 
 // include this stuff if you are using an old version of G++

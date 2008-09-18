@@ -9,7 +9,7 @@
 // Base class for all map projections.
 // 
 //*******************************************************************
-//  $Id: ossimMapProjection.h 11805 2007-10-05 14:54:28Z dburken $
+//  $Id: ossimMapProjection.h 12517 2008-02-28 15:21:44Z dburken $
 
 #ifndef ossimMapProjection_HEADER
 #define ossimMapProjection_HEADER
@@ -149,15 +149,31 @@ public:
     */
    virtual void setEllipsoid(const ossimEllipsoid& ellipsoid);
    virtual void setAB(double a, double b);
+
+   /**
+    * Sets theDatum to datum.
+    * Sets theEllipsiod to datum's ellipsiod.
+    * Calls update().
+    */
    virtual void setDatum(const ossimDatum* datum);
+
+   /**
+    * Sets theOrigin to origin.
+    * Sets theDatum to origin's datum.
+    * Sets theEllipsiod to datum's ellipsiod.
+    * Calls update().
+    *
+    * @param origin The projection origin.
+    */
    virtual void setOrigin(const ossimGpt& origin);
+   
    virtual void setMetersPerPixel(const ossimDpt& gsd);
    virtual void setDecimalDegreesPerPixel(const ossimDpt& gsd);
    virtual void setUlEastingNorthing(const  ossimDpt& ulEastingNorthing);
    virtual void setUlGpt(const  ossimGpt& ulGpt);
    virtual void assign( const  ossimProjection &aProjection);
    
-    /**
+   /**
     * Method to save the state of an object to a keyword list.
     * Return true if ok or false on error.
     */

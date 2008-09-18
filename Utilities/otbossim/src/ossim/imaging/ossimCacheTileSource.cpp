@@ -7,11 +7,10 @@
 // Description:  ossimCacheTileSource
 // 
 //*******************************************************************
-//  $Id: ossimCacheTileSource.cpp 11694 2007-09-09 21:55:16Z dburken $
+//  $Id: ossimCacheTileSource.cpp 12623 2008-04-07 14:10:08Z gpotts $
 
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNotify.h>
-#include <ossim/base/ossimScopedLock.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimStringProperty.h>
 #include <ossim/imaging/ossimCacheTileSource.h>
@@ -34,9 +33,7 @@ ossimCacheTileSource::ossimCacheTileSource()
      theCachingEnabled(true),
      theEventProgressFlag(false),
      theCacheRLevel(0),
-     theBoundingRect(),
-     theMutex()
-     
+     theBoundingRect()     
 {
    theBoundingRect.makeNan();
    theFixedTileSize = ossimAppFixedTileCache::instance()->getTileSize(theCacheId);
@@ -277,11 +274,13 @@ ossimRefPtr<ossimImageData> ossimCacheTileSource::fillTile(
 
 ossim_uint32 ossimCacheTileSource::getTileWidth() const
 {
+	OpenThreads::ScopedLock<OpenThreads::Mutex> scopeLock(theMutex);
    return theFixedTileSize.x;
 }
 
 ossim_uint32 ossimCacheTileSource::getTileHeight() const
 {
+	OpenThreads::ScopedLock<OpenThreads::Mutex> scopeLock(theMutex);
    return theFixedTileSize.y;  
 }
 
@@ -332,7 +331,7 @@ ossimRefPtr<ossimProperty> ossimCacheTileSource::getProperty(
    const ossimString& name)const
 {
    // Lock for the length of this method.
-   ossimScopedLock<ossimMutex> scopeLock(theMutex);
+	OpenThreads::ScopedLock<OpenThreads::Mutex> scopeLock(theMutex);
    
    if (name == TILE_SIZE_XY_KW)
    {

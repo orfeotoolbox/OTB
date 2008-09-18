@@ -27,6 +27,8 @@
 //  Initial delivery (okramer@imagelinks.com)
 //
 
+#include <ostream>
+
 #include <ossim/base/ossimEcefRay.h>
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimDatum.h>
@@ -96,3 +98,19 @@ ossimEcefPoint ossimEcefRay::intersectAboveEarthEllipsoid
 
    return solution;
 }
+
+std::ostream& ossimEcefRay::print(std::ostream& os) const
+{
+   os << "(ossimEcefRay)\n"
+      << "   theOrigin    = " << theOrigin
+      << "\n   theDirection = " << theDirection << std::endl;
+   return os;
+}
+
+std::ostream& operator<<(std::ostream& os ,
+                         const ossimEcefRay& instance)
+{
+   return instance.print(os);
+}
+
+

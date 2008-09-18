@@ -9,13 +9,14 @@
 // Contains class declaration for dpt3d
 // Used to represent a 3d double point containing an x, y and z data member.
 //*******************************************************************
-//  $Id: ossimDpt3d.h 11856 2007-10-12 15:21:17Z gpotts $
+//  $Id: ossimDpt3d.h 12619 2008-04-06 18:43:45Z dburken $
 
 #ifndef ossimDpt3d_HEADER
 #define ossimDpt3d_HEADER
+
+#include <cmath>
 #include <iostream>
 #include <iomanip>
-#include <math.h>
 
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimDpt.h>
@@ -57,7 +58,7 @@ public:
     * METHOD: length()
     * Returns the RSS of the components.
     */
-   double length() const { return sqrt(x*x + y*y + z*z); }
+   double length() const { return std::sqrt(x*x + y*y + z*z); }
    double length2() const { return x*x + y*y + z*z; }
    
    //***

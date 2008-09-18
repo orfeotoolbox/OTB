@@ -44,11 +44,16 @@ public:
       kwl.add(prefix, theImageGeometry);
       return (theImageGeometry.getSize() > 0);
    }
-   
+	virtual ossim_uint32 getNumberOfDecimationLevels() const
+	{
+		return 1;
+	}
+  
 protected:
    ossimRefPtr<ossimImageData> theImage;
    ossimRefPtr<ossimImageData> theResult;
    ossimKeywordlist theImageGeometry;
+	ossimIrect theBoundingRect;
 TYPE_DATA
 };
 

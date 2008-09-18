@@ -12,18 +12,19 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimLsrSpace.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimLsrSpace.h 12790 2008-05-05 13:41:33Z dburken $
 
 #ifndef ossimLsrSpace_HEADER
 #define ossimLsrSpace_HEADER
 
-#include <stdio.h>
 #include <ossim/base/ossimEcefPoint.h>
-#include <ossim/base/ossimEcefVector.h>
+  // #include <ossim/base/ossimEcefVector.h>
 #include <ossim/base/ossimMatrix3x3.h>
 #include <ossim/base/ossimNotifyContext.h>
 
-class OSSIMDLLEXPORT ossimGpt;
+class ossimGpt;
+class ossimEcefVector;
+
 
 //*****************************************************************************
 //  CLASS: ossimLsrSpace

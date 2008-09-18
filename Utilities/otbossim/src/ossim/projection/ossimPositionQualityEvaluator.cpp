@@ -7,9 +7,9 @@
 // Description: Base class for position quality evaluation operations.
 //
 //----------------------------------------------------------------------------
+// $Id$
 
 #include <ossim/projection/ossimPositionQualityEvaluator.h>
-#include <ossim/elevation/ossimHgtRef.h>
 #include <ossim/base/ossimDatum.h>
 #include <ossim/base/ossimEllipsoid.h>
 #include <ossim/base/ossimDms.h>
@@ -215,8 +215,6 @@ ossimPositionQualityEvaluator(const ossimEcefPoint&      pt,
 //*****************************************************************************
 ossimPositionQualityEvaluator::~ossimPositionQualityEvaluator()
 {
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG)
-      << "DEBUG: ~ossimPositionQualityEvaluator(): entering..." << std::endl;
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG)
       << "DEBUG: ~ossimPositionQualityEvaluator(): returning..." << std::endl;
 }
@@ -523,7 +521,7 @@ bool ossimPositionQualityEvaluator::decomposeMatrix()
       {
          // Convert "ccw from x-axis" to "cw from y-axis(N)"
          double rotAngle = atan3(sin2theta, cos2theta)/2.0;
-         theEllipse.theAzimAngle = -(rotAngle - M_PI/2.0);
+         theEllipse.theAzimAngle = M_PI/2.0 - rotAngle;
          if (theEllipse.theAzimAngle < 0.0)
             theEllipse.theAzimAngle += TWO_PI;
       }
@@ -555,9 +553,9 @@ constructMatrix(const ossim_float64&       errBiasLOS,
    if (eTot == 0.0)
       eTot = 0.001;
    
-   // Set the LOS vector
+   // Set the LOS unit vector
    double elC = elevAngleLOS;
-   double azC = azimAngleLOS;
+   double azC = azimAngleLOS;   
    ossimColumnVector3d  LOS(sin(azC)*cos(elC), cos(azC)*cos(elC), sin(elC));
 
    if (traceDebug())
@@ -567,6 +565,8 @@ constructMatrix(const ossim_float64&       errBiasLOS,
          <<"  tEl,tAz: "<<elC*DEG_PER_RAD<<"  "<<azC*DEG_PER_RAD<<endl;
       ossimNotify(ossimNotifyLevel_DEBUG)
          <<"  LOS:     "<<LOS<<endl;
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         <<"  eTot:    "<<eTot<<endl;
    }
 
    
@@ -576,12 +576,12 @@ constructMatrix(const ossim_float64&       errBiasLOS,
    ossimColumnVector3d tSlopeN = surfN.unit();
    if (traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG) <<"   tSlopeN: "<<tSlopeN<<endl;
+      ossimNotify(ossimNotifyLevel_DEBUG) <<"  tSlopeN: "<<tSlopeN<<endl;
    }
    
    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    // Compute normal to plane containing LOS and terrain normal
-   //   this is direction of minor axis
+   //   this is direction of minor axis unless geometry causes swap
    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    ossimColumnVector3d pMinU(0,1,0);
    ossimColumnVector3d pMinAxis = LOS.cross(tSlopeN);
@@ -589,221 +589,179 @@ constructMatrix(const ossim_float64&       errBiasLOS,
    {
       pMinU = pMinAxis.unit();
    }
-   
    if (traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG) <<"   pMinU: "<<pMinU<<endl;
+      ossimNotify(ossimNotifyLevel_DEBUG) <<"  pMinU: "<<pMinU<<endl;
    }
    
    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   // Compute major axis direction from cross product of
-   // minor axis vector and terrain slope normal
+   // Compute nominal major axis direction from cross 
+   // product of minor axis vector and terrain slope normal
    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    ossimColumnVector3d pMaxU = (tSlopeN.cross(pMinU)).unit();
    if (traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG) <<"   pMaxU: "<<pMaxU<<endl;
+      ossimNotify(ossimNotifyLevel_DEBUG) <<"  pMaxU: "<<pMaxU<<endl;
    }
    
-   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   // Compute angles related to terrain slope
-   //    [1] slope normal -> LOS
-   //    [2] LOS -> slope plane
-   //    [3] slope plane
-   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   // Compute angle between slope normal and LOS
-   ossimColumnVector3d  LOSh = LOS;
-   LOSh[2] = 0.0;
-   double tSlopeNormElev;
-   if (LOSh.magnitude() > DBL_EPSILON)
-   {
-      // Case 1: not nadir
-      tSlopeNormElev = acos(tSlopeN.dot(LOSh.unit()));
-   }
-   else
-   {
-      // Case 2: nadir, so use horizontal projection of tSlopeN instead
-      ossimColumnVector3d  tSlopeNh = tSlopeN;
-      tSlopeNh[2] = 0.0;
-      if (tSlopeNh.magnitude() > DBL_EPSILON)
-      {
-         // Case 3: nadir, not flat surface
-         tSlopeNormElev = acos(tSlopeN.dot(tSlopeNh.unit()));
-      }
-      else
-      {
-         // Case 4: nadir and flat surface
-         tSlopeNormElev = M_PI/2.0;
-      }
-   }
-   double tSlopeLOSAngleDelta = tSlopeNormElev - elC;
-
-   if (traceDebug())
-   {
-        ossimNotify(ossimNotifyLevel_DEBUG)
-         <<"   tSlopeNormElev:            "<<tSlopeNormElev*DEG_PER_RAD<<endl;
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         <<"   tSlopeNorm - LOSAngle ang: "<<tSlopeLOSAngleDelta*DEG_PER_RAD<<endl;
-   }
 
    // Compute elevation angle relative to terrain plane and check for positive
-   double elevAngTerr = M_PI/2.0 - tSlopeLOSAngleDelta;
+   double elevAngTerr = acos(pMaxU.dot(LOS));
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)<<"  elev angle rel to surface: "
+      <<elevAngTerr*DEG_PER_RAD<<endl;
+   }
    
    if (elevAngTerr > 0.0)
    {
-
-      // Terrain slope angle
-      double tSlope = elevAngTerr - elC;
-
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            <<"   terrain-referenced elev ang: "<<elevAngTerr*DEG_PER_RAD<<endl;
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            <<"   tSlope:  "<<tSlope*DEG_PER_RAD<<endl;
-      }
-
-      // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      // Project axes from terrain to horizontal  
-      // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      ossimColumnVector3d prjvc1 = vperp(pMaxU, lsrNorm);
-      ossimColumnVector3d prjvc2 = vperp(pMinU, lsrNorm);
-
-      double angMax = acos(prjvc1.unit().dot(pMaxU));
-      double angMin = acos(prjvc2.unit().dot(pMinU));
+      // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      // Compute the LOS error the surface plane  
+      // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      double planeErrorL = eTot/sin(elevAngTerr);
       
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            <<" angMax, angMin: "<<angMax*DEG_PER_RAD
-            <<" "<<angMin*DEG_PER_RAD<<endl;
-      }
-
-      prjvc1 = prjvc1 * eTot/sin(elevAngTerr) * cos(angMax);
-      prjvc2 = prjvc2 * eTot                  * cos(angMin);
-      double p1 = prjvc1.magnitude();
-      double p2 = prjvc2.magnitude();
+      // ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      // Project axes to horizontal  
+      // ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      ossimColumnVector3d pL = vperp(pMaxU, lsrNorm);
+      ossimColumnVector3d pN = vperp(pMinU, lsrNorm);
+      
+      ossimColumnVector3d eL = pL * planeErrorL;
+      ossimColumnVector3d eN = pN * eTot;
+      double magL = eL.magnitude();
+      double magN = eN.magnitude();
 
       // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       // Compute vertical component due to intersection geometry 
       // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      double vComp = p1 * tan(tSlope);
+      ossimColumnVector3d pV = pMaxU - pL;
+      ossimColumnVector3d eV = pV * planeErrorL;
+      double magV = eV.magnitude();
+      
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+         <<"  Projected horizontal/vertical components...."<<endl
+         <<"   pL: "<<pL<<"  magL: "<<magL<<endl
+         <<"   pN: "<<pN<<"  magN: "<<magN<<endl
+         <<"   pV: "<<pV<<"  magV: "<<magV<<endl;
+      }
+
+
 
 
       // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       // Now compute the contributions of the surface uncertainty
       // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+      // Terrain slope angle
+      double tSlope = acos(tSlopeN.dot(lsrNorm));
+
       // Vertical & horizontal components from surface covariance matrix
-      double vSig=sqrt(surfCovMat(3,3));
-      double hSig=sqrt((surfCovMat(1,1)+surfCovMat(2,2))/2.0) * tan(tSlope);
+      double surfSigV = sqrt(surfCovMat(3,3));
+      double surfSigH = sqrt((surfCovMat(1,1)+surfCovMat(2,2))/2.0);
+      double surfSigV_h = surfSigH * tan(tSlope);
 
       // Effective total vertical error component includes
       // horizontal uncertainty induced by local slope
-      double vSigTot = sqrt(vSig*vSig + hSig*hSig);
+      double vSigTot = sqrt(surfSigV*surfSigV + surfSigV_h*surfSigV_h);
+      
+      // Project to surface normal direction to bring it into the L-surfN plane
+      ossimColumnVector3d s_surfN = (lsrNorm.dot(tSlopeN))*tSlopeN;
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG) <<" Surface uncertainty...."<<endl;
+         ossimNotify(ossimNotifyLevel_DEBUG) <<"  tSlope angle: "<<tSlope*DEG_PER_RAD<<endl;
+         ossimNotify(ossimNotifyLevel_DEBUG) <<"  s_surfN(unit): "<<s_surfN<<endl;
+      }
+      s_surfN = s_surfN * vSigTot;
+      double sigTn = s_surfN.magnitude();
+      
+      // Compute corresponding error in LOS direction
+      double sigVl = sigTn/sin(elevAngTerr);
 
       // Resolve total vertical error to components based on intersection geometry
-      double vSigH = 0.0;
-      double vSigV = 0.0;
-      if (cos(tSlopeLOSAngleDelta) != 0.0)
+      ossimColumnVector3d vSigHvec = sigVl * vperp(LOS, lsrNorm);
+      ossimColumnVector3d vSigVvec = sigVl * (LOS.dot(lsrNorm))*lsrNorm;
+      double vSigH = vSigHvec.magnitude();
+      double vSigV = vSigVvec.magnitude();
+      if (traceDebug())
       {
-         vSigH = vSigTot*cos(tSlope)*cos(elC) / cos(tSlopeLOSAngleDelta);
-         if (vSigH > 0.001)
-         {
-            vSigV = vSigH * tan(elC);
-         }
-         else
-         {
-            vSigV = vSigTot;
-         }
+         ossimNotify(ossimNotifyLevel_DEBUG)
+         <<" s_surfN: "<<s_surfN
+         <<"\n vSigHvec: "<<vSigHvec
+         <<"\n vSigVvec: "<<vSigVvec<<endl;
       }
-      else
-      {
-         // Bad terrain geometry case
-         constructOK = false;
-      }
+      
 
       if (traceDebug())
       {
          ossimNotify(ossimNotifyLevel_DEBUG)<<"----------------------------"<<endl;
-         ossimNotify(ossimNotifyLevel_DEBUG)<<"     vSig: "<<vSig<<endl;
-         ossimNotify(ossimNotifyLevel_DEBUG)<<"     hSig: "<<hSig<<endl;
+         ossimNotify(ossimNotifyLevel_DEBUG)<<" surfSigH: "<<surfSigH<<endl;
+         ossimNotify(ossimNotifyLevel_DEBUG)<<" surfSigV: "<<surfSigV<<endl;
          ossimNotify(ossimNotifyLevel_DEBUG)<<"  vSigTot: "<<vSigTot<<endl;
          ossimNotify(ossimNotifyLevel_DEBUG)<<"    vSigH: "<<vSigH<<endl;
          ossimNotify(ossimNotifyLevel_DEBUG)<<"    vSigV: "<<vSigV<<endl;
          ossimNotify(ossimNotifyLevel_DEBUG)<<"----------------------------"<<endl;
       }
 
-      if (constructOK)
+
+
+      // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      // Add vSigH contribution (vSigH in L-surfN plane)
+      // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      magL = sqrt(magL*magL + vSigH*vSigH);
+
+      // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      // Compute the axes magnitudes & rotation angle
+      //    These parameters represent the horizontal error
+      //    due to acquisition geometry & terrain slope
+      // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      double theta;
+      double pMax, pMin;
+      if (magL > magN)
       {
-
-         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         // Add vSigH contribution (vSigH in LOS plane)
-         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         p1 = sqrt(p1*p1 + vSigH*vSigH);
-
-         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         // Compute the axes magnitudes & rotation angle
-         //    These parameters represent the horizontal error
-         //    due to acquisition geometry & terrain slope
-         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         double theta;
-         double pMax, pMin;
-         if (p1 > p2)
-         {
-            pMax = p1;
-            pMin = p2;
-            theta = atan3(prjvc1[1],prjvc1[0]);
-         }
-         else
-         {
-            pMax = p2;
-            pMin = p1;
-            theta = atan3(prjvc2[1],prjvc2[0]);
-         }
-
-         if (traceDebug())
-         {
-            ossimNotify(ossimNotifyLevel_DEBUG)
-               <<" p1,p2,pMax, pMin: "<<p1<<"  "<<p2<<"  "<<pMax<<"  "<<pMin<<endl;
-            ossimNotify(ossimNotifyLevel_DEBUG)
-               <<" prjvc1: "<<prjvc1<<"\n   unit: "<<prjvc1.unit()<<endl;
-            ossimNotify(ossimNotifyLevel_DEBUG)
-               <<" prjvc2: "<<prjvc2<<"\n   unit: "<<prjvc2.unit()<<endl;
-            ossimNotify(ossimNotifyLevel_DEBUG)<<"  theta: "<<theta*DEG_PER_RAD<<endl;
-         }
-
-         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         // Form final covariance matrix from axes & rotation angle
-         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         NEWMAT::Matrix Cov(2,2);
-         NEWMAT::Matrix Vcomp(2,2);
-         NEWMAT::DiagonalMatrix Dcomp(2);
-         
-         Dcomp(1,1) = pMax*pMax;
-         Dcomp(2,2) = pMin*pMin;
-         Vcomp(1,1) = cos(theta);
-         Vcomp(2,1) = sin(theta);
-         Vcomp(1,2) = Vcomp(2,1);
-         Vcomp(2,2) =-Vcomp(1,1);
-         Cov = Vcomp*Dcomp*Vcomp.t();
-
-         // Load full 3X3 matrix in local frame
-         NEWMAT::Matrix covMat(3,3);
-         covMat(1,1) = Cov(1,1);   
-         covMat(1,2) = Cov(1,2);   
-         covMat(1,3) = 0.0;   
-         covMat(2,1) = Cov(2,1);
-         covMat(2,2) = Cov(2,2);   
-         covMat(2,3) = 0.0;
-         covMat(3,1) = covMat(1,3);
-         covMat(3,2) = covMat(2,3);
-         covMat(3,3) = vComp*vComp + vSigV*vSigV;
-
-         // Save the matrix in local frame
-         theCovMat = covMat;
-
+         pMax = magL;
+         pMin = magN;
+         theta = atan3(pL[1],pL[0]);
       }
+      else
+      {
+         pMax = magN;
+         pMin = magL;
+         theta = atan3(pN[1],pN[0]);
+      }
+
+
+      // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      // Form final covariance matrix from axes & rotation angle
+      // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      NEWMAT::Matrix Cov(2,2);
+      NEWMAT::Matrix Vcomp(2,2);
+      NEWMAT::DiagonalMatrix Dcomp(2);
+      
+      Dcomp(1,1) = pMax*pMax;
+      Dcomp(2,2) = pMin*pMin;
+      Vcomp(1,1) = cos(theta);
+      Vcomp(2,1) = sin(theta);
+      Vcomp(1,2) =-Vcomp(2,1);
+      Vcomp(2,2) = Vcomp(1,1);
+      Cov = Vcomp*Dcomp*Vcomp.t();
+
+      // Load full 3X3 matrix in local frame
+      NEWMAT::Matrix covMat(3,3);
+      covMat(1,1) = Cov(1,1);   
+      covMat(1,2) = Cov(1,2);   
+      covMat(1,3) = 0.0;   
+      covMat(2,1) = Cov(2,1);
+      covMat(2,2) = Cov(2,2);   
+      covMat(2,3) = 0.0;
+      covMat(3,1) = covMat(1,3);
+      covMat(3,2) = covMat(2,3);
+      covMat(3,3) = magV*magV + vSigV*vSigV;
+
+      // Save the matrix in local frame
+      theCovMat = covMat;
       
    }  //end if (elevAngTerr > 0.0)
    else
@@ -856,12 +814,17 @@ double ossimPositionQualityEvaluator::compute90PCE() const
                           theEllipse.theSemiMajorAxis;
    ossim_uint32 ndx = int(floor(pRatio*nMultiplier));
    ossim_float64 alpha;
-   if (ndx == nTableEntries)
+
+   if (ndx == nMultiplier)
+   {
       alpha = table90[ndx];
+   }
    else
-      alpha = (pRatio-float(ndx/nMultiplier))*
-              (table90[ndx+1]-table90[ndx])+table90[ndx];
-   
+   {
+      ossim_float64 fac = (pRatio-(ossim_float64)ndx/(ossim_float64)nMultiplier) / 0.05;
+      alpha = fac * (table90[ndx+1]-table90[ndx]) + table90[ndx];
+   }
+              
    ossim_float64 CE90 = alpha * theEllipse.theSemiMajorAxis;
    
    return CE90;
@@ -1007,9 +970,6 @@ computeElevAzim(const pqeRPCModel     rpc,
 ossimColumnVector3d ossimPositionQualityEvaluator::
 vperp(const ossimColumnVector3d& v1, const ossimColumnVector3d& v2) const
 {
-   
-   ossimColumnVector3d t = v1;
-   ossimColumnVector3d r = v2;
    
    double scale = v1.dot(v2)/v2.dot(v2);
    ossimColumnVector3d v = v2*scale;

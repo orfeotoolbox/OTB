@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimSharedPluginRegistry.cpp 9194 2006-06-26 17:32:31Z gpotts $
+// $Id: ossimSharedPluginRegistry.cpp 13070 2008-06-23 20:56:50Z dburken $
 #include <algorithm>
 #include <ossim/plugin/ossimSharedPluginRegistry.h>
 #include <ossim/base/ossimConstants.h>
@@ -37,7 +37,7 @@ ossimSharedPluginRegistry* ossimSharedPluginRegistry::instance()
    return theInstance;
 }
 
-bool ossimSharedPluginRegistry::registerPlugin(const ossimFilename& filename)
+bool ossimSharedPluginRegistry::registerPlugin(const ossimFilename& filename, bool insertFrontFlag)
 {
    bool result = false;
    if(!getPlugin(filename))
@@ -48,7 +48,14 @@ bool ossimSharedPluginRegistry::registerPlugin(const ossimFilename& filename)
          if(lib->getSymbol("ossimSharedLibraryInitialize"))
          {
             lib->initialize();
-            theLibraryList.push_back(lib);
+            if(!insertFrontFlag)
+            {
+               theLibraryList.push_back(lib);
+            }
+            else
+            {
+               theLibraryList.insert(theLibraryList.begin(), lib);
+            }
             result = true;
          }
          else
@@ -81,31 +88,32 @@ bool ossimSharedPluginRegistry::registerPlugin(const ossimFilename& filename)
 bool ossimSharedPluginRegistry::unregisterPlugin(int idx)
 {
    ossimPluginLibrary* lib = getPlugin(idx);
-   bool result = false;
-   if(lib)
-   {
-      std::vector<ossimRefPtr<ossimPluginLibrary> >::iterator iter = std::find(theLibraryList.begin(),
-                                                                   theLibraryList.end(),
-                                                                   lib);
-
-      if(iter != theLibraryList.end())
-      {
-         (*iter)->finalize();
-         theLibraryList.erase(iter);
-         result  = true;
-      }
-   }
    
-   return result;
+   return unregisterPlugin(lib);
+}
+
+bool ossimSharedPluginRegistry::unregisterPlugin(ossimPluginLibrary* library)
+{
+   std::vector<ossimRefPtr<ossimPluginLibrary> >::iterator iter = theLibraryList.begin();
+   while(iter!=theLibraryList.end())
+   {
+      if((*iter).get() == library)
+      {
+         theLibraryList.erase(iter);
+         return true;
+      }
+      ++iter;
+   }
+   return false;
 }
 
 const ossimPluginLibrary* ossimSharedPluginRegistry::getPlugin(const ossimFilename& filename)const
 {
    ossim_uint32 idx = 0;
-
+   ossimFilename fileOnly = filename.file();
    for(idx = 0; idx < theLibraryList.size();++idx)
    {
-      if(filename == theLibraryList[idx]->getName())
+      if(fileOnly == ossimFilename(theLibraryList[idx]->getName()).file())
       {
          return theLibraryList[idx].get();
       }
@@ -117,10 +125,11 @@ const ossimPluginLibrary* ossimSharedPluginRegistry::getPlugin(const ossimFilena
 ossimPluginLibrary* ossimSharedPluginRegistry::getPlugin(const ossimFilename& filename)
 {
    ossim_uint32 idx = 0;
+   ossimFilename fileOnly = filename.file();
 
    for(idx = 0; idx < theLibraryList.size();++idx)
    {
-      if(filename == theLibraryList[idx]->getName())
+      if(filename == ossimFilename(theLibraryList[idx]->getName()).file())
       {
          return theLibraryList[idx].get();
       }
@@ -173,3 +182,23 @@ ossim_uint32 ossimSharedPluginRegistry::getNumberOfPlugins()const
    return theLibraryList.size();
 }
 
+
+bool ossimSharedPluginRegistry::isLoaded(const ossimFilename& filename) const
+   
+{
+   bool result = false;
+   ossim_uint32 count = getNumberOfPlugins();
+   for (ossim_uint32 i = 0; i < count; ++i)
+   {
+      const ossimPluginLibrary* pi = getPlugin(i);
+      if (pi)
+      {
+         if (filename == pi->getName())
+         {
+            result = true;
+            break;
+         }
+      }
+   }
+   return result;
+}

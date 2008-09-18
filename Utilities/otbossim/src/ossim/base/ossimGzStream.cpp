@@ -18,8 +18,8 @@
 // ============================================================================
 //
 // File          : gzstream.C
-// Revision      : $Revision: 11177 $
-// Revision_date : $Date: 2007-06-07 21:47:04 +0200 (Thu, 07 Jun 2007) $
+// Revision      : $Revision: 13050 $
+// Revision_date : $Date: 2008-06-19 20:07:35 +0200 (Thu, 19 Jun 2008) $
 // Author(s)     : Deepak Bandyopadhyay, Lutz Kettner
 // 
 // Standard streambuf implementation following Nicolai Josuttis, "The 
@@ -29,6 +29,7 @@
 #include <ossim/base/ossimGzStream.h>
 
 #if OSSIM_HAS_LIBZ
+#include <zlib.h>
 
 #include <iostream>
 #include <fstream>
@@ -40,13 +41,18 @@
 // --------------------------------------
 
 
-
+struct ossimGzStreamBuf::PrivateData
+{
+	gzFile           file;               // file handle for compressed file
+};
 // ----------------------------------------------------------------------------
 // Internal classes to implement gzstream. See header file for user classes.
 // ----------------------------------------------------------------------------
 ossimGzStreamBuf::ossimGzStreamBuf()
-   : opened(false)
+   : opened(false),
+   prvtData(new PrivateData())
 {
+
    setp( buffer, buffer + (bufferSize-1));
    setg( buffer + 4,     // beginning of putback area
          buffer + 4,     // read position
@@ -57,6 +63,11 @@ ossimGzStreamBuf::ossimGzStreamBuf()
 ossimGzStreamBuf::~ossimGzStreamBuf()
 {
    close();
+   if(prvtData)
+   {
+	   delete prvtData;
+	   prvtData = 0;
+   }
 }
 
 bool ossimGzStreamBuf::is_open() const
@@ -90,8 +101,8 @@ ossimGzStreamBuf* ossimGzStreamBuf::open( const char* name, int open_mode)
     }
     *fmodeptr++ = 'b';
     *fmodeptr = '\0';
-    file = gzopen( name, fmode);
-    if (file == 0)
+    prvtData->file = gzopen( name, fmode);
+    if (prvtData->file == 0)
     {
        return (ossimGzStreamBuf*)0;
     }
@@ -105,7 +116,7 @@ ossimGzStreamBuf * ossimGzStreamBuf::close()
    {
       sync();
       opened = false;
-      if ( gzclose( file) == Z_OK)
+      if ( gzclose( prvtData->file) == Z_OK)
       {
          return this;
       }
@@ -116,7 +127,7 @@ ossimGzStreamBuf * ossimGzStreamBuf::close()
 std::streamsize ossimGzStreamBuf::xsgetn(char_type* __s,
                                          std::streamsize n)
 {
-   int num = gzread( file, __s, n);
+   int num = gzread( prvtData->file, __s, n);
 
    if (num <= 0) // ERROR or EOF
       return EOF;
@@ -138,7 +149,7 @@ int ossimGzStreamBuf::underflow()
         n_putback = 4;
     memcpy( buffer + (4 - n_putback), gptr() - n_putback, n_putback);
 
-    int num = gzread( file, buffer+4, bufferSize-4);
+    int num = gzread( prvtData->file, buffer+4, bufferSize-4);
     if (num <= 0) // ERROR or EOF
         return EOF;
 
@@ -156,7 +167,7 @@ int ossimGzStreamBuf::flush_buffer()
     // Separate the writing of the buffer from overflow() and
     // sync() operation.
     int w = pptr() - pbase();
-    if ( gzwrite( file, pbase(), w) != w)
+    if ( gzwrite( prvtData->file, pbase(), w) != w)
         return EOF;
     pbump( -w);
     return w;
@@ -214,7 +225,7 @@ ossimGzStreamBuf::pos_type ossimGzStreamBuf::seekoff(off_type t,
       }
    }
 
-   return gzseek(file, t, whence);
+   return gzseek(prvtData->file, t, whence);
 }
 
 // ossimGzStreamBuf::pos_type ossimGzStreamBuf::seekpos(pos_type posType, 

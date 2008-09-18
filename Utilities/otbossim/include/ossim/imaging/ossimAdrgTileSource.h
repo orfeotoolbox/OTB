@@ -8,7 +8,7 @@
 //              ADRG file.
 //
 //********************************************************************
-// $Id: ossimAdrgTileSource.h 11284 2007-07-11 16:35:42Z dburken $
+// $Id: ossimAdrgTileSource.h 12988 2008-06-04 16:49:43Z gpotts $
 
 #ifndef ossimAdrgTileSource_HEADER
 #define ossimAdrgTileSource_HEADER
@@ -146,6 +146,19 @@ public:
     * image tile width on disk.
     */
    virtual ossim_uint32 getImageTileHeight() const;
+
+   /**
+    * @brief Gets a property for matching name.
+    * @param name The name of the property to get.
+    * @return Returns property matching "name".
+    */
+   virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
+   
+   /**
+    * @brief Gets a list of property names available.
+    * @param propertyNames The list to push back names to.
+    */
+   virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
    
 private:
    

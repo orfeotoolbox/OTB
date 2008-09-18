@@ -6,7 +6,9 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimUsgsQuad.cpp 11347 2007-07-23 13:01:59Z gpotts $
+// $Id: ossimUsgsQuad.cpp 12953 2008-06-01 16:24:05Z dburken $
+
+#include <cstdlib>
 #include <sstream>
 #include <iomanip>
 
@@ -62,7 +64,7 @@ ossimUsgsQuad::ossimUsgsQuad(const ossimGpt& lrGpt)
       << setiosflags(ios::fixed)
       << setfill('0');
 
-   tmpInt = abs(static_cast<int>(lrGpt.lat)); // Cast away the fractional part.
+   tmpInt = static_cast<int>(abs(lrGpt.lat)); // Cast away the fractional part.
    os << tmpInt; // latitude
 
    //***
@@ -71,7 +73,7 @@ ossimUsgsQuad::ossimUsgsQuad(const ossimGpt& lrGpt)
    tmpDbl = fabs(lrGpt.lat) - (double)tmpInt;
    quadChar += static_cast<int>(tmpDbl / QUAD_SIZE_IN_DEGREES);
 
-   tmpInt = abs(static_cast<int>(lrGpt.lon)); // longitude
+   tmpInt = static_cast<int>(abs(lrGpt.lon)); // longitude
    os << setw(3) << tmpInt;
 
    tmpDbl = fabs(lrGpt.lon) - (double)tmpInt;

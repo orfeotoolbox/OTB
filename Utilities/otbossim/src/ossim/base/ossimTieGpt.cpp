@@ -123,7 +123,7 @@ ossimTieGpt::exportAsGmlNode(ossimString aGmlVersion)const
       ossimNotify(ossimNotifyLevel_WARN) << "WARNING: ossimTieGpt::exportAsGmlNode positions have nan\n";
       return node;
    }
-   if (aGmlVersion[0] == '2')
+   if (aGmlVersion[static_cast<std::string::size_type>(0)] == '2')
    {
       node->setTag("SimpleTiePoint");
       // note: no "fid" attribute (feature id")
@@ -162,7 +162,7 @@ ossimTieGpt::importFromGmlNode(ossimRefPtr<ossimXmlNode> aGmlNode, ossimString a
    tie.makeNan();
    score = 0;
 
-   if (aGmlVersion[0] == '2')
+   if (aGmlVersion[static_cast<std::string::size_type>(0)] == '2')
    {
       //read ground point
       ossimRefPtr<ossimXmlNode> gn = aGmlNode->findFirstNode(GROUND_GML2);

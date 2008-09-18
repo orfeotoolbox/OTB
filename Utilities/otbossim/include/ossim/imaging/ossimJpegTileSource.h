@@ -157,6 +157,7 @@ public:
    bool open(const ossimFilename& jpeg_file);
 
 protected:
+	class PrivateData;
    /**
     *  Returns true if no errors initializing object.
     *
@@ -186,6 +187,8 @@ protected:
    ossimIrect                   theImageRect;
    ossim_uint32                 theNumberOfBands;
    ossimIpt                     theCacheSize;
+
+   PrivateData*                 thePrivateData;
 
    struct jpeg_decompress_struct theCinfo;
    struct jpeg_error_mgr         theJerr;

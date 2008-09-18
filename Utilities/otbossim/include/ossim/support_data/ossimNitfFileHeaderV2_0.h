@@ -7,7 +7,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeaderV2_0.h 11096 2007-05-30 14:52:08Z dburken $
+// $Id: ossimNitfFileHeaderV2_0.h 12959 2008-06-02 17:16:09Z gpotts $
 #ifndef ossimNitfFileHeaderV2_0_HEADER
 #define ossimNitfFileHeaderV2_0_HEADER
 
@@ -368,31 +368,33 @@ private:
    ossim_int32 theHeaderSize;
    
    /*!
-    * This is a 40 byte Alphanumeric field
+    * FSCODE: This is a 40 byte Alphanumeric field
     */
    char theCodewords[41]; 
 
    /*!
-    * This is a 40 byte Alphanumeric field.
+    * FSCTLH: This is a 40 byte Alphanumeric field.
     */
    char theControlAndHandling[41]; 
 
    /*!
-    * This is a 40 byte Alphanumeric field.
+    * FSREL: This is a 40 byte Alphanumeric field.
     */
    char theReleasingInstructions[41]; 
 
    /*!
-    * This is a 20 byte alphanumeric field.
+    * FSCAUT: This is a 20 byte alphanumeric field.
     */ 
    char theClassificationAuthority[21];
 
    /*!
-    * This is a 20 byte Alphanumeric field.
+    * FSCTLN: This is a 20 byte Alphanumeric field.
     */
    char theSecurityControlNumber[21]; 
 
    /*!
+    * FSDWNG:
+    *
     * This is a 6 byte Alphanumeric.  If this field
     * is not blank then it will have the form:
     *
@@ -409,24 +411,30 @@ private:
     */
    char theSecurityDowngrade[7];
 
-   /*!
+   /**
+    * FSDEVT:
     * This is a conditional field and is a 40 byte
     * Alphanumeric field.  This field exists if the
     * security downgrade is 999998.
     */
    char theDowngradingEvent[41];
 
-   /*!
+   /**
+    * ONAME:
+    *
     * This is a 27 byte Alphanumeric number
     */
    char theOriginatorsName[28];
 
    /*!
+    * OPHONE:
     * This is an 18 byte Alphanumeric value. 
     */
    char theOriginatorsPhone[19]; 
 
    /*!
+    * FL:
+    *
     * This is a required field.
     *
     * Is a 12 byte number of the form
@@ -437,7 +445,9 @@ private:
     */
    char theNitfFileLength[13];
 
-   /*!
+   /**
+    * HL:
+    *
     * This is a reqired field.
     *
     * Will hold the header length. The values
@@ -447,7 +457,9 @@ private:
     */
    char theNitfHeaderLength[7];
 
-   /*!
+   /**
+    * NUMI:
+    *
     * This is a 3 byte field that specifies the number
     * of images in the file.  0-999
     */
@@ -472,7 +484,9 @@ private:
     */
    std::vector<ossimNitfSymbolInfoRecordV2_0> theNitfSymbolInfoRecords;
 
-   /*!
+   /**
+    * NUML
+    *
     * This is a 3 byte numeric 0-999.
     */
 
@@ -485,7 +499,9 @@ private:
     */
    std::vector<ossimNitfLabelInfoRecordV2_0> theNitfLabelInfoRecords;
 
-   /*!
+   /**
+    * NUMT:
+    *
     * This is a 3 byte numeric 0-999.
     */
    char theNumberOfTextFileInfoRecords[4];
@@ -497,7 +513,9 @@ private:
     */
    std::vector<ossimNitfTextInfoRecordV2_0> theNitfTextInfoRecords;
 
-   /*!
+   /**
+    * NUMDES:
+    *
     * This is a 3 byte numeric 0-999.
     */
    char theNumberOfDataExtSegInfoRecords[4];
@@ -509,7 +527,9 @@ private:
     */
    std::vector<ossimNitfDataExtSegInfoRecordV2_0> theNitfDataExtSegInfoRecords;
 
-   /*!
+   /**
+    * NUMRES:
+    *
     * This is a 3 byte numeric 0-999. Reserved Extension Segments
     */
    char theNumberOfResExtSegInfoRecords[4];
@@ -521,7 +541,9 @@ private:
     */
    std::vector<ossimNitfResExtSegInfoRecordV2_0> theNitfResExtSegInfoRecords;
 
-   /*!
+   /**
+    * UDHDL:
+    * 
     * This is a required field and is a 5 byte numeric ranging
     * from 0-99999.  This is 0 if there is no data.
     */
@@ -536,7 +558,9 @@ private:
     */
    char theUserDefinedHeaderOverflow[4];
 
-   /*!
+   /**
+    * XHDL:
+    *
     * This is a required field.  It is 5 bytes long and
     * ranges from 0-99999.  0 means there is no data
     */

@@ -6,8 +6,8 @@
 #define WANT_STREAM                  // include.h will get stream fns
 #define WANT_MATH                    // include.h will get math fns
 
+#include <cmath>
 #include <ossim/matrix/include.h>
-#include <ossim/matrix/boolean.h>
 #include <ossim/matrix/myexcept.h>
 
 #include <ossim/matrix/solution.h>
@@ -52,7 +52,8 @@ void OneDimSolve::LookAt(int V)
    if (!lim) Throw(SolutionException("Does not converge"));
    Last = V;
    Real yy = function(x[V]) - YY;
-   Finish = (fabs(yy) <= accY) || (Captured && fabs(x[L]-x[U]) <= accX );
+   Finish = (std::fabs(yy) <= accY) ||
+      (Captured && std::fabs(x[L]-x[U]) <= accX );
    y[V] = vpol*yy;
 }
 

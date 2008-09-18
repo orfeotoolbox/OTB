@@ -7,13 +7,13 @@
 // Description:  ossimCacheTileSource
 // 
 //*******************************************************************
-//  $Id: ossimCacheTileSource.h 11693 2007-09-09 21:54:29Z dburken $
+//  $Id: ossimCacheTileSource.h 12623 2008-04-07 14:10:08Z gpotts $
 #ifndef ossimCacheTileSource_HEADER
 #define ossimCacheTileSource_HEADER
 #include <ossim/imaging/ossimImageSourceFilter.h>
 #include <ossim/imaging/ossimAppFixedTileCache.h>
 #include <ossim/base/ossimProcessProgressEvent.h>
-#include <ossim/base/ossimMutex.h>
+#include <OpenThreads/ReentrantMutex>
 
 /** Cache Tile Source */
 class OSSIMDLLEXPORT ossimCacheTileSource : public ossimImageSourceFilter
@@ -71,7 +71,7 @@ protected:
    ossimIrect                  theBoundingRect;
 
    /** For lock and unlock. */
-   mutable ossimMutex theMutex;
+   mutable OpenThreads::ReentrantMutex theMutex;
 
    
    virtual void fireProgressEvent(double percentComplete);

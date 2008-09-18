@@ -4,6 +4,7 @@
 
 //#define WANT_STREAM
 
+#include <cmath>
 #include <ossim/matrix/newmat.h>
 
 #ifdef use_namespace

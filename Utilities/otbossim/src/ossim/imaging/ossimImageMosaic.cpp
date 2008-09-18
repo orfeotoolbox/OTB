@@ -7,7 +7,7 @@
 // Description: implementation for image mosaic
 //
 //*************************************************************************
-// $Id: ossimImageMosaic.cpp 10777 2007-04-25 14:49:17Z gpotts $
+// $Id: ossimImageMosaic.cpp 12745 2008-04-27 03:38:04Z gpotts $
 
 #include <ossim/imaging/ossimImageMosaic.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -277,6 +277,7 @@ template <class T> ossimRefPtr<ossimImageData> ossimImageMosaic::combineNorm(
    ossimRefPtr<ossimImageData> destination = theTile;
    ossimDataObjectStatus destinationStatus = theTile->getDataObjectStatus();
 
+   
    float** srcBands         = new float*[theLargestNumberOfInputBands];
    float*  srcBandsNullPix  = new float[theLargestNumberOfInputBands];
    T**     destBands        = new T*[theLargestNumberOfInputBands];
@@ -382,7 +383,8 @@ template <class T> ossimRefPtr<ossimImageData> ossimImageMosaic::combineNorm(
       destinationStatus = destination->validate();
       if (destinationStatus == OSSIM_FULL)
       {
-         return destination;
+         
+         break;//return destination;
       }
 
       // If we get here we're are still not full.  Get a tile from next layer.
@@ -506,7 +508,7 @@ template <class T> ossimRefPtr<ossimImageData> ossimImageMosaic::combine(
       destinationStatus = destination->validate();
       if (destinationStatus == OSSIM_FULL)
       {
-         return destination;
+         break;//return destination;
       }
 
       // If we get here we're are still not full.  Get a tile from next layer.

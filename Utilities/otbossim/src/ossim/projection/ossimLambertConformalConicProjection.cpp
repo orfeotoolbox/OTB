@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  See top LICENSE.txt file.
 //
@@ -9,8 +8,10 @@
 //
 // Calls Lamberts Conformal Conic projection code.  
 //*******************************************************************
-//  $Id: ossimLambertConformalConicProjection.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimLambertConformalConicProjection.cpp 12508 2008-02-25 18:38:09Z dburken $
 
+#include <iostream>
+#include <iomanip>
 #include <ossim/projection/ossimLambertConformalConicProjection.h>
 #include <ossim/base/ossimKeywordNames.h>
 
@@ -241,6 +242,26 @@ bool ossimLambertConformalConicProjection::loadState(const ossimKeywordlist& kwl
    }
    update();
    return flag;
+}
+
+std::ostream& ossimLambertConformalConicProjection::print(
+   std::ostream& out) const
+{
+   // Capture the original flags.
+   std::ios_base::fmtflags f = out.flags();
+
+   out << setiosflags(ios::fixed) << setprecision(15);
+
+   out << "// ossimLambertConformalConicProjection::print\n"
+       << ossimKeywordNames::STD_PARALLEL_1_KW << ": "
+       << Lambert_Std_Parallel_1*DEG_PER_RAD << "\n"
+       << ossimKeywordNames::STD_PARALLEL_2_KW << ": "
+      << Lambert_Std_Parallel_2*DEG_PER_RAD << std::endl;
+
+   // Reset flags.
+   out.setf(f);
+   
+   return ossimMapProjection::print(out);
 }
 
 /************************************************************************/

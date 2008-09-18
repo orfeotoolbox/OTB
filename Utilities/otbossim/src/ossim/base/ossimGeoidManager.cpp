@@ -10,7 +10,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimGeoidManager.cpp 11499 2007-08-06 09:21:41Z dburken $
+//  $Id: ossimGeoidManager.cpp 12319 2008-01-16 19:55:24Z gpotts $
 
 #include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimGeoidManager.h>
@@ -73,9 +73,16 @@ ossimGeoidManager* ossimGeoidManager::instance()
 //  METHOD: ossimElevManager::addGeoidSource
 //  
 //*****************************************************************************
-void ossimGeoidManager::addGeoid(ossimRefPtr<ossimGeoid> geoid)
+void ossimGeoidManager::addGeoid(ossimRefPtr<ossimGeoid> geoid, bool toFrontFlag)
 {
-   theGeoidList.push_back(geoid);
+   if(!toFrontFlag)
+   {
+      theGeoidList.push_back(geoid);
+   }
+   else
+   {
+      theGeoidList.insert(theGeoidList.begin(), geoid);
+   }
 }
 
 bool ossimGeoidManager::saveState(ossimKeywordlist& /* kwl */,

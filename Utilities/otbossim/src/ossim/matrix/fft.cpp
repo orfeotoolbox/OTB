@@ -6,6 +6,7 @@
 #define WANT_MATH
 // #define WANT_STREAM
 
+#include <cmath>
 #include <ossim/matrix/include.h>
 
 #include <ossim/matrix/newmatap.h>
@@ -27,7 +28,7 @@ static void cossin(int n, int d, Real& c, Real& s)
 // minimise roundoff error
 {
    REPORT
-   long n4 = n * 4; int sector = (int)floor( (Real)n4 / (Real)d + 0.5 );
+   long n4 = n * 4; int sector = (int)std::floor( (Real)n4 / (Real)d + 0.5 );
    n4 -= sector * d;
    if (sector < 0) { REPORT sector = 3 - (3 - sector) % 4; }
    else  { REPORT sector %= 4; }

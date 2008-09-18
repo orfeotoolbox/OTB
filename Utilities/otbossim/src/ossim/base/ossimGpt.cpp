@@ -9,7 +9,7 @@
 // LATITUDE AND LONGITUDE VALUES ARE IN DEGREES.
 //
 //*******************************************************************
-//  $Id: ossimGpt.cpp 11399 2007-07-26 13:39:54Z dburken $
+//  $Id: ossimGpt.cpp 12447 2008-02-08 17:49:29Z dburken $
 
 #include <iostream>
 #include <sstream>
@@ -25,6 +25,9 @@
 
 std::ostream& ossimGpt::print(std::ostream& os, ossim_uint32 precision) const
 {
+   // Capture the original flags.
+   std::ios_base::fmtflags f = os.flags();
+
    os << setiosflags(ios::fixed) << setprecision(precision);
    os << "( ";
 
@@ -50,10 +53,14 @@ std::ostream& ossimGpt::print(std::ostream& os, ossim_uint32 precision) const
    }
    else
    {
-      os << height() << ", ";
+      // millimeter precision for height
+      os << setprecision(3) << height() << ", ";
    }
    
    os << (theDatum?theDatum->code().c_str():"") << " )";
+
+   // Reset flags.
+   os.setf(f);
 
    return os;
 }

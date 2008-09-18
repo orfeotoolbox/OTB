@@ -14,7 +14,7 @@ public:
    ossimString getEnvironmentVariable(const ossimString& variable)const;
 
    ossimFilename getUserDir()const;
-   
+   ossimString   getUserName()const;
    ossimFilename getUserOssimSupportDir()const;
    ossimFilename getUserOssimPreferences()const;
    ossimFilename getUserOssimPluginDir()const;

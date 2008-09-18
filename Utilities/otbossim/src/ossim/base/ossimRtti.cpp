@@ -1,7 +1,10 @@
-#include <ossim/base/ossimRtti.h>
+
 #include <iostream>
-#include <string.h>
+#include <cstring>
+#include <cstdlib>
 using namespace std;
+
+#include <ossim/base/ossimRtti.h>
 
 static const RTTITypeinfo* RTTI_base_null_type[] = { 0 };
 

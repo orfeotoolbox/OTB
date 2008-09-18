@@ -56,6 +56,8 @@ public:
     *
     * To access these, pass the constant to getProperty().
     */
+   static const ossimString FILE_TYPE_KW;
+   static const ossimString VERSION_KW;
    static const ossimString CLEVEL_KW;
    static const ossimString STYPE_KW;
    static const ossimString OSTAID_KW;

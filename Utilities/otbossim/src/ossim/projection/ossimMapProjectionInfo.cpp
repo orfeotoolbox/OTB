@@ -14,8 +14,9 @@
 //   Shifts will be made for "pixel is area" internally.
 //
 //*******************************************************************
-//  $Id: ossimMapProjectionInfo.cpp 11347 2007-07-23 13:01:59Z gpotts $
+//  $Id: ossimMapProjectionInfo.cpp 13025 2008-06-13 17:06:30Z sbortman $
 
+#include <cstdlib>
 #include <fstream>
 #include <time.h>
 

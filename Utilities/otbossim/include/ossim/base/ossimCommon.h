@@ -8,9 +8,9 @@
 // Description: Common file for utility functions.
 //
 //*************************************************************************
-// $Id: ossimCommon.h 12130 2007-12-06 18:11:37Z dburken $
-#ifndef COMMON_H
-#define COMMON_H
+// $Id: ossimCommon.h 12910 2008-05-28 11:09:09Z gpotts $
+#ifndef ossimCommon_HEADER
+#define ossimCommon_HEADER
 
 
 // XXX nullify these for now, but eventually replace with a #include 
@@ -58,9 +58,9 @@ namespace ossim
      *
      * @see nan()
      */
-#if (defined(WIN32) || defined(_MSC_VER)) && !defined(__CYGWIN__) && !defined(__MWERKS__)
+#if defined(WIN32) || defined(_MSC_VER) && !defined(__CYGWIN__) && !defined(__MWERKS__)
     inline bool isnan(const float& v) { return _isnan(v); }
-    inline bool isnan(const double& v) {return _isnan(v); }
+    inline bool isnan(const double& v) { return _isnan(v); }
 #elif defined(sun) || defined(__sun)
 #    if defined(__SVR4) || defined(__svr4__)
 /* Solaris */
@@ -69,7 +69,7 @@ namespace ossim
 #    else
 /* SunOS */
     inline bool isnan(const float& v)  { return ( ::isnan(v) ); }
-    inline bool isnan(const double& v) { return (::isnan(v) ); }
+    inline bool isnan(const double& v) { return ( ::isnan(v) ); }
 #   endif
 #else
     inline bool isnan(const float& v)  { return ( std::isnan(v) ); }

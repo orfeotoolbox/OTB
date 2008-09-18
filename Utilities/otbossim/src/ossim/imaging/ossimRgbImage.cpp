@@ -58,8 +58,9 @@
      
 // END OF COPYRIGHT STATEMENT
 //*************************************************************************
-// $Id: ossimRgbImage.cpp 11832 2007-10-10 13:39:29Z dburken $
+// $Id: ossimRgbImage.cpp 12984 2008-06-04 01:26:24Z dburken $
 
+#include <cstdlib>
 #include <cmath>
 #include <ossim/imaging/ossimRgbImage.h>
 #include <ossim/base/ossimCommon.h>

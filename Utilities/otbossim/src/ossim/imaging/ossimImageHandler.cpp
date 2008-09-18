@@ -10,7 +10,7 @@
 // derive from.
 //
 //*******************************************************************
-//  $Id: ossimImageHandler.cpp 12199 2007-12-16 14:18:04Z dburken $
+//  $Id: ossimImageHandler.cpp 12570 2008-03-24 18:26:40Z gpotts $
 
 #include <algorithm>
 
@@ -41,7 +41,7 @@ RTTI_DEF1(ossimImageHandler, "ossimImageHandler", ossimImageSource)
 static ossimTrace traceDebug("ossimImageHandler:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageHandler.cpp 12199 2007-12-16 14:18:04Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimImageHandler.cpp 12570 2008-03-24 18:26:40Z gpotts $";
 #endif
 
    
@@ -107,7 +107,11 @@ bool ossimImageHandler::saveState(ossimKeywordlist& kwl,
            ossimKeywordNames::FILENAME_KW,
            theImageFile.c_str(),
            true);
-
+   kwl.add(prefix,
+           ossimKeywordNames::OVERVIEW_FILE_KW,
+           theImageFile.c_str(),
+           true);
+   
    return true;
 }
 
@@ -156,6 +160,11 @@ bool ossimImageHandler::loadState(const ossimKeywordlist& kwl,
       theImageFile = lookup;
    }
    
+   lookup = kwl.find(prefix, ossimKeywordNames::OVERVIEW_FILE_KW);
+   if(lookup)
+   {
+      theOverviewFile = ossimFilename(lookup);
+   }
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -452,6 +461,7 @@ bool ossimImageHandler::buildOverview(ossimImageHandlerOverviewCompressionType c
 {
    ossimFilename file = getFilenameWithThisExtension(ossimString(".ovr"));
 
+   theOverviewFile = file;
    if(buildOverview(file, compressionType, quality, resampleType, includeFullResFlag))
    {
       openOverview();
@@ -496,6 +506,7 @@ bool ossimImageHandler::buildOverview(const ossimFilename& filename,
       return false;
    }
 
+   theOverviewFile = filename;
    ossimTiffOverviewBuilder tiffBuilder;
    if ( tiffBuilder.setInputSource(this, false) == false )
    {
@@ -678,13 +689,14 @@ bool ossimImageHandler::hasOverviews() const
 bool ossimImageHandler::openOverview(const ossimFilename& overview_file)
 {
    closeOverview();
-
+   
+   theOverviewFile = overview_file;
    // make sure we don't open ourselves.
-   if(theImageFile == overview_file) return false;
+   if(theImageFile == theOverviewFile) return false;
    
    theOverview = new ossimTiffTileSource;
 
-   if ( theOverview->open(overview_file) )
+   if ( theOverview->open(theOverviewFile) )
    {
       //---
       // This is not really a container event; however, using for now.
@@ -702,11 +714,10 @@ bool ossimImageHandler::openOverview(const ossimFilename& overview_file)
 
 bool ossimImageHandler::openOverview()
 {
-   closeOverview();
-
-   ossimFilename overviewFilename = createOverviewFilename();
-   
-   // 1) If the current over file exists see if if can be opened.
+   closeOverview();	
+	ossimFilename overviewFilename = createDefaultOverviewFilename();
+	
+   // 1) If the current over file exists see if it can be opened.
    if( overviewFilename.exists() )
    {
       if (traceDebug())
@@ -779,7 +790,7 @@ bool ossimImageHandler::writeValidImageVertices(const std::vector<ossimIpt>& ver
    ossimFilename tempFile = file;
    if(tempFile == "")
    {
-      tempFile = createValidVerticesFilename();
+      tempFile = createDefaultValidVerticesFilename();
    }
    ossim_uint32 i = 0;
    ossimKeywordlist tempKwl;
@@ -1007,6 +1018,11 @@ bool ossimImageHandler::setCurrentEntry(ossim_uint32 /* entryIdx */)
    return true;
 }
 
+ossimFilename ossimImageHandler::getOverviewFile()const
+{
+   return theOverviewFile;
+}
+
 void ossimImageHandler::getEntryList(std::vector<ossim_uint32>& entryList)const
 {
 	entryList.push_back(0);
@@ -1128,7 +1144,7 @@ ossimRefPtr<ossimProperty> ossimImageHandler::getProperty(const ossimString& nam
    if(name == "histogram_filename")
    {
       ossimFilenameProperty* filenameProp =
-         new ossimFilenameProperty(name, createHistogramFilename());
+         new ossimFilenameProperty(name, createDefaultHistogramFilename());
       
       filenameProp->setIoType(ossimFilenameProperty::ossimFilenamePropertyIoType_INPUT);
       filenameProp->setCacheRefreshBit();
@@ -1139,7 +1155,7 @@ ossimRefPtr<ossimProperty> ossimImageHandler::getProperty(const ossimString& nam
    if(name == "geometry_filename")
    {
       ossimFilenameProperty* filenameProp =
-         new ossimFilenameProperty(name, createGeometryFilename());
+         new ossimFilenameProperty(name, createDefaultGeometryFilename());
       
       filenameProp->setIoType(ossimFilenameProperty::ossimFilenamePropertyIoType_INPUT);
       filenameProp->setCacheRefreshBit();
@@ -1150,7 +1166,7 @@ ossimRefPtr<ossimProperty> ossimImageHandler::getProperty(const ossimString& nam
    if(name == "valid_vertices_filename")
    {
       ossimFilenameProperty* filenameProp =
-         new ossimFilenameProperty(name, createValidVerticesFilename());
+         new ossimFilenameProperty(name, createDefaultValidVerticesFilename());
       
       filenameProp->setIoType(ossimFilenameProperty::ossimFilenamePropertyIoType_INPUT);
       filenameProp->setCacheRefreshBit();
@@ -1160,7 +1176,7 @@ ossimRefPtr<ossimProperty> ossimImageHandler::getProperty(const ossimString& nam
    if(name == "metadata_filename")
    {
       ossimFilenameProperty* filenameProp =
-         new ossimFilenameProperty(name, createMetadataFilename());
+         new ossimFilenameProperty(name, createDefaultMetadataFilename());
       
       filenameProp->setIoType(ossimFilenameProperty::ossimFilenamePropertyIoType_INPUT);
       filenameProp->setCacheRefreshBit();
@@ -1170,7 +1186,7 @@ ossimRefPtr<ossimProperty> ossimImageHandler::getProperty(const ossimString& nam
    if(name == "overview_filename")
    {
       ossimFilenameProperty* filenameProp =
-         new ossimFilenameProperty(name, createOverviewFilename());
+         new ossimFilenameProperty(name, createDefaultOverviewFilename());
       
       filenameProp->setIoType(ossimFilenameProperty::ossimFilenamePropertyIoType_INPUT);
       filenameProp->setCacheRefreshBit();
@@ -1214,7 +1230,7 @@ ossimFilename ossimImageHandler::getFilenameWithThisExtension(
    }
    if (ext.size())
    {
-      if (ext[0] != '.')
+      if (ext[static_cast<std::string::size_type>(0)] != '.')
       {
          f += ".";
       }
@@ -1228,27 +1244,27 @@ ossimRefPtr<ossimNBandLutDataObject> ossimImageHandler::getLut()const
    return theLut;
 }
 
-ossimFilename ossimImageHandler::createOverviewFilename() const
+ossimFilename ossimImageHandler::createDefaultOverviewFilename() const
 {
    return getFilenameWithThisExtension("ovr");
 }
    
-ossimFilename ossimImageHandler::createGeometryFilename() const
+ossimFilename ossimImageHandler::createDefaultGeometryFilename() const
 {
    return getFilenameWithThisExtension("geom");
 }
 
-ossimFilename ossimImageHandler::createMetadataFilename() const
+ossimFilename ossimImageHandler::createDefaultMetadataFilename() const
 {
    return getFilenameWithThisExtension("omd");
 }
 
-ossimFilename ossimImageHandler::createHistogramFilename() const
+ossimFilename ossimImageHandler::createDefaultHistogramFilename() const
 {
    return getFilenameWithThisExtension("his");
 }
 
-ossimFilename ossimImageHandler::createValidVerticesFilename() const
+ossimFilename ossimImageHandler::createDefaultValidVerticesFilename() const
 {
    ossimFilename result;
    

@@ -12,9 +12,10 @@
 // Converts Lsat to Surface Reflectance values
 //
 //*************************************************************************
-// $Id: ossimGammaRemapper.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimGammaRemapper.cpp 12980 2008-06-04 00:50:33Z dburken $
 
-#include <math.h>
+#include <cstdlib>
+#include <cmath>
 
 #include <ossim/imaging/ossimGammaRemapper.h>
 #include <ossim/imaging/ossimAtCorrKeywords.h>

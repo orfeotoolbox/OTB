@@ -10,7 +10,7 @@
 // Contains definition of class ossimXmlAttribute.
 // 
 //*****************************************************************************
-// $Id: ossimXmlAttribute.cpp 10425 2007-02-06 19:00:11Z gpotts $
+// $Id: ossimXmlAttribute.cpp 12886 2008-05-21 18:00:43Z gpotts $
 
 #include <iostream>
 #include <sstream>
@@ -188,16 +188,16 @@ bool ossimXmlAttribute::readValue(std::istream& in)
    theValue = "";
    char c = in.peek();
    bool done = false;
-
+	char startQuote = '\0';
    if((c == '\'')||
       (c == '"'))
    {
+		startQuote = c;
       theValue += in.get();
       while(!done&&!in.fail())
       {
          c = in.peek();
-         if((c == '\'')||
-            (c == '"'))
+         if(c==startQuote)
          {
             theValue += c;
             done = true;
@@ -219,8 +219,7 @@ bool ossimXmlAttribute::readValue(std::istream& in)
    {
       ossimString::iterator startIter = theValue.begin();
       ossimString::iterator endIter   = --theValue.end();
-      if((*startIter == '\'')||
-         (*startIter == '"'))
+      if(*startIter == startQuote)
       {
          ++startIter;
       }
@@ -229,8 +228,7 @@ bool ossimXmlAttribute::readValue(std::istream& in)
          return false;
          setErrorStatus();
       }
-      if((*endIter != '\'')&&
-         (*endIter != '"'))
+      if(*endIter != startQuote)
       {
          return false;
          setErrorStatus();

@@ -9,10 +9,12 @@
 //              vpf file.
 //
 //********************************************************************
-// $Id: ossimVpfTable.cpp 10034 2006-12-05 14:32:10Z gpotts $
+// $Id: ossimVpfTable.cpp 13025 2008-06-13 17:06:30Z sbortman $
 #include <ossim/vec/ossimVpfTable.h>
 #include <ossim/vec/vpf.h>
 #include <ossim/base/ossimErrorCodes.h>
+#include <cstdlib>
+#include <cstring>
 
 std::ostream& operator <<(std::ostream& out,
                      const ossimVpfTable& data)

@@ -10,13 +10,12 @@
 // Density is base on alpha weight.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimWatermarkFilter.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimWatermarkFilter.cpp 12623 2008-04-07 14:10:08Z gpotts $
 
 #include <vector>
 
 #include <ossim/imaging/ossimWatermarkFilter.h>
 #include <ossim/base/ossimTrace.h>
-#include <ossim/base/ossimScopedLock.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimFilenameProperty.h>
@@ -38,7 +37,7 @@ static const char WATERMARK_MODE_KW[] = "watermark_mode";
 static const char WEIGHT_KW[]         = "weight";
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimWatermarkFilter.cpp 9094 2006-06-13 19:12:40Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimWatermarkFilter.cpp 12623 2008-04-07 14:10:08Z gpotts $";
 #endif
 
 const ossim_float64 DEFAULT_WEIGHT = 0.20;
@@ -51,8 +50,7 @@ ossimWatermarkFilter::ossimWatermarkFilter()
    theWatermark(NULL),
    theMode(ossimWatermarkFilter::UPPER_LEFT),
    theInputBoundingRect(),
-   theDirtyFlag(true),
-   theMutex()
+   theDirtyFlag(true)
 {
    theEnableFlag = true;
 
@@ -109,8 +107,6 @@ ossimRefPtr<ossimImageData> ossimWatermarkFilter::getTile(
    const ossimIrect& tile_rect, ossim_uint32 resLevel)
 {
    // Lock for the length of this method.
-   ossimScopedLock<ossimMutex> scopeLock(theMutex);
-
    // Check for input.
    if (!theInputConnection)
    {
@@ -694,8 +690,6 @@ void ossimWatermarkFilter::initialize()
    //---
 
    // Lock for the length of this method.
-   ossimScopedLock<ossimMutex> scopeLock(theMutex);
-
    // Set the input connection.
    ossimImageSourceFilter::initialize();
 
@@ -951,8 +945,6 @@ ossimRefPtr<ossimProperty> ossimWatermarkFilter::getProperty(
    const ossimString& name) const
 {
    // Lock for the length of this method.
-   ossimScopedLock<ossimMutex> scopeLock(theMutex);
-
    if (name == ossimKeywordNames::FILENAME_KW)
    {
       ossimFilenameProperty* ofp =

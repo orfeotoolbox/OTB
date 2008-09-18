@@ -7,7 +7,7 @@
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfToc.cpp 10278 2007-01-15 19:28:50Z dburken $
+// $Id: ossimRpfToc.cpp 12740 2008-04-26 01:47:29Z gpotts $
 
 #include <iostream>
 
@@ -306,6 +306,8 @@ void ossimRpfToc::buildTocEntryList(ossimRpfHeader* rpfHeader)
                
                --count;
             }
+            delete frameFileIndexHead;
+            frameFileIndexHead = 0;
          }
       }
       delete boundaryRect;

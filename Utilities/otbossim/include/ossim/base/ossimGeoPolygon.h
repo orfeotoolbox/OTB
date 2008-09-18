@@ -8,12 +8,13 @@
 // AUTHOR: Garrett Potts
 //
 //*****************************************************************************
-//  $Id: ossimGeoPolygon.h 11407 2007-07-27 13:41:05Z dburken $
+//  $Id: ossimGeoPolygon.h 12760 2008-04-29 16:33:29Z dburken $
 #ifndef ossimGeoPolygon_HEADER
 #define ossimGeoPolygon_HEADER
 #include <vector>
 #include <ossim/base/ossimGpt.h>
-#include <ossim/base/ossimKeywordlist.h>
+
+class ossimKeywordlist;
 
 class OSSIMDLLEXPORT ossimGeoPolygon
 {

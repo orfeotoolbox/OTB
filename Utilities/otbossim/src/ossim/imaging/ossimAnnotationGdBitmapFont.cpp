@@ -6,7 +6,7 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimAnnotationGdBitmapFont.cpp 11347 2007-07-23 13:01:59Z gpotts $
+// $Id: ossimAnnotationGdBitmapFont.cpp 12276 2008-01-07 19:58:43Z dburken $
 #include <ossim/imaging/ossimAnnotationGdBitmapFont.h>
 #include <ossim/imaging/ossimRgbImage.h>
 #include <ossim/base/ossimCommon.h>
@@ -74,9 +74,11 @@ void ossimAnnotationGdBitmapFont::draw(ossimRgbImage& anImage)const
       anImage.setDrawColor(theRed, theGreen, theBlue);
       ossimDpt position(thePosition.x - origin.x,
                         thePosition.y - origin.y);
-      for(ossim_uint32 character = 0; character < theText.size(); ++character)
+      for(std::string::size_type character = 0;
+          character < theText.size();
+          ++character)
       {
-         long charOffset = theText[(int)character];
+         long charOffset = theText[character];
 
          // we need to shift the offset to a positive value.
          // if it goes negative we just add 256 to the value.

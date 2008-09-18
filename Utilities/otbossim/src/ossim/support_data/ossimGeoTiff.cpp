@@ -10,7 +10,7 @@
 // information.
 //
 //***************************************************************************
-// $Id: ossimGeoTiff.cpp 12059 2007-11-16 19:35:33Z dburken $
+// $Id: ossimGeoTiff.cpp 13038 2008-06-18 15:19:41Z gpotts $
 
 #include <ossim/support_data/ossimGeoTiff.h>
 #include <ossim/base/ossimTrace.h>
@@ -42,12 +42,13 @@
 #include <string.h>
 #include <iomanip>
 #include <sstream>
+#include <cstdlib>
 
 static const ossimGeoTiffCoordTransformsLut COORD_TRANS_LUT;
 static const ossimGeoTiffDatumLut DATUM_LUT;
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimGeoTiff.cpp 12059 2007-11-16 19:35:33Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimGeoTiff.cpp 13038 2008-06-18 15:19:41Z gpotts $";
 #endif
 
 //---
@@ -112,12 +113,12 @@ ossimGeoTiff::ossimGeoTiff(const ossimFilename& file, ossim_uint32 entryIdx)
       {
          ossimNotify(ossimNotifyLevel_DEBUG)
             << "DEBUG ossimGeoTiff::ossimGeoTiff: "
-            << "Unable to read tags."
+            << "Unable to reade tags."
             << std::endl;
       }
       ossimNotify(ossimNotifyLevel_FATAL)
          << "FATAL ossimGeoTiff::ossimGeoTiff: "
-         << "Unable to read tags."
+         << "Unable to reade tags."
          << std::endl;
    }
    if (traceDebug())
@@ -399,7 +400,7 @@ bool ossimGeoTiff::writeTags(TIFF* tifPtr,
       gcs = USER_DEFINED;
 
       std::ostringstream os;
-      os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 12059 $ $Date: 2007-11-16 20:35:33 +0100 (Fri, 16 Nov 2007) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
+      os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 13038 $ $Date: 2008-06-18 17:19:41 +0200 (Wed, 18 Jun 2008) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
 
       GTIFKeySet(gtif,
                  GeogCitationGeoKey,
@@ -805,7 +806,8 @@ bool ossimGeoTiff::readTags(const ossimFilename& file, ossim_uint32 entryIdx)
    theGeoKeysPresentFlag = true;
    if(traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG) << "ossimGeoTiff::readTags: Raw Geotiff Tags are\n";
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "ossimGeoTiff::readTags: Raw Geotiff Tags are\n";
       GTIFPrint(gtif,0,0);
    }
    if(TIFFGetField( theTiffPtr,
@@ -835,20 +837,53 @@ bool ossimGeoTiff::readTags(const ossimFilename& file, ossim_uint32 entryIdx)
    if(GTIFKeyGet(gtif, GeogAngularUnitsGeoKey, &theAngularUnits, 0, 1))
    {
    }
+   
    theSavePcsCodeFlag = false;
    if(GTIFKeyGet(gtif, ProjectedCSTypeGeoKey, &thePcsCode, 0, 1))
    {
-      if(((thePcsCode >= 26929) && (thePcsCode <= 26998)) ||
-         ((thePcsCode >= 32100) && (thePcsCode <= 32158)) ||
-         ((thePcsCode >= 32001) && (thePcsCode <= 32060)) ||
-         ((thePcsCode >= 26729) && (thePcsCode <= 26803)) ||
-         (thePcsCode == 32161)
-         )
+      const ossimStatePlaneProjectionInfo* info =
+         ossimStatePlaneProjectionFactory::instance()->getInfo(thePcsCode);
+      if (info)
       {
          theSavePcsCodeFlag = true;
       }
       parsePcsCode(thePcsCode);
    }
+   //---
+   // ESH 2/2008 -- Handle geotiff's with state plane coordinate systems
+   // produced by ERDAS.
+   //---
+   else
+   {
+      const int CITATION_STRING_SIZE = 512;
+      char citationStr[CITATION_STRING_SIZE];
+      if ( GTIFKeyGet(gtif, GTCitationGeoKey,  &citationStr,
+                      0, CITATION_STRING_SIZE))
+      {
+         ossimString gTCitation = citationStr; // key 1026
+
+         // Extract state plane string from the citation key
+         ossimString projStrTemp =
+            gTCitation.afterRegExp( "Projection Name = " );
+         
+         ossimString projStr  = projStrTemp.beforeRegExp( "\n" );
+         if ( projStr.empty() == false )
+         {
+            // Determine the pcs code, etc from the state plane string
+            const ossimStatePlaneProjectionInfo* info =
+               ossimStatePlaneProjectionFactory::instance()->getInfo(
+                  projStr);
+            if (info)
+            {
+               theSavePcsCodeFlag = true;
+               thePcsCode = info->code();
+               parsePcsCode(thePcsCode);
+            }
+         }
+         
+      }  // End of "if(GTIFKeyGet(gtif, GTCitationGeoKey..."
+   }
+   
    char* buf = 0;
    double tempDouble;
    theCenterLon = ossim::nan();
@@ -935,7 +970,7 @@ bool ossimGeoTiff::readTags(const ossimFilename& file, ossim_uint32 entryIdx)
 //       theTiePoint.push_back(0.0);
 //    }
    ossim_uint16 doubleParamSize;
-   double* tempDoubleParam=0;
+   double* tempDoubleParam;
    theDoubleParam.clear();
    if(TIFFGetField(theTiffPtr, TIFFTAG_GEODOUBLEPARAMS, &doubleParamSize, &tempDoubleParam))
    {
@@ -944,10 +979,12 @@ bool ossimGeoTiff::readTags(const ossimFilename& file, ossim_uint32 entryIdx)
                             tempDoubleParam+doubleParamSize);
    }
 
-   //ossim_uint16 asciiParamSize;
    char* tempAsciiParam=0;
    theAsciiParam = "";
-   if(TIFFGetField(theTiffPtr, TIFFTAG_GEOASCIIPARAMS, &tempAsciiParam))
+	
+	// Note: this tag does not have the setting set to return the size
+	// so this call is only a 3 argument call without a size parameter
+	if(TIFFGetField(theTiffPtr, TIFFTAG_GEOASCIIPARAMS, &tempAsciiParam))
    {
       theAsciiParam = tempAsciiParam;
    }
@@ -1041,8 +1078,9 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
          if(tieCount > 4)
          {
             // create a cubic polynomial model
-            ossimRefPtr<ossimPolynomProjection> proj = new ossimPolynomProjection;
-            proj->setupOptimizer("1 x y x2 xy y2 x3 y3 xy2 x2y z xz yz");
+            //ossimRefPtr<ossimPolynomProjection> proj = new ossimPolynomProjection;
+            //proj->setupOptimizer("1 x y x2 xy y2 x3 y3 xy2 x2y z xz yz");
+            ossimRefPtr<ossimBilinearProjection> proj = new ossimBilinearProjection;
             proj->optimizeFit(tieSet);
             proj->saveState(kwl, prefix);
             if(traceDebug())
@@ -1699,20 +1737,16 @@ void ossimGeoTiff::parsePcsCode(int code)
          << std::endl;
    }
 
-   //---
-   // Check for codes that the ossimStatePlaneProjectionFactory can create a
-   // projection from. This probably should be moved to a method in 
-   // ossimStatePlaneProjectionFactory.
-   //---
-   if(((code >= 26929) && (code <= 26998)) ||
-      ((code >= 32100) && (code <= 32158)) ||
-      ((code >= 32001) && (code <= 32060)) ||
-      ((code >= 26729) && (code <= 26803)) ||
-      (code == 32161)
-      )
-   {
-      theSavePcsCodeFlag = true;
-   }
+// Duplicated prior to this method call (parsePcsCode()) drb.   
+//    //---
+//    // See if the ossimStatePlaneProjectionFactory can handle this pcs code.
+//    //---
+//    const ossimStatePlaneProjectionInfo* info =
+//       ossimStatePlaneProjectionFactory::instance()->getInfo(code);
+//    if (info)
+//    {
+//       theSavePcsCodeFlag = true;
+//    }
 
    if ( (theSavePcsCodeFlag == true) &&
         (theProjectionName == "ossimUtmProjection") )

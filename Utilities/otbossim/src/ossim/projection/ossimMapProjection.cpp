@@ -9,9 +9,10 @@
 // Base class for all map projections.
 // 
 //*******************************************************************
-//  $Id: ossimMapProjection.cpp 12107 2007-12-03 02:08:49Z gpotts $
+//  $Id: ossimMapProjection.cpp 13025 2008-06-13 17:06:30Z sbortman $
 
 #include <iostream>
+#include <cstdlib>
 #include <iomanip>
 #include <sstream>
 
@@ -160,7 +161,15 @@ void ossimMapProjection::setDatum(const ossimDatum* datum)
 
 void ossimMapProjection::setOrigin(const ossimGpt& origin)
 {
-   theOrigin = origin; update();
+   //---
+   // Set the origin and since the origin has a datum which in turn has
+   // an ellipsoid, sync them up.
+   //---
+   theOrigin    = origin;
+   theDatum     = theOrigin.datum();
+   theEllipsoid = *(theDatum->ellipsoid());
+      
+   update();
 }
 
 //*****************************************************************************
@@ -1175,29 +1184,34 @@ bool ossimMapProjection::loadState(const ossimKeywordlist& kwl, const char* pref
 //       theMetersPerPixel.x *= theDegreesPerPixel.x;
 //       theMetersPerPixel.y *= theDegreesPerPixel.y;
 //    }
-   
-   ossimString pixelType = kwl.find(prefix, ossimKeywordNames::PIXEL_TYPE_KW);
-   pixelType=pixelType.trim();
-   if(pixelType!="")
+
+   lookup = kwl.find(prefix, ossimKeywordNames::PIXEL_TYPE_KW);
+   if (lookup)
    {
-      pixelType.downcase();
-      if(pixelType.contains("area"))
+      ossimString pixelType = lookup;
+      pixelType=pixelType.trim();
+      if(pixelType!="")
       {
-         if( theMetersPerPixel.hasNans() == false)
+         pixelType.downcase();
+         if(pixelType.contains("area"))
          {
-            if(!theUlEastingNorthing.hasNans())
+            if( theMetersPerPixel.hasNans() == false)
             {
-               theUlEastingNorthing.x += (theMetersPerPixel.x*0.5);
-               theUlEastingNorthing.y -= (theMetersPerPixel.y*0.5);
+               if(!theUlEastingNorthing.hasNans())
+               {
+                  theUlEastingNorthing.x += (theMetersPerPixel.x*0.5);
+                  theUlEastingNorthing.y -= (theMetersPerPixel.y*0.5);
+               }
             }
-         }
-         if(theDegreesPerPixel.hasNans() == false)
-         {
-            theUlGpt.latd( theUlGpt.latd() - (theDegreesPerPixel.y*0.5) );
-            theUlGpt.lond( theUlGpt.lond() + (theDegreesPerPixel.x*0.5) );
+            if(theDegreesPerPixel.hasNans() == false)
+            {
+               theUlGpt.latd( theUlGpt.latd() - (theDegreesPerPixel.y*0.5) );
+               theUlGpt.lond( theUlGpt.lond() + (theDegreesPerPixel.x*0.5) );
+            }
          }
       }
    }
+   
    theModelTransformUnitType = OSSIM_UNIT_UNKNOWN;
    const char* modelTransform = kwl.find(prefix, ossimKeywordNames::IMAGE_MODEL_TRANSFORM_MATRIX_KW);
    const char* modelTransformUnit = kwl.find(prefix, ossimKeywordNames::IMAGE_MODEL_TRANSFORM_UNIT_KW);

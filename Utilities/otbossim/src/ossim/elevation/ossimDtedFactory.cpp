@@ -13,8 +13,9 @@
 // pure virtual methods that all elevation source factories must implement.
 //
 //**************************************************************************
-// $Id: ossimDtedFactory.cpp 11321 2007-07-17 20:53:07Z dburken $
+// $Id: ossimDtedFactory.cpp 12982 2008-06-04 01:12:46Z dburken $
 
+#include <cstdlib> /* abs() */
 #include <sstream>
 #include <iomanip>
 #include <ossim/elevation/ossimDtedFactory.h>

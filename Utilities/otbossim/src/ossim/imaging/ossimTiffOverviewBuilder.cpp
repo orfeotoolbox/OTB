@@ -14,7 +14,7 @@
 #include <cstring>
 #include <sstream>
 using namespace std;
-#include <itk_tiff.h>
+#include <xtiffio.h>
 
 #include <ossim/imaging/ossimTiffOverviewBuilder.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
@@ -832,28 +832,28 @@ bool ossimTiffOverviewBuilder::setTags(TIFF* tif,
 TIFF* ossimTiffOverviewBuilder::openTiff(const ossimString& filename,
                                          const ossimString& openMode)
 {
- #ifdef OSSIM_HAS_GEOTIFF
- #  if OSSIM_HAS_GEOTIFF
+// #ifdef OSSIM_HAS_GEOTIFF
+// #  if OSSIM_HAS_GEOTIFF
    return XTIFFOpen( filename.c_str(), openMode.c_str() );
- #  else
-    return TIFFOpen( filename.c_str(), openMode.c_str() );
- #  endif
- #else
-    return TIFFOpen( filename.c_str(), openMode.c_str() );
- #endif
+// #  else
+//    return TIFFOpen( filename.c_str(), openMode.c_str() );
+// #  endif
+// #else
+//    return TIFFOpen( filename.c_str(), openMode.c_str() );
+// #endif
 }
 
 void ossimTiffOverviewBuilder::closeTiff(TIFF* tif)
 {
- #ifdef OSSIM_HAS_GEOTIFF
- #  if OSSIM_HAS_GEOTIFF 
-	     XTIFFClose( tif );
- #  else
-       TIFFClose( tif );
- #  endif
- #else
-       TIFFClose( tif );   
- #endif
+// #ifdef OSSIM_HAS_GEOTIFF
+// #  if OSSIM_HAS_GEOTIFF 
+      XTIFFClose( tif );
+// #  else
+//       TIFFClose( tif );
+// #  endif
+// #else
+//       TIFFClose( tif );   
+// #endif
 }
 
 

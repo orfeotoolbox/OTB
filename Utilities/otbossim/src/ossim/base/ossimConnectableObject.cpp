@@ -1,21 +1,19 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  See top level LICENSE.txt file.
 //
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimConnectableObject.cpp 9955 2006-11-27 21:35:19Z dburken $
+// $Id: ossimConnectableObject.cpp 12645 2008-04-09 21:02:33Z dburken $
 #include <ossim/base/ossimConnectableObject.h>
 #include <ossim/base/ossimIdManager.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimObjectEvents.h>
-#include <ossim/base/ossimObjectEvents.h>
 #include <ossim/base/ossimConnectableContainerInterface.h>
 #include <ossim/base/ossimTextProperty.h>
-#include <ossim/base/ossimNotifyContext.h>
+#include <ossim/base/ossimNotify.h>
 #include <algorithm>
 
 RTTI_DEF3(ossimConnectableObject,
@@ -171,7 +169,7 @@ ossimConnectableObject* ossimConnectableObject::findConnectableObject(const ossi
       ++current;
    }
 
-   return NULL;
+   return 0;
 }
 
 ossimConnectableObject* ossimConnectableObject::findObjectOfType(RTTItypeid typeId,
@@ -182,7 +180,7 @@ ossimConnectableObject* ossimConnectableObject::findObjectOfType(RTTItypeid type
 
    if(directionType == CONNECTABLE_DIRECTION_NONE)
    {
-      return NULL;
+      return 0;
    }
 
   if(directionType == CONNECTABLE_DIRECTION_OUTPUT)
@@ -242,7 +240,7 @@ ossimConnectableObject* ossimConnectableObject::findObjectOfType(RTTItypeid type
       }
    }
 
-   ossimConnectableObject* result = NULL;
+   ossimConnectableObject* result = 0;
    for(ossim_uint32 index = 0; (index < connectableList->size())&&!result; ++index)
    {
       if((*connectableList)[index])
@@ -265,7 +263,7 @@ ossimConnectableObject* ossimConnectableObject::findObjectOfType(
 
    if(directionType == CONNECTABLE_DIRECTION_NONE)
    {
-      return NULL;
+      return 0;
    }
 
   if(directionType == CONNECTABLE_DIRECTION_OUTPUT)
@@ -322,7 +320,7 @@ ossimConnectableObject* ossimConnectableObject::findObjectOfType(
          }
       }
    }
-   ossimConnectableObject* result = NULL;
+   ossimConnectableObject* result = 0;
    for(ossim_uint32 index = 0; (index < connectableList->size())&&!result; ++index)
    {
       if((*connectableList)[index])
@@ -394,7 +392,7 @@ ossimConnectableObject* ossimConnectableObject::findInputObjectOfType(
       
    } // End of "Must have fixed input of one."
 
-   return (ossimConnectableObject*)NULL;
+   return 0;
 }
 
 ossim_int32 ossimConnectableObject::findInputIndex(const ossimConnectableObject* object)
@@ -517,7 +515,7 @@ ossim_int32 ossimConnectableObject::getMyOutputIndexToConnectTo(ossimConnectable
 
 void ossimConnectableObject::disconnect(ossimConnectableObject* object)
 {
-   if( (object==this) || (object==(ossimConnectableObject*)NULL))
+   if( (object==this) || (object==0) )
    {
       disconnectAllInputs();
       disconnectAllOutputs();
@@ -555,12 +553,12 @@ ossimConnectableObject* ossimConnectableObject::disconnectMyInput(ossim_int32 in
 								  bool createEventFlag)
 {
    if(theInputObjectList.size() == 0)
-     {
-       return (ossimConnectableObject*)NULL;
-     }
+   {
+      return 0;
+   }
 
    std::vector<ossimConnectableObject*>::iterator current;
-   ossimConnectableObject* result = NULL;
+   ossimConnectableObject* result = 0;
 
    if( (inputIndex > -1)&&
        (inputIndex < (ossim_int32)theInputObjectList.size()))
@@ -576,13 +574,13 @@ ossimConnectableObject* ossimConnectableObject::disconnectMyInput(ossim_int32 in
       }
       else
       {
-         *current = NULL;
+         *current = 0;
       }
       if(createEventFlag&&result)
       {
          ossimConnectionEvent event(this,  // owner of message
                                     OSSIM_EVENT_CONNECTION_DISCONNECT_ID,
-                                    NULL,  // new object
+                                    0,  // new object
                                     result,// old object
                                     ossimConnectionEvent::OSSIM_INPUT_DIRECTION);
 
@@ -643,11 +641,11 @@ ossimConnectableObject* ossimConnectableObject::disconnectMyOutput(ossim_int32 o
 {
    if(theOutputObjectList.size() == 0)
      {
-       return (ossimConnectableObject*)NULL;
+       return 0;
      }
 
    std::vector<ossimConnectableObject*>::iterator current;
-   ossimConnectableObject* result = NULL;
+   ossimConnectableObject* result = 0;
    if( (outputIndex > -1)&&
        (outputIndex < (ossim_int32)theOutputObjectList.size()))
    {
@@ -661,13 +659,13 @@ ossimConnectableObject* ossimConnectableObject::disconnectMyOutput(ossim_int32 o
       }
       else
       {
-         *current = NULL;
+         *current = 0;
       }
       if(createEvent)
       {
          ossimConnectionEvent event(this,  // owner of message
                                     OSSIM_EVENT_CONNECTION_DISCONNECT_ID,
-                                    NULL,  // new object
+                                    0,  // new object
                                     result,// old object
                                     ossimConnectionEvent::OSSIM_OUTPUT_DIRECTION);
 
@@ -751,7 +749,7 @@ void ossimConnectableObject::disconnectAllInputs()
       }
       else
       {
-         *current = NULL;
+         *current = 0;
          ++current;
       }
    }
@@ -799,7 +797,7 @@ void ossimConnectableObject::disconnectAllOutputs()
       }
       else
       {
-         *current = NULL;
+         *current = 0;
          ++current;
       }
    }
@@ -858,7 +856,7 @@ ossim_int32 ossimConnectableObject::connectMyInputTo(ossimConnectableObject* obj
          ossimConnectionEvent event(this,  // owner of message
                                     OSSIM_EVENT_CONNECTION_CONNECT_ID,
                                     theInputObjectList[index],  // new object
-                                    NULL,// old object
+                                    0,// old object
                                     ossimConnectionEvent::OSSIM_INPUT_DIRECTION);
          // send event to any listener.
          //
@@ -887,33 +885,33 @@ ossim_int32 ossimConnectableObject::connectMyInputTo(ossim_int32 inputIndex,
 					       bool createEventFlag)
 {
    if(!inputObject)
-     {
-       if(inputIndex < (ossim_int32)theInputObjectList.size())
-	 {
-	   ossimConnectableObject* oldObject = theInputObjectList[inputIndex];
-	   if(theInputListIsFixedFlag)
-	     {
-	       theInputObjectList[inputIndex]    = (ossimConnectableObject*)NULL;
-	     }
-	   else
-	     {
-	       theInputObjectList.erase(theInputObjectList.begin() + inputIndex);
-	     }
-	   if(createEventFlag)
-	     {
-	       ossimConnectionEvent event(this,  // owner of message
-					  OSSIM_EVENT_CONNECTION_CONNECT_ID,
-					  NULL,  // new object
-					  oldObject,// old object
-					  ossimConnectionEvent::OSSIM_INPUT_DIRECTION);
-	       // send event to any listener.
-	       //
-	       fireEvent(event);
-	     }
-	   return -1;
-	 }
-       return -1;
-     }
+   {
+      if(inputIndex < (ossim_int32)theInputObjectList.size())
+      {
+         ossimConnectableObject* oldObject = theInputObjectList[inputIndex];
+         if(theInputListIsFixedFlag)
+         {
+            theInputObjectList[inputIndex] = 0;
+         }
+         else
+         {
+            theInputObjectList.erase(theInputObjectList.begin() + inputIndex);
+         }
+         if(createEventFlag)
+         {
+            ossimConnectionEvent event(this,  // owner of message
+                                       OSSIM_EVENT_CONNECTION_CONNECT_ID,
+                                       0,  // new object
+                                       oldObject,// old object
+                                       ossimConnectionEvent::OSSIM_INPUT_DIRECTION);
+            // send event to any listener.
+            //
+            fireEvent(event);
+         }
+         return -1;
+      }
+      return -1;
+   }
 
    ossim_int32 index = findInputIndex(inputObject);
 
@@ -924,7 +922,7 @@ ossim_int32 ossimConnectableObject::connectMyInputTo(ossim_int32 inputIndex,
    {
       if(inputIndex>-1)
       {
-	ossimConnectableObject* oldObject=NULL;
+	ossimConnectableObject* oldObject=0;
          if(inputIndex >= (ossim_int32)theInputObjectList.size())
          {
             if(theInputListIsFixedFlag) return -1;
@@ -991,7 +989,7 @@ bool ossimConnectableObject::connectMyInputTo(std::vector<ossimConnectableObject
      {
         if(theInputListIsFixedFlag)
         {
-	   theInputObjectList[0] = NULL;
+	   theInputObjectList[0] = 0;
         }
         else
         {
@@ -1001,7 +999,7 @@ bool ossimConnectableObject::connectMyInputTo(std::vector<ossimConnectableObject
         {
            ossimConnectionEvent event(this,
                                       OSSIM_EVENT_CONNECTION_CONNECT_ID,
-                                      (ossimConnectableObject*)NULL,
+                                      0,
                                       theInputObjectList[0],
                                       ossimConnectionEvent::OSSIM_INPUT_DIRECTION);
            fireEvent(event);
@@ -1013,21 +1011,21 @@ bool ossimConnectableObject::connectMyInputTo(std::vector<ossimConnectableObject
    ossim_int32 i = 0;
    for(i = 0; i < (ossim_int32)inputList.size(); ++i)
    {
-     if(inputList[i])
-       {
+      if(inputList[i])
+      {
 	 if(connectMyInputTo(inputList[i], makeOutputConnection, false)<0)
-	   {
-	     result = false;
-	   }
+         {
+            result = false;
+         }
 	 else
-	   {
-	     newInputs.push_back(inputList[i]);
-	   }
-       }
-     else
-       {
-	 newInputs.push_back((ossimConnectableObject*)NULL);
-       }
+         {
+            newInputs.push_back(inputList[i]);
+         }
+      }
+      else
+      {
+	 newInputs.push_back(0);
+      }
    }
    if(createEventFlag)
    {
@@ -1077,7 +1075,7 @@ ossim_int32 ossimConnectableObject::connectMyOutputTo(ossimConnectableObject* ou
          ossimConnectionEvent event(this,  // owner of message
                                     OSSIM_EVENT_CONNECTION_CONNECT_ID,
                                     theOutputObjectList[index],  // new object
-                                    NULL,// old object
+                                    0,// old object
                                     ossimConnectionEvent::OSSIM_OUTPUT_DIRECTION);
          // send event to any listener.
          //
@@ -1153,7 +1151,7 @@ ossimConnectableObject* ossimConnectableObject::getInput(ossim_uint32 index)
       return theInputObjectList[index];
    }
 
-   return NULL;
+   return 0;
 }
 
 const ossimConnectableObject* ossimConnectableObject::getInput(ossim_uint32 index)const
@@ -1163,7 +1161,7 @@ const ossimConnectableObject* ossimConnectableObject::getInput(ossim_uint32 inde
       return theInputObjectList[index];
    }
 
-   return NULL;
+   return 0;
 }
 
 ossimConnectableObject* ossimConnectableObject::getOutput(ossim_uint32 index)
@@ -1173,7 +1171,7 @@ ossimConnectableObject* ossimConnectableObject::getOutput(ossim_uint32 index)
       return theOutputObjectList[index];
    }
 
-   return NULL;
+   return 0;
 }
 
 bool ossimConnectableObject::connectInputList(std::vector<ossimConnectableObject*>& inputList)
@@ -1192,7 +1190,7 @@ bool ossimConnectableObject::connectInputList(std::vector<ossimConnectableObject
 	     {
 	       tempOld.push_back(oldInputs[i]);
 	     }
-	   theInputObjectList[i] = NULL;
+	   theInputObjectList[i] = 0;
 	 }
      }
    if(theInputListIsFixedFlag && (theInputObjectList.size()==0))
@@ -1347,7 +1345,7 @@ void ossimConnectableObject::setNumberOfInputs(ossim_int32 numberOfInputs)
           i < numberOfInputs;
           ++i)
       {
-         theInputObjectList.push_back((ossimConnectableObject*)NULL);
+         theInputObjectList.push_back(0);
       }
    }
 }
@@ -1384,7 +1382,7 @@ void ossimConnectableObject::setNumberOfOutputs(ossim_int32 numberOfOutputs)
           i < numberOfOutputs;
           ++i)
       {
-         theOutputObjectList.push_back((ossimConnectableObject*)NULL);
+         theOutputObjectList.push_back(0);
       }
    }
 }
@@ -1397,7 +1395,7 @@ const ossimConnectableObject* ossimConnectableObject::getOutput(ossim_uint32 ind
       return theOutputObjectList[index];
    }
 
-   return NULL;
+   return 0;
 }
 
 void ossimConnectableObject::findAllInputsOfType(std::vector<ossimConnectableObject*>& result,
@@ -1685,7 +1683,9 @@ ossimRefPtr<ossimProperty> ossimConnectableObject::getProperty(const ossimString
    {
       return new ossimTextProperty(name, theDescription);
    }
-   else if(name == "Class name")
+   // "Class name" check for backwards compatibility only.
+   else if( (name == "class_name") ||
+            (name == "Class name") ) 
    {
       ossimProperty* prop = new ossimTextProperty(name,
                                                   getClassName());
@@ -1693,12 +1693,12 @@ ossimRefPtr<ossimProperty> ossimConnectableObject::getProperty(const ossimString
 
       return prop;
    }
-   return (ossimProperty*)NULL;
+   return ossimRefPtr<ossimProperty>();
 }
 
 void ossimConnectableObject::getPropertyNames(std::vector<ossimString>& propertyNames)const
 {
-   propertyNames.push_back("Class name");
+   propertyNames.push_back("class_name");
    propertyNames.push_back("Description");
 }
 
@@ -1752,7 +1752,12 @@ bool ossimConnectableObject::loadState(const ossimKeywordlist& kwl,
       regExpression = ossimString("^(") + ossimString(prefix) + "output_connection[0-9]+)";
       numberOutputs = kwl.getNumberOfSubstringKeys(regExpression);
    }
-   theDescription = kwl.find(prefix, ossimKeywordNames::DESCRIPTION_KW);
+   
+   lookup = kwl.find(prefix, ossimKeywordNames::DESCRIPTION_KW);
+   if (lookup)
+   {
+      theDescription = lookup;
+   }
 
    setNumberOfInputs(numberInputs);
    setNumberOfOutputs(numberOutputs);
@@ -1895,4 +1900,181 @@ bool ossimConnectableObject::canConnectMyOutputTo(ossim_int32 myOutputIndex,
 
   return ((myOutputIndex >= 0) &&
 	  (myOutputIndex  <= (ossim_int32)theOutputObjectList.size()));
+}
+
+bool ossimConnectableObject::moveInputUp(const ossimId& id)
+{
+   bool result = false;
+
+   if (theInputListIsFixedFlag == false)
+   {
+      if ( theInputObjectList.size() )
+      {
+         ossim_int32 indexOfId = findInputIndex(id);
+
+         if (indexOfId > 0)
+         {
+            std::vector<ossimConnectableObject*> oldInputs =
+               theInputObjectList;
+
+            // Swap with index above.
+            ossimConnectableObject* tmpObj  = theInputObjectList[indexOfId];
+            theInputObjectList[indexOfId]   = theInputObjectList[indexOfId-1];
+            theInputObjectList[indexOfId-1] = tmpObj;
+            result = true;
+
+            std::vector<ossimConnectableObject*> newInputs =
+               theInputObjectList;
+
+            ossimConnectionEvent event(this,
+                                 OSSIM_EVENT_CONNECTION_CONNECT_ID,
+                                 newInputs,
+                                 oldInputs,
+                                 ossimConnectionEvent::OSSIM_INPUT_DIRECTION);
+            fireEvent(event);
+         }
+      }
+   }
+   
+   return result;
+}
+
+bool ossimConnectableObject::moveInputDown(const ossimId& id)
+{
+   bool result = false;
+
+   if (theInputListIsFixedFlag == false)
+   {
+      if ( theInputObjectList.size() )
+      {
+         ossim_int32 indexOfId = findInputIndex(id);
+
+         if ( indexOfId <
+              static_cast<ossim_int32>(theInputObjectList.size()-1) )
+         {
+            std::vector<ossimConnectableObject*> oldInputs =
+               theInputObjectList;
+
+            // Swap with index below.
+            ossimConnectableObject* tmpObj  = theInputObjectList[indexOfId];
+            theInputObjectList[indexOfId]   = theInputObjectList[indexOfId+1];
+            theInputObjectList[indexOfId+1] = tmpObj;
+            result = true;
+
+            std::vector<ossimConnectableObject*> newInputs =
+               theInputObjectList;
+
+            ossimConnectionEvent event(this,
+                                 OSSIM_EVENT_CONNECTION_CONNECT_ID,
+                                 newInputs,
+                                 oldInputs,
+                                 ossimConnectionEvent::OSSIM_INPUT_DIRECTION);
+            fireEvent(event);
+         }
+      }
+   }
+   
+   return result;
+}
+
+bool ossimConnectableObject::moveInputToTop(const ossimId& id)
+{
+   bool result = false;
+   
+   if (theInputListIsFixedFlag == false)
+   {
+      if ( theInputObjectList.size() )
+      {
+         std::vector<ossimConnectableObject*>::iterator i =
+            theInputObjectList.begin();
+         
+         while (i != theInputObjectList.end())
+         {
+            if ( (*i)->getId() == id )
+            {
+               break;
+            }
+            ++i;
+         }
+         
+         if ( (i != theInputObjectList.begin()) &&
+              (i != theInputObjectList.end()) )
+         {
+            std::vector<ossimConnectableObject*> oldInputs =
+               theInputObjectList;
+            
+            ossimConnectableObject* obj = *i;               
+            theInputObjectList.erase(i);
+            theInputObjectList.insert(theInputObjectList.begin(), obj);
+            result = true;
+            
+            std::vector<ossimConnectableObject*> newInputs =
+               theInputObjectList;
+            
+            ossimConnectionEvent event(
+               this,
+               OSSIM_EVENT_CONNECTION_CONNECT_ID,
+               newInputs,
+               oldInputs,
+               ossimConnectionEvent::OSSIM_INPUT_DIRECTION);
+            fireEvent(event);
+         }
+      }
+   }
+
+   return result;
+}
+   
+bool ossimConnectableObject::moveInputToBottom(const ossimId& id)
+{
+   bool result = false;
+
+   if (theInputListIsFixedFlag == false)
+   {
+      if ( theInputObjectList.size() )
+      {
+         std::vector<ossimConnectableObject*>::iterator bottom =
+            theInputObjectList.end()-1;
+
+         // if not bottom already
+         if ( (*bottom)->getId() != id ) 
+         {
+            std::vector<ossimConnectableObject*>::iterator i =
+               theInputObjectList.begin();
+
+            while (i != bottom)
+            {
+               if ( (*i)->getId() == id )
+               {
+                  break;
+               }
+               ++i;
+            }
+
+            if (i != bottom)
+            {
+               std::vector<ossimConnectableObject*> oldInputs =
+                  theInputObjectList;
+               
+               ossimConnectableObject* obj = *i;
+               theInputObjectList.erase(i);
+               theInputObjectList.push_back(obj);
+               result = true;
+               
+               std::vector<ossimConnectableObject*> newInputs =
+                  theInputObjectList;
+               
+               ossimConnectionEvent event(
+                  this,
+                  OSSIM_EVENT_CONNECTION_CONNECT_ID,
+                  newInputs,
+                  oldInputs,
+                  ossimConnectionEvent::OSSIM_INPUT_DIRECTION);
+               fireEvent(event);
+            }
+         }
+      }
+   }
+   
+   return result;
 }

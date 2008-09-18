@@ -9,15 +9,17 @@
 // Support data class for a Shuttle Radar Topography Mission (SRTM) file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmSupportData.cpp 11423 2007-07-27 16:59:22Z dburken $
+// $Id: ossimSrtmSupportData.cpp 13094 2008-06-27 15:41:45Z dburken $
 
 #include <cmath>
 #include <fstream>
+#include <iostream>
+#include <iomanip>
 
 #include <ossim/support_data/ossimSrtmSupportData.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordNames.h>
-#include <ossim/base/ossimNotifyContext.h>
+#include <ossim/base/ossimNotify.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimDatum.h>
 #include <ossim/base/ossimDatumFactory.h>
@@ -25,6 +27,7 @@
 #include <ossim/base/ossimRegExp.h>
 #include <ossim/base/ossimScalarTypeLut.h>
 #include <ossim/base/ossimStreamFactoryRegistry.h>
+
 
 // Static trace for debugging
 static ossimTrace traceDebug("ossimSrtmSupportData:debug");
@@ -72,7 +75,7 @@ bool ossimSrtmSupportData::setFilename(const ossimFilename& srtmFile,
    
    theFileStream =  ossimStreamFactoryRegistry::instance()->
       createNewIFStream(theFile,
-                           ios::in | ios::binary);
+                        std::ios_base::in | std::ios_base::binary);
    if (theFileStream.valid())
    {
       if(theFileStream->fail())
@@ -163,7 +166,7 @@ bool ossimSrtmSupportData::setFilename(const ossimFilename& srtmFile,
    
    if (traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG) << *this << endl;
+      ossimNotify(ossimNotifyLevel_DEBUG) << *this << std::endl;
    }
    
    return true;
@@ -461,18 +464,6 @@ bool ossimSrtmSupportData::loadOmd(const ossimKeywordlist& kwl,
    {
       return false;
    }
-
-   lookup = kwl.find(prefix,
-                     ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LAT);
-   if (lookup)
-   {
-      s = lookup;
-      theLatSpacing = s.toDouble();
-   }
-   else
-   {
-      return false;
-   }
    
    int scalar = ossimScalarTypeLut::instance()->getEntryNumber(kwl, prefix);
    
@@ -489,20 +480,48 @@ bool ossimSrtmSupportData::loadOmd(const ossimKeywordlist& kwl,
    {
       return false;
    }
+
+   //---
+   // Note:
+   // Getting spacing from keyword list was causing a error in the
+   // ossimSrtmHandler::getHeightAboveMSLTemplate where:
+   // 
+   // double yi = (theNwCornerPost.lat - gpt.lat) / theLatSpacing;
+   //
+   // resulted in: 3599.999999997120085
+   //
+   // when it should have been:
+   // 3600.0
+   //
+   // (drb)
+   //---
    
-   lookup = kwl.find(prefix,
-                     ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LON);
-   if (lookup)
-   {
-      s = lookup;
-      theLonSpacing = s.toDouble();
-   }
-   else
-   {
-      return false;
-   }
+//    lookup = kwl.find(prefix,
+//                      ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LON);
+//    if (lookup)
+//    {
+//       s = lookup;
+//       theLonSpacing = s.toDouble();
+//    }
+//    else
+//    {
+//       return false;
+//    }
 
-
+//    lookup = kwl.find(prefix,
+//                      ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LAT);
+//    if (lookup)
+//    {
+//       s = lookup;
+//       theLatSpacing = s.toDouble();
+//    }
+//    else
+//    {
+//       return false;
+//    }
+   
+   theLatSpacing = 1.0 / (theNumberOfLines   - 1);
+   theLonSpacing = 1.0 / (theNumberOfSamples - 1);
    
    return true;
 }
@@ -587,11 +606,11 @@ bool ossimSrtmSupportData::setCornerPoints()
       theSouthwestLatitude = ossimString(f.begin()+1,
                                          f.begin()+3).toDouble();//s.toDouble();
       // Get the latitude.
-      if (f[0] == 'S')
+      if (f[static_cast<std::string::size_type>(0)] == 'S')
       {
          theSouthwestLatitude *= -1;
       }
-      else if (f[0] != 'N')
+      else if (f[static_cast<std::string::size_type>(0)] != 'N')
       {
          return false; // Must be either 's' or 'n'.
       }
@@ -602,11 +621,11 @@ bool ossimSrtmSupportData::setCornerPoints()
 //       s.push_back(f[6]);
       theSouthwestLongitude = ossimString(f.begin()+4,
                                           f.begin()+7).toDouble();//s.toDouble();
-      if (f[3] == 'W')
+      if (f[static_cast<std::string::size_type>(3)] == 'W')
       {
       theSouthwestLongitude *= -1;
       }
-      else if (f[3] != 'E')
+      else if (f[static_cast<std::string::size_type>(3)] != 'E')
       {
          return false; // Must be either 'e' or 'w'.
       }
@@ -620,11 +639,11 @@ bool ossimSrtmSupportData::setCornerPoints()
 //       s.push_back(f[3]);
       theSouthwestLongitude =  ossimString(f.begin()+1,
                                            f.begin()+4).toDouble();//s.toDouble();
-      if (f[0] == 'W')
+      if (f[static_cast<std::string::size_type>(0)] == 'W')
       {
       theSouthwestLongitude *= -1;
       }
-      else if (f[0] != 'E')
+      else if (f[static_cast<std::string::size_type>(0)] != 'E')
       {
          return false; // Must be either 'e' or 'w'.
       }
@@ -635,11 +654,11 @@ bool ossimSrtmSupportData::setCornerPoints()
       theSouthwestLatitude = ossimString(f.begin()+5,
                                          f.begin()+7).toDouble();//s.toDouble();
       // Get the latitude.
-      if (f[4] == 'S')
+      if (f[static_cast<std::string::size_type>(4)] == 'S')
       {
          theSouthwestLatitude *= -1;
       }
-      else if (f[4] != 'N')
+      else if (f[static_cast<std::string::size_type>(4)] != 'N')
       {
          return false; // Must be either 's' or 'n'.
       }
@@ -668,7 +687,7 @@ bool ossimSrtmSupportData::setSize()
       theFileStream =
          ossimStreamFactoryRegistry::instance()->createNewIFStream(
             theFile,
-            ios::in | ios::binary);
+            std::ios_base::in | std::ios_base::binary);
    }
    
    if (!theFileStream.valid())
@@ -827,7 +846,7 @@ bool ossimSrtmSupportData::computeMinMaxTemplate(T dummy,
       theFileStream =
          ossimStreamFactoryRegistry::instance()->createNewIFStream(
             theFile,
-            ios::in | ios::binary);
+            std::ios_base::in | std::ios_base::binary);
    }
    
    if (!theFileStream.valid())
@@ -890,7 +909,7 @@ ossimScalarType ossimSrtmSupportData::getScalarType()const
 
 std::ostream& ossimSrtmSupportData::print(std::ostream& out) const
 {
-   out << setprecision(15) << "ossimSrtmSupportData data members:"
+   out << std::setprecision(15) << "ossimSrtmSupportData data members:"
        << "\nFile:                  " << theFile
        << "\nLines:                 " << theNumberOfLines
        << "\nSamples:               " << theNumberOfSamples
@@ -900,7 +919,7 @@ std::ostream& ossimSrtmSupportData::print(std::ostream& out) const
        << "\nLongitude spacing:     " << theLonSpacing
        << "\nMin post value:        " << theMinPixelValue
        << "\nMax post value:        " << theMaxPixelValue
-       << endl;
+       << std::endl;
    return out;
 }
 

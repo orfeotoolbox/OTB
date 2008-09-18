@@ -18,8 +18,8 @@
 // ============================================================================
 //
 // File          : gzstream.h
-// Revision      : $Revision: 11176 $
-// Revision_date : $Date: 2007-06-07 21:45:56 +0200 (Thu, 07 Jun 2007) $
+// Revision      : $Revision: 13050 $
+// Revision_date : $Date: 2008-06-19 20:07:35 +0200 (Thu, 19 Jun 2008) $
 // Author(s)     : Deepak Bandyopadhyay, Lutz Kettner
 // 
 // Standard streambuf implementation following Nicolai Josuttis, "The 
@@ -38,7 +38,6 @@
 #include <ossim/base/ossimIoStream.h>
 
 #if OSSIM_HAS_LIBZ
-#include <zlib.h>
 // ----------------------------------------------------------------------------
 // Internal classes to implement gzstream. See below for user classes.
 // ----------------------------------------------------------------------------
@@ -69,12 +68,12 @@ public:
 /*                              std::ios_base::out); */
    
 private:
+   struct PrivateData;
    int flush_buffer();
 
    static const int bufferSize = 303; // 47+256 size of data buff
    // totals 512 bytes under g++ for igzstream at the end.
-   
-   gzFile           file;               // file handle for compressed file
+   PrivateData*     prvtData;
    char             buffer[bufferSize]; // data buffer
    bool             opened;             // open/close state of stream
    int              mode;               // I/O mode

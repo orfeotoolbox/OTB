@@ -7,7 +7,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeaderV2_1.cpp 11062 2007-05-29 12:46:36Z gpotts $
+// $Id: ossimNitfFileHeaderV2_1.cpp 12403 2008-02-04 17:59:13Z gpotts $
 
 #include <iostream>
 #include <iomanip>
@@ -635,7 +635,7 @@ ossim_int32 ossimNitfFileHeaderV2_1::getNumberOfImages()const
 
 ossim_int32 ossimNitfFileHeaderV2_1::getNumberOfTextSegments()const
 {
-   return theNitfTextFileInfoRecords.size();
+   return static_cast<ossim_int32>(theNitfTextFileInfoRecords.size());
 }
 
 ossim_int32 ossimNitfFileHeaderV2_1::getHeaderSize()const

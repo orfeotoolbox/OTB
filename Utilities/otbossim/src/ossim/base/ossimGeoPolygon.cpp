@@ -6,13 +6,15 @@
 // AUTHOR: Garrett Potts
 //
 //*****************************************************************************
-//  $Id: ossimGeoPolygon.cpp 11408 2007-07-27 13:43:00Z dburken $
+//  $Id: ossimGeoPolygon.cpp 12976 2008-06-03 23:58:10Z dburken $
 
+#include <ostream>
 #include <sstream>
 #include <algorithm>
 #include <ossim/base/ossimGeoPolygon.h>
 #include <ossim/base/ossimDatumFactory.h>
 #include <ossim/base/ossimDatum.h>
+#include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
 
 static const char* NUMBER_VERTICES_KW = "number_vertices";
@@ -25,14 +27,14 @@ std::ostream& operator <<(std::ostream& out, const ossimGeoPolygon& poly)
       {
          for(ossim_uint32 i = 0; i <  poly.size()-1; ++i)
          {
-            out << "P" << i << ": " << poly[i] << endl;
+            out << "P" << i << ": " << poly[i] << std::endl;
          }
          out << "P"  << (poly.size()-1)
-             << ": " << poly[poly.size()-1] << endl;
+             << ": " << poly[poly.size()-1] << std::endl;
       }
       else
       {
-         out << "P0: " << poly[0] << endl;
+         out << "P0: " << poly[0] << std::endl;
       }
    }
 
@@ -195,13 +197,13 @@ void ossimGeoPolygon::stretchOut(ossimGeoPolygon& newPolygon,
 double ossimGeoPolygon::area()const
 {
    double area = 0;
-   int i=0;
-   int j=0;
-   int size = theVertexList.size();
+   ossim_uint32 i=0;
+   ossim_uint32 j=0;
+   ossim_uint32 size = theVertexList.size();
    
-   for (i=0;i<(int)size;i++)
+   for (i=0;i<size;i++)
    {
-      j = (i + 1) % (int)size;
+      j = (i + 1) % size;
       area += theVertexList[i].lon * theVertexList[j].lat;
       area -= theVertexList[i].lat * theVertexList[j].lon;
    }
@@ -324,7 +326,7 @@ bool ossimGeoPolygon::loadState(const ossimKeywordlist& kwl,
       ossimString v = kwl.find(prefix, (ossimString("v")+ossimString::toString(i)).c_str());
       v = v.trim();
 
-      istringstream vStream(v);
+      std::istringstream vStream(v);
       vStream >> lat >> lon >> height;
       height = height.trim();
       if(height == "nan")

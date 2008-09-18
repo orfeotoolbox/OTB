@@ -10,7 +10,7 @@
 // Contains class declaration for ossimBandSelector.
 // 
 //*******************************************************************
-//  $Id: ossimBandSelector.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimBandSelector.cpp 13022 2008-06-10 16:25:36Z dburken $
 
 #include <iostream>
 #include <algorithm>
@@ -27,7 +27,7 @@ RTTI_DEF1(ossimBandSelector,"ossimBandSelector", ossimImageSourceFilter)
 ossimBandSelector::ossimBandSelector()
    :
       ossimImageSourceFilter(),
-      theTile(NULL),
+      theTile(0),
       theWithinRangeFlag(ossimBandSelectorWithinRangeFlagState_NOT_SET)
 
 {
@@ -37,7 +37,7 @@ ossimBandSelector::ossimBandSelector()
 
 ossimBandSelector::~ossimBandSelector()
 {
-   theTile = NULL;
+   theTile = 0;
 }
 
 ossimRefPtr<ossimImageData> ossimBandSelector::getTile(
@@ -114,7 +114,7 @@ void ossimBandSelector::setOutputBandList(
    if (outputBandList.size())
    {
       theOutputBandList = outputBandList;  // Assign the new list.
-      theTile = NULL;       // Force an allocate call next getTile.
+      theTile = 0;       // Force an allocate call next getTile.
 
       theWithinRangeFlag = ossimBandSelectorWithinRangeFlagState_NOT_SET;
    }
@@ -124,7 +124,7 @@ ossim_uint32 ossimBandSelector::getNumberOfOutputBands() const
 {
    if(theEnableFlag)
    {
-      return theOutputBandList.size();
+      return (ossim_uint32)theOutputBandList.size();
    }
    
    return getNumberOfInputBands();
@@ -160,18 +160,18 @@ void ossimBandSelector::initialize()
                 ( theTile->getScalarType() !=
                   theInputConnection->getOutputScalarType() ) )
             {
-               theTile = NULL; // Don't need it.
+               theTile = 0; // Don't need it.
             }
          }
       }
       else
       {
-         theTile = NULL;
+         theTile = 0;
       }
    }
    else // No input connection.
    {
-      theTile = NULL;
+      theTile = 0;
    }
 }
 
@@ -280,33 +280,34 @@ bool ossimBandSelector::saveState(ossimKeywordlist& kwl,
 }
 
 bool ossimBandSelector::loadState(const ossimKeywordlist& kwl,
-                                                  const char* prefix)
+                                  const char* prefix)
 {
    ossimImageSourceFilter::loadState(kwl, prefix);
-
+   
    // call ossimSource method to delete the list of objects   
    theOutputBandList.clear();
    ossimString copyPrefix = prefix;
-
+   
    
    ossimString regExpression =  ossimString("^(") + copyPrefix + "band[0-9]+)";
-
-   vector<ossimString> keys =
-      kwl.getSubstringKeyList( regExpression );
+   
+   vector<ossimString> keys = kwl.getSubstringKeyList( regExpression );
    long numberOfBands = (long)keys.size();
-   int offset = (copyPrefix+"band").size();
-   int idx = 0;
+   ossim_uint32 offset = (ossim_uint32)(copyPrefix+"band").size();
+   std::vector<int>::size_type idx = 0;
    std::vector<int> numberList(numberOfBands);
-   for(idx = 0; idx < (int)keys.size();++idx)
-     {
-       ossimString numberStr(keys[idx].begin() + offset,
-			     keys[idx].end());
-       numberList[idx] = numberStr.toInt();
-     }
-   std::sort(numberList.begin(), numberList.end());
-   for(idx=0;idx < (int)numberList.size();++idx)
+   for(idx = 0; idx < keys.size();++idx)
    {
-      const char* bandValue = kwl.find(copyPrefix, ("band"+ossimString::toString(numberList[idx])).c_str());
+      ossimString numberStr(keys[idx].begin() + offset,
+                            keys[idx].end());
+      numberList[idx] = numberStr.toInt();
+   }
+   std::sort(numberList.begin(), numberList.end());
+   for(idx=0;idx < numberList.size();++idx)
+   {
+      const char* bandValue =
+         kwl.find(copyPrefix,
+                  ("band"+ossimString::toString(numberList[idx])).c_str());
       theOutputBandList.push_back( ossimString(bandValue).toLong()-1);
    }
    initialize();
@@ -321,7 +322,7 @@ bool ossimBandSelector::isOrderedCorrectly() const
       std::vector<ossim_uint32> inputList;
       theInputConnection->getOutputBandList(inputList);
       
-      ossim_uint32 output_bands = theOutputBandList.size();
+      ossim_uint32 output_bands = (ossim_uint32)theOutputBandList.size();
 
       if(inputList.size() != output_bands) return false;
       
@@ -346,7 +347,7 @@ bool ossimBandSelector::outputBandsWithinInputRange() const
    if(theInputConnection)
    {
       const ossim_uint32 HIGHEST_BAND = getNumberOfInputBands() - 1;
-      const ossim_uint32 OUTPUT_BANDS = theOutputBandList.size();
+      const ossim_uint32 OUTPUT_BANDS = (ossim_uint32)theOutputBandList.size();
       for (ossim_uint32 i=0; i<OUTPUT_BANDS; ++i)
       {
          if (theOutputBandList[i] > HIGHEST_BAND)

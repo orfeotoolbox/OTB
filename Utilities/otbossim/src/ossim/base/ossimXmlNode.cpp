@@ -9,7 +9,7 @@
 // Contains definition of class ossimXmlNode.
 // 
 //*****************************************************************************
-// $Id: ossimXmlNode.cpp 11669 2007-09-04 17:10:06Z gpotts $
+// $Id: ossimXmlNode.cpp 12953 2008-06-01 16:24:05Z dburken $
 
 #include <iostream>
 #include <stack>
@@ -25,11 +25,8 @@ RTTI_DEF2(ossimXmlNode, "ossimXmlNode", ossimObject, ossimErrorStatusInterface);
 static std::istream& xmlskipws(std::istream& in)
 {
    int c = in.peek();
-   while(!in.fail()&&
-         (c == ' ') ||
-         (c == '\t') ||
-         (c == '\n')||
-	 (c == '\r'))
+   while( !in.fail() &&
+          ( (c == ' ') || (c == '\t') || (c == '\n')|| (c == '\r') ) )
    {
       in.ignore(1);
       c = in.peek();
@@ -52,8 +49,44 @@ ossimXmlNode::ossimXmlNode()
 {
 }
 
+ossimXmlNode::ossimXmlNode(const ossimXmlNode& src)
+:theTag(src.theTag),
+theParentNode(0),
+theText(src.theText),
+theCDataFlag(src.theCDataFlag)
+{
+   ossim_uint32 idx = 0;
+   for(idx = 0; idx < src.theChildNodes.size();++idx)
+   {
+      theChildNodes.push_back((ossimXmlNode*)(src.theChildNodes[idx]->dup()));
+   }
+   for(idx = 0; idx < src.theAttributes.size();++idx)
+   {
+      theAttributes.push_back((ossimXmlAttribute*)(src.theAttributes[idx]->dup()));
+   }
+}
+
 ossimXmlNode::~ossimXmlNode()
 {
+}
+
+void ossimXmlNode::duplicateAttributes(ossimXmlNode::AttributeListType result)const
+{
+   ossim_uint32 idx = 0;
+   for(idx = 0; idx<theAttributes.size();++idx)
+   {
+      result.push_back((ossimXmlAttribute*)theAttributes[idx]->dup());
+   }
+	
+}
+
+void ossimXmlNode::duplicateChildren(ossimXmlNode::ChildListType& result)const
+{
+   ossim_uint32 idx = 0;
+   for(idx = 0; idx<theChildNodes.size();++idx)
+   {
+      result.push_back((ossimXmlNode*)theChildNodes[idx]->dup());
+   }
 }
 
 void ossimXmlNode::setParent(ossimXmlNode* parent)
@@ -222,7 +255,7 @@ bool ossimXmlNode::read(std::istream& in)
 
 
 void ossimXmlNode::findChildNodes(const ossimString& xpath,
-                                  vector<ossimRefPtr<ossimXmlNode> >& result)const
+                                  ossimXmlNode::ChildListType& result)const
 {
    //***
    // Scan for trivial result (no children owned):
@@ -237,14 +270,16 @@ void ossimXmlNode::findChildNodes(const ossimString& xpath,
    if (rel_xpath.empty())
       return;
    
-   //***
+   //---
    // First verify that this is not an absolute path:
-   //***
-   if (rel_xpath[0] == XPATH_DELIM[0])
+   //---
+   if (rel_xpath[static_cast<std::string::size_type>(0)] ==
+       XPATH_DELIM[static_cast<std::string::size_type>(0)])
    {
-      ossimNotify(ossimNotifyLevel_WARN) << "WARNING: ossimXmlNode::findChildNodes\n"
-                                         << "Only relative XPaths can be searched from a node. "
-                                         << "Returning null list...\n";
+      ossimNotify(ossimNotifyLevel_WARN)
+         << "WARNING: ossimXmlNode::findChildNodes\n"
+         << "Only relative XPaths can be searched from a node. "
+         << "Returning null list...\n";
       return;
    }
 
@@ -259,7 +294,7 @@ void ossimXmlNode::findChildNodes(const ossimString& xpath,
    //***
    // Loop over all child nodes for match:
    //***
-   vector<ossimRefPtr<ossimXmlNode> >::const_iterator child_iter = theChildNodes.begin();
+   ossimXmlNode::ChildListType::const_iterator child_iter = theChildNodes.begin();
    while(child_iter != theChildNodes.end())
    {
       if ((*child_iter)->getTag() == desired_tag)
@@ -302,11 +337,13 @@ const ossimRefPtr<ossimXmlNode> ossimXmlNode::findFirstNode(const ossimString& x
    //
    // First verify that this is not an absolute path:
    //
-   if (rel_xpath[0] == XPATH_DELIM[0])
+   if (rel_xpath[static_cast<std::string::size_type>(0)] ==
+       XPATH_DELIM[static_cast<std::string::size_type>(0)])
    {
-      ossimNotify(ossimNotifyLevel_WARN) << "WARNING: ossimXmlNode::findChildNodes\n"
-                                         << "Only relative XPaths can be searched from a node. "
-                                         << "Returning null list...\n";
+      ossimNotify(ossimNotifyLevel_WARN)
+         << "WARNING: ossimXmlNode::findChildNodes\n"
+         << "Only relative XPaths can be searched from a node. "
+         << "Returning null list...\n";
       return 0;
    }
 
@@ -323,7 +360,7 @@ const ossimRefPtr<ossimXmlNode> ossimXmlNode::findFirstNode(const ossimString& x
    //
    // Loop over all child nodes for match:
    //
-   vector<ossimRefPtr<ossimXmlNode> >::const_iterator child_iter = theChildNodes.begin();
+   ossimXmlNode::ChildListType::const_iterator child_iter = theChildNodes.begin();
    while((child_iter != theChildNodes.end())&&
          (!result.valid()))
    {
@@ -366,11 +403,13 @@ ossimRefPtr<ossimXmlNode> ossimXmlNode::findFirstNode(const ossimString& xpath)
    //
    // First verify that this is not an absolute path:
    //
-   if (rel_xpath[0] == XPATH_DELIM[0])
+   if (rel_xpath[static_cast<std::string::size_type>(0)] ==
+       XPATH_DELIM[static_cast<std::string::size_type>(0)])
    {
-      ossimNotify(ossimNotifyLevel_WARN) << "WARNING: ossimXmlNode::findChildNodes\n"
-                                         << "Only relative XPaths can be searched from a node. "
-                                         << "Returning null list...\n";
+      ossimNotify(ossimNotifyLevel_WARN)
+         << "WARNING: ossimXmlNode::findChildNodes\n"
+         << "Only relative XPaths can be searched from a node. "
+         << "Returning null list...\n";
       return 0;
    }
 
@@ -387,7 +426,7 @@ ossimRefPtr<ossimXmlNode> ossimXmlNode::findFirstNode(const ossimString& xpath)
    //
    // Loop over all child nodes for match:
    //
-   vector<ossimRefPtr<ossimXmlNode> >::iterator child_iter = theChildNodes.begin();
+   ossimXmlNode::ChildListType::iterator child_iter = theChildNodes.begin();
    while((child_iter != theChildNodes.end())&&
          (!result.valid()))
    {
@@ -467,17 +506,17 @@ ossimXmlNode* ossimXmlNode::getParentNode()
    return theParentNode;
 }
 
-const vector<ossimRefPtr<ossimXmlNode> >& ossimXmlNode::getChildNodes() const
+const ossimXmlNode::ChildListType& ossimXmlNode::getChildNodes() const
 {
    return theChildNodes;
 }
 
-vector<ossimRefPtr<ossimXmlNode> >& ossimXmlNode::getChildNodes()
+ossimXmlNode::ChildListType& ossimXmlNode::getChildNodes()
 {
    return theChildNodes;
 }
 
-const vector<ossimRefPtr<ossimXmlAttribute> >& ossimXmlNode::getAttributes() const
+const ossimXmlNode::AttributeListType& ossimXmlNode::getAttributes() const
 {
    return theAttributes;
 }
@@ -558,7 +597,7 @@ ostream& operator << (ostream& os, const ossimXmlNode* xml_node)
    //
    if (xml_node->theAttributes.size())
    {
-      vector<ossimRefPtr<ossimXmlAttribute> >::const_iterator attr =
+      ossimXmlNode::AttributeListType::const_iterator attr =
          xml_node->theAttributes.begin();
       while (attr != xml_node->theAttributes.end())
       {
@@ -592,7 +631,7 @@ ostream& operator << (ostream& os, const ossimXmlNode* xml_node)
       //
       if (xml_node->theChildNodes.size())
       {
-         vector<ossimRefPtr<ossimXmlNode> >::const_iterator nodes = xml_node->theChildNodes.begin();
+         ossimXmlNode::ChildListType::const_iterator nodes = xml_node->theChildNodes.begin();
          while (nodes != xml_node->theChildNodes.end())
          {
             os << (*nodes).get();
@@ -657,7 +696,8 @@ ossimRefPtr<ossimXmlNode> ossimXmlNode::addNode(const ossimString& relPath,
    //
    // First verify that this is not an absolute path:
    //
-   if (relXpath[0] == XPATH_DELIM[0])
+   if (relXpath[static_cast<std::string::size_type>(0)] ==
+       XPATH_DELIM[static_cast<std::string::size_type>(0)])
    {
       ossimNotify(ossimNotifyLevel_WARN) << "WARNING: ossimXmlNode::findChildNodes\n"
                                          << "Only relative XPaths can be searched from a node. "
@@ -731,7 +771,7 @@ ossimRefPtr<ossimXmlNode> ossimXmlNode::addChildNode(const ossimString& tagName,
 
 ossimRefPtr<ossimXmlNode> ossimXmlNode::removeChild(ossimRefPtr<ossimXmlNode> node)
 {
-   vector<ossimRefPtr<ossimXmlNode> >::iterator iter = theChildNodes.begin();
+   ossimXmlNode::ChildListType::iterator iter = theChildNodes.begin();
    while(iter != theChildNodes.end())
    {
       
@@ -751,7 +791,7 @@ ossimRefPtr<ossimXmlNode> ossimXmlNode::removeChild(ossimRefPtr<ossimXmlNode> no
 
 ossimRefPtr<ossimXmlNode> ossimXmlNode::removeChild(const ossimString& tag)
 {
-   vector<ossimRefPtr<ossimXmlNode> >::iterator iter = theChildNodes.begin();
+   ossimXmlNode::ChildListType::iterator iter = theChildNodes.begin();
    while(iter != theChildNodes.end())
    {
       if(tag == iter->get()->theTag)
@@ -766,6 +806,55 @@ ossimRefPtr<ossimXmlNode> ossimXmlNode::removeChild(const ossimString& tag)
    }
    
    return 0;
+}
+void ossimXmlNode::addChildren(ossimXmlNode::ChildListType& children)
+{
+   ossim_uint32 idx;
+   for(idx = 0; idx < children.size(); ++idx)
+   {
+      addChildNode(children[idx].get());
+   }
+}
+
+void ossimXmlNode::setChildren(ossimXmlNode::ChildListType& children)
+{
+   clearChildren();
+   addChildren(children);
+}
+
+void ossimXmlNode::addAttributes(ossimXmlNode::AttributeListType& children)
+{
+   ossim_uint32 idx;
+   
+   for(idx = 0; idx < children.size(); ++idx)
+   {
+      addAttribute(children[idx].get());
+   }
+}
+
+void ossimXmlNode::setAttributes(ossimXmlNode::AttributeListType& children)
+{
+   clearAttributes();
+   addAttributes(children);
+}
+
+void ossimXmlNode::clear()
+{
+   theChildNodes.clear();
+   theAttributes.clear();
+   theTag="";
+   theText="";
+   theCDataFlag=false;
+}
+
+void ossimXmlNode::clearChildren()
+{
+   theChildNodes.clear();
+}
+
+void ossimXmlNode::clearAttributes()
+{
+   theAttributes.clear();
 }
 
 void ossimXmlNode::toKwl(ossimKeywordlist& kwl,

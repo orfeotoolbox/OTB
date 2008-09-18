@@ -12,11 +12,14 @@
 //              Initial coding.
 //
 //*****************************************************************************
-//  $Id: ossimLsrSpace.cpp 11347 2007-07-23 13:01:59Z gpotts $
+//  $Id: ossimLsrSpace.cpp 12790 2008-05-05 13:41:33Z dburken $
 
 #include <ossim/base/ossimLsrSpace.h>
 #include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimGpt.h>
+#include <ossim/base/ossimColumnVector3d.h>
+#include <ossim/base/ossimEcefVector.h>
+
 
 //*****************************************************************************
 //  CONSTRUCTOR: ossimLsrSpace(origin, x_dir, y_dir, int)

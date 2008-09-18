@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  See top level LICENSE.txt file.
 //
@@ -9,10 +8,12 @@
 //
 // Calls Lamberts Conformal Conic projection code.  
 //*******************************************************************
-//  $Id: ossimLambertConformalConicProjection.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimLambertConformalConicProjection.h 12508 2008-02-25 18:38:09Z dburken $
 
 #ifndef ossimLambertConformalConicProjection_HEADER
 #define ossimLambertConformalConicProjection_HEADER
+
+#include <iosfwd>
 #include <ossim/projection/ossimMapProjection.h>
 
 class ossimLambertConformalConicProjection : public ossimMapProjection
@@ -20,7 +21,15 @@ class ossimLambertConformalConicProjection : public ossimMapProjection
 public:
    ossimLambertConformalConicProjection(const ossimEllipsoid& ellipsoid = ossimEllipsoid(),
                                         const ossimGpt& origin = ossimGpt());
-   
+
+   /**
+    * @param ellipsoid
+    * @param origin latitude longitude in decimal degrees.
+    * @param stdParallel1 First parallel in radians.
+    * @param stdParallel2 Second parallel in radian.
+    * @param falseEasting False easting in meters.
+    * @param falseNorthing False northing in meters.
+    */
    ossimLambertConformalConicProjection(const ossimEllipsoid& ellipsoid,
                                         const ossimGpt& origin,
                                         double stdParallel1,
@@ -73,10 +82,13 @@ public:
     */
    void setFalseEastingNorthing(double falseEasting, double falseNorthing);
 
-   /*!
-    * Allows one to set all parameters for this projections.  parallels are in
-    * degrees and easting northings are in meters.
+   /**
+    * @brief Allows one to set all parameters for this projections.
     * Update is then called so we can pre-compute paramters.
+    * @param stdParallel1 First parallel in decimal degrees.
+    * @param stdParallel2 Second parallel in decimal degrees.
+    * @param falseEasting False easting in meters.
+    * @param falseNorthing False northing in meters.
     */
    void setParameters(double parallel1,
                       double parallel2,
@@ -104,6 +116,11 @@ public:
    */
   virtual bool loadState(const ossimKeywordlist& kwl,
 			 const char* prefix=0);
+  
+  /**
+   * @brief Prints data members to stream.  Returns stream&.
+   */
+   virtual std::ostream& print(std::ostream& out) const;
 
 private:
 

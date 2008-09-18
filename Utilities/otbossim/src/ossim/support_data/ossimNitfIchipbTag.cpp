@@ -11,11 +11,11 @@
 // http://164.214.2.51/ntb/baseline/docs/stdi0002/final.pdf
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfIchipbTag.cpp 10177 2007-01-03 19:22:09Z gpotts $
+// $Id: ossimNitfIchipbTag.cpp 13025 2008-06-13 17:06:30Z sbortman $
 
 #include <cstring> /* for memcpy */
-#include <istream>
 #include <iomanip>
+#include <iostream>
 
 #include <ossim/support_data/ossimNitfIchipbTag.h>
 #include <ossim/base/ossimString.h>

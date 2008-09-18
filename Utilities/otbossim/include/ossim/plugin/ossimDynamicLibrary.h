@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimDynamicLibrary.h 9097 2006-06-13 20:57:27Z dburken $
+// $Id: ossimDynamicLibrary.h 12319 2008-01-16 19:55:24Z gpotts $
 #ifndef ossimDynamicLibrary_HEADER
 #define ossimDynamicLibrary_HEADER
 

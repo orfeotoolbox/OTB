@@ -9,8 +9,9 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimAffineTransform.cpp 9966 2006-11-29 02:01:07Z gpotts $
+//  $Id: ossimAffineTransform.cpp 12953 2008-06-01 16:24:05Z dburken $
 
+#include <cstdlib>
 #include <ossim/base/ossimAffineTransform.h>
 RTTI_DEF1(ossimAffineTransform, "ossimAffineTransform", ossim2dTo2dTransform);
 
@@ -117,23 +118,23 @@ bool ossimAffineTransform::loadState(const ossimKeywordlist& kwl,
        
    buf= kwl.find(prefix, ossimKeywordNames::SCALE_X_KW);
    if (!buf) goto BAD_KEYWORD;
-   theScale.x = atof(buf);
+   theScale.x = std::atof(buf);
 
    buf= kwl.find(prefix, ossimKeywordNames::SCALE_Y_KW);
    if (!buf) goto BAD_KEYWORD;
-   theScale.y = atof(buf);
+   theScale.y = std::atof(buf);
 
    buf= kwl.find(prefix, ossimKeywordNames::TRANSLATION_X_KW);
    if (!buf) goto BAD_KEYWORD;
-   theTranslation.x = atof(buf);
+   theTranslation.x = std::atof(buf);
 
    buf= kwl.find(prefix, ossimKeywordNames::TRANSLATION_Y_KW);
    if (!buf) goto BAD_KEYWORD;
-   theTranslation.y = atof(buf);
+   theTranslation.y = std::atof(buf);
 
    buf= kwl.find(prefix, ossimKeywordNames::ROTATION_KW);
    if (!buf) goto BAD_KEYWORD;
-   theRotation = atof(buf);
+   theRotation = std::atof(buf);
 
    computeMatrix();   
    return true;

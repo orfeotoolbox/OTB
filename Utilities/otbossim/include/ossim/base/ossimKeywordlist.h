@@ -8,7 +8,7 @@
 // Description: This class provides capabilities for keywordlists.
 //
 //********************************************************************
-// $Id: ossimKeywordlist.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimKeywordlist.h 13015 2008-06-10 16:04:52Z dburken $
 
 #ifndef ossimKeywordlist_HEADER
 #define ossimKeywordlist_HEADER
@@ -135,6 +135,15 @@ public:
    void add(const char*   prefix,
             const char*   key,
             ossim_uint32  value,
+            bool          overwrite = true);
+
+   void add(const char*   key,
+            ossim_int64   value,
+            bool          overwrite = true);
+
+   void add(const char*   prefix,
+            const char*   key,
+            ossim_int64   value,
             bool          overwrite = true);
 
    /**

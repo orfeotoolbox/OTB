@@ -6,7 +6,7 @@
 //
 // Description: Base class for tuple-based ossimSensorModel metric operations.
 //----------------------------------------------------------------------------
-// $Id: ossimSensorModelTuple.h 11614 2007-08-15 17:07:49Z dburken $
+// $Id: ossimSensorModelTuple.h 12459 2008-02-11 18:05:01Z dburken $
 #ifndef ossimSensorModelTuple_HEADER
 #define ossimSensorModelTuple_HEADER
 
@@ -19,6 +19,25 @@
 class ossimEcefPoint;
 
 typedef vector<ossimDpt> DptSet_t;
+
+/**
+ * Container class to hold computed rpc model inputs to the
+ * ossimPositionQualityEvaluator constructor.  These are stored for retrieval
+ * purposes only and will only be initialized if the underlying sensor model
+ * is an rpc.
+ */
+class OSSIM_DLL ossimRpcPqeInputs
+{
+public:
+   ossimRpcPqeInputs();
+   ~ossimRpcPqeInputs();
+   ossim_float64       theRpcElevationAngle; // decimal degrees
+   ossim_float64       theRpcAzimuthAngle;   // decimal degrees
+   ossim_float64       theRpcBiasError;
+   ossim_float64       theRpcRandError;
+   ossimColumnVector3d theSurfaceNormalVector;
+   NEWMAT::Matrix      theSurfaceCovMatrix;
+};
 
 class OSSIM_DLL ossimSensorModelTuple
 {
@@ -85,7 +104,7 @@ public:
       const ossim_int32&     img,
       const ossimDpt&        obs,
       ossimEcefPoint&  pt,
-      NEWMAT::Matrix&  covMat) const;
+      NEWMAT::Matrix&  covMat);
    
    /**
     * @brief Single-image/height intersection method.
@@ -97,13 +116,16 @@ public:
     * @param covMat               3X3 ECF position covariance matrix [m].
     *
     * @return true on success, false on error.
+    *
+    * @NOTE:  This method's "const" qualifier was removed as it stores rpc
+    * inputs to the pqe constructor for report purposes.
     */
    ossimSensorModelTuple::IntersectStatus intersect(
       const ossim_int32&     img,
       const ossimDpt&        obs,
       const ossim_float64&   heightAboveEllipsoid,
       ossimEcefPoint&  pt,
-      NEWMAT::Matrix&  covMat) const;
+      NEWMAT::Matrix&  covMat);
             
    /**
     * @brief Set intersection surface accuracy method.
@@ -114,10 +136,11 @@ public:
     * @return true on success, false on exception.
     * Entry of negative value(s) indicates "no DEM" error prop for RPC
     */
-   bool setIntersectionSurfaceAccuracy(const ossim_float64 surfCE90,
-                                       const ossim_float64 surfLE90);
+   bool setIntersectionSurfaceAccuracy(const ossim_float64& surfCE90,
+                                       const ossim_float64& surfLE90);
 
-protected:
+   /** @param obj Object to initialize with rpc pqe inputs. */
+   void getRpcPqeInputs(ossimRpcPqeInputs& obj) const;
 
 private:
    std::vector<ossimSensorModel*> theImages;
@@ -128,6 +151,11 @@ private:
    ossim_float64  theSurfLE90;
    bool           theSurfAccSet;
    bool           theSurfAccRepresentsNoDEM;
+
+   /**
+    * Rpc model only, container to capture pqe inputs for report purposes only.
+    */
+   ossimRpcPqeInputs theRpcPqeInputs;
    
    /**
     * @brief Compute single image intersection covariance matrix.
@@ -144,7 +172,7 @@ private:
                               const ossimDpt&    obs,
                               const ossimGpt&    ptG,
                               HeightRefType_t    cRefType,
-                              NEWMAT::Matrix&    covMat) const;
+                              NEWMAT::Matrix&    covMat);
       
    
    /**

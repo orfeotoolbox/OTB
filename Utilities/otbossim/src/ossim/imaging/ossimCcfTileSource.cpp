@@ -11,7 +11,7 @@
 //
 // Contains class definition for ossimCcfTileSource.
 //*******************************************************************
-//  $Id: ossimCcfTileSource.cpp 11347 2007-07-23 13:01:59Z gpotts $
+//  $Id: ossimCcfTileSource.cpp 12988 2008-06-04 16:49:43Z gpotts $
 
 #include <algorithm>
 #include <ossim/imaging/ossimCcfTileSource.h>
@@ -20,6 +20,8 @@
 #include <ossim/base/ossimIpt.h>
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimIrect.h>
+#include <ossim/base/ossimStringProperty.h>
+#include <ossim/base/ossimContainerProperty.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimDirectory.h>
@@ -747,7 +749,7 @@ void ossimCcfTileSource::initVerticesFromHeader()
    const vector<ossimIpt>& validImageVertices
       = theCcfHead.getValidImageVertices();
    
-   ossim_uint32 upper = validImageVertices.size();
+   ossim_uint32 upper = (ossim_uint32)validImageVertices.size();
    if(!upper) return;
    for(ossim_uint32 index = 0; index < upper; ++index)
    {
@@ -832,6 +834,22 @@ ossim_uint32 ossimCcfTileSource::getNumberOfDecimationLevels() const
 bool ossimCcfTileSource::isOpen()const
 {
    return (theFileStr != NULL);
+}
+
+ossimRefPtr<ossimProperty> ossimCcfTileSource::getProperty(const ossimString& name)const
+{
+	if(name == "file_type")
+	{
+		
+		return new ossimStringProperty(name, "CCF");
+	}
+	return ossimImageHandler::getProperty(name);
+}
+
+void ossimCcfTileSource::getPropertyNames(std::vector<ossimString>& propertyNames)const
+{
+	ossimImageHandler::getPropertyNames(propertyNames);
+	propertyNames.push_back("file_type");
 }
 
 void ossimCcfTileSource::adjustToStartOfChunk(ossimIpt& pt) const

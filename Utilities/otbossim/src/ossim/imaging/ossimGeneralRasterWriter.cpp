@@ -6,8 +6,9 @@
 // Author:  David Burken
 //
 //*******************************************************************
-//  $Id: ossimGeneralRasterWriter.cpp 11347 2007-07-23 13:01:59Z gpotts $
+//  $Id: ossimGeneralRasterWriter.cpp 12980 2008-06-04 00:50:33Z dburken $
 
+#include <cstdlib>
 #include <fstream>
 
 #include <ossim/imaging/ossimGeneralRasterWriter.h>

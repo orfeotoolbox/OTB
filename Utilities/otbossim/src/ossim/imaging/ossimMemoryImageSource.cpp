@@ -14,12 +14,20 @@ RTTI_DEF1(ossimMemoryImageSource, "ossimMemoryImageSource", ossimImageSource);
 ossimMemoryImageSource::ossimMemoryImageSource()
    :ossimImageSource(0, 0, 1, true, false)
 {
-   
+   theBoundingRect.makeNan();
 }
 
 void ossimMemoryImageSource::setImage(ossimRefPtr<ossimImageData> image)
 {
    theImage = image;
+	if(theImage.valid())
+	{
+		theBoundingRect = theImage->getImageRectangle();
+	}
+	else
+	{
+		theBoundingRect.makeNan();
+	}
 }
 
 ossim_uint32 ossimMemoryImageSource::getNumberOfInputBands() const
@@ -88,7 +96,7 @@ ossimIrect ossimMemoryImageSource::getBoundingRect(ossim_uint32 resLevel)const
    {
       if(theImage.valid())
       {
-         return theImage->getImageRectangle();
+         return theBoundingRect;
       }
    }
 
@@ -99,7 +107,7 @@ ossimRefPtr<ossimImageData> ossimMemoryImageSource::getTile(const ossimIrect& re
                                                       ossim_uint32 resLevel)
 {
    if(!theImage.valid()) return 0;
-   
+   if(theBoundingRect.hasNans()) return 0;
    if(!theResult.valid())
    {
       theResult = new ossimImageData(0, getOutputScalarType(), getNumberOfOutputBands(), rect.width(), rect.height());
@@ -108,9 +116,13 @@ ossimRefPtr<ossimImageData> ossimMemoryImageSource::getTile(const ossimIrect& re
 
    theResult->setImageRectangle(rect);
    theResult->makeBlank();
-   
-   theResult->loadTile(theImage.get());
+   ossimIrect clampRect = theImage->getImageRectangle().clipToRect(rect);
+	
+   theResult->loadTile(theImage->getBuf(),
+	                    theBoundingRect,
+	                    OSSIM_BSQ);
 
+	theResult->validate();
    return theResult;
 }
 

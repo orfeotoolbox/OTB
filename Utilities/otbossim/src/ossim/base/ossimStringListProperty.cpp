@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimStringListProperty.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimStringListProperty.cpp 12911 2008-05-28 13:36:06Z gpotts $
 //
 #include <sstream>
 #include <algorithm>
@@ -172,7 +172,7 @@ ossim_uint32 ossimStringListProperty::getNumberOfValues()const
 
 ossim_uint32 ossimStringListProperty::getNumberOfContraints()const
 {
-   return theConstraintList.size();
+   return (ossim_uint32)theConstraintList.size();
 }
 
 ossimString ossimStringListProperty::getConstraintAt(ossim_uint32 idx)const

@@ -8,7 +8,7 @@
 //
 // Contains class declaration for 
 //*******************************************************************
-//  $Id: ossimLookUpTable.cpp 9963 2006-11-28 21:11:01Z gpotts $
+//  $Id: ossimLookUpTable.cpp 12966 2008-06-03 14:17:40Z gpotts $
 
 #include <iostream>
 using namespace std;
@@ -118,7 +118,7 @@ ossim_int32 ossimLookUpTable::getEntryNumber(const ossimKeywordlist& kwl,
 
 ossim_uint32 ossimLookUpTable::getTableSize() const
 {
-   return theTable.size();
+   return (ossim_uint32)theTable.size();
 }
 
 void ossimLookUpTable::dumpValues(std::ostream& out)const

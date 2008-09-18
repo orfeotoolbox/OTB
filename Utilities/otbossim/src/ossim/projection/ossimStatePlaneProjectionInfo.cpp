@@ -4,7 +4,7 @@
 //
 // Author: Garrett Potts
 //*******************************************************************
-//  $Id: ossimStatePlaneProjectionInfo.cpp 12096 2007-11-30 20:24:13Z dburken $
+//  $Id: ossimStatePlaneProjectionInfo.cpp 12442 2008-02-07 22:33:52Z dburken $
 
 #include <ossim/projection/ossimStatePlaneProjectionInfo.h>
 #include <ossim/projection/ossimTransMercatorProjection.h>
@@ -13,6 +13,7 @@
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimDatumFactory.h>
 #include <ossim/base/ossimConstants.h>
+#include <ossim/base/ossimNotify.h>
 #include <ossim/base/ossimUnitTypeLut.h>
 
 ossimStatePlaneProjectionInfo::ossimStatePlaneProjectionInfo(
@@ -40,87 +41,76 @@ ossimStatePlaneProjectionInfo::ossimStatePlaneProjectionInfo(
       theFalseEasting   (falseEast),
       theFalseNorthing  (falseNorth),
       theScaleFactor    (0.0),
-      theUnits          (units)
+      theUnits          (OSSIM_UNIT_UNKNOWN)
       
 {
-   // Set the parameters 
-   theParameter3 = ossimDms(param3).getDegrees();
-   theParameter4 = ossimDms(param4).getDegrees();
-
-   if (!theDatum)
+   //---
+   // If the projection name is abreviated, expand to be ossim class name.
+   //---
+   if (projName == "tm")
    {
-      if(theName.contains("NAD27"))
+      theProjectionName = "ossimTransMercatorProjection";
+   }
+   else if (projName == "lcc")
+   {
+      theProjectionName = "ossimLambertConformalConicProjection";
+   }
+
+   // Set the projection specific stuff.
+   if (theProjectionName == "ossimTransMercatorProjection")
+   {
+      theParameter3 = ossimString::toDouble(param3);
+      if(fabs(theParameter3) > FLT_EPSILON)
       {
-         // NAD 1927
-         theDatum = ossimDatumFactory::instance()->create("NAS-C"); 
+         theScaleFactor = 1.0 - (1.0 / theParameter3);
       }
       else
       {
-         // NAD 1983
-         theDatum = ossimDatumFactory::instance()->create("NAR-C");  
+         theScaleFactor = 1.0;
       }
    }
-
-   theOrigin = ossimGpt(theOriginLat.getDegrees(),
-                        theOriginLon.getDegrees(),
-                        0,
-                        theDatum);   
-}
-
-ossimStatePlaneProjectionInfo::ossimStatePlaneProjectionInfo(
-   const std::string&  name,
-   int                 pcsCode,
-   const std::string&  projName,
-   const std::string&  param1,
-   const std::string&  param2,
-   double              param3,
-   double              param4,
-   double              falseEast,
-   double              falseNorth,
-   const std::string&  units,
-   const ossimDatum*   datum)
-   :
-      thePcsCode        (pcsCode),
-      theName           (name),
-      theProjectionName (projName),
-      theDatum          (datum),
-      theOriginLat      (param1),
-      theOriginLon      (param2),
-      theOrigin         (),
-      theParameter3     (param3),
-      theParameter4     (param4),
-      theFalseEasting   (falseEast),
-      theFalseNorthing  (falseNorth),
-      theScaleFactor    (0.0),
-      theUnits          (units)
-{
-   if (!theDatum)
+   else if (theProjectionName == "ossimLambertConformalConicProjection")
    {
-      if(theName.contains("NAD27"))
-      {
-         // NAD 1927
-         theDatum = ossimDatumFactory::instance()->create("NAS-C"); 
-      }
-      else
-      {
-         // NAD 1983
-         theDatum = ossimDatumFactory::instance()->create("NAR-C");  
-      }
-   }
-
-   theOrigin = ossimGpt(theOriginLat.getDegrees(),
-                        theOriginLon.getDegrees(),
-                        0,
-                        theDatum);   
-   if(fabs(theParameter3) > FLT_EPSILON)
-   {
-      theScaleFactor = 1.0 - (1.0 / theParameter3);
+      theParameter3 = ossimDms(param3).getDegrees();
+      theParameter4 = ossimDms(param4).getDegrees();
    }
    else
    {
-      theScaleFactor = 1.0;
+      ossimNotify(ossimNotifyLevel_WARN)
+         << "ossimStatePlaneProjectionInfo unhandled projection type: "
+         << projName << std::endl;
    }
-   
+
+   if (!theDatum)
+   {
+      if(theName.contains("NAD27"))
+      {
+         // NAD 1927
+         theDatum = ossimDatumFactory::instance()->create("NAS-C"); 
+      }
+      else
+      {
+         // NAD 1983
+         theDatum = ossimDatumFactory::instance()->create("NAR-C");  
+      }
+   }
+
+   theOrigin = ossimGpt(theOriginLat.getDegrees(),
+                        theOriginLon.getDegrees(),
+                        0,
+                        theDatum);
+
+   theUnits = static_cast<ossimUnitType>(
+      ossimUnitTypeLut::instance()->getEntryNumber(units.c_str()));
+
+   // Currently only handle meters and us_survey_feet.
+   if ( (theUnits != OSSIM_METERS) && (theUnits != OSSIM_US_SURVEY_FEET) )
+   {
+      ossimNotify(ossimNotifyLevel_WARN)
+         << "ossimStatePlaneProjectionInfo unhandled unit type: "
+         << units.c_str()
+         << std::endl;
+   }
 }
 
 int ossimStatePlaneProjectionInfo::code() const
@@ -183,9 +173,9 @@ double ossimStatePlaneProjectionInfo::scaleFactor() const
    return theScaleFactor;
 }
 
-const ossimString&  ossimStatePlaneProjectionInfo::units() const
+ossimString ossimStatePlaneProjectionInfo::units() const
 {
-   return theUnits;
+   return ossimUnitTypeLut::instance()->getEntryString(theUnits);
 }
 
 bool ossimStatePlaneProjectionInfo::isSameCode(int pcsCode) const
@@ -200,16 +190,17 @@ bool ossimStatePlaneProjectionInfo::isSameCode(int pcsCode) const
 
 double ossimStatePlaneProjectionInfo::falseEastingInMeters() const
 {
-   if (units()=="m")
+   if (theUnits == OSSIM_METERS)
    {
       return theFalseEasting;
    }
+
    return theFalseEasting * US_METERS_PER_FT;
 }
 
 double ossimStatePlaneProjectionInfo::falseNorthingInMeters() const
 {
-   if (units()=="m")
+   if (theUnits == OSSIM_METERS)
    {
       return theFalseNorthing;
    }
@@ -227,7 +218,7 @@ void ossimStatePlaneProjectionInfo::populateProjectionKeywords(
   
    kwl.add(prefix,
            ossimKeywordNames::FALSE_EASTING_NORTHING_UNITS_KW,
-           (ossimUnitTypeLut::instance()->getEntryString(getUnitType())),
+           (ossimUnitTypeLut::instance()->getEntryString(theUnits)),
            true);
 
    ossimDpt pt(theFalseEasting, theFalseNorthing);
@@ -262,10 +253,6 @@ void ossimStatePlaneProjectionInfo::populateProjectionKeywords(
    if (projName()== STATIC_TYPE_NAME(ossimLambertConformalConicProjection))
    {
       kwl.add(prefix,
-              ossimKeywordNames::TYPE_KW,
-              STATIC_TYPE_NAME(ossimLambertConformalConicProjection),
-              true);
-      kwl.add(prefix,
               ossimKeywordNames::STD_PARALLEL_1_KW,
               parallel1(),
               true);
@@ -285,12 +272,7 @@ void ossimStatePlaneProjectionInfo::populateProjectionKeywords(
 
 ossimUnitType ossimStatePlaneProjectionInfo::getUnitType() const
 {
-   ossimUnitType type = OSSIM_METERS;
-   if (theUnits == "ft")
-   {
-      type = OSSIM_US_SURVEY_FEET;
-   }
-   return type;
+   return theUnits;
 }
 
 bool ossimStatePlaneProjectionInfo::matchesProjection(

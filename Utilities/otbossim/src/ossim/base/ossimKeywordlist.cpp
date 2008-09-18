@@ -5,7 +5,7 @@
 // Description: This class provides capabilities for keywordlists.
 //
 //********************************************************************
-// $Id: ossimKeywordlist.cpp 10999 2007-05-22 02:04:54Z dburken $
+// $Id: ossimKeywordlist.cpp 13081 2008-06-25 19:35:34Z dburken $
 #include <algorithm>
 #include <fstream>
 #include <list>
@@ -25,7 +25,7 @@ static const char NULL_KEY_NOTICE[]
 
 #ifdef OSSIM_ID_ENABLED
 static const bool TRACE = false;
-static const char OSSIM_ID[] = "$Id: ossimKeywordlist.cpp 10999 2007-05-22 02:04:54Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimKeywordlist.cpp 13081 2008-06-25 19:35:34Z dburken $";
 #endif
 
 ossimKeywordlist::ossimKeywordlist(char delimiter)
@@ -103,7 +103,11 @@ void ossimKeywordlist::add(const ossimKeywordlist& kwl,
 
    ossimRegExp regExp;
 
-   regExp.compile(("^("+ossimString(prefix)+")").c_str());
+   // Check for null prefix.
+   ossimString tmpPrefix;
+   if (prefix) tmpPrefix = prefix;
+   
+   regExp.compile(("^("+tmpPrefix+")").c_str());
 
    while(iter != kwl.theMap.end())
    {
@@ -112,7 +116,7 @@ void ossimKeywordlist::add(const ossimKeywordlist& kwl,
       if(regExp.find( (*iter).first.c_str()))
       {
          newKey = (*iter).first;
-         if(stripPrefix)
+         if(stripPrefix && prefix)
          {
             newKey = newKey.substitute(prefix,
                                        "");
@@ -125,7 +129,6 @@ void ossimKeywordlist::add(const ossimKeywordlist& kwl,
       }
       ++iter;
    }
-
 }
 
 void ossimKeywordlist::add(const char* prefix,
@@ -426,6 +429,55 @@ void ossimKeywordlist::add(const char* key,
 void ossimKeywordlist::add(const char*  prefix,
                            const char*  key,
                            ossim_uint32 value,
+                           bool overwrite)
+{
+   if (key)
+   {
+      ossimString k;
+      if (prefix) k = prefix;
+      k += key;
+
+      ossimString v = ossimString::toString(value);
+
+      KeywordMap::iterator i = getMapEntry(k);
+
+      if(i == theMap.end())
+      {
+         theMap.insert(std::make_pair(k, v));
+      }
+      else if (overwrite)
+      {
+         (*i).second = v;
+      }
+   }
+}
+
+void ossimKeywordlist::add(const char* key,
+                           ossim_int64 value,
+                           bool overwrite)
+{
+   if (key)
+   {
+      ossimString k = key;
+
+      ossimString v = ossimString::toString(value);
+
+      KeywordMap::iterator i = getMapEntry(k);
+
+      if(i == theMap.end())
+      {
+         theMap.insert(std::make_pair(k, v));
+      }
+      else if (overwrite)
+      {
+         (*i).second = v;
+      }
+   }
+}
+
+void ossimKeywordlist::add(const char*  prefix,
+                           const char*  key,
+                           ossim_int64 value,
                            bool overwrite)
 {
    if (key)
@@ -842,27 +894,48 @@ bool ossimKeywordlist::parseStream(std::istream& is,
 
       if(line != "")
       {
-         ossimString key;
-         ossimString value;
-
-         // parse out key and value
+         // Find the delimiter position.
          std::string::size_type pos = line.find(theDelimiter);
-         key = line.substr(0, pos);
-         key = key.trim();
-         value = line.substr(pos + 1);
-         value = value.trim();
 
-         // if it's not a comment then add it
-         if(key.begin()[0] != (char)'/' ||
-            key.begin()[1] != (char)'/')
+         if(pos != line.npos)
          {
-            if(pos != line.npos)
+            // Found delimiter, get the key.
+            ossimString key = line.substr(0, pos);
+            key = key.trim();
+
+            if ( key.size() ) // Could have a one letter key like: 'a'
             {
-               theMap.insert(std::make_pair(key, value));
+               bool addPair = true;
+
+               // ESH 06/2008 --
+               // Make sure the locations exist before accessing.
+               if ( key.size() > 1 ) // Check for c++ comment "//".
+               {
+                  //---
+                  // Might want to require beginning character to be an alpha?
+                  // For now only blocked if c++ comment.  (drb)
+                  //---
+                  if ( (key.begin()[0] == (char)'/') &&
+                       (key.begin()[1] == (char)'/') )
+                  {
+                     addPair = false;
+                  }
+               }
+
+               if ( addPair )
+               {
+                  // Get value.
+                  ossimString value = line.substr(pos + 1);
+                  value = value.trim();
+                  theMap.insert(std::make_pair(key, value));
+               }
             }
-         }
-      }
-   }
+            
+         } // End of:  if(pos != line.npos)
+
+      } // End of:  if(line != "")
+
+   } // End of while(!is.eof() && is.good())
 
    return true;
 }

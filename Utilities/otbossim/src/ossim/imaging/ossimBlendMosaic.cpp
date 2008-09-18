@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBlendMosaic.cpp 10798 2007-04-28 14:20:48Z dburken $
+// $Id: ossimBlendMosaic.cpp 12912 2008-05-28 15:05:54Z gpotts $
 
 #include <ossim/imaging/ossimBlendMosaic.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -48,7 +48,7 @@ void ossimBlendMosaic::initialize()
       
    if(theWeights.size() < theInputObjectList.size())
    {
-      for(ossim_uint32 index =theWeights.size();
+      for(ossim_uint32 index =(ossim_uint32)theWeights.size();
           index < theInputObjectList.size();
           ++index)
       {

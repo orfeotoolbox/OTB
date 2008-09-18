@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBandClipFilter.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimBandClipFilter.cpp 12912 2008-05-28 15:05:54Z gpotts $
 
 #include <ossim/imaging/ossimBandClipFilter.h>
 #include <ossim/base/ossimNotifyContext.h>
@@ -76,7 +76,7 @@ ossim_uint32 ossimBandClipFilter::getNumberOfValues()const
 {
    // We make sure that all arrays have the same number
    // of elements so we can use the size of any of them.
-   return theMinPix.size();
+   return (ossim_uint32)theMinPix.size();
 }
 
 void ossimBandClipFilter::setNumberOfValues(ossim_uint32 size)
@@ -102,7 +102,7 @@ void ossimBandClipFilter::setNumberOfValues(ossim_uint32 size)
    theMaxPix.resize(size);
    theMedian.resize(size);
     
-   ossim_uint32 upperBound = min(theMinPix.size(), tempMin.size());
+   ossim_uint32 upperBound = (ossim_uint32)min(theMinPix.size(), tempMin.size());
    ossim_uint32 index = 0;
 
    for(index = 0; index < upperBound; ++index)
@@ -134,7 +134,7 @@ void ossimBandClipFilter::setMinMaxPix(const vector<double>& minPix,
    theMinPix = minPix;
    theMaxPix = maxPix;
 
-   setNumberOfValues(max(theMinPix.size(), theMaxPix.size()));
+   setNumberOfValues((ossim_uint32)max(theMinPix.size(), theMaxPix.size()));
 }
 
 const std::vector<double>& ossimBandClipFilter::getMinPixList()const
@@ -317,7 +317,7 @@ void ossimBandClipFilter::runClamp()
 
 void ossimBandClipFilter::runLinearStretch()
 {   
-   ossim_uint32 bands = min(theTile->getNumberOfBands(), (ossim_uint32)theMinPix.size());
+   ossim_uint32 bands = (ossim_uint32)min(theTile->getNumberOfBands(), (ossim_uint32)theMinPix.size());
    ossim_uint32 w     = theTile->getWidth();
    ossim_uint32 h     = theTile->getHeight();
    ossim_uint32 upperBound = w*h;
@@ -540,7 +540,7 @@ bool ossimBandClipFilter::loadState(const ossimKeywordlist& kwl,
 
       if(numberOfMins != numberOfMaxs)
       {
-         ossim_int32 temp = min(numberOfMins, numberOfMaxs);
+         ossim_int32 temp = (ossim_int32)min(numberOfMins, numberOfMaxs);
          numberOfMins = temp;
          numberOfMaxs = temp;
       }

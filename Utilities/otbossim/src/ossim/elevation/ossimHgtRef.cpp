@@ -20,7 +20,7 @@
 static ossimTrace traceDebug(ossimString("ossimHgtRef:debug"));
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimHgtRef.cpp 12086 2007-11-29 14:46:01Z dhicks $";
+static const char OSSIM_ID[] = "$Id: ossimHgtRef.cpp 12577 2008-03-26 17:02:39Z dhicks $";
 #endif
 
 
@@ -238,7 +238,7 @@ getSurfaceNormalCovMatrix
 
    // Rotate surface normal to ECF
    NEWMAT::Matrix tnUecf(3,1);
-   tnUecf = enu.lsrToEcefRotMatrix().t() * tnU;
+   tnUecf = enu.lsrToEcefRotMatrix() * tnU;
 
    // Propagate to terrain normal
    NEWMAT::Matrix ptn;
@@ -287,7 +287,7 @@ ossimColumnVector3d ossimHgtRef::getLocalTerrainNormal(const ossimGpt& pg) const
                {
                   ossim_float64 clat = pg.latd()+lat*dLat;
                   ossimGpt p(clat, clon, pg.height());
-                  h(lat+2,lon+2) =
+                  h(2-lat,lon+2) =
                      ossimElevManager::instance()->getHeightAboveEllipsoid(p);
                }
             }
@@ -296,7 +296,7 @@ ossimColumnVector3d ossimHgtRef::getLocalTerrainNormal(const ossimGpt& pg) const
             {
                ossimNotify(ossimNotifyLevel_DEBUG)
                   <<"DEBUG: getLocalTerrainNormal...  3X3 grid"<<endl;
-               for (ossim_int32 lat=1; lat>=-1; --lat)
+               for (ossim_int32 lat=-1; lat<=1; ++lat)
                {
                   for (ossim_int32 lon=-1; lon<=1; ++lon)
                     ossimNotify(ossimNotifyLevel_DEBUG)<<"  "<<h(lat+2,lon+2);
@@ -308,8 +308,8 @@ ossimColumnVector3d ossimHgtRef::getLocalTerrainNormal(const ossimGpt& pg) const
                   ((h(1,3)+2*h(2,3)+h(3,3))-(h(1,1)+2*h(2,1)+h(3,1)))/(8*delta);
             ossim_float64 dz_dlat =
                   ((h(1,1)+2*h(1,2)+h(1,3))-(h(3,1)+2*h(3,2)+h(3,3)))/(8*delta);
-            tNorm[0] = dz_dlon;
-            tNorm[1] = dz_dlat;
+            tNorm[0] = -dz_dlon;
+            tNorm[1] = -dz_dlat;
             tNorm[2] = 1.0 - sqrt(dz_dlon*dz_dlon+dz_dlat*dz_dlat);
          }
          

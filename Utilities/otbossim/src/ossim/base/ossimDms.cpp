@@ -8,7 +8,7 @@
 //
 // Contains class definition for Degrees Minutes Seconds (ossimDms)
 //*******************************************************************
-//  $Id: ossimDms.cpp 12095 2007-11-30 16:06:06Z dburken $
+//  $Id: ossimDms.cpp 12953 2008-06-01 16:24:05Z dburken $
 
 #include <cmath>
 #include <cstring> /* for strcpy */
@@ -19,8 +19,8 @@
 #include <ossim/base/ossimCommon.h>
 
 const ossim_uint8 ossimDms::theDegreeSign = 176;
-char *ossimDms::DEFAULT_FORMAT = "ddd mm.mmC";
-char *ossimDms::SPACES = "                   ";
+const char* ossimDms::DEFAULT_FORMAT = "ddd mm.mmC";
+const char* ossimDms::SPACES = "                   ";
 
 ossimDms::ossimDms()
    : theDegrees(0.0),
@@ -364,7 +364,7 @@ ossimString ossimDms::toString(const ossimString& formatString)const
             }
             else
             {
-               theIntDegs = std::abs((int)(theDegrees));
+               theIntDegs = static_cast<int>( std::abs(theDegrees) );
                ossimString temp = ossimString::toString(theIntDegs);
                ossimString prefix;
                d_s -= temp.length();

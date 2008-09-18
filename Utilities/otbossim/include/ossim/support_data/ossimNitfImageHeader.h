@@ -7,7 +7,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeader.h 11330 2007-07-19 18:34:15Z dburken $
+// $Id: ossimNitfImageHeader.h 13101 2008-07-01 18:44:31Z dburken $
 #ifndef ossimNitfImageHeader_HEADER
 #define ossimNitfImageHeader_HEADER
 
@@ -77,6 +77,10 @@ public:
    virtual ossimDrect   getBlockImageRect()const=0;
    virtual ossimString  getIMode()const=0;
    virtual ossim_uint64 getDataLocation()const=0;
+
+   /** @return The IDATIM field unparsed. */
+   virtual ossimString  getImageDateAndTime() const=0;
+   
    virtual ossimString  getAcquisitionDateMonthDayYear(ossim_uint8 separationChar='-')const=0;
    virtual ossimString  getSecurityClassification()const=0;
    virtual ossimString  getCategory()const=0;

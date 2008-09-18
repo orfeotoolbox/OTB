@@ -1,16 +1,13 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author:  Oscar Kramer
 //
 // Description: Factory for all ossim sensor models.
 // 
 //*******************************************************************
-//  $Id: ossimSensorModelFactory.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimSensorModelFactory.h 12081 2007-11-26 21:44:18Z dburken $
 #ifndef ossimSensorModelFactory_HEADER
 #define ossimSensorModelFactory_HEADER
 #include <ossim/projection/ossimProjectionFactoryBase.h>
@@ -19,7 +16,7 @@ class ossimProjection;
 class ossimString;
 class ossimFilename;
 
-class ossimSensorModelFactory : public ossimProjectionFactoryBase
+class OSSIM_DLL ossimSensorModelFactory : public ossimProjectionFactoryBase
 {
 public:
    /*!
@@ -54,12 +51,6 @@ public:
     */
    virtual void getTypeNameList(std::vector<ossimString>& typeList)const;
    
-   /*!
-    * METHOD: getList()
-    * Returns name list of all products represented by this factory.
-    */
-   virtual std::list<ossimString> getList() const;
-
 protected:
    ossimSensorModelFactory() {}
    

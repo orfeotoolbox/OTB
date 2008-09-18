@@ -31,6 +31,9 @@
  * $Id&
  */
 
+#include <cstdlib>
+#include <cstring>
+
 #include <ossim/base/ossimCplUtil.h>
 #include <ossim/base/ossimString.h>
 

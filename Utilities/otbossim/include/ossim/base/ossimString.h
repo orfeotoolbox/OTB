@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  See top level LICENSE.txt file.
 //
@@ -8,13 +7,11 @@
 // Description: This class extends the stl's string class.
 //
 //********************************************************************
-// $Id: ossimString.h 9984 2006-11-30 17:16:03Z dburken $
+// $Id: ossimString.h 13141 2008-07-06 20:19:03Z dburken $
 #ifndef ossimString_HEADER
-#define ossimString_HEADER
+#define ossimString_HEADER 1
 
 #include <string>
-#include <cstring>
-#include <cstdlib>
 #include <vector>
 #include <ossim/base/ossimConstants.h>
 
@@ -22,39 +19,66 @@
 class OSSIM_DLL ossimString : public std::string
 {
 public:
-	ossimString():std::string(){}
-	ossimString(const std::string& aString):std::string(aString){}
-	ossimString(const char *aString):std::string(aString?aString:""){}
-	ossimString(const ossimString& aString):std::string(aString.c_str()){}
-   ossimString(char aChar);
+
+   /** default constructor */
+   ossimString():std::string(){}
+
+   /** constructor that takes a std::string */
+   ossimString(const std::string& s):std::string(s){}
 
    /**
-    * Create a string with n copies of c.
+    * constructor that takes char*
+    * NOTE: std::string construtor throws exception given null pointer;
+    * hence, the null check.
     */
-   ossimString(size_type n, char c);
+   ossimString(const char *aString):std::string( aString?aString:"" ){}
+
+   /** copy constructor */   
+   ossimString(const ossimString& aString):std::string(aString.c_str()){}
+
+   /** constructor - constructs with n copies of c */
+   ossimString(size_type n, char c):std::string(n,c){}
+
+   /** constructor - constructs with 1 c. */
+   ossimString(char aChar):std::string(1, aChar){}
    
    template <class Iter>
 	   ossimString(Iter start, Iter end):std::string(start, end){}
 
-
    bool contains(const ossimString& aString) const {return find(aString)!=npos;}
    bool contains(const char*   aString) const {return find(aString)!=npos;}
 
-   const ossimString& operator =(const char* s)
-      {
-         return (*this = ossimString(s));
+   const ossimString& operator=(const std::string& s)
+   {
+      std::string::operator=(s);
+      return *this;
+   }
 
-      }
-   const ossimString& operator =(char c)
+   const ossimString& operator=(const char* s)
+   {
+      if (s) // std::string::operator= throws exception given null pointer.
       {
-         return (*this = ossimString(c));
-
+         std::string::operator=(s);
       }
+      else
+      {
+         std::string::operator=("");
+      }
+      return *this;
+   }
+
+   const ossimString& operator=(char c)
+   {
+      std::string::operator=(c);
+      return *this;
+   }
+
    const ossimString& operator =(const ossimString& s)
-      {
-		  std::string::operator =(s.c_str());
-         return *this;
-      }
+   {
+      std::string::operator =(s.c_str());
+      return *this;
+   }
+
    const ossimString& operator +=(const ossimString& s)
       {
          append(s.c_str());
@@ -94,19 +118,73 @@ public:
 
          return returnS;
       }
-   bool operator==(const ossimString& s) const {return (strcmp(this->c_str(),s.c_str())==0);}
-   bool operator==(const char* s) const {return (strcmp(this->c_str(),s)==0);}
-   bool operator!=(const ossimString& s) const {return (strcmp(this->c_str(),s.c_str())!=0);}
-   bool operator!=(const char* s) const {return (strcmp(this->c_str(),s)!=0);}
+   
+   /**
+    *  @brief  Test if this ossimString is equal to another ossimString.
+    *  @param rhs ossimString to compare.
+    *  @return  True if strings are equal.  False otherwise.
+    */
+   bool operator==(const ossimString& rhs) const
+   {
+      return (std::string::compare(rhs.c_str()) == 0);
+   }
+   
+   /**
+    *  @brief  Test if this ossimString is equal to a C sting.
+    *  @param rhs C string to compare.
+    *  @return  True if strings are equal.
+    *  False if rhs is not equal null or null.
+    */
+   bool operator==(const char* rhs) const
+   {
+      bool result = false;
+      if (rhs)
+      {
+         result = (std::string::compare(std::string(rhs)) == 0);
+      }
+      return result;
+   }
 
-   char& operator[](int i)
+   /**
+    *  @brief  Test if this ossimString is not equal to another ossimString.
+    *  @param rhs ossimString to compare.
+    *  @return  True if strings are not equal.  False otherwise.
+    */
+   bool operator!=(const ossimString& rhs) const
+   {
+      return !(std::string::compare(rhs.c_str()) == 0);
+   }
+   
+   /**
+    *  @brief  Test if this ossimString is not equal to a C sting.
+    *  @param rhs C string to compare.
+    *  @return  True if strings are not equal or rhs is null.
+    *  False if rhs equal to this string.
+    */
+   bool operator!=(const char* rhs) const
+   {
+      bool result = true;
+      if (rhs)
       {
-         return *( const_cast<char*>(c_str())+i);
+         result = !(std::string::compare(std::string(rhs)) == 0);
       }
-   const char& operator[](int i)const
-      {
-         return *(c_str()+i);
-      }
+      return result;
+   }
+   
+   //---
+   // operator[] removed.  std::string::operator[] works given a
+   // std::string::size_type for an index.
+   // //
+   // char& operator[](int i)
+   //    {
+   //       return *( const_cast<char*>(c_str())+i);
+   //    }
+   // const char& operator[](int i)const
+   //    {
+   //       return *(c_str()+i);
+   //    }
+   //---
+   
    /**
     * this will strip lead and trailing character passed in.
     * So if you want to remove blanks:
@@ -320,7 +398,7 @@ public:
    ossimString urlEncode()const;
    /**
     * If OSSIM_ID_ENABLED returns the OSSIM_ID which currently is the
-    * expanded cvs $Id: ossimString.h 9984 2006-11-30 17:16:03Z dburken $ macro; else, an empty string.
+    * expanded cvs $Id: ossimString.h 13141 2008-07-06 20:19:03Z dburken $ macro; else, an empty string.
     */
    ossimString getOssimId() const;
 };

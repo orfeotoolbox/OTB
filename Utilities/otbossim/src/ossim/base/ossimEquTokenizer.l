@@ -1,5 +1,11 @@
 %{
-#include "ossimEquTokenDefines.h"
+#include <ossim/base/ossimEquTokenDefines.h>
+
+int yywrap()
+{
+   return 1;
+}
+
 %}
 
 string  \"[^\n"]+\"
@@ -11,6 +17,8 @@ dig     [0-9]
 num1    {dig}+\.?([eE][-+]?{dig}+)?
 num2    {dig}*\.{dig}+([eE][-+]?{dig}+)?
 number  {num1}|{num2}
+
+
 
 %%
 
@@ -173,7 +181,3 @@ number  {num1}|{num2}
 }
 
 %%
-int yywrap()
-{
-   return 1;
-}

@@ -6,12 +6,13 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimConnectableContainer.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimConnectableContainer.h 13017 2008-06-10 16:09:17Z dburken $
 
 #ifndef ossimConnectableContainer_HEADER
 #define ossimConnectableContainer_HEADER
 #include <map>
 
+#include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimConnectableObject.h>
 #include <ossim/base/ossimConnectableObjectListener.h>
 #include <ossim/base/ossimConnectableContainerInterface.h>
@@ -23,9 +24,10 @@ class OSSIMDLLEXPORT ossimConnectableContainer : public ossimConnectableObject,
                                   public ossimConnectableObjectListener
 {
 public:
-   typedef std::map<long, ossimConnectableObject*> connectablObjectMapType;
+   typedef std::map<ossim_int64,
+      ossimConnectableObject*> connectablObjectMapType;
    
-   ossimConnectableContainer(ossimConnectableObject* owner=NULL);
+   ossimConnectableContainer(ossimConnectableObject* owner=0);
    virtual ~ossimConnectableContainer();
 
    virtual ossimObject* getObject();
@@ -114,10 +116,10 @@ public:
                                      const ossimConnectableObject* obj) const;
    
    virtual bool loadState(const ossimKeywordlist& kwl,
-                          const char* prefix=NULL);
+                          const char* prefix=0);
    
    virtual bool saveState(ossimKeywordlist& kwl,
-                          const char* prefix=NULL)const;
+                          const char* prefix=0)const;
 
    //____________________PLACE ALL EVENT HANDLING STUFF HERE_____________
 //   virtual void objectDestructingEvent(ossimObjectDestructingEvent& event);
@@ -131,7 +133,7 @@ public:
    
    
    virtual void getChildren(std::vector<ossimConnectableObject*>& children,
-                               bool immediateChildrenOnlyFlag);
+                            bool immediateChildrenOnlyFlag);
    void deleteAllChildren();
    
 //    void propagateEventToOutputs(ossimEvent& event,
