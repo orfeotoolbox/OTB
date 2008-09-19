@@ -37,6 +37,7 @@ ENDIF(OTB_COMPILE_JPEG2000)
 
 SET(IO_TESTS14    ${CXX_TEST_PATH}/otbIOTests14)
 SET(IO_TESTS15    ${CXX_TEST_PATH}/otbIOTests15)
+SET(IO_TESTS16    ${CXX_TEST_PATH}/otbIOTests16)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COMMON_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1425,6 +1426,46 @@ ADD_TEST(ioTuKMLVectorDataIOCanWrite ${IO_TESTS15}
         otbKMLVectorDataIOTestCanWrite
         ${TEMP}/simple.kml)
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS16 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# ---  ALOS / RAD_CI2 / RAD_CR4...(GDAL)  ---
+
+# Can read a RAD format (ci2)
+ADD_TEST(ioTuRADImageIOCanRead_RADCI2 ${IO_TESTS16} 
+        otbRADImageIOTestCanRead 
+        /home3/mathieu/guillaume/CD_CNES/RAD_CI2/3017_HH.rad )
+
+# Can read a RAD format (cr4)
+ADD_TEST(ioTuRADImageIOCanRead_RADCR4sngl ${IO_TESTS16} 
+        otbRADImageIOTestCanRead 
+        /home3/mathieu/guillaume/CD_CNES/RAD_CR4_full/hvbas_calib_l1900_c1050.rad )
+       
+# Can read a RAD format (cr4)
+ADD_TEST(ioTuRADImageIOCanRead_RADCR4mult ${IO_TESTS16} 
+        otbRADImageIOTestCanRead 
+        /home3/mathieu/guillaume/CD_CNES/RAD_CR4_full/ext_cnes_bas_calib.rad )
+                
+# Convert a ci2.RAD file into ENVI format
+ADD_TEST(ioTvImageFileReaderRADCI22ENVI ${IO_TESTS16}
+        otbImageFileReaderTest
+        /home3/mathieu/guillaume/CD_CNES/RAD_CI2/3017_HH.rad 
+        ${TEMP}/ioImageFileReaderRAD2ENVI.hdr ) 
+                
+# Convert a cr4.RAD file into tif
+ADD_TEST(ioTvImageFileReaderRADCR42TIF ${IO_TESTS16}
+        otbImageFileReaderTest
+        /home3/mathieu/guillaume/CD_CNES/RAD_CR4_full/hvbas_calib_l1900_c1050.rad 
+        ${TEMP}/ioImageFileReaderRAD2ENVI.tif )                 
+               
+# Can read ALOS format
+#ADD_TEST(ioTuALOSImageIOCanRead ${IO_TESTS16} 
+#        otbALOSImageIOTestCanRead 
+#        /home3/mathieu/guillaume/CD_CNES/ALOS_Full_polar/IMG-HH-ALPSRP068677150-P1.1__A )
+
+
+
+        
 
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
@@ -1540,6 +1581,11 @@ otbKMLVectorDataIOTestCanRead.cxx
 otbKMLVectorDataIOTestCanWrite.cxx
 )
 
+SET(BasicIO_SRCS16
+otbRADImageIOTestCanRead.cxx
+otbALOSImageIOTestCanRead.cxx
+otbImageFileReaderTest.cxx
+)
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
@@ -1595,6 +1641,8 @@ TARGET_LINK_LIBRARIES(otbIOTests14 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 ADD_EXECUTABLE(otbIOTests15 otbIOTests15.cxx ${BasicIO_SRCS15})
 TARGET_LINK_LIBRARIES(otbIOTests15 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf otbkml)
 
+ADD_EXECUTABLE(otbIOTests16 otbIOTests16.cxx ${BasicIO_SRCS16})
+TARGET_LINK_LIBRARIES(otbIOTests16 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
