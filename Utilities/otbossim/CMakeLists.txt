@@ -57,11 +57,7 @@ INCLUDE_DIRECTORIES(${OTB_BINARY_DIR}/Utilities/otbossim/include)
 CONFIGURE_FILE(${OTB_SOURCE_DIR}/Utilities/otbossim/include/ossim/ossimConfig.h.in
 	       ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimConfig.h)
 
-MESSAGE(${OTB_SOURCE_DIR}/Utilities/otbossim/src/ossim/version-config.cpp)
-FIND_FILE(EXIST_VERSION_CONFIG version-config.cpp ${OTB_SOURCE_DIR}/Utilities/otbossim/src/ossim)
-IF(NOT EXIST_VERSION_CONFIG)
-      MESSAGE(FATAL_ERROR "OSSIM : cannot find version-config.cpp file.")
-ENDIF(NOT EXIST_VERSION_CONFIG)
+# Run ossim/version-config.cpp taht will generate ossim/ossimVersion.h file nedeed to compile OSSIM
 SET(INCLUDES_OSSIM_TRY_RUN "-DINCLUDE_DIRECTORIES:STRING=${OTB_BINARY_DIR}/Utilities/otbossim/include" )
 TRY_RUN(RUN_RESULT_VAR COMPILE_RESULT_VAR
         ${OTB_BINARY_DIR}
@@ -70,11 +66,7 @@ TRY_RUN(RUN_RESULT_VAR COMPILE_RESULT_VAR
         OUTPUT_VARIABLE output
         ARGS "${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h"
 )
-      
-      
-MESSAGE("COMPILE_RESULT_VAR:" ${COMPILE_RESULT_VAR})
-MESSAGE("RUN_RESULT_VAR:" ${RUN_RESULT_VAR})
-
+          
 IF(NOT COMPILE_RESULT_VAR)
     MESSAGE(FATAL_ERROR "OSSIM : cannot compile version-config.cpp")
 ENDIF(NOT COMPILE_RESULT_VAR)
@@ -83,10 +75,6 @@ IF(RUN_RESULT_VAR)
     MESSAGE(FATAL_ERROR "OSSIM : cannot create ossimVersion.h file")
 ENDIF(RUN_RESULT_VAR)       
 
-FIND_FILE(EXIST_OSSIM_VERSION_CONFIG ossimVersion.h ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim)
-IF(NOT EXIST_OSSIM_VERSION_CONFIG)
-      MESSAGE(FATAL_ERROR "OSSIM : cannot find ossimVersion.h.")
-ENDIF(NOT EXIST_OSSIM_VERSION_CONFIG)
        
 SUBDIRS(include)
 # ADDED BY OTB DEVELOPPERS TO AVOID INTENSIVE RECOMPILATION
