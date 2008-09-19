@@ -36,7 +36,7 @@ ENDIF(WIN32)
 INCLUDE_DIRECTORIES(${OTB_BINARY_DIR}/Utilities/otbgeotiff/)
 
 #Specify that we are making DLL here
-ADD_DEFINITION(-DOSSIMMAKINGDLL)
+ADD_DEFINITIONS(-DOSSIMMAKINGDLL)
 
 # For alls platform (except MINGW):
 IF( NOT MINGW )
