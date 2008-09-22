@@ -1448,19 +1448,23 @@ ADD_TEST(ioTuRADImageIOCanRead_RADCR4mult ${IO_TESTS16}
                 
 # Convert a ci2.RAD file into ENVI format
 ADD_TEST(ioTvImageFileReaderRADCI22ENVI ${IO_TESTS16}
-        otbImageFileReaderTest
+        otbImageFileReaderRADComplex
+#--compare-image ${TOL}  /home3/mathieu/guillaume/CD_CNES/RAD_CI2/3017_HH.rad
+#                        ${TEMP}/ioImageFileReaderRAD2ENVI.hdr        
         /home3/mathieu/guillaume/CD_CNES/RAD_CI2/3017_HH.rad 
         ${TEMP}/ioImageFileReaderRAD2ENVI.hdr ) 
                 
 # Convert a cr4.RAD file into tif
 ADD_TEST(ioTvImageFileReaderRADCR42TIF ${IO_TESTS16}
-        otbImageFileReaderTest
+        otbImageFileReaderRADComplex
+#--compare-image ${TOL}  /home3/mathieu/guillaume/CD_CNES/RAD_CR4_full/hvbas_calib_l1900_c1050.rad
+#                        ${TEMP}/ioImageFileReaderRAD2ENVI.tif        
         /home3/mathieu/guillaume/CD_CNES/RAD_CR4_full/hvbas_calib_l1900_c1050.rad 
         ${TEMP}/ioImageFileReaderRAD2ENVI.tif )       
         
 # Write a RAD file
 ADD_TEST(ioTvImageFileReaderTIF2RADCI2 ${IO_TESTS16}
-        otbImageFileReaderTest
+        otbImageFileReaderRADComplex
         /home3/mathieu/guillaume/CD_CNES/RSAT_cyrille/RSAT_imagery_VH.tif
         ${TEMP}/ioImageFileReaderTIF2RADCI2.rad )                   
                
@@ -1590,7 +1594,8 @@ otbKMLVectorDataIOTestCanWrite.cxx
 SET(BasicIO_SRCS16
 otbRADImageIOTestCanRead.cxx
 #otbALOSImageIOTestCanRead.cxx
-otbImageFileReaderTest.cxx
+otbImageFileReaderRAD.cxx
+otbImageFileReaderRADComplex.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
