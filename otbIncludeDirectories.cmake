@@ -142,8 +142,7 @@ IF(OTB_USE_EXTERNAL_EXPAT)
   	        ${EXPAT_INCLUDE_DIR} )
 ELSE(OTB_USE_EXTERNAL_EXPAT)
         SET(OTB_INCLUDE_DIRS_BUILD_TREE_CXX ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX}
-                ${OTB_SOURCE_DIR}/Utilities/otbexpat
-                ${OTB_SOURCE_DIR}/Utilities/otbexpat/lib )
+                ${OTB_SOURCE_DIR}/Utilities/otbexpat)
 ENDIF(OTB_USE_EXTERNAL_EXPAT)
 
 # For OpenThreads 
@@ -225,8 +224,7 @@ IF(OTB_USE_EXTERNAL_EXPAT)
   	        ${EXPAT_INCLUDE_DIR} )
 ELSE(OTB_USE_EXTERNAL_EXPAT)
         SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
-                ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbexpat
-                ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbexpat/lib )
+                ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbexpat)
 ENDIF(OTB_USE_EXTERNAL_EXPAT)
 
 #For CURL header file

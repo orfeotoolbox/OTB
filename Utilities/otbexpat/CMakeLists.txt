@@ -13,7 +13,6 @@ SET(libexpat_VERSION_STRING "${libexpat_VERSION_MAJOR}.${libexpat_VERSION_MINOR}
 
 # Allow sources in subdirectories to see the include files.
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/lib)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
 
 # Build libexpat library
