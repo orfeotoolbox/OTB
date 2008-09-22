@@ -1464,7 +1464,7 @@ ADD_TEST(ioTvImageFileReaderRADCR42TIF ${IO_TESTS16}
         
 # Write a RAD file
 ADD_TEST(ioTvImageFileReaderTIF2RADCI2 ${IO_TESTS16}
-        otbImageFileReaderRADComplex
+        otbImageFileWriterRADComplex
         /home3/mathieu/guillaume/CD_CNES/RSAT_cyrille/RSAT_imagery_VH.tif
         ${TEMP}/ioImageFileReaderTIF2RADCI2.rad )                   
                
@@ -1593,9 +1593,9 @@ otbKMLVectorDataIOTestCanWrite.cxx
 
 SET(BasicIO_SRCS16
 otbRADImageIOTestCanRead.cxx
-#otbALOSImageIOTestCanRead.cxx
 otbImageFileReaderRAD.cxx
 otbImageFileReaderRADComplex.cxx
+otbImageFileWriterRADComplex.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
