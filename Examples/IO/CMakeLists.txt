@@ -50,7 +50,7 @@ ADD_EXECUTABLE(MetadataExample MetadataExample.cxx )
 TARGET_LINK_LIBRARIES(MetadataExample OTBCommon OTBIO ITKCommon ITKIO)
 
 ADD_EXECUTABLE(DXFReaderExample DXFReaderExample.cxx )
-TARGET_LINK_LIBRARIES(DXFReaderExample OTBCommon OTBIO ITKCommon ITKIO dxf)
+TARGET_LINK_LIBRARIES(DXFReaderExample OTBCommon OTBIO ITKCommon ITKIO  ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 
 ADD_EXECUTABLE(VectorDataIOExample VectorDataIOExample.cxx )
 TARGET_LINK_LIBRARIES(VectorDataIOExample OTBCommon OTBIO ITKCommon ITKIO)
@@ -142,6 +142,6 @@ ADD_TEST(DEMToImageGeneratorTest ${EXE_TESTS}
  
 
 ADD_EXECUTABLE(otbIOExamplesTests otbIOExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbIOExamplesTests otbossim OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBProjections gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon dxf otbossim)
+TARGET_LINK_LIBRARIES(otbIOExamplesTests otbossim OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBProjections ITKIO ITKAlgorithms ITKStatistics ITKCommon  ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

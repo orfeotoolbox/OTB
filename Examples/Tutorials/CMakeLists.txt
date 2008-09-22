@@ -2,7 +2,7 @@ PROJECT(TutorialsExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 ADD_EXECUTABLE(HelloWorldOTB HelloWorldOTB.cxx )
-TARGET_LINK_LIBRARIES(HelloWorldOTB OTBCommon OTBIO)
+TARGET_LINK_LIBRARIES(HelloWorldOTB OTBCommon OTBIO ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 
 ADD_EXECUTABLE(Pipeline Pipeline.cxx )
 TARGET_LINK_LIBRARIES(Pipeline OTBCommon OTBIO)
@@ -106,6 +106,6 @@ ADD_TEST( TutorialsOrthoFusionTest ${EXE_TESTS}
 
 
 ADD_EXECUTABLE(otbTutorialsExamplesTests otbTutorialsExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbTutorialsExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKNumerics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion)
+TARGET_LINK_LIBRARIES(otbTutorialsExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKNumerics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -24,7 +24,7 @@ ADD_EXECUTABLE(NeighborhoodIterators3 NeighborhoodIterators3.cxx)
 TARGET_LINK_LIBRARIES(NeighborhoodIterators3 OTBIO OTBCommon ITKIO   )
 
 ADD_EXECUTABLE(NeighborhoodIterators6 NeighborhoodIterators6.cxx)
-TARGET_LINK_LIBRARIES(NeighborhoodIterators6 ITKAlgorithms ITKBasicFilters OTBIO OTBCommon ITKIO )
+TARGET_LINK_LIBRARIES(NeighborhoodIterators6 ITKAlgorithms ITKBasicFilters OTBIO OTBCommon ITKIO ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 
 ADD_EXECUTABLE(ImageRegionIteratorWithIndex ImageRegionIteratorWithIndex.cxx)
 TARGET_LINK_LIBRARIES(ImageRegionIteratorWithIndex OTBIO OTBCommon ITKIO   )
@@ -194,6 +194,6 @@ ADD_TEST(ShapedNeighborhoodIterators2Test ${EXE_TESTS}
 
 
 ADD_EXECUTABLE(otbIteratorsExamplesTests otbIteratorsExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbIteratorsExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+TARGET_LINK_LIBRARIES(otbIteratorsExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

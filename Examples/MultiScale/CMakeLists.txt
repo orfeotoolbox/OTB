@@ -8,11 +8,11 @@ ADD_EXECUTABLE(MorphologicalPyramidSynthesisFilterExample MorphologicalPyramidSy
 TARGET_LINK_LIBRARIES(MorphologicalPyramidSynthesisFilterExample OTBCommon OTBIO OTBMultiScale ITKCommon ITKIO)
 
 ADD_EXECUTABLE(MorphologicalPyramidSegmenterExample MorphologicalPyramidSegmenterExample.cxx )
-TARGET_LINK_LIBRARIES(MorphologicalPyramidSegmenterExample OTBCommon OTBIO OTBMultiScale ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(MorphologicalPyramidSegmenterExample OTBCommon OTBIO OTBMultiScale ITKCommon ITKIO  ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 
 
 ADD_EXECUTABLE(MorphologicalPyramidSegmentationExample MorphologicalPyramidSegmentationExample.cxx )
-TARGET_LINK_LIBRARIES(MorphologicalPyramidSegmentationExample OTBCommon OTBIO OTBMultiScale ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(MorphologicalPyramidSegmentationExample OTBCommon OTBIO OTBMultiScale ITKCommon ITKIO ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 
 
 
@@ -94,6 +94,6 @@ ADD_TEST(MorphologicalPyramidSegmenterExampleTest ${EXE_TESTS}
 
 
 ADD_EXECUTABLE(otbMultiScaleExamplesTests otbMultiScaleExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbMultiScaleExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+TARGET_LINK_LIBRARIES(otbMultiScaleExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
