@@ -28,6 +28,7 @@
 #include "otbGDALImageIOFactory.h"
 #include "otbLUMImageIOFactory.h"
 #include "otbBSQImageIOFactory.h"
+#include "otbRADImageIOFactory.h"
 
 #ifdef OTB_COMPILE_JPEG2000
 #include "otbJPEG2000ImageIOFactory.h"
@@ -80,6 +81,9 @@ namespace otb
                         
 	    // MSTAR Format for OTB
             itk::ObjectFactoryBase::RegisterFactory( MSTARImageIOFactory::New() );
+            
+	    // RAD Format for OTB
+            itk::ObjectFactoryBase::RegisterFactory( RADImageIOFactory::New() );            
                         
 #ifdef OTB_USE_CURL
 	    // TileMap : New format for OTB
