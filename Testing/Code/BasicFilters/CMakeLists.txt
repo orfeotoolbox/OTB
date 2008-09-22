@@ -22,6 +22,7 @@ SET(BASICFILTERS_TESTS6 ${CXX_TEST_PATH}/otbBasicFiltersTests6)
 SET(BASICFILTERS_TESTS7 ${CXX_TEST_PATH}/otbBasicFiltersTests7)
 SET(BASICFILTERS_TESTS8 ${CXX_TEST_PATH}/otbBasicFiltersTests8)
 SET(BASICFILTERS_TESTS9 ${CXX_TEST_PATH}/otbBasicFiltersTests9)
+SET(BASICFILTERS_TESTS10 ${CXX_TEST_PATH}/otbBasicFiltersTests10)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests1 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -920,9 +921,15 @@ ADD_TEST(bfTuFunctionToImageFilterTest ${BASICFILTERS_TESTS9}
 	    2 # radius
 )
 
-ADD_TEST(bfTuScalarImageTextureFunctorNew ${BASICFILTERS_TESTS9}
+
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests10 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ADD_TEST(bfTuScalarImageTextureFunctorNew ${BASICFILTERS_TESTS10}
         otbScalarImageTextureFunctorNew )
-ADD_TEST(bfTvScalarImageTextureFunctor ${BASICFILTERS_TESTS9}
+ADD_TEST(bfTvScalarImageTextureFunctor ${BASICFILTERS_TESTS10}
         --compare-image ${TOL}
             ${BASELINE}/bfScalarImageTextureFunctorTest.tif
             ${TEMP}/bfScalarImageTextureFunctorTest.tif
@@ -932,10 +939,10 @@ ADD_TEST(bfTvScalarImageTextureFunctor ${BASICFILTERS_TESTS9}
 	    2 # radius
             0 # index feature
 )		   
-ADD_TEST(bfTuScalarVectorImageTextureFunctorNew ${BASICFILTERS_TESTS9}
+ADD_TEST(bfTuScalarVectorImageTextureFunctorNew ${BASICFILTERS_TESTS10}
         otbScalarVectorImageTextureFunctorNew )
 
-ADD_TEST(bfTvScalarVectorImageTextureFunctor ${BASICFILTERS_TESTS9}
+ADD_TEST(bfTvScalarVectorImageTextureFunctor ${BASICFILTERS_TESTS10}
         --compare-image ${TOL}
             ${BASELINE}/bfScalarImageTextureFunctorTest.tif # It the same of  bfTvScalarImageTextureFunctor test
             ${TEMP}/bfScalarVectorImageTextureFunctorTest.tif
@@ -945,13 +952,14 @@ ADD_TEST(bfTvScalarVectorImageTextureFunctor ${BASICFILTERS_TESTS9}
 	    2 # radius
 )
 
+
 # -------            otb::GaborFilterGenerator   ----------------------------
 
-ADD_TEST(bfTuGaborFilterGeneratorNew ${BASICFILTERS_TESTS9}
+ADD_TEST(bfTuGaborFilterGeneratorNew ${BASICFILTERS_TESTS10}
 	otbGaborFilterGeneratorNew
 	 )
 
-ADD_TEST(bfTvGaborFilterGenerator ${BASICFILTERS_TESTS9}
+ADD_TEST(bfTvGaborFilterGenerator ${BASICFILTERS_TESTS10}
 	--compare-image ${TOL}
 	    ${BASELINE}/bfGaborFilterGeneratorTest.tif
 	    ${TEMP}/bfGaborFilterGeneratorTest.tif
@@ -968,10 +976,10 @@ ADD_TEST(bfTvGaborFilterGenerator ${BASICFILTERS_TESTS9}
 
 IF(USE_FFTWD)
 
-  ADD_TEST(bfTuOverlapSaveConvolutionImageFilterNew ${BASICFILTERS_TESTS9}
+  ADD_TEST(bfTuOverlapSaveConvolutionImageFilterNew ${BASICFILTERS_TESTS10}
          otbOverlapSaveConvolutionImageFilterNew)
 
-  ADD_TEST(bfTvOverlapSaveConvolutionImageFilter ${BASICFILTERS_TESTS9}
+  ADD_TEST(bfTvOverlapSaveConvolutionImageFilter ${BASICFILTERS_TESTS10}
 		--compare-image ${EPSILON}
 		    ${BASELINE}/bfTvConvolutionImageFilter.tif
 		    ${TEMP}/bfTvOverlapSaveConvolutionImageFilter.tif
@@ -980,7 +988,7 @@ IF(USE_FFTWD)
 		    ${TEMP}/bfTvOverlapSaveConvolutionImageFilter.tif
 )
 
- ADD_TEST(bfTvCompareOverlapSaveAndClassicalConvolutionWithGaborFilter ${BASICFILTERS_TESTS9}
+ ADD_TEST(bfTvCompareOverlapSaveAndClassicalConvolutionWithGaborFilter ${BASICFILTERS_TESTS10}
 		--compare-image ${EPSILON}
 		    ${TEMP}/bfTvCompareConvolutionOutput.tif
 		    ${TEMP}/bfTvCompareOSConvolutionoutput.tif
@@ -1131,23 +1139,29 @@ otbMeanShiftVectorImageFilterNew.cxx
 otbMeanShiftVectorImageFilter.cxx
 otbFunctionToImageFilterNew.cxx
 otbFunctionToImageFilter.cxx
+)
+
+# A enrichir
+SET(BasicFilters_SRCS10
 otbScalarImageTextureFunctorNew.cxx
 otbScalarImageTextureFunctor.cxx
 otbScalarVectorImageTextureFunctorNew.cxx
 otbScalarVectorImageTextureFunctor.cxx
 otbGaborFilterGeneratorNew.cxx
 otbGaborFilterGenerator.cxx
-
 )
 
+
 IF(USE_FFTWD)
-SET(BasicFilters_SRCS9 
-${BasicFilters_SRCS9}
+SET(BasicFilters_SRCS10
+${BasicFilters_SRCS10}
 otbOverlapSaveConvolutionImageFilterNew.cxx
 otbOverlapSaveConvolutionImageFilter.cxx
 otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter.cxx
 )
 ENDIF(USE_FFTWD)
+
+
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
@@ -1177,5 +1191,8 @@ TARGET_LINK_LIBRARIES(otbBasicFiltersTests8  OTBBasicFilters OTBCommon OTBIO  gd
 
 ADD_EXECUTABLE(otbBasicFiltersTests9 otbBasicFiltersTests9.cxx ${BasicFilters_SRCS9})
 TARGET_LINK_LIBRARIES(otbBasicFiltersTests9  OTBBasicFilters OTBCommon OTBIO  gdal ITKIO ITKCommon ITKBasicFilters)
+
+ADD_EXECUTABLE(otbBasicFiltersTests10 otbBasicFiltersTests10.cxx ${BasicFilters_SRCS10})
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests10  OTBBasicFilters OTBCommon OTBIO  gdal ITKIO ITKCommon ITKBasicFilters)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
