@@ -1456,7 +1456,13 @@ ADD_TEST(ioTvImageFileReaderRADCI22ENVI ${IO_TESTS16}
 ADD_TEST(ioTvImageFileReaderRADCR42TIF ${IO_TESTS16}
         otbImageFileReaderTest
         /home3/mathieu/guillaume/CD_CNES/RAD_CR4_full/hvbas_calib_l1900_c1050.rad 
-        ${TEMP}/ioImageFileReaderRAD2ENVI.tif )                 
+        ${TEMP}/ioImageFileReaderRAD2ENVI.tif )       
+        
+# Write a RAD file
+ADD_TEST(ioTvImageFileReaderTIF2RADCI2 ${IO_TESTS16}
+        otbImageFileReaderTest
+        /home3/mathieu/guillaume/CD_CNES/RSAT_cyrille/RSAT_imagery_VH.tif
+        ${TEMP}/ioImageFileReaderTIF2RADCI2.rad )                   
                
 # Can read ALOS format
 #ADD_TEST(ioTuALOSImageIOCanRead ${IO_TESTS16} 
@@ -1583,7 +1589,7 @@ otbKMLVectorDataIOTestCanWrite.cxx
 
 SET(BasicIO_SRCS16
 otbRADImageIOTestCanRead.cxx
-otbALOSImageIOTestCanRead.cxx
+#otbALOSImageIOTestCanRead.cxx
 otbImageFileReaderTest.cxx
 )
 
