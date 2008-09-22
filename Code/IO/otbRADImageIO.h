@@ -100,7 +100,6 @@ protected:
 
   bool OpenOneraDataFileForReading(const char* filename);
   bool OpenOneraHeaderFileForReading(const char* filename);
- // hu ??? check this out ! 
   
   void InternalReadImageInformation();
 
@@ -142,14 +141,14 @@ private:
 #define otbSetTypeRADMacro(WeakType, CAI_VALUE) \
     else if ( this->GetComponentType() == WeakType ) \
     { \
-        m_TypeRad = CAI_VALUE; \
+        m_TypeRAD = CAI_VALUE; \
     }
 
 
   bool    m_FlagWriteImageInformation;
   itk::ImageIOBase::ByteOrder m_FileByteOrder;
   std::fstream m_HeaderFile;
-  std::string m_TypeRad;
+  std::string m_TypeRAD;
   std::vector< std::string >  m_ChannelsFileName;    
   std::fstream *  m_ChannelsFile;
   int     m_NbOfChannels;
