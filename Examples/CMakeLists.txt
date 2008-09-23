@@ -21,6 +21,7 @@ SUBDIRS(
   Projections
   Registration
   Radiometry
+  SARPolarimetry
   Fusion
   Tutorials
   Markov
@@ -77,6 +78,7 @@ ELSE(OTB_BINARY_DIR)
         DisparityMap
         Registration
         Radiometry
+        SARPolarimetry
         Fusion
         Tutorials
         Markov
