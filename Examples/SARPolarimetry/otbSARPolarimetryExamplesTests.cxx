@@ -29,6 +29,6 @@ REGISTER_TEST(PiOver4ExamplePolarimetricSynthesisFilter);
 }
 
 #undef main
-#define main PiOver4ExamplePolarimetricSynthesisFilterTest
+#define main PiOver4ExamplePolarimetricSynthesisFilter
 #include "PiOver4ExamplePolarimetricSynthesisFilter.cxx"
 
