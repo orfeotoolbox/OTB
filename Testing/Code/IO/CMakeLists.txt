@@ -1388,10 +1388,12 @@ ADD_TEST(ioTuVectorDataSourceNew ${IO_TESTS15}
 ADD_TEST(ioTuVectorDataFileReaderNew ${IO_TESTS15} 
         otbVectorDataFileReaderNew )
 
-ADD_TEST(ioTvVectorDataFileReader ${IO_TESTS15} 
+ADD_TEST(ioTvSHPVectorDataFileReader ${IO_TESTS15} 
+        --compare-ascii ${TOL}  ${BASELINE_FILES}/ioSHPVectorDataFileReader.txt
+                        ${TEMP}/ioSHPVectorDataFileReader.txt
         otbVectorDataFileReader
 	${IMAGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
-	)
+	${TEMP}/ioSHPVectorDataFileReader.txt)
 
 ADD_TEST(ioTuVectorDataFileWriterNew ${IO_TESTS15} 
         otbVectorDataFileWriterNew )

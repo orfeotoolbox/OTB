@@ -18,6 +18,7 @@
 
 #include "otbVectorDataFileReader.h"
 #include "otbVectorData.h"
+#include <fstream>
 
 int otbVectorDataFileReader(int argc, char * argv[])
 {
@@ -30,6 +31,8 @@ int otbVectorDataFileReader(int argc, char * argv[])
 
   VectorDataType::Pointer data = reader->GetOutput();
 
-  std::cout<<data<<std::endl;
+  std::ofstream fout (argv[2]);
+  fout << data <<std::endl;
+  fout.close();
   return EXIT_SUCCESS;
 }
