@@ -41,8 +41,7 @@
 int main( int argc, char* argv[] )
 {
 
-
-  if(argc!=5)
+  if(argc!=6)
     {
     std::cout << argv[0]
               <<" <input_filename_HH_channel>"
