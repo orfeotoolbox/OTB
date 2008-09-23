@@ -138,16 +138,16 @@ class ITK_EXPORT ImageAlternateViewer
     void Reset(void);
 
     /** Initialize the widget */
-  virtual void Init(const char * l);
+    virtual void Init(int x, int y, int w, int h, const char * l);
+  
+  /** Resize the widget */
+  virtual void resize(int x, int y, int w, int h);
 
 protected:
   /** Constructor */
   ImageAlternateViewer();
   /** Destructor */
   virtual ~ImageAlternateViewer();
-  
-  /** Resize the widget */
-  virtual void resize(int x, int y, int w, int h);
   
   /** Draw the widget */
   virtual void draw(void);
