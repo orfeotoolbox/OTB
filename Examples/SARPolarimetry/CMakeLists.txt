@@ -35,7 +35,7 @@ ADD_TEST(rdTvPiOver4ExamplePolarimetricSynthesisFilterTest ${SARPOLARIMETRY_TEST
 	)        
 
 
-ADD_EXECUTABLE(otbSARPolarimetryExamplesTests PiOver4ExamplePolarimetricSynthesisFilter.cxx )
+ADD_EXECUTABLE(otbSARPolarimetryExamplesTests otbSARPolarimetryExamplesTests.cxx )
 TARGET_LINK_LIBRARIES(otbSARPolarimetryExamplesTests OTBSARPolarimetry OTBCommon OTBIO gdal ITKIO ITKCommon ITKBasicFilters)
 
 
