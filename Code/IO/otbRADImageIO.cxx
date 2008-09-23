@@ -340,14 +340,14 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string & file_name, st
         {
                 m_PixelType = SCALAR;
                 SetComponentType(UCHAR);
-                m_NbOctetPixel=1;       //ok
+                m_NbOctetPixel=1;
         }
         if(lStrCodePix == "PHA")
         {
                 m_PixelType = SCALAR;        
                 // 0 .. 360 degree
-                SetComponentType(USHORT);
-                m_NbOctetPixel=1;       //cmt tu codes 360 avec 8 bits stp ?
+                SetComponentType(CHAR);
+                m_NbOctetPixel=1;
         }
         if(lStrCodePix == "I2")
         {
@@ -358,7 +358,7 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string & file_name, st
         if(lStrCodePix == "I4")
         {
                 m_PixelType = SCALAR;        
-                SetComponentType(LONG);
+                SetComponentType(INT);
                 m_NbOctetPixel=4;
         }
         if(lStrCodePix == "R4")
@@ -382,7 +382,7 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string & file_name, st
         else if(lStrCodePix == "COCT")
         {
                 m_PixelType = COMPLEX;
-                SetComponentType(FLOAT);
+                SetComponentType(UCHAR);
                 m_NbOctetPixel=2;
         }
         else if(lStrCodePix == "C3B")
@@ -406,7 +406,7 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string & file_name, st
         else if(lStrCodePix == "CI4")
         {
                 m_PixelType = COMPLEX;
-                SetComponentType(LONG);
+                SetComponentType(INT);
                 m_NbOctetPixel=8;
         }
         else if(lStrCodePix == "CR8")
@@ -533,8 +533,8 @@ std::cout<< " Write !!!!!!!!! " <<std::endl;
 
 
 std::cout<< " Write2 !!!!!!!!! " <<std::endl;
-	// Cas particuliers : on controle que si la r�gion � �crire est de la m�me dimension que l'image enti�re,
-	// on commence l'offset � 0 (lorsque que l'on est pas en "Streaming")
+	// Special case : we control that if the region to write has the same dimension that the entire picture,
+	// we start to the offset to 0 ( when ze4re not in "Streaming")
 	if( (lNbLignes == m_Dimensions[1]) && (lNbColonnes == m_Dimensions[0]))
 	{
                 otbMsgDevMacro(<<"Force the IORegion offset to 0");
@@ -556,8 +556,8 @@ otbMsgDevMacro( <<" GetComponentSize       : "<<this->GetComponentSize());
         unsigned long cpt = 0;
 
         // Update the step variable
-      step = m_NbOctetPixel;  //(unsigned long)(this->GetComponentSize()); //step * 
-        
+        step = m_NbOctetPixel;
+              
         const char * p = static_cast<const char *>(buffer);
 
 std::cout<< " step : " <<step <<std::endl;
@@ -656,6 +656,99 @@ std::cout<< " Avant open !!!!!!!!! " <<std::endl;
         std::string lString;
         //Write TYPE information
         m_HeaderFile << "TYPECODAGE "; //  << std::endl;
+        
+        
+        std::string lExtension;
+        std::string lStringPixelType = System::SetToUpper(this->GetPixelTypeAsString(m_PixelType));
+        std::string lStringComponentType = System::SetToUpper(this->GetComponentTypeAsString(this->GetComponentType()));
+        
+std::cout<<"toto "<<lStringPixelType<<std::endl;
+std::cout<<"tutu "<<lStringComponentType<<std::endl;
+        
+        if(lStringPixelType == "SCALAR")
+        {
+                if( lStringComponentType =="UCHAR")
+                {
+                        m_NbOctetPixel=1;
+                        m_TypeRAD = "OCT";
+                        lExtension=".oct";
+                }
+                else if( lStringComponentType =="CHAR")
+                {
+                        m_NbOctetPixel=1;
+                        m_TypeRAD = "PHA";
+                        lExtension=".pha";
+                }
+                else if( lStringComponentType =="SHORT")
+                {
+                        m_NbOctetPixel=2;
+                        m_TypeRAD = "I2";
+                        lExtension=".i2";
+                }
+                else if( lStringComponentType =="INT")
+                {
+                        m_NbOctetPixel=4;
+                        m_TypeRAD = "I4";
+                }
+                else if( lStringComponentType =="FLOAT")
+                {
+                        m_NbOctetPixel=4;
+                        m_TypeRAD = "R4";
+                        lExtension=".r4";
+                        
+                }
+        }
+        else if( lStringPixelType == "COMPLEX")
+        {
+                if( lStringComponentType =="SHORT" || lStringComponentType =="INT")
+                {
+std::cout<< "ICIIIII ?" <<std::endl;
+
+
+                        m_NbOctetPixel=4;
+                        m_TypeRAD = "CI2";
+                        lExtension=".ci2";
+                }
+                else if( lStringComponentType =="FLOAT")
+                {
+                        m_NbOctetPixel=8;
+                        m_TypeRAD = "CR4";
+                        lExtension=".cr4";
+                }
+/*                if( this->GetComponentType()=="FLOAT")
+                {
+                        m_NbOctetPixel=2;
+                        m_TypeRAD = "COCT"
+                }
+                if( this->GetComponentType()=="FLOAT")
+                {
+                        m_NbOctetPixel=2;
+                        m_TypeRAD = "C3B"
+                }
+                if( this->GetComponentType()==FLOAT)
+                {
+                        m_NbOctetPixel=2;
+                        m_TypeRAD = "C5B"
+                }
+                if( this->GetComponentType()==FLOAT)
+                {
+                        m_NbOctetPixel=2;
+                        m_TypeRAD = "C7B"
+                }
+*/        
+                else if( lStringComponentType =="INT")
+                {
+                        m_NbOctetPixel=8;
+                        m_TypeRAD = "CI4";
+                        lExtension=".ci4";
+                }
+                else if( lStringComponentType =="DOUBLE")
+                {
+                        m_NbOctetPixel=16;
+                        m_TypeRAD = "CR8";
+                        lExtension=".cr8";                        
+                }
+        }
         m_HeaderFile << m_TypeRAD << std::endl;
 
         //Write "SENSCODAGE" informations
@@ -678,7 +771,7 @@ std::cout<< " Avant open !!!!!!!!! " <<std::endl;
 
 //comment on sait HH/HV/VH/VV ??
 
-                lStream << lRootName <<"_"<< i+1 << ".ci2";
+                lStream << lRootName <<"_"<< i+1 << lExtension;
                 m_ChannelsFileName.push_back(lStream.str());
         }
 
