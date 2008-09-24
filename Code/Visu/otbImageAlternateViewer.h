@@ -111,7 +111,7 @@ class ITK_EXPORT ImageAlternateViewer
     itkSetMacro(OpenGlIsotropicZoom,double);
     itkGetMacro(OpenGlIsotropicZoom,double);
 
-    itkSetMacro(ViewedRegionCenter,IndexType);
+    void SetViewedRegionCenter(const IndexType & index);
     itkGetMacro(ViewedRegionCenter,IndexType);
 
     itkSetObjectMacro(Image,ImageType);
@@ -132,6 +132,16 @@ class ITK_EXPORT ImageAlternateViewer
      * Set view mode to Grayscale.
      */
     void SetViewModelToGrayscale(void);
+
+    /**
+     * Set insight view model to RGB
+     */
+    void SetInsightViewModelToRGB(void);
+
+    /** 
+     * Set insight view model to grayscale
+     */
+    void SetInsightViewModelToGrayscale(void);
 
     /** Normalization function */
     unsigned char Normalize(PixelType value, unsigned int channelIndex);
@@ -173,7 +183,7 @@ protected:
 
   RegionType GetAdditionalBufferRegion(unsigned int i);
   
-  unsigned char * CreateAdditionalBuffer(RegionType region,ImagePointerType image);
+  unsigned char * CreateAdditionalBuffer(RegionType region,ImagePointerType image,bool rgb);
   
   virtual void MergeBuffersAndFreeMemory(std::vector<unsigned char *> bufferList, 
 					 std::vector<RegionType> bufferRegionList);
@@ -202,6 +212,7 @@ private:
   double m_OpenGlIsotropicZoom;
   /** Flag for RGB/ GRAYSCALE view mode */
   bool m_ViewModelIsRGB;
+  bool m_InsightViewModelIsRGB;
   /** Red channel index */
   unsigned int m_RedChannelIndex;
   /** Green channel index */

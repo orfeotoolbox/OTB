@@ -39,6 +39,7 @@ namespace otb
     m_OpenGlIsotropicZoom = 1.0;
     m_OpenGlBuffer = NULL;
     m_ViewModelIsRGB=true;
+    m_InsightViewModelIsRGB =true;
     m_RedChannelIndex = 0;
     m_GreenChannelIndex = 1;
     m_BlueChannelIndex = 2;
@@ -86,6 +87,16 @@ namespace otb
 	delete [] m_OpenGlBuffer;
       }
   }
+
+  template <class TPixel>
+  void
+  ImageAlternateViewer<TPixel>
+  ::SetViewedRegionCenter(const IndexType & index)
+  {
+    m_OldViewedRegionCenter = m_ViewedRegionCenter;
+    m_ViewedRegionCenter = index;
+  }
+
   /**
    * Reset the viewer
    */
@@ -136,10 +147,6 @@ namespace otb
 
     m_Image->UpdateOutputInformation();
     m_DecompositionFilter->SetInput(m_Image);
-    m_ViewedRegionCenter[0]=m_Image->GetLargestPossibleRegion().GetIndex()[0]
-      +m_Image->GetLargestPossibleRegion().GetSize()[0]/2;
-    m_ViewedRegionCenter[1]=m_Image->GetLargestPossibleRegion().GetIndex()[1]
-      +m_Image->GetLargestPossibleRegion().GetSize()[1]/2;
     m_OldViewedRegionCenter = m_ViewedRegionCenter;
 
     typename ImageListType::Pointer bandList = m_DecompositionFilter->GetOutput() ;
@@ -220,6 +227,28 @@ namespace otb
   {
     m_ViewModelIsRGB=false;
   }
+
+ /**
+   * Set view mode to RGB.
+   */
+  template <class TPixel>
+  void
+  ImageAlternateViewer<TPixel>
+  ::SetInsightViewModelToRGB(void)
+  {
+    m_InsightViewModelIsRGB=true;
+  }
+  /**
+   * Set view mode to Grayscale.
+   */
+  template <class TPixel>
+  void
+  ImageAlternateViewer<TPixel>
+  ::SetInsightViewModelToGrayscale(void)
+  {
+    m_InsightViewModelIsRGB=false;
+  }
+
   /** 
    * Show The widget. 
    */
@@ -278,7 +307,7 @@ namespace otb
 	  {
 	    RegionType additionalBufferRegion = GetAdditionalBufferRegion(i);
 	    //std::cout<<"Additional region required: "<<additionalBufferRegion<<std::endl;
-	    unsigned char * additionalBuffer = CreateAdditionalBuffer(additionalBufferRegion,m_Image);
+	    unsigned char * additionalBuffer = CreateAdditionalBuffer(additionalBufferRegion,m_Image,m_ViewModelIsRGB);
 	    this->Draw(additionalBuffer,additionalBufferRegion);
 	    bufferList.push_back(additionalBuffer);
 	    bufferRegionList.push_back(additionalBufferRegion);
@@ -288,7 +317,7 @@ namespace otb
       }
     if(m_SubWindowMode)
       {
-	unsigned char * subWindowBuffer = CreateAdditionalBuffer(m_SubWindowRegion,m_SecondImage);
+	unsigned char * subWindowBuffer = CreateAdditionalBuffer(m_SubWindowRegion,m_SecondImage,m_InsightViewModelIsRGB);
 	this->Draw(subWindowBuffer,m_SubWindowRegion);
 	delete [] subWindowBuffer;
       }
@@ -351,7 +380,7 @@ namespace otb
     focusOffset[0]=static_cast<long>(static_cast<double>(m_ViewedRegionCenter[0]-m_OldViewedRegionCenter[0])/m_SpacingZoomFactor);
     focusOffset[1]=static_cast<long>(static_cast<double>(m_ViewedRegionCenter[1]-m_OldViewedRegionCenter[1])/m_SpacingZoomFactor);
 
-     //std::cout<<"Focus offset: "<<focusOffset<<std::endl;
+    //std::cout<<"Focus offset: "<<focusOffset<<std::endl;
     
     IndexType newBufferedRegionIndex;
 
@@ -372,7 +401,7 @@ namespace otb
     newBufferedRegionIndex[1]-=focusOffset[1];
     //std::cout<<"NewBufferedRegionIndex: "<<newBufferedRegionIndex<<std::endl;
     m_BufferedRegion.SetIndex(newBufferedRegionIndex);
-    // m_OldViewedRegionCenter = m_ViewedRegionCenter;
+    //m_OldViewedRegionCenter = m_ViewedRegionCenter;
     
     //std::cout<<"New buffered region: "<<m_BufferedRegion<<std::endl;
     
@@ -381,8 +410,8 @@ namespace otb
     //std::cout<<"Center index: "<<m_ViewedRegionCenter<<std::endl;
     //std::cout<<"Center: "<<center<<std::endl;
 
-    if(m_SpacingZoomFactor != m_OldSpacingZoomFactor)
-      {
+     if(m_SpacingZoomFactor != m_OldSpacingZoomFactor)
+       {
 	m_BufferedRegion.Crop(m_DisplayExtent);
  	//std::cout<<"New buffered region2 "<<m_BufferedRegion<<std::endl;
 
@@ -545,12 +574,12 @@ namespace otb
 	m_OpenGlBuffer = newBuffer;
 
 	m_OldSpacingZoomFactor = m_SpacingZoomFactor;
+  }
 	//std::cout<<"Optimisation called "<<optiCount<<" times over "<<m_BufferedRegion.GetNumberOfPixels()<<std::endl;
-      }
    
      //std::cout<<"BufferedRegion: "<<m_BufferedRegion<<std::endl;
      //std::cout<<"OldBufferedRegion: "<<m_OldBufferedRegion<<std::endl; 
-  }
+}
   
   template <class TPixel>
   typename ImageAlternateViewer<TPixel>
@@ -701,7 +730,7 @@ namespace otb
   template <class TPixel>
   unsigned char *
   ImageAlternateViewer<TPixel>
-  ::CreateAdditionalBuffer(RegionType region,ImagePointerType image)
+  ::CreateAdditionalBuffer(RegionType region,ImagePointerType image, bool rgb)
   {
     itk::TimeProbe total,filter,interpolation;
     total.Start();
@@ -778,7 +807,7 @@ namespace otb
 	
 	bandList->UpdateOutputInformation();
 	bandList->GetNthElement(m_RedChannelIndex)->SetRequestedRegion(m_RequestedRegion);
-	if(m_ViewModelIsRGB)
+	if(rgb)
 	  {
 	    bandList->GetNthElement(m_GreenChannelIndex)->SetRequestedRegion(m_RequestedRegion);
 	    bandList->GetNthElement(m_BlueChannelIndex)->SetRequestedRegion(m_RequestedRegion);
@@ -807,7 +836,7 @@ namespace otb
 		    interpolatedValue = 0;
 		  }
 		result[index] = Normalize(interpolatedValue,m_RedChannelIndex);
-		if(m_ViewModelIsRGB)
+		if(rgb)
 		  {
 		    m_ZoomInInterpolator->SetInputImage(bandList->GetNthElement(m_GreenChannelIndex));
 		    if( m_ZoomInInterpolator->IsInsideBuffer(interpolatedPos))
