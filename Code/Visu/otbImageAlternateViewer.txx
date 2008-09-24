@@ -1346,7 +1346,7 @@ namespace otb
     glDisable(GL_BLEND);
 
     //     glEnable(GL_TEXTURE_2D);
-    //     glShadeModel(GL_SMOOTH);
+    glShadeModel(GL_SMOOTH);
     //     glClearColor(0.0f,0.0f,0.0f,0.5f);
     //     glClearDepth(1.0f);
     //     glEnable(GL_DEPTH_TEST);

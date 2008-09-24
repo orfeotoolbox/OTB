@@ -108,6 +108,9 @@ class ITK_EXPORT ImageAlternateViewer
     itkSetMacro(SpacingZoomFactor,double);
     itkGetMacro(SpacingZoomFactor,double);
 
+    itkSetMacro(OpenGlIsotropicZoom,double);
+    itkGetMacro(OpenGlIsotropicZoom,double);
+
     itkSetMacro(ViewedRegionCenter,IndexType);
     itkGetMacro(ViewedRegionCenter,IndexType);
 
