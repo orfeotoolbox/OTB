@@ -60,6 +60,7 @@ SET(OTB_VERSION_MAJOR "2")
 SET(OTB_VERSION_MINOR "4")
 SET(OTB_VERSION_PATCH "0")
 
+
 # Version string should not include patch level.  The major.minor is
 # enough to distinguish available features of the toolkit.
 SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
@@ -184,7 +185,14 @@ ELSE(OPENTHREADS_FOUND)
         SET(OPENTHREADS_INCLUDE_DIR "${OTB_SOURCE_DIR}/Utilities/otbopenthreads/OpenThreads/include")
         SET(OPENTHREADS_LIBRARY "OpenThreads" )
         INCLUDE_DIRECTORIES(${OPENTHREADS_INCLUDE_DIR})
+	IF(NOT BUILD_SHARED_LIBS)
+         ADD_DEFINITIONS(-DOT_LIBRARY_STATIC)
+        ENDIF(NOT BUILD_SHARED_LIBS)
 ENDIF(OPENTHREADS_FOUND)
+
+IF(NOT BUILD_SHARED_LIBS)
+  ADD_DEFINITIONS(-DOSSIM_STATIC)
+ENDIF(NOT BUILD_SHARED_LIBS)
 
 
 #-----------------------------------------------------------------------------
@@ -560,6 +568,7 @@ OPTION(BUILD_EXAMPLES "Build the Examples directory." OFF)
 
 #-----------------------------------------------------------------------------
 # Dispatch the build into the proper subdirectories.
+
 SUBDIRS(Utilities Code)
 
 SUBDIRS(Wrapping)

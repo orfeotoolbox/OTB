@@ -36,22 +36,15 @@ ENDIF(WIN32)
 INCLUDE_DIRECTORIES(${OTB_BINARY_DIR}/Utilities/otbgeotiff/)
 
 #Specify that we are making DLL here
-ADD_DEFINITIONS(-DOSSIMMAKINGDLL -DNOMINMAX)
+ADD_DEFINITIONS(-DNOMINMAX -DOSSIMMAKINGDLL)
 
-# For alls platform (except MINGW):
-IF( NOT MINGW )
-
-ADD_LIBRARY(otbossimBase 
+ADD_LIBRARY(otbossim 
 ${ossim_base_SRCS}
 ${ossim_kbool_SRCS}
 ${ossim_matrix_SRCS}
 ${ossim_vec_SRCS}
 ${ossim_vpfutil_SRCS}
 ${ossim_plugin_SRCS}
-)
-TARGET_LINK_LIBRARIES(otbossimBase)
-
-ADD_LIBRARY(otbossim 
 ${ossim_init_SRCS}
 ${ossim_font_SRCS}
 ${ossim_support_data_SRCS}
@@ -60,63 +53,10 @@ ${ossim_imaging_SRCS}
 ${ossim_parallel_SRCS} 
 ${ossim_elevation_SRCS}
 )
-TARGET_LINK_LIBRARIES(otbossim otbossimBase otbgeotiff otbxtiff itktiff itkjpeg8 itkjpeg12 itkjpeg16 OpenThreads)
-
-INSTALL(TARGETS otbossimBase
-RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
-LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
-ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
+TARGET_LINK_LIBRARIES(otbossim otbgeotiff otbxtiff itktiff itkjpeg8 itkjpeg12 itkjpeg16 OpenThreads)
 
 INSTALL(TARGETS otbossim
 RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
 LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
 ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-
-
-ELSE( NOT MINGW )
-
-ADD_LIBRARY(otbossimBase 
-${ossim_base_SRCS}
-${ossim_kbool_SRCS}
-${ossim_matrix_SRCS}
-${ossim_vec_SRCS}
-${ossim_vpfutil_SRCS}
-${ossim_plugin_SRCS}
-)
-
-ADD_LIBRARY(otbossimBase2 
-${ossim_font_SRCS}
-${ossim_support_data_SRCS}
-${ossim_projection_SRCS}
-${ossim_elevation_SRCS}
-)
-
-
-ADD_LIBRARY(otbossim 
-${ossim_init_SRCS}
-${ossim_imaging_SRCS} 
-${ossim_parallel_SRCS} 
-)
-
-TARGET_LINK_LIBRARIES(otbossimBase otbossimBase2 otbossim)
-TARGET_LINK_LIBRARIES(otbossimBase2 otbossimBase otbossim)
-TARGET_LINK_LIBRARIES(otbossim otbossimBase2 otbossimBase otbgeotiff otbxtiff itktiff itkjpeg8 itkjpeg12 itkjpeg16 OpenThreads )
-
-INSTALL(TARGETS otbossimBase
-RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
-LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
-ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-
-INSTALL(TARGETS otbossimBase2
-RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
-LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
-ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-
-INSTALL(TARGETS otbossim
-RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
-LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
-ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-
-
-ENDIF( NOT MINGW )
 

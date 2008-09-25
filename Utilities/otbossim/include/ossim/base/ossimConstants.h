@@ -7,7 +7,7 @@
  * Description: Common file for global constants.
  *
  **************************************************************************
- * $Id: ossimConstants.h 11959 2007-10-31 19:22:56Z gpotts $
+ * $Id$
  */
 #ifndef ossimConstants_HEADER
 #define ossimConstants_HEADER
@@ -41,7 +41,15 @@ extern "C" {
 /**
  * DLL IMPORT/EXORT SECTION
  */
-#if defined(__MINGW32__) || defined(__CYGWIN__) || defined(_MSC_VER) || defined(__VISUALC__) || defined(__BORLANDC__) || defined(__WATCOMC__)
+#if defined(OSSIM_STATIC)
+#  define OSSIMEXPORT
+#  define OSSIMIMPORT
+#  define OSSIMDLLEXPORT
+#  define OSSIM_DLL
+#  define OSSIMDLLEXPORT_DATA(type) type
+#  define OSSIM_DLL_DATA(type) type
+#  define OSSIMDLLEXPORT_CTORFN 
+#elif defined(__MINGW32__) || defined(__CYGWIN__) || defined(_MSC_VER) || defined(__VISUALC__) || defined(__BORLANDC__) || defined(__WATCOMC__)
 #  define OSSIMEXPORT __declspec(dllexport)
 #  define OSSIMIMPORT __declspec(dllimport)
 #  ifdef OSSIMMAKINGDLL
@@ -230,34 +238,11 @@ typedef signed int             ossim_sint32;
 typedef float                  ossim_float32;
 typedef double                 ossim_float64;
 
-/*
-  these are in ossimConfig.h.  For platforms that dont have a configure
-  you just copy the ossimConfig.h.in to ossimConfig.h found in src directory
-  and make modifications based on your platform
-*/
-#ifdef OSSIM_SIZEOF_LONG_INT
 
-#    if OSSIM_SIZEOF_LONG_INT == 8
-typedef long int               ossim_int64;
-typedef unsigned long int      ossim_uint64;
-typedef signed long int        ossim_sint64;
-#    elif OSSIM_SIZEOF_LONG_LONG == 8
 typedef long long              ossim_int64;
 typedef unsigned long long     ossim_uint64;
 typedef signed long long       ossim_sint64;
-#    else
-typedef long int               ossim_int64;
-typedef unsigned long int      ossim_uint64;
-typedef signed long int        ossim_sint64;
-#    endif
-
-#else
-typedef long int               ossim_int64;
-typedef unsigned long int      ossim_uint64;
-typedef signed long int        ossim_sint64;
-#endif
-
-
+   
 typedef ossim_int32            ossimErrorCode;
 
 enum ossimVertexOrdering
