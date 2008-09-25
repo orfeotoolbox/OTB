@@ -71,7 +71,7 @@ int otbAlternateViewerTest(int argc, char* argv[])
   viewer->SetBlueChannelIndex(atoi(argv[5]));
   window.end();
   window.resizable(viewer.GetPointer());
-  viewer->Init("test de la nouvelle visu");
+  viewer->Init(0,0,512,512,"test de la nouvelle visu");
   window.show();
   viewer->Show();
   
