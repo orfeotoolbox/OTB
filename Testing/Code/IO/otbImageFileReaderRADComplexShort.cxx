@@ -32,9 +32,11 @@ int otbImageFileReaderRADComplexShort(int argc, char* argv[])
   // Verify the number of parameters in the command line
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
-/*
-  typedef std::complex<short>  	                        InputPixelType;
-  typedef std::complex<short>                 		OutputPixelType;
+
+
+  typedef int                           InputPixelType;
+  typedef int                 		OutputPixelType;
+
   const   unsigned int        	                        Dimension = 2;
 
   typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
@@ -51,7 +53,7 @@ int otbImageFileReaderRADComplexShort(int argc, char* argv[])
         
   writer->SetInput( reader->GetOutput() );
   writer->Update(); 
-   */
+
   return EXIT_SUCCESS;
 }
 
