@@ -1451,10 +1451,10 @@ ADD_TEST(ioTuRADImageIOCanRead_RADCR4mult ${IO_TESTS16}
 
 
 # Convert a ci2.RAD file into ENVI format
-ADD_TEST(ioTvImageFileReaderRADCI22ENVI ${IO_TESTS16}
-        otbImageFileReaderRADComplexFloat
-        /home3/mathieu/guillaume/CD_CNES/RAD_CI2/3017_HH.rad
-        ${TEMP}/ioImageFileReaderRAD2ENVI.hdr ) 
+#ADD_TEST(ioTvImageFileReaderRADCI22ENVI ${IO_TESTS16}
+#        otbImageFileReaderRADComplexFloat
+#        /home3/mathieu/guillaume/CD_CNES/RAD_CI2/3017_HH.rad
+#        ${TEMP}/ioImageFileReaderRAD2ENVI.hdr ) 
                 
 # Convert a cr4.RAD file into tif
 ADD_TEST(ioTvImageFileReaderRADCR42TIF ${IO_TESTS16}
@@ -1469,24 +1469,16 @@ ADD_TEST(ioTvImageFileReaderCI42CR4 ${IO_TESTS16}
         ${TEMP}/ioImageFileReaderCI42CR4.rad )
         
 # Turn a ci2.RAD file into cr4.file (because of float type)
-ADD_TEST(ioTvImageFileReaderCI22CR4 ${IO_TESTS16}
-        otbImageFileReaderRADComplexFloat
-# --compare-image ${TOL}  /home3/mathieu/guillaume/CD_CNES/RAD_CI2/3017_HH.rad
-#                         ${TEMP}/ioImageFileReaderCI22CR4.rad        
-        /home3/mathieu/guillaume/CD_CNES/RAD_CI2/3017_HH.rad 
-        ${TEMP}/ioImageFileReaderCI22CR4.rad )
+#ADD_TEST(ioTvImageFileReaderCI22CR4 ${IO_TESTS16}
+#        otbImageFileReaderRADComplexFloat
+#        /home3/mathieu/guillaume/CD_CNES/RAD_CI2/3017_HH.rad 
+#        ${TEMP}/ioImageFileReaderCI22CR4.rad )
         
-# Turn a ci2.RAD file into ci4.file (because of float type)
+# Turn a ci4.RAD file into ci4.file (because of Int type)
 ADD_TEST(ioTvImageFileReaderCI22CI4 ${IO_TESTS16}
-        otbImageFileReaderRADComplexFloat
+        otbImageFileReaderRADComplexInt
         ${INPUTDATA}/RADCI4_image.rad
-        ${TEMP}/ioImageFileReaderCI22CI4.rad ) 
-        
-# Turn a ci2.RAD file into ci2.file (because of short type)
-ADD_TEST(ioTvImageFileReaderCI22CI2 ${IO_TESTS16}
-        otbImageFileReaderRADComplexShort
-        /home3/mathieu/guillaume/CD_CNES/RAD_CI2/3017_HH.rad 
-        ${TEMP}/ioImageFileReaderCI22CI2.rad )           
+        ${TEMP}/ioImageFileReaderCI42CI4.rad )   
 
 # Copy cr4.RAD file
 ADD_TEST(ioTvImageFileReaderCR42CR4 ${IO_TESTS16}
@@ -1501,10 +1493,16 @@ ADD_TEST(ioTvImageFileReaderTIF2RADCI4 ${IO_TESTS16}
         ${TEMP}/ioImageFileReaderTIF2RADCI4.rad )                   
 
 # Convert tif into a RAD file (cr4)
-ADD_TEST(ioTvImageFileReaderTIF2RADCR4 ${IO_TESTS16}
-        otbImageFileReaderRADComplexFloat
-        /home3/mathieu/guillaume/CD_CNES/RSAT_cyrille/RSAT_imagery_VH.tif
-        ${TEMP}/ioImageFileReaderTIF2RADCR4.rad ) 
+#ADD_TEST(ioTvImageFileReaderTIF2RADCR4 ${IO_TESTS16}
+#        otbImageFileReaderRADComplexFloat
+#        /home3/mathieu/guillaume/CD_CNES/RSAT_cyrille/RSAT_imagery_VH.tif
+#        ${TEMP}/ioImageFileReaderTIF2RADCR4.rad )
+        
+# Convert png into a RAD file (pha)
+#ADD_TEST(ioTvImageFileReaderTIF2RADTRUC ${IO_TESTS16}
+#        otbImageFileReaderRADChar
+#        ${INPUTDATA}/rcc8_mire1.png
+#        ${TEMP}/ioImageFileReaderPNG2RADTRUC.rad )         
 
 
         
@@ -1625,10 +1623,11 @@ otbKMLVectorDataIOTestCanWrite.cxx
 
 SET(BasicIO_SRCS16
 otbRADImageIOTestCanRead.cxx
-otbImageFileReaderRAD.cxx
-otbImageFileReaderRADComplexFloat.cxx
-otbImageFileReaderRADComplexShort.cxx
+otbImageFileReaderRADChar.cxx
+otbImageFileReaderRADInt.cxx
+otbImageFileReaderRADFloat.cxx
 otbImageFileReaderRADComplexInt.cxx
+otbImageFileReaderRADComplexFloat.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
