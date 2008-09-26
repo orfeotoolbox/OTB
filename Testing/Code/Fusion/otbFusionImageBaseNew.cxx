@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
@@ -41,44 +41,28 @@ namespace Functor
 
 int otbFusionImageBaseNew( int argc, char * argv[] )
 {
-  try 
-    { 
-      const unsigned int Dimension = 2;
-      typedef unsigned char InputPixelType;
-      typedef unsigned char OutputPixelType;
+  const unsigned int Dimension = 2;
+  typedef unsigned char InputPixelType;
+  typedef unsigned char OutputPixelType;
       
-      typedef otb::Image<InputPixelType,Dimension>       InputPanchroImageType;
-      typedef otb::VectorImage<InputPixelType,Dimension> InputMultiSpectralImageType;
-      typedef otb::VectorImage<InputPixelType,Dimension> InputMultiSpectralInterpImageType;
-      typedef otb::Image<OutputPixelType,Dimension>      OutputImageType;
+  typedef otb::Image<InputPixelType,Dimension>       InputPanchroImageType;
+  typedef otb::VectorImage<InputPixelType,Dimension> InputMultiSpectralImageType;
+  typedef otb::VectorImage<InputPixelType,Dimension> InputMultiSpectralInterpImageType;
+  typedef otb::Image<OutputPixelType,Dimension>      OutputImageType;
       
-      typedef otb::FusionImageBase<InputMultiSpectralImageType, 
-	                           InputMultiSpectralInterpImageType, 
-                                   InputPanchroImageType, 
-                                   OutputImageType, 
-	                           Functor::NewFunctorTest<InputMultiSpectralImageType::PixelType,
-                         	                           InputMultiSpectralInterpImageType::PixelType,
-	                                                   InputPanchroImageType::PixelType, 
-                                	                   OutputImageType::PixelType> 
-	                           >  FusionImageBaseType;
+  typedef otb::FusionImageBase<InputMultiSpectralImageType, 
+    InputMultiSpectralInterpImageType, 
+    InputPanchroImageType, 
+    OutputImageType, 
+    Functor::NewFunctorTest<InputMultiSpectralImageType::PixelType,
+    InputMultiSpectralInterpImageType::PixelType,
+    InputPanchroImageType::PixelType, 
+    OutputImageType::PixelType> 
+    >  FusionImageBaseType;
       
-      // Instantiation
-      FusionImageBaseType::Pointer base = FusionImageBaseType::New();
-      
-    } 
-  
-  catch( itk::ExceptionObject & err ) 
-    { 
-      std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-      std::cout << err << std::endl; 
-      return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-      std::cout << "Exception levee inconnue !" << std::endl; 
-      return EXIT_FAILURE;
-    } 
-  
+  // Instantiation
+  FusionImageBaseType::Pointer base = FusionImageBaseType::New();
+       
   
   return EXIT_SUCCESS;
 }
