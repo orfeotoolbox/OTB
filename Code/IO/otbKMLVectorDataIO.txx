@@ -277,7 +277,13 @@ folder->SetField(field->GetNameRef(),feature->GetFieldAsString(fieldIndex));
   template<class TData>
   void KMLVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
   {
-
+        //Create the factory
+/*        KmlFactory* factory = KmlFactory::GetFactory();
+        if(factory == NULL)
+        {
+                itkExceptionMacro(<<"Impossible to create the KML Factory to write file "<<this->m_FileName);
+        }
+*/
 /*
     //  // try to create an ogr driver
     OGRSFDriver * ogrDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName("ESRI Shapefile");

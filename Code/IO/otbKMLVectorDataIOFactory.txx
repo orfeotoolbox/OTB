@@ -31,7 +31,7 @@ KMLVectorDataIOFactory<TData>::KMLVectorDataIOFactory()
 {
   this->RegisterOverride("otbVectorDataIOBase",
                          "otbKMLVectorDataIO",
-                         "SHP Vectordata IO",
+                         "KML Vectordata IO",
                          1,
                          itk::CreateObjectFunction<KMLVectorDataIO<TData> >::New());
 }
@@ -49,7 +49,7 @@ template<class TData>
 const char* 
 KMLVectorDataIOFactory<TData>::GetDescription() const
 {
-  return "SHP VectorDataIO Factory, allows the loading of SHP vector data into OTB";
+  return "KML VectorDataIO Factory, allows the loading of KML vector data into OTB";
 }
 
 } // end namespace otb

@@ -1401,7 +1401,7 @@ ADD_TEST(ioTuVectorDataFileWriterNew ${IO_TESTS15}
 # If the file exists, try remove it to prevent test failure
 FILE(REMOVE ${TEMP}/ioTvVectorDataFileWriterOutput.shp)
 
-ADD_TEST(ioTvVectorDataFileWriter ${IO_TESTS15} 
+ADD_TEST(ioTvSHPVectorDataFileWriter ${IO_TESTS15} 
         otbVectorDataFileWriter
 	${TEMP}/ioTvVectorDataFileWriterOutput.shp	
 	)
@@ -1409,7 +1409,7 @@ ADD_TEST(ioTvVectorDataFileWriter ${IO_TESTS15}
 # If the file exists, try remove it to prevent test failure
 FILE(REMOVE ${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp)
 
-ADD_TEST(ioTvVectorDataFileReaderWriter ${IO_TESTS15} 
+ADD_TEST(ioTvSHPVectorDataFileReaderWriter ${IO_TESTS15} 
         otbVectorDataFileReaderWriter
 	${IMAGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
 	${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp	
@@ -1427,6 +1427,18 @@ ADD_TEST(ioTuKMLVectorDataIOCanRead ${IO_TESTS15}
 ADD_TEST(ioTuKMLVectorDataIOCanWrite ${IO_TESTS15} 
         otbKMLVectorDataIOTestCanWrite
         ${TEMP}/simple.kml)
+
+ADD_TEST(ioTvKMLVectorDataFileReader ${IO_TESTS15} 
+#        --compare-ascii ${TOL}  ${BASELINE_FILES}/ioSHPVectorDataFileReader.txt
+#                        ${TEMP}/ioSHPVectorDataFileReader.txt
+        otbVectorDataFileReader
+        ${INPUTDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
+        ${TEMP}/ioSHPVectorDataFileReader.txt)
+
+ADD_TEST(ioTvKMLVectorDataFileWriter ${IO_TESTS15} 
+        otbVectorDataFileWriter
+        ${TEMP}/ioKMLVectorDataFileWriterOutput.kml
+        )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS16 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
