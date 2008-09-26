@@ -29,8 +29,9 @@
 void RegisterTests()
 {
 REGISTER_TEST(otbRADImageIOTestCanRead);
-REGISTER_TEST(otbImageFileReaderRAD);
+REGISTER_TEST(otbImageFileReaderRADChar);
+REGISTER_TEST(otbImageFileReaderRADInt);
+REGISTER_TEST(otbImageFileReaderRADFloat);
 REGISTER_TEST(otbImageFileReaderRADComplexFloat);
 REGISTER_TEST(otbImageFileReaderRADComplexInt);
-REGISTER_TEST(otbImageFileReaderRADComplexShort);
 }
