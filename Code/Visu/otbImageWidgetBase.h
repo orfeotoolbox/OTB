@@ -139,14 +139,14 @@ class ImageWidgetBase
      */
     void SetFormListOverlay(FormListType* formList);
 
-    /** Set the transfert function list
-     *  \param list The transfert function list.
+    /** Set the transfer function list
+     *  \param list The transfer function list.
      */
     void SetTransferFunctionList(TransferFunctionListType * list);
 
     /** Show The widget */
     void Show(void);
-     /** Reset the widget (Clear buffered region and re init the transfert functions) */
+     /** Reset the widget (Clear buffered region and re init the transfer functions) */
     void Reset(void);
     /** Clear the buffered region */
     void ClearBufferedRegion(void);
@@ -236,7 +236,7 @@ class ImageWidgetBase
       *  Default is 1.
       */
      unsigned int m_SubSamplingRate;
-     /** List of the transfert function by channel */
+     /** List of the transfer function by channel */
      TransferFunctionListPointerType m_TransferFunctionList;
   };
 } // end namespace otb

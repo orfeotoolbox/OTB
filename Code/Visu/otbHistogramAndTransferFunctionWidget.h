@@ -137,7 +137,7 @@ private:
   /** The histogram to draw */
   HistogramConstPointerType m_Histogram;
 
-  /** The transfert function */
+  /** The transfer function */
   TransferFunctionPointerType m_TransferFunction;
 
   /** Colors */

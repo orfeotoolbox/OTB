@@ -25,7 +25,7 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class ImageWidgetTransferFunction
- *  \brief Base class for visualisation transfert functions.
+ *  \brief Base class for visualisation transfer functions.
  */
 template <class TPixel>
 class ITK_EXPORT ImageWidgetTransferFunction
@@ -86,7 +86,7 @@ private:
 };
 
 /** \class ImageWidgetAffineTransferFunction
- *  \brief Affine transfert function.
+ *  \brief Affine transfer function.
  */
 template <class TPixel>
 class ITK_EXPORT ImageWidgetAffineTransferFunction
@@ -135,7 +135,7 @@ class ITK_EXPORT ImageWidgetAffineTransferFunction
 
 
 /** \class ImageWidgetSquareRootTransferFunction
- *  \brief SquareRoot transfert function.
+ *  \brief SquareRoot transfer function.
  */
 template <class TPixel>
 class ITK_EXPORT ImageWidgetSquareRootTransferFunction
@@ -186,7 +186,7 @@ class ITK_EXPORT ImageWidgetSquareRootTransferFunction
 
 
 /** \class ImageWidgetLogTransferFunction
- *  \brief Log transfert function.
+ *  \brief Log transfer function.
  */
 template <class TPixel>
 class ITK_EXPORT ImageWidgetLogTransferFunction
@@ -236,7 +236,7 @@ class ITK_EXPORT ImageWidgetLogTransferFunction
 };
 
 /** \class ImageWidgetSquareTransferFunction
- *  \brief Log transfert function.
+ *  \brief Log transfer function.
  */
 template <class TPixel>
 class ITK_EXPORT ImageWidgetSquareTransferFunction

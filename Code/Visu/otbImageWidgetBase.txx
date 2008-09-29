@@ -214,8 +214,8 @@ ImageWidgetBase<TPixel>
   m_FormList = formList;
 }
 
-/** Set the transfert function list
- *  \param list The transfert function list.
+/** Set the transfer function list
+ *  \param list The transfer function list.
  */
 template <class TPixel>
 void
