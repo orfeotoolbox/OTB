@@ -53,7 +53,7 @@ ADD_EXECUTABLE(DXFReaderExample DXFReaderExample.cxx )
 TARGET_LINK_LIBRARIES(DXFReaderExample OTBCommon OTBIO ITKCommon ITKIO  ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 
 ADD_EXECUTABLE(VectorDataIOExample VectorDataIOExample.cxx )
-TARGET_LINK_LIBRARIES(VectorDataIOExample OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(VectorDataIOExample OTBCommon OTBIO ITKCommon ITKIO otbkml)
 
 ADD_EXECUTABLE(DEMToImageGenerator DEMToImageGenerator.cxx )
 TARGET_LINK_LIBRARIES(DEMToImageGenerator OTBProjections OTBIO OTBCommon ITKCommon ITKIO otbossim )
