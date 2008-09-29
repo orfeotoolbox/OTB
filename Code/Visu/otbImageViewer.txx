@@ -98,7 +98,7 @@ namespace otb
     
 
   oss.str("");
-  oss<<this->GetLabel()<<" - Histograms and transfert functions"; 
+  oss<<this->GetLabel()<<" - Histograms and transfer functions"; 
   if(this->GetViewModel() == Superclass::ScrollWidgetType::RGB)
   {
     m_HistogramWindow = new Fl_Window(0,hfull,3*this->GetRedHistogramWidget()->w(),this->GetRedHistogramWidget()->h());
