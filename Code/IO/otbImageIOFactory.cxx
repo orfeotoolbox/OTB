@@ -62,6 +62,10 @@ namespace otb
           itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder( mutex );
           if( firstTime )
           {
+          
+	    // RAD Format for OTB
+            itk::ObjectFactoryBase::RegisterFactory( RADImageIOFactory::New() );            
+                      
 	    // BSQ format for OTB
             itk::ObjectFactoryBase::RegisterFactory( BSQImageIOFactory::New() );			
                         
@@ -82,9 +86,6 @@ namespace otb
 	    // MSTAR Format for OTB
             itk::ObjectFactoryBase::RegisterFactory( MSTARImageIOFactory::New() );
             
-	    // RAD Format for OTB
-            itk::ObjectFactoryBase::RegisterFactory( RADImageIOFactory::New() );            
-                        
 #ifdef OTB_USE_CURL
 	    // TileMap : New format for OTB
             itk::ObjectFactoryBase::RegisterFactory( TileMapImageIOFactory::New() );
