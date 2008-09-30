@@ -176,9 +176,15 @@ ImageWidgetBase<TPixel>
 ::SetInput(ImageType * image)
 {
   m_Image=image;
+  m_Image->UpdateOutputInformation();
   SizeType size;
   size.Fill(0);
   m_BufferedRegion.SetSize(size);
+  SizeType displaySize;
+  displaySize[0]=this->w();
+  displaySize[1]=this->h();
+  m_ViewedRegion.SetSize(displaySize);
+  m_ViewedRegion.Crop(m_Image->GetLargestPossibleRegion());
 }
 /** Get the input image.
  * \return The image to view.
