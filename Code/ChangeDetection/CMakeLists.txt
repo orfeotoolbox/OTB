@@ -3,7 +3,7 @@
 FILE(GLOB OTBChangeDetection_SRCS "*.cxx" )
 
 ADD_LIBRARY(OTBChangeDetection ${OTBChangeDetection_SRCS})
-TARGET_LINK_LIBRARIES (OTBChangeDetection OTBCommon OTBIO ITKCommon)
+TARGET_LINK_LIBRARIES (OTBChangeDetection OTBCommon ITKStatistics)
 
 INSTALL(TARGETS OTBChangeDetection
 RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries

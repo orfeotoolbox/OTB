@@ -130,9 +130,9 @@ SET(BasicChangeDetection_SRCS2
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbChangeDetectionTests1 otbChangeDetectionTests1.cxx ${BasicChangeDetection_SRCS1})
-TARGET_LINK_LIBRARIES(otbChangeDetectionTests1 OTBChangeDetection OTBIO OTBCommon gdal ITKIO ITKCommon ITKStatistics)
+TARGET_LINK_LIBRARIES(otbChangeDetectionTests1 OTBChangeDetection OTBIO)
 
 ADD_EXECUTABLE(otbChangeDetectionTests2 otbChangeDetectionTests2.cxx ${BasicChangeDetection_SRCS2})
-TARGET_LINK_LIBRARIES(otbChangeDetectionTests2 OTBChangeDetection OTBIO OTBCommon gdal ITKIO ITKCommon ITKStatistics)
+TARGET_LINK_LIBRARIES(otbChangeDetectionTests2 OTBChangeDetection OTBIO)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

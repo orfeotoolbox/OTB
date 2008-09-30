@@ -237,8 +237,8 @@ otbImageMultiSegmentationToRCC8GraphFilter.cxx
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbSpatialReasoningTests1 otbSpatialReasoningTests1.cxx ${BasicSpatialReasoning_SRCS1})
-TARGET_LINK_LIBRARIES(otbSpatialReasoningTests1 OTBIO OTBSpatialReasoning gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
+TARGET_LINK_LIBRARIES(otbSpatialReasoningTests1 OTBIO OTBSpatialReasoning)
 ADD_EXECUTABLE(otbSpatialReasoningTests2 otbSpatialReasoningTests2.cxx ${BasicSpatialReasoning_SRCS2})
-TARGET_LINK_LIBRARIES(otbSpatialReasoningTests2 OTBIO OTBSpatialReasoning gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
+TARGET_LINK_LIBRARIES(otbSpatialReasoningTests2 OTBIO OTBSpatialReasoning)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

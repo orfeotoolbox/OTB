@@ -380,11 +380,11 @@ otbSVMModelCopyComposedKernelTest.cxx
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbLearningTests1 otbLearningTests1.cxx ${BasicLearning_SRCS1})
-TARGET_LINK_LIBRARIES(otbLearningTests1 gdal otbsvm OTBLearning OTBCommon OTBIO ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(otbLearningTests1 OTBLearning OTBIO)
 ADD_EXECUTABLE(otbLearningTests2 otbLearningTests2.cxx ${BasicLearning_SRCS2})
-TARGET_LINK_LIBRARIES(otbLearningTests2 gdal otbsvm OTBLearning OTBCommon OTBIO ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(otbLearningTests2 OTBLearning OTBIO)
 ADD_EXECUTABLE(otbLearningTests3 otbLearningTests3.cxx ${BasicLearning_SRCS3})
-TARGET_LINK_LIBRARIES(otbLearningTests3 gdal otbsvm OTBLearning OTBCommon OTBIO ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(otbLearningTests3 OTBLearning OTBIO)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 

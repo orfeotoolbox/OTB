@@ -134,7 +134,7 @@ otbVectorMultiChannelsPolarimetricSynthesisFilter.cxx
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbSARPolarimetryTests1 otbSARPolarimetryTests1.cxx ${SARPOLARIMETRY_SRCS1})
-TARGET_LINK_LIBRARIES(otbSARPolarimetryTests1 OTBSARPolarimetry OTBCommon OTBIO gdal ITKIO ITKCommon ITKBasicFilters)
+TARGET_LINK_LIBRARIES(otbSARPolarimetryTests1 OTBSARPolarimetry OTBIO)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

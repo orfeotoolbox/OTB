@@ -3,7 +3,7 @@
 FILE(GLOB OTBRadiometry_SRCS "*.cxx" )
 
 ADD_LIBRARY(OTBRadiometry ${OTBRadiometry_SRCS})
-TARGET_LINK_LIBRARIES (OTBRadiometry OTBCommon OTBBasicFilters otb6S)
+TARGET_LINK_LIBRARIES (OTBRadiometry OTBCommon otb6S)
 
 INSTALL(TARGETS OTBRadiometry
 RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries

@@ -3,7 +3,7 @@
 FILE(GLOB OTBSpatialReasoning_SRCS "*.cxx" )
 
 ADD_LIBRARY(OTBSpatialReasoning ${OTBSpatialReasoning_SRCS})
-TARGET_LINK_LIBRARIES (OTBSpatialReasoning ITKCommon)
+TARGET_LINK_LIBRARIES (OTBSpatialReasoning OTBCommon)
 
 INSTALL(TARGETS OTBSpatialReasoning
 RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
