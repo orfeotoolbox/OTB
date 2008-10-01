@@ -29,6 +29,7 @@
 #include "otbLUMImageIOFactory.h"
 #include "otbBSQImageIOFactory.h"
 #include "otbRADImageIOFactory.h"
+#include "otbMWImageIOFactory.h"
 
 #ifdef OTB_COMPILE_JPEG2000
 #include "otbJPEG2000ImageIOFactory.h"
@@ -62,7 +63,10 @@ namespace otb
           itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder( mutex );
           if( firstTime )
           {
-          
+
+	    // MegaWave format for OTB
+	    itk::ObjectFactoryBase::RegisterFactory( MWImageIOFactory::New() );
+
 	    // RAD Format for OTB
             itk::ObjectFactoryBase::RegisterFactory( RADImageIOFactory::New() );            
                       
