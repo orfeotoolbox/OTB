@@ -150,7 +150,7 @@ private:
   std::string m_TypeMW;        //used for write
   itk::ImageIOBase::ByteOrder m_FileByteOrder;
   std::fstream m_File;
-  uint m_Ncom;
+  unsigned int m_Ncom;
 
 
 };
