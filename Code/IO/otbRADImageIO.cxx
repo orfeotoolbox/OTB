@@ -66,8 +66,6 @@ RADImageIO::RADImageIO()
   m_Origin[1] = 0.0;
   m_ChannelsFile = NULL;
   m_FlagWriteImageInformation = true;
-  
-  std::cout<< " Fin constructeur" <<std::endl;
 }
 
 RADImageIO::~RADImageIO()
