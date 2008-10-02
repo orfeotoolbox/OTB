@@ -58,7 +58,7 @@ ImageWidgetPolygonForm<TValue>
 	polygonDrawer->Color4d(m_Color[0],m_Color[1],m_Color[2],m_Color[3]);
       }
       polygonDrawer->SetBoundaryOnly(!m_Solid);
-      VertexListIteratorType it =  this->GetPolygon()->GetVertexList()->Begin();
+      VertexListConstIteratorType it =  this->GetPolygon()->GetVertexList()->Begin();
       
       while(it != this->GetPolygon()->GetVertexList()->End())
 	{  

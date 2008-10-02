@@ -54,7 +54,7 @@ class ITK_EXPORT ImageWidgetPolylineForm
   typedef typename PolylineType::Pointer              PolylinePointerType;       
   typedef typename PolylineType::VertexType           VertexType;
   typedef typename PolylineType::VertexListType       VertexListType;
-  typedef typename VertexListType::ConstIterator     VertexListIteratorType;
+  typedef typename VertexListType::ConstIterator     VertexListConstIteratorType;
   typedef typename PolylineType::ContinuousIndexType  ContinuousIndexType;
   
   /** Accessors */

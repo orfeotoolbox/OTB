@@ -156,8 +156,8 @@ PolygonToPolygonRCC8Calculator<TInputPolygon>
 ::ComputeInterExter(PolygonPointerType polygon1, PolygonPointerType polygon2)
 {
   bool resp = false;
-  VertexListIteratorType it = polygon1->GetVertexList()->Begin();
-  VertexListIteratorType it_end = polygon1->GetVertexList()->End();
+  VertexListConstIteratorType it = polygon1->GetVertexList()->Begin();
+  VertexListConstIteratorType it_end = polygon1->GetVertexList()->End();
  
   ContinuousIndexType current = it.Value();
   ContinuousIndexType first = current;
@@ -213,8 +213,8 @@ PolygonToPolygonRCC8Calculator<TInputPolygon>
 ::ComputeInterInter(PolygonPointerType polygon1, PolygonPointerType polygon2)
 {
   bool resp = false;
-  VertexListIteratorType it = polygon1->GetVertexList()->Begin();
-  VertexListIteratorType it_end = polygon1->GetVertexList()->End();
+  VertexListConstIteratorType it = polygon1->GetVertexList()->Begin();
+  VertexListConstIteratorType it_end = polygon1->GetVertexList()->End();
   ContinuousIndexType current = it.Value();
   ContinuousIndexType first = current;
   bool currentIsInside = polygon2->IsInside(current);
@@ -259,8 +259,8 @@ PolygonToPolygonRCC8Calculator<TInputPolygon>
 ::ComputeEdgeEdge(PolygonPointerType polygon1, PolygonPointerType polygon2)
 {
   bool resp = false;
-  VertexListIteratorType it = polygon1->GetVertexList()->Begin();
-  VertexListIteratorType it_end = polygon1->GetVertexList()->End();
+  VertexListConstIteratorType it = polygon1->GetVertexList()->Begin();
+  VertexListConstIteratorType it_end = polygon1->GetVertexList()->End();
 
   ContinuousIndexType current = it.Value();
   resp = polygon2->IsOnEdge(current);

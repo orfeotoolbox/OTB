@@ -155,7 +155,7 @@ namespace otb
 
       /// type for the list of the polygon ROI
       typedef otb::Polygon<LabelType> PolygonType;
-      typedef typename PolygonType::VertexListIteratorType PolygonIteratorType;
+      typedef typename PolygonType::VertexListConstIteratorType PolygonIteratorType;
       typedef otb::ObjectList<PolygonType> PolygonListType;
       typedef typename PolygonListType::Pointer PolygonListPointerType;
       typedef typename PolygonListType::Iterator PolygonListIteratorType;
@@ -167,7 +167,7 @@ namespace otb
       typedef std::map<LabelType,ColorType> ROIColorMapType;
 
       typedef otb::PolyLineParametricPathWithValue<double,2> PathType;
-      typedef typename PathType::VertexListIteratorType PathIteratorType;
+      typedef typename PathType::VertexListConstIteratorType PathIteratorType;
       typedef otb::ObjectList<PathType> PathListType;
       typedef typename PathListType::Pointer PathListPointerType;
       typedef typename PathListType::Iterator PathListIteratorType;

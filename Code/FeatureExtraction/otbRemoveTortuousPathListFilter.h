@@ -58,7 +58,7 @@ class ITK_EXPORT RemoveTortuousPathListFilter
 
   typedef typename PathType::VertexListType VertexListType;
   typedef typename VertexListType::ConstPointer VertexListConstPointerType;
-  typedef typename VertexListType::Iterator VertexListIteratorType;
+  typedef typename VertexListType::Iterator VertexListConstIteratorType;
   typedef typename VertexListType::ConstIterator VertexListConstIteratorType;
   typedef typename PathType::VertexType VertexType;
 
