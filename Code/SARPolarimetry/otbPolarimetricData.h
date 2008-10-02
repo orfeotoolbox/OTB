@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef  _otb_PolarimetricData_h
-#define  _otb_PolarimetricData_h
+#ifndef  __otb_PolarimetricData_h
+#define  __otb_PolarimetricData_h
 
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"
