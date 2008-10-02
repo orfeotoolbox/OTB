@@ -64,17 +64,12 @@ void
 BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
 ::UpdateCoefficientsFilter(void)
 {
-  if(!m_CoefficientFilter->GetInput()->GetBufferedRegion().IsInside(m_CurrentBufferedRegion))
-    {
-      //std::cout<<"Updating coefs filter"<<std::endl;
       m_CoefficientFilter->GetOutput()->UpdateOutputInformation();
       m_CoefficientFilter->GetOutput()->SetRequestedRegion(m_CoefficientFilter->GetInput()->GetBufferedRegion());
       m_CoefficientFilter->GetOutput()->PropagateRequestedRegion();
       m_CoefficientFilter->GetOutput()->UpdateOutputData();
       m_Coefficients = m_CoefficientFilter->GetOutput();
-      //std::cout<<"Updated region: "<<m_CoefficientFilter->GetInput()->GetBufferedRegion()<<std::endl;
-    }
-  m_CurrentBufferedRegion =m_CoefficientFilter->GetInput()->GetBufferedRegion();
+      m_CurrentBufferedRegion =m_CoefficientFilter->GetInput()->GetBufferedRegion();
 }
 template <class TImageType, class TCoordRep, class TCoefficientType>
 void 
@@ -83,14 +78,12 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
 {
   if ( inputData )
     {
-    m_CoefficientFilter->SetInput(inputData);
+      m_CoefficientFilter->SetInput(inputData);
 
     // the Coefficient Filter requires that the spline order and the input data be set.
     // TODO:  We need to ensure that this is only run once and only after both input and
     //        spline order have been set. Should we force an update after the 
     //        splineOrder has been set also?
-
- 
 
     UpdateCoefficientsFilter();
 
