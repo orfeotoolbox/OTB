@@ -39,12 +39,12 @@ RADImageIO::RADImageIO()
   this->SetNumberOfDimensions(2);
 
   // By default the type to CI2
-  m_TypeRAD= "CI2";  
-  m_NbOctetPixel=4;
+  m_TypeRAD= "CR4";  
+  m_NbOctetPixel=8;
   m_NbOfChannels=1;
   this->SetNumberOfComponents(2);
   m_PixelType = COMPLEX;
-  m_ComponentType = SHORT;
+  m_ComponentType = FLOAT;
 
   
   if ( itk::ByteSwapper<char>::SystemIsLittleEndian() == true)
@@ -131,7 +131,6 @@ void RADImageIO::Read(void* buffer)
 {
         unsigned long step = this->GetNumberOfComponents();
         char * p = static_cast<char *>(buffer);
- // unsigned char  
  
         int lNbLignes   = this->GetIORegion().GetSize()[1];
         int lNbColonnes = this->GetIORegion().GetSize()[0];
@@ -144,14 +143,6 @@ otbMsgDevMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
 otbMsgDevMacro( <<" Nb Of Components       : "<<this->GetNumberOfComponents());
 otbMsgDevMacro( <<" Size Of Components     : "<<this->GetComponentSize());
 otbMsgDevMacro( <<" Nb Of Channels         : "<<m_NbOfChannels);
-
-std::cout <<" RADImageIO::Read()  "<<std::endl;
-std::cout <<" Dimensions de l'image  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]<<std::endl;
-std::cout <<" Region lue (IORegion)  : "<<this->GetIORegion()<<std::endl;
-std::cout <<" Nb Of Components       : "<<this->GetNumberOfComponents()<<std::endl;
-std::cout <<" Size Of Components     : "<<this->GetComponentSize()<<std::endl;
-std::cout <<" Nb Of Channels         : "<<m_NbOfChannels<<std::endl;
-
 
         std::streamoff  headerLength(0);
         std::streamoff  offset;        
@@ -343,7 +334,6 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string & file_name, st
         if(lStrCodePix == "PHA")
         {
                 m_PixelType = SCALAR;        
-                // 0 .. 360 degree
                 SetComponentType(CHAR);
                 m_NbOctetPixel=1;
         }
@@ -383,7 +373,7 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string & file_name, st
                 SetComponentType(UCHAR);
                 m_NbOctetPixel=2;
         }
-        else if(lStrCodePix == "C3B")
+/*        else if(lStrCodePix == "C3B")
         {
                 m_PixelType = COMPLEX;
                 SetComponentType(FLOAT);
@@ -401,7 +391,7 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string & file_name, st
                 SetComponentType(FLOAT);
                 m_NbOctetPixel=2;
         }
-        else if(lStrCodePix == "CI4")
+*/        else if(lStrCodePix == "CI4")
         {
                 m_PixelType = COMPLEX;
                 SetComponentType(INT);
@@ -514,8 +504,6 @@ bool RADImageIO::CanWriteFile( const char* filename )
 void RADImageIO::Write(const void* buffer)
 {
 
-std::cout<< " Write !!!!!!!!! " <<std::endl;
-
 
         if( m_FlagWriteImageInformation == true )
         {
@@ -529,9 +517,7 @@ std::cout<< " Write !!!!!!!!! " <<std::endl;
         int lPremiereLigne   = this->GetIORegion().GetIndex()[1] ; // [1... ]
         int lPremiereColonne = this->GetIORegion().GetIndex()[0] ; // [1... ]
 
-
-std::cout<< " Write2 !!!!!!!!! " <<std::endl;
-	// Special case : we control that if the region to write has the same dimension that the entire picture,
+        // Special case : we control that if the region to write has the same dimension that the entire picture,
 	// we start to the offset to 0 ( when ze4re not in "Streaming")
 	if( (lNbLignes == m_Dimensions[1]) && (lNbColonnes == m_Dimensions[0]))
 	{
@@ -558,12 +544,6 @@ otbMsgDevMacro( <<" GetComponentSize       : "<<this->GetComponentSize());
               
         const char * p = static_cast<const char *>(buffer);
 
-std::cout<< " step : " <<step <<std::endl;
-std::cout<< " numberOfBytesPerLines  : " <<numberOfBytesPerLines <<std::endl;
-std::cout<< " numberOfBytesToBeWrite : " <<numberOfBytesToBeWrite <<std::endl;
-  
-
- 
         char* value = new char[numberOfBytesToBeWrite];
         if(value==NULL)
         {
@@ -597,7 +577,6 @@ std::cout<< " numberOfBytesToBeWrite : " <<numberOfBytesToBeWrite <<std::endl;
 
 void RADImageIO::WriteImageInformation()
 {
-std::cout<< " WriteImageInformation !!!!!!!!! " <<std::endl;
         if ( m_FileName == "" )
         {
                 itkExceptionMacro(<<"A FileName must be specified.");
@@ -606,9 +585,6 @@ std::cout<< " WriteImageInformation !!!!!!!!! " <<std::endl;
         {
                 itkExceptionMacro(<< "The file "<<m_FileName.c_str()<<" is not defined as a RAD file");
         }
-
-std::cout<< " Avant open !!!!!!!!! " <<std::endl;
-
 
         // Close file from any previous image
         if ( m_HeaderFile.is_open() )
@@ -624,44 +600,27 @@ std::cout<< " Avant open !!!!!!!!! " <<std::endl;
                 itkExceptionMacro(<< "Cannot write requested file "<<m_FileName.c_str()<<".");
         } 
 
-      /*  if( 0 ) {}
-        otbSetTypeRadMacro( CHAR,   "OCT")
-        otbSetTypeRadMacro( UCHAR,  "UOCT")
-        otbSetTypeRadMacro( SHORT,  "I2")
-        otbSetTypeRadMacro( USHORT, "UI2")
-        otbSetTypeRadMacro( INT,    "I4")
-        otbSetTypeRadMacro( UINT,   "UI4")
-        otbSetTypeRadMacro( FLOAT,  "R4")
-        otbSetTypeRadMacro( DOUBLE, "R8")
-        else
-        {
-                itkExceptionMacro(<< "RAD format doesn't reconized (TYPE).");
-        }
-
-
-*/        //Write COLUMNS information
-        m_HeaderFile <<  "NBCOLUMNS "; //  << std::endl;
+        //Write COLUMNS information
+        m_HeaderFile <<  "NBCOLUMNS ";
         m_HeaderFile << m_Dimensions[0] << std::endl;
 
         //Write LINES information
-        m_HeaderFile <<  "NBLINES "; //  << std::endl;
+        m_HeaderFile <<  "NBLINES ";
         m_HeaderFile << m_Dimensions[1] << std::endl;
         
         //Write CHANNELS information
-        m_HeaderFile << "NBBANDS "; //  << std::endl;
+        m_HeaderFile << "NBBANDS ";
         m_HeaderFile << m_NbOfChannels << std::endl;        
         
         std::string lString;
         //Write TYPE information
-        m_HeaderFile << "TYPECODAGE "; //  << std::endl;
+        m_HeaderFile << "TYPECODAGE ";
         
         
         std::string lExtension;
         std::string lStringPixelType = System::SetToUpper(this->GetPixelTypeAsString(m_PixelType));
         std::string lStringComponentType = System::SetToUpper(this->GetComponentTypeAsString(this->GetComponentType()));
         
-std::cout<<"toto "<<lStringPixelType<<std::endl;
-std::cout<<"tutu "<<lStringComponentType<<std::endl;
         
         if(lStringPixelType == "SCALAR")
         {
@@ -687,6 +646,7 @@ std::cout<<"tutu "<<lStringComponentType<<std::endl;
                 {
                         m_NbOctetPixel=4;
                         m_TypeRAD = "I4";
+                        lExtension=".i4";                        
                 }
                 else if( lStringComponentType =="FLOAT")
                 {
@@ -698,27 +658,26 @@ std::cout<<"tutu "<<lStringComponentType<<std::endl;
         }
         else if( lStringPixelType == "COMPLEX")
         {
-                if( lStringComponentType =="SHORT" || lStringComponentType =="INT")
+                if( lStringComponentType == "SHORT" )
                 {
-std::cout<< "ICIIIII ?" <<std::endl;
-
 
                         m_NbOctetPixel=4;
                         m_TypeRAD = "CI2";
                         lExtension=".ci2";
                 }
-                else if( lStringComponentType =="FLOAT")
+                else if( lStringComponentType == "FLOAT")
                 {
                         m_NbOctetPixel=8;
                         m_TypeRAD = "CR4";
                         lExtension=".cr4";
                 }
-/*                if( this->GetComponentType()=="FLOAT")
+                if( lStringComponentType == "CHAR")
                 {
                         m_NbOctetPixel=2;
-                        m_TypeRAD = "COCT"
+                        m_TypeRAD = "COCT";
+                        lExtension=".coct";                        
                 }
-                if( this->GetComponentType()=="FLOAT")
+/*                if( this->GetComponentType()=="FLOAT")
                 {
                         m_NbOctetPixel=2;
                         m_TypeRAD = "C3B"
@@ -733,14 +692,13 @@ std::cout<< "ICIIIII ?" <<std::endl;
                         m_NbOctetPixel=2;
                         m_TypeRAD = "C7B"
                 }
-*/        
-                else if( lStringComponentType =="INT")
+*/                else if( lStringComponentType == "INT")
                 {
                         m_NbOctetPixel=8;
                         m_TypeRAD = "CI4";
                         lExtension=".ci4";
                 }
-                else if( lStringComponentType =="DOUBLE")
+                else if( lStringComponentType == "DOUBLE")
                 {
                         m_NbOctetPixel=16;
                         m_TypeRAD = "CR8";
@@ -766,9 +724,6 @@ std::cout<< "ICIIIII ?" <<std::endl;
         for(unsigned int i=0 ; i<m_NbOfChannels ; i++)
         {
                 ::itk::OStringStream lStream;
-
-//comment on sait HH/HV/VH/VV ??
-
                 lStream << lRootName <<"_"<< i+1 << lExtension;
                 m_ChannelsFileName.push_back(lStream.str());
         }
@@ -821,16 +776,6 @@ otbMsgDebugMacro( <<"         ComponentType      : "<<this->GetComponentType() )
 otbMsgDebugMacro( <<"         NumberOfComponents : "<<this->GetNumberOfComponents());
 otbMsgDebugMacro( <<"         ComponentSize      : "<<this->GetComponentSize());
 otbMsgDebugMacro( <<"         GetPixelSize       : "<<this->GetPixelSize());
-
-
-std::cout <<"Driver to write: RAD"<<std::endl;;
-std::cout <<"         Write file         : "<< m_FileName<<std::endl;
-std::cout <<"         Size               : "<<m_Dimensions[0]<<","<<m_Dimensions[1]<<std::endl;;
-std::cout <<"         Type Rad           : "<<m_TypeRAD<<std::endl;;
-std::cout <<"         ComponentType      : "<<this->GetComponentType() <<std::endl;;
-std::cout <<"         NumberOfComponents : "<<this->GetNumberOfComponents()<<std::endl;;
-std::cout <<"         ComponentSize      : "<<this->GetComponentSize()<<std::endl;;
-std::cout <<"         GetPixelSize       : "<<this->GetPixelSize()<<std::endl;
 
 }
 

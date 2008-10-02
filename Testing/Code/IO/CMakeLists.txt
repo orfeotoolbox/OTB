@@ -1,4 +1,4 @@
-# $Id$
+# $Id: CMakeLists.txt 4312 2008-09-26 13:46:16Z guillaume $
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
@@ -1401,7 +1401,7 @@ ADD_TEST(ioTuVectorDataFileWriterNew ${IO_TESTS15}
 # If the file exists, try remove it to prevent test failure
 FILE(REMOVE ${TEMP}/ioTvVectorDataFileWriterOutput.shp)
 
-ADD_TEST(ioTvSHPVectorDataFileWriter ${IO_TESTS15} 
+ADD_TEST(ioTvVectorDataFileWriter ${IO_TESTS15} 
         otbVectorDataFileWriter
 	${TEMP}/ioTvVectorDataFileWriterOutput.shp	
 	)
@@ -1409,7 +1409,7 @@ ADD_TEST(ioTvSHPVectorDataFileWriter ${IO_TESTS15}
 # If the file exists, try remove it to prevent test failure
 FILE(REMOVE ${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp)
 
-ADD_TEST(ioTvSHPVectorDataFileReaderWriter ${IO_TESTS15} 
+ADD_TEST(ioTvVectorDataFileReaderWriter ${IO_TESTS15} 
         otbVectorDataFileReaderWriter
 	${IMAGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
 	${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp	
@@ -1428,22 +1428,10 @@ ADD_TEST(ioTuKMLVectorDataIOCanWrite ${IO_TESTS15}
         otbKMLVectorDataIOTestCanWrite
         ${TEMP}/simple.kml)
 
-ADD_TEST(ioTvKMLVectorDataFileReader ${IO_TESTS15} 
-#        --compare-ascii ${TOL}  ${BASELINE_FILES}/ioSHPVectorDataFileReader.txt
-#                        ${TEMP}/ioSHPVectorDataFileReader.txt
-        otbVectorDataFileReader
-        ${INPUTDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
-        ${TEMP}/ioSHPVectorDataFileReader.txt)
-
-ADD_TEST(ioTvKMLVectorDataFileWriter ${IO_TESTS15} 
-        otbVectorDataFileWriter
-        ${TEMP}/ioKMLVectorDataFileWriterOutput.kml
-        )
-
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS16 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# ---  RAD_CI2 / RAD_CR4 /  ---
+# ---  RAD  ---
 
 # Can read a RAD format (ci2)
 ADD_TEST(ioTuRADImageIOCanRead_RADCI2 ${IO_TESTS16} 
@@ -1486,17 +1474,11 @@ ADD_TEST(ioTvImageFileReaderCI42CR4 ${IO_TESTS16}
 #        /home3/mathieu/guillaume/CD_CNES/RAD_CI2/3017_HH.rad 
 #        ${TEMP}/ioImageFileReaderCI22CR4.rad )
         
-# Turn a ci4.RAD file into ci4.file (because of Int type)
-ADD_TEST(ioTvImageFileReaderCI22CI4 ${IO_TESTS16}
-        otbImageFileReaderRADComplexInt
-        ${INPUTDATA}/RADCI4_image.rad
-        ${TEMP}/ioImageFileReaderCI42CI4.rad )   
-
 # Copy cr4.RAD file
-ADD_TEST(ioTvImageFileReaderCR42CR4 ${IO_TESTS16}
-        otbImageFileReaderRADComplexFloat
+ADD_TEST(ioTvImageFileReaderCR42CR8 ${IO_TESTS16}
+        otbImageFileReaderRADComplexDouble
         ${INPUTDATA}/RADCR4_image.rad
-        ${TEMP}/ioImageFileReaderCR42CR4.rad )
+        ${TEMP}/ioImageFileReaderCR42CR8.rad )
 
 # Convert tif into a RAD file (ci4)
 ADD_TEST(ioTvImageFileReaderTIF2RADCI4 ${IO_TESTS16}
@@ -1504,17 +1486,12 @@ ADD_TEST(ioTvImageFileReaderTIF2RADCI4 ${IO_TESTS16}
         ${INPUTDATA}/RSAT_imagery_VH.tif
         ${TEMP}/ioImageFileReaderTIF2RADCI4.rad )                   
 
-# Convert tif into a RAD file (cr4)
-#ADD_TEST(ioTvImageFileReaderTIF2RADCR4 ${IO_TESTS16}
-#        otbImageFileReaderRADComplexFloat
-#        /home3/mathieu/guillaume/CD_CNES/RSAT_cyrille/RSAT_imagery_VH.tif
-#        ${TEMP}/ioImageFileReaderTIF2RADCR4.rad )
-        
-# Convert png into a RAD file (pha)
-#ADD_TEST(ioTvImageFileReaderTIF2RADTRUC ${IO_TESTS16}
-#        otbImageFileReaderRADChar
+# Convert png into a RAD file (pha) -> sortie n'est pas lisible
+#ADD_TEST(ioTvImageFileReaderTIF2RADPHA ${IO_TESTS16}
+#        otbImageFileReaderRADInt
 #        ${INPUTDATA}/rcc8_mire1.png
-#        ${TEMP}/ioImageFileReaderPNG2RADTRUC.rad )         
+#        ${TEMP}/ioImageFileReaderPNG2RADPHA.rad )
+
 
 
         
@@ -1640,6 +1617,7 @@ otbImageFileReaderRADInt.cxx
 otbImageFileReaderRADFloat.cxx
 otbImageFileReaderRADComplexInt.cxx
 otbImageFileReaderRADComplexFloat.cxx
+otbImageFileReaderRADComplexDouble.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
