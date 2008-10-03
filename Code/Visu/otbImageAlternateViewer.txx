@@ -353,7 +353,7 @@ namespace otb
       }
     else 
       {
-	resp = 4*(static_cast<long>(y)*size[0]+static_cast<long>(x));
+	resp = 3*(static_cast<long>(y)*size[0]+static_cast<long>(x));
       }
 
     return resp;
@@ -434,7 +434,7 @@ namespace otb
 	
 
 	unsigned char *  newBuffer = NULL;
-	unsigned int bufferLenght = 4*m_BufferedRegion.GetSize()[0]*m_BufferedRegion.GetSize()[1];
+	unsigned int bufferLenght = 3*m_BufferedRegion.GetSize()[0]*m_BufferedRegion.GetSize()[1];
    
 	newBuffer = new unsigned char[bufferLenght];
 	typename ImageListType::Pointer bandList;
@@ -507,8 +507,7 @@ namespace otb
 			newBuffer[index] = m_OpenGlBuffer[indexInOldBuffer];
 			newBuffer[index+1] = m_OpenGlBuffer[indexInOldBuffer+1];
 			newBuffer[index+2] = m_OpenGlBuffer[indexInOldBuffer+2];
-			newBuffer[index+3] = m_OpenGlBuffer[indexInOldBuffer+3];
-			index+=4;
+			index+=3;
 			optiCount++;
 		      }
 		    else
@@ -545,15 +544,13 @@ namespace otb
 				interpolatedValue = 0;
 			      }
 			    newBuffer[index+2] = Normalize(interpolatedValue,m_BlueChannelIndex);
-			    newBuffer[index+3] = 255;
-			    index+=4;
+			    index+=3;
 			  }
 			else
 			  {
 			    newBuffer[index+1] = Normalize(interpolatedValue,m_RedChannelIndex);
 			    newBuffer[index+2] = Normalize(interpolatedValue,m_RedChannelIndex);
-			    newBuffer[index+3] = 255;
-			    index+=4; 
+			    index+=3; 
 			  }
  		      }
 		    interpolatedPos[0] +=spacing[0];
@@ -730,7 +727,7 @@ namespace otb
     total.Start();
     unsigned char *  result = NULL;
 
-    unsigned int bufferLenght = 4*region.GetSize()[0]*region.GetSize()[1];
+    unsigned int bufferLenght = 3*region.GetSize()[0]*region.GetSize()[1];
    
     if(bufferLenght == 0)
       {
@@ -858,15 +855,13 @@ namespace otb
 			interpolatedValue = 0;
 		      }
 		    result[index+2] = Normalize(interpolatedValue,m_BlueChannelIndex);
-		    result[index+3] = 255;
-		    index+=4;
+		    index+=3;
 		  }
 		else
 		  {
 		    result[index+1] = Normalize(interpolatedValue,m_RedChannelIndex);
 		    result[index+2] = Normalize(interpolatedValue,m_RedChannelIndex);
-		    result[index+3] = 255;
-		    index+=4; 
+		    index+=3; 
 		  }
 		interpolatedPos[0] +=spacing[0];
 	      }
@@ -1051,7 +1046,7 @@ namespace otb
 
       
     // malloc new buffer 
-    unsigned char * newBuffer = new unsigned char[4*m_DisplayExtent.GetNumberOfPixels()];
+    unsigned char * newBuffer = new unsigned char[3*m_DisplayExtent.GetNumberOfPixels()];
 
     // fill the new buffer
     unsigned int indexInNewBuffer = 0;
@@ -1085,7 +1080,7 @@ namespace otb
       {
 	if(bufferList[0]!=NULL)
 	  {
-	    for(unsigned int i = 0; i<4*bufferRegionList[0].GetSize()[0];++i)
+	    for(unsigned int i = 0; i<3*bufferRegionList[0].GetSize()[0];++i)
 	      {
 		newBuffer[indexInNewBuffer]=bufferList[0][indexInBuffer1];
 		++indexInNewBuffer;
@@ -1095,7 +1090,7 @@ namespace otb
 	// Fill region 2
 	if(bufferList[1]!=NULL)
 	  {
-	    for(unsigned int i = 0; i<4*bufferRegionList[1].GetSize()[0];++i)
+	    for(unsigned int i = 0; i<3*bufferRegionList[1].GetSize()[0];++i)
 	      {
 		newBuffer[indexInNewBuffer]=bufferList[1][indexInBuffer2];
 		++indexInNewBuffer;
@@ -1105,7 +1100,7 @@ namespace otb
 	// Fill region 3
 	if(bufferList[2]!=NULL)
 	  {
-	    for(unsigned int i = 0; i<4*bufferRegionList[2].GetSize()[0];++i)
+	    for(unsigned int i = 0; i<3*bufferRegionList[2].GetSize()[0];++i)
 	      {
 		newBuffer[indexInNewBuffer]=bufferList[2][indexInBuffer3];
 		++indexInNewBuffer;
@@ -1117,8 +1112,8 @@ namespace otb
     unsigned int lineOffset = static_cast<unsigned int>(-min(0L,m_BufferedRegion.GetIndex()[0]));
     unsigned int lineOffsetEnd = static_cast<unsigned int>(-min(0L,static_cast<long>(m_DisplayExtent.GetSize()[0])-m_BufferedRegion.GetIndex()[0]-static_cast<long>(m_BufferedRegion.GetSize()[0])));
     unsigned int columnOffset = static_cast<unsigned int>(-min(0L,m_BufferedRegion.GetIndex()[1]));
-    unsigned int offsety= columnOffset*(static_cast<int>(m_BufferedRegion.GetSize()[0]))*4;
-    unsigned int offsetx = lineOffset*4;
+    unsigned int offsety= columnOffset*(static_cast<int>(m_BufferedRegion.GetSize()[0]))*3;
+    unsigned int offsetx = lineOffset*3;
 
     indexInCentralBuffer+=offsety;
 
@@ -1132,7 +1127,7 @@ namespace otb
 	//Fill line from region 4
 	if(bufferList[3]!=NULL)
 	  {
-	    for(unsigned int i = 0;i<4*bufferRegionList[3].GetSize()[0];++i)
+	    for(unsigned int i = 0;i<3*bufferRegionList[3].GetSize()[0];++i)
 	      {
 		newBuffer[indexInNewBuffer]=bufferList[3][indexInBuffer4];
 		++indexInNewBuffer;
@@ -1144,18 +1139,18 @@ namespace otb
 	  {
 
 	    indexInCentralBuffer+=offsetx;	    
-	    for(unsigned int i = 0;i<4*bufferRegionList[1].GetSize()[0];++i)
+	    for(unsigned int i = 0;i<3*bufferRegionList[1].GetSize()[0];++i)
 	      {
 		newBuffer[indexInNewBuffer]=m_OpenGlBuffer[indexInCentralBuffer];
 		++indexInNewBuffer;
 		++indexInCentralBuffer;
 	      }
-	    indexInCentralBuffer+=lineOffsetEnd*4;
+	    indexInCentralBuffer+=lineOffsetEnd*3;
 	  }
 	// Fill line from region 5
 	if(bufferList[4]!=NULL)
 	  {
-	    for(unsigned int i = 0;i<4*bufferRegionList[4].GetSize()[0];++i)
+	    for(unsigned int i = 0;i<3*bufferRegionList[4].GetSize()[0];++i)
 	      {
 		newBuffer[indexInNewBuffer]=bufferList[4][indexInBuffer5];
 		++indexInNewBuffer;
@@ -1184,7 +1179,7 @@ namespace otb
       {
 	if(bufferList[5]!=NULL)
 	  {
-	    for(unsigned int i = 0; i<4*bufferRegionList[5].GetSize()[0];++i)
+	    for(unsigned int i = 0; i<3*bufferRegionList[5].GetSize()[0];++i)
 	      {
 		newBuffer[indexInNewBuffer]=bufferList[5][indexInBuffer6];
 		++indexInNewBuffer;
@@ -1194,7 +1189,7 @@ namespace otb
 	// Fill region 2
 	if(bufferList[6]!=NULL)
 	  {
-	    for(unsigned int i = 0; i<4*bufferRegionList[6].GetSize()[0];++i)
+	    for(unsigned int i = 0; i<3*bufferRegionList[6].GetSize()[0];++i)
 	      {
 		newBuffer[indexInNewBuffer]=bufferList[6][indexInBuffer7];
 		++indexInNewBuffer;
@@ -1204,7 +1199,7 @@ namespace otb
 	// Fill region 3
 	if(bufferList[7]!=NULL)
 	  {
-	    for(unsigned int i = 0; i<4*bufferRegionList[7].GetSize()[0];++i)
+	    for(unsigned int i = 0; i<3*bufferRegionList[7].GetSize()[0];++i)
 	      {
 		newBuffer[indexInNewBuffer]=bufferList[7][indexInBuffer8];
 		++indexInNewBuffer;
@@ -1268,7 +1263,7 @@ namespace otb
 	// display the image
 	glDrawPixels(region.GetSize()[0],
 		     region.GetSize()[1], 
-		     GL_RGBA,
+		     GL_RGB,
 		     GL_UNSIGNED_BYTE, 
 		     buffer);
 	glEnd();
@@ -1298,7 +1293,7 @@ namespace otb
     
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glColor4f(1,0,0,1);
+    glColor3f(1,0,0);
     glBegin(GL_LINE_LOOP);
     glVertex2f(minx,miny);
     glVertex2f(minx,maxy);
