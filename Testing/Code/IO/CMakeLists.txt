@@ -1428,6 +1428,24 @@ ADD_TEST(ioTuKMLVectorDataIOCanWrite ${IO_TESTS15}
         otbKMLVectorDataIOTestCanWrite
         ${TEMP}/simple.kml)
 
+# Read a MODIS file
+ADD_TEST(ioTvKMLVectorDataIOFileReaderExample ${IO_TESTS15} 
+        otbKMLVectorDataIOTestFileReader
+        ${INPUTDATA}/MODIS20040214212340.kml)        
+
+# Read a multigeometry example file
+ADD_TEST(ioTvKMLVectorDataIOFileReaderMultiGeom ${IO_TESTS15} 
+        otbKMLVectorDataIOTestFileReader
+        ${INPUTDATA}/multigeometry.kml)
+        
+# Read a complex line example file
+ADD_TEST(ioTvKMLVectorDataIOFileReaderLines ${IO_TESTS15} 
+        otbKMLVectorDataIOTestFileReader
+        ${INPUTDATA}/line.kml)        
+        
+
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS16 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1608,6 +1626,7 @@ otbSHPVectorDataIONew.cxx
 otbKMLVectorDataIONew.cxx
 otbKMLVectorDataIOTestCanRead.cxx
 otbKMLVectorDataIOTestCanWrite.cxx
+otbKMLVectorDataIOTestFileReader.cxx
 )
 
 SET(BasicIO_SRCS16
