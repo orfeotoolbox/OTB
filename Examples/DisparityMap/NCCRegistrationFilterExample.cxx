@@ -109,7 +109,7 @@ int main(int argc, char** argv )
   std::cout << "NCC radius " << registrator->GetNCCRadius() << std::endl;
   
   
-  registrator->SetNumberOfIterations( argv[6] );
+  registrator->SetNumberOfIterations( atoi(argv[6]) );
 
   registrator->GetDeformationField();
 
