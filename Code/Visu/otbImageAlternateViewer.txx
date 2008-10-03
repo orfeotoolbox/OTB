@@ -51,19 +51,8 @@ namespace otb
 
     m_DecompositionFilter = VectorImageDecompositionFilterType::New();
 
-    typename BSplineInterpolatorType::Pointer bsplineInterpolator = BSplineInterpolatorType::New();
-    bsplineInterpolator->SetSplineOrder(3);
-
-    typename ProlateInterpolatorType::Pointer prolateInterpolator = ProlateInterpolatorType::New();
-    prolateInterpolator->SetRadius(8);
-    typename OtbWindowedSincInterpolatorType::Pointer otbwinsinc = OtbWindowedSincInterpolatorType::New();
-    otbwinsinc->SetRadius(8);
-
      typename DefaultInterpolatorType::Pointer defaultInterpolator = DefaultInterpolatorType::New();
-    // m_ZoomInInterpolator = WindowedSincInterpolatorType::New();
     m_ZoomInInterpolator=defaultInterpolator;
-    // m_ZoomInInterpolator=bsplineInterpolator;
-
     m_ZoomOutInterpolator = defaultInterpolator;
 
     m_SpacingZoomFactor=1;
@@ -456,10 +445,15 @@ namespace otb
 	unsigned int numberOfSplits=1;
 	
 	unsigned int optiCount = 0;
-
-	if(m_SpacingZoomFactor>0)
+	InterpolatorPointerType interpolator;
+	if(m_SpacingZoomFactor>1)
 	  {
 	    numberOfSplits=max((static_cast<unsigned int>(m_SpacingZoomFactor))*(static_cast<unsigned int>(m_SpacingZoomFactor)),1U);
+	    interpolator = m_ZoomOutInterpolator;
+	  }
+	else
+	  {
+	    interpolator = m_ZoomInInterpolator;
 	  }
 	
 	unsigned int splitterNumberOfSplits = m_Splitter->GetNumberOfSplits(m_BufferedRegion,numberOfSplits);
@@ -519,8 +513,8 @@ namespace otb
 		      }
 		    else
 		      {
-			m_ZoomInInterpolator->SetInputImage(bandList->GetNthElement(m_RedChannelIndex));
-			if( m_ZoomInInterpolator->IsInsideBuffer(interpolatedPos))
+			interpolator->SetInputImage(bandList->GetNthElement(m_RedChannelIndex));
+			if(interpolator->IsInsideBuffer(interpolatedPos))
 			  {
 			    interpolatedValue = static_cast<PixelType>(m_ZoomInInterpolator->Evaluate(interpolatedPos));
 			  }
@@ -534,17 +528,17 @@ namespace otb
 			    m_ZoomInInterpolator->SetInputImage(bandList->GetNthElement(m_GreenChannelIndex));
 			    if( m_ZoomInInterpolator->IsInsideBuffer(interpolatedPos))
 			      {
-				interpolatedValue = static_cast<PixelType>( m_ZoomInInterpolator->Evaluate(interpolatedPos));
+				interpolatedValue = static_cast<PixelType>(interpolator->Evaluate(interpolatedPos));
 			      }
 			    else
 			      {
 				interpolatedValue = 0;
 			      }
 			    newBuffer[index+1] = Normalize(interpolatedValue,m_GreenChannelIndex);
-			    m_ZoomInInterpolator->SetInputImage(bandList->GetNthElement(m_BlueChannelIndex));
-			    if( m_ZoomInInterpolator->IsInsideBuffer(interpolatedPos))
+			    interpolator->SetInputImage(bandList->GetNthElement(m_BlueChannelIndex));
+			    if( interpolator->IsInsideBuffer(interpolatedPos))
 			      {
-				interpolatedValue = static_cast<PixelType>(m_ZoomInInterpolator->Evaluate(interpolatedPos));
+				interpolatedValue = static_cast<PixelType>(interpolator->Evaluate(interpolatedPos));
 			      }
 			    else
 			      {
@@ -757,9 +751,15 @@ namespace otb
     interpolatedPos.Fill(0);
     unsigned int numberOfSplits=1;
 
-    if(m_SpacingZoomFactor>0)
+    InterpolatorPointerType interpolator;
+    if(m_SpacingZoomFactor>1)
       {
 	numberOfSplits=max((static_cast<unsigned int>(m_SpacingZoomFactor))*(static_cast<unsigned int>(m_SpacingZoomFactor)),1U);
+	interpolator = m_ZoomOutInterpolator;
+      }
+    else
+      {
+	interpolator = m_ZoomInInterpolator;
       }
     
     unsigned int splitterNumberOfSplits = m_Splitter->GetNumberOfSplits(region,numberOfSplits);
@@ -826,10 +826,10 @@ namespace otb
 	    for(unsigned int i = 0;i<splitRegion.GetSize()[0];++i)
 	      {
 		// //std::cout<<interpolatedPos<<std::endl;
-		m_ZoomInInterpolator->SetInputImage(bandList->GetNthElement(m_RedChannelIndex));
-		if( m_ZoomInInterpolator->IsInsideBuffer(interpolatedPos))
+		interpolator->SetInputImage(bandList->GetNthElement(m_RedChannelIndex));
+		if( interpolator->IsInsideBuffer(interpolatedPos))
 		  {
-		    interpolatedValue = static_cast<PixelType>(m_ZoomInInterpolator->Evaluate(interpolatedPos));
+		    interpolatedValue = static_cast<PixelType>(interpolator->Evaluate(interpolatedPos));
 		  }
 		else
 		  {
@@ -838,20 +838,20 @@ namespace otb
 		result[index] = Normalize(interpolatedValue,m_RedChannelIndex);
 		if(rgb)
 		  {
-		    m_ZoomInInterpolator->SetInputImage(bandList->GetNthElement(m_GreenChannelIndex));
-		    if( m_ZoomInInterpolator->IsInsideBuffer(interpolatedPos))
+		    interpolator->SetInputImage(bandList->GetNthElement(m_GreenChannelIndex));
+		    if( interpolator->IsInsideBuffer(interpolatedPos))
 		      {
-			interpolatedValue = static_cast<PixelType>( m_ZoomInInterpolator->Evaluate(interpolatedPos));
+			interpolatedValue = static_cast<PixelType>( interpolator->Evaluate(interpolatedPos));
 		      }
 		    else
 		      {
 			interpolatedValue = 0;
 		      }
 		    result[index+1] = Normalize(interpolatedValue,m_GreenChannelIndex);
-		    m_ZoomInInterpolator->SetInputImage(bandList->GetNthElement(m_BlueChannelIndex));
-		    if( m_ZoomInInterpolator->IsInsideBuffer(interpolatedPos))
+		    interpolator->SetInputImage(bandList->GetNthElement(m_BlueChannelIndex));
+		    if( interpolator->IsInsideBuffer(interpolatedPos))
 		      {
-			interpolatedValue = static_cast<PixelType>(m_ZoomInInterpolator->Evaluate(interpolatedPos));
+			interpolatedValue = static_cast<PixelType>(interpolator->Evaluate(interpolatedPos));
 		      }
 		    else
 		      {
