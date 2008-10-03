@@ -36,7 +36,7 @@ Polygon<TValue>
   double x = point[0];
   double y = point[1];
   unsigned int crossingCount = 0;
-  VertexListIteratorType it = this->GetVertexList()->Begin();
+  VertexListConstIteratorType it = this->GetVertexList()->Begin();
   double xa = it.Value()[0];
   double ya = it.Value()[1];
   ++it; 
@@ -117,7 +117,7 @@ Polygon<TValue>
   double x = point[0];
   double y = point[1];
   double xb,yb; 
-  VertexListIteratorType it = this->GetVertexList()->Begin();
+  VertexListConstIteratorType it = this->GetVertexList()->Begin();
   double xa = it.Value()[0];
   double ya = it.Value()[1];
   double xbegin = xa;
@@ -201,8 +201,8 @@ Polygon<TValue>
 ::NbCrossing(VertexType a, VertexType b)
 {
   unsigned int resp = 0;
-  VertexListIteratorType it = this->GetVertexList()->Begin();
-  VertexListIteratorType it_end = this->GetVertexList()->End();
+  VertexListConstIteratorType it = this->GetVertexList()->Begin();
+  VertexListConstIteratorType it_end = this->GetVertexList()->End();
   VertexType current = it.Value();
   VertexType first = current;
   ++it;
@@ -235,8 +235,8 @@ Polygon<TValue>
 ::NbTouching(VertexType a, VertexType b)
 {
   unsigned int resp = 0;
-  VertexListIteratorType it = this->GetVertexList()->Begin();
-  VertexListIteratorType it_end = this->GetVertexList()->End();
+  VertexListConstIteratorType it = this->GetVertexList()->Begin();
+  VertexListConstIteratorType it_end = this->GetVertexList()->End();
   VertexType current = it.Value();
   VertexType first = current;
   ++it;
@@ -426,7 +426,7 @@ Polygon<TValue>
   IndexType maxId;
   maxId.Fill(0);
 
-  VertexListIteratorType it =  this->GetVertexList()->Begin();
+  VertexListConstIteratorType it =  this->GetVertexList()->Begin();
 
   long int x,y;
 
@@ -483,7 +483,7 @@ template<class TValue>
   ::GetSurface()
 {
   m_Surface = 0.0;
-  VertexListIteratorType it =  this->GetVertexList()->Begin();
+  VertexListConstIteratorType it =  this->GetVertexList()->Begin();
   
   if(this->GetVertexList()->Size()>2)
   {

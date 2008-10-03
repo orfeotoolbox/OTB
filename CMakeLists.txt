@@ -67,15 +67,24 @@ SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_
 
 
 # => Comment for OTB 2.6.0
-#OPTION(BUILD_TESTING "Build testing." OFF)
+OPTION(BUILD_TESTING "Build testing." OFF)
 
+#-----------------------------------------------------------------------------
+# OTB build configuration options.
+IF(WIN32)
+# do not build shared lib under windows
+SET(BUILD_SHARED_LIBS OFF)
+MESSAGE("Disabling build shared lib option on windows like OS.")
+ELSE(WIN32)
+OPTION(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
+ENDIF(WIN32)
+SET(OTB_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
 
 #-----------------------------------------------------------------------------
 
 # Case for release 2.2.1
 # Use the openjpeg library.
 OPTION(OTB_USE_JPEG2000 "Use to support jpeg2000 image file format." ON)
-#MARK_AS_ADVANCED(OTB_USE_JPEG2000)
 
 #-----------------------------------------------------------------------------
 
@@ -88,19 +97,13 @@ OPTION(OTB_USE_JPEG2000 "Use to support jpeg2000 image file format." ON)
 
 OPTION(OTB_USE_EXTERNAL_EXPAT "Use an outside build of EXPAT." OFF)
 MARK_AS_ADVANCED(OTB_USE_EXTERNAL_EXPAT)
-#SET(OTB_COMPILE_EXPAT ${OTB_USE_EXTERNAL_EXPAT})
+
 IF(OTB_USE_EXTERNAL_EXPAT)
     FIND_PACKAGE(EXPAT)
     IF(EXPAT_FOUND)
         # Control expat compatibility
         INCLUDE_DIRECTORIES(BEFORE ${EXPAT_INCLUDE_DIR})
         LINK_DIRECTORIES( ${EXPAT_LIBRARY} )
-#        TRY_COMPILE(OTB_TYPE_COMPILE_EXPAT
-#                        ${OTB_BINARY_DIR}/CMakeTmp
-#                        ${OTB_SOURCE_DIR}/CMake/otbTestCompileExpat.cxx )
-#        IF( NOT OTB_TYPE_COMPILE_EXPAT)
-#            SET(OTB_USE_EXTERNAL_EXPAT OFF)
-#        ENDIF( NOT OTB_TYPE_COMPILE_EXPAT)
     ELSE(EXPAT_FOUND)
         MESSAGE(FATAL_ERROR
                   "Cannot build OTB project without lib EXPAT.  Please set EXPAT_DIR or set OTB_USE_EXTERNAL_EXPAT OFF to use INTERNAL EXPAT set on OTB/Utilities repository.")
@@ -210,7 +213,7 @@ IF(OTB_USE_VISU_GUI)
         
         IF( NOT OPENGL_FOUND )
                 MESSAGE(FATAL_ERROR "Impossible to find OpenGL on your system.\nCannot build OTB Visu module without OpenGL library.\nInstall OpenGL on your system OR set OTB_USE_VISU to OFF to disable OTB Visu module generation !")
-        ENDIF( NOT OPENGL_FOUND )
+	ENDIF( NOT OPENGL_FOUND )
         IF( NOT OPENGL_GLU_FOUND )
                 MESSAGE(FATAL_ERROR "Impossible to find GLU library on your system.\nCannot build OTB Visu module without GLU library.\nInstall GLU library on your system OR set OTB_USE_VISU to OFF to disable OTB Visu module generation !")
         ENDIF( NOT OPENGL_GLU_FOUND )
@@ -218,17 +221,6 @@ IF(OTB_USE_VISU_GUI)
         IF(OPENGL_INCLUDE_DIR)
                 INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
         ENDIF(OPENGL_INCLUDE_DIR)
-
-#        INCLUDE(CheckIncludeFiles)
-#        CHECK_INCLUDE_FILES("GL/glu.h"       HAVE_GL_GLU_H)
-#        IF ( NOT HAVE_GL_GLU_H )
-#                FIND_PATH(OTB_GLU_INCLUDE_PATH "GL/glu.h" ${OPENGL_INCLUDE_PATH})
-#                IF(NOT OTB_GLU_INCLUDE_PATH)
-#                        SET(OTB_GLU_INCLUDE_PATH "")
-#                        MESSAGE("Impossible to find GLU files (include lib), detected by the FIND_PACKAGE(OpenGL) command.\nCannot build OTB Visu module without GLU library.\n=> You must install GLU (Mesa package, etc.) on your system OR set OTB_USE_VISU to OFF to disable OTB Visu module generation !")
-#                ENDIF(NOT OTB_GLU_INCLUDE_PATH)
-#        ENDIF ( NOT HAVE_GL_GLU_H )
-
         
         #-------------------------------
         # FLTK Library
@@ -280,17 +272,6 @@ ENDIF(OTB_USE_VISU_GUI)
 OPTION(OTB_USE_CURL "Use curl library." OFF)
 MARK_AS_ADVANCED(OTB_USE_CURL)
 IF(OTB_USE_CURL)
-
-#        INCLUDE(CheckIncludeFiles)
-#        INCLUDE(CheckLibraryExists)
-#        CHECK_INCLUDE_FILES("curl/curl.h" OTB_HAVE_CURL_HEADER)
-#        CHECK_LIBRARY_EXISTS("curl" "curl_easy_init" "" OTB_HAVE_CURL_LIBRARY)
-#        IF( NOT OTB_HAVE_CURL_HEADER )
-#            MESSAGE("Cannot find CURL include directory. Please set CURL_INCLUDE_DIRS or SET OTB_USE_CURL OFF.")
-#        ENDIF( NOT OTB_HAVE_CURL_HEADER)
-#        IF( NOT OTB_HAVE_CURL_LIBRARY )
-#            MESSAGE("Cannot find CURL include directory. Please set CURL_LIBRARY_DIRS or SET OTB_USE_CURL OFF.")
-#        ENDIF( NOT OTB_HAVE_CURL_LIBRARY)
 
         FIND_PATH(CURL_INCLUDE_DIR curl/curl.h PATHS)
         MARK_AS_ADVANCED(CURL_INCLUDE_DIR)
@@ -443,20 +424,6 @@ INCLUDE_DIRECTORIES( ${OTB_LIBRARY_PATH} )
 LINK_DIRECTORIES(.)
 
 #-----------------------------------------------------------------------------
-# OTB build configuration options.
-OPTION(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
-SET(OTB_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
-
-# => Comment for OTB 2.6.0
-# Options for building some of the most common core templates explicitly only
-# once.  This has only been tested on gcc compilers.
-#               OPTION(OTB_EXPLICIT_INSTANTIATION "BETA-Try to explicitly build some of the core templates explictitly rather than over and over again." OFF)
-#               MARK_AS_ADVANCED(OTB_EXPLICIT_INSTANTIATION)
-#               IF( OTB_EXPLICIT_INSTANTIATION )
-#                ADD_DEFINITIONS(-DOTB_EXPLICIT_INSTANTIATION)
-#               ENDIF( OTB_EXPLICIT_INSTANTIATION )
-
-#-----------------------------------------------------------------------------
 # Option for display all developpment message !!!
 OPTION(OTB_SHOW_ALL_MSG_DEBUG "OTB developers : Show all messages (debug, dev, etc...) use only for otb developers." OFF)
 MARK_AS_ADVANCED(OTB_SHOW_ALL_MSG_DEBUG)
@@ -500,21 +467,10 @@ INCLUDE(${OTB_SOURCE_DIR}/Wrapping/otbWrapSetup.cmake)
 OPTION(OTB_USE_PATENTED "Build patented examples. ITK must be genereted whith patented option (ITK_USE_PATENTED = ON)." OFF)
 MARK_AS_ADVANCED(OTB_USE_PATENTED)
 
-
-IF(WIN32)
-   IF(BUILD_SHARED_LIBS)
-     SET(OTB_COMMON_BUILD_TYPE "SHARED")
-   ELSE(BUILD_SHARED_LIBS)
-     SET(OTB_COMMON_BUILD_TYPE "STATIC")
-   ENDIF(BUILD_SHARED_LIBS)
-   SET(BUILD_SHARED_LIBS OFF)
-ENDIF(WIN32)
-
-
 IF(OTB_USE_VISU_GUI)
     SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES};${FLTK_PLATFORM_DEPENDENT_LIBS}")
         IF(APPLE)
-            SET(OTB_VISU_GUI_LIBRARIES "${OTB_VISU_GUI_LIBRARIES} -Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib ")
+            SET(OTB_VISU_GUI_LIBRARIES "${OTB_VISU_GUI_LIBRARIES};-Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib")
         ENDIF(APPLE)
 ELSE(OTB_USE_VISU_GUI)
         SET(OTB_VISU_GUI_LIBRARIES "")
@@ -528,9 +484,7 @@ ENDIF(OTB_USE_VISU_GUI)
 # Use OTB_ALLS_UTILITIES_DEPENDENT_LIBRARIES to LINK Utilities Algo libraries into your executable
 # => Create OTB_IO_UTILITIES_DEPENDENT_LIBRARIES
 
-#SET(OTB_IO_UTILITIES_DEPENDENT_LIBRARIES "gdal dxf otbkml tinyXML otbgeotiff otbxtiff otbossim otbossimBase otbossimElevation otbossimFont otbossimKBool otbossimMatrix otbossimPlugin otbossimProjectionImaging otbossimSupportData otbossimVec otbossimVpfUtil")
 SET(OTB_IO_UTILITIES_DEPENDENT_LIBRARIES "gdal;dxf;tinyXML;otbgeotiff;otbxtiff;otbossim" )
-#otbossimBase otbossimElevation otbossimFont otbossimKBool otbossimMatrix otbossimPlugin otbossimProjectionImaging otbossimSupportData otbossimVec otbossimVpfUtil")
 
 IF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
         SET(OTB_IO_UTILITIES_DEPENDENT_LIBRARIES  "${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES};${OPENTHREADS_LIBRARY}")
@@ -547,12 +501,6 @@ ENDIF( OTB_USE_EXTERNAL_EXPAT )
 IF( OTB_COMPILE_JPEG2000 )
      SET(OTB_IO_UTILITIES_DEPENDENT_LIBRARIES "${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES};otbopenjpeg") 
 ENDIF( OTB_COMPILE_JPEG2000 )
-
-
-# Add VISU libraries
-#IF(OTB_USE_VISU_GUI)
-#        SET(OTB_IO_UTILITIES_DEPENDENT_LIBRARIES  "${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES} ${OTB_VISU_GUI_LIBRARIES}")
-#ENDIF(OTB_USE_VISU_GUI)
 
 # => Create OTB_ALGO_UTILITIES_DEPENDENT_LIBRARIES
 SET(OTB_ALGO_UTILITIES_DEPENDENT_LIBRARIES "otb6S;otbgalib;InsightJournal;otbsvm")
@@ -588,62 +536,9 @@ SET(OTB_REQUIRED_C_FLAGS "${ITK_REQUIRED_C_FLAGS}")
 SET(OTB_REQUIRED_CXX_FLAGS "${ITK_REQUIRED_CXX_FLAGS}")
 SET(OTB_REQUIRED_LINK_FLAGS "${ITK_REQUIRED_LINK_FLAGS}")
 
-#          IF(CMAKE_COMPILER_IS_GNUCXX)
-#            SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -ftemplate-depth-50")
-#            IF(APPLE)
-#              SET(OTB_REQUIRED_C_FLAGS "${OTB_REQUIRED_C_FLAGS} -no-cpp-precomp")
-#              SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -no-cpp-precomp")
-#              SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -Wno-long-double")
-#            ENDIF(APPLE)
-#          ENDIF(CMAKE_COMPILER_IS_GNUCXX)
-
-#          IF(UNIX)
-#            IF(NOT CMAKE_COMPILER_IS_GNUCXX)
-#              INCLUDE(${OTB_SOURCE_DIR}/CMake/TestNO_ICC_IDYNAMIC_NEEDED.cmake)
-#              TESTNO_ICC_IDYNAMIC_NEEDED(NO_ICC_IDYNAMIC_NEEDED ${OTB_SOURCE_DIR}/CMake )
-#              IF(NO_ICC_IDYNAMIC_NEEDED)
-#                SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS}")
-#              ELSE(NO_ICC_IDYNAMIC_NEEDED)
-#                SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -i_dynamic")
-#              ENDIF(NO_ICC_IDYNAMIC_NEEDED)
-#            ENDIF(NOT CMAKE_COMPILER_IS_GNUCXX)
-#          ENDIF(UNIX)
-
-# Force the use of ansi cxx flags (i.e. -LANG:std on sgi )
-#          IF("x${CMAKE_ANSI_CXXFLAGS}" MATCHES "^x.*[^ ]")
-#            SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} ${CMAKE_ANSI_CXXFLAGS}")
-#          ENDIF("x${CMAKE_ANSI_CXXFLAGS}" MATCHES "^x.*[^ ]")
-#          IF("x${CMAKE_ANSI_CFLAGS}" MATCHES "^x.*[^ ]")
-#            SET(OTB_REQUIRED_C_FLAGS "${OTB_REQUIRED_C_FLAGS} ${CMAKE_ANSI_CFLAGS}")
-#          ENDIF("x${CMAKE_ANSI_CFLAGS}" MATCHES "^x.*[^ ]")
-
-#          IF(CMAKE_SYSTEM MATCHES "IRIX.*")
-#            IF(NOT CMAKE_COMPILER_IS_GNUCXX)
-#              SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -woff 15,84,1110,1209,1424,1468,3102,3210,3439  -no_auto_include -ptused -no_prelink")
-#              SET(OTB_REQUIRED_LINK_FLAGS "${OTB_REQUIRED_LINK_FLAGS}  -Wl,-woff15")
-#            ENDIF(NOT CMAKE_COMPILER_IS_GNUCXX)
-#          ENDIF(CMAKE_SYSTEM MATCHES "IRIX.*")
-
 IF(MINGW)
   LINK_LIBRARIES(gdi32)
 ENDIF(MINGW)
-
-# for the gnu compiler a -D_PTHREADS is needed on sun
-# for the native compiler a -mt flag is needed on the sun
-#          IF(CMAKE_USE_PTHREADS)
-#            IF(CMAKE_SYSTEM MATCHES "SunOS.*")
-#              IF(CMAKE_COMPILER_IS_GNUCXX)
-#                SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -D_PTHREADS")
-#              ELSE(CMAKE_COMPILER_IS_GNUCXX)
-#                SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -mt")
-#                SET(OTB_REQUIRED_C_FLAGS "${OTB_REQUIRED_C_FLAGS} -mt")
-#              ENDIF(CMAKE_COMPILER_IS_GNUCXX)
-#            ENDIF(CMAKE_SYSTEM MATCHES "SunOS.*")
-#          ENDIF(CMAKE_USE_PTHREADS)
-
-#          IF(WIN32)
-#            SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -DNOMINMAX")
-#          ENDIF(WIN32)
 
 #-----------------------------------------------------------------------------
 # Test for an Objective-C++ compiler.
@@ -663,44 +558,7 @@ IF(APPLE)
       "the following output:\n${OTB_OBJCXX_TRY_COMPILE_OUTPUT}\n\n")
   ENDIF( OTB_OBJCXX_COMPILER_WORKS )
 ENDIF(APPLE)
-#-----------------------------------------------------------------------------
-# mingw thread support
-#          IF(MINGW)
-#            SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -mthreads")
-#            SET(OTB_REQUIRED_C_FLAGS "${OTB_REQUIRED_C_FLAGS} -mthreads")
-#            SET(OTB_REQUIRED_LINK_FLAGS "${OTB_REQUIRED_LINK_FLAGS} -mthreads")
-#          ENDIF(MINGW)
 
-
-#-----------------------------------------------------------------------------
-# => Comment for OTB 2.6.0
-#
-# See if compiler preprocessor has the __FUNCTION__ directive used by itkExceptionMacro
-#
-#               INCLUDE(${OTB_SOURCE_DIR}/CMake/CheckCPPDirective.cmake)
-#               CHECK_CPP_DIRECTIVE_EXISTS(__FUNCTION__ ITK_CPP_FUNCTION)
-
-
-#-----------------------------------------------------------------------------
-# => Comment for OTB 2.6.0
-# Find platform-specific differences in the handling of IEEE floating point 
-# special values.
-#          INCLUDE(${OTB_SOURCE_DIR}/CMake/CheckBigBitfield.cmake)
-#          CHECK_BIG_BITFIELD(BIGBITFIELD_VALUE ${OTB_SOURCE_DIR}/CMake)
-#          IF(BIGBITFIELD_VALUE)
-#             SET(BIGBITFIELD 1 CACHE INTERNAL "System handles bit-fields larger than 32 bits.")
-#          ELSE(BIGBITFIELD_VALUE)
-#             SET(BIGBITFIELD 0 CACHE INTERNAL "System handles bit-fields larger than 32 bits.")
-#          ENDIF(BIGBITFIELD_VALUE)
-
-# => Comment for OTB 2.6.0
-#          INCLUDE(${OTB_SOURCE_DIR}/CMake/TestQnanhibit.cmake)
-#          TEST_QNANHIBIT(QNANHIBIT_VALUE ${OTB_SOURCE_DIR}/CMake)
-#          IF(QNANHIBIT_VALUE)
-#             SET(QNANHIBIT 1 CACHE INTERNAL "The 22nd bit of 32-bit floating-point quiet NaN.")
-#          ELSE(QNANHIBIT_VALUE)
-#             SET(QNANHIBIT 0 CACHE INTERNAL "The 22nd bit of 32-bit floating-point quiet NaN.")
-#          ENDIF(QNANHIBIT_VALUE)
 
 INCLUDE(CheckTypeSize)
 
@@ -708,74 +566,6 @@ CHECK_TYPE_SIZE("long long" OTB_SIZEOF_LONG_LONG)
 CHECK_TYPE_SIZE("__int64"   OTB_SIZEOF___INT64)
 CHECK_TYPE_SIZE("long int" OTB_SIZEOF_LONG_INT)
 CHECK_TYPE_SIZE("short int" OTB_SIZEOF_SHORT_INT)
-
-# => Comment for OTB 2.6.0
-#          IF(OTB_SIZEOF___INT64)
-#            IF("OTB_TYPE_SAME_LONG_AND___INT64" MATCHES "^OTB_TYPE_SAME_LONG_AND___INT64$")
-#              MESSAGE(STATUS "Checking whether long and __int64 are the same type")
-#              TRY_COMPILE(OTB_TYPE_SAME_LONG_AND___INT64
-#                ${OTB_BINARY_DIR}/CMakeTmp
-#                ${OTB_SOURCE_DIR}/CMake/otbTestCompareTypes.cxx
-#                COMPILE_DEFINITIONS
-#                -DOTB_TEST_COMPARE_TYPE_1=long
-#                -DOTB_TEST_COMPARE_TYPE_2=__int64
-#                OUTPUT_VARIABLE OUTPUT)
-#              IF(OTB_TYPE_SAME_LONG_AND___INT64)
-#                MESSAGE(STATUS "Checking whether long and __int64 are the same type -- yes")
-#                SET(OTB_TYPE_SAME_LONG_AND___INT64 1 CACHE INTERNAL "Whether long and __int64 are the same type")
-#              ELSE(OTB_TYPE_SAME_LONG_AND___INT64)
-#                MESSAGE(STATUS "Checking whether long and __int64 are the same type -- no")
-#                SET(OTB_TYPE_SAME_LONG_AND___INT64 0 CACHE INTERNAL "Whether long and __int64 are the same type")
-#                WRITE_FILE(${CMAKE_BINARY_DIR}/CMakeError.log
-#                  "Determining whether long and __int64 are the same type "
-#                  "failed with the following output:\n"
-#                  "${OUTPUT}\n" APPEND)
-#              ENDIF(OTB_TYPE_SAME_LONG_AND___INT64)
-#            ENDIF("OTB_TYPE_SAME_LONG_AND___INT64" MATCHES "^OTB_TYPE_SAME_LONG_AND___INT64$")
-#          ENDIF(OTB_SIZEOF___INT64)
-#          IF(OTB_SIZEOF_LONG_LONG)
-#            CONFIGURE_FILE(${OTB_SOURCE_DIR}/CMake/otbTestStreamLongLong.cxx.in
-#              ${OTB_BINARY_DIR}/otbTestStreamLongLong.cxx @ONLY IMMEDIATE)
-#            IF("OTB_OSTREAM_SUPPORTS_LONG_LONG" MATCHES "^OTB_OSTREAM_SUPPORTS_LONG_LONG$")
-#              MESSAGE(STATUS "Checking if ostream supports long long")
-#              TRY_COMPILE(OTB_OSTREAM_SUPPORTS_LONG_LONG
-#                ${OTB_BINARY_DIR}
-#                ${OTB_BINARY_DIR}/otbTestStreamLongLong.cxx
-#                COMPILE_DEFINITIONS -DOTB_TEST_OSTREAM_LONG_LONG
-#                OUTPUT_VARIABLE OUTPUT)
-#              IF(OTB_OSTREAM_SUPPORTS_LONG_LONG)
-#                MESSAGE(STATUS "Checking if ostream supports long long -- yes")
-#                SET(OTB_OSTREAM_SUPPORTS_LONG_LONG 1 CACHE INTERNAL "Whether ostream supports long long")
-#              ELSE(OTB_OSTREAM_SUPPORTS_LONG_LONG)
-#                MESSAGE(STATUS "Checking if ostream supports long long -- no")
-#                SET(OTB_OSTREAM_SUPPORTS_LONG_LONG 0 CACHE INTERNAL "Whether ostream supports long long")
-#                WRITE_FILE(${CMAKE_BINARY_DIR}/CMakeError.log
-#                  "Determining if ostream supports long long "
-#                  "failed with the following output:\n"
-#                  "${OUTPUT}\n" APPEND)
-#              ENDIF(OTB_OSTREAM_SUPPORTS_LONG_LONG)
-#            ENDIF("OTB_OSTREAM_SUPPORTS_LONG_LONG" MATCHES "^OTB_OSTREAM_SUPPORTS_LONG_LONG$")
-#            IF("OTB_ISTREAM_SUPPORTS_LONG_LONG" MATCHES "^OTB_ISTREAM_SUPPORTS_LONG_LONG$")
-#              MESSAGE(STATUS "Checking if istream supports long long")
-#              TRY_COMPILE(OTB_ISTREAM_SUPPORTS_LONG_LONG
-#                ${OTB_BINARY_DIR}
-#                ${OTB_BINARY_DIR}/otbTestStreamLongLong.cxx
-#                COMPILE_DEFINITIONS -DOTB_TEST_ISTREAM_LONG_LONG
-#                OUTPUT_VARIABLE OUTPUT)
-#              IF(OTB_ISTREAM_SUPPORTS_LONG_LONG)
-#                MESSAGE(STATUS "Checking if istream supports long long -- yes")
-#                SET(OTB_ISTREAM_SUPPORTS_LONG_LONG 1 CACHE INTERNAL "Whether istream supports long long")
-#              ELSE(OTB_ISTREAM_SUPPORTS_LONG_LONG)
-#                MESSAGE(STATUS "Checking if istream supports long long -- no")
-#                SET(OTB_ISTREAM_SUPPORTS_LONG_LONG 0 CACHE INTERNAL "Whether istream supports long long")
-#                WRITE_FILE(${CMAKE_BINARY_DIR}/CMakeError.log
-#                  "Determining if istream supports long long "
-#                  "failed with the following output:\n"
-#                  "${OUTPUT}\n" APPEND)
-#              ENDIF(OTB_ISTREAM_SUPPORTS_LONG_LONG)
-#            ENDIF("OTB_ISTREAM_SUPPORTS_LONG_LONG" MATCHES "^OTB_ISTREAM_SUPPORTS_LONG_LONG$")
-#          ENDIF(OTB_SIZEOF_LONG_LONG)
-
 
 #-----------------------------------------------------------------------------
 # Configure the default OTB_DATA_ROOT for the location of OTB Data.
@@ -845,22 +635,3 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OTB_REQUIRED_CXX_FLAGS}")
 SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OTB_REQUIRED_LINK_FLAGS}")
 SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OTB_REQUIRED_LINK_FLAGS}")
 SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${OTB_REQUIRED_LINK_FLAGS}")
-
-#-----------------------------------------------------------------------------
-# => Comment for OTB 2.6.0
-# The frename-registers option does not work due to a bug in the gnu compiler.
-# It must be removed or data errors will be produced and incorrect results
-# will be produced.  This is first documented in the gcc4 man page.
-#          IF(CMAKE_COMPILER_IS_GNUCXX)
-#            SET(ALL_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_CXX_FLAGS} ${CMAKE_EXE_LINKER_FLAGS} ${CMAKE_SHARED_LINKER_FLAGS} ${CMAKE_MODULE_LINKER_FLAGS}" )
-#            SEPARATE_ARGUMENTS(ALL_FLAGS)
-#            FOREACH(COMP_OPTION ${ALL_FLAGS})
-#              #  MESSAGE("${COMP_OPTION} being checked.")
-#              IF("${COMP_OPTION}" STREQUAL "-frename-registers")
-#                MESSAGE(FATAL_ERROR "-frename-registers causes runtime bugs.  It must be removed from your compilation options.")
-#              ENDIF("${COMP_OPTION}" STREQUAL "-frename-registers")
-#              IF("${COMP_OPTION}" STREQUAL "-ffloat-store")
-#                MESSAGE(FATAL_ERROR "-ffloat-store causes runtime bugs on gcc 3.2.3 (appearently not on gcc 3.4.3, but the exact criteria is not known).  It must be removed from your compilation options.")
-#              ENDIF("${COMP_OPTION}" STREQUAL "-ffloat-store")
-#            ENDFOREACH(COMP_OPTION)
-#          ENDIF(CMAKE_COMPILER_IS_GNUCXX)

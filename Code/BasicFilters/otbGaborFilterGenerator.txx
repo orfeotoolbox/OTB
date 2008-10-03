@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbGaborFilterGenerator_txx
-#define _otbGaborFilterGenerator_txx
+#ifndef __otbGaborFilterGenerator_txx
+#define __otbGaborFilterGenerator_txx
 
 #include "otbMath.h"
 

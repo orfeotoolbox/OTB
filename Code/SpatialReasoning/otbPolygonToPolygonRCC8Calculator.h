@@ -63,7 +63,7 @@ public:
   typedef typename PolygonType::ConstPointer PolygonConstPointerType;
   typedef typename PolygonType::VertexListType    VertexListType;
   typedef typename PolygonType::ContinuousIndexType ContinuousIndexType;
-  typedef typename VertexListType::ConstIterator VertexListIteratorType;
+  typedef typename VertexListType::ConstIterator VertexListConstIteratorType;
   typedef std::vector<bool> BoolVectorType;
 
   /** RCC8 values type */

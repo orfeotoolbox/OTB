@@ -124,7 +124,7 @@ int main(int argc, char * argv[])
 // Software Guide : BeginCodeSnippet    
 
   typedef otb::Polygon<PixelType> PolygonType;
-  typedef PolygonType::VertexListIteratorType PolygonIteratorType;
+  typedef PolygonType::VertexListConstIteratorType PolygonIteratorType;
   typedef otb::ObjectList<PolygonType> PolygonListType;
 
   typedef PolygonListType::Iterator PolygonListIteratorType;

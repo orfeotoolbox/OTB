@@ -56,6 +56,17 @@ ADD_TEST(dmTvNearestPointDeformationFieldGenerator ${DISPARITYMAP_TESTS1}
 	 ${TEMP}/dmTvNearestPointDeformationField.hdr
 )
 
+# -------            otb::NCCRegistrationFilter   ----------
+
+ADD_TEST(dmTuNCCRegistrationFilterNew ${DISPARITYMAP_TESTS1} 
+	 otbNCCRegistrationFilterNew)
+
+# -------            otb::MIRegistrationFilter   ----------
+
+ADD_TEST(dmTuMIRegistrationFilterNew ${DISPARITYMAP_TESTS1} 
+	 otbMIRegistrationFilterNew)
+
+       
 # -------  otb::NNearestPointsLinearInterpolateDeformationFieldGenerator   ----------
 
 ADD_TEST(dmTuNNearestPointsLinearInterpolateDeformationFieldGeneratorNew ${DISPARITYMAP_TESTS1} 
@@ -304,6 +315,8 @@ ADD_TEST(dmTvSinusoidDeformationFieldEstimation2 ${DISPARITYMAP_TESTS2}
 SET(BasicDisparityMap_SRCS1
 otbDisparityMapEstimationMethodNew.cxx
 otbDisparityMapEstimationMethod.cxx
+otbNCCRegistrationFilterNew.cxx
+otbMIRegistrationFilterNew.cxx
 otbPointSetToDeformationFieldGeneratorNew.cxx
 otbNearestPointDeformationFieldGeneratorNew.cxx
 otbNearestPointDeformationFieldGenerator.cxx
