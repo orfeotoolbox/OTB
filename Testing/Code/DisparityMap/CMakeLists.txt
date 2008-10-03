@@ -56,6 +56,11 @@ ADD_TEST(dmTvNearestPointDeformationFieldGenerator ${DISPARITYMAP_TESTS1}
 	 ${TEMP}/dmTvNearestPointDeformationField.hdr
 )
 
+# -------            otb::NCCRegistrationFilter   ----------
+
+ADD_TEST(dmTuNCCRegistrationFilterNew ${DISPARITYMAP_TESTS1} 
+	 otbNCCRegistrationFilterNew)
+
 # -------  otb::NNearestPointsLinearInterpolateDeformationFieldGenerator   ----------
 
 ADD_TEST(dmTuNNearestPointsLinearInterpolateDeformationFieldGeneratorNew ${DISPARITYMAP_TESTS1} 
