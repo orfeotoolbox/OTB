@@ -124,6 +124,11 @@ class ITK_EXPORT ImageAlternateViewer
     itkSetMacro(DisplayExtent,RegionType);
     itkGetMacro(DisplayExtent,RegionType);
 
+    itkGetObjectMacro(ZoomInInterpolator,InterpolatorType);
+    itkSetObjectMacro(ZoomInInterpolator,InterpolatorType);
+    itkGetObjectMacro(ZoomOutInterpolator,InterpolatorType);
+    itkSetObjectMacro(ZoomOutInterpolator,InterpolatorType);
+
     /**
      * Set view mode to RGB.
      */
