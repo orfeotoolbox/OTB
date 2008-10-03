@@ -191,8 +191,6 @@ namespace otb
     m_DisplayExtent.SetIndex(index);
     m_DisplayExtent.SetSize(size);
 
-    
-    //std::cout<<"New display extent: "<<m_DisplayExtent<<std::endl;
     this->Fl_Gl_Window::resize(x,y,w,h);
     this->redraw();
   }
@@ -271,7 +269,6 @@ namespace otb
 	IncrementalOpenGlBufferUpdate();
 	ResetOpenGlContext();
 	this->Draw(m_OpenGlBuffer,m_BufferedRegion);
-	//std::cout<<"Buffered region: "<<m_BufferedRegion<<std::endl;
 	
 	if(!m_Drag)
 	  {
@@ -295,7 +292,6 @@ namespace otb
 	for(unsigned int i = 0;i<8;++i)
 	  {
 	    RegionType additionalBufferRegion = GetAdditionalBufferRegion(i);
-	    //std::cout<<"Additional region required: "<<additionalBufferRegion<<std::endl;
 	    unsigned char * additionalBuffer = CreateAdditionalBuffer(additionalBufferRegion,m_Image,m_ViewModelIsRGB);
 	    this->Draw(additionalBuffer,additionalBufferRegion);
 	    bufferList.push_back(additionalBuffer);
@@ -335,8 +331,6 @@ namespace otb
     long resp;
     double x = (point[0]-oldUpperLeft[0])/spacing[0];
     double y = (point[1]-oldUpperLeft[1])/spacing[1];
-
-   //std::cout<<"x: "<<x<<", y: "<<y<<std::endl;
     
     if ((vcl_floor(x)!=x)||(vcl_floor(y)!=y))
       {
@@ -363,8 +357,6 @@ namespace otb
     IndexType focusOffset;
     focusOffset[0]=static_cast<long>(static_cast<double>(m_ViewedRegionCenter[0]-m_OldViewedRegionCenter[0])/m_SpacingZoomFactor);
     focusOffset[1]=static_cast<long>(static_cast<double>(m_ViewedRegionCenter[1]-m_OldViewedRegionCenter[1])/m_SpacingZoomFactor);
-
-    //std::cout<<"Focus offset: "<<focusOffset<<std::endl;
     
     IndexType newBufferedRegionIndex;
 
@@ -383,22 +375,14 @@ namespace otb
 			       -static_cast<long>(m_BufferedRegion.GetSize()[1]))/2;
     newBufferedRegionIndex[0]-=focusOffset[0];
     newBufferedRegionIndex[1]-=focusOffset[1];
-    //std::cout<<"NewBufferedRegionIndex: "<<newBufferedRegionIndex<<std::endl;
     m_BufferedRegion.SetIndex(newBufferedRegionIndex);
-    //m_OldViewedRegionCenter = m_ViewedRegionCenter;
-    
-    //std::cout<<"New buffered region: "<<m_BufferedRegion<<std::endl;
     
     PointType center;
     m_Image->TransformIndexToPhysicalPoint(m_ViewedRegionCenter,center);
-    //std::cout<<"Center index: "<<m_ViewedRegionCenter<<std::endl;
-    //std::cout<<"Center: "<<center<<std::endl;
 
      if(m_SpacingZoomFactor != m_OldSpacingZoomFactor)
        {
 	m_BufferedRegion.Crop(m_DisplayExtent);
- 	//std::cout<<"New buffered region2 "<<m_BufferedRegion<<std::endl;
-
 
 	SpacingType spacing = m_Image->GetSpacing()*m_SpacingZoomFactor;
 	SpacingType oldSpacing = m_Image->GetSpacing()*m_OldSpacingZoomFactor;
@@ -418,15 +402,6 @@ namespace otb
 	PointType bufferedUpperLeft;
 	bufferedUpperLeft[0]=origin[0]+static_cast<double>(m_BufferedRegion.GetIndex()[0])*spacing[0];
 	bufferedUpperLeft[1]=origin[1]+static_cast<double>(m_BufferedRegion.GetIndex()[1])*spacing[1];
-
-	//std::cout<<"OldBufferedRegion: "<<m_OldBufferedRegion<<std::endl;
-	//std::cout<<"DisplayExtent: "<<m_DisplayExtent<<std::endl;
-	//std::cout<<"Center: "<<center<<std::endl;
-	//std::cout<<"Spacing: "<<spacing<<std::endl;
-	//std::cout<<"OldSpacing: "<<oldSpacing<<std::endl;
-	//std::cout<<"BufferedUpperLeft: "<<bufferedUpperLeft<<std::endl;
-	//std::cout<<"oldBufferedUpperLeft: "<<oldBufferedUpperLeft<<std::endl;
-	
 
 	unsigned char *  newBuffer = NULL;
 	unsigned int bufferLenght = 3*m_BufferedRegion.GetSize()[0]*m_BufferedRegion.GetSize()[1];
@@ -452,9 +427,6 @@ namespace otb
 	  }
 	
 	unsigned int splitterNumberOfSplits = m_Splitter->GetNumberOfSplits(m_BufferedRegion,numberOfSplits);
-
-	//std::cout<<"numberOfSplits: "<<numberOfSplits<<std::endl;
-	//std::cout<<"splitterNumberOfSplits: "<<splitterNumberOfSplits<<std::endl;
 	
 	for(unsigned int splitIndex = 0;splitIndex<splitterNumberOfSplits;++splitIndex)
 	  {
@@ -469,7 +441,6 @@ namespace otb
 		m_RequestedRegion.SetSize(nullSize);
 		m_RequestedRegion.SetIndex(nullIndex);
 	      }	    
-	    //std::cout<<"Requested region: "<<m_RequestedRegion<<std::endl;
 	    m_DecompositionFilter = VectorImageDecompositionFilterType::New();
 	    m_DecompositionFilter->SetInput(m_Image);
 	    bandList = m_DecompositionFilter->GetOutput();
@@ -561,10 +532,6 @@ namespace otb
 
 	m_OldSpacingZoomFactor = m_SpacingZoomFactor;
   }
-	//std::cout<<"Optimisation called "<<optiCount<<" times over "<<m_BufferedRegion.GetNumberOfPixels()<<std::endl;
-   
-     //std::cout<<"BufferedRegion: "<<m_BufferedRegion<<std::endl;
-     //std::cout<<"OldBufferedRegion: "<<m_OldBufferedRegion<<std::endl; 
 }
   
   template <class TPixel>
@@ -650,7 +617,6 @@ namespace otb
       }
     region.SetSize(size);
     region.SetIndex(index);
-    //std::cout<<"Region "<<part<<": "<<region<<std::endl;
     return region;
   }
 
@@ -691,11 +657,6 @@ namespace otb
     bufferedLowerRight[0]=bufferedUpperLeft[0]+static_cast<double>(m_BufferedRegion.GetSize()[0]-1)*spacing[0];
     bufferedLowerRight[1]=bufferedUpperLeft[1]+static_cast<double>(m_BufferedRegion.GetSize()[1]-1)*spacing[1];
 
-    //std::cout<<"UpperLeft: "<<upperLeft<<std::endl;
-    //std::cout<<"LowerRight: "<<lowerRight<<std::endl;
-    //std::cout<<"BufferedUpperLeft: "<<bufferedUpperLeft<<std::endl;
-    //std::cout<<"BufferedLowerRight: "<<bufferedLowerRight<<std::endl;
-
     IndexType lowerRightIndex;
     IndexType requestedIndex;
     SizeType requestedSize;
@@ -735,8 +696,6 @@ namespace otb
     typename ImageListType::Pointer bandList = m_DecompositionFilter->GetOutput() ;
     bandList->UpdateOutputInformation();
 
-    //std::cout<<bandList->Size()<<std::endl;
-
     unsigned int index = 0;
     PixelType interpolatedValue = 0;
     PointType interpolatedPos;
@@ -756,15 +715,10 @@ namespace otb
     
     unsigned int splitterNumberOfSplits = m_Splitter->GetNumberOfSplits(region,numberOfSplits);
     
-    //std::cout<<"ZoomState: "<<m_ZoomState<<std::endl;
-    //std::cout<<"Number of splits: "<<numberOfSplits<<std::endl;
-    //std::cout<<"Zoom out number of splits: "<<splitterNumberOfSplits<<std::endl;
-    
     SpacingType spacing = image->GetSpacing()*m_SpacingZoomFactor;
 
     PointType center;
     image->TransformIndexToPhysicalPoint(m_ViewedRegionCenter,center);
-   //std::cout<<"Center(ad): "<<center<<std::endl;
     PointType origin;
     origin[0]=center[0]-(static_cast<double>(this->m_DisplayExtent.GetSize()[0])/2-1)*spacing[0];
     origin[1]=center[1]-(static_cast<double>(this->m_DisplayExtent.GetSize()[1])/2-1)*spacing[1];
@@ -776,10 +730,7 @@ namespace otb
 	PointType upperLeft;
 	upperLeft[0]=origin[0]+(static_cast<double>(splitRegion.GetIndex()[0]))*spacing[0];
 	upperLeft[1]=origin[1]+(static_cast<double>(splitRegion.GetIndex()[1]))*spacing[1];
-	//std::cout<<"Loop upper left: "<<upperLeft<<std::endl;
 	m_RequestedRegion = ComputeRequestedRegion(splitRegion);
-	//std::cout<<"Additional requested region: "<<m_RequestedRegion<<std::endl;
-	//std::cout<<"Largest possible region: "<<image->GetLargestPossibleRegion()<<std::endl;
 	if(!m_RequestedRegion.Crop(image->GetLargestPossibleRegion()))
 	  {
 	    SizeType nullSize;
@@ -789,10 +740,6 @@ namespace otb
 	    m_RequestedRegion.SetSize(nullSize);
 	    m_RequestedRegion.SetIndex(nullIndex);
 	  }
-	//std::cout<<"Additional cropped requested region: "<<m_RequestedRegion<<std::endl;
-	
-	// 	if(!m_RequestedRegion.IsInside(bandList->GetNthElement(m_RedChannelIndex)->GetBufferedRegion()))
-	// 	  {
 	m_DecompositionFilter = VectorImageDecompositionFilterType::New();
 	m_DecompositionFilter->SetInput(image);
 	bandList = m_DecompositionFilter->GetOutput();
@@ -808,7 +755,6 @@ namespace otb
 	bandList->UpdateOutputData();
 
 	filter.Stop();
-	// 	  }
 
 	interpolation.Start();
 	interpolatedPos[1]=upperLeft[1];
@@ -817,7 +763,6 @@ namespace otb
 	    interpolatedPos[0]=upperLeft[0];
 	    for(unsigned int i = 0;i<splitRegion.GetSize()[0];++i)
 	      {
-		// //std::cout<<interpolatedPos<<std::endl;
 		interpolator->SetInputImage(bandList->GetNthElement(m_RedChannelIndex));
 		if( interpolator->IsInsideBuffer(interpolatedPos))
 		  {
@@ -867,14 +812,8 @@ namespace otb
 
 
 
-    //  std::cout<<"Last interpolated position: "<<interpolatedPos<<std::endl;
-    //     std::cout<<"Additional buffer built"<<std::endl;
     interpolation.Stop();
     total.Stop();
-    //  std::cout<<"Profiling:\t"<<std::endl;
-    //     std::cout<<"- Total:\t"<<total.GetMeanTime()<<std::endl;
-    //     std::cout<<"- Filtering:\t\t"<<filter.GetMeanTime()<<"\t"<<filter.GetMeanTime()/total.GetMeanTime()*100<<" %"<<std::endl;
-    //     std::cout<<"- Interpolation:\t"<<interpolation.GetMeanTime()<<"\t\t"<<interpolation.GetMeanTime()/total.GetMeanTime()*100<<" %"<<std::endl;
     return result;
   }
   
@@ -895,7 +834,6 @@ namespace otb
 						      +(static_cast<double>(Fl::event_x())-static_cast<double>(m_DisplayExtent.GetSize()[0]/2))/m_OpenGlIsotropicZoom);
 	      m_OldMousePos[1]= static_cast<long int>(static_cast<double>(m_DisplayExtent.GetSize()[1]/2)
 						      +(static_cast<double>(Fl::event_y())-static_cast<double>(m_DisplayExtent.GetSize()[1]/2))/m_OpenGlIsotropicZoom);
-	      //  m_OldMousePos[1]= Fl::event_y();
   	      m_Drag=true;
 	      m_DragEventCounter=0;
 	      
@@ -913,7 +851,6 @@ namespace otb
 
       case FL_DRAG:
 	{
-	  //std::cout<<"FL_DRAG"<<std::endl;
  	  m_Drag=true;
 	  
 	  int x =static_cast<int>(static_cast<double>(m_DisplayExtent.GetSize()[0]/2)
@@ -933,7 +870,6 @@ namespace otb
 	      newSize[1]=vcl_abs(y-m_OldMousePos[1]);
 	      m_SubWindowRegion.SetIndex(newIndex);
 	      m_SubWindowRegion.SetSize(newSize);
-	      //std::cout<<"new subWindowRegion: "<<m_SubWindowRegion<<std::endl;
 	      this->redraw();
 	      m_DragEventCounter++;
 	    }
@@ -958,7 +894,6 @@ namespace otb
 	      PointType newCenter;
 	      newCenter[0]=origin[0]+static_cast<double>(m_OldMousePos[0]-x+static_cast<long>(this->m_DisplayExtent.GetSize()[0])/2)*spacing[0];
 	      newCenter[1]=origin[1]+static_cast<double>(m_OldMousePos[1]-y+static_cast<long>(this->m_DisplayExtent.GetSize()[1])/2)*spacing[1];
-	      //std::cout<<"Drag focus offset: "<<m_OldMousePos[0]-x<<", "<<m_OldMousePos[1]-y<<std::endl;
 	      m_Image->TransformPhysicalPointToIndex(newCenter,m_ViewedRegionCenter);
 	      this->redraw();
 	      m_DragEventCounter++;
@@ -986,7 +921,7 @@ namespace otb
 	}
       case FL_KEYDOWN:
 	{
-	  if(Fl::event_key()==116) // T kye
+	  if(Fl::event_key()==116) // T key
 	    {
 	      m_SubWindowMode = !m_SubWindowMode;
 	      this->redraw();
@@ -1002,7 +937,6 @@ namespace otb
   ImageAlternateViewer<TPixel>
  ::MergeBuffersAndFreeMemory(std::vector<unsigned char *> bufferList, std::vector<RegionType> bufferRegionList)
   {
-    //std::cout<<"Entering merge method"<<std::endl;
     if(bufferList.size()!=8 || bufferRegionList.size()!=8)
       {
 	itkExceptionMacro("Invalid number of additionnal buffers");
@@ -1093,10 +1027,6 @@ namespace otb
 
     indexInCentralBuffer+=offsety;
 
-    //comment std::cout<<"Line offset: "<<lineOffset<<std::endl;
-    //comment std::cout<<"Line offset end: "<<lineOffsetEnd<<std::endl;
-    //comment std::cout<<"Column offset: "<<columnOffset<<std::endl;
-    
     // For each line
     for(unsigned int j = 0;j<bufferRegionList[3].GetSize()[1];++j)
       {
@@ -1183,8 +1113,6 @@ namespace otb
 	      }
 	  }
       }
-    //std::cout<<"New Buffer size: "<<4*m_DisplayExtent.GetNumberOfPixels()<<", last processed index: "<<indexInNewBuffer-1<<std::endl;
-
 
     // Free all intermediate buffers
     typename std::vector<unsigned char *>::iterator it;    
@@ -1228,8 +1156,6 @@ namespace otb
 	zoomOffsetX = (1-m_OpenGlIsotropicZoom)*(static_cast<double>(m_DisplayExtent.GetSize()[0]/2)-static_cast<double>(region.GetIndex()[0]));
 	zoomOffsetY = (1-m_OpenGlIsotropicZoom)*( static_cast<double>(m_DisplayExtent.GetSize()[1]/2)-static_cast<double>(region.GetIndex()[1]));
 	
-	// std::cout<<zoomOffsetX<<" "<<zoomOffsetY<<std::endl;
-
 	double movex = static_cast<double>(region.GetIndex()[0])+zoomOffsetX;
 	double movey = static_cast<double>(m_DisplayExtent.GetSize()[1])-static_cast<double>(region.GetIndex()[1])-zoomOffsetY;
 	glBitmap(0,0,0,0,movex,movey,NULL);
@@ -1279,50 +1205,6 @@ namespace otb
     glDisable(GL_BLEND);
 
   }
-
-
-
-
-
-
-
-  // template <class TPixel>
-  // void
-  // ImageAlternateViewer<TPixel>
-  // ::Draw(unsigned char * buffer, RegionType& region)
-  // {
-  //   if(buffer!=NULL)
-  //     {
-  //       glMatrixMode(GL_TEXTURE);
-  //       glLoadIdentity();
-      
-  //      //  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
-  // //       glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
-  // // //       glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_R,GL_CLAMP);
-  // //       glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_REPLACE);    
-
-  //       glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,region.GetSize()[0],region.GetSize()[1],0,GL_RGBA,GL_UNSIGNED_BYTE,buffer);
-  //       //gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,region.GetSize()[0],region.GetSize()[1],GL_RGBA,GL_UNSIGNED_BYTE,buffer);
-  //       //glEnable(GL_TEXTURE_2D);
-  //       glBegin(GL_QUADS);
-  //       glTexCoord2f(0.,0.);
-  //       glVertex2f(region.GetIndex()[0],region.GetIndex()[1]);
-  //       glTexCoord2f(1.,0.);
-  //       glVertex2f(region.GetIndex()[0]+region.GetSize()[0],region.GetIndex()[1]);
-  //       glTexCoord2f(1.,1.);
-  //       glVertex2f(region.GetIndex()[0]+region.GetSize()[0],region.GetIndex()[1]+region.GetSize()[1]);
-  //       glTexCoord2f(0.,1.);
-  //       glVertex2f(region.GetIndex()[0],region.GetIndex()[1]+region.GetSize()[1]);
-  //       glEnd();
-
-  //      //  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-  // //       glDisable(GL_TEXTURE_2D);
-  //  //      swap_buffers();
-  // // 	;
-  // //       glFlush();
-  //     }
-  // }
-
   template <class TPixel>
   void
   ImageAlternateViewer<TPixel>
@@ -1345,14 +1227,7 @@ namespace otb
     glLoadIdentity();
     glDisable(GL_BLEND);
 
-    //     glEnable(GL_TEXTURE_2D);
     glShadeModel(GL_SMOOTH);
-    //     glClearColor(0.0f,0.0f,0.0f,0.5f);
-    //     glClearDepth(1.0f);
-    //     glEnable(GL_DEPTH_TEST);
-    //     glDepthFunc(GL_LEQUAL);
-    //     glHint(GL_PERSPECTIVE_CORRECTION_HINT,GL_NICEST);
-
   }
 
 
