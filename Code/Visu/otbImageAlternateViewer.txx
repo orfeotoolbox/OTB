@@ -323,11 +323,6 @@ namespace otb
       {
 	this->DrawRegionBoundary(m_SubWindowRegion);
       }
-    itk::OStringStream oss;
-    oss<<"Zoom: "<<m_OpenGlIsotropicZoom<<", scale: "<<m_SpacingZoomFactor;
-    gl_color(FL_RED);
-    gl_font(FL_SCREEN_BOLD,10);
-    gl_draw(oss.str().c_str(),static_cast<int>(m_DisplayExtent.GetIndex()[0])+10,static_cast<int>(m_DisplayExtent.GetIndex()[1])+10);
     swap_buffers();
     glFlush();
   }
@@ -979,25 +974,6 @@ namespace otb
 	  m_Drag=false;
 	  AdditionalRedraw();
 	  m_SubWindowMove = false;
-	  return 1;
-	}
-
-      case FL_MOUSEWHEEL:
-	{
-	  int dy = Fl::event_dy();
-	  m_OldSpacingZoomFactor = m_SpacingZoomFactor;
-	  m_OpenGlIsotropicZoom -=static_cast<double>(dy)/10;
-	  if(m_OpenGlIsotropicZoom>2)
-	    {
-	      m_SpacingZoomFactor/=2;
-	      m_OpenGlIsotropicZoom = 1;
-	    }
-	  else if(m_OpenGlIsotropicZoom<1)
-	    {
-	      m_SpacingZoomFactor*=2;
-	      m_OpenGlIsotropicZoom = 1.9;	      
-	    }
-	  this->redraw();
 	  return 1;
 	}
       case FL_FOCUS:
