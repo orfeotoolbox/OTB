@@ -59,7 +59,7 @@ class ITK_EXPORT ImageWidgetPolygonForm
   typedef typename PolygonType::Pointer              PolygonPointerType;       
   typedef typename PolygonType::VertexType           VertexType;
   typedef typename PolygonType::VertexListType       VertexListType;
-  typedef typename VertexListType::ConstIterator     VertexListIteratorType;
+  typedef typename VertexListType::ConstIterator     VertexListConstIteratorType;
   typedef typename PolygonType::ContinuousIndexType  ContinuousIndexType;
   
   /** Accessors */

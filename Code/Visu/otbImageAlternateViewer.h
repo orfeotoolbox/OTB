@@ -23,17 +23,13 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImageList.h"
 #include "itkInterpolateImageFunction.h"
 #include "itkLinearInterpolateImageFunction.h"
-#include "otbBSplineInterpolateImageFunction.h"
 #include "itkVectorImageToImageAdaptor.h"
 #include "otbVectorImageToImageListFilter.h"
 #include "otbImage.h"
-#include "itkWindowedSincInterpolateImageFunction.h"
-#include "otbWindowedSincInterpolateImageGaussianFunction.h"
-#include "otbWindowedSincInterpolateImageHammingFunction.h"
-#include "itkZeroFluxNeumannBoundaryCondition.h"
+
 #include <FL/gl.h>
 #include "itkImageRegionSplitter.h"
-#include "otbProlateInterpolateImageFunction.h"
+
 
 namespace otb
 {
@@ -78,14 +74,6 @@ class ITK_EXPORT ImageAlternateViewer
     typedef itk::InterpolateImageFunction<SingleImageType,double> InterpolatorType;
     typedef typename InterpolatorType::Pointer InterpolatorPointerType;
     typedef itk::LinearInterpolateImageFunction<SingleImageType,double> DefaultInterpolatorType;
-    typedef BSplineInterpolateImageFunction<SingleImageType,double,double> BSplineInterpolatorType;
-
-    typedef itk::Function::HammingWindowFunction<4> WindowFunctionType;
-    typedef otb::Function::GaussianWindowFunction<> GaussianWindowType;
-    typedef itk::ZeroFluxNeumannBoundaryCondition<SingleImageType> ConditionType;
-    typedef itk::WindowedSincInterpolateImageFunction<SingleImageType,3,WindowFunctionType,ConditionType ,double> WindowedSincInterpolatorType;
-    typedef WindowedSincInterpolateImageGaussianFunction<SingleImageType,ConditionType> OtbWindowedSincInterpolatorType;
-    typedef ProlateInterpolateImageFunction<SingleImageType,ConditionType> ProlateInterpolatorType;
 
     typedef itk::ImageRegionSplitter<2>  SplitterType;
     typedef typename SplitterType::Pointer SplitterPointerType;
@@ -123,6 +111,11 @@ class ITK_EXPORT ImageAlternateViewer
 
     itkSetMacro(DisplayExtent,RegionType);
     itkGetMacro(DisplayExtent,RegionType);
+
+    itkGetObjectMacro(ZoomInInterpolator,InterpolatorType);
+    itkSetObjectMacro(ZoomInInterpolator,InterpolatorType);
+    itkGetObjectMacro(ZoomOutInterpolator,InterpolatorType);
+    itkSetObjectMacro(ZoomOutInterpolator,InterpolatorType);
 
     /**
      * Set view mode to RGB.

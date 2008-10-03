@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbOverlapSaveConvolutionImageFilter_txx
-#define _otbOverlapSaveConvolutionImageFilter_txx
+#ifndef __otbOverlapSaveConvolutionImageFilter_txx
+#define __otbOverlapSaveConvolutionImageFilter_txx
 
 #include "otbOverlapSaveConvolutionImageFilter.h"
 

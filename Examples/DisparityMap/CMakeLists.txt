@@ -5,6 +5,11 @@ ADD_EXECUTABLE(SimpleDisparityMapEstimationExample SimpleDisparityMapEstimationE
 TARGET_LINK_LIBRARIES(SimpleDisparityMapEstimationExample OTBFeatureExtraction OTBCommon OTBIO ITKCommon
 ITKIO)
 
+ADD_EXECUTABLE(NCCRegistrationFilterExample NCCRegistrationFilterExample.cxx )
+TARGET_LINK_LIBRARIES(NCCRegistrationFilterExample OTBFeatureExtraction OTBCommon OTBIO ITKCommon
+ITKIO)
+
+
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/DisparityMap)

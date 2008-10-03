@@ -55,7 +55,7 @@ ImageWidgetPolylineForm<TValue>
       }
       glBegin(GL_LINE_STRIP);
 
-      VertexListIteratorType it =  this->GetPolyline()->GetVertexList()->Begin();
+      VertexListConstIteratorType it =  this->GetPolyline()->GetVertexList()->Begin();
      
       while(it != this->GetPolyline()->GetVertexList()->End())
 	{  
