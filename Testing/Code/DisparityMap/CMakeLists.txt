@@ -309,6 +309,7 @@ ADD_TEST(dmTvSinusoidDeformationFieldEstimation2 ${DISPARITYMAP_TESTS2}
 SET(BasicDisparityMap_SRCS1
 otbDisparityMapEstimationMethodNew.cxx
 otbDisparityMapEstimationMethod.cxx
+otbNCCRegistrationFilterNew.cxx
 otbPointSetToDeformationFieldGeneratorNew.cxx
 otbNearestPointDeformationFieldGeneratorNew.cxx
 otbNearestPointDeformationFieldGenerator.cxx
