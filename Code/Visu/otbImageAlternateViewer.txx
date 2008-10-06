@@ -124,8 +124,6 @@ namespace otb
     m_DisplayExtent.SetIndex(index);
     m_DisplayExtent.SetSize(size);
     m_OldDisplayExtent=m_DisplayExtent;
-
-    
     
     m_OldSpacingZoomFactor=m_SpacingZoomFactor;
 
@@ -172,21 +170,13 @@ namespace otb
     if(h%2==1)
       h+=1;
 
-    IndexType index,subWindowIndex;
-    SizeType size,subWindowSize;
+    IndexType index;
+    SizeType size;
     m_OldDisplayExtent=m_DisplayExtent;
     index[0]=0;
     index[1]=0;
     size[0]=w;
     size[1]=h; 
-
-    subWindowIndex[0] = 3*static_cast<long>(size[0])/8;
-    subWindowIndex[1] = 3*static_cast<long>(size[1])/8;
-    subWindowSize[0] = size[0]/4;
-    subWindowSize[1] = size[1]/4;
-
-    m_SubWindowRegion.SetIndex(subWindowIndex);
-    m_SubWindowRegion.SetSize(subWindowSize);
 
     m_DisplayExtent.SetIndex(index);
     m_DisplayExtent.SetSize(size);
