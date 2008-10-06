@@ -36,7 +36,7 @@ namespace otb {
  * on a brighter background.
  *
  * \sa ClosingOpeningMorphologicalFilter,
- * MorphologicalPyramidAnalyseFilter
+ * MorphologicalPyramidAnalysisFilter
  */
 template <class TInputImage, class TOutputImage, class TKernel>
 class  ITK_EXPORT ClosingOpeningMorphologicalFilter
