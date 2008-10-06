@@ -52,7 +52,7 @@ namespace otb
  *
  * Where \f$\stackrel{\smile}{\mu}\f$ denotes the likelihood of the current pixel to belong to a convex structure
  * of the input image \f$f\f$ (i.e. brighter than the surrounding background) with respect to the size of the 
- * structuring element \f$N\f$, and \f$\stackrel{\frown}{\mu}\f$ denotes the likekihood of the current pixel to
+ * structuring element \f$N\f$, and \f$\stackrel{\frown}{\mu}\f$ denotes the likelihood of the current pixel to
  * belong to a concave structure.
  *
  * This two membership functions can be used to define a simplification operator \f$\psi_{N}\f$ called leveling,

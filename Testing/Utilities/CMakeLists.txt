@@ -392,7 +392,7 @@ ENDFOREACH(id_test)
 
 ADD_TEST( utKmlhellofeatures   ${UTILITIES_TESTS}
         kmlhellofeatures
-        ${INPUTDATA}/abstractview.kml
+        ${INPUTDATA}/MODIS20040214212340.kml #abstractview.kml
 #        ${TEMP}/utkmlhellofeatures.txt
         )
 

@@ -23,6 +23,15 @@
 #include <string>
 #include <vector>
 
+
+#include "kml/dom.h"
+#include "kml/base/file.h"
+using kmldom::KmlPtr;
+using kmldom::ElementPtr;
+using kmldom::FeaturePtr;
+using kmldom::GeometryPtr;
+using kmldom::ContainerPtr;
+
 namespace otb
 {
 
@@ -114,6 +123,23 @@ protected:
 
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
+  
+  static const FeaturePtr GetRootFeature(const ElementPtr& root);
+  
+  static void PrintIndented(std::string item, int depth);
+  
+  static void PrintFeature(const FeaturePtr& feature, int depth);
+
+  static void WalkGeometry(const GeometryPtr& geometry);
+  
+  static void WalkFeature(const FeaturePtr& feature);
+  
+  static void WalkContainer(const ContainerPtr& container);
+  
+  static void PrintContainer(const ContainerPtr& container, int depth);
+
+
+  
   
   /** Conversion tools */
 

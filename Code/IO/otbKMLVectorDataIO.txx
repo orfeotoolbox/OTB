@@ -27,7 +27,33 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbSystem.h"
 #include "otbDataNode.h"
 //#include "itkPreOrderTreeIterator.h"
+
+#include "kml/dom.h"
 #include "kml/base/file.h"
+
+/*
+using std::cout;
+using std::endl;
+using std::string;
+*/
+
+using kmldom::ElementPtr;
+using kmldom::FeaturePtr;
+using kmldom::KmlPtr;
+using kmldom::KmlFactory;
+using kmldom::ContainerPtr;
+using kmldom::GeometryPtr;
+using kmldom::MultiGeometryPtr;
+using kmldom::PlacemarkPtr;
+using kmldom::CoordinatesPtr;
+using kmldom::PointPtr;
+using kmldom::LineStringPtr;
+using kmldom::LinearRingPtr;
+using kmldom::PolygonPtr;
+using kmldom::ModelPtr;
+using kmldom::OuterBoundaryIsPtr;
+
+
 
 namespace otb
 {
@@ -62,6 +88,279 @@ namespace otb
         return (kmlbase::File::ReadFileToString(lFileName, &kml) );
   }
 
+  // Get the features of the kml file, read into the root
+  template<class TData>
+  const FeaturePtr 
+  KMLVectorDataIO<TData>::GetRootFeature(const ElementPtr& root) 
+  {
+        const KmlPtr kml = kmldom::AsKml(root);
+        if (kml && kml->has_feature()) {
+          return kml->get_feature();
+        }
+        return kmldom::AsFeature(root);
+  }
+  
+    
+  // Print the selected feature
+  template<class TData>
+  void
+  KMLVectorDataIO<TData>::PrintIndented(std::string item, int depth) 
+  {
+        while (depth--) 
+        {
+          std::cout << "  ";
+        }
+        std::cout << item;
+  }
+   
+
+  // Walk the feature
+  template<class TData>
+  void
+  KMLVectorDataIO<TData>::PrintFeature(const FeaturePtr& feature, int depth) // Rajouter le node dans les parametres le construire et le retourner
+  {
+  
+std::cout<<"PrintFeature: "<<std::endl;
+        switch (feature->Type()) 
+        {
+            case kmldom::Type_Document:
+            {
+//std::cout<<"depth document : "<<depth<<std::endl;
+              PrintIndented("Document", depth);
+        
+
+              
+	/** Create the document node */
+	DataNodePointerType document = DataNodeType::New();
+	document->SetNodeType(DOCUMENT);
+//	document->SetNodeId(feature->get_id());
+                      
+              break;
+            } 
+            case kmldom::Type_Folder:
+            {
+
+              PrintIndented("Folder", depth);
+	DataNodePointerType document = DataNodeType::New();
+	document->SetNodeType(FOLDER);
+              
+              break;
+            }  
+            case kmldom::Type_GroundOverlay:
+              PrintIndented("GroundOverlay", depth);
+              break;
+            case kmldom::Type_NetworkLink:
+              PrintIndented("NetworkLink", depth);
+              break;
+            case kmldom::Type_PhotoOverlay:
+              PrintIndented("PhotoOverlay", depth);
+              break;
+            case kmldom::Type_Placemark:
+            {
+              PrintIndented("Placemark", depth);
+	/*DataNodePointerType document = DataNodeType::New();
+	document->SetNodeType();*/
+              break;
+            }
+            case kmldom::Type_ScreenOverlay:
+              PrintIndented("ScreenOverlay", depth);
+              break;
+            default:
+              PrintIndented("other", depth);
+              break;
+        }
+          
+        if (feature->has_name()) {
+            std::cout << " " << feature->get_name();
+        }
+        std::cout << std::endl;
+/* Recurse gere ailleurs ...  je  le fait dc pas la > rma gestion de la depth
+        if (const ContainerPtr container = kmldom::AsContainer(feature)) {
+            PrintContainer(container, depth+1);
+        } 
+*/
+  }
+  
+  // Walk through a placemark to print the geometry
+  template<class TData>
+  void  
+  KMLVectorDataIO<TData>::WalkGeometry(const GeometryPtr& geometry) 
+  {
+  
+// CREER UN NOEUD pour chq cas  
+// ATTENTION ALTITUDE PEUT ETRE ABSENTE ?? VERIF
+
+        if (!geometry) 
+        {
+            return;
+        }
+        // Print/create a Node with the Geometry type.
+        std::cout << "Found a";
+        switch(geometry->Type())
+        {
+            case kmldom::Type_Point:
+            {
+                std::cout << " Point ";
+                const PointPtr pt = kmldom::AsPoint(geometry);
+
+                std::cout << pt->get_coordinates()->get_coordinates_array_at(0).get_latitude()
+                << ", ";
+                std::cout << pt->get_coordinates()->get_coordinates_array_at(0).get_longitude()
+                << ", ";
+                std::cout << pt->get_coordinates()->get_coordinates_array_at(0).get_altitude()    
+                << std::endl;      
+                break;
+             }
+            case kmldom::Type_LineString:
+            {
+                std::cout << " LineString ";
+                const LineStringPtr ls = kmldom::AsLineString(geometry);
+                const CoordinatesPtr coords = ls->get_coordinates();
+                int array_size = coords->get_coordinates_array_size();
+
+                for(int i=0;i<array_size;i++)
+                {
+                    std::cout << coords->get_coordinates_array_at(i).get_latitude()
+                    << ", ";
+                    std::cout << coords->get_coordinates_array_at(i).get_longitude()
+                    << ", ";
+                    std::cout << coords->get_coordinates_array_at(i).get_altitude()    
+                    << std::endl;       
+                }          
+              break;
+            }
+            case kmldom::Type_LinearRing:
+            {
+                std::cout << " LinearRing " << std::endl;
+                const LinearRingPtr lr = kmldom::AsLinearRing(geometry);
+                const CoordinatesPtr coords = lr->get_coordinates();
+                int array_size = coords->get_coordinates_array_size();
+
+                for(int i=0;i<array_size;i++)
+                {
+                    std::cout << coords->get_coordinates_array_at(i).get_latitude()
+                    << ", ";
+                    std::cout << coords->get_coordinates_array_at(i).get_longitude()
+                    << ", ";
+                    std::cout << coords->get_coordinates_array_at(i).get_altitude()    
+                    << std::endl;       
+                }      
+                break;
+            }
+            case kmldom::Type_Polygon:
+            {
+              std::cout << " Polygon ";
+              // this case is treated downer
+//et ca ?? je cree un noeud
+              break;
+            }
+            case kmldom::Type_MultiGeometry:
+              std::cout << " MultiGeometry ";
+//et ca ?? je cree un noeud               
+              break;
+            case kmldom::Type_Model:
+            {
+              std::cout << " Model ";
+      const ModelPtr ml = kmldom::AsModel(geometry);              
+//je stocke ca ?? dqns koi ?
+              break;
+            }
+            default:  // KML has 6 types of Geometry.
+              break;
+        }
+        std::cout << std::endl;
+        // Recurse into <MultiGeometry>.
+        if (const MultiGeometryPtr multigeometry = kmldom::AsMultiGeometry(geometry)) 
+        {
+std::cout<<"RecurseMultiGeometry"<<std::endl;        
+            for (size_t i = 0; i < multigeometry->get_geometry_array_size(); ++i)
+            {
+                WalkGeometry(multigeometry->get_geometry_array_at(i));
+            }
+        }
+
+// SUREMENT A COMPLETER !!
+        // Recurse into <Polygon>.
+        if (const PolygonPtr polygon = kmldom::AsPolygon(geometry)) 
+        {
+std::cout<<"RecursePolygon"<<std::endl;
+            // Read the outerboundaryis of the polygon
+            if ( polygon->has_outerboundaryis())
+            {
+                const OuterBoundaryIsPtr outerboundaryis = polygon->get_outerboundaryis();
+                if(outerboundaryis->has_linearring())
+                {
+                    // We can do this because a linearRing is a geometry
+                    WalkGeometry(outerboundaryis->get_linearring());
+                }
+    // aga jmen sers de ca ? outerboundaryis->Type()
+    // aga je le gere cte merdouille             ??
+            }            
+    // voir si on chope les innerboundaryis ??
+            
+    // c koi les tesslates ??
+        }        
+        
+  }
+  
+  template<class TData>
+  void  
+  KMLVectorDataIO<TData>::WalkFeature(const FeaturePtr& feature) 
+  {
+        // On sen moquem juste pour le print
+        int depth=0;
+        
+        if (feature) 
+        {
+            if (const ContainerPtr container = kmldom::AsContainer(feature)) 
+            {
+                WalkContainer(container);
+                // depth is the number of spaces before the print
+                PrintContainer(container,depth+1); 
+            } 
+            else if (const PlacemarkPtr placemark = kmldom::AsPlacemark(feature)) 
+            {
+                
+                // Warning reate a Placemark node ??
+                WalkGeometry(placemark->get_geometry());
+                
+            }
+        
+        // To make the Read() method exhaustivem use this and watch the href example
+        /*
+        else if (const NetworkLinkPtr networklink = kmldom::AsNetworkLink(feature)) {
+            PrintNetworkLinkHref(networklink);
+        } else if (const OverlayPtr overlay = kmldom::AsOverlay(feature)) {
+            PrintOverlayIconHref(overlay);
+        }            
+       */
+            
+            
+        }
+  }
+
+  template<class TData>
+  void  
+  KMLVectorDataIO<TData>::WalkContainer(const ContainerPtr& container) 
+  {
+        for (size_t i = 0; i < container->get_feature_array_size(); ++i) 
+        {
+            WalkFeature(container->get_feature_array_at(i));
+        }
+  }
+  
+  template<class TData>
+  void  
+  KMLVectorDataIO<TData>::PrintContainer(const ContainerPtr& container, int depth) 
+  {
+
+        for (size_t i = 0; i < container->get_feature_array_size(); ++i) 
+        {
+            PrintFeature(container->get_feature_array_at(i), depth);
+        }
+  }  
+  
+  
 
   // Used to print information about this object
   template<class TData>
@@ -77,24 +376,68 @@ namespace otb
   KMLVectorDataIO<TData>
   ::Read(VectorDataPointerType data)
   {
+
         std::string kml;
-        bool r = kmlbase::File::ReadFileToString(this->m_FileName, &kml);
-        if( r == false )
+        bool status = kmlbase::File::ReadFileToString(this->m_FileName, &kml);
+        if( status == false )
         {
 	        itkExceptionMacro(<<"Failed to open KML data file "<<this->m_FileName);
         }
 
-    otbMsgDebugMacro( <<"Driver to read: KML");
-    otbMsgDebugMacro( <<"Reading  file: "<< this->m_FileName);
+//        std::cout<<kml<<std::endl;        
+        std::cout<<this->m_FileName<<std::endl;
 
-#if 0
+        otbMsgDebugMacro( <<"Driver to read: KML");
+        otbMsgDebugMacro( <<"Reading  file: "<< this->m_FileName);
 
+
+        // Parse the file.
+        std::string errors;
+        ElementPtr root = kmldom::Parse(kml, &errors);
+        if (!root) 
+        {
+                itkExceptionMacro(<<"Failed to open KML data file "<<errors);
+        }
+        
+        const FeaturePtr feature = GetRootFeature(root);
+        if (feature) {
+
+            // Walk Feature (get the Placemarks... and walk into them) //ENGLISH ??
+            WalkFeature(feature);
+     
+        } else {
+            itkExceptionMacro(<<"No root feature");
+        }
+ 
+ 
+ std::cout<<"yes"<<std::endl;
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+/*
     // Retrieving root node
     DataTreePointerType tree = data->GetDataTree();
     DataNodePointerType root = tree->GetRoot()->Get();
+*/
+#if 0
 
-
-
+    // For each layer
+    for(int layerIndex = 0;layerIndex<m_DataSource->GetLayerCount();++layerIndex)
+      {
+	/** retrieving layer and property */
+//	OGRLayer * layer = m_DataSource->GetLayer(layerIndex);
+//	OGRFeatureDefn * dfn = layer->GetLayerDefn();
 	/** Create the document node */
 	DataNodePointerType document = DataNodeType::New();
 	document->SetNodeType(DOCUMENT);
@@ -119,6 +462,17 @@ folder->SetField(field->GetNameRef(),feature->GetFieldAsString(fieldIndex));
 	    tree->Add(folder,document);
 #endif
   }
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*
@@ -277,6 +631,11 @@ folder->SetField(field->GetNameRef(),feature->GetFieldAsString(fieldIndex));
   template<class TData>
   void KMLVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
   {
+  
+  
+// VOIR example / print.cc + ex.web/createkml.cc !!
+
+  
         //Create the factory
 /*        KmlFactory* factory = KmlFactory::GetFactory();
         if(factory == NULL)
