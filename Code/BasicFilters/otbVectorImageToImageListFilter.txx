@@ -88,8 +88,6 @@ VectorImageToImageListFilter<TVectorImageType,TImageList>
 
   typedef itk::ImageRegionConstIteratorWithIndex<InputVectorImageType> InputIteratorType;
   typedef itk::ImageRegionIteratorWithIndex<OutputImageType> OutputIteratorType;
-
-  InputIteratorType inputIt(inputPtr,inputPtr->GetRequestedRegion());
   
   std::vector<OutputIteratorType> outputIteratorList;
   
@@ -98,9 +96,12 @@ VectorImageToImageListFilter<TVectorImageType,TImageList>
     {
       outputListIt.Get()->SetBufferedRegion(outputListIt.Get()->GetRequestedRegion());
       outputListIt.Get()->Allocate();
-      outputIteratorList.push_back(OutputIteratorType(outputListIt.Get(),outputListIt.Get()->GetRequestedRegion()));
-      outputIteratorList.back().GoToBegin();
+      OutputIteratorType tmpIt = OutputIteratorType(outputListIt.Get(),outputListIt.Get()->GetRequestedRegion());
+      tmpIt.GoToBegin();
+      outputIteratorList.push_back(tmpIt);
     }
+
+  InputIteratorType inputIt(inputPtr,outputPtr->GetNthElement(0)->GetRequestedRegion());
 
   inputIt.GoToBegin();
   while(!inputIt.IsAtEnd())

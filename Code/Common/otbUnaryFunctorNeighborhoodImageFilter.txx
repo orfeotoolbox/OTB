@@ -98,8 +98,6 @@ void
 UnaryFunctorNeighborhoodImageFilter<TInputImage, TOutputImage, TFunction>
 ::ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread, int threadId)
 { 
-  std::cout<<threadId<<" "<<outputRegionForThread<<std::endl;
-  //unsigned int i;
   itk::ZeroFluxNeumannBoundaryCondition<TInputImage> nbc;
 
 // We use dynamic_cast since inputs are stored as DataObjects.  The
