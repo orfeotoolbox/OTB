@@ -199,25 +199,28 @@ private:
  * \class CommandLineArgumentParser
  * \brief Utility to Parse command line argument.
  * Usage:
- *   - Initialize the parser:
+ *  - Initialize the parser:
  * \code
- *    // Initialize the parser
  *    CommandLineArgumentParser parser;
+ *    parser.AddInputImage();
  *    parser.AddOption("-f",1);
  *    parser.AddSynonim("-f","--filename");
  *    parser.AddOption("-v",0);
  *    parser.AddSynonim("-v","--verbose");
+ *    parser.AddOption("--DetailledName","Help explanation","-d", 1, false);
  * \endcode
  *  - Use the parser:
  * \code
  *    CommandLineArgumentParseResult result;
  *    if(parser.TryParseCommandLine(argc,argv,result))
- *       if(result.IsOptionPresent("-f"))
- *         {
- *           cout << "Filename " << result.GetOptionParameter("-f") << endl;    
- *           ...
- *         }
- * \endcode      
+ *    {
+ *      if(result.IsOptionPresent("-f"))
+ *      {
+ *        cout << "Filename " << result.GetOptionParameter("-f") << endl;
+ *        ...
+ *      }
+ *    }
+ * \endcode
  */
 class ITK_EXPORT CommandLineArgumentParser : public itk::ProcessObject
 {
