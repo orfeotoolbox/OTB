@@ -63,10 +63,6 @@ namespace otb
           itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder( mutex );
           if( firstTime )
           {
-
-	    // MegaWave format for OTB
-	    itk::ObjectFactoryBase::RegisterFactory( MWImageIOFactory::New() );
-
 	    // RAD Format for OTB
             itk::ObjectFactoryBase::RegisterFactory( RADImageIOFactory::New() );            
                       
@@ -83,7 +79,9 @@ namespace otb
 	    
 	    // GDAL : New format for OTB
             itk::ObjectFactoryBase::RegisterFactory( GDALImageIOFactory::New() );            
-           
+	    // MegaWave format for OTB
+	    itk::ObjectFactoryBase::RegisterFactory( MWImageIOFactory::New() );
+	    
 	    // ONERA format for OTB
             itk::ObjectFactoryBase::RegisterFactory( ONERAImageIOFactory::New() );			
                         
