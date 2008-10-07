@@ -21,7 +21,8 @@
 #endif /* ndef COMPILED_FROM_DSP */
 
 #include "ascii.h"
-#include "expat.h"
+// OTB Modifications
+#include "otb_expat.h"
 
 #ifdef XML_UNICODE
 #define XML_ENCODE_MAX XML_UTF16_ENCODE_MAX
