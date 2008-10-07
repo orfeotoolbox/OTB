@@ -174,15 +174,15 @@ FilterWatcherBase
   // Remove any observers we have on the old process object
   if (m_Process)
     {
-      if (m_StartTag)
+      if (m_StartFilterCommand)
 	{
 	  m_Process->RemoveObserver(m_StartTag);
 	}
-      if (m_EndTag)
+      if (m_EndFilterCommand)
 	{
 	  m_Process->RemoveObserver(m_EndTag);
 	}
-      if (m_ProgressTag)
+      if (m_ProgressFilterCommand)
 	{
 	  m_Process->RemoveObserver(m_ProgressTag);
 	}
