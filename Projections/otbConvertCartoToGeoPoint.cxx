@@ -45,7 +45,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 
 template<typename TMapProjection>
-int generic_main_carto_geo(int argc, char* argv[], TMapProjection* mapProjection, otb::CommandLineArgumentParseResult* parseResult) 
+int generic_main_carto_geo(TMapProjection* mapProjection, otb::CommandLineArgumentParseResult* parseResult) 
 {
 
   try 
@@ -157,7 +157,7 @@ int main(int argc, char* argv[])
       utmProjection->SetZone(numZone);
       utmProjection->SetHemisphere(hemisphere);
 					
-      return generic_main_carto_geo<UtmProjectionType>(argc,argv, utmProjection, parseResult);
+      return generic_main_carto_geo<UtmProjectionType>(utmProjection, parseResult);
     }
     else
     {
@@ -175,21 +175,21 @@ int main(int argc, char* argv[])
 						
         lambertProjection->SetParameters(parameters[0],parameters[1],parameters[2],parameters[3]);
 					
-        return generic_main_carto_geo<LambertProjectionType>(argc,argv, lambertProjection, parseResult);
+        return generic_main_carto_geo<LambertProjectionType>(lambertProjection, parseResult);
       }
       else if ((typeMap == "LAMBERT2")&&(nbParams==0))
       {
         typedef otb::Lambert2EtenduInverseProjection Lambert2ProjectionType;
         Lambert2ProjectionType::Pointer lambert2Projection = Lambert2ProjectionType::New();
 					
-        return generic_main_carto_geo<Lambert2ProjectionType>(argc,argv, lambert2Projection, parseResult);
+        return generic_main_carto_geo<Lambert2ProjectionType>(lambert2Projection, parseResult);
       }
       else if ((typeMap == "LAMBERT93")&&(nbParams==0))
       {
         typedef otb::Lambert93InverseProjection Lambert93ProjectionType;
         Lambert93ProjectionType::Pointer lambert93Projection = Lambert93ProjectionType::New();
 					
-        return generic_main_carto_geo<Lambert93ProjectionType>(argc,argv, lambert93Projection, parseResult);
+        return generic_main_carto_geo<Lambert93ProjectionType>(lambert93Projection, parseResult);
       }
       else if ((typeMap == "SINUS")&&(nbParams==2))
       {
@@ -198,7 +198,7 @@ int main(int argc, char* argv[])
 						
         sinusoidalProjection->SetParameters(parameters[0],parameters[1]);
 					
-        return generic_main_carto_geo<SinusoidalProjectionType>(argc,argv, sinusoidalProjection, parseResult);
+        return generic_main_carto_geo<SinusoidalProjectionType>(sinusoidalProjection, parseResult);
       }
       else if ((typeMap == "ECKERT4")&&(nbParams==2))
       {
@@ -207,7 +207,7 @@ int main(int argc, char* argv[])
 						
         eckert4Projection->SetParameters(parameters[0],parameters[1]);
 					
-        return generic_main_carto_geo<Eckert4ProjectionType>(argc,argv, eckert4Projection, parseResult);
+        return generic_main_carto_geo<Eckert4ProjectionType>(eckert4Projection, parseResult);
       }
       else if ((typeMap == "TRANSMERCATOR")&&(nbParams==3))
       {
@@ -216,7 +216,7 @@ int main(int argc, char* argv[])
 						
         transMercatorProjection->SetParameters(parameters[0],parameters[1],parameters[2]);
 					
-        return generic_main_carto_geo<TransMercatorProjectionType>(argc,argv, transMercatorProjection, parseResult);
+        return generic_main_carto_geo<TransMercatorProjectionType>(transMercatorProjection, parseResult);
       }
       else if ((typeMap == "MOLLWEID")&&(nbParams==2))
       {
@@ -225,7 +225,7 @@ int main(int argc, char* argv[])
 						
         mollweidProjection->SetParameters(parameters[0],parameters[1]);
 					
-        return generic_main_carto_geo<MollweidProjectionType>(argc,argv, mollweidProjection, parseResult);
+        return generic_main_carto_geo<MollweidProjectionType>(mollweidProjection, parseResult);
       }
       else 
       {
