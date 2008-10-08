@@ -20,27 +20,22 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbKMLVectorDataIO.h"
 
-//#include <itksys/SystemTools.hxx>
 #include "itkExceptionObject.h"
-//#include "itkByteSwapper.h"
 #include "otbMacro.h"
 #include "otbSystem.h"
 #include "otbDataNode.h"
-//#include "itkPreOrderTreeIterator.h"
+#include "itkPreOrderTreeIterator.h"
 
 #include "kml/dom.h"
 #include "kml/base/file.h"
 
-/*
-using std::cout;
-using std::endl;
-using std::string;
-*/
 
 using kmldom::ElementPtr;
 using kmldom::FeaturePtr;
 using kmldom::KmlPtr;
 using kmldom::KmlFactory;
+using kmldom::DocumentPtr;
+using kmldom::FolderPtr;
 using kmldom::ContainerPtr;
 using kmldom::GeometryPtr;
 using kmldom::MultiGeometryPtr;
@@ -52,6 +47,7 @@ using kmldom::LinearRingPtr;
 using kmldom::PolygonPtr;
 using kmldom::ModelPtr;
 using kmldom::OuterBoundaryIsPtr;
+using kmldom::InnerBoundaryIsPtr;
 
 
 
@@ -100,7 +96,6 @@ namespace otb
         return kmldom::AsFeature(root);
   }
   
-    
   // Print the selected feature
   template<class TData>
   void
@@ -110,257 +105,360 @@ namespace otb
         {
           std::cout << "  ";
         }
-        std::cout << item;
-  }
-   
-
-  // Walk the feature
-  template<class TData>
-  void
-  KMLVectorDataIO<TData>::PrintFeature(const FeaturePtr& feature, int depth) // Rajouter le node dans les parametres le construire et le retourner
-  {
-  
-std::cout<<"PrintFeature: "<<std::endl;
-        switch (feature->Type()) 
-        {
-            case kmldom::Type_Document:
-            {
-//std::cout<<"depth document : "<<depth<<std::endl;
-              PrintIndented("Document", depth);
-        
-
-              
-	/** Create the document node */
-	DataNodePointerType document = DataNodeType::New();
-	document->SetNodeType(DOCUMENT);
-//	document->SetNodeId(feature->get_id());
-                      
-              break;
-            } 
-            case kmldom::Type_Folder:
-            {
-
-              PrintIndented("Folder", depth);
-	DataNodePointerType document = DataNodeType::New();
-	document->SetNodeType(FOLDER);
-              
-              break;
-            }  
-            case kmldom::Type_GroundOverlay:
-              PrintIndented("GroundOverlay", depth);
-              break;
-            case kmldom::Type_NetworkLink:
-              PrintIndented("NetworkLink", depth);
-              break;
-            case kmldom::Type_PhotoOverlay:
-              PrintIndented("PhotoOverlay", depth);
-              break;
-            case kmldom::Type_Placemark:
-            {
-              PrintIndented("Placemark", depth);
-	/*DataNodePointerType document = DataNodeType::New();
-	document->SetNodeType();*/
-              break;
-            }
-            case kmldom::Type_ScreenOverlay:
-              PrintIndented("ScreenOverlay", depth);
-              break;
-            default:
-              PrintIndented("other", depth);
-              break;
-        }
-          
-        if (feature->has_name()) {
-            std::cout << " " << feature->get_name();
-        }
-        std::cout << std::endl;
-/* Recurse gere ailleurs ...  je  le fait dc pas la > rma gestion de la depth
-        if (const ContainerPtr container = kmldom::AsContainer(feature)) {
-            PrintContainer(container, depth+1);
-        } 
-*/
-  }
-  
-  // Walk through a placemark to print the geometry
-  template<class TData>
-  void  
-  KMLVectorDataIO<TData>::WalkGeometry(const GeometryPtr& geometry) 
-  {
-  
-// CREER UN NOEUD pour chq cas  
-// ATTENTION ALTITUDE PEUT ETRE ABSENTE ?? VERIF
-
-        if (!geometry) 
-        {
-            return;
-        }
-        // Print/create a Node with the Geometry type.
-        std::cout << "Found a";
-        switch(geometry->Type())
-        {
-            case kmldom::Type_Point:
-            {
-                std::cout << " Point ";
-                const PointPtr pt = kmldom::AsPoint(geometry);
-
-                std::cout << pt->get_coordinates()->get_coordinates_array_at(0).get_latitude()
-                << ", ";
-                std::cout << pt->get_coordinates()->get_coordinates_array_at(0).get_longitude()
-                << ", ";
-                std::cout << pt->get_coordinates()->get_coordinates_array_at(0).get_altitude()    
-                << std::endl;      
-                break;
-             }
-            case kmldom::Type_LineString:
-            {
-                std::cout << " LineString ";
-                const LineStringPtr ls = kmldom::AsLineString(geometry);
-                const CoordinatesPtr coords = ls->get_coordinates();
-                int array_size = coords->get_coordinates_array_size();
-
-                for(int i=0;i<array_size;i++)
-                {
-                    std::cout << coords->get_coordinates_array_at(i).get_latitude()
-                    << ", ";
-                    std::cout << coords->get_coordinates_array_at(i).get_longitude()
-                    << ", ";
-                    std::cout << coords->get_coordinates_array_at(i).get_altitude()    
-                    << std::endl;       
-                }          
-              break;
-            }
-            case kmldom::Type_LinearRing:
-            {
-                std::cout << " LinearRing " << std::endl;
-                const LinearRingPtr lr = kmldom::AsLinearRing(geometry);
-                const CoordinatesPtr coords = lr->get_coordinates();
-                int array_size = coords->get_coordinates_array_size();
-
-                for(int i=0;i<array_size;i++)
-                {
-                    std::cout << coords->get_coordinates_array_at(i).get_latitude()
-                    << ", ";
-                    std::cout << coords->get_coordinates_array_at(i).get_longitude()
-                    << ", ";
-                    std::cout << coords->get_coordinates_array_at(i).get_altitude()    
-                    << std::endl;       
-                }      
-                break;
-            }
-            case kmldom::Type_Polygon:
-            {
-              std::cout << " Polygon ";
-              // this case is treated downer
-//et ca ?? je cree un noeud
-              break;
-            }
-            case kmldom::Type_MultiGeometry:
-              std::cout << " MultiGeometry ";
-//et ca ?? je cree un noeud               
-              break;
-            case kmldom::Type_Model:
-            {
-              std::cout << " Model ";
-      const ModelPtr ml = kmldom::AsModel(geometry);              
-//je stocke ca ?? dqns koi ?
-              break;
-            }
-            default:  // KML has 6 types of Geometry.
-              break;
-        }
-        std::cout << std::endl;
-        // Recurse into <MultiGeometry>.
-        if (const MultiGeometryPtr multigeometry = kmldom::AsMultiGeometry(geometry)) 
-        {
-std::cout<<"RecurseMultiGeometry"<<std::endl;        
-            for (size_t i = 0; i < multigeometry->get_geometry_array_size(); ++i)
-            {
-                WalkGeometry(multigeometry->get_geometry_array_at(i));
-            }
-        }
-
-// SUREMENT A COMPLETER !!
-        // Recurse into <Polygon>.
-        if (const PolygonPtr polygon = kmldom::AsPolygon(geometry)) 
-        {
-std::cout<<"RecursePolygon"<<std::endl;
-            // Read the outerboundaryis of the polygon
-            if ( polygon->has_outerboundaryis())
-            {
-                const OuterBoundaryIsPtr outerboundaryis = polygon->get_outerboundaryis();
-                if(outerboundaryis->has_linearring())
-                {
-                    // We can do this because a linearRing is a geometry
-                    WalkGeometry(outerboundaryis->get_linearring());
-                }
-    // aga jmen sers de ca ? outerboundaryis->Type()
-    // aga je le gere cte merdouille             ??
-            }            
-    // voir si on chope les innerboundaryis ??
-            
-    // c koi les tesslates ??
-        }        
-        
+        std::cout << item <<std::endl;
   }
   
   template<class TData>
-  void  
-  KMLVectorDataIO<TData>::WalkFeature(const FeaturePtr& feature) 
+  void 
+  KMLVectorDataIO<TData>::WalkFeature(const FeaturePtr& feature, DataNodePointerType father)
   {
-        // On sen moquem juste pour le print
-        int depth=0;
+
+        DataNodePointerType node = NULL;
         
         if (feature) 
         {
             if (const ContainerPtr container = kmldom::AsContainer(feature)) 
             {
-                WalkContainer(container);
-                // depth is the number of spaces before the print
-                PrintContainer(container,depth+1); 
+                WalkContainer(container,father);
             } 
             else if (const PlacemarkPtr placemark = kmldom::AsPlacemark(feature)) 
             {
-                
-                // Warning reate a Placemark node ??
-                WalkGeometry(placemark->get_geometry());
-                
+                WalkGeometry(placemark->get_geometry(),father);
             }
         
-        // To make the Read() method exhaustivem use this and watch the href example
-        /*
-        else if (const NetworkLinkPtr networklink = kmldom::AsNetworkLink(feature)) {
-            PrintNetworkLinkHref(networklink);
-        } else if (const OverlayPtr overlay = kmldom::AsOverlay(feature)) {
-            PrintOverlayIconHref(overlay);
-        }            
-       */
-            
-            
+        // The Read() method is not exhaustive it is possible to add the read of the "link", 
+        // the style (iconStyle, LineStyle...). Then into the containers we also can find the fields :
+        // <visibility> <description> <LookAt>... cf. code.google.com/apis/kml/documentation/kmlelementssinmaps.html 
         }
+        return;
   }
 
   template<class TData>
-  void  
-  KMLVectorDataIO<TData>::WalkContainer(const ContainerPtr& container) 
+  void
+  KMLVectorDataIO<TData>::WalkContainer(const ContainerPtr& container, DataNodePointerType father)
   {
+  
+        DataNodePointerType node = NULL;
+  
         for (size_t i = 0; i < container->get_feature_array_size(); ++i) 
         {
-            WalkFeature(container->get_feature_array_at(i));
+                FeaturePtr feature = container->get_feature_array_at(i);
+                switch (feature->Type()) 
+                {
+                    case kmldom::Type_Document:
+                    {
+                      DataNodePointerType document = DataNodeType::New();
+                      document->SetNodeType(DOCUMENT);        
+                      document->SetNodeId(feature->get_id());
+                      if (feature->has_name()) {
+                        document->SetField("name",feature->get_name());
+                      }
+                      m_Tree->Add(document,father);
+                      WalkFeature(feature,document);              
+                      break;
+                    } 
+                    case kmldom::Type_Folder:
+                    {
+                      DataNodePointerType folder = DataNodeType::New();
+                      folder->SetNodeType(FOLDER);
+                      folder->SetNodeId(feature->get_id());                      
+                      if (feature->has_name()) {
+                        folder->SetField("name",feature->get_name());
+                        
+//std::cout<<" TEST " << folder->GetNumberOfFields() << std::endl;
+// NE MARCHE PAS ->  folder->GetField("name")
+//std::cout<<" TEST2 " << folder->GetField("name") << std::endl;
+//if(folder->HasField("name")) std::cout<<"HasField !!!!!!!!! " << std::endl;
+
+                      }
+                      m_Tree->Add(folder,father);
+                      WalkFeature(feature,folder);
+                      break;
+                    }
+                    case kmldom::Type_GroundOverlay:
+                    {
+                      WalkFeature(feature,father);
+                      break;
+                    }
+                    case kmldom::Type_NetworkLink:
+                    {
+                      WalkFeature(feature,father);
+                      break;
+                    }
+                    case kmldom::Type_PhotoOverlay:
+                    {
+                      WalkFeature(feature,father);                      
+                      break;
+                    }
+                    case kmldom::Type_Placemark:
+                    {
+                      DataNodePointerType placemark = DataNodeType::New();
+                      placemark->SetNodeType(PLACEMARK);
+                      placemark->SetNodeId(feature->get_id());                      
+                      if (feature->has_name()) {
+                        placemark->SetField("name",feature->get_name());
+                      }
+                      m_Tree->Add(placemark,father);                      
+                      WalkFeature(feature,placemark);
+                      break;
+                    }
+                    case kmldom::Type_ScreenOverlay:
+                    {
+                      WalkFeature(feature,father);                      
+                      break;
+                    }
+                    default:
+                      break;
+                }
+
         }
+        return;
+  }  
+
+  // Walk through a geometry and create a GeometryNode
+  template<class TData>  
+  void
+  KMLVectorDataIO<TData>::WalkGeometry(const GeometryPtr& geometry, DataNodePointerType father) 
+  {
+  
+        // Creation of a node
+        DataNodePointerType node = NULL;
+
+        if (!geometry) 
+        {
+            return;
+        }
+        // Create a Node with the Geometry type.
+        switch(geometry->Type())
+        {
+            case kmldom::Type_Point:
+            {
+                node = ConvertGeometryToPointNode(geometry);
+                m_Tree->Add(node,father); 
+                break;
+             }
+            case kmldom::Type_LineString:
+            {
+                node = ConvertGeometryToLineStringNode(geometry);
+                m_Tree->Add(node,father);                
+                break;
+            }
+            case kmldom::Type_LinearRing:
+            {
+                node = ConvertGeometryToLinearRingNode(geometry);
+                m_Tree->Add(node,father);                
+                break;
+            }
+            case kmldom::Type_Polygon:
+            {
+                node = ConvertGeometryToPolygonNode(geometry);
+                m_Tree->Add(node,father);
+                break;
+            }
+            case kmldom::Type_MultiGeometry:
+            {
+                // this case is treated downer
+                break;
+            }
+            case kmldom::Type_Model:
+            {
+                break;
+            }
+            default:  // KML has 6 types of Geometry.
+                break;
+        }
+
+        // Recurse into <MultiGeometry>.
+        if (const MultiGeometryPtr multigeometry = kmldom::AsMultiGeometry(geometry)) 
+        {
+            DataNodePointerType multi = DataNodeType::New();
+	    multi->SetNodeType(FEATURE_COLLECTION);
+            m_Tree->Add(multi,father);            
+            for (size_t i = 0; i < multigeometry->get_geometry_array_size(); ++i)
+            {
+                WalkGeometry(multigeometry->get_geometry_array_at(i),multi);
+            }           
+        }
+        return;
   }
   
   template<class TData>
-  void  
-  KMLVectorDataIO<TData>::PrintContainer(const ContainerPtr& container, int depth) 
+  typename KMLVectorDataIO<TData>
+  ::DataNodePointerType
+  KMLVectorDataIO<TData>
+  ::ConvertGeometryToPointNode(const GeometryPtr& geometry)
   {
 
-        for (size_t i = 0; i < container->get_feature_array_size(); ++i) 
-        {
-            PrintFeature(container->get_feature_array_at(i), depth);
+        if(geometry == NULL)
+        {       
+            	itkGenericExceptionMacro(<<"Failed to convert GeometryPtr to PointNode");
         }
+        
+        const PointPtr pt = kmldom::AsPoint(geometry);
+          
+        PointType otbPoint;
+        otbPoint.Fill(0);
+        otbPoint[0] = static_cast<typename DataNodeType::PrecisionType>(pt->get_coordinates()->get_coordinates_array_at(0).get_latitude());
+        otbPoint[1] = static_cast<typename DataNodeType::PrecisionType>(pt->get_coordinates()->get_coordinates_array_at(0).get_longitude());
+
+        if(DataNodeType::Dimension > 2)
+        {
+                otbPoint[2]=static_cast<typename DataNodeType::PrecisionType>(pt->get_coordinates()->get_coordinates_array_at(0).get_altitude());
+        }   
+  
+        DataNodePointerType node = DataNodeType::New();
+        node->SetPoint(otbPoint);
+        return node;
+  }
+
+  template<class TData>
+  typename KMLVectorDataIO<TData>
+  ::DataNodePointerType
+  KMLVectorDataIO<TData>
+  ::ConvertGeometryToLineStringNode(const GeometryPtr& geometry)
+  {
+  
+        if(geometry == NULL)
+        {
+               	itkGenericExceptionMacro(<<"Failed to convert GeometryPtr to LineNode");
+        }
+        
+        const LineStringPtr ls = kmldom::AsLineString(geometry);
+        const CoordinatesPtr coords = ls->get_coordinates();
+        int array_size = coords->get_coordinates_array_size();
+    
+        LinePointerType line = LineType::New();
+        for(int i=0;i<array_size;i++)
+        {
+               	typename LineType::VertexType vertex;
+        	vertex[0] = coords->get_coordinates_array_at(i).get_latitude();
+        	vertex[1] = coords->get_coordinates_array_at(i).get_longitude();
+
+        	if(DataNodeType::Dimension > 2)
+        	{
+        	    vertex[2]= coords->get_coordinates_array_at(i).get_altitude();
+        	}
+        	line->AddVertex(vertex);
+        }
+
+        DataNodePointerType node = DataNodeType::New();
+        node->SetLine(line);
+
+        return node;
+  }
+  
+ template<class TData>
+  typename KMLVectorDataIO<TData>
+  ::DataNodePointerType
+  KMLVectorDataIO<TData>
+  ::ConvertGeometryToLinearRingNode(const GeometryPtr& geometry)
+  {
+  
+        if(geometry == NULL)
+        {
+               	itkGenericExceptionMacro(<<"Failed to convert GeometryPtr to LineNode");
+        }
+
+        const LinearRingPtr lr = kmldom::AsLinearRing(geometry);        
+        const CoordinatesPtr coords = lr->get_coordinates();
+        int array_size = coords->get_coordinates_array_size();
+           
+        LinePointerType line = LineType::New();
+        for(int i=0;i<array_size;i++)
+        {
+               	typename LineType::VertexType vertex;
+        	vertex[0] = coords->get_coordinates_array_at(i).get_latitude();
+        	vertex[1] = coords->get_coordinates_array_at(i).get_longitude();
+
+        	if(DataNodeType::Dimension > 2)
+        	{
+        	    vertex[2]= coords->get_coordinates_array_at(i).get_altitude();
+        	}
+        	line->AddVertex(vertex);
+        }
+
+        DataNodePointerType node = DataNodeType::New();
+        node->SetLine(line);
+
+        return node;
   }  
   
+ template<class TData>
+  typename KMLVectorDataIO<TData>
+  ::DataNodePointerType
+  KMLVectorDataIO<TData>
+  ::ConvertGeometryToPolygonNode(const GeometryPtr& geometry)
+  {
   
+        if(geometry == NULL)
+        {
+               	itkGenericExceptionMacro(<<"Failed to convert GeometryPtr to LineNode");
+        }
+        
+        // Get the polygon
+        const PolygonPtr polygonKml = kmldom::AsPolygon(geometry);
+        PolygonPointerType extRing = PolygonType::New();
+        PolygonListPointerType intRings = PolygonListType::New();
+        
+        // Read the outerboundaryis of the polygon
+        if ( polygonKml->has_outerboundaryis())
+        {
+                const OuterBoundaryIsPtr outerboundaryis = polygonKml->get_outerboundaryis();
+                if(outerboundaryis->has_linearring())
+                {
+                        const LinearRingPtr lr = outerboundaryis->get_linearring();        
+                        const CoordinatesPtr coords = lr->get_coordinates();
+                        int array_size = coords->get_coordinates_array_size();
+                                                
+
+                        for(int i=0;i<array_size;i++)
+                        {
+                        	typename PolygonType::VertexType vertex;
+                        	vertex[0] = coords->get_coordinates_array_at(i).get_latitude();
+                        	vertex[1] = coords->get_coordinates_array_at(i).get_longitude();
+
+                        	if(DataNodeType::Dimension > 2)
+                                {
+                                        vertex[2]= coords->get_coordinates_array_at(i).get_altitude();
+                                }
+                        	extRing->AddVertex(vertex);
+                        }
+                }
+        }
+        
+        // Read the innerboundaryis of the polygon
+        for (int intRingIndex=0;intRingIndex<polygonKml->get_innerboundaryis_array_size();intRingIndex++)
+        {
+                const InnerBoundaryIsPtr innerboundaryis = polygonKml->get_innerboundaryis_array_at(intRingIndex);
+                if(innerboundaryis->has_linearring())
+                {
+                        const LinearRingPtr lr = innerboundaryis->get_linearring();        
+                        const CoordinatesPtr coords = lr->get_coordinates();
+                        int array_size = coords->get_coordinates_array_size();
+                        PolygonPointerType ring = PolygonType::New();                        
+                        
+                        for(int pIndex=0;pIndex<array_size;pIndex++)
+                        {
+                        	typename PolygonType::VertexType vertex;
+                        	vertex[0] = coords->get_coordinates_array_at(pIndex).get_latitude();
+                        	vertex[1] = coords->get_coordinates_array_at(pIndex).get_longitude();
+
+                        	if(DataNodeType::Dimension > 2)
+                                {
+                                        vertex[2]= coords->get_coordinates_array_at(pIndex).get_altitude();
+                                }
+                        	ring->AddVertex(vertex);
+                        }
+                        intRings->PushBack(ring);
+                }
+        }
+        
+        DataNodePointerType node = DataNodeType::New();        
+        node->SetPolygonExteriorRing(extRing);
+        node->SetPolygonInteriorRings(intRings);
+    
+        return node;
+  }  
 
   // Used to print information about this object
   template<class TData>
@@ -384,7 +482,6 @@ std::cout<<"RecursePolygon"<<std::endl;
 	        itkExceptionMacro(<<"Failed to open KML data file "<<this->m_FileName);
         }
 
-//        std::cout<<kml<<std::endl;        
         std::cout<<this->m_FileName<<std::endl;
 
         otbMsgDebugMacro( <<"Driver to read: KML");
@@ -394,224 +491,33 @@ std::cout<<"RecursePolygon"<<std::endl;
         // Parse the file.
         std::string errors;
         ElementPtr root = kmldom::Parse(kml, &errors);
+
         if (!root) 
         {
                 itkExceptionMacro(<<"Failed to open KML data file "<<errors);
         }
-        
+       
         const FeaturePtr feature = GetRootFeature(root);
         if (feature) {
 
+            // Retrieving root node
+            m_Tree = data->GetDataTree();
+            DataNodePointerType rootNode = m_Tree->GetRoot()->Get();
+            
+            DataNodePointerType document = DataNodeType::New();
+            document->SetNodeType(DOCUMENT);
+            m_Tree->Add(document,rootNode);            
+            
             // Walk Feature (get the Placemarks... and walk into them) //ENGLISH ??
-            WalkFeature(feature);
+            WalkFeature(feature,document);
      
         } else {
             itkExceptionMacro(<<"No root feature");
         }
  
- 
- std::cout<<"yes"<<std::endl;
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-    // Retrieving root node
-    DataTreePointerType tree = data->GetDataTree();
-    DataNodePointerType root = tree->GetRoot()->Get();
-*/
-#if 0
-
-    // For each layer
-    for(int layerIndex = 0;layerIndex<m_DataSource->GetLayerCount();++layerIndex)
-      {
-	/** retrieving layer and property */
-//	OGRLayer * layer = m_DataSource->GetLayer(layerIndex);
-//	OGRFeatureDefn * dfn = layer->GetLayerDefn();
-	/** Create the document node */
-	DataNodePointerType document = DataNodeType::New();
-	document->SetNodeType(DOCUMENT);
-	document->SetNodeId(dfn->GetName());
-
-//	    document->SetField(field->GetNameRef(),OGRFieldDefn::GetFieldTypeName(field->GetType()));
-	    // std::cout<<"Document "<<document->GetNodeId()<<": Adding field "<<field->GetNameRef()<<" "<<OGRFieldDefn::GetFieldTypeName(field->GetType())<<std::endl;
-
-	/** Adding the layer to the data tree */
-//	tree->Add(document,root);
-
-	/** Temporary pointer to store the feature */
-	    DataNodePointerType folder = DataNodeType::New();
-	    folder->SetNodeType(FOLDER);
-	    folder->SetNodeId(feature->GetDefnRef()->GetName());
-
-folder->SetField(field->GetNameRef(),feature->GetFieldAsString(fieldIndex));
-		//  std::cout<<"Folder "<<folder->GetNodeId()<<": Adding field "<<field->GetNameRef()<<" "<<feature->GetFieldAsString(fieldIndex)<<std::endl;
-	      }
-
-
-	    tree->Add(folder,document);
-#endif
+        // std::cout<< m_Tree <<std::endl;
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-  template<class TData>
-  typename KMLVectorDataIO<TData>
-  ::DataNodePointerType
-  KMLVectorDataIO<TData>
-  ::ConvertGeometryToPointNode(const OGRGeometry * ogrGeometry)
-  {
-    OGRPoint * ogrPoint = (OGRPoint *) ogrGeometry; 
-  
-    if(ogrPoint == NULL)
-      {
-	itkGenericExceptionMacro(<<"Failed to convert OGRGeometry to OGRPoint");
-      }
-  
-    PointType otbPoint;
-    otbPoint.Fill(0);
-    otbPoint[0] = static_cast<typename DataNodeType::PrecisionType>(ogrPoint->getX());
-    otbPoint[1] = static_cast<typename DataNodeType::PrecisionType>(ogrPoint->getY());
-
-    if(DataNodeType::Dimension > 2)
-      {
-	otbPoint[2]=static_cast<typename DataNodeType::PrecisionType>(ogrPoint->getZ());
-      }
-  
-    DataNodePointerType node = DataNodeType::New();
-    node->SetPoint(otbPoint);
-    return node;
-  }
-
-  template<class TData>
-  typename KMLVectorDataIO<TData>
-  ::DataNodePointerType
-  KMLVectorDataIO<TData>
-  ::ConvertGeometryToLineNode(const OGRGeometry * ogrGeometry)
-  {
-    OGRLineString * ogrLine = (OGRLineString *)ogrGeometry;
-
-    if(ogrLine == NULL)
-      {
-	itkGenericExceptionMacro(<<"Failed to convert OGRGeometry to OGRLine");
-      }
-
-
-    LinePointerType line = LineType::New();
-  
-    OGRPoint * ogrTmpPoint = new OGRPoint();
-  
-    for(int pIndex = 0;pIndex<ogrLine->getNumPoints();++pIndex)
-      {
-      
-	ogrLine->getPoint(pIndex,ogrTmpPoint);
-      
-	typename LineType::VertexType vertex;
-      
-	vertex[0] = ogrTmpPoint->getX();
-	vertex[1] = ogrTmpPoint->getY();
-
-	if(DataNodeType::Dimension > 2)
-	  {
-	    vertex[2]= ogrTmpPoint->getZ();
-	  }
-      
-	line->AddVertex(vertex);
-      }
-    delete ogrTmpPoint;
-
-    DataNodePointerType node = DataNodeType::New();
-    node->SetLine(line);
-
-    return node;
-  }
-
-  template<class TData>
-  typename KMLVectorDataIO<TData>
-  ::DataNodePointerType
-  KMLVectorDataIO<TData>
-  ::ConvertGeometryToPolygonNode(const OGRGeometry * ogrGeometry)
-  {
-    OGRPolygon * ogrPolygon = (OGRPolygon *)ogrGeometry;
-  
-    if(ogrPolygon == NULL)
-      {
-	itkGenericExceptionMacro(<<"Failed to convert OGRGeometry to OGRPolygon");
-      }
-  
-    OGRPoint * ogrTmpPoint = new OGRPoint();
-  
-    OGRLinearRing *  ogrRing = ogrPolygon->getExteriorRing();
-
-    PolygonPointerType extRing = PolygonType::New();  
-      
-    for(int pIndex = 0;pIndex<ogrRing->getNumPoints();++pIndex)
-      {
-	ogrRing->getPoint(pIndex,ogrTmpPoint);
-	typename PolygonType::VertexType vertex;
-	vertex[0] = ogrTmpPoint->getX();
-	vertex[1] = ogrTmpPoint->getY();
-
-	if(DataNodeType::Dimension > 2)
-	  {
-	    vertex[2]= ogrTmpPoint->getZ();
-	  }
-
-	extRing->AddVertex(vertex);
-      }
-
-    PolygonListPointerType intRings = PolygonListType::New();
-
-    for(int intRingIndex = 0;intRingIndex<ogrPolygon->getNumInteriorRings();++intRingIndex)
-      {
-	PolygonPointerType ring = PolygonType::New();
-	ogrRing = ogrPolygon->getInteriorRing(intRingIndex);
-	for(int pIndex = 0;pIndex<ogrRing->getNumPoints();++pIndex)
-	  {
-	    ogrRing->getPoint(pIndex,ogrTmpPoint);
-	    typename PolygonType::VertexType vertex;
-
-	    vertex[0] = ogrTmpPoint->getX();
-	    vertex[1] = ogrTmpPoint->getY();
-	    if(DataNodeType::Dimension > 2)
-	      {
-		vertex[2]= ogrTmpPoint->getZ();
-	      }
-  	    ring->AddVertex(vertex);
-	  }
-	intRings->PushBack(ring);
-      }
- 
-    delete ogrTmpPoint;
-
-    DataNodePointerType node = DataNodeType::New();
-    node->SetPolygonExteriorRing(extRing);
-    node->SetPolygonInteriorRings(intRings);
-
-    return node;
-  }
-*/
 
   template<class TData>
   bool KMLVectorDataIO<TData>::CanWriteFile( const char* filename )
@@ -632,288 +538,245 @@ folder->SetField(field->GetNameRef(),feature->GetFieldAsString(fieldIndex));
   void KMLVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
   {
   
-  
-// VOIR example / print.cc + ex.web/createkml.cc !!
+    //Create the factory
+    KmlFactory* factory = KmlFactory::GetFactory();
+    if(factory == NULL)
+    {
+        itkExceptionMacro(<<"Impossible to create the KML Factory to write file "<<this->m_FileName);
+    }
 
-  
-        //Create the factory
-/*        KmlFactory* factory = KmlFactory::GetFactory();
-        if(factory == NULL)
-        {
-                itkExceptionMacro(<<"Impossible to create the KML Factory to write file "<<this->m_FileName);
-        }
-*/
-/*
-    //  // try to create an ogr driver
-    OGRSFDriver * ogrDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName("ESRI Shapefile");
- 
-    if(ogrDriver == NULL)
-      {
-	itkExceptionMacro(<<"No OGR driver found to write file "<<this->m_FileName);
-      }
-
-    // free an existing previous data source, if any
-    if(m_DataSource != NULL)
-      {
-	OGRDataSource::DestroyDataSource(m_DataSource);
-      }
-    // m_DataSource = OGRSFDriverRegistrar::Open(this->m_FileName.c_str(), TRUE);
-    m_DataSource = ogrDriver->CreateDataSource(this->m_FileName.c_str(),NULL);
-  
-  
-    // check the created data source
-    if(m_DataSource == NULL)
-      {
-	itkExceptionMacro(<<"Failed to create OGR data source for file "<<this->m_FileName<<". Since OGR can not overwrite existing file, be sure that this file does not already exist");
-      }
+    KmlPtr kml = factory->CreateKml();
 
     // Retrieving root node
     DataTreeConstPointerType tree = data->GetDataTree();
     DataNodePointerType root = tree->GetRoot()->Get();
   
     typedef itk::PreOrderTreeIterator<DataTreeType> TreeIteratorType;
-
-    OGRLayer * ogrCurrentLayer = NULL;
-    std::vector<OGRFeature *> ogrFeatures;
-    OGRGeometryCollection * ogrCollection = NULL;
-    // OGRGeometry * ogrCurrentGeometry = NULL;
   
-
     TreeIteratorType it(tree);
     it.GoToBegin();
+    
+    DocumentPtr currentDocument = NULL;
+    FolderPtr currentFolder = NULL;
+    PlacemarkPtr currentPlacemark = NULL;    
+    MultiGeometryPtr currentMultiGeometry = NULL;    
+    PolygonPtr currentPolygon = NULL;
+    OuterBoundaryIsPtr outerboundaryis = NULL;
+    InnerBoundaryIsPtr innerboundaryis = NULL;    
 
+
+    // Note that we force a precise structure when we write a kml file.
+    // We will necessary have a <document> that will contain a <folder>.
+    // And in a folder there automatically will be one or several <placemark>.
     while(!it.IsAtEnd())
-      {
+    {
 	switch(it.Get()->GetNodeType())
-	  {
-	  case ROOT:
+	{
+            case ROOT:
 	    {
-	      break;
+	        break;
 	    }
-	  case DOCUMENT:
+	    case DOCUMENT:
 	    {
-	      if(ogrCurrentLayer!=NULL && ogrFeatures.size()>0)
-		{
-		  std::vector<OGRFeature*>::iterator fIt = ogrFeatures.begin();
-		  
-		  while(fIt!=ogrFeatures.end())
-		    {
-		      if(ogrCurrentLayer->CreateFeature(*fIt) != OGRERR_NONE)
-			{
-			  itkExceptionMacro(<<"Failed to create ogr feature in file "<<this->m_FileName);
-			}
-		      OGRFeature::DestroyFeature(*fIt);
-		      ++fIt;
-		    }
-		}
-	      ogrFeatures.clear();
-	      ogrCurrentLayer = m_DataSource->CreateLayer(it.Get()->GetNodeId(),NULL,wkbUnknown,NULL);
-	      if(ogrCurrentLayer == NULL)
-	      {
-		itkExceptionMacro(<<"Failed to create layer "<<it.Get()->GetNodeId());
-	      }
-	      break;
+	        DocumentPtr document = factory->CreateDocument();
+                
+                // TODO 
+                //std::string fieldname = it.Get()->GetField("name");
+                //std::cout<< "it.Get()->GetField() "<< fieldname << std::endl;                
+                //document->set_name(fieldname);                
+                
+                kml->set_feature(document);
+                currentDocument = document;
+	        break;
 	    }
 	    case FOLDER:
-		{
-		  if(ogrCurrentLayer!=NULL && ogrCollection != NULL && !ogrFeatures.empty())
-		    {
-		      ogrFeatures.back()->SetGeometry(ogrCollection);
-		      delete ogrCollection;
-		      ogrCollection = NULL;
-		    }
-	     
-		  ogrFeatures.push_back(OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn()));
-		  ogrFeatures.back()->SetField("Name",it.Get()->GetNodeId());  
-	  
-		  break;
-		}
+	    {
+                FolderPtr folder = factory->CreateFolder();
+                
+                // TODO 
+                //std::string fieldname = it.Get()->GetField("name");
+                //folder->set_name(fieldname);             
+                currentDocument->add_feature(folder);
+                currentFolder = folder;
+                break;
+	    }
+	    case PLACEMARK:
+	    {
+                PlacemarkPtr placemark = factory->CreatePlacemark();
+                
+                // TODO 
+                //std::string fieldname = it.Get()->GetField("name");
+                //placemark->set_name(fieldname);                
+                
+                if (currentFolder!= NULL)
+                {
+                    currentFolder->add_feature(placemark);
+                }
+                else
+                {
+                   currentDocument->add_feature(placemark);
+                }
+                currentPlacemark = placemark;
+                break;
+	    }            
 	    case FEATURE_POINT:
-	      {
-		OGRPoint ogrPoint;
-		ogrPoint.setX(it.Get()->GetPoint()[0]);
-		ogrPoint.setY(it.Get()->GetPoint()[1]);
-
+	    {
+                // Create <coordinates>
+                CoordinatesPtr coordinates = factory->CreateCoordinates();
 		if(DataNodeType::Dimension>2)
-		  {
-		    ogrPoint.setZ(it.Get()->GetPoint()[2]);
-		  }
+                {
+                    coordinates->add_latlngalt(it.Get()->GetPoint()[0],it.Get()->GetPoint()[1],it.Get()->GetPoint()[2]);
+		}
+                else
+                {
+                    coordinates->add_latlng(it.Get()->GetPoint()[0],it.Get()->GetPoint()[1]);                  
+                }
 
-		if(ogrCollection == NULL)
-		  {
-		    ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbPoint);
-		    ogrFeatures.back()->SetGeometry(&ogrPoint);
-		  }
-		else
-		  {
-		    ogrCollection->addGeometry(&ogrPoint);
-		  }
-
+                // Create <Point> and give it <coordinates>.
+		PointPtr point = factory->CreatePoint();
+		point->set_coordinates(coordinates);
+                
+                if (currentMultiGeometry != NULL)
+                {
+                        currentMultiGeometry->add_geometry(point);
+                }
+                else                 
+                        currentPlacemark->set_geometry(point);
  		break;
-	      }
+	    }
 	    case FEATURE_LINE:
- 	      {
-		OGRLineString ogrLine;
-		VertexListConstPointerType vertexList = it.Get()->GetLine()->GetVertexList();
-	    
-		typename VertexListType::ConstIterator vIt = vertexList->Begin();
+ 	    {
+
+        	VertexListConstPointerType vertexList = it.Get()->GetLine()->GetVertexList();
+	        
+                // Create <coordinates>
+                CoordinatesPtr coordinates = factory->CreateCoordinates();                
+                LineStringPtr line = factory->CreateLineString();                
+                       
+            	typename VertexListType::ConstIterator vIt = vertexList->Begin();
 
 		while(vIt != vertexList->End())
-		  {
-		    OGRPoint ogrPoint;
-		    ogrPoint.setX(vIt.Value()[0]);
-		    ogrPoint.setY(vIt.Value()[1]);
-		    if(DataNodeType::Dimension>2)
-		      {
-			ogrPoint.setZ(vIt.Value()[2]);
-		      }
-		    ogrLine.addPoint(&ogrPoint);
-		    ++vIt;
-		  }
-		
-		if(ogrCollection == NULL)
-		  {
-		    ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbLineString);
-		    ogrFeatures.back()->SetGeometry(&ogrLine);
-		  }
-		else
-		  {
-		    ogrCollection->addGeometry(&ogrLine);
-		  }
+		{
 
+        	    if(DataNodeType::Dimension>2)
+                    {
+                        coordinates->add_latlngalt(vIt.Value()[0],vIt.Value()[1],vIt.Value()[2]);
+        	    }
+                    else
+                    {
+                        coordinates->add_latlng(vIt.Value()[0],vIt.Value()[1]);                  
+                    }
+                    line->set_coordinates(coordinates);
+		    ++vIt;
+		}
+                
+                if (currentMultiGeometry != NULL)
+                {
+                        currentMultiGeometry->add_geometry(line);
+                }                        
+                else
+                {
+                        currentPlacemark->set_geometry(line);
+                }
 		break;
-	      }
+	    }
 	    case FEATURE_POLYGON:
-	      {
-		OGRPolygon * ogrPolygon = new OGRPolygon();
-		OGRLinearRing * ogrExternalRing = new OGRLinearRing();
+	    {
+
+                // In a polygon we just can find any LinearRings
+                LinearRingPtr line = factory->CreateLinearRing();
+                PolygonPtr polygon = factory->CreatePolygon();
+                CoordinatesPtr coordinates = factory->CreateCoordinates();                
+                OuterBoundaryIsPtr outerboundaryis = factory->CreateOuterBoundaryIs();
+                InnerBoundaryIsPtr innerboundaryis = factory->CreateInnerBoundaryIs();
+                
 		VertexListConstPointerType vertexList = it.Get()->GetPolygonExteriorRing()->GetVertexList();
 	    
 		typename VertexListType::ConstIterator vIt = vertexList->Begin();
 
 		while(vIt != vertexList->End())
-		  {
-		    OGRPoint ogrPoint;
-		    ogrPoint.setX(vIt.Value()[0]);
-		    ogrPoint.setY(vIt.Value()[1]);
-		    if(DataNodeType::Dimension>2)
-		      {
-			ogrPoint.setZ(vIt.Value()[2]);
-		      }
-
-		    ogrExternalRing->addPoint(&ogrPoint);
+		{
+        	    if(DataNodeType::Dimension>2)
+                    {
+                        coordinates->add_latlngalt(vIt.Value()[0],vIt.Value()[1],vIt.Value()[2]);
+        	    }
+                    else
+                    {
+                        coordinates->add_latlng(vIt.Value()[0],vIt.Value()[1]);                  
+                    }
+                    
+                    line->set_coordinates(coordinates);
 		    ++vIt;
-		  }
-		ogrPolygon->addRing(ogrExternalRing);
-		delete ogrExternalRing;
+		}
+                outerboundaryis->set_linearring(line);
+                polygon->set_outerboundaryis(outerboundaryis);
 
 		// Retrieving internal rings as well
 		for(typename PolygonListType::Iterator pIt = it.Get()->GetPolygonInteriorRings()->Begin();
 		    pIt!=it.Get()->GetPolygonInteriorRings()->End();++pIt)
-		  {
-		    OGRLinearRing * ogrInternalRing = new OGRLinearRing();
+                {
+
 		    vertexList = pIt.Get()->GetVertexList();	    
 		    vIt = vertexList->Begin();
 
 		    while(vIt != vertexList->End())
-		      {
-			OGRPoint ogrPoint;
-			ogrPoint.setX(vIt.Value()[0]);
-			ogrPoint.setY(vIt.Value()[1]);
-			if(DataNodeType::Dimension>2)
-			  {
-			    ogrPoint.setZ(vIt.Value()[2]);
-			  }
-			ogrInternalRing->addPoint(&ogrPoint);
-			++vIt;
-		      }
-		    ogrPolygon->addRing(ogrInternalRing);
-		    delete ogrInternalRing;
-		  }
-		if(ogrCollection == NULL)
-		  {
-		    ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbPolygon);
-		    ogrFeatures.back()->SetGeometry(ogrPolygon);
-		  }
-		else
-		  {
-		    ogrCollection->addGeometry(ogrPolygon);
-		  }
-
-		delete ogrPolygon;
+    		    {
+            	        if(DataNodeType::Dimension>2)
+                        {
+                            coordinates->add_latlngalt(it.Get()->GetPoint()[0],it.Get()->GetPoint()[1],it.Get()->GetPoint()[2]);
+        	        } 
+                        else
+                        {
+                            coordinates->add_latlng(it.Get()->GetPoint()[0],it.Get()->GetPoint()[1]);                  
+                        }
+                    
+                        line->set_coordinates(coordinates);
+		        ++vIt;
+		    }
+                    innerboundaryis->set_linearring(line);
+                    polygon->add_innerboundaryis(innerboundaryis);
+                    innerboundaryis->clear_linearring();
+        	}
+                
+                if (currentMultiGeometry != NULL)
+                {
+                        currentMultiGeometry->add_geometry(polygon);
+                }
+                else
+                {
+                        currentPlacemark->set_geometry(polygon);
+                }
 		break;
-	      }
-	    case FEATURE_MULTIPOINT:
-	      {
-		if(ogrCollection != NULL || ogrFeatures.empty())
-		  {
-		    itkExceptionMacro(<<"Problem while creating multipoint.");
-		  }
-		ogrCollection = new OGRMultiPoint();
-		ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbMultiPoint);
-		break;
-	      }
-	    case FEATURE_MULTILINE:
-	      {
-		if(ogrCollection != NULL || ogrFeatures.empty())
-		  {
-		    itkExceptionMacro(<<"Problem while creating multiline.");
-		  }
-		ogrCollection = new OGRMultiLineString();
-		ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbMultiLineString);
-		break;
-	      }
-	    case FEATURE_MULTIPOLYGON:
-	      {
-		if(ogrCollection != NULL || ogrFeatures.empty())
-		  {
-		    itkExceptionMacro(<<"Problem while creating multipolygon.");
-		  }
-		ogrCollection = new OGRMultiPolygon();
-		ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbMultiPolygon);
-		break;
-	      }
+	    }
+            // MultiGeometry
 	    case FEATURE_COLLECTION:
-	      {
-		if(ogrCollection != NULL || ogrFeatures.empty())
-		  {
-		    itkExceptionMacro(<<"Problem while creating collection.");
-		  }
-		ogrCollection = new OGRMultiPoint();
-		ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbGeometryCollection);
+	    {
+                MultiGeometryPtr multi = factory->CreateMultiGeometry();
+                currentPlacemark->set_geometry(multi);
+                currentMultiGeometry = multi;
 		break;
-	      }
-	  }
-	++it;
-      }
-  if(ogrCurrentLayer!=NULL && ogrCollection != NULL && !ogrFeatures.empty())
-  {
-    ogrFeatures.back()->SetGeometry(ogrCollection);
-    delete ogrCollection;
-    ogrCollection = NULL;
-  }
+	    }
+            default :
+                break;
 
-  if(ogrCurrentLayer!=NULL && ogrFeatures.size()>0)
-      {
-	std::vector<OGRFeature*>::iterator fIt = ogrFeatures.begin();
-	
-	while(fIt!=ogrFeatures.end())
-	  {
-	    if(ogrCurrentLayer->CreateFeature(*fIt) != OGRERR_NONE)
-	      {
-		itkExceptionMacro(<<"Failed to create ogr feature in file "<<this->m_FileName);
-	      }
-	    OGRFeature::DestroyFeature(*fIt);
-	    ++fIt;
-	  }
-      }
-    ogrFeatures.clear();
-    
+	} // end switch
+	++it;
+    } // end while
+     
+    // Serialize to XML
+    std::string xml = kmldom::SerializePretty(kml);
+
+    // Write it
+    kmlbase::File::WriteStringToFile(xml,this->m_FileName);
+
+    // Eventually print it
+    //std::cout << xml;
+
     otbMsgDevMacro( <<" KMLVectorDataIO::Write()  ");
-*/
 
   }
  
   } // end namespace otb
 
 #endif
+
