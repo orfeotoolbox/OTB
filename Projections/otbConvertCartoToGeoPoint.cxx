@@ -83,7 +83,7 @@ int generic_main_carto_geo(TMapProjection* mapProjection, otb::CommandLineArgume
   }
   catch( itk::ExceptionObject & err ) 
   { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
+    std::cout << "Exception itk::ExceptionObject raised !" << std::endl; 
     std::cout << err << std::endl; 
     return EXIT_FAILURE;
   } 
@@ -94,7 +94,7 @@ int generic_main_carto_geo(TMapProjection* mapProjection, otb::CommandLineArgume
   } 
   catch( ... ) 
   { 
-    std::cout << "Exception levee inconnue !" << std::endl; 
+    std::cout << "Unknown exception raised !" << std::endl; 
     return EXIT_FAILURE;
   } 
   return EXIT_SUCCESS;
@@ -238,7 +238,7 @@ int main(int argc, char* argv[])
   }
   catch( itk::ExceptionObject & err ) 
   { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
+    std::cout << "Exception itk::ExceptionObject raised !" << std::endl; 
     std::cout << err << std::endl; 
     return EXIT_FAILURE;
   } 
@@ -249,7 +249,7 @@ int main(int argc, char* argv[])
   } 
   catch( ... ) 
   { 
-    std::cout << "Exception levee inconnue !" << std::endl; 
+    std::cout << "Unknown exception raised !" << std::endl; 
     return EXIT_FAILURE;
   } 
   return EXIT_SUCCESS;
