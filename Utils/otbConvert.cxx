@@ -30,7 +30,6 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
-// #include "itkRescaleIntensityImageFilter.h"
 #include "otbCommandLineArgumentParser.h"
 #include "itkCastImageFilter.h"
 
@@ -49,7 +48,6 @@ int generic_main_convert(otb::CommandLineArgumentParseResult* parseResult)
   
   if(parseResult->IsOptionPresent("--UseRescale"))
   {
-    std::cerr << "Throught option r" << std::endl;
     typedef otb::ImageFileReader<InputImageType> ReaderType;
     typename ReaderType::Pointer reader=ReaderType::New();
     reader->SetFileName(parseResult->GetInputImage().c_str());
@@ -74,7 +72,6 @@ int generic_main_convert(otb::CommandLineArgumentParseResult* parseResult)
   }
   else
   {
-    std::cerr << "Throught other" << std::endl;
     typedef otb::ImageFileReader<OutputImageType> ReaderType;
     typename ReaderType::Pointer reader=ReaderType::New();
     reader->SetFileName(parseResult->GetInputImage().c_str());
@@ -163,7 +160,7 @@ int main(int argc, char ** argv)
   }
   catch( itk::ExceptionObject & err ) 
   { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
+    std::cout << "Exception itk::ExceptionObject raised !" << std::endl; 
     std::cout << err << std::endl; 
     return EXIT_FAILURE;
   } 
@@ -174,7 +171,7 @@ int main(int argc, char ** argv)
   } 
   catch( ... ) 
   { 
-    std::cout << "Exception levee inconnue !" << std::endl; 
+    std::cout << "Unknow exception raised !" << std::endl; 
     return EXIT_FAILURE;
   } 
   return EXIT_SUCCESS;
