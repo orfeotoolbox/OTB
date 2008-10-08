@@ -149,7 +149,7 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage>
     it = itk::ImageRegionIteratorWithIndex<OutputImageType>(output,outputRegionForThread);
 
     //variables for loops
-    int i,j,k,l;
+    unsigned int i,j,k,l;
     
     // ITK proxy to the fftw library
     typedef typename itk::fftw::Proxy<double> FFTWProxyType;
