@@ -96,6 +96,7 @@ int main(int argc, char ** argv)
     typedef otb::CommandLineArgumentParser ParserType;	
     ParserType::Pointer parser = ParserType::New();
     
+    parser->SetProgramDescription("Convert an image to a different format, eventually rescaling the data and/or changing the pixel type");
     parser->AddInputImage();
     parser->AddOutputImage();
     parser->AddOption("--OutputPixelType","OutputPixelType: unsigned char (1), short int (2), int (3), float (4), double (5), unsigned short int (12), unsigned int (13); default 1","-t", 1, false);
