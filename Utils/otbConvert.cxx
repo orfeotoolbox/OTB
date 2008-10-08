@@ -30,7 +30,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
-#include "itkRescaleIntensityImageFilter.h"
+// #include "itkRescaleIntensityImageFilter.h"
 #include "otbCommandLineArgumentParser.h"
 #include "itkCastImageFilter.h"
 
@@ -38,40 +38,52 @@ template<typename OutputPixelType>
 int generic_main_convert(otb::CommandLineArgumentParseResult* parseResult) 
 {
 
-
   typedef otb::VectorImage<double, 2> InputImageType;
   typedef otb::VectorImage<OutputPixelType, 2> OutputImageType;
-  typedef otb::ImageFileReader<OutputImageType> ReaderType;
-  typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
-//   typedef itk::RescaleIntensityImageFilter<InputImageType, OutputImageType> RescalerType;
-//   typedef otb::VectorRescaleIntensityImageFilter<InputImageType, OutputImageType> RescalerType;
-//   typedef itk::CastImageFilter<InputImageType, OutputImageType> RescalerType;
   
-  typename ReaderType::Pointer reader=ReaderType::New();
+  typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
   
   typename WriterType::Pointer writer=WriterType::New();
   
-  reader->SetFileName(parseResult->GetInputImage().c_str());
-  
-  
-//   OutputImageType::PixelType minimum,maximum;
-//   minimum.SetSize(3);
-//   maximum.SetSize(3);
-//   minimum.Fill(0);
-//   maximum.Fill(255);
-//   typename RescalerType::Pointer rescaler=RescalerType::New();
-//   rescaler->SetOutputMinimum(0);
-//   rescaler->SetOutputMaximum(255);
-// //   rescaler->SetOutputMinimum(minimum);
-// //   rescaler->SetOutputMaximum(maximum);
-//   rescaler->SetInput(reader->GetOutput());
-  
   writer->SetFileName(parseResult->GetOutputImage().c_str());
   
-//   writer->SetInput(rescaler->GetOutput());
-  writer->SetInput(reader->GetOutput());
+  if(parseResult->IsOptionPresent("--UseRescale"))
+  {
+    std::cerr << "Throught option r" << std::endl;
+    typedef otb::ImageFileReader<InputImageType> ReaderType;
+    typename ReaderType::Pointer reader=ReaderType::New();
+    reader->SetFileName(parseResult->GetInputImage().c_str());
+    reader->UpdateOutputInformation();
+    
+    typedef otb::VectorRescaleIntensityImageFilter<InputImageType, OutputImageType> RescalerType;
+    typename OutputImageType::PixelType minimum;
+    typename OutputImageType::PixelType maximum;
+    minimum.SetSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
+    maximum.SetSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
+    minimum.Fill(itk::NumericTraits<OutputPixelType>::min());
+    maximum.Fill(itk::NumericTraits<OutputPixelType>::max());
+    
+    typename RescalerType::Pointer rescaler=RescalerType::New();
+
+    rescaler->SetOutputMinimum(minimum);
+    rescaler->SetOutputMaximum(maximum);
+    
+    rescaler->SetInput(reader->GetOutput());
+    writer->SetInput(rescaler->GetOutput());
+    writer->Update();
+  }
+  else
+  {
+    std::cerr << "Throught other" << std::endl;
+    typedef otb::ImageFileReader<OutputImageType> ReaderType;
+    typename ReaderType::Pointer reader=ReaderType::New();
+    reader->SetFileName(parseResult->GetInputImage().c_str());
+      
+    writer->SetInput(reader->GetOutput());
+    writer->Update();
+  }
   
-  writer->Update();
+  
   
   return 0; 
 }
@@ -86,7 +98,8 @@ int main(int argc, char ** argv)
     
     parser->AddInputImage();
     parser->AddOutputImage();
-    parser->AddOption("--OutputPixelType","OutputPixelType: unsigned char (1), short int (2), int (3), float (4), double (5), unsigned short int (12), unsigned int (13)","-t", 1, false);
+    parser->AddOption("--OutputPixelType","OutputPixelType: unsigned char (1), short int (2), int (3), float (4), double (5), unsigned short int (12), unsigned int (13); default 1","-t", 1, false);
+    parser->AddOption("--UseRescale", "Rescale value between output type min and max","-r", 0, false);
 
     typedef otb::CommandLineArgumentParseResult ParserResultType;
     ParserResultType::Pointer  parseResult = ParserResultType::New();
@@ -110,9 +123,13 @@ int main(int argc, char ** argv)
       return EXIT_FAILURE;
     }	
     
-    
-    unsigned int type=parseResult->GetParameterUInt("--OutputPixelType");
-    
+    unsigned int type=1;
+    if(parseResult->IsOptionPresent("--OutputPixelType"))
+    {
+      type=parseResult->GetParameterUInt("--OutputPixelType");
+    }
+   
+     
     switch(type)
     {
       case 1:
