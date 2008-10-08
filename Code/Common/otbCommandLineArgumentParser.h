@@ -260,8 +260,8 @@ public:
   void ParseGUI(   CommandLineArgumentParseResult * outResult,
                            bool failOnUnknownTrailingParameters = true);
 protected:
- CommandLineArgumentParser();
- ~CommandLineArgumentParser(){};
+  CommandLineArgumentParser();
+  ~CommandLineArgumentParser(){};
  
 private:
 
@@ -281,7 +281,7 @@ private:
     std::string Description;            // option description
     std::string Synonim;                // shortcut
     bool NumberOfParametersFixed;       // required number of values
-      int NumberOfParameters;	        // number of values
+    int NumberOfParameters;	        // number of values
     bool Obligatory;                    // is the option mandatory ?
     bool Finded;                        // check if the option is present
     } OptionType;
