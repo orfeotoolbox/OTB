@@ -214,9 +214,9 @@ private:
  *    CommandLineArgumentParseResult result;
  *    if(parser.TryParseCommandLine(argc,argv,result))
  *    {
- *      if(result.IsOptionPresent("-f"))
+ *      if(result.IsOptionPresent("--DetailledName"))
  *      {
- *        cout << "Filename " << result.GetOptionParameter("-f") << endl;
+ *        cout << "Option " << result.GetParameterString("--DetailledName") << endl;
  *        ...
  *      }
  *    }
