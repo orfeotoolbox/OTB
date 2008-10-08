@@ -31,7 +31,7 @@ namespace otb {
  * \brief image data to vector conversion.
  *
  * A class that extract pixel value from an input image according to a ROI 
- * image and ouputs it on a vector of PixelType.
+ * image and outputs it on a vector of PixelType.
  */
 template < class TInputImage, class TInputROIImage > 
 class ROIdataConversion
