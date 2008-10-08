@@ -142,6 +142,7 @@ CommandLineArgumentParser
         AddOption("--help","Help","-h",0,false);
         AddOption("--version","Version","-v",0,false);
       	AddOptionNParams("--OTBTesting", "Testing purposes only.","-OTBTesting",false);
+        m_ProgramDescription.clear();
 }
 
 
@@ -401,6 +402,12 @@ CommandLineArgumentParser
 ::PrintUsage(std::ostream& os)const
 {
 	os << std::endl;
+        
+        if (!m_ProgramDescription.empty())
+        {
+          os << m_ProgramDescription << std::endl << std::endl;
+        }
+        
         os << " Usage : "<<m_ProgramName<<std::endl;
   	// Compute the max width for option display
   	int largeurmax(-1);

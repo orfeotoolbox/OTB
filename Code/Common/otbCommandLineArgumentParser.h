@@ -202,6 +202,7 @@ private:
  *  - Initialize the parser:
  * \code
  *    CommandLineArgumentParser parser;
+ *    parser.SetProgramDescription("This program is an example");
  *    parser.AddInputImage();
  *    parser.AddOption("-f",1);
  *    parser.AddSynonim("-f","--filename");
@@ -237,6 +238,9 @@ public:
   void AddInputImage(bool obligatory=true);
   /** Add an output image option */ 
   void AddOutputImage(bool obligatory=true);
+  
+  itkSetStringMacro(ProgramDescription);
+  itkGetStringMacro(ProgramDescription);
   
   /** Add an option with 0 or more parameters (words that follow it) */
 //  void AddOption(const char *name, const int nParameters, const char * comment);
@@ -287,6 +291,8 @@ private:
 
 
   std::string m_ProgramName;
+  std::string m_ProgramDescription;
+  
 };
 
 }
