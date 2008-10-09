@@ -31,7 +31,7 @@ namespace otb
  * This enumeration describes the type fo nodes used to represent a tree of vector data in the Orfeo ToolBox. 
  */
 typedef
-enum{ROOT,DOCUMENT,FOLDER,PLACEMARK,FEATURE_POINT,FEATURE_LINE,FEATURE_POLYGON,FEATURE_MULTIPOINT,FEATURE_MULTILINE,FEATURE_MULTIPOLYGON,FEATURE_COLLECTION} NodeType;
+enum{ROOT,DOCUMENT,FOLDER,FEATURE_POINT,FEATURE_LINE,FEATURE_POLYGON,FEATURE_MULTIPOINT,FEATURE_MULTILINE,FEATURE_MULTIPOLYGON,FEATURE_COLLECTION} NodeType;
 
 
 /** \class DataNode
@@ -175,11 +175,6 @@ class DataNode
     * \return True if node type is FEATURE_COLLECTION.
     */
    bool IsCollectionFeature() const;
-   /**
-    * \return True if node type is PLACEMARK.
-    */
-   bool IsPlacemark() const;
-      
    /**
     * Add a field to the node.
     * \param key The name of the field.
