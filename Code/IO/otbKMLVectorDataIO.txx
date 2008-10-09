@@ -573,9 +573,11 @@ namespace otb
 	    case DOCUMENT:
 	    {
 	        DocumentPtr document = factory->CreateDocument();
-                std::string fieldname = it.Get()->GetField("name");
-                document->set_name(fieldname);                
-                
+                if(it.Get()->HasField("name"))
+                {
+                    std::string fieldname = it.Get()->GetField("name");
+                    document->set_name(fieldname);                
+                }
                 kml->set_feature(document);
                 currentDocument = document;
 	        break;

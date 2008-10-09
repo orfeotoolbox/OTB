@@ -1446,8 +1446,17 @@ ADD_TEST(ioTvKMLVectorDataIOFileReaderLines ${IO_TESTS15}
         ${INPUTDATA}/lines.kml
         ${TEMP}/lines.kml)
 
+# Convert shp to  a complex line example file and then write it
+ADD_TEST(ioTvKMLVectorDataIOFileConvert ${IO_TESTS15} 
+        otbVectorDataFileReaderWriter
+        ${IMAGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_PRODUCT_SHAPE.shp
+        ${TEMP}/testConvert.kml) 
 
-
+ADD_TEST(ioTvKMLVectorDataIOFileConvert2 ${IO_TESTS15} 
+        otbVectorDataFileReaderWriter
+        ${INPUTDATA}/multigeometry.kml
+        ${TEMP}/testConvert.shp)
+        
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS16 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
