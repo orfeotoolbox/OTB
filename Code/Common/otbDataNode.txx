@@ -243,7 +243,7 @@ DataNode<TPrecision,VDimension>
 {
   if(HasField(key))
     {
-      return m_FieldMap[key];
+      return (*m_FieldMap.find(key)).second;
     }
   else
     {
