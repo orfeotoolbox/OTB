@@ -80,7 +80,7 @@ int otbDrawPathFilter(int argc, char * argv[])
 
   DrawPathFilterType::Pointer filter = DrawPathFilterType::New();
   filter->SetImageInput(image);
-  filter->SetPathInput(path);
+  filter->SetInputPath(path);
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(filter->GetOutput());

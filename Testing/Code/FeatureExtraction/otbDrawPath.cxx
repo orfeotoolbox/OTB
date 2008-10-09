@@ -98,7 +98,7 @@ int otbDrawPathDessinCarre( int argc, char * argv[] )
   DrawPathFilterType::Pointer DrawPath = DrawPathFilterType::New();
 
   DrawPath->SetImageInput( reader->GetOutput()  );
-  DrawPath->SetPathInput( VertexList     );
+  DrawPath->SetInputPath( VertexList     );
   writer->SetInput(DrawPath->GetOutput());
   writer->Update(); 
 
