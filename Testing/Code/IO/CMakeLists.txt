@@ -1421,30 +1421,32 @@ ADD_TEST(ioTuKMLVectorDataIO ${IO_TESTS15}
 # CanRead()
 ADD_TEST(ioTuKMLVectorDataIOCanRead ${IO_TESTS15} 
         otbKMLVectorDataIOTestCanRead
-        ${INPUTDATA}/simple.kml)
+        ${INPUTDATA}/MODIS20040214212340.kml)
 
 # CanWrite()
 ADD_TEST(ioTuKMLVectorDataIOCanWrite ${IO_TESTS15} 
         otbKMLVectorDataIOTestCanWrite
-        ${TEMP}/simple.kml)
+        ${TEMP}/MODIS20040214212340.kml)
 
-# Read a MODIS file
+# Read a MODIS kml file and then write it
 ADD_TEST(ioTvKMLVectorDataIOFileReaderExample ${IO_TESTS15} 
         otbKMLVectorDataIOTestFileReader
-        ${INPUTDATA}/MODIS20040214212340.kml)        
+        ${INPUTDATA}/MODIS20040214212340.kml
+        ${TEMP}/MODIS20040214212340.kml)
 
-# Read a multigeometry example file
+# Read a multigeometry example file and then write it
 ADD_TEST(ioTvKMLVectorDataIOFileReaderMultiGeom ${IO_TESTS15} 
         otbKMLVectorDataIOTestFileReader
-        ${INPUTDATA}/multigeometry.kml)
+        ${INPUTDATA}/multigeometry.kml
+        ${TEMP}/multigeometry.kml)
         
-# Read a complex line example file
+# Read a complex line example file and then write it
 ADD_TEST(ioTvKMLVectorDataIOFileReaderLines ${IO_TESTS15} 
         otbKMLVectorDataIOTestFileReader
-        ${INPUTDATA}/line.kml)        
+        ${INPUTDATA}/lines.kml
+        ${TEMP}/lines.kml)
+
         
-
-
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS16 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

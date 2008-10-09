@@ -191,14 +191,14 @@ int main(int argc, char * argv[])
     if (energyVert < energyHor)
     {
       removeCarvingPath->SetInput( duplicator->GetOutput() );
-      removeCarvingPath->SetPathInput( carvingFilterVert->GetOutput() );
+      removeCarvingPath->SetInputPath( carvingFilterVert->GetOutput() );
       removeCarvingPath->SetDirection(0);
       removeCarvingPath->UpdateLargestPossibleRegion();
     }
     else
     {
       removeCarvingPath->SetInput( duplicator->GetOutput() );
-      removeCarvingPath->SetPathInput( carvingFilterHor->GetOutput() );
+      removeCarvingPath->SetInputPath( carvingFilterHor->GetOutput() );
       removeCarvingPath->SetDirection(1);
       removeCarvingPath->UpdateLargestPossibleRegion();
     }

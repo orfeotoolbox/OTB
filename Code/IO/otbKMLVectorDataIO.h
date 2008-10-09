@@ -119,10 +119,7 @@ protected:
   /** Destructor.*/
   virtual ~KMLVectorDataIO();
 
-  /*   virtual void InternalReadVectorDataInformation(){}; */
-
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
   
   static const FeaturePtr GetRootFeature(const ElementPtr& root);
   
@@ -130,41 +127,26 @@ protected:
   
   static void PrintFeature(const FeaturePtr& feature, int depth);
 
-  static void WalkGeometry(const GeometryPtr& geometry);
+  void WalkGeometry(const GeometryPtr& geometry, DataNodePointerType father);
   
-  static void WalkFeature(const FeaturePtr& feature);
+  void WalkFeature(const FeaturePtr& feature, DataNodePointerType father);
   
-  static void WalkContainer(const ContainerPtr& container);
+  void WalkContainer(const ContainerPtr& container, DataNodePointerType father);
   
-  static void PrintContainer(const ContainerPtr& container, int depth);
 
-
-  
-  
   /** Conversion tools */
-
-/*  static DataNodePointerType ConvertGeometryToPointNode(const OGRGeometry * ogrGeometry);
-
-  static DataNodePointerType  ConvertGeometryToLineNode(const OGRGeometry * ogrGeometry);
-
-  static DataNodePointerType ConvertGeometryToPolygonNode(const OGRGeometry * ogrGeometry);
-*/
+  DataNodePointerType ConvertGeometryToPointNode(const GeometryPtr& geometry);
+  DataNodePointerType ConvertGeometryToLineStringNode(const GeometryPtr& geometry);
+  DataNodePointerType ConvertGeometryToLinearRingNode(const GeometryPtr& geometry);  
+  DataNodePointerType ConvertGeometryToPolygonNode(const GeometryPtr& geometry);
   /** end conversion tools */
 
 private:
   KMLVectorDataIO(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
+  DataTreePointerType m_Tree;
  
-  /** Is this necessary ? */
-
-  /** Internal method to read header informations */
-  /*   bool InternalReadHeaderInformation(std::fstream & file, const bool reportError); */
-
-  /*   bool    m_FlagWriteVectorDataInformation; */
-  /*   typename VectorDataIOBase<TData>::ByteOrder m_FileByteOrder; */
-  /*   std::fstream m_File; */
-
 };
 
 } // end namespace otb

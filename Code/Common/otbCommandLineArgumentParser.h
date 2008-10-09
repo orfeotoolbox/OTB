@@ -202,6 +202,7 @@ private:
  *  - Initialize the parser:
  * \code
  *    CommandLineArgumentParser parser;
+ *    parser.SetProgramDescription("This program is an example");
  *    parser.AddInputImage();
  *    parser.AddOption("-f",1);
  *    parser.AddSynonim("-f","--filename");
@@ -214,9 +215,9 @@ private:
  *    CommandLineArgumentParseResult result;
  *    if(parser.TryParseCommandLine(argc,argv,result))
  *    {
- *      if(result.IsOptionPresent("-f"))
+ *      if(result.IsOptionPresent("--DetailledName"))
  *      {
- *        cout << "Filename " << result.GetOptionParameter("-f") << endl;
+ *        cout << "Option " << result.GetParameterString("--DetailledName") << endl;
  *        ...
  *      }
  *    }
@@ -238,6 +239,9 @@ public:
   /** Add an output image option */ 
   void AddOutputImage(bool obligatory=true);
   
+  itkSetStringMacro(ProgramDescription);
+  itkGetStringMacro(ProgramDescription);
+  
   /** Add an option with 0 or more parameters (words that follow it) */
 //  void AddOption(const char *name, const int nParameters, const char * comment);
   // at least one value
@@ -256,8 +260,8 @@ public:
   void ParseGUI(   CommandLineArgumentParseResult * outResult,
                            bool failOnUnknownTrailingParameters = true);
 protected:
- CommandLineArgumentParser();
- ~CommandLineArgumentParser(){};
+  CommandLineArgumentParser();
+  ~CommandLineArgumentParser(){};
  
 private:
 
@@ -277,7 +281,7 @@ private:
     std::string Description;            // option description
     std::string Synonim;                // shortcut
     bool NumberOfParametersFixed;       // required number of values
-      int NumberOfParameters;	        // number of values
+    int NumberOfParameters;	        // number of values
     bool Obligatory;                    // is the option mandatory ?
     bool Finded;                        // check if the option is present
     } OptionType;
@@ -287,6 +291,8 @@ private:
 
 
   std::string m_ProgramName;
+  std::string m_ProgramDescription;
+  
 };
 
 }

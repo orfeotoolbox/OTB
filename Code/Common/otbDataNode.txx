@@ -185,6 +185,11 @@ DataNode<TPrecision,VDimension>
 	oss<<"Folder ("<<m_NodeId<<")";
 	break;
       }
+    case PLACEMARK:
+      {
+	oss<<"Placemark ("<<m_NodeId<<")";
+	break;
+      }      
     case FEATURE_POINT:
       {
 	oss<<"Point ("<<m_NodeId<<") "<<m_Data.point;
@@ -238,7 +243,7 @@ DataNode<TPrecision,VDimension>
 {
   if(HasField(key))
     {
-      return m_FieldMap[key];
+      return (*m_FieldMap.find(key)).second;
     }
   else
     {
@@ -364,6 +369,14 @@ DataNode<TPrecision,VDimension>
 ::IsCollectionFeature() const
 {
   return m_NodeType == FEATURE_COLLECTION;
+}
+
+template <class TPrecision, unsigned int VDimension>
+  bool 
+DataNode<TPrecision,VDimension>
+::IsPlacemark() const
+{
+  return m_NodeType == PLACEMARK;
 }
 } // end namespace otb
 

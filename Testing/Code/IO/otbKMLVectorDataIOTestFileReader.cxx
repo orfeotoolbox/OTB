@@ -28,22 +28,22 @@ int otbKMLVectorDataIOTestFileReader(int argc, char* argv[])
   
  
   KMLVectorDataIOType::Pointer object = KMLVectorDataIOType::New();
-  VectorDataPointerType data = VectorDataType::New();
+  VectorDataPointerType data = VectorDataType::New();  
+
 
   bool lCanRead = object->CanReadFile(argv[1]);
   
-// ??
   object->SetFileName(argv[1]);
+  object->Read(data);
   
-  std::cout<<"       FileName : "<< object->GetFileName() <<std::endl;
+  VectorDataType::ConstPointer constData = static_cast<const VectorDataType *>(data);
 
-  object->Read(data);  
-
-/*  if ( lCanRead == false)
-    {
-      std::cerr << "Erreur otb::KMLVectorDataIO : impossible to create the file "<<argv[1]<<"."<<std::endl;
-      return EXIT_FAILURE;
-    }
-  */
+  if(argc>2)
+  {
+     bool lCanWrite = object->CanWriteFile(argv[2]);
+     object->SetFileName(argv[2]);
+     object->Write(constData);  
+  }  
+  
   return EXIT_SUCCESS;
 }

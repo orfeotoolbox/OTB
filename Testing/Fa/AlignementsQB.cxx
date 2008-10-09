@@ -115,7 +115,7 @@ int main( int argc, char ** argv )
     {
 
     drawPathFilter->SetImageInput( backgroundImage );
-    drawPathFilter->SetPathInput(listIt.Get());
+    drawPathFilter->SetInputPath(listIt.Get());
     //drawPathFilter->SetPathValue( color );
 
     drawPathFilter->Update();

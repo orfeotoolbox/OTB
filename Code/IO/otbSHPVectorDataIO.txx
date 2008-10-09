@@ -780,6 +780,11 @@ namespace otb
 		ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbGeometryCollection);
 		break;
 	      }
+            // Note : placemark is a kml element    
+	    case PLACEMARK:
+	      {
+	        break;
+	      }
 	  }
 	++it;
       }

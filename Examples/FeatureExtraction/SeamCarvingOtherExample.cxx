@@ -151,7 +151,7 @@ int main(int argc, char * argv[])
     carvingFilter->SetDirection(i%2);
     
     removeCarvingPath->SetInput( duplicator->GetOutput() );
-    removeCarvingPath->SetPathInput( carvingFilter->GetOutput() );
+    removeCarvingPath->SetInputPath( carvingFilter->GetOutput() );
     removeCarvingPath->SetDirection(i%2);
     removeCarvingPath->UpdateLargestPossibleRegion();
     
@@ -180,12 +180,12 @@ int main(int argc, char * argv[])
   {
         
     addCarvingPath->SetInput( duplicator->GetOutput() );
-    addCarvingPath->SetPathInput(  pathList->GetNthElement(i) );
+    addCarvingPath->SetInputPath(  pathList->GetNthElement(i) );
     addCarvingPath->SetDirection(i%2);
     addCarvingPath->UpdateLargestPossibleRegion();
     
     drawPathFilter->SetInput( addCarvingPath->GetOutput() );
-    drawPathFilter->SetPathInput( pathList->GetNthElement(i) );
+    drawPathFilter->SetInputPath( pathList->GetNthElement(i) );
     drawPathFilter->UpdateLargestPossibleRegion();
     
     duplicator->SetInputImage(drawPathFilter->GetOutput());
