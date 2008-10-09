@@ -78,6 +78,12 @@ public:
   itkSetMacro(Value, OutputImagePixelType);
   itkGetConstReferenceMacro(Value, OutputImagePixelType);
   
+  /** Set/Get the path input of this process object.
+   Note: these methods are adding to get the proper name */
+  void SetInputPath( const TInputPath * path);
+  
+  const TInputPath * GetInputPath(void);
+  
 protected:
   DrawPathFilter();
   virtual ~DrawPathFilter() {};
