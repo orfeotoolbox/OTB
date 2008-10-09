@@ -164,12 +164,6 @@ namespace otb
                       folder->SetNodeId(feature->get_id());                      
                       if (feature->has_name()) {
                         folder->SetField("name",feature->get_name());
-                        
-//std::cout<<" TEST " << folder->GetNumberOfFields() << std::endl;
-// NE MARCHE PAS ->  folder->GetField("name")
-//std::cout<<" TEST2 " << folder->GetField("name") << std::endl;
-//if(folder->HasField("name")) std::cout<<"HasField !!!!!!!!! " << std::endl;
-
                       }
                       m_Tree->Add(folder,father);
                       WalkFeature(feature,folder);
@@ -579,11 +573,8 @@ namespace otb
 	    case DOCUMENT:
 	    {
 	        DocumentPtr document = factory->CreateDocument();
-                
-                // TODO 
-                //std::string fieldname = it.Get()->GetField("name");
-                //std::cout<< "it.Get()->GetField() "<< fieldname << std::endl;                
-                //document->set_name(fieldname);                
+                std::string fieldname = it.Get()->GetField("name");
+                document->set_name(fieldname);                
                 
                 kml->set_feature(document);
                 currentDocument = document;
@@ -592,10 +583,8 @@ namespace otb
 	    case FOLDER:
 	    {
                 FolderPtr folder = factory->CreateFolder();
-                
-                // TODO 
-                //std::string fieldname = it.Get()->GetField("name");
-                //folder->set_name(fieldname);             
+                std::string fieldname = it.Get()->GetField("name");
+                folder->set_name(fieldname);             
                 currentDocument->add_feature(folder);
                 currentFolder = folder;
                 break;
@@ -603,10 +592,8 @@ namespace otb
 	    case PLACEMARK:
 	    {
                 PlacemarkPtr placemark = factory->CreatePlacemark();
-                
-                // TODO 
-                //std::string fieldname = it.Get()->GetField("name");
-                //placemark->set_name(fieldname);                
+                std::string fieldname = it.Get()->GetField("name");
+                placemark->set_name(fieldname);                
                 
                 if (currentFolder!= NULL)
                 {
@@ -779,4 +766,5 @@ namespace otb
   } // end namespace otb
 
 #endif
+
 
