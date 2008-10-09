@@ -34,6 +34,23 @@ RemoveCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
   m_Value = static_cast<OutputImagePixelType>(255.0);
   m_Direction = 0;
 }
+
+template <class TInputImage, class TInputPath,class TOutputImage>
+inline void
+RemoveCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
+::SetInputPath( const TInputPath * path)
+{
+  this->SetPathInput(path);
+}
+
+template <class TInputImage, class TInputPath,class TOutputImage>
+const TInputPath *
+RemoveCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
+::GetInputPath(void)
+{
+  return this->GetPathInput();
+}
+
 /**
  * Main computation method.
  */

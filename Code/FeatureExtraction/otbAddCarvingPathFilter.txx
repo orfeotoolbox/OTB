@@ -38,6 +38,21 @@ AddCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
  * Main computation method.
  */
 template <class TInputImage, class TInputPath,class TOutputImage>
+inline void
+AddCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
+::SetInputPath( const TInputPath * path)
+{
+  this->SetPathInput(path);
+}
+template <class TInputImage, class TInputPath,class TOutputImage>
+const TInputPath *
+AddCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
+::GetInputPath(void)
+{
+  return this->GetPathInput();
+}
+
+template <class TInputImage, class TInputPath,class TOutputImage>
 void
 AddCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
 ::GenerateData(void)

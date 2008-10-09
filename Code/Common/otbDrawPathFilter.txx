@@ -44,7 +44,7 @@ inline void DrawPathFilter<TInputImage,TInputPath,TOutputImage>
 
 template <class TInputImage, class TInputPath,class TOutputImage>
 const TInputPath * DrawPathFilter<TInputImage,TInputPath,TOutputImage>
-  ::GetInputPath(void)
+::GetInputPath(void)
 {
   return this->GetPathInput();
 }

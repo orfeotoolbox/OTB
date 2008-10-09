@@ -98,6 +98,11 @@ public:
   typedef typename itk::ImageSliceConstIteratorWithIndex<InputImageType> InputIteratorType;
   typedef typename itk::ImageSliceIteratorWithIndex<OutputImageType> OutputIteratorType;
   
+  /** Set/Get the path input of this process object.
+    Note: these methods are adding to get the proper name */
+  void SetInputPath( const TInputPath * path);
+  
+  const TInputPath * GetInputPath(void);
 
   itkSetMacro(Value, OutputImagePixelType);
   itkGetConstReferenceMacro(Value, OutputImagePixelType);
