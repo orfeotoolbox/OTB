@@ -50,7 +50,7 @@ namespace otb
         return (Superclass::CreateImageIO(path,mode) );
 
       }
-  
+
       void
           ImageIOFactory::RegisterBuiltInFactories()
       {
@@ -64,34 +64,34 @@ namespace otb
           if( firstTime )
           {
 	    // RAD Format for OTB
-            itk::ObjectFactoryBase::RegisterFactory( RADImageIOFactory::New() );            
-                      
+            itk::ObjectFactoryBase::RegisterFactory( RADImageIOFactory::New() );
+
 	    // BSQ format for OTB
-            itk::ObjectFactoryBase::RegisterFactory( BSQImageIOFactory::New() );			
-                        
+            itk::ObjectFactoryBase::RegisterFactory( BSQImageIOFactory::New() );	
+
 	    // LUM format for OTB
-            itk::ObjectFactoryBase::RegisterFactory( LUMImageIOFactory::New() );			
+            itk::ObjectFactoryBase::RegisterFactory( LUMImageIOFactory::New() );	
 
 #ifdef OTB_COMPILE_JPEG2000
 	    // JPEG2000 : New format for OTB
             itk::ObjectFactoryBase::RegisterFactory( JPEG2000ImageIOFactory::New() );
 #endif
-	    
+
 	    // GDAL : New format for OTB
-            itk::ObjectFactoryBase::RegisterFactory( GDALImageIOFactory::New() );            
+            itk::ObjectFactoryBase::RegisterFactory( GDALImageIOFactory::New() );
 	    // MegaWave format for OTB
 	    itk::ObjectFactoryBase::RegisterFactory( MWImageIOFactory::New() );
-	    
+
 	    // ONERA format for OTB
-            itk::ObjectFactoryBase::RegisterFactory( ONERAImageIOFactory::New() );			
-                        
+            itk::ObjectFactoryBase::RegisterFactory( ONERAImageIOFactory::New() );	
+
 	    // MSTAR Format for OTB
             itk::ObjectFactoryBase::RegisterFactory( MSTARImageIOFactory::New() );
-            
+
 #ifdef OTB_USE_CURL
 	    // TileMap : New format for OTB
             itk::ObjectFactoryBase::RegisterFactory( TileMapImageIOFactory::New() );
-#endif                        
+#endif
             firstTime = false;
           }
         }
