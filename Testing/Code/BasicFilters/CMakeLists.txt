@@ -5,7 +5,9 @@ SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 #Images de teledetection (grosses images )
-SET(IMAGEDATA ${OTB_DATA_ROOT}/LargeInput )
+IF(OTB_DATA_USE_LARGEINPUT)
+  SET(IMAGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 
@@ -164,6 +166,7 @@ ADD_TEST(bfTvInverseLogPolarTransformResample ${BASICFILTERS_TESTS2}
   ADD_TEST(bfTuStreamingShrinkImageFilterNew ${BASICFILTERS_TESTS2}  
          otbStreamingShrinkImageFilterNew)
 
+IF(OTB_DATA_USE_LARGEINPUT)
 
  ADD_TEST(bfTvStreamingShrinkImageFilterQBPAN ${BASICFILTERS_TESTS2}  
 --compare-image ${TOL}
@@ -184,6 +187,7 @@ ADD_TEST(bfTvStreamingShrinkImageFilterQBMUL ${BASICFILTERS_TESTS2}
 	${TEMP}/bfTvStreamingShrinkImageFilterQBMULOutput.hdr
 	20
 )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # -------            otb::SpatialObjectToImageDrawingFilter   ----------------------------
 
@@ -222,6 +226,7 @@ ADD_TEST(bfTvStreamingShrinkImageFilterQBMUL ${BASICFILTERS_TESTS2}
 )
 
 
+IF(OTB_DATA_USE_LARGEINPUT)
  ADD_TEST(bfTvImportGeoInformationImageFilterWithKeywordList ${BASICFILTERS_TESTS3}  
 --compare-ascii ${EPSILON}
 		${BASELINE_FILES}/ioOSSIMImageQuickbirdMetaDataReader.txt
@@ -230,6 +235,7 @@ ADD_TEST(bfTvStreamingShrinkImageFilterQBMUL ${BASICFILTERS_TESTS2}
          ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
 	 ${TEMP}/bfTvImportGeoInformationKeywordListOutput.txt
 )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # -------            otb::SpectralAngleDistanceImageFilter   ----------------------------
 

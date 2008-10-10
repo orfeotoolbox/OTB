@@ -4,7 +4,9 @@ SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 #Images de teledetection (grosses images )
-SET(IMAGEDATA ${OTB_DATA_ROOT}/LargeInput )
+IF(OTB_DATA_USE_LARGEINPUT)
+  SET(IMAGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 
@@ -30,6 +32,7 @@ ADD_TEST(prTuMapProjectionsNew ${PROJECTIONS_TESTS1}  otbMapProjectionsNew )
 ADD_TEST(prTuSensorModelsNew ${PROJECTIONS_TESTS1}  otbSensorModelsNew )
 
 # TEST 4
+IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(prTvTestCreateProjectionWithOSSIM_Toulouse ${PROJECTIONS_TESTS1}  
         otbCreateProjectionWithOSSIM
         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
@@ -161,12 +164,15 @@ ADD_TEST(prTvRegionProjectionResamplerCevennes ${PROJECTIONS_TESTS1}
 #           )
 #=======================================================================================
 
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 # TU pour otb::OrthoRectificationFilterBase otb::OrthoRectificationFilter 
 ADD_TEST(prTuOrthoRectificationFilterNew ${PROJECTIONS_TESTS2} 
         otbOrthoRectificationFilterNew )
 
 
 # TEST 16.2
+IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(prTvOrthoRectificationToulouse ${PROJECTIONS_TESTS2} 
   --compare-image ${EPSILON}  ${BASELINE}/prTvOrthoRectificationToulouse_UTM.tif
                           ${TEMP}/prTvOrthoRectificationToulouse_UTM.tif
@@ -276,8 +282,7 @@ ADD_TEST(prTvOrthoRectificationCevennesWithDEM ${PROJECTIONS_TESTS2}
         ${INPUTDATA}/DEM/srtm_directory/ 
 #         ${TEMP}/prTvOrthoRectificationCevennesWithDEM_UTM.tif
         )
-        
-        
+
 #========================= Ortho rectif SPOT5 ===============================        
 
 ADD_TEST(prTvOrthoRectificationSPOT5 ${PROJECTIONS_TESTS2} 
@@ -310,7 +315,8 @@ ADD_TEST(prTvOrthoRectificationSPOT5 ${PROJECTIONS_TESTS2}
         -5
         39
         N
-        )       
+        )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 #========================= TESTS SINGAPOUR ===============================
 
 #SET(EMMANUELDATA ${OTB_DATA_ROOT}/Emmanuel/Singapour/000000173549_01_P001_MUL)
