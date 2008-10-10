@@ -111,7 +111,7 @@ int main(int argc, char** argv )
   
   registrator->SetNumberOfIterations( atoi(argv[6]) );
 
-  registrator->GetDeformationField();
+  // registrator->GetDeformationField();
 
   registrator->Update();
 
