@@ -6,7 +6,10 @@ SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 #Images de teledetection (grosses images )
-SET(IMAGEDATA ${OTB_DATA_ROOT}/LargeInput )
+IF(OTB_DATA_USE_LARGEINPUT)
+  SET(IMAGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Tolerance sur diff pixel image
@@ -43,6 +46,7 @@ SET(IO_TESTS16    ${CXX_TEST_PATH}/otbIOTests16)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COMMON_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 
+IF(OTB_DATA_USE_LARGEINPUT)
 
 # ---  RADARSAT (GDAL)  ---
 ADD_TEST(ioTvMultiMonoChannelROI_RADARSAT2ENVI ${COMMON_TESTS3} 
@@ -60,6 +64,7 @@ ADD_TEST(ioTvMultiMonoChannelROI_RADARSAT_ENVI2ENVI ${COMMON_TESTS3}
          -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.hdr
          -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT_ENVI2ENVI_2559_3591_337_280_2.hdr
          -startX 0 -startY 0 -sizeX 337 -sizeY 280 )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # ---  ENVI (GDAL) ---
 ADD_TEST(ioTvMultiMonoChannelROI_ENVI2PNG ${COMMON_TESTS3} 
@@ -76,6 +81,7 @@ ADD_TEST(ioTvMultiMonoChannelROI_ENVI2PNG ${COMMON_TESTS3}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTests1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 
+IF(OTB_DATA_USE_LARGEINPUT)
 # ---  SAR_ERS2_SLCI (GDAL)  ---
 ADD_TEST(ioTvImageFileReaderERS ${IO_TESTS1} 
 #   --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderERS_SLCI.png
@@ -91,6 +97,7 @@ ADD_TEST(ioTvImageFileReaderRADARSAT ${IO_TESTS1}
          ${IMAGEDATA}/RADARSAT1/SCENE01/
          ${TEMP}/ioImageFileReaderRADARSAT.png)
 
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # ------- TEST IO COMMON   ------------------------------
 
@@ -403,6 +410,8 @@ ADD_TEST(ioTuGDALImageIOCanRead_ENVI ${IO_TESTS5} otbGDALImageIOTestCanRead
 #        ${INPUTDATA}/poupees_1canal.c1.hdr )
         ${INPUTDATA}/poupees_1canal.c1 )
 
+IF(OTB_DATA_USE_LARGEINPUT)
+
 ADD_TEST(ioTuGDALImageIOCanRead_RADARSAT ${IO_TESTS5} otbGDALImageIOTestCanRead 
 # Filename identification is now set in the ImageFileReader class (Fiche 212)
 #        ${IMAGEDATA}/RADARSAT1/SCENE01/ )
@@ -439,6 +448,8 @@ ADD_TEST(ioTuGDALImageIOCanRead_SPOT4 ${IO_TESTS5} otbGDALImageIOTestCanRead
 #        ${IMAGEDATA}/SPOT4_SCENE01/ )
         ${IMAGEDATA}/SPOT4_SCENE01/IMAG_01.DAT )
 
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 ADD_TEST(ioTuGDALImageIOCanRead_SPOT5TIF ${IO_TESTS5} otbGDALImageIOTestCanRead
 # Filename identification is now set in the ImageFileReader class (Fiche 212)
 #        ${INPUTDATA}/poupeesTIF/ )
@@ -460,6 +471,8 @@ ADD_TEST(ioTuGDALImageIOCanWrite_HFA ${IO_TESTS6} otbGDALImageIOTestCanWrite
 
 # -------            otb::ONERAImageIO   ------------------------------
 # CanRead()
+IF(OTB_DATA_USE_LARGEINPUT)
+
 ADD_TEST(ioTuONERAImageIOCanRead ${IO_TESTS6} otbONERAImageIOTestCanRead
         ${IMAGEDATA}/ONERA/spa3_0215_rad.ent)
 	
@@ -495,6 +508,8 @@ ADD_TEST(ioTvONERAImageStreamWriter ${IO_TESTS6}
         otbImageFileWriterStreamingONERAComplex
         ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
         ${TEMP}/ioImageFileReaderONERAStreamWrite.ent )
+
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # -------            otb::ONERAImageIO   ------------------------------
 # CanRead()
@@ -690,6 +705,7 @@ ADD_TEST(ioTvImageReaderWriterRgbJPEG2TIF ${IO_TESTS8}
 # -------            otb::MultiChannelExtractROI   ------------------------------
 
 
+IF(OTB_DATA_USE_LARGEINPUT)
 # ---  SPOT4 (CAI)  ---
 ADD_TEST(ioTvMultiChannelROI_SPOT42PNG ${COMMON_TESTS2} 
    --compare-image ${TOL}   ${BASELINE}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_1_2_3.png
@@ -707,6 +723,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT42PNG_2 ${COMMON_TESTS2}
          ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_3_2_1.png
          -startX 700 -startY 60 -sizeX 77 -sizeY 489
          -channels 3 2 1 )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # ---  ENVI  ---
 ADD_TEST(ioTvMultiChannelROI_ENVI2PNG_2 ${COMMON_TESTS2} 
@@ -733,6 +750,7 @@ ADD_TEST(ioTvMultiChannelROI_ENVI2PNG_2 ${COMMON_TESTS2}
 
 # ---  SPOT5 (CAI)  ---
 # ---  Test sur l'image SPOT 5 4 canaux  ---
+IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvMultiChannelROI_SPOT52PNG ${COMMON_TESTS2} 
    --compare-image ${TOL}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channels_1_2_3.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channels_1_2_3.png
@@ -861,6 +879,7 @@ ADD_TEST(ioTvMultiChannelROI_QuickbirdXS2TIFF ${COMMON_TESTS2}
          -ushort ${TEMP}/ioExtractROI_QuickbirdXS2TIFF_1000_1000_100_150.tif
          -startX 1000 -startY 1000 -sizeX 100 -sizeY 150
          )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 #         -channels 1 2 3)
 
 
@@ -868,6 +887,7 @@ ADD_TEST(ioTvMultiChannelROI_QuickbirdXS2TIFF ${COMMON_TESTS2}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS9 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTuOtbImageTestSAR_ERS ${IO_TESTS9} 
    --compare-ascii ${EPS}  ${BASELINE_FILES}/ioOtbImageTestSAR_ERS.txt
                      ${TEMP}/ioOtbImageTestSAR_ERS.txt
@@ -899,8 +919,8 @@ ADD_TEST(ioTuOtbVectorImageTestSpot5 ${IO_TESTS9}
         otbVectorImageTest 
         ${IMAGEDATA}/SPOT5_SCENE01/
         ${TEMP}/ioOtbVectorImageTestSpot5.txt)
-        
 
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # ---  otb::VectorImageReadWriteTest  ---
 ADD_TEST(ioTvVectorImageFileReaderWriterTest ${IO_TESTS9} 
@@ -1167,6 +1187,7 @@ ADD_TEST(ioTvSpatialObjectDXFReader ${IO_TESTS11}
 # -------     Test pour la lecture des m�tadonn�es OSSIM  ------------------------
 
 # ---  Quickbird Metadata ---
+IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvOSSIMImageQuickbirdMetaDataReader ${IO_TESTS12} 
    --compare-n-ascii ${EPS} 2           ${BASELINE_FILES}/ioOSSIMImageQuickbirdMetaDataReader.txt
                                         ${TEMP}/ioOSSIMImageQuickbirdMetaDataReader.txt
@@ -1201,6 +1222,7 @@ ADD_TEST(ioTvOSSIMImageERS2MetaDataReader ${IO_TESTS12}
 	 ${TEMP}/ioOSSIMImageERS2MetaDataReader.txt
 	 ${TEMP}/ioOSSIMVectorImageERS2MetaDataReader.txt
          )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # ---  otb::DEMHandler ---
 ADD_TEST(ioTuDEMHandlerNew ${IO_TESTS12} otbDEMHandlerNew )
@@ -1226,14 +1248,13 @@ ADD_TEST(ioTvDEMToImageGeneratorTest ${IO_TESTS12}
         otbDEMToImageGeneratorTest
          ${INPUTDATA}/DEM/srtm_directory
          ${TEMP}/ioTvDEMToImageGenerator.tif
-				 6.5
-         44.5
-         500
-         500
-				 0.002
-				 0.002
-         )
- 
+        6.5
+        44.5
+        500
+        500
+        0.002
+        0.002
+        )
 
 
 ADD_TEST(ioTvossimElevManagerTest ${IO_TESTS12}
@@ -1283,10 +1304,12 @@ ADD_TEST(ioTuJ2KImageIOCanRead ${IO_TESTS13}
          ${INPUTDATA}/bretagne.j2k
          )
 
+IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTuJP2ImageIOCanRead ${IO_TESTS13} 
          otbJPEG2000ImageIOTestCanRead
          ${IMAGEDATA}/JPEG2000/QB_multicomp.jpx
          )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(ioTvVectorImageFileReaderWriterJ2K2TIF ${IO_TESTS9} 
 --compare-image ${TOL}  ${BASELINE}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
@@ -1305,6 +1328,7 @@ ADD_TEST(ioTvImageFileReaderWriterJ2K2TIF ${IO_TESTS2}
         )
 
 #NOTE: we are comparing with the kakadu output in raw format.
+IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF ${IO_TESTS9} 
 --compare-image ${TOL}  ${BASELINE}/ioTvVectorImageFileReaderWriterJP22TIFOutput
                         ${TEMP}/ioTvVectorImageFileReaderWriterJP22TIFOutput.tif
@@ -1321,6 +1345,7 @@ ADD_TEST(ioTvImageFileReaderWriterJP22TIF ${IO_TESTS2}
          ${IMAGEDATA}/JPEG2000/QB_multicomp_small.jpx
 	 ${TEMP}/ioTvImageFileReaderWriterJP22TIFOutput.tif
          )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
 
@@ -1335,11 +1360,13 @@ ENDIF(OTB_COMPILE_JPEG2000)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS14 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTuOGRDriverTest ${IO_TESTS14}
 				otbOGRDriverTest
 				${IMAGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_PRODUCT_SHAPE.shp
 				foo
 				)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 				
 ADD_TEST(ioTvGDALDriverDoubleWritingTest ${IO_TESTS14}
 		--compare-n-images ${TOL} 4
@@ -1360,6 +1387,7 @@ ADD_TEST(ioTvGDALDriverDoubleWritingTest ${IO_TESTS14}
 			${TEMP}/ioGdalDriverDoubleWritingTestImage4.tif
 )
 
+IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvReadingComplexDataIntoComplexImage ${IO_TESTS14}
 		otbReadingComplexDataIntoComplexImageTest
 		${IMAGEDATA}/RADARSAT2/SCENE01/DAT_01.001 
@@ -1376,6 +1404,8 @@ ADD_TEST(ioTvWritingComplexDataWithComplexImage ${IO_TESTS14}
 		1000 1000
 		500  500
 )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS15 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1388,12 +1418,14 @@ ADD_TEST(ioTuVectorDataSourceNew ${IO_TESTS15}
 ADD_TEST(ioTuVectorDataFileReaderNew ${IO_TESTS15} 
         otbVectorDataFileReaderNew )
 
+IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvSHPVectorDataFileReader ${IO_TESTS15} 
         --compare-ascii ${TOL}  ${BASELINE_FILES}/ioSHPVectorDataFileReader.txt
                         ${TEMP}/ioSHPVectorDataFileReader.txt
         otbVectorDataFileReader
 	${IMAGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
 	${TEMP}/ioSHPVectorDataFileReader.txt)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(ioTuVectorDataFileWriterNew ${IO_TESTS15} 
         otbVectorDataFileWriterNew )
@@ -1409,11 +1441,13 @@ ADD_TEST(ioTvVectorDataFileWriter ${IO_TESTS15}
 # If the file exists, try remove it to prevent test failure
 FILE(REMOVE ${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp)
 
+IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvVectorDataFileReaderWriter ${IO_TESTS15} 
         otbVectorDataFileReaderWriter
 	${IMAGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
 	${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp	
 	)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(ioTuKMLVectorDataIO ${IO_TESTS15} 
         otbKMLVectorDataIONew )

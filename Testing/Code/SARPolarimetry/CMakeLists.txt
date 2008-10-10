@@ -6,7 +6,9 @@ SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 #Images de teledetection (grosses images )
-SET(IMAGEDATA ${OTB_DATA_ROOT}/LargeInput )
+IF(OTB_DATA_USE_LARGEINPUT)
+  SET(IMAGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Tolerance sur diff pixel image
@@ -88,6 +90,7 @@ ADD_TEST(rdTuMultiChannelsPolarimetricSynthesisFilterNew ${SARPOLARIMETRY_TESTS1
 	)
             
 # With vector image HH, HV, VH and VV channels      
+#IF(OTB_DATA_USE_LARGEINPUT)
 #ADD_TEST(rdTvVectorMultiChannelsPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
 #  --compare-image ${TOL}   ${BASELINE}/rdTvMultiPolarimetricSynthesis1.tif
 #                    ${TEMP}/resMultiPolarimetricSynthesis1.tif
@@ -99,6 +102,7 @@ ADD_TEST(rdTuMultiChannelsPolarimetricSynthesisFilterNew ${SARPOLARIMETRY_TESTS1
 #         0.0     # PsiR
 #         0.0     # KhiR
 #	)
+#ENDIF(OTB_DATA_USE_LARGEINPUT)
         
         
 # With 3 images HH, HV and VV channels turned into vectorImage      

@@ -4,7 +4,9 @@ SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 #Images de teledetection (grosses images )
-SET(IMAGEDATA ${OTB_DATA_ROOT}/LargeInput )
+IF(OTB_DATA_USE_LARGEINPUT)
+  SET(IMAGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 
@@ -69,15 +71,15 @@ ADD_TEST(viTvImageViewerWithOtbVectorImage ${VISU_TESTS1}
 	${INPUTDATA}/couleurs.jpg 3
         )
 
+ADD_TEST(viTvImageViewerWithOtbImage ${VISU_TESTS1} 
+        otbImageViewerWithOtbImage
+        ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+        )
+
+IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(viTvImageViewerWithLargeOtbVectorImage ${VISU_TESTS1} 
         otbImageViewer
 	${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF 0
-        )
-
-
-ADD_TEST(viTvImageViewerWithOtbImage ${VISU_TESTS1} 
-        otbImageViewerWithOtbImage
-	${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
         )
 
 ADD_TEST(viTvModulusImageViewerWithComplexImage ${VISU_TESTS1} 
@@ -94,6 +96,7 @@ ADD_TEST(viTvImageViewerWithLargeOtbImage ${VISU_TESTS1}
         otbImageViewerWithOtbImage
 	${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF 0
         )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbVISU_Tests2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
