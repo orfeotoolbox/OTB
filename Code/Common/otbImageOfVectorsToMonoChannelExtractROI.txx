@@ -15,10 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMultiToMonoChannelExtractROI_txx
-#define __otbMultiToMonoChannelExtractROI_txx
+#ifndef __otbImageOfVectorsToMonoChannelExtractROI_txx
+#define __otbImageOfVectorsToMonoChannelExtractROI_txx
 
-#include "otbMultiToMonoChannelExtractROI.h"
+#include "otbImageOfVectorsToMonoChannelExtractROI.h"
 
 namespace otb
 {
@@ -27,9 +27,8 @@ namespace otb
  *
  */
 template<class TInputImage, class TOutputImage>
-MultiToMonoChannelExtractROI<TInputImage,TOutputImage>
-::MultiToMonoChannelExtractROI() :    ExtractROIBase< VectorImage<TInputImage,2> , Image<TOutputImage,2> >(),
-                                m_Channel(1)
+ImageOfVectorsToMonoChannelExtractROI<TInputImage,TOutputImage>
+::ImageOfVectorsToMonoChannelExtractROI() : m_Channel(1)
 {
 
 }
@@ -39,7 +38,7 @@ MultiToMonoChannelExtractROI<TInputImage,TOutputImage>
  */
 template<class TInputImage, class TOutputImage>
 void 
-MultiToMonoChannelExtractROI<TInputImage,TOutputImage>
+ImageOfVectorsToMonoChannelExtractROI<TInputImage,TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
@@ -57,14 +56,14 @@ MultiToMonoChannelExtractROI<TInputImage,TOutputImage>
  */
 template<class TInputImage, class TOutputImage>
 void 
-MultiToMonoChannelExtractROI<TInputImage,TOutputImage>
+ImageOfVectorsToMonoChannelExtractROI<TInputImage,TOutputImage>
 ::GenerateOutputInformation()
 {
         typename Superclass::InputImageConstPointer  inputPtr = this->GetInput();
         // Analyse du canal traité
         if ( (m_Channel <= 0) || (m_Channel > InputImagePixelType::Dimension ) )
         {
-                        itkExceptionMacro(<< "otb::ExtractImMultiToMonoChannelExtractROIageFilter::GenerateOutputInformation "
+                        itkExceptionMacro(<< "otb::ExtractImImageOfVectorsToMonoChannelExtractROIageFilter::GenerateOutputInformation "
                       << " Channel must be in the following range: [1;"<< InputImagePixelType::Dimension <<"] "
                       << typeid(itk::ImageBase<InputImageDimension>*).name() );
         }
@@ -76,7 +75,7 @@ MultiToMonoChannelExtractROI<TInputImage,TOutputImage>
 
 template<class TInputImage, class TOutputImage>
 void 
-MultiToMonoChannelExtractROI<TInputImage,TOutputImage>
+ImageOfVectorsToMonoChannelExtractROI<TInputImage,TOutputImage>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                        int threadId)
 {
