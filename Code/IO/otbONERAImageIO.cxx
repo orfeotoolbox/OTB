@@ -176,14 +176,14 @@ void ONERAImageIO::Read(void* buffer)
 
    unsigned char * p = static_cast<unsigned char *>(buffer);
    
-   int lNbLignes   = this->GetIORegion().GetSize()[1];
-   int lNbColonnes = this->GetIORegion().GetSize()[0];
-   int lPremiereLigne   = this->GetIORegion().GetIndex()[1] ; // [1... ]
-   int lPremiereColonne = this->GetIORegion().GetIndex()[0] ; // [1... ]
+   int lNbLines   = this->GetIORegion().GetSize()[1];
+   int lNbColumns = this->GetIORegion().GetSize()[0];
+   int lFirstLine   = this->GetIORegion().GetIndex()[1] ; // [1... ]
+   int lFirstColumn = this->GetIORegion().GetIndex()[0] ; // [1... ]
 
 otbMsgDevMacro( <<" ONERAImageIO::Read()  ");
-otbMsgDevMacro( <<" Dimensions de l'image  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
-otbMsgDevMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
+otbMsgDevMacro( <<" Image size  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
+otbMsgDevMacro( <<" Region read (IORegion)  : "<<this->GetIORegion());
 otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
 
   //read header information file:
@@ -195,16 +195,16 @@ otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
   std::streamoff numberOfBytesPerLines = static_cast<std::streamoff>(2 * m_width * m_NbOctetPixel);
   std::streamoff headerLength = ONERA_HEADER_LENGTH + numberOfBytesPerLines;
   std::streamoff offset;
-  std::streamsize numberOfBytesToBeRead = 2 * m_NbOctetPixel *lNbColonnes;
+  std::streamsize numberOfBytesToBeRead = 2 * m_NbOctetPixel *lNbColumns;
   std::streamsize numberOfBytesRead;        
 
   char* value = new char[numberOfBytesToBeRead];
   std::streamsize cpt = 0;
  
-  for(int LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
+  for(int LineNo = lFirstLine;LineNo <lFirstLine + lNbLines; LineNo++ )
     {
 	offset  =  headerLength + numberOfBytesPerLines * static_cast<std::streamoff>(LineNo);
-	offset +=  static_cast<std::streamoff>(m_NbOctetPixel * lPremiereColonne);
+	offset +=  static_cast<std::streamoff>(m_NbOctetPixel * lFirstColumn);
   	m_Datafile.seekg(offset, std::ios::beg);
         m_Datafile.read( static_cast<char *>( value ), numberOfBytesToBeRead );
     	numberOfBytesRead = m_Datafile.gcount();
@@ -223,7 +223,7 @@ otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
     }
 
   //byte swapping depending on pixel type:
-        unsigned long numberOfPixelsPerRegion = lNbLignes * lNbColonnes * 2;
+        unsigned long numberOfPixelsPerRegion = lNbLines * lNbColumns * 2;
         // Swap bytes if necessary
         if ( 0 ) {}
         otbSwappFileToSystemMacro( float, FLOAT, buffer, numberOfPixelsPerRegion )
@@ -494,39 +494,39 @@ void ONERAImageIO::Write(const void* buffer)
   // variable not used.
   // const unsigned long numberOfComponents = this->GetImageSizeInComponents();
 
-  unsigned int lNbLignes   = this->GetIORegion().GetSize()[1];
-  unsigned int lNbColonnes = this->GetIORegion().GetSize()[0];
-  int lPremiereLigne   = this->GetIORegion().GetIndex()[1] ; // [1... ]
-  int lPremiereColonne = this->GetIORegion().GetIndex()[0] ; // [1... ]
+  unsigned int lNbLines   = this->GetIORegion().GetSize()[1];
+  unsigned int lNbColumns = this->GetIORegion().GetSize()[0];
+  int lFirstLine   = this->GetIORegion().GetIndex()[1] ; // [1... ]
+  int lFirstColumn = this->GetIORegion().GetIndex()[0] ; // [1... ]
 
 otbMsgDevMacro( <<" ONERAImageIO::Write()  ");
-otbMsgDevMacro( <<" Dimensions de l'image  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
-otbMsgDevMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
+otbMsgDevMacro( <<" Image size  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
+otbMsgDevMacro( <<" Region read (IORegion)  : "<<this->GetIORegion());
 otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
 
 	// Cas particuliers : on controle que si la r�gion � �crire est de la m�me dimension que l'image enti�re,
 	// on commence l'offset � 0 (lorsque que l'on est pas en "Streaming")
-	if( (lNbLignes == m_Dimensions[1]) && (lNbColonnes == m_Dimensions[0]))
+	if( (lNbLines == m_Dimensions[1]) && (lNbColumns == m_Dimensions[0]))
 	{
                 otbMsgDevMacro(<<"Force l'offset de l'IORegion a 0");
-		lPremiereLigne = 0;
-		lPremiereColonne = 0;
+		lFirstLine = 0;
+		lFirstColumn = 0;
 	}
 
-  std::streamsize numberOfBytesPerLines = step * lNbColonnes * m_NbOctetPixel;
+  std::streamsize numberOfBytesPerLines = step * lNbColumns * m_NbOctetPixel;
   std::streamoff headerLength = ONERA_HEADER_LENGTH + numberOfBytesPerLines;
   std::streamoff offset;
-  unsigned long numberOfBytesRegion = step * m_NbOctetPixel *lNbColonnes *lNbLignes;
+  unsigned long numberOfBytesRegion = step * m_NbOctetPixel *lNbColumns *lNbLines;
 
   char *tempmemory = new char[numberOfBytesRegion];
   memcpy(tempmemory,buffer,numberOfBytesRegion);
 
-  for(unsigned int LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
+  for(unsigned int LineNo = lFirstLine;LineNo <lFirstLine + lNbLines; LineNo++ )
     {
-	char* value = tempmemory + numberOfBytesPerLines * (LineNo - lPremiereLigne);
+	char* value = tempmemory + numberOfBytesPerLines * (LineNo - lFirstLine);
 
 	offset  =  headerLength + static_cast<std::streamoff>(numberOfBytesPerLines) * static_cast<std::streamoff>(LineNo);
-	offset +=  static_cast<std::streamoff>(m_NbOctetPixel * lPremiereColonne);
+	offset +=  static_cast<std::streamoff>(m_NbOctetPixel * lFirstColumn);
   	m_Datafile.seekp(offset, std::ios::beg);
 	m_Datafile.write( static_cast<char *>( value ), numberOfBytesPerLines );
     }

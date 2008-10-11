@@ -127,20 +127,20 @@ void BSQImageIO::Read(void* buffer)
         unsigned long step = this->GetNumberOfComponents();
         char * p = static_cast<char *>(buffer);
    
-        int lNbLignes   = this->GetIORegion().GetSize()[1];
-        int lNbColonnes = this->GetIORegion().GetSize()[0];
-        int lPremiereLigne   = this->GetIORegion().GetIndex()[1] ; // [1... ]
-        int lPremiereColonne = this->GetIORegion().GetIndex()[0] ; // [1... ]
+        int lNbLines   = this->GetIORegion().GetSize()[1];
+        int lNbColumns = this->GetIORegion().GetSize()[0];
+        int lFirstLine   = this->GetIORegion().GetIndex()[1] ; // [1... ]
+        int lFirstColumn = this->GetIORegion().GetIndex()[0] ; // [1... ]
 
 otbMsgDevMacro( <<" BSQImageIO::Read()  ");
-otbMsgDevMacro( <<" Dimensions de l'image  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
-otbMsgDevMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
+otbMsgDevMacro( <<" Image size  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
+otbMsgDevMacro( <<" Region read (IORegion)  : "<<this->GetIORegion());
 otbMsgDevMacro( <<" Nb Of Components       : "<<this->GetNumberOfComponents());
 
         std::streamoff  headerLength(0);
         std::streamoff  numberOfBytesPerLines = static_cast<std::streamoff>(this->GetComponentSize() * m_Dimensions[0]);
         std::streamoff  offset;
-        std::streamsize numberOfBytesToBeRead = this->GetComponentSize() * lNbColonnes;
+        std::streamsize numberOfBytesToBeRead = this->GetComponentSize() * lNbColumns;
         std::streamsize numberOfBytesRead;        
         unsigned long cpt = 0;
 
@@ -166,10 +166,10 @@ otbMsgDevMacro( <<" sizeof(unsigned long) : "<<sizeof(unsigned long));
         {
                 cpt = (unsigned long )(nbComponents)* (unsigned long)(this->GetComponentSize());
                 //Read region of the channel
-                for(int LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
+                for(int LineNo = lFirstLine;LineNo <lFirstLine + lNbLines; LineNo++ )
                 {
 	                offset  =  headerLength + numberOfBytesPerLines * static_cast<std::streamoff>(LineNo);
-        	        offset +=  static_cast<std::streamoff>(this->GetComponentSize() * lPremiereColonne);
+        	        offset +=  static_cast<std::streamoff>(this->GetComponentSize() * lFirstColumn);
   	                m_ChannelsFile[nbComponents].seekg(offset, std::ios::beg);
                         //Read a line
                         m_ChannelsFile[nbComponents].read( static_cast<char *>( value ), numberOfBytesToBeRead );
@@ -192,7 +192,7 @@ otbMsgDevMacro( <<" sizeof(unsigned long) : "<<sizeof(unsigned long));
                         }
                 }
         }
-        unsigned long numberOfPixelsOfRegion = lNbLignes * lNbColonnes * this->GetNumberOfComponents();
+        unsigned long numberOfPixelsOfRegion = lNbLines * lNbColumns * this->GetNumberOfComponents();
 
         delete [] value;
 
@@ -492,29 +492,29 @@ void BSQImageIO::Write(const void* buffer)
         }
 
         unsigned long step = this->GetNumberOfComponents();
-        unsigned int lNbLignes   = this->GetIORegion().GetSize()[1];
-        unsigned int lNbColonnes = this->GetIORegion().GetSize()[0];
-        int lPremiereLigne   = this->GetIORegion().GetIndex()[1] ; // [1... ]
-        int lPremiereColonne = this->GetIORegion().GetIndex()[0] ; // [1... ]
+        unsigned int lNbLines   = this->GetIORegion().GetSize()[1];
+        unsigned int lNbColumns = this->GetIORegion().GetSize()[0];
+        int lFirstLine   = this->GetIORegion().GetIndex()[1] ; // [1... ]
+        int lFirstColumn = this->GetIORegion().GetIndex()[0] ; // [1... ]
 
 	// Cas particuliers : on controle que si la r�gion � �crire est de la m�me dimension que l'image enti�re,
 	// on commence l'offset � 0 (lorsque que l'on est pas en "Streaming")
-	if( (lNbLignes == m_Dimensions[1]) && (lNbColonnes == m_Dimensions[0]))
+	if( (lNbLines == m_Dimensions[1]) && (lNbColumns == m_Dimensions[0]))
 	{
                 otbMsgDevMacro(<<"Force l'offset de l'IORegion � 0");
-		lPremiereLigne = 0;
-		lPremiereColonne = 0;
+		lFirstLine = 0;
+		lFirstColumn = 0;
 	}
 
 otbMsgDevMacro( <<" BSQImageIO::Write()  ");
-otbMsgDevMacro( <<" Dimensions de l'image  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
-otbMsgDevMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
+otbMsgDevMacro( <<" Image size  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
+otbMsgDevMacro( <<" Region read (IORegion)  : "<<this->GetIORegion());
 otbMsgDevMacro( <<" Nb Of Components       : "<<this->GetNumberOfComponents());
 otbMsgDevMacro( <<" GetComponentSize       : "<<this->GetComponentSize());
 
         std::streamoff headerLength(0);
         std::streamoff  numberOfBytesPerLines = static_cast<std::streamoff>(this->GetComponentSize() * m_Dimensions[0]);
-        std::streamsize numberOfBytesToBeWrite = static_cast<std::streamsize>(this->GetComponentSize() * lNbColonnes);
+        std::streamsize numberOfBytesToBeWrite = static_cast<std::streamsize>(this->GetComponentSize() * lNbColumns);
         std::streamoff offset = 0;
         unsigned long cpt = 0;
 
@@ -533,7 +533,7 @@ otbMsgDevMacro( <<" GetComponentSize       : "<<this->GetComponentSize());
         {
                 cpt = (unsigned long )(nbComponents)* (unsigned long)(this->GetComponentSize());
                 //Read region of the channel
-                for(unsigned int LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
+                for(unsigned int LineNo = lFirstLine;LineNo <lFirstLine + lNbLines; LineNo++ )
                 {
                         for ( std::streamsize  i=0 ; i < numberOfBytesToBeWrite ; i = i+static_cast<std::streamsize>(this->GetComponentSize()) )
                         {
@@ -542,7 +542,7 @@ otbMsgDevMacro( <<" GetComponentSize       : "<<this->GetComponentSize());
                         }
 
 	                offset  =  headerLength + numberOfBytesPerLines * static_cast<std::streamoff>(LineNo);
-        	        offset +=  static_cast<std::streamoff>(this->GetComponentSize() * lPremiereColonne);
+        	        offset +=  static_cast<std::streamoff>(this->GetComponentSize() * lFirstColumn);
   	                m_ChannelsFile[nbComponents].seekp(offset, std::ios::beg);
                         //Write a line
                         m_ChannelsFile[nbComponents].write( static_cast<char *>( value ), numberOfBytesToBeWrite );

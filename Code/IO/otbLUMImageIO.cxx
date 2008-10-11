@@ -126,26 +126,26 @@ void LUMImageIO::Read(void* buffer)
 {
         char * p = static_cast<char *>(buffer);
    
-        int lNbLignes   = this->GetIORegion().GetSize()[1];
-        int lNbColonnes = this->GetIORegion().GetSize()[0];
-        int lPremiereLigne   = this->GetIORegion().GetIndex()[1] ; // [1... ]
-        int lPremiereColonne = this->GetIORegion().GetIndex()[0] ; // [1... ]
+        int lNbLines   = this->GetIORegion().GetSize()[1];
+        int lNbColumns = this->GetIORegion().GetSize()[0];
+        int lFirstLine   = this->GetIORegion().GetIndex()[1] ; // [1... ]
+        int lFirstColumn = this->GetIORegion().GetIndex()[0] ; // [1... ]
 
 otbMsgDevMacro( <<" LUMImageIO::Read()  ");
-otbMsgDevMacro( <<" Dimensions de l'image  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
-otbMsgDevMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
+otbMsgDevMacro( <<" Image size  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
+otbMsgDevMacro( <<" Region read (IORegion)  : "<<this->GetIORegion());
 otbMsgDevMacro( <<" Nb Of Components       : "<<this->GetNumberOfComponents());
 
         std::streamoff headerLength = static_cast<std::streamoff>(this->GetComponentSize() * m_Dimensions[0]);
         std::streamoff numberOfBytesPerLines = headerLength;
         std::streamoff offset;
-        std::streamsize numberOfBytesToBeRead = static_cast<std::streamsize>(this->GetComponentSize() * lNbColonnes);
+        std::streamsize numberOfBytesToBeRead = static_cast<std::streamsize>(this->GetComponentSize() * lNbColumns);
         std::streamsize numberOfBytesRead;        
         std::streamsize cpt = 0;
-        for(int LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
+        for(int LineNo = lFirstLine;LineNo <lFirstLine + lNbLines; LineNo++ )
         {
 	        offset  =  headerLength + numberOfBytesPerLines * static_cast<std::streamoff>(LineNo);
-	        offset +=  static_cast<std::streamoff>(this->GetComponentSize() * lPremiereColonne);
+	        offset +=  static_cast<std::streamoff>(this->GetComponentSize() * lFirstColumn);
   	        m_File.seekg(offset, std::ios::beg);
                 m_File.read( static_cast<char *>( p + cpt ), numberOfBytesToBeRead );
     	        numberOfBytesRead = m_File.gcount();
@@ -161,7 +161,7 @@ otbMsgDevMacro( <<" Nb Of Components       : "<<this->GetNumberOfComponents());
                 cpt += numberOfBytesToBeRead;
         }
  
-        unsigned long numberOfPixelsPerLines = lNbLignes * lNbColonnes;
+        unsigned long numberOfPixelsPerLines = lNbLines * lNbColumns;
         // Swap bytes if necessary
         if ( 0 ) {}
         otbSwappFileToSystemMacro( unsigned short, USHORT, buffer, numberOfPixelsPerLines )
@@ -340,38 +340,38 @@ void LUMImageIO::Write(const void* buffer)
   	        m_FlagWriteImageInformation = false;
         }
 
-        unsigned long lNbLignes   = this->GetIORegion().GetSize()[1];
-        unsigned long lNbColonnes = this->GetIORegion().GetSize()[0];
-        unsigned long lPremiereLigne   = this->GetIORegion().GetIndex()[1] ; // [1... ]
-        int lPremiereColonne = this->GetIORegion().GetIndex()[0] ; // [1... ]
+        unsigned long lNbLines   = this->GetIORegion().GetSize()[1];
+        unsigned long lNbColumns = this->GetIORegion().GetSize()[0];
+        unsigned long lFirstLine   = this->GetIORegion().GetIndex()[1] ; // [1... ]
+        int lFirstColumn = this->GetIORegion().GetIndex()[0] ; // [1... ]
 
 	// Cas particuliers : on controle que si la r�gion � �crire est de la m�me dimension que l'image enti�re,
 	// on commence l'offset � 0 (lorsque que l'on est pas en "Streaming")
-	if( (lNbLignes == m_Dimensions[1]) && (lNbColonnes == m_Dimensions[0]))
+	if( (lNbLines == m_Dimensions[1]) && (lNbColumns == m_Dimensions[0]))
 	{
                 otbMsgDevMacro(<<"Force l'offset de l'IORegion � 0");
-		lPremiereLigne = 0;
-		lPremiereColonne = 0;
+		lFirstLine = 0;
+		lFirstColumn = 0;
 	}
 
 otbMsgDevMacro( <<" LUMImageIO::Write()  ");
-otbMsgDevMacro( <<" Dimensions de l'image  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
-otbMsgDevMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
+otbMsgDevMacro( <<" Image size  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
+otbMsgDevMacro( <<" Region read (IORegion)  : "<<this->GetIORegion());
 otbMsgDevMacro( <<" Nb Of Components       : "<<this->GetNumberOfComponents());
 otbMsgDevMacro( <<" GetComponentSize       : "<<this->GetComponentSize());
 
         std::streamoff numberOfBytesPerLines = this->GetComponentSize() * m_Dimensions[0];
         std::streamoff headerLength = numberOfBytesPerLines;
         std::streamoff offset;
-        std::streamsize numberOfBytesToBeWrite = this->GetComponentSize() * lNbColonnes;
+        std::streamsize numberOfBytesToBeWrite = this->GetComponentSize() * lNbColumns;
         std::streamsize cpt = 0;
 
         const char * p = static_cast<const char *>(buffer);
  
-        for(unsigned long LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
+        for(unsigned long LineNo = lFirstLine;LineNo <lFirstLine + lNbLines; LineNo++ )
         {
 	        offset  =  headerLength + numberOfBytesPerLines * static_cast<std::streamoff>(LineNo);
-	        offset +=  static_cast<std::streamoff>(this->GetComponentSize() * lPremiereColonne);
+	        offset +=  static_cast<std::streamoff>(this->GetComponentSize() * lFirstColumn);
   	        m_File.seekp(offset, std::ios::beg);
             m_File.write( static_cast<const char *>( p + cpt ), numberOfBytesToBeWrite );
             cpt += numberOfBytesToBeWrite;

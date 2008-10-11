@@ -323,10 +323,10 @@ void MSTARImageIO::Read(void* buffer)
         unsigned long step = this->GetNumberOfComponents() * (unsigned long)(m_NbOctetPixel);;
         float * p = static_cast<float *>(buffer);
 
-        int lNbLignes   = this->GetIORegion().GetSize()[1];
-        int lNbColonnes = this->GetIORegion().GetSize()[0];
+        int lNbLines   = this->GetIORegion().GetSize()[1];
+        int lNbColumns = this->GetIORegion().GetSize()[0];
         
-        unsigned long lNbPixels = (unsigned long)(lNbColonnes*lNbLignes);
+        unsigned long lNbPixels = (unsigned long)(lNbColumns*lNbLines);
         unsigned long lTailleBuffer = (unsigned long)(m_NbOctetPixel)*lNbPixels;
         
         unsigned char* value = new unsigned char[lTailleBuffer];
@@ -643,7 +643,7 @@ void MSTARImageIO::ReadImageInformation()
         m_Dimensions[0] = NbColonnes;
         m_Dimensions[1] = NbLignes;
         m_NbOctetPixel = NbOctetPixel;
-otbMsgDebugMacro( <<"Dimensions de l'image cree : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
+otbMsgDebugMacro( <<"Image size cree : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
         
         m_PixelType = VECTOR;
 

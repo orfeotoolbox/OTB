@@ -187,17 +187,17 @@ void GDALImageIO::Read(void* buffer)
                 return;
         }
 
-        int lNbLignes   = this->GetIORegion().GetSize()[1];
-        int lNbColonnes = this->GetIORegion().GetSize()[0];
-        int lPremiereLigne   = this->GetIORegion().GetIndex()[1]; // [1... ]
-        int lPremiereColonne = this->GetIORegion().GetIndex()[0]; // [1... ]
+        int lNbLines   = this->GetIORegion().GetSize()[1];
+        int lNbColumns = this->GetIORegion().GetSize()[0];
+        int lFirstLine   = this->GetIORegion().GetIndex()[1]; // [1... ]
+        int lFirstColumn = this->GetIORegion().GetIndex()[0]; // [1... ]
 
 otbMsgDevMacro( <<" GDALImageIO::Read()  ");
 otbMsgDevMacro( <<" Image size  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
 otbMsgDevMacro( <<" Region read (IORegion)  : "<<this->GetIORegion());
 otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
 
-        std::streamoff lNbPixels = (static_cast<std::streamoff>(lNbColonnes))*(static_cast<std::streamoff>(lNbLignes));
+        std::streamoff lNbPixels = (static_cast<std::streamoff>(lNbColumns))*(static_cast<std::streamoff>(lNbLines));
 		std::streamoff lTailleBuffer = static_cast<std::streamoff>(m_NbOctetPixel)*lNbPixels;
 
 otbMsgDevMacro( <<" Allocation buff tempon taille : "<<lNbPixels<<"*"<<m_NbOctetPixel<<" (NbOctetPixel) = "<<lTailleBuffer);
@@ -226,7 +226,7 @@ otbMsgDevMacro( <<" sizeof(unsigned long) : "<<sizeof(unsigned long));
   	if( GDALDataTypeIsComplex(m_PxType) )
 	{
 			otbMsgDevMacro( << " GDALDataTypeIsComplex begin ");
-			lCrGdal = m_poBands[0]->RasterIO( GF_Read,lPremiereColonne,lPremiereLigne,lNbColonnes, lNbLignes, value , lNbColonnes, lNbLignes, m_PxType,0, 0 );
+			lCrGdal = m_poBands[0]->RasterIO( GF_Read,lFirstColumn,lFirstLine,lNbColumns, lNbLines, value , lNbColumns, lNbLines, m_PxType,0, 0 );
 
 			if (lCrGdal == CE_Failure)
             {
@@ -246,7 +246,7 @@ otbMsgDevMacro( <<" sizeof(unsigned long) : "<<sizeof(unsigned long));
 
         	for (unsigned int nbComponents = 0 ; nbComponents < this->GetNumberOfComponents() ; nbComponents++)
         	{
-			lCrGdal = m_poBands[nbComponents]->RasterIO( GF_Read,lPremiereColonne,lPremiereLigne,lNbColonnes, lNbLignes, value , lNbColonnes, lNbLignes, m_PxType,0, 0 ) ;
+			lCrGdal = m_poBands[nbComponents]->RasterIO( GF_Read,lFirstColumn,lFirstLine,lNbColumns, lNbLines, value , lNbColumns, lNbLines, m_PxType,0, 0 ) ;
 			if (lCrGdal == CE_Failure)
                 	{
                           itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName.c_str()<<".");
@@ -762,23 +762,23 @@ void GDALImageIO::Write(const void* buffer)
                 return;
         }
 
-        unsigned int lNbLignes   = this->GetIORegion().GetSize()[1];
-        unsigned int lNbColonnes = this->GetIORegion().GetSize()[0];
-        int lPremiereLigne   = this->GetIORegion().GetIndex()[1]; // [1... ]
-        int lPremiereColonne = this->GetIORegion().GetIndex()[0]; // [1... ]
+        unsigned int lNbLines   = this->GetIORegion().GetSize()[1];
+        unsigned int lNbColumns = this->GetIORegion().GetSize()[0];
+        int lFirstLine   = this->GetIORegion().GetIndex()[1]; // [1... ]
+        int lFirstColumn = this->GetIORegion().GetIndex()[0]; // [1... ]
 
 	// Cas particuliers : on controle que si la r�gion � �crire est de la m�me dimension que l'image enti�re,
 	// on commence l'offset � 0 (lorsque que l'on est pas en "Streaming")
-	if( (lNbLignes == m_Dimensions[1]) && (lNbColonnes == m_Dimensions[0]))
+	if( (lNbLines == m_Dimensions[1]) && (lNbColumns == m_Dimensions[0]))
 	{
                 otbMsgDevMacro(<<"Forcing IORegion offset at 0");
-		lPremiereLigne = 0;
-		lPremiereColonne = 0;
+		lFirstLine = 0;
+		lFirstColumn = 0;
 	}
 
 otbMsgDevMacro( << "GDALImageIO::Write() IORegion Start["<<this->GetIORegion().GetIndex()[0]<<","<<this->GetIORegion().GetIndex()[1]<<"] Size ["<<this->GetIORegion().GetSize()[0]<<","<<this->GetIORegion().GetSize()[1]<<"] on Image size ["<<m_Dimensions[0]<<","<<m_Dimensions[1]<<"]");
 
-        std::streamoff lNbPixels = static_cast<std::streamoff>(lNbColonnes)*static_cast<std::streamoff>(lNbLignes);
+        std::streamoff lNbPixels = static_cast<std::streamoff>(lNbColumns)*static_cast<std::streamoff>(lNbLines);
         std::streamoff lTailleBuffer = static_cast<std::streamoff>(m_NbOctetPixel)*lNbPixels;
 otbMsgDevMacro( <<" TailleBuffer allocated : "<< lTailleBuffer);
         
@@ -805,12 +805,12 @@ otbMsgDevMacro( <<" TailleBuffer allocated : "<< lTailleBuffer);
                         cpt += step;
         	}
         	otbMsgDevMacro( << "NbOctets/pix : " << m_NbOctetPixel << " pxType : " << m_PxType);
-        	otbMsgDevMacro( << "PremiereCol : " << lPremiereColonne << " PremiereLig : " << lPremiereLigne);
-        	otbMsgDevMacro( << "NbCol : " << lNbColonnes << " NbLig : " << lNbLignes);
+        	otbMsgDevMacro( << "PremiereCol : " << lFirstColumn << " PremiereLig : " << lFirstLine);
+        	otbMsgDevMacro( << "NbCol : " << lNbColumns << " NbLig : " << lNbLines);
                 GDALRasterBand *poBand;
                 poBand =  m_poBands[nbComponents]; //m_poDataset->GetRasterBand(nbComponents+1);
-//        	lCrGdal = poBand->RasterIO(GF_Write,lPremiereColonne,lPremiereLigne,lNbColonnes, lNbLignes, value , lNbColonnes, lNbLignes, m_PxType,0, 0 ) ;
-        	lCrGdal = m_poBands[nbComponents]->RasterIO(GF_Write,lPremiereColonne,lPremiereLigne,lNbColonnes, lNbLignes, value , lNbColonnes, lNbLignes, m_PxType,0, 0 ) ;
+//        	lCrGdal = poBand->RasterIO(GF_Write,lFirstColumn,lFirstLine,lNbColumns, lNbLines, value , lNbColumns, lNbLines, m_PxType,0, 0 ) ;
+        	lCrGdal = m_poBands[nbComponents]->RasterIO(GF_Write,lFirstColumn,lFirstLine,lNbColumns, lNbLines, value , lNbColumns, lNbLines, m_PxType,0, 0 ) ;
         	if (lCrGdal == CE_Failure)
         	{
     			itkExceptionMacro(<< "Error while writing image (GDAL format) " << m_FileName.c_str()<<".");
