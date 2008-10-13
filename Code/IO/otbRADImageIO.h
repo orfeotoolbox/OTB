@@ -151,7 +151,7 @@ private:
   std::string m_TypeRAD;
   std::vector< std::string >  m_ChannelsFileName;    
   std::fstream *  m_ChannelsFile;
-  int     m_NbOfChannels;
+  unsigned int     m_NbOfChannels;
   int     m_NbOctetPixel;
   
 };

@@ -21,6 +21,19 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
                  ${ossim_kbool_SRCS} ${ossim_dll_main_SRCS} )
         SET_SOURCE_FILES_PROPERTIES( ${f} PROPERTIES COMPILE_FLAGS -w )
   ENDFOREACH(f)
+ELSE(CMAKE_COMPILER_IS_GNUCXX)
+  IF(NOT BORLAND)
+    IF(NOT CYGWIN)
+      IF(NOT MINGW)
+        FOREACH(f       ${ossim_base_SRCS} ${ossim_elevation_SRCS} ${ossim_font_SRCS} ${ossim_imaging_SRCS} ${ossim_matrix_SRCS} 
+                        ${ossim_parallel_SRCS} ${ossim_projection_SRCS} ${ossim_support_data_SRCS}
+                        ${ossim_vec_SRCS} ${ossim_vpfutil_SRCS} ${ossim_plugin_SRCS} ${ossim_init_SRCS} 
+                        ${ossim_kbool_SRCS} ${ossim_dll_main_SRCS} )
+                SET_SOURCE_FILES_PROPERTIES( ${f} PROPERTIES COMPILE_FLAGS /W0 )
+        ENDFOREACH(f)
+      ENDIF(NOT MINGW)
+    ENDIF(NOT CYGWIN)
+  ENDIF(NOT BORLAND)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 IF(WIN32)

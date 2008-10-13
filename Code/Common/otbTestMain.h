@@ -546,7 +546,7 @@ bool isHexaPointerAddress(std::string str)
 {
   unsigned int size(0);
   bool result(false);
-  unsigned int start;
+  unsigned int start(0);
   //If (0xadresss)
   if(	(str[0]==40) &&
   		(str[str.size()-1]==41) &&
@@ -639,7 +639,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
     		itkGenericExceptionMacro(<< "Impossible to open the baseline ASCII file <"<<baselineAsciiFileName<<">.");
     	}
 
-	TypeEtat etatPrec, etatCour ;
+	TypeEtat etatPrec(ETAT_NUM), etatCour(ETAT_NUM) ;
         
         std::vector<std::string> listStrDiffLineFileRef;
         std::vector<std::string> listStrDiffLineFileTest;

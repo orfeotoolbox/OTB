@@ -204,7 +204,7 @@ int otbOGRDriverTest(int argc, char* argv[])
       while( (poFeature2 = poLayer2->GetNextFeature()) != NULL )
 	{
 	  otbGenericMsgTestingMacro(<< "Feature! ");
-	  OGRFeature* poWFeature;
+	  OGRFeature* poWFeature(NULL);
 					
 	  unsigned int nbFields = poFeature2->GetFieldCount();
 	  for (unsigned int i=0; i<nbFields; i++)
@@ -242,7 +242,7 @@ int otbOGRDriverTest(int argc, char* argv[])
   OGRDataSource::DestroyDataSource( poDSW );
 
 
-  // Libération mémoire structure lecture
+  // Libï¿½ration mï¿½moire structure lecture
   for (unsigned int i=0; i<nbOfLayers; i++)
     {
       OGRLayer  *poLayer = poDS->GetLayer(i);				

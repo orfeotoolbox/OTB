@@ -98,7 +98,7 @@ const MetaDataKey::KeyTypeDef Types[] =
   
 MetaDataKey::KeyType MetaDataKey::GetKeyType(std::string name)
 {
-   MetaDataKey::KeyType ktype;
+   MetaDataKey::KeyType ktype(MetaDataKey::TSTRING);
 
    for ( unsigned int i=0; i<NBKEYS; i++)
       {
