@@ -342,33 +342,27 @@ glDrawBuffer(GL_FRONT_AND_BACK);
   GLuint		texture;
   glGenTextures(1, &texture);
   glBindTexture(GL_TEXTURE_2D, texture);
-  glTexImage2D(GL_TEXTURE_2D, 0, 4, m_BufferedRegion.GetSize()[0], m_BufferedRegion.GetSize()[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, m_OpenGlBuffer);
+  glTexImage2D(GL_TEXTURE_2D, 0, 3, m_BufferedRegion.GetSize()[0], m_BufferedRegion.GetSize()[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, m_OpenGlBuffer);
   glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);	// Nearest Filtering
   glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);	// Nearest Filtering
-  
+//   glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);	// Linear Filtering
+//   glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);	// Linear Filtering
   
   glBindTexture (GL_TEXTURE_2D, texture);
   glBegin (GL_QUADS);
-  glTexCoord2f (0.0, 0.0);
-  glVertex3f (0.0, 0.0, 0.0);
-  glTexCoord2f (1.0, 0.0);
-  glVertex3f (this->w(), 0.0, 0.0);
-  glTexCoord2f (1.0, 1.0);
-  glVertex3f (this->w(), this->h(), 0.0);
-  glTexCoord2f (0.0, 1.0);
-  glVertex3f (0.0, this->h(), 0.0);
+  glTexCoord2f (0.0, 1.0);  glVertex3f (0.0, 0.0, 0.0);
+  glTexCoord2f (1.0, 1.0);  glVertex3f (this->w(), 0.0, 0.0);
+  glTexCoord2f (1.0, 0.0);  glVertex3f (this->w(), this->h(), 0.0);
+  glTexCoord2f (0.0, 0.0);  glVertex3f (0.0, this->h(), 0.0);
 
-//   glTexCoord2f (0.0, 0.0);
-//   glVertex3f (0.0, this->h(), 0.0);
-//   glTexCoord2f (1.0, 0.0);
-//   glVertex3f (this->w(), 0.0, 0.0);
-//   glTexCoord2f (1.0, 1.0);
-//   glVertex3f (this->w(), 0.0, 0.0);
-//   glTexCoord2f (0.0, 1.0);
-//   glVertex3f (0.0, this->h(), 0.0);
-//   glEnd ();
+//   glTexCoord2f (0.0, 1.0);  glVertex3f (0.0, 0.0, 0.0);
+//   glTexCoord2f (1.0, 1.0);  glVertex3f ((this->GetViewedRegion()).GetSize()[0], 0.0, 0.0);
+//   glTexCoord2f (1.0, 0.0);  glVertex3f ((this->GetViewedRegion()).GetSize()[0], (this->GetViewedRegion()).GetSize()[1], 0.0);
+//   glTexCoord2f (0.0, 0.0);  glVertex3f (0.0, (this->GetViewedRegion()).GetSize()[1], 0.0);
 
- glEnd();
+  glEnd ();
+
+//  glEnd();
 
  // if image overlay is activated, display image overlay
  if(m_ImageOverlayVisible)
