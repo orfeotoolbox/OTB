@@ -338,8 +338,8 @@ glDrawBuffer(GL_FRONT_AND_BACK);
 // 	      m_OpenGlBuffer);
 
   glEnable(GL_TEXTURE_2D);
-  glColor4f(1.0,1.0,1.0,1.0);
-  GLuint		texture;
+  glColor4f(1.0,1.0,1.0,0.0);
+  GLuint texture;
   glGenTextures(1, &texture);
   glBindTexture(GL_TEXTURE_2D, texture);
   glTexImage2D(GL_TEXTURE_2D, 0, 3, m_BufferedRegion.GetSize()[0], m_BufferedRegion.GetSize()[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, m_OpenGlBuffer);
@@ -354,15 +354,9 @@ glDrawBuffer(GL_FRONT_AND_BACK);
   glTexCoord2f (1.0, 1.0);  glVertex3f (this->wDisplayed(), 0.0, 0.0);
   glTexCoord2f (1.0, 0.0);  glVertex3f (this->wDisplayed(), this->hDisplayed(), 0.0);
   glTexCoord2f (0.0, 0.0);  glVertex3f (0.0, this->hDisplayed(), 0.0);
-
-//   glTexCoord2f (0.0, 1.0);  glVertex3f (0.0, 0.0, 0.0);
-//   glTexCoord2f (1.0, 1.0);  glVertex3f ((this->GetViewedRegion()).GetSize()[0], 0.0, 0.0);
-//   glTexCoord2f (1.0, 0.0);  glVertex3f ((this->GetViewedRegion()).GetSize()[0], (this->GetViewedRegion()).GetSize()[1], 0.0);
-//   glTexCoord2f (0.0, 0.0);  glVertex3f (0.0, (this->GetViewedRegion()).GetSize()[1], 0.0);
-
   glEnd ();
 
-//  glEnd();
+  glDisable(GL_TEXTURE_2D);
 
  // if image overlay is activated, display image overlay
  if(m_ImageOverlayVisible)
@@ -374,7 +368,8 @@ glDrawBuffer(GL_FRONT_AND_BACK);
 		  GL_RGBA,
 		  GL_UNSIGNED_BYTE, 
 		  m_OpenGlImageOverlayBuffer);
-     glEnd();
+     glDisable(GL_BLEND);
+//      glEnd();
    } 
 
  if(m_FormOverlayVisible)
