@@ -280,7 +280,15 @@ void
 ImageWidgetBase<TPixel>
 ::draw(void)
 {
-  //otbMsgDebugMacro(<<"Draw");
+
+
+#ifndef MESA
+glDrawBuffer(GL_FRONT_AND_BACK);
+#endif // !MESA
+
+
+//   otbMsgDebugMacro(<<"Draw");
+
  if(this->UpdateOpenGlBufferedRegionRequested())
     {
       UpdateOpenGlBufferedRegion();
@@ -317,16 +325,49 @@ ImageWidgetBase<TPixel>
  glMatrixMode(GL_PROJECTION);
  this->ortho();
  glDisable(GL_BLEND);
- 
- glRasterPos2i(0,this->h());  
- glPixelZoom(m_OpenGlIsotropicZoom ,-m_OpenGlIsotropicZoom);
 
- // display the image
- glDrawPixels(m_BufferedRegion.GetSize()[0],
-	      m_BufferedRegion.GetSize()[1], 
-	      GL_RGBA,
-	      GL_UNSIGNED_BYTE, 
-	      m_OpenGlBuffer);
+
+ glRasterPos2i(0,this->h());  
+//  glPixelZoom(m_OpenGlIsotropicZoom ,-m_OpenGlIsotropicZoom);
+
+ // // display the image
+ //glDrawPixels(m_BufferedRegion.GetSize()[0],
+// 	      m_BufferedRegion.GetSize()[1], 
+// 	      GL_RGBA,
+// 	      GL_UNSIGNED_BYTE, 
+// 	      m_OpenGlBuffer);
+
+  glEnable(GL_TEXTURE_2D);
+  glColor4f(1.0,1.0,1.0,1.0);
+  GLuint		texture;
+  glGenTextures(1, &texture);
+  glBindTexture(GL_TEXTURE_2D, texture);
+  glTexImage2D(GL_TEXTURE_2D, 0, 4, m_BufferedRegion.GetSize()[0], m_BufferedRegion.GetSize()[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, m_OpenGlBuffer);
+  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);	// Nearest Filtering
+  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);	// Nearest Filtering
+  
+  
+  glBindTexture (GL_TEXTURE_2D, texture);
+  glBegin (GL_QUADS);
+  glTexCoord2f (0.0, 0.0);
+  glVertex3f (0.0, 0.0, 0.0);
+  glTexCoord2f (1.0, 0.0);
+  glVertex3f (this->w(), 0.0, 0.0);
+  glTexCoord2f (1.0, 1.0);
+  glVertex3f (this->w(), this->h(), 0.0);
+  glTexCoord2f (0.0, 1.0);
+  glVertex3f (0.0, this->h(), 0.0);
+
+//   glTexCoord2f (0.0, 0.0);
+//   glVertex3f (0.0, this->h(), 0.0);
+//   glTexCoord2f (1.0, 0.0);
+//   glVertex3f (this->w(), 0.0, 0.0);
+//   glTexCoord2f (1.0, 1.0);
+//   glVertex3f (this->w(), 0.0, 0.0);
+//   glTexCoord2f (0.0, 1.0);
+//   glVertex3f (0.0, this->h(), 0.0);
+//   glEnd ();
+
  glEnd();
 
  // if image overlay is activated, display image overlay
@@ -354,6 +395,11 @@ ImageWidgetBase<TPixel>
 		       this->h(), m_SubSamplingRate);
        }
    }
+#ifndef MESA
+glDrawBuffer(GL_BACK);
+#endif // !MESA
+
+
 }
 
 /** 
