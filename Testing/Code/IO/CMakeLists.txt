@@ -1490,7 +1490,7 @@ ADD_TEST(ioTvKMLVectorDataIOFileReaderLines ${IO_TESTS15}
 # Can read a RAD format (ci2)
 ADD_TEST(ioTuRADImageIOCanRead_RADCI2 ${IO_TESTS16} 
         otbRADImageIOTestCanRead 
-        /home3/mathieu/guillaume/CD_CNES/RAD_CI2/3017_HH.rad )
+        ${INPUTDATA}/RADCI2_image_simu_poupees.rad )
 
 # Can read a RAD format (cr4)
 ADD_TEST(ioTuRADImageIOCanRead_RADCR4sngl ${IO_TESTS16} 
