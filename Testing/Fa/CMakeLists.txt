@@ -5,8 +5,11 @@ IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Fa)
 SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
-#Images de teledetection (grosses images )
-SET(IMAGEDATA ${OTB_DATA_ROOT}/LargeInput )
+#Remote sensing images (large images )
+IF(OTB_DATA_USE_LARGEINPUT)
+  SET(IMAGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 SET(EXAMPLES_DATA ${OTB_SOURCE_DIR}/Examples/Data)
 #Tolerance sur diff pixel image
@@ -91,7 +94,8 @@ ADD_TEST(FA-00006-io_Poupees_R8_Double2UCharBis ${COMMON_TESTS}
          -double ${TEMP}/FA-00006-io_Poupees_1canal_r8.hdr
          -uchar ${TEMP}/FA-00006-io_Poupees_1canal_oct_bis.hdr )
 
-# ------   RADASAT   ------------
+# ------   RADARSAT   ------------
+IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(FA-00006-io_Radarsat_UI2_UShort2UShort ${COMMON_TESTS} 
          otbMultiToMonoChannelExtractROI
          -ushort ${IMAGEDATA}/RADARSAT1/SCENE01/
@@ -110,6 +114,7 @@ ADD_TEST(FA-00006-io_Radarsat_UI2_Double2Double_ ${COMMON_TESTS}
          -double ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_r8.hdr
          -startX 2559 -startY 3591 -sizeX 337 -sizeY 280 )
 
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(FA-00006-io_Radarsat_I4_Int2Double ${COMMON_TESTS} 
 #     --compare-image ${TOL}  ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_r8.hdr
