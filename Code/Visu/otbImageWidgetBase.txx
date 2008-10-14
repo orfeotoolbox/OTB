@@ -351,9 +351,9 @@ glDrawBuffer(GL_FRONT_AND_BACK);
   glBindTexture (GL_TEXTURE_2D, texture);
   glBegin (GL_QUADS);
   glTexCoord2f (0.0, 1.0);  glVertex3f (0.0, 0.0, 0.0);
-  glTexCoord2f (1.0, 1.0);  glVertex3f (this->w(), 0.0, 0.0);
-  glTexCoord2f (1.0, 0.0);  glVertex3f (this->w(), this->h(), 0.0);
-  glTexCoord2f (0.0, 0.0);  glVertex3f (0.0, this->h(), 0.0);
+  glTexCoord2f (1.0, 1.0);  glVertex3f (this->wDisplayed(), 0.0, 0.0);
+  glTexCoord2f (1.0, 0.0);  glVertex3f (this->wDisplayed(), this->hDisplayed(), 0.0);
+  glTexCoord2f (0.0, 0.0);  glVertex3f (0.0, this->hDisplayed(), 0.0);
 
 //   glTexCoord2f (0.0, 1.0);  glVertex3f (0.0, 0.0, 0.0);
 //   glTexCoord2f (1.0, 1.0);  glVertex3f ((this->GetViewedRegion()).GetSize()[0], 0.0, 0.0);
