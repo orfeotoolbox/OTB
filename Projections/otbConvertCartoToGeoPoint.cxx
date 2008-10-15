@@ -114,6 +114,7 @@ int main(int argc, char* argv[])
     typedef otb::CommandLineArgumentParser ParserType;	
     ParserType::Pointer parser = ParserType::New();
 
+    parser->SetProgramDescription("Cartographic to geographic coordinates conversion");
     parser->AddOption("--XCarto","X cartographic value of desired point","-x");
     parser->AddOption("--YCarto","Y cartographic value of desired point","-y");
     parser->AddOptionNParams("--MapProjectionType","Type (UTM/LAMBERT/LAMBERT2/LAMBERT93/SINUS/ECKERT4/TRANSMERCATOR/MOLLWEID) and parameters of map projection used","-mapProj");				
