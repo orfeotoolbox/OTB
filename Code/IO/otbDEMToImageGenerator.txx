@@ -95,15 +95,12 @@ namespace otb
     // Walk the output image, evaluating the height at each pixel
     IndexType 			currentindex;
     PointType 			phyPoint;
-    PointType                   phyPointTemp;
     double			height;
 
     for (outIt.GoToBegin(); !outIt.IsAtEnd(); ++outIt)
     {
 			currentindex=outIt.GetIndex();
-			DEMImage->TransformIndexToPhysicalPoint(currentindex, phyPointTemp);
-			phyPoint[0] = phyPointTemp[0];
-			phyPoint[1] = phyPointTemp[1];
+			DEMImage->TransformIndexToPhysicalPoint(currentindex, phyPoint);
 
 			otbMsgDevMacro(<< "PhyPoint : (" << phyPoint[0] << "," << phyPoint[1] << ")") ;
 

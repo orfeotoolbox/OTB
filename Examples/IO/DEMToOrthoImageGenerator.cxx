@@ -26,7 +26,7 @@
 //  Software Guide : BeginCommandLineArgs
 //  OUTPUTS: {DEMToOrthoImageGenerator.tif}
 //  OUTPUTS: {pretty_DEMToOrthoImageGenerator.png}
-//  6.5 45.5 500 500 0.002 -0.002 ${OTB_SOURCE_DIR}/Examples/Data/DEM_srtm
+//  773441 5044457 500 500 200 -200 ${OTB_SOURCE_DIR}/Examples/Data/DEM_srtm
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
@@ -36,8 +36,8 @@
 //
 //
 // The following example illustrates the use of the \doxygen{otb}{DEMToOrthoImageGenerator} class.
-// The aim of this class is to generate an image from the srtm data (precising the start extraction 
-// latitude and longitude point). Each pixel is a geographic point and its intensity is 
+// The aim of this class is to generate an image in cartographic coordinate from the srtm data (precising the start extraction 
+// easting and northing coordinates). Each pixel is a geographic point and its intensity is 
 // the altitude of the point.
 // If srtm doesn't have altitude information for a point, the altitude value is set at -32768 (value of the srtm norm).
 //
@@ -61,7 +61,7 @@ int main(int argc, char * argv[])
 {
   if(argc<10)
     {
-      std::cout << argv[0] <<" output filename , pretty output filename , Longitude Output Orign point , Latitude Output Origin point , X Output Size, Y Output size , X Spacing , Y Spacing, DEM folder path"  << std::endl;
+      std::cout << argv[0] <<" output filename , pretty output filename , Easting Output Orign point , Northing Output Origin point , X Output Size, Y Output size , X Spacing , Y Spacing, DEM folder path"  << std::endl;
       return EXIT_FAILURE;
     }
   //  Software Guide : BeginLatex

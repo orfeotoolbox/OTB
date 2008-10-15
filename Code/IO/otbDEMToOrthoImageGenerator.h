@@ -70,6 +70,7 @@ namespace otb
             typedef itk::ImageRegionIteratorWithIndex< DEMImageType >      ImageIteratorType;
 
             typedef otb::DEMHandler                                                 DEMHandlerType;
+            typedef typename DEMHandlerType::Pointer                               DEMHandlerPointerType;
 
             /** Method for creation through the object factory. */
             itkNewMacro(Self);
@@ -93,9 +94,6 @@ namespace otb
             itkSetMacro(DefaultUnknownValue,PixelType);
             itkGetConstReferenceMacro(DefaultUnknownValue,PixelType);
 
-            /** Set the DEM directory. */
-            virtual void SetDEMDirectoryPath(const char* DEMDirectory);         
-     
             /** Set/Get the projection*/
             itkSetMacro(MapProjection, MapProjectionPointerType);
             itkGetMacro(MapProjection, MapProjectionPointerType);
@@ -108,12 +106,16 @@ namespace otb
             void GenerateData();
             virtual void GenerateOutputInformation();
       
-            DEMHandlerType::Pointer m_DEMHandler;
+            DEMHandlerPointerType m_DEMHandler;
             PointType m_OutputOrigin;
             SpacingType  m_OutputSpacing;
             SizeType m_OutputSize;
             PixelType m_DefaultUnknownValue;
             MapProjectionPointerType m_MapProjection;
+            
+          private:
+            DEMToOrthoImageGenerator(const Self&); //purposely not implemented
+            void operator=(const Self&); //purposely not implemented
         };
   
 } // namespace otb

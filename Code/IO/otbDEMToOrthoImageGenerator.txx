@@ -47,14 +47,6 @@ namespace otb
     // Nothing to be done...
   }
   
-  // DEM folder specification method 
-  template<class TDEMImage, class TMapProjection>
-      void 
-  DEMToOrthoImageGenerator<TDEMImage, TMapProjection>::
-          SetDEMDirectoryPath(const char* DEMDirectory)
-          {
-            m_DEMHandler->OpenDEMDirectory(DEMDirectory);
-          }
   
   // GenerateOutputInformation method
           template <class TDEMImage, class TMapProjection> 
@@ -103,16 +95,14 @@ namespace otb
     // Walk the output image, evaluating the height at each pixel
     IndexType currentindex;
     PointType cartoPoint;
-    PointType cartoPointTemp;
     double height;
     PointType geoPoint;
     for (outIt.GoToBegin(); !outIt.IsAtEnd(); ++outIt)
     {
       currentindex=outIt.GetIndex();
-      DEMImage->TransformIndexToPhysicalPoint(currentindex, cartoPointTemp);
-      cartoPoint[0] = cartoPointTemp[0];
-      cartoPoint[1] = cartoPointTemp[1];
 
+      DEMImage->TransformIndexToPhysicalPoint(currentindex, cartoPoint);
+      
       otbMsgDevMacro(<< "CartoPoint : (" << cartoPoint[0] << "," << cartoPoint[1] << ")") ;
                         
       geoPoint = m_MapProjection->TransformPoint(cartoPoint);
@@ -121,8 +111,8 @@ namespace otb
                         
       height=m_DEMHandler->GetHeightAboveMSL(geoPoint); // Altitude calculation
       otbMsgDevMacro(<< "height" << height) ;
-			// MNT sets a default value (-32768) at point where it doesn't have altitude information.
-			// OSSIM has chosen to change this default value in OSSIM_DBL_NAN (-4.5036e15).
+      // MNT sets a default value (-32768) at point where it doesn't have altitude information.
+      // OSSIM has chosen to change this default value in OSSIM_DBL_NAN (-4.5036e15).
       if (!ossim::isnan(height))
       {
 		    // Fill the image
