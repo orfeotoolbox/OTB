@@ -15,6 +15,7 @@ int main(int argc, char* argv[] )
   typedef otb::CommandLineArgumentParser ParserType;	
   ParserType::Pointer parser = ParserType::New();
   
+  parser->SetProgramDescription("Concatenate n images in a multiband image");
   parser->AddOutputImage();
   parser->AddOption("--InputImagesList","Images list to concatenate","-il",argc-4,true);
 
