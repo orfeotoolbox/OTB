@@ -56,6 +56,7 @@ int main(int argc, char* argv[] )
         typedef otb::CommandLineArgumentParser ParserType;	
 	ParserType::Pointer parser = ParserType::New();
 
+        parser->SetProgramDescription("Generates a subsampled version of an image");
         parser->AddInputImage();
         parser->AddOutputImage();
         parser->AddOptionNParams("--ChannelList", "channel list","-cl",false);
