@@ -37,7 +37,7 @@ namespace otb
     m_OutputOrigin[0]=0;
     m_OutputOrigin[1]=0;
     m_DefaultUnknownValue = static_cast<PixelType>(-32768); // Value defined in the norm for points strm doesn't have information.
-    m_MapProjection = MapProjectionType::New();
+    m_MapProjection = NULL;
   }
   
   template<class TDEMImage, class TMapProjection>
@@ -49,16 +49,16 @@ namespace otb
   
   // DEM folder specification method 
   template<class TDEMImage, class TMapProjection>
-  void 
+      void 
   DEMToOrthoImageGenerator<TDEMImage, TMapProjection>::
-  SetDEMDirectoryPath(const char* DEMDirectory)
-  {
-    m_DEMHandler->OpenDEMDirectory(DEMDirectory);
-  }
+          SetDEMDirectoryPath(const char* DEMDirectory)
+          {
+            m_DEMHandler->OpenDEMDirectory(DEMDirectory);
+          }
   
   // GenerateOutputInformation method
-  template <class TDEMImage, class TMapProjection> 
-      void DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
+          template <class TDEMImage, class TMapProjection> 
+              void DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
   ::GenerateOutputInformation()
   {
     DEMImageType *output;
@@ -80,10 +80,17 @@ namespace otb
   
   // GenerateData method
   template <class TDEMImage, class TMapProjection> 
-  void 
-      DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
+      void 
+          DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
   ::GenerateData()
   {
+    
+    if(!m_MapProjection)
+    {
+      itkExceptionMacro( << 
+          "Please set map projection!" );
+    }
+    
     DEMImagePointerType  DEMImage = this->GetOutput();
     
     // allocate the output buffer
@@ -94,40 +101,44 @@ namespace otb
     ImageIteratorType outIt = ImageIteratorType(DEMImage,DEMImage->GetRequestedRegion());
     
     // Walk the output image, evaluating the height at each pixel
-    IndexType 			currentindex;
-    PointType 			phyPoint;
-    PointType                   phyPointTemp;
-    double			height;
-
+    IndexType currentindex;
+    PointType cartoPoint;
+    PointType cartoPointTemp;
+    double height;
+    PointType geoPoint;
     for (outIt.GoToBegin(); !outIt.IsAtEnd(); ++outIt)
     {
-			currentindex=outIt.GetIndex();
-			DEMImage->TransformIndexToPhysicalPoint(currentindex, phyPointTemp);
-			phyPoint[0] = phyPointTemp[0];
-			phyPoint[1] = phyPointTemp[1];
+      currentindex=outIt.GetIndex();
+      DEMImage->TransformIndexToPhysicalPoint(currentindex, cartoPointTemp);
+      cartoPoint[0] = cartoPointTemp[0];
+      cartoPoint[1] = cartoPointTemp[1];
 
-			otbMsgDevMacro(<< "PhyPoint : (" << phyPoint[0] << "," << phyPoint[1] << ")") ;
-
-			height=m_DEMHandler->GetHeightAboveMSL(phyPoint); // Altitude calculation
-			otbMsgDevMacro(<< "height" << height) ;
+      otbMsgDevMacro(<< "CartoPoint : (" << cartoPoint[0] << "," << cartoPoint[1] << ")") ;
+                        
+      geoPoint = m_MapProjection->TransformPoint(cartoPoint);
+                        
+      otbMsgDevMacro(<< "CartoPoint : (" << geoPoint[0] << "," << geoPoint[1] << ")") ;
+                        
+      height=m_DEMHandler->GetHeightAboveMSL(geoPoint); // Altitude calculation
+      otbMsgDevMacro(<< "height" << height) ;
 			// MNT sets a default value (-32768) at point where it doesn't have altitude information.
 			// OSSIM has chosen to change this default value in OSSIM_DBL_NAN (-4.5036e15).
-			if (!ossim::isnan(height))
-	  	{
+      if (!ossim::isnan(height))
+      {
 		    // Fill the image
-		    DEMImage->SetPixel(currentindex, static_cast<PixelType>(height) );
-		  } 
-			else 
-	  	{
+        DEMImage->SetPixel(currentindex, static_cast<PixelType>(height) );
+      } 
+      else 
+      {
 	  	  // Back to the MNT default value
-	  	  DEMImage->SetPixel(currentindex, m_DefaultUnknownValue);
-	  	}
+        DEMImage->SetPixel(currentindex, m_DefaultUnknownValue);
+      }
     }
   }
   
   template <class TDEMImage, class TMapProjection> 
-  void 
-      DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
+      void 
+          DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
   ::PrintSelf(std::ostream& os, Indent indent) const
   {
     Superclass::PrintSelf(os,indent);

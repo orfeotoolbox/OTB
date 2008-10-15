@@ -81,11 +81,9 @@ int main(int argc, char * argv[])
   // The writer is defined 
   typedef otb::ImageFileWriter<ImageType>          WriterType;
 
-  
-  
-  
   typedef otb::UtmInverseProjection UtmProjectionType;
-  
+
+      
   //  Software Guide : BeginLatex
   //  
   // The DEMToOrthoImageGenerator is defined using the image pixel 
@@ -128,6 +126,15 @@ int main(int argc, char * argv[])
   object->SetDEMDirectoryPath(folderPath);
  // Software Guide : EndCodeSnippet
 
+  
+    
+  
+
+  UtmProjectionType::Pointer utmProjection = UtmProjectionType::New();
+  utmProjection->SetZone(48);
+  utmProjection->SetHemisphere('N');
+  object->SetMapProjection(utmProjection);
+  
   // Software Guide : BeginLatex
   //  
   // The origin (Longitude/Latitude) of the output image in the DEM is given to the filter.
