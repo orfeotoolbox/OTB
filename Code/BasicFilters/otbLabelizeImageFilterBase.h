@@ -74,6 +74,11 @@ namespace otb
       /** Set upper threshold */
       itkSetMacro(UpperThreshold, InputPixelType);
       
+      /** Get Object count*/
+      // only set after completion
+//       itkGetConstReferenceMacro(ObjectCount, unsigned long);
+      itkGetMacro(ObjectCount, unsigned long);
+      
       /** Internal */
       typedef otb::ThresholdImageToPointSetFilter<InputImageType, PointSetType> ThresholdFilterType;
       typedef typename ThresholdFilterType::Pointer ThresholdFilterPointerType;
@@ -81,7 +86,7 @@ namespace otb
       typedef otb::MultiplyByScalarImageFilter<InputImageType, OutputImageType> MultiplyFilterType;
       typedef typename MultiplyFilterType::Pointer MultiplyFilterPointerType;
       
-      typedef itk::AddImageFilter<InputImageType, InputImageType, OutputImageType> AddImageFilterType;
+      typedef itk::AddImageFilter<OutputImageType, OutputImageType, OutputImageType> AddImageFilterType;
       typedef typename AddImageFilterType::Pointer AddImageFilterPointerType;
       
     protected:
@@ -113,9 +118,14 @@ namespace otb
       /** Threshold point set filter */
       ThresholdFilterPointerType m_ThresholdPointSetFilter;
       
+      /** Object counting */
+      unsigned long m_ObjectCount;
+      
     private:
       LabelizeImageFilterBase(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
+      
+
       
     }; // end class LabelizeImageFilterBase
   
