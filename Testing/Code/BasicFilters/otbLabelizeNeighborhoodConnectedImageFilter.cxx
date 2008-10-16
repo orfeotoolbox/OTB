@@ -36,7 +36,7 @@ int otbLabelizeNeighborhoodConnectedImageFilter( int argc, char * argv[] )
   char* inputImageName = argv[1];
   char* outputImageName = argv[2];
   
-  typedef unsigned char InputPixelType;
+  typedef unsigned short InputPixelType;
   typedef unsigned char OutputPixelType;
   typedef itk::RGBPixel<unsigned char> ColorPixelType;
   const unsigned int Dimension = 2;

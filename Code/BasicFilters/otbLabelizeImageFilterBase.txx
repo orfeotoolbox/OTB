@@ -77,7 +77,7 @@ namespace otb
  	index[0] = static_cast <int> (pCoordinate[0]);
  	index[1] = static_cast <int> (pCoordinate[1]);
  	if (outputImage->GetPixel(index) ==
-	    itk::NumericTraits<InputPixelType>::ZeroValue() )
+	    itk::NumericTraits<OutputPixelType>::ZeroValue() )
  	  {
 	    this->RegionGrowing(index);
 	    
