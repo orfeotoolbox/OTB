@@ -1,5 +1,23 @@
-#ifndef _otbNCCRegistrationFilter_txx
-#define _otbNCCRegistrationFilter_txx
+/*=========================================================================
+
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+
+#ifndef __otbNCCRegistrationFilter_txx
+#define __otbNCCRegistrationFilter_txx
 #include "otbNCCRegistrationFilter.h"
 
 namespace otb {
