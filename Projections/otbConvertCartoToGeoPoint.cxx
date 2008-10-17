@@ -117,7 +117,7 @@ int main(int argc, char* argv[])
     parser->SetProgramDescription("Cartographic to geographic coordinates conversion");
     parser->AddOption("--XCarto","X cartographic value of desired point","-x");
     parser->AddOption("--YCarto","Y cartographic value of desired point","-y");
-    parser->AddOptionNParams("--MapProjectionType","Type (UTM/LAMBERT/LAMBERT2/LAMBERT93/SINUS/ECKERT4/TRANSMERCATOR/MOLLWEID) and parameters of map projection used","-mapProj");				
+    parser->AddOptionNParams("--MapProjectionType","Type (UTM/LAMBERT/LAMBERT2/LAMBERT93/SINUS/ECKERT4/TRANSMERCATOR/MOLLWEID/SVY21) and parameters of map projection used","-mapProj");				
 
     typedef otb::CommandLineArgumentParseResult ParserResultType;
     ParserResultType::Pointer  parseResult = ParserResultType::New();
@@ -228,9 +228,16 @@ int main(int argc, char* argv[])
 					
         return generic_main_carto_geo<MollweidProjectionType>(mollweidProjection, parseResult);
       }
+      else if ((typeMap == "SVY21")&&(nbParams==0))
+      {
+        typedef otb::SVY21InverseProjection SVY21ProjectionType;
+        SVY21ProjectionType::Pointer svy21Projection = SVY21ProjectionType::New();
+					
+        return generic_main_carto_geo<SVY21ProjectionType>(svy21Projection, parseResult);
+      }
       else 
       {
-        itkGenericExceptionMacro(<< "TypeMap not recognized, choose one with (parameters) : UTM(2), LAMBERT(4), LAMBERT2(0), LAMBERT2(93), SINUS(2), ECKERT4(2), TRANSMERCATOR(3), MOLLWEID(2)");
+        itkGenericExceptionMacro(<< "TypeMap not recognized, choose one with (parameters) : UTM(2), LAMBERT(4), LAMBERT2(0), LAMBERT2(93), SINUS(2), ECKERT4(2), TRANSMERCATOR(3), MOLLWEID(2), SVY21(0)");
       }
 					
     }
