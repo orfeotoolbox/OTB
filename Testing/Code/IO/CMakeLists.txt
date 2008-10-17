@@ -5,14 +5,14 @@ IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
-#Images de teledetection (grosses images )
+#Remote sensing images (large images )
 IF(OTB_DATA_USE_LARGEINPUT)
   SET(IMAGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
-#Tolerance sur diff pixel image
+#Tolerance on  pixel image diff
 SET(TOL 0.000000001)
 
 #Tolerance sur la difference des valeurs numeriques dans le --compare-ascii
@@ -1490,7 +1490,7 @@ ADD_TEST(ioTvKMLVectorDataIOFileReaderLines ${IO_TESTS15}
 # Can read a RAD format (ci2)
 ADD_TEST(ioTuRADImageIOCanRead_RADCI2 ${IO_TESTS16} 
         otbRADImageIOTestCanRead 
-        /home3/mathieu/guillaume/CD_CNES/RAD_CI2/3017_HH.rad )
+        ${INPUTDATA}/RADCI2_image_simu_poupees.rad )
 
 # Can read a RAD format (cr4)
 ADD_TEST(ioTuRADImageIOCanRead_RADCR4sngl ${IO_TESTS16} 

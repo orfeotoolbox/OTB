@@ -86,7 +86,7 @@ template < class TScalarType,
 
   {
     ossimGpt ossimGPointRef = ossimGPoint;
-    double height, heightTmp ;
+    double height(0.), heightTmp(0.);
     double diffHeight = 100; // arbitrary value
     itk::Point<double, 2> point;
     int nbIter = 0;

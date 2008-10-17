@@ -32,6 +32,10 @@ int otbKMLVectorDataIOTestFileReader(int argc, char* argv[])
 
 
   bool lCanRead = object->CanReadFile(argv[1]);
+  if(lCanRead==false)
+  {
+        return EXIT_FAILURE;
+  }
   
   object->SetFileName(argv[1]);
   object->Read(data);
@@ -41,6 +45,10 @@ int otbKMLVectorDataIOTestFileReader(int argc, char* argv[])
   if(argc>2)
   {
      bool lCanWrite = object->CanWriteFile(argv[2]);
+     if(lCanWrite==false)
+     {
+        return EXIT_FAILURE;
+     }
      object->SetFileName(argv[2]);
      object->Write(constData);  
   }  

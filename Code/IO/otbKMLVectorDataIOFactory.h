@@ -47,8 +47,8 @@ public:
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    typename KMLVectorDataIOFactory<TData>::Pointer SHPFactory = KMLVectorDataIOFactory<TData>::New();
-    itk::ObjectFactoryBase::RegisterFactory(SHPFactory);
+    typename KMLVectorDataIOFactory<TData>::Pointer KMLFactory = KMLVectorDataIOFactory<TData>::New();
+    itk::ObjectFactoryBase::RegisterFactory(KMLFactory);
   }
 
 protected:

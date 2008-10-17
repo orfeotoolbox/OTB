@@ -69,7 +69,7 @@ ArcSpatialObject< VDimension >
     }
   if(r<=1)
   {
-        double angle;
+        double angle(0.);
         if(transformedPoint[0]!=0)
         {
                 angle=vcl_atan(transformedPoint[1]/transformedPoint[0])*180/PI;

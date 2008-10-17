@@ -255,8 +255,7 @@ namespace otb
 
     std::string lString;
     std::string lStrCodePix;
-    int lNbOfChannels;
-        
+
         // Read NBCOLONNES information
     file >> lString;
     lString = System::SetToUpper(lString);
@@ -272,7 +271,7 @@ namespace otb
       }
     }
     file >> m_Dimensions[0];
-        
+
         // Read NBLIGNES information
     file >> lString;
     lString = System::SetToUpper(lString);
@@ -451,7 +450,6 @@ namespace otb
         
         // Read FileName information
     std::string lPathName = System::GetPathName( file_name );
-    unsigned int i=0;
     m_ChannelsFileName.clear();        
     for(unsigned int i=0 ; i<m_NbOfChannels ; i++)
     {
@@ -501,6 +499,7 @@ namespace otb
     {
       return false;
     }
+    return true;
   }
 
   void RADImageIO::Write(const void* buffer)
