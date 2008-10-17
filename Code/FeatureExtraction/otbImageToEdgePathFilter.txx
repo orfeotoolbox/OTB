@@ -71,7 +71,7 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
   LinearIteratorType linIter(pad->GetOutput(),pad->GetOutput()->GetLargestPossibleRegion());
   linIter.GoToBegin();
   bool flag = true;
-  while(flag)
+  while(flag && !linIter.IsAtEnd())
     {     
     if(linIter.Get() == m_ForegroundValue )
       {
