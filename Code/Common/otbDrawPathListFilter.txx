@@ -39,6 +39,7 @@ DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
   this->SetNumberOfRequiredOutputs(1);
   m_PathValue = static_cast<OutputImagePixelType>(255); 
   m_UseInternalPathValue = false;
+  m_AddValue = false;
 }
 
 
@@ -93,7 +94,6 @@ DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
     }
   
   // Then we use otb::PolyLineImageIterator to draw polylines
-
   for(PathListIteratorType plIt = pathListPtr->Begin(); plIt!=pathListPtr->End();++plIt)
     {
       OutputImagePixelType value;
@@ -106,10 +106,16 @@ DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
 	  value = static_cast<OutputImagePixelType>(m_PathValue);
 	}
       PolyLineIteratorType imageIt(outputPtr,plIt.Get());
-      
       for(imageIt.GoToBegin();!imageIt.IsAtEnd();++imageIt)
 	{
-	  imageIt.Set(value);
+          if (m_AddValue)
+          {
+            imageIt.Set(imageIt.Get()+1);
+          }
+          else
+          {
+            imageIt.Set(value);
+          }
 	}
     }
 }
