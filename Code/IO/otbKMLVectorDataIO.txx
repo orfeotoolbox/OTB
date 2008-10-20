@@ -590,11 +590,11 @@ namespace otb
 	      CoordinatesPtr coordinates = factory->CreateCoordinates();
 	      if(DataNodeType::Dimension>2)
                 {
-		  coordinates->add_latlngalt(it.Get()->GetPoint()[0],it.Get()->GetPoint()[1],it.Get()->GetPoint()[2]);
+		  coordinates->add_latlngalt(it.Get()->GetPoint()[1],it.Get()->GetPoint()[0],it.Get()->GetPoint()[2]);
 		}
 	      else
                 {
-		  coordinates->add_latlng(it.Get()->GetPoint()[0],it.Get()->GetPoint()[1]);                  
+		  coordinates->add_latlng(it.Get()->GetPoint()[1],it.Get()->GetPoint()[0]);                  
                 }
 
 	      // Create <Point> and give it <coordinates>.
@@ -638,11 +638,11 @@ namespace otb
 
 		  if(DataNodeType::Dimension>2)
                     {
-		      coordinates->add_latlngalt(vIt.Value()[0],vIt.Value()[1],vIt.Value()[2]);
+		      coordinates->add_latlngalt(vIt.Value()[1],vIt.Value()[0],vIt.Value()[2]);
         	    }
 		  else
                     {
-		      coordinates->add_latlng(vIt.Value()[0],vIt.Value()[1]);                  
+		      coordinates->add_latlng(vIt.Value()[1],vIt.Value()[0]);                  
                     }
 		  line->set_coordinates(coordinates);
 		  ++vIt;
@@ -684,11 +684,11 @@ namespace otb
 		{
 		  if(DataNodeType::Dimension>2)
                     {
-		      coordinates->add_latlngalt(vIt.Value()[0],vIt.Value()[1],vIt.Value()[2]);
+		      coordinates->add_latlngalt(vIt.Value()[1],vIt.Value()[0],vIt.Value()[2]);
         	    }
 		  else
                     {
-		      coordinates->add_latlng(vIt.Value()[0],vIt.Value()[1]);                  
+		      coordinates->add_latlng(vIt.Value()[1],vIt.Value()[0]);                  
                     }
                     
 		  line->set_coordinates(coordinates);
@@ -709,11 +709,11 @@ namespace otb
     		    {
 		      if(DataNodeType::Dimension>2)
                         {
-			  coordinates->add_latlngalt(it.Get()->GetPoint()[0],it.Get()->GetPoint()[1],it.Get()->GetPoint()[2]);
+			  coordinates->add_latlngalt(it.Get()->GetPoint()[1],it.Get()->GetPoint()[0],it.Get()->GetPoint()[2]);
         	        } 
 		      else
                         {
-			  coordinates->add_latlng(it.Get()->GetPoint()[0],it.Get()->GetPoint()[1]);                  
+			  coordinates->add_latlng(it.Get()->GetPoint()[1],it.Get()->GetPoint()[0]);                  
                         }
                     
 		      line->set_coordinates(coordinates);

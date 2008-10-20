@@ -23,7 +23,7 @@
 namespace otb
 {
 /** \class KMLVectorDataIOFactory
- * \brief Creation d'un instance d'un objet VectorDataImageIO utilisant les object factory.
+ * \brief Creating an instance of a VectorDataImageIO object using object factory.
  */
 template <class TData> class ITK_EXPORT KMLVectorDataIOFactory : public itk::ObjectFactoryBase
 {
