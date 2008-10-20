@@ -286,8 +286,8 @@ namespace otb
           
     PointType otbPoint;
     otbPoint.Fill(0);
-    otbPoint[0] = static_cast<typename DataNodeType::PrecisionType>(pt->get_coordinates()->get_coordinates_array_at(0).get_latitude());
-    otbPoint[1] = static_cast<typename DataNodeType::PrecisionType>(pt->get_coordinates()->get_coordinates_array_at(0).get_longitude());
+    otbPoint[0] = static_cast<typename DataNodeType::PrecisionType>(pt->get_coordinates()->get_coordinates_array_at(0).get_longitude());
+    otbPoint[1] = static_cast<typename DataNodeType::PrecisionType>(pt->get_coordinates()->get_coordinates_array_at(0).get_latitude());
 
     if(DataNodeType::Dimension > 2)
       {
@@ -319,8 +319,8 @@ namespace otb
     for(int i=0;i<array_size;i++)
       {
 	typename LineType::VertexType vertex;
-	vertex[0] = coords->get_coordinates_array_at(i).get_latitude();
-	vertex[1] = coords->get_coordinates_array_at(i).get_longitude();
+	vertex[0] = coords->get_coordinates_array_at(i).get_longitude();
+	vertex[1] = coords->get_coordinates_array_at(i).get_latitude();
 
 	if(DataNodeType::Dimension > 2)
 	  {
@@ -355,8 +355,8 @@ namespace otb
     for(int i=0;i<array_size;i++)
       {
 	typename LineType::VertexType vertex;
-	vertex[0] = coords->get_coordinates_array_at(i).get_latitude();
-	vertex[1] = coords->get_coordinates_array_at(i).get_longitude();
+	vertex[0] = coords->get_coordinates_array_at(i).get_longitude();
+	vertex[1] = coords->get_coordinates_array_at(i).get_latitude();
 
 	if(DataNodeType::Dimension > 2)
 	  {
@@ -402,8 +402,8 @@ namespace otb
 	    for(int i=0;i<array_size;i++)
 	      {
 		typename PolygonType::VertexType vertex;
-		vertex[0] = coords->get_coordinates_array_at(i).get_latitude();
-		vertex[1] = coords->get_coordinates_array_at(i).get_longitude();
+		vertex[0] = coords->get_coordinates_array_at(i).get_longitude();
+		vertex[1] = coords->get_coordinates_array_at(i).get_latitude();
 
 		if(DataNodeType::Dimension > 2)
 		  {
@@ -428,8 +428,8 @@ namespace otb
 	    for(int pIndex=0;pIndex<array_size;pIndex++)
 	      {
 		typename PolygonType::VertexType vertex;
-		vertex[0] = coords->get_coordinates_array_at(pIndex).get_latitude();
-		vertex[1] = coords->get_coordinates_array_at(pIndex).get_longitude();
+		vertex[0] = coords->get_coordinates_array_at(pIndex).get_longitude();
+		vertex[1] = coords->get_coordinates_array_at(pIndex).get_latitude();
 
 		if(DataNodeType::Dimension > 2)
 		  {
