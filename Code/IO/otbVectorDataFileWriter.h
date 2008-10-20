@@ -53,7 +53,7 @@ public:
 
 
   /** \class VectorDataFileWriter
-   *  \brief This class writes the ShapeFile format 
+   *  \brief This class writes vector data file format (shapefile and KML) 
    *
    *  \ingroup IO
    */
