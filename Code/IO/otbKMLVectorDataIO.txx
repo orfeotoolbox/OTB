@@ -27,6 +27,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkPreOrderTreeIterator.h"
 
 #include "kml/dom.h"
+#include "kml/dom/kml22.h"
 #include "kml/base/file.h"
 
 
@@ -668,10 +669,14 @@ namespace otb
 	      break;
 	    }
 	  case FEATURE_POLYGON:
-	    {
+	    {//TODO refine the solution of drawing the polygon 1m above the ground
 	      // In a polygon we just can find any LinearRings
 	      LinearRingPtr line = factory->CreateLinearRing();
 	      PolygonPtr polygon = factory->CreatePolygon();
+        
+        polygon->set_extrude(true);
+        polygon->set_altitudemode(1);//ALTITUDEMODE_RELATIVETOGROUND
+        
 	      CoordinatesPtr coordinates = factory->CreateCoordinates();                
 	      OuterBoundaryIsPtr outerboundaryis = factory->CreateOuterBoundaryIs();
 	      InnerBoundaryIsPtr innerboundaryis = factory->CreateInnerBoundaryIs();
@@ -680,67 +685,97 @@ namespace otb
 	    
 	      typename VertexListType::ConstIterator vIt = vertexList->Begin();
 
-	      while(vIt != vertexList->End())
-		{
-		  if(DataNodeType::Dimension>2)
-                    {
-		      coordinates->add_latlngalt(vIt.Value()[1],vIt.Value()[0],vIt.Value()[2]);
-        	    }
-		  else
-                    {
-		      coordinates->add_latlng(vIt.Value()[1],vIt.Value()[0]);                  
-                    }
-                    
-		  line->set_coordinates(coordinates);
-		  ++vIt;
-		}
+        while(vIt != vertexList->End())
+        {
+          if(DataNodeType::Dimension>2)
+          {
+            coordinates->add_latlngalt(vIt.Value()[1],vIt.Value()[0],vIt.Value()[2]+1);//Drawing polygon 1m above ground to avoid z-buffer issues
+          }
+          else
+          {
+            coordinates->add_latlngalt(vIt.Value()[1],vIt.Value()[0],1);//Drawing polygon 1m above ground to avoid z-buffer issues                  
+          }
+                        
+          line->set_coordinates(coordinates);
+          ++vIt;
+        }
+        
+        //Adding the first point again to close the polygon
+        vIt = vertexList->Begin();
+        if(DataNodeType::Dimension>2)
+        {
+          coordinates->add_latlngalt(vIt.Value()[1],vIt.Value()[0],vIt.Value()[2]+1);//Drawing polygon 1m above ground to avoid z-buffer issues
+        }
+        else
+        {
+          coordinates->add_latlngalt(vIt.Value()[1],vIt.Value()[0],1);//Drawing polygon 1m above ground to avoid z-buffer issues                  
+        }
+        line->set_coordinates(coordinates);
+        
 	      outerboundaryis->set_linearring(line);
 	      polygon->set_outerboundaryis(outerboundaryis);
 
 	      // Retrieving internal rings as well
-	      for(typename PolygonListType::Iterator pIt = it.Get()->GetPolygonInteriorRings()->Begin();
-		  pIt!=it.Get()->GetPolygonInteriorRings()->End();++pIt)
-                {
+        for(typename PolygonListType::Iterator pIt = it.Get()->GetPolygonInteriorRings()->Begin();
+            pIt!=it.Get()->GetPolygonInteriorRings()->End();++pIt)
+        {
 
-		  vertexList = pIt.Get()->GetVertexList();	    
-		  vIt = vertexList->Begin();
-
-		  while(vIt != vertexList->End())
-    		    {
-		      if(DataNodeType::Dimension>2)
-                        {
-			  coordinates->add_latlngalt(it.Get()->GetPoint()[1],it.Get()->GetPoint()[0],it.Get()->GetPoint()[2]);
-        	        } 
-		      else
-                        {
-			  coordinates->add_latlng(it.Get()->GetPoint()[1],it.Get()->GetPoint()[0]);                  
-                        }
-                    
-		      line->set_coordinates(coordinates);
-		      ++vIt;
-		    }
-		  innerboundaryis->set_linearring(line);
-		  polygon->add_innerboundaryis(innerboundaryis);
-		  innerboundaryis->clear_linearring();
-        	}
+          vertexList = pIt.Get()->GetVertexList();	    
+          vIt = vertexList->Begin();
+    
+          while(vIt != vertexList->End())
+          {
+            if(DataNodeType::Dimension>2)
+            {
+              coordinates->add_latlngalt(it.Get()->GetPoint()[1],it.Get()->GetPoint()[0],it.Get()->GetPoint()[2]+1);//Drawing polygon 1m above ground to avoid z-buffer issues
+            } 
+            else
+            {
+              coordinates->add_latlngalt(it.Get()->GetPoint()[1],it.Get()->GetPoint()[0],1);//Drawing polygon 1m above ground to avoid z-buffer issues                  
+            }
+                        
+            line->set_coordinates(coordinates);
+            ++vIt;
+          }
+          
+          //Adding the first point again to close the polygon
+          vIt = vertexList->Begin();
+          if(DataNodeType::Dimension>2)
+          {
+            coordinates->add_latlngalt(it.Get()->GetPoint()[1],it.Get()->GetPoint()[0],it.Get()->GetPoint()[2]+1);//Drawing polygon 1m above ground to avoid z-buffer issues
+          } 
+          else
+          {
+            coordinates->add_latlngalt(it.Get()->GetPoint()[1],it.Get()->GetPoint()[0],1);//Drawing polygon 1m above ground to avoid z-buffer issues                  
+          }
+                        
+          line->set_coordinates(coordinates);
+          ++vIt;
+          
+          
+          innerboundaryis->set_linearring(line);
+          polygon->add_innerboundaryis(innerboundaryis);
+          innerboundaryis->clear_linearring();
+        }
                 
-	      if (currentMultiGeometry != NULL)
-                {
-		  currentMultiGeometry->add_geometry(polygon);
-                }
-	      else
-                {
-		  PlacemarkPtr placemark = factory->CreatePlacemark();			
-		  placemark->set_geometry(polygon);
-		  if (currentFolder!= NULL)
-		    {
-		      currentFolder->add_feature(placemark);
-		    }
-		  else
-		    {
-		      currentDocument->add_feature(placemark);
-		    }
-                }
+        
+        if (currentMultiGeometry != NULL)
+        {
+          currentMultiGeometry->add_geometry(polygon);
+        }
+        else
+        {
+          PlacemarkPtr placemark = factory->CreatePlacemark();			
+          placemark->set_geometry(polygon);
+          if (currentFolder!= NULL)
+          {
+            currentFolder->add_feature(placemark);
+          }
+          else
+          {
+            currentDocument->add_feature(placemark);
+          }
+        }
 	      break;
 	    }
             // MultiGeometry
