@@ -98,63 +98,65 @@ namespace otb
   InputIteratorType it;
   // if scroll is activated, compute the factors from the quicklook
   if(m_UseScroll)
-    {
-      it = InputIteratorType(m_Shrink->GetOutput(),m_Shrink->GetOutput()->GetLargestPossibleRegion());
-      it.GoToBegin();
-    }
+  {
+    it = InputIteratorType(m_Shrink->GetOutput(),m_Shrink->GetOutput()->GetLargestPossibleRegion());
+    it.GoToBegin();
+  }
   // else, compute the factors from the full viewed region
   else
-    {
-      m_InputImage->SetRequestedRegion(m_FullWidget->GetViewedRegion());
-      m_InputImage->PropagateRequestedRegion();
-      m_InputImage->UpdateOutputData();
-      it = InputIteratorType(m_InputImage,m_InputImage->GetRequestedRegion());
-      it.GoToBegin();
-    }
+  {
+    m_InputImage->SetRequestedRegion(m_FullWidget->GetViewedRegion());
+    m_InputImage->PropagateRequestedRegion();
+    m_InputImage->UpdateOutputData();
+    it = InputIteratorType(m_InputImage,m_InputImage->GetRequestedRegion());
+    it.GoToBegin();
+  }
   
   if(this->GetViewModel() == ScrollWidgetType::COMPLEX_MODULUS)
+  {
+    sl->PushBack(ListSampleType::New());
+    while( !it.IsAtEnd() )
     {
-      sl->PushBack(ListSampleType::New());
-      while( !it.IsAtEnd() )
-	{
-	  PixelType pixel = it.Get();
-	  for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
-	    {
-	      sl->GetNthElement(0)->PushBack(vcl_sqrt(static_cast<double>(pixel[m_RedChannelIndex]*pixel[m_RedChannelIndex]+pixel[m_GreenChannelIndex]*pixel[m_GreenChannelIndex])));
-	    }
-	  ++it;
-	}
-    }
-  else if(this->GetViewModel() == ScrollWidgetType::COMPLEX_PHASE)
-    {
-      sl->PushBack(ListSampleType::New());
-      while( !it.IsAtEnd() )
-	{
-	  PixelType pixel = it.Get();
-	  for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
-	    {
-	      sl->GetNthElement(0)->PushBack(vcl_atan2(static_cast<double>(pixel[m_RedChannelIndex]),static_cast<double>(pixel[m_GreenChannelIndex])));
-	    }
-	  ++it;
-	}
-
-    }
-  else
-    {
+      PixelType pixel = it.Get();
       for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
-	{
-	  sl->PushBack(ListSampleType::New());
-	}
-      while( !it.IsAtEnd() )
-	{
-	  PixelType pixel = it.Get();
-	  for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
-	    {
-	      sl->GetNthElement(i)->PushBack(pixel[i]);
-	    }
-	  ++it;
-	}
+      {
+        double re = static_cast<double>(pixel[m_RedChannelIndex]);
+        double im = static_cast<double>(pixel[m_GreenChannelIndex]);
+        sl->GetNthElement(0)->PushBack(vcl_sqrt(static_cast<double>(re*re+im*im)));
+      }
+      ++it;
     }
+  }
+  else if(this->GetViewModel() == ScrollWidgetType::COMPLEX_PHASE)
+  {
+    sl->PushBack(ListSampleType::New());
+    while( !it.IsAtEnd() )
+    {
+      PixelType pixel = it.Get();
+      for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
+      {
+        sl->GetNthElement(0)->PushBack(vcl_atan2(static_cast<double>(pixel[m_GreenChannelIndex]),static_cast<double>(pixel[m_RedChannelIndex])));
+      }
+      ++it;
+    }
+
+  }
+  else
+  {
+    for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
+    {
+      sl->PushBack(ListSampleType::New());
+    }
+    while( !it.IsAtEnd() )
+    {
+      PixelType pixel = it.Get();
+      for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
+      {
+        sl->GetNthElement(i)->PushBack(pixel[i]);
+      }
+      ++it;
+    }
+  }
 
   m_HistogramGeneratorList->Clear();
   m_TransferFunctionList->Clear();
@@ -634,8 +636,8 @@ namespace otb
   }
 
   template <class TPixel, class TLabel>
-  void 
-  ImageViewerBase<TPixel,TLabel>
+      void 
+          ImageViewerBase<TPixel,TLabel>
   ::ReportPixel(IndexType index)
   {
     //comment: std::cout<<"Entering report pixel: "<<m_Label<<std::endl;
@@ -651,43 +653,43 @@ namespace otb
     oss << std::setprecision(12) << point<<" (physical coordinates)"<<std::endl;
     
     if(m_InputImage->GetBufferedRegion().IsInside(index))
+    {
+	  //comment: std::cout<<"Index: "<<index<<std::endl;
+
+      typename ImageType::PixelType newPixel = m_InputImage->GetPixel(index);
+
+      if(this->GetViewModel() == ScrollWidgetType::RGB || this->GetViewModel() == ScrollWidgetType::GRAYSCALE)
       {
-	//comment: std::cout<<"Index: "<<index<<std::endl;
-
-	typename ImageType::PixelType newPixel = m_InputImage->GetPixel(index);
-
-	if(this->GetViewModel() == ScrollWidgetType::RGB || this->GetViewModel() == ScrollWidgetType::GRAYSCALE)
-	  {
-	    oss<<newPixel<<" ("<<m_Label<<" pixel values)"<<std::endl;
-	  }
-	else if(this->GetViewModel() == ScrollWidgetType::COMPLEX_MODULUS)
-	  {
-	    double im = static_cast<double>(newPixel[m_RedChannelIndex]);
-	    double re = static_cast<double>(newPixel[m_GreenChannelIndex]);
-	    double modulus = vcl_sqrt(re*re+im*im);
-	    oss<<modulus<<std::setprecision(3)<<" ("<<m_Label<<" modulus value)"<<std::endl;
-
-	  }
-	else if(this->GetViewModel() == ScrollWidgetType::COMPLEX_PHASE)
-	  {
-	    double im = static_cast<double>(newPixel[m_RedChannelIndex]);
-	    double re = static_cast<double>(newPixel[m_GreenChannelIndex]);
-	    double phase = vcl_atan2(im,re);
-	    oss<<phase<<std::setprecision(3)<<" ("<<m_Label<<" phase value)"<<std::endl;
-	  }
+        oss<<newPixel<<" ("<<m_Label<<" pixel values)"<<std::endl;
       }
+      else if(this->GetViewModel() == ScrollWidgetType::COMPLEX_MODULUS)
+      {
+        double re = static_cast<double>(newPixel[m_RedChannelIndex]);
+        double im = static_cast<double>(newPixel[m_GreenChannelIndex]);
+        double modulus = vcl_sqrt(re*re+im*im);
+        oss<<modulus<<std::setprecision(3)<<" ("<<m_Label<<" modulus value)" << im << ", " << re <<std::endl;
+
+      }
+      else if(this->GetViewModel() == ScrollWidgetType::COMPLEX_PHASE)
+      {
+        double re = static_cast<double>(newPixel[m_RedChannelIndex]);
+        double im = static_cast<double>(newPixel[m_GreenChannelIndex]);
+        double phase = vcl_atan2(im,re);
+        oss<<phase<<std::setprecision(3)<<" ("<<m_Label<<" phase value)"<<std::endl;
+      }
+    }
     else
-      {
-	IndexType shrinkIndex;
-	shrinkIndex[0]=index[0]/m_ShrinkFactor;
-	shrinkIndex[1]=index[1]/m_ShrinkFactor;
+    {
+      IndexType shrinkIndex;
+      shrinkIndex[0]=index[0]/m_ShrinkFactor;
+      shrinkIndex[1]=index[1]/m_ShrinkFactor;
 	
-	if(m_Shrink->GetOutput()->GetBufferedRegion().IsInside(shrinkIndex))
-	  {
-	    typename ImageType::PixelType newPixel = m_Shrink->GetOutput()->GetPixel(shrinkIndex);
-	    oss<<newPixel<<" ("<<m_Label<<" pixel values)"<<std::endl;
-	  }
+      if(m_Shrink->GetOutput()->GetBufferedRegion().IsInside(shrinkIndex))
+      {
+        typename ImageType::PixelType newPixel = m_Shrink->GetOutput()->GetPixel(shrinkIndex);
+        oss<<newPixel<<" ("<<m_Label<<" pixel values)"<<std::endl;
       }
+    }
       
     typename ViewerListType::Iterator linkedIt = m_LinkedViewerList->Begin();
     typename OffsetListType::iterator offIt = m_LinkedViewerOffsetList.begin();
@@ -698,30 +700,30 @@ namespace otb
       //comment: std::cout<<"CurrentIndex: "<<currentIndex<<std::endl;
       if(linkedIt.Get()->GetInputImage()->GetBufferedRegion().IsInside(currentIndex))
       {
-	typename ImageType::PixelType newPixel = linkedIt.Get()->GetInputImage()->GetPixel(currentIndex);
+        typename ImageType::PixelType newPixel = linkedIt.Get()->GetInputImage()->GetPixel(currentIndex);
         oss<<newPixel<<" ("<<linkedIt.Get()->GetLabel()<<" pixel values)"<<std::endl;
       }
-    else
+      else
       {
-	IndexType shrinkIndex;
-	shrinkIndex[0]=currentIndex[0]/m_ShrinkFactor;
-	shrinkIndex[1]=currentIndex[1]/m_ShrinkFactor;
+        IndexType shrinkIndex;
+        shrinkIndex[0]=currentIndex[0]/m_ShrinkFactor;
+        shrinkIndex[1]=currentIndex[1]/m_ShrinkFactor;
 	
-	if(linkedIt.Get()->GetShrinkedImage()->GetBufferedRegion().IsInside(shrinkIndex))
-	  {
-	    typename ImageType::PixelType newPixel = linkedIt.Get()->GetShrinkedImage()->GetPixel(shrinkIndex);
-	    oss<<newPixel<<" ("<<linkedIt.Get()->GetLabel()<<" pixel values)"<<std::endl;
-	  }
+        if(linkedIt.Get()->GetShrinkedImage()->GetBufferedRegion().IsInside(shrinkIndex))
+        {
+          typename ImageType::PixelType newPixel = linkedIt.Get()->GetShrinkedImage()->GetPixel(shrinkIndex);
+          oss<<newPixel<<" ("<<linkedIt.Get()->GetLabel()<<" pixel values)"<<std::endl;
+        }
       }
       ++linkedIt;
       ++offIt;
     }
     if(oss.good())
-      {
-	m_PixLocOutput->value(oss.str().c_str());
-	m_PixLocOutput->redraw();
-	Fl::check();
-      }
+    {
+      m_PixLocOutput->value(oss.str().c_str());
+      m_PixLocOutput->redraw();
+      Fl::check();
+    }
     //comment: std::cout<<"Leaving report pixel: "<<m_Label<<std::endl;
   }
 
@@ -1111,10 +1113,10 @@ ImageViewerBase<TPixel,TLabel>
     case ScrollWidgetType::GRAYSCALE:
     {
       if(m_UseScroll)
-	{
-	  m_ScrollWidget->SetViewModel(viewModel);
-	  m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
-	}
+      {
+        m_ScrollWidget->SetViewModel(viewModel);
+        m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
+      }
       m_FullWidget->SetViewModel(viewModel);
       m_ZoomWidget->SetViewModel(viewModel);
       m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
@@ -1136,11 +1138,11 @@ ImageViewerBase<TPixel,TLabel>
     case ScrollWidgetType::COMPLEX_MODULUS:
     {
       if(m_UseScroll)
-	{
-	  m_ScrollWidget->SetViewModel(viewModel);
-	  m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
+      {
+        m_ScrollWidget->SetViewModel(viewModel);
+        m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
 	  m_ScrollWidget->SetGreenChannelIndex(m_GreenChannelIndex);
-	}
+      }
       m_FullWidget->SetViewModel(viewModel);
       m_ZoomWidget->SetViewModel(viewModel);
       m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
@@ -1164,11 +1166,11 @@ ImageViewerBase<TPixel,TLabel>
     case ScrollWidgetType::COMPLEX_PHASE:
     {
       if(m_UseScroll)
-	{
-	  m_ScrollWidget->SetViewModel(viewModel);
-	  m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
+      {
+        m_ScrollWidget->SetViewModel(viewModel);
+        m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
 	  m_ScrollWidget->SetGreenChannelIndex(m_GreenChannelIndex);
-	}
+      }
       m_FullWidget->SetViewModel(viewModel);
       m_ZoomWidget->SetViewModel(viewModel);
       m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
