@@ -636,8 +636,8 @@ namespace otb
   }
 
   template <class TPixel, class TLabel>
-  void 
-  ImageViewerBase<TPixel,TLabel>
+      void 
+          ImageViewerBase<TPixel,TLabel>
   ::ReportPixel(IndexType index)
   {
     //comment: std::cout<<"Entering report pixel: "<<m_Label<<std::endl;
@@ -653,43 +653,43 @@ namespace otb
     oss << std::setprecision(12) << point<<" (physical coordinates)"<<std::endl;
     
     if(m_InputImage->GetBufferedRegion().IsInside(index))
-      {
+    {
 	//comment: std::cout<<"Index: "<<index<<std::endl;
 
-	typename ImageType::PixelType newPixel = m_InputImage->GetPixel(index);
+      typename ImageType::PixelType newPixel = m_InputImage->GetPixel(index);
 
-	if(this->GetViewModel() == ScrollWidgetType::RGB || this->GetViewModel() == ScrollWidgetType::GRAYSCALE)
-	  {
-	    oss<<newPixel<<" ("<<m_Label<<" pixel values)"<<std::endl;
-	  }
-	else if(this->GetViewModel() == ScrollWidgetType::COMPLEX_MODULUS)
-	  {
-	    double im = static_cast<double>(newPixel[m_RedChannelIndex]);
-	    double re = static_cast<double>(newPixel[m_GreenChannelIndex]);
-	    double modulus = vcl_sqrt(re*re+im*im);
-	    oss<<modulus<<std::setprecision(3)<<" ("<<m_Label<<" modulus value)"<<std::endl;
-
-	  }
-	else if(this->GetViewModel() == ScrollWidgetType::COMPLEX_PHASE)
-	  {
-	    double im = static_cast<double>(newPixel[m_RedChannelIndex]);
-	    double re = static_cast<double>(newPixel[m_GreenChannelIndex]);
-	    double phase = vcl_atan2(im,re);
-	    oss<<phase<<std::setprecision(3)<<" ("<<m_Label<<" phase value)"<<std::endl;
-	  }
-      }
-    else
+      if(this->GetViewModel() == ScrollWidgetType::RGB || this->GetViewModel() == ScrollWidgetType::GRAYSCALE)
       {
-	IndexType shrinkIndex;
-	shrinkIndex[0]=index[0]/m_ShrinkFactor;
-	shrinkIndex[1]=index[1]/m_ShrinkFactor;
-	
-	if(m_Shrink->GetOutput()->GetBufferedRegion().IsInside(shrinkIndex))
-	  {
-	    typename ImageType::PixelType newPixel = m_Shrink->GetOutput()->GetPixel(shrinkIndex);
-	    oss<<newPixel<<" ("<<m_Label<<" pixel values)"<<std::endl;
-	  }
+        oss<<newPixel<<" ("<<m_Label<<" pixel values)"<<std::endl;
       }
+      else if(this->GetViewModel() == ScrollWidgetType::COMPLEX_MODULUS)
+      {
+        double im = static_cast<double>(newPixel[m_RedChannelIndex]);
+        double re = static_cast<double>(newPixel[m_GreenChannelIndex]);
+        double modulus = vcl_sqrt(re*re+im*im);
+        oss<<modulus<<std::setprecision(3)<<" ("<<m_Label<<" modulus value)"<<std::endl;
+
+      }
+      else if(this->GetViewModel() == ScrollWidgetType::COMPLEX_PHASE)
+      {
+        double im = static_cast<double>(newPixel[m_RedChannelIndex]);
+        double re = static_cast<double>(newPixel[m_GreenChannelIndex]);
+        double phase = vcl_atan2(im,re);
+        oss<<phase<<std::setprecision(3)<<" ("<<m_Label<<" phase value)"<<std::endl;
+      }
+    }
+    else
+    {
+      IndexType shrinkIndex;
+      shrinkIndex[0]=index[0]/m_ShrinkFactor;
+      shrinkIndex[1]=index[1]/m_ShrinkFactor;
+	
+      if(m_Shrink->GetOutput()->GetBufferedRegion().IsInside(shrinkIndex))
+      {
+        typename ImageType::PixelType newPixel = m_Shrink->GetOutput()->GetPixel(shrinkIndex);
+        oss<<newPixel<<" ("<<m_Label<<" pixel values)"<<std::endl;
+      }
+    }
       
     typename ViewerListType::Iterator linkedIt = m_LinkedViewerList->Begin();
     typename OffsetListType::iterator offIt = m_LinkedViewerOffsetList.begin();
@@ -700,30 +700,30 @@ namespace otb
       //comment: std::cout<<"CurrentIndex: "<<currentIndex<<std::endl;
       if(linkedIt.Get()->GetInputImage()->GetBufferedRegion().IsInside(currentIndex))
       {
-	typename ImageType::PixelType newPixel = linkedIt.Get()->GetInputImage()->GetPixel(currentIndex);
+        typename ImageType::PixelType newPixel = linkedIt.Get()->GetInputImage()->GetPixel(currentIndex);
         oss<<newPixel<<" ("<<linkedIt.Get()->GetLabel()<<" pixel values)"<<std::endl;
       }
-    else
+      else
       {
-	IndexType shrinkIndex;
-	shrinkIndex[0]=currentIndex[0]/m_ShrinkFactor;
-	shrinkIndex[1]=currentIndex[1]/m_ShrinkFactor;
+        IndexType shrinkIndex;
+        shrinkIndex[0]=currentIndex[0]/m_ShrinkFactor;
+        shrinkIndex[1]=currentIndex[1]/m_ShrinkFactor;
 	
-	if(linkedIt.Get()->GetShrinkedImage()->GetBufferedRegion().IsInside(shrinkIndex))
-	  {
-	    typename ImageType::PixelType newPixel = linkedIt.Get()->GetShrinkedImage()->GetPixel(shrinkIndex);
-	    oss<<newPixel<<" ("<<linkedIt.Get()->GetLabel()<<" pixel values)"<<std::endl;
-	  }
+        if(linkedIt.Get()->GetShrinkedImage()->GetBufferedRegion().IsInside(shrinkIndex))
+        {
+          typename ImageType::PixelType newPixel = linkedIt.Get()->GetShrinkedImage()->GetPixel(shrinkIndex);
+          oss<<newPixel<<" ("<<linkedIt.Get()->GetLabel()<<" pixel values)"<<std::endl;
+        }
       }
       ++linkedIt;
       ++offIt;
     }
     if(oss.good())
-      {
-	m_PixLocOutput->value(oss.str().c_str());
-	m_PixLocOutput->redraw();
-	Fl::check();
-      }
+    {
+      m_PixLocOutput->value(oss.str().c_str());
+      m_PixLocOutput->redraw();
+      Fl::check();
+    }
     //comment: std::cout<<"Leaving report pixel: "<<m_Label<<std::endl;
   }
 
