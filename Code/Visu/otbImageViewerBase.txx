@@ -1139,14 +1139,14 @@ ImageViewerBase<TPixel,TLabel>
 	{
 	  m_ScrollWidget->SetViewModel(viewModel);
 	  m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
-	  m_ScrollWidget->SetRedChannelIndex(m_GreenChannelIndex);
+	  m_ScrollWidget->SetGreenChannelIndex(m_GreenChannelIndex);
 	}
       m_FullWidget->SetViewModel(viewModel);
       m_ZoomWidget->SetViewModel(viewModel);
       m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
       m_FullWidget->SetRedChannelIndex(m_RedChannelIndex);
-      m_ZoomWidget->SetRedChannelIndex(m_GreenChannelIndex);
-      m_FullWidget->SetRedChannelIndex(m_GreenChannelIndex);
+      m_ZoomWidget->SetGreenChannelIndex(m_GreenChannelIndex);
+      m_FullWidget->SetGreenChannelIndex(m_GreenChannelIndex);
 
       ComputeNormalizationFactors();
       
@@ -1167,7 +1167,7 @@ ImageViewerBase<TPixel,TLabel>
 	{
 	  m_ScrollWidget->SetViewModel(viewModel);
 	  m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
-	  m_ScrollWidget->SetRedChannelIndex(m_GreenChannelIndex);
+	  m_ScrollWidget->SetGreenChannelIndex(m_GreenChannelIndex);
 	}
       m_FullWidget->SetViewModel(viewModel);
       m_ZoomWidget->SetViewModel(viewModel);
