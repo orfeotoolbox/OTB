@@ -48,6 +48,7 @@
 // Software Guide : BeginCodeSnippet
 #include "otbNCCRegistrationFilter.h"
 #include "itkRecursiveGaussianImageFilter.h"
+#include "itkWarpImageFilter.h"
 // Software Guide : EndCodeSnippet
 
 #include <iostream>
@@ -184,6 +185,23 @@ int main(int argc, char** argv )
   dfWriter->SetInput( registrator->GetOutput() );
   dfWriter->Update();
 
+  
+  typedef itk::WarpImageFilter<MovingImageType, MovingImageType, DeformationFieldType> WarperType;
+  WarperType::Pointer warper = WarperType::New();
+  
+  MovingImageType::PixelType padValue = 4.0;
+
+  warper->SetInput( mReader->GetOutput() );
+  warper->SetDeformationField( registrator->GetOutput() );
+  warper->SetEdgePaddingValue( padValue );
+  
+  typedef otb::ImageFileWriter< MovingImageType > WriterType;
+
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetFileName(argv[4]);
+  writer->SetInput( warper->GetOutput() );
+  writer->Update();
+  
   // Software Guide : BeginLatex
   //
   // Figure~\ref{fig:NCCRegistrationFilterOUTPUT} shows the result of applying.
