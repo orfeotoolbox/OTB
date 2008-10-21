@@ -440,8 +440,9 @@ ImageWidgetBase<TPixel>
 	}
 	case COMPLEX_MODULUS:
 	{
-	  unsigned char  modulus = Normalize(static_cast<PixelType>(vcl_sqrt(static_cast<double>(it.Get()[m_RedChannelIndex]*it.Get()[m_RedChannelIndex]
-				       +it.Get()[m_GreenChannelIndex]*it.Get()[m_GreenChannelIndex]))),0);
+    double im = static_cast<double>(it.Get()[m_RedChannelIndex]);
+    double re = static_cast<double>(it.Get()[m_GreenChannelIndex]);
+	  unsigned char  modulus = Normalize(static_cast<PixelType>(vcl_sqrt(static_cast<double>(im*im+re*re))),0);
 	  m_OpenGlBuffer[index] =   modulus;
 	  m_OpenGlBuffer[index+1] = modulus;
 	  m_OpenGlBuffer[index+2] = modulus;
