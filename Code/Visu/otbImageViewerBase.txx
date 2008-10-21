@@ -1111,10 +1111,10 @@ ImageViewerBase<TPixel,TLabel>
     case ScrollWidgetType::GRAYSCALE:
     {
       if(m_UseScroll)
-	{
-	  m_ScrollWidget->SetViewModel(viewModel);
-	  m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
-	}
+      {
+        m_ScrollWidget->SetViewModel(viewModel);
+        m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
+      }
       m_FullWidget->SetViewModel(viewModel);
       m_ZoomWidget->SetViewModel(viewModel);
       m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
@@ -1136,11 +1136,11 @@ ImageViewerBase<TPixel,TLabel>
     case ScrollWidgetType::COMPLEX_MODULUS:
     {
       if(m_UseScroll)
-	{
-	  m_ScrollWidget->SetViewModel(viewModel);
-	  m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
-	  m_ScrollWidget->SetRedChannelIndex(m_GreenChannelIndex);
-	}
+      {
+        m_ScrollWidget->SetViewModel(viewModel);
+        m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
+        m_ScrollWidget->SetRedChannelIndex(m_GreenChannelIndex);
+      }
       m_FullWidget->SetViewModel(viewModel);
       m_ZoomWidget->SetViewModel(viewModel);
       m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
@@ -1164,11 +1164,11 @@ ImageViewerBase<TPixel,TLabel>
     case ScrollWidgetType::COMPLEX_PHASE:
     {
       if(m_UseScroll)
-	{
-	  m_ScrollWidget->SetViewModel(viewModel);
-	  m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
-	  m_ScrollWidget->SetRedChannelIndex(m_GreenChannelIndex);
-	}
+      {
+        m_ScrollWidget->SetViewModel(viewModel);
+        m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
+        m_ScrollWidget->SetRedChannelIndex(m_GreenChannelIndex);
+      }
       m_FullWidget->SetViewModel(viewModel);
       m_ZoomWidget->SetViewModel(viewModel);
       m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
