@@ -120,9 +120,9 @@ namespace otb
       PixelType pixel = it.Get();
       for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
       {
-        double im = static_cast<double>(pixel[m_RedChannelIndex]);
-        double re = static_cast<double>(pixel[m_GreenChannelIndex]);
-        sl->GetNthElement(0)->PushBack(vcl_sqrt(static_cast<double>(im*im+re*re)));
+        double re = static_cast<double>(pixel[m_RedChannelIndex]);
+        double im = static_cast<double>(pixel[m_GreenChannelIndex]);
+        sl->GetNthElement(0)->PushBack(vcl_sqrt(static_cast<double>(re*re+im*im)));
       }
       ++it;
     }
@@ -135,7 +135,7 @@ namespace otb
       PixelType pixel = it.Get();
       for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
       {
-        sl->GetNthElement(0)->PushBack(vcl_atan2(static_cast<double>(pixel[m_RedChannelIndex]),static_cast<double>(pixel[m_GreenChannelIndex])));
+        sl->GetNthElement(0)->PushBack(vcl_atan2(static_cast<double>(pixel[m_GreenChannelIndex]),static_cast<double>(pixel[m_RedChannelIndex])));
       }
       ++it;
     }
@@ -654,7 +654,7 @@ namespace otb
     
     if(m_InputImage->GetBufferedRegion().IsInside(index))
     {
-	//comment: std::cout<<"Index: "<<index<<std::endl;
+	  //comment: std::cout<<"Index: "<<index<<std::endl;
 
       typename ImageType::PixelType newPixel = m_InputImage->GetPixel(index);
 
@@ -664,16 +664,16 @@ namespace otb
       }
       else if(this->GetViewModel() == ScrollWidgetType::COMPLEX_MODULUS)
       {
-        double im = static_cast<double>(newPixel[m_RedChannelIndex]);
-        double re = static_cast<double>(newPixel[m_GreenChannelIndex]);
+        double re = static_cast<double>(newPixel[m_RedChannelIndex]);
+        double im = static_cast<double>(newPixel[m_GreenChannelIndex]);
         double modulus = vcl_sqrt(re*re+im*im);
-        oss<<modulus<<std::setprecision(3)<<" ("<<m_Label<<" modulus value)"<<std::endl;
+        oss<<modulus<<std::setprecision(3)<<" ("<<m_Label<<" modulus value)" << im << ", " << re <<std::endl;
 
       }
       else if(this->GetViewModel() == ScrollWidgetType::COMPLEX_PHASE)
       {
-        double im = static_cast<double>(newPixel[m_RedChannelIndex]);
-        double re = static_cast<double>(newPixel[m_GreenChannelIndex]);
+        double re = static_cast<double>(newPixel[m_RedChannelIndex]);
+        double im = static_cast<double>(newPixel[m_GreenChannelIndex]);
         double phase = vcl_atan2(im,re);
         oss<<phase<<std::setprecision(3)<<" ("<<m_Label<<" phase value)"<<std::endl;
       }
