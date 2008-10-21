@@ -82,7 +82,7 @@ int main(int argc, char** argv )
 
   MovingBlurType::Pointer mBlur = MovingBlurType::New();
   mBlur->SetInput( mReader->GetOutput() );
-  mBlur->SetSigma( 1.0 );
+  mBlur->SetSigma(atof(argv[5]) );
 
 
   //Create the filter

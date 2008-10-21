@@ -43,8 +43,8 @@ namespace otb
    *  - The row deformation value,
    *  - The final estimated parameters of the transform.
    *
-   *  This classs is derived form the MAECENAS code provided by Jordi Inglada, 
-   *  from Cnes.
+   *  This class is derived from the MAECENAS code provided by Jordi Inglada, 
+   *  from CNES.
    */
 template <class TFixedImage, class TMovingImage, class TPointSet>
 class ITK_EXPORT DisparityMapEstimationMethod

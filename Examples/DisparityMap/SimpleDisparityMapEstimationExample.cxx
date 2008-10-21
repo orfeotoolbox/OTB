@@ -224,8 +224,8 @@ int main (int argc, char* argv[])
   
   fixedReader->SetFileName(argv[1]);
   movingReader->SetFileName(argv[2]);
-  fixedReader->Update();
-  movingReader->Update();
+  fixedReader->UpdateOutputInformation();
+  movingReader->UpdateOutputInformation();
 
   // Software Guide : EndCodeSnippet
 
