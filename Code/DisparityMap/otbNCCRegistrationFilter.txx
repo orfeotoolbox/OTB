@@ -74,15 +74,16 @@ NCCRegistrationFilter<TFixedImage,TMovingImage,TDeformationField>
    itkExceptionMacro( << 
      "Could not cast difference function to NCCRegistrationFunction" );
    }
- 
+
+
   /*
    * Smooth the deformation field
-   */
+
   if ( this->GetSmoothDeformationField() )
     {
     this->SmoothDeformationField();
     }
-
+   */
 }
 
 
@@ -234,11 +235,11 @@ NCCRegistrationFilter<TFixedImage,TMovingImage,TDeformationField>
 {
   // If we smooth the update buffer before applying it, then the are
   // approximating a viscuous problem as opposed to an elastic problem
-  if ( this->GetSmoothUpdateField() )
+/*  if ( this->GetSmoothUpdateField() )
     {
     this->SmoothUpdateField();
     }
-  
+  */
   this->Superclass::ApplyUpdate(dt);
 
   NCCRegistrationFunctionType *drfp = 
