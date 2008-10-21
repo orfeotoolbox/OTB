@@ -98,63 +98,63 @@ namespace otb
   InputIteratorType it;
   // if scroll is activated, compute the factors from the quicklook
   if(m_UseScroll)
-    {
-      it = InputIteratorType(m_Shrink->GetOutput(),m_Shrink->GetOutput()->GetLargestPossibleRegion());
-      it.GoToBegin();
-    }
+  {
+    it = InputIteratorType(m_Shrink->GetOutput(),m_Shrink->GetOutput()->GetLargestPossibleRegion());
+    it.GoToBegin();
+  }
   // else, compute the factors from the full viewed region
   else
-    {
-      m_InputImage->SetRequestedRegion(m_FullWidget->GetViewedRegion());
-      m_InputImage->PropagateRequestedRegion();
-      m_InputImage->UpdateOutputData();
-      it = InputIteratorType(m_InputImage,m_InputImage->GetRequestedRegion());
-      it.GoToBegin();
-    }
+  {
+    m_InputImage->SetRequestedRegion(m_FullWidget->GetViewedRegion());
+    m_InputImage->PropagateRequestedRegion();
+    m_InputImage->UpdateOutputData();
+    it = InputIteratorType(m_InputImage,m_InputImage->GetRequestedRegion());
+    it.GoToBegin();
+  }
   
   if(this->GetViewModel() == ScrollWidgetType::COMPLEX_MODULUS)
+  {
+    sl->PushBack(ListSampleType::New());
+    while( !it.IsAtEnd() )
     {
-      sl->PushBack(ListSampleType::New());
-      while( !it.IsAtEnd() )
-	{
-	  PixelType pixel = it.Get();
-	  for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
-	    {
-	      sl->GetNthElement(0)->PushBack(vcl_sqrt(static_cast<double>(pixel[m_RedChannelIndex]*pixel[m_RedChannelIndex]+pixel[m_GreenChannelIndex]*pixel[m_GreenChannelIndex])));
-	    }
-	  ++it;
-	}
-    }
-  else if(this->GetViewModel() == ScrollWidgetType::COMPLEX_PHASE)
-    {
-      sl->PushBack(ListSampleType::New());
-      while( !it.IsAtEnd() )
-	{
-	  PixelType pixel = it.Get();
-	  for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
-	    {
-	      sl->GetNthElement(0)->PushBack(vcl_atan2(static_cast<double>(pixel[m_RedChannelIndex]),static_cast<double>(pixel[m_GreenChannelIndex])));
-	    }
-	  ++it;
-	}
-
-    }
-  else
-    {
+      PixelType pixel = it.Get();
       for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
-	{
-	  sl->PushBack(ListSampleType::New());
-	}
-      while( !it.IsAtEnd() )
-	{
-	  PixelType pixel = it.Get();
-	  for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
-	    {
-	      sl->GetNthElement(i)->PushBack(pixel[i]);
-	    }
-	  ++it;
-	}
+      {
+        sl->GetNthElement(0)->PushBack(vcl_sqrt(static_cast<double>(pixel[m_RedChannelIndex]*pixel[m_RedChannelIndex]+pixel[m_GreenChannelIndex]*pixel[m_GreenChannelIndex])));
+      }
+      ++it;
     }
+  }
+  else if(this->GetViewModel() == ScrollWidgetType::COMPLEX_PHASE)
+  {
+    sl->PushBack(ListSampleType::New());
+    while( !it.IsAtEnd() )
+    {
+      PixelType pixel = it.Get();
+      for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
+      {
+        sl->GetNthElement(0)->PushBack(vcl_atan2(static_cast<double>(pixel[m_RedChannelIndex]),static_cast<double>(pixel[m_GreenChannelIndex])));
+      }
+      ++it;
+    }
+
+  }
+  else
+  {
+    for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
+    {
+      sl->PushBack(ListSampleType::New());
+    }
+    while( !it.IsAtEnd() )
+    {
+      PixelType pixel = it.Get();
+      for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
+      {
+        sl->GetNthElement(i)->PushBack(pixel[i]);
+      }
+      ++it;
+    }
+  }
 
   m_HistogramGeneratorList->Clear();
   m_TransferFunctionList->Clear();
