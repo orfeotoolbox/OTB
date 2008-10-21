@@ -454,7 +454,7 @@ ImageWidgetBase<TPixel>
 	}
 	case COMPLEX_PHASE:
 	  {
-      unsigned char phase =  Normalize(static_cast<PixelType>(vcl_atan2(static_cast<double>(it.Get()[m_GreenChannelIndex])),static_cast<double>(it.Get()[m_RedChannelIndex])),0);
+      unsigned char phase =  Normalize(static_cast<PixelType>(vcl_atan2(static_cast<double>(it.Get()[m_GreenChannelIndex]),static_cast<double>(it.Get()[m_RedChannelIndex]))),0);
 	    m_OpenGlBuffer[index]   = phase;
 	    m_OpenGlBuffer[index+1] = phase;
 	    m_OpenGlBuffer[index+2] = phase;
