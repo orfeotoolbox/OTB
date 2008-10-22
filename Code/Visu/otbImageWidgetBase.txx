@@ -104,17 +104,17 @@ ImageWidgetBase<TPixel>
 
 
 template <class TPixel>
-void 
-ImageWidgetBase<TPixel>
-::Init(int x, int y, int w, int h, const char * l)
+    void 
+    ImageWidgetBase<TPixel>
+  ::Init(int x, int y, int w, int h, const char * l)
 {
   for(unsigned int i = 0; i<m_Image->GetNumberOfComponentsPerPixel();++i)
+  {
+    if(i>=m_TransferFunctionList->Size())
     {
-      if(i>=m_TransferFunctionList->Size())
-	{
-	  m_TransferFunctionList->PushBack(AffineTransferFunctionType::New());
-	}
+      m_TransferFunctionList->PushBack(AffineTransferFunctionType::New());
     }
+  }
 }
 
 /**
@@ -132,41 +132,42 @@ ImageWidgetBase<TPixel>
   IndexType resp;
   IndexType origin = this->GetViewedRegion().GetIndex();
   x = static_cast<double>(index[0])/m_OpenGlIsotropicZoom
-    +static_cast<double>(origin[0]);
+      +static_cast<double>(origin[0]);
   y = static_cast<double>(origin[1])
-    +static_cast<double>(index[1])/m_OpenGlIsotropicZoom;
+      +static_cast<double>(index[1])/m_OpenGlIsotropicZoom;
 
   SizeType maxSize = this->GetInput()->GetLargestPossibleRegion().GetSize();
   IndexType maxIndex = this->GetInput()->GetLargestPossibleRegion().GetIndex();
 
   if(x<maxIndex[0])
-    {
-      resp[0]=maxIndex[0];
-    }
+  {
+    resp[0]=maxIndex[0];
+  }
   else if(x>maxIndex[0]+maxSize[0])
-    {
-      resp[0] = maxIndex[0]+maxSize[0];
-    }
+  {
+    resp[0] = maxIndex[0]+maxSize[0];
+  }
   else
-    {
-      resp[0]=static_cast<int>(x);
-    }
+  {
+    resp[0]=static_cast<int>(x);
+  }
   
   if(y<maxIndex[1])
-    {
-      resp[1]=maxIndex[1];
+  {
+    resp[1]=maxIndex[1];
       
-    }
+  }
   else if(y>maxIndex[1]+maxSize[1])
-    {
-      resp[1] = maxIndex[1]+maxSize[1];
-    }
+  {
+    resp[1] = maxIndex[1]+maxSize[1];
+  }
   else
-    {
-      resp[1]=static_cast<int>(y);
-    }
+  {
+    resp[1]=static_cast<int>(y);
+  }
   return resp;
 }
+
 /** Set the input image.
  * \param image The image to view.
  */
@@ -242,6 +243,7 @@ ImageWidgetBase<TPixel>
 {
   return m_ImageOverlay;
 }
+
 /** 
  * Show The widget. 
  */
@@ -251,17 +253,17 @@ ImageWidgetBase<TPixel>
 ::Show(void)
 { 
   if(!m_Image)
-    {
-      itkExceptionMacro(<<"No input image !");
-    }
+  {
+    itkExceptionMacro(<<"No input image !");
+  }
   else
-    {
+  {
       //otbMsgDebugMacro(<<"Zoomable widget Show");       
-      this->show();
+    this->show();
       //otbMsgDebugMacro(<<"Before redraw.");
-      this->redraw();
+    this->redraw();
       //otbMsgDebugMacro(<<"After redraw.");
-    }
+  }
 }
 
 template <class TPixel>
@@ -283,51 +285,51 @@ ImageWidgetBase<TPixel>
 
 
 #ifndef MESA
-glDrawBuffer(GL_FRONT_AND_BACK);
+  glDrawBuffer(GL_FRONT_AND_BACK);
 #endif // !MESA
 
 
 //   otbMsgDebugMacro(<<"Draw");
 
- if(this->UpdateOpenGlBufferedRegionRequested())
+  if(this->UpdateOpenGlBufferedRegionRequested())
+  {
+    UpdateOpenGlBufferedRegion();
+    m_Image->SetRequestedRegion(m_BufferedRegion);
+    m_Image->PropagateRequestedRegion();
+    m_Image->UpdateOutputData();
+    RebuildOpenGlBuffer(); 
+    if(m_ImageOverlayVisible)
     {
-      UpdateOpenGlBufferedRegion();
-      m_Image->SetRequestedRegion(m_BufferedRegion);
-      m_Image->PropagateRequestedRegion();
-      m_Image->UpdateOutputData();
-      RebuildOpenGlBuffer(); 
-      if(m_ImageOverlayVisible)
-	{
-	  m_ImageOverlay->SetRequestedRegion(m_BufferedRegion);
-	  m_ImageOverlay->PropagateRequestedRegion();
-	  m_ImageOverlay->UpdateOutputData();
-	}
+      m_ImageOverlay->SetRequestedRegion(m_BufferedRegion);
+      m_ImageOverlay->PropagateRequestedRegion();
+      m_ImageOverlay->UpdateOutputData();
     }
+  }
  
   if(m_ImageOverlayVisible)
-    {
-      RebuildOpenGlImageOverlayBuffer();
-    }
+  {
+    RebuildOpenGlImageOverlayBuffer();
+  }
 
- if (!this->valid())
-   {
-     valid(1);
-     glLoadIdentity();
-     glViewport(0,0,w(),h());
-     glClearColor((float)0.0, (float)0.0, (float)0.0, (float)0.0);          
-     glShadeModel(GL_FLAT);
-     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-   }
+  if (!this->valid())
+  {
+    valid(1);
+    glLoadIdentity();
+    glViewport(0,0,w(),h());
+    glClearColor((float)0.0, (float)0.0, (float)0.0, (float)0.0);          
+    glShadeModel(GL_FLAT);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+  }
  
- glClear(GL_COLOR_BUFFER_BIT);    //this clears and paints to black
- glMatrixMode(GL_MODELVIEW);    //clear previous 3D draw params
- glLoadIdentity();
- glMatrixMode(GL_PROJECTION);
- this->ortho();
- glDisable(GL_BLEND);
+  glClear(GL_COLOR_BUFFER_BIT);    //this clears and paints to black
+  glMatrixMode(GL_MODELVIEW);    //clear previous 3D draw params
+  glLoadIdentity();
+  glMatrixMode(GL_PROJECTION);
+  this->ortho();
+  glDisable(GL_BLEND);
 
 
- glRasterPos2i(0,this->h());  
+  glRasterPos2i(0,this->h());  
 //  glPixelZoom(m_OpenGlIsotropicZoom ,-m_OpenGlIsotropicZoom);
 
  // // display the image
@@ -360,33 +362,33 @@ glDrawBuffer(GL_FRONT_AND_BACK);
   glDisable(GL_TEXTURE_2D);
 
  // if image overlay is activated, display image overlay
- if(m_ImageOverlayVisible)
-   {
-     glEnable(GL_BLEND);
-     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-     glDrawPixels(m_BufferedRegion.GetSize()[0],
-		  m_BufferedRegion.GetSize()[1], 
-		  GL_RGBA,
-		  GL_UNSIGNED_BYTE, 
-		  m_OpenGlImageOverlayBuffer);
-     glDisable(GL_BLEND);
+  if(m_ImageOverlayVisible)
+  {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+    glDrawPixels(m_BufferedRegion.GetSize()[0],
+                 m_BufferedRegion.GetSize()[1], 
+                                          GL_RGBA,
+                                          GL_UNSIGNED_BYTE, 
+                                          m_OpenGlImageOverlayBuffer);
+    glDisable(GL_BLEND);
 //      glEnd();
-   } 
+  } 
 
- if(m_FormOverlayVisible)
-   {
-     ReverseIteratorType it =  m_FormList->ReverseBegin();
+  if(m_FormOverlayVisible)
+  {
+    ReverseIteratorType it =  m_FormList->ReverseBegin();
      //otbMsgDebugMacro(<<"Formlist size: "<<m_FormList->Size());
-     for(;it!=m_FormList->ReverseEnd();++it)
-       {
-	 it.Get()->Draw(m_OpenGlIsotropicZoom,
-		       m_ViewedRegion.GetIndex()[0],
-		       m_ViewedRegion.GetIndex()[1],
-		       this->h(), m_SubSamplingRate);
-       }
-   }
+    for(;it!=m_FormList->ReverseEnd();++it)
+    {
+      it.Get()->Draw(m_OpenGlIsotropicZoom,
+             m_ViewedRegion.GetIndex()[0],
+                                     m_ViewedRegion.GetIndex()[1],
+                                         this->h(), m_SubSamplingRate);
+    }
+  }
 #ifndef MESA
-glDrawBuffer(GL_BACK);
+  glDrawBuffer(GL_BACK);
 #endif // !MESA
 
 
@@ -402,68 +404,68 @@ ImageWidgetBase<TPixel>
 {
   //otbMsgDebugMacro(<<"RebuildOpenGlBuffer");
   if(m_OpenGlBuffer != NULL)
-    {
+  {
       //otbMsgDebugMacro(<<"Deleting previous buffer ...");
-      delete [] m_OpenGlBuffer;
-    }
+    delete [] m_OpenGlBuffer;
+  }
   //otbMsgDebugMacro(<<"Buffered region: "<<m_BufferedRegion); 
   unsigned int bufferLenght = 4*m_BufferedRegion.GetSize()[0]
-                                                        *m_BufferedRegion.GetSize()[1];
+      *m_BufferedRegion.GetSize()[1];
   //otbMsgDebugMacro(<<"New buffer lenght: "<<bufferLenght);
   m_OpenGlBuffer = new unsigned char[bufferLenght];
 
- typedef itk::ImageRegionConstIterator<ImageType> IteratorType;
+  typedef itk::ImageRegionConstIterator<ImageType> IteratorType;
   IteratorType it(m_Image,m_BufferedRegion);
   unsigned int index = 0;
   for(it.GoToBegin();!it.IsAtEnd();++it)
+  {
+    switch(m_ViewModel)
     {
-      switch(m_ViewModel)
-	{
-	case RGB:
-	  {
-	    m_OpenGlBuffer[index] = Normalize(it.Get()[m_RedChannelIndex],m_RedChannelIndex);
-	    m_OpenGlBuffer[index+1] = Normalize(it.Get()[m_GreenChannelIndex],m_GreenChannelIndex);
-	    m_OpenGlBuffer[index+2] = Normalize(it.Get()[m_BlueChannelIndex],m_BlueChannelIndex);
-	    m_OpenGlBuffer[index+3] = 255;
-	    index+=4;
-	    break;
-	}
-	case GRAYSCALE:
-	  {
-	    unsigned char  gray = Normalize(it.Get()[m_RedChannelIndex],m_RedChannelIndex);
-	    m_OpenGlBuffer[index] =   gray;
-	    m_OpenGlBuffer[index+1] = gray;
-	    m_OpenGlBuffer[index+2] = gray;
-	    m_OpenGlBuffer[index+3] = 255;
-	    index+=4;
-	    break;
-	}
-	case COMPLEX_MODULUS:
-	{
-    double re = static_cast<double>(it.Get()[m_RedChannelIndex]);
-    double im = static_cast<double>(it.Get()[m_GreenChannelIndex]);
+      case RGB:
+      {
+        m_OpenGlBuffer[index] = Normalize(it.Get()[m_RedChannelIndex],m_RedChannelIndex);
+        m_OpenGlBuffer[index+1] = Normalize(it.Get()[m_GreenChannelIndex],m_GreenChannelIndex);
+        m_OpenGlBuffer[index+2] = Normalize(it.Get()[m_BlueChannelIndex],m_BlueChannelIndex);
+        m_OpenGlBuffer[index+3] = 255;
+        index+=4;
+        break;
+      }
+      case GRAYSCALE:
+      {
+        unsigned char  gray = Normalize(it.Get()[m_RedChannelIndex],m_RedChannelIndex);
+        m_OpenGlBuffer[index] =   gray;
+        m_OpenGlBuffer[index+1] = gray;
+        m_OpenGlBuffer[index+2] = gray;
+        m_OpenGlBuffer[index+3] = 255;
+        index+=4;
+        break;
+      }
+      case COMPLEX_MODULUS:
+      {
+        double re = static_cast<double>(it.Get()[m_RedChannelIndex]);
+        double im = static_cast<double>(it.Get()[m_GreenChannelIndex]);
 //     std::cout << " *** " << m_RedChannelIndex << " " << m_GreenChannelIndex << std::endl;
-	  unsigned char  modulus = Normalize(static_cast<PixelType>(vcl_sqrt(static_cast<double>(im*im+re*re))),0);
+        unsigned char  modulus = Normalize(static_cast<PixelType>(vcl_sqrt(static_cast<double>(im*im+re*re))),0);
 //     std::cout << " ** " << im << " " << re << " -> " << static_cast<int>(modulus) << std::endl;
-	  m_OpenGlBuffer[index] =   modulus;
-	  m_OpenGlBuffer[index+1] = modulus;
-	  m_OpenGlBuffer[index+2] = modulus;
-	  m_OpenGlBuffer[index+3] = 255;
-	  index+=4;
-	  break;
-	}
-	case COMPLEX_PHASE:
-	  {
-      unsigned char phase =  Normalize(static_cast<PixelType>(vcl_atan2(static_cast<double>(it.Get()[m_GreenChannelIndex]),static_cast<double>(it.Get()[m_RedChannelIndex]))),0);
-	    m_OpenGlBuffer[index]   = phase;
-	    m_OpenGlBuffer[index+1] = phase;
-	    m_OpenGlBuffer[index+2] = phase;
-	    m_OpenGlBuffer[index+3] = 255;
-	    index+=4;
-	    break;
-	  }
-	}
+        m_OpenGlBuffer[index] =   modulus;
+        m_OpenGlBuffer[index+1] = modulus;
+        m_OpenGlBuffer[index+2] = modulus;
+        m_OpenGlBuffer[index+3] = 255;
+        index+=4;
+        break;
+      }
+      case COMPLEX_PHASE:
+      {
+        unsigned char phase =  Normalize(static_cast<PixelType>(vcl_atan2(static_cast<double>(it.Get()[m_GreenChannelIndex]),static_cast<double>(it.Get()[m_RedChannelIndex]))),0);
+        m_OpenGlBuffer[index]   = phase;
+        m_OpenGlBuffer[index+1] = phase;
+        m_OpenGlBuffer[index+2] = phase;
+        m_OpenGlBuffer[index+3] = 255;
+        index+=4;
+        break;
+      }
     }
+  }
 }
 /** 
  * Rebuild opengl image overlay buffer. 
@@ -475,52 +477,52 @@ ImageWidgetBase<TPixel>
 {
   //otbMsgDebugMacro(<<"RebuildOpenGlImageOverlayBuffer");
   if(m_OpenGlImageOverlayBuffer != NULL)
-    {
+  {
       //otbMsgDebugMacro(<<"Deleting previous buffer ...");
-      delete [] m_OpenGlImageOverlayBuffer;
-    }
+    delete [] m_OpenGlImageOverlayBuffer;
+  }
   //otbMsgDebugMacro(<<"Buffered region: "<<m_BufferedRegion); 
   unsigned int bufferLenght = 4*m_BufferedRegion.GetSize()[0]
-                                                        *m_BufferedRegion.GetSize()[1];
+      *m_BufferedRegion.GetSize()[1];
   //otbMsgDebugMacro(<<"New buffer lenght: "<<bufferLenght);
   m_OpenGlImageOverlayBuffer = new unsigned char[bufferLenght];
 
- typedef itk::ImageRegionConstIterator<OverlayImageType> IteratorType;
+  typedef itk::ImageRegionConstIterator<OverlayImageType> IteratorType;
 //   m_ImageOverlay->SetNumberOfComponentsPerPixel(3);
   IteratorType it(m_ImageOverlay,m_BufferedRegion);
   unsigned int index = 0;
   if(m_BlackTransparency)
+  {
+    for(it.GoToBegin();!it.IsAtEnd();++it)
     {
-      for(it.GoToBegin();!it.IsAtEnd();++it)
-	{
-	  if ((it.Get()[0]==0)&&(it.Get()[1]==0)&&(it.Get()[2]==0))
-	    {
-	      m_OpenGlImageOverlayBuffer[index] = 0;
-	      m_OpenGlImageOverlayBuffer[index+1] = 0;
-	      m_OpenGlImageOverlayBuffer[index+2] =0;
-	      m_OpenGlImageOverlayBuffer[index+3] = 0;
-	    }
-	  else
-	    {
-	      m_OpenGlImageOverlayBuffer[index] =   static_cast<unsigned char>(it.Get()[0]);
-	      m_OpenGlImageOverlayBuffer[index+1] = static_cast<unsigned char>( it.Get()[1]);
-	      m_OpenGlImageOverlayBuffer[index+2] = static_cast<unsigned char>(it.Get()[2]);
-	      m_OpenGlImageOverlayBuffer[index+3] = m_ImageOverlayOpacity;
-	    } 
-	  index+=4;
-	}     
-    }
+      if ((it.Get()[0]==0)&&(it.Get()[1]==0)&&(it.Get()[2]==0))
+      {
+        m_OpenGlImageOverlayBuffer[index] = 0;
+        m_OpenGlImageOverlayBuffer[index+1] = 0;
+        m_OpenGlImageOverlayBuffer[index+2] =0;
+        m_OpenGlImageOverlayBuffer[index+3] = 0;
+      }
+      else
+      {
+        m_OpenGlImageOverlayBuffer[index] =   static_cast<unsigned char>(it.Get()[0]);
+        m_OpenGlImageOverlayBuffer[index+1] = static_cast<unsigned char>( it.Get()[1]);
+        m_OpenGlImageOverlayBuffer[index+2] = static_cast<unsigned char>(it.Get()[2]);
+        m_OpenGlImageOverlayBuffer[index+3] = m_ImageOverlayOpacity;
+      } 
+      index+=4;
+    }     
+  }
   else 
+  {
+    for(it.GoToBegin();!it.IsAtEnd();++it)
     {
-      for(it.GoToBegin();!it.IsAtEnd();++it)
-	{
-	  m_OpenGlImageOverlayBuffer[index] =  static_cast<unsigned char>(it.Get()[0]);
-	  m_OpenGlImageOverlayBuffer[index+1] =static_cast<unsigned char>(it.Get()[1]);
-	  m_OpenGlImageOverlayBuffer[index+2] =static_cast<unsigned char>(it.Get()[2]);
-	  m_OpenGlImageOverlayBuffer[index+3] =m_ImageOverlayOpacity;
-	  index+=4;
-	}
+      m_OpenGlImageOverlayBuffer[index] =  static_cast<unsigned char>(it.Get()[0]);
+      m_OpenGlImageOverlayBuffer[index+1] =static_cast<unsigned char>(it.Get()[1]);
+      m_OpenGlImageOverlayBuffer[index+2] =static_cast<unsigned char>(it.Get()[2]);
+      m_OpenGlImageOverlayBuffer[index+3] =m_ImageOverlayOpacity;
+      index+=4;
     }
+  }
 }
 
 
