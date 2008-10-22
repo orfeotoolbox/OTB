@@ -350,90 +350,31 @@ ImageWidgetBase<TPixel>
 //   glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);	// Linear Filtering
 //   glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);	// Linear Filtering
   
-//   glBindTexture (GL_TEXTURE_2D, texture);
-//   glBegin (GL_QUADS);
-//   int hOffset = this->h() - this->hDisplayed();
-//   glTexCoord2f (0.0, 1.0);  glVertex3f (0.0, 0.0+hOffset, 0.0);
-//   glTexCoord2f (1.0, 1.0);  glVertex3f (this->wDisplayed(), 0.0+hOffset, 0.0);
-//   glTexCoord2f (1.0, 0.0);  glVertex3f (this->wDisplayed(), this->hDisplayed()+hOffset, 0.0);
-//   glTexCoord2f (0.0, 0.0);  glVertex3f (0.0, this->hDisplayed()+hOffset, 0.0);
-//   glEnd ();
-// 
-//   glDisable(GL_TEXTURE_2D);
+  glBindTexture (GL_TEXTURE_2D, texture);
+  glBegin (GL_QUADS);
+  int hOffset = this->h() - this->hDisplayed();
+  glTexCoord2f (0.0, 1.0);  glVertex3f (0.0, 0.0+hOffset, 0.0);
+  glTexCoord2f (1.0, 1.0);  glVertex3f (this->wDisplayed(), 0.0+hOffset, 0.0);
+  glTexCoord2f (1.0, 0.0);  glVertex3f (this->wDisplayed(), this->hDisplayed()+hOffset, 0.0);
+  glTexCoord2f (0.0, 0.0);  glVertex3f (0.0, this->hDisplayed()+hOffset, 0.0);
+  glEnd ();
 
-  glActiveTextureARB( GL_TEXTURE0_ARB );
-  glEnable( GL_TEXTURE_2D );
-  glBindTexture( GL_TEXTURE_2D, texture );
+  glDisable(GL_TEXTURE_2D);
 
-  glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
-  
-  
  // if image overlay is activated, display image overlay
   if(m_ImageOverlayVisible)
   {
-//     glEnable(GL_BLEND);
-//     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-//     glDrawPixels(m_BufferedRegion.GetSize()[0],
-//                  m_BufferedRegion.GetSize()[1], 
-//                                           GL_RGBA,
-//                                           GL_UNSIGNED_BYTE, 
-//                                           m_OpenGlImageOverlayBuffer);
-//     glDisable(GL_BLEND);
-//     
-    GLuint textureOverlay;
-    glGenTextures(1, &textureOverlay);
-    glBindTexture(GL_TEXTURE_2D, textureOverlay);
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, m_BufferedRegion.GetSize()[0], m_BufferedRegion.GetSize()[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, m_OpenGlImageOverlayBuffer);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);  // Nearest Filtering
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);  // Nearest Filtering
-    
-
-    glActiveTextureARB(GL_TEXTURE1_ARB );
-    glEnable( GL_TEXTURE_2D );
-    glBindTexture( GL_TEXTURE_2D, textureOverlay );
-
-    glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE_ARB );
-    glTexEnvi( GL_TEXTURE_ENV, GL_COMBINE_RGB_ARB, GL_INTERPOLATE_ARB );
-
-    glTexEnvi( GL_TEXTURE_ENV, GL_SOURCE0_RGB_ARB, GL_PREVIOUS_ARB );
-    glTexEnvi( GL_TEXTURE_ENV, GL_OPERAND0_RGB_ARB, GL_SRC_COLOR );
-
-    glTexEnvi( GL_TEXTURE_ENV, GL_SOURCE1_RGB_ARB, GL_TEXTURE );
-    glTexEnvi( GL_TEXTURE_ENV, GL_OPERAND1_RGB_ARB, GL_SRC_COLOR );
-
-    glTexEnvi( GL_TEXTURE_ENV, GL_SOURCE2_RGB_ARB, GL_PRIMARY_COLOR_ARB );
-    glTexEnvi( GL_TEXTURE_ENV, GL_OPERAND2_RGB_ARB, GL_SRC_COLOR );
-    
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+    glDrawPixels(m_BufferedRegion.GetSize()[0],
+                 m_BufferedRegion.GetSize()[1], 
+                                          GL_RGBA,
+                                          GL_UNSIGNED_BYTE, 
+                                          m_OpenGlImageOverlayBuffer);
+    glDisable(GL_BLEND);
 //      glEnd();
   } 
-  
-  glBegin (GL_QUADS);
-  {
-    int hOffset = this->h() - this->hDisplayed();
-    
-    glMultiTexCoord2fARB( GL_TEXTURE0_ARB, 0.0f, 1.0f );
-    glMultiTexCoord2fARB( GL_TEXTURE1_ARB, 0.0f, 1.0f );
-    glVertex3f (0.0, 0.0+hOffset, 0.0);
-    
-    glMultiTexCoord2fARB( GL_TEXTURE0_ARB, 1.0f, 1.0f );
-    glMultiTexCoord2fARB( GL_TEXTURE1_ARB, 1.0f, 1.0f );
-    glVertex3f (this->wDisplayed(), 0.0+hOffset, 0.0);
-    
-    glMultiTexCoord2fARB( GL_TEXTURE0_ARB, 1.0f, 0.0f );
-    glMultiTexCoord2fARB( GL_TEXTURE1_ARB, 1.0f, 0.0f );
-    glVertex3f (this->wDisplayed(), this->hDisplayed()+hOffset, 0.0);
-  
-    glMultiTexCoord2fARB( GL_TEXTURE0_ARB, 0.0f, 0.0f );
-    glMultiTexCoord2fARB( GL_TEXTURE1_ARB, 0.0f, 0.0f );
-    glVertex3f (0.0, this->hDisplayed()+hOffset, 0.0);
-  }
-  glEnd ();
-  
-  glActiveTextureARB(GL_TEXTURE0_ARB);
-  glDisable(GL_TEXTURE_2D);
-  glActiveTextureARB(GL_TEXTURE1_ARB);
-  glDisable(GL_TEXTURE_2D);
-  
+
   if(m_FormOverlayVisible)
   {
     ReverseIteratorType it =  m_FormList->ReverseBegin();
