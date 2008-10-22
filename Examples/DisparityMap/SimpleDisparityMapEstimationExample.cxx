@@ -70,8 +70,8 @@ int main (int argc, char* argv[])
     {
       std::cerr <<"Usage: "<<argv[0];
       std::cerr<<"fixedFileName movingFileName fieldOutName imageOutName ";
-      std::cerr<<"pointSetStep explorationSize windowSize learningRate nbIterations ";
-      std::cerr<<"metricThreshold";
+      std::cerr<<"pointSetStepX pointSetStepY explorationSize windowSize learningRate ";
+      std::cerr<<"nbIterations metricThreshold";
       
       
       return EXIT_FAILURE;
