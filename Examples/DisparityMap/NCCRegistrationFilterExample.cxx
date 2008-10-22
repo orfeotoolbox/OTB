@@ -26,7 +26,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {fixed.tif}, {moving.tif}
-//    OUTPUTS: {deformationFieldOutput2.png}
+//    OUTPUTS: {deformationFieldOutput2.png} {resampledOutput2.png}
 //    5 1.0 2
 //  Software Guide : EndCommandLineArgs
 
@@ -56,6 +56,15 @@
 
 int main(int argc, char** argv )
 {
+  
+  if(argc!= 8)
+  {
+    std::cerr <<"Usage: "<<argv[0];
+    std::cerr<<"fixedFileName movingFileName fieldOutName imageOutName ";
+    std::cerr<<"explorationSize bluringSigma nbIterations ";
+      
+    return EXIT_FAILURE;
+  }
   
   const unsigned int ImageDimension = 2;
 
@@ -104,7 +113,7 @@ int main(int argc, char** argv )
 
   FixedBlurType::Pointer fBlur = FixedBlurType::New();
   fBlur->SetInput( fReader->GetOutput() );
-  fBlur->SetSigma( atof(argv[5]) );
+  fBlur->SetSigma( atof(argv[6]) );
 
 
   typedef itk::RecursiveGaussianImageFilter< MovingImageType,
@@ -112,7 +121,7 @@ int main(int argc, char** argv )
 
   MovingBlurType::Pointer mBlur = MovingBlurType::New();
   mBlur->SetInput( mReader->GetOutput() );
-  mBlur->SetSigma(atof(argv[5]) );
+  mBlur->SetSigma(atof(argv[6]) );
 // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -147,8 +156,8 @@ int main(int argc, char** argv )
 
   RadiusType radius;
 
-  radius[0] = atoi(argv[4]);
-  radius[1] = atoi(argv[4]);
+  radius[0] = atoi(argv[5]);
+  radius[1] = atoi(argv[5]);
 
   registrator->SetNCCRadius( radius );
 // Software Guide : EndCodeSnippet
@@ -162,7 +171,7 @@ int main(int argc, char** argv )
   // Software Guide : EndLatex
   
    // Software Guide : BeginCodeSnippet
-  registrator->SetNumberOfIterations( atoi(argv[6]) );
+  registrator->SetNumberOfIterations( atoi(argv[7]) );
 // Software Guide : EndCodeSnippet
   // registrator->GetDeformationField();
 
