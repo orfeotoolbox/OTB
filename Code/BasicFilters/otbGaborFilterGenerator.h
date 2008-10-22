@@ -46,17 +46,24 @@ namespace otb
    *
    * The formula used to compute these coefficients is as follows:
    * 
-   * \f$ g(x,y) = \epsilon^{-\pi((a(x cos(\theta)+y sin(\theta))^{2} +(b( y cos(\theta}-x sin(\theta))^{2})}*cos(2*\pi(u_{0}*x + v_{0}*y)+\phi) \f$
+   * \f$ g(x,y) = \exp\Big(-\pi((a x_\theta)^{2} +(b y_\theta)^{2})\Big) * \cos\big(2\pi(u_0*x + v_0*y)+\phi\big) \f$
+   *
+   * with:
+   *
+   * \f$ x_\theta = x \cos(\theta)+y \sin(\theta) \f$
+   * and
+   * \f$ y_\theta = y \cos(\theta)-x \sin(\theta) \f$
    *
    * Where:
    * 
-   * Radius         : Radius of the generated filter (GetRadius()/SetRadius())
-   * \f$ a      \f$ : Scale the x axis of the gaussian envelop. (GetA()/SetA())
-   * \f$ b      \f$ : Scale the y axis of the gaussian envelop (GetB()/SetB())
-   * \f$ \theta \f$ : Rotation angle of the gaussian envelop (in degree) (GetTheta()/SetTheta())
-   * \f$ u_0    \f$ : x spatial frenquency of the sinusoidal carrier (GetU0()/SetU0())
-   * \f$ v_0    \f$ : y spatial frenquency of the sinusoidal carrier (GetV0()/SetV0())
-   * \f$ \phi   \f$ : Phase of the sinusoidal carrier (GetPhi()/SetPhi())
+   * - Radius         : Radius of the generated filter (GetRadius()/SetRadius())
+   * - \f$ a      \f$ : Scale the x axis of the gaussian envelop. (GetA()/SetA())
+   * - \f$ b      \f$ : Scale the y axis of the gaussian envelop (GetB()/SetB())
+   * - \f$ \theta \f$ : Rotation angle of the gaussian envelop (in degree) (GetTheta()/SetTheta())
+   * - \f$ u_0    \f$ : x spatial frenquency of the sinusoidal carrier (GetU0()/SetU0())
+   * - \f$ v_0    \f$ : y spatial frenquency of the sinusoidal carrier (GetV0()/SetV0())
+   * - \f$ \phi   \f$ : Phase of the sinusoidal carrier (GetPhi()/SetPhi())
+   *
    */
 
 template <class TPrecision> 
