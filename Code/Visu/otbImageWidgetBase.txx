@@ -364,14 +364,36 @@ ImageWidgetBase<TPixel>
  // if image overlay is activated, display image overlay
   if(m_ImageOverlayVisible)
   {
+//     glEnable(GL_BLEND);
+//     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+//     glDrawPixels(m_BufferedRegion.GetSize()[0],
+//                  m_BufferedRegion.GetSize()[1], 
+//                                           GL_RGBA,
+//                                           GL_UNSIGNED_BYTE, 
+//                                           m_OpenGlImageOverlayBuffer);
+
+//     glDisable(GL_BLEND);
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-    glDrawPixels(m_BufferedRegion.GetSize()[0],
-                 m_BufferedRegion.GetSize()[1], 
-                                          GL_RGBA,
-                                          GL_UNSIGNED_BYTE, 
-                                          m_OpenGlImageOverlayBuffer);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_TEXTURE_2D);
+    GLuint textureOverlay;
+    glGenTextures(1, &textureOverlay);
+    glBindTexture(GL_TEXTURE_2D, textureOverlay);
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, m_BufferedRegion.GetSize()[0], m_BufferedRegion.GetSize()[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, m_OpenGlImageOverlayBuffer);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);  // Nearest Filtering
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);  // Nearest Filtering
+    
+    glBindTexture (GL_TEXTURE_2D, textureOverlay);
+    glBegin (GL_QUADS);
+    int hOffset = this->h() - this->hDisplayed();
+    glTexCoord2f (0.0, 1.0);  glVertex3f (0.0, 0.0+hOffset, 0.0);
+    glTexCoord2f (1.0, 1.0);  glVertex3f (this->wDisplayed(), 0.0+hOffset, 0.0);
+    glTexCoord2f (1.0, 0.0);  glVertex3f (this->wDisplayed(), this->hDisplayed()+hOffset, 0.0);
+    glTexCoord2f (0.0, 0.0);  glVertex3f (0.0, this->hDisplayed()+hOffset, 0.0);
+    glEnd ();
+    glDisable(GL_TEXTURE_2D);
     glDisable(GL_BLEND);
+    
 //      glEnd();
   } 
 
@@ -387,6 +409,10 @@ ImageWidgetBase<TPixel>
                                          this->h(), m_SubSamplingRate);
     }
   }
+  
+  
+
+  
 #ifndef MESA
   glDrawBuffer(GL_BACK);
 #endif // !MESA
