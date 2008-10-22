@@ -1149,19 +1149,44 @@ namespace otb
 	
       double movex = static_cast<double>(region.GetIndex()[0])+zoomOffsetX;
       double movey = static_cast<double>(m_DisplayExtent.GetSize()[1])-static_cast<double>(region.GetIndex()[1])-zoomOffsetY;
-      glBitmap(0,0,0,0,movex,movey,NULL);
-      glPixelZoom(m_OpenGlIsotropicZoom,-m_OpenGlIsotropicZoom);
+//       glBitmap(0,0,0,0,movex,movey,NULL);
+//       glPixelZoom(m_OpenGlIsotropicZoom,-m_OpenGlIsotropicZoom);
+// 
+// 
+// 	// display the image
+//       glDrawPixels(region.GetSize()[0],
+//                    region.GetSize()[1], 
+//                                   GL_RGB,
+//                                   GL_UNSIGNED_BYTE, 
+//                                   buffer);
+//       glEnd();
+      
+      glEnable(GL_TEXTURE_2D);
+      glColor4f(1.0,1.0,1.0,0.0);
+      GLuint texture;
+      glGenTextures(1, &texture);
+      glBindTexture(GL_TEXTURE_2D, texture);
+      glTexImage2D(GL_TEXTURE_2D, 0, 3, region.GetSize()[0], region.GetSize()[1], 0, GL_RGB, GL_UNSIGNED_BYTE, buffer);
+      glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);  // Nearest Filtering
+      glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);  // Nearest Filtering
+  
+      glBindTexture (GL_TEXTURE_2D, texture);
+      glBegin (GL_QUADS);
+//       glTexCoord2f (0.0, 1.0);  glVertex3f (-movex, -movey, 0.0);
+//       glTexCoord2f (1.0, 1.0);  glVertex3f (region.GetSize()[0]-movex, -movey, 0.0);
+//       glTexCoord2f (1.0, 0.0);  glVertex3f (region.GetSize()[0]-movex, region.GetSize()[1]-movey, 0.0);
+//       glTexCoord2f (0.0, 0.0);  glVertex3f (-movex, region.GetSize()[1]-movey, 0.0);
+      glTexCoord2f (0.0, 1.0);  glVertex3f (0.0, 0.0, 0.0);
+      glTexCoord2f (1.0, 1.0);  glVertex3f (region.GetSize()[0], 0.0, 0.0);
+      glTexCoord2f (1.0, 0.0);  glVertex3f (region.GetSize()[0], region.GetSize()[1], 0.0);
+      glTexCoord2f (0.0, 0.0);  glVertex3f (0.0, region.GetSize()[1], 0.0);
+      glEnd ();
 
-
-	// display the image
-      glDrawPixels(region.GetSize()[0],
-                   region.GetSize()[1], 
-                                  GL_RGB,
-                                  GL_UNSIGNED_BYTE, 
-                                  buffer);
-      glEnd();
-      swap_buffers();
-      glFlush();
+      glDisable(GL_TEXTURE_2D);
+      
+      
+//       swap_buffers();
+//       glFlush();
     }
     total.Stop();
   }
