@@ -60,7 +60,7 @@ int main(int argc, char** argv )
   if(argc!= 8)
   {
     std::cerr <<"Usage: "<<argv[0];
-    std::cerr<<"fixedFileName movingFileName fieldOutName imageOutName ";
+    std::cerr<<" fixedFileName movingFileName fieldOutName imageOutName ";
     std::cerr<<"explorationSize bluringSigma nbIterations ";
       
     return EXIT_FAILURE;
