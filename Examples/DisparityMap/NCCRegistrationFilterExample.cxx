@@ -25,7 +25,7 @@
 
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {fixed.tif}, {moving.tif}
+//    INPUTS: {StereoFixed.png}, {StereoMoving.png}
 //    OUTPUTS: {deformationFieldOutput2.png} {resampledOutput2.png}
 //    5 1.0 2
 //  Software Guide : EndCommandLineArgs
