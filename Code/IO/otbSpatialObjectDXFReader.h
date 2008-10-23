@@ -26,6 +26,8 @@ namespace otb
   /** \class SpatialObjectDXFReader
    *  \brief This class reads the DXF file format to SpatialObjects.
    *
+   * \example IO/DXFReaderExample.cxx
+   *
    *  \ingroup ObjectSource
    */
 template <class TSpatialObject>
