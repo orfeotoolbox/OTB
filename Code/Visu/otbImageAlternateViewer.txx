@@ -1161,6 +1161,12 @@ namespace otb
 //                                   buffer);
 //       glEnd();
       
+//       std::cout << "Region size: " << region.GetSize() << std::endl;
+//       std::cout << "DisplayExtent size: " << m_DisplayExtent.GetSize() << std::endl;
+//       std::cout << "zoomOffset: " << zoomOffsetX << " " << zoomOffsetY << std::endl;
+//       std::cout << "move: " << movex << " " << movey << std::endl;
+      
+      
       glEnable(GL_TEXTURE_2D);
       glColor4f(1.0,1.0,1.0,0.0);
       GLuint texture;
