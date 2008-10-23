@@ -1,0 +1,34 @@
+SET(OTB_TCL_EXE_DIR_BUILD "${OTB_EXECUTABLE_PATH}")
+SET(OTB_TCL_EXE_NAME_ROOT "itkwish")
+
+CONFIGURE_FILE(${OTB_SOURCE_DIR}/Wrapping/CSwig/Tcl/itkTclConfigure.h.in
+               ${OTB_BINARY_DIR}/Wrapping/CSwig/Tcl/itkTclConfigure.h)
+
+INCLUDE_DIRECTORIES(${OTB_BINARY_DIR}/Wrapping/CSwig/Tcl)
+ADD_EXECUTABLE(itkwish itkTclAppInit.cxx)
+TARGET_LINK_LIBRARIES(itkwish
+  OTBAlgorithmsTcl
+  OTBBasicFiltersATcl
+  OTBBasicFiltersBTcl
+  OTBIOTcl
+  OTBNumericsTcl
+  OTBCommonATcl
+  OTBCommonBTcl
+  VXLNumericsTcl
+  SwigRuntimeTcl
+  ${TCL_LIBRARY}
+  ${TK_LIBRARY}
+)
+
+IF(OTB_LIBRARY_PROPERTIES)
+  SET_TARGET_PROPERTIES(itkwish PROPERTIES ${OTB_LIBRARY_PROPERTIES})
+ENDIF(OTB_LIBRARY_PROPERTIES)
+INSTALL(TARGETS itkwish
+  RUNTIME DESTINATION ${OTB_INSTALL_LIB_DIR_CM24} COMPONENT RuntimeExecutables)
+
+INSTALL(FILES
+  ${CMAKE_CURRENT_SOURCE_DIR}/itkinteraction.tcl
+  ${CMAKE_CURRENT_SOURCE_DIR}/itktesting.tcl
+  ${CMAKE_CURRENT_SOURCE_DIR}/itkdata.tcl
+  DESTINATION ${OTB_INSTALL_LIB_DIR_CM24}/tcl
+  COMPONENT RuntimeLibraries)

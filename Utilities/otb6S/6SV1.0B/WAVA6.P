@@ -1,0 +1,1 @@
+extern int wava6_(doublereal *a, integer *inu);

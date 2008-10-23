@@ -1,0 +1,6 @@
+extern int mie_(integer *iaer, doublereal *wldis, doublereal *ex, doublereal *sc, doublereal *asy, integer *ipol);
+extern int exscphase_(doublereal *x, doublereal *nr, doublereal *ni, doublereal *qext, doublereal *qsca, doublereal *p11, doublereal *q11, doublereal *u11, integer *ipol, doublereal *cgaus_s__, doublereal *pdgs_s__);
+/* comlen num_quad__ 4 */
+/* comlen sixs_aerbas__ 480000 */
+/* comlen mie_in__ 2232 */
+/*:ref: gauss_ 14 5 7 7 7 7 4 */

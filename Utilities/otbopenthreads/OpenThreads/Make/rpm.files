@@ -1,0 +1,7 @@
+755 lib/Linux32/libOpenThreads.so   /usr/lib/libOpenThreads.so
+644 include/OpenThreads/Barrier     /usr/include/OpenThreads/Barrier
+644 include/OpenThreads/Condition   /usr/include/OpenThreads/Condition
+644 include/OpenThreads/Exports     /usr/include/OpenThreads/Exports
+644 include/OpenThreads/Mutex       /usr/include/OpenThreads/Mutex
+644 include/OpenThreads/ScopedLock  /usr/include/OpenThreads/ScopedLock
+644 include/OpenThreads/Thread      /usr/include/OpenThreads/Thread

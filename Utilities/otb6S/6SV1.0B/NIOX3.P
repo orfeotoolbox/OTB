@@ -1,0 +1,1 @@
+extern int niox3_(doublereal *a, integer *inu);

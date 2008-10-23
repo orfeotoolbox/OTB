@@ -1,0 +1,9 @@
+<Style id="sh_ylw-pushpin">
+  <IconStyle>
+    <scale>1.3</scale>
+    <hotSpot x="20" xunits="pixels" y="2" yunits="pixels"/>
+    <Icon>
+      <href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+    </Icon>
+  </IconStyle>
+</Style>

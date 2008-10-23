@@ -1,0 +1,10 @@
+band1.null_value:  -32768
+byte_order:  big_endian
+decimal_degrees_per_pixel_lat:  0.000833333333333
+decimal_degrees_per_pixel_lon:  0.000833333333333
+filename: N44E006.hgt
+number_lines:  1201
+number_samples:  1201
+scalar_type:  ossim_sint16
+tie_point_lat:  45.000000000000000
+tie_point_lon:  6.000000000000000

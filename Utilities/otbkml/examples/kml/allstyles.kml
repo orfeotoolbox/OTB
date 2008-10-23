@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.2">
+<Document>
+  <Style id="allstyles">
+    <IconStyle id="iconstyle">
+      <scale>1.2</scale>
+      <heading>90.5</heading>
+      <Icon>
+        <href>http://example.com/image.png</href>
+      </Icon>
+      <hotSpot x="0.1" y="10" xunits="fraction" yunits="pixels"/>
+    </IconStyle>
+    <LabelStyle id="labelstyle">
+      <scale>0.8</scale>
+    </LabelStyle>
+    <LineStyle id="linestyle">
+      <width>2</width>
+    </LineStyle>
+    <PolyStyle id="polystyle">
+      <fill>0</fill>
+      <outline>0</outline>
+    </PolyStyle>
+    <BalloonStyle id="balloonstyle">
+      <bgcolor>00112233</bgcolor>
+      <textColor>33221100</textColor>
+      <!--
+      XHTML in CDATA must conform to the HTML Compatibility guidelines as
+      detailed in http://www.w3.org/TR/xhtml1/#guidelines. See in particular section
+      C2, which requires <br /> over <br>.
+      -->
+      <text><![CDATA[<b>$[name]</b><br /><br />$[description]]]></text>
+      <displayMode>hide</displayMode>
+    </BalloonStyle>
+    <ListStyle id="liststyle">
+      <listItemType>checkHideChildren</listItemType>
+      <bgcolor>00112233</bgcolor>
+      <ItemIcon>
+        <state>open closed</state>
+        <href>http://example.com/image.png</href>
+      </ItemIcon>
+      <ItemIcon>
+        <state>closed</state>
+        <href>http://example.com/image.png</href>
+      </ItemIcon>
+    </ListStyle>
+  </Style>
+</Document>
+</kml>
+

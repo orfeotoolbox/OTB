@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document>
+
+  <Placemark id="empty-placemark"/>
+
+  <NetworkLink id="empty-name">
+    <name/>
+  </NetworkLink>
+
+  <Document id="empty-description">
+    <description/>
+  </Document>
+
+  <Folder id="empty-name-description">
+    <name/>
+    <description/>
+  </Folder>
+
+  <GroundOverlay id="name">
+    <name>named</name>
+  </GroundOverlay>
+
+  <ScreenOverlay id="name-description">
+    <name>named</name>
+    <description>described</description>
+  </ScreenOverlay>
+
+  <PhotoOverlay id="name-description-entity">
+    <name>named</name>
+    <!-- yes, entity replacements directly in description are uncommon but
+    allowed -->
+    <description><![CDATA[name is $[name]<br />id is $[id]]]></description>
+  </PhotoOverlay>
+
+  <Placemark id="simple-balloon-style">
+    <name>named</name>
+    <Style>
+      <BalloonStyle>
+      <!--
+      XHTML in CDATA must conform to the HTML Compatibility guidelines as
+      detailed in http://www.w3.org/TR/xhtml1/#guidelines. See in particular section
+      C2, which requires <br /> over <br>.
+      -->
+        <text><![CDATA[name is $[name]<br />id is $[id]]]></text>
+      </BalloonStyle>
+    </Style>
+  </Placemark>
+
+  <Placemark id="extendeddata-data">
+    <name>named</name>
+    <Style>
+      <BalloonStyle>
+        <text><![CDATA[$[d0] $[d1/displayName] $[d1]]]></text>
+      </BalloonStyle>
+    </Style>
+    <ExtendedData>
+      <Data name="d0">
+        <value>to be or not</value>
+      </Data>
+      <Data name="d1">
+        <displayName>to be that</displayName>
+        <value>is the question</value>
+      </Data>
+    </ExtendedData>
+  </Placemark>
+
+  <Document>
+    <Schema id="SID" name="SNAME">
+      <SimpleField type="string" name="BalloonGirlName">
+        <displayName>She was called</displayName>
+      </SimpleField>
+      <SimpleField type="int" name="BalloonGirlAge">
+        <displayName>and she had just turned</displayName>
+      </SimpleField>
+    </Schema>
+    <Placemark id="extendeddata-schemadata">
+      <name>named</name>
+      <Style>
+        <BalloonStyle>
+          <text><![CDATA[$[SNAME/BalloonGirlName/displayName] $[SNAME/BalloonGirlName] $[SNAME/BalloonGirlAge/displayName] $[SNAME/BalloonGirlAge]]]></text>
+        </BalloonStyle>
+      </Style>
+      <ExtendedData>
+        <SchemaData schemaUrl="#SID">
+          <SimpleData name="BalloonGirlName">Balloon Girl</SimpleData>
+          <SimpleData name="BalloonGirlAge">23</SimpleData>
+        </SchemaData>
+      </ExtendedData>
+      <Point>
+        <coordinates>-123.115786, 49.283323</coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+
+</Document>
+</kml>

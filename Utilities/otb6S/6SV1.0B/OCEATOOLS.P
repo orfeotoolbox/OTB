@@ -1,0 +1,5 @@
+extern int morcasiwat_(doublereal *wl, doublereal *c__, doublereal *r2);
+extern int indwat_(doublereal *wl, doublereal *xsal, doublereal *nr, doublereal *ni);
+extern int sunglint_(doublereal *wspd, doublereal *nr, doublereal *ni, doublereal *azw, doublereal *ts, doublereal *tv, doublereal *fi, doublereal *rog);
+extern int fresnel_(doublereal *nr, doublereal *ni, doublereal *coschi, doublereal *sinchi, doublereal *r1);
+extern int glitalbe_(doublereal *wspd, doublereal *nr, doublereal *ni, doublereal *azw, doublereal *rge);

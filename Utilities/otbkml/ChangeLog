@@ -1,0 +1,10 @@
+Release 0.2.2 May 7 2008
+  - Parser performance improvements.
+  - RTTI disabled in KMLDOM.
+  - "domview" sample python application.
+  - Miscellaneous build fixes.
+
+Release 0.2.1 May 5 2008
+  - Introduced use of boost::intrusive_ptr for improved memory management.
+  - SWIG 1.3.35 now required for bindings to Python, Java.
+  - SCons deprecated in favour of GNU make, Microsoft Visual Studio.

@@ -1,0 +1,29 @@
+extern int msrm_();
+extern int akd_();
+extern int biz_();
+extern int difr92_();
+extern int glak_(doublereal *glth, doublereal *th);
+extern int gmf_(doublereal *gf);
+extern int soil_();
+extern int soilspec_();
+extern int gmd92_();
+extern int leaf_();
+extern int s13aaf_();
+extern int tav_();
+extern int valeur_();
+extern int dakg_(doublereal *u, doublereal *a, integer *nq);
+extern int akbrdf_(doublereal *eei, doublereal *thmi, doublereal *uli, doublereal *sli, doublereal *rsl1i, doublereal *wlmoy, doublereal *rnci, doublereal *cabi, doublereal *cwi, doublereal *vaii, integer *mu, integer *np, doublereal *rm, doublereal *rp, doublereal *brdfint);
+extern int akalbe_(doublereal *albbrdf);
+/* comlen count_ 352 */
+/* comlen soildata_ 6472 */
+/* comlen aaa_ 72 */
+/* comlen ggg_ 296 */
+/* comlen ladak_ 32 */
+/* comlen leafin_ 24 */
+/* comlen leafout_ 16 */
+/* comlen dat_ 6400 */
+/* comlen cfresn_ 16 */
+/* comlen msrmdata_ 40 */
+/* comlen nagout_ 8 */
+/* comlen tauin_ 16 */
+/* comlen tauout_ 8 */

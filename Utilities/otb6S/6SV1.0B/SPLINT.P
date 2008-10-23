@@ -1,0 +1,1 @@
+extern int splint_(doublereal *xa, doublereal *ya, doublereal *y2a, integer *n, doublereal *x, doublereal *y);

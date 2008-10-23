@@ -1,0 +1,2 @@
+extern int meteo_();
+/* comlen sixs_ffu__ 12024 */

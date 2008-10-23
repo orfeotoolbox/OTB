@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.2" hint="target=sky">
+<Placemark>
+  <name>M101</name>
+  <Point>
+    <coordinates>30.817158,54.363992</coordinates>
+  </Point>
+</Placemark>
+</kml>
+

@@ -1,0 +1,136 @@
+
+IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+
+SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
+SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
+SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
+SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
+
+
+#Tolerance sur diff pixel image
+SET(TOL 0.0)
+SET(EPSILON 0.0000000001)
+
+SET(CHANGEDETECTION_TESTS1 ${CXX_TEST_PATH}/otbChangeDetectionTests1)
+SET(CHANGEDETECTION_TESTS2 ${CXX_TEST_PATH}/otbChangeDetectionTests2)
+
+# -------            otb::CBAMI   ------------------------------
+
+ADD_TEST(cdTvCBAMI ${CHANGEDETECTION_TESTS1}  
+  --compare-image ${TOL}   ${BASELINE}/cdCBAMIImage.png
+                    ${TEMP}/cdCBAMIImage.png
+        otbCBAMIChangeDetectionTest
+	 ${INPUTDATA}/GomaAvant.png 
+	 ${INPUTDATA}/GomaApres.png
+	 2 
+	 ${TEMP}/cdCBAMIImage.png 
+	 )
+	 
+ADD_TEST(cdTvCorrel ${CHANGEDETECTION_TESTS1}
+  --compare-image ${TOL}   ${BASELINE}/cdCorrelImage.png
+                    ${TEMP}/cdCorrelImage.png
+	otbCorrelChangeDetectionTest 
+	 ${INPUTDATA}/GomaAvant.png 
+	 ${INPUTDATA}/GomaApres.png 
+	 2 
+	 ${TEMP}/cdCorrelImage.png 
+	 )
+
+ADD_TEST(cdTvMeanDiff ${CHANGEDETECTION_TESTS1}
+  --compare-image ${EPSILON} 
+		  ${BASELINE}/cdMeanDiffImage.hdr
+		  ${TEMP}/cdMeanDiffImage.hdr
+	otbMeanDiffChangeDetectionTest 
+	 ${INPUTDATA}/GomaAvant.png 
+	 ${INPUTDATA}/GomaApres.png
+	 2 
+	 ${TEMP}/cdMeanDiffImage.hdr 
+	 )
+
+ADD_TEST(cdTvMeanRatio ${CHANGEDETECTION_TESTS1}
+  --compare-image ${TOL}   ${BASELINE}/cdMeanRatioImage.png
+                    ${TEMP}/cdMeanRatioImage.png
+	otbMeanRatioChangeDetectionTest 
+	 ${INPUTDATA}/GomaAvant.png 
+	 ${INPUTDATA}/GomaApres.png
+	 2 
+	 ${TEMP}/cdMeanRatioImage.png 
+	 )
+	 
+ADD_TEST(cdTvLHMI ${CHANGEDETECTION_TESTS1}
+#  --compare-image ${TOL}   ${BASELINE}/cdLHMIImage.png
+#                    ${TEMP}/cdLHMIImage.png
+	otbLHMIChangeDetectionTest 
+	 ${INPUTDATA}/GomaAvantSousEch.png 
+	 ${INPUTDATA}/GomaApresSousEch.png
+	 2 
+	 ${TEMP}/cdLHMIImage.png 
+	 )
+
+ADD_TEST(cdTvJHMI ${CHANGEDETECTION_TESTS1}
+  --compare-image ${TOL}   
+		  ${BASELINE}/cdJHMIImage.png
+                  ${TEMP}/cdJHMIImage.png
+	otbJHMIChangeDetectionTest 
+	 ${INPUTDATA}/GomaAvant.png 
+	 ${INPUTDATA}/GomaApres.png
+	 2 
+	 ${TEMP}/cdJHMIImage.png 
+	 )
+
+ADD_TEST(cdTuKullbackLeiblerDistanceImageFilterNew ${CHANGEDETECTION_TESTS1}
+         otbKullbackLeiblerDistanceImageFilterNew)
+
+ADD_TEST(cdTvKullbackLeiblerDistanceImageFilter ${CHANGEDETECTION_TESTS1}
+         --compare-image ${EPSILON}
+			 ${BASELINE}/cdTVKullbackLeiblerDistanceImageFilterOutput.hdr
+			 ${TEMP}/cdTVKullbackLeiblerDistanceImageFilterOutput.hdr
+	 otbKullbackLeiblerDistanceImageFilter
+			${INPUTDATA}/GomaAvant.png 
+			${INPUTDATA}/GomaApres.png
+			${TEMP}/cdTVKullbackLeiblerDistanceImageFilterOutput.hdr
+			35)
+
+ADD_TEST(cdTuKullbackLeiblerProfileImageFilterNew ${CHANGEDETECTION_TESTS1}
+         otbKullbackLeiblerProfileImageFilterNew)
+
+ADD_TEST(cdTvKullbackLeiblerProfileImageFilter ${CHANGEDETECTION_TESTS1}
+         --compare-image ${EPSILON}
+			 ${BASELINE}/cdTVKullbackLeiblerProfileImageFilterOutput.hdr
+			 ${TEMP}/cdTVKullbackLeiblerProfileImageFilterOutput.hdr
+	 otbKullbackLeiblerProfileImageFilter
+			${INPUTDATA}/GomaAvant.png 
+			${INPUTDATA}/GomaApres.png
+			${TEMP}/cdTVKullbackLeiblerProfileImageFilterOutput.hdr
+			5 51)
+
+
+# -------       Fichiers sources CXX -----------------------------------
+SET(BasicChangeDetection_SRCS1
+otbCBAMIChangeDetectionTest.cxx
+otbCorrelChangeDetectionTest.cxx
+otbMeanDiffChangeDetectionTest.cxx
+otbMeanRatioChangeDetectionTest.cxx
+otbLHMIChangeDetectionTest.cxx
+otbJHMIChangeDetectionTest.cxx
+otbKullbackLeiblerDistanceImageFilterNew.cxx
+otbKullbackLeiblerDistanceImageFilter.cxx
+otbKullbackLeiblerProfileImageFilterNew.cxx
+otbKullbackLeiblerProfileImageFilter.cxx
+)
+
+# -------       Fichiers sources CXX -----------------------------------
+SET(BasicChangeDetection_SRCS2
+)
+
+
+
+INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
+
+ADD_EXECUTABLE(otbChangeDetectionTests1 otbChangeDetectionTests1.cxx ${BasicChangeDetection_SRCS1})
+TARGET_LINK_LIBRARIES(otbChangeDetectionTests1 OTBChangeDetection OTBIO)
+
+ADD_EXECUTABLE(otbChangeDetectionTests2 otbChangeDetectionTests2.cxx ${BasicChangeDetection_SRCS2})
+TARGET_LINK_LIBRARIES(otbChangeDetectionTests2 OTBChangeDetection OTBIO)
+
+ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

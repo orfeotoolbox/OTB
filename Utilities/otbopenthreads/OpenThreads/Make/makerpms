@@ -1,0 +1,130 @@
+#!/bin/sh
+
+PRODUCT=$1
+RPM_HEADER=$2
+RPM_FILES=$3
+
+SYS_SRC_DIR=/usr/src/packages/
+
+VERSION=`make -s version`
+rev=`echo $VERSION | cut -f1 -d"-"`
+rel=`echo $VERSION | cut -f2 -d"-"`
+TARBALL_NAME=$PRODUCT-$VERSION.tar.gz
+TARBALL_DEST=$SYS_SRC_DIR/SOURCES/$TARBALL_NAME
+
+printRPMHeaderBeforeDescription()
+{
+    cat $RPM_HEADER |  awk  \
+        'BEGIN{flag=1}\
+        { \
+          if ($1 == "Description:" )\
+            flag = 0;\
+          if( flag == 1 ) \
+              print $0;  \
+        }'
+}
+
+printRPMHeaderAfterDescription()
+{
+    cat $RPM_HEADER |  awk  \
+        'BEGIN{flag=0}\
+        { \
+          if( flag == 1 ) \
+              print $0;  \
+          if ($1 == "Description:" )\
+            flag = 1;\
+        }'
+}
+
+makeSpec()
+{
+    cat <<-LEOF
+Name: $PRODUCT
+`printRPMHeaderBeforeDescription`
+Version: $rev
+Release: $rel
+Source: $TARBALL_NAME
+Packager: `awk -f - /etc/passwd <<-EOF
+BEGIN { FS=":"}
+{
+        if( \\$1 == "$LOGNAME" )
+                print \\$5
+}
+EOF`
+
+%description
+
+`printRPMHeaderAfterDescription`
+
+%prep
+
+%setup
+
+%build
+
+%install
+
+tar cf - . | tar xvfC - /
+
+%files
+
+LEOF
+
+    cat $RPM_FILES | while read perm src dst
+    do
+        echo "%attr($perm, root, root) $dst"
+    done
+    echo
+}
+
+makedir()
+{
+    [ -d $1 ] || mkdir -p $1 
+}
+
+makeTarball()
+{
+    IDIR=$PRODUCT-$rev
+    [ -d $IDIR ] && rm -rf $IDIR
+
+    cat $RPM_FILES | while read perm src dst
+    do
+        makedir $IDIR/`dirname $dst`
+        install $src $IDIR/$dst
+    done
+
+    tar cf - $IDIR | gzip > $TARBALL_DEST
+}
+
+check_args()
+{
+    if [ ! -f $RPM_HEADER ] 
+    then
+        echo RPM Header file == $RPM_HEADER == missing
+        return 1
+    fi
+    if [ ! -f $RPM_FILES ] 
+    then
+        echo RPM Files file == $RPM_FILES == missing
+        return 1
+    fi
+
+    return 0
+}
+
+if ! check_args 
+then 
+    exit 1; 
+fi
+
+makeTarball 
+
+makeSpec > $PRODUCT.spec
+
+rpmbuild -bb --clean $PRODUCT.spec
+
+exit 0
+
+
+
+

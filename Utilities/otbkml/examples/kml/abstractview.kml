@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.2">
+  <NetworkLinkControl>
+    <Camera>
+      <longitude>-122.4790</longitude>
+      <latitude>37.8110</latitude>
+      <altitude>127</altitude>
+      <heading>18.0</heading>
+      <tilt>85</tilt>
+    </Camera>
+  </NetworkLinkControl>
+
+  <Document>
+    <name>Golden Gate tour</name>
+    <open>1</open>
+    <Camera>
+      <longitude>-122.4790</longitude>
+      <latitude>37.8110</latitude>
+      <altitude>127</altitude>
+      <heading>18.0</heading>
+      <tilt>85</tilt>
+      <altitudeMode>absolute</altitudeMode>
+    </Camera>
+
+    <Placemark>
+      <name>At ground level</name>
+      <Camera>
+        <longitude>-122.4783</longitude>
+        <latitude>37.8120</latitude>
+        <!-- altitude default is 0 (default altitudeMode is clampToGround) -->
+        <!-- heading default is 0 (north) -->
+        <tilt>90</tilt>
+        <!-- level -->
+        <!-- roll default is 0 -->
+        <!-- altitudeMode default is clampToGround -->
+      </Camera>
+    </Placemark>
+
+    <NetworkLink>
+      <name>On ground looking up</name>
+      <Camera>
+        <longitude>-122.4783</longitude>
+        <latitude>37.8120</latitude>
+        <tilt>123.456</tilt>
+      </Camera>
+    </NetworkLink>
+
+    <GroundOverlay>
+      <name>100m</name>
+      <Camera>
+        <longitude>-122.4783</longitude>
+        <latitude>37.8120</latitude>
+        <altitude>100</altitude>
+        <tilt>90</tilt>
+        <!-- level -->
+        <altitudeMode>absolute</altitudeMode>
+      </Camera>
+    </GroundOverlay>
+
+    <ScreenOverlay>
+      <name>200m 45 degree tilt</name>
+      <Camera>
+        <longitude>-122.4783</longitude>
+        <latitude>37.8120</latitude>
+        <altitude>200</altitude>
+        <tilt>45</tilt>
+        <altitudeMode>absolute</altitudeMode>
+      </Camera>
+    </ScreenOverlay>
+
+    <Folder>
+      <name>300m straight down</name>
+      <Camera>
+        <longitude>-122.4783</longitude>
+        <latitude>37.8120</latitude>
+        <altitude>300</altitude>
+        <altitudeMode>absolute</altitudeMode>
+      </Camera>
+    </Folder>
+
+    <PhotoOverlay>
+      <name>100m looking east</name>
+      <Camera>
+        <longitude>-122.4783</longitude>
+        <latitude>37.8120</latitude>
+        <altitude>100</altitude>
+        <heading>90</heading>
+        <!-- east -->
+        <tilt>90</tilt>
+        <!-- level -->
+        <altitudeMode>absolute</altitudeMode>
+      </Camera>
+    </PhotoOverlay>
+
+    <Placemark>
+      <name>Roll left</name>
+      <Camera>
+        <longitude>-122.4783</longitude>
+        <latitude>37.8120</latitude>
+        <altitude>100</altitude>
+        <heading>90</heading>
+        <!-- east -->
+        <tilt>90</tilt>
+        <!-- level -->
+        <roll>45</roll>
+        <altitudeMode>absolute</altitudeMode>
+      </Camera>
+    </Placemark>
+
+    <Placemark>
+      <name>Turn to NE</name>
+      <Camera>
+        <longitude>-122.4783</longitude>
+        <latitude>37.8120</latitude>
+        <altitude>90</altitude>
+        <heading>45</heading>
+        <!-- ne -->
+        <tilt>75</tilt>
+        <roll>30</roll>
+        <altitudeMode>absolute</altitudeMode>
+      </Camera>
+    </Placemark>
+
+    <Placemark>
+      <name>Roll right</name>
+      <Camera>
+        <longitude>-122.4780</longitude>
+        <latitude>37.8130</latitude>
+        <altitude>80</altitude>
+        <heading>-5</heading>
+        <!-- slightly west -->
+        <tilt>82</tilt>
+        <roll>-15</roll>
+        <altitudeMode>absolute</altitudeMode>
+      </Camera>
+    </Placemark>
+
+    <Placemark>
+      <name>Roll left</name>
+      <Camera>
+        <longitude>-122.4778</longitude>
+        <latitude>37.8135</latitude>
+        <altitude>80</altitude>
+        <heading>-7.5</heading>
+        <!-- slightly west -->
+        <tilt>100</tilt>
+        <roll>5</roll>
+        <altitudeMode>absolute</altitudeMode>
+      </Camera>
+    </Placemark>
+
+    <Placemark>
+      <LookAt>
+        <longitude>-122.4778</longitude>
+        <latitude>37.8135</latitude>
+        <altitude>80</altitude>
+        <heading>-7.5</heading>
+        <tilt>100</tilt>
+        <altitudeMode>relativeToGround</altitudeMode>
+      </LookAt>
+    </Placemark>
+
+    <Placemark>
+      <name>Untitled Placemark</name>
+      <LookAt>
+        <longitude>-96.90894644841848</longitude>
+        <latitude>38.06991208043639</latitude>
+        <altitude>0</altitude>
+        <range>880022.9846434592</range>
+        <tilt>33.76207682779854</tilt>
+        <heading>64.85616758779747</heading>
+      </LookAt>
+      <Point>
+        <coordinates>-96.90894644841848,38.06991208043639,0</coordinates>
+      </Point>
+    </Placemark>
+
+  </Document>
+</kml>

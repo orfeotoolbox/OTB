@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file contains lots of junk for the specific purpose of testing unknown
+element and attribute handling.
+-->
+<kml xmlns="http://earth.google.com/kml/2.2">
+  <unknownKmlChild a="b">preserve me</unknownKmlChild>
+  <NetworkLinkControl attr="unknown">
+    <Point> <!-- known element, but illegal child of NLC -->
+      foo
+      <coordinates>1,2,3</coordinates> <!-- foo and goo ignored -->
+      goo
+    </Point>
+    <maxSessionLength>60</maxSessionLength>
+    <someFutureElement attr="unknown">some string</someFutureElement>
+  </NetworkLinkControl>
+  <Document id="knownAttr" attr="unknown">
+    <unknownDocChild>hi</unknownDocChild>
+    <Schema>
+      <SimpleField type="string" name="alsoknown" foo="notknown">
+        <displayName>yep</displayName>
+        <someOtherName>nope</someOtherName>
+      </SimpleField>
+    </Schema>
+    <Placemark>
+      <name>we know name</name>
+      <UnknownPlacemarkChild>
+      This complex element has character data followed by:
+        <weird>a nested child element</weird>
+      All of this should be preserved for serialization.
+      </UnknownPlacemarkChild>
+      <EmptyComplex/>
+      <Snippet maxlines="BigL" maxLines="3">foo bar</Snippet>
+      <EmptyComplexWithAttrs a="b" b="c"/>
+      <ComplexWithAttrsAndCdata a="b" b="c">text</ComplexWithAttrsAndCdata>
+      <ComplexParent>
+        <ComplexChild>
+          <simpleChild foo="goo">hi</simpleChild>
+        </ComplexChild>
+      </ComplexParent>
+      <description>we know about this element</description>
+      <Description>we have no idea about this element</Description>
+      <Style>
+        <IconStyle>
+          <hotSpot x="foo" y="123" xunits="fraction" yunits="pixels" a="b"/>
+          <SomeNewChildOfIconStyle/>
+        </IconStyle>
+      </Style>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates/>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+        <NoSuchGeometry>
+          <fantasy attr="foo"/>
+        </NoSuchGeometry>
+      </MultiGeometry>
+      <ExtendedData>
+        <SchemaData>
+          <SimpleData attr="unknown" name="known">
+            another example of a known element
+            <name>does not belong here</name>
+            interposing inside the wrong parent.
+          </SimpleData>
+        </SchemaData>
+      </ExtendedData>
+    </Placemark>
+    <anotherUnknownDocChild foo="emptyelement"/>
+    <PhotoOverlay>
+      <what>huh?</what>
+    </PhotoOverlay>
+  </Document>
+</kml>
+

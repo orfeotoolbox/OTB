@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+  ProjectType="Visual C++"
+  Version="8.00"
+  Name="libkmlengine"
+  ProjectGUID="{C7D291C3-46EC-441C-B7F1-911FD32CE185}"
+  RootNamespace="libkmlengine"
+  Keyword="Win32Proj"
+  >
+  <Platforms>
+    <Platform
+      Name="Win32"
+    />
+  </Platforms>
+  <ToolFiles>
+  </ToolFiles>
+  <Configurations>
+    <Configuration
+      Name="Debug|Win32"
+      OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+      IntermediateDirectory="$(ConfigurationName)"
+      ConfigurationType="4"
+      CharacterSet="1"
+      >
+      <Tool
+        Name="VCPreBuildEventTool"
+      />
+      <Tool
+        Name="VCCustomBuildTool"
+      />
+      <Tool
+        Name="VCXMLDataGeneratorTool"
+      />
+      <Tool
+        Name="VCWebServiceProxyGeneratorTool"
+      />
+      <Tool
+        Name="VCMIDLTool"
+      />
+      <Tool
+        Name="VCCLCompilerTool"
+        Optimization="0"
+        AdditionalIncludeDirectories="..\third_party\boost_1_34_1;..\src;..\third_party\zlib-1.2.3;..\third_party\zlib-1.2.3\contrib;..\third_party\uriparser-0.7.1\include"
+        PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
+        MinimalRebuild="true"
+        BasicRuntimeChecks="3"
+        RuntimeLibrary="3"
+        UsePrecompiledHeader="0"
+        WarningLevel="3"
+        Detect64BitPortabilityProblems="true"
+        DebugInformationFormat="4"
+        ForcedIncludeFiles=""
+      />
+      <Tool
+        Name="VCManagedResourceCompilerTool"
+      />
+      <Tool
+        Name="VCResourceCompilerTool"
+      />
+      <Tool
+        Name="VCPreLinkEventTool"
+      />
+      <Tool
+        Name="VCLibrarianTool"
+      />
+      <Tool
+        Name="VCALinkTool"
+      />
+      <Tool
+        Name="VCXDCMakeTool"
+      />
+      <Tool
+        Name="VCBscMakeTool"
+      />
+      <Tool
+        Name="VCFxCopTool"
+      />
+      <Tool
+        Name="VCPostBuildEventTool"
+      />
+    </Configuration>
+    <Configuration
+      Name="Release|Win32"
+      OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+      IntermediateDirectory="$(ConfigurationName)"
+      ConfigurationType="4"
+      CharacterSet="1"
+      WholeProgramOptimization="1"
+      >
+      <Tool
+        Name="VCPreBuildEventTool"
+      />
+      <Tool
+        Name="VCCustomBuildTool"
+      />
+      <Tool
+        Name="VCXMLDataGeneratorTool"
+      />
+      <Tool
+        Name="VCWebServiceProxyGeneratorTool"
+      />
+      <Tool
+        Name="VCMIDLTool"
+      />
+      <Tool
+        Name="VCCLCompilerTool"
+        AdditionalIncludeDirectories="..\third_party\boost_1_34_1;..\src;..\third_party\zlib-1.2.3;..\third_party\zlib-1.2.3\contrib;..\third_party\uriparser-0.7.1\include"
+        PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
+        RuntimeLibrary="2"
+        UsePrecompiledHeader="2"
+        PrecompiledHeaderThrough="stdafx.h"
+        WarningLevel="3"
+        Detect64BitPortabilityProblems="true"
+        DebugInformationFormat="3"
+        ForcedIncludeFiles="stdafx.h"
+      />
+      <Tool
+        Name="VCManagedResourceCompilerTool"
+      />
+      <Tool
+        Name="VCResourceCompilerTool"
+      />
+      <Tool
+        Name="VCPreLinkEventTool"
+      />
+      <Tool
+        Name="VCLibrarianTool"
+      />
+      <Tool
+        Name="VCALinkTool"
+      />
+      <Tool
+        Name="VCXDCMakeTool"
+      />
+      <Tool
+        Name="VCBscMakeTool"
+      />
+      <Tool
+        Name="VCFxCopTool"
+      />
+      <Tool
+        Name="VCPostBuildEventTool"
+      />
+    </Configuration>
+  </Configurations>
+  <References>
+  </References>
+  <Files>
+    <Filter
+      Name="Source Files"
+      Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
+      UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+      >
+      <File RelativePath="kml\engine\clone.cc"/>
+      <File RelativePath="kml\engine\entity_mapper.cc"/>
+      <File RelativePath="kml\engine\feature_balloon.cc"/>
+      <File RelativePath="kml\engine\feature_visitor.cc"/>
+      <File RelativePath="kml\engine\find.cc"/>
+      <File RelativePath="kml\engine\get_links.cc"/>
+      <File RelativePath="kml\engine\href.cc"/>
+      <File RelativePath="kml\engine\kml_cache.cc"/>
+      <File RelativePath="kml\engine\kml_file.cc"/>
+      <File RelativePath="kml\engine\kml_uri.cc"/>
+      <File RelativePath="kml\engine\kmz_cache.cc"/>
+      <File RelativePath="kml\engine\kmz_file.cc"/>
+      <File RelativePath="kml\engine\location_util.cc"/>
+      <File RelativePath="kml\engine\merge.cc"/>
+      <File RelativePath=".\stdafx.cpp">
+        <FileConfiguration
+          Name="Release|Win32"
+          >
+          <Tool
+            Name="VCCLCompilerTool"
+            UsePrecompiledHeader="1"
+          />
+        </FileConfiguration>
+      </File>
+      <File RelativePath="kml\engine\style_merger.cc"/>
+      <File RelativePath="kml\engine\style_resolver.cc"/>
+    </Filter>
+    <Filter
+      Name="Header Files"
+      Filter="h;hpp;hxx;hm;inl;inc;xsd"
+      UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+      >
+      <File RelativePath="kml\engine\bbox.h"/>
+      <File RelativePath="kml\engine\clone.h"/>
+      <File RelativePath="kml\engine\entity_mapper.h"/>
+      <File RelativePath="kml\engine\feature_balloon.h"/>
+      <File RelativePath="kml\engine\feature_visitor.h"/>
+      <File RelativePath="kml\engine\find.h"/>
+      <File RelativePath="kml\engine\get_links.h"/>
+      <File RelativePath="kml\engine\href.h"/>
+      <File RelativePath="kml\engine\kml_cache.h"/>
+      <File RelativePath="kml\engine\kml_file.h"/>
+      <File RelativePath="kml\engine\kml_uri.h"/>
+      <File RelativePath="kml\engine\kmz_cache.h"/>
+      <File RelativePath="kml\engine\kmz_file.h"/>
+      <File RelativePath="kml\engine\location_util.h"/>
+      <File RelativePath="kml\engine\merge.h"/>
+      <File RelativePath="kml\engine\object_id_parser_observer.h"/>
+      <File RelativePath="kml\engine\shared_style_parser_observer.h"/>
+      <File RelativePath=".\stdafx.h"/>
+      <File RelativePath="kml\engine\style_merger.h"/>
+      <File RelativePath="kml\engine\style_resolver.h"/>
+    </Filter>
+    <Filter
+      Name="Resource Files"
+      Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
+      UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
+      >
+    </Filter>
+    <File
+      RelativePath="libkml\libkml\debug\BuildLog.htm"
+      DeploymentContent="true"
+      >
+    </File>
+    <File
+      RelativePath=".\ReadMe.txt"
+      >
+    </File>
+  </Files>
+  <Globals>
+  </Globals>
+</VisualStudioProject>

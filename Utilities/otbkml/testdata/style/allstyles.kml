@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document>
+  <Style id="allstyles">
+    <IconStyle id="iconstyle">
+      <scale>1.2</scale>
+      <heading>90.5</heading>
+<!-- TODO: IconStyle/Icon serializer shouldn't lie -->
+<!-- TODO: note order in check file due to Icon being unknown -->
+      <Icon>
+        <href>http://example.com/image.png</href>
+      </Icon>
+      <hotSpot x="0.1" y="10" xunits="fraction" yunits="pixels"/>
+    </IconStyle>
+<!-- TODO serialize attrs
+    <LabelStyle id="labelstyle">
+-->
+    <LabelStyle>
+      <scale>0.8</scale>
+    </LabelStyle>
+<!-- TODO serialize attrs
+    <LineStyle id="linestyle">
+-->
+    <LineStyle>
+      <width>2</width>
+    </LineStyle>
+<!-- TODO serialize attrs
+    <PolyStyle id="polystyle">
+-->
+    <PolyStyle>
+      <fill>0</fill>
+      <outline>0</outline>
+    </PolyStyle>
+<!-- TODO serialize attrs
+    <BalloonStyle id="balloonstyle">
+-->
+    <BalloonStyle>
+<!-- TODO causes an infinite loop
+      <bgcolor>00112233</bgcolor>
+-->
+      <bgColor>00112233</bgColor>
+      <textColor>33221100</textColor>
+      <!--
+      XHTML in CDATA must conform to the HTML Compatibility guidelines as
+      detailed in http://www.w3.org/TR/xhtml1/#guidelines. See in particular section
+      C2, which requires <br /> over <br>.
+      -->
+      <text><![CDATA[<b>$[name]</b><br /><br />$[description]]]></text>
+      <displayMode>hide</displayMode>
+    </BalloonStyle>
+<!-- TODO serialize attrs
+    <ListStyle id="liststyle">
+-->
+    <ListStyle>
+      <listItemType>checkHideChildren</listItemType>
+<!-- TODO infinite loop
+      <bgcolor>00112233</bgcolor>
+-->
+      <bgColor>10112233</bgColor>
+      <ItemIcon>
+<!-- TODO enum list
+        <state>open closed</state>
+-->
+        <href>http://example.com/image.png</href>
+      </ItemIcon>
+      <ItemIcon>
+        <state>closed</state>
+        <href>http://example.com/image.png</href>
+      </ItemIcon>
+    </ListStyle>
+  </Style>
+  <Folder id="f0">
+    <styleUrl>#allstyles</styleUrl>
+  </Folder>
+  <Folder id="f1">
+    <styleUrl>#no-such-style</styleUrl>
+  </Folder>
+</Document>
+</kml>
+

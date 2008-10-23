@@ -1,0 +1,12 @@
+extern int discom_(integer *idatmp, integer *iaer, integer *iaer_prof__, doublereal *xmus, doublereal *xmuv, doublereal *phi, doublereal *taer55, doublereal *taer55p, doublereal *palt, doublereal *phirad, integer *nt, integer *mu, integer *np, doublereal *rm, doublereal *gb, doublereal *rp, doublereal *ftray, integer *ipol, doublereal *xlm1, doublereal *xlm2, doublereal *roatm_fi__, integer *nfi, integer *nfilut, doublereal *filut, doublereal *roluts, doublereal *rolutsq, doublereal *rolutsu);
+/* comlen num_quad__ 4 */
+/* comlen sixs_phase__ 480000 */
+/* comlen sixs_polar__ 56032 */
+/* comlen sixs_aer__ 960 */
+/* comlen sixs_disc__ 4320 */
+/* comlen sixs_ffu__ 12024 */
+/* comlen aeroprof_ 2428 */
+/*:ref: odrayl_ 14 2 7 7 */
+/*:ref: trunca_ 14 2 7 4 */
+/*:ref: atmref_ 14 41 4 4 7 7 7 7 7 7 7 7 7 7 7 7 7 4 4 4 7 7 7 7 7 7 7 7 7 7 7 7 4 7 7 7 7 4 4 7 7 7 7 */
+/*:ref: scatra_ 14 28 4 7 7 7 7 7 7 4 4 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 */

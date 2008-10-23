@@ -1,0 +1,682 @@
+2005-11-15 22:12  robert
+
+	* win32_src/: Win32Condition.h, Win32ThreadBarrier.cpp: Converted
+	  to dos endings.
+
+2005-11-15 18:31  robert
+
+	* Make/makedefs: From Sean Spicer, compile fixes for Intel
+	  compiler.
+
+2005-11-11 10:48  robert
+
+	* Make/instrules: From Colin McDonald, build fix for Solaris.
+
+2005-11-03 11:36  robert
+
+	* win32_src/HandleHolder.h: From Thibault Genessay,
+
+	  "Under Windows, the current implementation of the operator bool()
+	  of the HandleHolder class can return true even if the handle is
+	  not valid. This happens when Win32 calls return NULL instead of
+	  INVALID_HANDLE_VALUE as expected by the operator bool().
+
+	  The modified file makes the OpenThreads::Thread::start() method
+	  return non-zero in this case, and should also ensure that other
+	  calls to Win32 functions returning handles are correctly checked.
+	   "
+
+2005-09-28 15:02  robert
+
+	* include/OpenThreads/Exports: From Chris Hanson, "Minor changes to
+	  support Win32 static library linking, when used in conjunction
+	  with static-enabled .dsp (forthcoming)."
+
+2005-06-24 16:39  robert
+
+	* Make/makedefs: From Colin McDonald:
+
+	      "Some makedefs fixes for Solaris:
+
+	      For multithreaded applications the -mt option must be
+	  specified on both
+	      the compile and link steps, to ensure correct behaviour.
+	  According to
+	      the Sun compiler documentation it sets REENTRANT flags in the
+	  system
+	      header files, and links the -lthread library in the correct
+	  order.
+
+	      When compiling shared libraries the -KPIC option should be
+	  specified.
+	      Although Solaris will handle shared libraries without
+	      position-independent code there is a performance penalty.
+	  The linker
+	      reference manual says: 'If a shared object is built from code
+	  that is
+	      not position-independent, the text segment will usually
+	  require a large
+	      number of relocations to be performed at runtime. Although
+	  the runtime
+	      linker is equipped to handle this, the system overhead this
+	  creates can
+	      cause serious performance degradation'."
+
+2005-05-24 16:54  robert
+
+	* win32_src/Win32Thread.cpp: Added pragma to remove depreacted API
+	  warning under VS8.0
+
+2005-05-20 22:11  robert
+
+	* include/OpenThreads/Thread, pthread_src/PThread.c++,
+	  sproc_src/SprocThread.c++, win32_src/Win32Thread.cpp: Renamed
+	  Thread::usleep(uint) to Thread::microSleep(uint) to avoid compile
+	  problems when usleep is defined by extenal dependencies.
+
+2005-05-13 11:55  bbralo
+
+	* win32_src/: Win32Thread.cpp, Win32ThreadPrivateData.h: removed
+	  unneded variables (stackSizeLocked and idSet )
+
+2005-05-13 10:10  bbralo
+
+	* win32_src/Win32ThreadBarrier.cpp: removed extra ScopedLock
+
+2005-05-12 21:54  don
+
+	* win32_src/Win32ThreadBarrier.cpp: Changed scoped lock to just
+	  non-scoped lock in invalidate(), as release() must be called
+	  after the lock has been unlocked.  Avoiding deadlock.
+
+2005-05-12 21:42  don
+
+	* win32_src/Win32ThreadBarrier.cpp: Fixed barrier::invalidate
+	  non-compile on win32
+
+2005-05-12 21:37  don
+
+	* win32_src/Win32ThreadBarrier.cpp: Small typo in invalidate()
+
+2005-05-12 17:55  don
+
+	* include/OpenThreads/Barrier, pthread_src/PThreadBarrier.c++,
+	  win32_src/Win32ThreadBarrier.cpp: Added Barrier::invalidate()
+
+2005-05-11 20:23  don
+
+	* Make/instrules: Fix for links in  instrules
+
+2005-05-10 10:07  robert
+
+	* Make/dolink.sh: Changed -ne to $LINK_ECHO_OPTION to fix cross
+	  platform compile issues
+
+2005-05-04 10:16  robert
+
+	* include/OpenThreads/: Barrier, Condition, Mutex, Thread: From
+	  Martin Aumueller, commented out unused parameters to prevent
+	  warnings.
+
+2005-04-28 06:08  robert
+
+	* Make/dolink.sh: From Marco Jez, added -ne option echo usage to
+	  fix stdout/stderr redirection error under Mingw.
+
+2005-04-26 14:45  don
+
+	* Make/instrules: er.. added the um.. @ to the	inst line.... for
+	  inst_headers
+
+2005-04-25 14:48  don
+
+	* Make/instrules: Small fix in instrules to check for status of
+	  header files
+
+2005-04-24 17:04  sspicer
+
+	* include/OpenThreads/Thread, pthread_src/PThread.c++,
+	  sproc_src/SprocThread.c++, win32_src/Win32Thread.cpp:
+	  Prefix PRIORITY and SCHEDULE params with THREAD_
+
+2005-04-22 09:34  bbralo
+
+	* README.txt: test acces
+
+2005-04-18 08:59  robert
+
+	* examples_src/: GNUmakefile, simplethreader/SimpleThreader.cpp,
+	  workcrew/ThreadReporter.h, workcrew/WorkCrew.c++: From Bob
+	  Kuehne, warning fixes for OSX build.	From Robert Osfield,
+	  warnings fixes for Linux build.
+
+2005-04-11 21:47  sspicer
+
+	* include/OpenThreads/Thread, pthread_src/PThread.c++,
+	  sproc_src/SprocThread.c++, win32_src/Win32Thread.cpp:
+	  Commit Boris' changes to the trunk after testing.  -sean
+
+2005-04-08 10:03  bbralo
+
+	* include/OpenThreads/Thread: usleep implementation
+
+2005-04-08 09:57  bbralo
+
+	* win32_src/Win32Thread.cpp, sproc_src/SprocThread.c++,
+	  pthread_src/PThread.c++: usleep implementation
+
+2005-04-05 19:00  donburns
+
+	* Make/: distrules, instrules, makedefs, makerpms, makerules,
+	  rpm.header: Updates for HP-UX build system on acc (not gcc).
+
+2005-03-24 13:55  donburns
+
+	* Make/makerules: Added static target for mac build
+
+2005-02-05 04:07  donburns
+
+	* Make/: distrules, makerpms, rpm.files, rpm.header: Added RPM
+	  build files
+
+2005-01-15 23:13  donburns
+
+	* Make/makedefs, Make/makerules, include/OpenThreads/ScopedLock:
+	  Updated make environment to build static libs on Linux Add c++
+	  header to ScopedLock to assist editors
+
+2004-12-04 23:33  donburns
+
+	* Make/openthreads.pc: Changed version number for package config
+
+2004-11-20 10:13  robertosfield
+
+	* Make/makedefs: From John Shue, fix for FreeBSD build
+
+2004-11-17 16:22  robertosfield
+
+	* GNUmakefile: From Thom DeCarlo, change to force Cygwin build to
+	  use Win32 threads.
+
+2004-11-15 19:53  robertosfield
+
+	* Make/openthreads.pc: From Loic Dachary, added pk-config file.
+
+2004-11-15 09:57  robertosfield
+
+	* Make/makedefs: From Loic Dachary, fixes to soname generation.
+
+2004-11-14 17:19  robertosfield
+
+	* Make/makedefs: Added option for compiling with soname under Linux
+	  when the env is set:
+
+	      export COMPILE_OSG_OP_OT_WITH_SONAMES=YES
+
+2004-09-27 23:27  donburns
+
+	* win32_src/GNUmakefile: Fixed C++FILES to CXXFILES
+
+2004-08-30 11:13  bbralo
+
+	* win32_src/Win32Thread.cpp: setProcessorAffinity
+
+2004-08-28 20:54  donburns
+
+	* pthread_src/PThread.c++: Small change for IRIX to make
+	  processorAffinity work
+
+2004-08-27 17:45  donburns
+
+	* include/OpenThreads/Thread, pthread_src/PThread.c++,
+	  pthread_src/PThreadPrivateData.h: Added setProcessorAffinity() to
+	  Pthread header and Pthread implementation for __sgi
+
+2004-08-17 15:34  sspicer
+
+	* include/OpenThreads/Barrier, pthread_src/PThreadBarrier.c++,
+	  sproc_src/SprocBarrier.c++, win32_src/Win32ThreadBarrier.cpp:
+	  Added Barrier::release(), Barrier::numThreadsCurrentlyBlocked().
+
+2004-08-09 17:03  robertosfield
+
+	* Make/makedefs: Set REVISION number back to 0 after 1.3 release.
+
+2004-08-09 17:01  robertosfield
+
+	* Make/makedefs: Set relase and revision number for 1.3 release
+
+2004-08-09 17:01  robertosfield
+
+	* include/OpenThreads/Thread: Minor fix to indentation
+
+2004-07-26 16:49  robertosfield
+
+	* include/OpenThreads/ScopedLock: Added a return to the end of the
+	  file to fix a warning under IRIX.
+
+2004-07-26 16:46  robertosfield
+
+	* win32_src/OpenThreads.dsp: Made the keyword substitution use -ko
+	  and did a unix2dos, to ensure that windows file endings are
+	  maintained.
+
+2004-05-18 08:55  bbralo
+
+	* win32_src/Win32Thread.cpp: cancelCleanup after run() iff thread
+	  is canceled. Change suggested by Frank Lindeman
+
+2004-05-15 09:42  robertosfield
+
+	* win32_src/GNUmakefile: GNUmakefle for Cygwin/mingw build (from
+	  Norman Vine, if my memory serves me correctly:)
+
+2004-05-12 14:18  bbralo
+
+	* win32_src/HandleHolder.h: HandleHolder for proper handling of
+	  win32 HANDLE-s
+
+2004-05-12 09:42  bbralo
+
+	* win32_src/OpenThreads.mak: HandleHolder.h + ScopedLock in
+	  includes
+
+2004-05-12 09:32  bbralo
+
+	* win32_src/: Win32ThreadPrivateData.h, OpenThreads.dsp,
+	  WIN32Condition.cpp, Win32ConditionPrivateData.h, Win32Thread.cpp:
+	  HandleHolder for proper handling of win32 HANDLE-s
+
+2004-05-11 17:25  bbralo
+
+	* win32_src/Win32Thread.cpp: *close thread handle in
+	  ~Win32ThredaPrivateData() *implementation of
+	  PrintSchedulingInfo()
+
+2004-05-10 08:24  bbralo
+
+	* win32_src/Win32ConditionPrivateData.h: added try catch block in
+	  wait() - fix for hang on exit.
+
+2004-04-14 23:36  donburns
+
+	* sproc_src/SprocThread.c++: Added startThread() to the sproc
+	  implementation of Thread.
+
+2004-04-10 16:49  donburns
+
+	* Make/makedefs: Added -DOPENTHREADS_EXPORT to Cygwin and Mingw
+	  defines
+
+2004-02-27 09:34  bbralo
+
+	* win32_src/Win32Thread.cpp: fix for broken STLs where size_t  is
+	  not in std ( VC < 7.1 )
+
+2004-02-24 20:41  sspicer
+
+	* pthread_src/: PThreadBarrierPrivateData.h, PThreadCondition.c++,
+	  PThreadConditionPrivateData.h, PThreadMutexPrivateData.h,
+	  PThreadPrivateData.h:
+	  Fix improper placement of "namespace" directives in pthread_src.
+
+2003-10-27 19:27  sspicer
+
+	* pthread_src/PThreadCondition.c++:
+	  Fix PThreadCondition.c++ build error on MacOS X Panther.
+
+2003-10-06 17:05  sspicer
+
+	* examples_src/simplethreader/SimpleThreader.cpp:
+	  Some small fixes to support IRIX sproc.
+
+2003-10-06 17:03  sspicer
+
+	* sproc_src/: GNUmakefile, SharedArena.c++, SharedArena.h,
+	  SprocBarrier.c++, SprocBarrierPrivateData.h, SprocCondition.c++,
+	  SprocConditionPrivateData.h, SprocMutex.c++,
+	  SprocMutexPrivateData.h, SprocThread.c++,
+	  SprocThreadPrivateActions.h, SprocThreadPrivateData.h:
+	  Initial commit.
+
+2003-09-16 08:42  robertosfield
+
+	* pthread_src/PThread.c++: And return 0 to pthread cancel
+	  implemenation to catch the case when no thread is running.
+
+2003-09-12 20:52  robertosfield
+
+	* GNUmakefile, Make/makedefs, pthread_src/GNUmakefile,
+	  pthread_src/PThreadCondition.c++: From Norman Vine, fixes for
+	  Cygwin + Mingw builds
+
+2003-09-12 10:32  robertosfield
+
+	* win32_src/: Makefile, OpenThreads.mak: From Norman Vine,
+	  Makefile's for OpenThreads win32.
+
+2003-09-10 22:37  robertosfield
+
+	* examples_src/simplethreader/simplethreader.dsp: Did a to_dos to
+	  fix unix line endings.
+
+2003-09-10 14:29  robertosfield
+
+	* win32_src/Win32Thread.cpp: Fix for warning under Windows.
+
+2003-09-06 08:57  robertosfield
+
+	* pthread_src/PThread.c++, win32_src/Win32Thread.cpp: Added an if
+	  (pd->isRunning) check to the pthread + win32 thread
+	  Thread::cancel() implementation to prevent cancel's being done on
+	  an non running thread.  This has been introduced to
+	  "speculatively" solve a crash that has been reported on the OSG
+	  that looked like an example of cancel() being called the thread
+	  was started.
+
+2003-09-01 09:37  robertosfield
+
+	* pthread_src/PThread.c++, win32_src/Win32Thread.cpp: Added a cout
+	  to warn of thread still running when the destructor is entered.
+
+2003-08-29 23:24  robertosfield
+
+	* win32_src/OpenThreads.dsp: Fixes to project files.
+
+2003-08-29 14:30  robertosfield
+
+	* win32_src/Win32Thread.cpp: Comment out the
+	  (WaitForSingleObject(pd->tid,INFINITE)!=WAIT_OBJECT_0) in the
+	  win32 cancel implemention.
+
+2003-08-29 12:33  bbralo
+
+	* win32_src/: OpenThreads.dsp, WIN32Condition.cpp,
+	  Win32ConditionPrivateData.h, Win32Thread.cpp,
+	  Win32ThreadBarrier.cpp: Thread cancelation support take 3 :-) *
+	  cancelEvent in Win32 thread implementation. Event is signaled in
+	  cancel() * testCancel() checks event (with
+	  WaitForSingleObject(cancelEvent, 0) ) * cooperativeWait( handle,
+	  timeout ) cheks cancelEvent besides handle   and exits if
+	  cancelEvent is signaled * Thread::cancel() has right semantics
+	  finally     - deffered - signal cancelEvent than wait for thread
+	  to exit    -	async - terminateThread unconditionally    -
+	  disable - do nothing
+
+2003-08-29 12:03  bbralo
+
+	* win32_src/Win32ThreadPrivateData.h: added cancelEvent member for
+	  thread cancelation support
+
+2003-08-29 12:01  bbralo
+
+	* include/OpenThreads/ScopedLock: ScopedLock and ReveseScopedLock
+	  templates
+
+2003-08-29 11:59  bbralo
+
+	* include/OpenThreads/Thread: added getImplementation() (needed for
+	  Win32)
+
+2003-08-29 11:27  robertosfield
+
+	* win32_src/Win32ConditionPrivateData.h: Changed INFINITE wait time
+	  to timeout_ms to be consistent with the wat() input paramters.
+
+2003-08-28 15:13  bbralo
+
+	* win32_src/: OpenThreads.dsp, WIN32Condition.cpp,
+	  Win32ConditionPrivateData.h, Win32Thread.cpp,
+	  Win32ThreadBarrier.cpp, Win32ThreadPrivateData.h: thread
+	  cancelation issues: * condition::wait and condition::broadcast()
+	  now uses WaitForMultipleObject API   with second handle being
+	  thread handle.  *to make this work change is made in
+	  thread::cancel   -reintroduced WaitForSingleObject but with
+	  shorter timeout this time.	This shold take care delays on exit
+	  * remove unneeded testCanlel() calls
+
+2003-08-26 08:37  robertosfield
+
+	* win32_src/Win32ConditionPrivateData.h: Moved position of Thread*
+	  thread = CurrentThread() out of the inner loop.
+
+2003-08-25 13:59  robertosfield
+
+	* win32_src/Win32ConditionPrivateData.h: Compile fix for Win32.
+
+2003-08-23 15:50  robertosfield
+
+	* win32_src/: WIN32Condition.cpp, Win32ConditionPrivateData.h,
+	  Win32Thread.cpp, Win32ThreadBarrier.cpp: Win32 build and bug
+	  fixes from Marco Jez.
+
+2003-08-22 21:50  robertosfield
+
+	* win32_src/Win32Thread.cpp: Marco's change to testCancel() to use
+	  GetCurrentThreadId().
+
+2003-08-22 21:45  robertosfield
+
+	* win32_src/Win32ConditionPrivateData.h: Fixes to Win32 threading
+	  code.
+
+2003-08-22 18:42  robertosfield
+
+	* win32_src/: WIN32Condition.cpp, Win32ConditionPrivateData.h,
+	  Win32Thread.cpp, Win32ThreadBarrier.cpp: To the Win32
+	  implemenation:
+
+	      Added checks for valid CurrentThread() when issuing
+	  testCancel().
+
+	      Added time slicing the wait() implementation with
+	  testCancel() being
+	      issued on each slice.
+
+2003-08-21 21:21  robertosfield
+
+	* win32_src/Win32Thread.cpp: Fixed typo.
+
+2003-08-21 21:14  robertosfield
+
+	* win32_src/: WIN32Condition.cpp, Win32Thread.cpp,
+	  Win32ThreadBarrier.cpp: Added testCancel into
+	  Thread::YeildCurrentThread(), Barrier and Condition code under
+	  Win32 to help respond to cancel requests.
+
+2003-08-19 19:19  sspicer
+
+	* Make/makedefs, examples_src/simplethreader/SimpleThreader.cpp,
+	  include/OpenThreads/Thread, pthread_src/PThread.c++,
+	  win32_src/Win32Thread.cpp:
+	  Change Thread::Yield() to Thread::YieldCurrentThread() to avoid
+	  name collisions on Windows.
+
+2003-08-07 16:52  sspicer
+
+	* pthread_src/PThread.c++:
+	  remove setCancelModeAsyncronous from the destructor, could cause
+	  havoc.
+
+2003-08-07 16:50  sspicer
+
+	* include/OpenThreads/Condition:
+	  Make methods virtual.
+
+2003-08-07 15:10  sspicer
+
+	* include/OpenThreads/: Barrier, Condition, Exports, Mutex, Thread:
+
+	  Bring headers inline with what was in osgcvs.no-ip.com.  Namely
+	  add c++ to top of headers, and comment out pragma.
+
+2003-08-06 14:49  sspicer
+
+	* win32_src/OpenThreads.dsp:
+	  Change release version to use non-debug dll.
+
+2003-08-05 22:41  sspicer
+
+	* examples_src/: simplethreader/GNUmakefile, workcrew/GNUmakefile,
+	  workcrew/WorkCrew.c++:
+	  Fixing examples.
+
+2003-08-04 14:29  sspicer
+
+	* pthread_src/PThreadCondition.c++:
+	  typedef ::timespec to OpenThreads::timespec for OSX 10.3.
+
+2003-07-23 10:40  bbralo
+
+	* win32_src/Win32ConditionPrivateData.h: added Interlocked
+	  primitives for waiters count
+
+2003-07-23 09:37  donburns
+
+	* include/OpenThreads/Exports, win32_src/OpenThreads.dsp: Windows
+	  builds are never complete.... Fixed a couple more booboos.
+
+2003-07-23 08:45  donburns
+
+	* win32_src/: OpenThread.dsp, OpenThread.dsw, OpenThreads.dsp,
+	  OpenThreads.dsw: fixed windows build (again).
+
+2003-07-22 17:27  donburns
+
+	* win32_src/: OpenThreads.dsp, OpenThreads.dsw:
+	  Added OpenThreads.dsw and OpenThreads.dsp
+
+2003-07-22 10:17  bbralo
+
+	* win32_src/OpenThread.dsw: added simplethreader project into
+	  workspace
+
+2003-07-22 10:15  bbralo
+
+	* win32_src/: WIN32Condition.cpp, Win32BarrierPrivateData.h,
+	  Win32ConditionPrivateData.h, Win32MutexPrivateData.h,
+	  Win32ThreadBarrier.cpp, Win32Mutex.cpp: fix CR/LF
+
+2003-07-22 10:07  bbralo
+
+	* win32_src/: Win32Thread.cpp, Win32ThreadPrivateData.h:
+	  CurrentThread() implementation
+
+2003-07-22 10:05  bbralo
+
+	* include/OpenThreads/Exports: changed #pragma comment( lib .. ) to
+	  reflect new name
+
+2003-07-22 10:03  bbralo
+
+	* include/OpenThreads/Thread: CurrentThread() implementation for
+	  win32
+
+2003-07-22 10:00  bbralo
+
+	* examples_src/simplethreader/: SimpleThreader.c++,
+	  ThreadObserver.c++, ThreadReporter.c++: Changed extension from
+	  c++ to cpp for VC to work.
+
+2003-07-22 09:59  bbralo
+
+	* examples_src/simplethreader/: SimpleThreader.cpp,
+	  ThreadObserver.cpp, ThreadReporter.cpp, simplethreader.dsp,
+	  simplethreader.plg: Changed extension from c++ to cpp for VC to
+	  work.  Added CurrentChecker() for testing of
+	  Thread::CurrentThread() workings.  Various WIN32 fixes
+
+2003-07-22 09:57  bbralo
+
+	* examples_src/simplethreader/: GNUmakefile, ThreadReporter.h:
+	  Changed extension from c++ to cpp for VC to work.  Added
+	  CurrentChecker() for testing of Thread::CurrentThread() workings.
+	  Changed include <list.h> into more standard sequence #include
+	  <list> ->using std::list Various WIN32 fixes
+
+2003-07-22 00:36  sspicer
+
+	* include/OpenThreads/Thread, pthread_src/PThread.c++,
+	  pthread_src/PThreadPrivateData.h, win32_src/Win32Thread.cpp:
+	  Implement first pass at Thread::CurrentThread() to return a
+	  pointer to the current thread being executed.  If NULL, this
+	  probably means it's the main thread.	Also change Thread::yield
+	  -> Thread::Yield() and make it static.
+
+2003-07-18 22:16  sspicer
+
+	* AUTHORS.txt, COPYING.txt, ChangeLog, GNUmakefile, INSTALL.txt,
+	  README.txt, TODO.txt, Make/cygwin_plugin_def, Make/distrules,
+	  Make/docrules, Make/dolink.sh, Make/help.sh, Make/helprules,
+	  Make/instrules, Make/makedefs, Make/makedirdefs,
+	  Make/makedirrules, Make/makeinnosetup, Make/makepkg,
+	  Make/makerpms, Make/makerules, Make/versionrules, bin/README,
+	  docs/doxyfile, examples_src/GNUmakefile,
+	  examples_src/simplethreader/GNUmakefile,
+	  examples_src/simplethreader/SimpleThreader.c++,
+	  examples_src/simplethreader/ThreadObserver.c++,
+	  examples_src/simplethreader/ThreadObserver.h,
+	  examples_src/simplethreader/ThreadReporter.c++,
+	  examples_src/simplethreader/ThreadReporter.h,
+	  examples_src/workcrew/GNUmakefile,
+	  examples_src/workcrew/ThreadObserver.c++,
+	  examples_src/workcrew/ThreadObserver.h,
+	  examples_src/workcrew/ThreadReporter.c++,
+	  examples_src/workcrew/ThreadReporter.h,
+	  examples_src/workcrew/WorkCrew.c++, include/OpenThreads/Barrier,
+	  include/OpenThreads/Condition, include/OpenThreads/Exports,
+	  include/OpenThreads/Mutex, include/OpenThreads/Thread,
+	  lib/README, pthread_src/GNUmakefile, pthread_src/PThread.c++,
+	  pthread_src/PThreadBarrier.c++,
+	  pthread_src/PThreadBarrierPrivateData.h,
+	  pthread_src/PThreadCondition.c++,
+	  pthread_src/PThreadConditionPrivateData.h,
+	  pthread_src/PThreadMutex.c++,
+	  pthread_src/PThreadMutexPrivateData.h,
+	  pthread_src/PThreadPrivateData.h, win32_src/OpenThread.dsp,
+	  win32_src/OpenThread.dsw, win32_src/WIN32Condition.cpp,
+	  win32_src/Win32BarrierPrivateData.h, win32_src/Win32Condition.h,
+	  win32_src/Win32ConditionPrivateData.h, win32_src/Win32Mutex.cpp,
+	  win32_src/Win32MutexPrivateData.h, win32_src/Win32Thread.cpp,
+	  win32_src/Win32ThreadBarrier.cpp,
+	  win32_src/Win32ThreadPrivateData.h: Initial Import from
+	  osgcvs.no-ip.net, 7.18.2003
+
+2003-07-18 22:16  sspicer
+
+	* AUTHORS.txt, COPYING.txt, ChangeLog, GNUmakefile, INSTALL.txt,
+	  README.txt, TODO.txt, Make/cygwin_plugin_def, Make/distrules,
+	  Make/docrules, Make/dolink.sh, Make/help.sh, Make/helprules,
+	  Make/instrules, Make/makedefs, Make/makedirdefs,
+	  Make/makedirrules, Make/makeinnosetup, Make/makepkg,
+	  Make/makerpms, Make/makerules, Make/versionrules, bin/README,
+	  docs/doxyfile, examples_src/GNUmakefile,
+	  examples_src/simplethreader/GNUmakefile,
+	  examples_src/simplethreader/SimpleThreader.c++,
+	  examples_src/simplethreader/ThreadObserver.c++,
+	  examples_src/simplethreader/ThreadObserver.h,
+	  examples_src/simplethreader/ThreadReporter.c++,
+	  examples_src/simplethreader/ThreadReporter.h,
+	  examples_src/workcrew/GNUmakefile,
+	  examples_src/workcrew/ThreadObserver.c++,
+	  examples_src/workcrew/ThreadObserver.h,
+	  examples_src/workcrew/ThreadReporter.c++,
+	  examples_src/workcrew/ThreadReporter.h,
+	  examples_src/workcrew/WorkCrew.c++, include/OpenThreads/Barrier,
+	  include/OpenThreads/Condition, include/OpenThreads/Exports,
+	  include/OpenThreads/Mutex, include/OpenThreads/Thread,
+	  lib/README, pthread_src/GNUmakefile, pthread_src/PThread.c++,
+	  pthread_src/PThreadBarrier.c++,
+	  pthread_src/PThreadBarrierPrivateData.h,
+	  pthread_src/PThreadCondition.c++,
+	  pthread_src/PThreadConditionPrivateData.h,
+	  pthread_src/PThreadMutex.c++,
+	  pthread_src/PThreadMutexPrivateData.h,
+	  pthread_src/PThreadPrivateData.h, win32_src/OpenThread.dsp,
+	  win32_src/OpenThread.dsw, win32_src/WIN32Condition.cpp,
+	  win32_src/Win32BarrierPrivateData.h, win32_src/Win32Condition.h,
+	  win32_src/Win32ConditionPrivateData.h, win32_src/Win32Mutex.cpp,
+	  win32_src/Win32MutexPrivateData.h, win32_src/Win32Thread.cpp,
+	  win32_src/Win32ThreadBarrier.cpp,
+	  win32_src/Win32ThreadPrivateData.h: Initial revision
+

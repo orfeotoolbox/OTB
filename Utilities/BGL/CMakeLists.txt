@@ -1,0 +1,4 @@
+PROJECT(BGL)
+
+SUBDIRS(boost)
+

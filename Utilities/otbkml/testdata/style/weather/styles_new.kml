@@ -1,0 +1,689 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document>
+   <Style id="s00">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/00.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s01">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/01.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s02">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/02.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s03">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/03.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s04">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/04.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s05">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/05.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s06">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/06.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s07">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/07.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s08">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/08.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s09">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/09.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s10">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/10.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s11">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/11.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s12">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/12.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s13">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/13.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s14">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/14.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s15">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/15.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s16">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/16.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s17">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/17.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s18">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/18.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s19">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/19.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s20">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/20.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s21">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/21.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s22">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/22.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s23">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/23.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s24">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/24.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s25">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/25.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s26">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/26.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s27">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/27.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s28">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/28.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s29">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/29.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s30">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/30.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s31">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/31.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s32">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/32.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s33">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/33.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s34">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/34.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s35">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/35.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s36">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/36.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s37">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/37.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s38">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/38.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s39">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/39.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s40">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/40.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s41">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/41.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s42">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/42.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s43">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/43.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s44">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/44.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s45">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/45.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s46">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/46.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s47">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/47.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+   <Style id="s99">
+      <BalloonStyle>
+         <text><![CDATA[<table><tr><td colspan="5"><font size="+1">Currently in $[location]</font></td></tr><br/><tr><td><a href="http://g.example.com?map"><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/wcom_small.jpg"/></a><br /><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[00_Icon].jpg" /><br /><b>$[00_Phrase]</b></td><td valign="center"><b><font size="7">$[name]</font></b><br /><b>Feels like $[00_Feels_Like]</b></td><td valign="center">Humidity: $[00_Humidity]<br/>Wind: $[00_Wind_Direction] $[00_Wind_Speed]<br/>Pressure: $[00_Pressure]<br/>Dewpoint: $[00_Dewpoint]<br/></td><td valign="center"><a href="http://g.example.com/outlook/hourbyhour/$[id]?map">Hour-by-Hour</a><br/><a href="http://g.example.com/outlook/tenday/$[id]?map">10-Day</a><br/><a href="http://g.example.com/outlook/monthly/$[id]?map">Month</a><br/></td></tr></table><hr/><table><tr><td>$[01_Date]</td><td>$[02_Date]</td><td>$[03_Date]</td><td>$[04_Date]</td><td>$[05_Date]</td></tr><tr><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[01_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[02_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[03_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[04_Icon].jpg"/></td><td><img src="http://www.example.com/style/weather/icons_jpg.kmz/icons_jpg/$[05_Icon].jpg"/></td></tr><tr><td>$[01_Phrase]</td><td>$[02_Phrase]</td><td>$[03_Phrase]</td><td>$[04_Phrase]</td><td>$[05_Phrase]</td></tr><tr><td>$[01_Temperature]</td><td>$[02_Temperature]</td><td>$[03_Temperature]</td><td>$[04_Temperature]</td><td>$[05_Temperature]</td></tr></table>]]></text>
+      </BalloonStyle>
+      <IconStyle>
+         <Icon>
+            <href>http://www.example.com/style/weather/icons_small.kmz/icons_small/thermometer.png</href>
+         </Icon>
+      </IconStyle>
+      <LabelStyle>
+         <color>ff7ccfff</color>
+         <scale>1</scale>
+      </LabelStyle>
+   </Style>
+</Document>

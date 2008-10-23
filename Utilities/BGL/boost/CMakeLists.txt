@@ -1,0 +1,7 @@
+FILE(GLOB_RECURSE __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+FILE(GLOB_RECURSE __files2 "${CMAKE_CURRENT_SOURCE_DIR}/*.txx")
+FILE(GLOB_RECURSE __files3 "${CMAKE_CURRENT_SOURCE_DIR}/*.hpp")
+
+INSTALL(FILES ${__files1} ${__files2} ${__files3}
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/BGL/boost
+    COMPONENT Development)

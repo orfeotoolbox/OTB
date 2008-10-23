@@ -1,0 +1,11 @@
+The Open Thread Group consists of:
+
+Sean Spicer......Original project author (posix threads) and maintainer.
+Jack Lees........Friendly neighborhood API tester/contributer/developer
+                 e.g. (Jack-of-all-trades)
+Don Burns........Master of multi-threaded windowing and scene-graphs
+Robert Osfield...The Open Scene Graph Yoda
+Boris Bralo......Developed the Win32 implementation
+
+The numerous developers who contribute on a daily basis to the design,
+testing, and general discussion surrounding OpenThreads.  

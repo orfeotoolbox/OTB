@@ -1,0 +1,30 @@
+This file records the source URL and version of each external package
+used by libkml. Other versions may work fine, but you'll be less
+on your own if you use these exact versions as well.
+
+Required:
+g++: 4.0.1, 4.0.3 (or MS Visual Studio 2005 on Windows)
+expat: expat.sourceforge.net 2.0.1
+zlib: www.zlib.net 1.2.3
+
+Optional:
+cppunit: cppunit.sourceforge.net 1.12.0, 1.12.1
+java: java.sun.com 1.5.0_13, 1.6.0_04
+python: www.python.org 2.3.4, 2.4.4, 2.5.1
+swig: www.swig.org 1.3.35
+
+Development:
+automake: www.gnu.org/software/automake 1.9.6
+autoconf: www.gnu.org/software/autoconf 2.59
+libtool: www.gnu.org/software/libtool 1.5
+
+Note that since libkml does not use RTTI, your cppunit libraries have to be
+configured as follows:
+
+On Mac OS X:
+./configure --disable-typeinfo-name
+This is because libkml explicitly does not use RTTI.
+
+On Linux:
+./configure --disable-typeinfo-name LIBS="-ldl"
+

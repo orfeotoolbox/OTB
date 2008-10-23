@@ -1,0 +1,3 @@
+extern int presplane_(doublereal *uw, doublereal *uo3, doublereal *xpp, doublereal *ftray);
+/* comlen sixs_atm__ 1360 */
+/* comlen sixs_planesim__ 1360 */

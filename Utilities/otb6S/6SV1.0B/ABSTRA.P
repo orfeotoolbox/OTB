@@ -1,0 +1,36 @@
+extern int abstra_(integer *idatm, doublereal *wl, doublereal *xmus, doublereal *xmuv, doublereal *uw, doublereal *uo3, doublereal *uwus, doublereal *uo3us, integer *idatmp, doublereal *uwpl, doublereal *uo3pl, doublereal *uwusp, doublereal *uo3usp, doublereal *dtwava, doublereal *dtozon, doublereal *dtdica, doublereal *dtoxyg, doublereal *dtniox, doublereal *dtmeth, doublereal *dtmoca, doublereal *utwava, doublereal *utozon, doublereal *utdica, doublereal *utoxyg, doublereal *utniox, doublereal *utmeth, doublereal *utmoca, doublereal *ttwava, doublereal *ttozon, doublereal *ttdica, doublereal *ttoxyg, doublereal *ttniox, doublereal *ttmeth, doublereal *ttmoca);
+/* comlen sixs_atm__ 1360 */
+/* comlen sixs_planesim__ 1360 */
+/*:ref: wava6_ 14 2 7 4 */
+/*:ref: oxyg6_ 14 2 7 4 */
+/*:ref: niox6_ 14 2 7 4 */
+/*:ref: meth6_ 14 2 7 4 */
+/*:ref: moca6_ 14 2 7 4 */
+/*:ref: wava5_ 14 2 7 4 */
+/*:ref: oxyg5_ 14 2 7 4 */
+/*:ref: niox5_ 14 2 7 4 */
+/*:ref: meth5_ 14 2 7 4 */
+/*:ref: moca5_ 14 2 7 4 */
+/*:ref: wava4_ 14 2 7 4 */
+/*:ref: oxyg4_ 14 2 7 4 */
+/*:ref: niox4_ 14 2 7 4 */
+/*:ref: meth4_ 14 2 7 4 */
+/*:ref: moca4_ 14 2 7 4 */
+/*:ref: wava3_ 14 2 7 4 */
+/*:ref: dica3_ 14 2 7 4 */
+/*:ref: oxyg3_ 14 2 7 4 */
+/*:ref: niox3_ 14 2 7 4 */
+/*:ref: meth3_ 14 2 7 4 */
+/*:ref: moca3_ 14 2 7 4 */
+/*:ref: wava2_ 14 2 7 4 */
+/*:ref: dica2_ 14 2 7 4 */
+/*:ref: niox2_ 14 2 7 4 */
+/*:ref: meth2_ 14 2 7 4 */
+/*:ref: moca2_ 14 2 7 4 */
+/*:ref: wava1_ 14 2 7 4 */
+/*:ref: dica1_ 14 2 7 4 */
+/*:ref: ozon1_ 14 2 7 4 */
+/*:ref: niox1_ 14 2 7 4 */
+/*:ref: meth1_ 14 2 7 4 */
+/*:ref: moca1_ 14 2 7 4 */
+/*:ref: print_error__ 14 2 13 124 */

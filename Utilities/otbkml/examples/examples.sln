@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "createkml", "helloworld\createkml.vcproj", "{2D08AB30-4254-479F-9EF0-67E5C1EE2E64}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "parsekml", "helloworld\parsekml.vcproj", "{5ADB0151-CD72-4260-9A4A-5C2FA7D53F72}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "prettykml", "helloworld\prettykml.vcproj", "{FC3E952B-9781-4DE5-A26B-A2D1DC8F9646}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sortplacemarks", "helloworld\sortplacemarks.vcproj", "{FCD0B93B-BBCE-452B-AE9D-D03427A04543}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "printstyle", "engine\printstyle.vcproj", "{08F2DC19-28A2-4048-8706-9D8F03F659DA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "kmzfetch", "hellonet\kmzfetch.vcproj", "{33EB3580-3832-4043-823D-4D945D461AB3}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "csvregionator", "regionator\csvregionator.vcproj", "{12044D18-00ED-4AA1-906E-48D5B12A877D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2D08AB30-4254-479F-9EF0-67E5C1EE2E64}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2D08AB30-4254-479F-9EF0-67E5C1EE2E64}.Debug|Win32.Build.0 = Debug|Win32
+		{2D08AB30-4254-479F-9EF0-67E5C1EE2E64}.Release|Win32.ActiveCfg = Release|Win32
+		{2D08AB30-4254-479F-9EF0-67E5C1EE2E64}.Release|Win32.Build.0 = Release|Win32
+		{5ADB0151-CD72-4260-9A4A-5C2FA7D53F72}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5ADB0151-CD72-4260-9A4A-5C2FA7D53F72}.Debug|Win32.Build.0 = Debug|Win32
+		{5ADB0151-CD72-4260-9A4A-5C2FA7D53F72}.Release|Win32.ActiveCfg = Release|Win32
+		{5ADB0151-CD72-4260-9A4A-5C2FA7D53F72}.Release|Win32.Build.0 = Release|Win32
+		{FC3E952B-9781-4DE5-A26B-A2D1DC8F9646}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FC3E952B-9781-4DE5-A26B-A2D1DC8F9646}.Debug|Win32.Build.0 = Debug|Win32
+		{FC3E952B-9781-4DE5-A26B-A2D1DC8F9646}.Release|Win32.ActiveCfg = Release|Win32
+		{FC3E952B-9781-4DE5-A26B-A2D1DC8F9646}.Release|Win32.Build.0 = Release|Win32
+		{FCD0B93B-BBCE-452B-AE9D-D03427A04543}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FCD0B93B-BBCE-452B-AE9D-D03427A04543}.Debug|Win32.Build.0 = Debug|Win32
+		{FCD0B93B-BBCE-452B-AE9D-D03427A04543}.Release|Win32.ActiveCfg = Release|Win32
+		{FCD0B93B-BBCE-452B-AE9D-D03427A04543}.Release|Win32.Build.0 = Release|Win32
+		{08F2DC19-28A2-4048-8706-9D8F03F659DA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{08F2DC19-28A2-4048-8706-9D8F03F659DA}.Debug|Win32.Build.0 = Debug|Win32
+		{08F2DC19-28A2-4048-8706-9D8F03F659DA}.Release|Win32.ActiveCfg = Release|Win32
+		{08F2DC19-28A2-4048-8706-9D8F03F659DA}.Release|Win32.Build.0 = Release|Win32
+		{33EB3580-3832-4043-823D-4D945D461AB3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{33EB3580-3832-4043-823D-4D945D461AB3}.Debug|Win32.Build.0 = Debug|Win32
+		{33EB3580-3832-4043-823D-4D945D461AB3}.Release|Win32.ActiveCfg = Release|Win32
+		{33EB3580-3832-4043-823D-4D945D461AB3}.Release|Win32.Build.0 = Release|Win32
+		{12044D18-00ED-4AA1-906E-48D5B12A877D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{12044D18-00ED-4AA1-906E-48D5B12A877D}.Debug|Win32.Build.0 = Debug|Win32
+		{12044D18-00ED-4AA1-906E-48D5B12A877D}.Release|Win32.ActiveCfg = Release|Win32
+		{12044D18-00ED-4AA1-906E-48D5B12A877D}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

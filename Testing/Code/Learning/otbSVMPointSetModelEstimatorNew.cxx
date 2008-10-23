@@ -1,0 +1,49 @@
+/*=========================================================================
+
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+
+#if defined(_MSC_VER)
+#pragma warning ( disable : 4786 )
+#endif
+
+
+#include "itkExceptionObject.h"
+#include "itkPointSet.h"
+#include <iostream>
+
+#include "otbSVMPointSetModelEstimator.h"
+
+
+int otbSVMPointSetModelEstimatorNew( int argc, char* argv[] )
+{
+  typedef std::vector<double>                           InputPixelType;
+  typedef double                                        LabelPixelType;
+  const   unsigned int        	                        Dimension = 2;
+  
+  typedef itk::PointSet< InputPixelType,  Dimension >           MeasurePointSetType;
+  typedef itk::PointSet< LabelPixelType,  Dimension >           LabelPointSetType;
+  typedef otb::SVMPointSetModelEstimator< MeasurePointSetType,
+                                          LabelPointSetType >   EstimatorType;
+  
+  
+  EstimatorType::Pointer estimator = EstimatorType::New();
+  
+  
+  return EXIT_SUCCESS;
+}
+
+

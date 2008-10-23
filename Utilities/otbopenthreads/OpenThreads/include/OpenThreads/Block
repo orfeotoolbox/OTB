@@ -1,0 +1,96 @@
+/* -*-c++-*- OpenThreads - Copyright (C) 1998-2007 Robert Osfield
+ *
+ * This library is open source and may be redistributed and/or modified under
+ * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or
+ * (at your option) any later version.  The full license is in LICENSE file
+ * included with this distribution, and on the openscenegraph.org website.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * OpenSceneGraph Public License for more details.
+*/
+
+#ifndef _OPENTHREADS_BLOCK_
+#define _OPENTHREADS_BLOCK_
+
+#include <OpenThreads/Thread>
+#include <OpenThreads/Barrier>
+#include <OpenThreads/Condition>
+#include <OpenThreads/ScopedLock>
+
+namespace OpenThreads {
+
+class Block 
+{
+    public:
+    
+        Block():
+            _released(false) {}
+
+        ~Block()
+        {
+            release();
+        }
+
+        inline bool block()
+        {
+            ScopedLock<OpenThreads::Mutex> mutlock(_mut);
+            if( !_released )
+            {
+                return _cond.wait(&_mut)==0;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        inline bool block(unsigned long timeout)
+        {
+            ScopedLock<OpenThreads::Mutex> mutlock(_mut);
+            if( !_released )
+            {
+                return _cond.wait(&_mut, timeout)==0;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        inline void release()
+        {
+            ScopedLock<OpenThreads::Mutex> mutlock(_mut);
+            if (!_released)
+            {
+                _released = true;
+                _cond.broadcast();
+            }
+        }
+
+        inline void reset()
+        {
+            ScopedLock<OpenThreads::Mutex> mutlock(_mut);
+            _released = false;
+        }
+        
+        inline void set(bool doRelease)
+        {
+            if (doRelease!=_released)
+            {
+                if (doRelease) release();
+                else reset();
+            }
+        }
+
+    protected:
+
+        Mutex _mut;
+        Condition _cond;
+        bool _released;
+};
+
+}
+
+#endif

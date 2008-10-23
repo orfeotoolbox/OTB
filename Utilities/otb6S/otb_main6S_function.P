@@ -1,0 +1,30 @@
+extern int otb_6s__(doublereal *otb_asol__, doublereal *otb_phi0__, doublereal *otb_avis__, doublereal *otb_phiv__, integer *otb_month__, integer *otb_jday__, doublereal *otb_pressure__, doublereal *otb_uw__, doublereal *otb_uo3__, integer *otb_iaer__, doublereal *otb_taer55__, doublereal *otb_wlinf__, doublereal *otb_wlsup__, doublereal *otb_s__, doublereal *otb_ratm__, doublereal *otb_sast__, doublereal *otb_tgasm__, doublereal *otb_sdtott__, doublereal *otb_sutott__, doublereal *otb_tdif_up__, doublereal *otb_tdir_up__, doublereal *otb_tdif_up_ray__, doublereal *otb_tdif_up_aer__);
+/* comlen num_quad__ 4 */
+/* comlen aeroprof_ 2428 */
+/* comlen sixs_ier__ 8 */
+/* comlen mie_in__ 2232 */
+/* comlen multorder_ 4 */
+/* comlen sixs_planesim__ 1360 */
+/* comlen sixs_test__ 8 */
+/* comlen sixs_ffu__ 12024 */
+/* comlen sixs_del__ 16 */
+/* comlen sixs_atm__ 1360 */
+/* comlen sixs_aer__ 960 */
+/* comlen sixs_disc__ 4320 */
+/*:ref: gauss_ 14 5 7 7 7 7 4 */
+/*:ref: varsol_ 14 3 4 4 7 */
+/*:ref: us62_ 14 0 */
+/*:ref: aeroso_ 14 7 4 7 7 7 13 4 124 */
+/*:ref: pressure_ 14 3 7 7 7 */
+/*:ref: presplane_ 14 4 7 7 7 7 */
+/*:ref: equivwl_ 14 4 4 4 7 7 */
+/*:ref: discom_ 14 27 4 4 4 7 7 7 7 7 7 7 4 4 4 7 7 7 7 4 7 7 7 4 4 7 7 7 7 */
+/*:ref: specinterp_ 14 8 7 7 7 7 7 7 7 4 */
+/*:ref: odrayl_ 14 2 7 7 */
+/*:ref: polnad_ 14 6 7 7 7 7 7 7 */
+/*:ref: polglit_ 14 7 7 7 7 7 7 7 7 */
+/*:ref: solirr_ 14 2 7 7 */
+/*:ref: abstra_ 14 34 4 7 7 7 7 7 7 7 4 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 */
+/*:ref: interp_ 14 47 4 4 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 4 7 7 7 4 7 7 7 7 7 7 4 */
+/*:ref: enviro_ 14 8 7 7 7 7 7 7 7 7 */
+/*:ref: dirpopol_ 14 3 7 7 7 */

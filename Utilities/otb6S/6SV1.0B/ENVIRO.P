@@ -1,0 +1,1 @@
+extern int enviro_(doublereal *difr, doublereal *difa, doublereal *r__, doublereal *palt, doublereal *xmuv, doublereal *fra, doublereal *fae, doublereal *fr);
