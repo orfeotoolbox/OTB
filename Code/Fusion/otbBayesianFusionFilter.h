@@ -128,6 +128,13 @@ namespace otb
   /** \class StreamingStatisticsVectorImageFilter
    * \brief Baesian fusion filter. Contribution of Julien Radoux
    *
+   * Please refer to D. Fasbender, J. Radoux and P. Bogaert, 
+   * Bayesian Data Fusion for Adaptable Image Pansharpening,
+   * Transactions on Geoscience and Remote Sensing, 
+   * vol. 46, n. 6, 2007, pp 1847-1857
+   * 
+   * \example Fusion/BayesianFusionImageFilter.cxx
+   * 
    *
    * \sa FusionImageBase
    * \sa MatrixTransposeMatrix

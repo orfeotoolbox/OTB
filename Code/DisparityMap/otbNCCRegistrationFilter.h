@@ -56,6 +56,9 @@ namespace otb {
  * \warning This filter assumes that the fixed image type, moving image type
  * and deformation field type all have the same number of dimensions.
  * 
+ * \example  DisparityMap/NCCRegistrationFilterExample.cxx
+ * 
+ * 
  * \sa NCCRegistrationFunction 
  * \ingroup DeformableImageRegistration MultiThreaded
  */
@@ -109,11 +112,21 @@ public:
   /** Get the metric value. The metric value is computed over the the
    * overlapping region between the two images.  This is value is only
    * available for the previous iteration and NOT the current
-   * iteration. */
+   * iteration. 
+   *\return metric
+   **/
   virtual double GetMetric() const;
 
-
+  /**
+   * Set the NCC radius
+   * \param radius
+   */
   virtual void SetNCCRadius(RadiusType radius);
+  
+  /**
+   * Get the radius.
+   * \return radius.
+   **/
   virtual RadiusType GetNCCRadius() const;
   
 protected:

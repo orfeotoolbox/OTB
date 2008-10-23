@@ -102,6 +102,8 @@ namespace otb
    * 
    * Orientation is expressed in degree in the range [0,360] with a precision of 10 degrees.
    *
+   * \example FeatureExtraction/SIFTExample.cxx
+   *
    */
   template <class TInputImage, class TOutputPointSet>
     class ITK_EXPORT ImageToSIFTKeyPointSetFilter

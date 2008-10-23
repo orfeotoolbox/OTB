@@ -41,7 +41,7 @@
 // Software Guide : EndLatex
 
 #include "otbImage.h"
-#include "otbImageFileWriter.h"
+#include "otbStreamingImageFileWriter.h"
 #include "otbImageFileReader.h"
 #include "otbCommandLineArgumentParser.h"
 
@@ -184,13 +184,12 @@ int main(int argc, char** argv )
   // Software Guide : BeginLatex
   //
   // \end{itemize}
-  // Then we can trigger the \code{Update()} method on the NCCRegistrationFilter:
+  // The execution of the NCCRegistrationFilter will be triggered by the \code{Update()}
+  // call on the writer at the end of the pipeline. Make sure to use a 
+  // \doxygen{otb}{StreamingImageFileWriter} if you want to benefit from the streaming features.
   //
   // Software Guide : EndLatex
   
-  // Software Guide : BeginCodeSnippet
-  registrator->Update();
-  // Software Guide : EndCodeSnippet
 
 
   typedef otb::ImageOfVectorsToMonoChannelExtractROI<DeformationFieldType, MovingImageType> ChannelExtractionFilterType;
@@ -206,7 +205,7 @@ int main(int argc, char** argv )
   fieldRescaler->SetOutputMaximum(255);
   fieldRescaler->SetOutputMinimum(0);
   
-  typedef otb::ImageFileWriter< OutputImageType > DFWriterType;
+  typedef otb::StreamingImageFileWriter< OutputImageType > DFWriterType;
 
   DFWriterType::Pointer dfWriter = DFWriterType::New();
   dfWriter->SetFileName(argv[3]);
@@ -229,7 +228,7 @@ int main(int argc, char** argv )
   CastFilterType::Pointer  caster =  CastFilterType::New();
   caster->SetInput( warper->GetOutput() );
   
-  typedef otb::ImageFileWriter< OutputImageType > WriterType;
+  typedef otb::StreamingImageFileWriter< OutputImageType > WriterType;
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[4]);

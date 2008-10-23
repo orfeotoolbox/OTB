@@ -28,6 +28,9 @@ namespace Functor
   {
     /** \class RemoveWrongDirectionFunctor
      *  \brief This functor is used by the RemoveWrongDirectionFilter
+     *
+     * \example FeatureExtraction/ExtractRoadByStepsExample.cxx
+     *
      *  \sa RemoveWrongDirectionFilter
      *  \ingroup Functor
      */

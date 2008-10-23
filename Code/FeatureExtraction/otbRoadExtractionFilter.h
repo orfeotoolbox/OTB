@@ -52,6 +52,9 @@ namespace otb
  * 1000 \f$ \times \f$ 1000 images with four spectral bands. Results can be
  * used as an initialization for more complex algorithms.
  *
+ *
+ * \example FeatureExtraction/ExtractRoadExample.cxx
+ *
  * \sa SpectralAngleDistanceImageFilter
  * \sa GenericRoadExtractionFilter
  */
