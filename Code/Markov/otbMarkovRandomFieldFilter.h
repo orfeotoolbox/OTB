@@ -72,6 +72,12 @@ namespace otb
    *   markovFilter->SetSampler(sampler);
    * \endcode
    * 
+   * \example  Markov/MarkovClassification1Example.cxx
+   * \example  Markov/MarkovClassification2Example.cxx
+   * \example  Markov/MarkovRegularizationExample.cxx
+   * \example  Markov/MarkovRestaurationExample.cxx
+   *
+   * 
    * \ingroup Markov
    */
   

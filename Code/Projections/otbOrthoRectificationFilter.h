@@ -37,6 +37,8 @@ namespace otb
    * This class is used to apply map projection and sensor model transformation
    * to orthorectify an image, with or without DEM.
    * 
+   * \example Projections/OrthoRectificationExample.cxx
+   * 
    */
   
   template <class TInputImage,

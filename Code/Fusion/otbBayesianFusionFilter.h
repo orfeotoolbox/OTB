@@ -128,6 +128,9 @@ namespace otb
   /** \class StreamingStatisticsVectorImageFilter
    * \brief Baesian fusion filter. Contribution of Julien Radoux
    *
+   * 
+   * \example Fusion/BayesianFusionImageFilter.cxx
+   * 
    *
    * \sa FusionImageBase
    * \sa MatrixTransposeMatrix
