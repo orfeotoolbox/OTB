@@ -29,10 +29,11 @@ namespace Functor
     /** \class RemoveWrongDirectionFunctor
      *  \brief This functor is used by the RemoveWrongDirectionFilter
      *
-     * \example FeatureExtraction/ExtractRoadByStepsExample.cxx
-     *
      *  \sa RemoveWrongDirectionFilter
      *  \ingroup Functor
+     *
+     * \example FeatureExtraction/ExtractRoadByStepsExample.cxx
+     *
      */
     template <class TInput1, class TInput2, class TOutput>
       class RemoveWrongDirectionFunctor

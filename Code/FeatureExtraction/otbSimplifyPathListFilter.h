@@ -39,11 +39,11 @@ namespace otb
  *
  *  This filter is part of the road extraction framework.
  *
+ * \sa BreakAngularPathListFilter
+ * \sa RemoveTortuousPathFilter.
    *
    * \example FeatureExtraction/ExtractRoadByStepsExample.cxx
    *
- * \sa BreakAngularPathListFilter
- * \sa RemoveTortuousPathFilter.
  */
 template <class TPath>
 class ITK_EXPORT SimplifyPathListFilter

@@ -37,6 +37,8 @@ namespace otb
  * - \f$ \Phi \f$ an edge preserving function: 
  *     \f[ \Phi(u) = \frac{u^2}{1+u^2} \f]
  * 
+   * This class is meant to be used in the MRF framework with the otb::MarkovRandomFieldFilter
+ *
  * \ingroup Markov
 */
   

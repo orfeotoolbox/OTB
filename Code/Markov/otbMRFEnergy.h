@@ -30,6 +30,8 @@ namespace otb
    *  
    * Derived class must reimplement the GetSingleValue() method.
    * 
+   * This class is meant to be used in the MRF framework with the otb::MarkovRandomFieldFilter
+   *
    * \ingroup Markov
    */
 template< class TInput1, class TInput2 >

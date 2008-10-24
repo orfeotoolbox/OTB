@@ -32,6 +32,8 @@ namespace otb
    * value randomly according to a uniform probability.
    * 
    * 
+   * This class is meant to be used in the MRF framework with the otb::MarkovRandomFieldFilter
+   *
    * \ingroup Markov
  */
   

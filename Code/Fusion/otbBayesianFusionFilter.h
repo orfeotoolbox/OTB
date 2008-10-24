@@ -132,9 +132,6 @@ namespace otb
    * Bayesian Data Fusion for Adaptable Image Pansharpening,
    * Transactions on Geoscience and Remote Sensing, 
    * vol. 46, n. 6, 2007, pp 1847-1857
-   * 
-   * \example Fusion/BayesianFusionImageFilter.cxx
-   * 
    *
    * \sa FusionImageBase
    * \sa MatrixTransposeMatrix
@@ -145,6 +142,10 @@ namespace otb
    * 
    * \ingroup Fusion
    * 
+   * 
+   * \example Fusion/BayesianFusionImageFilter.cxx
+   * 
+   *
    */
 
 
