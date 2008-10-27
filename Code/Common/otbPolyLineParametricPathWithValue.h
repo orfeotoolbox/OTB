@@ -67,7 +67,7 @@ class ITK_EXPORT PolyLineParametricPathWithValue
 
  ValueType GetValue(void)
  {
-    ValueType resp;
+   ValueType resp = itk::NumericTraits<ValueType>::Zero;
    itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
    if(dict.HasKey(m_Key))
    {
