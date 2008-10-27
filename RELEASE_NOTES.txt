@@ -1,3 +1,30 @@
+OTB-v.2.6.0 - Changes since version 2.4.0 (2008/10/31)
+-----------------------------------------
+
+* System
+	- GCC 4.3 compatibility
+	- ITK version updated to 3.8
+	- FLTK version updated to 1.1.9
+	- OpenThreads library added
+	- Expat library added
+
+* Library
+	- SAR Polarimetry synthesis classes
+	- Kullback Leibler supervised change detection
+	- KML support
+	- Gabor filters implementation
+	- Optimized convolution using FFT
+	- CNES RAD format support
+	- NCC and MI registration filters for diparity map estimation
+
+* Applications
+	- Object segmentation application
+	- Feature extraction application
+	- Land Cover Map application
+	- SAR polarimentrix synthesis application
+	- 3D & stereo anaglyh viewer application
+
+
 OTB-v.2.4.0 - Changes since version 2.2.0 (2008/07/24)
 -----------------------------------------
 
