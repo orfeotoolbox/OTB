@@ -31,7 +31,7 @@ namespace otb
 {
 
 /** \class FltkFilterWatcher
- *  \brief This class implements the progress mechanim
+ *  \brief This class implements the progress mechanism
  *         on pipeline filtering execution
  *
  */
