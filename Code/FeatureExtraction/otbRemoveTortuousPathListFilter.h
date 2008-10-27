@@ -30,6 +30,11 @@ namespace otb
  *
  * \sa BreakAngularPathListFilter
  * \sa SimplifyPathFilter
+ *
+ *
+   *
+   * \example FeatureExtraction/ExtractRoadByStepsExample.cxx
+   *
  */
 template <class TPath>
 class ITK_EXPORT RemoveTortuousPathListFilter

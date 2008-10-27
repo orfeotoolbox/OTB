@@ -38,6 +38,8 @@ namespace otb
    * where \f$ Z = \sum_x \exp^{-U(x)}\f$
    * 
    * 
+   * This class is meant to be used in the MRF framework with the otb::MarkovRandomFieldFilter
+   *
    * \ingroup Markov
  */
   

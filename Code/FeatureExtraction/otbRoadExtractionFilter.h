@@ -54,6 +54,9 @@ namespace otb
  *
  * \sa SpectralAngleDistanceImageFilter
  * \sa GenericRoadExtractionFilter
+ *
+ * \example FeatureExtraction/ExtractRoadExample.cxx
+ *
  */
 template <class TInputImage, class TOutputPath>
   class ITK_EXPORT RoadExtractionFilter

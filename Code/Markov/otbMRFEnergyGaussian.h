@@ -39,7 +39,9 @@ namespace otb
  * with
  * - \f$ x_s \f$ the label on site s
  * - \f$ y_s \f$ the value on the reference image
- * 
+   * 
+   * This class is meant to be used in the MRF framework with the otb::MarkovRandomFieldFilter
+   *
  * \ingroup Markov
  */
   

@@ -25,6 +25,9 @@ namespace otb
 {
 /** \class BreakAngularPathListFilter
  *  \brief CBase class for breaking angulars the input PathList, returning a PathList.
+   *
+   * \example FeatureExtraction/ExtractRoadByStepsExample.cxx
+   *
  */
 template <class TPath>
 class ITK_EXPORT BreakAngularPathListFilter
