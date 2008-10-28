@@ -572,8 +572,8 @@ int main (int argc, char* argv[])
   //
   // \begin{figure} 
   // \center
-  // \includegraphics[width=0.40\textwidth]{ROI_IKO_PAN_LesHalles.eps}
-  // \includegraphics[width=0.40\textwidth]{ROI_IKO_PAN_LesHalles_warped.eps}
+  // \includegraphics[width=0.40\textwidth]{ROI_IKO_PAN_LesHalles_pos_spacing.eps}
+  // \includegraphics[width=0.40\textwidth]{ROI_IKO_PAN_LesHalles_warped_pos_spacing.eps}
   // \includegraphics[width=0.40\textwidth]{deformationFieldOutput.eps}
   // \includegraphics[width=0.40\textwidth]{resampledMovingOutput.eps}
   // \itkcaption[Deformation field and resampling from disparity map estimation]{From left
