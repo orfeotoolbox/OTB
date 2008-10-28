@@ -72,13 +72,14 @@ namespace otb
    *   markovFilter->SetSampler(sampler);
    * \endcode
    * 
+   * 
+   * \ingroup Markov
+   *
    * \example  Markov/MarkovClassification1Example.cxx
    * \example  Markov/MarkovClassification2Example.cxx
    * \example  Markov/MarkovRegularizationExample.cxx
    * \example  Markov/MarkovRestaurationExample.cxx
    *
-   * 
-   * \ingroup Markov
    */
   
 template <class TInputImage, class TClassifiedImage>

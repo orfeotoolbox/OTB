@@ -36,7 +36,9 @@ namespace otb
  * - \f$ x_s \f$ the label on site s
  * - \f$ y_s \f$ the value on the reference image
  * - \f$ \mu_{x_s} \f$ and \f$ \sigma^2_{x_s} \f$ the mean and variance of label \f$ x_s \f$
- * 
+   * 
+   * This class is meant to be used in the MRF framework with the otb::MarkovRandomFieldFilter
+   *
  * \ingroup Markov
  */
   

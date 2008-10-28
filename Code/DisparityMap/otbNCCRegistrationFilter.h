@@ -56,11 +56,12 @@ namespace otb {
  * \warning This filter assumes that the fixed image type, moving image type
  * and deformation field type all have the same number of dimensions.
  * 
+ * \sa NCCRegistrationFunction 
+ * \ingroup DeformableImageRegistration MultiThreaded
+ *
  * \example  DisparityMap/NCCRegistrationFilterExample.cxx
  * 
  * 
- * \sa NCCRegistrationFunction 
- * \ingroup DeformableImageRegistration MultiThreaded
  */
 template<class TFixedImage, class TMovingImage, class TDeformationField>
 class ITK_EXPORT NCCRegistrationFilter : 

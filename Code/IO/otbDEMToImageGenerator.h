@@ -39,9 +39,10 @@ namespace otb
    * This class is based on ossimElevManager. It takes in input the UL and LR geographic coordinates and the spacing.
    * Handle DTED and SRTM formats.
    *
-   * \example IO/DEMToImageGenerator.cxx
-   *
    * \ingroup Images
+   *
+   *
+   * \example IO/DEMToImageGenerator.cxx
    *
    */
   template <class TDEMImage>

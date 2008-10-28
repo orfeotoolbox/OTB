@@ -29,7 +29,9 @@ namespace otb
  * \brief This is the base class for optimizer used in the MRF framework.
  *
  * Derived class must reimplement Compute() method.
- * 
+   * 
+   * This class is meant to be used in the MRF framework with the otb::MarkovRandomFieldFilter
+   *
  * \ingroup Markov
  */
 

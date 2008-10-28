@@ -29,7 +29,9 @@ namespace otb
  *  
  * This is one optimizer to be used in the MRF framework. This optimizer 
  * follows the ICM algorithm to accept of reject the value proposed by the sampler
- * 
+   * 
+   * This class is meant to be used in the MRF framework with the otb::MarkovRandomFieldFilter
+   *
  * \ingroup Markov
  */
 class ITK_EXPORT MRFOptimizerICM : public MRFOptimizer

@@ -38,6 +38,8 @@ namespace otb
    *  \f[ e^{\frac{-\Delta E}{T}} \f]
    * 
    * 
+   * This class is meant to be used in the MRF framework with the otb::MarkovRandomFieldFilter
+   *
    * \ingroup Markov
    */
   

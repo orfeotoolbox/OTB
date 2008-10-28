@@ -28,11 +28,13 @@ namespace otb
  *  A path is considered to be tortuous if the mean distance between each consecutive vertices
  *  is lower than the user provided threshold.
  *
-  *
-  * \example FeatureExtraction/ExtractRoadByStepsExample.cxx
-  *
  * \sa BreakAngularPathListFilter
  * \sa SimplifyPathFilter
+ *
+ *
+   *
+   * \example FeatureExtraction/ExtractRoadByStepsExample.cxx
+   *
  */
 template <class TPath>
 class ITK_EXPORT RemoveTortuousPathListFilter

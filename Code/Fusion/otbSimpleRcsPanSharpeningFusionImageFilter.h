@@ -37,12 +37,13 @@ namespace otb {
    * 
    * \f[ \frac{XS}{\mathrm{Filtered}(PAN)} PAN  \f]
    *
-   * \example Fusion/PanSharpeningExample.cxx
-   *
    * \ingroup Streamed
    * \ingroup Multithreaded
    * \ingroup Fusion
-   * 
+   *
+   *
+   * \example Fusion/PanSharpeningExample.cxx
+   *
    **/
 
   template <class TPanImageType,class TXsImageType,class TOutputImageType>
