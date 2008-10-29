@@ -1578,6 +1578,8 @@ SET(BasicIO_SRCS1
 otbImageFileReaderERS.cxx
 otbLUMImageIOTestCanRead.cxx
 otbLUMImageIOTestCanWrite.cxx
+otbMWImageIOTestCanRead.cxx
+otbMWImageIOTestCanWrite.cxx
 otbImageFileReaderTest.cxx
 otbShortImageIOTest.cxx
 )
