@@ -26,7 +26,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {StereoFixed.png}, {StereoMoving.png}
-//    OUTPUTS: {deformationFieldOutput2.png}, {resampledOutput2.png}
+//    OUTPUTS: {deformationFieldOutput-horizontal.png}, {deformationFieldOutput-vertical.png}, {resampledOutput2.png}
 //    5 1.0 2
 //  Software Guide : EndCommandLineArgs
 
@@ -61,7 +61,7 @@
 int main(int argc, char** argv )
 {
   
-  if(argc!= 8)
+  if(argc!= 9)
   {
     std::cerr <<"Usage: "<<argv[0];
     std::cerr<<" fixedFileName movingFileName fieldOutName imageOutName ";
@@ -119,7 +119,7 @@ int main(int argc, char** argv )
 
   FixedBlurType::Pointer fBlur = FixedBlurType::New();
   fBlur->SetInput( fReader->GetOutput() );
-  fBlur->SetSigma( atof(argv[6]) );
+  fBlur->SetSigma( atof(argv[7]) );
 
 
   typedef itk::RecursiveGaussianImageFilter< MovingImageType,
@@ -127,7 +127,7 @@ int main(int argc, char** argv )
 
   MovingBlurType::Pointer mBlur = MovingBlurType::New();
   mBlur->SetInput( mReader->GetOutput() );
-  mBlur->SetSigma(atof(argv[6]) );
+  mBlur->SetSigma(atof(argv[7]) );
 // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -162,8 +162,8 @@ int main(int argc, char** argv )
 
   RadiusType radius;
 
-  radius[0] = atoi(argv[5]);
-  radius[1] = atoi(argv[5]);
+  radius[0] = atoi(argv[6]);
+  radius[1] = atoi(argv[6]);
 
   registrator->SetNCCRadius( radius );
 // Software Guide : EndCodeSnippet
@@ -177,7 +177,7 @@ int main(int argc, char** argv )
   // Software Guide : EndLatex
   
    // Software Guide : BeginCodeSnippet
-  registrator->SetNumberOfIterations( atoi(argv[7]) );
+  registrator->SetNumberOfIterations( atoi(argv[8]) );
 // Software Guide : EndCodeSnippet
   // registrator->GetDeformationField();
 
@@ -213,6 +213,10 @@ int main(int argc, char** argv )
   dfWriter->Update();
 
   
+  channelExtractor->SetChannel(2);
+  dfWriter->SetFileName(argv[4]);
+  dfWriter->Update();
+  
   typedef itk::WarpImageFilter<MovingImageType, MovingImageType, DeformationFieldType> WarperType;
   WarperType::Pointer warper = WarperType::New();
   
@@ -231,7 +235,7 @@ int main(int argc, char** argv )
   typedef otb::StreamingImageFileWriter< OutputImageType > WriterType;
 
   WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName(argv[4]);
+  writer->SetFileName(argv[5]);
   writer->SetInput( caster->GetOutput() );
   writer->Update();
 
@@ -243,11 +247,11 @@ int main(int argc, char** argv )
   // \center
   // \includegraphics[width=0.40\textwidth]{StereoFixed.eps}
   // \includegraphics[width=0.40\textwidth]{StereoMoving.eps}
-  // \includegraphics[width=0.40\textwidth]{deformationFieldOutput2.eps}
-  // \includegraphics[width=0.40\textwidth]{resampledOutput2.eps}
+  // \includegraphics[width=0.40\textwidth]{deformationFieldOutput-horizontal.eps}
+  // \includegraphics[width=0.40\textwidth]{deformationFieldOutput-vertical.eps}
   // \itkcaption[Deformation field and resampling from NCC registration]{From left
   // to right and top to bottom: fixed input image, moving image with a low stereo angle, 
-  // estimated deformation field in the horizontal direction, resampled moving image.}
+  // estimated deformation field in the horizontal direction, estimated deformation field in the vertical direction.}
   // \label{fig:NCCRegistrationFilterOUTPUT}
   // \end{figure}
   //
