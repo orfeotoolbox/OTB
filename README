@@ -1,6 +1,6 @@
 This is the ORFEO Toolbox README file.
 Please see the Copyright directory for legal issues on the use of the software.
-Install information is available in the OTB Software Guide which can be downloaded from http://otb.cnes.fr.
+Install information is available in the OTB Software Guide which can be downloaded from http://www.orfeo-toolbox.org.
 
 Thank you.
 
@@ -25,20 +25,20 @@ Installation on Linux/Unix platforms
 
 NB: On some linux plateforme, you may (and should) use the official distribution packages for gdal, cmake and fltk
 
-1. Install GDAL:
+1. Install GDAL (or use your distribution package):
       cd INSTALL_DIR
-      gunzip gdal.1.5.1.tar.gz
-      tar xvf gdal.1.5.1.tar
-      cd gdal.1.5.1
+      gunzip gdal.1.5.2.tar.gz
+      tar xvf gdal.1.5.2.tar
+      cd gdal.1.5.2
       ./configure --prefix=INSTALL_DIR
       make
       make install
 
-2. Install CMake:
+2. Install CMake (or use your distribution package):
       cd INSTALL_DIR
-      gunzip cmake-2.4.7.tar.gz
-      tar xvf cmake-2.4.7.tar
-      cd cmake-2.4.7
+      gunzip cmake-2.6.0.tar.gz
+      tar xvf cmake-2.6.0.tar
+      cd cmake-2.6.0
       ./configure --prefix=INSTALL_DIR
       make
       make install
@@ -46,14 +46,14 @@ NB: On some linux plateforme, you may (and should) use the official distribution
       In order to properly use cmake, add INSTALL_DIR/bin to your path
       with export PATH=$PATH:INSTALL_DIR/bin or something similar.
 
-3. Install Fltk using CMake (do not use the configure script)
+3. Install Fltk using CMake (do not use the configure script) (or use your distribution package)
 
       cd INSTALL_DIR
-      bunzip2 fltk-1.1.7-source.tar.bz2 OR
-      gunzip fltk-1.1.7-source.tar.gz
+      bunzip2 fltk-1.1.9-source.tar.bz2 OR
+      gunzip fltk-1.1.9-source.tar.gz
       mkdir Fltk-binary
       cd Fltk-binary
-      ccmake ../fltk-1.1.7
+      ccmake ../fltk-1.1.9
       --> follow the CMake instructions, in particular:
           --> set CMAKE_INSTALL_PREFIX to INSTALL_DIR within CMake
 	  --> set BUILD_EXAMPLES to ON within CMake
@@ -67,11 +67,11 @@ NB: On some linux plateforme, you may (and should) use the official distribution
 4. Install OTB
 
       cd INSTALL_DIR
-      gunzip OrfeoToolbox-2.4.0.tgz
-      tar xvf OrfeoToolbox-2.4.0.tar
+      gunzip OrfeoToolbox-2.6.0.tgz
+      tar xvf OrfeoToolbox-2.6.0.tar
       mkdir OTB-Binary
       cd OTB-Binary
-      ccmake ../OrfeoToolbox-2.4.0
+      ccmake ../OrfeoToolbox-2.6.0
       --> follow the CMake instructions, in particular:
 	  --> set BUILD_EXAMPLES to ON within CMake
 	  --> set BUILD_SHARED_LIBS to OFF within CMake
@@ -92,7 +92,7 @@ Installation on Microsoft Visual Studio .NET 2003 (7.1)
 1. Install GDAL
 
 	MSVC++ 7.1 project files are needed to compile GDAL.
-	These files can be downloaded at http://vterrain.org/dist/gdal132_vc71.zip.
+	These files can be downloaded at http://vterrain.org/dist/gdal151-vc71.zip.
 	Then, unzip it to your GDAL folder, and it will create a folder (named "VisualStudio").
 	Load the solution (.sln file) and build the gdal project.
 	More details can be found at http://vterrain.org/Distrib/gdal.html.
