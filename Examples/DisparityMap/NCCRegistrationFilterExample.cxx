@@ -26,7 +26,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {StereoFixed.png}, {StereoMoving.png}
-//    OUTPUTS: {deformationFieldOutput2.png} {resampledOutput2.png}
+//    OUTPUTS: {deformationFieldOutput2.png}, {resampledOutput2.png}
 //    5 1.0 2
 //  Software Guide : EndCommandLineArgs
 
@@ -234,17 +234,17 @@ int main(int argc, char** argv )
   writer->SetFileName(argv[4]);
   writer->SetInput( caster->GetOutput() );
   writer->Update();
-  
+
   // Software Guide : BeginLatex
   //
   // Figure~\ref{fig:NCCRegistrationFilterOUTPUT} shows the result of applying.
   //
   // \begin{figure} 
   // \center
-  // \includegraphics[width=0.40\textwidth]{}
-  // \includegraphics[width=0.40\textwidth]{}
-  // \includegraphics[width=0.40\textwidth]{}
-  // \includegraphics[width=0.40\textwidth]{}
+  // \includegraphics[width=0.40\textwidth]{StereoFixed.eps}
+  // \includegraphics[width=0.40\textwidth]{StereoMoving.eps}
+  // \includegraphics[width=0.40\textwidth]{deformationFieldOutput2.eps}
+  // \includegraphics[width=0.40\textwidth]{resampledOutput2.eps}
   // \itkcaption[Deformation field and resampling from NCC registration]{From left
   // to right and top to bottom: fixed input image, moving image with a low stereo angle, 
   // estimated deformation field in the horizontal direction, resampled moving image.}
