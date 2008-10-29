@@ -21,8 +21,9 @@ OTB-v.2.6.0 - Changes since version 2.4.0 (2008/10/31)
 	- Object segmentation application
 	- Feature extraction application
 	- Land Cover Map application
-	- SAR polarimentrix synthesis application
+	- SAR polarimetric synthesis application
 	- 3D & stereo anaglyh viewer application
+	- Command line convertion from/to all image formats supported by OTB
 
 
 OTB-v.2.4.0 - Changes since version 2.2.0 (2008/07/24)
