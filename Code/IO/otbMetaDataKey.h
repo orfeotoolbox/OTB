@@ -91,12 +91,12 @@ public:
   	std::string keyname;
   	KeyType type; 
 
-	KeyTypeDef() {} 
-	KeyTypeDef(std::string _keyname, KeyType _type)
-	{
-		keyname = _keyname;
-		type = _type;
-	} 
+    KeyTypeDef() {} 
+    KeyTypeDef(std::string _keyname, KeyType _type)
+    {
+      keyname = _keyname;
+      type = _type;
+    } 
 
   } ;
 

@@ -26,8 +26,8 @@
 
 namespace otb
 {
-  /** \class otbLabelizeImageFilterBase
-   *  \brief
+  /** \class LabelizeImageFilterBase
+   *  \brief Base class for filter labelizing image region based on segmentation.
    *
    */
   template <class TInputImage, class TOutputImage, class TFilter>

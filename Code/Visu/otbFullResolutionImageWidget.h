@@ -23,7 +23,7 @@
 namespace otb
 {
 /** \class FullResolutionImageWidget
- * \brief 
+   * \brief Widget for the full resolution window in viewer.
  *
  */
 template <class TPixel>

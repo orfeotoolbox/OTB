@@ -25,7 +25,7 @@
 namespace otb
 {
 /** \class ImageWidgetBoxForm
- * \brief 
+ * \brief Widget to draw boxes on the viewer
  *
  */
 class ImageWidgetBoxForm

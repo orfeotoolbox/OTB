@@ -27,6 +27,7 @@
 namespace otb
 {
 /** \class FillGapsFilter
+ * \brief To be documented
  */
 class ITK_EXPORT FillGapsFilter : public itk::ProcessObject
 {
