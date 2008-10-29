@@ -31,6 +31,8 @@ void RegisterTests()
 REGISTER_TEST(otbImageFileReaderERS);
 REGISTER_TEST(otbLUMImageIOTestCanRead);
 REGISTER_TEST(otbLUMImageIOTestCanWrite);
+REGISTER_TEST(otbMWImageIOTestCanRead);
+REGISTER_TEST(otbMWImageIOTestCanWrite); 
 REGISTER_TEST(otbImageFileReaderTest);
 REGISTER_TEST(otbShortImageIOTest);
 }

@@ -161,6 +161,29 @@ ADD_TEST(ioTvImageFileReaderShortLUM2LUM ${IO_TESTS1}
         ${INPUTDATA}/poupees_I2.lum
         ${TEMP}/ioImageFileReaderI2_LUM2LUM.lum )
 
+# -------            otb::MWImageIO   ------------------------------
+# CanRead()
+ADD_TEST(ioTuMWImageIOCanRead ${IO_TESTS1} otbMWImageIOTestCanRead
+        ${BASELINE}/QB_Toulouse_Ortho_PAN.img)
+
+ADD_TEST(ioTvImageFileReaderMW2TIF ${IO_TESTS1} 
+  --compare-image ${TOL}        ${BASELINE}/QB_Toulouse_Ortho_PAN.img
+                                ${TEMP}/ioImageFileReaderMW2TIF.tif
+        otbImageFileReaderTest
+        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+        ${TEMP}/ioImageFileReaderMW2TIF.tif )      
+      
+
+# CanWrite()
+ADD_TEST(ioTuMWImageIOCanWrite ${IO_TESTS1} otbMWImageIOTestCanWrite
+        ${TEMP}/QB_Toulouse_Ortho_PAN.img)
+
+ADD_TEST(ioTvImageFileReaderTIF2MW ${IO_TESTS1} 
+  --compare-image ${TOL}        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+                                ${TEMP}/ioImageFileReaderTIF2MW.img
+        otbImageFileReaderTest
+        ${BASELINE}/QB_Toulouse_Ortho_PAN.img
+        ${TEMP}/ioImageFileReaderTIF2MW.img )      
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTests2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
