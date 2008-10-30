@@ -16,6 +16,7 @@ OTB-v.2.6.0 - Changes since version 2.4.0 (2008/10/31)
 	- Optimized convolution using FFT
 	- CNES RAD format support
 	- NCC and MI registration filters for diparity map estimation
+	- Support for MegaWave image format (contributed by Eric Bughin)
 
 * Applications
 	- Object segmentation application
