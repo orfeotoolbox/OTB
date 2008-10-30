@@ -23,7 +23,7 @@ Make sure that you have downloaded the source code for:
 Installation on Linux/Unix platforms
 ------------------------------------
 
-NB: On some linux plateforme, you may (and should) use the official distribution packages for gdal, cmake and fltk
+NB: On some linux plateforms, you may (and should) use the official distribution packages for gdal, cmake and fltk
 
 1. Install GDAL (or use your distribution package):
       cd INSTALL_DIR
