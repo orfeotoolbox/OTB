@@ -17,19 +17,23 @@
 =========================================================================*/
 
 #include "otbFltkFilterWatcher.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileReader.h"
 #include "otbImage.h"
+#include "itkGradientMagnitudeImageFilter.h"
 
-int otbFltkFilterWatcherNew(int argc, char * argv[])
+
+int otbFltkFilterWatcher(int argc, char * argv[])
 {
-//        const char * filename = argv[1];
+        const char * infname = argv[1];
         typedef otb::Image<char,2> ImageType;
-        typedef otb::StreamingImageFileWriter<ImageType> WriterType;
+	typedef otb::ImageFileReader<ImageType> ReaderType;
+	typedef itk::GradientMagnitudeImageFilter<ImageType, ImageType> FilterType;
         
-        WriterType::Pointer writer = WriterType::New();
-//        writer->SetFileName(filename);
-//        writer->SetInput(m_ChangeLabelFilter->GetOutput());
-        otb::FltkFilterWatcher watcher(writer,0,0,200,20,"Saving result image ...");
-//        writer->Update();
+	ReaderType::Pointer reader = ReaderType::New();
+	reader->SetFileName(infname);
+	FilterType::Pointer gradient = FilterType::New();
+	gradient->SetInput(reader->GetOutput());
+        otb::FltkFilterWatcher watcher(gradient,0,0,200,20,"Gradient");
+        gradient->Update();
         return EXIT_SUCCESS;
 }

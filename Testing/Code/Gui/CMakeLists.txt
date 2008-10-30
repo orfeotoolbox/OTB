@@ -15,15 +15,26 @@ SET(EPS 0.001)
 SET(GUI_TESTS ${CXX_TEST_PATH}/otbGuiTests)
 
 # -------            otb::System  -------------
-ADD_TEST(guTuFltkFilterWatcherNew ${GUI_TESTS}  
-        otbFltkFilterWatcherNew
+ADD_TEST(guTuFltkFilterWatcher ${GUI_TESTS}  
+        otbFltkFilterWatcher
+	${INPUTDATA}/couleurs.tif
         )
+
+
+# -------------  otb::FltkWriterWatcher ----------------------------
+
+ADD_TEST(coTvFltkWriterWatcher ${GUI_TESTS}
+     otbFltkWriterWatcher
+        ${INPUTDATA}/couleurs.tif
+	${TEMP}/coTvFltkWriterWatcherOutput.tif
+	20)
 
 
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(Gui_SRCS
-otbFltkFilterWatcherNew.cxx
+otbFltkFilterWatcher.cxx
+otbFltkWriterWatcher.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
