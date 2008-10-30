@@ -241,7 +241,8 @@ int main(int argc, char** argv )
 
   // Software Guide : BeginLatex
   //
-  // Figure~\ref{fig:NCCRegistrationFilterOUTPUT} shows the result of applying.
+  // Figure~\ref{fig:NCCRegistrationFilterOUTPUT} shows the result of
+  // applying the disparity map estimation.
   //
   // \begin{figure} 
   // \center
