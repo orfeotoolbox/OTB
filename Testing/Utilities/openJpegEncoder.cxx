@@ -38,13 +38,13 @@
 #include <windows.h>
 #endif
 
-#define NUM_COMPS			3
-#define IMAGE_WIDTH			2000
-#define IMAGE_HEIGHT		2000
-#define TILE_WIDTH			1000
-#define TILE_HEIGHT			1000
-#define COMP_PREC			8
-#define OUTPUT_FILE			"test.j2k"
+#define NUM_COMPS	3
+#define IMAGE_WIDTH	2000
+#define IMAGE_HEIGHT	2000
+#define TILE_WIDTH	1000
+#define TILE_HEIGHT	1000
+#define COMP_PREC	8
+
 
 /* -------------------------------------------------------------------------- */
 
@@ -88,211 +88,213 @@ void _openJpegEncoder_info_callback(const char *msg, void *client_data) {
 
 int openJpegEncoder(int argc, char * argv[])
 {
-	opj_cparameters_t l_param;
-	opj_codec_t * l_codec;
-	opj_image_t * l_image;
-	opj_image_cmptparm_t l_params [NUM_COMPS];
-	FILE * l_file;
-	opj_stream_t * l_stream;
-	OPJ_UINT32 l_nb_tiles = (IMAGE_WIDTH/TILE_WIDTH) * (IMAGE_HEIGHT/TILE_HEIGHT);
-	OPJ_UINT32 l_data_size = TILE_WIDTH * TILE_HEIGHT * NUM_COMPS * (COMP_PREC/8);
+  const char* outputFile = argv[1];
 
-	/*	const OPJ_FLOAT32 l_mct [] = 
+  opj_cparameters_t l_param;
+  opj_codec_t * l_codec;
+  opj_image_t * l_image;
+  opj_image_cmptparm_t l_params [NUM_COMPS];
+  FILE * l_file;
+  opj_stream_t * l_stream;
+  OPJ_UINT32 l_nb_tiles = (IMAGE_WIDTH/TILE_WIDTH) * (IMAGE_HEIGHT/TILE_HEIGHT);
+  OPJ_UINT32 l_data_size = TILE_WIDTH * TILE_HEIGHT * NUM_COMPS * (COMP_PREC/8);
+
+  /*	const OPJ_FLOAT32 l_mct [] = 
 	{
-		1 , 0 , 0 ,
-		0 , 1 , 0 ,
-		0 , 0 , 1
+	1 , 0 , 0 ,
+	0 , 1 , 0 ,
+	0 , 0 , 1
 	};
 
 	const OPJ_INT32 l_offsets [] = 
 	{
-		128 , 128 , 128
-		};*/
+	128 , 128 , 128
+	};*/
 
-	opj_image_cmptparm_t * l_current_param_ptr;
-	OPJ_UINT32 i;
-	OPJ_BYTE *l_data;
+  opj_image_cmptparm_t * l_current_param_ptr;
+  OPJ_UINT32 i;
+  OPJ_BYTE *l_data;
 
-	PROFINIT();
-	l_data =(OPJ_BYTE*) malloc( TILE_WIDTH * TILE_HEIGHT * NUM_COMPS * (COMP_PREC/8) *sizeof(OPJ_BYTE));
+  PROFINIT();
+  l_data =(OPJ_BYTE*) malloc( TILE_WIDTH * TILE_HEIGHT * NUM_COMPS * (COMP_PREC/8) *sizeof(OPJ_BYTE));
 	
-	fprintf(stdout, "Encoding random values -> keep in mind that this is very hard to compress\n");
-	for
-		(i=0;i<l_data_size;++i)
+  fprintf(stdout, "Encoding random values -> keep in mind that this is very hard to compress\n");
+  for
+    (i=0;i<l_data_size;++i)
+    {
+      l_data[i] = rand();
+    }
+	
+  opj_set_default_encoder_parameters(&l_param);
+  /** you may here add custom encoding parameters */
+  /* rate specifications */
+  /** number of quality layers in the stream */
+  l_param.tcp_numlayers = 1;
+  l_param.cp_fixed_quality = 1;
+  l_param.tcp_distoratio[0] = 20;
+  /* is using others way of calculation */
+  /* l_param.cp_disto_alloc = 1 or l_param.cp_fixed_alloc = 1 */
+  /* l_param.tcp_rates[0] = ... */
+	
+
+  /* tile definitions parameters */
+  /* position of the tile grid aligned with the image */
+  l_param.cp_tx0 = 0;
+  l_param.cp_ty0 = 0;
+  /* tile size, we are using tile based encoding */
+  l_param.tile_size_on = true;
+  l_param.cp_tdx = TILE_WIDTH;
+  l_param.cp_tdy = TILE_HEIGHT;
+	
+  /* use irreversible encoding ?*/
+  l_param.irreversible = 1;
+
+  /* do not bother with mct, the rsiz is set when calling opj_set_MCT*/
+  /*l_param.cp_rsiz = STD_RSIZ;*/
+	
+  /* no cinema */
+  /*l_param.cp_cinema = 0;*/
+	
+  /* no not bother using SOP or EPH markers, do not use custom size precinct */
+  /* number of precincts to specify */
+  /* l_param.csty = 0;*/
+  /* l_param.res_spec = ... */
+  /* l_param.prch_init[i] = .. */
+  /* l_param.prcw_init[i] = .. */
+
+	
+  /* do not use progression order changes */
+  /*l_param.numpocs = 0;*/
+  /* l_param.POC[i].... */
+
+  /* do not restrain the size for a component.*/
+  /* l_param.max_comp_size = 0; */
+	
+  /** block encoding style for each component, do not use at the moment */
+  /** J2K_CCP_CBLKSTY_TERMALL, J2K_CCP_CBLKSTY_LAZY, J2K_CCP_CBLKSTY_VSC, J2K_CCP_CBLKSTY_SEGSYM, J2K_CCP_CBLKSTY_RESET */
+  /* l_param.mode = 0;*/
+
+  /** number of resolutions */
+  l_param.numresolution = 6;
+
+  /** progression order to use*/
+  /** LRCP, RLCP, RPCL, PCRL, CPRL */
+  l_param.prog_order = LRCP;
+	
+  /** no "region" of interest, more precisally component */
+  /* l_param.roi_compno = -1; */
+  /* l_param.roi_shift = 0; */
+	
+  /* we are not using multiple tile parts for a tile. */
+  /* l_param.tp_on = 0; */
+  /* l_param.tp_flag = 0; */	
+	
+  /* if we are using mct */
+  /* opj_set_MCT(&l_param,l_mct,l_offsets,NUM_COMPS); */
+
+	
+  /* image definition */
+  l_current_param_ptr = l_params;
+  for
+    (i=0;i<NUM_COMPS;++i)
+    {
+      /* do not bother bpp useless */
+      /*l_current_param_ptr->bpp = COMP_PREC;*/
+      l_current_param_ptr->dx = 1;
+      l_current_param_ptr->dy = 1;
+      l_current_param_ptr->h = IMAGE_HEIGHT;
+      l_current_param_ptr->sgnd = 0;
+      l_current_param_ptr->prec = COMP_PREC;
+      l_current_param_ptr->w = IMAGE_WIDTH;
+      l_current_param_ptr->x0 = 0;
+      l_current_param_ptr->y0 = 0;
+      ++l_current_param_ptr;
+    }
+
+  l_codec = opj_create_compress(CODEC_J2K);
+  if
+    (! l_codec)
+    {
+      return 1;
+    }
+
+  /* catch events using our callbacks and give a local context */		
+  opj_set_info_handler(l_codec, _openJpegEncoder_info_callback,00);
+  opj_set_warning_handler(l_codec, _openJpegEncoder_warning_callback,00);
+  opj_set_error_handler(l_codec, _openJpegEncoder_error_callback,00);
+	
+  l_image = opj_image_tile_create(NUM_COMPS,l_params,CLRSPC_SRGB);
+  if
+    (! l_image)
+    {
+      opj_destroy_codec(l_codec);
+      return 1;
+    }
+  l_image->x0 = 0;
+  l_image->y0 = 0;
+  l_image->x1 = IMAGE_WIDTH;
+  l_image->y1 = IMAGE_HEIGHT;
+  l_image->color_space = CLRSPC_SRGB;
+	
+  if
+    (! opj_setup_encoder(l_codec,&l_param,l_image))
+    {
+      opj_destroy_codec(l_codec);
+      opj_image_destroy(l_image);
+      return 1;
+    }
+	
+  l_file = fopen(outputFile/*OUTPUT_FILE*/,"wb");
+  if
+    (! l_file)
+    {
+      opj_destroy_codec(l_codec);
+      opj_image_destroy(l_image);
+      return 1;
+    }
+
+  l_stream = opj_stream_create_default_file_stream(l_file,false);
+
+  if
+    (! opj_start_compress(l_codec,l_image,l_stream))
+    {
+      opj_stream_destroy(l_stream);
+      fclose(l_file);
+      opj_destroy_codec(l_codec);
+      opj_image_destroy(l_image);
+      return 1;
+    }
+  for
+    (i=0;i<l_nb_tiles;++i)
+    {
+      if
+	(! opj_write_tile(l_codec,i,l_data,l_data_size,l_stream))
 	{
-		l_data[i] = rand();
+	  opj_stream_destroy(l_stream);
+	  fclose(l_file);
+	  opj_destroy_codec(l_codec);
+	  opj_image_destroy(l_image);
+	  return 1;
 	}
-	
-	opj_set_default_encoder_parameters(&l_param);
-	/** you may here add custom encoding parameters */
-	/* rate specifications */
-	/** number of quality layers in the stream */
-	l_param.tcp_numlayers = 1;
-	l_param.cp_fixed_quality = 1;
-	l_param.tcp_distoratio[0] = 20;
-	/* is using others way of calculation */
-	/* l_param.cp_disto_alloc = 1 or l_param.cp_fixed_alloc = 1 */
-	/* l_param.tcp_rates[0] = ... */
-	
+    }
+  if
+    (! opj_end_compress(l_codec,l_stream))
+    {
+      opj_stream_destroy(l_stream);
+      fclose(l_file);
+      opj_destroy_codec(l_codec);
+      opj_image_destroy(l_image);
+      return 1;
+    }
+  opj_stream_destroy(l_stream);
+  fclose(l_file);
+  opj_destroy_codec(l_codec);
+  opj_image_destroy(l_image);
 
-	/* tile definitions parameters */
-	/* position of the tile grid aligned with the image */
-	l_param.cp_tx0 = 0;
-	l_param.cp_ty0 = 0;
-	/* tile size, we are using tile based encoding */
-	l_param.tile_size_on = true;
-	l_param.cp_tdx = TILE_WIDTH;
-	l_param.cp_tdy = TILE_HEIGHT;
-	
-	/* use irreversible encoding ?*/
-	l_param.irreversible = 1;
+  // Print profiling
+  PROFPRINT();
 
-	/* do not bother with mct, the rsiz is set when calling opj_set_MCT*/
-	/*l_param.cp_rsiz = STD_RSIZ;*/
-	
-	/* no cinema */
-	/*l_param.cp_cinema = 0;*/
-	
-	/* no not bother using SOP or EPH markers, do not use custom size precinct */
-	/* number of precincts to specify */
-	/* l_param.csty = 0;*/
-	/* l_param.res_spec = ... */
-	/* l_param.prch_init[i] = .. */
-	/* l_param.prcw_init[i] = .. */
-
-	
-	/* do not use progression order changes */
-	/*l_param.numpocs = 0;*/
-	/* l_param.POC[i].... */
-
-	/* do not restrain the size for a component.*/
-	/* l_param.max_comp_size = 0; */
-	
-	/** block encoding style for each component, do not use at the moment */
-	/** J2K_CCP_CBLKSTY_TERMALL, J2K_CCP_CBLKSTY_LAZY, J2K_CCP_CBLKSTY_VSC, J2K_CCP_CBLKSTY_SEGSYM, J2K_CCP_CBLKSTY_RESET */
-	/* l_param.mode = 0;*/
-
-	/** number of resolutions */
-	l_param.numresolution = 6;
-
-	/** progression order to use*/
-	/** LRCP, RLCP, RPCL, PCRL, CPRL */
-	l_param.prog_order = LRCP;
-	
-	/** no "region" of interest, more precisally component */
-	/* l_param.roi_compno = -1; */
-	/* l_param.roi_shift = 0; */
-	
-	/* we are not using multiple tile parts for a tile. */
-	/* l_param.tp_on = 0; */
-	/* l_param.tp_flag = 0; */	
-	
-	/* if we are using mct */
-	/* opj_set_MCT(&l_param,l_mct,l_offsets,NUM_COMPS); */
-
-	
-	/* image definition */
-	l_current_param_ptr = l_params;
-	for
-		(i=0;i<NUM_COMPS;++i)
-	{
-		/* do not bother bpp useless */
-		/*l_current_param_ptr->bpp = COMP_PREC;*/
-		l_current_param_ptr->dx = 1;
-		l_current_param_ptr->dy = 1;
-		l_current_param_ptr->h = IMAGE_HEIGHT;
-		l_current_param_ptr->sgnd = 0;
-		l_current_param_ptr->prec = COMP_PREC;
-		l_current_param_ptr->w = IMAGE_WIDTH;
-		l_current_param_ptr->x0 = 0;
-		l_current_param_ptr->y0 = 0;
-		++l_current_param_ptr;
-	}
-
-	l_codec = opj_create_compress(CODEC_J2K);
-	if
-		(! l_codec)
-	{
-		return 1;
-	}
-
-	/* catch events using our callbacks and give a local context */		
-	opj_set_info_handler(l_codec, _openJpegEncoder_info_callback,00);
-	opj_set_warning_handler(l_codec, _openJpegEncoder_warning_callback,00);
-	opj_set_error_handler(l_codec, _openJpegEncoder_error_callback,00);
-	
-	l_image = opj_image_tile_create(NUM_COMPS,l_params,CLRSPC_SRGB);
-	if
-		(! l_image)
-	{
-		opj_destroy_codec(l_codec);
-		return 1;
-	}
-	l_image->x0 = 0;
-	l_image->y0 = 0;
-	l_image->x1 = IMAGE_WIDTH;
-	l_image->y1 = IMAGE_HEIGHT;
-	l_image->color_space = CLRSPC_SRGB;
-	
-	if
-		(! opj_setup_encoder(l_codec,&l_param,l_image))
-	{
-		opj_destroy_codec(l_codec);
-		opj_image_destroy(l_image);
-		return 1;
-	}
-	
-	l_file = fopen(OUTPUT_FILE,"wb");
-	if
-		(! l_file)
-	{
-		opj_destroy_codec(l_codec);
-		opj_image_destroy(l_image);
-		return 1;
-	}
-
-	l_stream = opj_stream_create_default_file_stream(l_file,false);
-
-	if
-		(! opj_start_compress(l_codec,l_image,l_stream))
-	{
-		opj_stream_destroy(l_stream);
-		fclose(l_file);
-		opj_destroy_codec(l_codec);
-		opj_image_destroy(l_image);
-		return 1;
-	}
-	for
-		(i=0;i<l_nb_tiles;++i)
-	{
-		if
-			(! opj_write_tile(l_codec,i,l_data,l_data_size,l_stream))
-		{
-			opj_stream_destroy(l_stream);
-			fclose(l_file);
-			opj_destroy_codec(l_codec);
-			opj_image_destroy(l_image);
-			return 1;
-		}
-	}
-	if
-		(! opj_end_compress(l_codec,l_stream))
-	{
-		opj_stream_destroy(l_stream);
-		fclose(l_file);
-		opj_destroy_codec(l_codec);
-		opj_image_destroy(l_image);
-		return 1;
-	}
-	opj_stream_destroy(l_stream);
-	fclose(l_file);
-	opj_destroy_codec(l_codec);
-	opj_image_destroy(l_image);
-
-	// Print profiling
-	PROFPRINT();
-
-	return 0;
+  return 0;
 }
 
 
