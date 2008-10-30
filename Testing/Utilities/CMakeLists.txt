@@ -330,10 +330,14 @@ ADD_TEST(utOssimRadarSatSupport ${UTILITIES_TESTS}
 # Case for release 2.2.1
 IF(OTB_COMPILE_JPEG2000)
 ADD_TEST(utOpenJpegEncoder ${UTILITIES_TESTS}
-	openJpegEncoder)
+	openJpegEncoder
+	${TEMP}/testjpeg.j2k	
+)
 
 ADD_TEST(utOpenJpegDecoder ${UTILITIES_TESTS}
-	openJpegDecoder)
+	openJpegDecoder
+	${TEMP}/testjpeg.j2k
+)
 ENDIF(OTB_COMPILE_JPEG2000)
 
 # -------            lib expat  ------------------------------
