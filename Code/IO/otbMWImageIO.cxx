@@ -71,18 +71,12 @@ bool MWImageIO::CanReadFile( const char* filename )
         std::string lFileName(filename);
 	// Test the extension
 	std::string extension = GetExtension(filename);
-	if((extension!="img")&&(extension!=""))
-	  {
+        if((extension!="img")&&(extension!="")&&(extension!="mw"))
 	    return false;
-	  }
 	if( System::IsADirName(lFileName) == true )
-	  {
 	    return false;
-	  }
 	if( m_File.is_open() )
-	  {
 	    m_File.close();
-	  }
 	
 	std::fstream header_file;
 	header_file.open( filename,  std::ios::in | std::ios::binary );
@@ -241,19 +235,13 @@ bool MWImageIO::CanWriteFile( const char* filename )
 {
         std::string lFileName(filename);
 	std::string extension = GetExtension(filename);
-	if ((extension!="img")&&(extension!=""))
-	  {
+	if (extension!="mw")
 	    return false;
-	  }
-        else if( System::IsADirName(lFileName) == true )
-        {
+       if( System::IsADirName(lFileName) == true )
                 return false;
-        }
-        else
-        {
-                return true;
-        }
-}
+
+       return true;
+ }
 
 void MWImageIO::Write(const void* buffer)
 {
@@ -420,8 +408,8 @@ std::string MWImageIO::GetExtension( const std::string& filename )
 		std::string fileExt3("");
 		return( fileExt3 );
 	}
-	else
-		return( fileExt );
+	
+        return( fileExt );
 
 }
 
