@@ -173,14 +173,14 @@ ADD_TEST(ioTuMWImageIOCanReadMW ${IO_TESTS1} otbMWImageIOTestCanRead
 ADD_TEST(ioTvImageFileReaderMW2TIFIMG ${IO_TESTS1} 
   --compare-image ${TOL}        ${BASELINE}/QB_Toulouse_Ortho_PAN.img
                                 ${TEMP}/ioImageFileReaderMW2TIF.tif
-        otbImageFileReaderTest
+        otbImageFileReaderTestFloat
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
         ${TEMP}/ioImageFileReaderMW2TIF.tif )      
 
 ADD_TEST(ioTvImageFileReaderMW2TIFMW ${IO_TESTS1} 
   --compare-image ${TOL}        ${BASELINE}/QB_Toulouse_Ortho_PAN.mw
                                 ${TEMP}/ioImageFileReaderMW2TIF.tif
-        otbImageFileReaderTest
+        otbImageFileReaderTestFloat
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
         ${TEMP}/ioImageFileReaderMW2TIF.tif )      
 
@@ -193,7 +193,7 @@ ADD_TEST(ioTuMWImageIOCanWrite ${IO_TESTS1} otbMWImageIOTestCanWrite
 ADD_TEST(ioTvImageFileReaderTIF2MW ${IO_TESTS1} 
   --compare-image ${TOL}        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
                                 ${TEMP}/ioImageFileReaderTIF2MW.mw
-        otbImageFileReaderTest
+        otbImageFileReaderTestFloat
         ${BASELINE}/QB_Toulouse_Ortho_PAN.mw
         ${TEMP}/ioImageFileReaderTIF2MW.mw )      
 
@@ -1593,6 +1593,7 @@ otbLUMImageIOTestCanWrite.cxx
 otbMWImageIOTestCanRead.cxx
 otbMWImageIOTestCanWrite.cxx
 otbImageFileReaderTest.cxx
+otbImageFileReaderTestFloat.cxx
 otbShortImageIOTest.cxx
 )
 SET(BasicIO_SRCS2
