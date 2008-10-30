@@ -123,11 +123,12 @@ source code and to the Software User's Guide.
 OTB is a multi-platform library. It has successfully been installed on
 the following platforms:
 \begin{itemize}
-  \item Linux/Unix with GCC (2.95.X, 3.3.X, 4.1.X, 4.2.X).
+  \item Linux/Unix with GCC (2.95.X, 3.3.X, 4.1.X, 4.2.X, 4.3.X).
   \item Windows with Microsoft Visual Studio C++ 7.1 .NET 2003.
   \item Windows with Microsoft Visual Studio C++ 8.0 .NET 2005.  
   \item Windows with MinGW. (mingw + msys at \url{http://www.mingw.org})
   \item Cygwin. (\url{http://www.cygwin.com})
+  \item MacOS
 \end{itemize}
 
 Support for the following platforms is planned:
@@ -174,12 +175,12 @@ packages, you can skip to step 4.
 
 \begin{enumerate}
     
-\item Install GDAL
+\item Install GDAL (or use your distribution package)
   \begin{verbatim}
       cd INSTALL_DIR
-      gunzip gdal.1.4.2.tar.gz
-      tar xvf gdal.1.4.2.tar
-      cd gdal.1.4.2
+      gunzip gdal.1.5.2.tar.gz
+      tar xvf gdal.1.5.2.tar
+      cd gdal.1.5.2
       ./configure --prefix=INSTALL_DIR
       make
       make install
@@ -191,12 +192,12 @@ Actually, since this is the last step in the GDAL install procedure, when you ge
 
 The \texttt{--without-python} option passed to the \texttt{configure} step avoids this. However, some users may want to have Python bindings, so recommending this option for the install may not be OK for everybody. 
 
-\item Install CMake
+\item Install CMake (or use your distribution package)
   \begin{verbatim}
       cd INSTALL_DIR
-      gunzip cmake-2.4.7.tar.gz
-      tar xvf cmake-2.4.7.tar
-      cd cmake-2.4.7
+      gunzip cmake-2.6.0.tar.gz
+      tar xvf cmake-2.6.0.tar
+      cd cmake-2.6.0
       ./configure --prefix=INSTALL_DIR
       make
       make install
@@ -205,15 +206,15 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
       your path with \texttt{export PATH=\$PATH:INSTALL\_DIR/bin} or
       something similar.
 
-\item Install Fltk (optional) using CMake (do not use the configure script)
+\item Install Fltk (optional) using CMake (do not use the configure script) (or use your distribution package)
   \begin{verbatim}
       cd INSTALL_DIR
-      bunzip2 fltk-1.1.7-source.tar.bz2 OR
-      gunzip fltk-1.1.7-source.tar.gz
-      tar xvf fltk-1.1.7-source.tar
+      bunzip2 fltk-1.1.9-source.tar.bz2 OR
+      gunzip fltk-1.1.9-source.tar.gz
+      tar xvf fltk-1.1.9-source.tar
       mkdir Fltk-binary
       cd Fltk-binary
-      ccmake ../fltk-1.1.7
+      ccmake ../fltk-1.1.9
       --> follow the CMake instructions, in particular:
           --> set CMAKE_INSTALL_PREFIX to INSTALL_DIR within CMake
 	  --> set BUILD_EXAMPLES to ON within CMake
@@ -231,11 +232,11 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 \item Install OTB
   \begin{verbatim}
       cd INSTALL_DIR
-      gunzip OrfeoToolbox-2.4.0.tgz
-      tar xvf OrfeoToolbox-2.4.0.tar
+      gunzip OrfeoToolbox-2.6.0.tgz
+      tar xvf OrfeoToolbox-2.6.0.tar
       mkdir OTB-Binary
       cd OTB-Binary
-      ccmake ../OrfeoToolbox-2.4.0
+      ccmake ../OrfeoToolbox-2.6.0
       --> follow the CMake instructions, in particular:
 	  --> set BUILD_EXAMPLES to ON within CMake
 	  --> set BUILD_SHARED_LIBS to ON within CMake
@@ -281,7 +282,7 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 
 	MSVC++ 7.1 project files are needed to compile GDAL.
 	
-	These files can be downloaded at \url{http://vterrain.org/dist/gdal132_vc71.zip}.
+	These files can be downloaded at \url{http://vterrain.org/dist/gdal151-vc71.zip}.
 	
 	Then, unzip it to your GDAL folder, and it will create a folder (named "VisualStudio").
 	
@@ -518,7 +519,7 @@ bugfixes.
 The first version was 1.0.0 in July 2006. Version 1.2.0, 1.4.0 and 1.6.0 were 
 released in between. The 2.0.0 major version  was released in December 2007. 
 The 2.2.0 and 2.4.0 update in June and July 2008 respectively.
-The next one will probably be 2.6.0.
+The current one is 2.6.0.
 
 \subsubsection{What is a major version?}
 A major version of the library implies the addition of high-level
