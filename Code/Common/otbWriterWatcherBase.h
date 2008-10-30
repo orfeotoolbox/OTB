@@ -49,7 +49,11 @@ namespace otb
        * comment string that is prepended to each event message. */
       WriterWatcherBase(itk::ProcessObject* process,
 			const char *comment="");
-      
+
+      /** This other constructor is provided so that the user can set a different processing filter than the one
+	  just before process in the pipeline */
+      WriterWatcherBase(itk::ProcessObject* process, itk::ProcessObject * source,const char *comment="");
+
       /** Default constructor */
       WriterWatcherBase();
       

@@ -32,6 +32,14 @@ StandardWriterWatcher
 }
 
 StandardWriterWatcher
+::StandardWriterWatcher(itk::ProcessObject* process,itk::ProcessObject * source,
+			const char *comment)
+  : WriterWatcherBase(process,source,comment)
+{
+  m_StarsCount = 50;
+}
+
+StandardWriterWatcher
 ::StandardWriterWatcher( const StandardWriterWatcher& watch)
 { 
   // Initialize state
