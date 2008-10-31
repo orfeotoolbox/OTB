@@ -129,7 +129,6 @@ WriterWatcherBase
 					 m_ProgressWriterCommand);
 
   m_SourceProcess = source;
-  m_SourceProcess = m_Process->GetInputs()[0]->GetSource();
   
   // Add the commands as observers
   m_StartFilterTag = m_SourceProcess->AddObserver(itk::StartEvent(),
