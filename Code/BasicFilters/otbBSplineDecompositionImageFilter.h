@@ -27,7 +27,7 @@
 
 namespace otb
 {
-/** \class otbBSplineDecompositionImageFilter
+/** \class BSplineDecompositionImageFilter
  *  \brief This class is an evolution of the itk::BSplineDecompositionImageFilter to handle
  * huge images with this interpolator. For more documentation, please refer to the original
  * class.

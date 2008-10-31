@@ -29,7 +29,7 @@
 
 namespace otb {
 
-/** \class KullbackLeiblerSupervizedDistance
+/** \class KullbackLeiblerSupervizedDistanceImageFilter
  * \brief Implements KullbackLeibler distance over Edgeworth approximation, 
  * between a Neighborhood and a predefined Region of Interest.
  *

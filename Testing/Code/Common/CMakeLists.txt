@@ -526,6 +526,15 @@ ADD_TEST(coTvShiftScaleImageAdaptor ${COMMON_TESTS7}
 	${TEMP}/coTvShiftScaleImageAdaptor.tif
 )
 
+# -------------  otb::StandardWriterWatcher ----------------------------
+
+ADD_TEST(coTvStandardWriterWatcher ${COMMON_TESTS7}
+     otbStandardWriterWatcher
+        ${INPUTDATA}/couleurs.tif
+	${TEMP}/coTvStandardWriterWatcherOutput.tif
+	20
+)
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
 otbSystemTest.cxx
@@ -604,6 +613,7 @@ otbVectorDataNew.cxx
 otbVectorData.cxx
 otbShiftScaleImageAdaptorNew.cxx
 otbShiftScaleImageAdaptor.cxx
+otbStandardWriterWatcher.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

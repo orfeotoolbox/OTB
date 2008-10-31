@@ -24,7 +24,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-/** \class Filename
+/** \class FileName
  *  \brief This class represents a file name
  *
  * It is derived from the ossimFilename class, which allows to manipulate a

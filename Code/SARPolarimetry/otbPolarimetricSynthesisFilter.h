@@ -27,7 +27,7 @@
 namespace otb
 {
 
-/** \class otbPolarimetricSynthesisFilter
+/** \class PolarimetricSynthesisFilter
  * \brief 
  *
  * This class compute the polarimetric synthesis from two to four radar images,
@@ -36,7 +36,7 @@ namespace otb
  *    \item HH_HV : two channels are available: $S_{HH}$ and $S_{HV}$. 
  *                  Emit polarisation is fixed to horizontal orientation: $\psi_{i}=0$ and $\chi_{i}=0$.
  *    \item VV_VH : two channels are available: $S_{VV}$ and $S_{VH}$.
- *                  Emit polarisation is fixed to vertical orientation: $\psi_{i}=90°$ and $\chi_{i}=0$.
+ *                  Emit polarisation is fixed to vertical orientation: $\psi_{i}=90^\circ$ and $\chi_{i}=0$.
  *    \item HH_HV_VV : three channels are available: $S_{HH}$, $S_{HV}$ and $S_{VV}$. 
  *                     we make the assumption that cross polarisation are reciprocal ($S_{HV} =  S_{VH}$).
  *    \item HH_HV_VH_VV: four channels are available $S_{HH}$, $S_{HV}$, $S_{VH}$ and $S_{VV}$.
@@ -49,7 +49,7 @@ namespace otb
  * \begin{enumerate}
  *     \item none: set the four parameters;
  *     \item co: $\psi_{r} = \psi_{i}$ and $\chi_{r} = \chi_{i}$
- *     \item cross: $\psi_{r} = \psi_{i} + 90°$ and $\chi_{r} = -\chi_{i}$ 
+ *     \item cross: $\psi_{r} = \psi_{i} + 90^\circ$ and $\chi_{r} = -\chi_{i}$ 
  * \end{enumerate}
  *
  * This class is parameterized over the type of the input images and

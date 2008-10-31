@@ -35,8 +35,13 @@
 
 namespace otb
 {
+
   namespace Functor
     {
+      /** \class BayesianFunctor
+       * \brief Functor for the bayesian fusion filter. Please refer to BayesianFusionFilter.
+       *
+       */
       template <class TInputMultiSpectral, 
 	        class TInputMultiSpectralInterp, 
 	        class TInputPanchro, 
@@ -125,8 +130,9 @@ namespace otb
    */
    /***** END TODO ***/
 
-  /** \class StreamingStatisticsVectorImageFilter
-   * \brief Baesian fusion filter. Contribution of Julien Radoux
+    
+  /** \class BayesianFusionFilter
+   * \brief Bayesian fusion filter. Contribution of Julien Radoux
    *
    * Please refer to D. Fasbender, J. Radoux and P. Bogaert, 
    * Bayesian Data Fusion for Adaptable Image Pansharpening,
@@ -147,9 +153,6 @@ namespace otb
    * 
    *
    */
-
-
-
 
 template <class TInputMultiSpectralImage, 
           class TInputMultiSpectralInterpImage, 

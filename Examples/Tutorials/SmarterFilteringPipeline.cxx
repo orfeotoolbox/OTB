@@ -128,7 +128,8 @@ int main( int argc, char * argv[] )
     //  Software Guide : EndLatex 
     
     // Software Guide : BeginCodeSnippet
-    parser->SetProgramDescription("This program applies a Harris detector on the input image");
+    parser->SetProgramDescription(
+              "This program applies a Harris detector on the input image");
     parser->AddInputImage(); 
     parser->AddOutputImage();
     parser->AddOption("--SigmaD", 

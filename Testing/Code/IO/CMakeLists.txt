@@ -161,6 +161,41 @@ ADD_TEST(ioTvImageFileReaderShortLUM2LUM ${IO_TESTS1}
         ${INPUTDATA}/poupees_I2.lum
         ${TEMP}/ioImageFileReaderI2_LUM2LUM.lum )
 
+# -------            otb::MWImageIO   ------------------------------
+# CanRead()
+ADD_TEST(ioTuMWImageIOCanReadIMG ${IO_TESTS1} otbMWImageIOTestCanRead
+        ${BASELINE}/QB_Toulouse_Ortho_PAN.img)
+
+ADD_TEST(ioTuMWImageIOCanReadMW ${IO_TESTS1} otbMWImageIOTestCanRead
+        ${BASELINE}/QB_Toulouse_Ortho_PAN.mw)
+      
+      
+ADD_TEST(ioTvImageFileReaderMW2TIFIMG ${IO_TESTS1} 
+  --compare-image ${TOL}        ${BASELINE}/QB_Toulouse_Ortho_PAN.img
+                                ${TEMP}/ioImageFileReaderMW2TIF.tif
+        otbImageFileReaderTestFloat
+        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+        ${TEMP}/ioImageFileReaderMW2TIF.tif )      
+
+ADD_TEST(ioTvImageFileReaderMW2TIFMW ${IO_TESTS1} 
+  --compare-image ${TOL}        ${BASELINE}/QB_Toulouse_Ortho_PAN.mw
+                                ${TEMP}/ioImageFileReaderMW2TIF.tif
+        otbImageFileReaderTestFloat
+        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+        ${TEMP}/ioImageFileReaderMW2TIF.tif )      
+
+      
+
+# CanWrite()
+ADD_TEST(ioTuMWImageIOCanWrite ${IO_TESTS1} otbMWImageIOTestCanWrite
+        ${TEMP}/QB_Toulouse_Ortho_PAN.mw)
+
+ADD_TEST(ioTvImageFileReaderTIF2MW ${IO_TESTS1} 
+  --compare-image ${TOL}        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+                                ${TEMP}/ioImageFileReaderTIF2MW.mw
+        otbImageFileReaderTestFloat
+        ${BASELINE}/QB_Toulouse_Ortho_PAN.mw
+        ${TEMP}/ioImageFileReaderTIF2MW.mw )      
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTests2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1555,7 +1590,10 @@ SET(BasicIO_SRCS1
 otbImageFileReaderERS.cxx
 otbLUMImageIOTestCanRead.cxx
 otbLUMImageIOTestCanWrite.cxx
+otbMWImageIOTestCanRead.cxx
+otbMWImageIOTestCanWrite.cxx
 otbImageFileReaderTest.cxx
+otbImageFileReaderTestFloat.cxx
 otbShortImageIOTest.cxx
 )
 SET(BasicIO_SRCS2

@@ -23,7 +23,7 @@
 namespace otb
 {
 /** \class ZoomableImageWidget
- * \brief 
+ * \brief Widget for the zoom window in viewer.
  *
  */
 template <class TPixel>

@@ -25,7 +25,11 @@
 
 namespace otb
 {
-
+  /** 
+   *\class LineCorrelationDetectorImageFilter
+   * \brief To be documented
+   *
+   */
 
 template <class TInputImage, 
 	  class TOutputImage,

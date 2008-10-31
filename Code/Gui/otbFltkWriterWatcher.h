@@ -18,70 +18,92 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFltkFilterWatcher_h
-#define __otbFltkFilterWatcher_h
+#ifndef __otbFltkWriterWatcher_h
+#define __otbFltkWriterWatcher_h
 
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Progress.H>
 
-#include "otbFilterWatcherBase.h"
+#include "otbWriterWatcherBase.h"
 
 namespace otb
 {
 
-/** \class FltkFilterWatcher
+/** \class FltkWriterWatcher
  *  \brief This class implements the progress mechanism
  *         on pipeline filtering execution
  *
  */
-  class ITK_EXPORT FltkFilterWatcher : public FilterWatcherBase
+  class ITK_EXPORT FltkWriterWatcher : public WriterWatcherBase
 {
 public:
   /** Classes that need access to filter's private data */
-  // friend class XMLFilterWatcher;
+  // friend class XMLWriterWatcher;
 
   /** Constructor. Takes a ProcessObject to monitor and an optional
    * comment string that is prepended to each event message. */
-  FltkFilterWatcher(itk::ProcessObject* process,
+  FltkWriterWatcher(itk::ProcessObject* process,
 		    int x, int y, int w,int h,
 		    const char *comment="");
   
   /** Destructor. */
-  virtual ~FltkFilterWatcher();
+  virtual ~FltkWriterWatcher();
 
 
   /** Callback method to show the EndEvent */
-  virtual void EndFilter()
+  virtual void EndWriter()
   {
     m_Window->hide();
   }
 
+  virtual void EndFilter(){}
+
 protected:
 
   /** Callback method to show the ProgressEvent */
-  virtual void ShowProgress()
+  virtual void ShowFilterProgress()
+  {
+    if (m_SourceProcess)
+      {
+	m_FilterProgress->value(m_SourceProcess->GetProgress());
+	Fl::check();
+      }
+  }
+
+ /** Callback method to show the ProgressEvent */
+  virtual void ShowWriterProgress()
   {
     if (m_Process)
       {
-	m_Progress->value(m_Process->GetProgress());
+	m_WriterProgress->value(m_Process->GetProgress());
 	Fl::check();
       }
   }
 
   /** Callback method to show the StartEvent */
+  virtual void StartWriter()
+  {
+    m_Window->show();
+    m_FilterProgress->show();
+    m_WriterProgress->show();
+  }
+
+
+ /** Callback method to show the StartEvent */
   virtual void StartFilter()
   {
     m_Window->show();
-    m_Progress->show();
+    m_FilterProgress->show();
+    m_WriterProgress->show();
   }
-
  
 
 private:
   
   Fl_Window * m_Window;
-  Fl_Progress * m_Progress;
+  Fl_Progress * m_WriterProgress;
+  Fl_Progress * m_FilterProgress;
 };
 
 } // end namespace otb

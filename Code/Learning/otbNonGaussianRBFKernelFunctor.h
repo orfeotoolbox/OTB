@@ -22,24 +22,25 @@
 
 #include "svm.h"
 
+//FIXME: shouldn't it be in the Functor namespace?
 namespace otb
 {
-
+  /** \class NonGaussianRBFKernelFunctor
+   * \brief Performs an RBF kernel evaluation that better suit sample distribution with high Kurtosis.
+   *
+   * It is of kind 
+   * $\exp\left( - \gamma \sum_i | x_i^\alpha - y_i^\alpha |^\beta \right)$
+   * where $0 \leqslant \alpha \leqslant 1$ and 
+   * $0 \leqslant \beta \leqslant 2$.
+   *
+   * Variables to be instanciated (through \code SetValue \endcode) are:
+   * Alpha (def=1), Beta (def=2) and Gamma (def 1.0).
+   * */
 class NonGaussianRBFKernelFunctor
 		: public GenericKernelFunctorBase
 {
 public:
-	/** Non Gaussian RBF.
-	 * Performs an RBF kernel evaluation that better suit sample distribution
-	 * with high Kurtosis.
-	 * It is of kind 
-	 * $\exp\left( - \gamma \sum_i | x_i^\alpha - y_i^\alpha |^\beta \right)$
-	 * where $0 \leqslant \alpha \leqslant 1$ and 
-	 * $0 \leqslant \beta \leqslant 2$.
-	 *
-	 * Variables to be instanciated (through \code SetValue \endcode) are:
-	 * Alpha (def=1), Beta (def=2) and Gamma (def 1.0).
-	 * */
+
 	double operator() ( const svm_node * x, const svm_node * y,
 						const svm_parameter & param ) const;
 	
