@@ -25,6 +25,10 @@
 
 namespace otb {
 
+  /** \class CumulantsForEdgeworth
+   * \brief Helper class for KullbackLeiblerDistanceImageFilter. Please refer to KullbackLeiblerDistanceImageFilter.
+   *
+   */
 template < class TInput >
 class CumulantsForEdgeworth 
 {
@@ -59,7 +63,10 @@ class CumulantsForEdgeworth
 
 
 namespace Functor {  
-
+  /** \class KullbackLeiblerDistance
+   * \brief Functor for KullbackLeiblerDistanceImageFilter. Please refer to KullbackLeiblerDistanceImageFilter.
+   *
+   */
 	template < class TInput1, class TInput2, class TOutput >
 	class KullbackLeiblerDistance
 	{

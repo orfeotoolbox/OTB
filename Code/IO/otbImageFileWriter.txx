@@ -120,6 +120,8 @@ ImageFileWriter<TInputImage,toto>
     throw e;
     return;
     }
+    // Notify start event observers
+  this->InvokeEvent( itk::StartEvent() );
 
   // NOTE: this const_cast<> is due to the lack of const-correctness
   // of the ProcessObject.
@@ -179,16 +181,18 @@ ImageFileWriter<TInputImage,toto>
     {
     this->GetImageIO()->SetMetaDataDictionary(input->GetMetaDataDictionary());
     }
-  // Notify start event observers
-  this->InvokeEvent( itk::StartEvent() );
 
 //otbMsgDevMacro( << this->GetFileName() );
 //  this->GetImageIO()->SetFileName( this->GetFileName() );
 //  this->GetImageIO()->WriteImageInformation();
   
 
+  this->UpdateProgress(0.);
+
   // Actually do something
   this->GenerateData();
+
+  this->UpdateProgress(1.);
   
   // Notify end event observers
   this->InvokeEvent( itk::EndEvent() );

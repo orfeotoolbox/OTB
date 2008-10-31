@@ -31,7 +31,7 @@
 namespace otb
 {
 /** \class ImageWidgetPolygonForm
- * \brief 
+   * \brief Widget to draw polygons on the viewer
  *
  */
 template<class TValue = double>

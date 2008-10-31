@@ -9,36 +9,37 @@
 
 #include "otbGaussianModelComponent.h"
 
-/** \class SEMClassifier
- *  \brief This class implements the Stochastic Expectation 
- *  Maximization algorithm to perform an estimation of a mixture model. 
- *
- * The first template argument is the type of the target sample
- * data. This estimator expects one or more model component objects 
- * of the classes derived from the ModelComponentBase. The actual 
- * component (or module) parameters are updated by each component. 
- * Users can think this class as a strategy or a integration point 
- * for the SEM procedure. 
- *
- * The number of classes (SetNumberOfClasses), the initial 
- * proportion (SetInitialProportions), the input sample (SetSample), 
- * the model components (AddComponent), and the maximum iteration 
- * (SetMaximumIteration) are required. The SEM procedure terminates 
- * when the current iteration reaches the maximum iteration or the model 
- * parameters converge.
- *
- * The difference from ExpectationMaximizationMixtureModelEstimator is 
- * that SEMClassifier include the maximum a posteriori decition on each 
- * sample. The class is to be seen as a classification and not an estimator.
- *
- * <b>Recent API changes:</b>
- * N/A
- * 
- * \sa ModelComponentBase, GaussianModelComponent
- */
+
 
 namespace otb {
-
+  
+/** \class SEMClassifier
+   *  \brief This class implements the Stochastic Expectation 
+   *  Maximization algorithm to perform an estimation of a mixture model. 
+   *
+   * The first template argument is the type of the target sample
+   * data. This estimator expects one or more model component objects 
+   * of the classes derived from the ModelComponentBase. The actual 
+   * component (or module) parameters are updated by each component. 
+   * Users can think this class as a strategy or a integration point 
+   * for the SEM procedure. 
+   *
+   * The number of classes (SetNumberOfClasses), the initial 
+   * proportion (SetInitialProportions), the input sample (SetSample), 
+   * the model components (AddComponent), and the maximum iteration 
+   * (SetMaximumIteration) are required. The SEM procedure terminates 
+   * when the current iteration reaches the maximum iteration or the model 
+   * parameters converge.
+   *
+   * The difference from ExpectationMaximizationMixtureModelEstimator is 
+   * that SEMClassifier include the maximum a posteriori decition on each 
+   * sample. The class is to be seen as a classification and not an estimator.
+   *
+   * <b>Recent API changes:</b>
+   * N/A
+   * 
+   * \sa ModelComponentBase, GaussianModelComponent
+ */
 template< class TInputImage, class TOutputImage >
 class ITK_EXPORT SEMClassifier 
   : public itk::Statistics::SampleClassifier< 

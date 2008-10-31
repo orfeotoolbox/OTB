@@ -16,23 +16,24 @@
 
 =========================================================================*/
 
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
-#include <iostream>
-#include "otbTestMain.h" 
 
-void RegisterTests()
+#include "otbMWImageIO.h"
+#include "itkExceptionObject.h"
+#include <iostream>
+
+int otbMWImageIOTestCanRead(int argc, char* argv[])
 {
-REGISTER_TEST(otbGenericInterpolateImageFunctionNew);
-REGISTER_TEST(otbMirrorBoundaryConditionTest);
-REGISTER_TEST(otbStandardFilterWatcherNew);
-REGISTER_TEST(otbDataNodeTest);
-REGISTER_TEST(otbVectorDataNew);
-REGISTER_TEST(otbVectorData);
-REGISTER_TEST(otbShiftScaleImageAdaptorNew);
-REGISTER_TEST(otbShiftScaleImageAdaptor);
-REGISTER_TEST(otbStandardWriterWatcher);
+  otb::MWImageIO::Pointer lMWImageIO = otb::MWImageIO::New();
+  bool lCanRead = lMWImageIO->CanReadFile(argv[1]);
+  if ( lCanRead == false)
+    {
+      std::cerr << "Error otb::MWImageIO : impossible to read MW image "<<argv[1]<<"."<<std::endl;
+      return EXIT_FAILURE;
+    }
+
+  
+  return EXIT_SUCCESS;
 }

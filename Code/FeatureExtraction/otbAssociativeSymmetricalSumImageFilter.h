@@ -35,8 +35,13 @@ namespace otb
  * 
  * 
  */
-namespace Functor {  
 
+
+namespace Functor 
+{  
+  /** \class AssociativeSymmetricalSum
+   * \brief Functor used with the AssociativeSymmetricalSumImageFilter.
+   */
 template< class TInput1, class TInput2, class TOutput>
 class ITK_EXPORT AssociativeSymmetricalSum
 {

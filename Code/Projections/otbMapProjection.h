@@ -36,7 +36,7 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
   
-  /** \class otbMapProjection
+  /** \class MapProjection
    *  \brief This is the base class for all geographic projections (UTM, Lambert, ...)
    * 
    * All derived class assume that the latitude and longitude are given according to the 

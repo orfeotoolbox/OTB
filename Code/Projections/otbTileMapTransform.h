@@ -37,7 +37,7 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
   
-  /** \class otbTileMapTransform
+  /** \class TileMapTransform
    *  \brief to do
    **/
   

@@ -27,41 +27,10 @@
 namespace otb
 {
 
-/** \class otbPolarimetricSynthesisFilter
+/** \class MultiChannelsPolarimetricSynthesisFilter
  * \brief 
  *
- * This class compute the polarimetric synthesis from a radar vector image,
- * depening on the polarimetric architecture :
- * \begin{enumerate}
- *    \item HH_HV : two channels are available: $S_{HH}$ and $S_{HV}$. 
- *                  Emit polarisation is fixed to horizontal orientation: $\psi_{i}=0$ and $\chi_{i}=0$.
- *    \item VV_VH : two channels are available: $S_{VV}$ and $S_{VH}$.
- *                  Emit polarisation is fixed to vertical orientation: $\psi_{i}=90°$ and $\chi_{i}=0$.
- *    \item HH_HV_VV : three channels are available: $S_{HH}$, $S_{HV}$ and $S_{VV}$. 
- *                     we make the assumption that cross polarisation are reciprocal ($S_{HV} =  S_{VH}$).
- *    \item HH_HV_VH_VV: four channels are available $S_{HH}$, $S_{HV}$, $S_{VH}$ and $S_{VV}$.
- * \end{enumerate}
  * 
- * \begin{enumerate}
- *    \item emissionH : if two images are contained into the vector, emissionH enables to determine that
- *                      the type of architecture is HH_HV.
- *    \item emissionV : In the same way, with onlyt two images emissionV enables to determine that the type
- *                      of architecture is VH_VV. 
- * \end{enumerate}
- *
- * To resolve the synthesis, four parameters are required: $\psi_{i}$ , $\chi_{i}$, $\psi_{r}$ and $\chi_{r}$. 
- * These parameters depend on the polarimetric architecture describe below.
- * 
- * The result of the synthesis is a scalar image. Three modes are available:
- * \begin{enumerate}
- *     \item none: set the four parameters;
- *     \item co: $\psi_{r} = \psi_{i}$ and $\chi_{r} = \chi_{i}$
- *     \item cross: $\psi_{r} = \psi_{i} + 90°$ and $\chi_{r} = -\chi_{i}$ 
- * \end{enumerate}
- *
- * This class is parameterized over the type of the input images and
- * the type of the output image.  It is also parameterized by the
- * operation to be applied, using a Functor style.  
  * 
  */
 

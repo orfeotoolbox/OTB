@@ -26,5 +26,6 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbFltkFilterWatcherNew);
+REGISTER_TEST(otbFltkFilterWatcher);
+REGISTER_TEST(otbFltkWriterWatcher);
 }
