@@ -34,7 +34,7 @@
 // Software Guide : BeginLatex
 //
 // This example demonstrates the use of the \doxygen{otb}{NCCRegistrationFilter}. This filter performs deformation estimation
-// by optimising a PDE based on correlation. This use the finite difference solver hierarchy.
+// by optimising a PDE based on the normalized correlation coefficient. It uses the finite difference solver hierarchy.
 //
 // The first step toward the use of these filters is to include the proper header files.
 //
@@ -107,8 +107,9 @@ int main(int argc, char** argv )
 
   // Software Guide : BeginLatex
   //
-  // To make the correlation possible and to avoid some local minima the first required step is
-  // to blur the input images. This is done using the \doxygen{itk}{RecursiveGaussianImageFilter}:
+  // To make the correlation estimation more robust, the first
+  // required step is to blur the input images. This is done using the
+  // \doxygen{itk}{RecursiveGaussianImageFilter}:
   //
   // Software Guide : EndLatex
   
@@ -151,7 +152,7 @@ int main(int argc, char** argv )
 
   // Software Guide : BeginLatex
   //
-  // Few parameters need to be specified to the NCCRegistrationFilter:
+  // Some parameters need to be specified to the NCCRegistrationFilter:
   // \begin{itemize}
   // \item The area where the search is performed. This area is defined by its radius:
   //
@@ -172,7 +173,7 @@ int main(int argc, char** argv )
   
   // Software Guide : BeginLatex
   //
-  // \item The number of iteration for the PDE resolution:
+  // \item The number of iterations for the PDE resolution:
   //
   // Software Guide : EndLatex
   
@@ -184,9 +185,11 @@ int main(int argc, char** argv )
   // Software Guide : BeginLatex
   //
   // \end{itemize}
-  // The execution of the NCCRegistrationFilter will be triggered by the \code{Update()}
-  // call on the writer at the end of the pipeline. Make sure to use a 
-  // \doxygen{otb}{StreamingImageFileWriter} if you want to benefit from the streaming features.
+  // The execution of the NCCRegistrationFilter will be triggered by
+  // the \code{Update()} call on the writer at the end of the
+  // pipeline. Make sure to use a
+  // \doxygen{otb}{StreamingImageFileWriter} if you want to benefit
+  // from the streaming features.
   //
   // Software Guide : EndLatex
   
@@ -241,7 +244,8 @@ int main(int argc, char** argv )
 
   // Software Guide : BeginLatex
   //
-  // Figure~\ref{fig:NCCRegistrationFilterOUTPUT} shows the result of applying.
+  // Figure~\ref{fig:NCCRegistrationFilterOUTPUT} shows the result of
+  // applying the disparity map estimation.
   //
   // \begin{figure} 
   // \center
