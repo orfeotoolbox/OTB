@@ -113,7 +113,7 @@ int main( int argc, char* argv[] )
   typedef otb::VectorImage<double, 2>     VectorImageType;
   typedef otb::ImageFileReader<ImageType>  ReaderType;
   typedef otb::ImageFileReader<VectorImageType>  ReaderVectorType;
-  typedef otb::VectorImage<unsigned int, 2>     VectorIntImageType;
+  typedef otb::VectorImage<unsigned short int, 2>     VectorIntImageType;
  
 					
   ReaderVectorType::Pointer     	readerXS=ReaderVectorType::New();
