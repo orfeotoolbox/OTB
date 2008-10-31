@@ -113,6 +113,17 @@ namespace otb
   ::GenerateData()
       {
         
+        //Check if size is correct
+        typename InternalImageType::SizeType sizePan;
+        typename InternalVectorImageType::SizeType sizeXs;
+        sizePan = this->GetPanInput()->GetLargestPossibleRegion().GetSize();
+        sizeXs = this->GetXsInput()->GetLargestPossibleRegion().GetSize();
+        if ((sizePan[0] != sizeXs[0]) || (sizePan[1] != sizeXs[1]))
+        {
+          itkExceptionMacro(<<"SimpleRcsPanSharpeningFusionImageFilter: Wrong Pan/Xs size");
+        }
+      
+        //Process the fusion
         m_ConvolutionFilter->SetInput( this->GetPanInput() );
         m_ConvolutionFilter->SetRadius( this->m_Radius); 
         m_ConvolutionFilter->SetFilter( this->m_Filter);
