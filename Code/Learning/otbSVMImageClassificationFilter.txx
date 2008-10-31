@@ -18,6 +18,7 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef __otbSVMImageClassificationFilter_txx
 #define __otbSVMImageClassificationFilter_txx
 
+#include "itkProgressReporter.h"
 #include "otbSVMImageClassificationFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkNumericTraits.h"
@@ -73,6 +74,9 @@ void
 SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskImage>
 ::ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, int threadId)
 {
+  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
+  
+
   InputImageConstPointerType inputPtr     = this->GetInput();
   MaskImageConstPointerType inputMaskPtr  = this->GetInputMask();
   OutputImagePointerType     outputPtr    = this->GetOutput();
@@ -81,9 +85,14 @@ SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskI
   typedef itk::ImageRegionConstIterator<MaskImageType> MaskIteratorType;
   typedef itk::ImageRegionIterator<OutputImageType> OutputIteratorType;
   
-  ListSamplePointerType listSample = ListSampleType::New();
+  SVMFunctorType svmFunctor;
+  svmFunctor.SetNumberOfComponentsPerSample(inputPtr->GetNumberOfComponentsPerPixel());
+  svmFunctor.SetModel(m_Model->GetModel());
+  svmFunctor.AllocateProblem();
+  
   
   InputIteratorType inIt(inputPtr,outputRegionForThread);
+  inIt.GoToBegin();
 
   MaskIteratorType maskIt;
   if(inputMaskPtr)
@@ -92,12 +101,12 @@ SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskI
       maskIt.GoToBegin();
     }
     
-  unsigned int sampleSize = std::min(inputPtr->GetNumberOfComponentsPerPixel(),
-				     VMaxSampleDimension);
+   OutputIteratorType outIt(outputPtr,outputRegionForThread);
+   outIt.GoToBegin();
 
   bool validPoint = true;
 
-  for(inIt.GoToBegin();!inIt.IsAtEnd();++inIt)
+  while(!outIt.IsAtEnd() && !inIt.IsAtEnd())
     {
       if(inputMaskPtr)
 	{
@@ -106,57 +115,16 @@ SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskI
 	}
       if(validPoint)
 	{
-	  MeasurementVectorType sample;
-	  sample.Fill(itk::NumericTraits<ValueType>::ZeroValue());
-	  for(unsigned int i=0;i<sampleSize;i++)
-	    {
-	      sample[i]=inIt.Get()[i];
-	    }
-	  listSample->PushBack(sample);
+	  outIt.Set(svmFunctor(inIt.Get()));
 	}
+      else
+	{
+	  outIt.Set(m_DefaultLabel);
+	}
+      progress.CompletedPixel();
+      ++inIt;
+      ++outIt;
     }
-  ClassifierPointerType classifier =ClassifierType::New();
-  classifier->SetModel(m_Model);
-  classifier->SetNumberOfClasses(m_Model->GetNumberOfClasses());
-  classifier->SetSample(listSample);
-  classifier->Update();
-  
-  typename ClassifierType::OutputType::Pointer membershipSample = classifier->GetOutput();
-  typename ClassifierType::OutputType::ConstIterator sampleIter = membershipSample->Begin();
-  typename ClassifierType::OutputType::ConstIterator sampleLast = membershipSample->End();
-  
-  OutputIteratorType outIt(outputPtr,outputRegionForThread);
-  
-  outIt.GoToBegin();
-
-  while(!outIt.IsAtEnd()&&(sampleIter!=sampleLast))
-    {
-      outIt.Set(m_DefaultLabel);
-       ++outIt;
-    }
-
-  outIt.GoToBegin();
-
-   if(inputMaskPtr)
-    {
-      maskIt.GoToBegin();
-    }
-   validPoint = true;
-
-   while(!outIt.IsAtEnd()&&(sampleIter!=sampleLast))
-     {
-       if(inputMaskPtr)
-	 {
-	   validPoint = maskIt.Get()>0;
-	   ++maskIt;
-	 }
-       if(validPoint)
-	 {
-	   outIt.Set(sampleIter.GetClassLabel());
-	   ++sampleIter;
-	 }
-       ++outIt;
-     }
 }
 /**
  * PrintSelf Method

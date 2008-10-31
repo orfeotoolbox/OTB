@@ -18,11 +18,8 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef __otbSVMImageClassificationFilter_h
 #define __otbSVMImageClassificationFilter_h
 
-#include "otbSVMClassifier.h"
 #include "itkInPlaceImageFilter.h"
-#include "itkFixedArray.h"
-#include "itkListSample.h"
-#include "otbSVMClassifier.h"
+#include "otbSVMClassifierFunctor.h"
 
 namespace otb
 {
@@ -63,6 +60,7 @@ namespace otb
 
     typedef TInputImage                                InputImageType;
     typedef typename InputImageType::ConstPointer      InputImageConstPointerType;
+    typedef typename InputImageType::PixelType         PixelType;
     typedef typename InputImageType::InternalPixelType ValueType;
 
     typedef TMaskImage                                 MaskImageType;
@@ -74,13 +72,10 @@ namespace otb
     typedef typename OutputImageType::RegionType       OutputImageRegionType;
     typedef typename OutputImageType::PixelType        LabelType;
 
-    typedef itk::FixedArray<ValueType,VMaxSampleDimension>     MeasurementVectorType;
-    typedef itk::Statistics::ListSample<MeasurementVectorType> ListSampleType;
-    typedef typename ListSampleType::Pointer                   ListSamplePointerType;
-    typedef otb::SVMClassifier<ListSampleType, LabelType>      ClassifierType;
-    typedef typename ClassifierType::Pointer                   ClassifierPointerType;
-    typedef SVMModel< ValueType, LabelType >                   ModelType;
-    typedef typename ModelType::Pointer                        ModelPointerType;
+    typedef SVMModel< ValueType, LabelType >           ModelType;
+    typedef typename ModelType::Pointer                ModelPointerType;
+
+    typedef Functor::SVMClassifierFunctor<PixelType,LabelType> SVMFunctorType;
     
     /** Set/Get the svm model */
     itkSetObjectMacro(Model,ModelType);
@@ -123,8 +118,6 @@ namespace otb
     ModelPointerType m_Model;
     /** Default label for invalid pixels (when using a mask) */
     LabelType m_DefaultLabel;
-
-
   };
 }// End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
