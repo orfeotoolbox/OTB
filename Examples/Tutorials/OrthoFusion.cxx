@@ -72,10 +72,11 @@ int main( int argc, char* argv[] )
   if(argc!=12)
   {
   std::cout << argv[0] <<" <input_pan_filename> <input_xs_filename> ";
-  std::cout << "<output_filename> <utm zone> <hemisphere N/S> <x_ground_upper_left_corner> ";
-  std::cout << "<y_ground_upper_left_corner> <x_Size> <y_Size> ";
+  std::cout << "<output_filename> <utm zone> <hemisphere N/S>  ";
+  std::cout << "<x_ground_upper_left_corner> <y_ground_upper_left_corner> ";
+  std::cout << "<x_Size> <y_Size> ";
   std::cout << "<x_groundSamplingDistance> ";
-  std::cout << "<y_groundSamplingDistance (should be negative since origin is upper left)>" 
+  std::cout << "<y_groundSamplingDistance (negative since origin is upper left)>" 
         << std::endl;
 
     return EXIT_FAILURE;
