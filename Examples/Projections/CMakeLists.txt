@@ -35,6 +35,7 @@ SET(EXE_TESTS ${CXX_TEST_PATH}/otbProjectionsExamplesTests)
 
 SET(TOL 0.0)
 
+IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(OrthoRectificationExampleTest ${EXE_TESTS}
 	--compare-image ${TOL}
 	${BASELINE}/panOrthoToul.tif
@@ -70,6 +71,7 @@ ADD_TEST(OrthoRectificationExampleXSTest ${EXE_TESTS}
 	-0.6
 	
 )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_EXECUTABLE(otbProjectionsExamplesTests otbProjectionsExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbProjectionsExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKNumerics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion OTBProjections)
