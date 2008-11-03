@@ -46,6 +46,12 @@ public:
   FltkWriterWatcher(itk::ProcessObject* process,
 		    int x, int y, int w,int h,
 		    const char *comment="");
+
+  FltkWriterWatcher(itk::ProcessObject* process,
+		    itk::ProcessObject * source,
+		    int x, int y, int w,int h,
+		    const char *comment="");
+
   
   /** Destructor. */
   virtual ~FltkWriterWatcher();
@@ -98,6 +104,7 @@ protected:
     m_WriterProgress->show();
   }
  
+  void BuildGUI(int x, int y, int w, int h,const char * comment);
 
 private:
   

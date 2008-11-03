@@ -89,6 +89,60 @@ WriterWatcherBase
 }
 
 WriterWatcherBase
+::WriterWatcherBase(itk::ProcessObject* process, itk::ProcessObject * source,
+		    const char *comment)
+{
+  // Initialize state
+  m_Process = process;
+  m_Comment = comment;
+  
+  // Create a series of commands
+  m_StartWriterCommand = CommandType::New();
+  m_EndWriterCommand = CommandType::New();
+  m_ProgressWriterCommand = CommandType::New();
+  m_StartFilterCommand = CommandType::New();
+  m_EndFilterCommand = CommandType::New();
+  m_ProgressFilterCommand = CommandType::New();
+    
+  // Assign the callbacks
+  m_StartFilterCommand->SetCallbackFunction(this,
+                                        &WriterWatcherBase::StartFilter);
+  m_EndFilterCommand->SetCallbackFunction(this,
+                                        &WriterWatcherBase::EndFilter);
+  m_ProgressFilterCommand->SetCallbackFunction(this,
+                                        &WriterWatcherBase::ShowFilterProgress);
+  m_StartWriterCommand->SetCallbackFunction(this,
+                                        &WriterWatcherBase::StartWriter);
+  m_EndWriterCommand->SetCallbackFunction(this,
+                                        &WriterWatcherBase::EndWriter);
+  m_ProgressWriterCommand->SetCallbackFunction(this,
+                                        &WriterWatcherBase::ShowWriterProgress);
+  
+  // Add the commands as observers
+  m_StartWriterTag = m_Process->AddObserver(itk::StartEvent(),
+				      m_StartWriterCommand);
+  
+  m_EndWriterTag = m_Process->AddObserver(itk::EndEvent(),
+				    m_EndWriterCommand);
+  
+  m_ProgressWriterTag = m_Process->AddObserver(itk::ProgressEvent(),
+					 m_ProgressWriterCommand);
+
+  m_SourceProcess = source;
+  
+  // Add the commands as observers
+  m_StartFilterTag = m_SourceProcess->AddObserver(itk::StartEvent(),
+						  m_StartFilterCommand);
+  
+  m_EndFilterTag = m_SourceProcess->AddObserver(itk::EndEvent(),
+						m_EndFilterCommand);
+  
+  m_ProgressFilterTag = m_SourceProcess->AddObserver(itk::ProgressEvent(),
+						     m_ProgressFilterCommand);
+}
+
+
+WriterWatcherBase
 ::WriterWatcherBase( const WriterWatcherBase& watch)
 {
   // Remove any observers we have on the old process object

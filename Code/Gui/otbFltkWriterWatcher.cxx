@@ -29,10 +29,27 @@ FltkWriterWatcher
 		    const char *comment)
   : WriterWatcherBase(process, comment)
 {
-  m_Window = new Fl_Window(x,y,w+10,h+15);
+  this->BuildGUI(x,y,w,h,comment);
+}
+
+
+FltkWriterWatcher
+::FltkWriterWatcher(itk::ProcessObject* process,
+		    itk::ProcessObject* source,
+		    int x, int y, int w, int h,
+		    const char *comment)
+  : WriterWatcherBase(process,source,comment)
+{
+  this->BuildGUI(x,y,w,h,comment);
+}
+
+
+void FltkWriterWatcher
+::BuildGUI(int x, int y, int w, int h,const char * comment)
+{
+   m_Window = new Fl_Window(x,y,w+10,h+15);
   m_Window->label(m_Comment.c_str());
   m_Window->begin();
-  
   m_FilterProgress = new Fl_Progress(5,5,w,h/2);
   m_FilterProgress->selection_color(FL_DARK_BLUE);
   m_FilterProgress->minimum(0);
@@ -47,7 +64,6 @@ FltkWriterWatcher
   m_WriterProgress->label("writing");
   m_WriterProgress->align(FL_ALIGN_INSIDE);
   m_Window->end();
-  
 }
 
 FltkWriterWatcher

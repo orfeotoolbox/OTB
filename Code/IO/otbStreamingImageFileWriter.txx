@@ -458,7 +458,9 @@ StreamingImageFileWriter<TInputImage>
    * piece, and copy the results into the output image.
    */
   otbMsgDebugMacro(<< "Number Of Stream Divisions : " << numDivisions);
-         
+
+  this->UpdateProgress(0);
+
   unsigned int piece;
   for (piece = 0;
        piece < numDivisions && !this->GetAbortGenerateData();
