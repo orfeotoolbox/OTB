@@ -91,25 +91,17 @@ int main(int argc, char* argv[])
   typedef otb::Image<CharPixelType, Dimension>    CharImageType;
   typedef otb::Image<RealPixelType, Dimension>    RealImageType;
 
-  typedef otb::ImageFileReader< CharImageType >  ReaderType;
-  typedef otb::ImageFileWriter< CharImageType >  WriterType;
-
-
-
-
   //  Software Guide : BeginLatex
   //
-  //  This filter operates on image of pixel type float. It is then necessary
-  //  to cast the type of the input images that are usually of integer type.
-  //  The \doxygen{itk}{CastImageFilter} is used here for that purpose. Its image 
-  //  template parameters are defined for casting from the input type to the
-  //  float type using for processing.
+  // As the Canny filter works with real values, we can instanciated the reader using
+  // an image with pixels as double. This does not imply anything on the real image 
+  // coding format which will be cast into double.
   //
   //  Software Guide : EndLatex
-
   // Software Guide : BeginCodeSnippet
-  typedef itk::CastImageFilter< CharImageType, RealImageType> CastToRealFilterType;
+  typedef otb::ImageFileReader< RealImageType >  ReaderType;
   // Software Guide : EndCodeSnippet
+  typedef otb::ImageFileWriter< CharImageType >  WriterType;
 
 
 
@@ -132,7 +124,6 @@ int main(int argc, char* argv[])
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  CastToRealFilterType::Pointer toReal = CastToRealFilterType::New();
   RescaleFilter::Pointer rescale = RescaleFilter::New();
 
   //Setting the ITK pipeline filter
@@ -146,9 +137,7 @@ int main(int argc, char* argv[])
   rescale->SetOutputMinimum(   0 );
   rescale->SetOutputMaximum( 255 );
 
-  toReal->SetInput( reader->GetOutput() );
-
-  cannyFilter->SetInput( toReal->GetOutput() );
+  cannyFilter->SetInput( reader->GetOutput() );
   cannyFilter->SetVariance( variance );
   rescale->SetInput( cannyFilter->GetOutput() );
   writer->SetInput( rescale->GetOutput() );

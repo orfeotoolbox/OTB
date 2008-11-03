@@ -59,6 +59,7 @@ namespace otb
     m_ThresholdPointSetFilter->SetUpperThreshold( m_UpperThreshold );
     m_ThresholdPointSetFilter->Update();
     m_PointSet = m_ThresholdPointSetFilter->GetOutput();
+    m_ObjectCount=0;
     
     // Iterate Point set
     typedef typename PointSetType::PointsContainer ContainerType;
@@ -76,7 +77,7 @@ namespace otb
  	index[0] = static_cast <int> (pCoordinate[0]);
  	index[1] = static_cast <int> (pCoordinate[1]);
  	if (outputImage->GetPixel(index) ==
-	    itk::NumericTraits<InputPixelType>::ZeroValue() )
+	    itk::NumericTraits<OutputPixelType>::ZeroValue() )
  	  {
 	    this->RegionGrowing(index);
 	    
@@ -85,12 +86,12 @@ namespace otb
 	    addImage->SetInput2(m_RegionGrowingFilter->GetOutput());
 	    addImage->Update();
 	    outputImage = addImage->GetOutput();
+            ++m_ObjectCount;
 	  }
  	++itList;
       }
     
     this->GraftOutput(outputImage);
-    
   }
   
   /** PrintSelf Method
@@ -105,7 +106,7 @@ namespace otb
     
     os << indent << "Seeds lower threshold: " << m_LowerThreshold << std::endl;
     os << indent << "Seeds upper threshold: " << m_UpperThreshold << std::endl;
-    
+    os << indent << "ObjectCount: "  << m_ObjectCount << std::endl;
     os << indent << m_RegionGrowingFilter << std::endl;
   }
 } // end namespace otb

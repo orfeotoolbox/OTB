@@ -55,7 +55,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbTransMercatorMapProjection.h"
 #include "otbSinusoidalMapProjection.h"
 #include "otbMollweidMapProjection.h"
-
+#include "otbSVY21MapProjection.h"
 
 namespace otb
 {
@@ -86,6 +86,8 @@ namespace otb
   typedef Lambert2EtenduProjection<FORWARD>                          Lambert2EtenduForwardProjection;	
   typedef Lambert93Projection<INVERSE>                               Lambert93InverseProjection;
   typedef Lambert93Projection<FORWARD>                               Lambert93ForwardProjection;
+  typedef SVY21MapProjection<INVERSE>                                SVY21InverseProjection;
+  typedef SVY21MapProjection<FORWARD>                                SVY21ForwardProjection;
   typedef MapProjection<ossimLlxyProjection,INVERSE>                 LlxyInverseProjection;
   typedef MapProjection<ossimLlxyProjection,FORWARD>                 LlxyForwardProjection;
   typedef MapProjection<ossimEquDistCylProjection,INVERSE>           EquDistCylInverseProjection;

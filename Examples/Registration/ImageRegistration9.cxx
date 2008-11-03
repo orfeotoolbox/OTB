@@ -415,7 +415,7 @@ int main( int argc, char *argv[] )
   // Software Guide : BeginCodeSnippet
   try 
     { 
-    registration->StartRegistration(); 
+    registration->Update(); 
     } 
   catch( itk::ExceptionObject & err ) 
     { 

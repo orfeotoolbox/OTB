@@ -177,6 +177,17 @@ class ImageWidgetBase
     /** Normalization function */
     unsigned char Normalize(PixelType value, unsigned int channelIndex);
 
+   /** Return the width and heigh of the displayed image (overloaded for scroll)*/
+   inline virtual int wDisplayed()
+   {
+    return this->w();
+   }
+
+   inline virtual int hDisplayed()
+   {
+    return this->h();
+   }
+
     // PURE VIRTUAL METHODS 
 
     // User is not supposed to be allowed to move the zoom in the generic implementation

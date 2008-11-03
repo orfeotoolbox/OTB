@@ -88,6 +88,10 @@ public:
   itkSetMacro(UseInternalPathValue,bool);
   itkBooleanMacro(UseInternalPathValue);
   
+  itkGetMacro(AddValue,bool);
+  itkSetMacro(AddValue,bool);
+  itkBooleanMacro(AddValue);
+
   itkSetMacro(PathValue,OutputImagePixelType);
   itkGetMacro(PathValue,OutputImagePixelType);
 
@@ -116,6 +120,8 @@ private:
   OutputImagePixelType m_PathValue; 
   /** If set to true, the algorithm try to use path internal metadatadictionnary value */
   bool m_UseInternalPathValue;
+
+  bool m_AddValue;
 };
 
 } // end namespace otb

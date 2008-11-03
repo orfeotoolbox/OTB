@@ -30,7 +30,7 @@ namespace otb
 {
 
 /** \class ImageKeywordlist
- * \brief Stockage/Conversion des MetaDonnees OSSIM
+ * \brief Storage and conversion for OSSIM metadata
  *
  * \sa ImageSeriesReader
  * \sa ImageIOBase

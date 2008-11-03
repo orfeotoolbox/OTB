@@ -81,11 +81,18 @@ namespace otb
       
       /** Get radius */
       const InputSizeType& GetRadius() const
-	{ return this->m_RegionGrowingFilter->GetRadius(); }
+      { 
+          return this->m_RegionGrowingFilter->GetRadius();
+      }
       
       /** Set radius */
       void SetRadius( const InputSizeType radius )
-	{ this->m_RegionGrowingFilter->SetRadius(radius); }
+      { 
+        this->m_RegionGrowingFilter->SetRadius(radius);
+        this->Modified();
+      }
+      
+
       
     protected:
       LabelizeNeighborhoodConnectedImageFilter();
@@ -108,6 +115,7 @@ namespace otb
       /** Intial replace value*/
       OutputPixelType m_ReplaceValue;
       
+
     }; // end class LabelizeconnectedThresholdImageFilter
   
 } // end namespace otb

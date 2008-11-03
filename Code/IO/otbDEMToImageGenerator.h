@@ -111,6 +111,10 @@ namespace otb
       SpacingType  m_OutputSpacing;
       SizeType m_OutputSize;
       PixelType m_DefaultUnknownValue;
+    
+    private:
+      DEMToImageGenerator(const Self&); //purposely not implemented
+      void operator=(const Self&); //purposely not implemented
     };
   
 } // namespace otb

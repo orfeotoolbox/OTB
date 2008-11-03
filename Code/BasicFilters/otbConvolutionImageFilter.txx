@@ -122,9 +122,9 @@ ConvolutionImageFilter< TInputImage, TOutputImage, TBoundaryCondition>
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
   for (fit=faceList.begin(); fit != faceList.end(); ++fit)
-    { 
+  { 
     bit = itk::ConstNeighborhoodIterator<InputImageType>(m_Radius,
-                                                    input, *fit);
+        input, *fit);
 
     it = itk::ImageRegionIterator<OutputImageType>(output, *fit);
     bit.OverrideBoundaryCondition(&nbc);
@@ -132,31 +132,30 @@ ConvolutionImageFilter< TInputImage, TOutputImage, TBoundaryCondition>
     unsigned int neighborhoodSize = bit.Size();
    
     while ( ! bit.IsAtEnd() )
+    {
+      sum = itk::NumericTraits<InputRealType>::Zero;
+      norm = itk::NumericTraits<InputRealType>::Zero;
+      for (i = 0; i < neighborhoodSize; ++i)
       {
-	sum = itk::NumericTraits<InputRealType>::Zero;
-	norm = itk::NumericTraits<InputRealType>::Zero;
-	for (i = 0; i < neighborhoodSize; ++i)
-	{
-	    sum += static_cast<InputRealType>( bit.GetPixel(i)*m_Filter(i) );
-	    norm += static_cast<InputRealType>( m_Filter(i) );
-	}
-	
-	// get the mean value
-        
-        if (m_NormalizeFilter)
-        {
-	  it.Set( static_cast<OutputPixelType>(sum / double(norm)) );
-        }
-        else
-        {
-          it.Set( static_cast<OutputPixelType>(sum));
-        }
-	
-	++bit;
-	++it;
-	progress.CompletedPixel();
+        sum += static_cast<InputRealType>( bit.GetPixel(i)*m_Filter(i) );
+        norm += static_cast<InputRealType>( m_Filter(i) );
       }
+	
+	    // get the mean value
+      if (m_NormalizeFilter)
+      {
+        it.Set( static_cast<OutputPixelType>(sum / double(norm)) );
+      }
+      else
+      {
+        it.Set( static_cast<OutputPixelType>(sum));
+      }
+	
+      ++bit;
+      ++it;
+      progress.CompletedPixel();
     }
+  }
 }
 
 /**

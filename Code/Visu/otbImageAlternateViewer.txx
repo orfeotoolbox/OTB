@@ -1128,6 +1128,7 @@ namespace otb
     
     //std::cout<<"Buffers merged and freed"<<std::endl;
   }
+  
   template <class TPixel>
   void
   ImageAlternateViewer<TPixel>
@@ -1136,32 +1137,63 @@ namespace otb
     itk::TimeProbe total;
     total.Start();
     if(buffer!=NULL)
-      {
+    {
 	// This enable negative raster pos
-	glRasterPos3d(0,0,0);
+      glRasterPos3d(0,0,0);
 	
-	double zoomOffsetX = 0;
-	double zoomOffsetY = 0;
+      double zoomOffsetX = 0;
+      double zoomOffsetY = 0;
 
-	zoomOffsetX = (1-m_OpenGlIsotropicZoom)*(static_cast<double>(m_DisplayExtent.GetSize()[0]/2)-static_cast<double>(region.GetIndex()[0]));
-	zoomOffsetY = (1-m_OpenGlIsotropicZoom)*( static_cast<double>(m_DisplayExtent.GetSize()[1]/2)-static_cast<double>(region.GetIndex()[1]));
+      zoomOffsetX = (1-m_OpenGlIsotropicZoom)*(static_cast<double>(m_DisplayExtent.GetSize()[0]/2)-static_cast<double>(region.GetIndex()[0]));
+      zoomOffsetY = (1-m_OpenGlIsotropicZoom)*( static_cast<double>(m_DisplayExtent.GetSize()[1]/2)-static_cast<double>(region.GetIndex()[1]));
 	
-	double movex = static_cast<double>(region.GetIndex()[0])+zoomOffsetX;
-	double movey = static_cast<double>(m_DisplayExtent.GetSize()[1])-static_cast<double>(region.GetIndex()[1])-zoomOffsetY;
-	glBitmap(0,0,0,0,movex,movey,NULL);
-	glPixelZoom(m_OpenGlIsotropicZoom,-m_OpenGlIsotropicZoom);
+      double movex = static_cast<double>(region.GetIndex()[0])+zoomOffsetX;
+      double movey = static_cast<double>(m_DisplayExtent.GetSize()[1])-static_cast<double>(region.GetIndex()[1])-zoomOffsetY;
+//       glBitmap(0,0,0,0,movex,movey,NULL);
+//       glPixelZoom(m_OpenGlIsotropicZoom,-m_OpenGlIsotropicZoom);
+// 
+// 
+// 	// display the image
+//       glDrawPixels(region.GetSize()[0],
+//                    region.GetSize()[1], 
+//                                   GL_RGB,
+//                                   GL_UNSIGNED_BYTE, 
+//                                   buffer);
+//       glEnd();
+      
+//       std::cout << "Region size: " << region.GetSize() << std::endl;
+//       std::cout << "DisplayExtent size: " << m_DisplayExtent.GetSize() << std::endl;
+//       std::cout << "zoomOffset: " << zoomOffsetX << " " << zoomOffsetY << std::endl;
+//       std::cout << "move: " << movex << " " << movey << std::endl;
+      
+      
+      glEnable(GL_TEXTURE_2D);
+      glColor4f(1.0,1.0,1.0,0.0);
+      GLuint texture;
+      glGenTextures(1, &texture);
+      glBindTexture(GL_TEXTURE_2D, texture);
+      glTexImage2D(GL_TEXTURE_2D, 0, 3, region.GetSize()[0], region.GetSize()[1], 0, GL_RGB, GL_UNSIGNED_BYTE, buffer);
+      glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);  // Nearest Filtering
+      glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);  // Nearest Filtering
+  
+      glBindTexture (GL_TEXTURE_2D, texture);
+      glBegin (GL_QUADS);
+//       glTexCoord2f (0.0, 1.0);  glVertex3f (-movex, -movey, 0.0);
+//       glTexCoord2f (1.0, 1.0);  glVertex3f (region.GetSize()[0]-movex, -movey, 0.0);
+//       glTexCoord2f (1.0, 0.0);  glVertex3f (region.GetSize()[0]-movex, region.GetSize()[1]-movey, 0.0);
+//       glTexCoord2f (0.0, 0.0);  glVertex3f (-movex, region.GetSize()[1]-movey, 0.0);
+      glTexCoord2f (0.0, 1.0);  glVertex3f (0.0, 0.0, 0.0);
+      glTexCoord2f (1.0, 1.0);  glVertex3f (region.GetSize()[0], 0.0, 0.0);
+      glTexCoord2f (1.0, 0.0);  glVertex3f (region.GetSize()[0], region.GetSize()[1], 0.0);
+      glTexCoord2f (0.0, 0.0);  glVertex3f (0.0, region.GetSize()[1], 0.0);
+      glEnd ();
 
-
-	// display the image
-	glDrawPixels(region.GetSize()[0],
-		     region.GetSize()[1], 
-		     GL_RGB,
-		     GL_UNSIGNED_BYTE, 
-		     buffer);
-	glEnd();
-	swap_buffers();
-	glFlush();
-      }
+      glDisable(GL_TEXTURE_2D);
+      
+      
+//       swap_buffers();
+//       glFlush();
+    }
     total.Stop();
   }
 
