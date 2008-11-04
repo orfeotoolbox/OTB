@@ -518,6 +518,56 @@ template<class TValue>
 }
 
 /**
+ * Lenght computation (difference with path is in the last addition)
+ */
+ template < class TValue>
+     double Polygon<TValue>
+  ::GetLength()
+{
+  double length = 0.0;
+  VertexListConstIteratorType it =  this->GetVertexList()->Begin();
+  
+  VertexType origin = it.Value();
+  if(this->GetVertexList()->Size()>1)
+  {
+
+
+    VertexType pt1 = it.Value();//just init, won't be used like that
+    VertexType pt2 = it.Value();
+    
+    it++;
+    while(it != this->GetVertexList()->End())
+    {
+      pt1=pt2;
+      pt2 = it.Value();
+      double accum=0.0;
+      for (int i=0; i<2; i++)
+      {
+        accum += (pt1[i]-pt2[i])*(pt1[i]-pt2[i]);
+      }
+      length += vcl_sqrt(accum);
+      it++;
+    }
+    
+    //Adding the last segment (between first and last point)
+    double accum=0.0;
+    for (int i=0; i<2; i++)
+    {
+      accum += (origin[i]-pt2[i])*(origin[i]-pt2[i]);
+    }
+    length += vcl_sqrt(accum);
+    
+  }
+  else //if there is strictly less than 2 points, length is 0
+  {
+    length = 0.0;
+  }
+  
+  return length;
+}
+
+
+/**
  * PrintSelf Method
  */
 template<class TValue>

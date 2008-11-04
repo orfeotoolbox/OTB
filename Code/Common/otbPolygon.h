@@ -127,7 +127,13 @@ class ITK_EXPORT Polygon
   * \return The surface.
   */
  double GetSurface();
-
+ 
+  /**
+  * Return the polygon length (perimeter).
+  * \return The length.
+  */
+ virtual double GetLength();
+ 
 protected:
   /** Constructor */
   Polygon() 

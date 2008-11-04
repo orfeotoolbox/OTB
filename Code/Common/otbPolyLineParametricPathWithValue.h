@@ -79,27 +79,31 @@ class ITK_EXPORT PolyLineParametricPathWithValue
    }
    return resp;
  }
+ 
+ /**
+  * Return the path length (perimeter).
+  * \return The length.
+  */
+ virtual double GetLength();
 
 protected:
   /** Constructor */
-  PolyLineParametricPathWithValue()
- {
-   itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
-   m_Key = "Value";
-   itk::EncapsulateMetaData<ValueType>(dict,m_Key,0);
- };
+  PolyLineParametricPathWithValue();
   /** Destructor */
   virtual ~PolyLineParametricPathWithValue() 
  { }
  /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
- {
-   Superclass::PrintSelf(os,indent);
- }
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
  private:
- PolyLineParametricPathWithValue(const Self&); //purposely not implemented
- void operator=(const Self&); //purposely not implemented
- std::string m_Key;
+  PolyLineParametricPathWithValue(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+  std::string m_Key;
 };
 }// End namespace otb
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbPolyLineParametricPathWithValue.txx"
+#endif
+
 #endif
