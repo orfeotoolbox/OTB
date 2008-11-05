@@ -281,14 +281,6 @@ namespace otb
       itkExceptionMacro(<<"GDAl read : empty image file name file.");
     }
   
-  // Recupre le nom r�el du fichier a ouvrir
-/*  std::string lFileNameGdal;
-    bool found = GetGdalReadImageFileName(m_FileName.c_str(),lFileNameGdal);
-    if( found == false )
-    {
-    itkExceptionMacro(<<"The file "<<m_FileName<<" is not supported by GDAL !!!");
-  }
-*/
     std::string lFileNameGdal = m_FileName;
 
   // Init GDAL parameters 
@@ -327,6 +319,33 @@ namespace otb
     
     // Get Number of Bands
       m_NbBands = m_poDataset->GetRasterCount();
+      if(m_NbBands==0)
+      {
+//FIXME this happen in the case of a hdf file with SUBDATASETS
+// in this situation, at least the first dataset should be open (ideally all in an imagelist) 
+//         char** papszMetadata;
+//         papszMetadata = m_poDataset->GetMetadata("SUBDATASETS");
+//         if( CSLCount(papszMetadata) > 0 )
+//         {
+//           std::string key;
+//           itk::MetaDataDictionary & dico = this->GetMetaDataDictionary();
+//           for( int cpt = 0; papszMetadata[cpt] != NULL; cpt++ )
+//           {
+//             std::cout << papszMetadata[cpt] << std::endl;
+//               ::itk::OStringStream lStream;
+//               lStream << MetaDataKey::m_SubMetadataKey << cpt;
+//               key = lStream.str(); 
+//             
+//               itk::EncapsulateMetaData<std::string>(dico, key, 
+//                   static_cast<std::string>( papszMetadata[cpt] ) );
+//           }
+//           std::cout << dico[dico.GetKeys()[0]] << std::endl;
+//           std::cout << key << std::endl;
+//         }
+
+        itkExceptionMacro(<<"Zero band found in the dataset");
+        return;
+      }
       this->SetNumberOfComponents(m_NbBands);
    
       otbMsgDevMacro(<<"NbBands : "<<m_NbBands);
@@ -344,7 +363,7 @@ namespace otb
       m_poBands = new GDALRasterBand * [m_NbBands];
       if(m_poBands==NULL)
       {
-        itkExceptionMacro(<<"Erreur d'allocation memoire du 'rasterBands'");
+        itkExceptionMacro(<<"Memory allocation error for the 'rasterBands'");
         return;
       }
       for(i=0 ; i<m_NbBands ; i++)
@@ -389,7 +408,7 @@ namespace otb
       }
       else
       {
-        itkExceptionMacro(<<"Type de codage des pixels non reconu");
+        itkExceptionMacro(<<"Pixel type unknown");
       }
 
 
