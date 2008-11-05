@@ -27,8 +27,8 @@ namespace itk {
 /*
  * Default constructor
  */
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType>
-MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType>
+template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType, class TInternalImageType>
+MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType,TInternalImageType>
 ::MultiResolutionPDEDeformableRegistration()
 {
  
@@ -64,9 +64,9 @@ MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationFi
 /*
  * Set the moving image image.
  */
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType>
+template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType, class TInternalImageType>
 void
-MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType>
+MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType,TInternalImageType>
 ::SetMovingImage(
 const MovingImageType * ptr )
 {
@@ -77,10 +77,10 @@ const MovingImageType * ptr )
 /*
  * Get the moving image image.
  */
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType>
-const typename MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType>
+template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType, class TInternalImageType>
+const typename MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType,TInternalImageType>
 ::MovingImageType *
-MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType>
+MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType,TInternalImageType>
 ::GetMovingImage(void) const
 {
   return dynamic_cast< const MovingImageType * >
@@ -91,9 +91,9 @@ MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationFi
 /*
  * Set the fixed image.
  */
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType>
+template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType, class TInternalImageType>
 void
-MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType>
+MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType,TInternalImageType>
 ::SetFixedImage(
 const FixedImageType * ptr )
 {
@@ -104,10 +104,10 @@ const FixedImageType * ptr )
 /*
  * Get the fixed image.
  */
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType>
-const typename MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType>
+template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType, class TInternalImageType>
+const typename MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType,TInternalImageType>
 ::FixedImageType *
-MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType>
+MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType,TInternalImageType>
 ::GetFixedImage(void) const
 {
   return dynamic_cast< const FixedImageType * >
@@ -117,9 +117,9 @@ MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationFi
 /*
  * 
  */
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType>
+template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType, class TInternalImageType>
 std::vector<SmartPointer<DataObject> >::size_type
-MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType>
+MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType,TInternalImageType>
 ::GetNumberOfValidRequiredInputs() const
 {
   typename std::vector<SmartPointer<DataObject> >::size_type num = 0;
@@ -141,9 +141,9 @@ MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationFi
 /*
  * Set the number of multi-resolution levels
  */
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType>
+template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType, class TInternalImageType>
 void
-MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType>
+MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType,TInternalImageType>
 ::SetNumberOfLevels(
 unsigned int num )
 {
@@ -169,9 +169,9 @@ unsigned int num )
 /*
  * Standard PrintSelf method.
  */
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType>
+template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType, class TInternalImageType>
 void
-MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType>
+MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType,TInternalImageType>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
@@ -211,9 +211,9 @@ MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationFi
  * registrator and field_expander.
  *
  */                              
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType>
+template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType, class TInternalImageType>
 void
-MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType>
+MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType,TInternalImageType>
 ::GenerateData()
 {
   //DeformationFieldPointer NullDeformationFieldPointer = DeformationFieldType::New();
@@ -368,18 +368,18 @@ MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationFi
 }
 
 
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType>
+template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType, class TInternalImageType>
 void
-MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType>
+MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType,TInternalImageType>
 ::StopRegistration()
 {
   m_RegistrationFilter->StopRegistration();
   m_StopRegistrationFlag = true;
 }
 
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType>
+template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType, class TInternalImageType>
 bool
-MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType>
+MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType,TInternalImageType>
 ::Halt()
 {
   // Halt the registration after the user-specified number of levels
@@ -405,9 +405,9 @@ MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationFi
 }
 
 
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType>
+template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType, class TInternalImageType>
 void
-MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType>
+MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType,TInternalImageType>
 ::GenerateOutputInformation()
 {
 
@@ -439,9 +439,9 @@ MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationFi
 }
 
 
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType>
+template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType, class TInternalImageType>
 void
-MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType>
+MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType,TInternalImageType>
 ::GenerateInputRequestedRegion()
 {
 
@@ -477,9 +477,9 @@ MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationFi
 }
 
 
-template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType>
+template <class TFixedImage, class TMovingImage, class TDeformationField, class TRealType, class TInternalImageType>
 void
-MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType>
+MultiResolutionPDEDeformableRegistration<TFixedImage,TMovingImage,TDeformationField,TRealType,TInternalImageType>
 ::EnlargeOutputRequestedRegion(
 DataObject * ptr )
 {

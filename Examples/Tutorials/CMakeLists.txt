@@ -90,6 +90,7 @@ ADD_TEST( TutorialsSmarterFilteringPipelineTest ${EXE_TESTS}
         -a 0.1
         )
 
+IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST( TutorialsOrthoFusionTest ${EXE_TESTS}
         --compare-image ${TOL}          ${BASELINE}/TutorialsOrthoFusionOutput.tif
                                         ${TEMP}/TutorialsOrthoFusionOutput.tif
@@ -106,7 +107,7 @@ ADD_TEST( TutorialsOrthoFusionTest ${EXE_TESTS}
 	0.6 
 	-0.6
         )
-
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
 ADD_EXECUTABLE(otbTutorialsExamplesTests otbTutorialsExamplesTests.cxx)
