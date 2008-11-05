@@ -73,7 +73,7 @@ namespace itk
  *
  * \ingroup DeformableImageRegistration
  */
-template <class TFixedImage, class TMovingImage, class TDeformationField, class  TRealType = float>
+  template <class TFixedImage, class TMovingImage, class TDeformationField, class  TRealType = float, class TInternalImage = Image<TRealType,TFixedImage::ImageDimension> >
 class ITK_EXPORT MultiResolutionPDEDeformableRegistration :
     public ImageToImageFilter <TDeformationField, TDeformationField>
 {
@@ -111,7 +111,8 @@ public:
                       FixedImageType::ImageDimension);
 
   /** Internal float image type. */
-  typedef Image<TRealType,itkGetStaticConstMacro(ImageDimension)> FloatImageType;
+//   typedef Image<TRealType,itkGetStaticConstMacro(ImageDimension)> FloatImageType;
+  typedef TInternalImage FloatImageType;
 
   /** The internal registration type. */
   typedef PDEDeformableRegistrationFilter<
