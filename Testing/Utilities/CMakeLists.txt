@@ -28,6 +28,8 @@ SET(UTILITIES_TESTS ${CXX_TEST_PATH}/otbUtilitiesTests)
 #        ${TEMP}/utOssimIntegration.tif
 #)
 
+IF(OTB_DATA_USE_LARGEINPUT)
+
 ADD_TEST(utOssimKeywordlistToulouseQuickBirdTest ${UTILITIES_TESTS}
 --compare-ascii ${EPSILON_10e6}  ${BASELINE_FILES}/utOssimKeywordlistToulouseQuickBird.txt
                         ${TEMP}/utOssimKeywordlistToulouseQuickBird.txt
@@ -43,6 +45,7 @@ ADD_TEST(utOssimKeywordlistBlossevilleIkonosTest ${UTILITIES_TESTS}
         ${IMAGEDATA}/IKONOS_BLOSSEVILLE/po_2619900_grn_0000000.tif
         ${TEMP}/utOssimKeywordlistBlossevilleIkonos.txt
         )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(utOssimElevManagerTest ${UTILITIES_TESTS}
         ossimElevManagerTest
@@ -145,11 +148,12 @@ ADD_TEST(utTvTinyXMLTest ${UTILITIES_TESTS}
                 ${TEMP}/utTinyXML_testStdout.txt
 )
 
-
+IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(utOssimRadarSatSupport ${UTILITIES_TESTS}
         ossimRadarSatSupport
         ${IMAGEDATA}/RADARSAT2/SCENE01/DAT_01.001
         )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # -------            lib Galib   ------------------------------
 
