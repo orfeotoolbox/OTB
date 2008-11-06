@@ -45,9 +45,9 @@
 #include "otbBreakAngularPathListFilter.h"
 #include "otbRemoveTortuousPathListFilter.h"
 #include "otbLinkPathListFilter.h"
-#include "otbLikehoodPathListFilter.h"
+#include "otbLikelihoodPathListFilter.h"
 #include "otbDrawPathListFilter.h"
-#include "otbLikehoodPathListFilter.h"
+#include "otbLikelihoodPathListFilter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkSqrtImageFilter.h"
@@ -353,14 +353,14 @@ int main( int argc, char * argv[] )
   //  Software Guide : BeginLatex
   //
   //  A value can be associated with each polyline according to pixel values 
-  // under the polyline with \doxygen{otb}{LikehoodPathListFilter}. A higher value 
-  // will mean a higher likelihood to be a road.
+  // under the polyline with \doxygen{otb}{LikelihoodPathListFilter}. A higher value 
+  // will mean a higher Likelihood to be a road.
   //
   //  Software Guide : EndLatex
   
   // Software Guide : BeginCodeSnippet
 
-  typedef otb::LikehoodPathListFilter<PathType,
+  typedef otb::LikelihoodPathListFilter<PathType,
                InternalImageType> PathListToPathListWithValueType;
   PathListToPathListWithValueType::Pointer pathListConverter 
                 = PathListToPathListWithValueType::New();
@@ -389,7 +389,7 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginLatex
   //
   // Polylines are drawn on a black background image with \doxygen{otb}{DrawPathListFilter}. 
-  // The \code{SetUseIternalValues()} tell the drawing filter to draw the path with its likehood
+  // The \code{SetUseIternalValues()} tell the drawing filter to draw the path with its Likelihood
   // value.
   //
   // Software Guide : EndLatex
@@ -407,7 +407,7 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginLatex
   //
-  // The output from the drawing filter contains very small values (likehood values). Therefore
+  // The output from the drawing filter contains very small values (Likelihood values). Therefore
   // the image has to be rescaled to be viewed. The whole pipeline is executed by invoking 
   // the \code{Update()} method on this last filter.
   //
@@ -532,7 +532,7 @@ int main( int argc, char * argv[] )
   // \itkcaption[Road extraction filter application]{Result of applying
   // the road extraction by steps pipeline to a fusionned Quickbird
   // image. From left to right : original image, extracted road with their
-  // likehood values.}  
+  // Likelihood values.}  
   // \label{fig:ROADEXTRACTIONBYSTEPS} 
   // \end{figure}
   //
@@ -543,7 +543,7 @@ int main( int argc, char * argv[] )
   // \itkcaption[Road extraction filter application]{Result of applying
   // the road extraction by steps pipeline to a fusionned Quickbird
   // image. From left to right : original image, extracted road with their
-  // likehood values.}  
+  // Likelihood values.}  
   // \label{fig:ROADEXTRACTIONBYSTEPS2} 
   // \end{figure}
   // Software Guide : EndLatex

@@ -15,10 +15,10 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLikehoodPathListFilter_txx
-#define __otbLikehoodPathListFilter_txx
+#ifndef __otbLikelihoodPathListFilter_txx
+#define __otbLikelihoodPathListFilter_txx
 
-#include "otbLikehoodPathListFilter.h"
+#include "otbLikelihoodPathListFilter.h"
 #include "otbPolyLineImageConstIterator.h"
 #include "itkMetaDataObject.h"
 #include "otbMacro.h"
@@ -29,8 +29,8 @@ namespace otb
  * Constructor
  */
 template <class TPath, class TImage>
-LikehoodPathListFilter<TPath, TImage>
-::LikehoodPathListFilter()
+LikelihoodPathListFilter<TPath, TImage>
+::LikelihoodPathListFilter()
 {
   m_Key = "Value";
   this->SetNumberOfRequiredInputs(2);
@@ -38,15 +38,15 @@ LikehoodPathListFilter<TPath, TImage>
 }
 template <class TPath, class TImage>
 void
-LikehoodPathListFilter<TPath, TImage>
+LikelihoodPathListFilter<TPath, TImage>
 ::SetInputImage(const ImageType * image)
 {
   this->itk::ProcessObject::SetNthInput(1,const_cast<ImageType *>(image));
 }
 template <class TPath, class TImage>
-const typename LikehoodPathListFilter<TPath, TImage>
+const typename LikelihoodPathListFilter<TPath, TImage>
 ::ImageType *
-LikehoodPathListFilter<TPath, TImage>
+LikelihoodPathListFilter<TPath, TImage>
 ::GetInputImage(void)
 {
   if(this->GetNumberOfInputs()<1)
@@ -58,7 +58,7 @@ LikehoodPathListFilter<TPath, TImage>
 
 template <class TPath, class TImage>
 void
-LikehoodPathListFilter<TPath, TImage>
+LikelihoodPathListFilter<TPath, TImage>
 ::GenerateData()
 {
   // I/O wiring
@@ -69,26 +69,26 @@ LikehoodPathListFilter<TPath, TImage>
   typedef otb::PolyLineImageConstIterator<ImageType,PathType> ImageIteratorType;
 
   for(IteratorType it = inputPtr->Begin(); it != inputPtr->End(); ++it)
+  {
+    PathPointerType path = it.Get();
+    ImageIteratorType imageIt(inputImagePtr,path);
+    double cumulatedValues = 0.0;
+    double nbPoints = 0.0;
+    for(imageIt.GoToBegin();!imageIt.IsAtEnd();++imageIt,++nbPoints)
     {
-      PathPointerType path = it.Get();
-      ImageIteratorType imageIt(inputImagePtr,path);
-      double cumulatedValues = 0.0;
-      double nbPoints = 0.0;
-      for(imageIt.GoToBegin();!imageIt.IsAtEnd();++imageIt,++nbPoints)
-	{
-	  cumulatedValues+=static_cast<double>(imageIt.Get());
-	}
-      itk::MetaDataDictionary & dict = path->GetMetaDataDictionary();
-      itk::EncapsulateMetaData<double>(dict,m_Key,cumulatedValues/nbPoints);
-      outputPtr->PushBack(path);
+      cumulatedValues+=static_cast<double>(imageIt.Get());
     }
+    itk::MetaDataDictionary & dict = path->GetMetaDataDictionary();
+    itk::EncapsulateMetaData<double>(dict,m_Key,cumulatedValues/nbPoints);
+    outputPtr->PushBack(path);
+  }
 }
 /**
  * PrintSelf Method
  */
 template <class TPath, class TImage>
 void
-LikehoodPathListFilter<TPath, TImage>
+LikelihoodPathListFilter<TPath, TImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

@@ -34,7 +34,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbLinkPathListFilter.h"
 #include "otbRemoveIsolatedByDirectionFilter.h"
 #include "otbRemoveWrongDirectionFilter.h"
-#include "otbLikehoodPathListFilter.h"
+#include "otbLikelihoodPathListFilter.h"
 
 namespace otb
 {
@@ -68,7 +68,7 @@ namespace otb
  * \sa BreakAngularPathListFilter
  * \sa RemoveTortuousPathListFilter
  * \sa LinkPathListFilter
- * \sa LikehoodPathListFilter
+ * \sa LikelihoodPathListFilter
  */
 template <class TInputImage, class TOutputPath>
   class ITK_EXPORT GenericRoadExtractionFilter
@@ -137,7 +137,7 @@ template <class TInputImage, class TOutputPath>
     typedef BreakAngularPathListFilter<OutputPathType>          BreakAngularPathListFilterType;
     typedef RemoveTortuousPathListFilter<OutputPathType>        RemoveTortuousPathListFilterType;
     typedef LinkPathListFilter<OutputPathType>                  LinkPathListFilterType;
-    typedef LikehoodPathListFilter<OutputPathType, ModulusType>	LikehoodPathListFilterType;
+    typedef LikelihoodPathListFilter<OutputPathType, ModulusType>	LikelihoodPathListFilterType;
     
     /** Template parameters typedefs for internals filters */
     typedef typename GradientFilterType::RealType SigmaType;
@@ -211,7 +211,7 @@ template <class TInputImage, class TOutputPath>
     typename RemoveTortuousPathListFilterType::Pointer          m_FirstRemoveTortuousPathListFilter;
     typename RemoveTortuousPathListFilterType::Pointer          m_SecondRemoveTortuousPathListFilter;
     typename LinkPathListFilterType::Pointer                    m_LinkPathListFilter;
-    typename LikehoodPathListFilterType::Pointer 		m_LikehoodPathListFilter;
+    typename LikelihoodPathListFilterType::Pointer 		m_LikelihoodPathListFilter;
 
 
   /** Amplitude threshold to start following a path (use by the VectorizationPathListFilter)*/

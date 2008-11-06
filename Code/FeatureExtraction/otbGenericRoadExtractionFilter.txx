@@ -46,7 +46,7 @@ GenericRoadExtractionFilter<TInputImage, TOutputPath>
         m_FirstRemoveTortuousPathListFilter = RemoveTortuousPathListFilterType::New();
         m_SecondRemoveTortuousPathListFilter = RemoveTortuousPathListFilterType::New();
         m_LinkPathListFilter = LinkPathListFilterType::New();
-        m_LikehoodPathListFilter = LikehoodPathListFilterType::New();
+        m_LikelihoodPathListFilter = LikelihoodPathListFilterType::New();
         
         /** Amplitude threshold to start following a path (use by the VectorizationPathListFilter)*/
         m_AmplitudeThreshold = static_cast<AmplitudeThresholdType>(0.00005 );
@@ -148,17 +148,17 @@ GenericRoadExtractionFilter<TInputImage, TOutputPath>
   m_SecondRemoveTortuousPathListFilter->SetInput(m_SecondSimplifyPathListFilter->GetOutput());
   m_SecondRemoveTortuousPathListFilter->SetMeanDistanceThreshold(m_SecondMeanDistanceThreshold);
   
-  m_LikehoodPathListFilter->SetInput(m_SecondRemoveTortuousPathListFilter->GetOutput());
-  m_LikehoodPathListFilter->SetInputImage(m_NonMaxRemovalByDirectionFilter->GetOutput());
+  m_LikelihoodPathListFilter->SetInput(m_SecondRemoveTortuousPathListFilter->GetOutput());
+  m_LikelihoodPathListFilter->SetInputImage(m_NonMaxRemovalByDirectionFilter->GetOutput());
   
   // Graft output seems to be broken for PolylineParametricPath
   // So we use update, and copy the path to the output path list.
-  // m_LikehoodPathListFilter->GraftOutput(this->GetOutput());
-  m_LikehoodPathListFilter->Update();
-  // outputPathList =  m_LikehoodPathListFilter->GetOutput();
-    for(typename LikehoodPathListFilterType::PathListType::ConstIterator it 
-	  = m_LikehoodPathListFilter->GetOutput()->Begin();
-      it!=m_LikehoodPathListFilter->GetOutput()->End();
+  // m_LikelihoodPathListFilter->GraftOutput(this->GetOutput());
+  m_LikelihoodPathListFilter->Update();
+  // outputPathList =  m_LikelihoodPathListFilter->GetOutput();
+    for(typename LikelihoodPathListFilterType::PathListType::ConstIterator it 
+	  = m_LikelihoodPathListFilter->GetOutput()->Begin();
+      it!=m_LikelihoodPathListFilter->GetOutput()->End();
       ++it)
     {
       outputPathList->PushBack(it.Get());

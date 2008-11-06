@@ -17,17 +17,17 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbLikehoodPathListFilter.h"
+#include "otbLikelihoodPathListFilter.h"
 #include "otbPolyLineParametricPathWithValue.h"
 #include "otbImage.h"
 
-int otbLikehoodPathListFilterNew(int argc, char * argv[])
+int otbLikelihoodPathListFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension =2;
   typedef double PixelType;
   typedef otb::Image<PixelType,Dimension> ImageType;
   typedef otb::PolyLineParametricPathWithValue<double,Dimension> PathType;
-  typedef otb::LikehoodPathListFilter<PathType,ImageType> LinkPathListFilterType;
+  typedef otb::LikelihoodPathListFilter<PathType,ImageType> LinkPathListFilterType;
   
   // Instantiating object
   LinkPathListFilterType::Pointer object = LinkPathListFilterType::New();
