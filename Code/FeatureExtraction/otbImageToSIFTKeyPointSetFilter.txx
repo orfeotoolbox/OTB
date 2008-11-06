@@ -195,8 +195,8 @@ namespace otb
     //
     // with multiply by spacing before filtering, length sigma gaussian 
     // is compute in pixel
-    double xsigman = input->GetSpacing()[0]*m_Sigma0;
-    double ysigman = input->GetSpacing()[1]*m_Sigma0;
+    double xsigman = vcl_abs(input->GetSpacing()[0])*m_Sigma0;
+    double ysigman = vcl_abs(input->GetSpacing()[1])*m_Sigma0;
     
     for (lScale = 0; lScale != m_ScalesNumber+2; lScale++)
       {
