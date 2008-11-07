@@ -610,7 +610,7 @@ namespace otb
 	  + (lIterOrientation.GetIndex()[1]-currentScale.GetIndex()[1])
 	  *(lIterOrientation.GetIndex()[1]-currentScale.GetIndex()[1]);
 	
-	double lWeightMagnitude = vcl_exp(dist2/(2*lSigma*lSigma));
+	double lWeightMagnitude = vcl_exp(-dist2/(2*lSigma*lSigma));
 	
 	unsigned int lHistoIndex = static_cast<unsigned int>
 	  ( vcl_floor(36*lOrientation/(2*M_PI)) );
@@ -656,88 +656,81 @@ namespace otb
   {
     std::vector<PixelType> lHistogram(128, 0.);
     
-    typename InputImageType::RegionType  region;
+     typename InputImageType::RegionType  region;
     typename InputImageType::RegionType::SizeType regionSize;
-    typename InputImageType::RegionType::IndexType inputStart;
-    
-    regionSize[0] = 4;
-    regionSize[1] = 4;
-    
-    unsigned int lHDescriptors=0;
-    unsigned int lVDescriptors=0;
-    
-    // sigma set to one half the width of descriptor window
-    double lSigma = 4*0.5;
-    
-    while (lHDescriptors < 4)
-      {
-	lVDescriptors = 0;
-	while(lVDescriptors < 4)
-	  {
-	    inputStart[0] = currentScale.GetIndex()[0] + lHDescriptors*4 - 8;
-	    inputStart[1] = currentScale.GetIndex()[1] + lVDescriptors*4 - 8;
-	    region.SetIndex(inputStart);
-	    region.SetSize(regionSize);
+    typename InputImageType::RegionType::IndexType regionIndex;
 
-	    if (region.Crop(m_OrientationList->GetNthElement(scale)->GetLargestPossibleRegion()))
+    unsigned int nbHistograms = 4;
+    unsigned int nbPixelsPerHistogram = 4;
+    unsigned int nbBinsPerHistogram = 8;
+
+    float radius = static_cast<float>(nbHistograms/2*nbPixelsPerHistogram);
+    
+//     std::cout<<"Radius: "<<radius<<std::endl;
+
+
+    // 4 region of 4 pixels plus 2 pixels of margin
+    regionSize[0] = nbHistograms*nbPixelsPerHistogram+2;
+    regionSize[1] = nbHistograms*nbPixelsPerHistogram+2;
+
+    // sigma set to one half the width of descriptor window
+    double lSigma = nbPixelsPerHistogram*0.5;
+    
+    // index - regionSize/2
+    regionIndex[0]=currentScale.GetIndex()[0]-regionSize[0]/2;
+    regionIndex[1]=currentScale.GetIndex()[1]-regionSize[1]/2;
+
+    region.SetIndex(regionIndex);
+    region.SetSize(regionSize);
+    
+    // Crop with largest region
+    if (!region.Crop(m_OrientationList->GetNthElement(scale)->GetLargestPossibleRegion()))
+      {
+	itkExceptionMacro(<<"Region "<<region<<" is outside of the largest possible region!");
+      }
+    RegionIteratorType lIterMagnitude(m_MagnitudeList->GetNthElement(scale),region);
+    RegionIteratorType lIterOrientation(m_OrientationList->GetNthElement(scale),region);
+    
+    // For each pixel in the region
+    while(!lIterMagnitude.IsAtEnd() && !lIterOrientation.IsAtEnd())
+      {
+	// check if pixel is inside the circle of radius 
+	float dx = lIterMagnitude.GetIndex()[0]-currentScale.GetIndex()[0];
+	float dy = lIterMagnitude.GetIndex()[1]-currentScale.GetIndex()[1];
+	float dist = vcl_sqrt(dx*dx+dy*dy);
+
+	// If we are in the circle
+	if(dist<radius)
+	  {
+	    // rotate the pixel location to compensate sift orientation
+	    float angle = orientation*M_PI/180.;
+	    float cosangle = vcl_cos(angle);
+	    float sinangle = vcl_sin(angle);
+	    float rdx = dx * cosangle - dy * sinangle;
+	    float rdy = dx * sinangle + dy * cosangle;
+	    // decide to which histogram the pixel contributes
+	    unsigned int xHistogramIndex = vcl_floor((rdx + radius)/static_cast<float>(nbPixelsPerHistogram));
+	    unsigned int yHistogramIndex = vcl_floor((rdy + radius)/static_cast<float>(nbPixelsPerHistogram));
+
+	    // decide to which bin of the histogram the pixel contributes
+	    float compensatedOrientation =  lIterOrientation.Get()-angle;	    
+	    if(compensatedOrientation<0)
 	      {
-		RegionIteratorType lIterMagnitude(m_MagnitudeList->GetNthElement(scale),
-						  region);
-		RegionIteratorType lIterOrientation(m_OrientationList->GetNthElement(scale),
-						    region);
-		RegionIteratorType lIterNMagnitude(m_MagnitudeList->GetNthElement(scale),
-						   region);
-		RegionIteratorType lIterNOrientation(m_OrientationList->GetNthElement(scale),
-						     region);
-					
-		for ( lIterMagnitude.GoToBegin(), lIterOrientation.GoToBegin();
-		      !lIterMagnitude.IsAtEnd();
-		      ++lIterMagnitude, ++lIterOrientation)
-		  { 
-		    float dx = vcl_abs(lIterMagnitude.GetIndex()[0]-currentScale.GetIndex()[0]);
-		    float dy = vcl_abs(lIterMagnitude.GetIndex()[1]-currentScale.GetIndex()[1]);
-		    
-		    float dist2 = dx*dx+dy*dy;
-		    if (dist2 <= 8*8)
-		      {
-			float nx = vcl_cos(dx)+vcl_sin(dy);
-			float ny = -vcl_sin(dx)+vcl_cos(dy);
-			
-			typename InputImageType::IndexType nIndex;
-			nIndex[0] = static_cast<unsigned int>(vcl_floor(currentScale.GetIndex()[0]+nx+0.5));
-			nIndex[1] = static_cast<unsigned int>(vcl_floor(currentScale.GetIndex()[1]+ny+0.5));
-			
-			// test : if oriented index is in image
-			if (lIterNMagnitude.GetImage()->GetLargestPossibleRegion().IsInside(nIndex))
-			  {
-			    lIterNMagnitude.SetIndex(nIndex);
-			    lIterNOrientation.SetIndex(nIndex);
-			    
-			    PixelType lMagnitude = lIterNMagnitude.Get();
-			    PixelType lOrientation = lIterNOrientation.Get();
-			    
-			    unsigned int lHistoIndex = 0;
-			    double diffAngle = lOrientation/(2*M_PI)*8 - orientation/45;
-			    if (diffAngle>=0)
-			      {
-				lHistoIndex = static_cast<unsigned int>(diffAngle);
-			      }
-			    else
-			      {
-				lHistoIndex = static_cast<unsigned int>(diffAngle+8);
-			      }
-			    
-			    double lWeightMagnitude = vcl_exp(dist2/(2*lSigma*lSigma));
-			    PixelType lHistoEntry = lMagnitude*lWeightMagnitude;
-			
-			    lHistogram[lHDescriptors*4*8+lVDescriptors*8+lHistoIndex] += lHistoEntry;
-			  }
-		      }
-		  }
+		compensatedOrientation+=2*M_PI;
 	      }
-	    lVDescriptors++;
+	    unsigned int histogramBin = vcl_floor(compensatedOrientation*nbBinsPerHistogram/(2*M_PI));
+	    
+	    // Compute the wheight of the pixel in the histogram
+	    double lWeightMagnitude = vcl_exp(-(dist*dist)/(2*lSigma*lSigma));
+	    
+	    // Compute the global descriptor index
+	    unsigned int descriptorIndex = yHistogramIndex * nbBinsPerHistogram * nbHistograms
+	      + xHistogramIndex * nbBinsPerHistogram + histogramBin;
+	    lHistogram[descriptorIndex]+=lIterMagnitude.Get()*lWeightMagnitude;
 	  }
-	lHDescriptors++;
+
+	++lIterOrientation;
+	++lIterMagnitude;
       }
     
     // normalize histogram to unit lenght
