@@ -275,7 +275,7 @@ namespace otb
        *
        * \return orientation key point orientation
        */
-      PixelType ComputeKeyPointOrientation(const NeighborhoodIteratorType& currentScale,
+      std::vector<PixelType> ComputeKeyPointOrientations(const NeighborhoodIteratorType& currentScale,
 					   const unsigned int scale,
 					   const PixelType translation);
       

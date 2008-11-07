@@ -371,44 +371,47 @@ namespace otb
 		    // add key point
 		    if (accepted)
 		      {
-			PixelType lOrientation = 0;
-			
-			lOrientation = ComputeKeyPointOrientation(neighborCurrentScale,
+			std::vector<PixelType> lOrientations = ComputeKeyPointOrientations(neighborCurrentScale,
 								  lScale,
 								  lTranslation[2]);
 			
-			std::vector<PixelType> lDescriptors = ComputeKeyPointDescriptor(neighborCurrentScale,
-											lScale,
-											lOrientation);
-			
-			OutputPointType keyPoint;
-
-			lIterDoG.Get()->TransformIndexToPhysicalPoint(neighborCurrentScale.GetIndex(),
-								      keyPoint);
-			keyPoint[0] += spacing[0]*lTranslation[0];
-			keyPoint[1] += spacing[1]*lTranslation[1];
-			
-			outputPointSet->SetPoint(m_ValidatedKeyPoints, keyPoint);
-			
-			OutputPixelType data;
-			data.SetSize(2+128);
-			// check this, compute scale
-			// real scale = octave*scale
-			data.SetElement(0,lScale+lTranslation[2]);
-			data.SetElement(1,lOrientation);
-			typename std::vector<PixelType>::const_iterator lIterDescriptor = 
-			  lDescriptors.begin();
-			
-			unsigned int lIndDesc = 2;
-			while (lIterDescriptor != lDescriptors.end())
+			// for each main orientation
+			for(typename std::vector<PixelType>::iterator orientationIt = lOrientations.begin(); orientationIt != lOrientations.end();++orientationIt)
 			  {
-			    data.SetElement(lIndDesc, *lIterDescriptor);
-			    lIndDesc++;
-			    lIterDescriptor++;
-			  }
-			outputPointSet->SetPointData(m_ValidatedKeyPoints, data);
+
+			    std::vector<PixelType> lDescriptors = ComputeKeyPointDescriptor(neighborCurrentScale,
+											    lScale,
+											    *orientationIt);
 			
-			m_ValidatedKeyPoints++;
+			    OutputPointType keyPoint;
+			    
+			    lIterDoG.Get()->TransformIndexToPhysicalPoint(neighborCurrentScale.GetIndex(),
+									  keyPoint);
+			    keyPoint[0] += spacing[0]*lTranslation[0];
+			    keyPoint[1] += spacing[1]*lTranslation[1];
+			
+			    outputPointSet->SetPoint(m_ValidatedKeyPoints, keyPoint);
+			    
+			    OutputPixelType data;
+			    data.SetSize(2+128);
+			    // check this, compute scale
+			    // real scale = octave*scale
+			    data.SetElement(0,lScale+lTranslation[2]);
+			    data.SetElement(1,*orientationIt);
+			    typename std::vector<PixelType>::const_iterator lIterDescriptor = 
+			      lDescriptors.begin();
+			
+			    unsigned int lIndDesc = 2;
+			    while (lIterDescriptor != lDescriptors.end())
+			      {
+				data.SetElement(lIndDesc, *lIterDescriptor);
+				lIndDesc++;
+				lIterDescriptor++;
+			      }
+			    outputPointSet->SetPointData(m_ValidatedKeyPoints, data);
+			    
+			    m_ValidatedKeyPoints++;
+			  }
 		      }
 		  }
 		
@@ -567,9 +570,9 @@ namespace otb
    * Compute key point orientation
    */
   template <class TInputImage, class TOutputPointSet>
-  typename ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>::PixelType
+  std::vector<typename ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>::PixelType>
   ImageToSIFTKeyPointSetFilter<TInputImage,TOutputPointSet>
-  ::ComputeKeyPointOrientation( const NeighborhoodIteratorType& currentScale,
+  ::ComputeKeyPointOrientations( const NeighborhoodIteratorType& currentScale,
 				const unsigned int scale,
 				const PixelType translation)
   {    
@@ -630,10 +633,12 @@ namespace otb
 	++lIterMagn;
       }
     
-    // Computing smoothed histogram and looking for the maximum
+    // Computing smoothed histogram and looking for the maximum and a second maximum within 80% of the first
     double max = 0;
+    double secondMax = 0;
     double sum = 0;
     unsigned int maxIndex = 0;
+    int secondMaxIndex = -1;
     int j = 0;
     int i = 0;
     
@@ -646,11 +651,27 @@ namespace otb
 	  }
 	if(sum>max)
 	  {
+	    secondMax = max;
+	    secondMaxIndex = maxIndex;
 	    max=sum;
 	    maxIndex = i;
 	  }
+	else if(sum > secondMax)
+	  {
+	    secondMax = sum;
+	    secondMaxIndex = i;
+	  }
       }
-    return static_cast<PixelType>(maxIndex*10);
+    
+
+    std::vector<PixelType> orientations;
+    orientations.push_back( static_cast<PixelType>(maxIndex*10));
+    if(secondMaxIndex>=0 && secondMax > 0.8 * max)
+      {
+	orientations.push_back(static_cast<PixelType>(secondMaxIndex*10));
+      }
+
+    return orientations;
   }
   
   /**
