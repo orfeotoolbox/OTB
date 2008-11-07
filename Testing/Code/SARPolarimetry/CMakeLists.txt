@@ -28,7 +28,7 @@ ADD_TEST(rdTuPolarimetricSynthesisFilterNew ${SARPOLARIMETRY_TESTS1}
 
  # Normal Case 
 ADD_TEST(rdTvPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
-  --compare-image ${TOL}   ${BASELINE}/rdTvPolarimetricSynthesis.tif
+  --compare-image ${EPSILON}   ${BASELINE}/rdTvPolarimetricSynthesis.tif
                     ${TEMP}/resPolarimetricSynthesis_HH_VH_HV_VV.tif
         otbPolarimetricSynthesisFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
@@ -44,7 +44,7 @@ ADD_TEST(rdTvPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
         
  # With 3 channels
 ADD_TEST(rdTvHHnHVnVVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
-  --compare-image ${TOL}   ${BASELINE}/rdTvPolarimetricSynthesis_HH_HV_VV.tif
+  --compare-image ${EPSILON}   ${BASELINE}/rdTvPolarimetricSynthesis_HH_HV_VV.tif
                     ${TEMP}/resPolarimetricSynthesis_HH_HV_VV.tif
         otbHHnHVnVVPolarimetricSynthesisFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
@@ -59,7 +59,7 @@ ADD_TEST(rdTvHHnHVnVVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
 
  # With HH and HV channels
 ADD_TEST(rdTvHHnHVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
-  --compare-image ${TOL}   ${BASELINE}/rdTvPolarimetricSynthesis_HH_HV.tif
+  --compare-image ${EPSILON}   ${BASELINE}/rdTvPolarimetricSynthesis_HH_HV.tif
                     ${TEMP}/resPolarimetricSynthesis_HH_HV.tif
         otbHHnHVPolarimetricSynthesisFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
@@ -73,7 +73,7 @@ ADD_TEST(rdTvHHnHVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
         
 # With VH and VV channels
 ADD_TEST(rdTvVHnVVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
-#  --compare-image ${TOL}   ${BASELINE}/rdTvPolarimetricSynthesis_VH_VV.tif
+#  --compare-image ${EPSILON}   ${BASELINE}/rdTvPolarimetricSynthesis_VH_VV.tif
 #                    ${TEMP}/resPolarimetricSynthesis_VH_VV.tif
         otbHHnHVPolarimetricSynthesisFilter
         ${INPUTDATA}/RSAT_imagery_VH.tif
@@ -92,7 +92,7 @@ ADD_TEST(rdTuMultiChannelsPolarimetricSynthesisFilterNew ${SARPOLARIMETRY_TESTS1
 # With vector image HH, HV, VH and VV channels      
 #IF(OTB_DATA_USE_LARGEINPUT)
 #ADD_TEST(rdTvVectorMultiChannelsPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
-#  --compare-image ${TOL}   ${BASELINE}/rdTvMultiPolarimetricSynthesis1.tif
+#  --compare-image ${EPSILON}   ${BASELINE}/rdTvMultiPolarimetricSynthesis1.tif
 #                    ${TEMP}/resMultiPolarimetricSynthesis1.tif
 #        otbVectorMultiChannelsPolarimetricSynthesisFilter
 #        ${IMAGEDATA}/RSAT2/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
@@ -107,7 +107,7 @@ ADD_TEST(rdTuMultiChannelsPolarimetricSynthesisFilterNew ${SARPOLARIMETRY_TESTS1
         
 # With 3 images HH, HV and VV channels turned into vectorImage      
 ADD_TEST(rdTvMultiChannelsPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}  
-  --compare-image ${TOL}   ${BASELINE}/rdTvMultiPolarimetricSynthesis2.tif
+  --compare-image ${EPSILON}   ${BASELINE}/rdTvMultiPolarimetricSynthesis2.tif
                     ${TEMP}/resMultiPolarimetricSynthesis2.tif
         otbMultiChannelsPolarimetricSynthesisFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif

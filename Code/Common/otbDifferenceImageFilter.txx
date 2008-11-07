@@ -191,12 +191,13 @@ DifferenceImageFilter<TInputImage, TOutputImage>
 	  }
 	}
 	
-      // Check if difference is above threshold.
+  // Check if difference is above threshold
+  // the threshold is interpreted as relative to the value
 	bool isDifferent = false;
 	
 	for(unsigned int j = 0;j<minimumDifference.Size();++j)
 	  {
-	    if(minimumDifference[j] > m_DifferenceThreshold)
+      if(minimumDifference[j] > m_DifferenceThreshold * t[j])
 	      {
 		isDifferent = true;
 	      }
