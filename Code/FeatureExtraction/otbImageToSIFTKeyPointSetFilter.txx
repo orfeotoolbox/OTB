@@ -573,48 +573,59 @@ namespace otb
 				const unsigned int scale,
 				const PixelType translation)
   {    
-    // compute histogram
+    // radius of the neighborhood
+    unsigned int radius = 4;
+    double lSigma = scale*3;
+
+    // initialize the histogram
     std::vector<double> lHistogram(36,0.);
     
+    // Build the region to examine
     typename InputImageType::RegionType region;
     typename InputImageType::RegionType::SizeType regionSize;
-    typename InputImageType::RegionType::IndexType indexStart;
-    
-    regionSize.Fill(3);
+    typename InputImageType::RegionType::IndexType regionIndex;
+    regionSize.Fill(2*radius+2);
     region.SetSize(regionSize);
-    indexStart[0] = currentScale.GetIndex()[0]-1;
-    indexStart[1] = currentScale.GetIndex()[1]-1;
-    region.SetIndex(indexStart);
+    regionIndex[0] = currentScale.GetIndex()[0]-regionSize[0]/2;
+    regionIndex[1] = currentScale.GetIndex()[1]-regionSize[1]/2;
+    region.SetIndex(regionIndex);
     
-    region.Crop(m_OrientationList->GetNthElement(scale)->GetLargestPossibleRegion());
+    if(!region.Crop(m_OrientationList->GetNthElement(scale)->GetLargestPossibleRegion()))
+      {
+	itkExceptionMacro(<<"Region "<<region<<" is strictly outside the largest possible region!");
+      }
     
-    RegionIteratorType lIterOrientation(m_OrientationList->GetNthElement(scale),
-					region);
-    
-    RegionIteratorType lIterMagn(m_MagnitudeList->GetNthElement(scale),
-				 region);
-    
+    // iterators on the orientation and the magnitude
+    RegionIteratorType lIterOrientation(m_OrientationList->GetNthElement(scale),region);
+    RegionIteratorType lIterMagn(m_MagnitudeList->GetNthElement(scale), region);
     lIterOrientation.GoToBegin();
     lIterMagn.GoToBegin();
-    double lSigma = scale*1.5;
     
-    while (!lIterOrientation.IsAtEnd() &&
-	   !lIterMagn.IsAtEnd())
+    // For each pixel
+    while (!lIterOrientation.IsAtEnd() && !lIterMagn.IsAtEnd())
       {
 	
-	PixelType lOrientation = lIterOrientation.Get();
-	PixelType lMagnitude = lIterMagn.Get();
-	
-	double dist2 = (lIterOrientation.GetIndex()[0]-currentScale.GetIndex()[0])
-	  *(lIterOrientation.GetIndex()[0]-currentScale.GetIndex()[0])
-	  + (lIterOrientation.GetIndex()[1]-currentScale.GetIndex()[1])
-	  *(lIterOrientation.GetIndex()[1]-currentScale.GetIndex()[1]);
-	
-	double lWeightMagnitude = vcl_exp(-dist2/(2*lSigma*lSigma));
-	
-	unsigned int lHistoIndex = static_cast<unsigned int>
-	  ( vcl_floor(36*lOrientation/(2*M_PI)) );
-	lHistogram[lHistoIndex] += lMagnitude*lWeightMagnitude;
+	// check if pixel is inside the circle of radius 
+	float dx = lIterMagn.GetIndex()[0]-currentScale.GetIndex()[0];
+	float dy = lIterMagn.GetIndex()[1]-currentScale.GetIndex()[1];
+	float dist = vcl_sqrt(dx*dx+dy*dy);
+
+	// If we are in the circle
+	if(dist<radius)
+	  {
+	    //Get the values
+	    PixelType lOrientation = lIterOrientation.Get();
+	    PixelType lMagnitude = lIterMagn.Get();
+	   
+	    // Compute the gaussian weight
+	    double lWeightMagnitude = vcl_exp(-dist*dist/(2*lSigma*lSigma));
+	    
+	    // Compute the histogram bin index
+	    unsigned int lHistoIndex = static_cast<unsigned int>(vcl_floor(36*lOrientation/(2*M_PI)));
+
+	    // Update the histogram value
+	    lHistogram[lHistoIndex] += lMagnitude*lWeightMagnitude;
+	  }
 	++lIterOrientation;
 	++lIterMagn;
       }
@@ -632,15 +643,13 @@ namespace otb
 	for(j=i-36;j<i;++j)
 	  {
 	    sum+=lHistogram[i-j-1]*m_HistogramGaussianWeights[j+36];
-	    //std::cout << "Histo Ori index: " << i-j << " histo gauss: " << j+36 << std::endl;
-	      }
+	  }
 	if(sum>max)
 	  {
 	    max=sum;
 	    maxIndex = i;
 	  }
       }
-    
     return static_cast<PixelType>(maxIndex*10);
   }
   
@@ -674,7 +683,8 @@ namespace otb
     regionSize[1] = nbHistograms*nbPixelsPerHistogram+2;
 
     // sigma set to one half the width of descriptor window
-    double lSigma = nbPixelsPerHistogram*0.5;
+    // TODO check this
+    double lSigma = 0.5*radius;
     
     // index - regionSize/2
     regionIndex[0]=currentScale.GetIndex()[0]-regionSize[0]/2;
@@ -690,7 +700,9 @@ namespace otb
       }
     RegionIteratorType lIterMagnitude(m_MagnitudeList->GetNthElement(scale),region);
     RegionIteratorType lIterOrientation(m_OrientationList->GetNthElement(scale),region);
-    
+    lIterMagnitude.GoToBegin();
+    lIterOrientation.GoToBegin();
+
     // For each pixel in the region
     while(!lIterMagnitude.IsAtEnd() && !lIterOrientation.IsAtEnd())
       {
