@@ -197,7 +197,7 @@ DifferenceImageFilter<TInputImage, TOutputImage>
 	
 	for(unsigned int j = 0;j<minimumDifference.Size();++j)
 	  {
-      if(minimumDifference[j] > m_DifferenceThreshold * t[j])
+      if(minimumDifference[j] > m_DifferenceThreshold * vcl_abs(t[j]))
 	      {
 		isDifferent = true;
 	      }
