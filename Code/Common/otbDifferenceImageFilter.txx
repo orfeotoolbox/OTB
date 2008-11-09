@@ -190,6 +190,13 @@ DifferenceImageFilter<TInputImage, TOutputImage>
 	      }
 	  }
 	}
+
+       //for complex and vector type. FIXME: module might be better
+       ScalarRealType tMax=t[0];
+       for (unsigned int j = 0;j<t.Size();++j)
+       {
+	 if (t[j]>tMax) tMax = t[j];
+       }
 	
   // Check if difference is above threshold
   // the threshold is interpreted as relative to the value
@@ -197,7 +204,7 @@ DifferenceImageFilter<TInputImage, TOutputImage>
 	
 	for(unsigned int j = 0;j<minimumDifference.Size();++j)
 	  {
-      if(minimumDifference[j] > m_DifferenceThreshold * vcl_abs(t[j]))
+      if(minimumDifference[j] > m_DifferenceThreshold * tMax)
 	      {
 		isDifferent = true;
 	      }
