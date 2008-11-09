@@ -645,3 +645,21 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OTB_REQUIRED_CXX_FLAGS}")
 SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OTB_REQUIRED_LINK_FLAGS}")
 SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OTB_REQUIRED_LINK_FLAGS}")
 SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${OTB_REQUIRED_LINK_FLAGS}")
+
+#-----------------------------------------------------------------------------
+# Parameters for CPack
+SET(CPACK_PACKAGE_NAME "OTB" CACHE STRING "Package name")
+MARK_AS_ADVANCED(CPACK_PACKAGE_NAME)
+
+SET(CPACK_PACKAGE_VERSION  "${OTB_VERSION_STRING}" CACHE STRING "Package version number")
+MARK_AS_ADVANCED(CPACK_PACKAGE_VERSION)
+
+SET(CPACK_PACKAGE_CONTACT "debian@orfeo-toolbox.org" CACHE STRING  "Debian package maintainer email")
+MARK_AS_ADVANCED(CPACK_PACKAGE_CONTACT)
+
+SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "ORFEO Toolbox (OTB) is a remote sensing processing library developped by CNES (French Space Agency) and distributed as an open source library of image processing algorithms. OTB  offers particular functionalities for remote sensing image processing: image access (optimized read/write access for most of remote sensing image formats, meta-data access, visualization), filtering (blurring, denoising, enhancement), feature extraction (interest points, alignments, lines), image segmentation (region growing, watershed, level sets), classification (K-means, SVM, Markov random fields), change detection." CACHE STRING  "Debian package description")
+MARK_AS_ADVANCED(CPACK_PACKAGE_DESCRIPTION_SUMMARY)
+
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libgdal1-1.5.0 (>= 1.5.1-0), libfltk1 (>= 1.1.7-3), libcurl3 (>=7.15.5-1etch1), libfftw3-3 (>=3.1.2-3.1)" CACHE STRING "Debian package dependance" )
+MARK_AS_ADVANCED(CPACK_DEBIAN_PACKAGE_DEPENDS)
+
