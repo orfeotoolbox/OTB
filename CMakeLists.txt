@@ -647,19 +647,33 @@ SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OTB_REQUIRED_LINK_
 SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${OTB_REQUIRED_LINK_FLAGS}")
 
 #-----------------------------------------------------------------------------
-# Parameters for CPack
+# Set up CPack support, to be able to distribute OTB binary packages. It will
+# be particulary useful to distributed prebuilt OTB.
+#
+
+INCLUDE(InstallRequiredSystemLibraries)
+
 SET(CPACK_PACKAGE_NAME "OTB" CACHE STRING "Package name")
 MARK_AS_ADVANCED(CPACK_PACKAGE_NAME)
 
-SET(CPACK_PACKAGE_VERSION  "${OTB_VERSION_STRING}" CACHE STRING "Package version number")
-MARK_AS_ADVANCED(CPACK_PACKAGE_VERSION)
+SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Orfeo Toolbox")
+MARK_AS_ADVANCED(CPACK_PACKAGE_DESCRIPTION_SUMMARY)
+
+SET(CPACK_PACKAGE_VERSION  "${OTB_VERSION_STRING}")
+SET(CPACK_PACKAGE_VERSION_MAJOR "${OTB_VERSION_MAJOR}")
+SET(CPACK_PACKAGE_VERSION_MINOR "${OTB_VERSION_MINOR}")
+SET(CPACK_PACKAGE_VERSION_PATCH "${OTB_VERSION_PATCH}")
 
 SET(CPACK_PACKAGE_CONTACT "debian@orfeo-toolbox.org" CACHE STRING  "Debian package maintainer email")
 MARK_AS_ADVANCED(CPACK_PACKAGE_CONTACT)
 
-SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "ORFEO Toolbox (OTB) is a remote sensing processing library developped by CNES (French Space Agency) and distributed as an open source library of image processing algorithms. OTB  offers particular functionalities for remote sensing image processing: image access (optimized read/write access for most of remote sensing image formats, meta-data access, visualization), filtering (blurring, denoising, enhancement), feature extraction (interest points, alignments, lines), image segmentation (region growing, watershed, level sets), classification (K-means, SVM, Markov random fields), change detection." CACHE STRING  "Debian package description")
-MARK_AS_ADVANCED(CPACK_PACKAGE_DESCRIPTION_SUMMARY)
+SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Description.txt")
 
 SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libgdal1-1.5.0 (>= 1.5.1-0), libfltk1 (>= 1.1.7-3), libcurl3 (>=7.15.5-1etch1), libfftw3-3 (>=3.1.2-3.1)" CACHE STRING "Debian package dependance" )
 MARK_AS_ADVANCED(CPACK_DEBIAN_PACKAGE_DEPENDS)
 
+SET(CPACK_PACKAGE_INSTALL_DIRECTORY "OrfeoToolbox-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
+
+SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/Copyright/OTBCopyright.txt")
+
+INCLUDE(CPack)
