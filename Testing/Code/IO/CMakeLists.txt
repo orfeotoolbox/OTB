@@ -1387,7 +1387,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 # ---  JPEG2000 can write ---
 ADD_TEST(ioTuJPEG2000ImageIOCanWrite ${IO_TESTS13} 
          otbJPEG2000ImageIOTestCanWrite
-         ${INPUTDATA}/toto.j2k
+         ${TEMP}/toto.j2k
          )
 
 ENDIF(OTB_COMPILE_JPEG2000)
