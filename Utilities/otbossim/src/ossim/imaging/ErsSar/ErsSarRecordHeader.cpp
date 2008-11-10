@@ -52,7 +52,7 @@ ErsSarRecordHeader& ErsSarRecordHeader::operator=(const ErsSarRecordHeader& rhs)
 	return *this;
 }
 
-void ErsSarRecordHeader::SwitchEndian(int& value)
+void ErsSarRecordHeader::SwitchEndian(unsigned int& value)
 {
 	char buffer[4];
 	char res[4];

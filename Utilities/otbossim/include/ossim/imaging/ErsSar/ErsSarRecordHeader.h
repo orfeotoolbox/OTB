@@ -46,7 +46,7 @@ public:
 	/**
 	 * @brief Record sequence number
 	 */
-	int  get_rec_seq()
+	unsigned int  get_rec_seq()
 	{
 		return _rec_seq;
 	};
@@ -86,7 +86,7 @@ public:
 	/**
 	 * @brief Length of this record (in bytes)
 	 */
-    int  get_length()
+    unsigned int get_length()
 	{
 		return _length;
 	};
@@ -95,12 +95,12 @@ protected:
 	/**
 	 * @brief This function switch the LSB value and the MSB value of the parameter
 	 */
-	void SwitchEndian(int& value);
+	void SwitchEndian(unsigned int& value);
 
 	/**
 	 * @brief Record sequence number
 	 */
-	int  _rec_seq;
+	unsigned int  _rec_seq;
 	/**
 	 * @brief First record sub-type code
 	 */
@@ -120,7 +120,7 @@ protected:
 	/**
 	 * @brief Length of this record (in bytes)
 	 */
-    int  _length;
+    unsigned int  _length;
 private:
 
 
