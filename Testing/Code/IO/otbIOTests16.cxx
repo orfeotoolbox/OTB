@@ -35,4 +35,6 @@ REGISTER_TEST(otbImageFileReaderRADFloat);
 REGISTER_TEST(otbImageFileReaderRADComplexDouble);
 REGISTER_TEST(otbImageFileReaderRADComplexFloat);
 REGISTER_TEST(otbImageFileReaderRADComplexInt);
+REGISTER_TEST(otbPointSetFileReaderNew);
+REGISTER_TEST(otbPointSetFileReader);
 }

@@ -73,6 +73,7 @@ template<class TOutputPointSet>
     void TestFileExistanceAndReadability();
     
     std::string m_FileName; // The file to be read
+    long int m_NumberOfPoints;
     
   private:
     PointSetFileReader(const Self&); //purposely not implemented

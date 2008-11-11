@@ -33,6 +33,7 @@ namespace otb
       PointSetFileReader<TOutputPointSet>
   ::PointSetFileReader() : otb::PointSetSource<TOutputPointSet>()
   {
+    m_NumberOfPoints=-1;
   }
   
   template <class TOutputPointSet>
@@ -83,7 +84,8 @@ namespace otb
     std::cout << "Signature: " << header.GetFileSignature() << std::endl;
     std::cout << "Points count: " << header.GetPointRecordsCount() << std::endl;
 
-  
+    m_NumberOfPoints = header.GetPointRecordsCount();
+    
   
   }
   
@@ -97,7 +99,7 @@ namespace otb
     if( ! itksys::SystemTools::FileExists( m_FileName.c_str() ) )
     {
       itk::ImageFileReaderException e(__FILE__, __LINE__);
-      OStringStream msg;
+      itk::OStringStream msg;
       msg <<"The file doesn't exist. "
           << std::endl << "Filename = " << m_FileName
           << std::endl;
@@ -112,7 +114,7 @@ namespace otb
     if( readTester.fail() )
     {
       readTester.close();
-      OStringStream msg;
+      itk::OStringStream msg;
       msg <<"The file couldn't be opened for reading. "
           << std::endl << "Filename: " << m_FileName
           << std::endl;
@@ -130,7 +132,7 @@ namespace otb
   {
   
 
-    typename TOutputImage::Pointer output = this->GetOutput();
+    typename TOutputPointSet::Pointer output = this->GetOutput();
   
   
   }
@@ -142,16 +144,7 @@ namespace otb
   ::PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os, indent);
-
-    if (this->->GetOutput())
-    {
-      os << indent << "Number of points: " << this->->GetOutput()->GetNumberOfPoints() << std::endl;
-    }
-    else
-    {
-      os << indent << "Output: (null)" << "\n";
-    }
-
+    os << indent << "Number of points: " << this->m_NumberOfPoints << std::endl;
     os << indent << "m_FileName: " << this->m_FileName << "\n";
   }
   

@@ -1582,15 +1582,15 @@ ADD_TEST(ioTvImageFileReaderTIF2RADCI4 ${IO_TESTS16}
 #        ${TEMP}/ioImageFileReaderPNG2RADPHA.rad )
 
 
-ADD_TEST(ioTuPointSetFileReaderNew ${IO_TESTS15} 
+ADD_TEST(ioTuPointSetFileReaderNew ${IO_TESTS16} 
         otbPointSetFileReaderNew )
 
-ADD_TEST(ioTvPointSetFileReader ${IO_TESTS15} 
+ADD_TEST(ioTvPointSetFileReader ${IO_TESTS16} 
         --compare-ascii ${TOL}  ${BASELINE_FILES}/ioPointSetFileReader.txt
                         ${TEMP}/ioPointSetFileReader.txt
         otbPointSetFileReader
   ${INPUTDATA}/lidar.las
-  ${TEMP}/ioPointSetFileReader.txt)        
+  ${TEMP}/ioPointSetFileReader.txt)
         
   
 #----------------------------------------------------------------------------------
