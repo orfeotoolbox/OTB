@@ -44,6 +44,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party/boost_1_34_1
 #  ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party/zlib-1.2.3
 #  ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party/zlib-1.2.3/contrib
+  ${OTB_SOURCE_DIR}/Utilities/otbliblas/include
 )
 IF(OTB_COMPILE_JPEG2000)
   SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE} 
@@ -206,6 +207,7 @@ SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/third_party/boost_1_34_1
 #  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/third_party/zlib-1.2.3
 #  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/third_party/zlib-1.2.3/contrib
+  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbliblas/include
 )
 
 IF(OTB_COMPILE_JPEG2000)

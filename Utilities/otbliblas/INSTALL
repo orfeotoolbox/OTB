@@ -1,0 +1,32 @@
+***************************************************************
+libLAS Installation
+***************************************************************
+
+
+Unix
+~~~~~~~~~~~~~~~~~~~
+
+libLAS uses a typical GNU autoconf/automake framework for 
+building and installation on unix-like platforms.  
+
+The quick and dirty installation that would install things 
+by default in /usr/local might look like:
+
+::
+
+    ./configure
+    make
+    make install
+
+Configure libLAS for debugging and install in my home directory:
+
+::
+
+    ./configure --enable-debug --prefix=/home/hobu/liblas
+    
+Windows
+~~~~~~~~~~~~~~~~~~~
+
+Copy the windows package zip file into a directory of your 
+choosing and unzip.  You should be able to run the utility 
+applications.

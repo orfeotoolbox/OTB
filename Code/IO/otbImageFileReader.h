@@ -28,7 +28,7 @@ namespace otb
 {
 
 /** \class ImageFileReader
- * \brief Ressource en lecture pour lire une image depuis un fichier.
+ * \brief Ressource to read an image from a file.
  *
  * \sa ImageSeriesReader
  * \sa ImageIOBase
