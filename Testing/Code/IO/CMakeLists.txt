@@ -1589,7 +1589,7 @@ ADD_TEST(ioTvPointSetFileReader ${IO_TESTS16}
         --compare-ascii ${TOL}  ${BASELINE_FILES}/ioPointSetFileReader.txt
                         ${TEMP}/ioPointSetFileReader.txt
         otbPointSetFileReader
-  ${INPUTDATA}/lidar.las
+  ${INPUTDATA}/srs.las
   ${TEMP}/ioPointSetFileReader.txt)
         
   

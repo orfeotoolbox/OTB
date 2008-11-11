@@ -31,8 +31,21 @@ int otbPointSetFileReader(int argc, char * argv[])
 
   PointSetType::Pointer data = reader->GetOutput();
 
+  
   std::ofstream fout (argv[2]);
-  fout << data <<std::endl;
+  unsigned long nPoints = data->GetNumberOfPoints();
+  fout << std::setprecision(15) << "Number of points: " << nPoints << std::endl;
+  
+  for(unsigned long i=0; i < nPoints; ++i)
+  {
+    PointSetType::PointType point;
+    data->GetPoint(i,&point);
+    fout << point << " : ";
+    PointSetType::PixelType value;
+    data->GetPointData(i,&value);
+    fout << value << std::endl;
+  }
+  fout << std::endl;
   fout.close();
   return EXIT_SUCCESS;
 }

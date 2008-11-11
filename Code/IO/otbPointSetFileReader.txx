@@ -86,6 +86,7 @@ namespace otb
 
     m_NumberOfPoints = header.GetPointRecordsCount();
     
+    ifs.close();
   
   }
   
@@ -133,8 +134,38 @@ namespace otb
   
 
     typename TOutputPointSet::Pointer output = this->GetOutput();
+    
+    std::ifstream ifs;
+    ifs.open(m_FileName.c_str(), std::ios::in | std::ios::binary);
+    liblas::LASReader reader(ifs);
   
+    liblas::LASHeader const& header = reader.GetHeader();
+    
+    std::cout << "Signature: " << header.GetFileSignature() << std::endl;
+    std::cout << "Points count: " << header.GetPointRecordsCount() << std::endl;
+
+    m_NumberOfPoints = header.GetPointRecordsCount();
   
+    while (reader.ReadNextPoint())
+    {
+      liblas::LASPoint const& p = reader.GetPoint();
+
+      PointType point;
+      point[0] = p.GetX();
+      point[1] = p.GetY();
+
+
+      unsigned long i = output->GetNumberOfPoints();
+      output->SetPoint( i, point );        
+
+      PixelType V;
+      V = static_cast<PixelType>( p.GetZ() );
+      output->SetPointData( i, V );
+    
+    }
+    
+    
+    ifs.close();
   }
 
 
