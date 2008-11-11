@@ -1582,9 +1582,17 @@ ADD_TEST(ioTvImageFileReaderTIF2RADCI4 ${IO_TESTS16}
 #        ${TEMP}/ioImageFileReaderPNG2RADPHA.rad )
 
 
+ADD_TEST(ioTuPointSetFileReaderNew ${IO_TESTS15} 
+        otbPointSetFileReaderNew )
 
+ADD_TEST(ioTvPointSetFileReader ${IO_TESTS15} 
+        --compare-ascii ${TOL}  ${BASELINE_FILES}/ioPointSetFileReader.txt
+                        ${TEMP}/ioPointSetFileReader.txt
+        otbPointSetFileReader
+  ${INPUTDATA}/lidar.las
+  ${TEMP}/ioPointSetFileReader.txt)        
         
-
+  
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
 otbImageFileReaderERS.cxx
@@ -1711,6 +1719,8 @@ otbImageFileReaderRADFloat.cxx
 otbImageFileReaderRADComplexInt.cxx
 otbImageFileReaderRADComplexFloat.cxx
 otbImageFileReaderRADComplexDouble.cxx
+otbPointSetFileReaderNew.cxx
+otbPointSetFileReader.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
