@@ -518,7 +518,7 @@ ADD_TEST(coTuShiftScaleImageAdaptorNew ${COMMON_TESTS7}
 )
 
 ADD_TEST(coTvShiftScaleImageAdaptor ${COMMON_TESTS7}
-  --compare-image ${TOL}
+  --compare-image 10e-9
 	          ${BASELINE}/coTvShiftScaleImageAdaptor.tif    # copie the input image
 		  ${TEMP}/coTvShiftScaleImageAdaptor.tif
      otbShiftScaleImageAdaptor
