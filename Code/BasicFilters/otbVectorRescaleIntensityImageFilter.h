@@ -201,9 +201,20 @@ class ITK_EXPORT VectorRescaleIntensityImageFilter
   itkGetConstReferenceMacro( OutputMaximum, OutputPixelType );
   itkSetMacro( OutputMinimum, OutputPixelType );
   itkGetConstReferenceMacro( OutputMinimum, OutputPixelType );
-  itkSetMacro(ClampThreshold,double);
+  itkSetMacro(AutomaticInputMinMaxComputation,bool);
+  itkGetMacro(AutomaticInputMinMaxComputation,bool);
+  itkBooleanMacro(AutomaticInputMinMaxComputation);
+
   itkGetMacro(ClampThreshold,double);
-  
+  itkSetMacro(ClampThreshold,double);
+
+  itkGetMacro(InputMinimum,InputPixelType);
+  itkSetMacro(InputMinimum,InputPixelType);
+
+  itkGetMacro(InputMaximum,InputPixelType);
+  itkSetMacro(InputMaximum,InputPixelType);
+
+
   /** Process to execute before entering the multithreaded section */
   void BeforeThreadedGenerateData(void);
   
@@ -213,8 +224,8 @@ class ITK_EXPORT VectorRescaleIntensityImageFilter
   /** Generate input requested region */
   void GenerateInputRequestedRegion(void);
 
-/** Print internal ivars */
-void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  /** Print internal ivars */
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 protected:
   VectorRescaleIntensityImageFilter();
@@ -226,7 +237,10 @@ private:
 
   OutputPixelType        m_OutputMinimum;
   OutputPixelType        m_OutputMaximum;
+  InputPixelType         m_InputMinimum;
+  InputPixelType         m_InputMaximum;
   double                 m_ClampThreshold;
+  bool                   m_AutomaticInputMinMaxComputation;
 
 };
   

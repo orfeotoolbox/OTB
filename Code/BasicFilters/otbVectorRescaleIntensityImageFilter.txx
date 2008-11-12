@@ -37,6 +37,7 @@ VectorRescaleIntensityImageFilter<TInputImage, TOutputImage>
 ::VectorRescaleIntensityImageFilter()
 {
   m_ClampThreshold = 0.01;
+  m_AutomaticInputMinMaxComputation = true;
 }
 
 /**
@@ -75,67 +76,65 @@ void
 VectorRescaleIntensityImageFilter<TInputImage, TOutputImage>
 ::BeforeThreadedGenerateData()
 {
-  typedef  typename Superclass::InputImageType      InputImageType;
-  typedef  typename Superclass::InputImagePointer   InputImagePointer;
-
-  // Get the input
-  InputImagePointer inputImage =   this->GetInput();
-
-  typedef itk::ImageRegionConstIterator< InputImageType >  InputIterator;
-  typedef itk::Vector<typename InputImageType::InternalPixelType,1> MeasurementVectorType;
-  typedef itk::Statistics::ListSample<MeasurementVectorType> ListSampleType;
-  typedef float HistogramMeasurementType;
-  typedef itk::Statistics::ListSampleToHistogramGenerator<ListSampleType,HistogramMeasurementType,
-    itk::Statistics::DenseFrequencyContainer,1> HistogramGeneratorType;
-
-  typedef ObjectList<ListSampleType> ListSampleListType;
-
-
-    InputPixelType maximum;
-  InputPixelType minimum;
-  minimum.SetSize(inputImage->GetNumberOfComponentsPerPixel());
-  maximum.SetSize(inputImage->GetNumberOfComponentsPerPixel());
-  typename ListSampleListType::Pointer sl =  ListSampleListType::New();
-  
-  sl->Reserve(inputImage->GetNumberOfComponentsPerPixel());
-
-  for(unsigned int i = 0;i<maximum.GetSize();++i)
+  if(m_AutomaticInputMinMaxComputation)
     {
-      sl->PushBack(ListSampleType::New());
-    }
 
-  
-
-
-  InputIterator it( inputImage, inputImage->GetBufferedRegion() );
-
-  it.GoToBegin();
-  
-  while( !it.IsAtEnd() )
-    {
-       InputPixelType pixel = it.Get();
-      for(unsigned int i = 0;i<maximum.GetSize();++i)
+      typedef  typename Superclass::InputImageType      InputImageType;
+      typedef  typename Superclass::InputImagePointer   InputImagePointer;
+      
+      // Get the input
+      InputImagePointer inputImage =   this->GetInput();
+      
+      typedef itk::ImageRegionConstIterator< InputImageType >  InputIterator;
+      typedef itk::Vector<typename InputImageType::InternalPixelType,1> MeasurementVectorType;
+      typedef itk::Statistics::ListSample<MeasurementVectorType> ListSampleType;
+      typedef float HistogramMeasurementType;
+      typedef itk::Statistics::ListSampleToHistogramGenerator<ListSampleType,HistogramMeasurementType,
+	itk::Statistics::DenseFrequencyContainer,1> HistogramGeneratorType;
+      
+      typedef ObjectList<ListSampleType> ListSampleListType;
+      
+      m_InputMinimum.SetSize(inputImage->GetNumberOfComponentsPerPixel());
+      m_InputMaximum.SetSize(inputImage->GetNumberOfComponentsPerPixel());
+      typename ListSampleListType::Pointer sl =  ListSampleListType::New();
+      
+      sl->Reserve(inputImage->GetNumberOfComponentsPerPixel());
+      
+      for(unsigned int i = 0;i<m_InputMaximum.GetSize();++i)
 	{
-	  sl->GetNthElement(i)->PushBack(pixel[i]);
+	  sl->PushBack(ListSampleType::New());
 	}
-      ++it;
+      
+      InputIterator it( inputImage, inputImage->GetBufferedRegion() );
+      
+      it.GoToBegin();
+      
+      while( !it.IsAtEnd() )
+	{
+	  InputPixelType pixel = it.Get();
+	  for(unsigned int i = 0;i<m_InputMaximum.GetSize();++i)
+	    {
+	      sl->GetNthElement(i)->PushBack(pixel[i]);
+	    }
+	  ++it;
+	}
+      
+      for(unsigned int i = 0;i<m_InputMaximum.GetSize();++i)
+	{
+	  typename HistogramGeneratorType::Pointer generator = HistogramGeneratorType::New();
+	  generator->SetListSample(sl->GetNthElement(i));
+	  typename HistogramGeneratorType::HistogramType::SizeType size;
+	  size.Fill(static_cast<unsigned int>(vcl_ceil(1/m_ClampThreshold)*10));
+	  generator->SetNumberOfBins(size);
+	  generator->Update();
+	  m_InputMinimum[i]=static_cast<typename InputImageType::InternalPixelType>(generator->GetOutput()->Quantile(0,m_ClampThreshold));
+	  m_InputMaximum[i]=static_cast<typename InputImageType::InternalPixelType>(generator->GetOutput()->Quantile(0,1-m_ClampThreshold));
+	}
     }
 
-  for(unsigned int i = 0;i<maximum.GetSize();++i)
-    {
-      typename HistogramGeneratorType::Pointer generator = HistogramGeneratorType::New();
-      generator->SetListSample(sl->GetNthElement(i));
-      typename HistogramGeneratorType::HistogramType::SizeType size;
-      size.Fill(static_cast<unsigned int>(vcl_ceil(1/m_ClampThreshold)*10));
-      generator->SetNumberOfBins(size);
-      generator->Update();
-      minimum[i]=static_cast<typename InputImageType::InternalPixelType>(generator->GetOutput()->Quantile(0,m_ClampThreshold));
-      maximum[i]=static_cast<typename InputImageType::InternalPixelType>(generator->GetOutput()->Quantile(0,1-m_ClampThreshold));
-    }
-
-  // set up the functor values
-  this->GetFunctor().SetInputMinimum( minimum );
-  this->GetFunctor().SetInputMaximum ( maximum );
+      // set up the functor values
+  this->GetFunctor().SetInputMinimum( m_InputMinimum  );
+  this->GetFunctor().SetInputMaximum( m_InputMaximum  );
   this->GetFunctor().SetOutputMaximum(m_OutputMaximum );
   this->GetFunctor().SetOutputMinimum(m_OutputMinimum );
 }
@@ -149,6 +148,8 @@ VectorRescaleIntensityImageFilter<TInputImage, TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
+  os<<indent<<"Automatic min/max computation: "<<m_AutomaticInputMinMaxComputation<<std::endl;
+  os<<indent<<"Clamp threshold: "<<m_ClampThreshold<<std::endl;
 }
 } // end namespace otb
 #endif
