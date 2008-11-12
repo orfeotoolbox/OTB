@@ -31,8 +31,9 @@ int otbShiftScaleImageAdaptor( int argc, char * argv[] )
   const char * outputFilename = argv[2];
   
   typedef double                                                        PixelType;
+  typedef unsigned char                                           OutputPixelType;
   typedef otb::Image<PixelType, 2>                                InputImageType;
-  typedef otb::Image<PixelType, 2>                                      OutputImageType;
+  typedef otb::Image<OutputPixelType, 2>                          OutputImageType;
   typedef otb::ImageFileReader< InputImageType  >                       ReaderType;
   typedef otb::ImageFileWriter< OutputImageType >                       WriterType;
   typedef otb::ShiftScaleImageAdaptor<InputImageType, PixelType>        FilterType;
