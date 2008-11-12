@@ -81,8 +81,8 @@ namespace otb
   
     liblas::LASHeader const& header = reader.GetHeader();
     
-    std::cout << "Signature: " << header.GetFileSignature() << std::endl;
-    std::cout << "Points count: " << header.GetPointRecordsCount() << std::endl;
+    otbDebugMacro(<< "Signature: " << header.GetFileSignature());
+    otbDebugMacro(<< "Points count: " << header.GetPointRecordsCount());
 
     m_NumberOfPoints = header.GetPointRecordsCount();
     
@@ -141,8 +141,8 @@ namespace otb
   
     liblas::LASHeader const& header = reader.GetHeader();
     
-    std::cout << "Signature: " << header.GetFileSignature() << std::endl;
-    std::cout << "Points count: " << header.GetPointRecordsCount() << std::endl;
+    otbDebugMacro(<< "Signature: " << header.GetFileSignature());
+    otbDebugMacro(<< "Points count: " << header.GetPointRecordsCount());
 
     m_NumberOfPoints = header.GetPointRecordsCount();
   
