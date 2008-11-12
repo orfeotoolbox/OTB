@@ -29,35 +29,32 @@
 namespace otb {
   /**
        * \class PrintableImageFilter
-       * \brief This class 
-       * 
-       * 
-       * 
-       * 
+       * \brief This class is a helper class to turn a vector image to a generic 8 bytes RGB image.
        *
-       * 
-       * 
-   **/
+       *  It is useful for publications for instance.
+       **/
 
-      template <class TInputImageType>
+      template <class TInputImage>
 class ITK_EXPORT PrintableImageFilter :
-          public itk::ImageToImageFilter<TInputImageType, otb::VectorImage<unsigned char,2> >
+          public itk::ImageToImageFilter<TInputImage, otb::VectorImage<unsigned char,2> >
     {
       public:
-        typedef PrintableImageFilter   Self;
+        typedef PrintableImageFilter                            Self;
         typedef itk::ImageToImageFilter
-            <TInputImageType, otb::VectorImage<unsigned char,2> > Superclass;
-        typedef itk::SmartPointer<Self>             Pointer;
-        typedef itk::SmartPointer<const Self>       ConstPointer;
-        typedef otb::VectorImage<unsigned char,2>   OutputImageType;
-//         typedef typename OutputImageType::PixelType PixelType;
-        typedef unsigned char PixelType;
+	  <TInputImage, otb::VectorImage<unsigned char,2> >     Superclass;
+        typedef itk::SmartPointer<Self>                         Pointer;
+        typedef itk::SmartPointer<const Self>                   ConstPointer;
+        
+	typedef TInputImage                                     InputImageType;
+	typedef typename InputImageType::PixelType              InputPixelType;
+	typedef unsigned char                                   OutputPixelType;
+        typedef otb::VectorImage<OutputPixelType,2>             OutputImageType;
 
         typedef otb::VectorRescaleIntensityImageFilter
-            <TInputImageType,OutputImageType>            VectorRescalerType;
+            <InputImageType,OutputImageType>                    VectorRescalerType;
         typedef otb::MultiChannelExtractROI
-            <PixelType,PixelType>           ChannelExtractorType;
-        typedef typename ChannelExtractorType::ChannelsType ChannelsType;
+            <OutputPixelType,OutputPixelType>                   ChannelExtractorType;
+        typedef typename ChannelExtractorType::ChannelsType     ChannelsType;
           
           
         /** Method for creation through object factory */
@@ -72,6 +69,13 @@ class ITK_EXPORT PrintableImageFilter :
           
         void SetChannel( unsigned int channel);
         const ChannelsType GetChannels(void) const;
+
+	otbSetObjectMemberMacro(Rescaler,AutomaticInputMinMaxComputation,bool);
+	otbGetObjectMemberMacro(Rescaler,AutomaticInputMinMaxComputation,bool);
+	otbSetObjectMemberMacro(Rescaler,InputMinimum,InputPixelType);
+	otbGetObjectMemberMacro(Rescaler,InputMinimum,InputPixelType);
+	otbSetObjectMemberMacro(Rescaler,InputMaximum,InputPixelType);
+	otbGetObjectMemberMacro(Rescaler,InputMaximum,InputPixelType);
           
       protected:
 
@@ -86,9 +90,6 @@ class ITK_EXPORT PrintableImageFilter :
 
         typename VectorRescalerType::Pointer m_Rescaler;
         typename ChannelExtractorType::Pointer m_Extractor;
-
-
-
     };
       
 } // end namespace otb

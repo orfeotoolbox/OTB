@@ -79,7 +79,6 @@ namespace otb
     m_Rescaler->SetOutputMinimum(minimum);
     m_Rescaler->SetOutputMaximum(maximum);
     m_Rescaler->SetClampThreshold(0.01);
-//     m_Rescaler->GetOutput()->SetNumberOfComponentsPerPixel(4);
         
     m_Extractor->GraftOutput( this->GetOutput() );
     m_Extractor->Update();
@@ -92,10 +91,6 @@ namespace otb
   ::PrintSelf( std::ostream& os, itk::Indent indent ) const
   {
     Superclass::PrintSelf(os,indent);
-
-    os
-//         << indent << "Channels:" << this->m_Extractor->GetChannels()
-        << std::endl;
   }
           
 } // end namespace otb
