@@ -123,6 +123,12 @@
 
 #endif
 
+/** Define short operation macro */
+
+#ifndef M_SQUARE
+#define M_SQUARE(x) ((x)*(x))
+#endif
+
 #endif //end of __otbMath_h
 
 
