@@ -216,44 +216,17 @@ namespace otb
 	m_GradientFilter = GradientFilterType::New();
 	m_MagnitudeFilter = MagnitudeFilterType::New();
 	m_OrientationFilter = OrientationFilterType::New();
-// 	m_XOrientationGaussianFilter = GaussianFilterType::New();
-// 	m_YOrientationGaussianFilter = GaussianFilterType::New();
-// 	m_XDescriptorGaussianFilter = GaussianFilterType::New();
-// 	m_YDescriptorGaussianFilter = GaussianFilterType::New();
 	
 	m_GradientFilter->SetInput(m_YGaussianFilter->GetOutput());
 	m_MagnitudeFilter->SetInput(m_GradientFilter->GetOutput());
 	m_OrientationFilter->SetInput(m_GradientFilter->GetOutput());
 	
-// 	m_XOrientationGaussianFilter->SetInput(m_OrientationFilter->GetOutput());
-// 	m_XOrientationGaussianFilter->SetSigma(m_SigmaFactorOrientation*xsigman);
-// 	m_XOrientationGaussianFilter->SetDirection(0);
-	
-// 	m_YOrientationGaussianFilter->SetInput(m_XOrientationGaussianFilter->GetOutput());
-// 	m_YOrientationGaussianFilter->SetSigma(m_SigmaFactorOrientation*ysigman);
-// 	m_YOrientationGaussianFilter->SetDirection(1);
-	
-// 	m_XDescriptorGaussianFilter->SetInput(m_OrientationFilter->GetOutput());
-// 	m_XDescriptorGaussianFilter->SetSigma(m_SigmaFactorDescriptor*xsigman);
-// 	m_XDescriptorGaussianFilter->SetDirection(0);
-	
-// 	m_YDescriptorGaussianFilter->SetInput(m_XDescriptorGaussianFilter->GetOutput());
-// 	m_YDescriptorGaussianFilter->SetSigma(m_SigmaFactorDescriptor*ysigman);
-// 	m_YDescriptorGaussianFilter->SetDirection(1);
-	
 	m_MagnitudeFilter->Update();
 	m_OrientationFilter->Update();
 	
-// 	m_YOrientationGaussianFilter->Update();
-// 	m_YDescriptorGaussianFilter->Update();
-	
-	
 	m_MagnitudeList->PushBack(m_MagnitudeFilter->GetOutput());
 	m_OrientationList->PushBack(m_OrientationFilter->GetOutput());
-// 	m_GaussianWeightOrientationList->
-// 	  PushBack(m_YOrientationGaussianFilter->GetOutput());
-// 	m_GaussianWeightDescriptorList->
-// 	  PushBack(m_YDescriptorGaussianFilter->GetOutput());
+
 	
 	if (lScale>0)
 	  {
@@ -393,15 +366,13 @@ namespace otb
 			    outputPointSet->SetPoint(m_ValidatedKeyPoints, keyPoint);
 			    
 			    OutputPixelType data;
-			    data.SetSize(2+128);
+			    data.SetSize(128);
 			    // check this, compute scale
 			    // real scale = octave*scale
-			    data.SetElement(0,lScale+lTranslation[2]);
-			    data.SetElement(1,*orientationIt);
 			    typename std::vector<PixelType>::const_iterator lIterDescriptor = 
 			      lDescriptors.begin();
 			
-			    unsigned int lIndDesc = 2;
+			    unsigned int lIndDesc = 0;
 			    while (lIterDescriptor != lDescriptors.end())
 			      {
 				data.SetElement(lIndDesc, *lIterDescriptor);
@@ -579,9 +550,11 @@ namespace otb
     // radius of the neighborhood
     unsigned int radius = 4;
     double lSigma = scale*3;
+    unsigned int nbBins = 36;
+    double binWidth = 360./nbBins;
 
     // initialize the histogram
-    std::vector<double> lHistogram(36,0.);
+    std::vector<double> lHistogram(nbBins,0.), lSmoothedHistogram(nbBins,0.);
     
     // Build the region to examine
     typename InputImageType::RegionType region;
@@ -624,7 +597,7 @@ namespace otb
 	    double lWeightMagnitude = vcl_exp(-dist*dist/(2*lSigma*lSigma));
 	    
 	    // Compute the histogram bin index
-	    unsigned int lHistoIndex = static_cast<unsigned int>(vcl_floor(36*lOrientation/(2*M_PI)));
+	    unsigned int lHistoIndex = static_cast<unsigned int>(vcl_floor(nbBins*lOrientation/(2*M_PI)));
 
 	    // Update the histogram value
 	    lHistogram[lHistoIndex] += lMagnitude*lWeightMagnitude;
@@ -637,39 +610,110 @@ namespace otb
     double max = 0;
     double secondMax = 0;
     double sum = 0;
-    unsigned int maxIndex = 0;
+    int maxIndex = 0;
     int secondMaxIndex = -1;
     int j = 0;
     int i = 0;
-    
-    for(i=0;i<36;++i)
+
+    // Smoothing histogram
+    for(i=0;i<static_cast<int>(nbBins);++i)
       {
 	sum = 0;
-	for(j=i-36;j<i;++j)
+	for(j=i-nbBins;j<i;++j)
 	  {
-	    sum+=lHistogram[i-j-1]*m_HistogramGaussianWeights[j+36];
+	    sum+=lHistogram[i-j-1]*m_HistogramGaussianWeights[j+nbBins];
 	  }
-	if(sum>max)
+	lSmoothedHistogram[i]=sum;
+      }
+
+    // looking for maximums
+    for(i=0;i<static_cast<int>(nbBins);++i)
+      {
+	if(lSmoothedHistogram[i]>max)
 	  {
 	    secondMax = max;
 	    secondMaxIndex = maxIndex;
-	    max=sum;
+	    max=lSmoothedHistogram[i];
 	    maxIndex = i;
 	  }
 	else if(sum > secondMax)
 	  {
-	    secondMax = sum;
+	    secondMax = lSmoothedHistogram[i];
 	    secondMaxIndex = i;
 	  }
       }
-    
-
+    // This structure will hold the located maximums
     std::vector<PixelType> orientations;
-    orientations.push_back( static_cast<PixelType>(maxIndex*10));
-    if(secondMaxIndex>=0 && secondMax > 0.8 * max)
+
+    //interpolate orientation maximum
+    double x1,x2,x3,y1,y2,y3,a,b,num,denom,orientation;
+    x1 = (maxIndex-1)*binWidth+binWidth/2;
+    y1 = lSmoothedHistogram[(maxIndex-1)<0 ? maxIndex-1+nbBins : maxIndex-1];
+    x2 = (maxIndex)*binWidth+binWidth/2;
+    y2 = lSmoothedHistogram[maxIndex];
+    x3 = (maxIndex+1)*binWidth+binWidth/2;
+    y3 = lSmoothedHistogram[maxIndex+1>static_cast<int>(nbBins)-1 ? maxIndex+1-nbBins : maxIndex+1];
+
+    denom = x1*x1*x2 + x2*x2*x3 + x3*x3*x1 - x1*x1*x3 - x2*x2*x1 - x3*x3*x2;
+    num =   y1 * x2  + y2 * x3  + y3 * x1  - y1 * x3  - y2 * x1  - y3 * x2;
+
+    if(denom == 0 || num == 0)
       {
-	orientations.push_back(static_cast<PixelType>(secondMaxIndex*10));
+	// no main orientation, return an empty orientation vector
+	return orientations;
       }
+
+    a = num/denom;
+    b = ((y1-y2)-a*(x1*x1-x2*x2))/(x1-x2);
+
+    orientation = -b/(2*a);
+    if(orientation<0)
+      {
+	orientation+=360;
+      }
+    else if(orientation>=360)
+      {
+	orientation-=360;
+      }
+    
+//     orientations.push_back( static_cast<PixelType>(maxIndex*binWidth + binWidth/2));
+    orientations.push_back(static_cast<PixelType>(orientation));
+
+    // Second peak is disabled, since it seems to confuse the matching procedure.
+
+  //   if(secondMaxIndex>=0 && secondMax > 0.8 * max)
+//       {
+// 	x1 = (secondMaxIndex-1)*binWidth+binWidth/2;
+// 	y1 = lSmoothedHistogram[(secondMaxIndex-1)<0 ? secondMaxIndex-1+nbBins : secondMaxIndex-1];
+// 	x2 = (secondMaxIndex)*binWidth+binWidth/2;
+// 	y2 = lSmoothedHistogram[secondMaxIndex];
+// 	x3 = (secondMaxIndex+1)*binWidth+binWidth/2;
+// 	y3 = lSmoothedHistogram[secondMaxIndex+1>static_cast<int>(nbBins)-1 ? secondMaxIndex+1-nbBins : secondMaxIndex+1];
+	
+// 	denom = x1*x1*x2 + x2*x2*x3 + x3*x3*x1 - x1*x1*x3 - x2*x2*x1 - x3*x3*x2;
+// 	num = y1*x2 + y2 * x3 + y3*x1 - y1*x3 - y2*x1 - y3*x2;
+	
+// 	if(denom == 0 || num == 0)
+// 	  {
+// 	    // no main orientation, return an empty orientation vector
+// 	    return orientations;
+// 	  }
+	
+// 	a = num/denom;
+// 	b = ((y1-y2)-a*(x1*x1-x2*x2))/(x1-x2);
+
+// 	orientation = -b/(2*a);
+// 	if(orientation<0)
+// 	  {
+// 	    orientation+=360;
+// 	  }
+// 	else if(orientation>=360)
+// 	  {
+// 	    orientation-=360;
+// 	  }
+// // 	orientations.push_back( static_cast<PixelType>(secondMaxIndex*binWidth+binWidth/2));
+// 	orientations.push_back(static_cast<PixelType>(orientation));
+//       }
 
     return orientations;
   }
@@ -705,7 +749,7 @@ namespace otb
 
     // sigma set to one half the width of descriptor window
     // TODO check this
-    double lSigma = 0.5*radius;
+    double lSigma = radius;
     
     // index - regionSize/2
     regionIndex[0]=currentScale.GetIndex()[0]-regionSize[0]/2;
@@ -737,8 +781,8 @@ namespace otb
 	  {
 	    // rotate the pixel location to compensate sift orientation
 	    float angle = orientation*M_PI/180.;
-	    float cosangle = vcl_cos(angle);
-	    float sinangle = vcl_sin(angle);
+	    float cosangle = vcl_cos(-angle);
+	    float sinangle = vcl_sin(-angle);
 	    float rdx = dx * cosangle - dy * sinangle;
 	    float rdy = dx * sinangle + dy * cosangle;
 	    // decide to which histogram the pixel contributes
@@ -750,6 +794,10 @@ namespace otb
 	    if(compensatedOrientation<0)
 	      {
 		compensatedOrientation+=2*M_PI;
+	      }
+	    if(compensatedOrientation>=2*M_PI)
+	      {
+		compensatedOrientation-=2*M_PI;
 	      }
 	    unsigned int histogramBin = vcl_floor(compensatedOrientation*nbBinsPerHistogram/(2*M_PI));
 	    
