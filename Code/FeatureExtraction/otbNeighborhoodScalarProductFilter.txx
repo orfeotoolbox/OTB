@@ -146,7 +146,7 @@ NeighborhoodScalarProductFilter<TInputImage,TOutputModulus,TOutputDirection>
 	      }
 	    }
 	  // Compute the direction 
-	  double angle = (1+neighborhoodNumberMax) * M_PI/4;
+    double angle = (1+neighborhoodNumberMax) * M_PI_4;
 	  if (flagPosNegDirection) 
 	    {
 	      angle -= M_PI;

@@ -114,8 +114,6 @@ ADD_TEST(FA-00006-io_Radarsat_UI2_Double2Double_ ${COMMON_TESTS}
          -double ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_r8.hdr
          -startX 2559 -startY 3591 -sizeX 337 -sizeY 280 )
 
-ENDIF(OTB_DATA_USE_LARGEINPUT)
-
 ADD_TEST(FA-00006-io_Radarsat_I4_Int2Double ${COMMON_TESTS} 
 #     --compare-image ${TOL}  ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_r8.hdr
 #                       ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_r8_bis.hdr
@@ -140,13 +138,15 @@ ADD_TEST(FA-00006-io_Radarsat_R8_Double2Double ${COMMON_TESTS}
          -double ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_r8_4.hdr
          )
 
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 ADD_TEST(FA-00012-co_AlignementsQB ${CXX_TEST_PATH}/AlignementsQB
         ${INPUTDATA}/poupees.hdr 
         ${TEMP}/FA-00012-co_AlignementsQB.png 
         )
 
 
-# ---  FA 00013 : impossible d'�crire une image TIFF(CAI) -> GDAL  ---
+# ---  FA 00013 : impossible to write a TIFF(CAI) -> GDAL  ---
 ADD_TEST(FA-00013-io_WriteImageTIFF ${IO_TESTS2} 
         otbImageFileWriterTest
         ${INPUTDATA}/sbuv_NB_c1.png 

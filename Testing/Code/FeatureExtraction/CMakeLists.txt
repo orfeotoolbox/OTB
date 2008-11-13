@@ -652,18 +652,18 @@ ADD_TEST(feTvLinkPathListFilter ${FEATUREEXTRACTION_TESTS8}
 	  11 171  11 141 
         )
 
-# -------            otb::LikehoodPathListFilter   -------------
+# -------            otb::LikelihoodPathListFilter   -------------
 
-ADD_TEST(feTuLikehoodPathListFilterNew ${FEATUREEXTRACTION_TESTS8} 
-         otbLikehoodPathListFilterNew) 
+ADD_TEST(feTuLikelihoodPathListFilterNew ${FEATUREEXTRACTION_TESTS8} 
+         otbLikelihoodPathListFilterNew) 
 
-ADD_TEST(feTvLikehoodPathListFilter ${FEATUREEXTRACTION_TESTS8}  
+ADD_TEST(feTvLikelihoodPathListFilter ${FEATUREEXTRACTION_TESTS8}  
 --compare-ascii ${EPS}  
-		${BASELINE_FILES}/feTvLikehoodPathOutput.txt
-		${TEMP}/feTvLikehoodPathOutput.txt
-        otbLikehoodPathListFilter
+		${BASELINE_FILES}/feTvLikelihoodPathOutput.txt
+		${TEMP}/feTvLikelihoodPathOutput.txt
+        otbLikelihoodPathListFilter
 	${INPUTDATA}/InputForRoadDetection_NonMaxRem.hdr
-	${TEMP}/feTvLikehoodPathOutput.txt
+	${TEMP}/feTvLikelihoodPathOutput.txt
 	157 335 204 376 |
 	21 305 35 308 77 354 85 358 |
 	73 160 126 173 
@@ -904,8 +904,8 @@ otbRemoveTortuousPathListFilterNew.cxx
 otbRemoveTortuousPathListFilter.cxx
 otbLinkPathListFilterNew.cxx
 otbLinkPathListFilter.cxx
-otbLikehoodPathListFilterNew.cxx
-otbLikehoodPathListFilter.cxx
+otbLikelihoodPathListFilterNew.cxx
+otbLikelihoodPathListFilter.cxx
 otbRoadExtractionFilterNew.cxx
 otbRoadExtractionFilter.cxx
 otbAddCarvingPathFilterNew.cxx

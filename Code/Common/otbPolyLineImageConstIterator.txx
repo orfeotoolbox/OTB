@@ -38,22 +38,22 @@ PolyLineImageConstIterator<TImage, TPath>
   m_InternalVertexIterator = m_Path->GetVertexList()->Begin();
   IndexType source,target;
   for(unsigned int i = 0;i<ImageType::ImageDimension;++i)
-    {
-      source[i] = static_cast<unsigned int>(m_InternalVertexIterator.Value()[i]);
-    }
+  {
+    source[i] = static_cast<unsigned int>(m_InternalVertexIterator.Value()[i]);
+  }
   ++m_InternalVertexIterator;
   if(m_InternalVertexIterator!=m_Path->GetVertexList()->End())
+  {
+
+    for(unsigned int i = 0;i<ImageType::ImageDimension;++i)
     {
-      
-      for(unsigned int i = 0;i<ImageType::ImageDimension;++i)
-	{
-	  target[i] = static_cast<unsigned int>(m_InternalVertexIterator.Value()[i]);
-	}    
-    }
+      target[i] = static_cast<unsigned int>(m_InternalVertexIterator.Value()[i]);
+    }    
+  }
   else
-    {
-      target = source;
-    }
+  {
+    target = source;
+  }
   m_InternalImageIterator = InternalImageIteratorType(const_cast<ImageType *>(m_Image.GetPointer()),source,target);
 }
 /**
@@ -79,22 +79,22 @@ PolyLineImageConstIterator<TImage, TPath>
   m_InternalVertexIterator = m_Path->GetVertexList()->Begin();
   IndexType source,target;
   for(unsigned int i = 0;i<ImageType::ImageDimension;++i)
-    {
-      source[i] = static_cast<unsigned int>(m_InternalVertexIterator.Value()[i]);
-    }
+  {
+    source[i] = static_cast<unsigned int>(m_InternalVertexIterator.Value()[i]);
+  }
   ++m_InternalVertexIterator;
   if(m_InternalVertexIterator!=m_Path->GetVertexList()->End())
-    {
+  {
       
-      for(unsigned int i = 0;i<ImageType::ImageDimension;++i)
-	{
-	  target[i] = static_cast<unsigned int>(m_InternalVertexIterator.Value()[i]);
-	}    
-    }
-  else
+    for(unsigned int i = 0;i<ImageType::ImageDimension;++i)
     {
-      target = source;
-    }
+      target[i] = static_cast<unsigned int>(m_InternalVertexIterator.Value()[i]);
+    }    
+  }
+  else
+  {
+    target = source;
+  }
   m_InternalImageIterator = InternalImageIteratorType(const_cast<ImageType *>(m_Image.GetPointer()),source,target);      
 }
 
@@ -106,29 +106,29 @@ PolyLineImageConstIterator<TImage,TPath>
  //  otbMsgDebugMacro(<<this->GetIndex());
   ++m_InternalImageIterator;
   if(m_InternalImageIterator.IsAtEnd())
+  {
+    if(m_InternalVertexIterator!=m_Path->GetVertexList()->End())
     {
-      if(m_InternalVertexIterator!=m_Path->GetVertexList()->End())
-	{
-	  IndexType source;
-	  for(unsigned int i = 0;i<ImageType::ImageDimension;++i)
-	    {
-	      source[i] = static_cast<unsigned int>(m_InternalVertexIterator.Value()[i]);
-	    }
+      IndexType source;
+      for(unsigned int i = 0;i<ImageType::ImageDimension;++i)
+      {
+        source[i] = static_cast<unsigned int>(m_InternalVertexIterator.Value()[i]);
+      }
 	  // otbMsgDebugMacro(<<"Source: "<<source);
-	  ++m_InternalVertexIterator;	  
-	  if(m_InternalVertexIterator!=m_Path->GetVertexList()->End())
-	    {
-	      IndexType target;
-	      for(unsigned int i = 0;i<ImageType::ImageDimension;++i)
-		{
-		  target[i] = static_cast<unsigned int>(m_InternalVertexIterator.Value()[i]);
-		}
+      ++m_InternalVertexIterator;	  
+      if(m_InternalVertexIterator!=m_Path->GetVertexList()->End())
+      {
+        IndexType target;
+        for(unsigned int i = 0;i<ImageType::ImageDimension;++i)
+        {
+          target[i] = static_cast<unsigned int>(m_InternalVertexIterator.Value()[i]);
+        }
 	      // otbMsgDebugMacro(<<"Target: "<<target);
-	      m_InternalImageIterator = InternalImageIteratorType(const_cast<ImageType *>(m_Image.GetPointer()),source,target);      
-	      ++m_InternalImageIterator;
-	    }
-	}
+        m_InternalImageIterator = InternalImageIteratorType(const_cast<ImageType *>(m_Image.GetPointer()),source,target);      
+        ++m_InternalImageIterator;
+      }
     }
+  }
 }
 } // End namespace otb
 #endif

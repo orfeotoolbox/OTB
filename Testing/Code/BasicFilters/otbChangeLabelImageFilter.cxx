@@ -65,8 +65,18 @@ int otbChangeLabelImageFilterTest(int argc, char * argv[])
 
   OutputImageType::Pointer outputImage = filter->GetOutput();
   
-  filter->Update();
-  filter->SetFunctor(filter->GetFunctor());
+  // Execute the filter
+  try
+  {
+    filter->Update();
+    filter->SetFunctor(filter->GetFunctor());
+  }
+  catch(...)
+  {
+    std::cerr << "Caught an unexpected exception. " << std::endl;
+    std::cerr << "Test failed. " << std::endl;
+    return EXIT_FAILURE;
+  }
   
   // Create an iterator for going through the image output
   InputIteratorType  it( source->GetOutput(), source->GetOutput()->GetRequestedRegion() ); 
@@ -96,7 +106,12 @@ int otbChangeLabelImageFilterTest(int argc, char * argv[])
  
     if ( !pass )
       {
-	return EXIT_FAILURE;
+        std::cerr << "Error in otbChangeLabelImageFilterTest " << std::endl;
+        std::cerr << " input = " << input;
+        std::cerr << " output = " << output;
+        std::cerr << std::endl;
+
+        return EXIT_FAILURE;
       }
     
     ++ot;

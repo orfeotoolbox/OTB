@@ -15,24 +15,30 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLikehoodPathListFilter_h
-#define __otbLikehoodPathListFilter_h
+#ifndef __otbLikelihoodPathListFilter_h
+#define __otbLikelihoodPathListFilter_h
 
 #include "otbPathListToPathListFilter.h"
 #include "otbMacro.h"
 
 namespace otb
 {
-/** \class LikehoodPathListFilter
- *  \brief 
+/** \class LikelihoodPathListFilter
+ *  \brief Affect a value to each path of the list based on the image
+ * 
+ * PathList and image are given as an input, the filter affect a value to each
+ * path: this value is equal to the sum of the pixels crossed by the path
+ * (using a PolyLineImageConstIterator) divided by the number of points in the
+ * path
+ * 
  */
 template <class TPath, class TImage>
-class ITK_EXPORT LikehoodPathListFilter
+class ITK_EXPORT LikelihoodPathListFilter
   : public PathListToPathListFilter<TPath>
 {
  public:
   /** Standard typedefs */
-  typedef LikehoodPathListFilter                Self;
+  typedef LikelihoodPathListFilter                Self;
   typedef PathListToPathListFilter<TPath>       Superclass;
   typedef itk::SmartPointer<Self>               Pointer;
   typedef itk::SmartPointer<const Self>         ConstPointer;
@@ -41,7 +47,7 @@ class ITK_EXPORT LikehoodPathListFilter
   itkNewMacro(Self);
   
   /** Creation through object factory macro */
-  itkTypeMacro(LikehoodPathListFilter, PathListToPathListFilter);
+  itkTypeMacro(LikelihoodPathListFilter, PathListToPathListFilter);
   
   /** Template parameters typedefs */
   typedef typename Superclass::PathType         PathType;
@@ -59,36 +65,36 @@ class ITK_EXPORT LikehoodPathListFilter
   typedef typename ImageType::ConstPointer ImageConstPointerType;
   
   /**
-   * Set the input likehood image.
-   * \param image The likehood image.
+   * Set the input Likelihood image.
+   * \param image The Likelihood image.
    */
   void SetInputImage(const ImageType * image);
   
   /**
-   * Get the input likehood image.
-   * \return The input likehood image.
+   * Get the input Likelihood image.
+   * \return The input Likelihood image.
    */
   const ImageType * GetInputImage(void);
 
 protected:
   /** Constructor */
-  LikehoodPathListFilter();
+  LikelihoodPathListFilter();
   /** Destructor */
-  virtual ~LikehoodPathListFilter() {};
+  virtual ~LikelihoodPathListFilter() {};
   /** GenerateData method */
   virtual void GenerateData();
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  LikehoodPathListFilter(const Self&); //purposely not implemented
+  LikelihoodPathListFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   std::string m_Key;
 };
 }// End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLikehoodPathListFilter.txx"
+#include "otbLikelihoodPathListFilter.txx"
 #endif
 
 #endif

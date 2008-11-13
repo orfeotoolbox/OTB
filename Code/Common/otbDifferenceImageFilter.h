@@ -56,7 +56,7 @@ public:
   itkSetMacro(ToleranceRadius, int);
   itkGetMacro(ToleranceRadius, int);
   
-  /** Set/Get the minimum threshold for pixels to be different.
+  /** Set/Get the minimum threshold for pixels to be different (relative).
       Default is 0. */
   itkSetMacro(DifferenceThreshold,ScalarRealType );
   itkGetMacro(DifferenceThreshold,ScalarRealType );

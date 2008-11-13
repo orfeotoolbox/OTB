@@ -650,7 +650,7 @@ namespace otb
     oss<<index<<" (image position)"<<std::endl;
     PointType point;
     m_InputImage->TransformIndexToPhysicalPoint(index,point);
-    oss << std::setprecision(12) << point<<" (physical coordinates)"<<std::endl;
+    oss << std::setprecision(15) << point<<" (physical coordinates)"<<std::endl;
     
     if(m_InputImage->GetBufferedRegion().IsInside(index))
     {
@@ -667,7 +667,7 @@ namespace otb
         double re = static_cast<double>(newPixel[m_RedChannelIndex]);
         double im = static_cast<double>(newPixel[m_GreenChannelIndex]);
         double modulus = vcl_sqrt(re*re+im*im);
-        oss<<modulus<<std::setprecision(3)<<" ("<<m_Label<<" modulus value)" << im << ", " << re <<std::endl;
+        oss<<modulus<<std::setprecision(3)<<" ("<<m_Label<<" modulus value)" <<std::endl;
 
       }
       else if(this->GetViewModel() == ScrollWidgetType::COMPLEX_PHASE)

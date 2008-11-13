@@ -89,35 +89,35 @@ DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
   for(outIt.GoToBegin(),inIt.GoToBegin();
       (!outIt.IsAtEnd() && !inIt.IsAtEnd());
       ++outIt,++inIt)
-    {
-      outIt.Set(static_cast<OutputImagePixelType>(inIt.Get()));
-    }
+  {
+    outIt.Set(static_cast<OutputImagePixelType>(inIt.Get()));
+  }
   
   // Then we use otb::PolyLineImageIterator to draw polylines
   for(PathListIteratorType plIt = pathListPtr->Begin(); plIt!=pathListPtr->End();++plIt)
+  {
+    OutputImagePixelType value;
+    if(m_UseInternalPathValue && plIt.Get()->GetMetaDataDictionary().HasKey("Value"))
     {
-      OutputImagePixelType value;
-      if(m_UseInternalPathValue && plIt.Get()->GetMetaDataDictionary().HasKey("Value"))
-	{
-	  itk::ExposeMetaData<OutputImagePixelType>(plIt.Get()->GetMetaDataDictionary(),"Value",value);
-	}
-      else
-	{
-	  value = static_cast<OutputImagePixelType>(m_PathValue);
-	}
-      PolyLineIteratorType imageIt(outputPtr,plIt.Get());
-      for(imageIt.GoToBegin();!imageIt.IsAtEnd();++imageIt)
-	{
-          if (m_AddValue)
-          {
-            imageIt.Set(imageIt.Get()+1);
-          }
-          else
-          {
-            imageIt.Set(value);
-          }
-	}
+      itk::ExposeMetaData<OutputImagePixelType>(plIt.Get()->GetMetaDataDictionary(),"Value",value);
     }
+    else
+    {
+      value = static_cast<OutputImagePixelType>(m_PathValue);
+    }
+    PolyLineIteratorType imageIt(outputPtr,plIt.Get());
+    for(imageIt.GoToBegin();!imageIt.IsAtEnd();++imageIt)
+    {
+      if (m_AddValue)
+      {
+        imageIt.Set(imageIt.Get()+1);
+      }
+      else
+      {
+        imageIt.Set(value);
+      }
+    }
+  }
 }
 /**
  * Printself method

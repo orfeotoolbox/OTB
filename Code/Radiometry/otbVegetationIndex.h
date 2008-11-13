@@ -18,6 +18,7 @@
 #ifndef __otbVegetationIndex_h
 #define __otbVegetationIndex_h
 
+#include "otbMath.h"
 
 namespace otb
 {
