@@ -1147,8 +1147,8 @@ namespace otb
       zoomOffsetX = (1-m_OpenGlIsotropicZoom)*(static_cast<double>(m_DisplayExtent.GetSize()[0]/2)-static_cast<double>(region.GetIndex()[0]));
       zoomOffsetY = (1-m_OpenGlIsotropicZoom)*( static_cast<double>(m_DisplayExtent.GetSize()[1]/2)-static_cast<double>(region.GetIndex()[1]));
 	
-      double movex = static_cast<double>(region.GetIndex()[0])+zoomOffsetX;
-      double movey = static_cast<double>(m_DisplayExtent.GetSize()[1])-static_cast<double>(region.GetIndex()[1])-zoomOffsetY;
+//      double movex = static_cast<double>(region.GetIndex()[0])+zoomOffsetX;
+//      double movey = static_cast<double>(m_DisplayExtent.GetSize()[1])-static_cast<double>(region.GetIndex()[1])-zoomOffsetY;
 //       glBitmap(0,0,0,0,movex,movey,NULL);
 //       glPixelZoom(m_OpenGlIsotropicZoom,-m_OpenGlIsotropicZoom);
 // 
