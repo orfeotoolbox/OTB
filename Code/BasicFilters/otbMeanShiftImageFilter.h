@@ -33,15 +33,15 @@ namespace otb
    * \ingroup Streamed
    * \ingroup Threaded
    */
-template <class TInputImage, class TOutputImage, class TPrecision = double>
+template <class TInputImage, class TOutputImage, class TClusterImage = Image<unsigned short, 2>, class TPrecision = double>
 class ITK_EXPORT MeanShiftImageFilter
-: public MeanShiftImageFilterBase<TInputImage,TOutputImage,TPrecision>
+: public MeanShiftImageFilterBase<TInputImage,TOutputImage,TClusterImage,TPrecision>
   {
     public:
     /** Standard class typedef */
     typedef MeanShiftImageFilter                              Self;
     typedef MeanShiftImageFilterBase<TInputImage,
-    TOutputImage,TPrecision>                                  Superclass;
+    TOutputImage,TClusterImage,TPrecision>                    Superclass;
     typedef itk::SmartPointer<Self>                           Pointer;
     typedef itk::SmartPointer<const Self>                     ConstPointer;
    

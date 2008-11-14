@@ -43,7 +43,7 @@ int otbMeanShiftVectorImageFilter(int argc, char * argv[])
   typedef otb::VectorImage<PixelType,Dimension> ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
-  typedef otb::MeanShiftVectorImageFilter<ImageType,ImageType> FilterType;
+  typedef otb::MeanShiftVectorImageFilter<ImageType, ImageType> FilterType;
   
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();
@@ -55,6 +55,7 @@ int otbMeanShiftVectorImageFilter(int argc, char * argv[])
   
   filter->SetSpatialRadius(spatialRadius);
   filter->SetRangeRadius(rangeRadius);
+  std::cout<<maxNbIterations<<std::endl;
   filter->SetMaxNumberOfIterations(maxNbIterations);
   filter->SetUseImageSpacing(useImageSpacing);
   filter->SetConvergenceDistanceThreshold(convergenceTol);
@@ -63,5 +64,15 @@ int otbMeanShiftVectorImageFilter(int argc, char * argv[])
   writer->SetInput(filter->GetOutput());
   
   writer->Update();
+
+  /*
+  typedef FilterType::ClusterImageType ClusterType;
+  typedef otb::ImageFileWriter<ClusterType> Writer2Type;
+  Writer2Type::Pointer w2 = Writer2Type::New();
+  w2->SetFileName("cluster.tif");
+  w2->SetInput(filter->GetClusterImage());
+  w2->Update();
+  */
+
   return EXIT_SUCCESS;
 }

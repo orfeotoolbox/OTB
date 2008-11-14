@@ -23,51 +23,51 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  template <class TInputImage,class TOutputImage,class TPrecision>
+  template <class TInputImage,class TOutputImage, class TClusterImage,class TPrecision>
   unsigned int 
-  MeanShiftImageFilter<TInputImage,TOutputImage,TPrecision>
+  MeanShiftImageFilter<TInputImage,TOutputImage,TClusterImage,TPrecision>
   ::GetNumberOfComponentsPerPixel()
   {
     return 1;
   }
 
-  template <class TInputImage,class TOutputImage,class TPrecision>
+  template <class TInputImage,class TOutputImage, class TClusterImage,class TPrecision>
   void
-  MeanShiftImageFilter<TInputImage,TOutputImage,TPrecision>
+  MeanShiftImageFilter<TInputImage,TOutputImage,TClusterImage,TPrecision>
   ::InitValue(PrecisionPixelType & value, const unsigned int& nbComponents)
   {
     value = 0;
   }
 
-  template <class TInputImage,class TOutputImage,class TPrecision>
+  template <class TInputImage,class TOutputImage, class TClusterImage,class TPrecision>
   double
-  MeanShiftImageFilter<TInputImage,TOutputImage,TPrecision>
+  MeanShiftImageFilter<TInputImage,TOutputImage,TClusterImage,TPrecision>
   ::SquaredNorm(const PrecisionPixelType & value)
   {   
     return value * value;
   }
 
-  template <class TInputImage,class TOutputImage,class TPrecision>
-  const typename  MeanShiftImageFilter<TInputImage,TOutputImage,TPrecision>
+  template <class TInputImage,class TOutputImage, class TClusterImage,class TPrecision>
+  const typename  MeanShiftImageFilter<TInputImage,TOutputImage,TClusterImage,TPrecision>
   ::PrecisionPixelType
-  MeanShiftImageFilter<TInputImage,TOutputImage,TPrecision>
+  MeanShiftImageFilter<TInputImage,TOutputImage,TClusterImage,TPrecision>
   ::CastInputPixelToPrecisionPixel(const InputPixelType & pixel)
   {   
     return static_cast<PrecisionPixelType>(pixel);
   }
 
-  template <class TInputImage,class TOutputImage,class TPrecision>
-  const typename  MeanShiftImageFilter<TInputImage,TOutputImage,TPrecision>
+  template <class TInputImage,class TOutputImage, class TClusterImage,class TPrecision>
+  const typename  MeanShiftImageFilter<TInputImage,TOutputImage,TClusterImage,TPrecision>
   ::OutputPixelType
-  MeanShiftImageFilter<TInputImage,TOutputImage,TPrecision>
+  MeanShiftImageFilter<TInputImage,TOutputImage,TClusterImage,TPrecision>
   ::CastPrecisionPixelToOutputPixel(const PrecisionPixelType & pixel)
   {   
     return static_cast<OutputPixelType>(pixel);
   }
 
-  template <class TInputImage,class TOutputImage,class TPrecision>
+  template <class TInputImage,class TOutputImage, class TClusterImage,class TPrecision>
   void
-  MeanShiftImageFilter<TInputImage,TOutputImage,TPrecision>
+  MeanShiftImageFilter<TInputImage,TOutputImage,TClusterImage,TPrecision>
   ::PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os,indent);

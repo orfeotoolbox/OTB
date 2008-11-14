@@ -913,6 +913,16 @@ ADD_TEST(bfTvMeanShiftVectorImageFilterUsingImageSpacing ${BASICFILTERS_TESTS9}
 	3 15 20 1 0.0001
 	)
 
+ADD_TEST(bfTvMeanShiftVectorImageCluster ${BASICFILTERS_TESTS9}
+#--compare-image ${EPSILON}
+#		${BASELINE}/bfMeanShiftVectorImageFilterOutputUsingImageSpacing.tif
+#		${TEMP}/bfMeanShiftImageCluster.tif
+        otbMeanShiftVectorImageCluster
+	${INPUTDATA}/qb_RoadExtract2sub200x200.tif
+	${TEMP}/bfMeanShiftImageCluster.tif
+	3 15 20 1 0.0001
+	)
+
 ADD_TEST(bfTvFunctionToImageFilterNew ${BASICFILTERS_TESTS9}
         otbFunctionToImageFilterNew
 )
@@ -1143,6 +1153,7 @@ otbMeanShiftImageFilterNew.cxx
 otbMeanShiftImageFilter.cxx
 otbMeanShiftVectorImageFilterNew.cxx
 otbMeanShiftVectorImageFilter.cxx
+otbMeanShiftVectorImageCluster.cxx
 otbFunctionToImageFilterNew.cxx
 otbFunctionToImageFilter.cxx
 )

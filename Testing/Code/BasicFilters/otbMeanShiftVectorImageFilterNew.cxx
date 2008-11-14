@@ -17,6 +17,7 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 #include "otbVectorImage.h"
+#include "otbImage.h"
 #include "otbMeanShiftVectorImageFilter.h"
 
 int otbMeanShiftVectorImageFilterNew(int argc, char * argv[])

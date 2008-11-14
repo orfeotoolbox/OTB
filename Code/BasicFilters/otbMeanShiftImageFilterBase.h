@@ -20,9 +20,58 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "itkImageToImageFilter.h"
 #include "itkVariableLengthVector.h"
+#include "otbImage.h"
 
 namespace otb
 {
+  template <class  TPixel,  class TPoint>
+    class ITK_EXPORT MeanShiftCluster
+    {
+    public:
+      typedef TPixel PixelType;
+      typedef TPoint PointType;
+
+      PixelType m_SpectralCenter;
+      PointType m_SpatialCenter;
+      PixelType m_SpectralAccumulation;
+      PointType m_SpatialAccumulation;
+      unsigned int m_NumberOfPixels;
+
+
+      MeanShiftCluster()
+	{}
+      
+      MeanShiftCluster(const PointType& spatialCenter, const PixelType& spectralCenter)
+	{
+	  m_NumberOfPixels = 1;
+	  m_SpectralCenter = spectralCenter;
+	  m_SpatialCenter = spatialCenter;
+	  m_SpectralAccumulation = spectralCenter;
+	  m_SpatialAccumulation = spatialCenter;
+	}
+
+      void UpdateCenter()
+	{
+	  m_SpectralCenter = m_SpectralAccumulation/m_NumberOfPixels;
+	  m_SpatialCenter  = m_SpatialAccumulation/m_NumberOfPixels;
+	}
+
+      void AddPixel(const PointType& point, const PixelType& pixel)
+	{
+	  m_SpectralAccumulation += pixel;
+	  m_SpatialAccumulation[0]+= point[0];
+	  m_SpatialAccumulation[1]+= point[1];
+	  m_NumberOfPixels++;
+	}
+
+      void RemovePixel(const PointType& point, const PixelType& pixel)
+	{
+	  m_SpectralAccumulation -= pixel;
+	  m_SpatialAccumulation[0]-= point[0];
+	  m_SpatialAccumulation[1]-= point[1];
+	  m_NumberOfPixels--;
+	}
+    };
 
   /** \class MeanShiftImageFilterBase
    *   
@@ -57,7 +106,7 @@ namespace otb
    * \ingroup Threaded
    */
 
-  template <class TInputImage, class TOutputImage, class TPrecision = double>
+  template <class TInputImage, class TOutputImage, class TClusterImage = Image<unsigned short, 2>, class TPrecision = double>
     class ITK_EXPORT MeanShiftImageFilterBase
     : public itk::ImageToImageFilter<TInputImage,TOutputImage>
     {
@@ -79,11 +128,17 @@ namespace otb
       typedef TOutputImage                                 OutputImageType;
       typedef typename OutputImageType::Pointer            OutputImagePointerType;
       typedef typename OutputImageType::PixelType          OutputPixelType;
+      typedef TClusterImage                                ClusterImageType;
+      typedef typename ClusterImageType::Pointer           ClusterImagePointerType;
+      typedef typename ClusterImageType::PixelType         ClusterPixelType;
       typedef typename OutputImageType::RegionType         RegionType;
       typedef typename RegionType::SizeType                SizeType;
       typedef typename RegionType::IndexType               IndexType;
       typedef typename InputImageType::SpacingType         SpacingType;
       typedef TPrecision                                   PrecisionPixelType;
+
+      typedef std::vector<ClusterPixelType>                LabelPerThreadType;
+      typedef std::vector<LabelPerThreadType>              LabelVectorType;
 
       /** Setters / Getters */
       itkSetMacro(SpatialRadius,double);
@@ -98,6 +153,11 @@ namespace otb
       itkGetMacro(UseImageSpacing,bool);
       itkBooleanMacro(UseImageSpacing);
 
+      /** Return the const output image direction */  
+      const ClusterImageType * GetClusterImage() const;
+      /** Return the output image direction */  
+      ClusterImageType * GetClusterImage();
+      
       protected:
       /** This filters use a neighborhood around the pixel, so it needs to redfine the 
        * input requested region */
@@ -106,9 +166,14 @@ namespace otb
       /** Threaded generate data */
       virtual void ThreadedGenerateData(const RegionType & outputRegionForThread,int threadId);
 
+      /** output allocation. ITK don't support to have two output with different type (Image and VectorImage) */
+      virtual void AllocateOutputs();
+
+      /** Before Threaded generate data */
+      virtual void BeforeThreadedGenerateData();
+
       /** Constructor */
       MeanShiftImageFilterBase();
-
       /** destructor */
       ~MeanShiftImageFilterBase(){};
 
@@ -174,6 +239,9 @@ namespace otb
 
       /** Distance threshold for convergence in the spatial domain */
       double m_ConvergenceDistanceThreshold;
+
+      /** Label vector*/
+      LabelVectorType m_Label;
     };
 }// end namespace otb
 

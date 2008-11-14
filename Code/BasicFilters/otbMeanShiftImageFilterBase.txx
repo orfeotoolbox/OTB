@@ -29,10 +29,16 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  template <class TInputImage,class TOutputImage,class TPrecision>
-  MeanShiftImageFilterBase<TInputImage,TOutputImage,TPrecision>
+  template <class TInputImage,class TOutputImage, class TClusterImage,class TPrecision>
+  MeanShiftImageFilterBase<TInputImage,TOutputImage,TClusterImage, TPrecision>
   ::MeanShiftImageFilterBase()
   {
+    this->SetNumberOfOutputs(2);
+    this->SetNumberOfRequiredOutputs(1);
+
+    //this->SetNthOutput(1,OutputImageType::New());
+    this->SetNthOutput(1,ClusterImageType::New());
+
     m_MaxNumberOfIterations = 20;
     m_ConvergenceDistanceThreshold = 0.5;
     m_SpatialRadius      = 3;
@@ -40,14 +46,69 @@ namespace otb
     m_UseImageSpacing    = false;
     m_InternalRadius.Fill(0);
     m_InternalSpacing.Fill(1.);
-
+    m_Label.clear();
+    
     // For debug purposes we set the number of threads to 1.
     // this->SetNumberOfThreads(1);
   }
 
-  template <class TInputImage,class TOutputImage,class TPrecision>
+  template <class TInputImage,class TOutputImage, class TClusterImage,class TPrecision>
+  const typename MeanShiftImageFilterBase<TInputImage, TOutputImage, TClusterImage, TPrecision>::ClusterImageType * 
+  MeanShiftImageFilterBase<TInputImage,TOutputImage,TClusterImage, TPrecision>
+  ::GetClusterImage()const
+  {
+    if (this->GetNumberOfOutputs() < 2)
+      {
+    	return 0;
+
+      }
+    return static_cast<const ClusterImageType * >(this->itk::ProcessObject::GetOutput(1) );
+  }
+  
+  /** Return the output image direction */  
+  template <class TInputImage,class TOutputImage, class TClusterImage,class TPrecision>
+  typename MeanShiftImageFilterBase<TInputImage, TOutputImage, TClusterImage, TPrecision>::ClusterImageType * 
+  MeanShiftImageFilterBase<TInputImage,TOutputImage,TClusterImage, TPrecision>
+  ::GetClusterImage()
+  {
+    if (this->GetNumberOfOutputs() < 2)
+      {
+    	return 0;
+      }
+    return static_cast<ClusterImageType * >
+      (this->itk::ProcessObject::GetOutput(1) );
+  }
+
+
+  template <class TInputImage,class TOutputImage,class TClusterImage, class TPrecision>
   void
-  MeanShiftImageFilterBase<TInputImage,TOutputImage,TPrecision>
+  MeanShiftImageFilterBase<TInputImage,TOutputImage,TClusterImage, TPrecision>
+  ::AllocateOutputs()
+  {
+    // Filter Output
+    OutputImagePointerType outputPtr = this->GetOutput(0);
+    outputPtr->SetBufferedRegion( outputPtr->GetRequestedRegion() );
+    outputPtr->Allocate();
+
+    // Cluster Output
+    ClusterImagePointerType clusterPtr = this->GetClusterImage();
+    clusterPtr->SetBufferedRegion( clusterPtr->GetRequestedRegion() );
+    clusterPtr->Allocate();
+  }
+
+ template <class TInputImage,class TOutputImage,class TClusterImage, class TPrecision>
+  void
+  MeanShiftImageFilterBase<TInputImage,TOutputImage,TClusterImage, TPrecision>
+  ::BeforeThreadedGenerateData()
+  {
+    LabelPerThreadType labelThread(1, 0);
+    LabelVectorType m_label(this->GetNumberOfThreads(), labelThread);
+  }
+
+
+  template <class TInputImage,class TOutputImage,class TClusterImage, class TPrecision>
+  void
+  MeanShiftImageFilterBase<TInputImage,TOutputImage,TClusterImage, TPrecision>
   ::GenerateInputRequestedRegion()
   {
     // call the superclass' implementation of this method
@@ -113,21 +174,24 @@ namespace otb
       }
   }
   
-  template <class TInputImage,class TOutputImage,class TPrecision>
+  template <class TInputImage,class TOutputImage,class TClusterImage, class TPrecision>
   void
-  MeanShiftImageFilterBase<TInputImage,TOutputImage,TPrecision>
+  MeanShiftImageFilterBase<TInputImage,TOutputImage,TClusterImage,TPrecision>
   ::ThreadedGenerateData(const RegionType & outputRegionForThread,int threadId)
   {
     // Set up the progress reporter
     itk::ProgressReporter progress(this,threadId,outputRegionForThread.GetNumberOfPixels());
 
     // Input and output pointers
-    typename OutputImageType::Pointer outputPtr = this->GetOutput();
     typename  InputImageType::ConstPointer inputPtr  = this->GetInput();
+    typename OutputImageType::Pointer outputPtr = this->GetOutput();
+    typename ClusterImageType::Pointer clusterPtr = this->GetClusterImage();
+    
 
     // Iterators
     itk::ImageRegionConstIteratorWithIndex<InputImageType> inputIt(inputPtr,outputRegionForThread);
     itk::ImageRegionIterator<OutputImageType> outputIt(outputPtr,outputRegionForThread);
+    itk::ImageRegionIterator<ClusterImageType> clusterIt(clusterPtr,outputRegionForThread);
 
     // local declarations 
     unsigned int nbIterations;
@@ -137,21 +201,27 @@ namespace otb
     unsigned int   nbPixelsIntoAccount;
     bool goesOn = true;
     long startx,stopx,starty,stopy,i,j;
-    double squaredSpatialDistance, squaredUpdateDistance;
+    double squaredSpatialDistance, squaredSpectralDistance, squaredUpdateDistance;
 
     // Const values computed here to reduce complexity
     const unsigned int nbComponentsPerPixel = this->GetNumberOfComponentsPerPixel();
     const double spatialThreshold = vcl_pow(m_SpatialRadius,2);
+    const double spectralThreshold = vcl_pow(m_RangeRadius,2);
     const double spatialAndRangeThreshold = nbComponentsPerPixel * vcl_pow(m_RangeRadius,2) + spatialThreshold;
     const double spatialConvergenceThreshold = vcl_pow(m_ConvergenceDistanceThreshold,2);
 
+    typedef MeanShiftCluster<PrecisionPixelType,PointType> ClusterType;
+    typedef std::vector<ClusterType> ClusterVectorType;
+
+    ClusterVectorType clusterVector;
     
     // intialize iterators 
     inputIt.GoToBegin();
     outputIt.GoToBegin();
-    
+    clusterIt.GoToBegin();
+
     // Walk the images 
-    while(!inputIt.IsAtEnd() && !outputIt.IsAtEnd())
+    while(!inputIt.IsAtEnd() && !outputIt.IsAtEnd() && !clusterIt.IsAtEnd())
       {
 	nbIterations = 0;
 	goesOn = true;
@@ -210,7 +280,7 @@ namespace otb
 		maxDensityPoint[1]/=nbPixelsIntoAccount;
 		maxDensityValue/=nbPixelsIntoAccount;
 	      }   
-	    convergenceValue = maxDensityValue;	    
+	    convergenceValue = maxDensityValue;
 	    // Check if we are still significantly moving
 	    squaredUpdateDistance = vcl_pow(static_cast<double>(maxDensityPoint[0]-convergencePoint[0]),2)
 	    +vcl_pow(static_cast<double>(maxDensityPoint[1]-convergencePoint[1]),2);
@@ -223,22 +293,58 @@ namespace otb
 	      {
 		// Update the convergence point and loop again
 		convergencePoint = maxDensityPoint;
+	    
 	      }
 	    ++nbIterations;
 	  }
 	// Set the output value
 	outputIt.Set(this->CastPrecisionPixelToOutputPixel(convergenceValue));
+
+	bool clusterFound = false;
+
+	// Look for an already existing cluster
+	ClusterPixelType label = 0;
+	while(label<clusterVector.size() && !clusterFound)
+	  {
+	    squaredSpatialDistance = vcl_pow(clusterVector[label].m_SpatialCenter[0]-convergencePoint[0],2)
+	      +vcl_pow(clusterVector[label].m_SpatialCenter[1]-convergencePoint[1],2);
+	    squaredSpectralDistance = this->SquaredNorm(clusterVector[label].m_SpectralCenter-convergenceValue);
+
+	    if(squaredSpatialDistance<spatialThreshold
+	       && squaredSpectralDistance<spectralThreshold)
+	      {
+		clusterFound = true;
+		clusterVector[label].AddPixel(convergencePoint,convergenceValue);
+	      }
+	    else
+	      {
+		++label;
+	      }
+	  }
+
+	// if we found a good cluster, labelize pixel
+	if(clusterFound)
+	  {
+	    clusterIt.Set(label+1);
+	  }
+	// else create a new cluster for that pixel and labelize it
+	else
+	  {
+	    clusterVector.push_back(ClusterType(convergencePoint,convergenceValue));
+	    clusterIt.Set(static_cast<ClusterPixelType>(clusterVector.size()));
+	  }
 	// Update progress
 	progress.CompletedPixel();
 	// Increment iterators
 	++inputIt;
 	++outputIt;
+	++clusterIt;
       }
   }
 
-  template <class TInputImage,class TOutputImage,class TPrecision>
+  template <class TInputImage,class TOutputImage,class TClusterImage, class TPrecision>
   void
-  MeanShiftImageFilterBase<TInputImage,TOutputImage,TPrecision>
+  MeanShiftImageFilterBase<TInputImage,TOutputImage,TClusterImage, TPrecision>
   ::PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os,indent);

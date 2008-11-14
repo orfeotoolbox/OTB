@@ -17,15 +17,16 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 #include "otbImage.h"
+#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbMeanShiftImageFilter.h"
+#include "otbMeanShiftVectorImageFilter.h"
 
-int otbMeanShiftImageFilter(int argc, char * argv[])
+int otbMeanShiftVectorImageCluster(int argc, char * argv[])
 {
   if(argc != 8)
     {
-      std::cerr<<"Usage: "<<argv[0]<<" infname outfname spatialRadius rangeRadius maxNbIterations useImageSpacing convergenceDistanceThreshold"<<std::endl;
+      std::cerr<<"Usage: "<<argv[0]<<" infname clusterfname spatialRadius rangeRadius maxNbIterations useImageSpacing convergenceDistanceThreshold"<<std::endl;
       return EXIT_FAILURE;
     }
 
@@ -39,11 +40,12 @@ int otbMeanShiftImageFilter(int argc, char * argv[])
 
   const unsigned int Dimension = 2;
   typedef short PixelType;
-  typedef otb::Image<PixelType,Dimension> ImageType;
+  typedef otb::VectorImage<PixelType,Dimension> ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
-  typedef otb::MeanShiftImageFilter<ImageType,ImageType> FilterType;
-  
+  typedef otb::MeanShiftVectorImageFilter<ImageType,ImageType> FilterType;
+  typedef FilterType::ClusterImageType ClusterImageType;
+  typedef otb::ImageFileWriter<ClusterImageType> WriterType;
+
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();
   ReaderType::Pointer reader = ReaderType::New();
@@ -57,9 +59,11 @@ int otbMeanShiftImageFilter(int argc, char * argv[])
   filter->SetMaxNumberOfIterations(maxNbIterations);
   filter->SetUseImageSpacing(useImageSpacing);
   filter->SetConvergenceDistanceThreshold(convergenceTol);
+  // FOR DEBUG
+  filter->SetNumberOfThreads(1);
 
   filter->SetInput(reader->GetOutput());
-  writer->SetInput(filter->GetOutput());
+  writer->SetInput(filter->GetClusterImage());
   
   writer->Update();
   return EXIT_SUCCESS;

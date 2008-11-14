@@ -34,14 +34,14 @@ namespace otb
    * \ingroup Streamed
    * \ingroup Threaded
    */
-  template <class TInputImage, class TOutputImage, class TPrecision = double>
+  template <class TInputImage, class TOutputImage, class TClusterImage = Image<unsigned short, 2>, class TPrecision = double>
     class ITK_EXPORT MeanShiftVectorImageFilter
-    : public MeanShiftImageFilterBase<TInputImage,TOutputImage,itk::VariableLengthVector<TPrecision> >
+    : public MeanShiftImageFilterBase<TInputImage,TOutputImage,TClusterImage,itk::VariableLengthVector<TPrecision> >
     {
       public:
       /** Standard class typedef */
       typedef MeanShiftVectorImageFilter                        Self;
-      typedef MeanShiftImageFilterBase<TInputImage,TOutputImage,
+      typedef MeanShiftImageFilterBase<TInputImage,TOutputImage,TClusterImage,
       itk::VariableLengthVector<TPrecision> >                   Superclass;
       typedef itk::SmartPointer<Self>                           Pointer;
       typedef itk::SmartPointer<const Self>                     ConstPointer;
