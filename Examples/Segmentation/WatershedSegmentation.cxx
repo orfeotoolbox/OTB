@@ -241,7 +241,7 @@ int main( int argc, char *argv[] )
     std::cerr << e << std::endl;
     }
     
-  return 0;
+  return EXIT_SUCCESS;
 }
 
 //

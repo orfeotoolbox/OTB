@@ -283,7 +283,7 @@ int main(int argc, char* argv[] )
   // SoftwareGuide : EndLatex
 
   
-  return 0;
+  return EXIT_SUCCESS;
 
 }
 

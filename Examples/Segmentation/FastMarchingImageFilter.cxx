@@ -759,7 +759,7 @@ int main( int argc, char *argv[] )
   //  See the ITK Software Guide for examples of the use of these classes.
   //  Software Guide : EndLatex 
 
-  return 0;
+  return EXIT_SUCCESS;
 }
 
 

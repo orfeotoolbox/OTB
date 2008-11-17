@@ -165,6 +165,6 @@ int main(int, char *[])
   // Software Guide : EndLatex 
 
 
-  return 0;
+  return EXIT_SUCCESS;
 }
 

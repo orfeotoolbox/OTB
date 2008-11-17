@@ -36,7 +36,7 @@ int main()
 
   std::cout << "OTB Hello World !" << std::endl;
 
-  return 0;
+  return EXIT_SUCCESS;
 }
 // Software Guide : EndCodeSnippet
 

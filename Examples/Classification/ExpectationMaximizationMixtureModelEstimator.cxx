@@ -258,7 +258,7 @@ int main()
     }
   // Software Guide : EndCodeSnippet
   
-  return 0;
+  return EXIT_SUCCESS;
 }
 
 

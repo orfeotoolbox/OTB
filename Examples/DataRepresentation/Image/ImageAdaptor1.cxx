@@ -185,7 +185,7 @@ std::cout << "Sum of pixels is: " << sum << std::endl;
 //  Software Guide : EndLatex 
 
 
-  return 0;
+  return EXIT_SUCCESS;
 }
 
 

@@ -295,7 +295,7 @@ int main( int argc, char *argv[] )
   // Software Guide : EndCodeSnippet
 
 
-  return 0;
+  return EXIT_SUCCESS;
 }
 
 

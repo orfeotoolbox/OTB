@@ -301,5 +301,5 @@ int main( int argc, char* argv[] )
     std::cerr << "Error: " << e << std::endl;
     }
 
-  return 0;
+  return EXIT_SUCCESS;
 }

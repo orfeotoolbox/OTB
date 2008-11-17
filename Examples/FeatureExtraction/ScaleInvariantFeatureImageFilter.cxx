@@ -248,5 +248,5 @@ int main( int argc, char *argv[])
     siftFilter2.MatchKeypointsPos(keypoints1, keypoints2, inv_test_transform);
     siftFilter2.MatchKeypointsFeatures(keypoints1, keypoints2, inv_test_transform);
   }
-  return 0;
+  return EXIT_SUCCESS;
 }

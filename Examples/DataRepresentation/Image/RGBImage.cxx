@@ -167,6 +167,6 @@ int main( int , char * argv[] )
   // querying pixel value by clicking with the mouse.
   //
  
-  return 0;
+  return EXIT_SUCCESS;
 }
 

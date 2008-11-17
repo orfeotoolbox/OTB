@@ -108,7 +108,7 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
   writer->Update();
 
-  return 0; 
+  return EXIT_SUCCESS; 
 }
 // Software Guide : EndCodeSnippet
 

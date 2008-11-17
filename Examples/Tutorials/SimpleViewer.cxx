@@ -114,7 +114,7 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
   Fl::run();
 
-  return 0; 
+  return EXIT_SUCCESS; 
 }
 // Software Guide : EndCodeSnippet
 

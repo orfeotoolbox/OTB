@@ -150,5 +150,5 @@ int main( int argc, char *argv[] )
 // \index{itk::Image\-Random\-Const\-Iterator\-With\-Index!example of using|)}
 // Software Guide : EndLatex
   
-  return 0;
+  return EXIT_SUCCESS;
 }
