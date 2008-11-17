@@ -1021,6 +1021,19 @@ IF(USE_FFTWD)
 
 ENDIF(USE_FFTWD)
 
+# ADD_TEST(bfTuGaborFilterGeneratorNew ${BASICFILTERS_TESTS10}
+# 	otbGaborFilterGeneratorNew
+# 	 )
+
+ADD_TEST(bfTvPolygonCompacityFunctor ${BASICFILTERS_TESTS10}
+	--compare-ascii ${TOL}
+	    ${BASELINE}/bfPolygonCompacityFunctorTest.txt
+	    ${TEMP}/bfPolygonCompacityFunctorTest.txt
+	 otbPolygonCompacityFunctor
+	 ${INPUTDATA}/polygon.png
+	 ${TEMP}/bfPolygonCompacityFunctorTest.txt
+)
+
 # A enrichir
 SET(BasicFilters_SRCS1
 otbLeeFilter.cxx
@@ -1166,6 +1179,7 @@ otbScalarVectorImageTextureFunctorNew.cxx
 otbScalarVectorImageTextureFunctor.cxx
 otbGaborFilterGeneratorNew.cxx
 otbGaborFilterGenerator.cxx
+otbPolygonCompacityFunctor.cxx
 )
 
 
