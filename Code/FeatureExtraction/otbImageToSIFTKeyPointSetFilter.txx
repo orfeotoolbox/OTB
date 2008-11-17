@@ -786,8 +786,8 @@ namespace otb
 	    float rdx = dx * cosangle - dy * sinangle;
 	    float rdy = dx * sinangle + dy * cosangle;
 	    // decide to which histogram the pixel contributes
-	    unsigned int xHistogramIndex = vcl_floor((rdx + radius)/static_cast<float>(nbPixelsPerHistogram));
-	    unsigned int yHistogramIndex = vcl_floor((rdy + radius)/static_cast<float>(nbPixelsPerHistogram));
+	    unsigned int xHistogramIndex = static_cast<unsigned int>(vcl_floor((rdx + radius)/static_cast<float>(nbPixelsPerHistogram)));
+	    unsigned int yHistogramIndex = static_cast<unsigned int>(vcl_floor((rdy + radius)/static_cast<float>(nbPixelsPerHistogram)));
 
 	    // decide to which bin of the histogram the pixel contributes
 	    float compensatedOrientation =  lIterOrientation.Get()-angle;	    
@@ -799,7 +799,7 @@ namespace otb
 	      {
 		compensatedOrientation-=2*M_PI;
 	      }
-	    unsigned int histogramBin = vcl_floor(compensatedOrientation*nbBinsPerHistogram/(2*M_PI));
+	    unsigned int histogramBin = static_cast<unsigned int>(vcl_floor(compensatedOrientation*nbBinsPerHistogram/(2*M_PI)));
 	    
 	    // Compute the wheight of the pixel in the histogram
 	    double lWeightMagnitude = vcl_exp(-(dist*dist)/(2*lSigma*lSigma));
