@@ -118,12 +118,12 @@ namespace otb
     while( !it.IsAtEnd() )
     {
       PixelType pixel = it.Get();
-      for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
-      {
+//       for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
+//       {
         double re = static_cast<double>(pixel[m_RedChannelIndex]);
         double im = static_cast<double>(pixel[m_GreenChannelIndex]);
         sl->GetNthElement(0)->PushBack(vcl_sqrt(static_cast<double>(re*re+im*im)));
-      }
+//       }
       ++it;
     }
   }
@@ -133,10 +133,10 @@ namespace otb
     while( !it.IsAtEnd() )
     {
       PixelType pixel = it.Get();
-      for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
-      {
+//       for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
+//       {
         sl->GetNthElement(0)->PushBack(vcl_atan2(static_cast<double>(pixel[m_GreenChannelIndex]),static_cast<double>(pixel[m_RedChannelIndex])));
-      }
+//       }
       ++it;
     }
 
