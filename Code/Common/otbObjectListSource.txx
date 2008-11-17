@@ -1,0 +1,111 @@
+/*=========================================================================
+
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+#ifndef __otbObjectListSource_txx
+#define __otbObjectListSource_txx
+
+#include "otbObjectListSource.h"
+#include "itkProgressReporter.h"
+
+namespace otb
+{
+
+/**
+   * Constructor
+ */
+  template <class TOutputList>
+      ObjectListSource<TOutputList>
+  ::ObjectListSource()
+  {
+  // Create the output. We use static_cast<> here because we know the default
+  // output must be of type TOutputImage
+    typename TOutputList::Pointer output
+        = static_cast<TOutputList*>(this->MakeOutput(0).GetPointer()); 
+    this->ProcessObject::SetNumberOfRequiredOutputs(1);
+    this->ProcessObject::SetNthOutput(0, output.GetPointer());
+  
+  }
+
+  template<class TOutputList>
+      typename ObjectListSource<TOutputList>::DataObjectPointer
+          ObjectListSource<TOutputList>
+  ::MakeOutput(unsigned int)
+  {
+    return static_cast<itk::DataObject*>(TOutputList::New().GetPointer());
+  }
+
+
+  template <class TOutputList>
+      typename ObjectListSource<TOutputList>::OutputListType *
+          ObjectListSource<TOutputList>
+  ::GetOutput()
+  {
+    if (this->GetNumberOfOutputs() < 1)
+    {
+      return 0;
+    }
+  
+    return static_cast<TOutputList*>
+        (this->ProcessObject::GetOutput(0));
+  }
+  
+  template<class TOutputList>
+      void
+      ObjectListSource<TOutputList>
+  ::GraftOutput(itk::DataObject *graft)
+  {
+    this->GraftNthOutput(0, graft);
+  }
+     
+         
+  template<class TOutputList>
+      void
+      ObjectListSource<TOutputList>
+  ::GraftNthOutput(unsigned int idx, itk::DataObject *graft)
+  {
+    if ( idx >= this->GetNumberOfOutputs() )
+    {
+      itkExceptionMacro(<<"Requested to graft output " << idx << 
+          " but this filter only has " << this->GetNumberOfOutputs() << " Outputs.");
+    }  
+         
+    if ( !graft )
+    {
+      itkExceptionMacro(<<"Requested to graft output that is a NULL pointer" );
+    }
+           
+    itk::DataObject * output = this->GetOutput(idx);
+           
+    // Call GraftImage to copy meta-information, regions, and the pixel container
+    output->Graft( graft );
+  }
+
+
+/**
+   * GenerateData Performs the pixel-wise addition
+ */
+  template <class TOutputList>
+      void
+          ObjectListSource<TOutputList>
+  ::GenerateData(void)
+  {
+    itkExceptionMacro("subclass should override this method!!!");
+  }
+
+} // end namespace otb
+
+#endif
