@@ -47,7 +47,7 @@ namespace otb
   template <class TObject>
   unsigned int 
   ObjectList<TObject>
-  ::Capacity(void)
+  ::Capacity(void) const
   {
     return m_InternalContainer.capacity();
   }
@@ -58,7 +58,7 @@ namespace otb
   template <class TObject>
   unsigned int 
   ObjectList<TObject>
-  ::Size(void)
+  ::Size(void) const
   {
     return m_InternalContainer.size();
   }
@@ -104,7 +104,7 @@ namespace otb
   template <class TObject>
   typename ObjectList<TObject>::ObjectPointerType 
   ObjectList<TObject>
-  ::GetNthElement(unsigned int index)
+  ::GetNthElement(unsigned int index) const
   {
     return m_InternalContainer[index];
   }

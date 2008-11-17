@@ -60,12 +60,12 @@ public:
    * Get the capacity of the vector.
    * \return The capacity of the vector. 
    */
-  unsigned int Capacity(void);
+  unsigned int Capacity(void) const;
   /**
    * Get the number of elements in the vector.
    * \return The number of elements in the vector.
    */
-  unsigned int Size(void);
+  unsigned int Size(void) const;
   /**
    * Resize the maximal list capacity.
    * \param size The new maximal size of the list.
@@ -87,7 +87,7 @@ public:
    * \param index The index of the object to get.
    * \return The pointer to the nth element of the list.
    */
-  ObjectPointerType GetNthElement(unsigned int index);
+  ObjectPointerType GetNthElement(unsigned int index) const;
   /**
    * Return the first element of the list.
    * \return The first element of the list.
