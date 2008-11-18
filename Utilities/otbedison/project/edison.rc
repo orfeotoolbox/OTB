@@ -1,0 +1,33 @@
+/* Useful if PROVIDE_DEFAULT_ICONS is set in wx_setup.h */
+#define IHaveMDIParentIcon
+#define IHaveMDIChildIcon
+
+wxSTD_MDIPARENTFRAME    ICON    "../GUI/icons/mondrian.ico"
+wxSTD_MDICHILDFRAME     ICON    "../GUI/icons/chart.ico"
+
+bg_icn                  ICON    "../GUI/icons/mondrian.ico"
+chrt_icn                ICON    "../GUI/icons/chart.ico"
+
+icon1			BITMAP "../GUI/icons/new_e.bmp"
+icon2			BITMAP "../GUI/icons/open.bmp"
+icon3			BITMAP "../GUI/icons/save.bmp"
+icon4			BITMAP "../GUI/icons/copy.bmp"
+icon5			BITMAP "../GUI/icons/cut.bmp"
+icon6			BITMAP "../GUI/icons/paste.bmp"
+icon7			BITMAP "../GUI/icons/new_s.bmp"
+icon8			BITMAP "../GUI/icons/help.bmp"
+icon9			BITMAP "../GUI/icons/cross.bmp"
+icon10			BITMAP "../GUI/icons/zoom_in.bmp"
+icon11			BITMAP "../GUI/icons/zoom_out.bmp"
+icon12			BITMAP "../GUI/icons/arrow.bmp"
+ro				BITMAP "../GUI/icons/p.bmp"
+rotated_ro		BITMAP "../GUI/icons/rotated_p.bmp"
+eta				BITMAP "../GUI/icons/h.bmp"
+rotated_eta		BITMAP "../GUI/icons/rotated_h.bmp"
+riul_logo		BITMAP "../GUI/icons/riul_logo.bmp"
+caip_logo		BITMAP "../GUI/icons/caip_logo.bmp"
+rutgers_logo	BITMAP "../GUI/icons/rutgers_logo.bmp"
+down_arrow		BITMAP "../GUI/icons/down_arrow.bmp"
+
+#include "wx/msw/wx.rc"
+

@@ -1,0 +1,182 @@
+<html>
+<title>Edge Detection and Image Segmentation (EDISON) System</title>
+<body bgcolor="white">
+<font size=5><b>Edge Detection and Image Segmentation (EDISON) System</b></font>
+
+<!-- Begin Table of Contents -->
+
+<hr>
+<b> Table of Contents </b>
+<ul>
+<li> <a href="help.html"> Introduction </a></li>
+<li> System Overview </li>
+<li> <a href="edge.html"> Confidence Based Edge Detector </a></li>
+<li> <a href="segm.html"> Mean Shift Based Image Segmenter </a></li>
+<li> <a href="syng.html"> Synergistic Image Segmenter </a></li>
+<li> <a href="ref.html"> References </a></li>
+</ul>
+<hr>
+
+<!-- Finish Table of Contents -->
+
+<!-- Begin System Overview-->
+
+<h5> System Overview </h5>
+
+<p>
+
+The system is built using two separate modules: a confidence based edge detector and a mean shift based image segmenter. General system use is outlined below. <br>
+
+<p align=center><img src="./figs/sys_fig1.jpg" alt="Error: Missing image './figs/sys_fig1.jpg'."></img><p align=left>
+
+<u><b>Open New Edge Detection Window</u></b>
+<br><br>
+Opens a new edge detection window. An image is <u>not</u> loaded.
+
+<br><br>
+<u><b>Open New Segmentation Window</u></b>
+<br><br>
+Opens a new segmentation window. An image is <u>not</u> loaded.
+
+<br><br>
+<u><b>Load an Image</u></b>
+<br><br>
+Loads an image into a new edge detection and segmentation window for processing.
+
+<br><br>
+<u><b>Save Result</u></b>
+<br><br>
+A result may be saved only after image processing is performed. When performing edge detection the result is an edge map. Upon performing segmentation the segmented image and region boundaries may be saved.
+
+<br><br>
+<u><b>Zoom Window</u></b>
+<br><br>
+Defines a small zoom window above the current image, centered about the mouse cursor.
+
+<br><br>
+<u><b>Zoom In</u></b>
+<br><br>
+Zoom into current image.
+
+<br><br>
+<u><b>Zoom Out</u></b>
+<br><br>
+Zoom out of current image.
+
+<br><br>
+<u><b>Pointer</u></b>
+<br><br>
+Restores the mouse cursor to a pointer when over the current image.
+
+<br><br>
+<u><b>Help</u></b>
+<br><br>
+Opens the help window.
+
+<br><br>
+<u><b>Log Window</u></b>
+<br><br>
+Displays the system progress and state. The edge detection and segmentation modules use the window log to display messages that document their progress. They also use this log to display errors. The log is used by the general system to report the success or failure of an operation (e.g. saving a result or loading an image). The contents of the log window are copied to the file 'filelog.txt'.
+
+<br><br>
+<u>NOTE:</u> The <i>current image</i> is the image being viewed in an edge detection or image segmentation window. For example, the current image may be the input image or may display the result. 
+
+<br>
+
+<br><font size=4><b>File Menu</b></font><br>
+
+<p align=center><img src="./figs/sys_fig2.jpg" alt="Error: Missing image './figs/sys_fig2.jpg'."></img><p align=left>
+
+<u><b>Open New Edge Detection Window</u></b>
+<br><br>
+Opens a new edge detection window. An image is <u>not</u> loaded.
+
+<br><br>
+<u><b>Open New Segmentation Window</u></b>
+<br><br>
+Opens a new segmentation window. An image is <u>not</u> loaded.
+
+<br><br>
+<u><b>Load Image into Edge Detection Window</u></b>
+<br><br>
+Loads an image to perform edge detection.
+
+<br><br>
+<u><b>Load Image into Segmentation Window</u></b>
+<br><br>
+Loads an image to perform image segmentation.
+
+<br><br>
+<u><b>Exit System</u></b>
+<br><br>
+Exits the system. If processing windows are open upon exit, a prompt will be displayed to confirm the action.
+
+<br>
+
+<br><font size=4><b>Window Menu</b></font><br>
+
+<br>
+
+<p align=center><img src="./figs/sys_fig3.jpg" alt="Error: Missing image './figs/sys_fig3.jpg'."></img><p align=left>
+
+<u><b>Cascade</u></b>
+<br><br>
+Cascades open edge detection and segmentation windows.
+
+<br><br>
+<u><b>Tile Horizontally</u></b>
+<br><br>
+Tiles open edge detection and segmentation windows horizontally.
+
+<br><br>
+<u><b>Tile Vertically</u></b>
+<br><br>
+Tiles open edge detection and segmentation windows vertically.
+
+<br><br>
+<u><b>Arrange Icons</u></b>
+<br><br>
+Places minimized window icons at the bottom of the working area in an orderly fashion.
+
+<br><br>
+<u><b>Next</u></b>
+<br><br>
+Redirects focus to the next edge detection or image segmentation window.
+
+<br>
+
+<br><font size=4><b>Help Menu</b></font><br>
+
+<p align=center><img src="./figs/sys_fig4.jpg" alt="Error: Missing image './figs/sys_fig4.jpg'."></img><p align=left>
+
+<u><b>Help</u></b>
+<br><br>
+Opens the help window.
+
+<br><br>
+<u><b>About</u></b>
+<br><br>
+Provides a brief description of the system.
+
+<br>
+
+<br><font size=4><b>Edge Detection/Segmentation Windows</b></font><br>
+
+<br>
+
+Edge detection is performed by opening an edge window:
+
+<p align=center><img src="./figs/win_fig1.jpg" alt="Error: Missing image './figs/win_fig1.jpg'."></img><p align=left>
+
+Similarly, image segmentation is performed using a segmentation window:
+
+<p align=center><img src="./figs/win_fig2.jpg" alt="Error: Missing image './figs/win_fig2.jpg'."></img><p align=left>
+
+The use of these interfaces is detailed by their corresponding topics listed in the table of contents. <a href="overview.html">top</a>
+
+<!-- Finish System Overview -->
+
+<br><hr>
+<font color="#888888">Robust Image Understanding Lab, (freeware) 2002</font>
+</body>
+</html>
