@@ -669,6 +669,11 @@ ADD_TEST(feTvLikelihoodPathListFilter ${FEATUREEXTRACTION_TESTS8}
 	73 160 126 173 
         )
 
+# -------            otb::ParallelLinePathListFilter   -------------
+
+ADD_TEST(feTuParallelLinePathListFilterNew ${FEATUREEXTRACTION_TESTS8} 
+         otbParallelLinePathListFilterNew) 
+      
 
 # -------            otb::RoadExtractionFilter   -------------
 
