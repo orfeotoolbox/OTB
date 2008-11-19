@@ -884,12 +884,12 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
     std::cout << nbdiff;
     std::cout <<  "</DartMeasurement>" << std::endl;
     std::cout << "================================================================"<<std::endl;
-    std::cout << "Baseline ASCII File :"<<baselineAsciiFileName << std::endl;
-    std::cout << "Test ASCII File     :"<<testAsciiFileName << std::endl;
-    std::cout << "Diff ASCII File     :"<<diffAsciiFileName << std::endl;
-    std::cout << "Tolerance value     :"<<epsilon << std::endl;
+    std::cout << "Baseline ASCII File : "<<baselineAsciiFileName << std::endl;
+    std::cout << "Test ASCII File     : "<<testAsciiFileName << std::endl;
+    std::cout << "Diff ASCII File     : "<<diffAsciiFileName << std::endl;
+    std::cout << "Tolerance value     : "<<epsilon << std::endl;
 
-    std::cout << "Nb lines differents :"<<listStrDiffLineFileRef.size() << std::endl;
+    std::cout << "Nb lines differents : "<<listStrDiffLineFileRef.size() << std::endl;
     for( unsigned int i = 0 ; i  < listStrDiffLineFileRef.size() ; i++)
     {
       std::cout << "   -------------------------------"<<std::endl;
