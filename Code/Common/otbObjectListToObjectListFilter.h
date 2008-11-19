@@ -47,7 +47,7 @@ namespace otb
           itkNewMacro(Self);
   
           /** Run-time type information (and related methods). */
-          itkTypeMacro(ObjectListToObjectListFilter, InPlaceImageFilter);
+          itkTypeMacro(ObjectListToObjectListFilter, ObjectListSource);
 
           /** Some typedefs. */
           typedef TInputList InputListType;

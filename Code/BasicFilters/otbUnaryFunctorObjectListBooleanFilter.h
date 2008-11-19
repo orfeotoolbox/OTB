@@ -46,7 +46,7 @@ public:
   itkNewMacro(Self);
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(UnaryFunctorObjectListBooleanFilter, InPlaceImageFilter);
+  itkTypeMacro(UnaryFunctorObjectListBooleanFilter, ObjectListToObjectListFilter);
 
   /** Some typedefs. */
   typedef TFunction   FunctorType;
@@ -56,7 +56,7 @@ public:
   typedef typename TOutputList::Pointer OutputListPointer;
   typedef typename TInputList::ConstIterator InputListIterator;
   
-  typedef itk::DataObject::Pointer DataObjectPointer;
+//   typedef itk::DataObject::Pointer DataObjectPointer;
 
 
   /** Get the functor object.  The functor is returned by reference.

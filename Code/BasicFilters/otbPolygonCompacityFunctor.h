@@ -47,6 +47,7 @@ namespace otb
         m_Threshold = 0.2;
       };
       ~PolygonCompacityFunctor() {};
+      
       inline bool operator()(const TInput1 & input)
       {
         double circularityRatio = 4*M_PI*input->GetSurface()

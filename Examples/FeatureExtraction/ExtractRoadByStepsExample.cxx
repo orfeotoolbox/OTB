@@ -318,7 +318,7 @@ int main( int argc, char * argv[] )
   typedef otb::RemoveTortuousPathListFilter<PathType> RemoveTortuousPathType;
   RemoveTortuousPathType::Pointer removeTortuousPathListFilter 
                           = RemoveTortuousPathType::New();
-  removeTortuousPathListFilter->SetMeanDistanceThreshold(1.0);
+  removeTortuousPathListFilter->GetFunctor().SetThreshold(1.0);
   removeTortuousPathListFilter->SetInput(breakAngularPathListFilter->GetOutput());
   // Software Guide : EndCodeSnippet
     
@@ -345,7 +345,7 @@ int main( int argc, char * argv[] )
   
   RemoveTortuousPathType::Pointer removeTortuousPathListFilter2 
                           = RemoveTortuousPathType::New();
-  removeTortuousPathListFilter2->SetMeanDistanceThreshold(10.0);
+  removeTortuousPathListFilter2->GetFunctor().SetThreshold(10.0);
   removeTortuousPathListFilter2->SetInput(simplifyPathListFilter2->GetOutput());
   // Software Guide : EndCodeSnippet
   

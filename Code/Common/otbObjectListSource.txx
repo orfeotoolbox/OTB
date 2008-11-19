@@ -35,8 +35,8 @@ namespace otb
   // output must be of type TOutputImage
     typename TOutputList::Pointer output
         = static_cast<TOutputList*>(this->MakeOutput(0).GetPointer()); 
-    this->ProcessObject::SetNumberOfRequiredOutputs(1);
-    this->ProcessObject::SetNthOutput(0, output.GetPointer());
+    this->itk::ProcessObject::SetNumberOfRequiredOutputs(1);
+    this->itk::ProcessObject::SetNthOutput(0, output.GetPointer());
   
   }
 
