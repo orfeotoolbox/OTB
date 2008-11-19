@@ -1,8 +1,4 @@
 SET(EDISON_SOURCE
-prompt/parser.cpp 
-prompt/globalFnc.cpp 
-prompt/edison.cpp
-prompt/libppm.cpp
 segm/ms.cpp
 segm/msSysPrompt.cpp 
 segm/msImageProcessor.cpp
@@ -15,13 +11,6 @@ edge/BgGlobalFc.cpp
 edge/BgImage.cpp)
 
 SET(EDISON_HEADERS
-prompt/parser.h 
-prompt/defs.h 
-prompt/error.h 
-prompt/flags.h 
-prompt/edison.h
-prompt/imfilt.h 
-prompt/libppm.h
 segm/tdef.h
 segm/RAList.h
 segm/ms.h
@@ -33,6 +22,11 @@ edge/BgEdge.h
 edge/BgEdgeDetect.h
 edge/BgImage.h
 )
+
+# Suppress deprecated warning
+IF(CMAKE_COMPILER_IS_GNUCXX)
+      SET_SOURCE_FILES_PROPERTIES(${EDISON_SOURCE} PROPERTIES COMPILE_FLAGS -w)
+  ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(otbedison ${EDISON_SOURCE})
 
