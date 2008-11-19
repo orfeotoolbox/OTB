@@ -67,6 +67,8 @@ class ITK_EXPORT LinkPathListFilter
   itkGetMacro(AngularThreshold,RealType);
   itkSetMacro(DistanceThreshold,RealType);
   itkGetMacro(DistanceThreshold,RealType);
+  itkSetMacro(ModuloPI, bool);
+  itkGetMacro(ModuloPI, bool);
 
 protected:
   /** Constructor */
@@ -104,6 +106,9 @@ private:
 
   RealType m_AngularThreshold;
   RealType m_DistanceThreshold;
+
+  /// Do not use the sign of the orientation of the lines
+  bool m_ModuloPI;
   
 };
 }// End namespace otb

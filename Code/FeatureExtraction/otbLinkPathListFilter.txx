@@ -32,6 +32,7 @@ LinkPathListFilter<TPath>
 {
   m_DistanceThreshold = 10.;
   m_AngularThreshold = 3.14;
+  m_ModuloPI = false;
 }
 
 template <class TPath>
@@ -229,9 +230,18 @@ LinkPathListFilter<TPath>
   double alpha2 = vcl_atan2((v4[1]-v3[1]),(v4[0]-v3[0]));
   double alpha3 = vcl_atan2((v3[1]-v2[1]),(v3[0]-v2[0]));
 
-  alpha1 = (alpha1 >= 0)?alpha1:(alpha1+2.*M_PI);
-  alpha2 = (alpha2 >= 0)?alpha2:(alpha2+2.*M_PI);
-  alpha3 = (alpha3 >= 0)?alpha3:(alpha3+2.*M_PI);
+  if(m_ModuloPI)
+    {
+    alpha1 = (alpha1 >= 0)?alpha1:(alpha1+M_PI);
+    alpha2 = (alpha2 >= 0)?alpha2:(alpha2+M_PI);
+    alpha3 = (alpha3 >= 0)?alpha3:(alpha3+M_PI);  
+    }
+  else
+    {
+    alpha1 = (alpha1 >= 0)?alpha1:(alpha1+2.*M_PI);
+    alpha2 = (alpha2 >= 0)?alpha2:(alpha2+2.*M_PI);
+    alpha3 = (alpha3 >= 0)?alpha3:(alpha3+2.*M_PI);
+    }
    
   bool resp = (vcl_abs(alpha1-alpha2) < static_cast<double>(m_AngularThreshold))
     && (vcl_abs(alpha1-alpha3) < static_cast<double>(m_AngularThreshold))
