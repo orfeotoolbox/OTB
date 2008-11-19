@@ -28,11 +28,11 @@ namespace otb
    * The log-polar coordinate system is a polar system where the 
    * radial coordinate has a logarithmic scale.
    * 
-   * Given (rho,theta) the coordinate in the log-polar system, the 
+   * Given \f$(\rho,\theta)\f$ the coordinate in the log-polar system, the 
    * corresponding cartesian coordinates are 
    * 
-   * x-xc=exp(Rho)*cos(theta)
-   * y-yc=exp(Rho)*sin(theta)
+   * \f$ x-xc=exp(\rho)*cos(\theta) \f$
+   * \f$ y-yc=exp(\rho)*sin(\theta) \f$
    *
    * Where (xc,yc) is the center of the log-polar transform in the cartesian space.
    * Please note that this center can NOT be represented in log-polar.
