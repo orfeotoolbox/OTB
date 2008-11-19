@@ -17,11 +17,11 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbSimplifyPathListFilter.h"
+#include "otbParallelLinePathListFilter.h"
 #include "itkPolyLineParametricPath.h"
 #include <cstdlib>
 
-int otbSimplifyPathListFilterNew(int argc, char * argv[])
+int otbParallelLinePathListFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension =2;
   typedef itk::PolyLineParametricPath<Dimension> PathType;
