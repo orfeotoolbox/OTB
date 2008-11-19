@@ -1,4 +1,9 @@
 SET(EDISON_SOURCE
+prompt/parser.cpp 
+prompt/globalFnc.cpp 
+prompt/edison.cpp
+prompt/libppm.cpp
+segm/msSysPrompt.cpp 
 segm/ms.cpp
 segm/msImageProcessor.cpp
 segm/RAList.cpp
@@ -10,6 +15,13 @@ edge/BgGlobalFc.cpp
 edge/BgImage.cpp)
 
 SET(EDISON_HEADERS
+prompt/parser.h 
+prompt/defs.h 
+prompt/error.h 
+prompt/flags.h 
+prompt/edison.h
+prompt/imfilt.h 
+prompt/libppm.h
 segm/tdef.h
 segm/RAList.h
 segm/ms.h
