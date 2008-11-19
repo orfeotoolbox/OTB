@@ -142,7 +142,8 @@ template <class TInputImage, class TOutputPath>
     /** Template parameters typedefs for internals filters */
     typedef typename GradientFilterType::RealType SigmaType;
     typedef typename VectorizationPathListFilterType::InputPixelType AmplitudeThresholdType;
-    typedef typename SimplifyPathListFilterType::ToleranceType ToleranceType;
+//     typedef typename SimplifyPathListFilterType::ToleranceType ToleranceType;
+    typedef double ToleranceType;
     typedef typename BreakAngularPathListFilterType::MaxAngleType MaxAngleType;
 //     typedef typename RemoveTortuousPathListFilterType::MeanDistanceThresholdType MeanDistanceThresholdType; 
     typedef double MeanDistanceThresholdType;

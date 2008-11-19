@@ -147,7 +147,7 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
   // Some typedefs
   typedef otb::ImageToEdgePathFilter<InputImageType,PathType> EdgeExtractionFilterType;
   typedef otb::SimplifyPathListFilter<PathType> SimplifyPathFilterType;
-  typedef typename SimplifyPathFilterType::PathListType PathListType;
+  typedef typename SimplifyPathFilterType::InputListType PathListType;
 
   typedef itk::MinimumMaximumImageCalculator<InputImageType> MinMaxCalculatorType;
   typedef PolygonToPolygonRCC8Calculator<PathType> RCC8CalculatorType;
@@ -185,7 +185,7 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
 	  region->PushBack(extraction->GetOutput());
 	  typename SimplifyPathFilterType::Pointer simplifier = SimplifyPathFilterType::New();
 	  simplifier->SetInput(region);
-	  simplifier->SetTolerance(0.1);
+	  simplifier->GetFunctor().SetTolerance(0.1);
 	  simplifier->Update();
 
 	  // Create a new vertex

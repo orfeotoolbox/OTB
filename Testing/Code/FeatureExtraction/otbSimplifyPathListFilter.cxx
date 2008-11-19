@@ -57,7 +57,7 @@ int otbSimplifyPathListFilter(int argc, char * argv[])
   const unsigned int Dimension = 2;
   typedef itk::PolyLineParametricPath<Dimension> PathType;
   typedef otb::SimplifyPathListFilter<PathType> SimplifyPathListFilterType;
-  typedef SimplifyPathListFilterType::PathListType PathListType;
+  typedef SimplifyPathListFilterType::InputListType PathListType;
   PathType::ContinuousIndexType cindex;
       
       
@@ -83,7 +83,7 @@ int otbSimplifyPathListFilter(int argc, char * argv[])
   SimplifyPathListFilterType::Pointer simplifyFilter = SimplifyPathListFilterType::New();
 
   simplifyFilter->SetInput(InputPathList);
-  simplifyFilter->SetTolerance(tolerance);
+  simplifyFilter->GetFunctor().SetTolerance(tolerance);
   simplifyFilter->Update();
 
   PathListType::Pointer OutputPathList = simplifyFilter->GetOutput();
@@ -97,7 +97,7 @@ int otbSimplifyPathListFilter(int argc, char * argv[])
   unsigned int counter = 1;
   PathListIteratorType pathListIt = InputPathList->Begin();
         
-  file<<"TOLERANCE: "<<simplifyFilter->GetTolerance()<< "("<<tolerance<<")"<<std::endl;
+  file<<"TOLERANCE: "<<simplifyFilter->GetFunctor().GetTolerance()<< "("<<tolerance<<")"<<std::endl;
   file<<"INPUT list of Path "<<": "<<std::endl;
   while(pathListIt!=InputPathList->End())
     {

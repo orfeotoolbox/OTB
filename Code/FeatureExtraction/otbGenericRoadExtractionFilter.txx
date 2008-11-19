@@ -130,7 +130,7 @@ GenericRoadExtractionFilter<TInputImage, TOutputPath>
   m_VectorizationPathListFilter->SetAmplitudeThreshold(m_AmplitudeThreshold);
   
   m_FirstSimplifyPathListFilter->SetInput(m_VectorizationPathListFilter->GetOutput());
-  m_FirstSimplifyPathListFilter->SetTolerance(m_Tolerance);
+  m_FirstSimplifyPathListFilter->GetFunctor().SetTolerance(m_Tolerance);
   
   m_BreakAngularPathListFilter->SetInput(m_FirstSimplifyPathListFilter->GetOutput());
   m_BreakAngularPathListFilter->SetMaxAngle(m_MaxAngle);
@@ -143,7 +143,7 @@ GenericRoadExtractionFilter<TInputImage, TOutputPath>
   m_LinkPathListFilter->SetDistanceThreshold( static_cast<LinkRealType>(m_DistanceThreshold/m_Resolution) );
 
   m_SecondSimplifyPathListFilter->SetInput(m_LinkPathListFilter->GetOutput());
-  m_SecondSimplifyPathListFilter->SetTolerance(m_Tolerance);
+  m_SecondSimplifyPathListFilter->GetFunctor().SetTolerance(m_Tolerance);
  
   m_SecondRemoveTortuousPathListFilter->SetInput(m_SecondSimplifyPathListFilter->GetOutput());
   m_SecondRemoveTortuousPathListFilter->GetFunctor().SetThreshold(m_SecondMeanDistanceThreshold);

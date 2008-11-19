@@ -36,7 +36,7 @@ int otbPolygonToPolygonRCC8Calculator(int argc, char* argv[])
   typedef otb::Image<PixelType,Dimension> ImageType;
   typedef otb::ImageToEdgePathFilter<ImageType,PolygonType> EdgeExtractionFilterType;
   typedef otb::SimplifyPathListFilter<PolygonType> SimplifyPathFilterType;
-  typedef SimplifyPathFilterType::PathListType PathListType;
+  typedef SimplifyPathFilterType::InputListType PathListType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::PolygonToPolygonRCC8Calculator<PolygonType> CalculatorType;
 
@@ -92,7 +92,7 @@ int otbPolygonToPolygonRCC8Calculator(int argc, char* argv[])
 
   SimplifyPathFilterType::Pointer simplifier = SimplifyPathFilterType::New();
   simplifier->SetInput(regions);
-  simplifier->SetTolerance(0.1);
+  simplifier->GetFunctor().SetTolerance(0.1);
   simplifier->Update();
 
   // Declaration

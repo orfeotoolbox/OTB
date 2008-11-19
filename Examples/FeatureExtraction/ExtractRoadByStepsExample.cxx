@@ -306,7 +306,7 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
   typedef otb::SimplifyPathListFilter<PathType> SimplifyPathType;
   SimplifyPathType::Pointer simplifyPathListFilter = SimplifyPathType::New();
-  simplifyPathListFilter->SetTolerance(1.0);
+  simplifyPathListFilter->GetFunctor().SetTolerance(1.0);
   simplifyPathListFilter->SetInput(vectorizationFilter->GetOutput());
     
   typedef otb::BreakAngularPathListFilter<PathType> BreakAngularPathType;
@@ -340,7 +340,7 @@ int main( int argc, char * argv[] )
   linkPathListFilter->SetInput(removeTortuousPathListFilter->GetOutput());
   
   SimplifyPathType::Pointer simplifyPathListFilter2 = SimplifyPathType::New();
-  simplifyPathListFilter2->SetTolerance(1.0);
+  simplifyPathListFilter2->GetFunctor().SetTolerance(1.0);
   simplifyPathListFilter2->SetInput(linkPathListFilter->GetOutput());
   
   RemoveTortuousPathType::Pointer removeTortuousPathListFilter2 
