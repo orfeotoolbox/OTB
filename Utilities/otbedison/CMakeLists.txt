@@ -1,6 +1,5 @@
 SET(EDISON_SOURCE
 segm/ms.cpp
-segm/msSysPrompt.cpp 
 segm/msImageProcessor.cpp
 segm/RAList.cpp
 segm/rlist.cpp
