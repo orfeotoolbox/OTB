@@ -29,6 +29,8 @@ namespace otb
      * This functor compute the average distance between each point of a path
      * and return true is the distance is above the threshold, false otherwise.
      *
+     * \sa UnaryFunctorObjectListBooleanFilter
+     *
      *  \ingroup Functor
      */
   template <class TInput1>
