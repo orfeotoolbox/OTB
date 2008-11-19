@@ -3,7 +3,7 @@
 FILE(GLOB OTBBasicFilters_SRCS "*.cxx" )
 
 ADD_LIBRARY(OTBBasicFilters ${OTBBasicFilters_SRCS})
-TARGET_LINK_LIBRARIES (OTBBasicFilters OTBCommon ITKBasicFilters)
+TARGET_LINK_LIBRARIES (OTBBasicFilters OTBCommon ITKBasicFilters otbedison)
 
 INSTALL(TARGETS OTBBasicFilters
 RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries

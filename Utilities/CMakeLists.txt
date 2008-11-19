@@ -26,7 +26,7 @@ ENDIF(NOT OTB_USE_EXTERNAL_EXPAT)
 
 #Supress libraries not used by the 2.2.0 version 
 #SUBDIRS(BGL otbsvm dxflib InsightJournal otbossim otb6S otbgeotiff tinyXMLlib otbgalib otbkml)
-SUBDIRS(BGL otbsvm dxflib InsightJournal otbossim otb6S otbgeotiff tinyXMLlib otbkml otbliblas)
+SUBDIRS(BGL otbsvm dxflib InsightJournal otbossim otb6S otbgeotiff tinyXMLlib otbkml otbliblas otbedison)
 
 IF(BUILD_TESTING)
         SUBDIRS( Dart )

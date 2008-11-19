@@ -35,7 +35,6 @@ REGISTER_TEST(otbMeanShiftImageFilterNew);
 REGISTER_TEST(otbMeanShiftImageFilter);
 REGISTER_TEST(otbMeanShiftVectorImageFilterNew);
 REGISTER_TEST(otbMeanShiftVectorImageFilter);
-REGISTER_TEST(otbMeanShiftVectorImageCluster);
 REGISTER_TEST(otbFunctionToImageFilterNew);
 REGISTER_TEST(otbFunctionToImageFilter);
 }

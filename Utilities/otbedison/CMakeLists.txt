@@ -1,0 +1,41 @@
+SET(EDISON_SOURCE
+segm/ms.cpp
+segm/msSysPrompt.cpp 
+segm/msImageProcessor.cpp
+segm/RAList.cpp
+segm/rlist.cpp
+edge/BgEdge.cpp
+edge/BgEdgeDetect.cpp
+edge/BgEdgeList.cpp
+edge/BgGlobalFc.cpp
+edge/BgImage.cpp)
+
+SET(EDISON_HEADERS
+segm/tdef.h
+segm/RAList.h
+segm/ms.h
+segm/msImageProcessor.h 
+segm/msSys.h
+segm/rlist.h
+edge/BgDefaults.h
+edge/BgEdge.h
+edge/BgEdgeDetect.h
+edge/BgImage.h
+)
+
+# Suppress deprecated warning
+IF(CMAKE_COMPILER_IS_GNUCXX)
+      SET_SOURCE_FILES_PROPERTIES(${EDISON_SOURCE} PROPERTIES COMPILE_FLAGS -w)
+  ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
+ADD_LIBRARY(otbedison ${EDISON_SOURCE})
+
+INSTALL(TARGETS otbedison
+RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
+LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
+ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
+
+INSTALL(FILES ${EDISON_HEADERS}
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otedison
+    COMPONENT Development)
+

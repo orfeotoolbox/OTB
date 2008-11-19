@@ -881,47 +881,34 @@ ADD_TEST(bfTuMeanShiftImageFilterNew ${BASICFILTERS_TESTS9}
         otbMeanShiftImageFilterNew )
 
 ADD_TEST(bfTvMeanShiftImageFilter ${BASICFILTERS_TESTS9}
---compare-image ${EPSILON}
+--compare-n-images ${EPSILON} 2
 		${BASELINE}/bfMeanShiftImageFilterOutput.tif
 		${TEMP}/bfMeanShiftImageFilterOutput.tif
+		${BASELINE}/bfMeanShiftImageFilterClusteredOutput.tif
+		${TEMP}/bfMeanShiftImageFilterClusteredOutput.tif
         otbMeanShiftImageFilter 
 	${INPUTDATA}/QB_Suburb.png
 	${TEMP}/bfMeanShiftImageFilterOutput.tif
-	3 15 20 0 0.0001
+	${TEMP}/bfMeanShiftImageFilterClusteredOutput.tif
+	16 16 10 1.0
 	)
 
 ADD_TEST(bfTuMeanShiftVectorImageFilterNew ${BASICFILTERS_TESTS9}
         otbMeanShiftVectorImageFilterNew )
 
 ADD_TEST(bfTvMeanShiftVectorImageFilter ${BASICFILTERS_TESTS9}
---compare-image ${EPSILON}
+--compare-n-images ${EPSILON} 2
 		${BASELINE}/bfMeanShiftVectorImageFilterOutput.tif
 		${TEMP}/bfMeanShiftVectorImageFilterOutput.tif
+		${BASELINE}/bfMeanShiftVectorImageFilterClusteredOutput.tif
+		${TEMP}/bfMeanShiftVectorImageFilterClusteredOutput.tif
         otbMeanShiftVectorImageFilter 
 	${INPUTDATA}/qb_RoadExtract2sub200x200.tif
 	${TEMP}/bfMeanShiftVectorImageFilterOutput.tif
-	3 15 20 0 0.0001
+	${TEMP}/bfMeanShiftVectorImageFilterClusteredOutput.tif
+	16 16 10 1.0
 	)
 
-ADD_TEST(bfTvMeanShiftVectorImageFilterUsingImageSpacing ${BASICFILTERS_TESTS9}
---compare-image ${EPSILON}
-		${BASELINE}/bfMeanShiftVectorImageFilterOutputUsingImageSpacing.tif
-		${TEMP}/bfMeanShiftVectorImageFilterOutputUsingImageSpacing.tif
-        otbMeanShiftVectorImageFilter 
-	${INPUTDATA}/qb_RoadExtract2sub200x200.tif
-	${TEMP}/bfMeanShiftVectorImageFilterOutputUsingImageSpacing.tif
-	3 15 20 1 0.0001
-	)
-
-ADD_TEST(bfTvMeanShiftVectorImageCluster ${BASICFILTERS_TESTS9}
-#--compare-image ${EPSILON}
-#		${BASELINE}/bfMeanShiftVectorImageFilterOutputUsingImageSpacing.tif
-#		${TEMP}/bfMeanShiftImageCluster.tif
-        otbMeanShiftVectorImageCluster
-	${INPUTDATA}/qb_RoadExtract2sub200x200.tif
-	${TEMP}/bfMeanShiftImageCluster.tif
-	3 15 20 1 0.0001
-	)
 
 ADD_TEST(bfTvFunctionToImageFilterNew ${BASICFILTERS_TESTS9}
         otbFunctionToImageFilterNew
@@ -1166,7 +1153,6 @@ otbMeanShiftImageFilterNew.cxx
 otbMeanShiftImageFilter.cxx
 otbMeanShiftVectorImageFilterNew.cxx
 otbMeanShiftVectorImageFilter.cxx
-otbMeanShiftVectorImageCluster.cxx
 otbFunctionToImageFilterNew.cxx
 otbFunctionToImageFilter.cxx
 )
