@@ -31,14 +31,28 @@ namespace otb
   class PolygonCompacityFunctor
   {
     public:
-      PolygonCompacityFunctor() {};
+      
+
+      void SetThreshold(double threshold )
+      {
+        m_Threshold = threshold;
+      }
+      double GetThreshold(void)const
+      {
+        return (  m_Threshold );
+      }
+      
+      PolygonCompacityFunctor() 
+      {
+        m_Threshold = 0.2;
+      };
       ~PolygonCompacityFunctor() {};
       inline bool operator()(const TInput1 & input)
       {
         double circularityRatio = 4*M_PI*input->GetSurface()
             / M_SQUARE(input->GetLength());
       
-        if (circularityRatio > 0.2)
+        if (circularityRatio > m_Threshold)
         {
           return true;
         }
@@ -47,6 +61,11 @@ namespace otb
           return false;
         }
       }
+      
+      
+      
+    private:
+      double m_Threshold;
   };
 
 }
