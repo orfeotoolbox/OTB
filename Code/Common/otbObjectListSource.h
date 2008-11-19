@@ -18,6 +18,7 @@
 #ifndef __otbObjectListSource_h
 #define __otbObjectListSource_h
 
+#include "itkProcessObject.h"
 #include "otbObjectList.h"
 
 namespace otb
@@ -48,7 +49,7 @@ namespace otb
           itkNewMacro(Self);
   
           /** Run-time type information (and related methods). */
-          itkTypeMacro(ObjectListSource, InPlaceImageFilter);
+          itkTypeMacro(ObjectListSource, ProcessObject);
 
           /** Some typedefs. */
           typedef TOutputList OutputListType;

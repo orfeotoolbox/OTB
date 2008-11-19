@@ -57,7 +57,7 @@ int otbRemoveTortuousPathListFilter(int argc, char * argv[])
   const unsigned int Dimension = 2;
   typedef itk::PolyLineParametricPath<Dimension> PathType;
   typedef otb::RemoveTortuousPathListFilter<PathType> RemoveTortuousPathListFilterType;
-  typedef RemoveTortuousPathListFilterType::PathListType PathListType;
+  typedef RemoveTortuousPathListFilterType::InputListType PathListType;
   PathType::ContinuousIndexType cindex;
       
       
@@ -83,7 +83,7 @@ int otbRemoveTortuousPathListFilter(int argc, char * argv[])
   RemoveTortuousPathListFilterType::Pointer filter = RemoveTortuousPathListFilterType::New();
 
   filter->SetInput(InputPathList);
-  filter->SetMeanDistanceThreshold(threshold);
+  filter->GetFunctor().SetThreshold(threshold);
   filter->Update();
 
   PathListType::Pointer OutputPathList = filter->GetOutput();
@@ -97,7 +97,7 @@ int otbRemoveTortuousPathListFilter(int argc, char * argv[])
   unsigned int counter = 1;
   PathListIteratorType pathListIt = InputPathList->Begin();
         
-  file<<"Minimum Mean Distance: "<<filter->GetMeanDistanceThreshold()<< " ("<<threshold<<")"<<std::endl;
+  file<<"Minimum Mean Distance: "<<filter->GetFunctor().GetThreshold()<< " ("<<threshold<<")"<<std::endl;
   file<<"INPUT list of Path "<<": "<<std::endl;
   while(pathListIt!=InputPathList->End())
     {
