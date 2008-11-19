@@ -1,0 +1,101 @@
+
+<HTML>
+<HEAD><TITLE>Mean Shift Based Image Segmenter</TITLE></HEAD>
+
+<BODY BGCOLOR=#FFFFFF>
+<font size=5><b>Edge Detection and Image Segmentation (EDISON) System</b></font>
+
+<!-- Begin Table of Contents -->
+
+<hr>
+<b> Table of Contents </b>
+<ul>
+<li> <a href="help.html"> Introduction </a></li>
+<li> <a href="overview.html"> System Overview </a></li>
+<li> <a href="edge.html"> Confidence Based Edge Detector </a></li>
+<li> Mean Shift Based Image Segmenter </li>
+<li> <a href="syng.html"> Synergistic Image Segmenter </a></li>
+<li> <a href="ref.html"> References </a></li>
+</ul>
+<hr>
+
+<!-- Finish Table of Contents -->
+<h5> Mean Shift Based Image Segmenter </h5>
+
+<p align=center><img src="./figs/segm_fig.jpg" alt="Error: Missing image './figs/segm_fig.jpg'."></img></p>
+
+<p align=left>
+This program implements the image segmentation algorithm described in <a href="ref.html">[1]</a> and <a href="ref.html">[3]</a>.</p>
+<p><u>Usage instructions:</u></p>
+<ul>
+
+<li>
+Open a segmentation frame from the toolbar or file menu by selecting <b>File</b> and then <b> Open segment window </b>. Alternatively a segmentation frame may be opened by pressing <b>Alt-S</b>.
+</li>
+
+<li>
+Load an image to be segmented from the toolbar or file menu by selecting <b>File</b> and then <b> Load segment image </b>. An image may also have been loaded into a new segment window from the <b>Load Image</b> button on the options panel or by pressing <b>Shift-L</b>.
+</li>
+
+<li>
+Adjust the parameters displayed on the options panel of the segmentation window and proceed to segment the image by either clicking on the <b>Run</b> button displayed on the options panel, or by selecting <b>Segment</b>, then <b> Segment Image </b> from the file menu, or by pressing <b>Shift-R</b>.
+</li>
+
+<li>
+Adjust the parameters and re-run the program until a satisfactory segmentation result is obtained.
+</li>
+
+<li>
+The segmented image and a region boundaries may be saved from the toolbar, by selecting <b>File</b>, then <b>Save segmented</b> from the file menu, or by pressing <b>Shift-S</b>. The filename specified is used to save the segmented image, filtered image, and region boundaries. This is done by appending to it the tags '_segm', '_filt', and '_bndy'. The segmented and filtered images are only saved when available.
+</li>
+
+</ul>
+
+<br>
+
+<br><b><font size=4>Segmentation Parameters</font></b><br>
+
+<br>
+
+As described in the <a href="ref.html">[1]</a> and <a href="ref.html">[3]</a> the mean shift based segmentation algorithm takes a feature (range) bandwidth, spatial bandwidth, and a minimum region area (in pixels) as input. These parameters are displayed and may be adjusted from the segmentation window options panel. The feature bandwidth may take on any real positive values, however, since the spatial subspace of the image data lies on the image lattice, the spatial bandwidth is constrained to all positive integer values. More specifically, the spatial bandwidth (r) defines a (2r+1)x(2r+1) spatial search window when computing mean shift. Minimum region is also constrained to all positive integer values. If a negative value is entered for either of the parameters and/or zero is entered for the spatial or feature bandwidths, an error will be flagged and the segmentation will not occur. If positive real values are entered for the spatial radius or the minimum region, they will be rounded to the nearest integer prior to segmentation.
+
+<br>
+
+<br><b><font size=4>Mean Shift Based Filtering</font></b><br>
+
+<br>
+
+Mean shift based filtering may be performed by selecting the <b>Filter Only</b> option and then re-running the segmentation algorithm as described by the short usage instructions.
+
+<br>
+
+<br><b><font size=4>Region Fusion</font></b><br>
+
+<br>
+
+Image regions may be further fused to result in a new segmented image by selecting the <b>Fuse Only</b> option and then re-running the segmentation algorithm as described by the short usage instructions.
+
+<br>
+
+<br><b><font size=4>Execution Speedup</font></b><br>
+
+<br>
+
+The execution time for mean shift segmentation and filtering is greatly decreased through the use of a speedup described in <a href="ref.html">[3]</a>. The speedup level <i>None</i>, <i>Medium</i> or <i>High</i>, may be specified by selecting <b>Algorithm</b> from the file menu and then checking the appropriate item in the <b>Speedup</b> submenu. The High speedup level is an extension of the original, Medium speedup level described in the paper which achieves faster execution at the expense of segmentation quality. Nonetheless, for an approximate, time efficient segmentation this speedup may be used.
+
+<br>
+
+<br><b><font size=4>Viewing Results</font></b><br>
+
+<br>
+
+A radio box allows for four views of the display image: original, filtered, segmented, and no image. An <b>Overlay Boundaries</b> checkbox is also provided below the radio box. When selected, the region boundaries obtained from the segmented image are superimposed over the current image. By selecting this checkbox when no image is displayed, the boundary map is viewed.
+
+<p><a href="segm.html">top</a>
+
+<br><hr>
+<font color="#888888">Robust Image Understanding Lab, (freeware) 2002</font>
+
+</BODY>
+
+</HTML>

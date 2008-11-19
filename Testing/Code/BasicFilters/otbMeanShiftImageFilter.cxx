@@ -18,49 +18,53 @@
 #include "itkExceptionObject.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbImageFileWriter.h"
+#include "otbStreamingImageFileWriter.h"
 #include "otbMeanShiftImageFilter.h"
 
 int otbMeanShiftImageFilter(int argc, char * argv[])
 {
   if(argc != 8)
     {
-      std::cerr<<"Usage: "<<argv[0]<<" infname outfname spatialRadius rangeRadius maxNbIterations useImageSpacing convergenceDistanceThreshold"<<std::endl;
+      std::cerr<<"Usage: "<<argv[0]<<" infname filteredfname clusteredfname spatialRadius rangeRadius minregionsize scale"<<std::endl;
       return EXIT_FAILURE;
     }
 
   const char *       infname         = argv[1];
-  const char *       outfname        = argv[2];
-  const double       spatialRadius   = atof(argv[3]);
-  const double       rangeRadius     = atof(argv[4]);
-  const unsigned int maxNbIterations = atoi(argv[5]);
-  const bool         useImageSpacing = atoi(argv[6]);
-  const double       convergenceTol  = atof(argv[7]);
+  const char *       filteredfname   = argv[2];
+  const char *       clusteredfname  = argv[3];
+  const unsigned int spatialRadius   = atoi(argv[4]);
+  const double       rangeRadius     = atof(argv[5]);
+  const unsigned int minRegionSize   = atoi(argv[6]);
+  const double       scale           = atoi(argv[7]);
 
   const unsigned int Dimension = 2;
-  typedef short PixelType;
+  typedef float PixelType;
   typedef otb::Image<PixelType,Dimension> ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  typedef otb::StreamingImageFileWriter<ImageType> WriterType;
   typedef otb::MeanShiftImageFilter<ImageType,ImageType> FilterType;
   
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();
   ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
-  
+  WriterType::Pointer writer1 = WriterType::New();
+  WriterType::Pointer writer2 = WriterType::New();
+ 
   reader->SetFileName(infname);
-  writer->SetFileName(outfname);
+  writer1->SetFileName(filteredfname);
+  writer2->SetFileName(clusteredfname);
   
   filter->SetSpatialRadius(spatialRadius);
   filter->SetRangeRadius(rangeRadius);
-  filter->SetMaxNumberOfIterations(maxNbIterations);
-  filter->SetUseImageSpacing(useImageSpacing);
-  filter->SetConvergenceDistanceThreshold(convergenceTol);
+  filter->SetMinimumRegionSize(minRegionSize);
+  filter->SetScale(scale);
 
   filter->SetInput(reader->GetOutput());
-  writer->SetInput(filter->GetOutput());
-  
-  writer->Update();
+  writer1->SetInput(filter->GetOutput());
+  writer2->SetInput(filter->GetClusteredOutput());
+
+  writer1->Update();
+  writer2->Update();
+
   return EXIT_SUCCESS;
 }

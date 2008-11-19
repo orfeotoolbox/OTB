@@ -1,0 +1,1273 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>EDISON Command Prompt Specification</title>
+	<h2>Edge Detection and Image SegmentatiON (EDISON) System Command Prompt
+	Specification</h2>
+	<hr>
+</head>
+
+<body bgcolor=#FFFFFF>
+
+<!---Table of Contents--->
+
+<h3>Table of Contents</h3>
+
+<ul>
+<li><a href="#overview">Overview</a>
+<li><a href="#syntax">Syntax</a>
+<li><a href="#commands">Commands</a>
+<li><a href="#parameters">Parameters</a>
+<li><a href="#enumerations">Data Types and Enumerations</a>
+<li><a href="#input">Input Types</a>
+<li><a href="#output">Output Types</a>
+<li><a href="#images">Supported Image/File Formats</a>
+<li><a href="#formats">Other Image Formats</a>
+<li><a href="#example_edge">Example: Confidence Based Edge Detection</a>
+<li><a href="#example_ms">Example: Mean Shift Based Segmentation</a>
+<li><a href="#example_syn">Example: Synergistic Segmentation</a>
+<li><a href="#example_filt">Example: Mean Shift Based Image Filtering and Region Fusion</a>
+</ul>
+
+<hr>
+
+<!---System Overview--->
+
+<h3><a name="overview">Overview</a></h3>
+
+<p>
+The command prompt version of the Edge Detection and Image SegmentatiON (EDISON)
+System provides a versatile environment for performing confidence based edge
+detection and synergistic image segmentation through the definition of user
+defined scripts. In an EDISON script one specifies the system parameters,
+input, output, and operations. The system functionality is facilitated
+through a simple set of commands and parameters described in the following
+sections. 
+
+<p>
+Once compiled and installed, the system may be invoked from the command
+prompt by typing,
+
+<br><br>
+<font face="courier" size=1> >> edison myscript.eds</font>
+<br><br>
+
+where 'myscript.eds' is a user defined EDISON script file.
+
+<p>
+The source code and makefile for the command prompt version of the EDISON system
+is available from the 
+<a href="http://www.caip.rutgers.edu/riul/"> Robust Image Understanding
+Laboratory </a> web site. The system was tested under both UNIX and Windows
+operating system environments.
+
+<br><br>
+
+<hr>
+
+<!---Syntax--->
+
+<h3><a name="syntax">Syntax</a></h3>
+
+<p>
+The C-like syntax of the EDISON system is extraordinarily simple. In short,
+the EDISON script language is case sensitive, each statement must end in a semicolon,
+and assignments must be performed using the equals sign. Line comments and block
+comments are facilitated through the use of '
+<font face="courier" size=2>//</font>
+' and '
+<font face="courier" size=2>/*</font> ... <font face="courier" size=2>*/</font>
+' respectively. The language is limited to a small set of pre-defined
+parameters and commands whose usage is outlined in the following sections.
+
+<br><br>
+
+<hr>
+
+<!---Commands--->
+
+<h3><a name="commands">Commands</a></h3>
+
+<p>
+The EDISON language contains three basic classes of commands. These classes as
+well as the commands that constitute them are listed below.
+
+<p><b>Input/Output</b>
+
+<p>
+<table width="80%" border=0>
+<tr>
+	   <td width="5%"></td>
+       <td width="15%"><u>Command</u>:</td>
+       <td width="80%"><a name="save"><b>Save</b></a></td>
+</tr>
+<tr>
+	   <td></td>
+       <td valign=top><u>Description</u>:</td>
+       <td>
+	   Outputs system results. System results may be saved as images and
+	   MATLAB ASCII data files for analysis and further processing. If the
+	   requested result is not available a run-time error will be flagged by
+	   the system and the system execution will be halted.
+	   </td>
+</tr>
+<tr>
+	   <td></td>
+       <td><u>Syntax</u>:</td>
+       <td><i>Save('filename', filetype, outputtype);</i></td>
+</tr>
+<tr>
+	   <td></td>
+	   <td><u>Arguments</u></td>
+</tr>
+<tr>
+	   <td></td>
+       <td valign=top>&nbsp&nbsp <i>filename</i></td>
+       <td>A character string containing the name of the file to which the result
+	   will be saved. The file extension must be included in the filename,
+	   EDISON will <u>not</u> place one automatically.</td>
+</tr>
+<tr>
+	   <td></td>
+       <td valign=top>&nbsp&nbsp <i>filetype</i></td>
+       <td>An enumeration that specifies the image/data format, the only data
+	   format available being a MATLAB ASCII file. The 
+	   <a href="#images"> File Type </a> enumeration is detailed below.</td>
+</tr>
+<tr>
+	   <td></td>
+       <td valign=top>&nbsp&nbsp <i>outputtype</i></td>
+       <td>An enumeration that specifies which result is to be saved. The
+	   <a href="#output"> Output Type </a> enumeration is detailed below.</td>
+</tr>
+<tr height=20></tr>
+<tr>
+       <td></td>
+       <td><u>Command</u>:</td>
+       <td><a name="load"><b>Load</b></a></td>
+</tr>
+<tr>
+	   <td></td>
+       <td valign=top><u>Description</u>:</td>
+       <td>
+	   Loads system input. There are two types of system input: (1) the images
+	   which are processed by the EDISON system, and (2) data maps used by
+	   the synergistic image segmentation algorithm to segment an image using
+	   specialized (possible higher-level) information. If the specified file
+	   to be loaded does not exist or read permission is denied, a run-time
+	   error is flagged and the system execution is halted.
+	   </td>
+</tr>
+<tr>
+	   <td></td>
+       <td><u>Syntax</u>:</td>
+       <td><i>Load('filename', inputtype);</i></td>
+</tr>
+<tr>
+	   <td></td>
+	   <td><u>Arguments</u></td>
+</tr>
+<tr>
+	   <td></td>
+       <td valign=top>&nbsp&nbsp <i>filename</i></td>
+       <td>A character string containing the name of the input file.</td>
+</tr>
+<tr>
+	   <td></td>
+       <td valign=top>&nbsp&nbsp <i>inputtype</i></td>
+       <td>An enumeration specifying the type of input IMAGE or MAP. The
+	   <a href="#input"> input type </a> is outlined below.</td>
+</tr>
+<tr height=20></tr>
+<tr>
+	   <td></td>
+       <td><u>Command</u>:</td>
+       <td><b>Use Result</b></td>
+</tr>
+<tr>
+	   <td></td>
+       <td valign=top><u>Description</u>:</td>
+       <td>
+	   Routes the filtering or segmentation result from the previous operation
+	   to the current input of the system. When UseResult is invoked, the original
+	   image is replaced by the system output and any current output is deleted.
+	   In order to reinstate the input image Load must be called once again.
+           If system output does not exists in the form of a filtered or segmented image 
+	   a run-time error is generated and the system is halted.
+	   </td>
+</tr>
+<tr>
+	   <td></td>
+       <td><u>Syntax</u>:</td>
+       <td><i>UseResult(outputtype);</i></td>
+</tr>
+<tr>
+	   <td></td>
+	   <td><u>Arguments</u></td>
+</tr>
+<tr>
+	   <td></td>
+       <td valign=top>&nbsp&nbsp <i>outputtype</i></td>
+       <td>An enumeration that specifies which result is to be stored as
+	   input to the system. Unlike <a href="#save"> Save </a> the outputtype
+	   to argument to UseResult may only have one of two values: SEGM_IMAGE or
+	   FILT_IMAGE. The
+	   <a href="#output"> Output Type </a> enumeration is detailed below.</td>
+</tr>
+</table>
+
+<p><b>Operations</b>
+
+<p> EDISON operations do not take any arguments when invoked. The arguments to
+these operations are specified by the parameter assignments which must be made
+prior to invoking an operation. If a parameter remains un-specified or system
+input is needed to perform the desired operation, a run-time error will be
+flagged and the system execution halted.
+
+<p>
+<table width="80%" border=0>
+<tr>
+	   <td width="5%"></td>
+       <td width="12%"><u>Command</u>:</td>
+       <td width="83%"><b>Edge Detect</b></td>
+</tr>
+<tr>
+	   <td></td>
+       <td><u>Description</u>:</td>
+       <td>
+	   Performs confidence based edge detection.
+	   </td>
+</tr>
+<tr>
+	   <td></td>
+       <td><u>Syntax</u>:</td>
+       <td><i>EdgeDetect;</i></td>
+</tr>
+<tr height=20></tr>
+<tr>
+	   <td></td>
+       <td><u>Command</u>:</td>
+       <td><b>Filter</b></td>
+</tr>
+<tr>
+	   <td></td>
+       <td><u>Description</u>:</td>
+       <td>
+	   Performs mean shift filtering.
+	   </td>
+</tr>
+<tr>
+	   <td></td>
+       <td><u>Syntax</u>:</td>
+       <td><i>Filter;</i></td>
+</tr>
+<tr height=20></tr>
+<tr>
+	   <td></td>
+       <td><u>Command</u>:</td>
+       <td><b>Fuse</b></td>
+</tr>
+<tr>
+	   <td></td>
+       <td valign=top><u>Description</u>:</td>
+       <td>
+	   Performs transitive closure on the input image, fusing its regions
+	   based on a set of similarity criterion. See the 
+	   <a href="http://www.caip.rutgers.edu/riul/"> paper </a> for details. The
+	   Fuse operation will use the filtered image output as input if available,
+	   otherwise the input image regions will be fused.
+	   </td>
+</tr>
+<tr>
+	   <td></td>
+       <td><u>Syntax</u>:</td>
+       <td><i>Fuse;</i></td>
+</tr>
+<tr height=20></tr>
+<tr>
+	   <td></td>
+       <td><u>Command</u>:</td>
+       <td><b>Segment</b></td>
+</tr>
+<tr>
+	   <td></td>
+       <td valign=top><u>Description</u>:</td>
+       <td>
+	   Performs traditional mean shift based and synergistic image segmentation.
+	   </td>
+</tr>
+<tr>
+	   <td></td>
+       <td><u>Syntax</u>:</td>
+       <td><i>Segment;</i></td>
+</tr>
+</table>
+
+<p><b>Flags</b>
+
+<p> EDISON flags define the system state. They have a value of either ON or OFF
+The EDISON system keeps track of three system flags which are set using the
+following commands. If a flag is not specified its default value is OFF. 
+The <a href="#flags"> flag type </a> enumeration is also mentioned below.
+ 
+<p>
+<table width="80%" border=0>
+<tr>
+	   <td width="5%"></td>
+       <td width="12%"><u>Command</u>:</td>
+       <td width="83%"><b>Synergistic</b></td>
+</tr>
+<tr>
+	   <td></td>
+       <td valign=top><u>Description</u>:</td>
+       <td>
+	   The system performs synergistic segmentation when this flag has the
+	   value ON and mean shift based segmentation when it has the value OFF.
+	   </td>
+</tr>
+<tr>
+	   <td></td>
+       <td><u>Syntax</u>:</td>
+       <td><i>Synergistic FLAG;</i></td>
+</tr>
+<tr height=20></tr>
+<tr>
+	   <td></td>
+       <td><u>Command</u>:</td>
+       <td><b>Display Progress</b></td>
+</tr>
+<tr>
+	   <td></td>
+       <td valign=top><u>Description</u>:</td>
+       <td>
+	   When turned ON this flag instructs the system to output its progress
+	   to <font style="courier" size=2> stdout </font>. When OFF no output
+	   is generated.
+	   </td>
+</tr>
+<tr>
+	   <td></td>
+       <td><u>Syntax</u>:</td>
+       <td><i>DisplayProgress FLAG;</i></td>
+</tr>
+<tr height=20></tr>
+<tr>
+	   <td></td>
+       <td><u>Command</u>:</td>
+       <td><b>Use Custom Weight Map</b></td>
+</tr>
+<tr>
+	   <td></td>
+       <td valign=top><u>Description</u>:</td>
+       <td>
+	   The user specified custom weight map is used during synergistic
+	   segmentation when this flag is set to ON. When OFF the derived weight
+	   map is used.
+	   </td>
+</tr>
+<tr>
+	   <td></td>
+       <td><u>Syntax</u>:</td>
+       <td><i>UseCustomWeightMap FLAG;</i></td>
+</tr>
+</table>
+
+<br><br>
+
+<hr>
+
+<!---Parameters--->
+
+<h3><a name="parameters">Parameters</a></h3>
+
+All necessary parameters must be specified prior to invoking an operation. The
+system takes <u>no</u> default values because of the strong dependence between
+parameter values and the input image. The parameters are categorized according
+to operation and are outlined below. Although each parameter is briefly described,
+for a more detailed description please consult the papers available from the 
+<a href="http://www.caip.rutgers.edu/riul/"> RIUL </a> web site.
+
+<p><b>Mean Shift Based Segmentation</b>
+
+<p>
+<table width=80% border=0>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Parameter</u>:</td>
+	<td width="80%"><b>SpatialBandwidth</b></td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign=top><u>Description</u>:</td>
+	<td width="80%">Specifies a spatial search window of size (2<i>r</i>+1)x
+	(2<i>r</i>+1) during the mean shift computation, where <i>r</i> is the
+	spatial bandwidth.</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Type</u>:</td>
+	<td width="80%">Integer</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Range</u>:</td>
+	<td width="80%"> Greater than zero.</td>
+</tr>
+<tr height=20></tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Parameter</u>:</td>
+	<td width="80%"><b>RangeBandwidth</b></td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign=top><u>Description</u>:</td>
+	<td width="80%">Specifies the bandwidth of the search window in the range
+	subspace during the computation of mean shift.</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Type</u>:</td>
+	<td width="80%">Floating point.</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Range</u>:</td>
+	<td width="80%">Greater than zero.</td>
+</tr>
+<tr height=20></tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Parameter</u>:</td>
+	<td width="80%"><b>MinimumRegionArea</b></td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Description</u>:</td>
+	<td width="80%">Specifies the minimum allowable region area (in pixels) 
+	contained in the segmented image.</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Type</u>:</td>
+	<td width="80%">Integer</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Range</u>:</td>
+	<td width="80%">Greater than zero.</td>
+</tr>
+<tr height=20></tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Parameter</u>:</td>
+	<td width="80%"><b>Speedup</b></td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign=top><u>Description</u>:</td>
+	<td width="80%">Determines the speedup level used when computing mean shift.
+	</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Type</u>:</td>
+	<td width="80%"><a href="#speedup">Enumeration</a></td>
+</tr>
+</table>
+
+<p><b>Synergistic Image Segmentation</b>
+
+<p>In addition to the parameters specified for mean shift based segmentation
+three supplemental parameters are needed to perform synergistic segmentation.
+
+<p>
+<table width=80% border=0>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Parameter</u>:</td>
+	<td width="80%"><b>GradientWindowRadius</b></td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign=top><u>Description</u>:</td>
+	<td width="80%">Used to compute the gradient and confidence maps employed
+	in the algorithm.</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Type</u>:</td>
+	<td width="80%">Integer</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Range</u>:</td>
+	<td width="80%">Greater than zero.</td>
+</tr>
+<tr height=20></tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Parameter</u>:</td>
+	<td width="80%"><b>MixtureParameter</b></td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign=top><u>Description</u>:</td>
+	<td width="80%">Specifies the relative importance between gradient and 
+	confidence in the definition of the edge weight map. More specifically
+	the mixture parameter is the parameter <i>aij</i> described in the
+	paper.</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Type</u>:</td>
+	<td width="80%">Floating point.</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Range</u>:</td>
+	<td width="80%">Between zero and one.</td>
+</tr>
+<tr height=20></tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Parameter</u>:</td>
+	<td width="80%"><b>EdgeStrengthThreshold</b></td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign=top><u>Description</u>:</td>
+	<td width="80%">During transitive closure (i.e. region fusion) regions
+	having an average edge strength large than this threshold are not fused.
+	</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Type</u>:</td>
+	<td width="80%">Floating point.</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Range</u>:</td>
+	<td width="80%">Between zero and one.</td>
+</tr>
+</table>
+
+<p><b>Confidence Based Edge Detection</b>
+
+<p>
+<table width=80% border=0>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Parameter</u>:</td>
+	<td width="80%"><b>GradientWindowRadius</b></td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign=top><u>Description</u>:</td>
+	<td width="80%">Used to compute the gradient and confidence maps employed
+	in the algorithm.</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Type</u>:</td>
+	<td width="80%">Integer</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Range</u>:</td>
+	<td width="80%">Greater than zero.</td>
+</tr>
+<tr height=20></tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Parameter</u>:</td>
+	<td width="80%"><b>MinimumLength</b></td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign=top><u>Description</u>:</td>
+	<td width="80%">Removes edges whose length is less than this threshold.</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Type</u>:</td>
+	<td width="80%">Integer.</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Range</u>:</td>
+	<td width="80%">Greater than zero.</td>
+</tr>
+<tr height=20></tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Parameter</u>:</td>
+	<td width="80%"><b>NmxRank</b></td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign=top><u>Description</u>:</td>
+	<td width="80%">Specifies the x-intercept of the non-maximum
+	suppression curve.</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Type</u>:</td>
+	<td width="80%">Floating point.</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Range</u>:</td>
+	<td width="80%">Between zero and one.</td>
+</tr>
+<tr height=20></tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Parameter</u>:</td>
+	<td width="80%"><b>NmxConf</b></td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign=top><u>Description</u>:</td>
+	<td width="80%">Specifies the y-intercept of the non-maximum
+	suppression curve.</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Type</u>:</td>
+	<td width="80%">Floating point.</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Range</u>:</td>
+	<td width="80%">Between zero and one.</td>
+</tr>
+<tr height=20></tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Parameter</u>:</td>
+	<td width="80%"><b>NmxType</b></td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign=top><u>Description</u>:</td>
+	<td width="80%">Specifies the curve type of the non-maximum
+	suppression curve. <i>Unlike, the other two curves the non-maximum
+	suppression curve may not be of a CUSTOM type.</i></td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Type</u>:</td>
+	<td width="80%"><a href="#curvetype">Enumeration.</a></td>
+</tr>
+<tr height=20></tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Parameter</u>:</td>
+	<td width="80%"><b>HysterisisHighRank</b></td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign=top><u>Description</u>:</td>
+	<td width="80%">Specifies the x-intercept of the high hysterisis
+	threshold curve.</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Type</u>:</td>
+	<td width="80%">Floating point.</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Range</u>:</td>
+	<td width="80%">Between zero and one.</td>
+</tr>
+<tr height=20></tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Parameter</u>:</td>
+	<td width="80%"><b>HysterisisHighConf</b></td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign=top><u>Description</u>:</td>
+	<td width="80%">Specifies the y-intercept of the high hysterisis
+	threshold curve.</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Type</u>:</td>
+	<td width="80%">Floating point.</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Range</u>:</td>
+	<td width="80%">Between zero and one.</td>
+</tr>
+<tr height=20></tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Parameter</u>:</td>
+	<td width="80%"><b>HysterisisHighType</b></td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign=top><u>Description</u>:</td>
+	<td width="80%">Specifies the curve type of the high hysterisis
+	threshold curve.</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Type</u>:</td>
+	<td width="80%"><a href="#curvetype">Enumeration.</a></td>
+</tr>
+<tr height=20></tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Parameter</u>:</td>
+	<td width="80%"><b>CustomCurveHystHigh</b></td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign=top><u>Description</u>:</td>
+	<td width="80%">Specifies the vertices of the high hysterisis threshold
+	custom curve.</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Type</u>:</td>
+	<td width="80%"><a href="#vertexlist">Vertex List.</a></td>
+</tr>
+<tr height=20></tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Parameter</u>:</td>
+	<td width="80%"><b>HysterisisLowRank</b></td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign=top><u>Description</u>:</td>
+	<td width="80%">Specifies the x-intercept of the low hysterisis
+	threshold curve.</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Type</u>:</td>
+	<td width="80%">Floating point.</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Range</u>:</td>
+	<td width="80%">Between zero and one.</td>
+</tr>
+<tr height=20></tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Parameter</u>:</td>
+	<td width="80%"><b>HysterisisLowConf</b></td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign=top><u>Description</u>:</td>
+	<td width="80%">Specifies the y-intercept of the low hysterisis
+	threshold curve.</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Type</u>:</td>
+	<td width="80%">Floating point.</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Range</u>:</td>
+	<td width="80%">Between zero and one.</td>
+</tr>
+<tr height=20></tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Parameter</u>:</td>
+	<td width="80%"><b>HysterisisLowType</b></td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign=top><u>Description</u>:</td>
+	<td width="80%">Specifies the curve type of the low hysterisis threshold
+	curve.</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Type</u>:</td>
+	<td width="80%"><a href="#curvetype">Enumeration.</a></td>
+</tr>
+<tr height=20></tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Parameter</u>:</td>
+	<td width="80%"><b>CustomCurveHystLow</b></td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign=top><u>Description</u>:</td>
+	<td width="80%">Specifies the vertices of the low hysterisis threshold
+	custom curve.</td>
+</tr>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Type</u>:</td>
+	<td width="80%"><a href="#vertexlist">Vertex List.</a></td>
+</tr>
+</table>
+
+<hr>
+
+<!---Data Types and Enumerations--->
+
+<h3><a name="enumerations">Data Types and Enumerations</a></h3>
+
+<p>The EDISON system parameters are either of integer or floating point type, or
+they are an enumeration. Each enumeration as well as the <b>Vertex List</b> data
+structure are outlined below.
+
+<p><b><a name="flags">Flag</a></b>
+
+<p>The flag enumeration is used to specify the system state. Flags have a value
+of either ON or OFF and are set using <a href="#flagcommands">flag commands</a>.
+
+<p><i>Possible Values</i>
+<ul>
+<li>ON</li>
+<li>OFF</li>
+</ul>
+
+<p><b><a name="speedup">Speedup Level</a></b>
+
+<p>The speedup level of the mean shift algorithm is determined through the use
+of this enumeration. There are three speedup levels outlined below: (1) NONE
+indicating that no speedup is to be used, (2) MEDIUM employs the speedup
+technique described in the paper, and (3) HIGH is an extension of the MEDIUM
+speedup to result in an even faster execution of the mean shift algorithm.
+
+<p><i>Possible Values</i>
+<ul>
+<li>NONE</li>
+<li>MEDIUM</li>
+<li>HIGH</li>
+</ul>
+
+<p><b><a name="curvetype">Curve Type</a></b>
+
+<p>The curve type enumeration is used to specify the shape of the curves
+used during the non-maximum and hysterisis thresholding steps of the
+confidence based edge detection algorithm. The possible curve types are
+listed below. 
+
+<p><u>NOTE</u>:The non-maxima suppression curve may not be of type CUSTOM.
+
+<p><i>Possible Values</i>
+<ul>
+<li>ARC</li>
+<li>HORIZONTAL_LINE</li>
+<li>VERTICAL_LINE</li>
+<li>LINE</li>
+<li>BOX</li>
+<li>CUSTOM</li>
+</ul>
+
+<p><b><a name="vertexlist">Vertex List</a></b>
+
+<p>The vertex list is a list of 2-dimensional vertices that are placed in
+the row-eta diagram to form a custom curve. The custom curve has the syntax
+outlined below.
+
+<p><i>Syntax:</i>
+
+<p>Parameter = {(<i>x1</i>, <i>y1</i>), (<i>x2</i>, <i>y2</i>), ..., 
+(<i>xn</i>, <i>yn</i>)};
+<p>where <i>xi</i> and <i>yi</i> are real valued numbers. 
+
+<p><u>NOTE</u>: Empty vertex lists (i.e. using '{};') are not permitted.
+
+<br><br>
+
+<hr>
+
+<!---Input Types--->
+
+<h3><a name="input">Input Types</a></h3>
+
+There are two types of input used by the EDISON system.
+
+<ol>
+<li><b>Image Input</b></i>
+<p>The images analyzed using the EDISON system are specified as input by
+passing IMAGE as an argument to the <a href="#load"> Load </a> command. A
+list of <a href="#images">supported</a> and <a href="#formats">extendible</a>
+file formats are provided below.<br><br>
+<li><b>Map Input</b></i>
+<p>A custom weight map may be specified as input to the synergistic image
+segmentation algorithm by passing MAP as an argument to the 
+<a href="#load"> Load </a> command. Currently custom weight maps may only
+be specified using MATLAB ASCII data files.
+</ol>
+
+<hr>
+
+<!---Output Types--->
+
+<h3><a name="output">Output Types</a></h3>
+
+<p> The nine different output types are grouped below according to
+operation. All output types may be output using any <a href="#images">
+supported</a> or <a href="#formats">extendible</a> file formats.
+
+<p><b>Edge Detection</b>
+
+<p><table width="80%" border=0>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Output Type</u>:</td>
+	<td width="80%">EDGES</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign="top"><u>Description</u>:</td>
+	<td width="80%">Output the edge map.</td>
+</tr>
+</table>
+
+<p><b>Image Segmentation</b>
+
+<p><table width="80%" border=0>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Output Type</u>:</td>
+	<td width="80%">SEGM_BOUNDARIES</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign="top"><u>Description</u>:</td>
+	<td width="80%">Output the region boundaries of a segmented or
+	filtered image.</td>
+</tr>
+<tr height=20></tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Output Type</u>:</td>
+	<td width="80%">SEGM_IMAGE</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign="top"><u>Description</u>:</td>
+	<td width="80%">Output the segmented image.</td>
+</tr>
+<tr height=20></tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Output Type</u>:</td>
+	<td width="80%">SEGM_IMAGE_BOUNDARIES</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign="top"><u>Description</u>:</td>
+	<td width="80%">Output the segmented image with the region
+	boundary points overlaid onto the image.</td>
+</tr>
+<tr height=20></tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Output Type</u>:</td>
+	<td width="80%">FILT_IMAGE</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign="top"><u>Description</u>:</td>
+	<td width="80%">Output the filtered image.</td>
+</tr>
+<tr height=20></tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Output Type</u>:</td>
+	<td width="80%">FILT_IMAGE_BOUNDARIES</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign="top"><u>Description</u>:</td>
+	<td width="80%">Output the filtered image with region boundary
+	points overlayed onto the image.</td>
+</tr>
+<tr height=20></tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Output Type</u>:</td>
+	<td width="80%">WEIGHT_MAP</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign="top"><u>Description</u>:</td>
+	<td width="80%">Output the weight map</td>
+</tr>
+</table>
+
+<p><b>Edge Detection and Image Segmentation</b>
+
+<p><table width="80%" border=0>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Output Type</u>:</td>
+	<td width="80%">GRADIENT_MAP</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign="top"><u>Description</u>:</td>
+	<td width="80%">Output the gradient map.</td>
+</tr>
+<tr height=20></tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%"><u>Output Type</u>:</td>
+	<td width="80%">CONFIDENCE_MAP</td>
+</tr>
+<tr>
+	<td width="5%"></td>
+	<td width="15%" valign="top"><u>Description</u>:</td>
+	<td width="80%">Output the confidence map.</td>
+</tr>
+</table>
+
+<br><br>
+
+<hr>
+
+<!---Supported Image/File Formats--->
+
+<h3><a name="images">Supported Image/File Formats</a></h3>
+
+<p> The supported file formats include: (1) Images: Portable Pixel-map
+(Grey-scale [pgm] and Color [ppm]) and Portable Any-map (pnm), (2) Data:
+MATLAB ASCII data files. These file formats are specified via the file
+format enumeration whose possible values are listed below.
+
+<p><u>File Type Enumeration</u>
+
+<p><ul>
+<li> PPM - Portable Pixel-map Color Images
+<li> PGM - Portable Pixel-map Grey-scale Images
+<li> PNM - Portable Any-map Images
+<li> MAT-LAB_ASCII - MATLAB ASCII data files
+</ol>
+
+<p>One may <a href="#formats">extend</a> the EDISON system to support
+additional image/file formats as needed.
+
+<br><br>
+
+<hr>
+
+<!---Other Image Formats--->
+
+<h3><a name="formats">Other Image Formats</a></h3>
+
+<p>One may extend the EDISON system to support additional image/file
+formats by altering the code in the following files, and then alter
+the makefile and recompile the system with the additional source files
+containing the function definitions necessary for reading/writing.
+
+<font face="courier" size=2>
+<ul>
+<li>defs.h
+<li>globalFnc.h
+</ul>
+</font>
+
+<p>In 'defs.h' the constant FILETYPE_NUM must be changed to indicate the
+number of available file formats. An enumeration must then be added to
+the file type enumeration list, and a corresponding entry must be
+placed in the FILETYPE_LIST to indicate how this file format will be
+represented in the EDISON script. Finally, a corresponding entry must
+also be entered into the FILETYPE_HEADER_LIST specifying the file
+header that identifies the file format. Completing the above will define the
+new file type(s) in the EDISON system.
+
+<p>Next, in 'globalFnc.cpp' an entry must be entered for each new file 
+type in the case statements located in the functions CmCReadImage() and
+CmCWriteImage(), that will read/write a file using the specified file
+format. Once complete, the enumeration of the new file type(s) must be
+entered into the SUPPORTED_FILETYPE_LIST, which indicates to the system
+that the file types are supported.
+
+<p>As seen from the code in 'defs.h' the file types for jpeg, pcx, and
+png are already defined in the EDISON system. These image formats are
+not currently supported by the system, however. Using them in an EDISON
+script without adding the appropriate functionality and recompiling
+the code will result in a version incompatibility error, which is
+flagged prior to running the script.
+
+<br><br>
+
+<hr>
+
+<!---Example: Confidence Based Edge Detection--->
+
+<h3><u>Example</u>: <a name="example_edge">Confidence Based Edge Detection</a></h3>
+
+<font face="courier" size=2>
+
+<p>/*
+<br>Performs confidence based edge detection.
+<br>*/
+<p>//Specify the edge detection parameters
+<br>GradientWindowRadius = 2;
+<br>MinimumLength = 5;
+<br>NmxRank = 0.5;
+<br>NmxConf = 0.5;
+<br>NmxType = ARC;
+<br>HysterisisHighRank = 0.9;
+<br>HysterisisHighConf = 0.9;
+<br>HysterisisHighType = BOX;
+<br>HysterisisLowRank = 0.8;
+<br>HysterisisLowConf = 0.8;
+<br>HysyerisisLowType = CUSTOM;
+<br>CustomCurveHystLow = {(0.4,0.7), (0.6,0.3)};
+<p>//Display progress
+<br>DisplayProgress ON;
+<p>//Load an image to perform edge detection
+<br>Load('image.ppm', IMAGE);
+<p>//Perform edge detection
+<br>EdgeDetect;
+<p>//Save the resulting edge map
+<br>Save('edgemap.pgm', PGM, EDGES);
+<p>//done.
+
+</font>
+
+<br><br>
+
+<hr>
+
+<!---Example: Mean Shift Based Segmentation--->
+
+<h3><u>Example</u>: <a name="example_ms">Mean Shift Based Segmentation</a></h3>
+
+<font face="courier" size=2>
+
+<p>/*
+<br>Performs mean shift based segmentation.
+<br>*/
+<p>//Specify mean shift parameters
+<br>SpatialBandwidth = 7;
+<br>RangeBandwidth = 6.5;
+<br>MinimumRegionArea = 20;
+<br>Speedup = MEDIUM;
+<p>//Display progress
+<br>DisplayProgress ON;
+<p>//Load an image to be segmented
+<br>Load('image.pnm', IMAGE);
+<p>//Segment the image
+<br>Segment;
+<p>//Save the result:
+<p>//The segmented image...
+<br>Save('segmimage.pnm', PNM, SEGM_IMAGE);
+<p>//The filtered image...
+<br>Save('filtimage.ppm', PPM, FILT_IMAGE);
+<p>//The boundary image...
+<br>Save('bndyimage.pgm', PGM, SEGM_BOUNDARIES);
+<p>//done.
+
+</font>
+
+<br><br>
+
+<hr>
+
+<!---Example: Synergistic Segmentation--->
+
+<h3><u>Example</u>: <a name="example_syn">Synergistic Segmentation</a></h3>
+
+<font face="courier" size=2>
+
+<p>/*
+<br>Performs synergistic image segmentation.
+<br>*/
+<p>//Specify the necessary parameters...
+<br>SpatialBandwidth = 7;
+<br>RangeBandwidth = 6.5;
+<br>MinimumRegionArea = 20;
+<br>Speedup = MEDIUM;
+<br>GradientWindowRadius = 2;
+<br>MixtureParameter = 0.3;
+<br>EdgeStrengthThreshold = 0.55;
+<p>//Load an image
+<br>Load('image.pnm', IMAGE);
+<p>//Load a custom weight map
+<br>Load('map.dat', MAP);
+<p>//Use synergistic segmentation
+<br>Synergistic ON;
+<p>//Use a custom weight map
+<br>UseCustomWeightMap ON;
+<p>//Do not display progress
+<br>DisplayProgress OFF;
+<p>//Segment the image
+<br>Segment;
+<p>//Save the resulting segmented image with the region boundaries
+<br>//overlayed.
+<br>Save('syngimage.pnm', PNM, SEGM_IMAGE_BOUNDARIES);
+<p>//done.
+
+</font>
+
+<br><br>
+
+<hr>
+
+<!---Example: Mean Shift Based Image Filtering and Region Fusion--->
+
+<h3><u>Example</u>: <a name="example_filt">Mean Shift Based Image Filtering and Region Fusion</a></h3>
+
+<font face="courier" size=2>
+
+<p>/*
+<br>Performs mean shift based filtering and region fusion.
+<br>*/
+<p>//Specify the mean shift parameters for (fine) filtering...
+<br>SpatialBandwidth = 4;
+<br>RangeBandwidth = 4;
+<br>Speedup = MEDIUM;
+<p>//Load an image
+<br>Load('image.pnm', IMAGE);
+<p>//Display progress
+<br>DisplayProgress ON;
+<p>//Filter the image
+<br>Filter;
+<p>//Save the filtered image
+<br>Save('filtimage.pnm', PNM, FILT_IMAGE);
+<p>//Segment the image using a large resolution in both subspaces...
+<br>SpatialBandwidth = 7;
+<br>RangeBandwidth = 6.5;
+<br>MinimumRegionArea = 20;
+<p>//Fuse the filtered image regions
+<br>Fuse;
+<p>//Save the result
+<br>Save('fuseimage.pnm', PNM, SEGM_IMAGE);
+<p>//Further fuse the regions using a larger minimum area
+<br>MinimumRegionArea = 50;
+<br>UseResult(SEGM_IMAGE);
+<br>Fuse;
+<p>//Save the result
+<br>Save('newimage.ppm', PPM, SEGM_IMAGE);
+<p>//done.
+
+</font>
+
+<br><br>
+
+<hr>
+
+<!---Copyright--->
+
+<font color=#555555> Robust Image Understanding Laboratory, (freeware) 2002. </font>
+
+</body>
+</html>
