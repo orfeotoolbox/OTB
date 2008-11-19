@@ -29,7 +29,7 @@ namespace otb
    *  \brief This filter remove path considered as tortuous.
    *
    *  A path is considered to be tortuous if the mean distance between each consecutive vertices
-   *  is lower than the user provided threshold.
+   *  is strictly lower than the user provided threshold.
    *
    * \sa BreakAngularPathListFilter
    * \sa SimplifyPathFilter
@@ -37,6 +37,8 @@ namespace otb
    *<b>Recent API changes:</b>
    * Now part of the UnaryFunctorObjectListBooleanFilter hierachy, replace call to SetMeanDistanceThreshold()
    * by GetFunctor.SetThreshold().
+   * 
+   * The inequality is now a strict one.
    *
    * \example FeatureExtraction/ExtractRoadByStepsExample.cxx
    *

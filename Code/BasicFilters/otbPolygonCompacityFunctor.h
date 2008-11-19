@@ -24,7 +24,18 @@ namespace otb
 {
 
     /** \class PolygonCompacityFunctor
-     *  \brief 
+     *  \brief Select polygons according to their compacity
+     *
+   * This functor compute the compacity of a polygon
+   * and return true is the distance is above the threshold, false otherwise.
+   *
+   * The compacity is defined as:
+   *
+   *  \f$ 4\pi \frac{S}{L}\f$
+    * 
+   * where \f$ S \f$ is the surface (obtained by the method GetSurface() ) 
+    * and \f$ L \f$ the perimeter (obtained by the method GetLength() ).
+     *
      *  \ingroup Functor
      */
   template <class TInput1>
