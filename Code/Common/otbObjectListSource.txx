@@ -105,7 +105,17 @@ namespace otb
   {
     itkExceptionMacro("subclass should override this method!!!");
   }
-
+  
+/**
+   * PrintSelf Method
+ */
+  template <class TOutputList>
+      void
+      ObjectListSource<TOutputList>
+  ::PrintSelf(std::ostream& os, itk::Indent indent) const
+  {
+    Superclass::PrintSelf(os,indent);
+  }
 } // end namespace otb
 
 #endif

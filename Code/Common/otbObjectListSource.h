@@ -31,7 +31,10 @@ namespace otb
    * ObjectListSource is the base class for all process objects that output ObjectList data.
    * Specifically, this class defines the GetOutput() method that returns a pointer to the 
    * output ObjectList. 
-   *
+   * 
+   * Be aware that this class is templated over the list type, not the object type. It will
+   * be typically something like otb::ObjectList<ObjectType>. This is to enable the use of
+   * class derived from ObjectList or other implementations.
    *
    * \ingroup ObjectListFilter
  */
@@ -64,9 +67,12 @@ namespace otb
 
   
         protected:
+          /** Constructor */
           ObjectListSource();
+          /** Destructor */
           virtual ~ObjectListSource() {};
-
+          /**PrintSelf method */
+          virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** ObjectListSource can be implemented as a multithreaded filter.
            * Therefore, this implementation provides a ThreadedGenerateData() routine
