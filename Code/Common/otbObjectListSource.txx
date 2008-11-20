@@ -35,11 +35,14 @@ namespace otb
   // output must be of type TOutputImage
     typename TOutputList::Pointer output
         = static_cast<TOutputList*>(this->MakeOutput(0).GetPointer()); 
-    this->itk::ProcessObject::SetNumberOfRequiredOutputs(1);
-    this->itk::ProcessObject::SetNthOutput(0, output.GetPointer());
+    this->Superclass::SetNumberOfRequiredOutputs(1);
+    this->Superclass::SetNthOutput(0, output.GetPointer());
   
   }
-
+  
+  /**
+   *
+   */
   template<class TOutputList>
       typename ObjectListSource<TOutputList>::DataObjectPointer
           ObjectListSource<TOutputList>
@@ -48,7 +51,9 @@ namespace otb
     return static_cast<itk::DataObject*>(TOutputList::New().GetPointer());
   }
 
-
+  /**
+   *
+   */
   template <class TOutputList>
       typename ObjectListSource<TOutputList>::OutputListType *
           ObjectListSource<TOutputList>
@@ -60,9 +65,24 @@ namespace otb
     }
   
     return static_cast<TOutputList*>
-        (this->ProcessObject::GetOutput(0));
+        (this->Superclass::GetOutput(0));
   }
   
+  /**
+   *
+   */
+  template <class TOutputList>
+      typename ObjectListSource<TOutputList>::OutputListType *
+      ObjectListSource<TOutputList>
+  ::GetOutput(unsigned int idx)
+  {
+    return static_cast<TOutputList*>
+        (this->Superclass::GetOutput(idx));
+  }
+  
+  /**
+   *
+   */ 
   template<class TOutputList>
       void
       ObjectListSource<TOutputList>
@@ -71,7 +91,9 @@ namespace otb
     this->GraftNthOutput(0, graft);
   }
      
-         
+  /**
+   *
+   */
   template<class TOutputList>
       void
       ObjectListSource<TOutputList>
