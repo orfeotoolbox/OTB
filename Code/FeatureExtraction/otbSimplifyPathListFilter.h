@@ -20,6 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbUnaryFunctorObjectListFilter.h"
 #include "otbSimplifyPathFunctor.h"
+#include "otbObjectList.h"
 
 namespace otb
 {
@@ -67,8 +68,5 @@ namespace otb
       {};
 
 }// End namespace otb
-// #ifndef OTB_MANUAL_INSTANTIATION
-// #include "otbSimplifyPathListFilter.txx"
-// #endif
 
 #endif

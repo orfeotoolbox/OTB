@@ -18,7 +18,6 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef __otbRemoveTortuousPathListFilter_h
 #define __otbRemoveTortuousPathListFilter_h
 
-// #include "otbPathListToPathListFilter.h"
 #include "otbUnaryFunctorObjectListBooleanFilter.h"
 #include "otbPathMeanDistanceFunctor.h"
 #include "otbObjectList.h"
@@ -59,8 +58,6 @@ namespace otb
        {};
 
 }// End namespace otb
-// #ifndef OTB_MANUAL_INSTANTIATION
-// #include "otbRemoveTortuousPathListFilter.txx"
-// #endif
+
 
 #endif
