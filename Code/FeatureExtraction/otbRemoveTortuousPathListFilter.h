@@ -31,7 +31,8 @@ namespace otb
    *  A path is considered to be tortuous if the mean distance between each consecutive vertices
    *  is strictly lower than the user provided threshold.
    *
-   *
+   * This class is just a shortcut to the UnaryFunctorObjectListBooleanFilter with 
+   * the PathMeanDistanceFunctor.
    *
    *<b>Recent API changes:</b>
    * Now part of the UnaryFunctorObjectListBooleanFilter hierachy, replace call to SetMeanDistanceThreshold()
@@ -42,6 +43,7 @@ namespace otb
    * \sa BreakAngularPathListFilter
    * \sa SimplifyPathFilter
    * \sa UnaryFunctorObjectListBooleanFilter
+   * \sa PathMeanDistanceFunctor
    *
    * \example FeatureExtraction/ExtractRoadByStepsExample.cxx
    *

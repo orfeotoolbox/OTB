@@ -41,6 +41,9 @@ namespace otb
    *
    *  This filter is part of the road extraction framework.
    *
+   * This class is just a shortcut to the UnaryFunctorObjectListFilter with 
+   * the SimplifyPathFunctor.
+   *
    *   <b>Recent API changes:</b>
    * Now part of the UnaryFunctorObjectListFilter hierachy, replace call to SetTolerance()
    * by GetFunctor.SetTolerance().
@@ -49,6 +52,7 @@ namespace otb
    * \sa BreakAngularPathListFilter
    * \sa RemoveTortuousPathFilter.
    * \sa UnaryFunctorObjectListFilter
+   * \sa SimplifyPathFunctor
    *
    * \example FeatureExtraction/ExtractRoadByStepsExample.cxx
    *
