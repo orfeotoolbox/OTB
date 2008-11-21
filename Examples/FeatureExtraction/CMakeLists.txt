@@ -69,6 +69,11 @@ ADD_EXECUTABLE(SIFTExample SIFTExample.cxx)
 TARGET_LINK_LIBRARIES(SIFTExample OTBIO OTBCommon OTBFeatureExtraction
 ITKCommon ITKBasicFilters)
 
+ADD_EXECUTABLE(ParallelLineDetectionExample ParallelLineDetectionExample.cxx)
+TARGET_LINK_LIBRARIES(ParallelLineDetectionExample OTBIO OTBCommon OTBFeatureExtraction
+ITKCommon ITKBasicFilters)
+
+
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/FeatureExtraction)

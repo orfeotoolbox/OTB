@@ -18,9 +18,9 @@
 #ifndef __otbPathListSource_h
 #define __otbPathListSource_h
 
-#include "itkProcessObject.h"
-#include "itkDataObject.h"
-#include "otbObjectList.h"
+// #include "itkProcessObject.h"
+// #include "itkDataObject.h"
+#include "otbObjectListSource.h"
 
 namespace otb
 {
@@ -37,12 +37,12 @@ namespace otb
  */
 
 template <class TOutputPath >
-  class ITK_EXPORT PathListSource : public itk::ProcessObject
+    class ITK_EXPORT PathListSource : public ObjectListSource<ObjectList<TOutputPath> >
 {
 public:
   /** Standard class typedefs. */
   typedef PathListSource                 Self;
-  typedef itk::ProcessObject             Superclass;
+  typedef ObjectListSource<ObjectList<TOutputPath> >              Superclass;
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
     
@@ -50,14 +50,14 @@ public:
   itkNewMacro(Self);
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PathListSource,itk::ProcessObject);
+  itkTypeMacro(PathListSource,ObjectListSource);
 
   /** Some convenient typedefs. */
   typedef itk::DataObject::Pointer             		DataObjectPointer;
 
   typedef TOutputPath                               OutputPathType;
   typedef typename OutputPathType::Pointer          OutputPathPointerType;
-  typedef otb::ObjectList<OutputPathType>           OutputPathListType;
+  typedef typename Superclass::OutputListType       OutputPathListType;
   typedef typename OutputPathListType::Pointer      OutputPathListPointerType;
   typedef typename OutputPathListType::ConstPointer OutputPathListConstPointerType;
   
@@ -101,8 +101,8 @@ public:
    * Region, which can be set using ImageBase::SetRequestedRegion().
    * By default, the largest possible region is requested.
    */
-  OutputPathListType * GetOutput(void);
-  OutputPathListType * GetOutput(unsigned int idx);
+//   OutputPathListType * GetOutput(void);
+//   OutputPathListType * GetOutput(unsigned int idx);
   
   /** Graft the specified DataObject onto this ProcessObject's output.
    * This method grabs a handle to the specified DataObject's path
@@ -139,7 +139,7 @@ public:
    * filter's pipeline mechanism must be consistent with what the
    * mini-pipeline will do). */
   // just calls GraftNthOutput()
-  virtual void GraftOutput(OutputPathListType *output);
+//   virtual void GraftOutput(OutputPathListType *output);
 
   /** Graft the specified data object onto this ProcessObject's idx'th
    * output. This is the similar to GraftOutput method except is
@@ -147,7 +147,7 @@ public:
    * must be a valid output number (less than
    * ProcessObject::GetNumberOfOutputs()). See the GraftOutput for
    * general usage information. */
-  virtual void GraftNthOutput(unsigned int idx, OutputPathListType *output);
+//   virtual void GraftNthOutput(unsigned int idx, OutputPathListType *output);
 
   /** Make a DataObject of the correct type to used as the specified
    * output.  Every ProcessObject subclass must be able to create a
@@ -162,14 +162,14 @@ public:
    * SmartPointer to a DataObject. If a subclass of ImageSource has
    * multiple outputs of different types, then that class must provide
    * an implementation of MakeOutput(). */
-  virtual DataObjectPointer MakeOutput(unsigned int idx);
+//   virtual DataObjectPointer MakeOutput(unsigned int idx);
 
 
 
 protected:
-  PathListSource();
+  PathListSource() {};
   virtual ~PathListSource() {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+//   void PrintSelf(std::ostream& os, itk::Indent indent) const;
     
 private:
   PathListSource(const Self&); //purposely not implemented
@@ -178,8 +178,8 @@ private:
 
 } // end namespace otb
 
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPathListSource.txx"
-#endif
+// #ifndef OTB_MANUAL_INSTANTIATION
+// #include "otbPathListSource.txx"
+// #endif
 
 #endif

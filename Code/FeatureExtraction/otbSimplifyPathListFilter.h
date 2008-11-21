@@ -20,6 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbUnaryFunctorObjectListFilter.h"
 #include "otbSimplifyPathFunctor.h"
+#include "otbObjectList.h"
 
 namespace otb
 {
@@ -41,6 +42,9 @@ namespace otb
    *
    *  This filter is part of the road extraction framework.
    *
+   * This class is just a shortcut to the UnaryFunctorObjectListFilter with 
+   * the SimplifyPathFunctor.
+   *
    *   <b>Recent API changes:</b>
    * Now part of the UnaryFunctorObjectListFilter hierachy, replace call to SetTolerance()
    * by GetFunctor.SetTolerance().
@@ -49,6 +53,7 @@ namespace otb
    * \sa BreakAngularPathListFilter
    * \sa RemoveTortuousPathFilter.
    * \sa UnaryFunctorObjectListFilter
+   * \sa SimplifyPathFunctor
    *
    * \example FeatureExtraction/ExtractRoadByStepsExample.cxx
    *
@@ -63,8 +68,5 @@ namespace otb
       {};
 
 }// End namespace otb
-// #ifndef OTB_MANUAL_INSTANTIATION
-// #include "otbSimplifyPathListFilter.txx"
-// #endif
 
 #endif

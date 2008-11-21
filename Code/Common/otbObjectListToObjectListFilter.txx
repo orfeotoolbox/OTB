@@ -60,7 +60,16 @@ namespace otb
         (this->itk::ProcessObject::GetInput(0) );
   }
 
-
+/**
+   * PrintSelf Method
+ */
+  template <class TInputList, class TOutputList>
+      void
+          ObjectListToObjectListFilter<TInputList,TOutputList>
+  ::PrintSelf(std::ostream& os, itk::Indent indent) const
+  {
+    Superclass::PrintSelf(os, indent);
+  }
 
 } // end namespace otb
 

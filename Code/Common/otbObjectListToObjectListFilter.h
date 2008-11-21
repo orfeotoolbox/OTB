@@ -29,6 +29,10 @@ namespace otb
    * ObjectListToObjectListFilter is the base class for all process objects that output 
    * ObjectList data and require ObjectList data as input. Specifically, this class 
    * defines the SetInput() method for defining the input to a filter.
+   *
+   * Be aware that this class is templated over the list type, not the object type. It will
+   * be typically something like otb::ObjectList<ObjectType>. This is to enable the use of
+   * class derived from ObjectList or other implementations.
    * 
    *
    * \ingroup ObjectListFilter  
@@ -55,6 +59,8 @@ namespace otb
           typedef typename TInputList::ConstPointer InputListPointer;
           typedef typename TOutputList::Pointer OutputListPointer;
           typedef typename TInputList::ConstIterator InputListIterator;
+          typedef typename InputListType::ObjectType InputObjectType;
+          typedef typename OutputListType::ObjectType OutputObjectType;
   
           typedef itk::DataObject::Pointer DataObjectPointer;
 
@@ -64,9 +70,12 @@ namespace otb
 
   
         protected:
+          /** Constructor */
           ObjectListToObjectListFilter();
+          /** Destructor */
           virtual ~ObjectListToObjectListFilter() {};
-
+          /**PrintSelf method */
+          virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
         private:
           ObjectListToObjectListFilter(const Self&); //purposely not implemented

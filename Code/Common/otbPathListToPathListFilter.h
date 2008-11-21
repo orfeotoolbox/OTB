@@ -18,7 +18,8 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef __otbPathListToPathListFilter_h
 #define __otbPathListToPathListFilter_h
 
-#include "otbPathListSource.h"
+#include "otbObjectListToObjectListFilter.h"
+#include "otbObjectList.h"
 
 namespace otb
 {
@@ -27,12 +28,12 @@ namespace otb
  */
 template <class TPath>
 class ITK_EXPORT PathListToPathListFilter
-  : public PathListSource<TPath>
+  : public ObjectListToObjectListFilter<ObjectList<TPath>, ObjectList<TPath> >
 {
  public:
   /** Standard typedefs */
   typedef PathListToPathListFilter      Self;
-  typedef PathListSource<TPath>         Superclass;
+  typedef ObjectListToObjectListFilter<ObjectList<TPath>, ObjectList<TPath> >         Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
   
@@ -40,45 +41,29 @@ class ITK_EXPORT PathListToPathListFilter
   itkNewMacro(Self);
   
   /** Creation through object factory macro */
-  itkTypeMacro(PathListToPathListFilter, PathListSource);
+  itkTypeMacro(PathListToPathListFilter, ObjectListToObjectListFilter);
   
   /** Template parameters typedefs */
-  typedef typename Superclass::OutputPathType PathType;
-  typedef typename Superclass::OutputPathListType PathListType;
+  typedef typename Superclass::InputObjectType PathType;
+  typedef typename Superclass::InputListType PathListType;
   typedef typename PathType::Pointer PathPointerType;
   typedef typename PathListType::Pointer PathListPointerType;
   typedef typename PathListType::ConstPointer PathListConstPointerType;
-  typedef typename Superclass::OutputPathType OutputPathType;
-  typedef typename Superclass::OutputPathPointerType OutputPathPointerType;
-  typedef typename Superclass::OutputPathListType OutputPathListType;
-  typedef typename Superclass::OutputPathListPointerType OutputPathListPointerType;
-  typedef typename Superclass::OutputPathListConstPointerType OutputPathListConstPointerType;
-  /** 
-   * Set the input path list.
-   * \param pathList The input path list.
-   */
-  void SetInput( const PathListType * pathList);
-  /**
-   * Get the input path list.
-   * \return the input path list.
-   */
-  const PathListType * GetInput(void);
-
+  typedef typename Superclass::OutputObjectType OutputPathType;
+  typedef typename PathType::Pointer OutputPathPointerType;
+  typedef typename Superclass::OutputListType OutputPathListType;
+  typedef typename Superclass::OutputListPointer OutputPathListPointerType;
+  
 protected:
   /** Constructor */
-  PathListToPathListFilter();
+  PathListToPathListFilter(){};
   /** Destructor */
   virtual ~PathListToPathListFilter() {};
- /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
   PathListToPathListFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 };
 }// End namespace otb
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPathListToPathListFilter.txx"
-#endif
 
 #endif

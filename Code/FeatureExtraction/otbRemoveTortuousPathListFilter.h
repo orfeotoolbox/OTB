@@ -18,7 +18,6 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef __otbRemoveTortuousPathListFilter_h
 #define __otbRemoveTortuousPathListFilter_h
 
-// #include "otbPathListToPathListFilter.h"
 #include "otbUnaryFunctorObjectListBooleanFilter.h"
 #include "otbPathMeanDistanceFunctor.h"
 #include "otbObjectList.h"
@@ -31,7 +30,8 @@ namespace otb
    *  A path is considered to be tortuous if the mean distance between each consecutive vertices
    *  is strictly lower than the user provided threshold.
    *
-   *
+   * This class is just a shortcut to the UnaryFunctorObjectListBooleanFilter with 
+   * the PathMeanDistanceFunctor.
    *
    *<b>Recent API changes:</b>
    * Now part of the UnaryFunctorObjectListBooleanFilter hierachy, replace call to SetMeanDistanceThreshold()
@@ -42,6 +42,7 @@ namespace otb
    * \sa BreakAngularPathListFilter
    * \sa SimplifyPathFilter
    * \sa UnaryFunctorObjectListBooleanFilter
+   * \sa PathMeanDistanceFunctor
    *
    * \example FeatureExtraction/ExtractRoadByStepsExample.cxx
    *
@@ -57,8 +58,6 @@ namespace otb
        {};
 
 }// End namespace otb
-// #ifndef OTB_MANUAL_INSTANTIATION
-// #include "otbRemoveTortuousPathListFilter.txx"
-// #endif
+
 
 #endif
