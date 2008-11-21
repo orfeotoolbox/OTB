@@ -383,7 +383,7 @@ void BgEdgeDetect::CreateFilters(void)
    double w;
    for (i=-WL_; i<=WL_; i++)
    {
-      w = pow(2,(-2*WL_))*factorial(2*WL_)/(factorial(WL_-i)*factorial(WL_+i));
+      w = pow(2.,(-2*WL_))*factorial(2*WL_)/(factorial(WL_-i)*factorial(WL_+i));
       smofil_[i+WL_] = w;
       diffil_[i+WL_] = (2*i*w)/WL_;
    }
