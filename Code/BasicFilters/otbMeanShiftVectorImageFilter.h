@@ -66,16 +66,16 @@ namespace otb
    * \ingroup Streamed
    * \ingroup Threaded
    */
-  template <class TInputImage, class TOutputImage>
+  template <class TInputImage, class TOutputImage, class TLabeledOutput = otb::Image<unsigned short,2> >
     class MeanShiftVectorImageFilter
-    : public MeanShiftImageFilter<TInputImage,TOutputImage,MeanShift::VectorBufferConverter>
+    : public MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,MeanShift::VectorBufferConverter>
     {
-    public:
+      public:
 
       /** Standard class typedef */
       typedef MeanShiftVectorImageFilter                        Self;
-      typedef MeanShiftImageFilter<TInputImage,TOutputImage,
-	MeanShift::VectorBufferConverter>                       Superclass;
+      typedef MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,
+      MeanShift::VectorBufferConverter>                       Superclass;
       typedef itk::SmartPointer<Self>                           Pointer;
       typedef itk::SmartPointer<const Self>                     ConstPointer;
 
@@ -83,7 +83,7 @@ namespace otb
       itkTypeMacro(MeanShiftVectorImageFilter,MeanShiftImageFilter);
       itkNewMacro(Self);
 
-    protected:
+      protected:
       /** Constructor */
       MeanShiftVectorImageFilter(){};
       /** destructor */
@@ -91,9 +91,9 @@ namespace otb
       
       /**PrintSelf method */
       virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
-	{
-	  Superclass::PrintSelf(os,indent);
-	}
+      {
+	Superclass::PrintSelf(os,indent);
+      }
 
       private:
       MeanShiftVectorImageFilter(const Self&); //purposely not implemented

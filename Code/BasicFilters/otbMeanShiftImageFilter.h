@@ -60,7 +60,8 @@ namespace otb
    * and color center. 
    *
    * Mean shift can be used for edge-preserving smoothing, or for clustering. The GetOutput() method will allow you to get the smoothed image, whereas the 
-   * GetClusteredOuptut() methods returns the clustered output.
+   * GetClusteredOuptut() methods returns the clustered output. The GetLabeledClusteredOutput() returns a labeled clustered images, and the GetClusterBoundariesOutput() 
+   * an image of the cluster boundaries.
    *
    * The MinimumRegionSize parameter allows you to prune small clustered regions.
    *
@@ -68,13 +69,13 @@ namespace otb
    * than the filtering one).
    *
    * Please note that if both parts are streamable, only the filtering part will ensure you to get the same results than without streaming. In the clustering results, you 
-   * might find region split due to tiling.
+   * might find region split due to tiling. Morover, the labeled output will not give consistent results when streamed. The cluster boundaries might work though.
    * 
-   * This filter uses the Edison mean shift algorithm implementation. Please note that data whose precision is more that float are casted to float before processing.
+   * This filter uses the Edison mean shift algorithm implementation. Please note that data whose precision is more than float are casted to float before processing.
    * 
    * The Scale parameter allows you to stretch the data dynamic 
    *
-   * For more information about mean shift techniques, one might consider reading the following article:
+   * For more information on mean shift techniques, one might consider reading the following article:
    * 
    * D. Comaniciu, P. Meer, "Mean Shift: A Robust Approach Toward Feature Space Analysis," IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 24, no. 5, pp. 603-619, May, 2002
    * D. Comaniciu, P. Meer, "Robust analysis of feature spaces: color image segmentation," cvpr, p. 750, 1997 IEEE Computer Society Conference on Computer Vision and Pattern Recognition (CVPR'97), 1997
@@ -88,7 +89,7 @@ namespace otb
    * \ingroup Threaded
    */
 
-  template <class TInputImage, class TOutputImage, class TBufferConverter = MeanShift::ScalarBufferConverter>
+  template <class TInputImage, class TOutputImage,class TLabeledOutput = otb::Image<unsigned short,2>, class TBufferConverter = MeanShift::ScalarBufferConverter>
     class ITK_EXPORT MeanShiftImageFilter
     : public itk::ImageToImageFilter<TInputImage,TOutputImage>
     {
@@ -112,6 +113,9 @@ namespace otb
       typedef typename OutputImageType::Pointer            OutputImagePointerType;
       typedef typename OutputImageType::PixelType          OutputPixelType;
       typedef typename OutputImageType::RegionType         RegionType;
+      typedef TLabeledOutput                               LabeledOutputType;
+      typedef typename LabeledOutputType::Pointer          LabeledOutputPointerType;
+      typedef typename LabeledOutputType::PixelType        LabelType;
 
       /** Setters / Getters */
       itkSetMacro(SpatialRadius,unsigned int);
@@ -127,16 +131,24 @@ namespace otb
       const OutputImageType * GetClusteredOutput() const;
       /** Return the output image direction */  
       OutputImageType * GetClusteredOutput();
+
+      const LabeledOutputType * GetLabeledClusteredOutput() const;
+      LabeledOutputType * GetLabeledClusteredOutput();
+
+      const LabeledOutputType * GetClusterBoundariesOutput() const;
+      
+      LabeledOutputType * GetClusterBoundariesOutput();
 	
       protected:
       /** This filters use a neighborhood around the pixel, so it needs to redfine the 
        * input requested region */
       virtual void GenerateInputRequestedRegion();
-
       /** Threaded generate data (handle the filtering part) */
       virtual void ThreadedGenerateData(const RegionType& outputRegionForThread,int threadId);
       /** After threaded generate data (handle the clustering part) */
       virtual void AfterThreadedGenerateData();
+      /** Allocate the outputs (need to be reimplemented since outputs have differents type */
+      virtual void AllocateOutputs();
 
       /** Constructor */
       MeanShiftImageFilter();
