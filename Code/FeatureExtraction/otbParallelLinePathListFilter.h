@@ -24,16 +24,9 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class ParallelLinePathListFilter
- *  \brief This filters link path from the input path list according to distance and angular criterions.
+ *  \brief Description needed
  *  
- *  This filter examines both ends of each path to link and is able to link several path into one single path.
- *  The two criterions to link a path are :
- *  - The two ends to link must be closer than the user defined threshold in terms of euclidean distance,
- *  - The angle at the link must not be sharp (less than the user defined threshold).
- *  
- *  Please note that this filter may invert the order of the vertices in the newly created path.
  *
- *  This filter is part of the road extraction framework.
  */
 template <class TPath>
 class ITK_EXPORT ParallelLinePathListFilter
