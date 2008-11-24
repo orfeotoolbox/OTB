@@ -333,8 +333,6 @@ ImageWidgetBase<TPixel>
   glRasterPos2i(0,this->h());
 
 #ifndef OTB_GL_USE_ACCEL
-  std::cout << "No accel" << std::endl;
-  
   glPixelZoom(m_OpenGlIsotropicZoom ,-m_OpenGlIsotropicZoom);
 
   // display the image
@@ -344,8 +342,6 @@ ImageWidgetBase<TPixel>
 	       GL_UNSIGNED_BYTE, 
 	       m_OpenGlBuffer);
 #else
-  std::cout << "Accel" << std::endl;
-  
   glEnable(GL_TEXTURE_2D);
   glColor4f(1.0,1.0,1.0,0.0);
   GLuint texture;
