@@ -61,7 +61,10 @@ namespace otb {
  * \sa CumulantsForEdgeworth
  */
 namespace Functor {  
-
+  /** \class KullbackLeiblerSupervizedDistance
+   * \brief Functor for KullbackLeiblerSupervizedDistanceImageFilter. Please refer to KullbackLeiblerSupervizedDistanceImageFilter.
+   *
+   */
 	template < class TInput1, class TInput2, class TInputROIImage, class TOutput >
 	class KullbackLeiblerSupervizedDistance
 	{
