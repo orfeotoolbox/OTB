@@ -30,7 +30,11 @@
 #include "otbBinaryFunctorNeighborhoodVectorImageFilter.h"
 
 namespace otb {
-	
+  
+ /** \class CumulantsForEdgeworthProfile
+   * \brief Helper class for KullbackLeiblerProfileImageFilter. Please refer to KullbackLeibleProfileImageFilter.
+   *
+   */
 template <class TInput>
 class CumulantsForEdgeworthProfile 
 {
@@ -55,16 +59,16 @@ class CumulantsForEdgeworthProfile
 
 	protected :
 
-		// Estimation des moments à partir de voisinnages emboités
+		// Estimation des moments ï¿½ partir de voisinnages emboitï¿½s
 		int	MakeSumAndMoments	( const TInput & input, std::vector< itk::Array2D<int> > & mask );
-		// Estimation des moments à partir de la petite taille de fenetre
+		// Estimation des moments ï¿½ partir de la petite taille de fenetre
 		int InitSumAndMoments ( const TInput & input, itk::Array2D<int> & mask ); 
 		//
 		int ReInitSumAndMoments ( const TInput & input, itk::Array2D<int> & mask, int level ); 
 		// transformation moment -> cumulants (pour Edgeworth)
 		int MakeCumulants(); 	
 
-		// Attributs internes à la classe
+		// Attributs internes ï¿½ la classe
 		double	fSum0, fSum1, fSum2, fSum3, fSum4;
 		CumulantSet fMu;
 		CumulantSet fCum;
@@ -76,7 +80,10 @@ class CumulantsForEdgeworthProfile
 };
 
 namespace Functor {  
-
+  /** \class KullbackLeiblerProfile
+   * \brief Functor for KullbackLeiblerProfileImageFilter. Please refer to KullbackLeiblerProfileImageFilter.
+   *
+   */
 	template< class TInput1, class TInput2, class TOutput >
 	class KullbackLeiblerProfile
 	{
