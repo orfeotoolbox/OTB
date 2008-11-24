@@ -18,6 +18,8 @@
 #ifndef __otbImageWidgetBase_txx
 #define __otbImageWidgetBase_txx
 
+#define GL_NO_ACCEL
+
 #include "itkImageRegionConstIterator.h"
 #include "itkMacro.h"
 #include "otbMacro.h"
@@ -329,16 +331,18 @@ ImageWidgetBase<TPixel>
   glDisable(GL_BLEND);
 
 
-  glRasterPos2i(0,this->h());  
-//  glPixelZoom(m_OpenGlIsotropicZoom ,-m_OpenGlIsotropicZoom);
+  glRasterPos2i(0,this->h());
 
- // // display the image
- //glDrawPixels(m_BufferedRegion.GetSize()[0],
-// 	      m_BufferedRegion.GetSize()[1], 
-// 	      GL_RGBA,
-// 	      GL_UNSIGNED_BYTE, 
-// 	      m_OpenGlBuffer);
+#ifdef GL_NO_ACCEL
+  glPixelZoom(m_OpenGlIsotropicZoom ,-m_OpenGlIsotropicZoom);
 
+  // display the image
+  glDrawPixels(m_BufferedRegion.GetSize()[0],
+	       m_BufferedRegion.GetSize()[1], 
+	       GL_RGBA,
+	       GL_UNSIGNED_BYTE, 
+	       m_OpenGlBuffer);
+#else
   glEnable(GL_TEXTURE_2D);
   glColor4f(1.0,1.0,1.0,0.0);
   GLuint texture;
@@ -349,7 +353,7 @@ ImageWidgetBase<TPixel>
   glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);	// Nearest Filtering
 //   glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);	// Linear Filtering
 //   glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);	// Linear Filtering
-  
+
   glBindTexture (GL_TEXTURE_2D, texture);
   glBegin (GL_QUADS);
   int hOffset = this->h() - this->hDisplayed();
@@ -360,19 +364,23 @@ ImageWidgetBase<TPixel>
   glEnd ();
 
   glDisable(GL_TEXTURE_2D);
-
+#endif
+  
  // if image overlay is activated, display image overlay
   if(m_ImageOverlayVisible)
-  {
-//     glEnable(GL_BLEND);
-//     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-//     glDrawPixels(m_BufferedRegion.GetSize()[0],
-//                  m_BufferedRegion.GetSize()[1], 
-//                                           GL_RGBA,
-//                                           GL_UNSIGNED_BYTE, 
-//                                           m_OpenGlImageOverlayBuffer);
+    {
+#ifdef GL_NO_ACCEL
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+    glDrawPixels(m_BufferedRegion.GetSize()[0],
+                 m_BufferedRegion.GetSize()[1], 
+		 GL_RGBA,
+		 GL_UNSIGNED_BYTE, 
+		 m_OpenGlImageOverlayBuffer);
 
-//     glDisable(GL_BLEND);
+    glDisable(GL_BLEND);
+    glEnd();
+#else
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_TEXTURE_2D);
@@ -393,9 +401,9 @@ ImageWidgetBase<TPixel>
     glEnd ();
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_BLEND);
-    
-//      glEnd();
-  } 
+#endif
+
+    } 
 
   if(m_FormOverlayVisible)
   {
