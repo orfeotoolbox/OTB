@@ -22,14 +22,15 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkImageRegionIterator.h"
+#include "itkImageRegionIteratorWithIndex.h"
 #include "otbMacro.h"
 
 #include "msImageProcessor.h"
 
 namespace otb
 {
-  template <class TInputImage,class TOutputImage, class TBufferConverter>
-  MeanShiftImageFilter<TInputImage,TOutputImage,TBufferConverter>
+  template <class TInputImage,class TOutputImage, class TLabeledOutput, class TBufferConverter>
+  MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
   ::MeanShiftImageFilter()
   {
     m_SpatialRadius      = 3;
@@ -37,13 +38,15 @@ namespace otb
     m_MinimumRegionSize  = 10;
     m_Scale              = 100000.;
     
-    this->SetNumberOfOutputs(2);
+    this->SetNumberOfOutputs(4);
     this->SetNthOutput(1,OutputImageType::New());
+    this->SetNthOutput(2,LabeledOutputType::New());
+    this->SetNthOutput(3,LabeledOutputType::New());
   }
 
-  template <class TInputImage,class TOutputImage, class TBufferConverter>
-  const typename  MeanShiftImageFilter<TInputImage,TOutputImage,TBufferConverter>::OutputImageType *
-  MeanShiftImageFilter<TInputImage,TOutputImage,TBufferConverter>
+  template <class TInputImage,class TOutputImage, class TLabeledOutput, class TBufferConverter>
+  const typename  MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>::OutputImageType *
+  MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
   ::GetClusteredOutput()const
   {
     if (this->GetNumberOfOutputs() < 2)
@@ -53,9 +56,9 @@ namespace otb
     return static_cast<const OutputImageType * >(this->itk::ProcessObject::GetOutput(1));
   }
 
-  template <class TInputImage,class TOutputImage, class TBufferConverter>
-  typename  MeanShiftImageFilter<TInputImage,TOutputImage,TBufferConverter>::OutputImageType *
-  MeanShiftImageFilter<TInputImage,TOutputImage,TBufferConverter>
+  template <class TInputImage,class TOutputImage, class TLabeledOutput, class TBufferConverter>
+  typename  MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>::OutputImageType *
+  MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
   ::GetClusteredOutput()
   {
     if (this->GetNumberOfOutputs() < 2)
@@ -66,10 +69,82 @@ namespace otb
   }
 
 
+ template <class TInputImage,class TOutputImage, class TLabeledOutput, class TBufferConverter>
+  const typename  MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>::LabeledOutputType *
+  MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
+  ::GetLabeledClusteredOutput()const
+  {
+    if (this->GetNumberOfOutputs() < 3)
+      {
+	return 0;
+      }
+    return static_cast<const LabeledOutputType * >(this->itk::ProcessObject::GetOutput(2));
+  }
 
-  template <class TInputImage,class TOutputImage, class TBufferConverter>
+  template <class TInputImage,class TOutputImage, class TLabeledOutput, class TBufferConverter>
+  typename  MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>::LabeledOutputType *
+  MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
+  ::GetLabeledClusteredOutput()
+  {
+    if (this->GetNumberOfOutputs() < 3)
+      {
+	return 0;
+      }
+    return static_cast< LabeledOutputType * >(this->itk::ProcessObject::GetOutput(2));
+  }
+
+  
+  template <class TInputImage,class TOutputImage, class TLabeledOutput, class TBufferConverter>
+  const typename  MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>::LabeledOutputType *
+  MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
+  ::GetClusterBoundariesOutput()const
+  {
+    if (this->GetNumberOfOutputs() < 4)
+      {
+	return 0;
+      }
+    return static_cast<const LabeledOutputType * >(this->itk::ProcessObject::GetOutput(3));
+  }
+
+  template <class TInputImage,class TOutputImage, class TLabeledOutput, class TBufferConverter>
+  typename  MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>::LabeledOutputType *
+  MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
+  ::GetClusterBoundariesOutput()
+  {
+    if (this->GetNumberOfOutputs() < 4)
+      {
+	return 0;
+      }
+    return static_cast< LabeledOutputType * >(this->itk::ProcessObject::GetOutput(3));
+  }
+
+
+ template <class TInputImage,class TOutputImage, class TLabeledOutput, class TBufferConverter>
   void
-  MeanShiftImageFilter<TInputImage,TOutputImage,TBufferConverter>
+  MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
+  ::AllocateOutputs()
+  {
+     typename OutputImageType::Pointer outputPtr = this->GetOutput();
+     typename OutputImageType::Pointer clusteredOutputPtr = this->GetClusteredOutput();
+     typename LabeledOutputType::Pointer labeledClusteredOutputPtr = this->GetLabeledClusteredOutput();
+     typename LabeledOutputType::Pointer clusterBoundariesOutputPtr = this->GetClusterBoundariesOutput(); 
+
+     outputPtr->SetBufferedRegion(outputPtr->GetRequestedRegion());
+     outputPtr->Allocate();
+
+     clusteredOutputPtr->SetBufferedRegion(clusteredOutputPtr->GetRequestedRegion());
+     clusteredOutputPtr->Allocate();
+
+     labeledClusteredOutputPtr->SetBufferedRegion(labeledClusteredOutputPtr->GetRequestedRegion());
+     labeledClusteredOutputPtr->Allocate();
+
+     clusterBoundariesOutputPtr->SetBufferedRegion(clusterBoundariesOutputPtr->GetRequestedRegion());
+     clusterBoundariesOutputPtr->Allocate();
+  }
+
+  template <class TInputImage,class TOutputImage, class TLabeledOutput, class TBufferConverter>
+  void
+  MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
   ::GenerateInputRequestedRegion()
   {
     // call the superclass' implementation of this method
@@ -116,9 +191,9 @@ namespace otb
       }
   }
 
-  template <class TInputImage,class TOutputImage, class TBufferConverter>
+  template <class TInputImage,class TOutputImage, class TLabeledOutput, class TBufferConverter>
   void
-  MeanShiftImageFilter<TInputImage,TOutputImage,TBufferConverter>
+  MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
   ::ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId )
   {    
     // Input and output pointers
@@ -206,16 +281,18 @@ namespace otb
     delete [] data;
   }
 
-  template <class TInputImage,class TOutputImage, class TBufferConverter>
+  template <class TInputImage,class TOutputImage, class TLabeledOutput, class TBufferConverter>
   void
-  MeanShiftImageFilter<TInputImage,TOutputImage,TBufferConverter>
+  MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
   ::AfterThreadedGenerateData()
   {
     double invScale = 1/m_Scale;
 
     typename OutputImageType::Pointer outputPtr = this->GetOutput();
     typename OutputImageType::Pointer clusteredOutputPtr = this->GetClusteredOutput();
-    
+    typename LabeledOutputType::Pointer labeledClusteredOutputPtr = this->GetLabeledClusteredOutput();
+    typename LabeledOutputType::Pointer clusterBoudariesOutputPtr = this->GetClusterBoundariesOutput(); 
+
     RegionType outputRequestedRegion = outputPtr->GetRequestedRegion();
 
     itk::ImageRegionIterator<OutputImageType> outputIt(outputPtr,outputRequestedRegion);
@@ -268,13 +345,63 @@ namespace otb
       }
     
     delete [] data;
+
+    int   * labels = NULL;
+    float * modes = NULL;
+    int   * modesPointsCount = NULL;
+
+    edisonProcessor.GetRegions(&labels,&modes,&modesPointsCount);
+   
+    if(edisonProcessor.ErrorStatus)
+      {
+	itkExceptionMacro(<<"Error while running edison!");
+      }
+    
+    itk::ImageRegionIteratorWithIndex<LabeledOutputType> lcIt(labeledClusteredOutputPtr,labeledClusteredOutputPtr->GetRequestedRegion());
+
+    index = 0;
+    
+    labeledClusteredOutputPtr->FillBuffer(0);
+
+    for(lcIt.GoToBegin();!lcIt.IsAtEnd();++lcIt)
+      {
+	lcIt.Set(static_cast<LabelType>(labels[index]));
+	++index;
+      }
+    
+    delete [] labels;
+    delete [] modes;
+    delete [] modesPointsCount;
+
+    clusterBoudariesOutputPtr->FillBuffer(0);
+    
+    //define the boundaries
+    RegionList *regionList        = edisonProcessor.GetBoundaries();
+    int        *regionIndeces;
+    int        numRegions         = regionList->GetNumRegions();
+    int        numBoundaryPixels  = 0;
+ 
+    typename LabeledOutputType::IndexType boundIndex;
+
+    // TODO: Here it would be possible to extract the polygon edges for each region
+    for(LabelType label = 1; label <= numRegions;++label)
+      {
+	regionIndeces = regionList->GetRegionIndeces(label);
+	for(int  i = 0; i < regionList->GetRegionCount(label);++i)
+	  {
+	    boundIndex[0]= regionIndeces[i] % clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0];
+	    boundIndex[1]= regionIndeces[i] / clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0];
+	    if(clusterBoudariesOutputPtr->GetBufferedRegion().IsInside(boundIndex))
+	      {
+		clusterBoudariesOutputPtr->SetPixel(boundIndex,1);
+	      }
+	  }
+      }
   }
-
-
-
-  template <class TInputImage,class TOutputImage, class TBufferConverter>
+  
+  template <class TInputImage,class TOutputImage, class TLabeledOutput, class TBufferConverter>
   void
-  MeanShiftImageFilter<TInputImage,TOutputImage,TBufferConverter>
+  MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
   ::PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os,indent);

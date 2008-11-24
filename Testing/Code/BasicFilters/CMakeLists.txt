@@ -881,15 +881,21 @@ ADD_TEST(bfTuMeanShiftImageFilterNew ${BASICFILTERS_TESTS9}
         otbMeanShiftImageFilterNew )
 
 ADD_TEST(bfTvMeanShiftImageFilter ${BASICFILTERS_TESTS9}
---compare-n-images ${EPSILON} 2
+--compare-n-images ${EPSILON} 4
 		${BASELINE}/bfMeanShiftImageFilterOutput.tif
 		${TEMP}/bfMeanShiftImageFilterOutput.tif
 		${BASELINE}/bfMeanShiftImageFilterClusteredOutput.tif
 		${TEMP}/bfMeanShiftImageFilterClusteredOutput.tif
+		${BASELINE}/bfMeanShiftImageFilterLabeledClusteredOutput.tif
+		${TEMP}/bfMeanShiftImageFilterLabeledClusteredOutput.tif
+		${BASELINE}/bfMeanShiftImageFilterClusterBoundariesOutput.tif
+		${TEMP}/bfMeanShiftImageFilterClusterBoundariesOutput.tif
         otbMeanShiftImageFilter 
 	${INPUTDATA}/QB_Suburb.png
 	${TEMP}/bfMeanShiftImageFilterOutput.tif
 	${TEMP}/bfMeanShiftImageFilterClusteredOutput.tif
+	${TEMP}/bfMeanShiftImageFilterLabeledClusteredOutput.tif
+	${TEMP}/bfMeanShiftImageFilterClusterBoundariesOutput.tif
 	16 16 10 1.0
 	)
 
@@ -897,15 +903,21 @@ ADD_TEST(bfTuMeanShiftVectorImageFilterNew ${BASICFILTERS_TESTS9}
         otbMeanShiftVectorImageFilterNew )
 
 ADD_TEST(bfTvMeanShiftVectorImageFilter ${BASICFILTERS_TESTS9}
---compare-n-images ${EPSILON} 2
+--compare-n-images ${EPSILON} 4
 		${BASELINE}/bfMeanShiftVectorImageFilterOutput.tif
 		${TEMP}/bfMeanShiftVectorImageFilterOutput.tif
 		${BASELINE}/bfMeanShiftVectorImageFilterClusteredOutput.tif
 		${TEMP}/bfMeanShiftVectorImageFilterClusteredOutput.tif
+		${BASELINE}/bfMeanShiftVectorImageFilterLabeledClusteredOutput.tif
+		${TEMP}/bfMeanShiftVectorImageFilterLabeledClusteredOutput.tif
+		${BASELINE}/bfMeanShiftVectorImageFilterClusterBoundariesOutput.tif
+		${TEMP}/bfMeanShiftVectorImageFilterClusterBoundariesOutput.tif
         otbMeanShiftVectorImageFilter 
 	${INPUTDATA}/qb_RoadExtract2sub200x200.tif
 	${TEMP}/bfMeanShiftVectorImageFilterOutput.tif
 	${TEMP}/bfMeanShiftVectorImageFilterClusteredOutput.tif
+	${TEMP}/bfMeanShiftVectorImageFilterLabeledClusteredOutput.tif
+	${TEMP}/bfMeanShiftVectorImageFilterClusterBoundariesOutput.tif
 	16 16 10 1.0
 	)
 

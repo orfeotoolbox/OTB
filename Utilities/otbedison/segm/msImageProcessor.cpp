@@ -1116,23 +1116,27 @@ int msImageProcessor::GetRegions(int **labels_out, float **modes_out, int **MPC_
 
 	//allocate memory for labels_out, modes_out and MPC_out based
 	//on output storage structure
+	if(!(*labels_out = new int [L]))
+	{
+		ErrorHandler("msImageProcessor", "GetRegions", "Not enough memory.");
+		return -1;
+	}
+	if(!(*modes_out	= new float [regionCount*N]))
+	{
+		ErrorHandler("msImageProcessor", "GetRegions", "Not enough memory.");
+		return -1;
+	}
+	if(!(*MPC_out = new int [regionCount]))
+	{
+		ErrorHandler("msImageProcessor", "GetRegions", "Not enough memory.");
+		return -1;
+	}
+
+
 	int		*labels_	= *labels_out, *MPC_out_ = *MPC_out;
 	float	*modes_		= *modes_out; 
-	if(!(labels_ = new int [L]))
-	{
-		ErrorHandler("msImageProcessor", "GetRegions", "Not enough memory.");
-		return -1;
-	}
-	if(!(modes_	= new float [regionCount*N]))
-	{
-		ErrorHandler("msImageProcessor", "GetRegions", "Not enough memory.");
-		return -1;
-	}
-	if(!(MPC_out_ = new int [regionCount]))
-	{
-		ErrorHandler("msImageProcessor", "GetRegions", "Not enough memory.");
-		return -1;
-	}
+
+	
 
 	//populate labels_out with image labels
 	int	i;
