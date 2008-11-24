@@ -24,7 +24,7 @@ namespace otb
 {
 
 /** \class ImageToPointSetFilter
- * \brief 
+ * \brief Base class to output PointSet data with image data as input
  *
  * ImageToPointSetFilter is the base class for all process objects that output
  * Point Set data and require image data as input. Specifically, this class
@@ -47,7 +47,7 @@ public:
   itkTypeMacro(ImageToPointSetFilter, PointSetSource);
 
   /** Create a valid output. */
-  itk::DataObject::Pointer  MakeOutput(unsigned int idx);
+//   itk::DataObject::Pointer  MakeOutput(unsigned int idx);
 
   /** Some Image related typedefs. */
   typedef   TInputImage                             InputImageType;
@@ -69,7 +69,7 @@ public:
   const InputImageType * GetInput(unsigned int idx);
 
   /** Get the output Point Set of this process object.  */
-  OutputPointSetType * GetOutput(void);
+//   OutputPointSetType * GetOutput(void);
 
   /** Prepare the output */
   void GenerateOutputInformation(void);

@@ -54,14 +54,14 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
 /**
  *   Make Output
  */
-template <class TInputImage, class TOutputPointSet>
-itk::DataObject::Pointer
-ImageToPointSetFilter<TInputImage,TOutputPointSet>
-::MakeOutput(unsigned int)
-{
-  OutputPointSetPointer  outputPointSet = OutputPointSetType::New();
-  return dynamic_cast< itk::DataObject *>( outputPointSet.GetPointer() );
-}
+// template <class TInputImage, class TOutputPointSet>
+// itk::DataObject::Pointer
+// ImageToPointSetFilter<TInputImage,TOutputPointSet>
+// ::MakeOutput(unsigned int)
+// {
+//   OutputPointSetPointer  outputPointSet = OutputPointSetType::New();
+//   return dynamic_cast< itk::DataObject *>( outputPointSet.GetPointer() );
+// }
 
 
 
@@ -98,14 +98,14 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
 /**
  *
  */
-template <class TInputImage, class TOutputPointSet>
-typename ImageToPointSetFilter<TInputImage,TOutputPointSet>::OutputPointSetType *
-ImageToPointSetFilter<TInputImage,TOutputPointSet>
-::GetOutput(void) 
-{
-  return dynamic_cast<OutputPointSetType*>
-    (this->ProcessObjectType::GetOutput(0));
-}
+// template <class TInputImage, class TOutputPointSet>
+// typename ImageToPointSetFilter<TInputImage,TOutputPointSet>::OutputPointSetType *
+// ImageToPointSetFilter<TInputImage,TOutputPointSet>
+// ::GetOutput(void) 
+// {
+//   return dynamic_cast<OutputPointSetType*>
+//     (this->ProcessObjectType::GetOutput(0));
+// }
 
 
 /**
