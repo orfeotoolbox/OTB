@@ -332,7 +332,9 @@ ImageWidgetBase<TPixel>
 
   glRasterPos2i(0,this->h());
 
-#ifdef GL_NO_ACCEL
+#ifndef GL_USE_ACCEL
+  std::cout << "No accel" << std::endl;
+  
   glPixelZoom(m_OpenGlIsotropicZoom ,-m_OpenGlIsotropicZoom);
 
   // display the image
@@ -342,6 +344,7 @@ ImageWidgetBase<TPixel>
 	       GL_UNSIGNED_BYTE, 
 	       m_OpenGlBuffer);
 #else
+  std::cout << "Accel" << std::endl;
   glEnable(GL_TEXTURE_2D);
   glColor4f(1.0,1.0,1.0,0.0);
   GLuint texture;
@@ -368,7 +371,7 @@ ImageWidgetBase<TPixel>
  // if image overlay is activated, display image overlay
   if(m_ImageOverlayVisible)
     {
-#ifdef GL_NO_ACCEL
+#ifndef GL_USE_ACCEL
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
     glDrawPixels(m_BufferedRegion.GetSize()[0],
