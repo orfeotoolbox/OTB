@@ -224,6 +224,12 @@ IF(OTB_USE_VISU_GUI)
         IF(OPENGL_INCLUDE_DIR)
                 INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
         ENDIF(OPENGL_INCLUDE_DIR)
+
+	#-------------------------------
+        # Display images using textures using video card acceleration
+        #-------------------------------
+	OPTION(GL_NO_ACCEL "Do not use video card acceleration." OFF)
+	MARK_AS_ADVANCED(GL_NO_ACCEL)
         
         #-------------------------------
         # FLTK Library

@@ -18,7 +18,6 @@
 #ifndef __otbImageWidgetBase_txx
 #define __otbImageWidgetBase_txx
 
-#define GL_NO_ACCEL
 
 #include "itkImageRegionConstIterator.h"
 #include "itkMacro.h"
