@@ -228,12 +228,12 @@ IF(OTB_USE_VISU_GUI)
 	#-------------------------------
         # Display images using textures using video card acceleration
         #-------------------------------
-	OPTION(GL_USE_ACCEL "Use video card acceleration." ON)
-	MARK_AS_ADVANCED(GL_USE_ACCEL)
-	IF(GL_USE_ACCEL)
+	OPTION(OTB_GL_USE_ACCEL "Use video card acceleration." ON)
+	MARK_AS_ADVANCED(OTB_GL_USE_ACCEL)
+	IF(OTB_GL_USE_ACCEL)
           # Add compiler option 
-          ADD_DEFINITIONS(-DGL_USE_ACCEL)
-	ENDIF(GL_USE_ACCEL)
+          ADD_DEFINITIONS(-DOTB_GL_USE_ACCEL)
+	ENDIF(OTB_GL_USE_ACCEL)
 
 
 	
