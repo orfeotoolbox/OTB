@@ -28,7 +28,7 @@ namespace otb
  * \brief Applies an averaging filter to an image
  *
  * Computes an image where a given pixel is the value over the standard 8, 26, etc. connected
- * neighborhood.  This calculation uses a ZeroFluxNeumannBoundaryCondition.
+ * neighborhood. This calculation uses a ZeroFluxNeumannBoundaryCondition.
  *
  *
  * \sa Image
