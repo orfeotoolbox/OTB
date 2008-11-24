@@ -30,15 +30,12 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 
-//THOMAS
 #include "otbImageFileWriter.h"
 
-//ROMAIN
 #include "otbMacro.h" // otb::StringStream
 
 #include "itkImageRegionConstIterator.h"
 #include "itkSubtractImageFilter.h"
-//#include "itkRescaleIntensityImageFilter.h"
 #include "otbPrintableImageFilter.h"
 #include "itkExtractImageFilter.h"
 #include "otbDifferenceImageFilter.h"
@@ -63,7 +60,7 @@ int RegressionTestMetaData(const char *, const char *,int,const double);
 void RegisterTests();
 void PrintAvailableTests()
 {
-  std::cout << "Tests diponibles:\n";
+  std::cout << "Tests available:\n";
   std::map<std::string, MainFuncPointer>::iterator j = StringToTestFunctionMap.begin();
   int i = 0;
   while(j != StringToTestFunctionMap.end())
@@ -100,7 +97,7 @@ int main(int ac, char* av[] )
   if(ac < 2)
   {
     PrintAvailableTests();
-    std::cout << "Pour lancer un test, entrer son numero: ";
+    std::cout << "To launch a test, enter its number: ";
     int testNum = 0;
     std::cin >> testNum;
     std::map<std::string, MainFuncPointer>::iterator j = StringToTestFunctionMap.begin();
@@ -112,7 +109,7 @@ int main(int ac, char* av[] )
     }
     if(j == StringToTestFunctionMap.end())
     {
-      std::cerr << testNum << " n'est pas un numero de test valid\n";
+      std::cerr << testNum << " is not a valid test number\n";
       return -1;
     }
     testToRun = j->first;
@@ -442,7 +439,7 @@ int main(int ac, char* av[] )
     return result;
   }
   PrintAvailableTests();
-  std::cerr << "Echec: " << testToRun << ": Pas de test identifie " << testToRun << "\n";
+  std::cerr << "Failure: " << testToRun << ": no test identified " << testToRun << "\n";
   return -1;
 }
 
