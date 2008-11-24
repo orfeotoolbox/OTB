@@ -42,12 +42,8 @@ public:
   typedef itk::SmartPointer<Self>          Pointer;
   typedef itk::SmartPointer<const Self>    ConstPointer;
 
-  
   /** Run-time type information (and related methods). */
   itkTypeMacro(ImageToPointSetFilter, PointSetSource);
-
-  /** Create a valid output. */
-//   itk::DataObject::Pointer  MakeOutput(unsigned int idx);
 
   /** Some Image related typedefs. */
   typedef   TInputImage                             InputImageType;
@@ -67,9 +63,6 @@ public:
 
   /** Get the input image of this process object.  */
   const InputImageType * GetInput(unsigned int idx);
-
-  /** Get the output Point Set of this process object.  */
-//   OutputPointSetType * GetOutput(void);
 
   /** Prepare the output */
   void GenerateOutputInformation(void);
