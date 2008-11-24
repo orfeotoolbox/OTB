@@ -230,6 +230,13 @@ IF(OTB_USE_VISU_GUI)
         #-------------------------------
 	OPTION(GL_NO_ACCEL "Do not use video card acceleration." OFF)
 	MARK_AS_ADVANCED(GL_NO_ACCEL)
+	IF(GL_NO_ACCEL)
+          # Add compiler option 
+          ADD_DEFINITIONS(-DGL_NO_ACCEL)
+	ENDIF(GL_NO_ACCEL)
+
+
+	
         
         #-------------------------------
         # FLTK Library
