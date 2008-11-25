@@ -285,9 +285,9 @@ ImageWidgetBase<TPixel>
 {
 
 
-#ifndef MESA
-  glDrawBuffer(GL_FRONT_AND_BACK);
-#endif // !MESA
+// #ifndef MESA
+//   glDrawBuffer(GL_FRONT_AND_BACK);
+// #endif // !MESA
 
 
 //   otbMsgDebugMacro(<<"Draw");
@@ -420,9 +420,9 @@ ImageWidgetBase<TPixel>
   
 
   
-#ifndef MESA
-  glDrawBuffer(GL_BACK);
-#endif // !MESA
+// #ifndef MESA
+//   glDrawBuffer(GL_BACK);
+// #endif // !MESA
 
 
 }
