@@ -284,12 +284,6 @@ ImageWidgetBase<TPixel>
 ::draw(void)
 {
 
-
-// #ifndef MESA
-//   glDrawBuffer(GL_FRONT_AND_BACK);
-// #endif // !MESA
-
-
 //   otbMsgDebugMacro(<<"Draw");
 
   if(this->UpdateOpenGlBufferedRegionRequested())
@@ -416,14 +410,6 @@ ImageWidgetBase<TPixel>
                                          this->h(), m_SubSamplingRate);
     }
   }
-  
-  
-
-  
-// #ifndef MESA
-//   glDrawBuffer(GL_BACK);
-// #endif // !MESA
-
 
 }
 
