@@ -35,7 +35,7 @@ namespace otb
    *
    *<b>Recent API changes:</b>
    * Now part of the UnaryFunctorObjectListBooleanFilter hierachy, replace call to SetMeanDistanceThreshold()
-   * by GetFunctor.SetThreshold().
+   * by GetFunctor().SetThreshold().
    * 
    * The inequality is now a strict one.
    *

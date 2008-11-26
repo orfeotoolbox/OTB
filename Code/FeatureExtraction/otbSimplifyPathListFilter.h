@@ -47,7 +47,7 @@ namespace otb
    *
    *   <b>Recent API changes:</b>
    * Now part of the UnaryFunctorObjectListFilter hierachy, replace call to SetTolerance()
-   * by GetFunctor.SetTolerance().
+   * by GetFunctor().SetTolerance().
    * 
    * 
    * \sa BreakAngularPathListFilter
