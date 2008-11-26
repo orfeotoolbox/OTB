@@ -45,7 +45,7 @@ UnaryFunctorObjectListBooleanFilter<TInputList,TOutputList,TFunction>
 {
   InputListPointer inputPtr = this->GetInput();
   OutputListPointer outputPtr = this->GetOutput();
-  
+  outputPtr->Clear();//FIXME this should be probably be in a superclass in a method called before GenerateData()
 
   itk::ProgressReporter progress(this, 0, inputPtr->Size());
   
