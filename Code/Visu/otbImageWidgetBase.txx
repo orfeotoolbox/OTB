@@ -377,6 +377,7 @@ ImageWidgetBase<TPixel>
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_TEXTURE_2D);
+    glColor4f(1.0,1.0,1.0,0.0);
     GLuint textureOverlay;
     glGenTextures(1, &textureOverlay);
     glBindTexture(GL_TEXTURE_2D, textureOverlay);
