@@ -25,7 +25,7 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb 
 {
 /** \class ObjectList
- *  \brief This class is a generic all-purpose wrapping around an std::vector<SmartPointer<ObjectType>>.
+ *  \brief This class is a generic all-purpose wrapping around an std::vector<itk::SmartPointer<ObjectType> >.
  *
  * ObjectList stores SmartPointer to ObjectType in a std::vector data structure. It provides the same
  * methods and iterators interfaces.

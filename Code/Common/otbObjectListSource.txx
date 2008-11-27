@@ -116,9 +116,25 @@ namespace otb
     output->Graft( graft );
   }
 
+//----------------------------------------------------------------------------
 
+  template <class TOutputList>
+    void
+      ObjectListSource<TOutputList>
+  ::AllocateOutputs()
+  {
+    OutputListPointer outputPtr;
+
+  // Allocate the output memory
+    for (unsigned int i=0; i < this->GetNumberOfOutputs(); i++)
+    {
+      outputPtr = this->GetOutput(i);
+      outputPtr->Clear();
+    }
+  }
+  
 /**
-   * GenerateData Performs the pixel-wise addition
+   * GenerateData
  */
   template <class TOutputList>
       void
