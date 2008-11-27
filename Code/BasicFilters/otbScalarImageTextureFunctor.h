@@ -64,8 +64,8 @@ class ScalarImageTextureFunctor
       image->SetRegions( region );
       image->Allocate();
    
-      typedef itk::ImageRegionIterator< InputImageType > IteratorrrType;
-      IteratorrrType inputIt( image, image->GetLargestPossibleRegion() );
+      typedef itk::ImageRegionIterator< InputImageType > IteratorType;
+      IteratorType inputIt( image, image->GetLargestPossibleRegion() );
       inputIt.GoToBegin();
       for (unsigned int i = 0; i < neighborhoodSize; ++i)
 	{
