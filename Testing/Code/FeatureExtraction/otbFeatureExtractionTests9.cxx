@@ -33,4 +33,7 @@ REGISTER_TEST(otbImageToSIFTKeyPointSetFilterOutputImage);
 REGISTER_TEST(otbImageToSIFTKeyPointSetFilterOutputAscii);
 // This test is only used to make validation image from sift code
 //REGISTER_TEST(otbImageToSIFTKeyPointSetFilterValid);
+REGISTER_TEST(otbImageToHessianDeterminantImageFilterNew);
+REGISTER_TEST(otbImageToHessianDeterminantImageFilter);
+
 }

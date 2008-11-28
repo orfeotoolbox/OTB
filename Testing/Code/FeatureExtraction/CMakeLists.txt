@@ -825,6 +825,22 @@ ADD_TEST(feTvImageToSIFTKeyPointSetFilterQB_SuburbOutputAscii ${FEATUREEXTRACTIO
 )
 
 
+# -------            otb::HessianToHessianDeterminantImageFilter   -------------
+ADD_TEST(feTuImageToHessianDeterminantImageFilterNew ${FEATUREEXTRACTION_TESTS9} 
+         otbImageToHessianDeterminantImageFilterNew)
+
+
+ADD_TEST(feTvImageToHessianDeterminantImageFilter ${FEATUREEXTRACTION_TESTS9} 
+--compare-image ${EPS}
+	 ${BASELINE}/feTvImageToHessianDeterminantImageFilterOutput.tif
+	 ${TEMP}/feTvImageToHessianDeterminantImageFilterOutput.tif
+         otbImageToHessianDeterminantImageFilter
+	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
+	 ${TEMP}/feTvImageToHessianDeterminantImageFilterOutput.tif
+	 1.5
+	 )
+
+
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
@@ -928,6 +944,8 @@ otbImageToSIFTKeyPointSetFilterValid.cxx
 otbImageToSIFTKeyPointSetFilterDistanceMap.cxx
 otbImageToSIFTKeyPointSetFilterOutputImage.cxx
 otbImageToSIFTKeyPointSetFilterOutputAscii.cxx
+otbImageToHessianDeterminantImageFilterNew.cxx
+otbImageToHessianDeterminantImageFilter.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
