@@ -95,6 +95,18 @@ int main( int argc, char * argv[] )
   
   //  Software Guide : BeginLatex
   //
+  // When you open several reader, this is handy to be able to identify 
+  // each one. This can be done using
+  // \code{SetLabel()}.
+  //
+  //  Software Guide : EndLatex 
+  
+  // Software Guide : BeginCodeSnippet
+  viewer->SetLabel(argv[1]);
+  // Software Guide : EndCodeSnippet
+  
+  //  Software Guide : BeginLatex
+  //
   // We trigger the pipeline execution and the image display
   // with the \code{Show()} method of the viewer.
   //
