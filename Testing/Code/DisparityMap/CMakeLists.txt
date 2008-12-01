@@ -304,6 +304,24 @@ ADD_TEST(dmTvSinusoidDeformationFieldEstimation2 ${DISPARITYMAP_TESTS2}
 	  15 10 10 250 0.95 4 25
 )
 
+# ------- otb::StreamingWarpImageFilter  ----------
+
+
+ADD_TEST(dmTuStreamingWarpImageFilterNew ${DISPARITYMAP_TESTS3}
+	otbStreamingWarpImageFilterNew)
+
+ADD_TEST(dmTvStreamingWarpImageFilter ${DISPARITYMAP_TESTS3}
+	--compare-image ${EPSILON}
+	${BASELINE}/
+	${TEMP}/
+	otbStreamingWarpImageFilter
+	${INPUTDATA}/
+	${INPUTDATA}/
+	${TEMP}/
+	5
+)
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbDisparityMapTests3 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
@@ -336,6 +354,9 @@ otbBSplinesInterpolateTransformDeformationFieldGeneratorNew.cxx
 otbBSplinesInterpolateTransformDeformationFieldGenerator.cxx
 )
 SET(BasicDisparityMap_SRCS3
+otbStreamingWarpImageFilterNew.cxx
+otbStreamingWarpimageFilter.cxx
+
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
