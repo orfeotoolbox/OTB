@@ -355,7 +355,7 @@ otbBSplinesInterpolateTransformDeformationFieldGenerator.cxx
 )
 SET(BasicDisparityMap_SRCS3
 otbStreamingWarpImageFilterNew.cxx
-otbStreamingWarpimageFilter.cxx
+otbStreamingWarpImageFilter.cxx
 
 )
 
