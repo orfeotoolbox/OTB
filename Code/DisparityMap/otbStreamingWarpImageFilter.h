@@ -49,20 +49,18 @@ public:
   itkTypeMacro(StreamingWarpImageFilter, itk::WarpImageFilter);
   
   /** template parameters typedef */
-  typedef TInputImage                            InputImageType;
-  typedef InputImageType::Pointer                InputImagePointerType;
-  typedef TOutputImage                           OutputImageType;
-  typedef typename OutputImageType::Pointer      OutputImagePointerType;
-  typedef TDeformationField                      DeformationFieldType;
-  typedef DeformationFieldType::PixelType        DeformationValueType;
-  typedef typename DeformationFieldType::Pointer DeformationFieldPointerType;
+  typedef TInputImage                              InputImageType;
+  typedef typename  InputImageType::Pointer        InputImagePointerType;
+  typedef TOutputImage                             OutputImageType;
+  typedef typename OutputImageType::Pointer        OutputImagePointerType;
+  typedef TDeformationField                        DeformationFieldType;
+  typedef typename DeformationFieldType::PixelType DeformationValueType;
+  typedef typename DeformationFieldType::Pointer   DeformationFieldPointerType;
 
-  /** 
-   * This filters requires only a part of the input and of the deformation field to
-   * produce its output. As such, we need to overload the GenerateInputRequestedRegion() method.
-   */
-  virtual void GenerateInputRequestedRegion() ;
-	
+  /** Accessors */
+  itkSetMacro(MaximumDeformation,DeformationValueType);
+  itkGetConstReferenceMacro(MaximumDeformation,DeformationValueType);
+  
 protected:
   /** Constructor */
   StreamingWarpImageFilter();
@@ -70,17 +68,18 @@ protected:
   virtual ~StreamingWarpImageFilter() {};
   /** PrintSelf */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  /** 
+   * This filters requires only a part of the input and of the deformation field to
+   * produce its output. As such, we need to overload the GenerateInputRequestedRegion() method.
+   */
+  virtual void GenerateInputRequestedRegion() ;
 	
-  /** Accessors */
-  itkSetMacro(MaximumDeformation,DeformationValueType);
-  itkGetConstReferenceMacro(MaximumDeformation,DeformationValueType);
-
 private:
   StreamingWarpImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 	
   // Assesment of the maximum deformation for streaming
-  DeformationValueType m_MaximumDeformation;s
+  DeformationValueType m_MaximumDeformation;
 };
 
 } // end namespace otb

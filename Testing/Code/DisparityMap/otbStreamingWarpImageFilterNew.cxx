@@ -20,7 +20,7 @@
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
 
-#include "itkWarpImageFilter.h"
+#include "otbStreamingWarpImageFilter.h"
 
 
 int otbStreamingWarpImageFilterNew(int argc, char* argv[])

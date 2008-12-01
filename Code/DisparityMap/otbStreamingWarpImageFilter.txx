@@ -31,8 +31,6 @@ template<class TInputImage, class TOutputImage, class TDeformationField>
 StreamingWarpImageFilter<TInputImage,TOutputImage,TDeformationField>
 ::StreamingWarpImageFilter()
 {
-  // Default neighborhood interpolation radius is one pixel
-  m_InterpolatorNeighborhoodRadius = 1 ;
   // Fill the default maximum deformation
   m_MaximumDeformation.SetSize(InputImageType::ImageDimension);
   m_MaximumDeformation.Fill(1);
@@ -59,7 +57,7 @@ StreamingWarpImageFilter<TInputImage,TOutputImage,TDeformationField>
   
   // Compute the security margin radius
   typename InputImageType::SizeType radius;
-  typename InputImageType::SpacingType sapcing = inputPtr->GetSpacing();
+  typename InputImageType::SpacingType spacing = inputPtr->GetSpacing();
 
   // Add the padding due to the interpolator
   unsigned int interpolatorRadius = StreamingTraits<typename Superclass::InputImageType>::CalculateNeededRadiusForInterpolator(this->GetInterpolator());
@@ -67,7 +65,7 @@ StreamingWarpImageFilter<TInputImage,TOutputImage,TDeformationField>
   // Compute the margin due to the maximum deformation value and interpolator radius
   for(unsigned int i = 0; i<InputImageType::ImageDimension;++i)
     {
-      radius[i]=interpolatorRadius + static_cast<unsigned int>(vcl_ceil(m_MaximumDeformation/spacing[i]));
+      radius[i]=interpolatorRadius + static_cast<unsigned int>(vcl_ceil(m_MaximumDeformation[i]/spacing[i]));
     }
 
   otbMsgDevMacro(<<"WarpImageFilter: MaximumDeformation: "<<m_MaximumDeformation<<", interpolator radius: "<<interpolatorRadius<<", total radius:  "<<radius);
@@ -95,7 +93,7 @@ StreamingWarpImageFilter<TInputImage,TOutputImage,TDeformationField>
     inputPtr->SetRequestedRegion( inputRequestedRegion );
     
     // build an exception
-    InvalidRequestedRegionError e(__FILE__, __LINE__);
+    itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
     e.SetLocation(ITK_LOCATION);
     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
     e.SetDataObject(inputPtr);
@@ -109,8 +107,7 @@ StreamingWarpImageFilter<TInputImage,TOutputImage,TDeformationField>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
-  os << indent << "m_InterpolatorNeighborhoodRadius: " << m_InterpolatorNeighborhoodRadius<<std::endl;
-  os << indent << "m_AddedRadius: " <<m_AddedRadius<< std::endl;
+  os << indent << "Maximum deformation: " << m_MaximumDeformation<<std::endl;
 }
 
 

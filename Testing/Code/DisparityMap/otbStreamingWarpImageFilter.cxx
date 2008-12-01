@@ -20,7 +20,7 @@
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
 
-#include "itkWarpImageFilter.h"
+#include "otbStreamingWarpImageFilter.h"
 
 
 int otbStreamingWarpImageFilter(int argc, char* argv[])
@@ -52,9 +52,9 @@ int otbStreamingWarpImageFilter(int argc, char* argv[])
   typedef otb::StreamingImageFileWriter<ImageType> WriterType;
   
   // Objects creation
-  DeformationReaderType::Pointer deformationReader::New();
-  ReaderType::Pointer movingReader = ReaderType::New();
-  WriterType::pointer writer WriterType::New();
+  DeformationReaderType::Pointer deformationReader = DeformationReaderType::New();
+  ReaderType::Pointer reader = ReaderType::New();
+  WriterType::Pointer writer = WriterType::New();
   ImageWarperType::Pointer warper = ImageWarperType::New();
   
   // Reading
