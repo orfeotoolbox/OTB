@@ -685,6 +685,11 @@ namespace otb
 
           typename VertexListType::ConstIterator vIt = vertexList->Begin();
 
+          if (vIt == vertexList->End())
+          {
+            itkExceptionMacro(<<"Polygon is empty");
+          }
+          
           while(vIt != vertexList->End())
           {
             if(DataNodeType::Dimension>2)
@@ -702,6 +707,7 @@ namespace otb
 
           //Adding the first point again to close the polygon
           vIt = vertexList->Begin();
+          
           if(DataNodeType::Dimension>2)
           {
             coordinates->add_latlngalt(vIt.Value()[1],vIt.Value()[0],vIt.Value()[2]+1);//Drawing polygon 1m above ground to avoid z-buffer issues
