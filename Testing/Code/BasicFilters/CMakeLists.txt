@@ -975,7 +975,7 @@ ADD_TEST(bfTuGaborFilterGeneratorNew ${BASICFILTERS_TESTS10}
 	 )
 
 ADD_TEST(bfTvGaborFilterGenerator ${BASICFILTERS_TESTS10}
-	--compare-image ${TOL}
+	--compare-image ${EPSILON}
 	    ${BASELINE}/bfGaborFilterGeneratorTest.tif
 	    ${TEMP}/bfGaborFilterGeneratorTest.tif
 	 otbGaborFilterGenerator
