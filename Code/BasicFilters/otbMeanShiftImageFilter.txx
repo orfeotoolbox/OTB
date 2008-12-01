@@ -384,7 +384,7 @@ namespace otb
     typename LabeledOutputType::IndexType boundIndex;
 
     // TODO: Here it would be possible to extract the polygon edges for each region
-    for(LabelType label = 1; label <= numRegions;++label)
+    for(LabelType label = 0; label < numRegions;++label)
       {
 	regionIndeces = regionList->GetRegionIndeces(label);
 	for(int  i = 0; i < regionList->GetRegionCount(label);++i)
