@@ -312,12 +312,12 @@ ADD_TEST(dmTuStreamingWarpImageFilterNew ${DISPARITYMAP_TESTS3}
 
 ADD_TEST(dmTvStreamingWarpImageFilter ${DISPARITYMAP_TESTS3}
 	--compare-image ${EPSILON}
-	${BASELINE}/
-	${TEMP}/
+	${BASELINE}/dmStreamingWarpImageFilterOutput.tif
+	${TEMP}/dmStreamingWarpImageFilterOutput.tif
 	otbStreamingWarpImageFilter
-	${INPUTDATA}/
-	${INPUTDATA}/
-	${TEMP}/
+	${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
+	${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub_deformation_field.tif
+	${TEMP}/dmStreamingWarpImageFilterOutput.tif
 	5
 )
 
