@@ -944,7 +944,7 @@ namespace otb
     	
     if(m_poBands==NULL)
     {
-      itkExceptionMacro(<<"Erreur d'allocation memoire du 'rasterBands'");
+      itkExceptionMacro(<<"Memory allocation error for 'rasterBands'");
     }
     for(int i=0 ; i<m_NbBands ; i++)
     {
