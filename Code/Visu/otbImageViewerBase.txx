@@ -1054,8 +1054,9 @@ ImageViewerBase<TPixel,TLabel>
     {
     case ScrollWidgetType::RGB:
     {
-      if(m_InputImage->GetNumberOfComponentsPerPixel()>2)
-	{
+//       if(m_InputImage->GetNumberOfComponentsPerPixel()>2)
+// 	{ //NOTE: No reason to prevent a 2 bands image to be displayed in RGB
+//       and the image is not necessarily loaded at that time.
 	  if(m_UseScroll)
 	    {
 	      m_ScrollWidget->SetViewModel(viewModel);
@@ -1108,7 +1109,7 @@ ImageViewerBase<TPixel,TLabel>
 	  m_GreenHistogramWidget->SetHistogramColor(green);
 	  m_GreenHistogramWidget->SetTextColor(green);
 	  break;
-	}
+// 	}
     }
     case ScrollWidgetType::GRAYSCALE:
     {
