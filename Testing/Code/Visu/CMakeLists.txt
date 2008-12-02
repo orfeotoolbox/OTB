@@ -179,6 +179,14 @@ ADD_TEST(viTvImageWidgetTransferFunctions ${VISU_TESTS2}
 	${TEMP}/viTvImageWidgetTransferFunctionsOutput.txt
         )
 
+#----------   otb::ImageViewer (Testing overlay, related to bug 35 -----------
+ADD_TEST(viTvImageViewerWithOverlay ${VISU_TESTS2}
+	otbImageViewerWithOverlay
+		${INPUTDATA}/couleurs.tif
+		128
+		128
+)
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicVisu_SRCS1
 otbImageWidgetBaseNew.cxx
@@ -206,6 +214,7 @@ otbHistogramAndTransferFunctionWidgetNew.cxx
 otbHistogramAndTransferFunctionWidget.cxx
 otbImageWidgetTransferFunctions.cxx
 otbImageWidgetTransferFunctionsNew.cxx
+otbImageViewerWithOverlay.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}") 

@@ -39,4 +39,5 @@ REGISTER_TEST(otbHistogramAndTransferFunctionWidgetNew);
 REGISTER_TEST(otbHistogramAndTransferFunctionWidget);
 REGISTER_TEST(otbImageWidgetTransferFunctionsNew);
 REGISTER_TEST(otbImageWidgetTransferFunctions);
+REGISTER_TEST(otbImageViewerWithOverlay);
 }

@@ -65,7 +65,7 @@ StreamingWarpImageFilter<TInputImage,TOutputImage,TDeformationField>
   // Compute the margin due to the maximum deformation value and interpolator radius
   for(unsigned int i = 0; i<InputImageType::ImageDimension;++i)
     {
-      radius[i]=interpolatorRadius + static_cast<unsigned int>(vcl_ceil(m_MaximumDeformation[i]/spacing[i]));
+      radius[i]= interpolatorRadius + static_cast<unsigned int>(vcl_ceil(m_MaximumDeformation[i]/vcl_abs(spacing[i])));
     }
 
   otbMsgDevMacro(<<"WarpImageFilter: MaximumDeformation: "<<m_MaximumDeformation<<", interpolator radius: "<<interpolatorRadius<<", total radius:  "<<radius);
