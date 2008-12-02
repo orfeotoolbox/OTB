@@ -25,9 +25,22 @@ namespace otb
 {
 
 /** \class StreamingWarpImageFilter
- * \brief 
+ * \brief This class acts like the itk::WarpImageFilter, but it does not request the largest possible region of the image to warp.
  *
- * \TODO: Document
+ * Instead, the user should assess the maximum deformation in the deformation field and set it via the SetMaximumDeformation() method.
+ *
+ * The filter will then compute an appropriate security margin according to the image spacing, the maximum deformation and the interpolator
+ * radius in otb::StreamingTraits. 
+ * 
+ * This security margin is used to stream the input image, making this filter an entirely streamable one.
+ *
+ * If the maximum deformation is wrong, this filter is likely to request data outside of the input image buffered region. In this case, pixels
+ * outside the region will be set to Zero according to itk::NumericTraits.
+ *
+ * \sa itk::WarpImageFilter
+ * 
+ * \ingroup Streamed
+ * \ingroup Threaded
  */
 
 template <class TInputImage, class TOutputImage, class TDeformationField>
@@ -35,7 +48,6 @@ class ITK_EXPORT StreamingWarpImageFilter
   :  public itk::WarpImageFilter< TInputImage, TOutputImage, TDeformationField >
 {
 public:
-
   /** Standard class typedefs. */
   typedef StreamingWarpImageFilter                                            Self;
   typedef itk::WarpImageFilter< TInputImage, TOutputImage, TDeformationField> Superclass;
