@@ -25,8 +25,8 @@
 int otbImageFittingPolygonListFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension =2;
-  typedef otb::Polygon<double>                                     PolygonType;
-  typedef otb::Image<double,2> ImageType;
+  typedef otb::Polygon<double>           PolygonType;
+  typedef otb::Image<double,Dimension>   ImageType;
   
   typedef otb::ImageFittingPolygonListFilter<PolygonType,ImageType> FittingPolygonType;
   
