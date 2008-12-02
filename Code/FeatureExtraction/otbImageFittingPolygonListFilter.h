@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImagePerturbationPolygonListFilter_h
-#define __otbImagePerturbationPolygonListFilter_h
+#ifndef __otbImageFittingPolygonListFilter_h
+#define __otbImageFittingPolygonListFilter_h
 
 #include "otbPathListToPathListFilter.h"
 #include "otbMacro.h"
@@ -24,7 +24,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-/** \class ImagePerturbationPolygonListFilter
+/** \class ImageFittingPolygonListFilter
  *  \brief Slightly deform polygon to reach higher enery from the image
  * 
  * <br>Limitations:</br> This filter is currently working with integer position
@@ -32,12 +32,12 @@ namespace otb
  *
  */
 template <class TPath, class TImage>
-class ITK_EXPORT ImagePerturbationPolygonListFilter
+class ITK_EXPORT ImageFittingPolygonListFilter
   : public PathListToPathListFilter<TPath>
 {
  public:
   /** Standard typedefs */
-  typedef ImagePerturbationPolygonListFilter                Self;
+  typedef ImageFittingPolygonListFilter                Self;
   typedef PathListToPathListFilter<TPath>       Superclass;
   typedef itk::SmartPointer<Self>               Pointer;
   typedef itk::SmartPointer<const Self>         ConstPointer;
@@ -46,7 +46,7 @@ class ITK_EXPORT ImagePerturbationPolygonListFilter
   itkNewMacro(Self);
   
   /** Creation through object factory macro */
-  itkTypeMacro(ImagePerturbationPolygonListFilter, PathListToPathListFilter);
+  itkTypeMacro(ImageFittingPolygonListFilter, PathListToPathListFilter);
   
   /** Template parameters typedefs */
   typedef typename Superclass::PathType         PathType;
@@ -87,9 +87,9 @@ class ITK_EXPORT ImagePerturbationPolygonListFilter
   
 protected:
   /** Constructor */
-  ImagePerturbationPolygonListFilter();
+  ImageFittingPolygonListFilter();
   /** Destructor */
-  virtual ~ImagePerturbationPolygonListFilter() {};
+  virtual ~ImageFittingPolygonListFilter() {};
   /** GenerateData method */
   virtual void GenerateData();
   /** PrintSelf method */
@@ -101,14 +101,14 @@ protected:
   unsigned int m_NumberOfIterations;
   
 private:
-  ImagePerturbationPolygonListFilter(const Self&); //purposely not implemented
+  ImageFittingPolygonListFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   
 };
 }// End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImagePerturbationPolygonListFilter.txx"
+#include "otbImageFittingPolygonListFilter.txx"
 #endif
 
 #endif

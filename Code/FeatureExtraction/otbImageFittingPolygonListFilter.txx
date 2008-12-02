@@ -15,13 +15,13 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImagePerturbationPolygonListFilter_txx
-#define __otbImagePerturbationPolygonListFilter_txx
+#ifndef __otbImageFittingPolygonListFilter_txx
+#define __otbImageFittingPolygonListFilter_txx
 
-#include "otbImagePerturbationPolygonListFilter.h"
+#include "otbImageFittingPolygonListFilter.h"
 #include "otbPolyLineImageConstIterator.h"
 #include "otbMacro.h"
-
+#include "itkImageRegionConstIteratorWithIndex.h"
 
 namespace otb
 {
@@ -29,8 +29,8 @@ namespace otb
  * Constructor
  */
 template <class TPath, class TImage>
-ImagePerturbationPolygonListFilter<TPath, TImage>
-::ImagePerturbationPolygonListFilter()
+ImageFittingPolygonListFilter<TPath, TImage>
+::ImageFittingPolygonListFilter()
 {
   this->SetNumberOfRequiredInputs(2);
   this->SetNumberOfInputs(2);
@@ -40,16 +40,16 @@ ImagePerturbationPolygonListFilter<TPath, TImage>
 
 template <class TPath, class TImage>
 void
-ImagePerturbationPolygonListFilter<TPath, TImage>
+ImageFittingPolygonListFilter<TPath, TImage>
 ::SetInputImage(const ImageType * image)
 {
   this->itk::ProcessObject::SetNthInput(1,const_cast<ImageType *>(image));
 }
 
 template <class TPath, class TImage>
-const typename ImagePerturbationPolygonListFilter<TPath, TImage>
+const typename ImageFittingPolygonListFilter<TPath, TImage>
 ::ImageType *
-ImagePerturbationPolygonListFilter<TPath, TImage>
+ImageFittingPolygonListFilter<TPath, TImage>
 ::GetInputImage(void)
 {
   if(this->GetNumberOfInputs()<1)
@@ -65,7 +65,7 @@ ImagePerturbationPolygonListFilter<TPath, TImage>
 //maybe we should use the itk::LineConstIterator 
 template <class TPath, class TImage>
 void
-ImagePerturbationPolygonListFilter<TPath, TImage>
+ImageFittingPolygonListFilter<TPath, TImage>
 ::GenerateData()
 {
   // I/O wiring
@@ -222,7 +222,7 @@ ImagePerturbationPolygonListFilter<TPath, TImage>
 
 template <class TPath, class TImage>
     double
-        ImagePerturbationPolygonListFilter<TPath, TImage>
+        ImageFittingPolygonListFilter<TPath, TImage>
   ::computeValue(ImageConstPointerType image, VertexType middlePoint, VertexType previousPoint, VertexType nextPoint) const
 {
   typedef typename ImageType::IndexType IndexType;
@@ -263,7 +263,7 @@ template <class TPath, class TImage>
  */
 template <class TPath, class TImage>
 void
-ImagePerturbationPolygonListFilter<TPath, TImage>
+ImageFittingPolygonListFilter<TPath, TImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
