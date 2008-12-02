@@ -377,7 +377,7 @@ ImageWidgetBase<TPixel>
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_TEXTURE_2D);
-    glColor4f(1.0,1.0,1.0,0.0);
+    glColor4f(1.0,1.0,1.0,1.0);
     GLuint textureOverlay;
     glGenTextures(1, &textureOverlay);
     glBindTexture(GL_TEXTURE_2D, textureOverlay);
@@ -388,10 +388,10 @@ ImageWidgetBase<TPixel>
     glBindTexture (GL_TEXTURE_2D, textureOverlay);
     glBegin (GL_QUADS);
     int hOffset = this->h() - this->hDisplayed();
-    glTexCoord2f (0.0, 1.0);  glVertex3f (0.0, 0.0+hOffset, 0.0);
-    glTexCoord2f (1.0, 1.0);  glVertex3f (this->wDisplayed(), 0.0+hOffset, 0.0);
-    glTexCoord2f (1.0, 0.0);  glVertex3f (this->wDisplayed(), this->hDisplayed()+hOffset, 0.0);
-    glTexCoord2f (0.0, 0.0);  glVertex3f (0.0, this->hDisplayed()+hOffset, 0.0);
+    glTexCoord2f (0.0, 1.0);  glVertex3f (0.0, 0.0+hOffset, 1.0);
+    glTexCoord2f (1.0, 1.0);  glVertex3f (this->wDisplayed(), 0.0+hOffset, 1.0);
+    glTexCoord2f (1.0, 0.0);  glVertex3f (this->wDisplayed(), this->hDisplayed()+hOffset, 1.0);
+    glTexCoord2f (0.0, 0.0);  glVertex3f (0.0, this->hDisplayed()+hOffset, 1.0);
     glEnd ();
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_BLEND);
