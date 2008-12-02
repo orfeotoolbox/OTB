@@ -839,8 +839,10 @@ ADD_TEST(feTvImageToHessianDeterminantImageFilter ${FEATUREEXTRACTION_TESTS9}
 	 ${TEMP}/feTvImageToHessianDeterminantImageFilterOutput.tif
 	 1.5
 	 )
-
-
+	 
+# -------            otb::ImageFittingPolygonListFilter   -------------
+ADD_TEST(feTuImageFittingPolygonListFilterNew ${FEATUREEXTRACTION_TESTS9} 
+         otbImageFittingPolygonListFilterNew)
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
@@ -946,6 +948,7 @@ otbImageToSIFTKeyPointSetFilterOutputImage.cxx
 otbImageToSIFTKeyPointSetFilterOutputAscii.cxx
 otbImageToHessianDeterminantImageFilterNew.cxx
 otbImageToHessianDeterminantImageFilter.cxx
+otbImageFittingPolygonListFilterNew.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
