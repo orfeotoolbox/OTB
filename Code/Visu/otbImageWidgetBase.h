@@ -29,7 +29,7 @@
 namespace otb
 {
   /** \class ImageWidgetBase
-   *  \brief 
+   *  \brief Base class for ImageWidget
    *
    */
 template <class TPixel>
