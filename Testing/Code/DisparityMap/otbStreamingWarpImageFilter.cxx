@@ -15,13 +15,12 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbImage.h"
 #include "otbVectorImage.h"
+#include "itkVector.h"
+#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
-
 #include "otbStreamingWarpImageFilter.h"
-
 
 int otbStreamingWarpImageFilter(int argc, char* argv[])
 {
@@ -41,7 +40,8 @@ int otbStreamingWarpImageFilter(int argc, char* argv[])
   const unsigned int Dimension=2;
   typedef double PixelType;
   typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef otb::VectorImage<PixelType,Dimension> DeformationFieldType;
+  typedef itk::Vector<PixelType,2> DeformationValueType;
+  typedef otb::Image<DeformationValueType,Dimension> DeformationFieldType;
   
   // Warper
   typedef otb::StreamingWarpImageFilter<ImageType,ImageType,DeformationFieldType> ImageWarperType;
@@ -62,7 +62,7 @@ int otbStreamingWarpImageFilter(int argc, char* argv[])
   deformationReader->SetFileName(deffname);
 
   // Warping 
-  ImageWarperType::DeformationValueType maxDeformation;
+  DeformationValueType maxDeformation;
   maxDeformation.Fill(maxdef);
   warper->SetMaximumDeformation(maxDeformation);
   warper->SetInput(reader->GetOutput());

@@ -16,21 +16,18 @@
 
 =========================================================================*/
 #include "otbImage.h"
-#include "otbVectorImage.h"
-#include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
-
+#include "itkVector.h"
 #include "otbStreamingWarpImageFilter.h"
-
 
 int otbStreamingWarpImageFilterNew(int argc, char* argv[])
 {
   // Images definition
   const unsigned int Dimension=2;
   typedef double PixelType;
+  typedef itk::Vector<PixelType,2> DeformationValueType;
   typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef otb::VectorImage<PixelType,Dimension> DeformationFieldType;
-  
+  typedef otb::Image<DeformationValueType,2> DeformationFieldType;
+
   // Warper
   typedef otb::StreamingWarpImageFilter<ImageType,ImageType,DeformationFieldType> ImageWarperType;
 
