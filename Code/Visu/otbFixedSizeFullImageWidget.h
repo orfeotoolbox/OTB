@@ -23,7 +23,7 @@
 namespace otb
 {
 /** \class FixedSizeFullImageWidget
- * \brief 
+ * \brief FixedSizeFullImageWidget
  *
  */
 template <class TPixel>
