@@ -19,7 +19,7 @@
 #define __otbImageWidgetBase_txx
 
 
-#include "itkImageRegionConstIterator.h"
+#include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkMacro.h"
 #include "otbMacro.h"
 
@@ -324,10 +324,10 @@ ImageWidgetBase<TPixel>
   glDisable(GL_BLEND);
 
 
-  glRasterPos2i(0,this->h());
+  glRasterPos2i(0,0);
 
 #ifndef OTB_GL_USE_ACCEL
-  glPixelZoom(m_OpenGlIsotropicZoom ,-m_OpenGlIsotropicZoom);
+  glPixelZoom(m_OpenGlIsotropicZoom ,m_OpenGlIsotropicZoom);
 
   // display the image
   glDrawPixels(m_BufferedRegion.GetSize()[0],
@@ -429,17 +429,18 @@ ImageWidgetBase<TPixel>
     delete [] m_OpenGlBuffer;
   }
   //otbMsgDebugMacro(<<"Buffered region: "<<m_BufferedRegion); 
-  unsigned int bufferLenght = 4*m_BufferedRegion.GetSize()[0]
-      *m_BufferedRegion.GetSize()[1];
+  unsigned int bufferLenght = 4*m_BufferedRegion.GetNumberOfPixels();
   //otbMsgDebugMacro(<<"New buffer lenght: "<<bufferLenght);
   m_OpenGlBuffer = new unsigned char[bufferLenght];
 
-  typedef itk::ImageRegionConstIterator<ImageType> IteratorType;
+  typedef itk::ImageRegionConstIteratorWithIndex<ImageType> IteratorType;
   IteratorType it(m_Image,m_BufferedRegion);
   unsigned int index = 0;
   for(it.GoToBegin();!it.IsAtEnd();++it)
   {
-    switch(m_ViewModel)
+	index = (m_BufferedRegion.GetSize()[1]-1+m_BufferedRegion.GetIndex()[1]-it.GetIndex()[1])*4*m_BufferedRegion.GetSize()[0]
+	+ 4*(it.GetIndex()[0]-m_BufferedRegion.GetIndex()[0]);
+	switch(m_ViewModel)
     {
       case RGB:
       {
@@ -447,7 +448,6 @@ ImageWidgetBase<TPixel>
         m_OpenGlBuffer[index+1] = Normalize(it.Get()[m_GreenChannelIndex],m_GreenChannelIndex);
         m_OpenGlBuffer[index+2] = Normalize(it.Get()[m_BlueChannelIndex],m_BlueChannelIndex);
         m_OpenGlBuffer[index+3] = 255;
-        index+=4;
         break;
       }
       case GRAYSCALE:
@@ -457,7 +457,6 @@ ImageWidgetBase<TPixel>
         m_OpenGlBuffer[index+1] = gray;
         m_OpenGlBuffer[index+2] = gray;
         m_OpenGlBuffer[index+3] = 255;
-        index+=4;
         break;
       }
       case COMPLEX_MODULUS:
@@ -471,7 +470,6 @@ ImageWidgetBase<TPixel>
         m_OpenGlBuffer[index+1] = modulus;
         m_OpenGlBuffer[index+2] = modulus;
         m_OpenGlBuffer[index+3] = 255;
-        index+=4;
         break;
       }
       case COMPLEX_PHASE:
@@ -481,7 +479,6 @@ ImageWidgetBase<TPixel>
         m_OpenGlBuffer[index+1] = phase;
         m_OpenGlBuffer[index+2] = phase;
         m_OpenGlBuffer[index+3] = 255;
-        index+=4;
         break;
       }
     }
@@ -502,19 +499,19 @@ ImageWidgetBase<TPixel>
     delete [] m_OpenGlImageOverlayBuffer;
   }
   //otbMsgDebugMacro(<<"Buffered region: "<<m_BufferedRegion); 
-  unsigned int bufferLenght = 4*m_BufferedRegion.GetSize()[0]
-      *m_BufferedRegion.GetSize()[1];
+  unsigned int bufferLenght = 4*m_BufferedRegion.GetNumberOfPixels();
   //otbMsgDebugMacro(<<"New buffer lenght: "<<bufferLenght);
   m_OpenGlImageOverlayBuffer = new unsigned char[bufferLenght];
 
-  typedef itk::ImageRegionConstIterator<OverlayImageType> IteratorType;
-//   m_ImageOverlay->SetNumberOfComponentsPerPixel(3);
+  typedef itk::ImageRegionConstIteratorWithIndex<OverlayImageType> IteratorType;
   IteratorType it(m_ImageOverlay,m_BufferedRegion);
   unsigned int index = 0;
   if(m_BlackTransparency)
   {
     for(it.GoToBegin();!it.IsAtEnd();++it)
     {
+	  index = (m_BufferedRegion.GetSize()[1]-1+m_BufferedRegion.GetIndex()[1]-it.GetIndex()[1])*4*m_BufferedRegion.GetSize()[0] 
+	  + 4*(it.GetIndex()[0]-m_BufferedRegion.GetIndex()[0]);
       if ((it.Get()[0]==0)&&(it.Get()[1]==0)&&(it.Get()[2]==0))
       {
         m_OpenGlImageOverlayBuffer[index] = 0;
@@ -529,22 +526,20 @@ ImageWidgetBase<TPixel>
         m_OpenGlImageOverlayBuffer[index+2] = static_cast<unsigned char>(it.Get()[2]);
         m_OpenGlImageOverlayBuffer[index+3] = m_ImageOverlayOpacity;
       } 
-      index+=4;
     }     
   }
   else 
   {
     for(it.GoToBegin();!it.IsAtEnd();++it)
     {
+	  index = (m_BufferedRegion.GetSize()[1]-1+m_BufferedRegion.GetIndex()[1]-it.GetIndex()[1])*4*m_BufferedRegion.GetSize()[0] 
+	  + 4*(it.GetIndex()[0]-m_BufferedRegion.GetIndex()[0]);
       m_OpenGlImageOverlayBuffer[index] =  static_cast<unsigned char>(it.Get()[0]);
       m_OpenGlImageOverlayBuffer[index+1] =static_cast<unsigned char>(it.Get()[1]);
       m_OpenGlImageOverlayBuffer[index+2] =static_cast<unsigned char>(it.Get()[2]);
       m_OpenGlImageOverlayBuffer[index+3] =m_ImageOverlayOpacity;
-      index+=4;
     }
   }
 }
-
-
 }// end namespace otb
 #endif
