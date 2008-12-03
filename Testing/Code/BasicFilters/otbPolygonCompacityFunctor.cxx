@@ -93,7 +93,6 @@ int otbPolygonCompacityFunctor( int argc, char * argv[] )
   
   typedef  PolygonListType::ConstIterator PolygonListIteratorType;
   
-  LabelPixelType label=0;
   for(PolygonListIteratorType pIt = compacityFilter->GetOutput()->Begin();
       pIt!=compacityFilter->GetOutput()->End();
       ++pIt)
