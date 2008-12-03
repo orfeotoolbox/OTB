@@ -56,8 +56,8 @@ namespace otb
 	   */
 	  inline TOutput operator()(const TInput& input)
 	    {
-	      double determinant = static_cast<TOutput>(input[0]*input[1]-0.9*input[2]*input[2]);
-	      return  (vcl_abs(determinant)<0.05)?0:determinant;
+	      return static_cast<TOutput>(input[0]*input[1] - input[2]*input[2]);
+	        
 	    }
 	  
 	  bool operator !=(const HessianDeterminant) const
