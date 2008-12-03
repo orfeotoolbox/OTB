@@ -844,6 +844,17 @@ ADD_TEST(feTvImageToHessianDeterminantImageFilter ${FEATUREEXTRACTION_TESTS9}
 ADD_TEST(feTuImageFittingPolygonListFilterNew ${FEATUREEXTRACTION_TESTS9} 
          otbImageFittingPolygonListFilterNew)
 
+ADD_TEST(feTvImageFittingPolygonListFilter ${FEATUREEXTRACTION_TESTS9}
+--compare-ascii ${EPS}
+		${BASELINE_FILES}/feTvImageFittingPolygonListFilter_Output.kml
+		${TEMP}/feTvImageFittingPolygonListFilter_Output.kml
+         otbImageToSIFTKeyPointSetFilterOutputAscii
+		${INPUTDATA}/polygon.png
+		${INPUTDATA}/polygon-start.kml
+		${TEMP}/feTvImageFittingPolygonListFilter_Output.kml
+		5 10
+)
+
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
 otbAlignImageToPath.cxx
@@ -949,6 +960,7 @@ otbImageToSIFTKeyPointSetFilterOutputAscii.cxx
 otbImageToHessianDeterminantImageFilterNew.cxx
 otbImageToHessianDeterminantImageFilter.cxx
 otbImageFittingPolygonListFilterNew.cxx
+otbImageFittingPolygonListFilter.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

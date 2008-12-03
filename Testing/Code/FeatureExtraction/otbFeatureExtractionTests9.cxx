@@ -36,5 +36,5 @@ REGISTER_TEST(otbImageToSIFTKeyPointSetFilterOutputAscii);
 REGISTER_TEST(otbImageToHessianDeterminantImageFilterNew);
 REGISTER_TEST(otbImageToHessianDeterminantImageFilter);
 REGISTER_TEST(otbImageFittingPolygonListFilterNew);
-
+REGISTER_TEST(otbImageFittingPolygonListFilter);
 }

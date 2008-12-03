@@ -20,6 +20,8 @@
 #include "otbImageFittingPolygonListFilter.h"
 #include "otbPolygon.h"
 #include "otbImage.h"
+#include "otbVectorData.h"
+#include "otbVectorDataFileReader.h"
 #include <fstream>
 #include <cstdlib>
 
@@ -46,7 +48,29 @@ int otbImageFittingPolygonListFilter(int argc, char * argv[])
   
   
   //Read the original polygon list (kml file)
+  typedef otb::VectorData<> VectorDataType;
+  typedef VectorDataType::DataTreeType         DataTreeType;
+  typedef itk::PreOrderTreeIterator<DataTreeType>       TreeIteratorType;
+  typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
+  VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
+ 
+  readerVector->SetFileName(polyFileName);
+  readerVector->Update();
+
+  typedef otb::ObjectList<PolygonType> PolygonListType;
+  PolygonListType::Pointer polygonList = PolygonListType::New();
   
+  TreeIteratorType it(vectorReader->GetOutput()->GetDataTree());
+  it.GoToBegin();
+    
+  while(!it.IsAtEnd())
+  {
+    DataNodePointerType dataNode = it.Get();
+    if(dataNode->IsPolygonFeature())
+    {
+      polygonList->PushBack(dataNode->GetPolygonExteriorRing());
+    }
+  }
   
   //Fit the polygons on the image
   typedef otb::ImageFittingPolygonListFilter<PolygonType,ImageType> FittingPolygonType;
@@ -56,11 +80,41 @@ int otbImageFittingPolygonListFilter(int argc, char * argv[])
   fittingPolygon->SetInputImage(canny->GetOutput());
   fittingPolygon->SetRadius(fittingRadius);
   fittingPolygon->SetNumberOfIterations(fittingIters);
-//   fittingPolygon->Update();
+  fittingPolygon->Update();
 
   
   //Read the improved polygon list (kml file)
+  VectorDataType::Pointer data = VectorDataType::New();
+ 
+  DataNodeType::Pointer document = DataNodeType::New();
+  DataNodeType::Pointer folder = DataNodeType::New();
+  DataNodeType::Pointer polygon = DataNodeType::New();
   
+
+  document->SetNodeType(otb::DOCUMENT);
+  folder->SetNodeType(otb::FOLDER);
+  polygon->SetNodeType(otb::POLYGON);
+
+  document->SetNodeId("DOCUMENT");
+  folder->SetNodeId("FOLDER");
+  polygon->SetNodeId("POLYGON");
+
+  DataNodeType::Pointer root = data->GetDataTree()->GetRoot()->Get();
+
+  data->GetDataTree()->Add(document,root);
+  data->GetDataTree()->Add(folder,document);
+
+  ListIteratorType listIt = fittingPolygon->GetOutput()->Begin();
+  while(listIt  != fittingPolygon->GetOutput()->End())
+  {
+    polygon->SetPolygon(listIt.Get());
+    data->GetDataTree()->Add(polygon,folder);
+  }
+  
+  typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
+  writer->SetFileName(outFileName);
+  writer->SetInput(data);
+  writer->Update();
   
   return EXIT_SUCCESS;
 }
