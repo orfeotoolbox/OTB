@@ -15,3 +15,6 @@ Guillaume Borrut (CS)
 Mathieu Deltorre (CS)
 Vincent Schut (Sarvision)
 David Dubois
+Jan Wegner
+Otmane Lahlou (CS)
+
