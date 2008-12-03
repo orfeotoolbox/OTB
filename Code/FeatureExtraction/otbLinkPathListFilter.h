@@ -34,6 +34,11 @@ namespace otb
  *  Please note that this filter may invert the order of the vertices in the newly created path.
  *
  *  This filter is part of the road extraction framework.
+ * 
+   * \sa ParallelLinePathListFilter
+ * 
+   * \ingroup PathFilters
+ * 
  */
 template <class TPath>
 class ITK_EXPORT LinkPathListFilter

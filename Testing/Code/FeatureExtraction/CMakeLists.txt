@@ -838,11 +838,50 @@ ADD_TEST(feTvImageToHessianDeterminantImageFilter ${FEATUREEXTRACTION_TESTS9}
 	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
 	 ${TEMP}/feTvImageToHessianDeterminantImageFilterOutput.tif
 	 1.5
-	 )
+		 )
+
+# -------            otb::ImageToSURFKeyPointSetFilterNew   -------------
+
+ADD_TEST(feTuImageToSURFKeyPointSetFilterNew ${FEATUREEXTRACTION_TESTS9} 
+         otbImageToSURFKeyPointSetFilterNew)
+
+
+ADD_TEST(feTvImageToSURFKeyPointSetFilterSceneOutputImage ${FEATUREEXTRACTION_TESTS9}
+--compare-image ${EPSILON}  
+		${BASELINE}/feTvImageToSURFKeyPointSetFilterSceneImageOutput.png
+		${TEMP}/feTvImageToSURFKeyPointSetFilterSceneImageOutput.png
+         otbImageToSURFKeyPointSetFilterOutputImage
+		${INPUTDATA}/scene.png
+		${TEMP}/feTvImageToSURFKeyPointSetFilterSceneImageOutput.png
+		1 3 
+)
+
+ADD_TEST(feTvImageToSURFKeyPointSetFilterSceneOutputAscii ${FEATUREEXTRACTION_TESTS9}
+--compare-ascii ${EPS}
+		${BASELINE_FILES}/feTvImageToSURFKeyPointSetFilterSceneKeysOutput.txt
+		${TEMP}/feTvImageToSURFKeyPointSetFilterSceneKeysOutput.txt
+         otbImageToSURFKeyPointSetFilterOutputAscii
+		${INPUTDATA}/scene.png
+		${TEMP}/feTvImageToSURFKeyPointSetFilterSceneKeysOutput.txt
+		1 3 
+)
 	 
 # -------            otb::ImageFittingPolygonListFilter   -------------
 ADD_TEST(feTuImageFittingPolygonListFilterNew ${FEATUREEXTRACTION_TESTS9} 
          otbImageFittingPolygonListFilterNew)
+ADD_TEST(feTvImageFittingPolygonListFilter ${FEATUREEXTRACTION_TESTS9}
+--compare-ascii ${EPS}
+		${BASELINE_FILES}/feTvImageFittingPolygonListFilter_Output.kml
+		${TEMP}/feTvImageFittingPolygonListFilter_Output.kml
+         otbImageFittingPolygonListFilter
+		${INPUTDATA}/polygon.png
+		${INPUTDATA}/polygon-start.kml
+		${TEMP}/feTvImageFittingPolygonListFilter_Output.kml
+		5 10
+)
+
+	
+				     
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
@@ -948,7 +987,11 @@ otbImageToSIFTKeyPointSetFilterOutputImage.cxx
 otbImageToSIFTKeyPointSetFilterOutputAscii.cxx
 otbImageToHessianDeterminantImageFilterNew.cxx
 otbImageToHessianDeterminantImageFilter.cxx
+otbImageFittingPolygonListFilter.cxx
 otbImageFittingPolygonListFilterNew.cxx
+otbImageToSURFKeyPointSetFilterNew.cxx	
+otbImageToSURFKeyPointSetFilterOutputImage.cxx
+otbImageToSURFKeyPointSetFilterOutputAscii.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

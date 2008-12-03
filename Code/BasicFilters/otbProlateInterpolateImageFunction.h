@@ -36,6 +36,9 @@ template<class TInput, class TOutput>
 class ProlateFunction
 {
  public:
+  ProlateFunction(){ m_Radius = 1; };
+  ~ProlateFunction(){};
+
   typedef std::vector<double> VectorType;
   // Accessors definitions
   void SetRadius(unsigned int rad){ m_Radius = rad; }

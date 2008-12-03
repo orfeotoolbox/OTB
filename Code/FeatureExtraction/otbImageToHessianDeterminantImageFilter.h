@@ -9,7 +9,7 @@ Version:   $Revision$
 Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
-Copyright (c) CS Systèmes d'Information. All rights reserved.
+Copyright (c) CS Systemes d'information. All rights reserved.
 See CSCopyright.txt for details.
 
 This software is distributed WITHOUT ANY WARRANTY; without even 
@@ -26,6 +26,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkUnaryFunctorImageFilter.h"
 #include "otbImage.h"
 #include "itkFixedArray.h"
+#include "otbMath.h"
 
 
 
@@ -55,7 +56,8 @@ namespace otb
 	   */
 	  inline TOutput operator()(const TInput& input)
 	    {
-	      return static_cast<TOutput>(input[0]*input[1]-input[2]*input[2]);
+	      return static_cast<TOutput>(input[0]*input[1] - input[2]*input[2]);
+	        
 	    }
 	  
 	  bool operator !=(const HessianDeterminant) const
