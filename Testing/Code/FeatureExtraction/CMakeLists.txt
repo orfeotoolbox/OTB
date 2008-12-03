@@ -848,7 +848,7 @@ ADD_TEST(feTvImageFittingPolygonListFilter ${FEATUREEXTRACTION_TESTS9}
 --compare-ascii ${EPS}
 		${BASELINE_FILES}/feTvImageFittingPolygonListFilter_Output.kml
 		${TEMP}/feTvImageFittingPolygonListFilter_Output.kml
-         otbImageToSIFTKeyPointSetFilterOutputAscii
+         otbImageFittingPolygonListFilter
 		${INPUTDATA}/polygon.png
 		${INPUTDATA}/polygon-start.kml
 		${TEMP}/feTvImageFittingPolygonListFilter_Output.kml

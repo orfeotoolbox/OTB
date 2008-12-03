@@ -50,7 +50,6 @@ int otbImageFittingPolygonListFilter(int argc, char * argv[])
   CannyFilterType::Pointer canny = CannyFilterType::New();
   canny->SetInput(reader->GetOutput());
   
-  
   //Read the original polygon list (kml file)
   typedef otb::VectorData<> VectorDataType;
   typedef VectorDataType::DataTreeType         DataTreeType;
@@ -63,6 +62,7 @@ int otbImageFittingPolygonListFilter(int argc, char * argv[])
   readerVector->SetFileName(polyFileName);
   readerVector->Update();
 
+  //Copy the polygons of the data tree in a polygon list
   typedef otb::ObjectList<PolygonType> PolygonListType;
   PolygonListType::Pointer polygonList = PolygonListType::New();
   
@@ -76,6 +76,7 @@ int otbImageFittingPolygonListFilter(int argc, char * argv[])
     {
       polygonList->PushBack(dataNode->GetPolygonExteriorRing());
     }
+    ++it;
   }
   
   //Fit the polygons on the image
@@ -89,21 +90,17 @@ int otbImageFittingPolygonListFilter(int argc, char * argv[])
   fittingPolygon->Update();
 
   
-  //Read the improved polygon list (kml file)
+  //Write the improved polygon list (kml file)
   VectorDataType::Pointer data = VectorDataType::New();
  
   DataNodeType::Pointer document = DataNodeType::New();
   DataNodeType::Pointer folder = DataNodeType::New();
-  DataNodeType::Pointer polygon = DataNodeType::New();
   
-
   document->SetNodeType(otb::DOCUMENT);
   folder->SetNodeType(otb::FOLDER);
-  polygon->SetNodeType(otb::FEATURE_POLYGON);
 
   document->SetNodeId("DOCUMENT");
   folder->SetNodeId("FOLDER");
-  polygon->SetNodeId("FEATURE_POLYGON");
 
   DataNodeType::Pointer root = data->GetDataTree()->GetRoot()->Get();
 
@@ -114,8 +111,12 @@ int otbImageFittingPolygonListFilter(int argc, char * argv[])
   ListIteratorType listIt = fittingPolygon->GetOutput()->Begin();
   while(listIt  != fittingPolygon->GetOutput()->End())
   {
+    DataNodeType::Pointer polygon = DataNodeType::New();
+    polygon->SetNodeType(otb::FEATURE_POLYGON);
+    polygon->SetNodeId("FEATURE_POLYGON");
     polygon->SetPolygonExteriorRing(listIt.Get());
     data->GetDataTree()->Add(polygon,folder);
+    ++listIt;
   }
   
   typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
