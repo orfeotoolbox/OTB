@@ -18,7 +18,7 @@
 #ifndef __otbImageWidgetBase_txx
 #define __otbImageWidgetBase_txx
 
-
+#include "otbConfigure.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkMacro.h"
 #include "otbMacro.h"

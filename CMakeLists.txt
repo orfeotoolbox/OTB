@@ -230,13 +230,6 @@ IF(OTB_USE_VISU_GUI)
         #-------------------------------
 	OPTION(OTB_GL_USE_ACCEL "Use video card acceleration." ON)
 	MARK_AS_ADVANCED(OTB_GL_USE_ACCEL)
-	IF(OTB_GL_USE_ACCEL)
-          # Add compiler option 
-          ADD_DEFINITIONS(-DOTB_GL_USE_ACCEL)
-	ENDIF(OTB_GL_USE_ACCEL)
-
-
-	
         
         #-------------------------------
         # FLTK Library
