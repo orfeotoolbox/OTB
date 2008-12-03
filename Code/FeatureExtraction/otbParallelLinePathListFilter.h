@@ -24,9 +24,26 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class ParallelLinePathListFilter
- *  \brief Description needed
- *  
+ *  \brief otbParallelLinePathListFilter detects parallel lines in imagery. The required input data are a pathlist object.
  *
+ * The class consists of three basic functions that determine the angle between two lines, 
+ * the distance between the lines and the common part of the lines. First, all input lines 
+ * are checked if there is a second line running in the same direction. Thereafter, all line 
+ * pairs that already fulfilled the angular criterion are checked whether they are close to 
+ * each other or not, i.e. the orthogonal distance between them is calculated. Finally, it 
+ * has to be verified if the two lines have a common part since lines may fulfil the two 
+ * first criteria but be located in different parts of the image. In order to adapt the 
+ * detection algorithm to the user’s needs, the thresholds AngularThreshold, DistanceThreshold 
+ * and CommonDistanceThreshold can be set.
+ * 
+ * A possible processing chain would be to extract lines with a line detector, to convert the 
+ * result to pathlist objects, to link short line segments with the otbLinkPathListFilter to 
+ * longer lines and to finally detect all parallel long lines. 
+ *
+   * \sa LinkPathListFilter 
+ * 
+   * \ingroup PathFilters
+ * 
  */
 template <class TPath>
 class ITK_EXPORT ParallelLinePathListFilter
