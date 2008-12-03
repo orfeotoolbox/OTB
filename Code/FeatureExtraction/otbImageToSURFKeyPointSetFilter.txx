@@ -9,7 +9,7 @@ Version:   $Revision$
 Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
-Copyright (c) CS Systemes d'information. All rights reserved.
+Copyright (c) CS systèmes d'information. All rights reserved.
 See CSCopyright.txt for details.
 
 This software is distributed WITHOUT ANY WARRANTY; without even 
@@ -183,7 +183,7 @@ namespace otb
 		  
 		  radius.Fill(GetMin((int)(this->GetInput(0)->GetLargestPossibleRegion().GetSize()[0] - keyPoint[0]),
 				     (int)(this->GetInput(0)->GetLargestPossibleRegion().GetSize()[1] - keyPoint[1]),
-				     (int)(6*keyPoint[2]) ) ) ;
+				     (int)(6*sigmaDetected) ) ) ; // changer le sigma detected par keypoint[2]
 		  
 		  
 
@@ -215,6 +215,7 @@ namespace otb
 							     this->GetInput(0)->GetLargestPossibleRegion());
 		  itNeighDescriptor.SetLocation(it.GetIndex());
 		  VectorType descriptor;
+		  descriptor.resize(64);
 		  //descriptor = ComputeDescriptor(itNeighDescriptor.GetNeighborhood(),keyPoint[3],keyPoint[2]);
 		  descriptor = ComputeDescriptor(itNeighDescriptor.GetNeighborhood(),orientationDetected,sigmaDetected);
 
@@ -359,13 +360,14 @@ namespace otb
 	  // Haar Wavelets responses accumulated in an histogram with Pi/3 precison
 	  if (( col > pas && col < Largeur - pas ) && ( raw > pas && raw < Largeur - pas) )
 	  {
+	    
 	    w  = vcl_exp(-((col-rayon)*(col-rayon) + (raw-rayon)*(raw-rayon))/(2*2.5*2.5*S*S) );
 	    pt[0] = (neigh[(col+pas) + raw * Largeur] - neigh[(col-pas) + raw *Largeur ]) * w ;
 	    pt[1] = (neigh[col + (raw+pas)* Largeur ] - neigh[col + (raw-pas)*Largeur]) * w;
 	    
 	    if (pt[0] + pt[1] != 0)                              
 	    {
-	      angle = atan( pt[0]/pt[1] )*( Pi/3.1415);
+	      angle = atan( pt[0]/pt[1] )*( Pi/M_PI);
 	      if(angle < 0 ) 
 		angle += 2*Pi;
 	      
