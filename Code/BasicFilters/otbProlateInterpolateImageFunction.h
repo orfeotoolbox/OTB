@@ -36,6 +36,9 @@ template<class TInput, class TOutput>
 class ProlateFunction
 {
  public:
+  ProlateFunction(){ m_Radius = 1; };
+  ~ProlateFunction(){};
+
   typedef std::vector<double> VectorType;
   // Accessors definitions
   void SetRadius(unsigned int rad){ m_Radius = rad; }
@@ -87,9 +90,7 @@ class ProlateFunction
   static const unsigned int m_OriginalProfileSize;
   /** Original prolate profil */
   static const double m_OriginalProfile[721]; 
- protected:
-  ProlateFunction(){ m_Radius = 1; };
-  ~ProlateFunction(){};
+
 }; 
  
 }//namespace Function
