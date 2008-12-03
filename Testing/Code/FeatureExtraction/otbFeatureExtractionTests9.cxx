@@ -35,6 +35,8 @@ REGISTER_TEST(otbImageToSIFTKeyPointSetFilterOutputAscii);
 //REGISTER_TEST(otbImageToSIFTKeyPointSetFilterValid);
 REGISTER_TEST(otbImageToHessianDeterminantImageFilterNew);
 REGISTER_TEST(otbImageToHessianDeterminantImageFilter);
-REGISTER_TEST(otbImageFittingPolygonListFilterNew);
-
+REGISTER_TEST(otbImageToSURFKeyPointSetFilterNew); 
+REGISTER_TEST(otbImageToSURFKeyPointSetFilterOutputImage);
+REGISTER_TEST(otbImageToSURFKeyPointSetFilterOutputAscii);
+//REGISTER_TEST(otbImageToSURFKeyPointSetFilterDistanceMap); 
 }

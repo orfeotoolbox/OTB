@@ -839,10 +839,36 @@ ADD_TEST(feTvImageToHessianDeterminantImageFilter ${FEATUREEXTRACTION_TESTS9}
 	 ${TEMP}/feTvImageToHessianDeterminantImageFilterOutput.tif
 	 1.5
 	 )
-	 
-# -------            otb::ImageFittingPolygonListFilter   -------------
-ADD_TEST(feTuImageFittingPolygonListFilterNew ${FEATUREEXTRACTION_TESTS9} 
-         otbImageFittingPolygonListFilterNew)
+
+# -------            otb::ImageToSURFKeyPointSetFilterNew   -------------
+
+ADD_TEST(feTuImageToSURFKeyPointSetFilterNew ${FEATUREEXTRACTION_TESTS9} 
+         otbImageToSURFKeyPointSetFilterNew)
+
+
+ADD_TEST(feTvImageToSURFKeyPointSetFilterSceneOutputImage ${FEATUREEXTRACTION_TESTS9}
+--compare-image ${EPSILON}  
+		${BASELINE}/feTvImageToSURFKeyPointSetFilterSceneImageOutput.png
+		${TEMP}/feTvImageToSURFKeyPointSetFilterSceneImageOutput.png
+         otbImageToSURFKeyPointSetFilterOutputImage
+		${INPUTDATA}/scene.png
+		${TEMP}/feTvImageToSURFKeyPointSetFilterSceneImageOutput.png
+		1 3 
+)
+
+ADD_TEST(feTvImageToSURFKeyPointSetFilterSceneOutputAscii ${FEATUREEXTRACTION_TESTS9}
+--compare-ascii ${EPS}
+		${BASELINE_FILES}/feTvImageToSURFKeyPointSetFilterSceneKeysOutput.txt
+		${TEMP}/feTvImageToSURFKeyPointSetFilterSceneKeysOutput.txt
+         otbImageToSURFKeyPointSetFilterOutputAscii
+		${INPUTDATA}/scene.png
+		${TEMP}/feTvImageToSURFKeyPointSetFilterSceneKeysOutput.txt
+		1 3 
+)
+
+	
+				     
+
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
@@ -948,7 +974,10 @@ otbImageToSIFTKeyPointSetFilterOutputImage.cxx
 otbImageToSIFTKeyPointSetFilterOutputAscii.cxx
 otbImageToHessianDeterminantImageFilterNew.cxx
 otbImageToHessianDeterminantImageFilter.cxx
-otbImageFittingPolygonListFilterNew.cxx
+otbImageToSURFKeyPointSetFilterNew.cxx	
+otbImageToSURFKeyPointSetFilterOutputImage.cxx
+otbImageToSURFKeyPointSetFilterOutputAscii.cxx
+#otbImageToSURFKeyPointSetFilterDistanceMap.cxx	
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
