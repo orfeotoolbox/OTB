@@ -59,12 +59,31 @@ ADD_TEST(dmTvNearestPointDeformationFieldGenerator ${DISPARITYMAP_TESTS1}
 ADD_TEST(dmTuNCCRegistrationFilterNew ${DISPARITYMAP_TESTS1} 
 	 otbNCCRegistrationFilterNew)
 
+ADD_TEST(dmTvNCCRegistrationFilter ${DISPARITYMAP_TESTS1} 
+--compare-image ${EPSILON}
+		${BASELINE}/dmNCCRegistrationFilterOutput.tif
+		${TEMP}/dmNCCRegistrationFilterOutput.tif
+		otbNCCRegistrationFilter
+		${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
+		${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub_warped_sinus.tif
+		${TEMP}/dmNCCRegistrationFilterOutput.tif
+		5 1.0 2)
+
 # -------            otb::MIRegistrationFilter   ----------
 
 ADD_TEST(dmTuMIRegistrationFilterNew ${DISPARITYMAP_TESTS1} 
 	 otbMIRegistrationFilterNew)
 
-       
+ADD_TEST(dmTvMIRegistrationFilter ${DISPARITYMAP_TESTS1} 
+--compare-image ${EPSILON}
+		${BASELINE}/dmMIRegistrationFilterOutput.tif
+		${TEMP}/dmMIRegistrationFilterOutput.tif
+		otbMIRegistrationFilter
+		${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
+		${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub_warped_sinus.tif
+		${TEMP}/dmMIRegistrationFilterOutput.tif
+		5 1.0 2)
+
 # -------  otb::NNearestPointsLinearInterpolateDeformationFieldGenerator   ----------
 
 ADD_TEST(dmTuNNearestPointsLinearInterpolateDeformationFieldGeneratorNew ${DISPARITYMAP_TESTS1} 
@@ -332,7 +351,9 @@ SET(BasicDisparityMap_SRCS1
 otbDisparityMapEstimationMethodNew.cxx
 otbDisparityMapEstimationMethod.cxx
 otbNCCRegistrationFilterNew.cxx
+otbNCCRegistrationFilter.cxx
 otbMIRegistrationFilterNew.cxx
+otbMIRegistrationFilter.cxx
 otbPointSetToDeformationFieldGeneratorNew.cxx
 otbNearestPointDeformationFieldGeneratorNew.cxx
 otbNearestPointDeformationFieldGenerator.cxx

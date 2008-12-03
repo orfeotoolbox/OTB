@@ -67,14 +67,6 @@ int otbProlateValidationTest(int argc, char * argv[])
   std::cout<<"Radius : "<<prolate->GetRadius()<<std::endl;
   std::cout<<"Factor : "<<factor<<std::endl;
 
-  /*
-    otb::Function::ProlateFunction<double,double> function; ///= prolate->GetFunction();
-    function.SetRadius(rad);
-    std::cout<<"Originalprofilsize: "<< function.GetOriginalProfileSize()<<std::endl;
-    std::cout<<"Energy : "<<function.ComputeEnergy(factor)<<std::endl;
-    std::cout<<"Radius : "<<function.GetRadius()<<std::endl;
-    std::cout<<"Factor : "<<factor<<std::endl;
-  */
   proresampler->SetInput(reader->GetOutput());
   proresampler->SetInterpolator(prolate);
   StreamingResampleImageFilterType::SizeType size;
@@ -88,18 +80,6 @@ int otbProlateValidationTest(int argc, char * argv[])
   prowriter->SetFileName(outfname);
   prowriter->Update();
 
-  /*
-  prowriter     = WriterType::New();
-  proresampler = StreamingResampleImageFilterType::New();
-  proresampler->SetSize(size);
-  proresampler->SetOutputSpacing(newSpacing);
-  proresampler->SetOutputOrigin(origin);
-  proresampler->SetInput(reader->GetOutput());
-  def->SetInputImage(reader->GetOutput());
-  proresampler->SetInterpolator(def);
-  prowriter->SetInput(proresampler->GetOutput());
-  prowriter->SetFileName(defaultoutfname);
-  prowriter->Update();
-  */
+
   return EXIT_SUCCESS;
 }
