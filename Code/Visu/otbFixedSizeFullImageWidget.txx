@@ -121,7 +121,7 @@ FixedSizeFullImageWidget<TPixel>
 ::UpdateOpenGlBufferedRegion(void)
 {
   //otbMsgDebugMacro(<<"UpdateOpenGlBufferedRegion: "<<this->GetViewedRegion());
-  this->SetBufferedRegion(this->GetViewedRegion());
+  this->SetBufferedRegion((this->GetInput()->GetLargestPossibleRegion()));
 }
 } // end namespace otb
 #endif
