@@ -341,17 +341,17 @@ namespace otb
 
     // Gradient orientation histogram
     double angle;
-    int bin = 0 , Pi = 180;    
-    int LengthBin = 60;
-    int NbBins = (2*Pi/LengthBin);
-    double tab[NbBins*2];
-    
-    
+    int bin        = 0 ;
+    int Pi         = 180;    
+    int LengthBin  = 60;
+    int NbBins     = (2*Pi/LengthBin);
+    std::vector<double> tab(NbBins*2 , 0.);
+
     while (i < (int)neigh.Size())
       {
 	col = i%Largeur - rayon ;
 	raw = i/Largeur - rayon ;
-	dist = sqrt(col *col  + raw * raw );
+	dist = vcl_sqrt(col *col  + raw * raw );
 	col +=rayon; 
 	raw +=rayon;                           // Backup to the image coordinate axes 
 	
@@ -391,7 +391,7 @@ namespace otb
     
     //Detection de l'orientation du point courant 
     for (int i = 0 ; i < NbBins*2  ; i = i+2){
-      length = sqrt( tab[i]*tab[i] + tab[i+1]*tab[i+1] );
+      length = vcl_sqrt( tab[i]*tab[i] + tab[i+1]*tab[i+1] );
       if( length > max){
 	max = length ;
 	indice = i/2;
@@ -442,8 +442,7 @@ namespace otb
     ParamVec[3] = 0;
     ParamVec[4] = 0;
     eulerTransform->SetParameters(ParamVec);
-    
-    int accumulator = 0;
+
     while (i < (int)neigh.Size())
       {
 	col = i % Largeur ;
@@ -469,10 +468,8 @@ namespace otb
 		if(raw==0) raw =+1;
 		if(col ==0) col +=1;
  		
-		xx = static_cast<int> (pSrc[1]/rayon); 
-		yy = static_cast<int> (pSrc[0]/rayon);
-		
-		//Nbin = static_cast<int> ( vcl_floor(xx + 4 * yy) )  ;
+		xx = static_cast<int> (pSrc[1]/rayon);    
+		yy = static_cast<int> (pSrc[0]/rayon); 
 		Nbin =  xx + 4*yy ;
 		
 		if( Nbin < 16)           //because 64 descriptor length 
@@ -481,8 +478,7 @@ namespace otb
 		    double distanceYcompensee_2 = (pSrc[1] - r)*(pSrc[1] - r);
 		    
 		    w = vcl_exp(-( distanceXcompensee_2 + distanceYcompensee_2 ) / (2*3.3*3.3*S*S) );
-		    //w  = vcl_exp(-( (pSrc[0] - r)*(pSrc[0] -r) + (pSrc[1] - r)*(pSrc[1] - r) )/(2*3.3*3.3/**S*S*/));
-		    
+		    		    
 		    dx = 0.5 * (neigh[(col+pas) + raw * Largeur] - neigh[(col-pas) + raw *Largeur]) * w ;
 		    dy = 0.5 * (neigh[col + (raw+ pas)* Largeur] - neigh[col + (raw-pas)*Largeur])  * w;
 		    
@@ -491,19 +487,11 @@ namespace otb
 		    descriptorVector[4*Nbin+2] += vcl_abs(dx) ;
 		    descriptorVector[4*Nbin+3] += vcl_abs(dy) ;
 		  }
-		else
-		  {
-		    accumulator++;
-		    //std::cout << " xx "<< xx  <<  " yy  " << yy  << " Nbin " << Nbin  << " rayon "<< rayon << " pSrc[1] " << pSrc[1] << " pSrc[0] " <<pSrc[0] << " pDst[0] " << pDst[0] <<" pDst[1] "  << pDst[1]  << " Largeur "<< Largeur << std::endl;
-		  }
 	      }
 	  }
 	i++;
       }
-    
-    if(accumulator > 0 ) std::cout << " accumulator  "<< accumulator << " / "<< i << std::endl;
-    
-    
+          
     double accu = 0;
     for (int i = 0 ; i < 64 ;  i++)
       accu += descriptorVector[i]*descriptorVector[i];
