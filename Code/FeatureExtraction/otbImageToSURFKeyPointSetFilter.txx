@@ -136,8 +136,8 @@ namespace otb
 				     <<m_determinantImage->GetLargestPossibleRegion().GetSize() );
 	  
 
-	/** For each octave, we fill the imageList for the extremum search*/
-	m_ImageList->PushBack(m_determinantImage);
+	  /** For each octave, we fill the imageList for the extremum search*/
+	  m_ImageList->PushBack(m_determinantImage);
       }
      
       /*----------------------------------------------------*/
@@ -280,10 +280,10 @@ namespace otb
     
     while (i!=(int)neigh.Size()){
       if(i != centerIndex ){
-	if( centerValue> neigh[i] & flag_max == 0)   max = true;  
+	if( centerValue> neigh[i] && flag_max == 0)   max = true;  
 	else { max = false;  flag_max = 1; }
 	
-	if(centerValue < neigh[i] & flag_min == 0 & centerValue <0)   min = true; 
+	if(centerValue < neigh[i] && flag_min == 0 && centerValue <0)   min = true; 
 	else {  min = false; flag_min = 1; }
       }
       ++i;
@@ -307,10 +307,10 @@ namespace otb
     
     while (i!=(int)neigh.Size()){
 
-      if( CenterValue> neigh[i] & flag_max == 0)   max = true;  
+      if( CenterValue> neigh[i] && flag_max == 0)   max = true;  
       else { max = false;  flag_max = 1; }
 	
-      if(CenterValue < neigh[i] & flag_min == 0)   min = true; 
+      if(CenterValue < neigh[i] && flag_min == 0)   min = true; 
       else {  min = false; flag_min = 1; }
       
       ++i;
