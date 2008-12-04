@@ -49,11 +49,11 @@ public:
 
   itkGetMacro( Lon, double );
   itkGetMacro( Lat, double );
-  itkGetMacro( PlaceName, string );
+  itkGetMacro( PlaceName, std::string );
 
   itkSetMacro( Lon, double );
   itkSetMacro( Lat, double );
-  itkSetMacro( PlaceName, string );
+  itkSetMacro( PlaceName, std::string );
 
   virtual bool Evaluate();
 
@@ -71,7 +71,7 @@ private:
 
   double m_Lon;
   double m_Lat;
-  string m_PlaceName;
+  std::string m_PlaceName;
 
 };
 

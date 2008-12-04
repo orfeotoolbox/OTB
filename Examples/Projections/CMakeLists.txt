@@ -18,6 +18,10 @@ TARGET_LINK_LIBRARIES(SensorModelExample OTBProjections OTBCommon OTBIO ITKCommo
 ADD_EXECUTABLE(OrthoRectificationExample OrthoRectificationExample.cxx )
 TARGET_LINK_LIBRARIES(OrthoRectificationExample OTBProjections OTBCommon OTBIO ITKCommon ITKIO)
 
+IF( OTB_USE_CURL )
+ADD_EXECUTABLE(PlaceNameToLonLat PlaceNameToLonLat.cxx )
+TARGET_LINK_LIBRARIES(PlaceNameToLonLat OTBProjections OTBCommon OTBIO ITKCommon ITKIO ${CURL_LIBRARY} tinyXML)
+ENDIF( OTB_USE_CURL )
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
