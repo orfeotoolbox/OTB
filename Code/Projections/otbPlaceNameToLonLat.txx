@@ -54,8 +54,8 @@ PlaceNameToLonLat
 
 bool PlaceNameToLonLat::Evaluate()
 {
-  string::size_type loc = m_PlaceName.find(" ", 0 );
-  while (loc != string::npos)
+  std::string::size_type loc = m_PlaceName.find(" ", 0 );
+  while (loc != std::string::npos)
   {
     m_PlaceName.replace(loc, 1, "+");
     loc = m_PlaceName.find(" ", loc);
@@ -100,6 +100,21 @@ bool PlaceNameToLonLat::Evaluate()
   return true;
 }
 
+
+static size_t
+curlHandlerWriteMemoryCallback(void *ptr, size_t size, size_t nmemb,
+  void *data)
+{
+  register int realsize = (int)(size * nmemb);
+
+  std::vector<char> *vec
+    = static_cast<std::vector<char>*>(data);
+  const char* chPtr = static_cast<char*>(ptr);
+  vec->insert(vec->end(), chPtr, chPtr + realsize);
+
+  return realsize;
+}
+
 void PlaceNameToLonLat::RetrieveXML(std::ostringstream& urlStream)
 {
   
@@ -109,7 +124,7 @@ void PlaceNameToLonLat::RetrieveXML(std::ostringstream& urlStream)
   FILE* output_file = fopen("out.xml","w");
   curl = curl_easy_init();
 
-  std::cout << "URL data " << urlStream.str().data() << std::endl;
+//   std::cout << "URL data " << urlStream.str().data() << std::endl;
 
 
   char url[256];
@@ -117,7 +132,13 @@ void PlaceNameToLonLat::RetrieveXML(std::ostringstream& urlStream)
 
 //   std::cout << url << std::endl;
   if(curl) {
+    std::vector<char> chunk;
     curl_easy_setopt(curl, CURLOPT_URL, url);
+    /*
+    //Step needed to handle curl without temporary file
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION,this->curlHandlerWriteMemoryCallback);
+    curl_easy_setopt(curl, CURLOPT_FILE, (void *)&chunk);
+    */
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, output_file);
     res = curl_easy_perform(curl);
 
