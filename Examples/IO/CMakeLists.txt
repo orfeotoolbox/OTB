@@ -61,6 +61,11 @@ TARGET_LINK_LIBRARIES(DEMToImageGenerator OTBProjections OTBIO OTBCommon ITKComm
 ADD_EXECUTABLE(DEMToOrthoImageGenerator DEMToOrthoImageGenerator.cxx )
 TARGET_LINK_LIBRARIES(DEMToOrthoImageGenerator OTBProjections OTBIO OTBCommon ITKCommon ITKIO otbossim )
 
+IF(ITK_USE_REVIEW)
+  ADD_EXECUTABLE(LidarToImageExample LidarToImageExample.cxx )
+  TARGET_LINK_LIBRARIES(LidarToImageExample OTBIO OTBCommon ITKCommon ITKIO otbossim )
+ENDIF(ITK_USE_REVIEW)
+
 #ADD_EXECUTABLE(ImageReadExportVTK ImageReadExportVTK.cxx )
 #TARGET_LINK_LIBRARIES(ImageReadExportVTK ITKCommon ITKIO)
 
