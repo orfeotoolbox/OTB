@@ -169,4 +169,9 @@ ENDIF(ITK_USE_REVIEW)
 ADD_EXECUTABLE(otbIOExamplesTests otbIOExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbIOExamplesTests otbossim OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBProjections ITKIO ITKAlgorithms ITKStatistics ITKCommon  ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 
+IF(ITK_USE_REVIEW)
+ADD_EXECUTABLE(otbIOExamplesTests2 otbIOExamplesTests2.cxx)
+TARGET_LINK_LIBRARIES(otbIOExamplesTests2 otbossim OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBProjections ITKIO ITKAlgorithms ITKStatistics ITKCommon  ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
+ENDIF(ITK_USE_REVIEW)
+
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

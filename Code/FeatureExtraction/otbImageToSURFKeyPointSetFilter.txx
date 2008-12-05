@@ -138,8 +138,8 @@ namespace otb
 
 	  /** For each octave, we fill the imageList for the extremum search*/
 	  m_ImageList->PushBack(m_determinantImage);
-      }
-     
+	  }
+
       /*----------------------------------------------------*/
       /*           extremum  Search over octave's scales    */
       /*----------------------------------------------------*/
@@ -351,7 +351,7 @@ namespace otb
       {
 	col = i%Largeur - rayon ;
 	raw = i/Largeur - rayon ;
-	dist = vcl_sqrt(col *col  + raw * raw );
+	dist = vcl_sqrt(static_cast<double>(col *col  + raw * raw) );
 	col +=rayon; 
 	raw +=rayon;                           // Backup to the image coordinate axes 
 	

@@ -179,14 +179,12 @@ ImageWidgetBase<TPixel>
 {
   m_Image=image;
   m_Image->UpdateOutputInformation();
-  
   SizeType size;
   size.Fill(0);
   m_BufferedRegion.SetSize(size);
   SizeType displaySize;
   displaySize[0]=this->w();
   displaySize[1]=this->h();
-  
   m_ViewedRegion.SetSize(displaySize);
   m_ViewedRegion.Crop(m_Image->GetLargestPossibleRegion());
 }
@@ -300,10 +298,14 @@ ImageWidgetBase<TPixel>
       m_ImageOverlay->SetRequestedRegion(m_BufferedRegion);
       m_ImageOverlay->PropagateRequestedRegion();
       m_ImageOverlay->UpdateOutputData();
-      RebuildOpenGlImageOverlayBuffer();
     }
   }
  
+  if(m_ImageOverlayVisible)
+  {
+    RebuildOpenGlImageOverlayBuffer();
+  }
+
   if (!this->valid())
   {
     valid(1);
@@ -322,10 +324,15 @@ ImageWidgetBase<TPixel>
   glDisable(GL_BLEND);
 
 
-  glRasterPos2i(0,0);
-
 #ifndef OTB_GL_USE_ACCEL
-  glPixelZoom(m_OpenGlIsotropicZoom, m_OpenGlIsotropicZoom);
+
+  // To be consistent with old method
+  int displayHeight = static_cast<int>(vcl_ceil(m_BufferedRegion.GetSize()[1]*m_OpenGlIsotropicZoom));
+  int viewPortOffset = 0;  
+  viewPortOffset = h()-displayHeight;
+  glRasterPos2i(0,viewPortOffset);
+
+  glPixelZoom(m_OpenGlIsotropicZoom,m_OpenGlIsotropicZoom);
 
   // display the image
   glDrawPixels(m_BufferedRegion.GetSize()[0],
@@ -426,6 +433,7 @@ ImageWidgetBase<TPixel>
       //otbMsgDebugMacro(<<"Deleting previous buffer ...");
     delete [] m_OpenGlBuffer;
   }
+  //otbMsgDebugMacro(<<"Buffered region: "<<m_BufferedRegion); 
   unsigned int bufferLenght = 4*m_BufferedRegion.GetNumberOfPixels();
   //otbMsgDebugMacro(<<"New buffer lenght: "<<bufferLenght);
   m_OpenGlBuffer = new unsigned char[bufferLenght];
