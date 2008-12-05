@@ -109,6 +109,7 @@ IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/IO)
+SET(DATA ${OTB_DATA_ROOT}/Input)
 
 SET(INPUTDATA ${OTB_SOURCE_DIR}/Examples/Data)
 SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
@@ -147,7 +148,20 @@ ADD_TEST(DEMToImageGeneratorTest ${EXE_TESTS}
 	 -0.002	
 	  ${INPUTDATA}/DEM_srtm
          )
- 
+
+IF(ITK_USE_REVIEW)
+ADD_TEST(LidarToImageExampleTest ${EXE_TESTS}
+--compare-image ${TOL}  ${BASELINE}/lidar-image-4.hdr
+                        ${TEMP}/lidar-image-4.hdr
+         LidarToImageExampleTest
+         ${DATA}/TO_core_last_zoom.las
+         ${TEMP}/lidar-image-4.hdr
+	 ${TEMP}/lidar-image-4.png
+         1.0
+         5
+         4
+         )
+ENDIF(ITK_USE_REVIEW)
 
 ADD_EXECUTABLE(otbIOExamplesTests otbIOExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbIOExamplesTests otbossim OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBProjections ITKIO ITKAlgorithms ITKStatistics ITKCommon  ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
