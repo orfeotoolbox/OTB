@@ -156,6 +156,56 @@
     return this->m_##object->Get##name(); \
 }
 
+/** Testing macro. This macro doesn't throw a exception if the called command 
+ * generate a itk::ExceptionObject object. For alls others use cases, the macro 
+ * generate a exception. */
+#define otbTestingCheckValidCommand(command) \
+  { \
+        try \
+        { \
+                command;\
+        } \
+        catch( std::bad_alloc & err )     { throw err; } \
+        catch( itk::ExceptionObject & e ) { throw e ; } \
+        catch( const std::exception & stde)   { throw stde; } \
+        catch( ... ) \
+        { \
+                ::itk::OStringStream message; \
+                message << "otb::ERROR Unknow error (catch(...) )"; \
+                ::itk::ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(),ITK_LOCATION); \
+                throw e_; \
+        } \
+        std::cout << " Testing Check Valid Command "<< #command " ok."<<std::endl; \
+   }
+
+#define otbTestingCheckUnValidCommand(command) \
+  { \
+        int result(1); \
+        try \
+        { \
+                command;\
+        } \
+        catch( std::bad_alloc & err )     { throw err; } \
+        catch( itk::ExceptionObject & e ) { std::cout << " Testing Check UnValid Command "<< #command " ok."<<std::endl; result = 0; } \
+        catch( const std::exception & stde)   { throw stde; } \
+        catch( ... ) \
+        { \
+                ::itk::OStringStream message; \
+                message << "otb::ERROR Unknow error (catch(...) )"; \
+                ::itk::ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(),ITK_LOCATION); \
+                throw e_; \
+        } \
+        if(result) \
+        { \
+                ::itk::OStringStream message; \
+                message << "otb::ERROR: The command should be run an exception."; \
+                ::itk::ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(),ITK_LOCATION); \
+                throw e_; \
+        } \
+   }
+
+ 
+
 namespace otb
 {
 
