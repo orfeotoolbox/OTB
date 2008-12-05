@@ -25,14 +25,9 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(ExtractROITest);
-REGISTER_TEST(DEMToImageGeneratorTest);
+REGISTER_TEST(LidarToImageExampleTest);
 }
-
+    
 #undef main
-#define main ExtractROITest
-#include "ExtractROI.cxx"
-
-#undef main
-#define main DEMToImageGeneratorTest
-#include "DEMToImageGenerator.cxx"
+#define main LidarToImageExampleTest
+#include "LidarToImageExample.cxx"
