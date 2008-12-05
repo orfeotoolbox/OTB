@@ -155,6 +155,7 @@ NCCRegistrationFilter<TFixedImage,TMovingImage,TDeformationField>
    
   drfp->SetRadius(radius);
 
+  this->Modified();
 }
 
 template <class TFixedImage, class TMovingImage, class TDeformationField>
