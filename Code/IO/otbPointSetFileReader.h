@@ -59,6 +59,14 @@ template<class TOutputPointSet>
     itkSetStringMacro(FileName);
     itkGetStringMacro(FileName);
     
+    /** Get Macro*/ 
+    itkGetMacro( NumberOfPoints, long int );
+    itkGetMacro( MinX, double );
+    itkGetMacro( MaxX, double );
+    itkGetMacro( MinY, double );
+    itkGetMacro( MaxY, double );
+    
+    
     virtual void GenerateOutputInformation(void);
     
     /** Does the real work. */
@@ -74,6 +82,10 @@ template<class TOutputPointSet>
     
     std::string m_FileName; // The file to be read
     long int m_NumberOfPoints;
+    double m_MinX;
+    double m_MaxX;
+    double m_MinY;
+    double m_MaxY;
     
   private:
     PointSetFileReader(const Self&); //purposely not implemented

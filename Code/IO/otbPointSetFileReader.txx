@@ -34,6 +34,10 @@ namespace otb
   ::PointSetFileReader() : otb::PointSetSource<TOutputPointSet>()
   {
     m_NumberOfPoints=-1;
+    m_MinX=0;
+    m_MaxX=0;
+    m_MinY=0;
+    m_MaxY=0;
   }
   
   template <class TOutputPointSet>
@@ -85,7 +89,10 @@ namespace otb
     otbDebugMacro(<< "Points count: " << header.GetPointRecordsCount());
 
     m_NumberOfPoints = header.GetPointRecordsCount();
-    
+    m_MinX = header.GetMinX();
+    m_MaxX = header.GetMaxX();
+    m_MinY = header.GetMinY();
+    m_MaxY = header.GetMaxY();
     ifs.close();
   
   }
@@ -176,6 +183,10 @@ namespace otb
   {
     Superclass::PrintSelf(os, indent);
     os << indent << "Number of points: " << this->m_NumberOfPoints << std::endl;
+    os << indent << "Min X: " << this->m_MinX << std::endl;
+    os << indent << "Max X: " << this->m_MaxX << std::endl;
+    os << indent << "Min Y: " << this->m_MinY << std::endl;
+    os << indent << "Max Y: " << this->m_MaxY << std::endl;
     os << indent << "m_FileName: " << this->m_FileName << "\n";
   }
   
