@@ -183,6 +183,7 @@ namespace otb
   {
     Superclass::PrintSelf(os, indent);
     os << indent << "Number of points: " << this->m_NumberOfPoints << std::endl;
+    os << indent << std::setprecision(15);
     os << indent << "Min X: " << this->m_MinX << std::endl;
     os << indent << "Max X: " << this->m_MaxX << std::endl;
     os << indent << "Min Y: " << this->m_MinY << std::endl;
