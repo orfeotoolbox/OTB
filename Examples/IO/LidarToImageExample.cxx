@@ -31,13 +31,12 @@ int main( int argc, char* argv[] )
 {
 
 
-  if(argc!=3)
+  if(argc!=6)
   {
     std::cout << argv[0] <<" <input_lidar_filename> <output_image_filename>"
-	      << " <output_resolution> <upper_left_corner_latitude>"
-              << " <size_x> <sizee_y> <number_of_stream_divisions>" 
+	      << " <output_resolution> <spline_order>"
+              << " <number_of_level>" 
 	      << std::endl;
-
     return EXIT_FAILURE;
   }
   
@@ -65,20 +64,30 @@ int main( int argc, char* argv[] )
   start[0] =  0;
   start[1] =  0; 
   
+//   std::cout << std::setprecision(15);
+//   std::cout << reader->GetMinX() << std::endl;
+//   std::cout << reader->GetMaxX() << std::endl;
+//   std::cout << reader->GetMinY() << std::endl;
+//   std::cout << reader->GetMaxY() << std::endl;
+  
   ImageType::SizeType  size;
   size[0]  = static_cast<long int >(
-         ceil((reader->GetMaxX()-reader->GetMinX()+1)/resolution)); 
+         ceil((reader->GetMaxX()-reader->GetMinX()+1)/resolution))+1; 
   size[1]  = static_cast<long int >(
-         ceil((reader->GetMaxY()-reader->GetMinY()+1)/resolution)); 
+         ceil((reader->GetMaxY()-reader->GetMinY()+1)/resolution))+1; 
 
   ImageType::PointType origin;
-  origin[0] = 0;//minX;
-  origin[1] = 0;//maxY;
+  origin[0] = reader->GetMinX();//minX;
+  origin[1] = reader->GetMaxY();//maxY;
   
   ImageType::SpacingType spacing;
   spacing[0] = resolution;
   spacing[1] = -resolution;
 
+  
+//   std::cout << "Size: " << size << std::endl;
+//   std::cout << "Origin: " << origin << std::endl;
+//   std::cout << "Spacing: " << spacing << std::endl;
   
    typedef itk::BSplineScatteredDataPointSetToImageFilter
       <PointSetType, VectorImageType> FilterType;
