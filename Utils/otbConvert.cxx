@@ -10,13 +10,13 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
- 
+
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
@@ -34,25 +34,25 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkCastImageFilter.h"
 
 template<typename OutputPixelType>
-int generic_main_convert(otb::CommandLineArgumentParseResult* parseResult) 
+int generic_main_convert(otb::CommandLineArgumentParseResult* parseResult)
 {
 
   typedef otb::VectorImage<double, 2> InputImageType;
   typedef otb::VectorImage<OutputPixelType, 2> OutputImageType;
-  
+
   typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
-  
+
   typename WriterType::Pointer writer=WriterType::New();
-  
+
   writer->SetFileName(parseResult->GetOutputImage().c_str());
-  
+
   if(parseResult->IsOptionPresent("--UseRescale"))
   {
     typedef otb::ImageFileReader<InputImageType> ReaderType;
     typename ReaderType::Pointer reader=ReaderType::New();
     reader->SetFileName(parseResult->GetInputImage().c_str());
     reader->UpdateOutputInformation();
-    
+
     typedef otb::VectorRescaleIntensityImageFilter<InputImageType, OutputImageType> RescalerType;
     typename OutputImageType::PixelType minimum;
     typename OutputImageType::PixelType maximum;
@@ -60,12 +60,12 @@ int generic_main_convert(otb::CommandLineArgumentParseResult* parseResult)
     maximum.SetSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
     minimum.Fill(itk::NumericTraits<OutputPixelType>::min());
     maximum.Fill(itk::NumericTraits<OutputPixelType>::max());
-    
+
     typename RescalerType::Pointer rescaler=RescalerType::New();
 
     rescaler->SetOutputMinimum(minimum);
     rescaler->SetOutputMaximum(maximum);
-    
+
     rescaler->SetInput(reader->GetOutput());
     writer->SetInput(rescaler->GetOutput());
     writer->Update();
@@ -75,24 +75,24 @@ int generic_main_convert(otb::CommandLineArgumentParseResult* parseResult)
     typedef otb::ImageFileReader<OutputImageType> ReaderType;
     typename ReaderType::Pointer reader=ReaderType::New();
     reader->SetFileName(parseResult->GetInputImage().c_str());
-      
+
     writer->SetInput(reader->GetOutput());
     writer->Update();
   }
-  
-  
-  
-  return 0; 
+
+
+
+  return 0;
 }
 
 int main(int argc, char * argv[])
 {
   try
-  { 
+  {
     // Parse command line parameters
-    typedef otb::CommandLineArgumentParser ParserType;	
+    typedef otb::CommandLineArgumentParser ParserType;
     ParserType::Pointer parser = ParserType::New();
-    
+
     parser->SetProgramDescription("Convert an image to a different format, eventually rescaling the data and/or changing the pixel type");
     parser->AddInputImage();
     parser->AddOutputImage();
@@ -101,33 +101,33 @@ int main(int argc, char * argv[])
 
     typedef otb::CommandLineArgumentParseResult ParserResultType;
     ParserResultType::Pointer  parseResult = ParserResultType::New();
-				
+
     try
     {
       parser->ParseCommandLine(argc,argv,parseResult);
     }
-    catch( itk::ExceptionObject & err ) 
-    { 
-      std::string descriptionException = err.GetDescription();   
-      if(descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos) 
+    catch( itk::ExceptionObject & err )
+    {
+      std::string descriptionException = err.GetDescription();
+      if(descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos)
       {
         std::cout << "WARNING : output file pixels are converted in 'unsigned char'" << std::endl;
         return EXIT_SUCCESS;
       }
-      if(descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos) 
+      if(descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos)
       {
         return EXIT_SUCCESS;
       }
       return EXIT_FAILURE;
-    }	
-    
+    }
+
     unsigned int type=1;
     if(parseResult->IsOptionPresent("--OutputPixelType"))
     {
       type=parseResult->GetParameterUInt("--OutputPixelType");
     }
-   
-     
+
+
     switch(type)
     {
       case 1:
@@ -155,24 +155,24 @@ int main(int argc, char * argv[])
         generic_main_convert<unsigned char>(parseResult);
         break;
     }
-    
-    
+
+
   }
-  catch( itk::ExceptionObject & err ) 
-  { 
-    std::cout << "Exception itk::ExceptionObject raised !" << std::endl; 
-    std::cout << err << std::endl; 
+  catch( itk::ExceptionObject & err )
+  {
+    std::cout << "Exception itk::ExceptionObject raised !" << std::endl;
+    std::cout << err << std::endl;
     return EXIT_FAILURE;
-  } 
-  catch( std::bad_alloc & err ) 
-  { 
-    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl; 
+  }
+  catch( std::bad_alloc & err )
+  {
+    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl;
     return EXIT_FAILURE;
-  } 
-  catch( ... ) 
-  { 
-    std::cout << "Unknow exception raised !" << std::endl; 
+  }
+  catch( ... )
+  {
+    std::cout << "Unknow exception raised !" << std::endl;
     return EXIT_FAILURE;
-  } 
+  }
   return EXIT_SUCCESS;
 }
