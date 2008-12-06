@@ -9,12 +9,12 @@ Version:   $Revision$
 Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
-Copyright (c) Institut Telecom ; Telecom bretagne. All rights reserved. 
+Copyright (c) Institut Telecom ; Telecom bretagne. All rights reserved.
 See ITCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,12 +31,12 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-/** 
- * Constructor 
+/**
+ * Constructor
  */
 template < class TListSample, class TMap,
 	class TSOMLearningBehaviorFunctor,
-	class TSOMNeighborhoodBehaviorFunctor >  
+	class TSOMNeighborhoodBehaviorFunctor >
 SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor>
 ::SOM()
 {
@@ -53,12 +53,12 @@ SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor
   m_RandomInit=false;
   m_Seed=123574651;
 }
-/** 
- * Destructor 
+/**
+ * Destructor
  */
 template < class TListSample, class TMap,
 	class TSOMLearningBehaviorFunctor,
-	class TSOMNeighborhoodBehaviorFunctor > 
+	class TSOMNeighborhoodBehaviorFunctor >
 SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor>
 ::~SOM()
 {
@@ -82,7 +82,7 @@ SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor
 	// typedefs
 	typedef itk::ImageRegionIteratorWithIndex<MapType> IteratorType;
 	typedef itk::ContinuousIndex<double,MapType::ImageDimension> ContinuousIndexType;
-	typedef itk::Statistics::EuclideanDistance<ContinuousIndexType> DistanceType; 
+	typedef itk::Statistics::EuclideanDistance<ContinuousIndexType> DistanceType;
 	typename DistanceType::Pointer distance = DistanceType::New();
 
 	// winner index in the map
@@ -102,14 +102,14 @@ SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor
 	localRegion.Crop( map->GetLargestPossibleRegion() );
 	IteratorType it ( map, localRegion );
 
-	// Walk through the map, and evolve each neuron depending on its 
+	// Walk through the map, and evolve each neuron depending on its
 	// distance to the winner.
 	for(it.GoToBegin();!it.IsAtEnd();++it)
 	{
 		NeuronType tempNeuron = it.Get();
 		NeuronType newNeuron ( tempNeuron.Size() );
 		double tempBeta = beta
-						/ ( 1 + 
+						/ ( 1 +
 							distance->Evaluate( ContinuousIndexType(position),
 												ContinuousIndexType(it.GetIndex()) ) );
 
@@ -129,22 +129,22 @@ SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor
 template < class TListSample, class TMap,
 	class TSOMLearningBehaviorFunctor,
 	class TSOMNeighborhoodBehaviorFunctor >
-void 
+void
 SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor>
 ::Step(unsigned int currentIteration)
-{  
+{
 	// Compute the new learning coefficient
-	double newBeta = m_BetaFunctor( 
+	double newBeta = m_BetaFunctor(
 						currentIteration, m_NumberOfIterations, m_BetaInit, m_BetaEnd );
 
 	// Compute the new neighborhood size
-	SizeType newSize = m_NeighborhoodSizeFunctor( 
+	SizeType newSize = m_NeighborhoodSizeFunctor(
 						currentIteration, m_NumberOfIterations, m_NeighborhoodSizeInit );
 
 	// update the neurons map with each example of the training set.
 	otbMsgDebugMacro(<<"Beta: "<<newBeta<<", radius: "<<newSize);
 	for ( typename ListSampleType::Iterator it = m_ListSample->Begin();
-			it != m_ListSample->End(); 
+			it != m_ListSample->End();
 			++it )
 	{
 		UpdateMap( it.GetMeasurementVector(), newBeta, newSize );
@@ -185,14 +185,14 @@ SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor
 {
 	if ( this->GetNumberOfOutputs() != 1 )
 		itkExceptionMacro( << "Number of output image should be 1" );
-	
+
 	// output neuron map fill
 	MapPointerType map = this->GetOutput(0);
 	map->Allocate();
-} 
+}
 
-/** 
- * Main computation method 
+/**
+ * Main computation method
  */
 template < class TListSample, class TMap,
 	class TSOMLearningBehaviorFunctor,
@@ -226,7 +226,7 @@ SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor
 			}
 			it.Set(neuronInit);
 		}
-	}  
+	}
 	else
 	{
 		NeuronType neuronInit ( m_ListSample->GetMeasurementVectorSize() );
@@ -244,13 +244,13 @@ SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor
 
 	this->AfterThreadedGenerateData();
 }
-/** 
- *PrintSelf method 
+/**
+ *PrintSelf method
  */
 template < class TListSample, class TMap,
 	class TSOMLearningBehaviorFunctor,
 	class TSOMNeighborhoodBehaviorFunctor >
-void 
+void
 SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {

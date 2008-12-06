@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,15 +34,15 @@ namespace otb
  * with
  * - \f$ x_s \f$ the label on site s
  * - \f$ x_t \f$ the label on site t, a neighbor of s
- * - \f$ \Phi \f$ an edge preserving function: 
+ * - \f$ \Phi \f$ an edge preserving function:
  *     \f[ \Phi(u) = \frac{u^2}{1+u^2} \f]
- * 
+ *
    * This class is meant to be used in the MRF framework with the otb::MarkovRandomFieldFilter
  *
  * \ingroup Markov
 */
-  
-template< class TInput1, class TInput2>    
+
+template< class TInput1, class TInput2>
 class ITK_EXPORT MRFEnergyEdgeFidelity : public MRFEnergy< TInput1, TInput2>
   {
   public:
@@ -50,24 +50,24 @@ class ITK_EXPORT MRFEnergyEdgeFidelity : public MRFEnergy< TInput1, TInput2>
     typedef MRFEnergy< TInput1, TInput2>                    Superclass;
     typedef itk::SmartPointer<Self>       Pointer;
     typedef itk::SmartPointer<const Self> ConstPointer;
-    
+
     typedef itk::ConstNeighborhoodIterator< TInput1 >  NeighborhoodIterator;
     typedef typename TInput1::PixelType                InputImagePixelType;
     typedef typename TInput2::PixelType                LabelledImagePixelType;
-    
+
     itkNewMacro(Self);
-    
+
     itkTypeMacro(MRFEnergyEdgeFidelity, MRFEnergy);
-    
+
     double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)
       {
 	double val1 = static_cast<double>(value1);
 	double val2 = static_cast<double>(value2);
-	
+
 	return M_SQUARE((val1 - val2))/(1+M_SQUARE(val1 - val2));
       }
-    
-    
+
+
   protected:
     // The constructor and destructor.
     MRFEnergyEdgeFidelity() {};

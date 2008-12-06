@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -61,12 +61,12 @@ namespace otb
     public:
 
       typedef unsigned char InputPixelType;
-  
+
       /** Standard class typedefs. */
       typedef TileMapImageIO            Self;
       typedef itk::ImageIOBase  Superclass;
       typedef itk::SmartPointer<Self>  Pointer;
-  
+
       /** Method for creation through the object factory. */
       itkNewMacro(Self);
 
@@ -77,32 +77,32 @@ namespace otb
    *  0-9; 0 = none, 9 = maximum. */
       itkSetMacro(CompressionLevel, int);
       itkGetMacro(CompressionLevel, int);
-  
+
       virtual void SetCacheDirectory (const char* _arg)
       {
-        if ( _arg && (_arg == this->m_CacheDirectory) ) { return;} 
+        if ( _arg && (_arg == this->m_CacheDirectory) ) { return;}
         if (_arg)
-        { 
+        {
           this->m_CacheDirectory = _arg;
           this->useCache=true;
         }
-        else 
-        { 
-          this->m_CacheDirectory = ""; 
+        else
+        {
+          this->m_CacheDirectory = "";
           this->useCache=false;
-        } 
-        this->Modified(); 
-      } 
-  
-      virtual void SetCacheDirectory (const std::string & _arg) 
-      { 
-        this->SetCacheDirectory( _arg.c_str() ); 
+        }
+        this->Modified();
+      }
+
+      virtual void SetCacheDirectory (const std::string & _arg)
+      {
+        this->SetCacheDirectory( _arg.c_str() );
         this->useCache=true;
-      } 
-          
+      }
+
       itkSetMacro(Depth, int);
       itkGetMacro(Depth, int);
-  
+
       itkGetStringMacro(CacheDirectory);
 
       /*-------- This part of the interface deals with reading data. ------ */
@@ -110,16 +110,16 @@ namespace otb
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
       virtual bool CanReadFile(const char*);
-  
+
       /** Determine the file type. Returns true if the ImageIO can stream read the specified file */
       virtual bool CanStreamRead(){  return true; };
 
       /** Set the spacing and dimention information for the set filename. */
       virtual void ReadImageInformation();
- 
+
       /** Reads the data from disk into the memory buffer provided. */
       virtual void Read(void* buffer);
-    
+
       /** Reads 3D data from multiple files assuming one slice per file. */
       virtual void ReadVolume(void* buffer);
 
@@ -143,13 +143,13 @@ namespace otb
 
   // JULIEN: NOT USED, NOT IMPLEMENTED
   //void SampleImage(void* buffer,int XBegin, int YBegin, int SizeXRead, int SizeYRead, int XSample, int YSample);
-  
+
     protected:
       /** Construtor.*/
       TileMapImageIO();
       /** Destructor.*/
       ~TileMapImageIO();
-  
+
       void PrintSelf(std::ostream& os, itk::Indent indent) const;
       /** Read all information on the image*/
       void InternalReadImageInformation();
@@ -163,8 +163,8 @@ namespace otb
       int m_NbBands;
       /** Buffer*/
   //float **pafimas;
-  
-  /** Determines the level of compression for written files. 
+
+  /** Determines the level of compression for written files.
    *  Range 0-9; 0 = none, 9 = maximum , default = 4 */
       int m_CompressionLevel;
       const char* m_currentfile;
@@ -184,7 +184,7 @@ namespace otb
 
       /** Nombre d'octets par pixel */
       int           m_NbOctetPixel;
-  
+
       /** Resolution depth*/
       int m_Depth;
       bool useCache;
@@ -192,7 +192,7 @@ namespace otb
       std::string m_ServerName;
       std::string m_FileSuffix;
       std::string m_AddressMode;
-  
+
       bool m_FlagWriteImageInformation;
 
   };

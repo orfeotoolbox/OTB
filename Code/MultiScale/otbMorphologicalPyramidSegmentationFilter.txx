@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,7 +32,7 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
-::MorphologicalPyramidSegmentationFilter() 
+::MorphologicalPyramidSegmentationFilter()
 {
   this->SetNumberOfRequiredInputs(3);
 	m_MinimumObjectSize = 10;
@@ -45,13 +45,13 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
 template <class TInputImage, class TOutputImage>
 MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
 ::~MorphologicalPyramidSegmentationFilter() {}
-  
+
 /**
  * Set the reference image.
  * \param image The reference image which was decomposed by the pyramid.
  */
 template <class TInputImage, class TOutputImage>
-void 
+void
 MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
 ::SetReferenceImage(InputImageType * image)
 {
@@ -63,7 +63,7 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
  * \param imageList The brighter details extracted from the filtering operation.
  */
 template <class TInputImage, class TOutputImage>
-void 
+void
 MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
 ::SetBrighterDetails(InputImageListType * imageList)
 {
@@ -75,7 +75,7 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
  * \param imageList The darker details extracted from the filtering operation.
  */
 template <class TInputImage, class TOutputImage>
-void 
+void
 MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
 ::SetDarkerDetails(InputImageListType * imageList)
 {
@@ -158,13 +158,13 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
   mrtoms->SetSupFilter(this->GetBrighterDetails());
   mrtoms->SetInfFilter(this->GetDarkerDetails());
   mrtoms->Update();
-  
+
   // Full resolution Input images lists pointers
   InputImageListPointerType brighter = mrtoms->GetSupFilterFullResolution();
   InputImageListPointerType darker = mrtoms->GetInfFilterFullResolution();
 
   // Segmentation filter definition
-  typename InputImageListType::Iterator it; 
+  typename InputImageListType::Iterator it;
   // Segment the supFilter details
   for(it= brighter->Begin();it!=brighter->End();++it)
     {
@@ -178,8 +178,8 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
       m_NumberOfObjectsVector.push_back(segmenter->GetNumberOfObjects());
       outputList->PushBack(segmenter->GetOutput());
     }
-  
-  
+
+
   // Segment the infFilter details
   for(it= darker->Begin();it!= darker->End();++it)
     {
@@ -189,7 +189,7 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
       segmenter->SetConnectedThresholdQuantile(m_ConnectedThresholdQuantile);
       segmenter->SetOriginalImage(referenceImage);
       segmenter->SetSegmentDarkDetailsBool(true);
-      
+
       segmenter->SetDetailsImage(it.Get());
       segmenter->Update();
       m_NumberOfObjectsVector.push_back(segmenter->GetNumberOfObjects());

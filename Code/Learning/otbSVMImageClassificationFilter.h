@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -48,10 +48,10 @@ namespace otb
     typedef itk::InPlaceImageFilter<TInputImage,TOutputImage> Superclass;
     typedef itk::SmartPointer<Self>                           Pointer;
     typedef itk::SmartPointer<const Self>                     ConstPointer;
-    
+
     /** Type macro */
     itkNewMacro(Self);
-    
+
     /** Creation through object factory macro */
     itkTypeMacro(SVMImageClassificationFilter,InPlaceImageFilter);
 
@@ -81,7 +81,7 @@ namespace otb
     typedef typename ClassifierType::Pointer                   ClassifierPointerType;
     typedef SVMModel< ValueType, LabelType >                   ModelType;
     typedef typename ModelType::Pointer                        ModelPointerType;
-    
+
     /** Set/Get the svm model */
     itkSetObjectMacro(Model,ModelType);
     itkGetObjectMacro(Model,ModelType);
@@ -114,7 +114,7 @@ namespace otb
     virtual void BeforeThreadedGenerateData();
     /**PrintSelf method */
     virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-    
+
     private:
     SVMImageClassificationFilter(const Self&); //purposely not implemented
     void operator=(const Self&); //purposely not implemented

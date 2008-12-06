@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -36,7 +36,7 @@ namespace otb
  * - \f$ \phi_{5} = Re (c_{30} c_{12}^{3}) \f$
  * - \f$ \phi_{6} = Re (c_{20} c_{12}^{2}) \f$
  * - \f$ \phi_{7} = Im (c_{30} c_{12}^{3}) \f$
- *  
+ *
  * With :
  *
  *  \f[  c_{p,q}=\int_{-\infty}^{\infty} \int_{-\infty}^{\infty} (x+iy)^{p} \cdot (x-iy)^{q} \cdot f(x,y) \cdot
@@ -48,12 +48,12 @@ namespace otb
  *
  * This class is templated over the input image type and the
  * coordinate representation type (e.g. float or double).
- * 
+ *
  * \ingroup ImageFunctions
  */
 //  public itk::ImageFunction< TInput, TOutput,TCoordRep >
 
-template < class TInput, 
+template < class TInput,
            class TOutput    = double,
            class TPrecision = double,
 	   class TCoordRep  = float >
@@ -66,7 +66,7 @@ public:
   typedef RealMomentImageFunction< TInput, TOutput, TPrecision, TCoordRep >      Superclass;
   typedef itk::SmartPointer<Self>                                   Pointer;
   typedef itk::SmartPointer<const Self>                             ConstPointer;
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(HuImageFunction, RealMomentImageFunction);
 
@@ -84,33 +84,33 @@ public:
 
   /** Type for calculation precision */
   typedef typename Superclass::PrecisionType        PrecisionType;
-   
+
   /** Dimension of the underlying image. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       InputType::ImageDimension);
-  			 
+
 
   /** Evalulate the function at specified index */
   virtual RealType EvaluateAtIndex( const IndexType& index ) const;
 
    /** Evaluate the function at non-integer positions */
   virtual RealType Evaluate( const PointType& point ) const
-    { 
+    {
       IndexType index;
       this->ConvertPointToNearestIndex( point, index );
-      return this->EvaluateAtIndex( index ); 
+      return this->EvaluateAtIndex( index );
     }
-  virtual RealType EvaluateAtContinuousIndex( 
+  virtual RealType EvaluateAtContinuousIndex(
     const ContinuousIndexType& cindex ) const
-    { 
+    {
       IndexType index;
       this->ConvertContinuousIndexToNearestIndex( cindex, index );
-      return this->EvaluateAtIndex( index ) ; 
+      return this->EvaluateAtIndex( index ) ;
     }
- 
+
 
   /** Get/Set the radius of the neighborhood over which the
-      statistics are evaluated */  
+      statistics are evaluated */
   itkSetClampMacro(MomentNumber,short,1,7);
   itkGetConstReferenceMacro( MomentNumber, short );
 
@@ -123,7 +123,7 @@ private:
   HuImageFunction( const Self& ); //purposely not implemented
   void operator=( const Self& ); //purposely not implemented
 
-  short m_MomentNumber;  
+  short m_MomentNumber;
 };
 
 } // namespace otb

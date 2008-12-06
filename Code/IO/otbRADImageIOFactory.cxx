@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -21,7 +21,7 @@
 #include "otbRADImageIO.h"
 #include "itkVersion.h"
 
-  
+
 namespace otb
 {
 
@@ -33,18 +33,18 @@ RADImageIOFactory::RADImageIOFactory()
                          1,
                          itk::CreateObjectFunction<RADImageIO>::New());
 }
-  
+
 RADImageIOFactory::~RADImageIOFactory()
 {
 }
 
-const char* 
+const char*
 RADImageIOFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char* 
+const char*
 RADImageIOFactory::GetDescription() const
 {
   return "RAD ImageIO Factory, permettant le chargement d'image au format RAD dans l'OTB";

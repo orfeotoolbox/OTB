@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -40,13 +40,13 @@ SHPVectorDataIOFactory<TData>::~SHPVectorDataIOFactory()
 {
 }
 template<class TData>
-const char* 
+const char*
 SHPVectorDataIOFactory<TData>::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 template<class TData>
-const char* 
+const char*
 SHPVectorDataIOFactory<TData>::GetDescription() const
 {
   return "SHP VectorDataIO Factory, allows the loading of SHP vector data into OTB";

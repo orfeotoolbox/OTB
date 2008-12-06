@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,7 +23,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  /** 
+  /**
    * \brief Simple image viewer.
    *
    * This class is a simple image viewer using fltk gui and opengl drawing.
@@ -37,7 +37,7 @@ namespace otb
    * without flooding the memory.
    *
    * Channel index and other various parameters can be set.
-   * 
+   *
    * To use the viewer, setup it with all your parameters, then call the Build(), Show() and the Update() methods.
    * A call to Fl::run() is mandatory to hang the program execution until the viewer is closed.
    *
@@ -47,7 +47,7 @@ namespace otb
    * \sa ImageViewerFullWidget, ImageViewerScrollWidget, ImageViewerZoomWidget
    */
 template <class TPixel, class TLabel = double>
-class ITK_EXPORT ImageViewer 
+class ITK_EXPORT ImageViewer
   : public ImageViewerBase<TPixel,TLabel>
 {
  public:
@@ -63,26 +63,26 @@ class ITK_EXPORT ImageViewer
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
   itkTypeMacro(ImageViewer,ImageViewerBase);
-  
+
   /** Show the viewer */
   virtual void Show(void);
    /** Hide all Image View Windows */
   virtual void Hide(void);
   /** Build the interfaces */
-  virtual void Build(void);  
+  virtual void Build(void);
   /** Update */
   virtual void Update(void);
- 
+
   protected:
   /**Constructor */
-  ImageViewer(); 
+  ImageViewer();
   /** Destructor */
   ~ImageViewer();
-  
+
   private:
   ImageViewer(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
   /// Fltk surrounding windows
   Fl_Window * m_FullWindow;
   Fl_Window * m_ScrollWindow;

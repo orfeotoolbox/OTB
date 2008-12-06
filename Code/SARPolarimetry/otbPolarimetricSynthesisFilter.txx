@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -38,7 +38,7 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
   m_PresentInputImages[0] = false;
   m_PresentInputImages[1] = false;
   m_PresentInputImages[2] = false;
-  m_PresentInputImages[3] = false;    
+  m_PresentInputImages[3] = false;
   m_ArchitectureType = PolarimetricData::New();
 }
 
@@ -48,14 +48,14 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
 ::GenerateOutputInformation()
 {
   // if HH is set, use HH to generate output information
-  if(m_PresentInputImages[0])  
+  if(m_PresentInputImages[0])
   {
         this->GetOutput()->CopyInformation(this->GetInput(0));
   }
   // else, use VH
   else if(m_PresentInputImages[2])
   {
-        this->GetOutput()->CopyInformation(this->GetInput(2));        
+        this->GetOutput()->CopyInformation(this->GetInput(2));
   }
   else
   {
@@ -69,7 +69,7 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
 template <class TInputImageHH,class TInputImageHV,class TInputImageVH,class TInputImageVV,class TOutputImage,class TFunction  >
 void
 PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImageVV,TOutputImage,TFunction>
-::SetInputHH( const TInputImageHH * image ) 
+::SetInputHH( const TInputImageHH * image )
 {
   // Process object is not const-correct so the const casting is required.
   SetInput1( image );
@@ -82,10 +82,10 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
 template <class TInputImageHH,class TInputImageHV,class TInputImageVH,class TInputImageVV,class TOutputImage,class TFunction  >
 void
 PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImageVV,TOutputImage,TFunction>
-::SetInputHV( const TInputImageHV * image ) 
+::SetInputHV( const TInputImageHV * image )
 {
   SetInput2( image );
-  m_PresentInputImages[1]=true;  
+  m_PresentInputImages[1]=true;
 }
 
 /**
@@ -94,10 +94,10 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
 template <class TInputImageHH,class TInputImageHV,class TInputImageVH,class TInputImageVV,class TOutputImage,class TFunction  >
 void
 PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImageVV,TOutputImage,TFunction>
-::SetInputVH( const TInputImageVH * image ) 
+::SetInputVH( const TInputImageVH * image )
 {
   SetInput3( image );
-  m_PresentInputImages[2]=true;  
+  m_PresentInputImages[2]=true;
 }
 
 /**
@@ -106,10 +106,10 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
 template <class TInputImageHH,class TInputImageHV,class TInputImageVH,class TInputImageVV,class TOutputImage,class TFunction  >
 void
 PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImageVV,TOutputImage,TFunction>
-::SetInputVV( const TInputImageVV * image ) 
+::SetInputVV( const TInputImageVV * image )
 {
   SetInput4( image );
-  m_PresentInputImages[3]=true;  
+  m_PresentInputImages[3]=true;
 }
 
 /**
@@ -121,17 +121,17 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
-  
+
   os<<"PsiI: "<<m_PsiI<<std::endl;
   os<<"KhiI: "<<m_KhiI<<std::endl;
   os<<"PsiR: "<<m_PsiR<<std::endl;
   os<<"KhiR: "<<m_KhiR<<std::endl;
-  
+
   os<<"Ei0 im: "<<m_Ei[0].imag()<<std::endl;
   os<<"Ei0 re: "<<m_Ei[0].real()<<std::endl;
   os<<"Ei1 im: "<<m_Ei[1].imag()<<std::endl;
   os<<"Ei1 re: "<<m_Ei[1].real()<<std::endl;
-  
+
   os<<"Er0 im: "<<m_Er[0].imag()<<std::endl;
   os<<"Er0 re: "<<m_Er[0].real()<<std::endl;
   os<<"Er1 im: "<<m_Er[1].imag()<<std::endl;
@@ -147,7 +147,7 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
 ::ForceCoPolar()
 {
         SetPsiR(m_PsiI);
-        SetKhiR(m_KhiI);        
+        SetKhiR(m_KhiI);
         SetMode(1);
 }
 
@@ -161,7 +161,7 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
 {
         SetPsiR(m_PsiI+90);
         SetKhiR(-m_KhiI);
-        SetMode(2);        
+        SetMode(2);
 }
 
 /**
@@ -180,26 +180,26 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
         this->SetKhiI(0);
         this->SetPsiI(0);
         break;
-      
+
       case VH_VV :
-        // Forcing KhiI=0 PsiI=90          
+        // Forcing KhiI=0 PsiI=90
         this->SetKhiI(0);
         this->SetPsiI(90);
-        break;        
-        
+        break;
+
       case HH_VV :
         itkExceptionMacro("Only the HH and VV channels are available : Polarimetric synthesis is not supported !");
         return;
 
       case UNKNOWN :
         itkExceptionMacro("Unknown architecture : Polarimetric synthesis is impossible !");
-        return;        
-      
+        return;
+
       default :
         break;
-        
+
    }
-  
+
   if(GetMode()==1)ForceCoPolar();
   else if(GetMode()==2)ForceCrossPolar();
 
@@ -214,35 +214,35 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
 ::ComputeElectromagneticFields()
 {
   ComplexArrayType AEi, AEr;
-  
+
   /** Conversion coefficient Degre To Radian */
-  double DTOR=M_PI/180;  
+  double DTOR=M_PI/180;
   double real,imag;
-  
+
   real = vcl_cos(DTOR*m_PsiI)*vcl_cos(DTOR*m_KhiI);
   imag = -vcl_sin(DTOR*m_PsiI)*vcl_sin(DTOR*m_KhiI);
   ComplexType Ei0(real,imag);
-  
+
   real = vcl_sin(DTOR*m_PsiI)*vcl_cos(DTOR*m_KhiI);
   imag = vcl_cos(DTOR*m_PsiI)*vcl_sin(DTOR*m_KhiI);
   ComplexType Ei1(real,imag);
-  
+
   real = vcl_cos(DTOR*m_PsiR)*vcl_cos(DTOR*m_KhiR);
   imag = -vcl_sin(DTOR*m_PsiR)*vcl_sin(DTOR*m_KhiR);
   ComplexType Er0(real,imag);
-  
+
   real = vcl_sin(DTOR*m_PsiR)*vcl_cos(DTOR*m_KhiR);
   imag = vcl_cos(DTOR*m_PsiR)*vcl_sin(DTOR*m_KhiR);
   ComplexType Er1(real,imag);
-  
+
   AEi[0]=Ei0;
   AEi[1]=Ei1;
   AEr[0]=Er0;
   AEr[1]=Er1;
 
   this->SetEi(AEi);
-  this->SetEr(AEr);  
-           
+  this->SetEr(AEr);
+
 }
 
 /**
@@ -256,10 +256,10 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
 
    // First Part. Determine the kind of architecture
    m_ArchitectureType->DetermineArchitecture(m_PresentInputImages);
-   
+
    // Second Part. Verify and force the inputs
-   VerifyAndForceInputs();   
-  
+   VerifyAndForceInputs();
+
    // Third Part. Estimation of the incident field Ei and the reflected field Er
    ComputeElectromagneticFields();
 
@@ -278,7 +278,7 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
   OutputImagePointer outputPtr = this->GetOutput(0);
   itk::ImageRegionIterator<TOutputImage> outputIt(outputPtr, outputRegionForThread);
   outputIt.GoToBegin();
-                
+
   switch (m_ArchitectureType->GetArchitectureType())
   {
         // With 4 channels :
@@ -291,24 +291,24 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
                     = dynamic_cast<const TInputImageHH*>((itk::ProcessObject::GetInput(0)));
                 HVInputImagePointer inputPtrHV
                     = dynamic_cast<const TInputImageHV*>((itk::ProcessObject::GetInput(1)));
-                VHInputImagePointer inputPtrVH 
+                VHInputImagePointer inputPtrVH
                     = dynamic_cast<const TInputImageVH*>((itk::ProcessObject::GetInput(2)));
                 VVInputImagePointer inputPtrVV
                     = dynamic_cast<const TInputImageVV*>((itk::ProcessObject::GetInput(3)));
-  
+
                 itk::ImageRegionConstIterator<TInputImageHH> inputItHH(inputPtrHH, outputRegionForThread);
                 itk::ImageRegionConstIterator<TInputImageHV> inputItHV(inputPtrHV, outputRegionForThread);
                 itk::ImageRegionConstIterator<TInputImageVH> inputItVH(inputPtrVH, outputRegionForThread);
                 itk::ImageRegionConstIterator<TInputImageVV> inputItVV(inputPtrVV, outputRegionForThread);
 
                 itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-        
+
                 inputItHH.GoToBegin();
                 inputItHV.GoToBegin();
                 inputItVH.GoToBegin();
-                inputItVV.GoToBegin();  
-         
-                while( !inputItHH.IsAtEnd() ) 
+                inputItVV.GoToBegin();
+
+                while( !inputItHH.IsAtEnd() )
                 {
                     outputIt.Set( m_Gain * Superclass::GetFunctor()(inputItHH.Get(), inputItHV.Get(), inputItVH.Get(), inputItVV.Get()) );
                     ++inputItHH;
@@ -320,7 +320,7 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
                 }
                 break;
         }
-        // With 3 channels : HH HV VV 
+        // With 3 channels : HH HV VV
         case HH_HV_VV :
 
         {
@@ -330,19 +330,19 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
                     = dynamic_cast<const TInputImageHV*>((itk::ProcessObject::GetInput(1)));
                 VVInputImagePointer inputPtrVV
                     = dynamic_cast<const TInputImageVV*>((itk::ProcessObject::GetInput(3)));
-  
+
                 itk::ImageRegionConstIterator<TInputImageHH> inputItHH(inputPtrHH, outputRegionForThread);
                 itk::ImageRegionConstIterator<TInputImageHV> inputItHV(inputPtrHV, outputRegionForThread);
                 itk::ImageRegionConstIterator<TInputImageVV> inputItVV(inputPtrVV, outputRegionForThread);
                 itk::ImageRegionIterator<TOutputImage> outputIt(outputPtr, outputRegionForThread);
-        
+
                 itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-        
+
                 inputItHH.GoToBegin();
                 inputItHV.GoToBegin();
-                inputItVV.GoToBegin();  
+                inputItVV.GoToBegin();
 
-                while( !inputItHH.IsAtEnd() ) 
+                while( !inputItHH.IsAtEnd() )
                 {
                     outputIt.Set( m_Gain * Superclass::GetFunctor()(inputItHH.Get(), inputItHV.Get(), inputItHV.Get(), inputItVV.Get()) );
                     ++inputItHH;
@@ -356,26 +356,26 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
         // With 3 channels : HH VH VV
         case HH_VH_VV :
         {
-          
+
                 HHInputImagePointer inputPtrHH
                     = dynamic_cast<const TInputImageHH*>((itk::ProcessObject::GetInput(0)));
-                VHInputImagePointer inputPtrVH 
+                VHInputImagePointer inputPtrVH
                     = dynamic_cast<const TInputImageVH*>((itk::ProcessObject::GetInput(2)));
                 VVInputImagePointer inputPtrVV
                     = dynamic_cast<const TInputImageVV*>((itk::ProcessObject::GetInput(3)));
                 OutputImagePointer outputPtr = this->GetOutput(0);
-  
+
                 itk::ImageRegionConstIterator<TInputImageHH> inputItHH(inputPtrHH, outputRegionForThread);
                 itk::ImageRegionConstIterator<TInputImageVH> inputItVH(inputPtrVH, outputRegionForThread);
                 itk::ImageRegionConstIterator<TInputImageVV> inputItVV(inputPtrVV, outputRegionForThread);
-        
+
                 itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-        
+
                 inputItHH.GoToBegin();
                 inputItVH.GoToBegin();
-                inputItVV.GoToBegin();  
-                
-                while( !inputItHH.IsAtEnd() ) 
+                inputItVV.GoToBegin();
+
+                while( !inputItHH.IsAtEnd() )
                 {
                     outputIt.Set( m_Gain * Superclass::GetFunctor()(inputItHH.Get(), inputItVH.Get(), inputItVH.Get(), inputItVV.Get()) );
                     ++inputItHH;
@@ -385,26 +385,26 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
                     progress.CompletedPixel(); // potential exception thrown here
                 }
                 break;
-        }        
+        }
         // With 2 channels : HH HV
         case HH_HV :
         {
-        
+
                 HHInputImagePointer inputPtrHH
                     = dynamic_cast<const TInputImageHH*>((itk::ProcessObject::GetInput(0)));
                 HVInputImagePointer inputPtrHV
                     = dynamic_cast<const TInputImageHV*>((itk::ProcessObject::GetInput(1)));
-  
+
                 itk::ImageRegionConstIterator<TInputImageHH> inputItHH(inputPtrHH, outputRegionForThread);
                 itk::ImageRegionConstIterator<TInputImageHV> inputItHV(inputPtrHV, outputRegionForThread);
                 itk::ImageRegionIterator<TOutputImage> outputIt(outputPtr, outputRegionForThread);
-        
+
                 itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-        
+
                 inputItHH.GoToBegin();
                 inputItHV.GoToBegin();
-          
-                while( !inputItHH.IsAtEnd() ) 
+
+                while( !inputItHH.IsAtEnd() )
                 {
                     outputIt.Set( m_Gain * Superclass::GetFunctor()(inputItHH.Get(), inputItHV.Get(), 0,0 ));
                     ++inputItHH;
@@ -413,25 +413,25 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
                     progress.CompletedPixel(); // potential exception thrown here
                 }
                 break;
-        }       
-        // With 2 channels : VH VV                
+        }
+        // With 2 channels : VH VV
         case VH_VV :
-        {  
-                VHInputImagePointer inputPtrVH 
+        {
+                VHInputImagePointer inputPtrVH
                     = dynamic_cast<const TInputImageVH*>((itk::ProcessObject::GetInput(2)));
                 VVInputImagePointer inputPtrVV
                     = dynamic_cast<const TInputImageVV*>((itk::ProcessObject::GetInput(3)));
-  
+
                 itk::ImageRegionConstIterator<TInputImageVH> inputItVH(inputPtrVH, outputRegionForThread);
                 itk::ImageRegionConstIterator<TInputImageVV> inputItVV(inputPtrVV, outputRegionForThread);
                 itk::ImageRegionIterator<TOutputImage> outputIt(outputPtr, outputRegionForThread);
-        
+
                 itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-        
+
                 inputItVH.GoToBegin();
-                inputItVV.GoToBegin();  
-                
-                while( !inputItVH.IsAtEnd() ) 
+                inputItVV.GoToBegin();
+
+                while( !inputItVH.IsAtEnd() )
                 {
                     outputIt.Set( m_Gain * Superclass::GetFunctor()(0,0, inputItVH.Get(), inputItVV.Get()) );
                     ++inputItVH;
@@ -440,11 +440,11 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
                     progress.CompletedPixel(); // potential exception thrown here
                 }
                 break;
-        }         
+        }
         default :
                 itkExceptionMacro("Unknown architecture : Polarimetric synthesis is impossible !");
-              return;                                              
-  
+              return;
+
   }
 } // end namespace otb
 

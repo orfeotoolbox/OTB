@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -90,7 +90,7 @@ KMeansImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMa
   typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
   typedef itk::ImageRegionConstIterator<MaskImageType> MaskIteratorType;
   typedef itk::ImageRegionIterator<OutputImageType> OutputIteratorType;
-   
+
   InputIteratorType inIt(inputPtr,outputRegionForThread);
   OutputIteratorType outIt(outputPtr,outputRegionForThread);
 
@@ -135,7 +135,7 @@ KMeansImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMa
 	     {
 	       pixel[i]=inIt.Get()[i];
 	     }
-	   
+
 	   double current_distance = distance->Evaluate(pixel,m_CentroidsMap[label]);
 
 	   for(label=2;label<=static_cast<LabelType>(m_CentroidsMap.size());++label)
@@ -150,7 +150,7 @@ KMeansImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMa
 	   outIt.Set(current_label);
 	 }
        ++outIt;
-       ++inIt; 
+       ++inIt;
      }
 }
 /**

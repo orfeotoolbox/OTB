@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -37,10 +37,10 @@ void
 VectorImageTo3DScalarImageFilter<TInputImage, TOutputImage>
 ::GenerateOutputInformation()
 {
-  
+
   const InputImageType* inputPtr = this->GetInput();
   OutputImageType* outputPtr = this->GetOutput();
-  
+
   InputImageRegionType inputLargestRegion = this->GetInput()->GetLargestPossibleRegion();
   OutputImageSizeType size;
   OutputImageIndexType index;
@@ -49,9 +49,9 @@ VectorImageTo3DScalarImageFilter<TInputImage, TOutputImage>
       size[i] = inputLargestRegion.GetSize()[i];
       index[i]= inputLargestRegion.GetIndex()[i];
     }
-  size[OutputImageType::ImageDimension-1]=inputPtr->GetNumberOfComponentsPerPixel();  
+  size[OutputImageType::ImageDimension-1]=inputPtr->GetNumberOfComponentsPerPixel();
   index[OutputImageType::ImageDimension-1]=0;
-  
+
   OutputImageRegionType outputRegion;
   outputRegion.SetSize(size);
   outputRegion.SetIndex(index);
@@ -65,7 +65,7 @@ VectorImageTo3DScalarImageFilter<TInputImage, TOutputImage>
 {
   InputImageType* inputPtr = const_cast<InputImageType *>(this->GetInput());
   OutputImageType* outputPtr = this->GetOutput();
-  
+
   OutputImageRegionType requestedRegion = outputPtr->GetRequestedRegion();
   InputImageRegionType inputRequestedRegion;
   InputImageSizeType size;
@@ -91,7 +91,7 @@ VectorImageTo3DScalarImageFilter<TInputImage, TOutputImage>
 
   typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
   typedef itk::ImageSliceIteratorWithIndex<OutputImageType> OutputIteratorType;
-  
+
   InputImageRegionType inputRegion;
   InputImageSizeType size;
   InputImageIndexType index;
@@ -103,9 +103,9 @@ VectorImageTo3DScalarImageFilter<TInputImage, TOutputImage>
     }
   inputRegion.SetSize(size);
   inputRegion.SetIndex(index);
- 
+
   InputIteratorType inIt(inputPtr,inputRegion);
-  
+
   OutputIteratorType outIt(outputPtr,outputRegionForThread);
   outIt.SetFirstDirection(0);
   outIt.SetSecondDirection(1);
@@ -116,7 +116,7 @@ VectorImageTo3DScalarImageFilter<TInputImage, TOutputImage>
   while(!outIt.IsAtEnd())
     {
       outIt.Set(static_cast<OutputPixelType>(inIt.Get()[outIt.GetIndex()[InputImageType::ImageDimension]]));
-      ++inIt; 
+      ++inIt;
       if(inIt.IsAtEnd())
       {
  	    inIt.GoToBegin();

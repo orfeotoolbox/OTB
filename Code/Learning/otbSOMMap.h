@@ -13,8 +13,8 @@ Copyright (c) Institut Telecom ; Telecom Bretagne. All right reserved.
 See GETCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -39,16 +39,16 @@ namespace otb
  * Thanks to the extensiong of the Image object, reading and writing is supported through standard image
  * readers and writers.
  *
- * The training is done via the SOM class, and the activation map can be produced with the SOMActivationBuilder 
+ * The training is done via the SOM class, and the activation map can be produced with the SOMActivationBuilder
  * class.
  *
  * \sa SOM
  * \sa SOMActivationBuilder
  */
-template <class TNeuron=itk::VariableLengthVector<double>, 
+template <class TNeuron=itk::VariableLengthVector<double>,
           class TDistance=itk::Statistics::EuclideanDistance<TNeuron>,
-		  unsigned int VMapDimension=2>  
-class ITK_EXPORT SOMMap  
+		  unsigned int VMapDimension=2>
+class ITK_EXPORT SOMMap
 : public otb::VectorImage<typename TNeuron::ComponentType,VMapDimension>
 {
   public:
@@ -57,20 +57,20 @@ class ITK_EXPORT SOMMap
   typedef otb::VectorImage<typename TNeuron::ComponentType,VMapDimension>  Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  
+
   /** Creation through object factory macro */
   itkNewMacro(Self);
-  /** 
+  /**
    * There is no runtime informations macro since
-   * this class has to be considered to as a simple VectorImage 
+   * this class has to be considered to as a simple VectorImage
    * // itkTypeMacro(SOMMap,VectorImage);
    * */
-  
+
   /** Template parameters related typedefs */
   typedef TNeuron NeuronType;
   typedef TDistance DistanceType;
   typedef typename DistanceType::Pointer DistancePointerType;
-  
+
   /** Superclass related typedefs */
   typedef typename Superclass::IndexType IndexType;
   typedef typename Superclass::SizeType SizeType;
@@ -84,7 +84,7 @@ class ITK_EXPORT SOMMap
    * \return The index of the winning neuron.
    */
   IndexType GetWinner(const NeuronType& sample);
-  
+
   protected:
   /** Constructor */
   SOMMap();
@@ -92,10 +92,10 @@ class ITK_EXPORT SOMMap
   virtual ~SOMMap();
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  
+
   private:
-  SOMMap(const Self&); // purposely not implemented 
-  void operator=(const Self&); // purposely not implemented 
+  SOMMap(const Self&); // purposely not implemented
+  void operator=(const Self&); // purposely not implemented
 };
 } // end namespace otb
 

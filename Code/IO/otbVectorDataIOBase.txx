@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -69,7 +69,7 @@ VectorDataIOBase<TData>
 
 
 template <class TData>
-void 
+void
 VectorDataIOBase<TData>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {

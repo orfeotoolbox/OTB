@@ -9,7 +9,7 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  
+
   Some parts of this code are derived from ITK. See ITKCopyright.txt
   for details.
 
@@ -43,7 +43,7 @@ namespace otb
 	class LuminanceToReflectanceImageFunctor
 	{
 	public:
-	  LuminanceToReflectanceImageFunctor() 
+	  LuminanceToReflectanceImageFunctor()
 	    {
 	      m_SolarIllumination = 1.;
 	      m_IlluminationCorrectionCoefficient = 1.;
@@ -52,18 +52,18 @@ namespace otb
 
 	  void SetSolarIllumination(double solarIllumination){ m_SolarIllumination = solarIllumination;};
 	  void SetIlluminationCorrectionCoefficient(double coef){ m_IlluminationCorrectionCoefficient = coef;};
-	  
+
 	  double GetSolarIllumination(){ return m_SolarIllumination;};
 	  double GetIlluminationCorrectionCoefficient(){ return m_IlluminationCorrectionCoefficient;};
 
-	  inline TOutput operator() (const TInput & inPixel) 
+	  inline TOutput operator() (const TInput & inPixel)
 	    {
 	      TOutput outPixel;
 	      double temp;
- 	      temp = static_cast<double>(inPixel) 
-		         * static_cast<double>(M_PI) 
+ 	      temp = static_cast<double>(inPixel)
+		         * static_cast<double>(M_PI)
                          * m_IlluminationCorrectionCoefficient
-		         / m_SolarIllumination; 
+		         / m_SolarIllumination;
 	      outPixel = static_cast<TOutput>(temp);
 	      return outPixel;
 	    }
@@ -75,16 +75,16 @@ namespace otb
     }
 
   /** \class LuminanceToReflectanceImageFilter
-   *  \brief Transform a luminance image into the reflectance. For this it uses the functor LuminanceToReflectanceImageFunctor 
-   *   calling for each component of each pixel. 
+   *  \brief Transform a luminance image into the reflectance. For this it uses the functor LuminanceToReflectanceImageFunctor
+   *   calling for each component of each pixel.
    *
    * \ingroup ImageToLuminanceImageFunctor
    */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT LuminanceToReflectanceImageFilter : 
+class ITK_EXPORT LuminanceToReflectanceImageFilter :
 public UnaryImageFunctorWithVectorImageFilter< TInputImage,
                                                TOutputImage,
-                                               ITK_TYPENAME Functor::LuminanceToReflectanceImageFunctor< ITK_TYPENAME TInputImage::InternalPixelType, 
+                                               ITK_TYPENAME Functor::LuminanceToReflectanceImageFunctor< ITK_TYPENAME TInputImage::InternalPixelType,
                                                                                                    ITK_TYPENAME TOutputImage::InternalPixelType > >
 {
 public:
@@ -95,13 +95,13 @@ public:
   /** "typedef" to simplify the variables definition and the declaration. */
   typedef TInputImage         InputImageType;
   typedef TOutputImage        OutputImageType;
-  typedef typename Functor::LuminanceToReflectanceImageFunctor<ITK_TYPENAME InputImageType::InternalPixelType, 
+  typedef typename Functor::LuminanceToReflectanceImageFunctor<ITK_TYPENAME InputImageType::InternalPixelType,
                                                          ITK_TYPENAME OutputImageType::InternalPixelType> FunctorType;
 
 
   /** "typedef" for standard classes. */
   typedef LuminanceToReflectanceImageFilter Self;
-  typedef UnaryImageFunctorWithVectorImageFilter< InputImageType, OutputImageType, FunctorType > Superclass; 
+  typedef UnaryImageFunctorWithVectorImageFilter< InputImageType, OutputImageType, FunctorType > Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -110,7 +110,7 @@ public:
 
   /** return class name. */
   itkTypeMacro(LuminanceToReflectanceImageFilter, UnaryImageFunctorWithVectorImageFiltermageFilter);
-  
+
   /** Supported images definition. */
   typedef typename InputImageType::PixelType                           InputPixelType;
   typedef typename InputImageType::InternalPixelType                   InputInternalPixelType;
@@ -121,7 +121,7 @@ public:
 
 
   typedef typename itk::VariableLengthVector<double>                   VectorType;
- 
+
   /** Image size "typedef" definition. */
   typedef typename InputImageType::SizeType SizeType;
 
@@ -144,7 +144,7 @@ public:
   itkSetClampMacro(Month, int, 1, 12);
   /** Give the mounth. */
   itkGetConstReferenceMacro(Month, int);
-   
+
     /** Set the flux normalization coefficient. */
   void SetFluxNormalizationCoefficient(double coef)
     {
@@ -183,7 +183,7 @@ public:
       for(unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
 	{
 	  FunctorType functor;
-	  double coefTemp = 0.;  
+	  double coefTemp = 0.;
 	  if (!m_IsSetFluxNormalizationCoefficient)
 	    {
 	      if (m_Day*m_Month != 0 && m_Day<32 && m_Month<13)
@@ -210,7 +210,7 @@ public:
 	  this->GetFunctorVector().push_back(functor);
 	}
     }
-                 
+
 private:
 
   /** Set the zenithal soalr angle. */
@@ -226,7 +226,7 @@ private:
   /** Used to know if the user has set a value for the FluxNormalizationCoefficient parameter
    * or if the class has to compute it */
   bool m_IsSetFluxNormalizationCoefficient;
-  
+
 };
 
 } // end namespace otb

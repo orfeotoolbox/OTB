@@ -9,7 +9,7 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  
+
   Some parts of this code are derived from ITK. See ITKCopyright.txt
   for details.
 
@@ -40,7 +40,7 @@ namespace otb
 	class ReflectanceToSurfaceReflectanceImageFunctor
 	{
 	public:
-	  ReflectanceToSurfaceReflectanceImageFunctor() 
+	  ReflectanceToSurfaceReflectanceImageFunctor()
 	    {
 	     m_Coefficient = 1.;
 	     m_Residu = 1.;
@@ -51,29 +51,29 @@ namespace otb
 	  /**
 	   * Set/Get the spherical albedo of the atmosphere.
 	   */
-	  void SetSphericalAlbedo(double albedo){ m_SphericalAlbedo=albedo;}; 
-	  double GetSphericalAlbedo(){ return m_SphericalAlbedo; }; 
+	  void SetSphericalAlbedo(double albedo){ m_SphericalAlbedo=albedo;};
+	  double GetSphericalAlbedo(){ return m_SphericalAlbedo; };
 
 	  /**
 	   * Set/Get Coefficient, computed from AtmosphericRadiativeTermsPointerType datas.
 	   */
-	  void SetCoefficient(double coef){ m_Coefficient = coef; }; 
+	  void SetCoefficient(double coef){ m_Coefficient = coef; };
 	  double GetCoefficient(){ return m_Coefficient; };
-	  
+
 	  /**
 	   * Set/Get Residu, computed from AtmosphericRadiativeTermsPointerType datas.
 	   */
-	  void SetResidu(double res){ m_Residu = res; }; 
+	  void SetResidu(double res){ m_Residu = res; };
 	  double GetResidu(){ return m_Residu; };
 
-	  inline TOutput operator() (const TInput & inPixel) 
+	  inline TOutput operator() (const TInput & inPixel)
 	    {
 	      TOutput outPixel;
 	      double temp, temp2;
 	      temp = static_cast<double>(inPixel)*m_Coefficient + m_Residu;
 	      temp2 =  temp / (1. + m_SphericalAlbedo *  temp);
 	      outPixel = static_cast<TOutput>(temp2);
-	      
+
 
 	      return outPixel;
 	    }
@@ -87,41 +87,41 @@ namespace otb
   /** \class ReflectanceToSurfaceReflectanceImageFilter
    *  \brief Calculates the slope, the orientation incidence and exitance radius values for each pixel.
    *
-   * 
+   *
    * \ingroup AtmosphericRadiativeTerms
    * \ingroup AtmosphericCorrectionParameters
    * \ingroup LuminanceToReflectanceImageFilter
    * \ingroup ImageToReflectanceImageFilter
    */
   template <class TInputImage, class TOutputImage >
-    class ITK_EXPORT ReflectanceToSurfaceReflectanceImageFilter : 
+    class ITK_EXPORT ReflectanceToSurfaceReflectanceImageFilter :
     public UnaryImageFunctorWithVectorImageFilter< TInputImage,
                                                    TOutputImage,
-                                                   ITK_TYPENAME Functor::ReflectanceToSurfaceReflectanceImageFunctor< ITK_TYPENAME TInputImage::InternalPixelType, 
+                                                   ITK_TYPENAME Functor::ReflectanceToSurfaceReflectanceImageFunctor< ITK_TYPENAME TInputImage::InternalPixelType,
                                                                                                                       ITK_TYPENAME TOutputImage::InternalPixelType > >
     {
     public:
       /** Extract input and output images dimensions.*/
       itkStaticConstMacro( InputImageDimension, unsigned int, TInputImage::ImageDimension);
       itkStaticConstMacro( OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
-      
+
       /** "typedef" to simplify the variables definition and the declaration. */
       typedef TInputImage         InputImageType;
       typedef TOutputImage        OutputImageType;
-      typedef typename Functor::ReflectanceToSurfaceReflectanceImageFunctor<ITK_TYPENAME InputImageType::InternalPixelType, 
+      typedef typename Functor::ReflectanceToSurfaceReflectanceImageFunctor<ITK_TYPENAME InputImageType::InternalPixelType,
 	                                                                    ITK_TYPENAME OutputImageType::InternalPixelType> FunctorType;
       /** "typedef" for standard classes. */
       typedef ReflectanceToSurfaceReflectanceImageFilter                                                     Self;
-      typedef UnaryImageFunctorWithVectorImageFilter< InputImageType, OutputImageType, FunctorType >    Superclass; 
+      typedef UnaryImageFunctorWithVectorImageFilter< InputImageType, OutputImageType, FunctorType >    Superclass;
       typedef itk::SmartPointer<Self>                                                                        Pointer;
       typedef itk::SmartPointer<const Self>                                                                  ConstPointer;
-      
+
       /** object factory method. */
       itkNewMacro(Self);
-      
+
       /** return class name. */
       itkTypeMacro(ReflectanceToSurfaceReflectanceImageFilter, UnaryImageFunctorWithVectorImageFilter);
-      
+
       /** Supported images definition. */
       typedef typename InputImageType::PixelType                           InputPixelType;
       typedef typename InputImageType::InternalPixelType                   InputInternalPixelType;
@@ -144,7 +144,7 @@ namespace otb
 	  return m_AtmosphericRadiativeTerms;
 	}
 
-       
+
     protected:
       /** Constructor */
       ReflectanceToSurfaceReflectanceImageFilter()
@@ -153,7 +153,7 @@ namespace otb
 	};
       /** Destructor */
       virtual ~ReflectanceToSurfaceReflectanceImageFilter(){};
-   
+
       /** Initialize the functor vector */
       void BeforeThreadedGenerateData ()
 	{
@@ -176,11 +176,11 @@ namespace otb
 	      this->GetFunctorVector().push_back(functor);
 	    }
 	}
- 
+
     private:
       AtmosphericRadiativeTermsPointerType m_AtmosphericRadiativeTerms;
     };
-  
+
 } // end namespace otb
 
 #endif

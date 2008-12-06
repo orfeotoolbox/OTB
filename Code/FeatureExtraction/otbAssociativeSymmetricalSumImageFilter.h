@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -22,23 +22,23 @@
 
 namespace otb
 {
-  
+
 /** \class AssociativeSymmetricalSumImageFilter
  * \brief Implements an assymetric fusion of line detector image filter.
  *
  * This class implements a fusion of the output images of
  * otb::LineRatioDetector and otb::LineCorrelationDetector
  *
- * The associative symmetrical sum \f$ \sigma(x,y) \f$ is used to merge information from the 
+ * The associative symmetrical sum \f$ \sigma(x,y) \f$ is used to merge information from the
  * two detectors:
  	\f[ \sigma(x,y)=\frac{xy}{1-x-y+2xy} \f] with \f$ x,y \in [0,1] \f$.
- * 
- * 
+ *
+ *
  */
 
 
-namespace Functor 
-{  
+namespace Functor
+{
   /** \class AssociativeSymmetricalSum
    * \brief Functor used with the AssociativeSymmetricalSumImageFilter.
    */
@@ -48,13 +48,13 @@ class ITK_EXPORT AssociativeSymmetricalSum
 public:
   AssociativeSymmetricalSum() {};
   ~AssociativeSymmetricalSum() {};
- 
-  inline TOutput operator()( const TInput1 X, 
+
+  inline TOutput operator()( const TInput1 X,
                              const TInput2 Y)
   {
-    
+
     TOutput SumXY = 0.;
-      
+
     SumXY += static_cast<TOutput>((X*Y)/(1.-X-Y+(2*X*Y)));
 
     return ( SumXY );
@@ -65,27 +65,27 @@ public:
 template <class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT AssociativeSymmetricalSumImageFilter :
     public
-itk::BinaryFunctorImageFilter<TInputImage1,TInputImage2,TOutputImage, 
-                         Functor::AssociativeSymmetricalSum< 
-  typename TInputImage1::PixelType, 
+itk::BinaryFunctorImageFilter<TInputImage1,TInputImage2,TOutputImage,
+                         Functor::AssociativeSymmetricalSum<
+  typename TInputImage1::PixelType,
   typename TInputImage2::PixelType,
   typename TOutputImage::PixelType>   >
 {
 public:
   /** Standard class typedefs. */
   typedef AssociativeSymmetricalSumImageFilter  Self;
-  typedef itk::BinaryFunctorImageFilter<TInputImage1,TInputImage2,TOutputImage, 
-                                   Functor::AssociativeSymmetricalSum< 
-    typename TInputImage1::PixelType, 
+  typedef itk::BinaryFunctorImageFilter<TInputImage1,TInputImage2,TOutputImage,
+                                   Functor::AssociativeSymmetricalSum<
     typename TInputImage1::PixelType,
-    typename TOutputImage::PixelType>   
+    typename TInputImage1::PixelType,
+    typename TOutputImage::PixelType>
   > Superclass;
   typedef itk::SmartPointer<Self>   Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
 protected:
   AssociativeSymmetricalSumImageFilter() {}
   virtual ~AssociativeSymmetricalSumImageFilter() {}

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,11 +25,11 @@ namespace otb
 {
 
 /** \class RAndBAndNIRVegetationIndexImageFilter
- * \brief 
- * 
+ * \brief
+ *
  */
 
-template <class TInputImageR, class TInputImageB, class TInputImageNIR, class TOutputImage, 
+template <class TInputImageR, class TInputImageB, class TInputImageNIR, class TOutputImage,
           class TFunction = Functor::ARVI<              typename TInputImageR::PixelType,
                                                         typename TInputImageB::PixelType,
                                                         typename TInputImageNIR::PixelType,
@@ -43,15 +43,15 @@ public:
   typedef itk::TernaryFunctorImageFilter< TInputImageR, TInputImageB, TInputImageNIR, TOutputImage, TFunction >  Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(RAndBAndNIRVegetationIndexImageFilter,TernaryFunctorImageFilter);
-  
-  void SetInputR( const TInputImageR * image ); 
-  void SetInputB( const TInputImageB * image ); 
+
+  void SetInputR( const TInputImageR * image );
+  void SetInputB( const TInputImageB * image );
   void SetInputNIR( const TInputImageNIR * image );
 
   /** Template parameters typedefs */
@@ -80,5 +80,5 @@ private:
 #include "otbRAndBAndNIRVegetationIndexImageFilter.txx"
 #endif
 
-  
+
 #endif

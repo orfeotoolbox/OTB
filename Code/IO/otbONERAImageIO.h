@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -40,12 +40,12 @@ class ITK_EXPORT ONERAImageIO : public itk::ImageIOBase
 public:
 
   typedef unsigned char InputPixelType;
-  
+
   /** Standard class typedefs. */
   typedef ONERAImageIO            Self;
   typedef itk::ImageIOBase  Superclass;
   typedef itk::SmartPointer<Self>  Pointer;
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -58,16 +58,16 @@ public:
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
   virtual bool CanReadFile(const char*);
-  
+
   /** Determine the file type. Returns true if the ImageIO can stream read the specified file */
   virtual bool CanStreamRead(){  return true; };
 
   /** Set the spacing and dimention information for the set filename. */
   virtual void ReadImageInformation();
- 
+
   /** Reads the data from disk into the memory buffer provided. */
   virtual void Read(void* buffer);
-    
+
   /** Reads 3D data from multiple files assuming one slice per file. */
   virtual void ReadVolume(void* buffer);
 
@@ -89,7 +89,7 @@ public:
   virtual void Write(const void* buffer);
   // JULIEN: NOT USED, NOT IMPLEMENTED
   //void SampleImage(void* buffer,int XBegin, int YBegin, int SizeXRead, int SizeYRead, int XSample, int YSample);
-  
+
 protected:
   /** Construtor.*/
   ONERAImageIO();
@@ -102,7 +102,7 @@ protected:
 
   bool OpenOneraDataFileForWriting(const char* filename);
   bool OpenOneraHeaderFileForWriting(const char* filename);
-  
+
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Dimension along Ox of the image*/
@@ -115,14 +115,14 @@ protected:
   //float **pafimas;
   std::fstream m_Datafile;
   std::fstream m_Headerfile;
-  
+
 private:
   ONERAImageIO(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  /** M�thode analyse le nom du fichier a ouvrir. S'il s'agit d'un r�pertoire, 
+  /** M�thode analyse le nom du fichier a ouvrir. S'il s'agit d'un r�pertoire,
     * on regarde s'il contient un produit le fichier ent�te (fichier "ENT...")
-    * Dans ce cas, ONERAFileName contient le nom du fichier a ouvrir. 
+    * Dans ce cas, ONERAFileName contient le nom du fichier a ouvrir.
     * Sinon ONERAFileName contient filename
     */
   void GetOneraImageFileName( const char * filename, std::string & OneraFileName );

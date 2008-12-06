@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -35,7 +35,7 @@ namespace otb
  * of a particular format (such as PNG or raw binary). The
  * VectorDataIOBase encapsulates both the reading and writing of data. The
  * VectorDataIOBase is used by the VectorDataFileReader class (to read data)
- * and the VectorDataFileWriter (to write data) into a single file. 
+ * and the VectorDataFileWriter (to write data) into a single file.
  * Normally the user does not directly
  * manipulate this class other than to instantiate it, set the FileName,
  * and assign it to a VectorDataFileReader/VectorDataFileWriter.
@@ -172,7 +172,7 @@ private:
 
 };
 
-} // end namespace otb 
+} // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbVectorDataIOBase.txx"

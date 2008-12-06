@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -38,7 +38,7 @@ MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType>
  *
  */
 template<class TInputPixelType, class TOutputPixelType>
-void 
+void
 MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
@@ -46,17 +46,17 @@ MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType>
 }
 
 
-/** 
+/**
  * ExtractImageFilter can produce an image which is a different resolution
  * than its input image.  As such, ExtractImageFilter needs to provide an
  * implementation for GenerateOutputInformation() in order to inform
  * the pipeline execution model.  The original documentation of this
  * method is below.
  *
- * \sa ProcessObject::GenerateOutputInformaton() 
+ * \sa ProcessObject::GenerateOutputInformaton()
  */
 template<class TInputPixelType, class TOutputPixelType>
-void 
+void
 MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType>
 ::GenerateOutputInformation()
 {
@@ -75,7 +75,7 @@ MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType>
 
 
 template<class TInputPixelType, class TOutputPixelType>
-void 
+void
 MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                        int threadId)
@@ -88,11 +88,11 @@ MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType>
 
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-  
+
   // Define the portion of the input to walk for this thread
   InputImageRegionType inputRegionForThread;
   this->CallCopyOutputRegionToInputRegion(inputRegionForThread, outputRegionForThread);
-  
+
   // Define the iterators.
   typedef itk::ImageRegionIterator<OutputImageType> OutputIterator;
   typedef itk::ImageRegionConstIterator<InputImageType> InputIterator;
@@ -110,8 +110,8 @@ MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType>
                 pixelInput = inIt.Get();
                 pixelOutput = static_cast<OutputValueType>(pixelInput[channelIn]);
                 outIt.Set( pixelOutput );
-                ++outIt; 
-                ++inIt; 
+                ++outIt;
+                ++inIt;
                 progress.CompletedPixel();
   }
 

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -42,12 +42,12 @@ namespace otb
     m_VertexIndex = iter.m_VertexIndex;
     m_End=iter.m_End;
   }
-  /**  
-   *Constructor with input graph 
+  /**
+   *Constructor with input graph
    */
   template <class TGraph>
   RCC8OutEdgeIterator<TGraph>
-  ::RCC8OutEdgeIterator(VertexDescriptorType vertex,TGraph * graph) 
+  ::RCC8OutEdgeIterator(VertexDescriptorType vertex,TGraph * graph)
   {
     m_Graph=graph;
     m_VertexIndex = vertex;
@@ -59,7 +59,7 @@ namespace otb
    */
   template <class TGraph>
   typename  RCC8OutEdgeIterator<TGraph>
-  ::RCC8ValueType 
+  ::RCC8ValueType
   RCC8OutEdgeIterator<TGraph>
   ::GetValue(void)
   {
@@ -71,11 +71,11 @@ namespace otb
    */
   template <class TGraph>
   typename  RCC8OutEdgeIterator<TGraph>
-  ::VertexPointerType 
+  ::VertexPointerType
   RCC8OutEdgeIterator<TGraph>
   ::GetTargetVertex(void)
   {
-    return (*m_Graph->GetGraph())[target(*m_Iter,(*m_Graph->GetGraph()))];    
+    return (*m_Graph->GetGraph())[target(*m_Iter,(*m_Graph->GetGraph()))];
   }
   /**
    * Return the target vertex index of the current edge.
@@ -83,14 +83,14 @@ namespace otb
    */
   template <class TGraph>
   typename  RCC8OutEdgeIterator<TGraph>
-  ::VertexDescriptorType 
+  ::VertexDescriptorType
   RCC8OutEdgeIterator<TGraph>
   ::GetTargetIndex(void)
   {
     IndexMapType index = get(boost::vertex_index,(*m_Graph->GetGraph()));
-    return index[target(*m_Iter,(*m_Graph->GetGraph()))];    
+    return index[target(*m_Iter,(*m_Graph->GetGraph()))];
   }
-  /** 
+  /**
    * Return true if the iterator is at the end.
    * \return True if the iterator is at the end.
    */
@@ -105,7 +105,7 @@ namespace otb
    * Go to the beginning.
    */
   template <class TGraph>
-  void 
+  void
   RCC8OutEdgeIterator<TGraph>
   ::GoToBegin(void)
   {
@@ -115,11 +115,11 @@ namespace otb
    * Increment.
    */
   template <class TGraph>
-  typename RCC8OutEdgeIterator<TGraph> 
-  ::Self& 
+  typename RCC8OutEdgeIterator<TGraph>
+  ::Self&
   RCC8OutEdgeIterator<TGraph>
   ::operator++()
-  { 
+  {
     ++m_Iter;
     return *this;
   }
@@ -127,20 +127,20 @@ namespace otb
    * Decrement.
    */
   template <class TGraph>
-  typename RCC8OutEdgeIterator<TGraph> 
-  ::Self& 
+  typename RCC8OutEdgeIterator<TGraph>
+  ::Self&
   RCC8OutEdgeIterator<TGraph>
   ::operator--()
   {
     --m_Iter;
     return *this;
-  } 
+  }
   /**
    * Add
    */
   template <class TGraph>
-  typename RCC8OutEdgeIterator<TGraph> 
-  ::Self& 
+  typename RCC8OutEdgeIterator<TGraph>
+  ::Self&
   RCC8OutEdgeIterator<TGraph>
   ::operator+(int i)
   {
@@ -151,8 +151,8 @@ namespace otb
    * Remove
    */
   template <class TGraph>
-  typename RCC8OutEdgeIterator<TGraph> 
-  ::Self& 
+  typename RCC8OutEdgeIterator<TGraph>
+  ::Self&
   RCC8OutEdgeIterator<TGraph>
   ::operator-(int i)
   {
@@ -163,7 +163,7 @@ namespace otb
    * Difference comparison operator.
    */
   template <class TGraph>
-  bool 
+  bool
   RCC8OutEdgeIterator<TGraph>
   ::operator!=(const Self& iter)
   {
@@ -173,7 +173,7 @@ namespace otb
    * Equality comparison operator.
    */
   template <class TGraph>
-  bool 
+  bool
   RCC8OutEdgeIterator<TGraph>
   ::operator==(const Self& iter)
   {
@@ -183,8 +183,8 @@ namespace otb
    * Instantiation operator.
    */
   template <class TGraph>
-  typename RCC8OutEdgeIterator<TGraph> 
-  ::Self& 
+  typename RCC8OutEdgeIterator<TGraph>
+  ::Self&
   RCC8OutEdgeIterator<TGraph>
   ::operator=(const Self& iter)
   {

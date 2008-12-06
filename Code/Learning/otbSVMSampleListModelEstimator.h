@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,10 +30,10 @@ namespace otb
 
  * \brief Class for SVM model
  * estimation from SampleLists used for classification.
- * 
+ *
  *
  * The basic functionality of the SVMSampleListModelEstimator is to
- * generate the models used in SVM classification. It 
+ * generate the models used in SVM classification. It
  * requires one input poinset and a training pointset to be provided by the
  * user.  This object supports data handling of multiband data. The
  * object accepts the input image in vector format only, where each
@@ -45,11 +45,11 @@ namespace otb
  *
  * EstimateModels() uses the libsvm library for SVM learning.
  *
- * \ingroup ClassificationFilters 
+ * \ingroup ClassificationFilters
  */
-template <class TInputSampleList, 
+template <class TInputSampleList,
           class TTrainingSampleList>
-class ITK_EXPORT SVMSampleListModelEstimator: 
+class ITK_EXPORT SVMSampleListModelEstimator:
     public SVMModelEstimator<typename TInputSampleList::MeasurementType, typename TTrainingSampleList::MeasurementType>
 {
 public:
@@ -71,12 +71,12 @@ public:
   /** Type definition for the input image. */
     /** Type definitions for the training image. */
   typedef typename TInputSampleList::Pointer   InputSampleListPointer;
- 
+
   /** Type definitions for the training image. */
   typedef typename TTrainingSampleList::Pointer TrainingSampleListPointer;
-    
+
   /** Type definition for the vector associated with
-   * input image pixel type. */     
+   * input image pixel type. */
   typedef typename TInputSampleList::ValueType InputSampleListValueType;
 
   /** Type definitions for the vector holding
@@ -91,7 +91,7 @@ public:
 
   /** Set the input image. */
   itkSetObjectMacro(InputSampleList,TInputSampleList);
-  
+
   /** Get the input image. */
   itkGetObjectMacro(InputSampleList,TInputSampleList);
 
@@ -104,7 +104,7 @@ public:
 
 
 
-protected: 
+protected:
   SVMSampleListModelEstimator();
   ~SVMSampleListModelEstimator();
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;

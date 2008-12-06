@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,11 +27,11 @@ namespace otb
  *  \brief This filter applies the filter given as template to the input image list.
  *
  *  It produces one output image in the output list for one input image in the output list.
- * 
+ *
  *  It uses the given filter methods to generate output information and input requested region.
  *
  *  The filter can be set up via the GetFilter() accessor.
- * 
+ *
  *  It also support streaming when the templated filter support it.
  *
  *  No type checking is done : it is up to the user to check the adequation between the input images,
@@ -41,23 +41,23 @@ namespace otb
  */
 template <class TInputImageList, class TOutputImageList, class TFilter>
 class ITK_EXPORT ImageListToImageListApplyFilter
-  : public ImageListToImageListFilter<typename TInputImageList::ImageType, 
+  : public ImageListToImageListFilter<typename TInputImageList::ImageType,
   typename TOutputImageList::ImageType>
 {
  public:
   /** Standard typedefs */
   typedef ImageListToImageListApplyFilter            Self;
-  typedef ImageListToImageListFilter<typename TInputImageList::ImageType, 
+  typedef ImageListToImageListFilter<typename TInputImageList::ImageType,
     typename TOutputImageList::ImageType> Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(ImageListToImageListApplyFilter, ImageListToImageListFilter);
-  
+
   /** Template parameters typedefs */
   typedef TInputImageList InputImageListType;
   typedef typename InputImageListType::Pointer InputImageListPointerType;

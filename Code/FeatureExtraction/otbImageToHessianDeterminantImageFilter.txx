@@ -12,8 +12,8 @@ See OTBCopyright.txt for details.
 Copyright (c) CS Systemes d'information. All rights reserved.
 See CSCopyright.txt for details.
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,14 +32,14 @@ namespace otb
     // Filter intialisation
     m_HessianFilter = ImageToHessianImageFilterType::New();
     m_DeterminantFilter = DeterminantFilterType::New();
-    
+
     // pipeline wiring
     m_DeterminantFilter->SetInput(m_HessianFilter->GetOutput());
-    
+
     // default parameter value
     m_Sigma = 1.0;
   }
-  
+
    template <class TInputImage, class TOutputImage, class TPrecision>
     ImageToHessianDeterminantImageFilter<TInputImage,TOutputImage,TPrecision>
   ::~ImageToHessianDeterminantImageFilter()

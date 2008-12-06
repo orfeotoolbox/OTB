@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -37,10 +37,10 @@ class ITK_EXPORT ImageWidgetTransferFunction
   typedef itk::Object                       Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(ImageWidgetTransferFunction,Object);
-  
+
   /** Template parameters typedefs */
   typedef TPixel PixelType;
 
@@ -98,13 +98,13 @@ class ITK_EXPORT ImageWidgetAffineTransferFunction
   typedef ImageWidgetTransferFunction<TPixel> Superclass;
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(ImageWidgetAffineTransferFunction,ImageWidgetTransferFunction);
-  
+
   /** Template parameters typedefs */
   typedef TPixel PixelType;
 
@@ -147,13 +147,13 @@ class ITK_EXPORT ImageWidgetSquareRootTransferFunction
   typedef ImageWidgetTransferFunction<TPixel>   Superclass;
   typedef itk::SmartPointer<Self>                Pointer;
   typedef itk::SmartPointer<const Self>          ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(ImageWidgetSquareRootTransferFunction,ImageWidgetTransferFunction);
-  
+
   /** Template parameters typedefs */
   typedef TPixel PixelType;
 
@@ -198,13 +198,13 @@ class ITK_EXPORT ImageWidgetLogTransferFunction
   typedef ImageWidgetTransferFunction<TPixel> Superclass;
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(ImageWidgetLogTransferFunction,ImageWidgetTransferFunction);
-  
+
   /** Template parameters typedefs */
   typedef TPixel PixelType;
 
@@ -248,13 +248,13 @@ class ITK_EXPORT ImageWidgetSquareTransferFunction
   typedef ImageWidgetTransferFunction<TPixel> Superclass;
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(ImageWidgetSquareTransferFunction,ImageWidgetTransferFunction);
-  
+
   /** Template parameters typedefs */
   typedef TPixel PixelType;
 

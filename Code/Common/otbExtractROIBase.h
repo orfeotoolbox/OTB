@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,15 +29,15 @@ namespace otb
  * \brief Base class to extract area of images.
  *
  * Extracted region can be defined by the methods SetStartX/Y (region origin) and
- * SetSizeX/Y (region size). If the starting point is not defined, the extracted 
- * region start from the upper left corner of the input image. If the size is not 
+ * SetSizeX/Y (region size). If the starting point is not defined, the extracted
+ * region start from the upper left corner of the input image. If the size is not
  * defined, the extracted region extend to the lower right corner of the input
  * image. If no parameter is defined all image is extracted.
  *
  * Alternatively, a region can be specified using the SetROI() method.
  *
  * \ingroup Common
- * 
+ *
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ExtractROIBase:
@@ -51,7 +51,7 @@ public:
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ExtractROIBase, itk::ImageToImageFilter);
@@ -80,15 +80,15 @@ public:
   itkStaticConstMacro(OutputImageDimension, unsigned int,
                       TOutputImage::ImageDimension);
 
-  typedef 
-  itk::ImageToImageFilterDetail::ExtractImageFilterRegionCopier<itkGetStaticConstMacro(InputImageDimension), 
+  typedef
+  itk::ImageToImageFilterDetail::ExtractImageFilterRegionCopier<itkGetStaticConstMacro(InputImageDimension),
                                                            itkGetStaticConstMacro(OutputImageDimension)> ExtractROIBaseRegionCopierType;
 
    itkGetMacro(ExtractionRegion, InputImageRegionType);
 
   /** Give the region to extract, same effect as given m_StartX/Y and m_SizeX/Y*/
   void SetExtractionRegion(InputImageRegionType roi);
-  
+
   /** Set/Get Start methods */
   itkSetMacro(StartX,unsigned long);
   itkGetConstMacro(StartX,unsigned long);
@@ -122,7 +122,7 @@ protected:
   virtual void GenerateOutputInformation();
 
   /** This function calls the actual region copier to do the mapping from
-   * output image space to input image space.  It uses a 
+   * output image space to input image space.  It uses a
    * Function object used for dispatching to various routines to
    * copy an output region (start index and size) to an input region.
    * For most filters, this is a trivial copy because most filters
@@ -148,15 +148,15 @@ protected:
 
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                             int threadId )
-                            
+
       {
-      
+
       };
 
- /** Set/Get the output image region. 
+ /** Set/Get the output image region.
   *  If any of the ExtractionRegion.Size = 0 for any particular dimension dim,
   *  we have to collapse dimension dim.  This means the output image will have
-  *  'c' dimensions less than the input image, where c = # of 
+  *  'c' dimensions less than the input image, where c = # of
   *  ExtractionRegion.Size = 0. */
   void SetInternalExtractionRegion(InputImageRegionType extractRegion);
 
@@ -175,14 +175,14 @@ private:
   unsigned long m_SizeX;
   unsigned long m_SizeY;
 
-  
+
 };
 
-  
+
 } // end namespace otb
-  
+
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbExtractROIBase.txx"
 #endif
-  
+
 #endif

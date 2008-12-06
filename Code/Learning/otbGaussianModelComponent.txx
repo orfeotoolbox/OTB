@@ -9,7 +9,7 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Some parts of this code are covered by the GET copyright. 
+  Some parts of this code are covered by the GET copyright.
   See GETCopyright.txt for details.
 
      This software is distributed WITHOUT ANY WARRANTY; without even
@@ -75,20 +75,20 @@ void
 GaussianModelComponent< TSample >
 ::SetSample(const TSample* sample)
 {
-  Superclass::SetSample(sample); 
+  Superclass::SetSample(sample);
 
-  const MeasurementVectorSizeType measurementVectorLength 
+  const MeasurementVectorSizeType measurementVectorLength
       = sample->GetMeasurementVectorSize();
-  
-  this->m_Parameters.SetSize( measurementVectorLength 
+
+  this->m_Parameters.SetSize( measurementVectorLength
               * ( 1 + measurementVectorLength ) );
 
   m_Mean.SetSize( measurementVectorLength );
-  
+
   m_MeanEstimator = MeanEstimatorType::New() ;
   m_MeanEstimator->SetInputSample(sample) ;
   //m_MeanEstimator->Update();
-  
+
   m_Covariance.SetSize( measurementVectorLength,
               measurementVectorLength );
 
@@ -99,11 +99,11 @@ GaussianModelComponent< TSample >
 
   m_GaussianDensityFunction = NativeMembershipFunctionType::New() ;
   this->m_PdfFunction = (MembershipFunctionType *) m_GaussianDensityFunction ;
-  m_GaussianDensityFunction->SetMeasurementVectorSize( 
+  m_GaussianDensityFunction->SetMeasurementVectorSize(
       measurementVectorLength );
   this->SetPdfMembershipFunction( (MembershipFunctionType *)
       m_GaussianDensityFunction.GetPointer() ) ;
-  
+
 }
 
 template< class TSample >
@@ -116,7 +116,7 @@ GaussianModelComponent< TSample >
   unsigned int paramIndex = 0 ;
   unsigned int i, j ;
 
-  MeasurementVectorSizeType measurementVectorSize 
+  MeasurementVectorSizeType measurementVectorSize
     = this->GetSample()->GetMeasurementVectorSize();
 
   m_Mean.SetSize ( measurementVectorSize );
@@ -146,8 +146,8 @@ GaussianModelComponent< TSample >
 {
   if ( this->IsSampleModified() == 0 )
     return;
-  
-  MeasurementVectorSizeType measurementVectorSize 
+
+  MeasurementVectorSizeType measurementVectorSize
     = this->GetSample()->GetMeasurementVectorSize();
 
   unsigned int i, j ;
@@ -167,18 +167,18 @@ GaussianModelComponent< TSample >
   m_CovarianceEstimator->Update() ;
   // m_Covariance.SetSize( m_CovarianceEstimator->GetOutput()->Rows(),
   //     m_CovarianceEstimator->GetOutput()->Cols() );
-  
+
   const CovarianceType * covariance = m_CovarianceEstimator->GetOutput();
 
   for ( i = 0 ; i < measurementVectorSize ; i++ )
     for ( j = 0 ; j < measurementVectorSize ; j++ )
     {
-      this->m_Parameters[paramIndex] 
+      this->m_Parameters[paramIndex]
         = m_Covariance(i,j)
         = covariance->GetVnlMatrix().get(i, j);
       ++paramIndex;
     }
-  
+
   this->m_GaussianDensityFunction->SetMean(&m_Mean) ;
   this->m_GaussianDensityFunction->SetCovariance(&m_Covariance) ;
 

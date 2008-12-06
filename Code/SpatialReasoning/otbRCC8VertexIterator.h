@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,7 +27,7 @@ namespace otb
  * \brief Iterates on the graph vertices
  */
 template <class TGraph>
-class ITK_EXPORT RCC8VertexIterator 
+class ITK_EXPORT RCC8VertexIterator
 {
  public:
   /** self typedef */
@@ -44,7 +44,7 @@ class ITK_EXPORT RCC8VertexIterator
 /** Typedef of the index map */
   typedef typename boost::property_map<InternalGraphType, boost::vertex_index_t>::type IndexMapType;
   /** Constructor */
-  RCC8VertexIterator();  
+  RCC8VertexIterator();
    /** Copy constructor */
    RCC8VertexIterator(const Self& iter);
    /**  Constructor with input graph */
@@ -64,7 +64,7 @@ class ITK_EXPORT RCC8VertexIterator
    * \return The current vertex index.
    */
   VertexDescriptorType GetIndex(void);
-   /** 
+   /**
     * Return true if the iterator is at the end.
     * \return True if the iterator is at the end.
     */

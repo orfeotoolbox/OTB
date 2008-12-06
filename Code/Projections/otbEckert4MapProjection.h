@@ -1,5 +1,5 @@
 /*=========================================================================
-  
+
 Program:   ORFEO Toolbox
 Language:  C++
 Date:      $Date$
@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,23 +29,23 @@ namespace otb
    * It converts coordinates in longitude,latitude (WGS84) to Eckert4 map coordinates.
    */
   template <InverseOrForwardTransformationEnum transform>
-      class ITK_EXPORT Eckert4MapProjection : public MapProjection<ossimEckert4Projection,transform> 
+      class ITK_EXPORT Eckert4MapProjection : public MapProjection<ossimEckert4Projection,transform>
   {
     public :
-	
+
       /** Standard class typedefs. */
       typedef Eckert4MapProjection                   Self;
       typedef MapProjection<ossimEckert4Projection,transform>    Superclass;
       typedef itk::SmartPointer<Self>                  Pointer;
       typedef itk::SmartPointer<const Self>            ConstPointer;
-      
+
       typedef typename Superclass::ScalarType 			ScalarType;
       typedef itk::Point<ScalarType,2 >   	      	InputPointType;
-      typedef itk::Point<ScalarType,2 >  	      	OutputPointType; 
-      
+      typedef itk::Point<ScalarType,2 >  	      	OutputPointType;
+
       /** Method for creation through the object factory. */
       itkNewMacro( Self );
-      
+
       /** Run-time type information (and related methods). */
       itkTypeMacro( Eckert4MapProjection, MapProjection );
       virtual void SetFalseEasting(double falseEasting);
@@ -54,17 +54,17 @@ namespace otb
       virtual double GetFalseEasting() const;
       virtual void SetParameters(double falseEasting,double falseNorthing);
       virtual void SetDefaults();
-      
+
     protected :
-      Eckert4MapProjection(); 
+      Eckert4MapProjection();
       virtual ~Eckert4MapProjection();
-      
+
     private :
       Eckert4MapProjection(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
-      
+
   };
-  
+
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

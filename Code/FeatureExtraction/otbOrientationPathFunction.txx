@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -43,16 +43,16 @@ OrientationPathFunction<TInputPath,TOutput>
 ::Evaluate(const PathType& path) const
 {
   typedef double                      RealType;
-  
+
   VertexListPointer                   vertexList;
   VertexType                          cindex;
   VertexType                          IndexOut;
   int                                 nbPath;
   RealType  	     		      Theta;
-  
+
   vertexList = path.GetVertexList();
   nbPath = vertexList->Size();
-   
+
   if(nbPath ==2)
      {
        cindex = vertexList->GetElement(0);
@@ -61,12 +61,12 @@ OrientationPathFunction<TInputPath,TOutput>
        cindex = vertexList->GetElement(1);
        RealType x2 = cindex[0];
        RealType y2 = cindex[1];
-              
+
        Theta = vcl_atan2(y2-y1,x2-x1);
      } // IF loop
      else
      {
-        itkExceptionMacro(<<"OrientationPathFunction::Evaluate() FAILED -- path must have 2 points"); 
+        itkExceptionMacro(<<"OrientationPathFunction::Evaluate() FAILED -- path must have 2 points");
      }
   return (static_cast<OutputType>(Theta) );
 
@@ -85,7 +85,7 @@ OrientationPathFunction<TInputPath,TOutput>
     }
 
   OutputType Result =  Evaluate( *(this->GetInputPath()) );
-  
+
   return Result;
 }
 

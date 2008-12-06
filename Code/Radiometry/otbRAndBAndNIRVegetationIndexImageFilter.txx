@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -26,7 +26,7 @@ namespace otb
 /**
  * Constructor
  */
-template <class TInputImageR, class TInputImageB, class TInputImageNIR, 
+template <class TInputImageR, class TInputImageB, class TInputImageNIR,
           class TOutputImage, class TFunction  >
 RAndBAndNIRVegetationIndexImageFilter<TInputImageR,TInputImageB,TInputImageNIR,TOutputImage,TFunction>
 ::RAndBAndNIRVegetationIndexImageFilter()
@@ -37,11 +37,11 @@ RAndBAndNIRVegetationIndexImageFilter<TInputImageR,TInputImageB,TInputImageNIR,T
 /**
  * Connect one of the operands for pixel-wise addition
  */
-template <class TInputImageR, class TInputImageB, class TInputImageNIR, 
+template <class TInputImageR, class TInputImageB, class TInputImageNIR,
           class TOutputImage, class TFunction  >
 void
 RAndBAndNIRVegetationIndexImageFilter<TInputImageR,TInputImageB,TInputImageNIR,TOutputImage,TFunction>
-::SetInputR( const TInputImageR * image ) 
+::SetInputR( const TInputImageR * image )
 {
   // Process object is not const-correct so the const casting is required.
   SetInput1( image );
@@ -51,11 +51,11 @@ RAndBAndNIRVegetationIndexImageFilter<TInputImageR,TInputImageB,TInputImageNIR,T
 /**
  * Connect one of the operands for pixel-wise addition
  */
-template <class TInputImageR, class TInputImageB, class TInputImageNIR, 
+template <class TInputImageR, class TInputImageB, class TInputImageNIR,
           class TOutputImage, class TFunction  >
 void
 RAndBAndNIRVegetationIndexImageFilter<TInputImageR,TInputImageB,TInputImageNIR,TOutputImage,TFunction>
-::SetInputB( const TInputImageB * image ) 
+::SetInputB( const TInputImageB * image )
 {
   SetInput2( image );
 }
@@ -63,11 +63,11 @@ RAndBAndNIRVegetationIndexImageFilter<TInputImageR,TInputImageB,TInputImageNIR,T
 /**
  * Connect one of the operands for pixel-wise addition
  */
-template <class TInputImageR, class TInputImageB, class TInputImageNIR, 
+template <class TInputImageR, class TInputImageB, class TInputImageNIR,
           class TOutputImage, class TFunction  >
 void
 RAndBAndNIRVegetationIndexImageFilter<TInputImageR,TInputImageB,TInputImageNIR,TOutputImage,TFunction>
-::SetInputNIR( const TInputImageNIR * image ) 
+::SetInputNIR( const TInputImageNIR * image )
 {
   SetInput3( image );
 }

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -45,7 +45,7 @@ MWImageIO::MWImageIO()
   }
 
   m_FileByteOrder = BigEndian;
-  
+
   // Set default spacing to one
   m_Spacing[0] = 1.0;
   m_Spacing[1] = 1.0;
@@ -77,7 +77,7 @@ bool MWImageIO::CanReadFile( const char* filename )
 	    return false;
 	if( m_File.is_open() )
 	    m_File.close();
-	
+
 	std::fstream header_file;
 	header_file.open( filename,  std::ios::in | std::ios::binary );
 	if( header_file.fail() )
@@ -85,7 +85,7 @@ bool MWImageIO::CanReadFile( const char* filename )
 	    otbMsgDevMacro(<<"MWImageIO::CanReadFile() failed header open ! " );
 	    return false;
 	  }
-	
+
 	//Read header informations
 	bool lResult = InternalReadHeaderInformation(header_file,false);
 	header_file.close();
@@ -104,11 +104,11 @@ void MWImageIO::ReadVolume(void*)
 {
 }
 
-// Read image 
+// Read image
 void MWImageIO::Read(void* buffer)
 {
         char * p = static_cast<char *>(buffer);
-   
+
         int lNbLignes   = this->GetIORegion().GetSize()[1];
         int lNbColonnes = this->GetIORegion().GetSize()[0];
         int lPremiereLigne   = this->GetIORegion().GetIndex()[1] ; // [1... ]
@@ -123,7 +123,7 @@ otbMsgDevMacro( <<" Nb Of Components       : "<<this->GetNumberOfComponents());
 	std::streamoff numberOfBytesPerLines = static_cast<std::streamoff>(this->GetComponentSize() * m_Dimensions[0]);
         std::streamoff offset;
         std::streamsize numberOfBytesToBeRead = static_cast<std::streamsize>(this->GetComponentSize() * lNbColonnes);
-        std::streamsize numberOfBytesRead;        
+        std::streamsize numberOfBytesRead;
         std::streamsize cpt = 0;
         for(int LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
         {
@@ -143,7 +143,7 @@ otbMsgDevMacro( <<" Nb Of Components       : "<<this->GetNumberOfComponents());
                 }
                 cpt += numberOfBytesToBeRead;
         }
- 
+
         unsigned long numberOfPixelsPerLines = lNbLignes * lNbColonnes;
         // Swap bytes if necessary
         if ( 0 ) {}
@@ -170,7 +170,7 @@ void MWImageIO::ReadImageInformation()
 
         //Read header informations
         InternalReadHeaderInformation(m_File,true);
-	
+
 otbMsgDebugMacro( <<"Driver to read: MW");
 otbMsgDebugMacro( <<"         Read  file         : "<< m_FileName);
 otbMsgDebugMacro( <<"         Size               : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
@@ -187,12 +187,12 @@ bool MWImageIO::InternalReadHeaderInformation(std::fstream & file, const bool re
 
 	char * headerInformation = new char[64];
         file.seekg(0, std::ios::beg );
-        file.read(headerInformation,64);  
+        file.read(headerInformation,64);
 	unsigned short NbCol(0);
 	unsigned short NbLig(0);
 	unsigned short Nbcom(0);
 
-        //Set file byte order 
+        //Set file byte order
 	if( headerInformation[0] == *("R") ||  headerInformation[1] == *("I") )
         {
                 m_FileByteOrder = BigEndian;
@@ -213,13 +213,13 @@ bool MWImageIO::InternalReadHeaderInformation(std::fstream & file, const bool re
 	}
 	else
 	{
-		itkExceptionMacro(<< "MW : impossible to determine CodePix information of the image");  
+		itkExceptionMacro(<< "MW : impossible to determine CodePix information of the image");
 		return false;
 	}
- 
+
         SetComponentType(FLOAT);
-        
-	
+
+
 	//Initialisation of image informations
         m_Dimensions[0] = NbCol;
         m_Dimensions[1] = NbLig;
@@ -278,7 +278,7 @@ otbMsgDevMacro( <<" GetComponentSize       : "<<this->GetComponentSize());
         std::streamsize cpt = 0;
 
         const char * p = static_cast<const char *>(buffer);
- 
+
         for(unsigned long LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
         {
 	        offset  =  headerLength + numberOfBytesPerLines * static_cast<std::streamoff>(LineNo);
@@ -306,14 +306,14 @@ void MWImageIO::WriteImageInformation()
         {
                 m_File.close();
         }
-  
+
         // Open the new file for writing
         // Actually open the file
         m_File.open( m_FileName.c_str(),  std::ios::out | std::ios::trunc | std::ios::binary );
         if( m_File.fail() )
         {
                 itkExceptionMacro(<< "Cannot write requested file "<<m_FileName.c_str()<<".");
-        } 
+        }
 
         //Writing header information
         if( 0 ) {}
@@ -323,7 +323,7 @@ void MWImageIO::WriteImageInformation()
 	}
 
         m_File.seekp(0, std::ios::beg );
-	
+
 	char header[64];
 	std::string comments("Image written with otb mw_IO_factory");
 	m_Ncom = comments.length();
@@ -334,21 +334,21 @@ void MWImageIO::WriteImageInformation()
 	unsigned short lNbComments = m_Ncom;
 	unsigned short lNbLignes   = static_cast<unsigned short>(this->GetIORegion().GetSize()[1]);
 	unsigned short lNbColonnes =static_cast<unsigned short>( this->GetIORegion().GetSize()[0]);
-	
+
 	unsigned short low,high;
 	if (m_ByteOrder == BigEndian)
 	{
 		header[0] = *("R");
 		header[1] = *("I");
-		
+
 		ByteSplitting(lNbComments,low,high);
 		header[2] = static_cast<unsigned char>(low);
 		header[3] = static_cast<unsigned char>(high);
-		
+
 		ByteSplitting(lNbColonnes,low,high);
 		header[4] = static_cast<unsigned char>(low);
 		header[5] = static_cast<unsigned char>(high);
-		
+
 		ByteSplitting(lNbLignes,low,high);
 		header[6] = static_cast<unsigned char>(low);
 		header[7] = static_cast<unsigned char>(high);
@@ -357,15 +357,15 @@ void MWImageIO::WriteImageInformation()
 	{
 		header[0] = *("I");
 		header[1] = *("R");
-		
+
 		ByteSplitting(lNbComments,low,high);
 		header[3] = static_cast<unsigned char>(low);
 		header[2] = static_cast<unsigned char>(high);
-		
+
 		ByteSplitting(lNbColonnes,low,high);
 		header[5] = static_cast<unsigned char>(low);
 		header[4] = static_cast<unsigned char>(high);
-		
+
 		ByteSplitting(lNbLignes,low,high);
 		header[7] = static_cast<unsigned char>(low);
 		header[6] = static_cast<unsigned char>(high);
@@ -374,7 +374,7 @@ void MWImageIO::WriteImageInformation()
 	{
 		itkExceptionMacro(<< "Unknown Byte order");
 	}
-	
+
 	m_File.write(header,64);
 	m_File.write(comments.data(),36);
 
@@ -400,7 +400,7 @@ std::string MWImageIO::GetExtension( const std::string& filename )
   // who's value is the extension of the input filename
   // eg. "myimage.gif" has an extension of "gif"
 	std::string fileExt( filename, it+1, filename.length() );
-	
+
   //If the extension has a "/" in it then this is not an extension and there are no extension.
 	std::string::size_type it2 = fileExt.find_last_of("/");
 	if ( it2!=std::string::npos )
@@ -408,11 +408,11 @@ std::string MWImageIO::GetExtension( const std::string& filename )
 		std::string fileExt3("");
 		return( fileExt3 );
 	}
-	
+
         return( fileExt );
 
 }
 
-  
+
 } // end namespace otb
 

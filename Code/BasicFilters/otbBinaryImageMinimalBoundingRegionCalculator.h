@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -26,12 +26,12 @@ namespace otb
 /**
  * \class BinaryImageMinimalBoundingRegionCalculator
  * \brief This class compute the smallest region of the image
- * containing every pixel with the foreground value. 
+ * containing every pixel with the foreground value.
  *
  * This class is used for instance in the RCC8 calculator filter,
  * where the input region used for computation has to be the smallest possible
  * for costs reasons. The Pad arg allows the user to get a region of pad  pixel larger
- * at each bound in case a security margin has to be kept. 
+ * at each bound in case a security margin has to be kept.
  *
  * \sa ImageToImageRCC8Calculator
  */
@@ -60,7 +60,7 @@ public:
 	itkGetMacro(InsideValue,PixelType);
 	itkSetMacro(Pad,unsigned int);
 	itkGetMacro(Pad,unsigned int);
-	
+
 protected:
 	/** Constructor */
 	BinaryImageMinimalBoundingRegionCalculator();

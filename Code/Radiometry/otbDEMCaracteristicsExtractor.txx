@@ -1,5 +1,5 @@
 /*=========================================================================
-	
+
   Program:   ORFEO Toolbox
   Language:  C++
   Date:      $Date$
@@ -25,14 +25,14 @@
 
 namespace otb
 {
-  
+
   template <class TInputImage, class TOutputImage>
   DEMCaracteristicsExtractor<TInputImage, TOutputImage>
   ::DEMCaracteristicsExtractor()
   {
     this->SetNumberOfInputs(1);
     this->SetNumberOfOutputs(3);
-    
+
     this->SetNthOutput(0,OutputImageType::New());
     this->SetNthOutput(1,OutputImageType::New());
     this->SetNthOutput(2,OutputImageType::New());
@@ -43,15 +43,15 @@ namespace otb
     m_ViewAngle = 0;
     m_ViewAzimut = 0;
   }
-  
-  
+
+
   template <class TInputImage, class TOutputImage>
   DEMCaracteristicsExtractor<TInputImage, TOutputImage>
   ::~DEMCaracteristicsExtractor()
   {
   }
-  
-  
+
+
   /**
    * ThreadedGenerateData Performs the pixel-wise addition
    */
@@ -67,13 +67,13 @@ namespace otb
     typename OutputImageType::Pointer IncidenceOutputPtr = this->GetIncidenceOutput();
     typename OutputImageType::Pointer ExitanceOutputPtr = this->GetExitanceOutput();
 
-    // Gradient Magnitude Image Filter used to compute the slope.  
+    // Gradient Magnitude Image Filter used to compute the slope.
     typename GradientMagnitudeFilterType::Pointer GradientMagnitudeFilter = GradientMagnitudeFilterType::New();
-    // Gradient Recursive Gaussian Image Filter used to compute the aspect. 
+    // Gradient Recursive Gaussian Image Filter used to compute the aspect.
     typename GradientRecursiveGaussianImageFilterType::Pointer GradientRecursiveGaussianFilter= GradientRecursiveGaussianImageFilterType::New();
     // Atan used to compute the slop
     typename AtanFilterType::Pointer  AtanFilter   = AtanFilterType::New();
-    // Atan2 Image Filter used to compute the aspect.  
+    // Atan2 Image Filter used to compute the aspect.
     typename Atan2FilterType::Pointer AspectFilter = Atan2FilterType::New();
     // Inverse cosinus Image filter used to compute the incidence image
     typename AcosImageFilterType::Pointer IncidenceFilter = AcosImageFilterType::New();
@@ -84,7 +84,7 @@ namespace otb
     double rad2degCoef;
     rad2degCoef = 180/M_PI;
 
-    // Slop calculation 
+    // Slop calculation
     GradientMagnitudeFilter->SetInput(inputPtr);
     AtanFilter->SetInput( GradientMagnitudeFilter->GetOutput() );
     // Transform values from radian to degrees.
@@ -99,7 +99,7 @@ namespace otb
     // Aspect calcultation
     GradientRecursiveGaussianFilter->SetInput(inputPtr);
     GradientRecursiveGaussianFilter->Update();
-    
+
     // // Extract the X and the Y gradient
     typename AdaptorType::Pointer XAdaptator = AdaptorType::New();
     typename AdaptorType::Pointer YAdaptator = AdaptorType::New();
@@ -117,7 +117,7 @@ namespace otb
     rad2DegFilter1->GraftOutput( AspectOutputPtr );
     rad2DegFilter1->Update();
     this->GraftNthOutput( 1, rad2DegFilter1->GetOutput() );
-    
+
 
     // Angle calculation :
     // sin(slop)
@@ -204,9 +204,9 @@ namespace otb
     rad2DegFilter3->GraftOutput( ExitanceOutputPtr );
     rad2DegFilter3->Update();
     this->GraftNthOutput( 3, rad2DegFilter3->GetOutput() );
-    
+
   }
-  
+
   /**PrintSelf method */
   template <class TInputImage, class TOutputImage>
   void
@@ -219,5 +219,5 @@ namespace otb
     os << indent << "View Angle: " << m_ViewAngle << std::endl;
     os << indent << "View Azimut: " << m_ViewAzimut << std::endl;
   }
- 
+
 } // end namespace otb

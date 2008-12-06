@@ -1,5 +1,5 @@
 /*=========================================================================
-  
+
 Program:   ORFEO Toolbox
 Language:  C++
 Date:      $Date$
@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -59,17 +59,17 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  
+
   typedef MapProjection<ossimAlbersProjection,INVERSE>               AlbersInverseProjection;
   typedef MapProjection<ossimAlbersProjection,FORWARD>               AlbersForwardProjection;
   typedef MapProjection<ossimAzimEquDistProjection,INVERSE>          AzimEquDistInverseProjection;
-  typedef MapProjection<ossimAzimEquDistProjection,FORWARD>          AzimEquDistForwardProjection;	
+  typedef MapProjection<ossimAzimEquDistProjection,FORWARD>          AzimEquDistForwardProjection;
   typedef MapProjection<ossimBngProjection,INVERSE>                  BngInverseProjection;
   typedef MapProjection<ossimBngProjection,FORWARD>                  BngForwardProjection;
   typedef MapProjection<ossimBonneProjection,INVERSE>                BonneInverseProjection;
-  typedef MapProjection<ossimBonneProjection,FORWARD>                BonneForwardProjection;	
+  typedef MapProjection<ossimBonneProjection,FORWARD>                BonneForwardProjection;
   typedef MapProjection<ossimCadrgProjection,INVERSE>                CadrgInverseProjection;
-  typedef MapProjection<ossimCadrgProjection,FORWARD>                CadrgForwardProjection;	
+  typedef MapProjection<ossimCadrgProjection,FORWARD>                CadrgForwardProjection;
   typedef MapProjection<ossimCassiniProjection,INVERSE>              CassiniInverseProjection;
   typedef MapProjection<ossimCassiniProjection,FORWARD>              CassiniForwardProjection;
   typedef MapProjection<ossimCylEquAreaProjection,INVERSE>           CylEquAreaInverseProjection;
@@ -81,9 +81,9 @@ namespace otb
   typedef MapProjection<ossimGnomonicProjection,INVERSE>             GnomonicInverseProjection;
   typedef MapProjection<ossimGnomonicProjection,FORWARD>             GnomonicForwardProjection;
   typedef LambertConformalConicMapProjection<INVERSE>                LambertConformalConicInverseProjection;
-  typedef LambertConformalConicMapProjection<FORWARD>                LambertConformalConicForwardProjection;	
+  typedef LambertConformalConicMapProjection<FORWARD>                LambertConformalConicForwardProjection;
   typedef Lambert2EtenduProjection<INVERSE>                          Lambert2EtenduInverseProjection;
-  typedef Lambert2EtenduProjection<FORWARD>                          Lambert2EtenduForwardProjection;	
+  typedef Lambert2EtenduProjection<FORWARD>                          Lambert2EtenduForwardProjection;
   typedef Lambert93Projection<INVERSE>                               Lambert93InverseProjection;
   typedef Lambert93Projection<FORWARD>                               Lambert93ForwardProjection;
   typedef SVY21MapProjection<INVERSE>                                SVY21InverseProjection;
@@ -108,7 +108,7 @@ namespace otb
   typedef MapProjection<ossimPolarStereoProjection,FORWARD>          PolarStereoForwardProjection;
   typedef MapProjection<ossimPolyconicProjection,INVERSE>            PolyconicInverseProjection;
   typedef MapProjection<ossimPolyconicProjection,FORWARD>            PolyconicForwardProjection;
-  typedef SinusoidalMapProjection<INVERSE>                           SinusoidalInverseProjection;  
+  typedef SinusoidalMapProjection<INVERSE>                           SinusoidalInverseProjection;
   typedef SinusoidalMapProjection<FORWARD>                           SinusoidalForwardProjection;
   typedef MapProjection<ossimSpaceObliqueMercatorProjection,INVERSE> SpaceObliqueMercatorInverseProjection;
   typedef MapProjection<ossimSpaceObliqueMercatorProjection,FORWARD> SpaceObliqueMercatorForwardProjection;
@@ -124,6 +124,6 @@ namespace otb
   typedef UtmMapProjection<FORWARD>                                  UtmForwardProjection;
   typedef MapProjection<ossimVanDerGrintenProjection,INVERSE>        VanDerGrintenInverseProjection;
   typedef MapProjection<ossimVanDerGrintenProjection,FORWARD>        VanDerGrintenForwardProjection;
-  
+
 }//namespace otb
 #endif

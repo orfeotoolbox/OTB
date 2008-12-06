@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -76,11 +76,11 @@ ImageWidgetBase<TPixel>
       delete [] m_OpenGlImageOverlayBuffer;
     }
 }
-/** 
+/**
  * Reset the widget.
  */
 template <class TPixel>
-void 
+void
 ImageWidgetBase<TPixel>
 ::Reset(void)
 {
@@ -94,7 +94,7 @@ ImageWidgetBase<TPixel>
 }
 
 template <class TPixel>
-void 
+void
 ImageWidgetBase<TPixel>
 ::ClearBufferedRegion(void)
 {
@@ -105,7 +105,7 @@ ImageWidgetBase<TPixel>
 
 
 template <class TPixel>
-    void 
+    void
     ImageWidgetBase<TPixel>
   ::Init(int x, int y, int w, int h, const char * l)
 {
@@ -152,11 +152,11 @@ ImageWidgetBase<TPixel>
   {
     resp[0]=static_cast<int>(x);
   }
-  
+
   if(y<maxIndex[1])
   {
     resp[1]=maxIndex[1];
-      
+
   }
   else if(y>maxIndex[1]+maxSize[1])
   {
@@ -245,21 +245,21 @@ ImageWidgetBase<TPixel>
   return m_ImageOverlay;
 }
 
-/** 
- * Show The widget. 
+/**
+ * Show The widget.
  */
 template <class TPixel>
 void
 ImageWidgetBase<TPixel>
 ::Show(void)
-{ 
+{
   if(!m_Image)
   {
     itkExceptionMacro(<<"No input image !");
   }
   else
   {
-      //otbMsgDebugMacro(<<"Zoomable widget Show");       
+      //otbMsgDebugMacro(<<"Zoomable widget Show");
     this->show();
       //otbMsgDebugMacro(<<"Before redraw.");
     this->redraw();
@@ -275,8 +275,8 @@ ImageWidgetBase<TPixel>
   return m_TransferFunctionList->GetNthElement(channelIndex)->Map(value);
 }
 
-/** 
- * Draw the widget 
+/**
+ * Draw the widget
  */
 template <class TPixel>
 void
@@ -292,7 +292,7 @@ ImageWidgetBase<TPixel>
     m_Image->SetRequestedRegion(m_BufferedRegion);
     m_Image->PropagateRequestedRegion();
     m_Image->UpdateOutputData();
-    RebuildOpenGlBuffer(); 
+    RebuildOpenGlBuffer();
     if(m_ImageOverlayVisible)
     {
       m_ImageOverlay->SetRequestedRegion(m_BufferedRegion);
@@ -300,7 +300,7 @@ ImageWidgetBase<TPixel>
       m_ImageOverlay->UpdateOutputData();
     }
   }
- 
+
   if(m_ImageOverlayVisible)
   {
     RebuildOpenGlImageOverlayBuffer();
@@ -311,11 +311,11 @@ ImageWidgetBase<TPixel>
     valid(1);
     glLoadIdentity();
     glViewport(0,0,w(),h());
-    glClearColor((float)0.0, (float)0.0, (float)0.0, (float)0.0);          
+    glClearColor((float)0.0, (float)0.0, (float)0.0, (float)0.0);
     glShadeModel(GL_FLAT);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
   }
- 
+
   glClear(GL_COLOR_BUFFER_BIT);    //this clears and paints to black
   glMatrixMode(GL_MODELVIEW);    //clear previous 3D draw params
   glLoadIdentity();
@@ -328,7 +328,7 @@ ImageWidgetBase<TPixel>
 
   // To be consistent with old method
   int displayHeight = static_cast<int>(vcl_ceil(m_BufferedRegion.GetSize()[1]*m_OpenGlIsotropicZoom));
-  int viewPortOffset = 0;  
+  int viewPortOffset = 0;
   viewPortOffset = h()-displayHeight;
   glRasterPos2i(0,viewPortOffset);
 
@@ -336,9 +336,9 @@ ImageWidgetBase<TPixel>
 
   // display the image
   glDrawPixels(m_BufferedRegion.GetSize()[0],
-	       m_BufferedRegion.GetSize()[1], 
+	       m_BufferedRegion.GetSize()[1],
 	       GL_RGBA,
-	       GL_UNSIGNED_BYTE, 
+	       GL_UNSIGNED_BYTE,
 	       m_OpenGlBuffer);
 #else
   glEnable(GL_TEXTURE_2D);
@@ -363,7 +363,7 @@ ImageWidgetBase<TPixel>
 
   glDisable(GL_TEXTURE_2D);
 #endif
-  
+
  // if image overlay is activated, display image overlay
   if(m_ImageOverlayVisible)
     {
@@ -371,9 +371,9 @@ ImageWidgetBase<TPixel>
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
     glDrawPixels(m_BufferedRegion.GetSize()[0],
-                 m_BufferedRegion.GetSize()[1], 
+                 m_BufferedRegion.GetSize()[1],
 		 GL_RGBA,
-		 GL_UNSIGNED_BYTE, 
+		 GL_UNSIGNED_BYTE,
 		 m_OpenGlImageOverlayBuffer);
 
     glDisable(GL_BLEND);
@@ -389,7 +389,7 @@ ImageWidgetBase<TPixel>
     glTexImage2D(GL_TEXTURE_2D, 0, 4, m_BufferedRegion.GetSize()[0], m_BufferedRegion.GetSize()[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, m_OpenGlImageOverlayBuffer);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);  // Nearest Filtering
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);  // Nearest Filtering
-    
+
     glBindTexture (GL_TEXTURE_2D, textureOverlay);
     glBegin (GL_QUADS);
     int hOffset = this->h() - this->hDisplayed();
@@ -402,7 +402,7 @@ ImageWidgetBase<TPixel>
     glDisable(GL_BLEND);
 #endif
 
-    } 
+    }
 
   if(m_FormOverlayVisible)
   {
@@ -419,8 +419,8 @@ ImageWidgetBase<TPixel>
 
 }
 
-/** 
- * Rebuild opengl buffer. 
+/**
+ * Rebuild opengl buffer.
  */
 template <class TPixel>
 void
@@ -433,7 +433,7 @@ ImageWidgetBase<TPixel>
       //otbMsgDebugMacro(<<"Deleting previous buffer ...");
     delete [] m_OpenGlBuffer;
   }
-  //otbMsgDebugMacro(<<"Buffered region: "<<m_BufferedRegion); 
+  //otbMsgDebugMacro(<<"Buffered region: "<<m_BufferedRegion);
   unsigned int bufferLenght = 4*m_BufferedRegion.GetNumberOfPixels();
   //otbMsgDebugMacro(<<"New buffer lenght: "<<bufferLenght);
   m_OpenGlBuffer = new unsigned char[bufferLenght];
@@ -489,8 +489,8 @@ ImageWidgetBase<TPixel>
     }
   }
 }
-/** 
- * Rebuild opengl image overlay buffer. 
+/**
+ * Rebuild opengl image overlay buffer.
  */
 template <class TPixel>
 void
@@ -503,7 +503,7 @@ ImageWidgetBase<TPixel>
       //otbMsgDebugMacro(<<"Deleting previous buffer ...");
     delete [] m_OpenGlImageOverlayBuffer;
   }
-  //otbMsgDebugMacro(<<"Buffered region: "<<m_BufferedRegion); 
+  //otbMsgDebugMacro(<<"Buffered region: "<<m_BufferedRegion);
   unsigned int bufferLenght = 4*m_BufferedRegion.GetNumberOfPixels();
   //otbMsgDebugMacro(<<"New buffer lenght: "<<bufferLenght);
   m_OpenGlImageOverlayBuffer = new unsigned char[bufferLenght];
@@ -515,7 +515,7 @@ ImageWidgetBase<TPixel>
   {
     for(it.GoToBegin();!it.IsAtEnd();++it)
     {
-	  index = (m_BufferedRegion.GetSize()[1]-1+m_BufferedRegion.GetIndex()[1]-it.GetIndex()[1])*4*m_BufferedRegion.GetSize()[0] 
+	  index = (m_BufferedRegion.GetSize()[1]-1+m_BufferedRegion.GetIndex()[1]-it.GetIndex()[1])*4*m_BufferedRegion.GetSize()[0]
 	  + 4*(it.GetIndex()[0]-m_BufferedRegion.GetIndex()[0]);
       if ((it.Get()[0]==0)&&(it.Get()[1]==0)&&(it.Get()[2]==0))
       {
@@ -530,14 +530,14 @@ ImageWidgetBase<TPixel>
         m_OpenGlImageOverlayBuffer[index+1] = static_cast<unsigned char>( it.Get()[1]);
         m_OpenGlImageOverlayBuffer[index+2] = static_cast<unsigned char>(it.Get()[2]);
         m_OpenGlImageOverlayBuffer[index+3] = m_ImageOverlayOpacity;
-      } 
-    }     
+      }
+    }
   }
-  else 
+  else
   {
     for(it.GoToBegin();!it.IsAtEnd();++it)
     {
-	  index = (m_BufferedRegion.GetSize()[1]-1+m_BufferedRegion.GetIndex()[1]-it.GetIndex()[1])*4*m_BufferedRegion.GetSize()[0] 
+	  index = (m_BufferedRegion.GetSize()[1]-1+m_BufferedRegion.GetIndex()[1]-it.GetIndex()[1])*4*m_BufferedRegion.GetSize()[0]
 	  + 4*(it.GetIndex()[0]-m_BufferedRegion.GetIndex()[0]);
       m_OpenGlImageOverlayBuffer[index] =  static_cast<unsigned char>(it.Get()[0]);
       m_OpenGlImageOverlayBuffer[index+1] =static_cast<unsigned char>(it.Get()[1]);

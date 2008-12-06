@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,7 +34,7 @@ template < class TInput, class TOutput, class TPrecision, class TCoordRep>
 HuImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 ::HuImageFunction()
 {
-  m_MomentNumber =-1; 
+  m_MomentNumber =-1;
 }
 
 /**
@@ -82,7 +82,7 @@ HuImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 
   switch(m_MomentNumber)
     {
-    case 1 : 
+    case 1 :
         {
 	ComplexType C11;
 	function->SetP(1);
@@ -95,7 +95,7 @@ HuImageFunction<TInput,TOutput,TPrecision,TCoordRep>
         {
 	ComplexType C20,C02;
 	function->SetP(2);
-	function->SetQ(0);	
+	function->SetQ(0);
 	C20 = function->EvaluateAtIndex( index );
 	function->SetP(0);
 	function->SetQ(2);
@@ -129,7 +129,7 @@ HuImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 	C12 = function->EvaluateAtIndex( index );
 
 	HuValue = vcl_abs( C21 * C12 );
-	}	
+	}
 	break;
 
     case 5:
@@ -143,8 +143,8 @@ HuImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 	C12 = function->EvaluateAtIndex( index );
 
 	HuValueComplex = C30 * vcl_pow(C12,3) ;
-	HuValue = HuValueComplex.real();       
-	}	
+	HuValue = HuValueComplex.real();
+	}
 	break;
 
     case 6:
@@ -158,8 +158,8 @@ HuImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 	C12 = function->EvaluateAtIndex( index );
 
 	HuValueComplex = C20 * vcl_pow( C12 ,2 );
-	HuValue = HuValueComplex.real();         
-	}	
+	HuValue = HuValueComplex.real();
+	}
 	break;
 
     case 7:
@@ -173,12 +173,12 @@ HuImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 	C12 = function->EvaluateAtIndex( index );
 
 	HuValueComplex = C30 * vcl_pow( C12 , 3);
-	HuValue = HuValueComplex.imag();         
-	}	
+	HuValue = HuValueComplex.imag();
+	}
 	break;
-	
+
     default:
-	itkWarningMacro("Hu's invariant parameters are between 1 and 7");	
+	itkWarningMacro("Hu's invariant parameters are between 1 and 7");
     }
 
 

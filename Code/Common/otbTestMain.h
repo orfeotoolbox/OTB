@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -168,7 +168,7 @@ int main(int ac, char* av[] )
     else if (strcmp(av[1], "--compare-ascii") == 0)
     {
       lFlagRegression = true;
-      lEpsilon = (double)(::atof(av[2]));	
+      lEpsilon = (double)(::atof(av[2]));
       baseLineFilenamesAscii.reserve(1);
       testFilenamesAscii.reserve(1);
       baseLineFilenamesAscii.push_back(av[3]);
@@ -179,7 +179,7 @@ int main(int ac, char* av[] )
     else if (strcmp(av[1], "--compare-n-ascii") == 0)
     {
       lFlagRegression = true;
-      lEpsilon = (double)(::atof(av[2]));	
+      lEpsilon = (double)(::atof(av[2]));
         // Number of comparisons to do
       unsigned int nbComparisons=(unsigned int)(::atoi(av[3]));
       baseLineFilenamesAscii.reserve(nbComparisons);
@@ -251,7 +251,7 @@ int main(int ac, char* av[] )
       result = 0;
       std::cout << " -> Test EXIT SUCCESS."<<std::endl;
       if( lFlagRegression == false )
-      {      
+      {
         std::cout << "-------------  No control baseline tests    -------------"<<std::endl;
       }
       else
@@ -279,7 +279,7 @@ int main(int ac, char* av[] )
               std::map<std::string,int> baselines = RegressionTestBaselines(const_cast<char*>(baselineFilenameImage.c_str()));
               std::map<std::string,int>::reverse_iterator baseline = baselines.rbegin();
               multiResult = 1;
-              std::cout<<"Number of baseline images: "<<baselines.size()<<std::endl; 
+              std::cout<<"Number of baseline images: "<<baselines.size()<<std::endl;
               while(baseline!=baselines.rend() && (multiResult!=0))
               {
                 std::cout<<"Testing non-regression on image: "<<(baseline->first).c_str()<<std::endl;
@@ -287,14 +287,14 @@ int main(int ac, char* av[] )
                     (baseline->first).c_str(),
                      0,
                      lToleranceDiffPixelImage);
-					    
+
                 multiResult = baseline->second;
                 ++baseline;
               }
               if (multiResult != 0)
               {
                 baseline = baselines.rbegin();
-                baseline->second 
+                baseline->second
                     = RegressionTestImage(cpt,testFilenameImage.c_str(),
                                           (baseline->first).c_str(),
                                            1,
@@ -303,7 +303,7 @@ int main(int ac, char* av[] )
               cpt++;
               result += multiResult;
             }
-				
+
           }
 
                         // Non-regression testing on metadata.
@@ -323,7 +323,7 @@ int main(int ac, char* av[] )
               std::map<std::string,int> baselines = RegressionTestBaselines(const_cast<char*>(baselineFilenameImage.c_str()));
               std::map<std::string,int>::reverse_iterator baseline = baselines.rbegin();
               multiResult = 1;
-              std::cout<<"Number of baseline images: "<<baselines.size()<<std::endl; 
+              std::cout<<"Number of baseline images: "<<baselines.size()<<std::endl;
               while(baseline!=baselines.rend() && (multiResult!=0))
               {
                 std::cout<<"Testing non-regression on image: "<<(baseline->first).c_str()<<std::endl;
@@ -331,14 +331,14 @@ int main(int ac, char* av[] )
                     (baseline->first).c_str(),
                      0,
                      lToleranceDiffPixelImage);
-					    
+
                 multiResult = baseline->second;
                 ++baseline;
               }
               if (multiResult != 0)
               {
                 baseline = baselines.rbegin();
-                baseline->second 
+                baseline->second
                     = RegressionTestMetaData(testFilenameImage.c_str(),
                                              (baseline->first).c_str(),
                                               1,
@@ -365,7 +365,7 @@ int main(int ac, char* av[] )
               std::map<std::string,int> baselines = RegressionTestBaselines(const_cast<char*>(baselineFilenameAscii.c_str()));
               std::map<std::string,int>::reverse_iterator baseline = baselines.rbegin();
               multiResult = 1;
-              std::cout<<"Number of baseline files: "<<baselines.size()<<std::endl; 
+              std::cout<<"Number of baseline files: "<<baselines.size()<<std::endl;
               while(baseline!=baselines.rend() && (multiResult!=0))
               {
                 std::cout<<"Testing non-regression on file: "<<(baseline->first).c_str()<<std::endl;
@@ -373,14 +373,14 @@ int main(int ac, char* av[] )
                     (baseline->first).c_str(),
                      0,
                      lEpsilon);
-					    
+
                 multiResult = baseline->second;
                 ++baseline;
               }
               if (multiResult != 0)
               {
                 baseline = baselines.rbegin();
-                baseline->second 
+                baseline->second
                     = RegressionTestAsciiFile(testFilenameAscii.c_str(),
                                               (baseline->first).c_str(),
                                                1,
@@ -392,7 +392,7 @@ int main(int ac, char* av[] )
                         // Test de non regression sur des fichiers binaires
           if (baselineFilenameBinary && testFilenameBinary)
           {
-        
+
             std::map<std::string,int> baselines;
             baselines[std::string(baselineFilenameBinary)] = 0;
             std::map<std::string,int>::iterator baseline = baselines.begin();
@@ -477,7 +477,7 @@ bool isNumeric(std::string str)
   while ((i<str.size())&&(result==true))
   {
     number = str[i];
-		
+
     if (isPoint(number))
       nbOfPoints++ ;
     if (isNumber(number))
@@ -485,7 +485,7 @@ bool isNumeric(std::string str)
     if ((!isNumber(number)&&!isPoint(number)&&!isMinusSign(number))
           ||(isMinusSign(number)&&(i!=0)))
       result = false ;
-			
+
     i++;
   }
   if ((str.size()==0)||(nbOfPoints > 1)/*||(nbOfNumbers==0)*/)
@@ -502,12 +502,12 @@ bool isScientificNumeric(std::string str)
   bool pointDetected(false);
   bool eDetected(false);
   bool signDetected(false);
-  
+
   // Analyse first character (+, -, 0...9)
   unsigned int cpt(0);
   if( (str[0] != '+') && (str[0] != '-') && (!isNumber(number)) ) return false;
   if( (str[0] == '+') || (str[0] == '-') ) { cpt++; signDetected = true; }
-  
+
   while( cpt < str.size() )
   {
     if ( str[cpt] == '.' )
@@ -518,23 +518,23 @@ bool isScientificNumeric(std::string str)
     }
     else if ( ( str[cpt] == 'e' )||( str[cpt] == 'E' ) )
     {
-                // Exit false if two e 
+                // Exit false if two e
       if( eDetected == true ) return false;
       eDetected = true;
     }
     else if ( ( str[cpt] == '-' )||( str[cpt] == '+' ) )
     {
-                // Exit false if already sign with no E detected 
+                // Exit false if already sign with no E detected
       if ( ( signDetected == true ) && ( eDetected == false ) )return false;
       signDetected = true;
     }
-    else 
+    else
     {
       number = str[cpt];
       if (!isNumber(number)) return false;
     }
-    cpt++;  
-  }  
+    cpt++;
+  }
 
   return true;
 }
@@ -621,7 +621,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
   {
     fluxfilediff.open(diffAsciiFileName.c_str());
   }
-	
+
   std::string strfiletest;
   std::string strfileref;
 
@@ -637,7 +637,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
   }
 
   TypeEtat etatPrec(ETAT_NUM), etatCour(ETAT_NUM) ;
-        
+
   std::vector<std::string> listStrDiffLineFileRef;
   std::vector<std::string> listStrDiffLineFileTest;
 
@@ -645,37 +645,37 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
   {
     otb::StringStream buffstreamRef, buffstreamTest ;
     buffstreamRef << strfileref ;
-    
+
     //check if we've reach end of test file
-    if (std::getline(fluxfiletest,strfiletest) == 0) 
+    if (std::getline(fluxfiletest,strfiletest) == 0)
     {
       std::string strRef = "";
-      
+
       buffstreamRef >> strRef ;
-      fluxfilediff << "Line missing in test file: " << numLine 
+      fluxfilediff << "Line missing in test file: " << numLine
           << " : " << strRef
           << std::endl ;
       nbdiff++;
     }
     else
     {
-			
+
       buffstreamTest << strfiletest ;
       int nblinediff(0);
-	
+
       while (buffstreamRef.peek() != EOF)
       {
         std::string strRef = "";
         std::string strTest = "";
-			
+
         std::string strNumRef = "";
         std::string strCharRef = "";
         std::string strNumTest = "";
         std::string strCharTest = "";
-			
+
         buffstreamRef >> strRef ;
         buffstreamTest >> strTest ;
-			
+
         bool chgt= false;
         std::string charTmpRef = "";
         std::string charTmpTest = "";
@@ -689,18 +689,18 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
             {
               if( reportErrors )
               {
-                fluxfilediff << "Diff at line " << numLine << " : compare numeric value with no numeric value ("<<strRef 
+                fluxfilediff << "Diff at line " << numLine << " : compare numeric value with no numeric value ("<<strRef
                     << strRef << " != " << strTest <<")"<< std::endl ;
                 nblinediff++;
               }
               nbdiff++;
-                                
+
             }
             else if (vcl_abs(atof(strRef.c_str())-atof(strTest.c_str())) > epsilon)
             {
               if( reportErrors )
               {
-                fluxfilediff << "Diff at line " << numLine << " : vcl_abs ( (" 
+                fluxfilediff << "Diff at line " << numLine << " : vcl_abs ( ("
                     << strRef << ") - (" << strTest
                     << ") ) > " << epsilon << std::endl ;
                 nblinediff++;
@@ -718,16 +718,16 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
               {
                 charTmpTest=strTest[i];
               }
-				
+
               if (isNumeric(charTmpRef))
                 etatCour = ETAT_NUM;
-              else 
+              else
                 etatCour = ETAT_CHAR;
-				
+
 				// "reference" state initialisation.
               if (i==0)
                 etatPrec=etatCour;
-				
+
 				// Case where there's a number after characteres.
               if ((etatCour==ETAT_NUM)&&(etatPrec==ETAT_CHAR))
               {
@@ -735,14 +735,14 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
                 {
                   if( reportErrors )
                   {
-                    fluxfilediff << "Diff at line " << numLine 
+                    fluxfilediff << "Diff at line " << numLine
                         << " : " << strCharRef
                         << " != " << strCharTest << std::endl ;
                     nblinediff++;
                   }
                   nbdiff++;
                 }
-				    
+
                 strCharRef="";
                 strCharTest="";
                 strNumRef=charTmpRef;
@@ -752,19 +752,19 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 				// Case where there's a character after numbers.
               else if ((etatCour==ETAT_CHAR)&&(etatPrec==ETAT_NUM))
               {
-				    
+
                 if (vcl_abs(atof(strNumRef.c_str())-atof(strNumTest.c_str())) > epsilon)
                 {
                   if( reportErrors )
                   {
-                    fluxfilediff << "Diff at line " << numLine << " : vcl_abs ( (" 
+                    fluxfilediff << "Diff at line " << numLine << " : vcl_abs ( ("
                         << strNumRef << ") - (" << strNumTest
                         << ") ) > " << epsilon << std::endl ;
                     nblinediff++;
                   }
                   nbdiff++;
-                }	
-				    
+                }
+
                 strNumRef="";
                 strNumTest="";
                 strCharRef=charTmpRef;
@@ -777,29 +777,29 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
                 {
                   strCharRef+=charTmpRef;
                   strCharTest+=charTmpTest;
-                }						
+                }
                 else
                 {
                   strNumRef+=charTmpRef;
                   strNumTest+=charTmpTest;
                 }
               }
-				
+
               etatPrec = etatCour;
               i++;
-            }	
-			    
+            }
+
 			    // Simpliest case : string characters or numeric value between 2 separators
             if (!chgt)
             {
               if (isNumeric(strRef))
               {
-				    
+
                 if (vcl_abs(atof(strRef.c_str())-atof(strTest.c_str())) > epsilon)
                 {
                   if( reportErrors )
                   {
-                    fluxfilediff << "Diff at line " << numLine << " : vcl_abs( (" 
+                    fluxfilediff << "Diff at line " << numLine << " : vcl_abs( ("
                         << strRef << ") - (" << strTest
                         << ") ) > " << epsilon << std::endl ;
                     nblinediff++;
@@ -807,13 +807,13 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
                   nbdiff++;
                 }
               }
-              else 
+              else
               {
                 if ( strRef != strTest )
                 {
                   if( reportErrors )
                   {
-                    fluxfilediff << "Diff at line " << numLine 
+                    fluxfilediff << "Diff at line " << numLine
                         << " : " << strRef
                         << " != " << strTest << std::endl ;
                     nblinediff++;
@@ -834,9 +834,9 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
           }
         }
       }
-    
+
       numLine++;
-    //Store alls differences lines 
+    //Store alls differences lines
       if ( nblinediff!=0 && reportErrors)
       {
         listStrDiffLineFileRef.push_back(strfileref);
@@ -844,9 +844,9 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
       }
 
     }
-    
+
   }
-	
+
 
   while(std::getline(fluxfiletest,strfiletest) != 0)
   {
@@ -855,7 +855,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
     std::string strTest = "";
     buffstreamTest << strfiletest ;
     buffstreamTest >> strTest ;
-    fluxfilediff << "Additional line in test file: " << numLine 
+    fluxfilediff << "Additional line in test file: " << numLine
         << " : " << strTest
         << std::endl ;
     nblinediff++;
@@ -866,15 +866,15 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
       listStrDiffLineFileTest.push_back(strfiletest);
     }
   }
-  
-  
+
+
   fluxfiletest.close();
   fluxfileref.close();
   if( reportErrors )
   {
     fluxfilediff.close();
   }
-	
+
   if ( nbdiff!=0 && reportErrors)
   {
     std::cout << "<DartMeasurement name=\"ASCIIFileError\" type=\"numeric/int\">";
@@ -900,7 +900,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 int RegressionTestBinaryFile(const char * testBinaryFileName, const char * baselineBinaryFileName, int reportErrors)
 {
   int nbdiff(0);
-  FILE *fluxfiletest=NULL;	
+  FILE *fluxfiletest=NULL;
   FILE *fluxfileref=NULL;
   fluxfiletest = fopen(testBinaryFileName,"rb");
   fluxfileref = fopen(baselineBinaryFileName,"rb");
@@ -916,12 +916,12 @@ int RegressionTestBinaryFile(const char * testBinaryFileName, const char * basel
   while( !feof(fluxfiletest) && !feof(fluxfileref) )
   {
     if ( fgetc(fluxfiletest) != fgetc(fluxfileref) )
-    { 
+    {
       nbdiff++;
     }
   }
 /*    	if ( feof(fluxfiletest) != feof(fluxfileref) )
-  { 
+  {
   fprintf(stderr,"L'un des fichiers n'a pas �t� lu enti�rement\n");
 }*/
   fclose(fluxfiletest);
@@ -976,7 +976,7 @@ int RegressionTestImage (int cpt, const char *testImageFilename, const char *bas
   baselineSize = baselineReader->GetOutput()->GetLargestPossibleRegion().GetSize();
   ImageType::SizeType testSize;
   testSize = testReader->GetOutput()->GetLargestPossibleRegion().GetSize();
-  
+
   if (baselineSize != testSize)
   {
     std::cerr << "The size of the Baseline image and Test image do not match!" << std::endl;
@@ -1036,7 +1036,7 @@ int RegressionTestImage (int cpt, const char *testImageFilename, const char *bas
       try
       {
         rescale->SetInput(diff->GetOutput());
-	
+
         for(unsigned int i = 1;i<=min(diff->GetOutput()->GetNumberOfComponentsPerPixel(),3U);++i)
         {
           rescale->SetChannel(i);
@@ -1156,7 +1156,7 @@ int RegressionTestMetaData (const char *testImageFilename, const char *baselineI
   baselineSize = baselineReader->GetOutput()->GetLargestPossibleRegion().GetSize();
   ImageType::SizeType testSize;
   testSize = testReader->GetOutput()->GetLargestPossibleRegion().GetSize();
-  
+
   if (baselineSize != testSize)
   {
     std::cerr << "The size of the Baseline image and Test image do not match!" << std::endl;
@@ -1168,7 +1168,7 @@ int RegressionTestMetaData (const char *testImageFilename, const char *baselineI
   }
   ImageType::Pointer blImPtr = baselineReader->GetOutput();
   ImageType::Pointer testImPtr = testReader->GetOutput();
-  
+
   // test orgin
   if(blImPtr->GetOrigin()!=testImPtr->GetOrigin())
   {
@@ -1201,7 +1201,7 @@ int RegressionTestMetaData (const char *testImageFilename, const char *baselineI
         << " has projection reference " << testImPtr->GetProjectionRef() << std::endl;
     errcount++;
   }
-  
+
   // test Geographic transform
   if(blImPtr->GetGeoTransform()!=testImPtr->GetGeoTransform())
   {
@@ -1268,7 +1268,7 @@ int RegressionTestMetaData (const char *testImageFilename, const char *baselineI
     errcount++;
   }
 
-  
+
   // test gcp count
   if(blImPtr->GetGCPCount()!=testImPtr->GetGCPCount())
   {
@@ -1279,7 +1279,7 @@ int RegressionTestMetaData (const char *testImageFilename, const char *baselineI
         << " has gcp count " << testImPtr->GetGCPCount() << std::endl;
     errcount++;
   }
-  else 
+  else
   {
     for(unsigned int i=0;i<blImPtr->GetGCPCount();++i)
     {
@@ -1315,7 +1315,7 @@ int RegressionTestMetaData (const char *testImageFilename, const char *baselineI
     }
   }
   if(errcount>0)
-  {     
+  {
     std::cout << "<DartMeasurement name=\"MetadataError\" type=\"numeric/int\">";
     std::cout << errcount;
     std::cout <<  "</DartMeasurement>" << std::endl;

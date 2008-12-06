@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -51,15 +51,15 @@ namespace otb
     m_RedChannelIndex = 0;
     m_GreenChannelIndex = 1;
     m_BlueChannelIndex = 2;
-    m_Built=false;   
-    m_Shrink = ShrinkFilterType::New();  
+    m_Built=false;
+    m_Shrink = ShrinkFilterType::New();
     m_PixLocOutput=NULL;
     m_NormalizationFactor = 0.02;
     m_QuicklookRatioCoef = 2;
     m_VectorCastFilter = NULL;
     m_LinkedViewerList = ViewerListType::New();
     m_Updating = false;
-    m_PolygonROIList = PolygonListType::New(); 
+    m_PolygonROIList = PolygonListType::New();
     m_PathList = PathListType::New();
     m_InterfaceBoxesList = FormListType::New();
     m_ShowFullWidget = true;
@@ -76,7 +76,7 @@ namespace otb
     m_BlueHistogramWidget = HistogramWidgetType::New();
     m_ShowHistograms = true;
   }
-  
+
   /// Destructor
   template <class TPixel, class TLabel>
   ImageViewerBase<TPixel,TLabel>
@@ -89,12 +89,12 @@ namespace otb
    ImageViewerBase<TPixel,TLabel>
   ::ComputeNormalizationFactors(void)
   {
- 
+
   typename ListSampleListType::Pointer sl =  ListSampleListType::New();
-  
+
   sl->Reserve(m_InputImage->GetNumberOfComponentsPerPixel());
 
-  
+
   InputIteratorType it;
   // if scroll is activated, compute the factors from the quicklook
   if(m_UseScroll)
@@ -111,7 +111,7 @@ namespace otb
     it = InputIteratorType(m_InputImage,m_InputImage->GetRequestedRegion());
     it.GoToBegin();
   }
-  
+
   if(this->GetViewModel() == ScrollWidgetType::COMPLEX_MODULUS)
   {
     sl->PushBack(ListSampleType::New());
@@ -161,7 +161,7 @@ namespace otb
   m_HistogramGeneratorList->Clear();
   m_TransferFunctionList->Clear();
   otbMsgDebugMacro(<<"Nb bands: "<<m_InputImage->GetNumberOfComponentsPerPixel());
-  
+
   for(unsigned int i = 0;i<sl->Size();++i)
     {
       typename HistogramGeneratorType::Pointer generator = HistogramGeneratorType::New();
@@ -186,7 +186,7 @@ namespace otb
   m_ZoomWidget->SetTransferFunctionList(m_TransferFunctionList);
   m_FullWidget->SetTransferFunctionList(m_TransferFunctionList);
   }
-  
+
   /// Build the HMI
   template <class TPixel, class TLabel>
   void
@@ -197,7 +197,7 @@ namespace otb
     if(!m_InputImage)
       {
 	itkExceptionMacro(<<"No input image !");
-      } 
+      }
 
     if(m_UseImageOverlay && !m_InputImageOverlay)
       {
@@ -215,7 +215,7 @@ namespace otb
     // Get the image dimension
     typename ImageType::SizeType size = m_InputImage->GetLargestPossibleRegion().GetSize();
     m_ImageGeometry = static_cast<double>(size[0])/static_cast<double>(size[1]);
-    
+
     // initiate windows dimensions
     int wscroll=200;
     int hscroll=0;
@@ -227,7 +227,7 @@ namespace otb
       {
 	m_UseScroll=false;
       }
-    else 
+    else
       {
 	m_UseScroll=true;
 	// Compute scroll size :
@@ -260,10 +260,10 @@ namespace otb
 	WatcherType watcher(m_Shrink,wfull-200,hfull/2,200,20, "Generating Quicklook ...");
 	m_Shrink->Update();
       }
-    
 
 
-    // Create full windows    
+
+    // Create full windows
     m_FullWidget = FullWidgetType::New();
     m_FullWidget->SetParent(this);
     m_FullWidget->SetInput(m_InputImage);
@@ -289,7 +289,7 @@ namespace otb
     m_ZoomWidget->Init(0,0,m_ZoomMaxInitialSize,m_ZoomMaxInitialSize,"");
     m_ZoomWidget->box( FL_EMBOSSED_BOX );
     m_ZoomWidget->SetFormOverlayVisible(true);
-    
+
     // Create the zoom selection mode
     if(m_ShowZoomWidget)
       {
@@ -305,7 +305,7 @@ namespace otb
 	zoomBox->SetColor(m_InterfaceBoxesColor);
 	m_InterfaceBoxesList->PushBack(zoomBox);
       }
-    
+
     if(m_UseScroll)
       {
 	// Create the scroll window
@@ -358,7 +358,7 @@ namespace otb
     m_GreenHistogramWidget->resize(0,0,m_FullMaxInitialSize/2,m_ZoomMaxInitialSize);
 
     GenerateOverlayList();
-    
+
     m_Built=true;
   }
   /// Set the image (VectorImage version)
@@ -368,7 +368,7 @@ namespace otb
   ::SetImage(ImageType * img)
   {
     m_InputImage = dynamic_cast<ImageType *>( img );
-  } 
+  }
 /// Set the image overlay (VectorImage version)
   template <class TPixel, class TLabel>
   void
@@ -376,7 +376,7 @@ namespace otb
   ::SetImageOverlay(OverlayImageType * img)
   {
     m_InputImageOverlay = dynamic_cast<OverlayImageType *>( img );
-  } 
+  }
 
 
    template <class TPixel, class TLabel>
@@ -404,11 +404,11 @@ namespace otb
     m_VectorCastFilter->SetInput(img);
     m_VectorCastFilter->UpdateOutputInformation();
     m_InputImage = m_VectorCastFilter->GetOutput();
-  } 
+  }
 
   /// Show the app
   template <class TPixel, class TLabel>
-  void 
+  void
   ImageViewerBase<TPixel,TLabel>
   ::Show(void)
   {
@@ -422,12 +422,12 @@ namespace otb
       {
  	m_ScrollWidget->Show();
       }
-   
+
       if(m_ShowFullWidget)
       {
         m_FullWidget->Show();
       }
-      
+
     if(m_ShowZoomWidget)
     {
       m_ZoomWidget->Show();
@@ -435,7 +435,7 @@ namespace otb
     if(m_ShowHistograms)
       {
 	m_RedHistogramWidget->show();
-	
+
 	if(this->GetViewModel()== ScrollWidgetType::RGB)
 	  {
 	    m_GreenHistogramWidget->show();
@@ -446,7 +446,7 @@ namespace otb
     Fl::check();
     //comment: std::cout<<"Leaving show method"<<std::endl;
   }
-  /** This is a helper class that performs a Show() and Fl::run() in order to ease 
+  /** This is a helper class that performs a Show() and Fl::run() in order to ease
       the use of the class for example in wrappings.*/
   template <class TPixel, class TLabel>
   int
@@ -460,7 +460,7 @@ namespace otb
 
   /// Hide the app
   template <class TPixel, class TLabel>
-  void 
+  void
   ImageViewerBase<TPixel,TLabel>
   ::Hide(void)
   {
@@ -483,7 +483,7 @@ namespace otb
 
     Fl::check();
 
-  } 
+  }
 
   template <class TPixel, class TLabel>
   void
@@ -505,7 +505,7 @@ namespace otb
 	zoomBox->SetColor(m_InterfaceBoxesColor);
 	m_InterfaceBoxesList->SetNthElement(0,zoomBox);
       }
-    
+
     if(m_UseScroll)
     {
       BoxPointerType box = BoxType::New();
@@ -529,13 +529,13 @@ namespace otb
 	}
       m_InterfaceBoxesList->SetNthElement(idx,box);
     }
-    
+
     for(FormListIteratorType it1 = m_InterfaceBoxesList->Begin();
         it1!=m_InterfaceBoxesList->End();++it1)
         {
             new_list->PushBack(it1.Get());
         }
-        
+
     for(PolygonListIteratorType it2 = m_PolygonROIList->Begin();
         it2!=m_PolygonROIList->End();++it2)
         {
@@ -552,22 +552,22 @@ namespace otb
 	      {
 		new_poly->SetColor(m_DefaultROIColor);
 	      }
-            
+
             for(PolygonIteratorType pIt = it2.Get()->GetVertexList()->Begin();
               pIt != it2.Get()->GetVertexList()->End();++pIt)
               {
               ImageWidgetCircleFormPointerType new_circle = ImageWidgetCircleFormType::New();
-              
+
               new_circle->SetCenter(pIt.Value());
               new_circle->SetRadius(2);
               new_circle->SetSolid(false);
               new_circle->SetColor(m_InterfaceBoxesColor);
               new_list->PushBack(new_circle);
-              
+
               }
               new_list->PushBack(new_poly);
         }
-        
+
         for(PathListIteratorType it2 = m_PathList->Begin();
             it2!=m_PathList->End();++it2)
         {
@@ -579,13 +579,13 @@ namespace otb
 
           new_list->PushBack(new_line);
         }
-        
-        
+
+
         if(m_UseScroll)
         {
             m_ScrollWidget->SetFormListOverlay(new_list);
         }
-     
+
     m_FullWidget->SetFormListOverlay(new_list);
     m_ZoomWidget->SetFormListOverlay(new_list);
   }
@@ -594,7 +594,7 @@ namespace otb
 
   /// Update the display
   template <class TPixel, class TLabel>
-  void 
+  void
   ImageViewerBase<TPixel,TLabel>
   ::Update(void)
   {
@@ -616,11 +616,11 @@ namespace otb
 	m_BlueHistogramWidget->redraw();
       }
 
-    
+
     // update the linked viewer
     typename ViewerListType::Iterator linkedIt = m_LinkedViewerList->Begin();
     typename OffsetListType::iterator offIt = m_LinkedViewerOffsetList.begin();
-  
+
     while(linkedIt!=m_LinkedViewerList->End()&&offIt!=m_LinkedViewerOffsetList.end())
     {
       if(!linkedIt.Get()->GetUpdating() && linkedIt.Get()->GetBuilt())
@@ -636,7 +636,7 @@ namespace otb
   }
 
   template <class TPixel, class TLabel>
-      void 
+      void
           ImageViewerBase<TPixel,TLabel>
   ::ReportPixel(IndexType index)
   {
@@ -651,7 +651,7 @@ namespace otb
     PointType point;
     m_InputImage->TransformIndexToPhysicalPoint(index,point);
     oss << std::setprecision(15) << point<<" (physical coordinates)"<<std::endl;
-    
+
     if(m_InputImage->GetBufferedRegion().IsInside(index))
     {
 	  //comment: std::cout<<"Index: "<<index<<std::endl;
@@ -683,20 +683,20 @@ namespace otb
       IndexType shrinkIndex;
       shrinkIndex[0]=index[0]/m_ShrinkFactor;
       shrinkIndex[1]=index[1]/m_ShrinkFactor;
-	
+
       if(m_Shrink->GetOutput()->GetBufferedRegion().IsInside(shrinkIndex))
       {
         typename ImageType::PixelType newPixel = m_Shrink->GetOutput()->GetPixel(shrinkIndex);
         oss<<newPixel<<" ("<<m_Label<<" pixel values)"<<std::endl;
       }
     }
-      
+
     typename ViewerListType::Iterator linkedIt = m_LinkedViewerList->Begin();
     typename OffsetListType::iterator offIt = m_LinkedViewerOffsetList.begin();
-  
+
     while(linkedIt!=m_LinkedViewerList->End()&&offIt!=m_LinkedViewerOffsetList.end())
     {
-      IndexType currentIndex = index + (*offIt); 
+      IndexType currentIndex = index + (*offIt);
       //comment: std::cout<<"CurrentIndex: "<<currentIndex<<std::endl;
       if(linkedIt.Get()->GetInputImage()->GetBufferedRegion().IsInside(currentIndex))
       {
@@ -708,7 +708,7 @@ namespace otb
         IndexType shrinkIndex;
         shrinkIndex[0]=currentIndex[0]/m_ShrinkFactor;
         shrinkIndex[1]=currentIndex[1]/m_ShrinkFactor;
-	
+
         if(linkedIt.Get()->GetShrinkedImage()->GetBufferedRegion().IsInside(shrinkIndex))
         {
           typename ImageType::PixelType newPixel = linkedIt.Get()->GetShrinkedImage()->GetPixel(shrinkIndex);
@@ -728,10 +728,10 @@ namespace otb
   }
 
  template <class TPixel, class TLabel>
-  void 
+  void
   ImageViewerBase<TPixel,TLabel>
   ::ClearPixLocVal(void)
-  { 
+  {
     if(m_PixLocOutput == NULL)
     {
       //comment: std::cout<<"PixLocOutput == NULL, returning ..."<<std::endl;
@@ -741,9 +741,9 @@ namespace otb
     m_PixLocOutput->redraw();
     Fl::check();
   }
-  
+
   template <class TPixel, class TLabel>
-  void 
+  void
   ImageViewerBase<TPixel,TLabel>
   ::SetImageOverlayOpacity(unsigned char opacity)
   {
@@ -751,7 +751,7 @@ namespace otb
       {
 	m_FullWidget->SetImageOverlayOpacity(opacity);
 	m_ZoomWidget->SetImageOverlayOpacity(opacity);
-	
+
 	if(m_UseScroll)
 	  {
 	    m_ScrollWidget->SetImageOverlayOpacity(opacity);
@@ -760,7 +760,7 @@ namespace otb
   }
 
  template <class TPixel, class TLabel>
-  void 
+  void
   ImageViewerBase<TPixel,TLabel>
   ::UpdateZoomWidget(void)
   {
@@ -768,7 +768,7 @@ namespace otb
   }
 
  template <class TPixel, class TLabel>
-  void 
+  void
   ImageViewerBase<TPixel,TLabel>
   ::UpdateFullWidget(void)
   {
@@ -776,12 +776,12 @@ namespace otb
   }
 
    template <class TPixel, class TLabel>
-  void 
+  void
   ImageViewerBase<TPixel,TLabel>
   ::UpdateScrollWidget(void)
   {
     if(m_UseScroll)
-      {	
+      {
 	m_ScrollWidget->redraw();
       }
   }
@@ -803,7 +803,7 @@ ImageViewerBase<TPixel,TLabel>
       RegionType resp;
       IndexType index = smallRegion.GetIndex();
       SizeType size = smallRegion.GetSize();
-      
+
       if(smallRegion.GetIndex()[0]<bigRegion.GetIndex()[0])
 	{
 	  index[0]=bigRegion.GetIndex()[0];
@@ -827,7 +827,7 @@ ImageViewerBase<TPixel,TLabel>
 }
 
 template <class TPixel, class TLabel>
-void 
+void
 ImageViewerBase<TPixel,TLabel>
 ::ChangeFullViewedRegion(IndexType clickedIndex)
 {
@@ -845,7 +845,7 @@ ImageViewerBase<TPixel,TLabel>
 
   typename ViewerListType::Iterator linkedIt = m_LinkedViewerList->Begin();
   typename OffsetListType::iterator offIt = m_LinkedViewerOffsetList.begin();
-  
+
   while(linkedIt!=m_LinkedViewerList->End()&&offIt!=m_LinkedViewerOffsetList.end())
     {
       if(!linkedIt.Get()->GetUpdating())
@@ -856,17 +856,17 @@ ImageViewerBase<TPixel,TLabel>
 	  linkedIt.Get()->ChangeFullViewedRegion(linkedIndex);
 	}
       ++offIt;
-      ++linkedIt;			    
+      ++linkedIt;
     }
 //comment: std::cout<<"ChangeFullViewedRegion: "<<m_Label<<" Updating flag off"<<std::endl;
   m_Updating = false;
 }
 
 template <class TPixel, class TLabel>
-  void 
+  void
   ImageViewerBase<TPixel,TLabel>
 ::ChangeZoomViewedRegion(IndexType clickedIndex)
-{ 
+{
 
   m_Updating = true;
   //comment: std::cout<<"ChangeZoomViewedRegion: "<<m_Label<<" Updating flag on"<<std::endl;
@@ -876,14 +876,14 @@ template <class TPixel, class TLabel>
       IndexType newIndex;
       newIndex[0]=clickedIndex[0]-region.GetSize()[0]/2;
       newIndex[1]=clickedIndex[1]-region.GetSize()[1]/2;
-      
+
       region.SetIndex(newIndex);
       RegionType newRegion = ComputeConstrainedRegion(region,m_FullWidget->GetViewedRegion());
       m_ZoomWidget->SetZoomUpperLeftCorner(newRegion.GetIndex());
-      
+
       typename ViewerListType::Iterator linkedIt = m_LinkedViewerList->Begin();
       typename OffsetListType::iterator offIt = m_LinkedViewerOffsetList.begin();
-      
+
       while(linkedIt!=m_LinkedViewerList->End()&&offIt!=m_LinkedViewerOffsetList.end())
 	{
 	  if(!linkedIt.Get()->GetUpdating())
@@ -894,15 +894,15 @@ template <class TPixel, class TLabel>
 	      linkedIt.Get()->ChangeZoomViewedRegion(linkedIndex);
 	    }
 	  ++offIt;
-	  ++linkedIt;			    
+	  ++linkedIt;
 	}
     }
   //comment: std::cout<<"ChangeZoomViewedRegion: "<<m_Label<<" Updating flag off"<<std::endl;
-  m_Updating = false; 
+  m_Updating = false;
 }
 
 template <class TPixel, class TLabel>
-void 
+void
 ImageViewerBase<TPixel,TLabel>
 ::Link(Self * viewer, OffsetType offset, bool backwardLinkFlag)
 {
@@ -921,7 +921,7 @@ ImageViewerBase<TPixel,TLabel>
   // If not, add it with its offset
   m_LinkedViewerList->PushBack(viewer);
   m_LinkedViewerOffsetList.push_back(offset);
-  
+
   // If backward link flag is set, add the backward link
   if(backwardLinkFlag)
     {
@@ -934,7 +934,7 @@ ImageViewerBase<TPixel,TLabel>
 }
 
 template <class TPixel, class TLabel>
-void 
+void
 ImageViewerBase<TPixel,TLabel>
 ::Link(Self * viewer, OffsetType offset)
 {
@@ -942,7 +942,7 @@ ImageViewerBase<TPixel,TLabel>
 }
 
 template <class TPixel, class TLabel>
-void 
+void
 ImageViewerBase<TPixel,TLabel>
 ::Link(Self * viewer)
 {
@@ -952,7 +952,7 @@ ImageViewerBase<TPixel,TLabel>
 }
 
 template <class TPixel, class TLabel>
-void 
+void
 ImageViewerBase<TPixel,TLabel>
 ::Unlink(Self * viewer,bool backwardLinkFlag)
 {
@@ -972,7 +972,7 @@ ImageViewerBase<TPixel,TLabel>
 	}
       ++it;
     }
-  
+
   // If found, erase
   m_LinkedViewerList->Erase(counter);
   m_LinkedViewerOffsetList.erase(m_LinkedViewerOffsetList.begin()+counter);
@@ -984,7 +984,7 @@ ImageViewerBase<TPixel,TLabel>
     }
 }
 template <class TPixel, class TLabel>
-void 
+void
 ImageViewerBase<TPixel,TLabel>
 ::Unlink(Self * viewer)
 {
@@ -1072,11 +1072,11 @@ ImageViewerBase<TPixel,TLabel>
 	  m_FullWidget->SetRedChannelIndex(m_RedChannelIndex);
 	  m_FullWidget->SetGreenChannelIndex(m_GreenChannelIndex);
 	  m_FullWidget->SetBlueChannelIndex(m_BlueChannelIndex);
-	  
+
 	  ComputeNormalizationFactors();
 
 	  typename HistogramWidgetType::ColorType blue,red,green;
-	  
+
 	  red[0]=0.5;
 	  red[1]=0;
 	  red[2]=0;
@@ -1095,7 +1095,7 @@ ImageViewerBase<TPixel,TLabel>
 	  m_RedHistogramWidget->SetTransferFunctionLabel("Affine");
 	  m_RedHistogramWidget->SetHistogramColor(red);
 	  m_RedHistogramWidget->SetTextColor(red);
-	  
+
 	  m_BlueHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(m_BlueChannelIndex)->GetOutput());
 	  m_BlueHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(m_BlueChannelIndex));
 	  m_BlueHistogramWidget->SetLabel("Blue channel");
@@ -1124,10 +1124,10 @@ ImageViewerBase<TPixel,TLabel>
       m_FullWidget->SetRedChannelIndex(m_RedChannelIndex);
 
       ComputeNormalizationFactors();
-      
+
       typename HistogramWidgetType::ColorType gray;
       gray.Fill(0.5);
-      
+
       m_RedHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(m_RedChannelIndex)->GetOutput());
       m_RedHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(m_RedChannelIndex));
       m_RedHistogramWidget->SetLabel("Grayscale channel");
@@ -1152,10 +1152,10 @@ ImageViewerBase<TPixel,TLabel>
       m_FullWidget->SetGreenChannelIndex(m_GreenChannelIndex);
 
       ComputeNormalizationFactors();
-      
+
       typename HistogramWidgetType::ColorType gray;
       gray.Fill(0.5);
-      
+
       m_RedHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(0)->GetOutput());
       m_RedHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(0));
       m_RedHistogramWidget->SetLabel("Modulus");
@@ -1180,10 +1180,10 @@ ImageViewerBase<TPixel,TLabel>
       m_FullWidget->SetGreenChannelIndex(m_GreenChannelIndex);
 
       ComputeNormalizationFactors();
-      
+
       typename HistogramWidgetType::ColorType gray;
       gray.Fill(0.5);
-      
+
       m_RedHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(0)->GetOutput());
       m_RedHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(0));
       m_RedHistogramWidget->SetLabel("Phase");
@@ -1277,7 +1277,7 @@ ImageViewerBase<TPixel,TLabel>
 }
 
 template<class TPixel, class TLabel>
-void 
+void
 ImageViewerBase<TPixel,TLabel>
 ::ClearROIColorMap(void)
 {

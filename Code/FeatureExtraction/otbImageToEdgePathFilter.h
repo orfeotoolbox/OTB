@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,20 +32,20 @@ namespace otb {
  * objects. The padding constant is chosen as regard to the ForegroundValue (label of
  * the object) to avoid confusion on foreground and background values.
  *
- * The edge computation is divided into two steps. 
+ * The edge computation is divided into two steps.
  *
  * First, a linear search is perfomed to detect a first pixel belonging to the edge of
  * the object.
- * 
+ *
  * From that pixel and until the algorithm comes back to this position, the neighborhood
- * is iteratively and clock-wise searched to detect the next pixel in the edge. 
- * 
+ * is iteratively and clock-wise searched to detect the next pixel in the edge.
+ *
  * In case of linear object (in fact open edge), the algorithm will walk the object twice in
  * opposite directions, thus producing an edge with a null surface and twice the length of the
  * object as perimeter.
- * 
+ *
  * This leads to consistant result for geometric descriptors (for instance compacity).
- * \sa ImageToPathFilter 
+ * \sa ImageToPathFilter
  */
 
 
@@ -77,7 +77,7 @@ public:
   /** Set and Get foreground value */
   itkSetMacro(ForegroundValue,PixelType);
   itkGetConstMacro(ForegroundValue,PixelType);
-  
+
 protected:
   ImageToEdgePathFilter();
   virtual ~ImageToEdgePathFilter(){};
@@ -88,8 +88,8 @@ protected:
 private:
   ImageToEdgePathFilter(const Self&); // purposely not implemented
   void operator=(const Self&); // purposely not implemented
-  
-  PixelType m_ForegroundValue; 
+
+  PixelType m_ForegroundValue;
 };
 
 } // end namespace otb

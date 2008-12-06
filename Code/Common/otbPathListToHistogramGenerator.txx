@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -22,12 +22,12 @@
 #include "otbPathListToHistogramGenerator.h"
 
 
-namespace otb { 
+namespace otb {
 
 
 template< class TPath,class TFunction >
 PathListToHistogramGenerator< TPath, TFunction >
-::PathListToHistogramGenerator() 
+::PathListToHistogramGenerator()
 {
   m_HistogramGenerator = GeneratorType::New();
 }
@@ -37,7 +37,7 @@ PathListToHistogramGenerator< TPath, TFunction >
 template< class TPath,class TFunction >
 void
 PathListToHistogramGenerator< TPath, TFunction >
-::SetInput( PathListPointer path ) 
+::SetInput( PathListPointer path )
 {
   m_PathList = path ;
 }
@@ -56,23 +56,23 @@ PathListToHistogramGenerator< TPath, TFunction >
 template< class TPath,class TFunction >
 void
 PathListToHistogramGenerator< TPath, TFunction >
-::Compute() 
+::Compute()
 {
-	
+
     PathPointer vertexList;
-    
+
     ListSamplePointer  ListSample = ListSampleType::New();
     int nbElementPathList = m_PathList->size();
- 
+
     ListSampleVectorType ResultFunction;
-    
+
     typename TFunction::Pointer function = TFunction::New();
-   
+
     for(int noPathList = 0 ; noPathList < nbElementPathList; noPathList++ )
     {
-       vertexList = (*m_PathList)[noPathList]; 
+       vertexList = (*m_PathList)[noPathList];
        function->SetInputPath( vertexList );
-       
+
        ResultFunction[0] = static_cast<MeasurementType>( function->Evaluate() );
        ListSample->PushBack(ResultFunction);
 
@@ -87,7 +87,7 @@ PathListToHistogramGenerator< TPath, TFunction >
 template< class TPath,class TFunction >
 void
 PathListToHistogramGenerator< TPath, TFunction >
-::SetNumberOfBins( const SizeType & size ) 
+::SetNumberOfBins( const SizeType & size )
 {
   m_HistogramGenerator->SetNumberOfBins( size );
 }

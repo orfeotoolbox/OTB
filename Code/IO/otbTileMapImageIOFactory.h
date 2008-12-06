@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,17 +29,17 @@ namespace otb
  */
 class ITK_EXPORT TileMapImageIOFactory : public itk::ObjectFactoryBase
 {
-public:  
+public:
   /** Standard class typedefs. */
   typedef TileMapImageIOFactory   Self;
   typedef itk::ObjectFactoryBase  Superclass;
   typedef itk::SmartPointer<Self>  Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
-  
+
   /** Class methods used to interface with the registered factories. */
   virtual const char* GetITKSourceVersion(void) const;
   virtual const char* GetDescription(void) const;
-  
+
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
 
@@ -62,8 +62,8 @@ private:
   void operator=(const Self&); //purposely not implemented
 
 };
-  
-  
+
+
 } // end namespace otb
 
 #endif

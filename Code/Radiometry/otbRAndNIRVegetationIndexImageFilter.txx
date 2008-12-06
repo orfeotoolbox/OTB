@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,7 +30,7 @@ namespace otb
 /**
  * Constructor
  */
-template <class TInputImageR, class TInputImageNIR, 
+template <class TInputImageR, class TInputImageNIR,
           class TOutputImage, class TFunction  >
 RAndNIRVegetationIndexImageFilter<TInputImageR,TInputImageNIR,TOutputImage,TFunction>
 ::RAndNIRVegetationIndexImageFilter()
@@ -41,11 +41,11 @@ RAndNIRVegetationIndexImageFilter<TInputImageR,TInputImageNIR,TOutputImage,TFunc
 /**
  * Connect one of the operands for pixel-wise addition
  */
-template <class TInputImageR, class TInputImageNIR, 
+template <class TInputImageR, class TInputImageNIR,
           class TOutputImage, class TFunction  >
 void
 RAndNIRVegetationIndexImageFilter<TInputImageR,TInputImageNIR,TOutputImage,TFunction>
-::SetInputR( const TInputImageR * image1 ) 
+::SetInputR( const TInputImageR * image1 )
 {
   // Process object is not const-correct so the const casting is required.
   SetInput1( image1 );
@@ -55,11 +55,11 @@ RAndNIRVegetationIndexImageFilter<TInputImageR,TInputImageNIR,TOutputImage,TFunc
 /**
  * Connect one of the operands for pixel-wise addition
  */
-template <class TInputImageR, class TInputImageNIR, 
+template <class TInputImageR, class TInputImageNIR,
           class TOutputImage, class TFunction  >
 void
 RAndNIRVegetationIndexImageFilter<TInputImageR,TInputImageNIR,TOutputImage,TFunction>
-::SetInputNIR( const TInputImageNIR * image2 ) 
+::SetInputNIR( const TInputImageNIR * image2 )
 {
   // Process object is not const-correct so the const casting is required.
 //  SetNthInput(1, const_cast<TInputImageNIR *>( image2 ));
@@ -87,7 +87,7 @@ RAndNIRVegetationIndexImageFilter<TInputImageR, TInputImageNIR, TOutputImage, TF
   NIRInputImagePointer inputPtr2
     = dynamic_cast<const TInputImageNIR*>(itk::ProcessObject::GetInput(1));
   OutputImagePointer outputPtr = this->GetOutput(0);
-  
+
   itk::ImageRegionConstIterator<TInputImageR> inputItR(inputPtr1, outputRegionForThread);
   itk::ImageRegionConstIterator<TInputImageNIR> inputItNIR(inputPtr2, outputRegionForThread);
 
@@ -99,7 +99,7 @@ RAndNIRVegetationIndexImageFilter<TInputImageR, TInputImageNIR, TOutputImage, TF
   inputItNIR.GoToBegin();
   outputIt.GoToBegin();
 
-  while( !inputItR.IsAtEnd() ) 
+  while( !inputItR.IsAtEnd() )
     {
     outputIt.Set( this->GetFunctor()( inputItR.Get(), inputItNIR.Get() ) );
     ++inputItNIR;

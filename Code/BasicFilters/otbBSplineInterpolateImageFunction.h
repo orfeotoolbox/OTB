@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -41,11 +41,11 @@ namespace otb
  * \ingroup ImageFunctions
  */
 template <
-  class TImageType, 
+  class TImageType,
   class TCoordRep = double,
   class TCoefficientType = double >
-class ITK_EXPORT BSplineInterpolateImageFunction : 
-    public itk::InterpolateImageFunction<TImageType,TCoordRep> 
+class ITK_EXPORT BSplineInterpolateImageFunction :
+    public itk::InterpolateImageFunction<TImageType,TCoordRep>
 {
 public:
   /** Standard class typedefs. */
@@ -57,7 +57,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(BSplineInterpolateImageFunction, InterpolateImageFunction);
 
- 
+
   /** New macro for creation of through a Smart Pointer */
   itkNewMacro( Self );
 
@@ -87,25 +87,25 @@ typedef typename InputImageType::RegionType RegionType;
 
   /** Internal Coefficient typedef support */
   typedef TCoefficientType CoefficientDataType;
-  typedef itk::Image<CoefficientDataType, 
+  typedef itk::Image<CoefficientDataType,
                      itkGetStaticConstMacro(ImageDimension)
     > CoefficientImageType;
 
   /** Define filter for calculating the BSpline coefficients */
-  typedef otb::BSplineDecompositionImageFilter<TImageType, CoefficientImageType> 
+  typedef otb::BSplineDecompositionImageFilter<TImageType, CoefficientImageType>
   CoefficientFilter;
   typedef typename CoefficientFilter::Pointer CoefficientFilterPointer;
 
   /** Evaluate the function at a ContinuousIndex position.
    *
-   * Returns the B-Spline interpolated image intensity at a 
+   * Returns the B-Spline interpolated image intensity at a
    * specified point position. No bounds checking is done.
    * The point is assume to lie within the image buffer.
    *
    * ImageFunction::IsInsideBuffer() can be used to check bounds before
    * calling the method. */
-  virtual OutputType EvaluateAtContinuousIndex( 
-    const ContinuousIndexType & index ) const; 
+  virtual OutputType EvaluateAtContinuousIndex(
+    const ContinuousIndexType & index ) const;
 
   /** Derivative typedef support */
   typedef itk::CovariantVector<OutputType,
@@ -113,13 +113,13 @@ typedef typename InputImageType::RegionType RegionType;
     > CovariantVectorType;
 
   CovariantVectorType EvaluateDerivative( const PointType & point ) const
-  {    
+  {
     ContinuousIndexType index;
     this->GetInputImage()->TransformPhysicalPointToContinuousIndex( point, index );
     return ( this->EvaluateDerivativeAtContinuousIndex( index ) );
-  } 
+  }
 
-  CovariantVectorType EvaluateDerivativeAtContinuousIndex( 
+  CovariantVectorType EvaluateDerivativeAtContinuousIndex(
     const ContinuousIndexType & x ) const;
 
 
@@ -133,7 +133,7 @@ typedef typename InputImageType::RegionType RegionType;
   virtual void SetInputImage(const TImageType * inputData);
 
 
-  /** Update coefficients filter. Coefficient filter are computed over the buffered 
+  /** Update coefficients filter. Coefficient filter are computed over the buffered
    region of the input image. */
 virtual void UpdateCoefficientsFilter(void);
 
@@ -148,34 +148,34 @@ protected:
   typename TImageType::SizeType       m_DataLength;  // Image size
   unsigned int                        m_SplineOrder; // User specified spline order (3rd or cubic is the default)
 
-  typename CoefficientImageType::ConstPointer       m_Coefficients; // Spline coefficients  
+  typename CoefficientImageType::ConstPointer       m_Coefficients; // Spline coefficients
 
 private:
   BSplineInterpolateImageFunction( const Self& ); //purposely not implemented
   /** Determines the weights for interpolation of the value x */
-  void SetInterpolationWeights( const ContinuousIndexType & x, 
-                                const vnl_matrix<long> & EvaluateIndex, 
-                                vnl_matrix<double> & weights, 
+  void SetInterpolationWeights( const ContinuousIndexType & x,
+                                const vnl_matrix<long> & EvaluateIndex,
+                                vnl_matrix<double> & weights,
                                 unsigned int splineOrder ) const;
 
   /** Determines the weights for the derivative portion of the value x */
-  void SetDerivativeWeights( const ContinuousIndexType & x, 
-                             const vnl_matrix<long> & EvaluateIndex, 
-                             vnl_matrix<double> & weights, 
+  void SetDerivativeWeights( const ContinuousIndexType & x,
+                             const vnl_matrix<long> & EvaluateIndex,
+                             vnl_matrix<double> & weights,
                              unsigned int splineOrder ) const;
 
-  /** Precomputation for converting the 1D index of the interpolation neighborhood 
+  /** Precomputation for converting the 1D index of the interpolation neighborhood
     * to an N-dimensional index. */
   void GeneratePointsToIndex(  );
 
   /** Determines the indicies to use give the splines region of support */
-  void DetermineRegionOfSupport( vnl_matrix<long> & evaluateIndex, 
-                                 const ContinuousIndexType & x, 
+  void DetermineRegionOfSupport( vnl_matrix<long> & evaluateIndex,
+                                 const ContinuousIndexType & x,
                                  unsigned int splineOrder ) const;
 
-  /** Set the indicies in evaluateIndex at the boundaries based on mirror 
+  /** Set the indicies in evaluateIndex at the boundaries based on mirror
     * boundary conditions. */
-  void ApplyMirrorBoundaryConditions(vnl_matrix<long> & evaluateIndex, 
+  void ApplyMirrorBoundaryConditions(vnl_matrix<long> & evaluateIndex,
                                      unsigned int splineOrder) const;
 
 
@@ -186,7 +186,7 @@ private:
   CoefficientFilterPointer     m_CoefficientFilter;
 
   RegionType m_CurrentBufferedRegion;
-  
+
 };
 
 } // namespace otb

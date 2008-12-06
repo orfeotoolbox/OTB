@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -69,7 +69,7 @@ namespace otb
   ::GetOutput(void)
   {
     return dynamic_cast<OutputImageListType*>(this->itk::ProcessObject::GetOutput(2));
-  }  
+  }
   /**
    * Get The SupFilter details
    * \return The brighter details extracted from the filtering operation.
@@ -125,7 +125,7 @@ namespace otb
   void
   MorphologicalPyramidAnalysisFilter<TInputImage,TOutputImage,TMorphoFilter>
   ::GenerateData(void)
-  { 
+  {
     // Input image pointer
     OutputImageListType *   OutputImageList   = this->GetOutput();
 
@@ -139,9 +139,9 @@ namespace otb
     typedef itk::SubtractImageFilter<InputImageType,InputImageType,OutputImageType> SubtractFilterType;
     typedef itk::MaximumImageFilter<InputImageType,InputImageType,InputImageType> MaxFilterType;
     typedef itk::ImageDuplicator<InputImageType> DuplicatorType;
-    typedef otb::MorphologicalPyramid::Resampler<InputImageType,OutputImageType> ResamplerType;  
+    typedef otb::MorphologicalPyramid::Resampler<InputImageType,OutputImageType> ResamplerType;
 
-    // Input Image duplication to the currentImage Pointer 
+    // Input Image duplication to the currentImage Pointer
     typename DuplicatorType::Pointer duplicator = DuplicatorType::New();
     duplicator->SetInputImage(this->GetInput());
     duplicator->Update();
@@ -150,18 +150,18 @@ namespace otb
 
     // Structuring element size computation
     const int structElementDimension=static_cast<int>(vcl_ceil(this->GetDecimationRatio()/2.));
-  
+
     // Structuring element creation
     KernelType structuringElement;
     structuringElement.SetRadius(structElementDimension);
     structuringElement.CreateStructuringElement();
-  
+
     // Filters declarations
     typename MorphoFilterType::Pointer morphoFilter;
     typename MaxFilterType::Pointer max;
     typename SubtractFilterType::Pointer subtract1,subtract2,subtract3,subtract4;
     typename ResamplerType::Pointer resampler1, resampler2;
-  
+
     // Size declaration
     typename InputImageType::SizeType size;
 
@@ -205,7 +205,7 @@ namespace otb
 	otbMsgDevMacro(<<"MorphologicalPyramidAnalysisFilter: subtract2 OK "<<subtract2->GetOutput()->GetLargestPossibleRegion().GetSize());
 	infFilter->PushBack(subtract2->GetOutput());
 	otbMsgDevMacro("MorphologicalPyramidAnalysisFilter: step "<<i<<" - Image appended to InfFilter");
-	
+
 	// New  Size
 	size = morphoFilter->GetOutput()->GetLargestPossibleRegion().GetSize();
 	for (int j =0; j<InputImageType::ImageDimension;j++)
@@ -215,15 +215,15 @@ namespace otb
 	    size[j]=static_cast<unsigned int>(vcl_ceil((static_cast<double>(sizeTmp)/this->GetDecimationRatio())+0.5));
 	  }
 	otbMsgDevMacro(<<"New size: "<<size);
-    
-	// Image subsampling 
+
+	// Image subsampling
 	// Current image becomes the newly subsampled image
 	resampler1 = ResamplerType::New();
 	resampler1->SetInput(morphoFilter->GetOutput());
 	resampler1->SetSize(size);
 	resampler1->Update();
 	currentImage=resampler1->GetOutput();
-	
+
 	otbMsgDevMacro(<<"MorphologicalPyramidAnalysisFilter: DownSampling OK "<<currentImage->GetLargestPossibleRegion().GetSize());
 	// New current image is appeneded to the output list
 	OutputImageList->PushBack(currentImage);

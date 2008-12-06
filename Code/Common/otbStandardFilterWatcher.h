@@ -30,7 +30,7 @@ namespace otb
    *  \brief This class shows the percentage progress execution
    *         of the pipeline filtering process
    *
-   *  This class is based on oberservers desgin patter 
+   *  This class is based on oberservers desgin patter
    *  Abstract class ProcessObject is the subject
    *  Event are oberservers
    *
@@ -49,39 +49,39 @@ namespace otb
   class ITK_EXPORT StandardFilterWatcher : public otb::FilterWatcherBase
     {
     public:
-      
+
       /** Constructor. Takes a ProcessObject to monitor and an optional
        * comment string that is prepended to each event message. */
       StandardFilterWatcher(itk::ProcessObject* process,
 			    const char *comment="");
-      
+
       /** Copy constructor */
       StandardFilterWatcher(const StandardFilterWatcher&);
-      
+
       /** operator=  */
       void operator=(const StandardFilterWatcher& );
-            
+
       /** Get/Set number of stars */
       void SetStars( int count ) { m_StarsCount = count;}
       const int& GetStars() const { return m_StarsCount;}
-      
+
     protected:
-      
+
       /** Callback method to show the ProgressEvent */
       virtual void ShowProgress();
-      
+
       /** Callback method to show the StartEvent */
       virtual void StartFilter();
-      
+
       /** Callback method to show the EndEvent */
       virtual void EndFilter();
-      
+
     private:
-      
+
       /** Stars coutning */
       int m_StarsCount;
     };
-  
+
 } // end namespace otb
 
 #endif

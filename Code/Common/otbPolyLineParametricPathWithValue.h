@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,7 +28,7 @@ namespace otb
  *  \brief This class implement a PolyLineParametricPath for which a value can be set.
  * The value is stored in the itk::MetaDataDictionary.
  * The precision of the value can be set.
- * 
+ *
  * \sa itk::PolyLineParametricPath.
  */
 template < class TValue,unsigned int VDimension=2>
@@ -41,22 +41,22 @@ class ITK_EXPORT PolyLineParametricPathWithValue
   typedef itk::PolyLineParametricPath<VDimension>  Superclass;
   typedef itk::SmartPointer<Self>                  Pointer;
   typedef itk::SmartPointer<const Self>            ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(PolyLineParametricPath, MySuperclass);
-  
+
   /** Template parameters typedefs */
  typedef TValue ValueType;
- 
+
  /** Derived typedefs */
  typedef typename Superclass::VertexType VertexType;
  typedef typename Superclass::VertexListType VertexListType;
  typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
  typedef typename VertexListType::ConstIterator   VertexListConstIteratorType;
- 
+
  itkGetMacro(Key,std::string);
 
  void SetValue(ValueType value)
@@ -79,7 +79,7 @@ class ITK_EXPORT PolyLineParametricPathWithValue
    }
    return resp;
  }
- 
+
  /**
   * Return the path length (perimeter).
   * \return The length.
@@ -90,7 +90,7 @@ protected:
   /** Constructor */
   PolyLineParametricPathWithValue();
   /** Destructor */
-  virtual ~PolyLineParametricPathWithValue() 
+  virtual ~PolyLineParametricPathWithValue()
  { }
  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;

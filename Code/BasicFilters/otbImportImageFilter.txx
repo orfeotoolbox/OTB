@@ -1,5 +1,5 @@
 /*=========================================================================
-	
+
   Program:   ORFEO Toolbox
   Language:  C++
   Date:      $Date$
@@ -35,7 +35,7 @@ ImportImageFilter<TOutputImage>
 ::ImportImageFilter()
 {
   unsigned int idx;
-  
+
   for (idx = 0; idx < TOutputImage::ImageDimension; ++idx)
     {
     m_Spacing[idx] = 1.0;
@@ -66,11 +66,11 @@ ImportImageFilter<TOutputImage>
  *
  */
 template <class TOutputImage>
-void 
+void
 ImportImageFilter<TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  int i;  
+  int i;
 
   Superclass::PrintSelf(os,indent);
 
@@ -107,7 +107,7 @@ ImportImageFilter<TOutputImage>
  *
  */
 template <class TOutputImage>
-void 
+void
 ImportImageFilter<TOutputImage>
 ::SetImportPointer(TPixel *ptr, unsigned long num, bool LetFilterManageMemory)
 {
@@ -141,9 +141,9 @@ ImportImageFilter<TOutputImage>
  *
  */
 template <class TOutputImage>
-void 
+void
 ImportImageFilter<TOutputImage>
-::EnlargeOutputRequestedRegion(itk::DataObject *output) 
+::EnlargeOutputRequestedRegion(itk::DataObject *output)
 {
   // call the superclass' implementation of this method
   Superclass::EnlargeOutputRequestedRegion(output);
@@ -157,11 +157,11 @@ ImportImageFilter<TOutputImage>
 }
 
 
-/** 
+/**
  *
  */
 template <class TOutputImage>
-void 
+void
 ImportImageFilter<TOutputImage>
 ::GenerateOutputInformation()
 {
@@ -184,14 +184,14 @@ ImportImageFilter<TOutputImage>
  *
  */
 template <class TOutputImage>
-void 
+void
 ImportImageFilter<TOutputImage>
 ::GenerateData()
 {
   // Normally, GenerateData() allocates memory.  However, the application
   // provides the memory for this filter via the SetImportPointer() method.
   // Therefore, this filter does not call outputPtr->Allocate().
-  
+
   // get pointer to the output
   OutputImagePointer outputPtr = this->GetOutput();
 
@@ -209,11 +209,11 @@ ImportImageFilter<TOutputImage>
 }
 
 
-/** 
+/**
  *
  */
 template <class TOutputImage>
-void 
+void
 ImportImageFilter<TOutputImage>
 ::SetSpacing( const SpacingType & spacing )
 {
@@ -226,11 +226,11 @@ ImportImageFilter<TOutputImage>
 }
 
 
-/** 
+/**
  *
  */
 template <class TOutputImage>
-void 
+void
 ImportImageFilter<TOutputImage>
 ::SetOrigin( const OriginType & origin )
 {
@@ -244,7 +244,7 @@ ImportImageFilter<TOutputImage>
 
 //----------------------------------------------------------------------------
 template <class TOutputImage>
-void 
+void
 ImportImageFilter<TOutputImage>
 ::SetDirection(const DirectionType direction )
 {

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -39,23 +39,23 @@ namespace otb
  * \brief Creation of an "otb" image which contains metadata.
  *
  */
- 
-// Le 3ieme parametre template est bidon MAIS necessaire pour compiler avec Microsoft Visual C++ 6.0 
-template <class TPixel,unsigned int VImageDimension> 
+
+// Le 3ieme parametre template est bidon MAIS necessaire pour compiler avec Microsoft Visual C++ 6.0
+template <class TPixel,unsigned int VImageDimension>
 class ITK_EXPORT Image : public itk::Image<TPixel,VImageDimension>,
 				ImageBase
-					 
+
 {
-public: 
+public:
   /** Standard class typedefs. */
   typedef Image   Self;
   typedef itk::Image<TPixel, VImageDimension>  Superclass;
   typedef itk::SmartPointer<Self>  Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
   typedef itk::WeakPointer<const Self>  ConstWeakPointer;
-  
-  typedef ImageBase::VectorType	VectorType;	
-  typedef ImageBase::ImageKeywordlistType	ImageKeywordlistType;	
+
+  typedef ImageBase::VectorType	VectorType;
+  typedef ImageBase::ImageKeywordlistType	ImageKeywordlistType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -85,7 +85,7 @@ public:
   typedef itk::DefaultPixelAccessorFunctor< Self > AccessorFunctorType;
 
   /** Tyepdef for the functor used to access a neighborhood of pixel pointers.*/
-  typedef itk::NeighborhoodAccessorFunctor< Self > 
+  typedef itk::NeighborhoodAccessorFunctor< Self >
                                             NeighborhoodAccessorFunctorType;
 
 
@@ -129,7 +129,7 @@ public:
   typedef typename Superclass::OffsetValueType OffsetValueType;
 
   /** Return the Pixel Accessor object */
-  AccessorType GetPixelAccessor( void ) 
+  AccessorType GetPixelAccessor( void )
     { return AccessorType(); }
 
   /** Return the Pixel Accesor object */
@@ -137,9 +137,9 @@ public:
     { return AccessorType(); }
 
   /** Return the NeighborhoodAccessor functor */
-  NeighborhoodAccessorFunctorType GetNeighborhoodAccessor() 
+  NeighborhoodAccessorFunctorType GetNeighborhoodAccessor()
     { return NeighborhoodAccessorFunctorType(); }
-  
+
   /** Return the NeighborhoodAccessor functor */
   const NeighborhoodAccessorFunctorType GetNeighborhoodAccessor() const
     { return NeighborhoodAccessorFunctorType(); }
@@ -148,31 +148,31 @@ public:
 
   /** Get the projection coordinate system of the image. */
   virtual std::string GetProjectionRef( void );
-  
+
   /** Get the GCP projection coordinates of the image. */
   virtual std::string GetGCPProjection( void );
-  
+
   virtual unsigned int GetGCPCount( void );
-  
+
   virtual OTB_GCP & GetGCPs ( unsigned int GCPnum );
-    
-  virtual std::string GetGCPId( unsigned int GCPnum );   
+
+  virtual std::string GetGCPId( unsigned int GCPnum );
   virtual std::string GetGCPInfo( unsigned int GCPnum );
-  virtual double GetGCPRow( unsigned int GCPnum ); 
-  virtual double GetGCPCol( unsigned int GCPnum ); 	
-  virtual double GetGCPX( unsigned int GCPnum ); 
-  virtual double GetGCPY( unsigned int GCPnum ); 
+  virtual double GetGCPRow( unsigned int GCPnum );
+  virtual double GetGCPCol( unsigned int GCPnum );
+  virtual double GetGCPX( unsigned int GCPnum );
+  virtual double GetGCPY( unsigned int GCPnum );
   virtual double GetGCPZ( unsigned int GCPnum );
-  
+
   /** Get the six coefficients of affine geoTtransform. */
-  virtual VectorType GetGeoTransform( void ); 
-  
+  virtual VectorType GetGeoTransform( void );
+
   /** Get image corners. */
   virtual VectorType GetUpperLeftCorner( void );
   virtual VectorType GetUpperRightCorner( void );
   virtual VectorType GetLowerLeftCorner( void );
   virtual VectorType GetLowerRightCorner( void );
-  
+
   /** Get image keyword list */
   virtual ImageKeywordlistType GetImageKeywordlist(void);
 
@@ -189,10 +189,10 @@ protected:
 private:
   Image(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
 };
-  
-  
+
+
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

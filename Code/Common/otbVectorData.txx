@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -44,7 +44,7 @@ VectorData<TPrecision,VDimension>
 
   itk::PreOrderTreeIterator<DataTreeType> it(m_DataTree);
   it.GoToBegin();
-  
+
   while(!it.IsAtEnd())
     {
       itk::PreOrderTreeIterator<DataTreeType> itParent = it;

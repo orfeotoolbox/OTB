@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,7 +30,7 @@ namespace otb
  *  This iterator encapsulates the itk::LineIterator along with the VectorContainer iterator on
  *  the vertex list of the polyline.
  *
- * \ingroup Iterators 
+ * \ingroup Iterators
  * \sa PolyLineParametricPath
  * \sa PolyLineParametricPathWithValue
  * \sa LineIterator
@@ -56,7 +56,7 @@ class ITK_EXPORT PolyLineImageConstIterator
   typedef typename TImage::RegionType            RegionType;
   typedef typename TImage::SpacingType           SpacingType;
   typedef typename TImage::PointType             PointType;
-  typedef TImage                                 ImageType;           
+  typedef TImage                                 ImageType;
   typedef TPath                                  PathType;
   typedef typename PathType::VertexType          VertexType;
   typedef typename PathType::VertexListType      VertexListType;
@@ -70,9 +70,9 @@ class ITK_EXPORT PolyLineImageConstIterator
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(PolyLineImageConstIterator, None);
-  
+
   /** Get the dimension (size) of the index. */
-  static unsigned int GetImageIteratorDimension() 
+  static unsigned int GetImageIteratorDimension()
     {
     return TImage::ImageDimension;
     }
@@ -88,8 +88,8 @@ class ITK_EXPORT PolyLineImageConstIterator
     }
   /** Is the iterator at the end of the line? */
   bool IsAtEnd()
-    {   
-	  return (m_InternalVertexIterator == m_Path->GetVertexList()->End()) 
+    {
+	  return (m_InternalVertexIterator == m_Path->GetVertexList()->End())
 	    && m_InternalImageIterator.IsAtEnd();
     }
   /** Move an iterator to the beginning of the line. */
@@ -104,7 +104,7 @@ class ITK_EXPORT PolyLineImageConstIterator
   /** Default Destructor. */
   virtual ~PolyLineImageConstIterator() {};
 
-protected: //made protected so other iterators can access 
+protected: //made protected so other iterators can access
   /** Smart pointer to the source image. */
   typename ImageType::ConstWeakPointer m_Image;
   /** Smart pointer to the path */

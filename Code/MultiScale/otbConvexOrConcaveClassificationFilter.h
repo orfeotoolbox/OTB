@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,10 +34,10 @@ namespace Functor
      * satellite imagery. IEEE Transactions on geoscience and remote sensing, vol. 39,
      * NO. 2, February 2001, p. 309-320.
      * \par
-     *  
+     *
      * This functor implements the following decision rule to classify a pixel between the three classes
      * Convex, Concave and Flat. Let \f$f\f$ denote the input image and \f$\psi_{N}(f)\f$ the geodesic leveling
-     * of \f$f\f$ with a structuring element of size \f$N\f$. One can derive the following decision rule to 
+     * of \f$f\f$ with a structuring element of size \f$N\f$. One can derive the following decision rule to
      * classify \f$f\f$ into Convex (label \f$\stackrel{\smile}{k}\f$), Concave (label \f$\stackrel{\frown}{k}\f$)
      * and Flat (label \f$\bar{k}\f$):
      *
@@ -53,7 +53,7 @@ namespace Functor
     template<class TInput,class TOutput>
       class ConvexOrConcaveDecisionRule
       {
-	
+
       public:
 	/**
 	 * Constructor
@@ -89,7 +89,7 @@ namespace Functor
 	      }
 	    return resp;
 	  }
-	/** 
+	/**
 	 * Set the convex label
 	 * \param label the convex label
 	 */
@@ -105,7 +105,7 @@ namespace Functor
 	  {
 	    return m_ConvexLabel;
 	  }
-	/** 
+	/**
 	 * Set the concave label
 	 * \param label the concave label
 	 */
@@ -121,7 +121,7 @@ namespace Functor
 	  {
 	    return m_ConcaveLabel;
 	  }
-	/** 
+	/**
 	 * Set the flat label
 	 * \param label the flat label
 	 */
@@ -168,43 +168,43 @@ namespace Functor
 
 /** \class ConvexOrConcaveClassificationFilter
  *  \brief This filter apply the Convex, Concave and flat classification functor to the whole image.
- * 
+ *
  *  Please refer to the documentation of the Functor::ConvexOrConcaveDecisionRule for more details.
  *
- * \sa GeodesicMorphologyDecompositionImageFilter 
+ * \sa GeodesicMorphologyDecompositionImageFilter
  * \sa GeodesicMorphologyLevelingFilter
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ConvexOrConcaveClassificationFilter
   : public itk::BinaryFunctorImageFilter<TInputImage,TInputImage, TOutputImage,
-    Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType, 
+    Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
                                          typename TOutputImage::PixelType> >
 {
  public:
   /** Standard typedefs */
   typedef ConvexOrConcaveClassificationFilter Self;
   typedef itk::BinaryFunctorImageFilter<TInputImage,TInputImage, TOutputImage,
-   Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType, 
+   Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
                                         typename TOutputImage::PixelType> > Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(ConvexOrConcaveClassificationFilter,BinaryFunctorImageFilter);
-  
+
   /** Template class typedef */
   typedef TInputImage InputImageType;
   typedef TOutputImage OutputImageType;
   typedef typename OutputImageType::PixelType LabelType;
-  typedef Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType, 
+  typedef Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
     typename TOutputImage::PixelType> DecisionFunctorType;
   /**
    * Set the input image
    * \param image the input image
-   * 
+   *
    */
   void SetInput(const TInputImage * image)
     {
@@ -213,7 +213,7 @@ class ITK_EXPORT ConvexOrConcaveClassificationFilter
   /**
    * Set the input leveling image
    * \param leveling the input leveling image
-   * 
+   *
    */
   void SetInputLeveling(const TInputImage * leveling)
     {

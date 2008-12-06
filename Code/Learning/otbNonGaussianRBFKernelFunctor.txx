@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) GET / ENST Bretagne. All rights reserved. 
+  Copyright (c) GET / ENST Bretagne. All rights reserved.
   See GETCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -45,12 +45,12 @@ NonGaussianRBFKernelFunctor
 				const svm_parameter & param ) const
 {
 	double pr_x, pr_y, diff, sum = 0.0;
-	
+
 	while ( x->index != -1 && y->index != -1 )
 	{
-		pr_x = pow( x->value, m_Alpha ); 
-		pr_y = pow( y->value, m_Alpha ); 
-		
+		pr_x = pow( x->value, m_Alpha );
+		pr_y = pow( y->value, m_Alpha );
+
 		diff = pow( fabs( pr_x - pr_y ), m_Beta );
 
 		sum += diff;
@@ -78,4 +78,4 @@ NonGaussianRBFKernelFunctor
 #endif
 
 
-	
+

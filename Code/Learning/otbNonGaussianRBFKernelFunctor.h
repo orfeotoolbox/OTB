@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) GET / ENST Bretagne. All rights reserved. 
+  Copyright (c) GET / ENST Bretagne. All rights reserved.
   See GETCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,9 +28,9 @@ namespace otb
   /** \class NonGaussianRBFKernelFunctor
    * \brief Performs an RBF kernel evaluation that better suit sample distribution with high Kurtosis.
    *
-   * It is of kind 
+   * It is of kind
    * $\exp\left( - \gamma \sum_i | x_i^\alpha - y_i^\alpha |^\beta \right)$
-   * where $0 \leqslant \alpha \leqslant 1$ and 
+   * where $0 \leqslant \alpha \leqslant 1$ and
    * $0 \leqslant \beta \leqslant 2$.
    *
    * Variables to be instanciated (through \code SetValue \endcode) are:
@@ -43,14 +43,14 @@ public:
 
 	double operator() ( const svm_node * x, const svm_node * y,
 						const svm_parameter & param ) const;
-	
+
 	NonGaussianRBFKernelFunctor ();
 	virtual ~NonGaussianRBFKernelFunctor () { }
 
 	/** Specific implementation of \code Update \endcode to split m_MapParameters
 	 * into specific variables to speed up kernel evaluations */
 	void Update ();
-	
+
 protected:
 	double m_Alpha;
 	double m_Beta;

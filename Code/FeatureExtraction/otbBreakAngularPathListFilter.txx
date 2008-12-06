@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -40,16 +40,16 @@ BreakAngularPathListFilter<TPath>
 {
         typename PathType::VertexListType::ConstPointer  vertexList = inputPath->GetVertexList();
         typename PathType::VertexListType::ConstIterator pathIt = vertexList->Begin();
-        
+
         typename PathType::VertexType pixel1, pixel2, pixel3;
-        
-        // Initialisation 
-        PathPointerType newPath = PathType::New();  
+
+        // Initialisation
+        PathPointerType newPath = PathType::New();
         newPath->Initialize();
-        
+
         double alpha1(0.), alpha2(0.);
-        
-        while ( pathIt != vertexList->End() ) 
+
+        while ( pathIt != vertexList->End() )
         {
                 // Add Pixel 1
                 newPath->AddVertex(pathIt.Value());
@@ -62,7 +62,7 @@ BreakAngularPathListFilter<TPath>
                         if (pathIt != vertexList->End())
                         {
                                 pixel3=pathIt.Value();
-                               
+
                                 alpha1 = vcl_atan2((pixel1[1]-pixel2[1]),(pixel1[0]-pixel2[0]));
                                 alpha2 = vcl_atan2((pixel2[1]-pixel3[1]),(pixel2[0]-pixel3[0]));
 								alpha1 = (alpha1 >= 0)?alpha1:(alpha1+2.*M_PI);
@@ -75,7 +75,7 @@ BreakAngularPathListFilter<TPath>
                                         outputPathList->PushBack(newPath);
                                         // Reinit
                                         newPath = PathType::New();
-                                        
+
                                 }
                                 --pathIt; // Return previous pixel
                         }
@@ -101,8 +101,8 @@ BreakAngularPathListFilter<TPath>
 
         typename PathListType::ConstIterator listIt = inputPathList->Begin();
         outputPathList->Clear();
-        
-        PathListPointerType newTempPathList = PathListType::New(); 
+
+        PathListPointerType newTempPathList = PathListType::New();
         while( listIt != inputPathList->End())
         {
                 (void)BreakAngularPath(m_MaxAngle, listIt.Get(), outputPathList);

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,13 +24,13 @@
 
 namespace otb
 {
-  
+
 /** \class SpatialObjectToImageDrawingFilter
- * \brief Base class for filters that take a SpatialObject 
+ * \brief Base class for filters that take a SpatialObject
  *        as input and produce an image as output.
  *  By default, if the user does not specify the size of the output image,
- *  the maximum size of the object's bounding box is used. 
- *  The spacing of the image is given by the spacing of the input 
+ *  the maximum size of the object's bounding box is used.
+ *  The spacing of the image is given by the spacing of the input
  *  Spatial object.
  */
 template <class TInputSpatialObject, class TOutputImage>
@@ -48,10 +48,10 @@ public:
   typedef typename OutputImageType::Pointer OutputImagePointer;
   typedef typename OutputImageType::ValueType  ValueType;
   typedef typename OutputImageType::SpacingType SpacingType;
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(SpatialObjectToImageDrawingFilter,itk::ImageSource);
 
@@ -85,18 +85,18 @@ public:
   virtual void SetSpacing( const float* spacing);
   virtual const double* GetSpacing() const;
 
-  /** Set/Get the value for pixels inside the spatial object. 
+  /** Set/Get the value for pixels inside the spatial object.
   * By default, this filter will return an image
-  * that contains values from the spatial object specified as input. 
+  * that contains values from the spatial object specified as input.
   * If this "inside" value is changed to a non-null value,
-  * the output produced by this filter will be a mask with inside/outside values 
+  * the output produced by this filter will be a mask with inside/outside values
   * specified by the user. */
   itkSetMacro(InsideValue, ValueType);
   itkGetMacro(InsideValue, ValueType);
 
   /** Set/Get the value for pixels outside the spatial object.
   * By default, this filter will return an image
-  * that contains values from the spatial object specified as input. 
+  * that contains values from the spatial object specified as input.
   * If this "outside" value is changed to a non-null value,
   * the output produced by this filter will be a mask with inside/outside values
   * specified by the user. */
@@ -128,13 +128,13 @@ public:
   itkSetMacro(UseObjectValue,bool);
   itkGetMacro(UseObjectValue,bool);
 
-  
-  
-  
+
+
+
   typedef itk::SpatialObject<InputSpatialObjectType::ObjectDimension> SpatialObjectType;
   typedef typename SpatialObjectType::ChildrenListType* ChildrenType;
   typedef typename SpatialObjectType::ChildrenListType::iterator IteratorType;
-  
+
 protected:
   SpatialObjectToImageDrawingFilter();
   ~SpatialObjectToImageDrawingFilter();

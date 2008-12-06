@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,9 +27,9 @@ namespace otb
   ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
   ::ForwardFourierMellinTransformImageFilter()
   {
-   
+
     m_Sigma = 1.0;
-    m_OutputSize.Fill(512); 
+    m_OutputSize.Fill(512);
     m_FFTFilter = FourierImageFilterType::New();
     m_Interpolator = InterpolatorType::New();
     m_Transform = LogPolarTransformType::New();
@@ -45,7 +45,7 @@ namespace otb
  ::GenerateOutputInformation(void)
  {
    Superclass::GenerateOutputInformation();
-   
+
    OutputImagePointer outputPtr = this->GetOutput();
 
    if(!outputPtr)
@@ -64,7 +64,7 @@ namespace otb
   void
   ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
   ::GenerateData()
-  {   
+  {
     typename LogPolarTransformType::ParametersType params(4);
     // Center the transform
     params[0]=0.5*static_cast<double>(this->GetInput()->GetLargestPossibleRegion().GetSize()[0]);
@@ -73,7 +73,7 @@ namespace otb
     params[3]=vcl_log(vcl_sqrt(vcl_pow(static_cast<double>(this->GetInput()->GetLargestPossibleRegion().GetSize()[0]),2)
 		       +vcl_pow(static_cast<double>(this->GetInput()->GetLargestPossibleRegion().GetSize()[1]),2.))/2)/m_OutputSize[1];
   m_Transform->SetParameters(params);
-  
+
   // log polar resampling
   m_ResampleFilter->SetInput(this->GetInput());
   m_ResampleFilter->SetDefaultPixelValue(m_DefaultPixelValue);
@@ -98,7 +98,7 @@ namespace otb
     valueTemp *= vcl_exp(m_Sigma * Rho);
     valueTemp *=params[3];
     PixelType value = static_cast<PixelType>(valueTemp);
-	    
+
     if( value < minOutputValue )
       {
 	pixval = minOutputValue;
@@ -107,23 +107,23 @@ namespace otb
       {
 	pixval = maxOutputValue;
       }
-    else 
+    else
       {
 	pixval = static_cast<PixelType>(value);
       }
-    m_Iterator.Set(pixval);      
+    m_Iterator.Set(pixval);
   }
   m_FFTFilter->SetInput(tempImage );
-  
+
   m_FFTFilter->GraftOutput( this->GetOutput() );
   m_FFTFilter->Update();
-  this->GraftOutput( m_FFTFilter->GetOutput() );  
+  this->GraftOutput( m_FFTFilter->GetOutput() );
 }
 /**
  * Standard "PrintSelf" method
  */
 template < class TPixel,class  TInterpol,unsigned int   Dimension >
-void 
+void
 ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {

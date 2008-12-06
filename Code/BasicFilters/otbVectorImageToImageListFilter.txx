@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -65,7 +65,7 @@ VectorImageToImageListFilter<TVectorImageType,TImageList>
 {
   OutputImageListPointerType outputPtr = this->GetOutput();
   InputVectorImagePointerType inputPtr = this->GetInput();
-  
+
   if(inputPtr)
     {
       if(outputPtr->Size()>0)
@@ -82,15 +82,15 @@ void
 VectorImageToImageListFilter<TVectorImageType,TImageList>
 ::GenerateData(void)
 {
-  
+
   OutputImageListPointerType outputPtr = this->GetOutput();
   InputVectorImagePointerType inputPtr = this->GetInput();
 
   typedef itk::ImageRegionConstIteratorWithIndex<InputVectorImageType> InputIteratorType;
   typedef itk::ImageRegionIteratorWithIndex<OutputImageType> OutputIteratorType;
-  
+
   std::vector<OutputIteratorType> outputIteratorList;
-  
+
  typename OutputImageListType::ConstIterator outputListIt = outputPtr->Begin();
   for(;outputListIt!=outputPtr->End();++outputListIt)
     {

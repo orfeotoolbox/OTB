@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -98,13 +98,13 @@ ImageFileReader<TOutputImage>
 
   // Tell the ImageIO to read the file
   //
-  OutputImagePixelType *buffer = 
+  OutputImagePixelType *buffer =
     output->GetPixelContainer()->GetBufferPointer();
   this->m_ImageIO->SetFileName(this->m_FileName.c_str());
 
   itk::ImageIORegion ioRegion(TOutputImage::ImageDimension);
 //otbMsgDebugMacro( <<" Avant ioRegion : "<<ioRegion);
-  
+
 //  itk::ImageIORegion ioRegionStreaming = output->GetRequestedRegion();
 
   itk::ImageIORegion::SizeType ioSize = ioRegion.GetSize();
@@ -149,12 +149,12 @@ ImageFileReader<TOutputImage>
 
 //otbMsgDebugMacro( <<" Apres ioRegion : "<<ioRegion);
 
- 
+
   this->m_ImageIO->SetIORegion(ioRegion);
 
   typedef itk::DefaultConvertPixelTraits< ITK_TYPENAME TOutputImage::IOPixelType >  ConvertPixelTraits;
-  
-  
+
+
 otbMsgDevMacro(<< "ImageFileReader<TOutputImage>::GenerateData():");
 otbMsgDevMacro (<< "ioRegion: " << ioRegion);
 otbMsgDevMacro(<< "   => test conversion Pixel type: compare");
@@ -163,7 +163,7 @@ otbMsgDevMacro(<< "         this->m_ImageIO->GetComponentTypeInfo(): "<<this->m_
 otbMsgDevMacro(<< "   with  typeid(ITK_TYPENAME ConvertPixelTraits::ComponentType): "<<typeid(ITK_TYPENAME ConvertPixelTraits::ComponentType).name());
 otbMsgDevMacro(<< "   and   this->m_ImageIO->GetNumberOfComponents(): "<<this->m_ImageIO->GetNumberOfComponents());
 otbMsgDevMacro(<< "   with  ConvertPixelTraits::GetNumberOfComponents(): "<<ConvertPixelTraits::GetNumberOfComponents());
-  
+
   if ( this->m_ImageIO->GetComponentTypeInfo()
        == typeid(ITK_TYPENAME ConvertPixelTraits::ComponentType)
        && (this->m_ImageIO->GetNumberOfComponents()
@@ -179,7 +179,7 @@ otbMsgDevMacro(<< "   with  ConvertPixelTraits::GetNumberOfComponents(): "<<Conv
     // note: char is used here because the buffer is read in bytes
     // regardles of the actual type of the pixels.
     ImageRegionType region = output->GetBufferedRegion();
-	
+
     // Adapte the image size with the region
     std::streamoff nbBytes = (this->m_ImageIO->GetImageSizeInBytes() / this->m_ImageIO->GetImageSizeInPixels()) * static_cast<std::streamoff>(region.GetNumberOfPixels());
     otbMsgDevMacro(<<"NbBytes for region: "<<nbBytes);
@@ -190,7 +190,7 @@ otbMsgDevMacro(<< "   with  ConvertPixelTraits::GetNumberOfComponents(): "<<Conv
                      << " to: "
                      << typeid(ITK_TYPENAME ConvertPixelTraits::ComponentType).name() << "  NbBytes"<<nbBytes<<"  region.GetNumberOfPixels()"<<region.GetNumberOfPixels());
     char * loadBuffer = new char[nbBytes];
-    
+
     this->m_ImageIO->Read(loadBuffer);
 
     this->DoConvertBuffer(loadBuffer, region.GetNumberOfPixels());
@@ -229,7 +229,7 @@ otbMsgDevMacro( << " Streaming Image Read ");
 
 
 template <class TOutputImage>
-void 
+void
 ImageFileReader<TOutputImage>
 ::GenerateOutputInformation(void)
 {
@@ -237,7 +237,7 @@ ImageFileReader<TOutputImage>
   typename TOutputImage::Pointer output = this->GetOutput();
 
   itkDebugMacro(<<"Reading file for GenerateOutputInformation()" << this->m_FileName);
-  
+
   // Check to see if we can read the file given the name or prefix
   //
   if ( this->m_FileName == "" )
@@ -255,20 +255,20 @@ ImageFileReader<TOutputImage>
   }
   // Update FileName
   this->m_FileName = lFileName;
-  
+
   std::string lFileNameOssimKeywordlist = this->m_FileName ;
-  
+
 
   // Test if the file exist and if it can be open.
   // and exception will be thrown otherwise.
   //
   this->TestFileExistanceAndReadability();
-  
+
   if ( this->m_UserSpecifiedImageIO == false ) //try creating via factory
     {
     this->m_ImageIO = ImageIOFactory::CreateImageIO( this->m_FileName.c_str(), itk::ImageIOFactory::ReadMode );
     }
-  
+
   if ( this->m_ImageIO.IsNull() )
     {
     itk::ImageFileReaderException e(__FILE__, __LINE__);
@@ -276,13 +276,13 @@ ImageFileReader<TOutputImage>
     msg << " Could not create IO object for file "
         << this->m_FileName.c_str() << std::endl;
     msg << "  Tried to create one of the following:" << std::endl;
-    std::list<itk::LightObject::Pointer> allobjects = 
+    std::list<itk::LightObject::Pointer> allobjects =
       itk::ObjectFactoryBase::CreateAllInstance("itkImageIOBase");
     for(std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin();
         i != allobjects.end(); ++i)
       {
       itk::ImageIOBase* io = dynamic_cast<itk::ImageIOBase*>(i->GetPointer());
-      msg << "    " << io->GetNameOfClass() << std::endl; 
+      msg << "    " << io->GetNameOfClass() << std::endl;
       }
     msg << "  You probably failed to set a file suffix, or" << std::endl;
     msg << "    set the suffix to an unsupported type." << std::endl;
@@ -290,7 +290,7 @@ ImageFileReader<TOutputImage>
     throw e;
     return;
     }
-  
+
   // Got to allocate space for the image. Determine the characteristics of
   // the image.
   //
@@ -298,8 +298,8 @@ ImageFileReader<TOutputImage>
   this->m_ImageIO->ReadImageInformation();
   // Initialisation du nombre de Composante par pixel
 // THOMAS ceci n'est pas dans ITK !!
-//  output->SetNumberOfComponentsPerPixel(this->m_ImageIO->GetNumberOfComponents()); 
-  
+//  output->SetNumberOfComponentsPerPixel(this->m_ImageIO->GetNumberOfComponents());
+
   SizeType dimSize;
   double spacing[ TOutputImage::ImageDimension ];
   double origin[ TOutputImage::ImageDimension ];
@@ -333,7 +333,7 @@ ImageFileReader<TOutputImage>
       // Number of dimensions in the output is more than number of dimensions
       // in the ImageIO object (the file).  Use default values for the size,
       // spacing, origin and direction for the final (degenerate) dimensions.
-      dimSize[i] = 1;  
+      dimSize[i] = 1;
       spacing[i] = 1.0;
       origin[i] = 0.0;
       for (unsigned j = 0; j < TOutputImage::ImageDimension; j++)
@@ -355,11 +355,11 @@ ImageFileReader<TOutputImage>
   output->SetDirection( direction ); // Set the image direction cosines
 
   // Trying to read ossim MetaData
-  
+
   // Add the radar factory
   ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
   ossimImageHandler* handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(lFileNameOssimKeywordlist.c_str()));
-  
+
   if (!handler)
   {
   	  otbMsgDebugMacro( <<"OSSIM Open Image FAILED ! ");
@@ -369,7 +369,7 @@ ImageFileReader<TOutputImage>
   {
   	  otbMsgDebugMacro( <<"OSSIM Open Image SUCCESS ! ");
 	  ossimKeywordlist geom_kwl, tmp_kwl, tmp_kwl2;// = new ossimKeywordlist();
-  
+
 	  // Read OSSIM Keyword List
 	  bool hasMetaData = handler->getImageGeometry(geom_kwl);
 	  otbMsgDevMacro( << " AVANT *geom_kwl : "<<geom_kwl<<std::endl);
@@ -381,43 +381,43 @@ ImageFileReader<TOutputImage>
 	  else
 	  {
 	  	  otbMsgDebugMacro( <<"OSSIM MetaData present ! ");
-	  	  
+
 		  otbMsgDevMacro( <<"Image keyword lists are :" << std::endl << geom_kwl);
-		  
+
 	      // Update otb Keywordlist
 		  ImageKeywordlist otb_kwl;
 		  otb_kwl.SetKeywordlist( geom_kwl );
-		  
+
 	  	  // Update itk MetaData Dictionnary
 //		  otbMsgDebugMacro( <<"Start update ITK Dictionnary ? ");
-		  
+
 		  otb_kwl.convertToOSSIMKeywordlist(tmp_kwl);
 
 		  itk::MetaDataDictionary& dico = this->m_ImageIO->GetMetaDataDictionary();
-  
+
 //		  otbMsgDebugMacro( <<"Before write ITK Dictionnary ? ");
 	  	  itk::EncapsulateMetaData< ImageKeywordlist >(dico,
 	  											 MetaDataKey::m_OSSIMKeywordlistKey,
 												 otb_kwl);
-												 
+
 //		  otbMsgDebugMacro( <<"After write ITK Dictionnary ? ");
 //		  itk::ExposeMetaData< ImageKeywordlist >(dico,
 //	  											 MetaDataKey::m_OSSIMKeywordlistKey,
 //												 otb_tmp);
 //		  otbMsgDebugMacro( <<"After read ITK Dictionnary ? ");
-		  
+
 //		  otb_tmp.convertToOSSIMKeywordlist(tmp_kwl2);
 //		  otbMsgDebugMacro( << " DEBUT THOMAS : Ossim key word list copy : "<<tmp_kwl2<<std::endl);
 
 		 // otbMsgDebugMacro( <<"Image keyword lists in dictionnary are :" << std::endl << geom_tmp);
-		  
+
 	  }
 	  // Free memory
 	  otbMsgDevMacro( <<"OSSIM Free Memory ? ");
-	  delete handler;  		
+	  delete handler;
 	  otbMsgDevMacro( <<"OSSIM Free Memory OK ! ");
   }
-  
+
   //Copy MetaDataDictionary from instantiated reader to output image.
   output->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
   this->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
@@ -431,21 +431,21 @@ ImageFileReader<TOutputImage>
   region.SetSize(dimSize);
   region.SetIndex(start);
 
-// THOMAS : ajout 
-  // If a VectorImage, this requires us to set the 
+// THOMAS : ajout
+  // If a VectorImage, this requires us to set the
   // VectorLength before allocate
-  if( strcmp( output->GetNameOfClass(), "VectorImage" ) == 0 ) 
+  if( strcmp( output->GetNameOfClass(), "VectorImage" ) == 0 )
     {
     typedef typename TOutputImage::AccessorFunctorType AccessorFunctorType;
     AccessorFunctorType::SetVectorLength( output, this->m_ImageIO->GetNumberOfComponents() );
     }
- 
+
   output->SetLargestPossibleRegion(region);
 
 }
 
 template <class TOutputImage>
-void 
+void
 ImageFileReader<TOutputImage>
 ::TestFileExistanceAndReadability()
 {
@@ -518,10 +518,10 @@ ImageFileReader<TOutputImage>
                         cpt++;
                 }
 	}
-        else 
+        else
         {
                 std::string strFileName(filename);
-                
+
                 std::string extension = System::GetExtension(strFileName);
                 if( (extension=="HDR") || (extension=="hdr") )
                 {

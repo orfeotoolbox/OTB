@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,7 +30,7 @@ ThresholdImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::ThresholdImageToPointSetFilter()
 {
   m_LowerThreshold = itk::NumericTraits<InputPixelType>::NonpositiveMin();
-  m_UpperThreshold = itk::NumericTraits<InputPixelType>::max();  
+  m_UpperThreshold = itk::NumericTraits<InputPixelType>::max();
 }
 
 
@@ -53,19 +53,19 @@ ThresholdImageToPointSetFilter<TInputImage, TOutputPointSet>
   // walk the regions, threshold each pixel
   while( !inIt.IsAtEnd() )
     {
-    
+
     const InputPixelType value = inIt.Get();
     const IndexType index = inIt.GetIndex();
-    
+
     if ((value >= m_LowerThreshold) && (value <= m_UpperThreshold))
       {
        position[0] = index[0];
        position[1] = index[1];
 
-       outputPtr->SetPoint(pointId,position);    
+       outputPtr->SetPoint(pointId,position);
 
-       pointId++;    
-       
+       pointId++;
+
       }
     ++inIt;
     }

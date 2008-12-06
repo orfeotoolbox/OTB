@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,7 +24,7 @@
 #include "otbStreamingWarpImageFilter.h"
 #include "otbStreamingTraits.h"
 
-namespace otb 
+namespace otb
 {
 
 template<class TInputImage, class TOutputImage, class TDeformationField>
@@ -53,7 +53,7 @@ StreamingWarpImageFilter<TInputImage,TOutputImage,TDeformationField>
     {
       return;
     }
-  
+
   // Compute the security margin radius
   typename InputImageType::SizeType radius;
   typename InputImageType::SpacingType spacing = inputPtr->GetSpacing();
@@ -68,7 +68,7 @@ StreamingWarpImageFilter<TInputImage,TOutputImage,TDeformationField>
     }
 
   otbMsgDevMacro(<<"WarpImageFilter: MaximumDeformation: "<<m_MaximumDeformation<<", interpolator radius: "<<interpolatorRadius<<", total radius:  "<<radius);
-  
+
   // get a copy of the input requested region (should equal the output
   // requested region)
   typename DeformationFieldType::RegionType inputRequestedRegion;
@@ -90,7 +90,7 @@ StreamingWarpImageFilter<TInputImage,TOutputImage,TDeformationField>
 
     // store what we tried to request (prior to trying to crop)
     inputPtr->SetRequestedRegion( inputRequestedRegion );
-    
+
     // build an exception
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
     e.SetLocation(ITK_LOCATION);
@@ -101,7 +101,7 @@ StreamingWarpImageFilter<TInputImage,TOutputImage,TDeformationField>
 }
 
 template<class TInputImage, class TOutputImage, class TDeformationField>
-void 
+void
 StreamingWarpImageFilter<TInputImage,TOutputImage,TDeformationField>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {

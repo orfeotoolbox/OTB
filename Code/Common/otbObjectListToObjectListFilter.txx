@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -42,20 +42,20 @@ namespace otb
   ::SetInput(const InputListType *input)
   {
  // Process object is not const-correct so the const_cast is required here
-    this->itk::ProcessObject::SetNthInput(0, 
+    this->itk::ProcessObject::SetNthInput(0,
                                           const_cast< InputListType * >( input ) );
   }
 
   template <class TInputList, class TOutputList>
       const typename ObjectListToObjectListFilter<TInputList,TOutputList>::InputListType *
           ObjectListToObjectListFilter<TInputList,TOutputList>
-  ::GetInput(void) 
+  ::GetInput(void)
   {
     if (this->GetNumberOfInputs() < 1)
     {
       return 0;
     }
-  
+
     return static_cast<const TInputList * >
         (this->itk::ProcessObject::GetInput(0) );
   }

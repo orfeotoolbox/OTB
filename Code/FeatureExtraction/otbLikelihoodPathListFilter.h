@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,12 +25,12 @@ namespace otb
 {
 /** \class LikelihoodPathListFilter
  *  \brief Affect a value to each path of the list based on the image
- * 
+ *
  * PathList and image are given as an input, the filter affect a value to each
  * path: this value is equal to the sum of the pixels crossed by the path
  * (using a PolyLineImageConstIterator) divided by the number of points in the
  * path
- * 
+ *
  */
 template <class TPath, class TImage>
 class ITK_EXPORT LikelihoodPathListFilter
@@ -42,13 +42,13 @@ class ITK_EXPORT LikelihoodPathListFilter
   typedef PathListToPathListFilter<TPath>       Superclass;
   typedef itk::SmartPointer<Self>               Pointer;
   typedef itk::SmartPointer<const Self>         ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(LikelihoodPathListFilter, PathListToPathListFilter);
-  
+
   /** Template parameters typedefs */
   typedef typename Superclass::PathType         PathType;
   typedef typename Superclass::PathListType     PathListType;
@@ -63,13 +63,13 @@ class ITK_EXPORT LikelihoodPathListFilter
   typedef TImage ImageType;
   typedef typename ImageType::Pointer ImagePointerType;
   typedef typename ImageType::ConstPointer ImageConstPointerType;
-  
+
   /**
    * Set the input Likelihood image.
    * \param image The Likelihood image.
    */
   void SetInputImage(const ImageType * image);
-  
+
   /**
    * Get the input Likelihood image.
    * \return The input Likelihood image.

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,7 +24,7 @@
 
 namespace otb
 {
-  
+
 /** \class MultiChannelRAndBAndNIRVegetationIndexImageFilter
  * \brief Implements mutli channel R and B and NIR vegetation index operation, pixel-wise generic vegetation index operation on one vector image.
  *
@@ -33,12 +33,12 @@ namespace otb
  * operation to be applied, using a Functor style.
  *
  */
-template <class TInputImage, class TOutputImage, 
+template <class TInputImage, class TOutputImage,
         class TFunction = Functor::ARVI<        typename TInputImage::InternalPixelType,
                                                 typename TInputImage::InternalPixelType,
                                                 typename TInputImage::InternalPixelType,
                                                 typename TOutputImage::PixelType>  >
-class ITK_EXPORT MultiChannelRAndBAndNIRVegetationIndexImageFilter : public itk::InPlaceImageFilter<TInputImage,TOutputImage> 
+class ITK_EXPORT MultiChannelRAndBAndNIRVegetationIndexImageFilter : public itk::InPlaceImageFilter<TInputImage,TOutputImage>
 {
 public:
   /** Standard class typedefs. */
@@ -49,7 +49,7 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(MultiChannelRAndBAndNIRVegetationIndexImageFilter, InPlaceImageFilter);
 
@@ -57,8 +57,8 @@ public:
   typedef TFunction   FunctorType;
   typedef TInputImage InputImageType;
   typedef typename    InputImageType::ConstPointer    InputImagePointer;
-  typedef typename    InputImageType::RegionType InputImageRegionType; 
-  typedef typename    InputImageType::PixelType  InputImagePixelType; 
+  typedef typename    InputImageType::RegionType InputImageRegionType;
+  typedef typename    InputImageType::PixelType  InputImagePixelType;
   typedef TOutputImage OutputImageType;
   typedef typename     OutputImageType::Pointer    OutputImagePointer;
   typedef typename     OutputImageType::RegionType OutputImageRegionType;
@@ -85,7 +85,7 @@ public:
       this->Modified();
       }
   }
-  
+
   /** Set/Get the red channel index. Value must be in [1...[ */
   itkSetMacro(RedIndex,unsigned int);
   itkGetMacro(RedIndex,unsigned int);
@@ -95,7 +95,7 @@ public:
   /** Set/Get the nir channel index. Value must be in [1...[ */
   itkSetMacro(NIRIndex,unsigned int);
   itkGetMacro(NIRIndex,unsigned int);
-  
+
 protected:
   MultiChannelRAndBAndNIRVegetationIndexImageFilter();
   virtual ~MultiChannelRAndBAndNIRVegetationIndexImageFilter() {};

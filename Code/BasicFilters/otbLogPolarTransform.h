@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,12 +25,12 @@ namespace otb
   /** \class LogPolarTransform
    * \brief Implement the log-polar coordinate transform.
    *
-   * The log-polar coordinate system is a polar system where the 
+   * The log-polar coordinate system is a polar system where the
    * radial coordinate has a logarithmic scale.
-   * 
-   * Given \f$(\rho,\theta)\f$ the coordinate in the log-polar system, the 
-   * corresponding cartesian coordinates are 
-   * 
+   *
+   * Given \f$(\rho,\theta)\f$ the coordinate in the log-polar system, the
+   * corresponding cartesian coordinates are
+   *
    * \f$ x-xc=exp(\rho)*cos(\theta) \f$
    * \f$ y-yc=exp(\rho)*sin(\theta) \f$
    *
@@ -115,7 +115,7 @@ class ITK_EXPORT LogPolarTransform
   private:
     LogPolarTransform(const Self&); // purposely not implemented
     void operator=(const Self&); // purposely not implemented
-  
+
     InputPointType m_Center;
     ScaleType m_Scale;
   };

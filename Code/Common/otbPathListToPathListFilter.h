@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -36,13 +36,13 @@ class ITK_EXPORT PathListToPathListFilter
   typedef ObjectListToObjectListFilter<ObjectList<TPath>, ObjectList<TPath> >         Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(PathListToPathListFilter, ObjectListToObjectListFilter);
-  
+
   /** Template parameters typedefs */
   typedef typename Superclass::InputObjectType PathType;
   typedef typename Superclass::InputListType PathListType;
@@ -53,7 +53,7 @@ class ITK_EXPORT PathListToPathListFilter
   typedef typename PathType::Pointer OutputPathPointerType;
   typedef typename Superclass::OutputListType OutputPathListType;
   typedef typename Superclass::OutputListPointer OutputPathListPointerType;
-  
+
 protected:
   /** Constructor */
   PathListToPathListFilter(){};

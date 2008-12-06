@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,22 +34,22 @@ namespace otb
  * satellite imagery. IEEE Transactions on geoscience and remote sensing, vol. 39,
  * NO. 2, February 2001, p. 309-320.
  * \par
- * 
+ *
  * It provides a geodesic decomposition of the input image, with the following scheme.
- * Let \f$f_0\f$ denote the input image,\f$\stackrel{\smile}{\mu}_{N}(f)\f$ denote 
- * the convex membership function, \f$ \stackrel{\frown}{\mu}_{N}(f) \f$ denote the concave 
- *  membership function and \f$\psi_{N}(f)\f$ denote the leveling function, for a given radius \f$ N \f$ 
+ * Let \f$f_0\f$ denote the input image,\f$\stackrel{\smile}{\mu}_{N}(f)\f$ denote
+ * the convex membership function, \f$ \stackrel{\frown}{\mu}_{N}(f) \f$ denote the concave
+ *  membership function and \f$\psi_{N}(f)\f$ denote the leveling function, for a given radius \f$ N \f$
  * as defined in the documentation  of the GeodesicMorphologyDecompositionImageFilter .
- * Let \f$[N_{1},\ldots,N_{n}]\f$ denote a range of increasing radius (or scales). The iterative 
+ * Let \f$[N_{1},\ldots,N_{n}]\f$ denote a range of increasing radius (or scales). The iterative
  * decomposition is defined as follows:
- * 
+ *
  * \f[
  *  f_{n} = \psi_{N_{n}}(f_{n-1})
  * \f]
  *
  * \f[
  *  \stackrel{\frown}{f}_{n} = \stackrel{\frown}{\mu}_{N_{N}}(f_{n})
- * \f] 
+ * \f]
  *
  * \f[
  *  \stackrel{\smile}{f}_{n} = \stackrel{\smile}{\mu}_{N_{N}}(f_{n})
@@ -82,12 +82,12 @@ public:
   typedef typename OutputImageListType::Pointer        OutputImageListPointerType;
   typedef typename Superclass::OutputImagePointerType  OutputImagePointerType;
   /** Input related typedefs */
-  typedef typename Superclass::InputImageType          InputImageType;          
+  typedef typename Superclass::InputImageType          InputImageType;
   typedef typename Superclass::InputImageRegionType    InputImageRegionType;
   typedef typename InputImageType::Pointer             InputImagePointerType;
   typedef typename InputImageType::ConstPointer        InputImageConstPointerType;
-  typedef typename InputImageType::SizeType            SizeType;                 
-  typedef typename InputImageType::ValueType           ValueType;  
+  typedef typename InputImageType::SizeType            SizeType;
+  typedef typename InputImageType::ValueType           ValueType;
   typedef typename InputImageType::PixelType           PixelType;
   typedef typename InputImageType::SpacingType         SpacingType;
 
@@ -120,8 +120,8 @@ public:
    * \return The concave membership function for each scale.
    */
   OutputImageListType * GetConcaveOutput(void);
-   
-protected:  
+
+protected:
   /** Constructor */
   GeodesicMorphologyIterativeDecompositionImageFilter();
   /** Destructor */
@@ -133,7 +133,7 @@ protected:
   /** Main computation method */
   virtual void GenerateData();
   /** Printself method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;  
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
  private:
   /** The step for the scale analysis */

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,7 +33,7 @@ namespace otb
 /** \class ExtractSegmentsImageFilter
  *
  * This class implements a composite filter that generate an image of segments
- * primitives. It combines four filters : 
+ * primitives. It combines four filters :
  *   - otb::PixelSuppressionByDirectionImageFilter
  *   - otb::LocalHoughFilter
  *   - otb::FillGapsFilter
@@ -41,9 +41,9 @@ namespace otb
  *
  */
 
-template <class TInputImage, 
+template <class TInputImage,
 	  class TOutputImage>
-class ITK_EXPORT ExtractSegmentsImageFilter : 
+class ITK_EXPORT ExtractSegmentsImageFilter :
 public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -51,15 +51,15 @@ public:
   itkStaticConstMacro(		InputImageDimension,
   				unsigned int,
                       		TInputImage::ImageDimension);
-  itkStaticConstMacro(		OutputImageDimension, 
+  itkStaticConstMacro(		OutputImageDimension,
   				unsigned int,
                       		TOutputImage::ImageDimension);
 
   typedef TInputImage InputImageType;
   typedef TOutputImage OutputImageType;
-  
+
   typedef TInputImage PSOutputImageType;
-  
+
   typedef ExtractSegmentsImageFilter 				    Self;
   typedef itk::ImageToImageFilter< InputImageType, OutputImageType> Superclass;
   typedef itk::SmartPointer<Self> 				    Pointer;
@@ -68,36 +68,36 @@ public:
   itkNewMacro(Self);
 
   itkTypeMacro(ExtractSegmentsImageFilter, itk::ImageToImageFilter);
-  
+
   typedef typename InputImageType::PixelType  InputPixelType;
   typedef typename InputImageType::SizeType SizeType;
 
   typedef typename OutputImageType::PixelType OutputPixelType;
-  
-  
+
+
   /** Definition of the list of lines. */
   typedef LineSpatialObjectList	 LinesListType;
- 
+
 
   /** Set/Get the radius of the region of the pixel suppression by direction image filter. */
   void SetPixelSuppressionRadius( SizeType Radius );
   const SizeType GetPixelSuppressionRadius( void );
-  
+
   /** Set/Get Angular Accuracy on the direction of the central pixel for
       the pixel suppression by direction image filter. */
   void SetPixelSuppressionAngularBeam( float AngularBeam );
-  const float GetPixelSuppressionAngularBeam( void );  
+  const float GetPixelSuppressionAngularBeam( void );
 
-  
-  
+
+
   /** Set/Get the radius used to define the region of local hough filter. */
   void SetLocalHoughRadius( SizeType Radius );
   const SizeType GetLocalHoughRadius( void );
-  
+
   /** Set/Get the number of lines we are looking for in the local hough filter. */
   void SetLocalHoughNumberOfLines( unsigned int Radius );
   const unsigned int GetLocalHoughNumberOfLines( void );
-  
+
   /** Set/Get the radius of the disc to remove from the accumulator
    *  for each line found */
   void SetLocalHoughDiscRadius( float DiscRadius );
@@ -112,18 +112,18 @@ public:
   /** Set/Get the radius between two segments in the fill gaps filter. */
   void SetFillGapsRadius( float Radius );
   const float GetFillGapsRadius( void );
-  
+
   /** Set/Get Angular Beam between two segments in the fill gaps filter. */
   void SetFillGapsAngularBeam( float AngularBeam );
-  const float GetFillGapsAngularBeam( void );  
-  
-  
+  const float GetFillGapsAngularBeam( void );
+
+
 
   /** Set/Get the image input of this filter.  */
   void SetInputImage( const InputImageType *image);
-  const InputImageType * GetInputImage(void);  
+  const InputImageType * GetInputImage(void);
 
-  /** Set/Get the image direction of this filter.  */  
+  /** Set/Get the image direction of this filter.  */
   void SetInputImageDirection( const InputImageType *image);
   const InputImageType * GetInputImageDirection(void);
 
@@ -132,21 +132,21 @@ public:
 protected:
   ExtractSegmentsImageFilter();
   virtual ~ExtractSegmentsImageFilter() {};
-  
+
   typedef PixelSuppressionByDirectionImageFilter< InputImageType, PSOutputImageType > 	PixelSuppressionType;
   typedef LocalHoughFilter< InputImageType >						LocalHoughType;
   typedef FillGapsFilter								FillGapsType;
   typedef DrawLineSpatialObjectListFilter< InputImageType, OutputImageType > 		DrawLineListType;
 
   virtual void GenerateData();
-  
+
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
   ExtractSegmentsImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  
+
   typename PixelSuppressionType::Pointer	m_PixelSuppression;
   typename LocalHoughType::Pointer		m_LocalHough;
   typename FillGapsType::Pointer		m_FillGaps;
@@ -158,5 +158,5 @@ private:
 #include "otbExtractSegmentsImageFilter.txx"
 #endif
 
-  
+
 #endif

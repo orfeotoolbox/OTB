@@ -1,5 +1,5 @@
 /*=========================================================================
-	
+
   Program:   ORFEO Toolbox
   Language:  C++
   Date:      $Date$
@@ -36,17 +36,17 @@ namespace otb
     m_ConvolutionFilter->NormalizeFilterOn();
     m_DivideFilter = DivideFilterType::New();
     m_MultiplyFilter = MultiplyFilterType::New();
-    
-     
+
+
     m_Radius.Fill(3);
     m_Filter.SetSize(7*7);
     m_Filter.Fill(1);
-    
+
     m_DivideFilter->SetInput2(m_ConvolutionFilter->GetOutput());
     m_MultiplyFilter->SetInput1(m_DivideFilter->GetOutput());
-    
+
   }
-  
+
   template <class TPanImageType, class TXsImageType, class TOutputImageType>
       void
           SimpleRcsPanSharpeningFusionImageFilter
@@ -56,7 +56,7 @@ namespace otb
   // We have 2 inputs:  an image and a vector image
 
   // Process object is not const-correct so the const_cast is required here
-    this->itk::ProcessObject::SetNthInput(1, 
+    this->itk::ProcessObject::SetNthInput(1,
                                      const_cast<  TPanImageType* >( image ) );
     this->Modified();
   }
@@ -71,11 +71,11 @@ namespace otb
     {
       return 0;
     }
-  
+
     return static_cast<const TPanImageType * >
         (this->itk::ProcessObject::GetInput(1) );
   }
-  
+
   template <class TPanImageType, class TXsImageType, class TOutputImageType>
       void
           SimpleRcsPanSharpeningFusionImageFilter
@@ -85,7 +85,7 @@ namespace otb
   // We have 2 inputs:  an image and a vector image
 
   // Process object is not const-correct so the const_cast is required here
-    this->itk::ProcessObject::SetNthInput(0, 
+    this->itk::ProcessObject::SetNthInput(0,
                          const_cast<  TXsImageType* >( image ) );
     this->Modified();
   }
@@ -100,19 +100,19 @@ namespace otb
     {
       return 0;
     }
-  
+
     return static_cast<const TXsImageType * >
         (this->itk::ProcessObject::GetInput(0) );
   }
-  
-  
+
+
   template <class TPanImageType,class TXsImageType,class TOutputImageType>
       void
       SimpleRcsPanSharpeningFusionImageFilter
           <TPanImageType, TXsImageType, TOutputImageType>
   ::GenerateData()
       {
-        
+
         //Check if size is correct
         typename InternalImageType::SizeType sizePan;
         typename InternalVectorImageType::SizeType sizeXs;
@@ -122,12 +122,12 @@ namespace otb
         {
           itkExceptionMacro(<<"SimpleRcsPanSharpeningFusionImageFilter: Wrong Pan/Xs size");
         }
-      
+
         //Process the fusion
         m_ConvolutionFilter->SetInput( this->GetPanInput() );
-        m_ConvolutionFilter->SetRadius( this->m_Radius); 
+        m_ConvolutionFilter->SetRadius( this->m_Radius);
         m_ConvolutionFilter->SetFilter( this->m_Filter);
-        
+
         m_DivideFilter->SetInput1(this->GetXsInput());
 
         m_MultiplyFilter->SetInput2(this->GetPanInput());
@@ -136,7 +136,7 @@ namespace otb
         m_MultiplyFilter->Update();
         this->GraftOutput( m_MultiplyFilter->GetOutput() );
       }
-      
+
   template <class TPanImageType,class TXsImageType,class TOutputImageType>
           void
       SimpleRcsPanSharpeningFusionImageFilter
@@ -149,7 +149,7 @@ namespace otb
                 << indent << "Radius:" << this->m_Radius
                 << std::endl;
           }
-          
+
 } // end namespace otb
 
 #endif

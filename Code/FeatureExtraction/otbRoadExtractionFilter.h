@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,23 +32,23 @@ namespace otb
 /**
  * \class RoadExtractionFilter
  * \brief This class performs the extraction of roads from an image.
- * 
+ *
  * This composite filter implements a fast and robust road extraction
- * for high resolution satellite images. This is a composite filter using the 
+ * for high resolution satellite images. This is a composite filter using the
  * SpectralAngleDistanceImageFilter and the GenericRoadExtractionFilter and is
- * intended to be used with optical high resolution data. The full method is 
- * described in E. Christophe and J. Inglada, "Robust Road Extraction for High 
- * Resolution Satellite Images," in IEEE International Conference on 
+ * intended to be used with optical high resolution data. The full method is
+ * described in E. Christophe and J. Inglada, "Robust Road Extraction for High
+ * Resolution Satellite Images," in IEEE International Conference on
  * Image Processing, ICIP 2007.
- * 
+ *
  * The algorithm uses all spectral
- * bands based on the spectral angle with a reference pixel. Then, the line 
+ * bands based on the spectral angle with a reference pixel. Then, the line
  * detection is done using a Gaussian gradient with a scalar product to find
- * the road directions. Finally, extracted roads are vectorized and 
- * processed to improve the results removing some occultations and false 
+ * the road directions. Finally, extracted roads are vectorized and
+ * processed to improve the results removing some occultations and false
  * detections.
  *
- * This filter is fast, as the detection typically takes 3 seconds for a 
+ * This filter is fast, as the detection typically takes 3 seconds for a
  * 1000 \f$ \times \f$ 1000 images with four spectral bands. Results can be
  * used as an initialization for more complex algorithms.
  *
@@ -63,7 +63,7 @@ template <class TInputImage, class TOutputPath>
   : public ImageToPathListFilter<TInputImage,TOutputPath>
   {
     public :
-    /** Standard typedefs */ 
+    /** Standard typedefs */
     typedef RoadExtractionFilter                                Self;
     typedef ImageToPathListFilter<TInputImage,TOutputPath>      Superclass;
     typedef itk::SmartPointer<Self>                             Pointer;
@@ -78,13 +78,13 @@ template <class TInputImage, class TOutputPath>
     typedef typename Superclass::OutputPathListType                     OutputPathListType;
     typedef typename InputImageType::PixelType 				InputPixelType;
     typedef double                                                      InternalPixelType;
-    
+
     typedef otb::VectorImage<InternalPixelType,InputImageType::ImageDimension>  VectorImageType;
     typedef otb::Image<InternalPixelType,InputImageType::ImageDimension>        SpectralAngleType;
     typedef otb::Image<InternalPixelType,InputImageType::ImageDimension>        ModulusType;
     typedef otb::Image<InternalPixelType,InputImageType::ImageDimension>        DirectionType;
-    
-    typedef itk::CovariantVector<InternalPixelType,InputImageType::ImageDimension> 
+
+    typedef itk::CovariantVector<InternalPixelType,InputImageType::ImageDimension>
                                                                         VectorPixelType;
     typedef otb::Image<VectorPixelType,InputImageType::ImageDimension>  CovariantVectorImageType;
 
@@ -95,16 +95,16 @@ template <class TInputImage, class TOutputPath>
 
     typedef GenericRoadExtractionFilter<SpectralAngleType, OutputPathType>
         GenericRoadExtractionFilterType;
-                        
-    
+
+
     /** Template parameters typedefs for internals filters */
         typedef typename GenericRoadExtractionFilterType::SigmaType SigmaType;
         typedef typename GenericRoadExtractionFilterType::AmplitudeThresholdType AmplitudeThresholdType;
         typedef typename GenericRoadExtractionFilterType::ToleranceType ToleranceType;
         typedef typename GenericRoadExtractionFilterType::MaxAngleType MaxAngleType;
-        typedef typename GenericRoadExtractionFilterType::MeanDistanceThresholdType MeanDistanceThresholdType; 
+        typedef typename GenericRoadExtractionFilterType::MeanDistanceThresholdType MeanDistanceThresholdType;
         typedef typename GenericRoadExtractionFilterType::LinkRealType LinkRealType;
-     
+
   /** Get/Set the reference pixel (use by the SpectralAngleDistanceImageFilter)*/
   otbGetObjectMemberConstReferenceMacro(SpectralAngleDistanceImageFilter,ReferencePixel,InputPixelType);
   otbSetObjectMemberMacro(SpectralAngleDistanceImageFilter,ReferencePixel,InputPixelType);
@@ -130,14 +130,14 @@ template <class TInputImage, class TOutputPath>
   otbSetObjectMemberMacro(GenericRoadExtractionFilter,FirstMeanDistanceThreshold,MeanDistanceThresholdType);
   otbGetObjectMemberMacro(GenericRoadExtractionFilter,SecondMeanDistanceThreshold,MeanDistanceThresholdType);
   otbSetObjectMemberMacro(GenericRoadExtractionFilter,SecondMeanDistanceThreshold,MeanDistanceThresholdType);
- 
+
   /** Get/Set the angular threshold (use by LinkPathFilter)*/
   otbSetObjectMemberMacro(GenericRoadExtractionFilter,AngularThreshold,LinkRealType);
   otbGetObjectMemberMacro(GenericRoadExtractionFilter,AngularThreshold,LinkRealType);
   /** Get/Set the distance threshold (use by LinkPathFilter)*/
   otbSetObjectMemberMacro(GenericRoadExtractionFilter,DistanceThreshold,LinkRealType);
   otbGetObjectMemberMacro(GenericRoadExtractionFilter,DistanceThreshold,LinkRealType);
-  
+
   protected:
     /** Constructor */
     RoadExtractionFilter();
@@ -153,7 +153,7 @@ template <class TInputImage, class TOutputPath>
     void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   private :
-    
+
     RoadExtractionFilter(const Self&); // purposely not implemented
     void operator=(const Self&); // purposely not implemented
 

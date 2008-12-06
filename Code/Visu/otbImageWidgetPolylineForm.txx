@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -56,9 +56,9 @@ ImageWidgetPolylineForm<TValue>
       glBegin(GL_LINE_STRIP);
 
       VertexListConstIteratorType it =  this->GetPolyline()->GetVertexList()->Begin();
-     
+
       while(it != this->GetPolyline()->GetVertexList()->End())
-	{  
+	{
 	  double x1 = it.Value()[0];
 	  double y1 = it.Value()[1];
 
@@ -66,12 +66,12 @@ ImageWidgetPolylineForm<TValue>
 	  y1 = static_cast<int>(windowh+(originy-y1)*openGlZoom*(1/static_cast<double>(ss_rate)));
           glVertex2f(x1,y1);
 	  ++it;
-	}            
+	}
       glEnd();
       glDisable(GL_BLEND);
     }
 }
- 
+
 } // end namespace otb
 
 #endif

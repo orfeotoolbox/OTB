@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -21,7 +21,7 @@
 #include "otbSVMClassifier.h"
 #include "otbMacro.h"
 
-namespace otb{ 
+namespace otb{
 
 template< class TSample, class TLabel >
 SVMClassifier< TSample, TLabel >
@@ -60,10 +60,10 @@ SVMClassifier< TSample, TLabel >
 
   m_Output->Resize( this->GetSample()->Size() ) ;
 
-  
+
   otbMsgDevMacro(  << "Resize to " << this->GetSample()->Size() );
   otbMsgDevMacro(  << "Resize to " << m_Output->GetSample()->Size() );
-  
+
   //std::vector< double > discriminantScores ;
   unsigned int numberOfClasses = this->GetNumberOfClasses() ;
   otbMsgDevMacro(  << "NbClass " << numberOfClasses );
@@ -73,18 +73,18 @@ SVMClassifier< TSample, TLabel >
   m_Output->SetNumberOfClasses(numberOfClasses) ;
 
 
-/*typename Superclass::DecisionRuleType::Pointer rule = 
+/*typename Superclass::DecisionRuleType::Pointer rule =
     this->GetDecisionRule() ;*/
   otbMsgDevMacro(  << "Do Classif "  );
   this->DoClassification();
-  otbMsgDevMacro(  << "End of classif" );  
+  otbMsgDevMacro(  << "End of classif" );
 
 }
 
 template< class TSample, class TLabel >
 typename SVMClassifier< TSample, TLabel >::OutputType*
 SVMClassifier< TSample, TLabel >
-::GetOutput() 
+::GetOutput()
 {
   return m_Output ;
 }
@@ -92,7 +92,7 @@ SVMClassifier< TSample, TLabel >
 template< class TSample, class TLabel >
 void
 SVMClassifier< TSample, TLabel >
-::SetOutput( OutputType * output ) 
+::SetOutput( OutputType * output )
 {
   m_Output = output;
 }
@@ -113,7 +113,7 @@ SVMClassifier< TSample, TLabel >
 
 
   int numberOfComponentsPerSample  = iter.GetMeasurementVector().Size() ;//this->GetSample().GetMeasurementVectorSize();//
- 
+
   struct svm_node *x;
   bool predict_probability = 1;
 
@@ -144,8 +144,8 @@ SVMClassifier< TSample, TLabel >
 
   int *labels=(int *) malloc(nr_class*sizeof(int));
   double *prob_estimates=NULL;
-  
-  if(predict_probability) 
+
+  if(predict_probability)
     {
     if (svm_type==NU_SVR || svm_type==EPSILON_SVR)
       printf("Prob. model for test data: target value = predicted value + z,\nz: Laplace distribution e^(-|z|/sigma)/(2sigma),sigma=%g\n",svm_get_svr_probability(model));
@@ -161,7 +161,7 @@ SVMClassifier< TSample, TLabel >
   otbMsgDevMacro(  << "Starting iterations " );
   while (iter != end && iterO != endO)
     {
-    
+
     int i = 0;
     double v;
 
@@ -171,7 +171,7 @@ SVMClassifier< TSample, TLabel >
       {
       x[i].index = i+1 ;
       x[i].value = measurements[i];
-	
+
       }
     x[i].index = -1;
 
@@ -184,7 +184,7 @@ SVMClassifier< TSample, TLabel >
       {
       v = svm_predict(model,x);
       }
-    
+
 
     ClassLabelType classLabel;
     // Julien: Event if we support larger type for class labels,
@@ -195,7 +195,7 @@ SVMClassifier< TSample, TLabel >
 
   ++iter;
   ++iterO;
-        
+
 }
 
 if(predict_probability)
@@ -203,7 +203,7 @@ if(predict_probability)
   free(prob_estimates);
   free(labels);
   }
-  
+
 
 delete [] x;
 }

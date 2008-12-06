@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -35,13 +35,13 @@ template <class TImage>
 unsigned long StreamingTraits<TImage>::CalculateNumberOfStreamDivisions(const TImage * image,
                                                         RegionType region,
                                                         SplitterType * splitter,
-                                                        StreamingModeType mode, 
+                                                        StreamingModeType mode,
                                                         unsigned long numberOfStreamDivision,
                                                         unsigned long bufferMemorySize,
                                                         unsigned long bufferNumberOfLinesDivisions)
-{      
+{
         unsigned long numDivisions(0);
-      
+
         switch(mode)
         {
                 case SET_TILING_WITH_SET_NUMBER_OF_STREAM_DIVISIONS : // Just like SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS
@@ -66,10 +66,10 @@ unsigned long StreamingTraits<TImage>::CalculateNumberOfStreamDivisions(const TI
                         otbMsgDevMacro(<<"BufferMemorySize                         = "<<bufferMemorySize);
                         otbMsgDevMacro(<<"bufferMemorySizeOctet                    = "<<bufferMemorySizeOctet);
 
-                        //Active streaming 
+                        //Active streaming
                         if( regionSize > bufferMemorySizeOctet )
                         {
-                                //The regionSize must be at list equal to the sizeLine 
+                                //The regionSize must be at list equal to the sizeLine
                                 if( regionSize < sizeLine )
                                 {
                                         otbMsgDevMacro(<<"Force buffer size.");
@@ -83,7 +83,7 @@ unsigned long StreamingTraits<TImage>::CalculateNumberOfStreamDivisions(const TI
                                 //Non streaming
                                 numDivisions = 1;
                         }
-                
+
                 }
                 break;
                 case SET_BUFFER_NUMBER_OF_LINES :
@@ -113,7 +113,7 @@ unsigned long StreamingTraits<TImage>::CalculateNumberOfStreamDivisions(const TI
                         //Convert in octet unit
                         unsigned long streamMaxSizeBufferForStreaming = streamMaxSizeBufferForStreamingBytes/8;
                         const unsigned long streamImageSizeToActivateStreaming = streamImageSizeToActivateStreamingBytes/8;
-                  
+
                                         unsigned long numberColumnsOfRegion = region.GetSize()[0]; // X dimension
                         const unsigned long sizeLine = numberColumnsOfRegion * \
                                                                                               image->GetNumberOfComponentsPerPixel() * \
@@ -129,7 +129,7 @@ unsigned long StreamingTraits<TImage>::CalculateNumberOfStreamDivisions(const TI
                         otbMsgDevMacro(<<"sizeLine                                     = "<<sizeLine);
                         otbMsgDevMacro(<<"regionSize                                   = "<<regionSize);
 
-                        //Active streaming 
+                        //Active streaming
                         if( regionSize > streamImageSizeToActivateStreaming )
                         {
                                 //On s'assure que la taille du bandeau fait au moins une ligne de l'image si pas TILING
@@ -147,7 +147,7 @@ unsigned long StreamingTraits<TImage>::CalculateNumberOfStreamDivisions(const TI
                                 //Non streaming
                                 numDivisions = 1;
                         }
-                
+
                 }
                 break;
                 default :
@@ -156,28 +156,28 @@ unsigned long StreamingTraits<TImage>::CalculateNumberOfStreamDivisions(const TI
         }
         if( numDivisions == 0) numDivisions = 1;
         otbMsgDevMacro(<<" -> Resume : method : "<<mode<<"\n -> Number of divisions = "<<numDivisions);
-        
+
         // Compute real number of splitter
         unsigned int numDivisionsFromSplitter = splitter->GetNumberOfSplits(region, numDivisions);
-  
+
         /** In tiling streaming mode, we keep the number of divisions calculed by splitter */
         if ((numDivisionsFromSplitter < numDivisions)||(mode==SET_TILING_WITH_SET_NUMBER_OF_STREAM_DIVISIONS)||(mode==SET_TILING_WITH_SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS))
         {
                 numDivisions = numDivisionsFromSplitter;
         }
-        
+
         return(numDivisions);
 }
-         
-         
+
+
 template <class TImage>
 unsigned int StreamingTraits<TImage>::CalculateNeededRadiusForInterpolator(const InterpolationType* interpolator)
 {
         unsigned int neededRadius = 0;
         std::string className;
-        
+
         className = interpolator->GetNameOfClass();
-        
+
         if (className == "LinearInterpolateImageFunction")
 	  {
 	    otbMsgDevMacro(<<"Linear Interpolator");
@@ -234,12 +234,12 @@ unsigned int StreamingTraits<TImage>::CalculateNeededRadiusForInterpolator(const
                 itkGenericExceptionMacro(<< "Windowed Sinc Interpolator not supported yet in resample");
                 otbMsgDevMacro(<<"Windowed Sinc Interpolator not supported yet in resample");
 //                dynamic_cast<typename itk::WindowedSincInterpolateImageFunction*>(interpolator);
-        }                        
+        }
         else
         {
                 itkGenericExceptionMacro(<< "Interpolator not recognized, please choose another type !");
-        }        */                        
-        
+        }        */
+
         return neededRadius;
 }
 
@@ -272,9 +272,9 @@ std::string StreamingTraits<TImage>::GetMethodUseToCalculateNumberOfStreamDivisi
       break;
     }
 
-} 
+}
 
-         
+
 }// End namespace otb
 
 #endif

@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -39,7 +39,7 @@ namespace otb
  * the StreamingImageFilter to divide a requested output region into a
  * series of smaller requests of the pipeline.  This object has two
  * basic methods: GetNumberOfSplits() and GetSplit().
- * 
+ *
  * GetNumberOfSplits() is used to determine how may subregions a given
  * region can be divided.  You call GetNumberOfSplits with an argument
  * that is the number of subregions you want.  If the image region can
@@ -51,9 +51,9 @@ namespace otb
  *
  * GetSplit() returns the ith of N subregions (as an ImageRegion object).
  *
- * ImageRegionNonUniformMultidimensionalSplitter class first proceed 
- * to the division according to the last dimension, if the number of 
- * required division is not reached, it proceed to divide the dimension 
+ * ImageRegionNonUniformMultidimensionalSplitter class first proceed
+ * to the division according to the last dimension, if the number of
+ * required division is not reached, it proceed to divide the dimension
  * before the last one and so on.
  *
  * \ingroup ITKSystemObjects
@@ -69,16 +69,16 @@ public:
   typedef itk::ImageRegionSplitter<VImageDimension>  Superclass;
   typedef itk::SmartPointer<Self>  Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(ImageRegionNonUniformMultidimensionalSplitter,ImageRegionSplitter);
 
   /** Dimension of the image available at compile time. */
   itkStaticConstMacro(ImageDimension, unsigned int, VImageDimension);
-  
+
   /** Index typedef support. An index is used to access pixel values. */
   typedef itk::Index<VImageDimension>  IndexType;
 

@@ -9,12 +9,12 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Some parts of this code are covered by the GET copyright. 
+  Some parts of this code are covered by the GET copyright.
   See GETCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,19 +23,19 @@
 
 #include <vector>
 
-#include "otbKullbackLeiblerProfileImageFilter.h" 
+#include "otbKullbackLeiblerProfileImageFilter.h"
 #include "otbMath.h"
 
 namespace otb {
 
 /* *******************************************************************
-*	Classe CumulantsForEdgeworthProfile 
+*	Classe CumulantsForEdgeworthProfile
 * ********************************************************************
 */
 template <class TInput>
 CumulantsForEdgeworthProfile<TInput>
-::CumulantsForEdgeworthProfile 
-( const TInput & input, std::vector< itk::Array2D<int> > & mask ) 
+::CumulantsForEdgeworthProfile
+( const TInput & input, std::vector< itk::Array2D<int> > & mask )
 {
 	m_debug = MakeSumAndMoments( input, mask );
 	MakeCumulants();
@@ -45,16 +45,16 @@ CumulantsForEdgeworthProfile<TInput>
 
 template <class TInput>
 template <class TInput2>
-itk::VariableLengthVector<double> 
+itk::VariableLengthVector<double>
 CumulantsForEdgeworthProfile<TInput>
 ::KL_profile ( CumulantsForEdgeworthProfile<TInput2> & cumulants )
 {
 	itk::VariableLengthVector<double> resu ( fCum.size() );
-	
+
 	Iterator iter1 = fCum.begin();
 	Iterator iter2 = cumulants.fCum.begin();
 
-	for (unsigned int level = 0; level < resu.GetSize(); level++ ) 
+	for (unsigned int level = 0; level < resu.GetSize(); level++ )
 		resu[level] = KL_profile( (*iter1++), (*iter2++) );
 
 	return resu;
@@ -62,10 +62,10 @@ CumulantsForEdgeworthProfile<TInput>
 
 /* =========== Kullback-Leibler divergence at a given scale ========== */
 
-template <class TInput> 
-double 
+template <class TInput>
+double
 CumulantsForEdgeworthProfile<TInput>
-::KL_profile 
+::KL_profile
 ( const CumulantType & cumulants1, const CumulantType & cumulants2 )
 {
 	double cum1 = cumulants1[0];
@@ -97,7 +97,7 @@ CumulantsForEdgeworthProfile<TInput>
 	double beta_2 = beta * beta;
 	double beta_4 = beta_2 * beta_2;
 	double beta_6 = beta_2 * beta_4;
-	
+
 	double c2 = alpha_2 + beta_2;
 	double c3 = alpha * ( alpha_2 + 3.0 * beta_2 );
 	double c4 = alpha_4 + 6.0 * alpha_2 * beta_2 + 3.0 * beta_4;
@@ -109,7 +109,7 @@ CumulantsForEdgeworthProfile<TInput>
 
 	double tmp = cum1 - tilde_cum1 + sqrt_cum2;
 	double resu = cum3_2 / ( 12.0 * cum2_3 )
-			+ ( log( tilde_cum2 / cum2 ) 
+			+ ( log( tilde_cum2 / cum2 )
 					- 1.0 + tmp * tmp / tilde_cum2 ) / 2.0
 			- ( tilde_cum3 * a1 / 6.0 + tilde_cum4 * a2 / 24.0 + tilde_cum3_2 * a3 / 72.0 )
 			- tilde_cum3_2 * ( c6 - 6.0 * c4 / cum2 + 9.0 * c2 / tilde_cum2_2 ) / 72.0
@@ -124,41 +124,41 @@ CumulantsForEdgeworthProfile<TInput>
 /* ====== Estimation des moments à partir de voisinnages emboités ==== */
 
 template <class TInput>
-int	
+int
 CumulantsForEdgeworthProfile<TInput>
-::MakeSumAndMoments	
-( const TInput & input, std::vector< itk::Array2D<int> > & mask ) 
+::MakeSumAndMoments
+( const TInput & input, std::vector< itk::Array2D<int> > & mask )
 {
 	fMu.resize( mask.size() );
 	std::vector< itk::Array2D<int> >::iterator iter = mask.begin();
-	
+
 	if ( InitSumAndMoments ( input, (*iter++) ) )
 		return 1;
-	
+
 	for (unsigned int level = 1; level < mask.size(); level++ )
 		if ( ReInitSumAndMoments( input, (*iter++), level ) )
 			return 1;
-	
+
 	return 0;
 }
-	
+
 /* ===================== Estimation des moments ====================== */
 /* =============== à partir de la petite taille de fenetre =========== */
 
 template <class TInput>
-int 
+int
 CumulantsForEdgeworthProfile<TInput>
-::InitSumAndMoments 
-( const TInput & input, itk::Array2D<int> & mask ) 
+::InitSumAndMoments
+( const TInput & input, itk::Array2D<int> & mask )
 {
 	fSum0 = fSum1 = fSum2 = fSum3 = fSum4 = 0.0;
 	fMu[0].Fill(0.0);
-	
+
 	unsigned int i,j;
 	unsigned long k = 0;
 	double pixel,pixel_2;
-		
-	// for ( unsigned long i = 0; i < input.Size(); i++ ) 
+
+	// for ( unsigned long i = 0; i < input.Size(); i++ )
 	for (i = 0; i < mask.rows(); i++ )
         {
 		for ( j = 0; j < mask.cols(); j++ )
@@ -166,9 +166,9 @@ CumulantsForEdgeworthProfile<TInput>
 			// std::cerr << "(" << i << "," << j << ") k=" << k << " ";
 			if ( mask.get(i,j) == 1 )
 			{
-				pixel = static_cast<double> ( input.GetPixel(k) ); 
+				pixel = static_cast<double> ( input.GetPixel(k) );
 				pixel_2 = pixel * pixel;
-			
+
 				fSum0 += 1.0;
 				fSum1 += pixel;
 				fSum2 += pixel_2;
@@ -183,25 +183,25 @@ CumulantsForEdgeworthProfile<TInput>
 		return 1;
 
 	double mu1, mu2;
-	
+
 	mu1 = fSum1 / fSum0;
 	mu2 = fSum2 / fSum0 - mu1 * mu1;
-	
-	if ( mu2 == 0.0 ) 
+
+	if ( mu2 == 0.0 )
 		return 1;
 
 	double sigma = sqrt( mu2 );
-	
+
 	itk::VariableLengthVector<double> tab ( input.Size() );
 	double * x = const_cast<double *> ( tab.GetDataPointer() );
 	for ( unsigned long cp = 0; cp < input.Size(); cp++ )
 		*x++ = ( static_cast<double> ( input.GetPixel(cp) ) - mu1 ) / sigma;
-	
+
 	double mu3 = 0.0;
 	double mu4 = 0.0;
 	x = const_cast<double *> ( tab.GetDataPointer() );
-	
-	// for ( unsigned long i = 0; i < input.Size(); i++ ) 
+
+	// for ( unsigned long i = 0; i < input.Size(); i++ )
 	for ( i = 0; i < mask.rows(); i++ )
         {
 		for ( j = 0; j < mask.cols(); j++ )
@@ -210,7 +210,7 @@ CumulantsForEdgeworthProfile<TInput>
 			{
 				pixel = *x++;
 				pixel_2 = pixel * pixel;
-				
+
 				mu3 += pixel * pixel_2;
 				mu4 += pixel_2 * pixel_2;
 			}
@@ -218,10 +218,10 @@ CumulantsForEdgeworthProfile<TInput>
 				x++;
                 }
 	}
-	
+
 	mu3 /= fSum0;
 	mu4 /= fSum0;
-	
+
 	if ( vnl_math_isnan( mu3 ) || vnl_math_isnan( mu4 ) )
 		return 1;
 
@@ -230,16 +230,16 @@ CumulantsForEdgeworthProfile<TInput>
 	fMu[0][2] = mu3;
 	fMu[0][3] = mu4;
 
-	return 0;	
+	return 0;
 }
 
 /* ================ Accroissement de la taille de fenetre ============ */
 
 template <class TInput>
-int 
+int
 CumulantsForEdgeworthProfile<TInput>
-::ReInitSumAndMoments 
-( const TInput & input, itk::Array2D<int> & mask, int level ) 
+::ReInitSumAndMoments
+( const TInput & input, itk::Array2D<int> & mask, int level )
 {
 	fMu[level].Fill(0.0);
 	// mise a jour du comptage...
@@ -248,20 +248,20 @@ CumulantsForEdgeworthProfile<TInput>
 			sum2 = 0.0,
 			sum3 = 0.0,
 			sum4 = 0.0;
-	
+
 	double pixel,pixel_2;
 
 	unsigned int i,j;
 	unsigned long k = 0L;
-	
-	// for ( unsigned long i = 0; i < input.Size(); i++ ) 
+
+	// for ( unsigned long i = 0; i < input.Size(); i++ )
 	for ( i = 0; i < mask.rows(); i++ )
         {
 		for ( j = 0; j < mask.cols(); j++ )
 		{
 			if ( mask.get(i,j) == 1 )
 			{
-				pixel = static_cast<double> ( input.GetPixel(k) ); 
+				pixel = static_cast<double> ( input.GetPixel(k) );
 				pixel_2 = pixel * pixel;
 
 				sum0 += 1.0;
@@ -284,8 +284,8 @@ CumulantsForEdgeworthProfile<TInput>
 	double mu_2 = mu * mu;
 	double mu_3 = mu_2 * mu;
 	double mu_4 = mu_2 * mu_2;
-	
-	fMu[level][0] = mu; 
+
+	fMu[level][0] = mu;
 	fMu[level][1] = fSum2 / fSum0 - mu_2;
 
 	double sigma = sqrt( fSum2 );
@@ -295,26 +295,26 @@ CumulantsForEdgeworthProfile<TInput>
 
 	fMu[level][2] = ( fSum3 - 3.0 * mu * fSum2 + 3.0 * mu_2 * fSum1 - fSum0 * mu_3 )
 						/ ( sigma_3 * fSum0 );
-	fMu[level][3] = ( fSum4 - 4.0 * mu * fSum3 + 6.0 * mu_2 * fSum2 
+	fMu[level][3] = ( fSum4 - 4.0 * mu * fSum3 + 6.0 * mu_2 * fSum2
 						- 4.0 * mu_3 * fSum1 + fSum0 * mu_4 )
 						/ ( sigma_4 * fSum0 );
-	
+
 	return 0;
 }
 
 /* =========== transformation moment -> cumulants ==================== */
 
 template <class TInput>
-int 
+int
 CumulantsForEdgeworthProfile<TInput>
 ::MakeCumulants()
 {
 	fCum.resize( fMu.size() );
 	fCum = fMu;
-	
+
 	for ( unsigned int i = 0; i < fCum.size(); i++ )
 		fCum[i][3] -= 3.0;
-	
+
 	return 0;
 }
 
@@ -325,22 +325,22 @@ CumulantsForEdgeworthProfile<TInput>
 * ********************************************************************
 */
 
-namespace Functor {  
+namespace Functor {
 
 	template< class TInput1, class TInput2, class TOutput >
 	KullbackLeiblerProfile<TInput1,TInput2,TOutput>
-	::KullbackLeiblerProfile () 
-	{ 
+	::KullbackLeiblerProfile ()
+	{
 		m_RadiusMin = 1;
 		m_RadiusMax = 3;
 	}
-			
+
 /* =========== Gives the radius min and max of neighborhood ========== */
 
 	template< class TInput1, class TInput2, class TOutput >
-	void 
+	void
 	KullbackLeiblerProfile<TInput1,TInput2,TOutput>
-	::SetRadius ( const unsigned char & min, const unsigned char & max ) 
+	::SetRadius ( const unsigned char & min, const unsigned char & max )
 	{
 		m_RadiusMin = min < max ? min : max;
 		m_RadiusMax = max > min ? max : min;
@@ -354,7 +354,7 @@ namespace Functor {
 	{
 	  return m_RadiusMin;
 	}
-  
+
         template< class TInput1, class TInput2, class TOutput >
 	unsigned char
 	KullbackLeiblerProfile<TInput1,TInput2,TOutput>
@@ -362,19 +362,19 @@ namespace Functor {
 	{
 	  return m_RadiusMax;
 	}
-  
+
 
 /* ====== Make the set of masks to play the increase in window size == */
 
 	template< class TInput1, class TInput2, class TOutput >
-	void 
+	void
 	KullbackLeiblerProfile<TInput1,TInput2,TOutput>
-	::MakeMultiscaleProfile () 
+	::MakeMultiscaleProfile ()
 	{
 		m_mask.resize( m_RadiusMax - m_RadiusMin + 1 );
 		int lenMax = 2*m_RadiusMax+1;
 		int i,j,middle = m_RadiusMax;
-		
+
 		// let's begin by the smaller neighborhood
 		std::vector< itk::Array2D<int> >::iterator outer_iter = m_mask.begin();
 		(*outer_iter).SetSize( lenMax, lenMax );
@@ -384,10 +384,10 @@ namespace Functor {
 				(*outer_iter).put(i,j,1);
 
 		// std::cerr << "outerIter = " << (*outer_iter) << std::endl;
-				
+
 		// let's continue with increasing neighborhoods
 		outer_iter++;
-		for ( int radius = m_RadiusMin+1; radius <= m_RadiusMax; radius++ ) 
+		for ( int radius = m_RadiusMin+1; radius <= m_RadiusMax; radius++ )
 		{
 			(*outer_iter).SetSize( lenMax, lenMax );
 			(*outer_iter).fill(0);
@@ -403,15 +403,15 @@ namespace Functor {
 			// std::cerr << "outerIter = " << (*outer_iter) << std::endl;
 			outer_iter++;
 		}
-	}	
+	}
 
 /* ========================== Functor ================================ */
 
 	template< class TInput1, class TInput2, class TOutput >
-	TOutput 
+	TOutput
 	KullbackLeiblerProfile<TInput1,TInput2,TOutput>
-	::operator () 
-	( const TInput1 & it1, const TInput2 & it2 ) 
+	::operator ()
+	( const TInput1 & it1, const TInput2 & it2 )
 	{
 		CumulantsForEdgeworthProfile<TInput1> cum1 ( it1, m_mask );
 		CumulantsForEdgeworthProfile<TInput2> cum2 ( it2, m_mask );

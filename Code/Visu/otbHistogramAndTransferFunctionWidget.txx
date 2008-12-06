@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -78,8 +78,8 @@ HistogramAndTransferFunctionWidget<THistogram,TPixel>
       glClearColor(m_BackgroundColor[0],
 		   m_BackgroundColor[1],
 		   m_BackgroundColor[2],
-		   1);     
-    }     
+		   1);
+    }
   glShadeModel(GL_FLAT);
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
   glClear(GL_COLOR_BUFFER_BIT);    //this clears and paints to black
@@ -97,7 +97,7 @@ HistogramAndTransferFunctionWidget<THistogram,TPixel>
 {
   double x,y;
   // Rendering grid
-  glBegin(GL_LINES);  
+  glBegin(GL_LINES);
   glColor3d(m_GridColor[0],m_GridColor[1],m_GridColor[2]);
   for(unsigned int i=1;i<m_GridSizeX;++i)
     {
@@ -107,7 +107,7 @@ HistogramAndTransferFunctionWidget<THistogram,TPixel>
       y = static_cast<double>(this->h())-m_MarginY;
       glVertex2d(x,y);
     }
-  
+
   for(unsigned int i=1;i<m_GridSizeY;++i)
     {
       y=static_cast<double>(i)*gridYSpacing+m_MarginY;
@@ -139,16 +139,16 @@ HistogramAndTransferFunctionWidget<THistogram,TPixel>
 ::HistogramRendering(double binWidth, double binHeightRatio, double maxFrequency)
 {
   HistogramIteratorType it;
-  double startx = m_MarginX;  
+  double startx = m_MarginX;
   // Temporary vertex coordinates
   double x,y;
   // Rendering histogram
   for(it=m_Histogram->Begin();it!=m_Histogram->End();++it,startx+=binWidth)
     {
-      
+
       glBegin(GL_POLYGON);
       glColor3d(m_HistogramColor[0],m_HistogramColor[1],m_HistogramColor[2]);
-      
+
       x =startx;
       y = m_MarginY;
       glVertex2d(x,y);
@@ -159,7 +159,7 @@ HistogramAndTransferFunctionWidget<THistogram,TPixel>
       y=m_MarginY;
       glVertex2d(x,y);
       glEnd();
-    } 
+    }
 
 }
 
@@ -171,13 +171,13 @@ HistogramAndTransferFunctionWidget<THistogram,TPixel>
   double x,y;
   // Rendering bounds
   glColor3d(m_BoundColor[0],m_BoundColor[1],m_BoundColor[2]);
-  glBegin(GL_LINES);  
-  
+  glBegin(GL_LINES);
+
   double factor = (m_Histogram->Quantile(0,1.)-m_Histogram->Quantile(0,0.))
     /(static_cast<double>(this->w())-2*m_MarginX-m_OutputHistogramMargin*static_cast<double>(this->w()));
 
   x = m_MarginX + static_cast<double>(m_TransferFunction->GetLowerBound()-m_Histogram->Quantile(0,0.))/factor;
-  
+
   y = m_MarginY;
   glVertex2d(x,y);
   y = static_cast<double>(this->h())-m_MarginY;
@@ -259,7 +259,7 @@ HistogramAndTransferFunctionWidget<THistogram,TPixel>
 ::OutputHistogramRendering()
 {
   std::vector<unsigned int> outputHistogram(256,0);
-  
+
   HistogramIteratorType it;
   for(it=m_Histogram->Begin();it!=m_Histogram->End();++it)
     {
@@ -280,20 +280,20 @@ HistogramAndTransferFunctionWidget<THistogram,TPixel>
     }
 
   // Temporary vertex coordinates
-  double x,y; 
+  double x,y;
  if(maxFrequency>0)
-   {      
+   {
      double binWidth = (static_cast<double>(this->h())-2*m_MarginY)/255.;
      double binLengthRatio = m_HistogramClamping*m_OutputHistogramMargin*static_cast<double>(this->w())/static_cast<double>(maxFrequency);
      double starty = m_MarginY;
 
-     
+
      // Rendering histogram
      for(vit=outputHistogram.begin();vit!=outputHistogram.end();++vit,starty+=binWidth)
        {
 	 glBegin(GL_POLYGON);
 	 glColor3d(m_TransferFunctionColor[0],m_TransferFunctionColor[1],m_TransferFunctionColor[2]);
-	 
+
 	 x =static_cast<double>(this->w())-m_OutputHistogramMargin*static_cast<double>(this->w())-m_MarginX/2;
 	 y = starty;
 	 glVertex2d(x,y);
@@ -340,16 +340,16 @@ HistogramAndTransferFunctionWidget<THistogram,TPixel>
   if(!m_Histogram)
     {
       return;
-    } 
+    }
 
   if(m_Updating)
     return;
 
   m_Updating = true;
-  
+
   double maxFrequency = 0;
   HistogramIteratorType it;
-  
+
   // Computing histogram max frequency
   for(it=m_Histogram->Begin();it!=m_Histogram->End();++it)
     {
@@ -358,18 +358,18 @@ HistogramAndTransferFunctionWidget<THistogram,TPixel>
 	  maxFrequency = it.GetFrequency();
 	}
     }
-  
+
   double binWidth = static_cast<double>(this->w()-2*m_MarginX-m_OutputHistogramMargin*static_cast<double>(this->w()))/static_cast<double>(m_Histogram->GetSize()[0]);
   double binHeightRatio = m_HistogramClamping*static_cast<double>(this->h()-2*m_MarginY)/static_cast<double>(maxFrequency);
   double gridXSpacing = (static_cast<double>(this->w())-2*m_MarginX-m_OutputHistogramMargin*static_cast<double>(this->w()))/static_cast<double>(m_GridSizeX);
   double gridYSpacing = (static_cast<double>(this->h())-2*m_MarginY)/static_cast<double>(m_GridSizeY);
-  
+
   OpenGlSetup();
   GridRendering(gridXSpacing,gridYSpacing);
   AxisRendering();
   HistogramRendering(binWidth,binHeightRatio,maxFrequency);
   LegendRendering(gridXSpacing,gridYSpacing,maxFrequency);
- 
+
 
   if(m_TransferFunction)
     {

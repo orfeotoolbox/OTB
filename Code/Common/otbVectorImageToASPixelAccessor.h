@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,7 +33,7 @@ namespace Accessor
  * \class VectorImageToASPixelAccessor
  * \brief Give access to a Vector pixel type as if it were a RGBPixel type.
  *
- * This class is intended to be used as parameter of 
+ * This class is intended to be used as parameter of
  * an ImageAdaptor to make an Vector image appear as being
  * an image of RGB pixel type.
  *
@@ -59,7 +59,7 @@ public:
 
   /** Write access to the VectorToRGB component */
   inline void Set( InternalType & output, const ExternalType & input ) const
-    { 
+    {
     output[0] = input[0];
     output[1] = input[1];
     output[2] = input[2];
@@ -74,7 +74,7 @@ public:
 
 private:
 };
-  
+
 }  // end namespace Accessor
 }  // end namespace otb
 

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -35,13 +35,13 @@ namespace otb
  * - \f$ x_s \f$ the label on site s
  * - \f$ y_s \f$ the value on the reference image
  * - \f$ \sigma^2_{x_s} \f$ the noise variance
-   * 
+   *
    * This class is meant to be used in the MRF framework with the otb::MarkovRandomFieldFilter
    *
  * \ingroup Markov
  */
-  
-template< class TInput1, class TInput2>    
+
+template< class TInput1, class TInput2>
 class ITK_EXPORT MRFEnergyPotts:public MRFEnergy< TInput1, TInput2>
   {
   public:
@@ -49,30 +49,30 @@ class ITK_EXPORT MRFEnergyPotts:public MRFEnergy< TInput1, TInput2>
     typedef MRFEnergy< TInput1, TInput2>  Superclass;
     typedef itk::SmartPointer<Self>       Pointer;
     typedef itk::SmartPointer<const Self> ConstPointer;
-    
+
     typedef TInput1                               InputImageType;
     typedef TInput2                               LabelledImageType;
     typedef typename InputImageType::PixelType    InputImagePixelType;
     typedef typename LabelledImageType::PixelType LabelledImagePixelType;
 
     typedef itk::Array< double >                  ParametersType;
-    
+
     itkTypeMacro(MRFEnergyPotts, MRFEnergy);
-    
+
     itkNewMacro(Self);
-                
-    double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)   
+
+    double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)
       {
 	if (value1 != value2)
           {
             return this->m_Parameters[0];
           }
-	else 
+	else
           {
             return -this->m_Parameters[0];
           }
       }
-       
+
   protected:
     // The constructor and destructor.
     MRFEnergyPotts() {
@@ -81,7 +81,7 @@ class ITK_EXPORT MRFEnergyPotts:public MRFEnergy< TInput1, TInput2>
       this->m_Parameters[0]=1.0;
     };
     virtual ~MRFEnergyPotts() {};
-    
+
   };
 }
 

@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) GET / ENST Bretagne. All rights reserved. 
+  Copyright (c) GET / ENST Bretagne. All rights reserved.
   See GETCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -36,7 +36,7 @@ MixturePolyRBFKernelFunctor
 	m_CoefPoly = 1.0;
 	m_DegreePoly = 2;
 	m_GammaRBF = 1.0;
-	
+
 	SetValue( "Mixture", m_Mixture );
 	SetValue( "GammaPoly", m_GammaPoly );
 	SetValue( "CoefPoly", m_CoefPoly );
@@ -51,9 +51,9 @@ MixturePolyRBFKernelFunctor
 {
 	double kernel_poly = 0.0;
 	if ( m_Mixture > 0.0 )
-		kernel_poly = powi( m_GammaPoly * this->dot( x, y ) + m_CoefPoly, 
+		kernel_poly = powi( m_GammaPoly * this->dot( x, y ) + m_CoefPoly,
 							m_DegreePoly );
-	
+
 	double kernel_rbf = 0.0;
 	if ( m_Mixture < 1.0 )
 	{
@@ -70,7 +70,7 @@ MixturePolyRBFKernelFunctor
 			else
 			{
 				if ( x->index > y->index )
-				{	
+				{
 					sum += y->value * y->value;
 					++y;
 				}
@@ -119,7 +119,7 @@ MixturePolyRBFKernelFunctor
 #endif
 }
 
-double 
+double
 MixturePolyRBFKernelFunctor
 ::powi ( double base, int times ) const
 {

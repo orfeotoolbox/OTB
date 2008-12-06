@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,7 +23,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkImageRegionConstIterator.h"
 #include "itkProgressReporter.h"
 #include "otbMacro.h"
-#include "otbMath.h" 
+#include "otbMath.h"
 
 namespace otb
 {
@@ -34,7 +34,7 @@ template <class TInputImage, class TOutputImage>
 VectorImageToIntensityImageFilter<TInputImage,TOutputImage>
 ::VectorImageToIntensityImageFilter()
 {
-  
+
 }
 
 template <class TInputImage, class TOutputImage>
@@ -42,12 +42,12 @@ void
 VectorImageToIntensityImageFilter<TInputImage,TOutputImage>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,int threadId)
 {
-  
+
 
   InputImageConstPointerType  inputPtr = this->GetInput();
   OutputImagePointerType outputPtr = this->GetOutput();
 
-  
+
   // Define the portion of the input to walk for this thread, using
   // the CallCopyOutputRegionToInputRegion method allows for the input
   // and output images to be different dimensions
@@ -62,7 +62,7 @@ VectorImageToIntensityImageFilter<TInputImage,TOutputImage>
   inputIt.GoToBegin();
   outputIt.GoToBegin();
 
-  while(!inputIt.IsAtEnd() && !outputIt.IsAtEnd()) 
+  while(!inputIt.IsAtEnd() && !outputIt.IsAtEnd())
     {
       double sum=0.0;
       InputPixelType pixel = inputIt.Get();

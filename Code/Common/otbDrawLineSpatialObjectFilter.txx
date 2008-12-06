@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,45 +32,45 @@
 namespace otb
 {
 
-/** 
+/**
  *
  */
 template <class TInputImage, class TOutputImage>
 DrawLineSpatialObjectFilter<TInputImage, TOutputImage>::DrawLineSpatialObjectFilter()
 {
   this->SetNumberOfRequiredInputs(2);
-  this->SetNumberOfRequiredOutputs(1); 
-  
+  this->SetNumberOfRequiredOutputs(1);
+
   m_Value = static_cast<OutputPixelType>(255.0);
-   
+
 }
 
 template <class TInputImage, class TOutputImage>
 void
 DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
 ::SetInputLine(const InputLineType *line)
-{  
-  this->ProcessObjectType::SetNthInput(0, 
+{
+  this->ProcessObjectType::SetNthInput(0,
                                    const_cast< InputLineType * >( line ) );
 }
 
 
 template <class TInputImage, class TOutputImage>
-typename DrawLineSpatialObjectFilter<TInputImage, TOutputImage>::InputLineType * 
+typename DrawLineSpatialObjectFilter<TInputImage, TOutputImage>::InputLineType *
 DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
 ::GetInput(void)
-{  
+{
     return static_cast<InputLineType *>
     (this->ProcessObjectType::GetInput(0) );
 }
-    
-    
+
+
 template <class TInputImage, class TOutputImage>
 void
 DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
 ::SetInputImage(const InputImageType *image)
 {
-  this->ProcessObjectType::SetNthInput(1, 
+  this->ProcessObjectType::SetNthInput(1,
                                    const_cast< InputImageType * >( image ) );
 }
 
@@ -84,7 +84,7 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
     {
     return 0;
     }
-  
+
   return static_cast<const InputImageType *>
     (this->ProcessObjectType::GetInput(1) );
 }
@@ -100,7 +100,7 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
 
     // Get the region
   typename OutputImageType::RegionType region;
-  
+
 
   region.SetSize(input->GetLargestPossibleRegion().GetSize());
   region.SetIndex(input->GetLargestPossibleRegion().GetIndex());
@@ -109,9 +109,9 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
   output->SetSpacing(input->GetSpacing());
   output->Allocate();
 
-  typedef itk::ImageRegionIteratorWithIndex< OutputImageType > OutputIteratorType; 
-  typedef itk::ImageRegionConstIteratorWithIndex< InputImageType >  InputIteratorType; 
-    
+  typedef itk::ImageRegionIteratorWithIndex< OutputImageType > OutputIteratorType;
+  typedef itk::ImageRegionConstIteratorWithIndex< InputImageType >  InputIteratorType;
+
   OutputIteratorType    outputIt( output, output->GetRequestedRegion() );
   InputIteratorType     inputIt(  input,  input->GetRequestedRegion() );
 
@@ -126,7 +126,7 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
   InputLineType * inputLine = this->GetInput();
 
   // Get the list of points which consists of two points to represent a
-  // straight line 
+  // straight line
   PointListType & pointsList = inputLine->GetPoints();
   typename PointListType::const_iterator   itPoints = pointsList.begin();
 
@@ -135,9 +135,9 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
   double x1, y1;
   x1 = (*itPoints).GetPosition()[0];
   y1 = (*itPoints).GetPosition()[1];
-  
+
   itPoints++;
-  
+
   double x2, y2;
   x2 = (*itPoints).GetPosition()[0];
   y2 = (*itPoints).GetPosition()[1];
@@ -145,62 +145,62 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
 
   // Distance between two points
   double DeltaX, DeltaY;
-    
+
   DeltaX = fabs(x2-x1);
   DeltaY = fabs(y2-y1);
 
-  // To draw the line, we seek in which direction the number 
+  // To draw the line, we seek in which direction the number
   // of pixels between the two points is most important
-  
+
   if ( (DeltaX >= DeltaY) && (DeltaX > 0.) )
      {
-     double Xmin, Xmax;	
+     double Xmin, Xmax;
      /*Xmin = std::min(x1,x2);
      Xmax = std::max(x1,x2);*/
 	 Xmin = x1 < x2 ? x1 : x2;
 	 Xmax = x1 > x2 ? x1 : x2;
-  
+
      // Slope of the line y=slope*(x-x1)+y1
      double Slope = (y2-y1) / (x2-x1) ;
 
-     // Set a point for each x value between xmin and xmax	 
+     // Set a point for each x value between xmin and xmax
      for ( double x = Xmin; x <= Xmax; x++)
         {
 	outputIndex[0] = static_cast<unsigned long>( x ) ;
 	outputIndex[1] = static_cast<unsigned long>( Slope*(x-x1) + y1 ) ;
 
-	 
-	// Set the point if the pixel index belongs to the output image  
-	if( region.IsInside( outputIndex ) ) 
+
+	// Set the point if the pixel index belongs to the output image
+	if( region.IsInside( outputIndex ) )
 	   output->SetPixel( outputIndex, m_Value);
-	
+
 	}
-	 
+
       }
    else if ( DeltaX < DeltaY )
       {
-      double Ymin, Ymax;  
+      double Ymin, Ymax;
       /*Ymin = std::min(y1,y2);
       Ymax = std::max(y1,y2);*/
   	  Ymin = y1 < y2 ? y1 : y2;
 	  Ymax = y1 > y2 ? y1 : y2;
 
       double SlopeInv = (x2-x1) / (y2-y1) ;
-	 
+
       for ( double y = Ymin; y <= Ymax; y++)
          {
 	 outputIndex[0] = static_cast<unsigned long>( SlopeInv * (y-y1) + x1 ) ;
 	 outputIndex[1] = static_cast<unsigned long>( y );
-	    
+
 	 if( region.IsInside( outputIndex ) )
 	    output->SetPixel( outputIndex, m_Value);
 
-	      
-	 } 
-      } 
+
+	 }
+      }
 
    // Exception
-/*   else 
+/*   else
       {
       itkExceptionMacro(<< "otb::DrawLineSpatialObjectFilter::GenerateData : "
                       	<< "the line is defined by one point : deltaX = deltaY = 0.");
@@ -212,7 +212,7 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
  * Standard "PrintSelf" method
  */
 template <class TInputImage, class TOutput>
-void 
+void
 DrawLineSpatialObjectFilter<TInputImage, TOutput>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

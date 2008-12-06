@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,10 +31,10 @@ namespace otb
   {
     m_LowerThresholdDelta = itk::NumericTraits<InputPixelType>::NonpositiveMin();
     m_UpperThresholdDelta = itk::NumericTraits<InputPixelType>::max();
-    
+
     m_ReplaceValue = 5;//itk::NumericTraits<OutputPixelType>::One;
   }
-  
+
   /** Region growing
    *
    */
@@ -44,15 +44,15 @@ namespace otb
   ::RegionGrowing( const IndexType indexSeed )
   {
     InputPixelType threshold = this->GetInput()->GetPixel(indexSeed);
-    
+
     this->m_RegionGrowingFilter->SetLower(threshold-m_LowerThresholdDelta);
     this->m_RegionGrowingFilter->SetUpper(threshold+m_UpperThresholdDelta);
-    
+
     this->m_RegionGrowingFilter->SetReplaceValue(m_ReplaceValue);
     this->m_RegionGrowingFilter->SetSeed(indexSeed);
     m_ReplaceValue++;
   }
-  
+
   /** PrintSelf Method
    *
    */

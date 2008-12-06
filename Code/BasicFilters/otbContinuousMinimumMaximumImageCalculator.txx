@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,8 +24,8 @@
 #include "itkNumericTraits.h"
 
 namespace otb
-{ 
-    
+{
+
 /*
   * Constructor
  */
@@ -62,22 +62,22 @@ namespace otb
 
     while( !it.IsAtEnd() )
     {
-      const RealPixelType value = it.Get();  
-      if (value > static_cast<RealPixelType>(m_Maximum) ) 
+      const RealPixelType value = it.Get();
+      if (value > static_cast<RealPixelType>(m_Maximum) )
       {
         m_Maximum = static_cast<PixelType>(value);
         m_IndexOfMaximum = it.GetIndex();
       }
-      if (value < static_cast<RealPixelType>(m_Minimum)) 
+      if (value < static_cast<RealPixelType>(m_Minimum))
       {
         m_Minimum = static_cast<PixelType>(value);
         m_IndexOfMinimum = it.GetIndex();
       }
       ++it;
     }
-    
+
     IndexType indexNeighbor;
-    
+
     { //Continuous Minimum calculation
       //Compute horizontal offset
       indexNeighbor[0] = m_IndexOfMinimum[0]-1;
@@ -88,9 +88,9 @@ namespace otb
       indexNeighbor[1] = m_IndexOfMinimum[1];
       it.SetIndex(indexNeighbor);
       const RealPixelType rightValue= it.Get();
-      
+
       double hOffset = -(rightValue-leftValue) / (2*(rightValue+leftValue-2*m_Minimum));
-      
+
       //Compute vertical offset
       indexNeighbor[0] = m_IndexOfMinimum[0];
       indexNeighbor[1] = m_IndexOfMinimum[1]-1;
@@ -100,16 +100,16 @@ namespace otb
       indexNeighbor[1] = m_IndexOfMinimum[1]+1;
       it.SetIndex(indexNeighbor);
       const RealPixelType bottomValue= it.Get();
-      
-  
+
+
       double vOffset = -(bottomValue-topValue) / (2*(bottomValue+topValue-2*m_Minimum));
-  
-  
+
+
       m_ContinuousIndexOfMinimum[0] = m_IndexOfMinimum[0] + hOffset;
       m_ContinuousIndexOfMinimum[1] = m_IndexOfMinimum[1] + vOffset;
     }
-    
-    
+
+
     { //Continuous Maximum calculation
       //Compute horizontal offset
       indexNeighbor[0] = m_IndexOfMaximum[0]-1;
@@ -120,9 +120,9 @@ namespace otb
       indexNeighbor[1] = m_IndexOfMaximum[1];
       it.SetIndex(indexNeighbor);
       const RealPixelType rightValue= it.Get();
-      
+
       double hOffset = -(rightValue-leftValue) / (2*(rightValue+leftValue-2*m_Maximum));
-      
+
       //Compute vertical offset
       indexNeighbor[0] = m_IndexOfMaximum[0];
       indexNeighbor[1] = m_IndexOfMaximum[1]-1;
@@ -132,15 +132,15 @@ namespace otb
       indexNeighbor[1] = m_IndexOfMaximum[1]+1;
       it.SetIndex(indexNeighbor);
       const RealPixelType bottomValue= it.Get();
-      
-  
+
+
       double vOffset = -(bottomValue-topValue) / (2*(bottomValue+topValue-2*m_Maximum));
-  
-  
+
+
       m_ContinuousIndexOfMaximum[0] = m_IndexOfMaximum[0] + hOffset;
       m_ContinuousIndexOfMaximum[1] = m_IndexOfMaximum[1] + vOffset;
     }
-    
+
   }
 
 /*
@@ -160,17 +160,17 @@ namespace otb
 
     while( !it.IsAtEnd() )
     {
-      const RealPixelType value = it.Get();  
-      if (value < static_cast<RealPixelType>(m_Minimum)) 
+      const RealPixelType value = it.Get();
+      if (value < static_cast<RealPixelType>(m_Minimum))
       {
         m_Minimum = static_cast<PixelType>(value);
         m_IndexOfMinimum = it.GetIndex();
       }
       ++it;
     }
-    
+
     IndexType indexNeighbor;
-    
+
     //Compute horizontal offset
     indexNeighbor[0] = m_IndexOfMinimum[0]-1;
     indexNeighbor[1] = m_IndexOfMinimum[1];
@@ -180,9 +180,9 @@ namespace otb
     indexNeighbor[1] = m_IndexOfMinimum[1];
     it.SetIndex(indexNeighbor);
     const RealPixelType rightValue= it.Get();
-    
+
     double hOffset = -(rightValue-leftValue) / (2*(rightValue+leftValue-2*m_Minimum));
-    
+
     //Compute vertical offset
     indexNeighbor[0] = m_IndexOfMinimum[0];
     indexNeighbor[1] = m_IndexOfMinimum[1]-1;
@@ -192,17 +192,17 @@ namespace otb
     indexNeighbor[1] = m_IndexOfMinimum[1]+1;
     it.SetIndex(indexNeighbor);
     const RealPixelType bottomValue= it.Get();
-    
+
 
     double vOffset = -(bottomValue-topValue) / (2*(bottomValue+topValue-2*m_Minimum));
 
 
     m_ContinuousIndexOfMinimum[0] = m_IndexOfMinimum[0] + hOffset;
     m_ContinuousIndexOfMinimum[1] = m_IndexOfMinimum[1] + vOffset;
-    
-    
-    
-    
+
+
+
+
   }
 
 /*
@@ -222,7 +222,7 @@ namespace otb
 
     while( !it.IsAtEnd() )
     {
-      const RealPixelType value = it.Get();  
+      const RealPixelType value = it.Get();
       if (value > static_cast<RealPixelType>(m_Maximum) )
       {
         m_Maximum = static_cast<PixelType>(value);
@@ -230,7 +230,7 @@ namespace otb
       }
       ++it;
     }
-    
+
         //Solve equations a,b,c
 //     y0 = a*x0^2 + b*x0 +c
 //     y1 = a*x1^2 + b*x1 +c
@@ -239,12 +239,12 @@ namespace otb
 //     y0 = a - b +c
 //     y1 = c
 //     y2 = a + b +c
-    //    
-    //     
+    //
+    //
     // Max is at -b/2a
     // -(y2-y0)/(2*(y0+y2-2y1))
     IndexType indexNeighbor;
-    
+
     //Compute horizontal offset
     indexNeighbor[0] = m_IndexOfMaximum[0]-1;
     indexNeighbor[1] = m_IndexOfMaximum[1];
@@ -254,9 +254,9 @@ namespace otb
     indexNeighbor[1] = m_IndexOfMaximum[1];
     it.SetIndex(indexNeighbor);
     const RealPixelType rightValue= it.Get();
-    
+
     double hOffset = -(rightValue-leftValue) / (2*(rightValue+leftValue-2*m_Maximum));
-    
+
     //Compute vertical offset
     indexNeighbor[0] = m_IndexOfMaximum[0];
     indexNeighbor[1] = m_IndexOfMaximum[1]-1;
@@ -266,14 +266,14 @@ namespace otb
     indexNeighbor[1] = m_IndexOfMaximum[1]+1;
     it.SetIndex(indexNeighbor);
     const RealPixelType bottomValue= it.Get();
-    
+
 
     double vOffset = -(bottomValue-topValue) / (2*(bottomValue+topValue-2*m_Maximum));
 
 
     m_ContinuousIndexOfMaximum[0] = m_IndexOfMaximum[0] + hOffset;
     m_ContinuousIndexOfMaximum[1] = m_IndexOfMaximum[1] + vOffset;
-    
+
   }
 
 
@@ -288,7 +288,7 @@ namespace otb
   }
 
 
- 
+
   template<class TInputImage>
       void
       ContinuousMinimumMaximumImageCalculator<TInputImage>
@@ -306,7 +306,7 @@ namespace otb
     os << indent << "Index of Maximum: " << m_IndexOfMaximum << std::endl;
     os << indent << "Continuous Index of Minimum: " << m_ContinuousIndexOfMinimum << std::endl;
     os << indent << "Continuous Index of Maximum: " << m_ContinuousIndexOfMaximum << std::endl;
-    
+
     os << indent << "Image: " << std::endl;
     m_Image->Print(os, indent.GetNextIndent());
     os << indent << "Region: " << std::endl;

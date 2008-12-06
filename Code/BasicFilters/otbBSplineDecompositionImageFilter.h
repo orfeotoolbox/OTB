@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -35,7 +35,7 @@ namespace otb
  * \ingroup ImageFilters
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT BSplineDecompositionImageFilter : 
+class ITK_EXPORT BSplineDecompositionImageFilter :
     public itk::ImageToImageFilter<TInputImage,TOutputImage>
 {
 public:
@@ -47,7 +47,7 @@ public:
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(BSplineDecompositionImageFilter, ImageToImageFilter);
- 
+
   /** New macro for creation of through a Smart Pointer */
   itkNewMacro( Self );
 
@@ -115,7 +115,7 @@ private:
 
   /** Copies a vector of data from m_Scratch to the Coefficients image. */
   void CopyScratchToCoefficients( OutputLinearIterator & );
-  
+
 };
 
 

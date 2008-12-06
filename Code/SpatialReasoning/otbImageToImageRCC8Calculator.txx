@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,7 +33,7 @@
 //TODELETE  #include "itkCastImageFilter.h"
 
 namespace otb
-{     
+{
   /**
    * Constructor
    */
@@ -112,7 +112,7 @@ namespace otb
    */
   template <class TInputImage>
   typename ImageToImageRCC8Calculator<TInputImage>
-  ::RegionType 
+  ::RegionType
   ImageToImageRCC8Calculator<TInputImage>
   ::ComputeMinimalRegion(void)
   {
@@ -135,13 +135,13 @@ namespace otb
     region2=rc->GetRegion();
     // otbMsgDebugMacro(<<"RCC8Calculator->ComputeMinimalRegion() Region1: index: "<<region1.GetIndex()<<" size: "<<region1.GetSize());
     // otbMsgDebugMacro(<<"RCC8Calculator->ComputeMinimalRegion() Region2: index: "<<region2.GetIndex()<<" size: "<<region2.GetSize());
-    
+
   //TODELETE     std::cout<<"RCC8Calculator->ComputeMinimalRegion() Region1: index: "<<region1.GetIndex()<<" size: "<<region1.GetSize()<<std::endl;
  //TODELETE      std::cout<<"RCC8Calculator->ComputeMinimalRegion() Region2: index: "<<region2.GetIndex()<<" size: "<<region2.GetSize()<<std::endl;
 
     typename ImageType::SizeType size;
     typename ImageType::IndexType index;
-    
+
     for(int i=0;i<ImageType::ImageDimension;i++)
       {
 	index[i]=std::min(region1.GetIndex()[i],region2.GetIndex()[i]);
@@ -167,7 +167,7 @@ namespace otb
  */
 template<class TInputImage>
 typename ImageToImageRCC8Calculator<TInputImage>
-::BoolImagePointerType 
+::BoolImagePointerType
 ImageToImageRCC8Calculator<TInputImage>
 ::ConvertToBoolImage(ImagePointerType image, PixelType insideValue)
 {
@@ -180,7 +180,7 @@ ImageToImageRCC8Calculator<TInputImage>
   typename BoolImageType::IndexType boolImageIndex;
   boolImageIndex[0]=m_MinimalROI.GetIndex()[0]-1;
   boolImageIndex[1]=m_MinimalROI.GetIndex()[1]-1;
-  //otbMsgDebugMacro(<<"RCC8Calculator->ConvertToBoolImage() size: "<<boolImageSize<<" index: "<<boolImageIndex);  
+  //otbMsgDebugMacro(<<"RCC8Calculator->ConvertToBoolImage() size: "<<boolImageSize<<" index: "<<boolImageIndex);
 
   typename BoolImageType::RegionType boolRegion;
   boolRegion.SetSize(boolImageSize);
@@ -188,7 +188,7 @@ ImageToImageRCC8Calculator<TInputImage>
   output->SetRegions(boolRegion);
   output->Allocate();
   output->FillBuffer(false);
-  
+
   ConstIterator inputIt(image,m_MinimalROI);
   Iterator outputIt(output,m_MinimalROI);
   inputIt.GoToBegin();
@@ -199,7 +199,7 @@ ImageToImageRCC8Calculator<TInputImage>
       ++inputIt;
       ++outputIt;
     }
-  
+
   return output;
 }
   /**
@@ -207,11 +207,11 @@ ImageToImageRCC8Calculator<TInputImage>
    * \return true if the intersection is not empty.
    */
   template<class TInputImage>
-  bool 
+  bool
   ImageToImageRCC8Calculator<TInputImage>
   ::ComputeEdgeEdgeBool(void)
   {
-    
+
   /// Definition of the Filters used to compute the boolean
     typedef itk::SubtractImageFilter<BoolImageType,BoolImageType,BoolImageType> SubtractFilterType;
     typedef itk::BinaryBallStructuringElement<bool,BoolImageType::ImageDimension> BinaryBallStructuringElementType;
@@ -232,14 +232,14 @@ ImageToImageRCC8Calculator<TInputImage>
     dilateFilter1->SetKernel(structElement1);
     dilateFilter2->SetKernel(structElement2);
     /// The erosion is performed to get the surounding edge of this
-    /// region by substraction to the original image 
+    /// region by substraction to the original image
     dilateFilter1->SetInput(m_BoolImage1);
     dilateFilter1->Update();
     subtractFilter1->SetInput2(m_BoolImage1);
     subtractFilter1->SetInput1(dilateFilter1->GetOutput());
     subtractFilter1->Update();
     /// The erosion is performed to get the surounding edge of this
-    /// region by substraction to the original image 
+    /// region by substraction to the original image
     dilateFilter2->SetInput(m_BoolImage2);
     dilateFilter2->Update();
     subtractFilter2->SetInput2(m_BoolImage2);
@@ -258,7 +258,7 @@ ImageToImageRCC8Calculator<TInputImage>
    * \return true if the intersection is not empty.
    */
   template<class TInputImage>
-  bool 
+  bool
   ImageToImageRCC8Calculator<TInputImage>
   ::ComputeExterInterBool(void)
   {
@@ -283,7 +283,7 @@ ImageToImageRCC8Calculator<TInputImage>
    * \return true if the intersection is not empty.
    */
   template<class TInputImage>
-  bool 
+  bool
   ImageToImageRCC8Calculator<TInputImage>
   ::ComputeInterExterBool(void)
   {
@@ -300,14 +300,14 @@ ImageToImageRCC8Calculator<TInputImage>
     /// The exterior is the inverted input image
     invert->SetMaximum(true);
     invert->SetInput(m_BoolImage2);
-    
+
  //TODELETE     typename CastFilterType::Pointer caster = CastFilterType::New();
   //TODELETE    caster->SetInput(invert->GetOutput());
  //TODELETE     typename WriterType::Pointer writer = WriterType::New();
 //TODELETE      writer->SetFileName("invert.tif");
  //TODELETE     writer->SetInput(caster->GetOutput());
 //TODELETE      writer->Update();
-    
+
     andFilter->SetInput1(m_BoolImage1);
     andFilter->SetInput2(invert->GetOutput());
     andFilter->Update();
@@ -327,7 +327,7 @@ ImageToImageRCC8Calculator<TInputImage>
    * \return true if the intersection is not empty.
    */
   template<class TInputImage>
-  bool 
+  bool
   ImageToImageRCC8Calculator<TInputImage>
   ::ComputeInterInterBool(void)
   {
@@ -354,7 +354,7 @@ ImageToImageRCC8Calculator<TInputImage>
    * \return True if the decision process was successful.
    */
   template<class TInputImage>
-  bool 
+  bool
   ImageToImageRCC8Calculator<TInputImage>
   ::ComputeRelation(bool edgeEdgeBool, bool interExterBool, bool exterInterBool)
   {
@@ -391,13 +391,13 @@ ImageToImageRCC8Calculator<TInputImage>
       }
   }
   /**
-   * Test if the boolean image is totally black or not. This is a based on the lazy operator 
+   * Test if the boolean image is totally black or not. This is a based on the lazy operator
    * paradigm.
    * \param The image to test.
    * \return True or false.
    */
   template<class TInputImage>
-  bool 
+  bool
   ImageToImageRCC8Calculator<TInputImage>
   ::IsBoolImageNotEmpty(BoolImagePointerType image)
   {
@@ -481,7 +481,7 @@ ImageToImageRCC8Calculator<TInputImage>
 	    else
 	      {
 		/// Else it must be computed
-		exterInterBool = ComputeExterInterBool();  
+		exterInterBool = ComputeExterInterBool();
 		// otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): ExterInter "<<exterInterBool);
 	      }
 	//TODELETE      std::cout<<"RCC8Calculator->GenerateData(): ExterInter "<<exterInterBool<<std::endl;

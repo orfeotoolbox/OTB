@@ -10,12 +10,12 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
- 
+
 
 #ifndef __otbTreeNeighborhood_txx
 #define __otbTreeNeighborhood_txx
@@ -30,7 +30,7 @@ namespace otb
  *
  */
 /* Reinitialise the neighborhood, so that it will be used for a new region */
-void 
+void
 Neighborhood::reinit_neighborhood(TypeOfTree type)
 {
   iNbPoints = 0;
@@ -38,7 +38,7 @@ Neighborhood::reinit_neighborhood(TypeOfTree type)
 }
 
 /* To allocate the structure representing the neighborhood of a region */
-void 
+void
 Neighborhood::init_neighborhood(int iMaxArea,
                                 int iWidth,int iHeight)
 {
@@ -53,7 +53,7 @@ Neighborhood::init_neighborhood(int iMaxArea,
 }
 
 /* Free the structure representing the neighborhood of a region */
-void 
+void
 Neighborhood::free_neighborhood()
 {
   delete[] tabPoints;
@@ -61,13 +61,13 @@ Neighborhood::free_neighborhood()
 
 
 /* Put the last neighbor at a position so that we fix the heap */
-void 
+void
 Neighborhood::fix_up()
 {
   Neighbor *tabPoints = tabPoints;
   int k = iNbPoints;
   int l;
-  
+
   if(type == MAX)
     while(k > 1 && ORDER_MAX(k, l=k>>1))
       {
@@ -83,7 +83,7 @@ Neighborhood::fix_up()
 }
 
 /* Put the first neighbor at a position so that we fix the heap */
-void 
+void
 Neighborhood::fix_down()
 {
   Neighbor *tabPoints = tabPoints;
@@ -112,7 +112,7 @@ Neighborhood::fix_down()
 }
 
 
-void 
+void
 Neighborhood::print_neighborhood()
 {
   otbMsgDevMacro( << "pNeighborhood : " );
@@ -121,7 +121,7 @@ Neighborhood::print_neighborhood()
     {
     otbMsgDevMacro( << "tabPoints["<<i <<"] =" << tabPoints[i].value << " Position: (" <<  tabPoints[i].point.x << " , " <<  tabPoints[i].point.y << ")" );
     }
-  
+
 }
 
 

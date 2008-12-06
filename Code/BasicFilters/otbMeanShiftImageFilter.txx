@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -37,7 +37,7 @@ namespace otb
     m_RangeRadius        = 10;
     m_MinimumRegionSize  = 10;
     m_Scale              = 100000.;
-    
+
     this->SetNumberOfOutputs(4);
     this->SetNthOutput(1,OutputImageType::New());
     this->SetNthOutput(2,LabeledOutputType::New());
@@ -93,7 +93,7 @@ namespace otb
     return static_cast< LabeledOutputType * >(this->itk::ProcessObject::GetOutput(2));
   }
 
-  
+
   template <class TInputImage,class TOutputImage, class TLabeledOutput, class TBufferConverter>
   const typename  MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>::LabeledOutputType *
   MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
@@ -127,7 +127,7 @@ namespace otb
      typename OutputImageType::Pointer outputPtr = this->GetOutput();
      typename OutputImageType::Pointer clusteredOutputPtr = this->GetClusteredOutput();
      typename LabeledOutputType::Pointer labeledClusteredOutputPtr = this->GetLabeledClusteredOutput();
-     typename LabeledOutputType::Pointer clusterBoundariesOutputPtr = this->GetClusterBoundariesOutput(); 
+     typename LabeledOutputType::Pointer clusterBoundariesOutputPtr = this->GetClusterBoundariesOutput();
 
      outputPtr->SetBufferedRegion(outputPtr->GetRequestedRegion());
      outputPtr->Allocate();
@@ -149,25 +149,25 @@ namespace otb
   {
     // call the superclass' implementation of this method
     Superclass::GenerateInputRequestedRegion();
-    
+
     // get pointers to the input and output
-    typename Superclass::InputImagePointer inputPtr = 
+    typename Superclass::InputImagePointer inputPtr =
       const_cast< TInputImage * >( this->GetInput() );
     typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
-    
+
     if ( !inputPtr || !outputPtr )
       {
 	return;
       }
-    
+
     // get a copy of the input requested region (should equal the output
     // requested region)
     typename TInputImage::RegionType inputRequestedRegion;
     inputRequestedRegion = inputPtr->GetRequestedRegion();
-    
+
     // pad the input requested region by the operator radius
     inputRequestedRegion.PadByRadius( static_cast<unsigned int>(m_SpatialRadius) );
-    
+
     // crop the input requested region at the input's largest possible region
     if ( inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
       {
@@ -181,7 +181,7 @@ namespace otb
 
 	// store what we tried to request (prior to trying to crop)
 	inputPtr->SetRequestedRegion( inputRequestedRegion );
-	
+
 	// build an exception
 	itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
 	e.SetLocation(ITK_LOCATION);
@@ -195,7 +195,7 @@ namespace otb
   void
   MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
   ::ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId )
-  {    
+  {
     // Input and output pointers
     typename  InputImageType::ConstPointer inputPtr  = this->GetInput();
     typename OutputImageType::Pointer outputPtr = this->GetOutput();
@@ -204,18 +204,18 @@ namespace otb
 
     RegionType inputRequestedRegion = outputRegionForThread;
     RegionType outputRequestedRegion = outputRegionForThread;
-    
+
     inputRequestedRegion.PadByRadius(m_SpatialRadius);
     inputRequestedRegion.Crop(inputPtr->GetRequestedRegion());
-    
+
     // Iterators
     itk::ImageRegionConstIteratorWithIndex<InputImageType> inputIt(inputPtr,inputRequestedRegion);
     itk::ImageRegionIterator<OutputImageType> outputIt(outputPtr,outputRequestedRegion);
-    
+
 
     //create image processing object
     msImageProcessor edisonProcessor;
-    
+
     float * data = new float[inputRequestedRegion.GetNumberOfPixels()*inputPtr->GetNumberOfComponentsPerPixel()];
 
     unsigned int index = 0;
@@ -227,12 +227,12 @@ namespace otb
       }
 
     edisonProcessor.DefineLInput(data,inputRequestedRegion.GetSize()[1],inputRequestedRegion.GetSize()[0],inputPtr->GetNumberOfComponentsPerPixel());
-   
+
     //define default kernel paramerters...
     kernelType	k[2] = {Uniform, Uniform};
     int		P[2] = {2, inputPtr->GetNumberOfComponentsPerPixel()};
     float   tempH[2] = {1.0 , 1.0};
-    
+
     edisonProcessor.DefineKernel(k, tempH, P, 2);
 
     edisonProcessor.Filter(m_SpatialRadius,m_RangeRadius*m_Scale,MED_SPEEDUP);
@@ -263,21 +263,21 @@ namespace otb
       {
 	OutputPixelType pixel;
 
-	TBufferConverter::FloatArrayToPixel(data,index,pixel,outputPtr->GetNumberOfComponentsPerPixel(),invScale);	
+	TBufferConverter::FloatArrayToPixel(data,index,pixel,outputPtr->GetNumberOfComponentsPerPixel(),invScale);
 	tmpIt.Set(pixel);
 	index+=outputPtr->GetNumberOfComponentsPerPixel();
       }
 
     tmp2It.GoToBegin();
     outputIt.GoToBegin();
-    
+
     while(!tmp2It.IsAtEnd() && !outputIt.IsAtEnd())
       {
 	outputIt.Set(tmp2It.Get());
 	++tmp2It;
 	++outputIt;
       }
-    
+
     delete [] data;
   }
 
@@ -291,17 +291,17 @@ namespace otb
     typename OutputImageType::Pointer outputPtr = this->GetOutput();
     typename OutputImageType::Pointer clusteredOutputPtr = this->GetClusteredOutput();
     typename LabeledOutputType::Pointer labeledClusteredOutputPtr = this->GetLabeledClusteredOutput();
-    typename LabeledOutputType::Pointer clusterBoudariesOutputPtr = this->GetClusterBoundariesOutput(); 
+    typename LabeledOutputType::Pointer clusterBoudariesOutputPtr = this->GetClusterBoundariesOutput();
 
     RegionType outputRequestedRegion = outputPtr->GetRequestedRegion();
 
     itk::ImageRegionIterator<OutputImageType> outputIt(outputPtr,outputRequestedRegion);
     itk::ImageRegionIterator<OutputImageType> clusteredOutputIt(clusteredOutputPtr,outputRequestedRegion);
-    
-    
+
+
     //create image processing object
     msImageProcessor edisonProcessor;
-    
+
     float * data = new float[outputRequestedRegion.GetNumberOfPixels()*outputPtr->GetNumberOfComponentsPerPixel()];
 
     unsigned int index = 0;
@@ -318,7 +318,7 @@ namespace otb
     kernelType	k[2] = {Uniform, Uniform};
     int		P[2] = {2, outputPtr->GetNumberOfComponentsPerPixel()};
     float   tempH[2] = {1.0 , 1.0};
-    
+
     edisonProcessor.DefineKernel(k, tempH, P, 2);
 
     edisonProcessor.FuseRegions(m_RangeRadius*m_Scale,m_MinimumRegionSize);
@@ -343,7 +343,7 @@ namespace otb
 	clusteredOutputIt.Set(pixel);
 	index+=clusteredOutputPtr->GetNumberOfComponentsPerPixel();
       }
-    
+
     delete [] data;
 
     int   * labels = NULL;
@@ -351,16 +351,16 @@ namespace otb
     int   * modesPointsCount = NULL;
 
     edisonProcessor.GetRegions(&labels,&modes,&modesPointsCount);
-   
+
     if(edisonProcessor.ErrorStatus)
       {
 	itkExceptionMacro(<<"Error while running edison!");
       }
-    
+
     itk::ImageRegionIteratorWithIndex<LabeledOutputType> lcIt(labeledClusteredOutputPtr,labeledClusteredOutputPtr->GetRequestedRegion());
 
     index = 0;
-    
+
     labeledClusteredOutputPtr->FillBuffer(0);
 
     for(lcIt.GoToBegin();!lcIt.IsAtEnd();++lcIt)
@@ -368,19 +368,19 @@ namespace otb
 	lcIt.Set(static_cast<LabelType>(labels[index]));
 	++index;
       }
-    
+
     delete [] labels;
     delete [] modes;
     delete [] modesPointsCount;
 
     clusterBoudariesOutputPtr->FillBuffer(0);
-    
+
     //define the boundaries
     RegionList *regionList        = edisonProcessor.GetBoundaries();
     int        *regionIndeces;
     int        numRegions         = regionList->GetNumRegions();
     int        numBoundaryPixels  = 0;
- 
+
     typename LabeledOutputType::IndexType boundIndex;
 
     // TODO: Here it would be possible to extract the polygon edges for each region
@@ -398,7 +398,7 @@ namespace otb
 	  }
       }
   }
-  
+
   template <class TInputImage,class TOutputImage, class TLabeledOutput, class TBufferConverter>
   void
   MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>

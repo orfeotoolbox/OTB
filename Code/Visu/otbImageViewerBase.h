@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -56,7 +56,7 @@ namespace otb
    * without flooding the memory.
    *
    * Channel index and other various parameters can be set.
-   * 
+   *
    * To use the viewer, setup it with all your parameters, then call the Build(), Show() and the Update() methods.
    * A call to Fl::run() is mandatory to hang the program execution until the viewer is closed.
    *
@@ -66,8 +66,8 @@ namespace otb
    * \sa ImageViewerFullWidget, ImageViewerScrollWidget, ImageViewerZoomWidget
    */
   template <class TPixel, class TLabel = double>
-    class ITK_EXPORT ImageViewerBase 
-    : public itk::ProcessObject            
+    class ITK_EXPORT ImageViewerBase
+    : public itk::ProcessObject
     {
       public:
       /** Standard class typedefs */
@@ -81,7 +81,7 @@ namespace otb
 
       /** Run-time type information (and related methods). */
       itkTypeMacro(ImageViewerBase,itk::ProcessObject);
-  
+
       /// Template pixel type
       typedef TPixel InputPixelType;
       typedef TLabel LabelType;
@@ -140,7 +140,7 @@ namespace otb
       /// Definition of box form to represent displayed regions.
       typedef otb::ImageWidgetBoxForm BoxType;
       typedef typename BoxType::Pointer BoxPointerType;
-  
+
       /// List of linked viewer typedef
       typedef otb::ObjectList<Self> ViewerListType;
       typedef typename ViewerListType::Pointer ViewerListPointerType;
@@ -173,7 +173,7 @@ namespace otb
       typedef typename PathListType::Iterator PathListIteratorType;
       typedef ImageWidgetPolylineForm<double> ImageWidgetPolylineFormType;
       typedef typename ImageWidgetPolylineFormType::Pointer ImageWidgetPolylineFormPointerType;
-          
+
       /// Accessors
       itkGetMacro(Built,bool);
       itkGetMacro(ShrinkFactor,unsigned int);
@@ -246,7 +246,7 @@ namespace otb
 
       /** Set the input image overlay (VectorImage of unsigned char image with at least 3 channels) */
       virtual void SetImageOverlay(OverlayImageType * img);
-  
+
       /** Get the shrinked image if scroll is activated and else the input image */
       virtual ImageType * GetShrinkedImage(void);
 
@@ -260,25 +260,25 @@ namespace otb
 
       /** Build the interfaces */
       virtual void Build(void);
-  
+
       /** Update the widgets */
       virtual void Update(void);
 
       /** Update the full widget */
       virtual void UpdateFullWidget(void);
-  
+
       /** Update the scroll widget */
       virtual void UpdateScrollWidget(void);
 
       /** Update the ZoomWidget */
       virtual void UpdateZoomWidget(void);
 
-      /** Change the ZoomViewedRegion 
+      /** Change the ZoomViewedRegion
        * \param clickedIndex The new center of the region
        **/
       virtual void ChangeZoomViewedRegion(IndexType clickedIndex);
-      /** 
-       * Change the Full Viewed region 
+      /**
+       * Change the Full Viewed region
        * \param clickedIndex The new center of the region
        */
       virtual void ChangeFullViewedRegion(IndexType clickedIndex);
@@ -295,11 +295,11 @@ namespace otb
       /** Generate overlay list */
       virtual void GenerateOverlayList(void);
 
-      /** This is a helper class that performs a Show() and Fl::run() in order to ease 
+      /** This is a helper class that performs a Show() and Fl::run() in order to ease
        *  the use of the class for example in wrappings.
        * \return The return code from fltk.
        */
-      int FlRun(void);  
+      int FlRun(void);
       /**
        * Link this viewer with the given viewer.
        * \param viewer The viewer to link with.
@@ -382,13 +382,13 @@ namespace otb
        * true if the entry exists, and false otherwise.
        * \param label The label
        * \param color The color
-       * \return true if the label was found. 
+       * \return true if the label was found.
        */
       virtual bool GetROIColorMapEntry(const LabelType &label, ColorType &color);
 
 
       /**
-       * Clear the ROI color map. 
+       * Clear the ROI color map.
        */
       virtual void ClearROIColorMap(void);
 
@@ -415,12 +415,12 @@ namespace otb
        * \param viewer The viewer to link with.
        * \param backwardLinkFlag Link back to this viewer.
        */
-      virtual void Unlink(Self * viewer,bool backwardLinkFlag);  
+      virtual void Unlink(Self * viewer,bool backwardLinkFlag);
 
       // Constructor and destructor
       ImageViewerBase();
       ~ImageViewerBase();
- 
+
       private:
       ImageViewerBase(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
@@ -447,7 +447,7 @@ namespace otb
       bool m_UseScroll;
       /// Show the histograms
       bool m_ShowHistograms;
-      
+
       /// Intial sizes
       unsigned int m_ScrollMaxInitialSize;
       unsigned int m_FullMaxInitialSize;
@@ -460,22 +460,22 @@ namespace otb
       /// Pointer to the shrink filters
       ShrinkFilterPointerType m_Shrink;
       OverlayShrinkFilterPointerType m_ShrinkOverlay;
- 
-      /// The shrink factor 
+
+      /// The shrink factor
       unsigned int m_ShrinkFactor;
       /// true if the Gui has been built.
       bool m_Built;
       /// Channel indices
       unsigned int m_RedChannelIndex;
       unsigned int m_GreenChannelIndex;
-      unsigned int m_BlueChannelIndex;  
+      unsigned int m_BlueChannelIndex;
       /// Quicklook quality factor
       double       m_QuicklookRatioCoef;
       /// Normalization quality factor
       double       m_NormalizationFactor;
       /// Converter from otb::Image to otb::VectorImage
       VectorCastFilterPointerType m_VectorCastFilter;
-      VectorCastFilterPointerType m_VectorCastFilterOverlay; 
+      VectorCastFilterPointerType m_VectorCastFilterOverlay;
       /// Wether the viewer is updating or not
       bool m_Updating;
       /// The list of viewer with which this viewer is linked
@@ -488,7 +488,7 @@ namespace otb
       PathListPointerType m_PathList;
       /// Interface boxes
       FormListPointerType m_InterfaceBoxesList;
-      /// Next ROI color 
+      /// Next ROI color
       ColorType m_DefaultROIColor;
       /// Interfaces box color
       ColorType m_InterfaceBoxesColor;
@@ -511,7 +511,7 @@ namespace otb
       HistogramWidgetPointerType m_RedHistogramWidget;
       HistogramWidgetPointerType m_BlueHistogramWidget;
       HistogramWidgetPointerType m_GreenHistogramWidget;
-      
+
     };
 
 

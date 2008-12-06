@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -22,13 +22,13 @@
 #include "otbSVMModel.h"
 #include "itkVectorImage.h"
 
-namespace otb{ 
+namespace otb{
 
-/** \class SVMClassifier 
+/** \class SVMClassifier
  *  \brief SVM-based classifier
  *
- * The first template argument is the type of the target sample data 
- * that this classifier will assign a class label for each measurement 
+ * The first template argument is the type of the target sample data
+ * that this classifier will assign a class label for each measurement
  * vector. The second one is the pixel type of the labels to be
  * produced by the classifier.
  *
@@ -37,16 +37,16 @@ namespace otb{
  * target sample data).
  *
  * The classification result is stored in a vector of Subsample object.
- * Each class has its own class sample (Subsample object) that has 
- * InstanceIdentifiers for all measurement vectors belong to the class. 
+ * Each class has its own class sample (Subsample object) that has
+ * InstanceIdentifiers for all measurement vectors belong to the class.
  * The InstanceIdentifiers come from the target sample data. Therefore,
- * the Subsample objects act as separate class masks. 
+ * the Subsample objects act as separate class masks.
  *
  *
  */
 
 template< class TSample, class TLabel >
-class ITK_EXPORT SVMClassifier : 
+class ITK_EXPORT SVMClassifier :
       public itk::Statistics::SampleClassifier< TSample >
 {
 public:
@@ -69,9 +69,9 @@ public:
   /*typedef typename itk::NumericTraits<TSample::ValueType>::RealType
    InputPixelType ;*/
   typedef typename TSample::MeasurementVectorType::ValueType InputPixelType ;
-  
+
   /** typedefs from Superclass */
-  typedef typename Superclass::MembershipFunctionPointerVector 
+  typedef typename Superclass::MembershipFunctionPointerVector
     MembershipFunctionPointerVector ;
 
   /** typedef for label type */
@@ -85,10 +85,10 @@ public:
   /** Type definitions for the SVM Model. */
   typedef SVMModel< InputPixelType, TLabel >   SVMModelType;
   typedef typename SVMModelType::Pointer     SVMModelPointer;
-  
+
   /** Set the model */
   itkSetMacro(Model, SVMModelPointer);
-  
+
   /** Get the number of classes. */
   itkGetConstReferenceMacro(Model, SVMModelPointer);
 

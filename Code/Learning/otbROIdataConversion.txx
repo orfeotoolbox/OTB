@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) GET / ENST Bretagne. All rights reserved. 
+  Copyright (c) GET / ENST Bretagne. All rights reserved.
   See GETCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -43,8 +43,8 @@ ROIdataConversion< TInputImage, TInputROIImage >
 ::GenerateOutputInformation(void)
 {
   typename OutputImageType::Pointer outputPtr = this->GetOutput();
-  typename OutputImageType::SizeType outputSize 
-    = outputPtr->GetRequestedRegion().GetSize(); 
+  typename OutputImageType::SizeType outputSize
+    = outputPtr->GetRequestedRegion().GetSize();
   outputSize[0] = GetNumberOfSample();
   outputPtr->SetRegions( outputSize );
 }
@@ -100,12 +100,12 @@ ROIdataConversion< TInputImage, TInputROIImage >
 template < class TInputImage, class TInputROIImage >
 typename ROIdataConversion< TInputImage, TInputROIImage >::SizeValueType
 ROIdataConversion< TInputImage, TInputROIImage >
-::GetNumberOfSample () 
+::GetNumberOfSample ()
 {
 	InputROIImagePointerType inputROIPtr = GetROIImage();
 	itk::ImageRegionConstIterator< InputROIImageType > trainingIter
 		( inputROIPtr, inputROIPtr->GetRequestedRegion() );
-	
+
 	trainingIter.GoToBegin();
 
 	SizeValueType count = 0L;

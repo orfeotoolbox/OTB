@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,7 +24,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include <vector>
 
 
-namespace otb 
+namespace otb
 {
 
 /** \class AtmosphericRadiativeTermsSingleChannel
@@ -52,56 +52,56 @@ public:
   /**
    * Set/Get the intrinsic atmospheric reflectance.
    */
-  itkSetMacro(IntrinsicAtmosphericReflectance,double); 
-  itkGetMacro(IntrinsicAtmosphericReflectance,double); 
+  itkSetMacro(IntrinsicAtmosphericReflectance,double);
+  itkGetMacro(IntrinsicAtmosphericReflectance,double);
 
 
   /**
    * Set/Get the spherical albedo of the atmosphere.
    */
-  itkSetMacro(SphericalAlbedo,double); 
-  itkGetMacro(SphericalAlbedo,double); 
+  itkSetMacro(SphericalAlbedo,double);
+  itkGetMacro(SphericalAlbedo,double);
   /**
    * Set/Get the total gaseous transmission.
    */
-  itkSetMacro(TotalGaseousTransmission,double); 
-  itkGetMacro(TotalGaseousTransmission,double); 
+  itkSetMacro(TotalGaseousTransmission,double);
+  itkGetMacro(TotalGaseousTransmission,double);
 
    /**
    * Set/Get the downward transmittance of the atmosphere.
    */
-  itkSetMacro(DownwardTransmittance,double); 
-  itkGetMacro(DownwardTransmittance,double); 
+  itkSetMacro(DownwardTransmittance,double);
+  itkGetMacro(DownwardTransmittance,double);
 
   /**
    * Set/Get the upward transmittance of the atmosphere.
    */
-  itkSetMacro(UpwardTransmittance,double); 
-  itkGetMacro(UpwardTransmittance,double); 
+  itkSetMacro(UpwardTransmittance,double);
+  itkGetMacro(UpwardTransmittance,double);
 
   /**
-   * Set/Get the upward diffuse transmittance 
+   * Set/Get the upward diffuse transmittance
    */
-  itkSetMacro(UpwardDiffuseTransmittance,double); 
-  itkGetMacro(UpwardDiffuseTransmittance,double); 
+  itkSetMacro(UpwardDiffuseTransmittance,double);
+  itkGetMacro(UpwardDiffuseTransmittance,double);
 
   /**
-   * Set/Get the upward direct transmittance 
+   * Set/Get the upward direct transmittance
    */
-  itkSetMacro(UpwardDirectTransmittance,double); 
-  itkGetMacro(UpwardDirectTransmittance,double); 
+  itkSetMacro(UpwardDirectTransmittance,double);
+  itkGetMacro(UpwardDirectTransmittance,double);
 
   /**
-   * Set/Get the upward diffuse transmittance for rayleigh 
+   * Set/Get the upward diffuse transmittance for rayleigh
    */
-  itkSetMacro(UpwardDiffuseTransmittanceForRayleigh,double); 
-  itkGetMacro(UpwardDiffuseTransmittanceForRayleigh,double); 
+  itkSetMacro(UpwardDiffuseTransmittanceForRayleigh,double);
+  itkGetMacro(UpwardDiffuseTransmittanceForRayleigh,double);
 
   /**
    * Set/Get the upward diffuse transmittance for aerosols
    */
-  itkSetMacro(UpwardDiffuseTransmittanceForAerosol,double); 
-  itkGetMacro(UpwardDiffuseTransmittanceForAerosol,double); 
+  itkSetMacro(UpwardDiffuseTransmittanceForAerosol,double);
+  itkGetMacro(UpwardDiffuseTransmittanceForAerosol,double);
 
 protected:
   /** Constructor */
@@ -117,37 +117,37 @@ private:
 
 
   /** The intrinsic atmospheric reflectance. */
-  double m_IntrinsicAtmosphericReflectance; 
-  
+  double m_IntrinsicAtmosphericReflectance;
+
   /** The spherical albedo of the atmosphere.*/
-  double m_SphericalAlbedo; 
+  double m_SphericalAlbedo;
 
   /**The total gaseous transmission (for all species). */
-  double m_TotalGaseousTransmission; 
+  double m_TotalGaseousTransmission;
 
   /** The downward transmittance. */
-  double m_DownwardTransmittance; 
+  double m_DownwardTransmittance;
 
  /** The upward transmittance. */
-  double m_UpwardTransmittance; 
+  double m_UpwardTransmittance;
 
  /** The upward diffuse transmittance. */
-  double m_UpwardDiffuseTransmittance; 
+  double m_UpwardDiffuseTransmittance;
 
  /** The upward direct transmittance. */
-  double m_UpwardDirectTransmittance; 
+  double m_UpwardDirectTransmittance;
 
  /** The upward diffuse transmittance for rayleigh. */
-  double m_UpwardDiffuseTransmittanceForRayleigh; 
+  double m_UpwardDiffuseTransmittanceForRayleigh;
 
  /** The upward diffuse transmittance for aerosols. */
-  double m_UpwardDiffuseTransmittanceForAerosol; 
+  double m_UpwardDiffuseTransmittanceForAerosol;
 
 };
 
 
 /** \class AtmosphericRadiativeTerms
- *  \brief This class is a vector of AtmosphericRadiativeTermsSingleChannel, 
+ *  \brief This class is a vector of AtmosphericRadiativeTermsSingleChannel,
  *         it contains all atmospheric radiative terms for each studied channel.
  *
  * \ingroup AtmosphericRadiativeTermSingleChannel
@@ -168,64 +168,64 @@ public:
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
-  
+
   typedef AtmosphericRadiativeTermsSingleChannel::Pointer   ValueType;
   typedef std::vector<ValueType>                            VectorValueType;
-  typedef std::vector<double>                               DataVectorType;  
+  typedef std::vector<double>                               DataVectorType;
   /**
    * Set/Get the values.
    */
-  void SetValues( const VectorValueType & val) 
-    { 
-      m_Values = val; 
+  void SetValues( const VectorValueType & val)
+    {
+      m_Values = val;
       this->Modified();
-    }; 
-  VectorValueType & GetValues() { return m_Values; }; 
-  const VectorValueType & GetValues() const { return m_Values; }; 
-  
+    };
+  VectorValueType & GetValues() { return m_Values; };
+  const VectorValueType & GetValues() const { return m_Values; };
+
   /** Set/Get the data classified by channel. */
   /** Set methods with vectors. */
-  void SetIntrinsicAtmosphericReflectances(const DataVectorType & vect); 
-  void SetSphericalAlbedos(const DataVectorType & vect); 
-  void SetTotalGaseousTransmissions(const DataVectorType & vect); 
-  void SetDownwardTransmittances(const DataVectorType & vect); 
-  void SetUpwardTransmittances(const DataVectorType & vect); 
+  void SetIntrinsicAtmosphericReflectances(const DataVectorType & vect);
+  void SetSphericalAlbedos(const DataVectorType & vect);
+  void SetTotalGaseousTransmissions(const DataVectorType & vect);
+  void SetDownwardTransmittances(const DataVectorType & vect);
+  void SetUpwardTransmittances(const DataVectorType & vect);
 
-  void SetUpwardDiffuseTransmittances(const DataVectorType & vect); 
-  void SetUpwardDirectTransmittances(const DataVectorType & vect); 
-  void SetUpwardDiffuseTransmittancesForRayleigh(const DataVectorType & vect); 
-  void SetUpwardDiffuseTransmittancesForAerosol(const DataVectorType & vect); 
+  void SetUpwardDiffuseTransmittances(const DataVectorType & vect);
+  void SetUpwardDirectTransmittances(const DataVectorType & vect);
+  void SetUpwardDiffuseTransmittancesForRayleigh(const DataVectorType & vect);
+  void SetUpwardDiffuseTransmittancesForAerosol(const DataVectorType & vect);
 
   /** Set methods with index. */
   void SetValueByIndex(unsigned int id, const ValueType & val);
-  void SetIntrinsicAtmosphericReflectance(unsigned int id, const double & val); 
-  void SetSphericalAlbedo(unsigned int id, const double & val); 
-  void SetTotalGaseousTransmission(unsigned int id, const double & val); 
-  void SetDownwardTransmittance(unsigned int id, const double & val ); 
-  void SetUpwardTransmittance(unsigned int id, const  double & val ); 
+  void SetIntrinsicAtmosphericReflectance(unsigned int id, const double & val);
+  void SetSphericalAlbedo(unsigned int id, const double & val);
+  void SetTotalGaseousTransmission(unsigned int id, const double & val);
+  void SetDownwardTransmittance(unsigned int id, const double & val );
+  void SetUpwardTransmittance(unsigned int id, const  double & val );
 
-  void SetUpwardDiffuseTransmittance(unsigned int id, const  double & val ); 
-  void SetUpwardDirectTransmittance(unsigned int id, const  double & val ); 
-  void SetUpwardDiffuseTransmittanceForRayleigh(unsigned int id, const  double & val ); 
-  void SetUpwardDiffuseTransmittanceForAerosol(unsigned int id, const  double & val ); 
+  void SetUpwardDiffuseTransmittance(unsigned int id, const  double & val );
+  void SetUpwardDirectTransmittance(unsigned int id, const  double & val );
+  void SetUpwardDiffuseTransmittanceForRayleigh(unsigned int id, const  double & val );
+  void SetUpwardDiffuseTransmittanceForAerosol(unsigned int id, const  double & val );
 
   /** Get methods with vectors. */
-  DataVectorType GetIntrinsicAtmosphericReflectances(); 
-  DataVectorType GetSphericalAlbedos(); 
-  DataVectorType GetTotalGaseousTransmissions(); 
-  DataVectorType GetDownwardTransmittances(); 
-  DataVectorType GetUpwardTransmittances(); 
+  DataVectorType GetIntrinsicAtmosphericReflectances();
+  DataVectorType GetSphericalAlbedos();
+  DataVectorType GetTotalGaseousTransmissions();
+  DataVectorType GetDownwardTransmittances();
+  DataVectorType GetUpwardTransmittances();
 
-  DataVectorType GetUpwardDiffuseTransmittances(); 
-  DataVectorType GetUpwardDirectTransmittances(); 
-  DataVectorType GetUpwardDiffuseTransmittancesForRayleigh(); 
-  DataVectorType GetUpwardDiffuseTransmittancesForAerosol(); 
+  DataVectorType GetUpwardDiffuseTransmittances();
+  DataVectorType GetUpwardDirectTransmittances();
+  DataVectorType GetUpwardDiffuseTransmittancesForRayleigh();
+  DataVectorType GetUpwardDiffuseTransmittancesForAerosol();
 
  /** Get methods with index. */
-  double GetIntrinsicAtmosphericReflectance(unsigned int id); 
-  double GetSphericalAlbedo(unsigned int id); 
-  double GetTotalGaseousTransmission(unsigned int id); 
-  double GetDownwardTransmittance(unsigned int id); 
+  double GetIntrinsicAtmosphericReflectance(unsigned int id);
+  double GetSphericalAlbedo(unsigned int id);
+  double GetTotalGaseousTransmission(unsigned int id);
+  double GetDownwardTransmittance(unsigned int id);
   double GetUpwardTransmittance(unsigned int id);
   double GetUpwardDiffuseTransmittance(unsigned int id);
   double GetUpwardDirectTransmittance(unsigned int id);
@@ -233,7 +233,7 @@ public:
   double GetUpwardDiffuseTransmittanceForAerosol(unsigned int id);
 
   const ValueType GetValueByIndex(unsigned int id) const;
- 
+
   /** Initialization method.*/
   void ValuesInitialization(unsigned int nbChannel);
 
@@ -250,9 +250,9 @@ private:
   void operator=(const Self&) ; //purposely not implemented
 
   /** The vector containing each channel information. */
-  VectorValueType m_Values; 
+  VectorValueType m_Values;
   /** Boolean to know if m_Values has been initialized. */
-  bool m_IsInitialized; 
+  bool m_IsInitialized;
 };
 
 

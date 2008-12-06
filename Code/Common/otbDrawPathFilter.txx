@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -57,13 +57,13 @@ template <class TInputImage, class TInputPath,class TOutputImage>
 void
 DrawPathFilter<TInputImage,TInputPath,TOutputImage>
 ::GenerateData(void)
-{  
+{
   typedef otb::DrawPathListFilter<TInputImage,TInputPath,TOutputImage> DrawListFilterType;
   typedef typename DrawListFilterType::InputPathListType PathListType;
   typename PathListType::Pointer list = PathListType::New();
   InputPathPointer path = const_cast<TInputPath*>(this->GetPathInput());
   list->PushBack(path);
-  
+
   typename DrawListFilterType::Pointer drawer = DrawListFilterType::New();
   drawer->SetInput(this->GetImageInput());
   drawer->SetInputPath(list);
@@ -87,4 +87,4 @@ DrawPathFilter<TInputImage,TInputPath,TOutputImage>
 } // end namespace otb
 
 #endif
- 
+

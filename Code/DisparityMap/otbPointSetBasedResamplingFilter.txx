@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -88,10 +88,10 @@ PointSetBasedResamplingFilter<TInputImage, TPointSet, TOutputImage>
   InputImageConstPointerType inputPtr = this->GetInput();
   outputPtr->FillBuffer(0);
   m_Interpolator->SetInputImage(inputPtr);
-  
+
   typedef itk::ImageRegionIteratorWithIndex<OutputImageType> IteratorType;
   IteratorType outputIt(outputPtr,outputPtr->GetRequestedRegion());
-  
+
   for(outputIt.GoToBegin();!outputIt.IsAtEnd();++outputIt)
     {
       PointType outputPoint,inputPoint;
@@ -115,7 +115,7 @@ PointSetBasedResamplingFilter<TInputImage, TPointSet, TOutputImage>
 	}
     }
 }
-/** 
+/**
  * \return The parameters of the transform associated with the nearest suitable point in pointset.
  */
 template <class TInputImage, class TPointSet, class TOutputImage>
@@ -152,7 +152,7 @@ PointSetBasedResamplingFilter<TInputImage, TPointSet, TOutputImage>
 	    }
 	  inputPoint[0] = it.Value()[0];
 	  inputPoint[1] = it.Value()[1];
-	  
+
 	  m_Transform->SetParameters(tmpParameters);
 	  outputPoint = m_Transform->TransformPoint(inputPoint);
 	  // compute the distance to current point
@@ -167,7 +167,7 @@ PointSetBasedResamplingFilter<TInputImage, TPointSet, TOutputImage>
     }
   return parameters;
 }
-    
+
 /**
  * PrintSelf Method
  */

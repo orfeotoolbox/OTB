@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -22,16 +22,16 @@
 namespace otb
 {
 /** \class ImageToPathListFilter
- * \brief Base class used to implement filters that have a image as input and a paths list as output. 
+ * \brief Base class used to implement filters that have a image as input and a paths list as output.
  *
- * 
+ *
  * \ingroup PathListFilters
  * \ingroup PathLists
  */
 
 template <class TInputImage, class TOutputPath>
-//class ITK_EXPORT ImageToPathListFilter : public itk::PathSource<TOutputPath> 
-class ITK_EXPORT ImageToPathListFilter : public PathListSource<TOutputPath> 
+//class ITK_EXPORT ImageToPathListFilter : public itk::PathSource<TOutputPath>
+class ITK_EXPORT ImageToPathListFilter : public PathListSource<TOutputPath>
 {
 public:
   /** Standard class typedefs. */
@@ -44,17 +44,17 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(ImageToPathListFilter, PathListSource);
 
   /** Some convenient typedefs. */
   typedef          TInputImage                    InputImageType;
   typedef typename InputImageType::ConstPointer   InputImagePointer;
-  typedef typename InputImageType::RegionType     InputImageRegionType; 
-  typedef typename InputImageType::PixelType      InputImagePixelType; 
-  typedef typename InputImageType::SizeType           SizeType;                 
-  typedef typename InputImageType::ValueType          ValueType;  
+  typedef typename InputImageType::RegionType     InputImageRegionType;
+  typedef typename InputImageType::PixelType      InputImagePixelType;
+  typedef typename InputImageType::SizeType           SizeType;
+  typedef typename InputImageType::ValueType          ValueType;
 
   typedef typename Superclass::OutputPathType         OutputPathType;
   typedef typename Superclass::OutputPathListType     OutputPathListType;
@@ -63,7 +63,7 @@ public:
   /** ImageDimension constants */
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputImage::ImageDimension);
-  
+
   /** Set/Get the image input of this process object. */
   virtual void SetInput( const InputImageType * image);
   const InputImageType * GetInput(void);
@@ -72,7 +72,7 @@ protected:
   ImageToPathListFilter();
   virtual ~ImageToPathListFilter() {};
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;  
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
   ImageToPathListFilter(const Self&); //purposely not implemented

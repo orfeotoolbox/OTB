@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,7 +34,7 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
   this->ProcessObjectType::SetNumberOfRequiredInputs(1);
 
   OutputPointSetPointer output
-    = dynamic_cast<OutputPointSetType*>(this->MakeOutput(0).GetPointer()); 
+    = dynamic_cast<OutputPointSetType*>(this->MakeOutput(0).GetPointer());
 
   ProcessObjectType::SetNumberOfRequiredOutputs(1);
   ProcessObjectType::SetNthOutput(0, output.GetPointer());
@@ -54,13 +54,13 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
  *
  */
 template <class TInputImage, class TOutputPointSet>
-void 
+void
 ImageToPointSetFilter<TInputImage,TOutputPointSet>
 ::SetInput(unsigned int idx,const InputImageType *input)
 {
   // process object is not const-correct, the const_cast
   // is required here.
-  this->ProcessObjectType::SetNthInput(idx, 
+  this->ProcessObjectType::SetNthInput(idx,
                                    const_cast< InputImageType * >(input) );
 }
 
@@ -71,7 +71,7 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
 template <class TInputImage, class TOutputPointSet>
 const typename ImageToPointSetFilter<TInputImage,TOutputPointSet>::InputImageType *
 ImageToPointSetFilter<TInputImage,TOutputPointSet>
-::GetInput(unsigned int idx) 
+::GetInput(unsigned int idx)
 {
   return dynamic_cast<const InputImageType*>
     (this->ProcessObjectType::GetInput(idx));
@@ -81,7 +81,7 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
  *
  */
 template <class TInputImage, class TOutputPointSet>
-void 
+void
 ImageToPointSetFilter<TInputImage,TOutputPointSet>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
@@ -92,11 +92,11 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
 
 /**
  * copy information from first input to all outputs
- * This is a void implementation to prevent the 
+ * This is a void implementation to prevent the
  * ProcessObject version to be called
  */
 template <class TInputImage, class TOutputPointSet>
-void 
+void
 ImageToPointSetFilter<TInputImage,TOutputPointSet>
 ::GenerateOutputInformation()
 {

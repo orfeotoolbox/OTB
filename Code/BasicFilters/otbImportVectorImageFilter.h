@@ -1,5 +1,5 @@
 /*=========================================================================
-	
+
   Program:   ORFEO Toolbox
     Language:  C++
     Date:      $Date$
@@ -35,11 +35,11 @@ namespace otb
  * object.
  *
  * This class is templated over the output Image Type
- * 
+ *
  */
- 
+
 template <typename TOutputImageType>
-class ITK_EXPORT ImportVectorImageFilter: 
+class ITK_EXPORT ImportVectorImageFilter:
     public itk::ImageSource< TOutputImageType >
 {
 public:
@@ -49,7 +49,7 @@ public:
   typedef typename OutputImageType::SpacingType SpacingType;
   typedef typename OutputImageType::PointType   OriginType;
 
-  
+
   /** Standard class typedefs. */
   typedef ImportVectorImageFilter   Self;
   typedef itk::ImageSource<OutputImageType>  Superclass;
@@ -61,22 +61,22 @@ public:
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ImportVectorImageFilter,itk::ImageSource);
-	
+
   /** Index typedef support. An index is used to access pixel values. */
   typedef itk::Index<OutputImageType::ImageDimension>  IndexType;
 
   /** Size typedef support. A size is used to define region bounds. */
   typedef itk::Size<OutputImageType::ImageDimension>  SizeType;
 
-  /** Region typedef support. A region is used to specify a 
+  /** Region typedef support. A region is used to specify a
    * subset of an image. */
   typedef itk::ImageRegion<OutputImageType::ImageDimension>  RegionType;
 
   /** Type of the output image pixel type. */
 	typedef typename OutputImageType::PixelType TOutputPixel;
 	typedef typename TOutputPixel::ValueType TPixel;
-	
-  
+
+
   /** Get the pointer from which the image data is imported. */
   TPixel *GetImportPointer();
 
@@ -96,14 +96,14 @@ public:
    * \sa ImageRegion */
   void SetRegion(const RegionType &region)
   { if (m_Region != region) {m_Region = region; this->Modified();} };
-  
+
   /** Get the region object that defines the size and starting index
    * for the imported image. This will serve as the LargestPossibleRegion,
    * the BufferedRegion, and the RequestedRegion.
    * \sa ImageRegion */
   const RegionType& GetRegion() const
   { return m_Region;};
-  
+
   /** Set the spacing (size of a pixel) of the image.
    * \sa GetSpacing() */
   itkSetVectorMacro(Spacing, const double, OutputImageType::ImageDimension);
@@ -113,7 +113,7 @@ public:
    * \sa SetSpacing() */
   itkGetVectorMacro(Spacing, const double, OutputImageType::ImageDimension);
   void SetSpacing( const SpacingType & spacing );
-  
+
   /** Set the origin of the image.
    * \sa GetOrigin() */
   itkSetVectorMacro(Origin, const double, OutputImageType::ImageDimension);
@@ -135,7 +135,7 @@ public:
   /**  Get the direction of the image
    * \sa SetDirection */
   itkGetConstReferenceMacro(Direction, DirectionType);
-	
+
 protected:
   ImportVectorImageFilter();
   ~ImportVectorImageFilter();
@@ -159,7 +159,7 @@ protected:
    * \sa ProcessObject::EnlargeOutputRequestedRegion() */
   virtual void EnlargeOutputRequestedRegion(itk::DataObject *output);
 
-private:  
+private:
   ImportVectorImageFilter(const ImportVectorImageFilter &); //purposely not implemented
   void operator=(const ImportVectorImageFilter&); //purposely not implemented
 

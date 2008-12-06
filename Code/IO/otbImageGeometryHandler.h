@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -19,10 +19,10 @@
 #define __otbImageGeometryHandler_h
 /*!otbImageGeometryHandler.h
  *
- * 
+ *
  * PURPOSE:
  *
- * 
+ *
  */
 // iostream is used for general output
 //#include <iostream>
@@ -51,9 +51,9 @@
 #include "itkObject.h"
 
 namespace otb
-{	         
+{
 class ITK_EXPORT ImageGeometryHandler: public itk::Object
-{          
+{
 public :
 //Déclaration des types:
   typedef ImageGeometryHandler                       Self;
@@ -63,9 +63,9 @@ public :
   typedef itk::SmartPointer<const Self>              ConstPointer;
 
   static Pointer New()
-  { 
-        Pointer n = new Self; 
-        n->UnRegister(); 
+  {
+        Pointer n = new Self;
+        n->UnRegister();
         return n;
   }
 
@@ -82,16 +82,16 @@ ossimKeywordlist GetGeometryKeywordlist();
 
 // //Récupération du model de projection(spécifique à AdjMapModel):
 // const ossimMapProjection* ImageGeometryHandler::GetProjection() const;
-// 
+//
 // //Récupération de ImageSize(spécifique à AdjMapModel):
 // const ossimIpt ImageGeometryHandler::GetImageSize() const;
-// 
+//
 // //Récupération du GeoFilename:
 // const ossimFilename ImageGeometryHandler::GetGeometryFileName() const;
-// 
+//
 // //Récupération du HeaderFile de type Ffl7:
 // const ossimFfL7 ImageGeometryHandler::GetFfL7();
-// 
+//
 // //Récupération du SpotDimapSupportData:
 
 protected:

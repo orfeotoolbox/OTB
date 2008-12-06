@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -40,7 +40,7 @@ NNearestPointsLinearInterpolateDeformationFieldGenerator<TPointSet, TDeformation
 
   typedef itk::ImageRegionIteratorWithIndex<DeformationFieldType> IteratorType;
   IteratorType it(outputPtr,outputPtr->GetRequestedRegion());
-  
+
   for(it.GoToBegin();!it.IsAtEnd();++it)
     {
       IndexType index = it.GetIndex();
@@ -50,7 +50,7 @@ NNearestPointsLinearInterpolateDeformationFieldGenerator<TPointSet, TDeformation
       xdeformation = 0;
       ydeformation = 0;
       normalization = 0;
-      
+
       for(typename IndexVectorType::iterator indexIt=indexVector.begin();indexIt!=indexVector.end();++indexIt)
 	{
 	  PointType point;
@@ -63,7 +63,7 @@ NNearestPointsLinearInterpolateDeformationFieldGenerator<TPointSet, TDeformation
 	    }
 	  xdeformation +=  this->GetPointSet()->GetPointData()->GetElement((*indexIt))[1]/distance;
 	  ydeformation +=  this->GetPointSet()->GetPointData()->GetElement((*indexIt))[2]/distance;
-	  normalization+=1/distance;	      
+	  normalization+=1/distance;
 	}
 
       if(normalization>0)

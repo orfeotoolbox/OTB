@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -56,7 +56,7 @@ VectorRescaleIntensityImageFilter<TInputImage,TOutputImage>
  * Generate input requested region.
  */
 template <class TInputImage, class TOutputImage>
-void 
+void
 VectorRescaleIntensityImageFilter<TInputImage,TOutputImage>
 ::GenerateInputRequestedRegion(void)
       {
@@ -72,7 +72,7 @@ VectorRescaleIntensityImageFilter<TInputImage,TOutputImage>
  * Process to execute before entering the multithreaded section.
  */
 template <class TInputImage, class TOutputImage>
-void 
+void
 VectorRescaleIntensityImageFilter<TInputImage, TOutputImage>
 ::BeforeThreadedGenerateData()
 {
@@ -81,34 +81,34 @@ VectorRescaleIntensityImageFilter<TInputImage, TOutputImage>
 
       typedef  typename Superclass::InputImageType      InputImageType;
       typedef  typename Superclass::InputImagePointer   InputImagePointer;
-      
+
       // Get the input
       InputImagePointer inputImage =   this->GetInput();
-      
+
       typedef itk::ImageRegionConstIterator< InputImageType >  InputIterator;
       typedef itk::Vector<typename InputImageType::InternalPixelType,1> MeasurementVectorType;
       typedef itk::Statistics::ListSample<MeasurementVectorType> ListSampleType;
       typedef float HistogramMeasurementType;
       typedef itk::Statistics::ListSampleToHistogramGenerator<ListSampleType,HistogramMeasurementType,
 	itk::Statistics::DenseFrequencyContainer,1> HistogramGeneratorType;
-      
+
       typedef ObjectList<ListSampleType> ListSampleListType;
-      
+
       m_InputMinimum.SetSize(inputImage->GetNumberOfComponentsPerPixel());
       m_InputMaximum.SetSize(inputImage->GetNumberOfComponentsPerPixel());
       typename ListSampleListType::Pointer sl =  ListSampleListType::New();
-      
+
       sl->Reserve(inputImage->GetNumberOfComponentsPerPixel());
-      
+
       for(unsigned int i = 0;i<m_InputMaximum.GetSize();++i)
 	{
 	  sl->PushBack(ListSampleType::New());
 	}
-      
+
       InputIterator it( inputImage, inputImage->GetBufferedRegion() );
-      
+
       it.GoToBegin();
-      
+
       while( !it.IsAtEnd() )
 	{
 	  InputPixelType pixel = it.Get();
@@ -118,7 +118,7 @@ VectorRescaleIntensityImageFilter<TInputImage, TOutputImage>
 	    }
 	  ++it;
 	}
-      
+
       for(unsigned int i = 0;i<m_InputMaximum.GetSize();++i)
 	{
 	  typename HistogramGeneratorType::Pointer generator = HistogramGeneratorType::New();
@@ -143,7 +143,7 @@ VectorRescaleIntensityImageFilter<TInputImage, TOutputImage>
  * Printself method
  */
 template <class TInputImage, class TOutputImage>
-void 
+void
 VectorRescaleIntensityImageFilter<TInputImage, TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {

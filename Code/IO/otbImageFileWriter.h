@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,12 +32,12 @@ namespace otb
  *
  * \sa ImageSeriesWriter
  * \sa ImageIOBase
- * 
+ *
  * \ingroup IOFilters
  *
  */
 
-// Le 3ieme parametre template est bidon MAIS necessaire pour compiler avec Microsoft Visual C++ 6.0 
+// Le 3ieme parametre template est bidon MAIS necessaire pour compiler avec Microsoft Visual C++ 6.0
 template <class TInputImage, unsigned int toto=0>
 class ITK_EXPORT ImageFileWriter : public itk::ImageFileWriter<TInputImage>
 {
@@ -57,9 +57,9 @@ public:
   /** Some convenient typedefs. */
   typedef TInputImage InputImageType;
   typedef typename InputImageType::Pointer InputImagePointer;
-  typedef typename InputImageType::RegionType InputImageRegionType; 
-  typedef typename InputImageType::PixelType InputImagePixelType; 
-  
+  typedef typename InputImageType::RegionType InputImageRegionType;
+  typedef typename InputImageType::PixelType InputImagePixelType;
+
   /** A special version of the Update() method for writers.  It
    * invokes start and end events and handles releasing data. It
    * eventually calls GenerateData() which does the actual writing.
@@ -74,7 +74,7 @@ public:
   {
     this->Superclass::SetFileName(filename);
     this->SetImageIO(NULL);
-  } 
+  }
 protected:
   ImageFileWriter();
   ~ImageFileWriter();
@@ -90,12 +90,12 @@ private:
 
 };
 
-  
+
 } // end namespace otb
-  
+
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbImageFileWriter.txx"
 #endif
 
 #endif // __otbImageFileWriter_h
-  
+

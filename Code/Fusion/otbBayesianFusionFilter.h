@@ -10,7 +10,7 @@
   See OTBCopyright.txt for details.
 
   This code is from a Julien Radoux contribution.
-  
+
   Some parts of this code are derived from ITK. See ITKCopyright.txt
   for details.
 
@@ -42,9 +42,9 @@ namespace otb
        * \brief Functor for the bayesian fusion filter. Please refer to BayesianFusionFilter.
        *
        */
-      template <class TInputMultiSpectral, 
-	        class TInputMultiSpectralInterp, 
-	        class TInputPanchro, 
+      template <class TInputMultiSpectral,
+	        class TInputMultiSpectralInterp,
+	        class TInputPanchro,
 	        class TOutput>
 	class BayesianFunctor
 	{
@@ -69,7 +69,7 @@ namespace otb
 
 
 
-	  inline TOutput operator() (const TInputMultiSpectral & ms, const TInputMultiSpectralInterp & msi, const TInputPanchro & p) 
+	  inline TOutput operator() (const TInputMultiSpectral & ms, const TInputMultiSpectralInterp & msi, const TInputPanchro & p)
 	    {
 	      TOutput obs;
 	      obs.SetSize(msi.GetSize());
@@ -92,22 +92,22 @@ namespace otb
 	       *  To modify using + method operator. If we use it now -> exceptionmacro (no GetClassName...)
 	       * obsMat += PanVect;
 	       **/
-	      if( (obsMat.Cols() != PanVect.Cols()) || (obsMat.Rows() != PanVect.Rows()) ) 
-		{ 
-		  itkGenericExceptionMacro( << "Matrix with size (" << obsMat.Rows() << "," << 
+	      if( (obsMat.Cols() != PanVect.Cols()) || (obsMat.Rows() != PanVect.Rows()) )
+		{
+		  itkGenericExceptionMacro( << "Matrix with size (" << obsMat.Rows() << "," <<
 				     obsMat.Cols() << ") cannot be subtracted from matrix with size (" <<
 				     PanVect.Rows() << "," << PanVect.Cols() << " )" );
 		}
-	      
-	      for( unsigned int r=0; r<obsMat.Rows(); r++) 
+
+	      for( unsigned int r=0; r<obsMat.Rows(); r++)
 		{
-		  for( unsigned int c=0; c<obsMat.Cols(); c++ ) 
+		  for( unsigned int c=0; c<obsMat.Cols(); c++ )
 		    {
 		      obsMat(r,c) += PanVect(r,c);
 		    }
 		}
 	      //**** END TODO ****/
-	      obsMat *= m_Vcondopt; 
+	      obsMat *= m_Vcondopt;
 	      for (unsigned int i=0; i<obs.GetSize();i++)
 		{
 		  obs[i] = static_cast<typename TOutput::ValueType>(obsMat(0U,i));
@@ -126,17 +126,17 @@ namespace otb
     }
 
   /***** TODO ***
-   * Complete the description with J. Radoux text 
+   * Complete the description with J. Radoux text
    */
    /***** END TODO ***/
 
-    
+
   /** \class BayesianFusionFilter
    * \brief Bayesian fusion filter. Contribution of Julien Radoux
    *
-   * Please refer to D. Fasbender, J. Radoux and P. Bogaert, 
+   * Please refer to D. Fasbender, J. Radoux and P. Bogaert,
    * Bayesian Data Fusion for Adaptable Image Pansharpening,
-   * Transactions on Geoscience and Remote Sensing, 
+   * Transactions on Geoscience and Remote Sensing,
    * vol. 46, n. 6, 2007, pp 1847-1857
    *
    * \sa FusionImageBase
@@ -145,27 +145,27 @@ namespace otb
    * \ingroup Streamed
    * \ingroup Multithreaded
    * \ingroup MathematicalStatisticsImageFilters
-   * 
+   *
    * \ingroup Fusion
-   * 
-   * 
+   *
+   *
    * \example Fusion/BayesianFusionImageFilter.cxx
-   * 
+   *
    *
    */
 
-template <class TInputMultiSpectralImage, 
-          class TInputMultiSpectralInterpImage, 
-          class TInputPanchroImage, 
+template <class TInputMultiSpectralImage,
+          class TInputMultiSpectralInterpImage,
+          class TInputPanchroImage,
           class TOutputImage>
-class ITK_EXPORT BayesianFusionFilter 
-  :  public FusionImageBase<TInputMultiSpectralImage, 
-                                 TInputMultiSpectralInterpImage, 
-                                 TInputPanchroImage, 
-                                 TOutputImage, 
+class ITK_EXPORT BayesianFusionFilter
+  :  public FusionImageBase<TInputMultiSpectralImage,
+                                 TInputMultiSpectralInterpImage,
+                                 TInputPanchroImage,
+                                 TOutputImage,
                                  Functor::BayesianFunctor<ITK_TYPENAME TInputMultiSpectralImage::PixelType,
                          	                          ITK_TYPENAME TInputMultiSpectralInterpImage::PixelType,
-	                                                  ITK_TYPENAME TInputPanchroImage::PixelType, 
+	                                                  ITK_TYPENAME TInputPanchroImage::PixelType,
 	                                                  ITK_TYPENAME TOutputImage::PixelType>                    >
 {
 public:
@@ -185,11 +185,11 @@ public:
   typedef BayesianFusionFilter Self;
   typedef FusionImageBase< InputMultiSpectralImageType,
                            InputMultiSpectralInterpImageType,
-                           InputPanchroImageType, 
-                           OutputImageType, 
+                           InputPanchroImageType,
+                           OutputImageType,
                            Functor::BayesianFunctor<ITK_TYPENAME InputMultiSpectralImageType::PixelType,
                          	                    ITK_TYPENAME InputMultiSpectralInterpImageType::PixelType,
-	                                            ITK_TYPENAME InputPanchroImageType::PixelType, 
+	                                            ITK_TYPENAME InputPanchroImageType::PixelType,
 	                                            ITK_TYPENAME OutputImageType::PixelType> > Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
@@ -199,7 +199,7 @@ public:
 
   /** return class name. */
   itkTypeMacro(BayesianFusionFilter, FusionImageBase);
-  
+
   /** Supported images definition. */
   typedef typename InputMultiSpectralImageType::PixelType                InputMultiSpectralPixelType;
   typedef typename InputMultiSpectralImageType::InternalPixelType        InputMultiSpectralInternalPixelType;
@@ -208,7 +208,7 @@ public:
   typedef typename InputPanchroImageType::PixelType                      InputPanchroPixelType;
   typedef typename OutputImageType::PixelType                            OutputPixelType;
   typedef typename OutputImageType::InternalPixelType                    OutputInternalPixelType;
- 
+
   /** Real class typedef definition. */
   typedef typename itk::NumericTraits<InputPanchroPixelType>::RealType                     InputPanchroRealType;
   typedef typename itk::NumericTraits<InputMultiSpectralInternalPixelType>::RealType       InputMultiSpectralRealType;
@@ -217,7 +217,7 @@ public:
   typedef typename InputMultiSpectralInterpImageType::RegionType                           InputMultiSpectralInterpImageRegionType;
   typedef typename InputPanchroImageType::RegionType                                       InputPanchroImageRegionType;
   typedef typename OutputImageType::RegionType                                             OutputImageRegionType;
-  
+
 
   /** Image size "typedef" definition. */
   typedef typename InputMultiSpectralImageType::SizeType SizeType;
@@ -259,7 +259,7 @@ public:
   itkSetMacro(S, float);
   /** Give the S coefficient. */
   itkGetConstReferenceMacro(S, float);
-  
+
 protected:
   BayesianFusionFilter();
   virtual ~BayesianFusionFilter();
@@ -270,7 +270,7 @@ protected:
   /** Call the superclass implementation and set the StatisticsHaveBeenGenerated
    * flag to false */
   virtual void Modified(void);
-   
+
 private:
   /** Ponderation declaration*/
   float m_Lambda;

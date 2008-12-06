@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,7 +34,7 @@ template < class TInputPath, class TOutput, class TPrecision>
 HuPathFunction< TInputPath, TOutput, TPrecision  >
 ::HuPathFunction()
 {
-  m_MomentNumber =-1; 
+  m_MomentNumber =-1;
 }
 
 /**
@@ -57,18 +57,18 @@ HuPathFunction<TInputPath, TOutput, TPrecision  >
 {
   typedef ComplexMomentPathFunction<PathType>   FunctionType;
   typedef typename FunctionType::ComplexType    ComplexType;
-  
+
   RealType                         HuValue;
   ComplexType                      HuValueComplex;
 
   typename FunctionType::Pointer function =FunctionType::New();
- 
+
   function->SetStep( this->GetStep() );
   function->SetInputPath( this->GetInputPath() );
 
   switch(m_MomentNumber)
     {
-    case 1 : 
+    case 1 :
         {
 	ComplexType C11;
 	function->SetP(1);
@@ -115,7 +115,7 @@ HuPathFunction<TInputPath, TOutput, TPrecision  >
 	C12 = function->Evaluate( );
 
 	HuValue = vcl_abs( C21 * C12 );
-	}	
+	}
 	break;
 
     case 5:
@@ -129,8 +129,8 @@ HuPathFunction<TInputPath, TOutput, TPrecision  >
 	C12 = function->Evaluate( );
 
 	HuValueComplex = C30 * vcl_pow(C12,3) ;
-	HuValue = HuValueComplex.real();       
-	}	
+	HuValue = HuValueComplex.real();
+	}
 	break;
 
     case 6:
@@ -144,8 +144,8 @@ HuPathFunction<TInputPath, TOutput, TPrecision  >
 	C12 = function->Evaluate( );
 
 	HuValueComplex = C20 * vcl_pow( C12 ,2 );
-	HuValue = HuValueComplex.real();         
-	}	
+	HuValue = HuValueComplex.real();
+	}
 	break;
 
     case 7:
@@ -159,12 +159,12 @@ HuPathFunction<TInputPath, TOutput, TPrecision  >
 	C12 = function->Evaluate( );
 
 	HuValueComplex = C30 * vcl_pow( C12 , 3);
-	HuValue = HuValueComplex.imag();         
-	}	
+	HuValue = HuValueComplex.imag();
+	}
 	break;
-	
+
     default:
-	itkWarningMacro("Hu's invariant parameters are between 1 and 7");	
+	itkWarningMacro("Hu's invariant parameters are between 1 and 7");
     }
 
   return (static_cast<RealType>(HuValue) );
@@ -183,7 +183,7 @@ HuPathFunction<TInputPath, TOutput, TPrecision >
     }
 
   RealType Result =  Evaluate( *(this->GetInputPath()) );
-  
+
   return Result;
 
 }

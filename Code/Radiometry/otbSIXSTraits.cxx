@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -40,10 +40,10 @@ SIXSTraits::ComputeAtmosphericParameters(
         const   double                  AerosolOptical,                         /** The Aerosol optical (radiative impact of aerosol for the reference wavelenght 550-nm) */
                 WavelenghtSpectralType* WavelenghtSpectralBand,                 /** Wavelenght for the spectral band definition */
                                                                                 /** Note : The Max wavelenght spectral band value must be updated ! */
-                double &                AtmosphericReflectance,                 /** Atmospheric reflectance */     
+                double &                AtmosphericReflectance,                 /** Atmospheric reflectance */
                 double &                AtmosphericSphericalAlbedo,             /** atmospheric spherical albedo */
                 double &                TotalGaseousTransmission,               /** Total gaseous transmission */
-                double &                DownwardTransmittance,                  /** downward transmittance */      
+                double &                DownwardTransmittance,                  /** downward transmittance */
                 double &                UpwardTransmittance,                    /** upward transmittance */
                 double &                UpwardDiffuseTransmittance,             /** upward diffuse transmittance */
                 double &                UpwardDirectTransmittance,              /** Upward direct transmittance */
@@ -52,7 +52,7 @@ SIXSTraits::ComputeAtmosphericParameters(
         )
 {
 // geometrical conditions
-        otb_6s_doublereal asol(static_cast<otb_6s_doublereal>(SolarZenithalAngle)); 
+        otb_6s_doublereal asol(static_cast<otb_6s_doublereal>(SolarZenithalAngle));
         otb_6s_doublereal phi0(static_cast<otb_6s_doublereal>(SolarAzimutalAngle));
         otb_6s_doublereal avis(static_cast<otb_6s_doublereal>(ViewingZenithalAngle));
         otb_6s_doublereal phiv(static_cast<otb_6s_doublereal>(ViewingAzimutalAngle));
@@ -60,32 +60,32 @@ SIXSTraits::ComputeAtmosphericParameters(
         otb_6s_integer jday(static_cast<otb_6s_integer>(Day));
         otb_6s_doublereal pressure(static_cast<otb_6s_doublereal>(AtmosphericPressure));
         otb_6s_doublereal uw(static_cast<otb_6s_doublereal>(WaterVaporAmount));
-        otb_6s_doublereal uo3(static_cast<otb_6s_doublereal>(OzoneAmount)); 
+        otb_6s_doublereal uo3(static_cast<otb_6s_doublereal>(OzoneAmount));
 // atmospheric model
         otb_6s_integer iaer(static_cast<otb_6s_integer>(AerosolModel));
         otb_6s_doublereal taer55(static_cast<otb_6s_doublereal>(AerosolOptical));
 
-        // Init output parameters       
-        AtmosphericReflectance = 0.;   
-        AtmosphericSphericalAlbedo = 0.; 
-        TotalGaseousTransmission = 0.;  
-        DownwardTransmittance = 0.;    
-        UpwardTransmittance = 0.;      
-        UpwardDiffuseTransmittance = 0.;      
-        UpwardDirectTransmittance = 0.;      
-        UpwardDiffuseTransmittanceForRayleigh = 0.;      
-        UpwardDiffuseTransmittanceForAerosol = 0.;      
+        // Init output parameters
+        AtmosphericReflectance = 0.;
+        AtmosphericSphericalAlbedo = 0.;
+        TotalGaseousTransmission = 0.;
+        DownwardTransmittance = 0.;
+        UpwardTransmittance = 0.;
+        UpwardDiffuseTransmittance = 0.;
+        UpwardDirectTransmittance = 0.;
+        UpwardDiffuseTransmittanceForRayleigh = 0.;
+        UpwardDiffuseTransmittanceForAerosol = 0.;
 
         otb_6s_doublereal wlinf(0.), wlsup(0.);
         otb_6s_doublereal otb_ratm__(0.), sast(0.), tgasm(0.), sdtott(0.), sutott(0.);
         otb_6s_doublereal tdif_up(0.), tdir_up(0.), tdif_up_ray(0.), tdif_up_aer(0.);
         try
         {
-                // 6S official Wavelenght Spectral Band step value 
+                // 6S official Wavelenght Spectral Band step value
                 const float SIXSStepOfWavelenghtSpectralBandValues = .0025;
                 // Generate 6s Wavelenght Spectral Band with the offcicial step value
                 ComputeWavelenghtSpectralBandValuesFor6S(       SIXSStepOfWavelenghtSpectralBandValues,
-                                                                WavelenghtSpectralBand // Update 
+                                                                WavelenghtSpectralBand // Update
                                                                 );
 
                 // 6S official tab size Wavelenght Spectral
@@ -93,7 +93,7 @@ SIXSTraits::ComputeAtmosphericParameters(
                 // Generate WavelenghtSpectralBand  in 6S compatible buffer s[1501]
                 wlinf = static_cast<otb_6s_doublereal>(WavelenghtSpectralBand->GetMinSpectralValue());
                 wlsup = static_cast<otb_6s_doublereal>(WavelenghtSpectralBand->GetMaxSpectralValue());
-                
+
                 otb_6s_integer iinf = static_cast<otb_6s_integer>((wlinf - (float).25) / SIXSStepOfWavelenghtSpectralBandValues + (float)1.5);
                 otb_6s_integer isup = static_cast<otb_6s_integer>((wlsup - (float).25) / SIXSStepOfWavelenghtSpectralBandValues + (float)1.5);
 
@@ -110,16 +110,16 @@ SIXSTraits::ComputeAtmosphericParameters(
                 }
                 // Call 6s main function
                 otbMsgDevMacro(<< "Start call 6S main function ...");
-                otb_6s_ssssss_otb_main_function(        &asol, &phi0, &avis, &phiv, &month, &jday, 
-                                                        &pressure, &uw, &uo3, 
-	                                                &iaer, 
-                                                        &taer55, 
-                                                        &wlinf, &wlsup, 
-                                                        s, 
-                                                        &otb_ratm__, 
-                                                        &sast, 
-                                                        &tgasm, 
-                                                        &sdtott, 
+                otb_6s_ssssss_otb_main_function(        &asol, &phi0, &avis, &phiv, &month, &jday,
+                                                        &pressure, &uw, &uo3,
+	                                                &iaer,
+                                                        &taer55,
+                                                        &wlinf, &wlsup,
+                                                        s,
+                                                        &otb_ratm__,
+                                                        &sast,
+                                                        &tgasm,
+                                                        &sdtott,
                                                         &sutott,
                                                         &tdif_up,
                                                         &tdir_up,
@@ -133,21 +133,21 @@ SIXSTraits::ComputeAtmosphericParameters(
         {
                 itkGenericExceptionMacro( <<"Exception bad_alloc in SIXSTraits class: "<<(char*)err.what());
         }
-        catch (...) 
+        catch (...)
         {
                 itkGenericExceptionMacro( <<"Unknown exception in SIXSTraits class (catch(...)");
         }
 
-        // Set outputs parameters       
-        AtmosphericReflectance = static_cast<double>(otb_ratm__);   
-        AtmosphericSphericalAlbedo = static_cast<double>(sast); 
-        TotalGaseousTransmission = static_cast<double>(tgasm);  
-        DownwardTransmittance = static_cast<double>(sdtott);    
-        UpwardTransmittance = static_cast<double>(sutott);   
-        UpwardDiffuseTransmittance = static_cast<double>(tdif_up);      
-        UpwardDirectTransmittance = static_cast<double>(tdir_up);      
-        UpwardDiffuseTransmittanceForRayleigh = static_cast<double>(tdif_up_ray);      
-        UpwardDiffuseTransmittanceForAerosol = static_cast<double>(tdif_up_aer);      
+        // Set outputs parameters
+        AtmosphericReflectance = static_cast<double>(otb_ratm__);
+        AtmosphericSphericalAlbedo = static_cast<double>(sast);
+        TotalGaseousTransmission = static_cast<double>(tgasm);
+        DownwardTransmittance = static_cast<double>(sdtott);
+        UpwardTransmittance = static_cast<double>(sutott);
+        UpwardDiffuseTransmittance = static_cast<double>(tdif_up);
+        UpwardDirectTransmittance = static_cast<double>(tdir_up);
+        UpwardDiffuseTransmittanceForRayleigh = static_cast<double>(tdif_up_ray);
+        UpwardDiffuseTransmittanceForAerosol = static_cast<double>(tdif_up_aer);
 }
 
 
@@ -165,24 +165,24 @@ SIXSTraits::ComputeWavelenghtSpectralBandValuesFor6S(
         unsigned int j = 1;
         const double invStep = static_cast<double>(1./L_userStep);
         double value(0.);
-        
+
         // Generate WavelenghtSpectralBand if the step is not the offical 6S step value
-        if( vcl_abs(L_userStep-SIXSStepOfWavelenghtSpectralBandValues) > .000001 ) 
+        if( vcl_abs(L_userStep-SIXSStepOfWavelenghtSpectralBandValues) > .000001 )
         {
                 ValuesVectorType values(1, FilterFunctionValues[0]); //vector size 1 with the value vect[0]
-                
+
 	        // Stop the interpolation at the max spectral value.
 	        value = i*SIXSStepOfWavelenghtSpectralBandValues;
                 while(L_min+value <= L_max )
 	        {
 	                // Search the User interval that surround the StepOfWavelenghtSpectralBandValues current value.
-                        
+
 			// removed the <= here, might be wrong
 	                while(j*L_userStep < value)
 	                {
 		                j++;
 	                }
-			
+
 			// Check if we are not out of bound
 			if(j>=FilterFunctionValues.size())
 			{
@@ -190,7 +190,7 @@ SIXSTraits::ComputeWavelenghtSpectralBandValuesFor6S(
 			}
 
 	                double valueTemp;
-	                valueTemp = static_cast<double>(FilterFunctionValues[j-1]) 
+	                valueTemp = static_cast<double>(FilterFunctionValues[j-1])
 	                                + ((static_cast<double>(FilterFunctionValues[j])-static_cast<double>(FilterFunctionValues[j-1]))*invStep)
 	                                *(value-L_userStep*(j-1));
 	                values.push_back(static_cast<WavelenghtSpectralBandType>(valueTemp));
@@ -203,9 +203,9 @@ SIXSTraits::ComputeWavelenghtSpectralBandValuesFor6S(
 	        {
 	                values.push_back(0);
 	        }
-	         // Store this values        
+	         // Store this values
                 WavelenghtSpectralBand->SetFilterFunctionValues6S(values);
-                // Store the new Max MaxSpectralValue         
+                // Store the new Max MaxSpectralValue
                 WavelenghtSpectralBand->SetMaxSpectralValue(static_cast<WavelenghtSpectralBandType>(L_min + i*SIXSStepOfWavelenghtSpectralBandValues));
 
         }

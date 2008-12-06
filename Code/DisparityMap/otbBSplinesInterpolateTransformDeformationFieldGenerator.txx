@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -83,7 +83,7 @@ BSplinesInterpolateTransformDeformationFieldGenerator<TPointSet, TDeformationFie
 	  if(vcl_abs(this->GetPointSet()->GetPointData()->GetElement(pointDataCounter)[0])>=this->GetMetricThreshold())
 	    {
 	      typename InternalPointSetType::PixelType V(0.0);
-	      
+
 	       if(!IsAngular(paramIndex))
 		 {
 		   V[0] = this->GetPointSet()->GetPointData()->GetElement(pointDataCounter)[paramIndex+3];
@@ -95,22 +95,22 @@ BSplinesInterpolateTransformDeformationFieldGenerator<TPointSet, TDeformationFie
 		   V[1] = static_cast<ValueType>(vcl_sin( this->GetPointSet()->GetPointData()->GetElement(pointDataCounter)[paramIndex+3]));
 		 }
 	       unsigned long nbPoints = tmpPointSet->GetNumberOfPoints();
-	       tmpPointSet->SetPoint( nbPoints, it.Value());  
+	       tmpPointSet->SetPoint( nbPoints, it.Value());
 	       tmpPointSet->SetPointData( nbPoints, V );
 	    }
 	  ++pointDataCounter;
-	} 
+	}
 
       // Set the interpolator parameters
       splineIntList->Back()->SetInput(tmpPointSet);
-      splineIntList->Back()->SetSplineOrder(m_SplineOrder);  
-      typename SPlineInterpolateFilterType::ArrayType ncps;  
-      ncps.Fill(m_NumberOfControlPoints);  
+      splineIntList->Back()->SetSplineOrder(m_SplineOrder);
+      typename SPlineInterpolateFilterType::ArrayType ncps;
+      ncps.Fill(m_NumberOfControlPoints);
       splineIntList->Back()->SetNumberOfControlPoints( ncps );
       splineIntList->Back()->SetNumberOfLevels(m_NumberOfLevels);
       // splineIntList->Back()->SetGenerateOutputImage(false);
-  
-      // Define the parametric domain. 
+
+      // Define the parametric domain.
       splineIntList->Back()->SetOrigin(this->GetOutput()->GetOrigin());
       splineIntList->Back()->SetSpacing(this->GetOutput()->GetSpacing());
       splineIntList->Back()->SetSize(this->GetOutput()->GetLargestPossibleRegion().GetSize());
@@ -120,7 +120,7 @@ BSplinesInterpolateTransformDeformationFieldGenerator<TPointSet, TDeformationFie
   // Interpolation
   typedef itk::ImageRegionIteratorWithIndex<DeformationFieldType> IteratorType;
   IteratorType outIt(outputPtr,outputPtr->GetRequestedRegion());
-  
+
 
   // main loop
   for(outIt.GoToBegin();!outIt.IsAtEnd();++outIt)

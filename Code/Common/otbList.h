@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -22,7 +22,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"
 
-namespace otb 
+namespace otb
 {
 /** \class List
  *  \brief This class is a generic all-purpose wrapping around an std::vector<ObjectType*>.
@@ -60,7 +60,7 @@ class ITK_EXPORT List
   void Reserve(unsigned int size);
   /**
    * Get the capacity of the vector.
-   * \return The capacity of the vector. 
+   * \return The capacity of the vector.
    */
   unsigned int Capacity(void);
   /**
@@ -107,8 +107,8 @@ class ITK_EXPORT List
   {
     return m_InternalContainer[index];
   }
- 
- 
+
+
    /**
    * Return the first element of the list.
    * \return The first element of the list.
@@ -191,7 +191,7 @@ class ITK_EXPORT List
 	Iterator lIter(m_Iter+1);
     	return lIter;
       }
-      
+
       /**
        * Remove
        */
@@ -230,8 +230,8 @@ class ITK_EXPORT List
       	m_Iter=it.m_Iter;
       }
 
-	  /** 
-	    * Get the current internal iterator 
+	  /**
+	    * Get the current internal iterator
 		*/
 	  InternalIteratorType & GetIter(void)
 	  {

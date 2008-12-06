@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -35,7 +35,7 @@ RoadExtractionFilter<TInputImage, TOutputPath>
 
         m_SpectralAngleDistanceImageFilter = SpectralAngleDistanceImageFilterType::New();
         m_GenericRoadExtractionFilter = GenericRoadExtractionFilterType::New();
-        
+
 }
 
 
@@ -51,14 +51,14 @@ RoadExtractionFilter<TInputImage, TOutputPath>
    typename InputImageType::ConstPointer inputImage     = this->GetInput();
    typename OutputPathListType::Pointer outputPathList  = this->GetOutput();
 
-  // 
+  //
   m_SpectralAngleDistanceImageFilter->SetInput(inputImage);
 //   m_SpectralAngleDistanceImageFilter->SetReferencePixel(m_ReferencePixel);
 
   m_GenericRoadExtractionFilter->SetInput(m_SpectralAngleDistanceImageFilter->GetOutput());
-  
+
   m_GenericRoadExtractionFilter->Update();
-  for(typename GenericRoadExtractionFilterType::OutputPathListType::ConstIterator it 
+  for(typename GenericRoadExtractionFilterType::OutputPathListType::ConstIterator it
         = m_GenericRoadExtractionFilter->GetOutput()->Begin();
         it!=m_GenericRoadExtractionFilter->GetOutput()->End();
       ++it)

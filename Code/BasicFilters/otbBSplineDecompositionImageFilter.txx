@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -48,7 +48,7 @@ template <class TInputImage, class TOutputImage>
 void
 BSplineDecompositionImageFilter<TInputImage, TOutputImage>
 ::PrintSelf(
-  std::ostream& os, 
+  std::ostream& os,
   itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
@@ -61,13 +61,13 @@ template <class TInputImage, class TOutputImage>
 bool
 BSplineDecompositionImageFilter<TInputImage, TOutputImage>
 ::DataToCoefficients1D()
-{ 
+{
 
-  // See Unser, 1993, Part II, Equation 2.5, 
-  //   or Unser, 1999, Box 2. for an explaination. 
+  // See Unser, 1993, Part II, Equation 2.5,
+  //   or Unser, 1999, Box 2. for an explaination.
 
-  double c0 = 1.0;  
-  
+  double c0 = 1.0;
+
   if (m_DataLength[m_IteratorDirection] == 1) //Required by mirror boundaries
     {
     return false;
@@ -76,30 +76,30 @@ BSplineDecompositionImageFilter<TInputImage, TOutputImage>
   // Compute overall gain
   for (int k = 0; k < m_NumberOfPoles; k++)
     {
-    // Note for cubic splines lambda = 6 
+    // Note for cubic splines lambda = 6
     c0 = c0 * (1.0 - m_SplinePoles[k]) * (1.0 - 1.0 / m_SplinePoles[k]);
     }
 
-  // apply the gain 
+  // apply the gain
   for (unsigned int n = 0; n < m_DataLength[m_IteratorDirection]; n++)
     {
     m_Scratch[n] *= c0;
     }
 
-  // loop over all poles 
-  for (int k = 0; k < m_NumberOfPoles; k++) 
+  // loop over all poles
+  for (int k = 0; k < m_NumberOfPoles; k++)
     {
-    // causal initialization 
+    // causal initialization
     this->SetInitialCausalCoefficient(m_SplinePoles[k]);
-    // causal recursion 
+    // causal recursion
     for (unsigned int n = 1; n < m_DataLength[m_IteratorDirection]; n++)
       {
       m_Scratch[n] += m_SplinePoles[k] * m_Scratch[n - 1];
       }
 
-    // anticausal initialization 
+    // anticausal initialization
     this->SetInitialAntiCausalCoefficient(m_SplinePoles[k]);
-    // anticausal recursion 
+    // anticausal recursion
     for ( int n = m_DataLength[m_IteratorDirection] - 2; 0 <= n; n--)
       {
       m_Scratch[n] = m_SplinePoles[k] * (m_Scratch[n + 1] - m_Scratch[n]);
@@ -132,7 +132,7 @@ BSplineDecompositionImageFilter<TInputImage, TOutputImage>
 ::SetPoles()
 {
   /* See Unser, 1997. Part II, Table I for Pole values */
-  // See also, Handbook of Medical Imaging, Processing and Analysis, Ed. Isaac N. Bankman, 
+  // See also, Handbook of Medical Imaging, Processing and Analysis, Ed. Isaac N. Bankman,
   //  2000, pg. 416.
   switch (m_SplineOrder)
     {
@@ -195,7 +195,7 @@ BSplineDecompositionImageFilter<TInputImage, TOutputImage>
     {
     /* accelerated loop */
     sum = m_Scratch[0];   // verify this
-    for (unsigned int n = 1; n < horizon; n++) 
+    for (unsigned int n = 1; n < horizon; n++)
       {
       sum += zn * m_Scratch[n];
       zn *= z;
@@ -224,11 +224,11 @@ void
 BSplineDecompositionImageFilter<TInputImage, TOutputImage>
 ::SetInitialAntiCausalCoefficient(double z)
 {
-  // this initialization corresponds to mirror boundaries 
+  // this initialization corresponds to mirror boundaries
   /* See Unser, 1999, Box 2 for explaination */
   //  Also see erratum at http://bigwww.epfl.ch/publications/unser9902.html
   m_Scratch[m_DataLength[m_IteratorDirection] - 1] =
-    (z / (z * z - 1.0)) * 
+    (z / (z * z - 1.0)) *
     (z * m_Scratch[m_DataLength[m_IteratorDirection] - 2] + m_Scratch[m_DataLength[m_IteratorDirection] - 1]);
 }
 
@@ -266,7 +266,7 @@ BSplineDecompositionImageFilter<TInputImage, TOutputImage>
 
       // Perform 1D BSpline calculations
       this->DataToCoefficients1D();
-    
+
       // Copy scratch back to coefficients.
       // Brings us back to the end of the line we were working on.
       CIterator.GoToBeginOfLine();
@@ -303,7 +303,7 @@ BSplineDecompositionImageFilter<TInputImage, TOutputImage>
     ++inIt;
     ++outIt;
     }
- 
+
 }
 
 

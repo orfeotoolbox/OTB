@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -21,7 +21,7 @@
 #include "otbLUMImageIO.h"
 #include "itkVersion.h"
 
-  
+
 namespace otb
 {
 
@@ -33,18 +33,18 @@ LUMImageIOFactory::LUMImageIOFactory()
                          1,
                          itk::CreateObjectFunction<LUMImageIO>::New());
 }
-  
+
 LUMImageIOFactory::~LUMImageIOFactory()
 {
 }
 
-const char* 
+const char*
 LUMImageIOFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char* 
+const char*
 LUMImageIOFactory::GetDescription() const
 {
   return "LUM ImageIO Factory, permettant le chargement d'image au format LUM dans l'OTB";

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,12 +30,12 @@ namespace otb {
  * This class is parameterized over the input image type
  * and the type of the output image.  It is also parameterized by the
  * operation to be applied.  A Functor style is used.
- * 
+ *
  * \ingroup IntensityImageFilters   Multithreaded
- */	
+ */
 template <class TInputImage, class TOutputImage, class TFunction >
-class ITK_EXPORT UnaryFunctorNeighborhoodImageFilter 
-	: public itk::ImageToImageFilter<TInputImage,TOutputImage> 
+class ITK_EXPORT UnaryFunctorNeighborhoodImageFilter
+	: public itk::ImageToImageFilter<TInputImage,TOutputImage>
 {
 public:
   /** Standard class typedefs. */
@@ -46,7 +46,7 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(UnaryFunctorNeighborhoodImageFilter,ImageToImageFilter);
 
@@ -55,7 +55,7 @@ public:
   typedef TFunction                             FunctorType;
   typedef typename Superclass::InputImageType   InputImageType;
   typedef typename InputImageType::ConstPointer InputImagePointer;
-  typedef typename InputImageType::RegionType   InputImageRegionType; 
+  typedef typename InputImageType::RegionType   InputImageRegionType;
   typedef typename InputImageType::PixelType    InputImagePixelType;
   typedef typename InputImageType::SizeType     InputImageSizeType;
   typedef typename Superclass::OutputImageType  OutputImageType;
@@ -97,7 +97,7 @@ public:
     this->Modified();
   }
 
-  typedef itk::ConstNeighborhoodIterator<TInputImage>     NeighborhoodIteratorType; 
+  typedef itk::ConstNeighborhoodIterator<TInputImage>     NeighborhoodIteratorType;
   typedef typename NeighborhoodIteratorType::RadiusType   RadiusType;
   typedef unsigned char RadiusSizeType;
 

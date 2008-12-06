@@ -9,11 +9,11 @@ Version:   $Revision$
 Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
-Copyright (c) Institut Telecom ; Telecom bretagne. All rights reserved. 
+Copyright (c) Institut Telecom ; Telecom bretagne. All rights reserved.
 See ITCopyright.txt for details.
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -54,18 +54,18 @@ namespace Functor {
 
 			/** Functor */
 			template < unsigned int VDimension >
-			itk::Size<VDimension> operator() ( unsigned int currentIteration, 
+			itk::Size<VDimension> operator() ( unsigned int currentIteration,
 											unsigned int numberOfIterations,
 											const itk::Size<VDimension> & sizeInit )
 			{
 				itk::Size<VDimension> theSize;
-				double weightening = ::vcl_pow( 1.0 
+				double weightening = ::vcl_pow( 1.0
 										- static_cast<double>( currentIteration )
 											/ static_cast<double>( numberOfIterations ),
 											2.0 );
 				for (unsigned int i = 0; i < VDimension; i++ )
 				{
-					theSize[i] = static_cast<typename itk::Size<VDimension>::SizeValueType> ( 
+					theSize[i] = static_cast<typename itk::Size<VDimension>::SizeValueType> (
 									static_cast<double>( sizeInit[i] ) * weightening );
 				}
 

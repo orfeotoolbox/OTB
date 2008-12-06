@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,15 +32,15 @@ namespace otb
 /** \class DrawLineSpatialObjectListFilter
  * \brief Composite filter which draw lines in a binary image.
  *
- * This class implements a composite filter that draws a list of line in 
+ * This class implements a composite filter that draws a list of line in
  * a binary image by using the otb::DrawLineSpatialObjectFilter that
  * draws each line of the list.
- *  
- *  
+ *
+ *
  */
 
 template <class TInputImage, class TOutputImage>
-class  ITK_EXPORT DrawLineSpatialObjectListFilter : 
+class  ITK_EXPORT DrawLineSpatialObjectListFilter :
 public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -48,30 +48,30 @@ public:
   itkStaticConstMacro(		InputImageDimension,
   				unsigned int,
                       		TInputImage::ImageDimension);
-  itkStaticConstMacro(		OutputImageDimension, 
+  itkStaticConstMacro(		OutputImageDimension,
   				unsigned int,
                       		TOutputImage::ImageDimension);
 
 
   typedef TInputImage InputImageType;
   typedef TOutputImage OutputImageType;
-  
+
 
   /** typedef for the classes standards. */
   typedef DrawLineSpatialObjectListFilter Self;
   typedef itk::ImageToImageFilter< TInputImage, TOutputImage > Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
-  
+
   typedef LineSpatialObjectList                           LinesListType;
   typedef LinesListType::LineType                  	  LineType;
-    
+
   typedef typename LinesListType::const_iterator LineListIterator;
-  
+
   typedef DrawLineSpatialObjectFilter< OutputImageType, OutputImageType > DrawLineType;
 
   typedef itk::RescaleIntensityImageFilter< InputImageType,
-                                            OutputImageType > RescalerType; 
+                                            OutputImageType > RescalerType;
 
   typedef itk::ProcessObject ProcessObjectType;
 
@@ -80,22 +80,22 @@ public:
 
   /** Return the name of the class. */
   itkTypeMacro(DrawLineSpatialObjectListFilter, ImageToImageFilter);
-  
+
   /** Definition of the input and output images */
   typedef typename InputImageType::PixelType InputPixelType;
   typedef typename OutputImageType::PixelType OutputPixelType;
-  
+
   typedef typename InputImageType::RegionType InputImageRegionType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
   /** Definition of the size of the images. */
   typedef typename InputImageType::SizeType SizeType;
-  
+
   /** Set/Get the image input of this process object. */
   virtual void SetInputLineSpatialObjectList(const LinesListType * list);
   LinesListType * GetInputLineSpatialObjectList(void);
-  
-  
+
+
 protected:
   DrawLineSpatialObjectListFilter();
   virtual ~DrawLineSpatialObjectListFilter() {};
@@ -118,5 +118,5 @@ private:
 #include "otbDrawLineSpatialObjectListFilter.txx"
 #endif
 
-  
+
 #endif

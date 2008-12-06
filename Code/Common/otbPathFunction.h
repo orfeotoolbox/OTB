@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,7 +29,7 @@ namespace otb
  *
  * PathFunction is a baseclass for all objects that evaluates
  * a function of an image using a path list.
- * This class is templated over the input image type, the path type 
+ * This class is templated over the input image type, the path type
  * and the function output and the coordinate representation type
  * (e.g. float or double).
  *
@@ -42,8 +42,8 @@ namespace otb
  */
 template <class TInputPath,
           class TOutput>
-class ITK_EXPORT PathFunction : 
-    public itk::FunctionBase< TInputPath, TOutput > 
+class ITK_EXPORT PathFunction :
+    public itk::FunctionBase< TInputPath, TOutput >
 {
 public:
 
@@ -52,14 +52,14 @@ public:
   typedef itk::FunctionBase<  TInputPath,TOutput >                     Superclass;
   typedef itk::SmartPointer<Self>                                      Pointer;
   typedef itk::SmartPointer<const Self>                                ConstPointer;
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(PathFunction, itk::FunctionBase);
 
   /** InputPathType typedef support. */
   typedef typename Superclass::InputType InputPathType;
 
-  /** InputPathPointer typedef support */ 
+  /** InputPathPointer typedef support */
   typedef typename InputPathType::ConstPointer InputPathConstPointer;
 
   /** OutputType typedef support. */
@@ -82,7 +82,7 @@ protected:
 private:
   PathFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
 };
 
 } // namespace otb

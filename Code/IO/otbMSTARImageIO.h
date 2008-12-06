@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -47,7 +47,7 @@ public:
   typedef MSTARImageIO            Self;
   typedef itk::ImageIOBase  Superclass;
   typedef itk::SmartPointer<Self>  Pointer;
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -65,7 +65,7 @@ public:
 
   /** Set the spacing and dimension information for the set filename. */
   virtual void ReadImageInformation();
-  
+
   /** Reads the data from disk into the memory buffer provided. */
   virtual void Read(void* buffer);
 
@@ -80,7 +80,7 @@ public:
 
   /** Set the spacing and dimension information for the set filename. */
   virtual void WriteImageInformation();
-  
+
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegions has been set properly. */
   virtual void Write(const void* buffer);
@@ -89,7 +89,7 @@ public:
   MSTARImageIO();
   ~MSTARImageIO();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  
+
 private:
   MSTARImageIO(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
@@ -112,7 +112,7 @@ private:
   char  HDRname[80];         /* Phoenix header filename buffer */
 
   int            outOpt;     /* ALL data, or MAG ONLY...    */
-  int            phlen, nhlen, mstartype; 
+  int            phlen, nhlen, mstartype;
   long           magloc, bytesPerImage, nchunks, totchunks;
 
   char          *tptr;  /* Temp buffer ptr */
@@ -126,7 +126,7 @@ private:
   int            byteorder;
   unsigned char  bigfloatbuf[4];   /* BigEndian float buffer... */
   float          littlefloatval;   /* LittleEndian float value  */
-  unsigned char  bigushortbuf[2];  /* BigEndian ushort buffer...*/ 
+  unsigned char  bigushortbuf[2];  /* BigEndian ushort buffer...*/
   unsigned short littleushortval;  /* LittleEndian ushort value.*/
 
 

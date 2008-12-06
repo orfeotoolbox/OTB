@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -84,7 +84,7 @@ ProfileToProfileDerivativeFilter<TInputImageList,TOutputImageList>
   // For each input image and corresponding output image
   typename InputImageListType::ConstIterator inputListIt = inputPtr->Begin();
   typename OutputImageListType::Iterator outputListIt = outputPtr->Begin();
-  
+
   // Use the filter to generate input requested region
   while(inputListIt!=inputPtr->End()&&outputListIt!=outputPtr->End())
 	{

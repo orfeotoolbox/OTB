@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -22,7 +22,7 @@
 #include "otbMacro.h"
 
 namespace otb
-{     
+{
 /**
  * Constructor
  */
@@ -68,9 +68,9 @@ PolygonToPolygonRCC8Calculator<TInputPolygon>
       /// Else it must be computed
       interExterBool = ComputeInterExter(m_Polygon1,m_Polygon2);
     }
-  
+
   //std::cout<<"InterExter: "<<interExterBool<<std::endl;
- 
+
   /// At this stage we can determine if the relation is of type NTPP
   if((!interExterBool)&&(!edgeEdgeBool))
     {
@@ -88,7 +88,7 @@ PolygonToPolygonRCC8Calculator<TInputPolygon>
       else
 	{
 	  /// Else it must be computed
-	  exterInterBool = ComputeInterExter(m_Polygon2,m_Polygon1);  
+	  exterInterBool = ComputeInterExter(m_Polygon2,m_Polygon1);
 	}
 
       //std::cout<<"ExterInter: "<<exterInterBool<<std::endl;
@@ -114,7 +114,7 @@ PolygonToPolygonRCC8Calculator<TInputPolygon>
     }
 }
 template<class TInputPolygon>
-bool 
+bool
 PolygonToPolygonRCC8Calculator<TInputPolygon>
 ::ComputeRelation(bool edgeEdgeBool, bool interExterBool, bool exterInterBool)
 {
@@ -158,7 +158,7 @@ PolygonToPolygonRCC8Calculator<TInputPolygon>
   bool resp = false;
   VertexListConstIteratorType it = polygon1->GetVertexList()->Begin();
   VertexListConstIteratorType it_end = polygon1->GetVertexList()->End();
- 
+
   ContinuousIndexType current = it.Value();
   ContinuousIndexType first = current;
   bool isInside = polygon2->IsInside(current);
@@ -237,14 +237,14 @@ PolygonToPolygonRCC8Calculator<TInputPolygon>
 	}
        currentIsInside =nextIsInside;
        current = it.Value();
-       
+
        if(currentIsInside)
 	 {
 	   resp = true;
 	 }
       ++it;
     }
-  
+
     if (!resp && !currentIsInside && !firstIsInside && !polygon2->IsOnEdge(current) && !polygon2->IsOnEdge(first))
 	{
 	  unsigned int nbCrossings = polygon2->NbCrossing(current,first);
@@ -265,9 +265,9 @@ PolygonToPolygonRCC8Calculator<TInputPolygon>
   ContinuousIndexType current = it.Value();
   resp = polygon2->IsOnEdge(current);
   //std::cout<<"IsOnEdge: "<<current<<": "<<polygon2->IsOnEdge(current)<<std::endl;
-  ContinuousIndexType first = current; 
+  ContinuousIndexType first = current;
   ++it;
-  
+
   while (! resp && it != it_end)
     {
       if(polygon2->NbTouching(current,it.Value())>0)
@@ -281,7 +281,7 @@ PolygonToPolygonRCC8Calculator<TInputPolygon>
 	  //std::cout<<"NbTouching: "<<current<<" -> "<<it.Value()<<": "<<polygon2->NbTouching(current,it.Value())<<std::endl;
 	}
       current = it.Value();
-      
+
       if(polygon2->IsOnEdge(current))
 	{
 	  resp = true;
@@ -299,7 +299,7 @@ PolygonToPolygonRCC8Calculator<TInputPolygon>
       resp = true;
       //std::cout<<"NbTouching: "<<current<<" -> "<<first<<": "<<polygon2->NbTouching(current,first)<<std::endl;
     }
- 
+
   return resp;
 }
 /**

@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -44,9 +44,9 @@ namespace Functor
 	  {
 	    m_RedChannelIndex = 0;
 	    m_GreenChannelIndex = 1;
-	    m_BlueChannelIndex = 2;	    
+	    m_BlueChannelIndex = 2;
 	  };
-	/// Destructor 
+	/// Destructor
 	~ColorAnaglyphFunctor(){};
 
 	inline TOutputPixel operator()(const TInputPixel1& pixel1, const TInputPixel2& pixel2)
@@ -57,7 +57,7 @@ namespace Functor
 	    result[2]=static_cast<typename TOutputPixel::ValueType>(pixel2[m_BlueChannelIndex]);
 	    return result;
 	  }
-	
+
 	void SetRedChannelIndex(unsigned int index)
 	  {
 	    m_RedChannelIndex = index;
@@ -90,8 +90,8 @@ namespace Functor
       };
   }
  /** \class VectorImageToColorAnaglyphVectorImageFilter
-  *  \brief This filter implements the synthesis of a grayscale anaglyph image from 
-  *  a pair of stereoscopic images. 
+  *  \brief This filter implements the synthesis of a grayscale anaglyph image from
+  *  a pair of stereoscopic images.
   *  The output image is a VectorImage with 3 channels, where the first channel is the first
   *  channel of the second  input image, and the two last channels are the two last channel
   *  of the first input image.
@@ -105,7 +105,7 @@ template <class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT VectorImageToColorAnaglyphVectorImageFilter
   : public itk::BinaryFunctorImageFilter
   <  TInputImage1,TInputImage2,TOutputImage,
-  Functor::ColorAnaglyphFunctor< 
+  Functor::ColorAnaglyphFunctor<
   typename TInputImage1::PixelType,
   typename TInputImage2::PixelType,
   typename TOutputImage::PixelType
@@ -117,20 +117,20 @@ class ITK_EXPORT VectorImageToColorAnaglyphVectorImageFilter
 
   typedef itk::BinaryFunctorImageFilter
   <  TInputImage1,TInputImage2,TOutputImage,
-    Functor::ColorAnaglyphFunctor< 
+    Functor::ColorAnaglyphFunctor<
     typename TInputImage1::PixelType,
     typename TInputImage2::PixelType,
     typename TOutputImage::PixelType
     >  > Superclass;
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(VectorImageToColorAnaglyphVectorImageFilter, BinaryFunctorImageFilter);
-  
+
   virtual void GenerateOutputInformation(void)
     {
       Superclass::GenerateOutputInformation();

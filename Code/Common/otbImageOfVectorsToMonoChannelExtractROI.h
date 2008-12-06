@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,7 +28,7 @@ namespace otb
 {
 
 /** \class ImageOfVectorsToMonoChannelExtractROI
- * \brief 
+ * \brief
  * \todo Document this class
  */
 template <class TInputImage, class TOutputImage>
@@ -43,7 +43,7 @@ public:
   typedef itk::SmartPointer<const Self>         ConstPointer;
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ImageOfVectorsToMonoChannelExtractROI, ExtractROIBase);
@@ -103,16 +103,16 @@ protected:
 private:
   ImageOfVectorsToMonoChannelExtractROI(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
   /** Channel to process [1...] */
   unsigned int  m_Channel;
 };
 
-  
+
 } // end namespace otb
-  
+
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbImageOfVectorsToMonoChannelExtractROI.txx"
 #endif
-  
+
 #endif

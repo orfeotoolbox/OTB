@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -42,10 +42,10 @@ class ImageWidgetBase
     typedef itk::Object Superclass;
     typedef itk::SmartPointer<Self> Pointer;
     typedef itk::SmartPointer<const Self> ConstPointer;
-    
+
     /** Method for creation through the object factory */
     itkNewMacro(Self);
-    
+
     /** Runtime information */
     itkTypeMacro(ImageWidgetBase,Object);
 
@@ -77,7 +77,7 @@ class ImageWidgetBase
     typedef otb::ImageWidgetAffineTransferFunction<PixelType> AffineTransferFunctionType;
     typedef List<TransferFunctionType> TransferFunctionListType;
     typedef typename TransferFunctionListType::Pointer TransferFunctionListPointerType;
-    
+
     itkSetMacro(BufferedRegion,RegionType);
     itkGetMacro(BufferedRegion,RegionType);
 
@@ -95,10 +95,10 @@ class ImageWidgetBase
 
     itkSetMacro(FormOverlayVisible,bool);
     itkGetMacro(FormOverlayVisible,bool);
-    
+
     itkSetMacro(ImageOverlayVisible,bool);
     itkGetMacro(ImageOverlayVisible,bool);
-    
+
     itkSetMacro(BlackTransparency,bool);
     itkGetMacro(BlackTransparency,bool);
 
@@ -107,7 +107,7 @@ class ImageWidgetBase
 
     itkSetMacro(ViewModel,ViewModelType);
     itkGetMacro(ViewModel,ViewModelType);
-    
+
     itkGetMacro(ImageOverlayOpacity,unsigned char);
     itkSetMacro(ImageOverlayOpacity,unsigned char);
 
@@ -115,7 +115,7 @@ class ImageWidgetBase
     itkGetObjectMacro(TransferFunctionList,TransferFunctionListType);
 
     itkGetMacro(OpenGlIsotropicZoom,double);
-    
+
     /** Set the input image.
      * \param image The image to view.
      */
@@ -124,7 +124,7 @@ class ImageWidgetBase
      * \return The image to view.
      */
     ImageType * GetInput(void);
-    
+
     /** Set the input overlay image.
      * \param image The image to view.
      */
@@ -157,10 +157,10 @@ class ImageWidgetBase
      * \return The image coordinate.
      */
     virtual IndexType WindowToImageCoordinates(IndexType index);
-        
+
     /** Initialize the widget */
     virtual void Init(int x, int y, int w, int h, const char * l);
-    
+
   protected:
     /** Constructor */
     ImageWidgetBase();
@@ -173,7 +173,7 @@ class ImageWidgetBase
     virtual void RebuildOpenGlBuffer(void);
     /** Rebuild opengl image overlay buffer */
     virtual void RebuildOpenGlImageOverlayBuffer(void);
-   
+
     /** Normalization function */
     unsigned char Normalize(PixelType value, unsigned int channelIndex);
 
@@ -188,11 +188,11 @@ class ImageWidgetBase
     return this->h();
    }
 
-    // PURE VIRTUAL METHODS 
+    // PURE VIRTUAL METHODS
 
     // User is not supposed to be allowed to move the zoom in the generic implementation
     itkSetMacro(OpenGlIsotropicZoom,double);
-    
+
 
     /** Unlarge OpenGlBuffer */
     virtual void UpdateOpenGlBufferedRegion(void){};

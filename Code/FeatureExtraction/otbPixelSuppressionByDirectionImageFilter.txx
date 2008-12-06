@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,7 +29,7 @@
 #include "itkConstantBoundaryCondition.h"
 #include "itkOffset.h"
 #include "itkProgressReporter.h"
-#include "otbMath.h" 
+#include "otbMath.h"
 
 namespace otb
 {
@@ -40,30 +40,30 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>::PixelSuppressionByDirectionImageFilter()
 {
-	
+
   m_Radius.Fill(1);
   m_AngularBeam = static_cast<double>(0.);
 
 }
 
 template <class TInputImage, class TOutputImage>
-void 
+void
 PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>
 ::SetInputImage(const InputImageType *input)
 {
-  this->SetInput(0,input);	
+  this->SetInput(0,input);
 }
 
 template <class TInputImage, class TOutputImage>
-void 
+void
 PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>
 ::SetInputImageDirection(const InputImageType *input)
 {
-  this->SetInput(1,input);	
+  this->SetInput(1,input);
 }
 
 template <class TInputImage, class TOutputImage>
-const 
+const
 typename PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>::InputImageType *
 PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>
 ::GetInputImage(void)
@@ -78,7 +78,7 @@ PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>
 }
 
 template <class TInputImage, class TOutputImage>
-const 
+const
 typename PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>::InputImageType *
 PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>
 ::GetInputImageDirection(void)
@@ -97,11 +97,11 @@ void PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>::Generate
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
-  
+
   // get pointers to the input and output
   typename Superclass::InputImagePointer inputPtr   =  const_cast< TInputImage * >( this->GetInputImageDirection() );
   typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
-  
+
   if ( !inputPtr || !outputPtr )
     {
     return;
@@ -128,7 +128,7 @@ void PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>::Generate
 
     // store what we tried to request (prior to trying to crop)
     inputPtr->SetRequestedRegion( inputRequestedRegion );
-    
+
     // build an exception
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
     itk::OStringStream msg;
@@ -143,7 +143,7 @@ void PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>::Generate
 
 
 template< class TInputImage, class TOutputImage>
-void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(	
+void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(
 			const 	OutputImageRegionType& 		outputRegionForThread,
                        	int 	threadId
 				)
@@ -152,17 +152,17 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
   itk::ConstantBoundaryCondition<InputImageType> 		cbc;
   const InputPixelType cvalue = 255;
   cbc.SetConstant(cvalue);
-   
-  itk::ConstNeighborhoodIterator<InputImageType> 		bit; 
+
+  itk::ConstNeighborhoodIterator<InputImageType> 		bit;
   itk::ImageRegionConstIterator<InputImageType> 		itin;
   itk::ImageRegionIterator<OutputImageType> 			itout;
-  
-  
+
+
   // Allocate output
   typename OutputImageType::Pointer     output = this->GetOutput();
   typename InputImageType::ConstPointer input  = this->GetInputImage();
   typename InputImageType::ConstPointer inputDirection  = this->GetInputImageDirection();
-  
+
   // Find the data-set boundary "faces"
   typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType 		faceList;
   typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType::iterator 	fit;
@@ -174,55 +174,55 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
 
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-  
+
   //typename TInputImage::IndexType     bitIndex;
-  
+
   //---------------------------------------------------------------------------
 
   InputPixelType PixelValue;
-    
+
   // Location of the central pixel in the input image
 //  int Xc, Yc;
 
-  // Pixel location in the system axis of the region  
+  // Pixel location in the system axis of the region
   int x, y;
-  
-  // Pixel location in the system axis of the region after rotation of theta
-  // where theta is the direction of the cantral pixel  
-  
 
-  // Pixel Direction  
+  // Pixel location in the system axis of the region after rotation of theta
+  // where theta is the direction of the cantral pixel
+
+
+  // Pixel Direction
   double ThetaXcYc, Thetaxtyt ;
-  
+
 
   //---------------------------------------------------------------------------
-  
+
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
   for (fit=faceList.begin(); fit != faceList.end(); ++fit)
     {
     bit = itk::ConstNeighborhoodIterator<InputImageType>(m_Radius, inputDirection, *fit);
-      
-    itin = itk::ImageRegionConstIterator<InputImageType>(input, *fit);  
+
+    itin = itk::ImageRegionConstIterator<InputImageType>(input, *fit);
     itout = itk::ImageRegionIterator<OutputImageType>(output, *fit);
-    
+
     bit.OverrideBoundaryCondition(&cbc);
     bit.GoToBegin();
- 
- 
+
+
     while ( ! bit.IsAtEnd() )
       {
-      	
+
       /*// Location of the central pixel of the region in the input image
       bitIndex = bit.GetIndex();
-      
+
       Xc = bitIndex[0];
       Yc = bitIndex[1];
     */
       // Get Pixel Direction from the image of directions
       ThetaXcYc = static_cast<double>( bit.GetCenterPixel() );
 
-      // Pixel intensity in the input image      
+      // Pixel intensity in the input image
       PixelValue = itin.Get();
 
       bool IsLine = false;
@@ -235,13 +235,13 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
 
 	off[0]=i-m_Radius[0];
 	off[1]=j-m_Radius[1];
-	
+
         x = off[0];
         y = off[1];
 
-        
-        // No calculation on the central pixel  
-        if (( x == 0 ) && ( y == 0 )) 
+
+        // No calculation on the central pixel
+        if (( x == 0 ) && ( y == 0 ))
            continue;
 
 	Thetaxtyt = vcl_atan2( static_cast<double>(y), static_cast<double>(x) ); //result is [-PI,PI]
@@ -269,13 +269,13 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
 	  IsLine = true;
 	  continue;
 	  }
-		
-	
+
+
 	}
-      
-      // end of the loop on the pixels of the region 
-      
-      
+
+      // end of the loop on the pixels of the region
+
+
       // Assignment of this value to the output pixel
       if (IsLine == true)
 	{
@@ -285,15 +285,15 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
 	{
 	itout.Set( static_cast<OutputPixelType>(0.) );
 	}
-                 
-      
+
+
       ++bit;
       ++itin;
       ++itout;
-      progress.CompletedPixel();  
-      
+      progress.CompletedPixel();
+
       }
-      
+
     }
 }
 
@@ -301,7 +301,7 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
  * Standard "PrintSelf" method
  */
 template <class TInputImage, class TOutput>
-void 
+void
 PixelSuppressionByDirectionImageFilter<TInputImage, TOutput>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );

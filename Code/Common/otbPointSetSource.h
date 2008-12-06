@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -37,7 +37,7 @@ namespace otb
  *
  * \ingroup DataSources
  */
- 
+
 template <class TOutputPointSet>
 class ITK_EXPORT PointSetSource : public itk::ProcessObject
 {
@@ -47,9 +47,9 @@ public:
   typedef itk::ProcessObject             Superclass;
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
-  
+
   /** Method for creation through the object factory. */
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(PointSetSource,itk::ProcessObject);
@@ -58,11 +58,11 @@ public:
   typedef itk::DataObject::Pointer             DataObjectPointer;
   typedef TOutputPointSet                      OutputPointSetType;
   typedef typename OutputPointSetType::Pointer OutputPointSetPointer;
-  
+
   /** Get the point set output of this process object.  */
   OutputPointSetType * GetOutput(void);
   OutputPointSetType * GetOutput(unsigned int idx);
-  
+
   /** Set the point set output of this process object. This call is slated
    * to be removed from ITK. You should GraftOutput() and possible
    * DataObject::DisconnectPipeline() to properly change the output. */
@@ -124,12 +124,12 @@ protected:
   PointSetSource();
   virtual ~PointSetSource() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  
+
   /** Requested region of Point Set is specified as i of N unstructured regions.
-   * Since all DataObjects should be able to set the requested region in 
+   * Since all DataObjects should be able to set the requested region in
    * unstructured form, just copy output->RequestedRegion all inputs. */
   void GenerateInputRequestedRegion();
-  
+
 private:
   PointSetSource(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
@@ -139,7 +139,7 @@ private:
   int m_GenerateDataRegion;
   int m_GenerateDataNumberOfRegions;
   };
-  
+
 
 } // end namespace otb
 

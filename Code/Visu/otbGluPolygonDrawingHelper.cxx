@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,9 +23,9 @@ PURPOSE.  See the above copyright notices for more information.
 // This is defined in windows only, and it is needed for FunctionPointerType
 // to be properly defined.
 
-// There are function prototype conflits under cygwin between standard w32 API 
+// There are function prototype conflits under cygwin between standard w32 API
 // and standard C ones
-#ifndef CALLBACK 
+#ifndef CALLBACK
 	#if defined(__CYGWIN__)
 		#define CALLBACK __stdcall
         #else
@@ -142,10 +142,10 @@ void GluPolygonDrawingHelper::RenderPolygon()
   glColor4d(m_Color[0],m_Color[1],m_Color[2],m_Color[3]);
   gluTessBeginPolygon(m_GluTesselator, NULL);
   gluTessBeginContour(m_GluTesselator);
-    
+
   for(i=0;i<m_PointVector.size();++i)
     {
-      gluTessVertex(m_GluTesselator,data[i],data[i]); 
+      gluTessVertex(m_GluTesselator,data[i],data[i]);
     }
   gluTessEndContour(m_GluTesselator);
   gluTessEndPolygon(m_GluTesselator);
@@ -155,7 +155,7 @@ void GluPolygonDrawingHelper::RenderPolygon()
       delete []data[i];
     }
   delete []data;
-  
+
   m_PointVector.clear();
 }
 } // end namespace otb

@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -58,7 +58,7 @@ ImageListToVectorImageFilter<TImageList,TVectorImage>
   while(inputListIt!=inputPtr->End())
     {
       inputListIt.Get()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
-      ++inputListIt; 
+      ++inputListIt;
     }
 }
 /**
@@ -69,7 +69,7 @@ void
 ImageListToVectorImageFilter<TImageList,TVectorImage>
 ::GenerateData(void)
 {
-  
+
   InputImageListPointerType inputPtr = this->GetInput();
   OutputVectorImagePointerType outputPtr = this->GetOutput();
 
@@ -86,7 +86,7 @@ ImageListToVectorImageFilter<TImageList,TVectorImage>
   // defines input and output iterators
   typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
   typedef itk::ImageRegionIterator<OutputVectorImageType> OutputIteratorType;
-  
+
   typename InputImageListType::ConstIterator inputListIt = inputPtr->Begin();
 
   // defines a vector of input iterators

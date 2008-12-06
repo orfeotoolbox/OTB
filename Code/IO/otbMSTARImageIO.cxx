@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,7 +23,7 @@
 /* Define MSTAR image type */
 #define CHIP_IMAGE   0
 #define FSCENE_IMAGE 1
- 
+
 #define ALL_DATA   0
 #define MAG_DATA   1
 
@@ -61,9 +61,9 @@ namespace otb
 
     m_Origin[0] = 0.0;
     m_Origin[1] = 0.0;
-  
+
     m_NbOctetPixel = 0;
-  
+
     MSTARfp=NULL;        /* Input FILE ptr to MSTAR image file     */
     HDRfp=NULL;          /* Output FILE ptr to MSTAR header file   */
 
@@ -71,7 +71,7 @@ namespace otb
 
     tptr=NULL;  /* Temp buffer ptr */
     phdr=NULL;  /* Ptr to buffer to hold Phoenix header */
-  
+
     FSCENEdata=NULL; /* Ptr to Fullscene data buffer */
     CHIPdata=NULL;   /* Ptr to CHIp data buffer      */
 
@@ -91,8 +91,8 @@ namespace otb
 
 
 
-  bool MSTARImageIO::CanReadFile( const char* filename ) 
-  { 
+  bool MSTARImageIO::CanReadFile( const char* filename )
+  {
         // First check the filename extension
     std::string fname = filename;
     if ( fname == "" )
@@ -143,7 +143,7 @@ namespace otb
     {
       sscanf((tptr+21), "%d", &nhlen);
     }
-	
+
     /* Extract MSTAR column width */
     tptr = (char *) strstr(tbuff,"NumberOfColumns= ");
     if (tptr == (char *) NULL)
@@ -216,7 +216,7 @@ namespace otb
     otbMsgDevMacro(<< "Can read MSTAR");
     return bool(true);
   }
-  
+
 
 
 
@@ -224,7 +224,7 @@ namespace otb
   {
     bool formatFound = false;
     std::string fname = filename;
- 
+
     if ( fname == "" )
     {
       itkDebugMacro(<< "Fichier image non specifie.");
@@ -242,7 +242,7 @@ namespace otb
   }
 
 
- 
+
   void MSTARImageIO::Read(void* buffer)
   {
 
@@ -251,7 +251,7 @@ namespace otb
     {
       itkExceptionMacro(<< "Error: Unable to open file for reading!\n\n " << m_FileName.c_str() <<").");
     }
-  
+
 /****************************************************
     * Read first 512 bytes to figure out some header   *
     * parameters....                                   *
@@ -282,7 +282,7 @@ namespace otb
     {
       sscanf((tptr+21), "%d", &nhlen);
     }
-	
+
     /* Extract MSTAR column width */
     tptr = (char *) strstr(tbuff,"NumberOfColumns= ");
     if (tptr == (char *) NULL)
@@ -325,10 +325,10 @@ namespace otb
 
     int lNbLines   = this->GetIORegion().GetSize()[1];
     int lNbColumns = this->GetIORegion().GetSize()[0];
-        
+
     unsigned long lNbPixels = (unsigned long)(lNbColumns*lNbLines);
     unsigned long lTailleBuffer = (unsigned long)(m_NbOctetPixel)*lNbPixels;
-        
+
     unsigned char* value = new unsigned char[lTailleBuffer];
 
     otbMsgDevMacro( << "MSTARImageIO::Read() IORegion Start["<<this->GetIORegion().GetIndex()[0]<<","<<this->GetIORegion().GetIndex()[1]<<"] Size ["<<this->GetIORegion().GetSize()[0]<<","<<this->GetIORegion().GetSize()[1]<<"] on Image size ["<<m_Dimensions[0]<<","<<m_Dimensions[1]<<"]");
@@ -338,8 +338,8 @@ namespace otb
  ******************************************************/
     switch (mstartype)
     {
-      case CHIP_IMAGE: 
-        magloc  = phlen; 
+      case CHIP_IMAGE:
+        magloc  = phlen;
         fseek(MSTARfp, magloc, 0);
         nchunks = numrows * numcols;
         break;
@@ -395,7 +395,7 @@ namespace otb
         bytesPerImage = totchunks * sizeof(float);
         CHIPdata = (float *) malloc(bytesPerImage);
 
-     
+
 
         if (CHIPdata == (float *) NULL)
         {
@@ -403,21 +403,21 @@ namespace otb
           itkExceptionMacro("Error: Unable to malloc CHIP memory!\n");
 
         }
-     
+
 
 
         switch (byteorder)
         {
           case LSB_FIRST: /* Little-endian..do byteswap */
 
-            otbMsgDevMacro(<<"Performing auto-byteswap...\n"); 
+            otbMsgDevMacro(<<"Performing auto-byteswap...\n");
             for (i = 0; i < totchunks; i++)
             {
               fread(bigfloatbuf, sizeof(char), 4, MSTARfp);
               littlefloatval = byteswap_SR_IR(bigfloatbuf);
               CHIPdata[i] = littlefloatval;
             }
-            break; 
+            break;
 
             case MSB_FIRST: /* Big-endian..no swap */
 
@@ -429,9 +429,9 @@ namespace otb
      //n = fwrite(CHIPdata, sizeof(float), totchunks, RAWfp);
 
 
-     
 
-     // Recopie dans le buffer 
+
+     // Recopie dans le buffer
 
         for(int ci=0; ci<nchunks; ci++)
         {
@@ -445,7 +445,7 @@ namespace otb
         free(CHIPdata);
         break; /* End of CHIP_IMAGE case */
 
-      case FSCENE_IMAGE:  
+      case FSCENE_IMAGE:
         bytesPerImage = nchunks * sizeof(short);
         FSCENEdata = (unsigned short *) malloc( bytesPerImage );
         if (FSCENEdata == (unsigned short *) NULL)
@@ -459,26 +459,26 @@ namespace otb
         switch (byteorder)
         {
           case LSB_FIRST: /* Little-endian..do byteswap */
-            otbMsgDevMacro(<<"Performing auto-byteswap..."); 
+            otbMsgDevMacro(<<"Performing auto-byteswap...");
             for (i = 0; i < nchunks; i++)
             {
               fread(bigushortbuf, sizeof(char), 2, MSTARfp);
               littleushortval = byteswap_SUS_IUS(bigushortbuf);
               FSCENEdata[i] = littleushortval;
             }
-            break; 
-	 
+            break;
+
             case MSB_FIRST: /* Big-endian..no swap */
               numgot = fread(FSCENEdata, sizeof(short), nchunks, MSTARfp);
               break;
         }
-     
+
         otbMsgDevMacro(<<"Writing MSTAR fullscene magnitude data to ["<<RAWname<<"].");
      //n = fwrite(FSCENEdata, sizeof(short), nchunks, RAWfp);
         for ( int nbComponents = 0 ; nbComponents < 1 ; nbComponents++)
         {
-	// Recopie dans le buffer 
-        
+	// Recopie dans le buffer
+
           unsigned long cpt(0);
           cpt = (unsigned long )(nbComponents)* (unsigned long)(m_NbOctetPixel);
           for ( unsigned long  i=0 ; i < lTailleBuffer ; i = i+m_NbOctetPixel )
@@ -495,32 +495,32 @@ namespace otb
           fclose(MSTARfp);
           itkExceptionMacro(<< "Error: in writing MSTAR Fullscene data!");
         }
-     
+
         otbMsgDevMacro(<<"Reading MSTAR fullscene phase data from ["<<MSTARname<<"].");
-     
+
         switch (byteorder)
         {
           case LSB_FIRST: /* Little-endian..do byteswap */
-            otbMsgDevMacro(<<"Performing auto-byteswap..."); 
+            otbMsgDevMacro(<<"Performing auto-byteswap...");
             for (i = 0; i < nchunks; i++)
             {
               fread(bigushortbuf, sizeof(char), 2, MSTARfp);
               littleushortval = byteswap_SUS_IUS(bigushortbuf);
               FSCENEdata[i] = littleushortval;
             }
-            break; 
-	 
+            break;
+
             case MSB_FIRST: /* Big-endian..no swap */
               numgot = fread(FSCENEdata, sizeof(short), nchunks, MSTARfp);
               break;
         }
-     
+
         otbMsgDevMacro(<<"Writing MSTAR fullscene phase data to ["<<RAWname<<"].");
 //     n = fwrite(FSCENEdata, sizeof(short), nchunks, RAWfp);
         for ( unsigned int nbComponents = 1 ; nbComponents < this->GetNumberOfComponents() ; nbComponents++)
         {
-	// Recopie dans le buffer 
-        
+	// Recopie dans le buffer
+
           unsigned long cpt(0);
           cpt = (unsigned long )(nbComponents)* (unsigned long)(m_NbOctetPixel);
           for ( unsigned long  i=0 ; i < lTailleBuffer ; i = i+m_NbOctetPixel )
@@ -537,7 +537,7 @@ namespace otb
           fclose(MSTARfp);
           itkExceptionMacro(<<"Error: in writing MSTAR Fullscene Phase data!");
         }
-     
+
         /* Cleanup: free memory */
         free(FSCENEdata);
 
@@ -576,10 +576,10 @@ namespace otb
     * Read first 512 bytes to figure out some header   *
     * parameters....                                   *
  ****************************************************/
-	
+
     fread(tbuff, sizeof(char), 1024, MSTARfp);
     rewind(MSTARfp);
-	
+
     /* Extract Phoenix Summary header length */
     tptr = (char *) strstr(tbuff,"PhoenixHeaderLength= ");
     if (tptr == (char *) NULL)
@@ -602,7 +602,7 @@ namespace otb
     {
       sscanf((tptr+21), "%d", &nhlen);
     }
-	
+
     /* Extract MSTAR column width */
     tptr = (char *) strstr(tbuff,"NumberOfColumns= ");
     if (tptr == (char *) NULL)
@@ -635,7 +635,7 @@ namespace otb
     {
       mstartype = FSCENE_IMAGE; /* UnShort Fullscene */
     }
-        
+
     otbMsgDebugMacro( << "Driver: MSTAR - ");
 
     this->SetNumberOfComponents(2);
@@ -644,7 +644,7 @@ namespace otb
     m_Dimensions[1] = NbLignes;
     m_NbOctetPixel = NbOctetPixel;
     otbMsgDebugMacro( <<"Image size cree : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
-        
+
     m_PixelType = VECTOR;
 
 
@@ -652,7 +652,7 @@ namespace otb
     fclose(MSTARfp);
 
     this->SetComponentType( FLOAT );
-	        
+
   }
 
   /** The write function is not implemented */
@@ -662,7 +662,7 @@ namespace otb
   }
 
   /** The write function is not implemented */
-  void MSTARImageIO::Write( const void* buffer) 
+  void MSTARImageIO::Write( const void* buffer)
   {
 
   }

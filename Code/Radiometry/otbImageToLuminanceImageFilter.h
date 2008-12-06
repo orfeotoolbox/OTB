@@ -9,7 +9,7 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  
+
   Some parts of this code are derived from ITK. See ITKCopyright.txt
   for details.
 
@@ -44,7 +44,7 @@ namespace otb
 	class ImageToLuminanceImageFunctor
 	{
 	public:
-	  ImageToLuminanceImageFunctor() 
+	  ImageToLuminanceImageFunctor()
 	    {
 	      m_Alpha = 1.;
 	      m_Beta = 0.;
@@ -55,13 +55,13 @@ namespace otb
 	   void SetBeta(double beta){ m_Beta = beta;};
 	   double GetAlpha(){ return m_Alpha;};
 	   double GetBeta(){ return m_Beta;};
-	
 
-	  inline TOutput operator() (const TInput & inPixel) 
+
+	  inline TOutput operator() (const TInput & inPixel)
 	    {
 	      TOutput outPixel;
-	      double temp; 
- 	      temp = static_cast<double>(inPixel)/m_Alpha + m_Beta; 
+	      double temp;
+ 	      temp = static_cast<double>(inPixel)/m_Alpha + m_Beta;
 	      outPixel = static_cast<TOutput>(temp);
 	      return outPixel;
 	    }
@@ -73,15 +73,15 @@ namespace otb
     }
 
   /** \class ImageToLuminanceImageFilter
-   *  \brief Transform a classical image into the luminance image. For this it uses the functor ImageToLuminanceImageFunctor calling for each component of each pixel. 
+   *  \brief Transform a classical image into the luminance image. For this it uses the functor ImageToLuminanceImageFunctor calling for each component of each pixel.
    *
    * \ingroup ImageToLuminanceImageFunctor
    */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ImageToLuminanceImageFilter : 
+class ITK_EXPORT ImageToLuminanceImageFilter :
 public UnaryImageFunctorWithVectorImageFilter< TInputImage,
                                                TOutputImage,
-                                               ITK_TYPENAME Functor::ImageToLuminanceImageFunctor< ITK_TYPENAME TInputImage::InternalPixelType, 
+                                               ITK_TYPENAME Functor::ImageToLuminanceImageFunctor< ITK_TYPENAME TInputImage::InternalPixelType,
                                                                                                    ITK_TYPENAME TOutputImage::InternalPixelType > >
 {
 public:
@@ -92,13 +92,13 @@ public:
   /** "typedef" to simplify the variables definition and the declaration. */
   typedef TInputImage         InputImageType;
   typedef TOutputImage        OutputImageType;
-  typedef typename Functor::ImageToLuminanceImageFunctor<ITK_TYPENAME InputImageType::InternalPixelType, 
+  typedef typename Functor::ImageToLuminanceImageFunctor<ITK_TYPENAME InputImageType::InternalPixelType,
                                                          ITK_TYPENAME OutputImageType::InternalPixelType> FunctorType;
 
 
   /** "typedef" for standard classes. */
   typedef ImageToLuminanceImageFilter Self;
-  typedef UnaryImageFunctorWithVectorImageFilter< InputImageType, OutputImageType, FunctorType > Superclass; 
+  typedef UnaryImageFunctorWithVectorImageFilter< InputImageType, OutputImageType, FunctorType > Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -107,7 +107,7 @@ public:
 
   /** return class name. */
   itkTypeMacro(ImageToLuminanceImageFilter, UnaryImageFunctorWithVectorImageFiltermageFilter);
-  
+
   /** Supported images definition. */
   typedef typename InputImageType::PixelType                           InputPixelType;
   typedef typename InputImageType::InternalPixelType                   InputInternalPixelType;
@@ -118,7 +118,7 @@ public:
 
 
   typedef typename itk::VariableLengthVector<double>                   VectorType;
- 
+
   /** Image size "typedef" definition. */
   typedef typename InputImageType::SizeType SizeType;
 
@@ -131,10 +131,10 @@ public:
   itkSetMacro(Beta, VectorType);
   /** Give the absolute calibration bias. */
   itkGetConstReferenceMacro(Beta, VectorType);
-   
-  
+
+
  protected:
-  
+
   ImageToLuminanceImageFilter()
   {
     m_Alpha.SetSize(1);
@@ -155,8 +155,8 @@ public:
 	  this->GetFunctorVector().push_back(functor);
 	}
     }
-  
-                        
+
+
 private:
   /** Ponderation declaration*/
   VectorType m_Alpha;

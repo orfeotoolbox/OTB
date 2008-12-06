@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,7 +24,7 @@ namespace otb
 {
 /** \class NNearestTransformsLinearInterpolateDeformationFieldGenerator
  *  \brief This class generate the deformation field by performing a linear interpolation of the deformations from the transforms induced by the n nearest points.
- * \ingroup 
+ * \ingroup
  * \ingroup
  */
 template <class TPointSet, class TDeformationField>
@@ -37,13 +37,13 @@ class ITK_EXPORT NNearestTransformsLinearInterpolateDeformationFieldGenerator
   typedef PointSetWithTransformToDeformationFieldGenerator<TPointSet,TDeformationField> Superclass;
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(NNearestTransformsLinearInterpolateDeformationFieldGenerator,PointSetWithTransformsToDeformationFieldGenerator);
-  
+
   /** Template parameters typedefs */
   typedef typename Superclass::PointSetType PointSetType;
   typedef typename Superclass::PointSetPointerType PointSetPointerType;

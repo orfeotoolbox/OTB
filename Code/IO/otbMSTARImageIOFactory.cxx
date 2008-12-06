@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -20,7 +20,7 @@
 #include "otbMSTARImageIO.h"
 #include "itkVersion.h"
 
-  
+
 namespace otb
 {
 
@@ -32,18 +32,18 @@ MSTARImageIOFactory::MSTARImageIOFactory()
                          1,
                          itk::CreateObjectFunction<MSTARImageIO>::New());
 }
-  
+
 MSTARImageIOFactory::~MSTARImageIOFactory()
 {
 }
 
-const char* 
+const char*
 MSTARImageIOFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char* 
+const char*
 MSTARImageIOFactory::GetDescription() const
 {
   return "MSTAR ImageIO Factory, permettant le chargement d'image MSTAR dans l'OTB";

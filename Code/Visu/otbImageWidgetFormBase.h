@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,7 +28,7 @@
 namespace otb
 {
 /** \class ImageWidgetFormBase
- * \brief 
+ * \brief
  *
  */
 class ITK_EXPORT ImageWidgetFormBase
@@ -46,8 +46,8 @@ class ITK_EXPORT ImageWidgetFormBase
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
-  
- 
+
+
 
   typedef itk::FixedArray<float,4> ColorType;
   typedef itk::ImageRegion<2> RegionType;
@@ -83,7 +83,7 @@ class ITK_EXPORT ImageWidgetFormBase
 
   virtual RegionType GetRegion(void){itkExceptionMacro("Method must be implemented in subclasses!");};
 
- protected: 
+ protected:
   /** Constructor. */
     ImageWidgetFormBase()
       {
@@ -103,10 +103,10 @@ class ITK_EXPORT ImageWidgetFormBase
  private:
     ImageWidgetFormBase(const Self&);// purposely not implemented
     void operator=(const Self&);// purposely not implemented
-    
+
 
     bool m_Visible;
-    
+
 };
 } // end namespace otb
 #endif

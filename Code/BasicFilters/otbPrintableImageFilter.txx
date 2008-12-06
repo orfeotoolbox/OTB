@@ -1,5 +1,5 @@
 /*=========================================================================
-	
+
   Program:   ORFEO Toolbox
   Language:  C++
   Date:      $Date$
@@ -26,19 +26,19 @@
 
 namespace otb
 {
-  
+
   template <class TInputImage>
       PrintableImageFilter<TInputImage>
   ::PrintableImageFilter()
   {
-    
+
     m_Rescaler = VectorRescalerType::New();
     m_Extractor = ChannelExtractorType::New();
-    
+
     m_Extractor->SetInput( m_Rescaler->GetOutput() );
-    
+
   }
-  
+
   template <class TInputImage>
       void
       PrintableImageFilter<TInputImage>
@@ -47,7 +47,7 @@ namespace otb
     m_Extractor->SetChannel(channel);
     this->Modified();
   }
-  
+
   template <class TInputImage>
       const typename PrintableImageFilter<TInputImage>::ChannelsType
       PrintableImageFilter<TInputImage>
@@ -55,36 +55,36 @@ namespace otb
   {
     return m_Extractor->GetChannels();
   }
-  
-  
+
+
   template <class TInputImage>
       void
       PrintableImageFilter<TInputImage>
   ::GenerateData()
   {
-    
+
     if(m_Extractor->GetNbChannels() == 0){
       m_Extractor->SetChannel(2);
       m_Extractor->SetChannel(3);
-      m_Extractor->SetChannel(4); 
+      m_Extractor->SetChannel(4);
     }
-    
+
     typename TInputImage::PixelType minimum,maximum;
     minimum.SetSize(this->GetInput()->GetNumberOfComponentsPerPixel());
     maximum.SetSize(this->GetInput()->GetNumberOfComponentsPerPixel());
     minimum.Fill(0);
     maximum.Fill(255);
-    
+
     m_Rescaler->SetInput(this->GetInput());
     m_Rescaler->SetOutputMinimum(minimum);
     m_Rescaler->SetOutputMaximum(maximum);
     m_Rescaler->SetClampThreshold(0.01);
-        
+
     m_Extractor->GraftOutput( this->GetOutput() );
     m_Extractor->Update();
     this->GraftOutput( m_Extractor->GetOutput() );
   }
-      
+
   template <class TInputImage>
       void
       PrintableImageFilter<TInputImage>
@@ -92,7 +92,7 @@ namespace otb
   {
     Superclass::PrintSelf(os,indent);
   }
-          
+
 } // end namespace otb
 
 #endif

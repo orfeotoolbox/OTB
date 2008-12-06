@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -63,7 +63,7 @@ ImageListToImageListApplyFilter<TInputImageList,TOutputImageList,TFilter>
       while(inputListIt!=inputPtr->End()&&outputListIt!=outputPtr->End())
 	{
 	  // Create the output image and set its information
-	  
+
 	  m_Filter->SetInput(inputListIt.Get());
 	  m_Filter->UpdateOutputInformation();
 	  outputListIt.Get()->CopyInformation(m_Filter->GetOutput(m_OutputIndex));
@@ -86,7 +86,7 @@ ImageListToImageListApplyFilter<TInputImageList,TOutputImageList,TFilter>
   // For each input image and corresponding output image
   typename InputImageListType::ConstIterator inputListIt = inputPtr->Begin();
   typename OutputImageListType::Iterator outputListIt = outputPtr->Begin();
-  
+
   // Use the filter to generate input requested region
   while(inputListIt!=inputPtr->End()&&outputListIt!=outputPtr->End())
 	{
@@ -111,7 +111,7 @@ ImageListToImageListApplyFilter<TInputImageList,TOutputImageList,TFilter>
   typename InputImageListType::ConstIterator inputListIt = inputPtr->Begin();
   typename OutputImageListType::Iterator outputListIt = outputPtr->Begin();
   unsigned int counter = 0;
-  
+
 
   while(inputListIt!=inputPtr->End()&&outputListIt!=outputPtr->End())
 	{

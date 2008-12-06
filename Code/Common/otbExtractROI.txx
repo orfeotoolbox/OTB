@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -39,7 +39,7 @@ ExtractROI<TInputPixel, TOutputPixel>
  *
  */
 template <class TInputPixel, class TOutputPixel>
-void 
+void
 ExtractROI<TInputPixel, TOutputPixel>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
@@ -47,17 +47,17 @@ ExtractROI<TInputPixel, TOutputPixel>
 }
 
 
-/** 
+/**
  * ExtractROI can produce an image which is a different resolution
  * than its input image.  As such, ExtractROI needs to provide an
  * implementation for GenerateOutputInformation() in order to inform
  * the pipeline execution model.  The original documentation of this
  * method is below.
  *
- * \sa ProcessObject::GenerateOutputInformaton() 
+ * \sa ProcessObject::GenerateOutputInformaton()
  */
 template <class TInputPixel, class TOutputPixel>
-void 
+void
 ExtractROI<TInputPixel, TOutputPixel>
 ::GenerateOutputInformation()
 {
@@ -66,7 +66,7 @@ ExtractROI<TInputPixel, TOutputPixel>
 }
 
 template <class TInputPixel, class TOutputPixel>
-void 
+void
 ExtractROI<TInputPixel, TOutputPixel>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                        int threadId)
@@ -79,11 +79,11 @@ ExtractROI<TInputPixel, TOutputPixel>
 
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-  
+
   // Define the portion of the input to walk for this thread
   InputImageRegionType inputRegionForThread;
   this->CallCopyOutputRegionToInputRegion(inputRegionForThread, outputRegionForThread);
-  
+
   // Define the iterators.
   typedef itk::ImageRegionIterator<OutputImageType> OutputIterator;
   typedef itk::ImageRegionConstIterator<InputImageType> InputIterator;
@@ -96,8 +96,8 @@ ExtractROI<TInputPixel, TOutputPixel>
     {
     // copy the input pixel to the output
     outIt.Set( inIt.Get());
-    ++outIt; 
-    ++inIt; 
+    ++outIt;
+    ++inIt;
     progress.CompletedPixel();
     }
 }

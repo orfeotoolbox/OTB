@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,13 +25,13 @@
 
 namespace otb
 {
-  /** 
+  /**
    *\class LineCorrelationDetectorImageFilter
    * \brief To be documented
    *
    */
 
-template <class TInputImage, 
+template <class TInputImage,
 	  class TOutputImage,
           class TOutputImageDirection = TOutputImage,
 	  class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
@@ -42,7 +42,7 @@ public:
   itkStaticConstMacro(		InputImageDimension,
   				unsigned int,
                       		TInputImage::ImageDimension);
-  itkStaticConstMacro(		OutputImageDimension, 
+  itkStaticConstMacro(		OutputImageDimension,
   				unsigned int,
                       		TOutputImage::ImageDimension);
 
@@ -66,7 +66,7 @@ public:
   /** Typedefs to describe and access Interpolator */
   typedef typename InterpolatorType::Pointer InterpolatorPointer;
   typedef typename InterpolatorType::CoordRepType CoordRepType;
-  
+
   typedef typename InputImageType::PointType TPoint;
 
 
@@ -74,7 +74,7 @@ public:
   typedef typename InputImageType::PixelType InputPixelType;
   typedef typename OutputImageType::PixelType OutputPixelType;
 
-  
+
   typedef typename InputImageType::RegionType InputImageRegionType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
@@ -89,11 +89,11 @@ protected:
 
   /** Compute the measure */
   virtual double ComputeMeasure(std::vector<double>* m1, std::vector<double>* m2, std::vector<double>* m3);
-  
+
 private:
   LineCorrelationDetectorImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
- 
+
 
 };
 } // end namespace otb
@@ -102,5 +102,5 @@ private:
 #include "otbLineCorrelationDetectorImageFilter.txx"
 #endif
 
-  
+
 #endif

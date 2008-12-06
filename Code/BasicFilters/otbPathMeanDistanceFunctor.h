@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -37,7 +37,7 @@ namespace otb
   class PathMeanDistanceFunctor
   {
     public:
-      
+
 
       void SetThreshold(double threshold )
       {
@@ -47,16 +47,16 @@ namespace otb
       {
         return (  m_Threshold );
       }
-      
-      PathMeanDistanceFunctor() 
+
+      PathMeanDistanceFunctor()
       {
         m_Threshold = 0.2;
       };
       ~PathMeanDistanceFunctor() {};
-      
+
       inline bool operator()(const TInput1 & input)
       {
-        
+
         double meanDistance = 0.0;
         typedef typename TInput1::ObjectType::VertexListType::ConstIterator VertexListConstIteratorType;
         typedef typename TInput1::ObjectType::VertexType VertexType;
@@ -82,10 +82,10 @@ namespace otb
         {
           itkGenericExceptionMacro(<<"Object with only one vertex!" );
         }
-        
+
         std::cout << "Num vertex: " << nbVertices << std::endl;
         std::cout << "Mean dist: " << meanDistance << std::endl;
-      
+
         if ( meanDistance > m_Threshold)
         {
           return true;
@@ -95,9 +95,9 @@ namespace otb
           return false;
         }
       }
-      
-      
-      
+
+
+
     private:
       double m_Threshold;
   };

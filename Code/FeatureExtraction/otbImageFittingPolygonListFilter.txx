@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -62,7 +62,7 @@ ImageFittingPolygonListFilter<TPath, TImage>
 
 //FIXME
 //There is an issue here with integer and continous indexes
-//maybe we should use the itk::LineConstIterator 
+//maybe we should use the itk::LineConstIterator
 template <class TPath, class TImage>
 void
 ImageFittingPolygonListFilter<TPath, TImage>
@@ -75,7 +75,7 @@ ImageFittingPolygonListFilter<TPath, TImage>
 
 
   typename ImageType::RegionType regionLargest=inputImagePtr->GetLargestPossibleRegion();
-      
+
   typedef itk::ImageRegionConstIteratorWithIndex<ImageType> NeighborhoodIteratorType;
 
   typename ImageType::SizeType size;
@@ -84,12 +84,12 @@ ImageFittingPolygonListFilter<TPath, TImage>
   typename ImageType::RegionType region;
   region.SetSize(size);
   typename ImageType::IndexType start;
-  
+
   //go through all the polygons in the list
   for(IteratorType it = inputPtr->Begin(); it != inputPtr->End(); ++it)
   {
     PathPointerType polygon = it.Get();
-    
+
     if(polygon->GetVertexList()->Size()>2)
     {
       for (int iteration=0;iteration < m_NumberOfIterations;++iteration)
@@ -111,7 +111,7 @@ ImageFittingPolygonListFilter<TPath, TImage>
          * to factorize
          * */
         {
-          
+
         start[0] = static_cast<long int>(currentPoint[0]-m_Radius);
         start[1] = static_cast<long int>(currentPoint[1]-m_Radius);
         region.SetIndex(start);
@@ -173,17 +173,17 @@ ImageFittingPolygonListFilter<TPath, TImage>
       newPolygon->AddVertex(maxPoint);
       }
       /** End 'to factorize' */
-      
+
       previousPoint = currentPoint;
       currentPoint= firstPoint;
       vertexIt = newPolygon->GetVertexList()->Begin();
       nextPoint=vertexIt.Value();
-      
+
        /** try all the possible neighbor for the current point
        * to factorize
        * */
       {
-      
+
       start[0] = static_cast<long int>(currentPoint[0]-m_Radius);
       start[1] = static_cast<long int>(currentPoint[1]-m_Radius);
       region.SetIndex(start);
@@ -208,15 +208,15 @@ ImageFittingPolygonListFilter<TPath, TImage>
       newPolygon->AddVertex(maxPoint);
       }
       /** End 'to factorize' */
-      
+
       polygon = newPolygon;//prepare the next iteration
       }
     }
-    
+
     outputPtr->PushBack(polygon);
 
   }//going through the polygon list
-        
+
 
 }
 

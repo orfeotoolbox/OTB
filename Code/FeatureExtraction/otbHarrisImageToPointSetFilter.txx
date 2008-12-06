@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,10 +34,10 @@ HarrisImageToPointSetFilter<TInputImage, TOutputPointSet>
   m_SigmaD = 1.0;
   m_SigmaI = 1.0;
   m_Alpha  = 1.0;
-  
-  m_LowerThreshold = itk::NumericTraits<InputPixelType>::NonpositiveMin();  
+
+  m_LowerThreshold = itk::NumericTraits<InputPixelType>::NonpositiveMin();
   m_UpperThreshold = itk::NumericTraits<InputPixelType>::max();
-  
+
   m_HarrisFilter     = HarrisImageFilterType::New();
   m_ThresholdFilter  = ThresholdImageToPointSetType::New();
 }
@@ -47,8 +47,8 @@ void
 HarrisImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::GenerateData()
 {
-   
-  typename OutputPointSetType::Pointer pointList = this->GetOutput(); 
+
+  typename OutputPointSetType::Pointer pointList = this->GetOutput();
 
   m_HarrisFilter->SetInput( 0, this->GetInput(0) );
   m_HarrisFilter->SetSigmaD( m_SigmaD );
@@ -56,12 +56,12 @@ HarrisImageToPointSetFilter<TInputImage, TOutputPointSet>
   m_HarrisFilter->SetAlpha(  m_Alpha  );
 
   m_ThresholdFilter->SetInput(0,m_HarrisFilter->GetOutput() );
-  m_ThresholdFilter->SetLowerThreshold(m_LowerThreshold); 
-  m_ThresholdFilter->SetUpperThreshold(m_UpperThreshold); 
+  m_ThresholdFilter->SetLowerThreshold(m_LowerThreshold);
+  m_ThresholdFilter->SetUpperThreshold(m_UpperThreshold);
 
-  m_ThresholdFilter->SetOutput(pointList ); 
+  m_ThresholdFilter->SetOutput(pointList );
   m_ThresholdFilter->Update();
- 
+
 }
 
 
@@ -69,7 +69,7 @@ HarrisImageToPointSetFilter<TInputImage, TOutputPointSet>
  * Standard "PrintSelf" method
  */
 template <class TInputImage, class TOutputPointSet>
-void 
+void
 HarrisImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {

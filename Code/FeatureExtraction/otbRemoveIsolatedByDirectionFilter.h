@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -66,7 +66,7 @@ namespace Functor
  *  For a given pixel, the filter walk through its neighborhood in direction image, counting pixels having
  *  the same direction as the center pixel. If there is no such a pixel, the center pixel is considered to be
  *  isolated in direction, and thus will be removed (set to 0). If the pixel is not isolated in direction, the output
- *  value is the value of the pixel in the modulus image. 
+ *  value is the value of the pixel in the modulus image.
  *  Of course this filter requires the direction to be discrete, in order to be able to count the directions.
  *
  * \ingroup Streamed
@@ -82,21 +82,21 @@ class ITK_EXPORT RemoveIsolatedByDirectionFilter
   typedef ModulusAndDirectionImageToImageFilter<TInputModulus, TInputDirection, TOutputImage> Superclass;
   typedef itk::SmartPointer<Self>                                                             Pointer;
   typedef itk::SmartPointer<const Self>                                                       ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(RemoveIsolatedByDirectionFilter,ModulusAndDirectionImageToImageFilter);
-  
+
   /** typedef of the computing filter (this allows us to derive from ModulusAndDirectionToImageFilter as well as
       using the BinaryFunctorNeighBorhoodImageFilter, which is appropriate here */
   typedef Functor::RemoveIsolatedByDirectionFunctor<
-    typename itk::ConstNeighborhoodIterator<TInputModulus>, 
+    typename itk::ConstNeighborhoodIterator<TInputModulus>,
     typename itk::ConstNeighborhoodIterator<TInputDirection>,
     typename TOutputImage::PixelType>  FunctorType;
   typedef otb::BinaryFunctorNeighborhoodImageFilter<TInputModulus, TInputDirection,TOutputImage,FunctorType> ComputingFilterType;
-        
+
 protected:
   /** Constructor */
   RemoveIsolatedByDirectionFilter(){};

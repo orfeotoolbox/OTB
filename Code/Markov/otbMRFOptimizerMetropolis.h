@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,38 +27,38 @@ namespace otb
 {
   /**
    * \class MRFOptimizerMetropolis
-   * \brief This is the optimizer class implementing the Metropolis algorithm 
-   *  
-   * This is one optimizer to be used in the MRF framework. This optimizer 
+   * \brief This is the optimizer class implementing the Metropolis algorithm
+   *
+   * This is one optimizer to be used in the MRF framework. This optimizer
    * follows the metropolis algorithm to accept of reject the value proposed by the sampler.
    *
    * The MRFOptimizerMetropolis has one parameter corresponding to the temperature T used
    * to accept or reject proposed values. The proposed value is accepted with a probability:
    *
    *  \f[ e^{\frac{-\Delta E}{T}} \f]
-   * 
-   * 
+   *
+   *
    * This class is meant to be used in the MRF framework with the otb::MarkovRandomFieldFilter
    *
    * \ingroup Markov
    */
-  
+
 class ITK_EXPORT MRFOptimizerMetropolis : public MRFOptimizer
   {
   public:
-    
+
     typedef MRFOptimizerMetropolis Self;
     typedef MRFOptimizer Superclass;
     typedef itk::SmartPointer<Self>  Pointer;
     typedef itk::SmartPointer<const Self>  ConstPointer;
     typedef Superclass::ParametersType ParametersType;
-      
+
     typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
-    
+
     itkNewMacro(Self);
-    
+
     itkTypeMacro(MRFOptimizerMetropolis,MRFOptimizer);
-    
+
     /** Set parameter to a one array filled with paramVal.*/
     void SetSingleParameter( double parameterVal )
       {
@@ -66,7 +66,7 @@ class ITK_EXPORT MRFOptimizerMetropolis : public MRFOptimizer
 	this->m_Parameters.Fill(parameterVal);
 	this->Modified();
       }
-    
+
 
     inline bool Compute(double deltaEnergy)
       {
@@ -88,7 +88,7 @@ class ITK_EXPORT MRFOptimizerMetropolis : public MRFOptimizer
               }
 	return false;
       }
-    
+
     /** Methods to cancel random effects.*/
     void InitializeSeed(int seed){ m_Generator->SetSeed(seed); }
     void InitializeSeed(){ m_Generator->SetSeed(); }
@@ -103,8 +103,8 @@ class ITK_EXPORT MRFOptimizerMetropolis : public MRFOptimizer
     }
     virtual ~MRFOptimizerMetropolis() {}
     RandomGeneratorType::Pointer m_Generator;
-  };       
- 
+  };
+
 }
 
 #endif

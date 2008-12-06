@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,16 +24,16 @@ namespace otb
 {
 /**
  * \class MorphologicalPyramidSynthesisFilter
- * \brief Recomposition of the multiscale analysis performed with 
+ * \brief Recomposition of the multiscale analysis performed with
  * a MorphologicalPyramidAnalyseFilter.
  *
  * Once a morphological pyramidal decompisition has been made, it is
  * possible to rebuild without any loss of information the original
  * image at full resolution. The MorphologicalPyramidsynthesisFilter
- * provides such a functionality. At each iteration, it perfoms the 
- * up-sampling of the current image using the 
- * otb::morphologicalPyramid::Resampler filter, the addition of 
- * the details lost in down-sampling, and the addition of the details 
+ * provides such a functionality. At each iteration, it perfoms the
+ * up-sampling of the current image using the
+ * otb::morphologicalPyramid::Resampler filter, the addition of
+ * the details lost in down-sampling, and the addition of the details
  * lost in smoothing.
  *
  * \ingroup MultiScale
@@ -49,7 +49,7 @@ public:
   typedef MorphologicalPyramidSynthesisFilter                  Self;
   typedef ImageToImageListFilter<TInputImage,TOutputImage>     Superclass;
   typedef itk::SmartPointer<Self>                              Pointer;
-  typedef itk::SmartPointer<const Self>                        ConstPointer;  
+  typedef itk::SmartPointer<const Self>                        ConstPointer;
   /** Creation through object factory macro */
   itkNewMacro(Self);
   /** Type macro */
@@ -64,12 +64,12 @@ public:
   typedef typename Superclass::OutputImageListType::Iterator            ImageListIterator;
   typedef typename Superclass::OutputImageListType::ReverseIterator     ImageListReverseIterator;
   /** Input related typedefs */
-  typedef typename Superclass::InputImageType                           InputImageType;          
+  typedef typename Superclass::InputImageType                           InputImageType;
   typedef typename Superclass::InputImageRegionType                     InputImageRegionType;
   typedef typename InputImageType::Pointer                              InputImagePointer;
   typedef typename InputImageType::ConstPointer                         InputImageConstPointer;
-  typedef typename InputImageType::SizeType                             SizeType;                 
-  typedef typename InputImageType::ValueType                            ValueType;  
+  typedef typename InputImageType::SizeType                             SizeType;
+  typedef typename InputImageType::ValueType                            ValueType;
   typedef typename InputImageType::PixelType                            PixelType;
   typedef typename InputImageType::SpacingType                          SpacingType;
   typedef otb::ImageList<InputImageType>                                InputImageListType;
@@ -77,7 +77,7 @@ public:
   /** Size vector typedefs */
   typedef std::vector<SizeType>                                         SizeVectorType;
   typedef typename SizeVectorType::iterator                             SizeIterator;
-  typedef typename SizeVectorType::reverse_iterator                     SizeReverseIterator;  
+  typedef typename SizeVectorType::reverse_iterator                     SizeReverseIterator;
   /**
    * Set The SupFilter details
    * \param imageList The brighter details extracted from the filtering operation.
@@ -102,7 +102,7 @@ public:
    * Get The SupFilter details
    * \return The brighter details extracted from the filtering operation.
    */
-  InputImageListType* GetSupFilter(void);   
+  InputImageListType* GetSupFilter(void);
   /**
    * Get The InfFilter details
    * \return The darker details extracted from the filtering operation.
@@ -128,7 +128,7 @@ protected:
   /** Main computation method */
   virtual void GenerateData();
   /** Printself method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;  
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 };
 }// End namespace otb
 

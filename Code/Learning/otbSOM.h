@@ -9,11 +9,11 @@ Version:   $Revision$
 Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
-Copyright (c) Institut Telecom ; Telecom bretagne. All rights reserved. 
+Copyright (c) Institut Telecom ; Telecom bretagne. All rights reserved.
 See ITCopyright.txt for details.
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,21 +29,21 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /**
- * \class SOM 
- * \brief This class is responsible for the learning of a self organizing map from a 
+ * \class SOM
+ * \brief This class is responsible for the learning of a self organizing map from a
  * set of vector represented by the input image (each vector is a pixel of the image).
  *
  * The learning process iteratively select the best-response neuron for each input vector,
- * enhancing its response and the response of its neighbors with respect to a certain radius, 
+ * enhancing its response and the response of its neighbors with respect to a certain radius,
  * computed from an initial radius, and to a certain learning factor, decreasing at each iteration.
  *
  * The behavior of the neighborhood is given by a functor (templated) which parameter is the current
  * iteration. It returns a neighborhood of type \code SizeType \endcode.
  *
- * The behavior of the learning factor (hold by a beta variable) is given by an other functor 
+ * The behavior of the learning factor (hold by a beta variable) is given by an other functor
  * which parameter is the current iteration. It returns a beta value of type double.
  *
- * The SOMMap produced as output can be either initialized with a constant custom value or randomly 
+ * The SOMMap produced as output can be either initialized with a constant custom value or randomly
  * generated following a normal law. The seed for the random intialization can be modified.
  *
  * \sa SOMMap
@@ -51,10 +51,10 @@ namespace otb
  * \sa CzihoSOMLearningBehaviorFunctor
  * \sa CzihoSOMNeighborhoodBehaviorFunctor
  */
-template < class TListSample, class TMap, 
-		 class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor, 
+template < class TListSample, class TMap,
+		 class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
 		 class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor >
-class ITK_EXPORT SOM  
+class ITK_EXPORT SOM
 : public itk::ImageSource<TMap>
 {
   public:
@@ -63,7 +63,7 @@ class ITK_EXPORT SOM
   typedef itk::ImageSource<TMap>        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  
+
   /** Creation through object factory macro */
   itkNewMacro(Self);
   /** Runtime informations macro */
@@ -78,13 +78,13 @@ class ITK_EXPORT SOM
   typedef typename MapType::SizeType  SizeType;
   typedef typename MapType::RegionType RegionType;
   typedef typename MapType::Pointer MapPointerType;
-  
+
   typedef TSOMLearningBehaviorFunctor SOMLearningBehaviorFunctorType;
   typedef TSOMNeighborhoodBehaviorFunctor SOMNeighborhoodBehaviorFunctorType;
 
   /** Map dimension */
   itkStaticConstMacro(MapDimension,unsigned int, MapType::ImageDimension);
-  
+
   /** Accessors */
   itkSetMacro(NumberOfIterations,unsigned int);
   itkGetMacro(NumberOfIterations,unsigned int);
@@ -134,13 +134,13 @@ class ITK_EXPORT SOM
   /**
    * Step one iteration.
    */
-  virtual void Step(unsigned int currentIteration);  
+  virtual void Step(unsigned int currentIteration);
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  
+
   private:
-  SOM(const Self&); // purposely not implemented 
-  void operator=(const Self&); // purposely not implemented 
+  SOM(const Self&); // purposely not implemented
+  void operator=(const Self&); // purposely not implemented
   /** Size of the neurons map */
   SizeType m_MapSize;
   /** Number of iterations */

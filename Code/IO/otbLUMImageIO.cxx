@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -45,7 +45,7 @@ namespace otb
     }
 
     m_FileByteOrder = BigEndian;
-  
+
   // Set default spacing to one
     m_Spacing[0] = 1.0;
     m_Spacing[1] = 1.0;
@@ -94,7 +94,7 @@ namespace otb
     {
       m_File.close();
     }
-	
+
     std::fstream header_file;
     header_file.open( filename,  std::ios::in | std::ios::binary );
     if( header_file.fail() )
@@ -102,7 +102,7 @@ namespace otb
       otbMsgDevMacro(<<"LUMImageIO::CanReadFile() failed header open ! " );
       return false;
     }
-	
+
 	//Read header informations
     bool lResult = InternalReadHeaderInformation(header_file,false);
     header_file.close();
@@ -121,11 +121,11 @@ namespace otb
   {
   }
 
-// Read image 
+// Read image
   void LUMImageIO::Read(void* buffer)
   {
     char * p = static_cast<char *>(buffer);
-   
+
     int lNbLines   = this->GetIORegion().GetSize()[1];
     int lNbColumns = this->GetIORegion().GetSize()[0];
     int lFirstLine   = this->GetIORegion().GetIndex()[1] ; // [1... ]
@@ -140,7 +140,7 @@ namespace otb
     std::streamoff numberOfBytesPerLines = headerLength;
     std::streamoff offset;
     std::streamsize numberOfBytesToBeRead = static_cast<std::streamsize>(this->GetComponentSize() * lNbColumns);
-    std::streamsize numberOfBytesRead;        
+    std::streamsize numberOfBytesRead;
     std::streamsize cpt = 0;
     for(int LineNo = lFirstLine;LineNo <lFirstLine + lNbLines; LineNo++ )
     {
@@ -160,7 +160,7 @@ namespace otb
       }
       cpt += numberOfBytesToBeRead;
     }
- 
+
     unsigned long numberOfPixelsPerLines = lNbLines * lNbColumns;
         // Swap bytes if necessary
     if ( 0 ) {}
@@ -196,7 +196,7 @@ namespace otb
 
         //Read header informations
     InternalReadHeaderInformation(m_File,true);
-	
+
     otbMsgDebugMacro( <<"Driver to read: LUM");
     otbMsgDebugMacro( <<"         Read  file         : "<< m_FileName);
     otbMsgDebugMacro( <<"         Size               : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
@@ -210,30 +210,30 @@ namespace otb
 
   bool LUMImageIO::InternalReadHeaderInformation(std::fstream & file, const bool reportError)
   {
-	
+
     std::string lStrTypeImage;
     std::string lStrCodePix;
     std::string lStrTypeMachine;
     int lNbBits(-1);
     char TypeCode[5];
     file.seekg(8, std::ios::beg );
-    file.read((char*)(TypeCode),4);  
+    file.read((char*)(TypeCode),4);
     int lTaille = CaiGetTypeLum(            TypeCode,
                                             lStrTypeImage,
-                                            lNbBits, 
+                                            lNbBits,
                                             lStrCodePix);
     if (lTaille == -1)
     {
       if( reportError == true )
       {
-        itkExceptionMacro(<< "LUM : bad read of header informations");  
+        itkExceptionMacro(<< "LUM : bad read of header informations");
       }
       else
       {
         return false;
       }
     }
-        //Set file byte order 
+        //Set file byte order
     if( lStrTypeImage == "BE" )
     {
       m_FileByteOrder = BigEndian;
@@ -243,7 +243,7 @@ namespace otb
       m_FileByteOrder = LittleEndian;
     }
 
-    if(lStrCodePix == "OCT") 
+    if(lStrCodePix == "OCT")
     {
       SetComponentType(CHAR);
     }
@@ -279,7 +279,7 @@ namespace otb
     {
       if( reportError == true )
       {
-        itkExceptionMacro(<< "LUM : impossible to determine CodePix information of the image");  
+        itkExceptionMacro(<< "LUM : impossible to determine CodePix information of the image");
       }
       else
       {
@@ -292,9 +292,9 @@ namespace otb
 
         //Read image dimensions
     file.seekg(0, std::ios::beg );
-    file.read((char*)(&NbCol),4); 
-    file.read((char*)(&NbLig),4);  
-         
+    file.read((char*)(&NbCol),4);
+    file.read((char*)(&NbLig),4);
+
         //Swapp if necessary
     otbSwappFileOrderToSystemOrderMacro(int,&NbCol,1);
     otbSwappFileOrderToSystemOrderMacro(int,&NbLig,1);
@@ -367,7 +367,7 @@ namespace otb
     std::streamsize cpt = 0;
 
     const char * p = static_cast<const char *>(buffer);
- 
+
     for(unsigned long LineNo = lFirstLine;LineNo <lFirstLine + lNbLines; LineNo++ )
     {
       offset  =  headerLength + numberOfBytesPerLines * static_cast<std::streamoff>(LineNo);
@@ -395,14 +395,14 @@ namespace otb
     {
       m_File.close();
     }
-  
+
         // Open the new file for writing
         // Actually open the file
     m_File.open( m_FileName.c_str(),  std::ios::out | std::ios::trunc | std::ios::binary );
     if( m_File.fail() )
     {
       itkExceptionMacro(<< "Cannot write requested file "<<m_FileName.c_str()<<".");
-    } 
+    }
 
         //Writing header information
     std::streamsize headerLength = static_cast<std::streamsize>(this->GetComponentSize() * m_Dimensions[0]);
@@ -452,7 +452,7 @@ namespace otb
 
   int LUMImageIO::CaiGetTypeLum(          const   char *          type_code,
                                           std::string &   str_sens_code,
-                                          int &           inbbits, 
+                                          int &           inbbits,
                                           std::string &   str_cod_pix)
   {
     unsigned int ind;	/* indice de boucle sur les types reconnus */
@@ -492,7 +492,7 @@ namespace otb
     {
       mod2=ind%2;
       if (mod2==0) sprintf(sens_code,"BE");
-      else sprintf(sens_code,"LE");            
+      else sprintf(sens_code,"LE");
 
       if (ind < 4)
       {
@@ -502,8 +502,8 @@ namespace otb
         {
           trouve =(int)(nbbits/8);
           if ((nbbits%8)!=0) taille =trouve+1;
-          else taille  = trouve;		    
-        } 
+          else taille  = trouve;
+        }
         pch0 = const_cast<char *>(strstr(type_code,"U"));
         if (taille == 1)
         {
@@ -522,7 +522,7 @@ namespace otb
         }
         else taille=-1;
       }
-      else if  ((ind ==4)||(ind==5) ) 
+      else if  ((ind ==4)||(ind==5) )
       {
         taille=4;
         nbbits = 32;
@@ -544,6 +544,6 @@ namespace otb
     return(taille);
   }
 
-  
+
 } // end namespace otb
 

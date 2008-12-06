@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -22,11 +22,11 @@
 
 namespace otb
 {
-  
+
 /** \class UnaryFunctorObjectListFilter
   * \brief Process each element in the ObjectList with the functor
   *
-  * Each element of the ObjectList is processed by the functor. 
+  * Each element of the ObjectList is processed by the functor.
   * This is similar to the python map() function.
   *
   *
@@ -44,7 +44,7 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(UnaryFunctorObjectListFilter, ObjectListToObjectListFilter);
 
@@ -55,7 +55,7 @@ public:
   typedef typename TInputList::ConstPointer InputListPointer;
   typedef typename TOutputList::Pointer OutputListPointer;
   typedef typename TInputList::ConstIterator InputListIterator;
-  
+
 //   typedef itk::DataObject::Pointer DataObjectPointer;
 
   /** Get the functor object.  The functor is returned by reference.
@@ -79,8 +79,8 @@ public:
       this->Modified();
       }
   }
-  
-  
+
+
 protected:
   UnaryFunctorObjectListFilter();
   virtual ~UnaryFunctorObjectListFilter() {};

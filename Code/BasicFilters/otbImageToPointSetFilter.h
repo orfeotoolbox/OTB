@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -49,13 +49,13 @@ public:
   typedef   TInputImage                             InputImageType;
   typedef   typename InputImageType::Pointer        InputImagePointer;
   typedef   typename InputImageType::ConstPointer   InputImageConstPointer;
-  typedef   typename InputImageType::RegionType     InputImageRegionType; 
-  typedef   typename InputImageType::PixelType      InputImagePixelType; 
-  
+  typedef   typename InputImageType::RegionType     InputImageRegionType;
+  typedef   typename InputImageType::PixelType      InputImagePixelType;
+
   /** Some PointSet related typedefs. */
   typedef   typename Superclass::OutputPointSetType     OutputPointSetType;
   typedef   typename Superclass::OutputPointSetPointer  OutputPointSetPointer;
-  
+
   typedef   itk::ProcessObject			    ProcessObjectType;
 
   /** Set the input image of this process object.  */
@@ -66,12 +66,12 @@ public:
 
   /** Prepare the output */
   void GenerateOutputInformation(void);
-     
+
 protected:
   ImageToPointSetFilter();
   ~ImageToPointSetFilter();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
- 
+
 private:
   ImageToPointSetFilter(const ImageToPointSetFilter&); //purposely not implemented
   void operator=(const ImageToPointSetFilter&); //purposely not implemented

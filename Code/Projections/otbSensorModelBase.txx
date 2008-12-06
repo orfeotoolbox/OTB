@@ -1,5 +1,5 @@
 /*=========================================================================
-  
+
 Program:   ORFEO Toolbox
 Language:  C++
 Date:      $Date$
@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,8 +30,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "imaging/ossimImageHandler.h"
 
 namespace otb
-{ 
-  
+{
+
   template < class TScalarType,
   unsigned int NInputDimensions,
   unsigned int NOutputDimensions,
@@ -44,10 +44,10 @@ namespace otb
     m_UseDEM = false;
     m_DEMIsLoaded = false;
     m_AverageElevation = -10000;
-		
+
   }
-  
-  
+
+
   template < class TScalarType,
   unsigned int NInputDimensions,
   unsigned int NOutputDimensions,
@@ -61,8 +61,8 @@ namespace otb
       m_Model = NULL;
     }
   }
-  
-  
+
+
   /// Get the Geometry Keyword list
   template < class TScalarType,
   unsigned int NInputDimensions,
@@ -74,7 +74,7 @@ namespace otb
   {
     return m_ImageKeywordlist;
   }
-  
+
   /// Get the Geometry Keyword list
   template < class TScalarType,
   unsigned int NInputDimensions,
@@ -86,7 +86,7 @@ namespace otb
   {
     ossimKeywordlist geom;
     m_ImageKeywordlist.convertToOSSIMKeywordlist(geom);
-    
+
     return geom;
   }
 
@@ -99,10 +99,10 @@ namespace otb
       SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
   ::GetOssimModel(void)
   {
-    
+
     return m_Model;
   }
-  
+
   /** Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
   template < class TScalarType,
   unsigned int NInputDimensions,
@@ -115,7 +115,7 @@ namespace otb
     m_ImageKeywordlist = image_kwl;
     CreateProjection(m_ImageKeywordlist);
   }
-  
+
   /** Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
   template < class TScalarType,
   unsigned int NInputDimensions,
@@ -129,8 +129,8 @@ namespace otb
     m_ImageKeywordlist.SetKeywordlist(geom_kwl);
     CreateProjection(m_ImageKeywordlist);
   }
-  
-  
+
+
   /** Instatiate the sensor model from metadata. */
   template < class TScalarType,
   unsigned int NInputDimensions,
@@ -141,7 +141,7 @@ namespace otb
   ::CreateProjection(const ImageKeywordlist & image_kwl)
   {
     ossimKeywordlist geom;
-    
+
     otbMsgDevMacro(<<"CreateProjection(): ossimKeywordlist: "<<geom);
     image_kwl.convertToOSSIMKeywordlist(geom);
     m_Model = ossimProjectionFactoryRegistry::instance()->createProjection(geom);
@@ -150,7 +150,7 @@ namespace otb
       itkExceptionMacro(<<"Invalid Model pointer m_Model == NULL !\n The ossim keywordlist is bad!");
     }
   }
-  
+
   /**
    * PrintSelf method
    */
@@ -166,7 +166,7 @@ namespace otb
     os << indent << "Model: " << m_Model << std::endl;
     os << indent << "Keywordlist: " << m_ImageKeywordlist << std::endl;
   }
-  
+
 } // namespace otb
 
 #endif

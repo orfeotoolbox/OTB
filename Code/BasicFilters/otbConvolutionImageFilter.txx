@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -41,18 +41,18 @@ ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
 }
 
 template <class TInputImage, class TOutputImage, class TBoundaryCondition>
-void 
+void
 ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
 ::GenerateInputRequestedRegion() throw (itk::InvalidRequestedRegionError)
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
-  
+
   // get pointers to the input and output
-  typename Superclass::InputImagePointer inputPtr = 
+  typename Superclass::InputImagePointer inputPtr =
     const_cast< TInputImage * >( this->GetInput() );
   typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
-  
+
   if ( !inputPtr || !outputPtr )
     {
     return;
@@ -79,7 +79,7 @@ ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
 
     // store what we tried to request (prior to trying to crop)
     inputPtr->SetRequestedRegion( inputRequestedRegion );
-    
+
     // build an exception
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
     e.SetLocation(ITK_LOCATION);
@@ -101,11 +101,11 @@ ConvolutionImageFilter< TInputImage, TOutputImage, TBoundaryCondition>
   unsigned int i;
   itk::ConstNeighborhoodIterator<InputImageType> bit;
   itk::ImageRegionIterator<OutputImageType> it;
-  
+
   // Allocate output
   typename OutputImageType::Pointer output = this->GetOutput();
   typename  InputImageType::ConstPointer input  = this->GetInput();
-  
+
   // Find the data-set boundary "faces"
   typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType faceList;
   itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType> bC;
@@ -115,14 +115,14 @@ ConvolutionImageFilter< TInputImage, TOutputImage, TBoundaryCondition>
 
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-  
+
   InputRealType sum;
   InputRealType norm;
 
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
   for (fit=faceList.begin(); fit != faceList.end(); ++fit)
-  { 
+  {
     bit = itk::ConstNeighborhoodIterator<InputImageType>(m_Radius,
         input, *fit);
 
@@ -130,7 +130,7 @@ ConvolutionImageFilter< TInputImage, TOutputImage, TBoundaryCondition>
     bit.OverrideBoundaryCondition(&nbc);
     bit.GoToBegin();
     unsigned int neighborhoodSize = bit.Size();
-   
+
     while ( ! bit.IsAtEnd() )
     {
       sum = itk::NumericTraits<InputRealType>::Zero;
@@ -140,7 +140,7 @@ ConvolutionImageFilter< TInputImage, TOutputImage, TBoundaryCondition>
         sum += static_cast<InputRealType>( bit.GetPixel(i)*m_Filter(i) );
         norm += static_cast<InputRealType>( m_Filter(i) );
       }
-	
+
 	    // get the mean value
       if (m_NormalizeFilter)
       {
@@ -150,7 +150,7 @@ ConvolutionImageFilter< TInputImage, TOutputImage, TBoundaryCondition>
       {
         it.Set( static_cast<OutputPixelType>(sum));
       }
-	
+
       ++bit;
       ++it;
       progress.CompletedPixel();

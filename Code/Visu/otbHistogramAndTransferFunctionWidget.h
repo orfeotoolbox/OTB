@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,7 +28,7 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class HistogramAndTransferFunctionWidget
- *  \brief 
+ *  \brief
  *
  * \ingroup Visu
  */
@@ -42,13 +42,13 @@ class ITK_EXPORT HistogramAndTransferFunctionWidget
   typedef itk::ProcessObject                  Superclass;
   typedef itk::SmartPointer<Self>             Pointer;
   typedef itk::SmartPointer<const Self>       ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(HistogramAndTransferFunctionWidget,ProcessObject);
-  
+
   /** Template parameters typedefs */
   typedef TPixel PixelType;
   typedef THistogram HistogramType;
@@ -66,7 +66,7 @@ class ITK_EXPORT HistogramAndTransferFunctionWidget
   itkSetMacro(Histogram,HistogramConstPointerType);
   itkGetMacro(Histogram,HistogramConstPointerType);
   itkGetMacro(TransferFunction,TransferFunctionPointerType);
-  
+
   virtual void SetTransferFunction(TransferFunctionType * function)
     {
       m_TransferFunction = function;
@@ -83,7 +83,7 @@ class ITK_EXPORT HistogramAndTransferFunctionWidget
   itkGetMacro(TextColor,ColorType);
   itkSetMacro(TransferFunctionColor,ColorType);
   itkGetMacro(TransferFunctionColor,ColorType);
-  
+
   itkSetMacro(Label,std::string);
   itkGetMacro(Label,std::string);
   itkSetMacro(TransferFunctionLabel,std::string);
@@ -100,7 +100,7 @@ class ITK_EXPORT HistogramAndTransferFunctionWidget
   itkGetMacro(GridSizeX,unsigned int);
   itkSetMacro(GridSizeY,unsigned int);
   itkGetMacro(GridSizeY,unsigned int);
-  
+
 protected:
   /** Constructor */
   HistogramAndTransferFunctionWidget();
@@ -121,7 +121,7 @@ protected:
   virtual void HistogramRendering(double binWidth, double binHeightRatio, double maxFrequency);
 
   virtual void LegendRendering(double gridXSpacing, double gridYSpacing, double maxFrequency);
-  
+
   virtual void TransferFunctionRendering(void);
 
   virtual void OutputHistogramRendering(void);
@@ -163,7 +163,7 @@ private:
   std::string m_Label;
 /** Label of the histogram */
   std::string m_TransferFunctionLabel;
-  
+
 };
 }// End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

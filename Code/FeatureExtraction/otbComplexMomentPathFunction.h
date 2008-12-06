@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -40,16 +40,16 @@ namespace otb
  *
  * This class is templated over :
  *   - the input image type
- *   - the path type   
+ *   - the path type
  *   - and the coordinate representation type (e.g. float or double).
- * 
+ *
  * \ingroup ImageFunctions
  */
-template < class TInputPath, 
+template < class TInputPath,
            class TOutput = std::complex<double>,
            class TPrecision = double>
 class ITK_EXPORT ComplexMomentPathFunction :
-    public GeometricMomentPathFunction< TInputPath, 
+    public GeometricMomentPathFunction< TInputPath,
 					TOutput,
                                         TPrecision >
 {
@@ -59,7 +59,7 @@ public:
   typedef GeometricMomentPathFunction<TInputPath, TOutput, TPrecision>  Superclass;
   typedef itk::SmartPointer<Self>                                    Pointer;
   typedef itk::SmartPointer<const Self>                              ConstPointer;
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(ComplexMomentPathFunction, GeometricMomentPathFunction);
 
@@ -69,7 +69,7 @@ public:
 
   /** InputPathType typedef support. */
   typedef typename Superclass::PathType                 PathType;
-  typedef typename Superclass::PathConstPointer         PathConstPointer;  
+  typedef typename Superclass::PathConstPointer         PathConstPointer;
   typedef typename PathType::ContinuousIndexType        VertexType;
   typedef itk::VectorContainer< unsigned,VertexType >   VertexListType;
   typedef typename VertexListType::ConstPointer         VertexListPointer;
@@ -80,17 +80,17 @@ public:
   typedef typename Superclass::OutputType               OutputType;
 
   typedef double                                        RealType;
- 
+
   /** Type for calculation precision */
   typedef typename Superclass::PrecisionType            PrecisionType;
-  			 
+
   /** ComplexType for calculation precision */
   typedef std::complex<PrecisionType>                   ComplexPrecisionType;
-  			 
+
   /** Evalulate the function */
   virtual OutputType Evaluate(const PathType& path) const;
   virtual OutputType Evaluate() const;
-  
+
   itkSetMacro(P, unsigned int);
   itkGetConstReferenceMacro(P, unsigned int);
   itkSetMacro(Q, unsigned int);
@@ -107,11 +107,11 @@ private:
   ComplexMomentPathFunction( const Self& ); //purposely not implemented
   void operator=( const Self& ); //purposely not implemented
   ComplexType EvaluateComplexMomentAtIndex(VertexType index) const;
- 
+
   unsigned int    m_P;
   unsigned int    m_Q;
   RealType        m_Step;
-  
+
 };
 
 } // namespace otb

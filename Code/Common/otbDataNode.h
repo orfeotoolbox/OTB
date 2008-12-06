@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,7 +28,7 @@
 namespace otb
 {
 /**
- * This enumeration describes the type fo nodes used to represent a tree of vector data in the Orfeo ToolBox. 
+ * This enumeration describes the type fo nodes used to represent a tree of vector data in the Orfeo ToolBox.
  */
 typedef
 enum{ROOT,DOCUMENT,FOLDER,FEATURE_POINT,FEATURE_LINE,FEATURE_POLYGON,FEATURE_MULTIPOINT,FEATURE_MULTILINE,FEATURE_MULTIPOLYGON,FEATURE_COLLECTION} NodeType;
@@ -36,17 +36,17 @@ enum{ROOT,DOCUMENT,FOLDER,FEATURE_POINT,FEATURE_LINE,FEATURE_POLYGON,FEATURE_MUL
 
 /** \class DataNode
  *  \brief This class represent a node of data in a vector data hierarchy.
- *   A DataNode has a type represented by the NodeType enumeration. Depending of 
+ *   A DataNode has a type represented by the NodeType enumeration. Depending of
  *  its type, it can have associated data such as Point, Line or Polygon.
  *
- *  A flag indicates if the data are valid or not. 
+ *  A flag indicates if the data are valid or not.
  *
  *  A DataNode has also a dictionnary of fields which can be used to store associated data.
  *  Depending of the writing vector data file format, fields will be used by the writing driver.
  *
  * \sa VectorData
  */
-template <class TPrecision = double, unsigned VDimension = 2> 
+template <class TPrecision = double, unsigned VDimension = 2>
 class DataNode
 : public itk::Object
  {
@@ -71,10 +71,10 @@ class DataNode
    typedef otb::PolyLineParametricPathWithValue<double,VDimension>    LineType;
    typedef typename LineType::Pointer                 LinePointerType;
    typedef Polygon<PrecisionType>                     PolygonType;
-   typedef typename PolygonType::Pointer              PolygonPointerType; 
+   typedef typename PolygonType::Pointer              PolygonPointerType;
    typedef ObjectList<PolygonType>                    PolygonListType;
    typedef typename PolygonListType::Pointer          PolygonListPointerType;
-   
+
    /** Fields typedef */
    typedef std::map<std::string,std::string>          FieldMapType;
    typedef std::pair<std::string,std::string>         FieldType;
@@ -112,7 +112,7 @@ class DataNode
     * Get the polygon interior rings data, when valid.
     * \return The polygon interior rings list.
     */
-   PolygonListPointerType GetPolygonInteriorRings() const;   
+   PolygonListPointerType GetPolygonInteriorRings() const;
    /**
     * Set the point data. Node type is automatically set to FEATURE_POINT.
     * \param point the point.
@@ -158,7 +158,7 @@ class DataNode
    /**
     * \return True if node type is FEATURE_POLYGON.
     */
-   bool IsPolygonFeature() const;    
+   bool IsPolygonFeature() const;
    /**
     * \return True if node type is FEATURE_MULTIPOINT.
     */
@@ -210,7 +210,7 @@ class DataNode
     * Clear all fields.
     */
    void ClearFields();
-  
+
    protected:
    /** Constructor */
    DataNode();
@@ -218,11 +218,11 @@ class DataNode
    ~DataNode(){};
    /** PrintSelf method */
    void PrintSelf(std::ostream& os, itk::Indent indent) const;
-   
+
    private:
    DataNode(const Self&); //purposely not implemented
    void operator=(const Self&); //purposely not implemented
-   
+
    /** typedef of the data associated with the node */
    typedef struct {
      bool      valid;
@@ -233,14 +233,14 @@ class DataNode
    } DataType;
 
    /** The node type */
-   NodeType             m_NodeType;  
-   
+   NodeType             m_NodeType;
+
    /** The node id */
    std::string          m_NodeId;
-   
+
    /** The data associated with the node */
    DataType             m_Data;
-   
+
    /** The fields map */
    FieldMapType         m_FieldMap;
  };

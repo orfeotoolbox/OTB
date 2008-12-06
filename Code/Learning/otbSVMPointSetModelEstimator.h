@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,10 +30,10 @@ namespace otb
 
  * \brief Class for SVM model
  * estimation from PointSets used for classification.
- * 
+ *
  *
  * The basic functionality of the SVMPointSetModelEstimator is to
- * generate the models used in SVM classification. It 
+ * generate the models used in SVM classification. It
  * requires one input poinset and a training pointset to be provided by the
  * user.  This object supports data handling of multiband data. The
  * object accepts the input image in vector format only, where each
@@ -45,11 +45,11 @@ namespace otb
  *
  * EstimateModels() uses the libsvm library for SVM learning.
  *
- * \ingroup ClassificationFilters 
+ * \ingroup ClassificationFilters
  */
-template <class TInputPointSet, 
+template <class TInputPointSet,
           class TTrainingPointSet>
-class ITK_EXPORT SVMPointSetModelEstimator: 
+class ITK_EXPORT SVMPointSetModelEstimator:
     public SVMModelEstimator<typename TInputPointSet::PixelType::value_type, typename TTrainingPointSet::PixelType>
 {
 public:
@@ -71,14 +71,14 @@ public:
   /** Type definition for the input image. */
     /** Type definitions for the training image. */
   typedef typename TInputPointSet::Pointer   InputPointSetPointer;
- 
+
   /** Type definitions for the training image. */
   typedef typename TTrainingPointSet::Pointer TrainingPointSetPointer;
-    
+
   /** Type definition for the vector associated with
-   * input image pixel type. */     
+   * input image pixel type. */
   typedef typename TInputPointSet::PixelType InputPointSetPixelType;
-  typedef typename TInputPointSet::PointType InputPointType;        
+  typedef typename TInputPointSet::PointType InputPointType;
 
   /** Type definitions for the vector holding
    * training image pixel type. */
@@ -92,7 +92,7 @@ public:
 
   /** Set the input image. */
   itkSetObjectMacro(InputPointSet,TInputPointSet);
-  
+
   /** Get the input image. */
   itkGetObjectMacro(InputPointSet,TInputPointSet);
 
@@ -105,7 +105,7 @@ public:
 
 
 
-protected: 
+protected:
   SVMPointSetModelEstimator();
   ~SVMPointSetModelEstimator();
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -99,7 +99,7 @@ Resampler<TInputImage,TOutputImage>
   const typename InputImageType::SpacingType& inputSpacing    = inputPtr->GetSpacing();
   const typename InputImageType::IndexType&   inputStartIndex = inputPtr->GetLargestPossibleRegion().GetIndex();
   typename OutputImageType::IndexType   outputStartIndex;
-  typename OutputImageType::SpacingType spacing;  
+  typename OutputImageType::SpacingType spacing;
    for (i = 0; i < OutputImageType::ImageDimension; i++)
      {
      outputStartIndex[i] =  inputStartIndex[i] ;
@@ -128,7 +128,7 @@ Resampler<TInputImage, TOutputImage>
   typedef itk::LinearInterpolateImageFunction<InputImageType,double> InterpolatorType;
   typedef itk::ImageRegionConstIterator<OutputImageType> ConstIteratorType;
   typedef itk::ImageRegionIterator<OutputImageType> IteratorType;
-  
+
   // Resampling filter creation
   typename ResampleFilterType::Pointer resampler = ResampleFilterType::New();
   typename InterpolatorType::Pointer interpolator = InterpolatorType::New();
@@ -148,14 +148,14 @@ Resampler<TInputImage, TOutputImage>
   resampler->SetInterpolator(interpolator);
   resampler->SetOutputOrigin(this->GetInput()->GetOrigin());
   resampler->SetSize(this->GetSize());
-  resampler->SetOutputSpacing(inputSpacing);  
+  resampler->SetOutputSpacing(inputSpacing);
   resampler->ReleaseDataFlagOn();
 
-  // Progress accumulator 
+  // Progress accumulator
   itk::ProgressAccumulator::Pointer progress = itk::ProgressAccumulator::New();
   progress->SetMiniPipelineFilter(this);
   progress->RegisterInternalFilter(resampler, .5f);
-  
+
   // Input image connexion
   resampler->SetInput(this->GetInput());
   resampler->Update();

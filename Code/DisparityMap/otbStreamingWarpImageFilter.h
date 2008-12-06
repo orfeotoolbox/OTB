@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,21 +30,21 @@ namespace otb
  * Instead, the user should assess the maximum deformation in the deformation field and set it via the SetMaximumDeformation() method.
  *
  * The filter will then compute an appropriate security margin according to the image spacing, the maximum deformation and the interpolator
- * radius in otb::StreamingTraits. 
- * 
+ * radius in otb::StreamingTraits.
+ *
  * This security margin is used to stream the input image, making this filter an entirely streamable one.
  *
  * If the maximum deformation is wrong, this filter is likely to request data outside of the input image buffered region. In this case, pixels
  * outside the region will be set to Zero according to itk::NumericTraits.
  *
  * \sa itk::WarpImageFilter
- * 
+ *
  * \ingroup Streamed
  * \ingroup Threaded
  */
 
 template <class TInputImage, class TOutputImage, class TDeformationField>
-class ITK_EXPORT StreamingWarpImageFilter 
+class ITK_EXPORT StreamingWarpImageFilter
   :  public itk::WarpImageFilter< TInputImage, TOutputImage, TDeformationField >
 {
 public:
@@ -59,7 +59,7 @@ public:
 
    /** Run-time type information (and related methods). */
   itkTypeMacro(StreamingWarpImageFilter, itk::WarpImageFilter);
-  
+
   /** template parameters typedef */
   typedef TInputImage                              InputImageType;
   typedef typename  InputImageType::Pointer        InputImagePointerType;
@@ -72,7 +72,7 @@ public:
   /** Accessors */
   itkSetMacro(MaximumDeformation,DeformationValueType);
   itkGetConstReferenceMacro(MaximumDeformation,DeformationValueType);
-  
+
 protected:
   /** Constructor */
   StreamingWarpImageFilter();
@@ -80,16 +80,16 @@ protected:
   virtual ~StreamingWarpImageFilter() {};
   /** PrintSelf */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  /** 
+  /**
    * This filters requires only a part of the input and of the deformation field to
    * produce its output. As such, we need to overload the GenerateInputRequestedRegion() method.
    */
   virtual void GenerateInputRequestedRegion() ;
-	
+
 private:
   StreamingWarpImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-	
+
   // Assesment of the maximum deformation for streaming
   DeformationValueType m_MaximumDeformation;
 };
@@ -100,5 +100,5 @@ private:
 #include "otbStreamingWarpImageFilter.txx"
 #endif
 
-  
+
 #endif

@@ -46,7 +46,7 @@ public:
   FltkFilterWatcher(itk::ProcessObject* process,
 		    int x, int y, int w,int h,
 		    const char *comment="");
-  
+
   /** Destructor. */
   virtual ~FltkFilterWatcher();
 
@@ -76,10 +76,10 @@ protected:
     m_Progress->show();
   }
 
- 
+
 
 private:
-  
+
   Fl_Window * m_Window;
   Fl_Progress * m_Progress;
 };

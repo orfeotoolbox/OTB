@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -40,13 +40,13 @@ KMLVectorDataIOFactory<TData>::~KMLVectorDataIOFactory()
 {
 }
 template<class TData>
-const char* 
+const char*
 KMLVectorDataIOFactory<TData>::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 template<class TData>
-const char* 
+const char*
 KMLVectorDataIOFactory<TData>::GetDescription() const
 {
   return "KML VectorDataIO Factory, allows the loading of KML vector data into OTB";

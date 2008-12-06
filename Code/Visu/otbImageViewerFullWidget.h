@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,7 +28,7 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 template <class TPixel, class TLabel> class ImageViewerBase;
-/** 
+/**
  * \brief Custom full image widget.
  *
  * This class derives from otb::FullResolutionImageWidget, and implements behaviours specific to the image viewer.
@@ -49,7 +49,7 @@ class ITK_EXPORT ImageViewerFullWidget
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(ImageViewerFullWidget, FullResolutionImageWidget);
 
@@ -57,7 +57,7 @@ class ITK_EXPORT ImageViewerFullWidget
  typedef ImageViewerFullResolutionEventsInterface EventsInterfaceType;
  typedef EventsInterfaceType::Pointer             EventsInterfacePointerType;
 
-  
+
   typedef TPixel PixelType;
   typedef TLabel LabelType;
   typedef typename Superclass::IndexType IndexType;
@@ -65,10 +65,10 @@ class ITK_EXPORT ImageViewerFullWidget
  typedef typename Superclass::ImageType ImageType;
  typedef typename Superclass::RegionType RegionType;
  typedef typename Superclass::OverlayImageType OverlayImageType;
-  
+
   typedef ImageViewerBase<PixelType, LabelType>  ParentType;
   typedef ParentType*                    ParentPointerType;
-  
+
   typedef ImageWidgetBoxForm             BoxType;
   typedef ImageWidgetRectangleForm       RectangleType;
   typedef RectangleType::ColorType       ColorType;
@@ -77,12 +77,12 @@ class ITK_EXPORT ImageViewerFullWidget
   typedef typename PolygonType::ContinuousIndexType ContinuousIndexType;
   typedef typename PolygonType::Superclass::VertexListPointer VertexListPointerType;
   typedef typename PolygonType::Superclass::VertexListType VertexListType;
-  
+
   itkSetMacro(Parent,ParentPointerType);
   itkGetMacro(Parent,ParentPointerType);
   itkGetObjectMacro(EventsInterface,EventsInterfaceType);
   itkSetObjectMacro(EventsInterface,EventsInterfaceType);
- 
+
  virtual void SetUpperLeftCorner(IndexType index)
  {
    Superclass::SetUpperLeftCorner(index);
@@ -91,10 +91,10 @@ class ITK_EXPORT ImageViewerFullWidget
        m_EventsInterface->ViewedRegionChanged();
      }
  }
- 
+
  /** Handle method */
-  
-  
+
+
   /** Default mode handling, without ROI selection */
   virtual int DefaultHandle(int event)
   {
@@ -167,13 +167,13 @@ class ITK_EXPORT ImageViewerFullWidget
                   m_Parent->Update();
                 }
               }
-                return 1;   
+                return 1;
             }
           }
     return 0;
   }
-  
-  
+
+
   virtual int RectangleROISelectionHandle(int event)
   {
     switch(event)
@@ -228,17 +228,17 @@ class ITK_EXPORT ImageViewerFullWidget
 	box->SetSize(boxSize);
 	if(m_Drag)
 	   {
-	     m_Parent->GetInterfaceBoxesList()->PopBack(); 
-	     
+	     m_Parent->GetInterfaceBoxesList()->PopBack();
+
 	   }
 	 m_Parent->GetInterfaceBoxesList()->PushBack(box);
 	 m_Drag=true;
 	m_Parent->Update();
-	 return 1; 
+	 return 1;
       }
-         
+
       case FL_RELEASE:
-      { 
+      {
 	int x = Fl::event_x();
 	int y = Fl::event_y();
 	IndexType clickedIndex;
@@ -247,7 +247,7 @@ class ITK_EXPORT ImageViewerFullWidget
 	clickedIndex=this->WindowToImageCoordinates(clickedIndex);
 	if(m_Drag)
 	{
-	  m_Parent->GetInterfaceBoxesList()->PopBack();          
+	  m_Parent->GetInterfaceBoxesList()->PopBack();
 	}
 	if(m_EventsInterface.IsNull() || m_EventsInterface->GetForwardEvents())
 	{
@@ -302,19 +302,19 @@ class ITK_EXPORT ImageViewerFullWidget
 	  m_Parent->GetPolygonROIList()->Back()->AddVertex(newVertex);
 	  // Down Left corner
 	  newVertex[0]= boxIndex[0];
-	  m_Parent->GetPolygonROIList()->Back()->AddVertex(newVertex);     
+	  m_Parent->GetPolygonROIList()->Back()->AddVertex(newVertex);
 	  m_Parent->GetPolygonROIList()->PushBack(PolygonType::New());
 	  m_Parent->GetPolygonROIList()->Back()->SetValue(m_Parent->GetNextROILabel());
-	  
+
 	  m_Parent->Update();
 	}
 	m_Drag=false;
 	return 1;
-      } 
+      }
     }
     return 0;
   }
-  
+
   virtual int PolygonROISelectionHandle(int event)
   {
     switch(event)
@@ -336,14 +336,14 @@ class ITK_EXPORT ImageViewerFullWidget
 		m_Parent->GetPolygonROIList()->PushBack(PolygonType::New());
 		m_Parent->GetPolygonROIList()->Back()->SetValue(m_Parent->GetNextROILabel());
 	      }
-	    m_Parent->GetPolygonROIList()->Back()->AddVertex(clickedIndex); 
+	    m_Parent->GetPolygonROIList()->Back()->AddVertex(clickedIndex);
 	    m_Parent->Update();
           }
           else if(Fl::event_button()==FL_RIGHT_MOUSE)
           {
 	    m_Parent->GetPolygonROIList()->PushBack(PolygonType::New());
 	    m_Parent->GetPolygonROIList()->Back()->SetValue(m_Parent->GetNextROILabel());
-	    
+
           }
           return 1;
         }
@@ -364,12 +364,12 @@ class ITK_EXPORT ImageViewerFullWidget
 	      }
 	    }
           }
-        return 1;        
+        return 1;
         }
       }
     return 0;
 }
-  
+
   virtual int handle(int event)
   {
   // Handle the mode selection to call the specific handle methods */
@@ -385,7 +385,7 @@ class ITK_EXPORT ImageViewerFullWidget
 //       {
 //         m_ShortCutRectangle = !m_ShortCutRectangle;
 //         m_ShortCutPolygon = false;
-//         
+//
 //         if(m_ShortCutRectangle)
 //         {
 //           std::cout<<"Rectangle ROI selection mode ON"<<std::endl;
@@ -399,7 +399,7 @@ class ITK_EXPORT ImageViewerFullWidget
 //       {
 //         m_ShortCutPolygon = !m_ShortCutPolygon;
 //         m_ShortCutRectangle = false;
-//         
+//
 //         if(m_ShortCutPolygon)
 //         {
 //           std::cout<<"Polygon ROI selection mode ON"<<std::endl;
@@ -410,7 +410,7 @@ class ITK_EXPORT ImageViewerFullWidget
 //           std::cout<<"Polygon ROI selection mode OFF"<<std::endl;
 //         }
 //       }
-    }  
+    }
     // handle the pixel value reporting
     switch(event)
     {
@@ -452,7 +452,7 @@ class ITK_EXPORT ImageViewerFullWidget
 	  {
 	    m_Parent->Hide();
 	    return 0;
-	  } 
+	  }
     }
     // If the current mode is rectangle selection, call the right handle method
     if(m_Parent->GetRectangularROISelectionMode())
@@ -470,11 +470,11 @@ class ITK_EXPORT ImageViewerFullWidget
       return DefaultHandle(event);
     }
   }
-  
+
   virtual void resize(int x,int y, int w, int h)
    {
      Superclass::resize(x,y,w,h);
-      if(m_Parent->GetBuilt()) 
+      if(m_Parent->GetBuilt())
 	m_Parent->Update();
     }
 
@@ -492,7 +492,7 @@ class ITK_EXPORT ImageViewerFullWidget
       m_ShortCutPolygon = false;
       m_Drag = false;
       m_ValueUpdateFrequency = 5;
-      
+
     };
   /**
    * Destructor.

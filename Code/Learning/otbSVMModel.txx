@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -40,7 +40,7 @@ SVMModel< TInputPixel, TLabel >::SVMModel()
   m_Problem.y = new double[1];
   m_Problem.x = new struct svm_node*[1];
   m_XSpace = new struct svm_node[1];
- 
+
 
   //m_GenericKernelFunctor = NULL;
   m_Model->param.kernel_generic = NULL;
@@ -102,17 +102,17 @@ SVMModel<TInputPixel, TLabel>
    otbMsgDevMacro(  << "SVMModel::AllocateProblem - x done" );
    delete [] m_XSpace;
    m_XSpace = new struct svm_node[elements];
-   
+
    for(long int i = 0;i<elements;++i)
      {
        m_XSpace[i].value = 0;
        m_XSpace[i].index = -1;
      }
-   
+
    //free(m_XSpace);
    //m_XSpace = Malloc(struct svm_node,elements);
    //otbMsgDevMacro(  << "SVMModel::AllocateProblem - m_XSpace done" );
-   
+
  }
 
 
@@ -135,7 +135,7 @@ SVMModel<TInputPixel, TLabel>
 ::GetProblem()
   {
     return m_Problem;
-    
+
 //     otbMsgDevMacro(  << "SVMModel::GetProblem - enter" );
 //     aProblem.l = m_Problem.l;
 //     aProblem.y = m_Problem.y;
@@ -182,8 +182,8 @@ SVMModel<TInputPixel, TLabel>
 ::GetCopy()
 {
   Pointer modelCopy = New();
-  modelCopy->SetModel( svm_copy_model(m_Model) ); 
-  
+  modelCopy->SetModel( svm_copy_model(m_Model) );
+
   return modelCopy;
 }
 
@@ -192,13 +192,13 @@ template <class TInputPixel, class TLabel >
 void
 SVMModel<TInputPixel, TLabel>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
-{  
-  Superclass::PrintSelf(os,indent); 
+{
+  Superclass::PrintSelf(os,indent);
 }
 
 
 template <class TInputPixel, class TLabel >
-double 
+double
 SVMModel<TInputPixel, TLabel>
 ::Evaluate(void)
 {
@@ -206,14 +206,14 @@ SVMModel<TInputPixel, TLabel>
 }
 
 template <class TInputPixel, class TLabel >
-typename SVMModel<TInputPixel, TLabel>::ValuesType 
+typename SVMModel<TInputPixel, TLabel>::ValuesType
 SVMModel<TInputPixel, TLabel>
 ::EvaluateHyperplaneDistance(void)
 {
   ValuesType values;
-  
+
   values.SetSize( m_Model->nr_class*(m_Model->nr_class-1)/2);
-  
+
   svm_predict_values(m_Model, m_XSpace, (double*)(values.GetDataPointer()));
   return (values);
 }
@@ -223,7 +223,7 @@ template <class TInputPixel, class TLabel >
 void
 SVMModel<TInputPixel, TLabel>
 ::SetSupportVectors(svm_node ** sv, int nbOfSupportVector)
-{     
+{
   // erase the old SV
   // delete just the first element, it destoyes the whole pointers (cf SV filling with x_space)
   delete [] (m_Model->SV[0]);
@@ -240,14 +240,14 @@ SVMModel<TInputPixel, TLabel>
 
   // copy new SV values
   svm_node **SV = m_Model->SV;
-  
+
   // Compute the total number of SV elements.
   unsigned int elements = 0;
   for (int p=0; p<nbOfSupportVector; p++)
     {
-      std::cout<<p<<"  "; 
+      std::cout<<p<<"  ";
       const svm_node *tempNode = sv[p];
-      std::cout<<p<<"  "; 
+      std::cout<<p<<"  ";
       while(tempNode->index != -1)
 	{
 	  tempNode++;
@@ -256,22 +256,22 @@ SVMModel<TInputPixel, TLabel>
       elements++;// for -1 values
     }
 
-  if(m_Model->l>0) 
+  if(m_Model->l>0)
       {
         SV[0] = Malloc(svm_node,elements);
 	memcpy( SV[0],sv[0],sizeof(svm_node*)*elements);
       }
   svm_node *x_space =  SV[0];
-  
+
   int j = 0;
   for(int i=0; i<m_Model->l; i++)
-    {   
+    {
       // SV
-      SV[i] = &x_space[j];   
+      SV[i] = &x_space[j];
       const svm_node *p = sv[i];
       svm_node *pCpy = SV[i];
       while(p->index != -1)
-	{  
+	{
 	  pCpy->index = p->index;
 	  pCpy->value = p->value;
 	  p++;
@@ -295,16 +295,16 @@ SVMModel<TInputPixel, TLabel>
       delete[] m_Model->sv_coef[i];
     }
   delete [] m_Model->sv_coef;
-  
+
   this->SetNumberOfSupportVectors(nbOfSupportVector);
-  
+
   // copy new sv_coef values
   m_Model->sv_coef = Malloc(double *,m_Model->nr_class-1);
   for(int i=0; i<m_Model->nr_class-1; i++)
     m_Model->sv_coef[i] = Malloc(double,m_Model->l);
 
   for(int i=0; i<m_Model->l; i++)
-    { 
+    {
       // sv_coef
       for(int k=0; k<m_Model->nr_class-1; k++)
 	{

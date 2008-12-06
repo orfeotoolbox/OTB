@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,7 +34,7 @@ template < class TInput, class TOutput, class TPrecision, class TCoordRep>
 FlusserImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 ::FlusserImageFunction()
 {
-  m_MomentNumber =-1; 
+  m_MomentNumber =-1;
 }
 
 /**
@@ -55,7 +55,7 @@ typename FlusserImageFunction<TInput,TOutput,TPrecision,TCoordRep>::RealType
 FlusserImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
-  
+
   RealType                            FlusserValue;
   ComplexType                         FlusserValueComplex;
 
@@ -66,7 +66,7 @@ FlusserImageFunction<TInput,TOutput,TPrecision,TCoordRep>
     {
     return ( itk::NumericTraits<RealType>::max() );
     }
-  
+
   if ( !this->IsInsideBuffer( index ) )
     {
     return ( itk::NumericTraits<RealType>::max() );
@@ -74,13 +74,13 @@ FlusserImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 
   assert(m_MomentNumber > 0);
   assert(m_MomentNumber < 12);
-	
+
    function->SetInputImage( this->GetInputImage() );
    function->SetNeighborhoodRadius(this->GetNeighborhoodRadius() );
 
   switch(m_MomentNumber)
     {
-    case 1 : 
+    case 1 :
         {
 	ComplexType C11;
 	function->SetP(1);
@@ -139,8 +139,8 @@ FlusserImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 	C12 = function->EvaluateAtIndex( index );
 
 	FlusserValueComplex = C30 * vcl_pow(C12,3) ;
-	FlusserValue = FlusserValueComplex.real();       
-	}	
+	FlusserValue = FlusserValueComplex.real();
+	}
 	break;
     case 6:
         {
@@ -153,10 +153,10 @@ FlusserImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 	C12 = function->EvaluateAtIndex( index );
 
 	FlusserValueComplex = C30 * vcl_pow(C12,3) ;
-	FlusserValue = FlusserValueComplex.imag();       
-	}	
+	FlusserValue = FlusserValueComplex.imag();
+	}
 	break;
-    case 7 : 
+    case 7 :
         {
 	ComplexType C22;
 	function->SetP(2);
@@ -217,9 +217,9 @@ FlusserImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 	FlusserValue = FlusserValueComplex.imag();
 	}
 	break;
-	
+
     default:
-	itkWarningMacro("Hu's invariant parameters are between 1 and 7");	
+	itkWarningMacro("Hu's invariant parameters are between 1 and 7");
     }
 
 

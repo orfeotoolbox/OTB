@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -20,7 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbPolyLineParametricPathWithValue.h"
 
-namespace otb 
+namespace otb
 {
   /**
    * Constructor
@@ -33,21 +33,21 @@ namespace otb
     m_Key = "Value";
     itk::EncapsulateMetaData<ValueType>(dict,m_Key,0);
   }
-  
+
   template < class TValue,unsigned int VDimension>
       double PolyLineParametricPathWithValue<TValue,VDimension>
   ::GetLength()
   {
     double length = 0.0;
     VertexListConstIteratorType it =  this->GetVertexList()->Begin();
-  
+
     if(this->GetVertexList()->Size()>1)
     {
 
 
       VertexType pt1 = it.Value();//just init, won't be used like that
       VertexType pt2 = it.Value();
-    
+
       it++;
       while(it != this->GetVertexList()->End())
       {
@@ -61,17 +61,17 @@ namespace otb
         length += vcl_sqrt(accum);
         it++;
       }
-    
+
     }
     else //if there is strictly less than 2 points, length is 0
     {
       length = 0.0;
     }
-  
+
     return length;
   }
 
-  
+
   /**
    * PrintSelf Method
    */
@@ -89,6 +89,6 @@ namespace otb
     }
     os << std::endl;
   }
-  
+
 } // end namespace otb
 #endif

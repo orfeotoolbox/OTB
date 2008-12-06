@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -51,8 +51,8 @@ namespace otb
   template <class TSpatialObject>
   void
   DXFToSpatialObjectGroupFilter<TSpatialObject>
-  ::addLayer(const DL_LayerData& data) 
-  {  
+  ::addLayer(const DL_LayerData& data)
+  {
     GroupPointer grpPtr = this->GetOutput();
     //If the previous object is a vertex we create the polyline:
     if (m_CurrentObjectType==6)
@@ -71,12 +71,12 @@ namespace otb
 		grpPtr->AddSpatialObject(m_CurrentPolyLine);
 	      }
 	  }
-	else 
+	else
 	  grpPtr->AddSpatialObject(m_CurrentPolyLine);
       }
     m_CurrentObjectType=0;
     otbMsgDebugMacro(<<"LAYER: "<< data.name <<" flags: "<<data.flags);
-    
+
   }
   /**
    * Sample implementation of the method which handles point entities.
@@ -84,7 +84,7 @@ namespace otb
   template <class TSpatialObject>
   void
   DXFToSpatialObjectGroupFilter<TSpatialObject>
-  ::addPoint(const DL_PointData& data) 
+  ::addPoint(const DL_PointData& data)
   {
     GroupPointer grpPtr = this->GetOutput();
     //If the previous object is a vertex we create the polyline:
@@ -104,7 +104,7 @@ namespace otb
 		grpPtr->AddSpatialObject(m_CurrentPolyLine);
 	      }
 	  }
-	else 
+	else
 	  grpPtr->AddSpatialObject(m_CurrentPolyLine);
       }
     m_CurrentObjectType=1;
@@ -121,10 +121,10 @@ namespace otb
 	    grpPtr->AddSpatialObject(landmark);
 	  }
       }
-    else    
+    else
       grpPtr->AddSpatialObject(landmark);
     otbMsgDebugMacro(<<"POINT ("<<data.x<<", "<<data.y<<", "<<data.z<<") ( nb objects "<<grpPtr->GetNumberOfChildren()<<")");
-    
+
   }
   /**
    * Sample implementation of the method which handles line entities.
@@ -132,7 +132,7 @@ namespace otb
   template <class TSpatialObject>
   void
   DXFToSpatialObjectGroupFilter<TSpatialObject>
-  ::addLine(const DL_LineData& data) 
+  ::addLine(const DL_LineData& data)
   {
     GroupPointer grpPtr = this->GetOutput();
     //If the previous object is a vertex we create the polyline:
@@ -152,7 +152,7 @@ namespace otb
 		grpPtr->AddSpatialObject(m_CurrentPolyLine);
 	      }
 	  }
-	else 
+	else
 	  grpPtr->AddSpatialObject(m_CurrentPolyLine);
       }
     m_CurrentObjectType=2;
@@ -172,11 +172,11 @@ namespace otb
 	    grpPtr->AddSpatialObject(line);
 	  }
       }
-    else    
+    else
       grpPtr->AddSpatialObject(line);
     otbMsgDebugMacro(<<"LINE "<<"("<<data.x1<<", "<<data.y1<<", "<<data.z1<<") ("
 		     <<data.x2<<", "<<data.y2<<", "<<data.z2 <<grpPtr->GetNumberOfChildren()<<")");
-    
+
   }
   /**
    * Sample implementation of the method which handles 3DFace entities.
@@ -184,7 +184,7 @@ namespace otb
   template <class TSpatialObject>
   void
   DXFToSpatialObjectGroupFilter<TSpatialObject>
-  ::add3DFace(const DL_3DFaceData& data) 
+  ::add3DFace(const DL_3DFaceData& data)
   {
     GroupPointer grpPtr = this->GetOutput();
     //If the previous object is a vertex we create the polyline:
@@ -204,7 +204,7 @@ namespace otb
 		grpPtr->AddSpatialObject(m_CurrentPolyLine);
 	      }
 	  }
-	else 
+	else
 	  grpPtr->AddSpatialObject(m_CurrentPolyLine);
       }
     m_CurrentObjectType=7;
@@ -229,14 +229,14 @@ namespace otb
 	    grpPtr->AddSpatialObject(line);
 	  }
       }
-    else 
+    else
       grpPtr->AddSpatialObject(line);
     otbMsgDebugMacro(<<"3D Face "<<"("<<data.x1<<", "<<data.y1<<", "<<data.z1<<") ("
 		     <<data.x2<<", "<<data.y2<<", "<<data.z2<<") ("
 		     <<data.x3<<", "<<data.y3<<", "<<data.z3<<") ("
 		     <<data.x4<<", "<<data.y4<<", "<<data.z4<<") ("
 		     <<grpPtr->GetNumberOfChildren()<<")");
-    
+
   }
   /**
    * Sample implementation of the method which handles arc entities.
@@ -244,7 +244,7 @@ namespace otb
   template <class TSpatialObject>
   void
   DXFToSpatialObjectGroupFilter<TSpatialObject>
-  ::addArc(const DL_ArcData& data) 
+  ::addArc(const DL_ArcData& data)
   {
     GroupPointer grpPtr = this->GetOutput();
     //If the previous object is a vertex we create the polyline:
@@ -270,7 +270,7 @@ namespace otb
     otbMsgDebugMacro(<<"ARC ("<<data.cx<<", "<<data.cy<<", "<<data.cz<<") "
 		     <<data.radius<<", "<<data.angle1<<", "<<data.angle2
 		     <<" (nb objects "<<grpPtr->GetNumberOfChildren()<<")");
-    
+
   }
 
   /**
@@ -279,7 +279,7 @@ namespace otb
   template <class TSpatialObject>
   void
   DXFToSpatialObjectGroupFilter<TSpatialObject>
-  ::addCircle(const DL_CircleData& data) 
+  ::addCircle(const DL_CircleData& data)
   {
     GroupPointer grpPtr = this->GetOutput();
     //If the previous object is a vertex we create the polyline:
@@ -299,7 +299,7 @@ namespace otb
 		grpPtr->AddSpatialObject(m_CurrentPolyLine);
 	      }
 	  }
-	else 
+	else
 	  grpPtr->AddSpatialObject(m_CurrentPolyLine);
       }
     m_CurrentObjectType=4;
@@ -321,13 +321,13 @@ namespace otb
 	    grpPtr->AddSpatialObject(ellipse);
 	  }
       }
-    else    
+    else
       grpPtr->AddSpatialObject(ellipse);
 
     otbMsgDebugMacro(<<"CIRCLE ("<<data.cx<<", "<<data.cy<<", "<<data.cz<<") "
 		     <<data.radius
 		     <<" (nb objects "<<grpPtr->GetNumberOfChildren()<<")");
-    
+
   }
   /**
    * Sample implementation of the method which handles polyline entities.
@@ -335,7 +335,7 @@ namespace otb
   template <class TSpatialObject>
   void
   DXFToSpatialObjectGroupFilter<TSpatialObject>
-  ::addPolyline(const DL_PolylineData& data) 
+  ::addPolyline(const DL_PolylineData& data)
   {
     GroupPointer grpPtr = this->GetOutput();
     //If the previous object is a vertex we create the polyline:
@@ -355,7 +355,7 @@ namespace otb
 		grpPtr->AddSpatialObject(m_CurrentPolyLine);
 	      }
 	  }
-	else 
+	else
 	  grpPtr->AddSpatialObject(m_CurrentPolyLine);
       }
     m_CurrentObjectType=5;
@@ -366,11 +366,11 @@ namespace otb
       {
         m_PolylineClosed=1;
       }
-    else 
+    else
       m_PolylineClosed=0;
     otbMsgDebugMacro(<<"POLYLINE ");
     otbMsgDebugMacro(<<"flags: "<< data.flags <<",nombre de sommets: "<< data.number);
-    
+
   }
 
 
@@ -380,7 +380,7 @@ namespace otb
   template <class TSpatialObject>
   void
   DXFToSpatialObjectGroupFilter<TSpatialObject>
-  ::addVertex(const DL_VertexData& data) 
+  ::addVertex(const DL_VertexData& data)
   {
     GroupPointer grpPtr = this->GetOutput();
     m_CurrentObjectType=6;
@@ -391,13 +391,13 @@ namespace otb
     otbMsgDebugMacro(<<"VERTEX ("<<data.x<<", "<<data.y<<", "<<data.z<<") "
 		     <<data.bulge
 		     <<" (nb objects "<<grpPtr->GetNumberOfChildren()<<")");
-    
+
   }
 
   template <class TSpatialObject>
   void
   DXFToSpatialObjectGroupFilter<TSpatialObject>
-  ::GenerateData() 
+  ::GenerateData()
   {
     GroupPointer grpPtr = this->GetOutput();
     //If the previous object is a vertex we create the polyline:
@@ -417,7 +417,7 @@ namespace otb
 		grpPtr->AddSpatialObject(m_CurrentPolyLine);
 	      }
 	  }
-	else 
+	else
 	  grpPtr->AddSpatialObject(m_CurrentPolyLine);
       }
   }
@@ -425,7 +425,7 @@ namespace otb
 template <class TSpatialObject>
   void
   DXFToSpatialObjectGroupFilter<TSpatialObject>
-  ::Update() 
+  ::Update()
   {
     this->GenerateData();
   }

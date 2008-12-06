@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -44,7 +44,7 @@
 #include <fstream>
 
 //This is to check the file existence
-#include <sys/stat.h> 
+#include <sys/stat.h>
 
 #include "base/ossimFilename.h"
 
@@ -72,15 +72,15 @@ namespace otb
     m_Origin[1] = 0.0;
 
     m_currentfile = NULL;
-  
+
     m_NbBands = 3;
     m_FlagWriteImageInformation = true;
-  
+
   //Resolution depth
     m_Depth = 8;
-  
+
     m_NbOctetPixel=1;
-  
+
     useCache=false;
     m_ServerName="";
     m_CacheDirectory="";
@@ -148,9 +148,9 @@ namespace otb
     otbMsgDevMacro( <<" Image size  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
     otbMsgDevMacro( <<" Region read (IORegion)  : "<<this->GetIORegion());
     otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
-        
+
     std::streamoff lNbPixels = (static_cast<std::streamoff>(totSamples))*(static_cast<std::streamoff>(totLines));
-        
+
     //otbMsgDevMacro( <<" Allocation buff tempon taille : "<<lNbPixels<<"*"<<m_NbOctetPixel<<" (NbOctetPixel) = "<<lTailleBuffer);
     otbMsgDevMacro( <<" sizeof(streamsize)    : "<<sizeof(std::streamsize));
     otbMsgDevMacro( <<" sizeof(streampos)     : "<<sizeof(std::streampos));
@@ -164,7 +164,7 @@ namespace otb
     int nTilesX = (int) ceil(totSamples/256.)+1;
     int nTilesY = (int) ceil(totLines/256.)+1;
     unsigned char * bufferTile = new unsigned char[256*256*nComponents];
-        
+
     //Read all the required tiles
     //FIXME assume RGB image
     for(int numTileY=0; numTileY<nTilesY; numTileY++)
@@ -205,7 +205,7 @@ namespace otb
           }
         }//end of tile copy
 
- 
+
       }
     }//end of full image copy
 
@@ -258,7 +258,7 @@ namespace otb
       }
       lCanRead = imageIO->CanReadFile(filename.str().c_str());
     }
-  
+
     if ( lCanRead == true)
     {
       imageIO->SetFileName(filename.str().c_str());
@@ -272,21 +272,21 @@ namespace otb
         FillCacheFaults(bufferCacheFault);
       }
       memcpy(buffer, bufferCacheFault,256*256*3 );
-    
+
     }
-  
-  
+
+
   }
 
   void TileMapImageIO::BuildFileName(std::ostringstream& quad, std::ostringstream& filename) {
-  
+
     int quadsize=quad.str().size();
     std::ostringstream directory;
     directory << m_CacheDirectory;
-  
+
   //build directory name
     int i=0;
-    while ((i<8) && (i<quadsize)) 
+    while ((i<8) && (i<quadsize))
     {
       directory << "/";
       directory << (quad.str().c_str())[i];
@@ -294,23 +294,23 @@ namespace otb
     }
     ossimFilename directoryOssim(directory.str().c_str());
     directoryOssim.createDirectory();
-  
-  
+
+
     filename << directory.str();
     filename << "/";
     filename << "otb-";
     filename << quad.str();
     filename << "." << m_FileSuffix;
-    
+
   }
 
   /** Get the file from net in a qtrssrtstr.jpg fashion */
   void TileMapImageIO::GetFromNetGM(std::ostringstream& filename, double x, double y)
   {
-    
+
     std::ostringstream quad;
     XYToQuadTree(x, y, quad);
-    
+
     std::ostringstream urlStream;
     urlStream << m_ServerName;
     urlStream << quad.str();
@@ -323,10 +323,10 @@ namespace otb
     {
       itkExceptionMacro(<<"TileMap read : bad file name.");
     }
-  
+
     std::ostringstream browserStream;
     browserStream   << "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11";
-  
+
     CURL *curl;
     CURLcode res;
     curl = curl_easy_init();
@@ -336,7 +336,7 @@ namespace otb
 
     char url[200];
     strcpy(url,urlStream.str().data());
-  
+
     char browser[200];
     strcpy(browser,browserStream.str().data());
 
@@ -354,13 +354,13 @@ namespace otb
       /* always cleanup */
       curl_easy_cleanup(curl);
     }
-  
+
   }
 
   /** Get the file from net in a 132/153.png fashion */
   void TileMapImageIO::GetFromNetOSM(std::ostringstream& filename, double x, double y)
   {
-    otbMsgDevMacro( << "(x,y): (" << x << "," << y << ")"); 
+    otbMsgDevMacro( << "(x,y): (" << x << "," << y << ")");
     std::ostringstream urlStream;
     urlStream << m_ServerName;
 //   urlStream << quad.str();
@@ -370,8 +370,8 @@ namespace otb
     urlStream << "/";
     urlStream << (long int) (((double) y*(1 << m_Depth)));
     urlStream << "." << m_FileSuffix;
-  
-  
+
+
 
 //     std::ostringstream filename;
 //     BuildFileName(quad, filename);
@@ -381,10 +381,10 @@ namespace otb
     {
       itkExceptionMacro(<<"TileMap read : bad file name.");
     }
-  
+
     std::ostringstream browserStream;
     browserStream   << "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11";
-  
+
     CURL *curl;
     CURLcode res;
     curl = curl_easy_init();
@@ -394,7 +394,7 @@ namespace otb
 
     char url[200];
     strcpy(url,urlStream.str().data());
-  
+
     char browser[200];
     strcpy(browser,browserStream.str().data());
 
@@ -412,7 +412,7 @@ namespace otb
       /* always cleanup */
       curl_easy_cleanup(curl);
     }
-  
+
   }
 
   void TileMapImageIO::ReadImageInformation()
@@ -422,7 +422,7 @@ namespace otb
     {
       itkExceptionMacro(<<"TileMap read : empty image file name file.");
     }
-  
+
     m_Dimensions[0] = (1 << m_Depth)*256;
     m_Dimensions[1] = (1 << m_Depth)*256;
     otbMsgDevMacro(<<"Get Dimensions : x="<<m_Dimensions[0]<<" & y="<<m_Dimensions[1]);
@@ -452,17 +452,17 @@ namespace otb
   }
 
 
-  
+
   bool TileMapImageIO::CanWriteFile( const char* name )
   {
-  
+
   // First if filename is provided
     if(  name == NULL )
     {
       itkDebugMacro(<<"No filename specified.");
       return false;
     }
-  
+
   // Check for file extension
     std::string filename = name;
     std::string::size_type gmPos = filename.rfind(".otb");
@@ -472,7 +472,7 @@ namespace otb
       return true;
     }
     return false;
-  
+
   }
 
   void TileMapImageIO::WriteImageInformation(void)
@@ -481,20 +481,20 @@ namespace otb
 
   void TileMapImageIO::Write(const void* buffer)
   {
-  
+
     const unsigned char * p = static_cast<const unsigned char *>(buffer);
     if(p==NULL)
     {
       itkExceptionMacro(<<"Memory allocation error");
       return;
     }
-  
+
     if( m_FlagWriteImageInformation == true )
     {
       this->WriteImageInformation();
       m_FlagWriteImageInformation = false;
     }
-  
+
     int totLines   = this->GetIORegion().GetSize()[1];
     int totSamples = this->GetIORegion().GetSize()[0];
     int firstLine   = this->GetIORegion().GetIndex()[1];
@@ -502,19 +502,19 @@ namespace otb
     int originLine   = (int)this->GetOrigin(1);
     int originSample = (int)this->GetOrigin(0);
     int nComponents = this->GetNumberOfComponents();
-    
+
     std::cout << "TileMapImageIO::Write: Size " << totLines << ", "<< totSamples << std::endl;
     std::cout << "TileMapImageIO::Write: Index" << firstLine << ", "<< firstSample << std::endl;
     std::cout << "TileMapImageIO::Write: Origin" << originLine << ", "<< originSample << std::endl;
-    
+
     otbMsgDevMacro( <<" TileMapImageIO::Read()  ");
     otbMsgDevMacro( <<" Image size  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
     otbMsgDevMacro( <<" Region read (IORegion)  : "<<this->GetIORegion());
     otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
-        
+
     std::streamoff lNbPixels = (static_cast<std::streamoff>(totSamples))*(static_cast<std::streamoff>(totLines));
     std::streamoff lTailleBuffer = static_cast<std::streamoff>(m_NbOctetPixel)*lNbPixels;
-        
+
     otbMsgDevMacro( <<" Allocation buff tempon taille : "<<lNbPixels<<"*"<<m_NbOctetPixel<<" (NbOctetPixel) = "<<lTailleBuffer);
     otbMsgDevMacro( <<" sizeof(streamsize)    : "<<sizeof(std::streamsize));
     otbMsgDevMacro( <<" sizeof(streampos)     : "<<sizeof(std::streampos));
@@ -524,17 +524,17 @@ namespace otb
         //otbMsgDevMacro( <<" sizeof(pos_type)      : "<<sizeof(pos_type));
         //otbMsgDevMacro( <<" sizeof(off_type)      : "<<sizeof(off_type));
     otbMsgDevMacro( <<" sizeof(unsigned long) : "<<sizeof(unsigned long));
-  
+
     double x = (originSample+firstSample)/((1 << m_Depth)*256.);
     double y = (originLine+firstLine)/((1 << m_Depth)*256.);
     std::cout << x << std::endl;
     std::cout << y << std::endl;
-    
+
     int nTilesX = (int) ceil(totSamples/256.)+1;
     int nTilesY = (int) ceil(totLines/256.)+1;
     unsigned char * bufferTile = new unsigned char[256*256*nComponents];
-    
-        
+
+
   //Read all the required tiles
     for(int numTileY=0; numTileY<nTilesY; numTileY++)
     {
@@ -546,7 +546,7 @@ namespace otb
           bufferTile[iInit]=0;
         }
 
-        
+
         for(int tileJ=0; tileJ<256; tileJ++)
         {
           long int yImageOffset=(long int) (256*floor((originLine+firstLine)/256.)+256*numTileY-(originLine+firstLine)+tileJ);
@@ -574,14 +574,14 @@ namespace otb
 
           }
         }//end of tile copy
-        
+
 
         double xTile = (originSample+firstSample+256*numTileX)/((1 << m_Depth)*256.);
         double yTile = (originLine+firstLine+256*numTileY)/((1 << m_Depth)*256.);
       //Write the tile
         InternalWrite(xTile, yTile, bufferTile);
-      
- 
+
+
       }
     }//end of full image copy
 
@@ -589,24 +589,24 @@ namespace otb
 
 
     otbMsgDevMacro( << "TileMapImageIO::Write() completed");
-  
-  
-  
+
+
+
   }
 
 
   void TileMapImageIO::InternalWrite(double x, double y, const void* buffer)
   {
     std::ostringstream quad;
-    
+
     std::cout << x << ", " << y  << std::endl;
     std::cout.flush();
-    
+
     XYToQuadTree2(x, y, quad);
-    
+
     std::ostringstream filename;
     BuildFileName(quad, filename);
-  
+
     itk::ImageIOBase::Pointer imageIO;
   //Open the file to write the buffer
     if (m_AddressMode[0] == '0')
@@ -617,11 +617,11 @@ namespace otb
     {
       imageIO = itk::PNGImageIO::New();
     }
-  
+
     bool lCanWrite(false);
     lCanWrite = imageIO->CanWriteFile(filename.str().c_str());
     std::cout << filename.str() << std::endl;
-  
+
     if ( lCanWrite == true)
     {
       imageIO->SetNumberOfDimensions(2);
@@ -632,7 +632,7 @@ namespace otb
       imageIO->SetOrigin(0,0);
       imageIO->SetOrigin(1,0);
       imageIO->SetNumberOfComponents(3);
-      
+
       vnl_vector< double > axisDirection(2);
 
         axisDirection[0] = 1;
@@ -643,10 +643,10 @@ namespace otb
       imageIO->SetDirection( 1, axisDirection );
 
     imageIO->SetUseCompression(1);
-      
+
       imageIO->SetFileName(filename.str().c_str());
       imageIO->WriteImageInformation();
-      
+
       itk::ImageIORegion ioRegion(2);
       for(unsigned int i=0; i<2; i++)
       {
@@ -654,14 +654,14 @@ namespace otb
         ioRegion.SetIndex(i,0);
       }
       imageIO->SetIORegion(ioRegion);
-      
+
       imageIO->Write(buffer);
     }
     else
     {
       itkExceptionMacro(<<"TileMap write : bad file name.");
     }
-  
+
   }
 
   /** Generate the quadtree address in qrts style */
@@ -694,7 +694,7 @@ namespace otb
       x *= 2;
       y *= 2;
     }
-  
+
     return 0;
   }
 
@@ -728,10 +728,10 @@ namespace otb
       x *= 2;
       y *= 2;
     }
-  
+
     return 0;
   }
-  
+
   /** RGB buffer filling when the tile is not found */
   void TileMapImageIO::FillCacheFaults(void* buffer)
   {
@@ -1374,7 +1374,7 @@ namespace otb
     }
 
   }
-     
+
 
 
 } // end namespace otb

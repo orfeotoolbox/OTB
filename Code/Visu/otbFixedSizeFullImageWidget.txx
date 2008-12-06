@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,7 +24,7 @@
 
 namespace otb
 {
-/** 
+/**
  * Constructor.
  */
 template <class TPixel>
@@ -42,18 +42,18 @@ FixedSizeFullImageWidget<TPixel>
   m_ImageOverlayLoaded=false;
 }
 
-/** 
+/**
  * Destructor.
  */
 template <class TPixel>
 FixedSizeFullImageWidget<TPixel>
 ::~FixedSizeFullImageWidget()
 {}
-/** 
+/**
  * Initialize the widget.
  */
 template <class TPixel>
-void 
+void
 FixedSizeFullImageWidget<TPixel>
 ::Init(int x, int y, int w, int h, const char * l)
 {
@@ -72,11 +72,11 @@ FixedSizeFullImageWidget<TPixel>
     }
 }
 
-/** 
+/**
  * Resize the widget.
  */
 template <class TPixel>
-void 
+void
 FixedSizeFullImageWidget<TPixel>
 ::resize(int x, int y, int w, int h)
 {
@@ -85,7 +85,7 @@ FixedSizeFullImageWidget<TPixel>
   m_WindowSize[1]=h;
 
   SizeType viewedSize = this->GetViewedRegion().GetSize();
-  
+
   double zoom1 = (double)w/(double)viewedSize[0];
   double zoom2 = (double)h/(double)viewedSize[1];
 
@@ -94,11 +94,11 @@ FixedSizeFullImageWidget<TPixel>
   this->Fl_Gl_Window::resize(x,y,w,h);
   this->redraw();
 }
-/** 
+/**
  * Test if the buffer has to be updated.
  */
 template <class TPixel>
-bool 
+bool
 FixedSizeFullImageWidget<TPixel>
 ::UpdateOpenGlBufferedRegionRequested(void)
 {
@@ -112,11 +112,11 @@ FixedSizeFullImageWidget<TPixel>
       return true;
     }
 }
-/** 
- * Update OpenGlBuffer. 
+/**
+ * Update OpenGlBuffer.
  */
 template <class TPixel>
-void 
+void
 FixedSizeFullImageWidget<TPixel>
 ::UpdateOpenGlBufferedRegion(void)
 {

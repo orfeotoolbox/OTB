@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,42 +28,42 @@ namespace otb
 {
 
 /** \class PolarimetricSynthesisFilter
- * \brief 
+ * \brief
  *
  * This class compute the polarimetric synthesis from two to four radar images,
  * depening on the polarimetric architecture:
  * \begin{enumerate}
- *    \item HH_HV : two channels are available: $S_{HH}$ and $S_{HV}$. 
+ *    \item HH_HV : two channels are available: $S_{HH}$ and $S_{HV}$.
  *                  Emit polarisation is fixed to horizontal orientation: $\psi_{i}=0$ and $\chi_{i}=0$.
  *    \item VV_VH : two channels are available: $S_{VV}$ and $S_{VH}$.
  *                  Emit polarisation is fixed to vertical orientation: $\psi_{i}=90^\circ$ and $\chi_{i}=0$.
- *    \item HH_HV_VV : three channels are available: $S_{HH}$, $S_{HV}$ and $S_{VV}$. 
+ *    \item HH_HV_VV : three channels are available: $S_{HH}$, $S_{HV}$ and $S_{VV}$.
  *                     we make the assumption that cross polarisation are reciprocal ($S_{HV} =  S_{VH}$).
  *    \item HH_HV_VH_VV: four channels are available $S_{HH}$, $S_{HV}$, $S_{VH}$ and $S_{VV}$.
  * \end{enumerate}
- * 
- * To resolve the synthesis, four parameters are required: $\psi_{i}$ , $\chi_{i}$, $\psi_{r}$ and $\chi_{r}$. 
+ *
+ * To resolve the synthesis, four parameters are required: $\psi_{i}$ , $\chi_{i}$, $\psi_{r}$ and $\chi_{r}$.
  * These parameters depend on the polarimetric architecture describe below.
- * 
+ *
  * The result of the synthesis is a scalar image. Three modes are available:
  * \begin{enumerate}
  *     \item none: set the four parameters;
  *     \item co: $\psi_{r} = \psi_{i}$ and $\chi_{r} = \chi_{i}$
- *     \item cross: $\psi_{r} = \psi_{i} + 90^\circ$ and $\chi_{r} = -\chi_{i}$ 
+ *     \item cross: $\psi_{r} = \psi_{i} + 90^\circ$ and $\chi_{r} = -\chi_{i}$
  * \end{enumerate}
  *
  * This class is parameterized over the type of the input images and
  * the type of the output image.  It is also parameterized by the
- * operation to be applied, using a Functor style.  
- * 
+ * operation to be applied, using a Functor style.
+ *
  */
 
-template <class TInputImageHH,class TInputImageHV,class TInputImageVH,class TInputImageVV,class TOutputImage, 
-          class TFunction = Functor::PolarimetricSynthesisFunctor<              
+template <class TInputImageHH,class TInputImageHV,class TInputImageVH,class TInputImageVV,class TOutputImage,
+          class TFunction = Functor::PolarimetricSynthesisFunctor<
                                                         typename TInputImageHH::PixelType,
                                                         typename TInputImageHV::PixelType,
                                                         typename TInputImageVH::PixelType,
-                                                        typename TInputImageVV::PixelType,                                                        
+                                                        typename TInputImageVV::PixelType,
                                                         typename TOutputImage::PixelType > >
 class ITK_EXPORT PolarimetricSynthesisFilter :  public otb::QuaternaryFunctorImageFilter< TInputImageHH,
                         TInputImageHV, TInputImageVH, TInputImageVV, TOutputImage, TFunction >
@@ -72,17 +72,17 @@ public:
 
   /** Standard typedefs */
   typedef PolarimetricSynthesisFilter       Self;
-  typedef otb::QuaternaryFunctorImageFilter< TInputImageHH, TInputImageHV, 
+  typedef otb::QuaternaryFunctorImageFilter< TInputImageHH, TInputImageHV,
                 TInputImageVH, TInputImageVV, TOutputImage, TFunction >  Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(PolarimetricSynthesisFilter,QuaternaryFunctorImageFilter);
-  
+
   /** Template parameters typedefs */
   typedef std::complex <double>                   InputPixelType;
   typedef otb::Image< InputPixelType,  2 >        InputImageType;
@@ -93,13 +93,13 @@ public:
   typedef typename Superclass::Input3ImageType    VHInputImageType;
   typedef typename Superclass::Input3ImagePointer VHInputImagePointer;
   typedef typename Superclass::Input4ImageType    VVInputImageType;
-  typedef typename Superclass::Input4ImagePointer VVInputImagePointer;  
+  typedef typename Superclass::Input4ImagePointer VVInputImagePointer;
   typedef typename Superclass::OutputImageType    OutputImageType;
-  typedef typename OutputImageType::Pointer       OutputImagePointer;  
-  typedef typename OutputImageType::RegionType    OutputImageRegionType;  
+  typedef typename OutputImageType::Pointer       OutputImagePointer;
+  typedef typename OutputImageType::RegionType    OutputImageRegionType;
   typedef typename Superclass::FunctorType        FunctorType;
   typedef typename std::complex <double>          ComplexType;
-  typedef typename itk::FixedArray<ComplexType,2> ComplexArrayType;   
+  typedef typename itk::FixedArray<ComplexType,2> ComplexArrayType;
 
   void SetInputHH( const TInputImageHH * image );
   void SetInputHV( const TInputImageHV * image );
@@ -118,40 +118,40 @@ public:
   /** Set/Get KhiR */
   itkSetMacro(KhiR,double);
   itkGetMacro(KhiR,double);
-  /** Set/Get Mode */    
+  /** Set/Get Mode */
   itkSetMacro(Mode,int);
   itkGetMacro(Mode,int);
   /** Set the gain */
   itkSetMacro(Gain,double);
-  /** Set the ElectroMagneticField Incident */  
+  /** Set the ElectroMagneticField Incident */
   void SetEi(ComplexArrayType ei)
   {
        m_Ei = ei;
        this->GetFunctor().SetEi(ei);
        this->Modified();
   }
-  /** Set the ElectroMagneticField Reflected */  
+  /** Set the ElectroMagneticField Reflected */
   void SetEr(ComplexArrayType er)
   {
        m_Er = er;
        this->GetFunctor().SetEr(er);
        this->Modified();
-  }   
+  }
   /** Force the copolar mode */
-  void ForceCoPolar();  
-  /** Force the crosspolar mode */  
+  void ForceCoPolar();
+  /** Force the crosspolar mode */
   void ForceCrossPolar();
-  
+
 protected:
   /**  Constructor */
   PolarimetricSynthesisFilter();
-  /**  Destructor */  
+  /**  Destructor */
   virtual ~PolarimetricSynthesisFilter() {};
-  
+
   virtual void GenerateOutputInformation();
-  
-  virtual void BeforeThreadedGenerateData(); 
-  
+
+  virtual void BeforeThreadedGenerateData();
+
   /** ThreadedGenerateData().  ThreadedGenerateData can only write to the
    * portion of the output image specified by the parameter
    * "outputRegionForThread"
@@ -159,21 +159,21 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId );  
-  
-  /** Computation of the electromagnetic fields Ei Er */ 
+                            int threadId );
+
+  /** Computation of the electromagnetic fields Ei Er */
   void ComputeElectromagneticFields();
 
   /** Verify and force the inputs, if only  2 or 3 channels are present */
   void VerifyAndForceInputs();
-  
+
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
 
   PolarimetricSynthesisFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
   /** Psi Incident */
   double m_PsiI;
   /** Khi Incident */
@@ -185,19 +185,19 @@ private:
 
   /** Gain */
   double m_Gain;
-     
+
   /** None = 0 , copolar = 1 , crosspolar = 2 */
   int m_Mode;
-  
+
   /** Champs Electromagnetic Incident */
   ComplexArrayType m_Ei;
   /** Champs Electromagnetic Reflechi */
-  ComplexArrayType m_Er;  
-  
+  ComplexArrayType m_Er;
+
   /** Architecture Type */
   PolarimetricData::Pointer m_ArchitectureType;
   bool m_PresentInputImages[4];
-   
+
 };
 
 } // end namespace otb
@@ -206,5 +206,5 @@ private:
 #include "otbPolarimetricSynthesisFilter.txx"
 #endif
 
-  
+
 #endif

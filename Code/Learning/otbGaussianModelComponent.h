@@ -9,7 +9,7 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Some parts of this code are covered by the GET copyright. 
+  Some parts of this code are covered by the GET copyright.
   See GETCopyright.txt for details.
 
      This software is distributed WITHOUT ANY WARRANTY; without even
@@ -26,16 +26,16 @@
 
 #include "otbModelComponentBase.h"
 
-namespace otb { 
+namespace otb {
 namespace Statistics {
-  
+
 /** \class GaussianModelComponent
  * \brief is a component (derived from ModelComponentBase) for
  * Gaussian class. This class is used in SEMClassifier
  *
  * <b>Recent API changes:</b>
  * N/A
- * 
+ *
  * \sa ModelComponentBase, SEMClassifier
  */
 
@@ -56,22 +56,22 @@ public:
 
   /** Typedefs from the superclass */
   typedef typename Superclass::MeasurementVectorType MeasurementVectorType ;
-  typedef typename Superclass::MeasurementVectorSizeType 
+  typedef typename Superclass::MeasurementVectorSizeType
       MeasurementVectorSizeType ;
   typedef typename Superclass::MembershipFunctionType MembershipFunctionType ;
   typedef typename Superclass::ParametersType ParametersType ;
 
   /** Type of the membership function. Gaussian density function */
-  typedef itk::Statistics::GaussianDensityFunction< MeasurementVectorType > 
+  typedef itk::Statistics::GaussianDensityFunction< MeasurementVectorType >
       NativeMembershipFunctionType ;
-  
+
   /** Types of the mean and the covariance calculator that will update
    *  this component's distribution parameters */
   typedef itk::Statistics::MeanCalculator< TSample > MeanEstimatorType ;
-  typedef itk::Statistics::CovarianceCalculator< TSample > 
+  typedef itk::Statistics::CovarianceCalculator< TSample >
       CovarianceEstimatorType ;
 
-  /** types of the mean and covariance to be used by 
+  /** types of the mean and covariance to be used by
    *  NativeMembershipFunctionType */
   typedef itk::Array< double > MeanType;
   typedef itk::VariableSizeMatrix< double > CovarianceType;
@@ -79,18 +79,18 @@ public:
   /** Sets the input sample */
   virtual void SetSample(const TSample* sample) ;
 
-  /** Sets the component's distribution parameters. 
+  /** Sets the component's distribution parameters.
    *  e.g. Then user can call directly Pdf( MeasurementVectorType & )  */
   void SetParameters(const ParametersType &parameters) ;
 
   /** Show the parameters in a minimal form in comparison to PrintSelf */
   virtual void ShowParameters ( std::ostream& os, itk::Indent indent) const;
-  
+
 protected:
   GaussianModelComponent() ;
   virtual ~GaussianModelComponent() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-    
+
   void GenerateData ();
 
 private:
@@ -103,9 +103,9 @@ private:
   CovarianceType m_Covariance;
 
 } ; // end of class
-    
-} // end of namespace Statistics 
-} // end of namespace otb 
+
+} // end of namespace Statistics
+} // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbGaussianModelComponent.txx"

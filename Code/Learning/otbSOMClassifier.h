@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -21,16 +21,16 @@
 #include "itkProcessObject.h"
 #include "itkMembershipSample.h"
 
-namespace otb{ 
+namespace otb{
 
-/** \class SOMClassifier 
+/** \class SOMClassifier
  *  \brief This class implements a SOM-Based classifier.
  *
- * The classifier iterates on the input list sample, feeding 
- * the output membership sample with the one-dimensionnal index 
- * of the winner neuron. 
+ * The classifier iterates on the input list sample, feeding
+ * the output membership sample with the one-dimensionnal index
+ * of the winner neuron.
  *
- * Since this classifier differs from the base framework of itk in that it 
+ * Since this classifier differs from the base framework of itk in that it
  * does not use DecisionRule and Memberships function, it derives from itk::ProcessObject
  * instead of itk::SampleClassifierBase.
  *
@@ -38,7 +38,7 @@ namespace otb{
  */
 
 template< class TSample, class TSOMMap, class TLabel>
-class ITK_EXPORT SOMClassifier : 
+class ITK_EXPORT SOMClassifier :
       public itk::ProcessObject
 {
 public:
@@ -66,7 +66,7 @@ public:
   /** Output typedefs */
   typedef itk::Statistics::MembershipSample<SampleType> OutputType;
   typedef typename OutputType::Pointer OutputPointerType;
-  
+
   /** Label type typedef */
   typedef TLabel ClassLabelType;
 
@@ -93,7 +93,7 @@ protected:
   SamplePointerType m_Sample;
   /// The output membership sample.
   OutputPointerType m_Output;
- 
+
 } ; // end of class
 } // end of namespace otb
 

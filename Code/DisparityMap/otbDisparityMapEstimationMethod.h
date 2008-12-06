@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,9 +28,9 @@
 namespace otb
 {
   /** \class DisparityMapEstimationMethod
-   *  \brief This class performs an estimation of the local deformation 
-   *  modelled by a given transform between the fixed and the moving image, 
-   *  at each point of the given point set. 
+   *  \brief This class performs an estimation of the local deformation
+   *  modelled by a given transform between the fixed and the moving image,
+   *  at each point of the given point set.
    *
    *  It uses the ITK registration framework locally for each point and thus
    *  provides the flexibility of this framework. The parameters of each transform
@@ -43,7 +43,7 @@ namespace otb
    *  - The row deformation value,
    *  - The final estimated parameters of the transform.
    *
-   *  This class is derived from the MAECENAS code provided by Jordi Inglada, 
+   *  This class is derived from the MAECENAS code provided by Jordi Inglada,
    *  from CNES.
    */
 template <class TFixedImage, class TMovingImage, class TPointSet>
@@ -56,19 +56,19 @@ class ITK_EXPORT DisparityMapEstimationMethod
   typedef PointSetSource<TPointSet>          Superclass;
   typedef itk::SmartPointer<Self>            Pointer;
   typedef itk::SmartPointer<const Self>      ConstPointer;
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(DisparityMapEstimationMethod, ProcessObject);
-  
+
   /** Typedef for the Fixed image. */
   typedef TFixedImage  FixedImageType;
   typedef typename FixedImageType::Pointer FixedImagePointerType;
   typedef typename FixedImageType::PixelType FixedPixelType;
   typedef typename FixedImageType::SizeType SizeType;
-  
+
   /** Typedef for the Moving image. */
   typedef TMovingImage MovingImageType;
   typedef typename MovingImageType::Pointer MovingImagePointerType;
@@ -91,7 +91,7 @@ class ITK_EXPORT DisparityMapEstimationMethod
   typedef itk::DataObjectDecorator<TransformType> TransformOutputType;
   typedef typename TransformOutputType::Pointer TransformOutputPointerType;
   typedef typename TransformOutputType::ConstPointer TransformOutputConstPointerType;
-  
+
   /** Typedef for the generic interpolator. */
   typedef typename MetricType::InterpolatorType InterpolatorType;
   typedef typename InterpolatorType::Pointer InterpolatorPointerType;

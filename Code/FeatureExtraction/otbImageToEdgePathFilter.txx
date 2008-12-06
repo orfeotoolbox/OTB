@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -43,18 +43,18 @@ void
 ImageToEdgePathFilter<TInputImage, TOutputPath>
 ::GenerateData(void)
 {
-  
+
   const InputImageType * inputImage = this->GetInput();
   OutputPathType * outputPath       = this->GetOutput();
- 
+
   otbMsgDebugMacro(<<"Foreground value : "<<m_ForegroundValue);
-  
+
   PixelType initPadConstant(0);
   if( initPadConstant == m_ForegroundValue )
   {
   	initPadConstant = 1;
   }
-  
+
   typedef itk::ConstantPadImageFilter<InputImageType,InputImageType> PadFilterType;
   typedef itk::ConstShapedNeighborhoodIterator<InputImageType> IteratorType;
   typedef itk::ImageRegionConstIteratorWithIndex<InputImageType> LinearIteratorType;
@@ -72,7 +72,7 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
   linIter.GoToBegin();
   bool flag = true;
   while(flag && !linIter.IsAtEnd())
-    {     
+    {
     if(linIter.Get() == m_ForegroundValue )
       {
       flag=false;
@@ -84,7 +84,7 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
     }
   typename InputImageType::IndexType start = linIter.GetIndex();
  //  outputPath->AddVertex(start);
-  
+
   // Neighborhood definition
   typename IteratorType::RadiusType radius;
   radius.Fill(1);
@@ -160,7 +160,7 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
 	}
       else
 	{
-	//  Else goes on 
+	//  Else goes on
 	LastWasPositive=(it.GetPixel(rotation[move%8]) == m_ForegroundValue);
 	move++;
 	}
@@ -202,7 +202,7 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
 	  }
 	}
       }
-      // else 
+      // else
       else
       {
       // search ended, no pixel can be added to the edge path.

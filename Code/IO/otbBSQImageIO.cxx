@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -121,12 +121,12 @@ namespace otb
   {
   }
 
-// Read image 
+// Read image
   void BSQImageIO::Read(void* buffer)
   {
     unsigned long step = this->GetNumberOfComponents();
     char * p = static_cast<char *>(buffer);
-   
+
     int lNbLines   = this->GetIORegion().GetSize()[1];
     int lNbColumns = this->GetIORegion().GetSize()[0];
     int lFirstLine   = this->GetIORegion().GetIndex()[1] ; // [1... ]
@@ -141,12 +141,12 @@ namespace otb
     std::streamoff  numberOfBytesPerLines = static_cast<std::streamoff>(this->GetComponentSize() * m_Dimensions[0]);
     std::streamoff  offset;
     std::streamsize numberOfBytesToBeRead = this->GetComponentSize() * lNbColumns;
-    std::streamsize numberOfBytesRead;        
+    std::streamsize numberOfBytesRead;
     unsigned long cpt = 0;
 
         // Update the step variable
     step = step * (unsigned long)(this->GetComponentSize());
-        
+
     char * value = new char[numberOfBytesToBeRead];
     if(value==NULL)
     {
@@ -253,7 +253,7 @@ namespace otb
     {
       if( reportError == true )
       {
-        itkExceptionMacro(<< "BSQ : the first line of the header file must be contains 'TYPE' caracters.");  
+        itkExceptionMacro(<< "BSQ : the first line of the header file must be contains 'TYPE' caracters.");
       }
       else
       {
@@ -262,7 +262,7 @@ namespace otb
     }
     file >> lStrCodePix;
     lStrCodePix = System::SetToUpper(lStrCodePix);
-    if(lStrCodePix == "OCT") 
+    if(lStrCodePix == "OCT")
     {
       SetComponentType(CHAR);
     }
@@ -298,7 +298,7 @@ namespace otb
     {
       if( reportError == true )
       {
-        itkExceptionMacro(<< "BSQ : the value type '"<<lStrCodePix<<"' (second line) set in the header file is not reconized as correct value.");  
+        itkExceptionMacro(<< "BSQ : the value type '"<<lStrCodePix<<"' (second line) set in the header file is not reconized as correct value.");
       }
       else
       {
@@ -312,7 +312,7 @@ namespace otb
     {
       if( reportError == true )
       {
-        itkExceptionMacro(<< "BSQ : the third line of the header file must be contains 'LABEL' caracters.");  
+        itkExceptionMacro(<< "BSQ : the third line of the header file must be contains 'LABEL' caracters.");
       }
       else
       {
@@ -328,7 +328,7 @@ namespace otb
     {
       if( reportError == true )
       {
-        itkExceptionMacro(<< "BSQ : 'CHANNELS' keyword is not find in the header file.");  
+        itkExceptionMacro(<< "BSQ : 'CHANNELS' keyword is not find in the header file.");
       }
       else
       {
@@ -346,7 +346,7 @@ namespace otb
     {
       if( reportError == true )
       {
-        itkExceptionMacro(<< "BSQ : 'LINES' keyword is not find in the header file.");  
+        itkExceptionMacro(<< "BSQ : 'LINES' keyword is not find in the header file.");
       }
       else
       {
@@ -361,7 +361,7 @@ namespace otb
     {
       if( reportError == true )
       {
-        itkExceptionMacro(<< "BSQ : 'COLUMNS' keyword is not find in the header file.");  
+        itkExceptionMacro(<< "BSQ : 'COLUMNS' keyword is not find in the header file.");
       }
       else
       {
@@ -369,7 +369,7 @@ namespace otb
       }
     }
     file >> m_Dimensions[0];
-        
+
         //Read "BITS PER PIXEL" informations
     file >> lString;
     std::string lStrBitsPerPixels(lString);
@@ -382,7 +382,7 @@ namespace otb
     {
       if( reportError == true )
       {
-        itkExceptionMacro(<< "BSQ : 'BITS PER PIXEL' keyword is not find in the header file.");  
+        itkExceptionMacro(<< "BSQ : 'BITS PER PIXEL' keyword is not find in the header file.");
       }
       else
       {
@@ -413,7 +413,7 @@ namespace otb
         {
           if( reportError == true )
           {
-            itkExceptionMacro(<< "BSQ : the value SENSCODAGE '"<<lString<<"' set in the header file is not reconized as correct value. Possible values are INTEL or IEEE");  
+            itkExceptionMacro(<< "BSQ : the value SENSCODAGE '"<<lString<<"' set in the header file is not reconized as correct value. Possible values are INTEL or IEEE");
           }
           else
           {
@@ -435,7 +435,7 @@ namespace otb
     }
 
     m_ChannelsFile = new std::fstream[this->GetNumberOfComponents() ];
-        
+
         //Try to open channels file
     for (unsigned int channels = 0 ; channels<m_ChannelsFileName.size() ; channels++)
     {
@@ -444,7 +444,7 @@ namespace otb
       {
         if( reportError == true )
         {
-          itkExceptionMacro(<< "BSQ : impossible to find the file <"<<m_ChannelsFileName[channels]<<">.");  
+          itkExceptionMacro(<< "BSQ : impossible to find the file <"<<m_ChannelsFileName[channels]<<">.");
         }
         else
         {
@@ -521,7 +521,7 @@ namespace otb
         // Update the step variable
     step = step * (unsigned long)(this->GetComponentSize());
     const char * p = static_cast<const char *>(buffer);
-        
+
     char* value = new char[numberOfBytesToBeWrite];
     if(value==NULL)
     {
@@ -567,14 +567,14 @@ namespace otb
     {
       m_HeaderFile.close();
     }
-  
+
         // Open the new file for writing
         // Actually open the file
     m_HeaderFile.open( m_FileName.c_str(),  std::ios::out | std::ios::trunc );
     if( m_HeaderFile.fail() )
     {
       itkExceptionMacro(<< "Cannot write requested file "<<m_FileName.c_str()<<".");
-    } 
+    }
 
     if( 0 ) {}
     otbSetTypeBsqMacro( CHAR,   "OCT")
@@ -610,7 +610,7 @@ namespace otb
         //Write COLUMNS information
     m_HeaderFile <<  "COLUMNS" << std::endl;
     m_HeaderFile << m_Dimensions[0] << std::endl;
-        
+
         //Write "BITS PER PIXEL" informations
     m_HeaderFile <<  "BITS PER PIXEL" << std::endl;
     m_HeaderFile << this->GetComponentSize()*8 << std::endl;
@@ -629,7 +629,7 @@ namespace otb
     m_HeaderFile.close();
 
         //Create channels files
-        
+
         //Define channels file name
     std::string lRootName = System::GetRootName( m_FileName );
     m_ChannelsFileName.clear();
@@ -649,11 +649,11 @@ namespace otb
       m_ChannelsFile[channels].open( m_ChannelsFileName[channels].c_str(),  std::ios::out | std::ios::trunc | std::ios::binary );
       if( m_ChannelsFile[channels].fail() )
       {
-        itkExceptionMacro(<< "BSQ : impossible to find the file <"<<m_ChannelsFileName[channels]<<">.");  
+        itkExceptionMacro(<< "BSQ : impossible to find the file <"<<m_ChannelsFileName[channels]<<">.");
       }
     }
     this->SetFileTypeToBinary();
-    this->SetNumberOfDimensions(2);  
+    this->SetNumberOfDimensions(2);
 
     unsigned long headerLength = this->GetComponentSize() * m_Dimensions[0];
     char* value = new char[headerLength];
@@ -681,6 +681,6 @@ namespace otb
 
   }
 
-  
+
 } // end namespace otb
 

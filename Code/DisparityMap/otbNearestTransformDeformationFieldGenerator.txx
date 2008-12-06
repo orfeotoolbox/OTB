@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -38,7 +38,7 @@ NearestTransformDeformationFieldGenerator<TPointSet, TDeformationField>
 
   typedef itk::ImageRegionIteratorWithIndex<DeformationFieldType> IteratorType;
   IteratorType it(outputPtr,outputPtr->GetRequestedRegion());
-  
+
   for(it.GoToBegin();!it.IsAtEnd();++it)
     {
        IndexVectorType indexVector = this->GenerateNearestValidPointsPointSet(it.GetIndex(),1);
@@ -52,7 +52,7 @@ NearestTransformDeformationFieldGenerator<TPointSet, TDeformationField>
 	    }
 	  this->GetTransform()->SetParameters(params);
 	  PointType sourcePoint,targetPoint;
-	  
+
 	  outputPtr->TransformIndexToPhysicalPoint(it.GetIndex(),sourcePoint);
 	  targetPoint = this->GetTransform()->TransformPoint(sourcePoint);
  	  pixel[0] = static_cast<ValueType>(targetPoint[0]-sourcePoint[0]);

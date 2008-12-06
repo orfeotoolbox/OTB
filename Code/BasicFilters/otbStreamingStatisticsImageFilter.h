@@ -13,8 +13,8 @@ Some parts of this code are derived from ITK. See ITKCopyright.txt
 for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -35,7 +35,7 @@ namespace otb {
    *  This filter persists its temporary data. It means that if you Update it n times on n different
    * requested regions, the output statistics will be the statitics of the whole set of n regions.
    *
-   * To reset the temporary data, one should call the Reset() function. 
+   * To reset the temporary data, one should call the Reset() function.
    *
    * To get the statistics once the regions have been processed via the pipeline, use the Synthetize() method.
    *
@@ -68,11 +68,11 @@ namespace otb {
       typedef typename TInputImage::RegionType RegionType;
       typedef typename TInputImage::SizeType   SizeType;
       typedef typename TInputImage::IndexType  IndexType;
-      typedef typename TInputImage::PixelType  PixelType;  
-  
+      typedef typename TInputImage::PixelType  PixelType;
+
       itkStaticConstMacro(InputImageDimension, unsigned int,
 			  TInputImage::ImageDimension);
- 
+
       /** Image related typedefs. */
       itkStaticConstMacro(ImageDimension, unsigned int,
 			  TInputImage::ImageDimension );
@@ -139,7 +139,7 @@ namespace otb {
       PersistentStatisticsImageFilter();
       ~PersistentStatisticsImageFilter(){};
       void PrintSelf(std::ostream& os, itk::Indent indent) const;
- 
+
       /** Multi-thread version GenerateData. */
       void  ThreadedGenerateData (const RegionType&
 				  outputRegionForThread,
@@ -162,9 +162,9 @@ namespace otb {
    * \brief This class streams the whole input image through the PersistentStatisticsImageFilter.
    *
    * This way, it allows to compute the first order global statistics of this image. It calls the
-   * Reset() method of the PersistentStatisticsImageFilter before streaming the image and the 
+   * Reset() method of the PersistentStatisticsImageFilter before streaming the image and the
    * Synthetize() method of the PersistentStatisticsImageFilter after having streamed the image
-   * to compute the statistics. The accessor on the results are wrapping the accessors of the 
+   * to compute the statistics. The accessor on the results are wrapping the accessors of the
    * internal PersistentStatisticsImageFilter.
    *
    * This filter can be used as:
@@ -176,7 +176,7 @@ namespace otb {
    * std::cout << statistics-> GetMaximum() << std::endl;
    * std::cout << statistics-> GetMinimum() << std::endl;
    * \endcode
-   * 
+   *
    * \sa PersistentStatisticsImageFilter
    * \sa PersistentImageFilter
    * \sa PersistentFilterStreamingDecorator
@@ -200,7 +200,7 @@ namespace otb {
 
       /** Type macro */
       itkNewMacro(Self);
-  
+
       /** Creation through object factory macro */
       itkTypeMacro(StreamingStatisticsImageFilter,PersistentFilterStreamingDecorator);
 
@@ -208,11 +208,11 @@ namespace otb {
       typedef typename StatFilterType::PixelType PixelType;
       typedef typename StatFilterType::RealType RealType;
       typedef TInputImage InputImageType;
-  
+
       /** Type of DataObjects used for scalar outputs */
       typedef itk::SimpleDataObjectDecorator<RealType>  RealObjectType;
       typedef itk::SimpleDataObjectDecorator<PixelType> PixelObjectType;
-  
+
       void SetInput(InputImageType * input)
 	{
 	  this->GetFilter()->SetInput(input);
@@ -220,8 +220,8 @@ namespace otb {
 
       /** Return the computed Minimum. */
       PixelType GetMinimum() const
-	{ 
-	  return this->GetFilter()->GetMinimumOutput()->Get(); 
+	{
+	  return this->GetFilter()->GetMinimumOutput()->Get();
 	}
       PixelObjectType* GetMinimumOutput()
 	{
@@ -233,8 +233,8 @@ namespace otb {
 	}
       /** Return the computed Maximum. */
       PixelType GetMaximum() const
-	{ 
-	  return this->GetFilter()->GetMaximumOutput()->Get(); 
+	{
+	  return this->GetFilter()->GetMaximumOutput()->Get();
 	}
       PixelObjectType* GetMaximumOutput()
 	{
@@ -246,8 +246,8 @@ namespace otb {
 	}
       /** Return the computed Mean. */
       RealType GetMean() const
-	{ 
-	  return this->GetFilter()->GetMeanOutput()->Get(); 
+	{
+	  return this->GetFilter()->GetMeanOutput()->Get();
 	}
       RealObjectType* GetMeanOutput()
 	{
@@ -257,11 +257,11 @@ namespace otb {
 	{
 	  return this->GetFilter()->GetMeanOutput();
 	}
-  
+
       /** Return the computed Standard Deviation. */
       RealType GetSigma() const
-	{ 
-	  return this->GetSigmaOutput()->Get(); 
+	{
+	  return this->GetSigmaOutput()->Get();
 	}
       RealObjectType* GetSigmaOutput()
 	{
@@ -271,11 +271,11 @@ namespace otb {
 	{
 	  return this->GetFilter()->GetSigmaOutput();
 	}
-  
+
       /** Return the computed Variance. */
       RealType GetVariance() const
-	{ 
-	  return this->GetFilter()->GetVarianceOutput()->Get(); 
+	{
+	  return this->GetFilter()->GetVarianceOutput()->Get();
 	}
       RealObjectType* GetVarianceOutput()
 	{
@@ -288,8 +288,8 @@ namespace otb {
 
       /** Return the compute Sum. */
       RealType GetSum() const
-	{ 
-	  return this->GetFilter()->GetSumOutput()->Get(); 
+	{
+	  return this->GetFilter()->GetSumOutput()->Get();
 	}
       RealObjectType* GetSumOutput()
 	{
@@ -306,7 +306,7 @@ namespace otb {
       StreamingStatisticsImageFilter(){};
       /** Destructor */
       virtual ~StreamingStatisticsImageFilter(){};
-  
+
     private:
       StreamingStatisticsImageFilter(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,9 +29,9 @@ namespace otb
  *
  */
 
-template <class TInputImage, 
+template <class TInputImage,
           class TOutputPointSet = itk::PointSet<ITK_TYPENAME TInputImage::PixelType,2> >
-class ITK_EXPORT HarrisImageToPointSetFilter :  
+class ITK_EXPORT HarrisImageToPointSetFilter :
            public ImageToPointSetFilter< TInputImage,TOutputPointSet >
 {
 public:
@@ -51,14 +51,14 @@ public:
   itkNewMacro(Self);
 
   itkTypeMacro(HarrisImageToPointSetFilter, ImageToPointSetFilter);
-  
+
   typedef typename InputImageType::PixelType  InputPixelType;
   typedef typename InputImageType::SizeType   SizeType;
 
   typedef typename otb::HarrisImageFilter<InputImageType,InputImageType>         HarrisImageFilterType;
   typedef typename otb::ThresholdImageToPointSetFilter<InputImageType,
-  			 			  OutputPointSetType>       ThresholdImageToPointSetType; 
-  
+  			 			  OutputPointSetType>       ThresholdImageToPointSetType;
+
   typedef typename OutputPointSetType::PixelType OutputPixelType;
 
   itkSetMacro(SigmaD,double);
@@ -77,7 +77,7 @@ protected:
   virtual ~HarrisImageToPointSetFilter() {};
 
   virtual void GenerateData();
-  
+
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
@@ -89,7 +89,7 @@ private:
   double         m_SigmaD;
   double         m_SigmaI;
   double         m_Alpha;
-  
+
   typename HarrisImageFilterType::Pointer           m_HarrisFilter;
   typename ThresholdImageToPointSetType::Pointer    m_ThresholdFilter;
 
@@ -100,5 +100,5 @@ private:
 #include "otbHarrisImageToPointSetFilter.txx"
 #endif
 
-  
+
 #endif

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -41,29 +41,29 @@ class ITK_EXPORT MetaDataKey
 public:
 
   typedef MetaDataKey Self;
-  
+
   MetaDataKey(){};
   virtual ~MetaDataKey(){};
- 
-  static const std::string m_DriverShortNameKey; 
-  static const std::string m_DriverLongNameKey; 
-      
+
+  static const std::string m_DriverShortNameKey;
+  static const std::string m_DriverLongNameKey;
+
   static const std::string m_ProjectionRefKey;
-  
+
   static const std::string m_GCPProjectionKey;
-  static const std::string m_GCPParametersKey; 
+  static const std::string m_GCPParametersKey;
   static const std::string m_GCPCountKey;
-  
+
   static const std::string m_GeoTransformKey;
-  
-  static const std::string m_MetadataKey; 
-  static const std::string m_SubMetadataKey; 
-  
+
+  static const std::string m_MetadataKey;
+  static const std::string m_SubMetadataKey;
+
   static const std::string m_UpperLeftCornerKey;
   static const std::string m_UpperRightCornerKey;
   static const std::string m_LowerLeftCornerKey;
   static const std::string m_LowerRightCornerKey;
-  
+
   static const std::string m_ColorTableNameKey;
   static const std::string m_ColorEntryCountKey;
   static const std::string m_ColorEntryAsRGBKey;
@@ -80,27 +80,27 @@ public:
 	TOSSIMKEYWORDLIST,
   };
   /*
-  typedef struct 
+  typedef struct
   {
   	std::string keyname;
-  	KeyType type; 
+  	KeyType type;
   } KeyTypeDef ;*/
 
   struct KeyTypeDef
   {
   	std::string keyname;
-  	KeyType type; 
+  	KeyType type;
 
-    KeyTypeDef() {} 
+    KeyTypeDef() {}
     KeyTypeDef(std::string _keyname, KeyType _type)
     {
       keyname = _keyname;
       type = _type;
-    } 
+    }
 
   } ;
 
-  
+
   KeyType GetKeyType(std::string name);
 
   typedef std::vector<double> VectorType;
@@ -108,10 +108,10 @@ public:
 private:
   MetaDataKey(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
 
-  
-}; 
+
+
+};
 
 /** \class OTB_GCP
  *
@@ -125,14 +125,14 @@ public:
 
 
     /** Unique identifier, often numeric */
-    std::string m_Id; 
+    std::string m_Id;
 
     /** Informational message or "" */
     std::string m_Info;
 
     /** Pixel (x) location of GCP on raster */
     double      m_GCPCol;
-    
+
     /** Line (y) location of GCP on raster */
     double      m_GCPRow;
 
@@ -160,37 +160,37 @@ public:
     virtual ~OTB_GCP(){};
 
   OTB_GCP(const OTB_GCP& pGcp)
-  { 
-    m_Id = pGcp.m_Id; 
-    m_Info = pGcp.m_Info; 
-    m_GCPCol = pGcp.m_GCPCol; 
-    m_GCPRow = pGcp.m_GCPRow; 
-    m_GCPX = pGcp.m_GCPX; 
-    m_GCPY = pGcp.m_GCPY; 
-    m_GCPZ = pGcp.m_GCPZ; 
+  {
+    m_Id = pGcp.m_Id;
+    m_Info = pGcp.m_Info;
+    m_GCPCol = pGcp.m_GCPCol;
+    m_GCPRow = pGcp.m_GCPRow;
+    m_GCPX = pGcp.m_GCPX;
+    m_GCPY = pGcp.m_GCPY;
+    m_GCPZ = pGcp.m_GCPZ;
   }
-  
-  void operator=(const OTB_GCP& pGcp) 
-  { 
-    m_Id = pGcp.m_Id; 
-    m_Info = pGcp.m_Info; 
-    m_GCPCol = pGcp.m_GCPCol; 
-    m_GCPRow = pGcp.m_GCPRow; 
-    m_GCPX = pGcp.m_GCPX; 
-    m_GCPY = pGcp.m_GCPY; 
-    m_GCPZ = pGcp.m_GCPZ; 
+
+  void operator=(const OTB_GCP& pGcp)
+  {
+    m_Id = pGcp.m_Id;
+    m_Info = pGcp.m_Info;
+    m_GCPCol = pGcp.m_GCPCol;
+    m_GCPRow = pGcp.m_GCPRow;
+    m_GCPX = pGcp.m_GCPX;
+    m_GCPY = pGcp.m_GCPY;
+    m_GCPZ = pGcp.m_GCPZ;
   }
 
   void Print(std::ostream& os)const
   {
    os << " 	GCP Id = " << this->m_Id << std::endl;
-   os << " 	GCP Info =  " << this->m_Info << std::endl;  
+   os << " 	GCP Info =  " << this->m_Info << std::endl;
    os << " 	GCP (Row,Col) = (" << this->m_GCPRow << "," << this->m_GCPCol << ")" << std::endl;
    os << " 	GCP (X,Y,Z) = (" << this->m_GCPX << "," << this->m_GCPY << "," << this->m_GCPZ << ")" << std::endl;
   }
 
 };
-  
+
 } // end namespace otb
 
 

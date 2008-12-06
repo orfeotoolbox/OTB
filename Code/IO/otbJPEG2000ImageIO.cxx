@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -74,9 +74,9 @@ namespace otb
       {
 	return false;
       }
-    
+
     std::string lFileName(filename);
- 
+
     // Creating a codec
     opj_codec_t * codec = NULL;
 
@@ -105,11 +105,11 @@ namespace otb
     otb_openjpeg_opj_set_info_handler(codec, info_callback,00);
     otb_openjpeg_opj_set_warning_handler(codec, warning_callback,00);
     otb_openjpeg_opj_set_error_handler(codec, error_callback,00);
- 
+
     // Setting default parameters
     opj_dparameters_t parameters;
     otb_openjpeg_opj_set_default_decoder_parameters(&parameters);
- 
+
     if(! otb_openjpeg_opj_setup_decoder(codec,&parameters))
       {
 	otbMsgDebugMacro(<<"Impossible to set parameter.");
@@ -169,17 +169,17 @@ namespace otb
   {
   }
 
-  // Read image 
+  // Read image
   void JPEG2000ImageIO::Read(void* buffer)
   {
     //  unsigned long step = this->GetNumberOfComponents();
     char * charstarbuffer = static_cast<char *>(buffer);
-  
+
     int buffer_size_y = this->GetIORegion().GetSize()[1];
     int buffer_size_x = this->GetIORegion().GetSize()[0];
-    int buffer_y0     = this->GetIORegion().GetIndex()[1]; 
+    int buffer_y0     = this->GetIORegion().GetIndex()[1];
     int buffer_x0     = this->GetIORegion().GetIndex()[0];
-  
+
     otbMsgDevMacro( <<" JPEG2000ImageIO::Read()  ");
     otbMsgDevMacro( <<" ImageDimension   : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
     otbMsgDevMacro( <<" IORegion         : "<<this->GetIORegion());
@@ -225,9 +225,9 @@ namespace otb
       {
 	itkExceptionMacro(<<"Failed to open file: "<<m_FileName);
       }
-  
+
     m_OpenJpegStream = otb_openjpeg_opj_stream_create_default_file_stream(m_File,true);
-  
+
     if(!m_OpenJpegStream)
       {
 	itkExceptionMacro(<<"Failed to create file stream.");
@@ -280,15 +280,15 @@ namespace otb
 	    otbMsgDebugMacro(<<"Tile number of component: "<<nb_comps);
 	    otbMsgDebugMacro(<<"Goes on: "<<goesOn);
 	    otbMsgDevMacro(<<"--------------------------");
-	    
-	    
+
+
 	    tile_data = new OPJ_BYTE[data_size];
-	    
+
 	    if(! otb_openjpeg_opj_decode_tile_data(m_Codec,tile_index,tile_data,data_size,m_OpenJpegStream))
 	      {
 		itkExceptionMacro(<<"Error while reading tile data.");
 	      }
-	    
+
 	    std::streamsize tile_component_size = data_size/nb_comps;
 	    std::streamoff  buffer_skip         = std::max(0,tile_y0-buffer_y0)*buffer_size_x*nb_comps*m_NbOctetPixel;
 	    std::streamoff tile_skip            = std::max(0,buffer_y0-tile_y0)*(tile_x1-tile_x0)*m_NbOctetPixel;
@@ -303,14 +303,14 @@ namespace otb
 	    otbMsgDevMacro(<<"buffer_skip: "<<buffer_skip);
 	    otbMsgDevMacro(<<"tile_skip: "<<tile_skip);
 	    otbMsgDevMacro(<<"buffer_offset_begin: "<<buffer_offset_begin);
-	    otbMsgDevMacro(<<"tile_offset_begin: "<<tile_offset_begin); 
+	    otbMsgDevMacro(<<"tile_offset_begin: "<<tile_offset_begin);
 	    otbMsgDevMacro(<<"buffer_line_size: "<<buffer_line_size);
 	    otbMsgDevMacro(<<"tile_line_size: "<<tile_line_size);
 	    otbMsgDevMacro(<<"line_size: "<<line_size);
 	    otbMsgDevMacro(<<"nb_lines: "<<nb_lines);
 	    otbMsgDevMacro(<<"buffer_step: "<<buffer_step);
-	    
-	    
+
+
 	    std::streamoff buffer_pos,tile_pos;
 
 	    for(unsigned int comp = 0;comp<nb_comps;++comp)
@@ -319,7 +319,7 @@ namespace otb
 		  {
 		    buffer_pos = buffer_skip + comp*m_NbOctetPixel + line*buffer_line_size + buffer_offset_begin;
 		    tile_pos   = comp *tile_component_size + tile_skip + line*tile_line_size + tile_offset_begin;
-		    
+
 		    for(int cols = 0;cols<line_size;cols++)
 		      {
 			for(unsigned int octet = 0;octet<m_NbOctetPixel;++octet)
@@ -328,13 +328,13 @@ namespace otb
 			  }
 		      }
 		  }
-	      }	    
+	      }
 	    delete[] tile_data;
 	  }
       }
     otbMsgDebugMacro(<<"==========================");
 
-   
+
     otb_openjpeg_opj_stream_destroy(m_OpenJpegStream);
     fclose(m_File);
     otb_openjpeg_opj_destroy_codec(m_Codec);
@@ -348,7 +348,7 @@ namespace otb
       {
 	itkExceptionMacro(<<"JPEG2000ImageIO: empty image filename.");
       }
-  
+
     // Creating openjpeg objects
     if(System::SetToLower(System::GetExtension(m_FileName)) == "j2k")
       {
@@ -383,9 +383,9 @@ namespace otb
       {
 	itkExceptionMacro(<<"Failed to open file: "<<m_FileName);
       }
-  
+
     m_OpenJpegStream = otb_openjpeg_opj_stream_create_default_file_stream(m_File,true);
-  
+
     if(!m_OpenJpegStream)
       {
 	itkExceptionMacro(<<"Failed to create file stream.");
@@ -409,18 +409,18 @@ namespace otb
 
     m_Dimensions[0]=m_OpenJpegImage->x1 - m_OpenJpegImage->x0;
     m_Dimensions[1]=m_OpenJpegImage->y1 - m_OpenJpegImage->y0;
-  
+
     this->SetNumberOfDimensions(2);
 
     if(m_Dimensions[0] == 0 || m_Dimensions[1] == 0)
       {
 	itkExceptionMacro(<<"Image size is null.");
       }
-  
+
     this->SetNumberOfComponents(m_OpenJpegImage->numcomps);
-  
+
     this->SetFileTypeToBinary();
-  
+
     unsigned int precision = m_OpenJpegImage->comps->prec;
     int isSigned = m_OpenJpegImage->comps->sgnd;
 
@@ -468,7 +468,7 @@ namespace otb
     else
       {
 	this->SetPixelType(VECTOR);
-      }	
+      }
 
     otbMsgDebugMacro(<<"==========================");
     otbMsgDebugMacro(<<"ReadImageInformation: ");
@@ -566,12 +566,12 @@ namespace otb
 //                 m_NbOctetPixel = 8;
 //                 m_PxType = GDT_Float64;
 //         }
-//         else 
+//         else
 //         {
 //                 m_NbOctetPixel = 1;
 //                 m_PxType = GDT_Byte;
 //         }
-    
+
 //         // Automatically set the Type to Binary for GDAL data
 //         this->SetFileTypeToBinary();
 
@@ -584,8 +584,8 @@ namespace otb
 //     /* is using others way of calculation */
 //     /* m_Parameters.cp_disto_alloc = 1 or m_Parameters.cp_fixed_alloc = 1 */
 //     /* m_Parameters.tcp_rates[0] = ... */
-    
-    
+
+
 //     /* tile definitions parameters */
 //     /* position of the tile grid aligned with the image */
 //     m_Parameters.cp_tx0 = 0;
@@ -594,54 +594,54 @@ namespace otb
 //     m_Parameters.tile_size_on = true;
 //     m_Parameters.cp_tdx = 512;
 //     m_Parameters.cp_tdy = 512;
-    
+
 //     /* use irreversible encoding ?*/
 //     m_Parameters.irreversible = 1;
-    
+
 //     /* do not bother with mct, the rsiz is set when calling opj_set_MCT*/
 //     /*m_Parameters.cp_rsiz = STD_RSIZ;*/
-    
+
 //     /* no cinema */
 //     /*m_Parameters.cp_cinema = 0;*/
-    
+
 //     /* no not bother using SOP or EPH markers, do not use custom size precinct */
 //     /* number of precincts to specify */
 //     /* m_Parameters.csty = 0;*/
 //     /* m_Parameters.res_spec = ... */
 //     /* m_Parameters.prch_init[i] = .. */
 //     /* m_Parameters.prcw_init[i] = .. */
-    
-    
+
+
 //     /* do not use progression order changes */
 //     /*m_Parameters.numpocs = 0;*/
 //     /* m_Parameters.POC[i].... */
-    
+
 //     /* do not restrain the size for a component.*/
 //     /* m_Parameters.max_comp_size = 0; */
-    
+
 //     /** block encoding style for each component, do not use at the moment */
 //     /** J2K_CCP_CBLKSTY_TERMALL, J2K_CCP_CBLKSTY_LAZY, J2K_CCP_CBLKSTY_VSC, J2K_CCP_CBLKSTY_SEGSYM, J2K_CCP_CBLKSTY_RESET */
 //     /* m_Parameters.mode = 0;*/
-    
+
 //     /** number of resolutions */
 //     m_Parameters.numresolution = 6;
-    
+
 //     /** progression order to use*/
 //     /** LRCP, RLCP, RPCL, PCRL, CPRL */
 //     m_Parameters.prog_order = LRCP;
-    
+
 //     /** no "region" of interest, more precisally component */
 //     /* m_Parameters.roi_compno = -1; */
 //     /* m_Parameters.roi_shift = 0; */
-    
+
 //     /* we are not using multiple tile parts for a tile. */
 //     /* m_Parameters.tp_on = 0; */
-//     /* m_Parameters.tp_flag = 0; */	
-    
+//     /* m_Parameters.tp_flag = 0; */
+
 //     /* if we are using mct */
 //     /* opj_set_MCT(&m_Parameters,l_mct,l_offsets,NUM_COMPS); */
-    
-    
+
+
 //     /* image definition */
 //     l_current_param_ptr = m_Parameters;
 //     for
@@ -660,7 +660,7 @@ namespace otb
 // 	++l_current_param_ptr;
 //       }
 
-    
+
 //     m_Codec = opj_create_compress(CODEC_JP2);
 //     opj_set_info_handler(m_Codec, info_callback,00);
 //     opj_set_warning_handler(m_Codec, warning_callback,00);
@@ -700,9 +700,9 @@ namespace otb
 //       {
 // 	itkExceptionMacro(<<"Failed to open file: "<<m_FileName);
 //       }
-  
+
 //     m_OpenJpegStream = opj_stream_create_default_file_stream(m_File,true);
-  
+
 //     if(!m_OpenJpegStream)
 //       {
 // 	itkExceptionMacro(<<"Failed to create file stream.");
@@ -715,12 +715,12 @@ namespace otb
 
 //     std::streamsize buffer_size = this->GetIORegion().GetNumberOfPixels()*m_NbOctetPixel*m_nbBands;
 
-//     unsigned int nb_tile_x = (unsigned int)vcl_ceil((double)m_Dimensions[0]/(double)m_Parameters.cp_tdx);    
+//     unsigned int nb_tile_x = (unsigned int)vcl_ceil((double)m_Dimensions[0]/(double)m_Parameters.cp_tdx);
 //     unsigned int nb_tile_y = (unsigned int)vcl_ceil((double)m_Dimensions[1]/(double)m_Parameters.cp_tdy);
 
 //     unsigned int tile_index = nb_tile_x*buffer_y0/m_Parameters.cp_tdy+buffer_x0/m_Parameters.cp_tdx;
-    
-    
+
+
 //     OPJ_BYTE * desinterleaved_data = new OPJ_BYTE[buffer_size];
 
 //     std::streamoff step = m_NbBands*m_NbOctetPixel;
@@ -729,17 +729,17 @@ namespace otb
 
 //     for(comp = 0;comp<m_NbBands;++comp)
 //       {
-	
+
 
 //       }
-    
-    
+
+
 //     if(! opj_write_tile(m_Codec,tile_index,charstarbuffer,buffer_size,m_OpenJpegStream))
 //       {
-    
-    
-    
-    
+
+
+
+
 //       }
   }
 
@@ -765,6 +765,6 @@ namespace otb
 
   }
 
-  
+
 } // end namespace otb
 

@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,7 +29,7 @@ namespace otb
 {
 /** \class PerBandVectorImageFilter
  *  \brief This filter is a helper class to apply per band a standard ImageToImageFilter to a VectorImage.
- * 
+ *
  *  This filter is a composite filter composed of the following filters :
  *  - VectorImageToImageListFilter
  *  - ImageListToImageListApplyFilter
@@ -38,7 +38,7 @@ namespace otb
  * \sa VectorImageToImageListFilter
  * \sa ImageListToImageListApplyFilter
  * \sa ImageListToVectorImageFilter
- * \ingroup Streamed 
+ * \ingroup Streamed
  */
 template <class TInputImage, class TOutputImage, class TFilter>
 class ITK_EXPORT PerBandVectorImageFilter
@@ -50,13 +50,13 @@ class ITK_EXPORT PerBandVectorImageFilter
   typedef itk::ImageToImageFilter<TInputImage,TOutputImage> Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(PerBandVectorImageFilter, ImageToImageFilter);
-  
+
   /** Template parameters typedefs */
   typedef TInputImage InputVectorImageType;
   typedef typename InputVectorImageType::Pointer InputVectorImagePointerType;
@@ -88,7 +88,7 @@ class ITK_EXPORT PerBandVectorImageFilter
 
   itkSetMacro(OutputIndex,unsigned int);
   itkGetMacro(OutputIndex,unsigned int);
-  
+
 
   virtual void GenerateInputRequestedRegion(void);
   virtual void GenerateOutputInformation(void);
@@ -106,10 +106,10 @@ protected:
 private:
   PerBandVectorImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
- 
+
   /// The processing filter
   FilterPointerType m_Filter;
-  
+
   /// The index of the output of the filter to gather
   unsigned m_OutputIndex;
 };

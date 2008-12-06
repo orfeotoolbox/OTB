@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,21 +34,21 @@ namespace otb
  * \class ForwardFourierMellinTransformImageFilter
  * \brief Calculate the Fourier-Mellin transform over an image.
  *
- * This class implements a composite filter. It combines two filters :  
+ * This class implements a composite filter. It combines two filters :
  *   - otb::LogPolarResampleImageFilter : converting the input image in a
  log-polar system coordinate
  *   - itk::VnlFFTRealToComplexConjugateImageFilter : applying the Forward
  Fourier transform of the log-polar image.
- * 
+ *
  * \note the Fourier transform image is coded from 0.0 to 1.0
  *
  * \ingroup ImageFunctions
  */
 
-template < class TPixel, 
+template < class TPixel,
            class TInterpol,
 	   unsigned int  Dimension = 2 >
-	   
+
 class ITK_EXPORT ForwardFourierMellinTransformImageFilter :
     public itk::ImageToImageFilter<Image< TPixel , Dimension >,
                                    itk::Image< std::complex<TPixel> , Dimension > >
@@ -58,17 +58,17 @@ class ITK_EXPORT ForwardFourierMellinTransformImageFilter :
   //typedef TPixel						     PixelType;
   typedef Image< TPixel , Dimension >                           InputImageType;
   /*   typedef otb::Image< std::complex< TPixel > , Dimension >           OutputImageType; */
-  
+
   typedef typename itk::VnlFFTRealToComplexConjugateImageFilter<TPixel,Dimension> FourierImageFilterType;
   typedef typename FourierImageFilterType::OutputImageType OutputImageType;
-  
-  
+
+
   /** Standard class typedefs. */
   typedef ForwardFourierMellinTransformImageFilter                    Self;
   typedef itk::ImageToImageFilter< InputImageType, OutputImageType>   Superclass;
   typedef itk::SmartPointer<Self>                                     Pointer;
   typedef itk::SmartPointer<const Self>                               ConstPointer;
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(	ForwardFourierMellinTransformImageFilter, itk::ImageToImageFilter);
 
@@ -81,8 +81,8 @@ class ITK_EXPORT ForwardFourierMellinTransformImageFilter :
   typedef typename InputImageType::Pointer              ImagePointer;
   typedef typename InputImageType::ConstPointer         ImageConstPointer;
 
-  
-  
+
+
   /** InputImageType typedef support. */
   typedef typename OutputImageType::PixelType            OutputPixelType;
   typedef typename OutputImageType::IndexType            OutputIndexType;
@@ -91,7 +91,7 @@ class ITK_EXPORT ForwardFourierMellinTransformImageFilter :
   typedef typename OutputImageType::ConstPointer         OutputImageConstPointer;
   typedef typename OutputImageType::RegionType 	  	 OutputImageRegionType;
 
- 
+
   typedef typename OutputImageType::PixelType            ComplexType;
 
   /** Typedefs to describe and access Interpolator */
@@ -118,11 +118,11 @@ class ITK_EXPORT ForwardFourierMellinTransformImageFilter :
 
   /** Set/Get the Sigma value for the Log-polar resampler  */
    itkSetMacro(Sigma,double);
-   itkGetMacro(Sigma,double);  
+   itkGetMacro(Sigma,double);
 
   /** Set/Get the Default pixel value for the Log-polar resampler  */
   itkSetMacro(DefaultPixelValue, PixelType);
-  itkGetMacro(DefaultPixelValue, PixelType); 
+  itkGetMacro(DefaultPixelValue, PixelType);
 
   virtual void GenerateOutputInformation(void);
 
@@ -139,7 +139,7 @@ protected:
   void GenerateData();
 
 
-  
+
 private:
   ForwardFourierMellinTransformImageFilter( const Self& ); //purposely not implemented
   void operator=( const Self& ); //purposely not implemented
@@ -152,22 +152,22 @@ private:
 
   /** Output pixel default value */
   PixelType m_DefaultPixelValue;
-  
+
   /** Interpolator */
   InterpolatorPointerType m_Interpolator;
-  
+
   /** Transform */
   LogPolarTransformPointerType m_Transform;
-  
+
   /** Resampler */
   ResampleFilterPointerType m_ResampleFilter;
-  
+
   /** FFT Filter */
   FourierImageFilterPointer m_FFTFilter;
-  
+
   /** Iterator */
   IteratorType m_Iterator;
- 
+
 };
 
 } // namespace otb

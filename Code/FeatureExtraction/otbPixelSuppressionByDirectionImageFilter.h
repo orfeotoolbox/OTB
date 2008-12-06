@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,7 +25,7 @@
 #define TRANSITION_MATRIX(_x,_y,_theta,_xout,_yout) \
     (_xout) = (_x)*vcl_cos(_theta) + (_y)*vcl_sin(_theta); \
     (_yout) = - (_x)*vcl_sin(_theta) + (_y)*vcl_cos(_theta)
-    
+
 
 namespace otb
 {
@@ -42,7 +42,7 @@ namespace otb
  *
  * This filter is the first step to generate an image of segments
  * primitives. It starts from the two output images of the line detector
- * image filters which are the image of intensity of detection and 
+ * image filters which are the image of intensity of detection and
  * the image of direction.
  *
  */
@@ -55,7 +55,7 @@ public:
   itkStaticConstMacro(		InputImageDimension,
   				unsigned int,
                       		TInputImage::ImageDimension);
-  itkStaticConstMacro(		OutputImageDimension, 
+  itkStaticConstMacro(		OutputImageDimension,
   				unsigned int,
                       		TOutputImage::ImageDimension);
 
@@ -74,13 +74,13 @@ public:
 
   /** Return the nale of the class. */
   itkTypeMacro(PixelSuppressionByDirectionImageFilter, ImageToImageFilter);
-  
+
   /** Definition of the input and output images */
   typedef typename InputImageType::PixelType InputPixelType;
   typedef typename OutputImageType::PixelType OutputPixelType;
 
   typedef typename itk::NumericTraits<InputPixelType>::RealType InputRealType;
-  
+
   typedef typename InputImageType::RegionType InputImageRegionType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
@@ -90,20 +90,20 @@ public:
   itkSetMacro(Radius, SizeType);
   /** Get the radius of one zone. */
   itkGetConstReferenceMacro(Radius, SizeType);
-  
+
   /** Set the angular beam. */
   itkSetMacro(AngularBeam, InputRealType);
   /** Get the angular beam. */
   itkGetConstReferenceMacro(AngularBeam, InputRealType);
-  
+
   /** Set/Get the image input of this process object.  */
   void SetInputImage( const InputImageType *image);
-  const InputImageType * GetInputImage(void);  
-  
+  const InputImageType * GetInputImage(void);
+
   void SetInputImageDirection( const InputImageType *image);
   const InputImageType * GetInputImageDirection(void);
 
-  
+
   virtual void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError);
 
 protected:
@@ -130,5 +130,5 @@ private:
 #include "otbPixelSuppressionByDirectionImageFilter.txx"
 #endif
 
-  
+
 #endif

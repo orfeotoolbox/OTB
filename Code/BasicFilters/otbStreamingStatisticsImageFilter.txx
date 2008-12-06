@@ -13,8 +13,8 @@ Some parts of this code are derived from ITK. See ITKCopyright.txt
 for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -231,7 +231,7 @@ namespace otb {
     int i;
     long count;
     RealType sumOfSquares;
-    
+
     int numberOfThreads = this->GetNumberOfThreads();
 
     PixelType minimum;
@@ -240,7 +240,7 @@ namespace otb {
     RealType  sigma;
     RealType  variance;
     RealType  sum;
-  
+
     sum = sumOfSquares = itk::NumericTraits<RealType>::Zero;
     count = 0;
 
@@ -286,14 +286,14 @@ namespace otb {
   ::Reset()
   {
     int numberOfThreads = this->GetNumberOfThreads();
-    
+
     // Resize the thread temporaries
     m_Count.SetSize(numberOfThreads);
     m_SumOfSquares.SetSize(numberOfThreads);
     m_ThreadSum.SetSize(numberOfThreads);
     m_ThreadMin.SetSize(numberOfThreads);
     m_ThreadMax.SetSize(numberOfThreads);
-    
+
     // Initialize the temporaries
     m_Count.Fill(itk::NumericTraits<long>::Zero);
     m_ThreadSum.Fill(itk::NumericTraits<RealType>::Zero);
@@ -307,7 +307,7 @@ namespace otb {
   void
   PersistentStatisticsImageFilter<TInputImage>
   ::ThreadedGenerateData(const RegionType& outputRegionForThread,
-			 int threadId) 
+			 int threadId)
   {
     /**
      * Grab the input
@@ -320,7 +320,7 @@ namespace otb {
     PixelType value;
 
     itk::ImageRegionConstIterator<TInputImage> it (inputPtr, outputRegionForThread);
-      
+
     it.GoToBegin();
     // do the work
     while (!it.IsAtEnd())
@@ -335,7 +335,7 @@ namespace otb {
 	  {
 	    m_ThreadMax[threadId] = value;
 	  }
-	  
+
 	m_ThreadSum[threadId] += realValue;
 	m_SumOfSquares[threadId] += (realValue * realValue);
 	m_Count[threadId]++;
@@ -344,7 +344,7 @@ namespace otb {
       }
   }
 template <class TImage>
-void 
+void
 PersistentStatisticsImageFilter<TImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {

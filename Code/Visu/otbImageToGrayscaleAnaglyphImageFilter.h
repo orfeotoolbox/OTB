@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -37,7 +37,7 @@ namespace Functor
       public:
 	/// Constructor
 	GrayscaleAnaglyphFunctor(){};
-	/// Destructor 
+	/// Destructor
 	~GrayscaleAnaglyphFunctor(){};
 
 
@@ -52,7 +52,7 @@ namespace Functor
       };
   }
  /** \class ImageToGrayscaleAnaglyphImageFilter
-  *  \brief This filter implements the synthesis of a grayscale anaglyph image from 
+  *  \brief This filter implements the synthesis of a grayscale anaglyph image from
   *  a pair of stereoscopic images.
   *  The output image is a VectorImage with 3 channels, where the first channel is the first
   *  input image, and the two last channels are the second input image.
@@ -62,7 +62,7 @@ template <class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT ImageToGrayscaleAnaglyphImageFilter
   : public itk::BinaryFunctorImageFilter
   <  TInputImage1,TInputImage2,TOutputImage,
-  Functor::GrayscaleAnaglyphFunctor< 
+  Functor::GrayscaleAnaglyphFunctor<
   typename TInputImage1::PixelType,
   typename TInputImage2::PixelType,
   typename TOutputImage::PixelType
@@ -74,20 +74,20 @@ class ITK_EXPORT ImageToGrayscaleAnaglyphImageFilter
 
   typedef itk::BinaryFunctorImageFilter
   <  TInputImage1,TInputImage2,TOutputImage,
-    Functor::GrayscaleAnaglyphFunctor< 
+    Functor::GrayscaleAnaglyphFunctor<
     typename TInputImage1::PixelType,
     typename TInputImage2::PixelType,
     typename TOutputImage::PixelType
     >  > Superclass;
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(ImageToGrayscaleAnaglyphImageFilter, BinaryFunctorImageFilter);
-  
+
   virtual void GenerateOutputInformation(void)
     {
       Superclass::GenerateOutputInformation();

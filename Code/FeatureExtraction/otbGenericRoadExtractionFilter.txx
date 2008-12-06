@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -47,7 +47,7 @@ GenericRoadExtractionFilter<TInputImage, TOutputPath>
         m_SecondRemoveTortuousPathListFilter = RemoveTortuousPathListFilterType::New();
         m_LinkPathListFilter = LinkPathListFilterType::New();
         m_LikelihoodPathListFilter = LikelihoodPathListFilterType::New();
-        
+
         /** Amplitude threshold to start following a path (use by the VectorizationPathListFilter)*/
         m_AmplitudeThreshold = static_cast<AmplitudeThresholdType>(0.00005 );
         /** Tolerance for segment consistency (tolerance in terms of distance) (use by the SimplifyPathFilter)*/
@@ -66,7 +66,7 @@ GenericRoadExtractionFilter<TInputImage, TOutputPath>
         /** Alpha value */
         /** Use to calculate the sigma value use by the GradientRecursiveGaussianImageFilter */
         m_Alpha = 1.0;
-        
+
         /** Resolution of the image */
         m_Resolution = 1.;
 }
@@ -106,19 +106,19 @@ GenericRoadExtractionFilter<TInputImage, TOutputPath>
   //// Algorithm for road extraction ////
   ///////////////////////////////////////
 
-  // 
+  //
 
   m_SquareRootImageFilter->SetInput(inputImage);
-  
+
   m_GradientFilter->SetInput(m_SquareRootImageFilter->GetOutput());
   /** Sigma calculated with the alpha and image resolution parameters */
   m_GradientFilter->SetSigma(static_cast<SigmaType>(m_Alpha * (1.2/m_Resolution + 1.) ));
-  
+
   m_NeighborhoodScalarProductFilter->SetInput(m_GradientFilter->GetOutput());
-  
+
   m_RemoveIsolatedByDirectionFilter->SetInput(m_NeighborhoodScalarProductFilter->GetOutput());
   m_RemoveIsolatedByDirectionFilter->SetInputDirection(m_NeighborhoodScalarProductFilter->GetOutputDirection());
-  
+
   m_RemoveWrongDirectionFilter->SetInput(m_RemoveIsolatedByDirectionFilter->GetOutput());
   m_RemoveWrongDirectionFilter->SetInputDirection(m_NeighborhoodScalarProductFilter->GetOutputDirection());
 
@@ -128,13 +128,13 @@ GenericRoadExtractionFilter<TInputImage, TOutputPath>
   m_VectorizationPathListFilter->SetInput(m_NonMaxRemovalByDirectionFilter->GetOutput());
   m_VectorizationPathListFilter->SetInputDirection(m_NeighborhoodScalarProductFilter->GetOutputDirection());
   m_VectorizationPathListFilter->SetAmplitudeThreshold(m_AmplitudeThreshold);
-  
+
   m_FirstSimplifyPathListFilter->SetInput(m_VectorizationPathListFilter->GetOutput());
   m_FirstSimplifyPathListFilter->GetFunctor().SetTolerance(m_Tolerance);
-  
+
   m_BreakAngularPathListFilter->SetInput(m_FirstSimplifyPathListFilter->GetOutput());
   m_BreakAngularPathListFilter->SetMaxAngle(m_MaxAngle);
-  
+
   m_FirstRemoveTortuousPathListFilter->SetInput(m_BreakAngularPathListFilter->GetOutput());
   m_FirstRemoveTortuousPathListFilter->GetFunctor().SetThreshold(m_FirstMeanDistanceThreshold);
 
@@ -144,19 +144,19 @@ GenericRoadExtractionFilter<TInputImage, TOutputPath>
 
   m_SecondSimplifyPathListFilter->SetInput(m_LinkPathListFilter->GetOutput());
   m_SecondSimplifyPathListFilter->GetFunctor().SetTolerance(m_Tolerance);
- 
+
   m_SecondRemoveTortuousPathListFilter->SetInput(m_SecondSimplifyPathListFilter->GetOutput());
   m_SecondRemoveTortuousPathListFilter->GetFunctor().SetThreshold(m_SecondMeanDistanceThreshold);
-  
+
   m_LikelihoodPathListFilter->SetInput(m_SecondRemoveTortuousPathListFilter->GetOutput());
   m_LikelihoodPathListFilter->SetInputImage(m_NonMaxRemovalByDirectionFilter->GetOutput());
-  
+
   // Graft output seems to be broken for PolylineParametricPath
   // So we use update, and copy the path to the output path list.
   // m_LikelihoodPathListFilter->GraftOutput(this->GetOutput());
   m_LikelihoodPathListFilter->Update();
   // outputPathList =  m_LikelihoodPathListFilter->GetOutput();
-    for(typename LikelihoodPathListFilterType::PathListType::ConstIterator it 
+    for(typename LikelihoodPathListFilterType::PathListType::ConstIterator it
 	  = m_LikelihoodPathListFilter->GetOutput()->Begin();
       it!=m_LikelihoodPathListFilter->GetOutput()->End();
       ++it)

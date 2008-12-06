@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,7 +31,7 @@ namespace otb
 	public:
 	  VectorToAmplitudeFunctor(){};
 	  ~VectorToAmplitudeFunctor(){};
-	  
+
 	  inline TOutput operator()(const TInput & A)
 	    {
 	      return static_cast<TOutput>(vcl_sqrt(A.GetSquaredNorm()));
@@ -58,13 +58,13 @@ class ITK_EXPORT VectorImageToAmplitudeImageFilter
   typename TInputImage::PixelType, typename TOutputImage::PixelType> > Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(VectorImageToAmplitudeImageFilter, UnaryFunctorImageFilter);
-   
+
 protected:
   /** Constructor */
   VectorImageToAmplitudeImageFilter(){};

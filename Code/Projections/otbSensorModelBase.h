@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -41,9 +41,9 @@ namespace otb
   unsigned int NInputDimensions=3,
   unsigned int NOutputDimensions=2,
   unsigned int NParametersDimensions=3>
-      class ITK_EXPORT SensorModelBase : public itk::Transform<TScalarType,          
-      NInputDimensions,  
-      NOutputDimensions> 
+      class ITK_EXPORT SensorModelBase : public itk::Transform<TScalarType,
+      NInputDimensions,
+      NOutputDimensions>
       {
 
         public :
@@ -55,83 +55,83 @@ namespace otb
           NOutputDimensions >         Superclass;
           typedef itk::SmartPointer<Self>                     Pointer;
           typedef itk::SmartPointer<const Self>               ConstPointer;
-      
+
           typedef itk::Point<TScalarType, NInputDimensions >  InputPointType;
-          typedef itk::Point<TScalarType, NOutputDimensions > OutputPointType;      
-      
+          typedef itk::Point<TScalarType, NOutputDimensions > OutputPointType;
+
           typedef DEMHandler				 DEMHandlerType;
-          typedef typename DEMHandlerType::Pointer		 DEMHandlerPointerType;     
-			
+          typedef typename DEMHandlerType::Pointer		 DEMHandlerPointerType;
+
           /** Method for creation through the object factory. */
           itkNewMacro( Self );
-      
+
           /** Run-time type information (and related methods). */
           itkTypeMacro( SensorModelBase, Transform );
-      
+
           itkStaticConstMacro(InputSpaceDimension,  unsigned int, NInputDimensions);
           itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
           itkStaticConstMacro(ParametersDimension,  unsigned int, NParametersDimensions); //A voir!!
-      
+
           /* Get the ImageKeywordlist */
           ImageKeywordlist GetImageGeometryKeywordlist(void) const;
           /* Get an ossimKeywordlist */
           ossimKeywordlist GetOssimKeywordlist(void);
           /* Get an ossimModel */
           ossimProjection* GetOssimModel(void);
-      
+
           /* Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
           virtual void SetImageGeometry(const ImageKeywordlist image_kwl);
-      
+
           /* Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
           virtual void SetImageGeometry(const ossimKeywordlist &geom_kwl);
-      
-     
+
+
 //      itkGetObjectMacro(DEMHandler, DEMHandlerType);
-      
-/*      virtual void SetDEMHandler(DEMHandlerType* _arg) 
-          { 
-          if (this->m_DEMHandler != _arg) 
-          { 
-          this->m_DEMHandler = _arg; 
-          this->Modified(); 
+
+/*      virtual void SetDEMHandler(DEMHandlerType* _arg)
+          {
+          if (this->m_DEMHandler != _arg)
+          {
+          this->m_DEMHandler = _arg;
+          this->Modified();
           this->UseDEM(true);
-      } 
+      }
       }*/
-      
+
           /** Set/Get the average elevation if the DEM is not used*/
           itkSetMacro(AverageElevation, TScalarType);
           itkGetMacro(AverageElevation, TScalarType);
-          
+
           virtual void SetDEMDirectory(const std::string& directory)
           {
             m_DEMHandler->OpenDEMDirectory(directory.c_str());
             m_DEMIsLoaded=true;
-            this->EnableDEM();	
+            this->EnableDEM();
           }
-			
+
           virtual void DisableDEM()
           {
-            m_UseDEM = false; 
+            m_UseDEM = false;
             this->Modified();
           }
-      
-          virtual void EnableDEM() 
-          { 
-            if (m_DEMIsLoaded) 
-              m_UseDEM = true; 
+
+          virtual void EnableDEM()
+          {
+            if (m_DEMIsLoaded)
+              m_UseDEM = true;
             this->Modified();
-          } 
+          }
 
         protected:
-          SensorModelBase(); 
+          SensorModelBase();
           virtual ~SensorModelBase();
-      
+
           /** Create the projection ( m_Model). Called by the SetImageGeometry methods */
           void CreateProjection(const ImageKeywordlist & image_kwl);
-      
+
           /** PrintSelf method */
           void PrintSelf(std::ostream& os, itk::Indent indent) const;
-      
+
           /** ImageKeywordlist */
           ImageKeywordlist m_ImageKeywordlist;
           /** Pointer on an ossim projection (created with the keywordlist) */
@@ -139,22 +139,22 @@ namespace otb
 
           /** Specify if DEM is used in Point Transformation */
           bool m_UseDEM ;
-			
+
           /** Object that read and use DEM */
           DEMHandlerPointerType m_DEMHandler;
-          
+
           /** Specify an average elevation to use */
           TScalarType m_AverageElevation;
-			
+
         private :
           SensorModelBase(const Self&); //purposely not implemented
           void operator=(const Self&); //purposely not implemented
-			
+
           /** Specify if DEM is loaded */
           bool m_DEMIsLoaded ;
-          
 
-     
+
+
       };
 
 } // namespace otb

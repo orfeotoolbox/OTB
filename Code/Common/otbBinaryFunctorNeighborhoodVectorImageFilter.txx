@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,7 +30,7 @@ namespace otb
 /**
  * Constructor
  */
-template <class TInputImage1, class TInputImage2, 
+template <class TInputImage1, class TInputImage2,
           class TOutputImage, class TFunction  >
 BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1,TInputImage2,TOutputImage,TFunction>
 ::BinaryFunctorNeighborhoodVectorImageFilter()
@@ -44,11 +44,11 @@ BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1,TInputImage2,TOutputImag
 /**
  * Connect one of the operands for neighborhood-wise operation
  */
-template <class TInputImage1, class TInputImage2, 
+template <class TInputImage1, class TInputImage2,
           class TOutputImage, class TFunction  >
 void
 BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1,TInputImage2,TOutputImage,TFunction>
-::SetInput1( const TInputImage1 * image1 ) 
+::SetInput1( const TInputImage1 * image1 )
 {
   // Process object is not const-correct so the const casting is required.
   SetNthInput(0, const_cast<TInputImage1 *>( image1 ));
@@ -58,11 +58,11 @@ BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1,TInputImage2,TOutputImag
 /**
  * Connect one of the operands for neighborhood-wise operation
  */
-template <class TInputImage1, class TInputImage2, 
+template <class TInputImage1, class TInputImage2,
           class TOutputImage, class TFunction  >
 void
 BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1,TInputImage2,TOutputImage,TFunction>
-::SetInput2( const TInputImage2 * image2 ) 
+::SetInput2( const TInputImage2 * image2 )
 {
   // Process object is not const-correct so the const casting is required.
   SetNthInput(1, const_cast<TInputImage2 *>( image2 ));
@@ -71,7 +71,7 @@ BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1,TInputImage2,TOutputImag
 /**
  * Connect the interval of radius
  */
-template <class TInputImage1, class TInputImage2, 
+template <class TInputImage1, class TInputImage2,
           class TOutputImage, class TFunction  >
 void
 BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1,TInputImage2,TOutputImage,TFunction>
@@ -112,8 +112,8 @@ BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1, TInputImage2, TOutputIm
 
   Input1ImagePointer inputPtr1 = dynamic_cast<const TInputImage1 *>( ProcessObjectType::GetInput(0) );
   Input2ImagePointer inputPtr2 = dynamic_cast<const TInputImage2 *>( ProcessObjectType::GetInput(1) );
-    
-  
+
+
   RadiusType1 r1;
   r1.Fill(m_Radius);
   NeighborhoodIteratorType1 neighInputIt1;
@@ -121,9 +121,9 @@ BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1, TInputImage2, TOutputIm
   RadiusType2 r2;
   r2.Fill(m_Radius);
   NeighborhoodIteratorType2 neighInputIt2;
-    
+
   // This is the main difference from BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>::ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread, int threadId)
-  OutputImagePointer outputPtr = this->GetOutput(); 
+  OutputImagePointer outputPtr = this->GetOutput();
   outputPtr->SetNumberOfComponentsPerPixel( m_Functor.GetNumberOfComponentsPerPixel() );
   outputPtr->Allocate();
 
@@ -135,7 +135,7 @@ BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1, TInputImage2, TOutputIm
   typename TypeFace1::FaceListType faceList1;
   TypeFace1 bC1;
   faceList1 = bC1( inputPtr1, outputRegionForThread, r1 );
-  
+
   typedef typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage2> TypeFace2;
   typename TypeFace2::FaceListType::iterator fit2;
   typename TypeFace2::FaceListType faceList2;
@@ -144,13 +144,13 @@ BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1, TInputImage2, TOutputIm
 
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-  
-  // Process each of the boundary faces.  
+
+  // Process each of the boundary faces.
   // Center first and then left, right, up, down borders
-	for ( fit1=faceList1.begin(), fit2=faceList2.begin(); 
+	for ( fit1=faceList1.begin(), fit2=faceList2.begin();
 			fit1 != faceList1.end() && fit2 != faceList2.end();
 			++fit1, ++fit2 )
-	{ 
+	{
 		neighInputIt1 = itk::ConstNeighborhoodIterator<TInputImage1> ( r1, inputPtr1, *fit1 );
 		neighInputIt1.OverrideBoundaryCondition( &nbc1 );
 		neighInputIt1.GoToBegin();
@@ -161,7 +161,7 @@ BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1, TInputImage2, TOutputIm
 
 		outputIt = itk::ImageRegionIterator<TOutputImage> ( outputPtr, *fit1 );
 		outputIt.GoToBegin();
-	
+
 		while ( !outputIt.IsAtEnd() )
 		{
 			outputIt.Set( m_Functor( neighInputIt1, neighInputIt2 ) );
@@ -169,7 +169,7 @@ BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1, TInputImage2, TOutputIm
 			++neighInputIt1;
 			++neighInputIt2;
 			++outputIt;
-			
+
 			progress.CompletedPixel();
 		}
 	}

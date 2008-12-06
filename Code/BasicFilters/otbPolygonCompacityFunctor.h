@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,8 +32,8 @@ namespace otb
    * The compacity is defined as:
    *
    *  \f$ 4\pi \frac{S}{L}\f$
-    * 
-   * where \f$ S \f$ is the surface (obtained by the method GetSurface() ) 
+    *
+   * where \f$ S \f$ is the surface (obtained by the method GetSurface() )
     * and \f$ L \f$ the perimeter (obtained by the method GetLength() ).
      *
      *  \ingroup Functor
@@ -42,7 +42,7 @@ namespace otb
   class PolygonCompacityFunctor
   {
     public:
-      
+
 
       void SetThreshold(double threshold )
       {
@@ -52,18 +52,18 @@ namespace otb
       {
         return (  m_Threshold );
       }
-      
-      PolygonCompacityFunctor() 
+
+      PolygonCompacityFunctor()
       {
         m_Threshold = 0.2;
       };
       ~PolygonCompacityFunctor() {};
-      
+
       inline bool operator()(const TInput1 & input)
       {
         double circularityRatio = 4*M_PI*input->GetSurface()
             / M_SQUARE(input->GetLength());
-      
+
         if (circularityRatio > m_Threshold)
         {
           return true;
@@ -73,9 +73,9 @@ namespace otb
           return false;
         }
       }
-      
-      
-      
+
+
+
     private:
       double m_Threshold;
   };

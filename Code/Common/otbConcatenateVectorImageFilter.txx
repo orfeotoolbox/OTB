@@ -22,7 +22,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkImageRegionIterator.h"
 
 namespace otb {
-  /** 
+  /**
    * Constructor.
    */
   template <class TInputImage1,class TInputImage2,class TOutputImage>
@@ -31,8 +31,8 @@ namespace otb {
   {
     this->SetNumberOfRequiredInputs(2);
   }
-  /** 
-   * Destructor. 
+  /**
+   * Destructor.
    */
   template <class TInputImage1,class TInputImage2,class TOutputImage>
   ConcatenateVectorImageFilter<TInputImage1,TInputImage2,TOutputImage>
@@ -84,7 +84,7 @@ namespace otb {
   {
     return const_cast<InputImage2Type *>(this->GetInput(1));
   }
-  /** 
+  /**
    * Main computation method.
    */
   template <class TInputImage1,class TInputImage2,class TOutputImage>
@@ -100,12 +100,12 @@ namespace otb {
     // Check the requested regions
     typename InputImage1Type::RegionType region1 = input1->GetRequestedRegion();
     typename InputImage2Type::RegionType region2 = input2->GetRequestedRegion();
-    
+
     if(region1!=region2)
       {
 	itkExceptionMacro(<<"InputImage1 and InputImage2 have different requested regions.");
       }
-    
+
     // Iterators typedefs
     typedef itk::ImageRegionIterator<InputImage1Type> Input1IteratorType;
     typedef itk::ImageRegionIterator<InputImage2Type> Input2IteratorType;
@@ -125,7 +125,7 @@ namespace otb {
     input1It.GoToBegin();
     input2It.GoToBegin();
     outputIt.GoToBegin();
-    
+
     // Iterate through the pixel
     while(!input1It.IsAtEnd()
 	  &&!input2It.IsAtEnd()

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -46,12 +46,12 @@ UnaryFunctorNeighborhoodImageFilter<TInputImage,TOutputImage,TFunction>
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
-  
+
   // get pointers to the input and output
   typename Superclass::InputImagePointer  inputPtr =
     const_cast< TInputImage * >( this->GetInput());
   typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
-  
+
   if ( !inputPtr || !outputPtr )
     {
     return;
@@ -60,7 +60,7 @@ UnaryFunctorNeighborhoodImageFilter<TInputImage,TOutputImage,TFunction>
   // requested region)
   typename TInputImage::RegionType inputRequestedRegion;
   inputRequestedRegion = inputPtr->GetRequestedRegion();
-  
+
   // pad the input requested region by the operator radius
   inputRequestedRegion.PadByRadius( m_Radius );
 
@@ -97,7 +97,7 @@ template <class TInputImage, class TOutputImage, class TFunction >
 void
 UnaryFunctorNeighborhoodImageFilter<TInputImage, TOutputImage, TFunction>
 ::ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread, int threadId)
-{ 
+{
   itk::ZeroFluxNeumannBoundaryCondition<TInputImage> nbc;
 
 // We use dynamic_cast since inputs are stored as DataObjects.  The
@@ -110,7 +110,7 @@ UnaryFunctorNeighborhoodImageFilter<TInputImage, TOutputImage, TFunction>
   RadiusType r;
   r.Fill(m_Radius);
   NeighborhoodIteratorType neighInputIt;
-    
+
   itk::ImageRegionIterator<TOutputImage> outputIt;
 
 
@@ -124,13 +124,13 @@ UnaryFunctorNeighborhoodImageFilter<TInputImage, TOutputImage, TFunction>
 
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-  
+
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
   for (fit=faceList.begin(); fit != faceList.end(); ++fit)
-    { 
+    {
     neighInputIt = itk::ConstNeighborhoodIterator<TInputImage>(r, inputPtr, *fit);
-      
+
     outputIt = itk::ImageRegionIterator<TOutputImage>(outputPtr, *fit);
     neighInputIt.OverrideBoundaryCondition(&nbc);
     neighInputIt.GoToBegin();
@@ -144,7 +144,7 @@ UnaryFunctorNeighborhoodImageFilter<TInputImage, TOutputImage, TFunction>
       ++outputIt;
       progress.CompletedPixel();
       }
-    }  
+    }
 }
 
 } // end namespace otb

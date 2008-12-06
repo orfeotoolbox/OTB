@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,7 +27,7 @@ namespace otb
 /** \class ProfileToProfileDerivativeFilter
  *  \brief This filter computes the derivative of a given profile.
  *
- * For the profile \f$ \Pi_{\phi}(f)= \{\phi_{n}(f), n \in \{n_{1},\ldots,n_{N}\}\}\f$, the 
+ * For the profile \f$ \Pi_{\phi}(f)= \{\phi_{n}(f), n \in \{n_{1},\ldots,n_{N}\}\}\f$, the
  * profile derivative is defined by:
  *
  * \f[
@@ -35,7 +35,7 @@ namespace otb
  * \f]
  *
  * with \f$ \Delta\phi_{n}(f) = \mid \Pi_{\phi_{n2}}(f)-\Pi_{\phi_{n1}}(f) \mid \f$
- * 
+ *
  * \ingroup Streamed
  */
 template <class TInputImage, class TOutputImage>
@@ -48,13 +48,13 @@ class ITK_EXPORT ProfileToProfileDerivativeFilter
   typedef ImageListToImageListFilter<TInputImage,TOutputImage> Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(ProfileToProfileDerivativeFilter, ImageListToImageListFilter);
-  
+
   /** Template parameters typedefs */
   typedef typename Superclass::InputImageListType InputImageListType;
   typedef typename InputImageListType::Pointer InputImageListPointerType;
@@ -69,7 +69,7 @@ class ITK_EXPORT ProfileToProfileDerivativeFilter
   typedef itk::AbsImageFilter<InputImageType,InputImageType> AbsFilterType;
   typedef typename SubtractFilterType::Pointer SubtractFilterPointerType;
   typedef typename AbsFilterType::Pointer AbsFilterPointerType;
-  
+
   /** Generate output information for the ImageList and for each image
       in the list. */
   virtual void GenerateOutputInformation(void);

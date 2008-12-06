@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -58,7 +58,7 @@ template<class InputPixelType, class LabelPixelType>
 SVMModelEstimator<InputPixelType, LabelPixelType>
 ::~SVMModelEstimator(void)
 {
-  
+
    svm_destroy_param(&m_Model->GetParameters());
 
 }
@@ -70,7 +70,7 @@ template<class InputPixelType, class LabelPixelType>
 void
 SVMModelEstimator<InputPixelType, LabelPixelType>
 ::PrintSelf( std::ostream& os, itk::Indent indent ) const
-{  
+{
   // FIXME : print useful SVM information
 //   os << indent << "                   " << std::endl;
 //   os << indent << "Gaussian Models generated from the training data." << std::endl;
@@ -84,7 +84,7 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
 }// end PrintSelf
 
 template<class InputPixelType, class LabelPixelType>
-void 
+void
 SVMModelEstimator<InputPixelType, LabelPixelType>
 ::Update()
 {
@@ -96,7 +96,7 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
  * Generate data (start the model building process)
  */
 template<class InputPixelType, class LabelPixelType>
-void 
+void
 SVMModelEstimator<InputPixelType, LabelPixelType>
 ::GenerateData( )
 {
@@ -104,12 +104,12 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
     {
     m_Done = 1;
     this->EstimateModels();
-    } 
+    }
 }// end Generate data
 
 
 template<class InputPixelType, class LabelPixelType>
-void 
+void
 SVMModelEstimator<InputPixelType, LabelPixelType>
 ::EstimateModels()
 {
@@ -122,7 +122,7 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
 
 
   this->BuildProblem();
-  
+
   const char* error_msg = svm_check_parameter(&m_Model->GetProblem(),&m_Model->GetParameters());
 
   if(error_msg)
@@ -138,18 +138,18 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
 
   m_Model->SetModel(tempModel);
   m_Model->SetNumberOfClasses( this->GetNumberOfClasses() );
-  
+
   otbMsgDebugMacro(  << "Training done" );
 
-}// end train classifier 
+}// end train classifier
 
 
 template<class InputPixelType, class LabelPixelType>
-void 
+void
 SVMModelEstimator< InputPixelType, LabelPixelType >
 ::PrepareData()
 {
-  int probl = m_Measures.size();  
+  int probl = m_Measures.size();
 
   long int elements = (m_Measures[0].size()+1)*probl;
 
@@ -189,12 +189,12 @@ SVMModelEstimator< InputPixelType, LabelPixelType >
       typename MeasurementVectorType::iterator compEnd = (*measIt).end();
 
       int k=0;
-      
+
       while(compIt!=compEnd)
 	{
-	// otbMsgDebugMacro(  << "Index " << x_space[j].index );	
+	// otbMsgDebugMacro(  << "Index " << x_space[j].index );
 // 	otbMsgDebugMacro(  << "Value " << x_space[j].value );
-	
+
 	x_space[j].index = k+1;
 	x_space[j].value = (*compIt);
 // 	otbMsgDebugMacro(  << x_space[j].index << ":" << x_space[j].value << " " << "j: " << j << " " );
@@ -210,8 +210,8 @@ SVMModelEstimator< InputPixelType, LabelPixelType >
 
       ++measIt;
       ++labelsIt;
-	
-		  
+
+
     }
 
   otbMsgDebugMacro(  << "Processed " << i << " examples" );

@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,7 +24,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-/** 
+/**
  * Constructor.
  */
 template< unsigned int VDimension >
@@ -37,10 +37,10 @@ ArcSpatialObject< VDimension >
   m_Angle1=0.0;
   m_Angle2=0.0;
 }
-/** 
+/**
  * Test whether a point is inside or outside the object
  * For computational speed purposes, it is faster if the method does not
- * check the name of the class and the current depth 
+ * check the name of the class and the current depth
  */
 template< unsigned int VDimension >
 bool
@@ -93,8 +93,8 @@ ArcSpatialObject< VDimension >
         }
   return false;
 }
-/** 
- * Test if the given point is inside the arc 
+/**
+ * Test if the given point is inside the arc
  */
 template< unsigned int VDimension >
 bool
@@ -119,8 +119,8 @@ ArcSpatialObject< VDimension >
     }
   return Superclass::IsInside(point, depth, name);
 }
-/** 
- * Compute the bounds of the arc 
+/**
+ * Compute the bounds of the arc
  */
 template< unsigned int VDimension >
 bool
@@ -146,7 +146,7 @@ ArcSpatialObject< VDimension >
     PointType pntB;
         PointType pntC;
         PointType pntD;
-        
+
         double alpha,longueur,largeur;
         alpha=(m_Angle2-m_Angle1) ; // Difference between 2 angles.
 
@@ -198,7 +198,7 @@ ArcSpatialObject< VDimension >
   return true;
 }
 /**
- *  Returns if the arc is evaluable at one point 
+ *  Returns if the arc is evaluable at one point
  */
 template< unsigned int VDimension >
 bool
@@ -208,8 +208,8 @@ ArcSpatialObject< VDimension >
   // itkDebugMacro( "Checking if the arc is evaluable at " << point );
   return IsInside(point, depth, name);
 }
-/** 
- * Returns the value at one point 
+/**
+ * Returns the value at one point
  */
 template< unsigned int VDimension >
 bool
@@ -238,8 +238,8 @@ ArcSpatialObject< VDimension >
     }
   return false;
 }
-/** 
- * Print Self function 
+/**
+ * Print Self function
  */
 template< unsigned int VDimension >
 void
@@ -249,8 +249,8 @@ ArcSpatialObject< VDimension >
   Superclass::PrintSelf(os, indent);
   os << "Radius: " << m_Radius << std::endl;
 }
-/** 
- * Copy the information from another spatial object 
+/**
+ * Copy the information from another spatial object
  */
 template< unsigned int VDimension >
 void  ArcSpatialObject< VDimension >

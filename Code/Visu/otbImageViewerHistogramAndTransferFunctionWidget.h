@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,10 +23,10 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 template <class TPixel, class TLabel> class ImageViewerBase;
-/** 
+/**
  * \brief Custom histogram widget for the image viewer.
  *
- * This class derives from otb::HistogramAndTransferFunctionWidget, 
+ * This class derives from otb::HistogramAndTransferFunctionWidget,
  * and implements behaviours specific to the image viewer.
  *
  * \sa ImageViewer, HistogramAndTransferFunctionWidget
@@ -42,10 +42,10 @@ class ITK_EXPORT ImageViewerHistogramAndTransferFunctionWidget
   typedef HistogramAndTransferFunctionWidget<THistogram,TPixel> Superclass;
   typedef itk::SmartPointer<Self>                                Pointer;
   typedef itk::SmartPointer<const Self>                          ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(ImageViewerHistogramAndTransferFunctionWidget,HistogramAndTransferFunctionWidget);
 
@@ -64,7 +64,7 @@ class ITK_EXPORT ImageViewerHistogramAndTransferFunctionWidget
   typedef typename LogTransferFunctionType::Pointer LogTransferFunctionPointerType;
   typedef ImageWidgetSquareTransferFunction<PixelType> SquareonentialTransferFunctionType;
   typedef typename SquareonentialTransferFunctionType::Pointer SquareonentialTransferFunctionPointerType;
-    
+
   /** Set the parent application */
   itkSetMacro(Parent,ParentPointerType);
   itkGetMacro(Parent,ParentPointerType);
@@ -106,7 +106,7 @@ class ITK_EXPORT ImageViewerHistogramAndTransferFunctionWidget
 	case FL_DRAG:
 	  {
 	    double x = Fl::event_x();
-	    
+
 	    if(m_ModifyLower && (x>this->GetMarginX()) && (x<static_cast<double>(this->w())-this->GetMarginX()-this->GetOutputHistogramMargin()*static_cast<double>(this->w())))
 	      {
 		x = (x>xupper ? xupper : x);
@@ -172,7 +172,7 @@ class ITK_EXPORT ImageViewerHistogramAndTransferFunctionWidget
       m_TransferFunctionCode = 0;
     }
   /** Destructor */
-  virtual ~ImageViewerHistogramAndTransferFunctionWidget() 
+  virtual ~ImageViewerHistogramAndTransferFunctionWidget()
     {
       m_Parent = NULL;
     }

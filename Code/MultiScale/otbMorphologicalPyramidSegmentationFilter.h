@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,25 +28,25 @@ namespace otb
  * The first step is to convert the multi-resolution analysis from the pyramid to a multi-scale one using the
  * MRToMSConverter filter.
  *
- * The segmentation algorithm used is based on seeds extraction using the ImageToPointSetFilter, followed by 
+ * The segmentation algorithm used is based on seeds extraction using the ImageToPointSetFilter, followed by
  * a connected threshold segmentation using the ConnectedThresholdImageFilter. A final relabelling step is done
- * with the LabelImageFilter adn RelabelImageFilter to remove object whose sizes are to small regarding the 
+ * with the LabelImageFilter adn RelabelImageFilter to remove object whose sizes are to small regarding the
  * MinimumObjectSize parameter. The threshold for seeds extraction and segmentation are computed using quantiles.
  *
- * A pre processing step is applied by multiplying the full resolution brighter details (resp. darker details) 
- * with the original image (resp. the inverted original image). This perfoms an enhancement of the regions contour 
+ * A pre processing step is applied by multiplying the full resolution brighter details (resp. darker details)
+ * with the original image (resp. the inverted original image). This perfoms an enhancement of the regions contour
  * precision.
- * 
- * The details from the pyramid are set via the SetBrighterDetails() and SetDarkerDetails() methods. The brighter and 
- * darker details depends on the filter used in the pyramid analysis. If the OpeningClosing filter is used, then the 
- * brighter details are those from the supFilter image list, whereas if the ClosingOpening filter is used, the brighter 
+ *
+ * The details from the pyramid are set via the SetBrighterDetails() and SetDarkerDetails() methods. The brighter and
+ * darker details depends on the filter used in the pyramid analysis. If the OpeningClosing filter is used, then the
+ * brighter details are those from the supFilter image list, whereas if the ClosingOpening filter is used, the brighter
  * details are those from the infFilter list.
- * 
- * The output of the segmentation filter is a single segmentation images list, containing first the brighter details 
- * segmentation from higher scale to lower, and then the darker details in the same order. The attention of the used 
+ *
+ * The output of the segmentation filter is a single segmentation images list, containing first the brighter details
+ * segmentation from higher scale to lower, and then the darker details in the same order. The attention of the used
  * is drawn to the fact that since the label filter used internally will deal with a large number of labels, so the
- * OutputPixelType is required to be sufficiently precise. Unsigned short or Unsigned long would be a good choice, 
- * unless the user has a very good reason to think that a less precise type will be sufficient.  
+ * OutputPixelType is required to be sufficiently precise. Unsigned short or Unsigned long would be a good choice,
+ * unless the user has a very good reason to think that a less precise type will be sufficient.
  *
  * \ingroup MultiScale
  * \sa MorphologicalPyramidSynthesisFilter,OpeningClosingMorphologicalFilter,
@@ -76,8 +76,8 @@ public:
   typedef typename Superclass::OutputImagePointerType  OutputImagePointerType;
   typedef typename OutputImageListType::Iterator       OutputImageListIteratorType;
   /** Input related typedefs */
-  typedef typename Superclass::InputImageType          InputImageType;  
-  typedef typename InputImageType::PixelType           InputPixelType;        
+  typedef typename Superclass::InputImageType          InputImageType;
+  typedef typename InputImageType::PixelType           InputPixelType;
   typedef typename InputImageType::Pointer             InputImagePointerType;
   typedef typename Superclass::InputImageListType      InputImageListType;
   typedef typename InputImageListType::Pointer         InputImageListPointerType;
@@ -132,7 +132,7 @@ public:
    */
   InputImageListType *GetDarkerDetails(void);
 
-protected:  
+protected:
   /** Constructor */
   MorphologicalPyramidSegmentationFilter();
   /** Destructor */
@@ -141,7 +141,7 @@ protected:
   /** Main computation method */
   virtual void GenerateData();
   /** Printself method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;  
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
  private:
   unsigned long  m_MinimumObjectSize;
   /** Quantile for seeds determination */

@@ -8,7 +8,7 @@
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
-  
+
   Some parts of this code are derived from ITK. See ITKCopyright.txt
   for details.
 
@@ -64,7 +64,7 @@ GaborFilterGenerator<TPrecision>
 
   costheta = vcl_cos(m_Theta*M_PI/180.);
   sintheta = vcl_sin(m_Theta*M_PI/180.);
-  
+
 
   for(PrecisionType y = - static_cast<PrecisionType>(m_Radius[1]);
       y<=static_cast<PrecisionType>(m_Radius[1]);y+=1)

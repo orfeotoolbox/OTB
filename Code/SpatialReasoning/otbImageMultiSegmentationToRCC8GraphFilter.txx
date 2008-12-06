@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,7 +30,7 @@
 
 namespace otb
 {
-/** 
+/**
  * Constructor.
  */
 template <class TInputImage, class TOutputGraph>
@@ -84,7 +84,7 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
   m_Accumulator[5]=0;
   m_Accumulator[6]=0;
   m_Accumulator[7]=0;
-  
+
   // otbMsgDebugMacro(<<"RCC8GraphFilter: entering GetKnowledge method.");
   // This is the RCC8 composition table
  const int knowledge[8][8]
@@ -103,7 +103,7 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
   int value = knowledge[r1][r2];
   // Each negative case correspond to a level of knowledge
   if(value>=0)
-    { 
+    {
       // otbMsgDebugMacro(<<"RCC8GraphFilter: leaving GetKnowledge method: FULL");
       return KnowledgeStateType(FULL,static_cast<RCC8ValueType>(value));
     }
@@ -117,7 +117,7 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
       // otbMsgDebugMacro(<<"RCC8GraphFilter: leaving GetKnowledge method.LEVEL_3");
       return KnowledgeStateType(LEVEL_3,OTB_RCC8_DC);
     }
-  else 
+  else
     {
       // otbMsgDebugMacro(<<"RCC8GraphFilter: leaving GetKnowledge method.NO_INFO");
       return KnowledgeStateType(NO_INFO,OTB_RCC8_DC);
@@ -133,8 +133,8 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
 {
   // Input image list pointer
   InputImageListPointerType segList = this->GetInput();
-  
-  // Ouptut graph pointer 
+
+  // Ouptut graph pointer
   OutputGraphPointerType graph = this->GetOutput();
 
 
@@ -151,13 +151,13 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
 
   typedef itk::MinimumMaximumImageCalculator<InputImageType> MinMaxCalculatorType;
   typedef PolygonToPolygonRCC8Calculator<PathType> RCC8CalculatorType;
-  typedef RCC8VertexIterator<OutputGraphType> VertexIteratorType; 
+  typedef RCC8VertexIterator<OutputGraphType> VertexIteratorType;
   typedef RCC8InEdgeIterator<OutputGraphType> InEdgeIteratorType;
   typedef RCC8OutEdgeIterator<OutputGraphType> OutEdgeIteratorType;
 
     // Vector of label
   std::vector<PixelType> maxLabelVector;
-  
+
   // Vertex indexes
   unsigned int vertexIndex = 0;
   unsigned int segmentationImageIndex = 0;
@@ -189,7 +189,7 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
 	  simplifier->Update();
 
 	  // Create a new vertex
-	  VertexPointerType vertex = VertexType::New(); 
+	  VertexPointerType vertex = VertexType::New();
 	  // Set its properties
 	  vertex->SetPath(simplifier->GetOutput()->GetNthElement(0));
 	  vertex->SetSegmentationLevel(segmentationImageIndex/2);
@@ -215,13 +215,13 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
 	  //We do not examine each couple because of the RCC8 symmetry
 	  if(vIt1.GetIndex()<vIt2.GetIndex())
 	    {
-	      
+
 	      // Compute the RCC8 relation
 	      typename RCC8CalculatorType::Pointer calc = RCC8CalculatorType::New();
 	      calc->SetPolygon1(vIt1.Get()->GetPath());
 	      calc->SetPolygon2(vIt2.Get()->GetPath());
 	      RCC8ValueType value=OTB_RCC8_DC;
-	      
+
 	      // if the optimisations are activated
 	      if(m_Optimisation)
 		{
@@ -253,7 +253,7 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
 			      calc->SetLevel1APrioriKnowledge(know.first==LEVEL_1);
 			      calc->SetLevel3APrioriKnowledge(know.first==LEVEL_3);
 			     //  otbMsgDebugMacro(<<"Optimisation loop: knowledge: "<<know.first<<","<<know.second);
-			    }  
+			    }
 			  ++inIt2;
 			}
 		      // If no intermediate was found
@@ -298,7 +298,7 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
 		  otbMsgDevMacro(<<"Adding edge: "<<vIt1.GetIndex()<<" -> "<<vIt2.GetIndex()<<": "<<value);
 		  graph->AddEdge(vIt1.GetIndex(),vIt2.GetIndex(),value);
 		}
-	    }	    
+	    }
 	  progress.CompletedPixel();
 	  progress.CompletedPixel();
 	}

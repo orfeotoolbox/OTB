@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -47,7 +47,7 @@ public:
 
   /** Byte order typedef */
   typedef Superclass::ByteOrder  ByteOrder;
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -59,16 +59,16 @@ public:
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
   virtual bool CanReadFile(const char*);
-  
+
   /** Determine the file type. Returns true if the ImageIO can stream read the specified file */
   virtual bool CanStreamRead(){  return true; };
 
   /** Set the spacing and dimention information for the set filename. */
   virtual void ReadImageInformation();
- 
+
   /** Reads the data from disk into the memory buffer provided. */
   virtual void Read(void* buffer);
-    
+
   /** Reads 3D data from multiple files assuming one slice per file. */
   virtual void ReadVolume(void* buffer);
 
@@ -90,7 +90,7 @@ public:
   virtual void Write(const void* buffer);
   // JULIEN: NOT USED, NOT IMPLEMENTED
   //void SampleImage(void* buffer,int XBegin, int YBegin, int SizeXRead, int SizeYRead, int XSample, int YSample);
-  
+
 protected:
   /** Construtor.*/
   LUMImageIO();
@@ -103,7 +103,7 @@ protected:
 
   bool OpenOneraDataFileForWriting(const char* filename);
   bool OpenOneraHeaderFileForWriting(const char* filename);
-  
+
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
@@ -115,7 +115,7 @@ private:
   /** This method get the LUM type */
   int CaiGetTypeLum(                            const   char *          type_code,
                                                 std::string &   str_sens_code,
-                                                int &           inbbits, 
+                                                int &           inbbits,
 					        std::string &   str_cod_pix);
 
 

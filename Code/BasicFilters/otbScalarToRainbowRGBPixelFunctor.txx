@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,7 +23,7 @@
 
 namespace otb {
 
-namespace Functor {  
+namespace Functor {
 
 template <class TScalar>
 ScalarToRainbowRGBPixelFunctor<TScalar>
@@ -31,21 +31,21 @@ ScalarToRainbowRGBPixelFunctor<TScalar>
 {
   m_Minimum = 0;
   m_Maximum = itk::NumericTraits<ScalarType>::max();
-  
+
 }
 
-  
+
 template <class TScalar>
 typename ScalarToRainbowRGBPixelFunctor<TScalar>::RGBPixelType
 ScalarToRainbowRGBPixelFunctor<TScalar>
 ::operator()( const TScalar & v) const
 {
-  
+
   double hinc, sinc, vinc;
   hinc=0.6/(m_Maximum-m_Minimum);
   sinc=0.0;
   vinc=0.0;
-  
+
   double hue, sat, val;
 
   hue = 0.6 - (v-m_Minimum)*hinc;
@@ -56,12 +56,12 @@ ScalarToRainbowRGBPixelFunctor<TScalar>
   if (v > m_Maximum)
   {
     hue =0.0;
-  }  
+  }
   sat = 0.99 + v*sinc;
   val = itk::NumericTraits<RGBComponentType>::max() + v*vinc;
-  
+
   return HSVToRGB(hue, sat, val);
-  
+
 }
 
 
@@ -76,7 +76,7 @@ ScalarToRainbowRGBPixelFunctor<TScalar>
   double twothird = 2.0 / 3.0;
   double fivesixth = 5.0 / 6.0;
   double r, g, b;
-  
+
   // compute RGB from HSV
   if (h > onesixth && h <= onethird) // green/red
     {
@@ -114,22 +114,22 @@ ScalarToRainbowRGBPixelFunctor<TScalar>
     g = h / onesixth;
     b = 0.0;
     }
-  
+
   // add Saturation to the equation.
   r = (s * r + (1.0 - s));
   g = (s * g + (1.0 - s));
   b = (s * b + (1.0 - s));
-  
+
   r *= v;
   g *= v;
   b *= v;
-  
+
   RGBPixelType ans;
   ans[0] = static_cast<RGBComponentType>( r );
   ans[1] = static_cast<RGBComponentType>( g );
   ans[2] = static_cast<RGBComponentType>( b );
   return ans;
-  
+
 }
 
 

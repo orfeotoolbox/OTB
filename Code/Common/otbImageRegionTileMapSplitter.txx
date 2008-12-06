@@ -1,6 +1,6 @@
 
 /*=========================================================================
-  
+
 Program:   ORFEO Toolbox
 Language:  C++
 Date:      $Date$
@@ -11,8 +11,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,7 +28,7 @@ namespace otb
    *
  */
   template <unsigned int VImageDimension>
-      unsigned int 
+      unsigned int
       ImageRegionTileMapSplitter<VImageDimension>
   ::GetNumberOfSplits(const RegionType &region, unsigned int requestedNumber)
   {
@@ -55,7 +55,7 @@ namespace otb
     return maxPieceUsed + 1;
   }
 
-  
+
 /**
    *
  */
@@ -68,14 +68,14 @@ namespace otb
         RegionType splitRegion;
         IndexType splitIndex;
         SizeType splitSize, regionSize;
-  
+
   // Initialize the splitRegion to the requested region
         splitRegion = region;
         splitIndex = splitRegion.GetIndex();
         splitSize = splitRegion.GetSize();
 
         regionSize = region.GetSize();
-  
+
   // split on the outermost dimension available
         splitAxis = VImageDimension - 1;
         while (regionSize[splitAxis] == 1)
@@ -114,24 +114,24 @@ namespace otb
           splitSize[splitAxis] = valuesPerPiece;
         }
 
-               
+
   // set the split region ivars
         splitRegion.SetIndex( splitIndex );
         splitRegion.SetSize( splitSize );
-               
-               
+
+
         itkDebugMacro("  Split Piece: " << splitRegion );
 
         return splitRegion;
       }
-  
-  
+
+
 
 /**
        *
  */
       template <unsigned int VImageDimension>
-          void 
+          void
           ImageRegionTileMapSplitter<VImageDimension>
   ::PrintSelf(std::ostream& os, itk::Indent indent) const
       {

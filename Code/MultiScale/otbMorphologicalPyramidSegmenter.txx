@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -67,7 +67,7 @@ this->SetNthInput(0,const_cast<TInputImage *>(detailsImage));
    * \return detailsImage The input details image.
    */
 template <class TInputImage,class TOutputImage>
-typename Segmenter<TInputImage, TOutputImage>::InputImageType * 
+typename Segmenter<TInputImage, TOutputImage>::InputImageType *
 Segmenter<TInputImage, TOutputImage>
 ::GetDetailsImage(void)
 {
@@ -89,7 +89,7 @@ Segmenter<TInputImage, TOutputImage>
  * \return originalImage The original image to segment.
  */
 template <class TInputImage,class TOutputImage>
-typename Segmenter<TInputImage, TOutputImage>::InputImageType * 
+typename Segmenter<TInputImage, TOutputImage>::InputImageType *
 Segmenter<TInputImage, TOutputImage>
 ::GetOriginalImage(void)
 {
@@ -105,14 +105,14 @@ Segmenter<TInputImage, TOutputImage>
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
-  
+
   // get pointers to the inputs
   InputImagePointerType  detailsPtr =
     const_cast< InputImageType * >( this->GetInput(0) );
 
-  InputImagePointerType  origPtr = 
+  InputImagePointerType  origPtr =
     const_cast< InputImageType * >( this->GetInput(1) );
-  
+
   if ( !detailsPtr || !origPtr )
     {
     return;
@@ -160,13 +160,13 @@ Segmenter<TInputImage, TOutputImage>
   typedef otb::ThresholdImageToPointSetFilter<InputImageType,PointSetType> PointSetFilterType;
   typedef typename PointSetType::PointsContainer::Iterator PointSetIteratorType;
   typedef typename PointSetType::PointType PointType;
-  
+
   // Typedefs for segmentation
   typedef itk::ConnectedThresholdImageFilter<InputImageType,InputImageType> ConnectedFilterType;
   typedef itk::ConnectedComponentImageFilter<InputImageType,OutputImageType> LabelFilterType;
   typedef itk::RelabelComponentImageFilter<OutputImageType,OutputImageType> RelabelFilterType;
   typedef itk::ThresholdImageFilter<OutputImageType> ThresholdFilterType;
-  
+
   // Typedefs for statistics computation
   typedef itk::Statistics::ScalarImageToHistogramGenerator<InputImageType> HistGeneratorType;
   typedef typename HistGeneratorType::HistogramType HistogramType;
@@ -187,7 +187,7 @@ Segmenter<TInputImage, TOutputImage>
 
   minMax->SetImage(original);
   minMax->ComputeMaximum();
-  
+
 
   // If we want to segment darker detail, the original image must have its itensity inverted
   if(m_SegmentDarkDetailsBool)
@@ -216,7 +216,7 @@ Segmenter<TInputImage, TOutputImage>
   histogram->SetNumberOfBins(255);
   histogram->SetMarginalScale(10.0);
   histogram->Compute();
-  InputPixelType  pointSetThreshold = 
+  InputPixelType  pointSetThreshold =
     static_cast<InputPixelType>(histogram->GetOutput()->Quantile(0,m_SeedsQuantile));
 
   // Segmentation Threshold is computed from the quantile
@@ -225,7 +225,7 @@ Segmenter<TInputImage, TOutputImage>
   histogram->SetNumberOfBins(255);
   histogram->SetMarginalScale(10.0);
   histogram->Compute();
-  InputPixelType  connectedThresholdValue = 
+  InputPixelType  connectedThresholdValue =
     static_cast<InputPixelType>(histogram->GetOutput()->Quantile(0,m_ConnectedThresholdQuantile));
 
   /////////////////////////////////////
@@ -246,7 +246,7 @@ Segmenter<TInputImage, TOutputImage>
   typename LabelFilterType::Pointer labeler = LabelFilterType::New();
   typename RelabelFilterType::Pointer relabeler = RelabelFilterType::New();
   typename ThresholdFilterType::Pointer threshold = ThresholdFilterType::New();
-  
+
   //Passing seeds to the connected filter
   connectedThreshold = ConnectedFilterType::New();
   connectedThreshold->ClearSeeds();
@@ -261,7 +261,7 @@ Segmenter<TInputImage, TOutputImage>
       it++;
     }
 
-  // segmentation     
+  // segmentation
   connectedThreshold->SetLower(connectedThresholdValue);
 
   // labelling
@@ -273,7 +273,7 @@ Segmenter<TInputImage, TOutputImage>
   relabeler->Update();
 
   // In some cases it might happen that the whole extent of the image is segmented as a single region.
-  // Since this is not desirable, we test this case here to avoid it. 
+  // Since this is not desirable, we test this case here to avoid it.
   threshold = ThresholdFilterType::New();
   threshold->SetInput(relabeler->GetOutput());
   OutputPixelType num = 0;
@@ -286,15 +286,15 @@ Segmenter<TInputImage, TOutputImage>
 	  num = 0;
 	}
       else
-	{        
+	{
 	  num=1;
 	}
     }
   else
     {
       num= static_cast<OutputPixelType>(relabeler->GetNumberOfObjects());
-    }   
-  threshold->ThresholdOutside(0,num);    
+    }
+  threshold->ThresholdOutside(0,num);
 
   // Output connection
   threshold->GraftOutput(this->GetOutput());

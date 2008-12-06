@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -53,7 +53,7 @@ template <class TLabel,class TPrecision>
 typename RCC8VertexWithRegionCenter<TLabel,TPrecision>::AttributesMapType
 RCC8VertexWithRegionCenter<TLabel,TPrecision>
 ::GetAttributesMap(void)
-{  
+{
   std::stringstream oss;
   AttributesMapType results;
   results=this->Superclass::GetAttributesMap();

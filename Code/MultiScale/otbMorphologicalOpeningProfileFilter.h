@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,7 +25,7 @@ namespace otb
 {
 /** \class MorphologicalOpeningProfileFilter
  *  \brief This filter compute the morphological opening profile.
- * 
+ *
  * This algorithm is based on the following publication:
  * \par
  * Martino Pesaresi and Jon Alti Benediktsson, Member, IEEE:
@@ -33,7 +33,7 @@ namespace otb
  * satellite imagery. IEEE Transactions on geoscience and remote sensing, vol. 39,
  * NO. 2, February 2001, p. 309-320.
  * \par
- * 
+ *
  * The opening profile is a set of images beeing the result of a geodesic morphological
  * opening by reconstruction with an increasing range of structuring element sizes.
  *
@@ -59,16 +59,16 @@ class ITK_EXPORT MorphologicalOpeningProfileFilter
           unsigned int> Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(MorphologicalOpeningProfileFilter,ImageToProfileFilter);
-  
+
   typedef TStructuringElement StructuringElementType;
   typedef typename Superclass::ParameterType ParameterType;
- 
+
 protected:
   /** Set the profile parameter */
   virtual void SetProfileParameter(ParameterType param)

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,7 +29,7 @@ namespace otb
  * \class ImageToImageRCC8Calculator
  * \brief This class compute the RCC8 relation between the regions from two segmentation images.
  *
- * The RCC8 system comes from qualitative spatial reasoning. 
+ * The RCC8 system comes from qualitative spatial reasoning.
  * It is a set of pairwise disjoint exhaustive relation between two closed region of space.
  * There are 8 possible relations :
  * DC: Disconnected
@@ -42,11 +42,11 @@ namespace otb
  * EQ: Equivalence
  *
  * The goal of this class is to determine which of these 8 relations link the two inputs regions represented
- * by the segmentation images. Since this class will further be used iteratively on a possibly large set 
- * of region, it is optimised : the decision is managed by a decision tree, and the input data size is reduced 
+ * by the segmentation images. Since this class will further be used iteratively on a possibly large set
+ * of region, it is optimised : the decision is managed by a decision tree, and the input data size is reduced
  * to the smallest set needed to determine the relation.
  */
-template <class TInputImage>            
+template <class TInputImage>
   class ITK_EXPORT ImageToImageRCC8Calculator : public itk::ImageToImageFilter<TInputImage,TInputImage>
 {
 public:
@@ -65,7 +65,7 @@ public:
   typedef typename ImageType::ConstPointer ImageConstPointerType;
   typedef typename ImageType::PixelType    PixelType;
   typedef typename ImageType::IndexType    IndexType;
-  typedef typename ImageType::RegionType   RegionType; 
+  typedef typename ImageType::RegionType   RegionType;
   /** Internal bool image type */
   typedef bool BoolPixelType;
   typedef otb::Image<BoolPixelType,ImageType::ImageDimension> BoolImageType;
@@ -153,7 +153,7 @@ public:
    */
   bool ComputeRelation(bool edgeEdgeBool, bool interExterBool, bool exterInterBool);
   /**
-   * Test if the boolean image is totally black or not. This is a based on the lazy operator 
+   * Test if the boolean image is totally black or not. This is a based on the lazy operator
    * paradigm.
    * \param image The image to test.
    * \return True or false.
@@ -166,7 +166,7 @@ public:
    * \param insideValue The inside value.
    * \return The converted image
    */
-  BoolImagePointerType ConvertToBoolImage(ImagePointerType image, PixelType insideValue); 
+  BoolImagePointerType ConvertToBoolImage(ImagePointerType image, PixelType insideValue);
   /** Main computation method */
   void GenerateData(void);
   /** PrintSelf method */
@@ -195,4 +195,4 @@ public:
 #include "otbImageToImageRCC8Calculator.txx"
 #endif
 
-#endif 
+#endif

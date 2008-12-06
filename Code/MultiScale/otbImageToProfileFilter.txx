@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -35,8 +35,8 @@ ImageToProfileFilter<TInputImage,TOutputImage,TFilter,TParameter>
   m_OutputIndex = 0;
   m_Filter= FilterType::New();
 }
-/** 
- * GenerateOutputInformation method 
+/**
+ * GenerateOutputInformation method
  */
 template <class TInputImage, class TOutputImage, class TFilter, class TParameter>
 void
@@ -71,8 +71,8 @@ ImageToProfileFilter<TInputImage,TOutputImage,TFilter,TParameter>
 	}
     }
 }
-/** 
- * Generate input requested region 
+/**
+ * Generate input requested region
  */
 template <class TInputImage, class TOutputImage, class TFilter, class TParameter>
 void
@@ -82,22 +82,22 @@ ImageToProfileFilter<TInputImage,TOutputImage,TFilter,TParameter>
   // Retrieving input/output pointers
   InputImagePointerType inputPtr = this->GetInput();
   OutputImageListPointerType outputPtr = this->GetOutput();
-  
+
   // For each output image
   typename OutputImageListType::Iterator outputListIt = outputPtr->Begin();
-  
+
   m_Filter->SetInput(inputPtr);
 
   // Use the filter to generate input requested region
   while(outputListIt!=outputPtr->End())
-    {  
+    {
       m_Filter->GetOutput(m_OutputIndex)->SetRequestedRegion(outputListIt.Get()->GetRequestedRegion());
       m_Filter->PropagateRequestedRegion(outputListIt.Get());
       ++outputListIt;
     }
 }
-/** 
- * GenerateData method 
+/**
+ * GenerateData method
  */
 template <class TInputImage, class TOutputImage, class TFilter, class TParameter>
 void
@@ -134,8 +134,8 @@ ImageToProfileFilter<TInputImage,TOutputImage,TFilter,TParameter>
   os<<indent<<"ProfileSize: " <<m_ProfileSize             <<std::endl;
   os<<indent<<"InitialValue: "<<m_InitialValue            <<std::endl;
   os<<indent<<"Step: "        <<m_Step                    <<std::endl;
-  
-  
+
+
 }
 } // End namespace otb
 #endif

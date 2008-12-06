@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -41,7 +41,7 @@ DataNode<TPrecision,VDimension>
 }
 
 template <class TPrecision, unsigned int VDimension>
-void 
+void
 DataNode<TPrecision,VDimension>
 ::SetPoint(PointType point)
 {
@@ -58,8 +58,8 @@ template <class TPrecision, unsigned int VDimension>
   m_Data.line = line;
   m_Data.valid = true;
 }
-template <class TPrecision, unsigned int VDimension> 
- void 
+template <class TPrecision, unsigned int VDimension>
+ void
 DataNode<TPrecision,VDimension>
 ::SetPolygonExteriorRing(PolygonType* polygon)
 {
@@ -72,8 +72,8 @@ DataNode<TPrecision,VDimension>
   m_Data.valid = true;
 }
 
-template <class TPrecision, unsigned int VDimension> 
- void 
+template <class TPrecision, unsigned int VDimension>
+ void
 DataNode<TPrecision,VDimension>
   ::SetPolygonInteriorRings(PolygonListType* polygonList)
 {
@@ -86,9 +86,9 @@ DataNode<TPrecision,VDimension>
   m_Data.valid = true;
 }
 
-template <class TPrecision, unsigned int VDimension>  
+template <class TPrecision, unsigned int VDimension>
 typename DataNode<TPrecision,VDimension>
-::PointType      
+::PointType
 DataNode<TPrecision,VDimension>
 ::GetPoint() const
 {
@@ -104,10 +104,10 @@ DataNode<TPrecision,VDimension>
 }
 template <class TPrecision, unsigned int VDimension>
 typename DataNode<TPrecision,VDimension>
-::LinePointerType    
+::LinePointerType
 DataNode<TPrecision,VDimension>
 ::GetLine() const
-{  
+{
   if(!IsLineFeature())
     {
       itkGenericExceptionMacro(<<"Node "<<m_NodeId<<" is not a line.");
@@ -121,7 +121,7 @@ DataNode<TPrecision,VDimension>
 }
 template <class TPrecision, unsigned int VDimension>
 typename DataNode<TPrecision,VDimension>
-::PolygonPointerType 
+::PolygonPointerType
 DataNode<TPrecision,VDimension>
 ::GetPolygonExteriorRing() const
 {
@@ -138,7 +138,7 @@ DataNode<TPrecision,VDimension>
 
 template <class TPrecision, unsigned int VDimension>
 typename DataNode<TPrecision,VDimension>
-::PolygonListPointerType 
+::PolygonListPointerType
 DataNode<TPrecision,VDimension>
 ::GetPolygonInteriorRings() const
 {
@@ -153,7 +153,7 @@ DataNode<TPrecision,VDimension>
    return m_Data.interiorRings;
 }
 
-template <class TPrecision, unsigned int VDimension>  
+template <class TPrecision, unsigned int VDimension>
 void
 DataNode<TPrecision,VDimension>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
@@ -162,7 +162,7 @@ DataNode<TPrecision,VDimension>
 }
 
 
-template <class TPrecision, unsigned int VDimension>  
+template <class TPrecision, unsigned int VDimension>
 std::string
 DataNode<TPrecision,VDimension>
 ::GetNodeTypeAsString() const
@@ -184,7 +184,7 @@ DataNode<TPrecision,VDimension>
       {
 	oss<<"Folder ("<<m_NodeId<<")";
 	break;
-      }   
+      }
     case FEATURE_POINT:
       {
 	oss<<"Point ("<<m_NodeId<<") "<<m_Data.point;
@@ -225,14 +225,14 @@ DataNode<TPrecision,VDimension>
 }
 
 template <class TPrecision, unsigned int VDimension>
-void 
+void
 DataNode<TPrecision,VDimension>
 ::SetField(std::string key, std::string value)
 {
   m_FieldMap[key] = value;
 }
 template <class TPrecision, unsigned int VDimension>
-  std::string 
+  std::string
 DataNode<TPrecision,VDimension>
 ::GetField(std::string key) const
 {
@@ -246,7 +246,7 @@ DataNode<TPrecision,VDimension>
     }
 }
 template <class TPrecision, unsigned int VDimension>
-  void 
+  void
 DataNode<TPrecision,VDimension>
 ::RemoveField(std::string key)
 {
@@ -278,56 +278,56 @@ DataNode<TPrecision,VDimension>
   return FieldType("No key","No value");
 }
 template <class TPrecision, unsigned int VDimension>
-  unsigned int 
+  unsigned int
 DataNode<TPrecision,VDimension>
 ::GetNumberOfFields() const
 {
   return m_FieldMap.size();
 }
 template <class TPrecision, unsigned int VDimension>
-  void 
+  void
 DataNode<TPrecision,VDimension>
 ::ClearFields()
 {
   m_FieldMap.clear();
 }
 template <class TPrecision, unsigned int VDimension>
-  bool 
+  bool
 DataNode<TPrecision,VDimension>
 ::IsDocument() const
 {
   return m_NodeType == DOCUMENT;
 }
 template <class TPrecision, unsigned int VDimension>
-  bool 
+  bool
 DataNode<TPrecision,VDimension>
 ::IsRoot() const
 {
   return m_NodeType == ROOT;
 }
 template <class TPrecision, unsigned int VDimension>
-  bool 
+  bool
 DataNode<TPrecision,VDimension>
 ::IsFolder() const
 {
   return m_NodeType == FOLDER;
 }
 template <class TPrecision, unsigned int VDimension>
-  bool 
+  bool
 DataNode<TPrecision,VDimension>
 ::IsPointFeature() const
 {
   return m_NodeType == FEATURE_POINT;
 }
 template <class TPrecision, unsigned int VDimension>
-  bool 
+  bool
 DataNode<TPrecision,VDimension>
 ::IsLineFeature() const
 {
   return m_NodeType == FEATURE_LINE;
 }
 template <class TPrecision, unsigned int VDimension>
-  bool 
+  bool
 DataNode<TPrecision,VDimension>
 ::IsPolygonFeature() const
 {
@@ -335,7 +335,7 @@ DataNode<TPrecision,VDimension>
 }
 
 template <class TPrecision, unsigned int VDimension>
-  bool 
+  bool
 DataNode<TPrecision,VDimension>
 ::IsMultiPointFeature() const
 {
@@ -343,7 +343,7 @@ DataNode<TPrecision,VDimension>
 }
 
 template <class TPrecision, unsigned int VDimension>
-  bool 
+  bool
 DataNode<TPrecision,VDimension>
 ::IsMultiLineFeature() const
 {
@@ -351,7 +351,7 @@ DataNode<TPrecision,VDimension>
 }
 
 template <class TPrecision, unsigned int VDimension>
-  bool 
+  bool
 DataNode<TPrecision,VDimension>
 ::IsMultiPolygonFeature() const
 {
@@ -359,7 +359,7 @@ DataNode<TPrecision,VDimension>
 }
 
 template <class TPrecision, unsigned int VDimension>
-  bool 
+  bool
 DataNode<TPrecision,VDimension>
 ::IsCollectionFeature() const
 {

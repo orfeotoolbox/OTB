@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,7 +28,7 @@ namespace Function
   const unsigned int
   ProlateFunction<TInput, TOutput>
   ::m_OriginalProfileSize = 721;
-  
+
 
   template<class TInput, class TOutput>
   const double
@@ -67,7 +67,7 @@ namespace Function
     0.000885052,  0.000883208,  0.000881361,  0.000879511,  0.000877658,  0.000875802, 0.000873943,  0.000872081,  0.000870216,  0.000868347,  0.000866476,  0.000864602,
     0.000862724,  0.000860844,  0.000858961,  0.000857075,  0.000855186,  0.000853294, 0.000851399,  0.000849502,  0.000847601,  0.000845698,  0.000843791,  0.000841882,
     0.000839971,  0.000838056,  0.000836139,  0.000834219,  0.000832296,  0.000830371, 0.000828442,  0.000826511,  0.000824578,  0.000822642,  0.000820703,  0.000818761,
-    0.000816817,  0.000814871,  0.000812922,  0.00081097,   0.000809016,  0.000807059, 0.000805099,  0.000803138,  0.000801173,  0.000799207,  0.000797237,  0.000795266, 
+    0.000816817,  0.000814871,  0.000812922,  0.00081097,   0.000809016,  0.000807059, 0.000805099,  0.000803138,  0.000801173,  0.000799207,  0.000797237,  0.000795266,
     0.000793292,  0.000791315,  0.000789337,  0.000787355,  0.000785372,  0.000783386, 0.000781398,  0.000779407,  0.000777415,  0.00077542,   0.000773422,  0.000771423,
     0.000769421,  0.000767417,  0.000765411,  0.000763403,  0.000761393,  0.00075938,  0.000757365,  0.000755349,  0.00075333,   0.000751309,  0.000749286,  0.000747261,
     0.000745234,  0.000743205,  0.000741173,  0.00073914,   0.000737105,  0.000735069, 0.00073303,   0.000730989,  0.000728946,  0.000726902,  0.000724855,  0.000722807,
@@ -94,9 +94,9 @@ namespace Function
     0.000214923,  0.000212918,  0.000210915,  0.000208914,  0.000206915,  0.000204919, 0.000202924,  0.000200932,  0.000198942,  0.000196955,  0.000194969,  0.000192986,
     0.000191005,  0.000189026,  0.00018705,   0.000185076,  0.000183104,  0.000181135, 0.000179167,  0.000177203,  0.00017524,   0.000173281,  0.000171323,  0.000169368,
     0.000167415,  0.000165465,  0.000163517,  0.000161572,  0.000159629,  0.000157689, 0.000155752,  0.000153816,  0.000151884,  0.000149954,  0.000148026,  0.000146101,
-    0.000144179 
+    0.000144179
   };
-  
+
 template<class TInput, class TOutput>
 double
 ProlateFunction<TInput, TOutput>
@@ -104,7 +104,7 @@ ProlateFunction<TInput, TOutput>
 {
   vnl_vector<vcl_complex<double> > resampledProfile(1024);
   resampledProfile.fill(0);
-  
+
   for (unsigned int i = 0; i<m_Radius+1; i++)
     {
       unsigned int ival = static_cast<unsigned int>(static_cast<double>(m_OriginalProfileSize*i)/static_cast<double>(m_Radius+1));
@@ -112,10 +112,10 @@ ProlateFunction<TInput, TOutput>
     }
   vnl_fft_1d<double> v1d(1024);
   v1d.fwd_transform(resampledProfile);
-  
+
   // Carrful, spectrum is symmetrical
   unsigned int sampleNb = static_cast<unsigned int>( 1024/(2*resampleRatio) );
-  
+
   double energy = 0.;
   // First part of spectrum
   for (unsigned int j = 0; j<sampleNb+1; j++)
@@ -127,7 +127,7 @@ ProlateFunction<TInput, TOutput>
     {
       energy += std::abs(resampledProfile[j])*std::abs(resampledProfile[j]);
     }
-  
+
   double totalEnergy = energy;
   // Middle part
   for (unsigned int j = sampleNb+1; j<1023-sampleNb+1; j++)
@@ -151,7 +151,7 @@ ProlateInterpolateImageFunction<TInputImage, TBoundaryCondition, TCoordRep, TInp
   //VectorType m_ResampledProfil(1, 0.);
   this->SetNormalizeWeight(true);
 }
-  
+
 /** Destructor */
 template<class TInputImage, class TBoundaryCondition, class TCoordRep, class TInputInterpolator, class TOutputInterpolator>
 ProlateInterpolateImageFunction<TInputImage, TBoundaryCondition, TCoordRep, TInputInterpolator, TOutputInterpolator>
@@ -163,7 +163,7 @@ template<class TInputImage, class TBoundaryCondition, class TCoordRep, class TIn
 void
 ProlateInterpolateImageFunction<TInputImage, TBoundaryCondition, TCoordRep, TInputInterpolator, TOutputInterpolator>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
-{ 
+{
   Superclass::PrintSelf( os, indent );
 }
 

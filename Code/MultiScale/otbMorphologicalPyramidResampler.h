@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,13 +27,13 @@ namespace otb
       /**
        * \class Resampler
        * \brief This class performs the resampling of the given image to the given size.
-       * 
-       * This class performs the resampling of the given image to the given size.It is used 
+       *
+       * This class performs the resampling of the given image to the given size.It is used
        * in the MorphologicalPyramidAnalyseFilter and MorphologicalPyramidSynthesisFilter.
-       * 
+       *
        * The resampling is done by the itk::ResampleImageFilter, templated with the interpolator
        * itk::LinearInterpolateImageFunction and the transform itk::ScaleTransform.
-       * 
+       *
        * \sa MorphologicalPyramidAnalyseFilter
        * \sa MorphologicalPyramidSynthesisFilter
        * \sa ResampleImageFilter
@@ -45,7 +45,7 @@ namespace otb
 	: public itk::ImageToImageFilter<TInputImage,TOutputImage>
 	{
 	  public :
-	    /** Standard typedefs */ 
+	    /** Standard typedefs */
 	    typedef Resampler                                         Self;
 	  typedef itk::ImageToImageFilter<TInputImage,TOutputImage> Superclass;
 	  typedef itk::SmartPointer<Self>                           Pointer;
@@ -67,7 +67,7 @@ namespace otb
 	  /** Size parameter accessor */
 	  itkSetMacro(Size,SizeType);
 	  itkGetMacro(Size,SizeType);
-  
+
 	protected:
 	  /** Constructor */
 	  Resampler();

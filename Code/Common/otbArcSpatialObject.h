@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,7 +25,7 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class ArcSpatialObject
- *  \brief 
+ *  \brief
  *
  */
 template <unsigned int VDimension = 2>
@@ -38,10 +38,10 @@ public:
   typedef itk::SpatialObject<VDimension> Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(ArcSpatialObject, SpatialObject);
 
@@ -56,53 +56,53 @@ public:
   /** Additional typedefs */
   typedef itk::VectorContainer<unsigned long,PointType> PointContainerType;
   typedef itk::SmartPointer<PointContainerType>         PointContainerPointer;
-  /** 
+  /**
    *  Set all radii to the same radius value.  Each radius is
-   *  half the length of one axis of the ellipse.  
+   *  half the length of one axis of the ellipse.
    */
   itkSetMacro(Radius,double);
   itkGetConstReferenceMacro(Radius,double);
    /// Set the Start Angle
   itkSetMacro(Angle1,double);
   itkGetMacro(Angle1,double);
- 
+
   //Set the End Angle
   itkSetMacro(Angle2,double);
   itkGetMacro(Angle2,double);
-  /** 
+  /**
    *  That's useful for fuzzy objects.
-   * \return a degree of membership to the object. 
-   */ 
-  virtual bool ValueAt( const PointType & point, double & value, 
+   * \return a degree of membership to the object.
+   */
+  virtual bool ValueAt( const PointType & point, double & value,
                         unsigned int depth=0,
                         char * name=NULL) const;
-  /** 
-   * \return true if the object provides a method to evaluate the value 
+  /**
+   * \return true if the object provides a method to evaluate the value
    * at the specified point, false otherwise.
    */
-  virtual bool IsEvaluableAt( const PointType & point, 
+  virtual bool IsEvaluableAt( const PointType & point,
                               unsigned int depth=0,
                               char * name=NULL) const;
-  /** 
-   * Test whether a point is inside or outside the object 
-   */ 
+  /**
+   * Test whether a point is inside or outside the object
+   */
   virtual bool IsInside( const PointType & point,
                          unsigned int depth,
                          char *) const;
-  /** 
-   *  Test whether a point is inside or outside the object 
+  /**
+   *  Test whether a point is inside or outside the object
    *  For computational speed purposes, it is faster if the method does not
-   *  check the name of the class and the current depth 
-   */ 
+   *  check the name of the class and the current depth
+   */
   virtual bool IsInside( const PointType & point) const;
-  /** 
+  /**
    * Get the boundaries of a specific object.  This function needs to
    * be called every time one of the object's components is
-   * changed. 
-   */ 
+   * changed.
+   */
   virtual bool ComputeLocalBoundingBox() const;
-  /** 
-   * Copy the information from another SpatialObject 
+  /**
+   * Copy the information from another SpatialObject
    */
   void CopyInformation(const itk::DataObject *data);
 

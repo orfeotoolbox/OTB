@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -40,7 +40,7 @@ NNearestTransformsLinearInterpolateDeformationFieldGenerator<TPointSet, TDeforma
 
   typedef itk::ImageRegionIteratorWithIndex<DeformationFieldType> IteratorType;
   IteratorType it(outputPtr,outputPtr->GetRequestedRegion());
-  
+
   for(it.GoToBegin();!it.IsAtEnd();++it)
     {
       IndexType index = it.GetIndex();
@@ -50,7 +50,7 @@ NNearestTransformsLinearInterpolateDeformationFieldGenerator<TPointSet, TDeforma
       xdeformation = 0;
       ydeformation = 0;
       normalization = 0;
-      
+
       for(typename IndexVectorType::iterator indexIt=indexVector.begin();indexIt!=indexVector.end();++indexIt)
 	{
 	  PointType point;
@@ -61,7 +61,7 @@ NNearestTransformsLinearInterpolateDeformationFieldGenerator<TPointSet, TDeforma
 	    {
 	      distance = EPSILON;
 	    }
-	  
+
 	   ParametersType params(this->GetTransform()->GetNumberOfParameters());
 	   for(unsigned int  i = 0; i<this->GetTransform()->GetNumberOfParameters();++i)
 	    {
@@ -69,12 +69,12 @@ NNearestTransformsLinearInterpolateDeformationFieldGenerator<TPointSet, TDeforma
 	    }
 	  this->GetTransform()->SetParameters(params);
 	  PointType sourcePoint,targetPoint;
-	  
+
 	  outputPtr->TransformIndexToPhysicalPoint(it.GetIndex(),sourcePoint);
 	  targetPoint = this->GetTransform()->TransformPoint(sourcePoint);
 	  xdeformation += (targetPoint[0]-sourcePoint[0])/distance;
 	  ydeformation += (targetPoint[1]-sourcePoint[1]) /distance;
-	  normalization+=1/distance;	      
+	  normalization+=1/distance;
 	}
 
       if(normalization>0)
