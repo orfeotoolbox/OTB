@@ -118,6 +118,7 @@ SET(INPUTDATA ${OTB_SOURCE_DIR}/Examples/Data)
 SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
 SET(EXE_TESTS ${CXX_TEST_PATH}/otbIOExamplesTests)
+SET(EXE_TESTS ${CXX_TEST_PATH}/otbIOExamplesTests2)
 
 SET(TOL 0.0)
 
