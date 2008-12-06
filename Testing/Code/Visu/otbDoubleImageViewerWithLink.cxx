@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,22 +31,22 @@ int otbDoubleImageViewerWithLink( int argc, char * argv[] )
   typedef ImageViewerType::OffsetType OffsetType;
   typedef ImageViewerType::ImageType ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
-      
+
   // instantiation
   ImageViewerType::Pointer viewer1 = ImageViewerType::New();
   ImageViewerType::Pointer viewer2 = ImageViewerType::New();
-      
+
   // check for input images
   ReaderType::Pointer reader1 = ReaderType::New();
   reader1->SetFileName(filename1);
   reader1->GenerateOutputInformation();
-  viewer1->SetImage(reader1->GetOutput());      
-	
+  viewer1->SetImage(reader1->GetOutput());
+
   ReaderType::Pointer reader2 = ReaderType::New();
   reader2->SetFileName(filename2);
   reader2->GenerateOutputInformation();
-  viewer2->SetImage(reader2->GetOutput());      
-      
+  viewer2->SetImage(reader2->GetOutput());
+
   // CASE 1: Simple link
   viewer1->Link(viewer2);
   viewer1->Show();

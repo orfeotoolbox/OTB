@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,7 +27,7 @@
 
 
 int otbProlateValidationTest(int argc, char * argv[])
-{  
+{
   const char * infname = argv[1];
   const char * outfname = argv[2];
   const unsigned int rad = atoi(argv[3]);
@@ -61,7 +61,7 @@ int otbProlateValidationTest(int argc, char * argv[])
   prolate->SetInputImage(reader->GetOutput());
   prolate->SetRadius(rad);
 
- 
+
   std::cout<<"Originalprofilsize: "<< prolate->GetFunction().GetOriginalProfileSize()<<std::endl;
   std::cout<<"Energy : "<<prolate->GetFunction().ComputeEnergy(1/factor)<<std::endl;
   std::cout<<"Radius : "<<prolate->GetRadius()<<std::endl;

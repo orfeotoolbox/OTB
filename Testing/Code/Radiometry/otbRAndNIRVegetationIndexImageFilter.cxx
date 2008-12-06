@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,29 +29,29 @@ int generic_RAndNIRVegetationIndexImageFilter(int argc, char * argv[])
   typedef otb::ImageFileReader<TInputRImage> RReaderType;
   typedef otb::ImageFileReader<TInputNIRImage> NIRReaderType;
   typedef otb::ImageFileWriter<TOutputImage> WriterType;
-  
-  typedef otb::RAndNIRVegetationIndexImageFilter<TInputRImage,TInputNIRImage,TOutputImage,TFunction> 
+
+  typedef otb::RAndNIRVegetationIndexImageFilter<TInputRImage,TInputNIRImage,TOutputImage,TFunction>
     RAndNIRVegetationIndexImageFilterType;
-  
+
   // Instantiating object
   typename RAndNIRVegetationIndexImageFilterType::Pointer filter = RAndNIRVegetationIndexImageFilterType::New();
   typename RReaderType::Pointer readerR = RReaderType::New();
   typename NIRReaderType::Pointer readerNIR = NIRReaderType::New();
   typename WriterType::Pointer writer = WriterType::New();
-  
+
   const char * inputFilenameR  = argv[1];
   const char * inputFilenameNIR  = argv[2];
   const char * outputFilename = argv[3];
-  
+
   readerR->SetFileName( inputFilenameR );
   readerNIR->SetFileName( inputFilenameNIR );
   writer->SetFileName( outputFilename  );
-  filter->SetInputR( readerR->GetOutput() ); 
-  filter->SetInputNIR( readerNIR->GetOutput() ); 
+  filter->SetInputR( readerR->GetOutput() );
+  filter->SetInputNIR( readerNIR->GetOutput() );
   writer->SetInput( filter->GetOutput() );
   writer->Update();
-  
-  
+
+
   return EXIT_SUCCESS;
 }
 
@@ -63,7 +63,7 @@ int otbRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
   typedef otb::Image<PixelType,Dimension> InputRImageType;
   typedef otb::Image<PixelType,Dimension> InputNIRImageType;
   typedef otb::Image<float,Dimension> OutputImageType;
-        
+
   std::string strArgv(argv[1]);
   argc--;
   argv++;

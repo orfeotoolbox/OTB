@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -50,7 +50,7 @@ class Linear : public GenericKernelFunctorBase
 public:
   Linear(): GenericKernelFunctorBase() {};
   virtual ~Linear() {};
-  
+
   virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const
     {
       return this->dot(x,y);
@@ -63,67 +63,67 @@ public:
 int otbSVMClassifierImage(int argc, char* argv[] )
 {
   namespace stat = itk::Statistics ;
-  
+
   if (argc != 4)
     {
-      std::cout << "Usage : " << argv[0] << " inputImage modelFile outputImage" 
+      std::cout << "Usage : " << argv[0] << " inputImage modelFile outputImage"
                 << std::endl ;
       return EXIT_FAILURE;
     }
-  
+
   const char * imageFilename  = argv[1];
   const char * modelFilename  = argv[2];
   const char * outputFilename = argv[3];
-  
+
   /** Read the input image and build the sample */
-  
+
   typedef double                        InputPixelType;
   typedef std::vector<InputPixelType>   InputVectorType;
   typedef int                           LabelPixelType;
   const   unsigned int        	  Dimension = 2;
-  
+
   typedef otb::Image< itk::FixedArray<InputPixelType,3>,  Dimension >	InputImageType;
   typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-  
+
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( imageFilename  );
   reader->Update();
-  
+
   typedef itk::Statistics::ImageToListAdaptor< InputImageType > SampleType;
   SampleType::Pointer sample = SampleType::New();
-  
+
   sample->SetImage(reader->GetOutput());
-  
-  
+
+
   /** preparing classifier and decision rule object */
   typedef otb::SVMModel< InputPixelType, LabelPixelType > ModelType;
-  
+
   ModelType::Pointer model = ModelType::New();
-  
-    
+
+
   otb::Linear lFunctor;
   model->SetKernelFunctor(&lFunctor);
-  
+
   model->LoadModel( modelFilename );
-  
+
   int numberOfClasses = model->GetNumberOfClasses();
-  
+
   typedef otb::SVMClassifier< SampleType, LabelPixelType > ClassifierType ;
-  
+
   ClassifierType::Pointer classifier = ClassifierType::New() ;
-  
+
   classifier->SetNumberOfClasses(numberOfClasses) ;
   classifier->SetModel( model );
   classifier->SetSample(sample.GetPointer()) ;
   classifier->Update() ;
-  
+
   /* Build the class map */
   otbGenericMsgDebugMacro( << "Output image creation" );
-			    
+
     typedef ClassifierType::ClassLabelType	          OutputPixelType;
   typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
 
-    
+
     OutputImageType::Pointer outputImage = OutputImageType::New();
 
     typedef itk::Index<Dimension>         myIndexType;
@@ -145,17 +145,17 @@ int otbSVMClassifierImage(int argc, char* argv[] )
     outputImage->SetRegions( region );
     outputImage->Allocate();
 
-    
-    otbGenericMsgDebugMacro( << "classifier get output" );  
+
+    otbGenericMsgDebugMacro( << "classifier get output" );
     ClassifierType::OutputType* membershipSample =
       classifier->GetOutput() ;
-    otbGenericMsgDebugMacro( << "Sample iterators" );  
+    otbGenericMsgDebugMacro( << "Sample iterators" );
     ClassifierType::OutputType::ConstIterator m_iter =
       membershipSample->Begin() ;
     ClassifierType::OutputType::ConstIterator m_last =
       membershipSample->End() ;
 
-    otbGenericMsgDebugMacro( << "Image iterator" );  
+    otbGenericMsgDebugMacro( << "Image iterator" );
     typedef itk::ImageRegionIterator< OutputImageType>  OutputIteratorType;
     OutputIteratorType  outIt( outputImage,
 			   outputImage->GetBufferedRegion() );
@@ -163,7 +163,7 @@ int otbSVMClassifierImage(int argc, char* argv[] )
     outIt.GoToBegin();
 
 
-    otbGenericMsgDebugMacro( << "Iteration for output image = " << (membershipSample->Size()) );  
+    otbGenericMsgDebugMacro( << "Iteration for output image = " << (membershipSample->Size()) );
 
     while (m_iter != m_last && !outIt.IsAtEnd())
     {
@@ -175,27 +175,27 @@ int otbSVMClassifierImage(int argc, char* argv[] )
 
     typedef otb::Image< unsigned char, Dimension >        FileImageType;
 
-    
+
     typedef itk::RescaleIntensityImageFilter< OutputImageType,
       FileImageType > RescalerType;
 
     RescalerType::Pointer rescaler = RescalerType::New();
-    
+
     rescaler->SetOutputMinimum( itk::NumericTraits< unsigned char >::min());
     rescaler->SetOutputMaximum( itk::NumericTraits< unsigned char >::max());
 
     rescaler->SetInput( outputImage );
 
     typedef otb::ImageFileWriter< FileImageType >         WriterType;
-	
+
     WriterType::Pointer writer = WriterType::New();
 
     writer->SetFileName( outputFilename  );
     writer->SetInput( rescaler->GetOutput() );
-    
+
     writer->Update();
-    
- 
+
+
     return EXIT_SUCCESS;
 }
 

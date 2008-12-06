@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -37,12 +37,12 @@ int main( int argc, char ** argv )
 
     std::cout << "Usage : " << argv[0] << " inputImage outputImage" << std::endl;
     return 1;
-    
+
     }
 
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
-       
+
 
   typedef unsigned char                                   InputPixelType;
   typedef unsigned char   	                        OutputPixelType;
@@ -79,7 +79,7 @@ int main( int argc, char ** argv )
   roiFilter->Update();
 
   std::cout << "Extraction ROI" << std::endl;
-  
+
   typedef itk::PolyLineParametricPath< Dimension >		  PathType;
   typedef otb::ImageToPathListAlignFilter<InputImageType,PathType> ListAlignFilterType;
 
@@ -93,14 +93,14 @@ int main( int argc, char ** argv )
 
 
   typedef ROIFilterType::OutputImageType BackgroundImageType;
-  
+
   typedef otb::DrawPathFilter< BackgroundImageType, PathType, OutputImageType >  DrawPathFilterType;
 
   DrawPathFilterType::Pointer drawPathFilter = DrawPathFilterType::New();
 
   typedef ListAlignFilterType::OutputPathListType ListType;
 
-  
+
   ListType* listePaths = alignFilter->GetOutput();
 
   ListType::Iterator listIt = listePaths->Begin();
@@ -110,7 +110,7 @@ int main( int argc, char ** argv )
   roiFilter->Update();
 
   unsigned int color = 0;
-  
+
   while( listIt != listePaths->End())
     {
 
@@ -121,33 +121,33 @@ int main( int argc, char ** argv )
     drawPathFilter->Update();
 
     backgroundImage = drawPathFilter->GetOutput();
-    
+
     ++listIt;
     ++color;
 
-    
+
 
 
     }
-  
 
-  
+
+
   writer->SetInput( drawPathFilter->GetOutput() );
 
   writer->Update();
 
-  
+
 /*  typedef otb::ColorImageViewer<unsigned char,double>    ViewerType;
   ViewerType                      viewer;
 
   viewer.SetLabel( "Input Image" );
-  viewer.SetImage( drawPathFilter->GetOutput() );  
+  viewer.SetImage( drawPathFilter->GetOutput() );
 
   viewer.Show();
   Fl::run();
 */
 
-  
+
 
   return EXIT_SUCCESS;
 }

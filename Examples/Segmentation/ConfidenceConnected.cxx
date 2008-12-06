@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -81,7 +81,7 @@
 // following header defining the \doxygen{itk}{ConfidenceConnectedImageFilter} class
 // must be included.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 
 // Software Guide : BeginCodeSnippet
@@ -101,7 +101,7 @@
 //  \doxygen{itk}{CurvatureFlowImageFilter}, hence we need to include its header
 //  file.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "itkCurvatureFlowImageFilter.h"
@@ -124,12 +124,12 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  We now define the image type using a pixel type and a particular
   //  dimension. In this case the \code{float} type is used for the pixels due
-  //  to the requirements of the smoothing filter. 
+  //  to the requirements of the smoothing filter.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef   float           InternalPixelType;
@@ -143,7 +143,7 @@ int main( int argc, char *argv[] )
   typedef itk::CastImageFilter< InternalImageType, OutputImageType >
     CastingFilterType;
   CastingFilterType::Pointer caster = CastingFilterType::New();
-                        
+
 
   // We instantiate reader and writer types
   //
@@ -158,11 +158,11 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The smoothing filter type is instantiated using the image type as
   //  a template parameter.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef itk::CurvatureFlowImageFilter< InternalImageType, InternalImageType >
@@ -171,36 +171,36 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  Next the filter is created by invoking the \code{New()} method and
   //  assigning the result to a \doxygen{itk}{SmartPointer}.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  CurvatureFlowImageFilterType::Pointer smoothing = 
+  CurvatureFlowImageFilterType::Pointer smoothing =
                          CurvatureFlowImageFilterType::New();
   // Software Guide : EndCodeSnippet
 
 
   //  Software Guide : BeginLatex
-  //  
-  //  We now declare the type of the region growing filter. In this case it is
-  //  the ConfidenceConnectedImageFilter. 
   //
-  //  Software Guide : EndLatex 
+  //  We now declare the type of the region growing filter. In this case it is
+  //  the ConfidenceConnectedImageFilter.
+  //
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::ConfidenceConnectedImageFilter<InternalImageType, InternalImageType> 
+  typedef itk::ConfidenceConnectedImageFilter<InternalImageType, InternalImageType>
     ConnectedFilterType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  Then, we construct one filter of this class using the \code{New()}
   //  method.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   ConnectedFilterType::Pointer confidenceConnected = ConnectedFilterType::New();
@@ -208,14 +208,14 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  Now it is time to create a simple, linear pipeline. A file reader is
   //  added at the beginning of the pipeline and a cast filter and writer are
   //  added at the end. The cast filter is required here to convert
   //  \code{float} pixel types to integer types since only a few image file
   //  formats support \code{float} types.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   smoothing->SetInput( reader->GetOutput() );
@@ -232,7 +232,7 @@ int main( int argc, char *argv[] )
   //  be adjusted depending on the amount of noise present in the input
   //  image.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   smoothing->SetNumberOfIterations( 5 );
@@ -254,7 +254,7 @@ int main( int argc, char *argv[] )
   //
   //  \index{itk::ConfidenceConnectedImageFilter!SetMultiplier()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   confidenceConnected->SetMultiplier( 2.5 );
@@ -276,7 +276,7 @@ int main( int argc, char *argv[] )
   //
   //  \index{itk::ConfidenceConnectedImageFilter!SetNumberOfIterations()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   confidenceConnected->SetNumberOfIterations( 5 );
@@ -292,7 +292,7 @@ int main( int argc, char *argv[] )
   //
   //  \index{itk::ConfidenceConnectedImageFilter!SetReplaceValue()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   confidenceConnected->SetReplaceValue( 255 );
@@ -312,10 +312,10 @@ int main( int argc, char *argv[] )
   //  \index{itk::ConfidenceConnectedImageFilter!SetSeed()}
   //  \index{itk::ConfidenceConnectedImageFilter!SetInitialNeighborhoodRadius()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   InternalImageType::IndexType  index;
-  
+
   index[0] = atoi( argv[3] );
   index[1] = atoi( argv[4] );
 
@@ -323,16 +323,16 @@ int main( int argc, char *argv[] )
   // Software Guide : BeginCodeSnippet
   confidenceConnected->SetSeed( index );
   // Software Guide : EndCodeSnippet
- 
+
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The size of the initial neighborhood around the seed is defined with the
   //  method \code{SetInitialNeighborhoodRadius()}. The neighborhood will be
   //  defined as an $N$-dimensional rectangular region with $2r+1$ pixels on
-  //  the side, where $r$ is the value passed as initial neighborhood radius. 
+  //  the side, where $r$ is the value passed as initial neighborhood radius.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   confidenceConnected->SetInitialNeighborhoodRadius( 2 );
@@ -340,12 +340,12 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The invocation of the \code{Update()} method on the writer triggers the
   //  execution of the pipeline.  It is recommended to place update calls in a
   //  \code{try/catch} block in case errors occur and exceptions are thrown.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   try
@@ -364,7 +364,7 @@ int main( int argc, char *argv[] )
   //
   //  Let's now run this example using as input the image
   //  \code{QB\_Suburb.png} provided in the directory
-  //  \code{Examples/Data}. We can easily segment 
+  //  \code{Examples/Data}. We can easily segment
   //  structures by providing seeds in the appropriate locations. For example
   //
 
@@ -372,7 +372,7 @@ int main( int argc, char *argv[] )
   //  \begin{center}
   //  \begin{tabular}{|l|c|c|c|c|}
   //  \hline
-  //  Structure & Seed Index & Lower & Upper & Output Image \\ \hline 
+  //  Structure & Seed Index & Lower & Upper & Output Image \\ \hline
   //  Road & $(110,38)$ & 50 & 100 & Second from left in Figure \ref{fig:ConnectedThresholdOutput} \\ \hline
   //  Shadow    & $(118,100)$ & 0 & 10 & Third  from left in Figure \ref{fig:ConnectedThresholdOutput} \\ \hline
   //  Building  & $(169,146)$ & 220 & 255 & Fourth from left in Figure \ref{fig:ConnectedThresholdOutput} \\ \hline
@@ -396,7 +396,7 @@ int main( int argc, char *argv[] )
   // \end{figure}
   //
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
   return EXIT_SUCCESS;

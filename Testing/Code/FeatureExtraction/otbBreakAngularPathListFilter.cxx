@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,7 +27,7 @@
 int otbBreakAngularPathListFilter(int argc, char * argv[])
 {
   const char * outfname = argv[1];
-      
+
   typedef std::vector<double> PointsVectorType;
   typedef std::vector< PointsVectorType > PointsMatrixType;
   PointsMatrixType MatricePoints;
@@ -44,7 +44,7 @@ int otbBreakAngularPathListFilter(int argc, char * argv[])
     }
   cpt++;
   ListPoints.clear();
-      
+
   while ( argv[cpt] != NULL )
     {
       if( argv[cpt][0] == '|' )
@@ -63,18 +63,18 @@ int otbBreakAngularPathListFilter(int argc, char * argv[])
       cpt++;
     }
   MatricePoints.push_back(ListPoints);
-      
-      
-        
+
+
+
   const unsigned int Dimension = 2;
   typedef itk::PolyLineParametricPath<Dimension> PathType;
   typedef otb::BreakAngularPathListFilter<PathType> BreakAngularPathListFilterType;
   typedef BreakAngularPathListFilterType::PathListType PathListType;
   PathType::ContinuousIndexType cindex;
-      
-      
+
+
   PathListType::Pointer InputPathList = PathListType::New();
-      
+
   //Generate PathList
   for(PointsMatrixType::iterator listpos=MatricePoints.begin() ; listpos != MatricePoints.end() ; ++listpos)
     {
@@ -106,7 +106,7 @@ int otbBreakAngularPathListFilter(int argc, char * argv[])
 
       breakAngularFilter->SetMaxAngle((*itAngle)*M_PI/180.);
       breakAngularFilter->Update();
-      		
+
 
       PathListType::Pointer OutputPathList = breakAngularFilter->GetOutput();
 
@@ -116,7 +116,7 @@ int otbBreakAngularPathListFilter(int argc, char * argv[])
 
       unsigned int counter = 1;
       PathListIteratorType pathListIt = InputPathList->Begin();
-        
+
       file<<"--------------------------------------------------------------------------"<<std::endl;
       file<<"MAX ANGULAR :"<<breakAngularFilter->GetMaxAngle()<< "("<<(*itAngle)<<" deg.)"<<std::endl;
       file<<"INPUT list of Path "<<": "<<std::endl;
@@ -137,7 +137,7 @@ int otbBreakAngularPathListFilter(int argc, char * argv[])
 	  ++pathListIt;
 	  ++counter;
 	}
-        
+
       counter = 1;
       pathListIt = OutputPathList->Begin();
       file<<"OUTPUT list of Path "<<": "<<std::endl;
@@ -158,11 +158,11 @@ int otbBreakAngularPathListFilter(int argc, char * argv[])
 	  ++pathListIt;
 	  ++counter;
 	}
-	
+
     } //Enf for angle
   file.close();
 
- 
+
 
   return EXIT_SUCCESS;
 }

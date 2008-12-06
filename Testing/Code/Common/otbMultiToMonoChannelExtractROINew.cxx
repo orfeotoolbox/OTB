@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -21,16 +21,16 @@
 
 int otbMultiToMonoChannelExtractROINew ( int argc, char * argv[] )
 {
-  
+
   //        typedef unsigned char  	                                InputPixelType;
   //        typedef unsigned char  	                                OutputPixelType;
-  
+
   typedef std::complex<float>  	                                InputPixelType;
   typedef std::complex<double>  	                                OutputPixelType;
-  
-  typedef otb::MultiToMonoChannelExtractROI< InputPixelType, 
+
+  typedef otb::MultiToMonoChannelExtractROI< InputPixelType,
     OutputPixelType >  ExtractROIFilterType;
-  
+
   ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
 
 

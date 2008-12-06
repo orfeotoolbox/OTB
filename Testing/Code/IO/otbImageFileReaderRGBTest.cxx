@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -47,14 +47,14 @@ int otbImageFileReaderRGBTest(int argc, char* argv[])
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
- 
+
   reader->SetFileName( inputFilename  );
   writer->SetFileName( outputFilename );
-        
-  writer->SetInput( reader->GetOutput() );
-  writer->Update(); 
 
-  
+  writer->SetInput( reader->GetOutput() );
+  writer->Update();
+
+
   return EXIT_SUCCESS;
 }
 

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -37,12 +37,12 @@ int otbRCC8VertexWithCompacity(int argc, char* argv[])
 
   PathType::Pointer path = PathType::New();
   path->Initialize();
-    
+
   PathType::ContinuousIndexType p1,p2,p3;
-    
+
   p1[0]=0;
   p1[1]=0;
-    
+
   p2[0]=10;
   p2[1]=10;
 
@@ -73,8 +73,8 @@ int otbRCC8VertexWithCompacity(int argc, char* argv[])
   otbControlConditionTestMacro(vertex1->GetCompacity()!=compacity,
 			       "Test failed: vertex1->GetSegmentationImageIndex()!=imageIndex");
   // attributes vector set test
-  AttributesMapType attr1 = vertex1->GetAttributesMap(); 
-    
+  AttributesMapType attr1 = vertex1->GetAttributesMap();
+
   itk::OStringStream oss;
   oss<<p1[0];
   otbControlConditionTestMacro( attr1["P0x"].compare(oss.str())!=0,
@@ -100,7 +100,7 @@ int otbRCC8VertexWithCompacity(int argc, char* argv[])
   otbControlConditionTestMacro( attr1["P2y"].compare(oss.str())!=0,
 				"Test failed:attr1[\"P2y\"].compare(std::string(p3[1]))!=0");
 
-    
+
   otbControlConditionTestMacro(attr1["Compacity"].compare(std::string(argv[3]))!=0,
 			       "Test failed: vertex1->GetAttributesMap()[\"Compacity\"]!=std::string(argv[2])");
   // attributes vector get test
@@ -118,7 +118,7 @@ int otbRCC8VertexWithCompacity(int argc, char* argv[])
   otbControlConditionTestMacro(vertex2->GetPath()->GetVertexList()->GetElement(2)!=p3,
 			       "Test failed:vertex2->GetPath()->GetVertexList()->GetElement(2)!=p3");
   otbControlConditionTestMacro(vertex1->GetCompacity()!=vertex2->GetCompacity(),
-			       "Test failed: vertex1->GetCompacity()!=vertex2->GetCompacity()");	
+			       "Test failed: vertex1->GetCompacity()!=vertex2->GetCompacity()");
 
 
   return EXIT_SUCCESS;

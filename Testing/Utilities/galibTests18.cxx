@@ -216,7 +216,7 @@ galibTests18(int argc, char *argv[])
     }
     cout << "\n";
   }
-  
+
   char name[2048];
   params.get(gaNscoreFilename,name);
   cout << "\nthe statistics for the run are:\n" << stats;
@@ -230,7 +230,7 @@ galibTests18(int argc, char *argv[])
 
   return 0;
 }
- 
+
 
 
 float

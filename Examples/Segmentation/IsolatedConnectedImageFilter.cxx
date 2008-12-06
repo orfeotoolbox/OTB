@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -51,15 +51,15 @@
 // This example closely follows the previous ones. Only the relevant pieces
 // of code are highlighted here.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 //  Software Guide : BeginLatex
-//  
+//
 //  The header of the IsolatedConnectedImageFilter is included below.
 //
 //  \index{itk::Isolated\-Connected\-Image\-Filter!header}
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "itkIsolatedConnectedImageFilter.h"
@@ -86,11 +86,11 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  We define the image type using a pixel type and a particular
   //  dimension.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef   float           InternalPixelType;
@@ -103,9 +103,9 @@ int main( int argc, char *argv[] )
   typedef otb::Image< OutputPixelType, Dimension > OutputImageType;
   typedef itk::CastImageFilter< InternalImageType, OutputImageType >
     CastingFilterType;
-  
+
   CastingFilterType::Pointer caster = CastingFilterType::New();
-                        
+
 
   // We instantiate reader and writer types
   //
@@ -121,15 +121,15 @@ int main( int argc, char *argv[] )
 
   typedef itk::CurvatureFlowImageFilter< InternalImageType, InternalImageType >
     CurvatureFlowImageFilterType;
-  CurvatureFlowImageFilterType::Pointer smoothing = 
+  CurvatureFlowImageFilterType::Pointer smoothing =
                          CurvatureFlowImageFilterType::New();
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The IsolatedConnectedImageFilter is instantiated in the lines below.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef itk::IsolatedConnectedImageFilter<InternalImageType, InternalImageType>
@@ -138,10 +138,10 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  One filter of this class is constructed using the \code{New()} method.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   ConnectedFilterType::Pointer isolatedConnected = ConnectedFilterType::New();
@@ -149,10 +149,10 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  Now it is time to connect the pipeline.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   smoothing->SetInput( reader->GetOutput() );
@@ -176,18 +176,18 @@ int main( int argc, char *argv[] )
   //  \index{itk::Isolated\-Connected\-Image\-Filter!SetSeed1()}
   //  \index{itk::Isolated\-Connected\-Image\-Filter!SetSeed2()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
   InternalImageType::IndexType  indexSeed1;
-  
+
   indexSeed1[0] = atoi( argv[3] );
   indexSeed1[1] = atoi( argv[4] );
 
   const InternalPixelType lowerThreshold = atof( argv[5] );
 
   InternalImageType::IndexType  indexSeed2;
-  
+
   indexSeed2[0] = atoi( argv[6] );
   indexSeed2[1] = atoi( argv[7] );
 
@@ -207,20 +207,20 @@ int main( int argc, char *argv[] )
   //
   //  \index{itk::Isolated\-Connected\-Image\-Filter!SetReplaceValue()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
   // Software Guide : BeginCodeSnippet
   isolatedConnected->SetReplaceValue( 255 );
   // Software Guide : EndCodeSnippet
 
-  
+
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The invocation of the \code{Update()} method on the writer triggers the
   //  execution of the pipeline.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   try
@@ -236,20 +236,20 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The intensity value allowing us to separate both regions can be
   //  recovered with the method \code{GetIsolatedValue()}
   //
   //  \index{itk::Isolated\-Connected\-Image\-Filter!GetIsolatedValue()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   std::cout << "Isolated Value Found = ";
   std::cout << isolatedConnected->GetIsolatedValue()  << std::endl;
   // Software Guide : EndCodeSnippet
 
-  
+
   //  Software Guide : BeginLatex
   //
   //  Let's now run this example using the image
@@ -278,7 +278,7 @@ int main( int argc, char *argv[] )
   //  \begin{center}
   //  \begin{tabular}{|l|c|c|c|c|}
   //  \hline
-  //  Adjacent Structures & Seed1 & Seed2 & Lower & Isolated value found       \\ \hline 
+  //  Adjacent Structures & Seed1 & Seed2 & Lower & Isolated value found       \\ \hline
   //  Gray matter vs White matter & $(61,140)$ & $(63,43)$ & $150$ & $183.31$  \\ \hline
   //  \end{tabular}
   //  \end{center}
@@ -298,7 +298,7 @@ int main( int argc, char *argv[] )
   // \end{figure}
   //
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
   return EXIT_SUCCESS;

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,11 +33,11 @@ int otbImageListToVectorImageFilter(int argc, char * argv[])
   char * infname2 = argv[2];
   char * infname3 = argv[3];
   char * outfname = argv[4];
-     
+
   typedef otb::Image<PixelType,Dimension> ImageType;
   typedef otb::VectorImage<PixelType,Dimension> VectorImageType;
   typedef otb::ImageList<ImageType> ImageListType;
-      
+
   // IO
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<VectorImageType> WriterType;
@@ -66,13 +66,13 @@ int otbImageListToVectorImageFilter(int argc, char * argv[])
   imageList->PushBack(reader3->GetOutput());
 
   filter->SetInput(imageList);
- 
+
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(filter->GetOutput());
   writer->SetFileName(outfname);
   writer->Update();
 
-  
+
 
   return EXIT_SUCCESS;
 }

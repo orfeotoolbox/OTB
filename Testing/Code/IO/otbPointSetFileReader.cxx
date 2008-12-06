@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,11 +31,11 @@ int otbPointSetFileReader(int argc, char * argv[])
 
   PointSetType::Pointer data = reader->GetOutput();
 
-  
+
   std::ofstream fout (argv[2]);
   unsigned long nPoints = data->GetNumberOfPoints();
   fout << std::setprecision(15) << "Number of points: " << nPoints << std::endl;
-  
+
   for(unsigned long i=0; i < nPoints; ++i)
   {
     PointSetType::PointType point;

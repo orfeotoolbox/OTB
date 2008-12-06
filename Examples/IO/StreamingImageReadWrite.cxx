@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -56,7 +56,7 @@
 //  \index{otb::StreamingImageFileWriter|textbf}
 //  \index{otb::StreamingImageFileWriter!header}
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "otbImageFileReader.h"
@@ -83,7 +83,7 @@ int main( int argc, char ** argv )
   //  Then, as usual, a decision must be made about the type of pixel used to
   //  represent the image processed by the pipeline.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef unsigned char      PixelType;
@@ -100,7 +100,7 @@ int main( int argc, char ** argv )
   //
   //  \index{otb::StreamingImageFileWriter!Instantiation}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader< ImageType >  ReaderType;
@@ -119,7 +119,7 @@ int main( int argc, char ** argv )
   //  \index{otb::StreamingImageFileReader!SmartPointer}
   //  \index{otb::ImageFileWriter!SmartPointer}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   ReaderType::Pointer reader = ReaderType::New();
@@ -145,7 +145,7 @@ int main( int argc, char ** argv )
   //  \index{SetFileName()!otb::ImageFileReader}
   //  \index{SetFileName()!otb::StreamingImageFileWriter}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   reader->SetFileName( inputFilename  );
@@ -158,9 +158,9 @@ int main( int argc, char ** argv )
   //  Software Guide : BeginLatex
   //
   //  We can now connect these readers and writers to filters to create a
-  //  pipeline. 
+  //  pipeline.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   rescaler->SetInput( reader->GetOutput() );
@@ -172,23 +172,23 @@ int main( int argc, char ** argv )
   //  We can now trigger the pipeline execution by calling the
   //  \code{Update} method on the writer.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
 
 
 
 
-  try 
+  try
     {
     // Software Guide : BeginCodeSnippet
     writer->Update();
       // Software Guide : EndCodeSnippet
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cerr << "ExceptionObject caught !" << std::endl; 
-    std::cerr << err << std::endl; 
+    }
+  catch( itk::ExceptionObject & err )
+    {
+    std::cerr << "ExceptionObject caught !" << std::endl;
+    std::cerr << err << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -201,7 +201,7 @@ int main( int argc, char ** argv )
   //  whole input image will be read, processed and written without
   //  being fully loaded in memory.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
   return EXIT_SUCCESS;

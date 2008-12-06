@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -37,8 +37,8 @@ int otbKMeansImageClassificationFilter(int argc, char * argv[])
   typedef ClassificationFilterType::KMeansParametersType KMeansParametersType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::StreamingImageFileWriter<LabeledImageType> WriterType;
- 
- 
+
+
   // Instantiating object
   ClassificationFilterType::Pointer filter = ClassificationFilterType::New();
 
@@ -60,12 +60,12 @@ int otbKMeansImageClassificationFilter(int argc, char * argv[])
 	   parameters[i*sampleSize+j]=atof(argv[4+i*reader->GetOutput()->GetNumberOfComponentsPerPixel()+j]);
 	 }
      }
-     
+
    std::cout<<"Parameters: "<<parameters<<std::endl;
 
   filter->SetCentroids(parameters);
   filter->SetInput(reader->GetOutput());
-  
+
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(filter->GetOutput());
   writer->SetFileName(outfname);

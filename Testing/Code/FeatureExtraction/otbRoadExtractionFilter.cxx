@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,7 +33,7 @@ int otbRoadExtractionFilter(int argc, char * argv[])
   typedef otb::VectorImage<double,Dimension> InputImageType;
   typedef otb::Image<double,Dimension> OutputImageType;
   typedef otb::PolyLineParametricPathWithValue<double,Dimension> PathType;
-            
+
   typedef otb::ImageFileReader<InputImageType> ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
   typedef otb::RoadExtractionFilter<InputImageType,PathType> RoadExtractionFilterType;
@@ -58,7 +58,7 @@ int otbRoadExtractionFilter(int argc, char * argv[])
   const double SecondMeanDistanceThreshold  = ::atof(argv[12]);
   const double LinkAngularThreshold = ((M_PI*::atof(argv[13]))/180.);
   const double LinkDistanceThreshold  = ::atof(argv[14]);
-	  
+
   // Instantiating object
   ReaderType::Pointer reader = ReaderType::New();
   RoadExtractionFilterType::Pointer roadExtraction = RoadExtractionFilterType::New();
@@ -67,7 +67,7 @@ int otbRoadExtractionFilter(int argc, char * argv[])
 
   //Initialisation parameters
   reader->SetFileName(inputFileName);
-      
+
   roadExtraction->SetInput(reader->GetOutput());
   roadExtraction->SetReferencePixel(ReferencePixel);
   roadExtraction->SetAlpha(Alpha);
@@ -93,8 +93,8 @@ int otbRoadExtractionFilter(int argc, char * argv[])
 
   writer->SetFileName(outputFileName);
   writer->SetInput(draw->GetOutput());
-  writer->Update();    
+  writer->Update();
 
- 
+
   return EXIT_SUCCESS;
 }

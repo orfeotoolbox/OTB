@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,7 +29,7 @@ int otbShiftScaleImageAdaptor( int argc, char * argv[] )
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
-  
+
   typedef double                                                        PixelType;
   typedef unsigned char                                           OutputPixelType;
   typedef otb::Image<PixelType, 2>                                InputImageType;
@@ -38,12 +38,12 @@ int otbShiftScaleImageAdaptor( int argc, char * argv[] )
   typedef otb::ImageFileWriter< OutputImageType >                       WriterType;
   typedef otb::ShiftScaleImageAdaptor<InputImageType, PixelType>        FilterType;
   typedef itk::RescaleIntensityImageFilter<FilterType, OutputImageType> RescalerType;
-  
+
   FilterType::Pointer   filter   = FilterType::New();
   RescalerType::Pointer rescaler = RescalerType::New();
   ReaderType::Pointer   reader   = ReaderType::New();
   WriterType::Pointer   writer   = WriterType::New();
-  
+
   filter->SetScale(3.);
   filter->SetShift(10.);
 
@@ -57,10 +57,10 @@ int otbShiftScaleImageAdaptor( int argc, char * argv[] )
 
   writer->SetFileName( outputFilename );
   writer->SetInput( rescaler->GetOutput() );
-  writer->Update(); 
+  writer->Update();
 
   return EXIT_SUCCESS;
-  
+
 }
 
 

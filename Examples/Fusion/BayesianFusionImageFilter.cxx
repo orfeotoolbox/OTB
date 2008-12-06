@@ -31,7 +31,7 @@
 //  INPUTS: {multiSpect.tif} , {multiSpectInterp.tif}, {panchro.tif}
 //  OUTPUTS: {BayesianFusion_0.9999.tif} , {pretty_BayesianFusion_0.9999.png} , {pretty_multiSpect_0.9999.png} , {pretty_multiSpectInterp_0.9999.png} , {pretty_panchro_0.9999.png}
 //  0.9999
-//  Software Guide : EndCommandLineArgs    
+//  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginCommandLineArgs
 //  INPUTS: {multiSpect.tif} , {multiSpectInterp.tif}, {panchro.tif}
@@ -100,7 +100,7 @@ int main( int argc, char *argv[] )
     }
 
   //  Software Guide : BeginLatex
-  // 
+  //
   //  The image types are now defined using pixel types and particular
   //  dimension. The panchromatic image is defined as an \doxygen{otb}{Image}
   //  and the multispectral one as \doxygen{otb}{VectorImage}.
@@ -116,7 +116,7 @@ int main( int argc, char *argv[] )
 
   typedef double                                         OutputPixelType;
   typedef otb::VectorImage< OutputPixelType, Dimension > OutputImageType;
-                       
+
 
   // We instantiate reader and writer types
   //
@@ -136,7 +136,7 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  // 
+  //
   //  The Bayesian data fusion filter type is instantiated using the images types as
   //  a template parameters.
   //
@@ -151,7 +151,7 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  // 
+  //
   //  Next the filter is created by invoking the \code{New()} method and
   //  assigning the result to a \doxygen{itk}{SmartPointer}.
   //
@@ -163,17 +163,17 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  // 
+  //
   //  Now the multi spectral image, the interpolated multi spectral image and
   //  the panchromatic image are given as inputs to the filter.
-  // 
+  //
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   bayesianFilter->SetMultiSpect(       multiSpectReader->GetOutput() );
   bayesianFilter->SetMultiSpectInterp( multiSpectInterpReader->GetOutput() );
   bayesianFilter->SetPanchro(          panchroReader->GetOutput() );
- 
+
   writer->SetInput( bayesianFilter->GetOutput() );
   // Software Guide : EndCodeSnippet
 
@@ -192,7 +192,7 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  // 
+  //
   //  The invocation of the \code{Update()} method on the writer triggers the
   //  execution of the pipeline.  It is recommended to place update calls in a
   //  \code{try/catch} block in case errors occur and exceptions are thrown.
@@ -200,7 +200,7 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
 
- 
+
   // Software Guide : BeginCodeSnippet
   try
     {
@@ -212,8 +212,8 @@ int main( int argc, char *argv[] )
     std::cerr << excep << std::endl;
     }
    // Software Guide : EndCodeSnippet
- 
-   
+
+
    // Create an 3 band images for the software guide
   typedef unsigned char                                                            OutputPixelType2;
   typedef otb::VectorImage<OutputPixelType2, Dimension>                            OutputVectorImageType;
@@ -223,41 +223,41 @@ int main( int argc, char *argv[] )
   typedef otb::VectorRescaleIntensityImageFilter<OutputImageType,
                                                  OutputVectorImageType>            VectorRescalerBayesianType;
   typedef otb::Image< OutputPixelType2, Dimension >                                PanchroOutputImageType;
-  typedef otb::ImageToVectorImageCastFilter<PanchroImageType, MultiSpecImageType>  CasterType;                                        
+  typedef otb::ImageToVectorImageCastFilter<PanchroImageType, MultiSpecImageType>  CasterType;
   typedef otb::MultiChannelExtractROI<OutputPixelType2,OutputPixelType2>           ChannelExtractorType;
   typedef otb::ImageFileWriter<PanchroOutputImageType>                             WriterType2;
- 
+
   multiSpectReader->GenerateOutputInformation();
   multiSpectInterpReader->GenerateOutputInformation();
- 
+
   CasterType::Pointer cast = CasterType::New();
   cast->SetInput(panchroReader->GetOutput());
- 
+
   OutputVectorImageType::PixelType minimum,maximum;
   minimum.SetSize(multiSpectReader->GetOutput()->GetNumberOfComponentsPerPixel());
   maximum.SetSize(multiSpectReader->GetOutput()->GetNumberOfComponentsPerPixel());
   minimum.Fill(0);
   maximum.Fill(255);
- 
+
   VectorRescalerType::Pointer         vrms  = VectorRescalerType::New();
   VectorRescalerType::Pointer         vrmsi = VectorRescalerType::New();
   VectorRescalerBayesianType::Pointer vrb   = VectorRescalerBayesianType::New();
- 
+
   vrms->SetInput(multiSpectReader->GetOutput());
   vrms->SetOutputMinimum(minimum);
   vrms->SetOutputMaximum(maximum);
   vrms->SetClampThreshold(0.01);
- 
+
   vrmsi->SetInput(multiSpectInterpReader->GetOutput());
   vrmsi->SetOutputMinimum(minimum);
   vrmsi->SetOutputMaximum(maximum);
   vrmsi->SetClampThreshold(0.01);
- 
+
   vrb->SetInput(bayesianFilter->GetOutput());
   vrb->SetOutputMinimum(minimum);
   vrb->SetOutputMaximum(maximum);
   vrb->SetClampThreshold(0.01);
- 
+
   VectorRescalerType::Pointer rp = VectorRescalerType::New();
   rp->SetInput(cast->GetOutput());
   minimum.SetSize(1);
@@ -267,7 +267,7 @@ int main( int argc, char *argv[] )
   rp->SetOutputMinimum(minimum);
   rp->SetOutputMaximum(maximum);
   rp->SetClampThreshold(0.01);
- 
+
   ChannelExtractorType::Pointer selecterms = ChannelExtractorType::New();
   ChannelExtractorType::Pointer selectermsi = ChannelExtractorType::New();
   ChannelExtractorType::Pointer selecterf = ChannelExtractorType::New();
@@ -277,20 +277,20 @@ int main( int argc, char *argv[] )
   selecterms->SetChannel(2);
   selecterms->SetChannel(3);
   selecterms->SetChannel(4);
- 
+
   selectermsi->SetInput(vrmsi->GetOutput());
  // selectermsi->SetExtractionRegion(multiSpectInterpReader->GetOutput()->GetLargestPossibleRegion());
   selectermsi->SetChannel(2);
   selectermsi->SetChannel(3);
   selectermsi->SetChannel(4);
- 
+
   selecterf->SetInput(vrb->GetOutput());
   //selecterf->SetExtractionRegion(bayesianFilter->GetOutput()->GetLargestPossibleRegion());
   selecterf->SetChannel(2);
   selecterf->SetChannel(3);
   selecterf->SetChannel(4);
- 
- 
+
+
   VectorWriterType::Pointer vectWriterms  = VectorWriterType::New();
   VectorWriterType::Pointer vectWritermsi = VectorWriterType::New();
   VectorWriterType::Pointer vectWriterf   = VectorWriterType::New();
@@ -304,9 +304,9 @@ int main( int argc, char *argv[] )
   vectWritermsi->SetInput(selectermsi->GetOutput());
   vectWriterp->SetFileName(argv[8]);
   vectWriterp->SetInput(rp->GetOutput());
- 
- 
- 
+
+
+
   try
     {
     vectWriterms->Update();
@@ -324,7 +324,7 @@ int main( int argc, char *argv[] )
       std::cout << "Unknown exception !" << std::endl;
       return EXIT_FAILURE;
     }
- 
+
 
 
 
@@ -345,7 +345,7 @@ int main( int argc, char *argv[] )
   // images used for this example (\copyright European Space Imaging).}
   // \label{fig:BayesianImageFusionFilterInput}
   // \end{figure}
- 
+
   // \begin{figure} \center
   // \includegraphics[width=0.24\textwidth]{pretty_BayesianFusion_0.5.eps}
   // \includegraphics[width=0.24\textwidth]{pretty_BayesianFusion_0.9999.eps}

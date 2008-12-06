@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,8 +23,8 @@
  *
  * PURPOSE:
  *
- * Application pour projeter une région d'une image en coordonnées géographiques 
- * en utilisant un Interpolator+regionextractor et un Iterator. 
+ * Application pour projeter une région d'une image en coordonnées géographiques
+ * en utilisant un Interpolator+regionextractor et un Iterator.
  * Pas de prise en compte du MNT.
  */
 
@@ -57,13 +57,13 @@ int otbSensorImageToCarto( int argc, char* argv[] )
 
   if(argc!=10)
     {
-      std::cout << argv[0] <<" <input filename> <output filename> <X origine> <Y origine> <taille_x> <taille_y> <NumberOfstreamDivisions>" 
+      std::cout << argv[0] <<" <input filename> <output filename> <X origine> <Y origine> <taille_x> <taille_y> <NumberOfstreamDivisions>"
                 << "<xSPacing> <ySpacing>" << std::endl;
 
       return EXIT_FAILURE;
     }
   typedef itk::Point <double, 2> 		 PointType;
-  PointType				 outputpoint; 
+  PointType				 outputpoint;
 
   /*************************************************/
   /*  Création de l'image de sortie outputimage    */
@@ -76,8 +76,8 @@ int otbSensorImageToCarto( int argc, char* argv[] )
   ImageType::PixelType			 pixelvalue;
 
   ImageType::IndexType  			 start;
-  start[0]=0;     
-  start[1]=0;     
+  start[0]=0;
+  start[1]=0;
 
   ImageType::SizeType  			 size;
   size[0]=atoi(argv[5]);      //Taille en X.
@@ -100,19 +100,19 @@ int otbSensorImageToCarto( int argc, char* argv[] )
   outputimage-> SetRegions(region);
   outputimage->SetSpacing(spacing);
   outputimage-> Allocate();     //Notre image de sortie est créée.
-  otbGenericMsgDebugMacro(<< "Output image created!! " ); 
+  otbGenericMsgDebugMacro(<< "Output image created!! " );
 
   /******************************/
   /*  Création de mon handler   */
   /******************************/
-	
+
   ossimKeywordlist geom_kwl;
   typedef otb::ImageGeometryHandler  HandlerType;
   HandlerType::Pointer   handler= HandlerType::New();
-  otbGenericMsgDebugMacro(<< "Handler created " ); 
+  otbGenericMsgDebugMacro(<< "Handler created " );
   handler->SetFileName(argv[1]);
   geom_kwl=handler->GetGeometryKeywordlist();
-  std::cout << geom_kwl << std::endl; 
+  std::cout << geom_kwl << std::endl;
 
   /********************************************************/
   /*   Création de notre modèle en fonction de l'image    */
@@ -149,17 +149,17 @@ int otbSensorImageToCarto( int argc, char* argv[] )
 
   typedef otb::InverseSensorModel<double>  ModelType;
   ModelType::Pointer   model= ModelType::New();
-  otbGenericMsgDebugMacro(<< "Model set geometry " ); 
+  otbGenericMsgDebugMacro(<< "Model set geometry " );
   model->SetImageGeometry(ossim_kwl_image); //Notre modèle est créé à ce niveau.
   if(!model)
     {
       otbGenericMsgDebugMacro(<< "Unable to create a model");
       return 1;
     }
-  otbGenericMsgDebugMacro(<< "InverseSensorModel created " ); 
-      
+  otbGenericMsgDebugMacro(<< "InverseSensorModel created " );
+
   ModelType::OutputPointType inputpoint;
- 
+
   /********************************************************/
   /*                  Création d'un reader                */
   /********************************************************/
@@ -172,14 +172,14 @@ int otbSensorImageToCarto( int argc, char* argv[] )
   ImageType::IndexType 			 currentindexbis;
   //ImageType::IndexType 			 pixelindex;
   ImageType::IndexType 			 pixelindexbis;
-  otbGenericMsgDebugMacro(<< "Reader created " ); 
+  otbGenericMsgDebugMacro(<< "Reader created " );
 
   //Stocker les caractéristiques de notre image capteur:
   // ImageType::SizeType			 inputimagesize;
   // inputimagesize=inputimage->GetLargestPossibleRegion().GetSize();
   // //inputimagesize=inputimage->GetSize();
   // std::cout << "Dimension de notre image capteur:"<<  endl
-  //                 << "("<<  inputimagesize[0]<< ","<<  inputimagesize[1]<< ")"<<std::endl; 
+  //                 << "("<<  inputimagesize[0]<< ","<<  inputimagesize[1]<< ")"<<std::endl;
 
 
   /********************************************************/
@@ -188,7 +188,7 @@ int otbSensorImageToCarto( int argc, char* argv[] )
 
   typedef itk::ExtractImageFilter<InputImageType,ImageType>   ExtractType;
   ExtractType::Pointer			             extract=ExtractType::New();
-  otbGenericMsgDebugMacro(<< "Region Extractor created " ); 
+  otbGenericMsgDebugMacro(<< "Region Extractor created " );
 
   /********************************************************/
   /*            Création de notre interpolator            */
@@ -196,7 +196,7 @@ int otbSensorImageToCarto( int argc, char* argv[] )
 
   typedef itk::LinearInterpolateImageFunction<ImageType, double>  InterpolatorType;
   InterpolatorType::Pointer	interpolator=InterpolatorType::New();
-  otbGenericMsgDebugMacro(<< "Interpolator created " ); 
+  otbGenericMsgDebugMacro(<< "Interpolator created " );
 
   /********************************************************/
   /*            Création de notre writer                  */
@@ -208,7 +208,7 @@ int otbSensorImageToCarto( int argc, char* argv[] )
   CharWriterType::Pointer	                 writer=CharWriterType::New();
   extractorwriter->SetFileName("image_temp.jpeg");
   extractorwriter->SetInput(extract->GetOutput());
-  otbGenericMsgDebugMacro(<< "extractorwriter created" ); 
+  otbGenericMsgDebugMacro(<< "extractorwriter created" );
 
   /********************************************************/
   /*            Création de notre rescaler                */
@@ -218,7 +218,7 @@ int otbSensorImageToCarto( int argc, char* argv[] )
   RescalerType::Pointer	                 rescaler=RescalerType::New();
   rescaler->SetOutputMinimum(0);
   rescaler->SetOutputMaximum(255);
-  otbGenericMsgDebugMacro(<< "rescaler created" ); 
+  otbGenericMsgDebugMacro(<< "rescaler created" );
 
   /********************************************************/
   /*            Création de notre projection              */
@@ -231,13 +231,13 @@ int otbSensorImageToCarto( int argc, char* argv[] )
   utmprojection->SetZone(31);
   utmprojection->SetHemisphere('N');
 
-  /*************************************************/   
+  /*************************************************/
   /*     Création de RegionIteratorwithIndex       */
   /*************************************************/
 
   typedef itk::ImageRegionIteratorWithIndex<ImageType>	IteratorType;
   //IteratorType outputIt(outputimage, region); //Définition de notre itérateur.
-  //std::cout << "Iterator created " << std::endl; 
+  //std::cout << "Iterator created " << std::endl;
 
   //Donner une valeur par défaut numberofstreamdivision ou le faire fixer par l'utilisateur.
   unsigned int NumberOfStreamDivisions;
@@ -260,17 +260,17 @@ int otbSensorImageToCarto( int argc, char* argv[] )
       iteratorRegionSize[0]=atoi(argv[5]);      //Taille en X.
       if (count==NumberOfStreamDivisions-1)
 	{iteratorRegionSize[1]=(atoi(argv[6]))-((int)(((atoi(argv[6]))/NumberOfStreamDivisions)+0.5))*(count);
-	iterationRegionStart[1]=(atoi(argv[5]))-(iteratorRegionSize[1]); 
+	iterationRegionStart[1]=(atoi(argv[5]))-(iteratorRegionSize[1]);
 	}
       else
 	{iteratorRegionSize[1]=(int)(((atoi(argv[6]))/NumberOfStreamDivisions)+0.5);	  //Taille en Y.
-	iterationRegionStart[1]=count*iteratorRegionSize[1]; 
-	}    
-      iterationRegionStart[0]=0;//Début de chaque ligne==>0     
-      // std::cout <<iteratorRegionSize[1]<< std::endl;  
-      // std::cout <<iterationRegionStart[0]<< std::endl; 
+	iterationRegionStart[1]=count*iteratorRegionSize[1];
+	}
+      iterationRegionStart[0]=0;//Début de chaque ligne==>0
+      // std::cout <<iteratorRegionSize[1]<< std::endl;
+      // std::cout <<iterationRegionStart[0]<< std::endl;
       iteratorRegion.SetSize(iteratorRegionSize);
-      iteratorRegion.SetIndex(iterationRegionStart); 
+      iteratorRegion.SetIndex(iterationRegionStart);
 
       /**Création d'un tableau de pixelindex**/
       unsigned int pixelIndexArrayDimension= iteratorRegionSize[0]*iteratorRegionSize[1]*2;
@@ -289,11 +289,11 @@ int otbSensorImageToCarto( int argc, char* argv[] )
 	  //On le transforme en Point physique
 	  outputimage->TransformIndexToPhysicalPoint(currentindex, outputpoint);
 	  otbMsgDevMacro(<< "Pour l'Index N°:(" << currentindex[0]<< ","<< currentindex[1] << ")"<<  std::endl
-			 << "Le point physique correspondant est: ("<<  outputpoint[0]<< ","<<  outputpoint[1]<< ")"); 
+			 << "Le point physique correspondant est: ("<<  outputpoint[0]<< ","<<  outputpoint[1]<< ")");
 
 	  //On applique la projection:
-	  geoPoint= utmprojection->TransformPoint(outputpoint);	
-	  otbMsgDevMacro(<< "Le point géographique correspondant est: ("<<  geoPoint[0]<< ","<<  geoPoint[1]<< ")"); 	
+	  geoPoint= utmprojection->TransformPoint(outputpoint);
+	  otbMsgDevMacro(<< "Le point géographique correspondant est: ("<<  geoPoint[0]<< ","<<  geoPoint[1]<< ")");
 	  //On calcule les coordonnées pixeliques sur l'image capteur
 	  inputpoint = model->TransformPoint(geoPoint);
 	  otbMsgDevMacro(<< "Les coordonnées en pixel sur l'image capteur correspondant à ce point sont:" << std::endl
@@ -326,7 +326,7 @@ int otbSensorImageToCarto( int argc, char* argv[] )
       min_x=pixelIndexArray[0];
       max_y=pixelIndexArray[1];
       min_y=pixelIndexArray[1];
- 
+
       for (j=0;j<It;j++)
  	{
 	  if(j%2==0 && pixelIndexArray[j]>max_x){max_x=pixelIndexArray[j];}
@@ -334,7 +334,7 @@ int otbSensorImageToCarto( int argc, char* argv[] )
 	  if(j%2!=0 && pixelIndexArray[j]>max_y){max_y=pixelIndexArray[j];}
 	  if(j%2!=0 && pixelIndexArray[j]<min_y){min_y=pixelIndexArray[j];}
  	}//Fin while
-	
+
       otbGenericMsgDebugMacro(<< "max_x=" << max_x<< std::endl
 			      << "max_y=" << max_y<< std::endl
 			      << "min_x=" << min_x<< std::endl
@@ -347,15 +347,15 @@ int otbSensorImageToCarto( int argc, char* argv[] )
 
       if (min_x<10 && min_y<10)
 	{
-	  extractstart[0]=0;     
+	  extractstart[0]=0;
 	  extractstart[1]=0;
 	}
 
       else
 	{
-	  extractstart[0]=min_x-10;     
-	  extractstart[1]=min_y-10; 
-	} 
+	  extractstart[0]=min_x-10;
+	  extractstart[1]=min_y-10;
+	}
 
       InputImageType::SizeType  		    extractsize;
 
@@ -387,7 +387,7 @@ int otbSensorImageToCarto( int argc, char* argv[] )
 	}
       delete pixelIndexArray;
       otbGenericMsgDebugMacro(<< "pixelIndexArray deleted" );
-      delete currentIndexArray; 
+      delete currentIndexArray;
       otbGenericMsgDebugMacro(<< "currentIndexArray deleted" );
     }//Fin boucle principale
   writer->SetFileName(argv[2]);
@@ -400,7 +400,7 @@ int otbSensorImageToCarto( int argc, char* argv[] )
   otbGenericMsgDebugMacro(<< "Outputimage created" );
 
 
-  
+
   return EXIT_SUCCESS;
 
 }//Fin main()

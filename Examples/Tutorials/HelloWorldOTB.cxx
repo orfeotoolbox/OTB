@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -22,7 +22,7 @@
 //  program. It tests including header files and linking with OTB
 //  libraries.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "otbImage.h"
@@ -49,7 +49,7 @@ int main( int argc, char * argv[] )
 //  instance of an object (see section \ref{sec:SmartPointers} for more
 //  information).
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
 

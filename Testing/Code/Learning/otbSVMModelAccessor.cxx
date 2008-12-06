@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,39 +33,39 @@ int otbSVMModelAccessor( int argc, char* argv[] )
   typedef unsigned char                                   InputPixelType;
   typedef unsigned char                                   LabelPixelType;
   const   unsigned int        	                        Dimension = 2;
-  
+
   typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
-  
+
   typedef otb::SVMModel< InputPixelType, LabelPixelType >   ModelType;
-  
-  
+
+
   ModelType::Pointer ptrModel = ModelType::New();
-  
+
   ptrModel->LoadModel(argv[1]);
-  
-  
+
+
   // ototo
-  
+
   std::ofstream f;
   unsigned int nbClass = ptrModel->GetNumberOfClasses();
   unsigned int nbSupportVector = ptrModel->GetNumberOfSupportVectors();
-  
+
   f.open(argv[2]);
   f << "Test methods of SVMModel class:"<<std::endl;
   f << " - GetNumberOfClasses()        "<< nbClass<<std::endl;
   f << " - GetNumberOfHyperplane()     "<< ptrModel->GetNumberOfHyperplane()<<std::endl;
   f << " - GetNumberOfSupportVectors() "<< nbSupportVector<<std::endl;
-  
-  
+
+
   f << " - GetSupportVectors() [nb support vector][]"<<std::endl;
   svm_node ** SVs = ptrModel->GetSupportVectors();
   if( SVs == NULL )
     {
-      itkGenericExceptionMacro(<<"SVs NULL"); 
+      itkGenericExceptionMacro(<<"SVs NULL");
     }
   for(unsigned int i=0;i<nbSupportVector;i++)
     {
-      if( SVs[i] == NULL ) itkGenericExceptionMacro(<<"SVs "<<i<<" NULL"); 
+      if( SVs[i] == NULL ) itkGenericExceptionMacro(<<"SVs "<<i<<" NULL");
       f << std::endl;
       f << "  SV["<<i<<"]:";
       const svm_node *p = SVs[i];
@@ -82,7 +82,7 @@ int otbSVMModelAccessor( int argc, char* argv[] )
   double * rhos = ptrModel->GetRho();
   if( rhos == NULL )
     {
-      itkGenericExceptionMacro(<<"rhos NULL"); 
+      itkGenericExceptionMacro(<<"rhos NULL");
     }
   f << "      ";
   for(unsigned int i=0;i<taille;i++)
@@ -96,11 +96,11 @@ int otbSVMModelAccessor( int argc, char* argv[] )
   double ** alphas = ptrModel->GetAlpha();
   if( alphas == NULL )
     {
-      itkGenericExceptionMacro(<<"alphas NULL"); 
+      itkGenericExceptionMacro(<<"alphas NULL");
     }
   for(unsigned int i=0;i<nbClass-1;i++)
     {
-      if( alphas[i] == NULL ) itkGenericExceptionMacro(<<"alphas "<<i<<" NULL"); 
+      if( alphas[i] == NULL ) itkGenericExceptionMacro(<<"alphas "<<i<<" NULL");
       f << "     ";
       for(unsigned int j=0;j<nbSupportVector;j++)
         {
@@ -113,7 +113,7 @@ int otbSVMModelAccessor( int argc, char* argv[] )
   typedef ModelType::ValuesType ValuesType;
   ValuesType _evaluateHyperplaneDistance;
   _evaluateHyperplaneDistance = ptrModel->EvaluateHyperplaneDistance();
-    
+
   f << " - EvaluateHyperplaneDistance() VariableLenghtVector() nb value(s): "<<_evaluateHyperplaneDistance.Size()<<std::endl;
   for(unsigned int i=0;i<_evaluateHyperplaneDistance.Size();i++)
     {
@@ -121,8 +121,8 @@ int otbSVMModelAccessor( int argc, char* argv[] )
     }
   f << "end"<<std::endl;
   f.close();
-        
-  
+
+
   return EXIT_SUCCESS;
 }
 

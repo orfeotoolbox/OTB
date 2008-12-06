@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,10 +24,10 @@
 int otbImageToImageRCC8Calculator(int argc, char* argv[])
 {
   const unsigned int Dimension = 2;
-  
+
   int    nbImages  = atoi(argv[1]);
   char * outfile   = argv[2];
-  
+
   typedef unsigned char PixelType;
   typedef otb::Image<PixelType,Dimension> ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
@@ -36,7 +36,7 @@ int otbImageToImageRCC8Calculator(int argc, char* argv[])
   typedef ImageListType::Iterator IteratorType;
   // reference image list
   ImageListType::Pointer images = ImageListType::New();
-  
+
   // Reading input images
   std::ofstream out;
   out.open(outfile,std::ios::out);
@@ -63,7 +63,7 @@ int otbImageToImageRCC8Calculator(int argc, char* argv[])
 	  calc->SetInput2(it2.Get());
 	  calc->Update();
 	  out<<calc->GetValue()<<"\t";
-	  
+
 	  if(calc->GetValue()<3
 	     ||calc->GetValue()==4
 	     ||calc->GetValue()==6)

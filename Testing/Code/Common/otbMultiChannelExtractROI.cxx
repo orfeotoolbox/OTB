@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,7 +30,7 @@
 template < typename  InputPixelType /*= unsigned char */, typename OutputPixelType /*= unsigned char*/ >
 int generic_otbMultiChannelExtractROI( int argc, char * argv[], const char * inputFilename,const char * outputFilename)
 {
-  typedef otb::MultiChannelExtractROI< InputPixelType, 
+  typedef otb::MultiChannelExtractROI< InputPixelType,
     OutputPixelType >  ExtractROIFilterType;
 
   typename ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
@@ -44,7 +44,7 @@ int generic_otbMultiChannelExtractROI( int argc, char * argv[], const char * inp
       else if ( strArgv == "-sizeX" ) 	{ extractROIFilter->SetSizeX((unsigned long)::atoi(argv[cpt+1]));std::cout <<" ->SetSizeX("<<::atoi(argv[cpt+1])<<")"<<std::endl;cpt += 2;}
       else if ( strArgv == "-sizeY" ) 	{ extractROIFilter->SetSizeY((unsigned long)::atoi(argv[cpt+1]));std::cout <<" ->SetSizeY("<<::atoi(argv[cpt+1])<<")"<<std::endl;cpt += 2;}
       else if ( strArgv == "-channels" )
-	{ 
+	{
 	  cpt++;
 	  bool searchChannels(true);
 	  while (searchChannels==true)
@@ -91,9 +91,9 @@ int generic_otbMultiChannelExtractROI( int argc, char * argv[], const char * inp
   //        reader->Update(); //Necessaire pour connaitre le nombre de canaux dans l'image
   writer->SetFileName( outputFilename );
   extractROIFilter->SetInput( reader->GetOutput() );
-        
+
   writer->SetInput( extractROIFilter->GetOutput() );
-  writer->Update(); 
+  writer->Update();
   std::cout << " Nb canaux dans l'image d'entree : "<< reader->GetOutput()->GetNumberOfComponentsPerPixel()<<std::endl;
   std::cout << " Nb canaux dans l'image de sortie : "<<extractROIFilter->GetOutput()->GetNumberOfComponentsPerPixel() <<std::endl;
 
@@ -150,8 +150,8 @@ int otbMultiChannelExtractROI ( int argc, char * argv[] )
         else if (  (linputPixelType=="-double")&&(loutputPixelType=="-uchar") )         return (generic_otbMultiChannelExtractROI< double, unsigned char >( argc,argv,inputFilename,outputFilename) );
         // uchar -> Type
         else if (  (linputPixelType=="-uchar")&&(loutputPixelType=="-double") )         return (generic_otbMultiChannelExtractROI< unsigned char, double >( argc,argv,inputFilename,outputFilename) );
-        else 
-        {       
+        else
+        {
                 std::cout << " Erreur : le format des images en entree est mal precise dans la ligne de commande !!!"<<std::endl;
                 std::cout << "          valeurs autorisees : -uchar, -char, -ushort, -uint, -float, -double"<<std::endl;
                 std::cout << "          valeurs par defaut : -uchar"<<std::endl;
@@ -159,11 +159,11 @@ int otbMultiChannelExtractROI ( int argc, char * argv[] )
         }
 
 return EXIT_FAILURE;
-     
-}        
-        
 
-  
+}
+
+
+
 
 
 

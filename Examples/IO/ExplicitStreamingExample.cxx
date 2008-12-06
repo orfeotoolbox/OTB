@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -37,7 +37,7 @@
 //  offers a high level of abstraction for this task. We will need to
 //  include the following header files:
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "itkImageRegionSplitter.h"
@@ -73,7 +73,7 @@ int main(int argc, char * argv[])
 //  perform the actual image splitting. More information on splitter can be
 //  found in section~\ref{sec:Splitters}
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
   typedef otb::StreamingTraits<ImageType> StreamingTraitsType;
@@ -84,9 +84,9 @@ int main(int argc, char * argv[])
 //  Once a region of the image is available, we will use classical
 //  region iterators to get the pixels.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet  
+// Software Guide : BeginCodeSnippet
   typedef ImageType::RegionType RegionType;
 
   typedef itk::ImageRegionConstIterator<ImageType> IteratorType;
@@ -101,16 +101,16 @@ int main(int argc, char * argv[])
 //  etc. After that, we can access the largest possible region of the
 //  input image.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet    
+// Software Guide : BeginCodeSnippet
   ImageReaderType::Pointer reader = ImageReaderType::New();
 
   reader->SetFileName(infname);
 
 
   reader->GenerateOutputInformation();
-  
+
   RegionType largestRegion = reader->GetOutput()->GetLargestPossibleRegion();
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
@@ -120,9 +120,9 @@ int main(int argc, char * argv[])
 //  image into given the splitter, the user defined number of lines,
 //  and the input image information.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet    
+// Software Guide : BeginCodeSnippet
   SplitterType::Pointer splitter = SplitterType::New();
   unsigned int numberOfStreamDivisions =
     StreamingTraitsType::CalculateNumberOfStreamDivisions(
@@ -133,16 +133,16 @@ int main(int argc, char * argv[])
       0,0,nbLinesForStreaming);
 // Software Guide : EndCodeSnippet
   std::cout<<"The images will be streamed into "<<numberOfStreamDivisions<<" parts."<<std::endl;
- 
+
 
 //  Software Guide : BeginLatex
 //
 //  We can now get the split regions and iterate through them.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet    
-  
+// Software Guide : BeginCodeSnippet
+
   unsigned int piece = 0;
   RegionType streamingRegion;
 
@@ -156,9 +156,9 @@ int main(int argc, char * argv[])
 //
 //  We get the region
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet      
+// Software Guide : BeginCodeSnippet
     streamingRegion =
       splitter->GetSplit(piece,numberOfStreamDivisions,largestRegion);
 
@@ -168,10 +168,10 @@ int main(int argc, char * argv[])
 //
 //  We ask the reader to provide the region.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet          
-      
+// Software Guide : BeginCodeSnippet
+
     reader->GetOutput()->SetRequestedRegion(streamingRegion);
     reader->GetOutput()->PropagateRequestedRegion();
     reader->GetOutput()->UpdateOutputData();
@@ -180,10 +180,10 @@ int main(int argc, char * argv[])
 //
 //  We declare an iterator and walk through the region.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet          
-      
+// Software Guide : BeginCodeSnippet
+
     IteratorType it(reader->GetOutput(),streamingRegion);
     it.GoToBegin();
 
@@ -193,7 +193,7 @@ int main(int argc, char * argv[])
       ++it;
     }
 
-// Software Guide : EndCodeSnippet    
+// Software Guide : EndCodeSnippet
   }
     return EXIT_SUCCESS;
 }

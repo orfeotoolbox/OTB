@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -49,7 +49,7 @@ int otbLogPolarTransformResample(int argc, char* argv[])
 
   std::cout<<interpolator<<std::endl;
   LogPolarTransformType::Pointer transform = LogPolarTransformType::New();
-    
+
   LogPolarTransformType::ParametersType params(4);
   // Center the transform
   params[0]=0.5*static_cast<double>(reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]);
@@ -69,7 +69,7 @@ int otbLogPolarTransformResample(int argc, char* argv[])
   resampler->SetInterpolator(interpolator);
   resampler->SetDefaultPixelValue(0);
   resampler->SetSize(size);
-   
+
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputFileName);
   writer->SetInput(resampler->GetOutput());

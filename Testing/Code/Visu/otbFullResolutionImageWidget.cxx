@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -22,12 +22,12 @@ PURPOSE.  See the above copyright notices for more information.
 
 int otbFullResolutionImageWidget( int argc, char * argv[] )
 {
-  char * filename = argv[1];      
+  char * filename = argv[1];
   typedef float PixelType;
   typedef otb::FullResolutionImageWidget<PixelType> WidgetType;
   typedef WidgetType::ImageType ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
-      
+
   ReaderType::Pointer reader = ReaderType::New();
   ImageType::SizeType size;
   ImageType::IndexType index;
@@ -42,7 +42,7 @@ int otbFullResolutionImageWidget( int argc, char * argv[] )
 
   Fl_Window window(size[0],size[1]);
 
-  WidgetType::Pointer widget = WidgetType::New();   
+  WidgetType::Pointer widget = WidgetType::New();
   window.resizable(widget.GetPointer());
   widget->SetInput(reader->GetOutput());
   if(reader->GetOutput()->GetNumberOfComponentsPerPixel()>=3)
@@ -58,7 +58,7 @@ int otbFullResolutionImageWidget( int argc, char * argv[] )
   widget->Show();
   widget->redraw();
   Fl::check();
-      
+
   int StepX =(reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]-size[0])/100;
   int StepY =(reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]-size[1])/100;
   for(int i = 0;i<=100;i+=5)
@@ -68,7 +68,7 @@ int otbFullResolutionImageWidget( int argc, char * argv[] )
       Fl::wait(0.2);
       Fl::check();
     }
-      
+
   for(int i = 100;i>=0;i-=5)
     {
       Fl::check();
@@ -80,7 +80,7 @@ int otbFullResolutionImageWidget( int argc, char * argv[] )
   // delete memory is ITK respoability, since WidgetType::New()
   window.remove(widget.GetPointer());
 
-  
-  
+
+
   return EXIT_SUCCESS;
 }

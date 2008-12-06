@@ -37,7 +37,7 @@ REGISTER_TEST(galibTests20);
   Copyright (c) 1995-1996  Massachusetts Institute of Technology
 
  DESCRIPTION:
-   This example runs the royal road problem.  See the comments near the 
+   This example runs the royal road problem.  See the comments near the
 objective functions for details about the function itself.
    Some of this was copied (at least partially) from the galopps genetic
 algorithm library and from the pga package.  I used a bunch of globals in this
@@ -52,10 +52,10 @@ example - not good programming style, but it gets the job done.
 
 // This is the objective function for computing Holland's 1993 ICGA version
 // of the Royal Road problem.  It has been corrected per GAList volume 7
-// number 23, 8/26/93.  No bonus points are awarded for a given level until 
+// number 23, 8/26/93.  No bonus points are awarded for a given level until
 // it has been achieved (this fixes Holland's coding error in GAList).
-//   Holland posed this problem as a challenge to test the 
-// performance of genetic algorithms.  He indicated that, with the parameter 
+//   Holland posed this problem as a challenge to test the
+// performance of genetic algorithms.  He indicated that, with the parameter
 // settings of
 //
 //     schemata size = 8

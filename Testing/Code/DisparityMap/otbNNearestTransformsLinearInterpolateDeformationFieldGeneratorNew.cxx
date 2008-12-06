@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,10 +28,10 @@ int otbNNearestTransformsLinearInterpolateDeformationFieldGeneratorNew(int argc,
   typedef ImageType::PointType PointType;
   typedef itk::PointSet<PointType,Dimension> PointSetType;
   typedef otb::NNearestTransformsLinearInterpolateDeformationFieldGenerator<PointSetType,ImageType> FilterType;
-  
+
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();
-  
+
 
   return EXIT_SUCCESS;
 }

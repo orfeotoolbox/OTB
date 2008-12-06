@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,7 +31,7 @@ int otbRCC8GraphIOEndToEnd(int argc, char* argv[])
   typedef otb::RCC8Graph<VertexType> RCC8GraphType;
   typedef otb::RCC8GraphFileReader<RCC8GraphType> RCC8GraphFileReaderType;
   typedef otb::RCC8GraphFileWriter<RCC8GraphType> RCC8GraphFileWriterType;
-  
+
   // End to end test
   RCC8GraphFileReaderType::Pointer rcc8GraphReader = RCC8GraphFileReaderType::New();
   rcc8GraphReader->SetFileName(inputFilename);
@@ -39,6 +39,6 @@ int otbRCC8GraphIOEndToEnd(int argc, char* argv[])
   rcc8GraphWriter->SetInput(rcc8GraphReader->GetOutput());
   rcc8GraphWriter->SetFileName(outputFilename);
   rcc8GraphWriter->Update();
- 
+
   return EXIT_SUCCESS;
 }

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,7 +30,7 @@ int otbExtractROI_RGB( int argc, char * argv[] )
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
-        
+
   unsigned int  startX((unsigned int)::atoi(argv[3]));
   unsigned int  startY((unsigned int)::atoi(argv[4]));
   unsigned int  sizeX((unsigned int)::atoi(argv[5]));
@@ -39,7 +39,7 @@ int otbExtractROI_RGB( int argc, char * argv[] )
   typedef itk::RGBPixel<unsigned char>                    InputPixelType;
   typedef itk::RGBPixel<unsigned char>                    OutputPixelType;
 
-  typedef otb::ExtractROI< InputPixelType, 
+  typedef otb::ExtractROI< InputPixelType,
     OutputPixelType >   FilterType;
 
   typedef FilterType::InputImageType        InputImageType;
@@ -48,7 +48,7 @@ int otbExtractROI_RGB( int argc, char * argv[] )
   typedef otb::ImageFileReader< InputImageType  >         ReaderType;
   typedef otb::ImageFileWriter< OutputImageType >         WriterType;
   FilterType::Pointer filter = FilterType::New();
-        
+
   filter->SetStartX( startX );
   filter->SetStartY( startY );
   filter->SetSizeX( sizeX );
@@ -59,11 +59,11 @@ int otbExtractROI_RGB( int argc, char * argv[] )
 
   reader->SetFileName( inputFilename  );
   writer->SetFileName( outputFilename );
-        
+
   filter->SetInput( reader->GetOutput() );
   writer->SetInput( filter->GetOutput() );
-  writer->Update(); 
- 
+  writer->Update();
+
   return EXIT_SUCCESS;
 }
 

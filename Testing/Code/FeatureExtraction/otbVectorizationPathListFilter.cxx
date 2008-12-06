@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -59,7 +59,7 @@ int otbVectorizationPathListFilter(int argc, char * argv[])
   filter->SetInputDirection(dirReader->GetOutput());
   filter->SetAmplitudeThreshold(thresh);
   filter->Update();
-      
+
   PathListType::Pointer pathList = filter->GetOutput();
   PathListIteratorType pathListIt = pathList->Begin();
 
@@ -95,12 +95,12 @@ int otbVectorizationPathListFilter(int argc, char * argv[])
   drawer->SetInput(output);
   drawer->SetInputPath(filter->GetOutput());
   drawer->SetPathValue(0);
-      
+
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outImagefname);
   writer->SetInput(drawer->GetOutput());
   writer->Update();
-  
+
 
   return EXIT_SUCCESS;
 }

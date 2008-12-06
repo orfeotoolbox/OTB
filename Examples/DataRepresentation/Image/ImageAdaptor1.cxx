@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,17 +23,17 @@
 
 // Software Guide : BeginLatex
 //
-//This example illustrates how the \doxygen{itk}{ImageAdaptor} can be used to cast 
-// an image from one pixel type to another. In particular, we will 
-// \emph{adapt} an \code{unsigned char} image to make it appear as an image of 
+//This example illustrates how the \doxygen{itk}{ImageAdaptor} can be used to cast
+// an image from one pixel type to another. In particular, we will
+// \emph{adapt} an \code{unsigned char} image to make it appear as an image of
 // pixel type \code{float}.
-// 
+//
 // \index{itk::ImageAdaptor!Instantiation}
 // \index{itk::ImageAdaptor!Header}
 //
 // We begin by including the relevant headers.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "otbImage.h"
@@ -48,32 +48,32 @@
 //  Software Guide : BeginLatex
 //
 // First, we need to define a \emph{pixel accessor} class that does the actual
-// conversion. Note that in general, the only valid operations for pixel 
-// accessors are those that only require the value of the input pixel. As 
-// such, neighborhood type operations are not possible. A pixel accessor must 
-// provide methods \code{Set()} and \code{Get()}, and define the types of 
-// \code{InternalPixelType} and \code{ExternalPixelType}. The 
-// \code{InternalPixelType} corresponds to the pixel type of the image to be 
+// conversion. Note that in general, the only valid operations for pixel
+// accessors are those that only require the value of the input pixel. As
+// such, neighborhood type operations are not possible. A pixel accessor must
+// provide methods \code{Set()} and \code{Get()}, and define the types of
+// \code{InternalPixelType} and \code{ExternalPixelType}. The
+// \code{InternalPixelType} corresponds to the pixel type of the image to be
 // adapted (\code{unsigned char} in this example). The \code{ExternalPixelType}
-// corresponds to the pixel type we wish to emulate with the ImageAdaptor 
-// (\code{float} in this case). 
+// corresponds to the pixel type we wish to emulate with the ImageAdaptor
+// (\code{float} in this case).
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
 // Software Guide : BeginCodeSnippet
-class CastPixelAccessor  
+class CastPixelAccessor
 {
 public:
   typedef unsigned char InternalType;
   typedef float         ExternalType;
 
-  static void Set(InternalType & output, const ExternalType & input) 
+  static void Set(InternalType & output, const ExternalType & input)
     {
       output = static_cast<InternalType>( input );
     }
 
-  static ExternalType Get( const InternalType & input ) 
+  static ExternalType Get( const InternalType & input )
     {
       return static_cast<ExternalType>( input );
     }
@@ -87,7 +87,7 @@ public:
 //
 //-------------------------
 
-int main( int argc, char *argv[] ) 
+int main( int argc, char *argv[] )
 {
   if( argc < 2 )
     {
@@ -104,7 +104,7 @@ int main( int argc, char *argv[] )
 //  to define the image adaptor type and create an instance using
 //  the standard \code{New()} method.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
 // Software Guide : BeginCodeSnippet
@@ -121,12 +121,12 @@ int main( int argc, char *argv[] )
 // We also create an image reader templated over the input image type and
 // read the input image from file.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 
 // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader< ImageType >   ReaderType;
-  ReaderType::Pointer reader = ReaderType::New();  
+  ReaderType::Pointer reader = ReaderType::New();
 // Software Guide : EndCodeSnippet
 
 
@@ -139,21 +139,21 @@ int main( int argc, char *argv[] )
 //  The output of the reader is then connected as the input to the image
 //  adaptor.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
 // Software Guide : BeginCodeSnippet
   adaptor->SetImage( reader->GetOutput() );
 // Software Guide : EndCodeSnippet
- 
+
 
 //  Software Guide : BeginLatex
 //
-//  In the following code, we visit the image using an iterator 
+//  In the following code, we visit the image using an iterator
 //  instantiated using the adapted image type and compute the
 //  sum of the pixel values.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
 // Software Guide : BeginCodeSnippet
@@ -176,13 +176,13 @@ std::cout << "Sum of pixels is: " << sum << std::endl;
 
 //  Software Guide : BeginLatex
 //
-// Although in this example, we are just performing a simple summation, the key 
+// Although in this example, we are just performing a simple summation, the key
 // concept is that access to pixels is performed as if the pixel is of type
-//  \code{float}. Additionally, it should be noted that the adaptor is used 
-// as if it was an actual image and not as a filter. ImageAdaptors conform 
+//  \code{float}. Additionally, it should be noted that the adaptor is used
+// as if it was an actual image and not as a filter. ImageAdaptors conform
 // to the same API as the  \doxygen{otb}{Image} class.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
   return EXIT_SUCCESS;

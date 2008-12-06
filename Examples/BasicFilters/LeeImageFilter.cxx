@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,7 +25,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {GomaSmall.png}
-//    OUTPUTS: {GomaSmallLeeFiltered.png} 
+//    OUTPUTS: {GomaSmallLeeFiltered.png}
 //    3 1
 //  Software Guide : EndCommandLineArgs
 
@@ -39,9 +39,9 @@
 // multiplicative speckle model.
 //
 //
-// The first step required to use this filter is to include its header file. 
+// The first step required to use this filter is to include its header file.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "otbLeeImageFilter.h"
@@ -57,15 +57,15 @@ int main( int argc, char * argv[] )
   if( argc != 5 )
     {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
-    std::cerr << " outputImageFile radius NbLooks" << std::endl;  
+    std::cerr << " outputImageFile radius NbLooks" << std::endl;
     return EXIT_FAILURE;
     }
-  
+
   //  Software Guide : BeginLatex
   //
-  //  Then we must decide what pixel type to use for the image. 
+  //  Then we must decide what pixel type to use for the image.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef  unsigned char  PixelType;
@@ -75,7 +75,7 @@ int main( int argc, char * argv[] )
   //
   //  The images are defined using the pixel type and the dimension.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::Image< PixelType,  2 >   InputImageType;
@@ -87,7 +87,7 @@ int main( int argc, char * argv[] )
   //
   //  The filter can be instantiated using the image types defined above.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::LeeImageFilter< InputImageType, OutputImageType >  FilterType;
@@ -97,20 +97,20 @@ int main( int argc, char * argv[] )
   //  Software Guide : BeginLatex
   //
   //  An \doxygen{otb}{ImageFileReader} class is also instantiated in order to read
-  //  image data from a file. 
+  //  image data from a file.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader< InputImageType >  ReaderType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
-  //  
+  //
   // An \doxygen{otb}{ImageFileWriter} is instantiated in order to write the
   // output image to a file.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileWriter< OutputImageType >  WriterType;
@@ -123,7 +123,7 @@ int main( int argc, char * argv[] )
   //  Both the filter and the reader are created by invoking their \code{New()}
   //  methods and assigning the result to SmartPointers.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   ReaderType::Pointer reader = ReaderType::New();
@@ -136,14 +136,14 @@ int main( int argc, char * argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The image obtained with the reader is passed as input to the
   //  \doxygen{otb}{LeeImageFilter}.
   //
   //  \index{otb::LeeImageFilter!SetInput()}
   //  \index{otb::FileImageReader!GetOutput()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   filter->SetInput( reader->GetOutput() );
@@ -151,7 +151,7 @@ int main( int argc, char * argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The method \code{SetRadius()} defines the size of the window to
   //  be used for the computation of the local statistics. The method
   //  \code{SetNbLooks()} sets the number of looks of the input
@@ -159,9 +159,9 @@ int main( int argc, char * argv[] )
   //
   //  \index{otb::LeeImageFilter!SetRadius()}
   //  \index{otb::LeeImageFilter!NbLooks()}
-  //  \index{SetNbLooks()!otb::LeeImageFilter}  
+  //  \index{SetNbLooks()!otb::LeeImageFilter}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   FilterType::SizeType Radius;
@@ -174,13 +174,13 @@ int main( int argc, char * argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The filter is executed by invoking the \code{Update()} method. If the
   //  filter is part of a larger image processing pipeline, calling
   //  \code{Update()} on a downstream filter will also trigger update of this
   //  filter.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   filter->Update();
@@ -199,7 +199,7 @@ int main( int argc, char * argv[] )
   // \includegraphics[width=0.44\textwidth]{GomaSmall.eps}
   // \includegraphics[width=0.44\textwidth]{GomaSmallLeeFiltered.eps}
   // \itkcaption[Lee Filter Application]{Result of applying the
-  // \doxygen{otb}{LeeImageFilter} to a SAR image.} 
+  // \doxygen{otb}{LeeImageFilter} to a SAR image.}
   // \label{fig:LEE_FILTER}
   // \end{figure}
   //
@@ -208,7 +208,7 @@ int main( int argc, char * argv[] )
   //  \item \doxygen{otb}{FrostImageFilter}
   //  \end{itemize}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
   return EXIT_SUCCESS;

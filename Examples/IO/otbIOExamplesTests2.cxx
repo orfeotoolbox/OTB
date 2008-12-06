@@ -27,7 +27,7 @@ void RegisterTests()
 {
 REGISTER_TEST(LidarToImageExampleTest);
 }
-    
+
 #undef main
 #define main LidarToImageExampleTest
 #include "LidarToImageExample.cxx"

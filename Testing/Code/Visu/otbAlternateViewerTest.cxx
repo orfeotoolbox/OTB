@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,7 +30,7 @@ int otbAlternateViewerTest(int argc, char* argv[])
   typedef otb::VectorImage<PixelType,Dimension> ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageAlternateViewer<PixelType> ViewerType;
-  
+
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
   reader->GenerateOutputInformation();
@@ -38,7 +38,7 @@ int otbAlternateViewerTest(int argc, char* argv[])
   ReaderType::Pointer reader2 = ReaderType::New();
   reader2->SetFileName(argv[2]);
   reader2->GenerateOutputInformation();
-  
+
   ImageType::PixelType min,max;
   min.SetSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
   max.SetSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
@@ -52,7 +52,7 @@ int otbAlternateViewerTest(int argc, char* argv[])
   //   max[3]=740;
   min.Fill(0);
   max.Fill(255);
-  
+
   //  RescalerType::Pointer rescaler = RescalerType::New();
   //   rescaler->SetOutputMinimum(min);
   //   rescaler->SetOutputMaximum(max);
@@ -74,7 +74,7 @@ int otbAlternateViewerTest(int argc, char* argv[])
   viewer->Init(0,0,512,512,"test de la nouvelle visu");
   window.show();
   viewer->Show();
-  
+
   Fl::check();
   //   Fl::run();
 

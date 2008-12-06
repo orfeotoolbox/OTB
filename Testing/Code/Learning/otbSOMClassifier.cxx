@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,7 +34,7 @@ int otbSOMClassifier(int argc, char* argv[] )
 {
   if (argc != 4)
     {
-      std::cout << "Usage : " << argv[0] << " inputImage modelFile outputImage" 
+      std::cout << "Usage : " << argv[0] << " inputImage modelFile outputImage"
                 << std::endl ;
       return EXIT_FAILURE;
     }
@@ -42,7 +42,7 @@ int otbSOMClassifier(int argc, char* argv[] )
   const char * imageFilename  = argv[1];
   const char * mapFilename  = argv[2];
   const char * outputFilename = argv[3];
-      
+
   typedef double                              InputPixelType;
   typedef int                                 LabelPixelType;
   const   unsigned int        	         Dimension = 2;
@@ -62,7 +62,7 @@ int otbSOMClassifier(int argc, char* argv[] )
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( imageFilename  );
   reader->Update();
-  std::cout << "Image read" << std::endl;  
+  std::cout << "Image read" << std::endl;
 
   SOMReaderType::Pointer somreader = SOMReaderType::New();
   somreader->SetFileName(mapFilename);
@@ -72,9 +72,9 @@ int otbSOMClassifier(int argc, char* argv[] )
   SampleType::Pointer listSample = SampleType::New();
 
   itk::ImageRegionIterator<InputImageType> it(reader->GetOutput(),reader->GetOutput()->GetLargestPossibleRegion());
-    
+
   it.GoToBegin();
-    
+
   while(!it.IsAtEnd())
     {
       listSample->PushBack(it.Get());
@@ -103,13 +103,13 @@ int otbSOMClassifier(int argc, char* argv[] )
       ++m_iter ;
       ++outIt;
     }
-	
+
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputFilename);
   writer->SetInput(outputImage);
   writer->Update();
 
- 
+
   return EXIT_SUCCESS;
 }
 

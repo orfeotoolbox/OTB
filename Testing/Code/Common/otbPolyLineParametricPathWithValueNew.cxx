@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,11 +25,11 @@ int otbPolyLineParametricPathWithValueNew(int argc, char * argv[])
   const unsigned int Dimension = 2;
   typedef double ValueType;
   typedef otb::PolyLineParametricPathWithValue<ValueType, Dimension> PolyLineParametricPathWithValueType;
-  
+
   // Instantiating object
   PolyLineParametricPathWithValueType::Pointer object = PolyLineParametricPathWithValueType::New();
   object->SetValue(0);
 
- 
+
   return EXIT_SUCCESS;
 }

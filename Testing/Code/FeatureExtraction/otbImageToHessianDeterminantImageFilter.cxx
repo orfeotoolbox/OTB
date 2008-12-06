@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -35,21 +35,21 @@ int otbImageToHessianDeterminantImageFilter(int argc, char * argv[])
   typedef otb::ImageToHessianDeterminantImageFilter<ImageType,ImageType> FilterType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
-  
+
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
   reader->SetFileName(ifname);
-  
+
   filter->SetInput(reader->GetOutput());
   filter->SetSigma(sigma);
-  
+
   writer->SetInput(filter->GetOutput());
   writer->SetFileName(outfname);
   writer->Update();
 
-  
+
   return EXIT_SUCCESS;
 }

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,7 +25,7 @@ int otbMeanShiftImageFilterNew(int argc, char * argv[])
   typedef short PixelType;
   typedef otb::Image<PixelType,Dimension> ImageType;
   typedef otb::MeanShiftImageFilter<ImageType,ImageType> FilterType;
-  
+
   // Instantiating object
   FilterType::Pointer object = FilterType::New();
   return EXIT_SUCCESS;

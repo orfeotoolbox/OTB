@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,7 +32,7 @@ int otbLeeFilter( int argc, char * argv[] )
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
-       
+
   unsigned int  RadiusX((unsigned int)::atoi(argv[3]));
   unsigned int  RadiusY((unsigned int)::atoi(argv[4]));
   double        NbLooks((double)::atof(argv[5]));
@@ -48,13 +48,13 @@ int otbLeeFilter( int argc, char * argv[] )
   typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
   typedef otb::LeeImageFilter< InputImageType,OutputImageType >   FilterType;
-	
+
   FilterType::SizeType Radius;
   Radius[0]= RadiusX;
   Radius[1]= RadiusY;
 
   FilterType::Pointer filterLee = FilterType::New();
-        
+
   filterLee->SetRadius( Radius );
   // OTB-FA-00018-CS
   filterLee->SetNbLooks(NbLooks);
@@ -64,13 +64,13 @@ int otbLeeFilter( int argc, char * argv[] )
 
   reader->SetFileName( inputFilename  );
   writer->SetFileName( outputFilename );
-        
+
   filterLee->SetInput( reader->GetOutput() );
   writer->SetInput( filterLee->GetOutput() );
-        
-  writer->Update(); 
 
-  
+  writer->Update();
+
+
 
   return EXIT_SUCCESS;
 }

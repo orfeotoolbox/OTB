@@ -9,9 +9,9 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -22,10 +22,10 @@ int otbInverseLogPolarTransformNew(int argc, char* argv[])
 {
   typedef double PrecisionType;
   typedef otb::InverseLogPolarTransform<PrecisionType> InverseLogPolarTransformType;
-  
+
   // Instantiation
   InverseLogPolarTransformType::Pointer transform = InverseLogPolarTransformType::New();
- 
+
 
 
  return EXIT_SUCCESS;

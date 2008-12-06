@@ -7,7 +7,7 @@
 
 /**
  * In this test, we approximate a 2-D scalar field.
- * The scattered data is derived from a segmented 
+ * The scattered data is derived from a segmented
  * image.  We write the output to an image for
  * comparison.
  */
@@ -23,32 +23,32 @@ int ijBSplineScatteredDataPointSetToImageFilterTest( int argc, char *argv[] )
   typedef otb::Image<VectorType, ParametricDimension> VectorImageType;
   typedef itk::PointSet
     <VectorImageType::PixelType, ParametricDimension> PointSetType;
-  PointSetType::Pointer pointSet = PointSetType::New();  
+  PointSetType::Pointer pointSet = PointSetType::New();
 
   typedef otb::ImageFileReader<InputImageType> ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( argv[1] );
   reader->Update();
-              
-  itk::ImageRegionIteratorWithIndex<InputImageType> 
+
+  itk::ImageRegionIteratorWithIndex<InputImageType>
     It( reader->GetOutput(), reader->GetOutput()->GetLargestPossibleRegion() );
-  
-  // Iterate through the input image which consists of multivalued 
+
+  // Iterate through the input image which consists of multivalued
   // foreground pixels (=nonzero) and background values (=zero).
   // The foreground pixels comprise the input point set.
-  
+
   for ( It.GoToBegin(); !It.IsAtEnd(); ++It )
     {
     if ( It.Get() != itk::NumericTraits<PixelType>::Zero )
       {
-      // We extract both the 2-D location of the point 
-      // and the pixel value of that point.  
+      // We extract both the 2-D location of the point
+      // and the pixel value of that point.
 
       PointSetType::PointType point;
       reader->GetOutput()->TransformIndexToPhysicalPoint( It.GetIndex(), point );
 
       unsigned long i = pointSet->GetNumberOfPoints();
-      pointSet->SetPoint( i, point );        
+      pointSet->SetPoint( i, point );
 
       PointSetType::PixelType V( DataDimension );
       V[0] = static_cast<RealType>( It.Get() );
@@ -60,38 +60,38 @@ int ijBSplineScatteredDataPointSetToImageFilterTest( int argc, char *argv[] )
   typedef ij::BSplineScatteredDataPointSetToImageFilter
     <PointSetType, VectorImageType> FilterType;
   FilterType::Pointer filter = FilterType::New();
-  filter->SetSplineOrder( 3 );  
-  FilterType::ArrayType ncps;  
-  ncps.Fill( 4 );  
+  filter->SetSplineOrder( 3 );
+  FilterType::ArrayType ncps;
+  ncps.Fill( 4 );
   filter->SetNumberOfControlPoints( ncps );
   filter->SetNumberOfLevels( 10 );
-  
-  // Define the parametric domain. 
+
+  // Define the parametric domain.
   filter->SetOrigin( reader->GetOutput()->GetOrigin() );
   filter->SetSpacing( reader->GetOutput()->GetSpacing() );
   filter->SetSize( reader->GetOutput()->GetLargestPossibleRegion().GetSize() );
 
   filter->SetInput( pointSet );
 
-  try 
+  try
     {
     filter->Update();
     }
-  catch (...) 
+  catch (...)
     {
-    std::cerr << "Test 1: itkBSplineScatteredDataImageFilter exception thrown" 
+    std::cerr << "Test 1: itkBSplineScatteredDataImageFilter exception thrown"
               << std::endl;
     return EXIT_FAILURE;
     }
-  
+
   // Write the output to an image.
   typedef otb::Image<RealType, ParametricDimension> RealImageType;
   RealImageType::Pointer image = RealImageType::New();
   image->SetRegions( reader->GetOutput()->GetLargestPossibleRegion() );
   image->Allocate();
-  itk::ImageRegionIteratorWithIndex<RealImageType> 
+  itk::ImageRegionIteratorWithIndex<RealImageType>
     Itt( image, image->GetLargestPossibleRegion() );
-  
+
   for ( Itt.GoToBegin(); !Itt.IsAtEnd(); ++Itt )
     {
     Itt.Set( filter->GetOutput()->GetPixel( Itt.GetIndex() )[0] );
@@ -103,7 +103,7 @@ int ijBSplineScatteredDataPointSetToImageFilterTest( int argc, char *argv[] )
   writer->SetFileName( argv[2] );
   writer->Update();
 
-  return EXIT_SUCCESS; 
+  return EXIT_SUCCESS;
 };
 
 
@@ -116,7 +116,7 @@ int ijBSplineScatteredDataPointSetToImageFilterTest( int argc, char *argv[] )
 
 
 
- 
+
 
 
 

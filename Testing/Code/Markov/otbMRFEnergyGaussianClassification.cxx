@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,7 +27,7 @@
 int otbMRFEnergyGaussianClassification(int argc, char * argv[])
 {
   const char * outputFile = argv[1];
-  
+
   typedef double                                       PixelTypeInput;
   typedef int                                          PixelTypeLabel;
   typedef otb::Image<PixelTypeInput, 2>                ImageType;
@@ -41,7 +41,7 @@ int otbMRFEnergyGaussianClassification(int argc, char * argv[])
   MRFGaussianType::ParametersType param(6);
   param[0] = 0;
   param[1] = 1;
-  param[2] = 2;  
+  param[2] = 2;
   param[3] = 3;
   param[4] = 4;
   param[5] = 5;

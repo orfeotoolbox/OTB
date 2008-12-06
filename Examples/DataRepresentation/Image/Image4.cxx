@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -49,7 +49,7 @@
 //
 // Figure \ref{fig:ImageOriginAndSpacing} illustrates the main geometrical
 // concepts associated with the \doxygen{otb}{Image}. In this figure,
-// circles are 
+// circles are
 // used to represent the center of pixels. The value of the pixel is assumed
 // to exist as a Dirac Delta Function located at the pixel center. Pixel
 // spacing is measured between the pixel centers and can be different along
@@ -61,7 +61,7 @@
 // image values is performed inside the Delaunay region whose corners
 // are pixel centers.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 
 #include "otbImage.h"
@@ -85,7 +85,7 @@ int main(int, char *[])
   ImageType::RegionType region;
   region.SetSize( size );
   region.SetIndex( start );
-  
+
   image->SetRegions( region );
   image->Allocate();
 
@@ -93,7 +93,7 @@ int main(int, char *[])
 
   // Software Guide : BeginLatex
   //
-  // Image spacing is represented in a \code{FixedArray} 
+  // Image spacing is represented in a \code{FixedArray}
   // whose size matches the dimension of the image. In order to manually set
   // the spacing of the image, an array of the corresponding type must be
   // created.  The elements of the array should then be initialized with the
@@ -105,41 +105,41 @@ int main(int, char *[])
   //
   // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet 
+  // Software Guide : BeginCodeSnippet
   ImageType::SpacingType spacing;
 
   // Note: measurement units (e.g., meters, feet, etc.) are defined by the application.
   spacing[0] = 0.70; // spacing along X
   spacing[1] = 0.70; // spacing along Y
-  // Software Guide : EndCodeSnippet 
+  // Software Guide : EndCodeSnippet
 
 
   // Software Guide : BeginLatex
   //
-  // The array can be assigned to the image using 
+  // The array can be assigned to the image using
   // the \code{SetSpacing()} method.
   //
   // \index{otb::Image!SetSpacing()}
   //
   // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet 
+  // Software Guide : BeginCodeSnippet
   image->SetSpacing( spacing );
-  // Software Guide : EndCodeSnippet 
+  // Software Guide : EndCodeSnippet
 
 
   //  Software Guide : BeginLatex
   //
   // The spacing information can be retrieved from an image by using the
-  // \code{GetSpacing()} method. This method returns a reference to a 
+  // \code{GetSpacing()} method. This method returns a reference to a
   // \code{FixedArray}. The returned object can then be used to read the
   // contents of the array. Note the use of the \code{const} keyword to indicate
-  // that the array will not be modified. 
+  // that the array will not be modified.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  const ImageType::SpacingType& sp = image->GetSpacing();  
+  const ImageType::SpacingType& sp = image->GetSpacing();
 
   std::cout << "Spacing = ";
   std::cout << sp[0] << ", " << sp[1] << std::endl;
@@ -157,10 +157,10 @@ int main(int, char *[])
   // responsibility to make sure that multiple images used in the same
   // application are using a consistent reference system. This is
   // extremely important in image registration applications.
-  // 
+  //
   // The following code illustrates the creation and assignment of a variable
   // suitable for initializing the image origin.
-  //  
+  //
   // \index{otb::Image!origin}
   // \index{otb::Image!SetOrigin()}
   //
@@ -169,12 +169,12 @@ int main(int, char *[])
   // Software Guide : BeginCodeSnippet
   ImageType::PointType origin;
 
-  origin[0] = 0.0;  // coordinates of the 
+  origin[0] = 0.0;  // coordinates of the
   origin[1] = 0.0;  // first pixel in 2-D
 
 
   image->SetOrigin( origin );
-  // Software Guide : EndCodeSnippet 
+  // Software Guide : EndCodeSnippet
 
 
   //  Software Guide : BeginLatex
@@ -185,7 +185,7 @@ int main(int, char *[])
   //  the array. Note again the use of the \code{const} keyword to indicate
   //  that the array contents will not be modified.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   const ImageType::PointType& orgn = image->GetOrigin();
@@ -206,13 +206,13 @@ int main(int, char *[])
   // First, a \doxygen{itk}{Point} type must be declared. The point type is
   // templated over the type used to represent coordinates and over the
   // dimension of the space. In this particular case, the dimension of the
-  // point must match the dimension of the image. 
+  // point must match the dimension of the image.
   //
   // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet 
+  // Software Guide : BeginCodeSnippet
   typedef itk::Point< double, ImageType::ImageDimension > PointType;
-  // Software Guide : EndCodeSnippet 
+  // Software Guide : EndCodeSnippet
 
 
   // Software Guide : BeginLatex
@@ -230,31 +230,31 @@ int main(int, char *[])
   //
   // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet 
+  // Software Guide : BeginCodeSnippet
   PointType point;
 
   point[0] = 1.45;    // x coordinate
   point[1] = 7.21;    // y coordinate
-  // Software Guide : EndCodeSnippet 
+  // Software Guide : EndCodeSnippet
 
 
   // Software Guide : BeginLatex
-  // 
+  //
   // The image will map the point to an index using the values of the
   // current spacing and origin. An index object must be provided to
-  // receive the results of the mapping. The index object can be 
+  // receive the results of the mapping. The index object can be
   // instantiated by using the \code{IndexType} defined in the Image
   // type.
   //
   // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet 
+  // Software Guide : BeginCodeSnippet
   ImageType::IndexType pixelIndex;
-  // Software Guide : EndCodeSnippet 
+  // Software Guide : EndCodeSnippet
 
 
   // Software Guide : BeginLatex
-  // 
+  //
   // The \code{TransformPhysicalPointToIndex()} method of the image class
   // will compute the pixel index closest to the point provided. The method
   // checks for this index to be contained inside the current buffered pixel
@@ -270,8 +270,8 @@ int main(int, char *[])
   //
   // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet 
-  bool isInside = image->TransformPhysicalPointToIndex( point, pixelIndex ); 
+  // Software Guide : BeginCodeSnippet
+  bool isInside = image->TransformPhysicalPointToIndex( point, pixelIndex );
 
   if ( isInside )
     {
@@ -281,11 +281,11 @@ int main(int, char *[])
 
     image->SetPixel( pixelIndex, pixelValue );
     }
-  // Software Guide : EndCodeSnippet 
+  // Software Guide : EndCodeSnippet
 
 
   // Software Guide : BeginLatex
-  // 
+  //
   // Remember that \code{GetPixel()} and \code{SetPixel()} are very
   // inefficient methods for accessing pixel data. Image iterators should be
   // used when massive access to pixel data is required.

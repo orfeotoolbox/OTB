@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -26,7 +26,7 @@
 int otbMRFEnergyPotts(int argc, char * argv[])
 {
   const char * outputFile = argv[1];
-  
+
   typedef double PixelType;
   typedef int    PixelType2;
   typedef otb::Image<PixelType, 2>                   ImageType;
@@ -35,7 +35,7 @@ int otbMRFEnergyPotts(int argc, char * argv[])
   typedef otb::MRFEnergyPotts< ImageType, LabelType> MRFEnergyPottsType;
   typedef MRFEnergyPottsType::InputImagePixelType    InputImagePixelType;
   typedef MRFEnergyPottsType::LabelledImagePixelType LabelledImagePixelType;
- 
+
   MRFEnergyPottsType::Pointer object    = MRFEnergyPottsType::New();
 
   InputImagePixelType    inPix = 10;
@@ -43,14 +43,14 @@ int otbMRFEnergyPotts(int argc, char * argv[])
 
   std::ofstream file;
   file.open(outputFile);
- 
+
   file<<"GetValue(const InputImagePixelType = 10, const LabelledImagePixelType = 5): "<< object->GetValue(inPix, inLab)<<std::endl;
   inPix = 5;
   file<<"GetValue(const InputImagePixelType = 5, const LabelledImagePixelType = 5) : "<< object->GetValue(inPix, inLab)<<std::endl;
 
   file.close();
-  
-  
+
+
   return EXIT_SUCCESS;
 }
 

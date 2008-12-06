@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,47 +32,47 @@ int otbExtractROI2( int argc, char * argv[] )
   unsigned int  startY((unsigned int)::atoi(argv[4]));
   unsigned int  sizeX((unsigned int)::atoi(argv[5]));
   unsigned int  sizeY((unsigned int)::atoi(argv[6]));
-  
+
   typedef unsigned char  	                                InputPixelType;
   typedef unsigned char  	                                OutputPixelType;
-  
-  typedef otb::ExtractROI< InputPixelType, 
+
+  typedef otb::ExtractROI< InputPixelType,
     OutputPixelType >   FilterType;
-  
+
   typedef FilterType::InputImageType        InputImageType;
   typedef FilterType::OutputImageType       OutputImageType;
-  
+
   typedef otb::ImageFileReader< InputImageType  >         ReaderType;
   typedef otb::ImageFileWriter< OutputImageType >         WriterType;
   FilterType::Pointer filter = FilterType::New();
-  
+
   typedef otb::Image<InputPixelType,2> ImageType;
   ImageType::IndexType start;
-  
-  start[0] =   startX;  
-  start[1] =   startY; 
+
+  start[0] =   startX;
+  start[1] =   startY;
   ImageType::SizeType  size;
-  
-  size[0]  = sizeX;  
-  size[1]  = sizeY; 
+
+  size[0]  = sizeX;
+  size[1]  = sizeY;
   ImageType::RegionType region;
-  
+
   region.SetSize( size );
   region.SetIndex( start );
-  
+
   filter->SetExtractionRegion(region);
-  
+
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
-  
+
   reader->SetFileName( inputFilename  );
   writer->SetFileName( outputFilename );
-        
+
   filter->SetInput( reader->GetOutput() );
   writer->SetInput( filter->GetOutput() );
-  writer->Update(); 
-  
-  
+  writer->Update();
+
+
   return EXIT_SUCCESS;
 }
 

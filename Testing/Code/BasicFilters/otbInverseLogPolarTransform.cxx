@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -54,7 +54,7 @@ int otbInverseLogPolarTransform(int argc, char* argv[])
   params[2]=radialStep;
   params[3]=angularStep;
   transform->SetParameters(params);
-    
+
   file << "Transform calculation ... :" <<std::endl;
 
   for(PointsVectorType::iterator it=vect.begin();it!=vect.end();++it)
@@ -76,12 +76,12 @@ int otbInverseLogPolarTransform(int argc, char* argv[])
 	    }
 	  pprime[1]=(1./radialStep)*vcl_log(rho);
 	}
-      else 
+      else
 	{
 	  pprime[0]=400.;
 	  pprime[1]=0.;
 	}
-	
+
       file <<"Original Point: "<<(*it)<<", Reference point: "<<pprime<<", Transformed point: "<<p<<std::endl;
     }
   file.close();

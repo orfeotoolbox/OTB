@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -26,7 +26,7 @@
 
 #include "otbSVMModel.h"
 #include "otbSVMKernels.h"
- 
+
 
 
 int otbSVMModelGenericKernelsTest( int argc, char* argv[] )
@@ -35,21 +35,21 @@ int otbSVMModelGenericKernelsTest( int argc, char* argv[] )
   typedef unsigned char                                   LabelPixelType;
 
   typedef otb::SVMModel< InputPixelType, LabelPixelType >   ModelType;
-  
+
   ModelType::Pointer svmModel = ModelType::New();
-  
+
   otb::CustomKernelFunctor               customFunctor;
   otb::InvMultiQuadricKernelFunctor      invMultiQuadricFunctor;
   otb::SAMKernelFunctor                  SAMFunctor;
-  otb::KModKernelFunctor                 kModFunctor; 
+  otb::KModKernelFunctor                 kModFunctor;
   otb::RadialSAMKernelFunctor            radialSAMFunctor;
   otb::InvMultiQuadraticSAMKernelFunctor invMultiQuadraticSAMFunctor;
-  otb::KModSAMKernelFunctor              KModSAMFunctor;  
-  otb::RBFRBFSAMKernelFunctor            RBFRBFSAMFunctor; 
+  otb::KModSAMKernelFunctor              KModSAMFunctor;
+  otb::RBFRBFSAMKernelFunctor            RBFRBFSAMFunctor;
   otb::PolyRBFSAMKernelFunctor           polyRBFSAMFunctor;
-  otb::RBFDiffKernelFunctor              RBFDiffFunctor;  
-  otb::CustomLinearKernelFunctor         customLinearFunctor; 
-  otb::GroupedRBFKernelFunctor           groupedRBFFunctor;   
+  otb::RBFDiffKernelFunctor              RBFDiffFunctor;
+  otb::CustomLinearKernelFunctor         customLinearFunctor;
+  otb::GroupedRBFKernelFunctor           groupedRBFFunctor;
   otb::GroupingAdaptiveKernelFunctor     groupingAdaptiveFunctor;
 
   invMultiQuadricFunctor.SetValue<double>("const_coef", 2.);
@@ -61,7 +61,7 @@ int otbSVMModelGenericKernelsTest( int argc, char* argv[] )
   polyRBFSAMFunctor.SetValue<double>("lin_coef", 1.2);
   groupingAdaptiveFunctor.SetValue<double>("const_coef", 8.2);
   groupingAdaptiveFunctor.SetValue<double>("lin_coef", 5.2);
-  
+
   struct svm_model *model;
   model = (struct svm_model *)malloc(sizeof(struct svm_model));
   model->param.svm_type = 0;
@@ -69,7 +69,7 @@ int otbSVMModelGenericKernelsTest( int argc, char* argv[] )
   model->nr_class = 2;
   model->l = 5;
   model->sv_coef = Malloc(double *,model->nr_class-1);
-  
+
   for(int i=0; i<model->nr_class-1; i++)
     model->sv_coef[i] = Malloc(double,model->l);
   model->SV = Malloc(svm_node*,model->l);
@@ -79,7 +79,7 @@ int otbSVMModelGenericKernelsTest( int argc, char* argv[] )
       model->SV[n]->index = -1;
       model->SV[n]->value = 0.;
     }
-    
+
   model->sv_coef[0][0] = 0.125641;
   model->sv_coef[0][1] = 1;
   model->sv_coef[0][2] = 0;
@@ -96,7 +96,7 @@ int otbSVMModelGenericKernelsTest( int argc, char* argv[] )
   model->param.lin_coef = 5.;
   model->param.gamma = 1.5;
   model->param.degree = 2;
-  
+
   struct svm_node *p =  Malloc(struct svm_node,20);
   for(unsigned int n = 0;n<20;++n)
     {
@@ -150,7 +150,7 @@ p[19].index = -1;
   model->nSV = Malloc(int,2);
   model->nSV[0] = 3;
   model->nSV[1] = 2;
-        
+
   model->param.kernel_generic = &customFunctor;
   svmModel->SetModel(model);
   svmModel->SaveModel(argv[1]);

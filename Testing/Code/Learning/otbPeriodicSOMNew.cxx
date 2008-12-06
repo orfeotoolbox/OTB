@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,10 +32,10 @@ int otbPeriodicSOMNew(int argc, char* argv[])
    //     typedef itk::Statistics::ImageToListAdaptor<SOMMapType> AdaptorType;
    typedef itk::Statistics::ListSample<PixelType> ListSampleType;
    typedef otb::PeriodicSOM<ListSampleType,SOMMapType> SOMType;
-   
+
    // Instantiation
    SOMType::Pointer som = SOMType::New();
- 
- 
+
+
    return EXIT_SUCCESS;
 }

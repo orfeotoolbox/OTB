@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -35,7 +35,7 @@ int otbImageToPointSetFilterTest(int argc, char *argv[] )
   typedef otb::ImageToPointSetFilter<ImageType,PointSetType> FunctionType;
 
   //FunctionType::Pointer function = FunctionType::New();
- 
+
   return EXIT_SUCCESS;
 }
 

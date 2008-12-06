@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,20 +33,20 @@ int otbOverlapSaveConvolutionImageFilter( int argc, char * argv[] )
   typedef double      InputPixelType;
   typedef double      OutputPixelType;
   const unsigned int  Dimension = 2;
-  
+
   typedef otb::Image< InputPixelType,  Dimension >                      PanchroImageType;
   typedef otb::Image< OutputPixelType, Dimension >                      OutputImageType;
   typedef otb::ImageFileReader< PanchroImageType >                     ReaderType;
   typedef otb::ImageFileWriter< OutputImageType >                      WriterType;
   typedef otb::OverlapSaveConvolutionImageFilter< PanchroImageType,OutputImageType > ConvFilterType;
-  
+
   ReaderType::Pointer     reader     = ReaderType::New();
   WriterType::Pointer     writer     = WriterType::New();
   ConvFilterType::Pointer convFilter = ConvFilterType::New();
-  
+
   reader->SetFileName(inputFileName);
   writer->SetFileName(outputFileName);
-  
+
   ConvFilterType::InputSizeType radius;
   radius[0]=3;
   radius[1]=3;
@@ -57,11 +57,11 @@ int otbOverlapSaveConvolutionImageFilter( int argc, char * argv[] )
   convFilter->SetRadius(radius);
   convFilter->SetFilter(filterCoeffs);
   convFilter->NormalizeFilterOn();
-  
+
   convFilter->SetInput( reader->GetOutput() );
   writer->SetInput( convFilter->GetOutput() );
-  
+
   writer->Update();
-  
+
   return EXIT_SUCCESS;
 }

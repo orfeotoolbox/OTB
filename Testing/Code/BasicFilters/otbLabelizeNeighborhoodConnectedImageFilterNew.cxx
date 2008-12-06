@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,15 +27,15 @@ int otbLabelizeNeighborhoodConnectedImageFilterNew( int argc, char * argv[] )
   typedef unsigned char InputPixelType;
   typedef unsigned char OutputPixelType;
   const unsigned int Dimension = 2;
-  
+
   typedef otb::Image<InputPixelType, Dimension> InputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
-  
+
   typedef otb::LabelizeNeighborhoodConnectedImageFilter
     <InputImageType, OutputImageType> LabelizeFilterType;
   typedef LabelizeFilterType::Pointer LabelizeFilterPointerType;
-  
+
   LabelizeFilterPointerType filter = LabelizeFilterType::New();
-  
+
   return EXIT_SUCCESS;
 }

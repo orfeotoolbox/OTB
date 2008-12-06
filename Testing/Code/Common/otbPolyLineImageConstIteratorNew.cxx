@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,10 +31,10 @@ int otbPolyLineImageConstIteratorNew(int argc, char * argv[])
 
   PathType::Pointer path = PathType::New();
   ImageType::Pointer image = ImageType::New();
-      
+
   // Instantiating object
   ConstIteratorType it(image,path);
- 
- 
+
+
   return EXIT_SUCCESS;
 }

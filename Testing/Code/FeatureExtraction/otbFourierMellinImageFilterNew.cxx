@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,13 +32,13 @@ int otbFourierMellinImageFilterNew(int argc, char* argv[])
 
   typedef otb::Image< PixelType, Dimension >        InputImageType;
   typedef otb::Image< PixelType, Dimension >        OutputImageType;
-   
+
   typedef itk::LinearInterpolateImageFunction< InputImageType, double >		InterpolatorType;
   typedef otb::ForwardFourierMellinTransformImageFilter<PixelType,
   				InterpolatorType,Dimension> 			FourierMellinTransformType;
- 
+
   FourierMellinTransformType::Pointer fourierMellinTransform = FourierMellinTransformType::New();
-  
+
 
   return EXIT_SUCCESS;
 }

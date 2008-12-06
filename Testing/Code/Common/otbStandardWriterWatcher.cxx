@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,7 +27,7 @@
 int otbStandardWriterWatcher(int argc, char * argv[])
 {
   const char * infname = argv[1];
-  const char * outfname = argv[2]; 
+  const char * outfname = argv[2];
   const unsigned int nbsd = atoi(argv[3]);
 
   const unsigned int Dimension = 2;
@@ -42,7 +42,7 @@ int otbStandardWriterWatcher(int argc, char * argv[])
   reader->SetFileName(infname);
 
   FilterType::Pointer gradient = FilterType::New();
-  
+
   gradient->SetInput(reader->GetOutput());
 
   StreamingWriterType::Pointer writer1 = StreamingWriterType::New();

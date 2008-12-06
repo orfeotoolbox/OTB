@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -38,21 +38,21 @@ int otbDisparityMapEstimationMethod(int argc, char* argv[])
   const unsigned int Dimension=2;
   typedef double PixelType;
   typedef otb::Image<PixelType,Dimension> ImageType;
-   
+
   typedef itk::TranslationTransform<double,Dimension> TransformType;
   typedef TransformType::ParametersType ParametersType;
   typedef itk::PointSet<ParametersType,Dimension> PointSetType;
   typedef otb::DisparityMapEstimationMethod<ImageType,ImageType,PointSetType> DMEstimationType;
   typedef itk::NormalizedCorrelationImageToImageMetric<ImageType,ImageType> MetricType;
   typedef itk::LinearInterpolateImageFunction<ImageType,double> InterpolatorType;
-  typedef itk::GradientDescentOptimizer                         OptimizerType;   
+  typedef itk::GradientDescentOptimizer                         OptimizerType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ThresholdImageToPointSetFilter<ImageType,PointSetType> PointSetSourceType;
   typedef PointSetType::PointsContainer::Iterator PointSetIteratorType;
   typedef PointSetType::PointsContainer PointsContainerType;
   typedef PointSetType::PointDataContainer::Iterator PointDataIteratorType;
   typedef PointSetType::PointDataContainer PointDataContainerType;
-    
+
   //Input images reading
   ReaderType::Pointer fixedReader = ReaderType::New();
   ReaderType::Pointer movingReader = ReaderType::New();
@@ -82,7 +82,7 @@ int otbDisparityMapEstimationMethod(int argc, char* argv[])
   pointSetSource->Update();
 
   std::cout<<"PointSet size: "<<pointSetSource->GetOutput()->GetPoints()->Size()<<std::endl;
-    
+
   // Instantiation
   DMEstimationType::Pointer dmestimator = DMEstimationType::New();
   TransformType::Pointer transform = TransformType::New();
@@ -110,7 +110,7 @@ int otbDisparityMapEstimationMethod(int argc, char* argv[])
   ImageType::SizeType win,explo;
   win.Fill(winSize);
   explo.Fill(exploSize);
-    
+
   dmestimator->SetFixedImage(fixedReader->GetOutput());
   dmestimator->SetMovingImage(movingReader->GetOutput());
   dmestimator->SetPointSet(pointSetSource->GetOutput());
@@ -122,7 +122,7 @@ int otbDisparityMapEstimationMethod(int argc, char* argv[])
 
   // Point set retrieving
   PointSetType::Pointer pointSet = dmestimator->GetOutput();
-    
+
   // Writing output transform parameters
   std::ofstream out;
   out.open(outputFileName,std::ios::out);
@@ -140,7 +140,7 @@ int otbDisparityMapEstimationMethod(int argc, char* argv[])
       out<<"Point "<<it.Value()<<" -> transform parameters: ";
       out<<itData.Value();
       out<<std::endl;
-	
+
     }
   out.close();
 

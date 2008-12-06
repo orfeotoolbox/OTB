@@ -49,15 +49,15 @@ void RegisterTests()
 #undef main
 #define main TutorialsScalingPipelineTest
 #include "ScalingPipeline.cxx"
-             
+
 #undef main
 #define main TutorialsMultispectralTest
-#include "Multispectral.cxx"             
+#include "Multispectral.cxx"
 
 #undef main
 #define main TutorialsSmarterFilteringPipelineTest
 #include "SmarterFilteringPipeline.cxx"
-             
+
 #undef main
 #define main TutorialsOrthoFusionTest
 #include "OrthoFusion.cxx"

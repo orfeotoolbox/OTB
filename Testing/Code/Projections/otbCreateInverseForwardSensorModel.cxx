@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,9 +23,9 @@
  *
  * PURPOSE:
  *
- * Application pour projeter une rï¿½gion d'une image en coordonnï¿½es gï¿½ographiques 
- * en utilisant un Interpolator+regionextractor et un Iterator. 
- * 
+ * Application pour projeter une rï¿½gion d'une image en coordonnï¿½es gï¿½ographiques
+ * en utilisant un Interpolator+regionextractor et un Iterator.
+ *
  */
 
 // iostream is used for general output
@@ -52,7 +52,7 @@ int otbCreateInverseForwardSensorModel( int argc, char* argv[] )
       std::cout << argv[0] <<" <input filename>" << std::endl;
       return EXIT_FAILURE;
     }
-   
+
   typedef otb::Image<unsigned int, 2>     ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::InverseSensorModel<double> InverseModelType;
@@ -62,7 +62,7 @@ int otbCreateInverseForwardSensorModel( int argc, char* argv[] )
   InverseModelType::Pointer               inverse_model= InverseModelType::New();
   ForwardModelType::Pointer               forward_model= ForwardModelType::New();
   ReaderType::Pointer	                reader=ReaderType::New();
-        
+
   // Set parameters ...
   reader->SetFileName(argv[1]);
 
@@ -71,11 +71,11 @@ int otbCreateInverseForwardSensorModel( int argc, char* argv[] )
   ImageType::Pointer inputImage = reader->GetOutput();
 
   //Leve une exception si le model n'est pas créé
-  otbGenericMsgDebugMacro(<< "Inverse model creation..." ); 
+  otbGenericMsgDebugMacro(<< "Inverse model creation..." );
   inverse_model->SetImageGeometry(inputImage->GetImageKeywordlist());
-  otbGenericMsgDebugMacro(<< "Foreward model creation..." ); 
+  otbGenericMsgDebugMacro(<< "Foreward model creation..." );
   forward_model->SetImageGeometry(inputImage->GetImageKeywordlist());
 
- 
+
   return EXIT_SUCCESS;
 }

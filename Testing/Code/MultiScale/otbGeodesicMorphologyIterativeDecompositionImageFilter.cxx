@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -44,7 +44,7 @@ int otbGeodesicMorphologyIterativeDecompositionImageFilter(int argc, char * argv
       typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
       typedef otb::GeodesicMorphologyIterativeDecompositionImageFilter<InputImageType,StructuringElementType> DecompositionImageFilterType;
       typedef DecompositionImageFilterType::OutputImageListType::Iterator ImageListIterator;
-      
+
       // Reading input image
       ReaderType::Pointer reader = ReaderType::New();
       reader->SetFileName(inputFilename);
@@ -76,7 +76,7 @@ int otbGeodesicMorphologyIterativeDecompositionImageFilter(int argc, char * argv
 	  oss<<outputFilenamePrefix<<"_leveling_"<<i<<"."<<outputFilenameSuffix;
 	  writer =  WriterType::New();
 	  writer->SetInput(itAnalyse.Get());
-	  writer->SetFileName(oss.str().c_str());	  
+	  writer->SetFileName(oss.str().c_str());
 	  writer->Update();
 	  oss.str("");
 	  oss<<outputFilenamePrefix<<"_convMap_"<<i<<"."<<outputFilenameSuffix;

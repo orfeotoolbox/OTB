@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,7 +34,7 @@
 // This example illustrates how to generate a training image for an
 // image supervised classification.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 #include "itkNumericTraits.h"
 #include "otbImage.h"
@@ -53,13 +53,13 @@ int main( int argc, char *argv[] )
 
     std::cout << "Usage : " << argv[0] << " inputImage roiFile outputTrainingImage" << std::endl;
     return EXIT_FAILURE;
-    
+
     }
 
   const char * imageFilename  = argv[1];
   const char * roiFilename  = argv[2];
   const char * outputFilename = argv[3];
-       
+
 
   typedef unsigned char                                InputPixelType;
   typedef unsigned char   	                        OutputPixelType;
@@ -86,13 +86,13 @@ int main( int argc, char *argv[] )
     // Declare the type of the index to access images
   typedef itk::Index<Dimension>         myIndexType;
 
-  // Declare the type of the size 
+  // Declare the type of the size
   typedef itk::Size<Dimension>          mySizeType;
 
   // Declare the type of the Region
   typedef itk::ImageRegion<Dimension>        myRegionType;
 
-  
+
   // Define their size, and start index
   mySizeType size;
   size[0] = reader->GetOutput()->GetRequestedRegion().GetSize()[0];
@@ -129,7 +129,7 @@ int main( int argc, char *argv[] )
   roisFile >> nbRois;
 
   std::cout << "Nb of ROIS " << int(nbRois) << std::endl;
-  
+
 
   while( !roisFile.fail() && (nbRois > 0))
     {
@@ -152,16 +152,16 @@ int main( int argc, char *argv[] )
 
     // Region creation
 
-        
+
     start[0] = xUL;
     start[1] = yUL;
-    
+
     size[0]  = xBR - xUL;
     size[1]  = yBR - yUL;
-    
+
     region.SetSize( size );
     region.SetIndex( start );
-    
+
     // Iterator creation
     typedef itk::ImageRegionIterator< OutputImageType>  IteratorType;
     IteratorType  it( trainingImage, region );
@@ -178,17 +178,17 @@ int main( int argc, char *argv[] )
       //std::cout << (int)static_cast<OutputPixelType>(label) << " -- ";
       //std::cout << (int)it.Get() << std::endl;
       ++it;
-      
+
       }
 
-    
+
     }
 
 
-  
+
   writer->SetInput( trainingImage );
 
-  
+
   writer->Update();
 
 

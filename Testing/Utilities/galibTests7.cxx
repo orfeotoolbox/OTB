@@ -96,8 +96,8 @@ galibTests7(int argc, char *argv[])
 
 // Parse the command line for arguments.  We look for two possible arguments
 // (after the parameter list has grabbed everything it recognizes).  One is the
-// name of a data file from which to read, the other is the name of a 
-// parameters file from which to read.  Notice that any parameters in the 
+// name of a data file from which to read, the other is the name of a
+// parameters file from which to read.  Notice that any parameters in the
 // parameters file will override the defaults above AND any entered on the
 // command line.
 
@@ -142,7 +142,7 @@ galibTests7(int argc, char *argv[])
 // two integers that give the height then width of the matrix, then the matrix
 // of 1's and 0's (with whitespace inbetween).
 //   Here we use a binary string genome to store the desired pattern.  This
-// shows how you can read in directly from a stream into a genome.  (This can 
+// shows how you can read in directly from a stream into a genome.  (This can
 // be useful in a population initializer when you want to bias your population)
 
   cout << " ifstream inStream(datafile): "<<datafile<<"'\n";
@@ -181,7 +181,7 @@ galibTests7(int argc, char *argv[])
 // When you use a GA with overlapping populations, the default score
 // frequency (how often the best of generation score is recorded) defaults
 // to 100.  We use the parameters member function to change this value (along
-// with all of the other parameters we set above).  You can also change the 
+// with all of the other parameters we set above).  You can also change the
 // score frequency using the scoreFrequency member function of the GA.  Each of
 // the parameters can be set individually if you like.
 //   Here we just use the values that were set in the parameter list.
@@ -195,19 +195,19 @@ galibTests7(int argc, char *argv[])
   ga.selector(selector);
 
 // The following member functions override the values that were set using the
-// parameter list.  They are commented out here so that you can see how they 
+// parameter list.  They are commented out here so that you can see how they
 // would be used.
 
 // We can control the amount of overlap from generation to generation using the
 // pReplacement member function.  If we specify a value of 1 (100%) then the
 // entire population is replaced each generation.  Notice that the percentage
-// must be high enough to have at least one individual produced in each 
+// must be high enough to have at least one individual produced in each
 // generation.  If not, the GA will post a warning message.
 
 //  ga.pReplacement(0.3);
 
 // Often we use the number of generations as the criterion for terminating the
-// GA run.  Here we override that and tell the GA to use convergence as a 
+// GA run.  Here we override that and tell the GA to use convergence as a
 // termination criterion.  Note that you can pass ANY function as the stopping
 // criterion (as long as it has the correct signature).
 //   Notice that the values we set here for p- and n-convergence override those
@@ -246,7 +246,7 @@ galibTests7(int argc, char *argv[])
 
   return 0;
 }
- 
+
 
 
 
@@ -256,7 +256,7 @@ float
 objective(GAGenome & c)
 {
   GA2DBinaryStringGenome & genome = (GA2DBinaryStringGenome &)c;
-  GA2DBinaryStringGenome * pattern = 
+  GA2DBinaryStringGenome * pattern =
     (GA2DBinaryStringGenome *)c.userData();
 
   float value=0.0;

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,10 +25,10 @@ int otbKMLVectorDataIOTestFileReader(int argc, char* argv[])
   typedef otb::VectorData<> VectorDataType;
   typedef otb::KMLVectorDataIO<VectorDataType> KMLVectorDataIOType;
   typedef VectorDataType::Pointer VectorDataPointerType;
-  
- 
+
+
   KMLVectorDataIOType::Pointer object = KMLVectorDataIOType::New();
-  VectorDataPointerType data = VectorDataType::New();  
+  VectorDataPointerType data = VectorDataType::New();
 
 
   bool lCanRead = object->CanReadFile(argv[1]);
@@ -36,10 +36,10 @@ int otbKMLVectorDataIOTestFileReader(int argc, char* argv[])
   {
         return EXIT_FAILURE;
   }
-  
+
   object->SetFileName(argv[1]);
   object->Read(data);
-  
+
   VectorDataType::ConstPointer constData = static_cast<const VectorDataType *>(data);
 
   if(argc>2)
@@ -50,8 +50,8 @@ int otbKMLVectorDataIOTestFileReader(int argc, char* argv[])
         return EXIT_FAILURE;
      }
      object->SetFileName(argv[2]);
-     object->Write(constData);  
-  }  
-  
+     object->Write(constData);
+  }
+
   return EXIT_SUCCESS;
 }

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,7 +25,7 @@
 template < typename  InputPixelType, typename OutputPixelType  >
 int generic_otbMultiToMonoChannelExtractROI ( int argc, char * argv[], const char * inputFilename,const char * outputFilename)
 {
-  typedef otb::MultiToMonoChannelExtractROI< InputPixelType, 
+  typedef otb::MultiToMonoChannelExtractROI< InputPixelType,
     OutputPixelType >  ExtractROIFilterType;
 
   typename ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
@@ -60,12 +60,12 @@ int generic_otbMultiToMonoChannelExtractROI ( int argc, char * argv[], const cha
   //        reader->Update(); //Necessaire pour connaitre le nombre de canaux dans l'image
   writer->SetFileName( outputFilename );
   extractROIFilter->SetInput( reader->GetOutput() );
-        
+
   writer->SetInput( extractROIFilter->GetOutput() );
-  writer->Update(); 
+  writer->Update();
   std::cout << " Nb canaux dans l'image d'entree : "<< reader->GetOutput()->GetNumberOfComponentsPerPixel()<<std::endl;
   std::cout << " Nb canaux dans l'image de sortie : "<<extractROIFilter->GetOutput()->GetNumberOfComponentsPerPixel() <<std::endl;
-  
+
 
 
   return EXIT_SUCCESS;
@@ -146,8 +146,8 @@ int otbMultiToMonoChannelExtractROI ( int argc, char * argv[] )
         else if (  (linputPixelType=="-uint")&&(loutputPixelType=="-double") )          return (generic_otbMultiToMonoChannelExtractROI< unsigned int, double >( argc,argv,inputFilename,outputFilename) );
         else if (  (linputPixelType=="-float")&&(loutputPixelType=="-double") )         return (generic_otbMultiToMonoChannelExtractROI< float, double >( argc,argv,inputFilename,outputFilename) );
 
-        else 
-        {       
+        else
+        {
                 std::cout << " Erreur : le format des images en entrée est mal précisé dans la ligne de commande !!!"<<std::endl;
                 std::cout << "          valeurs autorisées : -uchar, -ushort, -uint, -float, -double"<<std::endl;
                 std::cout << "          valeurs par defaut : -uchar"<<std::endl;
@@ -155,7 +155,7 @@ int otbMultiToMonoChannelExtractROI ( int argc, char * argv[] )
         }
 
 return EXIT_FAILURE;
-     
+
 }
 
 

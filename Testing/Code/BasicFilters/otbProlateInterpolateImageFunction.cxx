@@ -10,10 +10,10 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
-     
+
 =========================================================================*/
 #include "itkExceptionObject.h"
 
@@ -32,7 +32,7 @@
 #include "itkDifferenceImageFilter.h"
 
 int otbProlateInterpolateImageFunction(int argc, char * argv[])
-{  
+{
   const char * infname = argv[1];
   const char * outfname = argv[2];
   const char * cosfname = argv[3];
@@ -48,10 +48,10 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
 
    std::vector<ContinuousIndexType> indicesList;
   while(i<static_cast<unsigned int>(argc) && (i+1)<static_cast<unsigned int>(argc))
-    {  
+    {
       ContinuousIndexType idx;
       idx[0]=atof(argv[i]);
-      idx[1]=atof(argv[i+1]);     
+      idx[1]=atof(argv[i+1]);
       indicesList.push_back(idx);
 
       i+=2;
@@ -98,11 +98,11 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
   //prowriter->SetNumberOfStreamDivisions(1);
  prowriter->SetFileName(profname);
  prowriter->Update();
- 
+
  typedef otb::WindowedSincInterpolateImageCosineFunction<ImageType>          CosInterpolatorType;
  typedef itk::Function::CosineWindowFunction<1, double, double>              itkCosType;
  typedef itk::WindowedSincInterpolateImageFunction<ImageType, 1, itkCosType> itkCosInterpolatorType;
- 
+
  WriterType::Pointer itkcoswriter  = WriterType::New();
  WriterType::Pointer coswriter = WriterType::New();
  StreamingResampleImageFilterType::Pointer cosresampler = StreamingResampleImageFilterType::New();

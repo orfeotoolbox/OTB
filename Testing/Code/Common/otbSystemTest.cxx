@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -50,8 +50,8 @@ int otbSystemTest( int argc, char* argv[] )
     {
       itkGenericExceptionMacro(<< "System::IsADirName() error : the dirname "<<inputDirName<<" is not detected!!");
     }
-        
-  
+
+
 
   return EXIT_SUCCESS;
 }

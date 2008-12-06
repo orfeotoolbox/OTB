@@ -37,7 +37,7 @@ tcase_create(char *name)
 }
 
 void
-suite_add_tcase(Suite *suite, TCase *tc) 
+suite_add_tcase(Suite *suite, TCase *tc)
 {
     assert(suite != NULL);
     assert(tc != NULL);

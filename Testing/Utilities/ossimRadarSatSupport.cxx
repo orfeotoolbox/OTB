@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,9 +23,9 @@
  *
  * PURPOSE:
  *
- * Application pour projeter une r�gion d'une image en coordonn�es g�ographiques 
- * en utilisant un Interpolator+regionextractor et un Iterator. 
- * 
+ * Application pour projeter une r�gion d'une image en coordonn�es g�ographiques
+ * en utilisant un Interpolator+regionextractor et un Iterator.
+ *
  */
 
 // iostream is used for general output
@@ -43,12 +43,12 @@
 #include "ossim/projection/ossimTerraSarModel.h"
 #include "ossim/projection/ossimRadarSatModel.h"
 
- 
+
 int ossimRadarSatSupport( int argc, char* argv[] )
 {
-  
-  try 
-    {        
+
+  try
+    {
         ossimInit::instance()->initialize(argc, argv);
 
 	       if(argc<2)
@@ -60,27 +60,27 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 
                 return EXIT_FAILURE;
         }
-  
+
 		ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
 		/*
 		 * Lecture du fichier passé en parametre
 		 */
-        ossimImageHandler *handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(argv[1])); 
+        ossimImageHandler *handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(argv[1]));
 		/*
 		 * Verification que la lecture est effectuée
 		 */
         if(!handler)
         {
 			  std::cout<<"Unable to open input image "<<argv[1]<<std::endl;
-        }  
-   
+        }
+
 		/*
-		 * Recuperation des métadonnées 
+		 * Recuperation des métadonnées
 		 */
         ossimKeywordlist geom;
         std::cout<<"Read ossim Keywordlist...";
 		  if  (! handler->getImageGeometry(geom)) {
-				std::cout << "Bad metadata parsing "<< std::endl; 
+				std::cout << "Bad metadata parsing "<< std::endl;
 				return EXIT_FAILURE;
 		  }
 
@@ -105,13 +105,13 @@ int ossimRadarSatSupport( int argc, char* argv[] )
         ossimRefPtr<ossimProjection> ptrmodel = model;
         if( ptrmodel.valid() == false )
         {
-                std::cout<<"Invalid Model pointer .valid() == false !"; 
+                std::cout<<"Invalid Model pointer .valid() == false !";
         }
-		*/	
+		*/
 
 		  const double RDR_DEUXPI      = 6.28318530717958647693 ;
 
-		int numero_produit = 1 ; // RDS : 1 ; RDS appuis : 2 ; RDS SGF : 3 
+		int numero_produit = 1 ; // RDS : 1 ; RDS appuis : 2 ; RDS SGF : 3
 										 // generique 4 coins + centre TSX : 0
 		if (numero_produit==1) {
 			{
@@ -155,7 +155,7 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 
 					int i = 8650;
 					int j = 3062;
-					
+
 					ossimDpt image(i,j);
 					ossimDpt imageret;
 					ossimGpt world;
@@ -334,19 +334,19 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 				/* test de la prise en compte de points d'appui									*/
 				/**************************************************************************/
 				std::cout<<"*********** OPTIMISATION **********"<<std::endl;
-	
+
 				ossimRadarSatModel * RDSmodel = ( ossimRadarSatModel *) model ;
-				std::list<ossimGpt> listePtsSol ; 
-				std::list<ossimDpt> listePtsImage ; 
+				std::list<ossimGpt> listePtsSol ;
+				std::list<ossimDpt> listePtsImage ;
 
 				ossimDpt * imageGCP;
 				ossimGpt * groundGCP;
 
 				imageGCP  = new ossimDpt(8650,3062);
 				groundGCP = new ossimGpt(43.282566*RDR_DEUXPI/360.0,1.204279*RDR_DEUXPI/360.0, 211);
-				listePtsSol.push_back(*groundGCP) ; 
-				listePtsImage.push_back(*imageGCP) ; 
-				
+				listePtsSol.push_back(*groundGCP) ;
+				listePtsImage.push_back(*imageGCP) ;
+
 				RDSmodel->optimizeModel(listePtsSol, listePtsImage) ;
 
 //8650 3062 43.282566 1.204279 211
@@ -360,7 +360,7 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 
 					int i = 8650;
 					int j = 3062;
-					
+
 					ossimDpt image(i,j);
 					ossimDpt imageret;
 					ossimGpt world;
@@ -459,7 +459,7 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 
 					int i = 5130;
 					int j = 4283;
-					
+
 					ossimDpt image(i,j);
 					ossimDpt imageret;
 					ossimGpt world;
@@ -546,19 +546,19 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 				/* test de la prise en compte de points d'appui									*/
 				/**************************************************************************/
 				std::cout<<"*********** OPTIMISATION **********"<<std::endl;
-	
+
 				ossimRadarSatModel * RDSmodel = ( ossimRadarSatModel *) model ;
-				std::list<ossimGpt> listePtsSol ; 
-				std::list<ossimDpt> listePtsImage ; 
+				std::list<ossimGpt> listePtsSol ;
+				std::list<ossimDpt> listePtsImage ;
 
 				ossimDpt * imageGCP;
 				ossimGpt * groundGCP;
 
 				imageGCP  = new ossimDpt(5130,4283);
 				groundGCP = new ossimGpt(43.734466 ,6.185295 , 506);
-				listePtsSol.push_back(*groundGCP) ; 
-				listePtsImage.push_back(*imageGCP) ; 
-				
+				listePtsSol.push_back(*groundGCP) ;
+				listePtsImage.push_back(*imageGCP) ;
+
 				RDSmodel->optimizeModel(listePtsSol, listePtsImage) ;
 
 //5130 4283 43.734466 6.185295 506
@@ -573,7 +573,7 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 
 					int i = 5130;
 					int j = 4283;
-					
+
 					ossimDpt image(i,j);
 					ossimDpt imageret;
 					ossimGpt world;
@@ -673,7 +673,7 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 					double lon = atof(lon_str);
 					const char* lat_str = geom.find("cornersLat0");
 					double lat = atof(lat_str);
-					
+
 					ossimDpt image(i,j);
 					ossimDpt imageret;
 					ossimGpt world;
@@ -718,7 +718,7 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 					double lon = atof(lon_str);
 					const char* lat_str = geom.find("cornersLat1");
 					double lat = atof(lat_str);
-					
+
 					ossimDpt image(i,j);
 					ossimDpt imageret;
 					ossimGpt world;
@@ -753,7 +753,7 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 					double lon = atof(lon_str);
 					const char* lat_str = geom.find("cornersLat2");
 					double lat = atof(lat_str);
-					
+
 					ossimDpt image(i,j);
 					ossimDpt imageret;
 					ossimGpt world;
@@ -788,7 +788,7 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 					double lon = atof(lon_str);
 					const char* lat_str = geom.find("cornersLat3");
 					double lat = atof(lat_str);
-					
+
 					ossimDpt image(i,j);
 					ossimDpt imageret;
 					ossimGpt world;
@@ -823,7 +823,7 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 					double lon = atof(lon_str);
 					const char* lat_str = geom.find("cornersLat4");
 					double lat = atof(lat_str);
-					
+
 					ossimDpt image(i,j);
 					ossimDpt imageret;
 					ossimGpt world;
@@ -848,10 +848,10 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 				/* test de la prise en compte de points d'appui									*/
 				/**************************************************************************/
 				std::cout<<"*********** OPTIMISATION **********"<<std::endl;
-	
+
 				ossimRadarSatModel * RDSmodel = ( ossimRadarSatModel *) model ;
-				std::list<ossimGpt> listePtsSol ; 
-				std::list<ossimDpt> listePtsImage ; 
+				std::list<ossimGpt> listePtsSol ;
+				std::list<ossimDpt> listePtsImage ;
 				// le point d'appui : le centre scène
 				ossimDpt * imageGCP;
 				ossimGpt * groundGCP;
@@ -868,9 +868,9 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 
 				imageGCP  = new ossimDpt(i0,j0);
 				groundGCP = new ossimGpt(lat0 ,lon0 , height0);
-				listePtsSol.push_back(*groundGCP) ; 
-				listePtsImage.push_back(*imageGCP) ; 
-				
+				listePtsSol.push_back(*groundGCP) ;
+				listePtsImage.push_back(*imageGCP) ;
+
 				RDSmodel->optimizeModel(listePtsSol, listePtsImage) ;
 
 /*
@@ -888,7 +888,7 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 					double lon = atof(lon_str);
 					const char* lat_str = geom.find("cornersLat0");
 					double lat = atof(lat_str);
-					
+
 					ossimDpt image(i,j);
 					ossimDpt imageret;
 					ossimGpt world;
@@ -928,7 +928,7 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 					double lon = atof(lon_str);
 					const char* lat_str = geom.find("cornersLat1");
 					double lat = atof(lat_str);
-					
+
 					ossimDpt image(i,j);
 					ossimDpt imageret;
 					ossimGpt world;
@@ -963,7 +963,7 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 					double lon = atof(lon_str);
 					const char* lat_str = geom.find("cornersLat2");
 					double lat = atof(lat_str);
-					
+
 					ossimDpt image(i,j);
 					ossimDpt imageret;
 					ossimGpt world;
@@ -998,7 +998,7 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 					double lon = atof(lon_str);
 					const char* lat_str = geom.find("cornersLat3");
 					double lat = atof(lat_str);
-					
+
 					ossimDpt image(i,j);
 					ossimDpt imageret;
 					ossimGpt world;
@@ -1033,7 +1033,7 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 					double lon = atof(lon_str);
 					const char* lat_str = geom.find("cornersLat4");
 					double lat = atof(lat_str);
-					
+
 					ossimDpt image(i,j);
 					ossimDpt imageret;
 					ossimGpt world;
@@ -1054,60 +1054,60 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 				}
 			}
 	{
-//		// ouvertures 
+//		// ouvertures
 //		hid_t fileID, group_ID, attr_ID1, attr_ID2, attr_ID3, attr_ID4, attr_ID5, attr_ID6, attr_ID7, dataset_ID, mem_type_id ;
 //		herr_t status ;
 //		fileID = H5Fopen("D:\\locSAR\\exemple_CSKS\\hdf5_test.h5", H5F_ACC_RDONLY, H5P_DEFAULT);
-//		group_ID = H5Gopen(fileID, "/links/hard links"  ) ; 
-//		dataset_ID = H5Dopen(group_ID, "Eskimo"  ) ; 
-//		attr_ID1 = H5Aopen_name(dataset_ID , "IMAGE_TRANSPARENCY"  ) ; 
-//		attr_ID2 = H5Aopen_name(dataset_ID , "IMAGE_MINMAXRANGE"  ) ; 
-//		attr_ID3 = H5Aopen_name(dataset_ID , "CLASS"  ) ; 
-//		attr_ID4 = H5Aopen_name(dataset_ID , "IMAGE_VERSION"  ) ; 
-//		attr_ID5 = H5Aopen_name(dataset_ID , "ajoutVMN"  ) ; 
-//		attr_ID6 = H5Aopen_name(dataset_ID , "ajoutVMN_tabInt"  ) ; 
-//		attr_ID7 = H5Aopen_name(dataset_ID , "ajoutVMN_double"  ) ; 
+//		group_ID = H5Gopen(fileID, "/links/hard links"  ) ;
+//		dataset_ID = H5Dopen(group_ID, "Eskimo"  ) ;
+//		attr_ID1 = H5Aopen_name(dataset_ID , "IMAGE_TRANSPARENCY"  ) ;
+//		attr_ID2 = H5Aopen_name(dataset_ID , "IMAGE_MINMAXRANGE"  ) ;
+//		attr_ID3 = H5Aopen_name(dataset_ID , "CLASS"  ) ;
+//		attr_ID4 = H5Aopen_name(dataset_ID , "IMAGE_VERSION"  ) ;
+//		attr_ID5 = H5Aopen_name(dataset_ID , "ajoutVMN"  ) ;
+//		attr_ID6 = H5Aopen_name(dataset_ID , "ajoutVMN_tabInt"  ) ;
+//		attr_ID7 = H5Aopen_name(dataset_ID , "ajoutVMN_double"  ) ;
 //
 //		// lectures
 //		mem_type_id = H5Aget_type(attr_ID1) ;
 //		unsigned int buffer1[1];
 //		status = H5Aread(attr_ID1, mem_type_id, buffer1 ) ;
-//		std::cout << buffer1[0] << std::endl ; 
+//		std::cout << buffer1[0] << std::endl ;
 //
 //		mem_type_id = H5Aget_type(attr_ID2) ;
 //		unsigned char buffer2[2] ;
 //		status = H5Aread(attr_ID2, mem_type_id, buffer2 ) ;
-//		std::cout << (int) buffer2[0] << std::endl ; 
-//		std::cout << (int) buffer2[1] << std::endl ; 
+//		std::cout << (int) buffer2[0] << std::endl ;
+//		std::cout << (int) buffer2[1] << std::endl ;
 //
 //		mem_type_id = H5Aget_type(attr_ID3) ;
 //		char buffer3[6] ;
 //		status = H5Aread(attr_ID3, mem_type_id, buffer3 ) ;
 //		char buffer4[10] ;
 //		status = H5Aread(attr_ID3, mem_type_id, buffer4 ) ;
-//		std::string classe(buffer4); 
-//		std::cout << classe << std::endl ; 
+//		std::string classe(buffer4);
+//		std::cout << classe << std::endl ;
 //
 //		mem_type_id = H5Aget_type(attr_ID4) ;
 //		float buffer5[1] ;
 //		status = H5Aread(attr_ID4, mem_type_id, buffer5 ) ;
-//		std::cout << buffer5[0] << std::endl ; 
+//		std::cout << buffer5[0] << std::endl ;
 //
 //mem_type_id = H5Aget_type(attr_ID5) ;
 //		int buffer6[1] ;
 //		status = H5Aread(attr_ID5, mem_type_id, buffer6 ) ;
-//std::cout << buffer6[0] << std::endl ; 
+//std::cout << buffer6[0] << std::endl ;
 //
 //mem_type_id = H5Aget_type(attr_ID6) ;
 //		int buffer7[2] ;
 //		status = H5Aread(attr_ID6, mem_type_id, buffer7 ) ;
-//std::cout << buffer7[0] << std::endl ; 
-//std::cout << buffer7[1] << std::endl ; 
+//std::cout << buffer7[0] << std::endl ;
+//std::cout << buffer7[1] << std::endl ;
 //
 //mem_type_id = H5Aget_type(attr_ID7) ;
 //		double buffer8[1] ;
 //		status = H5Aread(attr_ID7, mem_type_id, buffer8 ) ;
-//std::cout << buffer8[0] << std::endl ; 
+//std::cout << buffer8[0] << std::endl ;
 //
 //		// fermeture
 //		status = H5Aclose(attr_ID1) ;
@@ -1121,16 +1121,16 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 
 	}
 
-  catch( std::bad_alloc & err ) 
-    { 
-    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl; 
+  catch( std::bad_alloc & err )
+    {
+    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl;
     return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "Exception levee inconnue !" << std::endl; 
+    }
+  catch( ... )
+    {
+    std::cout << "Exception levee inconnue !" << std::endl;
     return EXIT_FAILURE;
-    } 
+    }
   return EXIT_SUCCESS;
 
  }//Fin main()

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
   =========================================================================*/
@@ -42,40 +42,40 @@ int otbVectorImageTest(int argc, char* argv[])
   const   unsigned int        	                        Dimension = 2;
 
   std::ofstream file;
-	
+
   file.open(outputAsciiFilename);
 
   typedef otb::VectorImage< InputPixelType,  Dimension >        InputImageType;
-        
+
   InputImageType::Pointer image = InputImageType::New();
-        
+
   typedef otb::ImageFileReader< InputImageType >         ReaderType;
-        
+
 
   ReaderType::Pointer reader = ReaderType::New();
- 
+
   reader->SetFileName( inputFilename  );
   reader->Update();
 
   image = reader->GetOutput();
-	
+
   file << "------ IMAGE --------" << std::endl;
   std::cout << "------ IMAGE --------" << std::endl;
-  // Image n'est pas ecrit dans le fichier car des pointeurs sont affichés, donc la valeur dépend de l'instanciation 
+  // Image n'est pas ecrit dans le fichier car des pointeurs sont affichés, donc la valeur dépend de l'instanciation
   // -> pour pouvoir faire de tests de non regression sur la sortie ecrite dans le fichier ASCII
-  std::cout << image << std::endl;	
+  std::cout << image << std::endl;
   std::cout << "---------------------" << std::endl;
-	
+
   file << "Spacing " << image->GetSpacing() << std::endl;
   file << "Origin " << image->GetOrigin() << std::endl;
-	
+
   file << "Projection REF " << image->GetProjectionRef() << std::endl;
-		 
+
   file << "GCP Projection " << image->GetGCPProjection() << std::endl;
-	
-  unsigned int GCPCount = image->GetGCPCount();	
-  file << "GCP Count " << image->GetGCPCount() << std::endl; 
-	
+
+  unsigned int GCPCount = image->GetGCPCount();
+  file << "GCP Count " << image->GetGCPCount() << std::endl;
+
   for(unsigned int GCPnum = 0 ; GCPnum < GCPCount ; GCPnum++ )
     {
       file << "GCP[" << GCPnum << "] Id " << image->GetGCPId(GCPnum) << std::endl;
@@ -87,7 +87,7 @@ int otbVectorImageTest(int argc, char* argv[])
       file << "GCP[" << GCPnum << "] Z " << image->GetGCPZ(GCPnum) << std::endl;
       file << "----------------" << std::endl;
     }
-	
+
   InputImageType::VectorType tab = image->GetGeoTransform();
 
   file << "Geo Transform " << std::endl;
@@ -96,7 +96,7 @@ int otbVectorImageTest(int argc, char* argv[])
       file << " " <<i<<" -> "<<tab[i]<< std::endl;
     }
   tab.clear();
-	
+
   tab = image->GetUpperLeftCorner();
   file << "Corners " << std::endl;
   for(unsigned int i = 0 ; i < tab.size() ; i++ )
@@ -104,31 +104,31 @@ int otbVectorImageTest(int argc, char* argv[])
       file << " UL[" <<i<<"] -> "<<tab[i]<< std::endl;
     }
   tab.clear();
-		
+
   tab = image->GetUpperRightCorner();
   for(unsigned int i = 0 ; i < tab.size() ; i++ )
     {
       file << " UR[" <<i<<"] -> "<<tab[i]<< std::endl;
     }
   tab.clear();
-		
+
   tab = image->GetLowerLeftCorner();
   for(unsigned int i = 0 ; i < tab.size() ; i++ )
     {
       file << " LL[" <<i<<"] -> "<<tab[i]<< std::endl;
     }
   tab.clear();
-			
+
   tab = image->GetLowerRightCorner();
   for(unsigned int i = 0 ; i < tab.size() ; i++ )
     {
       file << " LR[" <<i<<"] -> "<<tab[i]<< std::endl;
-    }	
+    }
   tab.clear();
-		
+
   file.close();
-	
-   
+
+
   return EXIT_SUCCESS;
 }
 

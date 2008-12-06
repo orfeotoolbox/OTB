@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -47,12 +47,12 @@ int otbClosingOpeningMorphologicalFilter(int argc, char * argv[])
   // Reading input image
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFilename);
-           
+
   // Creating Kernel
   StructuringElementType structElt;
   structElt.SetRadius(Radius);
   structElt.CreateStructuringElement();
- 
+
   // Instantiating the opening closing filter
   ClosingOpeningFilterType::Pointer openingClosing = ClosingOpeningFilterType::New();
   openingClosing->SetInput(reader->GetOutput());
@@ -63,7 +63,7 @@ int otbClosingOpeningMorphologicalFilter(int argc, char * argv[])
   writer->SetFileName(outputFilename);
   writer->SetInput(openingClosing->GetOutput());
   writer->Update();
-  
+
 
   return EXIT_SUCCESS;
 }

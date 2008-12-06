@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,12 +24,12 @@ int otbRCC8Edge(int argc, char* argv[])
   typedef otb::RCC8Edge RCC8EdgeType;
   typedef RCC8EdgeType::RCC8ValueType RCC8ValueType;
   RCC8ValueType value = otb::OTB_RCC8_DC;
-  
+
   // Instantiation
   RCC8EdgeType::Pointer edge= RCC8EdgeType::New();
   edge->SetValue(value);
-  
-  
+
+
   if(edge->GetValue()!=value)
     {
       std::cout<<"Test failed: edge->GetValue()!=value"<<std::endl;

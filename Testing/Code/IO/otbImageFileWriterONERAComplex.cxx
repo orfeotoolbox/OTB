@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -42,10 +42,10 @@ int otbImageFileWriterONERAComplex(int argc, char* argv[])
   typedef otb::ImageFileWriter< ImageType >         WriterType;
 
   ReaderType::Pointer complexReader = ReaderType::New();
- 
+
   complexReader->SetFileName( inputFilename  );
 
-  typedef otb::ExtractROI< PixelType, 
+  typedef otb::ExtractROI< PixelType,
     PixelType >  ExtractROIFilterType;
 
   ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
@@ -54,16 +54,16 @@ int otbImageFileWriterONERAComplex(int argc, char* argv[])
   extractROIFilter->SetStartY( 20 );
   extractROIFilter->SetSizeX( 100 );
   extractROIFilter->SetSizeY( 100 );
-  extractROIFilter->SetInput( complexReader->GetOutput() );        
+  extractROIFilter->SetInput( complexReader->GetOutput() );
   extractROIFilter->Update();
-	
+
   WriterType::Pointer complexWriter = WriterType::New();
   complexWriter->SetFileName( outputFilename  );
   complexWriter->SetInput( extractROIFilter->GetOutput()  );
   complexWriter->Update();
 
 
-  
+
   return EXIT_SUCCESS;
 }
 

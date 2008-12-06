@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,20 +25,20 @@
 
 int otbLikelihoodPathListFilter(int argc, char * argv[])
 {
-  
+
   std::cout<<std::endl;
 
   const char * infname = argv[1];
   const char * outfname = argv[2];
- 
+
   typedef std::vector<double> PointsVectorType;
   typedef std::vector< PointsVectorType > PointsMatrixType;
   PointsMatrixType MatricePoints;
   PointsVectorType ListPoints;
-      
+
   int cpt = 3;
   ListPoints.clear();
-      
+
   while ( argv[cpt] != NULL )
     {
       if( argv[cpt][0] == '|' )
@@ -57,7 +57,7 @@ int otbLikelihoodPathListFilter(int argc, char * argv[])
       cpt++;
     }
   MatricePoints.push_back(ListPoints);
-           
+
   const unsigned int Dimension = 2;
   typedef double PixelType;
   typedef otb::Image<PixelType,Dimension> ImageType;
@@ -66,10 +66,10 @@ int otbLikelihoodPathListFilter(int argc, char * argv[])
   typedef otb::LikelihoodPathListFilter<PathType,ImageType> LikelihoodPathListFilterType;
   typedef LikelihoodPathListFilterType::PathListType PathListType;
   PathType::ContinuousIndexType cindex;
-      
-      
+
+
   PathListType::Pointer InputPathList = PathListType::New();
-      
+
   //Generate PathList
   for(PointsMatrixType::iterator listpos=MatricePoints.begin() ; listpos != MatricePoints.end() ; ++listpos)
     {
@@ -109,7 +109,7 @@ int otbLikelihoodPathListFilter(int argc, char * argv[])
   file.open(outfname);
   unsigned int counter = 1;
   PathListIteratorType pathListIt = InputPathList->Begin();
-        
+
   file<<"INPUT list of Path "<<": "<<std::endl;
   while(pathListIt!=InputPathList->End())
     {
@@ -127,7 +127,7 @@ int otbLikelihoodPathListFilter(int argc, char * argv[])
       file<<std::endl;
       ++pathListIt;
       ++counter;
-    }        
+    }
   counter = 1;
   pathListIt = OutputPathList->Begin();
   file<<"OUTPUT list of Path "<<": "<<std::endl;
@@ -151,6 +151,6 @@ int otbLikelihoodPathListFilter(int argc, char * argv[])
     }
   file.close();
 
- 
+
   return EXIT_SUCCESS;
 }

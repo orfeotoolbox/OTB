@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,32 +33,32 @@ int otbCompacityPathSquare( int argc, char * argv[] )
   typedef itk::PolyLineParametricPath< Dimension >       PathType;
   typedef otb::CompacityPathFunction<PathType>           FunctionType;
   typedef FunctionType::RealType                         RealType;
-  
+
   PathType::ContinuousIndexType cindex;
   PathType::Pointer pathElt = PathType::New();
 
   if(A<0)
     {
-      std::cout << "square must be greater than 0.0 !" << std::endl; 
+      std::cout << "square must be greater than 0.0 !" << std::endl;
       return EXIT_FAILURE;
-    } 
+    }
 
-	
+
   pathElt->Initialize();
 
   cindex[0]= 100;
   cindex[1]= 100;
-  pathElt->AddVertex(cindex);	
+  pathElt->AddVertex(cindex);
   cindex[0]= 100+A;
   cindex[1]= 100;
-  pathElt->AddVertex(cindex);	
+  pathElt->AddVertex(cindex);
   cindex[0]= 100+A;
   cindex[1]= 100+A;
-  pathElt->AddVertex(cindex);	
+  pathElt->AddVertex(cindex);
   cindex[0]= 100;
   cindex[1]= 100+A;
-  pathElt->AddVertex(cindex);	
-        
+  pathElt->AddVertex(cindex);
+
 
   FunctionType::Pointer function =FunctionType::New();
   function->SetInputPath( pathElt );
@@ -68,14 +68,14 @@ int otbCompacityPathSquare( int argc, char * argv[] )
 
   RealType Error;
   Error = vcl_abs(Result - static_cast<RealType>(M_PI_4) );
-	
+
   if(  Error > 1.E-9)
     {
       std::cout << "Error in Theta estimation :" << std::endl;
       return EXIT_FAILURE;
     }
-	
-  
+
+
   return EXIT_SUCCESS;
 }
 

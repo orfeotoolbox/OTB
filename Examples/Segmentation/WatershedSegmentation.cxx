@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -62,7 +62,7 @@
 // use the vector versions of these filters because the input data is a color
 // image.
 //
-// 
+//
 // Software Guide : EndLatex
 #include <iostream>
 
@@ -88,7 +88,7 @@ int main( int argc, char *argv[] )
     std::cerr << " inputImage outputImage conductanceTerm diffusionIterations lowerThreshold outputScaleLevel gradientMode " << std::endl;
     return 1;
     }
-  
+
   // Software Guide : BeginLatex
   //
   // We now declare the image and pixel types to use for instantiation of the
@@ -121,12 +121,12 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader<RGBImageType> FileReaderType;
-  typedef itk::VectorCastImageFilter<RGBImageType, VectorImageType> 
+  typedef itk::VectorCastImageFilter<RGBImageType, VectorImageType>
     CastFilterType;
   typedef itk::VectorGradientAnisotropicDiffusionImageFilter<VectorImageType,
     VectorImageType>  DiffusionFilterType;
   typedef itk::VectorGradientMagnitudeImageFilter<VectorImageType,float,ScalarImageType>
-    GradientMagnitudeFilterType; 
+    GradientMagnitudeFilterType;
   typedef itk::WatershedImageFilter<ScalarImageType> WatershedFilterType;
   // Software Guide : EndCodeSnippet
 
@@ -134,9 +134,9 @@ int main( int argc, char *argv[] )
 
   FileReaderType::Pointer reader = FileReaderType::New();
   reader->SetFileName(argv[1]);
-  
+
   CastFilterType::Pointer caster = CastFilterType::New();
-  
+
   // Software Guide : BeginLatex
   //
   // Next we instantiate the filters and set their parameters.  The first
@@ -150,7 +150,7 @@ int main( int argc, char *argv[] )
   // the ITK anisotropic diffusion filters.
   //
   // Software Guide : EndLatex
-  
+
   // Software Guide : BeginCodeSnippet
   DiffusionFilterType::Pointer diffusion = DiffusionFilterType::New();
   diffusion->SetNumberOfIterations( atoi(argv[4]) );
@@ -161,13 +161,13 @@ int main( int argc, char *argv[] )
   // Software Guide : BeginLatex
   //
   // The ITK gradient magnitude filter for vector-valued images can optionally
-  // take several parameters.  Here we allow only enabling or disabling 
+  // take several parameters.  Here we allow only enabling or disabling
   // of principal component analysis.
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  GradientMagnitudeFilterType::Pointer 
+  GradientMagnitudeFilterType::Pointer
     gradient = GradientMagnitudeFilterType::New();
   gradient->SetUsePrincipleComponents(atoi(argv[7]));
   // Software Guide : EndCodeSnippet
@@ -212,7 +212,7 @@ int main( int argc, char *argv[] )
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
   // Software Guide : EndCodeSnippet
 
-  
+
   FileWriterType::Pointer writer = FileWriterType::New();
   writer->SetFileName(argv[2]);
 
@@ -232,7 +232,7 @@ int main( int argc, char *argv[] )
   writer->SetInput(colormapper->GetOutput());
   // Software Guide : EndCodeSnippet
 
-  try 
+  try
     {
     writer->Update();
     }
@@ -240,7 +240,7 @@ int main( int argc, char *argv[] )
     {
     std::cerr << e << std::endl;
     }
-    
+
   return EXIT_SUCCESS;
 }
 
@@ -280,6 +280,6 @@ int main( int argc, char *argv[] )
 // significant than the number of pixels in the image.  A very large, but very
 // flat input take less time to segment than a very small, but very detailed
 // input.
-// 
+//
 // Software Guide : EndLatex
 

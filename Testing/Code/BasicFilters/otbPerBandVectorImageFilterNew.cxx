@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,10 +29,10 @@ int otbPerBandVectorImageFilterNew(int argc, char * argv[])
   typedef otb::Image<PixelType,Dimension> ImageType;
   typedef otb::VectorImage<PixelType,Dimension> VectorImageType;
   typedef itk::MeanImageFilter<ImageType,ImageType> MeanFilterType;
-  
-  typedef otb::PerBandVectorImageFilter<VectorImageType,VectorImageType,MeanFilterType> 
+
+  typedef otb::PerBandVectorImageFilter<VectorImageType,VectorImageType,MeanFilterType>
     PerBandVectorImageFilterType;
-  
+
   // Instantiating object
   PerBandVectorImageFilterType::Pointer object = PerBandVectorImageFilterType::New();
 

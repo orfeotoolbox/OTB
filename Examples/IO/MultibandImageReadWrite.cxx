@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -46,7 +46,7 @@
 //  \index{otb::ImageFileWriter|textbf}
 //  \index{otb::ImageFileWriter!header}
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "otbImageFileReader.h"
@@ -78,7 +78,7 @@ int main( int argc, char ** argv )
   //  do:
   //
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef unsigned short      PixelType;
@@ -95,7 +95,7 @@ int main( int argc, char ** argv )
   //  \index{itk::ImageFileReader!Instantiation}
   //  \index{itk::ImageFileWriter!Instantiation}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader< ImageType >  ReaderType;
@@ -113,7 +113,7 @@ int main( int argc, char ** argv )
   //  \index{otb::ImageFileReader!SmartPointer}
   //  \index{otb::ImageFileWriter!SmartPointer}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   ReaderType::Pointer reader = ReaderType::New();
@@ -130,14 +130,14 @@ int main( int argc, char ** argv )
   //  Software Guide : BeginLatex
   //
   //  The name of the file to be read or written is passed with the
-  //  SetFileName() method. 
+  //  SetFileName() method.
   //
   //  \index{otb::ImageFileReader!SetFileName()}
   //  \index{otb::ImageFileWriter!SetFileName()}
   //  \index{SetFileName()!otb::ImageFileReader}
   //  \index{SetFileName()!otb::ImageFileWriter}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   reader->SetFileName( inputFilename  );
@@ -152,7 +152,7 @@ int main( int argc, char ** argv )
   //  program, choosing an output image file format which supports
   //  multiband images.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   writer->SetInput( reader->GetOutput() );
@@ -161,16 +161,16 @@ int main( int argc, char ** argv )
 
 
   // Software Guide : BeginCodeSnippet
-  try 
-    { 
-    writer->Update(); 
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cerr << "ExceptionObject caught !" << std::endl; 
-    std::cerr << err << std::endl; 
+  try
+    {
+    writer->Update();
+    }
+  catch( itk::ExceptionObject & err )
+    {
+    std::cerr << "ExceptionObject caught !" << std::endl;
+    std::cerr << err << std::endl;
     return EXIT_FAILURE;
-    } 
+    }
   // Software Guide : EndCodeSnippet
 
 

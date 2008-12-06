@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,16 +29,16 @@ int otbImageViewerWithOtbImage( int argc, char * argv[] )
   typedef otb::ImageViewer<PixelType>  ImageViewerType;
   typedef ImageViewerType::SingleImageType ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
-      
+
   // instantiation
   ImageViewerType::Pointer viewer = ImageViewerType::New();
-      
+
   // check for input images
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(filename);
   reader->GenerateOutputInformation();
-  viewer->SetImage(reader->GetOutput());      
-	
+  viewer->SetImage(reader->GetOutput());
+
   // build the app
   viewer->Show();
   Fl::check();

@@ -37,13 +37,13 @@ REGISTER_TEST(galibTests10);
   Copyright (c) 1995-1996  Massachusetts Institute of Technology
 
  DESCRIPTION:
-   Sample program that illustrates how to use a distance function to do 
+   Sample program that illustrates how to use a distance function to do
 speciation.  This example does both gene-based and phenotype-based distance
 calculations.  The differences are quite interesting.  Also, the length of the
 bit string (i.e. the size of the search space) is also a significant factor in
 the performance of the speciation methods.
    Notice that Goldberg describes fitness scaling speciation in the context of
-a simple genetic algorithm.  You can try using it with a steady-state 
+a simple genetic algorithm.  You can try using it with a steady-state
 algorithm, but you'll get bogus results unless you modify the algorithm.
 ---------------------------------------------------------------------------- */
 #include <stdlib.h>
@@ -128,7 +128,7 @@ galibTests10(int argc, char *argv[])
 // Now create the GA using the genome and set all of the parameters.
 // You'll get different results depending on the type of GA that you use.  The
 // steady-state GA tends to converge faster (depending on the type of replace-
-// ment method you specify).  
+// ment method you specify).
 
   GASimpleGA ga(genome);
   ga.set(gaNpopulationSize, 200);
@@ -227,7 +227,7 @@ galibTests10(int argc, char *argv[])
 
   return 0;
 }
- 
+
 
 
 
@@ -267,7 +267,7 @@ Function2(float v) {
 // outside these limits, the GA will produce bogus results and it WILL NOT warn
 // you that your distance function is brain-dead!
 
-// This distance function uses the genes to determine same-ness.  All we do 
+// This distance function uses the genes to determine same-ness.  All we do
 // is check to see if the bit strings are identical.
 
 float

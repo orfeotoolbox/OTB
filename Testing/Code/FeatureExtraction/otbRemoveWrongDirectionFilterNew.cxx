@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -26,10 +26,10 @@ int otbRemoveWrongDirectionFilterNew(int argc, char * argv[])
   typedef double PixelType;
   typedef otb::Image<PixelType,Dimension> ImageType;
   typedef otb::RemoveWrongDirectionFilter<ImageType,ImageType,ImageType> RemoveWrongDirectionFilterType;
-  
+
   // Instantiating object
   RemoveWrongDirectionFilterType::Pointer object = RemoveWrongDirectionFilterType::New();
 
-  
+
   return EXIT_SUCCESS;
 }

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -60,16 +60,16 @@
 
 int main(int argc, char** argv )
 {
-  
+
   if(argc!= 9)
   {
     std::cerr <<"Usage: "<<argv[0];
     std::cerr<<" fixedFileName movingFileName fieldOutNameHorizontal fieldOutNameVertical imageOutName ";
     std::cerr<<"explorationSize bluringSigma nbIterations ";
-      
+
     return EXIT_FAILURE;
   }
-  
+
   const unsigned int ImageDimension = 2;
 
   typedef double                                PixelType;
@@ -79,14 +79,14 @@ int main(int argc, char** argv )
 
   typedef unsigned char                         OutputPixelType;
   typedef otb::Image<OutputPixelType,ImageDimension> OutputImageType;
-  
+
     // Software Guide : BeginLatex
   //
    // Several type of \doxygen{otb}{Image} are required to represent the reference image (fixed)
   // the image we want to register (moving) and the deformation field.
   //
    // Software Guide : EndLatex
-  
+
   //Allocate Images
   // Software Guide : BeginCodeSnippet
   typedef otb::Image<PixelType,ImageDimension>         MovingImageType;
@@ -97,11 +97,11 @@ int main(int argc, char** argv )
 
   typedef otb::ImageFileReader< FixedImageType > FixedReaderType;
   FixedReaderType::Pointer fReader = FixedReaderType::New();
-  fReader->SetFileName(argv[1]);  
+  fReader->SetFileName(argv[1]);
 
   typedef otb::ImageFileReader< MovingImageType > MovingReaderType;
   MovingReaderType::Pointer mReader = MovingReaderType::New();
-  mReader->SetFileName(argv[2]);  
+  mReader->SetFileName(argv[2]);
 
 
 
@@ -112,7 +112,7 @@ int main(int argc, char** argv )
   // \doxygen{itk}{RecursiveGaussianImageFilter}:
   //
   // Software Guide : EndLatex
-  
+
   //Blur input images
   // Software Guide : BeginCodeSnippet
   typedef itk::RecursiveGaussianImageFilter< FixedImageType,
@@ -136,10 +136,10 @@ int main(int argc, char** argv )
   // Now, we need to instanciate the NCCRegistrationFilter which is going to perform the registration:
   //
   // Software Guide : EndLatex
-  
+
   //Create the filter
   // Software Guide : BeginCodeSnippet
-  typedef otb::NCCRegistrationFilter< FixedImageType, 
+  typedef otb::NCCRegistrationFilter< FixedImageType,
                                        MovingImageType,
                                        DeformationFieldType >
                                            RegistrationFilterType;
@@ -157,7 +157,7 @@ int main(int argc, char** argv )
   // \item The area where the search is performed. This area is defined by its radius:
   //
   // Software Guide : EndLatex
-  
+
   // Software Guide : BeginCodeSnippet
   typedef RegistrationFilterType::RadiusType RadiusType;
 
@@ -168,15 +168,15 @@ int main(int argc, char** argv )
 
   registrator->SetNCCRadius( radius );
 // Software Guide : EndCodeSnippet
-  
+
   std::cout << "NCC radius " << registrator->GetNCCRadius() << std::endl;
-  
+
   // Software Guide : BeginLatex
   //
   // \item The number of iterations for the PDE resolution:
   //
   // Software Guide : EndLatex
-  
+
    // Software Guide : BeginCodeSnippet
   registrator->SetNumberOfIterations( atoi(argv[8]) );
 // Software Guide : EndCodeSnippet
@@ -192,7 +192,7 @@ int main(int argc, char** argv )
   // from the streaming features.
   //
   // Software Guide : EndLatex
-  
+
 
 
   typedef otb::ImageOfVectorsToMonoChannelExtractROI<DeformationFieldType, MovingImageType> ChannelExtractionFilterType;
@@ -200,14 +200,14 @@ int main(int argc, char** argv )
 
   channelExtractor->SetInput(registrator->GetOutput());
   channelExtractor->SetChannel(1);
-  
+
   typedef itk::RescaleIntensityImageFilter<MovingImageType, OutputImageType> RescalerType;
   RescalerType::Pointer fieldRescaler = RescalerType::New();
-  
+
   fieldRescaler->SetInput(channelExtractor->GetOutput());
   fieldRescaler->SetOutputMaximum(255);
   fieldRescaler->SetOutputMinimum(0);
-  
+
   typedef otb::StreamingImageFileWriter< OutputImageType > DFWriterType;
 
   DFWriterType::Pointer dfWriter = DFWriterType::New();
@@ -215,26 +215,26 @@ int main(int argc, char** argv )
   dfWriter->SetInput( fieldRescaler->GetOutput() );
   dfWriter->Update();
 
-  
+
   channelExtractor->SetChannel(2);
   dfWriter->SetFileName(argv[4]);
   dfWriter->Update();
-  
+
   typedef itk::WarpImageFilter<MovingImageType, MovingImageType, DeformationFieldType> WarperType;
   WarperType::Pointer warper = WarperType::New();
-  
+
   MovingImageType::PixelType padValue = 4.0;
 
   warper->SetInput( mReader->GetOutput() );
   warper->SetDeformationField( registrator->GetOutput() );
   warper->SetEdgePaddingValue( padValue );
-  
-  
-  
+
+
+
   typedef itk::CastImageFilter< MovingImageType, OutputImageType > CastFilterType;
   CastFilterType::Pointer  caster =  CastFilterType::New();
   caster->SetInput( warper->GetOutput() );
-  
+
   typedef otb::StreamingImageFileWriter< OutputImageType > WriterType;
 
   WriterType::Pointer writer = WriterType::New();
@@ -247,20 +247,20 @@ int main(int argc, char** argv )
   // Figure~\ref{fig:NCCRegistrationFilterOUTPUT} shows the result of
   // applying the disparity map estimation.
   //
-  // \begin{figure} 
+  // \begin{figure}
   // \center
   // \includegraphics[width=0.40\textwidth]{StereoFixed.eps}
   // \includegraphics[width=0.40\textwidth]{StereoMoving.eps}
   // \includegraphics[width=0.40\textwidth]{deformationFieldOutput-horizontal.eps}
   // \includegraphics[width=0.40\textwidth]{deformationFieldOutput-vertical.eps}
   // \itkcaption[Deformation field and resampling from NCC registration]{From left
-  // to right and top to bottom: fixed input image, moving image with a low stereo angle, 
+  // to right and top to bottom: fixed input image, moving image with a low stereo angle,
   // estimated deformation field in the horizontal direction, estimated deformation field in the vertical direction.}
   // \label{fig:NCCRegistrationFilterOUTPUT}
   // \end{figure}
   //
   // Software Guide : EndLatex
-  
+
   return EXIT_SUCCESS;
 
 }

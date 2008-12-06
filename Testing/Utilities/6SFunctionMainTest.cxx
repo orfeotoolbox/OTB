@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,9 +29,9 @@
 int SIXSFunctionMainOtbTest( int argc, char *argv[] )
 {
 
-  try 
+  try
     {
-        
+
         if(argc!=3)
         {
                 std::cout << argv[0] <<" <input filename> <output filename>" << std::endl;
@@ -39,7 +39,7 @@ int SIXSFunctionMainOtbTest( int argc, char *argv[] )
         }
         otb_6s_doublereal asol(0.), phi0(0.), avis(0.), phiv(0.);
         otb_6s_integer month(0), jday(0);
-        otb_6s_doublereal pressure(0.), uw(0.), uo3(0.); 
+        otb_6s_doublereal pressure(0.), uw(0.), uo3(0.);
         otb_6s_integer iaer(0);
         otb_6s_doublereal taer55(0.);
         otb_6s_doublereal wlinf(0.), wlsup(0.);
@@ -53,7 +53,7 @@ int SIXSFunctionMainOtbTest( int argc, char *argv[] )
 
         std::ifstream fin;
         std::ofstream fout;
-        
+
         //Read input file parameters
         fin.open(argv[1]);
         fin >> asol;
@@ -69,10 +69,10 @@ int SIXSFunctionMainOtbTest( int argc, char *argv[] )
 
         fin >> iaer;
         fin >> taer55;
-        
+
         fin >> wlinf;
         fin >> wlsup;
-        
+
         while (!fin.eof() && fin.good())
         {
                 fin >> value;
@@ -99,16 +99,16 @@ int SIXSFunctionMainOtbTest( int argc, char *argv[] )
         // Call 6S function main
         std::cout << "Start otb_6s_ssssss_otb_main_function() ..."<<std::endl;
 
-        otb_6s_ssssss_otb_main_function(        &asol, &phi0, &avis, &phiv, &month, &jday, 
-                                                &pressure, &uw, &uo3, 
-	                                        &iaer, 
-                                                &taer55, 
-                                                &wlinf, &wlsup, 
-                                                s, 
-                                                &otb_ratm__, 
-                                                &sast, 
-                                                &tgasm, 
-                                                &sdtott, 
+        otb_6s_ssssss_otb_main_function(        &asol, &phi0, &avis, &phiv, &month, &jday,
+                                                &pressure, &uw, &uo3,
+	                                        &iaer,
+                                                &taer55,
+                                                &wlinf, &wlsup,
+                                                s,
+                                                &otb_ratm__,
+                                                &sast,
+                                                &tgasm,
+                                                &sdtott,
                                                 &sutott,
                                                 &tdif_up,
                                                 &tdir_up,
@@ -156,21 +156,21 @@ int SIXSFunctionMainOtbTest( int argc, char *argv[] )
         }
 
         fout.close();
-  
+
     }
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-    std::cout << err << std::endl; 
+  catch( itk::ExceptionObject & err )
+    {
+    std::cout << "Exception itk::ExceptionObject levee !" << std::endl;
+    std::cout << err << std::endl;
     return EXIT_FAILURE;
-    } 
-  catch (...) 
+    }
+  catch (...)
     {
     std::cerr << "svmTest exception thrown" << std::endl;
     return EXIT_FAILURE;
     }
 
-  return EXIT_SUCCESS; 
+  return EXIT_SUCCESS;
 };
 
 
@@ -183,7 +183,7 @@ int SIXSFunctionMainOtbTest( int argc, char *argv[] )
 
 
 
- 
+
 
 
 

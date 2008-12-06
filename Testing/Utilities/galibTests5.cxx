@@ -42,7 +42,7 @@ containing a 2DBinStr genome and a Bin2Dec genome.  This program uses
 a steady-state GA to match a 2D pattern in the 2DBinStr part of the genome
 and a sequence of numbers in the Bin2Dec part.
    In this example we derive a new genome and a new crossover object to be
-used with it.  All of the operators (initialization, mutation, crossover, 
+used with it.  All of the operators (initialization, mutation, crossover,
 comparison, and objective) are defined as member functions but are also
 override-able on any instance of the new genome.
 ---------------------------------------------------------------------------- */
@@ -75,7 +75,7 @@ public:
   static int CompositeCrossover(const GAGenome&, const GAGenome&,
 				GAGenome*, GAGenome*);
 public:
-  CompositeGenome(int, int, GABin2DecPhenotype&, 
+  CompositeGenome(int, int, GABin2DecPhenotype&,
 		  GAGenome::Evaluator f=NULL, void* u=NULL);
   CompositeGenome(const CompositeGenome & orig);
   CompositeGenome& operator=(const GAGenome& g);
@@ -102,7 +102,7 @@ protected:
 
 // Member functions for the composite genome object
 CompositeGenome::
-CompositeGenome(int element, int bond, GABin2DecPhenotype& p, 
+CompositeGenome(int element, int bond, GABin2DecPhenotype& p,
 		GAGenome::Evaluator f, void* u) :
 		GAGenome(  CompositeInitializer,
 			 CompositeMutator,
@@ -117,18 +117,18 @@ CompositeGenome::CompositeGenome(const CompositeGenome & orig) {
   b2d = new GABin2DecGenome(orig.bin2dec());
   copy(orig);
 }
-  
-CompositeGenome& 
+
+CompositeGenome&
 CompositeGenome::operator=(const GAGenome& g) { copy(g); return *this; }
 
 CompositeGenome::~CompositeGenome() { delete str; delete b2d; }
 
-GAGenome* 
+GAGenome*
 CompositeGenome::clone(GAGenome::CloneMethod) const {
   return new CompositeGenome(*this);
 }
 
-void 
+void
 CompositeGenome::copy(const GAGenome & c){
   if(&c != this && sameClass(c)){
     GAGenome::copy(c);
@@ -138,19 +138,19 @@ CompositeGenome::copy(const GAGenome & c){
   }
 }
 
-int 
+int
 CompositeGenome::equal(const GAGenome& g) const {
   CompositeGenome& genome = (CompositeGenome&)g;
   return ((*str == *genome.str) && (*b2d == *genome.b2d));
 }
 
-int 
+int
 CompositeGenome::read(istream & is) {
-  is >> *str >> *b2d; 
-  return is.fail() ? 1 : 0; 
+  is >> *str >> *b2d;
+  return is.fail() ? 1 : 0;
 }
 
-int 
+int
 CompositeGenome::write(ostream & os) const {
   int i,j;
   for(j=0; j<str->height(); j++){
@@ -175,7 +175,7 @@ CompositeGenome::write(ostream & os) const {
 // I would have used simply 'Initializer', 'Mutator', etc rather than
 // 'CompositeInitializer' but old versions of g++ are brain-dead and don't
 // get the encapsulation properly.
-void 
+void
 CompositeGenome::CompositeInitializer(GAGenome & c) {
   CompositeGenome & child = (CompositeGenome &)c;
   child.binstr().initialize();
@@ -185,7 +185,7 @@ CompositeGenome::CompositeInitializer(GAGenome & c) {
 
 
 // The mutator just calls the mutator for each of the component genomes.
-int 
+int
 CompositeGenome::CompositeMutator(GAGenome & c, float pmut) {
   CompositeGenome & child = (CompositeGenome &)c;
   int nmut = child.binstr().mutate(pmut) + child.bin2dec().mutate(pmut);
@@ -195,7 +195,7 @@ CompositeGenome::CompositeMutator(GAGenome & c, float pmut) {
 
 // The comparator just calls the comparators for each of the component genomes,
 // then averages the score.
-float 
+float
 CompositeGenome::CompositeComparator(const GAGenome& a, const GAGenome& b) {
   CompositeGenome& sis = (CompositeGenome &)a;
   CompositeGenome& bro = (CompositeGenome &)b;
@@ -208,7 +208,7 @@ CompositeGenome::CompositeComparator(const GAGenome& a, const GAGenome& b) {
 int
 CompositeGenome::
 CompositeCrossover(const GAGenome& a, const GAGenome& b,
-		   GAGenome* c, GAGenome* d){ 
+		   GAGenome* c, GAGenome* d){
   CompositeGenome& mom = (CompositeGenome&)a;
   CompositeGenome& dad = (CompositeGenome&)b;
   int n=0;
@@ -259,7 +259,7 @@ CompositeCrossover(const GAGenome& a, const GAGenome& b,
 
 
 
-// This object is a container for the data that we are supposed to match in 
+// This object is a container for the data that we are supposed to match in
 // our objective function.
 typedef struct _CompositeData {
   short ** str;

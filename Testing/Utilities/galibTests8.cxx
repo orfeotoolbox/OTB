@@ -39,7 +39,7 @@ REGISTER_TEST(galibTests8);
  DESCRIPTION:
    Example program for the list genome.  This example contains
 the code to run a genetic algorithm with a list genome.
-  This program illustrates how to specialize member functions of the 
+  This program illustrates how to specialize member functions of the
 template classes.  Here we specialize the default write() method so that we get
 the contents of the nodes rather than the pointers to the node contents.  You
 can specialize most functions of a template class (as long as they are not
@@ -126,7 +126,7 @@ galibTests8(int argc, char *argv[])
 
   return 0;
 }
- 
+
 
 
 /* ----------------------------------------------------------------------------
@@ -134,7 +134,7 @@ Objective function
   There is no limit to the size of a list (only the memory you have on your
 computer).  This objective function tries to build a list that contains the
 number 101 in all of its nodes.  If we don't put some control on this objective
-then the list will grow without bound.  So we dampen it a bit with a penalty 
+then the list will grow without bound.  So we dampen it a bit with a penalty
 for large size.  However, this will make the score go negative, so we must use
 a scaling object that allows negative objective scores.
   We could get lists with no contents, so we have to check for that.  Just make
@@ -159,10 +159,10 @@ objective(GAGenome & c)
 
 /* ----------------------------------------------------------------------------
 Here is the initializer for our genomes.  It builds a list of n items of type
-int.  Notice that we first destroy any list that is already in the genome 
+int.  Notice that we first destroy any list that is already in the genome
 before we do our initialization.  This is so that the genomes can be re-used.
-When you re-run a GA, it does not destroy the individuals in the population - 
-it reuses them.  Thus, the initializer must make sure that the genome is 
+When you re-run a GA, it does not destroy the individuals in the population -
+it reuses them.  Thus, the initializer must make sure that the genome is
 cleaned up before it tries to initialize it.
 ---------------------------------------------------------------------------- */
 void
@@ -187,9 +187,9 @@ ListInitializer(GAGenome & c)
 //   Here we specialize the write method for the List class.  This lets us see
 // exactly what we want (the default write method dumps out pointers to the
 // data rather than the data contents).
-//   This routine prints out the contents of each element of the list, 
+//   This routine prints out the contents of each element of the list,
 // separated by a space.  It does not put a newline at the end of the list.
-//   Notice that you can specialize ANY function of a template class, but 
+//   Notice that you can specialize ANY function of a template class, but
 // some compilers are more finicky about how you do it than others.  For the
 // metrowerks compiler this specialization must come before the forced
 // instantiation.

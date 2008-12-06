@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,16 +24,16 @@
 
 int otbMIRegistrationFilter(int argc, char* argv [])
 {
-  
+
   if(argc!= 7)
   {
     std::cerr <<"Usage: "<<argv[0];
     std::cerr<<" fixedFileName movingFileName fieldOutName";
     std::cerr<<"explorationSize bluringSigma nbIterations ";
-      
+
     return EXIT_FAILURE;
   }
-  
+
   const unsigned int ImageDimension = 2;
 
   typedef double                                     PixelType;
@@ -48,11 +48,11 @@ int otbMIRegistrationFilter(int argc, char* argv [])
 
   typedef otb::ImageFileReader< FixedImageType > FixedReaderType;
   FixedReaderType::Pointer fReader = FixedReaderType::New();
-  fReader->SetFileName(argv[1]);  
+  fReader->SetFileName(argv[1]);
 
   typedef otb::ImageFileReader< MovingImageType > MovingReaderType;
   MovingReaderType::Pointer mReader = MovingReaderType::New();
-  mReader->SetFileName(argv[2]);  
+  mReader->SetFileName(argv[2]);
 
   typedef itk::RecursiveGaussianImageFilter< FixedImageType,
     FixedImageType > FixedBlurType;
@@ -68,7 +68,7 @@ int otbMIRegistrationFilter(int argc, char* argv [])
   mBlur->SetInput( mReader->GetOutput() );
   mBlur->SetSigma(atof(argv[5]) );
 
-  typedef otb::MIRegistrationFilter< FixedImageType, 
+  typedef otb::MIRegistrationFilter< FixedImageType,
                                        MovingImageType,
                                        DeformationFieldType >
                                            RegistrationFilterType;
@@ -86,7 +86,7 @@ int otbMIRegistrationFilter(int argc, char* argv [])
   radius[1] = atoi(argv[4]);
 
   registrator->SetMIRadius( radius );
-  
+
   registrator->SetNumberOfIterations( atoi(argv[6]) );
 
   typedef otb::StreamingImageFileWriter<DeformationFieldType> DFWriterType;
@@ -94,7 +94,7 @@ int otbMIRegistrationFilter(int argc, char* argv [])
   dfWriter->SetFileName(argv[3]);
   dfWriter->SetInput( registrator->GetOutput() );
   dfWriter->Update();
-  
+
   return EXIT_SUCCESS;
 
 }

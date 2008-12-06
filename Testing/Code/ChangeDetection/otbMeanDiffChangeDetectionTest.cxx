@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,7 +23,7 @@
 #include "otbMeanDifferenceImageFilter.h"
 #include "otbCommandProgressUpdate.h"
 
-int otbMeanDiffChangeDetectionTest(int argc, char* argv[] ) 
+int otbMeanDiffChangeDetectionTest(int argc, char* argv[] )
 {
 
   if( argc < 5 )
@@ -48,17 +48,17 @@ int otbMeanDiffChangeDetectionTest(int argc, char* argv[] )
   typedef otb::ImageFileReader< InputImageType2 >  ReaderType2;
   typedef otb::ImageFileWriter< OutputImageType >  WriterType;
   typedef itk::RescaleIntensityImageFilter< ChangeImageType,
-                                            OutputImageType > RescalerType; 
+                                            OutputImageType > RescalerType;
 
 
-  
+
   // Declare the type for the filter
   typedef otb::MeanDifferenceImageFilter<
                                 InputImageType1,
                                 InputImageType2,
                                 ChangeImageType  >       FilterType;
 
-  
+
   ReaderType1::Pointer reader1 = ReaderType1::New();
   ReaderType2::Pointer reader2 = ReaderType2::New();
   WriterType::Pointer writer = WriterType::New();
@@ -75,7 +75,7 @@ int otbMeanDiffChangeDetectionTest(int argc, char* argv[] )
   rescaler->SetOutputMinimum( -1 );
   rescaler->SetOutputMaximum( 1 );
 
-  filter->SetInput1( reader1->GetOutput() ); 
+  filter->SetInput1( reader1->GetOutput() );
   filter->SetInput2( reader2->GetOutput() );
   filter->SetRadius( atoi(argv[3]) );
 
@@ -88,10 +88,10 @@ int otbMeanDiffChangeDetectionTest(int argc, char* argv[] )
   CommandType::Pointer observer = CommandType::New();
   filter->AddObserver(itk::ProgressEvent(), observer);
 
-  
-  writer->Update(); 
-  
-  
+
+  writer->Update();
+
+
   return EXIT_SUCCESS;
 
 }

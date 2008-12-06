@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -39,7 +39,7 @@ int otbLineCorrelationDetector( int argc, char* argv[] )
   unsigned int  WidthLine((unsigned int)::atoi(argv[3]));
   // Longueur de la ligne � detecter = 2*LengthLine+1
   unsigned int  LengthLine((unsigned int)::atoi(argv[4]));
-        
+
   typedef unsigned char                                   InputPixelType;
   typedef double		   	                        OutputPixelType;
   const   unsigned int        	                        Dimension = 2;
@@ -51,24 +51,24 @@ int otbLineCorrelationDetector( int argc, char* argv[] )
   typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
   typedef otb::LineCorrelationDetectorImageFilter< InputImageType, OutputImageType >   FilterType;
-	
+
   FilterType::Pointer FilterLineCorrelation = FilterType::New();
-        
+
   FilterLineCorrelation->SetWidthLine( WidthLine );
   FilterLineCorrelation->SetLengthLine( LengthLine );
-	
+
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
   reader->SetFileName( inputFilename  );
   writer->SetFileName( outputFilename );
-        
+
   FilterLineCorrelation->SetInput( reader->GetOutput() );
   writer->SetInput( FilterLineCorrelation->GetOutput() );
-        
+
   writer->Update();
 
-   
+
   return EXIT_SUCCESS;
 }
 

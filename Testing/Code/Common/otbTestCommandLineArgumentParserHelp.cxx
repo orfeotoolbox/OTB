@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,15 +29,15 @@ int otbTestCommandLineArgumentParserHelp( int argc, char * argv[] )
       // Parse command line parameters
       typedef otb::CommandLineArgumentParser ParserType;
       ParserType::Pointer parser = ParserType::New();
-      
+
       parser->AddOption("-image","Nom d'une image","-i",1,true);
-      
+
       typedef otb::CommandLineArgumentParseResult ParserResultType;
       ParserResultType::Pointer  parseResult = ParserResultType::New();
-      
+
       parser->ParseCommandLine(argc,argv,parseResult) ;
-  
-  
+
+
       std::cout << "Image : "<<parseResult->GetParameterString("-image")<<std::endl;
     }
   catch(CommandLineArgumentParserHelpException & err)

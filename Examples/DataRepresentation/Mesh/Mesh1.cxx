@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -54,7 +54,7 @@
 //
 //  In order to use the Mesh class, its header file should be included.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "itkMesh.h"
@@ -66,9 +66,9 @@ int main(int, char *[])
   //  Software Guide : BeginLatex
   //
   //  Then, the type associated with the points must be selected and used for
-  //  instantiating the Mesh type. 
+  //  instantiating the Mesh type.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef   float   PixelType;
@@ -87,8 +87,8 @@ int main(int, char *[])
   //
   //  \index{itk::Mesh!Instantiation}
   //
-  //  Software Guide : EndLatex 
-  
+  //  Software Guide : EndLatex
+
   // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
   typedef itk::Mesh< PixelType, Dimension >   MeshType;
@@ -105,9 +105,9 @@ int main(int, char *[])
   //
   //  \index{itk::Mesh!New()}
   //  \index{itk::Mesh!Pointer()}
-  //  
-  //  Software Guide : EndLatex 
-  
+  //
+  //  Software Guide : EndLatex
+
   // Software Guide : BeginCodeSnippet
   MeshType::Pointer  mesh = MeshType::New();
   // Software Guide : EndCodeSnippet
@@ -123,7 +123,7 @@ int main(int, char *[])
   //
   //  \index{itk::Mesh!PointType}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   MeshType::PointType p0;
@@ -147,7 +147,7 @@ int main(int, char *[])
   //
   //  \index{itk::Mesh!SetPoint()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   mesh->SetPoint( 0, p0 );
@@ -164,7 +164,7 @@ int main(int, char *[])
   //
   //  \index{itk::Mesh!GetNumberOfPoints()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   std::cout << "Points = " << mesh->GetNumberOfPoints() << std::endl;
@@ -181,7 +181,7 @@ int main(int, char *[])
   //  \index{PointsContainer!Iterator}
   //  \index{itk::Mesh!GetPoints()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef MeshType::PointsContainer::Iterator     PointsIterator;
@@ -196,10 +196,10 @@ int main(int, char *[])
   //  \index{PointsContainer!Begin()}
   //  \index{itk::Mesh!GetPoints()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  PointsIterator  pointIterator = mesh->GetPoints()->Begin();  
+  PointsIterator  pointIterator = mesh->GetPoints()->Begin();
   // Software Guide : EndCodeSnippet
 
 
@@ -216,11 +216,11 @@ int main(int, char *[])
   //  \index{PointsContainer!End()}
   //  \index{PointsContainer!Iterator}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   PointsIterator end = mesh->GetPoints()->End();
-  while( pointIterator != end ) 
+  while( pointIterator != end )
     {
     MeshType::PointType p = pointIterator.Value();  // access the point
     std::cout << p << std::endl;                    // print the point

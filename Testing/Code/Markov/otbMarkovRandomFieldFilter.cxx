@@ -11,8 +11,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -36,23 +36,23 @@
 #include "otbMRFOptimizerMetropolis.h"
 #include "otbMRFSamplerRandom.h"
 
-int otbMarkovRandomFieldFilter(int argc, char* argv[] ) 
+int otbMarkovRandomFieldFilter(int argc, char* argv[] )
 {
   const unsigned int Dimension = 2;
-  
+
   typedef double                                    InternalPixelType;
   typedef unsigned char                             LabelledPixelType;
   typedef otb::Image<InternalPixelType, Dimension>  InputImageType;
   typedef otb::Image<LabelledPixelType, Dimension>  LabelledImageType;
   typedef otb::ImageFileReader< InputImageType >    ReaderType;
   typedef otb::ImageFileWriter< LabelledImageType > WriterType;
-  
+
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
-  
+
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
-  
+
   reader->SetFileName( inputFilename );
   writer->SetFileName( outputFilename );
 
@@ -62,7 +62,7 @@ int otbMarkovRandomFieldFilter(int argc, char* argv[] )
   typedef otb::MRFEnergyPotts<LabelledImageType, LabelledImageType>               EnergyRegularizationType;
   typedef otb::MRFEnergyGaussianClassification<InputImageType, LabelledImageType> EnergyFidelityType;
 
- 
+
   MarkovRandomFieldFilterType::Pointer markovFilter         = MarkovRandomFieldFilterType::New();
   EnergyRegularizationType::Pointer    energyRegularization = EnergyRegularizationType::New();
   EnergyFidelityType::Pointer          energyFidelity       = EnergyFidelityType::New();
@@ -75,7 +75,7 @@ int otbMarkovRandomFieldFilter(int argc, char* argv[] )
   markovFilter->InitializeSeed(2);
 
   unsigned int nClass = 4;
-  energyFidelity->SetNumberOfParameters(2*nClass); 
+  energyFidelity->SetNumberOfParameters(2*nClass);
   EnergyFidelityType::ParametersType parameters;
   parameters.SetSize(energyFidelity->GetNumberOfParameters());
   parameters[0]=10.0; //Class 0 mean
@@ -89,32 +89,32 @@ int otbMarkovRandomFieldFilter(int argc, char* argv[] )
   energyFidelity->SetParameters(parameters);
 
   optimizer->SetSingleParameter(atof(argv[5]));
-  markovFilter->SetNumberOfClasses(nClass);  
+  markovFilter->SetNumberOfClasses(nClass);
   markovFilter->SetMaximumNumberOfIterations(atoi(argv[4]));
   markovFilter->SetErrorTolerance(0.0);
   markovFilter->SetLambda(atof(argv[3]));
   markovFilter->SetNeighborhoodRadius(1);
-  
+
   markovFilter->SetEnergyRegularization(energyRegularization);
   markovFilter->SetEnergyFidelity(energyFidelity);
   markovFilter->SetOptimizer(optimizer);
   markovFilter->SetSampler(sampler);
-  
+
   markovFilter->SetInput(reader->GetOutput());
-    
+
   typedef itk::RescaleIntensityImageFilter
       < LabelledImageType, LabelledImageType > RescaleType;
   RescaleType::Pointer rescaleFilter = RescaleType::New();
   rescaleFilter->SetOutputMinimum(0);
   rescaleFilter->SetOutputMaximum(255);
-  
+
   rescaleFilter->SetInput( markovFilter->GetOutput() );
-  
+
   writer->SetInput( rescaleFilter->GetOutput() );
-  
-  writer->Update();  
-  
+
+  writer->Update();
+
   return EXIT_SUCCESS;
-  
+
 }
 

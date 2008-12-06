@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -37,7 +37,7 @@
 //  \index{RGB!writing Image}
 //  \index{RGB!reading Image}
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "itkRGBPixel.h"
@@ -66,7 +66,7 @@ int main( int argc, char ** argv )
   //
   //  \index{itk::RGBPixel!Instantiation}
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef itk::RGBPixel< unsigned char >   PixelType;
@@ -82,7 +82,7 @@ int main( int argc, char ** argv )
   // \index{otb::ImageFileReader!RGB Image}
   // \index{otb::ImageFileWriter!RGB Image}
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader< ImageType >  ReaderType;
@@ -102,7 +102,7 @@ int main( int argc, char ** argv )
   //  The filenames of the input and output files must be provided to the
   //  reader and writer respectively.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   reader->SetFileName( inputFilename  );
@@ -119,7 +119,7 @@ int main( int argc, char ** argv )
   //  Finally, execution of the pipeline can be triggered by invoking the
   //  \code{Update()} method in the writer.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   writer->Update();
@@ -132,7 +132,7 @@ int main( int argc, char ** argv )
   //  images. All the actions required to support color images are implemented
   //  internally in the \doxygen{itk}{ImageIO} objects.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
   return EXIT_SUCCESS;

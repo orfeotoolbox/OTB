@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,30 +33,30 @@ int otbCompacityPathCircle( int argc, char * argv[] )
   typedef itk::PolyLineParametricPath< Dimension >       PathType;
   typedef otb::CompacityPathFunction<PathType>           FunctionType;
   typedef FunctionType::RealType                         RealType;
-  
+
   PathType::ContinuousIndexType cindex;
   PathType::Pointer pathElt = PathType::New();
 
   if(NbOfPoints<2)
     {
-      std::cout << "NbOfPoints must be greater than 2 !" << std::endl; 
+      std::cout << "NbOfPoints must be greater than 2 !" << std::endl;
       return EXIT_FAILURE;
-    } 
+    }
 
   RealType    deltaTheta;
   RealType    Rho = 100.0;
-	
+
   deltaTheta = 2.* M_PI / static_cast<RealType>(NbOfPoints);
-	
+
   pathElt->Initialize();
-        
+
   for(unsigned int noTheta = 0 ; noTheta < NbOfPoints ; noTheta++)
     {
       RealType Theta = deltaTheta * static_cast<RealType>(noTheta);
-	
+
       cindex[0]= (Rho * vcl_cos(Theta) );
       cindex[1]= (Rho * vcl_sin(Theta) );
-      pathElt->AddVertex(cindex);	
+      pathElt->AddVertex(cindex);
     }
 
   FunctionType::Pointer function =FunctionType::New();
@@ -67,14 +67,14 @@ int otbCompacityPathCircle( int argc, char * argv[] )
 
   RealType Error;
   Error = vcl_abs(Result - static_cast<RealType>(1.0) );
-	
+
   if(  Error > 1.E-5)
     {
       std::cout << "Error in estimation !" << std::endl;
       return EXIT_FAILURE;
     }
 
-  
+
 
   return EXIT_SUCCESS;
 }

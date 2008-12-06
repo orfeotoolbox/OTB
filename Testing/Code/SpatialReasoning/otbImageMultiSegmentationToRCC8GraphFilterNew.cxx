@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,10 +32,10 @@ int otbImageMultiSegmentationToRCC8GraphFilterNew(int argc, char* argv[])
   typedef otb::RCC8Graph<VertexType> RCC8GraphType;
   typedef otb::ImageMultiSegmentationToRCC8GraphFilter<LabelImageType,RCC8GraphType>
     RCC8GraphFilterType;
-  
+
   // Instanatiation
   RCC8GraphFilterType::Pointer filter = RCC8GraphFilterType::New();
-  
+
 
   return EXIT_SUCCESS;
-}  
+}

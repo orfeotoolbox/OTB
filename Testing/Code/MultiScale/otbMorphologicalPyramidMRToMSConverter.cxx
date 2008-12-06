@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,7 +33,7 @@ int otbMorphologicalPyramidMRToMSConverter(int argc, char * argv[])
   const char * outputFilename3 = argv[4];
   const unsigned int numberOfLevels = atoi(argv[5]);
   const float decimationRatio = atof(argv[6]);
-      
+
   const unsigned int Dimension = 2;
   typedef double InputPixelType;
   typedef double OutputPixelType;
@@ -86,8 +86,8 @@ int otbMorphologicalPyramidMRToMSConverter(int argc, char * argv[])
   writer3->SetFileName(outputFilename3);
   writer3->SetInput(mrtoms->GetOutput()->Back());
   writer3->Update();
-      
-  
+
+
 
   return EXIT_SUCCESS;
 }

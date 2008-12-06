@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -53,7 +53,7 @@ int otbPolygonToPolygonRCC8Calculator(int argc, char* argv[])
   a3[1]=10;
   a4[0]=10;
   a4[1]=0;
-    
+
   a5[0]=5;
   a5[1]=5;
 

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,7 +28,7 @@ int otbImageListToImageFilterNew(int argc, char * argv[])
   typedef otb::Image<InputPixelType,Dimension> InputImageType;
   typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
   typedef otb::ImageListToImageFilter<InputImageType,OutputImageType> ImageListToImageFilterType;
-  
+
   // Instantiating ImageListSource object
   ImageListToImageFilterType::Pointer imageList = ImageListToImageFilterType::New();
 

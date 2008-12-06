@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -39,7 +39,7 @@
 // neighborhood stencil.
 //
 // We need two iterators, a shaped iterator for the input image and a regular
-// image iterator for writing results to the output image. 
+// image iterator for writing results to the output image.
 //
 // Software Guide : EndLatex
 
@@ -72,25 +72,25 @@ int main( int argc, char ** argv )
   typedef unsigned char PixelType;
   typedef otb::Image< PixelType, 2 >  ImageType;
 
-  typedef itk::ConstShapedNeighborhoodIterator< 
-                                          ImageType 
+  typedef itk::ConstShapedNeighborhoodIterator<
+                                          ImageType
                                             > ShapedNeighborhoodIteratorType;
 
   typedef itk::ImageRegionIterator< ImageType> IteratorType;
   // Software Guide : EndCodeSnippet
-  
-  typedef otb::ImageFileReader< ImageType > ReaderType;    
+
+  typedef otb::ImageFileReader< ImageType > ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( argv[1] );
-  
+
   try
     {
     reader->Update();
     }
   catch ( itk::ExceptionObject &err)
     {
-    std::cout << "ExceptionObject caught !" << std::endl; 
-    std::cout << err << std::endl; 
+    std::cout << "ExceptionObject caught !" << std::endl;
+    std::cout << err << std::endl;
     return -1;
     }
 
@@ -128,15 +128,15 @@ int main( int argc, char ** argv )
 // Software Guide : BeginCodeSnippet
   typedef itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<
                                                 ImageType > FaceCalculatorType;
-  
+
   FaceCalculatorType faceCalculator;
   FaceCalculatorType::FaceListType faceList;
   FaceCalculatorType::FaceListType::iterator fit;
-  
-  faceList = faceCalculator( reader->GetOutput(), 
-                             output->GetRequestedRegion(), 
+
+  faceList = faceCalculator( reader->GetOutput(),
+                             output->GetRequestedRegion(),
                              radius );
-// Software Guide : EndCodeSnippet 
+// Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
 //
@@ -147,7 +147,7 @@ int main( int argc, char ** argv )
 
 // Software Guide : BeginCodeSnippet
   IteratorType out;
-  
+
   const PixelType background_value = 0;
   const PixelType foreground_value = 255;
   const float rad = static_cast<float>(element_radius);
@@ -177,13 +177,13 @@ int main( int argc, char ** argv )
 
     // Creates a circular structuring element by activating all the pixels less
     // than radius distance from the center of the neighborhood.
-  
+
     for (float y = -rad; y <= rad; y++)
       {
       for (float x = -rad; x <= rad; x++)
-        {     
+        {
         ShapedNeighborhoodIteratorType::OffsetType off;
-        
+
         float dis = ::sqrt( x*x + y*y );
         if (dis <= rad)
           {
@@ -207,7 +207,7 @@ int main( int argc, char ** argv )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-    
+
     // Implements erosion
     for (it.GoToBegin(), out.GoToBegin(); !it.IsAtEnd(); ++it, ++out)
       {
@@ -233,9 +233,9 @@ int main( int argc, char ** argv )
       }
     }
 // Software Guide : EndCodeSnippet
-  
+
   typedef otb::ImageFileWriter< ImageType > WriterType;
-  
+
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName( argv[2] );
   writer->SetInput( output );

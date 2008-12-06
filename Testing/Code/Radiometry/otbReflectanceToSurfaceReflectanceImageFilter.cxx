@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -53,7 +53,7 @@ int otbReflectanceToSurfaceReflectanceImageFilter(int argc, char * argv[])
   DataVectorType gaseous;
   DataVectorType downTrans;
   DataVectorType upTrans;
-    
+
   std::cout<<nbChannel<<std::endl;
   for( unsigned int j=0; j<nbChannel; j++)
     {
@@ -68,8 +68,8 @@ int otbReflectanceToSurfaceReflectanceImageFilter(int argc, char * argv[])
   atmo->SetSphericalAlbedos(albedo);
   atmo->SetTotalGaseousTransmissions(gaseous);
   atmo->SetDownwardTransmittances(downTrans);
-  atmo->SetUpwardTransmittances(upTrans);  
-      
+  atmo->SetUpwardTransmittances(upTrans);
+
   // Instantiating object
   ReflectanceToSurfaceReflectanceImageFilterType::Pointer filter = ReflectanceToSurfaceReflectanceImageFilterType::New();
   filter->SetAtmosphericRadiativeTerms(atmo);

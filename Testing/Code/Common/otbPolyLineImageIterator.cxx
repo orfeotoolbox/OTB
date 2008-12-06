@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,7 +33,7 @@ int otbPolyLineImageIterator(int argc, char * argv[])
   const unsigned int sizey = atoi(argv[2]);
   const unsigned int nbpoints  = atoi(argv[3]);
   const char * outfname = argv[4];
-      
+
   const unsigned int Dimension = 2;
   typedef unsigned char PixelType;
   typedef otb::Image<PixelType,Dimension> ImageType;
@@ -54,9 +54,9 @@ int otbPolyLineImageIterator(int argc, char * argv[])
   image->SetRegions(region);
   image->Allocate();
   image->FillBuffer(0);
-      
+
   PathType::Pointer path = PathType::New();
-      
+
   for(unsigned int i =1; i<nbpoints;i++)
     {
       VertexType vertex1,vertex2;
@@ -91,6 +91,6 @@ int otbPolyLineImageIterator(int argc, char * argv[])
   writer->SetFileName(outfname);
   writer->Update();
 
-    
+
   return EXIT_SUCCESS;
 }

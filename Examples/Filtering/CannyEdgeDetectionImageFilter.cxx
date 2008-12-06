@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -42,7 +42,7 @@
 //
 //  \index{itk::CannyEdgeDetectionImageFilter|textbf}
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
 #include "otbImage.h"
@@ -58,7 +58,7 @@
 //
 //  \index{itk::CannyEdgeDetectionImageFilter!header}
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
 // Software Guide : BeginCodeSnippet
@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
     std::cerr << argv[0] << " inputImage outputImage [variance]" << std::endl;
     return EXIT_FAILURE;
     }
-   
+
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
   float variance = 2.0;
@@ -94,7 +94,7 @@ int main(int argc, char* argv[])
   //  Software Guide : BeginLatex
   //
   // As the Canny filter works with real values, we can instanciated the reader using
-  // an image with pixels as double. This does not imply anything on the real image 
+  // an image with pixels as double. This does not imply anything on the real image
   // coding format which will be cast into double.
   //
   //  Software Guide : EndLatex
@@ -142,19 +142,19 @@ int main(int argc, char* argv[])
   rescale->SetInput( cannyFilter->GetOutput() );
   writer->SetInput( rescale->GetOutput() );
 
-  try 
+  try
     {
     writer->Update();
     }
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "ExceptionObject caught !" << std::endl; 
-    std::cout << err << std::endl; 
+  catch( itk::ExceptionObject & err )
+    {
+    std::cout << "ExceptionObject caught !" << std::endl;
+    std::cout << err << std::endl;
     return EXIT_FAILURE;
-    } 
+    }
 
   //  Software Guide : BeginLatex
-  //  
+  //
   // \begin{figure}
   // \center
   // \includegraphics[width=0.44\textwidth]{ROISpot5.eps}

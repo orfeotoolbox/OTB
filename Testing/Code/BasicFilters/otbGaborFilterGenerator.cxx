@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -59,7 +59,7 @@ int otbGaborFilterGenerator(int argc, char * argv[])
   gabor->SetV0(v0);
   gabor->SetPhi(phi);
   ArrayType filter = gabor->GetFilter();
-  
+
   // Writing filter mask to an image
   ImageType::Pointer image = ImageType::New();
   ImageType::RegionType region;
@@ -82,7 +82,7 @@ int otbGaborFilterGenerator(int argc, char * argv[])
     {
       it.Set(filter[k]);
     }
-  
+
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outfname);
   writer->SetInput(image);

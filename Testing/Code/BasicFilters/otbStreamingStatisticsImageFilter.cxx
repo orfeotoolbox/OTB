@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,14 +31,14 @@ int otbStreamingStatisticsImageFilter(int argc, char * argv[])
 
   const unsigned int Dimension = 2;
   typedef double PixelType;
-      
+
   typedef otb::Image<PixelType,Dimension> ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::StreamingStatisticsImageFilter<ImageType> StreamingStatisticsImageFilterType;
   //typedef itk::StatisticsImageFilter<ImageType> StreamingStatisticsImageFilterType;
   // Instantiating object
   StreamingStatisticsImageFilterType::Pointer filter = StreamingStatisticsImageFilterType::New();
-      
+
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
 
@@ -58,7 +58,7 @@ int otbStreamingStatisticsImageFilter(int argc, char * argv[])
   file<<"Sigma: "<<filter->GetSigma()<<std::endl;
   file<<"Variance: "<<filter->GetVariance()<<std::endl;
   file.close();
-  
+
 
   return EXIT_SUCCESS;
 }

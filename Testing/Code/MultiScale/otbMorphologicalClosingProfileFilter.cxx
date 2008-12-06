@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,7 +31,7 @@ int otbMorphologicalClosingProfileFilter(int argc, char * argv[])
   const unsigned int profileSize = atoi(argv[4]);
   const unsigned int initialValue = atoi(argv[5]);
   const unsigned int step = atoi(argv[5]);
-       
+
 
   const unsigned int Dimension = 2;
   typedef double InputPixelType;
@@ -46,7 +46,7 @@ int otbMorphologicalClosingProfileFilter(int argc, char * argv[])
   typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
   typedef otb::MorphologicalClosingProfileFilter<InputImageType,InputImageType,StructuringElementType>
     ClosingProfileFilterType;
-      
+
   // Reading input image
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFilename);
@@ -69,7 +69,7 @@ int otbMorphologicalClosingProfileFilter(int argc, char * argv[])
       writer =  WriterType::New();
       oss<<outputFilenamePrefix<<i<<"."<<outputFilenameSuffix;
       writer->SetInput(profileFilter->GetOutput()->GetNthElement(i-1));
-      writer->SetFileName(oss.str().c_str());	  
+      writer->SetFileName(oss.str().c_str());
       writer->Update();
       oss.str("");
     }

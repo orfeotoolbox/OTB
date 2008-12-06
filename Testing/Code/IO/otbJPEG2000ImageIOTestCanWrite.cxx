@@ -8,10 +8,10 @@
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
-  
-  
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+
+
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,6 +33,6 @@ int otbJPEG2000ImageIOTestCanWrite(int argc, char* argv[])
       std::cerr << "Erreur otb::JPEG2000ImageIO : impossible to create the image file JPEG2000 "<<argv[1]<<"."<<std::endl;
       return EXIT_FAILURE;
     }
- 
+
   return EXIT_SUCCESS;
 }

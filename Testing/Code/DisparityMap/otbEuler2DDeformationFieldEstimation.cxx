@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -59,7 +59,7 @@ int otbEuler2DDeformationFieldEstimation(int argc, char* argv[])
   const double centery = atof(argv[12]);
 
   // 0. DEFINTIONS
-    
+
   // Images definition
   const unsigned int Dimension=2;
   typedef double PixelType;
@@ -81,20 +81,20 @@ int otbEuler2DDeformationFieldEstimation(int argc, char* argv[])
   typedef PointSetType::PointDataContainer::Iterator PointDataIteratorType;
   typedef PointSetType::PointDataContainer PointDataContainerType;
 
-  // Disparity map estimator definition 
+  // Disparity map estimator definition
   typedef otb::DisparityMapEstimationMethod<ImageType,ImageType,PointSetType> DMEstimationType;
-    
-  // Metric definition 
+
+  // Metric definition
   typedef itk::NormalizedCorrelationImageToImageMetric<ImageType,ImageType> MetricType;
-    
+
   // Interpolator definition
   typedef itk::Function::HammingWindowFunction<3> WindowFunctionType;
   typedef itk::ZeroFluxNeumannBoundaryCondition<ImageType> ConditionType;
   typedef itk::WindowedSincInterpolateImageFunction<ImageType,3,WindowFunctionType,ConditionType ,double> InterpolatorType;
-    
+
   // Optimizer definition
-  typedef itk::GradientDescentOptimizer OptimizerType;   
-    
+  typedef itk::GradientDescentOptimizer OptimizerType;
+
   // IO definition
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
@@ -102,7 +102,7 @@ int otbEuler2DDeformationFieldEstimation(int argc, char* argv[])
 
   // Additional filters
   typedef itk::RescaleIntensityImageFilter<ImageType,OutputImageType> RescalerType;
-    
+
   // Deformation fields generator
   typedef otb::NearestPointDeformationFieldGenerator<PointSetType,DeformationFieldType> NearestPointGeneratorType;
   typedef otb::NNearestPointsLinearInterpolateDeformationFieldGenerator<PointSetType,DeformationFieldType> NNearestPointGeneratorType;
@@ -113,7 +113,7 @@ int otbEuler2DDeformationFieldEstimation(int argc, char* argv[])
 
   // Warper
   typedef itk::WarpImageFilter<ImageType,ImageType,DeformationFieldType> ImageWarperType;
-    
+
   //Input images reading
   ReaderType::Pointer fixedReader = ReaderType::New();
   ReaderType::Pointer movingReader = ReaderType::New();
@@ -128,7 +128,7 @@ int otbEuler2DDeformationFieldEstimation(int argc, char* argv[])
   unsigned int NumberOfXNodes = (fixedSize[0]-2*exploSize-1)/step;
   unsigned int NumberOfYNodes = (fixedSize[1]-2*exploSize-1)/step;
   unsigned int NumberOfNodes = NumberOfXNodes*NumberOfYNodes;
-   
+
   std::cout<<"PointSet size: "<<NumberOfNodes<<std::endl;
 
   IndexType firstNodeIndex;
@@ -137,7 +137,7 @@ int otbEuler2DDeformationFieldEstimation(int argc, char* argv[])
 
   PointSetType::Pointer  nodes = PointSetType::New();
   unsigned int nodeCounter = 0;
-    
+
   std::cout << "Node coordinates : " << std::endl;
   for(unsigned int x=0; x<NumberOfXNodes; x++)
     for(unsigned int y=0; y<NumberOfYNodes; y++)
@@ -148,10 +148,10 @@ int otbEuler2DDeformationFieldEstimation(int argc, char* argv[])
 	std::cout << "Id: " << nodeCounter << " ->  " <<  p << std::endl;
 	nodes->SetPoint( nodeCounter++, p );
       }
-    
+
   // Fix to avoid recomputing the disparity for each deformation field generation method.
   nodes->SetBufferedRegion(0);
-    
+
   // 2. DISPARITY MAP ESTIMATION
   DMEstimationType::Pointer dmestimator = DMEstimationType::New();
   TransformType::Pointer transform = TransformType::New();
@@ -192,14 +192,14 @@ int otbEuler2DDeformationFieldEstimation(int argc, char* argv[])
   ImageType::SizeType win,explo;
   win.Fill(winSize);
   explo.Fill(exploSize);
-    
+
   dmestimator->SetFixedImage(fixedReader->GetOutput());
   dmestimator->SetMovingImage(movingReader->GetOutput());
   dmestimator->SetPointSet(nodes);
   dmestimator->SetWinSize(win);
   dmestimator->SetExploSize(explo);
   dmestimator->SetInitialTransformParameters(initialParameters);
-        
+
   // 3. DEFORMATION FIELDS COMPUTATION
   WriterType::Pointer writer = WriterType::New();
   DeformationFieldWriterType::Pointer dfwriter = DeformationFieldWriterType::New();
@@ -227,7 +227,7 @@ int otbEuler2DDeformationFieldEstimation(int argc, char* argv[])
   dfwriter->SetFileName(oss.str().c_str());
   dfwriter->SetInput(generator1->GetOutput());
   dfwriter->Update();
-    
+
   oss.str("");
   oss<<outputFileNamePrefix<<"_np_oi.tif";
   writer->SetFileName(oss.str().c_str());
@@ -247,7 +247,7 @@ int otbEuler2DDeformationFieldEstimation(int argc, char* argv[])
   generator2->SetOutputSize(fixedReader->GetOutput()->GetLargestPossibleRegion().GetSize());
   generator2->SetMetricThreshold(metricThreshold);
   generator2->SetNumberOfPoints(nbPointsToInterpolate);
-   
+
 
   warper->SetInput(movingReader->GetOutput());
   warper->SetDeformationField(generator2->GetOutput());
@@ -261,7 +261,7 @@ int otbEuler2DDeformationFieldEstimation(int argc, char* argv[])
   dfwriter->SetFileName(oss.str().c_str());
   dfwriter->SetInput(generator2->GetOutput());
   dfwriter->Update();
-    
+
   oss.str("");
   oss<<outputFileNamePrefix<<"_nnp_oi.tif";
   writer->SetFileName(oss.str().c_str());
@@ -280,7 +280,7 @@ int otbEuler2DDeformationFieldEstimation(int argc, char* argv[])
   generator3->SetOutputSpacing(fixedReader->GetOutput()->GetSpacing());
   generator3->SetOutputSize(fixedReader->GetOutput()->GetLargestPossibleRegion().GetSize());
   generator3->SetMetricThreshold(metricThreshold);
-   
+
 
   warper->SetInput(movingReader->GetOutput());
   warper->SetDeformationField(generator3->GetOutput());
@@ -294,7 +294,7 @@ int otbEuler2DDeformationFieldEstimation(int argc, char* argv[])
   dfwriter->SetFileName(oss.str().c_str());
   dfwriter->SetInput(generator3->GetOutput());
   dfwriter->Update();
-    
+
   oss.str("");
   oss<<outputFileNamePrefix<<"_bs_oi.tif";
   writer->SetFileName(oss.str().c_str());
@@ -327,7 +327,7 @@ int otbEuler2DDeformationFieldEstimation(int argc, char* argv[])
   dfwriter->SetFileName(oss.str().c_str());
   dfwriter->SetInput(generator4->GetOutput());
   dfwriter->Update();
-    
+
   oss.str("");
   oss<<outputFileNamePrefix<<"_nt_oi.tif";
   writer->SetFileName(oss.str().c_str());
@@ -361,7 +361,7 @@ int otbEuler2DDeformationFieldEstimation(int argc, char* argv[])
   dfwriter->SetFileName(oss.str().c_str());
   dfwriter->SetInput(generator5->GetOutput());
   dfwriter->Update();
-    
+
   oss.str("");
   oss<<outputFileNamePrefix<<"_nnt_oi.tif";
   writer->SetFileName(oss.str().c_str());
@@ -397,7 +397,7 @@ int otbEuler2DDeformationFieldEstimation(int argc, char* argv[])
   dfwriter->SetFileName(oss.str().c_str());
   dfwriter->SetInput(generator6->GetOutput());
   dfwriter->Update();
-    
+
   oss.str("");
   oss<<outputFileNamePrefix<<"_bst_oi.tif";
   writer->SetFileName(oss.str().c_str());

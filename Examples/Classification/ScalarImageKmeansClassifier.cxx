@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -37,7 +37,7 @@
 // The classes are then used in this filter for generating a labeled image where
 // every pixel is assigned to one of the classes.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 
 // Software Guide : BeginCodeSnippet
@@ -69,8 +69,8 @@ int main( int argc, char * argv [] )
 // \doxygen{otb}{ImageFileReader} needed for reading the input image, create one and
 // set its input filename.
 //
-// Software Guide : EndLatex 
-  
+// Software Guide : EndLatex
+
 // Software Guide : BeginCodeSnippet
   typedef signed short       PixelType;
   const unsigned int          Dimension = 2;
@@ -89,9 +89,9 @@ int main( int argc, char * argv [] )
 //
 // With the \code{ImageType} we instantiate the type of the
 // \doxygen{itk}{ScalarImageKmeansImageFilter} that will compute the K-Means model
-// and then classify the image pixels. 
+// and then classify the image pixels.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
   typedef itk::ScalarImageKmeansImageFilter< ImageType > KMeansFilterType;
@@ -120,7 +120,7 @@ int main( int argc, char * argv [] )
 // classes, the non-contiguous labels will be (0,64,128,192). The selection of
 // the mode to use is done with the method \code{SetUseContiguousLabels()}.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
   const unsigned int useNonContiguousLabels = atoi( argv[3] );
@@ -150,7 +150,7 @@ int main( int argc, char * argv [] )
 // K-Means, the input image would be a vector image and therefore the means
 // will be vectors of the same dimension as the image pixels.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 
 // Software Guide : BeginCodeSnippet
@@ -174,7 +174,7 @@ int main( int argc, char * argv [] )
 // \doxygen{otb}{ImageFileWriter}. Then create one, and connect it to the output of
 // the classification filter.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
   typedef KMeansFilterType::OutputImageType  OutputImageType;
@@ -182,7 +182,7 @@ int main( int argc, char * argv [] )
   typedef otb::ImageFileWriter< OutputImageType > WriterType;
 
   WriterType::Pointer writer = WriterType::New();
-  
+
   writer->SetInput( kmeansFilter->GetOutput() );
 
   writer->SetFileName( outputImageFileName );
@@ -197,7 +197,7 @@ int main( int argc, char * argv [] )
 // by simply invoking the \code{Update()} method in the writer. This call will
 // propagate the update request to the reader and then to the classifier.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 
 // Software Guide : BeginCodeSnippet
@@ -214,7 +214,7 @@ int main( int argc, char * argv [] )
     }
 // Software Guide : EndCodeSnippet
 
-  
+
 
 
 // Software Guide : BeginLatex
@@ -223,10 +223,10 @@ int main( int argc, char * argv [] )
 // file, and we can take a look at the means that were found as a result of the
 // model estimation performed inside the classifier filter.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  KMeansFilterType::ParametersType estimatedMeans = 
+  KMeansFilterType::ParametersType estimatedMeans =
                                             kmeansFilter->GetFinalMeans();
 
   const unsigned int numberOfClasses = estimatedMeans.Size();
@@ -240,7 +240,7 @@ int main( int argc, char * argv [] )
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
-//  
+//
 // \begin{figure} \center
 // \includegraphics[width=0.44\textwidth]{QB_Suburb.eps}
 // \includegraphics[width=0.44\textwidth]{QB_Suburb_labelled.eps}
@@ -253,10 +253,10 @@ int main( int argc, char * argv [] )
 //  illustrates the effect of this filter with three classes.
 //  The means can be estimated by ScalarImageKmeansModelEstimator.cxx.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
   return EXIT_SUCCESS;
-  
+
 }
 
 

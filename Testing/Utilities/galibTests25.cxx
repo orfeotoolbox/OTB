@@ -84,12 +84,12 @@ galibTests25(int argc, char* argv[]) {
   cout << endl;
 
   cout << "best individual is: " << ga.statistics().bestIndividual() << "\n";
-  cout << "\n" << ga.statistics() << "\n";  
+  cout << "\n" << ga.statistics() << "\n";
 
   return 0;
 }
 
-// This is the 1-max objective function - try to maximize the number of 1s in 
+// This is the 1-max objective function - try to maximize the number of 1s in
 // a bit string of arbitrary length.
 float
 Objective(GAGenome& g) {

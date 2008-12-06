@@ -68,7 +68,7 @@ int otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter( int argc, char 
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
-  
+
   itk::TimeProbe probe1,probe2;
 
   ConvolutionFilterType::Pointer convolution = ConvolutionFilterType::New();

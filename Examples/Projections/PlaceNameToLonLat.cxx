@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,7 +23,7 @@
 
 int main( int argc, char* argv[] )
 {
-  
+
   if(argc!=2)
   {
     std::cout << argv[0] <<" <place name> "
@@ -31,18 +31,18 @@ int main( int argc, char* argv[] )
 
     return EXIT_FAILURE;
   }
-  
-  
+
+
   otb::PlaceNameToLonLat::Pointer pn2LL = otb::PlaceNameToLonLat::New();
   pn2LL->SetPlaceName(std::string(argv[1]));
   pn2LL->Evaluate();
-  
+
   double lon = pn2LL->GetLon();
   double lat = pn2LL->GetLat();
-  
+
   std::cout << "Latitude: " << lat << std::endl;
   std::cout << "Longitude: " << lon << std::endl;
-    
+
   return EXIT_SUCCESS;
 
 }

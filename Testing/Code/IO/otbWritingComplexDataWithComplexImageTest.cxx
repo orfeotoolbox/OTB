@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -46,6 +46,6 @@ int otbWritingComplexDataWithComplexImageTest(int argc,char * argv[])
   writer->SetInput(extract->GetOutput());
   writer->SetFileName(argv[2]);
   writer->Update();
-  
+
   return EXIT_SUCCESS;
 }

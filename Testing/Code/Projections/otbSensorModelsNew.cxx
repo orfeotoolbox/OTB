@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,13 +31,13 @@ int otbSensorModelsNew( int argc, char* argv[] )
 {
   typedef otb::SensorModelBase<double> SensorModelBaseType;
   SensorModelBaseType::Pointer lSensorModelBase = SensorModelBaseType::New();
-  
+
   typedef otb::InverseSensorModel<double> InverseSensorModelType;
   InverseSensorModelType::Pointer lInverseSensorModel = InverseSensorModelType::New();
-  
+
   typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
   ForwardSensorModelType::Pointer lForwardSensorModel = ForwardSensorModelType::New();
-  
+
 
   return EXIT_SUCCESS;
 }

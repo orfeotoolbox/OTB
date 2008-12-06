@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,8 +31,8 @@ int otbHuPath( int argc, char * argv[] )
   typedef itk::PolyLineParametricPath< Dimension >     PathType;
   typedef otb::HuPathFunction<PathType>                FunctionType;
   typedef FunctionType::RealType                       RealType;
-  
-		
+
+
   // Dessiner un carré:
   PathType::ContinuousIndexType cindex;
   PathType::Pointer pathElt = PathType::New();
@@ -56,7 +56,7 @@ int otbHuPath( int argc, char * argv[] )
 
   RealType Result;
   function->SetInputPath( pathElt );
-	
+
   for (Number = 1 ;Number<8;Number++)
     {
       //OTB-FA-00024-CS
@@ -64,7 +64,7 @@ int otbHuPath( int argc, char * argv[] )
       Result = function->Evaluate();
       std::cout << "Hu("<<Number<<") = "<< Result <<std::endl;
     }
-  
+
   return EXIT_SUCCESS;
 }
 

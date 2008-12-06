@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -43,7 +43,7 @@
 //  \index{itk::GrayscaleDilateImageFilter!header}
 //  \index{itk::GrayscaleErodeImageFilter!header}
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
@@ -53,7 +53,7 @@
 // Software Guide : BeginCodeSnippet
 #include "itkGrayscaleErodeImageFilter.h"
 #include "itkGrayscaleDilateImageFilter.h"
-#include "itkBinaryBallStructuringElement.h" 
+#include "itkBinaryBallStructuringElement.h"
 // Software Guide : EndCodeSnippet
 
 
@@ -73,11 +73,11 @@ int main( int argc, char * argv[] )
   //  The following code defines the input and output pixel types and their
   //  associated image types.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
-  
+
   typedef unsigned char   InputPixelType;
   typedef unsigned char   OutputPixelType;
 
@@ -107,10 +107,10 @@ int main( int argc, char * argv[] )
   //  instantiated using the pixel type and dimension of the input
   //  image.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::BinaryBallStructuringElement< 
+  typedef itk::BinaryBallStructuringElement<
                       InputPixelType,
                       Dimension  >             StructuringElementType;
   // Software Guide : EndCodeSnippet
@@ -120,18 +120,18 @@ int main( int argc, char * argv[] )
   //  The structuring element type is then used along with the input and output
   //  image types for instantiating the type of the filters.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
   // Software Guide : BeginCodeSnippet
   typedef itk::GrayscaleErodeImageFilter<
-                            InputImageType, 
+                            InputImageType,
                             OutputImageType,
                             StructuringElementType >  ErodeFilterType;
 
   typedef itk::GrayscaleDilateImageFilter<
-                            InputImageType, 
-                            OutputImageType, 
+                            InputImageType,
+                            OutputImageType,
                             StructuringElementType >  DilateFilterType;
   // Software Guide : EndCodeSnippet
 
@@ -152,7 +152,7 @@ int main( int argc, char * argv[] )
   //  \index{itk::GrayscaleDilateImageFilter!Pointer}
   //  \index{itk::GrayscaleErodeImageFilter!Pointer}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   ErodeFilterType::Pointer  grayscaleErode  = ErodeFilterType::New();
@@ -180,7 +180,7 @@ int main( int argc, char * argv[] )
   //  \index{SetRadius()!itk::BinaryBallStructuringElement}
   //  \index{CreateStructuringElement()!itk::BinaryBallStructuringElement}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   StructuringElementType  structuringElement;
@@ -195,17 +195,17 @@ int main( int argc, char * argv[] )
 
 
   reader->SetFileName( argv[1] );
- 
+
   writerErosion->SetFileName(  argv[2] );
   writerDilation->SetFileName( argv[3] );
-  
+
 
   //  Software Guide : BeginLatex
   //
   //  A grayscale image is provided as input to the filters. This
   //  image might be, for example, the output of a reader.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
   // Software Guide : BeginCodeSnippet
@@ -222,7 +222,7 @@ int main( int argc, char * argv[] )
   //  \index{itk::GrayscaleDilateImageFilter!Update()}
   //  \index{itk::GrayscaleErodeImageFilter!Update()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
   // Software Guide : BeginCodeSnippet
@@ -234,7 +234,7 @@ int main( int argc, char * argv[] )
   writerErosion->Update();
 
   //  Software Guide : BeginLatex
-  // 
+  //
   // \begin{figure}
   // \center
   // \includegraphics[width=0.32\textwidth]{QB_Suburb.eps}
@@ -250,7 +250,7 @@ int main( int argc, char * argv[] )
   //  figure shows how these operations can be used to remove spurious
   //  details from segmented images.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
   return EXIT_SUCCESS;

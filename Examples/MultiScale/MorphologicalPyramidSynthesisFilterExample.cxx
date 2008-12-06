@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -20,16 +20,16 @@ PURPOSE.  See the above copyright notices for more information.
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {suburb2.jpeg}
 //    OUTPUTS: {suburb2_synthesis.jpeg}
-//    4 2 
+//    4 2
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the \doxygen{otb}{MorphologicalPyramidSynthesisFilter}.
 //
-// The first step required to use this filter is to include its header file. 
+// The first step required to use this filter is to include its header file.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "otbMorphologicalPyramidSynthesisFilter.h"
@@ -40,9 +40,9 @@ PURPOSE.  See the above copyright notices for more information.
 // The mathematical morphology filters to be used have also to be
 // included here, as well as the
 // \doxygen{otb}{MorphologicalPyramidAnalyseFilter} in order to
-// perform the analysis step. 
+// perform the analysis step.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 
@@ -63,7 +63,7 @@ int main(int argc, char * argv[])
   if( argc != 5)
     {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
-    std::cerr << " outputImageFile iterations decimationRatio" << std::endl;  
+    std::cerr << " outputImageFile iterations decimationRatio" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -77,10 +77,10 @@ int main(int argc, char * argv[])
 // As usual, we start by defining the types needed for the pixels, the
 // images, the image reader and the image writer.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-      
+
       const unsigned int Dimension = 2;
       typedef unsigned char InputPixelType;
       typedef unsigned char OutputPixelType;
@@ -101,10 +101,10 @@ int main(int argc, char * argv[])
 // \doxygen{itk}{BinaryBallStructuringElement} which is templated over
 // the pixel type and the dimension of the image.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-      
+
       typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension>
 	                                           StructuringElementType;
 
@@ -119,10 +119,10 @@ int main(int argc, char * argv[])
 // over the input and output image types and the structurung element
 // type that we just define above.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-      
+
       typedef otb::OpeningClosingMorphologicalFilter<InputImageType,
                                    InputImageType,StructuringElementType>
 	                                         OpeningClosingFilterType;
@@ -135,11 +135,11 @@ int main(int argc, char * argv[])
 // filter. The filter is templated over the input and output mage
 // types and the {\em lowpas} morphological filter to be used.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 
-      
+
       typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,
                                 OutputImageType,OpeningClosingFilterType>
 	                                          PyramidAnalysisFilterType;
@@ -152,11 +152,11 @@ int main(int argc, char * argv[])
 // filter. The filter is templated over the input and output mage
 // types.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 
-      
+
       typedef otb::MorphologicalPyramidSynthesisFilter<InputImageType,
                                                         OutputImageType>
 	                                      PyramidSynthesisFilterType;
@@ -167,9 +167,9 @@ int main(int argc, char * argv[])
 // We can now instantiate the reader in order to access the input
 // image which has to be analysed.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet      
+// Software Guide : BeginCodeSnippet
 
       ReaderType::Pointer reader = ReaderType::New();
       reader->SetFileName(inputFilename);
@@ -184,12 +184,12 @@ int main(int argc, char * argv[])
 //    \item the number of iterations or levels of the pyramid;
 //    \item the subsample scale or decimation factor between two
 // successive pyramid levels.
-//\end{itemize}      
+//\end{itemize}
 // After that, we plug the pipeline and run it by calling the
-// \code{Update()} method.      
-// Software Guide : EndLatex 
+// \code{Update()} method.
+// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet            
+// Software Guide : BeginCodeSnippet
       PyramidAnalysisFilterType::Pointer pyramidAnalysis =
 	                        PyramidAnalysisFilterType::New();
       pyramidAnalysis->SetNumberOfLevels(numberOfLevels);
@@ -220,28 +220,28 @@ int main(int argc, char * argv[])
 // \end{itemize}
 // This outputs can be used as input of the synthesis filter by using
 // the appropriate methods.
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet                  
-      
+// Software Guide : BeginCodeSnippet
 
-      PyramidSynthesisFilterType::Pointer pyramidSynthesis = PyramidSynthesisFilterType::New();      
+
+      PyramidSynthesisFilterType::Pointer pyramidSynthesis = PyramidSynthesisFilterType::New();
       pyramidSynthesis->SetInput(pyramidAnalysis->GetOutput()->Back());
       pyramidSynthesis->SetSupFilter(pyramidAnalysis->GetSupFilter());
       pyramidSynthesis->SetSupDeci(pyramidAnalysis->GetSupDeci());
       pyramidSynthesis->SetInfFilter(pyramidAnalysis->GetInfFilter());
       pyramidSynthesis->SetInfDeci(pyramidAnalysis->GetInfDeci());
 // Software Guide : EndCodeSnippet
-      
+
 // Software Guide : BeginLatex
-//      
+//
 // After that, we plug the pipeline and run it by calling the
 // \code{Update()} method.
-//      
-// Software Guide : EndLatex 
+//
+// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet                  
-      
+// Software Guide : BeginCodeSnippet
+
       pyramidSynthesis->Update();
 
 // Software Guide : EndCodeSnippet
@@ -251,11 +251,11 @@ int main(int argc, char * argv[])
 // We finally instatiate a the writer in order to save the result
 // image to a file.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-      
-  
+
+
       WriterType::Pointer writer = WriterType::New();
       writer->SetFileName(outputFilename);
       writer->SetInput(pyramidSynthesis->GetOutput()->Back());
@@ -280,10 +280,10 @@ int main(int argc, char * argv[])
 //
 // Of course, in a real application, a specific processing will be
 // applied after the analysis and before the synthesis to, for
-// instance, denoise the image by removing pixels at the finer scales, etc.      
+// instance, denoise the image by removing pixels at the finer scales, etc.
 //
-// Software Guide : EndLatex 
-      
+// Software Guide : EndLatex
+
 
 
       return EXIT_SUCCESS;

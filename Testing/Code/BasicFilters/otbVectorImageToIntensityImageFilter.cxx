@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,23 +31,23 @@ int otbVectorImageToIntensityImageFilter(int argc, char * argv[])
   typedef otb::ImageFileReader<InputImageType> ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
   typedef otb::VectorImageToIntensityImageFilter<InputImageType,OutputImageType> FilterType;
-  
+
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
-  
+
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
-  
+
   InputImageType::PixelType refPixel;
-  
+
   filter->SetInput(reader->GetOutput());
-  
+
   writer->SetInput(filter->GetOutput());
-  
+
   writer->Update();
 
- 
+
   return EXIT_SUCCESS;
 }

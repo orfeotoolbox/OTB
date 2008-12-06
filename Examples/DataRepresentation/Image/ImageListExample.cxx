@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,7 +31,7 @@
 //  The first thing required to read an image from a file is to include
 //  the header file of the \subdoxygen{otb}{ImageFileReader} class.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "otbImageList.h"
@@ -55,9 +55,9 @@ int main(int argc, char * argv[])
 // As usual, we start by defining the types for the pixel and image
 // types, as well as those for the readers and writers.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet      
+// Software Guide : BeginCodeSnippet
 
       const unsigned int Dimension = 2;
       typedef unsigned char InputPixelType;
@@ -74,11 +74,11 @@ int main(int argc, char * argv[])
 // contained in it. This means that all images in a list must have the
 // same type.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet      
+// Software Guide : BeginCodeSnippet
 
-      
+
       typedef otb::ImageList< InputImageType > ImageListType;
 
 // Software Guide : EndCodeSnippet
@@ -90,10 +90,10 @@ int main(int argc, char * argv[])
 // reader and set the image file name. We effectively read the image
 // by calling the \code{Update()}.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet      
-      
+// Software Guide : BeginCodeSnippet
+
       ReaderType::Pointer reader = ReaderType::New();
       reader->SetFileName(inputFilename);
       reader->Update();
@@ -104,10 +104,10 @@ int main(int argc, char * argv[])
 //
 // We create an image list by using the \code{New()} method.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet      
-      
+// Software Guide : BeginCodeSnippet
+
       ImageListType::Pointer imageList = ImageListType::New();
 
 // Software Guide : EndCodeSnippet
@@ -117,9 +117,9 @@ int main(int argc, char * argv[])
 // In order to store the image in the list, the \code{PushBack()}
 // method is used.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet            
+// Software Guide : BeginCodeSnippet
 
       imageList->PushBack(reader->GetOutput());
 
@@ -133,17 +133,17 @@ int main(int argc, char * argv[])
 // input image for it. This is done by calling the \code{Back()}
 // method of the list, which allows us to get the last element.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet            
-      
+// Software Guide : BeginCodeSnippet
+
       // Getting the image from the list and writing it to file
       WriterType::Pointer writer = WriterType::New();
       writer->SetFileName(outputFilename);
       writer->SetInput(imageList->Back());
       writer->Update();
 
-// Software Guide : EndCodeSnippet                  
+// Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
 //
@@ -153,14 +153,14 @@ int main(int argc, char * argv[])
 // randomly access any element of the list.
 // \item \code{Front()} to access to the first element of the list.
 // \item \code{Erase()} to remove an element.
-// \end{itemize}            
+// \end{itemize}
 //
 // Also, iterator classes are defined in order to have an efficient
 // mean of moving through the list. Finally, the
 // \subdoxygen{otb}{ImageListToImageListFilter} is provided in order
 // to implement filter which operate on image lists and produce image lists.
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
-      
+
   return EXIT_SUCCESS;
 }

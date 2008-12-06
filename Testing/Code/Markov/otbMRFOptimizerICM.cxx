@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,11 +23,11 @@
 #include <cstdlib>
 
 int otbMRFOptimizerICM(int argc, char * argv[])
-{ 
+{
   typedef otb::MRFOptimizerICM MRFOptimizerICMType;
 
   MRFOptimizerICMType::Pointer object = MRFOptimizerICMType::New();
-  
+
   if ( object->Compute(-1) != true || object->Compute(1) != false )
     {
       return EXIT_FAILURE;

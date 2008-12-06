@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,7 +34,7 @@ int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int argc, char *
   const char * outputFileName = argv[2];
   const char * paramFile = argv[3];
   std::vector<const char *> wavelenghFiles;
-      
+
   const unsigned int Dimension = 2;
   typedef double PixelType;
   typedef otb::VectorImage<PixelType,Dimension> InputImageType;
@@ -56,7 +56,7 @@ int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int argc, char *
   CorrectionParametersType::Pointer                   param         = CorrectionParametersType::New();
   CorrectionParametersTo6SRadiativeTermsType::Pointer corrToRadia   = CorrectionParametersTo6SRadiativeTermsType::New();
   FilterFunctionValuesType::Pointer                   functionValues;
- 
+
   ReaderType::Pointer reader  = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
   reader->SetFileName(inputFileName);
@@ -68,9 +68,9 @@ int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int argc, char *
     {
       wavelenghFiles.push_back( argv[i+4] );
     }
-      
+
   ValueType val = 0.0025;
- 
+
   // Correction parameters initialization
   double solarZenithalAngle(0.);
   double solarAzimutalAngle(0.);
@@ -82,7 +82,7 @@ int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int argc, char *
   double waterVaporAmount(0.);
   double ozoneAmount(0.);
   double aerosolOptical(0.);
-      
+
   std::ifstream fin;
   fin.open(paramFile);
   //Read input file parameters
@@ -107,7 +107,7 @@ int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int argc, char *
   param->SetViewingAzimutalAngle(static_cast<double>(viewingAzimutalAngle));
   param->SetMonth(month);
   param->SetDay(day);
-  param->SetAtmosphericPressure(static_cast<double>(atmosphericPressure)); 
+  param->SetAtmosphericPressure(static_cast<double>(atmosphericPressure));
   param->SetWaterVaporAmount(static_cast<double>(waterVaporAmount));
   param->SetOzoneAmount(static_cast<double>(ozoneAmount));
   param->SetAerosolModel(aerosolModel);
@@ -119,17 +119,17 @@ int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int argc, char *
     {
       functionValues = FilterFunctionValuesType::New();
       vect.clear();
-	  
+
       // Filter function values initialization
       float minSpectralValue(0.);
       float maxSpectralValue(0.);
       float value(0.);
-	  	  
+
       std::ifstream fin;
       //Read input file parameters
       fin.open(wavelenghFiles[j]);
       fin >> minSpectralValue;//wlinf;
-      fin >> maxSpectralValue;//wlsup; 
+      fin >> maxSpectralValue;//wlsup;
 
       while (!fin.eof() && fin.good())
 	{
@@ -144,17 +144,17 @@ int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int argc, char *
 
       param->SetWavelenghtSpectralBandWithIndex(j, functionValues);
     }
- 
+
   corrToRadia->SetInput( param );
-      
+
   // Instantiating object
   ReflectanceToSurfaceReflectanceImageFilterType::Pointer filter = ReflectanceToSurfaceReflectanceImageFilterType::New();
   filter->SetAtmosphericRadiativeTerms( corrToRadia->GetOutput() );
   filter->SetInput(reader->GetOutput());
   writer->SetInput(filter->GetOutput());
- 
+
   writer->Update();
-  
-  
+
+
   return EXIT_SUCCESS;
 }

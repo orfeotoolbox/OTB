@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -38,8 +38,8 @@ int otbImportGeoInformationImageFilter(int argc, char * argv[])
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
   ImportGeoInformationImageFilterType::Pointer import = ImportGeoInformationImageFilterType::New();
-      
-      
+
+
   reader->SetFileName(infname);
   reader->GenerateOutputInformation();
   ImageType::IndexType index;
@@ -52,12 +52,12 @@ int otbImportGeoInformationImageFilter(int argc, char * argv[])
   black->Allocate();
   black->FillBuffer(128);
   std::cout<<"black: " <<black->GetLargestPossibleRegion()<<std::endl;
-      
+
   import->SetInput(black);
   import->SetSource(reader->GetOutput());
   //  import->Update();
   //       std::cout<<"import output: "<<import->GetOutput()<<std::endl;
-      
+
 
   writer->SetFileName(outfname);
   writer->SetInput(import->GetOutput());

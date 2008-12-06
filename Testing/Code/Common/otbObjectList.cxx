@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -51,7 +51,7 @@ int otbObjectList(int argc, char * argv[])
 
   // Instantiating the tested object
   ImageListType::Pointer imageList = ImageListType::New();
-      
+
   // Testing reserve/capacity
   imageList->Reserve(2);
 
@@ -67,10 +67,10 @@ int otbObjectList(int argc, char * argv[])
   otbControlConditionTestMacro(imageList->Front()!=reader1->GetOutput(),"PushBack/Front()");
   otbControlConditionTestMacro(imageList->Back()!=reader2->GetOutput(),"PushBack/Back()");
 
-  // Testing resizing and related method 
+  // Testing resizing and related method
   imageList->Resize(3);
   otbControlConditionTestMacro(imageList->Size()!=3,"Resize/Size()");
-      
+
   // Testing explicit setter
   imageList->SetNthElement(2,reader3->GetOutput());
 
@@ -96,7 +96,7 @@ int otbObjectList(int argc, char * argv[])
       ++index;
       ++iter;
     }
-    
+
   // Testing const iterator
   ImageListType::ConstIterator constIter = imageList->Begin();
   index = 0;
@@ -134,7 +134,7 @@ int otbObjectList(int argc, char * argv[])
       ++index;
       ++revConstIter;
     }
-    
+
   // Testing clear
   imageList->Clear();
 
@@ -151,7 +151,7 @@ int otbObjectList(int argc, char * argv[])
 
   otbControlConditionTestMacro(imageList->Size()!=1,"Erase(Iterator,Iterator)/Size()");
   otbControlConditionTestMacro(imageList->Back()!=reader1->GetOutput(),"Erase(Iterator,Iterator)/Back()");
- 
+
 
   return EXIT_SUCCESS;
 }

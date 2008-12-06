@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,7 +25,7 @@ int otbRCC8GraphNew(int argc, char* argv[])
   typedef otb::Polygon<>  PathType;
   typedef otb::RCC8VertexBase<PathType> VertexType;
   typedef otb::RCC8Graph<VertexType> RCC8GraphType;
-    
+
   // Instantiation
   RCC8GraphType::Pointer rcc8Graph = RCC8GraphType::New();
 

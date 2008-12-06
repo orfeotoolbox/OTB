@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,7 +32,7 @@ int generic_RAndBAndNIRVegetationIndexImageFilter(int argc, char * argv[])
   typedef otb::ImageFileReader<TInputNIRImage> NIRReaderType;
   typedef otb::ImageFileWriter<TOutputImage> WriterType;
 
-  typedef otb::RAndBAndNIRVegetationIndexImageFilter<TInputRImage,TInputBImage,TInputNIRImage,TOutputImage,TFunction> 
+  typedef otb::RAndBAndNIRVegetationIndexImageFilter<TInputRImage,TInputBImage,TInputNIRImage,TOutputImage,TFunction>
     RAndBAndNIRVegetationIndexImageFilterType;
 
   // Instantiating object
@@ -52,14 +52,14 @@ int generic_RAndBAndNIRVegetationIndexImageFilter(int argc, char * argv[])
   readerB->SetFileName( inputFilenameB );
   readerNIR->SetFileName( inputFilenameNIR );
   writer->SetFileName( outputFilename  );
-  filter->SetInputR( readerR->GetOutput() ); 
-  filter->SetInputB( readerB->GetOutput() ); 
-  filter->SetInputNIR( readerNIR->GetOutput() ); 
+  filter->SetInputR( readerR->GetOutput() );
+  filter->SetInputB( readerB->GetOutput() );
+  filter->SetInputNIR( readerNIR->GetOutput() );
   filter->GetFunctor().SetGamma(gamma);
   writer->SetInput( filter->GetOutput() );
   writer->Update();
 
- 
+
   return EXIT_SUCCESS;
 }
 
@@ -72,7 +72,7 @@ int otbRAndBAndNIRVegetationIndexImageFilter(int argc, char * argv[])
   typedef otb::Image<PixelType,Dimension> InputBImageType;
   typedef otb::Image<PixelType,Dimension> InputNIRImageType;
   typedef otb::Image<float,Dimension> OutputImageType;
-        
+
   std::string strArgv(argv[1]);
   argc--;
   argv++;

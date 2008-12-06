@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,7 +28,7 @@ int otbImageWidgetTransferFunctions(int argc, char * argv[])
   typedef otb::ImageWidgetSquareRootTransferFunction<PixelType> SquareRootType;
   typedef otb::ImageWidgetLogTransferFunction<PixelType> LogType;
   typedef otb::ImageWidgetSquareTransferFunction<PixelType> SquareType;
-  
+
   // Instantiation
   AffineType::Pointer affine = AffineType::New();
   LogType::Pointer log = LogType::New();

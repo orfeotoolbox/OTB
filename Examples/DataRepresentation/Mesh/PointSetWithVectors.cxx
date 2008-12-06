@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,14 +32,14 @@
 //  \doxygen{itk}{Vector} class is used here as the pixel type. This class is
 //  appropriate for representing the relative position between two points. It
 //  could then be used to manage displacements in disparity map
-//  estimations, for example. 
-//  
+//  estimations, for example.
+//
 //  \index{itk::PointSet!Vector pixels}
-//  
+//
 //  In order to use the vector class it is necessary to include its header file
 //  along with the header of the point set.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "itkVector.h"
@@ -58,13 +58,13 @@ int main(int, char *[])
   //  the spatial coordinates and over the space dimension.  Since the
   //  PixelType is independent of the PointType, we are free to select any
   //  dimension for the vectors to be used as pixel type. However, for the
-  //  sake of producing an interesting example, we will use vectors that 
+  //  sake of producing an interesting example, we will use vectors that
   //  represent displacements of the points in the PointSet. Those vectors
   //  are then selected to be of the same dimension as the PointSet.
   //
   //  \index{itk::Vector!itk::PointSet}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
@@ -77,7 +77,7 @@ int main(int, char *[])
   //  Then we use the PixelType (which are actually Vectors) to instantiate the
   //  PointSet type and subsequently create a PointSet object.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef itk::PointSet< PixelType, Dimension > PointSetType;
@@ -95,7 +95,7 @@ int main(int, char *[])
   //  \index{itk::PointSet!SetPoint()}
   //  \index{itk::PointSet!SetPointData()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   PointSetType::PixelType   tangent;
@@ -111,8 +111,8 @@ int main(int, char *[])
     point[1] = radius * cos( angle );
     tangent[0] =  cos(angle);
     tangent[1] = -sin(angle);
-    pointSet->SetPoint( pointId, point );   
-    pointSet->SetPointData( pointId, tangent );   
+    pointSet->SetPoint( pointId, point );
+    pointSet->SetPointData( pointId, tangent );
     pointId++;
     }
   // Software Guide : EndCodeSnippet
@@ -122,13 +122,13 @@ int main(int, char *[])
   //
   //  We can now visit all the points and use the vector on the pixel values to
   //  apply a displacement on the points. This is along the spirit of what a
-  //  deformable model could do at each one of its iterations. 
+  //  deformable model could do at each one of its iterations.
   //
   //  \index{itk::PointSet!PointIterator}
   //  \index{itk::PointSet!GetPoints()}
   //  \index{itk::PointSet!GetPointData()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
   // Software Guide : BeginCodeSnippet
@@ -140,7 +140,7 @@ int main(int, char *[])
   PointIterator pointIterator = pointSet->GetPoints()->Begin();
   PointIterator pointEnd      = pointSet->GetPoints()->End();
 
-  while( pixelIterator != pixelEnd  && pointIterator != pointEnd ) 
+  while( pixelIterator != pixelEnd  && pointIterator != pointEnd )
     {
     pointIterator.Value() = pointIterator.Value() + pixelIterator.Value();
     ++pixelIterator;
@@ -158,7 +158,7 @@ int main(int, char *[])
   //  \index{ConstIterator}
   //  \index{const-correctness}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
   //  Software Guide : BeginLatex
@@ -173,12 +173,12 @@ int main(int, char *[])
   //
   //  We can finally visit all the points and print out the new values
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   pointIterator = pointSet->GetPoints()->Begin();
   pointEnd      = pointSet->GetPoints()->End();
-  while( pointIterator != pointEnd ) 
+  while( pointIterator != pointEnd )
     {
     std::cout << pointIterator.Value() << std::endl;
     ++pointIterator;
@@ -194,7 +194,7 @@ int main(int, char *[])
   //  specific class for representing normals and function gradients. This is
   //  the \doxygen{itk}{CovariantVector} class.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

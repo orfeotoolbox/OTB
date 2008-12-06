@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -40,7 +40,7 @@
 // orthorectify images which are in a distributor format with the
 // appropriate meta-data describing the sensor model. In this example,
 // we will choose to use an UTM projection for the output image.
-// 
+//
 // The first step toward the use of these filters is to include the
 // proper header files: the one for the ortho-rectification filter and
 // the one defining the different projections available in OTB.
@@ -60,7 +60,7 @@ int main( int argc, char* argv[] )
 
   if(argc!=11)
     {
-      std::cout << argv[0] <<" <input_filename> <output_filename>  <utm zone> <hemisphere N/S> <x_ground_upper_left_corner> <y_ground_upper_left_corner> <x_Size> <y_Size> <x_groundSamplingDistance> <y_groundSamplingDistance> (should be negative since origin is upper left)>" 
+      std::cout << argv[0] <<" <input_filename> <output_filename>  <utm zone> <hemisphere N/S> <x_ground_upper_left_corner> <y_ground_upper_left_corner> <x_Size> <y_Size> <x_groundSamplingDistance> <y_groundSamplingDistance> (should be negative since origin is upper left)>"
 	      << std::endl;
 
     return EXIT_FAILURE;
@@ -86,7 +86,7 @@ int main( int argc, char* argv[] )
   typedef otb::ImageFileReader<VectorImageType>  ReaderType;
   typedef otb::StreamingImageFileWriter<VectorImageType>  WriterType;
 
-					
+
   ReaderType::Pointer     	reader=ReaderType::New();
   WriterType::Pointer	    	writer=WriterType::New();
 
@@ -94,7 +94,7 @@ int main( int argc, char* argv[] )
   writer->SetFileName(argv[2]);
 
 
-// Software Guide : EndCodeSnippet	
+// Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
 //
@@ -110,38 +110,38 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet
 
 
-	
+
   typedef otb::UtmInverseProjection utmMapProjectionType ;
   typedef otb::OrthoRectificationFilter<ImageType, ImageType,
                               utmMapProjectionType> OrthoRectifFilterType ;
 
-	
+
   OrthoRectifFilterType::Pointer  orthoRectifFilter =
                                               OrthoRectifFilterType::New();
-  
+
 // Software Guide : EndCodeSnippet
-  
-  
+
+
 // Software Guide : BeginLatex
 //
-// Now we need to 
-// instanciate the map projection, set the {\em zone} and {\em hemisphere} 
+// Now we need to
+// instanciate the map projection, set the {\em zone} and {\em hemisphere}
 // parameters and pass this projection to the orthorectification filter.
 //
 // Software Guide : EndLatex
-  
+
 // Software Guide : BeginCodeSnippet
   utmMapProjectionType::Pointer utmMapProjection =
                                               utmMapProjectionType::New();
   utmMapProjection->SetZone(atoi(argv[3]));
   utmMapProjection->SetHemisphere(*(argv[4]));
   orthoRectifFilter->SetMapProjection(utmMapProjection);
-				
-// Software Guide : EndCodeSnippet	
+
+// Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
-// 
-// Wiring the orthorectification filter into a PerBandImageFilter allows 
+//
+// Wiring the orthorectification filter into a PerBandImageFilter allows
 // to orthrectify images with multiple bands seamlesly.
 //
 // Software Guide : EndLatex
@@ -152,8 +152,8 @@ int main( int argc, char* argv[] )
   PerBandFilterType::Pointer perBandFilter=PerBandFilterType::New();
   perBandFilter->SetFilter(orthoRectifFilter);
   perBandFilter->SetInput(reader->GetOutput());
-  
-// Software Guide : EndCodeSnippet	
+
+// Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
 //
@@ -164,29 +164,29 @@ int main( int argc, char* argv[] )
 
 
 // Software Guide : BeginCodeSnippet
-  
+
   ImageType::IndexType start;
   start[0]=0;
   start[1]=0;
   orthoRectifFilter->SetOutputStartIndex(start);
-				
+
   ImageType::SizeType size;
   size[0]=atoi(argv[7]);
   size[1]=atoi(argv[8]);
   orthoRectifFilter->SetSize(size);
-				
+
   ImageType::SpacingType spacing;
   spacing[0]=atof(argv[9]);
   spacing[1]=atof(argv[10]);
   orthoRectifFilter->SetOutputSpacing(spacing);
-				
+
   ImageType::PointType origin;
   origin[0]=strtod(argv[5], NULL);
   origin[1]=strtod(argv[6], NULL);
   orthoRectifFilter->SetOutputOrigin(origin);
 
 
-// Software Guide : EndCodeSnippet	
+// Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
 //
@@ -198,12 +198,12 @@ int main( int argc, char* argv[] )
 
 
 // Software Guide : BeginCodeSnippet
-  
+
   writer->SetInput(perBandFilter->GetOutput());
-				
+
   writer->SetTilingStreamDivisions();
 
-// Software Guide : EndCodeSnippet	
+// Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
 //
@@ -214,17 +214,17 @@ int main( int argc, char* argv[] )
 // compute the input image regions which are needed to build the
 // output image. Since the resampler applies a geometric
 // transformation (scale, rotation, etc.), this region computation is
-// not trivial. 
+// not trivial.
 //
 // Software Guide : EndLatex
 
 
 // Software Guide : BeginCodeSnippet
-  
+
 
   writer->Update();
 
-// Software Guide : EndCodeSnippet	  
+// Software Guide : EndCodeSnippet
 
 
   return EXIT_SUCCESS;

@@ -2,8 +2,8 @@
  *
  * PURPOSE:
  *
- * Application pour projeter une région d'une image en coordonnées géographiques 
- * en utilisant un Interpolator+regionextractor+Iterator+DEMHandler. 
+ * Application pour projeter une région d'une image en coordonnées géographiques
+ * en utilisant un Interpolator+regionextractor+Iterator+DEMHandler.
  * Prise en compte du MNT
  */
 
@@ -32,13 +32,13 @@ int otbSensorImageDEMToCarto( int argc, char* argv[] )
 {
   if(argc!=11)
     {
-      std::cout << argv[0] <<" <input filename> <output filename> <X origine> <Y origine> <taille_x> <taille_y> <NumberOfstreamDivisions> <srtm directory> " 
+      std::cout << argv[0] <<" <input filename> <output filename> <X origine> <Y origine> <taille_x> <taille_y> <NumberOfstreamDivisions> <srtm directory> "
                 << "<xSpacing> <ySpacing>" << std::endl;
 
       return EXIT_FAILURE;
     }
   typedef itk::Point <double, 2> 		 PointType;
-  PointType				 outputpoint; 
+  PointType				 outputpoint;
 
   /*************************************************/
   /*            Création des diverses images       */
@@ -52,8 +52,8 @@ int otbSensorImageDEMToCarto( int argc, char* argv[] )
 
   ImageType::PixelType			 pixelvalue;
   ImageType::IndexType  			 start;
-  start[0]=0;     
-  start[1]=0;     
+  start[0]=0;
+  start[1]=0;
 
   ImageType::SizeType  			 size;
   size[0]=atoi(argv[5]);      //Taille en X.
@@ -81,7 +81,7 @@ int otbSensorImageDEMToCarto( int argc, char* argv[] )
   /******************************/
   /*  Création de mon handler   */
   /******************************/
-	
+
   ossimKeywordlist geom_kwl;
   typedef otb::ImageGeometryHandler  HandlerType;
   HandlerType::Pointer   handler= HandlerType::New();
@@ -103,7 +103,7 @@ int otbSensorImageDEMToCarto( int argc, char* argv[] )
       return 1;
     }
   otbGenericMsgDebugMacro(<< "InverseSensorModel created " );
-      
+
   ModelType::OutputPointType inputpoint;
 
 
@@ -172,7 +172,7 @@ int otbSensorImageDEMToCarto( int argc, char* argv[] )
   utmprojection->SetZone(31);
   utmprojection->SetHemisphere('N');
 
-  /*************************************************/   
+  /*************************************************/
   /*     Création de RegionIteratorwithIndex       */
   /*************************************************/
 
@@ -202,15 +202,15 @@ int otbSensorImageDEMToCarto( int argc, char* argv[] )
       iteratorRegionSize[0]=atoi(argv[5]);      //Taille en X.
       if (count==NumberOfStreamDivisions-1)
 	{iteratorRegionSize[1]=(atoi(argv[6]))-((int)(((atoi(argv[6]))/NumberOfStreamDivisions)+0.5))*(count);
-	iterationRegionStart[1]=(atoi(argv[5]))-(iteratorRegionSize[1]); 
+	iterationRegionStart[1]=(atoi(argv[5]))-(iteratorRegionSize[1]);
 	}
       else
 	{iteratorRegionSize[1]=(int)(((atoi(argv[6]))/NumberOfStreamDivisions)+0.5);	  //Taille en Y.
-	iterationRegionStart[1]=count*iteratorRegionSize[1]; 
-	}    
-      iterationRegionStart[0]=0;//Début de chaque ligne==>0     
+	iterationRegionStart[1]=count*iteratorRegionSize[1];
+	}
+      iterationRegionStart[0]=0;//Début de chaque ligne==>0
       iteratorRegion.SetSize(iteratorRegionSize);
-      iteratorRegion.SetIndex(iterationRegionStart); 
+      iteratorRegion.SetIndex(iterationRegionStart);
 
       /**Création d'un tableau de pixelindex**/
       unsigned int pixelIndexArrayDimension= iteratorRegionSize[0]*iteratorRegionSize[1]*2;
@@ -230,11 +230,11 @@ int otbSensorImageDEMToCarto( int argc, char* argv[] )
 	  //On le transforme en Point physique
 	  outputimage->TransformIndexToPhysicalPoint(currentindex, outputpoint);
 	  otbMsgDevMacro(<< "Pour l'Index N°:(" << currentindex[0]<< ","<< currentindex[1] << ")"<<  std::endl
-			 << "Le point physique correspondant est: ("<<  outputpoint[0]<< ","<<  outputpoint[1]<< ")"); 
+			 << "Le point physique correspondant est: ("<<  outputpoint[0]<< ","<<  outputpoint[1]<< ")");
 
 	  //On applique la projection:
-	  geoPoint= utmprojection->TransformPoint(outputpoint);	
-	  otbMsgDevMacro(<< "Le point géographique correspondant est: ("<<  geoPoint[0]<< ","<<  geoPoint[1]<< ")"); 
+	  geoPoint= utmprojection->TransformPoint(outputpoint);
+	  otbMsgDevMacro(<< "Le point géographique correspondant est: ("<<  geoPoint[0]<< ","<<  geoPoint[1]<< ")");
 
 	  //On calcule les coordonnées pixeliques sur l'image capteur
 	  inputpoint = model->TransformPoint(geoPoint);
@@ -258,8 +258,8 @@ int otbSensorImageDEMToCarto( int argc, char* argv[] )
 	  currentIndexArray[It+1]=currentindex[1];
 	  otbMsgDevMacro(<< "La valeur stockée" << std::endl
 			 << pixelIndexArray[It] <<  "," << pixelIndexArray[It+1] <<std::endl);
- 
- 
+
+
 	  It=It+2;
 	  It1=It1+1;
 	}//Fin boucle: on a stocké tous les index qui nous interesse
@@ -269,7 +269,7 @@ int otbSensorImageDEMToCarto( int argc, char* argv[] )
       min_x=pixelIndexArray[0];
       max_y=pixelIndexArray[1];
       min_y=pixelIndexArray[1];
- 
+
       for (j=0;j<It;j++)
  	{
 	  if(j%2==0 && pixelIndexArray[j]>max_x){max_x=pixelIndexArray[j];}
@@ -277,7 +277,7 @@ int otbSensorImageDEMToCarto( int argc, char* argv[] )
 	  if(j%2!=0 && pixelIndexArray[j]>max_y){max_y=pixelIndexArray[j];}
 	  if(j%2!=0 && pixelIndexArray[j]<min_y){min_y=pixelIndexArray[j];}
  	}//Fin while
-	
+
       otbMsgDevMacro(<< "max_x=" << max_x<< std::endl
 		     << "max_y=" << max_y<< std::endl
 		     << "min_x=" << min_x<< std::endl
@@ -290,15 +290,15 @@ int otbSensorImageDEMToCarto( int argc, char* argv[] )
 
       if (min_x<10 && min_y<10)
 	{
-	  extractstart[0]=0;     
+	  extractstart[0]=0;
 	  extractstart[1]=0;
 	}
 
       else
 	{
-	  extractstart[0]=min_x-10;     
-	  extractstart[1]=min_y-10; 
-	} 
+	  extractstart[0]=min_x-10;
+	  extractstart[1]=min_y-10;
+	}
 
       InputImageType::SizeType  		    extractsize;
 
@@ -325,15 +325,15 @@ int otbSensorImageDEMToCarto( int argc, char* argv[] )
 	      pixelvalue=int (interpolator->EvaluateAtIndex(pixelindexbis));
 	    }
 	  else {pixelvalue=0;}
-		
+
 	  otbMsgDevMacro(<< "La valeur du pixel est:"<< float(pixelvalue) );
-	   
+
 	  outputimage->SetPixel(currentindexbis,pixelvalue);
 
  	}
       delete pixelIndexArray;
       otbMsgDevMacro(<< "pixelIndexArray deleted" );
-      delete currentIndexArray; 
+      delete currentIndexArray;
       otbMsgDevMacro(<< "currentIndexArray deleted" );
     }//Fin boucle principale
 
@@ -346,7 +346,7 @@ int otbSensorImageDEMToCarto( int argc, char* argv[] )
   writer->Update();
   otbGenericMsgDebugMacro(<< "Outputimage created" );
 
- 
+
   return EXIT_SUCCESS;
 
 

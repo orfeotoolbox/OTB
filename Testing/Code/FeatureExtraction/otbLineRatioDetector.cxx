@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -38,7 +38,7 @@ int otbLineRatioDetector( int argc, char* argv[] )
   unsigned int  WidthLine((unsigned int)::atoi(argv[3]));
   // Longueur de la ligne a detecter = 2*LengthLine+1
   unsigned int  LengthLine((unsigned int)::atoi(argv[4]));
-        
+
   typedef unsigned char                                   InputPixelType;
   typedef double		   	                        OutputPixelType;
   const   unsigned int        	                        Dimension = 2;
@@ -50,24 +50,24 @@ int otbLineRatioDetector( int argc, char* argv[] )
   typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
   typedef otb::LineRatioDetectorImageFilter< InputImageType, OutputImageType >   FilterType;
-	
+
   FilterType::Pointer FilterLineRatio = FilterType::New();
-        
+
   FilterLineRatio->SetWidthLine( WidthLine );
   FilterLineRatio->SetLengthLine( LengthLine );
-	
+
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
   reader->SetFileName( inputFilename  );
   writer->SetFileName( outputFilename );
-        
+
   FilterLineRatio->SetInput( reader->GetOutput() );
   writer->SetInput( FilterLineRatio->GetOutput() );
-        
+
   writer->Update();
 
-  
+
   return EXIT_SUCCESS;
 }
 

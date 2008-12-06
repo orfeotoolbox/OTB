@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -50,7 +50,7 @@ int otbMorphologicalPyramidAnalysisFilter(int argc, char * argv[])
   typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,OutputImageType,OpeningClosingFilterType>
     PyramidFilterType;
   typedef PyramidFilterType::OutputImageListType::Iterator ImageListIterator;
-      
+
   // Reading input image
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFilename);
@@ -85,7 +85,7 @@ int otbMorphologicalPyramidAnalysisFilter(int argc, char * argv[])
     {
       oss<<outputFilenamePrefix<<"_an_"<<i<<"."<<outputFilenameSuffix;
       writer->SetInput(itAnalyse.Get());
-      writer->SetFileName(oss.str().c_str());	  
+      writer->SetFileName(oss.str().c_str());
       writer->Update();
       oss.str("");
       oss<<outputFilenamePrefix<<"_sf_"<<i<<"."<<outputFilenameSuffix;

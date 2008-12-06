@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -42,7 +42,7 @@ int otbStreamingImageFileWriterTestCalculateNumberOfDivisions (int argc, char* a
   typedef otb::Image< PixelType,  Dimension >        		ImageType;
   typedef otb::ImageFileReader< ImageType  >              ReaderType;
   typedef otb::StreamingImageFileWriter< ImageType>       StreamingWriterType;
-        
+
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( inputFilename  );
 
@@ -75,17 +75,17 @@ int otbStreamingImageFileWriterTestCalculateNumberOfDivisions (int argc, char* a
     {
       std::cout << "Number : " << ::atoi(argv[4]) << std::endl;
       writer->SetTilingStreamDivisions(::atoi(argv[4]));
-    } 
+    }
   else if( MethodCalculateNumberOfStreamDivision == "DEFAULT" )
     {
-        
+
     }
   else
     {
       itkGenericExceptionMacro(<<"Parameter value not authorized !!!");
     }
-  writer->Update(); 
+  writer->Update();
 
-          
+
   return EXIT_SUCCESS;
 }

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -51,7 +51,7 @@ int otbMRFSamplerMAP(int argc, char * argv[])
   EnergyFidelityType::Pointer       energyFidelity       = EnergyFidelityType::New();
   ReaderInputType::Pointer          readerIn             = ReaderInputType::New();
   ReaderLabelType::Pointer          readerLab            = ReaderLabelType::New();
- 
+
   object->SetEnergyFidelity(energyFidelity);
   object->SetEnergyRegularization(energyRegularization);
 
@@ -62,16 +62,16 @@ int otbMRFSamplerMAP(int argc, char * argv[])
 
   ImageType::IndexType idIn;
   LabelType::IndexType idLab;
-  idIn[0] = 50; 
+  idIn[0] = 50;
   idIn[1] = 50;
-  idLab[0] = 70; 
+  idLab[0] = 70;
   idLab[1] = 70;
   ImageType::PixelType inPix = readerIn->GetOutput()->GetPixel( idIn );
   LabelType::PixelType inLab = readerLab->GetOutput()->GetPixel( idLab );
 
   InputNeighborhoodIterator::RadiusType    radIn;
   LabelledNeighborhoodIterator::RadiusType radLab;
-  radIn.Fill(3);  
+  radIn.Fill(3);
   radLab.Fill(3);
 
   InputNeighborhoodIterator    iterIn  = InputNeighborhoodIterator( radIn, readerIn->GetOutput(), readerIn->GetOutput()->GetLargestPossibleRegion());
@@ -88,7 +88,7 @@ int otbMRFSamplerMAP(int argc, char * argv[])
   file<<"m_EnergyAfter : "<<object->GetEnergyAfter()<<std::endl;
   file<<"m_Value       : "<<object->GetValue()<<std::endl;
   file<<"m_DeltaEnergy : "<<object->GetDeltaEnergy()<<std::endl;
-  
+
 
   file.close();
 

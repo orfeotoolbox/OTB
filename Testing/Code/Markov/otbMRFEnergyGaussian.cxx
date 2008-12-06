@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,7 +33,7 @@ int otbMRFEnergyGaussian(int argc, char * argv[])
   typedef otb::MRFEnergyGaussian< ImageType, LabelType> MRFEnergyGaussianType;
   typedef MRFEnergyGaussianType::InputImagePixelType    InputImagePixelType;
   typedef MRFEnergyGaussianType::LabelledImagePixelType LabelledImagePixelType;
- 
+
   MRFEnergyGaussianType::Pointer object    = MRFEnergyGaussianType::New();
 
   InputImagePixelType    inPix = 10;
@@ -57,8 +57,8 @@ int otbMRFEnergyGaussian(int argc, char * argv[])
     {
       return EXIT_FAILURE;
     }
-  
-  
+
+
   return EXIT_SUCCESS;
 }
 

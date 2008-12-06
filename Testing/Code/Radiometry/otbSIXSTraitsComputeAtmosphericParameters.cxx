@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -36,25 +36,25 @@ int otbSIXSTraitsComputeAtmosphericParametersTest(int argc, char * argv[])
   typedef otb::FilterFunctionValues FilterFunctionValuesType;
   FilterFunctionValuesType::Pointer functionValues = FilterFunctionValuesType::New();
   FilterFunctionValuesType::ValuesVectorType vect;
-        
 
-  double SolarZenithalAngle(0.);    
-  double SolarAzimutalAngle(0.);    
-  double ViewingZenithalAngle(0.);  
-  double ViewingAzimutalAngle(0.);  
-  unsigned int Month(0);                 
-  unsigned int Day(0);                   
-  double AtmosphericPressure(0.);   
-  double WaterVaporAmount(0.);      
+
+  double SolarZenithalAngle(0.);
+  double SolarAzimutalAngle(0.);
+  double ViewingZenithalAngle(0.);
+  double ViewingAzimutalAngle(0.);
+  unsigned int Month(0);
+  unsigned int Day(0);
+  double AtmosphericPressure(0.);
+  double WaterVaporAmount(0.);
   double OzoneAmount(0.);
   typedef AtmosphericCorrectionParametersType::AerosolModelType AerosolModelType;
-                   
+
   AerosolModelType AerosolModel;
-  double AerosolOptical(0.);        
-  double AtmosphericReflectance(0.);      
-  double AtmosphericSphericalAlbedo(0.);   
-  double TotalGaseousTransmission(0.);     
-  double DownwardTransmittance(0.);       
+  double AerosolOptical(0.);
+  double AtmosphericReflectance(0.);
+  double AtmosphericSphericalAlbedo(0.);
+  double TotalGaseousTransmission(0.);
+  double DownwardTransmittance(0.);
   double UpwardTransmittance(0.);
   double UpwardDiffuseTransmittance(0.);
   double UpwardDirectTransmittance(0.);
@@ -63,7 +63,7 @@ int otbSIXSTraitsComputeAtmosphericParametersTest(int argc, char * argv[])
 
   std::ifstream fin;
   std::ofstream fout;
-        
+
   //Read input file parameters
   fin.open(inname);
   fin >> SolarZenithalAngle;//asol;
@@ -80,14 +80,14 @@ int otbSIXSTraitsComputeAtmosphericParametersTest(int argc, char * argv[])
   fin >> aer;//iaer;
   AerosolModel = static_cast<AerosolModelType>(aer);
   fin >> AerosolOptical;//taer55;
-        
+
   float MinSpectralValue(0.);
   float MaxSpectralValue(0.);
   float value(0.);
 
   fin >> MinSpectralValue;//wlinf;
   fin >> MaxSpectralValue;//wlsup;
-        
+
   while (!fin.eof() && fin.good())
     {
       fin >> value;
@@ -101,22 +101,22 @@ int otbSIXSTraitsComputeAtmosphericParametersTest(int argc, char * argv[])
   functionValues->SetUserStep(.0025);
 
   otb::SIXSTraits::ComputeAtmosphericParameters(
-						SolarZenithalAngle,   
-						SolarAzimutalAngle,   
-						ViewingZenithalAngle, 
-						ViewingAzimutalAngle, 
-						Month,                
-						Day,                  
-						AtmosphericPressure,  
-						WaterVaporAmount,     
-						OzoneAmount,          
-						AerosolModel,         
-						AerosolOptical,       
-						functionValues, 
-						AtmosphericReflectance,        
-						AtmosphericSphericalAlbedo,    
-						TotalGaseousTransmission,      
-						DownwardTransmittance,         
+						SolarZenithalAngle,
+						SolarAzimutalAngle,
+						ViewingZenithalAngle,
+						ViewingAzimutalAngle,
+						Month,
+						Day,
+						AtmosphericPressure,
+						WaterVaporAmount,
+						OzoneAmount,
+						AerosolModel,
+						AerosolOptical,
+						functionValues,
+						AtmosphericReflectance,
+						AtmosphericSphericalAlbedo,
+						TotalGaseousTransmission,
+						DownwardTransmittance,
 						UpwardTransmittance,
 						UpwardDiffuseTransmittance,
 						UpwardDirectTransmittance,

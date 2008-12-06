@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,8 +28,8 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROISpot5.png}
-//    OUTPUTS: {ThresholdImageFilterOutputBelow.png} 
-//    OUTPUTS: {ThresholdImageFilterOutputAbove.png} 
+//    OUTPUTS: {ThresholdImageFilterOutputBelow.png}
+//    OUTPUTS: {ThresholdImageFilterOutputAbove.png}
 //    OUTPUTS: {ThresholdImageFilterOutputOutside.png}
 //  Software Guide : EndCommandLineArgs
 
@@ -64,7 +64,7 @@
 //
 // This example illustrates the use of the \doxygen{itk}{ThresholdImageFilter}.
 // This filter can be used to transform the intensity levels of an image in
-// three different ways. 
+// three different ways.
 //
 // \begin{itemize}
 //
@@ -101,9 +101,9 @@
 // \index{itk::ThresholdImageFilter!ThresholdBelow()}
 // \index{itk::ThresholdImageFilter!ThresholdOutside()}
 //
-// The first step required to use this filter is to include its header file. 
+// The first step required to use this filter is to include its header file.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "itkThresholdImageFilter.h"
@@ -119,10 +119,10 @@ int main( int argc, char * argv[] )
   if( argc < 5 )
     {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
-    std::cerr << " outputImageFile1 outputImageFile2 outputImageFile3" << std::endl;  
+    std::cerr << " outputImageFile1 outputImageFile2 outputImageFile3" << std::endl;
     return EXIT_FAILURE;
     }
-  
+
   //  Software Guide : BeginLatex
   //
   //  Then we must decide what pixel type to use for the image. This filter is
@@ -130,7 +130,7 @@ int main( int argc, char * argv[] )
   //  pixel values outside the specified range, passing the rest through
   //  unchanged.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef  unsigned char  PixelType;
@@ -140,7 +140,7 @@ int main( int argc, char * argv[] )
   //
   //  The image is defined using the pixel type and the dimension.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::Image< PixelType,  2 >   ImageType;
@@ -151,7 +151,7 @@ int main( int argc, char * argv[] )
   //
   //  The filter can be instantiated using the image type defined above.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef itk::ThresholdImageFilter< ImageType >  FilterType;
@@ -161,20 +161,20 @@ int main( int argc, char * argv[] )
   //  Software Guide : BeginLatex
   //
   //  An \doxygen{otb}{ImageFileReader} class is also instantiated in order to read
-  //  image data from a file. 
+  //  image data from a file.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader< ImageType >  ReaderType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
-  //  
+  //
   // An \doxygen{otb}{ImageFileWriter} is instantiated in order to write the
   // output image to a file.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileWriter< ImageType >  WriterType;
@@ -187,7 +187,7 @@ int main( int argc, char * argv[] )
   //  Both the filter and the reader are created by invoking their \code{New()}
   //  methods and assigning the result to SmartPointers.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   ReaderType::Pointer reader = ReaderType::New();
@@ -200,14 +200,14 @@ int main( int argc, char * argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The image obtained with the reader is passed as input to the
   //  \doxygen{itk}{ThresholdImageFilter}.
   //
   //  \index{itk::ThresholdImageFilter!SetInput()}
   //  \index{itk::FileImageReader!GetOutput()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   filter->SetInput( reader->GetOutput() );
@@ -215,15 +215,15 @@ int main( int argc, char * argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The method \code{SetOutsideValue()} defines the intensity value to be
   //  assigned to those pixels whose intensities are outside the range defined
-  //  by the lower and upper thresholds. 
-  //  
+  //  by the lower and upper thresholds.
+  //
   //  \index{itk::ThresholdImageFilter!SetOutsideValue()}
   //  \index{SetOutsideValue()!itk::ThresholdImageFilter}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   filter->SetOutsideValue( 0 );
@@ -231,25 +231,25 @@ int main( int argc, char * argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The method \code{ThresholdBelow()} defines the intensity value below
   //  which pixels of the input image will be changed to the \code{OutsideValue}.
-  //  
+  //
   //  \index{itk::ThresholdImageFilter!ThresholdBelow()}
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   filter->ThresholdBelow( 40 );
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The filter is executed by invoking the \code{Update()} method. If the
   //  filter is part of a larger image processing pipeline, calling
   //  \code{Update()} on a downstream filter will also trigger update of this
   //  filter.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   filter->Update();
@@ -261,13 +261,13 @@ int main( int argc, char * argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The output of this example is shown in
   //  Figure~\ref{fig:ThresholdTransferFunctionBelow}.  The second operating mode of
   //  the filter is now enabled by calling the method
   //  \code{ThresholdAbove()}.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   filter->ThresholdAbove( 100 );
@@ -280,12 +280,12 @@ int main( int argc, char * argv[] )
   writer->Update();
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  Updating the filter with this new setting produces the output shown in
   //  Figure~\ref{fig:ThresholdTransferFunctionAbove}.  The third operating
   //  mode of the filter is enabled by calling \code{ThresholdOutside()}.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   filter->ThresholdOutside( 40,100 );
@@ -299,11 +299,11 @@ int main( int argc, char * argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The output of this third, ``band-pass'' thresholding mode is shown in
   //  Figure~\ref{fig:ThresholdTransferFunctionOutside}.
   //
-  //  The examples in this 
+  //  The examples in this
   //  section also illustrate the limitations of the thresholding filter for performing
   //  segmentation by itself. These limitations are particularly noticeable
   //  in noisy images and in images lacking spatial uniformity.
@@ -313,7 +313,7 @@ int main( int argc, char * argv[] )
   //  \item \doxygen{itk}{BinaryThresholdImageFilter}
   //  \end{itemize}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
   return EXIT_SUCCESS;

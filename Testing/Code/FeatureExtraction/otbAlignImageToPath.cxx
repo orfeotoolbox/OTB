@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -44,7 +44,7 @@ int otbAlignImageToPath( int argc, char * argv[] )
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
-       
+
 
   typedef double                                   	InputPixelType;
   typedef double   	                        	OutputPixelType;
@@ -55,13 +55,13 @@ int otbAlignImageToPath( int argc, char * argv[] )
   typedef itk::Image< RealPixelType,  Dimension >		RealImageType;
 
   typedef itk::PolyLineParametricPath< Dimension >	PathType;
-	
+
   typedef PathType::Pointer PathTypePointer;
   PathType::Pointer ltoto = PathType::New();
 
   typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
 
-  typedef otb::ImageFileReader< InputImageType  >         ReaderType;  
+  typedef otb::ImageFileReader< InputImageType  >         ReaderType;
 
   typedef otb::ImageToPathListAlignFilter<InputImageType,PathType> ListAlignFilterType;
   typedef itk::ImageFileWriter< OutputImageType >         WriterType;
@@ -69,37 +69,37 @@ int otbAlignImageToPath( int argc, char * argv[] )
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
   InputImageType::Pointer ImageIn = InputImageType::New();
-	
+
   typedef otb::ImageToPathListAlignFilter<InputImageType,PathType>  TestType;
   TestType::Pointer testList = TestType::New();
-	
+
   reader->SetFileName( inputFilename  );
 
   //OTB-FA-00010-CS
   testList->SetInput( reader->GetOutput() );
-	
+
   typedef ListAlignFilterType::OutputPathListType   ListAlignFilterOutputPathListType;
-	
-	
+
+
   otbGenericMsgDebugMacro(<< "Before update");
-  testList->Update(); 
+  testList->Update();
   otbGenericMsgDebugMacro(<< "After update");
   ListAlignFilterOutputPathListType * sortiePath = testList->GetOutput();
-	
+
   otbGenericMsgDebugMacro(<< "Writing :");
-	
+
   FILE *file = fopen(outputFilename,"w");
   if (file == NULL) {
     fprintf(stderr,"Error, can't open file");
     exit(-1);
   }
-  typedef itk::ContinuousIndex< double,2>              VertexType; 
+  typedef itk::ContinuousIndex< double,2>              VertexType;
   typedef itk::VectorContainer< unsigned,VertexType >  VertexListType;
   typedef VertexListType::ConstPointer                 VertexListTypePointer;
   VertexListTypePointer vertexList;
   VertexType cindex;
   double x1,y1,x2,y2;
-	  
+
   int nbPath = sortiePath->Size();
   otbGenericMsgDebugMacro(<< "NbSegment: "<<nbPath);
   fprintf(file,"Nb Segment: %d\n",nbPath);
@@ -114,8 +114,8 @@ int otbAlignImageToPath( int argc, char * argv[] )
     fprintf(file,"%8.3f %8.3f\n",x1,y1);
   }
   fclose(file);
-        
-  //        writer->Update(); 
+
+  //        writer->Update();
 
 
   return EXIT_SUCCESS;

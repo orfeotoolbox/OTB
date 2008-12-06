@@ -1,13 +1,13 @@
 /*!
  *
  * OVERVIEW:
- * 
+ *
  * Will reproject the input image to a utm projection.
- * 
+ *
  * PURPOSE:
  *
  * Teach you how to create a renderer and set the view and connect it up to an input
- * 
+ *
  */
 
 // iostream is used for general output
@@ -54,7 +54,7 @@ ossimProjection* newUtmView(const ossimGpt& centerGround,
 
 int ossimIntegrationTest(int argc, char* argv[])
 {
-  try 
+  try
     {
 
    ossimInit::instance()->initialize(argc, argv);
@@ -129,7 +129,7 @@ int ossimIntegrationTest(int argc, char* argv[])
 
       // connect the renderer to the handler
       renderer->connectMyInputTo(handler);
-      
+
       // specify the output file name
       writer->setFilename(ossimFilename(argv[3]));
 
@@ -144,19 +144,19 @@ int ossimIntegrationTest(int argc, char* argv[])
    }
 
     }
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-    std::cout << err << std::endl; 
+  catch( itk::ExceptionObject & err )
+    {
+    std::cout << "Exception itk::ExceptionObject levee !" << std::endl;
+    std::cout << err << std::endl;
     return EXIT_FAILURE;
-    } 
-  catch (...) 
+    }
+  catch (...)
     {
     std::cerr << "Unknowed exception thrown" << std::endl;
     return EXIT_FAILURE;
     }
 
-  return EXIT_SUCCESS; 
+  return EXIT_SUCCESS;
 }
 
 
@@ -170,7 +170,7 @@ void usage()
 void printOutputTypes()
 {
     std::vector<ossimString> outputType;
-   
+
     ossimImageWriterFactoryRegistry::instance()->getImageTypeList(outputType);
     std::copy(outputType.begin(),
               outputType.end(),
@@ -187,6 +187,6 @@ ossimProjection* newUtmView(const ossimGpt& centerGround,
    utm->setZone(centerGround);
    utm->setMetersPerPixel(ossimDpt(metersPerPixel));
 
-   
+
    return utm;
 }

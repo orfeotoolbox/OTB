@@ -39,8 +39,8 @@ REGISTER_TEST(galibTests22);
  DESCRIPTION:
    This example shows how to derive your own genetic algorithm class.  This one
 does a modified form of speciation that is useful for fitness-scaled speciation
-with overlapping populations (Goldberg's speciation is designed for use with 
-non-overlapping populations.  
+with overlapping populations (Goldberg's speciation is designed for use with
+non-overlapping populations.
    The steady-state genetic algorithm built-in to GAlib is actually capable of
 doing this already, but this example illustrates how you can modify a genetic
 algorithm to do your own thing.  For example, instead of using the "single
@@ -89,7 +89,7 @@ int   Crossover(const GAGenome&, const GAGenome&, GAGenome*);
 
 // Here we define our own genetic algorithm class.  This class is almost the
 // same as the steady-state genetic algorithm, but we modify the step method
-// (the one that does all the work) so that we do a slightly modified 
+// (the one that does all the work) so that we do a slightly modified
 // replacement.  We're only going to do a two-parents-make-one-child mating,
 // so we define our own crossover and use it rather than the standard one in
 // GAlib.
@@ -111,23 +111,23 @@ protected:
 // This step method is similar to that of the regular steady-state genetic
 // algorithm, but here we generate only one child in a crossover, and we
 // do a slightly different type of replacement.  Here we generate the new
-// individuals, insert them into the population, force a scaling to occur, 
+// individuals, insert them into the population, force a scaling to occur,
 // then remove the worst individuals.  This is all done based on the scaled
 // (fitness) scores, not the raw (objective) scores.
 
 void
 SharedOverlapGA::step()
-{ 
+{
   int i;
   GAGenome *mom, *dad;
 
   for(i=0; i<tmpPop->size(); i++){	// takes care of odd population
-    mom = &(pop->select());  
+    mom = &(pop->select());
     dad = &(pop->select());
     stats.numsel += 2;		// keep track of number of selections
     if(GAFlipCoin(pCrossover()))
       stats.numcro += crossFunction(*mom, *dad, &tmpPop->individual(i));
-    else if(GARandomBit()) 
+    else if(GARandomBit())
       tmpPop->individual(i).copy(*mom);
     else
       tmpPop->individual(i).copy(*dad);
@@ -254,7 +254,7 @@ galibTests22(int argc, char * argv[])
 
   return 0;
 }
- 
+
 
 
 
@@ -262,7 +262,7 @@ galibTests22(int argc, char * argv[])
 
 // Here are two different objective functions.  Function 1 has multiple peaks
 // with significant difference between peak heights - it is a modulated
-// sinusoid.  Function 2 has less difference between peaks - it is an 
+// sinusoid.  Function 2 has less difference between peaks - it is an
 // approximation of a square plateau using a sum of sinusoids.
 float
 Objective1(GAGenome& g)
@@ -300,7 +300,7 @@ Mutator(GAGenome& g, float pmut)
   GA1DArrayGenome<float>& genome = (GA1DArrayGenome<float>&)g;
   int nmut = 0;
   if(GAFlipCoin(pmut)){
-    genome.gene(0, genome.gene(0) + 
+    genome.gene(0, genome.gene(0) +
 		GARandomFloat() * (GARandomFloat() - GARandomFloat()));
     nmut = 1;
   }
@@ -324,14 +324,14 @@ Crossover(const GAGenome& g1, const GAGenome& g2, GAGenome* c1)
 }
 
 
-// You can change the factor to control how tightly the distance function 
-// considers the spacing of two genomes.  Higher numbers will give you a 
+// You can change the factor to control how tightly the distance function
+// considers the spacing of two genomes.  Higher numbers will give you a
 // tighter clustering at function peaks.
 
 #define FACTOR 800
 
 float
-Comparator(const GAGenome& g1, const GAGenome& g2) 
+Comparator(const GAGenome& g1, const GAGenome& g2)
 {
   GA1DArrayGenome<float>& a = (GA1DArrayGenome<float>&)g1;
   GA1DArrayGenome<float>& b = (GA1DArrayGenome<float>&)g2;

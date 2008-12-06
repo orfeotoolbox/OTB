@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,15 +30,15 @@ int generic_MultiChannelRAndNIRVegetationIndexImageFilter(int argc, char * argv[
 {
   typedef otb::ImageFileReader<TInputImage> ReaderType;
   typedef otb::ImageFileWriter<TOutputImage> WriterType;
-  
-  typedef otb::MultiChannelRAndNIRVegetationIndexImageFilter<TInputImage,TOutputImage,TFunction> 
+
+  typedef otb::MultiChannelRAndNIRVegetationIndexImageFilter<TInputImage,TOutputImage,TFunction>
     MultiChannelRAndNIRVegetationIndexImageFilterType;
-  
+
   // Instantiating object
   typename MultiChannelRAndNIRVegetationIndexImageFilterType::Pointer filter = MultiChannelRAndNIRVegetationIndexImageFilterType::New();
   typename ReaderType::Pointer reader = ReaderType::New();
   typename WriterType::Pointer writer = WriterType::New();
-  
+
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
   unsigned int redChannel(::atoi(argv[3]));
@@ -47,7 +47,7 @@ int generic_MultiChannelRAndNIRVegetationIndexImageFilter(int argc, char * argv[
   writer->SetFileName( outputFilename  );
   filter->SetRedIndex(redChannel);
   filter->SetNIRIndex(nirChannel);
-  filter->SetInput( reader->GetOutput() ); 
+  filter->SetInput( reader->GetOutput() );
   writer->SetInput( filter->GetOutput() );
   writer->Update();
 
@@ -59,7 +59,7 @@ int otbMultiChannelRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
   const unsigned int Dimension = 2;
   typedef otb::VectorImage<unsigned char ,Dimension> InputImageType;
   typedef otb::Image<float,Dimension> OutputImageType;
-        
+
   std::string strArgv(argv[1]);
   argc--;
   argv++;

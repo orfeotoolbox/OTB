@@ -76,12 +76,12 @@ galibTests3(int argc, char *argv[])
       GARandomSeed((unsigned int)atoi(argv[ii]));
     }
   }
-  
+
 //   Set the default values of the parameters and declare the params variable.
 // We use the genetic algorithm's configure member to set up the parameter list
 // so that it will parse for the appropriate arguments.  Notice that the
-// params argument 'removes' from the argv list any arguments that it 
-// recognized (actually it just re-orders them and changes the value of argc). 
+// params argument 'removes' from the argv list any arguments that it
+// recognized (actually it just re-orders them and changes the value of argc).
 //   Once the GA's parameters are registered, we set some values that we want
 // that are different than the GAlib defaults.  Then we parse the command line.
 
@@ -178,12 +178,12 @@ galibTests3(int argc, char *argv[])
 
   return 0;
 }
- 
+
 
 
 
 // For the objective function we compare the contents of the genome with the
-// target.  If a bit is set in the genome and it is also set in the target, 
+// target.  If a bit is set in the genome and it is also set in the target,
 // then we add 1 to the score.  If the bits do not match, we don't do anything.
 float
 objective(GAGenome & c)

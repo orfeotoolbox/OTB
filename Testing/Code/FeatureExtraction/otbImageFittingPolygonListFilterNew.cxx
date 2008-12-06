@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,9 +27,9 @@ int otbImageFittingPolygonListFilterNew(int argc, char * argv[])
   const unsigned int Dimension =2;
   typedef otb::Polygon<double>           PolygonType;
   typedef otb::Image<double,Dimension>   ImageType;
-  
+
   typedef otb::ImageFittingPolygonListFilter<PolygonType,ImageType> FittingPolygonType;
-  
+
     // Instantiating object
   FittingPolygonType::Pointer fittingPolygon = FittingPolygonType::New();
 

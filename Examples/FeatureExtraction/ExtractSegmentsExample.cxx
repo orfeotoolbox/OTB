@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,9 +34,9 @@
 //
 // This example illustrates the use of the \doxygen{otb}{ExtractSegmentsImageFilter}.
 //
-// The first step required to use this filter is to include its header file. 
+// The first step required to use this filter is to include its header file.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "otbExtractSegmentsImageFilter.h"
@@ -58,21 +58,21 @@ int main( int argc, char * argv[] )
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " outputSegmentsImageFile length width ";
     std::cerr << " PixelSuppressionRadiusX PixelSuppressionAngularBeam ";
-	
+
     std::cerr << " LocalHoughRadiusX LocalHoughRadiusY LocalHoughNumberOfLines";
     std::cerr << " FillGapsRadius FillGapsAngularBeam" << std::endl;
-    
+
     return EXIT_FAILURE;
     }
 
-  
+
   //  Software Guide : BeginLatex
   //
   //  Then we must decide what pixel type to use for the image. We
   //  choose to make all computations with floating point precision
   //  and rescale the results between 0 and 255 in order to export PNG images.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef  float  InternalPixelType;
@@ -83,7 +83,7 @@ int main( int argc, char * argv[] )
   //
   //  The images are defined using the pixel type and the dimension.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::Image< InternalPixelType,  2 >   InternalImageType;
@@ -95,7 +95,7 @@ int main( int argc, char * argv[] )
   //
   //  The filter can be instantiated using the image types defined above.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::LineRatioDetectorImageFilter< InternalImageType, InternalImageType >  DetectorType;
@@ -106,36 +106,36 @@ int main( int argc, char * argv[] )
   //  Software Guide : BeginLatex
   //
   //  An \doxygen{ImageFileReader} class is also instantiated in order to read
-  //  image data from a file. 
+  //  image data from a file.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader< InternalImageType >  ReaderType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
-  //  
+  //
   // An \doxygen{ImageFileWriter} is instantiated in order to write the
   // output image to a file.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileWriter< OutputImageType >  WriterType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
-  //  
+  //
   // The intensity rescaling of the results will be carried out by the
   // \code{itk::RescaleIntensityImageFilter} which is templated by the
   // input and output image types.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef itk::RescaleIntensityImageFilter< InternalImageType,
-                                            OutputImageType > RescalerType; 
+                                            OutputImageType > RescalerType;
 
   // Software Guide : EndCodeSnippet
 
@@ -145,7 +145,7 @@ int main( int argc, char * argv[] )
   //  Both the filter and the reader are created by invoking their \code{New()}
   //  methods and assigning the result to SmartPointers.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   ReaderType::Pointer reader = ReaderType::New();
@@ -156,15 +156,15 @@ int main( int argc, char * argv[] )
   //  Software Guide : BeginLatex
   //
   //  The same is done for the rescaler and the writer.
-  //  
-  //  Software Guide : EndLatex 
+  //
+  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet  
+  // Software Guide : BeginCodeSnippet
   RescalerType::Pointer rescaler = RescalerType::New();
   WriterType::Pointer writer = WriterType::New();
   // Software Guide : EndCodeSnippet
 
-  
+
   reader->SetFileName( argv[1] );
 
   //  Software Guide : BeginLatex
@@ -174,23 +174,23 @@ int main( int argc, char * argv[] )
   //  image. Those can be chosen in a generic way by using the
   //  \code{NumericTraits} functions, since they are templated over
   //  the pixel type.
-  //  
-  //  Software Guide : EndLatex 
+  //
+  //  Software Guide : EndLatex
 
 
-  // Software Guide : BeginCodeSnippet  
+  // Software Guide : BeginCodeSnippet
   rescaler->SetOutputMinimum( itk::NumericTraits< OutputPixelType >::min());
   rescaler->SetOutputMaximum( itk::NumericTraits< OutputPixelType >::max());
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The image obtained with the reader is passed as input to the
   //  \doxygen{otb}{ExtractSegmentsImageFilter}. The pipeline is built as follows.
   //
   //  \index{otb::ExtractSegmentsImageFilter!SetInput()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   detector->SetInput( reader->GetOutput() );
@@ -205,27 +205,27 @@ int main( int argc, char * argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The methods \code{SetLengthLine()} and \code{SetWidthLine()}
   //  allow to set the minimum length and the typical witdh of the
   //  lines which are to be detected.
   //
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
 
   detector->SetLengthLine( atoi(argv[3]) );
   detector->SetWidthLine( atoi(argv[4]) );
 
-  
+
   unsigned int  PixelSuppressionRadiusX((unsigned int)::atoi(argv[5]));
   float	      PixelSuppressionAngularBeam((float)::atof(argv[6]));
-  
+
   unsigned int  LocalHoughRadiusX((unsigned int)::atoi(argv[7]));
   unsigned int  LocalHoughRadiusY((unsigned int)::atoi(argv[8]));
   unsigned int  LocalHoughNumberOfLines((unsigned int)::atoi(argv[9]));
-  
+
   float  FillGapsRadius((float)::atoi(argv[10]));
   float  FillGapsAngularBeam((float)::atof(argv[11]));
 
@@ -233,34 +233,34 @@ int main( int argc, char * argv[] )
   ExtractorType::SizeType PixelSuppressionRadius;
   PixelSuppressionRadius[0] = PixelSuppressionRadiusX;
   PixelSuppressionRadius[1] = PixelSuppressionRadiusX;
-  
-  extractor->SetPixelSuppressionRadius( PixelSuppressionRadius );	
+
+  extractor->SetPixelSuppressionRadius( PixelSuppressionRadius );
   extractor->SetPixelSuppressionAngularBeam( PixelSuppressionAngularBeam );
-  
+
   ExtractorType::SizeType LocalHoughRadius;
   LocalHoughRadius[0] = LocalHoughRadiusX;
   LocalHoughRadius[1] = LocalHoughRadiusY;
-  
-  extractor->SetLocalHoughRadius( LocalHoughRadius );	
-  extractor->SetLocalHoughNumberOfLines( LocalHoughNumberOfLines );	
-  
-  extractor->SetFillGapsRadius( FillGapsRadius );	
+
+  extractor->SetLocalHoughRadius( LocalHoughRadius );
+  extractor->SetLocalHoughNumberOfLines( LocalHoughNumberOfLines );
+
+  extractor->SetFillGapsRadius( FillGapsRadius );
   extractor->SetFillGapsAngularBeam( FillGapsAngularBeam );
-  
+
   // Software Guide : EndCodeSnippet
 
 
   //  Software Guide : BeginLatex
   // \textbf{FIXME: set the methods}
   //   \index{otb::AssymetricFusionOfDetector!SetWidthLine()}
-  //  \index{otb::AssymetricFusionOfDetector!SetLengthLine()}  
+  //  \index{otb::AssymetricFusionOfDetector!SetLengthLine()}
 
   //  The filter is executed by invoking the \code{Update()} method. If the
   //  filter is part of a larger image processing pipeline, calling
   //  \code{Update()} on a downstream filter will also trigger update of this
   //  filter.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   extractor->Update();
@@ -286,7 +286,7 @@ int main( int argc, char * argv[] )
   //  \begin{itemize}
   //  \item \doxygen{otb}{AssymetricFusionOfDetectorImageFilter}
   //  \end{itemize}
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
 

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -37,9 +37,9 @@ int otbSVMComposedKernelFunctorTest( int argc, char* argv[] )
   typedef unsigned char                                   LabelPixelType;
 
   typedef otb::SVMModel< InputPixelType, LabelPixelType >   ModelType;
-  
+
   ModelType::Pointer svmModel = ModelType::New();
-  
+
   otb::CustomKernelFunctor         customFunctor;
   otb::SAMKernelFunctor            SAMFunctor;
   ComposedKernelFunctor            composedKernelFunctor;
@@ -56,7 +56,7 @@ int otbSVMComposedKernelFunctorTest( int argc, char* argv[] )
   model->nr_class = 2;
   model->l = 5;
   model->sv_coef = Malloc(double *,model->nr_class-1);
- 
+
   for(int i=0; i<model->nr_class-1; i++)
     model->sv_coef[i] = Malloc(double,model->l);
   model->SV = Malloc(svm_node*,model->l);
@@ -91,20 +91,20 @@ int otbSVMComposedKernelFunctorTest( int argc, char* argv[] )
   model->nSV = Malloc(int,2);
   model->nSV[0] = 3;
   model->nSV[1] = 2;
-			
+
   model->param.kernel_composed = &composedKernelFunctor;
   svmModel->SetModel(model);
 
   struct svm_node *x =  Malloc(struct svm_node,3);
   struct svm_node *y =  Malloc(struct svm_node,3);
-  
+
   struct svm_node **SVx = Malloc(svm_node*,1);
   struct svm_node **SVy = Malloc(svm_node*,1);
   SVx[0] = Malloc(svm_node,1);
   SVy[0] = Malloc(svm_node,1);
   SVx[0] = &x[0];
   SVy[0] = &y[0];
- 
+
   x[0].index = 1;
   x[0].value = 10;
   x[1].index = -1;
@@ -114,7 +114,7 @@ int otbSVMComposedKernelFunctorTest( int argc, char* argv[] )
   y[0].value = 5;
   y[1].index = -1;
   y[1].value = 10000;
-  
+
   double resAdd =0.;
   double resMul =0.;
   double res1 = 0.;
@@ -143,10 +143,10 @@ int otbSVMComposedKernelFunctorTest( int argc, char* argv[] )
 
   svmModel->GetModel()->param.kernel_composed->SetMultiplyKernelFunctor(true);
   resMul = (*(svmModel->GetModel()->param.kernel_composed))(SVx[0], SVy[0], svmModel->GetModel()->param);
-  
+
   //std::cout<<"composed : "<<resAdd<<std::endl;
   file<<"Addition: "<<resAdd<<", "<<"Multiplication: "<<resMul<<std::endl;
-  
+
   file.close();
 
   //svmModel->GetModel()->param.kernel_composed->print_parameters();

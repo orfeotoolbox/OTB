@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,14 +29,14 @@ int otbImageToCarvingPathFilterNew(int argc, char* argv[])
 
   typedef double                                  PixelType;
   const   unsigned int        	                  Dimension = 2;
-  
+
   typedef otb::Image< PixelType, Dimension >      InputImageType;
   typedef itk::PolyLineParametricPath<Dimension>  PathType;
-  
+
   typedef otb::ImageToCarvingPathFilter<InputImageType, PathType> 	ImageToCarvingPathFilterType;
 
   ImageToCarvingPathFilterType::Pointer addCarvingPathFilter = ImageToCarvingPathFilterType::New();
-   
-  
+
+
   return EXIT_SUCCESS;
 }

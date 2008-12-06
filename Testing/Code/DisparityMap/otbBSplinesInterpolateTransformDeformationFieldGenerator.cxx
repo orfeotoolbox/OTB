@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,7 +33,7 @@ int otbBSplinesInterpolateTransformDeformationFieldGenerator(int argc, char * ar
   typedef PointSetType::PointType PointType;
   typedef otb::BSplinesInterpolateTransformDeformationFieldGenerator<PointSetType,ImageType> FilterType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
-  typedef itk::Euler2DTransform<double> TransformType;   
+  typedef itk::Euler2DTransform<double> TransformType;
 
   ImageType::SizeType size;
   size.Fill(100);
@@ -56,38 +56,38 @@ int otbBSplinesInterpolateTransformDeformationFieldGenerator(int argc, char * ar
   p5[0] = 85;
   p5[1] = 70;
   center.Fill(50);
-      
+
   pd1[0] = 0.95;
   pd1[1] = 0;
   pd1[2] = 0;
   pd1[3] = 0.03925;
-  pd1[4] = 5; 
+  pd1[4] = 5;
   pd1[5] = 5;
   pd2[0] = 0.98;
   pd2[1] = 0;
   pd2[2] = 0;
   pd2[3] = -0.03925;
-  pd2[4] = 5; 
+  pd2[4] = 5;
   pd2[5] = -5;
   pd3[0] = 0.5;
   pd3[1] = 0;
   pd3[2] = 0;
   pd3[3] = 0;
-  pd3[4] = 0; 
+  pd3[4] = 0;
   pd3[5] = 0;
   pd4[0] = 0.91;
   pd4[1] = 0;
   pd4[2] = 0;
   pd4[3] = 0.03925  ;
-  pd4[4] = -5; 
-  pd4[5] = 5; 
+  pd4[4] = -5;
+  pd4[5] = 5;
   pd5[0] = 0.91;
   pd5[1] = 0;
   pd5[2] = 0;
   pd5[3] = -0.03925  ;
-  pd5[4] = -5; 
-  pd5[5] = -5; 
-     
+  pd5[4] = -5;
+  pd5[5] = -5;
+
 
   ps->SetPoint(0,p1);
   ps->SetPointData(0,pd1);
@@ -102,7 +102,7 @@ int otbBSplinesInterpolateTransformDeformationFieldGenerator(int argc, char * ar
 
   TransformType::Pointer transform = TransformType::New();
   transform->SetCenter(center);
-      
+
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();
   filter->SetOutputSize(size);
@@ -114,8 +114,8 @@ int otbBSplinesInterpolateTransformDeformationFieldGenerator(int argc, char * ar
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(filter->GetOutput());
   writer->SetFileName(outfname);
-  writer->Update();      
-  
+  writer->Update();
+
 
   return EXIT_SUCCESS;
 }

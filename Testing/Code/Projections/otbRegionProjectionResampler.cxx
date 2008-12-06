@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,9 +23,9 @@
  *
  * PURPOSE:
  *
- * Appliaction to project a geographic coordinated image region 
+ * Appliaction to project a geographic coordinated image region
  * using an Interpolator, a Regionextractor and an  Iteratorregion.
- * 
+ *
  */
 
 // iostream is used for general output
@@ -58,15 +58,15 @@
 int otbRegionProjectionResampler( int argc, char* argv[] )
 {
   ossimInit::instance()->initialize(argc, argv);
-      
+
   if(argc!=10)
     {
       std::cout << argv[0] <<" <input filename> <output filename> <latitude de l'origine> <longitude de l'origine> <taille_x> <taille_y> <NumberOfstreamDivisions>" << std::endl;
 
       return EXIT_FAILURE;
     }
-      
-      
+
+
   typedef otb::Image<unsigned char, 2>                               CharImageType;
   typedef otb::Image<double, 2>                                      ImageType;
   typedef otb::ImageFileReader<ImageType>                            ReaderType;
@@ -76,7 +76,7 @@ int otbRegionProjectionResampler( int argc, char* argv[] )
   typedef itk::RescaleIntensityImageFilter<ImageType,CharImageType>  RescalerType;
   typedef otb::StreamingResampleImageFilter< ImageType, ImageType >  ResamplerType;
   typedef itk::TranslationTransform<double,2>                        TransformType;
-  typedef otb::CompositeTransform<ModelType,TransformType>           CompositeType;											
+  typedef otb::CompositeTransform<ModelType,TransformType>           CompositeType;
 
   ImageType::IndexType  	start;
   ImageType::SizeType  	size;
@@ -91,24 +91,24 @@ int otbRegionProjectionResampler( int argc, char* argv[] )
   InterpolatorType::Pointer	 interpolator = InterpolatorType::New();
   RescalerType::Pointer	 rescaler     = RescalerType::New();
   ResamplerType::Pointer     resampler    = ResamplerType::New();
-      
+
   // Set parameters ...
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
   rescaler->SetOutputMinimum(0);
   rescaler->SetOutputMaximum(255);
-      
+
   // Read meta data (ossimKeywordlist)
   reader->GenerateOutputInformation();
   ImageType::ConstPointer inputImage = reader->GetOutput();
 
   model->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
 
-  start[0]=0;     
-  start[1]=0;     
+  start[0]=0;
+  start[1]=0;
   size[0]=atoi(argv[5]);  // X size.
   size[1]=atoi(argv[6]);  // Y size.
-      
+
   region.SetSize(size);
   region.SetIndex(start);
 
@@ -131,12 +131,12 @@ int otbRegionProjectionResampler( int argc, char* argv[] )
   resampler->SetInterpolator( interpolator );
 
   otbGenericMsgDebugMacro(<< "Sensor Model :" << model);
-       
+
   writer->SetInput(resampler->GetOutput());
   writer->SetTilingStreamDivisions(10);
-  otbGenericMsgDebugMacro(<< "Update writer ..." ); 
+  otbGenericMsgDebugMacro(<< "Update writer ..." );
   writer->Update();
- 
+
 
   return EXIT_SUCCESS;
 

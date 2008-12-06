@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,7 +30,7 @@ void generic_SetASetBRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
   typedef otb::ImageFileReader<TInputNIRImage> NIRReaderType;
   typedef otb::ImageFileWriter<TOutputImage> WriterType;
 
-  typedef otb::RAndNIRVegetationIndexImageFilter<TInputRImage,TInputNIRImage,TOutputImage,TFunction> 
+  typedef otb::RAndNIRVegetationIndexImageFilter<TInputRImage,TInputNIRImage,TOutputImage,TFunction>
     RAndNIRVegetationIndexImageFilterType;
 
   // Instantiating object
@@ -47,8 +47,8 @@ void generic_SetASetBRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
   readerR->SetFileName( inputFilenameR );
   readerNIR->SetFileName( inputFilenameNIR );
   writer->SetFileName( outputFilename  );
-  filter->SetInputR( readerR->GetOutput() ); 
-  filter->SetInputNIR( readerNIR->GetOutput() ); 
+  filter->SetInputR( readerR->GetOutput() );
+  filter->SetInputNIR( readerNIR->GetOutput() );
   filter->GetFunctor().SetA(a);
   filter->GetFunctor().SetB(b);
   writer->SetInput( filter->GetOutput() );
@@ -64,7 +64,7 @@ int otbSetASetBRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
   typedef otb::Image<PixelType,Dimension> InputRImageType;
   typedef otb::Image<PixelType,Dimension> InputNIRImageType;
   typedef otb::Image<float,Dimension> OutputImageType;
-        
+
   std::string strArgv(argv[1]);
   argc--;
   argv++;

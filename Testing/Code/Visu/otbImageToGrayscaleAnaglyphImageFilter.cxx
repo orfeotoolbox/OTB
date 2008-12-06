@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -48,7 +48,7 @@ int otbImageToGrayscaleAnaglyphImageFilter(int argc, char * argv[])
   filter->SetInput2(reader2->GetOutput());
   writer->SetInput(filter->GetOutput());
   writer->Update();
- 
+
 
   return EXIT_SUCCESS;
 }

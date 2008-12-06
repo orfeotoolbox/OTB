@@ -9,9 +9,9 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,7 +32,7 @@ int otbMultiToMonoChannelExtractROISAR ( int argc, char * argv[] )
   typedef std::complex<float>  	                                OutputPixelType;
 
 
-  typedef otb::ExtractROI< InputPixelType, 
+  typedef otb::ExtractROI< InputPixelType,
     OutputPixelType >  ExtractROIFilterType;
 
   ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
@@ -41,7 +41,7 @@ int otbMultiToMonoChannelExtractROISAR ( int argc, char * argv[] )
   extractROIFilter->SetStartY( 10 );
   extractROIFilter->SetSizeX( 100 );
   extractROIFilter->SetSizeY( 100 );
-	
+
   // Resume de la ligne de commande
   std::cout << " ROI selectionnee : startX "<<extractROIFilter->GetStartX()<<std::endl;
   std::cout << "                    startY "<<extractROIFilter->GetStartY()<<std::endl;
@@ -55,10 +55,10 @@ int otbMultiToMonoChannelExtractROISAR ( int argc, char * argv[] )
 
   reader->SetFileName( inputFilename  );
   writer->SetFileName( outputFilename );
-	
-  extractROIFilter->SetInput( reader->GetOutput() );        
+
+  extractROIFilter->SetInput( reader->GetOutput() );
   writer->SetInput( extractROIFilter->GetOutput() );
-  writer->Update(); 
+  writer->Update();
   std::cout << " Nb canaux dans l'image d'entree : "<< reader->GetOutput()->GetNumberOfComponentsPerPixel()<<std::endl;
   std::cout << " Nb canaux dans l'image de sortie : "<<extractROIFilter->GetOutput()->GetNumberOfComponentsPerPixel() <<std::endl;
 

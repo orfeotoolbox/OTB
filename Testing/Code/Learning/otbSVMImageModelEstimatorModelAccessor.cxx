@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
      =========================================================================*/
@@ -41,11 +41,11 @@ int otbSVMImageModelEstimatorModelAccessor( int argc, char* argv[] )
 
   typedef double      InputPixelType;
   const   unsigned int       Dimension = 2;
-    
+
   typedef otb::VectorImage< InputPixelType,  Dimension >        InputImageType;
-    
+
   typedef otb::Image< int,  Dimension >     TrainingImageType;
-    
+
   typedef otb::SVMImageModelEstimator< InputImageType,
     TrainingImageType >   EstimatorType;
 
@@ -60,7 +60,7 @@ int otbSVMImageModelEstimatorModelAccessor( int argc, char* argv[] )
 
   inputReader->Update();
   trainingReader->Update();
-    
+
   EstimatorType::Pointer svmEstimator = EstimatorType::New();
 
   svmEstimator->SetInputImage( inputReader->GetOutput() );
@@ -68,16 +68,16 @@ int otbSVMImageModelEstimatorModelAccessor( int argc, char* argv[] )
   svmEstimator->SetNumberOfClasses( 2 );
 
   svmEstimator->Update();
-    
+
   typedef EstimatorType::SVMModelPointer SVMModelPointer;
   typedef EstimatorType::SVMModelType SVMModelType;
   SVMModelPointer ptrModel = svmEstimator->GetModel();
-    
+
 
   std::ofstream f;
   unsigned int nbClass = ptrModel->GetNumberOfClasses();
   unsigned int nbSupportVector = ptrModel->GetNumberOfSupportVectors();
-    
+
   f.open(outputModelFileName);
   f << "Test methods of SVMModel class:"<<std::endl;
   f << " - GetNumberOfClasses()        "<< nbClass<<std::endl;
@@ -89,11 +89,11 @@ int otbSVMImageModelEstimatorModelAccessor( int argc, char* argv[] )
   svm_node ** SVs = ptrModel->GetSupportVectors();
   if( SVs == NULL )
     {
-      itkGenericExceptionMacro(<<"SVs NULL"); 
+      itkGenericExceptionMacro(<<"SVs NULL");
     }
   for(unsigned int i=0;i<nbSupportVector;i++)
     {
-      if( SVs[i] == NULL ) itkGenericExceptionMacro(<<"SVs "<<i<<" NULL"); 
+      if( SVs[i] == NULL ) itkGenericExceptionMacro(<<"SVs "<<i<<" NULL");
       f << std::endl;
       f << "  SV["<<i<<"]:";
       const svm_node *p = SVs[i];
@@ -103,7 +103,7 @@ int otbSVMImageModelEstimatorModelAccessor( int argc, char* argv[] )
       if( svmEstimator->GetKernelType() == PRECOMPUTED)
 	{
 	  f << " "<<p->value;
-                
+
 	}
       else
 	{
@@ -122,7 +122,7 @@ int otbSVMImageModelEstimatorModelAccessor( int argc, char* argv[] )
   double * rhos = ptrModel->GetRho();
   if( rhos == NULL )
     {
-      itkGenericExceptionMacro(<<"rhos NULL"); 
+      itkGenericExceptionMacro(<<"rhos NULL");
     }
   f << std::setprecision(10) <<"      ";
   for(unsigned int i=0;i<taille;i++)
@@ -136,11 +136,11 @@ int otbSVMImageModelEstimatorModelAccessor( int argc, char* argv[] )
   double ** alphas = ptrModel->GetAlpha();
   if( alphas == NULL )
     {
-      itkGenericExceptionMacro(<<"alphas NULL"); 
+      itkGenericExceptionMacro(<<"alphas NULL");
     }
   for(unsigned int i=0;i<nbClass-1;i++)
     {
-      if( alphas[i] == NULL ) itkGenericExceptionMacro(<<"alphas "<<i<<" NULL"); 
+      if( alphas[i] == NULL ) itkGenericExceptionMacro(<<"alphas "<<i<<" NULL");
       f << "     ";
       for(unsigned int j=0;j<nbSupportVector;j++)
         {
@@ -153,7 +153,7 @@ int otbSVMImageModelEstimatorModelAccessor( int argc, char* argv[] )
   typedef SVMModelType::ValuesType ValuesType;
   ValuesType _evaluateHyperplaneDistance;
   _evaluateHyperplaneDistance = ptrModel->EvaluateHyperplaneDistance();
-    
+
   f << " - EvaluateHyperplaneDistance() VariableLenghtVector() nb value(s): "<<_evaluateHyperplaneDistance.Size()<<std::endl;
   for(unsigned int i=0;i<_evaluateHyperplaneDistance.Size();i++)
     {
@@ -162,8 +162,8 @@ int otbSVMImageModelEstimatorModelAccessor( int argc, char* argv[] )
   f << "end"<<std::endl;
   f.close();
 
-        
- 
+
+
   return EXIT_SUCCESS;
 }
 

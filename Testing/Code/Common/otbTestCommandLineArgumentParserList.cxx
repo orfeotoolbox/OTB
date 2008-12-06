@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
-  
+
 =========================================================================*/
 
 #include <iostream>
@@ -24,18 +24,18 @@
 int otbTestCommandLineArgumentParserList( int argc, char * argv[] )
 {
   // Parse command line parameters
-  typedef otb::CommandLineArgumentParser ParserType;	
+  typedef otb::CommandLineArgumentParser ParserType;
   ParserType::Pointer parser = ParserType::New();
-	  
+
   parser->AddOption("-image","Nom d'une image","-i",1,true);
   parser->AddOption("-entier","Une Valeur entiere (obligatoire)","-e");
   parser->AddOption("-deuxentiers","Deux Valeurs entieres non obligatoire","-dede",2,false);
-  parser->AddOption("-double", "Valeur réelle double", "-d"); 
+  parser->AddOption("-double", "Valeur réelle double", "-d");
   parser->AddOptionNParams("-doubles", "Liste de Valeurs réelles","-ld",false);
-  
+
   typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
-  
+
   parser->ParseCommandLine(argc,argv,parseResult) ;
 
 
@@ -52,7 +52,7 @@ int otbTestCommandLineArgumentParserList( int argc, char * argv[] )
   //double lDouble = otb::GetParameter<double>(parseResult,"-double");
   double lDouble = parseResult->GetParameterDouble("-double");
   std::cout << "Double : "<<lDouble<<std::endl;
-		
+
   std::cout << "List de Double : "<<parseResult->GetNumberOfParameters("-doubles")<<std::endl;
   for (int i =0 ; i<parseResult->GetNumberOfParameters("-doubles") ; i++)
     {
@@ -61,7 +61,7 @@ int otbTestCommandLineArgumentParserList( int argc, char * argv[] )
       std::cout << "  "<<value;
     }
   std::cout << std::endl;
-  
+
 
 
   return EXIT_SUCCESS;

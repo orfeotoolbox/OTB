@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -42,7 +42,7 @@ int otbHHnHVnVVPolarimetricSynthesisFilter( int argc, char * argv[] )
   double  PsiR = strtod(argv[7],NULL);
   double  KhiR = strtod(argv[8],NULL);
 
-        
+
   typedef std::complex <double>                   InputPixelType;
   typedef double    	                        OutputPixelType;
   const   unsigned int                            Dimension = 2;
@@ -54,10 +54,10 @@ int otbHHnHVnVVPolarimetricSynthesisFilter( int argc, char * argv[] )
   typedef otb::ImageFileWriter< OutputImageType >   WriterType;
 
   typedef otb::PolarimetricSynthesisFilter<  InputImageType,InputImageType,InputImageType,InputImageType,OutputImageType >   FilterType;
-	
+
 
   FilterType::Pointer polarimetricSynthesis = FilterType::New();
-        
+
   polarimetricSynthesis->SetPsiI( PsiI );
   polarimetricSynthesis->SetKhiI( KhiI );
   polarimetricSynthesis->SetPsiR( PsiR );
@@ -72,13 +72,13 @@ int otbHHnHVnVVPolarimetricSynthesisFilter( int argc, char * argv[] )
   reader2->SetFileName( inputFilename2 );
   reader3->SetFileName( inputFilename3 );
   writer->SetFileName( outputFilename );
-        
+
   polarimetricSynthesis->SetInputHH( reader1->GetOutput() );
   polarimetricSynthesis->SetInputHV( reader2->GetOutput() );
-  polarimetricSynthesis->SetInputVV( reader3->GetOutput() );                        
+  polarimetricSynthesis->SetInputVV( reader3->GetOutput() );
   writer->SetInput( polarimetricSynthesis->GetOutput() );
 
-  writer->Update(); 
+  writer->Update();
 
 
   return EXIT_SUCCESS;

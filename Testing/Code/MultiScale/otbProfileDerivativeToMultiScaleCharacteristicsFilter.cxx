@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,7 +33,7 @@ int otbProfileDerivativeToMultiScaleCharacteristicsFilter(int argc, char * argv[
   const unsigned int profileSize = atoi(argv[4]);
   const unsigned int initialValue = atoi(argv[5]);
   const unsigned int step = atoi(argv[6]);
-       
+
 
   const unsigned int Dimension = 2;
   typedef double InputPixelType;
@@ -52,9 +52,9 @@ int otbProfileDerivativeToMultiScaleCharacteristicsFilter(int argc, char * argv[
   typedef otb::MorphologicalOpeningProfileFilter<InputImageType,InputImageType,StructuringElementType>
     OpeningProfileFilterType;
   typedef otb::ProfileToProfileDerivativeFilter<InputImageType,InputImageType> DerivativeFilterType;
-  typedef otb::ProfileDerivativeToMultiScaleCharacteristicsFilter<InputImageType,OutputImageType,LabeledImageType> 
+  typedef otb::ProfileDerivativeToMultiScaleCharacteristicsFilter<InputImageType,OutputImageType,LabeledImageType>
     MultiScaleCharacteristicsFilterType;
-      
+
   // Reading input image
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFilename);
@@ -68,13 +68,13 @@ int otbProfileDerivativeToMultiScaleCharacteristicsFilter(int argc, char * argv[
 
   DerivativeFilterType::Pointer derivativeFilter = DerivativeFilterType::New();
   derivativeFilter->SetInput(profileFilter->GetOutput());
-  
+
   MultiScaleCharacteristicsFilterType::Pointer msCharFilter = MultiScaleCharacteristicsFilterType::New();
   msCharFilter->SetInput(derivativeFilter->GetOutput());
   msCharFilter->SetInitialValue(initialValue);
   msCharFilter->SetStep(step);
-  
-  
+
+
   WriterType::Pointer writer = WriterType::New();
   LabeledWriterType::Pointer labeledWriter = LabeledWriterType::New();
 
@@ -85,6 +85,6 @@ int otbProfileDerivativeToMultiScaleCharacteristicsFilter(int argc, char * argv[
   labeledWriter->SetFileName(outputFilename2);
   labeledWriter->SetInput(msCharFilter->GetOutputCharacteristics());
   labeledWriter->Update();
-  
+
   return EXIT_SUCCESS;
 }
