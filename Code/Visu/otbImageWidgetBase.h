@@ -160,7 +160,19 @@ class ImageWidgetBase
         
     /** Initialize the widget */
     virtual void Init(int x, int y, int w, int h, const char * l);
+
+    /** Get the buffer index from the iterator position and the buffered region */
+    inline unsigned int GetBufferIndex(const IndexType& iteratorIndex)
+      {
+	return (iteratorIndex[1]-m_BufferedRegion.GetIndex()[1])*4*m_BufferedRegion.GetSize()[0] 
+	  + 4*(iteratorIndex()[0]-m_BufferedRegion.GetIndex()[0]);
+      }
     
+    inline unsigned int GetRevertedBufferIndex(const IndexType& iteratorIndex)
+      {
+	return  (m_BufferedRegion.GetSize()[1]-1+m_BufferedRegion.GetIndex()[1]-iteratorIndex[1])*4*m_BufferedRegion.GetSize()[0] 
+	  + 4*(iteratorIndex[0]-m_BufferedRegion.GetIndex()[0]);
+      }
   protected:
     /** Constructor */
     ImageWidgetBase();
