@@ -96,7 +96,7 @@ ImageListToVectorImageFilter<TImageList,TVectorImage>
   // fills the vector of input iterators
   for(;inputListIt!=inputPtr->End();++inputListIt)
     {
-      inputIteratorList.push_back(InputIteratorType(inputListIt.Get(),inputListIt.Get()->GetRequestedRegion()));
+      inputIteratorList.push_back(InputIteratorType(inputListIt.Get(),outputPtr->GetRequestedRegion()));
       inputIteratorList.back().GoToBegin();
     }
 
