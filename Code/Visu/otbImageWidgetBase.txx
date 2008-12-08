@@ -543,8 +543,11 @@ namespace otb
       {
 	for(it.GoToBegin();!it.IsAtEnd();++it)
 	  {
-	    index = (m_BufferedRegion.GetSize()[1]-1+m_BufferedRegion.GetIndex()[1]-it.GetIndex()[1])*4*m_BufferedRegion.GetSize()[0] 
-	      + 4*(it.GetIndex()[0]-m_BufferedRegion.GetIndex()[0]);
+#ifdef OTB_GL_USE_ACCEL
+	    index = GetBufferIndex(it.GetIndex());
+#else
+	    index = GetRevertedBufferIndex(it.GetIndex());
+#endif
 	    m_OpenGlImageOverlayBuffer[index] =  static_cast<unsigned char>(it.Get()[0]);
 	    m_OpenGlImageOverlayBuffer[index+1] =static_cast<unsigned char>(it.Get()[1]);
 	    m_OpenGlImageOverlayBuffer[index+2] =static_cast<unsigned char>(it.Get()[2]);
