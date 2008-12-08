@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,16 +30,16 @@ int otbHuImage( int argc, char * argv[] )
 {
   const char * inputFilename  = argv[1];
   unsigned int  Number = 1;
-       
+
   typedef unsigned char                                   InputPixelType;
   const   unsigned int        	                        Dimension = 2;
 
   typedef itk::Image< InputPixelType,  Dimension >	              InputImageType;
-  typedef otb::ImageFileReader< InputImageType  >                       ReaderType;  
+  typedef otb::ImageFileReader< InputImageType  >                       ReaderType;
   typedef std::complex<float>                                           ComplexType;
   typedef float                                                        RealType;
   typedef otb::HuImageFunction<InputImageType,float,float>                 FunctionType;
-  
+
   InputImageType::RegionType   region;
   InputImageType::SizeType     size;
   InputImageType::IndexType    start;
@@ -50,14 +50,14 @@ int otbHuImage( int argc, char * argv[] )
 
   ReaderType::Pointer reader         = ReaderType::New();
   FunctionType::Pointer function =FunctionType::New();
-	
+
   reader->SetFileName( inputFilename  );
-	
+
   InputImageType::Pointer image = reader->GetOutput();
 
   region.SetIndex( start );
   region.SetSize( size );
-	
+
   image->SetRegions(region);
   image->Update();
   function->SetInputImage( image );
@@ -65,9 +65,9 @@ int otbHuImage( int argc, char * argv[] )
   InputImageType::IndexType index;
   index[0]=10;
   index[1]=10;
-	
+
   RealType Result;
-	
+
   for (Number = 1 ;Number<10;Number++)
     {
       //OTB-FA-00024-CS
@@ -77,8 +77,8 @@ int otbHuImage( int argc, char * argv[] )
       Result = function->EvaluateAtIndex( index );
       std::cout << "Hu("<<Number<<") = "<< Result <<std::endl;
     }
-	
-  
+
+
   return EXIT_SUCCESS;
 }
 

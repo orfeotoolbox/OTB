@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,7 +31,7 @@ int otbImageMultiSegmentationToRCC8GraphFilter(int argc, char* argv[])
   char * outputFilename = argv[1];
   int useOptimisation = atoi(argv[2]);
   unsigned int nbImages = atoi(argv[3]);
-  
+
   // typedefs
   typedef unsigned short LabelPixelType;
   typedef otb::Image<LabelPixelType,Dimension> LabelImageType;
@@ -43,9 +43,9 @@ int otbImageMultiSegmentationToRCC8GraphFilter(int argc, char* argv[])
   typedef otb::ImageList<LabelImageType> ImageListType;
   typedef otb::ImageFileReader<LabelImageType> ReaderType;
   typedef otb::RCC8GraphFileWriter<RCC8GraphType> GraphWriterType;
-  
+
   ImageListType::Pointer inputList = ImageListType::New();
-  
+
   // Reading input images
   for(unsigned int i=0;i<nbImages;i++)
     {
@@ -59,13 +59,13 @@ int otbImageMultiSegmentationToRCC8GraphFilter(int argc, char* argv[])
   RCC8GraphFilterType::Pointer filter = RCC8GraphFilterType::New();
   filter->SetInput(inputList);
   filter->SetOptimisation(useOptimisation>0);
-  
+
   // Writing output graph
   GraphWriterType::Pointer writer = GraphWriterType::New();
   writer->SetFileName(outputFilename);
   writer->SetInput(filter->GetOutput());
   writer->Update();
-  
+
 
   return EXIT_SUCCESS;
-}  
+}

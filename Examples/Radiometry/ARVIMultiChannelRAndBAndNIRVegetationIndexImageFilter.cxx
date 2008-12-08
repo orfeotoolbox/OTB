@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,7 +25,7 @@
 
 
 //  Software Guide : BeginCommandLineArgs
-//  INPUTS: {VegetationIndex.hd} 
+//  INPUTS: {VegetationIndex.hd}
 //  OUTPUTS: {ARVIMultiChannelRAndBAndNIRVegetationIndex.tif} , {pretty_VegetationIndex.png} , {pretty_ARVIMultiChannelRAndBAndNIRVegetationIndex.png}
 //  1 3 2 0.6
 //  Software Guide : EndCommandLineArgs
@@ -53,7 +53,7 @@
 // $\rho_{r}^{*}$, $\rho_{b}^{*}$ the normalized radiances (that is to
 // say the radiance normalized to reflectance units) of red, blue and
 // NIR channels respectively.  $\rho_{rb}^{*}$ is defined as
-// 
+//
 // \begin{equation}
 // \rho_{rb}^{*} = \rho_{r}^{*} - \gamma*(\rho_{b}^{*} - \rho_{r}^{*})
 // \end{equation}
@@ -65,22 +65,22 @@
 // \end{equation}
 //
 //
-// This formula can be simplified with : 
+// This formula can be simplified with :
 //
 // \begin{equation}
 // \mathbf{ARVI} = \frac{ L_{NIR}-L_{rb} }{ L_{NIR}+L_{rb} }
 // \end{equation}
 //
 // For more details, refer to Faufman and Tanré work \cite{ARVI}.
-// 
-// With the \doxygen{otb}{MultiChannelRAndBAndNIRVegetationIndexImageFilter} class the 
+//
+// With the \doxygen{otb}{MultiChannelRAndBAndNIRVegetationIndexImageFilter} class the
 // input has to be a multi channel image and the user has to specify index channel
 // of the red, blue and NIR channel.
 //
-// Let's look at the minimal code required to use this algorithm. First, the following header 
-// defining the \doxygen{otb}{MultiChannelRAndBAndNIRVegetationIndexImageFilter} 
+// Let's look at the minimal code required to use this algorithm. First, the following header
+// defining the \doxygen{otb}{MultiChannelRAndBAndNIRVegetationIndexImageFilter}
 // class must be included.
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "otbMultiChannelRAndBAndNIRVegetationIndexImageFilter.h"
@@ -107,15 +107,15 @@ int main( int argc, char *argv[] )
       std::cerr << " inputImage , outputImage , prettyInput , prettyOutput , redChannel , blueChannel , nirChannel , gama" << std::endl;
       return 1;
     }
-  
+
   //  Software Guide : BeginLatex
-  //  
-  // The image types are now defined using pixel types and 
-  // dimension. The input image is defined as an \doxygen{otb}{VectorImage}, 
+  //
+  // The image types are now defined using pixel types and
+  // dimension. The input image is defined as an \doxygen{otb}{VectorImage},
   // the output is a \doxygen{otb}{Image}.
   //
-  // Software Guide : EndLatex 
-  
+  // Software Guide : EndLatex
+
   // Software Guide : BeginCodeSnippet
   const unsigned int                                  Dimension = 2;
   typedef double                                      InputPixelType;
@@ -123,106 +123,106 @@ int main( int argc, char *argv[] )
   typedef otb::VectorImage<InputPixelType ,Dimension> InputImageType;
   typedef otb::Image<OutputPixelType,Dimension>       OutputImageType;
   // Software Guide : EndCodeSnippet
-  
+
   // We instantiate reader and writer types
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;   
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   //  Software Guide : BeginLatex
-  //  
+  //
   // The ARVI (Atmospherically Resistant Vegetation Index) is
   // instantiated using the image pixel types as template parameters.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef  otb::Functor::ARVI< InputPixelType,
   	                       InputPixelType,
   		               InputPixelType,
                                OutputPixelType >        FunctorType;
-   // Software Guide : EndCodeSnippet                                  
-   
-   
+   // Software Guide : EndCodeSnippet
+
+
   //  Software Guide : BeginLatex
-  //  
+  //
   // The
   // \doxygen{otb}{MultiChannelRAndBAndNIRVegetationIndexImageFilter}
   // type is defined using the image types and the ARVI functor as
   // template parameters. We then instantiate the filter itself.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter
   		                                   <InputImageType,
   		                                    OutputImageType,
-  		                                    FunctorType      > 
+  		                                    FunctorType      >
                    MultiChannelRAndBAndNIRVegetationIndexImageFilterType;
 
-  MultiChannelRAndBAndNIRVegetationIndexImageFilterType::Pointer 
+  MultiChannelRAndBAndNIRVegetationIndexImageFilterType::Pointer
     filter = MultiChannelRAndBAndNIRVegetationIndexImageFilterType::New();
-  // Software Guide : EndCodeSnippet 
-  
+  // Software Guide : EndCodeSnippet
+
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  Now the input image is set and a name is given to the output image.
-  //  
-  //  Software Guide : EndLatex 
+  //
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   reader->SetFileName( argv[1] );
   writer->SetFileName( argv[2] );
-  // Software Guide : EndCodeSnippet 
-   
+  // Software Guide : EndCodeSnippet
+
   //  Software Guide : BeginLatex
-  //  
+  //
   // The three used index bands (red, blue and NIR) are declared.
-  //  
-  //  Software Guide : EndLatex 
+  //
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   filter->SetRedIndex(::atoi(argv[5]));
   filter->SetBlueIndex(::atoi(argv[6]));
   filter->SetNIRIndex(::atoi(argv[7]));
-  // Software Guide : EndCodeSnippet 
-  
+  // Software Guide : EndCodeSnippet
+
   //  Software Guide : BeginLatex
-  //  
+  //
   // The $\gamma$ parameter is set. The
   // \doxygen{otb}{MultiChannelRAndBAndNIRVegetationIndexImageFilter}
   // class sets the default value of $\gamma$ to $0.5$.  This parameter
   // is used to reduce the atmospheric effect on a global scale.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   filter->GetFunctor().SetGamma(::atof(argv[8]));
-  // Software Guide : EndCodeSnippet 
-  
+  // Software Guide : EndCodeSnippet
+
   //  Software Guide : BeginLatex
-  //  
+  //
   // The filter input is linked to the reader output and
   // the filter output is linked to the writer input.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filter->SetInput( reader->GetOutput() ); 
-  
+  filter->SetInput( reader->GetOutput() );
+
   writer->SetInput( filter->GetOutput() );
   // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
-  //  
+  //
   //  The invocation of the \code{Update()} method on the writer triggers the
   //  execution of the pipeline.  It is recommended to place update calls in a
   //  \code{try/catch} block in case errors occur and exceptions are thrown.
   //
-  //  Software Guide : EndLatex 
-  
+  //  Software Guide : EndLatex
+
   // Software Guide : BeginCodeSnippet
   try
     {
@@ -234,11 +234,11 @@ int main( int argc, char *argv[] )
       std::cerr << excep << std::endl;
     }
   // Software Guide : EndCodeSnippet
-  catch( ... ) 
-    { 
-      std::cout << "Unknown exception !" << std::endl; 
+  catch( ... )
+    {
+      std::cout << "Unknown exception !" << std::endl;
       return EXIT_FAILURE;
-    } 
+    }
 
 
   // Pretty image creation for the printing
@@ -251,7 +251,7 @@ int main( int argc, char *argv[] )
   typedef otb::MultiChannelExtractROI<unsigned char , unsigned char>                            ChannelExtractorType;
 
 
-  VectorRescalerType::Pointer vectRescaler         = VectorRescalerType::New();  
+  VectorRescalerType::Pointer vectRescaler         = VectorRescalerType::New();
   ChannelExtractorType::Pointer selecter           = ChannelExtractorType::New();
   WriterVectorPrettyType::Pointer vectPrettyWriter = WriterVectorPrettyType::New();
 
@@ -262,17 +262,17 @@ int main( int argc, char *argv[] )
   maximum.Fill(255);
   vectRescaler->SetOutputMinimum(minimum);
   vectRescaler->SetOutputMaximum(maximum);
-  vectRescaler->SetClampThreshold(0.01);                          
-  vectRescaler->SetInput( reader->GetOutput() );          
+  vectRescaler->SetClampThreshold(0.01);
+  vectRescaler->SetInput( reader->GetOutput() );
 
   selecter->SetInput(vectRescaler->GetOutput());
   selecter->SetChannel(1);
   selecter->SetChannel(2);
   selecter->SetChannel(3);
- 
-  vectPrettyWriter->SetFileName( argv[3] ); 
+
+  vectPrettyWriter->SetFileName( argv[3] );
   vectPrettyWriter->SetInput( selecter->GetOutput() );
-  
+
 
   typedef itk::ThresholdImageFilter< OutputImageType >   ThresholderType;
 
@@ -282,14 +282,14 @@ int main( int argc, char *argv[] )
   thresholder->ThresholdOutside( 0.0, 1.0 );
   thresholder->Update();
 
-  RescalerType::Pointer     rescaler     = RescalerType::New();                                       
+  RescalerType::Pointer     rescaler     = RescalerType::New();
   WriterPrettyType::Pointer prettyWriter = WriterPrettyType::New();
   rescaler->SetInput( thresholder->GetOutput() );
   rescaler->SetOutputMinimum(0);
   rescaler->SetOutputMaximum(255);
   prettyWriter->SetFileName( argv[4] );
   prettyWriter->SetInput( rescaler->GetOutput() );
-  
+
   try
     {
       prettyWriter->Update();
@@ -300,14 +300,14 @@ int main( int argc, char *argv[] )
       std::cerr << "Exception caught !" << std::endl;
       std::cerr << excep << std::endl;
     }
-  catch( ... ) 
-    { 
-      std::cout << "Unknown exception !" << std::endl; 
+  catch( ... )
+    {
+      std::cout << "Unknown exception !" << std::endl;
       return EXIT_FAILURE;
-    } 
-  
+    }
+
   return EXIT_SUCCESS;
-  
+
   // Software Guide : BeginLatex
   //
   // Let's now run this example using as input the image
@@ -323,7 +323,7 @@ int main( int argc, char *argv[] )
   // \label{fig:ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter}
   // \end{figure}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 }
 

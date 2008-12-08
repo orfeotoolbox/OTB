@@ -36,7 +36,7 @@ REGISTER_TEST(galibTests19);
   Copyright (c) 1995-1996  Massachusetts Institute of Technology
 
  DESCRIPTION:
-   This example runs all of the DeJong functions.  You can specify which 
+   This example runs all of the DeJong functions.  You can specify which
 function you want at the command line.  We use SigmaTruncation scaling to make
 certain that negative objective scores won't be a problem for us.
    The DeJong functions in this code were pinched from the eval.c file in the
@@ -184,7 +184,7 @@ galibTests19(int argc, char *argv[])
 
   return 0;
 }
- 
+
 
 
 
@@ -228,7 +228,7 @@ DeJong2(GAGenome & c)
 
 // DeJong's third function is:
 //
-// f3(x1,x2,x3,x4,x5) = 
+// f3(x1,x2,x3,x4,x5) =
 //      25 + floor(x1) + floor(x2) + floor(x3) + floor(x4) + floor(x5)
 //
 // where each x is in the range [-5.12,5.12]
@@ -287,7 +287,7 @@ DeJong4(GAGenome & c)
 //               25                 1
 //               ___    ---------------------------
 // f5(x1,x2) =   \              2
-//               /__           ___ 
+//               /__           ___
 //               j=1      j +  \   (x[i] - a[i][j])^6
 //                             /__
 //                             i=1
@@ -331,7 +331,7 @@ DeJong5(GAGenome & c)
 // GNU libg++ Normal.cc implementation of a normal distribution.  That is, in
 // turn, based on Simulation, Modelling & Analysis by Law & Kelton, pp259.
 //
-// My random number generator (actually just the system's) isn't as good as 
+// My random number generator (actually just the system's) isn't as good as
 // that in the libg++, but this should be OK for this purpose.
 double
 Gauss(double mean, double variance){

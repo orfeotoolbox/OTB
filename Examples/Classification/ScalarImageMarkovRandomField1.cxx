@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -38,7 +38,7 @@
 // classified while the second image is an image of labels representing an
 // initial classification.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 
 // Software Guide : BeginLatex
@@ -47,7 +47,7 @@
 // output image, and making the necessary conversions between scalar and vector
 // images.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "otbImage.h"
@@ -63,7 +63,7 @@
 //
 // The following headers are related to the statistical classification classes.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "itkMRFImageFilter.h"
@@ -112,10 +112,10 @@ int main( int argc, char * argv [] )
 // First we define the pixel type and dimension of the image that we intend to
 // classify. With this image type we can also declare the
 // \doxygen{otb}{ImageFileReader} needed for reading the input image, create one and
-// set its input filename. 
+// set its input filename.
 //
-// Software Guide : EndLatex 
-  
+// Software Guide : EndLatex
+
 // Software Guide : BeginCodeSnippet
   typedef unsigned char        PixelType;
   const unsigned int          Dimension = 2;
@@ -136,8 +136,8 @@ int main( int argc, char * argv [] )
 // image. This initial labeled image can be the output of a K-Means method like
 // the one illustrated in section \ref{sec:KMeansClassifier}.
 //
-// Software Guide : EndLatex 
-  
+// Software Guide : EndLatex
+
 // Software Guide : BeginCodeSnippet
   typedef unsigned char       LabelPixelType;
 
@@ -158,19 +158,19 @@ int main( int argc, char * argv [] )
 // the \code{MRFImageFilter}. We do this by using the
 // \doxygen{itk}{ScalarToArrayCastImageFilter}. With this filter we will present our
 // scalar image as a vector image whose vector pixels contain a single
-// component. 
-// 
-// Software Guide : EndLatex 
-  
+// component.
+//
+// Software Guide : EndLatex
+
 // Software Guide : BeginCodeSnippet
   typedef itk::FixedArray<LabelPixelType,1>  ArrayPixelType;
 
   typedef otb::Image< ArrayPixelType, Dimension > ArrayImageType;
 
-  typedef itk::ScalarToArrayCastImageFilter< 
+  typedef itk::ScalarToArrayCastImageFilter<
                      ImageType, ArrayImageType > ScalarToArrayFilterType;
 
-  ScalarToArrayFilterType::Pointer 
+  ScalarToArrayFilterType::Pointer
     scalarToArrayFilter = ScalarToArrayFilterType::New();
   scalarToArrayFilter->SetInput( reader->GetOutput() );
 // Software Guide : EndCodeSnippet
@@ -183,7 +183,7 @@ int main( int argc, char * argv [] )
 // \doxygen{itk}{MRFImageFilter} that will apply the Markov Random Field algorithm
 // in order to refine the pixel classification.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
   typedef itk::MRFImageFilter< ArrayImageType, LabelImageType > MRFFilterType;
@@ -202,7 +202,7 @@ int main( int argc, char * argv [] )
 // of iterations to be run in this filter and the error tolerance that will be
 // used as a criterion for convergence.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
   mrfFilter->SetNumberOfClasses( numberOfClasses );
@@ -214,15 +214,15 @@ int main( int argc, char * argv [] )
 
 // Software Guide : BeginLatex
 //
-// The smoothing factor represents the tradeoff between fidelity to the 
+// The smoothing factor represents the tradeoff between fidelity to the
 // observed image and the smoothness of the segmented image. Typical smoothing
 // factors have values between 1~5. This factor will multiply the weights that
 // define the influence of neighbors on the classification of a given pixel.
 // The higher the value, the more uniform will be the regions resulting from
 // the classification refinement.
-// 
-// Software Guide : EndLatex 
- 
+//
+// Software Guide : EndLatex
+
 // Software Guide : BeginCodeSnippet
   mrfFilter->SetSmoothingFactor( smoothingFactor );
 // Software Guide : EndCodeSnippet
@@ -237,15 +237,15 @@ int main( int argc, char * argv [] )
 // every pixel belongs to a particular class.  The classification is performed
 // by the \doxygen{itk}{ImageClassifierBase} class, that is instantiated using the
 // type of the input vector image and the type of the labeled image.
-// 
-// Software Guide : EndLatex 
+//
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef itk::ImageClassifierBase< 
+  typedef itk::ImageClassifierBase<
                               ArrayImageType,
                               LabelImageType >   SupervisedClassifierType;
 
-  SupervisedClassifierType::Pointer classifier = 
+  SupervisedClassifierType::Pointer classifier =
                                          SupervisedClassifierType::New();
 // Software Guide : EndCodeSnippet
 
@@ -259,8 +259,8 @@ int main( int argc, char * argv [] )
 // SmartPointer, and smart pointer cannot perform polymorphism, we
 // must then extract the raw pointer that is associated to the smart
 // pointer. This extraction is done with the GetPointer() method.
-// 
-// Software Guide : EndLatex 
+//
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
   typedef itk::MinimumDecisionRule DecisionRuleType;
@@ -277,25 +277,25 @@ int main( int argc, char * argv [] )
 // \subdoxygen{itk}{Statistics}{DistanceToCentroidMembershipFunction} class
 // templated over the pixel type of the vector image, which in our example
 // happens to be a vector of dimension 1.
-// 
-// Software Guide : EndLatex 
+//
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef itk::Statistics::DistanceToCentroidMembershipFunction< 
-                                                    ArrayPixelType > 
+  typedef itk::Statistics::DistanceToCentroidMembershipFunction<
+                                                    ArrayPixelType >
                                                        MembershipFunctionType;
 
   typedef MembershipFunctionType::Pointer MembershipFunctionPointer;
 
 
   double meanDistance = 0;
-  vnl_vector<double> centroid(1); 
+  vnl_vector<double> centroid(1);
   for( unsigned int i=0; i < numberOfClasses; i++ )
     {
-    MembershipFunctionPointer membershipFunction = 
+    MembershipFunctionPointer membershipFunction =
                                          MembershipFunctionType::New();
 
-    centroid[0] = atof( argv[i+numberOfArgumentsBeforeMeans] ); 
+    centroid[0] = atof( argv[i+numberOfArgumentsBeforeMeans] );
 
     membershipFunction->SetCentroid( centroid );
 
@@ -316,8 +316,8 @@ int main( int argc, char * argv [] )
 // box. For example, a neighborhood radius of 2 in a 3D image will result in a
 // clique of size 5x5x5 pixels, and a radius of 1 will result in a clique of
 // size 3x3x3 pixels.
-// 
-// Software Guide : EndLatex 
+//
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
   mrfFilter->SetNeighborhoodRadius( 1 );
@@ -334,8 +334,8 @@ int main( int argc, char * argv [] )
 // illustrate a typical set of values for a 3x3x3 neighborhood. The array is
 // arranged and then passed to the filter by using the method
 // \code{SetMRFNeighborhoodWeight()}.
-// 
-// Software Guide : EndLatex 
+//
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
   std::vector< double > weights;
@@ -356,19 +356,19 @@ int main( int argc, char * argv [] )
 // functions have comparable value. This is necessary since the label
 // image and the input image can have different dynamic ranges. The fidelity
 // function is usually computed using a distance function, such as the
-// \doxygen{itk}{DistanceToCentroidMembershipFunction} or one of the other 
+// \doxygen{itk}{DistanceToCentroidMembershipFunction} or one of the other
 // membership functions. They tend to have values in the order of the means
-// specified. 
-// Software Guide : EndLatex 
-    
+// specified.
+// Software Guide : EndLatex
+
 // Software Guide : BeginCodeSnippet
   double totalWeight = 0;
-  for(std::vector< double >::const_iterator wcIt = weights.begin(); 
+  for(std::vector< double >::const_iterator wcIt = weights.begin();
       wcIt != weights.end(); ++wcIt )
     {
     totalWeight += *wcIt;
     }
-  for(std::vector< double >::iterator wIt = weights.begin(); 
+  for(std::vector< double >::iterator wIt = weights.begin();
       wIt != weights.end(); wIt++ )
     {
     *wIt = static_cast< double > ( (*wIt) * meanDistance / (2 * totalWeight));
@@ -383,8 +383,8 @@ int main( int argc, char * argv [] )
 // Software Guide : BeginLatex
 //
 // Finally, the classifier class is connected to the Markov Random Fields filter.
-// 
-// Software Guide : EndLatex 
+//
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
   mrfFilter->SetClassifier( classifier );
@@ -402,26 +402,26 @@ int main( int argc, char * argv [] )
 // the classification filter after passing it through an intensity rescaler
 // to rescale it to an 8 bit dynamic range
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
   typedef MRFFilterType::OutputImageType  OutputImageType;
 // Software Guide : EndCodeSnippet
 
   // Rescale outputs to the dynamic range of the display
   typedef otb::Image< unsigned char, Dimension > RescaledOutputImageType;
-  typedef itk::RescaleIntensityImageFilter< 
+  typedef itk::RescaleIntensityImageFilter<
              OutputImageType, RescaledOutputImageType >   RescalerType;
 
   RescalerType::Pointer intensityRescaler = RescalerType::New();
   intensityRescaler->SetOutputMinimum(   0 );
   intensityRescaler->SetOutputMaximum( 255 );
-  intensityRescaler->SetInput( mrfFilter->GetOutput() );  
+  intensityRescaler->SetInput( mrfFilter->GetOutput() );
 
 // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileWriter< OutputImageType > WriterType;
 
   WriterType::Pointer writer = WriterType::New();
-  
+
   writer->SetInput( intensityRescaler->GetOutput() );
 
   writer->SetFileName( outputImageFileName );
@@ -436,7 +436,7 @@ int main( int argc, char * argv [] )
 // by simply invoking the \code{Update()} method in the writer. This call will
 // propagate the update request to the reader and then to the MRF filter.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 
 // Software Guide : BeginCodeSnippet
@@ -461,7 +461,7 @@ int main( int argc, char * argv [] )
   std::cout << mrfFilter->GetStopCondition() << std::endl;
 
   //  Software Guide : BeginLatex
-  //  
+  //
   // \begin{figure} \center
   // \includegraphics[width=0.44\textwidth]{ScalarImageMarkovRandomField1Output.eps}
   // \itkcaption[Output of the ScalarImageMarkovRandomField]{Effect of the
@@ -481,11 +481,11 @@ int main( int argc, char * argv [] )
   //  interest of using the MRF approach in order to ensure the
   //  regularization of the classified image.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
   return EXIT_SUCCESS;
-  
+
 }
 
 

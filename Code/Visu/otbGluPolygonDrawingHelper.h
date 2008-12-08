@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -50,9 +50,9 @@ class ITK_EXPORT GluPolygonDrawingHelper
     typedef std::vector<PointType> PointVectorType;
 
      itkTypeMacro(GluPolygonDrawingHelper,Object);
-    
+
     itkNewMacro(Self);
-   
+
 
     /**
      * Set the current color.
@@ -104,8 +104,8 @@ class ITK_EXPORT GluPolygonDrawingHelper
      */
     void RenderPolygon();
 
-  protected:    
-    
+  protected:
+
     /**
      * Constructor.
      */
@@ -117,7 +117,7 @@ class ITK_EXPORT GluPolygonDrawingHelper
 
     GluPolygonDrawingHelper(const Self&);// purposely not implemented
     void operator=(const Self&);// purposely not implemented
-    
+
 
   private:
     /** Store the point of the polygon */

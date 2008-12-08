@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -40,7 +40,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginLatex
 //
-// We need now to declare the data types that we will be using and instanciate the 
+// We need now to declare the data types that we will be using and instanciate the
 // reader (which is a \doxygen{otb}{PointSetFileReader}).
 //
 // Software Guide : EndLatex
@@ -53,14 +53,14 @@ int main(int argc, char * argv[])
   reader->SetFileName(argv[1]);
   reader->Update();
 // Software Guide : EndCodeSnippet
-  
+
 // Software Guide : BeginLatex
 //
-// We can already display some interesting information such as the 
+// We can already display some interesting information such as the
 // data extension and the number of points:
 //
 // Software Guide : EndLatex
-  
+
   // Software Guide : BeginCodeSnippet
   std::cout << "*** Data area *** " << std::endl;
   std::cout << std::setprecision(15);
@@ -70,20 +70,20 @@ int main(int argc, char * argv[])
   std::cout << " - Northing max: " << reader->GetMaxY() << std::endl;
   std::cout << "Data points: " << reader->GetNumberOfPoints() << std::endl;
   // Software Guide : EndCodeSnippet
-  
-  
+
+
   // Software Guide : BeginLatex
 //
-// We can also loop on the point to see each point with its coordinates and 
+// We can also loop on the point to see each point with its coordinates and
 // value. Be careful here, data set can have hundred of thousands of points:
 //
 // Software Guide : EndLatex
-  
+
   // Software Guide : BeginCodeSnippet
   PointSetType::Pointer data = reader->GetOutput();
-  
+
   unsigned long nPoints = data->GetNumberOfPoints();
-  
+
   for(unsigned long i=0; i < nPoints; ++i)
   {
     PointSetType::PointType point;

@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,7 +24,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 int otbGeodesicMorphologyDecompositionImageFilter(int argc, char * argv[])
 {
- 
+
   const char * infname = argv[1];
   const char * convexfname = argv[2];
   const char * concavefname = argv[3];
@@ -48,9 +48,9 @@ int otbGeodesicMorphologyDecompositionImageFilter(int argc, char * argv[])
 
   RadiusType radius;
   radius.Fill(sesize);
-  
+
   filter->SetRadius(radius);
-  
+
   // writer the leveling map
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(levelingfname);

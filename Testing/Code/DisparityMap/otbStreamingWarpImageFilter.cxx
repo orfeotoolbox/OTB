@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,20 +29,20 @@ int otbStreamingWarpImageFilter(int argc, char* argv[])
       std::cout<<"usage: "<<argv[0]<<"infname deffname outfname radius"<<std::endl;
       return EXIT_SUCCESS;
     }
-  
+
   // Input parameters
   const char * infname = argv[1];
   const char * deffname = argv[2];
   const char * outfname = argv[3];
   const double maxdef = atoi(argv[4]);
-  
+
   // Images definition
   const unsigned int Dimension=2;
   typedef double PixelType;
   typedef otb::Image<PixelType,Dimension> ImageType;
   typedef itk::Vector<PixelType,2> DeformationValueType;
   typedef otb::Image<DeformationValueType,Dimension> DeformationFieldType;
-  
+
   // Warper
   typedef otb::StreamingWarpImageFilter<ImageType,ImageType,DeformationFieldType> ImageWarperType;
 
@@ -50,28 +50,28 @@ int otbStreamingWarpImageFilter(int argc, char* argv[])
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileReader<DeformationFieldType> DeformationReaderType;
   typedef otb::StreamingImageFileWriter<ImageType> WriterType;
-  
+
   // Objects creation
   DeformationReaderType::Pointer deformationReader = DeformationReaderType::New();
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
   ImageWarperType::Pointer warper = ImageWarperType::New();
-  
+
   // Reading
   reader->SetFileName(infname);
   deformationReader->SetFileName(deffname);
 
-  // Warping 
+  // Warping
   DeformationValueType maxDeformation;
   maxDeformation.Fill(maxdef);
   warper->SetMaximumDeformation(maxDeformation);
   warper->SetInput(reader->GetOutput());
   warper->SetDeformationField(deformationReader->GetOutput());
-  
+
   // Writing
   writer->SetInput(warper->GetOutput());
   writer->SetFileName(outfname);
   writer->Update();
-  
+
   return EXIT_SUCCESS;
 }

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,15 +29,15 @@ int generic_MultiChannelRAndBAndNIRVegetationIndexImageFilter(int argc, char * a
 {
   typedef otb::ImageFileReader<TInputImage> ReaderType;
   typedef otb::ImageFileWriter<TOutputImage> WriterType;
-  
-  typedef otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter<TInputImage,TOutputImage,TFunction> 
+
+  typedef otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter<TInputImage,TOutputImage,TFunction>
     MultiChannelRAndBAndNIRVegetationIndexImageFilterType;
-  
+
   // Instantiating object
   typename MultiChannelRAndBAndNIRVegetationIndexImageFilterType::Pointer filter = MultiChannelRAndBAndNIRVegetationIndexImageFilterType::New();
   typename ReaderType::Pointer reader = ReaderType::New();
   typename WriterType::Pointer writer = WriterType::New();
-  
+
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
   unsigned int redChannel(::atoi(argv[3]));
@@ -50,11 +50,11 @@ int generic_MultiChannelRAndBAndNIRVegetationIndexImageFilter(int argc, char * a
   filter->SetBlueIndex(blueChannel);
   filter->SetNIRIndex(nirChannel);
   filter->GetFunctor().SetGamma(gamma);
-  filter->SetInput( reader->GetOutput() ); 
+  filter->SetInput( reader->GetOutput() );
   writer->SetInput( filter->GetOutput() );
   writer->Update();
-  
-  
+
+
   return EXIT_SUCCESS;
 }
 
@@ -63,7 +63,7 @@ int otbMultiChannelRAndBAndNIRVegetationIndexImageFilter(int argc, char * argv[]
   const unsigned int Dimension = 2;
   typedef otb::VectorImage<unsigned char ,Dimension> InputImageType;
   typedef otb::Image<float,Dimension> OutputImageType;
-  
+
   std::string strArgv(argv[1]);
   argc--;
   argv++;
@@ -75,6 +75,6 @@ int otbMultiChannelRAndBAndNIRVegetationIndexImageFilter(int argc, char * argv[]
 				   (argc,argv) );
   else
     return EXIT_FAILURE;
- 
+
   return EXIT_SUCCESS;
 }

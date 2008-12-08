@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -41,7 +41,7 @@ int otbSpatialObjectToImageDrawingFilter(int argc, char * argv[])
   SpatialObjectType::ArrayType radius;
   radius[0]=radiusx;
   radius[1]=radiusy;
-      
+
   ellipse->SetRadius(radius);
 
   ImageType::PointType origin;
@@ -55,7 +55,7 @@ int otbSpatialObjectToImageDrawingFilter(int argc, char * argv[])
   writer->SetInput(filter->GetOutput());
   writer->SetFileName(outputFilename);
   writer->Update();
-  
+
 
 
   return EXIT_SUCCESS;

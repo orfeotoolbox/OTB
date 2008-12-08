@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -36,7 +36,7 @@ int otbImageToLuminanceImageFilter(int argc, char * argv[])
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
   typedef otb::ImageToLuminanceImageFilter<InputImageType,OutputImageType> ImageToLuminanceImageFilterType;
-  typedef ImageToLuminanceImageFilterType::VectorType VectorType; 
+  typedef ImageToLuminanceImageFilterType::VectorType VectorType;
 
   ReaderType::Pointer reader  = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -57,7 +57,7 @@ int otbImageToLuminanceImageFilter(int argc, char * argv[])
       beta[i] = static_cast<double>(atof(argv[i+7]));
     }
 
-   
+
 
   // Instantiating object
   ImageToLuminanceImageFilterType::Pointer filter = ImageToLuminanceImageFilterType::New();

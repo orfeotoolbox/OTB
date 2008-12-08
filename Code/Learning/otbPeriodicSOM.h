@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom ; Telecom bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom ; Telecom bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,23 +27,23 @@ namespace otb {
 
 /**
  * \class PeriodicSOM
- * \brief This class is responsible for the learning of a self organizing 
+ * \brief This class is responsible for the learning of a self organizing
  * map when considered as a torus.
  *
- * This class extends the SOM object which implements the Self 
+ * This class extends the SOM object which implements the Self
  * Organizing Map (or Kohonen map) learning.
- * 
+ *
  * The learning process iteratively select the best-response neuron for each input vector,
- * enhancing its response and the response of its neighbors with respect to a certain radius, 
+ * enhancing its response and the response of its neighbors with respect to a certain radius,
  * computed from an initial radius, and to a certain learning factor, decreasing at each iteration.
  *
  * The behavior of the neighborhood is given by a functor (templated) which parameter is the current
  * iteration. It returns a neighborhood of type \code SizeType \endcode.
  *
- * The behavior of the learning factor (hold by a beta variable) is given by an other functor 
+ * The behavior of the learning factor (hold by a beta variable) is given by an other functor
  * which parameter is the current iteration. It returns a beta value of type \code double \endcode.
  *
- * The SOMMap produced as output can be either initialized with a constant custom value or randomly 
+ * The SOMMap produced as output can be either initialized with a constant custom value or randomly
  * generated following a normal law. The seed for the random intialization can be modified.
  *
  * \sa SOMMap
@@ -52,16 +52,16 @@ namespace otb {
  * \sa CzihoSOMNeighborhoodBehaviorFunctor
  */
 template <class TListSample, class TMap,
-		 class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor, 
-		 class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor > 
-class ITK_EXPORT PeriodicSOM  
+		 class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
+		 class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor >
+class ITK_EXPORT PeriodicSOM
 	: public SOM< TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor >
 {
 public:
 	/** Standard typedefs */
 	typedef PeriodicSOM Self;
-	typedef SOM< TListSample, TMap, 
-					TSOMLearningBehaviorFunctor, 
+	typedef SOM< TListSample, TMap,
+					TSOMLearningBehaviorFunctor,
 					TSOMNeighborhoodBehaviorFunctor > Superclass;
 	typedef itk::SmartPointer<Self> Pointer;
 	typedef itk::SmartPointer<const Self> ConstPointer;
@@ -113,8 +113,8 @@ protected:
 		Superclass::PrintSelf(os,indent); }
 
 private:
-	PeriodicSOM(const Self&); // purposely not implemented 
-	void operator=(const Self&); // purposely not implemented 
+	PeriodicSOM(const Self&); // purposely not implemented
+	void operator=(const Self&); // purposely not implemented
 
 }; // end of class
 

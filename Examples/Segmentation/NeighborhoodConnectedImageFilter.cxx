@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -53,7 +53,7 @@
 // NeighborhoodConnectedImageFilter, on the other hand, will only accept a
 // pixel if \textbf{all} its neighbors have intensities that fit in the
 // interval. The size of the neighborhood to be considered around each pixel is
-// defined by a user-provided integer radius. 
+// defined by a user-provided integer radius.
 //
 // The reason for considering the neighborhood intensities instead of only the
 // current pixel intensity is that small structures are less likely to be
@@ -62,7 +62,7 @@
 // morphology erosion using a structuring element of the same shape as
 // the neighborhood provided to the NeighborhoodConnectedImageFilter.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 
 // Software Guide : BeginCodeSnippet
@@ -79,7 +79,7 @@
 //  The \doxygen{itk}{CurvatureFlowImageFilter} is used here to smooth the image
 //  while preserving edges.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "itkCurvatureFlowImageFilter.h"
@@ -102,12 +102,12 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  We now define the image type using a particular pixel type and image
   //  dimension. In this case the \code{float} type is used for the pixels due
-  //  to the requirements of the smoothing filter. 
+  //  to the requirements of the smoothing filter.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef   float           InternalPixelType;
@@ -121,7 +121,7 @@ int main( int argc, char *argv[] )
   typedef itk::CastImageFilter< InternalImageType, OutputImageType >
     CastingFilterType;
   CastingFilterType::Pointer caster = CastingFilterType::New();
-                        
+
 
   // We instantiate reader and writer types
   //
@@ -136,11 +136,11 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The smoothing filter type is instantiated using the image type as
   //  a template parameter.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef   itk::CurvatureFlowImageFilter<InternalImageType, InternalImageType>
@@ -149,24 +149,24 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  Then, the filter is created by invoking the \code{New()} method and
   //  assigning the result to a \doxygen{itk}{SmartPointer}.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  CurvatureFlowImageFilterType::Pointer smoothing = 
+  CurvatureFlowImageFilterType::Pointer smoothing =
                          CurvatureFlowImageFilterType::New();
   // Software Guide : EndCodeSnippet
 
 
   //  Software Guide : BeginLatex
-  //  
-  //  We now declare the type of the region growing filter. In this case it is
-  //  the NeighborhoodConnectedImageFilter. 
   //
-  //  Software Guide : EndLatex 
+  //  We now declare the type of the region growing filter. In this case it is
+  //  the NeighborhoodConnectedImageFilter.
+  //
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef itk::NeighborhoodConnectedImageFilter<InternalImageType,
@@ -174,10 +174,10 @@ int main( int argc, char *argv[] )
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
-  //  
-  //  One filter of this class is constructed using the \code{New()} method. 
   //
-  //  Software Guide : EndLatex 
+  //  One filter of this class is constructed using the \code{New()} method.
+  //
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   ConnectedFilterType::Pointer neighborhoodConnected = ConnectedFilterType::New();
@@ -185,14 +185,14 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  Now it is time to create a simple, linear data processing pipeline. A
   //  file reader is added at the beginning of the pipeline and a cast
   //  filter and writer are added at the end. The cast filter is required
   //  to convert \code{float} pixel types to integer types since only a
   //  few image file formats support \code{float} types.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   smoothing->SetInput( reader->GetOutput() );
@@ -209,7 +209,7 @@ int main( int argc, char *argv[] )
   //  they may have to be adjusted depending on the amount of noise present in
   //  the input image.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   smoothing->SetNumberOfIterations( 5 );
@@ -229,7 +229,7 @@ int main( int argc, char *argv[] )
   //  \index{itk::NeighborhoodConnectedImageFilter!SetLower()}
   //  \index{itk::NeighborhoodConnectedImageFilter!SetUppder()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   const InternalPixelType lowerThreshold = atof( argv[5] );
   const InternalPixelType upperThreshold = atof( argv[6] );
@@ -240,7 +240,7 @@ int main( int argc, char *argv[] )
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  Here, we add the crucial parameter that defines the neighborhood size
   //  used to determine whether a pixel lies in the region. The larger the
   //  neighborhood, the more stable this filter will be against noise in the
@@ -248,13 +248,13 @@ int main( int argc, char *argv[] )
   //  select a filter of radius $2$ along each dimension. This results in a
   //  neighborhood of $5 \times 5$ pixels.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   InternalImageType::SizeType   radius;
 
-  radius[0] = 2;   // two pixels along X 
-  radius[1] = 2;   // two pixels along Y 
+  radius[0] = 2;   // two pixels along X
+  radius[1] = 2;   // two pixels along Y
 
   neighborhoodConnected->SetRadius( radius );
   // Software Guide : EndCodeSnippet
@@ -269,10 +269,10 @@ int main( int argc, char *argv[] )
   //  \index{itk::NeighborhoodConnectedImageFilter!SetSeed()}
   //  \index{itk::NeighborhoodConnectedImageFilter!SetReplaceValue()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   InternalImageType::IndexType  index;
-  
+
   index[0] = atoi( argv[3] );
   index[1] = atoi( argv[4] );
 
@@ -282,14 +282,14 @@ int main( int argc, char *argv[] )
   neighborhoodConnected->SetReplaceValue( 255 );
   // Software Guide : EndCodeSnippet
 
-  
+
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The invocation of the \code{Update()} method on the writer triggers the
   //  execution of the pipeline.  It is usually wise to put update calls in a
   //  \code{try/catch} block in case errors occur and exceptions are thrown.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   try
@@ -308,7 +308,7 @@ int main( int argc, char *argv[] )
   //
   //  Let's run this example using as input the image
   //  \code{QB\_Suburb.png} provided in the directory
-  //  \code{Examples/Data}. We can easily segment the major 
+  //  \code{Examples/Data}. We can easily segment the major
   //  structures by providing seeds in the appropriate locations and defining
   //  values for the lower and upper thresholds.
   //  Figure~\ref{fig:NeighborhoodConnectedThresholdOutput} illustrates several examples of
@@ -319,7 +319,7 @@ int main( int argc, char *argv[] )
   //  \begin{center}
   //  \begin{tabular}{|l|c|c|c|c|}
   //  \hline
-  //  Structure & Seed Index & Lower & Upper & Output Image \\ \hline 
+  //  Structure & Seed Index & Lower & Upper & Output Image \\ \hline
   //  Road & $(110,38)$ & 50 & 100 & Second from left in Figure \ref{fig:NeighborhoodConnectedThresholdOutput} \\ \hline
   //  Shadow    & $(118,100)$ & 0 & 10 & Third  from left in Figure \ref{fig:NeighborhoodConnectedThresholdOutput} \\ \hline
   //  Building  & $(169,146)$ & 220 & 255 & Fourth from left in Figure \ref{fig:NeighborhoodConnectedThresholdOutput} \\ \hline
@@ -336,7 +336,7 @@ int main( int argc, char *argv[] )
   // \includegraphics[width=0.24\textwidth]{NeighborhoodConnectedThresholdOutput1.eps}
   // \includegraphics[width=0.24\textwidth]{NeighborhoodConnectedThresholdOutput2.eps}
   // \includegraphics[width=0.24\textwidth]{NeighborhoodConnectedThresholdOutput3.eps}
-  // \itkcaption[NeighborhoodConnectedThreshold segmentation results]{Segmentation results 
+  // \itkcaption[NeighborhoodConnectedThreshold segmentation results]{Segmentation results
   // for the NeighborhoodConnectedThreshold filter for various seed points.}
   // \label{fig:NeighborhoodConnectedThresholdOutput}
   // \end{figure}
@@ -349,9 +349,9 @@ int main( int argc, char *argv[] )
   //  ConnectedThresholdImageFilter. You may want to play with the
   //  value of the neighborhood radius and see how it affect the smoothness of
   //  the segmented object borders, the size of the segmented region and how
-  //  much that costs in computing time. 
+  //  much that costs in computing time.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

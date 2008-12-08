@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -35,12 +35,12 @@ int otbPerBandVectorImageFilterWithMeanFilter(int argc, char * argv[])
   typedef otb::VectorImage<PixelType,Dimension> VectorImageType;
   typedef itk::MeanImageFilter<ImageType,ImageType> MeanFilterType;
 
-  typedef otb::PerBandVectorImageFilter<VectorImageType,VectorImageType,MeanFilterType> 
+  typedef otb::PerBandVectorImageFilter<VectorImageType,VectorImageType,MeanFilterType>
     PerBandVectorImageFilterType;
 
   typedef otb::ImageFileReader<VectorImageType> ReaderType;
   typedef otb::ImageFileWriter<VectorImageType> WriterType;
-      
+
   // Instantiating object
   PerBandVectorImageFilterType::Pointer filter = PerBandVectorImageFilterType::New();
 
@@ -49,13 +49,13 @@ int otbPerBandVectorImageFilterWithMeanFilter(int argc, char * argv[])
 
   reader->SetFileName(infname);
   writer->SetFileName(outfname);
-      
+
   filter->SetInput(reader->GetOutput());
   writer->SetInput(filter->GetOutput());
 
   writer->Update();
 
-   
+
 
   return EXIT_SUCCESS;
 }

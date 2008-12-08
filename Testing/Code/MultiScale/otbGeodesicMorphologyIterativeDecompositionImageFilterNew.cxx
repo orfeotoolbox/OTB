@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,14 +25,14 @@ int otbGeodesicMorphologyIterativeDecompositionImageFilterNew(int argc, char * a
 {
   const unsigned int Dimension = 2;
   typedef double InputPixelType;
-  
+
   typedef otb::Image<InputPixelType,Dimension> InputImageType;
-  
+
   typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
   typedef otb::GeodesicMorphologyIterativeDecompositionImageFilter<InputImageType,StructuringElementType> DecompositionFilterType;
 
   // Instantiation
   DecompositionFilterType::Pointer decomposition = DecompositionFilterType::New();
-  
+
   return EXIT_SUCCESS;
 }

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,9 +27,9 @@ int otbSOMMapNew(int argc, char* argv[])
   typedef itk::RGBPixel<ComponentType> PixelType;
   typedef itk::Statistics::EuclideanDistance<PixelType> DistanceType;
   typedef otb::SOMMap<PixelType,DistanceType,Dimension> SOMMapType;
-  
+
   // Instantiation
   SOMMapType::Pointer somMap = SOMMapType::New();
-  
+
   return EXIT_SUCCESS;
 }

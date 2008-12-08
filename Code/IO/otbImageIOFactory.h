@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,15 +29,15 @@ namespace otb
  */
 class ITK_EXPORT ImageIOFactory : public itk::ImageIOFactory
 {
-public:  
+public:
   /** Standard class typedefs. */
   typedef ImageIOFactory   Self;
   typedef itk::ImageIOFactory  Superclass;
   typedef itk::SmartPointer<Self>  Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
-  
+
   /** Class Methods used to interface with the registered factories */
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(ImageIOFactory, itk::ImageIOFactory);
 
@@ -46,7 +46,7 @@ public:
 
   /** Mode in which the files is intended to be used */
 //  typedef enum { ReadMode, WriteMode } FileModeType;
-  
+
   /** Create the appropriate ImageIO depending on the particulars of the file. */
   static ImageIOBasePointer CreateImageIO(const char* path, FileModeType mode);
 
@@ -60,10 +60,10 @@ protected:
 private:
   ImageIOFactory(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
 };
-  
-  
+
+
 } // end namespace otb
 
 #endif

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -36,7 +36,7 @@ namespace otb
  * - \f$ \phi_{5} = Re (c_{30} c_{12}^{3}) \f$
  * - \f$ \phi_{6} = Re (c_{20} c_{12}^{2}) \f$
  * - \f$ \phi_{7} = Im (c_{30} c_{12}^{3}) \f$
- *  
+ *
  * With :
  *
  *  \f[  c_{p,q}=\int \int (x+iy)^{p} \cdot (x-iy)^{q} \cdot f(x,y) \cdot
@@ -48,11 +48,11 @@ namespace otb
  *
  * This class is templated over the input image type and the
  * path type (e.g. PolyLineParametricPath<2> ).
- * 
+ *
  * \ingroup FunctionFunctions
  */
 
-template < class TInputPath,    
+template < class TInputPath,
            class TOutput    = double,
            class TPrecision = double>
 class ITK_EXPORT HuPathFunction :
@@ -64,7 +64,7 @@ public:
   typedef RealMomentPathFunction<TInputPath, TOutput, TPrecision>   Superclass;
   typedef itk::SmartPointer<Self>                       Pointer;
   typedef itk::SmartPointer<const Self>                 ConstPointer;
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(HuPathFunction, RealMomentPathFunction);
 
@@ -73,14 +73,14 @@ public:
 
   /** InputPathType typedef support. */
   typedef typename Superclass::PathType                 PathType;
-  typedef typename Superclass::PathConstPointer         PathConstPointer;  
+  typedef typename Superclass::PathConstPointer         PathConstPointer;
   typedef typename PathType::ContinuousIndexType        VertexType;
   typedef itk::VectorContainer< unsigned,VertexType >   VertexListType;
   typedef typename VertexListType::ConstPointer         VertexListPointer;
 
   /** OutputType typedef support. */
-  typedef typename Superclass::RealType                 RealType;  			 
- 
+  typedef typename Superclass::RealType                 RealType;
+
   /** Type for calculation precision */
   typedef typename Superclass::PrecisionType            PrecisionType;
 
@@ -88,7 +88,7 @@ public:
   virtual RealType Evaluate( const PathType& path) const;
   virtual RealType Evaluate( ) const;
   /** Get/Set the radius of the neighborhood over which the
-      statistics are evaluated */  
+      statistics are evaluated */
   itkSetMacro(MomentNumber,short);
   itkGetConstReferenceMacro( MomentNumber, short );
 
@@ -101,7 +101,7 @@ private:
   HuPathFunction( const Self& ); //purposely not implemented
   void operator=( const Self& ); //purposely not implemented
 
-  short m_MomentNumber;  
+  short m_MomentNumber;
 };
 
 } // namespace otb

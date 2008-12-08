@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,7 +34,7 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class ImageAlternateViewer
- *  \brief 
+ *  \brief
  *
  * \ingroup Visu
  */
@@ -48,13 +48,13 @@ class ITK_EXPORT ImageAlternateViewer
   typedef itk::Object                     Superclass;
   typedef itk::SmartPointer<Self>         Pointer;
   typedef itk::SmartPointer<const Self>   ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(ImageAlternateViewer,Object);
-  
+
   /** Template related typedef */
     typedef TPixel     PixelType;
     typedef otb::VectorImage<PixelType,2> ImageType;
@@ -70,7 +70,7 @@ class ITK_EXPORT ImageAlternateViewer
     typedef otb::ImageList<SingleImageType> ImageListType;
     typedef otb::VectorImageToImageListFilter<ImageType,ImageListType> VectorImageDecompositionFilterType;
     typedef typename VectorImageDecompositionFilterType::Pointer VectorImageDecompositionFilterPointerType;
-    
+
     typedef itk::InterpolateImageFunction<SingleImageType,double> InterpolatorType;
     typedef typename InterpolatorType::Pointer InterpolatorPointerType;
     typedef itk::LinearInterpolateImageFunction<SingleImageType,double> DefaultInterpolatorType;
@@ -80,7 +80,7 @@ class ITK_EXPORT ImageAlternateViewer
 
     itkSetMacro(RedChannelIndex,unsigned int);
     itkGetMacro(RedChannelIndex,unsigned int);
-    
+
     itkSetMacro(GreenChannelIndex,unsigned int);
     itkGetMacro(GreenChannelIndex,unsigned int);
 
@@ -104,7 +104,7 @@ class ITK_EXPORT ImageAlternateViewer
 
     itkSetObjectMacro(Image,ImageType);
     itkGetObjectMacro(Image,ImageType);
-    
+
     itkSetObjectMacro(SecondImage,ImageType);
     itkGetObjectMacro(SecondImage,ImageType);
 
@@ -131,7 +131,7 @@ class ITK_EXPORT ImageAlternateViewer
      */
     void SetInsightViewModelToRGB(void);
 
-    /** 
+    /**
      * Set insight view model to grayscale
      */
     void SetInsightViewModelToGrayscale(void);
@@ -140,12 +140,12 @@ class ITK_EXPORT ImageAlternateViewer
     unsigned char Normalize(PixelType value, unsigned int channelIndex);
 
     void Show(void);
-    
+
     void Reset(void);
 
     /** Initialize the widget */
     virtual void Init(int x, int y, int w, int h, const char * l);
-  
+
   /** Resize the widget */
   virtual void resize(int x, int y, int w, int h);
 
@@ -154,13 +154,13 @@ protected:
   ImageAlternateViewer();
   /** Destructor */
   virtual ~ImageAlternateViewer();
-  
+
   /** Draw the widget */
   virtual void draw(void);
-  
+
   /** Partial draw routine */
   virtual void Draw(unsigned char * buffer,RegionType& region);
-  
+
   /** Reset opengl context */
   virtual void ResetOpenGlContext(void);
 
@@ -171,20 +171,20 @@ protected:
 /*   virtual void RebuildOpenGlBuffer(void); */
 
 
-  
+
   virtual void IncrementalOpenGlBufferUpdate(void);
 
   RegionType GetAdditionalBufferRegion(unsigned int i);
-  
+
   unsigned char * CreateAdditionalBuffer(RegionType region,ImagePointerType image,bool rgb);
-  
-  virtual void MergeBuffersAndFreeMemory(std::vector<unsigned char *> bufferList, 
+
+  virtual void MergeBuffersAndFreeMemory(std::vector<unsigned char *> bufferList,
 					 std::vector<RegionType> bufferRegionList);
 
   virtual void AdditionalRedraw(void);
 
   virtual void DecorationRedraw(void);
-  
+
   virtual void DrawRegionBoundary(RegionType& region);
 
   virtual long IndexInOldGrid(PointType point, PointType oldUpperLeft, SpacingType spacing, SizeType size);
@@ -236,7 +236,7 @@ private:
   VectorImageDecompositionFilterPointerType m_DecompositionFilter;
   /** Region requested for decomposition */
   RegionType m_RequestedRegion;
-  
+
   /** buffered region */
   RegionType m_BufferedRegion;
 
@@ -271,7 +271,7 @@ private:
   bool m_SubWindowMode;
 /** subwindow mode switch */
   bool m_SubWindowMove;
-  
+
 };
 }// End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

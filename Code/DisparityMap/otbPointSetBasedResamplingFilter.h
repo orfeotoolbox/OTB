@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,7 +25,7 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class PointSetBasedResamplingFilter
- *  \brief 
+ *  \brief
  *
  * \ingroup DisparityMap
  */
@@ -40,13 +40,13 @@ class ITK_EXPORT PointSetBasedResamplingFilter
   typedef itk::ImageToImageFilter<TInputImage,TOutputImage> Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(PointSetBasedResamplingFilter,ImageToImageFilter);
-  
+
   /** Template parameters typedefs */
   typedef TInputImage InputImageType;
   typedef TOutputImage OutputImageType;
@@ -73,7 +73,7 @@ class ITK_EXPORT PointSetBasedResamplingFilter
   typedef itk::DataObjectDecorator<TransformType> TransformOutputType;
   typedef typename TransformOutputType::Pointer TransformOutputPointerType;
   typedef typename TransformOutputType::ConstPointer TransformOutputConstPointerType;
- 
+
   /**
    * Set the pointset containing the disparity.
    * \param pointset The pointset containing the disparity.
@@ -93,15 +93,15 @@ class ITK_EXPORT PointSetBasedResamplingFilter
    itkGetConstReferenceMacro(OutputSpacing,SpacingType);
    itkSetMacro(OutputOrigin,PointType);
    itkGetConstReferenceMacro(OutputOrigin,PointType);
-   
+
    /** Set/Get the Transfrom. */
    itkSetObjectMacro(Transform,TransformType);
    itkGetObjectMacro(Transform,TransformType);
-   
+
    /** Set/Get the Interpolator. */
    itkSetObjectMacro(Interpolator,InterpolatorType);
    itkGetObjectMacro(Interpolator,InterpolatorType);
-   
+
 protected:
   /** Constructor */
   PointSetBasedResamplingFilter();
@@ -109,13 +109,13 @@ protected:
   virtual ~PointSetBasedResamplingFilter() {};
  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  
+
   /** Main computation method */
   virtual void GenerateData(void);
 
  /** Generate output information */
   virtual void GenerateOutputInformation(void);
-  /** 
+  /**
    * \return The parameters of the transform associated with the nearest suitable point in pointset.
    */
   ParametersType GetNearestPointTransformParameters(IndexType &index);

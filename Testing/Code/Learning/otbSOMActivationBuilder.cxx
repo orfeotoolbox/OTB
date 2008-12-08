@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,7 +33,7 @@ int otbSOMActivationBuilder(int argc, char* argv[])
   char * vectorSetFileName = argv[1];
   char * mapFileName = argv[2];
   char * outputFileName = argv[3];
-  
+
   typedef float ComponentType;
   typedef unsigned char OutputPixelType;
   typedef itk::VariableLengthVector<ComponentType> PixelType;
@@ -52,21 +52,21 @@ int otbSOMActivationBuilder(int argc, char* argv[])
   typedef otb::SOMActivationBuilder<ListSampleType,MapType,OutputImageType> SOMActivationBuilderType;
 
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(vectorSetFileName);    
+  reader->SetFileName(vectorSetFileName);
   reader->Update();
 
   ListSampleType::Pointer listSample = ListSampleType::New();
 
   itk::ImageRegionIterator<InputImageType> it(reader->GetOutput(),reader->GetOutput()->GetLargestPossibleRegion());
-    
+
   it.GoToBegin();
-    
+
   while(!it.IsAtEnd())
     {
       listSample->PushBack(it.Get());
       ++it;
     }
-    
+
   MapReaderType::Pointer mapReader = MapReaderType::New();
   mapReader->SetFileName(mapFileName);
 

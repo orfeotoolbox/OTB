@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -19,7 +19,7 @@ PURPOSE.  See the above copyright notices for more information.
 #define __otbLinkPathListFilter_txx
 
 #include "otbLinkPathListFilter.h"
-#include "otbMath.h" 
+#include "otbMath.h"
 
 namespace otb
 {
@@ -43,12 +43,12 @@ LinkPathListFilter<TPath>
   // IO
   const PathListType *  inputPtr  = this->GetInput();
   PathListType *  outputPtr = this->GetOutput();
- 
+
   // Input iterator
   IteratorType inputIt = inputPtr->Begin();
-  
+
   std::vector<bool> eraseFlagVector;
-  
+
   // First we copy all input path to output
   while( inputIt != inputPtr->End())
     {
@@ -105,7 +105,7 @@ LinkPathListFilter<TPath>
 				{
 				  found = true;
 				}
-			    } 
+			    }
 			}
 		      // Examining end of path1 with end of path2
 		      vTargetIt = outputIt2.Get()->GetVertexList()->End();
@@ -114,7 +114,7 @@ LinkPathListFilter<TPath>
 		      --vTargetIt;
 		      v4 = vTargetIt.Value();
 		      tmpDistance = vcl_sqrt(vcl_pow(v2[0]-v3[0],2)+vcl_pow(v2[1]-v3[1],2));
-		      
+
 		      if((tmpDistance<static_cast<double>(m_DistanceThreshold)) && ((!found)||(tmpDistance<distance)))
 			{
 			  if(VerifyAngularCondition(v1,v2,v3,v4))
@@ -129,7 +129,7 @@ LinkPathListFilter<TPath>
 				{
 				  found = true;
 				}
-			    } 
+			    }
 			}
 		      // Examining beginning of path1 with end of path2
 		      vSourceIt = outputIt1.Get()->GetVertexList()->Begin();
@@ -137,7 +137,7 @@ LinkPathListFilter<TPath>
 		      ++vSourceIt;
 		      v1 = vSourceIt.Value();
 		      tmpDistance = vcl_sqrt(vcl_pow(v2[0]-v3[0],2)+vcl_pow(v2[1]-v3[1],2));
-		      
+
 		      if((tmpDistance<static_cast<double>(m_DistanceThreshold)) && ((!found)||(tmpDistance<distance)))
 			{
 			  if(VerifyAngularCondition(v1,v2,v3,v4))
@@ -152,7 +152,7 @@ LinkPathListFilter<TPath>
 				{
 				  found = true;
 				}
-			    } 
+			    }
 			}
 		      // Examining beginning of path1 with beginning of path2
 		      vTargetIt = outputIt2.Get()->GetVertexList()->Begin();
@@ -174,7 +174,7 @@ LinkPathListFilter<TPath>
 				{
 				  found = true;
 				}
-			    } 
+			    }
 			}
 		    }
 		  ++index2;
@@ -185,11 +185,11 @@ LinkPathListFilter<TPath>
 		  //otbMsgDevMacro(<<"Search ended, merging path "<<index1<<" and path "<<pathToLinkIndex);
 		  // an appropriate path was found
 		  outputIt2 = outputPtr->Begin() + pathToLinkIndex;
-		  PathPointerType newPath = this->LinkPath(outputIt1.Get(),revert1,outputIt2.Get(),revert2);	  
+		  PathPointerType newPath = this->LinkPath(outputIt1.Get(),revert1,outputIt2.Get(),revert2);
 		  outputPtr->PushBack(newPath);
 		  // add a non erased flag for the new path
 		  eraseFlagVector.push_back(false);
-		  // mark the old path as erased 
+		  // mark the old path as erased
 		  eraseFlagVector[index1]=true;
 		  eraseFlagVector[pathToLinkIndex]=true;
 		}
@@ -197,9 +197,9 @@ LinkPathListFilter<TPath>
 	}
       ++index1;
       // This replaces ++outputIt1 because the iterators is somehow invalidated by a pushback.
-      outputIt1 = outputPtr->Begin() + index1;     
+      outputIt1 = outputPtr->Begin() + index1;
     }
-  
+
   // search ended, now removing the erased path
   typename std::vector<bool>::reverse_iterator it = eraseFlagVector.rbegin();
   index1 = eraseFlagVector.size()-1;
@@ -234,7 +234,7 @@ LinkPathListFilter<TPath>
     {
     alpha1 = (alpha1 >= 0)?alpha1:(alpha1+M_PI);
     alpha2 = (alpha2 >= 0)?alpha2:(alpha2+M_PI);
-    alpha3 = (alpha3 >= 0)?alpha3:(alpha3+M_PI);  
+    alpha3 = (alpha3 >= 0)?alpha3:(alpha3+M_PI);
     }
   else
     {
@@ -242,7 +242,7 @@ LinkPathListFilter<TPath>
     alpha2 = (alpha2 >= 0)?alpha2:(alpha2+2.*M_PI);
     alpha3 = (alpha3 >= 0)?alpha3:(alpha3+2.*M_PI);
     }
-   
+
   bool resp = (vcl_abs(alpha1-alpha2) < static_cast<double>(m_AngularThreshold))
     && (vcl_abs(alpha1-alpha3) < static_cast<double>(m_AngularThreshold))
     &&(vcl_abs(alpha2-alpha3) <static_cast<double>(m_AngularThreshold ));
@@ -258,12 +258,12 @@ LinkPathListFilter<TPath>
  */
 template <class TPath>
 typename LinkPathListFilter<TPath>
-::PathPointerType 
+::PathPointerType
 LinkPathListFilter<TPath>
 ::LinkPath(PathPointerType p1, bool revert1 , PathPointerType p2, bool revert2)
 {
   PathPointerType resp = PathType::New();
-  
+
   VertexIteratorType it;
 
 
@@ -282,7 +282,7 @@ LinkPathListFilter<TPath>
 	  resp->AddVertex((it).Value());
 	}
     }
-  
+
   if(revert2)
     {
       for(it=(p2->GetVertexList()->End());it!=p2->GetVertexList()->Begin();)

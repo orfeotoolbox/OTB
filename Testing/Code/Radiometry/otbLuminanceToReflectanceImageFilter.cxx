@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -40,7 +40,7 @@ int otbLuminanceToReflectanceImageFilter(int argc, char * argv[])
   else
     {
       day = atoi(argv[8]);
-      month = atoi(argv[9]); 
+      month = atoi(argv[9]);
     }
 
   const unsigned int Dimension = 2;
@@ -50,7 +50,7 @@ int otbLuminanceToReflectanceImageFilter(int argc, char * argv[])
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
   typedef otb::LuminanceToReflectanceImageFilter<InputImageType,OutputImageType> LuminanceToReflectanceImageFilterType;
-  typedef LuminanceToReflectanceImageFilterType::VectorType VectorType; 
+  typedef LuminanceToReflectanceImageFilterType::VectorType VectorType;
 
   ReaderType::Pointer reader  = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -67,7 +67,7 @@ int otbLuminanceToReflectanceImageFilter(int argc, char * argv[])
   solarIllumination[2] = static_cast<double>(atof(argv[6]));
   solarIllumination[3] = static_cast<double>(atof(argv[7]));
 
- 
+
   // Instantiating object
   LuminanceToReflectanceImageFilterType::Pointer filter = LuminanceToReflectanceImageFilterType::New();
 
@@ -80,13 +80,13 @@ int otbLuminanceToReflectanceImageFilter(int argc, char * argv[])
   else
     {
       filter->SetDay(day);
-      filter->SetMonth(month); 
+      filter->SetMonth(month);
     }
- 
+
   filter->SetInput(reader->GetOutput());
   writer->SetInput(filter->GetOutput());
   writer->Update();
 
- 
+
   return EXIT_SUCCESS;
 }

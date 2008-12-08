@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -35,7 +35,7 @@
 //
 //  \index{itk::PointSet!PixelType}
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
 #include "itkPointSet.h"
@@ -47,7 +47,7 @@ int main(int, char *[])
   //  The following code defines a particular type for a pixel type and
   //  instantiates a PointSet class with it.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef unsigned short  PixelType;
@@ -70,12 +70,12 @@ int main(int, char *[])
   //
   //  \index{itk::PointSet!SetPointData()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   unsigned int dataId =  0;
   PixelType value     = 79;
-  pointSet->SetPointData( dataId++, value );   
+  pointSet->SetPointData( dataId++, value );
   // Software Guide : EndCodeSnippet
 
 
@@ -92,12 +92,12 @@ int main(int, char *[])
   //
   //  \index{itk::PointSet!GetPointData()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
 
-  const bool found = pointSet->GetPointData( dataId, & value );   
-  if( found ) 
+  const bool found = pointSet->GetPointData( dataId, & value );
+  if( found )
     {
     std::cout << "Pixel value = " << value << std::endl;
     }
@@ -109,7 +109,7 @@ int main(int, char *[])
   //
   //  The \code{SetPointData()} and \code{GetPointData()} methods are not the
   //  most efficient way to get access to point data. It is far more efficient
-  //  to use the Iterators provided by the \code{PointDataContainer}. 
+  //  to use the Iterators provided by the \code{PointDataContainer}.
   //
   //  Data associated with points is internally stored in
   //  \code{PointDataContainer}s.  In the same way as with points, the actual
@@ -123,7 +123,7 @@ int main(int, char *[])
   //
   //  \index{itk::PointSet!PointDataContainer}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef PointSetType::PointDataContainer      PointDataContainer;
@@ -140,7 +140,7 @@ int main(int, char *[])
   //  \index{PointDataContainer!New()}
   //  \index{PointDataContainer!Pointer}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
   // Software Guide : BeginCodeSnippet
@@ -158,11 +158,11 @@ int main(int, char *[])
   //  \index{itk::VectorContainer!InsertElement()}
   //  \index{itk::MapContainer!InsertElement()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   unsigned int pointId = 0;
-  
+
   PixelType value0 = 34;
   PixelType value1 = 67;
 
@@ -179,7 +179,7 @@ int main(int, char *[])
   //
   //  \index{itk::PointSet!SetPointData()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   pointSet->SetPointData( pointData );
@@ -194,10 +194,10 @@ int main(int, char *[])
   //
   //  \index{itk::PointSet!GetPointData()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  PointDataContainer::Pointer  pointData2 = pointSet->GetPointData();   
+  PointDataContainer::Pointer  pointData2 = pointSet->GetPointData();
   // Software Guide : EndCodeSnippet
 
 
@@ -211,7 +211,7 @@ int main(int, char *[])
   //
   //  \index{PointDataContainer!Iterator}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef PointDataContainer::Iterator     PointDataIterator;
@@ -226,10 +226,10 @@ int main(int, char *[])
   //
   //  \index{PointDataContainer!Begin()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  PointDataIterator  pointDataIterator = pointData2->Begin();  
+  PointDataIterator  pointDataIterator = pointData2->Begin();
   // Software Guide : EndCodeSnippet
 
 
@@ -246,11 +246,11 @@ int main(int, char *[])
   //  \index{PointDataContainer!End()}
   //  \index{PointDataContainer!increment ++}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   PointDataIterator end = pointData2->End();
-  while( pointDataIterator != end ) 
+  while( pointDataIterator != end )
     {
     PixelType p = pointDataIterator.Value();  // access the pixel data
     std::cout << p << std::endl;              // print the pixel data
@@ -265,8 +265,8 @@ int main(int, char *[])
   //  not a valid iterator. This is called a \emph{past-end} iterator in order
   //  to indicate that it is the value resulting from advancing one step after
   //  visiting the last element in the container.
-  // 
-  //  Software Guide : EndLatex 
+  //
+  //  Software Guide : EndLatex
 
 
   return EXIT_SUCCESS;

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -43,12 +43,12 @@ int otbFrostFilterTest( int argc, char * argv[] )
   unsigned long randomSize[2];
   randomSize[0] = randomSize[1] = 8;
   random->SetSize(randomSize);
-  
+
   float spacing[2] = {0.7, 2.1};
   random->SetSpacing( spacing );
   float origin[2] = {15, 400};
   random->SetOrigin( origin );
-    
+
   // Create a mean image
   otb::FrostImageFilter<FloatImage2DType, FloatImage2DType>::Pointer frost;
   frost = otb::FrostImageFilter<FloatImage2DType,FloatImage2DType>::New();
@@ -88,7 +88,7 @@ int otbFrostFilterTest( int argc, char * argv[] )
       std::cout << std::endl;
       }
     }
-  
+
   // Test the itkGetConstReferenceMacro
   const FloatImage2DType::SizeType & radius = frost->GetRadius();
   std::cout << "frost->GetRadius():" << radius << std::endl;

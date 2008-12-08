@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,9 +27,9 @@ int otbMultiChannelRAndNIRVegetationIndexImageFilterNew(int argc, char * argv[])
   typedef otb::VectorImage<unsigned char,Dimension> InputImageType;
   typedef otb::Image<float,Dimension> OutputImageType;
   typedef otb::MultiChannelRAndNIRVegetationIndexImageFilter<InputImageType,OutputImageType> MultiChannelRAndNIRVegetationIndexImageFilterType;
-  
+
   // Instantiating object
   MultiChannelRAndNIRVegetationIndexImageFilterType::Pointer object = MultiChannelRAndNIRVegetationIndexImageFilterType::New();
-  
+
   return EXIT_SUCCESS;
 }

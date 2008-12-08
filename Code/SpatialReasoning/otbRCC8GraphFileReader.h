@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,23 +24,23 @@
 namespace otb
 {
 /** \class RCC8GraphFileReaderException
- * \brief Base exception class for IO problems during reading. 
- */ 
-class ITK_EXPORT RCC8GraphFileReaderException 
-  : public itk::ExceptionObject 
+ * \brief Base exception class for IO problems during reading.
+ */
+class ITK_EXPORT RCC8GraphFileReaderException
+  : public itk::ExceptionObject
 {
 public:
   /** Run-time information. */
   itkTypeMacro( RCC8GraphFileReaderException, ExceptionObject );
 
   /** Constructor. */
-  RCC8GraphFileReaderException(const char *file, unsigned int line, 
+  RCC8GraphFileReaderException(const char *file, unsigned int line,
                            const char* message = "Error in IO",
-                           const char* loc = "Unknown" ) : 
+                           const char* loc = "Unknown" ) :
     ExceptionObject(file, line, message, loc)
   {}
   /** Constructor. */
-  RCC8GraphFileReaderException(const std::string &file, unsigned int line, 
+  RCC8GraphFileReaderException(const std::string &file, unsigned int line,
                            const char* message = "Error in IO",
                            const char* loc = "Unknown" ) :
     ExceptionObject(file, line, message, loc)
@@ -50,8 +50,8 @@ public:
  * \class RCC8GraphFileReader
  * \brief This class reads a RCC8 graph from a .dot file (graphviz format).
  *
- * The parsing algorithm reads the lines from the file, deciding if the line is 
- * a vertex or edge line. It then call the correct parse method between ParseEdge 
+ * The parsing algorithm reads the lines from the file, deciding if the line is
+ * a vertex or edge line. It then call the correct parse method between ParseEdge
  * and ParseVertex. The ParseVertex use builds an AttributesMap and pass it to a new
  * vertex.
  *
@@ -100,10 +100,10 @@ protected:
    * \param line The line to parse.
    */
   void  ParseVertex(std::string line);
-  
+
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  
+
  private:
   /** File name */
   std::string m_FileName;
@@ -113,4 +113,4 @@ protected:
 #include "otbRCC8GraphFileReader.txx"
 #endif
 
-#endif 
+#endif

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -21,7 +21,7 @@
 #include "otbJPEG2000ImageIO.h"
 #include "itkVersion.h"
 
-  
+
 namespace otb
 {
 
@@ -33,18 +33,18 @@ JPEG2000ImageIOFactory::JPEG2000ImageIOFactory()
                          1,
                          itk::CreateObjectFunction<JPEG2000ImageIO>::New());
 }
-  
+
 JPEG2000ImageIOFactory::~JPEG2000ImageIOFactory()
 {
 }
 
-const char* 
+const char*
 JPEG2000ImageIOFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char* 
+const char*
 JPEG2000ImageIOFactory::GetDescription() const
 {
   return "JPEG2000 ImageIO Factory, allows the loading of JPEG2000 images into insight";

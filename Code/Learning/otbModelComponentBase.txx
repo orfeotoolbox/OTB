@@ -9,7 +9,7 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Some parts of this code are covered by the GET copyright. 
+  Some parts of this code are covered by the GET copyright.
   See GETCopyright.txt for details.
 
      This software is distributed WITHOUT ANY WARRANTY; without even
@@ -26,7 +26,7 @@
 #include "otbMacro.h"
 #include "otbModelComponentBase.h"
 
-namespace otb{ 
+namespace otb{
 namespace Statistics{
 
 template< class TSample >
@@ -97,7 +97,7 @@ ModelComponentBase< TSample >
 {
   m_Sample = sample ;
   m_SampleModified = 1;
-} 
+}
 
 template< class TSample >
 const TSample*
@@ -105,7 +105,7 @@ ModelComponentBase< TSample >
 ::GetSample() const
 {
   return m_Sample ;
-} 
+}
 
 template< class TSample >
 void
@@ -151,7 +151,7 @@ ModelComponentBase< TSample >
 template< class TSample >
 inline double
 ModelComponentBase< TSample >
-::Pdf(MeasurementVectorType& measurements) 
+::Pdf(MeasurementVectorType& measurements)
 {
   return this->m_PdfFunction->Evaluate(measurements) ;
 }
@@ -159,7 +159,7 @@ ModelComponentBase< TSample >
 template< class TSample >
 inline double
 ModelComponentBase< TSample >
-::Cdf(MeasurementVectorType& measurements) 
+::Cdf(MeasurementVectorType& measurements)
 {
   return m_CdfFunction->Evaluate(measurements) ;
 }
@@ -175,7 +175,7 @@ ModelComponentBase< TSample >
 template< class TSample >
 void
 ModelComponentBase< TSample >
-::Update() 
+::Update()
 {
   if ( m_SampleModified )
     this->GenerateData();
@@ -187,14 +187,14 @@ void
 ModelComponentBase< TSample >
 ::GenerateData ()
 {
-  /** subclasses should override this function to perform 
+  /** subclasses should override this function to perform
    *  parameter estimation. But it allows to switch m_SampleModified
    *  when necessary.
    */
   m_SampleModified = 0;
 }
 
-} // end of namespace Statistics 
+} // end of namespace Statistics
 } // end of namespace otb
 
 #endif

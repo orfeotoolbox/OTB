@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,7 +28,7 @@ template< class TInputHistogram, class TOutput >
 HistogramStatisticsFunction< TInputHistogram, TOutput>
 ::HistogramStatisticsFunction()
 {
-  m_IsModified = true;  
+  m_IsModified = true;
 }
 
 template< class TInputHistogram, class TOutput >
@@ -41,7 +41,7 @@ HistogramStatisticsFunction< TInputHistogram, TOutput>
   	this->Update();
   }
   return m_entropy;
-}                                                    
+}
 
 template< class TInputHistogram, class TOutput >
 typename HistogramStatisticsFunction< TInputHistogram, TOutput>::OutputType
@@ -53,7 +53,7 @@ HistogramStatisticsFunction< TInputHistogram, TOutput>
   	this->Update();
   }
   return m_mean;
-}                                                    
+}
 
 template< class TInputHistogram, class TOutput >
 typename HistogramStatisticsFunction< TInputHistogram, TOutput>::OutputType
@@ -65,7 +65,7 @@ HistogramStatisticsFunction< TInputHistogram, TOutput>
   	this->Update();
   }
   return m_covariance;
-}                                                    
+}
 
 template< class TInputHistogram, class TOutput >
 void
@@ -87,15 +87,15 @@ HistogramStatisticsFunction< TInputHistogram, TOutput>
   while (iter != end)
     {
     RealType Proba = static_cast<RealType>(iter.GetFrequency());
-    Proba /= static_cast<RealType>(globalFrequency); 
-    if(Proba !=0.0)   
+    Proba /= static_cast<RealType>(globalFrequency);
+    if(Proba !=0.0)
       {
       entropy -=  Proba * vcl_log(Proba);
-      } 
+      }
     ++iter ;
     }
   m_entropy.resize(1);
-  m_entropy[0] = static_cast<TOutput>(entropy); 
+  m_entropy[0] = static_cast<TOutput>(entropy);
 }
 
 
@@ -131,7 +131,7 @@ HistogramStatisticsFunction< TInputHistogram, TOutput>
       }
     mean /=  histogram->GetTotalFrequency();
     m_mean[noDim] = static_cast<TOutput>(mean);
-    }  
+    }
 }
 
 template< class TInputHistogram, class TOutput >
@@ -150,7 +150,7 @@ HistogramStatisticsFunction< TInputHistogram, TOutput>
     {
     itkExceptionMacro(<<"Histogram must contain at least 1 element.");
     }
-    
+
   for( unsigned int noDimX = 0; noDimX < NumberOfDimension; noDimX++ )
   for( unsigned int noDimY = 0; noDimY < NumberOfDimension; noDimY++ )
     {
@@ -169,8 +169,8 @@ HistogramStatisticsFunction< TInputHistogram, TOutput>
       }
     covariance /=  histogram->GetTotalFrequency();
     m_covariance[noDimX*NumberOfDimension+noDimY] = static_cast<TOutput>(covariance);
-    }  
-  
+    }
+
 }
 
 template< class TInputHistogram, class TOutput >

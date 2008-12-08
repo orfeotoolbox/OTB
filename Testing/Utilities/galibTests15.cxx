@@ -71,7 +71,7 @@ galibTests15(int argc, char *argv[])
 // Declare variables for the GA parameters and set them to some default values.
 // When we use convergence as the completion measure we have to specify both
 // a convergence value (larger means more converged) and a number-of-gen
-// which specifies how many generations back to look to calculate the 
+// which specifies how many generations back to look to calculate the
 // convergence.  The number of generations back defaults to 20, so you do not
 // have to set that if you don't want to.
 
@@ -161,10 +161,10 @@ galibTests15(int argc, char *argv[])
   delete [] target;
   return 0;
 }
- 
+
 
 // For this objective function we try to match the values in the array of float
-// that is passed to us as userData.  If the values in the genome map to 
+// that is passed to us as userData.  If the values in the genome map to
 // values that are close, we return a better score.  We are limited to positive
 // values for the objective value (because we're using linear scaling), so we
 // take the reciprocal of the absolute value of the difference between the

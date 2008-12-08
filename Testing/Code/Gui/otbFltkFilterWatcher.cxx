@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,7 +28,7 @@ int otbFltkFilterWatcher(int argc, char * argv[])
         typedef otb::Image<char,2> ImageType;
 	typedef otb::ImageFileReader<ImageType> ReaderType;
 	typedef itk::GradientMagnitudeImageFilter<ImageType, ImageType> FilterType;
-        
+
 	ReaderType::Pointer reader = ReaderType::New();
 	reader->SetFileName(infname);
 	FilterType::Pointer gradient = FilterType::New();

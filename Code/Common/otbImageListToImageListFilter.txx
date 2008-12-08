@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,7 +32,7 @@ ImageListToImageListFilter<TInputImage,TOutputImage>
   this->SetNumberOfRequiredInputs(1);
 }
 /**
- * Input Connection 
+ * Input Connection
  * \param image The input image.
  */
 template <class TInputImage, class TOutputImage>
@@ -44,7 +44,7 @@ ImageListToImageListFilter<TInputImage,TOutputImage>
   this->itk::ProcessObject::SetNthInput(0,const_cast<InputImageListType*>(imageList));
 }
 /**
- * Input image retrieval 
+ * Input image retrieval
  * \return The input image.
  */
 template <class TInputImage, class TOutputImage>
@@ -52,7 +52,7 @@ typename ImageListToImageListFilter<TInputImage,TOutputImage>::InputImageListTyp
 ImageListToImageListFilter<TInputImage,TOutputImage>
 ::GetInput(void)
 {
-  // If there is no input 
+  // If there is no input
   if (this->GetNumberOfInputs()<1)
     {
     // exit

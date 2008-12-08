@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,11 +31,11 @@ namespace otb
  *
  * \par THEORY
  *
- * This function is intended to provide an interpolation function that 
+ * This function is intended to provide an interpolation function that
  * has minimum aliasing artifacts, in contrast to linear interpolation.
- * According to sampling theory, the infinite-support sinc filter, 
+ * According to sampling theory, the infinite-support sinc filter,
  * whose Fourier transform is the box filter, is optimal for resampling
- * a function. In practice, the infinite support sinc filter is 
+ * a function. In practice, the infinite support sinc filter is
  * approximated using a limited support 'windowed' sinc filter.
  * Most of those functions are inspired of the itk::WindowedSincInterpolateImageFunction source code.
  *
@@ -48,14 +48,14 @@ namespace otb
  * Kernels for Medical Image Interpolation. MICCAI 1999, pp. 210-217
  *
  * \par
- * In this work, several 'windows' are estimated. In two dimensions, the 
+ * In this work, several 'windows' are estimated. In two dimensions, the
  * interpolation at a position (x,y) is given by the following
- * expression: 
+ * expression:
  *
  * \par
  * \f[
- *   I(x,y) = 
- *     \sum_{i = \lfloor x \rfloor + 1 - m}^{\lfloor x \rfloor + m} 
+ *   I(x,y) =
+ *     \sum_{i = \lfloor x \rfloor + 1 - m}^{\lfloor x \rfloor + m}
  *     \sum_{j = \lfloor y \rfloor + 1 - m}^{\lfloor y \rfloor + m}
  *     I_{i,j} K(x-i) K(y-j),
  * \f]
@@ -83,22 +83,22 @@ namespace otb
  * Use this filter the way you would use any ImageInterpolationFunction,
  * so for instance, you can plug it into the ResampleImageFilter class.
  * In order to initialize the filter you must choose several template
- * parameters. 
+ * parameters.
  *
  * \par
- * The first (TInputImage) is the image type, that's standard. 
+ * The first (TInputImage) is the image type, that's standard.
  *
  * \par
- * The second (TWindowFunction) is the window function object, which you 
- * can choose from about five different functions defined in this 
+ * The second (TWindowFunction) is the window function object, which you
+ * can choose from about five different functions defined in this
  * header. The default is the Hamming window, which is commonly used
- * but not optimal according to the cited paper. 
+ * but not optimal according to the cited paper.
  *
  * \par
  * The third (TBoundaryCondition) is the boundary condition class used
  * to determine the values of pixels that fall off the image boundary.
  * This class has the same meaning here as in the NeighborhoodItetator
- * classes. 
+ * classes.
  *
  * \par
  * The fouth (TCoordRep) is again standard for interpolating functions,
@@ -124,19 +124,19 @@ namespace otb
  *
  * \sa GenericInterpolatorImageFunctionBase
  * \sa LinearInterpolateImageFunctionBase ResampleImageFilter
- * \sa Function::HammingWindowFunction 
- * \sa Function::CosineWindowFunction 
+ * \sa Function::HammingWindowFunction
+ * \sa Function::CosineWindowFunction
  * \sa Function::WelchWindowFunction
- * \sa Function::LanczosWindowFunction 
+ * \sa Function::LanczosWindowFunction
  * \sa Function::BlackmanWindowFunction
  * \ingroup ImageFunctionBases ImageInterpolators
  */
 template<class TInputImage, class TWindowFunction, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep=double>
-class ITK_EXPORT WindowedSincInterpolateImageFunctionBase : 
-public GenericInterpolateImageFunction< TInputImage, 
-                                            TWindowFunction, 
-                                            TBoundaryCondition, 
-                                            TCoordRep > 
+class ITK_EXPORT WindowedSincInterpolateImageFunctionBase :
+public GenericInterpolateImageFunction< TInputImage,
+                                            TWindowFunction,
+                                            TBoundaryCondition,
+                                            TCoordRep >
   {
     public:
     /** Standard class typedefs. */
@@ -144,20 +144,20 @@ public GenericInterpolateImageFunction< TInputImage,
     typedef GenericInterpolateImageFunction<TInputImage, TWindowFunction, TBoundaryCondition, TCoordRep>  Superclass;
     typedef itk::SmartPointer<Self>                                                                       Pointer;
     typedef itk::SmartPointer<const Self>                                                                 ConstPointer;
-    
+
     /** Run-time type information (and related methods). */
     itkTypeMacro(WindowedSincInterpolateImageFunctionBase, GenericInterpolateImageFunction);
-    
+
     /** Method for creation through the object factory. */
-    itkNewMacro(Self);  
-    
+    itkNewMacro(Self);
+
     /** Input and output images typedef definition. */
     typedef typename Superclass::InputImageType InputImageType;
     typedef typename Superclass::OutputType     OutputType;
 
     /** Dimension underlying input image. */
     itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
-    
+
     /** Superclass typedef inheritance. */
     typedef typename Superclass::IndexType                                             IndexType;
     typedef typename Superclass::SizeType                                              SizeType;
@@ -167,10 +167,10 @@ public GenericInterpolateImageFunction< TInputImage,
     //typedef typename TWindowFunction                                                   FunctionType;
     typedef typename Superclass::FunctionType                                          FunctionType;
     typedef typename std::vector<double>                                               VectorType;
-    
+
     /** Compute a resampled profil according to the window size.*/
     void ComputeResampledWindowedSincProfil();
-   
+
     /** Positionne le sigma de l'interpolateur */
     void SetRadius(unsigned int sigma);
 

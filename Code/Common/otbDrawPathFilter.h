@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -49,7 +49,7 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(DrawPathFilter, itk::ImageAndPathToImageFilter);
 
@@ -57,8 +57,8 @@ public:
   typedef          TInputImage                    InputImageType;
   typedef typename InputImageType::Pointer        InputImagePointer;
   typedef typename InputImageType::ConstPointer   InputImageConstPointer;
-  typedef typename InputImageType::RegionType     InputImageRegionType; 
-  typedef typename InputImageType::PixelType      InputImagePixelType; 
+  typedef typename InputImageType::RegionType     InputImageRegionType;
+  typedef typename InputImageType::PixelType      InputImagePixelType;
   typedef          TInputPath                     InputPathType;
   typedef typename InputPathType::Pointer         InputPathPointer;
   typedef typename InputPathType::ConstPointer    InputPathConstPointer;
@@ -69,28 +69,28 @@ public:
   typedef          TOutputImage                   OutputImageType;
   typedef typename OutputImageType::Pointer       OutputImagePointer;
   typedef typename OutputImageType::ConstPointer  OutputImageConstPointer;
-  
-  typedef typename OutputImageType::RegionType    OutputImageRegionType; 
-  typedef typename OutputImageType::PixelType     OutputImagePixelType; 
-  typedef typename OutputImageType::ValueType     OutputImageValueType; 
-  
+
+  typedef typename OutputImageType::RegionType    OutputImageRegionType;
+  typedef typename OutputImageType::PixelType     OutputImagePixelType;
+  typedef typename OutputImageType::ValueType     OutputImageValueType;
+
 
   itkSetMacro(Value, OutputImagePixelType);
   itkGetConstReferenceMacro(Value, OutputImagePixelType);
-  
+
   /** Set/Get the path input of this process object.
    Note: these methods are adding to get the proper name */
   void SetInputPath( const TInputPath * path);
-  
+
   const TInputPath * GetInputPath(void);
-  
+
 protected:
   DrawPathFilter();
   virtual ~DrawPathFilter() {};
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;  
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
   virtual void GenerateData();
- 
+
 private:
   DrawPathFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
@@ -105,4 +105,4 @@ private:
 #endif
 
 #endif
- 
+

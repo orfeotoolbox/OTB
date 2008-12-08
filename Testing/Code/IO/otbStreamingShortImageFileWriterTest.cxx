@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
   =========================================================================*/
@@ -41,8 +41,8 @@ int otbStreamingShortImageFileWriterTest (int argc, char* argv[])
     {
       NumberOfStreamDivisions = ::atoi(argv[4]);
     }
-                
-        
+
+
 
   typedef unsigned short 	                                InputPixelType;
   typedef unsigned short 	                                OutputPixelType;
@@ -54,7 +54,7 @@ int otbStreamingShortImageFileWriterTest (int argc, char* argv[])
   typedef otb::ImageFileReader< InputImageType  >         ReaderType;
   typedef otb::StreamingImageFileWriter< OutputImageType> StreamingWriterType;
   typedef otb::ImageFileWriter< OutputImageType >         WriterType;
-        
+
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( inputFilename  );
 
@@ -65,7 +65,7 @@ int otbStreamingShortImageFileWriterTest (int argc, char* argv[])
       writer->SetFileName( outputFilename );
       writer->SetNumberOfStreamDivisions( NumberOfStreamDivisions );
       writer->SetInput( reader->GetOutput() );
-      writer->Update(); 
+      writer->Update();
     }
   else
     {
@@ -73,11 +73,11 @@ int otbStreamingShortImageFileWriterTest (int argc, char* argv[])
       WriterType::Pointer writer = WriterType::New();
       writer->SetFileName( outputFilename );
       writer->SetInput( reader->GetOutput() );
-      writer->Update(); 
+      writer->Update();
     }
 
-        
 
-  
+
+
   return EXIT_SUCCESS;
 }

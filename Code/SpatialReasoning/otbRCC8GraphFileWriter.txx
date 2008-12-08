@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -49,7 +49,7 @@ RCC8GraphFileWriter<TInputGraph>
  * \param inputGraph The graph to write.
  */
 template <class TInputGraph>
-void 
+void
 RCC8GraphFileWriter<TInputGraph>
 ::SetInput(const InputGraphType * graph)
 {
@@ -61,7 +61,7 @@ RCC8GraphFileWriter<TInputGraph>
  */
 template <class TInputGraph>
 typename RCC8GraphFileWriter<TInputGraph>
-::InputGraphPointerType 
+::InputGraphPointerType
 RCC8GraphFileWriter<TInputGraph>
 ::GetInput(void)
 {
@@ -114,14 +114,14 @@ RCC8GraphFileWriter<TInputGraph>
  * Main computation method.
  */
 template <class TInputGraph>
-void 
+void
 RCC8GraphFileWriter<TInputGraph>
 ::GenerateData()
-{ 
+{
   otbMsgDevMacro(<<"RCC8GraphFileWriter: GenerateData call");
   // input graph pointer
   InputGraphPointerType input = this->GetInput();
-  
+
   // iterators typedefs
   typedef otb::RCC8VertexIterator<InputGraphType> VertexIteratorType;
   typedef otb::RCC8EdgeIterator<InputGraphType> EdgeIteratorType;
@@ -143,7 +143,7 @@ RCC8GraphFileWriter<TInputGraph>
       throw e;
       return;
     }
-  
+
   // Start writing the graph to file
   out<<"digraph G {"<<std::endl;
 
@@ -217,7 +217,7 @@ RCC8GraphFileWriter<TInputGraph>
       else
 	{
 	  of<<",";
-	} 
+	}
     }
 }
 /**

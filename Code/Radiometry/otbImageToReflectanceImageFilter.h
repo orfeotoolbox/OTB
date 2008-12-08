@@ -9,7 +9,7 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  
+
   Some parts of this code are derived from ITK. See ITKCopyright.txt
   for details.
 
@@ -50,23 +50,23 @@ namespace otb
 
 	  typedef Functor::ImageToLuminanceImageFunctor<TInput, TOutput>        ImToLumFunctorType;
 	  typedef Functor::LuminanceToReflectanceImageFunctor<TInput, TOutput>  LumToReflecFunctorType;
- 
+
 	  void SetAlpha(double alpha){ m_ImToLumFunctor.SetAlpha(alpha); };
 	  void SetBeta(double beta){ m_ImToLumFunctor.SetBeta(beta); };
 	  void SetSolarIllumination(double solarIllumination){ m_LumToReflecFunctor.SetSolarIllumination(solarIllumination); };
 	  void SetIlluminationCorrectionCoefficient(double coef){ m_LumToReflecFunctor.SetIlluminationCorrectionCoefficient(coef); };
-	  
+
 	  double GetAlpha(){ return m_ImToLumFunctor.GetAlpha();};
 	  double GetBeta(){ return m_ImToLumFunctor.GetBeta();};
 	  double GetSolarIllumination(){ return  m_LumToReflecFunctor.GetSolarIllumination();};
 	  double GetIlluminationCorrectionCoefficient(){ return m_LumToReflecFunctor.GetIlluminationCorrectionCoefficient();};
 
-	  inline TOutput operator() (const TInput & inPixel) 
+	  inline TOutput operator() (const TInput & inPixel)
 	    {
 	      TOutput outPixel;
 	      TOutput tempPix;
 	      tempPix = m_ImToLumFunctor(inPixel);
- 	      outPixel = m_LumToReflecFunctor(tempPix); 
+ 	      outPixel = m_LumToReflecFunctor(tempPix);
 
 	      return outPixel;
 	    }
@@ -80,22 +80,22 @@ namespace otb
     }
 
 /** \class ImageToReflectanceImageFilter
-   *  \brief Transform a classical image into the reflectance image. For this it uses the functor ImageToReflectanceFunctor calling for each component of each pixel. 
+   *  \brief Transform a classical image into the reflectance image. For this it uses the functor ImageToReflectanceFunctor calling for each component of each pixel.
    *
    *  Transform a classical image into the reflectance image. For this it uses the functor ImageToReflectanceFunctor calling for each component of each pixel.
-   *  The flux normalization coefficient (that is the ratio solar distance over mean solar distance) can be directly set or the user can 
-   *  give the day and the mounth of the observation and the class will used a coefficient given by a 6S routine that will give the corresponding coefficient. 
+   *  The flux normalization coefficient (that is the ratio solar distance over mean solar distance) can be directly set or the user can
+   *  give the day and the mounth of the observation and the class will used a coefficient given by a 6S routine that will give the corresponding coefficient.
    *  To note that in the case, 6S gives the square of the distances ratio.
-   *  
+   *
    * \ingroup ImageToReflectanceImageFunctor
    * \ingroup ImageToLuminanceImageFilter
    * \ingroup ReflectanceToLuminanceImageFilter
    */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ImageToReflectanceImageFilter : 
+class ITK_EXPORT ImageToReflectanceImageFilter :
 public UnaryImageFunctorWithVectorImageFilter< TInputImage,
                                                TOutputImage,
-                                               ITK_TYPENAME Functor::ImageToReflectanceImageFunctor< ITK_TYPENAME TInputImage::InternalPixelType, 
+                                               ITK_TYPENAME Functor::ImageToReflectanceImageFunctor< ITK_TYPENAME TInputImage::InternalPixelType,
                                                                                                    ITK_TYPENAME TOutputImage::InternalPixelType > >
 {
 public:
@@ -106,13 +106,13 @@ public:
   /** "typedef" to simplify the variables definition and the declaration. */
   typedef TInputImage         InputImageType;
   typedef TOutputImage        OutputImageType;
-  typedef typename Functor::ImageToReflectanceImageFunctor<ITK_TYPENAME InputImageType::InternalPixelType, 
+  typedef typename Functor::ImageToReflectanceImageFunctor<ITK_TYPENAME InputImageType::InternalPixelType,
                                                          ITK_TYPENAME OutputImageType::InternalPixelType> FunctorType;
 
 
   /** "typedef" for standard classes. */
   typedef ImageToReflectanceImageFilter Self;
-  typedef UnaryImageFunctorWithVectorImageFilter< InputImageType, OutputImageType, FunctorType > Superclass; 
+  typedef UnaryImageFunctorWithVectorImageFilter< InputImageType, OutputImageType, FunctorType > Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -121,7 +121,7 @@ public:
 
   /** return class name. */
   itkTypeMacro(ImageToReflectanceImageFilter, UnaryImageFunctorWithVectorImageFiltermageFilter);
-  
+
   /** Supported images definition. */
   typedef typename InputImageType::PixelType                           InputPixelType;
   typedef typename InputImageType::InternalPixelType                   InputInternalPixelType;
@@ -132,7 +132,7 @@ public:
 
 
   typedef typename itk::VariableLengthVector<double>                   VectorType;
- 
+
   /** Image size "typedef" definition. */
   typedef typename InputImageType::SizeType SizeType;
 
@@ -147,7 +147,7 @@ public:
   itkGetConstReferenceMacro(Beta, VectorType);
       /** Set the solar illumination value. */
   itkSetMacro(SolarIllumination, VectorType);
-  
+
   /** Give the solar illumination value. */
   itkGetConstReferenceMacro(SolarIllumination, VectorType);
 
@@ -155,7 +155,7 @@ public:
   itkSetMacro(ZenithalSolarAngle, double);
   /** Give the zenithal solar angle. */
   itkGetConstReferenceMacro(ZenithalSolarAngle, double);
-   
+
   /** Set the flux normalization coefficient. */
   void SetFluxNormalizationCoefficient(double coef)
     {
@@ -163,7 +163,7 @@ public:
       m_IsSetFluxNormalizationCoefficient = true;
       this->Modified();
     };
-  
+
     /** Set the acquisition day. */
     itkSetClampMacro(Day, int, 1, 31);
     /** Get the acquisition day. */
@@ -172,8 +172,8 @@ public:
     itkSetClampMacro(Month, int, 1, 12);
     /** Set the  acquisition mounth. */
     itkGetConstReferenceMacro(Month, int);
-	  
-  
+
+
  protected:
   ImageToReflectanceImageFilter()
     {
@@ -197,7 +197,7 @@ public:
       for(unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
 	{
 	  FunctorType functor;
-	  double coefTemp = 0.;  
+	  double coefTemp = 0.;
 	  if (!m_IsSetFluxNormalizationCoefficient)
 	    {
 	      if (m_Day*m_Month != 0 && m_Day<32 && m_Month<13)
@@ -225,8 +225,8 @@ public:
 	  this->GetFunctorVector().push_back(functor);
 	}
     }
-  
-                        
+
+
 private:
   /** Ponderation declaration*/
   VectorType m_Alpha;

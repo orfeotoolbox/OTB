@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -26,16 +26,16 @@
 
 namespace otb
 {
-namespace Functor {  
+namespace Functor {
   /** \class VectorAffineTransform
    *  \brief This functor performs a per band linear transform of its input.
-   *  
+   *
    *  Values upper than InputMaximum or lower than InputMinimum are clamped to OutputMaximum
    *  respectively OutputMinimum values.
    *
    *  TInput and TOutput type are supposed to be of type itk::VariableLengthVector.
    *
-   */ 
+   */
   template< typename TInput, typename  TOutput>
     class VectorAffineTransform
     {
@@ -57,8 +57,8 @@ namespace Functor {
       TOutput GetOutputMinimum(){return m_OutputMinimum;}
       TInput GetInputMinimum(){return m_InputMinimum;}
       TInput GetInputMaximum(){return m_InputMaximum;}
-      
-     
+
+
       bool operator!=( const VectorAffineTransform & other ) const
 	{
 	  if(m_OutputMaximum.Size()==other.GetOutputMaximum().Size())
@@ -116,14 +116,14 @@ namespace Functor {
 	  result.SetSize(x.GetSize());
 
 	  // consistency checking
-	  if(   result.GetSize()!=m_OutputMaximum.GetSize() 
-	     || result.GetSize() != m_OutputMaximum.GetSize() 
+	  if(   result.GetSize()!=m_OutputMaximum.GetSize()
+	     || result.GetSize() != m_OutputMaximum.GetSize()
 	     || result.GetSize() != m_InputMinimum.GetSize()
 	     || result.GetSize() != m_InputMaximum.GetSize())
 	    {
 	      itkGenericExceptionMacro(<<"Pixel size different from scale or shift size !");
 	    }
-	  
+
 	  // transformation
 	  for(unsigned int i=0; i<x.GetSize();++i)
 	    {
@@ -141,8 +141,8 @@ namespace Functor {
 		}
 	      else
 		{
-		  const RealType scaledComponent = static_cast<RealType>( x[i]-m_InputMinimum[i] ) 
-		    * static_cast<RealType> (m_OutputMaximum[i] - m_OutputMinimum[i]) 
+		  const RealType scaledComponent = static_cast<RealType>( x[i]-m_InputMinimum[i] )
+		    * static_cast<RealType> (m_OutputMaximum[i] - m_OutputMinimum[i])
 		    / static_cast<RealType> (m_InputMaximum[i] - m_InputMinimum[i]);
 		  result[i]= static_cast< typename TOutput::ValueType >( scaledComponent+m_OutputMinimum[i] );
 		}
@@ -153,8 +153,8 @@ namespace Functor {
       TOutput m_OutputMaximum;
       TOutput m_OutputMinimum;
       TInput m_InputMinimum;
-      TInput m_InputMaximum;      
-    }; 
+      TInput m_InputMaximum;
+    };
 }  // end namespace functor
 
 
@@ -163,7 +163,7 @@ namespace Functor {
  *
  * This filter rescales each band to match the [OutputMinimum,OutputMaximum] range.
  * In order to avoid odd values to alter the intensity extent, one can set a clamp percentage.
- * 
+ *
  * Values lower than the first quantile of this percentage are set to the OutputMinimum.
  * Values upper than the last quantile of this percentage are set to the OutputMaximum.
  *
@@ -171,32 +171,32 @@ namespace Functor {
  *  \ingroup MultiThreaded
  */
 template <class TInputImage, class TOutputImage=TInputImage>
-class ITK_EXPORT VectorRescaleIntensityImageFilter 
-  :  public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, 
-                                    Functor::VectorAffineTransform< 
-                                    typename TInputImage::PixelType, 
+class ITK_EXPORT VectorRescaleIntensityImageFilter
+  :  public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,
+                                    Functor::VectorAffineTransform<
+                                    typename TInputImage::PixelType,
                                     typename TOutputImage::PixelType>   >
 {
   public:
   /** Standard class typedefs. */
   typedef VectorRescaleIntensityImageFilter  Self;
-  typedef itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, 
-  Functor::VectorAffineTransform< 
-  typename TInputImage::PixelType, 
+  typedef itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,
+  Functor::VectorAffineTransform<
+  typename TInputImage::PixelType,
   typename TOutputImage::PixelType> >  Superclass;
   typedef itk::SmartPointer<Self>   Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
-  
+
   typedef typename TOutputImage::PixelType OutputPixelType;
   typedef typename TInputImage::PixelType  InputPixelType;
   typedef typename InputPixelType::ValueType      InputValueType;
   typedef typename OutputPixelType::ValueType     OutputValueType;
   typedef typename itk::NumericTraits<InputValueType>::RealType InputRealType;
   typedef typename itk::NumericTraits<OutputValueType>::RealType OutputRealType;
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   itkSetMacro( OutputMaximum, OutputPixelType );
   itkGetConstReferenceMacro( OutputMaximum, OutputPixelType );
   itkSetMacro( OutputMinimum, OutputPixelType );
@@ -217,10 +217,10 @@ class ITK_EXPORT VectorRescaleIntensityImageFilter
 
   /** Process to execute before entering the multithreaded section */
   void BeforeThreadedGenerateData(void);
-  
+
   /** Generate output information */
   void GenerateOutputInformation(void);
-  
+
   /** Generate input requested region */
   void GenerateInputRequestedRegion(void);
 
@@ -243,11 +243,11 @@ private:
   bool                   m_AutomaticInputMinMaxComputation;
 
 };
-  
+
 } // end namespace otb
-  
+
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbVectorRescaleIntensityImageFilter.txx"
 #endif
-  
+
 #endif

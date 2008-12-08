@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,7 +29,7 @@ WindowedSincInterpolateImageFunctionBase<TInputImage, TWindowFunction, TBoundary
 ::WindowedSincInterpolateImageFunctionBase()
 {
 }
-  
+
 /** Destructor */
 template<class TInputImage, class TWindowFunction, class TBoundaryCondition, class TCoordRep>
 WindowedSincInterpolateImageFunctionBase<TInputImage, TWindowFunction, TBoundaryCondition, TCoordRep>
@@ -52,7 +52,7 @@ template<class TInputImage, class TWindowFunction, class TBoundaryCondition, cla
 void
 WindowedSincInterpolateImageFunctionBase<TInputImage, TWindowFunction, TBoundaryCondition, TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
-{ 
+{
   Superclass::PrintSelf( os, indent );
 }
 

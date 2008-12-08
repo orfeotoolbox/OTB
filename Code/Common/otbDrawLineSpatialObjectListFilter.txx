@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,40 +30,40 @@
 namespace otb
 {
 
-/** 
+/**
  *
  */
 template <class TInputImage, class TOutputImage>
 DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>::DrawLineSpatialObjectListFilter()
 {
   this->SetNumberOfRequiredInputs(2);
-  this->SetNumberOfRequiredOutputs(1); 
-  
+  this->SetNumberOfRequiredOutputs(1);
+
   m_DrawLineFilter = DrawLineType::New();
   m_RescaleFilter = RescalerType::New();
 
 }
 
-    
+
 template <class TInputImage, class TOutputImage>
 void
 DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
 ::SetInputLineSpatialObjectList(const LinesListType * list)
 {
-  this->ProcessObjectType::SetNthInput(1, 
+  this->ProcessObjectType::SetNthInput(1,
                                    const_cast< LinesListType * >( list ) );
 
 }
 
 
 template <class TInputImage, class TOutputImage>
-typename DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>::LinesListType * 
+typename DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>::LinesListType *
 DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
 ::GetInputLineSpatialObjectList(void)
 {
     //ROMAIN
 	return static_cast</*const */LinesListType *>
-    (this->ProcessObjectType::GetInput(1) ); 
+    (this->ProcessObjectType::GetInput(1) );
 }
 
 template <class TInputImage, class TOutputImage>
@@ -102,25 +102,25 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
   // Draw each line of the list
   while( itList != list->end() )
      {
-    
-     m_DrawLineFilter->SetInputImage( this->GetOutput() ); 
+
+     m_DrawLineFilter->SetInputImage( this->GetOutput() );
      m_DrawLineFilter->SetInputLine( *itList );
      m_DrawLineFilter->Update();
-     
+
      ++itList;
 
      }
 
   this->GraftOutput( m_DrawLineFilter->GetOutput() );
 
-	
+
 }
 
 /**
  * Standard "PrintSelf" method
  */
 template <class TInputImage, class TOutput>
-void 
+void
 DrawLineSpatialObjectListFilter<TInputImage, TOutput>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

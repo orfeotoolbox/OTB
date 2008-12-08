@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,10 +31,10 @@
 
 // Software Guide : BeginLatex
 //
-// This example illustrates the details of the \doxygen{otb}{ParallelLinePathListFilter}. 
-// 
+// This example illustrates the details of the \doxygen{otb}{ParallelLinePathListFilter}.
 //
-// Software Guide : EndLatex 
+//
+// Software Guide : EndLatex
 
 #include "itkPolyLineParametricPath.h"
 #include "otbDrawPathListFilter.h"
@@ -50,7 +50,7 @@ int main( int argc, char * argv[] )
   if( argc !=6 )
     {
     std::cerr << "Usage: " << std::endl;
-    std::cerr << argv[0] << " outputImage "; 
+    std::cerr << argv[0] << " outputImage ";
     std::cerr << " outputParallelLineImage ";
     std::cerr << " distThreshParallel angThreshParallel commonDistThreshParallel"<< std::endl;
     return EXIT_FAILURE;
@@ -68,18 +68,18 @@ int main( int argc, char * argv[] )
   typedef otb::Image<PixelType, Dimension> ImageType;
 
   ImageType::Pointer image = ImageType::New();
-  
+
   ImageType::IndexType start;
 
-  start[0] =   0;  
-  start[1] =   0;  
-    
+  start[0] =   0;
+  start[1] =   0;
+
   ImageType::SizeType  size;
   size[0]  = 600;
   size[1]  = 300;
 
   ImageType::RegionType region;
-  
+
   region.SetSize( size );
   region.SetIndex( start );
   image->SetRegions( region );
@@ -88,15 +88,15 @@ int main( int argc, char * argv[] )
 
 
 
-  // We create some lines 
+  // We create some lines
   typedef itk::PolyLineParametricPath< Dimension > PathType;
   typedef otb::ObjectList< PathType > PathListType;
 
   PathListType::Pointer lineList = PathListType::New();
 
-  
 
-  
+
+
   typedef PathType::ContinuousIndexType    ContinuousIndexType;
   ContinuousIndexType cindex;
 
@@ -206,7 +206,7 @@ int main( int argc, char * argv[] )
   lineList->PushBack( aLine );
 
 
-  // Polylines are drawn on a black 
+  // Polylines are drawn on a black
   typedef otb::DrawPathListFilter<ImageType,PathType,ImageType> DrawPathType;
   DrawPathType::Pointer drawPathListFilter = DrawPathType::New();
   drawPathListFilter->SetInput(image);
@@ -217,7 +217,7 @@ int main( int argc, char * argv[] )
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput( drawPathListFilter->GetOutput() );
   writer->SetFileName( argv[1] );
-  writer->Update(); 
+  writer->Update();
 
 
   // Parallel lines are detected. A minimum common length, an angular
@@ -228,7 +228,7 @@ int main( int argc, char * argv[] )
   parallelLinePathListFilter->SetDistanceThreshold(distThreshParallel);
   parallelLinePathListFilter->SetAngularThreshold(angThreshParallel);
   parallelLinePathListFilter->SetCommonDistanceThreshold(commonDistThreshParallel);
-  parallelLinePathListFilter->SetInput(lineList); 
+  parallelLinePathListFilter->SetInput(lineList);
   parallelLinePathListFilter->Update();
 
   // A black background image is built to draw the path on.
@@ -237,7 +237,7 @@ int main( int argc, char * argv[] )
   outputParallel->Allocate();
   outputParallel->FillBuffer(itk::NumericTraits<PixelType>::Zero);
 
-  // Parallel lines are drawn on a black background image with \doxygen{otb}{DrawPathListFilter}. 
+  // Parallel lines are drawn on a black background image with \doxygen{otb}{DrawPathListFilter}.
   // The \code{SetUseIternalValues()} tells the drawing filter to draw the path with its likelihood
   // value.
   //typedef otb::DrawPathListFilter<ImageType,PathType,ImageType> DrawPathType;
@@ -251,7 +251,7 @@ int main( int argc, char * argv[] )
   WriterType::Pointer writerParallel = WriterType::New();
   writerParallel->SetInput( drawPathListFilterParallel->GetOutput() );
   writerParallel->SetFileName( argv[2] );
-  writerParallel->Update(); 
+  writerParallel->Update();
 
   return EXIT_SUCCESS;
 }

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,7 +33,7 @@ namespace otb
  * \brief ImageIO object for reading (not writing) SHP format vector data
  *
  */
-template <class TData> class ITK_EXPORT SHPVectorDataIO 
+template <class TData> class ITK_EXPORT SHPVectorDataIO
   : public VectorDataIOBase<TData>
   {
 public:
@@ -52,7 +52,7 @@ public:
 
   /** Byte order typedef */
   typedef typename Superclass::ByteOrder  ByteOrder;
-  
+
   /** Data typedef */
   typedef TData VectorDataType;
   typedef typename VectorDataType::DataTreeType  DataTreeType;
@@ -78,13 +78,13 @@ public:
   /** Determine the file type. Returns true if this VectorDataIO can read the
    * file specified. */
   virtual bool CanReadFile(const char*);
-  
+
   /** Determine the file type. Returns true if the VectorDataIO can stream read the specified file */
   virtual bool CanStreamRead(){  return false; };
 
 /*   /\** Set the spacing and dimention information for the set filename. *\/ */
 /*   virtual void ReadVectorDataInformation(); */
- 
+
   /** Reads the data from disk into the memory buffer provided. */
   virtual void Read(VectorDataPointerType data);
 
@@ -104,7 +104,7 @@ public:
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegion has been set properly. */
   virtual void Write(VectorDataConstPointerType data);
-  
+
 protected:
   /** Construtor.*/
   SHPVectorDataIO();
@@ -115,7 +115,7 @@ protected:
 
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  
+
   /** Conversion tools */
 
   static DataNodePointerType ConvertGeometryToPointNode(const OGRGeometry * ogrGeometry);
@@ -131,7 +131,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   OGRDataSource * m_DataSource;
-  
+
   /** Is this necessary ? */
 
   /** Internal method to read header informations */

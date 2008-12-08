@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,8 +32,8 @@ int otbProjectionBaseNew( int argc, char* argv[] )
   otb::AzimEquDistForwardProjection::Pointer lAzimEquDistProjection = otb::AzimEquDistForwardProjection::New();
   typedef otb::MapToMapProjection<otb::AlbersInverseProjection,otb::AzimEquDistForwardProjection> MapToMapProjectionType;
   MapToMapProjectionType::Pointer lMapToMapProjection = MapToMapProjectionType::New();
-        
-  
+
+
   return EXIT_SUCCESS;
 }
 

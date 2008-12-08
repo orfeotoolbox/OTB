@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -44,7 +44,7 @@
 //  \index{otb::ImageFileWriter!header}
 //  \index{itk::RescaleIntensityImageFilter!header}
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "otbImageFileReader.h"
@@ -75,7 +75,7 @@ int main( int argc, char ** argv )
   //  the image stored in the file.  Instead, it is the type that will be
   //  used to store the image as soon as it is read into memory.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef float               InputPixelType;
@@ -95,7 +95,7 @@ int main( int argc, char ** argv )
   //  \index{otb::ImageFileReader!Instantiation}
   //  \index{otb::ImageFileWriter!Instantiation}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader< InputImageType  >  ReaderType;
@@ -104,21 +104,21 @@ int main( int argc, char ** argv )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  Below we instantiate the RescaleIntensityImageFilter class that will
   //  linearly scale the image intensities.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::RescaleIntensityImageFilter< 
-                                  InputImageType, 
+  typedef itk::RescaleIntensityImageFilter<
+                                  InputImageType,
                                   OutputImageType >    FilterType;
   // Software Guide : EndCodeSnippet
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  A filter object is constructed and the minimum and maximum values of
   //  the output are selected using the SetOutputMinimum() and
   //  SetOutputMaximum() methods.
@@ -126,7 +126,7 @@ int main( int argc, char ** argv )
   //  \index{itk::RescaleIntensityImageFilter!SetOutputMinimum()}
   //  \index{itk::RescaleIntensityImageFilter!SetOutputMaximum()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   FilterType::Pointer filter = FilterType::New();
@@ -144,7 +144,7 @@ int main( int argc, char ** argv )
   //  \index{otb::ImageFileReader!SmartPointer}
   //  \index{otb::ImageFileWriter!SmartPointer}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   ReaderType::Pointer reader = ReaderType::New();
@@ -165,14 +165,14 @@ int main( int argc, char ** argv )
   //  Software Guide : BeginLatex
   //
   //  The name of the files to be read and written are passed with the
-  //  SetFileName() method. 
+  //  SetFileName() method.
   //
   //  \index{otb::ImageFileReader!SetFileName()}
   //  \index{otb::ImageFileWriter!SetFileName()}
   //  \index{SetFileName()!otb::ImageFileReader}
   //  \index{SetFileName()!otb::ImageFileWriter}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   reader->SetFileName( inputFilename  );
@@ -186,20 +186,20 @@ int main( int argc, char ** argv )
   //  method on the writer. The output image will then be the scaled and cast
   //  version of the input image.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
   // Software Guide : BeginCodeSnippet
-  try 
-    { 
-    writer->Update(); 
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cerr << "ExceptionObject caught !" << std::endl; 
-    std::cerr << err << std::endl; 
+  try
+    {
+    writer->Update();
+    }
+  catch( itk::ExceptionObject & err )
+    {
+    std::cerr << "ExceptionObject caught !" << std::endl;
+    std::cerr << err << std::endl;
     return EXIT_FAILURE;
-    } 
+    }
   // Software Guide : EndCodeSnippet
 
 

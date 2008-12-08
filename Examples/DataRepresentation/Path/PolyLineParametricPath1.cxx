@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,14 +28,14 @@
 // This class will typically be used for representing in a concise way the
 // output of an image segmentation algorithm in 2D. See section
 // \ref{sec:Alignments} for an example in the context of alignment
-// detection.  The 
+// detection.  The
 // \code{PolyLineParametricPath} however could also be used for representing
 // any open or close curve in N-Dimensions as a linear piece-wise approximation.
-// 
+//
 //
 // First, the header file of the \code{PolyLineParametricPath} class must be included.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 
 #include "otbImage.h"
@@ -58,17 +58,17 @@ int main(int argc, char * argv [] )
     }
 
   // Software Guide : BeginLatex
-  // 
+  //
   // The path is instantiated over the dimension of the image.
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet 
+  // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
 
   typedef otb::Image< unsigned char, Dimension > ImageType;
 
   typedef itk::PolyLineParametricPath< Dimension > PathType;
-  // Software Guide : EndCodeSnippet 
+  // Software Guide : EndCodeSnippet
 
 
   typedef otb::ImageFileReader< ImageType >    ReaderType;
@@ -90,8 +90,8 @@ int main(int argc, char * argv [] )
 
 
 
-  // Software Guide : BeginCodeSnippet 
-  
+  // Software Guide : BeginCodeSnippet
+
   ImageType::ConstPointer image = reader->GetOutput();
 
 
@@ -107,7 +107,7 @@ int main(int argc, char * argv [] )
 
   typedef ImageType::PointType             ImagePointType;
 
-  ImagePointType origin = image->GetOrigin(); 
+  ImagePointType origin = image->GetOrigin();
 
 
   ImageType::SpacingType spacing = image->GetSpacing();
@@ -117,7 +117,7 @@ int main(int argc, char * argv [] )
 
   point[0] = origin[0] + spacing[0] * size[0];
   point[1] = origin[1] + spacing[1] * size[1];
- 
+
   image->TransformPhysicalPointToContinuousIndex( origin, cindex );
 
   path->AddVertex( cindex );
@@ -126,9 +126,9 @@ int main(int argc, char * argv [] )
 
   path->AddVertex( cindex );
 
-  
 
-  // Software Guide : EndCodeSnippet 
+
+  // Software Guide : EndCodeSnippet
 
   return EXIT_SUCCESS;
 }

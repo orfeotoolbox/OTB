@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -26,11 +26,11 @@ namespace otb
   /** \class RCC8VertexWithRegionCenter
    *  \brief Class to represent a vertex in a RCC8 Graph with the compacity value of
    *  the represented region.
-   *  
+   *
    * \sa RCC8Graph, RCC8Edge, RCC8VertexBase
    */
   template <class TLabel, class TPrecision = float>
-    class ITK_EXPORT RCC8VertexWithRegionCenter 
+    class ITK_EXPORT RCC8VertexWithRegionCenter
 		: public RCC8VertexBase<TLabel>
     {
       public:
@@ -49,7 +49,7 @@ namespace otb
       typedef TPrecision PrecisionType;
       /** char* vector attributes */
       typedef  typename Superclass::AttributesMapType  AttributesMapType;
- 
+
 
       itkGetMacro(RegionCenterXCoordinate,PrecisionType);
       itkSetMacro(RegionCenterXCoordinate,PrecisionType);

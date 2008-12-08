@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,12 +23,12 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class ImportGeoInformationImageFilter
- *  \brief This filter is a helper class to import metadata 
+ *  \brief This filter is a helper class to import metadata
  *  from an existing image into a non-georeferenced image.
  *
- *  It derives from itk::InPlaceImageFilter since it overwrites 
- *  its output if possible. This class has been written as a workaround 
- *  for the bug http://public.kitware.com/Bug/bug.php?op=show&bugid=4625&pos=0. 
+ *  It derives from itk::InPlaceImageFilter since it overwrites
+ *  its output if possible. This class has been written as a workaround
+ *  for the bug http://public.kitware.com/Bug/bug.php?op=show&bugid=4625&pos=0.
  *  There should be no needs for this filter in a standard pipeline.
  *
  * \sa InPlaceImageFilter
@@ -44,13 +44,13 @@ class ITK_EXPORT ImportGeoInformationImageFilter
   typedef itk::CastImageFilter<TImage,TImage> Superclass;
   typedef itk::SmartPointer<Self>         Pointer;
   typedef itk::SmartPointer<const Self>   ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(ImportGeoInformationImageFilter, CastImageFilter);
-  
+
   /** Template parameters typedefs */
   typedef TImage ImageType;
   typedef typename ImageType::Pointer ImagePointerType;
@@ -68,7 +68,7 @@ class ITK_EXPORT ImportGeoInformationImageFilter
    * \return The source image.
    */
   const TSourceImage * GetSource(void);
- 
+
 protected:
   /** Constructor */
   ImportGeoInformationImageFilter();

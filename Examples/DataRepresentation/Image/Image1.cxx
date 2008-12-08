@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,7 +33,7 @@
 //
 // First, the header file of the Image class must be included.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 
 // Software Guide : BeginCodeSnippet
@@ -45,35 +45,35 @@
 int main(int, char *[])
 {
   // Software Guide : BeginLatex
-  // 
+  //
   // Then we must decide with what type to represent the pixels
-  // and what the dimension of the image will be. With these two 
+  // and what the dimension of the image will be. With these two
   // parameters we can instantiate the image class. Here we create
   // a 2D image, which is what we often use in remote sensing
   // applications, anyway, with \code{unsigned short} pixel data.
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
   //
-  // Software Guide : BeginCodeSnippet 
+  // Software Guide : BeginCodeSnippet
   typedef otb::Image< unsigned short, 2 > ImageType;
-  // Software Guide : EndCodeSnippet 
+  // Software Guide : EndCodeSnippet
 
-  
+
   // Software Guide : BeginLatex
   //
   // The image can then be created by invoking the \code{New()} operator
   // from the corresponding image type and assigning the result
-  // to a \doxygen{itk}{SmartPointer}. 
+  // to a \doxygen{itk}{SmartPointer}.
   //
   // \index{Image!Pointer}
   // \index{Image!New()}
-  // 
-  // Software Guide : EndLatex 
   //
-  // Software Guide : BeginCodeSnippet 
-  ImageType::Pointer image = ImageType::New();      
-  // Software Guide : EndCodeSnippet 
- 
+  // Software Guide : EndLatex
+  //
+  // Software Guide : BeginCodeSnippet
+  ImageType::Pointer image = ImageType::New();
+  // Software Guide : EndCodeSnippet
+
 
   // Software Guide : BeginLatex
   //
@@ -102,7 +102,7 @@ int main(int, char *[])
   // responsible for defining the image size and the index at which the image
   // grid starts. These two parameters make it possible to process selected
   // regions.
-  //   
+  //
   // The starting point of the image is defined by an Index class
   // that is an n-dimensional array where each component is an integer
   // indicating the grid coordinates of the initial pixel of the image.
@@ -110,14 +110,14 @@ int main(int, char *[])
   // \index{Image!Size}
   // \index{Image!SizeType}
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
   //
-  // Software Guide : BeginCodeSnippet 
+  // Software Guide : BeginCodeSnippet
   ImageType::IndexType start;
 
   start[0] =   0;  // first index on X
   start[1] =   0;  // first index on Y
-  // Software Guide : EndCodeSnippet 
+  // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
   //
@@ -129,14 +129,14 @@ int main(int, char *[])
   // \index{Image!Index}
   // \index{Image!IndexType}
   //
-  // Software Guide : EndLatex 
-  // 
-  // Software Guide : BeginCodeSnippet 
+  // Software Guide : EndLatex
+  //
+  // Software Guide : BeginCodeSnippet
   ImageType::SizeType  size;
 
   size[0]  = 200;  // size along X
   size[1]  = 200;  // size along Y
-  // Software Guide : EndCodeSnippet 
+  // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
   //
@@ -148,14 +148,14 @@ int main(int, char *[])
   // \index{Image!itk::ImageRegion}
   // \index{Image!RegionType}
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet 
+  // Software Guide : BeginCodeSnippet
   ImageType::RegionType region;
-  
+
   region.SetSize( size );
   region.SetIndex( start );
-  // Software Guide : EndCodeSnippet 
+  // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
   //
@@ -172,12 +172,12 @@ int main(int, char *[])
   // \index{Image!Allocate()}
   // \index{Image!SetRegions()}
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet 
+  // Software Guide : BeginCodeSnippet
   image->SetRegions( region );
   image->Allocate();
-  // Software Guide : EndCodeSnippet 
+  // Software Guide : EndCodeSnippet
 
   return EXIT_SUCCESS;
 }

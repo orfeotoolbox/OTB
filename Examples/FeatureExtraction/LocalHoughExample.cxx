@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -26,9 +26,9 @@
 //
 // This example illustrates the use of the \doxygen{otb}{ExtractSegmentsImageFilter}.
 //
-// The first step required to use this filter is to include its header file. 
+// The first step required to use this filter is to include its header file.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "otbLocalHoughFilter.h"
@@ -49,18 +49,18 @@ int main( int argc, char * argv[] )
     {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " outputImageFile  LocalHoughRadius LocalHoughOverlap LocalHoughNumberOfLines LocalHoughThreshold" << std::endl;
-    
+
     return EXIT_FAILURE;
     }
 
-  
+
   //  Software Guide : BeginLatex
   //
   //  Then we must decide what pixel type to use for the image. We
   //  choose to make all computations with floating point precision
   //  and rescale the results between 0 and 255 in order to export PNG images.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef  float  InternalPixelType;
@@ -71,7 +71,7 @@ int main( int argc, char * argv[] )
   //
   //  The images are defined using the pixel type and the dimension.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::Image< InternalPixelType,  2 >   InternalImageType;
@@ -85,7 +85,7 @@ int main( int argc, char * argv[] )
   //
   //  The filter can be instantiated using the image types defined above.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
 
@@ -95,66 +95,66 @@ int main( int argc, char * argv[] )
   // Software Guide : EndCodeSnippet
 
   typedef itk::RescaleIntensityImageFilter< InternalImageType,
-                                            OutputImageType > RescalerType; 
+                                            OutputImageType > RescalerType;
 
   RescalerType::Pointer rescaler = RescalerType::New();
 
   rescaler->SetOutputMinimum( itk::NumericTraits< OutputPixelType >::min());
   rescaler->SetOutputMaximum( itk::NumericTraits< OutputPixelType >::max());
 
-  
+
 
   //  Software Guide : BeginLatex
   //
   //  An \doxygen{otb}{ImageFileReader} class is also instantiated in order to read
-  //  image data from a file. 
+  //  image data from a file.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader< InternalImageType >  ReaderType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
-  //  
+  //
   // An \doxygen{otb}{ImageFileWriter} is instantiated in order to write the
   // output image to a file.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileWriter< OutputImageType >  WriterType;
   // Software Guide : EndCodeSnippet
 
-  
+
   //  Software Guide : BeginLatex
   //
   //  Both the filter and the reader are created by invoking their \code{New()}
   //  methods and assigning the result to SmartPointers.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   ReaderType::Pointer reader = ReaderType::New();
 
-  LocalHoughType::Pointer		localHough= LocalHoughType::New();  
+  LocalHoughType::Pointer		localHough= LocalHoughType::New();
 
   DrawLineListType::Pointer		drawLineList= DrawLineListType::New();
 
-  
+
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
   //
   //  The same is done for the writer.
-  //  
-  //  Software Guide : EndLatex 
+  //
+  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet  
+  // Software Guide : BeginCodeSnippet
   WriterType::Pointer writer = WriterType::New();
   // Software Guide : EndCodeSnippet
 
-  
+
   reader->SetFileName( argv[1] );
 
   unsigned int  LocalHoughRadiusX((unsigned int)::atoi(argv[3]));
@@ -163,7 +163,7 @@ int main( int argc, char * argv[] )
   unsigned int  LocalHoughOverlapY((unsigned int)::atoi(argv[4]));
   unsigned int  LocalHoughNumberOfLines((unsigned int)::atoi(argv[5]));
   float  LocalHoughThreshold((float)::atoi(argv[6]));
-  
+
   LocalHoughType::SizeType LocalHoughRadius;
   LocalHoughRadius[0] = LocalHoughRadiusX;
   LocalHoughRadius[1] = LocalHoughRadiusY;
@@ -173,35 +173,35 @@ int main( int argc, char * argv[] )
   LocalHoughOverlap[1] = LocalHoughOverlapY;
 
 
-  
+
   localHough->SetRadius( LocalHoughRadius );
-  localHough->SetOverlap( LocalHoughOverlap );	
+  localHough->SetOverlap( LocalHoughOverlap );
   localHough->SetNumberOfLines( LocalHoughNumberOfLines );
-  localHough->SetThreshold( LocalHoughThreshold );	
-  
-  
-  
+  localHough->SetThreshold( LocalHoughThreshold );
+
+
+
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The image obtained with the reader is passed as input to the
   //  \doxygen{otb}{ExtractSegmentsImageFilter}. The pipeline is built as follows.
   //
   //  \index{otb::ExtractSegmentsImageFilter!SetInput()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  
+
   localHough->SetInput( reader->GetOutput() );
 
-  
+
   drawLineList->SetInput( reader->GetOutput() );
   drawLineList->SetInputLineSpatialObjectList( localHough->GetOutput() );
   writer->SetFileName( argv[2] );
   writer->SetInput( drawLineList->GetOutput() );
   writer->Update();
-  
+
 
  // Software Guide : EndCodeSnippet
 
@@ -217,7 +217,7 @@ int main( int argc, char * argv[] )
   // the \doxygen{otb}{LocalHoughImageFilter}. From left to right :
   // original image, extracted segments.}  \label{fig:LOCAL_HOUGH} \end{figure}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
 

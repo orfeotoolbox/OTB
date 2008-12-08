@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,37 +34,37 @@ int otbCompacityPathRectangle( int argc, char * argv[] )
   typedef itk::PolyLineParametricPath< Dimension >       PathType;
   typedef otb::CompacityPathFunction<PathType>           FunctionType;
   typedef FunctionType::RealType                         RealType;
-  
+
   PathType::ContinuousIndexType cindex;
   PathType::Pointer pathElt = PathType::New();
 
   if(A<0)
     {
-      std::cout << "retangle must be greater than 0.0 !" << std::endl; 
+      std::cout << "retangle must be greater than 0.0 !" << std::endl;
       return EXIT_FAILURE;
-    } 
+    }
 
   if(B<0)
     {
-      std::cout << "rectangle must be greater than 0.0 !" << std::endl; 
+      std::cout << "rectangle must be greater than 0.0 !" << std::endl;
       return EXIT_FAILURE;
-    } 
-	
+    }
+
   pathElt->Initialize();
 
   cindex[0]= 100;
   cindex[1]= 100;
-  pathElt->AddVertex(cindex);	
+  pathElt->AddVertex(cindex);
   cindex[0]= 100+A;
   cindex[1]= 100;
-  pathElt->AddVertex(cindex);	
+  pathElt->AddVertex(cindex);
   cindex[0]= 100+A;
   cindex[1]= 100+B;
-  pathElt->AddVertex(cindex);	
+  pathElt->AddVertex(cindex);
   cindex[0]= 100;
   cindex[1]= 100+B;
-  pathElt->AddVertex(cindex);	
-        
+  pathElt->AddVertex(cindex);
+
 
   FunctionType::Pointer function =FunctionType::New();
   function->SetInputPath( pathElt );
@@ -74,14 +74,14 @@ int otbCompacityPathRectangle( int argc, char * argv[] )
 
   RealType Error;
   Error = vcl_abs(Result - static_cast<RealType>(M_PI * A*B / (A+B) / (A+B)) );
-	
+
   if(  Error > 1.E-9)
     {
       std::cout << "Error in estimation !" << std::endl;
       return EXIT_FAILURE;
     }
-	
-  
+
+
   return EXIT_SUCCESS;
 }
 

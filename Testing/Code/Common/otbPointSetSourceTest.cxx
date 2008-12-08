@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,13 +25,13 @@
 #include "itkExceptionObject.h"
 
 
-int otbPointSetSourceTest(int argc, char* argv[] ) 
+int otbPointSetSourceTest(int argc, char* argv[] )
 {
   // Declare the PointSet pixel type.
-  // Those are the values associated 
+  // Those are the values associated
   // with each PointSet point. (not used on this filter test)
   typedef int PixelType;
-  
+
   // Declare the types of the PointSet
   typedef itk::PointSet<PixelType,2>  PointSetType;
 
@@ -39,7 +39,7 @@ int otbPointSetSourceTest(int argc, char* argv[] )
   typedef PointSetType::PointsContainer     PointsContainerType;
 
   // Declare the type for PointsContainerPointer
-  typedef PointSetType::PointsContainerPointer     
+  typedef PointSetType::PointsContainerPointer
                                         PointsContainerPointer;
   // Declare the type for Points
   typedef PointSetType::PointType           PointType;
@@ -69,7 +69,7 @@ int otbPointSetSourceTest(int argc, char* argv[] )
         count++;
       }
     }
-  
+
   std::cout << "Input PointSet has " << inputPointSet->GetNumberOfPoints();
   std::cout << "   points " << std::endl;
 

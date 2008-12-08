@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -60,7 +60,7 @@ ImageList<TImage>
 	      it.Get()->GetSource()->PropagateRequestedRegion(it.Get());
 	    }
 	}
-      
+
       // Check that the requested region lies within the largest possible region
       if ( ! it.Get()->VerifyRequestedRegion() )
     {
@@ -69,7 +69,7 @@ ImageList<TImage>
     e.SetLocation(ITK_LOCATION);
     e.SetDataObject(it.Get());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
-    
+
     throw e;
     }
     }
@@ -82,7 +82,7 @@ ImageList<TImage>
 {
 //   otbMsgDebugMacro(<<"ImageList: Call to UpdateOutputInformation()");
   Superclass::UpdateOutputInformation();
-  
+
   if(this->GetSource())
     {
       this->GetSource()->UpdateOutputInformation();

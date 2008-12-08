@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,22 +33,22 @@ int otbImageFileReaderMSTAR(int argc, char* argv[])
   typedef float InputPixelType;
   typedef unsigned char OutputPixelType;
   const unsigned int   InputDimension = 2;
-  
+
   typedef otb::Image< itk::FixedArray<InputPixelType,2>, InputDimension > InputImageType;
   typedef otb::Image< InputPixelType, InputDimension > InternalImageType;
   typedef otb::Image< OutputPixelType, InputDimension > OutputImageType;
 
   typedef otb::ImageFileReader< InputImageType > ReaderType;
-  
+
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( argv[1] );
-  
+
   reader->Update();
-  
+
 
   typedef itk::ImageRegionConstIterator< InputImageType > ConstIteratorType;
   typedef itk::ImageRegionIterator< InternalImageType>       IteratorType;
-  
+
 
   InputImageType::RegionType inputRegion;
 
@@ -100,9 +100,9 @@ int otbImageFileReaderMSTAR(int argc, char* argv[])
     outputIt.Set(  inputIt.Get()[0]  );
 //    std::cout << inputIt.Get()[0] << " - " << inputIt.Get()[1] << std::endl;
     }
-  
 
-  
+
+
   typedef itk::RescaleIntensityImageFilter< InternalImageType,
                                              OutputImageType > RescalerType;
 
@@ -110,7 +110,7 @@ int otbImageFileReaderMSTAR(int argc, char* argv[])
   rescaler->SetOutputMinimum( itk::NumericTraits< OutputPixelType >::min());
   rescaler->SetOutputMaximum( itk::NumericTraits< OutputPixelType >::max());
   rescaler->SetInput( magnitude );
-  
+
 
   typedef otb::ImageFileWriter< OutputImageType > WriterType;
 

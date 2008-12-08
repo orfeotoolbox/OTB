@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -37,22 +37,22 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   this->SetNumberOfRequiredInputs( 1 );
   this->InPlaceOff();
   SetEmissionH(false);
-  SetEmissionV(false);  
+  SetEmissionV(false);
   SetGain(1);
   m_ArchitectureType = PolarimetricData::New();
 }
 
- /** 
-  * GenerateOutputInformation() 
+ /**
+  * GenerateOutputInformation()
   */
 template <class TInputImage, class TOutputImage, class TFunction>
-void 
+void
 MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 ::GenerateOutputInformation()
 {
   // do not call the superclass' implementation of this method since
   // this filter allows the input the output to be of different dimensions
- 
+
   // get pointers to the input and output
   typename Superclass::OutputImagePointer      outputPtr = this->GetOutput();
   typename Superclass::InputImageConstPointer  inputPtr  = this->GetInput();
@@ -106,7 +106,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
           }
         else
           {
-          outputDirection[j][i] = 0.0;          
+          outputDirection[j][i] = 0.0;
           }
         }
       }
@@ -122,7 +122,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
           }
         else
           {
-          outputDirection[j][i] = 0.0;          
+          outputDirection[j][i] = 0.0;
           }
         }
       }
@@ -131,7 +131,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
     outputPtr->SetSpacing( outputSpacing );
     outputPtr->SetOrigin( outputOrigin );
     outputPtr->SetDirection( outputDirection );
-    
+
     }
   else
     {
@@ -152,10 +152,10 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 ::ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread,
                         int threadId)
 {
- 
+
   InputImagePointer  inputPtr = this->GetInput();
   OutputImagePointer outputPtr = this->GetOutput(0);
-  
+
   // Define the portion of the input to walk for this thread, using
   // the CallCopyOutputRegionToInputRegion method allows for the input
   // and output images to be different dimensions
@@ -177,19 +177,19 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   switch (val)
   {
           case HH_HV_VH_VV :
-                while( !inputIt.IsAtEnd() ) 
+                while( !inputIt.IsAtEnd() )
                 {
-                outputIt.Set( m_Gain * GetFunctor()( inputIt.Get()[0], inputIt.Get()[1], 
+                outputIt.Set( m_Gain * GetFunctor()( inputIt.Get()[0], inputIt.Get()[1],
                                                      inputIt.Get()[2], inputIt.Get()[3] ) );
                 ++inputIt;
                 ++outputIt;
                 progress.CompletedPixel();  // potential exception thrown here
                 }
-              break;  
+              break;
 
           // With 3 channels : HH HV VV ou HH VH VV
           case HH_HV_VV :
-                while( !inputIt.IsAtEnd() ) 
+                while( !inputIt.IsAtEnd() )
                 {
                 outputIt.Set( m_Gain * GetFunctor()( inputIt.Get()[0], inputIt.Get()[1],
                                                      inputIt.Get()[1], inputIt.Get()[2] ) );
@@ -197,35 +197,35 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
                 ++outputIt;
                 progress.CompletedPixel();  // potential exception thrown here
                 }
-              break;  
-               
-          // Only HH and HV are present                
+              break;
+
+          // Only HH and HV are present
           case HH_HV :
-                while( !inputIt.IsAtEnd() ) 
+                while( !inputIt.IsAtEnd() )
                 {
                 outputIt.Set( m_Gain * GetFunctor()( inputIt.Get()[0], inputIt.Get()[1], 0, 0 ) );
                 ++inputIt;
                 ++outputIt;
                 progress.CompletedPixel();  // potential exception thrown here
                 }
-              break;  
-                                
+              break;
+
           // Only VH and VV are present
           case VH_VV :
-                while( !inputIt.IsAtEnd() ) 
+                while( !inputIt.IsAtEnd() )
                 {
                 outputIt.Set( m_Gain * GetFunctor()( 0, 0, inputIt.Get()[2], inputIt.Get()[3] ) );
                 ++inputIt;
                 ++outputIt;
                 progress.CompletedPixel();  // potential exception thrown here
                 }
-              break;  
-       
+              break;
+
           default :
               itkExceptionMacro("Unknown architecture : Polarimetric synthesis is impossible !");
               return;
-  }    
-    
+  }
+
 }
 
 /**
@@ -237,35 +237,35 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 ::ComputeElectromagneticFields()
 {
   ComplexArrayType AEi, AEr;
-  
+
   /** Conversion coefficient Degre To Radian */
-  double DTOR=M_PI/180;  
+  double DTOR=M_PI/180;
   double real,imag;
-  
+
   real = vcl_cos(DTOR*m_PsiI)*vcl_cos(DTOR*m_KhiI);
   imag = -vcl_sin(DTOR*m_PsiI)*vcl_sin(DTOR*m_KhiI);
   ComplexType Ei0(real,imag);
-  
+
   real = vcl_sin(DTOR*m_PsiI)*vcl_cos(DTOR*m_KhiI);
   imag = vcl_cos(DTOR*m_PsiI)*vcl_sin(DTOR*m_KhiI);
   ComplexType Ei1(real,imag);
-  
+
   real = vcl_cos(DTOR*m_PsiR)*vcl_cos(DTOR*m_KhiR);
   imag = -vcl_sin(DTOR*m_PsiR)*vcl_sin(DTOR*m_KhiR);
   ComplexType Er0(real,imag);
-  
+
   real = vcl_sin(DTOR*m_PsiR)*vcl_cos(DTOR*m_KhiR);
   imag = vcl_cos(DTOR*m_PsiR)*vcl_sin(DTOR*m_KhiR);
   ComplexType Er1(real,imag);
-    
+
   AEi[0]=Ei0;
   AEi[1]=Ei1;
   AEr[0]=Er0;
   AEr[1]=Er1;
 
   this->SetEi(AEi);
-  this->SetEr(AEr);  
-      
+  this->SetEr(AEr);
+
 }
 
 /**
@@ -276,42 +276,42 @@ void
 MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 ::VerifyAndForceInputs()
 {
-  
+
   ArchitectureType val = m_ArchitectureType->GetArchitectureType();
-  
+
   switch(val)
     {
-                
+
           case HH_HV_VH_VV :
                   break;
           case HH_HV_VV :
-                  break;           
+                  break;
           case HH_VH_VV :
-                  break;                  
-          // Only HH and HV are present                
+                  break;
+          // Only HH and HV are present
           case HH_HV :
-                             
+
         	// Forcing KhiI=0 PsiI=0
                 this->SetKhiI(0);
                 this->SetPsiI(0);
                 break;
-                                
+
           // Only VH and VV are present
           case VH_VV :
-        
-                // Forcing KhiI=0 PsiI=90          
+
+                // Forcing KhiI=0 PsiI=90
                 this->SetKhiI(0);
                 this->SetPsiI(90);
                 break;
-                
+
           default :
                 itkExceptionMacro("Unknown architecture : Polarimetric synthesis is impossible !!");
                 return;
     }
-    
+
   if(GetMode()==1)ForceCoPolar();
-  else if(GetMode()==2)ForceCrossPolar();    
-        
+  else if(GetMode()==2)ForceCrossPolar();
+
 }
 
 /**
@@ -327,13 +327,13 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 
   // First Part. Determine the kind of architecture of the input picture
   m_ArchitectureType->DetermineArchitecture(NumberOfImages,GetEmissionH(),GetEmissionV());
-  
+
   // Second Part. Verify and force the inputs
-  VerifyAndForceInputs();   
-  
+  VerifyAndForceInputs();
+
   // Third Part. Estimation of the incident field Ei and the reflected field Er
   ComputeElectromagneticFields();
- 
+
 }
 
 /**
@@ -345,7 +345,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 ::ForceCoPolar()
 {
         SetPsiR(m_PsiI);
-        SetKhiR(m_KhiI);        
+        SetKhiR(m_KhiI);
 }
 
 /**
@@ -358,7 +358,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 {
         SetPsiR(m_PsiI+90);
         SetKhiR(-m_KhiI);
-        SetMode(2);        
+        SetMode(2);
 }
 
 /**
@@ -384,12 +384,12 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   std::cout<<"KhiI: "<<m_KhiI<<std::endl;
   std::cout<<"PsiR: "<<m_PsiR<<std::endl;
   std::cout<<"KhiR: "<<m_KhiR<<std::endl;
-  
+
   std::cout<<"Ei0 im: "<<m_Ei[0].imag()<<std::endl;
   std::cout<<"Ei0 re: "<<m_Ei[0].real()<<std::endl;
   std::cout<<"Ei1 im: "<<m_Ei[1].imag()<<std::endl;
   std::cout<<"Ei1 re: "<<m_Ei[1].real()<<std::endl;
-  
+
   std::cout<<"Er0 im: "<<m_Er[0].imag()<<std::endl;
   std::cout<<"Er0 re: "<<m_Er[0].real()<<std::endl;
   std::cout<<"Er1 im: "<<m_Er[1].imag()<<std::endl;

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -45,7 +45,7 @@ public:
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ExtractROI,ExtractROIBase);
@@ -83,7 +83,7 @@ protected:
   ~ExtractROI() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** ExtractROI 
+  /** ExtractROI
    *
    * \sa ExtractROIBase::GenerateOutputInformaton()  */
   virtual void GenerateOutputInformation();
@@ -91,14 +91,14 @@ protected:
 private:
   ExtractROI(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
 };
 
-  
+
 } // end namespace otb
-  
+
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbExtractROI.txx"
 #endif
-  
+
 #endif

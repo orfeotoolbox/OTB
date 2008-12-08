@@ -9,7 +9,7 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  
+
   Some parts of this code are derived from ITK. See ITKCopyright.txt
   for details.
 
@@ -42,7 +42,7 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
 ::SurfaceAdjencyEffect6SCorrectionSchemeFilter()
-{ 
+{
   m_WindowRadius = 1;
   m_PixelSpacingInKilometers = 1.;
   m_ZenithalViewingAngle = 0;
@@ -50,21 +50,21 @@ SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
 }
 
 template <class TInputImage, class TOutputImage>
-void 
+void
 SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
   typename InputImageType::Pointer inputPtr = const_cast< TInputImage * >( this->GetInput() );
   typename OutputImageType::Pointer outputPtr = const_cast< TOutputImage * >( this->GetOutput() );
-  
+
   if(!inputPtr || !outputPtr)
     return;
   outputPtr->SetNumberOfComponentsPerPixel(inputPtr->GetNumberOfComponentsPerPixel());
 }
 
 template <class TInputImage, class TOutputImage>
-void 
+void
 SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
 ::Modified()
 {
@@ -73,7 +73,7 @@ SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
 }
 
 template <class TInputImage, class TOutputImage>
-void 
+void
 SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
 ::BeforeThreadedGenerateData ()
 {
@@ -85,7 +85,7 @@ SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
 }
 
 template <class TInputImage, class TOutputImage>
-void 
+void
 SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
 ::ComputeParameters()
 {
@@ -93,7 +93,7 @@ SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
   typename InputImageType::Pointer inputPtr = const_cast< TInputImage * >( this->GetInput() );
   typename OutputImageType::Pointer outputPtr = const_cast< TOutputImage * >( this->GetOutput() );
 
-  
+
   WeightingMatrixType radiusMatrix(2*m_WindowRadius+1,2*m_WindowRadius+1);
   radiusMatrix.Fill(0.);
 
@@ -118,7 +118,7 @@ SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
       WeightingMatrixType currentWeightingMatrix(2*m_WindowRadius+1,2*m_WindowRadius+1);
       double rayleigh = m_AtmosphericRadiativeTerms->GetUpwardDiffuseTransmittanceForRayleigh(band);
       double aerosol =  m_AtmosphericRadiativeTerms->GetUpwardDiffuseTransmittanceForAerosol(band);
-     
+
       currentWeightingMatrix.Fill(0.);
 
       for(unsigned int i = 0; i<2*m_WindowRadius+1; ++i)
@@ -133,11 +133,11 @@ SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
 	    }
 	}
       m_WeightingValues.push_back(currentWeightingMatrix);
-    }  
-  
-  
+    }
+
+
   DoubleContainerType upwardTransmittanceRatio,diffuseRatio;
-  
+
   for(unsigned int band = 0; band<inputPtr->GetNumberOfComponentsPerPixel();++band)
     {
       upwardTransmittanceRatio.push_back(m_AtmosphericRadiativeTerms->GetUpwardTransmittance(band)/m_AtmosphericRadiativeTerms->GetUpwardDirectTransmittance(band));

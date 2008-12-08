@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -39,7 +39,7 @@ int otbPeriodicSOM(int argc, char* argv[])
   double betaInit = atof(argv[8]);
   double betaEnd= atof(argv[9]);
   double initValue = atof(argv[10]);
-    
+
 
   typedef double ComponentType;
   typedef itk::VariableLengthVector<ComponentType> PixelType;
@@ -48,7 +48,7 @@ int otbPeriodicSOM(int argc, char* argv[])
   typedef otb::VectorImage<ComponentType,Dimension> ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef itk::Statistics::ListSample<PixelType>  ListSampleType;
-    
+
   typedef otb::PeriodicSOM<ListSampleType,MapType> SOMType;
   typedef otb::ImageFileWriter<MapType> WriterType;
 
@@ -59,9 +59,9 @@ int otbPeriodicSOM(int argc, char* argv[])
   ListSampleType::Pointer listSample = ListSampleType::New();
 
   itk::ImageRegionIterator<ImageType> it(reader->GetOutput(),reader->GetOutput()->GetLargestPossibleRegion());
-    
+
   it.GoToBegin();
-    
+
   while(!it.IsAtEnd())
     {
       listSample->PushBack(it.Get());
@@ -69,7 +69,7 @@ int otbPeriodicSOM(int argc, char* argv[])
     }
 
   std::cout<<"LIST SAMPLE SIZE: "<<listSample->GetMeasurementVectorSize()<<std::endl;
-       
+
   // Instantiation
   SOMType::Pointer som = SOMType::New();
   som->SetListSample(listSample);

@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -37,7 +37,7 @@ namespace Functor
      *
      * Given \f$x_1\f$ and \f$x_2\f$ two membership values, \f$L_1,L_2\f$ two labels associated,
      * and \f$\sigma\f$ a tolerance value, the following decision rule is applied:
-     * 
+     *
      *  \f[
      *  L=\left\{\begin{array}{lcl}
      * L_{1} &:& x_{1}>x_{2} \quad and \quad x_{1}>\sigma\\
@@ -55,7 +55,7 @@ namespace Functor
     template<class TInput,class TLabeled>
       class MultiScaleConvexOrConcaveDecisionRule
       {
-	
+
       public:
 	/**
 	 * Constructor
@@ -123,7 +123,7 @@ namespace Functor
 	  {
 	    return m_LabelSeparator;
 	  }
-	
+
       private:
 	/** Sigma (tolerance) parameter */
 	double m_Sigma;
@@ -135,41 +135,41 @@ namespace Functor
 
 /** \class MultiScaleConvexOrConcaveClassificationFilter
  *  \brief Apply the MultiScaleConvexOrConcaveDecisionRule to whole images.
- *  
+ *
  * See MultiScaleConvexOrConcaveDecisionRule functor documentation for more details.
- * 
+ *
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT MultiScaleConvexOrConcaveClassificationFilter
   : public QuaternaryFunctorImageFilter<TInputImage,TInputImage, TOutputImage,TOutputImage,TOutputImage,
-    Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType, 
+    Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
                                          typename TOutputImage::PixelType> >
 {
  public:
   /** Standard typedefs */
   typedef MultiScaleConvexOrConcaveClassificationFilter Self;
   typedef QuaternaryFunctorImageFilter<TInputImage,TInputImage, TOutputImage,TOutputImage,TOutputImage,
-                                       Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType, 
+                                       Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
                                        typename TOutputImage::PixelType> >Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(MultiScaleConvexOrConcaveClassificationFilter,QuaternaryFunctorImageFilter);
-  
+
   /** Template class typedef */
   typedef TInputImage InputImageType;
   typedef TOutputImage OutputImageType;
   typedef typename OutputImageType::PixelType LabelType;
-  typedef Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType, 
+  typedef Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
     typename TOutputImage::PixelType> DecisionFunctorType;
   /**
    * Set the opening profile derivative maxima image
    * \param derivativeMaxima the opening profile derivative maxima image
-   * 
+   *
    */
   void SetOpeningProfileDerivativeMaxima(const TInputImage * derivativeMaxima)
     {
@@ -178,7 +178,7 @@ class ITK_EXPORT MultiScaleConvexOrConcaveClassificationFilter
   /**
    * Set the opening profile characteristics image
    * \param characteristics the opening profile characteristics image
-   * 
+   *
    */
   void SetOpeningProfileCharacteristics(const TOutputImage * characteristics)
     {
@@ -187,7 +187,7 @@ class ITK_EXPORT MultiScaleConvexOrConcaveClassificationFilter
   /**
    * Set the closing profile derivative maxima image
    * \param derivativeMaxima the closing profile derivative maxima image
-   * 
+   *
    */
   void SetClosingProfileDerivativeMaxima(const TInputImage * derivativeMaxima)
     {
@@ -196,7 +196,7 @@ class ITK_EXPORT MultiScaleConvexOrConcaveClassificationFilter
   /**
    * Set the closing profile characteristics image
    * \param characteristics the closing profile characteristics image
-   * 
+   *
    */
   void SetClosingProfileCharacteristics(const TOutputImage * characteristics)
     {

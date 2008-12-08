@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -142,7 +142,7 @@ bool System::IsADirName(const std::string&  pszPath)
     bool isADir(false);
     std::string  pszFileSpec;
     std::string path(pszPath);
-    
+
     if (pszPath.empty() == true)
         path = ".";
 
@@ -168,7 +168,7 @@ std::vector<std::string> System::Readdir(const std::string&  pszPath)
     std::vector<std::string>  listFileFind;
     std::string  pszFileSpec;
     std::string path(pszPath);
-    
+
     if (pszPath.empty() == true)
         path = ".";
 
@@ -198,7 +198,7 @@ bool System::IsADirName(const std::string&  pszPath)
     bool isADir(false);
     DIR           *hDir;
     std::string path(pszPath);
-    
+
     if (pszPath.empty() == true)
         path = ".";
 
@@ -237,7 +237,7 @@ std::vector<std::string> System::Readdir(const std::string& pszPath)
     std::vector<std::string>  listFileFind;
     struct dirent *psDirEntry;
     std::string path(pszPath);
-    
+
     if (pszPath.empty() == true)
         path = ".";
 

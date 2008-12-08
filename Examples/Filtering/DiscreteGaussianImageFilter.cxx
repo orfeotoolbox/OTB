@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,7 +28,7 @@
 //    OUTPUTS: {DiscreteGaussianImageFilterOutput.png}
 //    4 9
 //  Software Guide : EndCommandLineArgs
-//  
+//
 //  Software Guide : BeginLatex
 //
 //  \itkpiccaption[DiscreteGaussianImageFilter Gaussian diagram.]{Discretized
@@ -56,7 +56,7 @@
 //
 //  \index{itk::DiscreteGaussianImageFilter}
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
 #include "otbImage.h"
@@ -70,7 +70,7 @@
 //
 //  \index{itk::DiscreteGaussianImageFilter!header}
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "itkDiscreteGaussianImageFilter.h"
@@ -79,20 +79,20 @@
 
 int main( int argc, char * argv[] )
 {
-  if( argc < 5 ) 
-    { 
+  if( argc < 5 )
+    {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << "  inputImageFile  outputImageFile  variance  maxKernelWidth " << std::endl;
     return EXIT_FAILURE;
     }
 
-  
+
   //  Software Guide : BeginLatex
   //
   //  Types should be chosen for the pixels of the input and output images.
   //  Image types can be instantiated using the pixel type and dimension.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef    float    InputPixelType;
@@ -115,7 +115,7 @@ int main( int argc, char * argv[] )
   //  \index{itk::DiscreteGaussianImageFilter!New()}
   //  \index{itk::DiscreteGaussianImageFilter!Pointer}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef itk::DiscreteGaussianImageFilter<
@@ -134,7 +134,7 @@ int main( int argc, char * argv[] )
   //  The input image can be obtained from the output of another
   //  filter. Here, an image reader is used as its input.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   filter->SetInput( reader->GetOutput() );
@@ -146,7 +146,7 @@ int main( int argc, char * argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The filter requires the user to provide a value for the variance
   //  associated with the Gaussian kernel. The method \code{SetVariance()} is
   //  used for this purpose. The discrete Gaussian is constructed as a
@@ -157,7 +157,7 @@ int main( int argc, char * argv[] )
   //  \index{itk::DiscreteGaussianImageFilter!SetVariance()}
   //  \index{itk::DiscreteGaussianImageFilter!SetMaximumKernelWidth()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
   // Software Guide : BeginCodeSnippet
@@ -172,7 +172,7 @@ int main( int argc, char * argv[] )
   //
   //  \index{itk::DiscreteGaussianImageFilter!Update()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
   // Software Guide : BeginCodeSnippet
@@ -187,11 +187,11 @@ int main( int argc, char * argv[] )
   //  triggered the execution of this one. For example, a writer could have
   //  been used after the filter.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   typedef unsigned char WritePixelType;
   typedef otb::Image< WritePixelType, 2 > WriteImageType;
-  typedef itk::RescaleIntensityImageFilter< 
+  typedef itk::RescaleIntensityImageFilter<
                OutputImageType, WriteImageType > RescaleFilterType;
   RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
 
@@ -201,7 +201,7 @@ int main( int argc, char * argv[] )
   typedef itk::ImageFileWriter< WriteImageType >  WriterType;
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName( argv[2] );
- 
+
   // Software Guide : BeginCodeSnippet
   rescaler->SetInput( filter->GetOutput() );
   writer->SetInput( rescaler->GetOutput() );
@@ -210,7 +210,7 @@ int main( int argc, char * argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   // \begin{figure}
   // \center
   // \includegraphics[width=0.44\textwidth]{QB_Suburb.eps}
@@ -222,13 +222,13 @@ int main( int argc, char * argv[] )
   //
   //  Figure~\ref{fig:DiscreteGaussianImageFilterInputOutput} illustrates the
   //  effect of this filter.
-  //  
+  //
   //  Note that large Gaussian variances will produce large convolution kernels
   //  and correspondingly slower computation times.  Unless a high degree of
   //  accuracy is required, it may be more desirable to use the approximating
   //  \doxygen{itk}{RecursiveGaussianImageFilter} with large variances.
-  // 
-  //  Software Guide : EndLatex 
+  //
+  //  Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

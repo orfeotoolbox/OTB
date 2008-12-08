@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,31 +33,31 @@ namespace otb
 	m_Numerators[dimension]=1;
 	m_Denominators[dimension]=1;
       }
-    
+
     // Internal filter
     m_ExpandFilter = ExpandFilterType::New();
     m_ShrinkFilter = ShrinkFilterType::New();
-    
+
     m_ShrinkFilter->SetInput(m_ExpandFilter->GetOutput());
-    
+
   }
 
-  
+
   template <class TInputImage, class TOutputImage>
   void
   RationalQuotientResampleImageFilter<TInputImage,TOutputImage>
   ::GenerateData()
   {
     m_ExpandFilter->SetInput(this->GetInput());
-    
+
     // Set expand factors as the numerator
     m_ExpandFilter->SetExpandFactors(m_Numerators);
-    
+
     // Set shrink factors as the denominator
     m_ShrinkFilter->SetShrinkFactors(m_Denominators);
-    
+
     m_ShrinkFilter->GraftOutput(this->GetOutput());
-    
+
     m_ShrinkFilter->Update();
     this->GraftOutput(m_ShrinkFilter->GetOutput());
   }
@@ -76,7 +76,7 @@ namespace otb
       }
     os << std::endl;
   }
-  
+
   template <class TInputImage, class TOutputImage>
   void
   RationalQuotientResampleImageFilter<TInputImage, TOutputImage>::
@@ -95,7 +95,7 @@ namespace otb
 	  }
       }
   }
-  
+
   template <class TInputImage, class TOutputImage>
   void
   RationalQuotientResampleImageFilter<TInputImage, TOutputImage>::
@@ -114,7 +114,7 @@ namespace otb
 	  }
       }
   }
-    
+
   template <class TInputImage, class TOutputImage>
   void
   RationalQuotientResampleImageFilter<TInputImage, TOutputImage>::
@@ -148,7 +148,7 @@ namespace otb
 	  }
       }
   }
-  
+
   template <class TInputImage, class TOutputImage>
   void
   RationalQuotientResampleImageFilter<TInputImage, TOutputImage>::
@@ -167,7 +167,7 @@ namespace otb
 	  }
       }
   }
-    
+
   template <class TInputImage, class TOutputImage>
   void
   RationalQuotientResampleImageFilter<TInputImage, TOutputImage>::

@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -52,7 +52,7 @@ int main(int argc, char * argv[])
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet    
+// Software Guide : BeginCodeSnippet
   const unsigned int     Dimension = 2;
   typedef double         PixelType;
   typedef unsigned short LabeledPixelType;
@@ -66,8 +66,8 @@ int main(int argc, char * argv[])
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet    
-    
+// Software Guide : BeginCodeSnippet
+
   typedef otb::VectorImage<PixelType,Dimension> ImageType;
   typedef otb::Image<LabeledPixelType,Dimension> LabeledImageType;
 
@@ -80,7 +80,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  
+
   typedef otb::SVMImageClassificationFilter<ImageType,LabeledImageType>
                                                 ClassificationFilterType;
   typedef ClassificationFilterType::ModelType ModelType;
@@ -94,9 +94,9 @@ int main(int argc, char * argv[])
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet        
-  
-  
+// Software Guide : BeginCodeSnippet
+
+
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::StreamingImageFileWriter<LabeledImageType> WriterType;
 
@@ -108,9 +108,9 @@ int main(int argc, char * argv[])
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet          
- 
-  
+// Software Guide : BeginCodeSnippet
+
+
 
   ClassificationFilterType::Pointer filter = ClassificationFilterType::New();
 
@@ -119,7 +119,7 @@ int main(int argc, char * argv[])
 
   ModelType::Pointer model = ModelType::New();
   model->LoadModel(modelfname);
-  
+
   filter->SetModel(model);
 
 // Software Guide : EndCodeSnippet
@@ -130,10 +130,10 @@ int main(int argc, char * argv[])
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet          
-  
+// Software Guide : BeginCodeSnippet
+
   filter->SetInput(reader->GetOutput());
-  
+
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(filter->GetOutput());
   writer->SetFileName(outfname);

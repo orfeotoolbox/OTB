@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,7 +23,7 @@
 #include "itkExceptionObject.h"
 #include "itkPointSet.h"
 #include <iostream>
-#include <cstdlib> 
+#include <cstdlib>
 
 #include "otbSVMPointSetModelEstimator.h"
 #include "itkPointSetToListAdaptor.h"
@@ -37,7 +37,7 @@ int main( int argc, char* argv[] )
 
 
   typedef float InputPixelType;
-  
+
   typedef std::vector<InputPixelType>                             InputVectorType;
   typedef int                             LabelPixelType;
   const   unsigned int        	                    Dimension = 2;
@@ -65,17 +65,17 @@ int main( int argc, char* argv[] )
   srand(0);
   int lowest = 0;
   int range = 1000;
-  
+
   unsigned int pointId;
-  
+
   for(pointId = 0; pointId<500; pointId++)
     {
-    
+
     MeasurePointType mP;
     LabelPointType lP;
 
     int x_coord = lowest+static_cast<int>(range*(rand()/(RAND_MAX + 1.0)));
-    int y_coord = lowest+static_cast<int>(range*(rand()/(RAND_MAX + 1.0))); 
+    int y_coord = lowest+static_cast<int>(range*(rand()/(RAND_MAX + 1.0)));
 
     std::cout << "coords : " << x_coord << " " << y_coord << std::endl;
     mP[0] = x_coord;
@@ -85,7 +85,7 @@ int main( int argc, char* argv[] )
     lP[1] = y_coord;
 
 
-    InputVectorType measure; 
+    InputVectorType measure;
     measure.push_back(static_cast<InputPixelType>((x_coord*1.0-lowest)/range));
     measure.push_back(static_cast<InputPixelType>((y_coord*1.0-lowest)/range));
 
@@ -100,22 +100,22 @@ int main( int argc, char* argv[] )
     std::cout << "Measures : " << measure[0] << " " << measure[1] << std::endl;
 
     mCont->InsertElement( pointId , mP );
-    mPSet->SetPointData( pointId, measure );   
+    mPSet->SetPointData( pointId, measure );
 
 
     lCont->InsertElement( pointId , lP );
-    lPSet->SetPointData( pointId, label );   
+    lPSet->SetPointData( pointId, label );
 
 
     }
 
   mPSet->SetPoints( mCont );
   lPSet->SetPoints( lCont );
-    
+
   typedef otb::SVMPointSetModelEstimator< MeasurePointSetType,
     LabelPointSetType >   EstimatorType;
-	
-	
+
+
   EstimatorType::Pointer estimator = EstimatorType::New();
 
   estimator->SetInputPointSet( mPSet );
@@ -133,21 +133,21 @@ int main( int argc, char* argv[] )
 
   MeasurePointSetType::Pointer tPSet = MeasurePointSetType::New();
   MeasurePointsContainer::Pointer tCont = MeasurePointsContainer::New();
-  
+
   for(pointId = 0; pointId<100; pointId++)
     {
-    
+
     MeasurePointType tP;
 
     int x_coord = lowest+static_cast<int>(range*(rand()/(RAND_MAX + 1.0)));
-    int y_coord = lowest+static_cast<int>(range*(rand()/(RAND_MAX + 1.0))); 
+    int y_coord = lowest+static_cast<int>(range*(rand()/(RAND_MAX + 1.0)));
 
     std::cout << "coords : " << x_coord << " " << y_coord << std::endl;
     tP[0] = x_coord;
     tP[1] = y_coord;
 
 
-    InputVectorType measure; 
+    InputVectorType measure;
     measure.push_back(static_cast<InputPixelType>((x_coord*1.0-lowest)/range));
     measure.push_back(static_cast<InputPixelType>((y_coord*1.0-lowest)/range));
 
@@ -155,7 +155,7 @@ int main( int argc, char* argv[] )
     std::cout << "Measures : " << measure[0] << " " << measure[1] << std::endl;
 
     tCont->InsertElement( pointId , tP );
-    tPSet->SetPointData( pointId, measure );   
+    tPSet->SetPointData( pointId, measure );
 
     }
 
@@ -168,7 +168,7 @@ int main( int argc, char* argv[] )
     SampleType::Pointer sample = SampleType::New();
     sample->SetPointSet( tPSet );
 
-    std::cout << "Sample set to Adaptor" << std::endl;  
+    std::cout << "Sample set to Adaptor" << std::endl;
 
 
     /** preparing classifier and decision rule object */
@@ -179,24 +179,24 @@ int main( int argc, char* argv[] )
     int numberOfClasses = model->GetNumberOfClasses();
 
     std::cout << "Classification for " << numberOfClasses << " classes " << std::endl;
-    
+
     typedef otb::SVMClassifier< SampleType, LabelPixelType > ClassifierType ;
 
     ClassifierType::Pointer classifier = ClassifierType::New() ;
-  
+
     classifier->SetNumberOfClasses(numberOfClasses) ;
     classifier->SetModel( model );
     classifier->SetSample(sample.GetPointer()) ;
     classifier->Update() ;
 
     /* Build the class map */
-    std::cout << "Output image creation" << std::endl;  
+    std::cout << "Output image creation" << std::endl;
 
-    
-    std::cout << "classifier get output" << std::endl;  
+
+    std::cout << "classifier get output" << std::endl;
     ClassifierType::OutputType* membershipSample =
       classifier->GetOutput() ;
-    std::cout << "Sample iterators" << std::endl;  
+    std::cout << "Sample iterators" << std::endl;
     ClassifierType::OutputType::ConstIterator m_iter =
       membershipSample->Begin() ;
     ClassifierType::OutputType::ConstIterator m_last =
@@ -208,9 +208,9 @@ int main( int argc, char* argv[] )
     while (m_iter != m_last)
       {
       ClassifierType::ClassLabelType label = m_iter.GetClassLabel();
-      
-      InputVectorType measure; 
-      
+
+      InputVectorType measure;
+
       tPSet->GetPointData(pointId, &measure);
 
       ClassifierType::ClassLabelType expectedLabel;
@@ -220,19 +220,19 @@ int main( int argc, char* argv[] )
 	expectedLabel = 1;
 
       double dist = fabs(measure[0] - measure[1]);
-      
+
       if(label != expectedLabel )
 	error++;
 
       std::cout << int(label) << "/" << int(expectedLabel) << " --- " << dist << std::endl;
-      
-      
+
+
       ++pointId;
       ++m_iter ;
       }
-    
+
     std::cout << "Error = " << error/pointId << std::endl;
-    
+
 
 
   return EXIT_SUCCESS;

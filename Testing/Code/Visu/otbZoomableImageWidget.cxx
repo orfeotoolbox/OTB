@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -22,12 +22,12 @@ PURPOSE.  See the above copyright notices for more information.
 
 int otbZoomableImageWidget( int argc, char * argv[] )
 {
-  char * filename = argv[1];      
+  char * filename = argv[1];
   typedef float PixelType;
   typedef otb::ZoomableImageWidget<PixelType> WidgetType;
   typedef WidgetType::ImageType ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  
+
   ReaderType::Pointer reader = ReaderType::New();
   ImageType::SizeType size;
   ImageType::IndexType index;
@@ -35,10 +35,10 @@ int otbZoomableImageWidget( int argc, char * argv[] )
   reader->SetFileName(filename);
   reader->Update();
   size=reader->GetOutput()->GetLargestPossibleRegion().GetSize();
-  
+
   Fl_Window window(size[0],size[1]);
-  
-  WidgetType::Pointer widget = WidgetType::New();   
+
+  WidgetType::Pointer widget = WidgetType::New();
   window.resizable(widget.GetPointer());
   widget->SetInput(reader->GetOutput());
   if(reader->GetOutput()->GetNumberOfComponentsPerPixel()>=3)
@@ -53,11 +53,11 @@ int otbZoomableImageWidget( int argc, char * argv[] )
   widget->Show();
   widget->redraw();
   Fl::check();
-  
+
   for(double zoom  = 1.0;zoom<10.;zoom++)
     {
       Fl::check();
-      
+
       index[0]=size[0]/2-static_cast<int>(static_cast<double>(size[0]/2)/zoom+0.5);
       index[1]=size[1]/2-static_cast<int>(static_cast<double>(size[1]/2)/zoom+0.5);
       widget->SetZoomUpperLeftCorner(index);
@@ -66,7 +66,7 @@ int otbZoomableImageWidget( int argc, char * argv[] )
       Fl::wait(0.2);
       Fl::check();
     }
-  
+
   for(double zoom=10.;zoom>=1.;zoom--)
     {
       Fl::check();
@@ -78,10 +78,10 @@ int otbZoomableImageWidget( int argc, char * argv[] )
       Fl::wait(0.2);
       Fl::check();
     }
-  
+
   // suppres child, without delete memory.
   // delete memory is ITK respoability, since WidgetType::New()
   window.remove(widget.GetPointer());
-  
+
   return EXIT_SUCCESS;
 }

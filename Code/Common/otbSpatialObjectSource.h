@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -52,12 +52,12 @@ class ITK_EXPORT SpatialObjectSource
   /** Data object pointer */
   typedef itk::DataObject::Pointer DataObjectPointer;
 
-  /** 
+  /**
    * Get the output spatial object.
    * \return The output spatial object.
    */
   virtual SpatialObjectType * GetOutput(void);
-  
+
 
  protected:
   /** Constructor */
@@ -69,7 +69,7 @@ class ITK_EXPORT SpatialObjectSource
 
 private:
   SpatialObjectSource(const Self&);//purposely not implemented
-  void operator=(const Self&); //purposely not implemented 
+  void operator=(const Self&); //purposely not implemented
 
 };
 } // end namespace otb

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -36,7 +36,7 @@
 // according to a given transform, using embedded ITK registration framework. It takes as input a possibly non regular
 // point set and produces a point set with associated point data representing the deformation.
 //
-// The second filter generates a deformation field by using nearest neighbor interpolation on the deformation values from 
+// The second filter generates a deformation field by using nearest neighbor interpolation on the deformation values from
 // the point set. More advanced methods for deformation field interpolation are also available.
 //
 // The first step toward the use of these filters is to include the proper header files.
@@ -72,8 +72,8 @@ int main (int argc, char* argv[])
       std::cerr<<"fixedFileName movingFileName fieldOutName imageOutName ";
       std::cerr<<"pointSetStepX pointSetStepY explorationSize windowSize learningRate ";
       std::cerr<<"nbIterations metricThreshold";
-      
-      
+
+
       return EXIT_FAILURE;
     }
 
@@ -81,33 +81,33 @@ int main (int argc, char* argv[])
 
    // Software Guide : BeginLatex
    //
-   // Then we must decide what pixel type to use for the image. We choose to do 
-   // all the computation in floating point precision and rescale the results 
+   // Then we must decide what pixel type to use for the image. We choose to do
+   // all the computation in floating point precision and rescale the results
    // between 0 and 255 in order to export PNG images.
    //
    // Software Guide : EndLatex
-    
+
   // Software Guide : BeginCodeSnippet
-  
+
   typedef double        PixelType;
   typedef unsigned char OutputPixelType;
-  
+
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
   //
   //  The images are defined using the pixel type and the dimension. Please note that
-  //  the \doxygen{otb}{NearestPointDeformationFieldGenerator} generates a 
-  //  \doxygen{otb}{VectorImage} to represent the deformation field in both 
+  //  the \doxygen{otb}{NearestPointDeformationFieldGenerator} generates a
+  //  \doxygen{otb}{VectorImage} to represent the deformation field in both
   //  image directions.
   //
-  //  Software Guide : EndLatex 
-  
+  //  Software Guide : EndLatex
+
   // Software Guide : BeginCodeSnippet
 
   typedef otb::Image<PixelType,Dimension>       ImageType;
   typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
-  
+
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -115,7 +115,7 @@ int main (int argc, char* argv[])
   //  The next step is to define the transform we have chosen to model the deformation. In this
   // example the deformation is modeled as a \doxygen{itk}{TranslationTransform}.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
 
@@ -126,7 +126,7 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginLatex
   //
-  // Then we define the metric we will use to evaluate the local registration between the fixed and 
+  // Then we define the metric we will use to evaluate the local registration between the fixed and
   // the moving image. In this example we choosed the \doxygen{itk}{NormalizedCorrelationImageToImageMetric}.
   //
   // Software Guide : EndLatex
@@ -140,13 +140,13 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginLatex
   //
-  // Disparity map estimation implies evaluation of the moving image at non-grid position. Therefore, an 
+  // Disparity map estimation implies evaluation of the moving image at non-grid position. Therefore, an
   // interpolator is needed. In this example we choosed the \doxygen{itk}{WindowedSincInterpolateImageFunction}.
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  
+
   typedef itk::Function::HammingWindowFunction<3> WindowFunctionType;
   typedef itk::ZeroFluxNeumannBoundaryCondition<ImageType> ConditionType;
   typedef itk::WindowedSincInterpolateImageFunction<ImageType,3,
@@ -156,16 +156,16 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginLatex
   //
-  // To perform local registration, an optimizer is needed. In this example we choosed the 
+  // To perform local registration, an optimizer is needed. In this example we choosed the
   // \doxygen{itk}{GradientDescentOptimizer}.
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
 
-  typedef itk::GradientDescentOptimizer OptimizerType; 
+  typedef itk::GradientDescentOptimizer OptimizerType;
 
-  // Software Guide : EndCodeSnippet 
+  // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
   //
@@ -216,12 +216,12 @@ int main (int argc, char* argv[])
   // Two readers are instantiated : one for the fixed image, and one for the moving image.
   //
   // Software Guide : EndLatex
-  
+
   // Software Guide : BeginCodeSnippet
 
   ReaderType::Pointer fixedReader = ReaderType::New();
   ReaderType::Pointer movingReader = ReaderType::New();
-  
+
   fixedReader->SetFileName(argv[1]);
   movingReader->SetFileName(argv[2]);
   fixedReader->UpdateOutputInformation();
@@ -237,7 +237,7 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
 
-  SizeType fixedSize = 
+  SizeType fixedSize =
     fixedReader->GetOutput()->GetLargestPossibleRegion().GetSize();
   unsigned int NumberOfXNodes = (fixedSize[0]-2*atoi(argv[7])-1)
     /atoi(argv[5]);
@@ -245,12 +245,12 @@ int main (int argc, char* argv[])
     /atoi(argv[6]);
 
   ImageType::IndexType firstNodeIndex;
-  firstNodeIndex[0] = atoi(argv[7]); 
+  firstNodeIndex[0] = atoi(argv[7]);
   firstNodeIndex[1] = atoi(argv[7]);
-  
+
   PointSetType::Pointer  nodes = PointSetType::New();
   unsigned int nodeCounter = 0;
-  
+
   for(unsigned int x=0; x<NumberOfXNodes; x++)
     {
       for(unsigned int y=0; y<NumberOfYNodes; y++)
@@ -264,14 +264,14 @@ int main (int argc, char* argv[])
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
-  // 
-  // We build the transform, interpolator, metric and optimizer for the disparity map 
+  //
+  // We build the transform, interpolator, metric and optimizer for the disparity map
   // estimation filter.
   //
   // Software Guide : EndLatex
-  
+
   // Software Guide : BeginCodeSnippet
-  
+
   TransformType::Pointer transform = TransformType::New();
 
   OptimizerType::Pointer optimizer = OptimizerType::New();
@@ -283,7 +283,7 @@ int main (int argc, char* argv[])
 
   MetricType::Pointer metric = MetricType::New();
   metric->SetSubtractMean(true);
- 
+
   // Software Guide : EndCodeSnippet
 
 
@@ -302,31 +302,31 @@ int main (int argc, char* argv[])
   // \item{the final parameters of the transform.}
   // \end{enumerate}
   //
-  // Please note that in the case of a \doxygen{itk}{TranslationTransform}, the deformation values and 
+  // Please note that in the case of a \doxygen{itk}{TranslationTransform}, the deformation values and
   // the transform parameters are the same.
   //
   // Software Guide : EndLatex
 
 
   // Software Guide :BeginCodeSnippet
-  
+
   DMEstimationType::Pointer dmestimator = DMEstimationType::New();
-  
+
   dmestimator->SetTransform(transform);
   dmestimator->SetOptimizer(optimizer);
   dmestimator->SetInterpolator(interpolator);
   dmestimator->SetMetric(metric);
-  
+
   SizeType windowSize, explorationSize;
   explorationSize.Fill(atoi(argv[7]));
   windowSize.Fill(atoi(argv[8]));
-		
+
   dmestimator->SetWinSize(windowSize);
   dmestimator->SetExploSize(explorationSize);
-  
+
   // Software Guide : EndCodeSnippet
-  
- 
+
+
   // Software Guide : BeginLatex
   //
   // The initial transform parameters can be set via the \code{SetIntialTransformParameters()} method.
@@ -336,17 +336,17 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
 
-  DMEstimationType::ParametersType 
+  DMEstimationType::ParametersType
     initialParameters(transform->GetNumberOfParameters() );
-  initialParameters[0] = 0.0; 
+  initialParameters[0] = 0.0;
   initialParameters[1] = 0.0;
   dmestimator->SetInitialTransformParameters(initialParameters);
   // Software Guide : EndCodeSnippet
-  
+
   // Software Guide : BeginLatex
   //
   // Now we can set the input for the deformation field estimation filter. Fixed image can be set using the \code{SetFixedImage()}
-  // method, moving image can be set using the \code{SetMovingImage()}, and input point set can be set using the 
+  // method, moving image can be set using the \code{SetMovingImage()}, and input point set can be set using the
   // \code{SetPointSet()} method.
   //
   // Software Guide : EndLatex
@@ -360,10 +360,10 @@ int main (int argc, char* argv[])
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
-  // 
+  //
   // Once the estimation has been performed by the \doxygen{otb}{DisparityMapEstimationMethod}, one can generate
   // the associated deformation field (that means translation in first and second image direction).
-  // It will be represented as a \doxygen{otb}{VectorImage}. 
+  // It will be represented as a \doxygen{otb}{VectorImage}.
   //
   // Software Guide : EndLatex
 
@@ -423,7 +423,7 @@ int main (int argc, char* argv[])
   generator->SetOutputSpacing(fixedReader->GetOutput()->GetSpacing());
   generator->SetOutputSize(fixedReader->GetOutput()
 			   ->GetLargestPossibleRegion().GetSize());
-    
+
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -477,9 +477,9 @@ int main (int argc, char* argv[])
   // Software Guide : BeginCodeSnippet
 
   ImageWarperType::Pointer warper = ImageWarperType::New();
-  
+
   // Software Guide : EndCodeSnippet
-  
+
   // Software Guide  : BeginLatex
   //
   // We set the input image to warp using the \code{SetInput()} method, and the deformation field
@@ -506,18 +506,18 @@ int main (int argc, char* argv[])
 
   typedef itk::RescaleIntensityImageFilter<ImageType,
                OutputImageType> RescalerType;
-  
+
   RescalerType::Pointer outputRescaler = RescalerType::New();
   outputRescaler->SetInput(warper->GetOutput());
   outputRescaler->SetOutputMaximum(255);
   outputRescaler->SetOutputMinimum(0);
-  
+
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
   //
-  // We can now write the image to a file. The filters are executed by invoking 
-  // the \code{Update()} method. 
+  // We can now write the image to a file. The filters are executed by invoking
+  // the \code{Update()} method.
   //
   // Software Guide : EndLatex
 
@@ -543,8 +543,8 @@ int main (int argc, char* argv[])
 
   typedef otb::MultiToMonoChannelExtractROI<PixelType,
                PixelType> ChannelExtractionFilterType;
-  
-  ChannelExtractionFilterType::Pointer channelExtractor 
+
+  ChannelExtractionFilterType::Pointer channelExtractor
     = ChannelExtractionFilterType::New();
 
   channelExtractor->SetInput(generator->GetOutput());
@@ -554,7 +554,7 @@ int main (int argc, char* argv[])
   fieldRescaler->SetInput(channelExtractor->GetOutput());
   fieldRescaler->SetOutputMaximum(255);
   fieldRescaler->SetOutputMinimum(0);
-  
+
   WriterType::Pointer fieldWriter = WriterType::New();
   fieldWriter->SetInput(fieldRescaler->GetOutput());
   fieldWriter->SetFileName(argv[3]);
@@ -570,14 +570,14 @@ int main (int argc, char* argv[])
   // period. Please note that there are more efficient ways to interpolate the deformation field than nearest neighbor,
   // including BSplines fitting.
   //
-  // \begin{figure} 
+  // \begin{figure}
   // \center
   // \includegraphics[width=0.40\textwidth]{ROI_IKO_PAN_LesHalles_pos_spacing.eps}
   // \includegraphics[width=0.40\textwidth]{ROI_IKO_PAN_LesHalles_warped_pos_spacing.eps}
   // \includegraphics[width=0.40\textwidth]{deformationFieldOutput.eps}
   // \includegraphics[width=0.40\textwidth]{resampledMovingOutput.eps}
   // \itkcaption[Deformation field and resampling from disparity map estimation]{From left
-  // to right and top to bottom: fixed input image, moving image with a sinusoid deformation, 
+  // to right and top to bottom: fixed input image, moving image with a sinusoid deformation,
   // estimated deformation field in the horizontal direction, resampled moving image.}
   // \label{fig:SIMPLEDISPARITYMAPESTIMATIONOUTPUT}
   // \end{figure}

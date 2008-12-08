@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -52,7 +52,7 @@ int otbNearestPointDeformationFieldGenerator(int argc, char * argv[])
   p4[1] = 60;
   p5[0] = 85;
   p5[1] = 70;
-      
+
   pd1[0] = 0.95;
   pd1[1] = 10;
   pd1[2] = -5;
@@ -91,7 +91,7 @@ int otbNearestPointDeformationFieldGenerator(int argc, char * argv[])
   writer->SetInput(filter->GetOutput());
   writer->SetFileName(outfname);
   writer->Update();
- 
+
 
   return EXIT_SUCCESS;
 }

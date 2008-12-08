@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,14 +25,14 @@ namespace otb
 /** \class NeighborhoodScalarProductFilter
  *  \brief This filter is designed to be part of a pipeline aiming at linear feature extraction, such as roads.
  *
- *  This filter takes as input a two-band image resulting from a gradient operator. The first channel contains 
+ *  This filter takes as input a two-band image resulting from a gradient operator. The first channel contains
  *  the gradient value in the first image direction, the second contains the gradient value in the second image direction.
  *
  *  Assuming that the linear feature we want to detect is darker than its surrounding environnement, we can deduce that
- *  the gradient direction will be opposite on each side of the road. Therefore, we compute for each pixel to compute the scalar 
+ *  the gradient direction will be opposite on each side of the road. Therefore, we compute for each pixel to compute the scalar
  *  product of the gradient vector for each opposite pixels in the neighborhood of radius 1 of the pixel to compute.
- * 
- * The lower negativ scalar product value along these four pairs of pixel gives us the direction in which there is most 
+ *
+ * The lower negativ scalar product value along these four pairs of pixel gives us the direction in which there is most
  * likely a linear feature.
  *
  * This filters has two outputs :
@@ -40,7 +40,7 @@ namespace otb
  * - The second output (from the GetOutputDirection() method) gives the direction in radian of this linear feature.
  *
  * Please note that there are only 8 possible values for the direction image, corresponding to two directions for each pair of opposite
- * pixels. In our conventions, negatives angle values represent opposite gradient vectors, whereas positive angle values represent convergent 
+ * pixels. In our conventions, negatives angle values represent opposite gradient vectors, whereas positive angle values represent convergent
  * gradient vectors.
  *  \ingroup Streamed
  *  \ingroup Threaded
@@ -55,13 +55,13 @@ class ITK_EXPORT NeighborhoodScalarProductFilter
   typedef ImageToModulusAndDirectionImageFilter<TInputImage,TOutputModulus,TOutputDirection> Superclass;
   typedef itk::SmartPointer<Self>                                                            Pointer;
   typedef itk::SmartPointer<const Self>                                                      ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(NeighborhoodScalarProductFilter,ImageToModulusAndDirectionImageFilter);
-  
+
   /** Template parameters typedefs */
   typedef TInputImage InputImageType;
   typedef typename InputImageType::ConstPointer InputImageConstPointerType;
@@ -74,7 +74,7 @@ class ITK_EXPORT NeighborhoodScalarProductFilter
   typedef TOutputDirection OutputDirectionType;
   typedef typename OutputDirectionType::Pointer OutputDirectionPointerType;
   typedef typename OutputDirectionType::RegionType OutputImageRegionType;
- 
+
 protected:
   /** Constructor */
   NeighborhoodScalarProductFilter();

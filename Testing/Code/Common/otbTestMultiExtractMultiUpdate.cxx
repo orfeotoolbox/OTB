@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -42,20 +42,20 @@ int otbTestMultiExtractMultiUpdate(int argc, char * argv[])
 
   ExtractInternVectorType::Pointer extractInternVector = ExtractInternVectorType::New();
   //readerMS->UpdateOutputInformation();
-  
+
   extractInternVector->SetInput( reader->GetOutput() );
   extractInternVector->SetStartX( atoi(argv[3]) );
   extractInternVector->SetStartY( atoi(argv[4]) );
   extractInternVector->SetSizeX( atoi(argv[5]) );
   extractInternVector->SetSizeY( atoi(argv[6]) );
-  
+
   extractInternVector->SetFirstChannel( atoi(argv[7] ));
   extractInternVector->SetLastChannel( atoi(argv[8]) );
 
   extractInternVector->Update();
   extractInternVector->Update();
   extractInternVector->Update();
- 
+
   writer->SetInput( extractInternVector->GetOutput() );
 
   writer->Update();

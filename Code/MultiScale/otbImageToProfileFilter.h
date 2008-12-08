@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,7 +30,7 @@ namespace otb
  *  \f[
  *  \Pi_{\phi}(f)= \{\phi_{n}(f), n \in \{n_{1},\ldots,n_{N}\} \}
  *  \f]
- * 
+ *
  * with \f$ \{n_{1},\ldots,n_{N}\} \f$ beeing a range of parameter. This class is a base class templated
  * by the type of the filter \f$ \phi \f$. The SetProfileParameter() is a virtual method meant to be
  * rewritten so that the filter can be correctly set up in sub-classes.
@@ -48,13 +48,13 @@ class ITK_EXPORT ImageToProfileFilter
  typedef ImageToImageListFilter<TInputImage,TOutputImage> Superclass;
  typedef itk::SmartPointer<Self>                          Pointer;
  typedef itk::SmartPointer<const Self>                    ConstPointer;
- 
+
  /** Type macro */
  itkNewMacro(Self);
- 
+
  /** Creation through object factory macro */
  itkTypeMacro(ImageToProfileFilter, ImageToImageListFilter);
- 
+
  /** Template parameters typedefs */
  typedef TInputImage  InputImageType;
  typedef TOutputImage OutputImageType;
@@ -79,8 +79,8 @@ class ITK_EXPORT ImageToProfileFilter
  itkGetMacro(OutputIndex,unsigned int);
 
 protected:
- /** 
-  * Set the profile parameter 
+ /**
+  * Set the profile parameter
   * \param param The parameter to set
   */
  virtual void SetProfileParameter(ParameterType param){};
@@ -113,7 +113,7 @@ private:
  ParameterType m_Step;
  /** The index of the output of the filter used for the profile */
  unsigned int m_OutputIndex;
- 
+
 };
 }// End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

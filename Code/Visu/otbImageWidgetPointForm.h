@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,7 +24,7 @@
 namespace otb
 {
 /** \class ImageWidgetPointForm
- * \brief 
+ * \brief
  *
  */
 class ImageWidgetPointForm
@@ -36,10 +36,10 @@ class ImageWidgetPointForm
   typedef ImageWidgetFormBase Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  
+
   /** Method for creation through the object factory */
   itkNewMacro(Self);
-  
+
   /** Runtime information */
   itkTypeMacro(ImageWidgetPointForm,ImageWidgetFormBase);
 
@@ -50,7 +50,7 @@ class ImageWidgetPointForm
 
   itkSetMacro(Index,IndexType);
   itkGetMacro(Index,IndexType);
- 
+
   void Draw(double openGlZoom, unsigned int originx, unsigned int originy, unsigned int windowh, unsigned int ss_rate)
     {
       if(this->GetVisible())
@@ -78,7 +78,7 @@ class ImageWidgetPointForm
       return resp;
     }
 
- protected: 
+ protected:
   /** Constructor. */
     ImageWidgetPointForm()
       {
@@ -91,7 +91,7 @@ class ImageWidgetPointForm
  private:
     ImageWidgetPointForm(const Self&);// purposely not implemented
     void operator=(const Self&);// purposely not implemented
-    
+
     IndexType m_Index;
 
 };

@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,13 +25,13 @@ namespace otb
 /** \class SpectralAngleDistanceImageFilter
  *  \brief This filter implements the computation of the spectral angle
  * distance with respect to a reference pixel.
- * 
+ *
  * Spectral angle distance is an efficient way to convert spectral information to
- * scalar data with respect to a reference pixel. The spectral angle distance 
+ * scalar data with respect to a reference pixel. The spectral angle distance
  * is defined as:
- * 
+ *
  * \f[SA = cos^{-1}\Big(\frac{{\sum_{b=1}^{n_{b}}}r(b)\cdot p(b)}{\sqrt{{\sum_{b=1}^{n_{b}}}r(b)^{2}{\sum_{b=1}^{n_{b}}p(b)^{2}}}}\Big) \f]
- * with \f$b\f$ being the spectral band, \f$r\f$ the reference pixel and \f$p\f$ 
+ * with \f$b\f$ being the spectral band, \f$r\f$ the reference pixel and \f$p\f$
  * the current pixel.
  *
  * Since the spectral angle deals with multi-bands image, the InputImage pixels are suposed to
@@ -55,13 +55,13 @@ class ITK_EXPORT SpectralAngleDistanceImageFilter
   typedef itk::ImageToImageFilter<TInputImage,TOutputImage> Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(SpectralAngleDistanceImageFilter,itk::ImageToImageFilter);
-  
+
   /** Template parameters typedefs */
   typedef TInputImage InputImageType;
   typedef typename InputImageType::ConstPointer InputImageConstPointerType;

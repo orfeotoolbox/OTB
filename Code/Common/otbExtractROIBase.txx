@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -47,7 +47,7 @@ ExtractROIBase<TInputImage,TOutputImage>
  *
  */
 template <class TInputImage, class TOutputImage>
-void 
+void
 ExtractROIBase<TInputImage,TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
@@ -59,7 +59,7 @@ ExtractROIBase<TInputImage,TOutputImage>
 
 
 template<class TInputImage, class TOutputImage>
-void 
+void
 ExtractROIBase<TInputImage,TOutputImage>
 ::CallCopyOutputRegionToInputRegion(InputImageRegionType &destRegion,
                                     const OutputImageRegionType &srcRegion)
@@ -70,7 +70,7 @@ ExtractROIBase<TInputImage,TOutputImage>
   destRegion = srcRegion;
 
   OutputImageIndexType index = destRegion.GetIndex();
-  
+
   for (unsigned int i = 0; i < InputImageDimension; ++i)
     {
       index[i]+=m_ExtractionRegion.GetIndex()[i];
@@ -80,7 +80,7 @@ ExtractROIBase<TInputImage,TOutputImage>
 
 
 template <class TInputImage, class TOutputImage>
-void 
+void
 ExtractROIBase<TInputImage,TOutputImage>
 ::SetInternalExtractionRegion(InputImageRegionType extractRegion)
 {
@@ -93,18 +93,18 @@ ExtractROIBase<TInputImage,TOutputImage>
 
   /**
    * check to see if the number of non-zero entries in the extraction region
-   * matches the number of dimensions in the output image.  
+   * matches the number of dimensions in the output image.
    **/
   for (unsigned int i = 0; i < InputImageDimension; ++i)
     {
     if (inputSize[i])
-      { 
-      outputSize[nonzeroSizeCount] = inputSize[i];    
+      {
+      outputSize[nonzeroSizeCount] = inputSize[i];
       outputIndex[nonzeroSizeCount] =0;
       nonzeroSizeCount++;
       }
     }
-    
+
   if (nonzeroSizeCount != OutputImageDimension)
     {
     itkExceptionMacro("Extraction Region not consistent with output image");
@@ -118,7 +118,7 @@ ExtractROIBase<TInputImage,TOutputImage>
 
 
 template <class TInputImage, class TOutputImage>
-void 
+void
 ExtractROIBase<TInputImage,TOutputImage>
 ::SetExtractionRegion(InputImageRegionType roi)
 {
@@ -131,12 +131,12 @@ ExtractROIBase<TInputImage,TOutputImage>
 }
 
 template <class TInputImage, class TOutputImage>
-void 
+void
 ExtractROIBase<TInputImage,TOutputImage>
 ::GenerateInputRequestedRegion()
 {
   Superclass::GenerateInputRequestedRegion();
-  
+
   typename Superclass::InputImagePointer  inputPtr  = const_cast<InputImageType*>(this->GetInput());
   typename Superclass::OutputImagePointer      outputPtr = this->GetOutput();
 
@@ -152,26 +152,26 @@ ExtractROIBase<TInputImage,TOutputImage>
         {
 	  index[i]+=offset[i];
 	}
-  requestedRegion.SetIndex(index);  
+  requestedRegion.SetIndex(index);
   inputPtr->SetRequestedRegion(requestedRegion);
 }
 
 
-/** 
+/**
  * ExtractROIBase can produce an image which is a different resolution
  * than its input image.  As such, ExtractROIBase needs to provide an
  * implementation for GenerateOutputInformation() in order to inform
  * the pipeline execution model.  The original documentation of this
  * method is below.
  *
- * \sa ProcessObject::GenerateOutputInformaton() 
+ * \sa ProcessObject::GenerateOutputInformaton()
  */
 template <class TInputImage, class TOutputImage>
-void 
+void
 ExtractROIBase<TInputImage,TOutputImage>
 ::GenerateOutputInformation()
 {
-        
+
 
         // Determine la zone a extraire
         // Si SizeX(Y) est nulle, alors SizeX(Y) est egale à la SizeX(Y) de l'image
@@ -186,7 +186,7 @@ ExtractROIBase<TInputImage,TOutputImage>
                 m_SizeX = inputRegion.GetSize()[0] - m_StartX;
         }
         if ( (m_SizeY == 0) || (m_SizeY > (inputRegion.GetSize()[1] - m_StartY)) )
-        {       
+        {
                 m_SizeY = inputRegion.GetSize()[1] - m_StartY;
         }
 
@@ -205,7 +205,7 @@ ExtractROIBase<TInputImage,TOutputImage>
 
   // do not call the superclass' implementation of this method since
   // this filter allows the input the output to be of different dimensions
- 
+
   // get pointers to the input and output
   typename Superclass::OutputImagePointer      outputPtr = this->GetOutput();
 //  typename Superclass::InputImageConstPointer  inputPtr  = this->GetInput();
@@ -230,7 +230,7 @@ ExtractROIBase<TInputImage,TOutputImage>
     // This logic needs to be augmented with logic that select which
     // dimensions to copy
     unsigned int i;
-    const typename InputImageType::SpacingType& 
+    const typename InputImageType::SpacingType&
       inputSpacing = inputPtr->GetSpacing();
     const typename InputImageType::DirectionType&
       inputDirection = inputPtr->GetDirection();
@@ -241,7 +241,7 @@ ExtractROIBase<TInputImage,TOutputImage>
     typename OutputImageType::DirectionType outputDirection;
     typename OutputImageType::PointType outputOrigin;
 
-    if ( static_cast<unsigned int>(OutputImageDimension) > 
+    if ( static_cast<unsigned int>(OutputImageDimension) >
          static_cast<unsigned int>(InputImageDimension )    )
       {
       // copy the input to the output and fill the rest of the

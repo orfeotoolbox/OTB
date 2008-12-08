@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -26,7 +26,7 @@ int otbRemoveTortuousPathListFilter(int argc, char * argv[])
 {
   const char * outfname = argv[1];
   const double threshold = atof(argv[2]);
-      
+
   typedef std::vector<double> PointsVectorType;
   typedef std::vector< PointsVectorType > PointsMatrixType;
   PointsMatrixType MatricePoints;
@@ -34,7 +34,7 @@ int otbRemoveTortuousPathListFilter(int argc, char * argv[])
 
   int cpt = 3;
   ListPoints.clear();
-      
+
   while ( argv[cpt] != NULL )
     {
       if( argv[cpt][0] == '|' )
@@ -53,16 +53,16 @@ int otbRemoveTortuousPathListFilter(int argc, char * argv[])
       cpt++;
     }
   MatricePoints.push_back(ListPoints);
-           
+
   const unsigned int Dimension = 2;
   typedef itk::PolyLineParametricPath<Dimension> PathType;
   typedef otb::RemoveTortuousPathListFilter<PathType> RemoveTortuousPathListFilterType;
   typedef RemoveTortuousPathListFilterType::InputListType PathListType;
   PathType::ContinuousIndexType cindex;
-      
-      
+
+
   PathListType::Pointer InputPathList = PathListType::New();
-      
+
   //Generate PathList
   for(PointsMatrixType::iterator listpos=MatricePoints.begin() ; listpos != MatricePoints.end() ; ++listpos)
     {
@@ -96,7 +96,7 @@ int otbRemoveTortuousPathListFilter(int argc, char * argv[])
   file.open(outfname);
   unsigned int counter = 1;
   PathListIteratorType pathListIt = InputPathList->Begin();
-        
+
   file<<"Minimum Mean Distance: "<<filter->GetFunctor().GetThreshold()<< " ("<<threshold<<")"<<std::endl;
   file<<"INPUT list of Path "<<": "<<std::endl;
   while(pathListIt!=InputPathList->End())
@@ -115,7 +115,7 @@ int otbRemoveTortuousPathListFilter(int argc, char * argv[])
       file<<std::endl;
       ++pathListIt;
       ++counter;
-    }        
+    }
   counter = 1;
   pathListIt = OutputPathList->Begin();
   file<<"OUTPUT list of Path "<<": "<<std::endl;
@@ -138,6 +138,6 @@ int otbRemoveTortuousPathListFilter(int argc, char * argv[])
     }
   file.close();
 
-  
+
   return EXIT_SUCCESS;
 }

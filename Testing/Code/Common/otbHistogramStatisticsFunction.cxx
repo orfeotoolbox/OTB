@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -40,20 +40,20 @@ int otbHistogramStatisticsFunction(int argc, char* argv[])
   upperBound[0] = NbOfBins ;
 
   histogram->Initialize(size, lowerBound, upperBound ) ;
-  
+
 
   // create histogram with same value for each frequency
   for (HistogramType::Iterator iter = histogram->Begin(); iter != histogram->End(); ++iter)
     {
         iter.SetFrequency(1.0);
     }
-  
+
   typedef otb::HistogramStatisticsFunction<HistogramType,MeasurementType>  HistogramStatisticsFunctionType;
   HistogramStatisticsFunctionType::Pointer HistogramStatisticsFunction = HistogramStatisticsFunctionType::New();
 
   HistogramStatisticsFunction->SetInputHistogram(histogram.GetPointer());
-  
-  
+
+
   MeasurementType Entropy;
   MeasurementType Mean;
   MeasurementType Covariance;
@@ -64,8 +64,8 @@ int otbHistogramStatisticsFunction(int argc, char* argv[])
 
   Entropy = HistogramStatisticsFunction->GetEntropy()[0];
   std::cout << "Entropy 1 : " << Entropy << std::endl;
- 
-  if(vcl_abs(Entropy-vcl_log(static_cast<double>(NbOfBins)))>0.00001 ) 
+
+  if(vcl_abs(Entropy-vcl_log(static_cast<double>(NbOfBins)))>0.00001 )
   {
   	std::cout << "Error in entropy estimation" << std::endl;
 	return EXIT_FAILURE;
@@ -73,8 +73,8 @@ int otbHistogramStatisticsFunction(int argc, char* argv[])
 
   Mean = HistogramStatisticsFunction->GetMean()[0];
   std::cout << "Mean 1 : " << Mean << std::endl;
- 
-  if( Mean != NbOfBins/2. ) 
+
+  if( Mean != NbOfBins/2. )
   {
   	std::cout << "Error in mean estimation" << std::endl;
 	return EXIT_FAILURE;
@@ -83,7 +83,7 @@ int otbHistogramStatisticsFunction(int argc, char* argv[])
   Covariance = HistogramStatisticsFunction->GetCovariance()[0];
   std::cout << "Covariance 1 : " << Covariance << std::endl;
 
-  if( Covariance != 0 ) 
+  if( Covariance != 0 )
   {
   	std::cout << "Error in covariance estimation" << std::endl;
 	return EXIT_FAILURE;
@@ -95,19 +95,19 @@ int otbHistogramStatisticsFunction(int argc, char* argv[])
         if(iter == histogram->Begin())
 	{
 		iter.SetFrequency(1.0);
-	} 
+	}
 	else
 	{
-		iter.SetFrequency(0.0);	
+		iter.SetFrequency(0.0);
 	}
     }
- 
+
   HistogramStatisticsFunction->Update();
 
   Entropy = HistogramStatisticsFunction->GetEntropy()[0];
   std::cout << "Entropy 2 : " << Entropy << std::endl;
 
-  if( Entropy!=0.0 ) 
+  if( Entropy!=0.0 )
   {
   	std::cout << "Error in entropy estimation" << std::endl;
 	return EXIT_FAILURE;
@@ -116,7 +116,7 @@ int otbHistogramStatisticsFunction(int argc, char* argv[])
   Mean = HistogramStatisticsFunction->GetMean()[0];
   std::cout << "Mean 2 : " << Mean << std::endl;
 
-  if( Mean != 0.5 ) 
+  if( Mean != 0.5 )
   {
   	std::cout << "Error in mean estimation" << std::endl;
 	return EXIT_FAILURE;
@@ -125,11 +125,11 @@ int otbHistogramStatisticsFunction(int argc, char* argv[])
   Covariance = HistogramStatisticsFunction->GetCovariance()[0];
   std::cout << "Covariance 2 : " << Covariance << std::endl;
 
-  if( Covariance != 0 ) 
+  if( Covariance != 0 )
   {
   	std::cout << "Error in covariance estimation" << std::endl;
 	return EXIT_FAILURE;
   }
-  
+
   return EXIT_SUCCESS;
 }

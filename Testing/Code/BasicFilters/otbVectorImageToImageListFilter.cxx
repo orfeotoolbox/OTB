@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -53,12 +53,12 @@ int otbVectorImageToImageListFilter(int argc, char * argv[])
   filter->SetInput(reader->GetOutput());
 
   filter->Update();
-      
+
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outfname1);
   writer->SetInput(filter->GetOutput()->GetNthElement(0));
   writer->Update();
-      
+
   writer = WriterType::New();
   writer->SetFileName(outfname2);
   writer->SetInput(filter->GetOutput()->GetNthElement(1));
@@ -69,7 +69,7 @@ int otbVectorImageToImageListFilter(int argc, char * argv[])
   writer->SetInput(filter->GetOutput()->GetNthElement(2));
   writer->Update();
 
-  
+
 
   return EXIT_SUCCESS;
 }

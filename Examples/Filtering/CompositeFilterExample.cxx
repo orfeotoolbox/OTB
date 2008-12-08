@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -164,7 +164,7 @@ private:
 } /* namespace otb */
 //  Software Guide : EndCodeSnippet
 
- 
+
 //  Software Guide : BeginLatex
 //
 //  The constructor sets up the pipeline, which involves creating the
@@ -224,7 +224,7 @@ GenerateData()
   this->GraftOutput( m_RescaleFilter->GetOutput() );
 }
 //  Software Guide : EndCodeSnippet
- 
+
 //  Software Guide : BeginLatex
 //
 //  Finally we define the \code{PrintSelf} method, which (by convention)
@@ -269,8 +269,8 @@ PrintSelf( std::ostream& os, itk::Indent indent ) const
 
 int main( int argc, char* argv[] )
 {
-  if( argc < 3 ) 
-    { 
+  if( argc < 3 )
+    {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << "  inputImageFile  outputImageFile" << std::endl;
     return EXIT_FAILURE;

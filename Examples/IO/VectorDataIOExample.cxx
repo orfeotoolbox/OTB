@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -38,7 +38,7 @@
 //  We will start by including the header files for the classes
 //  describing the vector data and the corresponding reader and writer.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "otbVectorData.h"
@@ -51,7 +51,7 @@
 //  which model the individual objects that we get from the vector
 //  data structure.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "itkPreOrderTreeIterator.h"
@@ -76,9 +76,9 @@ int main(int argc, char * argv[])
 //  We define the types for the vector data structure and the
 //  corresponding file reader.
   //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet  
+// Software Guide : BeginCodeSnippet
   typedef otb::VectorData<PixelType,2>           VectorDataType;
 
   typedef otb::VectorDataFileReader<VectorDataType>
@@ -89,9 +89,9 @@ int main(int argc, char * argv[])
   //
 //  We can now instantiate the reader and read the data.
   //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet    
+// Software Guide : BeginCodeSnippet
 
   VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
   reader->SetFileName(argv[1]);
@@ -104,10 +104,10 @@ int main(int argc, char * argv[])
 //  nodes containing the actual objects of the scene. This tree will
 //  be accessed using an \doxygen{itk}{PreOrderTreeIterator}.
   //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet    
-  
+// Software Guide : BeginCodeSnippet
+
   typedef VectorDataType::DataTreeType      DataTreeType;
   typedef itk::PreOrderTreeIterator<DataTreeType>    TreeIteratorType;
 
@@ -119,9 +119,9 @@ int main(int argc, char * argv[])
 //  for the polygon object as well as an iterator to the vertices. The
 //  polygons obtained will be stored in an \doxygen{otb}{ObjectList}.
   //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet    
+// Software Guide : BeginCodeSnippet
 
   typedef otb::Polygon<PixelType> PolygonType;
   typedef PolygonType::VertexListConstIteratorType PolygonIteratorType;
@@ -136,10 +136,10 @@ int main(int argc, char * argv[])
   //
 //  We get the data tree and instantiate an iterator to walk through it.
   //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet    
-  
+// Software Guide : BeginCodeSnippet
+
   TreeIteratorType it(reader->GetOutput()->GetDataTree());
 
   it.GoToBegin();
@@ -151,10 +151,10 @@ int main(int argc, char * argv[])
 //  \code{IsPolygonFeature()} method and get its exterior ring in
 //  order to sore it into the list.
   //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet    
-  
+// Software Guide : BeginCodeSnippet
+
   while(!it.IsAtEnd())
   {
     if(it.Get()->IsPolygonFeature())
@@ -165,7 +165,7 @@ int main(int argc, char * argv[])
   }
 
 // Software Guide : EndCodeSnippet
-  
+
   polygonList->PushBack(PolygonType::New());
 
 
@@ -175,10 +175,10 @@ int main(int argc, char * argv[])
 //  the vector data structure. This structure will be build up of
 //  nodes. We define the types needed for that.
   //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet    
-  
+// Software Guide : BeginCodeSnippet
+
   VectorDataType::Pointer outVectorData = VectorDataType::New();
 
   typedef VectorDataType::DataNodeType               DataNodeType;
@@ -190,10 +190,10 @@ int main(int argc, char * argv[])
 //  document which is composed of folders. A list of polygons can be
 //  seen as a multi polygon object.
   //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet    
-  
+// Software Guide : BeginCodeSnippet
+
     DataNodeType::Pointer document = DataNodeType::New();
     document->SetNodeType(otb::DOCUMENT);
     document->SetNodeId("polygon");
@@ -207,10 +207,10 @@ int main(int argc, char * argv[])
     //
 //  We assign these objects to the data tree stored by the vector data object.
     //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet    
-  
+// Software Guide : BeginCodeSnippet
+
     DataTreeType::Pointer tree = outVectorData->GetDataTree();
     DataNodeType::Pointer root = tree->GetRoot()->Get();
 
@@ -224,9 +224,9 @@ int main(int argc, char * argv[])
 //  We can now iterate through the polygon list and fill the vector
 //  data structure.
     //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet      
+// Software Guide : BeginCodeSnippet
 
     for(PolygonListType::Iterator it = polygonList->Begin();
         it != polygonList->End(); ++it)
@@ -240,20 +240,20 @@ int main(int argc, char * argv[])
 //  Software Guide : BeginLatex
     //
 //  An finally we write the vector data to a file using a generic
-//  \doxygen{otb}{VectorDataFileWriter}. 
+//  \doxygen{otb}{VectorDataFileWriter}.
     //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet      
-  
+// Software Guide : BeginCodeSnippet
+
     typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
-  
+
     WriterType::Pointer writer = WriterType::New();
     writer->SetInput(outVectorData);
     writer->SetFileName(argv[2]);
     writer->Update();
 
-// Software Guide : EndCodeSnippet  
+// Software Guide : EndCodeSnippet
 
     return EXIT_SUCCESS;
 }

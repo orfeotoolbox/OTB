@@ -30,7 +30,7 @@ namespace Functor
      * \brief This functor can be used to convert scalar value to VariableLengthVector with another precision
      *  a size of 1.
      * \ingroup Functor
-     * 
+     *
      */
     template <class TInput, class TOutput>
       class VectorCast
@@ -42,8 +42,8 @@ namespace Functor
 
 	bool operator!=(const VectorCast&) const
 	  {
-	    return false; 
-	  } 
+	    return false;
+	  }
 	bool operator==(const VectorCast& other) const
 	  {
 	    return(*this != other);
@@ -61,24 +61,24 @@ namespace Functor
    * \class ImageToVectorImageCastFilter
    * \brief This is a helper class that convert an otb::Image into a single-channel otb::VectorImage.
    * \ingroup Singlethreaded
-   * 
+   *
    */
 template <class TInputImage, class TOutputVectorImage>
 class ITK_EXPORT ImageToVectorImageCastFilter
   : public itk::UnaryFunctorImageFilter<TInputImage, TOutputVectorImage,
   Functor::VectorCast<typename TInputImage::PixelType, typename TOutputVectorImage::PixelType> >
   {
-  public: 
+  public:
     /// Standard class typedefs
     typedef ImageToVectorImageCastFilter Self;
     typedef itk::UnaryFunctorImageFilter<TInputImage, TOutputVectorImage, Functor::VectorCast<typename TInputImage::PixelType,
       typename TOutputVectorImage::PixelType> > Superclass;
     typedef itk::SmartPointer<Self> Pointer;
     typedef itk::SmartPointer<const Self> ConstPointer;
-    
+
     /// Method for creation through the object factory
     itkNewMacro(Self);
-    
+
     /// Runtime information
     itkTypeMacro(ImageToVectorImageCastFilter,itk::UnaryFunctorImageFilter);
 

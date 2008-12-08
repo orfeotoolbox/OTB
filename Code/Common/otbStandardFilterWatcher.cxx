@@ -33,7 +33,7 @@ StandardFilterWatcher
 
 StandardFilterWatcher
 ::StandardFilterWatcher( const StandardFilterWatcher& watch)
-{ 
+{
   // Initialize state
   m_StarsCount = watch.m_StarsCount;
 }

@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,7 +27,7 @@ namespace Functor
   {
     /** \class LevelingFunctor
      * \brief This functor performs the pixel-wise leveling operation needed in the
-     * geodesic morphology decomposition filter. For more details, please refer to 
+     * geodesic morphology decomposition filter. For more details, please refer to
      * the documentation of this filter.
      * \sa GeodesicMorphologyDecompositionImageFilter
      */
@@ -62,7 +62,7 @@ namespace Functor
   }// end namespace Functor
 
 /** \class GeodesicMorphologyLevelingFilter
- *  \brief This filter performs the leveling operation defined in the documentation of 
+ *  \brief This filter performs the leveling operation defined in the documentation of
  *  the geodesic decomposition image filter, given the original image, convex and concave membership
  *  functions. Please refer to the documentation of this filter for more details.
  *
@@ -86,13 +86,13 @@ class ITK_EXPORT GeodesicMorphologyLevelingFilter
                              typename TOutputImage::PixelType> >Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(GeodesicMorphologyLevelingFilter,TernaryFunctorImageFilter);
- 
+
   /**
    * Set the convex membership image.
    */

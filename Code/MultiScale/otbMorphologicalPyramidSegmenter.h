@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -26,16 +26,16 @@ namespace otb
     {
       /**
        * \class Segmenter
-       * \brief This class performs the segmentation of a detail image extracted from a 
+       * \brief This class performs the segmentation of a detail image extracted from a
        * morphological pyramid analysis.
-       * 
-       * This class performs the segmentation of a detail image extracted from a 
+       *
+       * This class performs the segmentation of a detail image extracted from a
        * morphological pyramid analysis.
-       * 
+       *
        * The Segmentation is perfomed using the ConnectedThresholdImageFilter. The seeds
        * are extracted from the image using the ImageToPointSetFilter. The thresolds are set
        * by using quantiles computed with the HistogramGenerator.
-       * 
+       *
        * \sa MorphologicalPyramidAnalyseFilter
        * \sa MorphologicalPyramidSynthesisFilter
        * \sa ResampleImageFilter
@@ -47,7 +47,7 @@ namespace otb
 	: public itk::ImageToImageFilter<TInputImage,TOutputImage>
 	{
 	  public :
-	    /** Standard typedefs */ 
+	    /** Standard typedefs */
 	    typedef Segmenter                                       Self;
 	  typedef itk::ImageToImageFilter<TInputImage,TOutputImage> Superclass;
 	  typedef itk::SmartPointer<Self>                           Pointer;
@@ -93,7 +93,7 @@ namespace otb
 	   * Get the original image.
 	   * \return originalImage The original image to segment.
 	   */
-	  InputImageType * GetOriginalImage(void); 
+	  InputImageType * GetOriginalImage(void);
 
 	  /** Min object size parameter accessor */
 	  itkSetMacro(MinimumObjectSize,unsigned long);

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,6 +30,6 @@ int otbRCC8GraphSourceNew(int argc, char* argv[])
 
   // Instantiation
   RCC8GraphSourceType::Pointer rcc8GraphSource = RCC8GraphSourceType::New();
-  
+
   return EXIT_SUCCESS;
 }

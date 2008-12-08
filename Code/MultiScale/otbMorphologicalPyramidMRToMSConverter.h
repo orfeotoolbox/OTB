@@ -10,8 +10,8 @@
  See OTBCopyright.txt for details.
 
 
- This software is distributed WITHOUT ANY WARRANTY; without even 
- the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+ This software is distributed WITHOUT ANY WARRANTY; without even
+ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
@@ -27,11 +27,11 @@ namespace otb
       /**
        * \class MRToMSConverter
        * \brief This class convert a multi resolution decomposition from the morphological pyramid to a multi-scale one.
-       * 
+       *
        * This class convert a multi resolution decomposition from the morphological pyramid to a multi-scale one.
-       * 
+       *
        * The operation consists in iterativly upsampling and adding decimation details to a given detail image.
-       * 
+       *
        * \sa MorphologicalPyramidAnalyseFilter
        * \sa MorphologicalPyramidSynthesisFilter
        */
@@ -40,7 +40,7 @@ namespace otb
 	: public ImageListToImageListFilter<TInputImage,TOutputImage>
 	{
 	  public :
-	    /** Standard typedefs */ 
+	    /** Standard typedefs */
 	    typedef MRToMSConverter                                    Self;
 	  typedef ImageListToImageListFilter<TInputImage,TOutputImage> Superclass;
 	  typedef itk::SmartPointer<Self>                              Pointer;
@@ -60,7 +60,7 @@ namespace otb
 	  typedef typename Superclass::OutputImagePointer         OutputImagePointerType;
 	  typedef typename Superclass::OutputImageListType        OutputImageListType;
 	  typedef typename Superclass::OutputImageListPointerType OutputImageListPointerType;
-	  
+
 	  /**
 	   * Set The input list.
 	   * \param imageList The analysed image at each level of the pyramid.
@@ -90,12 +90,12 @@ namespace otb
 	   * Get the input list.
 	   * \return The list of the analysed image at each pyramid level.
 	   */
-	  InputImageListType* GetInput(void); 
+	  InputImageListType* GetInput(void);
 	  /**
 	   * Get The SupFilter details
 	   * \return The brighter details extracted from the filtering operation.
 	   */
-	  InputImageListType* GetSupFilter(void);   
+	  InputImageListType* GetSupFilter(void);
 	  /**
 	   * Get The InfFilter details
 	   * \return The darker details extracted from the filtering operation.
@@ -119,7 +119,7 @@ namespace otb
 	  OutputImageListType* GetOutput(void);
 	  /**
 	   * Get The SupFilter details at full resolution.
-	   * \return The brighter details extracted from the filtering operation 
+	   * \return The brighter details extracted from the filtering operation
 	   * resampled at full resolution.
 	   */
 	  OutputImageListType * GetSupFilterFullResolution(void);
@@ -131,7 +131,7 @@ namespace otb
 	  OutputImageListType * GetInfFilterFullResolution(void);
 	  /**
 	   * Get The SupDeci details at full resolution.
-	   * \return The brighter details extracted from the resampling operation 
+	   * \return The brighter details extracted from the resampling operation
 	   * resampled at full resolution.
 	   */
 	  OutputImageListType * GetSupDeciFullResolution(void);

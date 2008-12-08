@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -26,10 +26,10 @@ int otbImageListSourceNew(int argc, char * argv[])
   typedef unsigned char InputPixelType;
   typedef otb::Image<InputPixelType,Dimension> InputImageType;
   typedef otb::ImageListSource<InputImageType> ImageListSourceType;
-  
+
       // Instantiating ImageListSource object
   ImageListSourceType::Pointer imageList = ImageListSourceType::New();
-  
+
 
 
   return EXIT_SUCCESS;

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -56,7 +56,7 @@ public:
   itkStaticConstMacro(		InputImageDimension,
   				unsigned int,
                       		TInputImage::ImageDimension);
-  itkStaticConstMacro(		OutputImageDimension, 
+  itkStaticConstMacro(		OutputImageDimension,
   				unsigned int,
                       		TOutputImage::ImageDimension);
 
@@ -71,7 +71,7 @@ public:
   itkNewMacro(Self);
 
   itkTypeMacro(HarrisImageFilter, ImageToImageFilter);
-  
+
   typedef typename InputImageType::PixelType  InputPixelType;
   typedef typename InputImageType::SizeType SizeType;
 
@@ -79,15 +79,15 @@ public:
 
 //  typedef typename InputImageType::SizeType SizeType;
 
-  typedef itk::Image< itk::SymmetricSecondRankTensor< 
+  typedef itk::Image< itk::SymmetricSecondRankTensor<
                       typename itk::NumericTraits< InputPixelType>::RealType,
                                       ::itk::GetImageDimension<InputImageType>::ImageDimension >,
                       ::itk::GetImageDimension<InputImageType>::ImageDimension >  TensorType;
-		      
+
   typedef itk::HessianRecursiveGaussianImageFilter<InputImageType,TensorType >  HessianFilterType;
-  
+
   typedef itk::RecursiveGaussianImageFilter<TensorType,
-                                            TensorType>                     GaussianFilterType;  
+                                            TensorType>                     GaussianFilterType;
   typedef otb::HessianToScalarImageFilter<TensorType,OutputImageType >      HessianToScalarFilterType;
   typedef otb::MultiplyByScalarImageFilter<OutputImageType,OutputImageType> MultiplyScalarFilterType;
 
@@ -104,7 +104,7 @@ protected:
   virtual ~HarrisImageFilter() {};
 
   virtual void GenerateData();
-  
+
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
@@ -114,11 +114,11 @@ private:
   double m_SigmaD;
   double m_SigmaI;
   double m_Alpha;
-  
+
   typename HessianFilterType::Pointer           m_HessianFilter;
   typename GaussianFilterType::Pointer          m_GaussianFilter;
   typename HessianToScalarFilterType::Pointer   m_HessianToScalarFilter;
-  typename MultiplyScalarFilterType::Pointer    m_MultiplyScalarFilter; 
+  typename MultiplyScalarFilterType::Pointer    m_MultiplyScalarFilter;
 };
 } // end namespace otb
 
@@ -126,5 +126,5 @@ private:
 #include "otbHarrisImageFilter.txx"
 #endif
 
-  
+
 #endif

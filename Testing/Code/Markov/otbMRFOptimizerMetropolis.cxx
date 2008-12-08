@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -43,7 +43,7 @@ int otbMRFOptimizerMetropolis(int argc, char * argv[])
   file<<"Compute(-1.)                                     : "<<object->Compute(-1.)<<std::endl;
 
   file.close();
-   
+
   return EXIT_SUCCESS;
 }
 

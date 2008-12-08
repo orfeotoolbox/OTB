@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -59,7 +59,7 @@ RCC8VertexBase<TPath>
       newPoint[0]=atof(attributes[oss.str()].c_str());
       oss.str("");
       oss<<"P"<<i<<"y";
-      newPoint[1]=atof(attributes[oss.str()].c_str());      
+      newPoint[1]=atof(attributes[oss.str()].c_str());
       oss.str("");
       m_Path->AddVertex(newPoint);
     }
@@ -72,7 +72,7 @@ template <class TPath>
 typename RCC8VertexBase<TPath>::AttributesMapType
 RCC8VertexBase<TPath>
 ::GetAttributesMap(void)
-{  
+{
   itk::OStringStream oss;
   AttributesMapType results;
   oss<<m_SegmentationLevel;
@@ -103,7 +103,7 @@ RCC8VertexBase<TPath>
       oss<<point[1];
       results[key]=oss.str();
       oss.str("");
-    } 
+    }
   return results;
 }
 /**

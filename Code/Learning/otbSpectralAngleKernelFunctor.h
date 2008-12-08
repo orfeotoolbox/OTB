@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) GET / ENST Bretagne. All rights reserved. 
+  Copyright (c) GET / ENST Bretagne. All rights reserved.
   See GETCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,7 +34,7 @@ public:
 	 * spectral data.
 	 * It is of kind:
 	 * $\frac{1}{\sqrt{ c_0 + \cos\textrm{SAM(x,y)} }}$ where $\textrm{SAM(x,y)}$ is
-	 * Spectral Angle Measure: 
+	 * Spectral Angle Measure:
 	 * $\textrm{SAM(x,y) = \acos\left( \frac{x \cdot y}{\|x\| \|y\|} \right)$.
 	 *
 	 * The only parameter $c_0$ is to be fixed by the \code SetValue \endcode

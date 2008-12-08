@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,20 +29,20 @@
 int otbSVMMembershipFunctionLoadModel( int argc, char* argv[] )
 {
   typedef std::vector<double>   VectorType;
-  
+
   typedef otb::SVMMembershipFunction< VectorType >   FunctionType;
-  
+
   FunctionType::Pointer membershipFunction = FunctionType::New();
-  
+
   typedef FunctionType::SVMModelType    ModelType;
-  
+
   ModelType::Pointer model = ModelType::New();
-  
+
   model->LoadModel( argv[1] );
-  
+
   membershipFunction->SetModel( model );
-  
-  
+
+
   return EXIT_SUCCESS;
 }
 

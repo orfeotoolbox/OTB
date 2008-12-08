@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,9 +29,9 @@ int otbComplexMomentPathFloat( int argc, char * argv[] )
 {
   unsigned int  p((unsigned int)::atoi(argv[1]));
   unsigned int  q((unsigned int)::atoi(argv[2]));
-       
+
   const   unsigned int      Dimension = 2;
-	  
+
   typedef itk::PolyLineParametricPath< Dimension >	        PathType;
   typedef std::complex<float>                                     ComplexType;
   typedef otb::ComplexMomentPathFunction< PathType,ComplexType >  CMType;
@@ -59,12 +59,12 @@ int otbComplexMomentPathFloat( int argc, char * argv[] )
 
   function->SetQ(q);
   function->SetP(p);
-	
+
   ComplexType Result;
-	
+
   Result = function->Evaluate( *pathElt);
-  std::cout << "function->Evaluate(Path)"<< Result << std::endl;	
-  
+  std::cout << "function->Evaluate(Path)"<< Result << std::endl;
+
 
   return EXIT_SUCCESS;
 }

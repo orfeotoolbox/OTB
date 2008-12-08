@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,14 +31,14 @@ int otbMultiChannelsPolarimetricSynthesisFilterNew( int argc, char * argv[] )
   typedef double              InputPixelType;
   typedef double    	    OutputPixelType;
   const   unsigned int        Dimension = 2;
-  
+
   typedef otb::VectorImage< InputPixelType,  Dimension >        InputImageType;
   typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
-  
+
   typedef otb::MultiChannelsPolarimetricSynthesisFilter< InputImageType,OutputImageType >   FilterType;
-  
+
   FilterType::Pointer filter = FilterType::New();
-  
+
   return EXIT_SUCCESS;
 }
 

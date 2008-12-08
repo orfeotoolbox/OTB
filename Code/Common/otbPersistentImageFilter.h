@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,13 +23,13 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class PersistentImageFilter
- *  \brief This filter is the base class for all filter persisting data through multiple 
- *   update. 
- *   For instance, a filter computing global statistics on an image with streaming 
- *   capabilities will have to keep the temporary results for each streamed piece of the 
+ *  \brief This filter is the base class for all filter persisting data through multiple
+ *   update.
+ *   For instance, a filter computing global statistics on an image with streaming
+ *   capabilities will have to keep the temporary results for each streamed piece of the
  *   image in order to synthetize the global statistics at the end. This filter is an
  *   itk::ImageToImageFilter, providing two additional methods. The first one, Synthetize(),
- *   allows the user to synthetize() temporary data produced by the multiple updates on different 
+ *   allows the user to synthetize() temporary data produced by the multiple updates on different
  *   pieces of the image to the global result. The second one, Reset(), allows the user to
  *   reset the temporary data for a new input image for instance.
  *
@@ -48,10 +48,10 @@ class ITK_EXPORT PersistentImageFilter
   typedef itk::ImageToImageFilter<TInputImage,TOutputImage> Superclass;
   typedef itk::SmartPointer<Self>                           Pointer;
   typedef itk::SmartPointer<const Self>                     ConstPointer;
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(PersistentImageFilter,ImageToImageFilter);
-  
+
   /** Template parameters typedefs */
   typedef TInputImage InputImageType;
   typedef TOutputImage OutputImageType;

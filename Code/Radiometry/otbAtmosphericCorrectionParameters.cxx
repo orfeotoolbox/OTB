@@ -10,27 +10,27 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
 #include "otbAtmosphericCorrectionParameters.h"
 
-namespace otb 
-{ 
+namespace otb
+{
   /***********************      FilterFunctionValues **************************/
   FilterFunctionValues
   ::FilterFunctionValues()
-  { 
+  {
      m_MinSpectralValue = 0;
      m_MaxSpectralValue = 0;
      m_FilterFunctionValues.clear();
   }
-  
+
   /**PrintSelf method */
-  void 
+  void
   FilterFunctionValues
   ::PrintSelf(std::ostream& os, itk::Indent indent) const
   {
@@ -55,15 +55,15 @@ namespace otb
   /**
    * Constructor
    */
-  
+
   AtmosphericCorrectionParameters
   ::AtmosphericCorrectionParameters()
-  { 
+  {
     m_AerosolModel = CONTINENTAL;
   }
-  
+
   /**PrintSelf method */
-  void 
+  void
   AtmosphericCorrectionParameters
   ::PrintSelf(std::ostream& os, itk::Indent indent) const
   {

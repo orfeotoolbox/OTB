@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,14 +32,14 @@ int otbLineRatioDetectorNew( int argc, char* argv[] )
   typedef unsigned char                            InputPixelType;
   typedef double		   	           OutputPixelType;
   const   unsigned int        	                   Dimension = 2;
-  
+
   typedef itk::Image< InputPixelType,  Dimension > InputImageType;
   typedef itk::Image< OutputPixelType, Dimension > OutputImageType;
-  
+
   typedef otb::LineRatioDetectorImageFilter< InputImageType, OutputImageType>   FilterType;
-  
+
   FilterType::Pointer FilterLineRatio = FilterType::New();
-  
+
 
   return EXIT_SUCCESS;
 }

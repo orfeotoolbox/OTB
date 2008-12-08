@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -51,7 +51,7 @@ int main(int argc, char * argv[])
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet      
+// Software Guide : BeginCodeSnippet
   const unsigned int     Dimension = 2;
   typedef double         PixelType;
   typedef unsigned short LabeledPixelType;
@@ -65,8 +65,8 @@ int main(int argc, char * argv[])
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet    
-  
+// Software Guide : BeginCodeSnippet
+
   typedef otb::VectorImage<PixelType,Dimension> ImageType;
   typedef otb::Image<LabeledPixelType,Dimension> LabeledImageType;
 
@@ -79,7 +79,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  
+
 
   typedef otb::SOMMap<ImageType::PixelType> SOMMapType;
   typedef otb::SOMImageClassificationFilter<ImageType,
@@ -89,19 +89,19 @@ int main(int argc, char * argv[])
 // Software Guide : BeginLatex
 //
 // And finally, we define the readers (for the input image and theSOM)
-// and the writer. Since the images, 
+// and the writer. Since the images,
 // to classify can be very big, we will use a streamed writer which
 // will trigger the streaming ability of the classifier.
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet        
+// Software Guide : BeginCodeSnippet
 
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileReader<SOMMapType> SOMReaderType;
   typedef otb::StreamingImageFileWriter<LabeledImageType> WriterType;
 
- 
+
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -110,8 +110,8 @@ int main(int argc, char * argv[])
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet          
- 
+// Software Guide : BeginCodeSnippet
+
 
   ClassificationFilterType::Pointer filter = ClassificationFilterType::New();
 
@@ -121,7 +121,7 @@ int main(int argc, char * argv[])
   SOMReaderType::Pointer somreader = SOMReaderType::New();
   somreader->SetFileName(somfname);
   somreader->Update();
-  
+
   filter->SetMap(somreader->GetOutput());
 
 // Software Guide : EndCodeSnippet
@@ -132,10 +132,10 @@ int main(int argc, char * argv[])
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet          
-  
+// Software Guide : BeginCodeSnippet
+
   filter->SetInput(reader->GetOutput());
-  
+
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(filter->GetOutput());
   writer->SetFileName(outfname);

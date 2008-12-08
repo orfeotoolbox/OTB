@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -21,13 +21,13 @@
 
 //  Software Guide : BeginLatex
 //
-//  Start by including some necessary headers and with the 
-//  usual \code{main} declaration. Apart from the classical header related to 
-// image input and output. We need the headers related to the fusion and the 
-// orthorectification. One header is also required to be able to process 
+//  Start by including some necessary headers and with the
+//  usual \code{main} declaration. Apart from the classical header related to
+// image input and output. We need the headers related to the fusion and the
+// orthorectification. One header is also required to be able to process
 // vector images (the XS one) with the orthorectification.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 
@@ -48,13 +48,13 @@ int main( int argc, char* argv[] )
 {
 // Software Guide : EndCodeSnippet
 
-  
+
   //  Software Guide : BeginLatex
   //
-  // We initialize ossim which is required for the orthorectification and we 
+  // We initialize ossim which is required for the orthorectification and we
   // check that all parameters are provided. Basically, we need:
   // \begin{itemize}
-  // \item the name of the input PAN image; 
+  // \item the name of the input PAN image;
   // \item the name of the input XS image;
   // \item the desired name for the output;
   // \item as the coordinates are given in UTM, we need the UTM zone number;
@@ -65,7 +65,7 @@ int main( int argc, char* argv[] )
   //
   // We check that all those parameters are provided.
   //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 
@@ -76,7 +76,7 @@ int main( int argc, char* argv[] )
   std::cout << "<x_ground_upper_left_corner> <y_ground_upper_left_corner> ";
   std::cout << "<x_Size> <y_Size> ";
   std::cout << "<x_groundSamplingDistance> ";
-  std::cout << "<y_groundSamplingDistance (negative since origin is upper left)>" 
+  std::cout << "<y_groundSamplingDistance (negative since origin is upper left)>"
         << std::endl;
 
     return EXIT_FAILURE;
@@ -87,7 +87,7 @@ int main( int argc, char* argv[] )
   //
   // We declare the different images, readers and writer:
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
   typedef otb::Image<unsigned int, 2>     ImageType;
@@ -98,7 +98,7 @@ int main( int argc, char* argv[] )
   typedef otb::ImageFileReader<VectorImageType>  VectorReaderType;
   typedef otb::StreamingImageFileWriter<VectorImageType>  WriterType;
 
-					
+
   ReaderType::Pointer     	readerPAN=ReaderType::New();
   VectorReaderType::Pointer     readerXS=VectorReaderType::New();
   WriterType::Pointer	    	writer=WriterType::New();
@@ -111,89 +111,89 @@ int main( int argc, char* argv[] )
 
   //  Software Guide : BeginLatex
   //
-  // We declare the projection (here we chose the UTM projection, other choices 
-  // are possible) and retrieve the paremeters from the command line: 
+  // We declare the projection (here we chose the UTM projection, other choices
+  // are possible) and retrieve the paremeters from the command line:
   // \begin{itemize}
   // \item the UTM zone
   // \item the hemisphere
   // \end{itemize}
   //
-  //  Software Guide : EndLatex 
-  
+  //  Software Guide : EndLatex
+
 // Software Guide : BeginCodeSnippet
 
-	
+
   typedef otb::UtmInverseProjection utmMapProjectionType ;
   utmMapProjectionType::Pointer utmMapProjection =
       utmMapProjectionType::New();
   utmMapProjection->SetZone(atoi(argv[4]));
   utmMapProjection->SetHemisphere(*(argv[5]));
-  
+
   // Software Guide : EndCodeSnippet
-  
+
   //  Software Guide : BeginLatex
   //
-  //  We will need to pass several parameters to the orthorectification 
+  //  We will need to pass several parameters to the orthorectification
   // concerning the desired output region:
   //
-  //  Software Guide : EndLatex 
-  
+  //  Software Guide : EndLatex
+
   // Software Guide : BeginCodeSnippet
   ImageType::IndexType start;
   start[0]=0;
   start[1]=0;
-				
+
   ImageType::SizeType size;
   size[0]=atoi(argv[8]);
   size[1]=atoi(argv[9]);
-				
+
   ImageType::SpacingType spacing;
   spacing[0]=atof(argv[10]);
   spacing[1]=atof(argv[11]);
-				
+
   ImageType::PointType origin;
   origin[0]=strtod(argv[6], NULL);
   origin[1]=strtod(argv[7], NULL);
    // Software Guide : EndCodeSnippet
-  
+
   //  Software Guide : BeginLatex
   //
-  // We declare the orthorectification filter. And provide the different 
+  // We declare the orthorectification filter. And provide the different
   // parameters:
   //
-  //  Software Guide : EndLatex 
-  
+  //  Software Guide : EndLatex
+
   // Software Guide : BeginCodeSnippet
   typedef otb::OrthoRectificationFilter<ImageType, DoubleImageType,
   utmMapProjectionType> OrthoRectifFilterType ;
-  
+
   OrthoRectifFilterType::Pointer  orthoRectifPAN =
       OrthoRectifFilterType::New();
   orthoRectifPAN->SetMapProjection(utmMapProjection);
-  
+
   orthoRectifPAN->SetInput(readerPAN->GetOutput());
-  
+
   orthoRectifPAN->SetOutputStartIndex(start);
   orthoRectifPAN->SetSize(size);
   orthoRectifPAN->SetOutputSpacing(spacing);
   orthoRectifPAN->SetOutputOrigin(origin);
    // Software Guide : EndCodeSnippet
-  
+
   //  Software Guide : BeginLatex
   // Now we are able to have the orthorectified area from the PAN image. We just
-  // have to follow a similar process for the XS image. However, 
+  // have to follow a similar process for the XS image. However,
   // the \doxygen{otb}{OrthoRectificationFilter} is designed to work with one
-  // band images. To be able to process the XS image (which is a 
-  // \doxygen{otb}{VectorImage}), we need to use the 
+  // band images. To be able to process the XS image (which is a
+  // \doxygen{otb}{VectorImage}), we need to use the
   // \doxygen{otb}{PerBandVectorImageFilter} which is going to apply the filter
   // set via the method \code{SetFilter()} to all spectral bands.
   //
   //  Software Guide : EndLatex
-  
+
   // Software Guide : BeginCodeSnippet
   typedef otb::PerBandVectorImageFilter<VectorImageType,
     DoubleVectorImageType, OrthoRectifFilterType> VectorOrthoRectifFilterType;
-	
+
 
   OrthoRectifFilterType::Pointer  orthoRectifXS =
       OrthoRectifFilterType::New();
@@ -207,8 +207,8 @@ int main( int argc, char* argv[] )
   //  This is the only difference, the rest of the parameters are provided as
   // before:
   //
-  //  Software Guide : EndLatex 
-  
+  //  Software Guide : EndLatex
+
   // Software Guide : BeginCodeSnippet
   orthoRectifXS->SetMapProjection(utmMapProjection);
 
@@ -219,46 +219,46 @@ int main( int argc, char* argv[] )
   orthoRectifXS->SetOutputSpacing(spacing);
   orthoRectifXS->SetOutputOrigin(origin);
 
-  // Software Guide : EndCodeSnippet				
+  // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
   //
   //  It's time to declare the fusion filter and set its inputs:
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  
+
   typedef otb::SimpleRcsPanSharpeningFusionImageFilter
       <DoubleImageType,DoubleVectorImageType,VectorImageType> FusionFilterType;
   FusionFilterType::Pointer fusion = FusionFilterType::New();
   fusion->SetPanInput(orthoRectifPAN->GetOutput());
   fusion->SetXsInput(orthoRectifXSVector->GetOutput());
 
-  
-  
-  // Software Guide : EndCodeSnippet				
+
+
+  // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
   //
-  //  And we can plug it to the writer. To be able to process the images by 
-  // tiles, we use the \code{SetTilingStreamDivisions()} method of the writer. 
+  //  And we can plug it to the writer. To be able to process the images by
+  // tiles, we use the \code{SetTilingStreamDivisions()} method of the writer.
   // We trigger the pipeline execution with the \code{Update()} method.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  
+
   writer->SetInput(fusion->GetOutput());
-				
+
   writer->SetTilingStreamDivisions();
-  
+
   otb::StandardFilterWatcher watcher(writer, "OrthoFusion");
-  
+
   writer->Update();
-  
+
   return EXIT_SUCCESS;
 
 }
     // Software Guide : EndCodeSnippet
-	
+

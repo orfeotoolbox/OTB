@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -41,9 +41,9 @@ ImageToModulusAndDirectionImageFilter()
 }
 
 
-/** Return the const output image modulus */  
+/** Return the const output image modulus */
 template <class TInputImage, class TOutputImage, class TOutputImageDirection >
-const typename ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::OutputImageType * 
+const typename ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::OutputImageType *
 ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::
 GetOutput() const
 {
@@ -54,9 +54,9 @@ GetOutput() const
 	return static_cast<const OutputImageType * >
     (this->itk::ProcessObject::GetOutput(0) );
 }
-/** Return the output image modulus */  
+/** Return the output image modulus */
 template <class TInputImage, class TOutputImage, class TOutputImageDirection >
-typename ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::OutputImageType * 
+typename ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::OutputImageType *
 ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::
 GetOutput()
 {
@@ -68,9 +68,9 @@ GetOutput()
     (this->itk::ProcessObject::GetOutput(0) );
 }
 
-/** Return the const output image direction */  
+/** Return the const output image direction */
 template <class TInputImage, class TOutputImage, class TOutputImageDirection >
-const typename ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::OutputImageDirectionType * 
+const typename ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::OutputImageDirectionType *
 ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::
 GetOutputDirection()const
 {
@@ -82,9 +82,9 @@ GetOutputDirection()const
     (this->itk::ProcessObject::GetOutput(1) );
 }
 
-/** Return the output image direction */  
+/** Return the output image direction */
 template <class TInputImage, class TOutputImage, class TOutputImageDirection >
-typename ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::OutputImageDirectionType * 
+typename ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::OutputImageDirectionType *
 ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::
 GetOutputDirection()
 {
@@ -100,7 +100,7 @@ GetOutputDirection()
  * Standard "GenerateInputRequestedRegion" method
  */
 template <class TInputImage, class TOutputImage, class TOutputImageDirection >
-void 
+void
 ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
 ::GenerateInputRequestedRegion()
 {
@@ -111,12 +111,12 @@ ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDir
  * Standard "PrintSelf" method
  */
 template <class TInputImage, class TOutputImage, class TOutputImageDirection >
-void 
+void
 ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::
 PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
- 
+
 }
 
 } // end namespace otb

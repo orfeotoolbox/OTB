@@ -28,7 +28,7 @@ namespace otb
  * image with the vector pixel of the second image.
  */
 template<class TInputImage1,class TInputImage2,class TOutputImage>
-class ITK_EXPORT ConcatenateVectorImageFilter 
+class ITK_EXPORT ConcatenateVectorImageFilter
 : public itk::ImageToImageFilter<TInputImage1,TOutputImage>
 {
 public:
@@ -39,7 +39,7 @@ public:
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(VectorImageToImagePixelAccessor,ImageToImageFilter);
@@ -48,7 +48,7 @@ public:
   typedef TInputImage1 InputImage1Type;
   typedef TInputImage2 InputImage2Type;
   typedef TOutputImage OutputImageType;
-  
+
   typedef typename InputImage1Type::Pointer InputImage1PointerType;
   typedef typename InputImage2Type::Pointer InputImage2PointerType;
   typedef typename OutputImageType::Pointer OutputImagePointerType;
@@ -85,7 +85,7 @@ public:
   /** Destructor. */
   virtual ~ConcatenateVectorImageFilter();
   /** Main computation method. */
-  void GenerateData(void); 
+  void GenerateData(void);
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -95,6 +95,6 @@ private:
 };
 } // end namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbConcatenateVectorImageFilter.txx"  
+#include "otbConcatenateVectorImageFilter.txx"
 #endif
 #endif

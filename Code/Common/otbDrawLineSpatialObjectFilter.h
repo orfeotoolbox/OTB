@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,14 +30,14 @@ namespace otb
  * \brief Application of a filter which draw line in a binary image.
  *
  * This class implements a filter that draws line in a binary image.
- * Inputs are a LineSpatialObject and an input image that is used to 
- * allocate the output image. This filter copies the input image in 
+ * Inputs are a LineSpatialObject and an input image that is used to
+ * allocate the output image. This filter copies the input image in
  * the output image.
- *  
+ *
  */
 
 template <class TInputImage, class TOutputImage>
-class  ITK_EXPORT DrawLineSpatialObjectFilter : 
+class  ITK_EXPORT DrawLineSpatialObjectFilter :
 public itk::SpatialObjectToImageFilter< itk::LineSpatialObject<2>, TOutputImage >
 {
 public:
@@ -45,14 +45,14 @@ public:
   itkStaticConstMacro(		InputImageDimension,
   				unsigned int,
                       		TInputImage::ImageDimension);
-  itkStaticConstMacro(		OutputImageDimension, 
+  itkStaticConstMacro(		OutputImageDimension,
   				unsigned int,
                       		TOutputImage::ImageDimension);
 
 
   typedef TInputImage InputImageType;
   typedef TOutputImage OutputImageType;
-  
+
 
   /** typedef for the classes standards. */
   typedef DrawLineSpatialObjectFilter Self;
@@ -71,32 +71,32 @@ public:
 
   /** Return the name of the class. */
   itkTypeMacro(DrawLineSpatialObjectFilter, SpatialObjectToImageFilter);
-  
+
   /** Definition of the input and output images */
   typedef typename InputImageType::PixelType InputPixelType;
   typedef typename OutputImageType::PixelType OutputPixelType;
-  
+
   typedef typename InputImageType::RegionType InputImageRegionType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
   /** Definition of the size of the images. */
   typedef typename InputImageType::SizeType SizeType;
-  
+
   typedef typename OutputImageType::IndexType IndexType;
-  
+
   /** Set/Get the image input of this process object. */
   virtual void SetInputImage(const InputImageType *image);
   const InputImageType * GetInputImage(void);
-  
+
   /** Get the input LineSpatialObjet (not const) */
   virtual void SetInputLine(const InputLineType *line);
   InputLineType * GetInput(void);
-  
+
   // Set/Get pixel value
   itkSetMacro(Value, OutputPixelType);
   itkGetConstReferenceMacro(Value, OutputPixelType);
 
-  
+
 protected:
   DrawLineSpatialObjectFilter();
   virtual ~DrawLineSpatialObjectFilter() {};
@@ -118,5 +118,5 @@ private:
 #include "otbDrawLineSpatialObjectFilter.txx"
 #endif
 
-  
+
 #endif

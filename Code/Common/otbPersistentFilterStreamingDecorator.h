@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,7 +25,7 @@ namespace otb
 {
 /** \class PersistentFilterStreamingDecorator
  *  \brief This filter link a persistent filter with a StreamingImageVirtualWriter.
- * 
+ *
  *  The StreamingVirtualWriter will break the input image into pieces and stream each
  *  piece through the persistent filter. That way, the persistent filter will computes
  *  its data on the whole image, but never loads the whole of it, and eventually processes
@@ -48,13 +48,13 @@ class ITK_EXPORT PersistentFilterStreamingDecorator
   typedef itk::ProcessObject                Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(PersistentFilterStreamingDecorator,ProcessObject);
-  
+
   /** Template parameters typedefs */
   typedef TFilter FilterType;
   typedef typename FilterType::Pointer FilterPointerType;

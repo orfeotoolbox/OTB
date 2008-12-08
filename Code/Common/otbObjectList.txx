@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -20,7 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbObjectList.h"
 
-namespace otb 
+namespace otb
 {
   /**
    * Constructor
@@ -34,7 +34,7 @@ namespace otb
    * \param size Size of the vector to reserve.
    */
   template <class TObject>
-  void 
+  void
   ObjectList<TObject>
   ::Reserve(unsigned int size)
   {
@@ -42,10 +42,10 @@ namespace otb
   }
   /**
    * Get the capacity of the vector.
-   * \return The capacity of the vector. 
+   * \return The capacity of the vector.
    */
   template <class TObject>
-  unsigned int 
+  unsigned int
   ObjectList<TObject>
   ::Capacity(void) const
   {
@@ -56,7 +56,7 @@ namespace otb
    * \return The number of elements in the vector.
    */
   template <class TObject>
-  unsigned int 
+  unsigned int
   ObjectList<TObject>
   ::Size(void) const
   {
@@ -67,7 +67,7 @@ namespace otb
    * \param size The new maximal size of the list.
    */
   template <class TObject>
-  void 
+  void
   ObjectList<TObject>
   ::Resize(unsigned int size)
   {
@@ -78,7 +78,7 @@ namespace otb
    * \param element Pointer to the element to append.
    */
   template <class TObject>
-  void 
+  void
   ObjectList<TObject>
   ::PushBack(ObjectType* element)
   {
@@ -90,7 +90,7 @@ namespace otb
    * \param element Pointer to the element to set.
    */
   template <class TObject>
-  void 
+  void
   ObjectList<TObject>
   ::SetNthElement(unsigned int index,ObjectPointerType element)
   {
@@ -102,7 +102,7 @@ namespace otb
    * \return The pointer to the nth element of the list.
    */
   template <class TObject>
-  typename ObjectList<TObject>::ObjectPointerType 
+  typename ObjectList<TObject>::ObjectPointerType
   ObjectList<TObject>
   ::GetNthElement(unsigned int index) const
   {
@@ -114,7 +114,7 @@ namespace otb
    */
 
   template <class TObject>
-  typename ObjectList<TObject>::ObjectPointerType 
+  typename ObjectList<TObject>::ObjectPointerType
   ObjectList<TObject>
   ::Front(void)
   {
@@ -125,7 +125,7 @@ namespace otb
    * \return The last element of the list.
    */
   template <class TObject>
-  typename ObjectList<TObject>::ObjectPointerType 
+  typename ObjectList<TObject>::ObjectPointerType
   ObjectList<TObject>
   ::Back(void)
   {
@@ -160,7 +160,7 @@ namespace otb
    * \return The iterator.
    */
   template <class TObject>
-  typename ObjectList<TObject>::Iterator 
+  typename ObjectList<TObject>::Iterator
   ObjectList<TObject>
   ::Begin(void)
   {
@@ -196,7 +196,7 @@ namespace otb
    * \return The iterator.
    */
   template <class TObject>
-  typename ObjectList<TObject>::ReverseConstIterator 
+  typename ObjectList<TObject>::ReverseConstIterator
   ObjectList<TObject>
   ::ReverseBegin(void) const
   {
@@ -211,7 +211,7 @@ namespace otb
   typename ObjectList<TObject>::Iterator
   ObjectList<TObject>
   :: End(void)
-  { 
+  {
     Iterator iter(m_InternalContainer.end());
     return iter;
   }
@@ -220,7 +220,7 @@ namespace otb
    * \return The iterator.
    */
   template <class TObject>
-  typename ObjectList<TObject>::ConstIterator 
+  typename ObjectList<TObject>::ConstIterator
   ObjectList<TObject>
   ::End(void) const
   {
@@ -232,7 +232,7 @@ namespace otb
    * \return The iterator.
    */
   template <class TObject>
-  typename ObjectList<TObject>::ReverseIterator 
+  typename ObjectList<TObject>::ReverseIterator
   ObjectList<TObject>
   ::ReverseEnd(void)
   {
@@ -244,13 +244,13 @@ namespace otb
    * \return The iterator.
    */
   template <class TObject>
-  typename ObjectList<TObject>::ReverseConstIterator 
+  typename ObjectList<TObject>::ReverseConstIterator
   ObjectList<TObject>
   ::ReverseEnd(void) const
   {
     ReverseConstIterator iter(m_InternalContainer.rend());
     return iter;
-  } 
+  }
   /**
    * Erase elements from begin to last.
    * \param begin Iterator pointing on first object to erase.
@@ -274,10 +274,10 @@ namespace otb
   {
     m_InternalContainer.erase(loc.GetIter());
   }
-  
+
   /**PrintSelf method */
   template <class TObject>
-  void 
+  void
   ObjectList<TObject>
   ::PrintSelf(std::ostream& os, itk::Indent indent) const
   {

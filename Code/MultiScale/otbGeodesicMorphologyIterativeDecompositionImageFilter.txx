@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -54,8 +54,8 @@ namespace otb
   ::GetOutput(void)
   {
     return dynamic_cast<OutputImageListType*>(this->itk::ProcessObject::GetOutput(2));
-  }  
- 
+  }
+
   template <class TImage, class TStructuringElement>
   typename GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
   ::OutputImageListType*
@@ -152,8 +152,8 @@ namespace otb
 	  }
       }
   }
-  
-  
+
+
   template <class TImage, class TStructuringElement>
   void
   GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
@@ -162,12 +162,12 @@ namespace otb
     // Retrieving input/output pointers
     InputImagePointerType inputPtr = this->GetInput();
     OutputImageListPointerType outputPtr = this->GetOutput();
-    
+
     // For each output image
     typename OutputImageListType::Iterator outputListIt = outputPtr->Begin();
     inputPtr->SetRequestedRegion(outputListIt.Get()->GetRequestedRegion());
   }
-  
+
   /**
    * Main computation method
    */
@@ -175,7 +175,7 @@ namespace otb
   void
   GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
   ::GenerateData(void)
-  { 
+  {
     //Input image pointer
     InputImagePointerType current = this->GetInput();
     OutputImageListPointerType outputPtr = this->GetOutput();
@@ -185,7 +185,7 @@ namespace otb
     unsigned int i = 0;
 
     DecompositionFilterPointerType filter;
-    
+
     while(i<m_NumberOfIterations)
       {
 	filter = DecompositionFilterType::New();
@@ -197,13 +197,13 @@ namespace otb
 	filter->GetOutput()->SetRequestedRegion(outputPtr->GetNthElement(i)->GetRequestedRegion());
 	filter->GetOutput()->PropagateRequestedRegion();
 	filter->GetOutput()->UpdateOutputData();
-	
+
 	outputPtr->SetNthElement(i,filter->GetOutput());
 	concOutputPtr->SetNthElement(i,filter->GetConvexMap());
 	convOutputPtr->SetNthElement(i,filter->GetConcaveMap());
-	
+
 	current=filter->GetOutput();
-	
+
 	++i;
       }
 

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,7 +27,7 @@ namespace otb
  * \brief Iterates on the graph in edges from a vertex.
  */
 template <class TGraph>
-class ITK_EXPORT RCC8InEdgeIterator 
+class ITK_EXPORT RCC8InEdgeIterator
 {
  public:
   /** self typedef */
@@ -47,7 +47,7 @@ class ITK_EXPORT RCC8InEdgeIterator
   typedef typename boost::property_map<InternalGraphType, boost::vertex_index_t>::type IndexMapType;
 
   /** Constructor */
-  RCC8InEdgeIterator();  
+  RCC8InEdgeIterator();
    /** Copy constructor */
    RCC8InEdgeIterator(const Self& iter);
    /**  Constructor with input graph */
@@ -66,8 +66,8 @@ class ITK_EXPORT RCC8InEdgeIterator
    * Return the source vertex index of the current edge.
    * \return The souce vertex index.
    */
-  VertexDescriptorType GetSourceIndex(void); 
-   /** 
+  VertexDescriptorType GetSourceIndex(void);
+   /**
     * Return true if the iterator is at the end.
     * \return True if the iterator is at the end.
     */

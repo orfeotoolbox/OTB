@@ -9,9 +9,9 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,7 +27,7 @@ int otbVectorizationPathListFilterNew(int argc, char * argv[])
   typedef otb::Image<PixelType,Dimension> ImageType;
   typedef itk::PolyLineParametricPath<Dimension> PathType;
   typedef otb::VectorizationPathListFilter<ImageType,ImageType,PathType> VectorizationPathListFilterType;
-  
+
   // Instantiating object
   VectorizationPathListFilterType::Pointer object = VectorizationPathListFilterType::New();
 

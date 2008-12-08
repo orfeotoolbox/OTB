@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,12 +30,12 @@ namespace otb
    * \brief Prepare SRTM directory for Ossim from a full archive
    *
    *  As ossim has some issue with directories containing too many SRTM tiles
-   * (>5000) this class enable to copy only the required tiles from 
+   * (>5000) this class enable to copy only the required tiles from
    * FullDEMDirectoryPath containing all the SRTM tiles to DEMDirectoryPath
    * that will be passed as the argument of the SetDEMDirectoryPath() of
    * the otb::DEMToImageGenerator for example
-   * 
-   * 
+   *
+   *
  */
 
 

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,16 +23,16 @@
 #endif
 
 #include <iostream>
-#include "otbTestMain.h" 
+#include "otbTestMain.h"
 
 void RegisterTests()
 {
   REGISTER_TEST(otbPolarimetricSynthesisFilterNew);
-  REGISTER_TEST(otbPolarimetricSynthesisFilter);  
+  REGISTER_TEST(otbPolarimetricSynthesisFilter);
   REGISTER_TEST(otbHHnHVnVVPolarimetricSynthesisFilter);
   REGISTER_TEST(otbHHnHVPolarimetricSynthesisFilter);
   REGISTER_TEST(otbMultiChannelsPolarimetricSynthesisFilterNew);
-  REGISTER_TEST(otbMultiChannelsPolarimetricSynthesisFilter);  
-//  REGISTER_TEST(otbVectorMultiChannelsPolarimetricSynthesisFilter);    
+  REGISTER_TEST(otbMultiChannelsPolarimetricSynthesisFilter);
+//  REGISTER_TEST(otbVectorMultiChannelsPolarimetricSynthesisFilter);
 }
 

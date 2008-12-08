@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -58,17 +58,17 @@ namespace otb
 
   bool PrepareSRTMDirectory::Evaluate()
   {
-    
+
     int startX = static_cast<int>(floor(m_ULLon));
     int endX = static_cast<int>(ceil(m_LRLon));
     int startY = static_cast<int>(floor(m_LRLat));
     int endY = static_cast<int>(ceil(m_ULLat));
-    
+
     std::cout << startX << std::endl;
     std::cout << endX << std::endl;
     std::cout << startY << std::endl;
     std::cout << endY << std::endl;
-    
+
     for (int j=startY; j<endY; j++)
     {
       for (int i=startX; i< endX; i++)
@@ -76,11 +76,11 @@ namespace otb
         std::ostringstream inputfilename;
         inputfilename << m_FullDEMDirectoryPath;
         inputfilename << "/";
-        
+
         std::ostringstream outputfilename;
         outputfilename << m_DEMDirectoryPath;
         outputfilename << "/";
-        
+
         if (j >= 0)
         {
           inputfilename << "N";
@@ -88,7 +88,7 @@ namespace otb
           outputfilename << "N";
           outputfilename << setfill('0') << setw(2) << j;
         }
-        else 
+        else
         {
           inputfilename << "S";
           inputfilename << setfill('0') << setw(2) << -j;
@@ -102,28 +102,28 @@ namespace otb
           outputfilename << "E";
           outputfilename << setfill('0') << setw(3) << i;
         }
-        else 
+        else
         {
           inputfilename << "W";
           inputfilename << setfill('0') << setw(3) << -i;
           outputfilename << "W";
           outputfilename << setfill('0') << setw(3) << -i;
         }
-        
+
         inputfilename << ".hgt";
         outputfilename << ".hgt";
-        
+
         std::cout << "Copying " << inputfilename.str() << " to " << outputfilename.str() << std::endl;
-            
+
         //copy input file to output file
         ossimFilename inputFile(inputfilename.str().c_str());
         ossimFilename outputFile(outputfilename.str().c_str());
         inputFile.copyFileTo(outputFile);
-        
-        
+
+
       }
     }
-    
+
     return true;
   }
 

@@ -36,19 +36,19 @@ REGISTER_TEST(galibTests26);
   mbwall 24mar96
   Copyright (c) 1995-1996  Massachusetts Institute of Technology
 
-  The code for this example is adapted from an original implementation 
+  The code for this example is adapted from an original implementation
   by Thomas Grueninger (from Uni Stuttgart, visiting scholar at MIT)
 
  DESCRIPTION:
    GAs are lousy at solving the travelling salesperson problem.  But here is an
 example of how to do it anyway.  In this case we use a steady-state genetic
-algorithm and give you the compile-time choice of partial match or edge 
+algorithm and give you the compile-time choice of partial match or edge
 recombination crossover.
    This one looks really good when you draw an entire population of individuals
 and watch them all evolve in real time.  It becomes very obvious what the
 genetic algorithm is doing and how well the speciation is working (or not).
-   This implementation is by no means efficient, so please do not complain 
-about all of the silly little inefficient aspects of the implementation.  But 
+   This implementation is by no means efficient, so please do not complain
+about all of the silly little inefficient aspects of the implementation.  But
 it does get the job done.
 ---------------------------------------------------------------------------- */
 #include <math.h>
@@ -64,13 +64,13 @@ it does get the job done.
 #define ifstream STD_IFSTREAM
 
 // Set this up for your favorite TSP.  The sample one is a contrived problem
-// with the towns laid out in a grid (so it is easy to figure out what the 
+// with the towns laid out in a grid (so it is easy to figure out what the
 // shortest distance is, and there are many different paths with the same
-// shortest path).  File format is that used by the TSPLIB problems.  You can 
-// grab more problems from 
-// 
-// 
-// Apologies for using fixed-length arrays.  But this is an example, not 
+// shortest path).  File format is that used by the TSPLIB problems.  You can
+// grab more problems from
+//
+//
+// Apologies for using fixed-length arrays.  But this is an example, not
 // production code ;)
 #define MAX_TOWNS 50
 #define TSP_FILE "tsp_rect_20.txt"
@@ -89,7 +89,7 @@ int ntowns = 0;
 float Objective(GAGenome&);
 int   Mutator(GAGenome&, float);
 void  Initializer(GAGenome&);
-float Comparator(const GAGenome&, const GAGenome&); 
+float Comparator(const GAGenome&, const GAGenome&);
 int   ERXover(const GAGenome&, const GAGenome&, GAGenome*, GAGenome*);
 int   PMXover(const GAGenome&, const GAGenome&, GAGenome*, GAGenome*);
 void  ERXOneChild(const GAGenome&, const GAGenome&, GAGenome*);
@@ -113,7 +113,7 @@ galibTests26(int argc, char* argv[]) {
   }
 
   double dump;
-  ifstream in(inputfile/*TSP_FILE*/); 
+  ifstream in(inputfile/*TSP_FILE*/);
   if(!in) {
     cerr << "could not read data file " << TSP_FILE << "\n";
     exit(1);
@@ -209,14 +209,14 @@ Initializer(GAGenome& g) {
   town=GARandomInt(0,ntowns-1);
   visit[town]=1;
   child.insert(town,GAListBASE::HEAD); // the head node
- 
+
   for( i=1; i<ntowns; i++) {
     do {
       town=GARandomInt(0,ntowns-1);
     } while (visit[town]);
     visit[town]=1;
     child.insert(town);
-  }		// each subsequent node 
+  }		// each subsequent node
 }
 
 int
@@ -226,12 +226,12 @@ Mutator(GAGenome& g, float pmut) {
   if ((GARandomFloat() >= pmut) || (pmut <= 0)) return 0;
 
   n = child.size();
-  
+
   if (GARandomFloat()<0.5) {
     child.swap(GARandomInt(0,n-1),GARandomInt(0,n-1)); // swap only one time
   }
   else {
-    int nNodes = GARandomInt(1,((int)(n/2-1)));       // displace nNodes 
+    int nNodes = GARandomInt(1,((int)(n/2-1)));       // displace nNodes
     child.warp(GARandomInt(0,n-1));                   // with or without
     GAList<int> TmpList;                              // inversion
     for(i=0;i<nNodes;i++) {
@@ -270,7 +270,7 @@ ERXOneChild(const GAGenome& g1, const GAGenome& g2, GAGenome* c1) {
   GAListGenome<int> &mate1=(GAListGenome<int> &)g1;
   GAListGenome<int> &mate2=(GAListGenome<int> &)g2;
   GAListGenome<int> &sis=(GAListGenome<int> &)*c1;
-  
+
   int i,j,k,t1,t2,town;
 
   static char CM[MAX_TOWNS][MAX_TOWNS],visit[MAX_TOWNS];
@@ -290,22 +290,22 @@ ERXOneChild(const GAGenome& g1, const GAGenome& g2, GAGenome* c1) {
     t1 = *mate2.current(); t2 = *mate2.next();
     CM[t1][t2]=1; CM[t2][t1]=1;
   }
-  
+
   // select 1st town randomly
   town=GARandomInt(0,ntowns-1);
   visit[town]=1; memset(CM[town], 0, MAX_TOWNS*sizeof(char));
-  sis.insert(town); // the head node 
-  
+  sis.insert(town); // the head node
+
   GAList<int> PossFollowList;
   GAList<int> FollowersList[5];
   while (PossFollowList.head()) PossFollowList.destroy();
   for(k=0; k<5; k++) {
-    while (FollowersList[k].head()) FollowersList[k].destroy(); 
+    while (FollowersList[k].head()) FollowersList[k].destroy();
   }
-  
+
   // select the following town with the minimal no of next folling towns
   int nPoss,nFollow;
-  for(i=1; i<ntowns; i++) {           
+  for(i=1; i<ntowns; i++) {
     nPoss = 0;
     for(j=0; j<ntowns; j++) {          // no of poss. following towns
       if (CM[j][town]) {
@@ -316,15 +316,15 @@ ERXOneChild(const GAGenome& g1, const GAGenome& g2, GAGenome* c1) {
     if (nPoss == 0) {
       do {town=GARandomInt(0,ntowns-1);} while (visit[town]); // no follower
       visit[town]=1; memset(CM[town], 0, MAX_TOWNS*sizeof(char));
-      sis.insert(town); 
+      sis.insert(town);
     }
     else {
       PossFollowList.head();
       for(j=0; j<nPoss; j++) {
-	nFollow = 0; 
+	nFollow = 0;
 	town = (*PossFollowList.current());
 	for(k=0; k<ntowns; k++) {
-	  if (CM[k][town]) nFollow++; 
+	  if (CM[k][town]) nFollow++;
 	}
 	FollowersList[nFollow].insert(town);
 	PossFollowList.next();
@@ -334,11 +334,11 @@ ERXOneChild(const GAGenome& g1, const GAGenome& g2, GAGenome* c1) {
       FollowersList[k].warp(GARandomInt(0,FollowersList[k].size()));
       town = (*FollowersList[k].current());
       visit[town]=1; memset(CM[town], 0, MAX_TOWNS*sizeof(char));
-      sis.insert(town); 
+      sis.insert(town);
     }
     while (PossFollowList.head()) PossFollowList.destroy();
     for(k=0; k<5; k++) {
-      while (FollowersList[k].head()) FollowersList[k].destroy(); 
+      while (FollowersList[k].head()) FollowersList[k].destroy();
     }
   }
   sis.head();         // set iterator to head of list
@@ -434,10 +434,10 @@ Comparator(const GAGenome& g1, const GAGenome& g2) {
 //   Here we override the _write method for the List class.  This lets us see
 // exactly what we want (the default _write method dumps out pointers to the
 // data rather than the data contents).
-//   This routine prints out the contents of each element of the list, 
+//   This routine prints out the contents of each element of the list,
 // separated by a space.  It does not put a newline at the end of the list.
 //   Notice that you can override ANY function of a template class.  This is
-// called "specialization" in C++ and it lets you tailor the behaviour of a 
+// called "specialization" in C++ and it lets you tailor the behaviour of a
 // template class to better fit the type.
 template <> int
 GAListGenome<int>::write(ostream & os) const

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,11 +34,11 @@ int otbOssimElevManagerTest(int argc,char* argv[])
     }
 
   const ossimFilename srtmDir(argv[1]);
-  const char * outfname = argv[2];  
+  const char * outfname = argv[2];
 
   typedef double PixelType;
   const unsigned int Dimension = 2;
-  
+
   typedef otb::Image<PixelType,Dimension> ImageType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
   typedef itk::ImageRegionIteratorWithIndex<ImageType> IteratorType;
@@ -90,13 +90,13 @@ int otbOssimElevManagerTest(int argc,char* argv[])
       ossimWorldPoint.lon=point[0];
       ossimWorldPoint.lat=point[1];
       double height = elevManager->getHeightAboveMSL(ossimWorldPoint);
- 
+
 	 if (!ossim::isnan(height))
 	  {
 	    // Fill the image
 	    it.Set(height);
-	  } 
-	else 
+	  }
+	else
 	  {
 	    // Back to the MNT default value
 	    it.Set(0);
@@ -107,7 +107,7 @@ int otbOssimElevManagerTest(int argc,char* argv[])
   writer->SetInput(image);
   writer->SetFileName(outfname);
   writer->Update();
-  
+
 
 
   return EXIT_SUCCESS;

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -21,7 +21,7 @@
 #include "otbONERAImageIO.h"
 #include "itkVersion.h"
 
-  
+
 namespace otb
 {
 
@@ -33,18 +33,18 @@ ONERAImageIOFactory::ONERAImageIOFactory()
                          1,
                          itk::CreateObjectFunction<ONERAImageIO>::New());
 }
-  
+
 ONERAImageIOFactory::~ONERAImageIOFactory()
 {
 }
 
-const char* 
+const char*
 ONERAImageIOFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char* 
+const char*
 ONERAImageIOFactory::GetDescription() const
 {
   return "ONERA ImageIO Factory, permettant le chargement d'image au format ONERA dans l'OTB";

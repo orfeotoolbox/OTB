@@ -38,7 +38,7 @@ REGISTER_TEST(galibTests14);
  DESCRIPTION:
    Example program for a composite genome derived from the GAGenome and
 containing a list of lists.  This example shows how to derive your own genome
-class and illustrates the use of one of the template genomes (GAListGenome) 
+class and illustrates the use of one of the template genomes (GAListGenome)
 from the GAlib.
 ---------------------------------------------------------------------------- */
 #include <stdio.h>
@@ -141,10 +141,10 @@ RobotPathGenome::~RobotPathGenome(){
 
 GAGenome*
 RobotPathGenome::clone(GAGenome::CloneMethod) const {
-  return new RobotPathGenome(*this); 
+  return new RobotPathGenome(*this);
 }
 
-int 
+int
 RobotPathGenome::equal(const GAGenome& g) const {
   RobotPathGenome& genome = (RobotPathGenome&)g;
   int flag=0;
@@ -153,14 +153,14 @@ RobotPathGenome::equal(const GAGenome& g) const {
   return flag;
 }
 
-int 
+int
 RobotPathGenome::read(istream & is) {
   for(int i=0; i<n; i++)
     is >> *(list[i]);
   return is.fail() ? 1 : 0;
 }
 
-int 
+int
 RobotPathGenome::write(ostream & os) const {
   for(int i=0; i<n; i++)
     os << "list " << i << ":\t" << *(list[i]) << "\n";
@@ -171,7 +171,7 @@ RobotPathGenome::write(ostream & os) const {
 
 
 // These are the definitions of the operators for the robot path genome.
-void 
+void
 RobotPathGenome::Initializer(GAGenome& g) {
   RobotPathGenome & genome = (RobotPathGenome &)g;
   for(int i=0; i<genome.npaths(); i++)
@@ -179,7 +179,7 @@ RobotPathGenome::Initializer(GAGenome& g) {
   genome._evaluated = gaFalse;
 }
 
-int 
+int
 RobotPathGenome::Mutator(GAGenome& g, float pmut) {
   RobotPathGenome & genome = (RobotPathGenome &)g;
   int nMut = 0;
@@ -213,7 +213,7 @@ RobotPathGenome::Evaluator(GAGenome & c) {
 }
 
 
-// This crossover method assumes that all of the robot path genomes have the 
+// This crossover method assumes that all of the robot path genomes have the
 // same number of paths in them.  With a few modifications you could make the
 // paths be variable length, but then you must use a crossover method other
 // than the partial match crossover used here (defined in the robot path
@@ -257,14 +257,14 @@ Crossover(const GAGenome& a, const GAGenome& b, GAGenome* c, GAGenome* d) {
 
 // This is the initialization operator for our lists.  We create a list that is
 // n long and whose nodes contain numbers in sequence.
-//   The first thing to do in the initializer is to clear out any old 
+//   The first thing to do in the initializer is to clear out any old
 // contents - we do not want to build our new list on a previously existing
-// one!  Notice that we have to cast the genome into the type of 
+// one!  Notice that we have to cast the genome into the type of
 // genome we're using (in this case a list).  The GA always operates on
 // generic genomes.
 //   All of our lists must be the same length since we're going to use the
 // ordered crossover operators.
-void 
+void
 RobotPathGenome::PathInitializer(GAGenome & c){
   GAListGenome<int> & list = (GAListGenome<int> &)c;
 
@@ -274,7 +274,7 @@ RobotPathGenome::PathInitializer(GAGenome & c){
 // Insert the head of the list.  This node has a random number in it, but the
 // number is in a range different than those in the rest of the list.  This
 // way we'll be able to see how the lists get scrambled up.  Since we're using
-// ordered crossover (see the header file) we should never end up with more 
+// ordered crossover (see the header file) we should never end up with more
 // than one node in each list that has a given value.
   list.insert(0, GAListBASE::HEAD);
 
@@ -290,9 +290,9 @@ RobotPathGenome::PathInitializer(GAGenome & c){
 
 
 
-// Here is the specialization of the write method for our lists.  The default 
+// Here is the specialization of the write method for our lists.  The default
 // write method just prints out pointers to the contents of the nodes (it has
-// no way of knowing in advance how you'll want things printed).  Here we 
+// no way of knowing in advance how you'll want things printed).  Here we
 // do almost the same thing, but print out the contents of the nodes rather
 // than the pointers to the contents.
 template <> int

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -50,8 +50,8 @@ int otbOSSIMImageMetaDataReaderTest (int argc, char* argv[])
 
   typedef itk::BinaryMedianImageFilter<InputImageType,InputImageType>  MedianFilterType;
   MedianFilterType::Pointer image_medianFilter = MedianFilterType::New();
-	
-	
+
+
   image_medianFilter->SetInput(image_reader->GetOutput());
   image_medianFilter->GetOutput()->UpdateOutputInformation();
 
@@ -64,9 +64,9 @@ int otbOSSIMImageMetaDataReaderTest (int argc, char* argv[])
 
   ossimKeywordlist ossim_kwl_image;
   otb_tmp_image.convertToOSSIMKeywordlist(ossim_kwl_image);
-	
+
   std::cout << " -> otbImage Ossim key word list copy : "<<ossim_kwl_image<<std::endl;
-	
+
   std::ofstream file;
   file.open(outputAsciiFilenameOtbImage);
   file << "--- OSSIM KEYWORDLIST ---" << std::endl;
@@ -88,15 +88,15 @@ int otbOSSIMImageMetaDataReaderTest (int argc, char* argv[])
 
   ossimKeywordlist ossim_kwl_vector_image;
   otb_tmp_vector_image.convertToOSSIMKeywordlist(ossim_kwl_vector_image);
-	
+
   std::cout << " -> otbVectorImage Ossim key word list copy : "<<ossim_kwl_vector_image<<std::endl;
-	
+
   //	std::ofstream file;
   file.open(outputAsciiFilenameOtbVectorImage);
   file << "--- OSSIM KEYWORDLIST ---" << std::endl;
   file << ossim_kwl_vector_image;
   file.close();
 
- 
+
   return EXIT_SUCCESS;
 }

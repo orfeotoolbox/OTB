@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -37,7 +37,7 @@ DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
 {
   this->SetNumberOfRequiredInputs(2);
   this->SetNumberOfRequiredOutputs(1);
-  m_PathValue = static_cast<OutputImagePixelType>(255); 
+  m_PathValue = static_cast<OutputImagePixelType>(255);
   m_UseInternalPathValue = false;
   m_AddValue = false;
 }
@@ -92,7 +92,7 @@ DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
   {
     outIt.Set(static_cast<OutputImagePixelType>(inIt.Get()));
   }
-  
+
   // Then we use otb::PolyLineImageIterator to draw polylines
   for(PathListIteratorType plIt = pathListPtr->Begin(); plIt!=pathListPtr->End();++plIt)
   {
@@ -132,4 +132,4 @@ DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
 } // end namespace otb
 
 #endif
- 
+

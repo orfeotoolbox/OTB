@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -20,7 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbModulusAndDirectionImageToImageFilter.h"
 #include "itkBinaryFunctorImageFilter.h"
-#include "otbMath.h" 
+#include "otbMath.h"
 
 namespace otb
 {
@@ -58,7 +58,7 @@ namespace Functor
  *  \brief This filter removes (sets to null intensity) pixels with wrong direction.
  *
  *  This filter is part of the road extraction framework. By using the Spectral Angle filter,
- *  we can assume that the direction of a road on our scalar product image is positive (greater 
+ *  we can assume that the direction of a road on our scalar product image is positive (greater
  *  than \f$ \pi/8 \f$).
  *  Therefore in the input modulus and direction images, pixels whose direction is lower than
  *  this threshold are supressed
@@ -78,21 +78,21 @@ class ITK_EXPORT RemoveWrongDirectionFilter
   typedef ModulusAndDirectionImageToImageFilter<TInputModulus, TInputDirection, TOutputImage> Superclass;
   typedef itk::SmartPointer<Self>                                                             Pointer;
   typedef itk::SmartPointer<const Self>                                                       ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(RemoveWrongDirectionFilter,ModulusAndDirectionImageToImageFilter);
-  
+
   /** typedef of the computing filter (this allows us to derive from ModulusAndDirectionToImageFilter as well as
       using the BinaryFunctorImageFilter, which is appropriate here */
   typedef Functor::RemoveWrongDirectionFunctor<
-    typename TInputModulus::PixelType, 
+    typename TInputModulus::PixelType,
     typename TInputDirection::PixelType,
     typename TOutputImage::PixelType>  FunctorType;
   typedef itk::BinaryFunctorImageFilter<TInputModulus, TInputDirection,TOutputImage,FunctorType> ComputingFilterType;
-        
+
 protected:
   /** Constructor */
   RemoveWrongDirectionFilter(){};

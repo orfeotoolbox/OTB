@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -39,33 +39,33 @@ namespace otb
     m_MinY=0;
     m_MaxY=0;
   }
-  
+
   template <class TOutputPointSet>
       PointSetFileReader<TOutputPointSet>
   ::~PointSetFileReader()
   {
   }
 
-  
-  
+
+
   template <class TOutputPointSet>
-      void 
+      void
       PointSetFileReader<TOutputPointSet>
   ::GenerateOutputInformation(void)
   {
     typename TOutputPointSet::Pointer output = this->GetOutput();
-  
+
     otbDebugMacro(<<"Reading file for GenerateOutputInformation()" << m_FileName);
-  
+
   // Check to see if we can read the file given the name or prefix
     //
     if ( m_FileName == "" )
     {
       throw itk::ImageFileReaderException(__FILE__, __LINE__, "FileName must be specified", ITK_LOCATION);
     }
-   
 
-    
+
+
     // Test if the file exists and if it can be open.
     // An exception will be thrown otherwise.
     //
@@ -78,13 +78,13 @@ namespace otb
     {
       m_ExceptionMessage = err.GetDescription();
     }
-  
+
     std::ifstream ifs;
     ifs.open(m_FileName.c_str(), std::ios::in | std::ios::binary);
     liblas::LASReader reader(ifs);
-  
+
     liblas::LASHeader const& header = reader.GetHeader();
-    
+
     otbDebugMacro(<< "Signature: " << header.GetFileSignature());
     otbDebugMacro(<< "Points count: " << header.GetPointRecordsCount());
 
@@ -94,10 +94,10 @@ namespace otb
     m_MinY = header.GetMinY();
     m_MaxY = header.GetMaxY();
     ifs.close();
-  
+
   }
-  
-  
+
+
   template <class TOutputPointSet>
       void
       PointSetFileReader<TOutputPointSet>
@@ -129,30 +129,30 @@ namespace otb
       itk::ImageFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
       throw e;
       return;
-    
+
     }
     readTester.close();
   }
-  
+
   template <class TOutputPointSet>
       void PointSetFileReader<TOutputPointSet>
   ::GenerateData()
   {
-  
+
 
     typename TOutputPointSet::Pointer output = this->GetOutput();
-    
+
     std::ifstream ifs;
     ifs.open(m_FileName.c_str(), std::ios::in | std::ios::binary);
     liblas::LASReader reader(ifs);
-  
+
     liblas::LASHeader const& header = reader.GetHeader();
-    
+
     otbDebugMacro(<< "Signature: " << header.GetFileSignature());
     otbDebugMacro(<< "Points count: " << header.GetPointRecordsCount());
 
     m_NumberOfPoints = header.GetPointRecordsCount();
-  
+
     while (reader.ReadNextPoint())
     {
       liblas::LASPoint const& p = reader.GetPoint();
@@ -163,15 +163,15 @@ namespace otb
 
 
       unsigned long i = output->GetNumberOfPoints();
-      output->SetPoint( i, point );        
+      output->SetPoint( i, point );
 
       PixelType V;
       V = static_cast<PixelType>( p.GetZ() );
       output->SetPointData( i, V );
-    
+
     }
-    
-    
+
+
     ifs.close();
   }
 
@@ -190,7 +190,7 @@ namespace otb
     os << indent << "Max Y: " << this->m_MaxY << std::endl;
     os << indent << "m_FileName: " << this->m_FileName << "\n";
   }
-  
+
 } //namespace otb
 
 #endif

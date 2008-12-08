@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -35,14 +35,14 @@ namespace otb
 {
 
 /** \class Point_plane
- * 
+ *
  *  Point in the plane
  */
 class Point_plane
 {
 public:
   short x;  /* coordinates of the point */
-  short y;  
+  short y;
 
   Point_plane()
        {
@@ -58,7 +58,7 @@ private:
 };
 
 /** \class shape
- * 
+ *
  *  A shape  : a connected component of a level set, with filled holes
  */
 class Shape
@@ -73,9 +73,9 @@ public:
   Shape    *parent;
   Shape    *next_sibling;
   Shape    *child;
-  /* Data to include it in a tree. It has a parent (the smallest containing 
-     shape), children (the largest contained shapes, whose first is pChild 
-     and the others are its siblings), and siblings (the other children of 
+  /* Data to include it in a tree. It has a parent (the smallest containing
+     shape), children (the largest contained shapes, whose first is pChild
+     and the others are its siblings), and siblings (the other children of
      its parent) */
   Shape* mw_get_not_removed_shape(Shape *sh);
   Shape* mw_get_parent_shape(Shape *sh);
@@ -110,8 +110,8 @@ private:
 };
 
 /** \class Shapes
- * 
- * A set of shapes (complete representation of an image) 
+ *
+ * A set of shapes (complete representation of an image)
  */
 
 class Shapes
@@ -120,7 +120,7 @@ public:
   typedef itk::PolyLineParametricPath<2>    PathType;
   typedef PathType::Pointer        PathPointer;
   typedef PathType::VertexType     VertexType;
-  
+
   int nrow;               /* Number of rows (dy) of the image */
   int ncol;               /* Number of columns (dx) of the image */
   int interpolation;      /* Interpolation used for the level lines:
@@ -134,7 +134,7 @@ public:
 
 //  Shapes* mw_new_shapes();
   void   mw_alloc_shapes( int inrow, int incol, float value);
-  void   mw_change_shapes(int inrow, int incol, float value);     
+  void   mw_change_shapes(int inrow, int incol, float value);
   Shape* mw_get_smallest_shape(int iX,int iY);
 
 
@@ -144,8 +144,8 @@ public:
 /* Allocate the array of pixels of each shape. Thanks to the tree structure,
 we allocate only memory for the pixels of the root, and other arrays are
 just pointers */
-  void  allocate_pixels(int* tabNbOfProperPixels);  
-  
+  void  allocate_pixels(int* tabNbOfProperPixels);
+
 /* Associate to each shape its array of pixels. Fills the field PIXELS of
 the tree structure. From the command line, this function has no interest,
 since that field is not saved to the file. It is meant to be called from
@@ -153,7 +153,7 @@ another module, when this field is needed */
   void  flst_pixels();
 
 
-  static const int EAST; 
+  static const int EAST;
   static const int NORTH;
   static const int WEST;
   static const int SOUTH;
@@ -168,9 +168,9 @@ another module, when this field is needed */
   int find_closed_boundary(Shape *pShape,PathPointer pBoundary);
 /* Find an initial point (to follow the boundary) at the border of the image */
   void initial_point_border(Point_plane *pDualPoint,
-   			    int *cDirection,Shape *pShape);		    
+   			    int *cDirection,Shape *pShape);
 /* Find an open boundary */
-  void find_open_boundary(Shape *pShape,PathPointer pBoundary);    
+  void find_open_boundary(Shape *pShape,PathPointer pBoundary);
   PathPointer flst_shape_boundary(Shape *pShape);
   Shapes()
     {
@@ -182,7 +182,7 @@ another module, when this field is needed */
     interpolation  = 0;
     }
 
-  ~Shapes() 
+  ~Shapes()
     {
      if((the_shapes != NULL) && (nb_shapes > 0))
          delete[] (the_shapes[0].pixels);
@@ -204,5 +204,5 @@ private:
 #include "otbShape.txx"
 #endif
 
-  
+
 #endif

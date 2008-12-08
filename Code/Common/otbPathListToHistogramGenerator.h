@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -39,8 +39,8 @@ namespace otb {
  *  the ListSampleToHistogramGenerator.
  *
  */
-  
- 
+
+
 template< class TPath,class TFunction >
 class PathListToHistogramGenerator : public itk::Object
 {
@@ -73,12 +73,12 @@ public:
   typedef itk::Statistics::ListSample< ListSampleVectorType >      ListSampleType ;
   typedef typename ListSampleType::Pointer                         ListSamplePointer;
   typedef typename ListSampleType::ConstPointer                    ListSampleConstPointer;
-  
+
   typedef itk::Statistics::DenseFrequencyContainer        FrequencyContainerType;
 
 
-  typedef itk::Statistics::ListSampleToHistogramGenerator< 
-                         ListSampleType, 
+  typedef itk::Statistics::ListSampleToHistogramGenerator<
+                         ListSampleType,
 			 MeasurementType,
                          FrequencyContainerType,1>        GeneratorType;
 
@@ -98,15 +98,15 @@ public:
 
   /** Connects the input PathList for which the histogram is going to be computed */
   void SetInput( PathListPointer path);
-  
+
   /** Return the histogram. o00
-   \warning This output is only valid after the Compute() method has been invoked 
+   \warning This output is only valid after the Compute() method has been invoked
    \sa Compute */
   const HistogramType * GetOutput() const;
-  
+
   /** Set number of histogram bins */
   void SetNumberOfBins( const SizeType & size );
- 
+
   /** Set marginal scale value to be passed to the histogram generator */
   void SetMarginalScale( double marginalScale );
   void SetHistogramMin(const MeasurementVectorType & histogramMin);
@@ -129,7 +129,7 @@ private:
 };
 
 
-} // end of namespace OTB 
+} // end of namespace OTB
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbPathListToHistogramGenerator.txx"

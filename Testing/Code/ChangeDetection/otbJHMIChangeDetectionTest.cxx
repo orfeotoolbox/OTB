@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,7 +23,7 @@
 #include "otbJoinHistogramMIImageFilter.h"
 #include "otbCommandProgressUpdate.h"
 
-int otbJHMIChangeDetectionTest(int argc, char* argv[] ) 
+int otbJHMIChangeDetectionTest(int argc, char* argv[] )
 {
 
   if( argc < 5 )
@@ -48,17 +48,17 @@ int otbJHMIChangeDetectionTest(int argc, char* argv[] )
   typedef itk::ImageFileReader< InputImageType2 >  ReaderType2;
   typedef itk::ImageFileWriter< OutputImageType >  WriterType;
   typedef itk::RescaleIntensityImageFilter< ChangeImageType,
-                                            OutputImageType > RescalerType; 
+                                            OutputImageType > RescalerType;
 
 
-  
+
   // Declare the type for the filter
   typedef otb::JoinHistogramMIImageFilter<
                                 InputImageType1,
                                 InputImageType2,
                                 ChangeImageType  >       FilterType;
 
-  
+
   ReaderType1::Pointer reader1 = ReaderType1::New();
   ReaderType2::Pointer reader2 = ReaderType2::New();
   WriterType::Pointer writer = WriterType::New();
@@ -75,7 +75,7 @@ int otbJHMIChangeDetectionTest(int argc, char* argv[] )
   rescaler->SetOutputMinimum( itk::NumericTraits< OutputPixelType >::min());
   rescaler->SetOutputMaximum( itk::NumericTraits< OutputPixelType >::max());
 
-  filter->SetInput1( reader1->GetOutput() ); 
+  filter->SetInput1( reader1->GetOutput() );
   filter->SetInput2( reader2->GetOutput() );
   filter->SetRadius( atoi(argv[3]) );
 
@@ -89,9 +89,9 @@ int otbJHMIChangeDetectionTest(int argc, char* argv[] )
   filter->AddObserver(itk::ProgressEvent(), observer);
 
 
-  writer->Update(); 
- 
-  
+  writer->Update();
+
+
   return EXIT_SUCCESS;
 
 }

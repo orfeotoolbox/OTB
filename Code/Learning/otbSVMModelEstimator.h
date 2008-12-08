@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -26,34 +26,34 @@ namespace otb
 
 /** \class SVMModelEstimator
  * \brief Class for SVM model estimation from images used for classification.
- * 
  *
- * The basic functionality of the SVMModelEstimator framework base class is to    
- * generate the models used in SVM classification. It requires input 
+ *
+ * The basic functionality of the SVMModelEstimator framework base class is to
+ * generate the models used in SVM classification. It requires input
  * images and a training image to be provided by the user.
  * This object supports data handling of multiband images. The object
- * accepts the input image in vector format only, where each pixel is a 
+ * accepts the input image in vector format only, where each pixel is a
  * vector and each element of the vector corresponds to an entry from
- * 1 particular band of a multiband dataset. A single band image is treated 
+ * 1 particular band of a multiband dataset. A single band image is treated
  * as a vector image with a single element for every vector. The classified
- * image is treated as a single band scalar image. 
+ * image is treated as a single band scalar image.
  *
- * EstimateModels() is a pure virtual function making this an abstract class. 
- * The template parameter is the type of a membership function the 
+ * EstimateModels() is a pure virtual function making this an abstract class.
+ * The template parameter is the type of a membership function the
  * ModelEstimator populates.
  *
  * A membership function represents a specific knowledge about
  * a class. In other words, it should tell us how "likely" is that a
- * measurement vector (pattern) belong to the class. 
+ * measurement vector (pattern) belong to the class.
  *
- * As the method name indicates, you can have more than one membership 
- * function. One for each classes. The order you put the membership 
+ * As the method name indicates, you can have more than one membership
+ * function. One for each classes. The order you put the membership
  * calculator becomes the class label for the class that is represented
- * by the membership calculator. 
+ * by the membership calculator.
  *
 
  *
- * \ingroup ClassificationFilters 
+ * \ingroup ClassificationFilters
  */
 template <class InputPixelType, class LabelPixelType>
 class ITK_EXPORT SVMModelEstimator : public itk::LightProcessObject
@@ -114,7 +114,7 @@ public:
   {
     return m_Model->GetSVMType();
   }
-  
+
   /** Set the kernel type to LINEAR, POLY, RBF, SIGMOID
 	linear: u'*v
 	polynomial: (gamma*u'*v + coef0)^degree
@@ -183,7 +183,7 @@ public:
     {
       return m_Model->GetNu();
     }
-  
+
   /** Set the cache size in MB for the training */
   void SetCacheSize(int cSize)
   {
@@ -232,7 +232,7 @@ public:
     this->Modified();
   }
 
-  
+
   /* Get the value of p for EPSILON_SVR */
   double GetP(void)
   {
@@ -267,7 +267,7 @@ public:
   }
 
   void Update();
-  
+
   /** Get/Set methods for generic kernel functor */
   virtual GenericKernelFunctorBase * GetKernelFunctor(void)const
   {
@@ -281,7 +281,7 @@ public:
 
   virtual void  PrepareData();
 
-protected: 
+protected:
   SVMModelEstimator();
   ~SVMModelEstimator();
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
@@ -293,7 +293,7 @@ protected:
   TrainingMeasuresType m_Measures;
   TrainingLabelsType   m_Labels;
 
-  /** A function that generates the 
+  /** A function that generates the
    * model based on the training input data
    * Achieves the goal of training the classifier. */
   virtual void EstimateModels();

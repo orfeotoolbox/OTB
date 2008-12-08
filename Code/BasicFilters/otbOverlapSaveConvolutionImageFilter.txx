@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,8 +34,8 @@
 namespace otb
 {
 
-template <class TInputImage, class TOutputImage> 
-OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage> 
+template <class TInputImage, class TOutputImage>
+OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage>
 ::OverlapSaveConvolutionImageFilter()
   {
     m_Radius.Fill(1);
@@ -45,18 +45,18 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage>
   }
 
 template <class TInputImage, class TOutputImage>
-void 
-OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage> 
+void
+OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage>
 ::GenerateInputRequestedRegion() throw (itk::InvalidRequestedRegionError)
   {
 #if defined USE_FFTWD
     // call the superclass' implementation of this method
     Superclass::GenerateInputRequestedRegion();
-  
+
     // get pointers to the input and output
     typename Superclass::InputImagePointer inputPtr = const_cast< TInputImage * >( this->GetInput() );
     typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
-  
+
     if ( !inputPtr || !outputPtr )
       {
 	return;
@@ -66,10 +66,10 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage>
     // requested region)
     typename TInputImage::RegionType inputRequestedRegion;
     inputRequestedRegion = inputPtr->GetRequestedRegion();
-    
+
     // Pad by filter radius
     inputRequestedRegion.PadByRadius(m_Radius);
- 
+
     // crop the input requested region at the input's largest possible region
     if(inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()))
       {
@@ -95,14 +95,14 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage>
       }
   }
 
-  template< class TInputImage, class TOutputImage> 
-  void 
+  template< class TInputImage, class TOutputImage>
+  void
   OverlapSaveConvolutionImageFilter< TInputImage, TOutputImage>
-  /** TODO commented out since multi-threading is not supported for the moment 
+  /** TODO commented out since multi-threading is not supported for the moment
    * ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,int threadId) */
   ::GenerateData()
-  {  
-    // Input/Output pointers 
+  {
+    // Input/Output pointers
     typename OutputImageType::Pointer output = this->GetOutput();
     typename InputImageType::ConstPointer input = this->GetInput();
 
@@ -110,15 +110,15 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage>
 	once multi-threading problem is solved */
     this->AllocateOutputs();
     OutputImageRegionType outputRegionForThread = output->GetRequestedRegion();
-	
+
     // Size of the filter
     typename InputImageType::SizeType sizeOfFilter;
     sizeOfFilter[0]=2*m_Radius[0]+1;
     sizeOfFilter[1]=2*m_Radius[1]+1;
-  
+
     // Filter normalization
     InputRealType norm;
-   
+
     // Compute the input region for the given thread
     OutputImageRegionType inputRegionForThread = outputRegionForThread;
     inputRegionForThread.PadByRadius(m_Radius);
@@ -128,11 +128,11 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage>
     typename InputImageType::RegionType pieceRegion = inputRegionForThread;
     typename InputImageType::SizeType pieceSize = pieceRegion.GetSize();
     typename InputImageType::IndexType pieceIndex = pieceRegion.GetIndex();
-    
+
     // Compute the size of the FFT and the size of the piece
     unsigned int pieceNbOfPixel = pieceRegion.GetNumberOfPixels();
     unsigned int sizeFFT=(pieceSize[0]/2+1)*pieceSize[1];
-    
+
     // Achieve the computation of the inputRegionForThread
     inputRegionForThread.Crop(input->GetLargestPossibleRegion());
     typename InputImageType::IndexType inputIndex = inputRegionForThread.GetIndex();
@@ -143,17 +143,17 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage>
     itk::ConstNeighborhoodIterator<InputImageType> bit(m_Radius,input,inputRegionForThread);
     bit.OverrideBoundaryCondition(&nbc);
     bit.GoToBegin();
-		
+
     //Iterator of output image
     itk::ImageRegionIteratorWithIndex<OutputImageType> it;
     it = itk::ImageRegionIteratorWithIndex<OutputImageType>(output,outputRegionForThread);
 
     //variables for loops
     unsigned int i,j,k,l;
-    
+
     // ITK proxy to the fftw library
     typedef typename itk::fftw::Proxy<double> FFTWProxyType;
-	
+
     //memory allocation
     InputPixelType* resampledFilterPiece;
     resampledFilterPiece=static_cast<FFTWProxyType::PixelType*>(fftw_malloc(pieceNbOfPixel*sizeof(InputPixelType)));
@@ -166,7 +166,7 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage>
 
     FFTWProxyType::ComplexType* inputPieceFFT;
     inputPieceFFT=static_cast<FFTWProxyType::ComplexType*>(fftw_malloc(sizeFFT*sizeof(FFTWProxyType::ComplexType)));
-   
+
     // Image piece FFT
     FFTWProxyType::PlanType inputPlan=FFTWProxyType::Plan_dft_r2c_2d(pieceSize[1],pieceSize[0],inputPiece,inputPieceFFT,FFTW_MEASURE);
 
@@ -194,25 +194,25 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage>
     for(j=0;j<sizeOfFilter[1];j++)
       {
 	for(i=0;i<sizeOfFilter[0];i++)
-	  {	
+	  {
 	    resampledFilterPiece[i+j*pieceSize[0]]=m_Filter.GetElement(k);//Copy values
 	    k++;
 	  }
       }
 
     FFTWProxyType::Execute(filterPlan);
-		
+
     // memory allocation for inverse FFT
     FFTWProxyType::ComplexType* multipliedFFTarray;
     multipliedFFTarray=static_cast<FFTWProxyType::ComplexType*>(fftw_malloc(sizeFFT*sizeof(FFTWProxyType::ComplexType)));
 
     FFTWProxyType::PixelType* inverseFFTpiece;
     inverseFFTpiece=static_cast<FFTWProxyType::PixelType*>(fftw_malloc(pieceNbOfPixel*sizeof(FFTWProxyType::PixelType)));
-    
+
 
     // Inverse FFT of the product of FFT (actually do filtering here)
     FFTWProxyType::PlanType outputPlan=FFTWProxyType::Plan_dft_c2r_2d(pieceSize[1],pieceSize[0],multipliedFFTarray,inverseFFTpiece,FFTW_MEASURE);
-    
+
     // Filling the buffer with complex product values
     for(k=0;k<sizeFFT;k++)
       {
@@ -252,20 +252,20 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage>
       {
 	typename InputImageType::IndexType index = it.GetIndex();
 	unsigned int linearIndex = (index[1]+sizeOfFilter[1]-1-outputRegionForThread.GetIndex()[1])*pieceSize[0]-1+index[0]+sizeOfFilter[0]-outputRegionForThread.GetIndex()[0];
-	it.Set( static_cast<OutputPixelType>((inverseFFTpiece[linearIndex]/pieceNbOfPixel)*static_cast<double>(norm) ));   
+	it.Set( static_cast<OutputPixelType>((inverseFFTpiece[linearIndex]/pieceNbOfPixel)*static_cast<double>(norm) ));
 	++it;
       }
-		
+
     // destroy the FFT plans
     FFTWProxyType::DestroyPlan(inputPlan);
     FFTWProxyType::DestroyPlan(filterPlan);
     FFTWProxyType::DestroyPlan(outputPlan);
 
     //frees memory
-    fftw_free(resampledFilterPiece); 
+    fftw_free(resampledFilterPiece);
     fftw_free(inputPiece);
     fftw_free(filterPieceFFT);
-    fftw_free(inputPieceFFT);		
+    fftw_free(inputPieceFFT);
     fftw_free(multipliedFFTarray);
     fftw_free(inverseFFTpiece);
 #else

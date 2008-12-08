@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,7 +23,7 @@
 
 int otbVectorDataFileWriter(int argc, char * argv[])
 {
- 
+
   typedef otb::VectorData<double,2> VectorDataType;
   typedef VectorDataType::DataNodeType DataNodeType;
   typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
@@ -35,13 +35,13 @@ int otbVectorDataFileWriter(int argc, char * argv[])
   //Instantiation
   WriterType::Pointer writer = WriterType::New();
   VectorDataType::Pointer data = VectorDataType::New();
- 
+
   DataNodeType::Pointer document = DataNodeType::New();
   DataNodeType::Pointer folder1 = DataNodeType::New();
   DataNodeType::Pointer folder2 = DataNodeType::New();
   DataNodeType::Pointer folder3 = DataNodeType::New();
   DataNodeType::Pointer line = DataNodeType::New();
-  
+
 
   document->SetNodeType(otb::DOCUMENT);
   folder1->SetNodeType(otb::FOLDER);
@@ -54,18 +54,18 @@ int otbVectorDataFileWriter(int argc, char * argv[])
   folder2->SetNodeId("FOLDER2");
   folder3->SetNodeId("FOLDER3");
   line->SetNodeId("FEATURE_LINE");
-  
+
   VertexType p1;
   p1.Fill(5);
-  
+
   VertexType p3;
   p3.Fill(0);
-  
+
   VertexType p2;
   p2[0]=0;
   p2[1]=10;
 
-  
+
   LineType::Pointer l = LineType::New();
   l->AddVertex(p1);
   l->AddVertex(p2);

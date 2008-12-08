@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,7 +23,7 @@
 #include "otbLHMIChangeDetector.h"
 #include "otbCommandProgressUpdate.h"
 
-int main(int argc, char* argv[] ) 
+int main(int argc, char* argv[] )
 {
 
   if( argc < 5 )
@@ -48,17 +48,17 @@ int main(int argc, char* argv[] )
   typedef otb::ImageFileReader< InputImageType2 >  ReaderType2;
   typedef otb::StreamingImageFileWriter< OutputImageType >  WriterType;
   typedef itk::ShiftScaleImageFilter< ChangeImageType,
-                                            OutputImageType > RescalerType; 
+                                            OutputImageType > RescalerType;
 
 
-  
+
   // Declare the type for the filter
   typedef otb::LHMIChangeDetector<
                                 InputImageType1,
                                 InputImageType2,
                                 ChangeImageType  >       FilterType;
 
-  
+
   ReaderType1::Pointer reader1 = ReaderType1::New();
   ReaderType2::Pointer reader2 = ReaderType2::New();
   WriterType::Pointer writer = WriterType::New();
@@ -72,11 +72,11 @@ int main(int argc, char* argv[] )
   reader1->SetFileName( inputFilename1  );
   reader2->SetFileName( inputFilename2  );
   writer->SetFileName( outputFilename );
-  
+
   float scale = itk::NumericTraits< OutputPixelType >::max();
   rescaler->SetScale( scale );
 
-  filter->SetInput1( reader1->GetOutput() ); 
+  filter->SetInput1( reader1->GetOutput() );
   filter->SetInput2( reader2->GetOutput() );
   filter->SetRadius( atoi(argv[3]) );
 
@@ -90,19 +90,19 @@ int main(int argc, char* argv[] )
   filter->AddObserver(itk::ProgressEvent(), observer);
 
 
-  
-  try 
-    { 
-    writer->Update(); 
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "ExceptionObject caught !" << std::endl; 
-    std::cout << err << std::endl; 
-    return -1;
-    } 
 
-  
+  try
+    {
+    writer->Update();
+    }
+  catch( itk::ExceptionObject & err )
+    {
+    std::cout << "ExceptionObject caught !" << std::endl;
+    std::cout << err << std::endl;
+    return -1;
+    }
+
+
   return EXIT_SUCCESS;
 
 }

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -44,13 +44,13 @@ int otbImageList(int argc, char * argv[])
 
   // Appending one image to the list
   imageList->PushBack(reader->GetOutput());
-     
+
   // Getting the image from the list and writing it to file
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputFilename);
   writer->SetInput(imageList->Back());
   writer->Update();
-  
+
 
 
   return EXIT_SUCCESS;

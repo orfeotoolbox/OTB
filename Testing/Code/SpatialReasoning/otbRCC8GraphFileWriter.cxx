@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,37 +24,37 @@
 int otbRCC8GraphFileWriter(int argc, char* argv[])
 {
   const char * outputFile = argv[1];
-    
+
   typedef otb::Polygon<> PathType;
   typedef otb::RCC8VertexBase<PathType> VertexType;
   typedef otb::RCC8Graph<VertexType> RCC8GraphType;
   typedef otb::RCC8GraphFileWriter<RCC8GraphType> RCC8GraphFileWriterType;
-    
+
   // Graph instantiation
   RCC8GraphType::Pointer rcc8Graph = RCC8GraphType::New();
   rcc8Graph->SetNumberOfVertices(4);
   rcc8Graph->Build();
-    
+
   // Vertex filling
   PathType::Pointer path = PathType::New();
   path->Initialize();
-    
+
   PathType::ContinuousIndexType p1,p2,p3;
-    
+
   p1[0]=0;
   p1[1]=0;
-    
+
   p2[0]=10;
   p2[1]=10;
-    
+
   p3[0]=-5;
   p3[1]=2;
 
   path->AddVertex(p1);
   path->AddVertex(p2);
   path->AddVertex(p3);
-    
-    
+
+
   VertexType::Pointer vertex1, vertex2, vertex3, vertex4;
   vertex1 = VertexType::New();
   vertex1->SetSegmentationLevel(0);
@@ -89,7 +89,7 @@ int otbRCC8GraphFileWriter(int argc, char* argv[])
   rcc8Graph->AddEdge(0,3,otb::OTB_RCC8_NTPPI);
 
   // Instantiation
-  RCC8GraphFileWriterType::Pointer rcc8GraphWriter 
+  RCC8GraphFileWriterType::Pointer rcc8GraphWriter
     = RCC8GraphFileWriterType::New();
   rcc8GraphWriter->SetFileName(outputFile);
   rcc8GraphWriter->SetInput(rcc8Graph);

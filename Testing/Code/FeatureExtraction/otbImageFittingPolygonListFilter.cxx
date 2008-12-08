@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -36,20 +36,20 @@ int otbImageFittingPolygonListFilter(int argc, char * argv[])
   const char * outFileName = argv[3];
   const int fittingRadius = atoi(argv[4]);
   const int fittingIters = atoi(argv[5]);
-  
+
   const unsigned int Dimension =2;
   typedef otb::Polygon<double>           PolygonType;
   typedef otb::Image<double,Dimension>   ImageType;
-  
+
   //Read the reference image and extract its contours
   typedef otb::ImageFileReader<ImageType> ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(imageFileName);
-  
+
   typedef itk::CannyEdgeDetectionImageFilter<ImageType,ImageType> CannyFilterType;
   CannyFilterType::Pointer canny = CannyFilterType::New();
   canny->SetInput(reader->GetOutput());
-  
+
   //Read the original polygon list (kml file)
   typedef otb::VectorData<> VectorDataType;
   typedef VectorDataType::DataTreeType         DataTreeType;
@@ -58,17 +58,17 @@ int otbImageFittingPolygonListFilter(int argc, char * argv[])
   typedef DataNodeType::Pointer                DataNodePointerType;
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
   VectorDataFileReaderType::Pointer readerVector = VectorDataFileReaderType::New();
- 
+
   readerVector->SetFileName(polyFileName);
   readerVector->Update();
 
   //Copy the polygons of the data tree in a polygon list
   typedef otb::ObjectList<PolygonType> PolygonListType;
   PolygonListType::Pointer polygonList = PolygonListType::New();
-  
+
   TreeIteratorType it(readerVector->GetOutput()->GetDataTree());
   it.GoToBegin();
-    
+
   while(!it.IsAtEnd())
   {
     DataNodePointerType dataNode = it.Get();
@@ -78,10 +78,10 @@ int otbImageFittingPolygonListFilter(int argc, char * argv[])
     }
     ++it;
   }
-  
+
   //Fit the polygons on the image
   typedef otb::ImageFittingPolygonListFilter<PolygonType,ImageType> FittingPolygonType;
-  
+
   FittingPolygonType::Pointer fittingPolygon = FittingPolygonType::New();
   fittingPolygon->SetInput(polygonList);
   fittingPolygon->SetInputImage(canny->GetOutput());
@@ -89,13 +89,13 @@ int otbImageFittingPolygonListFilter(int argc, char * argv[])
   fittingPolygon->SetNumberOfIterations(fittingIters);
   fittingPolygon->Update();
 
-  
+
   //Write the improved polygon list (kml file)
   VectorDataType::Pointer data = VectorDataType::New();
- 
+
   DataNodeType::Pointer document = DataNodeType::New();
   DataNodeType::Pointer folder = DataNodeType::New();
-  
+
   document->SetNodeType(otb::DOCUMENT);
   folder->SetNodeType(otb::FOLDER);
 
@@ -118,12 +118,12 @@ int otbImageFittingPolygonListFilter(int argc, char * argv[])
     data->GetDataTree()->Add(polygon,folder);
     ++listIt;
   }
-  
+
   typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outFileName);
   writer->SetInput(data);
   writer->Update();
-  
+
   return EXIT_SUCCESS;
 }

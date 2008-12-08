@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,8 +27,8 @@ int otbFillGapsFilterNew( int argc, char * argv[] )
 {
   typedef otb::FillGapsFilter FillGapsFilterType;
   FillGapsFilterType::Pointer fillgaps = FillGapsFilterType::New();
-  
- 
+
+
   return EXIT_SUCCESS;
 }
 

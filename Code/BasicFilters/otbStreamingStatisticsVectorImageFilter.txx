@@ -13,8 +13,8 @@ Some parts of this code are derived from ITK. See ITKCopyright.txt
 for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -39,16 +39,16 @@ namespace otb {
     //
     // allocate the data objects for the outputs which are
     // just decorators around pixel types
-  
+
     for (int i=1; i < 3; ++i)
       {
 	typename PixelObjectType::Pointer output = static_cast<PixelObjectType*>(this->MakeOutput(i).GetPointer());
 	this->itk::ProcessObject::SetNthOutput(i, output.GetPointer());
       }
-  
+
     // allocate the data objects for the outputs which are
     // just decorators around real types
-  
+
     for (int i=3; i < 5; ++i)
       {
 	typename RealPixelObjectType::Pointer output = static_cast<RealPixelObjectType*>(this->MakeOutput(i).GetPointer());
@@ -87,7 +87,7 @@ namespace otb {
 	return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
 	break;
       }
-    
+
   }
 
 
@@ -184,7 +184,7 @@ namespace otb {
       {
 	this->GetOutput()->CopyInformation(this->GetInput());
 	this->GetOutput()->SetLargestPossibleRegion(this->GetInput()->GetLargestPossibleRegion());
-      
+
 	if(this->GetOutput()->GetRequestedRegion().GetNumberOfPixels()==0)
 	  {
 	    this->GetOutput()->SetRequestedRegion(this->GetOutput()->GetLargestPossibleRegion());
@@ -208,7 +208,7 @@ namespace otb {
   void
   PersistentStatisticsVectorImageFilter<TInputImage>
   ::Reset()
-  { 
+  {
     TInputImage * inputPtr = const_cast<TInputImage * >(this->GetInput());
     inputPtr->UpdateOutputInformation();
 
@@ -260,13 +260,13 @@ namespace otb {
   void
   PersistentStatisticsVectorImageFilter<TInputImage>
   ::Synthetize()
-  { 
+  {
     int i;
     long count;
 
     int numberOfThreads = this->GetNumberOfThreads();
     unsigned int numberOfComponent = this->GetInput()->GetNumberOfComponentsPerPixel();
-  
+
     PixelType minimumVector;
     minimumVector.SetSize( numberOfComponent );
     minimumVector.Fill(itk::NumericTraits<InternalPixelType>::max());
@@ -287,7 +287,7 @@ namespace otb {
     count = 0;
 
     // Find the min/max over all threads and accumulate count, sum and
-    // sum of squares 
+    // sum of squares
     for( i = 0; i < numberOfThreads; i++)
       {
 	count += m_Count[i];
@@ -296,21 +296,21 @@ namespace otb {
 	 * crossedMatrix += m_XX[i];
 	 **/
 	if( (m_XX[i].Rows() != crossedMatrix.Rows()) || (m_XX[i].Cols() != crossedMatrix.Cols()))
-	  { 
-	    itkExceptionMacro( << "Matrix with size (" << m_XX[i].Rows() << "," << 
+	  {
+	    itkExceptionMacro( << "Matrix with size (" << m_XX[i].Rows() << "," <<
 			       m_XX[i].Cols() << ") cannot be subtracted from matrix with size (" <<
 			       crossedMatrix.Rows() << "," << crossedMatrix.Cols() );
 	  }
-      
-	for( unsigned int r=0; r<m_XX[i].Rows(); r++) 
+
+	for( unsigned int r=0; r<m_XX[i].Rows(); r++)
 	  {
-	    for( unsigned int c=0; c<m_XX[i].Cols(); c++ ) 
+	    for( unsigned int c=0; c<m_XX[i].Cols(); c++ )
 	      {
 		crossedMatrix(r,c) += m_XX[i](r,c);
 	      }
 	  }
 	//**** END TODO ****
-  
+
 	for (unsigned int j=0; j<numberOfComponent; j++)
 	  {
 	    sumVector[j] += m_ThreadSum[i][j];
@@ -330,7 +330,7 @@ namespace otb {
 	// compute statistics
 	meanVector[j] = sumVector[j] / static_cast<RealType>(count);
       }
-  
+
     // Compute Matrix Covariance
     MatrixType pixelSumMatrix;
     pixelSumMatrix.SetSize(static_cast<unsigned int>(numberOfComponent), 1);
@@ -344,8 +344,8 @@ namespace otb {
     covMatrix.SetSize(static_cast<unsigned int>(numberOfComponent), static_cast<unsigned int>(numberOfComponent));
     covMatrixTemp.SetSize(static_cast<unsigned int>(numberOfComponent), static_cast<unsigned int>(numberOfComponent));
     tempTranspose.SetSize(1, static_cast<unsigned int>(numberOfComponent));
-  
-    covMatrix = crossedMatrix/static_cast<RealType>(count); 
+
+    covMatrix = crossedMatrix/static_cast<RealType>(count);
     pixelSumMatrix/=static_cast<RealType>(count);
     tempTranspose = pixelSumMatrix.GetTranspose();
     covMatrixTemp = pixelSumMatrix*tempTranspose;
@@ -354,15 +354,15 @@ namespace otb {
      *covMatrix -= covMatrixTemp;
      **/
     if( (covMatrix.Rows() != covMatrixTemp.Rows()) || (covMatrix.Cols() != covMatrixTemp.Cols()))
-      { 
-	itkExceptionMacro( << "Matrix with size (" << covMatrix.Rows() << "," << 
+      {
+	itkExceptionMacro( << "Matrix with size (" << covMatrix.Rows() << "," <<
 			   covMatrix.Cols() << ") cannot be subtracted from matrix with size (" <<
 			   covMatrixTemp.Rows() << "," << covMatrixTemp.Cols() );
       }
-  
-    for( unsigned int r=0; r<covMatrix.Rows(); r++) 
+
+    for( unsigned int r=0; r<covMatrix.Rows(); r++)
       {
-	for( unsigned int c=0; c<covMatrix.Cols(); c++ ) 
+	for( unsigned int c=0; c<covMatrix.Cols(); c++ )
 	  {
 	    covMatrix(r,c) -= covMatrixTemp(r,c);
 	  }
@@ -380,7 +380,7 @@ namespace otb {
   template<class TInputImage>
   void
   PersistentStatisticsVectorImageFilter<TInputImage>
-  ::ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId) 
+  ::ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId)
   {
     /**
      * Grab the input
@@ -389,9 +389,9 @@ namespace otb {
     // support progress methods/callbacks
     itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
-  
+
     MatrixType pixelVector, pixelTransposeVector, pixelSumVector, tempMatrix;
-  
+
     pixelVector.SetSize(this->GetInput()->GetNumberOfComponentsPerPixel(), 1);
     pixelVector.Fill(itk::NumericTraits<RealType>::Zero);
     pixelTransposeVector.SetSize(1, this->GetInput()->GetNumberOfComponentsPerPixel());
@@ -399,10 +399,10 @@ namespace otb {
     pixelSumVector.SetSize(this->GetInput()->GetNumberOfComponentsPerPixel(), this->GetInput()->GetNumberOfComponentsPerPixel());
     pixelSumVector.Fill(itk::NumericTraits<RealType>::Zero);
     tempMatrix.SetSize(this->GetInput()->GetNumberOfComponentsPerPixel(), this->GetInput()->GetNumberOfComponentsPerPixel());
-  
-  
-  
-    itk::ImageRegionConstIteratorWithIndex<TInputImage> it (inputPtr, outputRegionForThread);   
+
+
+
+    itk::ImageRegionConstIteratorWithIndex<TInputImage> it (inputPtr, outputRegionForThread);
     it.GoToBegin();
     // do the work
     while (!it.IsAtEnd())
@@ -412,7 +412,7 @@ namespace otb {
 	for (unsigned int j=0; j<vectorValue.GetSize(); j++)
 	  {
 	    InternalPixelType value = vectorValue[j];
-	  
+
 	    RealType realValue = static_cast<RealType>( value );
 	    if (value < m_ThreadMin[threadId][j])
 	      {
@@ -425,7 +425,7 @@ namespace otb {
 	    m_ThreadSum[threadId][j] += realValue;
 	    pixelVector(j, 0) = realValue;
 	  }
-      
+
 	++it;
 	progress.CompletedPixel();
 	pixelTransposeVector = pixelVector.GetTranspose();
@@ -435,15 +435,15 @@ namespace otb {
 	 **/
 	tempMatrix = pixelVector*pixelTransposeVector;
 	if( (m_XX[threadId].Rows() != tempMatrix.Rows()) || (m_XX[threadId].Cols() != tempMatrix.Cols()))
-	  { 
-	    itkExceptionMacro( << "Matrix with size (" << m_XX[threadId].Rows() << "," << 
+	  {
+	    itkExceptionMacro( << "Matrix with size (" << m_XX[threadId].Rows() << "," <<
 			       m_XX[threadId].Cols() << ") cannot be subtracted from matrix with size (" <<
 			       tempMatrix.Rows() << "," << tempMatrix.Cols() );
 	  }
-      
-	for( unsigned int r=0; r<m_XX[threadId].Rows(); r++) 
+
+	for( unsigned int r=0; r<m_XX[threadId].Rows(); r++)
 	  {
-	    for( unsigned int c=0; c<m_XX[threadId].Cols(); c++ ) 
+	    for( unsigned int c=0; c<m_XX[threadId].Cols(); c++ )
 	      {
 		m_XX[threadId](r,c) += tempMatrix(r,c);
 	      }
@@ -454,18 +454,18 @@ namespace otb {
   }
 
   template <class TImage>
-  void 
+  void
   PersistentStatisticsVectorImageFilter<TImage>
   ::PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os,indent);
-  
+
     os << indent << "Minimum: "  <<this->GetMinimumOutput()->Get()<< std::endl;
     os << indent << "Maximum: "<<  this->GetMaximumOutput()->Get() << std::endl;
     os << indent << "Sum: "      << this->GetSumOutput()->Get() << std::endl;
     os << indent << "Mean: "     << this->GetMeanOutput()->Get() << std::endl;
     os << indent << "Covariance: " << this->GetCovarianceOutput()->Get() << std::endl;
-  
+
   }
 
 

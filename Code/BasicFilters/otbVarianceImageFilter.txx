@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -39,18 +39,18 @@ VarianceImageFilter<TInputImage, TOutputImage>
 }
 
 template <class TInputImage, class TOutputImage>
-void 
+void
 VarianceImageFilter<TInputImage, TOutputImage>
 ::GenerateInputRequestedRegion() throw (itk::InvalidRequestedRegionError)
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
-  
+
   // get pointers to the input and output
-  typename Superclass::InputImagePointer inputPtr = 
+  typename Superclass::InputImagePointer inputPtr =
     const_cast< TInputImage * >( this->GetInput() );
   typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
-  
+
   if ( !inputPtr || !outputPtr )
     {
     return;
@@ -77,7 +77,7 @@ VarianceImageFilter<TInputImage, TOutputImage>
 
     // store what we tried to request (prior to trying to crop)
     inputPtr->SetRequestedRegion( inputRequestedRegion );
-    
+
     // build an exception
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
     e.SetLocation(ITK_LOCATION);
@@ -99,11 +99,11 @@ VarianceImageFilter< TInputImage, TOutputImage>
 
   itk::ConstNeighborhoodIterator<InputImageType> bit;
   itk::ImageRegionIterator<OutputImageType> it;
-  
+
   // Allocate output
   typename OutputImageType::Pointer output = this->GetOutput();
   typename  InputImageType::ConstPointer input  = this->GetInput();
-  
+
   // Find the data-set boundary "faces"
   typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType faceList;
   itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType> bC;
@@ -113,14 +113,14 @@ VarianceImageFilter< TInputImage, TOutputImage>
 
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-  
+
   InputRealType sum;
   InputRealType sumOfSquares;
 
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
   for (fit=faceList.begin(); fit != faceList.end(); ++fit)
-    { 
+    {
     bit = itk::ConstNeighborhoodIterator<InputImageType>(m_Radius,
                                                     input, *fit);
     unsigned int neighborhoodSize = bit.Size();
@@ -138,11 +138,11 @@ VarianceImageFilter< TInputImage, TOutputImage>
 	sum += value;
 	sumOfSquares += value * value;
         }
-      
-      // get the mean value  
+
+      // get the mean value
       const double num = static_cast<double>( neighborhoodSize );
       it.Set( static_cast<OutputPixelType>(  sumOfSquares - ( sum*sum / num ) ) / ( num - 1.0 ) );
-      
+
       ++bit;
       ++it;
       progress.CompletedPixel();
@@ -157,7 +157,7 @@ template <class TInputImage, class TOutput>
 void
 VarianceImageFilter<TInputImage, TOutput>
 ::PrintSelf(
-  std::ostream& os, 
+  std::ostream& os,
   itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );

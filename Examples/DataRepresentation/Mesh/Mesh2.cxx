@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -38,7 +38,7 @@
 //
 //  \index{itk::LineCell!Header}
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
 #include "itkMesh.h"
@@ -54,7 +54,7 @@ int main(int, char *[])
   typedef itk::Mesh< PixelType, 2 >         MeshType;
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  In order to be consistent with the Mesh, cell types have to be configured
   //  with a number of custom types taken from the mesh traits. The set of
   //  traits relevant to cells are packaged by the Mesh class into the
@@ -65,7 +65,7 @@ int main(int, char *[])
   //  \index{itk::Mesh!CellType}
   //  \index{itk::Mesh!traits}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef MeshType::CellType                CellType;
@@ -75,11 +75,11 @@ int main(int, char *[])
   //  Software Guide : BeginLatex
   //
   //  The LineCell type can now be instantiated using the traits
-  //  taken from the Mesh.  
+  //  taken from the Mesh.
   //
   //  \index{itk::LineCell!Instantiation}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef itk::LineCell< CellType >         LineType;
@@ -116,13 +116,13 @@ int main(int, char *[])
   //  whenever the time comes for its own destruction. It is said that a
   //  \code{CellAutoPointer} \emph{owns} the cell when it is responsible for
   //  its destruction. Many CellAutoPointer can point to the same cell but at
-  //  any given time, only \textbf{one} CellAutoPointer can own the cell. 
+  //  any given time, only \textbf{one} CellAutoPointer can own the cell.
   //
   //  The \code{CellAutoPointer} trait is defined in the MeshType and can be
   //  extracted as illustrated in the following line.
   //
-  //  Software Guide : EndLatex 
-  
+  //  Software Guide : EndLatex
+
   // Software Guide : BeginCodeSnippet
   typedef CellType::CellAutoPointer         CellAutoPointer;
   // Software Guide : EndCodeSnippet
@@ -141,7 +141,7 @@ int main(int, char *[])
   //  \index{itk::Mesh!SetPoint()}
   //  \index{itk::Mesh!PointType}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   MeshType::Pointer  mesh = MeshType::New();
@@ -176,7 +176,7 @@ int main(int, char *[])
   //  \index{CellAutoPointer!TakeOwnership()}
   //  \index{CellType!creation}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   CellAutoPointer line0;
@@ -204,7 +204,7 @@ int main(int, char *[])
   //  the first parameter of \code{SetPointId()} while the mesh
   //  point-identifier is the second.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
   // Software Guide : BeginCodeSnippet
@@ -229,7 +229,7 @@ int main(int, char *[])
   //  \index{SetCell()!itk::Mesh}
   //  \index{itk::Mesh!Inserting cells}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   mesh->SetCell( 0, line0 );
@@ -243,7 +243,7 @@ int main(int, char *[])
   //  not to use this same CellAutoPointer again as argument to
   //  \code{SetCell()} without first securing ownership of another cell.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   std::cout << "Points = " << mesh->GetNumberOfPoints() << std::endl;
 
@@ -254,7 +254,7 @@ int main(int, char *[])
   //
   //  \index{itk::Mesh!GetNumberOfCells()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   std::cout << "Cells  = " << mesh->GetNumberOfCells()  << std::endl;
@@ -267,7 +267,7 @@ int main(int, char *[])
   //  the CellsContainer in the mesh. The trait for the cell iterator can be
   //  extracted from the mesh and used to define a local type.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef MeshType::CellsContainer::Iterator  CellIterator;
@@ -286,11 +286,11 @@ int main(int, char *[])
   //  \index{CellsContainer!Begin()}
   //  \index{CellsContainer!End()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  CellIterator  cellIterator = mesh->GetCells()->Begin();  
-  CellIterator  end          = mesh->GetCells()->End();  
+  CellIterator  cellIterator = mesh->GetCells()->Begin();
+  CellIterator  end          = mesh->GetCells()->End();
   // Software Guide : EndCodeSnippet
 
 
@@ -314,11 +314,11 @@ int main(int, char *[])
   //  \index{LineCell!Print()}
   //  \index{LineCell!GetNumberOfPoints()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
   // Software Guide : BeginCodeSnippet
-  while( cellIterator != end ) 
+  while( cellIterator != end )
     {
     MeshType::CellType * cellptr = cellIterator.Value();
     LineType * line = dynamic_cast<LineType *>( cellptr );

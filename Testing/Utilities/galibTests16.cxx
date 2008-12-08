@@ -48,7 +48,7 @@ genome.  This example uses points in the nodes.
 #define ostream STD_OSTREAM
 
 
-// This is the object that we're going to put in the nodes.  Each point has 
+// This is the object that we're going to put in the nodes.  Each point has
 // three coordinates: x,y,z.
 class Point {
 public:
@@ -76,9 +76,9 @@ protected:
 
 
 
-// These are the declarations for the functions defined in this file.  The 
+// These are the declarations for the functions defined in this file.  The
 // objective function is pretty standard.  The tree initializer generates a
-// random tree.  WriteNode is used in the write method for the tree - we 
+// random tree.  WriteNode is used in the write method for the tree - we
 // override (specialize) the write method to print out the contents of the
 // nodes rather than pointers to the contents.
 float objective(GAGenome &);
@@ -159,7 +159,7 @@ galibTests16(int argc, char *argv[])
 
   return 0;
 }
- 
+
 
 
 /* ----------------------------------------------------------------------------
@@ -226,21 +226,21 @@ TreeInitializer(GAGenome & c) {
    This is a specialization of the write method for the TreeGenome class.  The
 default write method prints out pointers to the nodes.  Here we print the
 contents of the nodes.
-   This is a recursive implementation (yuk) but it gets the job done.  Beware 
+   This is a recursive implementation (yuk) but it gets the job done.  Beware
 that it could crash your machine if your stack is limited and your trees get
 very big.
 ---------------------------------------------------------------------------- */
-void 
+void
 WriteNode(ostream & os, GANode<Point> * n) {
   if(!n) return;
   GANodeBASE * node = (GANodeBASE *)n;
 
   os.width(10);
   os << ((GANode<Point> *)node)->contents << " ";
-  os.width(10); 
+  os.width(10);
   if(node->parent) os << ((GANode<Point> *)node->parent)->contents << " ";
   else os << "." << " ";
-  os.width(10); 
+  os.width(10);
   if(node->child) os << ((GANode<Point> *)node->child)->contents << " ";
   else os << "." << " ";
   os.width(10);
@@ -257,13 +257,13 @@ WriteNode(ostream & os, GANode<Point> * n) {
     os.width(10);
     if(tmp->parent) os << ((GANode<Point> *)tmp->parent)->contents << " ";
     else os << "." << " ";
-    os.width(10); 
+    os.width(10);
     if(tmp->child) os << ((GANode<Point> *)tmp->child)->contents << " ";
     else os << "." << " ";
-    os.width(10); 
+    os.width(10);
     if(tmp->next) os << ((GANode<Point> *)tmp->next)->contents << " ";
     else os << "." << " ";
-    os.width(10); 
+    os.width(10);
     if(tmp->prev) os << ((GANode<Point> *)tmp->prev)->contents << "\n";
     else os << ".\n";
     WriteNode(os, (GANode<Point> *)tmp->child);

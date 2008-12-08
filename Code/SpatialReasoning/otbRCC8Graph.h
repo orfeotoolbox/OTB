@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -40,7 +40,7 @@ namespace otb
  * applications, one should provide a patch for this class including
  * the new functionnalities, for consistency reason.
  */
-template <class TVertex>  
+template <class TVertex>
 class ITK_EXPORT RCC8Graph  :
     public itk::DataObject
 {
@@ -72,7 +72,7 @@ class ITK_EXPORT RCC8Graph  :
   /** Getters and Setters for the number of vertices */
   itkSetMacro(NumberOfVertices,unsigned int);
   itkGetConstReferenceMacro(NumberOfVertices,unsigned int);
-  
+
   /**
    *  Return the internal boost graph object.
    *  \return The internal boost graph object
@@ -98,7 +98,7 @@ class ITK_EXPORT RCC8Graph  :
   VertexPointerType GetVertex(unsigned int index);
   /**
    * Add an edge in the graph.
-   * \param index1 The index of the source vertex. 
+   * \param index1 The index of the source vertex.
    * \param index2 The index of the target vertex.
    * \param r The RCC8 value.
    */
@@ -121,9 +121,9 @@ protected:
      * \param num The index of the last vertices to intialize.
      */
     void Initialize( unsigned int num);
-    
+
 private:
-  
+
   /** Defines the number of vertices (ie total number of segmentation regions)*/
   unsigned int m_NumberOfVertices;
   /** Internal representation using the boost graph library */

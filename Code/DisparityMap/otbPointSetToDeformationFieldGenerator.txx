@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -82,7 +82,7 @@ PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
  * Generate the n nearest point in point set
  *  \param index The index of the pixel to compute.
  *  \param n The number of nearest point to seek.
- *  \return A vector containing the index of the nearest point from nearest to most far. 
+ *  \return A vector containing the index of the nearest point from nearest to most far.
  */
 template <class TPointSet, class TDeformationField>
 typename PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
@@ -96,7 +96,7 @@ PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
   IndexVectorType sortVector;
   unsigned int i =  0;
   unsigned int j = 0;
-  
+
   typedef typename PointSetType::PointsContainer::ConstIterator PointSetIteratorType;
   typedef typename PointSetType::PointsContainer PointsContainerType;
   PointSetIteratorType it = this->GetPointSet()->GetPoints()->Begin();
@@ -115,11 +115,11 @@ PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
 	}
       ++j;
     }
-  
+
   ComparisonFunctorType comp;
-  comp.SetDistanceVector(distanceVector); 
+  comp.SetDistanceVector(distanceVector);
   sort(sortVector.begin(),sortVector.end(),comp);
-  
+
   // building output vector
   unsigned int nbElements = (n<indexVector.size() ? n : indexVector.size());
   IndexVectorType output;
@@ -131,7 +131,7 @@ PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
 }
 
 template <class TPointSet, class TDeformationField>
-double 
+double
 PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
 ::EuclideanDistance(IndexType index, PointType p)
 {

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,7 +33,7 @@ int otbFrostFilter( int argc, char * argv[] )
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
-       
+
   unsigned int  RadiusX((unsigned int)::atoi(argv[3]));
   unsigned int  RadiusY((unsigned int)::atoi(argv[4]));
   double        Deramp ((double)::atof(argv[5]));
@@ -49,13 +49,13 @@ int otbFrostFilter( int argc, char * argv[] )
   typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
   typedef otb::FrostImageFilter< InputImageType,OutputImageType >   FilterType;
-	
+
   FilterType::SizeType Radius;
   Radius[0]= RadiusX;
   Radius[1]= RadiusY;
 
   FilterType::Pointer filterFrost = FilterType::New();
-        
+
   filterFrost->SetRadius( Radius );
   filterFrost->SetDeramp( Deramp );
 
@@ -64,13 +64,13 @@ int otbFrostFilter( int argc, char * argv[] )
 
   reader->SetFileName( inputFilename  );
   writer->SetFileName( outputFilename );
-        
+
   filterFrost->SetInput( reader->GetOutput() );
   writer->SetInput( filterFrost->GetOutput() );
-        
-  writer->Update(); 
 
-   
+  writer->Update();
+
+
 
 
   return EXIT_SUCCESS;

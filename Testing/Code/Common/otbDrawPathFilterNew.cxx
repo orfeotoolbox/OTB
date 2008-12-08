@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,7 +29,7 @@ int otbDrawPathFilterNew(int argc, char * argv[])
   typedef otb::Image<PixelType,Dimension> ImageType;
   typedef itk::PolyLineParametricPath<Dimension> PathType;
   typedef otb::DrawPathFilter<ImageType, PathType, ImageType> DrawPathFilterType;
-  
+
   DrawPathFilterType::Pointer filter = DrawPathFilterType::New();
 
 

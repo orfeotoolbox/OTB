@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -38,16 +38,16 @@ int otbScalarVectorImageTextureFunctor(int argc, char * argv[])
   typedef otb::Image<InputPixelType,Dimension> InputImageType;
   typedef otb::VectorImage<InputPixelType,Dimension> OutputVectorImageType;
   typedef OutputVectorImageType::PixelType OutputVectorImagePixelType;
-  
+
   typedef itk::ConstNeighborhoodIterator<InputImageType>   IterType;
   typedef otb::ImageFileReader<InputImageType> ReaderType;
   typedef otb::StreamingImageFileWriter<OutputVectorImageType> WriterType;
 
   typedef otb::Functor::ScalarVectorImageTextureFunctor<IterType, InputImageType, OutputVectorImagePixelType>  FunctorType;
-  
+
   typedef FunctorType::IndexSelectFeaturesType ListIndexType;
   typedef otb::UnaryFunctorNeighborhoodImageFilter<InputImageType, OutputVectorImageType, FunctorType> UnaryFunctorNeighborhoodImageFilterType;
-  
+
   // Instantiating object
   UnaryFunctorNeighborhoodImageFilterType::Pointer object = UnaryFunctorNeighborhoodImageFilterType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -66,8 +66,8 @@ int otbScalarVectorImageTextureFunctor(int argc, char * argv[])
 
   writer->SetFileName(outputfilename);
 
-  
+
   writer->Update();
-      
+
   return EXIT_SUCCESS;
 }

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,14 +32,14 @@
 
 // Software Guide : BeginLatex
 //
-// Using a similar structure as the previous program and the same energy 
-// function, we are now going to slightly alter the program to use a 
+// Using a similar structure as the previous program and the same energy
+// function, we are now going to slightly alter the program to use a
 // different sampler and optimizer. The proposed sample is proposed
 // randomly according to the MAP probability and the optimizer is the
 // ICM which accept the proposed sample if it enable a reduction of
 // the energy.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -52,7 +52,7 @@
 //
 // First, we need to include header specific to these class:
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 
 #include "otbMRFEnergyPotts.h"
@@ -64,9 +64,9 @@
 // Software Guide : EndCodeSnippet
 //#include "otbMRFSamplerRandom.h"
 
-int main(int argc, char* argv[] ) 
+int main(int argc, char* argv[] )
 {
-  
+
   if( argc != 6 )
   {
     std::cerr << "Missing Parameters " << std::endl;
@@ -77,7 +77,7 @@ int main(int argc, char* argv[] )
   }
 
   const unsigned int Dimension = 2;
-  
+
   typedef double InternalPixelType;
   typedef unsigned char LabelledPixelType;
   typedef otb::Image<InternalPixelType, Dimension>  InputImageType;
@@ -85,13 +85,13 @@ int main(int argc, char* argv[] )
 
   typedef otb::ImageFileReader< InputImageType >  ReaderType;
   typedef otb::ImageFileWriter< LabelledImageType >  WriterType;
-  
+
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
-  
+
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
-  
+
   reader->SetFileName( inputFilename );
   writer->SetFileName( outputFilename );
 
@@ -103,13 +103,13 @@ int main(int argc, char* argv[] )
   //
   //  And to declare these new type:
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
 
   typedef otb::MRFSamplerRandomMAP< InputImageType, LabelledImageType> SamplerType;
 //   typedef otb::MRFSamplerRandom< InputImageType, LabelledImageType> SamplerType;
-  
+
   // Software Guide : EndCodeSnippet
 
 
@@ -135,10 +135,10 @@ int main(int argc, char* argv[] )
       // Overpass random calculation(for test only):
       sampler->InitializeSeed(0);
       markovFilter->InitializeSeed(1);
-    }  
-  
+    }
+
   unsigned int nClass = 4;
-  energyFidelity->SetNumberOfParameters(2*nClass); 
+  energyFidelity->SetNumberOfParameters(2*nClass);
   EnergyFidelityType::ParametersType parameters;
   parameters.SetSize(energyFidelity->GetNumberOfParameters());
   parameters[0]=10.0; //Class 0 mean
@@ -150,50 +150,50 @@ int main(int argc, char* argv[] )
   parameters[6]=220.0;//Class 3 mean
   parameters[7]=10.0; //Class 3 stde
   energyFidelity->SetParameters(parameters);
-  
-  
+
+
   // Software Guide : BeginLatex
   //
   // As the \doxygen{otb}{MRFOptimizerICM} does not have any parameters,
   // the call to \code{optimizer->SetParameters()} must be removed
   //
   // Software Guide : EndLatex
-  
-  markovFilter->SetNumberOfClasses(nClass);  
+
+  markovFilter->SetNumberOfClasses(nClass);
   markovFilter->SetMaximumNumberOfIterations(atoi(argv[4]));
   markovFilter->SetErrorTolerance(0.0);
   markovFilter->SetLambda(atof(argv[3]));
   markovFilter->SetNeighborhoodRadius(1);
-  
+
   markovFilter->SetEnergyRegularization(energyRegularization);
   markovFilter->SetEnergyFidelity(energyFidelity);
   markovFilter->SetOptimizer(optimizer);
   markovFilter->SetSampler(sampler);
-  
+
   markovFilter->SetInput(reader->GetOutput());
-    
+
   typedef itk::RescaleIntensityImageFilter
       < LabelledImageType, LabelledImageType > RescaleType;
   RescaleType::Pointer rescaleFilter = RescaleType::New();
   rescaleFilter->SetOutputMinimum(0);
   rescaleFilter->SetOutputMaximum(255);
-  
+
   rescaleFilter->SetInput( markovFilter->GetOutput() );
-  
+
   writer->SetInput( rescaleFilter->GetOutput() );
-  
+
   writer->Update();
-  
+
   // Software Guide : BeginLatex
   //
   // Apart from these, no further modification is required.
   //
   // Software Guide : EndLatex
-  
+
   // Software Guide : BeginLatex
   //
   // Figure~\ref{fig:MRF_CLASSIFICATION2} shows the output of the Markov Random
-  // Field classification after 5 iterations with a 
+  // Field classification after 5 iterations with a
   // MAP random sampler and an ICM optimizer.
   //
   // \begin{figure}
@@ -202,15 +202,15 @@ int main(int argc, char* argv[] )
   // \includegraphics[width=0.44\textwidth]{MarkovRandomField2.eps}
   // \itkcaption[MRF restauration]{Result of applying
   // the \doxygen{otb}{MarkovRandomFieldFilter} to an extract from a PAN Quickbird
-  // image for classification. The result is obtained after 5 iterations with a 
+  // image for classification. The result is obtained after 5 iterations with a
   // MAP random sampler and an ICM optimizer. From left to right : original image,
-  // classification.}  
-  // \label{fig:MRF_CLASSIFICATION2} 
+  // classification.}
+  // \label{fig:MRF_CLASSIFICATION2}
   // \end{figure}
   //
   // Software Guide : EndLatex
-  
+
   return EXIT_SUCCESS;
-  
+
 }
 

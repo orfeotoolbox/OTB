@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -19,7 +19,7 @@
 #ifdef _MSC_VER
 #pragma warning ( disable : 4786 )
 #endif
-  
+
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Suburb.png}
 //    OUTPUTS: {HybridSegmentationFuzzyVoronoiOutput.png}
@@ -39,7 +39,7 @@
 //
 // First, we include the header files of the two filters.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 
 // Software Guide : BeginCodeSnippet
@@ -69,11 +69,11 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
-  //  Next, we declare the pixel type and image dimension and 
+  //
+  //  Next, we declare the pixel type and image dimension and
   //  specify the image type to be used as input.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef  float     InputPixelType;
@@ -83,7 +83,7 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  Fuzzy connectedness segmentation is performed first to generate
   //  a rough segmentation that yields a sample from the
   //  region to be segmented.  A binary result, representing the
@@ -94,7 +94,7 @@ int main( int argc, char *argv[] )
   //  binary image.  Below, we declare the type of the image using a
   //  pixel type and a spatial dimension.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef unsigned char      BinaryPixelType;
@@ -103,22 +103,22 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The fuzzy segmentation filter type is instantiated here using the input
   //  and binary image types as template parameters.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef   itk::SimpleFuzzyConnectednessScalarImageFilter< 
-                                               InputImageType, 
-                                               BinaryImageType 
+  typedef   itk::SimpleFuzzyConnectednessScalarImageFilter<
+                                               InputImageType,
+                                               BinaryImageType
                                                   >  FuzzySegmentationFilterType;
   // Software Guide : EndCodeSnippet
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The fuzzy connectedness segmentation filter is created by invoking the
   //  \code{New()} method and assigning the result to a
   //  \doxygen{itk}{SmartPointer}.
@@ -126,16 +126,16 @@ int main( int argc, char *argv[] )
   //  \index{itk::SimpleFuzzy\-Connectedness\-Scalar\-Image\-Filter!New()}
   //  \index{itk::SimpleFuzzy\-Connectedness\-Scalar\-Image\-Filter!Pointer}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  FuzzySegmentationFilterType::Pointer fuzzysegmenter = 
+  FuzzySegmentationFilterType::Pointer fuzzysegmenter =
                                          FuzzySegmentationFilterType::New();
   // Software Guide : EndCodeSnippet
 
-  
+
   //  Software Guide : BeginLatex
-  //  
+  //
   //  In the next step of the hybrid segmentation method, the prior generated
   //  from the fuzzy segmentation is used to build a homogeneity measurement
   //  for the object.  A VoronoiSegmentationImageFilter uses the
@@ -145,13 +145,13 @@ int main( int argc, char *argv[] )
   //  VoronoiSegmentationImageFilter is sent to a writer. Its output
   //  type is conveniently declared as one that is compatible with the writer.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef unsigned char OutputPixelType;
   typedef otb::Image< OutputPixelType, Dimension > OutputImageType;
   // Software Guide : EndCodeSnippet
-                        
+
 
   //  Software Guide : BeginLatex
   //
@@ -160,19 +160,19 @@ int main( int argc, char *argv[] )
   //  \index{itk::Voronoi\-Segmentation\-Image\-Filter!New()}
   //  \index{itk::Voronoi\-Segmentation\-Image\-Filter!Pointer}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef  itk::VoronoiSegmentationImageFilter<
-                                      InputImageType, 
+                                      InputImageType,
                                       OutputImageType,
                                       BinaryImageType>
                                            VoronoiSegmentationFilterType;
 
-  VoronoiSegmentationFilterType::Pointer voronoisegmenter = 
+  VoronoiSegmentationFilterType::Pointer voronoisegmenter =
                                      VoronoiSegmentationFilterType::New();
   // Software Guide : EndCodeSnippet
-  
+
 
   //  Software Guide : BeginLatex
   //
@@ -184,7 +184,7 @@ int main( int argc, char *argv[] )
   // \label{fig:HybridSegmentationFuzzyVoronoiOutput}
   // \end{figure}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
 
@@ -201,19 +201,19 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The input that is passed to the fuzzy segmentation filter is taken from
   //  the reader.
   //
   //  \index{itk::Simple\-Fuzzy\-Connectedness\-Scalar\-Image\-Filter!SetInput()}
   //
-  //  Software Guide : EndLatex 
-  
+  //  Software Guide : EndLatex
+
   // Software Guide : BeginCodeSnippet
   fuzzysegmenter->SetInput( reader->GetOutput() );
   // Software Guide : EndCodeSnippet
 
-  
+
   InputImageType::IndexType index;
 
   index[0] = atoi(argv[3]);
@@ -227,7 +227,7 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The parameters of the fuzzy segmentation filter are defined here. A seed
   //  point is provided with the method \code{SetObjectSeed()} in order to
   //  initialize the region to be grown.  Estimated values for the mean and
@@ -236,14 +236,14 @@ int main( int argc, char *argv[] )
   //  value for generating the binary object is preset with the method
   //  \code{SetThreshold()}.  For details describing the role of the mean and
   //  variance on the computation of the segmentation, please see
-  //  \cite{Udupa1996}. 
+  //  \cite{Udupa1996}.
   //
   //  \index{itk::Simple\-Fuzzy\-Connectedness\-Scalar\-Image\-Filter!SetObjectSeed()}
   //  \index{itk::Simple\-Fuzzy\-Connectedness\-Scalar\-Image\-Filter!SetMean()}
   //  \index{itk::Simple\-Fuzzy\-Connectedness\-Scalar\-Image\-Filter!SetVariance()}
   //  \index{itk::Simple\-Fuzzy\-Connectedness\-Scalar\-Image\-Filter!SetThreshold()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   fuzzysegmenter->SetObjectSeed( index );
@@ -254,11 +254,11 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The execution of the fuzzy segmentation filter is triggered by the
   //  \code{Update()} method.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   fuzzysegmenter->Update();
@@ -266,14 +266,14 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The input to the Voronoi diagram classification filter is obtained from
   //  the reader and the prior is obtained from the fuzzy segmentation filter.
   //
   //  \index{itk::VoronoiSegmentationImageFilter!SetInput()}
   //  \index{itk::VoronoiSegmentationImageFilter!TakeAPrior()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   voronoisegmenter->SetInput( reader->GetOutput() );
@@ -282,7 +282,7 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The tolerance levels for testing the mean and standard deviation are set
   //  with the methods \code{SetMeanPercentError()} and
   //  \code{SetSTDPercentError()}. Note that the
@@ -290,12 +290,12 @@ int main( int argc, char *argv[] )
   //  the Voronoi segmentation filter uses the tolerance of the
   //  \emph{standard deviation} as a parameter. For more details on how these
   //  parameters should be selected, please see \cite{Imielinska2000b}.
-  //  
+  //
   //  \index{itk::VoronoiSegmentationImageFilter!SetMeanPercentError()}
   //  \index{itk::VoronoiSegmentationImageFilter!SetSTDPercentError()}
   //
-  //  Software Guide : EndLatex 
- 
+  //  Software Guide : EndLatex
+
   // Software Guide : BeginCodeSnippet
   voronoisegmenter->SetMeanPercentError( meanTolerance );
   voronoisegmenter->SetSTDPercentError(  stdTolerance );
@@ -303,32 +303,32 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  // 
+  //
   //  The \emph{resolution} of the Voronoi diagram classification can be
   //  chosen with the method \code{SetMinRegion()}.
   //
   //  \index{itk::VoronoiSegmentationImageFilter!SetMinRegion()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
-  
+
   // Software Guide : BeginCodeSnippet
   voronoisegmenter->SetMinRegion( 5 );
   // Software Guide : EndCodeSnippet
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The execution of the Voronoi segmentation filter is triggered with the
   //  \code{Update()} method.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   voronoisegmenter->Update();
   // Software Guide : EndCodeSnippet
 
-  
+
   //  Software Guide : BeginLatex
   //
   //  The output of the Voronoi diagram classification is an image mask with
@@ -337,7 +337,7 @@ int main( int argc, char *argv[] )
   //  the gray levels. Here, we add a \doxygen{itk}{RescaleIntensityImageFilter}
   //  in order to expand the dynamic range to more typical values.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef itk::RescaleIntensityImageFilter< OutputImageType,OutputImageType >
@@ -352,12 +352,12 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   // The output of the rescaler is passed to the writer. The invocation
   // of the \code{Update()} method on the writer triggers the execution of
   // the pipeline.
-  //  
-  //  Software Guide : EndLatex 
+  //
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   writer->SetInput( scaler->GetOutput() );
@@ -370,7 +370,7 @@ int main( int argc, char *argv[] )
   //  We execute this program on the image \code{QB\_Suburb.png} available
   //  in the directory \code{Examples/Data}. The following parameters are
   //  passed to the command line:
-  // 
+  //
   //  \small
   //  \begin{verbatim}
   //HybridSegmentationFuzzyVoronoi QB_Suburb.png Output.png
@@ -388,7 +388,7 @@ int main( int argc, char *argv[] )
   //  Note that in order to successfully segment other images, these
   //  parameters have to be adjusted to reflect the data.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

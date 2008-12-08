@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,7 +23,7 @@
 #include <fstream>
 
 int otbBSplineInterpolateImageFunction(int argc, char * argv[])
-{  
+{
   const char * infname = argv[1];
   const char * outfname = argv[2];
 
@@ -42,7 +42,7 @@ int otbBSplineInterpolateImageFunction(int argc, char * argv[])
 
       idx[0]=atof(argv[i]);
       idx[1]=atof(argv[i+1]);
-      
+
       indicesList.push_back(idx);
 
       i+=2;
@@ -54,7 +54,7 @@ int otbBSplineInterpolateImageFunction(int argc, char * argv[])
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
   reader->Update();
-  
+
   interpolator->SetInputImage(reader->GetOutput());
 
   std::ofstream file;
@@ -64,8 +64,8 @@ int otbBSplineInterpolateImageFunction(int argc, char * argv[])
     {
       file<<(*it)<<" -> "<<interpolator->EvaluateAtContinuousIndex((*it))<<std::endl;
     }
-  
+
   file.close();
-  
+
   return EXIT_SUCCESS;
 }

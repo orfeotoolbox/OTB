@@ -152,11 +152,11 @@ namespace otb
       {
 	resp[0]=static_cast<int>(x);
       }
-  
+
     if(y<maxIndex[1])
       {
 	resp[1]=maxIndex[1];
-      
+
       }
     else if(y>maxIndex[1]+maxSize[1])
       {
@@ -300,7 +300,7 @@ namespace otb
 	    m_ImageOverlay->UpdateOutputData();
 	  }
       }
- 
+
     if(m_ImageOverlayVisible)
       {
 	RebuildOpenGlImageOverlayBuffer();
@@ -315,7 +315,7 @@ namespace otb
 	glShadeModel(GL_FLAT);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
       }
- 
+
     glClear(GL_COLOR_BUFFER_BIT);    //this clears and paints to black
     glMatrixMode(GL_MODELVIEW);    //clear previous 3D draw params
     glLoadIdentity();
@@ -363,7 +363,7 @@ namespace otb
 
     glDisable(GL_TEXTURE_2D);
 #endif
-  
+
     // if image overlay is activated, display image overlay
     if(m_ImageOverlayVisible)
       {
@@ -389,7 +389,7 @@ namespace otb
 	glTexImage2D(GL_TEXTURE_2D, 0, 4, m_BufferedRegion.GetSize()[0], m_BufferedRegion.GetSize()[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, m_OpenGlImageOverlayBuffer);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);  // Nearest Filtering
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);  // Nearest Filtering
-    
+
 	glBindTexture (GL_TEXTURE_2D, textureOverlay);
 	glBegin (GL_QUADS);
 	int hOffset = this->h() - this->hDisplayed();

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -26,7 +26,7 @@
 
 namespace otb
 {
- 
+
 namespace Accessor {
 /** \class ShiftScalePixelAccessor
  * \brief Give access to the vcl_sqrt() function of a value
@@ -37,13 +37,13 @@ namespace Accessor {
  *
  * ShiftScalePixelAccessor is templated over an internal type and an
  * external type representation. This class cast the input
- * applies the funtion to it and cast the result according 
+ * applies the funtion to it and cast the result according
  * to the types defined as template parameters
  *
  * \ingroup ImageAdaptors
  */
 template <class TInternalType, class TExternalType >
-class ITK_EXPORT ShiftScalePixelAccessor  
+class ITK_EXPORT ShiftScalePixelAccessor
 {
 public:
   /** External typedef. It defines the external aspect
@@ -53,34 +53,34 @@ public:
   /** Internal typedef. It defines the internal real
    * representation of data. */
   typedef TInternalType InternalType;
-  
-  InternalType GetShift() 
+
+  InternalType GetShift()
     { return m_Shift; }
-  void SetShift(InternalType value) 
-    { m_Shift = value; } 
-  
-  InternalType GetScale() 
+  void SetShift(InternalType value)
+    { m_Shift = value; }
+
+  InternalType GetScale()
     { return m_Scale; }
-  void SetScale(InternalType value) 
-    { m_Scale = value; } 
+  void SetScale(InternalType value)
+    { m_Scale = value; }
 
 
-  inline void Set(TInternalType & output, const TExternalType & input) 
+  inline void Set(TInternalType & output, const TExternalType & input)
 //     {output = (TInternalType)((double) (input));}
     {output = (TInternalType)((double) m_Scale*(input+m_Shift));}
 
   inline const TExternalType Get(const TInternalType & input) const
 //     {return (TExternalType)((double) (input));}
     {return (TExternalType)((double) m_Scale*(input+m_Shift));}
-  
+
   private:
     InternalType m_Shift;
     InternalType m_Scale;
-    
+
 };
 
 } // end namespace Accessor
- 
+
 /** \class ShiftScaleImageAdaptor
  * \brief Presents an image as being composed of the vcl_sqrt() of its pixels
  *
@@ -109,20 +109,20 @@ public:
                                        typename TImage::PixelType,
                                        TOutputPixelType > AccessorType;
   typedef typename AccessorType::ExternalType PixelType;
-  
+
   /** Method for creation through the object factory. */
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
   itkTypeMacro( ShiftScaleImageAdaptor, ImageAdaptor );
-  
-  typename TImage::PixelType GetShift () 
+
+  typename TImage::PixelType GetShift ()
   {
-    itkDebugMacro("returning " << " m_Shift of " << this->GetPixelAccessor().GetShift() ); 
-    return this->GetPixelAccessor().GetShift(); 
+    itkDebugMacro("returning " << " m_Shift of " << this->GetPixelAccessor().GetShift() );
+    return this->GetPixelAccessor().GetShift();
   }
-  
-  virtual void SetShift (typename TImage::PixelType value) 
+
+  virtual void SetShift (typename TImage::PixelType value)
   {
     itkDebugMacro("setting m_Shift to " << value);
     if (this->GetPixelAccessor().GetShift() != value)
@@ -130,16 +130,16 @@ public:
       this->GetPixelAccessor().SetShift(value);
       this->Modified();
       }
-  } 
-  
-  typename TImage::PixelType GetScale () 
-  {
-    itkDebugMacro("returning " << " m_Scale of " << this->GetPixelAccessor().GetScale() ); 
-    return this->GetPixelAccessor().GetScale(); 
   }
-  
-  
-  virtual void SetScale (typename TImage::PixelType value) 
+
+  typename TImage::PixelType GetScale ()
+  {
+    itkDebugMacro("returning " << " m_Scale of " << this->GetPixelAccessor().GetScale() );
+    return this->GetPixelAccessor().GetScale();
+  }
+
+
+  virtual void SetScale (typename TImage::PixelType value)
   {
     itkDebugMacro("setting m_Scale to " << value);
     if (this->GetPixelAccessor().GetScale() != value)
@@ -147,12 +147,12 @@ public:
       this->GetPixelAccessor().SetScale(value);
       this->Modified();
       }
-  } 
-  
+  }
+
 protected:
   ShiftScaleImageAdaptor() {}
   virtual ~ShiftScaleImageAdaptor() {}
-  
+
 private:
   ShiftScaleImageAdaptor(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

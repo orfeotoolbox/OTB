@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,7 +32,7 @@ int main ( int argc, char * argv[] )
   typedef unsigned char  InputPixelType;
   typedef unsigned char  OutputPixelType;
 
-  typedef otb::MultiChannelExtractROI< InputPixelType, 
+  typedef otb::MultiChannelExtractROI< InputPixelType,
     OutputPixelType >  ExtractROIFilterType;
 
   ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
@@ -89,12 +89,12 @@ int main ( int argc, char * argv[] )
   std::cout <<" extractROIFilter->GetOutput()->GetRequestedRegion() : "<<extractROIFilter->GetOutput()->GetRequestedRegion()<<std::endl;
 
 
-  
-  return EXIT_SUCCESS;  
-}        
-        
 
-  
+  return EXIT_SUCCESS;
+}
+
+
+
 
 
 

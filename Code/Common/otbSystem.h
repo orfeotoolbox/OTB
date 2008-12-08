@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,8 +27,8 @@
 
 #ifdef _WIN
       #define OTB_FILE_SEPARATOR '\\'
-#else 
-     #define OTB_FILE_SEPARATOR '/'     
+#else
+     #define OTB_FILE_SEPARATOR '/'
 #endif
 
 namespace otb
@@ -41,7 +41,7 @@ namespace otb
  * System operations, filename or strings manipulations, etc.
  *
  */
-class ITK_EXPORT System 
+class ITK_EXPORT System
 {
 public:
 

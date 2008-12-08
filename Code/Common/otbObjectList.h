@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -22,7 +22,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"
 
-namespace otb 
+namespace otb
 {
 /** \class ObjectList
  *  \brief This class is a generic all-purpose wrapping around an std::vector<itk::SmartPointer<ObjectType> >.
@@ -58,7 +58,7 @@ public:
   void Reserve(unsigned int size);
   /**
    * Get the capacity of the vector.
-   * \return The capacity of the vector. 
+   * \return The capacity of the vector.
    */
   unsigned int Capacity(void) const;
   /**
@@ -195,9 +195,9 @@ public:
     Iterator(const Iterator &it){
       m_Iter=it.m_Iter;
     };
-    
-    /** 
-	    * Get the current internal iterator 
+
+    /**
+	    * Get the current internal iterator
 		*/
     InternalIteratorType & GetIter(void)
     {
@@ -296,7 +296,7 @@ public:
   public:
     friend class ObjectList;
     friend class Iterator;
-    
+
     friend class ReverseConstIterator;
     /** typedef of the internal iterator */
     typedef typename InternalContainerType::reverse_iterator InternalReverseIteratorType;

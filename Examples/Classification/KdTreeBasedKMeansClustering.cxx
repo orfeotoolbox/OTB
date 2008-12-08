@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,7 +29,7 @@
 // works as follows:
 //
 // \begin{enumerate}
-//   \item{Obtains the initial k means input from the user.} 
+//   \item{Obtains the initial k means input from the user.}
 //   \item{Assigns each measurement vector in a sample container to its
 // closest mean among the k number of means (i.e., update the membership of
 // each measurement vectors to the nearest of the k clusters).}
@@ -66,7 +66,7 @@
 // \doxygen{itk}{Vector} as the measurement vector. The following code
 // snippet includes their header files.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "itkVector.h"
@@ -136,7 +136,7 @@ int main()
   //
   // Since the \code{NormalVariateGenerator} class only supports 1-D, we
   // define our measurement vector type as one component vector. We
-  // then, create a \code{ListSample} object for data inputs. Each 
+  // then, create a \code{ListSample} object for data inputs. Each
   // measurement vector is of length 1. We set this using the
   // \code{SetMeasurementVectorSize()} method.
   // Software Guide : EndLatex
@@ -165,7 +165,7 @@ int main()
   // To see the probability density plots from the two distribution,
   // refer to the Figure~\ref{fig:TwoNormalDensityFunctionPlot}.
   //
-  // \begin{figure} 
+  // \begin{figure}
   //   \center
   //   \includegraphics[width=0.8\textwidth]{TwoNormalDensityFunctionPlot.eps}
   //   \itkcaption[Two normal distributions plot]{Two normal distributions' probability density plot
@@ -209,10 +209,10 @@ int main()
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::Statistics::WeightedCentroidKdTreeGenerator< SampleType > 
+  typedef itk::Statistics::WeightedCentroidKdTreeGenerator< SampleType >
       TreeGeneratorType;
   TreeGeneratorType::Pointer treeGenerator = TreeGeneratorType::New();
-  
+
   treeGenerator->SetSample( sample );
   treeGenerator->SetBucketSize( 16 );
   treeGenerator->Update();
@@ -222,7 +222,7 @@ int main()
   // Software Guide : BeginLatex
   //
   // Once we have the k-d tree, it is a simple procedure to produce k
-  // mean estimates. 
+  // mean estimates.
   //
   // We create the KdTreeBasedKmeansEstimator. Then, we provide the initial
   // mean values using the \code{SetParameters()}. Since we are dealing with
@@ -242,7 +242,7 @@ int main()
   // to call the \code{StartOptimization()} method.
   //
   // The for loop will print out the mean estimates from the estimation
-  // process. 
+  // process.
   //
   // Software Guide : EndLatex
 
@@ -300,11 +300,11 @@ int main()
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::Statistics::EuclideanDistance< MeasurementVectorType > 
+  typedef itk::Statistics::EuclideanDistance< MeasurementVectorType >
       MembershipFunctionType;
   typedef itk::MinimumDecisionRule DecisionRuleType;
   DecisionRuleType::Pointer decisionRule = DecisionRuleType::New();
-  
+
   typedef itk::Statistics::SampleClassifier< SampleType > ClassifierType;
   ClassifierType::Pointer classifier = ClassifierType::New();
 
@@ -332,14 +332,14 @@ int main()
   // functions, we call the \code{AddMembershipFunction()} method. Then
   // invocation of the \code{Update()} method will perform the
   // classification.
-  // 
+  //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   std::vector< MembershipFunctionType::Pointer > membershipFunctions;
   MembershipFunctionType::OriginType origin( sample->GetMeasurementVectorSize() );
   int index = 0;
-  for ( unsigned int i = 0 ; i < 2 ; i++ ) 
+  for ( unsigned int i = 0 ; i < 2 ; i++ )
   {
     membershipFunctions.push_back( MembershipFunctionType::New() );
     for ( unsigned int j = 0 ; j < sample->GetMeasurementVectorSize(); j++ )

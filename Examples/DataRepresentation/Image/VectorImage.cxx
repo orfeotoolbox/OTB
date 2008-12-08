@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -44,11 +44,11 @@
 // compile time. Therefore, we prefer to use the
 // \doxygen{otb}{VectorImage} class which allows to choose the number
 // of channels of the image at runtime. The pixels will be of type
-// \doxygen{itk}{VariableLengthVector}. 
+// \doxygen{itk}{VariableLengthVector}.
 //
 // The first step is to include the header file of the VectorImage class.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "otbVectorImage.h"
@@ -59,15 +59,15 @@
 int main(int, char *[])
 {
   // Software Guide : BeginLatex
-  // 
+  //
   // The VectorImage class is templated over the type used to represent
   // the coordinate in space and over the dimension of the space.  In
-  // this example, 
+  // this example,
   // we want to represent Pl\'eiades images which have 4 bands.
   //
   // \index{otb::VectorImage!Instantiation}
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef unsigned char                 PixelType;
@@ -90,7 +90,7 @@ int main(int, char *[])
   ImageType::RegionType region;
   region.SetSize( size );
   region.SetIndex( start );
-  
+
   // Pixel data is allocated
   image->SetRegions( region );
 
@@ -98,9 +98,9 @@ int main(int, char *[])
   // Since the pixel dimensionality is choosen at runtime, one has to
   // pass this parameter to the image before memory allocation.
   // Software Guide : EndLatex
-  
+
   // Software Guide : BeginCodeSnippet
-  
+
   image->SetNumberOfComponentsPerPixel(4);
   image->Allocate();
 
@@ -108,7 +108,7 @@ int main(int, char *[])
 
 
   ImageType::IndexType pixelIndex;
- 
+
   pixelIndex[0] = 27;   // x position
   pixelIndex[1] = 29;   // y position
 
@@ -116,12 +116,12 @@ int main(int, char *[])
   // Software Guide : BeginLatex
   //
   // The VariableLengthVector class overloads the operator
-  // \code{[]}. This makes it possible to access the 
+  // \code{[]}. This makes it possible to access the
   // Vector's components using index notation. The user must not
   // forget to allocate the memory for each individual pixel by using
   // the \code{Reserve} method.
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   ImageType::PixelType   pixelValue;
@@ -139,7 +139,7 @@ int main(int, char *[])
   // We can now store this vector in one of the image pixels by defining an
   // index and invoking the \code{SetPixel()} method.
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   image->SetPixel(   pixelIndex,   pixelValue  );
@@ -147,7 +147,7 @@ int main(int, char *[])
 
   // Software Guide : BeginLatex
 
-  // The GetPixel method can also be used to read Vectors 
+  // The GetPixel method can also be used to read Vectors
   // pixels from the image
   // Software Guide : EndLatex
 
@@ -156,13 +156,13 @@ int main(int, char *[])
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
-  //  
+  //
   // Lets repeat that both \code{SetPixel()} and \code{GetPixel()} are
   // inefficient and should only be used for debugging purposes or for
   // implementing interactions with a graphical user interface such as
   // querying pixel value by clicking with the mouse.
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
 
 
   return EXIT_SUCCESS;

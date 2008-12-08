@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,21 +28,21 @@ namespace otb
  */
 template <class TData> class ITK_EXPORT VectorDataIOFactory : public itk::Object
 {
-public:  
+public:
   /** Standard class typedefs. */
   typedef VectorDataIOFactory           Self;
   typedef itk::Object                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  
+
   typedef TData DataType;
   typedef typename DataType::Pointer DataPointerType;
   typedef otb::VectorDataIOBase<DataType> VectorDataIOBaseType;
   typedef typename VectorDataIOBaseType::Pointer VectorDataIOBasePointerType;
-  
+
 
   /** Class Methods used to interface with the registered factories */
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(VectorDataIOFactory, Object);
 
@@ -51,7 +51,7 @@ public:
 
   /** Mode in which the files is intended to be used */
   typedef enum { ReadMode, WriteMode } FileModeType;
-  
+
   /** Create the appropriate VectorDataIO depending on the particulars of the file. */
   static VectorDataIOBasePointerType CreateVectorDataIO(const char* path, FileModeType mode);
 
@@ -65,10 +65,10 @@ protected:
 private:
   VectorDataIOFactory(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
 };
-  
-  
+
+
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

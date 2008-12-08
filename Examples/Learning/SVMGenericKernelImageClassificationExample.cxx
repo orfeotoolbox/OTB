@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) GET / ENST Bretagne. All rights reserved. 
+  Copyright (c) GET / ENST Bretagne. All rights reserved.
   See GETCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -38,12 +38,12 @@
 // In this example, we will use an SVM model estimated in the previous
 // section to separate between water and non-water pixels by using the RGB
 // values only. The images used for this example are shown in
-// figure~\ref{fig:SVMROIS}. 
+// figure~\ref{fig:SVMROIS}.
 // The first thing to do is include the header file for the
-// class as well as the header of the appropriated kernel to be used. 
+// class as well as the header of the appropriated kernel to be used.
 //
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 #include "itkImageToListAdaptor.h"
 #include "itkListSample.h"
@@ -59,22 +59,22 @@ int main(int argc, char* argv[] )
 
     if (argc != 4)
     {
-      std::cout << "Usage : " << argv[0] 
+      std::cout << "Usage : " << argv[0]
 	  			<< " inputImage outputImage modelFile " << std::endl ;
       return EXIT_FAILURE;
-    } 
+    }
 
     const char * imageFilename  = argv[1];
     const char * modelFilename  = argv[3];
     const char * outputFilename = argv[2];
-       
+
     typedef double                          PixelType;
     typedef std::vector<PixelType>          VectorType;
     typedef int                             LabelPixelType;
 
     const   unsigned int        	         Dimension = 2;
 
-    
+
     typedef otb::Image< itk::FixedArray<PixelType,3>,
                               Dimension >	        InputImageType;
 
@@ -97,8 +97,8 @@ int main(int argc, char* argv[] )
 // for the measures and the type of pixel used for the labels.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
+
+// Software Guide : BeginCodeSnippet
     typedef otb::SVMModel< PixelType, LabelPixelType > ModelType;
     ModelType::Pointer model = ModelType::New();
 // Software Guide : EndCodeSnippet
@@ -108,13 +108,13 @@ int main(int argc, char* argv[] )
 // After instantiation, we can load a model saved to a file (see
 // section \ref{sec:LearningWithImages} for an example of model
 // estimation and storage to a file).
-// 
-// When using a user defined kernel, an explicit instanciation has 
+//
+// When using a user defined kernel, an explicit instanciation has
 // to be performed.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
+
+// Software Guide : BeginCodeSnippet
     otb::MixturePolyRBFKernelFunctor myKernel;
 	model->SetKernelFunctor( &myKernel );
 // Software Guide : EndCodeSnippet
@@ -124,15 +124,15 @@ int main(int argc, char* argv[] )
 // Then, the rest of the classification program remains unchanged.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet     
+
+// Software Guide : BeginCodeSnippet
     model->LoadModel( modelFilename );
 // Software Guide : EndCodeSnippet
 
     typedef otb::SVMClassifier< SampleType, LabelPixelType > ClassifierType ;
     ClassifierType::Pointer classifier = ClassifierType::New() ;
 
-    int numberOfClasses = model->GetNumberOfClasses();    
+    int numberOfClasses = model->GetNumberOfClasses();
     classifier->SetNumberOfClasses(numberOfClasses) ;
     classifier->SetModel( model );
     classifier->SetSample(sample.GetPointer()) ;
@@ -193,7 +193,7 @@ int main(int argc, char* argv[] )
     rescaler->SetInput( outputImage );
 
     typedef otb::ImageFileWriter< FileImageType >         WriterType;
-	
+
     WriterType::Pointer writer = WriterType::New();
     writer->SetFileName( outputFilename  );
     writer->SetInput( rescaler->GetOutput() );

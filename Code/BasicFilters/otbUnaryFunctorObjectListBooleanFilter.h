@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -22,7 +22,7 @@
 
 namespace otb
 {
-  
+
 /** \class UnaryFunctorObjectListBooleanFilter
  * \brief Filter an ObjectList and keep elements according to the functor value
  *
@@ -44,7 +44,7 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(UnaryFunctorObjectListBooleanFilter, ObjectListToObjectListFilter);
 
@@ -55,7 +55,7 @@ public:
   typedef typename TInputList::ConstPointer InputListPointer;
   typedef typename TOutputList::Pointer OutputListPointer;
   typedef typename TInputList::ConstIterator InputListIterator;
-  
+
 //   typedef itk::DataObject::Pointer DataObjectPointer;
 
 
@@ -80,8 +80,8 @@ public:
       this->Modified();
       }
   }
-  
-  
+
+
 protected:
   UnaryFunctorObjectListBooleanFilter();
   virtual ~UnaryFunctorObjectListBooleanFilter() {};

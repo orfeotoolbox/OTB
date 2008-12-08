@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,8 +27,8 @@ int otbDEMCaracteristicsExtractorNew(int argc, char * argv[])
   typedef double PixelType;
   typedef otb::Image<PixelType, Dimension> InputImageType;
   typedef otb::DEMCaracteristicsExtractor< InputImageType, InputImageType > DEMCaracteristicsExtractorType;
-  
+
   DEMCaracteristicsExtractorType::Pointer filter = DEMCaracteristicsExtractorType::New();
-  
+
   return EXIT_SUCCESS;
 }

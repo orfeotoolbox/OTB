@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,12 +29,12 @@ template <class TFixedImage, class TMovingImage, class TDeformationField>
 MIRegistrationFilter<TFixedImage,TMovingImage,TDeformationField>
 ::MIRegistrationFilter()
 {
- 
+
   typename MIRegistrationFunctionType::Pointer drfp;
   drfp = MIRegistrationFunctionType::New();
 
   drfp->SetDeformationField( this->GetDeformationField() );
-  
+
   this->SetDifferenceFunction( static_cast<FiniteDifferenceFunctionType *>(
                                  drfp.GetPointer() ) );
 
@@ -45,7 +45,7 @@ template <class TFixedImage, class TMovingImage, class TDeformationField>
 void
 MIRegistrationFilter<TFixedImage,TMovingImage,TDeformationField>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
-{ 
+{
   Superclass::PrintSelf( os, indent );
    os << indent << "MI Radius: " <<
     this->GetMIRadius() << std::endl;
@@ -60,21 +60,21 @@ void
 MIRegistrationFilter<TFixedImage,TMovingImage,TDeformationField>
 ::InitializeIteration()
 {
- 
+
   // call the superclass  implementation
   Superclass::InitializeIteration();
 
   // set the gradient selection flag
-  MIRegistrationFunctionType *drfp = 
+  MIRegistrationFunctionType *drfp =
     dynamic_cast<MIRegistrationFunctionType *>
       (this->GetDifferenceFunction().GetPointer());
- 
+
   if( !drfp )
    {
-   itkExceptionMacro( << 
+   itkExceptionMacro( <<
      "Could not cast difference function to MIRegistrationFunction" );
    }
- 
+
   /*
    * Smooth the deformation field
    */
@@ -94,64 +94,64 @@ double
 MIRegistrationFilter<TFixedImage,TMovingImage,TDeformationField>
 ::GetMetric() const
 {
- 
-  MIRegistrationFunctionType *drfp = 
+
+  MIRegistrationFunctionType *drfp =
     dynamic_cast<MIRegistrationFunctionType *>
       (this->GetDifferenceFunction().GetPointer());
- 
+
   if( !drfp )
    {
-   itkExceptionMacro( << 
+   itkExceptionMacro( <<
      "Could not cast difference function to MIRegistrationFunction" );
    }
-   
+
   return drfp->GetEnergy();
 
 }
 
 
 /*
- * 
+ *
  */
 template <class TFixedImage, class TMovingImage, class TDeformationField>
 typename MIRegistrationFilter<TFixedImage,TMovingImage,TDeformationField>::RadiusType
 MIRegistrationFilter<TFixedImage,TMovingImage,TDeformationField>
 ::GetMIRadius() const
 {
- 
-  MIRegistrationFunctionType *drfp = 
+
+  MIRegistrationFunctionType *drfp =
     dynamic_cast<MIRegistrationFunctionType *>
       (this->GetDifferenceFunction().GetPointer());
- 
+
   if( !drfp )
    {
-   itkExceptionMacro( << 
+   itkExceptionMacro( <<
      "Could not cast difference function to MIRegistrationFunction" );
    }
-   
+
   return drfp->GetRadius();
 
 }
 
 /*
- * 
+ *
  */
 template <class TFixedImage, class TMovingImage, class TDeformationField>
 void
 MIRegistrationFilter<TFixedImage,TMovingImage,TDeformationField>
-::SetMIRadius(RadiusType radius) 
+::SetMIRadius(RadiusType radius)
 {
- 
-  MIRegistrationFunctionType *drfp = 
+
+  MIRegistrationFunctionType *drfp =
     dynamic_cast<MIRegistrationFunctionType *>
       (this->GetDifferenceFunction().GetPointer());
- 
+
   if( !drfp )
    {
-   itkExceptionMacro( << 
+   itkExceptionMacro( <<
      "Could not cast difference function to MIRegistrationFunction" );
    }
-   
+
   drfp->SetRadius(radius);
 
 }
@@ -170,21 +170,21 @@ MIRegistrationFilter<TFixedImage,TMovingImage,TDeformationField>
     {
     this->SmoothUpdateField();
     }
-  
+
   this->Superclass::ApplyUpdate(dt);
 
-  MIRegistrationFunctionType *drfp = 
+  MIRegistrationFunctionType *drfp =
     dynamic_cast<MIRegistrationFunctionType *>
       (this->GetDifferenceFunction().GetPointer());
- 
+
   if( !drfp )
    {
-   itkExceptionMacro( << 
+   itkExceptionMacro( <<
      "Could not cast difference function to MIRegistrationFunction" );
    }
 
 //  this->SetRMSChange( drfp->GetRMSChange() );
-   
+
 }
 
 template <class TFixedImage, class TMovingImage, class TDeformationField>
@@ -193,25 +193,25 @@ MIRegistrationFilter<TFixedImage,TMovingImage,TDeformationField>
 ::GenerateInputRequestedRegion()
 {
    // get pointers to the input and output
-  typename Superclass::FixedImagePointer fixedPtr = 
+  typename Superclass::FixedImagePointer fixedPtr =
       const_cast< TFixedImage * >( this->GetFixedImage() );
-  typename Superclass::MovingImagePointer movingPtr = 
+  typename Superclass::MovingImagePointer movingPtr =
       const_cast< TMovingImage * >( this->GetMovingImage() );
   typename TDeformationField::Pointer outputPtr = this->GetOutput();
-      
+
   if ( !fixedPtr || !movingPtr || !outputPtr )
   {
     return;
   }
-      
+
       // get a copy of the input requested region (should equal the output
       // requested region)
   typename TDeformationField::RegionType requestedRegion;
   requestedRegion = outputPtr->GetRequestedRegion();
-      
+
       // pad the input requested region by the operator radius
   requestedRegion.PadByRadius( this->GetMIRadius() );
-      
+
       // crop the input requested region at the input's largest possible region
   if ( requestedRegion.Crop(fixedPtr->GetLargestPossibleRegion()))
   {
@@ -225,27 +225,27 @@ MIRegistrationFilter<TFixedImage,TMovingImage,TDeformationField>
     {
         // Couldn't crop the region (requested region is outside the largest
     // possible region).  Throw an exception.
-    
+
     // store what we tried to request (prior to trying to crop)
       movingPtr->SetRequestedRegion( requestedRegion );
-    
+
     // build an exception
       itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
       e.SetLocation(ITK_LOCATION);
       e.SetDescription("Requested region is (at least partially) outside the largest possible region of the moving image.");
       e.SetDataObject(movingPtr);
       throw e;
-        
+
     }
   }
   else
   {
     // Couldn't crop the region (requested region is outside the largest
     // possible region).  Throw an exception.
-    
+
     // store what we tried to request (prior to trying to crop)
     fixedPtr->SetRequestedRegion( requestedRegion );
-    
+
     // build an exception
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
     e.SetLocation(ITK_LOCATION);

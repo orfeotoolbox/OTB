@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,7 +29,7 @@ namespace otb
    */
 
 template<class TValue>
-bool 
+bool
 Polygon<TValue>
 ::IsInside(VertexType point)
 {
@@ -39,9 +39,9 @@ Polygon<TValue>
   VertexListConstIteratorType it = this->GetVertexList()->Begin();
   double xa = it.Value()[0];
   double ya = it.Value()[1];
-  ++it; 
+  ++it;
   while(it != this->GetVertexList()->End())
-    {      
+    {
       double xb = it.Value()[0];
       double yb = it.Value()[1];
       if(vcl_abs(xb-xa)<m_Epsilon)
@@ -50,7 +50,7 @@ Polygon<TValue>
 	    {
 	      ++crossingCount;
 	    }
-	  else if (ya<yb && xa>x && y>=ya && y<yb) 
+	  else if (ya<yb && xa>x && y>=ya && y<yb)
 	    {
 	      ++crossingCount;
 	    }
@@ -58,7 +58,7 @@ Polygon<TValue>
       else if(vcl_abs(yb-ya)>=m_Epsilon)
 	{
 	  double xcross = xa + (xb - xa)*(y - ya)/(yb-ya);
-	  
+
 	  if(ya>yb && xcross>x && y >= yb && y < ya)
 	    {
 	      ++crossingCount;
@@ -88,7 +88,7 @@ Polygon<TValue>
   else if(vcl_abs(yb-ya)>=m_Epsilon)
     {
       double xcross = xa + (xb - xa)*(y - ya)/(yb-ya);
-      
+
       if(ya>yb && xcross>x && y >= yb && y < ya)
 	{
 	  ++crossingCount;
@@ -108,7 +108,7 @@ Polygon<TValue>
  * \return True if the point is on the edge of the polygon.
  */
 template<class TValue>
-bool 
+bool
 Polygon<TValue>
 ::IsOnEdge(VertexType point)
 {
@@ -116,7 +116,7 @@ Polygon<TValue>
   bool resp = false;
   double x = point[0];
   double y = point[1];
-  double xb,yb; 
+  double xb,yb;
   VertexListConstIteratorType it = this->GetVertexList()->Begin();
   double xa = it.Value()[0];
   double ya = it.Value()[1];
@@ -165,19 +165,19 @@ Polygon<TValue>
       double oo = (ya - cd * xa);
       double xmin = std::min(xa,xb);
       double xmax = std::max(xa,xb);
-      
+
       if ((vcl_abs(y - cd * x - oo)<m_Epsilon)
 	  && ( x <= xmax)
 	  && ( x >= xmin))
 	{
 	  resp = true;
-	  //std::cout<<"Case 1: Point is on segment "<<xa<<", "<<ya<<" <-> "<<xb<<", "<<yb<<std::endl;	
+	  //std::cout<<"Case 1: Point is on segment "<<xa<<", "<<ya<<" <-> "<<xb<<", "<<yb<<std::endl;
 	}
     }
-  else 
+  else
     {
       double ymin = std::min(ya,yb);
-      double ymax = std::max(ya,yb);	
+      double ymax = std::max(ya,yb);
       if((vcl_abs(x-xa)<=m_Epsilon)
 	 &&(y<=ymax)
 	 &&(y>=ymin))
@@ -195,8 +195,8 @@ Polygon<TValue>
  * \param b Second point of the segment,
  * \return the number of strict crossings of segment [ab] with the polygon.
  */
-template<class TValue> 
-unsigned int 
+template<class TValue>
+unsigned int
 Polygon<TValue>
 ::NbCrossing(VertexType a, VertexType b)
 {
@@ -230,7 +230,7 @@ Polygon<TValue>
  * \return the number of touchings without crossing of segment [ab] with the polygon.
  */
 template<class TValue>
-unsigned int 
+unsigned int
 Polygon<TValue>
 ::NbTouching(VertexType a, VertexType b)
 {
@@ -266,7 +266,7 @@ Polygon<TValue>
  * \return True if the two segments are strictly crossing.
  */
 template<class TValue>
-bool 
+bool
 Polygon<TValue>
 ::IsCrossing(VertexType a1, VertexType a2, VertexType b1, VertexType b2)
 {
@@ -278,7 +278,7 @@ Polygon<TValue>
   double xamin = std::min(a1[0],a2[0]);
   double xamax = std::max(a1[0],a2[0]);
   double yamin = std::min(a1[1],a2[1]);
-  double yamax = std::max(a1[1],a2[1]);    
+  double yamax = std::max(a1[1],a2[1]);
   if(vcl_abs(a1[0]-a2[0])<m_Epsilon && vcl_abs(b1[0]-b2[0])<m_Epsilon)
     {
       resp = false;
@@ -286,7 +286,7 @@ Polygon<TValue>
   else if(vcl_abs(a1[0]-a2[0])<m_Epsilon)
     {
       double cd2 = (b2[1] - b1[1]) / (b2[0] - b1[0]);
-      double oo2 = b1[1] - cd2 * b1[0];      
+      double oo2 = b1[1] - cd2 * b1[0];
       double ycross = cd2 * a1[0] + oo2;
       resp = ( xbmin < a1[0] && xbmax > a1[0]
 	       && yamin < ycross && yamax > ycross);
@@ -307,7 +307,7 @@ Polygon<TValue>
       double oo2 = b1[1] - cd2 * b1[0];
       if(cd1 != cd2)
 	{
-	  double xcross = (oo2 - oo1) / (cd1 - cd2);	  
+	  double xcross = (oo2 - oo1) / (cd1 - cd2);
 	  resp = (xamin < xcross  && xbmin < xcross
 		  &&   xamax > xcross  && xbmax > xcross);
 	}
@@ -322,8 +322,8 @@ Polygon<TValue>
  * \param a1 Second point of the second segment.
  * \return True if the two segments are touching without crossing.
  */
-template<class TValue> 
-bool 
+template<class TValue>
+bool
 Polygon<TValue>
 ::IsTouching(VertexType a1, VertexType a2, VertexType b1, VertexType  b2)
 {
@@ -333,7 +333,7 @@ Polygon<TValue>
   double ybmin = std::min(b1[1],b2[1]);
   double ybmax = std::max(b1[1],b2[1]);
   double xamin = std::min(a1[0],a2[0]);
-  double xamax = std::max(a1[0],a2[0]); 
+  double xamax = std::max(a1[0],a2[0]);
   double yamin = std::min(a1[1],a2[1]);
   double yamax = std::max(a1[1],a2[1]);
   if(vcl_abs(a1[0]-a2[0])<m_Epsilon && vcl_abs(b1[0]-b2[0])<m_Epsilon)
@@ -348,7 +348,7 @@ Polygon<TValue>
     {
       double cd2 = (b2[1] - b1[1]) / (b2[0] - b1[0]);
       double oo2 = b1[1] - cd2 * b1[0];
-      
+
       if(vcl_abs(a1[1]-cd2*a1[0]-oo2)<m_Epsilon)
 	{
 	  resp = ( a1[0]>=xbmin && a1[0]<=xbmax);
@@ -356,13 +356,13 @@ Polygon<TValue>
       else if(vcl_abs(a2[1]-cd2*a2[0]-oo2)<m_Epsilon)
 	{
 	  resp = ( a2[0]>=xbmin && a2[0]<=xbmax);
-	} 
+	}
     }
   else if(vcl_abs(b1[0]-b2[0])<m_Epsilon)
     {
       double cd1 = (a2[1] - a1[1]) / (a2[0] - a1[0]);
       double oo1 = a1[1] - cd1 * a1[0];
-      
+
       if(vcl_abs(b1[1]-cd1*b1[0]-oo1)<m_Epsilon)
 	{
 	  resp = ( b1[0]>=xamin && b1[0]<=xamax);
@@ -370,7 +370,7 @@ Polygon<TValue>
 	else if(vcl_abs(b2[1]-cd1*b2[0]-oo1)<m_Epsilon)
 	  {
 	    resp = ( b2[0]>=xamin && b2[0]<=xamax);
-	  } 
+	  }
     }
   else
     {
@@ -394,7 +394,7 @@ Polygon<TValue>
 	  else if(vcl_abs(a2[1]-cd2*a2[0]-oo2)<m_Epsilon)
 	    {
 		resp = ( a2[0]>=xbmin && a2[0]<=xbmax);
-	    } 
+	    }
 	  if(vcl_abs(b1[1]-cd1*b1[0]-oo1)<m_Epsilon)
 	    {
 		resp = ( b1[0]>=xamin && b1[0]<=xamax);
@@ -402,7 +402,7 @@ Polygon<TValue>
 	  else if(vcl_abs(b2[1]-cd1*b2[0]-oo1)<m_Epsilon)
 	    {
 	      resp = ( b2[0]>=xamin && b2[0]<=xamax);
-	    } 
+	    }
 	}
     }
   return resp;
@@ -433,16 +433,16 @@ Polygon<TValue>
   if(this->GetVertexList()->Size()>0)
     {
       x = static_cast<long int>(it.Value()[0]);
-      y = static_cast<long int>(it.Value()[1]); 
+      y = static_cast<long int>(it.Value()[1]);
       index[0] = x;
       index[1] = y;
-  
+
       ++it;
       while(it != this->GetVertexList()->End())
-	{      
+	{
 	  x = static_cast<long int>(it.Value()[0]);
-	  y = static_cast<long int>(it.Value()[1]); 
-	  
+	  y = static_cast<long int>(it.Value()[1]);
+
 	  // Index search
 	  if ( x < index[0] )
 	    {
@@ -461,10 +461,10 @@ Polygon<TValue>
 	    {
 	      maxId[1] = y;
 	    }
-	  
+
 	  ++it;
 	}
-      
+
       size[0] = maxId[0] - index[0];
       size[1] = maxId[1] - index[1];
     }
@@ -484,19 +484,19 @@ template<class TValue>
 {
   m_Surface = 0.0;
   VertexListConstIteratorType it =  this->GetVertexList()->Begin();
-  
+
   if(this->GetVertexList()->Size()>2)
   {
     VertexType origin = it.Value();
     it++;
     VertexType pt1 = it.Value();
     VertexType pt2 = it.Value();
-    
+
     while(it != this->GetVertexList()->End())
     {
       pt1=pt2;
       pt2 = it.Value();
-          
+
       double vector1x = pt1[0] - origin[0];
       double vector1y = pt1[1] - origin[1];
       double vector2x = pt2[0] - origin[0];
@@ -505,7 +505,7 @@ template<class TValue>
       m_Surface += crossProdduct;
       it++;
     }
-    
+
     m_Surface = fabs(m_Surface/2.0);
 
   }
@@ -513,7 +513,7 @@ template<class TValue>
   {
     m_Surface = 0.0;
   }
-  
+
   return m_Surface;
 }
 
@@ -526,7 +526,7 @@ template<class TValue>
 {
   double length = 0.0;
   VertexListConstIteratorType it =  this->GetVertexList()->Begin();
-  
+
   VertexType origin = it.Value();
   if(this->GetVertexList()->Size()>1)
   {
@@ -534,7 +534,7 @@ template<class TValue>
 
     VertexType pt1 = it.Value();//just init, won't be used like that
     VertexType pt2 = it.Value();
-    
+
     it++;
     while(it != this->GetVertexList()->End())
     {
@@ -548,7 +548,7 @@ template<class TValue>
       length += vcl_sqrt(accum);
       it++;
     }
-    
+
     //Adding the last segment (between first and last point)
     double accum=0.0;
     for (int i=0; i<2; i++)
@@ -556,13 +556,13 @@ template<class TValue>
       accum += (origin[i]-pt2[i])*(origin[i]-pt2[i]);
     }
     length += vcl_sqrt(accum);
-    
+
   }
   else //if there is strictly less than 2 points, length is 0
   {
     length = 0.0;
   }
-  
+
   return length;
 }
 

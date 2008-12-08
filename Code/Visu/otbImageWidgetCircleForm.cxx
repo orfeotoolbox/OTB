@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -59,15 +59,15 @@ ImageWidgetCircleForm
         {
           double xi = m_Center[0]+static_cast<double>(m_Radius)*vcl_sin(angle);
           double yi = m_Center[1]+static_cast<double>(m_Radius)*vcl_cos(angle);
-          
+
           double xd = (xi-originx)*openGlZoom*(1/static_cast<double>(ss_rate));
           double yd = windowh+(originy-yi)*openGlZoom*(1/static_cast<double>(ss_rate));
           glVertex2d(xd,yd);
-        }            
+        }
       glEnd();
       glDisable(GL_BLEND);
 }
- 
+
 } // end namespace otb
 
 #endif

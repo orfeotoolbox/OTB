@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,7 +32,7 @@ int otbProfileToProfileDerivativeFilter(int argc, char * argv[])
   const unsigned int profileSize = atoi(argv[4]);
   const unsigned int initialValue = atoi(argv[5]);
   const unsigned int step = atoi(argv[5]);
-       
+
 
   const unsigned int Dimension = 2;
   typedef double InputPixelType;
@@ -48,7 +48,7 @@ int otbProfileToProfileDerivativeFilter(int argc, char * argv[])
   typedef otb::MorphologicalOpeningProfileFilter<InputImageType,InputImageType,StructuringElementType>
     OpeningProfileFilterType;
   typedef otb::ProfileToProfileDerivativeFilter<InputImageType,OutputImageType> DerivativeFilterType;
-      
+
   // Reading input image
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFilename);
@@ -74,7 +74,7 @@ int otbProfileToProfileDerivativeFilter(int argc, char * argv[])
       writer =  WriterType::New();
       oss<<outputFilenamePrefix<<i<<"."<<outputFilenameSuffix;
       writer->SetInput(derivativeFilter->GetOutput()->GetNthElement(i-1));
-      writer->SetFileName(oss.str().c_str());	  
+      writer->SetFileName(oss.str().c_str());
       writer->Update();
       oss.str("");
     }

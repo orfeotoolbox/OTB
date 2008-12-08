@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -116,7 +116,7 @@ namespace otb
      * \param imageList The analysed image at each level of the pyramid.
      */
     template <class TInputImage, class TOutputImage>
-    void 
+    void
     MRToMSConverter<TInputImage,TOutputImage>
     ::SetInput(InputImageListType * imageList)
     {
@@ -127,7 +127,7 @@ namespace otb
      * \param imageList The brighter details extracted from the filtering operation.
      */
     template <class TInputImage, class TOutputImage>
-    void 
+    void
     MRToMSConverter<TInputImage,TOutputImage>
     ::SetSupFilter(InputImageListType * imageList)
     {
@@ -138,7 +138,7 @@ namespace otb
      * \param imageList The darker details extracted from the filtering operation.
      */
     template <class TInputImage, class TOutputImage>
-    void 
+    void
     MRToMSConverter<TInputImage,TOutputImage>
     ::SetInfFilter(InputImageListType * imageList)
     {
@@ -149,7 +149,7 @@ namespace otb
      * \param imageList The brighter details extracted from the filtering operation.
      */
     template <class TInputImage, class TOutputImage>
-    void 
+    void
     MRToMSConverter<TInputImage,TOutputImage>
     ::SetSupDeci(InputImageListType * imageList)
     {
@@ -160,7 +160,7 @@ namespace otb
      * \param imageList The darker details extracted from the filtering operation.
      */
     template <class TInputImage, class TOutputImage>
-    void 
+    void
     MRToMSConverter<TInputImage,TOutputImage>
     ::SetInfDeci(InputImageListType * imageList)
     {
@@ -180,7 +180,7 @@ namespace otb
     }
     /**
      * Get The SupFilter details.
-     * \return The brighter details extracted from the filtering operation 
+     * \return The brighter details extracted from the filtering operation
      */
     template <class TInputImage, class TOutputImage>
     typename MRToMSConverter<TInputImage,TOutputImage>
@@ -204,7 +204,7 @@ namespace otb
     }
     /**
      * Get The SupDeci details.
-     * \return The brighter details extracted from the resampling operation 
+     * \return The brighter details extracted from the resampling operation
      */
     template <class TInputImage, class TOutputImage>
     typename MRToMSConverter<TInputImage,TOutputImage>
@@ -240,7 +240,7 @@ namespace otb
       InputImageListPointerType  supDeci = this->GetSupDeci();
       InputImageListPointerType  infDeci = this->GetInfDeci();
       InputImageListPointerType  inputList = this->GetInput();
-      
+
       // Output images lists pointers
       OutputImageListPointerType  supFilterFullResolution = this->GetSupFilterFullResolution();
       OutputImageListPointerType  infFilterFullResolution = this->GetInfFilterFullResolution();
@@ -257,7 +257,7 @@ namespace otb
       // Full resolution size
       typename InputImageType::SizeType frsize = supFilter->Front()->GetLargestPossibleRegion().GetSize();
       otbMsgDevMacro(<<"MRToMSConverter: Full resolution size: "<<frsize);
-      
+
       // SupFilter resampling
       otbMsgDevMacro(<<"MRToMSConverter: SupFilter resampling.");
       InputImageListIteratorType it = supFilter->Begin();

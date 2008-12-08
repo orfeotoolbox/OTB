@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -46,9 +46,9 @@ public:
   typedef itk::ProcessObject             Superclass;
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
-  
+
   /** Method for creation through the object factory. */
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(TreeSource,itk::ProcessObject);
@@ -59,11 +59,11 @@ public:
   typedef TOutputTree                           OutputTreeType;
   typedef typename OutputTreeType::Pointer      OutputTreePointer;
   typedef typename OutputTreeType::ConstPointer OutputTreeConstPointer;
-  
+
   /** Get the mesh output of this process object.  */
   OutputTreeType * GetOutput(void);
   OutputTreeType * GetOutput(unsigned int idx);
-  
+
   void SetOutput(TOutputTree *output);
 
   virtual void GraftOutput(DataObject *output);
@@ -75,9 +75,9 @@ protected:
   TreeSource();
   virtual ~TreeSource() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  
+
   void GenerateInputRequestedRegion();
-  
+
 private:
   TreeSource(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

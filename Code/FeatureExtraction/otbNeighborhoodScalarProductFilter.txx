@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,7 +24,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkProgressReporter.h"
 
-#include "otbMath.h" 
+#include "otbMath.h"
 
 namespace otb
 {
@@ -51,12 +51,12 @@ NeighborhoodScalarProductFilter<TInputImage,TOutputModulus,TOutputDirection>
   typedef itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType> BoundaryFacesCalculatorType;
   typedef typename BoundaryFacesCalculatorType::FaceListType FaceListType;
   typedef typename FaceListType::iterator FaceListIteratorType;
-  
-  // Pointers on inputs/outputs 
+
+  // Pointers on inputs/outputs
   InputImageType * inputPtr = const_cast<InputImageType *>(this->GetInput());
   OutputModulusPointerType outputPtr = this->GetOutput();
   OutputDirectionPointerType outputDirPtr = this->GetOutputDirection();
-  
+
   // Neighborhood radius
   RadiusType r;
   r.Fill(1);
@@ -68,25 +68,25 @@ NeighborhoodScalarProductFilter<TInputImage,TOutputModulus,TOutputDirection>
 
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-  
+
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
   for (fit=faceList.begin(); fit != faceList.end(); ++fit)
-    { 
+    {
       NeighborhoodIteratorType neighInputIt(r, inputPtr, *fit);
       OutputIteratorType outputIt(outputPtr,*fit);
       OutputDirectionIteratorType outputDirIt(outputDirPtr,*fit);
       neighInputIt.GoToBegin();
       outputIt.GoToBegin();
       outputDirIt.GoToBegin();
-    
+
       while ((!neighInputIt.IsAtEnd()) && (!outputIt.IsAtEnd()) && (!outputDirIt.IsAtEnd()) )
 	{
 	  // local variable intialisation
 	  int neighborhoodNumberMax = 0;
 	  double scalarMaxValue= 0.0;
 	  int flagPosNegDirection = 0;
-	 
+
 	  // walk through each case
 	  for (int neighborhoodNumber = 0;  neighborhoodNumber<4; ++neighborhoodNumber)
 	    {
@@ -117,42 +117,42 @@ NeighborhoodScalarProductFilter<TInputImage,TOutputModulus,TOutputDirection>
 	      offset1[1]=1;
 	      offset2[0]=0;
 	      offset2[1]=-1;
-	      break;                
-	    }  
+	      break;
+	    }
 	    // Get the gradient values
 	    InputPixelType pixel1 = neighInputIt.GetPixel(offset1);
 	    InputPixelType pixel2 = neighInputIt.GetPixel(offset2);
-	    
+
 	    // Compute the scalar product
 	    scalarCurrentValue = -(pixel1[0]*pixel2[0]+pixel1[1]*pixel2[1]);
-	    
+
 	    // If the value is upper than the current max value
 	    if (scalarCurrentValue > scalarMaxValue)
 	      {
 		// keep this configuration
 		scalarMaxValue = scalarCurrentValue;
 		neighborhoodNumberMax = neighborhoodNumber;
-		
+
 		// Also keep the direction
-		if (pixel1[0] <0) 
+		if (pixel1[0] <0)
 		  {
 		    flagPosNegDirection = 1;
-		  } 
-		else 
+		  }
+		else
 		  {
 		  flagPosNegDirection = 0;
 		  }
-		
+
 	      }
 	    }
-	  // Compute the direction 
+	  // Compute the direction
     double angle = (1+neighborhoodNumberMax) * M_PI_4;
-	  if (flagPosNegDirection) 
+	  if (flagPosNegDirection)
 	    {
 	      angle -= M_PI;
 	    }
 
-	  // Set the ouptut values	  
+	  // Set the ouptut values
 	  outputIt.Set(scalarMaxValue);
 	  outputDirIt.Set(angle);
 	  ++neighInputIt;

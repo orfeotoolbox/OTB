@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,17 +34,17 @@ int otbRCC8GraphFileReader(int argc, char* argv[])
   typedef otb::RCC8GraphFileReader<RCC8GraphType> RCC8GraphFileReaderType;
   typedef otb::RCC8VertexIterator<RCC8GraphType> VertexIteratorType;
   typedef otb::RCC8EdgeIterator<RCC8GraphType> EdgeIteratorType;
-    
+
   // Instantiation
   RCC8GraphFileReaderType::Pointer rcc8GraphReader = RCC8GraphFileReaderType::New();
   rcc8GraphReader->SetFileName(inputFilename);
 
   rcc8GraphReader->Update();
-    
+
   // Getting the output graph
   RCC8GraphType::Pointer graph = rcc8GraphReader->GetOutput();
 
-    
+
 
   // Checking vertices
   VertexIteratorType vIt(graph);
@@ -54,7 +54,7 @@ int otbRCC8GraphFileReader(int argc, char* argv[])
 			       "graph->GetNumberOfVertices()!=4");
   otbControlConditionTestMacro(graph->GetNumberOfEdges()!=6,
 			       "graph->GetNumberOfEdges()!=6");
-    
+
   // Checking edges
   EdgeIteratorType eIt(graph);
   count=0;
@@ -69,7 +69,7 @@ int otbRCC8GraphFileReader(int argc, char* argv[])
 				       "eIt.GetSourceIndex()!=0");
 	  otbControlConditionTestMacro(eIt.GetTargetIndex()!=1,
 				       "eIt.GetTargetIndex()!=1");
-	  break;	    
+	  break;
 	case 1:
 	  otbControlConditionTestMacro(eIt.GetValue()!=otb::OTB_RCC8_PO,
 				       "eIt.GetValue()!=otb::OTB_RCC8_PO");
@@ -115,7 +115,7 @@ int otbRCC8GraphFileReader(int argc, char* argv[])
 	  break;
 	}
     }
-  
-  
+
+
   return EXIT_SUCCESS;
 }

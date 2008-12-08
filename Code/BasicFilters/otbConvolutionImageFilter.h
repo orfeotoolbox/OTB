@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,25 +31,25 @@ namespace otb
  *
  * Computes an image which is the convolution of the input image
  * with a filter.
- * 
- * The radius of the input filter is provided by the \code SetInput() \endcode 
- * method and the filters coefficients are given by an itk::Array passed to the 
+ *
+ * The radius of the input filter is provided by the \code SetInput() \endcode
+ * method and the filters coefficients are given by an itk::Array passed to the
  * \code SetFilter() \endcode method.
- * 
- * By default, the input filter is not normalized but it can be using the 
+ *
+ * By default, the input filter is not normalized but it can be using the
  * NormalizeFilterOn() method.
  *
- * This filter allows the user to choose the boundary condtions in the template parameters. 
+ * This filter allows the user to choose the boundary condtions in the template parameters.
  Default boundary conditions are zero flux Neumann boundary conditions.
  *
  * An optimized version of this filter using FFTW is available in the Orfeo ToolBox and
- * will significantly improves performances especially for large kernels 
+ * will significantly improves performances especially for large kernels
  * (see OverlapSaveConvolutionImageFilter).
  *
  * \sa Image
  * \sa Neighborhood
  * \sa NeighborhoodOperator
- * \sa NeighborhoodIterator 
+ * \sa NeighborhoodIterator
  * \sa ImageBoundaryCondition
  * \sa ZeroFluxNeumannBoundaryCondition
  * \sa OverlapSaveConvolutionImageFilter
@@ -84,7 +84,7 @@ public:
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ConvolutionImageFilter, ImageToImageFilter);
-  
+
   /** Image typedef support. */
   typedef typename InputImageType::PixelType InputPixelType;
   typedef typename OutputImageType::PixelType OutputPixelType;
@@ -94,13 +94,13 @@ public:
   typedef typename InputImageType::SizeType InputSizeType;
   typedef typename itk::Array<InputRealType> ArrayType;
   typedef TBoundaryCondition BoundaryConditionType;
-  
+
   /** Set the radius of the neighborhood of the filter */
-  virtual void SetRadius (const InputSizeType rad) 
-  { 
-      itkDebugMacro("setting radius to " << rad); 
-          if (this->m_Radius != rad) 
-          { 
+  virtual void SetRadius (const InputSizeType rad)
+  {
+      itkDebugMacro("setting radius to " << rad);
+          if (this->m_Radius != rad)
+          {
               this->m_Radius = rad;
               unsigned int arraySize=1;
               for (unsigned int i=0; i<m_Radius.GetSizeDimension(); i++)
@@ -109,13 +109,13 @@ public:
               }
               this->m_Filter.SetSize(arraySize);
               this->m_Filter.Fill(1);
-              this->Modified(); 
-          } 
+              this->Modified();
+          }
   }
 
   /** Get the radius of the neighborhood of the filter*/
   itkGetConstReferenceMacro(Radius, InputSizeType);
-  
+
   /** Set the input filter */
   void SetFilter( ArrayType filter )
     {
@@ -131,14 +131,14 @@ public:
     }
   itkGetConstReferenceMacro(Filter, ArrayType);
 
-  
+
   /**
    * Set/Get methods for the normalization of the filter
   */
   itkSetMacro(NormalizeFilter, bool);
   itkGetMacro(NormalizeFilter, bool);
   itkBooleanMacro(NormalizeFilter);
-  
+
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
   itkConceptMacro(InputHasNumericTraitsCheck,
@@ -183,7 +183,7 @@ private:
   /** Flag for filter coefficients normalization */
   bool m_NormalizeFilter;
 };
-  
+
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,10 +30,10 @@ namespace otb
  *  \brief This class acts like a StreamingImageFileWriter, but without actually
  *  writing data to the disk.
  *
- *  This allows to stream the whole image through persistent filters such as 
+ *  This allows to stream the whole image through persistent filters such as
  *  PersitentStatisticsImageFilter in order to get the global statistics of an image.
- * 
- *  This filter is not intended to be used with classic ImageToImageFilter, though it 
+ *
+ *  This filter is not intended to be used with classic ImageToImageFilter, though it
  *  will not generate any error.
  *
  *  This filter proposes the same streaming setup methods than the StreamingImageFileWriter.
@@ -57,15 +57,15 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(StreamingImageVirtualWriter,itk::ImageToImageFilter);
 
   /** Some typedefs for the input and output. */
   typedef TInputImage InputImageType;
   typedef typename InputImageType::Pointer InputImagePointer;
-  typedef typename InputImageType::RegionType InputImageRegionType; 
-  typedef typename InputImageType::PixelType InputImagePixelType; 
+  typedef typename InputImageType::RegionType InputImageRegionType;
+  typedef typename InputImageType::PixelType InputImagePixelType;
 
   /** Streaming traits helper typedef */
   typedef StreamingTraits<InputImageType> StreamingTraitsType;
@@ -82,19 +82,19 @@ public:
   /** SmartPointer to a region splitting object */
   typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(InputImageDimension)>  SplitterType;
   typedef typename SplitterType::Pointer RegionSplitterPointer;
-  
+
   /**  Set buffer memory size (in bytes) use to calculate the number of stream divisions */
   void SetBufferMemorySize(unsigned long );
- 
+
   /**  Set the buffer number of lines use to calculate the number of stream divisions */
   void SetBufferNumberOfLinesDivisions(unsigned long);
- 
-  /**  The number of stream divisions is calculate by using 
-   * OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING and 
+
+  /**  The number of stream divisions is calculate by using
+   * OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING and
    * OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING cmake variables.
    */
   void SetAutomaticNumberOfStreamDivisions(void);
-	
+
   /** Set the tiling automatic mode for streaming division */
   void SetTilingStreamDivisions(void);
   /** Choose number of divisions in tiling streaming division */
@@ -106,7 +106,7 @@ public:
   /** Set the number of pieces to divide the input.  The upstream pipeline
    * will be executed this many times. */
   void SetNumberOfStreamDivisions(unsigned long);
-  
+
   /** Get the number of pieces to divide the input. The upstream pipeline
    * will be executed this many times. */
   unsigned long GetNumberOfStreamDivisions(void);
@@ -117,11 +117,11 @@ public:
   /** Get the helper class for dividing the input into chunks. */
   itkGetObjectMacro(RegionSplitter, SplitterType);
 
-  
+
   /** Type use to define number of divisions */
   typedef StreamingMode CalculationDivisionEnumType;
 
- 
+
   virtual void GenerateInputRequestedRegion(void);
 
 protected:
@@ -134,17 +134,17 @@ protected:
 private:
   StreamingImageVirtualWriter(const StreamingImageVirtualWriter&); //purposely not implemented
   void operator=(const StreamingImageVirtualWriter&); //purposely not implemented
-  
+
   /** This method calculate the number of stream divisions, by using the CalculationDivision type */
   unsigned long CalculateNumberOfStreamDivisions(void);
-  
-  /** Use to define the method used to calculate number of divisions */ 
+
+  /** Use to define the method used to calculate number of divisions */
   unsigned long m_BufferMemorySize;
   unsigned long m_BufferNumberOfLinesDivisions;
   unsigned long m_NumberOfStreamDivisions;
-  
+
   RegionSplitterPointer m_RegionSplitter;
- 
+
   /** Use to determine method of calculation number of divisions */
   CalculationDivisionEnumType m_CalculationDivision;
 };

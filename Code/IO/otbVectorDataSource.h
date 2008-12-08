@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,11 +32,11 @@ namespace otb
 /** \class VectorDataSource
  * \brief Famille de filtres ayant un object de type shapeFile en sortie
  *
- * 
+ *
  * \ingroup IO
  *
  */
- 
+
 template <class TOutputVectorData>
 class ITK_EXPORT VectorDataSource : public itk::ProcessObject
 {
@@ -53,9 +53,9 @@ public :
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(VectorDataSource, itk::ProcessObject);
-	
+
   typedef TOutputVectorData     OutputVectorDataType;
-	
+
 
   /** Overriding GetOutput() method */
   virtual OutputVectorDataType* GetOutput(void);
@@ -67,7 +67,7 @@ protected:
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-	
+
 private:
   VectorDataSource(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -22,14 +22,14 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {svm_model.svn}
-//    OUTPUTS: 
+//    OUTPUTS:
 //  Software Guide : EndCommandLineArgs
 
 
 #include "itkExceptionObject.h"
 #include "itkPointSet.h"
 #include <iostream>
-#include <cstdlib> 
+#include <cstdlib>
 
 
 
@@ -45,7 +45,7 @@
 //
 // We start by including the needed header files.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
 //  Software Guide : BeginCodeSnippet
@@ -59,7 +59,7 @@
 int main( int argc, char* argv[] )
 {
 // Software Guide : BeginLatex
-// 
+//
 // In the framework of supervised learning and classification, we will
 // always use feature vectors for the characterization of the
 // classes. On the other hand, the class labels are scalar
@@ -67,16 +67,16 @@ int main( int argc, char* argv[] )
 // \code{PixelType}, which will be used to define the feature
 // \code{VectorType}. We also declare the type for the labels.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 
   typedef float                           InputPixelType;
-  
+
   typedef std::vector<InputPixelType>     InputVectorType;
   typedef int                             LabelPixelType;
 
-// Software Guide : EndCodeSnippet  
+// Software Guide : EndCodeSnippet
   const   unsigned int        	                    Dimension = 2;
 
 // Software Guide : BeginLatex
@@ -85,13 +85,13 @@ int main( int argc, char* argv[] )
 // features and the labels.
 //
 // Software Guide : EndLatex
-  
-// Software Guide : BeginCodeSnippet    
+
+// Software Guide : BeginCodeSnippet
   typedef itk::PointSet< InputVectorType,  Dimension >    MeasurePointSetType;
 
   typedef itk::PointSet< LabelPixelType,  Dimension >     LabelPointSetType;
 
-// Software Guide : EndCodeSnippet    
+// Software Guide : EndCodeSnippet
 
 
 // Software Guide : BeginLatex
@@ -103,7 +103,7 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet  
+// Software Guide : BeginCodeSnippet
 
   typedef MeasurePointSetType::PointType    MeasurePointType;
   typedef LabelPointSetType::PointType    LabelPointType;
@@ -126,21 +126,21 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 
-  
+
   srand(0);
 
   unsigned int pointId;
-// Software Guide : BeginCodeSnippet        
+// Software Guide : BeginCodeSnippet
   int lowest = 0;
   int range = 1000;
 
   for(pointId = 0; pointId<100; pointId++)
     {
-    
+
     MeasurePointType tP;
 
     int x_coord = lowest+static_cast<int>(range*(rand()/(RAND_MAX + 1.0)));
-    int y_coord = lowest+static_cast<int>(range*(rand()/(RAND_MAX + 1.0))); 
+    int y_coord = lowest+static_cast<int>(range*(rand()/(RAND_MAX + 1.0)));
 
     std::cout << "coords : " << x_coord << " " << y_coord << std::endl;
     tP[0] = x_coord;
@@ -154,10 +154,10 @@ int main( int argc, char* argv[] )
 // useful for SVM convergence.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
 
-    InputVectorType measure; 
+// Software Guide : BeginCodeSnippet
+
+    InputVectorType measure;
     measure.push_back(static_cast<InputPixelType>((x_coord*1.0-lowest)/range));
     measure.push_back(static_cast<InputPixelType>((y_coord*1.0-lowest)/range));
 
@@ -169,12 +169,12 @@ int main( int argc, char* argv[] )
 // And we insert the points in the points container.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
+
+// Software Guide : BeginCodeSnippet
 
 
     tCont->InsertElement( pointId , tP );
-    tPSet->SetPointData( pointId, measure );   
+    tPSet->SetPointData( pointId, measure );
 
     }
 
@@ -185,8 +185,8 @@ int main( int argc, char* argv[] )
 // After the loop, we set the points container to the point set.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet        
+
+// Software Guide : BeginCodeSnippet
 
   tPSet->SetPoints( tCont );
 
@@ -201,8 +201,8 @@ int main( int argc, char* argv[] )
 // storing the measures.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
+
+// Software Guide : BeginCodeSnippet
 
 
   typedef itk::Statistics::PointSetToListAdaptor< MeasurePointSetType >
@@ -217,9 +217,9 @@ int main( int argc, char* argv[] )
 // sample adaptor.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
-    
+
+// Software Guide : BeginCodeSnippet
+
     sample->SetPointSet( tPSet );
 
 // Software Guide : EndCodeSnippet
@@ -231,9 +231,9 @@ int main( int argc, char* argv[] )
 // for the measures and the type of pixel used for the labels.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
-    
+
+// Software Guide : BeginCodeSnippet
+
 
     typedef otb::SVMModel< SampleType::MeasurementVectorType::ValueType,
                                                  LabelPixelType > ModelType;
@@ -249,9 +249,9 @@ int main( int argc, char* argv[] )
 // estimation and storage to a file).
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
-    
+
+// Software Guide : BeginCodeSnippet
+
     model->LoadModel(argv[1]);
 
 // Software Guide : EndCodeSnippet
@@ -263,9 +263,9 @@ int main( int argc, char* argv[] )
 // classified) and the label type (the type of the output of the classifier).
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
-    
+
+// Software Guide : BeginCodeSnippet
+
 
 
     typedef otb::SVMClassifier< SampleType, LabelPixelType > ClassifierType ;
@@ -281,9 +281,9 @@ int main( int argc, char* argv[] )
 // calling the \code{Update} method.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
-    
+
+// Software Guide : BeginCodeSnippet
+
     int numberOfClasses = model->GetNumberOfClasses();
     classifier->SetNumberOfClasses(numberOfClasses) ;
     classifier->SetModel( model );
@@ -299,11 +299,11 @@ int main( int argc, char* argv[] )
 // list. This list supports the classical STL iterators.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
-    
 
-    
+// Software Guide : BeginCodeSnippet
+
+
+
     ClassifierType::OutputType* membershipSample =
       classifier->GetOutput() ;
 
@@ -320,9 +320,9 @@ int main( int argc, char* argv[] )
 // classification error.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
-    
+
+// Software Guide : BeginCodeSnippet
+
 
     double error = 0.0;
     pointId = 0;
@@ -336,9 +336,9 @@ int main( int argc, char* argv[] )
 // We get the label for each point.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
-      
+
+// Software Guide : BeginCodeSnippet
+
       ClassifierType::ClassLabelType label = m_iter.GetClassLabel();
 
 // Software Guide : EndCodeSnippet
@@ -348,11 +348,11 @@ int main( int argc, char* argv[] )
 // And we compare it to the corresponding one of the test set.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
-      
-      InputVectorType measure; 
-      
+
+// Software Guide : BeginCodeSnippet
+
+      InputVectorType measure;
+
       tPSet->GetPointData(pointId, &measure);
 
       ClassifierType::ClassLabelType expectedLabel;
@@ -362,20 +362,20 @@ int main( int argc, char* argv[] )
 	expectedLabel = 1;
 
       double dist = fabs(measure[0] - measure[1]);
-      
+
       if(label != expectedLabel )
 	error++;
 
       std::cout << int(label) << "/" << int(expectedLabel) << " --- " << dist << std::endl;
-      
-      
+
+
       ++pointId;
       ++m_iter ;
       }
 
     std::cout << "Error = " << error/pointId << " % " << std::endl;
 
-// Software Guide : EndCodeSnippet    
+// Software Guide : EndCodeSnippet
 
 
   return EXIT_SUCCESS;

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,10 +34,10 @@
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the \doxygen{otb}{FlusserMomentImageFunction}.
-// 
-// The first step required to use this filter is to include its header file. 
 //
-// Software Guide : EndLatex 
+// The first step required to use this filter is to include its header file.
+//
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "otbFlusserImageFunction.h"
@@ -48,15 +48,15 @@ int main(int argc, char ** argv )
     if( argc != 3 )
     {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
-    std::cerr << " moment_number" << std::endl;  
+    std::cerr << " moment_number" << std::endl;
     return EXIT_FAILURE;
     }
 
     const char * inputFilename  = argv[1];
-        
+
     unsigned int mMomentNumber((unsigned char)::atoi(argv[2]));
 
-	        
+
     typedef unsigned char     InputPixelType;
     const   unsigned int      Dimension = 2;
 
@@ -74,15 +74,15 @@ int main(int argc, char ** argv )
     //  input image type and the output (real) type value, so we start by
     //  defining:
     //
-    //  Software Guide : EndLatex 
-    
+    //  Software Guide : EndLatex
+
     // Software Guide : BeginCodeSnippet
     typedef float                             MomentType;
     typedef otb::FlusserImageFunction<InputImageType,
                                             MomentType>   FlusserType;
 
     FlusserType::Pointer fmFunction =FlusserType::New();
-    
+
     // Software Guide : EndCodeSnippet
 
 
@@ -111,7 +111,7 @@ int main(int argc, char ** argv )
 
     region.SetIndex( start );
     region.SetSize( size );
-	
+
     image->SetRegions(region);
     image->Update();
 
@@ -121,8 +121,8 @@ int main(int argc, char ** argv )
 
     // Software Guide : EndCodeSnippet
 
-    
-    
+
+
     //  Software Guide : BeginLatex
     //
     // Next, we plug the input image into the complex moment function
@@ -139,7 +139,7 @@ int main(int argc, char ** argv )
     // Software Guide : EndCodeSnippet
 
 
-    
+
     //  Software Guide : BeginLatex
     // In order to get the value of the moment, we call the
     // \code{EvaluateAtIndex} method.
@@ -164,7 +164,7 @@ int main(int argc, char ** argv )
     //  \end{itemize}
     //
     //  Software Guide : EndLatex
-    
+
 
 
   return EXIT_SUCCESS;

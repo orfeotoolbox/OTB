@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,6 +24,6 @@ int otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew(int argc,
   typedef otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms  AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsType;
   // Instantiating object
   AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsType::Pointer object = AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsType::New();
-  
+
   return EXIT_SUCCESS;
 }

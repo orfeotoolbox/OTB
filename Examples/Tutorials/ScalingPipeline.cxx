@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,15 +24,15 @@
 
 //  Software Guide : BeginLatex
 //
-//  This example illustrates the use of the 
+//  This example illustrates the use of the
 // \doxygen{itk}{RescaleIntensityImageFilter} to convert
 // the result for proper display.
 //
-// We include the required header including the header 
-// for the \doxygen{itk}{CannyEdgeImageFilter} and the 
+// We include the required header including the header
+// for the \doxygen{itk}{CannyEdgeImageFilter} and the
 // \doxygen{itk}{RescaleIntensityImageFilter}.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "otbImage.h"
@@ -44,14 +44,14 @@
 int main( int argc, char * argv[] )
 {
 // Software Guide : EndCodeSnippet
-  
+
   //  Software Guide : BeginLatex
   //
-  //  We need to declare two different image types, one for the internal 
+  //  We need to declare two different image types, one for the internal
   // processing and one to output the results:
   //
-  //  Software Guide : EndLatex 
-  
+  //  Software Guide : EndLatex
+
   // Software Guide : BeginCodeSnippet
   typedef double PixelType;
   typedef otb::Image<PixelType, 2> ImageType;
@@ -59,7 +59,7 @@ int main( int argc, char * argv[] )
   typedef unsigned char OutputPixelType;
   typedef otb::Image<OutputPixelType, 2> OutputImageType;
   // Software Guide : EndCodeSnippet
-  
+
   //  Software Guide : BeginLatex
   //
   //  We declare the reader with the image template using the pixel type
@@ -70,9 +70,9 @@ int main( int argc, char * argv[] )
   //  The writer is templated with the unsigned char image to be able to save
   // the result on one byte images (like png for example).
   //
-  //  Software Guide : EndLatex 
-  
-  
+  //  Software Guide : EndLatex
+
+
   // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader<ImageType> ReaderType;
   ReaderType::Pointer reader=ReaderType::New();
@@ -83,70 +83,70 @@ int main( int argc, char * argv[] )
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
   // Software Guide : EndCodeSnippet
-  
+
   //  Software Guide : BeginLatex
   //
-  // Now we are declaring the edge detection filter which is going to work with 
+  // Now we are declaring the edge detection filter which is going to work with
   // double input and output.
   //
-  //  Software Guide : EndLatex 
-  
+  //  Software Guide : EndLatex
+
    // Software Guide : BeginCodeSnippet
   typedef itk::CannyEdgeDetectionImageFilter
       <ImageType,ImageType> FilterType;
   FilterType::Pointer filter = FilterType::New();
   // Software Guide : EndCodeSnippet
-  
+
   //  Software Guide : BeginLatex
   //
-  // Here comes the interesting part: we declare the 
+  // Here comes the interesting part: we declare the
   // \doxygen{itk}{RescaleIntensityImageFilter}. The input
-  // image type is the output type of the edge detection 
-  // filter. The output type is the same as the input type 
-  // of the writer. 
+  // image type is the output type of the edge detection
+  // filter. The output type is the same as the input type
+  // of the writer.
   //
   // Desired minimum and maximum values for the output are
-  // specified by the methods \code{SetOutputMinimum()} and 
+  // specified by the methods \code{SetOutputMinimum()} and
   // \code{SetOutputMaximum()}.
   //
-  // This filter will actually rescale all the pixels of 
+  // This filter will actually rescale all the pixels of
   // the image but also cast the type of these pixels.
   //
-  //  Software Guide : EndLatex 
-  
+  //  Software Guide : EndLatex
+
   // Software Guide : BeginCodeSnippet
   typedef itk::RescaleIntensityImageFilter
       <ImageType,OutputImageType> RescalerType;
   RescalerType::Pointer rescaler = RescalerType::New();
-  
+
   rescaler->SetOutputMinimum(0);
   rescaler->SetOutputMaximum(255);
    // Software Guide : EndCodeSnippet
-  
-  
+
+
   //  Software Guide : BeginLatex
   //
   // Let's plug the pipeline:
   //
-  //  Software Guide : EndLatex 
-  
+  //  Software Guide : EndLatex
+
   // Software Guide : BeginCodeSnippet
   filter->SetInput(reader->GetOutput());
   rescaler->SetInput(filter->GetOutput());
   writer->SetInput(rescaler->GetOutput());
   // Software Guide : EndCodeSnippet
-  
+
   //  Software Guide : BeginLatex
   //
   // And finally, we trigger the pipeline execution calling the Update()
   // method on the writer
   //
-  //  Software Guide : EndLatex 
-  
+  //  Software Guide : EndLatex
+
   // Software Guide : BeginCodeSnippet
   writer->Update();
 
-  return EXIT_SUCCESS; 
+  return EXIT_SUCCESS;
 }
 // Software Guide : EndCodeSnippet
 

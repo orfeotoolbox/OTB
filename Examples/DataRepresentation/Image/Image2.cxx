@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,7 +29,7 @@
 //  The first thing required to read an image from a file is to include
 //  the header file of the \doxygen{otb}{ImageFileReader} class.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "otbImageFileReader.h"
@@ -42,7 +42,7 @@ int main( int , char * argv[])
   // Then, the image type should be defined by specifying the
   // type used to represent pixels and the dimensions of the image.
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef unsigned char          PixelType;
@@ -68,7 +68,7 @@ int main( int , char * argv[])
   // \index{otb::ImageFileReader!Instantiation}
   // \index{otb::Image!read}
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader< ImageType >  ReaderType;
@@ -80,13 +80,13 @@ int main( int , char * argv[])
   // The reader type can now be used to create one reader object.  A
   // \doxygen{itk}{SmartPointer} (defined by the \code{::Pointer}
   // notation) is used to receive the reference to the newly created
-  // reader.  The \code{New()} 
+  // reader.  The \code{New()}
   // method is invoked to create an instance of the image reader.
   //
   // \index{otb::ImageFileReader!New()}
   // \index{otb::ImageFileReader!Pointer}
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   ReaderType::Pointer reader = ReaderType::New();
@@ -105,7 +105,7 @@ int main( int , char * argv[])
   //
   // \index{otb::ImageFileReader!SetFileName()}
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   const char * filename = argv[1];
@@ -128,7 +128,7 @@ int main( int , char * argv[])
   //
   // \index{otb::ImageFileReader!Update()}
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   reader->Update();
@@ -145,7 +145,7 @@ int main( int , char * argv[])
   //
   // \index{otb::ImageFileReader!GetOutput()}
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   ImageType::Pointer image = reader->GetOutput();
@@ -154,10 +154,10 @@ int main( int , char * argv[])
   // Software Guide : BeginLatex
   //
   // Any attempt to access image data before the reader executes will yield
-  // an image with no pixel data. It is likely that a program crash will 
+  // an image with no pixel data. It is likely that a program crash will
   // result since the image will not have been properly initialized.
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,15 +23,15 @@
 
 namespace otb
 {
-  
+
 /** \class ObjectListSource
    * \brief Base class for all process objects that output ObjectList data.
   *
   *
    * ObjectListSource is the base class for all process objects that output ObjectList data.
-   * Specifically, this class defines the GetOutput() method that returns a pointer to the 
-   * output ObjectList. 
-   * 
+   * Specifically, this class defines the GetOutput() method that returns a pointer to the
+   * output ObjectList.
+   *
    * Be aware that this class is templated over the list type, not the object type. It will
    * be typically something like otb::ObjectList<ObjectType>. This is to enable the use of
    * class derived from ObjectList or other implementations.
@@ -39,7 +39,7 @@ namespace otb
    * \ingroup ObjectListFilter
  */
   template <class TOutputList >
-      class ITK_EXPORT ObjectListSource : public itk::ProcessObject 
+      class ITK_EXPORT ObjectListSource : public itk::ProcessObject
       {
         public:
           /** Standard class typedefs. */
@@ -50,16 +50,16 @@ namespace otb
 
           /** Method for creation through the object factory. */
           itkNewMacro(Self);
-  
+
           /** Run-time type information (and related methods). */
           itkTypeMacro(ObjectListSource, ProcessObject);
 
           /** Some typedefs. */
           typedef TOutputList OutputListType;
           typedef typename TOutputList::Pointer OutputListPointer;
-  
+
           typedef itk::DataObject::Pointer DataObjectPointer;
-          
+
   /** Make a DataObject of the correct type to used as the specified
            * output.  Every ProcessObject subclass must be able to create a
            * DataObject that can be used as a specified output. This method
@@ -74,7 +74,7 @@ namespace otb
            * multiple outputs of different types, then that class must provide
    * an implementation of MakeOutput(). */
           virtual DataObjectPointer MakeOutput(unsigned int idx);
-          
+
             /** Graft the specified DataObject onto this ProcessObject's output.
            * This method grabs a handle to the specified DataObject's path
            * data to use as its output's own path data. It also copies the
@@ -110,7 +110,7 @@ namespace otb
            * filter's pipeline mechanism must be consistent with what the
              * mini-pipeline will do). */
           void GraftOutput(itk::DataObject *graft);
-          
+
             /** Graft the specified data object onto this ProcessObject's idx'th
            * output. This is the similar to GraftOutput method except is
            * allows you specify which output is affected. The specified index
@@ -118,7 +118,7 @@ namespace otb
            * ProcessObject::GetNumberOfOutputs()). See the GraftOutput for
              * general usage information. */
           void GraftNthOutput(unsigned int idx, itk::DataObject *graft);
-          
+
             /** Get the output data of this process object.  The output of this
            * function is not valid until an appropriate Update() method has
            * been called, either explicitly or implicitly.  Both the filter
@@ -135,7 +135,7 @@ namespace otb
            * \endcode
            *
            * In this situation, \a someFilter and \a anotherFilter are said
-           * to constitute a \b pipeline.  
+           * to constitute a \b pipeline.
            *
            * \code
            *   image = someFilter->GetOutput();
@@ -150,7 +150,7 @@ namespace otb
            * either order.)
            *
            * Note that Update() is not called automatically except within a
-           * pipeline as in the first example.  When \b streaming (using a 
+           * pipeline as in the first example.  When \b streaming (using a
            * StreamingImageFilter) is activated, it may be more efficient to
            * use a pipeline than to call Update() once for each filter in
            * turn.
@@ -162,7 +162,7 @@ namespace otb
           OutputListType * GetOutput(void);
           OutputListType * GetOutput(unsigned int idx);
 
-  
+
         protected:
           /** Constructor */
           ObjectListSource();
@@ -171,9 +171,9 @@ namespace otb
           /**PrintSelf method */
           virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-          /** Ensure that the list are cleared before processing */ 
+          /** Ensure that the list are cleared before processing */
           virtual void  AllocateOutputs();
-          
+
   /** ObjectListSource can be implemented as a multithreaded filter.
            * Therefore, this implementation provides a ThreadedGenerateData() routine
            * which is called for each processing thread. The output image data is

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -19,7 +19,7 @@
 #pragma warning ( disable : 4786 )
 #endif
 //  Software Guide : BeginCommandLineArgs
-//     INPUTS: {ROI_QB_MUL_2.tif} 
+//     INPUTS: {ROI_QB_MUL_2.tif}
 //     OUTPUTS: {ImageRegionIteratorWithIndexOutput.png}
 //  Software Guide : EndCommandLineArgs
 
@@ -78,13 +78,13 @@ int main( int argc, char *argv[] )
 
 // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
-  
+
   typedef itk::RGBPixel< unsigned char > RGBPixelType;
   typedef otb::Image< RGBPixelType, Dimension >  ImageType;
-  
+
   typedef itk::ImageRegionIteratorWithIndex< ImageType > IteratorType;
 // Software Guide : EndCodeSnippet
-  
+
   typedef otb::ImageFileReader< ImageType > ReaderType;
   typedef otb::ImageFileWriter< ImageType > WriterType;
 
@@ -98,8 +98,8 @@ int main( int argc, char *argv[] )
     }
   catch ( itk::ExceptionObject &err)
     {
-    std::cout << "ExceptionObject caught !" << std::endl; 
-    std::cout << err << std::endl; 
+    std::cout << "ExceptionObject caught !" << std::endl;
+    std::cout << err << std::endl;
     return -1;
     }
 
@@ -161,9 +161,9 @@ int main( int argc, char *argv[] )
     }
   catch ( itk::ExceptionObject &err)
     {
-    std::cout << "ExceptionObject caught !" << std::endl; 
-    std::cout << err << std::endl; 
-    return -1;   
+    std::cout << "ExceptionObject caught !" << std::endl;
+    std::cout << err << std::endl;
+    return -1;
 }
 
 // Software Guide : BeginLatex
@@ -185,6 +185,6 @@ int main( int argc, char *argv[] )
 // \index{itk::ImageRegionIteratorWithIndex!example of using|)}
 //
 // Software Guide : EndLatex
-  
+
   return EXIT_SUCCESS;
 }

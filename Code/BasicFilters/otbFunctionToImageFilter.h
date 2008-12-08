@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,7 +32,7 @@
 
 namespace otb
 {
-  
+
 /** \class FunctionToImageFilter
   * \brief Evaluates a ImageFunction onto a source image
  *
@@ -43,17 +43,17 @@ namespace otb
  * Like its parent ImageToImageFilter, this class functions in the filtering
  * pipeline and produces a unique output image.
  *
- * The function hs to inherite from itkImageFunction 
+ * The function hs to inherite from itkImageFunction
  *
  * \sa SpatialFunctionImageEvaluatorFilter
  * \sa SpatialFunctionImageFilter
- * \sa ImageFunction 
+ * \sa ImageFunction
  * \ingroup ImageFilters
  */
 
 template <class TInputImage, class TOutputImage,class TFunction    >
 class ITK_EXPORT FunctionToImageFilter :
-    public itk::InPlaceImageFilter<TInputImage,TOutputImage> 
+    public itk::InPlaceImageFilter<TInputImage,TOutputImage>
 {
 public:
   /** Standard class typedefs. */
@@ -72,8 +72,8 @@ public:
   /** Image size typedef. */
   typedef TInputImage                           InputImageType;
   typedef typename InputImageType::ConstPointer InputImagePointer;
-  typedef typename InputImageType::RegionType   InputImageRegionType; 
-  typedef typename InputImageType::PixelType    InputImagePixelType; 
+  typedef typename InputImageType::RegionType   InputImageRegionType;
+  typedef typename InputImageType::PixelType    InputImagePixelType;
   typedef TOutputImage                          OutputImageType;
   typedef typename OutputImageType::Pointer     OutputImagePointer;
   typedef typename OutputImageType::RegionType  OutputImageRegionType;
@@ -82,7 +82,7 @@ public:
   typedef TFunction                             FunctionType;
   typedef typename FunctionType::OutputType     FunctionValueType;
   typedef typename FunctionType::InputType      FunctionPositionType;
- 
+
   /** Connect one of the operands for pixel-wise addition. */
   //void SetInput( const TInputImage *image);
 

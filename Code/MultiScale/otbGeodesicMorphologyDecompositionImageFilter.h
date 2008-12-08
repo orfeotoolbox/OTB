@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -38,11 +38,11 @@ namespace otb
  * NO. 2, February 2001, p. 309-320.
  * \par
  *
- *  Given \f$\gamma^{\star}_{N}\f$ the geodesic opening by reconstruction morphological operator 
- *  and \f$\varphi^{\star}_{N}\f$ the geodesic closing  by reconstruction morphological operator 
+ *  Given \f$\gamma^{\star}_{N}\f$ the geodesic opening by reconstruction morphological operator
+ *  and \f$\varphi^{\star}_{N}\f$ the geodesic closing  by reconstruction morphological operator
  *  for a structuring element of size \f$N\f$, one can define the two following membership functions for
  *  the input image \f$f\f$:
- * 
+ *
  *  \f[
  *  \stackrel{\smile}{\mu} = f-\gamma^{\star}_{N}(f)
  *  \f]
@@ -51,12 +51,12 @@ namespace otb
  *  \f]
  *
  * Where \f$\stackrel{\smile}{\mu}\f$ denotes the likelihood of the current pixel to belong to a convex structure
- * of the input image \f$f\f$ (i.e. brighter than the surrounding background) with respect to the size of the 
+ * of the input image \f$f\f$ (i.e. brighter than the surrounding background) with respect to the size of the
  * structuring element \f$N\f$, and \f$\stackrel{\frown}{\mu}\f$ denotes the likelihood of the current pixel to
  * belong to a concave structure.
  *
  * This two membership functions can be used to define a simplification operator \f$\psi_{N}\f$ called leveling,
- * which removes from the input image \f$f\f$ the structures located by \f$\stackrel{\smile}{\mu}\f$ and 
+ * which removes from the input image \f$f\f$ the structures located by \f$\stackrel{\smile}{\mu}\f$ and
  * \f$\stackrel{\frown}{\mu}\f$:
  *
  * \f[
@@ -64,13 +64,13 @@ namespace otb
  *  \gamma^{\star}_{N}(f)&:& \stackrel{\smile}{\mu}>\stackrel{\frown}{\mu}\\
  *  \varphi^{\star}_{N}(f)&:& \stackrel{\frown}{\mu}>\stackrel{\smile}{\mu}\\
  *   f&:&\stackrel{\frown}{\mu}=\stackrel{\smile}{\mu}
- *  \end{array}\right. 
+ *  \end{array}\right.
  * \f]
  *
  * This filter performs this image decomposition at a given structuring element size. The GetOutput() method returns
  * \f$\psi_{N}(f)\f$, the GetConvexMap() method returns \f$\stackrel{\smile}{\mu}\f$ and the GetConcaveMap() method
  *  returns \f$\stackrel{\frown}{\mu}\f$.
- * 
+ *
  * The PreserveIntensities and the FullyConnected flags reflects the option of the geodesic morphology filters from ITK.
  *
  * \sa GeodesicMorphologyLevelingFilter
@@ -87,13 +87,13 @@ class ITK_EXPORT GeodesicMorphologyDecompositionImageFilter
   typedef itk::ImageToImageFilter<TInputImage,TOutputImage> Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(GeodesicMorphologyDecompositionImageFilter, ImageToImageFilter);
-  
+
   /** Template parameters typedefs */
   typedef TInputImage InputImageType;
   typedef TOutputImage OutputImageType;
@@ -105,27 +105,27 @@ class ITK_EXPORT GeodesicMorphologyDecompositionImageFilter
   typedef itk::SubtractImageFilter<InputImageType,InputImageType,OutputImageType> ConvexFilterType;
   typedef itk::SubtractImageFilter<OutputImageType,InputImageType,OutputImageType> ConcaveFilterType;
   typedef otb::GeodesicMorphologyLevelingFilter<InputImageType,OutputImageType,OutputImageType> LevelingFilterType;
-  
+
   /** Pointers typedefs*/
   typedef typename OpeningFilterType::Pointer OpeningFilterPointerType;
   typedef typename ClosingFilterType::Pointer ClosingFilterPointerType;
   typedef typename LevelingFilterType::Pointer LevelingFilterPointerType;
   typedef typename ConvexFilterType::Pointer ConvexFilterPointerType;
   typedef typename ConcaveFilterType::Pointer ConcaveFilterPointerType;
-  
+
   /** Radius of the structuring element */
   itkSetMacro(Radius,RadiusType);
   itkGetConstReferenceMacro(Radius,RadiusType);
-  
-  /** 
+
+  /**
    * Get the convex likehood map.
-   * \return The convex likehood map. 
+   * \return The convex likehood map.
    */
   OutputImageType * GetConvexMap(void);
 
-  /** 
+  /**
    * Get the concave likehood map.
-   * \return The concave likehood map. 
+   * \return The concave likehood map.
    */
   OutputImageType * GetConcaveMap(void);
 
@@ -149,7 +149,7 @@ protected:
 private:
   GeodesicMorphologyDecompositionImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
   /** Radius of the structuring element */
   RadiusType m_Radius;
   /** Opening filter */

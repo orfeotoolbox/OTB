@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -36,7 +36,7 @@
 // techniques that will use the classification as a prior and add spatial
 // information to it in order to produce a better segmentation.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 
 #include "itkKdTree.h"
@@ -88,7 +88,7 @@ int main( int argc, char * argv [] )
 
 
   // Software Guide : BeginCodeSnippet
-  
+
   // Create a List from the scalar image
   typedef itk::Statistics::ScalarImageToListAdaptor< ImageType >   AdaptorType;
 
@@ -103,8 +103,8 @@ int main( int argc, char * argv [] )
 
 
   // Create the K-d tree structure
-  typedef itk::Statistics::WeightedCentroidKdTreeGenerator< 
-                                                      AdaptorType > 
+  typedef itk::Statistics::WeightedCentroidKdTreeGenerator<
+                                                      AdaptorType >
                                                               TreeGeneratorType;
 
   TreeGeneratorType::Pointer treeGenerator = TreeGeneratorType::New();
@@ -123,12 +123,12 @@ int main( int argc, char * argv [] )
   const unsigned int numberOfClasses = 4;
 
   EstimatorType::ParametersType initialMeans( numberOfClasses );
-  initialMeans[0] = 25.0;   
-  initialMeans[1] = 125.0;  
-  initialMeans[2] = 250.0;  
+  initialMeans[0] = 25.0;
+  initialMeans[1] = 125.0;
+  initialMeans[2] = 250.0;
 
   estimator->SetParameters( initialMeans );
-  
+
   estimator->SetKdTree( treeGenerator->GetOutput() );
   estimator->SetMaximumIteration( 200 );
   estimator->SetCentroidPositionChangesThreshold(0.0);
@@ -147,7 +147,7 @@ int main( int argc, char * argv [] )
 
 
   return EXIT_SUCCESS;
-  
+
 }
 
 

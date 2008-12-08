@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,13 +34,13 @@ int otbNCCRegistrationFilterNew(int argc, char* argv[])
                                ImageDimension>         DeformationFieldType;
 
   //Create the filter
-  typedef otb::NCCRegistrationFilter< FixedImageType, 
+  typedef otb::NCCRegistrationFilter< FixedImageType,
                                        MovingImageType,
                                        DeformationFieldType >
                                            RegistrationFilterType;
 
   // Instantiation
   RegistrationFilterType::Pointer registrator = RegistrationFilterType::New();
-  
+
  return EXIT_SUCCESS;
 }

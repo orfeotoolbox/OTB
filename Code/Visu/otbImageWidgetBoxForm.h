@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -37,10 +37,10 @@ class ImageWidgetBoxForm
   typedef ImageWidgetFormBase Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  
+
   /** Method for creation through the object factory */
   itkNewMacro(Self);
-  
+
   /** Runtime information */
   itkTypeMacro(ImageWidgetBoxForm, ImageWidgetFormBase);
 
@@ -59,9 +59,9 @@ class ImageWidgetBoxForm
 	{
 	  double xul = static_cast<double>((static_cast<double>(m_Index[0])-static_cast<double>(originx))*openGlZoom*(1/static_cast<double>(ss_rate)));
           double xlr = static_cast<double>((static_cast<double>(m_Index[0]+m_Size[0])-static_cast<double>(originx))*openGlZoom*(1/static_cast<double>(ss_rate)));
-          
-          double yul = static_cast<double>(static_cast<double>(windowh)+(static_cast<double>(originy)-static_cast<double>(m_Index[1]))*openGlZoom*(1/static_cast<double>(ss_rate))); 
-          
+
+          double yul = static_cast<double>(static_cast<double>(windowh)+(static_cast<double>(originy)-static_cast<double>(m_Index[1]))*openGlZoom*(1/static_cast<double>(ss_rate)));
+
           double ylr = static_cast<double>(static_cast<double>(windowh)+(static_cast<double>(originy)-static_cast<double>(m_Size[1]+m_Index[1]))*openGlZoom*(1/static_cast<double>(ss_rate)));
 
 
@@ -77,7 +77,7 @@ class ImageWidgetBoxForm
 	  glDisable(GL_BLEND);
 	}
     };
- protected: 
+ protected:
   /** Constructor. */
   ImageWidgetBoxForm()
       {
@@ -86,11 +86,11 @@ class ImageWidgetBoxForm
       };
     /** Destructor. */
     ~ImageWidgetBoxForm(){};
-    
+
  private:
     ImageWidgetBoxForm(const Self&);// purposely not implemented
     void operator=(const Self&);// purposely not implemented
-    
+
     IndexType m_Index;
     SizeType m_Size;
 

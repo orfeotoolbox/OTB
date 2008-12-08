@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,20 +25,20 @@ namespace otb
 {
 /** \class LinkPathListFilter
  *  \brief This filters link path from the input path list according to distance and angular criterions.
- *  
+ *
  *  This filter examines both ends of each path to link and is able to link several path into one single path.
  *  The two criterions to link a path are :
  *  - The two ends to link must be closer than the user defined threshold in terms of euclidean distance,
  *  - The angle at the link must not be sharp (less than the user defined threshold).
- *  
+ *
  *  Please note that this filter may invert the order of the vertices in the newly created path.
  *
  *  This filter is part of the road extraction framework.
- * 
+ *
    * \sa ParallelLinePathListFilter
- * 
+ *
    * \ingroup PathFilters
- * 
+ *
  */
 template <class TPath>
 class ITK_EXPORT LinkPathListFilter
@@ -50,13 +50,13 @@ class ITK_EXPORT LinkPathListFilter
   typedef PathListToPathListFilter<TPath>       Superclass;
   typedef itk::SmartPointer<Self>               Pointer;
   typedef itk::SmartPointer<const Self>         ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(LinkPathListFilter, PathListToPathListFilter);
-  
+
   /** Template parameters typedefs */
   typedef typename Superclass::PathType         PathType;
   typedef typename Superclass::PathListType     PathListType;
@@ -67,7 +67,7 @@ class ITK_EXPORT LinkPathListFilter
   typedef typename PathType::VertexListType VertexListType;
   typedef typename VertexListType::ConstIterator VertexIteratorType;
   typedef double 								RealType;
-  
+
   itkSetMacro(AngularThreshold,RealType);
   itkGetMacro(AngularThreshold,RealType);
   itkSetMacro(DistanceThreshold,RealType);
@@ -114,7 +114,7 @@ private:
 
   /// Do not use the sign of the orientation of the lines
   bool m_ModuloPI;
-  
+
 };
 }// End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

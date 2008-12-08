@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -67,7 +67,7 @@ SVMImageModelEstimator<TInputImage, TTrainingImage>
 {
 }
 
-template<class TInputImage, 
+template<class TInputImage,
          class TTrainingImage>
 SVMImageModelEstimator<TInputImage, TTrainingImage>
 ::~SVMImageModelEstimator(void)
@@ -77,12 +77,12 @@ SVMImageModelEstimator<TInputImage, TTrainingImage>
 /*
  * PrintSelf
  */
-template<class TInputImage, 
+template<class TInputImage,
          class TTrainingImage>
 void
 SVMImageModelEstimator<TInputImage, TTrainingImage>
 ::PrintSelf( std::ostream& os, itk::Indent indent ) const
-{  
+{
   Superclass::PrintSelf(os,indent);
 }// end PrintSelf
 
@@ -92,7 +92,7 @@ SVMImageModelEstimator<TInputImage, TTrainingImage>
  */
 
 
-template<class TInputImage, 
+template<class TInputImage,
          class TTrainingImage>
 void
 SVMImageModelEstimator<TInputImage,  TTrainingImage>
@@ -108,20 +108,20 @@ SVMImageModelEstimator<TInputImage,  TTrainingImage>
     throw itk::ExceptionObject(__FILE__, __LINE__,"Training and input image dimensions are not the same.",ITK_LOCATION);
     }
 
-  InputImageSizeType 
+  InputImageSizeType
     inputImageSize = inputImage->GetBufferedRegion().GetSize();
 
   typedef InputImageSizeType TrainingImageSizeType;
 
   TrainingImagePointer  trainingImage = this->GetTrainingImage();
 
-  TrainingImageSizeType 
-    trainingImageSize = trainingImage->GetBufferedRegion().GetSize();  
+  TrainingImageSizeType
+    trainingImageSize = trainingImage->GetBufferedRegion().GetSize();
 
   // Check if size of the two inputs are same
   for( unsigned int i = 0; i < TInputImage::ImageDimension; i++)
     {
-    if( inputImageSize[i] != trainingImageSize[i] ) throw itk::ExceptionObject(__FILE__, __LINE__,"Input image size is not the same as the training image size.",ITK_LOCATION); 
+    if( inputImageSize[i] != trainingImageSize[i] ) throw itk::ExceptionObject(__FILE__, __LINE__,"Input image size is not the same as the training image size.",ITK_LOCATION);
     }
 
 
@@ -139,7 +139,7 @@ SVMImageModelEstimator<TInputImage,  TTrainingImage>
   // Erase the vector contents
   this->m_Measures.resize(0);
   this->m_Labels.resize(0);
-  
+
 
 
 

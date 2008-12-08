@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -59,7 +59,7 @@ SpatialObjectDXFReader<TSpatialObject>
   this->Modified();
 }
  /** Test whether the given filename exist and it is readable,
-      this is intended to be called before attempting to use 
+      this is intended to be called before attempting to use
       ImageIO classes for actually reading the file. If the file
       doesn't exist or it is not readable, and exception with an
       approriate message will be thrown. */

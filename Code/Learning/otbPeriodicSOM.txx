@@ -12,8 +12,8 @@
   Copyright (c) Institut Telecom ; Telecom bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -57,7 +57,7 @@ PeriodicSOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehavio
 	typename MapType::RegionType mapRegion = map->GetLargestPossibleRegion();
 	NeighborhoodIteratorType it ( radius, map, mapRegion );
 
-	// Here, the periodic update is achieved 'by hand' since 
+	// Here, the periodic update is achieved 'by hand' since
 	// PeriodicBoundaryCondition does not allow to modifiy
 	// VectorImage contents
 	SizeType mapSize = mapRegion.GetSize();
@@ -69,7 +69,7 @@ PeriodicSOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehavio
 	for ( i = 0; i < it.Size(); i++ )
 	{
 		typename NeighborhoodIteratorType::OffsetType offset = it.GetOffset(i);
-		
+
 		// The neighborhood is of elliptic shape
 		double theDistance = itk::NumericTraits< double >::Zero;
 		for ( j = 0; j < MapType::ImageDimension; j++ )
@@ -81,7 +81,7 @@ PeriodicSOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehavio
 			for ( j = 0; j < MapType::ImageDimension; j++ )
 			{
 				int pos = offset[j] + position[j];
-				positionToUpdate[j] = ( pos >= 0 ) ? 
+				positionToUpdate[j] = ( pos >= 0 ) ?
 					pos % mapSize[j] :
 					( mapSize[j] - ( (-pos) % mapSize[j] ) ) % mapSize[j];
 			}

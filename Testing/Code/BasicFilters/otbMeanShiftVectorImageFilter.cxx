@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -47,7 +47,7 @@ int otbMeanShiftVectorImageFilter(int argc, char * argv[])
   typedef otb::MeanShiftVectorImageFilter<ImageType,ImageType> FilterType;
   typedef FilterType::LabeledOutputType LabeledImageType;
   typedef otb::StreamingImageFileWriter<LabeledImageType> LabeledWriterType;
-  
+
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();
   ReaderType::Pointer reader = ReaderType::New();
@@ -56,13 +56,13 @@ int otbMeanShiftVectorImageFilter(int argc, char * argv[])
   LabeledWriterType::Pointer writer3 = LabeledWriterType::New();
   LabeledWriterType::Pointer writer4 = LabeledWriterType::New();
 
- 
+
   reader->SetFileName(infname);
   writer1->SetFileName(filteredfname);
   writer2->SetFileName(clusteredfname);
   writer3->SetFileName(labeledclusteredfname);
   writer4->SetFileName(clusterboundariesfname);
-  
+
   filter->SetSpatialRadius(spatialRadius);
   filter->SetRangeRadius(rangeRadius);
   filter->SetMinimumRegionSize(minRegionSize);

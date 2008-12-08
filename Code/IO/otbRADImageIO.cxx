@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -39,14 +39,14 @@ namespace otb
     this->SetNumberOfDimensions(2);
 
   // By default the type to CI2
-    m_TypeRAD= "CR4";  
+    m_TypeRAD= "CR4";
     m_NbOctetPixel=8;
     m_NbOfChannels=1;
     this->SetNumberOfComponents(2);
     m_PixelType = COMPLEX;
     m_ComponentType = FLOAT;
 
-  
+
     if ( itk::ByteSwapper<char>::SystemIsLittleEndian() == true)
     {
       m_ByteOrder = LittleEndian;
@@ -107,7 +107,7 @@ namespace otb
       otbMsgDevMacro(<<"RADImageIO::CanReadFile() failed header open ! " );
       return false;
     }
-        
+
         //Read header informations
     bool lResult = InternalReadHeaderInformation(lFileName, header_file,false);
     header_file.close();
@@ -126,12 +126,12 @@ namespace otb
   {
   }
 
-// Read image 
+// Read image
   void RADImageIO::Read(void* buffer)
   {
     unsigned long step = this->GetNumberOfComponents();
     char * p = static_cast<char *>(buffer);
- 
+
     int lNbLines   = this->GetIORegion().GetSize()[1];
     int lNbColumns = this->GetIORegion().GetSize()[0];
     int lFirstLine   = this->GetIORegion().GetIndex()[1] ; // [1... ]
@@ -145,15 +145,15 @@ namespace otb
     otbMsgDevMacro( <<" Nb Of Channels         : "<<m_NbOfChannels);
 
     std::streamoff  headerLength(0);
-    std::streamoff  offset;        
+    std::streamoff  offset;
     std::streamoff  numberOfBytesPerLines = static_cast<std::streamoff>( m_NbOctetPixel * m_Dimensions[0]);
-    std::streamsize numberOfBytesToBeRead = m_NbOctetPixel * lNbColumns;       
-    std::streamsize numberOfBytesRead;        
+    std::streamsize numberOfBytesToBeRead = m_NbOctetPixel * lNbColumns;
+    std::streamsize numberOfBytesRead;
     unsigned long cpt = 0;
 
         // Update the step variable
     step = step * (unsigned long)(this->GetComponentSize());
-        
+
     char * value = new char[numberOfBytesToBeRead];
     if(value==NULL)
     {
@@ -178,7 +178,7 @@ namespace otb
         offset +=  static_cast<std::streamoff>( m_NbOctetPixel * lFirstColumn);
         m_ChannelsFile[numChannel].seekg(offset, std::ios::beg);
                         //Read a line
-        m_ChannelsFile[numChannel].read( static_cast<char *>( value ), numberOfBytesToBeRead );                        
+        m_ChannelsFile[numChannel].read( static_cast<char *>( value ), numberOfBytesToBeRead );
 
         numberOfBytesRead = m_ChannelsFile[numChannel].gcount();
 #ifdef __APPLE_CC__
@@ -216,11 +216,11 @@ namespace otb
     {
       itkExceptionMacro(<<"RADImageIO::Read() undefined component type! " );
     }
-       
-       
+
+
     delete [] value;
     value = NULL;
-        
+
   }
 
 
@@ -263,7 +263,7 @@ namespace otb
     {
       if( reportError == true )
       {
-        itkExceptionMacro(<< "RAD : 'NBCOLONNES' keyword is not find in the header file.");  
+        itkExceptionMacro(<< "RAD : 'NBCOLONNES' keyword is not find in the header file.");
       }
       else
       {
@@ -279,7 +279,7 @@ namespace otb
     {
       if( reportError == true )
       {
-        itkExceptionMacro(<< "RAD : 'NBLIGNES' keyword is not find in the header file.");  
+        itkExceptionMacro(<< "RAD : 'NBLIGNES' keyword is not find in the header file.");
       }
       else
       {
@@ -287,15 +287,15 @@ namespace otb
       }
     }
     file >> m_Dimensions[1];
-       
+
         // Read NBPLANS information
     file >> lString;
-    lString = System::SetToUpper(lString);        
+    lString = System::SetToUpper(lString);
     if( (lString != "NBPLANS") && (lString != "NBBANDS") )
     {
       if( reportError == true )
       {
-        itkExceptionMacro(<< "RAD : 'NBPLANS' keyword is not find in the header file.");  
+        itkExceptionMacro(<< "RAD : 'NBPLANS' keyword is not find in the header file.");
       }
       else
       {
@@ -304,8 +304,8 @@ namespace otb
     }
     file >> m_NbOfChannels;
         // Because we read complex : *2
-    this->SetNumberOfComponents(2*m_NbOfChannels);      
-        
+    this->SetNumberOfComponents(2*m_NbOfChannels);
+
         // Read TYPECODAGE information
     file >> lString;
     lString = System::SetToUpper(lString);
@@ -313,7 +313,7 @@ namespace otb
     {
       if( reportError == true )
       {
-        itkExceptionMacro(<< "RAD : the first line of the header file must be contains 'TYPECODAGE' caracters.");  
+        itkExceptionMacro(<< "RAD : the first line of the header file must be contains 'TYPECODAGE' caracters.");
       }
       else
       {
@@ -332,19 +332,19 @@ namespace otb
     }
     if(lStrCodePix == "PHA")
     {
-      m_PixelType = SCALAR;        
+      m_PixelType = SCALAR;
       SetComponentType(CHAR);
       m_NbOctetPixel=1;
     }
     if(lStrCodePix == "I2")
     {
-      m_PixelType = SCALAR;        
+      m_PixelType = SCALAR;
       SetComponentType(SHORT);
       m_NbOctetPixel=2;
     }
     if(lStrCodePix == "I4")
     {
-      m_PixelType = SCALAR;        
+      m_PixelType = SCALAR;
       SetComponentType(INT);
       m_NbOctetPixel=4;
     }
@@ -354,7 +354,7 @@ namespace otb
       SetComponentType(FLOAT);
       m_NbOctetPixel=4;
     }
-    else if(lStrCodePix == "CI2") 
+    else if(lStrCodePix == "CI2")
     {
       m_PixelType = COMPLEX;
       SetComponentType(SHORT);
@@ -390,8 +390,8 @@ namespace otb
     SetComponentType(FLOAT);
     m_NbOctetPixel=2;
   }
-    */        
-    
+    */
+
     else if(lStrCodePix == "CI4")
     {
       m_PixelType = COMPLEX;
@@ -408,7 +408,7 @@ namespace otb
     {
       if( reportError == true )
       {
-        itkExceptionMacro(<< "RAD : the value type '"<<lStrCodePix<<"' (second line) set in the header file is not reconized as correct value.");  
+        itkExceptionMacro(<< "RAD : the value type '"<<lStrCodePix<<"' (second line) set in the header file is not reconized as correct value.");
       }
       else
       {
@@ -428,7 +428,7 @@ namespace otb
         if( lString == "INTEL" )
         {
           m_FileByteOrder = LittleEndian;
-        }                        
+        }
         else if( lString == "IEEE" )
         {
           m_FileByteOrder = BigEndian;
@@ -437,7 +437,7 @@ namespace otb
         {
           if( reportError == true )
           {
-            itkExceptionMacro(<< "RAD : the value SENSCODAGE '"<<lString<<"' set in the header file is not reconized as correct value. Possible values are INTEL or IEEE");  
+            itkExceptionMacro(<< "RAD : the value SENSCODAGE '"<<lString<<"' set in the header file is not reconized as correct value. Possible values are INTEL or IEEE");
           }
           else
           {
@@ -447,22 +447,22 @@ namespace otb
       }
     }
 
-        
+
         // Read FileName information
     std::string lPathName = System::GetPathName( file_name );
-    m_ChannelsFileName.clear();        
+    m_ChannelsFileName.clear();
     for(unsigned int i=0 ; i<m_NbOfChannels ; i++)
     {
       file >> lString;
         ::itk::OStringStream lStream;
-        lStream << lPathName <<"/"<< lString ;                
+        lStream << lPathName <<"/"<< lString ;
         m_ChannelsFileName.push_back(lStream.str());
-   
+
     }
     file.close();
 
     m_ChannelsFile = new std::fstream[m_NbOfChannels];
-       
+
         // Try to open channels file
     for (unsigned int channels = 0 ; channels<m_ChannelsFileName.size() ; channels++)
     {
@@ -472,7 +472,7 @@ namespace otb
       {
         if( reportError == true )
         {
-          itkExceptionMacro(<< "RAD : impossible to find the file <"<<m_ChannelsFileName[channels]<<">.");  
+          itkExceptionMacro(<< "RAD : impossible to find the file <"<<m_ChannelsFileName[channels]<<">.");
         }
         else
         {
@@ -536,13 +536,13 @@ namespace otb
     std::streamoff headerLength(0);
     std::streamoff  numberOfBytesPerLines = static_cast<std::streamoff>(m_NbOctetPixel * m_Dimensions[0]);
     std::streamsize numberOfBytesToBeWrite = static_cast<std::streamsize>(m_NbOctetPixel * lNbColumns);
-        
+
     std::streamoff offset = 0;
     unsigned long cpt = 0;
 
         // Update the step variable
     step = m_NbOctetPixel;
-              
+
     const char * p = static_cast<const char *>(buffer);
 
     char* value = new char[numberOfBytesToBeWrite];
@@ -592,14 +592,14 @@ namespace otb
     {
       m_HeaderFile.close();
     }
-  
+
         // Open the new file for writing
         // Actually open the file
     m_HeaderFile.open( m_FileName.c_str(),  std::ios::out | std::ios::trunc );
     if( m_HeaderFile.fail() )
     {
       itkExceptionMacro(<< "Cannot write requested file "<<m_FileName.c_str()<<".");
-    } 
+    }
 
         //Write COLUMNS information
     m_HeaderFile <<  "NBCOLUMNS ";
@@ -608,21 +608,21 @@ namespace otb
         //Write LINES information
     m_HeaderFile <<  "NBLINES ";
     m_HeaderFile << m_Dimensions[1] << std::endl;
-        
+
         //Write CHANNELS information
     m_HeaderFile << "NBBANDS ";
-    m_HeaderFile << m_NbOfChannels << std::endl;        
-        
+    m_HeaderFile << m_NbOfChannels << std::endl;
+
     std::string lString;
         //Write TYPE information
     m_HeaderFile << "TYPECODAGE ";
-        
-        
+
+
     std::string lExtension;
     std::string lStringPixelType = System::SetToUpper(this->GetPixelTypeAsString(m_PixelType));
     std::string lStringComponentType = System::SetToUpper(this->GetComponentTypeAsString(this->GetComponentType()));
-        
-        
+
+
     if(lStringPixelType == "SCALAR")
     {
       if( lStringComponentType =="UCHAR")
@@ -647,14 +647,14 @@ namespace otb
       {
         m_NbOctetPixel=4;
         m_TypeRAD = "I4";
-        lExtension=".i4";                        
+        lExtension=".i4";
       }
       else if( lStringComponentType =="FLOAT")
       {
         m_NbOctetPixel=4;
         m_TypeRAD = "R4";
         lExtension=".r4";
-                        
+
       }
     }
     else if( lStringPixelType == "COMPLEX")
@@ -676,7 +676,7 @@ namespace otb
       {
         m_NbOctetPixel=2;
         m_TypeRAD = "COCT";
-        lExtension=".coct";                        
+        lExtension=".coct";
       }
 /*                if( this->GetComponentType()=="FLOAT")
       {
@@ -703,7 +703,7 @@ namespace otb
                         {
                           m_NbOctetPixel=16;
                           m_TypeRAD = "CR8";
-                          lExtension=".cr8";                        
+                          lExtension=".cr8";
                         }
     }
     m_HeaderFile << m_TypeRAD << std::endl;
@@ -735,7 +735,7 @@ namespace otb
     }
     m_HeaderFile.close();
 
-   
+
 
 
         //Allocate  buffer of stream file
@@ -747,7 +747,7 @@ namespace otb
       m_ChannelsFile[channels].open( m_ChannelsFileName[channels].c_str(),  std::ios::out | std::ios::trunc | std::ios::binary );
       if( m_ChannelsFile[channels].fail() )
       {
-        itkExceptionMacro(<< "RAD : impossible to find the file <"<<m_ChannelsFileName[channels]<<">.");  
+        itkExceptionMacro(<< "RAD : impossible to find the file <"<<m_ChannelsFileName[channels]<<">.");
       }
     }
     this->SetFileTypeToBinary();
@@ -780,7 +780,7 @@ namespace otb
 
   }
 
-  
+
 } // end namespace otb
 
 

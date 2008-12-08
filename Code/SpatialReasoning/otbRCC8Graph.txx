@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -20,8 +20,8 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  /** 
-   * Constructor 
+  /**
+   * Constructor
    */
   template <class TVertex>
   RCC8Graph<TVertex>
@@ -35,7 +35,7 @@ namespace otb
    * once this parameter is set.
    */
   template <class TVertex>
-  void 
+  void
   RCC8Graph<TVertex>
   ::Build(void)
   {
@@ -46,7 +46,7 @@ namespace otb
    * \param num The index of the last vertices to intialize.
    */
   template <class TVertex>
-  void 
+  void
   RCC8Graph<TVertex>
   ::Initialize( unsigned int num)
   {
@@ -91,7 +91,7 @@ namespace otb
   }
   /**
    * Add an edge in the graph.
-   * \param index1 The index of the source vertex. 
+   * \param index1 The index of the source vertex.
    * \param index2 The index of the target vertex.
    * \param r The rcc8 value associated to the edge.
    */

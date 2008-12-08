@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,11 +24,11 @@ namespace otb
 {
 /**
  * \class ImageMultiSegmentationToRCC8GraphFilter
- * \brief This class takes a list of labelled segmentation images 
+ * \brief This class takes a list of labelled segmentation images
  * and build the RCC8 graph of the set of regions it represents.
  */
 template <class TInputImage, class TOutputGraph>
-class ITK_EXPORT ImageMultiSegmentationToRCC8GraphFilter 
+class ITK_EXPORT ImageMultiSegmentationToRCC8GraphFilter
   : public ImageListToRCC8GraphFilter<TInputImage,TOutputGraph>
 {
 public:
@@ -58,18 +58,18 @@ public:
   /** Knowledge enum typedef */
   typedef typename OutputGraphType::RCC8ValueType RCC8ValueType;
   typedef enum {NO_INFO,LEVEL_1,LEVEL_3,FULL} KnowledgeValueType;
-  typedef std::pair<KnowledgeValueType,RCC8ValueType> KnowledgeStateType; 
+  typedef std::pair<KnowledgeValueType,RCC8ValueType> KnowledgeStateType;
   /** Toogle optimisation flag */
   itkBooleanMacro(Optimisation);
   itkSetMacro(Optimisation,bool);
-  
+
   /**
    * Get the number of occurences of the given value
    * \return The value.
    */
   unsigned int GetRelationsCount(RCC8ValueType val);
 
-  /** 
+  /**
    * Get number of relations
    * \return The number of relations.
    */

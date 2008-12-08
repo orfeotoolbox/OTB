@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,7 +24,7 @@
 
 namespace otb
 {
-/** 
+/**
  * Constructor.
  */
 template <class TPixel>
@@ -34,18 +34,18 @@ ZoomableImageWidget<TPixel>
   m_ZoomUpperLeftCorner.Fill(0);
 }
 
-/** 
+/**
  * Destructor.
  */
 template <class TPixel>
 ZoomableImageWidget<TPixel>
 ::~ZoomableImageWidget()
 {}
-/** 
+/**
  * Initialize the widget.
  */
 template <class TPixel>
-void 
+void
 ZoomableImageWidget<TPixel>
 ::Init(int x, int y, int w, int h, const char * l)
 {
@@ -64,11 +64,11 @@ ZoomableImageWidget<TPixel>
       this->resize(x, y, w, h);
     }
 }
-/** 
+/**
  * Resize the widget.
  */
 template <class TPixel>
-void 
+void
 ZoomableImageWidget<TPixel>
 ::resize(int x, int y, int w, int h)
 {
@@ -84,11 +84,11 @@ ZoomableImageWidget<TPixel>
   this->Fl_Gl_Window::resize(x,y,w,h);
   this->redraw();
 }
-/** 
+/**
  * Test if the buffer has to be updated.
  */
 template <class TPixel>
-bool 
+bool
 ZoomableImageWidget<TPixel>
 ::UpdateOpenGlBufferedRegionRequested(void)
 {
@@ -105,23 +105,23 @@ ZoomableImageWidget<TPixel>
   return true;
 }
 
-/** 
- * Update OpenGlBuffer. 
+/**
+ * Update OpenGlBuffer.
  */
 template <class TPixel>
-void 
+void
 ZoomableImageWidget<TPixel>
 ::UpdateOpenGlBufferedRegion(void)
 {
   //otbMsgDebugMacro(<<"UpdateOpenGlBufferedRegion: "<<this->GetViewedRegion());
   this->SetBufferedRegion(this->GetViewedRegion());
 }
-/** 
- * Set a new zoom factor (>1). 
+/**
+ * Set a new zoom factor (>1).
  * \param zoomFactor The new zoom factor.
  */
 template <class TPixel>
-void 
+void
 ZoomableImageWidget<TPixel>
 ::SetZoomFactor(double zoomFactor)
 {
@@ -129,7 +129,7 @@ ZoomableImageWidget<TPixel>
     itkExceptionMacro(<<"Zoom factor must be >1 !");
 
   RegionType region = this->GetViewedRegion();
-  
+
   SizeType newSize;
   RegionType newRegion;
 
@@ -145,12 +145,12 @@ ZoomableImageWidget<TPixel>
       this->SetOpenGlIsotropicZoom(zoomFactor);
     }
 }
-/** 
- * Set a new zoom factor (>1). 
+/**
+ * Set a new zoom factor (>1).
  * \param zoomFactor The new zoom factor.
  */
 template <class TPixel>
-void 
+void
 ZoomableImageWidget<TPixel>
 ::SetZoomUpperLeftCorner(IndexType index)
 {
@@ -159,7 +159,7 @@ ZoomableImageWidget<TPixel>
 
   size = this->GetViewedRegion().GetSize();
 //  otbMsgDebugMacro(<<"SetZoomCenter: Size ->"<<size);
-  
+
 //  otbMsgDebugMacro(<<"SetZoomCenter: newIndex ->"<<index);
   newRegion.SetIndex(index);
   newRegion.SetSize(size);

@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -35,7 +35,7 @@ int otbMultiScaleConvexOrConcaveClassificationFilter(int argc, char * argv[])
   const unsigned int initialValue = atoi(argv[4]);
   const unsigned int step = atoi(argv[5]);
   const double sigma = atof(argv[6]);
-       
+
 
   const unsigned int Dimension = 2;
   typedef double InputPixelType;
@@ -55,11 +55,11 @@ int otbMultiScaleConvexOrConcaveClassificationFilter(int argc, char * argv[])
   typedef otb::MorphologicalClosingProfileFilter<InputImageType,InputImageType,StructuringElementType>
     ClosingProfileFilterType;
   typedef otb::ProfileToProfileDerivativeFilter<InputImageType,InputImageType> DerivativeFilterType;
-  typedef otb::ProfileDerivativeToMultiScaleCharacteristicsFilter<InputImageType,OutputImageType,LabeledImageType> 
+  typedef otb::ProfileDerivativeToMultiScaleCharacteristicsFilter<InputImageType,OutputImageType,LabeledImageType>
     MultiScaleCharacteristicsFilterType;
   typedef otb::MultiScaleConvexOrConcaveClassificationFilter<InputImageType,LabeledImageType> MultiScaleClassificationFilterType;
-  
-  
+
+
   // Reading input image
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFilename);
@@ -76,10 +76,10 @@ int otbMultiScaleConvexOrConcaveClassificationFilter(int argc, char * argv[])
   cprofileFilter->SetProfileSize(profileSize);
   cprofileFilter->SetInitialValue(initialValue);
   cprofileFilter->SetStep(step);
-  
+
   DerivativeFilterType::Pointer oderivativeFilter = DerivativeFilterType::New();
   oderivativeFilter->SetInput(oprofileFilter->GetOutput());
-  
+
   DerivativeFilterType::Pointer cderivativeFilter = DerivativeFilterType::New();
   cderivativeFilter->SetInput(cprofileFilter->GetOutput());
 
@@ -87,7 +87,7 @@ int otbMultiScaleConvexOrConcaveClassificationFilter(int argc, char * argv[])
   omsCharFilter->SetInput(oderivativeFilter->GetOutput());
   omsCharFilter->SetInitialValue(initialValue);
   omsCharFilter->SetStep(step);
-  
+
   MultiScaleCharacteristicsFilterType::Pointer cmsCharFilter = MultiScaleCharacteristicsFilterType::New();
   cmsCharFilter->SetInput(cderivativeFilter->GetOutput());
   cmsCharFilter->SetInitialValue(initialValue);
@@ -106,6 +106,6 @@ int otbMultiScaleConvexOrConcaveClassificationFilter(int argc, char * argv[])
   labeledWriter->SetFileName(outputFilename);
   labeledWriter->SetInput(classificationFilter->GetOutput());
   labeledWriter->Update();
-  
+
   return EXIT_SUCCESS;
 }

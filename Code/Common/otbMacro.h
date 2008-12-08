@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -20,9 +20,9 @@
 /**
  * otbMacro.h defines standard system-wide macros, constants, and other
  * parameters. One of its most important functions is to define macros used
- * to interface to instance variables in a standard fashion. 
+ * to interface to instance variables in a standard fashion.
  */
-  
+
 #ifndef __otbMacro_h
 #define __otbMacro_h
 
@@ -32,7 +32,7 @@
  * also used to catch errors, etc. Example usage looks like:
  * itkDebugMacro(<< "this is debug info" << this->SomeVariable); */
 #if defined(OTB_LEAN_AND_MEAN) || defined(__BORLANDC__)
-#define otbDebugMacro(x) 
+#define otbDebugMacro(x)
 #else
 #define otbDebugMacro(x) itkDebugMacro(x)
 /*  { if ( this->GetDebug() && *::itk::Object::GetGlobalWarningDisplay())   \
@@ -68,7 +68,7 @@
 	}
   #else
     #define otbGenericMsgDebugMacro(x)
-  #endif 
+  #endif
 #endif
 
 #define otbGenericMsgTestingMacro(x) \
@@ -108,8 +108,8 @@
 }
 #endif
 
-/** This macro is used to control condition. It use ONLY by the OTB developpers 
-  *  
+/** This macro is used to control condition. It use ONLY by the OTB developpers
+  *
   */
 #define otbControlConditionTestMacro(condition, message) \
 {       if( (condition) ) \
@@ -125,7 +125,7 @@
     itkDebugMacro("setting member " #name " to " << _arg); \
     this->m_##object->Set##name(_arg); \
     this->Modified(); \
-} 
+}
 
 /** Get built-in type.  Creates member Get"name"() (e.g., GetVisibility()); */
 #define otbGetObjectMemberMacro(object,name,type) \
@@ -155,6 +155,56 @@
     itkDebugMacro("returning " << #name " of " << this->m_##object->Get##name() ); \
     return this->m_##object->Get##name(); \
 }
+
+/** Testing macro. This macro doesn't throw a exception if the called command
+ * generate a itk::ExceptionObject object. For alls others use cases, the macro
+ * generate a exception. */
+#define otbTestingCheckValidCommand(command) \
+  { \
+        try \
+        { \
+                command;\
+        } \
+        catch( std::bad_alloc & err )     { throw err; } \
+        catch( itk::ExceptionObject & e ) { throw e ; } \
+        catch( const std::exception & stde)   { throw stde; } \
+        catch( ... ) \
+        { \
+                ::itk::OStringStream message; \
+                message << "otb::ERROR Unknow error (catch(...) )"; \
+                ::itk::ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(),ITK_LOCATION); \
+                throw e_; \
+        } \
+        std::cout << " Testing Check Valid Command "<< #command " ok."<<std::endl; \
+   }
+
+#define otbTestingCheckUnValidCommand(command) \
+  { \
+        int result(1); \
+        try \
+        { \
+                command;\
+        } \
+        catch( std::bad_alloc & err )     { throw err; } \
+        catch( itk::ExceptionObject & e ) { std::cout << " Testing Check UnValid Command "<< #command " ok."<<std::endl; result = 0; } \
+        catch( const std::exception & stde)   { throw stde; } \
+        catch( ... ) \
+        { \
+                ::itk::OStringStream message; \
+                message << "otb::ERROR Unknow error (catch(...) )"; \
+                ::itk::ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(),ITK_LOCATION); \
+                throw e_; \
+        } \
+        if(result) \
+        { \
+                ::itk::OStringStream message; \
+                message << "otb::ERROR: The command should be run an exception."; \
+                ::itk::ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(),ITK_LOCATION); \
+                throw e_; \
+        } \
+   }
+
+
 
 namespace otb
 {

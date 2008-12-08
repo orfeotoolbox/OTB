@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -35,7 +35,7 @@
 // In order to use this algorithm we should first include the header files of
 // the filter and the image class.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 
 // Software Guide : BeginCodeSnippet
@@ -52,7 +52,7 @@
 // rough segmentation and estimates from it the values of the mean and the
 // variance.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "itkConfidenceConnectedImageFilter.h"
@@ -77,11 +77,11 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
-  //  Next, we declare the pixel type and image dimension and 
+  //
+  //  Next, we declare the pixel type and image dimension and
   //  specify the image type to be used as input.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef  float            InputPixelType;
@@ -90,12 +90,12 @@ int main( int argc, char *argv[] )
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  Fuzzy connectedness computes first the affinity map and then thresholds
   //  its values in order to get a binary image as output. The type of the
   //  binary image is provided as the second template parameter of the filter.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef   unsigned char   BinaryPixelType;
@@ -106,19 +106,19 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The Confidence connected filter type is instantiated using the input
   //  image type and a binary image type for output.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::ConfidenceConnectedImageFilter< 
-                                                  InputImageType, 
-                                                  BinaryImageType 
+  typedef itk::ConfidenceConnectedImageFilter<
+                                                  InputImageType,
+                                                  BinaryImageType
                                                     >  ConfidenceConnectedFilterType;
 
-  ConfidenceConnectedFilterType::Pointer confidenceConnectedFilter = 
+  ConfidenceConnectedFilterType::Pointer confidenceConnectedFilter =
                                                  ConfidenceConnectedFilterType::New();
   // Software Guide : EndCodeSnippet
 
@@ -126,22 +126,22 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The fuzzy segmentation filter type is instantiated here using the input
   //  and binary image types as template parameters.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::SimpleFuzzyConnectednessScalarImageFilter< 
-                                                  InputImageType, 
-                                                  BinaryImageType 
+  typedef itk::SimpleFuzzyConnectednessScalarImageFilter<
+                                                  InputImageType,
+                                                  BinaryImageType
                                                     >  FuzzySegmentationFilterType;
   // Software Guide : EndCodeSnippet
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The fuzzy connectedness segmentation filter is created by invoking the
   //  \code{New()} method and assigning the result to a
   //  \doxygen{itk}{SmartPointer}.
@@ -149,10 +149,10 @@ int main( int argc, char *argv[] )
   //  \index{itk::SimpleFuzzy\-Connectedness\-Scalar\-Image\-Filter!New()}
   //  \index{itk::SimpleFuzzy\-Connectedness\-Scalar\-Image\-Filter!Pointer}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  FuzzySegmentationFilterType::Pointer fuzzysegmenter = 
+  FuzzySegmentationFilterType::Pointer fuzzysegmenter =
                                          FuzzySegmentationFilterType::New();
   // Software Guide : EndCodeSnippet
 
@@ -161,24 +161,24 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The affinity map can be accessed through the type \code{FuzzySceneType}
   //
-  //  Software Guide : EndLatex 
-  
+  //  Software Guide : EndLatex
+
   // Software Guide : BeginCodeSnippet
-  typedef FuzzySegmentationFilterType::FuzzySceneType  FuzzySceneType; 
+  typedef FuzzySegmentationFilterType::FuzzySceneType  FuzzySceneType;
   // Software Guide : EndCodeSnippet
- 
+
 
 
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   // We instantiate reader and writer types
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
   typedef  otb::ImageFileReader< InputImageType  >    ReaderType;
   typedef  otb::ImageFileWriter< BinaryImageType >    WriterType;
   typedef  otb::ImageFileWriter< FuzzySceneType  >    FuzzyWriterType;
@@ -192,7 +192,7 @@ int main( int argc, char *argv[] )
   writer->SetFileName(  argv[2] );
   fwriter->SetFileName( argv[3] );
 
- 
+
   InputImageType::IndexType index;
 
   index[0] = atoi(argv[4]);
@@ -201,13 +201,13 @@ int main( int argc, char *argv[] )
   const double varianceMultiplier = atof( argv[6] );
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The output of the reader is passed as input to the ConfidenceConnected image filter.
   //  Then the filter is executed in order to obtain estimations of the mean and variance
   //  gray values for the region to be segmented.
   //
-  //  Software Guide : EndLatex 
-  
+  //  Software Guide : EndLatex
+
   // Software Guide : BeginCodeSnippet
   confidenceConnectedFilter->SetInput( reader->GetOutput()  );
   confidenceConnectedFilter->SetMultiplier( varianceMultiplier );
@@ -225,14 +225,14 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The input that is passed to the fuzzy segmentation filter is taken from
   //  the reader.
   //
   //  \index{itk::Simple\-Fuzzy\-Connectedness\-Scalar\-Image\-Filter!SetInput()}
   //
-  //  Software Guide : EndLatex 
-  
+  //  Software Guide : EndLatex
+
   // Software Guide : BeginCodeSnippet
   fuzzysegmenter->SetInput( reader->GetOutput() );
   // Software Guide : EndCodeSnippet
@@ -245,7 +245,7 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The parameters of the fuzzy segmentation filter are defined here. A seed
   //  point is provided with the method \code{SetObjectsSeed()} in order to
   //  initialize the region to be grown.  Estimated values for the mean and
@@ -254,14 +254,14 @@ int main( int argc, char *argv[] )
   //  value for generating the binary object is preset with the method
   //  \code{SetThreshold()}.  For details describing the role of the mean and
   //  variance on the computation of the segmentation, please see
-  //  \cite{Udupa1996}. 
+  //  \cite{Udupa1996}.
   //
   //  \index{itk::Simple\-Fuzzy\-Connectedness\-Scalar\-Image\-Filter!SetObjectsSeed()}
   //  \index{itk::Simple\-Fuzzy\-Connectedness\-Scalar\-Image\-Filter!SetMean()}
   //  \index{itk::Simple\-Fuzzy\-Connectedness\-Scalar\-Image\-Filter!SetVariance()}
   //  \index{itk::Simple\-Fuzzy\-Connectedness\-Scalar\-Image\-Filter!SetThreshold()}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   fuzzysegmenter->SetObjectSeed( index );
@@ -272,11 +272,11 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The execution of the fuzzy segmentation filter is triggered by the
   //  \code{Update()} method.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   fuzzysegmenter->Update();

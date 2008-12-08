@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,7 +30,7 @@ void generic_SetASetBMultiChannelRAndNIRVegetationIndexImageFilter(int argc, cha
   typedef otb::ImageFileReader<TInputImage> ReaderType;
   typedef otb::ImageFileWriter<TOutputImage> WriterType;
 
-  typedef otb::MultiChannelRAndNIRVegetationIndexImageFilter<TInputImage,TOutputImage,TFunction> 
+  typedef otb::MultiChannelRAndNIRVegetationIndexImageFilter<TInputImage,TOutputImage,TFunction>
     MultiChannelRAndNIRVegetationIndexImageFilterType;
 
   // Instantiating object
@@ -46,7 +46,7 @@ void generic_SetASetBMultiChannelRAndNIRVegetationIndexImageFilter(int argc, cha
 
   reader->SetFileName( inputFilename );
   writer->SetFileName( outputFilename  );
-  filter->SetInput( reader->GetOutput() ); 
+  filter->SetInput( reader->GetOutput() );
   filter->SetRedIndex(redChannel);
   filter->SetNIRIndex(nirChannel);
   filter->GetFunctor().SetA(a);
@@ -61,7 +61,7 @@ int otbSetASetBMultiChannelRAndNIRVegetationIndexImageFilter(int argc, char * ar
   const unsigned int Dimension = 2;
   typedef otb::VectorImage<unsigned char,Dimension> InputImageType;
   typedef otb::Image<float,Dimension> OutputImageType;
-        
+
   std::string strArgv(argv[1]);
   argc--;
   argv++;

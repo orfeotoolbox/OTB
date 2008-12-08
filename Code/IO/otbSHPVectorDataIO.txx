@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -48,7 +48,7 @@ namespace otb
       }
   }
   template<class TData>
-  bool 
+  bool
   SHPVectorDataIO<TData>::CanReadFile( const char* filename )
   {
 
@@ -58,7 +58,7 @@ namespace otb
       {
 	return false;
       }
-	
+
     OGRDataSource::DestroyDataSource(poDS);
     return true;
   }
@@ -66,7 +66,7 @@ namespace otb
 
   // Used to print information about this object
   template<class TData>
-  void 
+  void
   SHPVectorDataIO<TData>::PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os, indent);
@@ -74,7 +74,7 @@ namespace otb
 
   // Read vector data
   template<class TData>
-  void 
+  void
   SHPVectorDataIO<TData>
   ::Read(VectorDataPointerType data)
   {
@@ -96,7 +96,7 @@ namespace otb
 
     // Reading layers
     otbMsgDebugMacro(<<"Number of layers: "<<m_DataSource->GetLayerCount());
-  
+
     // Retrieving root node
     DataTreePointerType tree = data->GetDataTree();
     DataNodePointerType root = tree->GetRoot()->Get();
@@ -129,7 +129,7 @@ namespace otb
 	OGRFeature * feature;
 
 	layer->ResetReading();
-      
+
 	while((feature = layer->GetNextFeature())!=NULL)
 	  {
 	    DataNodePointerType folder = DataNodeType::New();
@@ -150,7 +150,7 @@ namespace otb
 	    /** Temporary geometry container */
 	    OGRGeometry * geometry = feature->GetGeometryRef();
 
-  
+
 	    if(geometry != NULL)
 	      {
 		switch(geometry->getGeometryType())
@@ -377,7 +377,7 @@ namespace otb
 		      break;
 		    }
 		  }
-	      
+
 	      }
 	  }
       }
@@ -390,13 +390,13 @@ namespace otb
   SHPVectorDataIO<TData>
   ::ConvertGeometryToPointNode(const OGRGeometry * ogrGeometry)
   {
-    OGRPoint * ogrPoint = (OGRPoint *) ogrGeometry; 
-  
+    OGRPoint * ogrPoint = (OGRPoint *) ogrGeometry;
+
     if(ogrPoint == NULL)
       {
 	itkGenericExceptionMacro(<<"Failed to convert OGRGeometry to OGRPoint");
       }
-  
+
     PointType otbPoint;
     otbPoint.Fill(0);
     otbPoint[0] = static_cast<typename DataNodeType::PrecisionType>(ogrPoint->getX());
@@ -406,7 +406,7 @@ namespace otb
       {
 	otbPoint[2]=static_cast<typename DataNodeType::PrecisionType>(ogrPoint->getZ());
       }
-  
+
     DataNodePointerType node = DataNodeType::New();
     node->SetPoint(otbPoint);
     return node;
@@ -427,16 +427,16 @@ namespace otb
 
 
     LinePointerType line = LineType::New();
-  
+
     OGRPoint * ogrTmpPoint = new OGRPoint();
-  
+
     for(int pIndex = 0;pIndex<ogrLine->getNumPoints();++pIndex)
       {
-      
+
 	ogrLine->getPoint(pIndex,ogrTmpPoint);
-      
+
 	typename LineType::VertexType vertex;
-      
+
 	vertex[0] = ogrTmpPoint->getX();
 	vertex[1] = ogrTmpPoint->getY();
 
@@ -444,7 +444,7 @@ namespace otb
 	  {
 	    vertex[2]= ogrTmpPoint->getZ();
 	  }
-      
+
 	line->AddVertex(vertex);
       }
     delete ogrTmpPoint;
@@ -462,18 +462,18 @@ namespace otb
   ::ConvertGeometryToPolygonNode(const OGRGeometry * ogrGeometry)
   {
     OGRPolygon * ogrPolygon = (OGRPolygon *)ogrGeometry;
-  
+
     if(ogrPolygon == NULL)
       {
 	itkGenericExceptionMacro(<<"Failed to convert OGRGeometry to OGRPolygon");
       }
-  
+
     OGRPoint * ogrTmpPoint = new OGRPoint();
-  
+
     OGRLinearRing *  ogrRing = ogrPolygon->getExteriorRing();
 
-    PolygonPointerType extRing = PolygonType::New();  
-      
+    PolygonPointerType extRing = PolygonType::New();
+
     for(int pIndex = 0;pIndex<ogrRing->getNumPoints();++pIndex)
       {
 	ogrRing->getPoint(pIndex,ogrTmpPoint);
@@ -510,7 +510,7 @@ namespace otb
 	  }
 	intRings->PushBack(ring);
       }
- 
+
     delete ogrTmpPoint;
 
     DataNodePointerType node = DataNodeType::New();
@@ -543,7 +543,7 @@ namespace otb
   {
     //  // try to create an ogr driver
     OGRSFDriver * ogrDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName("ESRI Shapefile");
- 
+
     if(ogrDriver == NULL)
       {
 	itkExceptionMacro(<<"No OGR driver found to write file "<<this->m_FileName);
@@ -556,8 +556,8 @@ namespace otb
       }
     // m_DataSource = OGRSFDriverRegistrar::Open(this->m_FileName.c_str(), TRUE);
     m_DataSource = ogrDriver->CreateDataSource(this->m_FileName.c_str(),NULL);
-  
-  
+
+
     // check the created data source
     if(m_DataSource == NULL)
       {
@@ -567,14 +567,14 @@ namespace otb
     // Retrieving root node
     DataTreeConstPointerType tree = data->GetDataTree();
     DataNodePointerType root = tree->GetRoot()->Get();
-  
+
     typedef itk::PreOrderTreeIterator<DataTreeType> TreeIteratorType;
 
     OGRLayer * ogrCurrentLayer = NULL;
     std::vector<OGRFeature *> ogrFeatures;
     OGRGeometryCollection * ogrCollection = NULL;
     // OGRGeometry * ogrCurrentGeometry = NULL;
-  
+
 
     TreeIteratorType it(tree);
     it.GoToBegin();
@@ -592,7 +592,7 @@ namespace otb
 	      if(ogrCurrentLayer!=NULL && ogrFeatures.size()>0)
 		{
 		  std::vector<OGRFeature*>::iterator fIt = ogrFeatures.begin();
-		  
+
 		  while(fIt!=ogrFeatures.end())
 		    {
 		      if(ogrCurrentLayer->CreateFeature(*fIt) != OGRERR_NONE)
@@ -619,10 +619,10 @@ namespace otb
 		      delete ogrCollection;
 		      ogrCollection = NULL;
 		    }
-	     
+
 		  ogrFeatures.push_back(OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn()));
-		  ogrFeatures.back()->SetField("Name",it.Get()->GetNodeId());  
-	  
+		  ogrFeatures.back()->SetField("Name",it.Get()->GetNodeId());
+
 		  break;
 		}
 	    case FEATURE_POINT:
@@ -652,7 +652,7 @@ namespace otb
  	      {
 		OGRLineString ogrLine;
 		VertexListConstPointerType vertexList = it.Get()->GetLine()->GetVertexList();
-	    
+
 		typename VertexListType::ConstIterator vIt = vertexList->Begin();
 
 		while(vIt != vertexList->End())
@@ -667,7 +667,7 @@ namespace otb
 		    ogrLine.addPoint(&ogrPoint);
 		    ++vIt;
 		  }
-		
+
 		if(ogrCollection == NULL)
 		  {
 		    ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbLineString);
@@ -685,7 +685,7 @@ namespace otb
 		OGRPolygon * ogrPolygon = new OGRPolygon();
 		OGRLinearRing * ogrExternalRing = new OGRLinearRing();
 		VertexListConstPointerType vertexList = it.Get()->GetPolygonExteriorRing()->GetVertexList();
-	    
+
 		typename VertexListType::ConstIterator vIt = vertexList->Begin();
 
 		while(vIt != vertexList->End())
@@ -709,7 +709,7 @@ namespace otb
 		    pIt!=it.Get()->GetPolygonInteriorRings()->End();++pIt)
 		  {
 		    OGRLinearRing * ogrInternalRing = new OGRLinearRing();
-		    vertexList = pIt.Get()->GetVertexList();	    
+		    vertexList = pIt.Get()->GetVertexList();
 		    vIt = vertexList->Begin();
 
 		    while(vIt != vertexList->End())
@@ -793,7 +793,7 @@ namespace otb
   if(ogrCurrentLayer!=NULL && ogrFeatures.size()>0)
       {
 	std::vector<OGRFeature*>::iterator fIt = ogrFeatures.begin();
-	
+
 	while(fIt!=ogrFeatures.end())
 	  {
 	    if(ogrCurrentLayer->CreateFeature(*fIt) != OGRERR_NONE)
@@ -805,10 +805,10 @@ namespace otb
 	  }
       }
     ogrFeatures.clear();
-    
+
     otbMsgDevMacro( <<" SHPVectorDataIO::Write()  ");
   }
- 
+
   } // end namespace otb
 
 #endif

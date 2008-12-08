@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See GETCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -41,11 +41,11 @@ int main ( int argc, char * argv[] )
 	parser->AddOption( "--winSize", "Sliding window size (def. 35)", "-w", 1, false );
 	parser->AddOutputImage();
 
-	typedef otb::CommandLineArgumentParseResult ParserResultType;	
+	typedef otb::CommandLineArgumentParseResult ParserResultType;
 	ParserResultType::Pointer  parseResult = ParserResultType::New();
-    
+
 	try
-        {	
+        {
                 parser->ParseCommandLine(argc,argv,parseResult);
 	}
 	catch( itk::ExceptionObject & err )
@@ -63,7 +63,7 @@ int main ( int argc, char * argv[] )
 	/*
 	 *	declaration des types
 	 */
-	
+
 	const unsigned int Dimension = 2;
 
 	typedef double InputPixelType;
@@ -72,26 +72,26 @@ int main ( int argc, char * argv[] )
 	typedef otb::Image< InputPixelType, Dimension > ImageType;
 	typedef otb::ImageFileReader< ImageType > ReaderType;
 
-	typedef otb::Image< TrainingPixelType, Dimension > TrainingImageType; 
+	typedef otb::Image< TrainingPixelType, Dimension > TrainingImageType;
 	typedef otb::ImageFileReader< TrainingImageType > TrainingReaderType;
 
 	/*
 	 * Accès aux paramètres
 	 */
-	 
+
 	const char * inputImageFileName1 = parseResult->GetParameterString("--InputImage1").c_str();
 	const char * inputImageFileName2 = parseResult->GetParameterString("--InputImage2").c_str();
 	const char * inputTrainingImageFileName = parseResult->GetParameterString("--Roi").c_str();
 	const char * outputImageFileName = parseResult->GetOutputImage().c_str();
-	
+
 	int winSize = 35;
 	if ( parseResult->IsOptionPresent("--winSize") )
 		winSize = parseResult->GetParameterInt("--winSize");
-	
+
 	/*
 	 *	JustDoIt
 	 */
-	
+
 
 	ImageType::Pointer img1 = ImageType::New();
 	ReaderType::Pointer reader1 = ReaderType::New();
@@ -119,15 +119,15 @@ int main ( int argc, char * argv[] )
 	changeDetector->SetInput1( img1 );
 	changeDetector->SetInput2( img2 );
 
-	// Once img1 and img2 are connected, it is time to connect imgRoi 
+	// Once img1 and img2 are connected, it is time to connect imgRoi
 	// to perform the parameters estimation of the non-changed area.
-	
+
 	changeDetector->SetTrainingArea( imgRoi );
 
 	typedef otb::CommandProgressUpdate< FilterType > CommandType;
 	CommandType::Pointer observer = CommandType::New();
 	changeDetector->AddObserver( itk::ProgressEvent(), observer );
-	
+
 	typedef otb::ImageFileWriter< ImageType > WriterType;
 	WriterType::Pointer writer = WriterType::New();
 	writer->SetFileName( outputImageFileName );
@@ -136,15 +136,15 @@ int main ( int argc, char * argv[] )
 	writer->Update();
 
 	}
-	catch( itk::ExceptionObject & err ) 
-	{ 
-		std::cerr << "ExceptionObject caught !" << std::endl; 
-		std::cerr << err << std::endl << std::endl; 
+	catch( itk::ExceptionObject & err )
+	{
+		std::cerr << "ExceptionObject caught !" << std::endl;
+		std::cerr << err << std::endl << std::endl;
 		return EXIT_FAILURE;
-	} 
-	
+	}
+
 	return EXIT_SUCCESS;
 }
 
-	
+
 

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -55,7 +55,7 @@ ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
 
 
 template < class TInputPath, class TOutput, class TPrecision>
-typename ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>::ComplexType 
+typename ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>::ComplexType
 ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
 ::EvaluateComplexMomentAtIndex(VertexType index) const
 {
@@ -70,16 +70,16 @@ ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
     while(p>0)
      {
       ValP *= ComplexPrecisionType(index[0], index[1]);
-      --p; 
+      --p;
      }
     unsigned int q  = m_Q;
     while(q>0)
      {
       ValQ *= ComplexPrecisionType(index[0], -index[1]);
-      --q; 
+      --q;
      }
 
-    Result = ValP * ValQ * ComplexPrecisionType( static_cast<PrecisionType>(PixelValue), 0.0); 
+    Result = ValP * ValQ * ComplexPrecisionType( static_cast<PrecisionType>(PixelValue), 0.0);
     return ( static_cast<ComplexType>(Result) );
 }
 
@@ -98,10 +98,10 @@ ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
   ComplexType  	     		      Value;
 
   Value = static_cast<ComplexType>(0.0);
-  
+
   vertexList = path.GetVertexList();
   nbPath = vertexList->Size();
-   
+
   if(nbPath >1)
      {
      for(int i =0 ; i<nbPath-1 ;i++)
@@ -112,10 +112,10 @@ ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
        cindex = vertexList->GetElement(i+1);
        PrecisionType x2 = cindex[0];
        PrecisionType y2 = cindex[1];
-       
+
        PrecisionType Theta;
        PrecisionType Norm;
-       
+
        Theta = vcl_atan2(y2-y1,x2-x1);
        Norm  = vcl_sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) );
 
@@ -123,7 +123,7 @@ ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
          {
 	 IndexOut[0] = x1 + k * vcl_cos(Theta);
 	 IndexOut[1] = y1 + k * vcl_sin(Theta);
-	 
+
 	 Value += EvaluateComplexMomentAtIndex(IndexOut );
 	 }
        } // FOR loop
@@ -145,7 +145,7 @@ ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
     }
 
   OutputType Result =  Evaluate( *(this->GetInputPath()) );
-  
+
   return Result;
 }
 

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,12 +30,12 @@ namespace otb
  *
  * This is the base class for alls class' generate an image dulus and
  * by using an modulus and a direction images intputs.
- * SetInput() method set the modulus image input and  
- * SetInputDirection() set the image direction input. 
- * 
+ * SetInput() method set the modulus image input and
+ * SetInputDirection() set the image direction input.
+ *
  */
 template <class TInputImage,
-	class TInputImageDirection, 
+	class TInputImageDirection,
 	class TOutputImage >
 class ITK_EXPORT ModulusAndDirectionImageToImageFilter :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
@@ -44,7 +44,7 @@ public:
   itkStaticConstMacro(		InputImageDimension,
   				unsigned int,
                       		TInputImage::ImageDimension);
-  itkStaticConstMacro(		OutputImageDimension, 
+  itkStaticConstMacro(		OutputImageDimension,
   				unsigned int,
                       		TOutputImage::ImageDimension);
 
@@ -63,7 +63,7 @@ public:
   typedef typename Superclass::InputImageType 	InputImageType;
   typedef TInputImageDirection 				    InputImageDirectionType;
   typedef typename Superclass::OutputImageType	OutputImageType;
- 
+
   /** Set/Get the image input of this process object.  */
   virtual void SetInput( const InputImageType *input);
   virtual void SetInputDirection( const InputImageDirectionType *direction);
@@ -86,5 +86,5 @@ private:
 #include "otbModulusAndDirectionImageToImageFilter.txx"
 #endif
 
-  
+
 #endif

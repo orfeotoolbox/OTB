@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -41,14 +41,14 @@ int otbNeighborhoodScalarProductFilter(int argc, char * argv[])
   typedef otb::ImageFileWriter<ImageType> WriterType;
   typedef otb::ImageFileWriter<VectorImageType> TempWriter;
   typedef itk::GradientRecursiveGaussianImageFilter<ImageType,VectorImageType> GradientFilterType;
-      
+
 
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
   GradientFilterType::Pointer gradient = GradientFilterType::New();
-      
+
   reader->SetFileName(infname);
   reader->Update();
 

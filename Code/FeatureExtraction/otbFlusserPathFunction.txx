@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,7 +33,7 @@ template < class TInputPath, class TOutput, class TPrecision>
 FlusserPathFunction<TInputPath, TOutput, TPrecision >
 ::FlusserPathFunction()
 {
-  m_MomentNumber =-1; 
+  m_MomentNumber =-1;
 }
 
 /**
@@ -61,13 +61,13 @@ FlusserPathFunction<TInputPath, TOutput, TPrecision >
   ComplexType                         FlusserValueComplex;
 
   typename FunctionType::Pointer function =FunctionType::New();
- 
+
   function->SetStep( this->GetStep() );
   function->SetInputPath( this->GetInputPath() );
-  
+
   switch(m_MomentNumber)
     {
-    case 1 : 
+    case 1 :
         {
 	ComplexType C11;
 	function->SetP(1);
@@ -126,8 +126,8 @@ FlusserPathFunction<TInputPath, TOutput, TPrecision >
 	C12 = function->Evaluate( );
 
 	FlusserValueComplex = C30 * vcl_pow(C12,3) ;
-	FlusserValue = FlusserValueComplex.real();       
-	}	
+	FlusserValue = FlusserValueComplex.real();
+	}
 	break;
     case 6:
         {
@@ -140,10 +140,10 @@ FlusserPathFunction<TInputPath, TOutput, TPrecision >
 	C12 = function->Evaluate( );
 
 	FlusserValueComplex = C30 * vcl_pow(C12,3) ;
-	FlusserValue = FlusserValueComplex.imag();       
-	}	
+	FlusserValue = FlusserValueComplex.imag();
+	}
 	break;
-    case 7 : 
+    case 7 :
         {
 	ComplexType C22;
 	function->SetP(2);
@@ -204,9 +204,9 @@ FlusserPathFunction<TInputPath, TOutput, TPrecision >
 	FlusserValue = FlusserValueComplex.imag();
 	}
 	break;
-	
+
     default:
-	itkWarningMacro("Flusser's invariant parameters are between 1 and 11");	
+	itkWarningMacro("Flusser's invariant parameters are between 1 and 11");
     }
 
 
@@ -226,7 +226,7 @@ FlusserPathFunction<TInputPath, TOutput, TPrecision >
     }
 
   RealType Result =  Evaluate( *(this->GetInputPath()) );
-  
+
   return Result;
 
 }

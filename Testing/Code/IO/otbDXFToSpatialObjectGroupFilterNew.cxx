@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,10 +25,10 @@ int otbDXFToSpatialObjectGroupFilterNew(int argc, char * argv[])
   const unsigned int Dimension = 2;
   typedef itk::GroupSpatialObject<Dimension> GroupType;
   typedef otb::DXFToSpatialObjectGroupFilter<GroupType> DXFToSpatialObjectGroupFilterType;
-  
+
   // Instantiating object
   DXFToSpatialObjectGroupFilterType::Pointer object = DXFToSpatialObjectGroupFilterType::New();
-  
-  
+
+
   return EXIT_SUCCESS;
 }

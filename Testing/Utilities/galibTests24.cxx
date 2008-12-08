@@ -82,7 +82,7 @@ public:
   GADefineIdentity("FinickySelector", 273);
   FinickySelector(int w=GASelectionScheme::SCALED) : GASelectionScheme(w) { }
   FinickySelector(const FinickySelector& orig) { copy(orig); }
-  FinickySelector& operator=(const FinickySelector& orig) 
+  FinickySelector& operator=(const FinickySelector& orig)
     { if(&orig != this) copy(orig); return *this; }
   virtual ~FinickySelector() { }
   virtual GASelectionScheme* clone() const { return new FinickySelector; }
@@ -91,13 +91,13 @@ public:
 
 GAGenome&
 FinickySelector::select() const {
-  return pop->best(GARandomInt(0, pop->size()/2), GAPopulation::SCALED); 
+  return pop->best(GARandomInt(0, pop->size()/2), GAPopulation::SCALED);
 }
 
 
 
 
-// This is the genetic algorithm that does the restricted mating.  It is 
+// This is the genetic algorithm that does the restricted mating.  It is
 // similar to the steady state genetic algorithm, but we modify the selection
 // part of the step method to do the restricted mating.
 
@@ -116,24 +116,24 @@ public:
 
 void
 RestrictedMatingGA::step()
-{ 
+{
   int i;
   GAGenome *mom, *dad;
 
-// Generate the individuals in the temporary population from individuals in 
+// Generate the individuals in the temporary population from individuals in
 // the main population.  We do a restrictive selection in which we only let
 // individuals that are dissimilar mate.  We do a little count just to make
 // sure that we don't loop forever (just accept whatever we selected if we
 // can't find what we'd like).
 
   for(i=0; i<tmpPop->size()-1; i+=2){	// takes care of odd population
-    mom = &(pop->select()); 
+    mom = &(pop->select());
     int k=0;
     do { k++; dad = &(pop->select()); }
     while(mom->compare(*dad) < THRESHOLD && k<pop->size());
     stats.numsel += 2;		// keep track of number of selections
     if(GAFlipCoin(pCrossover())){
-      stats.numcro += (*scross)(*mom, *dad, &tmpPop->individual(i), 
+      stats.numcro += (*scross)(*mom, *dad, &tmpPop->individual(i),
 				&tmpPop->individual(i+1));
     }
     else{
@@ -144,7 +144,7 @@ RestrictedMatingGA::step()
     stats.nummut += tmpPop->individual(i+1).mutate(pMutation());
   }
   if(tmpPop->size() % 2 != 0){	// do the remaining population member
-    mom = &(pop->select());  
+    mom = &(pop->select());
     dad = &(pop->select());
     int k=0;
     do { k++; dad = &(pop->select()); }
@@ -162,7 +162,7 @@ RestrictedMatingGA::step()
   }
 
 // Now stick the new individuals into the population, force an evaluation,
-// force a scaling, then remove the worst individuals so that we keep a 
+// force a scaling, then remove the worst individuals so that we keep a
 // constant population size.
 
   for(i=0; i<tmpPop->size(); i++)
@@ -253,7 +253,7 @@ galibTests24(int argc, char * argv[])
 
   return 0;
 }
- 
+
 
 
 
@@ -265,7 +265,7 @@ Objective(GAGenome& g){
 }
 
 // The comparator returns a number in the interval [0,1] where 0 means that
-// the two genomes are identical (zero diversity) and 1 means they are 
+// the two genomes are identical (zero diversity) and 1 means they are
 // completely different (maximum diversity).
 float
 Comparator(const GAGenome& g1, const GAGenome& g2) {

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -21,7 +21,7 @@
 #include "otbGDALImageIO.h"
 #include "itkVersion.h"
 
-  
+
 namespace otb
 {
 
@@ -33,18 +33,18 @@ GDALImageIOFactory::GDALImageIOFactory()
                          1,
                          itk::CreateObjectFunction<GDALImageIO>::New());
 }
-  
+
 GDALImageIOFactory::~GDALImageIOFactory()
 {
 }
 
-const char* 
+const char*
 GDALImageIOFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char* 
+const char*
 GDALImageIOFactory::GetDescription() const
 {
   return "GDAL ImageIO Factory, permettant le chargement d'image GDAL dans l'OTB";

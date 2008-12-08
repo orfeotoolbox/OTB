@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -39,13 +39,13 @@ int otbFilterFunctionValuesTest(int argc, char * argv[])
     {
       vect.push_back(atof(argv[i]));
     }
- 
+
   object->SetMinSpectralValue(atof(argv[2]));
   object->SetMaxSpectralValue(atof(argv[3]));
   object->SetUserStep(atof(argv[4]));
   object->SetFilterFunctionValues(vect);
 
-  // Call interpolate 
+  // Call interpolate
   otb::SIXSTraits::ComputeWavelenghtSpectralBandValuesFor6S(
 							    SIXSStepOfWavelenghtSpectralBandValues,
 							    object);
@@ -54,7 +54,7 @@ int otbFilterFunctionValuesTest(int argc, char * argv[])
   // Writing output file
   std::ofstream file;
   file.open(outname);
-      
+
   file <<"Input Vector :"<<std::endl;
   for (unsigned int i=0; i<vect.size(); i++)
     {
@@ -69,9 +69,9 @@ int otbFilterFunctionValuesTest(int argc, char * argv[])
   file<<std::endl;
   file<<"L_min :"<<object->GetMinSpectralValue()<<std::endl;
   file<<"L_max :"<<object->GetMaxSpectralValue()<<std::endl;
-      
+
   file.close();
- 
+
 
   return EXIT_SUCCESS;
 }

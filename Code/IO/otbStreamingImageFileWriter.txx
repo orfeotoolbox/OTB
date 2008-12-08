@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -45,7 +45,7 @@ StreamingImageFileWriter<TInputImage>
   m_NumberOfStreamDivisions = 0;
   // default to AUTOMATIC_NUMBER_OF_DIVISIONS
   m_CalculationDivision = SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS;
-  
+
   // create default region splitter
   m_RegionSplitter = itk::ImageRegionSplitter<InputImageDimension>::New();
 
@@ -68,7 +68,7 @@ StreamingImageFileWriter<TInputImage>
  *
  */
 template <class TInputImage>
-void 
+void
 StreamingImageFileWriter<TInputImage>
 ::SetBufferMemorySize(unsigned long memory_size_divisions)
 {
@@ -81,7 +81,7 @@ StreamingImageFileWriter<TInputImage>
  *
  */
 template <class TInputImage>
-void 
+void
 StreamingImageFileWriter<TInputImage>
 ::SetBufferNumberOfLinesDivisions(unsigned long nb_lines_divisions)
 {
@@ -94,7 +94,7 @@ StreamingImageFileWriter<TInputImage>
  *
  */
 template <class TInputImage>
-void 
+void
 StreamingImageFileWriter<TInputImage>
 ::SetNumberOfStreamDivisions(unsigned long nb_divisions)
 {
@@ -107,7 +107,7 @@ StreamingImageFileWriter<TInputImage>
  *
  */
 template <class TInputImage>
-void 
+void
 StreamingImageFileWriter<TInputImage>
 ::SetAutomaticNumberOfStreamDivisions(void)
 {
@@ -119,7 +119,7 @@ StreamingImageFileWriter<TInputImage>
  *
  */
 template <class TInputImage>
-void 
+void
 StreamingImageFileWriter<TInputImage>
 ::SetTilingStreamDivisions(void)
 {
@@ -129,7 +129,7 @@ StreamingImageFileWriter<TInputImage>
 }
 
 template <class TInputImage>
-void 
+void
 StreamingImageFileWriter<TInputImage>
 ::SetTilingStreamDivisions(unsigned long nb_divisions)
 {
@@ -143,7 +143,7 @@ StreamingImageFileWriter<TInputImage>
  *
  */
 template <class TInputImage>
-unsigned long 
+unsigned long
 StreamingImageFileWriter<TInputImage>
 ::GetNumberOfStreamDivisions(void)
 {
@@ -154,7 +154,7 @@ StreamingImageFileWriter<TInputImage>
  *
  */
 template <class TInputImage>
-std::string 
+std::string
 StreamingImageFileWriter<TInputImage>
 ::GetMethodUseToCalculateNumberOfStreamDivisions(void)
 {
@@ -165,13 +165,13 @@ StreamingImageFileWriter<TInputImage>
  *
  */
 template <class TInputImage>
-void 
+void
 StreamingImageFileWriter<TInputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
 
-  os << indent << "File Name: " 
+  os << indent << "File Name: "
      << (m_FileName.data() ? m_FileName.data() : "(none)") << std::endl;
 
   os << indent << "Image IO: ";
@@ -229,9 +229,9 @@ StreamingImageFileWriter<TInputImage>
 
 //---------------------------------------------------------
 template<class TInputImage>
-void 
+void
 StreamingImageFileWriter<TInputImage>
-::SetIORegion (const itk::ImageIORegion& region) 
+::SetIORegion (const itk::ImageIORegion& region)
 {
   itkDebugMacro("setting IORegion to " << region );
   if ( m_IORegion != region)
@@ -240,17 +240,17 @@ StreamingImageFileWriter<TInputImage>
     this->Modified();
     m_UserSpecifiedIORegion = true;
     }
-} 
+}
 
 /**
  *
  */
 template<class TInputImage>
-unsigned long 
+unsigned long
 StreamingImageFileWriter<TInputImage>
 ::CalculateNumberOfStreamDivisions(void)
 {
-        
+
         return StreamingTraitsType
     ::CalculateNumberOfStreamDivisions(this->GetInput(),
                                        this->GetInput()->GetLargestPossibleRegion(),
@@ -266,7 +266,7 @@ StreamingImageFileWriter<TInputImage>
  *
  */
 template<class TInputImage>
-void 
+void
 StreamingImageFileWriter<TInputImage>
 ::UpdateOutputData(itk::DataObject *itkNotUsed(output))
 {
@@ -299,7 +299,7 @@ StreamingImageFileWriter<TInputImage>
   this->SetAbortGenerateData(0);
   this->SetProgress(0.0);
   this->m_Updating = true;
-    
+
 
   /**
    * Tell all Observers that the filter is starting
@@ -307,13 +307,13 @@ StreamingImageFileWriter<TInputImage>
   this->InvokeEvent( itk::StartEvent() );
 
   /**
-   * Allocate the output buffer. 
+   * Allocate the output buffer.
    */
   OutputImagePointer outputPtr = this->GetOutput(0);
   OutputImageRegionType outputRegion = outputPtr->GetLargestPossibleRegion();
 
   /** Prepare ImageIO  : create ImageFactory */
-  
+
   // Make sure that we can write the file given the name
   //
   if ( m_FileName == "" )
@@ -323,12 +323,12 @@ StreamingImageFileWriter<TInputImage>
 
   if ( m_ImageIO.IsNull() ) //try creating via factory
     {
-    itkDebugMacro(<<"Attempting factory creation of ImageIO for file: " 
+    itkDebugMacro(<<"Attempting factory creation of ImageIO for file: "
                   << m_FileName);
-    this->SetImageIO( ImageIOFactory::CreateImageIO( m_FileName.c_str(), 
+    this->SetImageIO( ImageIOFactory::CreateImageIO( m_FileName.c_str(),
                                                itk::ImageIOFactory::WriteMode ) );
 
-/*    m_ImageIO = ImageIOFactory::CreateImageIO( m_FileName.c_str(), 
+/*    m_ImageIO = ImageIOFactory::CreateImageIO( m_FileName.c_str(),
                                                itk::ImageIOFactory::WriteMode );*/
     m_FactorySpecifiedImageIO = true;
     }
@@ -336,11 +336,11 @@ StreamingImageFileWriter<TInputImage>
     {
     if( m_FactorySpecifiedImageIO && !m_ImageIO->CanWriteFile( m_FileName.c_str() ) )
       {
-      itkDebugMacro(<<"ImageIO exists but doesn't know how to write file:" 
+      itkDebugMacro(<<"ImageIO exists but doesn't know how to write file:"
                     << m_FileName );
       itkDebugMacro(<<"Attempting creation of ImageIO with a factory for file:"
                     << m_FileName);
-      m_ImageIO = ImageIOFactory::CreateImageIO( m_FileName.c_str(), 
+      m_ImageIO = ImageIOFactory::CreateImageIO( m_FileName.c_str(),
                                                  itk::ImageIOFactory::WriteMode );
       m_FactorySpecifiedImageIO = true;
       }
@@ -353,13 +353,13 @@ StreamingImageFileWriter<TInputImage>
     msg << " Could not create IO object for file "
         << m_FileName.c_str() << std::endl;
     msg << "  Tried to create one of the following:" << std::endl;
-    std::list<itk::LightObject::Pointer> allobjects = 
+    std::list<itk::LightObject::Pointer> allobjects =
       itk::ObjectFactoryBase::CreateAllInstance("itkImageIOBase");
     for(std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin();
         i != allobjects.end(); ++i)
       {
       itk::ImageIOBase* io = dynamic_cast<itk::ImageIOBase*>(i->GetPointer());
-      msg << "    " << io->GetNameOfClass() << std::endl; 
+      msg << "    " << io->GetNameOfClass() << std::endl;
       }
     msg << "  You probably failed to set a file suffix, or" << std::endl;
     msg << "    set the suffix to an unsupported type." << std::endl;
@@ -374,7 +374,7 @@ StreamingImageFileWriter<TInputImage>
   /**
    * Grab the input
    */
-  InputImagePointer inputPtr = 
+  InputImagePointer inputPtr =
     const_cast< InputImageType * >( this->GetInput(0) );
 
   /**
@@ -403,7 +403,7 @@ StreamingImageFileWriter<TInputImage>
                         otbDebugMacro(<< "NumberOfStreamDivisions : " << numDivisions);
                         numDivisionsFromSplitter = m_RegionSplitter->GetNumberOfSplits(outputRegion, numDivisions);
                         otbDebugMacro(<< "NumberOfStreamSplitterDivisions : " << numDivisionsFromSplitter);
-                        
+
                         // In tiling streaming mode, we keep the number of divisions calculed by splitter
                         if ((numDivisionsFromSplitter < numDivisions)||(m_CalculationDivision==SET_TILING_STREAM_DIVISIONS))
                   {
@@ -411,7 +411,7 @@ StreamingImageFileWriter<TInputImage>
                   }
 */
     }
-  
+
   /**
    * Loop over the number of pieces, execute the upstream pipeline on each
    * piece, and copy the results into the output image.
@@ -451,7 +451,7 @@ StreamingImageFileWriter<TInputImage>
    //
    m_ImageIO->SetFileName(m_FileName.c_str());
    m_ImageIO->WriteImageInformation();
-  
+
 
   /**
    * Loop over the number of pieces, execute the upstream pipeline on each
@@ -468,14 +468,14 @@ StreamingImageFileWriter<TInputImage>
     {
                 streamRegion = m_RegionSplitter->GetSplit(piece, numDivisions,
                                               outputRegion);
-      
+
 		otbMsgDebugMacro(<<"Piece : " << piece );
 		otbMsgDebugMacro(<<"RegionSplit : Index(" << streamRegion.GetIndex()[0]
 				 << "," << streamRegion.GetIndex()[1]
 				 << ") Size(" << streamRegion.GetSize()[0]
 				 << "," << streamRegion.GetSize()[1] << ")");
-		
-                        
+
+
                 inputPtr->SetRequestedRegion(streamRegion);
                 inputPtr->PropagateRequestedRegion();
                 inputPtr->UpdateOutputData();
@@ -519,12 +519,12 @@ StreamingImageFileWriter<TInputImage>
       this->GetOutput(idx)->DataHasBeenGenerated();
       }
     }
-  
+
   /**
    * Release any inputs if marked for release
    */
   this->ReleaseInputs();
-  
+
   // Mark that we are no longer updating the data in this filter
   this->m_Updating = false;
 }
@@ -536,30 +536,30 @@ StreamingImageFileWriter<TInputImage>
  *
  */
 template<class TInputImage>
-void 
+void
 StreamingImageFileWriter<TInputImage>
 ::GenerateData(void)
 {
  // otbGenericMsgDebugMacro(<< "TEST GenerateData");
-        
+
         const InputImageType * input = this->GetInput();
-  
-  // Make sure that the image is the right type and no more than 
+
+  // Make sure that the image is the right type and no more than
   // four components.
   typedef typename InputImageType::PixelType ScalarType;
 
-  if( strcmp( input->GetNameOfClass(), "VectorImage" ) == 0 ) 
+  if( strcmp( input->GetNameOfClass(), "VectorImage" ) == 0 )
     {
     typedef typename InputImageType::InternalPixelType VectorImageScalarType;
     m_ImageIO->SetPixelTypeInfo( typeid(VectorImageScalarType) );
-    
+
     typedef typename InputImageType::AccessorFunctorType AccessorFunctorType;
     m_ImageIO->SetNumberOfComponents( AccessorFunctorType::GetVectorLength(input) );
     }
   else
     {
     // Set the pixel and component type; the number of components.
-    m_ImageIO->SetPixelTypeInfo(typeid(ScalarType));  
+    m_ImageIO->SetPixelTypeInfo(typeid(ScalarType));
     }
 
   // Setup the image IO for writing.

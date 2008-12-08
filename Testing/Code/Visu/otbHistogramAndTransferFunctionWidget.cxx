@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,14 +25,14 @@ int otbHistogramAndTransferFunctionWidget(int argc, char * argv[])
 {
   typedef unsigned char PixelType;
   const unsigned int Dimension =2;
-  
+
   const char * infname = argv[1];
 
   typedef otb::Image<PixelType,Dimension> ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef itk::Statistics::ScalarImageToHistogramGenerator<ImageType> GeneratorType;
   typedef GeneratorType::HistogramType HistogramType;
-  
+
   typedef otb::HistogramAndTransferFunctionWidget<HistogramType,PixelType> WidgetType;
   typedef otb::ImageWidgetAffineTransferFunction<PixelType> TransferFunctionType;
 
@@ -67,6 +67,6 @@ int otbHistogramAndTransferFunctionWidget(int argc, char * argv[])
   // suppres child, without delete memory.
   // delete memory is ITK respoability, since WidgetType::New()
   window.remove(widget.GetPointer());
-  
+
   return EXIT_SUCCESS;
 }

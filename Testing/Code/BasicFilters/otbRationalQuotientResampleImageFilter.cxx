@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -26,17 +26,17 @@ int otbRationalQuotientResampleImageFilter(int argc, char* argv[])
   const char* outputName = argv[2];
   const unsigned int numerator = atoi(argv[3]);
   const unsigned int denominator = atoi(argv[4]);
-  
+
   typedef float PixelType;
   const unsigned int Dimension = 2;
-  
+
   typedef otb::Image<PixelType,Dimension> ImageType;
-  
+
   // Reader
   typedef otb::ImageFileReader<ImageType> ReaderType;
   // Writer
   typedef otb::ImageFileWriter<ImageType> WriterType;
-  
+
   // Rational quotient resample
   typedef otb::RationalQuotientResampleImageFilter<ImageType,ImageType> ResampleType;
 
@@ -44,20 +44,20 @@ int otbRationalQuotientResampleImageFilter(int argc, char* argv[])
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
   ResampleType::Pointer resampler = ResampleType::New();
-    
+
   // Pipe reader and resampler
   reader->SetFileName(inputName);
   resampler->SetInput(reader->GetOutput());
-  
+
   // Set filter properties, eg rational quotient
   resampler->SetNumeratorFactors(numerator);
   resampler->SetDenominatorFactors(denominator);
-  
+
   // Pipe resampler and writer
   writer->SetFileName(outputName);
   writer->SetInput(resampler->GetOutput());
-  
+
   writer->Update();
-  
+
   return EXIT_SUCCESS;
 }

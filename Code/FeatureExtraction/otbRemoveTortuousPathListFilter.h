@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,13 +30,13 @@ namespace otb
    *  A path is considered to be tortuous if the mean distance between each consecutive vertices
    *  is strictly lower than the user provided threshold.
    *
-   * This class is just a shortcut to the UnaryFunctorObjectListBooleanFilter with 
+   * This class is just a shortcut to the UnaryFunctorObjectListBooleanFilter with
    * the PathMeanDistanceFunctor.
    *
    *<b>Recent API changes:</b>
    * Now part of the UnaryFunctorObjectListBooleanFilter hierachy, replace call to SetMeanDistanceThreshold()
    * by GetFunctor().SetThreshold().
-   * 
+   *
    * The inequality is now a strict one.
    *
    * \sa BreakAngularPathListFilter
@@ -50,10 +50,10 @@ namespace otb
 
 //   template <class TPath>
   template <class TPath>
-      class ITK_EXPORT RemoveTortuousPathListFilter : 
+      class ITK_EXPORT RemoveTortuousPathListFilter :
       public UnaryFunctorObjectListBooleanFilter<
-       ObjectList<TPath>, 
-       ObjectList<TPath>, 
+       ObjectList<TPath>,
+       ObjectList<TPath>,
        PathMeanDistanceFunctor<typename TPath::Pointer> >
        {};
 

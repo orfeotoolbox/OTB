@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -54,9 +54,9 @@ namespace otb
 	    }
 	};
     }
-  
+
   /** \class MeanShiftVectorImageFilter
-   *    
+   *
    * This is the implementation of the mean shift clustering and edge-preserving smoothing filter adapted to
    * otb::VectorImage or itk::VectorImage. For the full documentation, please refer to the
    * base class otb::MeanShiftImageFilterBase.
@@ -88,7 +88,7 @@ namespace otb
       MeanShiftVectorImageFilter(){};
       /** destructor */
       ~MeanShiftVectorImageFilter(){};
-      
+
       /**PrintSelf method */
       virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
       {

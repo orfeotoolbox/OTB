@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -26,13 +26,13 @@ namespace otb
 /** \class Polygon
  *  \brief This class represent a 2D polygon.
  *
- *  It derives from otb::PolyLineParametricPathWithValue. The polygon is 
- * considered to be the closed path represented by the 
+ *  It derives from otb::PolyLineParametricPathWithValue. The polygon is
+ * considered to be the closed path represented by the
  * PolyLineParametricPathWithValue.
- * 
- *  It implements some useful methods to work with polygons, such as surface 
- * computation, as well as method useful in the spatial reasoning context, such 
- * as IsInside, IsOnEdge, IsTouching, IsCrossing. 
+ *
+ *  It implements some useful methods to work with polygons, such as surface
+ * computation, as well as method useful in the spatial reasoning context, such
+ * as IsInside, IsOnEdge, IsTouching, IsCrossing.
  *
  * \sa otb::PolyLineParametricPathWithValue
  */
@@ -49,10 +49,10 @@ class ITK_EXPORT Polygon
   typedef TValue                                    ValueType;
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(Polygon, PolyLineParametricPathWithValue);
-  
+
   /** Derived typedefs */
   typedef typename Superclass::VertexType          VertexType;
   typedef typename Superclass::VertexListType      VertexListType;
@@ -72,14 +72,14 @@ class ITK_EXPORT Polygon
    * \return True if the point is inside the polygon.
    */
   bool IsInside(VertexType point);
-  
+
   /**
    * Check wether point is strictly on the edge of the polygon.
    * \param point The point to check.
    * \return True if the point is on the edge of the polygon.
    */
   bool IsOnEdge(VertexType point);
-  
+
   /**
    * Returns the number of crossings of the polygon with a given segment.
    * \param a First point of the segment,
@@ -105,7 +105,7 @@ class ITK_EXPORT Polygon
    * \return True if the two segments are strictly crossing.
    */
   bool IsCrossing(VertexType a1, VertexType a2, VertexType b1, VertexType b2);
-  
+
   /**
    * Check wether two segments[a1a2] and [b1b2] are touching without crossing.
    * \param a1 First point of the first segment,
@@ -127,27 +127,27 @@ class ITK_EXPORT Polygon
   * \return The surface.
   */
  double GetSurface();
- 
+
   /**
   * Return the polygon length (perimeter).
   * \return The length.
   */
  virtual double GetLength();
- 
+
 protected:
   /** Constructor */
-  Polygon() 
+  Polygon()
     {
       m_Epsilon = 0.000001;
     };
-    
+
   /** Destructor */
   virtual ~Polygon() {};
-  
+
  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  
+
 private:
   Polygon(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

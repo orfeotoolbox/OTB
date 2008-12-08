@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -50,7 +50,7 @@ public:
   typedef itk::SmartPointer<const Self>         ConstPointer;
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(MultiToMonoChannelExtractROI, ExtractROIBase);
@@ -110,16 +110,16 @@ protected:
 private:
   MultiToMonoChannelExtractROI(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
   /** Channel to process [1...] */
   unsigned int  m_Channel;
 };
 
-  
+
 } // end namespace otb
-  
+
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbMultiToMonoChannelExtractROI.txx"
 #endif
-  
+
 #endif

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
   =========================================================================*/
@@ -44,25 +44,25 @@ int otbStreamingImageFilterTest (int argc, char* argv[])
 
   typedef otb::ImageFileReader< InputImageType  >         ReaderType;
   typedef otb::ImageFileWriter< OutputImageType >         WriterType;
-        
+
   typedef itk::StreamingImageFilter<InputImageType,OutputImageType> StreamingImageFilterType;
-        
-        
+
+
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
- 
+
   reader->SetFileName( inputFilename  );
   writer->SetFileName( outputFilename );
-        
+
   StreamingImageFilterType::Pointer streamer = StreamingImageFilterType::New();
 
   streamer->SetInput( reader->GetOutput() );
   streamer->SetNumberOfStreamDivisions( 10 );
   streamer->Update();
-        
-  writer->SetInput( streamer->GetOutput() );
-  writer->Update(); 
 
-  
+  writer->SetInput( streamer->GetOutput() );
+  writer->Update();
+
+
   return EXIT_SUCCESS;
 }

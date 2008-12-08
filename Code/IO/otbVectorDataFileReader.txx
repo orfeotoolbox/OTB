@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -58,7 +58,7 @@ SpatialObjectDXFReader<TSpatialObject>
 }*/
 
  /** Test whether the given filename exist and it is readable,
-      this is intended to be called before attempting to use 
+      this is intended to be called before attempting to use
       VectorDataIO classes for actually reading the file. If the file
       doesn't exist or it is not readable, and exception with an
       approriate message will be thrown. */
@@ -107,12 +107,12 @@ void
 VectorDataFileReader<TOutputVectorData>
 ::SetVectorDataIO( VectorDataIOBaseType * vectorDataIO)
 {
-  itkDebugMacro("setting VectorDataIO to " << vectorDataIO ); 
-  if (this->m_VectorDataIO != vectorDataIO ) 
+  itkDebugMacro("setting VectorDataIO to " << vectorDataIO );
+  if (this->m_VectorDataIO != vectorDataIO )
     {
     this->m_VectorDataIO = vectorDataIO;
-    this->Modified(); 
-    } 
+    this->Modified();
+    }
   m_UserSpecifiedVectorDataIO = true;
 }
 
@@ -125,7 +125,7 @@ VectorDataFileReader<TOutputVectorData>
   typename TOutputVectorData::Pointer output = this->GetOutput();
 
   itkDebugMacro(<<"Reading file for GenerateOutputInformation()" << m_FileName);
-  
+
   // Check to see if we can read the file given the name or prefix
   //
   if ( m_FileName == "" )
@@ -150,7 +150,7 @@ VectorDataFileReader<TOutputVectorData>
     {
     m_VectorDataIO = VectorDataIOFactory<TOutputVectorData>::CreateVectorDataIO( m_FileName.c_str(), VectorDataIOFactory<TOutputVectorData>::ReadMode );
     }
-  
+
   if ( m_VectorDataIO.IsNull() )
     {
     itk::OStringStream msg;
@@ -163,13 +163,13 @@ VectorDataFileReader<TOutputVectorData>
     else
       {
       msg << "  Tried to create one of the following:" << std::endl;
-      std::list<itk::LightObject::Pointer> allobjects = 
+      std::list<itk::LightObject::Pointer> allobjects =
         itk::ObjectFactoryBase::CreateAllInstance("otbVectorDataIOBase");
       for(std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin();
           i != allobjects.end(); ++i)
         {
         VectorDataIOBase<TOutputVectorData>* io = dynamic_cast<VectorDataIOBase<TOutputVectorData>*>(i->GetPointer());
-        msg << "    " << io->GetNameOfClass() << std::endl; 
+        msg << "    " << io->GetNameOfClass() << std::endl;
         }
       msg << "  You probably failed to set a file suffix, or" << std::endl;
       msg << "    set the suffix to an unsupported type." << std::endl;
@@ -178,7 +178,7 @@ VectorDataFileReader<TOutputVectorData>
     throw e;
     return;
     }
-  
+
   m_VectorDataIO->SetFileName(m_FileName.c_str());
 //   m_VectorDataIO->ReadVectorDataInformation();
 
@@ -198,7 +198,7 @@ VectorDataFileReader<TOutputVectorData>
 
   typename TOutputVectorData::Pointer output = this->GetOutput();
 
-  itkDebugMacro ( << "VectorDataFileReader::GenerateData() \n"); 
+  itkDebugMacro ( << "VectorDataFileReader::GenerateData() \n");
 
   // Test if the file exist and if it can be open.
   // and exception will be thrown otherwise.

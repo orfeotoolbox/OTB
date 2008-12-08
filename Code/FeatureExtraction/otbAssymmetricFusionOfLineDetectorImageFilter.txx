@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,7 +34,7 @@ AssymmetricFusionOfLineDetectorImageFilter<TInputImage, TOutputImage, TOutputIma
   this->m_Radius.Fill(1);
   this->m_LengthLine = 1;
   this->m_WidthLine = 0;
-  
+
   m_LineRatio         = LineRatioType::New();
   m_LineCorrelation   = LineCorrelationType::New();
   m_AssSymSum         = AssSymSumType::New();
@@ -51,12 +51,12 @@ AssymmetricFusionOfLineDetectorImageFilter<TInputImage, TOutputImage, TOutputIma
 
   m_LineCorrelation->SetInput( this->GetInput() );
   m_LineCorrelation->SetLengthLine( this->m_LengthLine );
-  m_LineCorrelation->SetWidthLine( this->m_WidthLine );  
+  m_LineCorrelation->SetWidthLine( this->m_WidthLine );
 
   m_AssSymSum->SetInput1( m_LineRatio->GetOutput() );
   m_AssSymSum->SetInput2( m_LineCorrelation->GetOutput() );
-  
-  m_AssSymSum->GraftOutput(this->GetOutput() ); 
+
+  m_AssSymSum->GraftOutput(this->GetOutput() );
   m_AssSymSum->Update();
   this->GraftOutput(m_AssSymSum->GetOutput() );
 }
@@ -66,7 +66,7 @@ AssymmetricFusionOfLineDetectorImageFilter<TInputImage, TOutputImage, TOutputIma
  * Standard "PrintSelf" method
  */
 template <class TInputImage, class TOutputImage, class TOutputImageDirection, class TInterpolator>
-void 
+void
 AssymmetricFusionOfLineDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection, TInterpolator>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {

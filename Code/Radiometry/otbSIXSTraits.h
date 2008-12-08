@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,10 +28,10 @@ namespace otb
  * \brief SIXSTraits operations.
  *
  * Call 6S main function. The main method call 6S to calculate atmospheric correction parameters.
- * It use by the OTB Atmospheric correction framework. 
+ * It use by the OTB Atmospheric correction framework.
  *
  */
-class ITK_EXPORT SIXSTraits 
+class ITK_EXPORT SIXSTraits
 {
 public:
 
@@ -58,22 +58,22 @@ public:
         const   double                  AerosolOptical,                         /** The Aerosol optical (radiative impact of aerosol for the reference wavelenght 550-nm) */
                 WavelenghtSpectralType* WavelenghtSpectralBand,                 /** Wavelenght for the spectral band definition */
                                                                                 /** Note : The Max wavelenght spectral band value must be updated ! */
-                double &                AtmosphericReflectance,                 /** Atmospheric reflectance */     
+                double &                AtmosphericReflectance,                 /** Atmospheric reflectance */
                 double &                AtmosphericSphericalAlbedo,             /** atmospheric spherical albedo */
                 double &                TotalGaseousTransmission,               /** Total gaseous transmission */
-                double &                DownwardTransmittance,                  /** downward transmittance */      
+                double &                DownwardTransmittance,                  /** downward transmittance */
                 double &                UpwardTransmittance,                    /** upward transmittance */
                 double &                UpwardDiffuseTransmittance,             /** upward diffuse transmittance */
                 double &                UpwardDirectTransmittance,              /** Upward direct transmittance */
                 double &                UpwardDiffuseTransmittanceForRayleigh,  /** upward diffuse transmittance for rayleigh */
                 double &                UpwardDiffuseTransmittanceForAerosol    /** upward diffuse transmittance for aerosols */
         );
-  
-  /** 
-  * Check the correpondance between the vector value size and 
+
+  /**
+  * Check the correpondance between the vector value size and
   * the interval number between min and max.
   * If the vector step is not at 0.0025, the new values are computed.
-  * The output vector values is store in the m_FilterFunctionValues6S 
+  * The output vector values is store in the m_FilterFunctionValues6S
   * of WavelenghtSpectralBand
   *
   */

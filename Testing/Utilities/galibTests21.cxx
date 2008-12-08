@@ -41,7 +41,7 @@ REGISTER_TEST(galibTests21);
 ArrayAlleleGenome.  In particular, we use the RealGenome to show how you can
 use the enumerated and bounded types of allele sets.
    You can define one allele set for an entire array, or you can define one
-allele set for each element in the array.  The constructor that you use to 
+allele set for each element in the array.  The constructor that you use to
 create the array determines which behaviour you'll get.
 ---------------------------------------------------------------------------- */
 #include <stdio.h>
@@ -89,7 +89,7 @@ galibTests21(int argc, char * argv[])
 
   int length = 8;
 
-// This genome uses an enumerated list of alleles.  We explictly add each 
+// This genome uses an enumerated list of alleles.  We explictly add each
 // allele to the allele set.  Any element of the genome may assume the value
 // of any member of the allele set.
 
@@ -102,14 +102,14 @@ galibTests21(int argc, char * argv[])
   GARealGenome genome1(length, alleles1, Objective1);
 
 // This genome uses a bounded set of continous numbers.  The default arguments
-// are INCLUSIVE for both the lower and upper bounds, so in this case the 
+// are INCLUSIVE for both the lower and upper bounds, so in this case the
 // allele set is [0,1] and any element of the genome may assume a value [0,1].
 
   GARealAlleleSet alleles2(0, 1);
   GARealGenome genome2(length, alleles2, Objective2);
 
 // Similar to the previous set, but this one has EXCLUSIVE bounds and we create
-// the allele set explicitly (even though in this case 
+// the allele set explicitly (even though in this case
 
   GARealAlleleSetArray alleles2a;
   for(int i=0; i<length; i++)
@@ -195,7 +195,7 @@ galibTests21(int argc, char * argv[])
 
   return 0;
 }
- 
+
 
 
 

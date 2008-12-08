@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -21,7 +21,7 @@
 #include "otbTileMapImageIO.h"
 #include "itkVersion.h"
 
-  
+
 namespace otb
 {
 
@@ -33,18 +33,18 @@ TileMapImageIOFactory::TileMapImageIOFactory()
                          1,
                          itk::CreateObjectFunction<TileMapImageIO>::New());
 }
-  
+
 TileMapImageIOFactory::~TileMapImageIOFactory()
 {
 }
 
-const char* 
+const char*
 TileMapImageIOFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char* 
+const char*
 TileMapImageIOFactory::GetDescription() const
 {
   return "TileMap ImageIO Factory, enabling TileMap image format loading in OTB";

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -22,14 +22,14 @@ int otbRationalQuotientResampleImageFilterNew( int argc, char* argv[] )
 {
   typedef float PixelType;
   const unsigned int Dimension = 2;
-  
+
   // Rational quotient resample
   typedef otb::Image<PixelType,Dimension> ImageType;
   typedef otb::RationalQuotientResampleImageFilter<ImageType,ImageType> ResampleType;
   typedef ResampleType::Pointer ResamplePointerType;
-  
+
   // Instanciation object
   ResamplePointerType rersample = ResampleType::New();
-  
+
   return EXIT_SUCCESS;
 }

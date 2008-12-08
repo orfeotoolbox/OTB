@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -76,7 +76,7 @@ LogPolarTransform<TScalarType>
   this->m_Parameters[1]=m_Center[1];
   this->m_Parameters[2]=m_Scale[0];
   this->m_Parameters[3]=m_Scale[1];
-  
+
   return this->m_Parameters;
 }
 /**
@@ -117,14 +117,14 @@ LogPolarTransform<TScalarType>
   result[1]=0.;
   result[0]+=vcl_exp(logRho) *vcl_cos(theta);
   result[1]+=vcl_exp(logRho) *vcl_sin(theta);
- 
+
   return result;
 }
 /**
  * Transform a vnl vector representing a point.
  * \param vector The point to transform.
  * \return The transformed point.
- */  
+ */
 template <class TScalarType>
 typename LogPolarTransform<TScalarType>
 ::OutputVnlVectorType

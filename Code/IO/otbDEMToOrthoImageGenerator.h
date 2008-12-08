@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -42,7 +42,7 @@ namespace otb
    *
    */
   template <class TDEMImage, class TMapProjection>
-    class ITK_EXPORT DEMToOrthoImageGenerator: 
+    class ITK_EXPORT DEMToOrthoImageGenerator:
         public otb::DEMToImageGenerator<TDEMImage>
         {
           public :
@@ -51,16 +51,16 @@ namespace otb
             typedef TDEMImage					      		      DEMImageType;
             typedef typename DEMImageType::Pointer				      DEMImagePointerType;
             typedef typename DEMImageType::PixelType                 		      PixelType;
-      
+
             typedef TMapProjection                                                  MapProjectionType;
             typedef typename MapProjectionType::Pointer                             MapProjectionPointerType;
-      
+
             typedef DEMToOrthoImageGenerator                              	              Self;
             typedef otb::DEMToImageGenerator<DEMImageType> Superclass;
             typedef itk::SmartPointer<Self>                    	      	      Pointer;
             typedef itk::SmartPointer<const Self>              	      	      ConstPointer;
-            typedef Image<PixelType,2>           				      OutputImageType; 
-      
+            typedef Image<PixelType,2>           				      OutputImageType;
+
             typedef typename Superclass::Pointer    				      OutputImagePointer;
             typedef typename OutputImageType::SpacingType   			      SpacingType;
             typedef typename OutputImageType::SizeType 			      SizeType;
@@ -74,50 +74,50 @@ namespace otb
 
             /** Method for creation through the object factory. */
             itkNewMacro(Self);
-      
+
             /** Run-time type information (and related methods). */
             itkTypeMacro(DEMToOrthoImageGenerator,ImageSource);
-      
+
             /** Set/Get the Output Origin coordinates. */
             itkSetMacro(OutputOrigin,PointType);
             itkGetConstReferenceMacro(OutputOrigin,PointType);
-      
+
             /** Set/Get the Output Size. */
             itkSetMacro(OutputSize,SizeType);
             itkGetConstReferenceMacro(OutputSize,SizeType);
-     
-            /** Set/Get the Output Spacing. */    
+
+            /** Set/Get the Output Spacing. */
             itkSetMacro(OutputSpacing,SpacingType);
             itkGetConstReferenceMacro(OutputSpacing,SpacingType);
 
-            /** Set/Get the Default Unknown Value. */    
+            /** Set/Get the Default Unknown Value. */
             itkSetMacro(DefaultUnknownValue,PixelType);
             itkGetConstReferenceMacro(DefaultUnknownValue,PixelType);
 
             /** Set/Get the projection*/
             itkSetMacro(MapProjection, MapProjectionPointerType);
             itkGetMacro(MapProjection, MapProjectionPointerType);
-      
+
           protected:
             DEMToOrthoImageGenerator();
             ~DEMToOrthoImageGenerator();
-      
+
             void PrintSelf(std::ostream& os, Indent indent) const;
             void GenerateData();
             virtual void GenerateOutputInformation();
-      
+
             DEMHandlerPointerType m_DEMHandler;
             PointType m_OutputOrigin;
             SpacingType  m_OutputSpacing;
             SizeType m_OutputSize;
             PixelType m_DefaultUnknownValue;
             MapProjectionPointerType m_MapProjection;
-            
+
           private:
             DEMToOrthoImageGenerator(const Self&); //purposely not implemented
             void operator=(const Self&); //purposely not implemented
         };
-  
+
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

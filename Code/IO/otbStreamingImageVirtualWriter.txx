@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -43,7 +43,7 @@ StreamingImageVirtualWriter<TInputImage>
   m_NumberOfStreamDivisions = 0;
   // default to AUTOMATIC_NUMBER_OF_DIVISIONS
   m_CalculationDivision = SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS;
-  
+
   // create default region splitter
   m_RegionSplitter = itk::ImageRegionSplitter<InputImageDimension>::New();
 }
@@ -61,7 +61,7 @@ StreamingImageVirtualWriter<TInputImage>
  *
  */
 template <class TInputImage>
-void 
+void
 StreamingImageVirtualWriter<TInputImage>
 ::SetBufferMemorySize(unsigned long memory_size_divisions)
 {
@@ -74,7 +74,7 @@ StreamingImageVirtualWriter<TInputImage>
  *
  */
 template <class TInputImage>
-void 
+void
 StreamingImageVirtualWriter<TInputImage>
 ::SetBufferNumberOfLinesDivisions(unsigned long nb_lines_divisions)
 {
@@ -87,7 +87,7 @@ StreamingImageVirtualWriter<TInputImage>
  *
  */
 template <class TInputImage>
-void 
+void
 StreamingImageVirtualWriter<TInputImage>
 ::SetNumberOfStreamDivisions(unsigned long nb_divisions)
 {
@@ -100,7 +100,7 @@ StreamingImageVirtualWriter<TInputImage>
  *
  */
 template <class TInputImage>
-void 
+void
 StreamingImageVirtualWriter<TInputImage>
 ::SetAutomaticNumberOfStreamDivisions(void)
 {
@@ -112,7 +112,7 @@ StreamingImageVirtualWriter<TInputImage>
  *
  */
 template <class TInputImage>
-void 
+void
 StreamingImageVirtualWriter<TInputImage>
 ::SetTilingStreamDivisions(void)
 {
@@ -122,7 +122,7 @@ StreamingImageVirtualWriter<TInputImage>
 }
 
 template <class TInputImage>
-void 
+void
 StreamingImageVirtualWriter<TInputImage>
 ::SetTilingStreamDivisions(unsigned long nb_divisions)
 {
@@ -133,12 +133,12 @@ StreamingImageVirtualWriter<TInputImage>
 }
 
 template <class TInputImage>
-void 
+void
 StreamingImageVirtualWriter<TInputImage>
 ::SetInput(const InputImageType *input)
 {
   // ProcessObject is not const_correct so this cast is required here.
-  this->itk::ProcessObject::SetNthInput(0, 
+  this->itk::ProcessObject::SetNthInput(0,
                                    const_cast<TInputImage *>(input ) );
 }
 
@@ -153,7 +153,7 @@ StreamingImageVirtualWriter<TInputImage>
     {
     return 0;
     }
-  
+
   return static_cast<TInputImage*>
     (this->itk::ProcessObject::GetInput(0));
 }
@@ -179,23 +179,23 @@ StreamingImageVirtualWriter<TInputImage>
   size.Fill(0);
   region.SetSize(size);
   region.SetIndex(index);
-  inputPtr->SetRequestedRegion(region);  
+  inputPtr->SetRequestedRegion(region);
 }
 /**
  *
  */
 template <class TInputImage>
-unsigned long 
+unsigned long
 StreamingImageVirtualWriter<TInputImage>
 ::GetNumberOfStreamDivisions(void)
 {
   return(CalculateNumberOfStreamDivisions());
 }
 template<class TInputImage>
-unsigned long 
+unsigned long
 StreamingImageVirtualWriter<TInputImage>
 ::CalculateNumberOfStreamDivisions(void)
-{	
+{
 	return StreamingTraitsType
     ::CalculateNumberOfStreamDivisions(this->GetInput(),
 				       this->GetInput()->GetLargestPossibleRegion(),
@@ -209,7 +209,7 @@ StreamingImageVirtualWriter<TInputImage>
  *
  */
 template <class TInputImage>
-std::string 
+std::string
 StreamingImageVirtualWriter<TInputImage>
 ::GetMethodUseToCalculateNumberOfStreamDivisions(void)
 {
@@ -219,7 +219,7 @@ StreamingImageVirtualWriter<TInputImage>
  *
  */
 template <class TInputImage>
-void 
+void
 StreamingImageVirtualWriter<TInputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
@@ -236,7 +236,7 @@ StreamingImageVirtualWriter<TInputImage>
     }
 }
 template<class TInputImage>
-void 
+void
 StreamingImageVirtualWriter<TInputImage>
 ::GenerateData(void)
 {

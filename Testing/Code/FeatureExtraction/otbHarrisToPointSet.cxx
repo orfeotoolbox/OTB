@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,29 +32,29 @@ int otbHarrisToPointSet( int argc, char * argv[] )
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
- 	
+
   double SigmaD((double)::atof(argv[3]));
   double SigmaI((double)::atof(argv[4]));
   double AlphaValue((double)::atof(argv[5]));
-	        
+
   typedef unsigned char                                   PixelType;
   const   unsigned int        	                        Dimension = 2;
 
   PixelType LowerThreshold((PixelType)::atoi(argv[6]));
   PixelType UpperThreshold((PixelType)::atoi(argv[7]));
-	
+
   typedef itk::Image< PixelType,  Dimension>                 ImageType;
-  typedef otb::ImageFileReader< ImageType  >                 ReaderType;  
+  typedef otb::ImageFileReader< ImageType  >                 ReaderType;
   typedef otb::HarrisImageToPointSetFilter<ImageType>        FunctionType;
   typedef FunctionType::OutputPointSetType                   OutputPointSetType;
   typedef OutputPointSetType::PointType                      OutputPointType;
-  
+
   ReaderType::Pointer           reader    = ReaderType::New();
   FunctionType::Pointer         harris    = FunctionType::New();
   OutputPointType               CoordPoint;
-	
+
   reader->SetFileName( inputFilename  );
- 	
+
   harris->SetInput( 0,reader->GetOutput() );
   harris->SetSigmaD( SigmaD );
   harris->SetSigmaI( SigmaI );
@@ -71,17 +71,17 @@ int otbHarrisToPointSet( int argc, char * argv[] )
 
   unsigned long  NbPoints  = pointList->GetNumberOfPoints();
   file << "NbPoints : " << NbPoints <<std::endl;
-	
+
   for (unsigned long i = 0 ; i < NbPoints ; i++)
     {
       pointList->GetPoint(i,&CoordPoint);
       file << i+1 <<" / " << NbPoints << " : " ;
       file << CoordPoint[0]<<" , "<< CoordPoint[1] << std::endl;
     }
-	
+
   file.close();
-	
- 
+
+
   return EXIT_SUCCESS;
 }
 

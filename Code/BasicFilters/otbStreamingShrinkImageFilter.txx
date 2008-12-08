@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -37,7 +37,7 @@ template <class TInputImage, class TOutputImage>
 StreamingShrinkImageFilter<TInputImage, TOutputImage>
 ::~StreamingShrinkImageFilter()
 {}
-/** 
+/**
  * StreamingShrinkImageFilter produces an output whose size is different from its input.
  * As such, it must override the GenerateOutputInformation method in order to compute
  * the output size from the input size.
@@ -140,18 +140,18 @@ StreamingShrinkImageFilter<TInputImage, TOutputImage>
    */
   this->InvokeEvent(itk::StartEvent());
   /**
-   * Allocate the output buffer. 
+   * Allocate the output buffer.
    */
   OutputImagePointerType outputPtr = this->GetOutput(0);
   typename OutputImageType::RegionType outputRegion = outputPtr->GetRequestedRegion();
   outputPtr->SetBufferedRegion( outputRegion );
   outputPtr->Allocate();
-  
+
   /**
    * Grab the input
    */
   InputImagePointerType inputPtr =  const_cast<InputImageType * >( this->GetInput(0) );
-  
+
   // otbMsgDebugMacro(<<"Input Largest possible region: "<<inputPtr->GetLargestPossibleRegion());
   typename InputImageType::IndexType origin = inputPtr->GetLargestPossibleRegion().GetIndex();
 
@@ -160,7 +160,7 @@ StreamingShrinkImageFilter<TInputImage, TOutputImage>
 
   OutputIteratorType it(outputPtr,outputRegion);
   it.GoToBegin();
-  
+
   typename OutputImageType::SizeType size = outputRegion.GetSize();
 
   for(unsigned int i=0;i<size[1]&&!it.IsAtEnd();++i)
@@ -209,12 +209,12 @@ StreamingShrinkImageFilter<TInputImage, TOutputImage>
   if (this->GetOutput(0))
       {
 	this->GetOutput(0)->DataHasBeenGenerated();
-      }  
+      }
   /**
    * Release any inputs if marked for release
    */
   this->ReleaseInputs();
-  
+
   // Mark that we are no longer updating the data in this filter
   this->m_Updating = false;
 }

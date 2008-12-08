@@ -9,9 +9,9 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,9 +32,9 @@ int otbParallelLinePathListFilter(int argc, char * argv[])
   PathListType::Pointer lineList = PathListType::New();
   PathListType::Pointer parallelList = PathListType::New();
 
-  
 
-  
+
+
   typedef PathType::ContinuousIndexType    ContinuousIndexType;
   ContinuousIndexType cindex;
 
@@ -81,13 +81,13 @@ int otbParallelLinePathListFilter(int argc, char * argv[])
 
 
   // Parallel lines are detected.
-  
+
   typedef otb::ParallelLinePathListFilter<PathType> ParallelLinePathType;
   ParallelLinePathType::Pointer parallelLinePathListFilter = ParallelLinePathType::New();
   parallelLinePathListFilter->SetDistanceThreshold(10);
   parallelLinePathListFilter->SetAngularThreshold(10);
   parallelLinePathListFilter->SetCommonDistanceThreshold(10);
-  parallelLinePathListFilter->SetInput(lineList); 
+  parallelLinePathListFilter->SetInput(lineList);
   parallelLinePathListFilter->Update();
 
 
@@ -96,16 +96,16 @@ int otbParallelLinePathListFilter(int argc, char * argv[])
   PathListType::Iterator listIt = pathList->Begin();
 
   PathListType::Iterator parListIt = parallelList->Begin();
-  
+
   // A path is a line segment in this case.
   while (listIt != pathList->End() && parListIt != parallelList->End())
-    {   
+    {
     PathType::VertexListType::ConstPointer vertexList = (listIt.Get())->GetVertexList();
 
     PathType::VertexListType::ConstPointer parVertexList = (parListIt.Get())->GetVertexList();
 
     PathType::VertexListType::ConstIterator pathIt = vertexList->Begin();
-    PathType::VertexListType::ConstIterator parPathIt = parVertexList->Begin();  
+    PathType::VertexListType::ConstIterator parPathIt = parVertexList->Begin();
 	  // Loop over all the vertices in one path
 	  while (pathIt != vertexList->End() &&
 		           parPathIt != parVertexList->End())
@@ -115,7 +115,7 @@ int otbParallelLinePathListFilter(int argc, char * argv[])
 	    {
 	    std::cout << pathIt.Index() << pathIt.Value() << std::endl;
 	    return EXIT_FAILURE;
-	    
+
 	    }
 	  ++pathIt;
 	  ++parPathIt;
@@ -124,9 +124,9 @@ int otbParallelLinePathListFilter(int argc, char * argv[])
 	  ++parListIt;
   }
 
-  
+
 
 
   return EXIT_SUCCESS;
-  
+
 }

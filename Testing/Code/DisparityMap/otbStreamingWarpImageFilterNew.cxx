@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,6 +33,6 @@ int otbStreamingWarpImageFilterNew(int argc, char* argv[])
 
   // Objects creation
   ImageWarperType::Pointer warper = ImageWarperType::New();
-   
+
   return EXIT_SUCCESS;
 }

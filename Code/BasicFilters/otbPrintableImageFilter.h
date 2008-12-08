@@ -1,5 +1,5 @@
 /*=========================================================================
-	
+
   Program:   ORFEO Toolbox
     Language:  C++
     Date:      $Date$
@@ -18,14 +18,14 @@
         PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-        
+
 #ifndef __otbPrintableImageFilter_h
 #define __otbPrintableImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbMultiChannelExtractROI.h"
-    
+
 namespace otb {
   /**
        * \class PrintableImageFilter
@@ -44,7 +44,7 @@ class ITK_EXPORT PrintableImageFilter :
 	  <TInputImage, otb::VectorImage<unsigned char,2> >     Superclass;
         typedef itk::SmartPointer<Self>                         Pointer;
         typedef itk::SmartPointer<const Self>                   ConstPointer;
-        
+
 	typedef TInputImage                                     InputImageType;
 	typedef typename InputImageType::PixelType              InputPixelType;
 	typedef unsigned char                                   OutputPixelType;
@@ -55,18 +55,18 @@ class ITK_EXPORT PrintableImageFilter :
         typedef otb::MultiChannelExtractROI
             <OutputPixelType,OutputPixelType>                   ChannelExtractorType;
         typedef typename ChannelExtractorType::ChannelsType     ChannelsType;
-          
-          
+
+
         /** Method for creation through object factory */
         itkNewMacro(Self);
 
         /** Run-time type information */
-        itkTypeMacro(PrintableImageFilter, 
+        itkTypeMacro(PrintableImageFilter,
                      itk::ImageToImageFilter);
 
         /** Display */
         void PrintSelf( std::ostream& os, itk::Indent indent ) const;
-          
+
         void SetChannel( unsigned int channel);
         const ChannelsType GetChannels(void) const;
 
@@ -76,7 +76,7 @@ class ITK_EXPORT PrintableImageFilter :
 	otbGetObjectMemberMacro(Rescaler,InputMinimum,InputPixelType);
 	otbSetObjectMemberMacro(Rescaler,InputMaximum,InputPixelType);
 	otbGetObjectMemberMacro(Rescaler,InputMaximum,InputPixelType);
-          
+
       protected:
 
         PrintableImageFilter();
@@ -91,7 +91,7 @@ class ITK_EXPORT PrintableImageFilter :
         typename VectorRescalerType::Pointer m_Rescaler;
         typename ChannelExtractorType::Pointer m_Extractor;
     };
-      
+
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

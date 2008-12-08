@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,12 +31,12 @@ namespace otb
 /** \class ImageToLineSpatialObjectListFilter
  *  \brief Base class for all process objects that output LineSpatialObjectList.
  *
- * ImageToLineSpatialObjectListFilter is the base class for all process objects 
- * that output list of LineSpatialObject. 
+ * ImageToLineSpatialObjectListFilter is the base class for all process objects
+ * that output list of LineSpatialObject.
  *
  */
- 
- 
+
+
 template <class TInputImage>
 class ITK_EXPORT ImageToLineSpatialObjectListFilter : public itk::ProcessObject
 {
@@ -49,16 +49,16 @@ public:
 
 
   typedef TInputImage InputImageType;
-  
-  
+
+
   /** Standard class typedefs. */
   typedef ImageToLineSpatialObjectListFilter             Self;
   typedef itk::ProcessObject                            Superclass;
   typedef itk::SmartPointer<Self>                       Pointer;
   typedef itk::SmartPointer<const Self>                 ConstPointer;
-  
+
   /** Method for creation through the object factory. */
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ImageToLineSpatialObjectListFilter,itk::ProcessObject);
@@ -69,37 +69,37 @@ public:
 
   /** Definition of the input and output images */
   typedef typename InputImageType::PixelType InputPixelType;
-  
+
 
   /** Definition of the size of the images. */
   typedef typename InputImageType::SizeType SizeType;
 
   typedef itk::ProcessObject ProcessObjectType;
- 
+
   /** Set/Get the input image */
   void SetInput(const InputImageType *image);
   const InputImageType * GetInput(void);
 
   /** Set/Get the list of LineSpatialObject of this process object.  */
   void SetOutput(const LinesListType *list);
-  LinesListType * GetOutput(void); 
+  LinesListType * GetOutput(void);
 
 
-  
+
 protected:
   ImageToLineSpatialObjectListFilter();
   virtual ~ImageToLineSpatialObjectListFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  
+
 
 private:
   ImageToLineSpatialObjectListFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
- 
+
 
 };
-  
+
 
 } // end namespace otb
 

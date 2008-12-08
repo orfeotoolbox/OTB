@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,15 +24,15 @@
 // Software Guide : BeginLatex
 //
 // This example illustrates how to use the \doxygen{itk}{ImageAdaptor}
-// to access the individual components of an RGB image. In this case, we 
-// create an ImageAdaptor that will accept a RGB image as input and 
+// to access the individual components of an RGB image. In this case, we
+// create an ImageAdaptor that will accept a RGB image as input and
 // presents it as a scalar image. The pixel data
 // will be taken directly from the red channel of the original image.
-// 
+//
 // \index{itk::ImageAdaptor!Instantiation}
 // \index{itk::ImageAdaptor!Header}
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 #include "otbImage.h"
 #include "itkImageAdaptor.h"
@@ -44,24 +44,24 @@
 
 //  Software Guide : BeginLatex
 //
-//  As with the previous example, the bulk of the effort in creating the image 
-//  adaptor is associated with the definition of the pixel accessor class. In 
-//  this case, the accessor converts a RGB vector to a scalar containing the 
+//  As with the previous example, the bulk of the effort in creating the image
+//  adaptor is associated with the definition of the pixel accessor class. In
+//  this case, the accessor converts a RGB vector to a scalar containing the
 //  red channel component. Note that in the following, we do not need to define
-//  the \code{Set()} method since we only expect the adaptor to be used for 
+//  the \code{Set()} method since we only expect the adaptor to be used for
 //  reading data from the image.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
 // Software Guide : BeginCodeSnippet
-class RedChannelPixelAccessor  
+class RedChannelPixelAccessor
 {
 public:
   typedef itk::RGBPixel<float>   InternalType;
   typedef               float    ExternalType;
 
-  static ExternalType Get( const InternalType & input ) 
+  static ExternalType Get( const InternalType & input )
     {
       return static_cast<ExternalType>( input.GetRed() );
     }
@@ -74,7 +74,7 @@ public:
 //  The \code{Get()} method simply calls the \code{GetRed()} method
 //  defined in the \doxygen{itk}{RGBPixel} class.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
 //-------------------------
@@ -83,7 +83,7 @@ public:
 //
 //-------------------------
 
-int main( int argc, char *argv[] ) 
+int main( int argc, char *argv[] )
 {
   if( argc < 3 )
     {
@@ -102,7 +102,7 @@ int main( int argc, char *argv[] )
 //  \index{itk::ImageAdaptor!RGB red channel}
 //  \index{ImageAdaptor!RGB red channel}
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
 // Software Guide : BeginCodeSnippet
@@ -110,7 +110,7 @@ int main( int argc, char *argv[] )
   const   unsigned int   Dimension = 2;
   typedef otb::Image< InputPixelType, Dimension >   ImageType;
 
-  typedef itk::ImageAdaptor<  ImageType, 
+  typedef itk::ImageAdaptor<  ImageType,
                               RedChannelPixelAccessor > ImageAdaptorType;
 
   ImageAdaptorType::Pointer adaptor = ImageAdaptorType::New();
@@ -122,12 +122,12 @@ int main( int argc, char *argv[] )
 //  We create an image reader and connect the output to the adaptor
 //  as before.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
 // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader< ImageType >   ReaderType;
-  ReaderType::Pointer reader = ReaderType::New();  
+  ReaderType::Pointer reader = ReaderType::New();
 // Software Guide : EndCodeSnippet
 
   reader->SetFileName( argv[1] );
@@ -136,7 +136,7 @@ int main( int argc, char *argv[] )
 // Software Guide : BeginCodeSnippet
   adaptor->SetImage( reader->GetOutput() );
 // Software Guide : EndCodeSnippet
- 
+
 
 //  Software Guide : BeginLatex
 //
@@ -146,13 +146,13 @@ int main( int argc, char *argv[] )
 //  used for the rescaling filter is the \code{ImageAdaptorType} itself. That
 //  is, the adaptor type is used in the same context as an image type.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
 // Software Guide : BeginCodeSnippet
   typedef otb::Image< unsigned char, Dimension >   OutputImageType;
-  typedef itk::RescaleIntensityImageFilter< ImageAdaptorType, 
-                                            OutputImageType 
+  typedef itk::RescaleIntensityImageFilter< ImageAdaptorType,
+                                            OutputImageType
                                                >   RescalerType;
 
   RescalerType::Pointer rescaler = RescalerType::New();
@@ -169,7 +169,7 @@ int main( int argc, char *argv[] )
 //  Now we connect the adaptor as the input to the rescaler and set the
 //  parameters for the intensity rescaling.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
   rescaler->SetOutputMinimum(  0  );
@@ -184,9 +184,9 @@ int main( int argc, char *argv[] )
 //
 //  Finally, we invoke the \code{Update()} method on the writer and take
 //  precautions to catch any exception that may be thrown during
-//  the execution of the pipeline. 
+//  the execution of the pipeline.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
   try
@@ -205,24 +205,24 @@ int main( int argc, char *argv[] )
 //
 //  ImageAdaptors for the green and blue channels can easily be implemented by
 //  modifying the pixel accessor of the red channel and then using the
-//  new pixel accessor for instantiating the type of an image adaptor. 
+//  new pixel accessor for instantiating the type of an image adaptor.
 //  The following define a green channel pixel accessor.
 //
 //  \index{PixelAccessor!RGB green channel}
 //  \index{itk::ImageAdaptor!RGB green channel}
 //  \index{ImageAdaptor!RGB green channel}
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
 // Software Guide : BeginCodeSnippet
-  class GreenChannelPixelAccessor  
+  class GreenChannelPixelAccessor
   {
   public:
     typedef itk::RGBPixel<float>   InternalType;
     typedef               float    ExternalType;
 
-    static ExternalType Get( const InternalType & input ) 
+    static ExternalType Get( const InternalType & input )
       {
         return static_cast<ExternalType>( input.GetGreen() );
       }
@@ -238,16 +238,16 @@ int main( int argc, char *argv[] )
 //  \index{itk::ImageAdaptor!RGB blue channel}
 //  \index{ImageAdaptor!RGB blue channel}
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  class BlueChannelPixelAccessor  
+  class BlueChannelPixelAccessor
   {
   public:
     typedef itk::RGBPixel<float>   InternalType;
     typedef               float    ExternalType;
 
-    static ExternalType Get( const InternalType & input ) 
+    static ExternalType Get( const InternalType & input )
       {
         return static_cast<ExternalType>( input.GetBlue() );
       }

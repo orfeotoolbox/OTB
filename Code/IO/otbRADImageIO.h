@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -47,7 +47,7 @@ public:
 
   /** Byte order typedef */
   typedef Superclass::ByteOrder  ByteOrder;
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -59,16 +59,16 @@ public:
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
   virtual bool CanReadFile(const char*);
-  
+
   /** Determine the file type. Returns true if the ImageIO can stream read the specified file */
   virtual bool CanStreamRead(){  return true; };
 
   /** Set the spacing and dimention information for the set filename. */
   virtual void ReadImageInformation();
- 
+
   /** Reads the data from disk into the memory buffer provided. */
   virtual void Read(void* buffer);
-    
+
   /** Reads 3D data from multiple files assuming one slice per file. */
   virtual void ReadVolume(void* buffer);
 
@@ -91,7 +91,7 @@ public:
 
   // JULIEN: NOT USED, NOT IMPLEMENTED
   // void SampleImage(void* buffer,int XBegin, int YBegin, int SizeXRead, int SizeYRead, int XSample, int YSample);
-  
+
 protected:
   /** Construtor.*/
   RADImageIO();
@@ -100,12 +100,12 @@ protected:
 
   bool OpenOneraDataFileForReading(const char* filename);
   bool OpenOneraHeaderFileForReading(const char* filename);
-  
+
   void InternalReadImageInformation();
 
   bool OpenOneraDataFileForWriting(const char* filename);
   bool OpenOneraHeaderFileForWriting(const char* filename);
-  
+
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
@@ -149,11 +149,11 @@ private:
   itk::ImageIOBase::ByteOrder m_FileByteOrder;
   std::fstream m_HeaderFile;
   std::string m_TypeRAD;
-  std::vector< std::string >  m_ChannelsFileName;    
+  std::vector< std::string >  m_ChannelsFileName;
   std::fstream *  m_ChannelsFile;
   unsigned int     m_NbOfChannels;
   int     m_NbOctetPixel;
-  
+
 };
 
 } // end namespace otb

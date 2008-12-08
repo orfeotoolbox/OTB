@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,9 +28,9 @@
 namespace otb
 {
 
-const std::string MetaDataKey::m_DriverShortNameKey = "DriverShortName"; 
-const std::string MetaDataKey::m_DriverLongNameKey = "DriverLongName"; 
-  
+const std::string MetaDataKey::m_DriverShortNameKey = "DriverShortName";
+const std::string MetaDataKey::m_DriverLongNameKey = "DriverLongName";
+
 const std::string MetaDataKey::m_ProjectionRefKey = "ProjectionRef";
 
 const std::string MetaDataKey::m_GCPProjectionKey = "GCPProjection";
@@ -39,9 +39,9 @@ const std::string MetaDataKey::m_GCPCountKey = "GCPCount";
 
 const std::string MetaDataKey::m_GeoTransformKey = "GeoTransform";
 
-const std::string MetaDataKey::m_MetadataKey = "Metadata_"; 
+const std::string MetaDataKey::m_MetadataKey = "Metadata_";
 const std::string MetaDataKey::m_SubMetadataKey = "SubMetadata_";
- 
+
 const std::string MetaDataKey::m_UpperLeftCornerKey = "UpperLeftCorner";
 const std::string MetaDataKey::m_UpperRightCornerKey = "UpperRightCorner";
 const std::string MetaDataKey::m_LowerLeftCornerKey = "LowerLeftCorner";
@@ -54,7 +54,7 @@ const std::string MetaDataKey::m_ColorEntryAsRGBKey = "ColorEntryAsRGB";
 const std::string MetaDataKey::m_OSSIMKeywordlistKey = "OSSIMKeywordlist";
 const std::string MetaDataKey::m_OSSIMKeywordlistDelimiterKey = "OSSIMKeywordlistDelimiter";
 
-/*const MetaDataKey::KeyTypeDef Types[] = 
+/*const MetaDataKey::KeyTypeDef Types[] =
   {
   	{MetaDataKey::m_DriverShortNameKey, 		MetaDataKey::TSTRING},
   	{MetaDataKey::m_DriverLongNameKey, 		MetaDataKey::TSTRING},
@@ -71,10 +71,10 @@ const std::string MetaDataKey::m_OSSIMKeywordlistDelimiterKey = "OSSIMKeywordlis
 	{MetaDataKey::m_ColorTableNameKey,    		MetaDataKey::TSTRING},
 	{MetaDataKey::m_ColorEntryCountKey,   		MetaDataKey::TENTIER},
 	{MetaDataKey::m_ColorEntryAsRGBKey,    		MetaDataKey::TVECTOR}
-	
-	
+
+
   }; */
-const MetaDataKey::KeyTypeDef Types[] = 
+const MetaDataKey::KeyTypeDef Types[] =
   {
   	MetaDataKey::KeyTypeDef(MetaDataKey::m_DriverShortNameKey,		MetaDataKey::TSTRING),
   	MetaDataKey::KeyTypeDef(MetaDataKey::m_DriverLongNameKey, 		MetaDataKey::TSTRING),
@@ -94,26 +94,26 @@ const MetaDataKey::KeyTypeDef Types[] =
 	MetaDataKey::KeyTypeDef(MetaDataKey::m_OSSIMKeywordlistKey,		MetaDataKey::TOSSIMKEYWORDLIST),
 	MetaDataKey::KeyTypeDef(MetaDataKey::m_OSSIMKeywordlistDelimiterKey,MetaDataKey::TSTRING)
   };
-  
-  
+
+
 MetaDataKey::KeyType MetaDataKey::GetKeyType(std::string name)
 {
    MetaDataKey::KeyType ktype(MetaDataKey::TSTRING);
 
    for ( unsigned int i=0; i<NBKEYS; i++)
       {
-//      if ( strcmp(name.c_str(),Types[i].keyname.c_str()) == 0 ) 
+//      if ( strcmp(name.c_str(),Types[i].keyname.c_str()) == 0 )
 
-        
+
         if ( (name.find(Types[i].keyname) >= 0 ) &&
-             (name.find(Types[i].keyname) <= name.size() ) ) 
-         {	
+             (name.find(Types[i].keyname) <= name.size() ) )
+         {
          ktype = Types[i].type;
          break;
          }
-         
+
       }
-   return(ktype);     	
+   return(ktype);
 }
 
 

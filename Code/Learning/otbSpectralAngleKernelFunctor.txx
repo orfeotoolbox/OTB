@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) GET / ENST Bretagne. All rights reserved. 
+  Copyright (c) GET / ENST Bretagne. All rights reserved.
   See GETCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -36,14 +36,14 @@ SpectralAngleKernelFunctor
 	SetValue( "Coef", m_Coef );
 }
 
-void 
+void
 SpectralAngleKernelFunctor
 ::Update ()
 {
 	m_Coef = GetValue<double>( "Coef" );
 }
 
-double 
+double
 SpectralAngleKernelFunctor
 ::operator()( const svm_node * x, const svm_node * y,
 				const svm_parameter & param ) const
@@ -56,14 +56,14 @@ SpectralAngleKernelFunctor
 	return 1.0 / sqrt( mq );
 }
 
-double 
+double
 SpectralAngleKernelFunctor
 ::SAM ( const svm_node * x, const svm_node * y ) const
 {
 	double den = dot(x,x) * dot(y,y);
 	if ( den <= 0.0 )
 		return 0.0;
-	
+
 	double ss = dot(x,y);
 	return /*acos*/( ss / sqrt( den ) );
 }

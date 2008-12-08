@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
      =========================================================================*/
@@ -33,17 +33,17 @@
 int otbSVMClassifierPointSet(int argc, char* argv[] )
 {
   namespace stat = itk::Statistics ;
-  
+
   if (argc != 2)
     {
-      std::cout << "Usage : " << argv[0] << " modelFile" 
+      std::cout << "Usage : " << argv[0] << " modelFile"
                 << std::endl ;
       return EXIT_FAILURE;
     }
-  
+
   const char * modelFilename  = argv[1];
 
-  std::cout << "Building the pointset" << std::endl;  
+  std::cout << "Building the pointset" << std::endl;
 
 
   typedef double InputPixelType;
@@ -62,9 +62,9 @@ int otbSVMClassifierPointSet(int argc, char* argv[] )
   typedef MeasurePointSetType::PointsContainer      MeasurePointsContainer;
 
   MeasurePointsContainer::Pointer mCont = MeasurePointsContainer::New();
-    
+
   unsigned int pointId;
-    
+
   for(pointId = 0; pointId<20; pointId++)
     {
 
@@ -74,28 +74,28 @@ int otbSVMClassifierPointSet(int argc, char* argv[] )
       mP[1] = pointId;
 
 
-      InputVectorType measure; 
+      InputVectorType measure;
       //measure.push_back(vcl_pow(pointId,2.0));
       measure.push_back(double(2.0*pointId));
       measure.push_back(double(-10));
 
 
       mCont->InsertElement( pointId , mP );
-      mPSet->SetPointData( pointId, measure );   
+      mPSet->SetPointData( pointId, measure );
 
 
     }
 
   mPSet->SetPoints( mCont );
 
-  std::cout << "PointSet built" << std::endl;  
+  std::cout << "PointSet built" << std::endl;
 
   typedef itk::Statistics::PointSetToListAdaptor< MeasurePointSetType >
     SampleType;
   SampleType::Pointer sample = SampleType::New();
   sample->SetPointSet( mPSet );
 
-  std::cout << "Sample set to Adaptor" << std::endl;  
+  std::cout << "Sample set to Adaptor" << std::endl;
 
 
   /** preparing classifier and decision rule object */
@@ -106,13 +106,13 @@ int otbSVMClassifierPointSet(int argc, char* argv[] )
   model->LoadModel( modelFilename );
 
   std::cout << "Model loaded" << std::endl;
-    
+
   int numberOfClasses = model->GetNumberOfClasses();
-    
+
   typedef otb::SVMClassifier< SampleType, LabelPixelType > ClassifierType ;
 
   ClassifierType::Pointer classifier = ClassifierType::New() ;
-  
+
   classifier->SetNumberOfClasses(numberOfClasses) ;
   classifier->SetModel( model );
   classifier->SetSample(sample.GetPointer()) ;
@@ -120,11 +120,11 @@ int otbSVMClassifierPointSet(int argc, char* argv[] )
 
   /* Build the class map */
 
-    
-  std::cout << "classifier get output" << std::endl;  
+
+  std::cout << "classifier get output" << std::endl;
   ClassifierType::OutputType* membershipSample =
     classifier->GetOutput() ;
-  std::cout << "Sample iterators" << std::endl;  
+  std::cout << "Sample iterators" << std::endl;
   ClassifierType::OutputType::ConstIterator m_iter =
     membershipSample->Begin() ;
   ClassifierType::OutputType::ConstIterator m_last =
@@ -136,25 +136,25 @@ int otbSVMClassifierPointSet(int argc, char* argv[] )
   while (m_iter != m_last)
     {
       ClassifierType::ClassLabelType label = m_iter.GetClassLabel();
-      
-      InputVectorType measure; 
-      
+
+      InputVectorType measure;
+
       mPSet->GetPointData(pointId, &measure);
-      
+
       if(label != ((measure[0]+measure[1])>0) )
 	error++;
 
       std::cout << label << "/" <<
 	((measure[0]+measure[1])>0) << std::endl;
-      
-      
+
+
       ++pointId;
       ++m_iter ;
     }
-    
+
   std::cout << "Error = " << error/pointId << std::endl;
-    
- 
+
+
   return EXIT_SUCCESS;
 }
 

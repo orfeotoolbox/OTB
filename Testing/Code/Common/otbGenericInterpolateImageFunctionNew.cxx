@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,18 +30,18 @@ public:
   void SetRadius(unsigned int rad){ m_Radius = rad; };
   unsigned int GetRadius() const { return m_Radius; };
   inline TOutput operator()( const TInput & A ) const
-    { 
-      return static_cast<TOutput>(A); 
+    {
+      return static_cast<TOutput>(A);
     }
   unsigned int m_Radius;
-}; 
+};
 
 }
 
 
 int otbGenericInterpolateImageFunctionNew(int argc, char * argv[])
 {
-  
+
   typedef double                                                   InputPixelType;
   const int Dimension = 2;
   typedef otb::Image<InputPixelType,Dimension>                     ImageType;
@@ -50,9 +50,9 @@ int otbGenericInterpolateImageFunctionNew(int argc, char * argv[])
   typedef double                                                   CoordRepType;
 
   typedef otb::GenericInterpolateImageFunction<ImageType, FunctionType, BoundaryConditionType, CoordRepType> GenericFunctionType;
-  
+
   // Instantiating object
   GenericFunctionType::Pointer generic = GenericFunctionType::New();
-  
+
   return EXIT_SUCCESS;
 }

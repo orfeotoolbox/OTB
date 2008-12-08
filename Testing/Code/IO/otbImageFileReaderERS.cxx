@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -45,12 +45,12 @@ int otbImageFileReaderERS(int argc, char* argv[])
   typedef otb::ImageFileReader< InputImageType  >         ReaderType;
   typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
-      
+
   ReaderType::Pointer complexReader = ReaderType::New();
- 
+
   complexReader->SetFileName( inputFilename  );
 
-  typedef otb::MultiChannelExtractROI< InputPixelType, 
+  typedef otb::MultiChannelExtractROI< InputPixelType,
     OutputPixelType >  ExtractROIFilterType;
 
   ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
@@ -60,15 +60,15 @@ int otbImageFileReaderERS(int argc, char* argv[])
   extractROIFilter->SetSizeX( 100 );
   extractROIFilter->SetSizeY( 100 );
   extractROIFilter->SetSizeY( 100 );
-  extractROIFilter->SetInput( complexReader->GetOutput() );        
+  extractROIFilter->SetInput( complexReader->GetOutput() );
 
   WriterType::Pointer writer = WriterType::New();
-	
-  writer->SetFileName( outputFilename );        
+
+  writer->SetFileName( outputFilename );
   writer->SetInput( extractROIFilter->GetOutput() );
-  writer->Update(); 
- 
-   
+  writer->Update();
+
+
   return EXIT_SUCCESS;
 }
 

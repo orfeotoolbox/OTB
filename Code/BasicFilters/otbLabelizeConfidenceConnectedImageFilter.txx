@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,7 +31,7 @@ namespace otb
   {
     m_ReplaceValue = itk::NumericTraits<OutputPixelType>::One;
   }
-  
+
   /** Region growing
    *
    */
@@ -44,7 +44,7 @@ namespace otb
     this->m_RegionGrowingFilter->SetSeed(indexSeed);
     m_ReplaceValue++;
   }
-  
+
   /** PrintSelf Method
    *
    */

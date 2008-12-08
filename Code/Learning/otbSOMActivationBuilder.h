@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,10 +23,10 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class SOMActivationBuilder
- *  \brief This class takes a self organizing map and an input vector image, and 
+ *  \brief This class takes a self organizing map and an input vector image, and
  *  produce a map counting the number of activation for each vector in the SOM map.
  *
- * SOM map can be set via the SetInput method, and vector image via the SetVectorSet 
+ * SOM map can be set via the SetInput method, and vector image via the SetVectorSet
  * method.
  *
  * \sa SOMMap
@@ -48,7 +48,7 @@ class ITK_EXPORT SOMActivationBuilder
 
   /** Runtime information macro */
   itkTypeMacro(SOMActivationBuilder,ImageToImageFilter);
-  
+
   /** Template related typedefs */
   typedef TListSample ListSampleType;
   typedef TOutputImage OutputImageType;
@@ -76,8 +76,8 @@ class ITK_EXPORT SOMActivationBuilder
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
  private:
-  SOMActivationBuilder(const Self&); // purposely not implemented 
-  void operator=(const Self&);// purposely not implemented 
+  SOMActivationBuilder(const Self&); // purposely not implemented
+  void operator=(const Self&);// purposely not implemented
   /** ListSample object */
   ListSamplePointerType m_ListSample;
 };

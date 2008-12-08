@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -104,13 +104,13 @@ template <class TOutputGraph>
 void
 RCC8GraphFileReader<TOutputGraph>
 ::GenerateData()
-{  
+{
   std::ifstream fin;
   std::string line;
-  
+
   // open file input stream
   fin.open(m_FileName.c_str());
-  
+
   // Test if the file has been opened correctly
   if(!fin)
     {

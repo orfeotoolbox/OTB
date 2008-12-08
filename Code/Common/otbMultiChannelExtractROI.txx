@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -35,7 +35,7 @@ namespace otb
  */
 template<class TInputPixelType, class TOutputPixelType>
 MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
-::MultiChannelExtractROI() :    
+::MultiChannelExtractROI() :
   ExtractROIBase< VectorImage<TInputPixelType,2> , VectorImage<TOutputPixelType,2> >(),
   m_FirstChannel(0),
   m_LastChannel(0),
@@ -125,7 +125,7 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
  *
  */
 template<class TInputPixelType, class TOutputPixelType>
-void 
+void
 MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
@@ -134,7 +134,7 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
 
 
 template<class TInputPixelType, class TOutputPixelType>
-void 
+void
 MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
 ::ChannelsReInitialization()
 {
@@ -142,7 +142,7 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
   m_ChannelsWorks.clear();
   // First passage in the method:
   if( m_Channels.empty() == true )
-    { 
+    {
       // - User SetFirst/LastChannel()
       if( m_ChannelsKind == 1)
 	{
@@ -178,7 +178,7 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
 }
 
 template<class TInputPixelType, class TOutputPixelType>
-void 
+void
 MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
 ::SetChannelsWorkWithLimits()
 {
@@ -194,42 +194,42 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
 			<< "FirstChannel is greater than LastChannel"
 			<< typeid(itk::ImageBase<InputImageDimension>*).name() );
     }
-  
+
   for( unsigned int channel = m_FirstChannel ; channel <= m_LastChannel ; channel ++ )
     {
       m_ChannelsWorks.push_back(channel);
     }
-  
+
   m_Channels = m_ChannelsWorks;
 }
 
 
-/** 
+/**
  * ExtractImageFilter can produce an image which is a different resolution
  * than its input image.  As such, ExtractImageFilter needs to provide an
  * implementation for GenerateOutputInformation() in order to inform
  * the pipeline execution model.  The original documentation of this
  * method is below.
  *
- * \sa ProcessObject::GenerateOutputInformaton() 
+ * \sa ProcessObject::GenerateOutputInformaton()
  */
 template<class TInputPixelType, class TOutputPixelType>
-void 
+void
 MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
 ::GenerateOutputInformation()
-{ 
+{
    // Call to the superclass implementation
   Superclass::GenerateOutputInformation();
   this->ChannelsReInitialization();
- 
+
   typename Superclass::InputImageConstPointer  inputPtr  = this->GetInput();
   typename Superclass::OutputImagePointer      outputPtr = this->GetOutput();
-  
- 
+
+
   unsigned int nbComponentsPerPixel = inputPtr->GetNumberOfComponentsPerPixel();
   if( m_ChannelsKind != 0 )
     {
-      // Test if the asked channels index exists in the input image 
+      // Test if the asked channels index exists in the input image
       ChannelsType  m_BadChannels;
       m_BadChannels.clear();
       for(unsigned int i=0 ; i < m_ChannelsWorks.size() ; i++)
@@ -241,7 +241,7 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
 		{
 		  if ( m_BadChannels[j]==m_ChannelsWorks[i] )
 		    isInsideBadChannels = true;
-		    
+
 		}
 	      if( !isInsideBadChannels)
 		m_BadChannels.push_back(m_ChannelsWorks[i]);
@@ -269,7 +269,7 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
 
 
 template<class TInputPixelType, class TOutputPixelType>
-void 
+void
 MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                        int threadId)
@@ -281,11 +281,11 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
 
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-  
+
   // Define the portion of the input to walk for this thread
   InputImageRegionType inputRegionForThread;
   this->CallCopyOutputRegionToInputRegion(inputRegionForThread, outputRegionForThread);
-  
+
   // Define the iterators.
   typedef itk::ImageRegionIterator<OutputImageType> OutputIterator;
   typedef itk::ImageRegionConstIterator<InputImageType> InputIterator;
@@ -303,8 +303,8 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
         while( !outIt.IsAtEnd() )
         {
                 outIt.Set( inIt.Get() );
-                ++outIt; 
-                ++inIt; 
+                ++outIt;
+                ++inIt;
                 progress.CompletedPixel();
         }
   }
@@ -315,7 +315,7 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
       unsigned int channelIn(0);
       unsigned int channelOut(0);
       unsigned int nbChannels(0);
-      
+
       InputImagePixelType  pixelInput;
       while( !outIt.IsAtEnd() )
         {
@@ -330,8 +330,8 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
 	      channelOut++;
 	    }
 	  outIt.Set( pixelOutput );
-	  ++outIt; 
-	  ++inIt; 
+	  ++outIt;
+	  ++inIt;
 	  progress.CompletedPixel();
         }
     }

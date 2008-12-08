@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,7 +24,7 @@
 namespace otb
 {
 /** \class ImageWidgetRectangleForm
- * \brief 
+ * \brief
  *
  */
 class ImageWidgetRectangleForm
@@ -36,10 +36,10 @@ class ImageWidgetRectangleForm
   typedef ImageWidgetFormBase Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  
+
   /** Method for creation through the object factory */
   itkNewMacro(Self);
-  
+
   /** Runtime information */
   itkTypeMacro(ImageWidgetRectangleForm,ImageWidgetFormBase);
 
@@ -62,15 +62,15 @@ class ImageWidgetRectangleForm
 	  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	  glColor4f(m_Color[0],m_Color[1],m_Color[2],m_Color[3]);
 	  glBegin(GL_QUADS);
-          
+
           int xul = static_cast<int>((static_cast<int>(m_Index[0])-static_cast<int>(originx))*openGlZoom*(1/static_cast<double>(ss_rate)));
           int xlr = static_cast<int>((static_cast<int>(m_Index[0]+m_Size[0])-static_cast<int>(originx))*openGlZoom*(1/static_cast<double>(ss_rate)));
-          
-          int yul = static_cast<int>(static_cast<int>(windowh)+(static_cast<int>(originy)-static_cast<int>(m_Index[1]))*openGlZoom*(1/static_cast<double>(ss_rate))); 
-          
-          int ylr = static_cast<int>(static_cast<int>(windowh)+(static_cast<int>(originy)-static_cast<int>(m_Size[1]+m_Index[1]))*openGlZoom*(1/static_cast<double>(ss_rate))); 
-          
-	  gl_rect(xul,yul,xlr,ylr); 
+
+          int yul = static_cast<int>(static_cast<int>(windowh)+(static_cast<int>(originy)-static_cast<int>(m_Index[1]))*openGlZoom*(1/static_cast<double>(ss_rate)));
+
+          int ylr = static_cast<int>(static_cast<int>(windowh)+(static_cast<int>(originy)-static_cast<int>(m_Size[1]+m_Index[1]))*openGlZoom*(1/static_cast<double>(ss_rate)));
+
+	  gl_rect(xul,yul,xlr,ylr);
 	  glEnd();
 	  glDisable(GL_BLEND);
 	}
@@ -84,7 +84,7 @@ class ImageWidgetRectangleForm
       return resp;
     }
 
- protected: 
+ protected:
   /** Constructor. */
     ImageWidgetRectangleForm()
       {

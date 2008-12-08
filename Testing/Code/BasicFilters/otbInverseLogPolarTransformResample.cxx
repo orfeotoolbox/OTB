@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,7 +28,7 @@ int otbInverseLogPolarTransformResample(int argc, char* argv[])
 {
   char * inputFileName = argv[1];
   char * outputFileName = argv[2];
-    
+
 
   const unsigned int Dimension = 2;
   typedef double PrecisionType;
@@ -65,7 +65,7 @@ int otbInverseLogPolarTransformResample(int argc, char* argv[])
 			     +vcl_pow(static_cast<double>(size[1]),2.))/2)/reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
   transform->SetParameters(params);
 
-    
+
 
   // ImageType::SpacingType spacing;
   //     spacing.Fill(1.0);
@@ -76,12 +76,12 @@ int otbInverseLogPolarTransformResample(int argc, char* argv[])
   resampler->SetInterpolator(interpolator);
   resampler->SetDefaultPixelValue(0);
   resampler->SetSize(size);
-   
+
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputFileName);
   writer->SetInput(resampler->GetOutput());
   writer->Update();
 
- 
+
   return EXIT_SUCCESS;
 }

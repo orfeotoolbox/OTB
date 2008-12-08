@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -63,7 +63,7 @@ class ITK_EXPORT ImageViewerScrollWidget
 
   typedef otb::ImageWidgetBoxForm BoxType;
   typedef BoxType::ColorType ColorType;
-  
+
   itkSetMacro(Parent,ParentPointerType);
   itkGetMacro(Parent,ParentPointerType);
 
@@ -71,7 +71,7 @@ class ITK_EXPORT ImageViewerScrollWidget
    /** Return the width and heigh of the displayed image (overloaded for scroll)*/
    int wDisplayed()
    {
-    if (this->GetViewedRegion().GetSize()[0] / static_cast<float>(this->GetViewedRegion().GetSize()[1]) 
+    if (this->GetViewedRegion().GetSize()[0] / static_cast<float>(this->GetViewedRegion().GetSize()[1])
           > this->w() / static_cast<float>(this->h()))
     {
       return this->w();
@@ -84,7 +84,7 @@ class ITK_EXPORT ImageViewerScrollWidget
 
    int hDisplayed()
    {
-    if (this->GetViewedRegion().GetSize()[0] / static_cast<float>(this->GetViewedRegion().GetSize()[1]) 
+    if (this->GetViewedRegion().GetSize()[0] / static_cast<float>(this->GetViewedRegion().GetSize()[1])
            > this->w() / static_cast<float>(this->h()))
     {
       return this->w()*this->GetViewedRegion().GetSize()[1] / this->GetViewedRegion().GetSize()[0];
@@ -151,10 +151,10 @@ class ITK_EXPORT ImageViewerScrollWidget
 	    m_Parent->Hide();
 	    return 0;
 	  }
-	}	
-      return 0; 
+	}
+      return 0;
     }
-    
+
  protected:
   /**
    * Constructor.

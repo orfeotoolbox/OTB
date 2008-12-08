@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,10 +29,10 @@ namespace otb
 /** \class BSplinesInterpolateTransformDeformationFieldGenerator
  *  \brief This class generate the deformation field by using spline interpolation on the parameters of the transform.
  *
- *  Spline interpolation of non regularly scattered data is provided by a filter from the insight journal, 
+ *  Spline interpolation of non regularly scattered data is provided by a filter from the insight journal,
  *  ij::BSplineScatteredDataPointSetToImageFilter. It allows interpolation using any spline order and implements a multi-level approach.
- *  
- *  This filter is used for each parameter. One can also specify the indices of the angular parameters. Angular parameters are first 
+ *
+ *  This filter is used for each parameter. One can also specify the indices of the angular parameters. Angular parameters are first
  *  converted to complex exponential, the interpolated and converted back to the angular space. This is done to avoid interpolating angular discontinuities,
  *  which is a non-sense.
  *
@@ -48,13 +48,13 @@ class ITK_EXPORT BSplinesInterpolateTransformDeformationFieldGenerator
   typedef PointSetWithTransformToDeformationFieldGenerator<TPointSet,TDeformationField> Superclass;
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(BSplinesInterpolateTransformDeformationFieldGenerator,PointSetWithTransformsToDeformationFieldGenerator);
-  
+
   /** Template parameters typedefs */
   typedef typename Superclass::PointSetType PointSetType;
   typedef typename Superclass::PointSetPointerType PointSetPointerType;
@@ -81,19 +81,19 @@ class ITK_EXPORT BSplinesInterpolateTransformDeformationFieldGenerator
    * \param index The index of the angular parameter.
    */
   void AddAngularParameter(unsigned int index);
-  /** 
+  /**
    * Remove an angular parameter.
    * \param index The index of the angular parameter.
-   */  
+   */
   void RemoveAngularParameter(unsigned int index);
-  
+
   itkSetMacro(SplineOrder,unsigned int);
   itkGetMacro(SplineOrder,unsigned int);
   itkSetMacro(NumberOfControlPoints,unsigned int);
   itkGetMacro(NumberOfControlPoints,unsigned int);
   itkSetMacro(NumberOfLevels,unsigned int);
   itkGetMacro(NumberOfLevels,unsigned int);
-  
+
 protected:
   /** Constructor */
   BSplinesInterpolateTransformDeformationFieldGenerator();

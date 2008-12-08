@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -21,9 +21,9 @@
 #include "otbSOMClassifier.h"
 #include "otbMacro.h"
 
-namespace otb{ 
+namespace otb{
 /**
- * Constructor 
+ * Constructor
  */
 template< class TSample, class TSOMMap, class TLabel >
 SOMClassifier< TSample, TSOMMap, TLabel >
@@ -47,7 +47,7 @@ SOMClassifier< TSample, TSOMMap, TLabel >
 {
   return dynamic_cast<SOMMapType *>(this->itk::ProcessObject::GetInput(0));
 }
-/** 
+/**
  * SOMMap Setter.
  */
 template< class TSample, class TSOMMap, class TLabel >
@@ -85,29 +85,29 @@ SOMClassifier< TSample, TSOMMap, TLabel >
      numberOfClasses*=size[i];
    }
   outputPtr->SetNumberOfClasses(numberOfClasses) ;
- 
+
   typename TSample::Iterator iter = this->GetSample()->Begin() ;
   typename TSample::Iterator end  = this->GetSample()->End() ;
 
-  
+
   typename OutputType::ConstIterator iterO = outputPtr->Begin() ;
   typename OutputType::ConstIterator endO  = outputPtr->End() ;
   typename TSample::MeasurementVectorType measurements ;
-  
+
   typename SOMMapType::IndexType index;
-  
+
   SOMMapPointerType somMap = this->GetMap();
 
    otbMsgDebugMacro(  << "Starting iterations " );
   while (iter != end && iterO != endO)
     {
-    
+
     measurements = iter.GetMeasurementVector() ;
     index = somMap->GetWinner(measurements);
     ClassLabelType classLabel = static_cast<ClassLabelType>((index[1]*size[1])+index[0]);
-    outputPtr->AddInstance(classLabel, iterO.GetInstanceIdentifier()) ; 
+    outputPtr->AddInstance(classLabel, iterO.GetInstanceIdentifier()) ;
     ++iter;
-    ++iterO;    
+    ++iterO;
     }
 }
 } // end of namespace otb

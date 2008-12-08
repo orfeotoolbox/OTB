@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,6 +33,6 @@ int otbBSQImageIOTestCanWrite(int argc, char* argv[])
       std::cerr << "Erreur otb::L'image "<<argv[1]<<" n'est pas une image BSQ."<<std::endl;
       return EXIT_FAILURE;
     }
-  
+
   return EXIT_SUCCESS;
 }

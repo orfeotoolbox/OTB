@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -37,23 +37,23 @@ MultiChannelRAndBAndNIRVegetationIndexImageFilter<TInputImage,TOutputImage,TFunc
   this->InPlaceOff();
 }
 
-/** 
+/**
  * MultiChannelRAndBAndNIRVegetationIndexImageFilter can produce an image which is a different resolution
  * than its input image.  As such, MultiChannelRAndBAndNIRVegetationIndexImageFilter needs to provide an
  * implementation for GenerateOutputInformation() in order to inform
  * the pipeline execution model.  The original documentation of this
  * method is below.
  *
- * \sa ProcessObject::GenerateOutputInformaton() 
+ * \sa ProcessObject::GenerateOutputInformaton()
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-void 
+void
 MultiChannelRAndBAndNIRVegetationIndexImageFilter<TInputImage,TOutputImage,TFunction>
 ::GenerateOutputInformation()
 {
   // do not call the superclass' implementation of this method since
   // this filter allows the input the output to be of different dimensions
- 
+
   // get pointers to the input and output
   typename Superclass::OutputImagePointer      outputPtr = this->GetOutput();
   typename Superclass::InputImageConstPointer  inputPtr  = this->GetInput();
@@ -107,7 +107,7 @@ MultiChannelRAndBAndNIRVegetationIndexImageFilter<TInputImage,TOutputImage,TFunc
           }
         else
           {
-          outputDirection[j][i] = 0.0;          
+          outputDirection[j][i] = 0.0;
           }
         }
       }
@@ -123,7 +123,7 @@ MultiChannelRAndBAndNIRVegetationIndexImageFilter<TInputImage,TOutputImage,TFunc
           }
         else
           {
-          outputDirection[j][i] = 0.0;          
+          outputDirection[j][i] = 0.0;
           }
         }
       }
@@ -156,7 +156,7 @@ MultiChannelRAndBAndNIRVegetationIndexImageFilter<TInputImage,TOutputImage,TFunc
 {
   InputImagePointer  inputPtr = this->GetInput();
   OutputImagePointer outputPtr = this->GetOutput(0);
-  
+
   // Define the portion of the input to walk for this thread, using
   // the CallCopyOutputRegionToInputRegion method allows for the input
   // and output images to be different dimensions
@@ -172,7 +172,7 @@ MultiChannelRAndBAndNIRVegetationIndexImageFilter<TInputImage,TOutputImage,TFunc
   inputIt.GoToBegin();
   outputIt.GoToBegin();
 
-  while( !inputIt.IsAtEnd() ) 
+  while( !inputIt.IsAtEnd() )
     {
     outputIt.Set( m_Functor( inputIt.Get()[m_RedIndex-1],inputIt.Get()[m_BlueIndex-1], inputIt.Get()[m_NIRIndex-1] ) );
     ++inputIt;

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -70,7 +70,7 @@ namespace otb
     m_poBands     = NULL;
     m_hDriver     = NULL;
     m_poDataset   = NULL;
-  
+
     m_NbBands = 0;
     m_FlagWriteImageInformation = true;
 
@@ -82,10 +82,10 @@ namespace otb
 //	if( m_hDriver != NULL ) GDALClose( m_hDriver ); //Ne pas le faire  sinon SegFault !!!!
 //         if( m_poBands != NULL ) delete [] m_poBands;
 // 	if( m_poDataset != NULL ) delete m_poDataset;
- 
+
     if(m_poDataset != NULL)
     {
-       
+
       delete m_poDataset;
       m_poDataset = NULL;
     }
@@ -99,7 +99,7 @@ namespace otb
 
 
 // Tell only if the file can be read with GDAL.
-  bool GDALImageIO::CanReadFile(const char* file) 
+  bool GDALImageIO::CanReadFile(const char* file)
   {
   // First check the extension
     if(  file == NULL )
@@ -109,14 +109,14 @@ namespace otb
     }
     bool lCanRead(false);
 
-        //Traitement particulier sur certain format o� l'on pr�f�re utiliser 
+        //Traitement particulier sur certain format o� l'on pr�f�re utiliser
         // Format PNG -> lecture avec ITK (pas GDAL car certains tests sortent en erreurs)
     itk::PNGImageIO::Pointer lPNGImageIO = itk::PNGImageIO::New();
     lCanRead = lPNGImageIO->CanReadFile(file);
     if ( lCanRead == true)
     {
       return false;
-    } 
+    }
     itk::JPEGImageIO::Pointer lJPEGImageIO = itk::JPEGImageIO::New();
     lCanRead = lJPEGImageIO->CanReadFile(file);
     if ( lCanRead == true)
@@ -135,18 +135,18 @@ namespace otb
 */
     std::string lFileNameGdal;
     lFileNameGdal = std::string(file);
-	
-        // Init GDAL parameters 
+
+        // Init GDAL parameters
     GDALAllRegister();
 
-  // Open file with GDAL 
+  // Open file with GDAL
     m_poDataset = static_cast<GDALDataset *>(GDALOpen(lFileNameGdal.c_str(), GA_ReadOnly ));
     if(m_poDataset==NULL)
     {
       fprintf( stderr,
                "GDALOpen failed - %d\n%s\n",
                CPLGetLastErrorNo(), CPLGetLastErrorMsg() );
-		 
+
       GDALDumpOpenDatasets( stderr );
       GDALDestroyDriverManager();
       CPLDumpSharedList( NULL );
@@ -222,7 +222,7 @@ namespace otb
 
     CPLErr lCrGdal;
     std::streamoff cpt(0);
-	
+
     if( GDALDataTypeIsComplex(m_PxType) )
     {
       otbMsgDevMacro( << " GDALDataTypeIsComplex begin ");
@@ -235,9 +235,9 @@ namespace otb
       cpt = 0;
       for ( std::streamoff  i=0 ; i < lTailleBuffer ; i = i+static_cast<std::streamoff>(m_NbOctetPixel) )
       {
-        memcpy((void*)(&(p[cpt])),(const void*)(&(value[i])),(size_t)(m_NbOctetPixel));		       
+        memcpy((void*)(&(p[cpt])),(const void*)(&(value[i])),(size_t)(m_NbOctetPixel));
         cpt += static_cast<std::streamoff>(m_NbOctetPixel);
-      }		
+      }
     }
     else
     {
@@ -251,7 +251,7 @@ namespace otb
         {
           itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName.c_str()<<".");
         }
-                	// Recopie dans le buffer                 
+                	// Recopie dans le buffer
         cpt = static_cast<std::streamoff>(nbComponents)*static_cast<std::streamoff>(m_NbOctetPixel);
         for ( std::streamoff  i=0 ; i < lTailleBuffer ; i = i+static_cast<std::streamoff>(m_NbOctetPixel) )
         {
@@ -260,7 +260,7 @@ namespace otb
         }
       }
     }
-	
+
     delete [] value;
     value = NULL;
     otbMsgDevMacro( << "GDALImageIO::Read() completed");
@@ -271,7 +271,7 @@ namespace otb
   //std::ifstream file;
     this->InternalReadImageInformation();
   }
-  
+
   void GDALImageIO::InternalReadImageInformation()
   {
     int i;
@@ -280,13 +280,13 @@ namespace otb
     {
       itkExceptionMacro(<<"GDAl read : empty image file name file.");
     }
-  
+
     std::string lFileNameGdal = m_FileName;
 
-  // Init GDAL parameters 
+  // Init GDAL parameters
     GDALAllRegister();
-  
-  // Get Dataset 
+
+  // Get Dataset
     if(m_poDataset != NULL)
     {
       delete m_poDataset;
@@ -298,13 +298,13 @@ namespace otb
       itkExceptionMacro(<<"Gdal dataset is null.");
       return;
     }
-  
+
     else
     {
     // Get image dimensions
       m_width = m_poDataset->GetRasterXSize();
       m_height = m_poDataset->GetRasterYSize();
-       
+
       if( (m_width==0) || (m_height==0))
       {
         itkExceptionMacro(<<"Dimension is undefined.");
@@ -316,13 +316,13 @@ namespace otb
         m_Dimensions[1] = m_height;
         otbMsgDevMacro(<<"Get Dimensions : x="<<m_Dimensions[0]<<" & y="<<m_Dimensions[1]);
       }
-    
+
     // Get Number of Bands
       m_NbBands = m_poDataset->GetRasterCount();
       if(m_NbBands==0)
       {
 //FIXME this happen in the case of a hdf file with SUBDATASETS
-// in this situation, at least the first dataset should be open (ideally all in an imagelist) 
+// in this situation, at least the first dataset should be open (ideally all in an imagelist)
 //         char** papszMetadata;
 //         papszMetadata = m_poDataset->GetMetadata("SUBDATASETS");
 //         if( CSLCount(papszMetadata) > 0 )
@@ -334,9 +334,9 @@ namespace otb
 //             std::cout << papszMetadata[cpt] << std::endl;
 //               ::itk::OStringStream lStream;
 //               lStream << MetaDataKey::m_SubMetadataKey << cpt;
-//               key = lStream.str(); 
-//             
-//               itk::EncapsulateMetaData<std::string>(dico, key, 
+//               key = lStream.str();
+//
+//               itk::EncapsulateMetaData<std::string>(dico, key,
 //                   static_cast<std::string>( papszMetadata[cpt] ) );
 //           }
 //           std::cout << dico[dico.GetKeys()[0]] << std::endl;
@@ -347,10 +347,10 @@ namespace otb
         return;
       }
       this->SetNumberOfComponents(m_NbBands);
-   
+
       otbMsgDevMacro(<<"NbBands : "<<m_NbBands);
       otbMsgDevMacro(<<"Nb of Components : "<<this->GetNumberOfComponents());
-    
+
     // Set the number of dimensions (verify for the dim )
       this->SetNumberOfDimensions(2);
 
@@ -358,7 +358,7 @@ namespace otb
 
     // Automatically set the Type to Binary for GDAL data
       this->SetFileTypeToBinary();
-    
+
    // Get all the Bands
       m_poBands = new GDALRasterBand * [m_NbBands];
       if(m_poBands==NULL)
@@ -444,11 +444,11 @@ namespace otb
       {
         m_NbOctetPixel = 8;
       }
-      else 
+      else
       {
         m_NbOctetPixel = 1;
       }
-    
+
 
       /******************************************************************/
     // Pixel Type always set to Scalar for GDAL ? maybe also to vector ?
@@ -475,7 +475,7 @@ namespace otb
         {
           this->SetPixelType(VECTOR);
         }
-      }	
+      }
 
       otbMsgDevMacro(<<"m_PxType : "<<m_PxType);
       otbMsgDevMacro(<<"Component Type : "<<m_ComponentType);
@@ -483,51 +483,51 @@ namespace otb
 
 
     }
-    
+
     /*----------------------------------------------------------------------*/
     /*-------------------------- METADATA ----------------------------------*/
     /*----------------------------------------------------------------------*/
- 
+
     // Now initialize the itk dictionary
     itk::MetaDataDictionary & dico = this->GetMetaDataDictionary();
-      
-    
+
+
     /* -------------------------------------------------------------------- */
     /*  Get Spacing								*/
-    /* -------------------------------------------------------------------- */    
-       
+    /* -------------------------------------------------------------------- */
+
     // Default Spacing
     m_Spacing[0]=1;
     m_Spacing[1]=1;
     if(m_NumberOfDimensions==3)
       m_Spacing[2]=1;
-      
+
     char** papszMetadata;
-    papszMetadata =  m_poDataset->GetMetadata( NULL ); 
-    
-    
+    papszMetadata =  m_poDataset->GetMetadata( NULL );
+
+
     /* -------------------------------------------------------------------- */
     /*      Report general info.                                            */
     /* -------------------------------------------------------------------- */
     GDALDriverH		hDriver;
-    
-    hDriver = m_poDataset->GetDriver();
-            
-    itk::EncapsulateMetaData<std::string>(dico, MetaDataKey::m_DriverShortNameKey, 
-                                          static_cast<std::string>( GDALGetDriverShortName( hDriver ) ) );        
-    itk::EncapsulateMetaData<std::string>(dico, MetaDataKey::m_DriverLongNameKey, 
-                                          static_cast<std::string>( GDALGetDriverLongName( hDriver ) ) );
-            	 
 
-    /* -------------------------------------------------------------------- */    
+    hDriver = m_poDataset->GetDriver();
+
+    itk::EncapsulateMetaData<std::string>(dico, MetaDataKey::m_DriverShortNameKey,
+                                          static_cast<std::string>( GDALGetDriverShortName( hDriver ) ) );
+    itk::EncapsulateMetaData<std::string>(dico, MetaDataKey::m_DriverLongNameKey,
+                                          static_cast<std::string>( GDALGetDriverLongName( hDriver ) ) );
+
+
+    /* -------------------------------------------------------------------- */
     /* Get the projection coordinate system of the image : ProjectionRef	*/
     /* -------------------------------------------------------------------- */
-    
+
     if( m_poDataset->GetProjectionRef() != NULL )
     {
       OGRSpatialReference*   pSR;
       const char *		      pszProjection = NULL;
-        
+
       pSR = new OGRSpatialReference( pszProjection );
 
       pszProjection =  m_poDataset->GetProjectionRef();
@@ -537,15 +537,15 @@ namespace otb
         char *	pszPrettyWkt = NULL;
 
         pSR->exportToPrettyWkt( &pszPrettyWkt, FALSE );
-        itk::EncapsulateMetaData<std::string> ( dico, MetaDataKey::m_ProjectionRefKey, 
-            static_cast<std::string>( pszPrettyWkt ) ); 
+        itk::EncapsulateMetaData<std::string> ( dico, MetaDataKey::m_ProjectionRefKey,
+            static_cast<std::string>( pszPrettyWkt ) );
 
         CPLFree( pszPrettyWkt );
       }
       else
-        itk::EncapsulateMetaData<std::string>(dico, MetaDataKey::m_ProjectionRefKey, 
+        itk::EncapsulateMetaData<std::string>(dico, MetaDataKey::m_ProjectionRefKey,
                                               static_cast<std::string>( m_poDataset->GetProjectionRef() ) );
-            	
+
       if (pSR != NULL)
       {
         delete pSR;
@@ -554,22 +554,22 @@ namespace otb
 
     }
 
-    /* -------------------------------------------------------------------- */    
+    /* -------------------------------------------------------------------- */
     /* Get the GCP projection coordinates of the image : GCPProjection	*/
     /* -------------------------------------------------------------------- */
-        
+
     if( m_poDataset->GetGCPCount() > 0 )
     {
-      itk::EncapsulateMetaData<std::string>(dico, MetaDataKey::m_GCPProjectionKey, 
+      itk::EncapsulateMetaData<std::string>(dico, MetaDataKey::m_GCPProjectionKey,
                                             static_cast<std::string>( m_poDataset->GetGCPProjection() ) );
-            	
+
       std::string key;
 
-      itk::EncapsulateMetaData<unsigned int>(dico, MetaDataKey::m_GCPCountKey, 
+      itk::EncapsulateMetaData<unsigned int>(dico, MetaDataKey::m_GCPCountKey,
                                              static_cast<unsigned int>( m_poDataset->GetGCPCount() ) );
-            	
 
-        
+
+
       for( int cpt = 0; cpt < m_poDataset->GetGCPCount(); cpt++ )
       {
         const GDAL_GCP	*psGCP;
@@ -577,31 +577,31 @@ namespace otb
         psGCP = m_poDataset->GetGCPs() + cpt;
 
         OTB_GCP	pOtbGCP(psGCP);
-                   
+
             // Complete the key with the GCP number : GCP_i
           ::itk::OStringStream lStream;
           lStream << MetaDataKey::m_GCPParametersKey << cpt;
-          key = lStream.str(); 
-            
-          itk::EncapsulateMetaData<OTB_GCP>(dico, key, pOtbGCP); 
-            
-      }
-        
+          key = lStream.str();
 
-        
+          itk::EncapsulateMetaData<OTB_GCP>(dico, key, pOtbGCP);
+
+      }
+
+
+
     }
 
-    /* -------------------------------------------------------------------- */    
+    /* -------------------------------------------------------------------- */
     /*  Get the six coefficients of affine geoTtransform			*/
     /* -------------------------------------------------------------------- */
 
     double adfGeoTransform[6];
     VectorType VadfGeoTransform;
-      
+
     if( m_poDataset->GetGeoTransform( adfGeoTransform ) == CE_None )
     {
       for(int cpt = 0 ; cpt < 6 ; cpt++ ) VadfGeoTransform.push_back(adfGeoTransform[cpt]);
-    	
+
       itk::EncapsulateMetaData<VectorType>(dico, MetaDataKey::m_GeoTransformKey, VadfGeoTransform);
 
 	/// retrieve orgin and spacing from the geo transform
@@ -621,12 +621,12 @@ namespace otb
       std::string key;
 
       for( int cpt = 0; papszMetadata[cpt] != NULL; cpt++ )
-      {       
+      {
           ::itk::OStringStream lStream;
           lStream << MetaDataKey::m_MetadataKey << cpt;
-          key = lStream.str(); 
-            
-          itk::EncapsulateMetaData<std::string>(dico, key, 
+          key = lStream.str();
+
+          itk::EncapsulateMetaData<std::string>(dico, key,
               static_cast<std::string>( papszMetadata[cpt] ) );
       }
     }
@@ -639,32 +639,32 @@ namespace otb
     if( CSLCount(papszMetadata) > 0 )
     {
       std::string key;
-        
+
       for( int cpt = 0; papszMetadata[cpt] != NULL; cpt++ )
       {
           ::itk::OStringStream lStream;
           lStream << MetaDataKey::m_SubMetadataKey << cpt;
-          key = lStream.str(); 
-            
-          itk::EncapsulateMetaData<std::string>(dico, key, 
+          key = lStream.str();
+
+          itk::EncapsulateMetaData<std::string>(dico, key,
               static_cast<std::string>( papszMetadata[cpt] ) );
       }
     }
 
-    
+
     /* -------------------------------------------------------------------- */
     /* Report corners							*/
     /* -------------------------------------------------------------------- */
-   
+
     double GeoX(0), GeoY(0);
     VectorType VGeo;
 
-    GDALInfoReportCorner( "Upper Left", 0.0, 0.0, GeoX, GeoY  );    
+    GDALInfoReportCorner( "Upper Left", 0.0, 0.0, GeoX, GeoY  );
     VGeo.push_back(GeoX);
     VGeo.push_back(GeoY);
-    
+
     itk::EncapsulateMetaData<VectorType>(dico, MetaDataKey::m_UpperLeftCornerKey, VGeo);
-        
+
     VGeo.clear();
 
     GDALInfoReportCorner( "Upper Right", m_width, 0.0, GeoX, GeoY );
@@ -674,15 +674,15 @@ namespace otb
     itk::EncapsulateMetaData<VectorType>(dico, MetaDataKey::m_UpperRightCornerKey, VGeo);
 
     VGeo.clear();
-    
+
     GDALInfoReportCorner( "Lower Left", 0.0, m_height, GeoX, GeoY);
     VGeo.push_back(GeoX);
     VGeo.push_back(GeoY);
-    
+
     itk::EncapsulateMetaData<VectorType>(dico, MetaDataKey::m_LowerLeftCornerKey, VGeo);
 
     VGeo.clear();
-   
+
     GDALInfoReportCorner( "Lower Right", m_width, m_height, GeoX, GeoY );
     VGeo.push_back(GeoX);
     VGeo.push_back(GeoY);
@@ -690,10 +690,10 @@ namespace otb
     itk::EncapsulateMetaData<VectorType>(dico, MetaDataKey::m_LowerRightCornerKey, VGeo);
 
     VGeo.clear();
- 
+
     /* -------------------------------------------------------------------- */
     /* Color Table								*/
-    /* -------------------------------------------------------------------- */ 
+    /* -------------------------------------------------------------------- */
 
     for(int iBand = 0; iBand <m_poDataset->GetRasterCount(); iBand++ )
     {
@@ -702,13 +702,13 @@ namespace otb
       hBand=GDALGetRasterBand(m_poDataset,iBand+1);
       if(GDALGetRasterColorInterpretation(hBand)==GCI_PaletteIndex&&(hTable=GDALGetRasterColorTable(hBand))!=NULL)
       {
-        unsigned int ColorEntryCount=GDALGetColorEntryCount(hTable);    
-	  
-        itk::EncapsulateMetaData<std::string>(dico, MetaDataKey::m_ColorTableNameKey, 
-                                              static_cast<std::string>( GDALGetPaletteInterpretationName( 
-                                                  GDALGetPaletteInterpretation( hTable ) ) ) );    
-            				    
-        itk::EncapsulateMetaData<unsigned int>(dico, MetaDataKey::m_ColorEntryCountKey, ColorEntryCount);        
+        unsigned int ColorEntryCount=GDALGetColorEntryCount(hTable);
+
+        itk::EncapsulateMetaData<std::string>(dico, MetaDataKey::m_ColorTableNameKey,
+                                              static_cast<std::string>( GDALGetPaletteInterpretationName(
+                                                  GDALGetPaletteInterpretation( hTable ) ) ) );
+
+        itk::EncapsulateMetaData<unsigned int>(dico, MetaDataKey::m_ColorEntryCountKey, ColorEntryCount);
 
         for(int i = 0; i < GDALGetColorEntryCount( hTable ); i++ )
         {
@@ -716,17 +716,17 @@ namespace otb
           VectorType VColorEntry;
 
           GDALGetColorEntryAsRGB( hTable, i, &sEntry );
-                
+
           VColorEntry.push_back(sEntry.c1);
           VColorEntry.push_back(sEntry.c2);
           VColorEntry.push_back(sEntry.c3);
           VColorEntry.push_back(sEntry.c4);
-                
+
           itk::EncapsulateMetaData<VectorType>(dico, MetaDataKey::m_ColorEntryAsRGBKey, VColorEntry);
-                
+
         }
-      } 
-    }        
+      }
+    }
     otbMsgDebugMacro( <<"Driver to read: GDAL");
     otbMsgDebugMacro( <<"         Read  file         : "<< m_FileName);
     otbMsgDebugMacro( <<"         Size               : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
@@ -743,7 +743,7 @@ namespace otb
       return false;
     }
 
-        //Traitement particulier sur certain format o� l'on pr�f�re utiliser 
+        //Traitement particulier sur certain format o� l'on pr�f�re utiliser
         // Format PNG -> lecture avec ITK (pas GDAL)
 /*  	itk::PNGImageIO::Pointer lPNGImageIO = itk::PNGImageIO::New();
     lCanWrite = lPNGImageIO->CanWriteFile(name);
@@ -758,8 +758,8 @@ namespace otb
     {
       return false;
     }
-        
-    return true;  	
+
+    return true;
 
   }
 
@@ -800,7 +800,7 @@ namespace otb
     std::streamoff lNbPixels = static_cast<std::streamoff>(lNbColumns)*static_cast<std::streamoff>(lNbLines);
     std::streamoff lTailleBuffer = static_cast<std::streamoff>(m_NbOctetPixel)*lNbPixels;
     otbMsgDevMacro( <<" TailleBuffer allocated : "<< lTailleBuffer);
-        
+
     unsigned char* value = new unsigned char[lTailleBuffer];
     if(value==NULL)
     {
@@ -812,12 +812,12 @@ namespace otb
     step = step * static_cast<std::streamoff>(m_NbOctetPixel);
 
     CPLErr lCrGdal;
-        
- 
+
+
     for (unsigned int nbComponents = 0 ; nbComponents < this->GetNumberOfComponents() ; nbComponents++)
     {
       cpt = static_cast<std::streamoff>(nbComponents)* static_cast<std::streamoff>(m_NbOctetPixel);
-     
+
       for ( std::streamoff i=0 ; i < lTailleBuffer ; i = i+static_cast<std::streamoff>(m_NbOctetPixel) )
       {
         memcpy((void*)(&(value[i])),(const void*)(&(p[cpt])),(size_t)(m_NbOctetPixel));
@@ -850,7 +850,7 @@ namespace otb
   {
 
   }
-  
+
   void GDALImageIO::InternalWriteImageInformation()
   {
 
@@ -903,12 +903,12 @@ namespace otb
       m_NbOctetPixel = 8;
       m_PxType = GDT_Float64;
     }
-    else 
+    else
     {
       m_NbOctetPixel = 1;
       m_PxType = GDT_Byte;
     }
-    
+
         // Automatically set the Type to Binary for GDAL data
     this->SetFileTypeToBinary();
 
@@ -927,7 +927,7 @@ namespace otb
       itkExceptionMacro(<< "GDAL Writing failed : Driver not reconized");
     }
     std::string realFileName = GetGdalWriteImageFileName(extGDAL, m_FileName);
-        
+
     if(m_poDataset != NULL)
     {
       delete m_poDataset;
@@ -941,7 +941,7 @@ namespace otb
 
    	// Get all the Bands
     m_poBands = new GDALRasterBand* [m_NbBands];
-    	
+
     if(m_poBands==NULL)
     {
       itkExceptionMacro(<<"Memory allocation error for 'rasterBands'");
@@ -957,28 +957,28 @@ namespace otb
     otbMsgDebugMacro( <<"         Size               : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
     otbMsgDebugMacro( <<"         ComponentType      : "<<this->GetComponentType() );
     otbMsgDebugMacro( <<"         NumberOfComponents : "<<this->GetNumberOfComponents());
-	
-	
+
+
 	// JULIEN: ADDING SUPPORT FOR METADATA WRITING.
-	
+
 
     /*----------------------------------------------------------------------*/
     /*-------------------------- METADATA ----------------------------------*/
     /*----------------------------------------------------------------------*/
- 
+
 	// Now initialize the itk dictionary
-    itk::MetaDataDictionary & dico = this->GetMetaDataDictionary();      
+    itk::MetaDataDictionary & dico = this->GetMetaDataDictionary();
     char** papszMetadata;
     papszMetadata =  m_poDataset->GetMetadata( NULL );
     itk::OStringStream oss;
 
-	
-    /* -------------------------------------------------------------------- */    
+
+    /* -------------------------------------------------------------------- */
     /* Set the GCPs	                                                        */
     /* -------------------------------------------------------------------- */
-        
+
     unsigned int gcpCount = ImageBase::GetGCPCount(dico);
-	
+
     if(gcpCount>0)
     {
 
@@ -994,39 +994,39 @@ namespace otb
         gdalGcps[gcpIndex].dfGCPX = ImageBase::GetGCPX(dico,gcpIndex);
         gdalGcps[gcpIndex].dfGCPY = ImageBase::GetGCPY(dico,gcpIndex);
         gdalGcps[gcpIndex].dfGCPZ = ImageBase::GetGCPZ(dico,gcpIndex);
-		
+
       }
-	    
+
       m_poDataset->SetGCPs(gcpCount,gdalGcps,ImageBase::GetGCPProjection(dico).c_str());
-	    
+
       delete [] gdalGcps;
     }
 
-    /* -------------------------------------------------------------------- */    
+    /* -------------------------------------------------------------------- */
     /* Set the projection coordinate system of the image : ProjectionRef	*/
     /* -------------------------------------------------------------------- */
-    
-	
+
+
     if(!ImageBase::GetProjectionRef(dico).empty())
     {
       m_poDataset->SetProjection(ImageBase::GetProjectionRef(dico).c_str());
     }
-	
-    /* -------------------------------------------------------------------- */    
+
+    /* -------------------------------------------------------------------- */
     /*  Set the six coefficients of affine geoTtransform			*/
     /* -------------------------------------------------------------------- */
-	
-  
+
+
 
     double * geoTransform = new double[6];
 	    /// Reporting origin and spacing
-    geoTransform[0]=m_Origin[0];            
+    geoTransform[0]=m_Origin[0];
     geoTransform[3]=m_Origin[1];
     geoTransform[1]=m_Spacing[0];
     geoTransform[5]=m_Spacing[1];
-            
-            // FIXME: Here component 1 and 4 should be replaced by the orientation parameters 
-    geoTransform[2]=0.;            
+
+            // FIXME: Here component 1 and 4 should be replaced by the orientation parameters
+    geoTransform[2]=0.;
     geoTransform[4]=0.;
     m_poDataset->SetGeoTransform(geoTransform);
     delete [] geoTransform;
@@ -1040,7 +1040,7 @@ namespace otb
     std::string svalue="";
     std::vector<std::string> keys = dico.GetKeys();
     MetaDataKey key;
-	    
+
     for (unsigned int itkey=0; itkey<keys.size(); itkey++)
     {
       if(keys[itkey].compare(0,key.m_MetadataKey.length(),key.m_MetadataKey)==0)
@@ -1053,18 +1053,18 @@ namespace otb
         m_poDataset->SetMetadataItem(tag.c_str(),value.c_str(),NULL);
       }
     }
-	    // END 
-	    
-  }	
+	    // END
+
+  }
 
   std::string GDALImageIO::TypeConversion(std::string name)
   {
     std::string extension;
     std::string extGDAL;
-	
+
 	//Recuperer extension du fichier image
     extension = System::GetExtension(name);
-        
+
     if ((extension=="tif")||(extension=="tiff")||(extension=="TIF")||(extension=="TIFF"))
       extGDAL="GTiff";
     else if ((extension=="hdr")||(extension=="HDR"))
@@ -1078,8 +1078,8 @@ namespace otb
 //	else if ((extension=="jpg")||(extension=="JPG")||(extension=="jpeg")||(extension=="JPEG"))
 //			extGDAL="JPEG";
     else
-      extGDAL="NOT-FOUND"; 
-    return(extGDAL);   
+      extGDAL="NOT-FOUND";
+    return(extGDAL);
   }
 
   std::string GDALImageIO::GetGdalWriteImageFileName(std::string & extGDAL, std::string filename)
@@ -1092,16 +1092,16 @@ namespace otb
     {
       gdalFileName = System::GetRootName(filename);
     }
-    return(gdalFileName);   
+    return(gdalFileName);
   }
 
   bool GDALImageIO::GDALInfoReportCorner( const char * corner_name, double x, double y, double &GeoX, double &GeoY)
   {
     const char  *pszProjection;
     double	adfGeoTransform[6];
- 
+
     bool IsTrue;
-        
+
     /* -------------------------------------------------------------------- */
     /*      Transform the point into georeferenced coordinates.             */
     /* -------------------------------------------------------------------- */
@@ -1125,5 +1125,5 @@ namespace otb
 
     return IsTrue;
   }
-  
+
 } // end namespace otb

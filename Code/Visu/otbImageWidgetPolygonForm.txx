@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -46,7 +46,7 @@ ImageWidgetPolygonForm<TValue>
     {
       glEnable(GL_BLEND);
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-      GluPolygonDrawingHelper::Pointer polygonDrawer = GluPolygonDrawingHelper::New(); 
+      GluPolygonDrawingHelper::Pointer polygonDrawer = GluPolygonDrawingHelper::New();
 
 
       if(m_InternalValueToAlphaChannel)
@@ -59,22 +59,22 @@ ImageWidgetPolygonForm<TValue>
       }
       polygonDrawer->SetBoundaryOnly(!m_Solid);
       VertexListConstIteratorType it =  this->GetPolygon()->GetVertexList()->Begin();
-      
+
       while(it != this->GetPolygon()->GetVertexList()->End())
-	{  
+	{
 	  double x1 = it.Value()[0];
 	  double y1 = it.Value()[1];
-	  
+
 	  x1 = static_cast<int>((x1-originx)*openGlZoom*(1/static_cast<double>(ss_rate)));
 	  y1 = static_cast<int>(windowh+(originy-y1)*openGlZoom*(1/static_cast<double>(ss_rate)));
 	  polygonDrawer->Vertex2d(x1,y1);
 	  ++it;
-	}            
+	}
       polygonDrawer->RenderPolygon();
       glDisable(GL_BLEND);
     }
 }
- 
+
 } // end namespace otb
 
 #endif

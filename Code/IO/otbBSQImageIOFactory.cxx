@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -21,7 +21,7 @@
 #include "otbBSQImageIO.h"
 #include "itkVersion.h"
 
-  
+
 namespace otb
 {
 
@@ -33,18 +33,18 @@ BSQImageIOFactory::BSQImageIOFactory()
                          1,
                          itk::CreateObjectFunction<BSQImageIO>::New());
 }
-  
+
 BSQImageIOFactory::~BSQImageIOFactory()
 {
 }
 
-const char* 
+const char*
 BSQImageIOFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char* 
+const char*
 BSQImageIOFactory::GetDescription() const
 {
   return "BSQ ImageIO Factory, permettant le chargement d'image au format BSQ dans l'OTB";

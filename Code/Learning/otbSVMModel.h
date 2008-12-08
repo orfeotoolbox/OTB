@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,34 +30,34 @@ namespace otb
 
 /** \class SVMModel
  * \brief Class for SVM models.
- * 
  *
- * The basic functionality of the SVMModel framework base class is to    
- * generate the models used in SVM classification. It requires input 
+ *
+ * The basic functionality of the SVMModel framework base class is to
+ * generate the models used in SVM classification. It requires input
  * images and a training image to be provided by the user.
  * This object supports data handling of multiband images. The object
- * accepts the input image in vector format only, where each pixel is a 
+ * accepts the input image in vector format only, where each pixel is a
  * vector and each element of the vector corresponds to an entry from
- * 1 particular band of a multiband dataset. A single band image is treated 
+ * 1 particular band of a multiband dataset. A single band image is treated
  * as a vector image with a single element for every vector. The classified
- * image is treated as a single band scalar image. 
+ * image is treated as a single band scalar image.
  *
- * EstimateModels() is a pure virtual function making this an abstract class. 
- * The template parameter is the type of a membership function the 
+ * EstimateModels() is a pure virtual function making this an abstract class.
+ * The template parameter is the type of a membership function the
  * Model populates.
  *
  * A membership function represents a specific knowledge about
  * a class. In other words, it should tell us how "likely" is that a
- * measurement vector (pattern) belong to the class. 
+ * measurement vector (pattern) belong to the class.
  *
- * As the method name indicates, you can have more than one membership 
- * function. One for each classes. The order you put the membership 
+ * As the method name indicates, you can have more than one membership
+ * function. One for each classes. The order you put the membership
  * calculator becomes the class label for the class that is represented
- * by the membership calculator. 
+ * by the membership calculator.
  *
 
  *
- * \ingroup ClassificationFilters 
+ * \ingroup ClassificationFilters
  */
 template <class TInputPixel, class TLabel >
 class ITK_EXPORT SVMModel : public itk::DataObject
@@ -99,12 +99,12 @@ public:
 //   itkGetObjectMacro(InputImage,InputImageType);
 
 //   /** Set the classified image. */
-//   void SetMembershipFunctions(MembershipFunctionPointerVector 
+//   void SetMembershipFunctions(MembershipFunctionPointerVector
 //                               membershipFunctions)
 //   {
 //     m_MembershipFunctions = membershipFunctions;
 //   }
-  
+
 //   /** Method to get mean */
 //   const MembershipFunctionPointerVector GetMembershipFunctions() const
 //   {
@@ -112,13 +112,13 @@ public:
 //   }
 
 //   /** Method to number of membership functions */
-//   unsigned int GetNumberOfMembershipFunctions() 
+//   unsigned int GetNumberOfMembershipFunctions()
 //   {
 //     return static_cast<unsigned int>( m_MembershipFunctions.size() );
 //   }
 
 //   /** Method to reset the membership fucntion mean */
-//   void DeleteAllMembershipFunctions() 
+//   void DeleteAllMembershipFunctions()
 //   {
 //     m_MembershipFunctions.resize(0);
 //   }
@@ -136,7 +136,7 @@ public:
   {
         m_Model->nr_class = (int)nr_class;
   }
-  
+
   /** Get the number of classes. */
   unsigned int GetNumberOfClasses(void)
   {
@@ -169,7 +169,7 @@ public:
   /** Allocates the problem */
   void AllocateProblem(int l, long int elements);
 
-  
+
   /** Sets the model */
   void SetModel(struct svm_model* aModel);
 
@@ -217,7 +217,7 @@ public:
     //return m_Parameters.svm_type;
     return m_Model->param.svm_type;
   }
-  
+
   /** Set the kernel type to LINEAR, POLY, RBF, SIGMOID
 	linear: u'*v
 	polynomial: (gamma*u'*v + coef0)^degree
@@ -296,7 +296,7 @@ public:
       //return m_Parameters.nu;
       return m_Model->param.nu;
     }
-  
+
   /** Set the cache size in MB for the training */
   void SetCacheSize(int cSize)
   {
@@ -352,7 +352,7 @@ public:
     this->Modified();
   }
 
-  
+
   /* Get the value of p for EPSILON_SVR */
   double GetP(void)
   {
@@ -457,11 +457,11 @@ public:
   /** Evaluate model */
   double Evaluate(void);
 
-  /** Evaluate hyperplane distance model. 
+  /** Evaluate hyperplane distance model.
     * Return NumberOfClasses*(NumberOfClasses-1)/2 elements
     */
   ValuesType EvaluateHyperplaneDistance(void);
-  
+
 protected:
   SVMModel();
   ~SVMModel();
@@ -485,8 +485,8 @@ private:
 
   struct svm_problem m_Problem;
   struct svm_node* m_XSpace;
-  
- 
+
+
   /** Pointer to generic kernel functor */
 //  GenericKernelFunctorBase * m_GenericKernelFunctor;
 

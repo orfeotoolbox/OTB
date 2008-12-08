@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -40,7 +40,7 @@ int otbSOMImageClassificationFilter(int argc, char * argv[])
   typedef otb::ImageFileReader<SOMMapType> SOMReaderType;
   typedef otb::StreamingImageFileWriter<LabeledImageType> WriterType;
 
- 
+
   // Instantiating object
   ClassificationFilterType::Pointer filter = ClassificationFilterType::New();
 
@@ -50,10 +50,10 @@ int otbSOMImageClassificationFilter(int argc, char * argv[])
   SOMReaderType::Pointer somreader = SOMReaderType::New();
   somreader->SetFileName(somfname);
   somreader->Update();
-  
+
   filter->SetMap(somreader->GetOutput());
   filter->SetInput(reader->GetOutput());
-  
+
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(filter->GetOutput());
   writer->SetFileName(outfname);

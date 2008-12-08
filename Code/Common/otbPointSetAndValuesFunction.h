@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -40,19 +40,19 @@ namespace otb
       typedef itk::FunctionBase<itk::Point<TCoordRep,::itk::GetPointSetDimension<TPointSet>::PointDimension>,TValue> Superclass;
       typedef itk::SmartPointer<Self>           Pointer;
       typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
       /** New macro */
       itkNewMacro(Self);
- 
+
       /** Creation through object factory macro */
       itkTypeMacro(PointSetAndValuesFunction, FunctionBase);
- 
+
       typedef TPointSet PointSetType;
       typedef typename PointSetType::ConstPointer PointSetConstPointerType;
       typedef TValue ValueType;
       typedef TCoordRep CoordRepType;
       typedef typename PointSetType::PointType PointType;
-      
+
       typedef itk::Index<PointType::PointDimension> IndexType;
       typedef itk::ContinuousIndex<CoordRepType,PointType::PointDimension> ContinuousIndexType;
 
@@ -64,16 +64,16 @@ namespace otb
 
       /**
        * Set the point set.
-       * \param the point set 
+       * \param the point set
        */
       virtual void SetPointSet( const PointSetType * ptr );
       /**
        * Get the point set.
-       * \return the point set 
+       * \return the point set
        */
       const PointSetType * GetPointSe() const
       { return m_PointSet.GetPointer(); }
-      
+
       /** Evaluate the function at specified Point position.
        * Subclasses must provide this method. */
       virtual TValue Evaluate( const PointType& point ) const = 0;
@@ -85,14 +85,14 @@ namespace otb
       /** Evaluate the function at specified ContinousIndex position.
        * Subclasses must provide this method. */
       virtual TValue EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const = 0;
-  
+
       protected:
       /** Constructor */
       PointSetAndValuesFunction()
       {
 	m_PointSet = PointSetType::New();
 	m_ValueVector = ValueVectorType::New();
-	
+
       }
       /** Destructor */
       virtual ~PointSetAndValuesFunction() {};

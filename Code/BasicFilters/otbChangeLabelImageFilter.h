@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -36,18 +36,18 @@ class ITK_EXPORT ChangeLabelImageFilter
   typedef itk::ChangeLabelImageFilter<TInputImage,TOutputImage> Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(ChangeLabelImageFilter,ChangeLabelImageFilter);
-  
+
   /** Set/Get the number of components per pixel */
   itkSetMacro(NumberOfComponentsPerPixel,unsigned int);
   itkGetMacro(NumberOfComponentsPerPixel,unsigned int);
-  
- 
+
+
 protected:
   /** Constructor */
   ChangeLabelImageFilter()

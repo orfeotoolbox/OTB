@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,7 +28,7 @@ int otbUnaryImageFunctorWithVectorImageFilter(int argc, char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];
-  
+
   const unsigned int Dimension = 2;
   typedef double PixelType;
   typedef otb::VectorImage<PixelType,Dimension>                           InputImageType;
@@ -40,12 +40,12 @@ int otbUnaryImageFunctorWithVectorImageFilter(int argc, char * argv[])
   typedef otb::UnaryImageFunctorWithVectorImageFilter<InputImageType,
                                                       InputImageType,
                                                       FunctorType    >    UnaryImageFunctorWithVectorImageFilterType;
-  
+
   // Instantiating object
   UnaryImageFunctorWithVectorImageFilterType::Pointer filter = UnaryImageFunctorWithVectorImageFilterType::New();
   ReaderType::Pointer reader  = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
-  
+
   reader->SetFileName(inputFileName);
   writer->SetFileName(outputFileName);
   filter->SetInput(reader->GetOutput());

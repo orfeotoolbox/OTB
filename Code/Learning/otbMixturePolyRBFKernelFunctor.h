@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) GET / ENST Bretagne. All rights reserved. 
+  Copyright (c) GET / ENST Bretagne. All rights reserved.
   See GETCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,9 +31,9 @@ class MixturePolyRBFKernelFunctor
 public:
 	/** Mixture of kernels.
 	 * Performs the mixture of kind: $\mu k_1(x,y) + (1-\mu) k_2(x,y)$
-	 * with $k_1(x,y)=\left( \gamma_1 x\cdot y + c_0 \right) ^d$ a 
-	 * polynomial kernel and 
-	 * $k_2(x,y) = \exp\left( - \gamma_2 \| x-y\-^2 \right)$ an RBF one. 
+	 * with $k_1(x,y)=\left( \gamma_1 x\cdot y + c_0 \right) ^d$ a
+	 * polynomial kernel and
+	 * $k_2(x,y) = \exp\left( - \gamma_2 \| x-y\-^2 \right)$ an RBF one.
 	 *
 	 * Variable to be instanciated (through \code SetValue \endcode) are:
 	 * Mixture (def=0.5), GammaPoly (def=1.0), CoefPoly (def=1.0),

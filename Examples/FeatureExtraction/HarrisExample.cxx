@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -35,10 +35,10 @@
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the \doxygen{otb}{HarrisImageFilter}.
-// 
-// The first step required to use this filter is to include its header file. 
 //
-// Software Guide : EndLatex 
+// The first step required to use this filter is to include its header file.
+//
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "otbHarrisImageFilter.h"
@@ -51,21 +51,21 @@ int main(int argc, char *argv[] )
     if( argc != 6 )
     {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
-    std::cerr << " outputHarrisImageFile sigmaD sigmaI alpha" << std::endl;  
+    std::cerr << " outputHarrisImageFile sigmaD sigmaI alpha" << std::endl;
     return EXIT_FAILURE;
     }
 
     const char * inputFilename  = argv[1];
     const char * outputFilename = argv[2];
-        
+
     double SigmaD((double)::atof(argv[3]));
     double SigmaI((double)::atof(argv[4]));
     double Alpha((double)::atof(argv[5]));
-	        
+
     typedef float                                   InputPixelType;
     const   unsigned int        	                        Dimension = 2;
     typedef unsigned char   	                        OutputPixelType;
-	
+
     typedef otb::Image< InputPixelType,  Dimension >   InputImageType;
     typedef otb::Image< OutputPixelType, Dimension >   OutputImageType;
 
@@ -77,35 +77,35 @@ int main(int argc, char *argv[] )
     //  input and output image types, so we start by
     //  defining:
     //
-    //  Software Guide : EndLatex 
-    
+    //  Software Guide : EndLatex
+
     // Software Guide : BeginCodeSnippet
     typedef otb::HarrisImageFilter<InputImageType,
                                      InputImageType>   HarrisFilterType;
 
     // Software Guide : EndCodeSnippet
     typedef itk::RescaleIntensityImageFilter
-                   < InputImageType, OutputImageType > RescalerType; 
+                   < InputImageType, OutputImageType > RescalerType;
 
     typedef otb::ImageFileWriter< OutputImageType >    WriterType;
-  
+
 
     ReaderType::Pointer reader   = ReaderType::New();
     WriterType::Pointer writer   = WriterType::New();
     HarrisFilterType::Pointer harris = HarrisFilterType::New();
     RescalerType::Pointer rescaler = RescalerType::New();
-	
+
     reader->SetFileName( inputFilename  );
     writer->SetFileName( outputFilename );
 
     harris->SetInput( reader->GetOutput() );
-    
+
     //  Software Guide : BeginLatex
     //
     // The \doxygen{otb}{HarrisImageFilter} needs some parameters to
     // operate. The derivative computation is performed by a
     // convolution with the derivative of a Gaussian kernel of
-    // variance $\sigma_D$ (derivation scale) and 
+    // variance $\sigma_D$ (derivation scale) and
     // the smoothing of the image is performed by convolving with a
     // Gaussian kernel of variance $\sigma_I$ (integration
     // scale). This allows the computation of the following matrix:
@@ -123,13 +123,13 @@ int main(int argc, char *argv[] )
     harris->SetSigmaI( SigmaI );
     harris->SetAlpha( Alpha );
     // Software Guide : EndCodeSnippet
-    
+
     rescaler->SetOutputMinimum( itk::NumericTraits< OutputPixelType >::min());
     rescaler->SetOutputMaximum( itk::NumericTraits< OutputPixelType >::max());
 
     rescaler->SetInput( harris->GetOutput() );
     writer->SetInput( rescaler->GetOutput() );
-    writer->Update(); 
+    writer->Update();
 
     //  Software Guide : BeginLatex
   // Figure~\ref{fig:Harris} shows the result of applying the interest
@@ -139,7 +139,7 @@ int main(int argc, char *argv[] )
   // \includegraphics[width=0.25\textwidth]{ROISpot5.eps}
   // \includegraphics[width=0.25\textwidth]{ROISpot5Harris.eps}
   // \itkcaption[Harris Filter Application]{Result of applying the
-  // \doxygen{otb}{HarrisImageFilter} to a Spot 5 image.} 
+  // \doxygen{otb}{HarrisImageFilter} to a Spot 5 image.}
   // \label{fig:Harris}
   // \end{figure}
   //
@@ -151,8 +151,8 @@ int main(int argc, char *argv[] )
   // \doxygen{otb}{HarrisImageToPointSetFilter}. This filter is only
   // templated over the input image type, the output being a
   // \doxygen{itk}{PointSet} with pixel type equal to the image pixel type.
-  // 
-  //  Software Guide : EndLatex 
+  //
+  //  Software Guide : EndLatex
 
     // Software Guide : BeginCodeSnippet
     typedef otb::HarrisImageToPointSetFilter<InputImageType>   FunctionType;
@@ -161,7 +161,7 @@ int main(int argc, char *argv[] )
     //  Software Guide : BeginLatex
     //
     //  We declare now the filter and a pointer to the output point set.
-    //  Software Guide : EndLatex 
+    //  Software Guide : EndLatex
     // Software Guide : BeginCodeSnippet
     typedef FunctionType::OutputPointSetType   OutputPointSetType;
 
@@ -177,7 +177,7 @@ int main(int argc, char *argv[] )
     // additional parameter : the threshold for the point selection.
     //
     //  Software Guide : EndLatex
-    
+
     // Software Guide : BeginCodeSnippet
 
     harrisPoints->SetInput( 0,reader->GetOutput() );
@@ -201,7 +201,7 @@ int main(int argc, char *argv[] )
     //  an iterator to it.
     //
     //  Software Guide : EndLatex
-    
+
     // Software Guide : BeginCodeSnippet
 
     typedef OutputPointSetType::PointsContainer ContainerType;
@@ -212,10 +212,10 @@ int main(int argc, char *argv[] )
 
     //  Software Guide : BeginLatex
     //
-    //  And we get the points coordinates 
+    //  And we get the points coordinates
     //
     //  Software Guide : EndLatex
-    
+
     // Software Guide : BeginCodeSnippet
 
 

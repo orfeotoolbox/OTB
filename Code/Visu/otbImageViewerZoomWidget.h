@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,7 +27,7 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 template <class TPixel, class TLabel> class ImageViewerBase;
-/** 
+/**
  * \brief Custom scroll image widget.
  *
  * This class derives from otb::ZoomableImageWidget, and implements behaviours specific to the image viewer.
@@ -59,7 +59,7 @@ class ITK_EXPORT ImageViewerZoomWidget
 
   typedef ImageViewerBase<PixelType, LabelType> ParentType;
   typedef ParentType* ParentPointerType;
- 
+
   itkSetMacro(Parent,ParentPointerType);
   itkGetMacro(Parent,ParentPointerType);
   /** Handle method */
@@ -154,20 +154,20 @@ case FL_FOCUS:
 	    m_Parent->ChangeZoomViewedRegion(newIndex);
 	    return 1;
 	  }
-	} 
-      return 0; 
+	}
+      return 0;
     }
-  
-
-  virtual void resize(int x,int y, int w, int h) 
-     { 
-       Superclass::resize(x,y,w,h); 
-       if(m_Parent->GetBuilt()) 
-	 m_Parent->Update(); 
-     } 
 
 
-  
+  virtual void resize(int x,int y, int w, int h)
+     {
+       Superclass::resize(x,y,w,h);
+       if(m_Parent->GetBuilt())
+	 m_Parent->Update();
+     }
+
+
+
  protected:
   /**
    * Constructor.

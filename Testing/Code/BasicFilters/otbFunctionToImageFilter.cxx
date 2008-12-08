@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,12 +32,12 @@ int otbFunctionToImageFilter(int argc, char * argv[])
   typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
   typedef itk::VarianceImageFunction<InputImageType> FunctionType;
   typedef otb::FunctionToImageFilter<InputImageType, OutputImageType, FunctionType> FilterType;
-  
+
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
-  
+
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
   filter->SetInput( reader->GetOutput() );
@@ -47,9 +47,9 @@ int otbFunctionToImageFilter(int argc, char * argv[])
   function->SetInputImage(reader->GetOutput());
 
   filter->SetFunction(function);
-  
-  
-  writer->SetInput(filter->GetOutput()); 
+
+
+  writer->SetInput(filter->GetOutput());
   writer->SetNumberOfStreamDivisions(2);
   writer->Update();
 

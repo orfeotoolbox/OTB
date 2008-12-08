@@ -41,9 +41,9 @@ REGISTER_TEST(galibTests6);
 
  DESCRIPTION:
    Example program for the tree and list genomes.  This example contains
-the code to run a tree genome.  The list genome is almost the same - 
+the code to run a tree genome.  The list genome is almost the same -
 just change tree to list and modify the initialization methods.
-  This program illustrates how to specialize member functions of the 
+  This program illustrates how to specialize member functions of the
 template classes.  Here we specialize the default write() method so that we get
 the contents of the nodes rather than the pointers to the node contents.  You
 can specialize most functions of a template class (as long as they are not
@@ -64,7 +64,7 @@ float objective(GAGenome &);
 // This is the declaration for the initialization operator for our trees.
 void TreeInitializer(GAGenome &);
 
-// This is a recursive function that will be used in the 'write' method for 
+// This is a recursive function that will be used in the 'write' method for
 // our tree genomes.
 void WriteNode(ostream & os, GANode<int> * n);
 
@@ -103,7 +103,7 @@ galibTests6(int argc, char *argv[])
   params.parse(argc, argv, gaFalse); // Parse the command line for GAlib args.
 
 // Now create the GA and run it.  We first create a chromsome with the
-// operators we want.  Once we have the genome set up, create the genetic 
+// operators we want.  Once we have the genome set up, create the genetic
 // algorithm, set the parameters, and let it go.
 
   GATreeGenome<int> genome(objective);
@@ -121,7 +121,7 @@ galibTests6(int argc, char *argv[])
 
   return 0;
 }
- 
+
 
 
 /* ----------------------------------------------------------------------------
@@ -142,10 +142,10 @@ objective(GAGenome & c)
 
 /* ----------------------------------------------------------------------------
 Here is the initializer for our genomes.  It builds a tree of n items of type
-int.  Notice that we first destroy any tree that is already in the genome 
+int.  Notice that we first destroy any tree that is already in the genome
 before we do our initialization.  This is so that the genomes can be re-used.
-When you re-run a GA, it does not destroy the individuals in the population - 
-it reuses them.  Thus, the initializer must make sure that the genome is 
+When you re-run a GA, it does not destroy the individuals in the population -
+it reuses them.  Thus, the initializer must make sure that the genome is
 cleaned up before it tries to initialize it.
 ---------------------------------------------------------------------------- */
 void
@@ -184,10 +184,10 @@ instance of the tree class methods, it finds these so it won't generate an
 instance from the templates.  You can do this with ANY method of a template
 class.  Here we do it only for the write method.
   The default write operator prints out pointers to the contents of each node.
-Here we print out the actual contents of each node.  This assumes that the 
+Here we print out the actual contents of each node.  This assumes that the
 object in our node has the operator<< defined for it.
 ---------------------------------------------------------------------------- */
-void 
+void
 WriteNode(ostream & os, GANode<int> * n)
 {
   if(!n) return;
@@ -195,10 +195,10 @@ WriteNode(ostream & os, GANode<int> * n)
 
   os.width(10);
   os << ((GANode<int> *)node)->contents << " ";
-  os.width(10); 
+  os.width(10);
   if(node->parent) os << ((GANode<int> *)node->parent)->contents << " ";
   else os << "." << " ";
-  os.width(10); 
+  os.width(10);
   if(node->child) os << ((GANode<int> *)node->child)->contents << " ";
   else os << "." << " ";
   os.width(10);
@@ -215,13 +215,13 @@ WriteNode(ostream & os, GANode<int> * n)
     os.width(10);
     if(tmp->parent) os << ((GANode<int> *)tmp->parent)->contents << " ";
     else os << "." << " ";
-    os.width(10); 
+    os.width(10);
     if(tmp->child) os << ((GANode<int> *)tmp->child)->contents << " ";
     else os << "." << " ";
-    os.width(10); 
+    os.width(10);
     if(tmp->next) os << ((GANode<int> *)tmp->next)->contents << " ";
     else os << "." << " ";
-    os.width(10); 
+    os.width(10);
     if(tmp->prev) os << ((GANode<int> *)tmp->prev)->contents << "\n";
     else os << ".\n";
     WriteNode(os, (GANode<int> *)tmp->child);

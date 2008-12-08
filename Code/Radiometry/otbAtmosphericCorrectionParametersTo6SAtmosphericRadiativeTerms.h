@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -40,7 +40,7 @@ class ITK_EXPORT AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
- 
+
 
   /** Runtime information */
   itkTypeMacro(AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms,itk::ProcessObject);
@@ -80,7 +80,7 @@ class ITK_EXPORT AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
 
 private:
   AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms(const Self&);//purposely not implemented
-  void operator=(const Self&); //purposely not implemented 
+  void operator=(const Self&); //purposely not implemented
 
 };
 

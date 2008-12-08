@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -42,7 +42,7 @@
 //  \index{itk::RGBPixel!Image}
 //  \index{itk::RGBPixel!header}
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "itkRGBPixel.h"
@@ -59,7 +59,7 @@ int main( int , char * argv[] )
   //
   //  \index{itk::RGBPixel!Instantiation}
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef itk::RGBPixel< unsigned char >    PixelType;
@@ -70,7 +70,7 @@ int main( int , char * argv[] )
   //
   // The type is then used as the pixel template parameter of the image.
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::Image< PixelType, 2 >   ImageType;
@@ -85,7 +85,7 @@ int main( int , char * argv[] )
   //
   // \index{otb::ImageFileReader!RGB Image}
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader< ImageType >  ReaderType;
@@ -101,8 +101,8 @@ int main( int , char * argv[] )
 
   ImageType::IndexType pixelIndex;
 
-  pixelIndex[0] = 25;  
-  pixelIndex[1] = 35;  
+  pixelIndex[0] = 25;
+  pixelIndex[1] = 35;
 
 
   // Software Guide : BeginLatex
@@ -115,11 +115,11 @@ int main( int , char * argv[] )
   // \index{itk::RGBPixel!GetGreen()}
   // \index{itk::RGBPixel!GetBlue()}
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   PixelType onePixel = image->GetPixel( pixelIndex );
-  
+
   PixelType::ValueType red   = onePixel.GetRed();
   PixelType::ValueType green = onePixel.GetGreen();
   PixelType::ValueType blue  = onePixel.GetBlue();
@@ -141,7 +141,7 @@ int main( int , char * argv[] )
   // The subindex notation can also be used since the \doxygen{itk}{RGBPixel} inherits the
   // \code{[]} operator from the \doxygen{itk}{FixedArray} class.
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   red   = onePixel[0];  // extract Red   component
@@ -166,7 +166,7 @@ int main( int , char * argv[] )
   // implementing interactions with a graphical user interface such as
   // querying pixel value by clicking with the mouse.
   //
- 
+
   return EXIT_SUCCESS;
 }
 

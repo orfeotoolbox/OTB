@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,7 +24,7 @@
 #include "otbContinuousMinimumMaximumImageCalculator.h"
 #include "itkSize.h"
 
-int 
+int
 otbContinuousMinimumMaximumImageCalculatorTest(int ,char *[] )
 {
 
@@ -75,11 +75,11 @@ otbContinuousMinimumMaximumImageCalculatorTest(int ,char *[] )
   index[0] = 10;
   index[1] = 10;
   image->SetPixel(index, maximum);
-    
+
   index[0] = 10;
   index[1] = 11;
   image->SetPixel(index, 41);
-    
+
 
     // Create and initialize the calculator
   MinMaxCalculatorType::Pointer calculator = MinMaxCalculatorType::New();
@@ -97,7 +97,7 @@ otbContinuousMinimumMaximumImageCalculatorTest(int ,char *[] )
     std::cout << " != " << minimum << std::endl;
     flag = 1;
   }
-  
+
     // Return maximum of intensity
   PixelType maximumResult = calculator->GetMaximum();
   std::cout << "The Maximum intensity value is : " << maximumResult << std::endl;
@@ -111,16 +111,16 @@ otbContinuousMinimumMaximumImageCalculatorTest(int ,char *[] )
   }
 
 
-    // Return results of test 
-  if (flag != 0) 
+    // Return results of test
+  if (flag != 0)
     {
       std::cout << "*** Some tests failed" << std::endl;
-      return flag; 
+      return flag;
     }
-  else 
+  else
     {
       std::cout << "All tests successfully passed" << std::endl;
-      return EXIT_SUCCESS; 
+      return EXIT_SUCCESS;
     }
 
   return EXIT_SUCCESS;

@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,12 +30,12 @@ namespace Statistics {
 /** \class EuclideanDistanceWithMissingValue
  * \brief Euclidean distance function facing missing value.
  *
- * This class is derived from EuclideanDistance class. In addition 
+ * This class is derived from EuclideanDistance class. In addition
  * to the initial Evaluate method, the class does not perform calculation
  * when a component does not contain any data.
- * 
+ *
  * The class can be templated over any container that holds data elements, as
- * for template of EuclideanDistance. 
+ * for template of EuclideanDistance.
  *
  * The only restriction is that elemnts have to support \code NaN \endcode.
  *
@@ -49,7 +49,7 @@ class ITK_EXPORT EuclideanDistanceWithMissingValue :
 		/** Standard "Self" typedef. */
 		typedef EuclideanDistanceWithMissingValue Self;
 		typedef itk::Statistics::EuclideanDistance< TVector > Superclass;
-		typedef itk::SmartPointer< Self > Pointer ; 
+		typedef itk::SmartPointer< Self > Pointer ;
 		typedef itk::SmartPointer<const Self> ConstPointer;
 		typedef typename Superclass::MeasurementVectorSizeType MeasurementVectorSizeType;
 
@@ -69,7 +69,7 @@ class ITK_EXPORT EuclideanDistanceWithMissingValue :
 		double Evaluate(const TVector &x1, const TVector &x2) const ;
 
 		/** Gets the cooridnate distance between a and b. NOTE: a and b
-		* should be type of component */ 
+		* should be type of component */
 		double Evaluate(const ValueType &a, const ValueType &b) const ;
 
 		/** Returns true if the distance between x and the origin is less
@@ -85,7 +85,7 @@ class ITK_EXPORT EuclideanDistanceWithMissingValue :
 
 	protected:
 		EuclideanDistanceWithMissingValue() {}
-		virtual ~EuclideanDistanceWithMissingValue() {} 
+		virtual ~EuclideanDistanceWithMissingValue() {}
 } ; // end of class
 
 } // end namespace statistics

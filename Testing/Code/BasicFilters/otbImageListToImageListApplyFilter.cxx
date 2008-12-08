@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -38,12 +38,12 @@ int otbImageListToImageListApplyFilter(int argc, char * argv[])
   typedef otb::Image<PixelType,Dimension>  ImageType;
   typedef otb::ImageList<ImageType> ImageListType;
   typedef itk::MeanImageFilter<ImageType,ImageType> MeanFilterType;
-      
+
   // IO
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
-      
-  typedef otb::ImageListToImageListApplyFilter<ImageListType,ImageListType,MeanFilterType> 
+
+  typedef otb::ImageListToImageListApplyFilter<ImageListType,ImageListType,MeanFilterType>
     ImageListToImageListApplyFilterType;
 
   // Instantiating object
@@ -71,12 +71,12 @@ int otbImageListToImageListApplyFilter(int argc, char * argv[])
   filter->SetInput(imageList);
   filter->SetFilter(meanFilter);
   filter->Update();
-      
+
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outfname1);
   writer->SetInput(filter->GetOutput()->GetNthElement(0));
   writer->Update();
-      
+
   writer = WriterType::New();
   writer->SetFileName(outfname2);
   writer->SetInput(filter->GetOutput()->GetNthElement(0));
@@ -86,8 +86,8 @@ int otbImageListToImageListApplyFilter(int argc, char * argv[])
   writer->SetFileName(outfname3);
   writer->SetInput(filter->GetOutput()->GetNthElement(0));
   writer->Update();
-      
-  
+
+
 
   return EXIT_SUCCESS;
 }

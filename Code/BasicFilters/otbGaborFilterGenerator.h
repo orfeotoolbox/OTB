@@ -8,7 +8,7 @@
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
-  
+
   Some parts of this code are derived from ITK. See ITKCopyright.txt
   for details.
 
@@ -34,18 +34,18 @@ namespace otb
    * This class allows to generate gabor filter convolution mask. The mask is stored
    * in a linear buffer of type itk::Array returned by the GetFilter() method.
    *
-   * When calling the GetFilter() method, if the filter has to be regenerated, it will be 
+   * When calling the GetFilter() method, if the filter has to be regenerated, it will be
    * done seamlessly.
-   * 
+   *
    * Gabor filters are commonly used in image processing for textures description for instance
    * The complex Gabor function is the product in spatial domain of a complex sinusoidal, also
    * known as the carrier, and a gaussian-shaped function, also knwown as the envelop.
-   * 
-   * Please note that this helper class generates a filter whose coefficients are the real part 
+   *
+   * Please note that this helper class generates a filter whose coefficients are the real part
    * of a complex Gabor fucntion.
    *
    * The formula used to compute these coefficients is as follows:
-   * 
+   *
    * \f$ g(x,y) = \exp\Big(-\pi((a x_\theta)^{2} +(b y_\theta)^{2})\Big) * \cos\big(2\pi(u_0*x + v_0*y)+\phi\big) \f$
    *
    * with:
@@ -55,7 +55,7 @@ namespace otb
    * \f$ y_\theta = y \cos(\theta)-x \sin(\theta) \f$
    *
    * Where:
-   * 
+   *
    * - Radius         : Radius of the generated filter (GetRadius()/SetRadius())
    * - \f$ a      \f$ : Scale the x axis of the gaussian envelop. (GetA()/SetA())
    * - \f$ b      \f$ : Scale the y axis of the gaussian envelop (GetB()/SetB())
@@ -66,12 +66,12 @@ namespace otb
    *
    */
 
-template <class TPrecision> 
+template <class TPrecision>
 class GaborFilterGenerator
   : public itk::Object
   {
   public:
-    // Standard class typedefs 
+    // Standard class typedefs
     typedef GaborFilterGenerator Self;
     typedef itk::Object          Superclass;
     typedef itk::SmartPointer<Self> Pointer;
@@ -81,7 +81,7 @@ class GaborFilterGenerator
     itkNewMacro(Self);
     itkTypeMacro(GaborFilterGenerator,Object);
 
-    // usefull typedefs 
+    // usefull typedefs
     typedef TPrecision PrecisionType;
     typedef itk::Array<PrecisionType> ArrayType;
     typedef itk::Size<2>              RadiusType;
@@ -101,10 +101,10 @@ class GaborFilterGenerator
     itkGetMacro(V0,PrecisionType);
     itkSetMacro(Radius,RadiusType);
     itkGetConstReferenceMacro(Radius,RadiusType);
-    
+
     /** Get The generated filter */
     const ArrayType & GetFilter();
-    
+
   protected:
     /** constructor */
     GaborFilterGenerator();
@@ -117,7 +117,7 @@ class GaborFilterGenerator
     /** Generate the filter coefficients */
     void GenerateFilter();
 
-    /** Reimplement the Modified() method 
+    /** Reimplement the Modified() method
      *to set the NeedToGenerateFilter to true */
     virtual void Modified();
 
@@ -127,7 +127,7 @@ class GaborFilterGenerator
 
     /** Radius of the filter */
     RadiusType m_Radius;
-    
+
     /** Gabor parameters */
     PrecisionType m_A;
     PrecisionType m_B;
@@ -135,13 +135,13 @@ class GaborFilterGenerator
     PrecisionType m_U0;
     PrecisionType m_V0;
     PrecisionType m_Phi;
-    
+
     /** Output filter coefficient array */
     ArrayType m_Filter;
-    
+
     /** Wether we need to regenerate the filter */
     bool m_NeedToRegenerateFilter;
-    
+
   };
 } // end namespace otb
 

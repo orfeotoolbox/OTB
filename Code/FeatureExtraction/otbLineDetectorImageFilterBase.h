@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,7 +25,7 @@
 #include "itkNumericTraits.h"
 
 #define MINI(_A,_B) ((_A) < (_B) ? (_A) : (_B))
-#define MAXI(_A,_B) ((_A) > (_B) ? (_A) : (_B))  
+#define MAXI(_A,_B) ((_A) > (_B) ? (_A) : (_B))
 #define ROTATION(_x,_y,_theta,_xout,_yout) \
     (_xout) = (_x)*vcl_cos(_theta) - (_y)*vcl_sin(_theta); \
     (_yout) = (_x)*vcl_sin(_theta) + (_y)*vcl_cos(_theta)
@@ -47,15 +47,15 @@ namespace otb
  * ThreadedGenerateData"()" method calls the virtual
  * ComputeMeasure"()" method which implements the detection. This
  * method should be overloaded by each specific line detector.
- * 
+ *
  * The output is an image of intensity of detection and an image of
  * direction of the line fo each pixel.
- * 
+ *
  */
 
-template <class TInputImage, 
+template <class TInputImage,
 	  class TOutputImage,
-	  class TOutputImageDirection = TOutputImage, 
+	  class TOutputImageDirection = TOutputImage,
 	  class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
 class ITK_EXPORT LineDetectorImageFilterBase :  public ImageToModulusAndDirectionImageFilter< TInputImage, TOutputImage, TOutputImageDirection >
 {
@@ -64,7 +64,7 @@ public:
   itkStaticConstMacro(		InputImageDimension,
   				unsigned int,
                       		TInputImage::ImageDimension);
-  itkStaticConstMacro(		OutputImageDimension, 
+  itkStaticConstMacro(		OutputImageDimension,
   				unsigned int,
                       		TOutputImage::ImageDimension);
 
@@ -84,11 +84,11 @@ public:
   typedef typename Superclass::OutputImageType				OutputImageType;
   typedef typename Superclass::OutputImageDirectionType 	OutputImageDirectionType;
   typedef TInterpolator 									InterpolatorType;
-  
+
   /** Typedefs to describe and access Interpolator */
   typedef typename InterpolatorType::Pointer InterpolatorPointer;
   typedef typename InterpolatorType::CoordRepType CoordRepType;
-  
+
   typedef typename InputImageType::PointType TPoint;
 
 
@@ -97,13 +97,13 @@ public:
   typedef typename OutputImageType::PixelType OutputPixelType;
   typedef typename OutputImageType::Pointer OutputImagePointerType;
 
-  
+
   typedef typename InputImageType::RegionType InputImageRegionType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
   /** Definition of the size of the images. */
   typedef typename InputImageType::SizeType SizeType;
-  
+
   /** Set the length of the linear feature. */
   itkSetMacro(LengthLine, unsigned int);
 
@@ -115,7 +115,7 @@ public:
 
   /** Get the length of the linear feature. */
   itkGetConstReferenceMacro(WidthLine, unsigned int);
-  
+
   /** Set the radius of one zone. */
   itkSetMacro(Radius, SizeType);
 
@@ -125,7 +125,7 @@ public:
 
   /** Set the radius of one zone. */
   itkSetMacro(Threshold, OutputPixelType);
-  
+
   /** Get the radius of one zone. */
   itkGetConstReferenceMacro(Threshold, OutputPixelType);
 
@@ -135,7 +135,7 @@ public:
   /** Get the numbero of drections for line detection. */
   itkGetConstReferenceMacro(NumberOfDirections, unsigned int);
 
-  
+
   virtual void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError);
 
 protected:
@@ -145,11 +145,11 @@ protected:
 
   void BeforeThreadedGenerateData();
 
-  /** LineDetectorImageFilterBase can be implemented for a treatment of filter multithreaded. 
-   * Thus, the ThreadedGenerateData() method is called for each thread process. 
-   * The data image are allocated automatically by the mother class by calling the 
-   * ThreadedGenerateData() method. ThreadedGenerateData can only write the portion 
-   * of the image specified by the parameter outputRegionForThread 
+  /** LineDetectorImageFilterBase can be implemented for a treatment of filter multithreaded.
+   * Thus, the ThreadedGenerateData() method is called for each thread process.
+   * The data image are allocated automatically by the mother class by calling the
+   * ThreadedGenerateData() method. ThreadedGenerateData can only write the portion
+   * of the image specified by the parameter outputRegionForThread
    *
    * \sa ImageToImageFilter::ThreadedGenerateData()
    * \sa    ImageToImageFilter::GenerateData()
@@ -159,25 +159,25 @@ protected:
 
   virtual double ComputeMeasure(std::vector<double>* m1, std::vector<double>* m2, std::vector<double>* m3);
 
-  /** Length of the linear feature = 2*m_LengthLine+1 */ 
+  /** Length of the linear feature = 2*m_LengthLine+1 */
   unsigned int m_LengthLine;
-  
-  /** Width of the linear feature = 2*m_WidthLine+1 */ 
+
+  /** Width of the linear feature = 2*m_WidthLine+1 */
   unsigned int m_WidthLine;
-     
+
   /** Radius of the region*/
   SizeType m_Radius;
-  
+
   /** Size of the facelist*/
   SizeType m_FaceList;
-  
+
   OutputPixelType m_Threshold;
 
   unsigned int m_NumberOfDirections;
 private:
   LineDetectorImageFilterBase(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
- 
+
 
 };
 } // end namespace otb
@@ -186,5 +186,5 @@ private:
 #include "otbLineDetectorImageFilterBase.txx"
 #endif
 
-  
+
 #endif

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,7 +33,7 @@ TreeSource<TOutputTree>
   // Create the output. We use static_cast<> here because we know the default
   // output must be of type TOutputMesh
   OutputTreePointer output
-    = static_cast<TOutputTree*>(this->MakeOutput(0).GetPointer()); 
+    = static_cast<TOutputTree*>(this->MakeOutput(0).GetPointer());
 
   this->itk::ProcessObject::SetNumberOfRequiredOutputs(1);
   this->itk::ProcessObject::SetNthOutput( 0, output.GetPointer() );
@@ -65,12 +65,12 @@ TreeSource<TOutputTree>
     {
     return 0;
     }
-  
+
   return static_cast<TOutputTree*>
     (this->itk::ProcessObject::GetOutput(0));
 }
 
-  
+
 /**
  *
  */
@@ -88,7 +88,7 @@ TreeSource<TOutputTree>
  *
  */
 template<class TOutputTree>
-void 
+void
 TreeSource<TOutputTree>
 ::SetOutput(TOutputTree *output)
 {
@@ -101,7 +101,7 @@ TreeSource<TOutputTree>
  *
  */
 template<class TOutputTree>
-void 
+void
 TreeSource<TOutputTree>
 ::GenerateInputRequestedRegion()
 {
@@ -110,7 +110,7 @@ TreeSource<TOutputTree>
 
 
 /**
- * 
+ *
  */
 template<class TOutputTree>
 void
@@ -122,7 +122,7 @@ TreeSource<TOutputTree>
 
 
 /**
- * 
+ *
  */
 template<class TOutputTree>
 void
@@ -131,9 +131,9 @@ TreeSource<TOutputTree>
 {
   if ( idx >= this->GetNumberOfOutputs() )
     {
-    itkExceptionMacro(<<"Requested to graft output " << idx << 
+    itkExceptionMacro(<<"Requested to graft output " << idx <<
         " but this filter only has " << this->GetNumberOfOutputs() << " Outputs.");
-    }  
+    }
 
   if ( !graft )
     {
@@ -151,7 +151,7 @@ TreeSource<TOutputTree>
  *
  */
 template<class TOutputTree>
-void 
+void
 TreeSource<TOutputTree>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {

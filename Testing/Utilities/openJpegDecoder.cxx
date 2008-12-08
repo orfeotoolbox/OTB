@@ -85,7 +85,7 @@ int openJpegDecoder(int argc, char * argv[])
   OPJ_INT32 l_tile_x0,l_tile_y0;
   OPJ_UINT32 l_tile_width,l_tile_height,l_nb_tiles_x,l_nb_tiles_y,l_nb_comps;
   OPJ_INT32 l_current_tile_x0,l_current_tile_y0,l_current_tile_x1,l_current_tile_y1;
-	
+
   PROFINIT();
 
 
@@ -104,7 +104,7 @@ int openJpegDecoder(int argc, char * argv[])
 
   /* to decode only a part of the image data */
   //opj_restrict_decoding(&l_param,0,0,1000,1000);
-	
+
   l_codec = opj_create_decompress(CODEC_J2K);
   if
     (! l_codec)
@@ -113,11 +113,11 @@ int openJpegDecoder(int argc, char * argv[])
       return 1;
     }
 
-  /* catch events using our callbacks and give a local context */		
+  /* catch events using our callbacks and give a local context */
   opj_set_info_handler(l_codec, _openJpegDecoder_info_callback,00);
   opj_set_warning_handler(l_codec, _openJpegDecoder_warning_callback,00);
   opj_set_error_handler(l_codec, _openJpegDecoder_error_callback,00);
-	
+
   if
     (! opj_setup_decoder(l_codec,&l_param))
     {
@@ -125,7 +125,7 @@ int openJpegDecoder(int argc, char * argv[])
       opj_destroy_codec(l_codec);
       return 1;
     }
-	
+
   l_file = fopen(inputFile/*FileINPUT_FILE*/,"rb");
   if
     (! l_file)

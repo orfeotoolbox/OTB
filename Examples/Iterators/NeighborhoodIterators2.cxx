@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -84,17 +84,17 @@ int main( int argc, char ** argv )
     }
   catch ( itk::ExceptionObject &err)
     {
-    std::cout << "ExceptionObject caught !" << std::endl; 
-    std::cout << err << std::endl; 
+    std::cout << "ExceptionObject caught !" << std::endl;
+    std::cout << err << std::endl;
     return -1;
     }
-  
+
   ImageType::Pointer output = ImageType::New();
   output->SetRegions(reader->GetOutput()->GetRequestedRegion());
   output->Allocate();
-  
+
   IteratorType out(output, reader->GetOutput()->GetRequestedRegion());
-  
+
 // Software Guide : BeginLatex
 //
 // \index{convolution!kernels}
@@ -121,16 +121,16 @@ int main( int argc, char ** argv )
 //
 // The neighborhood iterator is initialized as before, except that now it takes
 // its radius directly from the radius of the Sobel operator.  The inner
-// product function object is templated over image type and requires no 
+// product function object is templated over image type and requires no
 // initialization.
 //
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
   NeighborhoodIteratorType::RadiusType radius = sobelOperator.GetRadius();
-  NeighborhoodIteratorType it( radius, reader->GetOutput(), 
+  NeighborhoodIteratorType it( radius, reader->GetOutput(),
                                reader->GetOutput()->GetRequestedRegion() );
-  
+
   itk::NeighborhoodInnerProduct<ImageType> innerProduct;
 // Software Guide : EndCodeSnippet
 
@@ -142,28 +142,28 @@ int main( int argc, char ** argv )
 // by the iterator.
 //
 // Software Guide : EndLatex
-    
+
 // Software Guide : BeginCodeSnippet
   for (it.GoToBegin(), out.GoToBegin(); !it.IsAtEnd(); ++it, ++out)
     {
     out.Set( innerProduct( it, sobelOperator ) );
     }
 // Software Guide : EndCodeSnippet
-  
+
 // Software Guide : BeginLatex
 //
 // The output is rescaled and written as in the previous example.  Applying
 // this example in the $x$ and $y$ directions produces the images at the center
-// and right of Figure~\ref{fig:NeighborhoodExamples1}. Note that x-direction 
+// and right of Figure~\ref{fig:NeighborhoodExamples1}. Note that x-direction
 // operator produces the same output image as in the previous example.
-// 
+//
 // Software Guide : EndLatex
 
   typedef unsigned char WritePixelType;
   typedef otb::Image< WritePixelType, 2 > WriteImageType;
   typedef otb::ImageFileWriter< WriteImageType > WriterType;
-  
-  typedef itk::RescaleIntensityImageFilter< 
+
+  typedef itk::RescaleIntensityImageFilter<
                ImageType, WriteImageType > RescaleFilterType;
 
   RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
@@ -171,7 +171,7 @@ int main( int argc, char ** argv )
   rescaler->SetOutputMinimum(   0 );
   rescaler->SetOutputMaximum( 255 );
   rescaler->SetInput(output);
-  
+
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName( argv[2] );
   writer->SetInput(rescaler->GetOutput());
@@ -181,9 +181,9 @@ int main( int argc, char ** argv )
     }
   catch ( itk::ExceptionObject &err)
     {
-    std::cout << "ExceptionObject caught !" << std::endl; 
-    std::cout << err << std::endl; 
-    return -1;   
+    std::cout << "ExceptionObject caught !" << std::endl;
+    std::cout << err << std::endl;
+    return -1;
     }
 
   return EXIT_SUCCESS;

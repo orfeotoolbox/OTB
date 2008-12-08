@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,7 +25,7 @@
 
 namespace otb
 {
-template<class TInputSampleList, 
+template<class TInputSampleList,
          class TTrainingSampleList>
 SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList>
 ::SVMSampleListModelEstimator(void):  SVMModelEstimator<ITK_TYPENAME TInputSampleList::MeasurementType,
@@ -37,7 +37,7 @@ SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList>
 }
 
 
-template<class TInputSampleList, 
+template<class TInputSampleList,
          class TTrainingSampleList>
 SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList>
 ::~SVMSampleListModelEstimator(void)
@@ -47,12 +47,12 @@ SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList>
 /*
  * PrintSelf
  */
-template<class TInputSampleList, 
+template<class TInputSampleList,
          class TTrainingSampleList>
 void
 SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList>
 ::PrintSelf( std::ostream& os, itk::Indent indent ) const
-{  
+{
   // FIXME : print useful SVM information
 //   os << indent << "                   " << std::endl;
 //   os << indent << "Gaussian Models generated from the training data." << std::endl;
@@ -71,7 +71,7 @@ SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList>
  */
 
 
-template<class TInputSampleList, 
+template<class TInputSampleList,
          class TTrainingSampleList>
 void
 SVMSampleListModelEstimator<TInputSampleList,  TTrainingSampleList>
@@ -88,8 +88,8 @@ SVMSampleListModelEstimator<TInputSampleList,  TTrainingSampleList>
   int trainingSampleListSize = trainingSampleList->Size();
 
   // Check if size of the two inputs are same
-  if( inputSampleListSize != trainingSampleListSize ) throw itk::ExceptionObject(__FILE__, __LINE__,"Input pointset size is not the same as the training pointset size.",ITK_LOCATION); 
-  
+  if( inputSampleListSize != trainingSampleListSize ) throw itk::ExceptionObject(__FILE__, __LINE__,"Input pointset size is not the same as the training pointset size.",ITK_LOCATION);
+
 
   // Declaration of the iterators on the input and training images
 
@@ -101,22 +101,22 @@ SVMSampleListModelEstimator<TInputSampleList,  TTrainingSampleList>
   TrainingSampleListIteratorType trEnd = trainingSampleList->End();
 
 
-  
+
   // Erase the vector contents
   this->m_Measures.resize(0);
   this->m_Labels.resize(0);
-  
+
 
   otbMsgDebugMacro(  << " Input nb points " << inputSampleListSize );
   otbMsgDebugMacro(  << " Training nb points " << trainingSampleListSize );
-  
+
 
  //  otbMsgDebugMacro(  << " Before while " );
 
   while(inIt!=inEnd && trIt!=trEnd)
     {
 
-    // If label != 0 
+    // If label != 0
 
     typename TTrainingSampleList::MeasurementType label =
       trIt.GetMeasurementVector()[0];
@@ -129,7 +129,7 @@ SVMSampleListModelEstimator<TInputSampleList,  TTrainingSampleList>
       inIt.GetMeasurementVector();
 
     typename Superclass::MeasurementVectorType v;
-    
+
     typename TInputSampleList::MeasurementVectorType::ConstIterator pIt = value.Begin();
     typename TInputSampleList::MeasurementVectorType::ConstIterator pEnd = value.End();
 
@@ -138,9 +138,9 @@ SVMSampleListModelEstimator<TInputSampleList,  TTrainingSampleList>
       v.push_back(*pIt);
       ++pIt;
       }
-    
+
     this->m_Measures.push_back(v);
-    
+
     ++inIt;
     ++trIt;
     }

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -22,20 +22,20 @@
 
 namespace otb
 {
-  
+
 /** \class ObjectListToObjectListFilter
-   * \brief Base class for filters that take an ObjectList as input and produce an ObjectList as output. 
+   * \brief Base class for filters that take an ObjectList as input and produce an ObjectList as output.
    *
-   * ObjectListToObjectListFilter is the base class for all process objects that output 
-   * ObjectList data and require ObjectList data as input. Specifically, this class 
+   * ObjectListToObjectListFilter is the base class for all process objects that output
+   * ObjectList data and require ObjectList data as input. Specifically, this class
    * defines the SetInput() method for defining the input to a filter.
    *
    * Be aware that this class is templated over the list type, not the object type. It will
    * be typically something like otb::ObjectList<ObjectType>. This is to enable the use of
    * class derived from ObjectList or other implementations.
-   * 
    *
-   * \ingroup ObjectListFilter  
+   *
+   * \ingroup ObjectListFilter
  */
   template <class TInputList, class TOutputList >
       class ITK_EXPORT ObjectListToObjectListFilter : public otb::ObjectListSource<TOutputList>
@@ -49,7 +49,7 @@ namespace otb
 
           /** Method for creation through the object factory. */
           itkNewMacro(Self);
-  
+
           /** Run-time type information (and related methods). */
           itkTypeMacro(ObjectListToObjectListFilter, ObjectListSource);
 
@@ -61,14 +61,14 @@ namespace otb
           typedef typename TInputList::ConstIterator InputListIterator;
           typedef typename InputListType::ObjectType InputObjectType;
           typedef typename OutputListType::ObjectType OutputObjectType;
-  
+
           typedef itk::DataObject::Pointer DataObjectPointer;
 
-  
+
           virtual void SetInput( const InputListType *input);
           const InputListType * GetInput(void);
 
-  
+
         protected:
           /** Constructor */
           ObjectListToObjectListFilter();

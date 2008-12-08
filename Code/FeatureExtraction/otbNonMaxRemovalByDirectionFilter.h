@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -21,14 +21,14 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbModulusAndDirectionImageToImageFilter.h"
 #include "otbBinaryFunctorNeighborhoodImageFilter.h"
 
-#include "otbMath.h" 
+#include "otbMath.h"
 
 namespace otb
 {
 namespace Functor
   {
     /** \class NonMaxRemovalByDirectionFunctor
-     *  \brief This functor is used by the NonMaxRemovalByDirectionFilter 
+     *  \brief This functor is used by the NonMaxRemovalByDirectionFilter
      *  \sa NonMaxRemovalByDirectionFilter
      *  \ingroup Functor
      */
@@ -41,21 +41,21 @@ namespace Functor
 	inline TOutput operator()(const TInput1 & itA, const TInput2 &itB)
 	  {
 	    TOutput resp = 0;
-	    if (itA.GetCenterPixel() != 0) 
+	    if (itA.GetCenterPixel() != 0)
 	      {
 		typename TInput1::OffsetType offset1,offset2;
 		int neighborhoodNumber;
 		if (itB.GetCenterPixel() > 0)
 		  {
 		    neighborhoodNumber = static_cast<int>(itB.GetCenterPixel()/(M_PI/4)-1);
-		  } 
-		else 
+		  }
+		else
 		  {
 		    neighborhoodNumber = static_cast<int>((itB.GetCenterPixel()+M_PI)/(M_PI/4)-1);
 		  }
-		switch( neighborhoodNumber ) 
+		switch( neighborhoodNumber )
 		  {
-		case 0: 
+		case 0:
 		  offset1[0] =  1;
 		  offset1[1] = -1;
 		  offset2[0] = -1;
@@ -78,10 +78,10 @@ namespace Functor
 		  offset1[1] =  1;
 		  offset2[0] =  0;
 		  offset2[1] = -1;
-		  break;                
+		  break;
 		}
-		if ((itA.GetCenterPixel() > itA.GetPixel(offset1)) 
-		    && (itA.GetCenterPixel() > itA.GetPixel(offset2))) 
+		if ((itA.GetCenterPixel() > itA.GetPixel(offset1))
+		    && (itA.GetCenterPixel() > itA.GetPixel(offset2)))
 		  {
 		    resp =  itA.GetCenterPixel();
 		  }
@@ -91,7 +91,7 @@ namespace Functor
       };
   }
 /** \class NonMaxRemovalByDirectionFilter
- *  \brief This filters removes (sets to null intensity) pixels which are not the maxima of the 
+ *  \brief This filters removes (sets to null intensity) pixels which are not the maxima of the
  *  scalar product modulus value in the given direction.
  *
  * \ingroup Streamed
@@ -107,21 +107,21 @@ class ITK_EXPORT NonMaxRemovalByDirectionFilter
   typedef ModulusAndDirectionImageToImageFilter<TInputModulus, TInputDirection, TOutputImage> Superclass;
   typedef itk::SmartPointer<Self>                                                             Pointer;
   typedef itk::SmartPointer<const Self>                                                       ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(NonMaxRemovalByDirectionFilter,ModulusAndDirectionImageToImageFilter);
-  
+
   /** typedef of the computing filter (this allows us to derive from ModulusAndDirectionToImageFilter as well as
       using the BinaryFunctorNeighBorhoodImageFilter, which is appropriate here */
   typedef Functor::NonMaxRemovalByDirectionFunctor<
-    typename itk::ConstNeighborhoodIterator<TInputModulus>, 
+    typename itk::ConstNeighborhoodIterator<TInputModulus>,
     typename itk::ConstNeighborhoodIterator<TInputDirection>,
     typename TOutputImage::PixelType>  FunctorType;
   typedef otb::BinaryFunctorNeighborhoodImageFilter<TInputModulus, TInputDirection,TOutputImage,FunctorType> ComputingFilterType;
-        
+
 protected:
   /** Constructor */
   NonMaxRemovalByDirectionFilter(){};

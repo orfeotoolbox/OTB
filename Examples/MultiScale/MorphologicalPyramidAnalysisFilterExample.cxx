@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,16 +24,16 @@ PURPOSE.  See the above copyright notices for more information.
 //    OUTPUTS: {suburb2_if_1.jpeg}, {suburb2_if_2.jpeg}, {suburb2_if_3.jpeg}, {suburb2_if_4.jpeg}
 //    OUTPUTS: {suburb2_id_1.jpeg}, {suburb2_id_2.jpeg}, {suburb2_id_3.jpeg}, {suburb2_id_4.jpeg}
 //    OUTPUTS: {suburb2_sd_1.jpeg}, {suburb2_sd_2.jpeg}, {suburb2_sd_3.jpeg}, {suburb2_sd_4.jpeg}
-//    4 2 
+//    4 2
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the \doxygen{otb}{MorphologicalPyramidAnalyseFilter}.
 //
-// The first step required to use this filter is to include its header file. 
+// The first step required to use this filter is to include its header file.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 
@@ -43,9 +43,9 @@ PURPOSE.  See the above copyright notices for more information.
 // Software Guide : BeginLatex
 //
 // The mathematical morphology filters to be used have also to be
-// included here. 
+// included here.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 
@@ -65,7 +65,7 @@ int main(int argc, char * argv[])
     if( argc != 24)
     {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
-    std::cerr << " outputImagePrefix iterations decimationRatio" << std::endl;  
+    std::cerr << " outputImagePrefix iterations decimationRatio" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -78,10 +78,10 @@ int main(int argc, char * argv[])
 // As usual, we start by defining the types needed for the pixels, the
 // images, the image reader and the image writer.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-      
+
       const unsigned int Dimension = 2;
       typedef unsigned char InputPixelType;
       typedef unsigned char OutputPixelType;
@@ -101,11 +101,11 @@ int main(int argc, char * argv[])
 // \doxygen{itk}{BinaryBallStructuringElement} which is templated over
 // the pixel type and the dimension of the image.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 
-      
+
       typedef itk::BinaryBallStructuringElement<InputPixelType,
                                    Dimension> StructuringElementType;
 
@@ -120,7 +120,7 @@ int main(int argc, char * argv[])
 // over the input and output image types and the structurung element
 // type that we just define above.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 
@@ -136,11 +136,11 @@ int main(int argc, char * argv[])
 // filter. The filter is templated over the input and output mage
 // types and the {\em lowpas} morphological filter to be used.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 
-      
+
       typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,
                               OutputImageType,OpeningClosingFilterType>
 	                                              PyramidFilterType;
@@ -153,10 +153,10 @@ int main(int argc, char * argv[])
 // generates a list of images as output, it is useful to have an
 // iterator to access the images. This is done as follows :
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-      
+
       typedef PyramidFilterType::OutputImageListType::Iterator
 	                                             ImageListIterator;
 // Software Guide : EndCodeSnippet
@@ -166,9 +166,9 @@ int main(int argc, char * argv[])
 // We can now instantiate the reader in order to access the input
 // image which has to be analysed.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet      
+// Software Guide : BeginCodeSnippet
 
       ReaderType::Pointer reader = ReaderType::New();
       reader->SetFileName(inputFilename);
@@ -183,12 +183,12 @@ int main(int argc, char * argv[])
 //    \item the number of iterations or levels of the pyramid;
 //    \item the subsample scale or decimation factor between two
 // successive pyramid levels.
-//\end{itemize}      
+//\end{itemize}
 // After that, we plug the pipeline and run it by calling the
-// \code{Update()} method.      
-// Software Guide : EndLatex 
+// \code{Update()} method.
+// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet            
+// Software Guide : BeginCodeSnippet
       PyramidFilterType::Pointer pyramid = PyramidFilterType::New();
       pyramid->SetNumberOfLevels(numberOfLevels);
       pyramid->SetDecimationRatio(decimationRatio);
@@ -217,10 +217,10 @@ int main(int argc, char * argv[])
 // Each one of these methods provides a list of images (one for each
 // level of analysis), so we can iterate through the image lists by
 // using iterators.
-//      
-// Software Guide : EndLatex 
+//
+// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet                  
+// Software Guide : BeginCodeSnippet
 
 
       ImageListIterator itAnalyse = pyramid->GetOutput()->Begin();
@@ -235,11 +235,11 @@ int main(int argc, char * argv[])
 //
 //  We can now instantiate a writer and use it to write all the images
 //  to files.
-//      
-// Software Guide : EndLatex 
+//
+// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet                  
-      
+// Software Guide : BeginCodeSnippet
+
       WriterType::Pointer writer =  WriterType::New();
 
       int i=1;
@@ -249,7 +249,7 @@ int main(int argc, char * argv[])
       while(itAnalyse!=pyramid->GetOutput()->End())
 	{
 	  writer->SetInput(itAnalyse.Get());
-	  writer->SetFileName(argv[0*4+i+1]);	  
+	  writer->SetFileName(argv[0*4+i+1]);
 	  writer->Update();
 
 	  writer->SetInput(itSupFilter.Get());
@@ -289,14 +289,14 @@ int main(int argc, char * argv[])
 // morphological pyramid.}
 // \label{fig:PYR_IM}
 // \end{figure}
-//      
+//
 // Figure \ref{fig:PYR_AN} shows the 4 levels of analysis of the image.
 // \begin{figure}
 // \center
 // \includegraphics[width=0.20\textwidth]{suburb2_an_1.eps}
 // \includegraphics[width=0.20\textwidth]{suburb2_an_2.eps}
 // \includegraphics[width=0.20\textwidth]{suburb2_an_3.eps}
-// \includegraphics[width=0.20\textwidth]{suburb2_an_4.eps}      
+// \includegraphics[width=0.20\textwidth]{suburb2_an_4.eps}
 // \itkcaption[Morphological pyramid analysis]{Result of the
 // analysis for 4 levels of the pyramid.}
 // \label{fig:PYR_AN}
@@ -308,7 +308,7 @@ int main(int argc, char * argv[])
 // \includegraphics[width=0.20\textwidth]{suburb2_sf_1.eps}
 // \includegraphics[width=0.20\textwidth]{suburb2_sf_2.eps}
 // \includegraphics[width=0.20\textwidth]{suburb2_sf_3.eps}
-// \includegraphics[width=0.20\textwidth]{suburb2_sf_4.eps}      
+// \includegraphics[width=0.20\textwidth]{suburb2_sf_4.eps}
 // \itkcaption[Morphological pyramid analysis]{Bright details for 4 levels of the pyramid.}
 // \label{fig:PYR_SF}
 // \end{figure}
@@ -319,7 +319,7 @@ int main(int argc, char * argv[])
 // \includegraphics[width=0.20\textwidth]{suburb2_if_1.eps}
 // \includegraphics[width=0.20\textwidth]{suburb2_if_2.eps}
 // \includegraphics[width=0.20\textwidth]{suburb2_if_3.eps}
-// \includegraphics[width=0.20\textwidth]{suburb2_if_4.eps}      
+// \includegraphics[width=0.20\textwidth]{suburb2_if_4.eps}
 // \itkcaption[Morphological pyramid analysis]{Dark details for 4 levels of the pyramid.}
 // \label{fig:PYR_IF}
 // \end{figure}
@@ -330,7 +330,7 @@ int main(int argc, char * argv[])
 // \includegraphics[width=0.20\textwidth]{suburb2_id_1.eps}
 // \includegraphics[width=0.20\textwidth]{suburb2_id_2.eps}
 // \includegraphics[width=0.20\textwidth]{suburb2_id_3.eps}
-// \includegraphics[width=0.20\textwidth]{suburb2_id_4.eps}      
+// \includegraphics[width=0.20\textwidth]{suburb2_id_4.eps}
 // \itkcaption[Morphological pyramid analysis]{Bright decimation details for 4 levels of the pyramid.}
 // \label{fig:PYR_ID}
 // \end{figure}
@@ -341,14 +341,14 @@ int main(int argc, char * argv[])
 // \includegraphics[width=0.20\textwidth]{suburb2_sd_1.eps}
 // \includegraphics[width=0.20\textwidth]{suburb2_sd_2.eps}
 // \includegraphics[width=0.20\textwidth]{suburb2_sd_3.eps}
-// \includegraphics[width=0.20\textwidth]{suburb2_sd_4.eps}      
+// \includegraphics[width=0.20\textwidth]{suburb2_sd_4.eps}
 // \itkcaption[Morphological pyramid analysis]{Dark decimation details for 4 levels of the pyramid.}
 // \label{fig:PYR_SD}
 // \end{figure}
-//      
-// Software Guide : EndLatex 
+//
+// Software Guide : EndLatex
 
 
-      
+
       return EXIT_SUCCESS;
     }

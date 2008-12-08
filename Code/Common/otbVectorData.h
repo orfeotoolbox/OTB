@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,11 +25,11 @@
 namespace otb
 {
   /** \class VectorData
-   * \brief this class represents a hierarchy of vector data. 
-   * 
+   * \brief this class represents a hierarchy of vector data.
+   *
    * This class contains an itk::TreeContainer templated with otb::DataNode.
-   * It represents a tree structure of vector data. These data can be read from 
-   * shapefiles or kml files for instance. 
+   * It represents a tree structure of vector data. These data can be read from
+   * shapefiles or kml files for instance.
    *
    * The internal tree can be walked with itk::TreeIteratorBase subclasses.
    *
@@ -38,9 +38,9 @@ namespace otb
    * \sa VectorDataFileWriter
    *
    */
-template <class TPrecision = double, unsigned int VDimension =2> 
-class VectorData 
-  : public itk::DataObject  
+template <class TPrecision = double, unsigned int VDimension =2>
+class VectorData
+  : public itk::DataObject
 {
   public:
   /** Standard class typedefs */
@@ -72,8 +72,8 @@ class VectorData
   virtual ~VectorData(){};
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-   
-  private:    
+
+  private:
   VectorData(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 

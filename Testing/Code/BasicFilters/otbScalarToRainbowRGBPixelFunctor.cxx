@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -41,13 +41,13 @@ int otbScalarToRainbowRGBPixelFunctor(int argc, char * argv[])
   typedef otb::Image<RGBPixelType, 2> RGBImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::StreamingImageFileWriter<RGBImageType> WriterType;
-    
+
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
-    
-    
+
+
   typedef otb::Functor::ScalarToRainbowRGBPixelFunctor<PixelType>
     ColorMapFunctorType;
   typedef itk::UnaryFunctorImageFilter<ImageType,
@@ -55,12 +55,12 @@ int otbScalarToRainbowRGBPixelFunctor(int argc, char * argv[])
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
   colormapper->GetFunctor().SetMaximum(150);
   colormapper->GetFunctor().SetMinimum(70);
-    
+
   colormapper->SetInput(reader->GetOutput());
   writer->SetInput(colormapper->GetOutput());
-    
+
   writer->Update();
 
-  
+
   return EXIT_SUCCESS;
 }

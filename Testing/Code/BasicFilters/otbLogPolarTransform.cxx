@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,7 +28,7 @@ int otbLogPolarTransform(int argc, char* argv[])
   double angularStep = atof(argv[2]);
   const char * outputFilename(argv[3]);
   unsigned int nbPoints = atoi(argv[4]);
-    
+
   typedef double PrecisionType;
   typedef otb::LogPolarTransform<PrecisionType> LogPolarTransformType;
   typedef itk::Point<PrecisionType,2> PointType;
@@ -62,19 +62,19 @@ int otbLogPolarTransform(int argc, char* argv[])
   for(PointsVectorType::iterator it=vect.begin();it!=vect.end();++it)
     {
       PointType p = transform->TransformPoint(*it);
-	    
+
       PointType pprime;
-	    
+
       double theta = (*it)[0]*angularStep*M_PI/180.0;
       double logRho   = (*it)[1]*radialStep;
-	   
+
       file <<"Rho: "<<logRho<<", Theta: "<<theta<<std::endl;
       pprime[0]=vcl_exp(logRho) * vcl_cos(theta);
       pprime[1]=vcl_exp(logRho) * vcl_sin(theta);
 
       file <<"Original Point: "<<(*it)<<", Reference point: "<<pprime<<", Transformed point: "<<p<<std::endl<<std::endl;
     }
-  
+
   file.close();
 
 

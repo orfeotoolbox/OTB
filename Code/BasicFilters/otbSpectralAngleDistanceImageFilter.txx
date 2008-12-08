@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,7 +23,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkImageRegionConstIterator.h"
 #include "itkProgressReporter.h"
 #include "otbMacro.h"
-#include "otbMath.h" 
+#include "otbMath.h"
 
 namespace otb
 {
@@ -41,7 +41,7 @@ void
 SpectralAngleDistanceImageFilter<TInputImage,TOutputImage>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,int threadId)
 {
-  
+
   if (m_ReferencePixel == 0)
     {
       itkExceptionMacro(<<"Reference pixel is not set!");
@@ -58,7 +58,7 @@ SpectralAngleDistanceImageFilter<TInputImage,TOutputImage>
 			<<inputPtr->GetNumberOfComponentsPerPixel()<<") don't match!");
     }
 
-  
+
   // Define the portion of the input to walk for this thread, using
   // the CallCopyOutputRegionToInputRegion method allows for the input
   // and output images to be different dimensions
@@ -73,7 +73,7 @@ SpectralAngleDistanceImageFilter<TInputImage,TOutputImage>
   inputIt.GoToBegin();
   outputIt.GoToBegin();
 
-  while(!inputIt.IsAtEnd() && !outputIt.IsAtEnd()) 
+  while(!inputIt.IsAtEnd() && !outputIt.IsAtEnd())
     {
       double dist=0.0;
       double scalarProd=0.0;

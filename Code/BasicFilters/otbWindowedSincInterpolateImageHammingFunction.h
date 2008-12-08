@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,8 +25,8 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  
-namespace Function 
+
+namespace Function
 {
   /**
    * \class HammingWindowFunction
@@ -68,53 +68,53 @@ private:
  * \brief Use the WindowedSincInterpolateImageFunctionBase with a Hamming Function.
  *
  * \sa GenericInterpolatorImageFunction
- * \sa Function::GaussianWindowFunction 
- * \sa Function::HammingWindowFunction 
- * \sa Function::CosineWindowFunction 
+ * \sa Function::GaussianWindowFunction
+ * \sa Function::HammingWindowFunction
+ * \sa Function::CosineWindowFunction
  * \sa Function::WelchWindowFunction
- * \sa Function::LanczosWindowFunction 
+ * \sa Function::LanczosWindowFunction
  * \sa Function::BlackmanWindowFunction
  * \ingroup ImageFunctionBases ImageInterpolators
  */
 template<class TInputImage, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep=double, class TInputInterpolator=double, class TOutputInterpolator=double>
-class ITK_EXPORT WindowedSincInterpolateImageHammingFunction : 
-public WindowedSincInterpolateImageFunctionBase< TInputImage, 
-                                                 ITK_TYPENAME Function::HammingWindowFunction< TInputInterpolator, TOutputInterpolator>, 
-                                                 TBoundaryCondition, 
-                                                 TCoordRep > 
+class ITK_EXPORT WindowedSincInterpolateImageHammingFunction :
+public WindowedSincInterpolateImageFunctionBase< TInputImage,
+                                                 ITK_TYPENAME Function::HammingWindowFunction< TInputInterpolator, TOutputInterpolator>,
+                                                 TBoundaryCondition,
+                                                 TCoordRep >
   {
     public:
     /** Standard class typedefs. */
     typedef WindowedSincInterpolateImageHammingFunction                                                                  Self;
-    typedef WindowedSincInterpolateImageFunctionBase<TInputImage,  
-                                                     ITK_TYPENAME Function::HammingWindowFunction< TInputInterpolator, 
+    typedef WindowedSincInterpolateImageFunctionBase<TInputImage,
+                                                     ITK_TYPENAME Function::HammingWindowFunction< TInputInterpolator,
                                                                                                     TOutputInterpolator>,
-                                                     TBoundaryCondition, 
+                                                     TBoundaryCondition,
                                                      TCoordRep>                                                           Superclass;
     typedef itk::SmartPointer<Self>                                                                                       Pointer;
     typedef itk::SmartPointer<const Self>                                                                                 ConstPointer;
-    
+
     /** Run-time type information (and related methods). */
     itkTypeMacro(WindowedSincInterpolateImageHammingFunction, WindowedSincInterpolateImageFunctionBase);
-    
+
     /** Method for creation through the object factory. */
-    itkNewMacro(Self);  
-    
+    itkNewMacro(Self);
+
     /** Input and output images typedef definition. */
     typedef typename Superclass::InputImageType InputImageType;
     typedef typename Superclass::OutputType     OutputType;
 
     /** Dimension underlying input image. */
     itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
-    
+
     /** Superclass typedef inheritance. */
     typedef typename Superclass::IndexType                  IndexType;
     typedef typename Superclass::SizeType                   SizeType;
     typedef typename Superclass::RealType                   RealType;
     typedef typename Superclass::IteratorType               IteratorType;
     typedef typename Superclass::ContinuousIndexType        ContinuousIndexType;
-    
-  
+
+
     protected:
     WindowedSincInterpolateImageHammingFunction(){};
     ~WindowedSincInterpolateImageHammingFunction(){};

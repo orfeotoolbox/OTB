@@ -364,7 +364,7 @@ END_TEST
 START_TEST(test_utf16_le_epilog_newline)
 {
     unsigned int first_chunk_bytes = 17;
-    char text[] = 
+    char text[] =
         "\xFF\xFE"                      /* BOM */
         "<\000e\000/\000>\000"          /* document element */
         "\r\000\n\000\r\000\n\000";     /* epilog */
@@ -403,7 +403,7 @@ END_TEST
 
 /* Regression test #1 for SF bug #653180. */
 START_TEST(test_line_number_after_parse)
-{  
+{
     char *text =
         "<tag>\n"
         "\n"
@@ -415,7 +415,7 @@ START_TEST(test_line_number_after_parse)
     lineno = XML_GetCurrentLineNumber(parser);
     if (lineno != 4) {
         char buffer[100];
-        sprintf(buffer, 
+        sprintf(buffer,
             "expected 4 lines, saw %" XML_FMT_INT_MOD "u", lineno);
         fail(buffer);
     }
@@ -433,7 +433,7 @@ START_TEST(test_column_number_after_parse)
     colno = XML_GetCurrentColumnNumber(parser);
     if (colno != 11) {
         char buffer[100];
-        sprintf(buffer, 
+        sprintf(buffer,
             "expected 11 columns, saw %" XML_FMT_INT_MOD "u", colno);
         fail(buffer);
     }
@@ -501,7 +501,7 @@ START_TEST(test_line_and_column_numbers_inside_handlers)
     if (XML_Parse(parser, text, strlen(text), XML_TRUE) == XML_STATUS_ERROR)
         xml_failure(parser);
 
-    CharData_CheckString(&storage, expected); 
+    CharData_CheckString(&storage, expected);
 }
 END_TEST
 
@@ -524,7 +524,7 @@ START_TEST(test_line_number_after_error)
     }
 }
 END_TEST
-    
+
 /* Regression test #5 for SF bug #653180. */
 START_TEST(test_column_number_after_error)
 {
@@ -537,9 +537,9 @@ START_TEST(test_column_number_after_error)
         fail("Expected a parse error");
 
     colno = XML_GetCurrentColumnNumber(parser);
-    if (colno != 4) { 
+    if (colno != 4) {
         char buffer[100];
-        sprintf(buffer, 
+        sprintf(buffer,
             "expected 4 columns, saw %" XML_FMT_INT_MOD "u", colno);
         fail(buffer);
     }
@@ -1251,7 +1251,7 @@ external_entity_handler(XML_Parser parser,
                         const XML_Char *context,
                         const XML_Char *base,
                         const XML_Char *systemId,
-                        const XML_Char *publicId) 
+                        const XML_Char *publicId)
 {
     long callno = 1 + (long)XML_GetUserData(parser);
     char *text;

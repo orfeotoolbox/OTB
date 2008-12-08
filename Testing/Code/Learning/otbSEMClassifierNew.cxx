@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -39,13 +39,13 @@ int otbSEMClassifierNew( int argc, char* argv[] )
   typedef otb::SEMClassifier< ImageType, OutputImageType > ClassifType;
   typedef itk::Statistics::ListSample< ImageType::PixelType > SampleType;
   typedef itk::Statistics::Subsample< SampleType > ClassSampleType;
-  
-  typedef otb::Statistics::ModelComponentBase< ClassSampleType > ComponentType ; 
+
+  typedef otb::Statistics::ModelComponentBase< ClassSampleType > ComponentType ;
 
   ClassifType::Pointer classifier = ClassifType::New();
   ComponentType::Pointer component = ComponentType::New();
-          
- 
+
+
   return EXIT_SUCCESS;
 }
 

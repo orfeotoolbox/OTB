@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,17 +24,17 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  
+
 /** \class GenericInterpolateImageFunction
  * \brief Generic interpolation of an otb::image.
  *
- * GenericInterpolateImageFunction interpolates image intensity according to a 
+ * GenericInterpolateImageFunction interpolates image intensity according to a
  * resampling profil.
  * \ingroup ImageFunctions ImageInterpolators
  */
 template <class TInputImage, class TFunction, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep = double>
-class ITK_EXPORT GenericInterpolateImageFunction : 
-public itk::InterpolateImageFunction<TInputImage,TCoordRep> 
+class ITK_EXPORT GenericInterpolateImageFunction :
+public itk::InterpolateImageFunction<TInputImage,TCoordRep>
   {
     public:
     /** Standard class typedefs. */
@@ -42,20 +42,20 @@ public itk::InterpolateImageFunction<TInputImage,TCoordRep>
     typedef itk::InterpolateImageFunction<TInputImage,TCoordRep> Superclass;
     typedef itk::SmartPointer<Self> Pointer;
     typedef itk::SmartPointer<const Self>  ConstPointer;
-    
+
     /** Run-time type information (and related methods). */
     itkTypeMacro(GenericInterpolateImageFunction, itk::InterpolateImageFunction);
-    
+
     /** Method for creation through the object factory. */
-    itkNewMacro(Self);  
-    
+    itkNewMacro(Self);
+
     /** Input and output images typedef definition. */
     typedef typename Superclass::OutputType     OutputType;
     typedef typename Superclass::InputImageType InputImageType;
-    
+
     /** Dimension underlying input image. */
     //itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
-    
+
     /** Index and typedef support. */
     typedef typename Superclass::IndexType                                 IndexType;
     typedef typename InputImageType::SizeType                              SizeType;
@@ -68,12 +68,12 @@ public itk::InterpolateImageFunction<TInputImage,TCoordRep>
 
     /** Dimension underlying input image. */
     itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
-    
+
     virtual void SetInputImage(const InputImageType *image);
 
     /** Evaluate the function at a ContinuousIndex position
      *
-     * Returns the interpolated image intensity at a 
+     * Returns the interpolated image intensity at a
      * specified point position. No bounds checking is done.
      * The point is assume to lie within the image buffer.
      *
@@ -81,7 +81,7 @@ public itk::InterpolateImageFunction<TInputImage,TCoordRep>
      * calling the method. */
     virtual OutputType EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const;
 
- 
+
     /** Set/Get the window radius*/
     void SetRadius(unsigned int rad);
     unsigned int GetRadius() const { return m_Function.GetRadius(); };
@@ -95,19 +95,19 @@ public itk::InterpolateImageFunction<TInputImage,TCoordRep>
     FunctionType& GetFunction(void)
     {
       return m_Function;
-    } 
-    
+    }
+
     /** Delete tables.*/
     void ResetOffsetTable() const;
-    /** Initialize used tables*/ 
-    void InitializeTables() const;    
+    /** Initialize used tables*/
+    void InitializeTables() const;
     /** Fill the weight offset table*/
     void FillWeightOffsetTable() const;
 
     /** Weights normalization accessors*/
     itkSetMacro(NormalizeWeight, bool);
     itkGetMacro(NormalizeWeight, bool);
-    
+
     protected:
     GenericInterpolateImageFunction();
     ~GenericInterpolateImageFunction();
@@ -128,9 +128,9 @@ public itk::InterpolateImageFunction<TInputImage,TCoordRep>
     /** Used function */
     FunctionType m_Function;
     /** Store the image dimension.*/
-    unsigned int m_ImageDimension;  
+    unsigned int m_ImageDimension;
 
-    /** These members are declared mutable so that they can be 
+    /** These members are declared mutable so that they can be
 	regenerated seamlessly inside the EvaluateAtContinuousIndex method if
 	they need to */
     /** Size of the offset table */

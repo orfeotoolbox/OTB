@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,7 +33,7 @@ int otbMultiplyByScalarImageFilterTest( int argc, char * argv[] )
   typedef itk::Image<float, ImageDimension>  InputImageType;
   typedef itk::Image<float, ImageDimension>  OutputImageType;
 
-  // Declare Iterator types apropriated for each image 
+  // Declare Iterator types apropriated for each image
   typedef itk::ImageRegionIteratorWithIndex<
     InputImageType>  InputIteratorType;
 
@@ -43,7 +43,7 @@ int otbMultiplyByScalarImageFilterTest( int argc, char * argv[] )
   // Declare the type of the index to access images
   typedef itk::Index<ImageDimension>         IndexType;
 
-  // Declare the type of the size 
+  // Declare the type of the size
   typedef itk::Size<ImageDimension>          SizeType;
 
   // Declare the type of the Region
@@ -51,7 +51,7 @@ int otbMultiplyByScalarImageFilterTest( int argc, char * argv[] )
 
   // Create two images
   InputImageType::Pointer inputImage  = InputImageType::New();
-  
+
   // Define their size, and start index
   SizeType size;
   size[0] = 2;
@@ -60,7 +60,7 @@ int otbMultiplyByScalarImageFilterTest( int argc, char * argv[] )
   IndexType start;
   start[0] = 0;
   start[1] = 0;
- 
+
   RegionType region;
   region.SetIndex( start );
   region.SetSize( size );
@@ -76,7 +76,7 @@ int otbMultiplyByScalarImageFilterTest( int argc, char * argv[] )
   const double value = pi / 6.0;
   std::cout << "Content of the Input " << std::endl;
   it.GoToBegin();
-  while( !it.IsAtEnd() ) 
+  while( !it.IsAtEnd() )
     {
       it.Set( value );
       std::cout << it.Get() << std::endl;
@@ -85,14 +85,14 @@ int otbMultiplyByScalarImageFilterTest( int argc, char * argv[] )
 
   // Declare the type for the Acos filter
   typedef otb::MultiplyByScalarImageFilter< InputImageType, OutputImageType>  FilterType;
-            
-  // Create a MultiplyScalarImage Filter                                
+
+  // Create a MultiplyScalarImage Filter
   FilterType::Pointer filter = FilterType::New();
 
   // Connect the input images
-  filter->SetInput( inputImage ); 
+  filter->SetInput( inputImage );
 
-  // Get the Smart Pointer to the Filter Output 
+  // Get the Smart Pointer to the Filter Output
   OutputImageType::Pointer outputImage = filter->GetOutput();
 
   // Execute the filter
@@ -101,16 +101,16 @@ int otbMultiplyByScalarImageFilterTest( int argc, char * argv[] )
 
   // Create an iterator for going through the image output
   OutputIteratorType ot(outputImage, outputImage->GetRequestedRegion());
-  
+
   //  Check the content of the result image
   std::cout << "Verification of the output " << std::endl;
   const OutputImageType::PixelType epsilon = 1e-6;
   ot.GoToBegin();
   it.GoToBegin();
-  while( !ot.IsAtEnd() ) 
+  while( !ot.IsAtEnd() )
     {
       std::cout <<  ot.Get() << " = ";
-      std::cout <<  10.0 * ( it.Get() )  << std::endl; 
+      std::cout <<  10.0 * ( it.Get() )  << std::endl;
       const InputImageType::PixelType  input  = it.Get();
       const OutputImageType::PixelType output = ot.Get();
       const OutputImageType::PixelType multiplyByScal  = 10.0* input;
@@ -125,8 +125,8 @@ int otbMultiplyByScalarImageFilterTest( int argc, char * argv[] )
       ++ot;
       ++it;
     }
- 
- 
+
+
   return EXIT_SUCCESS;
 }
 

@@ -1,5 +1,5 @@
 /*=========================================================================
-  
+
 Program:   ORFEO Toolbox
 Language:  C++
 Date:      $Date$
@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,23 +30,23 @@ namespace otb
    *
    */
   template <InverseOrForwardTransformationEnum transform>
-      class ITK_EXPORT TransMercatorMapProjection : public MapProjection<ossimTransMercatorProjection,transform> 
+      class ITK_EXPORT TransMercatorMapProjection : public MapProjection<ossimTransMercatorProjection,transform>
   {
     public :
-	
+
       /** Standard class typedefs. */
       typedef TransMercatorMapProjection                 Self;
       typedef MapProjection<ossimTransMercatorProjection, transform>  Superclass;
       typedef itk::SmartPointer<Self>                      Pointer;
       typedef itk::SmartPointer<const Self>                ConstPointer;
-      
+
       typedef typename Superclass::ScalarType  			   ScalarType;
       typedef itk::Point<ScalarType,2>   	      	   InputPointType;
-      typedef itk::Point<ScalarType,2>  	      	   OutputPointType;     
-      
+      typedef itk::Point<ScalarType,2>  	      	   OutputPointType;
+
       /** Method for creation through the object factory. */
       itkNewMacro( Self );
-      
+
       /** Run-time type information (and related methods). */
       itkTypeMacro( TransMercatorMapProjection, MapProjection );
       virtual void SetFalseEasting(double falseEasting);
@@ -57,15 +57,15 @@ namespace otb
       virtual double GetFalseNorthing() const;
       virtual double GetFalseEasting() const;
       virtual double GetScaleFactor() const;
-      
+
     protected:
-      TransMercatorMapProjection(); 
+      TransMercatorMapProjection();
       virtual ~TransMercatorMapProjection();
-	
+
     private :
       TransMercatorMapProjection(const Self&); //purposely not implemented
       void operator=(const Self&);               //purposely not implemented
- 	
+
   };
 
 

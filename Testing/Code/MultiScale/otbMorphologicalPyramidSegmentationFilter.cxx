@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -44,7 +44,7 @@ int otbMorphologicalPyramidSegmentationFilter(int argc, char * argv[])
 
   typedef otb::ImageFileReader<InputImageType> ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
-      
+
   typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
   typedef otb::OpeningClosingMorphologicalFilter<InputImageType,InputImageType,StructuringElementType>
     OpeningClosingFilterType;
@@ -84,7 +84,7 @@ int otbMorphologicalPyramidSegmentationFilter(int argc, char * argv[])
       oss<<outputFilenamePrefix<<index<<"."<<outputFilenameSuffix;
       writer = WriterType::New();
       writer->SetInput(it.Get());
-      writer->SetFileName(oss.str().c_str());	  
+      writer->SetFileName(oss.str().c_str());
       writer->Update();
       std::cout<<oss.str()<<" file written."<<std::endl;
       oss.str("");

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -26,14 +26,14 @@ namespace otb
 {
 /** \class RCC8VertexBase
  *  \brief Base class to represent a vertex in a RCC8 Graph.
- *  
+ *
  *  This class can be derived to add attributes to the vertices of the
  *  RCC8 graph.
  *
  * \sa RCC8Graph, RCC8Edge
  */
 template <class TPath>
-class ITK_EXPORT RCC8VertexBase 
+class ITK_EXPORT RCC8VertexBase
 : public itk::DataObject
 {
  public:
@@ -50,10 +50,10 @@ class ITK_EXPORT RCC8VertexBase
   typedef TPath PathType;
   typedef typename PathType::Pointer PathPointerType;
   typedef typename PathType::ContinuousIndexType ContinuousIndexType;
-  
+
   /** char* vector attributes */
   typedef std::map<std::string,std::string> AttributesMapType;
- 
+
   /** Segmentation image index accessors */
   itkGetMacro(SegmentationLevel,unsigned int);
   itkSetMacro(SegmentationLevel,unsigned int);

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -22,15 +22,15 @@
 namespace otb
 {
 /** \class ImageToTreeFilter
- * \brief Base class used to implement filters that have a image as input and a tree as output.  
+ * \brief Base class used to implement filters that have a image as input and a tree as output.
  *
- * 
+ *
  * \ingroup TreeListFilters
  * \ingroup TreeLists
  */
 
 template <class TInputImage, class TOutputTree>
-class ITK_EXPORT ImageToTreeFilter : public TreeSource<TOutputTree> 
+class ITK_EXPORT ImageToTreeFilter : public TreeSource<TOutputTree>
 {
 public:
   /** Standard class typedefs. */
@@ -41,7 +41,7 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(ImageToTreeFilter, TreeSource);
 
@@ -49,11 +49,11 @@ public:
   typedef          TInputImage                    InputImageType;
   typedef typename InputImageType::Pointer        InputImagePointer;
   typedef typename InputImageType::ConstPointer   InputImageConstPointer;
-  typedef typename InputImageType::RegionType     InputImageRegionType; 
-  typedef typename InputImageType::PixelType      InputImagePixelType; 
-  typedef typename InputImageType::SizeType       InputImageSizeType;                 
-  typedef typename InputImageType::ValueType      InputImageValueType;  
-  typedef typename InputImageType::IndexType      InputImageIndexType;  
+  typedef typename InputImageType::RegionType     InputImageRegionType;
+  typedef typename InputImageType::PixelType      InputImagePixelType;
+  typedef typename InputImageType::SizeType       InputImageSizeType;
+  typedef typename InputImageType::ValueType      InputImageValueType;
+  typedef typename InputImageType::IndexType      InputImageIndexType;
 
   typedef typename Superclass::OutputTreeType          OutputTreeType;
   typedef typename Superclass::OutputTreePointer       OutputTreePointer;
@@ -65,7 +65,7 @@ public:
   /** ImageDimension constants */
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputImage::ImageDimension);
-  
+
   DataObjectPointer  MakeOutput(unsigned int idx);
 
   /** Set the input image of this process object.  */
@@ -84,7 +84,7 @@ protected:
   ImageToTreeFilter();
   ~ImageToTreeFilter();
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;  
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
   ImageToTreeFilter(const ImageToTreeFilter&); //purposely not implemented
@@ -98,4 +98,4 @@ private:
 #endif
 
 #endif
- 
+

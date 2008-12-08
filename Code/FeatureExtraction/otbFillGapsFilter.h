@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -38,9 +38,9 @@ public:
   typedef itk::ProcessObject                            Superclass;
   typedef itk::SmartPointer<Self>                       Pointer;
   typedef itk::SmartPointer<const Self>                 ConstPointer;
-  
+
   /** Method for creation through the object factory. */
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(FillGapsFilter,itk::ProcessObject);
@@ -51,7 +51,7 @@ public:
   typedef LineSpatialObjectListType::LineType                   LineSpatialObjectType;
   typedef LineSpatialObjectType::PointListType                  PointListType;
   typedef LineSpatialObjectType::LinePointType                  PointType;
-  
+
   typedef itk::ProcessObject                                    ProcessObjectType;
 
   void SetInput(const LineSpatialObjectListType * input);
@@ -60,28 +60,28 @@ public:
   LineSpatialObjectListType * GetOutput();
 
   itkSetMacro(AngularBeam, double);
-  itkGetConstReferenceMacro(AngularBeam, double);  
+  itkGetConstReferenceMacro(AngularBeam, double);
   itkSetMacro(Radius, double);
-  itkGetConstReferenceMacro(Radius, double);  
+  itkGetConstReferenceMacro(Radius, double);
 
- 
+
 protected:
   FillGapsFilter();
 
   virtual ~FillGapsFilter(){};
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  
+
   virtual void GenerateData();
 
-  
+
 private:
   FillGapsFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   double m_AngularBeam;
   double m_Radius;
-  
+
 };
 
 } // end namespace otb

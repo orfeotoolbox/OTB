@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,12 +31,12 @@
 //  Software Guide : BeginLatex
 //  The \doxygen{itk}{GradientAnisotropicDiffusionImageFilter}  implements an
 //  $N$-dimensional version of the classic Perona-Malik anisotropic diffusion
-//  equation for scalar-valued images \cite{Perona1990}.  
+//  equation for scalar-valued images \cite{Perona1990}.
 //
 //  The conductance term for this implementation is chosen as a function of the
 //  gradient magnitude of the image at each point, reducing the strength of
 //  diffusion at edge pixels.
-// 
+//
 //  \begin{equation}
 //  C(\mathbf{x}) = e^{-(\frac{\parallel \nabla U(\mathbf{x}) \parallel}{K})^2}
 //  \end{equation}
@@ -47,7 +47,7 @@
 //
 //  \index{itk::Gradient\-Anisotropic\-Diffusion\-Image\-Filter}
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
 #include "otbImage.h"
@@ -61,7 +61,7 @@
 //
 //  \index{itk::Gradient\-Anisotropic\-Diffusion\-Image\-Filter!header}
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "itkGradientAnisotropicDiffusionImageFilter.h"
@@ -70,22 +70,22 @@
 
 int main( int argc, char * argv[] )
 {
-  if( argc < 6 ) 
-    { 
+  if( argc < 6 )
+    {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << "  inputImageFile  outputImageFile ";
     std::cerr << "numberOfIterations  timeStep  conductance" << std::endl;
     return EXIT_FAILURE;
     }
 
-  
+
   //  Software Guide : BeginLatex
   //
   //  Types should be selected based on the pixel types required for the
   //  input and output images.  The image types are defined using the pixel
   //  type and the dimension.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef    float    InputPixelType;
@@ -109,7 +109,7 @@ int main( int argc, char * argv[] )
   //  \index{itk::Gradient\-Anisotropic\-Diffusion\-Image\-Filter!New()}
   //  \index{itk::Gradient\-Anisotropic\-Diffusion\-Image\-Filter!Pointer}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef itk::GradientAnisotropicDiffusionImageFilter<
@@ -127,7 +127,7 @@ int main( int argc, char * argv[] )
   //  The input image can be obtained from the output of another filter. Here,
   //  an image reader is used as source.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   filter->SetInput( reader->GetOutput() );
@@ -157,13 +157,13 @@ int main( int argc, char * argv[] )
   //  \index{SetTimeStep()!itk::Gradient\-Anisotropic\-Diffusion\-Image\-Filter}
   //  \index{SetNumberOfIterations()!itk::Gradient\-Anisotropic\-Diffusion\-Image\-Filter}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   filter->SetNumberOfIterations( numberOfIterations );
   filter->SetTimeStep( timeStep );
   filter->SetConductanceParameter( conductance );
-  
+
   filter->Update();
   // Software Guide : EndCodeSnippet
 
@@ -174,7 +174,7 @@ int main( int argc, char * argv[] )
   //  iterations is typically set to $5$; more iterations result in
   //  further smoothing and will increase the computing time linearly.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
   //
@@ -182,7 +182,7 @@ int main( int argc, char * argv[] )
   //
   typedef unsigned char WritePixelType;
   typedef otb::Image< WritePixelType, 2 > WriteImageType;
-  typedef itk::RescaleIntensityImageFilter< 
+  typedef itk::RescaleIntensityImageFilter<
                OutputImageType, WriteImageType > RescaleFilterType;
 
   RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
@@ -193,7 +193,7 @@ int main( int argc, char * argv[] )
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName( argv[2] );
- 
+
 
   rescaler->SetInput( filter->GetOutput() );
   writer->SetInput( rescaler->GetOutput() );
@@ -201,7 +201,7 @@ int main( int argc, char * argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   // \begin{figure} \center
   // \includegraphics[width=0.44\textwidth]{QB_Suburb.eps}
   // \includegraphics[width=0.44\textwidth]{GradientAnisotropicDiffusionImageFilterOutput.eps}
@@ -225,7 +225,7 @@ int main( int argc, char * argv[] )
   //  \item \doxygen{itk}{CurvatureFlowImageFilter}
   //  \end{itemize}
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
   return EXIT_SUCCESS;

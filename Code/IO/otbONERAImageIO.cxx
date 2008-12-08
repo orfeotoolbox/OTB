@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -112,7 +112,7 @@ namespace otb
     }
 
   // Check magic_number
-    int magicNumber; 
+    int magicNumber;
     m_Datafile.seekg(0, std::ios::beg );
     m_Datafile.read((char*)(&magicNumber),4);
 
@@ -126,7 +126,7 @@ namespace otb
       {
         m_FileByteOrder = BigEndian;
       }
-      else if ( m_ByteOrder == BigEndian ) 
+      else if ( m_ByteOrder == BigEndian )
       {
         m_FileByteOrder = LittleEndian;
       }
@@ -163,7 +163,7 @@ namespace otb
   }
 
 
-// Read image 
+// Read image
   void ONERAImageIO::Read(void* buffer)
   {
     unsigned int       dim;
@@ -175,7 +175,7 @@ namespace otb
     }
 
     unsigned char * p = static_cast<unsigned char *>(buffer);
-   
+
     int lNbLines   = this->GetIORegion().GetSize()[1];
     int lNbColumns = this->GetIORegion().GetSize()[0];
     int lFirstLine   = this->GetIORegion().GetIndex()[1] ; // [1... ]
@@ -196,11 +196,11 @@ namespace otb
     std::streamoff headerLength = ONERA_HEADER_LENGTH + numberOfBytesPerLines;
     std::streamoff offset;
     std::streamsize numberOfBytesToBeRead = 2 * m_NbOctetPixel *lNbColumns;
-    std::streamsize numberOfBytesRead;        
+    std::streamsize numberOfBytesRead;
 
     char* value = new char[numberOfBytesToBeRead];
     std::streamsize cpt = 0;
- 
+
     for(int LineNo = lFirstLine;LineNo <lFirstLine + lNbLines; LineNo++ )
     {
       offset  =  headerLength + numberOfBytesPerLines * static_cast<std::streamoff>(LineNo);
@@ -232,17 +232,17 @@ namespace otb
     {
       itkExceptionMacro(<<"ONERAImageIO::Read() undefined component type! " );
     }
-    
+
 
     delete [] value;
     value = NULL;
-    
+
   }
 
 
-  bool ONERAImageIO::OpenOneraDataFileForReading(const char* filename)                                       
+  bool ONERAImageIO::OpenOneraDataFileForReading(const char* filename)
   {
-  // Make sure that we have a file to 
+  // Make sure that we have a file to
     std::string lFileName(filename);
     if ( lFileName.empty() )
     {
@@ -256,7 +256,7 @@ namespace otb
       m_Datafile.close();
     }
     const std::string DataFileName = System::GetRootName(filename)+".dat";
-  
+
   // Open the new file for reading
     m_Datafile.open( DataFileName.c_str(),  std::ios::in | std::ios::binary );
     if( m_Datafile.fail() )
@@ -267,9 +267,9 @@ namespace otb
     return true;
   }
 
-  bool ONERAImageIO::OpenOneraHeaderFileForReading(const char* filename)                                       
+  bool ONERAImageIO::OpenOneraHeaderFileForReading(const char* filename)
   {
-  // Make sure that we have a file to 
+  // Make sure that we have a file to
     std::string lFileName(filename);
     if ( lFileName.empty() )
     {
@@ -283,7 +283,7 @@ namespace otb
       m_Headerfile.close();
     }
     const std::string HeaderFileName = System::GetRootName(filename)+".ent";
-  
+
   // Open the new file for reading
   // Actually open the file
     m_Headerfile.open( HeaderFileName.c_str(),  std::ios::in );
@@ -317,9 +317,9 @@ namespace otb
       itkExceptionMacro(<< "Cannot read ONERA header file "<<m_FileName);
     }
 
-  // check "Format_valeurs_look"  
+  // check "Format_valeurs_look"
     char* sHeader = new char[1024];
-  // skip 2 lines 	
+  // skip 2 lines
     m_Headerfile.getline(sHeader,1024);
     m_Headerfile.getline(sHeader,1024);
     m_Headerfile.getline(sHeader,1024);
@@ -336,13 +336,13 @@ namespace otb
     }
     else
     {
-      itkExceptionMacro(<< "data format not supported by OTB (only 'complex_real_4' is available)");  
-    }  
+      itkExceptionMacro(<< "data format not supported by OTB (only 'complex_real_4' is available)");
+    }
 
 
 
   // Check magic_number
-    int magicNumber; 
+    int magicNumber;
     m_Datafile.seekg(0, std::ios::beg );
     m_Datafile.read((char*)(&magicNumber),4);
     if( magicNumber == ONERA_MAGIC_NUMBER )
@@ -355,7 +355,7 @@ namespace otb
       {
         m_FileByteOrder = BigEndian;
       }
-      else if ( m_ByteOrder == BigEndian ) 
+      else if ( m_ByteOrder == BigEndian )
       {
         m_FileByteOrder = LittleEndian;
       }
@@ -366,9 +366,9 @@ namespace otb
     short NbCol;
 
     m_Datafile.seekg(ONERA_HEADER_LENGTH + 2, std::ios::beg );
-    m_Datafile.read((char*)(&NbCol),2);  
+    m_Datafile.read((char*)(&NbCol),2);
     otbSwappFileOrderToSystemOrderMacro(short, &NbCol, 1);
-    
+
     m_Datafile.seekg(0, std::ios::end);
     long gcountHead = static_cast<long>(ONERA_HEADER_LENGTH + 2*4*NbCol);
     long gcount     = static_cast<long>(m_Datafile.tellg());
@@ -388,7 +388,7 @@ namespace otb
       m_Dimensions[1] = m_height;
     }
 
-    this->SetNumberOfDimensions(2);  
+    this->SetNumberOfDimensions(2);
 
     otbMsgDebugMacro( <<"Driver to read: ONERA");
     otbMsgDebugMacro( <<"         Read  file         : "<< m_FileName);
@@ -404,9 +404,9 @@ namespace otb
   }
 
 
-  bool ONERAImageIO::OpenOneraDataFileForWriting(const char* filename)                                       
+  bool ONERAImageIO::OpenOneraDataFileForWriting(const char* filename)
   {
-  // Make sure that we have a file to 
+  // Make sure that we have a file to
     std::string lFileName(filename);
     if ( lFileName.empty() )
     {
@@ -420,7 +420,7 @@ namespace otb
       m_Datafile.close();
     }
     const std::string DataFileName = System::GetRootName(filename)+".dat";
-  
+
   // Open the new file for reading
 
   // Actually open the file
@@ -433,9 +433,9 @@ namespace otb
     return true;
   }
 
-  bool ONERAImageIO::OpenOneraHeaderFileForWriting(const char* filename)                                       
+  bool ONERAImageIO::OpenOneraHeaderFileForWriting(const char* filename)
   {
-  // Make sure that we have a file to 
+  // Make sure that we have a file to
     std::string lFileName(filename);
     if ( lFileName.empty() )
     {
@@ -449,7 +449,7 @@ namespace otb
       m_Headerfile.close();
     }
     const std::string HeaderFileName = System::GetRootName(filename)+".ent";
-  
+
   // Open the new file for reading
   // Actually open the file
     m_Headerfile.open( HeaderFileName.c_str(),  std::ios::out | std::ios::trunc | std::ios::binary );
@@ -482,7 +482,7 @@ namespace otb
 
   void ONERAImageIO::Write(const void* buffer)
   {
-   
+
     if( m_FlagWriteImageInformation == true )
     {
       this->WriteImageInformation();
@@ -566,15 +566,15 @@ namespace otb
     }
     else
     {
-      itkExceptionMacro(<< "data format not supported by OTB (only 'complex_real_4' is available)");  
-    }  
-       
+      itkExceptionMacro(<< "data format not supported by OTB (only 'complex_real_4' is available)");
+    }
+
     m_Headerfile << "Format_valeurs_look=    \t"<< sPixelType << std::endl;
-    m_Headerfile << "Nb_case_par_ligne_look= \t"<< m_Dimensions[0] <<std::endl;  
+    m_Headerfile << "Nb_case_par_ligne_look= \t"<< m_Dimensions[0] <<std::endl;
     m_Headerfile << "Nb_ligne_look=          \t"<< m_Dimensions[1] <<" + 1 ligne en-tete en binaire (entiers 16 bit) " << std::endl;
 
   // write magic_number
-    int magicNumber = ONERA_MAGIC_NUMBER; 
+    int magicNumber = ONERA_MAGIC_NUMBER;
     short NbCol = static_cast<short>(m_Dimensions[0]);
     short NbRow = static_cast<short>(m_Dimensions[1]);
     int ByteSizeCol = NbCol*4*2;
@@ -582,7 +582,7 @@ namespace otb
 //  itk::ByteSwapper< int>::SwapFromSystemToLittleEndian(&magicNumber);
     m_Datafile.seekp(0, std::ios::beg );
     m_Datafile.write((char*)(&magicNumber),4);
-  
+
     char * tab = new char[ByteSizeCol];
     for( int i = 0 ; i < (NbRow + 1) ; i++)
     {
@@ -595,8 +595,8 @@ namespace otb
 
     m_Datafile.seekp(ONERA_HEADER_LENGTH+2, std::ios::beg );
     m_Datafile.write((char*)(&NbCol),2);
-  
-  
+
+
     otbMsgDebugMacro( <<"Driver to write: ONERA");
     otbMsgDebugMacro( <<"         Write file         : "<< m_FileName);
     otbMsgDebugMacro( <<"         Size               : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
@@ -609,6 +609,6 @@ namespace otb
 
   }
 
-  
+
 } // end namespace otb
 

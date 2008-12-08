@@ -1,5 +1,5 @@
 /*=========================================================================
-	
+
   Program:   ORFEO Toolbox
   Language:  C++
   Date:      $Date$
@@ -35,7 +35,7 @@ ImportVectorImageFilter<TOutputImage>
 ::ImportVectorImageFilter()
 {
   unsigned int idx;
-  
+
   for (idx = 0; idx < TOutputImage::ImageDimension; ++idx)
     {
     m_Spacing[idx] = 1.0;
@@ -66,11 +66,11 @@ ImportVectorImageFilter<TOutputImage>
  *
  */
 template <class TOutputImage>
-void 
+void
 ImportVectorImageFilter<TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  int i;  
+  int i;
 
   Superclass::PrintSelf(os,indent);
 
@@ -108,7 +108,7 @@ ImportVectorImageFilter<TOutputImage>
  */
 
 template <class TOutputImage>
-void 
+void
 ImportVectorImageFilter<TOutputImage>
 ::SetImportPointer(TPixel *ptr, unsigned long num, bool LetFilterManageMemory)
 {
@@ -142,9 +142,9 @@ ImportVectorImageFilter<TOutputImage>
  *
  */
 template <class TOutputImage>
-void 
+void
 ImportVectorImageFilter<TOutputImage>
-::EnlargeOutputRequestedRegion(itk::DataObject *output) 
+::EnlargeOutputRequestedRegion(itk::DataObject *output)
 {
   // call the superclass' implementation of this method
   Superclass::EnlargeOutputRequestedRegion(output);
@@ -158,11 +158,11 @@ ImportVectorImageFilter<TOutputImage>
 }
 
 
-/** 
+/**
  *
  */
 template <class TOutputImage>
-void 
+void
 ImportVectorImageFilter<TOutputImage>
 ::GenerateOutputInformation()
 {
@@ -178,14 +178,14 @@ ImportVectorImageFilter<TOutputImage>
   outputPtr->SetOrigin( m_Origin );
   outputPtr->SetDirection( m_Direction );
   outputPtr->SetLargestPossibleRegion( m_Region );
-	
+
 	typename RegionType::SizeType size = m_Region.GetSize();
 
 	int numberOfBands= m_Size/(size[0]*size[1]);
 
 	if (numberOfBands!=static_cast<int>(numberOfBands))
 		itkExceptionMacro(<<"Buffer size and image size are not compatible !");
-		
+
 	 outputPtr->SetNumberOfComponentsPerPixel(numberOfBands);
 }
 
@@ -194,14 +194,14 @@ ImportVectorImageFilter<TOutputImage>
  *
  */
 template <class TOutputImage>
-void 
+void
 ImportVectorImageFilter<TOutputImage>
 ::GenerateData()
 {
   // Normally, GenerateData() allocates memory.  However, the application
   // provides the memory for this filter via the SetImportPointer() method.
   // Therefore, this filter does not call outputPtr->Allocate().
-  
+
   // get pointer to the output
   OutputImagePointer outputPtr = this->GetOutput();
 
@@ -216,15 +216,15 @@ ImportVectorImageFilter<TOutputImage>
   // opposed to the container) if the user wants it to.
   outputPtr->GetPixelContainer()->SetImportPointer( m_ImportPointer,
                                                     m_Size, false );
-																										
+
 }
 
 
-/** 
+/**
  *
  */
 template <class TOutputImage>
-void 
+void
 ImportVectorImageFilter<TOutputImage>
 ::SetSpacing( const SpacingType & spacing )
 {
@@ -237,11 +237,11 @@ ImportVectorImageFilter<TOutputImage>
 }
 
 
-/** 
+/**
  *
  */
 template <class TOutputImage>
-void 
+void
 ImportVectorImageFilter<TOutputImage>
 ::SetOrigin( const OriginType & origin )
 {
@@ -255,7 +255,7 @@ ImportVectorImageFilter<TOutputImage>
 
 //----------------------------------------------------------------------------
 template <class TOutputImage>
-void 
+void
 ImportVectorImageFilter<TOutputImage>
 ::SetDirection(const DirectionType direction )
 {

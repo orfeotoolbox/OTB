@@ -41,7 +41,7 @@ StandardWriterWatcher
 
 StandardWriterWatcher
 ::StandardWriterWatcher( const StandardWriterWatcher& watch)
-{ 
+{
   // Initialize state
   m_StarsCount = watch.m_StarsCount;
 }

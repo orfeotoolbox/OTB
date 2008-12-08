@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,9 +23,9 @@
  *
  * PURPOSE:
  *
- * Application pour projeter une r�gion d'une image en coordonn�es g�ographiques 
- * en utilisant un Interpolator+regionextractor et un Iterator. 
- * 
+ * Application pour projeter une r�gion d'une image en coordonn�es g�ographiques
+ * en utilisant un Interpolator+regionextractor et un Iterator.
+ *
  */
 
 // iostream is used for general output
@@ -65,7 +65,7 @@ int otbCreateProjectionWithOTB( int argc, char* argv[] )
 
       return EXIT_FAILURE;
     }
-        
+
   typedef otb::Image<unsigned int, 2>     ImageType;
   typedef otb::ImageFileReader<ImageType>  ReaderType;
   ReaderType::Pointer	                 reader=ReaderType::New();
@@ -80,12 +80,12 @@ int otbCreateProjectionWithOTB( int argc, char* argv[] )
   ossimKeywordlist geom;
   otb_image_keywordlist.convertToOSSIMKeywordlist(geom);
 
-  otbGenericMsgDebugMacro(<< "ossim Keywordlist:"<<geom ); 
+  otbGenericMsgDebugMacro(<< "ossim Keywordlist:"<<geom );
 
   /*
     typedef otb::InverseSensorModel<double>  ModelType;
     ModelType::Pointer   model= ModelType::New();
-    otbGenericMsgDebugMacro(<< "Model set geometry " ); 
+    otbGenericMsgDebugMacro(<< "Model set geometry " );
     model->SetImageGeometry(geom_kwl); //Notre mod�le est cr�� � ce niveau.
     if(!model)
     {
@@ -110,7 +110,7 @@ int otbCreateProjectionWithOTB( int argc, char* argv[] )
       itkGenericExceptionMacro(<<"Invalid Model pointer .valid() == false !");
     }
 
-  
+
   return EXIT_SUCCESS;
 
 }

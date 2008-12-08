@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,7 +27,7 @@ namespace otb
   /** \class FusionImageBase
    * Basic class for every Fusion classes.
    * \sa TernaryFunctorImageFilter
-   */	
+   */
   template <class TInputMultiSpectralImage, class TInputMultiSpectralInterpImage, class TInputPanchroImage, class TOutputImage, class TFunctor>
     class ITK_EXPORT FusionImageBase :  public itk::TernaryFunctorImageFilter<TInputMultiSpectralImage, TInputMultiSpectralInterpImage, TInputPanchroImage, TOutputImage, TFunctor>
     {
@@ -35,30 +35,30 @@ namespace otb
       /** 	Extract input and output images dimensions.*/
       itkStaticConstMacro( InputImageDimension,unsigned int, TInputMultiSpectralImage::ImageDimension);
       itkStaticConstMacro( OutputImageDimension,unsigned int, TOutputImage::ImageDimension);
-      
+
       /** "typedef" to simplify the variables definition and the declaration. */
       typedef TInputMultiSpectralImage       InputMultiSpectralImageType;
       typedef TInputMultiSpectralInterpImage InputMultiSpectralInterpImageType;
       typedef TInputPanchroImage             InputPanchroImageType;
       typedef TOutputImage                   OutputImageType;
       typedef TFunctor                       FunctorType;
-      
+
       /** "typedef" for standard classes. */
       typedef FusionImageBase Self;
-      typedef itk::TernaryFunctorImageFilter< InputMultiSpectralImageType, 
-	                                      InputMultiSpectralInterpImageType, 
-                                              InputPanchroImageType, 
-                                              OutputImageType, 
+      typedef itk::TernaryFunctorImageFilter< InputMultiSpectralImageType,
+	                                      InputMultiSpectralInterpImageType,
+                                              InputPanchroImageType,
+                                              OutputImageType,
                                               FunctorType> Superclass;
       typedef itk::SmartPointer<Self> Pointer;
       typedef itk::SmartPointer<const Self>  ConstPointer;
-      
+
       /** object factory method. */
       itkNewMacro(Self);
-      
+
       /** return class name. */
       itkTypeMacro(FusionImageBase, TernaryFunctorImageFilter);
-      
+
       /** Supported images definition. */
       typedef typename InputMultiSpectralImageType::PixelType       InputMultiSpectralPixelType;
       typedef typename InputMultiSpectralInterpImageType::PixelType InputMultiSpectralInterpPixelType;
@@ -72,10 +72,10 @@ namespace otb
       typedef typename InputMultiSpectralInterpImageType::RegionType                    InputMultiSpectralInterpImageRegionType;
       typedef typename InputPanchroImageType::RegionType                                InputPanchroImageRegionType;
       typedef typename OutputImageType::RegionType                                      OutputImageRegionType;
-      
+
       /** Image size "typedef" definition. */
       typedef typename InputMultiSpectralImageType::SizeType SizeType;
-      
+
 
       void SetMultiSpect(const InputMultiSpectralImageType *multiSpect){ this->SetInput1( multiSpect ); };
       void SetMultiSpectInterp(const InputMultiSpectralInterpImageType *multiSpectInterp){ this->SetInput2( multiSpectInterp ); };
@@ -111,9 +111,9 @@ namespace otb
 	    return( static_cast<const InputPanchroImageType *>(this->itk::ProcessObject::GetInput(2)) );
 	}
 
-      
+
     };
-  
+
 } // end namespace otb
 
 

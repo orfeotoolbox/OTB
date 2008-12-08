@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,7 +29,7 @@ namespace otb
  */
 template <class TInputImage>
 BinaryImageMinimalBoundingRegionCalculator<TInputImage>
-::BinaryImageMinimalBoundingRegionCalculator() 
+::BinaryImageMinimalBoundingRegionCalculator()
 {
   // The pad option is desactivated by default
   m_Pad=0;
@@ -51,7 +51,7 @@ template <class TInputImage>
 void
 BinaryImageMinimalBoundingRegionCalculator<TInputImage>
 ::GenerateData(void)
-{ 
+{
     // Input images pointers
     const InputImageType* image = this->GetInput();
     // Iterator definition
@@ -147,7 +147,7 @@ template <class TInputImage>
 void
 BinaryImageMinimalBoundingRegionCalculator<TInputImage>
 ::PrintSelf( std::ostream& os,itk::Indent indent ) const
-  { 
+  {
     Superclass::PrintSelf(os,indent);
   }
 

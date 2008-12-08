@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,7 +32,7 @@ int otbFillGapsFilter( int argc, char * argv[] )
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
-                       
+
   typedef double		                                InputPixelType;
   typedef unsigned char	   	                        OutputPixelType;
   const   unsigned int        	                        Dimension = 2;
@@ -45,13 +45,13 @@ int otbFillGapsFilter( int argc, char * argv[] )
   typedef otb::FillGapsFilter              FillGapsFilterType;
   typedef otb::LineSpatialObjectList	 LinesListType;
   typedef LinesListType::LineType	         LineType;
-	
+
   FilterType::Pointer filter = FilterType::New();
-        
+
   typedef otb::ImageFileReader< InputImageType  >         ReaderType;
   typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
-        
+
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
@@ -60,7 +60,7 @@ int otbFillGapsFilter( int argc, char * argv[] )
 
 
   FillGapsFilterType::Pointer fillgaps = FillGapsFilterType::New();
-        
+
   LinesListType::Pointer   linesListBeforeFillGaps = LinesListType::New();
   const LinesListType *linesListAfterFillGaps ;
 
@@ -83,9 +83,9 @@ int otbFillGapsFilter( int argc, char * argv[] )
   line->SetId(0);
   line->SetPoints( pointList );
   line->ComputeBoundingBox();
-       
+
   linesListBeforeFillGaps->push_back(line);
-        
+
   pointList.clear();
 
   // Definition of a second line
@@ -99,14 +99,14 @@ int otbFillGapsFilter( int argc, char * argv[] )
   pointList.push_back(point);
   point.SetPosition(Vx,Vy);
   pointList.push_back(point);
-        
+
   LineType::Pointer line2 = LineType::New();
   line2->SetId(0);
   line2->SetPoints( pointList );
   line2->ComputeBoundingBox();
-       
-  linesListBeforeFillGaps->push_back(line2); 
-        
+
+  linesListBeforeFillGaps->push_back(line2);
+
   pointList.clear();
 
 
@@ -121,32 +121,32 @@ int otbFillGapsFilter( int argc, char * argv[] )
   pointList.push_back(point);
   point.SetPosition(Vx,Vy);
   pointList.push_back(point);
-        
+
   LineType::Pointer line3 = LineType::New();
   line3->SetId(0);
   line3->SetPoints( pointList );
   line3->ComputeBoundingBox();
-       
-  linesListBeforeFillGaps->push_back(line3); 
-        
+
+  linesListBeforeFillGaps->push_back(line3);
+
   pointList.clear();
   //  FillGapsFilter parameters
-	
+
   fillgaps->SetRadius(15.);
   fillgaps->SetAngularBeam(1.0);  // Angle in Radian
   fillgaps->SetInput(linesListBeforeFillGaps);
   linesListAfterFillGaps = fillgaps->GetOutput();
   fillgaps->Update();
-	        
-        
-  filter->SetInputLineSpatialObjectList(linesListAfterFillGaps);  
+
+
+  filter->SetInputLineSpatialObjectList(linesListAfterFillGaps);
   filter->SetInput( reader->GetOutput() );
   writer->SetInput( filter->GetOutput() );
-        
+
   writer->Update();
- 
-        
-  
+
+
+
   return EXIT_SUCCESS;
 }
 

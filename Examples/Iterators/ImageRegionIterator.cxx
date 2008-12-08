@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -19,7 +19,7 @@
 #pragma warning ( disable : 4786 )
 #endif
 //  Software Guide : BeginCommandLineArgs
-//     INPUTS: {QB_Suburb.png} 
+//     INPUTS: {QB_Suburb.png}
 //     OUTPUTS: {ImageRegionIteratorOutput.png}
 //     10 10 110 140
 //  Software Guide : EndCommandLineArgs
@@ -75,19 +75,19 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
-  
+
   typedef unsigned char PixelType;
   typedef otb::Image< PixelType, Dimension >  ImageType;
-  
+
   typedef itk::ImageRegionConstIterator< ImageType > ConstIteratorType;
   typedef itk::ImageRegionIterator< ImageType>       IteratorType;
   // Software Guide : EndCodeSnippet
-  
+
   typedef otb::ImageFileReader< ImageType > ReaderType;
   typedef otb::ImageFileWriter< ImageType > WriterType;
 
 // Software Guide : BeginLatex
-// 
+//
 // Information about the subregion to copy is read from the command line. The
 // subregion is defined by an \doxygen{itk}{ImageRegion} object, with a starting
 // grid index and a size (Section~\ref{sec:ImageSection}).
@@ -112,7 +112,7 @@ int main( int argc, char *argv[] )
 
 
 // Software Guide : BeginLatex
-// 
+//
 // The destination region in the output image is defined using the input region
 // size, but a different start index.  The starting index for the destination
 // region is the corner of the newly generated image.
@@ -140,8 +140,8 @@ int main( int argc, char *argv[] )
     }
   catch ( itk::ExceptionObject &err)
     {
-    std::cerr << "ExceptionObject caught !" << std::endl; 
-    std::cerr << err << std::endl; 
+    std::cerr << "ExceptionObject caught !" << std::endl;
+    std::cerr << err << std::endl;
     return -1;
     }
 
@@ -158,12 +158,12 @@ int main( int argc, char *argv[] )
 //
 // After reading the input image and checking that the desired subregion is,
 // in fact, contained in the input, we allocate an output image.  It is
-// fundamental to set valid values to some of the basic image information 
-// during the copying process.  
+// fundamental to set valid values to some of the basic image information
+// during the copying process.
 // In particular, the starting index of the output region
 // is now filled up with zero values and the coordinates of the physical
 // origin are computed as a shift from the origin of the input image. This is
-// quite important since it will allow us to later 
+// quite important since it will allow us to later
 // register the extracted region against the original image.
 //
 // Software Guide : EndLatex
@@ -188,7 +188,7 @@ int main( int argc, char *argv[] )
 
 // Software Guide : BeginLatex
 //
-// \index{Iterators!construction of} \index{Iterators!and image regions} 
+// \index{Iterators!construction of} \index{Iterators!and image regions}
 // The necessary images and region definitions are now in place.  All that is
 // left to do is to create the iterators and perform the copy.  Note that image
 // iterators are not accessed via smart pointers so they are light-weight
@@ -220,7 +220,7 @@ int main( int argc, char *argv[] )
 // alternative of ten nested \code{for} loops for traversing an image.
 //
 // Software Guide : EndLatex
-  
+
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName( argv[2] );
   writer->SetInput( outputImage );
@@ -231,9 +231,9 @@ int main( int argc, char *argv[] )
     }
   catch ( itk::ExceptionObject &err)
     {
-    std::cerr << "ExceptionObject caught !" << std::endl; 
-    std::cerr << err << std::endl; 
-    return -1;   
+    std::cerr << "ExceptionObject caught !" << std::endl;
+    std::cerr << err << std::endl;
+    return -1;
     }
 
 // Software Guide : BeginLatex
@@ -261,7 +261,7 @@ int main( int argc, char *argv[] )
 // the right is the result of applying the ImageRegionIterator example code.}
 // \protect\label{fig:ImageRegionIteratorOutput}
 // \end{figure}
-// 
+//
 // \index{itk::ImageRegionIterator!example of using|)}
 //
 // Software Guide : EndLatex

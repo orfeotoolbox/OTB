@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -35,7 +35,7 @@ int otbScalarImageTextureFunctor(int argc, char * argv[])
 
   const int Dimension = 2;
   typedef otb::Image<InputPixelType,Dimension> InputImageType;
-  
+
   typedef itk::ConstNeighborhoodIterator<InputImageType>   IterType;
   typedef otb::ImageFileReader<InputImageType> ReaderType;
   typedef otb::StreamingImageFileWriter<InputImageType> WriterType;
@@ -49,17 +49,17 @@ int otbScalarImageTextureFunctor(int argc, char * argv[])
 
 
   typedef otb::Functor::ScalarImageTextureFunctor<IterType, InputImageType, InputPixelType>  FunctorType;
-  
+
   typedef otb::UnaryFunctorNeighborhoodImageFilter<InputImageType, InputImageType, FunctorType> UnaryFunctorNeighborhoodImageFilterType;
-  
+
   // Instantiating object
   UnaryFunctorNeighborhoodImageFilterType::Pointer object = UnaryFunctorNeighborhoodImageFilterType::New();
   object->SetInput(reader->GetOutput());
   object->SetRadius(radius);
   object->GetFunctor().SetFeatureIndex(indexfeature);
   writer->SetInput(object->GetOutput());
-  
+
   writer->Update();
-      
+
   return EXIT_SUCCESS;
 }

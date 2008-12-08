@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,7 +24,7 @@ namespace otb
 {
 /** \class VectorImageToImageListFilter
  *  \brief This class aims at converting a multi-band image to a list of scalar images.
- * 
+ *
  * This class takes a multi-band image represented as an otb::VectorImage and produces a list
  * of scalar images corresponding to each band of the input image.
  *
@@ -34,7 +34,7 @@ namespace otb
  */
 template <class TVectorImageType, class TImageList>
 class ITK_EXPORT VectorImageToImageListFilter
-  : public ImageToImageListFilter<TVectorImageType,typename TImageList::ImageType> 
+  : public ImageToImageListFilter<TVectorImageType,typename TImageList::ImageType>
 {
  public:
   /** Standard typedefs */
@@ -43,13 +43,13 @@ class ITK_EXPORT VectorImageToImageListFilter
     typename TImageList::ImageType>         Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(VectorImageToImageListFilter,ImageToImageListFilter);
-  
+
   /** Template parameters typedefs */
   typedef TVectorImageType InputVectorImageType;
   typedef typename InputVectorImageType::Pointer InputVectorImagePointerType;
@@ -57,10 +57,10 @@ class ITK_EXPORT VectorImageToImageListFilter
   typedef typename OutputImageListType::Pointer OutputImageListPointerType;
   typedef typename OutputImageListType::ImageType OutputImageType;
   typedef typename OutputImageType::Pointer OutputImagePointerType;
- 
+
   /** Generate the input requested region from the first element in the list. */
   virtual void GenerateInputRequestedRegion(void);
-  
+
   /** Generate the output information by building the output list. */
   virtual void GenerateOutputInformation(void);
 

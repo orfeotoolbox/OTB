@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -36,7 +36,7 @@ int otbExtractROI( int argc, char * argv[] )
   typedef unsigned char  	                                InputPixelType;
   typedef unsigned char  	                                OutputPixelType;
 
-  typedef otb::ExtractROI< InputPixelType, 
+  typedef otb::ExtractROI< InputPixelType,
     OutputPixelType >   FilterType;
 
   typedef FilterType::InputImageType        InputImageType;
@@ -45,7 +45,7 @@ int otbExtractROI( int argc, char * argv[] )
   typedef otb::ImageFileReader< InputImageType  >         ReaderType;
   typedef otb::ImageFileWriter< OutputImageType >         WriterType;
   FilterType::Pointer filter = FilterType::New();
-        
+
   filter->SetStartX( startX );
   filter->SetStartY( startY );
   filter->SetSizeX( sizeX );
@@ -56,11 +56,11 @@ int otbExtractROI( int argc, char * argv[] )
 
   reader->SetFileName( inputFilename  );
   writer->SetFileName( outputFilename );
-        
+
   filter->SetInput( reader->GetOutput() );
   writer->SetInput( filter->GetOutput() );
-  writer->Update(); 
-   
+  writer->Update();
+
 
   return EXIT_SUCCESS;
 }

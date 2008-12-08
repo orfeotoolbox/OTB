@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -51,16 +51,16 @@ namespace otb
     }
 
   /** \class MeanShiftImageFilter
-   *   
-   * 
-   * Mean shift is a data clustering algorithm ofthen used in image processing and segmentation.
-   * For a given pixel, the mean shift will build a set of neighboring pixels within a given spatial 
-   * radius (can be set using SetSpatialRadius()) and a color range (can be set using SetRangeRadius()). 
-   * The spatial and color center of this set is then computed and the algorithm iterates with this new spatial
-   * and color center. 
    *
-   * Mean shift can be used for edge-preserving smoothing, or for clustering. The GetOutput() method will allow you to get the smoothed image, whereas the 
-   * GetClusteredOuptut() methods returns the clustered output. The GetLabeledClusteredOutput() returns a labeled clustered images, and the GetClusterBoundariesOutput() 
+   *
+   * Mean shift is a data clustering algorithm ofthen used in image processing and segmentation.
+   * For a given pixel, the mean shift will build a set of neighboring pixels within a given spatial
+   * radius (can be set using SetSpatialRadius()) and a color range (can be set using SetRangeRadius()).
+   * The spatial and color center of this set is then computed and the algorithm iterates with this new spatial
+   * and color center.
+   *
+   * Mean shift can be used for edge-preserving smoothing, or for clustering. The GetOutput() method will allow you to get the smoothed image, whereas the
+   * GetClusteredOuptut() methods returns the clustered output. The GetLabeledClusteredOutput() returns a labeled clustered images, and the GetClusterBoundariesOutput()
    * an image of the cluster boundaries.
    *
    * The MinimumRegionSize parameter allows you to prune small clustered regions.
@@ -68,15 +68,15 @@ namespace otb
    * Please note that the filtering part is multi-threaded, while the clustering one is not (this is not really noticeable, because the clustering step is really faster
    * than the filtering one).
    *
-   * Please note that if both parts are streamable, only the filtering part will ensure you to get the same results than without streaming. In the clustering results, you 
+   * Please note that if both parts are streamable, only the filtering part will ensure you to get the same results than without streaming. In the clustering results, you
    * might find region split due to tiling. Morover, the labeled output will not give consistent results when streamed. The cluster boundaries might work though.
-   * 
+   *
    * This filter uses the Edison mean shift algorithm implementation. Please note that data whose precision is more than float are casted to float before processing.
-   * 
-   * The Scale parameter allows you to stretch the data dynamic 
+   *
+   * The Scale parameter allows you to stretch the data dynamic
    *
    * For more information on mean shift techniques, one might consider reading the following article:
-   * 
+   *
    * D. Comaniciu, P. Meer, "Mean Shift: A Robust Approach Toward Feature Space Analysis," IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 24, no. 5, pp. 603-619, May, 2002
    * D. Comaniciu, P. Meer, "Robust analysis of feature spaces: color image segmentation," cvpr, p. 750, 1997 IEEE Computer Society Conference on Computer Vision and Pattern Recognition (CVPR'97), 1997
    * D. Comaniciu, P. Meer, "Mean Shift Analysis and Applications," iccv, p. 1197, Seventh International Conference on Computer Vision (ICCV'99) - Volume 2, 1999
@@ -103,7 +103,7 @@ namespace otb
       /** Type macro */
       itkTypeMacro(MeanShiftImageFilter,ImageToImageFilter);
       itkNewMacro(Self);
-    
+
       /** Template parameters typedefs */
       typedef TInputImage                                  InputImageType;
       typedef typename InputImageType::Pointer             InputImagePointerType;
@@ -127,20 +127,20 @@ namespace otb
       itkSetMacro(Scale,double);
       itkGetMacro(Scale,double);
 
-      /** Return the const output image direction */  
+      /** Return the const output image direction */
       const OutputImageType * GetClusteredOutput() const;
-      /** Return the output image direction */  
+      /** Return the output image direction */
       OutputImageType * GetClusteredOutput();
 
       const LabeledOutputType * GetLabeledClusteredOutput() const;
       LabeledOutputType * GetLabeledClusteredOutput();
 
       const LabeledOutputType * GetClusterBoundariesOutput() const;
-      
+
       LabeledOutputType * GetClusterBoundariesOutput();
-	
+
       protected:
-      /** This filters use a neighborhood around the pixel, so it needs to redfine the 
+      /** This filters use a neighborhood around the pixel, so it needs to redfine the
        * input requested region */
       virtual void GenerateInputRequestedRegion();
       /** Threaded generate data (handle the filtering part) */
@@ -161,7 +161,7 @@ namespace otb
       private:
       MeanShiftImageFilter(const Self&); //purposely not implemented
       void operator=(const Self&);             //purposely not implemented
- 
+
       /** Spatial radius for mean shift convergence */
       unsigned int m_SpatialRadius;
       /** Range radius for mean shift convergence */

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,7 +23,7 @@
 #include "itkExceptionObject.h"
 #include "itkPointSet.h"
 #include <iostream>
-#include <cstdlib> 
+#include <cstdlib>
 
 
 // Software Guide : BeginLatex
@@ -32,9 +32,9 @@
 // \doxygen{otb}{SVMPointSetModelEstimator} in order to perform the
 // SVM learning from an \doxygen{itk}{PointSet} data structure.
 //
-// The first step required to use this filter is to include its header file. 
+// The first step required to use this filter is to include its header file.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "otbSVMPointSetModelEstimator.h"
@@ -45,7 +45,7 @@ int main( int argc, char* argv[] )
 {
 
 // Software Guide : BeginLatex
-// 
+//
 // In the framework of supervised learning and classification, we will
 // always use feature vectors for the characterization of the
 // classes. On the other hand, the class labels are scalar
@@ -53,7 +53,7 @@ int main( int argc, char* argv[] )
 // \code{PixelType}, which will be used to define the feature
 // \code{VectorType}. We also declare the type for the labels.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
   typedef float                      PixelType;
@@ -68,8 +68,8 @@ int main( int argc, char* argv[] )
 // features and the labels.
 //
 // Software Guide : EndLatex
-  
-// Software Guide : BeginCodeSnippet  
+
+// Software Guide : BeginCodeSnippet
   typedef itk::PointSet< VectorType,  Dimension >      FeaturePointSetType;
 
   typedef itk::PointSet< LabelPixelType,  Dimension >  LabelPointSetType;
@@ -78,7 +78,7 @@ int main( int argc, char* argv[] )
   FeaturePointSetType::Pointer fPSet = FeaturePointSetType::New();
   LabelPointSetType::Pointer   lPSet = LabelPointSetType::New();
 
-// Software Guide : EndCodeSnippet    
+// Software Guide : EndCodeSnippet
 
 
 // Software Guide : BeginLatex
@@ -90,7 +90,7 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet  
+// Software Guide : BeginCodeSnippet
   typedef FeaturePointSetType::PointType    FeaturePointType;
   typedef LabelPointSetType::PointType      LabelPointType;
 
@@ -113,18 +113,18 @@ int main( int argc, char* argv[] )
   /* We learn the y>x | y<x boundary*/
   srand(0);
 
-// Software Guide : BeginCodeSnippet    
+// Software Guide : BeginCodeSnippet
   int lowest = 0;
   int range = 1000;
-  
+
   for(unsigned int pointId = 0; pointId<500; pointId++)
     {
-    
+
     FeaturePointType fP;
     LabelPointType lP;
 
     int x_coord = lowest+static_cast<int>(range*(rand()/(RAND_MAX + 1.0)));
-    int y_coord = lowest+static_cast<int>(range*(rand()/(RAND_MAX + 1.0))); 
+    int y_coord = lowest+static_cast<int>(range*(rand()/(RAND_MAX + 1.0)));
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -133,8 +133,8 @@ int main( int argc, char* argv[] )
 // feature vector and for the label.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
+
+// Software Guide : BeginCodeSnippet
 
     fP[0] = x_coord;
     fP[1] = y_coord;
@@ -149,10 +149,10 @@ int main( int argc, char* argv[] )
 // useful for SVM convergence.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
 
-    VectorType feature; 
+// Software Guide : BeginCodeSnippet
+
+    VectorType feature;
     feature.push_back(static_cast<PixelType>((x_coord*1.0-lowest)/range));
     feature.push_back(static_cast<PixelType>((y_coord*1.0-lowest)/range));
 
@@ -163,9 +163,9 @@ int main( int argc, char* argv[] )
 // We decide on the label for each point.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
-    
+
+// Software Guide : BeginCodeSnippet
+
     LabelPixelType label;
 
     if(x_coord < y_coord)
@@ -180,16 +180,16 @@ int main( int argc, char* argv[] )
 // And we insert the points in the points containers.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
-    
+
+// Software Guide : BeginCodeSnippet
+
 
     fCont->InsertElement( pointId , fP );
-    fPSet->SetPointData( pointId, feature );   
+    fPSet->SetPointData( pointId, feature );
 
 
     lCont->InsertElement( pointId , lP );
-    lPSet->SetPointData( pointId, label );   
+    lPSet->SetPointData( pointId, label );
 
 
     }
@@ -201,9 +201,9 @@ int main( int argc, char* argv[] )
 // After the loop, we set the points containers to the point sets.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
-  
+
+// Software Guide : BeginCodeSnippet
+
   fPSet->SetPoints( fCont );
   lPSet->SetPoints( lCont );
 // Software Guide : EndCodeSnippet
@@ -216,13 +216,13 @@ int main( int argc, char* argv[] )
 // \index{otb::SVMPointSetModelEstimator}
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
-  
+
+// Software Guide : BeginCodeSnippet
+
   typedef otb::SVMPointSetModelEstimator< FeaturePointSetType,
                                        LabelPointSetType >   EstimatorType;
-	
-	
+
+
   EstimatorType::Pointer estimator = EstimatorType::New();
 // Software Guide : EndCodeSnippet
 
@@ -234,9 +234,9 @@ int main( int argc, char* argv[] )
 // set with the \code{SetTrainingPointSet} method.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
-  
+
+// Software Guide : BeginCodeSnippet
+
   estimator->SetInputPointSet( fPSet );
   estimator->SetTrainingPointSet( lPSet );
   estimator->SetNumberOfClasses( 2 );
@@ -249,9 +249,9 @@ int main( int argc, char* argv[] )
 // method.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
-  
+
+// Software Guide : BeginCodeSnippet
+
   estimator->Update();
 // Software Guide : EndCodeSnippet
 
@@ -260,9 +260,9 @@ int main( int argc, char* argv[] )
 // Finally, we can save the result of the learning to a file.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
-   
+
+// Software Guide : BeginCodeSnippet
+
   estimator->SaveModel("svm_model.svm");
 // Software Guide : EndCodeSnippet
 
@@ -284,7 +284,7 @@ int main( int argc, char* argv[] )
 // multi-class problems).
 //
 // Software Guide : EndLatex
-    
+
 
   return EXIT_SUCCESS;
 }

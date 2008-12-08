@@ -36,7 +36,7 @@ REGISTER_TEST(galibTests27);
   mbwall 24mar96
   Copyright (c) 1995-1996  Massachusetts Institute of Technology
 
-  The code for this example is adapted from an original implementation 
+  The code for this example is adapted from an original implementation
   by Thomas Grueninger (from Uni Stuttgart, visiting scholar at MIT)
 
  DESCRIPTION:
@@ -72,7 +72,7 @@ GALIB_INSTANTIATION_PREFIX GA1DArrayGenome<float>;
 
 
 
-// This is the class definition for the deterministic crowding genetic 
+// This is the class definition for the deterministic crowding genetic
 // algorithm.  It is based upon the steady-state genetic algorithm, but we
 // modify the replacement so that it does deterministic crowding as described
 // by Goldberg (not in his book) and his students.
@@ -86,7 +86,7 @@ public:
 };
 
 void
-DCrowdingGA::step() { 
+DCrowdingGA::step() {
   int i,*ip;
   float d1,d2;
   GAGenome *mom, *dad;
@@ -94,9 +94,9 @@ DCrowdingGA::step() {
 
   while (IndPool.head()) IndPool.destroy();
 
-  for (i=0; i<pop->size(); i++) 
+  for (i=0; i<pop->size(); i++)
     IndPool.insert(i);
-    
+
   do {
     //select mom
     IndPool.warp(GARandomInt(0,IndPool.size()-1));
@@ -109,10 +109,10 @@ DCrowdingGA::step() {
     dad = &pop->individual(*ip);
     delete ip;
     //create child
-    stats.numsel += 2;		
+    stats.numsel += 2;
     stats.numcro += (*(mom->sexual()))(*mom, *dad, &tmpPop->individual(0), 0);
     stats.nummut += tmpPop->individual(0).mutate(pMutation());
-    stats.numeval += 1;	
+    stats.numeval += 1;
     //replace closest parent
     d1 = tmpPop->individual(0).compare(*mom);
     d2 = tmpPop->individual(0).compare(*dad);
@@ -120,13 +120,13 @@ DCrowdingGA::step() {
       if (minmax == MINIMIZE) {
 	if (tmpPop->individual(0).score() < mom->score()) {
 	  mom->copy(tmpPop->individual(0));
-	  stats.numrep += 1;	
+	  stats.numrep += 1;
 	}
       }
       else {
 	if (tmpPop->individual(0).score() > mom->score()) {
 	  mom->copy(tmpPop->individual(0));
-	  stats.numrep += 1;	
+	  stats.numrep += 1;
 	}
       }
     }
@@ -134,20 +134,20 @@ DCrowdingGA::step() {
       if (minmax == MINIMIZE) {
 	if (tmpPop->individual(0).score() < dad->score()) {
 	  dad->copy(tmpPop->individual(0));
-	  stats.numrep += 1;	
+	  stats.numrep += 1;
 	}
       }
       else {
 	if (tmpPop->individual(0).score() > dad->score()) {
 	  dad->copy(tmpPop->individual(0));
-	  stats.numrep += 1;	
+	  stats.numrep += 1;
 	}
       }
     }
   } while (IndPool.size()>1);
 
   pop->evaluate(gaTrue);
-  stats.update(*pop);	
+  stats.update(*pop);
 }
 
 
@@ -372,9 +372,9 @@ Mutator(GAGenome& g, float pmut) {
   int nmut = 0;
 
   if(GAFlipCoin(pmut)){
-    genome.gene(0, genome.gene(0) + 
+    genome.gene(0, genome.gene(0) +
 		10*GARandomFloat() * (GARandomFloat() - GARandomFloat()));
-    genome.gene(1, genome.gene(1) + 
+    genome.gene(1, genome.gene(1) +
 		10*GARandomFloat() * (GARandomFloat() - GARandomFloat()));
     nmut++;
   }

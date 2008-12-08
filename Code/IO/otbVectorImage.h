@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -38,11 +38,11 @@ namespace otb
  * \brief Creation of an "otb" vector image which contains metadata.
  *
  */
-template <class TPixel, unsigned int VImageDimension=2> 
+template <class TPixel, unsigned int VImageDimension=2>
 class ITK_EXPORT VectorImage : public itk::VectorImage<TPixel, VImageDimension>,
 			 public ImageBase
 {
-public: 
+public:
 
   /** Standard class typedefs. */
   typedef VectorImage   Self;
@@ -50,9 +50,9 @@ public:
   typedef itk::SmartPointer<Self>  Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
   typedef itk::WeakPointer<const Self> ConstWeakPointer;
-  
-  typedef ImageBase::VectorType	VectorType;	
-  typedef ImageBase::ImageKeywordlistType	ImageKeywordlistType;	
+
+  typedef ImageBase::VectorType	VectorType;
+  typedef ImageBase::ImageKeywordlistType	ImageKeywordlistType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -78,13 +78,13 @@ public:
    /** Accessor type that convert data between internal and external
    *  representations.  */
   typedef itk::DefaultVectorPixelAccessor< InternalPixelType > AccessorType;
- 
+
   /** Functor to provide a common API between DefaultPixelAccessor and
    * DefaultVectorPixelAccessor */
   typedef itk::DefaultVectorPixelAccessorFunctor< Self >       AccessorFunctorType;
 
   /** Tyepdef for the functor used to access a neighborhood of pixel pointers.*/
-  typedef itk::VectorImageNeighborhoodAccessorFunctor< 
+  typedef itk::VectorImageNeighborhoodAccessorFunctor<
                           Self >              NeighborhoodAccessorFunctorType;
 
   /** Dimension of the image.  This constant is used by functions that are
@@ -122,25 +122,25 @@ public:
 
   /** Get the projection coordinate system of the image. */
   virtual std::string GetProjectionRef( void );
-  
+
   /** Get the GCP projection coordinates of the image. */
   virtual std::string GetGCPProjection( void );
-  
+
   virtual unsigned int GetGCPCount( void );
-  
+
   virtual OTB_GCP & GetGCPs ( unsigned int GCPnum );
-    
-  virtual std::string GetGCPId( unsigned int GCPnum );   
+
+  virtual std::string GetGCPId( unsigned int GCPnum );
   virtual std::string GetGCPInfo( unsigned int GCPnum );
-  virtual double GetGCPRow( unsigned int GCPnum ); 
-  virtual double GetGCPCol( unsigned int GCPnum ); 	
-  virtual double GetGCPX( unsigned int GCPnum ); 
-  virtual double GetGCPY( unsigned int GCPnum ); 
+  virtual double GetGCPRow( unsigned int GCPnum );
+  virtual double GetGCPCol( unsigned int GCPnum );
+  virtual double GetGCPX( unsigned int GCPnum );
+  virtual double GetGCPY( unsigned int GCPnum );
   virtual double GetGCPZ( unsigned int GCPnum );
-  
+
   /** Get the six coefficients of affine geoTtransform. */
-  virtual VectorType GetGeoTransform( void ); 
-  
+  virtual VectorType GetGeoTransform( void );
+
   /** Get image corners. */
   virtual VectorType GetUpperLeftCorner( void );
   virtual VectorType GetUpperRightCorner( void );
@@ -152,11 +152,11 @@ public:
 
   /// Copy metadata from a DataObject
   virtual void CopyInformation(const itk::DataObject *);
-  
+
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** Return the Pixel Accessor object */	
-  AccessorType GetPixelAccessor( void ) 
+  /** Return the Pixel Accessor object */
+  AccessorType GetPixelAccessor( void )
     { return AccessorType( this->GetNumberOfComponentsPerPixel() ); }
 
   /** Return the Pixel Accesor object */
@@ -164,9 +164,9 @@ public:
     { return AccessorType( this->GetNumberOfComponentsPerPixel() ); }
 
   /** Return the NeighborhoodAccessor functor */
-  NeighborhoodAccessorFunctorType GetNeighborhoodAccessor() 
+  NeighborhoodAccessorFunctorType GetNeighborhoodAccessor()
     { return NeighborhoodAccessorFunctorType( this->GetNumberOfComponentsPerPixel() ); }
-  
+
   /** Return the NeighborhoodAccessor functor */
   const NeighborhoodAccessorFunctorType GetNeighborhoodAccessor() const
     { return NeighborhoodAccessorFunctorType(this->GetNumberOfComponentsPerPixel()); }
@@ -178,10 +178,10 @@ protected:
 private:
   VectorImage(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
 };
-  
-  
+
+
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -20,7 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-/** 
+/**
  * Constructor.
  */
 
@@ -32,7 +32,7 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
   // Create the output. We use static_cast<> here because we know the default
   // output must be of type TOutputPointSet
   AtmosphericRadiativeTermsPointer output
-    = static_cast<AtmosphericRadiativeTermsType*>(this->MakeOutput(0).GetPointer()); 
+    = static_cast<AtmosphericRadiativeTermsType*>(this->MakeOutput(0).GetPointer());
 
   this->ProcessObject::SetNthOutput( 0, output.GetPointer() );
 
@@ -48,7 +48,7 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
 }
 
 /**
- * 
+ *
  */
 void
 AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
@@ -59,7 +59,7 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
 
 
 /**
- * 
+ *
  */
 void
 AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
@@ -67,9 +67,9 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
 {
   if ( idx >= this->GetNumberOfOutputs() )
     {
-    itkExceptionMacro(<<"Requested to graft output " << idx << 
+    itkExceptionMacro(<<"Requested to graft output " << idx <<
         " but this filter only has " << this->GetNumberOfOutputs() << " Outputs.");
-    }  
+    }
 
   if ( !graft )
     {
@@ -122,7 +122,7 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms::AtmosphericCorrect
 AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
 ::GetInput(void)
 {
-  // If there is no input 
+  // If there is no input
   if (this->GetNumberOfInputs()!=1)
     {
     // exit
@@ -140,12 +140,12 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
 {
   AtmosphericCorrectionParametersPointer input = this->GetInput();
   AtmosphericRadiativeTermsPointer output = this->GetOutput();
-  
+
   output->GetValues().clear();
   typedef AtmosphericCorrectionParameters::WavelenghtSpectralBandVectorType WavelenghtSpectralBandVectorType;
   WavelenghtSpectralBandVectorType WavelenghtSpectralBandVector = input->GetWavelenghtSpectralBand();
   unsigned int NbBand = WavelenghtSpectralBandVector.size();
-  
+
   double atmosphericReflectance(0.);
   double atmosphericSphericalAlbedo(0.);
   double totalGaseousTransmission(0.);
@@ -155,7 +155,7 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
   double upwardDirectTransmittance(0.);
   double upwardDiffuseTransmittanceForRayleigh(0.);
   double upwardDiffuseTransmittanceForAerosol(0.);
-  
+
   for(unsigned int i=0 ; i<NbBand ; i++)
     {
       atmosphericReflectance = 0.;
@@ -181,17 +181,17 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
 		       input->GetAerosolOptical(),                      /** The Aerosol optical (radiative impact of aerosol for the reference wavelenght 550-nm) */
 		       input->GetWavelenghtSpectralBand()[i],           /** Wavelenght for the spectral band definition */
 		                                                        /** Note : The Max wavelenght spectral band value must be updated ! */
-		       atmosphericReflectance,                          /** Atmospheric reflectance */     
+		       atmosphericReflectance,                          /** Atmospheric reflectance */
 		       atmosphericSphericalAlbedo,                      /** atmospheric spherical albedo */
 		       totalGaseousTransmission,                        /** Total gaseous transmission */
-		       downwardTransmittance,                           /** downward transmittance */      
+		       downwardTransmittance,                           /** downward transmittance */
 		       upwardTransmittance,                             /** upward transmittance */
                        upwardDiffuseTransmittance,                      /** Upward diffuse transmittance */
                        upwardDirectTransmittance,                       /** Upward direct transmittance */
                        upwardDiffuseTransmittanceForRayleigh,           /** Upward diffuse transmittance for rayleigh */
                        upwardDiffuseTransmittanceForAerosol             /** Upward diffuse transmittance for aerosols */
                        );
-      
+
       output->SetIntrinsicAtmosphericReflectance(i, atmosphericReflectance);
       output->SetSphericalAlbedo(i, atmosphericSphericalAlbedo);
       output->SetTotalGaseousTransmission(i, totalGaseousTransmission);
@@ -203,7 +203,7 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
       output->SetUpwardDiffuseTransmittanceForAerosol(i, upwardDiffuseTransmittanceForAerosol);
 
     }
-}        
+}
 
 /**
  * PrintSelf Method

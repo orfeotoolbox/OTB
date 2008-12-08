@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,44 +27,44 @@ namespace otb
 
   /** \class SinusoidalMapProjection
    *  \brief This class implements the Sinusoidal map projection.
-   *  It converts coordinates in longitude,latitude (WGS84) to Sinusoidal map coordinates. 
+   *  It converts coordinates in longitude,latitude (WGS84) to Sinusoidal map coordinates.
    */
-  template <InverseOrForwardTransformationEnum transform> 
-      class ITK_EXPORT SinusoidalMapProjection : public	MapProjection<ossimSinusoidalProjection, transform> 
+  template <InverseOrForwardTransformationEnum transform>
+      class ITK_EXPORT SinusoidalMapProjection : public	MapProjection<ossimSinusoidalProjection, transform>
   {
     public :
-	
+
       /** Standard class typedefs. */
       typedef SinusoidalMapProjection                      Self;
       typedef MapProjection<ossimSinusoidalProjection, transform>  Superclass;
       typedef itk::SmartPointer<Self>                        Pointer;
       typedef itk::SmartPointer<const Self>                  ConstPointer;
-      
+
       typedef typename Superclass::ScalarType  			     ScalarType;
       typedef itk::Point<ScalarType,2>   	      	     InputPointType;
-      typedef itk::Point<ScalarType,2>  	      	     OutputPointType;     
+      typedef itk::Point<ScalarType,2>  	      	     OutputPointType;
 
       /** Method for creation through the object factory. */
       itkNewMacro( Self );
-      
+
       /** Run-time type information (and related methods). */
       itkTypeMacro( SinusoidalMapProjection, MapProjection );
-      
+
       virtual void SetFalseEasting(double falseEasting);
       virtual void SetFalseNorthing(double falseNorthing);
       virtual double GetFalseNorthing() const;
       virtual double GetFalseEasting() const;
       virtual void SetParameters(double falseEasting,double falseNorthing);
       virtual void SetDefaults();
-      
+
     protected:
-      SinusoidalMapProjection(); 
+      SinusoidalMapProjection();
       virtual ~SinusoidalMapProjection();
-      
+
     private :
       SinusoidalMapProjection(const Self&); //purposely not implemented
       void operator=(const Self&);            //purposely not implemented
-      
+
   };
 
 } // namespace otb

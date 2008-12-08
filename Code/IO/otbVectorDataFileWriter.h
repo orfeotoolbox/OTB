@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,22 +28,22 @@ namespace otb
  *
  * \class ImageFileWriterException
  */
-class VectorDataFileWriterException : public itk::ExceptionObject 
+class VectorDataFileWriterException : public itk::ExceptionObject
 {
 public:
   /** Run-time information. */
   itkTypeMacro( VectorDataFileWriterException, ExceptionObject );
 
   /** Constructor. */
-  VectorDataFileWriterException(const char *file, unsigned int line, 
+  VectorDataFileWriterException(const char *file, unsigned int line,
                            const char* message = "Error in IO",
-                           const char* loc = "Unknown" ) : 
+                           const char* loc = "Unknown" ) :
     ExceptionObject(file, line, message, loc)
   {
   }
 
   /** Constructor. */
-  VectorDataFileWriterException(const std::string &file, unsigned int line, 
+  VectorDataFileWriterException(const std::string &file, unsigned int line,
                            const char* message = "Error in IO",
                            const char* loc = "Unknown" ) :
     ExceptionObject(file, line, message, loc)
@@ -53,11 +53,11 @@ public:
 
 
   /** \class VectorDataFileWriter
-   *  \brief This class writes vector data file format (shapefile and KML) 
+   *  \brief This class writes vector data file format (shapefile and KML)
    *
    *  \ingroup IO
    */
-	 
+
 template <class TInputVectorData>
 class ITK_EXPORT VectorDataFileWriter : public itk::ProcessObject
 {
@@ -74,16 +74,16 @@ public :
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(VectorDataFileWriter, itk::ProcessObject);
-	
+
   typedef TInputVectorData InputVectorDataType;
   typedef VectorDataIOBase<InputVectorDataType> VectorDataIOBaseType;
 
-	
+
   /** Set/Get the image input of this writer.  */
   void SetInput(const InputVectorDataType *input);
   const InputVectorDataType * GetInput(void);
   const InputVectorDataType * GetInput(unsigned int idx);
-	
+
   /** Does the real work. */
   virtual void Write();
 
@@ -91,7 +91,7 @@ public :
 
   virtual void Update()  {  this->Write(); }
 
-	
+
   /** Specify the name of the output shapefile to write. */
   itkSetStringMacro(FileName);
   itkGetStringMacro(FileName);
@@ -121,5 +121,5 @@ private:
 
 #endif // __otbVectorDataFileWriter_h
 
-	 
-	 
+
+

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,10 +34,10 @@
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the \doxygen{otb}{ComplexMomentImageFunction}.
-// 
-// The first step required to use this filter is to include its header file. 
 //
-// Software Guide : EndLatex 
+// The first step required to use this filter is to include its header file.
+//
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "otbComplexMomentImageFunction.h"
@@ -48,16 +48,16 @@ int main(int argc, char ** argv )
     if( argc != 4 )
     {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
-    std::cerr << " p q" << std::endl;  
+    std::cerr << " p q" << std::endl;
     return EXIT_FAILURE;
     }
 
     const char * inputFilename  = argv[1];
-        
+
     unsigned int P((unsigned char)::atoi(argv[2]));
     unsigned int Q((unsigned char)::atoi(argv[3]));
 
-	        
+
     typedef unsigned char     InputPixelType;
     const   unsigned int      Dimension = 2;
     typedef otb::Image< InputPixelType,  Dimension >   InputImageType;
@@ -74,18 +74,18 @@ int main(int argc, char ** argv )
     //  input image type and the output complex type value, so we start by
     //  defining:
     //
-    //  Software Guide : EndLatex 
-    
+    //  Software Guide : EndLatex
+
     // Software Guide : BeginCodeSnippet
     typedef std::complex<float>                             ComplexType;
     typedef otb::ComplexMomentImageFunction<InputImageType,ComplexType>   CMType;
 
     CMType::Pointer cmFunction =CMType::New();
-    
+
     // Software Guide : EndCodeSnippet
 
-    
-    
+
+
     //  Software Guide : BeginLatex
     //
     // Next, we plug the input image into the complex moment fucntion
@@ -127,7 +127,7 @@ int main(int argc, char ** argv )
     cmFunction->SetNeighborhoodRadius( 15 );
 
 
-    
+
     //  Software Guide : BeginLatex
     // In order to get the value of the moment, we call the
     // \code{EvaluateAtIndex} method.

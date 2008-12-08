@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,13 +29,13 @@ int otbImageListToImageListApplyFilterNew(int argc, char * argv[])
   typedef otb::Image<PixelType,Dimension>  ImageType;
   typedef otb::ImageList<ImageType> ImageListType;
   typedef itk::MeanImageFilter<ImageType,ImageType> MeanFilterType;
-  
-  typedef otb::ImageListToImageListApplyFilter<ImageListType,ImageListType,MeanFilterType> 
+
+  typedef otb::ImageListToImageListApplyFilter<ImageListType,ImageListType,MeanFilterType>
     ImageListToImageListApplyFilterType;
-  
+
   // Instantiating object
   ImageListToImageListApplyFilterType::Pointer object = ImageListToImageListApplyFilterType::New();
 
- 
+
   return EXIT_SUCCESS;
 }

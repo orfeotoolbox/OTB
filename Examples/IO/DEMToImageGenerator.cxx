@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -36,14 +36,14 @@
 //
 //
 // The following example illustrates the use of the \doxygen{otb}{DEMToImageGenerator} class.
-// The aim of this class is to generate an image from the srtm data (precising the start extraction 
-// latitude and longitude point). Each pixel is a geographic point and its intensity is 
+// The aim of this class is to generate an image from the srtm data (precising the start extraction
+// latitude and longitude point). Each pixel is a geographic point and its intensity is
 // the altitude of the point.
 // If srtm doesn't have altitude information for a point, the altitude value is set at -32768 (value of the srtm norm).
 //
-// Let's look at the minimal code required to use this algorithm. First, the following header 
+// Let's look at the minimal code required to use this algorithm. First, the following header
 // defining the \doxygen{otb}{DEMToImageGenerator} class must be included.
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "otbDEMToImageGenerator.h"
@@ -63,11 +63,11 @@ int main(int argc, char * argv[])
       return EXIT_FAILURE;
     }
   //  Software Guide : BeginLatex
-  //  
-  // The image type is now defined using pixel type and 
-  // dimension. The output image is defined as an \doxygen{otb}{Image}. 
   //
-  // Software Guide : EndLatex 
+  // The image type is now defined using pixel type and
+  // dimension. The output image is defined as an \doxygen{otb}{Image}.
+  //
+  // Software Guide : EndLatex
 
   char * folderPath = argv[9];
   char * outputName = argv[1];
@@ -76,15 +76,15 @@ int main(int argc, char * argv[])
   typedef otb::Image<double , Dimension>           ImageType;
   // Software Guide : EndCodeSnippet
 
-  // The writer is defined 
+  // The writer is defined
   typedef otb::ImageFileWriter<ImageType>          WriterType;
 
   //  Software Guide : BeginLatex
-  //  
-  // The DEMToImageGenerator is defined using the image pixel 
+  //
+  // The DEMToImageGenerator is defined using the image pixel
   // type as a template parameter. After that, the object can be instancied.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::DEMToImageGenerator<ImageType>      DEMToImageGeneratorType;
@@ -95,10 +95,10 @@ int main(int argc, char * argv[])
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   // Input parameter types are defined to set the value in the DEMToImageGenerator.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef DEMToImageGeneratorType::SizeType        SizeType;
@@ -106,25 +106,25 @@ int main(int argc, char * argv[])
   typedef DEMToImageGeneratorType::DEMHandlerType  DEMHandlerType;
   typedef DEMHandlerType::PointType                PointType;
   // Software Guide : EndCodeSnippet
-  
+
   // Instantiating writer
   WriterType::Pointer              writer = WriterType::New();
-  
+
 
   // Software Guide : BeginLatex
-  //  
+  //
   // The path to the DEM folder is given to the filter.
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
   object->SetDEMDirectoryPath(folderPath);
  // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
-  //  
+  //
   // The origin (Longitude/Latitude) of the output image in the DEM is given to the filter.
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
   PointType origin;
   origin[0] = ::atof(argv[3]);
@@ -135,10 +135,10 @@ int main(int argc, char * argv[])
 
 
   //  Software Guide : BeginLatex
-  //  
+  //
   // The size (in Pixel) of the output image is given to the filter.
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
   SizeType size;
   size[0] = ::atoi(argv[5]);
@@ -148,11 +148,11 @@ int main(int argc, char * argv[])
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
-  //  
+  //
   // The spacing (step between to consecutive pixel) is given to the filter.
   // By default, this spacing is set at 0.001.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
  SpacingType spacing;
  spacing[0] = ::atof(argv[7]);
@@ -162,11 +162,11 @@ int main(int argc, char * argv[])
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
-  //  
-  // The output image name is given to the writer and 
+  //
+  // The output image name is given to the writer and
   // the filter output is linked to the writer input.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   writer->SetFileName( outputName );
@@ -175,48 +175,48 @@ int main(int argc, char * argv[])
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
-  //  
+  //
   //  The invocation of the \code{Update()} method on the writer triggers the
   //  execution of the pipeline.  It is recommended to place update calls in a
   //  \code{try/catch} block in case errors occur and exceptions are thrown.
   //
-  //  Software Guide : EndLatex 
-  
+  //  Software Guide : EndLatex
+
   // Software Guide : BeginCodeSnippet
    try
     {
       writer->Update();
     }
-  
-  catch( itk::ExceptionObject & err ) 
-    { 
-      std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-      std::cout << err << std::endl; 
+
+  catch( itk::ExceptionObject & err )
+    {
+      std::cout << "Exception itk::ExceptionObject thrown !" << std::endl;
+      std::cout << err << std::endl;
     return EXIT_FAILURE;
-    } 
+    }
    // Software Guide : EndCodeSnippet
-  catch( ... ) 
-    { 
-      std::cout << "Unknown exception thrown !" << std::endl; 
+  catch( ... )
+    {
+      std::cout << "Unknown exception thrown !" << std::endl;
       return EXIT_FAILURE;
-    } 
- 
+    }
+
 
    // Pretty image creation for the printing
    typedef otb::Image<unsigned char, Dimension>                                  OutputPrettyImageType;
    typedef otb::ImageFileWriter<OutputPrettyImageType>                           WriterPrettyType;
    typedef itk::RescaleIntensityImageFilter< ImageType, OutputPrettyImageType>   RescalerType;
    typedef itk::ThresholdImageFilter< ImageType >                                ThresholderType;
-   
+
    ThresholderType::Pointer  thresholder  = ThresholderType::New();
-   RescalerType::Pointer     rescaler     = RescalerType::New();  
+   RescalerType::Pointer     rescaler     = RescalerType::New();
    WriterPrettyType::Pointer prettyWriter = WriterPrettyType::New();
-   
+
    thresholder->SetInput(  object->GetOutput() );
    thresholder->SetOutsideValue( 0.0 );
    thresholder->ThresholdBelow( 0.0 );
    thresholder->Update();
-   
+
    rescaler->SetInput( thresholder->GetOutput() );
    rescaler->SetOutputMinimum(0);
    rescaler->SetOutputMaximum(255);
@@ -232,17 +232,17 @@ int main(int argc, char * argv[])
        std::cerr << "Exception caught !" << std::endl;
        std::cerr << excep << std::endl;
      }
-   catch( ... ) 
-     { 
-       std::cout << "Unknown exception !" << std::endl; 
+   catch( ... )
+     {
+       std::cout << "Unknown exception !" << std::endl;
        return EXIT_FAILURE;
-     } 
-   
+     }
+
    return EXIT_SUCCESS;
- 
+
    // Software Guide : BeginLatex
    //
-   // Let's now run this example using as input the SRTM data contained in 
+   // Let's now run this example using as input the SRTM data contained in
    // \code{DEM\_srtm} folder. Figure \ref{fig:DEMToImageGenerator}
    // shows the obtained DEM. Invalid data values -- hidden areas due
    // to SAR shadowing -- are set to zero.
@@ -254,6 +254,6 @@ int main(int argc, char * argv[])
    // \label{fig:DEMToImageGenerator}
    // \end{figure}
    //
-   //  Software Guide : EndLatex 
-   
+   //  Software Guide : EndLatex
+
 }

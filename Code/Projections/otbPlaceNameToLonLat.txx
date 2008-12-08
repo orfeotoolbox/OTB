@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -65,27 +65,27 @@ bool PlaceNameToLonLat::Evaluate()
   {
     std::ostringstream urlStream;
     urlStream << "http://maps.google.com/maps?q=";
-    urlStream << m_PlaceName; 
+    urlStream << m_PlaceName;
     urlStream << "&sll=38.9594,-95.2655&sspn=119.526,360&output=kml&ie=utf-8&v=2.2&cv=4.2.0180.1134&hl=en";
     RetrieveXML(urlStream);
     ParseXMLGoogle();
   }
-  
+
   if ((m_Lat == -1000.0) && (m_Lon == -1000.0))
   {
     std::ostringstream urlStream;
     urlStream << "http://maps.google.fr/maps?q=";
-    urlStream << m_PlaceName; 
+    urlStream << m_PlaceName;
     urlStream << "&sll=38.9594,-95.2655&sspn=119.526,360&output=kml&ie=utf-8&v=2.2&cv=4.2.0180.1134&hl=en";
     RetrieveXML(urlStream);
     ParseXMLGoogle();
   }
-  
+
   if ((m_Lat == -1000.0) && (m_Lon == -1000.0))
   {
     std::ostringstream urlStream;
     urlStream << "http://api.local.yahoo.com/MapsService/V1/geocode?appid=com.sun.blueprints.ui.geocoder&location=";
-    urlStream << m_PlaceName; 
+    urlStream << m_PlaceName;
     RetrieveXML(urlStream);
     ParseXMLYahoo();
   }
@@ -117,7 +117,7 @@ curlHandlerWriteMemoryCallback(void *ptr, size_t size, size_t nmemb,
 
 void PlaceNameToLonLat::RetrieveXML(std::ostringstream& urlStream)
 {
-  
+
   CURL *curl;
   CURLcode res;
 
@@ -146,7 +146,7 @@ void PlaceNameToLonLat::RetrieveXML(std::ostringstream& urlStream)
     /* always cleanup */
     curl_easy_cleanup(curl);
   }
-  
+
 }
 
 
@@ -155,7 +155,7 @@ void PlaceNameToLonLat::ParseXMLYahoo()
   TiXmlDocument doc( "out.xml" );
   doc.LoadFile();
   TiXmlHandle docHandle( &doc );
-  
+
   TiXmlElement* childLat = docHandle.FirstChild( "ResultSet" ).FirstChild( "Result" ).FirstChild( "Latitude" ).Element();
   if ( childLat )
   {
@@ -166,7 +166,7 @@ void PlaceNameToLonLat::ParseXMLYahoo()
   {
     m_Lon=atof(childLon->GetText());
   }
-  
+
 }
 
 void PlaceNameToLonLat::ParseXMLGoogle()
@@ -174,7 +174,7 @@ void PlaceNameToLonLat::ParseXMLGoogle()
   TiXmlDocument doc( "out.xml" );
   doc.LoadFile();
   TiXmlHandle docHandle( &doc );
-  
+
   TiXmlElement* childLat = docHandle.FirstChild( "kml" ).FirstChild( "Placemark" ).FirstChild( "LookAt" ).FirstChild( "latitude" ).Element();
   if ( childLat )
   {
@@ -185,7 +185,7 @@ void PlaceNameToLonLat::ParseXMLGoogle()
   {
     m_Lon=atof(childLon->GetText());
   }
-  
+
 }
 
 } // namespace otb

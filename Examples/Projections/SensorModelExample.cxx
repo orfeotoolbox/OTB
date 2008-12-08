@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,8 +34,8 @@
 // very basic, step-by-step example, so you understand the different
 // components involved in the process. When performing real
 // ortho-rectifications, you can use the example presented in section
-// \ref{sec:OrthorectificationwithOTB}. 
-// 
+// \ref{sec:OrthorectificationwithOTB}.
+//
 // We will start by including the header file for the inverse sensor model.
 //
 // Software Guide : EndLatex
@@ -56,14 +56,14 @@ int main( int argc, char* argv[] )
     {
     std::cout << argv[0] <<" <input_filename> <output_filename>"
 	      << " <upper_left_corner_longitude> <upper_left_corner_latitude>"
-              << " <size_x> <sizee_y> <number_of_stream_divisions>" 
+              << " <size_x> <sizee_y> <number_of_stream_divisions>"
 	      << std::endl;
 
     return EXIT_FAILURE;
     }
-   
 
-  
+
+
 
 
 // Software Guide : BeginLatex
@@ -78,7 +78,7 @@ int main( int argc, char* argv[] )
 
 
 // Software Guide : BeginCodeSnippet
-  
+
   typedef otb::Image<unsigned int, 2>     ImageType;
   typedef otb::ImageFileReader<ImageType>  ReaderType;
   ReaderType::Pointer	                 reader=ReaderType::New();
@@ -86,7 +86,7 @@ int main( int argc, char* argv[] )
 
   ImageType::Pointer  			 inputImage= reader->GetOutput();
 
-// Software Guide : EndCodeSnippet  
+// Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
 //
@@ -105,9 +105,9 @@ int main( int argc, char* argv[] )
   reader->GenerateOutputInformation();
 
   std::cout << "Original input imagine spacing: "<<
-    reader->GetOutput()->GetSpacing() << std::endl;; 
+    reader->GetOutput()->GetSpacing() << std::endl;;
 
-// Software Guide : EndCodeSnippet  
+// Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
 //
@@ -124,7 +124,7 @@ int main( int argc, char* argv[] )
   typedef otb::InverseSensorModel<double>  ModelType;
   ModelType::Pointer   model= ModelType::New();
 
-// Software Guide : EndCodeSnippet  
+// Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
 //
@@ -135,10 +135,10 @@ int main( int argc, char* argv[] )
 
 
 // Software Guide : BeginCodeSnippet
-  
+
   model->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
 
-// Software Guide : EndCodeSnippet  
+// Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
 //
@@ -149,15 +149,15 @@ int main( int argc, char* argv[] )
 
 
 // Software Guide : BeginCodeSnippet
-  
-  
+
+
   if(!model)
     {
     std::cerr << "Unable to create a model" << std::endl;
     return 1;
     }
 
-// Software Guide : EndCodeSnippet  
+// Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
 //
@@ -168,20 +168,20 @@ int main( int argc, char* argv[] )
 
 
 // Software Guide : BeginCodeSnippet
-  
-      
+
+
   ModelType::OutputPointType inputPoint;
   typedef itk::Point <double, 2> 	 PointType;
   PointType				 outputPoint;
 
- 
- 
+
+
   ImageType::IndexType 			 currentIndex;
   ImageType::IndexType 			 currentIndexBis;
   ImageType::IndexType 			 pixelIndexBis;
- 
 
-// Software Guide : EndCodeSnippet  
+
+// Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
 //
@@ -193,33 +193,33 @@ int main( int argc, char* argv[] )
 
 
 // Software Guide : BeginCodeSnippet
-  
+
   ImageType::Pointer 	  	         outputImage = ImageType::New();
 
   ImageType::PixelType			 pixelValue;
 
   ImageType::IndexType  		 start;
-  start[0]=0;     
-  start[1]=0;     
+  start[0]=0;
+  start[1]=0;
 
   ImageType::SizeType  			 size;
-  size[0]=atoi(argv[5]);      
-  size[1]=atoi(argv[6]);	
+  size[0]=atoi(argv[5]);
+  size[1]=atoi(argv[6]);
 
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
 //
-// The spacing in y direction is negative since origin is the upper left corner. 
+// The spacing in y direction is negative since origin is the upper left corner.
 //
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
   ImageType::SpacingType  		 spacing;
   spacing[0]=0.00001;
-  spacing[1]=-0.00001; 
+  spacing[1]=-0.00001;
 
- 
+
   ImageType::PointType			 origin;
   origin[0]=strtod(argv[3], NULL);         //longitude
   origin[1]=strtod(argv[4], NULL);         //lattitude
@@ -234,7 +234,7 @@ int main( int argc, char* argv[] )
   outputImage->SetSpacing(spacing);
   outputImage->Allocate();
 
-// Software Guide : EndCodeSnippet  
+// Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
 //
@@ -249,7 +249,7 @@ int main( int argc, char* argv[] )
   typedef itk::ExtractImageFilter<ImageType,ImageType>   ExtractType;
   ExtractType::Pointer			  extract=ExtractType::New();
 
-// Software Guide : EndCodeSnippet  
+// Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
 //
@@ -260,14 +260,14 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet  
+// Software Guide : BeginCodeSnippet
 
   typedef itk::LinearInterpolateImageFunction<ImageType, double>
                                                     InterpolatorType;
   InterpolatorType::Pointer	interpolator=InterpolatorType::New();
 
 
-// Software Guide : EndCodeSnippet  
+// Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
 //
@@ -277,7 +277,7 @@ int main( int argc, char* argv[] )
 // the process.
 //
 // Software Guide : EndLatex
-// Software Guide : BeginCodeSnippet  
+// Software Guide : BeginCodeSnippet
 
   typedef otb::Image<unsigned char, 2>    CharImageType;
   typedef otb::ImageFileWriter<CharImageType>  CharWriterType;
@@ -287,7 +287,7 @@ int main( int argc, char* argv[] )
   extractorWriter->SetFileName("image_temp.jpeg");
   extractorWriter->SetInput(extract->GetOutput());
 
-// Software Guide : EndCodeSnippet    
+// Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
 // Since the output pixel type and the input pixel type are different,
@@ -295,7 +295,7 @@ int main( int argc, char* argv[] )
 // a file.
 //
 // Software Guide : EndLatex
-// Software Guide : BeginCodeSnippet      
+// Software Guide : BeginCodeSnippet
 
   typedef itk::RescaleIntensityImageFilter<ImageType,CharImageType>
                                                          RescalerType;
@@ -304,7 +304,7 @@ int main( int argc, char* argv[] )
   rescaler->SetOutputMaximum(255);
 
 
-// Software Guide : EndCodeSnippet    
+// Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
 // The tricky part starts here. Note that this example is only
@@ -319,7 +319,7 @@ int main( int argc, char* argv[] )
 //  convenience variables.
 //
 // Software Guide : EndLatex
-// Software Guide : BeginCodeSnippet  
+// Software Guide : BeginCodeSnippet
 
   typedef itk::ImageRegionIteratorWithIndex<ImageType>	IteratorType;
 
@@ -341,33 +341,33 @@ int main( int argc, char* argv[] )
   ImageType::SizeType  			 iteratorRegionSize;
   ImageType::RegionType			 iteratorRegion;
 
-// Software Guide : EndCodeSnippet    
+// Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
 // The loop starts here.
 //
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
-  
+
   for(count=0;count<NumberOfStreamDivisions;count++)
     {
-    iteratorRegionSize[0]=atoi(argv[5]);      
+    iteratorRegionSize[0]=atoi(argv[5]);
     if (count==NumberOfStreamDivisions-1)
       {
       iteratorRegionSize[1]=(atoi(argv[6]))-((int)(((atoi(argv[6]))/
 			      NumberOfStreamDivisions)+0.5))*(count);
-      iterationRegionStart[1]=(atoi(argv[5]))-(iteratorRegionSize[1]); 
+      iterationRegionStart[1]=(atoi(argv[5]))-(iteratorRegionSize[1]);
       }
     else
       {
       iteratorRegionSize[1]=(int)(((atoi(argv[6]))/
 				   NumberOfStreamDivisions)+0.5);
-      iterationRegionStart[1]=count*iteratorRegionSize[1]; 
-      }    
+      iterationRegionStart[1]=count*iteratorRegionSize[1];
+      }
     iterationRegionStart[0]=0;
     iteratorRegion.SetSize(iteratorRegionSize);
-    iteratorRegion.SetIndex(iterationRegionStart); 
-// Software Guide : EndCodeSnippet    
+    iteratorRegion.SetIndex(iterationRegionStart);
+// Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
 // We create an array for storing the pixel indexes.
@@ -379,7 +379,7 @@ int main( int argc, char* argv[] )
     int *pixelIndexArray=new int[pixelIndexArrayDimension];
     int *currentIndexArray=new int[pixelIndexArrayDimension];
 
-// Software Guide : EndCodeSnippet    
+// Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
 // We create an iterator for each piece of the image, and we iterate
@@ -387,13 +387,13 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
-    
+
     IteratorType outputIt(outputImage, iteratorRegion);
 
     It=0;
     for (outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt)
       {
-// Software Guide : EndCodeSnippet    
+// Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
 // We get the current index.
@@ -402,7 +402,7 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet
 
       currentIndex=outputIt.GetIndex();
-// Software Guide : EndCodeSnippet    
+// Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
 // We transform the index to physical coordinates.
@@ -411,9 +411,9 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet
 
       outputImage->TransformIndexToPhysicalPoint(currentIndex, outputPoint);
-      
 
-// Software Guide : EndCodeSnippet    
+
+// Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
 // We use the sensor model to get the pixel coordinates in the input
@@ -436,7 +436,7 @@ int main( int argc, char* argv[] )
       It=It+2;
       }
 
-// Software Guide : EndCodeSnippet    
+// Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
 // By this point, we have stored all the indexes we need for the piece
@@ -450,7 +450,7 @@ int main( int argc, char* argv[] )
     min_x=pixelIndexArray[0];
     max_y=pixelIndexArray[1];
     min_y=pixelIndexArray[1];
- 
+
 
 
     for (j=0;j<It;j++)
@@ -462,7 +462,7 @@ int main( int argc, char* argv[] )
       }
 
 
-// Software Guide : EndCodeSnippet    
+// Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
 // We can now set the parameters for the extractor using a little bit
@@ -486,7 +486,7 @@ int main( int argc, char* argv[] )
       {
       extractStart[0]=min_x-10;
       extractStart[1]=min_y-10;
-      } 
+      }
 
     ImageType::SizeType  		    extractSize;
 
@@ -499,7 +499,7 @@ int main( int argc, char* argv[] )
     extract->SetInput(reader->GetOutput());
     extractorWriter->Update();
 
-// Software Guide : EndCodeSnippet    
+// Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
 // We give the input image to the interpolator and we loop through the
@@ -530,11 +530,11 @@ int main( int argc, char* argv[] )
       outputImage->SetPixel(currentIndexBis,pixelValue);
       }
     delete pixelIndexArray;
-    delete currentIndexArray; 
+    delete currentIndexArray;
 
     }
 
-// Software Guide : EndCodeSnippet    
+// Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
 // So we are done. We can now write the output image to a file after
@@ -551,7 +551,7 @@ int main( int argc, char* argv[] )
   writer->SetInput(rescaler->GetOutput());
   writer->Update();
 
-// Software Guide : EndCodeSnippet      
+// Software Guide : EndCodeSnippet
 
   return EXIT_SUCCESS;
 

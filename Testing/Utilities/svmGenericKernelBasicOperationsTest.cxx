@@ -14,7 +14,7 @@ class LinearKernelFunctor : public GenericKernelFunctorBase
 public:
   LinearKernelFunctor(): GenericKernelFunctorBase() {};
   virtual ~LinearKernelFunctor() {};
-  
+
   virtual double Evaluate(const svm_node *x, const svm_node *y, const svm_parameter& param)const
     {
       return 0.;
@@ -26,17 +26,17 @@ public:
 int svmGenericKernelBasicOperationsTest( int argc, char *argv[] )
 {
   const char * outputFileName = argv[1];
-  
+
   struct svm_node* px;
   struct svm_node* py;
   struct svm_node* resSub;
   struct svm_node* resAdd;
-  
+
   px = new struct svm_node[5];
   py = new struct svm_node[5];
   resSub = new struct svm_node[5];
   resAdd = new struct svm_node[5];
-  
+
   px[0].index = 1;
   px[1].index = 1;
   px[2].index = 1;
@@ -47,7 +47,7 @@ int svmGenericKernelBasicOperationsTest( int argc, char *argv[] )
   py[2].index = 1;
   py[3].index = 1;
   py[4].index = -1;
-  
+
   px[0].value = 1.;
   px[1].value = 2.;
   px[2].value = 3.;
@@ -58,15 +58,15 @@ int svmGenericKernelBasicOperationsTest( int argc, char *argv[] )
   py[2].value = 4.;
   py[3].value = 1.;
   py[4].value = 12.;
-  
+
   GenericKernelFunctorBase gen;
-  
+
   resSub=gen.sub(px, py);
   resAdd=gen.add(px, py);
-  
+
   std::ofstream f;
   f.open(outputFileName);
-  
+
   f<<"Support Vectors 1: (Index, Value)"<<std::endl;
   for(unsigned int n = 0;n<5;++n)
     {
@@ -90,10 +90,10 @@ int svmGenericKernelBasicOperationsTest( int argc, char *argv[] )
     {
       f<<resAdd[n].index<<" "<<resAdd[n].value<<std::endl;
     }
-  
+
   f.close();
-  
-  return EXIT_SUCCESS; 
+
+  return EXIT_SUCCESS;
 };
 
 
@@ -106,7 +106,7 @@ int svmGenericKernelBasicOperationsTest( int argc, char *argv[] )
 
 
 
- 
+
 
 
 

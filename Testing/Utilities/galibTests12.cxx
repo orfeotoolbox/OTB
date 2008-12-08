@@ -83,7 +83,7 @@ galibTests12(int argc, char *argv[])
   GAParameterList params;
   GASteadyStateGA::registerDefaultParameters(params);
   params.set(gaNpopulationSize, 25);	// population size
-  params.set(gaNpCrossover, 0.9);	// probability of crossover 
+  params.set(gaNpCrossover, 0.9);	// probability of crossover
   params.set(gaNpMutation, 0.01);	// probability of mutation
   params.set(gaNnGenerations, 4000);	// number of generations
   params.parse(argc, argv, gaFalse);
@@ -113,7 +113,7 @@ galibTests12(int argc, char *argv[])
 
   return 0;
 }
- 
+
 
 
 /* ----------------------------------------------------------------------------
@@ -137,7 +137,7 @@ objective(GAGenome & c)
 
 /* ----------------------------------------------------------------------------
 AlphabetInitializer
-  This initializer creates a string genome with the letters a-z as its 
+  This initializer creates a string genome with the letters a-z as its
 elements.  Once we have assigned all the values, we randomize the string.
 ---------------------------------------------------------------------------- */
 void

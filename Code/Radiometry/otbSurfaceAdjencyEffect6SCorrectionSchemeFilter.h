@@ -9,7 +9,7 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  
+
   Some parts of this code are derived from ITK. See ITKCopyright.txt
   for details.
 
@@ -34,9 +34,9 @@ namespace otb
  namespace Functor
     {
        /** \class ComputeNeighborhoodContributionFunctor
-       *  \brief Unary neighborhood functor to compute the value of a pixel which is a sum 
+       *  \brief Unary neighborhood functor to compute the value of a pixel which is a sum
        *   of the surrounding pixels value ponderated by a coefficient.
-       *  
+       *
        *  \ingroup Functor
        */
       template <class TNeighIter, class TOutput>
@@ -45,7 +45,7 @@ namespace otb
 	public:
 	  ComputeNeighborhoodContributionFunctor() {};
 	  ~ComputeNeighborhoodContributionFunctor() {};
-	  
+
 	  typedef itk::VariableSizeMatrix<double>             WeightingMatrixType;
 	  typedef typename std::vector<WeightingMatrixType>   WeightingValuesContainerType;
 	  typedef typename TOutput::RealValueType             RealValueType;
@@ -59,7 +59,7 @@ namespace otb
 	  DoubleContainerType GetDiffuseRatio(){ return m_DiffuseRatio;};
 
 	  inline TOutput operator()(const TNeighIter & it)
-	    {	 
+	    {
 	      unsigned int neighborhoodSize = it.Size();
 	      double contribution = 0.;
 	      TOutput outPixel;
@@ -73,7 +73,7 @@ namespace otb
 		  WeightingMatrixType TempChannelWeighting = m_WeightingValues[j];
 		  // Loop over the neighborhood
 		  for (unsigned int i = 0; i < neighborhoodSize; ++i)
-		    { 
+		    {
 		      // Current neighborhood pixel index calculation
 		      unsigned int RowIdx = 0;
 		      unsigned int ColIdx = 0;
@@ -90,7 +90,7 @@ namespace otb
 		      double idVal = TempChannelWeighting(RowIdx, ColIdx);
 		      // Extract the current neighborhood pixel value
 		      TOutput tempPix = it.GetPixel(i);
-		      
+
 		      contribution += static_cast<double>( tempPix[j] )*idVal;
 
 		    }
@@ -104,32 +104,32 @@ namespace otb
 	  DoubleContainerType m_UpwardTransmittanceRatio;
 	  DoubleContainerType m_DiffuseRatio;
 	};
-  
+
     }
 
   /** \class SurfaceAdjencyEffect6SCorrectionSchemeFilter
-   *  \brief Correct the scheme taking care of the surrounding pixels. 
-   *   
-   *   The SurfaceAdjencyEffect6SCorrectionSchemeFilter class allows to introduce a neighbor correction to the 
-   *   reflectance estimation. The satelite signal is considered as to be a combinaison of the signal coming from 
+   *  \brief Correct the scheme taking care of the surrounding pixels.
+   *
+   *   The SurfaceAdjencyEffect6SCorrectionSchemeFilter class allows to introduce a neighbor correction to the
+   *   reflectance estimation. The satelite signal is considered as to be a combinaison of the signal coming from
    *   the target pixel and a weighting of the siganls coming from the neighbor pixels.
    *
    */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT SurfaceAdjencyEffect6SCorrectionSchemeFilter : 
+class ITK_EXPORT SurfaceAdjencyEffect6SCorrectionSchemeFilter :
  public UnaryFunctorNeighborhoodImageFilter< TInputImage,
                                              TOutputImage,
-                                             ITK_TYPENAME Functor::ComputeNeighborhoodContributionFunctor< itk::ConstNeighborhoodIterator<TInputImage>, 
+                                             ITK_TYPENAME Functor::ComputeNeighborhoodContributionFunctor< itk::ConstNeighborhoodIterator<TInputImage>,
                                                                                                                  ITK_TYPENAME TOutputImage::PixelType >       >
 {
 public:
   /** "typedef" to simplify the variables definition and the declaration. */
-  typedef Functor::ComputeNeighborhoodContributionFunctor<itk::ConstNeighborhoodIterator<TInputImage>, 
+  typedef Functor::ComputeNeighborhoodContributionFunctor<itk::ConstNeighborhoodIterator<TInputImage>,
                                                                    ITK_TYPENAME TOutputImage::PixelType> FunctorType;
 
   /** "typedef" for standard classes. */
-  typedef SurfaceAdjencyEffect6SCorrectionSchemeFilter                                           Self; 
-  typedef UnaryFunctorNeighborhoodImageFilter< TInputImage, TOutputImage, FunctorType >    Superclass; 
+  typedef SurfaceAdjencyEffect6SCorrectionSchemeFilter                                           Self;
+  typedef UnaryFunctorNeighborhoodImageFilter< TInputImage, TOutputImage, FunctorType >    Superclass;
   typedef itk::SmartPointer<Self>                                                                Pointer;
   typedef itk::SmartPointer<const Self>                                                          ConstPointer;
 
@@ -142,7 +142,7 @@ public:
 
   /** return class name. */
   itkTypeMacro(SurfaceAdjencyEffect6SCorrectionSchemeFilter, UnaryFunctorNeighborhoodImageFilter);
-  
+
 /** 	Extract input and output images dimensions.*/
   itkStaticConstMacro( InputImageDimension, unsigned int, TInputImage::ImageDimension);
   itkStaticConstMacro( OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
@@ -165,7 +165,7 @@ public:
 
   /** typedef for calculation*/
   typedef typename itk::ConstNeighborhoodIterator<InputImageType>          NeighborIterType;
- 
+
    /** Set/Get the Size of the neighbor window. */
   void SetWindowRadius(unsigned int rad)
     {
@@ -174,7 +174,7 @@ public:
       this->Modified();
     }
   itkGetConstReferenceMacro(WindowRadius, unsigned int);
-  
+
   /** Set/Get the pixel spacing in kilometers */
   itkSetMacro(PixelSpacingInKilometers,double);
   itkGetMacro(PixelSpacingInKilometers,double);
@@ -226,7 +226,7 @@ private:
   double m_ZenithalViewingAngle;
   /** Radiative terms object */
   AtmosphericRadiativeTermsPointerType m_AtmosphericRadiativeTerms;
-  
+
 };
 
 } // end namespace otb

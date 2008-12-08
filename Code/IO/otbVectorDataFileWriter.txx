@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,8 +33,8 @@ namespace otb
 template <class TInputVectorData>
 VectorDataFileWriter<TInputVectorData>
 ::VectorDataFileWriter() :      m_FileName(""),
-                                m_VectorDataIO(0), 
-                                m_UserSpecifiedVectorDataIO(false) 
+                                m_VectorDataIO(0),
+                                m_UserSpecifiedVectorDataIO(false)
 {
 }
 /**
@@ -49,12 +49,12 @@ VectorDataFileWriter<TInputVectorData>
 
 //---------------------------------------------------------
 template <class TInputVectorData>
-void 
+void
 VectorDataFileWriter<TInputVectorData>
 ::SetInput(const InputVectorDataType *input)
 {
 	// ProcessObject is not const_correct so this cast is required here.
-  this->ProcessObject::SetNthInput(0, 
+  this->ProcessObject::SetNthInput(0,
                                    const_cast<TInputVectorData *>(input ) );
 }
 
@@ -69,11 +69,11 @@ VectorDataFileWriter<TInputVectorData>
     {
     return 0;
     }
-  
+
   return static_cast<TInputVectorData*>
     (this->ProcessObject::GetInput(0));
 }
-  
+
 //---------------------------------------------------------
 template <class TInputVectorData>
 const typename VectorDataFileWriter<TInputVectorData>::InputVectorDataType *
@@ -108,9 +108,9 @@ VectorDataFileWriter<TInputVectorData>
 
   if ( m_VectorDataIO.IsNull() ) //try creating via factory
     {
-    itkDebugMacro(<<"Attempting factory creation of VectorDataIO for file: " 
+    itkDebugMacro(<<"Attempting factory creation of VectorDataIO for file: "
                   << m_FileName);
-    m_VectorDataIO = VectorDataIOFactory<TInputVectorData>::CreateVectorDataIO( m_FileName.c_str(), 
+    m_VectorDataIO = VectorDataIOFactory<TInputVectorData>::CreateVectorDataIO( m_FileName.c_str(),
                                                VectorDataIOFactory<TInputVectorData>::WriteMode );
     m_FactorySpecifiedVectorDataIO = true;
     }
@@ -118,11 +118,11 @@ VectorDataFileWriter<TInputVectorData>
     {
     if( m_FactorySpecifiedVectorDataIO && !m_VectorDataIO->CanWriteFile( m_FileName.c_str() ) )
       {
-      itkDebugMacro(<<"VectorDataIO exists but doesn't know how to write file:" 
+      itkDebugMacro(<<"VectorDataIO exists but doesn't know how to write file:"
                     << m_FileName );
       itkDebugMacro(<<"Attempting creation of VectorDataIO with a factory for file:"
                     << m_FileName);
-      m_VectorDataIO = VectorDataIOFactory<TInputVectorData>::CreateVectorDataIO( m_FileName.c_str(), 
+      m_VectorDataIO = VectorDataIOFactory<TInputVectorData>::CreateVectorDataIO( m_FileName.c_str(),
                                                  VectorDataIOFactory<TInputVectorData>::WriteMode );
       m_FactorySpecifiedVectorDataIO = true;
       }
@@ -135,13 +135,13 @@ VectorDataFileWriter<TInputVectorData>
     msg << " Could not create IO object for file "
         << m_FileName.c_str() << std::endl;
     msg << "  Tried to create one of the following:" << std::endl;
-    std::list<itk::LightObject::Pointer> allobjects = 
+    std::list<itk::LightObject::Pointer> allobjects =
       itk::ObjectFactoryBase::CreateAllInstance("otbVectorDataIOBase");
     for(std::list<LightObject::Pointer>::iterator i = allobjects.begin();
         i != allobjects.end(); ++i)
       {
       VectorDataIOBase<TInputVectorData>* io = dynamic_cast<VectorDataIOBase<TInputVectorData>*>(i->GetPointer());
-      msg << "    " << io->GetNameOfClass() << std::endl; 
+      msg << "    " << io->GetNameOfClass() << std::endl;
       }
     msg << "  You probably failed to set a file suffix, or" << std::endl;
     msg << "    set the suffix to an unsupported type." << std::endl;
@@ -166,7 +166,7 @@ VectorDataFileWriter<TInputVectorData>
 
   // Actually do something
   this->GenerateData();
-  
+
   // Notify end event observers
   this->InvokeEvent( itk::EndEvent() );
 
@@ -187,7 +187,7 @@ VectorDataFileWriter<TInputVectorData>
   const InputVectorDataType * input = this->GetInput();
 
   itkDebugMacro(<<"Writing file: " << m_FileName);
-  
+
   // Setup the vector data IO for writing.
   //
   m_VectorDataIO->SetFileName(m_FileName.c_str());

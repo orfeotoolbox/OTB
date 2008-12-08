@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -22,7 +22,7 @@
 
 namespace otb
 {
- /** 
+ /**
   * Constructor
   */
   template <class TGraph>
@@ -43,12 +43,12 @@ namespace otb
     m_Graph=iter.m_Graph;
     m_End=iter.m_End;
   }
-  /**  
-   *Constructor with input graph 
+  /**
+   *Constructor with input graph
    */
   template <class TGraph>
   RCC8VertexIterator<TGraph>
-  ::RCC8VertexIterator(TGraph * graph) 
+  ::RCC8VertexIterator(TGraph * graph)
   {
     m_Graph=graph;
     tie(m_Iter,m_End)=vertices(*(m_Graph->GetGraph()));
@@ -59,7 +59,7 @@ namespace otb
    */
   template <class TGraph>
   typename  RCC8VertexIterator<TGraph>
-  ::VertexPointerType 
+  ::VertexPointerType
   RCC8VertexIterator<TGraph>
   ::Get(void)
   {
@@ -82,14 +82,14 @@ namespace otb
    */
   template <class TGraph>
   typename  RCC8VertexIterator<TGraph>
-  ::VertexDescriptorType 
+  ::VertexDescriptorType
   RCC8VertexIterator<TGraph>
   ::GetIndex(void)
   {
     IndexMapType index = get(boost::vertex_index,(*m_Graph->GetGraph()));
     return index[*m_Iter];
   }
-  /** 
+  /**
     * Return true if the iterator is at the end.
     * \return True if the iterator is at the end.
     */
@@ -104,7 +104,7 @@ namespace otb
    * Go to the beginning.
    */
   template <class TGraph>
-  void 
+  void
   RCC8VertexIterator<TGraph>
   ::GoToBegin(void)
   {
@@ -114,8 +114,8 @@ namespace otb
    * Increment.
    */
   template <class TGraph>
-  typename RCC8VertexIterator<TGraph> 
-  ::Self& 
+  typename RCC8VertexIterator<TGraph>
+  ::Self&
   RCC8VertexIterator<TGraph>
   ::operator++()
   {
@@ -126,20 +126,20 @@ namespace otb
    * Decrement.
    */
   template <class TGraph>
-  typename RCC8VertexIterator<TGraph> 
-  ::Self& 
+  typename RCC8VertexIterator<TGraph>
+  ::Self&
   RCC8VertexIterator<TGraph>
   ::operator--()
   {
     --m_Iter;
     return *this;
-  } 
+  }
   /**
    * Add
    */
   template <class TGraph>
-  typename RCC8VertexIterator<TGraph> 
-  ::Self& 
+  typename RCC8VertexIterator<TGraph>
+  ::Self&
   RCC8VertexIterator<TGraph>
   ::operator+(int i)
   {
@@ -150,8 +150,8 @@ namespace otb
    * Remove
    */
   template <class TGraph>
-  typename RCC8VertexIterator<TGraph> 
-  ::Self& 
+  typename RCC8VertexIterator<TGraph>
+  ::Self&
   RCC8VertexIterator<TGraph>
   ::operator-(int i)
   {
@@ -162,7 +162,7 @@ namespace otb
    * Difference comparison operator.
    */
   template <class TGraph>
-  bool 
+  bool
   RCC8VertexIterator<TGraph>
   ::operator!=(const Self& iter)
   {
@@ -172,7 +172,7 @@ namespace otb
    * Equality comparison operator.
    */
   template <class TGraph>
-  bool 
+  bool
   RCC8VertexIterator<TGraph>
   ::operator==(const Self& iter)
   {
@@ -182,8 +182,8 @@ namespace otb
    * Instantiation operator.
    */
   template <class TGraph>
-  typename RCC8VertexIterator<TGraph> 
-  ::Self& 
+  typename RCC8VertexIterator<TGraph>
+  ::Self&
   RCC8VertexIterator<TGraph>
   ::operator=(const Self& iter)
   {

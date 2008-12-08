@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -35,7 +35,7 @@
 // The following example illustrates the use of the \doxygen{otb}{DEMToImageGenerator} class
 // combined with the \doxygen{otb}{ScalarToRainbowRGBPixelFunctor}
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 
 #include "otbImage.h"
@@ -51,25 +51,25 @@
 
 int main(int argc, char * argv[])
 {
-  
+
   if(argc<9)
   {
     std::cout << argv[0] <<" output filename, Longitude Output Orign point , Latitude Output Origin point , X Output Size, Y Output size , X Spacing , Y Spacing, DEM folder path"  << std::endl;
     return EXIT_FAILURE;
   }
-  
-  
+
+
   typedef double PixelType;
   typedef unsigned char UCharPixelType;
   typedef itk::RGBPixel<UCharPixelType> RGBPixelType;
   typedef otb::Image<PixelType, 2> ImageType;
   typedef otb::Image<RGBPixelType, 2> RGBImageType;
   typedef otb::StreamingImageFileWriter<RGBImageType> WriterType;
-  
+
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[1]);
-  
-  
+
+
   typedef otb::DEMToImageGenerator<ImageType>      DEMToImageGeneratorType;
 
   DEMToImageGeneratorType::Pointer demToImage = DEMToImageGeneratorType::New();
@@ -98,7 +98,7 @@ int main(int argc, char * argv[])
   spacing[1] = ::atof(argv[7]);
 
   demToImage->SetOutputSpacing(spacing);
-  
+
   typedef otb::Functor::ScalarToRainbowRGBPixelFunctor<PixelType>
     ColorMapFunctorType;
   typedef itk::UnaryFunctorImageFilter<ImageType,
@@ -106,11 +106,11 @@ int main(int argc, char * argv[])
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
   colormapper->GetFunctor().SetMaximum(4000);
   colormapper->GetFunctor().SetMinimum(0);
-  
+
   colormapper->SetInput(demToImage->GetOutput());
   writer->SetInput(colormapper->GetOutput());
-  
-  
+
+
   try
   {
     writer->Update();
@@ -120,15 +120,15 @@ int main(int argc, char * argv[])
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
   }
-  catch( ... ) 
-  { 
-    std::cout << "Unknown exception !" << std::endl; 
+  catch( ... )
+  {
+    std::cout << "Unknown exception !" << std::endl;
     return EXIT_FAILURE;
-  } 
-   
-  return EXIT_SUCCESS;
-  
+  }
 
-  
+  return EXIT_SUCCESS;
+
+
+
   return EXIT_SUCCESS;
 }

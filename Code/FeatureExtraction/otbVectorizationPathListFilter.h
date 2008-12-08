@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -49,20 +49,20 @@ class ITK_EXPORT VectorizationPathListFilter
   typedef PathListSource<TOutputPath>    Superclass;
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(VectorizationPathListFilter, PathListSource);
-  
+
   /** Template parameters typedefs */
   typedef TInputModulus InputModulusType;
   typedef typename InputModulusType::ConstPointer InputModulusConstPointerType;
   typedef typename InputModulusType::PixelType InputPixelType;
   typedef typename InputModulusType::PointType PointType;
   typedef typename InputModulusType::IndexType IndexType;
-  
+
   typedef TInputDirection InputDirectionType;
   typedef typename InputDirectionType::ConstPointer InputDirectionConstPointerType;
   typedef TOutputPath OutputPathType;
@@ -71,7 +71,7 @@ class ITK_EXPORT VectorizationPathListFilter
 
   /** Derived typedefs */
   typedef typename Superclass::OutputPathListType OutputPathListType;
-  typedef typename Superclass::OutputPathListPointerType OutputPathListPointerType;  
+  typedef typename Superclass::OutputPathListPointerType OutputPathListPointerType;
 
   /** Set/get the input modulus */
   void SetInput(InputModulusType * inputModulus);
@@ -89,13 +89,13 @@ protected:
   /** Other internal useful typedefs */
   typedef otb::Image<bool,InputModulusType::ImageDimension> FlagImageType;
   typedef typename FlagImageType::Pointer FlagImagePointerType;
-  
+
   typedef itk::ImageRegionConstIterator<InputModulusType>   ModRegionIteratorType;
   typedef itk::ImageRegionConstIterator<InputDirectionType> DirRegionIteratorType;
   typedef itk::ImageRegionIterator<FlagImageType>           FlagRegionIteratorType;
 
   typedef itk::ConstantBoundaryCondition<InputModulusType>   ModBCType;
-  typedef itk::ConstantBoundaryCondition<InputDirectionType> DirBCType; 
+  typedef itk::ConstantBoundaryCondition<InputDirectionType> DirBCType;
   typedef itk::ConstantBoundaryCondition<FlagImageType>      FlagBCType;
 
   typedef itk::ConstNeighborhoodIterator<InputModulusType,ModBCType>   ModNeighborhoodIteratorType;

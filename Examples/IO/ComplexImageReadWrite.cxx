@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,7 +30,7 @@
 //
 //  This example illustrates how to read and write an image of pixel type
 //  \code{std::complex}. The complex type is defined as an integral part of the
-//  C++ language. 
+//  C++ language.
 //
 //  We start by including the headers of the complex class, the image, and the
 //  reader and writer classes.
@@ -41,7 +41,7 @@
 //  \index{Complex images!Reading}
 //  \index{Complex images!Writing}
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
 // Software Guide : BeginCodeSnippet
@@ -69,7 +69,7 @@ int main( int argc, char * argv [] )
 // \code{std::complex<>} as the pixel type. Using the dimension and pixel type
 // we proceed to instantiate the image type.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 
 // Software Guide : BeginCodeSnippet
@@ -79,7 +79,7 @@ int main( int argc, char * argv [] )
   typedef otb::Image< PixelType, Dimension > ImageType;
 // Software Guide : EndCodeSnippet
 
-  
+
 
 
 // Software Guide : BeginLatex
@@ -87,8 +87,8 @@ int main( int argc, char * argv [] )
 // The image file reader and writer types are instantiated using the image
 // type. We can then create objects for both of them.
 //
-// Software Guide : EndLatex 
- 
+// Software Guide : EndLatex
+
 // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader< ImageType > ReaderType;
   typedef otb::ImageFileWriter< ImageType > WriterType;
@@ -98,14 +98,14 @@ int main( int argc, char * argv [] )
 // Software Guide : EndCodeSnippet
 
 
-  
+
 
 // Software Guide : BeginLatex
 //
 // Filenames should be provided for both the reader and the writer. In this
 // particular example we take those filenames from the command line arguments.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
   reader->SetFileName( argv[1] );
@@ -121,7 +121,7 @@ int main( int argc, char * argv [] )
 // This simple program could be used for converting complex images from one
 // fileformat to another.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
   writer->SetInput( reader->GetOutput() );
@@ -136,19 +136,19 @@ int main( int argc, char * argv [] )
 // method of the writer. This invocation must be placed inside a try/catch
 // block since its execution may result in exceptions being thrown.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
   try
     {
     writer->Update();
     }
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cerr << "ExceptionObject caught !" << std::endl; 
-    std::cerr << err << std::endl; 
+  catch( itk::ExceptionObject & err )
+    {
+    std::cerr << "ExceptionObject caught !" << std::endl;
+    std::cerr << err << std::endl;
     return EXIT_FAILURE;
-    } 
+    }
 // Software Guide : EndCodeSnippet
 
 
@@ -159,7 +159,7 @@ int main( int argc, char * argv [] )
 // between the reader and the writer and perform any complex image to complex
 // image operation.
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 
   return EXIT_SUCCESS;

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,11 +24,11 @@
 
 int otbVectorDataFileReaderWriter(int argc, char * argv[])
 {
- 
+
   typedef otb::VectorData<double,2> VectorDataType;
   typedef otb::VectorDataFileReader<VectorDataType> ReaderType;
   typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
- 
+
 
   //Instantiation
   ReaderType::Pointer reader = ReaderType::New();
@@ -36,7 +36,7 @@ int otbVectorDataFileReaderWriter(int argc, char * argv[])
   VectorDataType::Pointer data = VectorDataType::New();
 
   reader->SetFileName(argv[1]);
-  
+
   writer->SetFileName(argv[2]);
   writer->SetInput(reader->GetOutput());
   writer->Update();

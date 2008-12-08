@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -40,7 +40,7 @@ int otbVHnVVPolarimetricSynthesisFilter( int argc, char * argv[] )
   double  KhiI = strtod(argv[5],NULL);
   double  PsiR = strtod(argv[6],NULL);
   double  KhiR = strtod(argv[7],NULL);
-        
+
   typedef std::complex <double>                   InputPixelType;
   typedef double    	                        OutputPixelType;
   const   unsigned int                            Dimension = 2;
@@ -52,9 +52,9 @@ int otbVHnVVPolarimetricSynthesisFilter( int argc, char * argv[] )
   typedef otb::ImageFileWriter< OutputImageType >   WriterType;
 
   typedef otb::PolarimetricSynthesisFilter<  InputImageType,InputImageType,InputImageType,InputImageType,OutputImageType >   FilterType;
-	
+
   FilterType::Pointer polarimetricSynthesis = FilterType::New();
-        
+
   polarimetricSynthesis->SetPsiI( PsiI );
   polarimetricSynthesis->SetKhiI( KhiI );
   polarimetricSynthesis->SetPsiR( PsiR );
@@ -67,7 +67,7 @@ int otbVHnVVPolarimetricSynthesisFilter( int argc, char * argv[] )
   reader1->SetFileName( inputFilename1 );
   reader2->SetFileName( inputFilename2 );
   writer->SetFileName( outputFilename );
-        
+
   polarimetricSynthesis->SetInputVH( reader1->GetOutput() );
   polarimetricSynthesis->SetInputVV( reader2->GetOutput() );
 
@@ -75,7 +75,7 @@ int otbVHnVVPolarimetricSynthesisFilter( int argc, char * argv[] )
   std::cout<<polarimetricSynthesis->GetInputs().size()<<std::endl;
 
   writer->SetInput( polarimetricSynthesis->GetOutput() );
-  writer->Update(); 
+  writer->Update();
 
   return EXIT_SUCCESS;
 }

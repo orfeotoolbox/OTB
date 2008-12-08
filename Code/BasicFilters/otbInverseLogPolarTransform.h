@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,7 +32,7 @@ namespace otb
    *
    * In this implemenatation, theta is expressed in degree, and the result of the asin function
    * is clamped to the [0,360] range. Please note that since the transform of the center has no meaning
-   * it is rejected to the point [400,0], which does not belong to this range.  This is done to provide 
+   * it is rejected to the point [400,0], which does not belong to this range.  This is done to provide
    * a coordinate not likely to belong to a log-polar image buffer.
    *
    * \sa LogPolarTransform
@@ -114,7 +114,7 @@ class ITK_EXPORT InverseLogPolarTransform
   private:
     InverseLogPolarTransform(const Self&); // purposely not implemented
     void operator=(const Self&); // purposely not implemented
-  
+
     InputPointType m_Center;
     ScaleType m_Scale;
   };

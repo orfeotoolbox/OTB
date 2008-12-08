@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) GET / ENST Bretagne. All rights reserved. 
+  Copyright (c) GET / ENST Bretagne. All rights reserved.
   See GETCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,13 +31,13 @@ class ChangeProfileKernelFunctor
 public:
 	/** Change Profile Kernel.
 	 * Performs a decision point of view dedicated to the multiscale
-	 * change profile delivered by 
+	 * change profile delivered by
 	 * \subdoxygen{otb}{KullbackLeiblerProfileImageFilter}.
 	 *
 	 * It is implemented as a polynomial kernel:
 	 * $\exp - \left( \gamma \left( \max_i | x_i - y_i | \right)^\textrm{degree} + \textrm{coef} \right)$.
 	 *
-	 * The parameters $\gamma$, $\textrm{coef}$ and $\textrm{degree}$ are 
+	 * The parameters $\gamma$, $\textrm{coef}$ and $\textrm{degree}$ are
 	 * to be fixed through \code SetValue \endcode with keywords: Gamma (def 1.0),
 	 * Coef (def 1.0) and Degree (def 1.0).
 	 */

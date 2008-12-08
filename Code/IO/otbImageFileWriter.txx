@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -50,10 +50,10 @@ ImageFileWriter<TInputImage,toto>
 }
 
 
-  
+
 //---------------------------------------------------------
 template <class TInputImage, unsigned int toto>
-void 
+void
 ImageFileWriter<TInputImage,toto>
 ::Write()
 {
@@ -78,9 +78,9 @@ ImageFileWriter<TInputImage,toto>
 //  if ( this->GetImageIO()->IsNull() ) //try creating via factory
   if ( this->GetImageIO() == 0 ) //try creating via factory
     {
-    itkDebugMacro(<<"Attempting factory creation of ImageIO for file: " 
+    itkDebugMacro(<<"Attempting factory creation of ImageIO for file: "
                   << this->GetFileName());
-    this->SetImageIO( ImageIOFactory::CreateImageIO( this->GetFileName(), 
+    this->SetImageIO( ImageIOFactory::CreateImageIO( this->GetFileName(),
                                                itk::ImageIOFactory::WriteMode ) );
     m_FactorySpecifiedImageIO = true;
     }
@@ -88,11 +88,11 @@ ImageFileWriter<TInputImage,toto>
     {
     if( m_FactorySpecifiedImageIO && !this->GetImageIO()->CanWriteFile( this->GetFileName() ) )
       {
-      itkDebugMacro(<<"ImageIO exists but doesn't know how to write file:" 
+      itkDebugMacro(<<"ImageIO exists but doesn't know how to write file:"
                     << this->GetFileName() );
       itkDebugMacro(<<"Attempting creation of ImageIO with a factory for file:"
                     << this->GetFileName());
-      this->SetImageIO( ImageIOFactory::CreateImageIO( this->GetFileName(), 
+      this->SetImageIO( ImageIOFactory::CreateImageIO( this->GetFileName(),
                                                  itk::ImageIOFactory::WriteMode ) );
       m_FactorySpecifiedImageIO = true;
       }
@@ -106,13 +106,13 @@ ImageFileWriter<TInputImage,toto>
     msg << " Could not create IO object for file "
         << this->GetFileName() << std::endl;
     msg << "  Tried to create one of the following:" << std::endl;
-    std::list<itk::LightObject::Pointer> allobjects = 
+    std::list<itk::LightObject::Pointer> allobjects =
       itk::ObjectFactoryBase::CreateAllInstance("itkImageIOBase");
     for(std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin();
         i != allobjects.end(); ++i)
       {
       itk::ImageIOBase* io = dynamic_cast<itk::ImageIOBase*>(i->GetPointer());
-      msg << "    " << io->GetNameOfClass() << std::endl; 
+      msg << "    " << io->GetNameOfClass() << std::endl;
       }
     msg << "  You probably failed to set a file suffix, or" << std::endl;
     msg << "    set the suffix to an unsupported type." << std::endl;
@@ -185,7 +185,7 @@ ImageFileWriter<TInputImage,toto>
 //otbMsgDevMacro( << this->GetFileName() );
 //  this->GetImageIO()->SetFileName( this->GetFileName() );
 //  this->GetImageIO()->WriteImageInformation();
-  
+
 
   this->UpdateProgress(0.);
 
@@ -193,7 +193,7 @@ ImageFileWriter<TInputImage,toto>
   this->GenerateData();
 
   this->UpdateProgress(1.);
-  
+
   // Notify end event observers
   this->InvokeEvent( itk::EndEvent() );
 
@@ -207,7 +207,7 @@ ImageFileWriter<TInputImage,toto>
 
 //---------------------------------------------------------
 template <class TInputImage, unsigned int toto>
-void 
+void
 ImageFileWriter<TInputImage,toto>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {

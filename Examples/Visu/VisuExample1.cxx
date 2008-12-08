@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -44,8 +44,8 @@ int main( int argc, char ** argv )
     {
     std::cout <<" Usage : InputImage"<<std::endl;
     }
-        
-    
+
+
   const char * inputFilename  = argv[1];
 
   // Software Guide : BeginLatex
@@ -53,14 +53,14 @@ int main( int argc, char ** argv )
   // We will build a very simple pipeline where a reader gets an image
   // from a file and gives it to the viewer. We define the types for
   // the pixel, the image and the reader. The viewer class is templated
-  // over the scalar component of the pixel type. 
+  // over the scalar component of the pixel type.
   //
   // Software Guide : EndLatex
 
   // Siftware Guide : BeginCodeSnippet
   typedef int PixelType;
   typedef otb::VectorImage< PixelType, 2 > ImageType;
-  typedef otb::ImageFileReader< ImageType > ReaderType;    
+  typedef otb::ImageFileReader< ImageType > ReaderType;
   typedef otb::ImageViewer< PixelType >    ViewerType;
   // Software Guide : EndCodeSnippet
 
@@ -83,7 +83,7 @@ int main( int argc, char ** argv )
   //
   // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet    
+  // Software Guide : BeginCodeSnippet
   lViewer->SetLabel( "My Image" );
   // Software Guide : EndCodeSnippet
 
@@ -94,9 +94,9 @@ int main( int argc, char ** argv )
   //
   // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet    
+  // Software Guide : BeginCodeSnippet
 
-  lViewer->SetImage( lReader->GetOutput() );  
+  lViewer->SetImage( lReader->GetOutput() );
 
   lViewer->Show();
 
@@ -109,7 +109,7 @@ int main( int argc, char ** argv )
   //
   // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet    
+  // Software Guide : BeginCodeSnippet
 
   Fl::run();
 
@@ -138,7 +138,7 @@ int main( int argc, char ** argv )
   //
   // Software Guide : EndLatex
 
-    
+
 
 
   return EXIT_SUCCESS;

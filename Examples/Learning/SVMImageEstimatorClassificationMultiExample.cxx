@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -39,19 +39,19 @@
 // of the scope of this guide. In OTB, the multi-class SVM
 // classification is used in the same way as the two-class
 // one. Figure~\ref{fig:SVMROISMULTI} shows the image to be classified
-// and the associated ground truth, which is composed of 4 classes. 
+// and the associated ground truth, which is composed of 4 classes.
 // \begin{figure}
 // \center
 // \includegraphics[width=0.45\textwidth]{ROI_QB_MUL_1.eps}
 // \includegraphics[width=0.45\textwidth]{ROI_mask_multi.eps}
 // \itkcaption[SVM Image Model Estimation]{Images used for the
-// estimation of the SVM model. Left: RGB image. Right: image of labels.} 
+// estimation of the SVM model. Left: RGB image. Right: image of labels.}
 // \label{fig:SVMROISMULTI}
 // \end{figure}
 
 // The following header files are needed for the program:
 
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
 #include "itkExceptionObject.h"
@@ -80,7 +80,7 @@
 
 int main( int argc, char *argv[])
 {
-  
+
 
     const char* inputImageFileName = argv[1];
     const char* trainingImageFileName = argv[2];
@@ -96,85 +96,85 @@ int main( int argc, char *argv[])
 //  framework.
 //
 // Software Guide : EndLatex
-//  Software Guide : BeginCodeSnippet    
+//  Software Guide : BeginCodeSnippet
     typedef unsigned short      InputPixelType;
     const   unsigned int       Dimension = 2;
 
     typedef otb::VectorImage< InputPixelType, Dimension >   InputImageType;
 
-    
+
     typedef otb::Image< InputPixelType,  Dimension >     TrainingImageType;
-//  Software Guide : EndCodeSnippet        
-    
+//  Software Guide : EndCodeSnippet
+
 //  Software Guide : BeginLatex
 //
 //  The \doxygen{otb}{SVMImageModelEstimator} class is templated over
 //  the input (features) and the training (labels) images.
 //
 // Software Guide : EndLatex
-//  Software Guide : BeginCodeSnippet    
+//  Software Guide : BeginCodeSnippet
     typedef otb::SVMImageModelEstimator< InputImageType,
                                   TrainingImageType >   EstimatorType;
 
-//  Software Guide : EndCodeSnippet        
-    
+//  Software Guide : EndCodeSnippet
+
 //  Software Guide : BeginLatex
 //
 //  As usual, we define the readers for the images.
 //
 // Software Guide : EndLatex
-//  Software Guide : BeginCodeSnippet        
+//  Software Guide : BeginCodeSnippet
     typedef otb::ImageFileReader< InputImageType > InputReaderType;
     typedef otb::ImageFileReader< TrainingImageType > TrainingReaderType;
 
     InputReaderType::Pointer inputReader = InputReaderType::New();
     TrainingReaderType::Pointer trainingReader = TrainingReaderType::New();
 
-//  Software Guide : EndCodeSnippet        
-    
+//  Software Guide : EndCodeSnippet
+
 //  Software Guide : BeginLatex
 //
 //  We read the images. It is worth to note that, in order to ensure
 //  the pipeline coherence, the output of the objects which preceed the
 //  model estimator in the pipeline, must be up to date, so we call
-//  the corresponding \code{Update} methods. 
+//  the corresponding \code{Update} methods.
 //
 // Software Guide : EndLatex
-//  Software Guide : BeginCodeSnippet            
+//  Software Guide : BeginCodeSnippet
     inputReader->SetFileName( inputImageFileName );
     trainingReader->SetFileName( trainingImageFileName );
 
     inputReader->Update();
     trainingReader->Update();
 
-//  Software Guide : EndCodeSnippet        
-    
+//  Software Guide : EndCodeSnippet
+
 //  Software Guide : BeginLatex
 //
 //  We can now instantiate the model estimator and set its parameters.
 //
 // Software Guide : EndLatex
-//  Software Guide : BeginCodeSnippet                
+//  Software Guide : BeginCodeSnippet
     EstimatorType::Pointer svmEstimator = EstimatorType::New();
 
     svmEstimator->SetInputImage( inputReader->GetOutput() );
     svmEstimator->SetTrainingImage( trainingReader->GetOutput() );
     svmEstimator->SetNumberOfClasses( 4 );
 
-//  Software Guide : EndCodeSnippet        
-    
+//  Software Guide : EndCodeSnippet
+
 //  Software Guide : BeginLatex
 //
 //  The model estimation procedure is triggered by calling the
 //  estimator's \code{Update} method.
 //
 // Software Guide : EndLatex
-//  Software Guide : BeginCodeSnippet                    
+//  Software Guide : BeginCodeSnippet
 
     svmEstimator->Update();
 
-//  Software Guide : EndCodeSnippet        
-    
+//  Software Guide : EndCodeSnippet
+
 
 
 // Software Guide : BeginLatex
@@ -186,8 +186,8 @@ int main( int argc, char *argv[])
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet  
-    
+// Software Guide : BeginCodeSnippet
+
 
     typedef otb::Image< itk::FixedArray<InputPixelType,3>,
                              Dimension >	        ClassifyImageType;
@@ -195,7 +195,7 @@ int main( int argc, char *argv[])
 
     typedef otb::ImageFileReader< ClassifyImageType  >         ClassifyReaderType;
 
-// Software Guide : EndCodeSnippet    
+// Software Guide : EndCodeSnippet
 
 
 // Software Guide : BeginLatex
@@ -204,8 +204,8 @@ int main( int argc, char *argv[])
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet  
-    
+// Software Guide : BeginCodeSnippet
+
 
     ClassifyReaderType::Pointer cReader = ClassifyReaderType::New();
 
@@ -213,7 +213,7 @@ int main( int argc, char *argv[])
 
     cReader->Update();
 
-// Software Guide : EndCodeSnippet    
+// Software Guide : EndCodeSnippet
     // Software Guide : BeginLatex
 //
 // The image has now to be transformed to a sample which
@@ -223,9 +223,9 @@ int main( int argc, char *argv[])
 // storing the measures.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
-    
+
+// Software Guide : BeginCodeSnippet
+
 
     typedef itk::Statistics::ImageToListAdaptor< ClassifyImageType > SampleType;
     SampleType::Pointer sample = SampleType::New();
@@ -237,9 +237,9 @@ int main( int argc, char *argv[])
 // sample adaptor.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
-    
+
+// Software Guide : BeginCodeSnippet
+
     sample->SetImage(cReader->GetOutput());
 
 // Software Guide : EndCodeSnippet
@@ -253,12 +253,12 @@ int main( int argc, char *argv[])
 // \code{GetModel} method.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
 
-    
+// Software Guide : BeginCodeSnippet
+
+
     typedef InputPixelType LabelPixelType ;
-    
+
     typedef otb::SVMModel< InputPixelType, LabelPixelType > ModelType;
 
     ModelType::Pointer model = svmEstimator->GetModel();
@@ -273,10 +273,10 @@ int main( int argc, char *argv[])
 // classified) and the label type (the type of the output of the classifier).
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
-    
-    
+
+// Software Guide : BeginCodeSnippet
+
+
     typedef otb::SVMClassifier< SampleType, LabelPixelType > ClassifierType ;
 
     ClassifierType::Pointer classifier = ClassifierType::New() ;
@@ -290,8 +290,8 @@ int main( int argc, char *argv[])
 // calling the \code{Update} method.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet          
+
+// Software Guide : BeginCodeSnippet
     int numberOfClasses = model->GetNumberOfClasses();
     classifier->SetNumberOfClasses(numberOfClasses) ;
     classifier->SetModel( model );
@@ -309,10 +309,10 @@ int main( int argc, char *argv[])
 // the one used for the labels.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
-    
-    
+
+// Software Guide : BeginCodeSnippet
+
+
 
     typedef ClassifierType::ClassLabelType	            OutputPixelType;
     typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
@@ -326,10 +326,10 @@ int main( int argc, char *argv[])
 // from the input image.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
-    
-    
+
+// Software Guide : BeginCodeSnippet
+
+
 
     typedef itk::Index<Dimension>         myIndexType;
     typedef itk::Size<Dimension>          mySizeType;
@@ -358,11 +358,11 @@ int main( int argc, char *argv[])
 // output of the classifier as well as the iterator to fill the output image.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
-    
-    
-    
+
+// Software Guide : BeginCodeSnippet
+
+
+
     ClassifierType::OutputType* membershipSample =
       classifier->GetOutput() ;
     ClassifierType::OutputType::ConstIterator m_iter =
@@ -385,9 +385,9 @@ int main( int argc, char *argv[])
 // values to the output image.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
-    
+
+// Software Guide : BeginCodeSnippet
+
 
     while (m_iter != m_last && !outIt.IsAtEnd())
     {
@@ -398,16 +398,16 @@ int main( int argc, char *argv[])
     std::cout << "---" << std::endl;
 // Software Guide : EndCodeSnippet
 
-    
+
     typedef otb::ImageFileWriter<OutputImageType> WriterType;
-	
+
     WriterType::Pointer writer = WriterType::New();
 
     writer->SetFileName( outputImageFileName  );
     writer->SetInput(outputImage );
-    
+
     writer->Update();
-    
+
 // Software Guide : BeginLatex
 //
 // Only for visualization purposes, we choose a color mapping to the image of
@@ -419,12 +419,12 @@ int main( int argc, char *argv[])
 // converts scalar images to RGB images.
 //
 // Software Guide : EndLatex
-    
-    
-    
-    
-// Software Guide : BeginCodeSnippet      
-    
+
+
+
+
+// Software Guide : BeginCodeSnippet
+
     typedef itk::RGBPixel<unsigned char>   RGBPixelType;
     typedef otb::Image<RGBPixelType, 2>    RGBImageType;
     typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long>
@@ -435,7 +435,7 @@ int main( int argc, char *argv[])
 
     colormapper->SetInput( outputImage );
 
-    
+
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -443,18 +443,18 @@ int main( int argc, char *argv[])
 // We can now create an image file writer and save the image.
 //
 // Software Guide : EndLatex
-    
-// Software Guide : BeginCodeSnippet      
+
+// Software Guide : BeginCodeSnippet
 
     typedef otb::ImageFileWriter<RGBImageType> WriterRescaledType;
-	
+
     WriterRescaledType::Pointer writerRescaled = WriterRescaledType::New();
 
     writerRescaled->SetFileName( outputRescaledImageFileName  );
     writerRescaled->SetInput( colormapper->GetOutput() );
-    
+
     writerRescaled->Update();
-// Software Guide : EndCodeSnippet          
+// Software Guide : EndCodeSnippet
 
 
 
@@ -465,12 +465,12 @@ int main( int argc, char *argv[])
 // \includegraphics[width=0.45\textwidth]{ROI_QB_MUL_1.eps}
 // \includegraphics[width=0.45\textwidth]{ROI_QB_MUL_1_SVN_CLASS_MULTI_Rescaled.eps}
 // \itkcaption[SVM Image Classification]{Result of the SVM
-// classification . Left: RGB image. Right: image of classes.} 
+// classification . Left: RGB image. Right: image of classes.}
 // \label{fig:SVMCLASSMULTI}
 // \end{figure}
 //  Software Guide : EndLatex
-    
- 
+
+
 
 
   return EXIT_SUCCESS;

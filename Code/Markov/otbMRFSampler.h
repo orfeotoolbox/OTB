@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,55 +29,55 @@ namespace otb
    *
    * Derived class must reimplement Compute() method.
    *
-   * 
+   *
    * This class is meant to be used in the MRF framework with the otb::MarkovRandomFieldFilter
    *
    * \ingroup Markov
  */
-    
-template< class TInput1, class TInput2>    
+
+template< class TInput1, class TInput2>
 class ITK_EXPORT MRFSampler : public itk::Object
   {
   public:
-    
+
     typedef MRFSampler Self;
     typedef itk::Object Superclass;
     typedef itk::SmartPointer<Self>  Pointer;
     typedef itk::SmartPointer<const Self>  ConstPointer;
-    
+
     typedef itk::ConstNeighborhoodIterator< TInput1 >  InputImageNeighborhoodIterator;
     typedef typename TInput1::PixelType InputImagePixelType;
-    
+
     typedef itk::NeighborhoodIterator< TInput2 >  LabelledImageNeighborhoodIterator;
     typedef typename TInput2::PixelType LabelledImagePixelType;
-    
+
     typedef MRFEnergy<TInput1, TInput2>  EnergyFidelityType;
     typedef MRFEnergy<TInput2, TInput2>  EnergyRegularizationType;
-            
+
     typedef typename EnergyFidelityType::Pointer EnergyFidelityPointer;
     typedef typename EnergyRegularizationType::Pointer EnergyRegularizationPointer;
-    
+
     itkTypeMacro(MRFSampler,Object);
-    
+
     itkSetMacro(NumberOfClasses, unsigned int);
     itkGetMacro(NumberOfClasses, unsigned int);
-    
+
     itkSetMacro(Lambda, double);
     itkGetMacro(Lambda, double);
-    
+
     itkGetMacro(DeltaEnergy, double);
     itkGetMacro(Value, LabelledImagePixelType);
-    
+
     // Accessor for validation tests pour les tests
     itkGetConstMacro(EnergyBefore, double);
     itkGetConstMacro(EnergyAfter, double);
-    
+
     itkSetObjectMacro( EnergyRegularization, EnergyRegularizationType);
     itkSetObjectMacro( EnergyFidelity, EnergyFidelityType);
-    
-    virtual int Compute( const InputImageNeighborhoodIterator & itData, 
+
+    virtual int Compute( const InputImageNeighborhoodIterator & itData,
 			 const LabelledImageNeighborhoodIterator & itRegul) = 0;
-    
+
   protected:
     unsigned int m_NumberOfClasses;
     double m_EnergyBefore;
@@ -85,17 +85,17 @@ class ITK_EXPORT MRFSampler : public itk::Object
     double m_DeltaEnergy;
     double  m_EnergyCurrent;
     double  m_Lambda;
-    
+
     LabelledImagePixelType m_Value;
     EnergyRegularizationPointer  m_EnergyRegularization;
     EnergyFidelityPointer  m_EnergyFidelity;
     LabelledImagePixelType m_ValueCurrent;
-    
-    
+
+
   protected:
     // The constructor and destructor.
-    MRFSampler() 
-      {   
+    MRFSampler()
+      {
 	m_EnergyRegularization = EnergyRegularizationType::New();
 	m_EnergyFidelity =  EnergyFidelityType::New(),
 	m_NumberOfClasses =1;
@@ -106,9 +106,9 @@ class ITK_EXPORT MRFSampler : public itk::Object
 	m_Lambda = 1.;
       };
     virtual ~MRFSampler() {};
-    
+
   };
-  
+
 }
 
 #endif

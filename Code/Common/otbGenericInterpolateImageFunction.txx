@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -48,7 +48,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction,TBoundaryCondition, TCoor
 template<class TInputImage, class TFunction, class TBoundaryCondition, class TCoordRep>
 void
 GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoordRep>
-::ResetOffsetTable() const 
+::ResetOffsetTable() const
 {
   // Clear the offset table
   if(m_OffsetTable!=NULL)
@@ -81,7 +81,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
   if( image == NULL )
     {
       return;
-    } 
+    }
 }
 
 template<class TInputImage, class TFunction, class TBoundaryCondition, class TCoordRep>
@@ -102,10 +102,10 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
 {
   Superclass::Modified();
   m_TablesHaveBeenGenerated = false;
-  
+
 }
 
-/** Initialize used tables*/ 
+/** Initialize used tables*/
 template<class TInputImage, class TFunction, class TBoundaryCondition, class TCoordRep>
 void
 GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoordRep>
@@ -117,16 +117,16 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
     {
       m_OffsetTableSize *= m_WindowSize;
     }
-  
+
   // Allocate the offset table
   m_OffsetTable = new unsigned int[m_OffsetTableSize];
-  
+
   // Allocate the weights tables
   m_WeightOffsetTable = new unsigned int *[m_OffsetTableSize];
   for(unsigned int i=0;i<m_OffsetTableSize;i++)
     {
       m_WeightOffsetTable[i] = new unsigned int[ImageDimension];
-    } 
+    }
 }
 
 /** Fill the weight offset table*/
@@ -144,18 +144,18 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
       // Compute the offset tables (we ignore all the zero indices
       // in the neighborhood)
       unsigned int iOffset = 0;
-      int empty = static_cast<int>(this->GetRadius()); 
-   
+      int empty = static_cast<int>(this->GetRadius());
+
       for(unsigned int iPos = 0; iPos < it.Size(); iPos++)
-	{ 
+	{
 	// Get the offset (index)
 	typename IteratorType::OffsetType off = it.GetOffset(iPos);
-	
+
 	// Check if the offset has zero weights
 	bool nonzero = true;
 	for(unsigned int dim = 0; dim < ImageDimension; dim++)
 	  {
-	    if(off[dim] == -empty) 
+	    if(off[dim] == -empty)
 	      {
 		nonzero = false;
 		break;
@@ -166,7 +166,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
 	  {
 	    // Set the offset index
 	    m_OffsetTable[iOffset] = iPos;
-	    
+
 	    // Set the weight table indices
 	    for(unsigned int dim = 0; dim < ImageDimension; dim++)
 	      {
@@ -189,7 +189,7 @@ typename GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondit
 GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoordRep>
 ::EvaluateAtContinuousIndex(const ContinuousIndexType& index) const
 {
-  if(!m_TablesHaveBeenGenerated)   
+  if(!m_TablesHaveBeenGenerated)
     {
       // Delete existing tables
       this->ResetOffsetTable();
@@ -203,8 +203,8 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
   //unsigned int dim;
   IndexType baseIndex;
   double distance[ImageDimension];
-   
-  // Compute the integer index based on the continuous one by 
+
+  // Compute the integer index based on the continuous one by
   // 'flooring' the index
   for( unsigned int dim = 0; dim < ImageDimension; dim++ )
     {
@@ -226,19 +226,19 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
 	}
       distance[dim] = index[dim] - double( baseIndex[dim] );
     }
-  
-  
+
+
   // Position the neighborhood at the index of interest
   SizeType radius;
   radius.Fill(this->GetRadius());
   IteratorType nit = IteratorType( radius, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
   nit.SetLocation( baseIndex );
-  
+
   const unsigned int twiceRadius = static_cast<const unsigned int>(2*this->GetRadius());
 /*  double xWeight[ImageDimension][ twiceRadius];*/
   std::vector< std::vector<double> > xWeight;
   xWeight.resize(ImageDimension);
-  for(unsigned int cpt=0; cpt < xWeight.size(); cpt++) 
+  for(unsigned int cpt=0; cpt < xWeight.size(); cpt++)
     {
       xWeight[cpt].resize(twiceRadius);
     }
@@ -274,9 +274,9 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
       //}
     }
   if (m_NormalizeWeight == true)
-    {   
+    {
       for( unsigned int dim = 0; dim < ImageDimension; dim++ )
-	{ 
+	{
 	  double sum = 0.;
 	  // Compute the weights sum
 	  for( unsigned int i = 0; i < m_WindowSize; i++)
@@ -293,17 +293,17 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
 	    }
 	}
     }
-  
-  
-  
+
+
+
   // Iterate over the neighborhood, taking the correct set
-  // of weights in each dimension 
+  // of weights in each dimension
   double xPixelValue = 0.0;
   for(unsigned int j = 0; j < m_OffsetTableSize; j++)
     {
     // Get the offset for this neighbor
     unsigned int off = m_OffsetTable[j];
-    
+
     // Get the intensity value at the pixel
     double xVal = nit.GetPixel(off);
 
@@ -317,7 +317,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
     // Increment the pixel value
     xPixelValue += xVal;
     }
-  
+
   // Return the interpolated value
   return static_cast<OutputType>(xPixelValue);
 }
@@ -327,8 +327,8 @@ template<class TInputImage, class TFunction, class TBoundaryCondition, class TCo
 void
 GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
-{ 
-  Superclass::PrintSelf( os, indent ); 
+{
+  Superclass::PrintSelf( os, indent );
 }
 
 }//namespace otb

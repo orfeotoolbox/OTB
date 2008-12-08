@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,7 +27,7 @@ namespace otb
  *
  * It is derived from the otbObjectList class, which allows to manipulate an ITK/OTB
  * object list with the appropriate formalism (iterators, accessors).
- * \sa ObjectList 
+ * \sa ObjectList
  */
 
 template <class TImage>
@@ -61,15 +61,15 @@ class ITK_EXPORT ImageList
     virtual void UpdateOutputInformation(void);
     virtual void PropagateRequestedRegion(void) throw (itk::InvalidRequestedRegionError);
     virtual void UpdateOutputData(void);
-    
-    
+
+
   protected:
     /** Constructor */
     ImageList(){};
     /** Destructor */
     ~ImageList(){};
     /** PrintSelf method */
-    void PrintSelf(std::ostream& os, itk::Indent indent) const 
+    void PrintSelf(std::ostream& os, itk::Indent indent) const
       {
 	Superclass::PrintSelf(os,indent);
       };

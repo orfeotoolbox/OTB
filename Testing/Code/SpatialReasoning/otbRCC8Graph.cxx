@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -37,7 +37,7 @@ int otbRCC8Graph(int argc, char* argv[])
   typedef otb::RCC8EdgeIterator<RCC8GraphType>   EdgeIteratorType;
   typedef otb::RCC8InEdgeIterator<RCC8GraphType> InEdgeIteratorType;
   typedef otb::RCC8OutEdgeIterator<RCC8GraphType> OutEdgeIteratorType;
-    
+
   // Instantiation
   RCC8GraphType::Pointer rcc8Graph = RCC8GraphType::New();
   // Setting the number of vertices
@@ -113,7 +113,7 @@ int otbRCC8Graph(int argc, char* argv[])
   otbControlConditionTestMacro(rcc8Graph->GetVertex(1)->GetPath()->GetVertexList()->GetElement(2)!=p6,
 			       "rcc8Graph->GetVertex(1)->GetPath()->GetVertexList()->GetElement(2)!=p6");
 
-     
+
   VertexIteratorType v(rcc8Graph);
   v.GoToBegin();
   otbControlConditionTestMacro(v.Get()->GetSegmentationLevel()!=vertex1SegLevel,
@@ -137,8 +137,8 @@ int otbRCC8Graph(int argc, char* argv[])
 			       "rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(1)!=p5");
   otbControlConditionTestMacro(v.Get()->GetPath()->GetVertexList()->GetElement(2)!=p6,
 			       "rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(2)!=p6");
-      
-    
+
+
   // Testing the edge iterator
   rcc8Graph->AddEdge(0,1,otb::OTB_RCC8_NTPPI);
 

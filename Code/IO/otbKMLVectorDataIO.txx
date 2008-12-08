@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -64,7 +64,7 @@ namespace otb
   {
   }
   template<class TData>
-      bool 
+      bool
       KMLVectorDataIO<TData>::CanReadFile( const char* filename )
   {
     std::string lFileName(filename);
@@ -80,15 +80,15 @@ namespace otb
     {
       return false;
     }
-        
+
     std::string kml;
     return (kmlbase::File::ReadFileToString(lFileName, &kml) );
   }
 
   // Get the features of the kml file, read into the root
   template<class TData>
-      const FeaturePtr 
-      KMLVectorDataIO<TData>::GetRootFeature(const ElementPtr& root) 
+      const FeaturePtr
+      KMLVectorDataIO<TData>::GetRootFeature(const ElementPtr& root)
   {
     const KmlPtr kml = kmldom::AsKml(root);
     if (kml && kml->has_feature()) {
@@ -96,40 +96,40 @@ namespace otb
     }
     return kmldom::AsFeature(root);
   }
-  
+
   // Print the selected feature
   template<class TData>
       void
-      KMLVectorDataIO<TData>::PrintIndented(std::string item, int depth) 
+      KMLVectorDataIO<TData>::PrintIndented(std::string item, int depth)
   {
-    while (depth--) 
+    while (depth--)
     {
       std::cout << "  ";
     }
     std::cout << item <<std::endl;
   }
-  
+
   template<class TData>
-      void 
+      void
       KMLVectorDataIO<TData>::WalkFeature(const FeaturePtr& feature, DataNodePointerType father)
   {
 
     DataNodePointerType node = NULL;
-        
-    if (feature) 
+
+    if (feature)
     {
-      if (const ContainerPtr container = kmldom::AsContainer(feature)) 
+      if (const ContainerPtr container = kmldom::AsContainer(feature))
       {
         WalkContainer(container,father);
-      } 
-      else if (const PlacemarkPtr placemark = kmldom::AsPlacemark(feature)) 
+      }
+      else if (const PlacemarkPtr placemark = kmldom::AsPlacemark(feature))
       {
         WalkGeometry(placemark->get_geometry(),father);
       }
-        
-        // The Read() method is not exhaustive it is possible to add the read of the "link", 
+
+        // The Read() method is not exhaustive it is possible to add the read of the "link",
         // the style (iconStyle, LineStyle...). Then into the containers we also can find the fields :
-        // <visibility> <description> <LookAt>... cf. code.google.com/apis/kml/documentation/kmlelementssinmaps.html 
+        // <visibility> <description> <LookAt>... cf. code.google.com/apis/kml/documentation/kmlelementssinmaps.html
     }
     return;
   }
@@ -138,31 +138,31 @@ namespace otb
       void
       KMLVectorDataIO<TData>::WalkContainer(const ContainerPtr& container, DataNodePointerType father)
   {
-  
+
     DataNodePointerType node = NULL;
-  
-    for (size_t i = 0; i < container->get_feature_array_size(); ++i) 
+
+    for (size_t i = 0; i < container->get_feature_array_size(); ++i)
     {
       FeaturePtr feature = container->get_feature_array_at(i);
-      switch (feature->Type()) 
+      switch (feature->Type())
       {
         case kmldom::Type_Document:
         {
           DataNodePointerType document = DataNodeType::New();
-          document->SetNodeType(DOCUMENT);        
+          document->SetNodeType(DOCUMENT);
           document->SetNodeId(feature->get_id());
           if (feature->has_name()) {
             document->SetField("name",feature->get_name());
           }
           m_Tree->Add(document,father);
-          WalkFeature(feature,document);              
+          WalkFeature(feature,document);
           break;
-        } 
+        }
         case kmldom::Type_Folder:
         {
           DataNodePointerType folder = DataNodeType::New();
           folder->SetNodeType(FOLDER);
-          folder->SetNodeId(feature->get_id());                      
+          folder->SetNodeId(feature->get_id());
           if (feature->has_name()) {
             folder->SetField("name",feature->get_name());
           }
@@ -182,18 +182,18 @@ namespace otb
         }
         case kmldom::Type_PhotoOverlay:
         {
-          WalkFeature(feature,father);                      
+          WalkFeature(feature,father);
           break;
         }
         case kmldom::Type_Placemark:
         {
-	      // We just ignore placemarks                   
+	      // We just ignore placemarks
           WalkFeature(feature,father);
           break;
         }
         case kmldom::Type_ScreenOverlay:
         {
-          WalkFeature(feature,father);                      
+          WalkFeature(feature,father);
           break;
         }
         default:
@@ -202,18 +202,18 @@ namespace otb
 
     }
     return;
-  }  
+  }
 
   // Walk through a geometry and create a GeometryNode
-  template<class TData>  
+  template<class TData>
       void
-      KMLVectorDataIO<TData>::WalkGeometry(const GeometryPtr& geometry, DataNodePointerType father) 
+      KMLVectorDataIO<TData>::WalkGeometry(const GeometryPtr& geometry, DataNodePointerType father)
   {
-  
+
     // Creation of a node
     DataNodePointerType node = NULL;
 
-    if (!geometry) 
+    if (!geometry)
     {
       return;
     }
@@ -223,19 +223,19 @@ namespace otb
       case kmldom::Type_Point:
       {
         node = ConvertGeometryToPointNode(geometry);
-        m_Tree->Add(node,father); 
+        m_Tree->Add(node,father);
         break;
       }
       case kmldom::Type_LineString:
       {
         node = ConvertGeometryToLineStringNode(geometry);
-        m_Tree->Add(node,father);                
+        m_Tree->Add(node,father);
         break;
       }
       case kmldom::Type_LinearRing:
       {
         node = ConvertGeometryToLinearRingNode(geometry);
-        m_Tree->Add(node,father);                
+        m_Tree->Add(node,father);
         break;
       }
       case kmldom::Type_Polygon:
@@ -258,19 +258,19 @@ namespace otb
     }
 
     // Recurse into <MultiGeometry>.
-    if (const MultiGeometryPtr multigeometry = kmldom::AsMultiGeometry(geometry)) 
+    if (const MultiGeometryPtr multigeometry = kmldom::AsMultiGeometry(geometry))
     {
       DataNodePointerType multi = DataNodeType::New();
       multi->SetNodeType(FEATURE_COLLECTION);
-      m_Tree->Add(multi,father);            
+      m_Tree->Add(multi,father);
       for (size_t i = 0; i < multigeometry->get_geometry_array_size(); ++i)
       {
         WalkGeometry(multigeometry->get_geometry_array_at(i),multi);
-      }           
+      }
     }
     return;
   }
-  
+
   template<class TData>
       typename KMLVectorDataIO<TData>
   ::DataNodePointerType
@@ -279,12 +279,12 @@ namespace otb
   {
 
     if(geometry == NULL)
-    {       
+    {
       itkGenericExceptionMacro(<<"Failed to convert GeometryPtr to PointNode");
     }
-    
+
     const PointPtr pt = kmldom::AsPoint(geometry);
-      
+
     PointType otbPoint;
     otbPoint.Fill(0);
     otbPoint[0] = static_cast<typename DataNodeType::PrecisionType>(pt->get_coordinates()->get_coordinates_array_at(0).get_longitude());
@@ -293,7 +293,7 @@ namespace otb
     if(DataNodeType::Dimension > 2)
     {
       otbPoint[2]=static_cast<typename DataNodeType::PrecisionType>(pt->get_coordinates()->get_coordinates_array_at(0).get_altitude());
-    }   
+    }
 
     DataNodePointerType node = DataNodeType::New();
     node->SetPoint(otbPoint);
@@ -335,7 +335,7 @@ namespace otb
 
     return node;
   }
-  
+
   template<class TData>
       typename KMLVectorDataIO<TData>
   ::DataNodePointerType
@@ -348,7 +348,7 @@ namespace otb
       itkGenericExceptionMacro(<<"Failed to convert GeometryPtr to LineNode");
     }
 
-    const LinearRingPtr lr = kmldom::AsLinearRing(geometry);        
+    const LinearRingPtr lr = kmldom::AsLinearRing(geometry);
     const CoordinatesPtr coords = lr->get_coordinates();
     int array_size = coords->get_coordinates_array_size();
 
@@ -370,8 +370,8 @@ namespace otb
     node->SetLine(line);
 
     return node;
-  }  
-  
+  }
+
   template<class TData>
       typename KMLVectorDataIO<TData>
   ::DataNodePointerType
@@ -395,10 +395,10 @@ namespace otb
       const OuterBoundaryIsPtr outerboundaryis = polygonKml->get_outerboundaryis();
       if(outerboundaryis->has_linearring())
       {
-        const LinearRingPtr lr = outerboundaryis->get_linearring();        
+        const LinearRingPtr lr = outerboundaryis->get_linearring();
         const CoordinatesPtr coords = lr->get_coordinates();
         int array_size = coords->get_coordinates_array_size();
-                                
+
 
         for(int i=0;i<array_size;i++)
         {
@@ -421,11 +421,11 @@ namespace otb
       const InnerBoundaryIsPtr innerboundaryis = polygonKml->get_innerboundaryis_array_at(intRingIndex);
       if(innerboundaryis->has_linearring())
       {
-        const LinearRingPtr lr = innerboundaryis->get_linearring();        
+        const LinearRingPtr lr = innerboundaryis->get_linearring();
         const CoordinatesPtr coords = lr->get_coordinates();
         int array_size = coords->get_coordinates_array_size();
-        PolygonPointerType ring = PolygonType::New();                        
-        
+        PolygonPointerType ring = PolygonType::New();
+
         for(int pIndex=0;pIndex<array_size;pIndex++)
         {
           typename PolygonType::VertexType vertex;
@@ -442,16 +442,16 @@ namespace otb
       }
     }
 
-    DataNodePointerType node = DataNodeType::New();        
+    DataNodePointerType node = DataNodeType::New();
     node->SetPolygonExteriorRing(extRing);
     node->SetPolygonInteriorRings(intRings);
 
     return node;
-  }  
+  }
 
   // Used to print information about this object
   template<class TData>
-      void 
+      void
       KMLVectorDataIO<TData>::PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os, indent);
@@ -459,7 +459,7 @@ namespace otb
 
   // Read vector data
   template<class TData>
-      void 
+      void
       KMLVectorDataIO<TData>
   ::Read(VectorDataPointerType data)
   {
@@ -481,7 +481,7 @@ namespace otb
     std::string errors;
     ElementPtr root = kmldom::Parse(kml, &errors);
 
-    if (!root) 
+    if (!root)
     {
       itkExceptionMacro(<<"Failed to open KML data file "<<errors);
     }
@@ -495,7 +495,7 @@ namespace otb
 
       DataNodePointerType document = DataNodeType::New();
       document->SetNodeType(DOCUMENT);
-      m_Tree->Add(document,rootNode);            
+      m_Tree->Add(document,rootNode);
 
       // Walk Feature (get the Placemarks... and walk into them) //ENGLISH ??
       WalkFeature(feature,document);
@@ -547,10 +547,10 @@ namespace otb
 
     DocumentPtr currentDocument = NULL;
     FolderPtr currentFolder = NULL;
-    MultiGeometryPtr currentMultiGeometry = NULL;    
+    MultiGeometryPtr currentMultiGeometry = NULL;
     PolygonPtr currentPolygon = NULL;
     OuterBoundaryIsPtr outerboundaryis = NULL;
-    InnerBoundaryIsPtr innerboundaryis = NULL;    
+    InnerBoundaryIsPtr innerboundaryis = NULL;
 
 
     // Note that we force a precise structure when we write a kml file.
@@ -570,7 +570,7 @@ namespace otb
           if(it.Get()->HasField("name"))
           {
             std::string fieldname = it.Get()->GetField("name");
-            document->set_name(fieldname);                
+            document->set_name(fieldname);
           }
           kml->set_feature(document);
           currentDocument = document;
@@ -580,11 +580,11 @@ namespace otb
         {
           FolderPtr folder = factory->CreateFolder();
           std::string fieldname = it.Get()->GetField("name");
-          folder->set_name(fieldname);             
+          folder->set_name(fieldname);
           currentDocument->add_feature(folder);
           currentFolder = folder;
           break;
-        }	    
+        }
         case FEATURE_POINT:
         {
         // Create <coordinates>
@@ -595,7 +595,7 @@ namespace otb
           }
           else
           {
-            coordinates->add_latlng(it.Get()->GetPoint()[1],it.Get()->GetPoint()[0]);                  
+            coordinates->add_latlng(it.Get()->GetPoint()[1],it.Get()->GetPoint()[0]);
           }
 
           // Create <Point> and give it <coordinates>.
@@ -608,8 +608,8 @@ namespace otb
           }
           else
           {
-    
-            PlacemarkPtr placemark = factory->CreatePlacemark();			
+
+            PlacemarkPtr placemark = factory->CreatePlacemark();
             placemark->set_geometry(point);
             if (currentFolder!= NULL)
             {
@@ -619,7 +619,7 @@ namespace otb
             {
               currentDocument->add_feature(placemark);
             }
-    
+
           }
           break;
         }
@@ -629,9 +629,9 @@ namespace otb
           VertexListConstPointerType vertexList = it.Get()->GetLine()->GetVertexList();
 
           // Create <coordinates>
-          CoordinatesPtr coordinates = factory->CreateCoordinates();                
-          LineStringPtr line = factory->CreateLineString();                
-        
+          CoordinatesPtr coordinates = factory->CreateCoordinates();
+          LineStringPtr line = factory->CreateLineString();
+
           typename VertexListType::ConstIterator vIt = vertexList->Begin();
 
           while(vIt != vertexList->End())
@@ -643,7 +643,7 @@ namespace otb
             }
             else
             {
-              coordinates->add_latlng(vIt.Value()[1],vIt.Value()[0]);                  
+              coordinates->add_latlng(vIt.Value()[1],vIt.Value()[0]);
             }
             line->set_coordinates(coordinates);
             ++vIt;
@@ -652,10 +652,10 @@ namespace otb
           if (currentMultiGeometry != NULL)
           {
             currentMultiGeometry->add_geometry(line);
-          }                        
+          }
           else
           {
-            PlacemarkPtr placemark = factory->CreatePlacemark();			
+            PlacemarkPtr placemark = factory->CreatePlacemark();
             placemark->set_geometry(line);
             if (currentFolder!= NULL)
             {
@@ -677,7 +677,7 @@ namespace otb
           polygon->set_extrude(true);
           polygon->set_altitudemode(1);//ALTITUDEMODE_RELATIVETOGROUND
 
-          CoordinatesPtr coordinates = factory->CreateCoordinates();                
+          CoordinatesPtr coordinates = factory->CreateCoordinates();
           OuterBoundaryIsPtr outerboundaryis = factory->CreateOuterBoundaryIs();
           InnerBoundaryIsPtr innerboundaryis = factory->CreateInnerBoundaryIs();
 
@@ -689,7 +689,7 @@ namespace otb
           {
             itkExceptionMacro(<<"Polygon is empty");
           }
-          
+
           while(vIt != vertexList->End())
           {
             if(DataNodeType::Dimension>2)
@@ -698,23 +698,23 @@ namespace otb
             }
             else
             {
-              coordinates->add_latlngalt(vIt.Value()[1],vIt.Value()[0],1);//Drawing polygon 1m above ground to avoid z-buffer issues                  
+              coordinates->add_latlngalt(vIt.Value()[1],vIt.Value()[0],1);//Drawing polygon 1m above ground to avoid z-buffer issues
             }
-        
+
             line->set_coordinates(coordinates);
             ++vIt;
           }
 
           //Adding the first point again to close the polygon
           vIt = vertexList->Begin();
-          
+
           if(DataNodeType::Dimension>2)
           {
             coordinates->add_latlngalt(vIt.Value()[1],vIt.Value()[0],vIt.Value()[2]+1);//Drawing polygon 1m above ground to avoid z-buffer issues
           }
           else
           {
-            coordinates->add_latlngalt(vIt.Value()[1],vIt.Value()[0],1);//Drawing polygon 1m above ground to avoid z-buffer issues                  
+            coordinates->add_latlngalt(vIt.Value()[1],vIt.Value()[0],1);//Drawing polygon 1m above ground to avoid z-buffer issues
           }
           line->set_coordinates(coordinates);
 
@@ -726,7 +726,7 @@ namespace otb
               pIt!=it.Get()->GetPolygonInteriorRings()->End();++pIt)
           {
 
-            vertexList = pIt.Get()->GetVertexList();	    
+            vertexList = pIt.Get()->GetVertexList();
             vIt = vertexList->Begin();
 
             while(vIt != vertexList->End())
@@ -734,12 +734,12 @@ namespace otb
               if(DataNodeType::Dimension>2)
               {
                 coordinates->add_latlngalt(it.Get()->GetPoint()[1],it.Get()->GetPoint()[0],it.Get()->GetPoint()[2]+1);//Drawing polygon 1m above ground to avoid z-buffer issues
-              } 
+              }
               else
               {
-                coordinates->add_latlngalt(it.Get()->GetPoint()[1],it.Get()->GetPoint()[0],1);//Drawing polygon 1m above ground to avoid z-buffer issues                  
+                coordinates->add_latlngalt(it.Get()->GetPoint()[1],it.Get()->GetPoint()[0],1);//Drawing polygon 1m above ground to avoid z-buffer issues
               }
-        
+
               line->set_coordinates(coordinates);
               ++vIt;
             }
@@ -749,12 +749,12 @@ namespace otb
             if(DataNodeType::Dimension>2)
             {
               coordinates->add_latlngalt(it.Get()->GetPoint()[1],it.Get()->GetPoint()[0],it.Get()->GetPoint()[2]+1);//Drawing polygon 1m above ground to avoid z-buffer issues
-            } 
+            }
             else
             {
-              coordinates->add_latlngalt(it.Get()->GetPoint()[1],it.Get()->GetPoint()[0],1);//Drawing polygon 1m above ground to avoid z-buffer issues                  
+              coordinates->add_latlngalt(it.Get()->GetPoint()[1],it.Get()->GetPoint()[0],1);//Drawing polygon 1m above ground to avoid z-buffer issues
             }
-        
+
             line->set_coordinates(coordinates);
             ++vIt;
 
@@ -771,7 +771,7 @@ namespace otb
           }
           else
           {
-            PlacemarkPtr placemark = factory->CreatePlacemark();			
+            PlacemarkPtr placemark = factory->CreatePlacemark();
             placemark->set_geometry(polygon);
             if (currentFolder!= NULL)
             {
@@ -789,7 +789,7 @@ namespace otb
         {
           MultiGeometryPtr multi = factory->CreateMultiGeometry();
           currentMultiGeometry = multi;
-          PlacemarkPtr placemark = factory->CreatePlacemark();			
+          PlacemarkPtr placemark = factory->CreatePlacemark();
           placemark->set_geometry(multi);
           if (currentFolder!= NULL)
           {
@@ -820,7 +820,7 @@ namespace otb
     otbMsgDevMacro( <<" KMLVectorDataIO::Write()  ");
 
   }
- 
+
 } // end namespace otb
 
 #endif

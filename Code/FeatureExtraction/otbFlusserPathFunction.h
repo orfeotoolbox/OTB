@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -40,7 +40,7 @@ namespace otb
  * - \f$ \psi_{9} = Im (c_{31} c_{12}^{2} )\f$
  * - \f$ \psi_{10} = Re (c_{40} c_{12}^{4} )\f$
  * - \f$ \psi_{11} = Im (c_{40} c_{12}^{4} )\f$
- *  
+ *
  * With :
  *
  *  \f[  c_{p,q}=\int \int (x+iy)^{p} \cdot (x-iy)^{q} \cdot f(x,y) \cdot
@@ -52,11 +52,11 @@ namespace otb
  *
  * This class is templated over the input image type and the
  * coordinate representation type (e.g. float or double).
- * 
+ *
  * \ingroup PathFunctions
  */
 
-template < class TInputPath,    
+template < class TInputPath,
            class TOutput      = double,
        	   class TPrecision   = double>
 class ITK_EXPORT FlusserPathFunction :
@@ -68,7 +68,7 @@ public:
   typedef RealMomentPathFunction<TInputPath, TOutput, TPrecision>   Superclass;
   typedef itk::SmartPointer<Self>                       Pointer;
   typedef itk::SmartPointer<const Self>                 ConstPointer;
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(FlusserPathFunction, RealMomentPathFunction);
 
@@ -77,13 +77,13 @@ public:
 
   /** InputPathType typedef support. */
   typedef typename Superclass::PathType                 PathType;
-  typedef typename Superclass::PathConstPointer         PathConstPointer;  
+  typedef typename Superclass::PathConstPointer         PathConstPointer;
   typedef typename PathType::ContinuousIndexType        VertexType;
   typedef itk::VectorContainer< unsigned,VertexType >   VertexListType;
   typedef typename VertexListType::ConstPointer         VertexListPointer;
 
   typedef typename Superclass::RealType                 RealType;
- 
+
   /** Type for calculation precision */
   typedef typename Superclass::PrecisionType            PrecisionType;
 
@@ -91,7 +91,7 @@ public:
   virtual RealType Evaluate( const PathType& path) const;
   virtual RealType Evaluate( ) const;
   /** Get/Set the radius of the neighborhood over which the
-      statistics are evaluated */  
+      statistics are evaluated */
   itkSetMacro(MomentNumber,short);
   itkGetConstReferenceMacro( MomentNumber, short );
 
@@ -104,7 +104,7 @@ private:
   FlusserPathFunction( const Self& ); //purposely not implemented
   void operator=( const Self& ); //purposely not implemented
 
-  short m_MomentNumber;  
+  short m_MomentNumber;
 };
 
 } // namespace otb

@@ -52,7 +52,7 @@ public:
 		    int x, int y, int w,int h,
 		    const char *comment="");
 
-  
+
   /** Destructor. */
   virtual ~FltkWriterWatcher();
 
@@ -103,11 +103,11 @@ protected:
     m_FilterProgress->show();
     m_WriterProgress->show();
   }
- 
+
   void BuildGUI(int x, int y, int w, int h,const char * comment);
 
 private:
-  
+
   Fl_Window * m_Window;
   Fl_Progress * m_WriterProgress;
   Fl_Progress * m_FilterProgress;

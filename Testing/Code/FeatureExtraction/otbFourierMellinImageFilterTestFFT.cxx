@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -42,7 +42,7 @@ int otbFourierMellinImageFilterTestFFT(int argc, char* argv[])
 
   typedef otb::ImageFileReader< InputImageType  >         ReaderType;
   typedef otb::ImageFileWriter< OutputImageType >         WriterType;
-    
+
   FourierImageFilterType::Pointer FourierTransform = FourierImageFilterType::New();
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -53,10 +53,10 @@ int otbFourierMellinImageFilterTestFFT(int argc, char* argv[])
 
   FourierTransform->SetInput( reader->GetOutput() );
   writer->SetInput( FourierTransform->GetOutput() );
-        
-  writer->Update(); 
-	
-  
-  
+
+  writer->Update();
+
+
+
   return EXIT_SUCCESS;
 }

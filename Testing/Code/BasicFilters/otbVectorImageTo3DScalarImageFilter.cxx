@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,11 +34,11 @@ int otbVectorImageTo3DScalarImageFilter(int argc, char * argv[])
   const char * outfname = argv[2];
 
   typedef unsigned char PixelType;
-      
+
   typedef otb::VectorImage<PixelType,BiDimension> VectorImageType;
   typedef otb::Image<PixelType,TriDimension> ImageType;
   typedef otb::Image<PixelType,BiDimension> OutImageType;
-      
+
   typedef otb::ImageFileReader<VectorImageType> ReaderType;
   typedef otb::ImageFileWriter<OutImageType> WriterType;
   typedef otb::VectorImageTo3DScalarImageFilter<VectorImageType,ImageType> FilterType;
@@ -46,7 +46,7 @@ int otbVectorImageTo3DScalarImageFilter(int argc, char * argv[])
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();
   ReaderType::Pointer reader = ReaderType::New();
-      
+
   reader->SetFileName(infname);
   filter->SetInput(reader->GetOutput());
   filter->Update();
@@ -64,12 +64,12 @@ int otbVectorImageTo3DScalarImageFilter(int argc, char * argv[])
   InIteratorType inIt(filter->GetOutput(),filter->GetOutput()->GetLargestPossibleRegion());
   inIt.SetFirstDirection(0);
   inIt.SetSecondDirection(1);
-      
+
   outIt.GoToBegin();
-      
+
   while(!outIt.IsAtEnd()&&!inIt.IsAtEndOfSlice())
     {
-      outIt.Set(inIt.Get());	  
+      outIt.Set(inIt.Get());
       ++inIt;
       ++outIt;
     }

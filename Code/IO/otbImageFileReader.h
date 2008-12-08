@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,7 +32,7 @@ namespace otb
  *
  * \sa ImageSeriesReader
  * \sa ImageIOBase
- * 
+ *
  * \ingroup IOFilters
  *
  */
@@ -44,7 +44,7 @@ public:
   typedef ImageFileReader         Self;
   typedef itk::ImageFileReader<TOutputImage>  Superclass;
   typedef itk::SmartPointer<Self>  Pointer;
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -62,8 +62,8 @@ public:
 
   /** The pixel type of the output image. */
   //typedef typename TOutputImage::InternalPixelType OutputImagePixelType;
-  
-  /** Prepare l'allocation de l'image output lors du premier appel de traitement 
+
+  /** Prepare l'allocation de l'image output lors du premier appel de traitement
    * pipeline. */
   virtual void GenerateOutputInformation(void);
 
@@ -82,23 +82,23 @@ protected:
   ImageFileReader();
   ~ImageFileReader();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  
+
 private:
   /** Test whether the given filename exist and it is readable,
-      this is intended to be called before attempting to use 
+      this is intended to be called before attempting to use
       ImageIO classes for actually reading the file. If the file
       doesn't exist or it is not readable, and exception with an
       approriate message will be thrown. */
   void TestFileExistanceAndReadability();
 
-  /** Generate the filename (for GDALImageI for example). If filename is a directory, look if is a 
+  /** Generate the filename (for GDALImageI for example). If filename is a directory, look if is a
     * CEOS product (file "DAT...") In this case, the GdalFileName contain the open image file.
     */
   bool GetGdalReadImageFileName( const std::string & filename, std::string & GdalFileName );
-  
+
   ImageFileReader(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
 };
 
 

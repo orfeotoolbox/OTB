@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -77,7 +77,7 @@ InverseLogPolarTransform<TScalarType>
   this->m_Parameters[1]=m_Center[1];
   this->m_Parameters[2]=m_Scale[0];
   this->m_Parameters[3]=m_Scale[1];
-  
+
   return this->m_Parameters;
 }
 
@@ -157,7 +157,7 @@ InverseLogPolarTransform<TScalarType>
  * Transform a vnl vector representing a vector.
  * \param vector The vector to transform.
  * \return The transformed vector.
- */  
+ */
 template <class TScalarType>
 typename InverseLogPolarTransform<TScalarType>
 ::OutputVnlVectorType

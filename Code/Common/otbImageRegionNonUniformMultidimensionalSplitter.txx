@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,7 +30,7 @@ namespace otb
  *
  */
 template <unsigned int VImageDimension>
-unsigned int 
+unsigned int
 ImageRegionNonUniformMultidimensionalSplitter<VImageDimension>
 ::GetNumberOfSplits(const RegionType &region, unsigned int requestedNumber)
 {
@@ -39,11 +39,11 @@ ImageRegionNonUniformMultidimensionalSplitter<VImageDimension>
   // requested number of splits per dimension
   double splitsPerDimension[VImageDimension];
 //     ::ceil( vcl_pow((double) requestedNumber, 1.0/(double) VImageDimension));
-  
+
   unsigned int numberOfPiecesLeft=requestedNumber;
   unsigned int i, j, numPieces;
   numPieces = 1;
-  
+
   for (j=VImageDimension;j>0;--j)
   {
     if (regionSize[j-1]<numberOfPiecesLeft)
@@ -78,7 +78,7 @@ ImageRegionNonUniformMultidimensionalSplitter<VImageDimension>
   return numPieces;
 }
 
-  
+
 /**
  *
  */
@@ -91,18 +91,18 @@ ImageRegionNonUniformMultidimensionalSplitter<VImageDimension>
   RegionType splitRegion;
   IndexType splitIndex;
   SizeType splitSize, regionSize;
-  
+
   // Initialize the splitRegion to the requested region
   splitRegion = region;
   splitIndex = splitRegion.GetIndex();
   splitSize = splitRegion.GetSize();
 
   regionSize = region.GetSize();
-  
+
   // requested number of splits per dimension
-  double splitsPerDimension[VImageDimension]; 
+  double splitsPerDimension[VImageDimension];
 //     ::ceil( vcl_pow((double) numberOfPieces, 1.0/(double) VImageDimension));
-  
+
   unsigned int numberOfPiecesLeft=numberOfPieces;
 
   unsigned int j;
@@ -168,7 +168,7 @@ ImageRegionNonUniformMultidimensionalSplitter<VImageDimension>
       splitSize[j] = splitSize[j] - ijk[j]*pixelsPerSplit[j];
       }
     }
-  
+
   // set the split region ivars
   splitRegion.SetIndex( splitIndex );
   splitRegion.SetSize( splitSize );
@@ -177,14 +177,14 @@ ImageRegionNonUniformMultidimensionalSplitter<VImageDimension>
 
   return splitRegion;
 }
-  
-  
+
+
 
 /**
  *
  */
 template <unsigned int VImageDimension>
-void 
+void
 ImageRegionNonUniformMultidimensionalSplitter<VImageDimension>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -36,10 +36,10 @@ class ZoomableImageWidget
   typedef ImageWidgetBase<TPixel> Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  
+
   /** Method for creation through the object factory */
   itkNewMacro(Self);
-  
+
   /** Runtime information */
   itkTypeMacro(ZoomableImageWidget,ImageWidgetBase);
 
@@ -58,8 +58,8 @@ class ZoomableImageWidget
   /** Resize the widget */
   virtual void resize(int x, int y, int w, int h);
 
-  /** 
-   * Set a new zoom factor (>1). 
+  /**
+   * Set a new zoom factor (>1).
    * \param zoomFactor The new zoom factor.
    */
   void SetZoomFactor(double zoomFactor);

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,19 +27,19 @@
 
 
 int otbSVMModelCopyComposedKernelTest( int argc, char* argv[] )
-{       
+{
   typedef unsigned char                                   InputPixelType;
   typedef unsigned char                                   LabelPixelType;
-  
+
   typedef otb::SVMModel< InputPixelType, LabelPixelType > ModelType;
-  
+
   ModelType::Pointer svmModel = ModelType::New();
   svmModel->LoadModel(argv[1]);
 
   ModelType::Pointer svmModelCopy;
   svmModelCopy = svmModel->GetCopy();
   svmModelCopy->SaveModel(argv[2]);
-  
+
   return EXIT_SUCCESS;
 }
 

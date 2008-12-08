@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -49,7 +49,7 @@ namespace otb
   {
     return (this->IsOptionPresent("--OutputImage"));
   }
-  
+
   bool CommandLineArgumentParseResult
   ::IsOptionOTBTestingPresent(void)const
   {
@@ -113,12 +113,12 @@ namespace otb
   void CommandLineArgumentParseResult
   ::AddParameter(const std::string &option, const std::string &parameter)
   {
-    m_OptionMap[option].push_back(parameter);  
+    m_OptionMap[option].push_back(parameter);
   }
 
 
 // --------- CommandLineArgumentParser  ----------------------------------------
- 
+
   CommandLineArgumentParser
   ::CommandLineArgumentParser()
   {
@@ -132,13 +132,13 @@ namespace otb
   void CommandLineArgumentParser
   ::AddInputImage(bool obligatory)
   {
-    AddOption("--InputImage","input image file name ","-in",1,obligatory);	
+    AddOption("--InputImage","input image file name ","-in",1,obligatory);
   }
 
   void CommandLineArgumentParser
   ::AddOutputImage(bool obligatory)
   {
-    AddOption("--OutputImage","output image file name ","-out",1,obligatory);	
+    AddOption("--OutputImage","output image file name ","-out",1,obligatory);
   }
 
   void CommandLineArgumentParser
@@ -156,7 +156,7 @@ namespace otb
 
   // Add the option to the map
     m_OptionList.push_back(option);
-  
+
   }
 
   void CommandLineArgumentParser
@@ -175,23 +175,23 @@ namespace otb
   // Add the option to the map
     m_OptionList.push_back(option);
 
-	
+
   }
 
   void CommandLineArgumentParser
-  ::ParseGUI(CommandLineArgumentParseResult * outResult,bool failOnUnknownTrailingParameters ) 
+  ::ParseGUI(CommandLineArgumentParseResult * outResult,bool failOnUnknownTrailingParameters )
   {
-/* OTB Comment : Todo : use OTB_USE_VISU_GUI cmake option for generate this method 
+/* OTB Comment : Todo : use OTB_USE_VISU_GUI cmake option for generate this method
     Fl_Window *window = new Fl_Window(320,(m_OptionList.size()+2)*50);
 
-    std::vector<Fl_Input*> myInputs; 
-    unsigned int pos = 1; 
+    std::vector<Fl_Input*> myInputs;
+    unsigned int pos = 1;
     for(ListOptionType::iterator it = m_OptionList.begin();it!=m_OptionList.end();++it,++pos)
     {
     Fl_Input * tmpInput = new Fl_Input(50,pos*50,200,30,it->CommonName.c_str());
     tmpInput->tooltip(it->Description.c_str());
-     
-  } 
+
+  }
     Fl_Button * button = new Fl_Button(50,pos*50 , 130, 30, "Ok");
     button->tooltip("Validate parameters and exit.");
     window->end();
@@ -208,9 +208,9 @@ namespace otb
   }
 
 void CommandLineArgumentParser
-::ParseCommandLine(int argc, char *argv[], 
+::ParseCommandLine(int argc, char *argv[],
                     CommandLineArgumentParseResult * outResult,
-                    bool failOnUnknownTrailingParameters ) 
+                    bool failOnUnknownTrailingParameters )
 {
   bool tryParse = TryParseCommandLine(argc, argv, outResult, false, failOnUnknownTrailingParameters);
 
@@ -232,7 +232,7 @@ void CommandLineArgumentParser
   }
   tryParse = TryParseCommandLine(argc, argv, outResult, true, failOnUnknownTrailingParameters);
   if ( (tryParse == false) )
-  {	
+  {
     PrintUsage(std::cerr);
     CommandLineArgumentParserArgumentErrorException e(__FILE__, __LINE__);
     e.SetDescription("ParseCommandLine() argument Error");
@@ -241,7 +241,7 @@ void CommandLineArgumentParser
 }
 
 
-bool CommandLineArgumentParser::TryParseCommandLine(int argc, char *argv[], 
+bool CommandLineArgumentParser::TryParseCommandLine(int argc, char *argv[],
     CommandLineArgumentParseResult * outResult,
     bool reportFailedMsg,
     bool failOnUnknownTrailingParameters)
@@ -266,7 +266,7 @@ bool CommandLineArgumentParser::TryParseCommandLine(int argc, char *argv[],
       if(failOnUnknownTrailingParameters)
       {
           // Unknown argument found
-        if( reportFailedMsg == true) 
+        if( reportFailedMsg == true)
         {
           std::cerr << "The following '" << arg << "' option is unknown !!" << std::endl;
         }
@@ -281,10 +281,10 @@ bool CommandLineArgumentParser::TryParseCommandLine(int argc, char *argv[],
     {
       // Check if the number of parameters is correct
       int nParameters = m_OptionList[index].NumberOfParameters;
-      if(i+nParameters >= argc) 
+      if(i+nParameters >= argc)
       {
       // Too few parameters
-        if( reportFailedMsg == true) 
+        if( reportFailedMsg == true)
         {
           std::cerr << "Missing one (or more) parameter(s) for the following '" << arg << "' option." << std::endl;
         }
@@ -336,12 +336,12 @@ bool CommandLineArgumentParser::TryParseCommandLine(int argc, char *argv[],
     if ( (m_OptionList[cpt].Obligatory == true) && (m_OptionList[cpt].Finded == false) )
     {
           // Too few parameters
-      if( reportFailedMsg == true) 
+      if( reportFailedMsg == true)
       {
         std::cerr << "'" << m_OptionList[cpt].CommonName << "' argument is required !!!" << std::endl;
       }
       return false;
-    }	
+    }
   }
 
 // Everything is correct
@@ -361,12 +361,12 @@ bool CommandLineArgumentParser::FindOption(const std::string & option, int & ind
     {
       index = cpt;
       goOnFlag = false;
-      optionFoundFlag = true;	
+      optionFoundFlag = true;
     }
     cpt++;
     if( cpt >= m_OptionList.size() )
     {
-      goOnFlag = false;	
+      goOnFlag = false;
     }
   }
   return (optionFoundFlag);
@@ -404,7 +404,7 @@ void CommandLineArgumentParser::PrintUsage(std::ostream& os)const
       os << m_OptionList[i].CommonName ;
       if (m_OptionList[i].Synonim.empty() == false )
       {
-        os << "|"<<m_OptionList[i].Synonim;	
+        os << "|"<<m_OptionList[i].Synonim;
       }
       if ( m_OptionList[i].Obligatory == false ) os <<"]";
       else os << " ";

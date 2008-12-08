@@ -34,15 +34,15 @@ void RegisterTests()
 #undef main
 #define main MarkovClassification1ExampleTest
 #include "MarkovClassification1Example.cxx"
- 
+
 #undef main
 #define main MarkovClassification2ExampleTest
 #include "MarkovClassification2Example.cxx"
- 
+
 #undef main
 #define main MarkovRestaurationExampleTest
 #include "MarkovRestaurationExample.cxx"
- 
+
 #undef main
 #define main MarkovRegularizationExampleTest
 #include "MarkovRegularizationExample.cxx"

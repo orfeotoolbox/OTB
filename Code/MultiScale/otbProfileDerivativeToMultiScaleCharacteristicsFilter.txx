@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -77,7 +77,7 @@ ProfileDerivativeToMultiScaleCharacteristicsFilter<TInputImage,TOutputImage,TLab
 {
   InputImageListPointerType inputPtr = this->GetInput();
   typename InputImageListType::ConstIterator inputListIt = inputPtr->Begin();
-  
+
   RegionType region1 = this->GetOutput()->GetRequestedRegion();
   RegionType region2 = this->GetOutputCharacteristics()->GetRequestedRegion();
   RegionType region;
@@ -95,7 +95,7 @@ ProfileDerivativeToMultiScaleCharacteristicsFilter<TInputImage,TOutputImage,TLab
     {
       region = region1;
     }
-  else 
+  else
     {
       int xul1 = region1.GetIndex()[0];
       int xul2 = region2.GetIndex()[0];
@@ -105,12 +105,12 @@ ProfileDerivativeToMultiScaleCharacteristicsFilter<TInputImage,TOutputImage,TLab
       int xlr2 = region2.GetIndex()[0]+region2.GetSize()[0];
       int ylr1 = region1.GetIndex()[1]+region1.GetSize()[1];
       int ylr2 = region2.GetIndex()[1]+region2.GetSize()[1];
-      
+
       int xul = std::min(xul1,xul2);
       int yul = std::min(yul1,yul2);
       int xlr = std::max(xlr1,xlr2);
-      int ylr = std::max(ylr1,ylr2); 
-      
+      int ylr = std::max(ylr1,ylr2);
+
       typename RegionType::IndexType index;
       index[0]=xul;
       index[1]=yul;
@@ -122,11 +122,11 @@ ProfileDerivativeToMultiScaleCharacteristicsFilter<TInputImage,TOutputImage,TLab
       region.SetIndex(index);
       region.SetSize(size);
     }
-  
+
   while(inputListIt!=inputPtr->End())
     {
       inputListIt.Get()->SetRequestedRegion(region);
-      ++inputListIt; 
+      ++inputListIt;
     }
 }
 /**
@@ -145,7 +145,7 @@ ProfileDerivativeToMultiScaleCharacteristicsFilter<TInputImage,TOutputImage,TLab
   outputPtr->SetBufferedRegion(outputPtr->GetRequestedRegion());
   outputPtr->Allocate();
   outputPtr->FillBuffer(0);
-  
+
   outputLabeledPtr->SetBufferedRegion(outputLabeledPtr->GetRequestedRegion());
   outputLabeledPtr->Allocate();
   outputLabeledPtr->FillBuffer(0);
@@ -154,7 +154,7 @@ ProfileDerivativeToMultiScaleCharacteristicsFilter<TInputImage,TOutputImage,TLab
   typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
   typedef itk::ImageRegionIterator<OutputImageType> OutputIteratorType;
   typedef itk::ImageRegionIterator<LabeledImageType> LabeledIteratorType;
-  
+
   typename InputImageListType::ConstIterator inputListIt = inputPtr->Begin();
 
   // defines a vector of input iterators
@@ -180,7 +180,7 @@ ProfileDerivativeToMultiScaleCharacteristicsFilter<TInputImage,TOutputImage,TLab
 	{
 	  inputIteratorsAtEnd = inputIteratorsAtEnd || it->IsAtEnd();
 	}
-  
+
 
   while(!outputIt.IsAtEnd() && !labeledIt.IsAtEnd() && !inputIteratorsAtEnd)
     {

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,7 +30,7 @@ namespace otb
 /**
  * Constructor
  */
-template <class TInputImage1, class TInputImage2, 
+template <class TInputImage1, class TInputImage2,
           class TOutputImage, class TFunction  >
 BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOutputImage,TFunction>
 ::BinaryFunctorNeighborhoodJoinHistogramImageFilter()
@@ -46,11 +46,11 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOut
 /**
  * Connect one of the operands for neighborhood-wise operation
  */
-template <class TInputImage1, class TInputImage2, 
+template <class TInputImage1, class TInputImage2,
           class TOutputImage, class TFunction  >
 void
 BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOutputImage,TFunction>
-::SetInput1( const TInputImage1 * image1 ) 
+::SetInput1( const TInputImage1 * image1 )
 {
   // Process object is not const-correct so the const casting is required.
   SetNthInput(0, const_cast<TInputImage1 *>( image1 ));
@@ -60,17 +60,17 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOut
 /**
  * Connect one of the operands for neighborhood-wise operation
  */
-template <class TInputImage1, class TInputImage2, 
+template <class TInputImage1, class TInputImage2,
           class TOutputImage, class TFunction  >
 void
 BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOutputImage,TFunction>
-::SetInput2( const TInputImage2 * image2 ) 
+::SetInput2( const TInputImage2 * image2 )
 {
   // Process object is not const-correct so the const casting is required.
   SetNthInput(1, const_cast<TInputImage2 *>( image2 ));
 }
 
-template <class TInputImage1, class TInputImage2, 
+template <class TInputImage1, class TInputImage2,
           class TOutputImage, class TFunction  >
 const TInputImage1 *
 BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOutputImage,TFunction>
@@ -83,7 +83,7 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOut
   return static_cast<const TInputImage1 *>(this->itk::ProcessObject::GetInput(0));
 }
 
-template <class TInputImage1, class TInputImage2, 
+template <class TInputImage1, class TInputImage2,
           class TOutputImage, class TFunction  >
 const TInputImage2 *
 BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOutputImage,TFunction>
@@ -96,7 +96,7 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOut
   return static_cast<const TInputImage2 *>(this->itk::ProcessObject::GetInput(1));
 }
 
-template <class TInputImage1, class TInputImage2, 
+template <class TInputImage1, class TInputImage2,
           class TOutputImage, class TFunction  >
 void
 BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOutputImage,TFunction>
@@ -104,14 +104,14 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOut
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
-  
+
   // get pointers to the input and output
     Input1ImagePointer  inputPtr1 =
       const_cast< TInputImage1 * >( this->GetInput1());
     Input2ImagePointer  inputPtr2 =
       const_cast< TInputImage2 * >( this->GetInput2());
     typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
-  
+
   if ( !inputPtr1 || !inputPtr2 || !outputPtr )
     {
     return;
@@ -120,11 +120,11 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOut
   // requested region)
   typename TInputImage1::RegionType inputRequestedRegion1, inputRequestedRegion2;
   inputRequestedRegion1 = inputPtr1->GetRequestedRegion();
-  
+
   // pad the input requested region by the operator radius
   inputRequestedRegion1.PadByRadius( m_Radius );
   inputRequestedRegion2 = inputRequestedRegion1;
- 
+
   // crop the input requested region at the input's largest possible region
   if ( inputRequestedRegion1.Crop(inputPtr1->GetLargestPossibleRegion()))
     {
@@ -177,12 +177,12 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOut
 /**
  * Initialize the histogram
  */
-template <class TInputImage1, class TInputImage2, 
+template <class TInputImage1, class TInputImage2,
           class TOutputImage, class TFunction  >
 BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOutputImage,TFunction>
 ::HistogramType::Pointer
 BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOutputImage,TFunction>
-::ComputeHistogram( ) 
+::ComputeHistogram( )
 {
   // Calculate min and max image values in input1 image.
   Input1ImageConstPointer pInput1Image
@@ -198,7 +198,7 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOut
   while (!fiIt.IsAtEnd())
     {
     Input1ImagePixelType value = fiIt.Value();
-      
+
     if (value < minInput1)
       {
       minInput1 = value;
@@ -210,7 +210,7 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOut
 
     ++fiIt;
     }
-    
+
   // Calculate min and max image values in input2 image.
     Input2ImageConstPointer pInput2Image
     = dynamic_cast<const TInputImage2*>(ProcessObjectType::GetInput(1));
@@ -259,22 +259,22 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOut
   Input2IteratorType ti2(pInput2Image, input2Region);
 
   typename HistogramType::Pointer histogram = HistogramType::New();
-    
+
   histogram->Initialize(m_HistogramSize, m_LowerBound, m_UpperBound);
-    
+
   ti1.GoToBegin();
   ti2.GoToBegin();
   while (!ti1.IsAtEnd() && !ti2.IsAtEnd())
     {
 
-          
+
         typename HistogramType::MeasurementVectorType sample;
         sample[0] = ti1.Get();
         sample[1] = ti2.Get();
 	if(sample[0]!=itk::NumericTraits<Input1ImagePixelType>::Zero &&
 	   sample[1]!=itk::NumericTraits<Input2ImagePixelType>::Zero)
 	  histogram->IncreaseFrequency(sample, 1);
-      
+
     ++ti1;
     ++ti2;
     }
@@ -312,8 +312,8 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
   Input2ImageConstPointer inputPtr2
     = dynamic_cast<const TInputImage2*>(ProcessObjectType::GetInput(1));
   OutputImagePointer outputPtr = this->GetOutput(0);
-  
-  
+
+
   RadiusType1 r1;
   r1.Fill(m_Radius);
   NeighborhoodIteratorType1 neighInputIt1;
@@ -321,7 +321,7 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
   RadiusType2 r2;
   r2.Fill(m_Radius);
   NeighborhoodIteratorType2 neighInputIt2;
-    
+
   itk::ImageRegionIterator<TOutputImage> outputIt;
 
 
@@ -339,15 +339,15 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
 
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-  
+
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
   for (fit1=faceList1.begin(), fit2=faceList2.begin(); fit1 != faceList1.end(), fit2 != faceList2.end(); ++fit1, ++fit2)
-    { 
+    {
     neighInputIt1 = itk::ConstNeighborhoodIterator<TInputImage1>(r1, inputPtr1, *fit1);
     neighInputIt2 = itk::ConstNeighborhoodIterator<TInputImage2>(r1, inputPtr2, *fit2);
     outputIt = itk::ImageRegionIterator<TOutputImage>(outputPtr, outputRegionForThread);
-      
+
     outputIt = itk::ImageRegionIterator<TOutputImage>(outputPtr, *fit1);
     neighInputIt1.OverrideBoundaryCondition(&nbc1);
     neighInputIt1.GoToBegin();
@@ -367,7 +367,7 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
     }
 
 
-  
+
 
 }
 

@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,7 +34,7 @@
 // %\pageref{sec:ImageIteratorsChapter} for information about image
 // %iterators.)
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 
 #include "otbImage.h"
@@ -60,7 +60,7 @@ int main(int, char *[])
   ImageType::RegionType region;
   region.SetSize( size );
   region.SetIndex( start );
-  
+
   // Pixel data is allocated
   image->SetRegions( region );
   image->Allocate();
@@ -86,15 +86,15 @@ int main(int, char *[])
   // between objects. It is more efficient to produce multiple copies of
   // these small objects than to share them using the SmartPointer
   // mechanism.
-  // 
+  //
   // The following lines declare an instance of the index type and initialize
   // its content in order to associate it with a pixel position in the image.
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   ImageType::IndexType pixelIndex;
- 
+
   pixelIndex[0] = 27;   // x position
   pixelIndex[1] = 29;   // y position
   // Software Guide : EndCodeSnippet
@@ -107,8 +107,8 @@ int main(int, char *[])
   // method allows us to get the value of the pixels.
   //
   // \index{otb::Image!GetPixel()}
-  // 
-  // Software Guide : EndLatex 
+  //
+  // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   ImageType::PixelType   pixelValue = image->GetPixel( pixelIndex );
@@ -122,7 +122,7 @@ int main(int, char *[])
   //
   // \index{otb::Image!SetPixel()}
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   image->SetPixel(   pixelIndex,   pixelValue+1  );
@@ -139,7 +139,7 @@ int main(int, char *[])
   // and should only be used for debugging or for supporting interactions like
   // querying pixel values by clicking with the mouse.
   //
-  // Software Guide : EndLatex 
+  // Software Guide : EndLatex
 
 
   return EXIT_SUCCESS;

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,10 +28,10 @@ int otbDEMToImageGeneratorTest(int argc, char * argv[])
       std::cout << argv[0] <<" folder path , output filename , Longitude Output Orign point , Latitude Output Origin point , X Output Size, Y Output size , X Spacing , Y Spacing"  << std::endl;
       return EXIT_FAILURE;
     }
-  
+
   char * folderPath = argv[1];
   char * outputName = argv[2];
-  
+
   const unsigned int Dimension = 2;
   typedef otb::Image<float, Dimension>           ImageType;
   typedef otb::DEMToImageGenerator<ImageType>      DEMToImageGeneratorType;
@@ -40,11 +40,11 @@ int otbDEMToImageGeneratorTest(int argc, char * argv[])
   typedef DEMToImageGeneratorType::SizeType        SizeType;
   typedef DEMToImageGeneratorType::SpacingType     SpacingType;
   typedef otb::ImageFileWriter<ImageType>          WriterType;
-  
+
   // Instantiating object
   DEMToImageGeneratorType::Pointer object = DEMToImageGeneratorType::New();
   WriterType::Pointer              writer = WriterType::New();
-  
+
   PointType origin;
   origin[0] = ::atof(argv[3]);
   origin[1] = ::atof(argv[4]);

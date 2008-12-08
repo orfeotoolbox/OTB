@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,7 +29,7 @@ int otbRemoveWrongDirectionFilter(int argc, char * argv[])
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
   typedef otb::RemoveWrongDirectionFilter<ImageType,ImageType,ImageType> RemoveWrongDirectionFilterType;
-  
+
   // Instantiating object
   ReaderType::Pointer modReader = ReaderType::New();
   ReaderType::Pointer dirReader = ReaderType::New();

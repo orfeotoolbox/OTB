@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,11 +30,11 @@ int otbHuPathNew( int argc, char * argv[] )
   typedef itk::PolyLineParametricPath< Dimension >	 PathType;
   typedef otb::HuPathFunction<PathType>                    FunctionType;
   typedef FunctionType::RealType                           RealType;
-  
+
   FunctionType::Pointer function =FunctionType::New();
-  
-  
- 
+
+
+
   return EXIT_SUCCESS;
 }
 

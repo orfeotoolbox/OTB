@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -53,10 +53,10 @@ BSplinesInterpolateDeformationFieldGenerator<TPointSet, TDeformationField>
   PointsIterator pointIterator = this->GetPointSet()->GetPoints()->Begin();
   PointsIterator end = this->GetPointSet()->GetPoints()->End();
   unsigned int pointId = 0;
-  
-  PointDataIterator  pointDataIterator = this->GetPointSet()->GetPointData()->Begin();  
-  
-  while( pointIterator != end ) 
+
+  PointDataIterator  pointDataIterator = this->GetPointSet()->GetPointData()->Begin();
+
+  while( pointIterator != end )
     {
       typename PointDataContainer::Element valueAndDeformations = pointDataIterator.Value();
 
@@ -75,14 +75,14 @@ BSplinesInterpolateDeformationFieldGenerator<TPointSet, TDeformationField>
       ++pointIterator;
       ++pointDataIterator;
     }
-  
+
   typename DeformationFieldSourceType::Pointer deformer = DeformationFieldSourceType::New();
   deformer->SetOutputSpacing(this->GetOutputSpacing());
   deformer->SetOutputOrigin(this->GetOutputOrigin());
   deformer->SetOutputRegion(outputPtr->GetRequestedRegion());
   deformer->SetSourceLandmarks(sourceLandmarks.GetPointer());
   deformer->SetTargetLandmarks(targetLandmarks.GetPointer());
-  
+
   deformer->Update();
   outputPtr->Allocate();
   PixelType defaultPixel;
@@ -91,7 +91,7 @@ BSplinesInterpolateDeformationFieldGenerator<TPointSet, TDeformationField>
   outputPtr->FillBuffer(defaultPixel);
   typedef itk::ImageRegionIterator<ImageType> ImageIteratorType;
   typedef itk::ImageRegionIterator<DeformationFieldType> OutputIteratorType;
- 
+
   ImageIteratorType inIt(deformer->GetOutput(),outputPtr->GetRequestedRegion());
   OutputIteratorType outIt(outputPtr,outputPtr->GetRequestedRegion());
   int i=0;

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -36,12 +36,12 @@ int otbThresholdImageToPointSetFilterNew( int argc, char* argv[] )
   typedef unsigned char                       PixelType;
   typedef otb::Image<PixelType, Dimension>    ImageType;
   typedef itk::PointSet<PixelType, Dimension> PointSetType;
-  
+
   typedef otb::ThresholdImageToPointSetFilter< ImageType, PointSetType > FilterThresholdType;
 
 
   FilterThresholdType::Pointer filterThreshold = FilterThresholdType::New();
-  
+
   return EXIT_SUCCESS;
 }
 

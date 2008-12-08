@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) GET / ENST Bretagne. All rights reserved. 
+  Copyright (c) GET / ENST Bretagne. All rights reserved.
   See GETCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -22,7 +22,7 @@
 
 #include "otbChangeProfileKernelFunctor.h"
 
-namespace otb 
+namespace otb
 {
 
 ChangeProfileKernelFunctor
@@ -32,13 +32,13 @@ ChangeProfileKernelFunctor
 	m_Coef = 0.0;
 	m_Degree = 1.0;
 	m_Gamma = 1.0;
-	
+
 	SetValue( "Coef", m_Coef );
 	SetValue( "Degree", m_Degree );
 	SetValue( "Gamma", m_Gamma );
 }
 
-void 
+void
 ChangeProfileKernelFunctor
 ::Update ()
 {

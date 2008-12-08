@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) GET / ENST Bretagne. All rights reserved. 
+  Copyright (c) GET / ENST Bretagne. All rights reserved.
   See GETCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,10 +30,10 @@ namespace otb {
 /** ROIdataConversion class.
  * \brief image data to vector conversion.
  *
- * A class that extract pixel value from an input image according to a ROI 
+ * A class that extract pixel value from an input image according to a ROI
  * image and outputs it on a vector of PixelType.
  */
-template < class TInputImage, class TInputROIImage > 
+template < class TInputImage, class TInputROIImage >
 class ROIdataConversion
   : public itk::ImageToImageFilter< TInputImage, otb::Image<typename TInputImage::PixelType, 1> >
 {
@@ -57,11 +57,11 @@ public:
 	typedef typename OutputImageType::SizeType::SizeValueType SizeValueType;
 
 	/** Gets/Sets the input image */
-	const InputImageType * GetInputImage () { 
+	const InputImageType * GetInputImage () {
 		return this->Superclass::GetInput();
 	}
-	void SetInputImage ( const InputImageType * img ) {  
-		this->Superclass::SetInput(img); 
+	void SetInputImage ( const InputImageType * img ) {
+		this->Superclass::SetInput(img);
 	}
 
 	/** Gets/Sets the ROI image */
@@ -71,14 +71,14 @@ public:
 	void SetROIImage ( const InputROIImageType * img ) {
 		this->itk::ProcessObject::SetNthInput( 1, const_cast<InputROIImageType *>(img) );
 	}
-		
+
 protected:
 	ROIdataConversion();
 	virtual ~ROIdataConversion() { }
 	virtual void GenerateOutputInformation();
 	virtual void GenerateInputRequestedRegion();
 	void PrintSelf(std::ostream& os, itk::Indent indent) const {
-		Superclass::PrintSelf( os, indent ); 
+		Superclass::PrintSelf( os, indent );
 	}
 
 	/** Performs its job! */

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -44,12 +44,12 @@ UnaryFunctorObjectListBooleanFilter<TInputList,TOutputList,TFunction>
 ::GenerateData(void)
 {
   this->AllocateOutputs();
-  
+
   InputListPointer inputPtr = this->GetInput();
   OutputListPointer outputPtr = this->GetOutput();
 
   itk::ProgressReporter progress(this, 0, inputPtr->Size());
-  
+
   // Define the iterators
   for(InputListIterator it = inputPtr->Begin(); it != inputPtr->End(); ++it)
   {
@@ -58,10 +58,10 @@ UnaryFunctorObjectListBooleanFilter<TInputList,TOutputList,TFunction>
       outputPtr->PushBack(it.Get());
     }
 
-    progress.CompletedPixel(); 
+    progress.CompletedPixel();
 
   }
-  
+
 }
 
 } // end namespace otb

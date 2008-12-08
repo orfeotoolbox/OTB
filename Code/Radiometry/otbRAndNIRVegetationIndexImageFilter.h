@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,11 +25,11 @@ namespace otb
 {
 
 /** \class RAndNIRVegetationIndexImageFilter
- * \brief 
- * 
+ * \brief
+ *
  */
 
-template <class TInputImageR, class TInputImageNIR, class TOutputImage, 
+template <class TInputImageR, class TInputImageNIR, class TOutputImage,
           class TFunction = Functor::NDVI<              typename TInputImageR::PixelType,
                                                         typename TInputImageNIR::PixelType,
                                                         typename TOutputImage::PixelType > >
@@ -42,14 +42,14 @@ public:
   typedef itk::BinaryFunctorImageFilter< TInputImageR, TInputImageNIR, TOutputImage, TFunction >  Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
   /** Type macro */
   itkNewMacro(Self);
-  
+
   /** Creation through object factory macro */
   itkTypeMacro(RAndNIRVegetationIndexImageFilter,BinaryFunctorImageFilter);
-  
-  void SetInputR( const TInputImageR * image1 ); 
+
+  void SetInputR( const TInputImageR * image1 );
   void SetInputNIR( const TInputImageNIR * image2 );
 
   /** Template parameters typedefs */
@@ -84,5 +84,5 @@ private:
 #include "otbRAndNIRVegetationIndexImageFilter.txx"
 #endif
 
-  
+
 #endif

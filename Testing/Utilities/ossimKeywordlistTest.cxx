@@ -1,13 +1,13 @@
 /*!
  *
  * OVERVIEW:
- * 
+ *
  * Will reproject the input image to a utm projection.
- * 
+ *
  * PURPOSE:
  *
  * Teach you how to create a renderer and set the view and connect it up to an input
- * 
+ *
  */
 
 // iostream is used for general output

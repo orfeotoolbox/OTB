@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -80,9 +80,9 @@ SOMImageClassificationFilter<TInputImage,TOutputImage,TSOMMap,TMaskImage>
   typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
   typedef itk::ImageRegionConstIterator<MaskImageType> MaskIteratorType;
   typedef itk::ImageRegionIterator<OutputImageType> OutputIteratorType;
-  
+
   ListSamplePointerType listSample = ListSampleType::New();
-  
+
   InputIteratorType inIt(inputPtr,outputRegionForThread);
 
   MaskIteratorType maskIt;
@@ -119,13 +119,13 @@ SOMImageClassificationFilter<TInputImage,TOutputImage,TSOMMap,TMaskImage>
   classifier->SetMap(m_Map);
   classifier->SetSample(listSample);
   classifier->Update();
-  
+
   typename ClassifierType::OutputType::Pointer membershipSample = classifier->GetOutput();
   typename ClassifierType::OutputType::ConstIterator sampleIter = membershipSample->Begin();
   typename ClassifierType::OutputType::ConstIterator sampleLast = membershipSample->End();
-  
+
   OutputIteratorType outIt(outputPtr,outputRegionForThread);
-  
+
   outIt.GoToBegin();
 
   while(!outIt.IsAtEnd()&&(sampleIter!=sampleLast))

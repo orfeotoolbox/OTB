@@ -118,7 +118,7 @@ galibTests9(int argc, char * argv[])
 
   return 0;
 }
- 
+
 
 // This objective function tries to maximize the value of the function
 //

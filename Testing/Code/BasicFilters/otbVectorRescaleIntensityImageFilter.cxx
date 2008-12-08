@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -43,7 +43,7 @@ int otbVectorRescaleIntensityImageFilter(int argc, char * argv[])
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
   reader->GenerateOutputInformation();
-      
+
   // Instantiating object
   VectorRescaleIntensityImageFilterType::Pointer filter = VectorRescaleIntensityImageFilterType::New();
   filter->SetInput(reader->GetOutput());
@@ -63,13 +63,13 @@ int otbVectorRescaleIntensityImageFilter(int argc, char * argv[])
   selecter->SetChannel(2);
   selecter->SetChannel(3);
   selecter->SetExtractionRegion(reader->GetOutput()->GetLargestPossibleRegion());
-    
+
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(selecter->GetOutput());
   writer->SetFileName(outfname);
   writer->Update();
- 
- 
+
+
   return EXIT_SUCCESS;
 }

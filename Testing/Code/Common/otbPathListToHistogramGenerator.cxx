@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,32 +34,32 @@ int otbPathListToHistogramGenerator( int argc, char* argv[] )
   typedef itk::PolyLineParametricPath< Dimension >       PathType;
   typedef PathType::Pointer                              PathPointer;
   typedef std::vector< PathPointer >   		       PathListType;
-	
+
   typedef otb::OrientationPathFunction<PathType>         FunctionType;
 
   typedef otb::PathListToHistogramGenerator< PathType,FunctionType >   HistogramGeneratorType;
-	
+
   PathType::ContinuousIndexType cindex;
   int NbAngle = NbOfPointsPerHistogram*NbOfBins;
 
   /* build segments list */
   PathListType*  PathList = new PathListType;
   PathList->clear();
-	
+
   for(int i = 0 ; i <NbAngle ; i++)
     {
-      PathPointer pathElt = PathType::New();        
+      PathPointer pathElt = PathType::New();
       pathElt->Initialize();
       cindex[0]=30;
       cindex[1]=30;
       pathElt->AddVertex(cindex);
-	    
+
       float Theta = 2.0*static_cast<float>(M_PI)*static_cast<float>(i)/static_cast<float>(NbAngle);
       cindex[0]= 30 + vcl_cos(Theta);
       cindex[1]= 30 + vcl_sin(Theta);
       pathElt->AddVertex(cindex);
-         
-      PathList->push_back(pathElt); 
+
+      PathList->push_back(pathElt);
     }
 
   HistogramGeneratorType::Pointer histogramGenerator = HistogramGeneratorType::New();
@@ -67,7 +67,7 @@ int otbPathListToHistogramGenerator( int argc, char* argv[] )
   typedef HistogramGeneratorType::SizeType   HistogramSizeType;
   HistogramSizeType hsize;
   hsize[0] = NbOfBins;  // number of bins for the Red   channel
-	
+
   histogramGenerator->SetInput(  PathList  );
   histogramGenerator->SetNumberOfBins( hsize );
   histogramGenerator->Compute();
@@ -84,14 +84,14 @@ int otbPathListToHistogramGenerator( int argc, char* argv[] )
     {
       if(histogram->GetFrequency( bin, 0 ) !=NbOfPointsPerHistogram)
 	{
-	  std::cout << "Error in histogram value !" << std::endl; 
-	  return EXIT_FAILURE; 
-	}	    
+	  std::cout << "Error in histogram value !" << std::endl;
+	  return EXIT_FAILURE;
+	}
       std::cout << "bin = " << bin << " frequency = ";
       std::cout << histogram->GetFrequency( bin, 0 ) << std::endl;
     }
-	
-        
-    
+
+
+
   return EXIT_SUCCESS;
 }

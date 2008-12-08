@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,9 +24,9 @@
 
 namespace otb
 {
-  
+
 /** \class PathListSource
- * \brief Base class for filters with a PathList output type.  
+ * \brief Base class for filters with a PathList output type.
  *
  * PathListSource is the base class for all filters producing a PathList.
  * This class defines the GetOutput().
@@ -45,10 +45,10 @@ public:
   typedef ObjectListSource<ObjectList<TOutputPath> >              Superclass;
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
-    
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(PathListSource,ObjectListSource);
 
@@ -60,7 +60,7 @@ public:
   typedef typename Superclass::OutputListType       OutputPathListType;
   typedef typename OutputPathListType::Pointer      OutputPathListPointerType;
   typedef typename OutputPathListType::ConstPointer OutputPathListConstPointerType;
-  
+
   /** Get the output data of this process object.  The output of this
    * function is not valid until an appropriate Update() method has
    * been called, either explicitly or implicitly.  Both the filter
@@ -77,7 +77,7 @@ public:
    * \endcode
    *
    * In this situation, \a someFilter and \a anotherFilter are said
-   * to constitute a \b pipeline.  
+   * to constitute a \b pipeline.
    *
    * \code
    *   image = someFilter->GetOutput();
@@ -92,7 +92,7 @@ public:
    * either order.)
    *
    * Note that Update() is not called automatically except within a
-   * pipeline as in the first example.  When \b streaming (using a 
+   * pipeline as in the first example.  When \b streaming (using a
    * StreamingImageFilter) is activated, it may be more efficient to
    * use a pipeline than to call Update() once for each filter in
    * turn.
@@ -103,7 +103,7 @@ public:
    */
 //   OutputPathListType * GetOutput(void);
 //   OutputPathListType * GetOutput(unsigned int idx);
-  
+
   /** Graft the specified DataObject onto this ProcessObject's output.
    * This method grabs a handle to the specified DataObject's path
    * data to use as its output's own path data. It also copies the
@@ -170,7 +170,7 @@ protected:
   PathListSource() {};
   virtual ~PathListSource() {}
 //   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-    
+
 private:
   PathListSource(const Self&); //purposely not implemented
   void operator=(const Self&);   //purposely not implemented

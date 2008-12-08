@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,12 +34,12 @@ namespace otb
   // Create the output. We use static_cast<> here because we know the default
   // output must be of type TOutputImage
     typename TOutputList::Pointer output
-        = static_cast<TOutputList*>(this->MakeOutput(0).GetPointer()); 
+        = static_cast<TOutputList*>(this->MakeOutput(0).GetPointer());
     this->Superclass::SetNumberOfRequiredOutputs(1);
     this->Superclass::SetNthOutput(0, output.GetPointer());
-  
+
   }
-  
+
   /**
    *
    */
@@ -63,11 +63,11 @@ namespace otb
     {
       return 0;
     }
-  
+
     return static_cast<TOutputList*>
         (this->Superclass::GetOutput(0));
   }
-  
+
   /**
    *
    */
@@ -79,10 +79,10 @@ namespace otb
     return static_cast<TOutputList*>
         (this->Superclass::GetOutput(idx));
   }
-  
+
   /**
    *
-   */ 
+   */
   template<class TOutputList>
       void
       ObjectListSource<TOutputList>
@@ -90,7 +90,7 @@ namespace otb
   {
     this->GraftNthOutput(0, graft);
   }
-     
+
   /**
    *
    */
@@ -101,17 +101,17 @@ namespace otb
   {
     if ( idx >= this->GetNumberOfOutputs() )
     {
-      itkExceptionMacro(<<"Requested to graft output " << idx << 
+      itkExceptionMacro(<<"Requested to graft output " << idx <<
           " but this filter only has " << this->GetNumberOfOutputs() << " Outputs.");
-    }  
-         
+    }
+
     if ( !graft )
     {
       itkExceptionMacro(<<"Requested to graft output that is a NULL pointer" );
     }
-           
+
     itk::DataObject * output = this->GetOutput(idx);
-           
+
     // Call GraftImage to copy meta-information, regions, and the pixel container
     output->Graft( graft );
   }
@@ -132,7 +132,7 @@ namespace otb
       outputPtr->Clear();
     }
   }
-  
+
 /**
    * GenerateData
  */
@@ -143,7 +143,7 @@ namespace otb
   {
     itkExceptionMacro("subclass should override this method!!!");
   }
-  
+
 /**
    * PrintSelf Method
  */

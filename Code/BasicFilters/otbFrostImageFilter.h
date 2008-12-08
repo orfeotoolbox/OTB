@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,17 +30,17 @@ namespace otb
  *
  * Uses a negative exponential convolution kernel.
  * The output of the filter for pixel p is:
- *      \f$ \hat I_{s}=\sum_{p\in\eta_{p}} m_{p}I_{p} \f$ 
+ *      \f$ \hat I_{s}=\sum_{p\in\eta_{p}} m_{p}I_{p} \f$
  *
  * where :   \f$ m_{p}=\frac{KC_{s}^{2}\exp(-KC_{s}^{2}d_{s,p})}{\sum_{p\in\eta_{p}} KC_{s}^{2}\exp(-KC_{s}^{2}d_{s,p})} \f$
  *    and  \f$ d_{s,p}=\sqrt{(i-i_{p})^2+(j-j_{p})^2} \f$
  *
  * \f$ K \f$     : the decrease coefficient
  * \f$ (i,j)\f$ : the coordinates of the pixel inside the region
- * defined by \f$ \eta_{s} \f$ 
+ * defined by \f$ \eta_{s} \f$
  * \f$ (i_{p},j_{p})\f$ : the coordinates of the pixels belonging to \f$ \eta_{p} \subset \eta_{s} \f$
- * \f$ C_{s}\f$ : the variation coefficient computed over \f$ \eta_{p}\f$ 
- * 
+ * \f$ C_{s}\f$ : the variation coefficient computed over \f$ \eta_{p}\f$
+ *
  */
 
 template <class TInputImage, class TOutputImage>
@@ -51,7 +51,7 @@ public:
   itkStaticConstMacro(		InputImageDimension,
   				unsigned int,
                       		TInputImage::ImageDimension);
-  itkStaticConstMacro(		OutputImageDimension, 
+  itkStaticConstMacro(		OutputImageDimension,
   				unsigned int,
                       		TOutputImage::ImageDimension);
 
@@ -71,13 +71,13 @@ public:
 
   /** Return the class name. */
   itkTypeMacro(FrostImageFilter, ImageToImageFilter);
-  
+
   /** Supported images definition. */
   typedef typename InputImageType::PixelType InputPixelType;
   typedef typename OutputImageType::PixelType OutputPixelType;
   /** "typedef" to define a real. */
   typedef typename itk::NumericTraits<InputPixelType>::RealType InputRealType;
-  
+
   typedef typename InputImageType::RegionType InputImageRegionType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
@@ -89,13 +89,13 @@ public:
 
   /** Get the radius used to define the neighborhood for the filter calculation. */
   itkGetConstReferenceMacro(Radius, SizeType);
-  
+
   /** Set The numbers of view used for the filter calculation. */
   itkSetMacro(Deramp, double);
   /** Get The numbers of view used for the filter calculation. */
   itkGetConstReferenceMacro(Deramp, double);
 
-  /** To be allowed to use the pipeline method FrostImageFilter needs 
+  /** To be allowed to use the pipeline method FrostImageFilter needs
     * an input processing area larger than the output one.
     * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
   virtual void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError);
@@ -131,5 +131,5 @@ private:
 #include "otbFrostImageFilter.txx"
 #endif
 
-  
+
 #endif

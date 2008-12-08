@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,10 +28,10 @@ int otbVectorRescaleIntensityImageFilterNew(int argc, char * argv[])
   typedef otb::VectorImage<InputPixelType,Dimension> InputImageType;
   typedef otb::VectorImage<OutputPixelType,Dimension> OutputImageType;
   typedef otb::VectorRescaleIntensityImageFilter<InputImageType,OutputImageType> VectorRescaleIntensityImageFilterType;
-  
+
   // Instantiating object
   VectorRescaleIntensityImageFilterType::Pointer object = VectorRescaleIntensityImageFilterType::New();
-  
+
 
   return EXIT_SUCCESS;
 }

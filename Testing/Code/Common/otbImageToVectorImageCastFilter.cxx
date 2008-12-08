@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,7 +28,7 @@ int otbImageToVectorImageCastFilter(int argc, char * argv[])
   const char * outfilename = argv[2];
   const unsigned int Dimension = 2;
   typedef double PixelType;
-      
+
   typedef otb::Image<PixelType,Dimension> ImageType;
   typedef otb::VectorImage<PixelType,Dimension> VectorImageType;
 
@@ -44,7 +44,7 @@ int otbImageToVectorImageCastFilter(int argc, char * argv[])
   writer->SetFileName(outfilename);
   writer->SetInput(cast->GetOutput());
   writer->Update();
-  
+
 
   return EXIT_SUCCESS;
 }

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -36,8 +36,8 @@ int otbImportGeoInformationImageFilterWithKeywordList(int argc, char * argv[])
   // Instantiating objects
   ReaderType::Pointer reader = ReaderType::New();
   ImportGeoInformationImageFilterType::Pointer import = ImportGeoInformationImageFilterType::New();
-      
-      
+
+
   reader->SetFileName(infname);
   reader->GenerateOutputInformation();
   ImageType::IndexType index;
@@ -52,25 +52,25 @@ int otbImportGeoInformationImageFilterWithKeywordList(int argc, char * argv[])
   black->Allocate();
   black->FillBuffer(128);
   std::cout<<"black: " <<black->GetLargestPossibleRegion()<<std::endl;
-      
+
   import->SetInput(black);
   import->SetSource(reader->GetOutput());
   import->GetOutput()->UpdateOutputInformation();
 
   otb::ImageKeywordlist otb_tmp_image;
   otb_tmp_image = import->GetOutput()->GetImageKeywordlist();
-      
+
   ossimKeywordlist ossim_kwl_image;
   otb_tmp_image.convertToOSSIMKeywordlist(ossim_kwl_image);
-      
+
   std::cout << " -> otbImage Ossim key word list copy : "<<ossim_kwl_image<<std::endl;
-      
+
   std::ofstream file;
   file.open(outputAsciiFilenameOtbImage);
   file << "--- OSSIM KEYWORDLIST ---" << std::endl;
   file << ossim_kwl_image;
   file.close();
-      
-  
+
+
   return EXIT_SUCCESS;
 }

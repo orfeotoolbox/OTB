@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -43,28 +43,28 @@ int otbImageToSIFTKeyPointSetFilterValid(int argc, char * argv[])
   const char* inputImageFileName = argv[1];
   const char* inputKeysFileName = argv[2];
   const char* outputImageFileName = argv[3];
-  
+
   typedef otb::Image<float,2> ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputImageFileName);
   reader->Update();
-  
+
   ImageType::OffsetType t = {{ 0, 1}};
   ImageType::OffsetType b = {{ 0,-1}};
   ImageType::OffsetType l = {{ 1, 0}};
   ImageType::OffsetType r = {{-1, 0}};
-    
+
   typedef itk::RGBPixel<unsigned char> RGBPixelType;
   typedef otb::Image<RGBPixelType, 2> OutputImageType;
-  
+
   OutputImageType::Pointer outputImage = OutputImageType::New();
   outputImage->SetRegions(reader->GetOutput()->GetLargestPossibleRegion());
   outputImage->Allocate();
-  
+
   itk::ImageRegionIterator<OutputImageType> iterOutput(outputImage,
 						       outputImage->GetRequestedRegion());
-  
+
   for (iterOutput.GoToBegin(); !iterOutput.IsAtEnd(); ++iterOutput)
     {
       ImageType::IndexType index = iterOutput.GetIndex();
@@ -73,17 +73,17 @@ int otbImageToSIFTKeyPointSetFilterValid(int argc, char * argv[])
       rgbPixel.SetRed( static_cast<unsigned char>(grayPix) );
       rgbPixel.SetGreen( static_cast<unsigned char>(grayPix) );
       rgbPixel.SetBlue( static_cast<unsigned char>(grayPix) );
-      
+
       iterOutput.Set(rgbPixel);
     }
-  
+
   OutputImageType::PixelType greenPixel;
   OutputImageType::SizeType size = outputImage->GetLargestPossibleRegion().GetSize();
-  
+
   greenPixel.SetGreen(255);
   greenPixel.SetRed(0);
   greenPixel.SetBlue(0);
-  
+
   std::ifstream desc(inputKeysFileName);
   while(!desc.eof())
     {
@@ -92,7 +92,7 @@ int otbImageToSIFTKeyPointSetFilterValid(int argc, char * argv[])
       std::string line;
       desc >> point[0] >> point[1];
       std::getline(desc,line);
-      
+
       outputImage->TransformPhysicalPointToIndex(point, index);
 
       outputImage->SetPixel(index, greenPixel);
@@ -104,7 +104,7 @@ int otbImageToSIFTKeyPointSetFilterValid(int argc, char * argv[])
 	outputImage->SetPixel(index+l,greenPixel);
       if (index[0] > 0)
 	outputImage->SetPixel(index+r,greenPixel);
-      
+
     }
   desc.close();
 
@@ -113,6 +113,6 @@ int otbImageToSIFTKeyPointSetFilterValid(int argc, char * argv[])
   writer->SetInput(outputImage);
   writer->SetFileName(outputImageFileName);
   writer->Update();
-  
+
   return EXIT_SUCCESS;
 }

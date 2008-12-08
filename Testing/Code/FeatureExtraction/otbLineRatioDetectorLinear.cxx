@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -42,7 +42,7 @@ int otbLineRatioDetectorLinear( int argc, char* argv[] )
   unsigned int  WidthLine((unsigned int)::atoi(argv[4]));
   // Length of the linear feature = 2*LengthLine+1
   unsigned int  LengthLine((unsigned int)::atoi(argv[5]));
-        
+
   typedef unsigned char                                   InputPixelType;
   typedef double		   	                        OutputPixelType;
   const   unsigned int        	                        Dimension = 2;
@@ -56,12 +56,12 @@ int otbLineRatioDetectorLinear( int argc, char* argv[] )
 
   typedef itk::LinearInterpolateImageFunction< InputImageType, double >	InterpolatorType;
   typedef otb::LineRatioDetectorImageFilter< InputImageType, OutputImageType,  OutputImageDirectionType, InterpolatorType >   FilterType;
-	
+
   FilterType::Pointer FilterLineRatio = FilterType::New();
-        
+
   FilterLineRatio->SetWidthLine( WidthLine );
   FilterLineRatio->SetLengthLine( LengthLine );
-	
+
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer1 = WriterType::New();
   WriterType::Pointer writer2 = WriterType::New();
@@ -77,7 +77,7 @@ int otbLineRatioDetectorLinear( int argc, char* argv[] )
   writer1->Update();
   writer2->Update();
 
-    
+
   return EXIT_SUCCESS;
 }
 

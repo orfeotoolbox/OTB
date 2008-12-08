@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -68,7 +68,7 @@ namespace otb
 	delete m_ScrollWindow;
 	m_ScrollWindow = NULL;
       }
-    
+
     if(m_PixLocWindow!=NULL)
       {
 	m_PixLocWindow->remove(m_PixLocOutput);
@@ -81,7 +81,7 @@ namespace otb
 	m_PixLocOutput = NULL;
       }
   }
- 
+
   /// Build the HMI
   template <class TPixel, class TLabel>
   void
@@ -90,10 +90,10 @@ namespace otb
   {
     Superclass::Build();
     itk::OStringStream oss;
-  
+
   int wfull = this->GetFullWidget()->w();
   int hfull = this->GetFullWidget()->h();
-    
+
   oss.str("");
   oss<<this->GetLabel()<<" - Full Window";
   m_FullWindow = new Fl_Window(0,0,wfull,hfull,"");
@@ -101,10 +101,10 @@ namespace otb
   m_FullWindow->add(this->GetFullWidget());
   m_FullWindow->resizable(this->GetFullWidget());
   m_FullWindow->end();
-    
+
 
   oss.str("");
-  oss<<this->GetLabel()<<" - Histograms and transfer functions"; 
+  oss<<this->GetLabel()<<" - Histograms and transfer functions";
   if(this->GetViewModel() == Superclass::ScrollWidgetType::RGB)
   {
     m_HistogramWindow = new Fl_Window(0,hfull,3*this->GetRedHistogramWidget()->w(),this->GetRedHistogramWidget()->h());
@@ -119,9 +119,9 @@ namespace otb
 					   0,
 					   this->GetBlueHistogramWidget()->w(),
 					   this->GetBlueHistogramWidget()->h());
-    m_HistogramWindow->resizable(m_HistogramWindow);	
+    m_HistogramWindow->resizable(m_HistogramWindow);
     m_HistogramWindow->end();
-	
+
   }
   else
   {
@@ -138,20 +138,20 @@ namespace otb
 
   if(this->GetUseScroll())
   {
-    
-    // Create the scroll windows   
+
+    // Create the scroll windows
     wscroll = this->GetScrollWidget()->w();
-    hscroll = this->GetScrollWidget()->h();   
-     
+    hscroll = this->GetScrollWidget()->h();
+
     oss.str("");
     oss<<this->GetLabel()<<" - Scroll Window";
     m_ScrollWindow = new Fl_Window(wfull+15,0,wscroll,hscroll,"");
     m_ScrollWindow->copy_label(oss.str().c_str());
     m_ScrollWindow->add(this->GetScrollWidget());
     m_ScrollWindow->resizable(this->GetScrollWidget());
-    m_ScrollWindow->end();  
+    m_ScrollWindow->end();
   }
-        
+
   // Create the zoom window
   std::string zoomLabel=this->GetLabel();
   zoomLabel.append(" - Zoom Window (X4)");
@@ -160,7 +160,7 @@ namespace otb
   m_ZoomWindow->add(this->GetZoomWidget());
   m_ZoomWindow->resizable(this->GetZoomWidget());
   m_ZoomWindow->end();
-    
+
   std::string pixLocLabel=this->GetLabel();
   pixLocLabel.append("Pixel location & values");
   m_PixLocWindow= new Fl_Window(wfull+15,hscroll+50,(wscroll<100 ? 100 : wscroll),40,"");
@@ -172,17 +172,17 @@ namespace otb
   m_PixLocWindow->end();
   this->SetPixLocOutput(m_PixLocOutput);
   }
-  
+
 /// Show the app
 template <class TPixel, class TLabel>
-void 
+void
 ImageViewer<TPixel,TLabel>
 ::Show(void)
 {
   if(!this->GetBuilt())
     {
       this->Build();
-    } 
+    }
   if(this->GetUseScroll())
     {
       m_ScrollWindow->show();
@@ -193,12 +193,12 @@ ImageViewer<TPixel,TLabel>
   m_PixLocOutput->show();
   m_HistogramWindow->show();
   Superclass::Show();
- 
+
   Fl::check();
 }
 /// Hide the app
 template <class TPixel, class TLabel>
-void 
+void
 ImageViewer<TPixel,TLabel>
 ::Hide(void)
 {
@@ -207,16 +207,16 @@ ImageViewer<TPixel,TLabel>
     {
       m_ScrollWindow->hide();
     }
-  m_FullWindow->hide();   
+  m_FullWindow->hide();
   m_ZoomWindow->hide();
   m_PixLocWindow->hide();
   m_PixLocOutput->hide();
   m_HistogramWindow->hide();
   Fl::check();
-} 
-  
+}
+
 template <class TPixel, class TLabel>
-void 
+void
 ImageViewer<TPixel,TLabel>
 ::Update(void)
 {
@@ -228,7 +228,7 @@ ImageViewer<TPixel,TLabel>
     }
   m_ZoomWindow->redraw();
   Superclass::Update();
-} 
-  
+}
+
 } // end namespace otb
 #endif

@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,9 +23,9 @@
  *
  * PURPOSE:
  *
- * Application pour projeter une r�gion d'une image en coordonn�es g�ographiques 
- * en utilisant un Interpolator+regionextractor et un Iterator. 
- * 
+ * Application pour projeter une r�gion d'une image en coordonn�es g�ographiques
+ * en utilisant un Interpolator+regionextractor et un Iterator.
+ *
  */
 
 // iostream is used for general output
@@ -61,15 +61,15 @@ int otbRegionProjection( int argc, char* argv[] )
 
   if(argc!=10)
     {
-      std::cout << argv[0] <<" <input filename> <output filename> <latitude de l'origine> <longitude de l'origine> <taille_x> <taille_y> <NumberOfstreamDivisions>" 
+      std::cout << argv[0] <<" <input filename> <output filename> <latitude de l'origine> <longitude de l'origine> <taille_x> <taille_y> <NumberOfstreamDivisions>"
                 << "<xSpacing> <ySpacing>" << std::endl;
 
       return EXIT_FAILURE;
     }
-   
-   
+
+
   typedef itk::Point <double, 2> 		 PointType;
-  PointType				 outputpoint; 
+  PointType				 outputpoint;
 
   /*************************************************/
   /*  Cr�ation de l'image de sortie outputimage    */
@@ -82,8 +82,8 @@ int otbRegionProjection( int argc, char* argv[] )
   ImageType::PixelType			 pixelvalue;
 
   ImageType::IndexType  			 start;
-  start[0]=0;     
-  start[1]=0;     
+  start[0]=0;
+  start[1]=0;
 
   ImageType::SizeType  			 size;
   size[0]=atoi(argv[5]);      //Taille en X.
@@ -106,7 +106,7 @@ int otbRegionProjection( int argc, char* argv[] )
   outputimage->SetRegions(region);
   outputimage->SetSpacing(spacing);
   outputimage->Allocate();     //Notre image de sortie est cr��e.
-  otbGenericMsgDebugMacro(<< "Output image created!! " ); 
+  otbGenericMsgDebugMacro(<< "Output image created!! " );
 
   /********************************************************/
   /*                  Cr�ation d'un reader                */
@@ -119,16 +119,16 @@ int otbRegionProjection( int argc, char* argv[] )
   //Read meta data (ossimKeywordlist)
   reader->GenerateOutputInformation();
 
-  otbGenericMsgDebugMacro(<< "Original input imagine spacing: "<<reader->GetOutput()->GetSpacing() ); 
+  otbGenericMsgDebugMacro(<< "Original input imagine spacing: "<<reader->GetOutput()->GetSpacing() );
 
   /******************************/
   /*  Cr�ation de mon handler   */
   /******************************/
-	
+
   /*
     typedef otb::ImageGeometryHandler  HandlerType;
     HandlerType::Pointer   handler= HandlerType::New();
-    otbGenericMsgDebugMacro(<< "Handler created " ); 
+    otbGenericMsgDebugMacro(<< "Handler created " );
     handler->SetFileName(argv[1]);
     geom_kwl=handler->GetGeometryKeywordlist();*/
   otb::ImageKeywordlist otb_image_keywordlist = reader->GetOutput()->GetImageKeywordlist();
@@ -136,7 +136,7 @@ int otbRegionProjection( int argc, char* argv[] )
   ossimKeywordlist geom_kwl;
   otb_image_keywordlist.convertToOSSIMKeywordlist(geom_kwl);
 
-  otbGenericMsgDebugMacro(<< "ossimKeywordlist: "<<geom_kwl ); 
+  otbGenericMsgDebugMacro(<< "ossimKeywordlist: "<<geom_kwl );
 
   /********************************************************/
   /*   Cr�ation de notre mod�le en fonction de l'image    */
@@ -144,19 +144,19 @@ int otbRegionProjection( int argc, char* argv[] )
 
   typedef otb::InverseSensorModel<double>  ModelType;
   ModelType::Pointer   model= ModelType::New();
-  otbGenericMsgDebugMacro(<< "Model set geometry " ); 
+  otbGenericMsgDebugMacro(<< "Model set geometry " );
   model->SetImageGeometry(geom_kwl); //Notre mod�le est cr�� � ce niveau.
   if(!model)
     {
       otbGenericMsgDebugMacro(<< "Unable to create a model");
       return 1;
     }
-  otbGenericMsgDebugMacro(<< "InverseSensorModel created " ); 
-      
+  otbGenericMsgDebugMacro(<< "InverseSensorModel created " );
+
   ModelType::OutputPointType inputpoint;
-			
+
   otbGenericMsgDebugMacro(<< "Miary Sensor Model :" << model);
- 
+
 
   //reader1->SetFileName(argv[2]);
   //ImageType::Pointer 	  	         image = reader1->GetOutput();
@@ -166,14 +166,14 @@ int otbRegionProjection( int argc, char* argv[] )
   ImageType::IndexType 			 currentindexbis;
   ImageType::IndexType 			 pixelindex;
   ImageType::IndexType 			 pixelindexbis;
-  otbGenericMsgDebugMacro(<< "Reader created " ); 
+  otbGenericMsgDebugMacro(<< "Reader created " );
 
   //Stocker les caract�ristiques de notre image capteur:
   // ImageType::SizeType			 inputimagesize;
   // inputimagesize=inputimage->GetLargestPossibleRegion().GetSize();
   // //inputimagesize=inputimage->GetSize();
   // otbGenericMsgDebugMacro(<< "Dimension de notre image capteur:"<<  std::endl
-  //                 << "("<<  inputimagesize[0]<< ","<<  inputimagesize[1]<< ")"<<std::endl; 
+  //                 << "("<<  inputimagesize[0]<< ","<<  inputimagesize[1]<< ")"<<std::endl;
 
 
   /********************************************************/
@@ -182,7 +182,7 @@ int otbRegionProjection( int argc, char* argv[] )
 
   typedef itk::ExtractImageFilter<InputImageType,ImageType>   ExtractType;
   ExtractType::Pointer			             extract=ExtractType::New();
-  otbGenericMsgDebugMacro(<< "Region Extractor created " ); 
+  otbGenericMsgDebugMacro(<< "Region Extractor created " );
 
   /********************************************************/
   /*            Cr�ation de notre interpolator            */
@@ -191,7 +191,7 @@ int otbRegionProjection( int argc, char* argv[] )
   typedef itk::LinearInterpolateImageFunction<ImageType, double>  InterpolatorType;
   InterpolatorType::Pointer	interpolator=InterpolatorType::New();
   //InterpolatorType::OutputType	value;
-  otbGenericMsgDebugMacro(<< "Interpolator created " ); 
+  otbGenericMsgDebugMacro(<< "Interpolator created " );
 
   /********************************************************/
   /*            Cr�ation de notre writer                  */
@@ -203,7 +203,7 @@ int otbRegionProjection( int argc, char* argv[] )
   CharWriterType::Pointer	                 writer=CharWriterType::New();
   extractorwriter->SetFileName("image_temp.jpeg");
   extractorwriter->SetInput(extract->GetOutput());
-  otbGenericMsgDebugMacro(<< "extractorwriter created" ); 
+  otbGenericMsgDebugMacro(<< "extractorwriter created" );
 
   /********************************************************/
   /*            Cr�ation de notre rescaler                */
@@ -215,16 +215,16 @@ int otbRegionProjection( int argc, char* argv[] )
   //rescaler->SetOutputMaximum(500);
   rescaler->SetOutputMinimum(10);
   rescaler->SetOutputMaximum(255);
-  otbGenericMsgDebugMacro(<< "rescaler created" ); 
+  otbGenericMsgDebugMacro(<< "rescaler created" );
 
 
-  /*************************************************/   
+  /*************************************************/
   /*     Cr�ation de RegionIteratorwithIndex       */
   /*************************************************/
 
   typedef itk::ImageRegionIteratorWithIndex<ImageType>	IteratorType;
   //IteratorType outputIt(outputimage, region); //D�finition de notre it�rateur.
-  //otbGenericMsgDebugMacro(<< "Iterator created " ); 
+  //otbGenericMsgDebugMacro(<< "Iterator created " );
 
   //Donner une valeur par d�faut numberofstreamdivision ou le faire fixer par l'utilisateur.
   unsigned int NumberOfStreamDivisions;
@@ -247,17 +247,17 @@ int otbRegionProjection( int argc, char* argv[] )
       iteratorRegionSize[0]=atoi(argv[5]);      //Taille en X.
       if (count==NumberOfStreamDivisions-1)
 	{iteratorRegionSize[1]=(atoi(argv[6]))-((int)(((atoi(argv[6]))/NumberOfStreamDivisions)+0.5))*(count);
-	iterationRegionStart[1]=(atoi(argv[5]))-(iteratorRegionSize[1]); 
+	iterationRegionStart[1]=(atoi(argv[5]))-(iteratorRegionSize[1]);
 	}
       else
 	{iteratorRegionSize[1]=(int)(((atoi(argv[6]))/NumberOfStreamDivisions)+0.5);	  //Taille en Y.
-	iterationRegionStart[1]=count*iteratorRegionSize[1]; 
-	}    
-      iterationRegionStart[0]=0;//D�but de chaque ligne==>0     
-      // otbGenericMsgDebugMacro(<<iteratorRegionSize[1]);  
-      // otbGenericMsgDebugMacro(<<iterationRegionStart[0]); 
+	iterationRegionStart[1]=count*iteratorRegionSize[1];
+	}
+      iterationRegionStart[0]=0;//D�but de chaque ligne==>0
+      // otbGenericMsgDebugMacro(<<iteratorRegionSize[1]);
+      // otbGenericMsgDebugMacro(<<iterationRegionStart[0]);
       iteratorRegion.SetSize(iteratorRegionSize);
-      iteratorRegion.SetIndex(iterationRegionStart); 
+      iteratorRegion.SetIndex(iterationRegionStart);
 
       /**Cr�ation d'un tableau de pixelindex**/
       unsigned int pixelIndexArrayDimension= iteratorRegionSize[0]*iteratorRegionSize[1]*2;
@@ -286,7 +286,7 @@ int otbRegionProjection( int argc, char* argv[] )
 	  //On le transforme en Point physique
 	  outputimage->TransformIndexToPhysicalPoint(currentindex, outputpoint);
 	  otbGenericMsgDebugMacro(<< "Pour l'Index Ncurrent:(" << currentindex[0]<< ","<< currentindex[1] << ")"<<  std::endl
-				  << "Le point physique correspondant est: ("<<  outputpoint[0]<<	","<<outputpoint[1]<< ")"); 
+				  << "Le point physique correspondant est: ("<<  outputpoint[0]<<	","<<outputpoint[1]<< ")");
 
 	  //On calcule les coordonn�es pixeliques sur l'image capteur
 	  inputpoint = model->TransformPoint(outputpoint);
@@ -316,7 +316,7 @@ int otbRegionProjection( int argc, char* argv[] )
       min_x=pixelIndexArray[0];
       max_y=pixelIndexArray[1];
       min_y=pixelIndexArray[1];
- 
+
       otbGenericMsgDebugMacro(<< "max_x=" << max_x<< std::endl
 			      << "max_y=" << max_y<< std::endl
 			      << "min_x=" << min_x<< std::endl
@@ -342,15 +342,15 @@ int otbRegionProjection( int argc, char* argv[] )
 
       if (min_x<10 && min_y<10)
 	{
-	  extractstart[0]=0;     
+	  extractstart[0]=0;
 	  extractstart[1]=0;
 	}
 
       else
 	{
-	  extractstart[0]=min_x-10;     
-	  extractstart[1]=min_y-10; 
-	} 
+	  extractstart[0]=min_x-10;
+	  extractstart[1]=min_y-10;
+	}
 
       InputImageType::SizeType  		    extractsize;
 
@@ -382,7 +382,7 @@ int otbRegionProjection( int argc, char* argv[] )
 	}
       delete pixelIndexArray;
       otbGenericMsgDebugMacro(<< "pixelIndexArray deleted" );
-      delete currentIndexArray; 
+      delete currentIndexArray;
       otbGenericMsgDebugMacro(<< "currentIndexArray deleted" );
     }//Fin boucle principale
 
@@ -402,7 +402,7 @@ int otbRegionProjection( int argc, char* argv[] )
 
 
 
- 
+
   return EXIT_SUCCESS;
 
 }//Fin main()

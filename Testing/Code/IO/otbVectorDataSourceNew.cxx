@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,6 +24,6 @@ int otbVectorDataSourceNew(int argc, char * argv[])
   typedef otb::VectorData<> VectorDataType;
   typedef otb::VectorDataSource<VectorDataType> VectorDataSourceType;
   VectorDataSourceType::Pointer object = VectorDataSourceType::New();
-  
+
   return EXIT_SUCCESS;
 }

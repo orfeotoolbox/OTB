@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -38,7 +38,7 @@ int otbBinaryImageMinimalBoundingRegionCalculator(int argc, char* argv[])
   typedef ImageListType::Iterator IteratorType;
   // reference image list
   ImageListType::Pointer images = ImageListType::New();
-    
+
   // Reading input images
   std::ofstream out;
   out.open(outfile,std::ios::out);

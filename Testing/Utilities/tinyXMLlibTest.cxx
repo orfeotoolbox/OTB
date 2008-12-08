@@ -108,7 +108,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 		"<Item priority=\"2\" distance='none'> Do bills   </Item>"
 		"<Item priority=\"2\" distance='far &amp; back'> Look for Evil Dinosaurs! </Item>"
 		"</ToDo>";
-		
+
 	{
 
 	#ifdef TIXML_USE_STL
@@ -138,7 +138,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 		// The example parses from the character string (above):
 		#if defined( WIN32 ) && defined( TUNE )
 		_CrtMemCheckpoint( &startMemState );
-		#endif	
+		#endif
 
 		{
 			// Write to a file and read it back, to check file I/O.
@@ -173,7 +173,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 			doc.Accept( &printer );
 			fprintf( file, "%s", printer.CStr() );
 		}
-		#ifdef TIXML_USE_STL	
+		#ifdef TIXML_USE_STL
 		{
 			fprintf( file, "** Printing via operator<< **\n" );
 			std::cout << doc;
@@ -409,18 +409,18 @@ int tinyXMLlibTest(int argc, char *argv[] )
 			ostringstream outputStream0( ostringstream::out );
 			outputStream0 << document0;
 
-			XmlTest(file, "Stream round trip correct.",	string( demoEnd ).c_str(), 
+			XmlTest(file, "Stream round trip correct.",	string( demoEnd ).c_str(),
 													outputStream0.str().c_str(), true );
 
 			std::string str;
 			str << document0;
 
-			XmlTest(file, "String printing correct.", string( demoEnd ).c_str(), 
+			XmlTest(file, "String printing correct.", string( demoEnd ).c_str(),
 												 str.c_str(), true );
 		}
 	#endif
 	}
-	
+
 	{
 		const char* str = "<doc attr0='1' attr1='2.0' attr2='foo' />";
 
@@ -445,7 +445,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 		result = ele->QueryIntAttribute( "bar", &iVal );
 		XmlTest(file, "Query attribute: does not exist", result, TIXML_NO_ATTRIBUTE );
 	}
-	
+
 	{
 		const char* str =	"\t<?xml version=\"1.0\" standalone=\"no\" ?>\t<room doors='2'>\n"
 							"</room>";
@@ -470,7 +470,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 		XmlTest(file, "Location tracking: Tab 8: doors row", doors->Row(), 1 );
 		XmlTest(file, "Location tracking: Tab 8: doors col", doors->Column(), 55 );
 	}
-	
+
 	{
 		const char* str =	"\t<?xml version=\"1.0\" standalone=\"no\" ?>\t<room doors='2'>\n"
 							"  <!-- Silly example -->\n"
@@ -515,7 +515,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 		XmlTest(file, "Location tracking: doors col", doors->Column(), 51 );
 		XmlTest(file, "Location tracking: Comment row", comment->Row(), 2 );
 		XmlTest(file, "Location tracking: Comment col", comment->Column(), 3 );
-		XmlTest(file, "Location tracking: text row", text->Row(), 3 ); 
+		XmlTest(file, "Location tracking: text row", text->Row(), 3 );
 		XmlTest(file, "Location tracking: text col", text->Column(), 24 );
 		XmlTest(file, "Location tracking: door0 row", door0->Row(), 3 );
 		XmlTest(file, "Location tracking: door0 col", door0->Column(), 5 );
@@ -544,7 +544,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 			TiXmlHandle docH( &doc );
 			// Get the attribute "value" from the "Russian" element and check it.
 			TiXmlElement* element = docH.FirstChildElement( "document" ).FirstChildElement( "Russian" ).Element();
-			const unsigned char correctValue[] = {	0xd1U, 0x86U, 0xd0U, 0xb5U, 0xd0U, 0xbdU, 0xd0U, 0xbdU, 
+			const unsigned char correctValue[] = {	0xd1U, 0x86U, 0xd0U, 0xb5U, 0xd0U, 0xbdU, 0xd0U, 0xbdU,
 													0xd0U, 0xbeU, 0xd1U, 0x81U, 0xd1U, 0x82U, 0xd1U, 0x8cU, 0 };
 
 			XmlTest(file, "UTF-8: Russian value.", (const char*)correctValue, element->Attribute( "value" ), true );
@@ -607,7 +607,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 			text = latinDoc.FirstChildElement()->FirstChild()->ToText();
 			XmlTest(file, "Legacy encoding: Verify text element.", "r\x82sum\x82", text->Value() );
 		}
-	}		
+	}
 
 	//////////////////////
 	// Copy and assignment
@@ -644,7 +644,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 		unknownAssign = unknownCopy;
 		XmlTest(file, "Copy/Assign: unknown copy.", "[unknown]", unknownCopy.Value() );
 		XmlTest(file, "Copy/Assign: unknown assign.", "[unknown]", unknownAssign.Value() );
-		
+
 		TiXmlText text( "TextNode" );
 		TiXmlText textCopy( text );
 		TiXmlText textAssign( "incorrect" );
@@ -680,7 +680,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 		XmlTest(file, "Copy/Assign: document assign.", original.c_str(), assign.c_str(), true );
 
 		#endif
-	}	
+	}
 
 	//////////////////////////////////////////////////////
 #ifdef TIXML_USE_STL
@@ -739,7 +739,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 		doc.Parse( str );
 		doc.Print();
 
-		XmlTest(file, "CDATA parse.", doc.FirstChildElement()->FirstChild()->Value(), 
+		XmlTest(file, "CDATA parse.", doc.FirstChildElement()->FirstChild()->Value(),
 								 "I am > the rules!\n...since I make symbolic puns",
 								 true );
 
@@ -752,7 +752,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 		parse0 >> doc;
 		//cout << doc << '\n';
 
-		XmlTest(file, "CDATA stream.", doc.FirstChildElement()->FirstChild()->Value(), 
+		XmlTest(file, "CDATA stream.", doc.FirstChildElement()->FirstChild()->Value(),
 								 "I am > the rules!\n...since I make symbolic puns",
 								 true );
 		#endif
@@ -760,7 +760,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 		TiXmlDocument doc1 = doc;
 		//doc.Print();
 
-		XmlTest(file, "CDATA copy.", doc1.FirstChildElement()->FirstChild()->Value(), 
+		XmlTest(file, "CDATA copy.", doc1.FirstChildElement()->FirstChild()->Value(),
 								 "I am > the rules!\n...since I make symbolic puns",
 								 true );
 	}
@@ -806,7 +806,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 		doc.Parse( str );
 		doc.Print();
 
-		XmlTest(file, "CDATA parse. [ 1480107 ]", doc.FirstChildElement()->FirstChild()->Value(), 
+		XmlTest(file, "CDATA parse. [ 1480107 ]", doc.FirstChildElement()->FirstChild()->Value(),
 								 "<b>I am > the rules!</b>\n...since I make symbolic puns",
 								 true );
 
@@ -817,7 +817,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 		istringstream parse0( str );
 		parse0 >> doc;
 
-		XmlTest(file, "CDATA stream. [ 1480107 ]", doc.FirstChildElement()->FirstChild()->Value(), 
+		XmlTest(file, "CDATA stream. [ 1480107 ]", doc.FirstChildElement()->FirstChild()->Value(),
 								 "<b>I am > the rules!</b>\n...since I make symbolic puns",
 								 true );
 		#endif
@@ -825,7 +825,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 		TiXmlDocument doc1 = doc;
 		//doc.Print();
 
-		XmlTest(file, "CDATA copy. [ 1480107 ]", doc1.FirstChildElement()->FirstChild()->Value(), 
+		XmlTest(file, "CDATA copy. [ 1480107 ]", doc1.FirstChildElement()->FirstChild()->Value(),
 								 "<b>I am > the rules!</b>\n...since I make symbolic puns",
 								 true );
 	}
@@ -841,7 +841,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 
 	// The only goal is not to crash on bad input.
 	int len = (int) strlen( demoStart );
-	for( int i=0; i<FUZZ_ITERATION; ++i ) 
+	for( int i=0; i<FUZZ_ITERATION; ++i )
 	{
 		char* demoCopy = new char[ len+1 ];
 		strcpy( demoCopy, demoStart );
@@ -856,7 +856,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 		delete [] demoCopy;
 	}
 	fprintf( file, "** Fuzzing Complete. **\n" );
-	
+
 	//////////////////////////////////////////////////////
 	fprintf (file,"\n** Bug regression tests **\n");
 
@@ -990,7 +990,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 
 	{
 		// DOCTYPE not preserved (950171)
-		// 
+		//
 		const char* doctype =
 			"<?xml version=\"1.0\" ?>"
 			"<!DOCTYPE PLAY SYSTEM 'play.dtd'>"
@@ -1003,7 +1003,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 		doc.SaveFile( outputTest7OutputFilename );
 		doc.Clear();
 		doc.LoadFile( outputTest7OutputFilename );
-		
+
 		TiXmlHandle docH( &doc );
 		TiXmlUnknown* unknown = docH.Child( 1 ).Unknown();
 		XmlTest(file, "Correct value of unknown.", "!DOCTYPE PLAY SYSTEM 'play.dtd'", unknown->Value() );
@@ -1018,7 +1018,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 	{
 		// [ 791411 ] Formatting bug
 		// Comments do not stream out correctly.
-		const char* doctype = 
+		const char* doctype =
 			"<!-- Somewhat<evil> -->";
 		TiXmlDocument doc;
 		doc.Parse( doctype );
@@ -1039,7 +1039,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 		TiXmlDocument doc;
 		TiXmlText* text;
 		TiXmlHandle docH( &doc );
-	
+
 		const char* doctype0 = "<element> This has leading and trailing space </element>";
 		const char* doctype1 = "<element>This has  internal space</element>";
 		const char* doctype2 = "<element> This has leading, trailing, and  internal space </element>";
@@ -1083,7 +1083,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 
 		TiXmlDocument doc;
 		doc.Parse( doctype );
-		
+
 		XmlTest(file, "Parsing repeated attributes.", 0, (int)doc.Error() );	// not an  error to tinyxml
 		XmlTest(file, "Parsing repeated attributes.", "blue", doc.FirstChildElement( "element" )->Attribute( "attr" ) );
 	}
@@ -1145,9 +1145,9 @@ int tinyXMLlibTest(int argc, char *argv[] )
 	#endif
 	{
 		// Bug [ 1195696 ] from marlonism
-		TiXmlBase::SetCondenseWhiteSpace(false); 
-		TiXmlDocument xml; 
-		xml.Parse("<text><break/>This hangs</text>"); 
+		TiXmlBase::SetCondenseWhiteSpace(false);
+		TiXmlDocument xml;
+		xml.Parse("<text><break/>This hangs</text>");
 		XmlTest(file, "Test safe error return.", xml.Error(), false );
 	}
 
@@ -1156,7 +1156,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 		TiXmlDocument doc;
 		doc.SetCondenseWhiteSpace(false);
 		doc.Parse("<p><pb></pb>test</p>");
-	} 
+	}
 	{
 		// Low entities
 		TiXmlDocument xml;
@@ -1234,7 +1234,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 		XmlTest(file,"Missing end tag at end of input", xml.Error(), true);
 		xml.Parse("<x> ");
 		XmlTest(file,"Missing end tag with trailing whitespace", xml.Error(), true);
-	} 
+	}
 
 	{
 		// [ 1635701 ] fail to parse files with a tag separated into two lines
@@ -1286,7 +1286,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 		xml.FirstChild()->Type();
 	}
 	*/
-	
+
 	/*  1417717 experiment
 	{
 		TiXmlDocument xml;
@@ -1309,7 +1309,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 	#endif
 
 	fprintf (file,"\nPass %d, Fail %d\n", gPass, gFail);
-        
+
         fclose(file);
 
         if( gFail == 0 ) return EXIT_SUCCESS;

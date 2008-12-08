@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,7 +23,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 int otbStreamingShrinkImageFilter( int argc, char * argv[] )
 {
-  char * inputFilename = argv[1];      
+  char * inputFilename = argv[1];
   char * outputFilename = argv[2];
   unsigned int shrinkFactor = atoi(argv[3]);
   const unsigned int Dimension = 2;
@@ -46,7 +46,7 @@ int otbStreamingShrinkImageFilter( int argc, char * argv[] )
   writer->SetInput(shrink->GetOutput());
 
   writer->Update();
-  
+
 
   return EXIT_SUCCESS;
 }

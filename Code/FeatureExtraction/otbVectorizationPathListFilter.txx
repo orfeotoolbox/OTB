@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -20,7 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbVectorizationPathListFilter.h"
 #include "otbMacro.h"
-#include "otbMath.h" 
+#include "otbMath.h"
 
 namespace otb
 {
@@ -44,7 +44,7 @@ namespace otb
   }
   template <class TInputModulus, class TInputDirection, class TOutputPath>
   const typename VectorizationPathListFilter<TInputModulus, TInputDirection, TOutputPath>
-  ::InputModulusType * 
+  ::InputModulusType *
   VectorizationPathListFilter<TInputModulus, TInputDirection, TOutputPath>
   ::GetInput(void)
   {
@@ -63,7 +63,7 @@ namespace otb
   }
   template <class TInputModulus, class TInputDirection, class TOutputPath>
   const typename VectorizationPathListFilter<TInputModulus, TInputDirection, TOutputPath>
-  ::InputDirectionType * 
+  ::InputDirectionType *
   VectorizationPathListFilter<TInputModulus, TInputDirection, TOutputPath>
   ::GetInputDirection(void)
   {
@@ -84,7 +84,7 @@ namespace otb
     InputModulusConstPointerType modPtr = this->GetInput();
     InputDirectionConstPointerType dirPtr = this->GetInputDirection();
     OutputPathListPointerType outPtr = this->GetOutput();
-  
+
     typedef typename OffsetVectorType::iterator OffsetIteratorType;
 
     RadiusType radius;
@@ -101,7 +101,7 @@ namespace otb
     ModRegionIteratorType modIt(modPtr,modPtr->GetLargestPossibleRegion());
     DirRegionIteratorType dirIt(dirPtr,dirPtr->GetLargestPossibleRegion());
     FlagRegionIteratorType flagIt(flagImage,flagImage->GetLargestPossibleRegion());
-  
+
     for(modIt.GoToBegin(),dirIt.GoToBegin(),flagIt.GoToBegin();
 	(!modIt.IsAtEnd()) && (!dirIt.IsAtEnd()) && (!flagIt.IsAtEnd());
 	++modIt,++dirIt,++flagIt)
@@ -112,15 +112,15 @@ namespace otb
 	    OutputPathPointerType pathTempDirect = OutputPathType::New();
 	    OutputPathPointerType pathTempReverse = OutputPathType::New();
 	    OutputPathPointerType path = OutputPathType::New();
-	
+
 	    bool flagFinish;
 	    int  flagReverse = 0;
 	    double totalAmplitude = 0;
-	
+
 	    ModNeighborhoodIteratorType nModIt(radius,modPtr,modPtr->GetLargestPossibleRegion());
 	    DirNeighborhoodIteratorType nDirIt(radius,dirPtr,dirPtr->GetLargestPossibleRegion());
 	    FlagNeighborhoodIteratorType nFlagIt(radius,flagImage,flagImage->GetLargestPossibleRegion());
-	
+
 	    for (flagReverse=0; flagReverse < 2; ++flagReverse)
 	      {
 		nModIt.SetLocation(modIt.GetIndex());
@@ -147,7 +147,7 @@ namespace otb
 		    bool flagFound=false;
 		    while(vecIt!=offsetVector.end()&&!flagFound)
 		      {
-			flagFound = nModIt.GetPixel(*vecIt) > 0 
+			flagFound = nModIt.GetPixel(*vecIt) > 0
 			  && !nFlagIt.GetPixel(*vecIt);
 			++vecIt;
 		      }
@@ -188,7 +188,7 @@ namespace otb
 			    nModIt.SetLocation(newIndex);
 			    nDirIt.SetLocation(newIndex);
 			    nFlagIt.SetLocation(newIndex);
-			
+
 			    if(nModIt.GetCenterPixel()==0)
 			      {
 				//we need to check that in case the barycenter is out...
@@ -209,12 +209,12 @@ namespace otb
 		    else
 		      {
 			flagFinish=true;
-		      }    
+		      }
 		  }
 	      }
 	    VertexListPointerType vertexDirect = pathTempDirect->GetVertexList();
 	    VertexListPointerType vertexReverse = pathTempReverse->GetVertexList();
-	
+
 	    unsigned int numberVertex = 0;
 
 	    VertexIteratorType vertexReverseIt = vertexReverse->End();
@@ -227,14 +227,14 @@ namespace otb
 	      }
 	      path->AddVertex(vertexReverseIt.Value());
 	    }
-	
-	
+
+
 	    VertexIteratorType vertexDirectIt = vertexDirect->Begin();
 	    while ( vertexDirectIt != vertexDirect->End()){
 	      path->AddVertex(vertexDirectIt.Value());
 	      ++vertexDirectIt;
 	      ++numberVertex;
-	    }	
+	    }
 
 	    // otbMsgDebugMacro(<<"Path number of vertices: "<<numberVertex);
 
@@ -263,22 +263,22 @@ namespace otb
       {
 	//find the direction in terms of 0,1,2,3
 	neighborhoodNumber = (int) (direction/(M_PI/4)-1);
-      } 
-    else 
+      }
+    else
       {
 	neighborhoodNumber = (int) ((direction+M_PI)/(M_PI/4)-1);
-	neighborhoodNumber = (neighborhoodNumber + 4); 
+	neighborhoodNumber = (neighborhoodNumber + 4);
 	//if the direction was <0 need to convert to 4,5,6,7
       }
-    if (flagReverse) 
+    if (flagReverse)
       {
 	//if the reverse flag is activated we need to look on the other side
 	neighborhoodNumber = (neighborhoodNumber + 4) % 8;
       }
     OffsetType tmpOffset;
-    switch( neighborhoodNumber ) 
+    switch( neighborhoodNumber )
       {
-      case 0: 
+      case 0:
 	tmpOffset[0]=1;
 	tmpOffset[1]=0;
 	offset.push_back(tmpOffset);
@@ -288,7 +288,7 @@ namespace otb
 	tmpOffset[0]=0;
 	tmpOffset[1]=1;
 	offset.push_back(tmpOffset);
-       
+
 	tmpOffset[0]=2;
 	tmpOffset[1]=0;
 	offset.push_back(tmpOffset);
@@ -304,9 +304,9 @@ namespace otb
 	tmpOffset[0]=0;
 	tmpOffset[1]=2;
 	offset.push_back(tmpOffset);
-       
+
 	break;
-     
+
       case 1:
 	tmpOffset[0]=1;
 	tmpOffset[1]=1;
@@ -317,7 +317,7 @@ namespace otb
 	tmpOffset[0]=-1;
 	tmpOffset[1]=1;
 	offset.push_back(tmpOffset);
-       
+
 	tmpOffset[0]=2;
 	tmpOffset[1]=2;
 	offset.push_back(tmpOffset);
@@ -332,9 +332,9 @@ namespace otb
 	offset.push_back(tmpOffset);
 	tmpOffset[0]=-2;
 	tmpOffset[1]=2;
-	offset.push_back(tmpOffset);     
+	offset.push_back(tmpOffset);
 	break;
-     
+
       case 2:
 	tmpOffset[0]=0;
 	tmpOffset[1]=1;
@@ -345,7 +345,7 @@ namespace otb
 	tmpOffset[0]=-1;
 	tmpOffset[1]=0;
 	offset.push_back(tmpOffset);
-       
+
 	tmpOffset[0]=0;
 	tmpOffset[1]=2;
 	offset.push_back(tmpOffset);
@@ -360,9 +360,9 @@ namespace otb
 	offset.push_back(tmpOffset);
 	tmpOffset[0]=-2;
 	tmpOffset[1]=0;
-	offset.push_back(tmpOffset);            
+	offset.push_back(tmpOffset);
 	break;
-     
+
       case 3:
 	tmpOffset[0]=-1;
 	tmpOffset[1]=1;
@@ -373,7 +373,7 @@ namespace otb
 	tmpOffset[0]=-1;
 	tmpOffset[1]=-1;
 	offset.push_back(tmpOffset);
-       
+
 	tmpOffset[0]=-2;
 	tmpOffset[1]=2;
 	offset.push_back(tmpOffset);
@@ -388,10 +388,10 @@ namespace otb
 	offset.push_back(tmpOffset);
 	tmpOffset[0]=-2;
 	tmpOffset[1]=-2;
-	offset.push_back(tmpOffset);          
+	offset.push_back(tmpOffset);
 	break;
-     
-      case 4: 
+
+      case 4:
 	tmpOffset[0]=-1;
 	tmpOffset[1]=0;
 	offset.push_back(tmpOffset);
@@ -401,7 +401,7 @@ namespace otb
 	tmpOffset[0]=0;
 	tmpOffset[1]=-1;
 	offset.push_back(tmpOffset);
-       
+
 	tmpOffset[0]=-2;
 	tmpOffset[1]=0;
 	offset.push_back(tmpOffset);
@@ -416,9 +416,9 @@ namespace otb
 	offset.push_back(tmpOffset);
 	tmpOffset[0]=0;
 	tmpOffset[1]=-2;
-	offset.push_back(tmpOffset);              
+	offset.push_back(tmpOffset);
 	break;
-     
+
       case 5:
 	tmpOffset[0]=-1;
 	tmpOffset[1]=-1;
@@ -429,7 +429,7 @@ namespace otb
 	tmpOffset[0]=1;
 	tmpOffset[1]=-1;
 	offset.push_back(tmpOffset);
-       
+
 	tmpOffset[0]=-2;
 	tmpOffset[1]=-2;
 	offset.push_back(tmpOffset);
@@ -444,9 +444,9 @@ namespace otb
 	offset.push_back(tmpOffset);
 	tmpOffset[0]=2;
 	tmpOffset[1]=-2;
-	offset.push_back(tmpOffset);             
+	offset.push_back(tmpOffset);
 	break;
-     
+
       case 6:
 	tmpOffset[0]= 0;
 	tmpOffset[1]=-1;
@@ -457,7 +457,7 @@ namespace otb
 	tmpOffset[0]= 1;
 	tmpOffset[1]= 0;
 	offset.push_back(tmpOffset);
-       
+
 	tmpOffset[0]= 0;
 	tmpOffset[1]=-2;
 	offset.push_back(tmpOffset);
@@ -472,10 +472,10 @@ namespace otb
 	offset.push_back(tmpOffset);
 	tmpOffset[0]= 2;
 	tmpOffset[1]= 0;
-	offset.push_back(tmpOffset);   
+	offset.push_back(tmpOffset);
 	break;
-     
-      case 7:	
+
+      case 7:
 	tmpOffset[0]= 1;
 	tmpOffset[1]=-1;
 	offset.push_back(tmpOffset);
@@ -485,7 +485,7 @@ namespace otb
 	tmpOffset[0]= 1;
 	tmpOffset[1]= 1;
 	offset.push_back(tmpOffset);
-       
+
 	tmpOffset[0]= 2;
 	tmpOffset[1]=-2;
 	offset.push_back(tmpOffset);
@@ -500,8 +500,8 @@ namespace otb
 	offset.push_back(tmpOffset);
 	tmpOffset[0]= 2;
 	tmpOffset[1]= 2;
-	offset.push_back(tmpOffset);        
-	break;                  
+	offset.push_back(tmpOffset);
+	break;
       }
     return offset;
   }/**
@@ -523,22 +523,22 @@ namespace otb
       {
 	//find the direction in terms of 0,1,2,3
 	neighborhoodNumber = (int) (direction/(M_PI/4)-1);
-      } 
-    else 
+      }
+    else
       {
 	neighborhoodNumber = (int) ((direction+M_PI)/(M_PI/4)-1);
-	neighborhoodNumber = (neighborhoodNumber + 4); 
+	neighborhoodNumber = (neighborhoodNumber + 4);
 	//if the direction was <0 need to convert to 4,5,6,7
       }
-    if (flagReverse) 
+    if (flagReverse)
       {
 	//if the reverse flag is activated we need to look on the other side
 	neighborhoodNumber = (neighborhoodNumber + 4) % 8;
       }
     OffsetType tmpOffset;
-    switch( neighborhoodNumber ) 
+    switch( neighborhoodNumber )
       {
-          case 0: 
+          case 0:
 	tmpOffset[0]=1;
 	tmpOffset[1]=0;
 	offset.push_back(tmpOffset);
@@ -548,9 +548,9 @@ namespace otb
 	tmpOffset[0]=0;
 	tmpOffset[1]=1;
 	offset.push_back(tmpOffset);
-       
+
 	break;
-     
+
       case 1:
 	tmpOffset[0]=1;
 	tmpOffset[1]=1;
@@ -561,9 +561,9 @@ namespace otb
 	tmpOffset[0]=-1;
 	tmpOffset[1]=1;
 	offset.push_back(tmpOffset);
-         
+
 	break;
-     
+
       case 2:
 	tmpOffset[0]=0;
 	tmpOffset[1]=1;
@@ -574,9 +574,9 @@ namespace otb
 	tmpOffset[0]=-1;
 	tmpOffset[1]=0;
 	offset.push_back(tmpOffset);
-       
+
 	break;
-     
+
       case 3:
 	tmpOffset[0]=-1;
 	tmpOffset[1]=1;
@@ -587,10 +587,10 @@ namespace otb
 	tmpOffset[0]=-1;
 	tmpOffset[1]=-1;
 	offset.push_back(tmpOffset);
-       
+
 	break;
-     
-      case 4: 
+
+      case 4:
 	tmpOffset[0]=-1;
 	tmpOffset[1]=0;
 	offset.push_back(tmpOffset);
@@ -600,9 +600,9 @@ namespace otb
 	tmpOffset[0]=0;
 	tmpOffset[1]=-1;
 	offset.push_back(tmpOffset);
-       
+
 	break;
-     
+
       case 5:
 	tmpOffset[0]=-1;
 	tmpOffset[1]=-1;
@@ -613,9 +613,9 @@ namespace otb
 	tmpOffset[0]=1;
 	tmpOffset[1]=-1;
 	offset.push_back(tmpOffset);
-                   
+
 	break;
-     
+
       case 6:
 	tmpOffset[0]= 0;
 	tmpOffset[1]=-1;
@@ -626,10 +626,10 @@ namespace otb
 	tmpOffset[0]= 1;
 	tmpOffset[1]= 0;
 	offset.push_back(tmpOffset);
-       
+
 	break;
-     
-      case 7:	
+
+      case 7:
 	tmpOffset[0]= 1;
 	tmpOffset[1]=-1;
 	offset.push_back(tmpOffset);
@@ -639,8 +639,8 @@ namespace otb
 	tmpOffset[0]= 1;
 	tmpOffset[1]= 1;
 	offset.push_back(tmpOffset);
-       
-	break;          
+
+	break;
       }
     return offset;
   }
