@@ -117,17 +117,19 @@ SET(DATA ${OTB_DATA_ROOT}/Input)
 SET(INPUTDATA ${OTB_SOURCE_DIR}/Examples/Data)
 SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
-SET(EXE_TESTS ${CXX_TEST_PATH}/otbIOExamplesTests ${CXX_TEST_PATH}/otbIOExamplesTests2)
+
+SET(EXE_TESTS1  ${CXX_TEST_PATH}/otbIOExamplesTests1)
 
 SET(TOL 0.0)
 
 
 # ------- ExtractROITest----------
 
-ADD_TEST(ExtractROITest ${EXE_TESTS}
+ADD_TEST(ExtractROITest ${EXE_TESTS1}
 	--compare-n-images ${TOL} 2
 	${BASELINE}/ROI_IMAGERY_RGB.png
 	${TEMP}/ROI_IMAGERY_RGB.png
+
 	${BASELINE}/ROI_IMAGERY_MIR.png
 	${TEMP}/ROI_IMAGERY_MIR.png
 	ExtractROITest
@@ -137,7 +139,7 @@ ADD_TEST(ExtractROITest ${EXE_TESTS}
     0 0 100 100
 )
 
-ADD_TEST(DEMToImageGeneratorTest ${EXE_TESTS}
+ADD_TEST(DEMToImageGeneratorTest ${EXE_TESTS1}
 --compare-image ${TOL}  ${BASELINE}/DEMToImageGenerator.tif
                         ${TEMP}/DEMToImageGenerator.tif
         DEMToImageGeneratorTest        
@@ -153,7 +155,7 @@ ADD_TEST(DEMToImageGeneratorTest ${EXE_TESTS}
          )
 
 IF(ITK_USE_REVIEW)
-ADD_TEST(LidarToImageExampleTest ${EXE_TESTS}
+ADD_TEST(LidarToImageExampleTest ${EXE_TESTS1}
 --compare-image ${TOL}  ${BASELINE}/lidar-image-4.hdr
                         ${TEMP}/lidar-image-4.hdr
          LidarToImageExampleTest
@@ -166,12 +168,8 @@ ADD_TEST(LidarToImageExampleTest ${EXE_TESTS}
          )
 ENDIF(ITK_USE_REVIEW)
 
-ADD_EXECUTABLE(otbIOExamplesTests otbIOExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbIOExamplesTests otbossim OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBProjections ITKIO ITKAlgorithms ITKStatistics ITKCommon  ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
+ADD_EXECUTABLE(otbIOExamplesTests1 otbIOExamplesTests1.cxx)
+TARGET_LINK_LIBRARIES(otbIOExamplesTests1 otbossim OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBProjections ITKIO ITKAlgorithms ITKStatistics ITKCommon  ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 
-IF(ITK_USE_REVIEW)
-ADD_EXECUTABLE(otbIOExamplesTests2 otbIOExamplesTests2.cxx)
-TARGET_LINK_LIBRARIES(otbIOExamplesTests2 otbossim OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBProjections ITKIO ITKAlgorithms ITKStatistics ITKCommon  ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
-ENDIF(ITK_USE_REVIEW)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -23,10 +23,14 @@
 #include <iostream>
 #include "otbTestMain.h"
 
+
 void RegisterTests()
 {
 REGISTER_TEST(ExtractROITest);
 REGISTER_TEST(DEMToImageGeneratorTest);
+#if defined(ITK_USE_REVIEW)
+REGISTER_TEST(LidarToImageExampleTest);
+#endif(ITK_USE_REVIEW)
 }
 
 #undef main
@@ -36,3 +40,9 @@ REGISTER_TEST(DEMToImageGeneratorTest);
 #undef main
 #define main DEMToImageGeneratorTest
 #include "DEMToImageGenerator.cxx"
+
+#if defined(ITK_USE_REVIEW)
+#undef main
+#define main LidarToImageExampleTest
+#include "LidarToImageExample.cxx"
+#endif(ITK_USE_REVIEW)
