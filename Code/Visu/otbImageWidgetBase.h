@@ -165,7 +165,7 @@ class ImageWidgetBase
     inline unsigned int GetBufferIndex(const IndexType& iteratorIndex)
       {
 	return (iteratorIndex[1]-m_BufferedRegion.GetIndex()[1])*4*m_BufferedRegion.GetSize()[0] 
-	  + 4*(iteratorIndex()[0]-m_BufferedRegion.GetIndex()[0]);
+	  + 4*(iteratorIndex[0]-m_BufferedRegion.GetIndex()[0]);
       }
     
     inline unsigned int GetRevertedBufferIndex(const IndexType& iteratorIndex)
