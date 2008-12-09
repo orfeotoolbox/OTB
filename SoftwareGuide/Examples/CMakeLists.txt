@@ -153,26 +153,26 @@ ADD_CUSTOM_TARGET(SoftwareGuideExamples  ALL echo)
 
 SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Installation/HelloWorld.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image1.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image2.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image3.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image4.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/ImageAdaptor1.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/ImageAdaptor2.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/ImageAdaptor3.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/ImageAdaptor4.cxx      
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/RGBImage.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/VectorImage.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image5.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/ImageListExample.cxx  
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Mesh/PointSet1.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Mesh/PointSet2.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Mesh/PointSet3.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Mesh/Mesh1.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Mesh/Mesh2.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Mesh/Mesh3.cxx    
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Mesh/PointSetWithVectors.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Path/PolyLineParametricPath1.cxx
+  ${OTB_DATA_ROOT}/ExamplesRepresentation/Image/Image1.cxx
+  ${OTB_DATA_ROOT}/ExamplesRepresentation/Image/Image2.cxx
+  ${OTB_DATA_ROOT}/ExamplesRepresentation/Image/Image3.cxx
+  ${OTB_DATA_ROOT}/ExamplesRepresentation/Image/Image4.cxx
+  ${OTB_DATA_ROOT}/ExamplesRepresentation/Image/ImageAdaptor1.cxx
+  ${OTB_DATA_ROOT}/ExamplesRepresentation/Image/ImageAdaptor2.cxx
+  ${OTB_DATA_ROOT}/ExamplesRepresentation/Image/ImageAdaptor3.cxx
+  ${OTB_DATA_ROOT}/ExamplesRepresentation/Image/ImageAdaptor4.cxx      
+  ${OTB_DATA_ROOT}/ExamplesRepresentation/Image/RGBImage.cxx
+  ${OTB_DATA_ROOT}/ExamplesRepresentation/Image/VectorImage.cxx
+  ${OTB_DATA_ROOT}/ExamplesRepresentation/Image/Image5.cxx
+  ${OTB_DATA_ROOT}/ExamplesRepresentation/Image/ImageListExample.cxx  
+  ${OTB_DATA_ROOT}/ExamplesRepresentation/Mesh/PointSet1.cxx
+  ${OTB_DATA_ROOT}/ExamplesRepresentation/Mesh/PointSet2.cxx
+  ${OTB_DATA_ROOT}/ExamplesRepresentation/Mesh/PointSet3.cxx
+  ${OTB_DATA_ROOT}/ExamplesRepresentation/Mesh/Mesh1.cxx
+  ${OTB_DATA_ROOT}/ExamplesRepresentation/Mesh/Mesh2.cxx
+  ${OTB_DATA_ROOT}/ExamplesRepresentation/Mesh/Mesh3.cxx    
+  ${OTB_DATA_ROOT}/ExamplesRepresentation/Mesh/PointSetWithVectors.cxx
+  ${OTB_DATA_ROOT}/ExamplesRepresentation/Path/PolyLineParametricPath1.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/ImageReadWrite.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/StreamingImageReadWrite.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/ExplicitStreamingExample.cxx
