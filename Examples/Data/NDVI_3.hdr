@@ -1,9 +1,0 @@
-ENVI
-samples = 400
-lines   = 400
-bands   = 1
-header offset = 0
-file type = ENVI Standard
-data type = 13
-interleave = bsq
-byte order = 0
