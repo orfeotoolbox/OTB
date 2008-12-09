@@ -141,7 +141,7 @@ ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
   if( !this->GetInputPath() )
     {
     otbMsgDevMacro( << "Pb with GetInputPath" );
-    return static_cast<OutputType>(ComplexPrecisionType( itk::NumericTraits<PrecisionType>::max(), itk::NumericTraits<PrecisionType>::max() ) );
+    return static_cast<OutputType>(ComplexPrecisionType( itk::NumericTraits<PrecisionType>::Zero, itk::NumericTraits<PrecisionType>::Zero ) );
     }
 
   OutputType Result =  Evaluate( *(this->GetInputPath()) );

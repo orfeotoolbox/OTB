@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -76,11 +76,11 @@ namespace otb
 	delete [] m_OpenGlImageOverlayBuffer;
       }
   }
-  /** 
+  /**
    * Reset the widget.
    */
   template <class TPixel>
-  void 
+  void
   ImageWidgetBase<TPixel>
   ::Reset(void)
   {
@@ -94,7 +94,7 @@ namespace otb
   }
 
   template <class TPixel>
-  void 
+  void
   ImageWidgetBase<TPixel>
   ::ClearBufferedRegion(void)
   {
@@ -105,10 +105,15 @@ namespace otb
 
 
   template <class TPixel>
-  void 
+  void
   ImageWidgetBase<TPixel>
   ::Init(int x, int y, int w, int h, const char * l)
   {
+#ifdef OTB_GL_USE_ACCEL
+    otbMsgDevMacro(<<"Using OTB_GL_USE_ACCEL: ON");
+#else
+    otbMsgDevMacro(<<"Using OTB_GL_USE_ACCEL: OFF");
+#endif
     for(unsigned int i = 0; i<m_Image->GetNumberOfComponentsPerPixel();++i)
       {
 	if(i>=m_TransferFunctionList->Size())
@@ -116,6 +121,7 @@ namespace otb
 	    m_TransferFunctionList->PushBack(AffineTransferFunctionType::New());
 	  }
       }
+
   }
 
   /**
@@ -245,21 +251,21 @@ namespace otb
     return m_ImageOverlay;
   }
 
-  /** 
-   * Show The widget. 
+  /**
+   * Show The widget.
    */
   template <class TPixel>
   void
   ImageWidgetBase<TPixel>
   ::Show(void)
-  { 
+  {
     if(!m_Image)
       {
 	itkExceptionMacro(<<"No input image !");
       }
     else
       {
-	//otbMsgDebugMacro(<<"Zoomable widget Show");       
+	//otbMsgDebugMacro(<<"Zoomable widget Show");
 	this->show();
 	//otbMsgDebugMacro(<<"Before redraw.");
 	this->redraw();
@@ -275,8 +281,8 @@ namespace otb
     return m_TransferFunctionList->GetNthElement(channelIndex)->Map(value);
   }
 
-  /** 
-   * Draw the widget 
+  /**
+   * Draw the widget
    */
   template <class TPixel>
   void
@@ -292,7 +298,7 @@ namespace otb
 	m_Image->SetRequestedRegion(m_BufferedRegion);
 	m_Image->PropagateRequestedRegion();
 	m_Image->UpdateOutputData();
-	RebuildOpenGlBuffer(); 
+	RebuildOpenGlBuffer();
 	if(m_ImageOverlayVisible)
 	  {
 	    m_ImageOverlay->SetRequestedRegion(m_BufferedRegion);
@@ -311,7 +317,7 @@ namespace otb
 	valid(1);
 	glLoadIdentity();
 	glViewport(0,0,w(),h());
-	glClearColor((float)0.0, (float)0.0, (float)0.0, (float)0.0);          
+	glClearColor((float)0.0, (float)0.0, (float)0.0, (float)0.0);
 	glShadeModel(GL_FLAT);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
       }
@@ -328,7 +334,7 @@ namespace otb
 
     // To be consistent with old method
     int displayHeight = static_cast<int>(vcl_ceil(m_BufferedRegion.GetSize()[1]*m_OpenGlIsotropicZoom));
-    int viewPortOffset = 0;  
+    int viewPortOffset = 0;
     viewPortOffset = h()-displayHeight;
     glRasterPos2i(0,viewPortOffset);
 
@@ -336,9 +342,9 @@ namespace otb
 
     // display the image
     glDrawPixels(m_BufferedRegion.GetSize()[0],
-		 m_BufferedRegion.GetSize()[1], 
+		 m_BufferedRegion.GetSize()[1],
 		 GL_RGBA,
-		 GL_UNSIGNED_BYTE, 
+		 GL_UNSIGNED_BYTE,
 		 m_OpenGlBuffer);
 #else
     glEnable(GL_TEXTURE_2D);
@@ -371,9 +377,9 @@ namespace otb
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	glDrawPixels(m_BufferedRegion.GetSize()[0],
-		     m_BufferedRegion.GetSize()[1], 
+		     m_BufferedRegion.GetSize()[1],
 		     GL_RGBA,
-		     GL_UNSIGNED_BYTE, 
+		     GL_UNSIGNED_BYTE,
 		     m_OpenGlImageOverlayBuffer);
 
 	glDisable(GL_BLEND);
@@ -402,7 +408,7 @@ namespace otb
 	glDisable(GL_BLEND);
 #endif
 
-      } 
+      }
 
     if(m_FormOverlayVisible)
       {
@@ -419,8 +425,8 @@ namespace otb
 
   }
 
-  /** 
-   * Rebuild opengl buffer. 
+  /**
+   * Rebuild opengl buffer.
    */
   template <class TPixel>
   void
@@ -433,7 +439,7 @@ namespace otb
 	//otbMsgDebugMacro(<<"Deleting previous buffer ...");
 	delete [] m_OpenGlBuffer;
       }
-    //otbMsgDebugMacro(<<"Buffered region: "<<m_BufferedRegion); 
+    //otbMsgDebugMacro(<<"Buffered region: "<<m_BufferedRegion);
     unsigned int bufferLenght = 4*m_BufferedRegion.GetNumberOfPixels();
     //otbMsgDebugMacro(<<"New buffer lenght: "<<bufferLenght);
     m_OpenGlBuffer = new unsigned char[bufferLenght];
@@ -492,8 +498,8 @@ namespace otb
 	  }
       }
   }
-  /** 
-   * Rebuild opengl image overlay buffer. 
+  /**
+   * Rebuild opengl image overlay buffer.
    */
   template <class TPixel>
   void
@@ -506,7 +512,7 @@ namespace otb
 	//otbMsgDebugMacro(<<"Deleting previous buffer ...");
 	delete [] m_OpenGlImageOverlayBuffer;
       }
-    //otbMsgDebugMacro(<<"Buffered region: "<<m_BufferedRegion); 
+    //otbMsgDebugMacro(<<"Buffered region: "<<m_BufferedRegion);
     unsigned int bufferLenght = 4*m_BufferedRegion.GetNumberOfPixels();
     //otbMsgDebugMacro(<<"New buffer lenght: "<<bufferLenght);
     m_OpenGlImageOverlayBuffer = new unsigned char[bufferLenght];
@@ -536,10 +542,10 @@ namespace otb
 		m_OpenGlImageOverlayBuffer[index+1] = static_cast<unsigned char>( it.Get()[1]);
 		m_OpenGlImageOverlayBuffer[index+2] = static_cast<unsigned char>(it.Get()[2]);
 		m_OpenGlImageOverlayBuffer[index+3] = m_ImageOverlayOpacity;
-	      } 
-	  }     
+	      }
+	  }
       }
-    else 
+    else
       {
 	for(it.GoToBegin();!it.IsAtEnd();++it)
 	  {

@@ -69,7 +69,7 @@ ComplexMomentImageFunction<TInput,TOutput,TPrecision,TCoordRep>
   if( !this->GetInputImage() )
     {
     otbMsgDevMacro( << "Pb with GetInputImage" );
-    return ( static_cast<ComplexType>( itk::NumericTraits<PrecisionType>::max(), itk::NumericTraits<PrecisionType>::max() ) );
+	return ( ComplexType(itk::NumericTraits<PrecisionType>::Zero, itk::NumericTraits<PrecisionType>::Zero ) );
     }
 
    if(this->GetNeighborhoodRadius()<0)
