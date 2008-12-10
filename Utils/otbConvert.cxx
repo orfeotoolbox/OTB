@@ -32,6 +32,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbCommandLineArgumentParser.h"
 #include "itkCastImageFilter.h"
+#include "otbStandardFilterWatcher.h"
+#include "otbStandardWriterWatcher.h"
 
 template<typename OutputPixelType>
 int generic_main_convert(otb::CommandLineArgumentParseResult* parseResult)
@@ -68,6 +70,9 @@ int generic_main_convert(otb::CommandLineArgumentParseResult* parseResult)
 
     rescaler->SetInput(reader->GetOutput());
     writer->SetInput(rescaler->GetOutput());
+
+    otb::StandardWriterWatcher watcher(writer,rescaler,"Conversion");
+
     writer->Update();
   }
   else
@@ -75,7 +80,7 @@ int generic_main_convert(otb::CommandLineArgumentParseResult* parseResult)
     typedef otb::ImageFileReader<OutputImageType> ReaderType;
     typename ReaderType::Pointer reader=ReaderType::New();
     reader->SetFileName(parseResult->GetInputImage().c_str());
-
+    otb::StandardFilterWatcher watcher(writer,"Conversion");
     writer->SetInput(reader->GetOutput());
     writer->Update();
   }
