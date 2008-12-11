@@ -6,7 +6,7 @@ to do everything but - there is always a {\em but} - some effort is required.
 
 OTB uses the very powerful systems of generic programing, many classes are
 already available, some powerful tools are defined to help you with recurrent
-tasks, but it is not an easy world to enter. 
+tasks, but it is not an easy world to enter.
 
 These tutorials are designed to help you enter this world and grasp the logic
 behind OTB. Each of these tutorials should not take more than 10 minutes (typing
@@ -24,7 +24,7 @@ Let's start by the typical {\em Hello world} program. We are going to compile
 this C++ program linking to your new OTB.
 
 First, create a new folder to put your new programs (all the examples from this
-tutorial) in and go into this folder. 
+tutorial) in and go into this folder.
 
 Since all programs using OTB are handled using the CMake system, we need to create a
 \code{CMakeLists.txt} that will be used by CMake to compile our program. An
@@ -37,6 +37,8 @@ Open the \code{CMakeLists.txt} file and write in the few lines:
 \begin{small}
 \begin{verbatim}
 PROJECT(Tutorials)
+
+cmake_minimum_required(VERSION 2.4)
 
 FIND_PACKAGE(OTB)
 IF(OTB_FOUND)
@@ -111,18 +113,18 @@ Once this file is written you just have to run \code{make}. The
 \code{ccmake} call is not required anymore.
 
 Get one image from the \code{OTB/Examples/Data} directory in the OTB sources.
-For example get \code{QB\_Suburb.png}. 
+For example get \code{QB\_Suburb.png}.
 
 Now, run your new program as \code{Pipeline QB\_Suburb.png output.png}. You
 obtain the file \code{output.png} which is the same image as
 \code{QB\_Suburb.png}. When you triggered the \code{Update()} method, OTB opened
-the original image and wrote it back under another name. 
+the original image and wrote it back under another name.
 
 Well\ldots that's nice but a bit complicated for a copy program!
 
 Wait a minute! We didn't specify the file format anywhere! Let's try
 \code{Pipeline QB\_Suburb.png output.jpg}. And voila! The output image is a jpeg
-file. 
+file.
 
 That's starting to be a bit more interesting: this is not just a program to copy
 image files, but also to convert between image formats.
@@ -154,7 +156,7 @@ TARGET_LINK_LIBRARIES(FilteringPipeline OTBCommon OTBIO)
 
 Compile with \code{make} and execute as \code{FilteringPipeline QB\_Suburb.png
 output.png}.
- 
+
 You have the filtered version of your image in the \code{output.png} file.
 
 Now, you can practice a bit and try to replace the filter by one of the 150+
@@ -193,18 +195,18 @@ TARGET_LINK_LIBRARIES(ScalingPipeline OTBCommon OTBIO)
 
 As you should be getting used to it by now, compile with \code{make} and execute
 as \code{ScalingPipeline QB\_Suburb.png output.png}.
- 
+
 You have the filtered version of your image in the \code{output.png} file.
 
 \section{Working with multispectral or color images}
 
 So far, as you may have noticed, we have been working with grey level images,
-i.e. with only one spectral band. If you tried to process a color image with 
-some of the previous examples you have probably obtained a deceiving grey 
-result. 
+i.e. with only one spectral band. If you tried to process a color image with
+some of the previous examples you have probably obtained a deceiving grey
+result.
 
-Often, satellite images combine several spectral band to help the 
-identification of materials: this is called multispectral imagery. In this 
+Often, satellite images combine several spectral band to help the
+identification of materials: this is called multispectral imagery. In this
 tutorial, we are going to explore some of the mechanisms used by OTB to
 process multispectral images.
 
@@ -333,11 +335,11 @@ TARGET_LINK_LIBRARIES(OrthoFusion OTBProjections OTBCommon OTBIO)
 % \section{Multiband images}
 
 % \section{GUI}
-% 
+%
 % Basic GUI
-% 
+%
 % \section{Better GUI}
-% 
+%
 % Road extraction viewer
 
 
