@@ -178,7 +178,7 @@
         std::cout << " Testing Check Valid Command "<< #command " ok."<<std::endl; \
    }
 
-#define otbTestingCheckUnValidCommand(command) \
+#define otbTestingCheckNotValidCommand(command) \
   { \
         int result(1); \
         try \
