@@ -1,0 +1,22 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+header_name {.h} 
+code_name {.cxx}
+class MsgReporterGUI {open
+} {
+  Function {Build()} {open return_type {virtual void}
+  } {
+    Fl_Window wMainWindow {
+      label {Msg Reporter} open
+      xywh {331 57 670 90} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
+    } {
+      Fl_Group gMsgReporter {open
+        tooltip {Navigate through the image} xywh {0 -4 670 93} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      } {
+        Fl_Text_Display textArea {selected
+          xywh {10 10 650 70}
+        }
+      }
+    }
+  }
+} 
