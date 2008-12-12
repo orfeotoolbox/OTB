@@ -15,7 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
 #ifndef __otbNCCRegistrationFilter_txx
 #define __otbNCCRegistrationFilter_txx
 #include "otbNCCRegistrationFilter.h"

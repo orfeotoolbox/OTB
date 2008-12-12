@@ -15,12 +15,11 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
 #ifndef __otbNCCRegistrationFilter_h_
 #define __otbNCCRegistrationFilter_h_
 
 #include "itkPDEDeformableRegistrationFilter.h"
-#include "itkNCCRegistrationFunction.h"
+#include "otbNCCRegistrationFunction.h"
 
 namespace otb {
 
@@ -105,7 +104,7 @@ public:
   FiniteDifferenceFunctionType;
 
   /** NCCRegistrationFilterFunction type. */
-  typedef itk::NCCRegistrationFunction<FixedImageType,MovingImageType,
+  typedef NCCRegistrationFunction<FixedImageType,MovingImageType,
                                      DeformationFieldType>  NCCRegistrationFunctionType;
 
   typedef typename NCCRegistrationFunctionType::RadiusType RadiusType;
