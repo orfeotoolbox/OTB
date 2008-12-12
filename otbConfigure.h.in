@@ -60,22 +60,3 @@
 /* Use Visu/Gui configurations */
 #cmakedefine OTB_USE_VISU_GUI
 
-#ifdef OTB_USE_VISU_GUI
-  #include <FL/Fl.H>
-  // Replace th Fl::run method
-  #define otbFlRunMacro(condition) { while(condition) { Fl::wait(1e20); } }
-
-  // Check if application running or will be stopped
-  #define otbRunningMacro() \
-        private: \
-        virtual void StartRunning() {this->m_Running = true;  } \
-        virtual void StopRunning()  {this->m_Running = false; } \
-        bool m_Running;\
-        public: \
-        virtual bool IsRunning() { return this->m_Running; }
-#else
-  #define otbFlRunMacro(condition) 
-  #define otbRunningMacro() 
-#endif
-
-
