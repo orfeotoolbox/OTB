@@ -80,7 +80,7 @@
 #if defined(OTB_LEAN_AND_MEAN) || defined(__BORLANDC__)
 #define otbMsgDevMacro(x)
 #else
-  #ifdef OTB_ACTIVE_MSG_DEV_MACRO
+  #ifdef OTB_SHOW_ALL_MSG_DEBUG
     #define otbMsgDevMacro(x) \
     { { ::itk::OStringStream itkmsg; \
       itkmsg << " Msg Dev: " x << "\n"; \

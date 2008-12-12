@@ -51,7 +51,7 @@ ADD_DEFINITIONS(
 	-D_LARGEFILE_SOURCE
 	-D_FILE_OFFSET_BITS=64
 	-D_LARGEFILE64_SOURCE
-	-D_LARGE_FILES 
+	-D_LARGE_FILES
 	)
 
 #-----------------------------------------------------------------------------
@@ -164,7 +164,7 @@ IF( OTB_USE_JPEG2000 )
   ENDIF(CYGWIN)
 
 ENDIF( OTB_USE_JPEG2000 )
-# Check jpeg2000 support 
+# Check jpeg2000 support
 IF(OTB_COMPILE_JPEG2000)
   ADD_DEFINITIONS(-DOTB_COMPILE_JPEG2000 -DUSE_OPJ_DEPRECATED)
   IF(NOT BUILD_SHARED_LIBS)
@@ -175,11 +175,11 @@ ENDIF(OTB_COMPILE_JPEG2000)
 #-----------------------------------------------------------------------------
 # Option for OpenThreads (necessary because used by the new version of OSSIM library
 # Find OpenThread library
-IF(EXISTS "${CMAKE_ROOT}/Modules/FindOpenThreads.cmake") 
+IF(EXISTS "${CMAKE_ROOT}/Modules/FindOpenThreads.cmake")
         FIND_PACKAGE(OpenThreads)
-ELSE(EXISTS "${CMAKE_ROOT}/Modules/FindOpenThreads.cmake") 
+ELSE(EXISTS "${CMAKE_ROOT}/Modules/FindOpenThreads.cmake")
         INCLUDE(${OTB_SOURCE_DIR}/FindOpenThreads.cmake)
-ENDIF(EXISTS "${CMAKE_ROOT}/Modules/FindOpenThreads.cmake") 
+ENDIF(EXISTS "${CMAKE_ROOT}/Modules/FindOpenThreads.cmake")
 
 SET(OTB_USE_EXTERNAL_OPENTHREADS 1)
 IF(OPENTHREADS_FOUND)
@@ -213,7 +213,7 @@ IF(OTB_USE_VISU_GUI)
         # OpenGL Library
         #-------------------------------
         FIND_PACKAGE(OpenGL)
-        
+
         IF( NOT OPENGL_FOUND )
                 MESSAGE(FATAL_ERROR "Impossible to find OpenGL on your system.\nCannot build OTB Visu module without OpenGL library.\nInstall OpenGL on your system OR set OTB_USE_VISU to OFF to disable OTB Visu module generation !")
 	ENDIF( NOT OPENGL_FOUND )
@@ -230,19 +230,19 @@ IF(OTB_USE_VISU_GUI)
         #-------------------------------
 	OPTION(OTB_GL_USE_ACCEL "Use video card acceleration." ON)
 	MARK_AS_ADVANCED(OTB_GL_USE_ACCEL)
-        
+
         #-------------------------------
         # FLTK Library
         #-------------------------------
 
-        # Option for internal/external FLTK 
+        # Option for internal/external FLTK
         OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." ON)
         MARK_AS_ADVANCED(OTB_USE_EXTERNAL_FLTK)
         # Add an option to use or not use FLTK (http://www.fltk.org)
         IF(OTB_USE_EXTERNAL_FLTK)
 
                 FIND_PACKAGE(FLTK)
-                # Mingw Option doesn't exist in the FindFLTK.cmake default configuration file in CMake installationj directory. 
+                # Mingw Option doesn't exist in the FindFLTK.cmake default configuration file in CMake installationj directory.
                 # Copy  FLTK_PLATFORM_DEPENDENT_LIBS from FLTK CmakeList.txt
                 IF(MINGW)
                     ADD_DEFINITIONS(-DWIN32)
@@ -252,7 +252,7 @@ IF(OTB_USE_VISU_GUI)
 		        SET( FLTK_INCLUDE_DIR /usr/include )
                 FIND_PACKAGE(FLTK)
 	        ENDIF(NOT FLTK_INCLUDE_DIR)
-                
+
                 IF(FLTK_FOUND)
 		        INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIRS})
 		        LINK_DIRECTORIES(${FLTK_LIBRARY_DIRS})
@@ -264,9 +264,9 @@ IF(OTB_USE_VISU_GUI)
         ELSE(OTB_USE_EXTERNAL_FLTK)
 
                 SET( FLTK_PLATFORM_DEPENDENT_LIBS "")
-                IF(EXISTS "${OTB_BINARY_DIR}/Utilities/FLTK/FLTKConfig.cmake") 
+                IF(EXISTS "${OTB_BINARY_DIR}/Utilities/FLTK/FLTKConfig.cmake")
                         INCLUDE(${OTB_BINARY_DIR}/Utilities/FLTK/FLTKConfig.cmake)
-                ENDIF(EXISTS "${OTB_BINARY_DIR}/Utilities/FLTK/FLTKConfig.cmake") 
+                ENDIF(EXISTS "${OTB_BINARY_DIR}/Utilities/FLTK/FLTKConfig.cmake")
                 #----------------------------------------------------------------
                 # RESUME Alls VISU GUI libraries use by OTB in a single VARIABLE
                 SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES} ")
@@ -296,7 +296,7 @@ IF(OTB_USE_CURL)
                         "Cannot find CURL library. Please set CURL_LIBRARY or SET OTB_USE_CURL OFF.")
         ENDIF (NOT CURL_LIBRARY)
 
-        # Add compiler option 
+        # Add compiler option
         ADD_DEFINITIONS(-DOTB_USE_CURL)
 
         INCLUDE_DIRECTORIES(${CURL_INCLUDE_DIR})
@@ -307,7 +307,7 @@ ENDIF(OTB_USE_CURL)
 # GDAL Library
 #-------------------------------
 
-#FIND_LIBRARY(GDAL_LIBRARY_DIRS gdal PATHS $ENV{GDAL_LIBRARY_DIRS} ) 
+#FIND_LIBRARY(GDAL_LIBRARY_DIRS gdal PATHS $ENV{GDAL_LIBRARY_DIRS} )
 
 FIND_PATH(GDAL_LIBRARY_DIRS gdal PATHS $ENV{GDAL_LIBRARY_DIRS} )
 FIND_PATH(GDAL_INCLUDE_DIRS gdal.h $ENV{GDAL_INCLUDE_DIRS} /usr/include/gdal)
@@ -375,7 +375,7 @@ ENDIF(APPLE AND NOT FLTK_USE_X)
 
 
 INCLUDE_DIRECTORIES (
-  ${OTB_BINARY_DIR} 
+  ${OTB_BINARY_DIR}
   ${OTB_SOURCE_DIR}
 )
 
@@ -413,7 +413,7 @@ ENDIF(NOT EXECUTABLE_OUTPUT_PATH)
 IF(NOT OTB_NO_LIBRARY_VERSION)
    # This setting of SOVERSION assumes that any API change
    # will increment either the minor or major version number of OTB.
-   SET(OTB_LIBRARY_PROPERTIES 
+   SET(OTB_LIBRARY_PROPERTIES
        VERSION   "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}"
        SOVERSION "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
 ENDIF(NOT OTB_NO_LIBRARY_VERSION)
@@ -436,9 +436,9 @@ LINK_DIRECTORIES(.)
 # Option for display all developpment message !!!
 OPTION(OTB_SHOW_ALL_MSG_DEBUG "OTB developers : Show all messages (debug, dev, etc...) use only for otb developers." OFF)
 MARK_AS_ADVANCED(OTB_SHOW_ALL_MSG_DEBUG)
-IF( OTB_SHOW_ALL_MSG_DEBUG )
- ADD_DEFINITIONS(-DOTB_ACTIVE_MSG_DEV_MACRO)
-ENDIF( OTB_SHOW_ALL_MSG_DEBUG )
+# IF( OTB_SHOW_ALL_MSG_DEBUG )
+#  ADD_DEFINITIONS(-DOTB_SHOW_ALL_MSG_DEBUG)
+# ENDIF( OTB_SHOW_ALL_MSG_DEBUG )
 
 #-----------------------------------------------------------------------------
 # Advanced option to avoid recompiling utilities at each cmake reconfiguration
@@ -508,7 +508,7 @@ ENDIF( OTB_USE_EXTERNAL_EXPAT )
 
 # Add Open Jpeg library
 IF( OTB_COMPILE_JPEG2000 )
-     SET(OTB_IO_UTILITIES_DEPENDENT_LIBRARIES "${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES};otbopenjpeg") 
+     SET(OTB_IO_UTILITIES_DEPENDENT_LIBRARIES "${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES};otbopenjpeg")
 ENDIF( OTB_COMPILE_JPEG2000 )
 
 # => Create OTB_ALGO_UTILITIES_DEPENDENT_LIBRARIES
@@ -591,7 +591,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 #-----------------------------------------------------------------------------
 # Configure files with settings for use by the build.
-CONFIGURE_FILE(${OTB_SOURCE_DIR}/otbConfigure.h.in 
+CONFIGURE_FILE(${OTB_SOURCE_DIR}/otbConfigure.h.in
                ${OTB_BINARY_DIR}/otbConfigure.h)
 
 #-----------------------------------------------------------------------------
