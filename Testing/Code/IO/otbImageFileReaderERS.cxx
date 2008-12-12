@@ -36,7 +36,7 @@ int otbImageFileReaderERS(int argc, char* argv[])
   const char * outputFilename = argv[2];
 
   typedef float  	                        InputPixelType;
-  typedef unsigned short                           OutputPixelType;
+  typedef short                           OutputPixelType;
   const   unsigned int        	        Dimension = 2;
 
   typedef otb::VectorImage< InputPixelType,  Dimension >        InputImageType;

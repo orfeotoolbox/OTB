@@ -27,6 +27,7 @@
 #define __otbMacro_h
 
 #include "itkMacro.h"
+#include "otbConfigure.h"
 
 /** This macro is used to print debug (or other information). They are
  * also used to catch errors, etc. Example usage looks like:
@@ -80,7 +81,7 @@
 #if defined(OTB_LEAN_AND_MEAN) || defined(__BORLANDC__)
 #define otbMsgDevMacro(x)
 #else
-  #ifdef OTB_ACTIVE_MSG_DEV_MACRO
+  #ifdef OTB_SHOW_ALL_MSG_DEBUG
     #define otbMsgDevMacro(x) \
     { { ::itk::OStringStream itkmsg; \
       itkmsg << " Msg Dev: " x << "\n"; \
@@ -178,7 +179,7 @@
         std::cout << " Testing Check Valid Command "<< #command " ok."<<std::endl; \
    }
 
-#define otbTestingCheckUnValidCommand(command) \
+#define otbTestingCheckNotValidCommand(command) \
   { \
         int result(1); \
         try \
