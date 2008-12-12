@@ -27,6 +27,7 @@
 #define __otbMacro_h
 
 #include "itkMacro.h"
+#include "otbConfigure.h"
 
 /** This macro is used to print debug (or other information). They are
  * also used to catch errors, etc. Example usage looks like:
