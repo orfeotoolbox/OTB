@@ -26,7 +26,7 @@
 //  Software Guide : BeginCommandLineArgs
 //  OUTPUTS: {DEMToOrthoImageGenerator.tif}
 //  OUTPUTS: {pretty_DEMToOrthoImageGenerator.png}
-//  773441 5044457 500 500 200 -200 ${OTB_SOURCE_DIR}/Examples/Data/DEM_srtm
+//  773441 5044457 500 500 200 -200 ${OTB_DATA_ROOT}/Examples/DEM_srtm
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
