@@ -59,7 +59,7 @@ ADD_TEST(NDVIRAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
  	)
 
 ADD_TEST(AtmosphericCorrectionSequencementTest ${EXE_TESTS}  
-        --compare-image ${TOL}  
+        --compare-image ${EPSILON}  
 		${BASELINE}/Example_RomaniaAtmosphericCorrectionSequencement.tif
                 ${TEMP}/Example_RomaniaAtmosphericCorrectionSequencement.tif
         AtmosphericCorrectionSequencementTest
