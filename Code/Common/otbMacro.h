@@ -176,7 +176,7 @@
                 ::itk::ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(),ITK_LOCATION); \
                 throw e_; \
         } \
-        std::cout << " Testing Check Valid Command "<< #command " ok."<<std::endl; \
+        std::cout << " Testing Check Valid    Command "<< #command " ok."<<std::endl; \
    }
 
 #define otbTestingCheckNotValidCommand(command) \
@@ -187,7 +187,7 @@
                 command;\
         } \
         catch( std::bad_alloc & err )     { throw err; } \
-        catch( itk::ExceptionObject & e ) { std::cout << " Testing Check UnValid Command "<< #command " ok."<<std::endl; result = 0; } \
+        catch( itk::ExceptionObject & e ) { std::cout << " Testing Check NotValid Command "<< #command " ok."<<std::endl; result = 0; } \
         catch( const std::exception & stde)   { throw stde; } \
         catch( ... ) \
         { \

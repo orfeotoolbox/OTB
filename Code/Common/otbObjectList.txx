@@ -19,6 +19,7 @@ PURPOSE.  See the above copyright notices for more information.
 #define __otbObjectList_txx
 
 #include "otbObjectList.h"
+#include "itkMacro.h"
 
 namespace otb
 {
@@ -94,6 +95,10 @@ namespace otb
   ObjectList<TObject>
   ::SetNthElement(unsigned int index,ObjectPointerType element)
   {
+    if( index >= m_InternalContainer.size() )
+    {
+        itkExceptionMacro(<<"Impossible to SetNthElement with the index element "<<index<<" ; this element don't exist, the size of the list is "<<m_InternalContainer.size()<<"." );
+    }
     m_InternalContainer[index]=element;
   }
   /**
@@ -106,6 +111,10 @@ namespace otb
   ObjectList<TObject>
   ::GetNthElement(unsigned int index) const
   {
+    if( index >= m_InternalContainer.size() )
+    {
+        itkExceptionMacro(<<"Impossible to GetNthElement with the index element "<<index<<" ; this element don't exist, the size of the list is "<<m_InternalContainer.size()<<"." );
+    }
     return m_InternalContainer[index];
   }
 /**
@@ -140,6 +149,10 @@ namespace otb
   ObjectList<TObject>
   ::Erase(unsigned int index)
   {
+    if( index >= m_InternalContainer.size() )
+    {
+        itkExceptionMacro(<<"Impossible to erase the index element "<<index<<" ; the size of the list is "<<m_InternalContainer.size()<<"." );
+    }
     m_InternalContainer.erase(m_InternalContainer.begin()+index);
   }
   /**
