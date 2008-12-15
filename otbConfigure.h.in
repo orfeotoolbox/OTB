@@ -1,12 +1,12 @@
-/* 
+/*
  * here is where system comupted values get stored these values should only
- * change when the target compile platform changes 
+ * change when the target compile platform changes
  */
 
 /* what byte order */
 #cmakedefine CMAKE_WORDS_BIGENDIAN
 #ifdef CMAKE_WORDS_BIGENDIAN
-  #define OTB_WORDS_BIGENDIAN 
+  #define OTB_WORDS_BIGENDIAN
 #endif
 
 /* what threading system are we using */
@@ -51,6 +51,15 @@
 #define OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING  @OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING@
 #define OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING     @OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING@
 
+/* OTB-Data path*/
+#cmakedefine OTB_DATA_ROOT
+
 /* Use opengl acceleration */
 #cmakedefine OTB_GL_USE_ACCEL
+
+/* Show developper debug messages */
+#cmakedefine OTB_SHOW_ALL_MSG_DEBUG
+
+/* Use Visu/Gui configurations */
+#cmakedefine OTB_USE_VISU_GUI
 
