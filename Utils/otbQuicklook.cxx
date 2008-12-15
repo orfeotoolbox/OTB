@@ -35,9 +35,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbStreamingImageFileWriter.h"
 #include "otbConfigure.h"
 
-#include "otbPolygon.h"
-#include "otbVectorData.h"
-#include "otbVectorDataFileWriter.h"
+
 
 int main(int argc, char* argv[] )
 {
@@ -45,8 +43,8 @@ int main(int argc, char* argv[] )
   try
   {
 
-    typedef int				InputPixelType;
-    typedef unsigned char			OutputPixelType;
+    typedef double InputPixelType;
+    typedef double OutputPixelType;
 
 
     typedef otb::MultiChannelExtractROI< InputPixelType,
@@ -74,7 +72,6 @@ int main(int argc, char* argv[] )
 
     parser->AddOption("--SamplingRatio","Sampling Ratio ","-sr",1,false);
 
-    parser->AddOption("--kmlOutput","KML overlay file (experimental)","-kml",1,false);
 
     typedef otb::CommandLineArgumentParseResult ParserResultType;
     ParserResultType::Pointer  parseResult = ParserResultType::New();
@@ -222,53 +219,6 @@ int main(int argc, char* argv[] )
     writer->SetInput(ResamplingFilter->GetOutput() );
     writer->Update();
 
-
-    if (parseResult->IsOptionPresent("--kmlOutput"))
-    {
-      typedef otb::Polygon<> PolygonType;
-      PolygonType::Pointer polygon = PolygonType::New();
-      int numberOfGCP = reader->GetOutput()->GetGCPCount();
-      for (int i=0; i<numberOfGCP;++i)
-      {
-        PolygonType::VertexType point;
-        point[0]=reader->GetOutput()->GetGCPX(i);
-        point[1]=reader->GetOutput()->GetGCPY(i);
-        polygon->AddVertex(point);
-      }
-
-      //Write the polygon (kml file)
-      typedef otb::VectorData<> VectorDataType;
-      VectorDataType::Pointer data = VectorDataType::New();
-
-      typedef VectorDataType::DataNodeType                  DataNodeType;
-      DataNodeType::Pointer document = DataNodeType::New();
-      DataNodeType::Pointer folder = DataNodeType::New();
-
-      document->SetNodeType(otb::DOCUMENT);
-      folder->SetNodeType(otb::FOLDER);
-
-      document->SetNodeId("DOCUMENT");
-      folder->SetNodeId("FOLDER");
-
-      DataNodeType::Pointer root = data->GetDataTree()->GetRoot()->Get();
-
-      data->GetDataTree()->Add(document,root);
-      data->GetDataTree()->Add(folder,document);
-
-
-      DataNodeType::Pointer polygonNode = DataNodeType::New();
-      polygonNode->SetNodeType(otb::FEATURE_POLYGON);
-      polygonNode->SetNodeId("FEATURE_POLYGON");
-      polygonNode->SetPolygonExteriorRing(polygon);
-      data->GetDataTree()->Add(polygonNode,folder);
-
-      typedef otb::VectorDataFileWriter<VectorDataType> WriterVectorType;
-      WriterVectorType::Pointer writerVector = WriterVectorType::New();
-      writerVector->SetFileName(parseResult->GetParameterString("--kmlOutput"));
-      writerVector->SetInput(data);
-      writerVector->Update();
-
-    }
 
 
   }
