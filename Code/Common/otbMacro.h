@@ -214,12 +214,13 @@
 
 // Check if application running or will be stopped
 #define otbRunningMacro() \
-     private: \
-        virtual void StartRunning() {this->m_Running = true;  } \
-        virtual void StopRunning()  {this->m_Running = false; } \
+	private:\
+        void StartRunning() {m_Running = true;  } \
+        void StopRunning()  {m_Running = false; } \
         bool m_Running;\
         public: \
-        virtual bool IsRunning() { return this->m_Running; }
+        virtual bool IsRunning() { return m_Running; }
+
 
 #define otbTestCallbackWithValue(view,button,button_value)\
   { \
