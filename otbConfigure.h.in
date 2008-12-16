@@ -53,6 +53,8 @@
 
 /* OTB-Data path*/
 #cmakedefine OTB_DATA_ROOT
+#cmakedefine OTB_DATA_USE_LARGEINPUT
+#cmakedefine OTB_DATA_LARGEINPUT
 
 /* Use opengl acceleration */
 #cmakedefine OTB_GL_USE_ACCEL

@@ -176,7 +176,7 @@
                 ::itk::ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(),ITK_LOCATION); \
                 throw e_; \
         } \
-        std::cout << " Testing Check Valid Command "<< #command " ok."<<std::endl; \
+        std::cout << " Testing Check Valid    Command "<< #command " ok."<<std::endl; \
    }
 
 #define otbTestingCheckNotValidCommand(command) \
@@ -187,7 +187,7 @@
                 command;\
         } \
         catch( std::bad_alloc & err )     { throw err; } \
-        catch( itk::ExceptionObject & e ) { std::cout << " Testing Check UnValid Command "<< #command " ok."<<std::endl; result = 0; } \
+        catch( itk::ExceptionObject & e ) { std::cout << " Testing Check NotValid Command "<< #command " ok."<<std::endl; result = 0; } \
         catch( const std::exception & stde)   { throw stde; } \
         catch( ... ) \
         { \
@@ -214,13 +214,12 @@
 
 // Check if application running or will be stopped
 #define otbRunningMacro() \
-	private:\
-        void StartRunning() {m_Running = true;  } \
-        void StopRunning()  {m_Running = false; } \
+     private: \
+        virtual void StartRunning() {this->m_Running = true;  } \
+        virtual void StopRunning()  {this->m_Running = false; } \
         bool m_Running;\
         public: \
-        virtual bool IsRunning() { return m_Running; }
-
+        virtual bool IsRunning() { return this->m_Running; }
 
 #define otbTestCallbackWithValue(view,button,button_value)\
   { \
