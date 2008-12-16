@@ -54,7 +54,9 @@ int main(int argc, char * argv[])
 
   if(argc<9)
   {
-    std::cout << argv[0] <<" output filename, Longitude Output Orign point , Latitude Output Origin point , X Output Size, Y Output size , X Spacing , Y Spacing, DEM folder path"  << std::endl;
+    std::cout << argv[0] <<" <output_filename> <Longitude Output Orign point>";
+        std::cout << " <Latitude Output Origin point> <X Output Size> <Y Output size>";
+        std::cout << " <X Spacing> <Y Spacing> <DEM folder path>"  << std::endl;
     return EXIT_FAILURE;
   }
 
