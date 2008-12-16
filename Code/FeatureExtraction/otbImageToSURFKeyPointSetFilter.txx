@@ -470,7 +470,7 @@ namespace otb
 
 		xx = static_cast<int> (pSrc[1]/rayon);
 		yy = static_cast<int> (pSrc[0]/rayon);
-		Nbin =  xx + 4*yy ;
+		Nbin =  static_cast<int> (xx + 4*yy) ;
 
 		if( Nbin < 16)           //because 64 descriptor length
 		  {
