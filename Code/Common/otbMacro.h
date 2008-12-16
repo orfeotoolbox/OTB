@@ -182,6 +182,7 @@
 #define otbTestingCheckNotValidCommand(command) \
   { \
         int result(1); \
+        result = 1; \
         try \
         { \
                 command;\
@@ -196,7 +197,7 @@
                 ::itk::ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(),ITK_LOCATION); \
                 throw e_; \
         } \
-        if(result) \
+        if(result == 1) \
         { \
                 ::itk::OStringStream message; \
                 message << "otb::ERROR: The command should be run an exception."; \
