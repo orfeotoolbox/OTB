@@ -92,7 +92,7 @@ ImageFittingPolygonListFilter<TPath, TImage>
 
     if(polygon->GetVertexList()->Size()>2)
     {
-      for (int iteration=0;iteration < m_NumberOfIterations;++iteration)
+      for (unsigned int iteration=0;iteration < m_NumberOfIterations;++iteration)
       {
         PathPointerType newPolygon = PathType::New();
       VertexListConstIteratorType vertexIt = polygon->GetVertexList()->Begin();
