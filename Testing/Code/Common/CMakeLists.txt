@@ -287,9 +287,14 @@ ADD_TEST(coTuObjectListNew ${COMMON_TESTS4}
 ADD_TEST(coTvObjectList ${COMMON_TESTS4}   
          otbObjectList 
          ${INPUTDATA}/couleurs.jpg 
-	 ${INPUTDATA}/poupees.png
-	 ${INPUTDATA}/sbuv.png
+         ${INPUTDATA}/poupees.png
+         ${INPUTDATA}/sbuv.png
  )
+
+ADD_TEST(coTvObjectListTestNotValid ${COMMON_TESTS4}   
+         otbObjectList2 
+ )
+
 ADD_TEST(coTuListNew ${COMMON_TESTS4} 
          otbListNew)  
 
@@ -572,6 +577,7 @@ otbListNew.cxx
 otbList.cxx
 otbObjectListNew.cxx
 otbObjectList.cxx
+otbObjectList2.cxx
 otbImageListNew.cxx
 otbImageList.cxx
 otbImageListSourceNew.cxx

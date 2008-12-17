@@ -102,7 +102,7 @@ public:
   /** Save the estimated model */
   void SaveModel(const char* model_file_name);
 
-  /** Set the SVM type to C_SVC, NU_SVC, ONE_CLASS, EPSILON_SVR, NU_SVR */
+  /** Set the SVM type to ONE_CLASS, C_SVC, NU_SVC, ONE_CLASS, EPSILON_SVR, NU_SVR */
   void SetSVMType(int svmtype)
   {
     m_Model->SetSVMType(svmtype);

@@ -58,9 +58,7 @@ template<class InputPixelType, class LabelPixelType>
 SVMModelEstimator<InputPixelType, LabelPixelType>
 ::~SVMModelEstimator(void)
 {
-
    svm_destroy_param(&m_Model->GetParameters());
-
 }
 
 /*
@@ -72,13 +70,6 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
 ::PrintSelf( std::ostream& os, itk::Indent indent ) const
 {
   // FIXME : print useful SVM information
-//   os << indent << "                   " << std::endl;
-//   os << indent << "Gaussian Models generated from the training data." << std::endl;
-//   os << indent << "TrainingImage: " ;
-//   os << m_TrainingImage.GetPointer() << std::endl;
-//   os << indent << "Results printed in the superclass " << std::endl;
-//   os << indent << "                   " << std::endl;
-
   Superclass::PrintSelf(os,indent);
 
 }// end PrintSelf
@@ -100,6 +91,24 @@ void
 SVMModelEstimator<InputPixelType, LabelPixelType>
 ::GenerateData( )
 {
+  if(m_NumberOfClasses<2)
+    {
+      itkExceptionMacro(<<"Can not do SVM estimation with less than 2 classes");
+    }
+
+  if(m_Model->GetSVMType() == ONE_CLASS)
+    {
+      if(m_NumberOfClasses>2)
+	{
+	  itkExceptionMacro(<<"Can not do ONE_CLASS SVM estimation with more than 2 classes");
+	}
+      if(m_Model->GetDoProbabilityEstimates())
+	{
+	  otbMsgDebugMacro(<<"Disabling SVM probability estimates for ONE_CLASS SVM type.");
+	  m_Model->DoProbabilityEstimates(false);
+	}
+    }
+
   if(!m_Done)
     {
     m_Done = 1;
@@ -171,19 +180,12 @@ SVMModelEstimator< InputPixelType, LabelPixelType >
   typename TrainingLabelsType::iterator labelsEnd = m_Labels.end();
 
 
-//   otbMsgDebugMacro(  << " Before while " );
   while(measIt!=measEnd && labelsIt!=labelsEnd)
     {
 
       double label = static_cast<double>(*labelsIt);
-      // otbMsgDebugMacro(  << label       );
-//       otbMsgDebugMacro(  << prob.x[i]   );
-//       otbMsgDebugMacro(  << prob.y[i]   );
-//       otbMsgDebugMacro(  << &x_space[j] );
       prob.x[i] = &x_space[j];
       prob.y[i] = label;
-
-      // otbMsgDebugMacro(  << "Label " << label << " " << i <<"/" << probl);
 
       typename MeasurementVectorType::iterator compIt = (*measIt).begin();
       typename MeasurementVectorType::iterator compEnd = (*measIt).end();
@@ -192,12 +194,9 @@ SVMModelEstimator< InputPixelType, LabelPixelType >
 
       while(compIt!=compEnd)
 	{
-	// otbMsgDebugMacro(  << "Index " << x_space[j].index );
-// 	otbMsgDebugMacro(  << "Value " << x_space[j].value );
 
 	x_space[j].index = k+1;
 	x_space[j].value = (*compIt);
-// 	otbMsgDebugMacro(  << x_space[j].index << ":" << x_space[j].value << " " << "j: " << j << " " );
 	++j;
 	++k;
 	++compIt;
@@ -205,7 +204,6 @@ SVMModelEstimator< InputPixelType, LabelPixelType >
       if(j>=1 && x_space[j-1].index > max_index)
 	max_index = x_space[j-1].index;
       x_space[j++].index = -1;
-      //    otbMsgDebugMacro( " " );
       ++i;
 
       ++measIt;

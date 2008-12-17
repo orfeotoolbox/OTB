@@ -66,8 +66,8 @@ ParallelLinePathListFilter<TPath>
       ++inputIt;
     }
 
-  int VectorSize = eraseFlagVector1.size();
-  std::cout<<" Number of Lines: "<< VectorSize <<std::endl;
+  unsigned int VectorSize = static_cast<unsigned int>(eraseFlagVector1.size());
+  //std::cout<<" Number of Lines: "<< VectorSize <<std::endl;
 
   IteratorType outputIt1 = outputPtr->Begin();
   unsigned int index1 = 0;

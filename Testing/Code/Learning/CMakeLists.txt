@@ -86,6 +86,14 @@ ADD_TEST(leTvSVMImageModelEstimatorTrain ${LEARNING_TESTS1}
 	${INPUTDATA}/ROI_QB_MUL_4_train.c1.hdr
 	${TEMP}/leTvsvm_model_image)
 
+ADD_TEST(leTvSVMImageModelEstimatorTrainOneClass ${LEARNING_TESTS1}
+--compare-ascii ${EPSILON_10e3}  ${BASELINE_FILES}/leTvsvm_model_image_one_class 
+                        ${TEMP}/leTvsvm_model_image_one_class
+        otbSVMImageModelEstimatorTrainOneClass
+	${INPUTDATA}/ROI_QB_MUL_4.tif
+	${INPUTDATA}/ROI_QB_MUL_4_train_one_class.tif
+	${TEMP}/leTvsvm_model_image_one_class)
+
 ADD_TEST(leTvSVMImageModelEstimatorModelAccessor ${LEARNING_TESTS1}
 --compare-ascii ${EPSILON_10e3}  ${BASELINE_FILES}/leSVMModelEstimatorModelAccessor.txt
                         ${TEMP}/leSVMModelEstimatorModelAccessor.txt
@@ -117,10 +125,22 @@ ADD_TEST(leTuSVMClassifierNew ${LEARNING_TESTS2}
         otbSVMClassifierNew)
 
 ADD_TEST(leTvSVMClassifierImage ${LEARNING_TESTS2}  
+--compare-image ${TOL} 
+		${BASELINE}/leSVMClassifierImageOutput.png
+		${TEMP}/leSVMClassifierImageOutput.png
         otbSVMClassifierImage
 	${INPUTDATA}/ROI_QB_MUL_4.tif
 	${INPUTDATA}/svm_model_image
-	${TEMP}/svm_classified_image.png)
+	${TEMP}/leSVMClassifierImageOutput.png)
+
+ADD_TEST(leTvSVMClassifierImageOneClass ${LEARNING_TESTS2}  
+--compare-image ${TOL} 
+		${BASELINE}/leSVMClassifierImageOneClassOutput.png
+		${TEMP}/leSVMClassifierImageOneClassOutput.png
+        otbSVMClassifierImage
+	${INPUTDATA}/ROI_QB_MUL_4.tif
+	${INPUTDATA}/svm_model_image_one_class
+	${TEMP}/leSVMClassifierImageOnClassOutput.png)
 
 ADD_TEST(leTvSVMClassifierImageWithGenericKernalLinear ${LEARNING_TESTS2}  
 --compare-image ${TOL}  ${TEMP}/svm_classified_image.png
@@ -341,6 +361,7 @@ otbSVMModelGenericKernelLoadSave.cxx
 #otbSVMMembershipFunctionLoadModel.cxx
 otbSVMImageModelEstimatorNew.cxx
 otbSVMImageModelEstimatorTrain.cxx
+otbSVMImageModelEstimatorTrainOneClass.cxx
 otbSVMImageModelEstimatorModelAccessor.cxx
 )
 SET(BasicLearning_SRCS2
