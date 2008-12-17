@@ -311,7 +311,7 @@ SET( OTB_EXAMPLES_SRCS
 
 
 
-# It is recommended that the user build the figures from the Insight executables
+# It is recommended that the user build the figures from the OTB executables
 # to generate the guide to ensure consistency.
 IF( BUILD_FIGURES )
   #
