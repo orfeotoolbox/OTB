@@ -71,10 +71,10 @@ typename ScalarToRainbowRGBPixelFunctor<TScalar>::RGBPixelType
 ScalarToRainbowRGBPixelFunctor<TScalar>
   ::HSVToRGB(double h, double s, double v) const
 {
-  double onethird = 1.0 / 3.0;
-  double onesixth = 1.0 / 6.0;
-  double twothird = 2.0 / 3.0;
-  double fivesixth = 5.0 / 6.0;
+  const double onethird = 1.0 / 3.0;
+  const double onesixth = 1.0 / 6.0;
+  const double twothird = 2.0 / 3.0;
+  const double fivesixth = 5.0 / 6.0;
   double r, g, b;
 
   // compute RGB from HSV

@@ -176,18 +176,19 @@
                 ::itk::ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(),ITK_LOCATION); \
                 throw e_; \
         } \
-        std::cout << " Testing check valid command "<< #command " ok."<<std::endl; \
+        std::cout << " Checking valid command "<< #command " ok."<<std::endl; \
    }
 
 #define otbTestingCheckNotValidCommand(command) \
   { \
         int result(1); \
+        result = 1; \
         try \
         { \
                 command;\
         } \
         catch( std::bad_alloc & err )     { throw err; } \
-        catch( itk::ExceptionObject & e ) { std::cout << " Testing check invalid command "<< #command " ok."<<std::endl; result = 0; } \
+        catch( itk::ExceptionObject & e ) { std::cout << "Checking not valid Command "<< #command " ok."<<std::endl; result = 0; } \
         catch( const std::exception & stde)   { throw stde; } \
         catch( ... ) \
         { \
@@ -196,7 +197,7 @@
                 ::itk::ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(),ITK_LOCATION); \
                 throw e_; \
         } \
-        if(result) \
+        if(result == 1) \
         { \
                 ::itk::OStringStream message; \
                 message << "otb::ERROR: "<<#command<<" should be throwing an exception."; \

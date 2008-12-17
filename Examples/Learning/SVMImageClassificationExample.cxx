@@ -36,7 +36,7 @@
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROI_QB_MUL_1.png}
 //    OUTPUTS: {ROI_QB_MUL_1_SVN_CLASS.png}
-//    ${OTB_SOURCE_DIR}/Examples/Data/svm_image_model.svm
+//    ${OTB_DATA_ROOT}/Examples/svm_image_model.svm
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginLatex
