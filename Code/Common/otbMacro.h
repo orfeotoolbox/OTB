@@ -182,7 +182,6 @@
 #define otbTestingCheckNotValidCommand(command) \
   { \
         int result(1); \
-        result = 1; \
         try \
         { \
                 command;\
