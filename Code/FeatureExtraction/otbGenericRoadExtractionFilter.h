@@ -162,6 +162,10 @@ template <class TInputImage, class TOutputPath>
   itkGetMacro(Tolerance,ToleranceType);
   itkSetMacro(Tolerance,ToleranceType);
 
+  /** Get/Set  the resolution */
+  itkGetMacro(Resolution,double);
+  itkSetMacro(Resolution,double);
+
   /** Set/Get the max angle (use bye the BreakAngularPathListFilter)*/
   itkSetMacro(MaxAngle,MaxAngleType);
   itkGetConstMacro(MaxAngle,MaxAngleType);
