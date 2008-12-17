@@ -30,7 +30,7 @@ REGISTER_TEST(ExtractROITest);
 REGISTER_TEST(DEMToImageGeneratorTest);
 #if defined(ITK_USE_REVIEW)
 REGISTER_TEST(LidarToImageExampleTest);
-#endif(ITK_USE_REVIEW)
+#endif
 }
 
 #undef main
@@ -45,4 +45,4 @@ REGISTER_TEST(LidarToImageExampleTest);
 #undef main
 #define main LidarToImageExampleTest
 #include "LidarToImageExample.cxx"
-#endif(ITK_USE_REVIEW)
+#endif
