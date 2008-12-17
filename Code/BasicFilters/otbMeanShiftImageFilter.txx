@@ -379,7 +379,6 @@ namespace otb
     RegionList *regionList        = edisonProcessor.GetBoundaries();
     int        *regionIndeces;
     int        numRegions         = regionList->GetNumRegions();
-    int        numBoundaryPixels  = 0;
 
     typename LabeledOutputType::IndexType boundIndex;
 
