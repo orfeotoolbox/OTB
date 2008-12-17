@@ -132,32 +132,48 @@ SET(libzlib_la_SOURCES
 	${libzlib_la_SOURCES_DIR}/zip.c
 )
 
-# Only for Windows Visual Studio
-SET(libzlib_win32_la_SOURCES "")
+# Only for Windows Visual Studio and Mac OSX
+SET(libzlib_src_la_SOURCES "")
 IF(WIN32)
   IF(NOT BORLAND)
     IF(NOT CYGWIN)
       IF(NOT MINGW)
-        INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3.win32/src")
-        SET(libzlib_win32_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3.win32/src")
-        SET(libzlib_win32_la_SOURCES 
-                ${libzlib_win32_la_SOURCES_DIR}/adler32.c
-                ${libzlib_win32_la_SOURCES_DIR}/compress.c
-                ${libzlib_win32_la_SOURCES_DIR}/crc32.c
-                ${libzlib_win32_la_SOURCES_DIR}/deflate.c
-                ${libzlib_win32_la_SOURCES_DIR}/inflate.c
-                ${libzlib_win32_la_SOURCES_DIR}/gzio.c
-                ${libzlib_win32_la_SOURCES_DIR}/infback.c
-                ${libzlib_win32_la_SOURCES_DIR}/inffast.c
-                ${libzlib_win32_la_SOURCES_DIR}/inftrees.c
-                ${libzlib_win32_la_SOURCES_DIR}/trees.c
-                ${libzlib_win32_la_SOURCES_DIR}/uncompr.c
-                ${libzlib_win32_la_SOURCES_DIR}/zutil.c
-                )
+        INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3.src")
+        SET(libzlib_src_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3.src")
+        SET(libzlib_src_la_SOURCES 
+                ${libzlib_src_la_SOURCES_DIR}/adler32.c
+                ${libzlib_src_la_SOURCES_DIR}/compress.c
+                ${libzlib_src_la_SOURCES_DIR}/crc32.c
+                ${libzlib_src_la_SOURCES_DIR}/deflate.c
+                ${libzlib_src_la_SOURCES_DIR}/inflate.c
+                ${libzlib_src_la_SOURCES_DIR}/gzio.c
+                ${libzlib_src_la_SOURCES_DIR}/infback.c
+                ${libzlib_src_la_SOURCES_DIR}/inffast.c
+                ${libzlib_src_la_SOURCES_DIR}/inftrees.c
+                ${libzlib_src_la_SOURCES_DIR}/trees.c
+                ${libzlib_src_la_SOURCES_DIR}/uncompr.c
+                ${libzlib_src_la_SOURCES_DIR}/zutil.c )
       ENDIF(NOT MINGW)
     ENDIF(NOT CYGWIN)
   ENDIF(NOT BORLAND)
 ENDIF(WIN32)
+IF(APPLE)
+        INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3.src")
+        SET(libzlib_src_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3.src")
+        SET(libzlib_src_la_SOURCES 
+                ${libzlib_src_la_SOURCES_DIR}/adler32.c
+                ${libzlib_src_la_SOURCES_DIR}/compress.c
+                ${libzlib_src_la_SOURCES_DIR}/crc32.c
+                ${libzlib_src_la_SOURCES_DIR}/deflate.c
+                ${libzlib_src_la_SOURCES_DIR}/inflate.c
+                ${libzlib_src_la_SOURCES_DIR}/gzio.c
+                ${libzlib_src_la_SOURCES_DIR}/infback.c
+                ${libzlib_src_la_SOURCES_DIR}/inffast.c
+                ${libzlib_src_la_SOURCES_DIR}/inftrees.c
+                ${libzlib_src_la_SOURCES_DIR}/trees.c
+                ${libzlib_src_la_SOURCES_DIR}/uncompr.c
+                ${libzlib_src_la_SOURCES_DIR}/zutil.c )
+ENDIF(APPLE)
 
 
 SET(liburiparser_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/uriparser-0.7.1/lib")
@@ -191,7 +207,7 @@ SET(libkml_SOURCES
         ${libkmlregionator_la_SOURCES} 
         ${libzlib_la_SOURCES} 
         ${liburiparser_la_SOURCES} 
-        ${libzlib_win32_la_SOURCES}
+        ${libzlib_src_la_SOURCES}
         )
 # Adjust the compiler flags to avoid problems with ossim code.
 IF(CMAKE_COMPILER_IS_GNUCXX)
