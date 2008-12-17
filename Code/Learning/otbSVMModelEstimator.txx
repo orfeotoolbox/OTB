@@ -91,6 +91,24 @@ void
 SVMModelEstimator<InputPixelType, LabelPixelType>
 ::GenerateData( )
 {
+  if(m_NumberOfClasses<2)
+    {
+      itkExceptionMacro(<<"Can not do SVM estimation with less than 2 classes");
+    }
+
+  if(m_Model->GetSVMType() == ONE_CLASS)
+    {
+      if(m_NumberOfClasses>2)
+	{
+	  itkExceptionMacro(<<"Can not do ONE_CLASS SVM estimation with more than 2 classes");
+	}
+      if(m_Model->GetDoProbabilityEstimates())
+	{
+	  otbMsgDebugMacro(<<"Disabling SVM probability estimates for ONE_CLASS SVM type.");
+	  m_Model->DoProbabilityEstimates(false);
+	}
+    }
+
   if(!m_Done)
     {
     m_Done = 1;
