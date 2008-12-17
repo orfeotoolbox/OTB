@@ -38,5 +38,6 @@ REGISTER_TEST(otbSVMModelGenericKernelLoadSave);
 //REGISTER_TEST(otbSVMMembershipFunctionLoadModel);
 REGISTER_TEST(otbSVMImageModelEstimatorNew);
 REGISTER_TEST(otbSVMImageModelEstimatorTrain);
+REGISTER_TEST(otbSVMImageModelEstimatorTrainOneClass);
 REGISTER_TEST(otbSVMImageModelEstimatorModelAccessor);
 }

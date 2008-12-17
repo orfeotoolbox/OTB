@@ -86,6 +86,14 @@ ADD_TEST(leTvSVMImageModelEstimatorTrain ${LEARNING_TESTS1}
 	${INPUTDATA}/ROI_QB_MUL_4_train.c1.hdr
 	${TEMP}/leTvsvm_model_image)
 
+ADD_TEST(leTvSVMImageModelEstimatorTrainOneClass ${LEARNING_TESTS1}
+--compare-ascii ${EPSILON_10e3}  ${BASELINE_FILES}/leTvsvm_model_image_one_class 
+                        ${TEMP}/leTvsvm_model_image_one_class
+        otbSVMImageModelEstimatorTrainOneClass
+	${INPUTDATA}/ROI_QB_MUL_4.tif
+	${INPUTDATA}/ROI_QB_MUL_4_train_one_class.tif
+	${TEMP}/leTvsvm_model_image_one_class)
+
 ADD_TEST(leTvSVMImageModelEstimatorModelAccessor ${LEARNING_TESTS1}
 --compare-ascii ${EPSILON_10e3}  ${BASELINE_FILES}/leSVMModelEstimatorModelAccessor.txt
                         ${TEMP}/leSVMModelEstimatorModelAccessor.txt
@@ -341,6 +349,7 @@ otbSVMModelGenericKernelLoadSave.cxx
 #otbSVMMembershipFunctionLoadModel.cxx
 otbSVMImageModelEstimatorNew.cxx
 otbSVMImageModelEstimatorTrain.cxx
+otbSVMImageModelEstimatorTrainOneClass.cxx
 otbSVMImageModelEstimatorModelAccessor.cxx
 )
 SET(BasicLearning_SRCS2
