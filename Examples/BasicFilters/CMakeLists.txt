@@ -2,19 +2,13 @@ PROJECT(BasicFiltersExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 ADD_EXECUTABLE(LeeImageFilter LeeImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(LeeImageFilter OTBCommon OTBIO ITKCommon ITKIO ITKNumerics ITKBasicFilters ITKCommon ITKStatistics itkvnl_inst itkvnl_algo itkvnl itkvcl itknetlib itksys  ITKNrrdIO itkpng itktiff itkjpeg8 itkjpeg12 itkjpeg16 ITKMetaIO itkzlib ITKDICOMParser ITKEXPAT )
-TARGET_LINK_LIBRARIES(LeeImageFilter OTBCommon OTBIO ITKCommon ITKIO ITKNumerics ITKBasicFilters ITKCommon ITKStatistics itkvnl_inst itkvnl_algo itkvnl itkvcl itksys  ITKNrrdIO itkpng itktiff itkjpeg8 itkjpeg12 itkjpeg16 ITKMetaIO itkzlib ITKDICOMParser ITKEXPAT )
-
+TARGET_LINK_LIBRARIES(LeeImageFilter OTBCommon OTBIO)
 
 ADD_EXECUTABLE(DEMToRainbowExample DEMToRainbowExample.cxx )
-TARGET_LINK_LIBRARIES(DEMToRainbowExample OTBCommon OTBIO ITKCommon ITKIO ITKNumerics ITKBasicFilters ITKCommon
-                                          ITKStatistics itkvnl_inst itkvnl_algo itkvnl itkvcl itksys  ITKNrrdIO itkpng itktiff
-                                          itkjpeg8 itkjpeg12 itkjpeg16 ITKMetaIO itkzlib ITKDICOMParser ITKEXPAT otbossim )
+TARGET_LINK_LIBRARIES(DEMToRainbowExample OTBCommon OTBIO)
 
 ADD_EXECUTABLE(ScalingFilterExample ScalingFilterExample.cxx )
-TARGET_LINK_LIBRARIES(ScalingFilterExample OTBCommon OTBIO ITKCommon ITKIO ITKNumerics ITKBasicFilters ITKCommon
-                                          ITKStatistics itkvnl_inst itkvnl_algo itkvnl itkvcl itksys  ITKNrrdIO itkpng itktiff
-                                          itkjpeg8 itkjpeg12 itkjpeg16 ITKMetaIO itkzlib ITKDICOMParser ITKEXPAT otbossim )
+TARGET_LINK_LIBRARIES(ScalingFilterExample OTBCommon OTBIO)
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
@@ -49,6 +43,21 @@ ADD_TEST(DEMToRainbowExampleTest ${EXE_TESTS}
 	DEMToRainbowExampleTest
 	${TEMP}/DEMToRainbowImageGenerator.png
     6.5 45.5 500 500 0.002 -0.002 ${OTB_DATA_ROOT}/Examples/DEM_srtm
+)
+
+
+# ------- LeeImageFilterTest----------
+
+ADD_TEST(ScalingFilterExampleTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 2
+	${BASELINE}/QB_Toulouse_Ortho_PAN_rescaled.png
+	${TEMP}/QB_Toulouse_Ortho_PAN_rescaled.png
+	${BASELINE}/QB_Toulouse_Ortho_PAN_casted.png
+	${TEMP}/QB_Toulouse_Ortho_PAN_casted.png
+	ScalingFilterExampleTest
+	${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+	${TEMP}/QB_Toulouse_Ortho_PAN_rescaled.png
+	${TEMP}/QB_Toulouse_Ortho_PAN_casted.png
 )
 
 ADD_EXECUTABLE(otbBasicFiltersExamplesTests otbBasicFiltersExamplesTests.cxx)
