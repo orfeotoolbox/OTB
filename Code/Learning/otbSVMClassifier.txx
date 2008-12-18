@@ -143,7 +143,9 @@ namespace otb{
     if(predict_probability)
       {
 	if (svm_type==NU_SVR || svm_type==EPSILON_SVR)
+        {
 	  otbMsgDevMacro(<<"Prob. model for test data: target value = predicted value + z,\nz: Laplace distribution e^(-|z|/sigma)/(2sigma),sigma="<<svm_get_svr_probability(model));
+        }
 	else
 	  {
 
