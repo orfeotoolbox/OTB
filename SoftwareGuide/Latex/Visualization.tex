@@ -1,13 +1,13 @@
 \chapter{Image Visualization and output}
 \label{chap:ImageVisualization}
 
-After processing your images with OTB, you probably want to see the result. As it is quite straightforward in some situation, if can be a bit trickier in other. For example, some filters will give you a list of polygons as an output. Other can return an image with each region labeled by a unique index. In this section we are going to provide few examples to help you produce beautiful output ready to be included in your publications/presentations.
+After processing your images with OTB, you probably want to see the result. As it is quite straightforward in some situation, if can be a bit trickier in other. For example, some filters will give you a list of polygons as an output. Other can return an image with each region labelled by a unique index. In this section we are going to provide few examples to help you produce beautiful output ready to be included in your publications/presentations.
 
 
 \section{Viewer}
 Even if OTB is not a visualization toolkit as for instance VTK
 (\emph{The Visualization Toolkit} \url{http://www.vtk.org}), some
-simple functionnalities for image visualization are given in the
+simple functionalities for image visualization are given in the
 toolbox. Indeed, for algorithm prototyping, it is sometimes more
 useful to \emph{see} the result on the screen, than saving it to a
 file and then open in with an external viewer.
@@ -17,10 +17,22 @@ with the pipeline and can therefore replace the
 \doxygen{otb::ImageFileWriter} during proto-typing phases.
 
 \input{VisuExample1.tex}
-%% \section{Viewing Grey Level Images}
-%% \label{sec:ViewingGreyLevelImages}
 
-%% \section{Viewing RGB Images}
-%% \label{sec:ViewingRGBImages}
-%% \section{Viewing Multiband Images}
-%% \label{sec:ViewingMultibandImages}
+
+\section{Images}
+
+\subsection{Grey Level Images}
+\label{sec:ViewingGreyLevelImages}
+
+\input{ScalingFilterExample.cxx}
+
+% \subsection{Multiband Images}
+% \label{sec:ViewingMultibandImages}
+
+
+% \subsection{Indexed Images}
+% \label{sec:ViewingIndexedImages}
+
+% \subsection{Altitude Images}
+% \label{sec:ViewingAltitudeImages}
+
