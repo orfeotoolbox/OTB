@@ -158,7 +158,7 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
 
 
 
-%%\ifitkPrintedVersion 
+%%\ifitkPrintedVersion
 %% \input{Cover.tex}
 %%\fi
 
@@ -190,25 +190,25 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 
+%
 % Begin technical content
-% 
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \mainmatter
 
-\part{Introduction}
+\part{Introduction}\label{part:introduction}
 
 \input{Introduction.tex}
 \input{Installation.tex}
 \input{SystemOverview.tex}
 
-\part{Tutorials}
+\part{Tutorials}\label{part:tutorials}
 
 \input{Tutorial.tex}
 
 
-\part{User's guide}
+\part{User's guide}\label{part:userguide}
 
 \input{DataRepresentation.tex}
 \input{ReadWrite.tex}
@@ -230,13 +230,13 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
 
 
 
-\part{Developper's guide}
+\part{Developper's guide}\label{part:develepperguide}
 \input{Iterators.tex}
 \input{ImageAdaptors.tex}
 \input{StreamingAndThreading.tex}
 \input{WriteAFilter.tex}
 
-\part{Appendix}
+\part{Appendix}\label{part:appendix}
 \chapter{Frequently Asked Questions}
 \label{sec:FrequentlyAskedQuestions}
 \input{FAQ.tex}
