@@ -12,13 +12,17 @@ available on line at \url{http://orfeo-toolbox.sourceforge.net/Doxygen/html}.
 \label{sec:Organization}
 
 This software guide is divided into several parts, each of which is further
-divided into several chapters. Part~\ref{part:introduction} is a general introduction to OTB,
+divided into several chapters. Part~\ref{part:introduction} is a general
+introduction to OTB,
 with---in the next chapter---a description of how to install the ORFEO
 Toolbox on your computer. Part~\ref{part:introduction} also
 introduces basic system concepts such as an overview of the system
 architecture, and how to build applications in the C++ programming
-language. Part \ref{part:tutorials} is a short guide with gradual difficulty to get you start programming with OTB. Part~\ref{part:userguide} describes the system from the user point of view. Dozens
-of examples are used to illustrate important system features. Part~\ref{part:developperguide}  is for
+language. Part \ref{part:tutorials} is a short guide with gradual difficulty to
+get you start programming with OTB. Part~\ref{part:userguide} describes the
+system from the user point of view. Dozens
+of examples are used to illustrate important system features.
+Part~\ref{part:developperguide}  is for
 the OTB developer. It explains how to create your own classes and extend
 the system.%, and interface to windowing and GUI systems.
 
@@ -33,11 +37,15 @@ must also be familiar with OTB's internal structures and design
 (material covered in Part~\ref{part:developperguide}).
 
 The key to learning how to use OTB is to become familiar with its
-palette of objects and the ways of combining them. We recommend that you learn the system by studying the
+palette of objects and the ways of combining them. We recommend that you learn
+the system by studying the
 examples and then, if you are a class developer, study the source
-code. Start by the first few tutorials in Part~\ref{part:tutorials} to get familiar with the build process and the general program organization, follow by reading Chapter \ref{chapter:SystemOverview}, which provides an overview of some
+code. Start by the first few tutorials in Part~\ref{part:tutorials} to get
+familiar with the build process and the general program organization, follow by
+reading Chapter \ref{chapter:SystemOverview}, which provides an overview of some
 of the key concepts in the system, and then review the examples in
-Part~\ref{part:userguide}. You may also wish to compile and run the dozens of examples
+Part~\ref{part:userguide}. You may also wish to compile and run the dozens of
+examples
 distributed with the source code found in the directory
 \code{OTB/Examples}. (Please see the file
 \code{OTB/Examples/README.txt} for a description of the examples
@@ -93,7 +101,8 @@ created in your disk and you will be ready for starting the configuration
 process described in Section \ref{sec:CMakeforOTB} on page
 \pageref{sec:CMakeforOTB}.
 
-You can also get the current version following instructions in Section \ref{sec:FAQMercurial}, on page \pageref{sec:FAQMercurial}.
+You can also get the current version following instructions in Section
+\ref{sec:FAQMercurial}, on page \pageref{sec:FAQMercurial}.
 
 \subsection{Join the Mailing List}
 \label{sec:JoinMailList}
@@ -119,7 +128,8 @@ fundamental to achieving this goal.
 \label{sec:DirectoryStructure}
 
 To begin your OTB odyssey, you will first need to know something about OTB's
-software organization and directory structure. It is helpful to know enough to navigate through the
+software organization and directory structure. It is helpful to know enough to
+navigate through the
 code base to find examples, code, and documentation.
 
 OTB is organized into several different modules. There are three:
@@ -132,8 +142,7 @@ are available from \code{OTB-Applications}. Usually you will work with the
 \code{OTB} module unless you are a developer, are teaching a course, or
 are looking at the details of various design documents. The
 \code{OTB-Applications} module should only be downloaded and
-compiled once
-the \code{OTB} module is functioning properly.
+compiled once the \code{OTB} module is functioning properly.
 
 The \code{OTB} module contains the following subdirectories:
 \begin{itemize}
@@ -146,7 +155,8 @@ The \code{OTB} module contains the following subdirectories:
         to test OTB. These examples tend to be minimally documented but may
         be useful to demonstrate various system concepts.
         \item \code{OTB/Utilities}---supporting software for the OTB
-        source code. For example, libraries such as \code{ITK}.% and \code{GDAL}.
+        source code. For example, libraries such as \code{ITK}.% and
+\code{GDAL}.
 \end{itemize}
 
 The source code directory structure---found in \code{OTB/Code}---is
@@ -204,7 +214,8 @@ The \code{OTB-Documents} module contains the following subdirectories:
 
 The \code{OTB-Applications} module contains large, relatively complex
 examples of OTB usage.%%  See the web pages at
-%% \url{http://www.itk.org/HTML/Applications.htm}\textbf{FIXME} for a description. Some of
+%% \url{http://www.itk.org/HTML/Applications.htm}\textbf{FIXME} for a
+description. Some of
 %% these applications require GUI toolkits such as FLTK or other packages
 %% such as VTK (\emph{The Visualization Toolkit}
 %% \url{http://www.vtk.org}). Do not attempt to compile and build this module
@@ -238,7 +249,8 @@ aware of.
 \label{sec:Data}
 
 The OTB Toolkit was designed to support the ORFEO Acompaniment Program
-and its associated data. This data is available \url{http://smsc.cnes.fr/PLEIADES/index.htm}.
+and its associated data. This data is available
+\url{http://smsc.cnes.fr/PLEIADES/index.htm}.
 
 
 \section{The OTB Community and Support}
@@ -283,19 +295,29 @@ number of possibilities.
 \index{OTB!history}
 
 
-Beside the Pleiades (PHR) and Cosmo-Skymed (CSK) systems developments forming ORFEO, the dual and bilateral system (France - Italy) for Earth Observation, the ORFEO Accompaniment Program was set up, to prepare, accompany and promote the use and the exploitation of the images derived from these sensors.
+Beside the Pleiades (PHR) and Cosmo-Skymed (CSK) systems developments forming
+ORFEO, the dual and bilateral system (France - Italy) for Earth Observation, the
+ORFEO Accompaniment Program was set up, to prepare, accompany and promote the
+use and the exploitation of the images derived from these sensors.
 
-The creation of a preparatory program\footnote{http://smsc.cnes.fr/PLEIADES/A\_prog\_accomp.htm} is needed because of :
+The creation of a preparatory
+program\footnote{http://smsc.cnes.fr/PLEIADES/A\_prog\_accomp.htm} is needed
+because of :
 \begin{itemize}
-\item the new capabilities and performances of the ORFEO systems (optical and radar high resolution, access capability, data quality, possibility to acquire simultaneously in optic and radar),
-\item the implied need of new methodological developments : new processing methods, or adaptation of existing methods,
+\item the new capabilities and performances of the ORFEO systems (optical and
+radar high resolution, access capability, data quality, possibility to acquire
+simultaneously in optic and radar),
+\item the implied need of new methodological developments : new processing
+methods, or adaptation of existing methods,
 \item the need to realise those new developments in very close
-  cooperation with the final users for better integration of new products in their systems.
+  cooperation with the final users for better integration of new products in
+their systems.
 
 \end{itemize}
 
 This program was initiated by CNES mid-2003 and will last until 2010 at least
-It consists in two parts, between which it is necessary to keep a strong interaction :
+It consists in two parts, between which it is necessary to keep a strong
+interaction :
 \begin{itemize}
 \item A Thematic part
 \item A Methodological part.
@@ -306,7 +328,9 @@ defence ones), and aims at specifying and validating value added
 products and services required by end users. This part includes
 consideration about products integration in the operational systems or
 processing lines. It also includes a careful thought on intermediary
-structures to be developed to help non-autonomous users. Lastly, this part aims at raising future users awareness, through practical demonstrations and validations.
+structures to be developed to help non-autonomous users. Lastly, this part aims
+at raising future users awareness, through practical demonstrations and
+validations.
 
 The Methodological part objective is the definition and the
 development of tools for the operational exploitation of the future
