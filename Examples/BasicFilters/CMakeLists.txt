@@ -7,8 +7,13 @@ TARGET_LINK_LIBRARIES(LeeImageFilter OTBCommon OTBIO ITKCommon ITKIO ITKNumerics
 
 
 ADD_EXECUTABLE(DEMToRainbowExample DEMToRainbowExample.cxx )
-TARGET_LINK_LIBRARIES(DEMToRainbowExample OTBCommon OTBIO ITKCommon ITKIO ITKNumerics ITKBasicFilters ITKCommon 
-                                          ITKStatistics itkvnl_inst itkvnl_algo itkvnl itkvcl itksys  ITKNrrdIO itkpng itktiff 
+TARGET_LINK_LIBRARIES(DEMToRainbowExample OTBCommon OTBIO ITKCommon ITKIO ITKNumerics ITKBasicFilters ITKCommon
+                                          ITKStatistics itkvnl_inst itkvnl_algo itkvnl itkvcl itksys  ITKNrrdIO itkpng itktiff
+                                          itkjpeg8 itkjpeg12 itkjpeg16 ITKMetaIO itkzlib ITKDICOMParser ITKEXPAT otbossim )
+
+ADD_EXECUTABLE(ScalingFilterExample ScalingFilterExample.cxx )
+TARGET_LINK_LIBRARIES(ScalingFilterExample OTBCommon OTBIO ITKCommon ITKIO ITKNumerics ITKBasicFilters ITKCommon
+                                          ITKStatistics itkvnl_inst itkvnl_algo itkvnl itkvcl itksys  ITKNrrdIO itkpng itktiff
                                           itkjpeg8 itkjpeg12 itkjpeg16 ITKMetaIO itkzlib ITKDICOMParser ITKEXPAT otbossim )
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
