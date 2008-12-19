@@ -23,9 +23,6 @@
 #define ITK_LEAN_AND_MEAN
 #endif
 
-//Note, have to be aware that
-// SPOT5 IMAGERY.TIF has XS3, XS2, XS1, XS4
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {IMAGERY_SSECH.tif}
 //    OUTPUTS: {PrintableExampleOutput1.png}
