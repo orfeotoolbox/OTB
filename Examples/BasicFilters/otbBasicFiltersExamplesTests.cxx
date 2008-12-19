@@ -30,6 +30,7 @@ REGISTER_TEST(DEMToRainbowExampleTest);
 REGISTER_TEST(ScalingFilterExampleTest);
 REGISTER_TEST(PrintableImageFilterExample1Test);
 REGISTER_TEST(PrintableImageFilterExample2Test);
+REGISTER_TEST(IndexedToRGBExampleTest);
 }
 
 #undef main
@@ -52,3 +53,7 @@ REGISTER_TEST(PrintableImageFilterExample2Test);
 #undef main
 #define main PrintableImageFilterExample2Test
 #include "PrintableImageFilterExample.cxx"
+
+#undef main
+#define main IndexedToRGBExampleTest
+#include "IndexedToRGBExample.cxx"

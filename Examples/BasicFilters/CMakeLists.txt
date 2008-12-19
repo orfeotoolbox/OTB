@@ -13,6 +13,9 @@ TARGET_LINK_LIBRARIES(ScalingFilterExample OTBCommon OTBIO)
 ADD_EXECUTABLE(PrintableImageFilterExample PrintableImageFilterExample.cxx )
 TARGET_LINK_LIBRARIES(PrintableImageFilterExample OTBCommon OTBIO)
 
+ADD_EXECUTABLE(IndexedToRGBExample IndexedToRGBExample.cxx )
+TARGET_LINK_LIBRARIES(IndexedToRGBExample OTBCommon OTBIO)
+
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/BasicFilters)
@@ -83,6 +86,20 @@ ADD_TEST(PrintableImageFilteExample2rTest ${EXE_TESTS}
 	${INPUTDATA}/IMAGERY_SSECH.tif
 	${TEMP}/PrintableExampleOutput2.png
     1 4 2
+)
+
+# ------- IndexedToRGBExampleTest----------
+
+ADD_TEST(IndexedToRGBExampleTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 2
+	${BASELINE}/buildingExtractionRGB.png
+	${TEMP}/buildingExtractionRGB.png
+	${BASELINE}/buildingExtractionIndexed_scaled.png
+	${TEMP}/buildingExtractionIndexed_scaled.png
+	IndexedToRGBExampleTest
+	${INPUTDATA}/buildingExtractionIndexed.tif
+	${TEMP}/buildingExtractionRGB.png
+	${TEMP}/buildingExtractionIndexed_scaled.png
 )
 
 ADD_EXECUTABLE(otbBasicFiltersExamplesTests otbBasicFiltersExamplesTests.cxx)
