@@ -25,10 +25,9 @@
 
 
 //  Software Guide : BeginCommandLineArgs
-//  OUTPUTS: {DEMToRainbowImageGenerator.eps}
+//  OUTPUTS: {DEMToRainbowImageGenerator.png}
 //  6.5 45.5 500 500 0.002 -0.002 ${OTB_DATA_ROOT}/Examples/DEM_srtm
 //  Software Guide : EndCommandLineArgs
-
 
 // Software Guide : BeginLatex
 //
