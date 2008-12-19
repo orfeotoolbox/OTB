@@ -35,6 +35,10 @@ IF(WIN32)
     ENDIF(NOT CYGWIN)
   ENDIF(NOT BORLAND)
 ENDIF(WIN32)
+# __CYGWIN__ must be define for ossim (ex: ossimCommon.h, isnan definition, .. )
+#IF(CYGWIN)
+#  ADD_DEFINITIONS(-D__CYGWIN__)
+#ENDIF(CYGWIN)
 
 # If CMake is the version we're expecting, don't show the
 # CMAKE_BACKWARDS_COMPATIBILITY option. If the version is higher than the

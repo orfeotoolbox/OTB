@@ -58,7 +58,13 @@ namespace ossim
      *
      * @see nan()
      */
-#if defined(WIN32) || defined(_MSC_VER) && !defined(__CYGWIN__) && !defined(__MWERKS__)
+// BEGIN OTB modifications : select "std::isnan" for CYGWIN platform
+#if defined(__CYGWIN__)
+    inline bool isnan(const float& v)  { return ( std::isnan(v) ); }
+    inline bool isnan(const double& v) { return ( std::isnan(v) ); }
+//#if defined(WIN32) || defined(_MSC_VER) && !defined(__CYGWIN__) && !defined(__MWERKS__)
+// END OTB modifications : std::isnan for CYGWIN
+#elif defined(WIN32) || defined(_MSC_VER) && !defined(__CYGWIN__) && !defined(__MWERKS__)
     inline bool isnan(const float& v) { return _isnan(v); }
     inline bool isnan(const double& v) { return _isnan(v); }
 #elif defined(sun) || defined(__sun)
@@ -75,6 +81,7 @@ namespace ossim
     inline bool isnan(const float& v)  { return ( std::isnan(v) ); }
     inline bool isnan(const double& v) { return ( std::isnan(v) ); }
 #endif
+
 
 /* #if defined(WIN32) || defined(_MSC_VER) && !defined(__CYGWIN__) && !defined(__MWERKS__) */
 /*     inline bool isnan(const float& v) { return _isnan(v); } */

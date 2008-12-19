@@ -25,6 +25,12 @@ SET(liblas_SOURCES
   ${liblas_SOURCES_DIR}/detail/writer.cpp
 )
 
+#IF(CMAKE_COMPILER_IS_GNUCXX)
+#  FOREACH(f ${liblas_SOURCES} )
+#        SET_SOURCE_FILES_PROPERTIES( ${f} PROPERTIES COMPILE_FLAGS "-Wno-long-long -pedantic -std=c++98" )
+#  ENDFOREACH(f)
+#ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
 ADD_LIBRARY(otbliblas ${liblas_SOURCES} )
 
 INSTALL(TARGETS otbliblas

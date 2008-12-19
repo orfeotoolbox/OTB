@@ -309,7 +309,10 @@ inline void check_stream_state(std::basic_ios<C, T>& srtm)
     else if (srtm.bad())
         throw std::runtime_error("fatal I/O error occured");
 #else
+// OTB Modifications for cygwin compilation
+#ifndef __CYGWIN__
     UNREFERENCED_PARAMETER(srtm);
+#endif
 #endif
 }
 
