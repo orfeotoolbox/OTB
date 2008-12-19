@@ -26,7 +26,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Toulouse_Ortho_PAN.tif}
-//    OUTPUTS: {QB_Toulouse_Ortho_PAN_rescaled.png QB_Toulouse_Ortho_PAN_casted.png}
+//    OUTPUTS: {QB_Toulouse_Ortho_PAN_rescaled.png}, {QB_Toulouse_Ortho_PAN_casted.png}
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginLatex
