@@ -209,6 +209,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/LeeImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/ScalingFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/PrintableImageFilterExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/BasicFilters/IndexedToRGBExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration1.cxx
   ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration2.cxx
   ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration5.cxx
