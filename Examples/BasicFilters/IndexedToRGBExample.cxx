@@ -39,9 +39,9 @@
 // than a RGB value, it is different when it comes to displaying the results.
 //
 // Here we present a convient way to convert such indexed image to a color image. In
-// such conversion, it is important to ensure that neighborhood region have
-// easily dicernable colors. This is done randomly using a hash function by
-// the \doxygen{itk}{ScalarToRGBPixelFunctor}.
+// such conversion, it is important to ensure that neighborhood region, which are
+// likely to have consecutive number have easily dicernable colors. This is done
+// randomly using a hash function by the \doxygen{itk}{ScalarToRGBPixelFunctor}.
 //
 //  Software Guide : EndLatex
 
