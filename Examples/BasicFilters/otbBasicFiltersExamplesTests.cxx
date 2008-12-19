@@ -28,6 +28,8 @@ void RegisterTests()
 REGISTER_TEST(LeeImageFilterTest);
 REGISTER_TEST(DEMToRainbowExampleTest);
 REGISTER_TEST(ScalingFilterExampleTest);
+REGISTER_TEST(PrintableImageFilterExample1Test);
+REGISTER_TEST(PrintableImageFilterExample2Test);
 }
 
 #undef main
@@ -43,3 +45,10 @@ REGISTER_TEST(ScalingFilterExampleTest);
 #define main ScalingFilterExampleTest
 #include "ScalingFilterExample.cxx"
 
+#undef main
+#define main PrintableImageFilterExample1Test
+#include "PrintableImageFilterExample.cxx"
+
+#undef main
+#define main PrintableImageFilterExample2Test
+#include "PrintableImageFilterExample.cxx"

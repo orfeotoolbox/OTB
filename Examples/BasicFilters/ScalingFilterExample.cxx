@@ -100,7 +100,7 @@ int main( int argc, char * argv[] )
   // \itkcaption[Scaling images]{On the left, the image obtained by truncated the value
   // about the dynamic acceptable for a png file. On the right, the same image with
   // a proper rescaling}
-  // \label{fig:CALING_FILTER}
+  // \label{fig:SCALING_FILTER}
   // \end{figure}
   //
   //  Software Guide : EndLatex
