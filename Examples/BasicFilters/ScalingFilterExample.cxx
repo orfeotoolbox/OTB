@@ -97,8 +97,9 @@ int main( int argc, char * argv[] )
   // \center
   // \includegraphics[width=0.44\textwidth]{QB_Toulouse_Ortho_PAN_casted.eps}
   // \includegraphics[width=0.44\textwidth]{QB_Toulouse_Ortho_PAN_rescaled.eps}
-  // \itkcaption[Scaling images]{On the left, the image obtained by truncated the value
-  // about the dynamic acceptable for a png file. On the right, the same image with
+  // \itkcaption[Scaling images]{On the left, the image obtained by truncated pixel values
+  // at the dynamic acceptable for a png file (between 0 and 255). On the right,
+  // the same image with
   // a proper rescaling}
   // \label{fig:SCALING_FILTER}
   // \end{figure}

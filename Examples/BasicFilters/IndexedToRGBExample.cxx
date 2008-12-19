@@ -30,14 +30,15 @@
 
 //  Software Guide : BeginLatex
 //
-//  Some algorithm produce as an output an indexed image. In such images,
+//  Some algorithm produces as an output an indexed image. In such images,
 // each pixel is given a value according to the region number it belongs to.
+// This value starting at 0 or 1 is usually an integer value.
 // Often, such images are produced by segmentation or classification algorithm.
 //
-// If such region are easy to manipulate, as it is easier to compare two integer
+// If such regions are easy to manipulate, as it is easier to compare two integers
 // than a RGB value, it is different when it comes to displaying the results.
 //
-// Here we present a convient way to convert such index image to a color image. In
+// Here we present a convient way to convert such indexed image to a color image. In
 // such conversion, it is important to ensure that neighborhood region have
 // easily dicernable colors. This is done randomly using a hash function by
 // the \doxygen{itk}{ScalarToRGBPixelFunctor}.
@@ -74,8 +75,9 @@ int main(int argc, char * argv[])
 
   //  Software Guide : BeginLatex
   //
-  //  The \doxygen{itk}{UnaryFunctorImageFilter} will do the work of applying the
-  // \doxygen{itk}{ScalarToRGBPixelFunctor} to each pixel.
+  //  The \doxygen{itk}{UnaryFunctorImageFilter} is the filter in charge of
+  // calling the functor we specify to do the work for each pixel. Here it is the
+  // \doxygen{itk}{ScalarToRGBPixelFunctor}.
   //
   //  Software Guide : EndLatex
 
