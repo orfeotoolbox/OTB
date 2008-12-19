@@ -83,9 +83,6 @@ namespace otb
           itkGenericExceptionMacro(<<"Object with only one vertex!" );
         }
 
-        std::cout << "Num vertex: " << nbVertices << std::endl;
-        std::cout << "Mean dist: " << meanDistance << std::endl;
-
         if ( meanDistance > m_Threshold)
         {
           return true;
