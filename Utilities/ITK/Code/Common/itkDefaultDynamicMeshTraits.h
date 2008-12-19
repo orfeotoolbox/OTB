@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDefaultDynamicMeshTraits.h,v $
   Language:  C++
-  Date:      $Date: 2007-12-21 15:25:34 $
-  Version:   $Revision: 1.26 $
+  Date:      $Date: 2008-10-07 09:09:39 $
+  Version:   $Revision: 1.27 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -69,10 +69,10 @@ public:
   typedef DefaultDynamicMeshTraits  Self;
 
   /** Just save all the template parameters. */
-  typedef TPixelType      PixelType;
-  typedef TCellPixelType  CellPixelType;
-  typedef TCoordRep  CoordRepType;
-  typedef TInterpolationWeight  InterpolationWeightType;
+  typedef TPixelType                PixelType;
+  typedef TCellPixelType            CellPixelType;
+  typedef TCoordRep                 CoordRepType;
+  typedef TInterpolationWeight      InterpolationWeightType;
 
   /** Just save all the template parameters. */
   itkStaticConstMacro(PointDimension, unsigned int, VPointDimension);
@@ -118,28 +118,25 @@ public:
   
   /** The container type for use in storing cells.  It must conform to
    * the IndexedContainerInterface. */
-  typedef MapContainer< CellIdentifier , CellType * >
-        CellsContainer;
+  typedef MapContainer< CellIdentifier , CellType * >  CellsContainer;
   
   /** The CellLinks container should be a container of PointCellLinksContainer,
    * which should be a container conforming to the STL "set" interface. */
-  typedef std::set< CellIdentifier >
-        PointCellLinksContainer;
+  typedef std::set< CellIdentifier >                   PointCellLinksContainer;
 
   /** The container type for use in storing point links back to cells.]
    * It must conform to the IndexedContainerInterface. */
-  typedef MapContainer< PointIdentifier , PointCellLinksContainer >
-        CellLinksContainer;
+  typedef MapContainer< 
+    PointIdentifier , PointCellLinksContainer >        CellLinksContainer;
 
   /** The container type for use in storing point data.  It must conform to
    * the IndexedContainerInterface. */
-  typedef MapContainer< PointIdentifier , PixelType >
-        PointDataContainer;
+  typedef MapContainer< PointIdentifier , PixelType >  PointDataContainer;
 
   /** The container type for use in storing cell data.  It must conform to
    * the IndexedContainerInterface. */
-  typedef MapContainer< CellIdentifier , CellPixelType >
-        CellDataContainer;
+  typedef MapContainer< 
+    CellIdentifier , CellPixelType >                   CellDataContainer;
 
 };
 

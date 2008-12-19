@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryPruningImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-04-23 04:12:03 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2008-10-20 21:28:20 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -54,10 +54,10 @@ class ITK_EXPORT BinaryPruningImageFilter :
 {
 public:
   /** Standard class typedefs. */
-  typedef BinaryPruningImageFilter    Self;
+  typedef BinaryPruningImageFilter                     Self;
   typedef ImageToImageFilter<TInputImage,TOutputImage> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+  typedef SmartPointer<Self>                           Pointer;
+  typedef SmartPointer<const Self>                     ConstPointer;
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
@@ -78,7 +78,7 @@ public:
   typedef typename RegionType::IndexType  IndexType;
 
   /** Type for the index of the input image. */
-  typedef typename InputImageType::PixelType PixelType ;
+  typedef typename InputImageType::PixelType PixelType;
 
   /** Type for the size of the input image. */
   typedef typename RegionType::SizeType   SizeType;
@@ -90,7 +90,7 @@ public:
   typedef typename OutputImageType::Pointer OutputImagePointer;
   
   /** Neighborhood iterator type */
-  typedef NeighborhoodIterator<TInputImage> NeighborhoodIteratorType ;
+  typedef NeighborhoodIterator<TInputImage> NeighborhoodIteratorType;
   
   /** Get Skelenton by thinning image. */
   OutputImageType * GetPruning(void);

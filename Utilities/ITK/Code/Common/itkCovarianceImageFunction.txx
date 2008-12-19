@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCovarianceImageFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2006-02-06 22:01:55 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2008-10-07 12:04:18 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,8 +26,8 @@ namespace itk
 {
 
 /**
-   * Constructor
-   */
+ * Constructor
+ */
 template <class TInputImage, class TCoordRep>
 CovarianceImageFunction<TInputImage,TCoordRep>
 ::CovarianceImageFunction()
@@ -37,8 +37,8 @@ CovarianceImageFunction<TInputImage,TCoordRep>
 
 
 /**
-   *
-   */
+ *
+ */
 template <class TInputImage, class TCoordRep>
 void
 CovarianceImageFunction<TInputImage,TCoordRep>

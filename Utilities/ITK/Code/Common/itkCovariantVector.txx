@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCovariantVector.txx,v $
   Language:  C++
-  Date:      $Date: 2006-03-19 04:36:58 $
-  Version:   $Revision: 1.40 $
+  Date:      $Date: 2008-10-07 12:04:18 $
+  Version:   $Revision: 1.41 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkCovariantVector_txx
-#define _itkCovariantVector_txx
+#ifndef __itkCovariantVector_txx
+#define __itkCovariantVector_txx
 
 #include "itkCovariantVector.h" 
 #include <vnl/vnl_math.h>
@@ -105,8 +105,6 @@ CovariantVector<T, NVectorDimension>
   return result;
 }
 
-
-
 /**
  * Returns a temporary copy of a vector
  */
@@ -122,8 +120,6 @@ CovariantVector<T, NVectorDimension>
     }
   return result;
 }
-
-
 
 /**
  * Returns a temporary copy of a vector
@@ -192,8 +188,6 @@ CovariantVector<T, NVectorDimension>
     }
   return sum;
 }
-
-
 
 /**
  * Returns vector's Euclidean Norm
@@ -309,10 +303,7 @@ CovariantVector<T, NVectorDimension>
   return vnl_vector_ref<T>( NVectorDimension,
                             const_cast<T*>(this->GetDataPointer()));
 }
- 
-
 
 } // end namespace itk
-
 
 #endif

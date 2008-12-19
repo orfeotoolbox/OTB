@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDynamicLoader.cxx,v $
   Language:  C++
-  Date:      $Date: 2006-11-29 18:19:00 $
-  Version:   $Revision: 1.22 $
+  Date:      $Date: 2008-10-07 09:09:39 $
+  Version:   $Revision: 1.23 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -66,4 +66,3 @@ const char* DynamicLoader::LastError()
 }
 
 } // end namespace itk
-

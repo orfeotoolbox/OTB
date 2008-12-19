@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExtractOrthogonalSwath2DImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005-07-26 15:06:23 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2008-10-14 19:20:34 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,9 +44,10 @@ ImageAndPathToImageFilter<TImage,ParametricPath<2>,TImage>
 public:
   /** Standard class typedefs. */
   typedef ExtractOrthogonalSwath2DImageFilter  Self;
-  typedef ImageAndPathToImageFilter<TImage,ParametricPath<2>,TImage>  Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef ImageAndPathToImageFilter<TImage,ParametricPath<2>,TImage>
+                                               Superclass;
+  typedef SmartPointer<Self>                   Pointer;
+  typedef SmartPointer<const Self>             ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -123,7 +124,7 @@ protected:
     m_Size[1] = 16*2+1; // must be odd
     m_Origin[0]  = m_Origin[1]  = 0.0;
     m_Spacing[0] = m_Spacing[1] = 1.0;
-    };
+    }
   virtual ~ExtractOrthogonalSwath2DImageFilter() {};
   void PrintSelf(std::ostream& os, Indent indent) const;
   
@@ -153,9 +154,9 @@ private:
   void operator=(const Self&); //purposely not implemented
   
   ImagePixelType m_DefaultPixelValue;
-  SizeType  m_Size;
-  double m_Origin[ImageDimension];
-  double m_Spacing[ImageDimension];
+  SizeType       m_Size;
+  double         m_Origin[ImageDimension];
+  double         m_Spacing[ImageDimension];
 };
 
 } // end namespace itk

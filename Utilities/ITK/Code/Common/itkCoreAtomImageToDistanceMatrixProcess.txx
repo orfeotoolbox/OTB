@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCoreAtomImageToDistanceMatrixProcess.txx,v $
   Language:  C++
-  Date:      $Date: 2006-03-19 04:36:58 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2008-10-07 12:04:18 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,15 +24,15 @@ namespace itk
 {
 
 /**
-* Default Constructor.  Initializes outputs for the process object.
-*/
+ * Default Constructor.  Initializes outputs for the process object.
+ */
 template< typename TSourceImage >
 CoreAtomImageToDistanceMatrixProcess< TSourceImage >
 ::CoreAtomImageToDistanceMatrixProcess()
 {
   itkDebugMacro(<< "itkCoreAtomImageToDistanceMatrixProcess::itkCoreAtomImageToDistanceMatrixProcess() called");
 
-  // Setting the output.
+  /** Setting the output */
   DistanceMatrixPointer output;
   output = static_cast<typename CoreAtomImageToDistanceMatrixProcess::DistanceMatrixType*>(this->MakeOutput(0).GetPointer()); 
   this->ProcessObject::SetNumberOfRequiredOutputs(1);
@@ -147,15 +147,17 @@ CoreAtomImageToDistanceMatrixProcess< TSourceImage >
     pPixel1 = &bloxIt.Value();
 
     if( pPixel1->empty() )
+      {
       continue;
-
+      }
     for ( bloxIt2.GoToBegin(); !bloxIt2.IsAtEnd(); ++bloxIt2)
       {
       pPixel2 = &bloxIt2.Value();
 
       if( pPixel2->empty() )
+        {
         continue;
-
+        }
       // Get distance between pPixel1 and pPixel2.
       Location1 = pPixel1->GetVotedLocation();
       Location2 = pPixel2->GetVotedLocation();

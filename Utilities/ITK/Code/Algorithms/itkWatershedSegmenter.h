@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWatershedSegmenter.h,v $
   Language:  C++
-  Date:      $Date: 2006-05-01 22:13:16 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2008-08-04 23:22:59 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -113,7 +113,7 @@ public:
   typedef SmartPointer<Self> Pointer;
   typedef SmartPointer<const Self> ConstPointer;
   itkNewMacro(Self);
-  itkTypeMacro(Segmenter, ProcessObject);
+  itkTypeMacro(WatershedSegmenter, ProcessObject);
 
   /** Typedefs necessary on microsoft VC++ to avoid internal compiler errors */
   typedef typename InputImageType::Pointer InputImageTypePointer;

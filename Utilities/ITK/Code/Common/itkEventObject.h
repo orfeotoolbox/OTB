@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkEventObject.h,v $
   Language:  C++
-  Date:      $Date: 2007-06-05 20:34:22 $
-  Version:   $Revision: 1.23 $
+  Date:      $Date: 2008-10-13 15:36:31 $
+  Version:   $Revision: 1.25 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -104,17 +104,15 @@ inline std::ostream& operator<<(std::ostream& os, EventObject &e)
 }
 
 
-
-
-/*
+/**
  *  Macro for creating new Events
  */
 #define itkEventMacro( classname , super ) \
  /** \class classname */  \
  class  classname : public super { \
    public: \
-     typedef classname Self; \
-     typedef super Superclass; \
+     typedef classname    Self; \
+     typedef super        Superclass; \
      classname() {} \
      virtual ~classname() {} \
      virtual const char * GetEventName() const { return #classname; } \
@@ -128,33 +126,31 @@ inline std::ostream& operator<<(std::ostream& os, EventObject &e)
  };
 
 
-
 /**
  *      Define some common ITK events
  */
-itkEventMacro( NoEvent            , EventObject );
-itkEventMacro( AnyEvent           , EventObject );
-itkEventMacro( DeleteEvent        , AnyEvent );
-itkEventMacro( StartEvent         , AnyEvent );
-itkEventMacro( EndEvent           , AnyEvent );
-itkEventMacro( ProgressEvent      , AnyEvent );
-itkEventMacro( ExitEvent          , AnyEvent );
-itkEventMacro( AbortEvent         , AnyEvent );
-itkEventMacro( ModifiedEvent      , AnyEvent );
-itkEventMacro( InitializeEvent     , AnyEvent );
-itkEventMacro( IterationEvent     , AnyEvent );
-itkEventMacro( PickEvent          , AnyEvent );
-itkEventMacro( StartPickEvent     , PickEvent   );
-itkEventMacro( EndPickEvent       , PickEvent   );
-itkEventMacro( AbortCheckEvent    , PickEvent   );
-itkEventMacro( FunctionEvaluationIterationEvent, IterationEvent );
-itkEventMacro( GradientEvaluationIterationEvent, IterationEvent );
-itkEventMacro( FunctionAndGradientEvaluationIterationEvent, IterationEvent );
+itkEventMacro( NoEvent            , EventObject )
+itkEventMacro( AnyEvent           , EventObject )
+itkEventMacro( DeleteEvent        , AnyEvent )
+itkEventMacro( StartEvent         , AnyEvent )
+itkEventMacro( EndEvent           , AnyEvent )
+itkEventMacro( ProgressEvent      , AnyEvent )
+itkEventMacro( ExitEvent          , AnyEvent )
+itkEventMacro( AbortEvent         , AnyEvent )
+itkEventMacro( ModifiedEvent      , AnyEvent )
+itkEventMacro( InitializeEvent     , AnyEvent )
+itkEventMacro( IterationEvent     , AnyEvent )
+itkEventMacro( PickEvent          , AnyEvent )
+itkEventMacro( StartPickEvent     , PickEvent   )
+itkEventMacro( EndPickEvent       , PickEvent   )
+itkEventMacro( AbortCheckEvent    , PickEvent   )
+itkEventMacro( FunctionEvaluationIterationEvent, IterationEvent )
+itkEventMacro( GradientEvaluationIterationEvent, IterationEvent )
+itkEventMacro( FunctionAndGradientEvaluationIterationEvent, IterationEvent )
 
-itkEventMacro( UserEvent          , AnyEvent );
+itkEventMacro( UserEvent          , AnyEvent )
 
    
 } // end namespace itk
 
 #endif
-

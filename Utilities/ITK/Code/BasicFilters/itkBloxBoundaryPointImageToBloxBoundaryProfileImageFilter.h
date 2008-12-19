@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBloxBoundaryPointImageToBloxBoundaryProfileImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-16 13:35:01 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2008-10-09 16:20:18 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -61,35 +61,37 @@ public:
 
   /** Standard class typedefs */
   typedef BloxBoundaryPointImageToBloxBoundaryProfileImageFilter  Self;
-  typedef ImageToImageFilter<TSourceImage,BloxBoundaryProfileImage<itkGetStaticConstMacro(NDimensions)> >  Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef ImageToImageFilter<TSourceImage,BloxBoundaryProfileImage<itkGetStaticConstMacro(NDimensions)> >                                        Superclass;
+  typedef SmartPointer<Self>                                      Pointer;
+  typedef SmartPointer<const Self>                                ConstPointer;
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(itkBloxBoundaryPointImageToBloxBoundaryProfileImageFilter, ImageToImageFilter);
+  itkTypeMacro(BloxBoundaryPointImageToBloxBoundaryProfileImageFilter, ImageToImageFilter);
 
   /** Typedef for boundary point image */
-  typedef BloxBoundaryPointImage<itkGetStaticConstMacro(NDimensions)> BoundaryPointImageType;
-  typedef typename BoundaryPointImageType::Pointer BoundaryPointImagePointer;
-  typedef typename BoundaryPointImageType::RegionType BoundaryPointImageRegionType;
-  typedef typename BoundaryPointImageType::PixelType BoundaryPointImagePixelType;
+  typedef BloxBoundaryPointImage<itkGetStaticConstMacro(NDimensions)>
+                                                        BoundaryPointImageType;
+  typedef typename BoundaryPointImageType::Pointer      BoundaryPointImagePointer;
+  typedef typename BoundaryPointImageType::RegionType   BoundaryPointImageRegionType;
+  typedef typename BoundaryPointImageType::PixelType    BoundaryPointImagePixelType;
   typedef typename BoundaryPointImageType::ConstPointer BoundaryPointImageConstPointer;
 
   /** Typedef for blurred source image */
-  typedef TSourceImage SourceImageType;
-  typedef typename SourceImageType::Pointer SourceImagePointer;
-  typedef typename SourceImageType::RegionType SourceImageRegionType;
-  typedef typename SourceImageType::PixelType SourceImagePixelType;
+  typedef TSourceImage                           SourceImageType;
+  typedef typename SourceImageType::Pointer      SourceImagePointer;
+  typedef typename SourceImageType::RegionType   SourceImageRegionType;
+  typedef typename SourceImageType::PixelType    SourceImagePixelType;
   typedef typename SourceImageType::ConstPointer SourceImageConstPointer;
 
   /** Typedef for profile image */
-  typedef BloxBoundaryProfileImage<itkGetStaticConstMacro(NDimensions)> OutputImageType;
-  typedef typename OutputImageType::Pointer OutputImagePointer;
+  typedef BloxBoundaryProfileImage<itkGetStaticConstMacro(NDimensions)>
+                                               OutputImageType;
+  typedef typename OutputImageType::Pointer    OutputImagePointer;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
-  typedef typename OutputImageType::PixelType OutputImagePixelType;
+  typedef typename OutputImageType::PixelType  OutputImagePixelType;
 
   /** Image index typedef */
   typedef typename BloxBoundaryProfileImage<itkGetStaticConstMacro(NDimensions)>::IndexType IndexType;

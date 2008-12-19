@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCurvatureNDAnisotropicDiffusionFunction.h,v $
   Language:  C++
-  Date:      $Date: 2008-01-24 19:25:07 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2008-10-13 18:54:28 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkCurvatureNDAnisotropicDiffusionFunction_h_
-#define __itkCurvatureNDAnisotropicDiffusionFunction_h_
+#ifndef __itkCurvatureNDAnisotropicDiffusionFunction_h
+#define __itkCurvatureNDAnisotropicDiffusionFunction_h
 
 #include "itkScalarAnisotropicDiffusionFunction.h"
 #include "itkNeighborhoodAlgorithm.h"
@@ -74,10 +74,10 @@ class ITK_EXPORT CurvatureNDAnisotropicDiffusionFunction :
 {
 public:
   /** Standard class typedefs. */
-  typedef CurvatureNDAnisotropicDiffusionFunction Self;
+  typedef CurvatureNDAnisotropicDiffusionFunction    Self;
   typedef ScalarAnisotropicDiffusionFunction<TImage> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+  typedef SmartPointer<Self>                         Pointer;
+  typedef SmartPointer<const Self>                   ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -105,19 +105,15 @@ public:
 
   /** This method is called prior to each iteration of the solver. */
   virtual void InitializeIteration()
-  {
+    {
     m_K = static_cast<PixelType>(this->GetAverageGradientMagnitudeSquared() *
                                  this->GetConductanceParameter() *
                                  this->GetConductanceParameter() * -2.0f);
-  }
+    }
   
 protected:
   CurvatureNDAnisotropicDiffusionFunction();
   ~CurvatureNDAnisotropicDiffusionFunction() {}
-  void PrintSelf(std::ostream& os, Indent indent) const
-  {
-    Superclass::PrintSelf(os,indent);
-  }
   
 private:
   CurvatureNDAnisotropicDiffusionFunction(const Self&); //purposely not implemented

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkParametricSpaceToImageSpaceMeshFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2004-02-19 05:13:17 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2008-10-17 16:30:48 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkParametricSpaceToImageSpaceMeshFilter_txx
-#define _itkParametricSpaceToImageSpaceMeshFilter_txx
+#ifndef __itkParametricSpaceToImageSpaceMeshFilter_txx
+#define __itkParametricSpaceToImageSpaceMeshFilter_txx
 
 #include "itkParametricSpaceToImageSpaceMeshFilter.h"
 #include "itkExceptionObject.h"
@@ -139,8 +139,6 @@ ParametricSpaceToImageSpaceMeshFilter<TInputMesh,TOutputMesh>
     }
 
 }
-
-
 
 /**
  * copy information from first input to all outputs

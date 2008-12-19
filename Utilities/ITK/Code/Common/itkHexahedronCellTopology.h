@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHexahedronCellTopology.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:09 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2008-10-17 01:21:45 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -34,16 +34,15 @@ namespace itk
 
 class ITKCommon_EXPORT HexahedronCellTopology
 {
+public:
+  HexahedronCellTopology();
+  ~HexahedronCellTopology();
+ 
 protected:
    
   /** Hexahedron topology data. */
   static const int m_Edges[12][2];
   static const int m_Faces[6][4];
-    
-public:
-  HexahedronCellTopology();
-  ~HexahedronCellTopology();
-  
 };
 
 } // end namespace itk

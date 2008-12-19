@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorLinearInterpolateNearestNeighborExtrapolateImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2008-07-15 13:55:37 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2008-09-30 14:04:52 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -114,18 +114,18 @@ public:
     }
 
   /** Evaluate the function at a ContinuousIndex position
-  *
-  * Returns the linearly interpolated image intensity at a
-  * specified point position. If the point does not lie within the
-  * image buffer a nearest neighbor interpolation is done. */
+   *
+   * Returns the linearly interpolated image intensity at a
+   * specified point position. If the point does not lie within the
+   * image buffer a nearest neighbor interpolation is done. */
   virtual OutputType EvaluateAtContinuousIndex(
      const ContinuousIndexType & index ) const;
 
   /** Evaluate the function at an index position
-  *
-  * Simply returns the image value at the
-  * specified index position. If the index does not lie within the
-  * image buffer a nearest neighbor interpolation is done. */
+   *
+   * Simply returns the image value at the
+   * specified index position. If the index does not lie within the
+   * image buffer a nearest neighbor interpolation is done. */
   virtual OutputType EvaluateAtIndex( const IndexType & index ) const;
 
 protected:

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorFuzzyConnectednessImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-03-19 04:37:20 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2008-12-08 01:10:42 $
+  Version:   $Revision: 1.5.14.1 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -354,7 +354,9 @@ VectorFuzzyConnectednessImageFilter<TInputImage,TOutputImage>
   region.SetIndex(index);
 
   m_FilterImage->SetRegions( region );
+  m_FilterImage->SetOrigin(m_InputImage->GetOrigin());
   m_FilterImage->SetSpacing(m_InputImage->GetSpacing());
+  m_FilterImage->SetDirection(m_InputImage->GetDirection());
   m_FilterImage->Allocate();
 
   ImageRegionConstIterator <InputImageType> it(m_InputImage,m_InputImage->GetRequestedRegion());

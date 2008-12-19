@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFastMutexLock.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-06 15:07:34 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2008-10-16 23:25:41 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -52,10 +52,10 @@ class ITKCommon_EXPORT FastMutexLock : public Object
 {
 public:
   /** Standard class typedefs. */
-  typedef FastMutexLock       Self;
-  typedef Object  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef FastMutexLock                 Self;
+  typedef Object                        Superclass;
+  typedef SmartPointer<Self>            Pointer;
+  typedef SmartPointer<const Self>      ConstPointer;
   
   /** Method for creation. */
   itkNewMacro(Self);
@@ -95,4 +95,3 @@ inline void FastMutexLock::Unlock( void )
 
 }//end itk namespace
 #endif
-

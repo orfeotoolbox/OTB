@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLaplacianRecursiveGaussianImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-27 11:36:40 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2008-10-16 17:40:08 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -46,10 +46,10 @@ class ITK_EXPORT LaplacianRecursiveGaussianImageFilter:
 {
 public:
   /** Standard class typedefs. */
-  typedef LaplacianRecursiveGaussianImageFilter  Self;
+  typedef LaplacianRecursiveGaussianImageFilter        Self;
   typedef ImageToImageFilter<TInputImage,TOutputImage> Superclass;
-  typedef SmartPointer<Self>                   Pointer;
-  typedef SmartPointer<const Self>        ConstPointer;
+  typedef SmartPointer<Self>                           Pointer;
+  typedef SmartPointer<const Self>                     ConstPointer;
   
   
   /** Pixel Type of the input image */
@@ -67,7 +67,7 @@ public:
       RealType is usually 'double' in NumericTraits. 
       Here we prefer float in order to save memory.  */
 
-  typedef float                                            InternalRealType;
+  typedef float                                           InternalRealType;
   typedef Image<InternalRealType, 
                 itkGetStaticConstMacro(ImageDimension) >   RealImageType;
 
@@ -93,8 +93,8 @@ public:
   typedef typename TOutputImage::Pointer           OutputImagePointer;
 
   /** Type of the output Image */
-  typedef TOutputImage      OutputImageType;
-  typedef typename          OutputImageType::PixelType      OutputPixelType;
+  typedef TOutputImage                                 OutputImageType;
+  typedef typename          OutputImageType::PixelType OutputPixelType;
 
   /**  Auxiliary image for holding the values of the squared gradient components */
   typedef Image< InternalRealType, 
@@ -165,7 +165,3 @@ private:
 #endif
 
 #endif
-
-
-
-

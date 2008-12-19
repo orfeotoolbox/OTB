@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkComplexToModulusImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-27 11:36:40 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2008-10-13 18:54:27 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -37,17 +37,19 @@ public:
   ComplexToModulus() {}
   ~ComplexToModulus() {}
   bool operator!=( const ComplexToModulus & ) const
-  {
+    {
     return false;
-  }
+    }
   bool operator==( const ComplexToModulus & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
   inline TOutput operator()( const TInput & A )
-  { return (TOutput)( vcl_sqrt(A.real() * A.real() + 
-                            A.imag() * A.imag() ) ); }
-}; 
+    {
+    return (TOutput)( vcl_sqrt(A.real() * A.real() + 
+                               A.imag() * A.imag() ) );
+    }
+};
 }
 
 template <class TInputImage, class TOutputImage>
@@ -61,11 +63,13 @@ UnaryFunctorImageFilter<TInputImage,TOutputImage,
 public:
   /** Standard class typedefs. */
   typedef ComplexToModulusImageFilter  Self;
-  typedef UnaryFunctorImageFilter<TInputImage,TOutputImage, 
-                                  Function::ComplexToModulus< typename TInputImage::PixelType, 
-                                                 typename TOutputImage::PixelType> >  Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef UnaryFunctorImageFilter<
+    TInputImage,TOutputImage, 
+    Function::ComplexToModulus< typename TInputImage::PixelType, 
+                                typename TOutputImage::PixelType> >
+                                       Superclass;
+  typedef SmartPointer<Self>           Pointer;
+  typedef SmartPointer<const Self>     ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -74,8 +78,8 @@ public:
   itkTypeMacro(ComplexToModulusImageFilter, 
                UnaryFunctorImageFilter);
 
-  typedef typename TInputImage::PixelType   InputPixelType;
-  typedef typename TOutputImage::PixelType  OutputPixelType;
+  typedef typename TInputImage::PixelType                     InputPixelType;
+  typedef typename TOutputImage::PixelType                    OutputPixelType;
   typedef typename NumericTraits< InputPixelType >::ValueType InputPixelValueType;
 
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCenteredAffineTransform.h,v $
   Language:  C++
-  Date:      $Date: 2007-12-13 16:17:55 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2008-10-07 12:04:56 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -97,10 +97,10 @@ public:
   const JacobianType & GetJacobian(const InputPointType  &point ) const;
 
 protected:
-  /** Construct an CenteredAffineTransform object **/
+  /** Construct an CenteredAffineTransform object */
   CenteredAffineTransform();
   
-  /** Destroy an CenteredAffineTransform object   **/
+  /** Destroy an CenteredAffineTransform object */
   virtual ~CenteredAffineTransform();
 
 private:
@@ -111,7 +111,7 @@ private:
 
 }  // namespace itk
 
-// Define instantiation macro for this template.
+/** Define instantiation macro for this template. */
 #define ITK_TEMPLATE_CenteredAffineTransform(_, EXPORT, x, y) namespace itk { \
   _(2(class EXPORT CenteredAffineTransform< ITK_TEMPLATE_2 x >)) \
   namespace Templates { typedef CenteredAffineTransform< ITK_TEMPLATE_2 x > \

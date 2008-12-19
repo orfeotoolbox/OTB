@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkComposeRGBImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-27 11:36:40 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2008-10-13 18:54:27 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,21 +44,21 @@ public:
   ComposeRGB() {}
   ~ComposeRGB() {}
   bool operator!=( const ComposeRGB & ) const
-  {
+    {
     return false;
-  }
+    }
   bool operator==( const ComposeRGB & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
   inline OutputType operator()(  const TInput & R, 
                                  const TInput & G,
                                  const TInput & B)
-  {
+    {
     OutputType rgbPixel;
     rgbPixel.Set( R, G, B);
     return rgbPixel;
-  }
+    }
 }; 
 }
 
@@ -74,13 +74,14 @@ TernaryFunctorImageFilter<TInputImage,TInputImage,
 {
 public:
   /** Standard class typedefs. */
-  typedef ComposeRGBImageFilter  Self;
-  typedef TernaryFunctorImageFilter<TInputImage,TInputImage,
-                                    TInputImage,TOutputImage, 
-                                    Function::ComposeRGB< 
-    ITK_TYPENAME TInputImage::PixelType > 
-  >  Superclass;
-  typedef SmartPointer<Self>   Pointer;
+  typedef ComposeRGBImageFilter     Self;
+  typedef TernaryFunctorImageFilter<
+    TInputImage,TInputImage,
+    TInputImage,TOutputImage, 
+    Function::ComposeRGB< 
+      ITK_TYPENAME TInputImage::PixelType > >
+                                    Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
   typedef typename Superclass::OutputImageType OutputImageType;

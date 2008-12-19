@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConnectedThresholdImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-06-28 17:06:15 $
-  Version:   $Revision: 1.26 $
+  Date:      $Date: 2008-10-13 18:54:27 $
+  Version:   $Revision: 1.27 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkConnectedThresholdImageFilter_txx_
-#define __itkConnectedThresholdImageFilter_txx_
+#ifndef __itkConnectedThresholdImageFilter_txx
+#define __itkConnectedThresholdImageFilter_txx
 
 #include "itkConnectedThresholdImageFilter.h"
 #include "itkBinaryThresholdImageFunction.h"
@@ -217,8 +217,6 @@ ConnectedThresholdImageFilter<TInputImage, TOutputImage>
   return lower->Get();
 }
 
-
-
 template <class TInputImage, class TOutputImage>
 typename ConnectedThresholdImageFilter<TInputImage, TOutputImage>::InputImagePixelType
 ConnectedThresholdImageFilter<TInputImage, TOutputImage>
@@ -229,8 +227,6 @@ ConnectedThresholdImageFilter<TInputImage, TOutputImage>
 
   return upper->Get();
 }
-
-
 
 template <class TInputImage, class TOutputImage>
 void 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConformalFlatteningMeshFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-07-12 00:06:11 $
-  Version:   $Revision: 1.26 $
+  Date:      $Date: 2008-09-29 18:36:37 $
+  Version:   $Revision: 1.27 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -616,4 +616,3 @@ ConformalFlatteningMeshFilter< TInputMesh, TOutputMesh >
 } // end namespace itk
 
 #endif
-

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptImageToImageMetric.h,v $
   Language:  C++
-  Date:      $Date: 2008-05-10 15:35:11 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2008-07-30 20:56:17 $
+  Version:   $Revision: 1.22 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -370,7 +370,7 @@ protected:
   unsigned long               m_NumberOfParameters;
   mutable ParametersType      m_Parameters;
 
-  unsigned long               m_NumberOfFixedImageSamples;
+  mutable unsigned long       m_NumberOfFixedImageSamples;
   mutable unsigned long       m_NumberOfMovingImageSamples;
 
   FixedImageConstPointer      m_FixedImage;

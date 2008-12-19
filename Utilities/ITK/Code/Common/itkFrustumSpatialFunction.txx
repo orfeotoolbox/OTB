@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFrustumSpatialFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2006-03-19 04:36:58 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2008-10-16 23:25:41 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -50,8 +50,8 @@ FrustumSpatialFunction<VImageDimension,TInput>
 ::Evaluate(const InputType& position) const
 {
   
-  typedef InputType PointType;
-  typedef typename PointType::VectorType VectorType;
+  typedef InputType                           PointType;
+  typedef typename PointType::VectorType      VectorType;
 
   VectorType relativePosition = position - m_Apex;
   const double distanceToApex = relativePosition.GetNorm();
@@ -67,7 +67,7 @@ FrustumSpatialFunction<VImageDimension,TInput>
       }
     }
   else
-  {
+    {
     if( distanceToApex > m_TopPlane ||
         distanceToApex < m_BottomPlane )
       {

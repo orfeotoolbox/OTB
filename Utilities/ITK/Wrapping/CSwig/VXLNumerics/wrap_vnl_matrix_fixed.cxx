@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: wrap_vnl_matrix_fixed.cxx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:30:12 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2008-10-28 15:16:23 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -15,6 +15,7 @@
 
 =========================================================================*/
 #include "vnl/vnl_matrix_fixed.h"
+#include "vnl/vnl_vector_fixed.h"
 
 #ifdef CABLE_CONFIGURATION
 #include "wrap_VXLNumerics.h"

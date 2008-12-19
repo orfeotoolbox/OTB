@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOctree.h,v $
   Language:  C++
-  Date:      $Date: 2006-02-05 20:57:46 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2008-08-04 15:56:22 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -119,7 +119,7 @@ namespace itk {
     itkNewMacro(Self);
 
     /** Run-time type information (and related methods). */
-    itkTypeMacro(AnalyzeImageIO, Superclass);
+    itkTypeMacro(Octree, Superclass);
 
     ImageTypePointer GetImage();
     virtual void BuildFromBuffer(const void *buffer,const int xsize,const int ysize,const int zsize);

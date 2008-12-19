@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageBase.txx,v $
   Language:  C++
-  Date:      $Date: 2006-07-06 22:35:30 $
-  Version:   $Revision: 1.51 $
+  Date:      $Date: 2008-11-01 15:18:57 $
+  Version:   $Revision: 1.54 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -12,13 +12,13 @@
   Portions of this code are covered under the VTK copyright.
   See VTKCopyright.txt or http://www.kitware.com/VTKCopyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkImageBase_txx
-#define _itkImageBase_txx
+#ifndef __itkImageBase_txx
+#define __itkImageBase_txx
 
 #include "itkImageBase.h"
 
@@ -40,6 +40,8 @@ ImageBase<VImageDimension>
   m_Spacing.Fill(1.0);
   m_Origin.Fill(0.0);
   m_Direction.SetIdentity();
+  m_IndexToPhysicalPoint.SetIdentity();
+  m_PhysicalPointToIndex.SetIdentity();
 }
 
 
@@ -77,10 +79,25 @@ ImageBase<VImageDimension>
 }
 
 
+//----------------------------------------------------------------------------
+template<unsigned int VImageDimension>
+void
+ImageBase<VImageDimension>
+::SetSpacing(const SpacingType & spacing )
+{
+  itkDebugMacro("setting Spacing to " << spacing);
+  if( this->m_Spacing != spacing )
+    {
+    this->m_Spacing = spacing;
+    this->ComputeIndexToPhysicalPointMatrices();
+    this->Modified();
+    }
+}
+
 
 //----------------------------------------------------------------------------
 template<unsigned int VImageDimension>
-void 
+void
 ImageBase<VImageDimension>
 ::SetSpacing(const double spacing[VImageDimension] )
 {
@@ -91,7 +108,7 @@ ImageBase<VImageDimension>
 
 //----------------------------------------------------------------------------
 template<unsigned int VImageDimension>
-void 
+void
 ImageBase<VImageDimension>
 ::SetSpacing(const float spacing[VImageDimension] )
 {
@@ -103,7 +120,7 @@ ImageBase<VImageDimension>
 
 //----------------------------------------------------------------------------
 template<unsigned int VImageDimension>
-void 
+void
 ImageBase<VImageDimension>
 ::SetOrigin(const double origin[VImageDimension] )
 {
@@ -114,7 +131,7 @@ ImageBase<VImageDimension>
 
 //----------------------------------------------------------------------------
 template<unsigned int VImageDimension>
-void 
+void
 ImageBase<VImageDimension>
 ::SetOrigin(const float origin[VImageDimension] )
 {
@@ -126,7 +143,7 @@ ImageBase<VImageDimension>
 
 //----------------------------------------------------------------------------
 template<unsigned int VImageDimension>
-void 
+void
 ImageBase<VImageDimension>
 ::SetDirection(const DirectionType direction )
 {
@@ -142,10 +159,39 @@ ImageBase<VImageDimension>
         }
       }
     }
+
   if (modified)
     {
-    this->Modified();
+    this->ComputeIndexToPhysicalPointMatrices();
     }
+}
+
+//----------------------------------------------------------------------------
+template<unsigned int VImageDimension>
+void
+ImageBase<VImageDimension>
+::ComputeIndexToPhysicalPointMatrices()
+{
+  DirectionType scale;
+
+  for (unsigned int i=0; i < VImageDimension; i++)
+    {
+    if (this->m_Spacing[i] == 0.0)
+      {
+      itkExceptionMacro("A spacing of 0 is not allowed: Spacing is " << this->m_Spacing);
+      }
+    scale[i][i] = this->m_Spacing[i];
+    }
+
+  if (vnl_determinant(this->m_Direction.GetVnlMatrix()) == 0.0)
+    {
+    itkExceptionMacro(<< "Bad direction, determinant is 0. Direction is " << this->m_Direction);
+    }
+
+  this->m_IndexToPhysicalPoint = this->m_Direction * scale;
+  this->m_PhysicalPointToIndex = m_IndexToPhysicalPoint.GetInverse();
+
+  this->Modified();
 }
 
 //----------------------------------------------------------------------------
@@ -156,19 +202,19 @@ ImageBase<VImageDimension>
 {
   OffsetValueType num=1;
   const SizeType& bufferSize = this->GetBufferedRegion().GetSize();
-  
+
   m_OffsetTable[0] = num;
   for (unsigned int i=0; i < VImageDimension; i++)
     {
     num *= bufferSize[i];
     m_OffsetTable[i+1] = num;
-    }  
+    }
 }
 
 
 //----------------------------------------------------------------------------
 template<unsigned int VImageDimension>
-void 
+void
 ImageBase<VImageDimension>
 ::UpdateOutputInformation()
 {
@@ -190,9 +236,9 @@ ImageBase<VImageDimension>
       this->SetLargestPossibleRegion( this->GetBufferedRegion() );
       }
     }
-  
-  // Now we should know what our largest possible region is. If our 
-  // requested region was not set yet, (or has been set to something 
+
+  // Now we should know what our largest possible region is. If our
+  // requested region was not set yet, (or has been set to something
   // invalid - with no data in it ) then set it to the largest possible
   // region.
   if ( this->GetRequestedRegion().GetNumberOfPixels() == 0)
@@ -204,7 +250,7 @@ ImageBase<VImageDimension>
 
 //----------------------------------------------------------------------------
 template<unsigned int VImageDimension>
-void 
+void
 ImageBase<VImageDimension>
 ::SetRequestedRegionToLargestPossibleRegion()
 {
@@ -213,7 +259,7 @@ ImageBase<VImageDimension>
 
 //----------------------------------------------------------------------------
 template<unsigned int VImageDimension>
-void 
+void
 ImageBase<VImageDimension>
 ::CopyInformation(const DataObject *data)
 {
@@ -224,15 +270,15 @@ ImageBase<VImageDimension>
     {
     // Attempt to cast data to an ImageBase
     const ImageBase<VImageDimension> *imgData;
-  
-     try
-       {
-       imgData = dynamic_cast<const ImageBase<VImageDimension>*>(data);
-       }
-     catch( ... )
-       {
-       return;
-       }
+
+    try
+      {
+      imgData = dynamic_cast<const ImageBase<VImageDimension>*>(data);
+      }
+    catch( ... )
+      {
+      return;
+      }
 
     if( imgData )
       {
@@ -241,7 +287,7 @@ ImageBase<VImageDimension>
       this->SetSpacing( imgData->GetSpacing() );
       this->SetOrigin( imgData->GetOrigin() );
       this->SetDirection(imgData->GetDirection() );
-      this->SetNumberOfComponentsPerPixel( 
+      this->SetNumberOfComponentsPerPixel(
           imgData->GetNumberOfComponentsPerPixel() );
       }
     else
@@ -255,17 +301,16 @@ ImageBase<VImageDimension>
 }
 
 
-
 //----------------------------------------------------------------------------
 template<unsigned int VImageDimension>
-void 
+void
 ImageBase<VImageDimension>
 ::Graft(const DataObject *data)
 {
   typedef ImageBase<VImageDimension>  ImageBaseType;
 
   const ImageBaseType * image;
-  
+
   try
     {
     image = dynamic_cast< const ImageBaseType * >( data );
@@ -291,10 +336,9 @@ ImageBase<VImageDimension>
 }
 
 
-
 //----------------------------------------------------------------------------
 template<unsigned int VImageDimension>
-bool 
+bool
 ImageBase<VImageDimension>
 ::RequestedRegionIsOutsideOfTheBufferedRegion()
 {
@@ -304,7 +348,7 @@ ImageBase<VImageDimension>
 
   const SizeType& requestedRegionSize = this->GetRequestedRegion().GetSize();
   const SizeType& bufferedRegionSize = this->GetBufferedRegion().GetSize();
-  
+
   for (i=0; i< VImageDimension; i++)
     {
     if ( (requestedRegionIndex[i] < bufferedRegionIndex[i]) ||
@@ -321,7 +365,7 @@ ImageBase<VImageDimension>
 
 //----------------------------------------------------------------------------
 template<unsigned int VImageDimension>
-bool 
+bool
 ImageBase<VImageDimension>
 ::VerifyRequestedRegion()
 {
@@ -338,7 +382,7 @@ ImageBase<VImageDimension>
   const SizeType& requestedRegionSize = this->GetRequestedRegion().GetSize();
   const SizeType& largestPossibleRegionSize
     = this->GetLargestPossibleRegion().GetSize();
-  
+
   for (i=0; i< VImageDimension; i++)
     {
     if ( (requestedRegionIndex[i] < largestPossibleRegionIndex[i]) ||
@@ -381,12 +425,12 @@ ImageBase<VImageDimension>
 
 //----------------------------------------------------------------------------
 template<unsigned int VImageDimension>
-void 
+void
 ImageBase<VImageDimension>
 ::SetRequestedRegion(DataObject *data)
 {
   ImageBase *imgData;
-  
+
   imgData = dynamic_cast<ImageBase*>(data);
 
   if (imgData)
@@ -411,13 +455,13 @@ ImageBase<VImageDimension>
 
 //----------------------------------------------------------------------------
 template<unsigned int VImageDimension>
-unsigned int 
+unsigned int
 ImageBase<VImageDimension>
 ::GetNumberOfComponentsPerPixel() const
-{ 
+{
   // Returns the number of components in the image. Note that for most images
   // this is 1. Even for Image< RGBPixel< T >, 3 >.
-  // This is > 1 only for time-series images such as itk::VectorImage. 
+  // This is > 1 only for time-series images such as itk::VectorImage.
   return 1;
 }
 
@@ -433,7 +477,7 @@ ImageBase<VImageDimension>
  *
  */
 template<unsigned int VImageDimension>
-void 
+void
 ImageBase<VImageDimension>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
@@ -453,6 +497,12 @@ ImageBase<VImageDimension>
   os << indent << "Origin: " << this->GetOrigin() << std::endl;\
 
   os << indent << "Direction: " << std::endl << this->GetDirection() << std::endl;
+
+  os << indent << "IndexToPointMatrix: " << std::endl;
+  os << indent << this->m_IndexToPhysicalPoint << std::endl;
+
+  os << indent << "PointToIndexMatrix: " << std::endl;
+  os << indent << this->m_PhysicalPointToIndex << std::endl;
 }
 
 } // end namespace itk

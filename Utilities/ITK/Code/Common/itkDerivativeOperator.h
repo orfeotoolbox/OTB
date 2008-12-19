@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDerivativeOperator.h,v $
   Language:  C++
-  Date:      $Date: 2008-01-20 18:00:40 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2008-10-07 09:09:39 $
+  Version:   $Revision: 1.22 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -48,11 +48,12 @@ class ITK_EXPORT DerivativeOperator
 
 public:
   /** Standard class typedefs. */
-  typedef DerivativeOperator Self;
-  typedef NeighborhoodOperator<TPixel, VDimension, TAllocator>  Superclass;
+  typedef DerivativeOperator                  Self;
+  typedef NeighborhoodOperator<
+    TPixel, VDimension, TAllocator>           Superclass;
   
-  typedef typename Superclass::PixelType     PixelType;
-  typedef typename Superclass::PixelRealType PixelRealType;
+  typedef typename Superclass::PixelType      PixelType;
+  typedef typename Superclass::PixelRealType  PixelRealType;
 
   /** Constructor. */
   DerivativeOperator() : m_Order(1) {}
@@ -61,7 +62,7 @@ public:
   DerivativeOperator(const Self& other)
     : NeighborhoodOperator<TPixel, VDimension, TAllocator>(other)
   { m_Order = other.m_Order;  }
-  
+
   /** Assignment operator */
   Self &operator=(const Self& other)
   {
@@ -72,18 +73,20 @@ public:
 
   /** Sets the order of the derivative. */
   void SetOrder(const unsigned int &order)
-  {  m_Order = order;  }
+    {  
+    this->m_Order = order;
+    }
 
   /** Returns the order of the derivative. */
   unsigned int GetOrder() const { return m_Order; }
 
   /** Prints some debugging information */
   virtual void PrintSelf(std::ostream &os, Indent i) const  
-  { 
+    { 
     os << i << "DerivativeOperator { this=" << this
        << ", m_Order = " << m_Order << "}" << std::endl;
     Superclass::PrintSelf(os, i.GetNextIndent());
-  }
+    }
   
 protected:
   /** Typedef support for coefficient vector type.  Necessary to
@@ -120,5 +123,3 @@ private:
 #endif
 
 #endif
-
-

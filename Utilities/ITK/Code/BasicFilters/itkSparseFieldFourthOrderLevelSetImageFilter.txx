@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSparseFieldFourthOrderLevelSetImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-03-03 13:58:47 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2008-10-18 16:11:13 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkSparseFieldFourthOrderLevelSetImageFilter_txx_
-#define __itkSparseFieldFourthOrderLevelSetImageFilter_txx_
+#ifndef __itkSparseFieldFourthOrderLevelSetImageFilter_txx
+#define __itkSparseFieldFourthOrderLevelSetImageFilter_txx
 
 #include "itkSparseFieldLevelSetImageFilter.h"
 #include "itkSparseFieldFourthOrderLevelSetImageFilter.h"
@@ -124,7 +124,7 @@ SparseFieldFourthOrderLevelSetImageFilter<TInputImage, TOutputImage>
         position -= stride[k];
         }
       }
-    if (it.GetPixel (position)==0)
+    if (it.GetPixel (position) == 0)
       {
       flag = true;
       }
@@ -158,9 +158,9 @@ SparseFieldFourthOrderLevelSetImageFilter<TInputImage, TOutputImage>
 {
   typedef ImageRegionConstIterator <OutputImageType> DistanceImageIteratorType;
   
-  DistanceImageIteratorType
-    distanceImageIterator (distanceImage,
-                           distanceImage->GetRequestedRegion());
+  DistanceImageIteratorType distanceImageIterator (
+    distanceImage,
+    distanceImage->GetRequestedRegion());
   unsigned int j;
   typename SparseImageIteratorType::RadiusType radius;
   for( j = 0; j < ImageDimension; j++ )

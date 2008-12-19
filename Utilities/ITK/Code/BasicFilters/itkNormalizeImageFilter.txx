@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNormalizeImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2007-02-13 10:21:01 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2008-10-16 19:33:45 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkNormalizeImageFilter_txx
-#define _itkNormalizeImageFilter_txx
+#ifndef __itkNormalizeImageFilter_txx
+#define __itkNormalizeImageFilter_txx
 
 #include "itkNormalizeImageFilter.h"
 #include "itkImageRegionIterator.h"

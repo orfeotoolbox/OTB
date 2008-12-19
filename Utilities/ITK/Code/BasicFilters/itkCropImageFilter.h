@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCropImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-17 14:22:26 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2008-10-13 18:54:28 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -40,10 +40,10 @@ class ITK_EXPORT CropImageFilter:
 {
 public:
   /** Standard class typedefs. */
-  typedef CropImageFilter         Self;
+  typedef CropImageFilter                               Self;
   typedef ExtractImageFilter<TInputImage,TOutputImage>  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                            Pointer;
+  typedef SmartPointer<const Self>                      ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);  
@@ -53,7 +53,7 @@ public:
 
   /** Typedef to describe the output and input image region types. */
   typedef typename Superclass::OutputImageRegionType OutputImageRegionType;
-  typedef typename Superclass::InputImageRegionType InputImageRegionType;
+  typedef typename Superclass::InputImageRegionType  InputImageRegionType;
 
   /** Typedef to describe the type of pixel. */
   typedef typename Superclass::OutputImagePixelType OutputImagePixelType;
@@ -64,7 +64,7 @@ public:
   typedef typename Superclass::InputImageIndexType  InputImageIndexType;
   typedef typename Superclass::OutputImageSizeType  OutputImageSizeType;
   typedef typename Superclass::InputImageSizeType   InputImageSizeType;
-  typedef InputImageSizeType SizeType;
+  typedef InputImageSizeType                        SizeType;
 
   /** ImageDimension constants */
   itkStaticConstMacro(InputImageDimension, unsigned int,
@@ -78,6 +78,12 @@ public:
   itkSetMacro(LowerBoundaryCropSize, SizeType);
   itkGetMacro(LowerBoundaryCropSize, SizeType);
 
+  void SetBoundaryCropSize(const SizeType & s)
+    {
+    this->SetUpperBoundaryCropSize( s );
+    this->SetLowerBoundaryCropSize( s );
+    }
+
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
   itkConceptMacro(InputConvertibleToOutputCheck,
@@ -89,11 +95,11 @@ public:
 
 protected:
   CropImageFilter()
-  {
+    {
     m_UpperBoundaryCropSize.Fill(0);
     m_LowerBoundaryCropSize.Fill(0);
-  };
-  ~CropImageFilter() {};
+    }
+  ~CropImageFilter() {}
   void PrintSelf(std::ostream& os, Indent indent) const;
 
 

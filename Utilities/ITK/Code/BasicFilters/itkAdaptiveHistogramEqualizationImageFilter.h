@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAdaptiveHistogramEqualizationImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:43 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2008-10-07 14:49:29 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -18,13 +18,23 @@
 #define __itkAdaptiveHistogramEqualizationImageFilter_h
 
 
+// First make sure that the configuration is available.
+// This line can be removed once the optimized versions
+// gets integrated into the main directories.
+#include "itkConfigure.h"
+
+#ifdef ITK_USE_CONSOLIDATED_MORPHOLOGY
+#include "itkOptAdaptiveHistogramEqualizationImageFilter.h"
+#else
+
+
 #include <itkImageToImageFilter.h>
 #include <itkImage.h>
 
 namespace itk
 {
-/** /class AdaptiveHistogramEqualizationImageFilter
- * /brief Power Law Adaptive Histogram Equalization
+/** \class AdaptiveHistogramEqualizationImageFilter
+ * \brief Power Law Adaptive Histogram Equalization
  *
  * Histogram equalization modifies the contrast in an image. The
  * AdaptiveHistogramEqualizationImageFilter is a superset of many
@@ -61,11 +71,11 @@ class ITK_EXPORT AdaptiveHistogramEqualizationImageFilter :
     public ImageToImageFilter< TImageType, TImageType >
 {
 public:
-  /** Standard class typedefs.*/ 
-  typedef AdaptiveHistogramEqualizationImageFilter Self;
+  /** Standard class typedefs. */ 
+  typedef AdaptiveHistogramEqualizationImageFilter     Self;
   typedef ImageToImageFilter< TImageType, TImageType > Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> constPointer;
+  typedef SmartPointer<Self>                           Pointer;
+  typedef SmartPointer<const Self>                     constPointer;
 
   itkStaticConstMacro(ImageDimension, unsigned int,
                       TImageType::ImageDimension );
@@ -77,7 +87,7 @@ public:
   itkTypeMacro(AdaptiveHistogramEqualizationImageFilter, ImageToImageFilter);
 
   /** Image type typedef support. */
-  typedef TImageType ImageType;
+  typedef TImageType                   ImageType;
   typedef typename ImageType::SizeType ImageSizeType;
 
   /** Set/Get the value of alpha.  Alpha=0 produces the adaptive
@@ -107,16 +117,16 @@ public:
 
 protected:
   AdaptiveHistogramEqualizationImageFilter()
-  {
+    {
     m_Alpha = .3;
     m_Beta = .3;
     m_Radius.Fill( 5 );
     m_UseLookupTable = false;
-  }
+    }
   virtual ~AdaptiveHistogramEqualizationImageFilter(){}
   void PrintSelf(std::ostream& os, Indent indent) const;
 
-  /** Standard pipeline method.*/
+  /** Standard pipeline method. */
   void GenerateData();
 
   /** Adaptive histogram equalization requires more input that it
@@ -152,6 +162,8 @@ private:
 
 #ifndef ITK_MANUAL_INSTANTIATION
 #include "itkAdaptiveHistogramEqualizationImageFilter.txx"
+#endif
+
 #endif
 
 #endif

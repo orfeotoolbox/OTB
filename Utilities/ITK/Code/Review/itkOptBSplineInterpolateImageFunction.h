@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptBSplineInterpolateImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2008-02-07 15:07:57 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2008-12-08 01:10:42 $
+  Version:   $Revision: 1.6.6.1 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -271,7 +271,7 @@ public:
   /** Get/Sets the Spline Order, supports 0th - 5th order splines. The default
    *  is a 3rd order spline. */
   void SetSplineOrder(unsigned int SplineOrder);
-  itkGetMacro(SplineOrder, int);
+  itkGetConstMacro(SplineOrder, int);
 
   void SetNumberOfThreads(unsigned int numThreads);
   itkGetMacro(NumberOfThreads, int);
@@ -287,8 +287,11 @@ public:
    * into account the image Direction or not. The flag ON will take into
    * account the image direction and will result in an extra matrix
    * multiplication compared to the amount of computation performed when the
-   * flag is OFF.  This flag is OFF by default.
-   */
+   * flag is OFF.
+   * The default value of this flag is the same as the CMAKE option
+   * ITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE (i.e ON by default when
+   * ITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE is ON, and  OFF by default
+   * when ITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE is OFF). */
   itkSetMacro( UseImageDirection, bool );
   itkGetMacro( UseImageDirection, bool );
   itkBooleanMacro( UseImageDirection );

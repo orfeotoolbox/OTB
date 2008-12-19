@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryMorphologyImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-06-18 14:42:45 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2008-10-09 15:31:36 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -16,6 +16,16 @@
 =========================================================================*/
 #ifndef __itkBinaryMorphologyImageFilter_txx
 #define __itkBinaryMorphologyImageFilter_txx
+
+
+// First make sure that the configuration is available.
+// This line can be removed once the optimized versions
+// gets integrated into the main directories.
+#include "itkConfigure.h"
+
+#ifdef ITK_USE_CONSOLIDATED_MORPHOLOGY
+#include "itkOptBinaryMorphologyImageFilter.h"
+#else
 
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNeighborhoodIterator.h"
@@ -411,5 +421,7 @@ BinaryMorphologyImageFilter<TInputImage, TOutput, TKernel>
 }
 
 } // end namespace itk
+
+#endif
 
 #endif

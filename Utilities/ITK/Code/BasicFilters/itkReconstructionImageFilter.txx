@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkReconstructionImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-01-12 20:27:49 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2008-10-17 16:30:50 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -175,8 +175,6 @@ ReconstructionImageFilter<TInputImage, TOutputImage, TCompare>
     markerImageP = output;
     }
 
-
-
   // declare our queue type
   typedef typename std::queue<OutputImageIndexType> FifoType;
   FifoType IndexFifo;
@@ -225,7 +223,7 @@ ReconstructionImageFilter<TInputImage, TOutputImage, TCompare>
     CNInputIterator tttt(kernelRadius,
                          maskImageP,
                          output->GetRequestedRegion());
-    mskNIt = tttt;    
+    mskNIt = tttt;
     }
 
   setConnectivityPrevious( &outNIt, m_FullyConnected );
@@ -375,7 +373,7 @@ ReconstructionImageFilter<TInputImage, TOutputImage, TCompare>
           }
          IndexFifo.push(outNIt.GetIndex(*oLIt));
         }
-      }     
+      }
     progress.CompletedPixel();
     }
 

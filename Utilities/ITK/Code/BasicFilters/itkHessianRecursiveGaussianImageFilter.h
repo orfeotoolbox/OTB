@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHessianRecursiveGaussianImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-10-27 19:51:42 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2008-10-16 16:45:10 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -52,10 +52,10 @@ class ITK_EXPORT HessianRecursiveGaussianImageFilter:
 {
 public:
   /** Standard class typedefs. */
-  typedef HessianRecursiveGaussianImageFilter  Self;
+  typedef HessianRecursiveGaussianImageFilter          Self;
   typedef ImageToImageFilter<TInputImage,TOutputImage> Superclass;
-  typedef SmartPointer<Self>                   Pointer;
-  typedef SmartPointer<const Self>        ConstPointer;
+  typedef SmartPointer<Self>                           Pointer;
+  typedef SmartPointer<const Self>                     ConstPointer;
   
   
   /** Pixel Type of the input image */
@@ -77,11 +77,9 @@ public:
       Here we prefer float in order to save memory.  */
 
   typedef float                                            InternalRealType;
-  typedef Image<InternalRealType, 
-                ::itk::GetImageDimension<TInputImage>::ImageDimension >   RealImageType;
-
-
-
+  typedef Image<
+    InternalRealType, 
+    ::itk::GetImageDimension<TInputImage>::ImageDimension > RealImageType;
 
   /**  Output Image Nth Element Adaptor
    *  This adaptor allows to use conventional scalar 
@@ -89,7 +87,7 @@ public:
    *  components of the gradient image pixels. */
   typedef NthElementImageAdaptor< TOutputImage,
                                   InternalRealType >  OutputImageAdaptorType;
-  typedef typename OutputImageAdaptorType::Pointer OutputImageAdaptorPointer;
+  typedef typename OutputImageAdaptorType::Pointer    OutputImageAdaptorPointer;
 
   /**  Smoothing filter type */
   typedef RecursiveGaussianImageFilter<
@@ -117,11 +115,10 @@ public:
   typedef typename DerivativeFilterBType::Pointer  DerivativeFilterBPointer;
 
   /**  Pointer to the Output Image */
-  typedef typename TOutputImage::Pointer          OutputImagePointer;                                  
-
+  typedef typename TOutputImage::Pointer          OutputImagePointer;
 
   /** Type of the output Image */
-  typedef TOutputImage      OutputImageType;
+  typedef TOutputImage                                      OutputImageType;
   typedef typename          OutputImageType::PixelType      OutputPixelType;
   typedef typename PixelTraits<OutputPixelType>::ValueType  OutputComponentType;
 
@@ -189,7 +186,3 @@ private:
 #endif
 
 #endif
-
-
-
-

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOnePlusOneEvolutionaryOptimizer.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-05-30 20:03:08 $
-  Version:   $Revision: 1.35 $
+  Date:      $Date: 2008-08-06 16:14:46 $
+  Version:   $Revision: 1.37 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,6 +26,9 @@ namespace itk
 OnePlusOneEvolutionaryOptimizer
 ::OnePlusOneEvolutionaryOptimizer()
 {
+  m_CatchGetValueException = false;
+  m_MetricWorstPossibleValue = 0;
+
   m_Maximize = false;
   m_Epsilon = (double) 1.5e-4; 
   m_RandomGenerator = 0;
@@ -109,7 +112,23 @@ OnePlusOneEvolutionaryOptimizer
     parentPosition[i] = parent[i];
     }
 
-  double pvalue = m_CostFunction->GetValue(parentPosition);
+  double pvalue = m_MetricWorstPossibleValue;
+  try
+    {
+    pvalue = m_CostFunction->GetValue(parentPosition);
+    }
+  catch( ... )
+    {
+    if(m_CatchGetValueException)
+      {
+      pvalue = m_MetricWorstPossibleValue;
+      }
+    else
+      {
+      throw;
+      }
+    }
+
   itkDebugMacro(<< ": initial position: " << parentPosition); 
   itkDebugMacro(<< ": initial fitness: " << pvalue); 
 
@@ -159,7 +178,22 @@ OnePlusOneEvolutionaryOptimizer
       childPosition[i] = child[i];
       }
 
-    double cvalue = m_CostFunction->GetValue(childPosition);
+    double cvalue = m_MetricWorstPossibleValue;
+    try
+      {
+      cvalue = m_CostFunction->GetValue(childPosition);
+      }
+    catch( ... )
+      {
+      if(m_CatchGetValueException)
+        {
+        cvalue = m_MetricWorstPossibleValue;
+        }
+      else
+        {
+        throw;
+        }
+      }
 
     itkDebugMacro(<< "iter: " << iter << ": parent position: " 
                   << parentPosition);
@@ -283,7 +317,10 @@ OnePlusOneEvolutionaryOptimizer
   os << indent << "Current Iteration " << m_CurrentIteration << std::endl;
   os << indent << "Frobenius Norm    " << m_FrobeniusNorm    << std::endl;
   os << indent << "Maximize On/Off   " << m_Maximize         << std::endl;
-
+  os << indent << "CatchGetValueException   " << m_CatchGetValueException 
+               << std::endl;
+  os << indent << "MetricWorstPossibleValue " << m_MetricWorstPossibleValue 
+               << std::endl;
 }
 
 } // end of namespace itk

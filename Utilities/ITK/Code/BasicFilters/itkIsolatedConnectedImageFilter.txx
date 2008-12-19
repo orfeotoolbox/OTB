@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkIsolatedConnectedImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-03-19 04:36:56 $
-  Version:   $Revision: 1.27 $
+  Date:      $Date: 2008-10-16 16:45:11 $
+  Version:   $Revision: 1.28 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkIsolatedConnectedImageFilter_txx_
-#define __itkIsolatedConnectedImageFilter_txx_
+#ifndef __itkIsolatedConnectedImageFilter_txx
+#define __itkIsolatedConnectedImageFilter_txx
 
 #include "itkIsolatedConnectedImageFilter.h"
 #include "itkBinaryThresholdImageFunction.h"
@@ -109,7 +109,7 @@ IsolatedConnectedImageFilter<TInputImage,TOutputImage>
   typedef typename NumericTraits<InputImagePixelType>::AccumulateType AccumulateType;
 
   // Zero the output
-  OutputImageRegionType region = outputImage->GetRequestedRegion() ;
+  OutputImageRegionType region = outputImage->GetRequestedRegion();
   outputImage->SetBufferedRegion( region );
   outputImage->Allocate();
   outputImage->FillBuffer ( NumericTraits<OutputImagePixelType>::Zero );

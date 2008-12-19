@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGaussianSpatialFunction.h,v $
   Language:  C++
-  Date:      $Date: 2007-02-13 15:52:57 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2008-10-17 01:08:45 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -45,10 +45,10 @@ class ITK_EXPORT GaussianSpatialFunction
 {
 public:
   /** Standard class typedefs. */
-  typedef GaussianSpatialFunction Self;
-  typedef SpatialFunction<TOutput, VImageDimension, TInput> Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef GaussianSpatialFunction                                 Self;
+  typedef SpatialFunction<TOutput, VImageDimension, TInput>       Superclass;
+  typedef SmartPointer<Self>                                      Pointer;
+  typedef SmartPointer<const Self>                                ConstPointer;
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

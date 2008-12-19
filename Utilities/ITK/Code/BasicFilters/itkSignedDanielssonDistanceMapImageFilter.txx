@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSignedDanielssonDistanceMapImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2005-09-13 19:19:03 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2008-10-17 20:49:56 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkSignedDanielssonDistanceMapImageFilter_txx
-#define _itkSignedDanielssonDistanceMapImageFilter_txx
+#ifndef __itkSignedDanielssonDistanceMapImageFilter_txx
+#define __itkSignedDanielssonDistanceMapImageFilter_txx
 
 #include "itkSignedDanielssonDistanceMapImageFilter.h"
 #include "itkProgressAccumulator.h"
@@ -50,8 +50,6 @@ SignedDanielssonDistanceMapImageFilter<TInputImage,TOutputImage>
   this->m_UseImageSpacing     = false;
   this->m_InsideIsPositive    = false;
 }
-
-
 
 /**
  *  Return the distance map Image pointer
@@ -120,12 +118,11 @@ void SignedDanielssonDistanceMapImageFilter<TInputImage,TOutputImage>
   filter2->SetSquaredDistance( m_SquaredDistance );
     
   //Invert input image for second Danielsson filter
-  typedef typename InputImageType::PixelType InputPixelType;
+  typedef typename InputImageType::PixelType                 InputPixelType;
   typedef Functor::InvertIntensityFunctor< InputPixelType >  FunctorType;
-  
   typedef UnaryFunctorImageFilter< InputImageType, 
                                    InputImageType,
-                                   FunctorType >    InverterType;
+                                   FunctorType >             InverterType;
 
   typename InverterType::Pointer inverter = InverterType::New();
 
@@ -187,8 +184,6 @@ void SignedDanielssonDistanceMapImageFilter<TInputImage,TOutputImage>
 } 
 // end GenerateData()
 
-
-
 /**
  *  Print Self
  */
@@ -207,4 +202,3 @@ void SignedDanielssonDistanceMapImageFilter<TInputImage,TOutputImage>
 } // end namespace itk
 
 #endif
-

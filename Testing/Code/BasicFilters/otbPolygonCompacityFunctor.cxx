@@ -42,7 +42,11 @@ int otbPolygonCompacityFunctor( int argc, char * argv[] )
     return 1;
   }
 
-  typedef itk::RGBPixel<unsigned char> InputPixelType;
+// In the 3.10.1 ITK version, the itk::ConnectedComponentImageFilter filter has changed.
+// TODO: change reference output 
+//  typedef itk::RGBPixel<unsigned char> InputPixelType;
+  typedef unsigned char  InputPixelType;
+
   typedef unsigned short LabelPixelType;//FIXME doesn't seem to work with long int (64 bits problem ?)
 
   typedef otb::Image<InputPixelType,2> InputImageType;

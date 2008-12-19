@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkParametricSpaceToImageSpaceMeshFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:54 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2008-10-17 16:30:48 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -49,17 +49,17 @@ class ITK_EXPORT ParametricSpaceToImageSpaceMeshFilter :
 {
 public:
   /** Standard class typedefs. */
-  typedef ParametricSpaceToImageSpaceMeshFilter  Self;
+  typedef ParametricSpaceToImageSpaceMeshFilter    Self;
   typedef MeshToMeshFilter<TInputMesh,TOutputMesh> Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                       Pointer;
+  typedef SmartPointer<const Self>                 ConstPointer;
 
   /** Type for representing coordinates. */
   typedef typename TInputMesh::CoordRepType  CoordRepType;
 
-  typedef TInputMesh InputMeshType;
-  typedef TOutputMesh OutputMeshType;
-  typedef typename InputMeshType::Pointer InputMeshPointer;
+  typedef TInputMesh                       InputMeshType;
+  typedef TOutputMesh                      OutputMeshType;
+  typedef typename InputMeshType::Pointer  InputMeshPointer;
   typedef typename OutputMeshType::Pointer OutputMeshPointer;
   
   /** Method for creation through the object factory. */

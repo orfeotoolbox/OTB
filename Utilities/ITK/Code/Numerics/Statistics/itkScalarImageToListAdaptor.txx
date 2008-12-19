@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalarImageToListAdaptor.txx,v $
   Language:  C++
-  Date:      $Date: 2004-09-11 00:15:17 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2008-08-19 22:27:57 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -35,13 +35,13 @@ ScalarImageToListAdaptor< TImage >
 {
   if( this->GetUseBuffer() )
     {
-    m_TempVector[0] = (*this->GetPixelContainer())[id] ;
+    m_TempVector[0] = (*this->GetPixelContainer())[id];
     }
   else
     {
-    m_TempVector[0] = this->GetImage()->GetPixel( this->GetImage()->ComputeIndex( id ) )  ;
+    m_TempVector[0] = this->GetImage()->GetPixel( this->GetImage()->ComputeIndex( id ) );
     }
-  return m_TempVector  ;
+  return m_TempVector;
 }
 
 } // end of namespace Statistics 

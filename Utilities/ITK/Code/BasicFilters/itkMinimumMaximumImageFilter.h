@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMinimumMaximumImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-29 14:53:40 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2008-10-16 19:33:41 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -50,18 +50,18 @@ public:
                       TInputImage::ImageDimension);
 
   /** Standard class typedefs. */
-  typedef MinimumMaximumImageFilter Self;
+  typedef MinimumMaximumImageFilter                     Self;
   typedef ImageToImageFilter< TInputImage, TInputImage> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                            Pointer;
+  typedef SmartPointer<const Self>                      ConstPointer;
 
   /** Image related typedefs. */
   typedef typename TInputImage::Pointer InputImagePointer;
 
-  typedef typename TInputImage::RegionType RegionType ;
-  typedef typename TInputImage::SizeType SizeType ;
-  typedef typename TInputImage::IndexType IndexType ;
-  typedef typename TInputImage::PixelType PixelType ;
+  typedef typename TInputImage::RegionType RegionType;
+  typedef typename TInputImage::SizeType   SizeType;
+  typedef typename TInputImage::IndexType  IndexType;
+  typedef typename TInputImage::PixelType  PixelType;
 
   /** Smart Pointer type to a DataObject. */
   typedef typename DataObject::Pointer DataObjectPointer;
@@ -111,7 +111,7 @@ protected:
   void PrintSelf(std::ostream& os, Indent indent) const;
 
   /** Pass the input through unmodified. Do this by Grafting in the AllocateOutputs method. */
-  void AllocateOutputs();      
+  void AllocateOutputs();
 
   /** Initialize some accumulators before the threads run. */
   void BeforeThreadedGenerateData ();
@@ -122,7 +122,7 @@ protected:
   /** Multi-thread version GenerateData. */
   void  ThreadedGenerateData (const RegionType& 
                               outputRegionForThread,
-                              int threadId) ;
+                              int threadId);
 
   // Override since the filter needs all the data for the algorithm
   void GenerateInputRequestedRegion();

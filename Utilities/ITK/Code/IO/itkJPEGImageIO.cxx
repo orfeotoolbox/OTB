@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkJPEGImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-06-25 11:30:38 $
-  Version:   $Revision: 1.24 $
+  Date:      $Date: 2008-10-24 16:21:55 $
+  Version:   $Revision: 1.26 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,6 +24,7 @@
 #include "itkRGBPixel.h"
 #include "itkRGBAPixel.h"
 #include <stdio.h>
+#include <itksys/SystemTools.hxx>
 
 extern "C"
 {
@@ -212,7 +213,10 @@ void JPEGImageIO::Read(void* buffer)
   if(!fp)
     {
     itkExceptionMacro("Error JPEGImageIO could not open file: " 
-                      << this->GetFileName());
+                      << this->GetFileName()
+                      << std::endl
+                      << "Reason: "
+                      << itksys::SystemTools::GetLastSystemError());
     return;
     }
  
@@ -297,9 +301,13 @@ JPEGImageIO::JPEGImageIO()
 
   this->AddSupportedWriteExtension(".jpg");
   this->AddSupportedWriteExtension(".JPG");
+  this->AddSupportedWriteExtension(".jpeg");
+  this->AddSupportedWriteExtension(".JPEG");
 
   this->AddSupportedReadExtension(".jpg");
   this->AddSupportedReadExtension(".JPG");
+  this->AddSupportedReadExtension(".jpeg");
+  this->AddSupportedReadExtension(".JPEG");
 }
 
 JPEGImageIO::~JPEGImageIO()
@@ -329,7 +337,10 @@ void JPEGImageIO::ReadImageInformation()
   if(!fp)
     {
     itkExceptionMacro("Error JPEGImageIO could not open file: " 
-                      << this->GetFileName());
+                      << this->GetFileName()
+                      << std::endl
+                      << "Reason: "
+                      << itksys::SystemTools::GetLastSystemError());
     return;
     }
 
@@ -462,7 +473,12 @@ void JPEGImageIO::WriteSlice(std::string& fileName, const void* buffer)
   FILE* fp = JPEGfp.m_FilePointer;
   if(!fp)
     {
-    itkExceptionMacro("Unable to open file " << fileName);
+    itkExceptionMacro("Unable to open file "
+                      << fileName
+                      <<" for writing."
+                      << std::endl
+                      << "Reason: "
+                      << itksys::SystemTools::GetLastSystemError());
     }
 
   // Call the correct templated function for the output

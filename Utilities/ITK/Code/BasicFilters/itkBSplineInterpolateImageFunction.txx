@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBSplineInterpolateImageFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2008-02-04 12:34:11 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2008-12-08 01:10:42 $
+  Version:   $Revision: 1.20.2.1 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkBSplineInterpolateImageFunction_txx
-#define _itkBSplineInterpolateImageFunction_txx
+#ifndef __itkBSplineInterpolateImageFunction_txx
+#define __itkBSplineInterpolateImageFunction_txx
 
 // First, make sure that we include the configuration file.
 // This line may be removed once the ThreadSafeTransform gets
@@ -55,7 +55,11 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
   // ***TODO: Should we store coefficients in a variable or retrieve from filter?
   m_Coefficients = CoefficientImageType::New();
   this->SetSplineOrder(SplineOrder);
+#if defined(ITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE)
+  this->m_UseImageDirection = true;
+#else
   this->m_UseImageDirection = false;
+#endif
 }
 
 /**
@@ -100,9 +104,9 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
     m_DataLength = inputData->GetBufferedRegion().GetSize();
     }
   else
-   {
-   m_Coefficients = NULL;
-   }
+    {
+    m_Coefficients = NULL;
+    }
 }
 
 
@@ -167,25 +171,6 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
     interpolated += w * m_Coefficients->GetPixel(coefficientIndex);
     }
     
-/*  double interpolated = 0.0;
-  IndexType coefficientIndex;
-  // Step through eachpoint in the N-dimensional interpolation cube.
-  for (unsigned int sp = 0; sp <= m_SplineOrder; sp++)
-    {
-    for (unsigned int sp1=0; sp1 <= m_SplineOrder; sp1++)
-      {
-
-      double w = 1.0;
-      for (unsigned int n1 = 0; n1 < ImageDimension; n1++ )
-        {
-        w *= weights[n1][ sp1 ];
-        coefficientIndex[n1] = EvaluateIndex[n1][sp];  // Build up ND index for coefficients.
-        }
-
-        interpolated += w * m_Coefficients->GetPixel(coefficientIndex);
-      }  
-    }
-*/
   return(interpolated);
     
 }
@@ -226,7 +211,7 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
     derivativeValue[n] = 0.0;
     for (unsigned int p = 0; p < m_MaxNumberInterpolationPoints; p++)
       {
-      tempValue = 1.0 ; 
+      tempValue = 1.0; 
       for (unsigned int n1 = 0; n1 < ImageDimension; n1++)
         {
         //coefficientIndex[n1] = EvaluateIndex[n1][sp];
@@ -239,12 +224,12 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
           }
         else
           {
-          tempValue *= weights[n1][ m_PointsToIndex[p][n1] ];          
+          tempValue *= weights[n1][ m_PointsToIndex[p][n1] ];
           }
         }
-      derivativeValue[n] += m_Coefficients->GetPixel(coefficientIndex) * tempValue ;
+      derivativeValue[n] += m_Coefficients->GetPixel(coefficientIndex) * tempValue;
       }
-     derivativeValue[n] /= spacing[n];   // take spacing into account
+    derivativeValue[n] /= spacing[n];   // take spacing into account
     }
 
 #ifdef ITK_USE_ORIENTED_IMAGE_DIRECTION

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptResampleImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-01-20 18:00:40 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2008-12-08 01:10:43 $
+  Version:   $Revision: 1.6.6.1 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -40,8 +40,8 @@ template <class TInputImage,
 ResampleImageFilter<TInputImage, TOutputImage,TInterpolatorPrecisionType>
 ::ResampleImageFilter()
 {
-  m_OutputSpacing.Fill(1.0);
   m_OutputOrigin.Fill(0.0);
+  m_OutputSpacing.Fill(1.0);
   m_OutputDirection.SetIdentity();
 
   m_UseReferenceImage = false;
@@ -836,7 +836,7 @@ ResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
 ::SetReferenceImage( const TOutputImage *image )
 {
   itkDebugMacro("setting input ReferenceImage to " << image);
-  if( image != static_cast<const TOutputImage *>(this->GetInput( 1 )) )
+  if( image != static_cast<const TOutputImage *>(this->ProcessObject::GetInput( 1 )) )
     {
     this->ProcessObject::SetNthInput(1, const_cast< TOutputImage *>( image ) );
     this->Modified();

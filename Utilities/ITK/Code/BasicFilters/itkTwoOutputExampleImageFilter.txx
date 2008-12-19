@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTwoOutputExampleImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-01-19 19:50:01 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2008-10-18 16:11:15 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkTwoOutputExampleImageFilter_txx
-#define _itkTwoOutputExampleImageFilter_txx
+#ifndef __itkTwoOutputExampleImageFilter_txx
+#define __itkTwoOutputExampleImageFilter_txx
 
 #include "itkTwoOutputExampleImageFilter.h"
 #include "itkImageRegionIterator.h"
@@ -81,8 +81,6 @@ TwoOutputExampleImageFilter<TImage>
     this->Modified();
     }
 }
-
-
 
 /**
  * The values less than or equal to the value are set to OutsideValue

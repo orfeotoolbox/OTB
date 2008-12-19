@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkSpatialObjectToImageFilter.txx,v $
 Language:  C++
-Date:      $Date: 2008-01-02 15:12:17 $
-Version:   $Revision: 1.21 $
+Date:      $Date: 2008-10-18 16:11:13 $
+Version:   $Revision: 1.22 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkSpatialObjectToImageFilter_txx
-#define _itkSpatialObjectToImageFilter_txx
+#ifndef __itkSpatialObjectToImageFilter_txx
+#define __itkSpatialObjectToImageFilter_txx
 
 #include "itkSpatialObjectToImageFilter.h"
 #include <itkImageRegionIteratorWithIndex.h>
@@ -74,8 +74,6 @@ SpatialObjectToImageFilter<TInputSpatialObject, TOutputImage>
   this->ProcessObject::SetNthInput(index, 
                                    const_cast< TInputSpatialObject *>( object ) );
 }
-
-
 
 /** Get the input Spatial Object */
 template <class TInputSpatialObject, class TOutputImage>
@@ -338,7 +336,7 @@ SpatialObjectToImageFilter<TInputSpatialObject, TOutputImage>
 
   OutputImage->SetLargestPossibleRegion( region);     // 
   OutputImage->SetBufferedRegion( region );           // set the region 
-  OutputImage->SetRequestedRegion( region );          //                                                                       
+  OutputImage->SetRequestedRegion( region );          //
   // If the spacing has been explicitly specified, the filter
   // will set the output spacing to that explicit spacing, otherwise the spacing from
   // the spatial object is used as default.
@@ -363,7 +361,7 @@ SpatialObjectToImageFilter<TInputSpatialObject, TOutputImage>
     }
   OutputImage->SetOrigin( m_Origin );   //   and origin
   OutputImage->SetDirection( m_Direction );
-  OutputImage->Allocate();   // allocate the image                            
+  OutputImage->Allocate();   // allocate the image
 
   typedef itk::ImageRegionIteratorWithIndex<OutputImageType> myIteratorType;
 
@@ -433,8 +431,6 @@ SpatialObjectToImageFilter<TInputSpatialObject, TOutputImage>
     os << indent << "Using Object Value : OFF" << std::endl;
     }
 }
-
-
 
 } // end namespace itk
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBSplineUpsampleImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-08-01 19:16:17 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2008-10-09 20:43:43 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkBSplineUpsampleImageFilter_txx
-#define _itkBSplineUpsampleImageFilter_txx
+#ifndef __itkBSplineUpsampleImageFilter_txx
+#define __itkBSplineUpsampleImageFilter_txx
 #include "itkBSplineUpsampleImageFilter.h"
 
 namespace itk
@@ -98,7 +98,7 @@ BSplineUpsampleImageFilter<TInputImage,TOutputImage, ResamplerType>
   
   inputPtr->SetRequestedRegionToLargestPossibleRegion();
 
-// we need to compute the input requested region (size and start index)
+  // Compute the input requested region (size and start index)
   unsigned int i;
   const typename TOutputImage::SizeType& outputRequestedRegionSize
     = outputPtr->GetRequestedRegion().GetSize();

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBlackTopHatImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005-08-23 15:16:38 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2008-10-09 15:31:37 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -16,6 +16,16 @@
 =========================================================================*/
 #ifndef __itkBlackTopHatImageFilter_h
 #define __itkBlackTopHatImageFilter_h
+
+// First make sure that the configuration is available.
+// This line can be removed once the optimized versions
+// gets integrated into the main directories.
+#include "itkConfigure.h"
+
+#ifdef ITK_USE_CONSOLIDATED_MORPHOLOGY
+#include "itkOptBlackTopHatImageFilter.h"
+#else
+
 
 #include "itkImageToImageFilter.h"
 
@@ -38,19 +48,19 @@ class ITK_EXPORT BlackTopHatImageFilter :
 {
 public:
   /** Standard class typedefs. */
-  typedef BlackTopHatImageFilter Self;
-  typedef ImageToImageFilter<TInputImage, TOutputImage>
-  Superclass;
-  typedef SmartPointer<Self>        Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef BlackTopHatImageFilter                        Self;
+  typedef ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef SmartPointer<Self>                            Pointer;
+  typedef SmartPointer<const Self>                      ConstPointer;
 
   /** Some convenient typedefs. */
-  typedef TInputImage InputImageType;
-  typedef TOutputImage OutputImageType;
+  typedef TInputImage                              InputImageType;
   typedef typename InputImageType::Pointer         InputImagePointer;
   typedef typename InputImageType::ConstPointer    InputImageConstPointer;
   typedef typename InputImageType::RegionType      InputImageRegionType;
   typedef typename InputImageType::PixelType       InputImagePixelType;
+
+  typedef TOutputImage                             OutputImageType;
   typedef typename OutputImageType::Pointer        OutputImagePointer;
   typedef typename OutputImageType::ConstPointer   OutputImageConstPointer;
   typedef typename OutputImageType::RegionType     OutputImageRegionType;
@@ -86,7 +96,7 @@ protected:
   /** BlackTopHatImageFilter needs the entire input be
    * available. Thus, it needs to provide an implementation of
    * GenerateInputRequestedRegion(). */
-  void GenerateInputRequestedRegion() ;
+  void GenerateInputRequestedRegion();
 
   /** BlackTopHatImageFilter will produce the entire output. */
   void EnlargeOutputRequestedRegion(DataObject *itkNotUsed(output));
@@ -99,8 +109,8 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   /** kernel or structuring element to use. */
-  KernelType m_Kernel ;
-} ; // end of class
+  KernelType m_Kernel;
+}; // end of class
 
 } // end namespace itk
   
@@ -110,4 +120,4 @@ private:
 
 #endif
 
-
+#endif

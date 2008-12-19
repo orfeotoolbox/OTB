@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVotingBinaryHoleFillingImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-01-02 01:32:34 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2008-10-17 20:50:03 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkVotingBinaryHoleFillingImageFilter_txx
-#define _itkVotingBinaryHoleFillingImageFilter_txx
+#ifndef __itkVotingBinaryHoleFillingImageFilter_txx
+#define __itkVotingBinaryHoleFillingImageFilter_txx
 #include "itkVotingBinaryHoleFillingImageFilter.h"
 
 #include "itkConstNeighborhoodIterator.h"
@@ -157,8 +157,6 @@ VotingBinaryHoleFillingImageFilter< TInputImage, TOutputImage>
   this->m_Count[threadId] = numberOfPixelsChanged;
 }
 
-
-
 template< class TInputImage, class TOutputImage>
 void
 VotingBinaryHoleFillingImageFilter< TInputImage, TOutputImage>
@@ -172,8 +170,6 @@ VotingBinaryHoleFillingImageFilter< TInputImage, TOutputImage>
     this->m_NumberOfPixelsChanged += this->m_Count[t];
     }
 }
-
-
 
 /**
  * Standard "PrintSelf" method

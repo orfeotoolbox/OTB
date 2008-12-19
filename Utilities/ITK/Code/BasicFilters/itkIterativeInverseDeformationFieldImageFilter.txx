@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkIterativeInverseDeformationFieldImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-03-19 04:36:56 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2008-12-08 01:10:42 $
+  Version:   $Revision: 1.9.2.1 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,29 +14,29 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkIterativeInverseDeformationFieldImageFilter_cxx
-#define _itkIterativeInverseDeformationFieldImageFilter_cxx
+#ifndef __itkIterativeInverseDeformationFieldImageFilter_txx
+#define __itkIterativeInverseDeformationFieldImageFilter_txx
 
 #include "itkIterativeInverseDeformationFieldImageFilter.h"
 #include "itkProgressReporter.h"
 
 
-namespace itk{
+namespace itk {
 //----------------------------------------------------------------------------
 // Constructor
 template < class TInputImage, class TOutputImage >
-IterativeInverseDeformationFieldImageFilter<TInputImage, TOutputImage>::IterativeInverseDeformationFieldImageFilter(){
+IterativeInverseDeformationFieldImageFilter<TInputImage, TOutputImage>::IterativeInverseDeformationFieldImageFilter()
+{
   m_NumberOfIterations = 5;
   m_StopValue = 0;
   m_Time = 0;
 }
 
-
-
 //----------------------------------------------------------------------------
 template < class TInputImage, class TOutputImage >
 void IterativeInverseDeformationFieldImageFilter<TInputImage, TOutputImage>
-::GenerateData(){
+::GenerateData()
+{
 
   const unsigned int ImageDimension = InputImageType::ImageDimension;
   TimeType time;
@@ -61,8 +61,9 @@ void IterativeInverseDeformationFieldImageFilter<TInputImage, TOutputImage>
   // (calculate negative deformation field and apply it to itself)
   InputImagePointer negField = InputImageType::New();
   negField->SetRegions(inputPtr->GetLargestPossibleRegion());
-  negField->SetSpacing(inputPtr->GetSpacing());
   negField->SetOrigin(inputPtr->GetOrigin());
+  negField->SetSpacing(inputPtr->GetSpacing());
+  negField->SetDirection(inputPtr->GetDirection());
   negField->Allocate();
 
   InputConstIterator InputIt = InputConstIterator(inputPtr, inputPtr->GetRequestedRegion());
@@ -75,16 +76,18 @@ void IterativeInverseDeformationFieldImageFilter<TInputImage, TOutputImage>
     }
 
   outputPtr->SetRegions(inputPtr->GetRequestedRegion());
-  outputPtr->SetSpacing(inputPtr->GetSpacing());
   outputPtr->SetOrigin(inputPtr->GetOrigin());
+  outputPtr->SetSpacing(inputPtr->GetSpacing());
+  outputPtr->SetDirection(inputPtr->GetDirection());
   outputPtr->Allocate();
 
   typename VectorWarperType::Pointer vectorWarper = VectorWarperType::New();
   typename FieldInterpolatorType::Pointer VectorInterpolator = FieldInterpolatorType::New();
   vectorWarper->SetInput(negField);
   vectorWarper->SetInterpolator(VectorInterpolator);
-  vectorWarper->SetOutputSpacing(inputPtr->GetSpacing());
   vectorWarper->SetOutputOrigin(inputPtr->GetOrigin());
+  vectorWarper->SetOutputSpacing(inputPtr->GetSpacing());
+  vectorWarper->SetOutputDirection(inputPtr->GetDirection());
   vectorWarper->SetDeformationField(negField);
   vectorWarper->GraftOutput(outputPtr);
   vectorWarper->UpdateLargestPossibleRegion();

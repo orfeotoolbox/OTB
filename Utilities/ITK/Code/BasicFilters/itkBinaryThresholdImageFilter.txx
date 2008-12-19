@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryThresholdImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2004-12-28 18:04:20 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2008-10-09 15:31:36 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkBinaryThresholdImageFilter_txx
-#define _itkBinaryThresholdImageFilter_txx
+#ifndef __itkBinaryThresholdImageFilter_txx
+#define __itkBinaryThresholdImageFilter_txx
 
 #include "itkBinaryThresholdImageFilter.h"
 
@@ -230,8 +230,6 @@ BinaryThresholdImageFilter<TInputImage, TOutputImage>
     
   return upper;
 }
-
-
 
 /**
  *

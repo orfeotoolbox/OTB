@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOnePlusOneEvolutionaryOptimizer.h,v $
   Language:  C++
-  Date:      $Date: 2007-03-22 14:29:14 $
-  Version:   $Revision: 1.23 $
+  Date:      $Date: 2008-08-05 11:15:49 $
+  Version:   $Revision: 1.24 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -145,6 +145,12 @@ public:
   void StopOptimization() 
     { m_Stop = true; }
 
+  itkGetMacro(CatchGetValueException, bool);
+  itkSetMacro(CatchGetValueException, bool);
+
+  itkGetMacro(MetricWorstPossibleValue, double);
+  itkSetMacro(MetricWorstPossibleValue, double);
+
 protected:
   OnePlusOneEvolutionaryOptimizer();
   OnePlusOneEvolutionaryOptimizer(const OnePlusOneEvolutionaryOptimizer&);
@@ -161,6 +167,9 @@ private:
 
   /** Current iteration */
   unsigned int m_CurrentIteration;
+
+  bool               m_CatchGetValueException;
+  double             m_MetricWorstPossibleValue;
 
   /** Set if the Metric should be maximized: Default = False */
   bool m_Maximize;

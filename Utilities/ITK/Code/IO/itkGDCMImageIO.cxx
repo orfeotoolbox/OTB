@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGDCMImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-06-09 14:15:40 $
-  Version:   $Revision: 1.143 $
+  Date:      $Date: 2008-10-05 15:18:08 $
+  Version:   $Revision: 1.147 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,6 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "gdcmFile.h"
+
 #include "itkGDCMImageIO.h"
 #include "itkIOCommon.h"
 #include "itkPoint.h"
@@ -30,14 +32,29 @@
 
 #include <itksys/SystemTools.hxx>
 #include <itksys/Base64.h>
+
+#if GDCM_MAJOR_VERSION < 2
 #include "gdcmValEntry.h" //internal of gdcm
 #include "gdcmBinEntry.h" //internal of gdcm
-#include "gdcmFile.h"
 #include "gdcmFileHelper.h"
 #include "gdcmUtil.h"
 #include "gdcmGlobal.h"   // access to dictionary
 #include "gdcmDictSet.h"  // access to dictionary
-
+#else
+#include "gdcmImageHelper.h"
+#include "gdcmImageApplyLookupTable.h"
+#include "gdcmImageChangePlanarConfiguration.h"
+#include "gdcmUnpacker12Bits.h"
+#include "gdcmRescaler.h"
+#include "gdcmFileMetaInformation.h"
+#include "gdcmImageReader.h"
+#include "gdcmImageWriter.h"
+#include "gdcmUIDGenerator.h"
+#include "gdcmAttribute.h"
+#include "gdcmGlobal.h"
+#include "gdcmDicts.h"
+#include "gdcmDictEntry.h"
+#endif
 
 #include <fstream>
 #include <math.h>   //for fabs on SGI
@@ -57,6 +74,7 @@ bool GDCMImageIO::m_LoadSequencesDefault = false;
 bool GDCMImageIO::m_LoadPrivateTagsDefault = false;
 
 
+#if GDCM_MAJOR_VERSION < 2
 // Minimal functionality to handle 12bits pixel for the Interval Calculator:
 // Technically BitsAllocated should be considered but since GDCM
 // always presents
@@ -159,6 +177,7 @@ public:
     }
     
 };
+#endif
 
 GDCMImageIO::GDCMImageIO()
   : m_LoadSequences( m_LoadSequencesDefault ),
@@ -294,16 +313,25 @@ bool GDCMImageIO::CanReadFile(const char* filename)
 
   // Check to see if its a valid dicom file gdcm is able to parse:
   // We are parsing the header one time here:
-
+#if GDCM_MAJOR_VERSION < 2
   bool preamble;
   if( gdcm::Document::CanReadFile(file, preamble) )
     {
     // By default only support DICOM with preamble (DICM magic number):
     return preamble;
     }
+#else
+  gdcm::ImageReader reader;
+  reader.SetFileName( filename );
+  if( reader.Read() )
+    {
+    return true;
+    }
+#endif
   return false;
 }
 
+#if GDCM_MAJOR_VERSION < 2
 // Use a MACRO to exploit the Duff's device trick so that we can use for the direct
 // rescale function AND the inverse rescale function
 #define DUFF_DEVICE_8(aCount, aAction) \
@@ -540,8 +568,10 @@ void RescaleFunctionInverse(ImageIOBase::IOComponentType bufferType,
       throw e;
     }
 }
+#endif
 
 
+#if GDCM_MAJOR_VERSION < 2
 void GDCMImageIO::Read(void* buffer)
 {
   //Should I handle differently dicom lut ?
@@ -630,8 +660,86 @@ void GDCMImageIO::Read(void* buffer)
 //  NOTE: source should not be deleted. gdcm controls the pointer.
 
 }
+#else
+// GDCM 2.x version
+void GDCMImageIO::Read(void* pointer)
+{
+  const char *filename = m_FileName.c_str();
+  assert( gdcm::ImageHelper::GetForceRescaleInterceptSlope() );
+  gdcm::ImageReader reader;
+  reader.SetFileName( filename );
+  if( !reader.Read() )
+    {
+    itkExceptionMacro(<< "Cannot read requested file");
+    return;
+    }
+
+  gdcm::Image &image = reader.GetImage();
+  assert( image.GetNumberOfDimensions() == 2 || image.GetNumberOfDimensions() == 3 );
+  unsigned long len = image.GetBufferLength();
+
+  const unsigned long numberOfBytesToBeRead = 
+    static_cast< unsigned long>( this->GetImageSizeInBytes() );
+
+  // I think ITK only allow RGB image by pixel (and not by plane)
+  if( image.GetPlanarConfiguration() == 1 )
+    {
+    gdcm::ImageChangePlanarConfiguration icpc;
+    icpc.SetInput( image );
+    icpc.SetPlanarConfiguration( 0 );
+    icpc.Change();
+    image = icpc.GetOutput();
+    }
+
+  if( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::PALETTE_COLOR )
+    {
+    gdcm::ImageApplyLookupTable ialut;
+    ialut.SetInput( image );
+    ialut.Apply();
+    image = ialut.GetOutput();
+    len *= 3;
+    }
+
+  image.GetBuffer((char*)pointer);
+
+  const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
+  if( pixeltype == gdcm::PixelFormat::UINT12 || pixeltype == gdcm::PixelFormat::INT12 )
+    {
+    assert( m_RescaleSlope == 1.0 && m_RescaleIntercept == 0.0 );
+    assert( pixeltype.GetSamplesPerPixel() == 1 );
+    // FIXME: I could avoid this extra copy:
+    char * copy = new char[len];
+    memcpy(copy, pointer, len);
+    gdcm::Unpacker12Bits u12;
+    u12.Unpack((char*)pointer, copy, len);
+    // update len just in case:
+    len = 16 * len / 12;
+    delete[] copy;
+    }
+  if( m_RescaleSlope != 1.0 || m_RescaleIntercept != 0.0 )
+    {
+    gdcm::Rescaler r;
+    r.SetIntercept( m_RescaleIntercept );
+    r.SetSlope( m_RescaleSlope );
+    r.SetPixelFormat( pixeltype );
+    gdcm::PixelFormat outputpt = r.ComputeInterceptSlopePixelType();
+    char * copy = new char[len];
+    memcpy(copy, (char*)pointer, len);
+    r.Rescale((char*)pointer,copy,len);
+    delete[] copy;
+    // WARNING: sizeof(Real World Value) != sizeof(Stored Pixel)
+    len = len * outputpt.GetPixelSize() / pixeltype.GetPixelSize();
+    }
+
+  // \postcondition
+  // Now that len was updated (after unpacker 12bits -> 16bits, rescale...) , can now check compat: 
+  assert( numberOfBytesToBeRead == len ); // programmer error
+
+}
+#endif
 
 
+#if GDCM_MAJOR_VERSION < 2
 void GDCMImageIO::InternalReadImageInformation(std::ifstream& file)
 {
   //read header
@@ -891,6 +999,137 @@ void GDCMImageIO::InternalReadImageInformation(std::ifstream& file)
   this->GetScanOptions(name);
 
 }
+#else
+void GDCMImageIO::InternalReadImageInformation(std::ifstream& file)
+{
+  //read header
+  if ( ! this->OpenGDCMFileForReading(file, m_FileName.c_str()) )
+    {
+    itkExceptionMacro(<< "Cannot read requested file");
+    }
+
+  // In general this should be relatively safe to assume
+  gdcm::ImageHelper::SetForceRescaleInterceptSlope(true);
+
+  const char *filename = m_FileName.c_str();
+  gdcm::ImageReader reader;
+  reader.SetFileName( filename );
+  if( !reader.Read() )
+    {
+    itkExceptionMacro(<< "Cannot read requested file");
+    }
+  const gdcm::Image &image = reader.GetImage();
+  //const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
+  const unsigned int *dims = image.GetDimensions();
+
+  const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
+
+  m_RescaleIntercept = image.GetIntercept();
+  m_RescaleSlope = image.GetSlope();
+  gdcm::Rescaler r;
+  r.SetIntercept( m_RescaleIntercept );
+  r.SetSlope( m_RescaleSlope );
+  r.SetPixelFormat( pixeltype );
+  gdcm::PixelFormat::ScalarType outputpt = r.ComputeInterceptSlopePixelType();
+
+  assert( pixeltype <= outputpt );
+
+  m_ComponentType = UNKNOWNCOMPONENTTYPE;
+  switch( outputpt )
+    {
+    case gdcm::PixelFormat::INT8:
+      m_ComponentType = ImageIOBase::CHAR; // Is it signed char ?
+      break;
+    case gdcm::PixelFormat::UINT8:
+      m_ComponentType = ImageIOBase::UCHAR;
+      break;
+      /* INT12 / UINT12 should not happen anymore in any modern DICOM */
+    case gdcm::PixelFormat::INT12:
+      m_ComponentType = ImageIOBase::SHORT;
+      break;
+    case gdcm::PixelFormat::UINT12:
+      m_ComponentType = ImageIOBase::USHORT;
+      break;
+    case gdcm::PixelFormat::INT16:
+      m_ComponentType = ImageIOBase::SHORT;
+      break;
+    case gdcm::PixelFormat::UINT16:
+      m_ComponentType = ImageIOBase::USHORT;
+      break;
+      // RT / SC have 32bits
+    case gdcm::PixelFormat::INT32:
+      m_ComponentType = ImageIOBase::INT;
+      break;
+    case gdcm::PixelFormat::UINT32:
+      m_ComponentType = ImageIOBase::UINT;
+      break;
+      //case gdcm::PixelFormat::FLOAT16: // TODO
+    case gdcm::PixelFormat::FLOAT32:
+      m_ComponentType = ImageIOBase::FLOAT;
+      break;
+    default:
+      itkExceptionMacro( "Unhandled PixelFormat: " << outputpt ); 
+    }
+
+  m_NumberOfComponents = pixeltype.GetSamplesPerPixel();
+  if( image.GetPhotometricInterpretation() == 
+    gdcm::PhotometricInterpretation::PALETTE_COLOR )
+    {
+    assert( m_NumberOfComponents == 1 );
+    // TODO: need to do the LUT ourself...
+    //itkExceptionMacro(<< "PALETTE_COLOR is not implemented yet");
+    // AFAIK ITK user don't care about the palette so always apply it and fake a RGB image for them
+    m_NumberOfComponents = 3;
+    }
+  if (m_NumberOfComponents == 1)
+    {
+    this->SetPixelType(SCALAR);
+    }
+  else
+    {
+    this->SetPixelType(RGB); // What if image is YBR ? This is a problem since integer conversion is lossy
+    }
+
+  // set values in case we don't find them
+  //this->SetNumberOfDimensions(  image.GetNumberOfDimensions() );
+  m_Dimensions[0] = dims[0];
+  m_Dimensions[1] = dims[1];
+
+  const double *spacing = image.GetSpacing();
+  m_Spacing[0] = spacing[0];
+  m_Spacing[1] = spacing[1];
+  m_Spacing[2] = spacing[2];
+
+  const double *origin = image.GetOrigin();
+  m_Origin[0] = origin[0];
+  m_Origin[1] = origin[1];
+  m_Origin[2] = origin[2];
+
+  if( image.GetNumberOfDimensions() == 3 )
+    {
+    m_Dimensions[2] = dims[2];
+    }
+  else
+    {
+    m_Dimensions[2] = 1;
+    }
+
+  const double *dircos = image.GetDirectionCosines();
+  vnl_vector<double> rowDirection(3), columnDirection(3);
+  rowDirection[0] = dircos[0];
+  rowDirection[1] = dircos[1];
+  rowDirection[2] = dircos[2];
+  columnDirection[0] = dircos[3];
+  columnDirection[1] = dircos[4];
+  columnDirection[2] = dircos[5];
+
+  vnl_vector<double> sliceDirection = vnl_cross_3d(rowDirection, columnDirection);
+  this->SetDirection(0, rowDirection);
+  this->SetDirection(1, columnDirection);
+  this->SetDirection(2, sliceDirection);
+
+}
+#endif
 
 void GDCMImageIO::ReadImageInformation()
 {
@@ -944,6 +1183,7 @@ void GDCMImageIO::WriteImageInformation()
 {
 }
 
+#if GDCM_MAJOR_VERSION < 2
 void GDCMImageIO::Write(const void* buffer)
 {
   std::ofstream file;
@@ -1439,6 +1679,232 @@ void GDCMImageIO::Write(const void* buffer)
   delete gfile;
   delete header;
 }
+#else
+void GDCMImageIO::Write(const void* buffer)
+{
+  std::ofstream file;
+  if ( !this->OpenGDCMFileForWriting(file, m_FileName.c_str()) )
+    {
+    return;
+    }
+  file.close();
+  // global static:
+  gdcm::UIDGenerator::SetRoot( m_UIDPrefix.c_str() );
+
+  gdcm::ImageWriter writer;
+  gdcm::DataSet &header = writer.GetFile().GetDataSet();
+  gdcm::Global &g = gdcm::Global::GetInstance();
+  const gdcm::Dicts &dicts = g.GetDicts();
+  const gdcm::Dict &pubdict = dicts.GetPublicDict();
+
+  std::string value;
+  MetaDataDictionary & dict = this->GetMetaDataDictionary();
+  gdcm::Tag tag;
+  //Smarter approach using real iterators
+  itk::MetaDataDictionary::ConstIterator itr = dict.Begin();
+  itk::MetaDataDictionary::ConstIterator end = dict.End();
+  while(itr != end)
+    {
+    const std::string &key = itr->first; //Needed for bcc32
+    ExposeMetaData<std::string>(dict, key, value);
+
+    // Convert DICOM name to DICOM (group,element)
+    bool b = tag.ReadFromPipeSeparatedString( key.c_str() );
+    
+    // Anything that has been changed in the MetaData Dict will be pushed
+    // into the DICOM header:
+    if ( b /*tag != gdcm::Tag(0xffff,0xffff)*/ /*dictEntry*/)
+      {
+      const gdcm::DictEntry &dictEntry = pubdict.GetDictEntry(tag);
+      if (dictEntry.GetVR() != gdcm::VR::OB && dictEntry.GetVR() != gdcm::VR::OW)
+        {
+        // TODO, should we keep:
+        // (0028,0106) US/SS 0                                        #   2, 1 SmallestImagePixelValue
+        // (0028,0107) US/SS 4095                                     #   2, 1 LargestImagePixelValue
+        if(!tag.IsGroupLength()) // Get rid of group length, they are not useful
+          {
+          gdcm::DataElement de( tag );
+          de.SetByteValue( value.c_str(), value.size() );
+          de.SetVR( dictEntry.GetVR() );
+          header.Insert( de ); //value, tag.GetGroup(), tag.GetElement());
+          }
+        }
+      else
+        {
+        // convert value from Base64
+        uint8_t *bin = new uint8_t[value.size()];
+        unsigned int decodedLengthActual = static_cast<unsigned int>(
+          itksysBase64_Decode(
+          (const unsigned char *) value.c_str(),
+          static_cast<unsigned long>( 0 ),
+          (unsigned char *) bin,
+          static_cast<unsigned long>( value.size())));
+        if(tag.GetGroup() != 0 || tag.GetElement() != 0) // ?
+          {
+          gdcm::DataElement de( tag );
+          de.SetByteValue( (char*)bin, decodedLengthActual );
+          de.SetVR( dictEntry.GetVR() );
+          header.Insert( de );
+          }
+        delete []bin;
+        }
+      }
+    else
+      {
+      // This is not a DICOM entry, then check if it is one of the
+      // ITK standard ones
+      if( key == ITK_NumberOfDimensions )
+        {
+        unsigned int numberOfDimensions = 0;
+        ExposeMetaData<unsigned int>(dict, key, numberOfDimensions);
+        m_GlobalNumberOfDimensions = numberOfDimensions;
+        m_Origin.resize( m_GlobalNumberOfDimensions );
+        m_Spacing.resize( m_GlobalNumberOfDimensions );
+        }
+      else if( key == ITK_Origin )
+        {
+        typedef Array< double > DoubleArrayType;
+        DoubleArrayType originArray;
+        ExposeMetaData< DoubleArrayType >( dict, key, originArray );
+        m_Origin[0] = originArray[0];
+        m_Origin[1] = originArray[1];
+        m_Origin[2] = originArray[2];
+        }
+      else if( key == ITK_Spacing )
+        {
+        typedef Array< double > DoubleArrayType;
+        DoubleArrayType spacingArray;
+        ExposeMetaData< DoubleArrayType >( dict, key, spacingArray );
+        m_Spacing[0] = spacingArray[0];
+        m_Spacing[1] = spacingArray[1];
+        m_Spacing[2] = spacingArray[2];
+        }
+      else
+        {
+        itkDebugMacro(
+          << "GDCMImageIO: non-DICOM and non-ITK standard key = " << key );
+        }
+      }
+
+    ++itr;
+    }
+  //std::cout << header << std::endl;
+
+  //this->SetNumberOfDimensions(3);
+  gdcm::Image &image = writer.GetImage();
+  image.SetNumberOfDimensions( 2 ); // good default
+  image.SetDimension(0, m_Dimensions[0] );
+  image.SetDimension(1, m_Dimensions[1] );
+  //image.SetDimension(2, m_Dimensions[2] );
+  image.SetSpacing(0, m_Spacing[0] );
+  image.SetSpacing(1, m_Spacing[1] );
+  image.SetSpacing(2, m_Spacing[2] );
+  image.SetOrigin(0, m_Origin[0] );
+  image.SetOrigin(1, m_Origin[1] );
+  image.SetOrigin(2, m_Origin[2] );
+  if( m_NumberOfDimensions > 2 && m_Dimensions[2] != 1 )
+    {
+    // resize num of dim to 3:
+    image.SetNumberOfDimensions( 3 );
+    image.SetDimension(2, m_Dimensions[2] );
+    }
+  gdcm::PixelFormat pixeltype = gdcm::PixelFormat::UNKNOWN;
+  switch (this->GetComponentType())
+    {
+  case ImageIOBase::CHAR:
+    pixeltype = gdcm::PixelFormat::INT8;
+    break;
+  case ImageIOBase::UCHAR:
+    pixeltype = gdcm::PixelFormat::UINT8;
+    break;
+  case ImageIOBase::SHORT:
+    pixeltype = gdcm::PixelFormat::INT16;
+    break;
+  case ImageIOBase::USHORT:
+    pixeltype = gdcm::PixelFormat::UINT16;
+    break;
+    //Disabling INT and UINT for now...
+    //case ImageIOBase::INT:
+    //case ImageIOBase::UINT:
+    //case ImageIOBase::FLOAT:
+    //case ImageIOBase::DOUBLE:
+  default:
+    itkExceptionMacro(<<"DICOM does not support this component type");
+    }
+  assert( pixeltype != gdcm::PixelFormat::UNKNOWN );
+  gdcm::PhotometricInterpretation pi;
+  if( this->GetNumberOfComponents() == 1 )
+    {
+    pi = gdcm::PhotometricInterpretation::MONOCHROME2;
+    }
+  else if( this->GetNumberOfComponents() == 3 )
+    {
+    pi = gdcm::PhotometricInterpretation::RGB;
+    // (0028,0006) US 0                                        #   2, 1 PlanarConfiguration
+    }
+  else
+    {
+    itkExceptionMacro(<<"DICOM does not support this component type");
+    }
+  pixeltype.SetSamplesPerPixel( this->GetNumberOfComponents() );
+
+  image.SetPhotometricInterpretation( pi );
+  image.SetPixelFormat( pixeltype );
+  unsigned long len = image.GetBufferLength();
+
+  gdcm::ByteValue *bv = new gdcm::ByteValue(); // (char*)data->GetScalarPointer(), len );
+  bv->SetLength( len ); // allocate !
+
+  size_t numberOfBytes = this->GetImageSizeInBytes();
+  assert( len == numberOfBytes );
+
+  // only do a straight copy:
+  char *pointer = (char*)bv->GetPointer();
+  memcpy(pointer, buffer, numberOfBytes);
+
+  gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
+  pixeldata.SetValue( *bv );
+  image.SetDataElement( pixeldata );
+
+  if( !m_KeepOriginalUID )
+    {
+    // UID generation part:
+    // We only create *ONE* Study/Series.Frame of Reference Instance UID
+    if( m_StudyInstanceUID.empty() )
+      {
+      // As long as user maintain there gdcmIO they will keep the same
+      // Study/Series instance UID.
+      gdcm::UIDGenerator uid;
+      m_StudyInstanceUID = uid.Generate();
+      m_SeriesInstanceUID = uid.Generate();
+      m_FrameOfReferenceInstanceUID = uid.Generate();
+      }
+    //std::string uid = uid.Generate();
+  const char *studyuid = m_StudyInstanceUID.c_str();
+    {
+    gdcm::DataElement de( gdcm::Tag(0x0020,0x000d) ); // Study
+    de.SetByteValue( studyuid, strlen(studyuid) );
+    de.SetVR( gdcm::Attribute<0x0020, 0x000d>::GetVR() );
+    header.Insert( de );
+    }
+  const char *seriesuid = m_SeriesInstanceUID.c_str();
+    {
+    gdcm::DataElement de( gdcm::Tag(0x0020,0x000e) ); // Series
+    de.SetByteValue( seriesuid, strlen(seriesuid) );
+    de.SetVR( gdcm::Attribute<0x0020, 0x000e>::GetVR() );
+    header.Insert( de );
+    }
+    }
+
+  const char *filename = m_FileName.c_str();
+  writer.SetFileName( filename );
+  if( !writer.Write() )
+    {
+    itkExceptionMacro(<<"DICOM does not support this component type");
+    }
+}
+
+#endif
 
 // Convenience methods to query patient and scanner information. These
 // methods are here for compatibility with the DICOMImageIO2 class.
@@ -1560,6 +2026,7 @@ bool GDCMImageIO::GetValueFromTag(const std::string & tag, std::string & value)
   return ExposeMetaData<std::string>(dict, tag, value);
 }
 
+#if GDCM_MAJOR_VERSION < 2
 bool GDCMImageIO::GetLabelFromTag( const std::string & tagkey,
                                    std::string & labelId )
 {
@@ -1583,6 +2050,23 @@ bool GDCMImageIO::GetLabelFromTag( const std::string & tagkey,
     }
   return found;
 }
+#else
+bool GDCMImageIO::GetLabelFromTag( const std::string & tag, 
+                               std::string & labelId )
+{
+  gdcm::Tag t;
+  t.ReadFromPipeSeparatedString( tag.c_str() );
+  if( t.IsPublic() )
+    {
+    const gdcm::Global &g = gdcm::Global::GetInstance();
+    const gdcm::Dicts &dicts = g.GetDicts();
+    const gdcm::DictEntry &entry = dicts.GetDictEntry(t);
+    labelId = entry.GetName();
+    return true;
+    }
+  return false;
+}
+#endif
 
 
 void GDCMImageIO::PrintSelf(std::ostream& os, Indent indent) const
@@ -1619,5 +2103,6 @@ void GDCMImageIO::PrintSelf(std::ostream& os, Indent indent) const
   os << indent << "Model:" << m_Model << std::endl;
   os << indent << "Scan Options:" << m_ScanOptions << std::endl;
 }
+
 
 } // end namespace itk

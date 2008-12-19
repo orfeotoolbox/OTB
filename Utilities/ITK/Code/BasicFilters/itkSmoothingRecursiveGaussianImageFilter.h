@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSmoothingRecursiveGaussianImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-26 15:54:25 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2008-07-31 09:14:58 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -46,17 +46,17 @@ class ITK_EXPORT SmoothingRecursiveGaussianImageFilter:
 {
 public:
   /** Standard class typedefs. */
-  typedef SmoothingRecursiveGaussianImageFilter  Self;
-  typedef ImageToImageFilter<TInputImage,TOutputImage> Superclass;
-  typedef SmartPointer<Self>                   Pointer;
-  typedef SmartPointer<const Self>        ConstPointer;
+  typedef SmoothingRecursiveGaussianImageFilter             Self;
+  typedef ImageToImageFilter<TInputImage,TOutputImage>      Superclass;
+  typedef SmartPointer<Self>                                Pointer;
+  typedef SmartPointer<const Self>                          ConstPointer;
   
   
   /** Pixel Type of the input image */
-  typedef TInputImage                                    InputImageType;
-  typedef TOutputImage                                   OutputImageType;
-  typedef typename TInputImage::PixelType                PixelType;
-  typedef typename NumericTraits<PixelType>::RealType    RealType;
+  typedef TInputImage                                       InputImageType;
+  typedef TOutputImage                                      OutputImageType;
+  typedef typename TInputImage::PixelType                   PixelType;
+  typedef typename NumericTraits<PixelType>::RealType       RealType;
   typedef typename NumericTraits<PixelType>::ScalarRealType ScalarRealType;
 
 
@@ -105,7 +105,7 @@ public:
   typedef typename CastingFilterType::Pointer             CastingFilterPointer;
 
   /**  Pointer to the Output Image */
-  typedef typename OutputImageType::Pointer                  OutputImagePointer;                                  
+  typedef typename OutputImageType::Pointer                  OutputImagePointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -117,6 +117,8 @@ public:
   /** Define which normalization factor will be used for the Gaussian */
   void SetNormalizeAcrossScale( bool normalizeInScaleSpace );
   itkGetMacro( NormalizeAcrossScale, bool );
+
+  void SetNumberOfThreads( int nb );
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
@@ -165,7 +167,3 @@ private:
 #endif
 
 #endif
-
-
-
-

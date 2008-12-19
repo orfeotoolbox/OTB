@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageRegionExclusionIteratorWithIndex.h,v $
   Language:  C++
-  Date:      $Date: 2004-12-11 20:29:18 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2008-10-18 21:13:25 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -65,7 +65,7 @@ class ITK_EXPORT ImageRegionExclusionIteratorWithIndex : public ImageRegionExclu
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageRegionExclusionIteratorWithIndex Self;
+  typedef ImageRegionExclusionIteratorWithIndex               Self;
   typedef ImageRegionExclusionConstIteratorWithIndex<TImage>  Superclass;
   
    /** Types inherited from the Superclass */
@@ -125,6 +125,3 @@ protected:
 #endif
 
 #endif 
-
-
-

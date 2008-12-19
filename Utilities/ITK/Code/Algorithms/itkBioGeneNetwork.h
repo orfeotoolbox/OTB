@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBioGeneNetwork.h,v $
   Language:  C++
-  Date:      $Date: 2004-10-02 21:08:24 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2008-10-20 21:28:21 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkBioGeneNetwork_h_
-#define __itkBioGeneNetwork_h_
+#ifndef __itkBioGeneNetwork_h
+#define __itkBioGeneNetwork_h
 
 #ifdef _MSC_VER
 #pragma warning ( disable : 4786 )
@@ -71,5 +71,3 @@ private:
 } // end namespace itk
 
 #endif
-
-

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVotingBinaryIterativeHoleFillingImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2005-05-13 00:12:00 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2008-10-17 20:50:03 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkVotingBinaryIterativeHoleFillingImageFilter_txx
-#define _itkVotingBinaryIterativeHoleFillingImageFilter_txx
+#ifndef __itkVotingBinaryIterativeHoleFillingImageFilter_txx
+#define __itkVotingBinaryIterativeHoleFillingImageFilter_txx
 #include "itkVotingBinaryIterativeHoleFillingImageFilter.h"
 
 #include "itkConstNeighborhoodIterator.h"
@@ -93,8 +93,6 @@ VotingBinaryIterativeHoleFillingImageFilter< TInputImage >
     }
   this->GraftOutput( output );
 }
-
-
 
 /**
  * Standard "PrintSelf" method

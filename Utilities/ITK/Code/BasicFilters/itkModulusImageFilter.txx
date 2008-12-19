@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkModulusImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-02-03 13:23:15 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2008-10-16 19:33:41 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkModulusImageFilter_txx
-#define _itkModulusImageFilter_txx
+#ifndef __itkModulusImageFilter_txx
+#define __itkModulusImageFilter_txx
 
 #include "itkModulusImageFilter.h"
 

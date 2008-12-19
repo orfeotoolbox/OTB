@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkReflectImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-22 16:26:44 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2008-10-17 16:30:50 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -35,10 +35,10 @@ class ITK_EXPORT ReflectImageFilter : public ImageToImageFilter<TInputImage,TOut
 {
 public:
   /** Standard class typedefs. */
-  typedef ReflectImageFilter  Self;
+  typedef ReflectImageFilter                            Self;
   typedef ImageToImageFilter<TInputImage,TOutputImage>  Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                            Pointer;
+  typedef SmartPointer<const Self>                      ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -47,11 +47,12 @@ public:
   itkTypeMacro(ReflectImageFilter, ImageToImageFilter);
 
   /** Some convenient typedefs. */
-  typedef TInputImage InputImageType;
+  typedef TInputImage                            InputImageType;
   typedef typename    InputImageType::Pointer    InputImagePointer;
   typedef typename    InputImageType::RegionType InputImageRegionType; 
   typedef typename    InputImageType::PixelType  InputImagePixelType; 
-  typedef TOutputImage OutputImageType;
+
+  typedef TOutputImage                             OutputImageType;
   typedef typename     OutputImageType::Pointer    OutputImagePointer;
   typedef typename     OutputImageType::RegionType OutputImageRegionType;
   typedef typename     OutputImageType::PixelType  OutputImagePixelType;

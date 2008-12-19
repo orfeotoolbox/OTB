@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDeformationFieldSource.txx,v $
   Language:  C++
-  Date:      $Date: 2005-07-26 15:06:23 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2008-10-14 19:20:33 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -16,8 +16,8 @@
 =========================================================================*/
 
 
-#ifndef _itkDeformationFieldSource_txx
-#define _itkDeformationFieldSource_txx
+#ifndef __itkDeformationFieldSource_txx
+#define __itkDeformationFieldSource_txx
 
 #include "itkDeformationFieldSource.h"
 #include "itkProgressReporter.h"
@@ -68,8 +68,6 @@ DeformationFieldSource<TOutputImage>
   return;
 }
 
-
-
 /**
  * Set the output image spacing.
  */
@@ -83,7 +81,6 @@ DeformationFieldSource<TOutputImage>
   this->SetOutputSpacing( s );
 }
 
-
 /**
  * Set the output image origin.
  */
@@ -96,8 +93,6 @@ DeformationFieldSource<TOutputImage>
   OriginPointType p(origin);
   this->SetOutputOrigin( p );
 }
-
-
 
 /**
  * Sub-sample the input deformation field and prepare the KernelBase
@@ -132,9 +127,6 @@ DeformationFieldSource<TOutputImage>
   itkDebugMacro( << "After ComputeWMatrix() ");
 
 }
-
-
-
 
 /**
  * GenerateData
@@ -205,7 +197,6 @@ DeformationFieldSource<TOutputImage>
   return;
 }
 
-
 /** 
  * Inform pipeline of required output region
  */
@@ -233,8 +224,6 @@ DeformationFieldSource<TOutputImage>
 
   return;
 }
-
-
 
 /** 
  * Verify if any of the components has been modified.
@@ -270,13 +259,8 @@ DeformationFieldSource<TOutputImage>
       latestTime = m_TargetLandmarks->GetMTime();
       }
     }
-
-
-
   return latestTime;
 }
-
-
 
 } // end namespace itk
 

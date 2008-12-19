@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWatershedSegmentTable.h,v $
   Language:  C++
-  Date:      $Date: 2007-03-05 18:13:39 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2008-08-04 23:22:58 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -57,7 +57,7 @@ public:
   typedef SmartPointer<const Self> ConstPointer;
   typedef TScalarType ScalarType;
   itkNewMacro(Self);
-  itkTypeMacro(SegmentTable, DataObject);
+  itkTypeMacro(WatershedSegmentTable, DataObject);
 
   /** The value type for lists of adjacencies contained in each table
       entry */

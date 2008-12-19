@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConnectedComponentImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-10-05 10:31:58 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2008-08-01 15:16:46 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,6 +24,7 @@
 #include <vector>
 #include <map>
 #include "itkProgressReporter.h"
+#include "itkBarrier.h"
 
 namespace itk
 {
@@ -94,6 +95,7 @@ public:
   typedef typename TOutputImage::IndexType  OutputIndexType;
   typedef typename TOutputImage::SizeType   OutputSizeType;
   typedef typename TOutputImage::OffsetType OutputOffsetType;
+  typedef typename TOutputImage::PixelType  OutputImagePixelType;
 
   typedef std::list<IndexType>              ListType;
   typedef typename MaskImageType::Pointer   MaskImagePointer;
@@ -143,20 +145,28 @@ public:
     return (static_cast<const TMaskImage*>(this->ProcessObject::GetInput(1)));
     }
   
+  /**
+   */
+  itkSetMacro(BackgroundValue, OutputImagePixelType);
+  itkGetMacro(BackgroundValue, OutputImagePixelType);
+
 protected:
   ConnectedComponentImageFilter() 
     {
     m_FullyConnected = false;
     m_ObjectCount = 0;
+    m_BackgroundValue = NumericTraits< OutputImagePixelType >::Zero;
     }
   virtual ~ConnectedComponentImageFilter() {}
   ConnectedComponentImageFilter(const Self&) {}
   void PrintSelf(std::ostream& os, Indent indent) const;
 
   /**
-   * Standard pipeline method. 
+   * Standard pipeline methods.
    */
-  void GenerateData();
+  void BeforeThreadedGenerateData ();
+  void AfterThreadedGenerateData ();
+  void ThreadedGenerateData (const RegionType& outputRegionForThread, int threadId);
 
   /** ConnectedComponentImageFilter needs the entire input. Therefore
    * it must provide an implementation GenerateInputRequestedRegion().
@@ -172,7 +182,9 @@ protected:
   bool m_FullyConnected;
   
 private:
-  unsigned long m_ObjectCount;
+  unsigned long        m_ObjectCount;
+  OutputImagePixelType m_BackgroundValue;
+
   // some additional types
   typedef typename TOutputImage::RegionType::SizeType OutSizeType;
 
@@ -189,7 +201,7 @@ private:
   typedef std::vector<runLength> lineEncoding;
 
   // the map storing lines
-  typedef std::map<long, lineEncoding> LineMapType;
+  typedef std::vector<lineEncoding> LineMapType;
   
   typedef std::vector<long> OffsetVec;
 
@@ -216,12 +228,31 @@ private:
                   ProgressReporter &progress);
 
   void SetupLineOffsets(OffsetVec &LineOffsets);
+
+  void Wait()
+    {
+    // use m_NumberOfLabels.size() to get the number of thread used
+    if( m_NumberOfLabels.size() > 1 )
+      {
+      m_Barrier->Wait();
+      }
+    }
+
+  typename std::vector< long >       m_NumberOfLabels;
+  typename std::vector< long >       m_FirstLineIdToJoin;
+  typename Barrier::Pointer          m_Barrier;
+  typename TInputImage::ConstPointer m_Input;
+#if !defined(CABLE_CONFIGURATION)
+  LineMapType                        m_LineMap;
+#endif
 };
   
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
+#if !defined(CABLE_CONFIGURATION)
 #include "itkConnectedComponentImageFilter.txx"
+#endif
 #endif
 
 #endif

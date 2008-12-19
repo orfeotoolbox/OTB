@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNoiseImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-30 15:36:24 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2008-10-16 19:33:45 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,6 +17,16 @@
 #ifndef __itkNoiseImageFilter_h
 #define __itkNoiseImageFilter_h
 
+// First make sure that the configuration is available.
+// This line can be removed once the optimized versions
+// gets integrated into the main directories.
+#include "itkConfigure.h"
+
+#ifdef ITK_USE_CONSOLIDATED_MORPHOLOGY
+#include "itkOptNoiseImageFilter.h"
+#else
+
+
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"
 #include "itkNumericTraits.h"
@@ -26,13 +36,13 @@ namespace itk
 /** \class NoiseImageFilter
  * \brief Calculate the local noise in an image.
  *
- * Computes an image where a given pixel is the standard deviation of
- * the pixels in a neighborhood about the corresponding input pixel.
- * This serves as an estimate of the local noise (or texture) in an
- * image. Currently, this noise estimate assume a piecewise constant
- * image.  This filter should be extended to fitting a (hyper) plane
- * to the neighborhood and calculating the standard deviation of the
- * residuals to this (hyper) plane.
+ * Computes an image where a given output pixel is computed as the standard
+ * deviation of the input pixels in a neighborhood about the corresponding
+ * input pixel.  This serves as an estimate of the local noise (or texture) in
+ * an image. Currently, this noise estimate assume a piecewise constant image.
+ * This filter should be extended to fitting a (hyper) plane to the
+ * neighborhood and calculating the standard deviation of the residuals to this
+ * (hyper) plane.
  *
  * \sa Image
  * \sa Neighborhood
@@ -53,14 +63,14 @@ public:
                       TOutputImage::ImageDimension);
 
   /** Convenient typedefs for simplifying declarations. */
-  typedef TInputImage InputImageType;
+  typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
 
   /** Standard class typedefs. */
-  typedef NoiseImageFilter Self;
+  typedef NoiseImageFilter                                     Self;
   typedef ImageToImageFilter< InputImageType, OutputImageType> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                                   Pointer;
+  typedef SmartPointer<const Self>                             ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -69,11 +79,11 @@ public:
   itkTypeMacro(NoiseImageFilter, ImageToImageFilter);
   
   /** Image typedef support. */
-  typedef typename InputImageType::PixelType InputPixelType;
-  typedef typename OutputImageType::PixelType OutputPixelType;
+  typedef typename InputImageType::PixelType               InputPixelType;
+  typedef typename OutputImageType::PixelType              OutputPixelType;
   typedef typename NumericTraits<InputPixelType>::RealType InputRealType;
   
-  typedef typename InputImageType::RegionType InputImageRegionType;
+  typedef typename InputImageType::RegionType  InputImageRegionType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
   typedef typename InputImageType::SizeType InputSizeType;
@@ -130,6 +140,8 @@ private:
 
 #ifndef ITK_MANUAL_INSTANTIATION
 #include "itkNoiseImageFilter.txx"
+#endif
+
 #endif
 
 #endif

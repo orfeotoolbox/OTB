@@ -63,6 +63,10 @@ do.
 #include <dirent.h>    /* DIR, dirent */
 #include <ctype.h>     /* isspace */
 
+#ifdef __HAIKU__
+#undef __BEOS__
+#endif
+
 #if defined(KWSYS_C_HAS_PTRDIFF_T) && KWSYS_C_HAS_PTRDIFF_T
 typedef ptrdiff_t kwsysProcess_ptrdiff_t;
 #else
@@ -75,7 +79,7 @@ typedef ssize_t kwsysProcess_ssize_t;
 typedef int kwsysProcess_ssize_t;
 #endif
 
-#if defined(__BEOS__) && !defined(__ZETA__)
+#if defined(__BEOS__) && !defined(__ZETA__) 
 /* BeOS 5 doesn't have usleep(), but it has snooze(), which is identical. */
 # include <be/kernel/OS.h>
 static inline void kwsysProcess_usleep(unsigned int msec)
@@ -770,14 +774,14 @@ void kwsysProcess_Execute(kwsysProcess* cp)
     return;
     }
 
-#if !KWSYSPE_USE_SELECT
+  /* Set to non-blocking in case select lies, or for the polling
+     implementation.  */
   if(!kwsysProcessSetNonBlocking(p[0]))
     {
     kwsysProcessCleanup(cp, 1);
     kwsysProcessCleanupDescriptor(&si.StdErr);
     return;
     }
-#endif
   }
 
   /* Replace the stderr pipe with a file if requested.  In this case
@@ -830,14 +834,12 @@ void kwsysProcess_Execute(kwsysProcess* cp)
       failed = 1;
       }
 
-#if !KWSYSPE_USE_SELECT
-    /* Set the output pipe of the last process to be non-blocking so
-       we can poll it.  */
-    if(i == cp->NumberOfCommands-1 && !kwsysProcessSetNonBlocking(readEnd))
+    /* Set the output pipe of the last process to be non-blocking in
+       case select lies, or for the polling implementation.  */
+    if(i == (cp->NumberOfCommands-1) && !kwsysProcessSetNonBlocking(readEnd))
       {
       failed = 1;
       }
-#endif
 
     if(failed)
       {
@@ -1056,6 +1058,11 @@ static int kwsysProcessWaitForPipe(kwsysProcess* cp, char** data, int* length,
             };
           return 1;
           }
+        }
+      else if(n < 0 && errno == EAGAIN)
+        {
+        /* No data are really ready.  The select call lied.  See the
+           "man select" page on Linux for cases when this occurs.  */
         }
       else
         {

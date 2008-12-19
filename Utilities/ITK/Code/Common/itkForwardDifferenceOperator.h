@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkForwardDifferenceOperator.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:08 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2008-10-16 23:25:41 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -42,8 +42,8 @@ class ITK_EXPORT ForwardDifferenceOperator
 {
 public:
   /** Standard class typedefs. */
-  typedef ForwardDifferenceOperator Self;
-  typedef NeighborhoodOperator<TPixel, VDimension, TAllocator> Superclass;
+  typedef ForwardDifferenceOperator                               Self;
+  typedef NeighborhoodOperator<TPixel, VDimension, TAllocator>    Superclass;
   
   typedef typename Superclass::PixelType PixelType;
 
@@ -52,8 +52,7 @@ public:
 
   /** Copy constructor */
   ForwardDifferenceOperator(const Self& other)
-    : NeighborhoodOperator<TPixel, VDimension, TAllocator>(other)
-  {  }
+    : NeighborhoodOperator<TPixel, VDimension, TAllocator>(other) { }
 
   /** Assignment operator */
   Self &operator=(const Self& other)
@@ -84,5 +83,3 @@ protected:
 #endif
 
 #endif
-
-

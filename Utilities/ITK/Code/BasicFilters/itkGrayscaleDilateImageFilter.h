@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGrayscaleDilateImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-28 19:59:04 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2008-10-16 16:45:08 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -16,6 +16,16 @@
 =========================================================================*/
 #ifndef __itkGrayscaleDilateImageFilter_h
 #define __itkGrayscaleDilateImageFilter_h
+
+// First make sure that the configuration is available.
+// This line can be removed once the optimized versions
+// gets integrated into the main directories.
+#include "itkConfigure.h"
+
+#ifdef ITK_USE_CONSOLIDATED_MORPHOLOGY
+#include "itkOptGrayscaleDilateImageFilter.h"
+#else
+
 
 #include "itkMorphologyImageFilter.h"
 
@@ -50,9 +60,9 @@ public:
   /** Standard class typedefs. */
   typedef GrayscaleDilateImageFilter Self;
   typedef MorphologyImageFilter<TInputImage, TOutputImage, TKernel>
-  Superclass;
-  typedef SmartPointer<Self>        Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+                                     Superclass;
+  typedef SmartPointer<Self>         Pointer;
+  typedef SmartPointer<const Self>   ConstPointer;
   
   /** Standard New method. */
   itkNewMacro(Self);  
@@ -68,7 +78,7 @@ public:
   typedef typename Superclass::KernelIteratorType  KernelIteratorType;
 
   /** Neighborhood iterator type. */
-  typedef typename Superclass::NeighborhoodIteratorType NeighborhoodIteratorType ;
+  typedef typename Superclass::NeighborhoodIteratorType NeighborhoodIteratorType;
 
   /** Kernel typedef. */
   typedef typename Superclass::KernelType KernelType;
@@ -121,7 +131,7 @@ private:
   // NumericTraits<PixelType>::NonpositiveMin()
   DefaultBoundaryConditionType m_DilateBoundaryCondition;
 
-} ; // end of class
+}; // end of class
 
 } // end namespace itk
   
@@ -131,4 +141,4 @@ private:
 
 #endif
 
-
+#endif

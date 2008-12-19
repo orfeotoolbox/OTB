@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCoxDeBoorBSplineKernelFunction.h,v $
   Language:  C++
-  Date:      $Date: 2008-07-05 15:29:26 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2008-08-04 12:54:50 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -18,6 +18,7 @@
 #define __itkCoxDeBoorBSplineKernelFunction_h
 
 #include "itkKernelFunction.h"
+#include "itkNumericTraits.h"
 #include "vnl/vnl_math.h"
 #include "vnl/vnl_real_polynomial.h"
 #include "vnl/vnl_matrix.h"
@@ -83,7 +84,7 @@ public:
     {
     RealType absValue = vnl_math_abs( u );
     unsigned int which;
-    if ( this->m_SplineOrder % 2 == 0 )
+    if( this->m_SplineOrder % 2 == 0 )
       {
       which = static_cast<unsigned int>( absValue+0.5 );
       }
@@ -91,7 +92,7 @@ public:
       {
       which = static_cast<unsigned int>( absValue );
       }
-    if ( which < this->m_BSplineShapeFunctions.rows() )
+    if( which < this->m_BSplineShapeFunctions.rows() )
       {
       return PolynomialType(
         this->m_BSplineShapeFunctions.get_row( which ) ).evaluate( absValue );
@@ -102,12 +103,18 @@ public:
       }
     }
 
-  /** Evaluate the derivative. */
+  /** Evaluate the first derivative. */
   inline RealType EvaluateDerivative( const double & u ) const
+    {
+    return this->EvaluateNthDerivative( u, 1 );
+    }
+
+  /** Evaluate the Nth derivative. */
+  inline RealType EvaluateNthDerivative( const double & u, unsigned int n ) const
     {
     RealType absValue = vnl_math_abs( u );
     unsigned int which;
-    if ( this->m_SplineOrder % 2 == 0 )
+    if( this->m_SplineOrder % 2 == 0 )
       {
       which = static_cast<unsigned int>( absValue+0.5 );
       }
@@ -115,18 +122,23 @@ public:
       {
       which = static_cast<unsigned int>( absValue );
       }
-    if( which < static_cast<unsigned int>( this->m_BSplineShapeFunctions.rows() ) )
+    if( which < this->m_BSplineShapeFunctions.rows() )
       {
-      RealType der = PolynomialType(
-        this->m_BSplineShapeFunctions.get_row( which ) ).devaluate( absValue );
-      if ( u < NumericTraits<RealType>::Zero )
+      PolynomialType polynomial( 
+        this->m_BSplineShapeFunctions.get_row( which ) );
+      for( unsigned int i = 0; i < n; i++ )
+        {
+        polynomial = polynomial.derivative();
+        }
+      RealType der = polynomial.evaluate( absValue );
+      if( u < NumericTraits<RealType>::Zero && n % 2 != 0 )
         {
         return -der;
-         }
+        }
       else
         {
-         return der;
-         }
+        return der;
+        }
       }
     else
       {
@@ -135,10 +147,14 @@ public:
     }
 
   /**
-   * For a specific order, return the (this->m_SplineOrder+1) pieces of
-   * the single basis function centered at zero.
+   * For a specific order, return the ceil( 0.5*(m_SplineOrder+1) )
+   * pieces of the single basis function centered at zero for positive
+   * parametric values.
    */
-  MatrixType GetShapeFunctions();
+  MatrixType GetShapeFunctions()
+    {
+    return this->m_BSplineShapeFunctions;
+    }
 
   /**
    * For a specific order, generate and return the (this->m_SplineOrder+1)
@@ -167,7 +183,8 @@ private:
    * See, for example, L. Piegl, L. Tiller, "The NURBS Book,"
    * Springer 1997, p. 50.
    */
-  PolynomialType CoxDeBoor( unsigned short, VectorType, unsigned int, unsigned int );
+  PolynomialType CoxDeBoor( unsigned short, 
+    VectorType, unsigned int, unsigned int );
 
   MatrixType    m_BSplineShapeFunctions;
   unsigned int  m_SplineOrder;

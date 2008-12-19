@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkPathToImageFilter.txx,v $
 Language:  C++
-Date:      $Date: 2005-07-27 15:21:11 $
-Version:   $Revision: 1.7 $
+Date:      $Date: 2008-10-17 16:30:49 $
+Version:   $Revision: 1.8 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -72,8 +72,6 @@ PathToImageFilter<TInputPath,TOutputImage>
   // Process object is not const-correct so the const_cast is required here
   this->ProcessObject::SetNthInput(index, const_cast< InputPathType *>(path) );
 }
-
-
 
 /** Get the input Path */
 template <class TInputPath, class TOutputImage>
@@ -264,7 +262,7 @@ PathToImageFilter<TInputPath,TOutputImage>
   
   OutputImage->SetLargestPossibleRegion( region);     // 
   OutputImage->SetBufferedRegion( region );           // set the region 
-  OutputImage->SetRequestedRegion( region );          //                                                                       
+  OutputImage->SetRequestedRegion( region );          //
   
   // If the spacing has been explicitly specified, the filter
   // will set the output spacing to that explicit spacing, otherwise the spacing from
@@ -290,7 +288,7 @@ PathToImageFilter<TInputPath,TOutputImage>
     //OutputImage->SetSpacing(InputObject->GetIndexToObjectTransform()->GetScaleComponent());   // set spacing
     }
   OutputImage->SetOrigin(origin);   //   and origin
-  OutputImage->Allocate();   // allocate the image                            
+  OutputImage->Allocate();   // allocate the image
   
   ImageRegionIteratorWithIndex<OutputImageType> imageIt(OutputImage,region);
   for( imageIt.GoToBegin(); !imageIt.IsAtEnd(); ++imageIt )
@@ -319,8 +317,6 @@ PathToImageFilter<TInputPath,TOutputImage>
   os << indent << "Path Value : " << m_PathValue << std::endl;
   os << indent << "Background Value : " << m_BackgroundValue << std::endl;
 }
-
-
 
 } // end namespace itk
 

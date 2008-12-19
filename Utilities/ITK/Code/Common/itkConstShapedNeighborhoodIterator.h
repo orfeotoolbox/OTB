@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConstShapedNeighborhoodIterator.h,v $
   Language:  C++
-  Date:      $Date: 2007-05-17 20:57:49 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2008-10-07 12:04:18 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -99,7 +99,7 @@ public:
                                                    NeighborhoodType;
 
   /** An stl storage container type that can be sorted.  The type used for
-   *  the list of active offsets in the neighborhood.*/
+   *  the list of active offsets in the neighborhood. */
   typedef std::list<unsigned int> IndexListType;
 
   /** Typedef for boundary condition type. */
@@ -304,11 +304,11 @@ public:
     { return m_ActiveIndexList.size(); }
 
   /** Reimplements the operator++ method so that only active pixel locations
-   * are updataed.*/
+   * are updated. */
   Self &operator++();
 
   /** Reimplements the operator-- method so that only active pixel locations
-   * are updataed.*/
+   * are updated. */
   Self &operator--();
 
   /** Addition of an itk::Offset.  Note that this method does not do any bounds

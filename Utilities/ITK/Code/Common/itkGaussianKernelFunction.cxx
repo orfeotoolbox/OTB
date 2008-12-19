@@ -3,14 +3,14 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGaussianKernelFunction.cxx,v $
   Language:  C++
-  Date:      $Date: 2005-03-22 18:25:13 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2008-10-17 01:08:45 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -35,4 +35,3 @@ GaussianKernelFunction::~GaussianKernelFunction()
 }
 
 } // namespace itk
-

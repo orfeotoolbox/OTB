@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptImageToImageMetric.txx,v $
   Language:  C++
-  Date:      $Date: 2008-05-08 23:18:58 $
-  Version:   $Revision: 1.27 $
+  Date:      $Date: 2008-09-30 18:07:03 $
+  Version:   $Revision: 1.29 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -251,7 +251,7 @@ ImageToImageMetric<TFixedImage,TMovingImage>
   for( unsigned int ithread=0; ithread < m_NumberOfThreads-1; ++ithread)
     {
     // Create a copy of the main transform to be used in this thread.
-    itk::LightObject::Pointer anotherTransform = this->m_Transform->CreateAnother();
+    LightObject::Pointer anotherTransform = this->m_Transform->CreateAnother();
     // This static_cast should always work since the pointer was created by
     // CreateAnother() called from the transform itself.
     TransformType * transformCopy = static_cast< TransformType * >( anotherTransform.GetPointer() );
@@ -421,10 +421,9 @@ ImageToImageMetric<TFixedImage,TMovingImage>
   unsigned long len = m_FixedImageIndexes.size();
   m_NumberOfFixedImageSamples = len;
   this->NumberOfFixedImageSamplesUpdated();
-
   samples.resize(len);
-  iter=samples.begin();
 
+  iter=samples.begin();
   for(unsigned long i=0; i<len; i++)
     {
     // Get sampled index
@@ -449,9 +448,6 @@ ImageToImageMetric<TFixedImage,TMovingImage>
   typedef ImageRandomConstIteratorWithIndex<FixedImageType> RandomIterator;
   RandomIterator randIter( m_FixedImage, GetFixedImageRegion() );
 
-  randIter.SetNumberOfSamples( m_NumberOfFixedImageSamples );
-  randIter.GoToBegin();
-
   typename FixedImageSampleContainer::iterator iter;
   typename FixedImageSampleContainer::const_iterator end=samples.end();
 
@@ -463,11 +459,14 @@ ImageToImageMetric<TFixedImage,TMovingImage>
     int count = 0;
     int samples_found = 0;
     int maxcount = m_NumberOfFixedImageSamples * 10;
+    randIter.SetNumberOfSamples( m_NumberOfFixedImageSamples * 10 );
+    randIter.GoToBegin();
     while( iter != end )
       {
 
-      if ( count > maxcount )
+      if ( count > maxcount || randIter.IsAtEnd() )
         {
+        m_NumberOfFixedImageSamples = samples_found;
         samples.resize(samples_found);
         break;
         }
@@ -478,8 +477,16 @@ ImageToImageMetric<TFixedImage,TMovingImage>
       // Check if the Index is inside the mask, translate index to point
       m_FixedImage->TransformIndexToPhysicalPoint( index, inputPoint );
 
-      // If not inside the mask, ignore the point
-      if( !m_FixedImageMask->IsInside( inputPoint ) )
+      double val;
+      if( m_FixedImageMask->ValueAt( inputPoint, val ) )
+        {
+        if( val == 0 )
+          {
+          ++randIter; // jump to another random position
+          continue;
+          }
+        }
+      else
         {
         ++randIter; // jump to another random position
         continue;
@@ -506,6 +513,8 @@ ImageToImageMetric<TFixedImage,TMovingImage>
     }
   else
     {
+    randIter.SetNumberOfSamples( m_NumberOfFixedImageSamples );
+    randIter.GoToBegin();
     for( iter=samples.begin(); iter != end; ++iter )
       {
       // Get sampled index
@@ -985,7 +994,7 @@ ImageToImageMetric<TFixedImage,TMovingImage>
     {
     if ( m_ComputeGradient )
       {
-      itk::ContinuousIndex<double, MovingImageDimension> tempIndex;
+      ContinuousIndex<double, MovingImageDimension> tempIndex;
       m_MovingImage->TransformPhysicalPointToContinuousIndex( mappedPoint,
                                                               tempIndex );
       MovingImageIndexType mappedIndex;

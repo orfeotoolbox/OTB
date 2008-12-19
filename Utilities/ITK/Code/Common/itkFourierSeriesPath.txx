@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFourierSeriesPath.txx,v $
   Language:  C++
-  Date:      $Date: 2006-11-09 14:23:29 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2008-10-16 23:25:41 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -52,7 +52,6 @@ FourierSeriesPath<VDimension>
 }
 
 
-
 template<unsigned int VDimension>
 typename FourierSeriesPath<VDimension>::VectorType
 FourierSeriesPath<VDimension>
@@ -79,7 +78,6 @@ FourierSeriesPath<VDimension>
 }
 
 
-
 template<unsigned int VDimension>
 void
 FourierSeriesPath<VDimension>
@@ -94,7 +92,6 @@ FourierSeriesPath<VDimension>
 }
 
 
-
 /**
  * Constructor
  */
@@ -106,7 +103,6 @@ FourierSeriesPath<VDimension>
   m_CosCoefficients = CoefficientsType::New();
   m_SinCoefficients = CoefficientsType::New();
 }
-
 
 
 /**

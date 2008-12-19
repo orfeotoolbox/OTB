@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCheckerBoardImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-08-24 12:45:32 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2008-10-13 18:54:27 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -46,8 +46,9 @@ public:
   typedef ImageToImageFilter<TImage,TImage>  Superclass;
   typedef SmartPointer<Self>                 Pointer;
   typedef SmartPointer<const Self>           ConstPointer;
-  typedef TImage InputImageType;
-  typedef TImage OutputImageType;
+
+  typedef TImage                                InputImageType;
+  typedef TImage                                OutputImageType;
   typedef typename InputImageType::ConstPointer InputImageConstPointer;
   typedef typename OutputImageType::Pointer     OutputImagePointer;
   typedef typename OutputImageType::RegionType  ImageRegionType;

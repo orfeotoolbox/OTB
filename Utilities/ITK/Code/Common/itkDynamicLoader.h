@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDynamicLoader.h,v $
   Language:  C++
-  Date:      $Date: 2006-11-29 18:19:00 $
-  Version:   $Revision: 1.26 $
+  Date:      $Date: 2008-10-07 09:09:39 $
+  Version:   $Revision: 1.27 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -43,10 +43,10 @@ class ITKCommon_EXPORT DynamicLoader : public Object
 {
 public:
   /** Standard class typedefs. */
-  typedef DynamicLoader       Self;
-  typedef Object  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef DynamicLoader               Self;
+  typedef Object                      Superclass;
+  typedef SmartPointer<Self>          Pointer;
+  typedef SmartPointer<const Self>    ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

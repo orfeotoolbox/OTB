@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNoiseImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-01-11 19:43:32 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2008-10-16 19:33:45 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,20 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkNoiseImageFilter_txx
-#define _itkNoiseImageFilter_txx
+#ifndef __itkNoiseImageFilter_txx
+#define __itkNoiseImageFilter_txx
+
+
+// First make sure that the configuration is available.
+// This line can be removed once the optimized versions
+// gets integrated into the main directories.
+#include "itkConfigure.h"
+
+#ifdef ITK_USE_CONSOLIDATED_MORPHOLOGY
+#include "itkOptNoiseImageFilter.txx"
+#else
+
+
 #include "itkNoiseImageFilter.h"
 
 #include "itkConstNeighborhoodIterator.h"
@@ -169,5 +181,7 @@ NoiseImageFilter<TInputImage, TOutput>
 }
 
 } // end namespace itk
+
+#endif
 
 #endif

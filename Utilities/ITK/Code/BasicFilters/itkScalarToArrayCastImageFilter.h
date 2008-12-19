@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalarToArrayCastImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-30 15:36:25 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2008-10-17 20:49:55 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,17 +44,17 @@ class ITK_EXPORT ScalarToArrayCastImageFilter :
 {
 public:
   /** Standard class typedefs. */
-  typedef ScalarToArrayCastImageFilter  Self;
+  typedef ScalarToArrayCastImageFilter                     Self;
   typedef ImageToImageFilter< TInputImage, TOutputImage >  Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                               Pointer;
+  typedef SmartPointer<const Self>                         ConstPointer;
 
   /** Standard class macros */
   itkNewMacro(Self);
-  itkTypeMacro(ScalarToArrayCastImageFilter, ImageToImageFilter) ;
+  itkTypeMacro(ScalarToArrayCastImageFilter, ImageToImageFilter);
 
-  typedef typename Superclass::OutputImageRegionType OutputImageRegionType ;
-  typedef typename TOutputImage::PixelType OutputImagePixelType ;
+  typedef typename Superclass::OutputImageRegionType OutputImageRegionType;
+  typedef typename TOutputImage::PixelType           OutputImagePixelType;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
@@ -66,11 +66,11 @@ public:
 #endif
 
 protected:
-  ScalarToArrayCastImageFilter() ;
+  ScalarToArrayCastImageFilter();
   virtual ~ScalarToArrayCastImageFilter() {}
   
   void ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread,
-                            int threadId) ;
+                            int threadId);
  
 private:
   ScalarToArrayCastImageFilter(const Self&); //purposely not implemented

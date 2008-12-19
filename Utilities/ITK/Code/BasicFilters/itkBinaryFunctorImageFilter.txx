@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryFunctorImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2007-08-30 15:01:09 $
-  Version:   $Revision: 1.39 $
+  Date:      $Date: 2008-10-07 17:31:02 $
+  Version:   $Revision: 1.40 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkBinaryFunctorImageFilter_txx
-#define _itkBinaryFunctorImageFilter_txx
+#ifndef __itkBinaryFunctorImageFilter_txx
+#define __itkBinaryFunctorImageFilter_txx
 
 #include "itkBinaryFunctorImageFilter.h"
 #include "itkImageRegionIterator.h"
@@ -64,8 +64,6 @@ BinaryFunctorImageFilter<TInputImage1,TInputImage2,TOutputImage,TFunction>
   // Process object is not const-correct so the const casting is required.
   this->SetNthInput(1, const_cast<TInputImage2 *>( image2 ));
 }
-
-
 
 /**
  * ThreadedGenerateData Performs the pixel-wise addition

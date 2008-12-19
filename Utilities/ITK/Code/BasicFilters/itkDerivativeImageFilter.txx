@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDerivativeImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-01-11 19:43:31 $
-  Version:   $Revision: 1.25 $
+  Date:      $Date: 2008-10-14 19:20:33 $
+  Version:   $Revision: 1.26 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkDerivativeImageFilter_txx
-#define _itkDerivativeImageFilter_txx
+#ifndef __itkDerivativeImageFilter_txx
+#define __itkDerivativeImageFilter_txx
 #include "itkDerivativeImageFilter.h"
 
 #include "itkNumericTraits.h"

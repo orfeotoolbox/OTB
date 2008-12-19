@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkEuler2DTransform.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-30 20:56:07 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2008-10-13 15:36:31 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,7 +24,9 @@
 namespace itk
 {
 
-/** \brief Euler2DTransform of a vector space (e.g. space coordinates)
+/** \class Euler2DTransform
+ *
+ * \brief Euler2DTransform of a vector space (e.g. space coordinates)
  *
  * This transform applies a rigid transformation is 2D space.
  * The transform is specified as a rotation around arbitrary center
@@ -42,10 +44,10 @@ class ITK_EXPORT Euler2DTransform :
 {
 public:
   /** Standard class typedefs. */
-  typedef Euler2DTransform Self;
+  typedef Euler2DTransform                  Self;
   typedef Rigid2DTransform< TScalarType >   Superclass;
-  typedef SmartPointer<Self>        Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                Pointer;
+  typedef SmartPointer<const Self>          ConstPointer;
     
   /** New macro for creation of through a Smart Pointer. */
   itkNewMacro( Self );

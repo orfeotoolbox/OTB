@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMultiplyByConstantImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-06-29 19:53:02 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2008-08-11 21:18:10 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -63,7 +63,7 @@ public:
     return static_cast<TOutput>( A * m_Constant );
     }
   void SetConstant(TConstant ct) {this->m_Constant = ct; }
-  const TConstant GetConstant() const { return m_Constant; }
+  const TConstant & GetConstant() const { return m_Constant; }
   
   TConstant m_Constant;
 };
@@ -98,8 +98,15 @@ public:
   /** Set the constant that will be used to multiply all the image pixels */
   void SetConstant(TConstant ct)
     {
-    this->GetFunctor().SetConstant(ct);
-    this->Modified();
+    if( ct != this->GetFunctor().GetConstant() )
+      {
+      this->GetFunctor().SetConstant(ct);
+      this->Modified();
+      }
+    }
+  const TConstant & GetConstant() const
+    {
+    return this->GetFunctor().GetConstant();
     }
   
 
@@ -119,6 +126,15 @@ protected:
   MultiplyByConstantImageFilter() {};
   virtual ~MultiplyByConstantImageFilter() {};
    
+  void PrintSelf(std::ostream &os, Indent indent) const
+    {
+    Superclass::PrintSelf(os, indent);
+    os << indent << "Constant: " 
+       << static_cast<typename NumericTraits<TConstant>::PrintType>(this->GetConstant())
+       << std::endl;
+    }
+
+private:
   MultiplyByConstantImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 

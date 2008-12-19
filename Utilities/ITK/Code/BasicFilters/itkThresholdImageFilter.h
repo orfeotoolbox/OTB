@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkThresholdImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-10-05 10:31:58 $
-  Version:   $Revision: 1.22 $
+  Date:      $Date: 2008-10-18 16:11:15 $
+  Version:   $Revision: 1.23 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,10 +44,10 @@ class ITK_EXPORT ThresholdImageFilter : public InPlaceImageFilter<TImage,TImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef ThresholdImageFilter         Self;
+  typedef ThresholdImageFilter               Self;
   typedef InPlaceImageFilter<TImage,TImage>  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                 Pointer;
+  typedef SmartPointer<const Self>           ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);  
@@ -93,16 +93,16 @@ public:
   itkGetMacro(Upper, PixelType);
 
   /** Some additional typedefs.  */
-  typedef TImage InputImageType;
+  typedef TImage                                InputImageType;
   typedef typename InputImageType::ConstPointer InputImagePointer;
   typedef typename InputImageType::RegionType   InputImageRegionType;
   typedef typename InputImageType::PixelType    InputImagePixelType;
 
   /** Some additional typedefs.  */
-  typedef TImage OutputImageType;
-  typedef typename OutputImageType::Pointer OutputImagePointer;
-  typedef typename OutputImageType::RegionType OutputImageRegionType;
-  typedef typename OutputImageType::PixelType OutputImagePixelType;
+  typedef TImage                                OutputImageType;
+  typedef typename OutputImageType::Pointer     OutputImagePointer;
+  typedef typename OutputImageType::RegionType  OutputImageRegionType;
+  typedef typename OutputImageType::PixelType   OutputImagePixelType;
 
 protected:
   ThresholdImageFilter();

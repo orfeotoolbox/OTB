@@ -3,7 +3,7 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBMPImageIO.h,v $
   Language:  C++
-  Date:      $Date: 2008-03-02 14:27:29 $
+  Date:      $Date: 2008-10-03 16:09:47 $
   Version:   $1.0$
 
   Copyright (c) Insight Software Consortium. All rights reserved.
@@ -98,6 +98,7 @@ private:
   short                     m_Depth;
   bool                      m_Allow8BitBMP;
   unsigned short            m_NumberOfColors;
+  unsigned int              m_ColorTableSize;
   long                      m_BMPCompression;
   unsigned long             m_BMPDataSize;
   std::vector<RGBPixelType> m_ColorPalette;

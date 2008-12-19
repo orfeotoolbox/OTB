@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBioCellularAggregate.h,v $
   Language:  C++
-  Date:      $Date: 2007-04-20 13:36:35 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2008-10-20 21:28:20 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,11 +44,11 @@ public:
   /** Standard class typedefs. */
   typedef CellularAggregate              Self;
   typedef CellularAggregateBase          Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>             Pointer;
+  typedef SmartPointer<const Self>       ConstPointer;
 
   /*** Run-time type information (and related methods). */
-  itkTypeMacro(CellularAggregate, CellularAggregateBase);
+  itkTypeMacro(BioCellularAggregate, CellularAggregateBase);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);  
@@ -62,7 +62,7 @@ public:
 
 
   /** Mesh Traits */
-  typedef itk::DefaultDynamicMeshTraits<  
+  typedef DefaultDynamicMeshTraits<  
               PointPixelType,           // PixelType
               NSpaceDimension,           // Points Dimension
               NSpaceDimension,           // Max.Topological Dimension
@@ -72,7 +72,7 @@ public:
               >  MeshTraits;
   
   /** Mesh Traits */
-  typedef itk::Mesh<  PointPixelType,
+  typedef Mesh<  PointPixelType,
                       NSpaceDimension,
                       MeshTraits  >               MeshType;
 
@@ -96,15 +96,15 @@ public:
   typedef typename MeshType::CellAutoPointer               CellAutoPointer;
 
   /**   Voronoi region around a bio::Cell */
-  typedef itk::CellInterface<  
+  typedef CellInterface<  
                      typename MeshType::CellPixelType, 
                      typename MeshType::CellTraits >      CellInterfaceType;
-  typedef itk::PolygonCell<  CellInterfaceType >          VoronoiRegionType;
+  typedef PolygonCell<  CellInterfaceType >               VoronoiRegionType;
   typedef typename VoronoiRegionType::SelfAutoPointer     VoronoiRegionAutoPointer;
 
   /** Convenient typedefs. */
   typedef float                                        ImagePixelType;
-  typedef itk::Image<ImagePixelType, NSpaceDimension > SubstrateType;
+  typedef Image<ImagePixelType, NSpaceDimension >      SubstrateType;
   typedef typename SubstrateType::Pointer              SubstratePointer;
   typedef ImagePixelType                               SubstrateValueType;
   typedef std::vector< SubstratePointer >              SubstratesVector;
@@ -145,7 +145,7 @@ protected:
   virtual ~CellularAggregate();
   CellularAggregate( const Self & );
   void operator=(const Self&);
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, Indent indent) const;
 
   virtual void ComputeForces(void);
   virtual void UpdatePositions(void);

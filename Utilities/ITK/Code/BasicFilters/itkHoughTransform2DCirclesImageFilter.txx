@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHoughTransform2DCirclesImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2007-09-21 12:49:42 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2008-12-08 01:10:42 $
+  Version:   $Revision: 1.18.2.1 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -101,6 +101,7 @@ HoughTransform2DCirclesImageFilter< TInputPixelType, TOutputPixelType>
   m_RadiusImage->SetRegions( outputImage->GetLargestPossibleRegion() );
   m_RadiusImage->SetOrigin(inputImage->GetOrigin());
   m_RadiusImage->SetSpacing(inputImage->GetSpacing());
+  m_RadiusImage->SetDirection(inputImage->GetDirection());
   m_RadiusImage->Allocate();
   m_RadiusImage->FillBuffer(0);
 
@@ -144,7 +145,7 @@ HoughTransform2DCirclesImageFilter< TInputPixelType, TOutputPixelType>
             if(outputImage->GetRequestedRegion().IsInside( index ))
               {
               outputImage->SetPixel(index, outputImage->GetPixel(index)+1);
-              m_RadiusImage->SetPixel(index, (m_RadiusImage->GetPixel(index)+distance));       
+              m_RadiusImage->SetPixel(index, (m_RadiusImage->GetPixel(index)+distance));
               }
             
             i=i+1;
@@ -194,6 +195,7 @@ HoughTransform2DCirclesImageFilter< TInputPixelType, TOutputPixelType>
   outputImage->SetRegions( this->GetOutput(0)->GetLargestPossibleRegion() );
   outputImage->SetOrigin(this->GetOutput(0)->GetOrigin());
   outputImage->SetSpacing(this->GetOutput(0)->GetSpacing());
+  outputImage->SetDirection(this->GetOutput(0)->GetDirection());
   outputImage->Allocate();
   outputImage->FillBuffer(0);
 
@@ -258,8 +260,8 @@ HoughTransform2DCirclesImageFilter< TInputPixelType, TOutputPixelType>
         m_CirclesList.push_back(Circle);
        
         // Remove a black disc from the hough space domain
-        for(double angle = 0; angle <= 2*nPI ; angle += nPI/1000)
-          {     
+        for(double angle = 0; angle <= 2*nPI; angle += nPI/1000)
+          {
           for(double length = 0; length < m_DiscRadiusRatio*Circle->GetRadius()[0];length += 1)
             {
             index[0] = (long int)(it_input.GetIndex()[0] + length * vcl_cos(angle));
@@ -304,7 +306,8 @@ HoughTransform2DCirclesImageFilter< TInputPixelType, TOutputPixelType>
   os << "Disc Radius: " << m_DiscRadiusRatio << std::endl;
   os << "Accumulator blur variance: " << m_Variance << std::endl;
   os << "Sweep angle : " << m_SweepAngle << std::endl;
-  }
+}
+
 } // end namespace
 
 #endif

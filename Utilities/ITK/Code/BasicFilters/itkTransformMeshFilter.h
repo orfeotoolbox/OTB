@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTransformMeshFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:58 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2008-10-18 16:11:15 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -43,14 +43,14 @@ class ITK_EXPORT TransformMeshFilter :
 {
 public:
   /** Standard class typedefs. */
-  typedef TransformMeshFilter  Self;
+  typedef TransformMeshFilter                      Self;
   typedef MeshToMeshFilter<TInputMesh,TOutputMesh> Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                       Pointer;
+  typedef SmartPointer<const Self>                 ConstPointer;
   
-  typedef TInputMesh InputMeshType;
-  typedef TOutputMesh OutputMeshType;
-  typedef typename InputMeshType::Pointer InputMeshPointer;
+  typedef TInputMesh                       InputMeshType;
+  typedef TOutputMesh                      OutputMeshType;
+  typedef typename InputMeshType::Pointer  InputMeshPointer;
   typedef typename OutputMeshType::Pointer OutputMeshPointer;
   
   /** Type for representing coordinates. */

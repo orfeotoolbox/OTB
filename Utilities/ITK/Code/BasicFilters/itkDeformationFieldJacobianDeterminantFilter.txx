@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDeformationFieldJacobianDeterminantFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-07-12 18:38:40 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2008-10-14 19:20:32 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkDeformationFieldJacobianDeterminantFilter_txx
-#define _itkDeformationFieldJacobianDeterminantFilter_txx
+#ifndef __itkDeformationFieldJacobianDeterminantFilter_txx
+#define __itkDeformationFieldJacobianDeterminantFilter_txx
 
 #include "itkDeformationFieldJacobianDeterminantFilter.h"
 

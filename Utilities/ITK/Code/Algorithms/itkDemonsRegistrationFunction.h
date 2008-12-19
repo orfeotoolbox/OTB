@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDemonsRegistrationFunction.h,v $
   Language:  C++
-  Date:      $Date: 2004-06-17 15:25:58 $
-  Version:   $Revision: 1.27 $
+  Date:      $Date: 2008-12-08 01:10:41 $
+  Version:   $Revision: 1.27.28.1 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -208,8 +208,9 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   /** Cache fixed image information. */
-  SpacingType                     m_FixedImageSpacing;
-  PointType                       m_FixedImageOrigin;
+  //SpacingType                  m_FixedImageSpacing;
+  //PointType                    m_FixedImageOrigin;
+  PixelType                       m_ZeroUpdateReturn;
   double                          m_Normalizer;
 
   /** Function to compute derivatives of the fixed image. */

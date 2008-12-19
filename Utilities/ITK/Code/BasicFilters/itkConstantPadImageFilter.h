@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConstantPadImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-24 16:03:17 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2008-10-13 18:54:27 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -41,10 +41,10 @@ class ITK_EXPORT ConstantPadImageFilter:
 {
 public:
   /** Standard class typedefs. */
-  typedef ConstantPadImageFilter         Self;
+  typedef ConstantPadImageFilter                    Self;
   typedef PadImageFilter<TInputImage,TOutputImage>  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                        Pointer;
+  typedef SmartPointer<const Self>                  ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self); 
@@ -54,17 +54,17 @@ public:
 
   /** Typedef to describe the output image region type. */
   typedef typename Superclass::OutputImageRegionType OutputImageRegionType;
-  typedef typename Superclass::InputImageRegionType InputImageRegionType;
+  typedef typename Superclass::InputImageRegionType  InputImageRegionType;
 
   /** Typedef to describe the type of pixel. */
   typedef typename Superclass::OutputImagePixelType OutputImagePixelType;
-  typedef typename Superclass::InputImagePixelType InputImagePixelType;
+  typedef typename Superclass::InputImagePixelType  InputImagePixelType;
 
   /** Typedef to describe the output and input image index and size types. */
   typedef typename Superclass::OutputImageIndexType OutputImageIndexType;
-  typedef typename Superclass::InputImageIndexType InputImageIndexType;
-  typedef typename Superclass::OutputImageSizeType OutputImageSizeType;
-  typedef typename Superclass::InputImageSizeType InputImageSizeType;
+  typedef typename Superclass::InputImageIndexType  InputImageIndexType;
+  typedef typename Superclass::OutputImageSizeType  OutputImageSizeType;
+  typedef typename Superclass::InputImageSizeType   InputImageSizeType;
 
   /** ImageDimension constants */
   itkStaticConstMacro(ImageDimension, unsigned int,

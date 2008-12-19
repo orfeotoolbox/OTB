@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryThresholdSpatialFunction.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-19 23:21:39 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2008-10-07 12:04:39 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -36,7 +36,7 @@ namespace itk
  * \sa SpatialFunction
  * 
  * 
-*/
+ */
 template <typename TFunction>
 class ITK_EXPORT BinaryThresholdSpatialFunction : 
   public SpatialFunction< bool, 
@@ -55,7 +55,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(BinaryThresholdSpatialFunction, SpatialFunction);
 
-  /** New macro for creation of through the object factory.*/
+  /** New macro for creation of through the object factory. */
   itkNewMacro( Self );
 
   /** OutputType typedef support. */

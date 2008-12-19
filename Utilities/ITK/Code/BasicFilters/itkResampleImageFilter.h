@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkResampleImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-04-15 21:35:59 $
-  Version:   $Revision: 1.56 $
+  Date:      $Date: 2008-10-24 16:30:43 $
+  Version:   $Revision: 1.58 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -106,9 +106,7 @@ public:
                       TInputImage::ImageDimension);
 
 
-  /** Transform typedef.
-   *
-   **/
+  /** Transform typedef. */
   typedef Transform<TInterpolatorPrecisionType, 
     itkGetStaticConstMacro(ImageDimension), 
     itkGetStaticConstMacro(ImageDimension)> TransformType;
@@ -174,7 +172,7 @@ public:
   itkSetMacro( DefaultPixelValue, PixelType );
 
   /** Get the pixel value when a transformed pixel is outside of the image */
-  itkGetMacro( DefaultPixelValue, PixelType );
+  itkGetConstReferenceMacro( DefaultPixelValue, PixelType );
 
   /** Set the output image spacing. */
   itkSetMacro( OutputSpacing, SpacingType );
@@ -323,4 +321,3 @@ private:
 #endif
   
 #endif
-

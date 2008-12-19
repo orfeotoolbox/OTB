@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkZeroCrossingImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-04-04 13:13:52 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2008-10-07 17:31:03 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -46,11 +46,11 @@ namespace itk
  *  There are two parameters for this filter.  ForegroundValue is the value
  *  that marks zero-crossing pixels.  The BackgroundValue is the value given to 
  *  all other pixels.
- *       
+ *
  *  \sa Image
  *  \sa Neighborhood
  *  \sa NeighborhoodOperator
- *  \sa NeighborhoodIterator     
+ *  \sa NeighborhoodIterator
  *  \ingroup ImageFeatureExtraction */
 template<class TInputImage, class TOutputImage>
 class ITK_EXPORT ZeroCrossingImageFilter
@@ -58,7 +58,7 @@ class ITK_EXPORT ZeroCrossingImageFilter
 {
 public:
   /** Standard "Self" & Superclass typedef. */
-  typedef ZeroCrossingImageFilter    Self;
+  typedef ZeroCrossingImageFilter                       Self;
   typedef ImageToImageFilter<TInputImage, TOutputImage> Superclass;
   
   /** Image typedef support   */
@@ -66,7 +66,7 @@ public:
   typedef TOutputImage OutputImageType;
   
   /** SmartPointer typedef support  */ 
-  typedef SmartPointer<Self>  Pointer;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
   
   /** Define pixel types  */
@@ -121,10 +121,10 @@ public:
 
 protected:
   ZeroCrossingImageFilter()
-  {
+    {
     m_ForegroundValue = NumericTraits<OutputImagePixelType>::One;
     m_BackgroundValue = NumericTraits<OutputImagePixelType>::Zero;
-  }
+    }
   ~ZeroCrossingImageFilter(){}
   void PrintSelf(std::ostream& os, Indent indent) const;
   
@@ -154,4 +154,3 @@ protected:
 #endif
   
 #endif
-

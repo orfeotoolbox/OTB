@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDataObjectDecorator.h,v $
   Language:  C++
-  Date:      $Date: 2007-04-25 22:25:16 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2008-10-07 09:09:39 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -60,13 +60,13 @@ class ITK_EXPORT DataObjectDecorator : public DataObject
 public:
   /** Standard typedefs. */
   typedef DataObjectDecorator           Self;
-  typedef DataObject  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef DataObject                    Superclass;
+  typedef SmartPointer<Self>            Pointer;
+  typedef SmartPointer<const Self>      ConstPointer;
 
   /** Typedef for the component type (object being decorated) */
-  typedef T ComponentType;
-  typedef typename T::ConstPointer ComponentConstPointer;
+  typedef T                             ComponentType;
+  typedef typename T::ConstPointer      ComponentConstPointer;
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -101,4 +101,3 @@ private:
 #endif
 
 #endif
-

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRescaleIntensityImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-10-18 14:10:05 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2008-10-17 16:30:53 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkRescaleIntensityImageFilter_txx
-#define _itkRescaleIntensityImageFilter_txx
+#ifndef __itkRescaleIntensityImageFilter_txx
+#define __itkRescaleIntensityImageFilter_txx
 
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkMinimumMaximumImageCalculator.h"

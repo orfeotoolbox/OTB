@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAntiAliasBinaryImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2007-04-20 13:36:35 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2008-10-20 21:28:19 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -95,7 +95,9 @@ AntiAliasBinaryImageFilter<TInputImage, TOutputImage>
   this->InterpolateSurfaceLocationOff(); // no need for interpolation here
   if (TInputImage::ImageDimension > 3 && this->GetNumberOfLayers() < 4)
     {
-    itkWarningMacro("Only 3 layers are being used in the solver.  You should consider using at least as many layers as dimensions of your input.  This value can be set by calling SetNumberOfLayers(n) on this filter.");
+    itkWarningMacro("Only 3 layers are being used in the solver." 
+                    << "  You should consider using at least as many layers as dimensions of your input."
+                    << "  This value can be set by calling SetNumberOfLayers(n) on this filter.");
     }
   
   m_InputImage = this->GetInput();

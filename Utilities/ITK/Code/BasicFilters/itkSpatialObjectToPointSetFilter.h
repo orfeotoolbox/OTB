@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSpatialObjectToPointSetFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003-11-27 20:16:28 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2008-10-18 16:11:14 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -34,11 +34,12 @@ class ITK_EXPORT SpatialObjectToPointSetFilter : public MeshSource<TOutputPointS
 {
 public:
   /** Standard class typedefs. */
-  typedef SpatialObjectToPointSetFilter  Self;
-  typedef MeshSource<TOutputPointSet>  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
-  typedef TOutputPointSet  OutputPointSetType;
+  typedef SpatialObjectToPointSetFilter Self;
+  typedef MeshSource<TOutputPointSet>   Superclass;
+  typedef SmartPointer<Self>            Pointer;
+  typedef SmartPointer<const Self>      ConstPointer;
+
+  typedef TOutputPointSet                      OutputPointSetType;
   typedef typename OutputPointSetType::Pointer OutputPointSetPointer;
 
   /** Smart Pointer type to a DataObject. */
@@ -51,10 +52,10 @@ public:
   itkTypeMacro(SpatialObjectToPointSetFilter,ProcessObject);
 
   /** Some convenient typedefs. */
-  typedef TInputSpatialObject InputSpatialObjectType;
-  typedef typename InputSpatialObjectType::Pointer        InputSpatialObjectPointer;
-  typedef typename InputSpatialObjectType::ConstPointer   InputSpatialObjectConstPointer;
-  typedef typename TInputSpatialObject::ChildrenListType  ChildrenListType;
+  typedef TInputSpatialObject                            InputSpatialObjectType;
+  typedef typename InputSpatialObjectType::Pointer       InputSpatialObjectPointer;
+  typedef typename InputSpatialObjectType::ConstPointer  InputSpatialObjectConstPointer;
+  typedef typename TInputSpatialObject::ChildrenListType ChildrenListType;
 
 
   /** Dimension constants */

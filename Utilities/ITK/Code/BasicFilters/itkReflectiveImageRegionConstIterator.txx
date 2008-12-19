@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkReflectiveImageRegionConstIterator.txx,v $
   Language:  C++
-  Date:      $Date: 2004-12-21 22:47:30 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2008-10-17 16:30:51 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkReflectiveImageRegionConstIterator_txx
-#define _itkReflectiveImageRegionConstIterator_txx
+#ifndef __itkReflectiveImageRegionConstIterator_txx
+#define __itkReflectiveImageRegionConstIterator_txx
 
 
 #include "itkReflectiveImageRegionConstIterator.h"
@@ -32,8 +32,6 @@ ReflectiveImageRegionConstIterator<TImage>
   m_EndOffset.Fill( 0 );
   this->GoToBegin();
 }
-
-
 
 template<class TImage>
 ReflectiveImageRegionConstIterator<TImage>
@@ -98,8 +96,6 @@ ReflectiveImageRegionConstIterator<TImage>
 
 }
 
-
-
 template<class TImage>
 bool
 ReflectiveImageRegionConstIterator<TImage>
@@ -130,7 +126,7 @@ ReflectiveImageRegionConstIterator<TImage>
   
   this->m_Remaining = false;
   for( unsigned int in=0; in<TImage::ImageDimension; in++ )
-    {    
+    {
     if( m_IsFirstPass[ in ] ) 
       {
       this->m_PositionIndex[ in  ]++;

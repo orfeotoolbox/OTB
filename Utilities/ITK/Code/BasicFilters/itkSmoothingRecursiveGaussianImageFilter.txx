@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSmoothingRecursiveGaussianImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2007-09-27 13:55:36 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2008-07-31 09:14:58 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkSmoothingRecursiveGaussianImageFilter_txx
-#define _itkSmoothingRecursiveGaussianImageFilter_txx
+#ifndef __itkSmoothingRecursiveGaussianImageFilter_txx
+#define __itkSmoothingRecursiveGaussianImageFilter_txx
 
 #include "itkSmoothingRecursiveGaussianImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
@@ -71,6 +71,20 @@ SmoothingRecursiveGaussianImageFilter<TInputImage,TOutputImage>
 }
 
 
+template <typename TInputImage, typename TOutputImage>
+void 
+SmoothingRecursiveGaussianImageFilter<TInputImage,TOutputImage>
+::SetNumberOfThreads( int nb )
+{
+  Superclass::SetNumberOfThreads( nb );
+  for( unsigned int i = 0; i<ImageDimension-1; i++ )
+    {
+    m_SmoothingFilters[ i ]->SetNumberOfThreads( nb );
+    }
+  m_FirstSmoothingFilter->SetNumberOfThreads( nb );
+
+}
+
 
 /**
  * Set value of Sigma
@@ -93,7 +107,6 @@ SmoothingRecursiveGaussianImageFilter<TInputImage,TOutputImage>
     }
 
 }
-
 
 
 /**

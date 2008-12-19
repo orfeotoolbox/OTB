@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkIdentityTransform.h,v $
   Language:  C++
-  Date:      $Date: 2007-07-18 20:12:24 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2008-10-17 01:41:59 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -57,10 +57,10 @@ class ITK_EXPORT  IdentityTransform  : public Transform<TScalarType,NDimensions,
 {
 public:
   /** Standard class typedefs. */
-  typedef IdentityTransform  Self;
-  typedef Transform<TScalarType,NDimensions,NDimensions> Superclass;
-  typedef SmartPointer< Self >   Pointer;
-  typedef SmartPointer< const Self >  ConstPointer;
+  typedef IdentityTransform                                 Self;
+  typedef Transform<TScalarType,NDimensions,NDimensions>    Superclass;
+  typedef SmartPointer< Self >                              Pointer;
+  typedef SmartPointer< const Self >                        ConstPointer;
   
   /** New method for creating an object using a factory. */
   itkNewMacro(Self);
@@ -175,25 +175,18 @@ public:
 
 protected:
   IdentityTransform():Transform<TScalarType,NDimensions,NDimensions>(NDimensions,1) 
-   {
-   // The Jacobian is constant, therefore it can be initialized in the constructor.
-   this->m_Jacobian = JacobianType(NDimensions,1); 
-   this->m_Jacobian.Fill(0.0); 
-   }; 
-  virtual ~IdentityTransform() {};
-
+    {
+    // The Jacobian is constant, therefore it can be initialized in the constructor.
+    this->m_Jacobian = JacobianType(NDimensions,1); 
+    this->m_Jacobian.Fill(0.0); 
+    } 
+  virtual ~IdentityTransform() {}
 
 private:
   IdentityTransform(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
-
 };
 
 } // end namespace itk
 
-
 #endif
-
-
-

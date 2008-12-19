@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAddImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-27 11:36:39 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2008-10-07 15:07:03 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -48,6 +48,10 @@ namespace itk
  * pixels are vectors of the same dimension, and to store the resulting vector
  * in an output image of vector pixels.
  *
+ * The images to be added are set using the methods:
+ * SetInput1( image1 );
+ * SetInput2( image2 );
+ * 
  * \warning No numeric overflow checking is performed in this filter.
  *
  * \ingroup IntensityImageFilters  Multithreaded
@@ -62,18 +66,18 @@ public:
   Add2() {};
   ~Add2() {};
   bool operator!=( const Add2 & ) const
-  {
+    {
     return false;
-  }
+    }
   bool operator==( const Add2 & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
   inline TOutput operator()( const TInput1 & A, const TInput2 & B)
-  {
+    {
     const AccumulatorType sum = A;
     return static_cast<TOutput>( sum + B );
-  }
+    }
 }; 
 
 }
@@ -90,14 +94,14 @@ BinaryFunctorImageFilter<TInputImage1,TInputImage2,TOutputImage,
 {
 public:
   /** Standard class typedefs. */
-  typedef AddImageFilter  Self;
+  typedef AddImageFilter               Self;
   typedef BinaryFunctorImageFilter<TInputImage1,TInputImage2,TOutputImage, 
                                    Functor::Add2< 
     typename TInputImage1::PixelType, 
     typename TInputImage2::PixelType,
-    typename TOutputImage::PixelType>   
-  >  Superclass;
-  typedef SmartPointer<Self>   Pointer;
+    typename TOutputImage::PixelType> > Superclass;
+
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
   /** Method for creation through the object factory. */

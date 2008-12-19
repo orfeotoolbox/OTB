@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTransformToDeformationFieldSource.txx,v $
   Language:  C++
-  Date:      $Date: 2008-07-14 17:09:06 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2008-08-01 13:42:00 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -51,11 +51,16 @@ TransformToDeformationFieldSource<TOutputImage,TTransformPrecisionType>
   this->m_OutputOrigin.Fill(0.0);
   this->m_OutputDirection.SetIdentity();
 
-  this->m_OutputSize.Fill( 0 );
-  this->m_OutputIndex.Fill( 0 );
+  SizeType size;
+  size.Fill( 0 );
+  this->m_OutputRegion.SetSize( size );
+  
+  IndexType index;
+  index.Fill( 0 );
+  this->m_OutputRegion.SetIndex( index );
   
   this->m_Transform = IdentityTransform<TTransformPrecisionType, ImageDimension>::New();
-
+  
 } // end Constructor
 
 
@@ -71,14 +76,63 @@ TransformToDeformationFieldSource<TOutputImage,TTransformPrecisionType>
 {
   Superclass::PrintSelf( os, indent );
   
-  os << indent << "OutputSize: " << this->m_OutputSize << std::endl;
-  os << indent << "OutputIndex: " << this->m_OutputIndex << std::endl;
+  os << indent << "OutputRegion: " << this->m_OutputRegion << std::endl;
   os << indent << "OutputSpacing: " << this->m_OutputSpacing << std::endl;
   os << indent << "OutputOrigin: " << this->m_OutputOrigin << std::endl;
   os << indent << "OutputDirection: " << this->m_OutputDirection << std::endl;
   os << indent << "Transform: " << this->m_Transform.GetPointer() << std::endl;
 
 } // end PrintSelf()
+
+
+/**
+ * Set the output image size.
+ */
+template <class TOutputImage, class TTransformPrecisionType>
+void 
+TransformToDeformationFieldSource<TOutputImage,TTransformPrecisionType>
+::SetOutputSize( const SizeType & size )
+{
+  this->m_OutputRegion.SetSize( size );
+}
+
+
+/**
+ * Get the output image size.
+ */
+template <class TOutputImage, class TTransformPrecisionType>
+const typename TransformToDeformationFieldSource<TOutputImage,TTransformPrecisionType>
+::SizeType &
+TransformToDeformationFieldSource<TOutputImage,TTransformPrecisionType>
+::GetOutputSize()
+{
+  return this->m_OutputRegion.GetSize();
+}
+
+
+/**
+ * Set the output image index.
+ */
+template <class TOutputImage, class TTransformPrecisionType>
+void 
+TransformToDeformationFieldSource<TOutputImage,TTransformPrecisionType>
+::SetOutputIndex( const IndexType & index )
+{
+  this->m_OutputRegion.SetIndex( index );
+}
+
+
+/**
+ * Get the output image index.
+ */
+template <class TOutputImage, class TTransformPrecisionType>
+const typename TransformToDeformationFieldSource<TOutputImage,TTransformPrecisionType>
+::IndexType &
+TransformToDeformationFieldSource<TOutputImage,TTransformPrecisionType>
+::GetOutputIndex()
+{
+  return this->m_OutputRegion.GetIndex();
+}
 
 
 /**
@@ -112,28 +166,17 @@ TransformToDeformationFieldSource<TOutputImage,TTransformPrecisionType>
 template <class TOutputImage, class TTransformPrecisionType>
 void 
 TransformToDeformationFieldSource<TOutputImage,TTransformPrecisionType>
-::SetOutputParametersFromImage ( OutputImagePointer image )
+::SetOutputParametersFromImage ( const ImageBaseType * image )
 {
+  if( !image )
+    {
+    itkExceptionMacro(<< "Cannot use a null image reference");
+    }
+  
   this->SetOutputOrigin( image->GetOrigin() );
   this->SetOutputSpacing( image->GetSpacing() );
   this->SetOutputDirection( image->GetDirection() );
-  this->SetOutputSize( image->GetLargestPossibleRegion().GetSize() );
-  this->SetOutputIndex( image->GetLargestPossibleRegion().GetIndex() );
-
-} // end SetOutputParametersFromImage()
-
-
-/** Helper method to set the output parameters based on this image */
-template <class TOutputImage, class TTransformPrecisionType>
-void 
-TransformToDeformationFieldSource<TOutputImage,TTransformPrecisionType>
-::SetOutputParametersFromImage ( OutputImageConstPointer image )
-{
-  this->SetOutputOrigin( image->GetOrigin() );
-  this->SetOutputSpacing( image->GetSpacing() );
-  this->SetOutputDirection( image->GetDirection() );
-  this->SetOutputSize( image->GetLargestPossibleRegion().GetSize() );
-  this->SetOutputIndex( image->GetLargestPossibleRegion().GetIndex() );
+  this->SetOutputRegion( image->GetLargestPossibleRegion() );
 
 } // end SetOutputParametersFromImage()
 
@@ -330,10 +373,7 @@ TransformToDeformationFieldSource<TOutputImage,TTransformPrecisionType>
     return;
     }
 
-  OutputImageRegionType region;
-  region.SetSize( m_OutputSize );
-  region.SetIndex( m_OutputIndex );
-  outputPtr->SetLargestPossibleRegion( region );
+  outputPtr->SetLargestPossibleRegion( m_OutputRegion );
 
   outputPtr->SetSpacing( m_OutputSpacing );
   outputPtr->SetOrigin( m_OutputOrigin );

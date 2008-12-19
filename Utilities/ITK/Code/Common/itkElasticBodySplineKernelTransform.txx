@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkElasticBodySplineKernelTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2007-10-25 03:55:09 $
-  Version:   $Revision: 1.24 $
+  Date:      $Date: 2008-10-07 12:03:53 $
+  Version:   $Revision: 1.25 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkElasticBodySplineKernelTransform_txx
-#define _itkElasticBodySplineKernelTransform_txx
+#ifndef __itkElasticBodySplineKernelTransform_txx
+#define __itkElasticBodySplineKernelTransform_txx
 #include "itkElasticBodySplineKernelTransform.h"
 
 namespace itk

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWatershedBoundary.h,v $
   Language:  C++
-  Date:      $Date: 2004-03-03 19:15:19 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2008-08-04 23:22:58 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -129,7 +129,7 @@ public:
   typedef SmartPointer<Self> Pointer;
   typedef SmartPointer<const Self> ConstPointer;
   itkNewMacro(Self);
-  itkTypeMacro(Boundary, DataObject);
+  itkTypeMacro(WatershedBoundary, DataObject);
 
   /** The following averts an internal compiler error on microsoft compilers */
   typedef typename face_t::Pointer FacePointer;

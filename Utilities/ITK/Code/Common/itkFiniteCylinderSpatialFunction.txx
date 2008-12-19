@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkFiniteCylinderSpatialFunction.txx,v $
 Language:  C++
-Date:      $Date: 2006-03-19 04:36:58 $
-Version:   $Revision: 1.7 $
+Date:      $Date: 2008-10-16 23:25:41 $
+Version:   $Revision: 1.8 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkFiniteCylinderSpatialFunction_cpp
-#define __itkFiniteCylinderSpatialFunction_cpp
+#ifndef __itkFiniteCylinderSpatialFunction_txx
+#define __itkFiniteCylinderSpatialFunction_txx
 
 #include "itkFiniteCylinderSpatialFunction.h"
 #include <math.h>

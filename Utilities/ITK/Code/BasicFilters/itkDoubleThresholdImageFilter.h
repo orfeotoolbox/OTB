@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDoubleThresholdImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-10-16 14:22:34 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2008-10-14 19:20:33 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -56,10 +56,10 @@ class ITK_EXPORT DoubleThresholdImageFilter :
 {
 public:
   /** Standard class typedefs. */
-  typedef DoubleThresholdImageFilter  Self;
+  typedef DoubleThresholdImageFilter                   Self;
   typedef ImageToImageFilter<TInputImage,TOutputImage> Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                           Pointer;
+  typedef SmartPointer<const Self>                     ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -69,7 +69,7 @@ public:
 
   /** Types from the superclass */
   typedef typename Superclass::InputImagePointer InputImagePointer;
-  typedef typename Superclass::InputImageType InputImageType;
+  typedef typename Superclass::InputImageType    InputImageType;
 
   /** Pixel types. */
   typedef typename TInputImage::PixelType  InputPixelType;
@@ -108,7 +108,7 @@ public:
   /** \deprecated
    * Get the number of iterations used by the geodesic dilation to
    * produce the current output. This method is scheduled for removal
-   * since the implementation now uses a noniterative solution.*/
+   * since the implementation now uses a noniterative solution. */
   unsigned long GetNumberOfIterationsUsed()
     { 
     itkLegacyBodyMacro(itk::DoubleThresholdImageFilter::GetNumberOfIterationsUsed, 2.2);

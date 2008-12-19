@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSqrtImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-27 11:36:41 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2008-10-18 16:11:14 $
+  Version:   $Revision: 1.22 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -37,17 +37,17 @@ public:
   Sqrt() {}
   ~Sqrt() {}
   bool operator!=( const Sqrt & ) const
-  {
+    {
     return false;
-  }
+    }
   bool operator==( const Sqrt & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
   inline TOutput operator()( const TInput & A )
-  {
+    {
     return (TOutput)vcl_sqrt((double)A);
-  }
+    }
 }; 
 }
 template <class TInputImage, class TOutputImage>
@@ -59,12 +59,13 @@ UnaryFunctorImageFilter<TInputImage,TOutputImage,
 {
 public:
   /** Standard class typedefs. */
-  typedef SqrtImageFilter  Self;
-  typedef UnaryFunctorImageFilter<TInputImage,TOutputImage, 
-                                  Function::Sqrt< typename TInputImage::PixelType, 
-                                                  typename TOutputImage::PixelType> >  Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SqrtImageFilter                                Self;
+  typedef UnaryFunctorImageFilter<
+    TInputImage,TOutputImage, 
+    Function::Sqrt< typename TInputImage::PixelType, 
+                    typename TOutputImage::PixelType> >  Superclass;
+  typedef SmartPointer<Self>                             Pointer;
+  typedef SmartPointer<const Self>                       ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

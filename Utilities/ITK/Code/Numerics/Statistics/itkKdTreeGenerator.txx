@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkKdTreeGenerator.txx,v $
   Language:  C++
-  Date:      $Date: 2008-04-29 23:00:06 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2008-08-20 13:02:09 $
+  Version:   $Revision: 1.22 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -157,16 +157,14 @@ KdTreeGenerator< TSample >
   medianIndex = (endIndex - beginIndex) / 2;
 
   //
-  // Find the medial element by using the QuickSelect algorithm
-  // based on its description on the Wikipedia:
-  // http://en.wikipedia.org/wiki/Selection_algorithm
+  // Find the medial element by using the NthElement function
+  // based on the STL implementation of the QuickSelect algorithm.
   //
   partitionValue =
-    QuickSelect< SubsampleType >(m_Subsample,
+    NthElement< SubsampleType >(m_Subsample,
                                 partitionDimension,
                                 beginIndex, endIndex, 
-                                medianIndex,
-                                m_TempMean[partitionDimension]);
+                                medianIndex);
 
   medianIndex += beginIndex;
 

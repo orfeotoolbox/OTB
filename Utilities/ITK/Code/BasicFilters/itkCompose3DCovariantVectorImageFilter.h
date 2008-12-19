@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCompose3DCovariantVectorImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-27 11:36:40 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2008-10-13 18:54:27 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -45,23 +45,23 @@ public:
   Compose3DCovariantVector() {}
   ~Compose3DCovariantVector() {}
   bool operator!=( const Compose3DCovariantVector & ) const
-  {
+    {
     return false;
-  }
+    }
   bool operator==( const Compose3DCovariantVector & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
   inline OutputType operator()(  const TInput & s1, 
                                  const TInput & s2,
                                  const TInput & s3)
-  {
+    {
     OutputType v;
     v[0] = s1;
     v[1] = s2;
     v[2] = s3;
     return v;
-  }
+    }
 }; 
 }
 
@@ -78,13 +78,14 @@ TernaryFunctorImageFilter<TInputImage,TInputImage,
 public:
   /** Standard class typedefs. */
   typedef Compose3DCovariantVectorImageFilter  Self;
-  typedef TernaryFunctorImageFilter<TInputImage,TInputImage,TInputImage,
-                                    TOutputImage, 
-                                    Function::Compose3DCovariantVector< 
-    ITK_TYPENAME TInputImage::PixelType > 
-  >  Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef TernaryFunctorImageFilter<
+    TInputImage,TInputImage,TInputImage,
+    TOutputImage, 
+    Function::Compose3DCovariantVector< 
+      ITK_TYPENAME TInputImage::PixelType > >
+                                               Superclass;
+  typedef SmartPointer<Self>                   Pointer;
+  typedef SmartPointer<const Self>             ConstPointer;
 
   typedef typename Superclass::OutputImageType OutputImageType;
   

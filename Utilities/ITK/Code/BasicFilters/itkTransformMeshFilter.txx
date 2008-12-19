@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTransformMeshFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:58 $
-  Version:   $Revision: 1.22 $
+  Date:      $Date: 2008-10-18 16:11:15 $
+  Version:   $Revision: 1.23 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkTransformMeshFilter_txx
-#define _itkTransformMeshFilter_txx
+#ifndef __itkTransformMeshFilter_txx
+#define __itkTransformMeshFilter_txx
 
 #include "itkTransformMeshFilter.h"
 #include "itkExceptionObject.h"

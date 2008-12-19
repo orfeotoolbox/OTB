@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSinImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-27 11:36:41 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2008-10-17 20:49:56 $
+  Version:   $Revision: 1.22 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -37,15 +37,15 @@ public:
   Sin() {}
   ~Sin() {}
   bool operator!=( const Sin & ) const
-  {
+    {
     return false;
-  }
+    }
   bool operator==( const Sin & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
   inline TOutput operator()( const TInput & A )
-  { return (TOutput)vcl_sin((double)A); }
+    { return (TOutput)vcl_sin((double)A); }
 }; 
 }
 
@@ -59,12 +59,13 @@ UnaryFunctorImageFilter<TInputImage,TOutputImage,
 {
 public:
   /** Standard class typedefs. */
-  typedef SinImageFilter  Self;
-  typedef UnaryFunctorImageFilter<TInputImage,TOutputImage, 
-                                  Function::Sin< typename TInputImage::PixelType, 
-                                                 typename TOutputImage::PixelType> >  Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SinImageFilter                                Self;
+  typedef UnaryFunctorImageFilter<
+    TInputImage,TOutputImage, 
+    Function::Sin< typename TInputImage::PixelType, 
+                   typename TOutputImage::PixelType> >  Superclass;
+  typedef SmartPointer<Self>                            Pointer;
+  typedef SmartPointer<const Self>                      ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCenteredEuler3DTransform.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-30 20:56:07 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2008-10-07 12:04:59 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -105,7 +105,7 @@ protected:
 
   /**
    * Print contents of an CenteredEuler3DTransform
-   **/
+   */
   void PrintSelf(std::ostream &os, Indent indent) const;
 
 private:
@@ -117,7 +117,7 @@ private:
 
 }  // namespace itk
 
-// Define instantiation macro for this template.
+/** Define instantiation macro for this template. */
 #define ITK_TEMPLATE_CenteredEuler3DTransform(_, EXPORT, x, y) namespace itk { \
   _(1(class EXPORT CenteredEuler3DTransform< ITK_TEMPLATE_1 x >)) \
   namespace Templates { typedef CenteredEuler3DTransform< ITK_TEMPLATE_1 x > \

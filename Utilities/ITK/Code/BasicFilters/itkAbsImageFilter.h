@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAbsImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-27 11:36:39 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2008-10-07 14:09:10 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -37,15 +37,17 @@ public:
   Abs() {}
   ~Abs() {}
   bool operator!=( const Abs & ) const
-  {
+    {
     return false;
-  }
+    }
   bool operator==( const Abs & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
   inline TOutput operator()( const TInput & A )
-  { return (TOutput)( ( A > 0 ) ? A : -A ); }
+    {
+    return (TOutput)( ( A > 0 ) ? A : -A );
+    }
 }; 
 }
 
@@ -63,7 +65,7 @@ public:
   typedef UnaryFunctorImageFilter<TInputImage,TOutputImage, 
                                   Function::Abs< typename TInputImage::PixelType, 
                                                  typename TOutputImage::PixelType> >  Superclass;
-  typedef SmartPointer<Self>   Pointer;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
   /** Method for creation through the object factory. */

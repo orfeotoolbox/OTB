@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHessian3DToVesselnessMeasureImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-01-19 19:50:01 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2008-10-16 16:45:10 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkHessian3DToVesselnessMeasureImageFilter_txx
-#define _itkHessian3DToVesselnessMeasureImageFilter_txx
+#ifndef __itkHessian3DToVesselnessMeasureImageFilter_txx
+#define __itkHessian3DToVesselnessMeasureImageFilter_txx
 
 #include "itkHessian3DToVesselnessMeasureImageFilter.h"
 #include "itkImageRegionIterator.h"
@@ -103,8 +103,7 @@ Hessian3DToVesselnessMeasureImageFilter< TPixel >
     else
       {
       oit.Set( NumericTraits< OutputPixelType >::Zero );
-      }    
-    
+      }
 
     ++it;
     ++oit;

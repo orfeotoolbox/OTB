@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAccumulateImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2007-08-24 12:45:32 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2008-10-07 14:09:10 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkAccumulateImageFilter_txx
-#define _itkAccumulateImageFilter_txx
+#ifndef __itkAccumulateImageFilter_txx
+#define __itkAccumulateImageFilter_txx
 
 #include "itkAccumulateImageFilter.h"
 #include "itkImageRegionIterator.h"
@@ -208,7 +208,7 @@ AccumulateImageFilter<TInputImage,TOutputImage>
     AccumulateType Value=NumericTraits<AccumulateType>::ZeroValue();
     while(!inputIter.IsAtEnd())
       {
-      Value+=static_cast<AccumulateType>(inputIter.Get());
+      Value += static_cast<AccumulateType>(inputIter.Get());
       ++inputIter;
       }
     if (m_Average)

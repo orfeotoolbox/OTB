@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWatershedSegmentTreeGenerator.h,v $
   Language:  C++
-  Date:      $Date: 2004-02-24 20:47:26 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2008-08-04 23:22:58 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -83,7 +83,7 @@ public:
   typedef SmartPointer<Self> Pointer;
   typedef SmartPointer<const Self> ConstPointer;
   itkNewMacro(Self);
-  itkTypeMacro(SegmentTreeGenerator, ProcessObject);
+  itkTypeMacro(WatershedSegmentTreeGenerator, ProcessObject);
 
   /** Convenient type definitions */
   typedef TScalarType ScalarType;

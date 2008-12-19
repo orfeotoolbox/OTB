@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMultiResolutionPDEDeformableRegistration.h,v $
   Language:  C++
-  Date:      $Date: 2008-07-05 00:22:25 $
-  Version:   $Revision: 1.30 $
+  Date:      $Date: 2008-10-21 15:23:04 $
+  Version:   $Revision: 1.32 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -51,8 +51,13 @@ namespace itk
  *
  * The input fixed and moving images are set via methods SetFixedImage
  * and SetMovingImage respectively. An initial deformation field maybe set via
- * SetInitialDeformationField or SetInput. If no initial field is set
- * a zero field is used as the initial condition.
+ * SetInitialDeformationField if is matches the characteristics of the coarsest
+ * pyramid level. If no such assumption can be made (e.g. the deformation field
+ * has the same characteristics as the input images), an initial deformation
+ * field can still be set via SetArbitraryInitialDeformationField or
+ * SetInput. The filter will then take care of mathching the coarsest level
+ * characteristics. If no initial field is set a zero field is used as the
+ * initial condition.
  *
  * MultiResolutionPyramidImageFilters are used to downsample the fixed
  * and moving images. A VectorExpandImageFilter is used to upsample
@@ -73,7 +78,7 @@ namespace itk
  *
  * \ingroup DeformableImageRegistration
  */
-  template <class TFixedImage, class TMovingImage, class TDeformationField, class  TRealType = float, class TInternalImage = Image<TRealType,TFixedImage::ImageDimension> >
+template <class TFixedImage, class TMovingImage, class TDeformationField, class  TRealType = float>
 class ITK_EXPORT MultiResolutionPDEDeformableRegistration :
     public ImageToImageFilter <TDeformationField, TDeformationField>
 {
@@ -111,8 +116,7 @@ public:
                       FixedImageType::ImageDimension);
 
   /** Internal float image type. */
-//   typedef Image<TRealType,itkGetStaticConstMacro(ImageDimension)> FloatImageType;
-  typedef TInternalImage FloatImageType;
+  typedef Image<TRealType,itkGetStaticConstMacro(ImageDimension)> FloatImageType;
 
   /** The internal registration type. */
   typedef PDEDeformableRegistrationFilter<
@@ -150,11 +154,19 @@ public:
   /** Get the moving image. */
   const MovingImageType * GetMovingImage(void) const;
 
-  /** Set initial deformation field. */
+  /** Set initial deformation field to be used as is (no smoothing, no
+   *  subsampling at the coarsest level of the pyramid. */
   virtual void SetInitialDeformationField( DeformationFieldType * ptr )
   {
     this->m_InitialDeformationField=ptr;
-    // itkExceptionMacro( << "This feature not implemented yet"  );
+  }
+
+  /** Set initial deformation field. No assumption is made on the
+   *  input. It will therefore be smoothed and resampled to match the
+   *  images characteristics at the coarsest level of the pyramid. */
+  virtual void SetArbitraryInitialDeformationField( DeformationFieldType * ptr )
+  {
+    this->SetInput( ptr ); 
   }
 
   /** Get output deformation field. */
@@ -198,6 +210,12 @@ public:
 
   /** Set number of iterations per multi-resolution levels. */
   itkSetVectorMacro( NumberOfIterations, unsigned int, m_NumberOfLevels );
+
+  /** Set the moving image pyramid. */
+  itkSetObjectMacro( FieldExpander, FieldExpanderType );
+
+  /** Get the moving image pyramid. */
+  itkGetObjectMacro( FieldExpander, FieldExpanderType );
 
   /** Get number of iterations per multi-resolution levels. */
   virtual const unsigned int * GetNumberOfIterations() const

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryDilateImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-01-12 20:27:49 $
-  Version:   $Revision: 1.20 $
+  Date:      $Date: 2008-08-13 12:37:50 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -57,7 +57,8 @@ BinaryDilateImageFilter< TInputImage, TOutputImage, TKernel>
   InputPixelType foregroundValue = this->GetForegroundValue();
   InputPixelType backgroundValue = this->GetBackgroundValue();
   KernelType kernel = this->GetKernel();
-  InputSizeType radius = this->GetRadius();
+  InputSizeType radius;
+  radius.Fill(1);
   typename TInputImage::RegionType inputRegion = input->GetBufferedRegion();
   typename TOutputImage::RegionType outputRegion = output->GetBufferedRegion();
   

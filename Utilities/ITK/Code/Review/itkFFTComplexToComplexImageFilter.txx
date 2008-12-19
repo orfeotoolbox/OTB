@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFFTComplexToComplexImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-07-03 18:41:16 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2008-10-04 12:38:06 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -37,6 +37,9 @@
 namespace itk
 {
 
+#if defined(USE_FFTWD) || defined(USE_FFTWF)
+template <class TPixel,unsigned int NDimension> class FFTWComplexToComplexImageFilter;
+#endif
 
 template < class TPixel, unsigned int NDimension >
 typename FFTComplexToComplexImageFilter< TPixel, NDimension >::Pointer

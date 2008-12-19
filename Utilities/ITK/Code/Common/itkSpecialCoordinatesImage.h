@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSpecialCoordinatesImage.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-30 20:56:09 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2008-10-19 12:33:32 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -274,7 +274,7 @@ public:
    * to the output of a normal filter which is being used to output a
    * special-coordinates image.  Filters designed to produce a particular kind
    * of special-coordinates image should do this automatically. */
-  virtual void SetSpacing( const SpacingType ) {}
+  virtual void SetSpacing( const SpacingType &) {}
   virtual void SetSpacing( const double [VImageDimension] ) {}
   virtual void SetSpacing( const float [VImageDimension] ) {}
   virtual void SetOrigin( const PointType ) {}

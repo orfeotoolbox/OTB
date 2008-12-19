@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWarpVectorImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-07-05 00:38:26 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2008-10-07 17:31:02 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -65,7 +65,7 @@ WarpVectorImageFilter<TInputImage,TOutputImage,TDeformationField>
 
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "OutputSpacing: " << m_OutputSpacing << std::endl;;
+  os << indent << "OutputSpacing: " << m_OutputSpacing << std::endl;
   os << indent << "OutputOrigin: " << m_OutputOrigin << std::endl;
   os << indent << "OutputDirection: " << m_OutputDirection << std::endl;
   os << indent << "EdgePaddingValue: "
@@ -75,7 +75,7 @@ WarpVectorImageFilter<TInputImage,TOutputImage,TDeformationField>
   
 }
 
-/** Set the output image spacing.*/
+/** Set the output image spacing. */
 template <class TInputImage,class TOutputImage,class TDeformationField>
 void
 WarpVectorImageFilter<TInputImage,TOutputImage,TDeformationField>
@@ -85,7 +85,7 @@ WarpVectorImageFilter<TInputImage,TOutputImage,TDeformationField>
   this->SetOutputSpacing( s );
 }
 
-/** Set the output image origin.*/
+/** Set the output image origin. */
 template <class TInputImage,class TOutputImage,class TDeformationField>
 void
 WarpVectorImageFilter<TInputImage,TOutputImage,TDeformationField>
@@ -96,7 +96,7 @@ WarpVectorImageFilter<TInputImage,TOutputImage,TDeformationField>
 }
 
 
-/** Set deformation field as Inputs[1] for this ProcessObject.*/
+/** Set deformation field as Inputs[1] for this ProcessObject. */
 template <class TInputImage,class TOutputImage,class TDeformationField>
 void
 WarpVectorImageFilter<TInputImage,TOutputImage,TDeformationField>
@@ -271,4 +271,3 @@ WarpVectorImageFilter<TInputImage,TOutputImage,TDeformationField>
 } // end namespace itk
 
 #endif
- 

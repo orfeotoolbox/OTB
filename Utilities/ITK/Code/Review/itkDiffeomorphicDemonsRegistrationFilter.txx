@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDiffeomorphicDemonsRegistrationFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-07-11 19:02:04 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2008-12-08 01:10:42 $
+  Version:   $Revision: 1.6.2.1 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -231,8 +231,9 @@ DiffeomorphicDemonsRegistrationFilter<TFixedImage,TMovingImage,TDeformationField
   upbuf->SetLargestPossibleRegion(output->GetLargestPossibleRegion());
   upbuf->SetRequestedRegion(output->GetRequestedRegion());
   upbuf->SetBufferedRegion(output->GetBufferedRegion());
-  upbuf->SetSpacing(output->GetSpacing());
   upbuf->SetOrigin(output->GetOrigin());
+  upbuf->SetSpacing(output->GetSpacing());
+  upbuf->SetDirection(output->GetDirection());
   upbuf->Allocate();
 }
 
@@ -245,9 +246,6 @@ void
 DiffeomorphicDemonsRegistrationFilter<TFixedImage,TMovingImage,TDeformationField>
 ::ApplyUpdate(TimeStepType dt)
 {
-  // This is a workaround for ITK bug 0003972
-  this->GetUpdateBuffer()->Modified();
-   
   // If we smooth the update buffer before applying it, then the are
   // approximating a viscuous problem as opposed to an elastic problem
   if ( this->GetSmoothUpdateField() )
@@ -276,8 +274,8 @@ DiffeomorphicDemonsRegistrationFilter<TFixedImage,TMovingImage,TDeformationField
     // use s <- s o (Id +u)
     
     // skip exponential and compose the vector fields
-    m_Warper->SetOutputSpacing( this->GetUpdateBuffer()->GetSpacing() );
     m_Warper->SetOutputOrigin( this->GetUpdateBuffer()->GetOrigin() );
+    m_Warper->SetOutputSpacing( this->GetUpdateBuffer()->GetSpacing() );
     m_Warper->SetOutputDirection( this->GetUpdateBuffer()->GetDirection() );
     m_Warper->SetInput( this->GetOutput() );
     m_Warper->SetDeformationField( this->GetUpdateBuffer() );
@@ -323,8 +321,8 @@ DiffeomorphicDemonsRegistrationFilter<TFixedImage,TMovingImage,TDeformationField
     m_Exponentiator->Update();
 
     // compose the vector fields
-    m_Warper->SetOutputSpacing( this->GetUpdateBuffer()->GetSpacing() );
     m_Warper->SetOutputOrigin( this->GetUpdateBuffer()->GetOrigin() );
+    m_Warper->SetOutputSpacing( this->GetUpdateBuffer()->GetSpacing() );
     m_Warper->SetOutputDirection( this->GetUpdateBuffer()->GetDirection() );
     m_Warper->SetInput( this->GetOutput() );
     m_Warper->SetDeformationField( m_Exponentiator->GetOutput() );

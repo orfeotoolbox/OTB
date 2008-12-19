@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPNGImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-06-25 11:30:38 $
-  Version:   $Revision: 1.68 $
+  Date:      $Date: 2008-09-30 22:01:48 $
+  Version:   $Revision: 1.70 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -179,7 +179,7 @@ void PNGImageIO::Read(void* buffer)
     return;
     }
   
-//  VS 7.1 has problems with setjmp/longjmp in C++ code
+  //  VS 7.1 has problems with setjmp/longjmp in C++ code
 #if !defined(MSC_VER) || _MSC_VER != 1310
   if( setjmp( png_jmpbuf( png_ptr ) ) )
     {

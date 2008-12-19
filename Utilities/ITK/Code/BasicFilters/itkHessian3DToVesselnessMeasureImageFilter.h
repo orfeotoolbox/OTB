@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHessian3DToVesselnessMeasureImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-01-11 13:09:19 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2008-10-16 16:45:10 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -79,9 +79,9 @@ public:
   typedef Hessian3DToVesselnessMeasureImageFilter Self;
   typedef ImageToImageFilter< 
           Image< SymmetricSecondRankTensor< double, 3 >, 3 >, 
-          Image< TPixel, 3 > >                 Superclass;
-  typedef SmartPointer<Self>                   Pointer;
-  typedef SmartPointer<const Self>        ConstPointer;
+          Image< TPixel, 3 > >                    Superclass;
+  typedef SmartPointer<Self>                      Pointer;
+  typedef SmartPointer<const Self>                ConstPointer;
   
   typedef typename Superclass::InputImageType            InputImageType;
   typedef typename Superclass::OutputImageType           OutputImageType;
@@ -136,7 +136,8 @@ private:
   Hessian3DToVesselnessMeasureImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  typename EigenAnalysisFilterType::Pointer         m_SymmetricEigenValueFilter;
+  typename EigenAnalysisFilterType::Pointer m_SymmetricEigenValueFilter;
+
   double m_Alpha1;
   double m_Alpha2;
 };

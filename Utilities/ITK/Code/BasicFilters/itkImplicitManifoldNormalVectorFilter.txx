@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImplicitManifoldNormalVectorFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:50 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2008-10-16 16:45:10 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
      =========================================================================*/
-#ifndef __itkImplicitManifoldNormalVectorFilter_txx_
-#define __itkImplicitManifoldNormalVectorFilter_txx_
+#ifndef __itkImplicitManifoldNormalVectorFilter_txx
+#define __itkImplicitManifoldNormalVectorFilter_txx
 
 #include "itkNormalVectorFunctionBase.h"
 #include "itkImplicitManifoldNormalVectorFilter.h"

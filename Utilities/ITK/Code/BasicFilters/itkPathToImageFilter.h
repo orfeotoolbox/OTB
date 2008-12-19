@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPathToImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005-07-27 15:21:11 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2008-10-17 16:30:49 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -36,10 +36,10 @@ class ITK_EXPORT PathToImageFilter : public ImageSource<TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef PathToImageFilter  Self;
+  typedef PathToImageFilter          Self;
   typedef ImageSource<TOutputImage>  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>         Pointer;
+  typedef SmartPointer<const Self>   ConstPointer;
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -48,14 +48,14 @@ public:
   itkTypeMacro(PathToImageFilter,ImageSource);
   
   /** Some convenient typedefs. */
-  typedef typename Superclass::OutputImageRegionType  OutputImageRegionType;    
+  typedef typename Superclass::OutputImageRegionType  OutputImageRegionType;
   typedef          TInputPath                         InputPathType;
   typedef typename InputPathType::Pointer             InputPathPointer;
   typedef typename InputPathType::ConstPointer        InputPathConstPointer;
-  typedef          TOutputImage                       OutputImageType;          
-  typedef typename OutputImageType::Pointer           OutputImagePointer;       
-  typedef typename OutputImageType::SizeType          SizeType;                 
-  typedef typename OutputImageType::ValueType         ValueType;                
+  typedef          TOutputImage                       OutputImageType;
+  typedef typename OutputImageType::Pointer           OutputImagePointer;
+  typedef typename OutputImageType::SizeType          SizeType;
+  typedef typename OutputImageType::ValueType         ValueType;
 
   /** ImageDimension constants */
   itkStaticConstMacro(OutputImageDimension, unsigned int,

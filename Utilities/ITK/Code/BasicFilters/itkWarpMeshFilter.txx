@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWarpMeshFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2004-11-08 22:59:27 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2008-10-07 17:31:02 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkWarpMeshFilter_txx
-#define _itkWarpMeshFilter_txx
+#ifndef __itkWarpMeshFilter_txx
+#define __itkWarpMeshFilter_txx
 
 #include "itkWarpMeshFilter.h"
 #include "itkExceptionObject.h"
@@ -109,8 +109,8 @@ WarpMeshFilter<TInputMesh,TOutputMesh,TDeformationField>
   typename InputPointsContainer::ConstIterator  inputPoint  = inPoints->Begin();
   typename OutputPointsContainer::Iterator      outputPoint = outPoints->Begin();
 
-  typedef typename InputMeshType::PointType InputPointType;
-  typedef typename OutputMeshType::PointType OutputPointType;
+  typedef typename InputMeshType::PointType        InputPointType;
+  typedef typename OutputMeshType::PointType       OutputPointType;
   typedef typename DeformationFieldType::IndexType IndexType;
   IndexType index;
   

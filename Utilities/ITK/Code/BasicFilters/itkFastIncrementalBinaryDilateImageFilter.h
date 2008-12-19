@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFastIncrementalBinaryDilateImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005-12-17 14:16:26 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2008-10-07 17:31:02 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -69,15 +69,16 @@ public:
                       TKernel::NeighborhoodDimension);
   
   /** Convenient typedefs for simplifying declarations. */
-  typedef TInputImage InputImageType;
+  typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
-  typedef TKernel KernelType;
+  typedef TKernel      KernelType;
 
   /** Standard class typedefs. */
   typedef FastIncrementalBinaryDilateImageFilter Self;
-  typedef BinaryDilateImageFilter< InputImageType, OutputImageType, KernelType> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef BinaryDilateImageFilter< InputImageType, OutputImageType, KernelType>
+                                                 Superclass;
+  typedef SmartPointer<Self>                     Pointer;
+  typedef SmartPointer<const Self>               ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

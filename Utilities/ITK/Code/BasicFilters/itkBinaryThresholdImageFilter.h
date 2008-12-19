@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryThresholdImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-22 21:18:18 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2008-10-24 08:14:12 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -30,16 +30,16 @@ namespace itk
  *
  * This filter produces an output image whose pixels
  * are either one of two values ( OutsideValue or InsideValue ), 
- * depending on whether of not the corresponding input image pixel
+ * depending on whether the corresponding input image pixels
  * lie between the two thresholds ( LowerThreshold and UpperThreshold ).
  * Values equal to either threshold is considered to be between the thresholds.
  *
  * More precisely
  * \f[ Output(x_i) =
        \begin{cases}
-         InsideValue & \text{if $LowerThreshold \leq x_i \leq UpperThreshold$} \\
+         InsideValue  & \text{if $LowerThreshold \leq x_i \leq UpperThreshold$} \\
          OutsideValue & \text{otherwise}
-       \end{cases}
+        \end{cases}
    \f]
  * 
  * This filter is templated over the input image type
@@ -47,6 +47,12 @@ namespace itk
  * 
  * The filter expect both images to have the same number of dimensions.
  *
+ * The default values for LowerThreshold and UpperThreshold are:
+ * LowerThreshold = NumericTraits<TInput>::NonpositiveMin();
+ * UpperThreshold = NumericTraits<TInput>::max();
+ * Therefore, generally only one of these needs to be set, depending
+ * on whether the user wants to threshold above or below the desired threshold.
+ * 
  * \ingroup IntensityImageFilters  Multithreaded
  */
 namespace Functor {  
@@ -56,48 +62,47 @@ class BinaryThreshold
 {
 public:
   BinaryThreshold()
-  {
+    {
     m_LowerThreshold = NumericTraits<TInput>::NonpositiveMin();
     m_UpperThreshold = NumericTraits<TInput>::max();
     m_OutsideValue   = NumericTraits<TOutput>::Zero;
     m_InsideValue    = NumericTraits<TOutput>::max();
-  };
+    }
   ~BinaryThreshold() {};
 
   void SetLowerThreshold( const TInput & thresh )
-  { m_LowerThreshold = thresh; }
+    { m_LowerThreshold = thresh; }
   void SetUpperThreshold( const TInput & thresh )
-  { m_UpperThreshold = thresh; }
+    { m_UpperThreshold = thresh; }
   void SetInsideValue( const TOutput & value )
-  { m_InsideValue = value; }
+    { m_InsideValue = value; }
   void SetOutsideValue( const TOutput & value )
-  { m_OutsideValue = value; }
+    { m_OutsideValue = value; }
 
   bool operator!=( const BinaryThreshold & other ) const
-  {
+    {
     if( m_LowerThreshold != other.m_LowerThreshold ||
         m_UpperThreshold != other.m_UpperThreshold ||
         m_InsideValue    != other.m_InsideValue    ||
         m_OutsideValue   != other.m_OutsideValue  )
-        {
-        return true;
-        }
+      {
+      return true;
+      }
     return false;
-   }
+    }
   bool operator==( const BinaryThreshold & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
 
   inline TOutput operator()( const TInput & A )
-  {
+    {
     if ( m_LowerThreshold <= A && A <= m_UpperThreshold )
       {
       return m_InsideValue;
       }
     return m_OutsideValue;
-  }
-
+    }
 private:
   TInput      m_LowerThreshold;
   TInput      m_UpperThreshold;
@@ -122,9 +127,9 @@ public:
                                   Functor::BinaryThreshold< 
     typename TInputImage::PixelType, 
     typename TOutputImage::PixelType>   
-  >  Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  >                                   Superclass;
+  typedef SmartPointer<Self>          Pointer;
+  typedef SmartPointer<const Self>    ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

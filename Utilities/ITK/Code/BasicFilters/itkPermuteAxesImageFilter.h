@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPermuteAxesImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003-10-14 17:58:41 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2008-10-17 16:30:50 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkPermuteAxesImageFilter_h
-#define _itkPermuteAxesImageFilter_h
+#ifndef __itkPermuteAxesImageFilter_h
+#define __itkPermuteAxesImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkFixedArray.h"
@@ -49,10 +49,10 @@ class ITK_EXPORT PermuteAxesImageFilter :
 
 public:
   /** Standard class typedefs. */
-  typedef PermuteAxesImageFilter         Self;
+  typedef PermuteAxesImageFilter             Self;
   typedef ImageToImageFilter<TImage,TImage>  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                 Pointer;
+  typedef SmartPointer<const Self>           ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);  
@@ -65,15 +65,15 @@ public:
                       TImage::ImageDimension );
 
   /** Inherited types */
-  typedef typename Superclass::InputImagePointer InputImagePointer;
-  typedef typename Superclass::OutputImagePointer OutputImagePointer;
+  typedef typename Superclass::InputImagePointer        InputImagePointer;
+  typedef typename Superclass::OutputImagePointer       OutputImagePointer;
   typedef typename Superclass::OutputImageRegionType    OutputImageRegionType;
 
   /** PermuteOrderArray type. */
   typedef FixedArray<unsigned int, itkGetStaticConstMacro(ImageDimension)> PermuteOrderArrayType;
 
   /** Set the permutation order.  The elements of order must be
-   * a rearrangement of the numbers from 0 to ImageDimension - 1.*/
+   * a rearrangement of the numbers from 0 to ImageDimension - 1. */
   void SetOrder( const PermuteOrderArrayType& order );
 
   /** Get the permutation order. */
@@ -81,7 +81,6 @@ public:
 
   /** Get the inverse permutation order. */
   itkGetConstReferenceMacro( InverseOrder, PermuteOrderArrayType );
-
 
   /** PermuteAxesImageFilter produces an image which is a different
    * resolution and with a different pixel spacing than its input
@@ -134,4 +133,3 @@ private:
 #endif
   
 #endif
-

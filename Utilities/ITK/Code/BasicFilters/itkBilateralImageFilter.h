@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBilateralImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-24 16:03:16 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2008-10-07 17:31:02 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -71,10 +71,10 @@ class ITK_EXPORT BilateralImageFilter :
 {
 public:
   /** Standard class typedefs. */
-  typedef BilateralImageFilter Self;
+  typedef BilateralImageFilter                            Self;
   typedef ImageToImageFilter< TInputImage, TOutputImage > Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                              Pointer;
+  typedef SmartPointer<const Self>                        ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -91,11 +91,11 @@ public:
 
   /** Extract some information from the image types.  Dimensionality
    * of the two images is assumed to be the same. */
-  typedef typename TOutputImage::PixelType OutputPixelType;
-  typedef typename TOutputImage::InternalPixelType OutputInternalPixelType;
+  typedef typename TOutputImage::PixelType                  OutputPixelType;
+  typedef typename TOutputImage::InternalPixelType          OutputInternalPixelType;
   typedef typename NumericTraits<OutputPixelType>::RealType OutputPixelRealType;
-  typedef typename TInputImage::PixelType InputPixelType;
-  typedef typename TInputImage::InternalPixelType InputInternalPixelType;
+  typedef typename TInputImage::PixelType                   InputPixelType;
+  typedef typename TInputImage::InternalPixelType           InputInternalPixelType;
 
   /** Extract some information from the image types.  Dimensionality
    * of the two images is assumed to be the same. */
@@ -106,17 +106,16 @@ public:
   typedef FixedArray<double, itkGetStaticConstMacro(ImageDimension)> ArrayType;
 
   /** Neighborhood iterator types. */
-  typedef ConstNeighborhoodIterator<TInputImage> 
-  NeighborhoodIteratorType ;
+  typedef ConstNeighborhoodIterator<TInputImage> NeighborhoodIteratorType;
   
   /** Kernel typedef. */
   typedef
   Neighborhood<double, itkGetStaticConstMacro(ImageDimension)> KernelType;
-  typedef typename KernelType::SizeType SizeType;
+  typedef typename KernelType::SizeType                        SizeType;
   
   /** Kernel iterator. */
-  typedef typename KernelType::Iterator KernelIteratorType ;
-  typedef typename KernelType::ConstIterator KernelConstIteratorType ;
+  typedef typename KernelType::Iterator      KernelIteratorType;
+  typedef typename KernelType::ConstIterator KernelConstIteratorType;
 
   /** Gaussian image type */
   typedef
@@ -135,9 +134,9 @@ public:
   /** Convenience get/set methods for setting all domain parameters to the
    * same values.  */
   void SetDomainSigma(const double v)
-  {
+    {
     m_DomainSigma.Fill(v);
-  }
+    }
 
   /** Control automatic kernel size determination. When
    * automatic is "on", the kernel size is a function of the domain
@@ -172,7 +171,7 @@ protected:
   /** Constructor.  Default value for DomainSigma is 4. Default value
    * RangeSigma is 50. */
   BilateralImageFilter()
-  {
+    {
     m_Radius.Fill(1);
     m_AutomaticKernelSize = true;
     m_DomainSigma.Fill(4.0);
@@ -185,7 +184,7 @@ protected:
     m_RangeMu = 4.0;   // can be bigger then DomainMu since we only
                        // index into a single table
 
-  }
+    }
   virtual ~BilateralImageFilter() {}
   void PrintSelf(std::ostream& os, Indent indent) const;
 
@@ -232,9 +231,9 @@ private:
   bool       m_AutomaticKernelSize;
 
   /** Variables for the lookup table of range gaussian values */
-  unsigned long m_NumberOfRangeGaussianSamples;
-  double m_DynamicRange;
-  double m_DynamicRangeUsed;
+  unsigned long       m_NumberOfRangeGaussianSamples;
+  double              m_DynamicRange;
+  double              m_DynamicRangeUsed;
   std::vector<double> m_RangeGaussianTable;
 };
   

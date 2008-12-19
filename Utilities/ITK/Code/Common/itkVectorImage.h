@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorImage.h,v $
   Language:  C++
-  Date:      $Date: 2008-06-04 15:38:35 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2008-10-19 20:27:36 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -131,7 +131,8 @@ public:
   typedef ImportImageContainer<unsigned long, InternalPixelType> PixelContainer;
   
   /** Index typedef support. An index is used to access pixel values. */
-  typedef typename Superclass::IndexType  IndexType;
+  typedef typename Superclass::IndexType       IndexType;
+  typedef typename Superclass::IndexValueType  IndexValueType;
 
   /** Offset typedef support. An offset is used to access pixel values. */
   typedef typename Superclass::OffsetType OffsetType;
@@ -300,84 +301,6 @@ public:
   /** Get/Set the number of components each pixel has, ie the VectorLength */
   virtual unsigned int GetNumberOfComponentsPerPixel() const;
   virtual void SetNumberOfComponentsPerPixel( unsigned int  n );
-
-  /** \brief Get the continuous index from a physical point
-   *
-   * Returns true if the resulting index is within the image, false otherwise.
-   * \sa Transform */
-  template<class TCoordRep>
-  bool TransformPhysicalPointToContinuousIndex(
-              const Point<TCoordRep, VImageDimension>& point,
-              ContinuousIndex<TCoordRep, VImageDimension>& index   ) const
-    {
-    // Update the output index
-    for (unsigned int i = 0 ; i < VImageDimension ; i++)
-      {
-      index[i] = static_cast<TCoordRep>( (point[i]- this->m_Origin[i]) / this->m_Spacing[i] );
-      }
-
-    // Now, check to see if the index is within allowed bounds
-    const bool isInside =
-      this->GetLargestPossibleRegion().IsInside( index );
-
-    return isInside;
-    }
-
-  /** Get the index (discrete) from a physical point.
-   * Floating point index results are truncated to integers.
-   * Returns true if the resulting index is within the image, false otherwise
-   * \sa Transform */
-  template<class TCoordRep>
-  bool TransformPhysicalPointToIndex(
-            const Point<TCoordRep, VImageDimension>& point,
-            IndexType & index                                ) const
-    {
-    typedef typename IndexType::IndexValueType IndexValueType;
-
-    // Update the output index
-    for (unsigned int i = 0 ; i < VImageDimension ; i++)
-      {
-      index[i] = static_cast<IndexValueType>( (point[i]- this->m_Origin[i]) / this->m_Spacing[i] );
-      }
-
-    // Now, check to see if the index is within allowed bounds
-    const bool isInside =
-      this->GetLargestPossibleRegion().IsInside( index );
-
-    return isInside;
-    }
-
-  /** Get a physical point (in the space which
-   * the origin and spacing infomation comes from)
-   * from a continuous index (in the index space)
-   * \sa Transform */
-  template<class TCoordRep>
-  void TransformContinuousIndexToPhysicalPoint(
-            const ContinuousIndex<TCoordRep, VImageDimension>& index,
-            Point<TCoordRep, VImageDimension>& point        ) const
-    {
-    for (unsigned int i = 0 ; i < VImageDimension ; i++)
-      {
-      point[i] = static_cast<TCoordRep>( this->m_Spacing[i] * index[i] + this->m_Origin[i] );
-      }
-    }
-
-  /** Get a physical point (in the space which
-   * the origin and spacing infomation comes from)
-   * from a discrete index (in the index space)
-   *
-   * \sa Transform */
-  template<class TCoordRep>
-  void TransformIndexToPhysicalPoint(
-                      const IndexType & index,
-                      Point<TCoordRep, VImageDimension>& point ) const
-    {
-    for (unsigned int i = 0 ; i < VImageDimension ; i++)
-      {
-      point[i] = static_cast<TCoordRep>( this->m_Spacing[i] *
-        static_cast<double>( index[i] ) + this->m_Origin[i] );
-      }
-    }
 
 protected:
   VectorImage();

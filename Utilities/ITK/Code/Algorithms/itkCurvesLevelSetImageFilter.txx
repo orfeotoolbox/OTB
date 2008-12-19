@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCurvesLevelSetImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-03-03 13:58:41 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2008-10-23 16:15:24 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkCurvesLevelSetImageFilter_txx_
-#define __itkCurvesLevelSetImageFilter_txx_
+#ifndef __itkCurvesLevelSetImageFilter_txx
+#define __itkCurvesLevelSetImageFilter_txx
 
 #include "itkCurvesLevelSetImageFilter.h"
 
@@ -69,8 +69,5 @@ CurvesLevelSetImageFilter<TInputImage, TFeatureImage, TOutputType>
 }
 
 }// end namespace itk
-
-
-
 
 #endif

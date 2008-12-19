@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSubtractImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-27 11:36:41 $
-  Version:   $Revision: 1.27 $
+  Date:      $Date: 2008-10-18 16:11:14 $
+  Version:   $Revision: 1.28 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -42,15 +42,15 @@ public:
   Sub2() {}
   ~Sub2() {}
   bool operator!=( const Sub2 & ) const
-  {
+    {
     return false;
-  }
+    }
   bool operator==( const Sub2 & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
   inline TOutput operator()( const TInput1 & A, const TInput2 & B)
-  { return (TOutput)(A - B); }
+    { return (TOutput)(A - B); }
 }; 
 }
 
@@ -65,13 +65,14 @@ BinaryFunctorImageFilter<TInputImage1,TInputImage2,TOutputImage,
 {
 public:
   /** Standard class typedefs. */
-  typedef SubtractImageFilter  Self;
-  typedef BinaryFunctorImageFilter<TInputImage1,TInputImage2,TOutputImage, 
-                                   Function::Sub2< typename TInputImage1::PixelType, 
-                                                   typename TInputImage2::PixelType,
-                                                   typename TOutputImage::PixelType> >  Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SubtractImageFilter                            Self;
+  typedef BinaryFunctorImageFilter<
+    TInputImage1,TInputImage2,TOutputImage, 
+    Function::Sub2< typename TInputImage1::PixelType, 
+                    typename TInputImage2::PixelType,
+                    typename TOutputImage::PixelType> >  Superclass;
+  typedef SmartPointer<Self>                             Pointer;
+  typedef SmartPointer<const Self>                       ConstPointer;
 
 
   /** Method for creation through the object factory. */

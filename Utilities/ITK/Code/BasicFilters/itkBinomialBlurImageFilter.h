@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinomialBlurImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-16 13:35:01 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2008-10-09 15:31:37 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -40,10 +40,10 @@ class ITK_EXPORT BinomialBlurImageFilter :
 {
 public:
   /** Standard class typedefs. */
-  typedef BinomialBlurImageFilter Self;
+  typedef BinomialBlurImageFilter                       Self;
   typedef ImageToImageFilter<TInputImage,TOutputImage>  Superclass;
-  typedef SmartPointer<Self>        Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                            Pointer;
+  typedef SmartPointer<const Self>                      ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

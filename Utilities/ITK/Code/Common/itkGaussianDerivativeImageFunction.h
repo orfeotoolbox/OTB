@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGaussianDerivativeImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-30 20:56:08 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2008-10-17 01:08:45 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -51,8 +51,8 @@ public:
     TOutput > Superclass;
 
   /** Smart pointer typedef support. */
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>            Pointer;
+  typedef SmartPointer<const Self>      ConstPointer;
 
   /** Method for creation through the object factory.*/
   itkNewMacro(Self);
@@ -63,7 +63,7 @@ public:
   /** InputImageType typedef support.*/
   typedef TInputImage                                 InputImageType;
   typedef typename InputImageType::PixelType          InputPixelType;
-  typedef typename InputImageType::IndexType IndexType;
+  typedef typename InputImageType::IndexType          IndexType;
 
   /** Dimension of the underlying image. */
   itkStaticConstMacro(ImageDimension2, unsigned int,
@@ -86,8 +86,8 @@ public:
   typedef GaussianDerivativeSpatialFunction<TOutput,1>  GaussianDerivativeFunctionType;
   typedef typename GaussianDerivativeFunctionType::Pointer GaussianDerivativeFunctionPointer;
 
-  typedef GaussianSpatialFunction<TOutput,1>  GaussianFunctionType;
-  typedef typename GaussianFunctionType::Pointer GaussianFunctionPointer;
+  typedef GaussianSpatialFunction<TOutput,1>        GaussianFunctionType;
+  typedef typename GaussianFunctionType::Pointer    GaussianFunctionPointer;
 
   /** Point typedef support. */
   typedef Point<TOutput,itkGetStaticConstMacro(ImageDimension2)> PointType;
@@ -177,4 +177,3 @@ private:
 #endif
 
 #endif
-

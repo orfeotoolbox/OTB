@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshLineCell.h,v $
   Language:  C++
-  Date:      $Date: 2007-10-09 00:29:08 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2008-10-03 21:23:51 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -175,10 +175,11 @@ public:
     m_PointIds[1] = GetQEGeom()->GetDestination();
     }
 
-  /** QuadEdge internal flavor of cell API **/
+  /** QuadEdge internal flavor of cell API */
   virtual void InternalSetPointIds( PointIdInternalConstIterator first );
-  virtual void InternalSetPointIds( PointIdInternalConstIterator first,
-                            PointIdInternalConstIterator last );
+  virtual void InternalSetPointIds( 
+    PointIdInternalConstIterator first,
+    PointIdInternalConstIterator last );
 
   virtual PointIdInternalIterator InternalPointIdsBegin();
   virtual PointIdInternalIterator InternalPointIdsEnd();

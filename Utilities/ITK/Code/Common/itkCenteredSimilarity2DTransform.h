@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCenteredSimilarity2DTransform.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-30 20:56:07 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2008-10-07 12:04:59 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -144,14 +144,12 @@ public:
 
   /**
    * This method creates and returns a new Rigid2DTransform object
-   * which is the inverse of self.
-   **/
+   * which is the inverse of self. */
   void CloneInverseTo( Pointer & newinverse ) const;
 
   /**
    * This method creates and returns a new Rigid2DTransform object
-   * which has the same parameters.
-   **/
+   * which has the same parameters. */
   void CloneTo( Pointer & clone ) const;
 
 protected:
@@ -171,7 +169,7 @@ private:
 
 }  // namespace itk
 
-// Define instantiation macro for this template.
+/* Define instantiation macro for this template. */
 #define ITK_TEMPLATE_CenteredSimilarity2DTransform(_, EXPORT, x, y) namespace itk { \
   _(1(class EXPORT CenteredSimilarity2DTransform< ITK_TEMPLATE_1 x >)) \
   namespace Templates { typedef CenteredSimilarity2DTransform< ITK_TEMPLATE_1 x > \

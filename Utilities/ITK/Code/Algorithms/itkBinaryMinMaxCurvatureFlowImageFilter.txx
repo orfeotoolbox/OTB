@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryMinMaxCurvatureFlowImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:28 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2008-10-20 21:28:20 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -23,7 +23,7 @@
 namespace itk
 {
 
-/*
+/**
  * Constructor
  */
 template <class TInputImage, class TOutputImage>
@@ -42,7 +42,7 @@ BinaryMinMaxCurvatureFlowImageFilter<TInputImage, TOutputImage>
 }
 
 
-/*
+/**
  * Standard PrintSelf method.
  */
 template <class TInputImage, class TOutputImage>
@@ -55,7 +55,7 @@ BinaryMinMaxCurvatureFlowImageFilter<TInputImage, TOutputImage>
 }
 
 
-/*
+/**
  * Initialize the state of filter and equation before each iteration.
  */
 template <class TInputImage, class TOutputImage>
@@ -77,8 +77,7 @@ BinaryMinMaxCurvatureFlowImageFilter<TInputImage, TOutputImage>
 
   f->SetThreshold( m_Threshold );
 
-  this->Superclass::InitializeIteration();           
-
+  this->Superclass::InitializeIteration();
   
 }
 

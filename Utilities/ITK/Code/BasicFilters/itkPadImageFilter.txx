@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPadImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:54 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2008-10-17 16:30:48 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkPadImageFilter_txx
-#define _itkPadImageFilter_txx
+#ifndef __itkPadImageFilter_txx
+#define __itkPadImageFilter_txx
 
 #include "itkPadImageFilter.h"
 #include "itkImageRegionIterator.h"

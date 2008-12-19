@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExtractImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-05-12 15:59:24 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2008-10-14 19:20:34 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -65,10 +65,10 @@ class ITK_EXPORT ExtractImageFilter:
 {
 public:
   /** Standard class typedefs. */
-  typedef ExtractImageFilter         Self;
+  typedef ExtractImageFilter                            Self;
   typedef ImageToImageFilter<TInputImage,TOutputImage>  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                            Pointer;
+  typedef SmartPointer<const Self>                      ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);  
@@ -82,17 +82,17 @@ public:
 
   /** Typedef to describe the output and input image region types. */
   typedef typename TOutputImage::RegionType OutputImageRegionType;
-  typedef typename TInputImage::RegionType InputImageRegionType;
+  typedef typename TInputImage::RegionType  InputImageRegionType;
 
   /** Typedef to describe the type of pixel. */
   typedef typename TOutputImage::PixelType OutputImagePixelType;
-  typedef typename TInputImage::PixelType InputImagePixelType;
+  typedef typename TInputImage::PixelType  InputImagePixelType;
 
   /** Typedef to describe the output and input image index and size types. */
   typedef typename TOutputImage::IndexType OutputImageIndexType;
-  typedef typename TInputImage::IndexType InputImageIndexType;
-  typedef typename TOutputImage::SizeType OutputImageSizeType;
-  typedef typename TInputImage::SizeType InputImageSizeType;
+  typedef typename TInputImage::IndexType  InputImageIndexType;
+  typedef typename TOutputImage::SizeType  OutputImageSizeType;
+  typedef typename TInputImage::SizeType   InputImageSizeType;
 
   /** ImageDimension enumeration */
   itkStaticConstMacro(InputImageDimension, unsigned int,
@@ -158,7 +158,7 @@ protected:
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                             int threadId );
-  InputImageRegionType m_ExtractionRegion;
+  InputImageRegionType  m_ExtractionRegion;
   OutputImageRegionType m_OutputImageRegion;
 
 private:

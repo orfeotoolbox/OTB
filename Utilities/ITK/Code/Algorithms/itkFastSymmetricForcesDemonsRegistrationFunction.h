@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFastSymmetricForcesDemonsRegistrationFunction.h,v $
   Language:  C++
-  Date:      $Date: 2005-05-03 23:05:49 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2008-12-08 01:10:41 $
+  Version:   $Revision: 1.1.22.1 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -182,10 +182,8 @@ protected:
 private:
   FastSymmetricForcesDemonsRegistrationFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
   /** Cache fixed image information. */
-  SpacingType                     m_FixedImageSpacing;
-  PointType                       m_FixedImageOrigin;
   double                          m_Normalizer;
 
   /** Function to compute derivatives of the fixed image. */

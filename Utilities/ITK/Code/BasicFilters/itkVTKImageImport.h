@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVTKImageImport.h,v $
   Language:  C++
-  Date:      $Date: 2004-02-18 22:48:38 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2008-10-09 15:31:37 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -35,7 +35,8 @@
 namespace itk
 {
 
-/** \brief Connect the end of an VTK pipeline to an ITK image pipeline.
+/** \class VTKImageImport
+ * \brief Connect the end of an VTK pipeline to an ITK image pipeline.
  *
  * VTKImageImport can be used at the beginning of an ITK image pipeline to
  * connect with a VTK pipeline that ends with vtkImageExport.  Callbacks
@@ -56,9 +57,9 @@ class ITK_EXPORT VTKImageImport: public ImageSource<TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef VTKImageImport Self;
+  typedef VTKImageImport            Self;
   typedef ImageSource<TOutputImage> Superclass;
-  typedef SmartPointer<Self>  Pointer;
+  typedef SmartPointer<Self>        Pointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -67,11 +68,11 @@ public:
   itkTypeMacro(VTKImageImport, ImageSource);
 
   /** Convenient typedefs from the output image. */
-  typedef TOutputImage OutputImageType;
-  typedef typename OutputImageType::Pointer OutputImagePointer;
-  typedef typename OutputImageType::PixelType OutputPixelType;
-  typedef typename OutputImageType::SizeType OutputSizeType;
-  typedef typename OutputImageType::IndexType OutputIndexType;
+  typedef TOutputImage                         OutputImageType;
+  typedef typename OutputImageType::Pointer    OutputImagePointer;
+  typedef typename OutputImageType::PixelType  OutputPixelType;
+  typedef typename OutputImageType::SizeType   OutputSizeType;
+  typedef typename OutputImageType::IndexType  OutputIndexType;
   typedef typename OutputImageType::RegionType OutputRegionType;
 
   /** The output image dimension. */

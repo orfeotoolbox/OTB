@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkJoinSeriesImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-22 16:26:39 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2008-10-09 16:20:18 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -51,10 +51,10 @@ class ITK_EXPORT JoinSeriesImageFilter:
 {
 public:
   /** Standard class typedefs. */
-  typedef JoinSeriesImageFilter  Self;
+  typedef JoinSeriesImageFilter                         Self;
   typedef ImageToImageFilter<TInputImage,TOutputImage>  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                            Pointer;
+  typedef SmartPointer<const Self>                      ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -63,11 +63,11 @@ public:
   itkTypeMacro(JoinSeriesImageFilter, ImageToImageFilter);
 
   /** Compiler can't inherit typedef? */
-  typedef typename Superclass::InputImageType InputImageType;
+  typedef typename Superclass::InputImageType  InputImageType;
   typedef typename Superclass::OutputImageType OutputImageType;
-  typedef typename InputImageType::Pointer InputImagePointer;
-  typedef typename OutputImageType::Pointer OutputImagePointer;
-  typedef typename InputImageType::RegionType InputImageRegionType;
+  typedef typename InputImageType::Pointer     InputImagePointer;
+  typedef typename OutputImageType::Pointer    OutputImagePointer;
+  typedef typename InputImageType::RegionType  InputImageRegionType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
   /** Compiler can't inherit ImageDimension enumeration? */

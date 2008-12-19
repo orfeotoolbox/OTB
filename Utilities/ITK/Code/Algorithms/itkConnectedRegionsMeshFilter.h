@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConnectedRegionsMeshFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-01-01 21:43:34 $
-  Version:   $Revision: 1.25 $
+  Date:      $Date: 2008-10-23 16:15:23 $
+  Version:   $Revision: 1.26 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -41,7 +41,7 @@ template <class TInputMesh, class TOutputMesh>
 class ITK_EXPORT ConnectedRegionsMeshFilter 
 : public MeshToMeshFilter<TInputMesh, TOutputMesh> 
 {
-  public:
+public:
   /**
    * Standard class typedefs.
    */
@@ -237,15 +237,15 @@ private:
   ConnectedRegionsMeshFilter( const Self& ); //purposely not implemented
   void operator=( const Self& ); //purposely not implemented
 
-  int                        m_ExtractionMode;
-  InputMeshPointType         m_ClosestPoint;
-  std::vector<unsigned long> m_SeedList;
-  std::vector<unsigned long> m_RegionList;
-  std::vector<unsigned long> m_RegionSizes;
+  int                         m_ExtractionMode;
+  InputMeshPointType          m_ClosestPoint;
+  std::vector<unsigned long>  m_SeedList;
+  std::vector<unsigned long>  m_RegionList;
+  std::vector<unsigned long>  m_RegionSizes;
   
-  std::vector<long>          m_Visited;
-  unsigned long              m_NumberOfCellsInRegion;
-  unsigned long              m_RegionNumber;
+  std::vector<long>           m_Visited;
+  unsigned long               m_NumberOfCellsInRegion;
+  unsigned long               m_RegionNumber;
   std::vector<unsigned long> *m_Wave;
   std::vector<unsigned long> *m_Wave2;
   

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMinimumImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-27 11:36:41 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2008-10-16 19:33:41 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -43,15 +43,15 @@ public:
   Minimum() {}
   ~Minimum() {}
   bool operator!=( const Minimum & ) const
-  {
+    {
     return false;
-  }
+    }
   bool operator==( const Minimum & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
   inline TOutput operator()( const TInput1 & A, const TInput2 & B)
-  { return static_cast<TOutput>( (A < B)? A : B ); }
+    { return static_cast<TOutput>( (A < B)? A : B ); }
 }; 
 }
 
@@ -66,14 +66,15 @@ BinaryFunctorImageFilter<TInputImage1,TInputImage2,TOutputImage,
 {
 public:
   /** Standard class typedefs. */
-  typedef MinimumImageFilter  Self;
-  typedef BinaryFunctorImageFilter<TInputImage1,TInputImage2,TOutputImage, 
-                                   Function::Minimum< 
-    typename TInputImage1::PixelType, 
-    typename TInputImage2::PixelType,
-    typename TOutputImage::PixelType>   
-  > Superclass;
-  typedef SmartPointer<Self>   Pointer;
+  typedef MinimumImageFilter        Self;
+  typedef BinaryFunctorImageFilter<
+    TInputImage1,TInputImage2,TOutputImage, 
+    Function::Minimum< 
+      typename TInputImage1::PixelType, 
+      typename TInputImage2::PixelType,
+      typename TOutputImage::PixelType>   
+    >                               Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
   /** Method for creation through the object factory. */

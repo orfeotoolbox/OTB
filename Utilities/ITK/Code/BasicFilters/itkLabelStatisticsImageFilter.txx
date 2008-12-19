@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkLabelStatisticsImageFilter.txx,v $
 Language:  C++
-Date:      $Date: 2008-02-13 15:59:36 $
-Version:   $Revision: 1.18 $
+Date:      $Date: 2008-10-17 01:43:11 $
+Version:   $Revision: 1.21 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkLabelStatisticsImageFilter_txx
-#define _itkLabelStatisticsImageFilter_txx
+#ifndef __itkLabelStatisticsImageFilter_txx
+#define __itkLabelStatisticsImageFilter_txx
 #include "itkLabelStatisticsImageFilter.h"
 
 #include "itkImageRegionIterator.h"
@@ -44,7 +44,6 @@ LabelStatisticsImageFilter<TInputImage, TLabelImage>
   m_LowerBound = static_cast<RealType>( NumericTraits<PixelType>::NonpositiveMin() );
   m_UpperBound = static_cast<RealType>( NumericTraits<PixelType>::max() );
 }
-
 
 
 template<class TInputImage, class TLabelImage>
@@ -177,7 +176,7 @@ LabelStatisticsImageFilter<TInputImage, TLabelImage>
 
       //bounding box is min,max pairs
       int dimension = (*mapIt).second.m_BoundingBox.size() / 2;
-      for (int ii = 0; ii < (dimension * 2) ; ii += 2 ) 
+      for (int ii = 0; ii < (dimension * 2); ii += 2 ) 
          {
          if ((*mapIt).second.m_BoundingBox[ii] > (*threadIt).second.m_BoundingBox[ii])
            {
@@ -216,11 +215,11 @@ LabelStatisticsImageFilter<TInputImage, TLabelImage>
     if ((*mapIt).second.m_Count > 1)
       {
       // unbiased estimate of variance
-      (*mapIt).second.m_Variance
-        = ((*mapIt).second.m_SumOfSquares
-           - ((*mapIt).second.m_Sum*(*mapIt).second.m_Sum
-              / static_cast<RealType>((*mapIt).second.m_Count)))
-        / (static_cast<RealType>((*mapIt).second.m_Count) - 1);
+      LabelStatistics & ls = mapIt->second;
+      const RealType sumSquared  = ls.m_Sum * ls.m_Sum;
+      const RealType count       = static_cast< RealType >( ls.m_Count );
+
+      ls.m_Variance = ( ls.m_SumOfSquares - sumSquared / count ) / ( count - 1.0 );
       }
     else
       {
@@ -288,7 +287,7 @@ LabelStatisticsImageFilter<TInputImage, TLabelImage>
       }
 
     // bounding box is min,max pairs
-    for (unsigned int i = 0; i < ( 2 * it.GetImageDimension()) ; i+=2 ) 
+    for( unsigned int i = 0; i < ( 2 * it.GetImageDimension()); i += 2 ) 
       {
       typename ImageRegionConstIteratorWithIndex<TInputImage>::IndexType index = it.GetIndex();
       if ((*mapIt).second.m_BoundingBox[i] > index[i/2])

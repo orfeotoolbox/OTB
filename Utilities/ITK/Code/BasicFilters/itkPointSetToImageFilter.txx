@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkPointSetToImageFilter.txx,v $
 Language:  C++
-Date:      $Date: 2008-07-07 22:58:44 $
-Version:   $Revision: 1.12 $
+Date:      $Date: 2008-12-08 01:10:42 $
+Version:   $Revision: 1.13.2.1 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkPointSetToImageFilter_txx
-#define _itkPointSetToImageFilter_txx
+#ifndef __itkPointSetToImageFilter_txx
+#define __itkPointSetToImageFilter_txx
 
 #include "itkPointSetToImageFilter.h"
 #include <itkImageRegionIteratorWithIndex.h>
@@ -31,8 +31,9 @@ PointSetToImageFilter<TInputPointSet,TOutputImage>
 {
   this->SetNumberOfRequiredInputs(1);
   m_Size.Fill(0);
-  m_Spacing.Fill(1.0);
   m_Origin.Fill(0.0);
+  m_Spacing.Fill(1.0);
+  m_Direction.SetIdentity();
   m_InsideValue = NumericTraits< ValueType >::OneValue();
   m_OutsideValue = NumericTraits< ValueType >::ZeroValue();
 }
@@ -67,8 +68,6 @@ PointSetToImageFilter<TInputPointSet,TOutputImage>
   this->ProcessObject::SetNthInput(index, 
                                    const_cast< TInputPointSet *>( pointset ) );
 }
-
-
 
 /** Get the input point-set */
 template <class TInputPointSet, class TOutputImage>
@@ -230,6 +229,7 @@ PointSetToImageFilter<TInputPointSet,TOutputImage>
     }
 
   OutputImage->SetOrigin(origin);   //   and origin
+  OutputImage->SetDirection(m_Direction);   //   and Direction
   OutputImage->Allocate();   // allocate the image   
   OutputImage->FillBuffer(m_OutsideValue);
 
@@ -262,6 +262,7 @@ PointSetToImageFilter<TInputPointSet,TOutputImage>
   os << indent << "Size : " << m_Size << std::endl;
   os << indent << "Origin: " << m_Origin << std::endl;
   os << indent << "Spacing: " << m_Spacing << std::endl;
+  os << indent << "Direction: " << m_Direction << std::endl;
   os << indent << "Inside Value : "
      << static_cast<typename NumericTraits<ValueType>::PrintType>(m_InsideValue)
      << std::endl;
@@ -270,9 +271,6 @@ PointSetToImageFilter<TInputPointSet,TOutputImage>
      << std::endl;
 
 }
-
-
-
 } // end namespace itk
 
 #endif

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBSplineInterpolateImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2008-01-04 12:56:30 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2008-12-08 01:10:42 $
+  Version:   $Revision: 1.20.2.1 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -83,10 +83,10 @@ class ITK_EXPORT BSplineInterpolateImageFunction :
 {
 public:
   /** Standard class typedefs. */
-  typedef BSplineInterpolateImageFunction       Self;
+  typedef BSplineInterpolateImageFunction                 Self;
   typedef InterpolateImageFunction<TImageType,TCoordRep>  Superclass;
-  typedef SmartPointer<Self>                    Pointer;
-  typedef SmartPointer<const Self>              ConstPointer;
+  typedef SmartPointer<Self>                              Pointer;
+  typedef SmartPointer<const Self>                        ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(BSplineInterpolateImageFunction, InterpolateImageFunction);
@@ -120,11 +120,12 @@ public:
   typedef TCoefficientType CoefficientDataType;
   typedef Image<CoefficientDataType, 
                      itkGetStaticConstMacro(ImageDimension)
-    > CoefficientImageType;
+    >                      CoefficientImageType;
 
   /** Define filter for calculating the BSpline coefficients */
   typedef BSplineDecompositionImageFilter<TImageType, CoefficientImageType> 
   CoefficientFilter;
+
   typedef typename CoefficientFilter::Pointer CoefficientFilterPointer;
 
   /** Evaluate the function at a ContinuousIndex position.
@@ -144,11 +145,11 @@ public:
     > CovariantVectorType;
 
   CovariantVectorType EvaluateDerivative( const PointType & point ) const
-  {    
+    {
     ContinuousIndexType index;
     this->GetInputImage()->TransformPhysicalPointToContinuousIndex( point, index );
     return ( this->EvaluateDerivativeAtContinuousIndex( index ) );
-  } 
+    }
 
   CovariantVectorType EvaluateDerivativeAtContinuousIndex( 
     const ContinuousIndexType & x ) const;
@@ -157,7 +158,7 @@ public:
   /** Get/Sets the Spline Order, supports 0th - 5th order splines. The default
    *  is a 3rd order spline. */
   void SetSplineOrder(unsigned int SplineOrder);
-  itkGetMacro(SplineOrder, int);
+  itkGetConstMacro(SplineOrder, int);
 
 
   /** Set the input image.  This must be set by the user. */
@@ -167,11 +168,14 @@ public:
   /** The UseImageDirection flag determines whether image derivatives are
    * computed with respect to the image grid or with respect to the physical
    * space. When this flag is ON the derivatives are computed with respect to
-   * the coodinate system of physical space. The difference is whether we take
+   * the coordinate system of physical space. The difference is whether we take
    * into account the image Direction or not. The flag ON will take into
    * account the image direction and will result in an extra matrix
    * multiplication compared to the amount of computation performed when the
-   * flag is OFF.  This flag is OFF by default.*/
+   * flag is OFF.
+   * The default value of this flag is the same as the CMAKE option
+   * ITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE (i.e ON by default when ITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE is ON,
+   * and  OFF by default when ITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE is OFF).*/
   itkSetMacro( UseImageDirection, bool );
   itkGetMacro( UseImageDirection, bool );
   itkBooleanMacro( UseImageDirection );

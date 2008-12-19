@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRelabelComponentImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-08-01 19:16:18 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2008-10-17 16:30:52 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkRelabelComponentImageFilter_txx
-#define _itkRelabelComponentImageFilter_txx
+#ifndef __itkRelabelComponentImageFilter_txx
+#define __itkRelabelComponentImageFilter_txx
 
 #include "itkRelabelComponentImageFilter.h"
 #include "itkImageRegionIterator.h"

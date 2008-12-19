@@ -1,16 +1,16 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  ModUle:    $RCSfile: itkSparseFieldLayer.txx,v $
+  Module:    $RCSfile: itkSparseFieldLayer.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:56 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2008-10-18 16:11:13 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -71,17 +71,17 @@ SparseFieldLayer<TNodeType>
   
   for (int i=0;i<num;i++) 
     {
-      unsigned int j=0;
-      RegionType region;
-      region.first=position;
-      while ((j<regionsize)&&(position!=last)) 
-        {
-          j++;
-          ++position;
-        }
-      region.last=position;
-      regionlist.push_back(region);
-   }
+    unsigned int j=0;
+    RegionType region;
+    region.first=position;
+    while ((j<regionsize)&&(position!=last)) 
+      {
+      j++;
+      ++position;
+      }
+    region.last=position;
+    regionlist.push_back(region);
+    }
   
   return regionlist;
 }

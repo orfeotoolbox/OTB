@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTernaryAddImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-27 11:36:41 $
-  Version:   $Revision: 1.22 $
+  Date:      $Date: 2008-10-18 16:11:14 $
+  Version:   $Revision: 1.23 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -40,17 +40,17 @@ public:
   Add3() {}
   ~Add3() {}
   bool operator!=( const Add3 & ) const
-  {
+    {
     return false;
-  }
+    }
   bool operator==( const Add3 & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
   inline TOutput operator()( const TInput1 & A, 
                              const TInput2 & B,
                              const TInput3 & C)
-  { return (TOutput)(A + B + C); }
+    { return (TOutput)(A + B + C); }
 }; 
 }
 
@@ -67,15 +67,16 @@ TernaryFunctorImageFilter<TInputImage1,TInputImage2,
 {
 public:
   /** Standard class typedefs. */
-  typedef TernaryAddImageFilter  Self;
-  typedef TernaryFunctorImageFilter<TInputImage1,TInputImage2,
-                                    TInputImage3,TOutputImage, 
-                                    Function::Add3< typename TInputImage1::PixelType,
-                                                    typename TInputImage2::PixelType,
-                                                    typename TInputImage3::PixelType,
-                                                    typename TOutputImage::PixelType>   >  Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef TernaryAddImageFilter                            Self;
+  typedef TernaryFunctorImageFilter<
+    TInputImage1,TInputImage2,
+    TInputImage3,TOutputImage, 
+    Function::Add3< typename TInputImage1::PixelType,
+                    typename TInputImage2::PixelType,
+                    typename TInputImage3::PixelType,
+                    typename TOutputImage::PixelType>   >  Superclass;
+  typedef SmartPointer<Self>                               Pointer;
+  typedef SmartPointer<const Self>                         ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBayesianClassifierImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-01-27 18:29:23 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2008-12-08 01:10:41 $
+  Version:   $Revision: 1.6.6.1 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -126,8 +126,9 @@ BayesianClassifierImageFilter<TInputVectorImage, TLabelsType,
   const InputImageType * membershipImage = this->GetInput();
 
   this->GetOutput()->SetRegions( membershipImage->GetBufferedRegion() );
-  this->GetOutput()->SetSpacing( membershipImage->GetSpacing() );
   this->GetOutput()->SetOrigin(  membershipImage->GetOrigin() );
+  this->GetOutput()->SetSpacing( membershipImage->GetSpacing() );
+  this->GetOutput()->SetDirection( membershipImage->GetDirection() );
   this->GetOutput()->Allocate();
 
   // The first output is the Image of Labels, 
@@ -136,8 +137,9 @@ BayesianClassifierImageFilter<TInputVectorImage, TLabelsType,
   // be 2.
 
   this->GetPosteriorImage()->SetRegions( membershipImage->GetBufferedRegion() );
-  this->GetPosteriorImage()->SetSpacing( membershipImage->GetSpacing() );
   this->GetPosteriorImage()->SetOrigin(  membershipImage->GetOrigin() );
+  this->GetPosteriorImage()->SetSpacing( membershipImage->GetSpacing() );
+  this->GetPosteriorImage()->SetDirection( membershipImage->GetDirection() );
   this->GetPosteriorImage()->SetVectorLength( this->GetInput()->GetVectorLength() );
   this->GetPosteriorImage()->Allocate();
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkChangeInformationImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2007-11-21 14:06:50 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2008-10-13 18:54:26 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkChangeInformationImageFilter_txx
-#define _itkChangeInformationImageFilter_txx
+#ifndef __itkChangeInformationImageFilter_txx
+#define __itkChangeInformationImageFilter_txx
 
 #include "itkChangeInformationImageFilter.h"
 #include "itkImageRegionIterator.h"
@@ -146,7 +146,7 @@ ChangeInformationImageFilter<TInputImage>
     for (i = 0; i < ImageDimension; i++)
       {
       centerIndex[i] = static_cast<double>((outputSize[i]-1)/2.0);
-      }    
+      }
     output->TransformContinuousIndexToPhysicalPoint(centerIndex, centerPoint);
     for (i = 0; i < ImageDimension; i++)
       {
@@ -254,7 +254,7 @@ ChangeInformationImageFilter<TInputImage>
     } 
   os << "]" << std::endl;
 
-  os << indent << "OutputDirection:" << std::endl;;
+  os << indent << "OutputDirection:" << std::endl;
   os << m_OutputDirection << std::endl;
 
   os << indent << "OutputOffset: [";

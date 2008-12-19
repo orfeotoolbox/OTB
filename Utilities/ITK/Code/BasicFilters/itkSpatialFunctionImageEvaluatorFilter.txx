@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSpatialFunctionImageEvaluatorFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:57 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2008-10-18 16:11:13 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -62,7 +62,7 @@ SpatialFunctionImageEvaluatorFilter< TSpatialFunction, TInputImage, TOutputImage
   typename TSpatialFunction::InputType evalPoint;
 
   // Walk the output image, evaluating the spatial function at each pixel
-  for ( ; !outIt.IsAtEnd(); ++outIt)
+  for (; !outIt.IsAtEnd(); ++outIt)
     {
     typename TOutputImage::IndexType index = outIt.GetIndex();
     outputPtr->TransformIndexToPhysicalPoint(index, evalPoint );

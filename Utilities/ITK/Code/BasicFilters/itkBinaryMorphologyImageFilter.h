@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryMorphologyImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-12 09:20:29 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2008-10-09 15:31:36 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -16,6 +16,16 @@
 =========================================================================*/
 #ifndef __itkBinaryMorphologyImageFilter_h
 #define __itkBinaryMorphologyImageFilter_h
+
+
+// First make sure that the configuration is available.
+// This line can be removed once the optimized versions
+// gets integrated into the main directories.
+#include "itkConfigure.h"
+
+#ifdef ITK_USE_CONSOLIDATED_MORPHOLOGY
+#include "itkOptBinaryMorphologyImageFilter.h"
+#else
 
 #include <vector>
 #include <queue>
@@ -154,15 +164,7 @@ public:
       (Concept::SameDimension<itkGetStaticConstMacro(InputImageDimension),
                               itkGetStaticConstMacro(OutputImageDimension)>));
 
-// Cannot get this to work with gcc compiler
-#if 0
-  /** Input and structuring element must be the same dimnesion. */
-  itkConceptMacro(KernelDimensionCheck,
-      (Concept::SameDimension<itkGetStaticConstMacro(KernelDimension),
-                              itkGetStaticConstMacro(InputImageDimension)>));
-#endif
-
-  /** Set kernel (structuring element).*/
+  /** Set kernel (structuring element). */
   void SetKernel( const KernelType& kernel );
 
   /** Get the kernel (structuring element). */
@@ -170,7 +172,7 @@ public:
 
   /** Set the value in the image to consider as "foreground". Defaults to
    * maximum value of PixelType. Subclasses may alias this to
-   * DilateValue or ErodeValue.*/
+   * DilateValue or ErodeValue. */
   itkSetMacro(ForegroundValue, InputPixelType);
 
   /** Get the value in the image considered as "foreground". Defaults to
@@ -189,8 +191,7 @@ public:
    */
   itkGetConstMacro(BackgroundValue, OutputPixelType);
   
-  /** Get/Set the borders as foreground (true) or background (false).
-   */
+  /** Get/Set the borders as foreground (true) or background (false). */
   itkSetMacro(BoundaryToForeground, bool);
   itkGetConstReferenceMacro(BoundaryToForeground, bool);
   itkBooleanMacro(BoundaryToForeground);
@@ -284,6 +285,8 @@ private:
 
 #ifndef ITK_MANUAL_INSTANTIATION
 #include "itkBinaryMorphologyImageFilter.txx"
+#endif
+
 #endif
 
 #endif

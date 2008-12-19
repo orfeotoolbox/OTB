@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDilateObjectMorphologyImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-27 17:01:06 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2008-10-14 19:20:33 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -68,10 +68,10 @@ public:
   typedef typename KernelType::ConstIterator KernelIteratorType;
 
   /** duplicates from base class to avoid compiler warnings */
-  typedef NeighborhoodIterator<TOutputImage> OutputNeighborhoodIteratorType ;
+  typedef NeighborhoodIterator<TOutputImage> OutputNeighborhoodIteratorType;
 
   typedef typename Superclass::DefaultBoundaryConditionType 
-                                             DefaultBoundaryConditionType ;
+                                             DefaultBoundaryConditionType;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
@@ -101,7 +101,7 @@ private:
   DefaultBoundaryConditionType m_DilateBoundaryCondition;
 
 
-} ; // end of class
+}; // end of class
 
 } // end namespace itk
   
@@ -110,5 +110,3 @@ private:
 #endif
 
 #endif
-
-

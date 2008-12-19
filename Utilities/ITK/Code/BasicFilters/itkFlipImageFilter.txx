@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFlipImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2007-11-21 20:12:14 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2008-10-07 17:31:02 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkFlipImageFilter_txx
-#define _itkFlipImageFilter_txx
+#ifndef __itkFlipImageFilter_txx
+#define __itkFlipImageFilter_txx
 
 #include "itkFlipImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"

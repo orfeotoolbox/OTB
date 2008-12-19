@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageRandomIteratorWithIndex.h,v $
   Language:  C++
-  Date:      $Date: 2005-08-14 02:52:17 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2008-10-18 21:13:25 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -65,8 +65,8 @@ class ITK_EXPORT ImageRandomIteratorWithIndex : public ImageRandomConstIteratorW
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageRandomIteratorWithIndex Self;
-  typedef ImageRandomConstIteratorWithIndex<TImage>  Superclass;
+  typedef ImageRandomIteratorWithIndex                Self;
+  typedef ImageRandomConstIteratorWithIndex<TImage>   Superclass;
   
    /** Types inherited from the Superclass */
   typedef typename Superclass::IndexType              IndexType;
@@ -125,6 +125,3 @@ protected:
 #endif
 
 #endif 
-
-
-

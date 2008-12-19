@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNeighborhoodConnectedImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:52 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2008-10-16 19:33:45 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkNeighborhoodConnectedImageFilter_txx_
-#define __itkNeighborhoodConnectedImageFilter_txx_
+#ifndef __itkNeighborhoodConnectedImageFilter_txx
+#define __itkNeighborhoodConnectedImageFilter_txx
 
 #include "itkNeighborhoodConnectedImageFilter.h"
 #include "itkNeighborhoodBinaryThresholdImageFunction.h"

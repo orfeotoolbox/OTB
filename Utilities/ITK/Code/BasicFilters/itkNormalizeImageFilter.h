@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNormalizeImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-02-13 10:21:01 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2008-10-16 19:33:45 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -43,10 +43,10 @@ class ITK_EXPORT NormalizeImageFilter :
 {
 public:
   /** Standard Self typedef */
-  typedef NormalizeImageFilter Self;
-  typedef ImageToImageFilter<TInputImage,TOutputImage>  Superclass;
-  typedef SmartPointer<Self>        Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef NormalizeImageFilter                         Self;
+  typedef ImageToImageFilter<TInputImage,TOutputImage> Superclass;
+  typedef SmartPointer<Self>                           Pointer;
+  typedef SmartPointer<const Self>                     ConstPointer;
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);  
@@ -55,7 +55,7 @@ public:
   itkTypeMacro(NormalizeImageFilter, ImageToImageFilter);
   
   /** Image related typedefs. */
-  typedef typename TInputImage::Pointer InputImagePointer;
+  typedef typename TInputImage::Pointer  InputImagePointer;
   typedef typename TOutputImage::Pointer OutputImagePointer;
 
   /** NormalizeImageFilter must call modified on its internal filters */
@@ -74,9 +74,9 @@ private:
   NormalizeImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  typename StatisticsImageFilter<TInputImage>::Pointer m_StatisticsFilter;
+  typename StatisticsImageFilter<TInputImage>::Pointer              m_StatisticsFilter;
   typename ShiftScaleImageFilter<TInputImage,TOutputImage>::Pointer m_ShiftScaleFilter;
-} ; // end of class
+}; // end of class
 
 } // end namespace itk
   

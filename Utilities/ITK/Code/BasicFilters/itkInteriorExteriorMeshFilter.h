@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkInteriorExteriorMeshFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005-06-13 16:31:49 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2008-10-16 16:45:10 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -49,14 +49,14 @@ class ITK_EXPORT InteriorExteriorMeshFilter :
 {
 public:
   /** Standard class typedefs. */
-  typedef InteriorExteriorMeshFilter  Self;
+  typedef InteriorExteriorMeshFilter               Self;
   typedef MeshToMeshFilter<TInputMesh,TOutputMesh> Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                       Pointer;
+  typedef SmartPointer<const Self>                 ConstPointer;
   
-  typedef TInputMesh InputMeshType;
-  typedef TOutputMesh OutputMeshType;
-  typedef typename InputMeshType::Pointer InputMeshPointer;
+  typedef TInputMesh                       InputMeshType;
+  typedef TOutputMesh                      OutputMeshType;
+  typedef typename InputMeshType::Pointer  InputMeshPointer;
   typedef typename OutputMeshType::Pointer OutputMeshPointer;
   
   /** Type for representing coordinates. */

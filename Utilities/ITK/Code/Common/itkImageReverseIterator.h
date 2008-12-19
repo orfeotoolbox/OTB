@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageReverseIterator.h,v $
   Language:  C++
-  Date:      $Date: 2005-08-14 02:53:07 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2008-10-18 21:13:25 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -64,8 +64,8 @@ class ITK_EXPORT ImageReverseIterator : public ImageRegionReverseConstIterator<T
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageReverseIterator Self;
-  typedef ImageRegionReverseConstIterator<TImage>  Superclass;
+  typedef ImageReverseIterator                        Self;
+  typedef ImageRegionReverseConstIterator<TImage>     Superclass;
   
    /** Types inherited from the Superclass */
   typedef typename Superclass::IndexType              IndexType;
@@ -125,6 +125,3 @@ protected:
 #endif
 
 #endif 
-
-
-

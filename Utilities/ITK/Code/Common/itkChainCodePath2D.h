@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkChainCodePath2D.h,v $
   Language:  C++
-  Date:      $Date: 2007-12-23 17:59:28 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2008-10-07 12:05:28 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -76,7 +76,7 @@ public:
   typedef Index<2>    IndexType;
 
   /** ChainCodeType is a usless relic of the parent class */
-  typedef Superclass::ChainCodeType ChainCodeType;
+  typedef Superclass::ChainCodeType     ChainCodeType;
   typedef Superclass::ChainCodeSizeType ChainCodeSizeType;
 
   /** ChainCodePath2D stores its data as a Freeman-encoded chain code */

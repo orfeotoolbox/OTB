@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryMaskToNarrowBandPointSetFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-03-19 04:36:56 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2008-10-07 17:31:02 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkBinaryMaskToNarrowBandPointSetFilter_txx
-#define _itkBinaryMaskToNarrowBandPointSetFilter_txx
+#ifndef __itkBinaryMaskToNarrowBandPointSetFilter_txx
+#define __itkBinaryMaskToNarrowBandPointSetFilter_txx
 
 
 #include "itkBinaryMaskToNarrowBandPointSetFilter.h"
@@ -58,8 +58,6 @@ BinaryMaskToNarrowBandPointSetFilter<TInputImage,TOutputMesh>
 
 }
 
-
-
 /**
  *
  */
@@ -94,9 +92,6 @@ BinaryMaskToNarrowBandPointSetFilter<TInputImage,TOutputMesh>
 {
 }
 
-
-
-
 /**
  *
  */
@@ -112,9 +107,6 @@ BinaryMaskToNarrowBandPointSetFilter<TInputImage,TOutputMesh>
             const_cast< InputImageType * >( inputImage ) );
 
 }
-
-
-
 
 /**
  *

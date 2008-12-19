@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDefaultPixelAccessor.h,v $
   Language:  C++
-  Date:      $Date: 2007-04-03 16:59:41 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2008-10-07 12:05:28 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -57,13 +57,13 @@ public:
   DefaultPixelAccessor() {}
   virtual ~DefaultPixelAccessor() {}
 
- /** External typedef. It defines the external aspect
+  /** External typedef. It defines the external aspect
    * that this class will exhibit. */
-  typedef TType ExternalType ;
+  typedef TType ExternalType;
 
   /** Internal typedef. It defines the internal real
    * representation of data. */
-  typedef TType InternalType ;
+  typedef TType InternalType;
 
   /** Set the pixel. */
   inline void Set(TType & output, const TType & input) const
@@ -81,7 +81,5 @@ public:
 
   
 } // end namespace itk
-  
 
 #endif
-

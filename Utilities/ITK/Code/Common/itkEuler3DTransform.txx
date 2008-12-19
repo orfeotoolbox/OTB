@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkEuler3DTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2007-12-23 17:59:28 $
-  Version:   $Revision: 1.23 $
+  Date:      $Date: 2008-10-13 15:36:31 $
+  Version:   $Revision: 1.24 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkEuler3DTransform_txx
-#define _itkEuler3DTransform_txx
+#ifndef __itkEuler3DTransform_txx
+#define __itkEuler3DTransform_txx
 
 #include "itkEuler3DTransform.h"
 
@@ -59,6 +59,17 @@ Euler3DTransform<TScalarType>
 {
   m_ComputeZYX = false;
   m_AngleX = m_AngleY = m_AngleZ = NumericTraits<ScalarType>::Zero;
+}
+
+// Set Angles
+template <class TScalarType>
+void
+Euler3DTransform<TScalarType>
+::SetVarRotation(ScalarType angleX, ScalarType angleY, ScalarType angleZ)
+{
+  this->m_AngleX = angleX;
+  this->m_AngleY = angleY;
+  this->m_AngleZ = angleZ;
 }
 
 // Set Parameters

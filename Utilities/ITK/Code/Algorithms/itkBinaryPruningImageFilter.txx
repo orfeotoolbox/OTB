@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryPruningImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2004-10-18 21:29:12 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2008-10-20 21:28:20 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkBinaryPruningImageFilter_txx
-#define _itkBinaryPruningImageFilter_txx
+#ifndef __itkBinaryPruningImageFilter_txx
+#define __itkBinaryPruningImageFilter_txx
 
 #include <iostream>
 
@@ -94,7 +94,7 @@ BinaryPruningImageFilter<TInputImage,TOutputImage>
       ++it;
       ++ot;
       }
-  itkDebugMacro(<< "PrepareData End");    
+  itkDebugMacro(<< "PrepareData End");
 }
 
 /**
@@ -185,8 +185,6 @@ BinaryPruningImageFilter<TInputImage,TOutputImage>
   os << indent << "Iteration: " << m_Iteration << std::endl;
 
 }
-
-
 
 } // end namespace itk
 

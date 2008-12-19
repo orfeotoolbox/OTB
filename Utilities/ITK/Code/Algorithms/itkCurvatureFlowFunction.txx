@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCurvatureFlowFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2008-03-03 13:58:41 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2008-10-23 16:26:55 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,15 +14,15 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkCurvatureFlowFunction_txx_
-#define __itkCurvatureFlowFunction_txx_
+#ifndef __itkCurvatureFlowFunction_txx
+#define __itkCurvatureFlowFunction_txx
 #include "itkCurvatureFlowFunction.h"
 
 #include "vnl/vnl_math.h"
 
 namespace itk {
 
-/*
+/**
  * Constructor
  */
 template<class TImage>
@@ -44,7 +44,7 @@ CurvatureFlowFunction<TImage>
 }
 
 
-/*
+/**
  * Compute the global time step
  */
 template<class TImage>
@@ -57,7 +57,7 @@ CurvatureFlowFunction<TImage>
 
 
   // \todo compute timestep based on CFL condition
-/*
+#if 0
   GlobalDataStruct *globalData = (GlobalDataStruct *)gd;
   TimeStepType dt;
 
@@ -71,12 +71,11 @@ CurvatureFlowFunction<TImage>
     }
 
   return dt;
-*/
-
+#endif
 }
 
 
-/*
+/**
  * Update the solution at pixels which lies on the data boundary.
  */
 template<class TImage>
@@ -166,11 +165,11 @@ CurvatureFlowFunction<TImage>
   update /= magnitudeSqr;
 
   // \todo compute timestep based on CFL condition
-/*
+#if 0
   GlobalDataStruct *globalData = (GlobalDataStruct *)gd;
   globalData->m_MaxChange =
     vnl_math_max( globalData->m_MaxChange, vnl_math_abs(update) );
-*/
+#endif
   return update;
 
 }

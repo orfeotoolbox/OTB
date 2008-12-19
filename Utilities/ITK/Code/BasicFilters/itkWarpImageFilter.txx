@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWarpImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-07-04 17:49:23 $
-  Version:   $Revision: 1.26 $
+  Date:      $Date: 2008-10-07 17:31:02 $
+  Version:   $Revision: 1.27 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -63,7 +63,7 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
 
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "OutputSpacing: " << m_OutputSpacing << std::endl;;
+  os << indent << "OutputSpacing: " << m_OutputSpacing << std::endl;
   os << indent << "OutputOrigin: " << m_OutputOrigin << std::endl;
   os << indent << "OutputDirection: " << m_OutputDirection << std::endl;
   os << indent << "EdgePaddingValue: "
@@ -102,8 +102,6 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
   PointType p(origin);
   this->SetOutputOrigin(p);
 }
-
-
 
 /**
  * Set deformation field as Inputs[1] for this ProcessObject.
@@ -292,4 +290,3 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
 } // end namespace itk
 
 #endif
- 

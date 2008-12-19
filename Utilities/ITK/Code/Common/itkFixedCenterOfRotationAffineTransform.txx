@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFixedCenterOfRotationAffineTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2005-03-09 16:46:13 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2008-10-16 17:27:11 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkFixedCenterOfRotationAffineTransform_txx
-#define _itkFixedCenterOfRotationAffineTransform_txx
+#ifndef __itkFixedCenterOfRotationAffineTransform_txx
+#define __itkFixedCenterOfRotationAffineTransform_txx
 
 #include "itkNumericTraits.h"
 #include "itkFixedCenterOfRotationAffineTransform.h"

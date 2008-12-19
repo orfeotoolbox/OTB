@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkSimplexMeshToTriangleMeshFilter.txx,v $
 Language:  C++
-Date:      $Date: 2004-11-08 13:33:19 $
-Version:   $Revision: 1.5 $
+Date:      $Date: 2008-10-17 20:49:56 $
+Version:   $Revision: 1.6 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __SimplexMeshToTriangleMeshFilter_txx
-#define __SimplexMeshToTriangleMeshFilter_txx
+#ifndef __itkSimplexMeshToTriangleMeshFilter_txx
+#define __itkSimplexMeshToTriangleMeshFilter_txx
 
 #include "itkSimplexMeshToTriangleMeshFilter.h"
 
@@ -129,7 +129,7 @@ SimplexMeshToTriangleMeshFilter<TInputMesh, TOutputMesh>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
-  os << indent << "ToDo: implement PrinSelf!!!";    
+  os << indent << "ToDo: implement PrinSelf!!!";
 }
 
 

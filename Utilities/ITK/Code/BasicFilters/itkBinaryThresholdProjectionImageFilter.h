@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryThresholdProjectionImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-02-08 04:52:21 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2008-10-09 15:31:37 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -122,7 +122,7 @@ public:
   typedef typename Superclass::AccumulatorType AccumulatorType;
 
   /** Set/Get the value in the image to consider as "foreground". Defaults to
-   * maximum value of PixelType .*/
+   * maximum value of PixelType. */
   itkSetMacro(ForegroundValue, InputPixelType);
   itkGetConstMacro(ForegroundValue, InputPixelType);
 

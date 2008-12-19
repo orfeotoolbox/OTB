@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBilateralImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-07-24 20:49:07 $
-  Version:   $Revision: 1.28 $
+  Date:      $Date: 2008-10-07 17:31:02 $
+  Version:   $Revision: 1.29 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkBilateralImageFilter_txx
-#define _itkBilateralImageFilter_txx
+#ifndef __itkBilateralImageFilter_txx
+#define __itkBilateralImageFilter_txx
 
 #include "itkBilateralImageFilter.h"
 #include "itkImageRegionIterator.h"

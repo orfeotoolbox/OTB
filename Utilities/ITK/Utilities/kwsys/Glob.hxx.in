@@ -57,6 +57,16 @@ public:
   void SetRecurse(bool i) { this->Recurse = i; }
   bool GetRecurse() { return this->Recurse; }
 
+  //! Set recurse through symlinks to true if recursion should traverse the
+  // linked-to directories
+  void RecurseThroughSymlinksOn() { this->SetRecurseThroughSymlinks(true); }
+  void RecurseThroughSymlinksOff() { this->SetRecurseThroughSymlinks(false); }
+  void SetRecurseThroughSymlinks(bool i) { this->RecurseThroughSymlinks = i; }
+  bool GetRecurseThroughSymlinks() { return this->RecurseThroughSymlinks; }
+
+  //! Get the number of symlinks followed through recursion
+  unsigned int GetFollowedSymlinkCount() { return this->FollowedSymlinkCount; }
+
   //! Set relative to true to only show relative path to files.
   void SetRelative(const char* dir);
   const char* GetRelative();
@@ -90,6 +100,8 @@ protected:
   GlobInternals* Internals;
   bool Recurse;
   kwsys_stl::string Relative;
+  bool RecurseThroughSymlinks;
+  unsigned int FollowedSymlinkCount;
 
 private:
   Glob(const Glob&);  // Not implemented.

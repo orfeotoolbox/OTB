@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageToVectorImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-12-09 05:06:19 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2008-10-16 16:45:10 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,14 +14,14 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkImageToVectorImageFilter_h_
-#define __itkImageToVectorImageFilter_h_
+#ifndef __itkImageToVectorImageFilter_h
+#define __itkImageToVectorImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkVectorContainer.h"
 #include "itkVectorImage.h"
 
-namespace itk{
+namespace itk {
 /** \class ImageToVectorImageFilter 
  * \brief This class takes as input 'n' itk::Image's and composes them into
  * a single itk::VectorImage. 
@@ -52,7 +52,7 @@ public:
   typedef SmartPointer<Self>                        Pointer;
   typedef SmartPointer<const Self>                  ConstPointer;
   itkNewMacro(Self);  
-  itkTypeMacro(Self, ImageToImageFilter);
+  itkTypeMacro(ImageToVectorImageFilter, ImageToImageFilter);
 
   itkStaticConstMacro(Dimension, unsigned int, TInputImage::ImageDimension);
 
@@ -90,4 +90,3 @@ protected:
 #endif
 
 #endif
-

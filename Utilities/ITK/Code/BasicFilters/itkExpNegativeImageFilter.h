@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExpNegativeImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-27 11:36:40 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2008-10-14 19:20:33 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -42,29 +42,31 @@ public:
   ~ExpNegative() {};
 
   bool operator!=( const ExpNegative & other ) const
-  {
+    {
     if( m_Factor != other.m_Factor )
       {
       return true;
       }
     return false;
-  }
+    }
   bool operator==( const ExpNegative & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
   
   inline TOutput operator()( const TInput & A )
-  {
+    {
     return static_cast<TOutput>( vcl_exp(- m_Factor * static_cast<double>(A) ) );
-  }
+    }
 
-  void SetFactor( double factor ) {
+  void SetFactor( double factor )
+    {
     m_Factor = factor;
-  }
-  double GetFactor() const {
+    }
+  double GetFactor() const
+    {
     return m_Factor;
-  }
+    }
 private:
   double  m_Factor;
 }; 
@@ -79,12 +81,13 @@ UnaryFunctorImageFilter<TInputImage,TOutputImage,
 {
 public:
   /** Standard class typedefs. */
-  typedef ExpNegativeImageFilter  Self;
-  typedef UnaryFunctorImageFilter<TInputImage,TOutputImage, 
-                                  Function::ExpNegative< typename TInputImage::PixelType, 
-                                                         typename TOutputImage::PixelType> >  Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef ExpNegativeImageFilter                                Self;
+  typedef UnaryFunctorImageFilter<
+    TInputImage,TOutputImage, 
+    Function::ExpNegative< typename TInputImage::PixelType, 
+                           typename TOutputImage::PixelType> >  Superclass;
+  typedef SmartPointer<Self>                                    Pointer;
+  typedef SmartPointer<const Self>                              ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -94,14 +97,14 @@ public:
                UnaryFunctorImageFilter);
 
   void SetFactor( double factor )
-  {
+    {
     if( factor == this->GetFunctor().GetFactor() ) 
       {
       return;
       }
     this->GetFunctor().SetFactor( factor );
     this->Modified();
-  }
+    }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */

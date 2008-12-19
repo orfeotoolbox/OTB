@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageLinearConstIteratorWithIndex.txx,v $
   Language:  C++
-  Date:      $Date: 2006-11-15 21:59:09 $
-  Version:   $Revision: 1.20 $
+  Date:      $Date: 2008-10-18 20:31:36 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,15 +14,14 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkImageLinearConstIteratorWithIndex_txx
-#define _itkImageLinearConstIteratorWithIndex_txx
+#ifndef __itkImageLinearConstIteratorWithIndex_txx
+#define __itkImageLinearConstIteratorWithIndex_txx
 
 #include "itkImageLinearConstIteratorWithIndex.h"
 
 
 namespace itk
 {
-
 
 
 //----------------------------------------------------------------------
@@ -54,7 +53,6 @@ ImageLinearConstIteratorWithIndex<TImage>
 }
 
 
-
 //----------------------------------------------------------------------
 //  Go to the first pixel of the current line
 //----------------------------------------------------------------------
@@ -72,8 +70,6 @@ ImageLinearConstIteratorWithIndex<TImage>
   this->m_PositionIndex[m_Direction] = this->m_BeginIndex[m_Direction];   
   
 }
-
-
 
 
 //----------------------------------------------------------------------

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLaplacianImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-19 17:24:12 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2008-10-16 17:40:08 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -61,27 +61,27 @@ class ITK_EXPORT LaplacianImageFilter :
 {
 public:
   /** Standard "Self" & Superclass typedef.   */
-  typedef LaplacianImageFilter Self;
+  typedef LaplacianImageFilter                            Self;
   typedef ImageToImageFilter< TInputImage, TOutputImage > Superclass;
 
   /** Extract some information from the image types.  Dimensionality
    * of the two images is assumed to be the same. */
-  typedef typename TOutputImage::PixelType OutputPixelType;
+  typedef typename TOutputImage::PixelType         OutputPixelType;
   typedef typename TOutputImage::InternalPixelType OutputInternalPixelType;
-  typedef typename TInputImage::PixelType InputPixelType;
-  typedef typename TInputImage::InternalPixelType InputInternalPixelType;
+  typedef typename TInputImage::PixelType          InputPixelType;
+  typedef typename TInputImage::InternalPixelType  InputInternalPixelType;
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputImage::ImageDimension);
   itkStaticConstMacro(ImageDimension, unsigned int,
                       TOutputImage::ImageDimension);
   
   /** Image typedef support. */
-  typedef TInputImage  InputImageType;
-  typedef TOutputImage OutputImageType;
+  typedef TInputImage                      InputImageType;
+  typedef TOutputImage                     OutputImageType;
   typedef typename InputImageType::Pointer InputImagePointer;
 
   /** Smart pointer typedef support.   */
-  typedef SmartPointer<Self> Pointer;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
   
   /** Run-time type information (and related methods)  */
@@ -102,12 +102,12 @@ public:
   /** Use the image spacing information in calculations. Use this option if you
    *  want derivatives in physical space. Default is UseImageSpacingOn. */
   void SetUseImageSpacingOn()
-  { this->SetUseImageSpacing(true); }
+    { this->SetUseImageSpacing(true); }
   
   /** Ignore the image spacing. Use this option if you want derivatives in
       isotropic pixel space.  Default is UseImageSpacingOn. */
   void SetUseImageSpacingOff()
-  { this->SetUseImageSpacing(false); }
+    { this->SetUseImageSpacing(false); }
   
   /** Set/Get whether or not the filter will use the spacing of the input
       image in its calculations */
@@ -127,9 +127,9 @@ public:
 
 protected:
   LaplacianImageFilter()
-  {
+    {
     m_UseImageSpacing = true;
-  }
+    }
   virtual ~LaplacianImageFilter()  {}
 
   /** Standard pipeline method. While this class does not implement a

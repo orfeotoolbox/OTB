@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBSplineCenteredResampleImageFilterBase.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:43 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2008-10-09 20:43:42 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -61,10 +61,10 @@ class ITK_EXPORT BSplineCenteredResampleImageFilterBase :
 {
 public:
   /** Standard class typedefs. */
-  typedef BSplineCenteredResampleImageFilterBase       Self;
+  typedef BSplineCenteredResampleImageFilterBase                     Self;
   typedef BSplineResampleImageFilterBase<TInputImage, TOutputImage>  Superclass;
-  typedef SmartPointer<Self>                    Pointer;
-  typedef SmartPointer<const Self>              ConstPointer;
+  typedef SmartPointer<Self>                                         Pointer;
+  typedef SmartPointer<const Self>                                   ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(BSplineCenteredResampleImageFilterBase, BSplineResampleImageFilterBase);

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorResampleImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-03-03 00:17:37 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2008-10-17 20:50:03 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -58,16 +58,17 @@ class ITK_EXPORT VectorResampleImageFilter:
 {
 public:
   /** Standard class typedefs. */
-  typedef VectorResampleImageFilter         Self;
+  typedef VectorResampleImageFilter                     Self;
   typedef ImageToImageFilter<TInputImage,TOutputImage>  Superclass;
-  typedef SmartPointer<Self>        Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
-  typedef TInputImage InputImageType;
-  typedef TOutputImage OutputImageType;
-  typedef typename InputImageType::Pointer InputImagePointer;
+  typedef SmartPointer<Self>                            Pointer;
+  typedef SmartPointer<const Self>                      ConstPointer;
+
+  typedef TInputImage                           InputImageType;
+  typedef TOutputImage                          OutputImageType;
+  typedef typename InputImageType::Pointer      InputImagePointer;
   typedef typename InputImageType::ConstPointer InputImageConstPointer;
-  typedef typename OutputImageType::Pointer OutputImagePointer;
-  typedef typename InputImageType::RegionType InputImageRegionType;
+  typedef typename OutputImageType::Pointer     OutputImagePointer;
+  typedef typename InputImageType::RegionType   InputImageRegionType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);  
@@ -108,8 +109,8 @@ public:
   typedef typename TOutputImage::RegionType OutputImageRegionType;
 
   /** Image spacing,origin and direction typedef */
-  typedef typename TOutputImage::SpacingType SpacingType;
-  typedef typename TOutputImage::PointType   OriginPointType;
+  typedef typename TOutputImage::SpacingType   SpacingType;
+  typedef typename TOutputImage::PointType     OriginPointType;
   typedef typename TOutputImage::DirectionType DirectionType;
   
   /** Set the coordinate transformation.

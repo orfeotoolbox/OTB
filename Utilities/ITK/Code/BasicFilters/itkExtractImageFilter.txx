@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExtractImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-05-07 17:03:06 $
-  Version:   $Revision: 1.24 $
+  Date:      $Date: 2008-12-08 01:10:42 $
+  Version:   $Revision: 1.27.2.1 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkExtractImageFilter_txx
-#define _itkExtractImageFilter_txx
+#ifndef __itkExtractImageFilter_txx
+#define __itkExtractImageFilter_txx
 
 #include "itkExtractImageFilter.h"
 #include "itkImageRegionIterator.h"
@@ -79,12 +79,12 @@ ExtractImageFilter<TInputImage,TOutputImage>
   /**
    * check to see if the number of non-zero entries in the extraction region
    * matches the number of dimensions in the output image.  
-   **/
+   */
   for (unsigned int i = 0; i < InputImageDimension; ++i)
     {
     if (inputSize[i])
       { 
-      outputSize[nonzeroSizeCount] = inputSize[i];    
+      outputSize[nonzeroSizeCount] = inputSize[i];
       outputIndex[nonzeroSizeCount] = extractRegion.GetIndex()[i];
       nonzeroSizeCount++;
       }
@@ -99,8 +99,6 @@ ExtractImageFilter<TInputImage,TOutputImage>
   m_OutputImageRegion.SetIndex(outputIndex);
   this->Modified();
 }
-
-
 
 /** 
  * ExtractImageFilter can produce an image which is a different resolution
@@ -183,6 +181,7 @@ ExtractImageFilter<TInputImage,TOutputImage>
     else
       {
       // copy the non-collapsed part of the input spacing and origing to the output
+      outputDirection.SetIdentity();
       int nonZeroCount = 0;
       for (i=0; i < InputImageDimension; ++i)
         {
@@ -191,7 +190,7 @@ ExtractImageFilter<TInputImage,TOutputImage>
           outputSpacing[nonZeroCount] = inputSpacing[i];
           outputOrigin[nonZeroCount] = inputOrigin[i];
           int nonZeroCount2 = 0;
-          for (unsigned int dim = 0; dim < OutputImageDimension; ++dim)
+          for (unsigned int dim = 0; dim < InputImageDimension; ++dim)
             {
             if (m_ExtractionRegion.GetSize()[dim])
               {
@@ -204,13 +203,20 @@ ExtractImageFilter<TInputImage,TOutputImage>
           }
         }
       }
+    // This is a temporary fix to get over the problems with using OrientedImages to
+    // a non-degenerate extracted image to be created.  It still needs to be determined
+    // how to compute the correct outputDirection from all possible input directions.
+    if (vnl_determinant(outputDirection.GetVnlMatrix()) == 0.0)
+      {
+      outputDirection.SetIdentity();
+      }
 
     // set the spacing and origin
     outputPtr->SetSpacing( outputSpacing );
     outputPtr->SetDirection( outputDirection );
     outputPtr->SetOrigin( outputOrigin );
     outputPtr->SetNumberOfComponentsPerPixel(
-       inputPtr->GetNumberOfComponentsPerPixel() );
+    inputPtr->GetNumberOfComponentsPerPixel() );
     }
   else
     {
@@ -222,17 +228,17 @@ ExtractImageFilter<TInputImage,TOutputImage>
 }
 
 /** 
-   * ExtractImageFilter can be implemented as a multithreaded filter.
-   * Therefore, this implementation provides a ThreadedGenerateData()
-   * routine which is called for each processing thread. The output
-   * image data is allocated automatically by the superclass prior to
-   * calling ThreadedGenerateData().  ThreadedGenerateData can only
-   * write to the portion of the output image specified by the
-   * parameter "outputRegionForThread"
-   *
-   * \sa ImageToImageFilter::ThreadedGenerateData(),
-   *     ImageToImageFilter::GenerateData() 
-   */
+ * ExtractImageFilter can be implemented as a multithreaded filter.
+ * Therefore, this implementation provides a ThreadedGenerateData()
+ * routine which is called for each processing thread. The output
+ * image data is allocated automatically by the superclass prior to
+ * calling ThreadedGenerateData().  ThreadedGenerateData can only
+ * write to the portion of the output image specified by the
+ * parameter "outputRegionForThread"
+ *
+ * \sa ImageToImageFilter::ThreadedGenerateData(),
+ *     ImageToImageFilter::GenerateData() 
+ */
 template <class TInputImage, class TOutputImage>
 void 
 ExtractImageFilter<TInputImage,TOutputImage>
@@ -253,7 +259,7 @@ ExtractImageFilter<TInputImage,TOutputImage>
   this->CallCopyOutputRegionToInputRegion(inputRegionForThread, outputRegionForThread);
   
   // Define the iterators.
-  typedef ImageRegionIterator<TOutputImage> OutputIterator;
+  typedef ImageRegionIterator<TOutputImage>     OutputIterator;
   typedef ImageRegionConstIterator<TInputImage> InputIterator;
 
   OutputIterator outIt(outputPtr, outputRegionForThread);

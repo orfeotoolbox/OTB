@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageRandomNonRepeatingConstIteratorWithIndex.txx,v $
   Language:  C++
-  Date:      $Date: 2005-10-03 15:18:45 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2008-10-18 21:13:25 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkImageRandomNonRepeatingConstIteratorWithIndex_txx
-#define _itkImageRandomNonRepeatingConstIteratorWithIndex_txx
+#ifndef __itkImageRandomNonRepeatingConstIteratorWithIndex_txx
+#define __itkImageRandomNonRepeatingConstIteratorWithIndex_txx
 
 #include "itkImageRandomNonRepeatingConstIteratorWithIndex.h"
 
@@ -44,7 +44,7 @@ ImageRandomNonRepeatingConstIteratorWithIndex<TImage>
   m_NumberOfPixelsInRegion   = region.GetNumberOfPixels();
   m_NumberOfSamplesRequested = 0L;
   m_NumberOfSamplesDone      = 0L;
-  m_Permutation=new randomPermutation(m_NumberOfPixelsInRegion);
+  m_Permutation=new RandomPermutation(m_NumberOfPixelsInRegion);
 }
 
 /**  Set the number of samples to extract from the region */
@@ -89,14 +89,14 @@ ImageRandomNonRepeatingConstIteratorWithIndex<TImage>
 template<class TImage>
 void
 ImageRandomNonRepeatingConstIteratorWithIndex<TImage>
-::SetPriorityImage(const PriorityImageType* priorityImage) 
+::SetPriorityImage(const PriorityImageType* priorityImage)
 {
   // should probably do error checking to be sure that the priority
   // image is the right size
   IndexType positionIndex;
   unsigned long position,pixel;
   unsigned long residual;
-  for(pixel=0;pixel<m_NumberOfPixelsInRegion;pixel++) 
+  for(pixel=0;pixel<m_NumberOfPixelsInRegion;pixel++)
     {
     position=pixel;
     for( unsigned int dim = 0; dim < TImage::ImageDimension; dim++ )

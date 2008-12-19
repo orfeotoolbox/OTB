@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageIterator.h,v $
   Language:  C++
-  Date:      $Date: 2008-05-27 23:04:02 $
-  Version:   $Revision: 1.53 $
+  Date:      $Date: 2008-10-18 20:31:36 $
+  Version:   $Revision: 1.54 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -147,7 +147,7 @@ public:
     // const_cast is needed here because m_Image is declared as a const pointer
     // in the base class which is the ConstIterator.
     return const_cast<ImageType *>( this->m_Image.GetPointer() );
-    };
+    }
 
 
 protected:

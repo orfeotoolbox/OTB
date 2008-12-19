@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCovariantVector.cxx,v $
   Language:  C++
-  Date:      $Date: 2005-12-09 16:44:57 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2008-10-07 12:04:18 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -57,10 +57,4 @@ ITKCommon_EXPORT CrossProduct( CovariantVector<int,3> & c, const Vector<int,3> &
   c[2] = a[0] * b[1] - a[1] * b[0];
 }
 
-
-
-
-
 } // end namespace itk
-
-

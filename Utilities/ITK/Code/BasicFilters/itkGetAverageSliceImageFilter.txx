@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGetAverageSliceImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2005-12-03 17:12:13 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2008-10-16 16:45:08 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkGetAverageSliceImageFilter_txx
-#define _itkGetAverageSliceImageFilter_txx
+#ifndef __itkGetAverageSliceImageFilter_txx
+#define __itkGetAverageSliceImageFilter_txx
 
 #include "itkGetAverageSliceImageFilter.h"
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWatershedSegmenter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-01-27 18:29:24 $
-  Version:   $Revision: 1.35 $
+  Date:      $Date: 2008-08-28 20:25:52 $
+  Version:   $Revision: 1.36 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -800,7 +800,9 @@ void Segmenter<TInputImage>
           // If the following is encountered, it means that there is a
           // logic flaw in the first pass of this algorithm where flat
           // regions are initially detected and linked.
+#ifndef NDEBUG
           else itkDebugMacro("An unexpected but non-fatal error has occurred.");
+#endif
           }
               
         }

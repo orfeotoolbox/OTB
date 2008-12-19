@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAdaptiveHistogramEqualizationImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-01-18 20:07:32 $
-  Version:   $Revision: 1.28 $
+  Date:      $Date: 2008-10-07 14:49:29 $
+  Version:   $Revision: 1.30 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,18 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkAdaptiveHistogramEqualizationImageFilter_txx
-#define _itkAdaptiveHistogramEqualizationImageFilter_txx
+#ifndef __itkAdaptiveHistogramEqualizationImageFilter_txx
+#define __itkAdaptiveHistogramEqualizationImageFilter_txx
+
+
+// First make sure that the configuration is available.
+// This line can be removed once the optimized versions
+// gets integrated into the main directories.
+#include "itkConfigure.h"
+
+#ifdef ITK_USE_CONSOLIDATED_MORPHOLOGY
+#include "itkOptAdaptiveHistogramEqualizationImageFilter.h"
+#else
 
 #include <map>
 #include <set>
@@ -236,7 +246,7 @@ AdaptiveHistogramEqualizationImageFilter<TImageType>
           }
         }
         
-      typedef typename ImageType::PixelType PixelType;    
+      typedef typename ImageType::PixelType PixelType;
         
       // if we cached the cumulative array
       // if not, use CumulativeFunction()
@@ -342,5 +352,6 @@ AdaptiveHistogramEqualizationImageFilter<TImageType>
 }
 } // end namespace
 
+#endif
 
 #endif

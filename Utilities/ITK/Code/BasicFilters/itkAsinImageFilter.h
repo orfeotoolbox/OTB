@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAsinImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-27 11:36:39 $
-  Version:   $Revision: 1.22 $
+  Date:      $Date: 2008-10-07 14:49:30 $
+  Version:   $Revision: 1.23 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -50,21 +50,21 @@ public:
   Asin() {};
   ~Asin() {};
   bool operator!=( const Asin & ) const
-  {
+    {
     return false;
-  }
+    }
   bool operator==( const Asin & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
   inline TOutput operator()( const TInput & A )
-  {
+    {
     return static_cast<TOutput>(
       vcl_asin(
         static_cast<double>(A)
         )
       );
-  }
+    }
 }; 
 
 }
@@ -78,13 +78,13 @@ UnaryFunctorImageFilter<TInputImage,TOutputImage,
 {
 public:
   /** Standard class typedefs. */
-  typedef AsinImageFilter  Self;
+  typedef AsinImageFilter           Self;
   typedef UnaryFunctorImageFilter<TInputImage,TOutputImage, 
                                   Functor::Asin< 
     typename TInputImage::PixelType, 
     typename TOutputImage::PixelType>   
-  >  Superclass;
-  typedef SmartPointer<Self>   Pointer;
+  >                                 Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
   /** Method for creation through the object factory. */

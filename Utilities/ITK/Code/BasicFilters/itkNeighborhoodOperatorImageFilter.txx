@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNeighborhoodOperatorImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-01-11 19:43:32 $
-  Version:   $Revision: 1.39 $
+  Date:      $Date: 2008-10-16 19:33:45 $
+  Version:   $Revision: 1.40 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkNeighborhoodOperatorImageFilter_txx
-#define _itkNeighborhoodOperatorImageFilter_txx
+#ifndef __itkNeighborhoodOperatorImageFilter_txx
+#define __itkNeighborhoodOperatorImageFilter_txx
 
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkNeighborhoodInnerProduct.h"
@@ -84,6 +84,7 @@ NeighborhoodOperatorImageFilter<TInputImage, TOutputImage, TOperatorValueType>
 {
   typedef NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>
     BFC;
+
   typedef typename BFC::FaceListType FaceListType;
 
   NeighborhoodInnerProduct<InputImageType, OperatorValueType> smartInnerProduct;

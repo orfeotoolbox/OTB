@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkReflectiveImageRegionIterator.h,v $
   Language:  C++
-  Date:      $Date: 2004-12-21 22:47:31 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2008-10-17 16:30:51 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -46,7 +46,7 @@ class ITK_EXPORT ReflectiveImageRegionIterator : public ReflectiveImageRegionCon
 {
 public:
   /** Standard class typedefs. */
-  typedef ReflectiveImageRegionIterator Self;
+  typedef ReflectiveImageRegionIterator               Self;
   typedef ReflectiveImageRegionConstIterator<TImage>  Superclass;
   
   /** Types inherited from the Superclass */
@@ -106,6 +106,3 @@ protected:
 #endif
 
 #endif 
-
-
-

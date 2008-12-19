@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkShrinkImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-03-19 04:36:56 $
-  Version:   $Revision: 1.53 $
+  Date:      $Date: 2008-10-17 20:49:56 $
+  Version:   $Revision: 1.54 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkShrinkImageFilter_txx
-#define _itkShrinkImageFilter_txx
+#ifndef __itkShrinkImageFilter_txx
+#define __itkShrinkImageFilter_txx
 
 #include "itkShrinkImageFilter.h"
 #include "itkImageRegionIterator.h"
@@ -135,16 +135,15 @@ ShrinkImageFilter<TInputImage,TOutputImage>
   
   // Define/declare an iterator that will walk the output region for this
   // thread.
-  typedef
-    ImageRegionIterator<TOutputImage> OutputIterator;
+  typedef ImageRegionIterator<TOutputImage> OutputIterator;
   
   OutputIterator outIt(outputPtr, outputRegionForThread);
   
   // Define a few indices that will be used to translate from an input pixel
   // to an output pixel
   typename TOutputImage::IndexType outputIndex;
-  typename TInputImage::IndexType inputIndex;
-  typename TOutputImage::SizeType factorSize;
+  typename TInputImage::IndexType  inputIndex;
+  typename TOutputImage::SizeType  factorSize;
   
   for (unsigned int i=0; i < TInputImage::ImageDimension; i++)
     {
@@ -170,8 +169,6 @@ ShrinkImageFilter<TInputImage,TOutputImage>
     progress.CompletedPixel();
     }
 }
-
-
 
 /** 
  *

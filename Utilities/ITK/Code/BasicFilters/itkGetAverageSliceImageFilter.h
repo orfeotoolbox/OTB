@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGetAverageSliceImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-10-05 10:30:47 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2008-10-16 16:45:07 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -48,10 +48,10 @@ class ITK_EXPORT GetAverageSliceImageFilter : public AccumulateImageFilter<TInpu
 {
 public:
   /** Standard class typedefs. */
-  typedef GetAverageSliceImageFilter  Self;
+  typedef GetAverageSliceImageFilter                       Self;
   typedef AccumulateImageFilter<TInputImage,TOutputImage>  Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                               Pointer;
+  typedef SmartPointer<const Self>                         ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -83,5 +83,3 @@ private:
 #endif
 
 #endif
-
-

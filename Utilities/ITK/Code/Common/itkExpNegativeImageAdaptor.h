@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExpNegativeImageAdaptor.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-19 04:36:58 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2008-10-13 15:36:31 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -38,8 +38,8 @@ template <class TInternalType, class TExternalType >
 class ITK_EXPORT ExpNegativePixelAccessor  
 {
 public:
- /** External typedef. It defines the external aspect
-   * that this class will exhibit. */
+  /** External typedef. It defines the external aspect
+    * that this class will exhibit. */
   typedef TExternalType ExternalType;
 
   /** Internal typedef. It defines the internal real
@@ -72,12 +72,12 @@ class ITK_EXPORT ExpNegativeImageAdaptor : public
 {
 public:
   /** Standard class typedefs. */
-  typedef ExpNegativeImageAdaptor  Self;
-  typedef ImageAdaptor<TImage,Accessor::ExpNegativePixelAccessor<
-                                       typename TImage::PixelType,
-                                       TOutputPixelType> > Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef ExpNegativeImageAdaptor                         Self;
+  typedef ImageAdaptor<
+    TImage,Accessor::ExpNegativePixelAccessor<
+      typename TImage::PixelType, TOutputPixelType> >     Superclass;
+  typedef SmartPointer<Self>                              Pointer;
+  typedef SmartPointer<const Self>                        ConstPointer;
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);  

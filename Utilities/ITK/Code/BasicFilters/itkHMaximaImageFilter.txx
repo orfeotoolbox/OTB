@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHMaximaImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-08-01 19:16:18 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2008-10-16 16:45:09 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -74,8 +74,7 @@ HMaximaImageFilter<TInputImage, TOutputImage>
   // construct a marker image to manipulate using reconstruction by
   // dilation. the marker image is the input image minus the height
   // parameter.
-  typedef ShiftScaleImageFilter<TInputImage, TInputImage>
-    ShiftFilterType;
+  typedef ShiftScaleImageFilter<TInputImage, TInputImage> ShiftFilterType;
   typename ShiftFilterType::Pointer shift = ShiftFilterType::New();
   shift->SetInput( this->GetInput() );
   shift->SetShift( -1.0 * static_cast<typename ShiftFilterType::RealType>(m_Height) );

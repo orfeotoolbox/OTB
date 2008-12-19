@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkShrinkImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-22 16:26:45 $
-  Version:   $Revision: 1.42 $
+  Date:      $Date: 2008-10-17 20:49:55 $
+  Version:   $Revision: 1.43 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -54,10 +54,10 @@ class ITK_EXPORT ShrinkImageFilter:
 {
 public:
   /** Standard class typedefs. */
-  typedef ShrinkImageFilter         Self;
+  typedef ShrinkImageFilter                             Self;
   typedef ImageToImageFilter<TInputImage,TOutputImage>  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                            Pointer;
+  typedef SmartPointer<const Self>                      ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);  
@@ -86,13 +86,13 @@ public:
   void SetShrinkFactors( unsigned int factors[] );
   void SetShrinkFactors( unsigned int factor );
   void SetShrinkFactor( unsigned int i, unsigned int factor )
-  {
+    {
     m_ShrinkFactors[i] = factor;
-  }
+    }
   
   /** Get the shrink factors. */
   const unsigned int * GetShrinkFactors() const
-  { return m_ShrinkFactors; }
+    { return m_ShrinkFactors; }
                  
   /** ShrinkImageFilter produces an image which is a different
    * resolution and with a different pixel spacing than its input

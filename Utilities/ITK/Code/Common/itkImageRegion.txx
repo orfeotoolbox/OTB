@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageRegion.txx,v $
   Language:  C++
-  Date:      $Date: 2006-04-13 17:57:25 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2008-10-18 21:13:25 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkImageRegion_txx
-#define _itkImageRegion_txx
+#ifndef __itkImageRegion_txx
+#define __itkImageRegion_txx
 
 #include "itkImageRegion.h"
 
@@ -176,9 +176,18 @@ typename ImageRegion<VImageDimension>::SliceRegion
 ImageRegion<VImageDimension>
 ::Slice(const unsigned long dim) const
 {
+  if (dim >= VImageDimension)
+    {
+    itkGenericExceptionMacro(
+      << "The dimension to remove: " << dim
+      << " is greater than the dimension of the image: " << VImageDimension);
+    }
+
   Index<SliceDimension> sliceIndex;
   Size<SliceDimension> sliceSize;
 
+  sliceIndex.Fill(0);
+  sliceSize.Fill(0);
   unsigned int ii = 0;
   for (unsigned int i=0; i < VImageDimension; i++)
     {

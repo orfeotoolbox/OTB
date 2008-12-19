@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageMaskSpatialObject.txx,v $
   Language:  C++
-  Date:      $Date: 2008-06-29 01:56:12 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2008-11-02 16:03:30 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -49,37 +49,34 @@ bool
 ImageMaskSpatialObject< TDimension >
 ::IsInside( const PointType & point) const
 {
-  if(this->GetBounds()->IsInside(point))
+  if( !this->GetBounds()->IsInside(point) )
     {
-
-    if( !this->SetInternalInverseTransformToWorldToIndexTransform() )
-      {
-      return false;
-      }
-
-    PointType p = this->GetInternalInverseTransform()->TransformPoint(point);
-
-    IndexType index;
-    for(unsigned int i=0; i<TDimension; i++)
-      {
-      index[i] = static_cast<int>( p[i] );
-      }
-
-    const bool insideBuffer = 
-            this->GetImage()->GetBufferedRegion().IsInside( index );
-      
-    if( !insideBuffer )
-      {
-      return false;
-      }
-
-    const bool insideMask = 
-      (this->GetImage()->GetPixel(index) != NumericTraits<PixelType>::Zero);
-
-    return insideMask;
+    return false;
     }
 
-  return false;
+  if( !this->SetInternalInverseTransformToWorldToIndexTransform() )
+    {
+    return false;
+    }
+
+  PointType p = this->GetInternalInverseTransform()->TransformPoint(point);
+
+  IndexType index;
+  for(unsigned int i=0; i<TDimension; i++)
+    {
+    index[i] = static_cast<int>( p[i] );
+    }
+
+  const bool insideBuffer = this->GetImage()->GetBufferedRegion().IsInside( index );
+     
+  if( !insideBuffer )
+    {
+    return false;
+    }
+
+  const bool insideMask = (this->GetImage()->GetPixel(index) != NumericTraits<PixelType>::Zero);
+
+  return insideMask;
 }
 
 

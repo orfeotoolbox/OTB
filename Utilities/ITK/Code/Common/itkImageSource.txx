@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageSource.txx,v $
   Language:  C++
-  Date:      $Date: 2005-12-01 11:17:00 $
-  Version:   $Revision: 1.61 $
+  Date:      $Date: 2008-08-29 16:39:23 $
+  Version:   $Revision: 1.62 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -243,7 +243,15 @@ ImageSource<TOutputImage>
 ::ThreadedGenerateData(const OutputImageRegionType&,
                        int)
 {
-  itkExceptionMacro("subclass should override this method!!!");
+// The following code is equivalent to:
+// itkExceptionMacro("subclass should override this method!!!");
+// The ExceptionMacro is not used because gcc warns that a 
+// 'noreturn' function does return
+  OStringStream message;
+  message << "itk::ERROR: " << this->GetNameOfClass()
+          << "(" << this << "): " << "Subclass should override this method!!!";
+  ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(),ITK_LOCATION);
+  throw e_;
 }
 
 // Callback routine used by the threading library. This routine just calls

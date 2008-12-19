@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTensorRelativeAnisotropyImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-10-27 19:51:42 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2008-10-18 16:11:14 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -34,13 +34,13 @@ public:
   TensorRelativeAnisotropyFunction() {}
   ~TensorRelativeAnisotropyFunction() {}
   bool operator!=( const TensorRelativeAnisotropyFunction & ) const
-  {
+    {
     return false;
-  }
+    }
   bool operator==( const TensorRelativeAnisotropyFunction & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
   inline RealValueType operator()( const TInput & x )
     {
     return x.GetRelativeAnisotropy();
@@ -74,12 +74,12 @@ UnaryFunctorImageFilter<TInputImage,TOutputImage,
 public:
   /** Standard class typedefs. */
   typedef TensorRelativeAnisotropyImageFilter  Self;
-  typedef UnaryFunctorImageFilter<TInputImage,TOutputImage, 
-                                  Functor::TensorRelativeAnisotropyFunction< 
-                                    typename TInputImage::PixelType> >  Superclass;
-
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef UnaryFunctorImageFilter<
+    TInputImage,TOutputImage, 
+    Functor::TensorRelativeAnisotropyFunction< 
+      typename TInputImage::PixelType> >       Superclass;
+  typedef SmartPointer<Self>                   Pointer;
+  typedef SmartPointer<const Self>             ConstPointer;
 
   typedef typename Superclass::OutputImageType    OutputImageType;
   typedef typename TOutputImage::PixelType        OutputPixelType;

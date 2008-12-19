@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWarpHarmonicEnergyCalculator.h,v $
   Language:  C++
-  Date:      $Date: 2008-07-05 00:12:50 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2008-09-30 18:07:03 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -113,7 +113,7 @@ public:
   /** Directly Set/Get the array of weights used in the gradient calculations.
    *  Note that calling UseImageSpacingOn will clobber these values. */
   void SetDerivativeWeights(double data[]);
-  itkGetVectorMacro(DerivativeWeights, const double, itk::GetImageDimension<TInputImage>::ImageDimension);
+  itkGetVectorMacro(DerivativeWeights, const double, ::itk::GetImageDimension<TInputImage>::ImageDimension);
 
   /** Set the input image. */
   itkSetConstObjectMacro(Image,ImageType);
@@ -151,7 +151,7 @@ private:
   bool m_UseImageSpacing;
 
   /** The weights used to scale partial derivatives during processing */
-  double m_DerivativeWeights[itk::GetImageDimension<TInputImage>::ImageDimension];
+  double m_DerivativeWeights[::itk::GetImageDimension<TInputImage>::ImageDimension];
 
   RadiusType    m_NeighborhoodRadius;
 };

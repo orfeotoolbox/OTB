@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptBSplineInterpolateImageFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2008-02-04 12:34:12 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2008-12-08 01:10:42 $
+  Version:   $Revision: 1.8.6.1 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -50,7 +50,11 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
   m_SplineOrder = 0;
   unsigned int SplineOrder = 3;
   this->SetSplineOrder(SplineOrder);
+#if defined(ITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE)
+  this->m_UseImageDirection = true;
+#else
   this->m_UseImageDirection = false;
+#endif
 }
 
 template <class TImageType, class TCoordRep, class TCoefficientType>

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMacro.h,v $
   Language:  C++
-  Date:      $Date: 2008-05-26 15:54:24 $
-  Version:   $Revision: 1.87 $
+  Date:      $Date: 2008-07-31 12:08:03 $
+  Version:   $Revision: 1.88 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -483,7 +483,7 @@ extern ITKCommon_EXPORT void OutputWindowDisplayDebugText(const char*);
 /** This macro is used to print debug (or other information). They are
  * also used to catch errors, etc. Example usage looks like:
  * itkDebugMacro(<< "this is debug info" << this->SomeVariable); */
-#if defined(ITK_LEAN_AND_MEAN) || defined(__BORLANDC__)
+#if defined(ITK_LEAN_AND_MEAN) || defined(__BORLANDC__) || defined(NDEBUG)
 #define itkDebugMacro(x)
 #else
 #define itkDebugMacro(x) \

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExponentialDeformationFieldImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-07-10 20:18:07 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2008-12-08 01:10:42 $
+  Version:   $Revision: 1.4.4.1 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -166,8 +166,8 @@ ExponentialDeformationFieldImageFilter<TInputImage,TOutputImage>
 
 
   // Do the iterative composition of the vector field
-  m_Warper->SetOutputSpacing(inputPtr->GetSpacing());
   m_Warper->SetOutputOrigin(inputPtr->GetOrigin());
+  m_Warper->SetOutputSpacing(inputPtr->GetSpacing());
   m_Warper->SetOutputDirection(inputPtr->GetDirection());
 
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkJoinSeriesImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-02-13 15:59:36 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2008-10-09 16:20:18 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkJoinSeriesImageFilter_txx
-#define _itkJoinSeriesImageFilter_txx
+#ifndef __itkJoinSeriesImageFilter_txx
+#define __itkJoinSeriesImageFilter_txx
 
 #include "itkJoinSeriesImageFilter.h"
 #include "itkProgressReporter.h"
@@ -120,7 +120,7 @@ JoinSeriesImageFilter<TInputImage,TOutputImage>
     //
     // Copy the direction cosines from the input to the output.
     // On join, the output dim is always >= input dim
-    typedef typename InputImageType::DirectionType InputDirectionType;
+    typedef typename InputImageType::DirectionType  InputDirectionType;
     typedef typename OutputImageType::DirectionType OutputDirectionType;
     InputDirectionType inputDir = inputPtr->GetDirection();
     unsigned int inputdim = InputImageType::GetImageDimension();
@@ -219,10 +219,10 @@ JoinSeriesImageFilter<TInputImage,TOutputImage>
   for (IndexValueType idx = begin; idx < end; ++idx)
     {
     outputRegion.SetIndex(InputImageDimension, idx);
-    ImageRegionIterator<OutputImageType>
-      outIt(this->GetOutput(), outputRegion);
-    ImageRegionConstIterator<InputImageType>
-      inIt(this->GetInput(idx), inputRegion);
+    ImageRegionIterator<OutputImageType> outIt(
+      this->GetOutput(), outputRegion);
+    ImageRegionConstIterator<InputImageType> inIt(
+      this->GetInput(idx), inputRegion);
     outIt.GoToBegin();
     inIt.GoToBegin();
     while( !outIt.IsAtEnd() )

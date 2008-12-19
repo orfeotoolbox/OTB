@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorAnisotropicDiffusionFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:58 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2008-10-17 16:30:53 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkVectorAnisotropicDiffusionFunction_txx_
-#define __itkVectorAnisotropicDiffusionFunction_txx_
+#ifndef __itkVectorAnisotropicDiffusionFunction_txx
+#define __itkVectorAnisotropicDiffusionFunction_txx
 #include "itkVectorAnisotropicDiffusionFunction.h"
 
 #include "itkZeroFluxNeumannBoundaryCondition.h"
@@ -31,8 +31,8 @@ void
 VectorAnisotropicDiffusionFunction<TImage>
 ::CalculateAverageGradientMagnitudeSquared(TImage *ip)
 {
-  typedef ConstNeighborhoodIterator<TImage>      RNI_type;
-  typedef ConstNeighborhoodIterator<TImage> SNI_type;
+  typedef ConstNeighborhoodIterator<TImage>                           RNI_type;
+  typedef ConstNeighborhoodIterator<TImage>                           SNI_type;
   typedef NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TImage> BFC_type;
 
   unsigned int i, j;

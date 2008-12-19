@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPermuteAxesImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2007-11-20 02:24:53 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2008-10-17 16:30:50 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkPermuteAxesImageFilter_txx
-#define _itkPermuteAxesImageFilter_txx
+#ifndef __itkPermuteAxesImageFilter_txx
+#define __itkPermuteAxesImageFilter_txx
 
 #include "itkPermuteAxesImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGrayscaleFillholeImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-10-16 14:22:34 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2008-10-16 16:45:08 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkFillholeImageFilter_h
-#define __itkFillholeImageFilter_h
+#ifndef __itkGrayscaleFillholeImageFilter_h
+#define __itkGrayscaleFillholeImageFilter_h
 
 #include "itkImageToImageFilter.h"
 
@@ -35,7 +35,7 @@ namespace itk {
  * the difference above a small value), you'll obtain a map of the
  * local minima.
  *
- * This filter uses the GrayscaleGeodesicErodeImageFilter.  It
+ * This filter uses the ReconstructionByErosionImageFilter.  It
  * provides its own input as the "mask" input to the geodesic
  * erosion.  The "marker" image for the geodesic erosion is
  * constructed such that boundary pixels match the boundary pixels of
@@ -46,7 +46,7 @@ namespace itk {
  * Chapter 6 of Pierre Soille's book "Morphological Image Analysis:
  * Principles and Applications", Second Edition, Springer, 2003.
  *
- * \sa GrayscaleGeodesicErodeImageFilter
+ * \sa ReconstructionByErosionImageFilter
  * \sa MorphologyImageFilter, GrayscaleErodeImageFilter, GrayscaleFunctionErodeImageFilter, BinaryErodeImageFilter
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  */
@@ -58,17 +58,17 @@ public:
   /** Standard class typedefs. */
   typedef GrayscaleFillholeImageFilter Self;
   typedef ImageToImageFilter<TInputImage, TOutputImage>
-  Superclass;
-  typedef SmartPointer<Self>        Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+                                       Superclass;
+  typedef SmartPointer<Self>           Pointer;
+  typedef SmartPointer<const Self>     ConstPointer;
 
   /** Some convenient typedefs. */
-  typedef TInputImage InputImageType;
-  typedef TOutputImage OutputImageType;
+  typedef TInputImage                              InputImageType;
   typedef typename InputImageType::Pointer         InputImagePointer;
   typedef typename InputImageType::ConstPointer    InputImageConstPointer;
   typedef typename InputImageType::RegionType      InputImageRegionType;
   typedef typename InputImageType::PixelType       InputImagePixelType;
+  typedef TOutputImage                             OutputImageType;
   typedef typename OutputImageType::Pointer        OutputImagePointer;
   typedef typename OutputImageType::ConstPointer   OutputImageConstPointer;
   typedef typename OutputImageType::RegionType     OutputImageRegionType;
@@ -122,13 +122,13 @@ protected:
   /** GrayscaleFillholeImageFilter needs the entire input be
    * available. Thus, it needs to provide an implementation of
    * GenerateInputRequestedRegion(). */
-  void GenerateInputRequestedRegion() ;
+  void GenerateInputRequestedRegion();
 
   /** GrayscaleFillholeImageFilter will produce the entire output. */
   void EnlargeOutputRequestedRegion(DataObject *itkNotUsed(output));
   
   /** Single-threaded version of GenerateData.  This filter delegates
-   * to GrayscaleGeodesicErodeImageFilter. */
+   * to ReconstructionByErosionImageFilter. */
   void GenerateData();
   
 
@@ -139,7 +139,7 @@ private:
   unsigned long m_NumberOfIterationsUsed;
 
   bool                m_FullyConnected;
-} ; // end of class
+}; // end of class
 
 } // end namespace itk
   
@@ -148,5 +148,3 @@ private:
 #endif
 
 #endif
-
-

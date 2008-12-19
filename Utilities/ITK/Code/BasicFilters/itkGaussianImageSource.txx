@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGaussianImageSource.txx,v $
   Language:  C++
-  Date:      $Date: 2007-02-13 16:14:57 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2008-10-16 16:45:07 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkGaussianImageSource_txx
-#define _itkGaussianImageSource_txx
+#ifndef __itkGaussianImageSource_txx
+#define __itkGaussianImageSource_txx
 
 #include "itkGaussianImageSource.h"
 #include "itkGaussianSpatialFunction.h"
@@ -154,7 +154,7 @@ GaussianImageSource<TOutputImage>
                             outputPtr->GetRequestedRegion()
                                          .GetNumberOfPixels());
   // Walk the output image, evaluating the spatial function at each pixel
-  for ( ; !outIt.IsAtEnd(); ++outIt)
+  for (; !outIt.IsAtEnd(); ++outIt)
     {
     typename TOutputImage::IndexType index = outIt.GetIndex();
     outputPtr->TransformIndexToPhysicalPoint(index, evalPoint );

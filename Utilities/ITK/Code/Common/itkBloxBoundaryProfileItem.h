@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBloxBoundaryProfileItem.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-30 20:56:07 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2008-10-07 12:04:39 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -100,10 +100,10 @@ private:
   /** Length of sampling profile */
   unsigned int m_ProfileLength;
 
-  /** Mean location of the boundary along sampling profile*/
+  /** Mean location of the boundary along sampling profile */
   double m_Mean;
 
-  /** Mean normalized by the profile length*/
+  /** Mean normalized by the profile length */
   double m_MeanNormalized;
 
   /** Width of blurred boundary */

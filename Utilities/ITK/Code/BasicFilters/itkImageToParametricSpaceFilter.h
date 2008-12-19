@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageToParametricSpaceFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-07-22 23:37:31 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2008-10-16 16:45:10 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -69,16 +69,16 @@ public:
   InputImageIterator;
 
   /** Some typedefs associated with the output mesh. */
-  typedef TOutputMesh OutputMeshType;
-  typedef typename OutputMeshType::PointType        PointType;
-  typedef typename OutputMeshType::Pointer          OutputMeshPointer;
-  typedef typename OutputMeshType::PointsContainer  PointsContainer; 
-  typedef typename OutputMeshType::PointIdentifier  PointIdentifier; 
-  typedef typename PointsContainer::Pointer         PointsContainerPointer;
-  typedef typename PointsContainer::Iterator        PointsContainerIterator;
+  typedef TOutputMesh                                 OutputMeshType;
+  typedef typename OutputMeshType::PointType          PointType;
+  typedef typename OutputMeshType::Pointer            OutputMeshPointer;
+  typedef typename OutputMeshType::PointsContainer    PointsContainer; 
+  typedef typename OutputMeshType::PointIdentifier    PointIdentifier; 
+  typedef typename PointsContainer::Pointer           PointsContainerPointer;
+  typedef typename PointsContainer::Iterator          PointsContainerIterator;
   typedef typename OutputMeshType::PointDataContainer PointDataContainer; 
-  typedef typename PointDataContainer::Pointer      PointDataContainerPointer;
-  typedef typename PointDataContainer::Iterator     PointDataContainerIterator;
+  typedef typename PointDataContainer::Pointer        PointDataContainerPointer;
+  typedef typename PointDataContainer::Iterator       PointDataContainerIterator;
 
   /** The dimension of the output mesh. */
   itkStaticConstMacro(PointDimension, unsigned int,

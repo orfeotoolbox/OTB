@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSignedMaurerDistanceMapImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-27 11:36:41 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2008-08-01 20:07:06 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -70,6 +70,8 @@ public:
                       TInputImage::ImageDimension);
   itkStaticConstMacro(OutputImageDimension, unsigned int,
                       TOutputImage::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int,
+                      TOutputImage::ImageDimension);
 
 
   /** Convenient typedefs for simplifying declarations. */
@@ -104,7 +106,8 @@ public:
 
   typedef typename InputImageType::SpacingType  InputSpacingType;
   typedef typename OutputImageType::SpacingType OutputSpacingType;
-
+  typedef typename OutputImageType::RegionType  OutputImageRegionType;
+  
   /** Set if the distance should be squared. */
   itkSetMacro(SquaredDistance, bool);
 
@@ -153,6 +156,10 @@ protected:
 
   void GenerateData();
 
+  int SplitRequestedRegion(int i, int num, OutputImageRegionType& splitRegion);
+
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId );
+
   
 private:
 
@@ -166,9 +173,11 @@ private:
   InputPixelType         m_BackgroundValue;  
   InputSpacingType       m_Spacing;
 
-  bool     m_InsideIsPositive;
-  bool     m_UseImageSpacing;
-  bool     m_SquaredDistance;
+  bool                   m_InsideIsPositive;
+  bool                   m_UseImageSpacing;
+  bool                   m_SquaredDistance;
+  
+  unsigned int           m_CurrentDimension;
 
 };
 

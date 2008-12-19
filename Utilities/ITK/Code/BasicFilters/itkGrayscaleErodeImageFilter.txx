@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGrayscaleErodeImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2004-04-30 21:02:03 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2008-10-16 16:45:08 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -16,6 +16,16 @@
 =========================================================================*/
 #ifndef __itkGrayscaleErodeImageFilter_txx
 #define __itkGrayscaleErodeImageFilter_txx
+
+// First make sure that the configuration is available.
+// This line can be removed once the optimized versions
+// gets integrated into the main directories.
+#include "itkConfigure.h"
+
+#ifdef ITK_USE_CONSOLIDATED_MORPHOLOGY
+#include "itkOptGrayscaleErodeImageFilter.txx"
+#else
+
 
 #include "itkGrayscaleErodeImageFilter.h"
 
@@ -37,7 +47,7 @@ GrayscaleErodeImageFilter<TInputImage, TOutputImage, TKernel>
            const KernelIteratorType kernelEnd)
 {
   unsigned int i;
-  PixelType min = NumericTraits<PixelType>::max() ;
+  PixelType min = NumericTraits<PixelType>::max();
   PixelType temp;
 
   KernelIteratorType kernel_it;
@@ -53,12 +63,16 @@ GrayscaleErodeImageFilter<TInputImage, TOutputImage, TKernel>
       temp = nit.GetPixel(i);
 
       if (temp < min)
-        min = temp ;
+        {
+        min = temp;
+        }
       }
     }
   
-  return min ;
+  return min;
 } 
   
 }// end namespace itk
+#endif
+
 #endif

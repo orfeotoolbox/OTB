@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryFunctorImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-03 13:45:32 $
-  Version:   $Revision: 1.36 $
+  Date:      $Date: 2008-10-07 17:31:02 $
+  Version:   $Revision: 1.37 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -41,10 +41,10 @@ class ITK_EXPORT BinaryFunctorImageFilter :
 {
 public:
   /** Standard class typedefs. */
-  typedef BinaryFunctorImageFilter  Self;
+  typedef BinaryFunctorImageFilter                       Self;
   typedef InPlaceImageFilter<TInputImage1,TOutputImage>  Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                             Pointer;
+  typedef SmartPointer<const Self>                       ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -53,19 +53,21 @@ public:
   itkTypeMacro(BinaryFunctorImageFilter, InPlaceImageFilter);
 
   /** Some convenient typedefs. */
-  typedef TFunction   FunctorType;
-  typedef TInputImage1 Input1ImageType;
+  typedef TFunction                              FunctorType;
+  typedef TInputImage1                           Input1ImageType;
   typedef typename Input1ImageType::ConstPointer Input1ImagePointer;
-  typedef typename Input1ImageType::RegionType Input1ImageRegionType; 
-  typedef typename Input1ImageType::PixelType Input1ImagePixelType; 
-  typedef TInputImage2 Input2ImageType;
+  typedef typename Input1ImageType::RegionType   Input1ImageRegionType; 
+  typedef typename Input1ImageType::PixelType    Input1ImagePixelType; 
+
+  typedef TInputImage2                           Input2ImageType;
   typedef typename Input2ImageType::ConstPointer Input2ImagePointer;
-  typedef typename Input2ImageType::RegionType Input2ImageRegionType; 
-  typedef typename Input2ImageType::PixelType Input2ImagePixelType; 
-  typedef TOutputImage OutputImageType;
-  typedef typename OutputImageType::Pointer OutputImagePointer;
-  typedef typename OutputImageType::RegionType OutputImageRegionType;
-  typedef typename OutputImageType::PixelType OutputImagePixelType;
+  typedef typename Input2ImageType::RegionType   Input2ImageRegionType; 
+  typedef typename Input2ImageType::PixelType    Input2ImagePixelType; 
+
+  typedef TOutputImage                           OutputImageType;
+  typedef typename OutputImageType::Pointer      OutputImagePointer;
+  typedef typename OutputImageType::RegionType   OutputImageRegionType;
+  typedef typename OutputImageType::PixelType    OutputImagePixelType;
 
   /** Connect one of the operands for pixel-wise addition */
   void SetInput1( const TInputImage1 * image1);
@@ -95,13 +97,13 @@ public:
    * (or the compiler's default implementation of operator!=() being
    * appropriate). */
   void SetFunctor(const FunctorType& functor)
-  {
+    {
     if (m_Functor != functor)
       {
       m_Functor = functor;
       this->Modified();
       }
-  }
+    }
 
   /** ImageDimension constants */
   itkStaticConstMacro(

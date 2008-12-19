@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshEulerOperatorSplitVertexFunction.h,v $
   Language:  C++
-  Date:      $Date: 2007-08-02 23:38:12 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2008-09-30 18:07:03 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -39,8 +39,8 @@ public:
   /** Standard class typedefs. */
   typedef QuadEdgeMeshEulerOperatorSplitVertexFunction     Self;
   typedef QuadEdgeMeshFunctionBase< TMesh, TQEType* >      Superclass;
-  typedef itk::SmartPointer< Self >                        Pointer;
-  typedef itk::SmartPointer< const Self >                  ConstPointer;
+  typedef SmartPointer< Self >                             Pointer;
+  typedef SmartPointer< const Self >                       ConstPointer;
   
   itkNewMacro( Self );
   /** Run-time type information (and related methods). */

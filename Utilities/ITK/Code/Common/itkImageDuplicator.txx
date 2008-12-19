@@ -3,26 +3,26 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkImageDuplicator.txx,v $
 Language:  C++
-Date:      $Date: 2005-08-23 18:07:15 $
-Version:   $Revision: 1.5 $
+Date:      $Date: 2008-10-17 13:35:26 $
+Version:   $Revision: 1.6 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkImageDuplicator_txx
-#define _itkImageDuplicator_txx
+#ifndef __itkImageDuplicator_txx
+#define __itkImageDuplicator_txx
 
 #include "itkImageDuplicator.h"
 
 
 namespace itk
-{ 
-    
+{
+
 /** Constructor */
 template<class TInputImage>
 ImageDuplicator<TInputImage>
@@ -51,7 +51,7 @@ ImageDuplicator<TInputImage>
   t2 = m_InputImage->GetMTime();
   t = (t1 > t2 ? t1 : t2);
 
-  if(t == m_InternalImageTime) 
+  if(t == m_InternalImageTime)
     {
     return; // No need to update
     }

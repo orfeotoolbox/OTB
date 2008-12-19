@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorCurvatureAnisotropicDiffusionImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-04-03 15:07:52 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2008-10-17 16:30:54 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkVectorCurvatureAnisotropicDiffusionImageFilter_h_
-#define __itkVectorCurvatureAnisotropicDiffusionImageFilter_h_
+#ifndef __itkVectorCurvatureAnisotropicDiffusionImageFilter_h
+#define __itkVectorCurvatureAnisotropicDiffusionImageFilter_h
 
 #include "itkExceptionObject.h"
 #include "itkAnisotropicDiffusionImageFilter.h"
@@ -65,9 +65,9 @@ public:
   /** Standard itk typedefs */
   typedef VectorCurvatureAnisotropicDiffusionImageFilter Self;
   typedef AnisotropicDiffusionImageFilter<TInputImage, TOutputImage>
-  Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+                                                         Superclass;
+  typedef SmartPointer<Self>                             Pointer;
+  typedef SmartPointer<const Self>                       ConstPointer;
 
   /** Instantiation through object factory. */
   itkNewMacro(Self);
@@ -94,24 +94,22 @@ public:
 
 protected:
   VectorCurvatureAnisotropicDiffusionImageFilter()
-  {
+    {
     typename VectorCurvatureNDAnisotropicDiffusionFunction<UpdateBufferType>::Pointer q
       = VectorCurvatureNDAnisotropicDiffusionFunction<UpdateBufferType>::New();
     this->SetDifferenceFunction(q);
-  }
+    }
   ~VectorCurvatureAnisotropicDiffusionImageFilter() {}
 
   virtual void InitializeIteration()
-  {
+    {
     Superclass::InitializeIteration();
     if (this->GetTimeStep() >  0.5 / vcl_pow(2.0, static_cast<double>(ImageDimension))  )
       {
       itkWarningMacro(<< "Anisotropic diffusion has attempted to use a time step which may introduce instability into the solution." );
       }
-  }
+    }
   
-  void PrintSelf(std::ostream& os, Indent indent) const
-  { Superclass::PrintSelf(os,indent);  }
 private:
   VectorCurvatureAnisotropicDiffusionImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVTKImageExportBase.cxx,v $
   Language:  C++
-  Date:      $Date: 2007-10-05 10:29:52 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2008-10-09 15:31:37 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -185,81 +185,80 @@ void VTKImageExportBase::UpdateDataCallback()
 //----------------------------------------------------------------------------
 void VTKImageExportBase::UpdateInformationCallbackFunction(void* userData)
 {
-  static_cast<VTKImageExportBase*>(userData)->
-    UpdateInformationCallback();
+  static_cast<VTKImageExportBase*>
+    (userData)->UpdateInformationCallback();
 }
 
 int VTKImageExportBase::PipelineModifiedCallbackFunction(void* userData)
 {
-  return static_cast<VTKImageExportBase*>(userData)->
-    PipelineModifiedCallback();
+  return static_cast<VTKImageExportBase*>
+    (userData)->PipelineModifiedCallback();
 }
 
 int* VTKImageExportBase::WholeExtentCallbackFunction(void* userData)
 {
-  return static_cast<VTKImageExportBase*>(userData)->
-    WholeExtentCallback();
+  return static_cast<VTKImageExportBase*>
+    (userData)->WholeExtentCallback();
 }
 
 double* VTKImageExportBase::OriginCallbackFunction(void* userData)
 {
-  return static_cast<VTKImageExportBase*>(userData)->
-    OriginCallback();
+  return static_cast<VTKImageExportBase*>
+    (userData)->OriginCallback();
 }
 
 float* VTKImageExportBase::FloatOriginCallbackFunction(void* userData)
 {
-  return static_cast<VTKImageExportBase*>(userData)->
-    FloatOriginCallback();
+  return static_cast<VTKImageExportBase*>
+    (userData)->FloatOriginCallback();
 }
 
 double* VTKImageExportBase::SpacingCallbackFunction(void* userData)
 {
-  return static_cast<VTKImageExportBase*>(userData)->
-    SpacingCallback();
+  return static_cast<VTKImageExportBase*>
+    (userData)->SpacingCallback();
 }
 
 float* VTKImageExportBase::FloatSpacingCallbackFunction(void* userData)
 {
-  return static_cast<VTKImageExportBase*>(userData)->
-    FloatSpacingCallback();
+  return static_cast<VTKImageExportBase*>
+    (userData)->FloatSpacingCallback();
 }
 
 const char* VTKImageExportBase::ScalarTypeCallbackFunction(void* userData)
 {
-  return static_cast<VTKImageExportBase*>(userData)->
-    ScalarTypeCallback();
+  return static_cast<VTKImageExportBase*>
+    (userData)->ScalarTypeCallback();
 }
  
 int VTKImageExportBase::NumberOfComponentsCallbackFunction(void* userData)
 {
-  return static_cast<VTKImageExportBase*>(userData)->
-    NumberOfComponentsCallback();
+  return static_cast<VTKImageExportBase*>
+    (userData)->NumberOfComponentsCallback();
 }
 
 void VTKImageExportBase::PropagateUpdateExtentCallbackFunction(void* userData,
                                                                int* extent)
 {
-  static_cast<VTKImageExportBase*>(userData)->
-    PropagateUpdateExtentCallback(extent);
-}
-
-void VTKImageExportBase::UpdateDataCallbackFunction(void* userData)
-{
-  static_cast<VTKImageExportBase*>(userData)->
-    UpdateDataCallback();
+  static_cast<VTKImageExportBase*>
+    (userData)->PropagateUpdateExtentCallback(extent);
 }
 
 int* VTKImageExportBase::DataExtentCallbackFunction(void* userData)
 {
-  return static_cast<VTKImageExportBase*>(userData)->
-    DataExtentCallback();
+  return static_cast<VTKImageExportBase*>
+    (userData)->DataExtentCallback();
 }
 
 void* VTKImageExportBase::BufferPointerCallbackFunction(void* userData)
 {
-  return static_cast<VTKImageExportBase*>(userData)->
-    BufferPointerCallback();
+  return static_cast<VTKImageExportBase*>
+    (userData)->BufferPointerCallback();
+}
+
+void VTKImageExportBase::UpdateDataCallbackFunction(void* userData)
+{
+  static_cast<VTKImageExportBase*>(userData)->UpdateDataCallback();
 }
 
 

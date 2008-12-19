@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeanImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-01-11 19:43:31 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2008-10-16 18:05:25 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,19 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkMeanImageFilter_txx
-#define _itkMeanImageFilter_txx
+#ifndef __itkMeanImageFilter_txx
+#define __itkMeanImageFilter_txx
+
+
+// First make sure that the configuration is available.
+// This line can be removed once the optimized versions
+// gets integrated into the main directories.
+#include "itkConfigure.h"
+
+#ifdef ITK_USE_CONSOLIDATED_MORPHOLOGY
+#include "itkOptMeanImageFilter.txx"
+#else
+
 #include "itkMeanImageFilter.h"
 
 #include "itkConstNeighborhoodIterator.h"
@@ -159,5 +170,7 @@ MeanImageFilter<TInputImage, TOutput>
 }
 
 } // end namespace itk
+
+#endif
 
 #endif

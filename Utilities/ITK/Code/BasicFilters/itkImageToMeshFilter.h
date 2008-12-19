@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageToMeshFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:50 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2008-10-16 16:45:10 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -36,10 +36,10 @@ class ITK_EXPORT ImageToMeshFilter : public MeshSource<TOutputMesh>
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageToMeshFilter  Self;
+  typedef ImageToMeshFilter        Self;
   typedef MeshSource<TOutputMesh>  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>       Pointer;
+  typedef SmartPointer<const Self> ConstPointer;
 
   
   /** Run-time type information (and related methods). */
@@ -74,7 +74,6 @@ public:
 protected:
   ImageToMeshFilter();
   ~ImageToMeshFilter();
-  void PrintSelf(std::ostream& os, Indent indent) const;
  
 private:
   ImageToMeshFilter(const ImageToMeshFilter&); //purposely not implemented

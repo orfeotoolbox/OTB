@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWeightedCentroidKdTreeGenerator.txx,v $
   Language:  C++
-  Date:      $Date: 2008-04-29 23:00:08 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2008-08-22 23:42:31 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -99,16 +99,14 @@ WeightedCentroidKdTreeGenerator< TSample >
   medianIndex = (endIndex - beginIndex) / 2;
 
   //
-  // Find the medial element by using the QuickSelect algorithm
-  // based on its description on the Wikipedia:
-  // http://en.wikipedia.org/wiki/Selection_algorithm
+  // Find the medial element by using the NthElement function
+  // based on the STL implementation of the QuickSelect algorithm.
   //
   partitionValue =
-    QuickSelect< SubsampleType >(this->GetSubsample(),
+    NthElement< SubsampleType >(this->GetSubsample(),
                                  partitionDimension,
                                  beginIndex, endIndex, 
-                                 medianIndex,
-                                 m_TempMean[partitionDimension]);
+                                 medianIndex);
              
   medianIndex += beginIndex;
 

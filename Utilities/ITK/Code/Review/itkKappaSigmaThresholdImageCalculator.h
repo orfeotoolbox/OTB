@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkKappaSigmaThresholdImageCalculator.h,v $
   Language:  C++
-  Date:      $Date: 2008-07-05 16:45:08 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2008-09-29 18:36:38 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -40,7 +40,7 @@ class ITK_EXPORT KappaSigmaThresholdImageCalculator : public Object
 {
 public:
   /** Standard class typedefs. */
-  typedef KappaSigmaThresholdImageCalculator         Self;
+  typedef KappaSigmaThresholdImageCalculator    Self;
   typedef Object                                Superclass;
   typedef SmartPointer<Self>                    Pointer;
   typedef SmartPointer<const Self>              ConstPointer;

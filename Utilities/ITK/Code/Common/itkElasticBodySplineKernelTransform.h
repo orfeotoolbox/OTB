@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkElasticBodySplineKernelTransform.h,v $
   Language:  C++
-  Date:      $Date: 2007-12-20 17:10:46 $
-  Version:   $Revision: 1.34 $
+  Date:      $Date: 2008-10-07 12:03:53 $
+  Version:   $Revision: 1.35 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -77,10 +77,10 @@ public:
   
   /** These (rather redundant) typedefs are needed because on SGI, typedefs
    * are not inherited */
-  typedef typename Superclass::InputPointType  InputPointType;
-  typedef typename Superclass::OutputPointType  OutputPointType;
-  typedef typename Superclass::InputVectorType InputVectorType;
-  typedef typename Superclass::OutputVectorType OutputVectorType;
+  typedef typename Superclass::InputPointType           InputPointType;
+  typedef typename Superclass::OutputPointType          OutputPointType;
+  typedef typename Superclass::InputVectorType          InputVectorType;
+  typedef typename Superclass::OutputVectorType         OutputVectorType;
   typedef typename Superclass::InputCovariantVectorType InputCovariantVectorType;
   typedef typename Superclass::OutputCovariantVectorType OutputCovariantVectorType;
     
@@ -115,7 +115,7 @@ protected:
    */
   TScalarType m_Alpha;
 
-  private:
+private:
   ElasticBodySplineKernelTransform(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 

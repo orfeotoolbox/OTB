@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDivideImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-12-08 17:18:04 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2008-10-14 19:20:33 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -43,15 +43,15 @@ public:
   Div() {};
   ~Div() {};
   bool operator!=( const Div & ) const
-  {
+    {
     return false;
-  }
+    }
   bool operator==( const Div & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
   inline TOutput operator()( const TInput1 & A, const TInput2 & B)
-  {
+    {
     if(B != (TInput2) 0)
       {
       return (TOutput)(A / B);
@@ -60,7 +60,7 @@ public:
       {
       return NumericTraits<TOutput>::max(A);
       }
-  }
+    }
 }; 
 }
 
@@ -92,7 +92,7 @@ public:
   /** 
    * Smart pointer typedef support 
    */
-  typedef SmartPointer<Self>   Pointer;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
   /**

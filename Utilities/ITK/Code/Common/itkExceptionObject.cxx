@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExceptionObject.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-06-13 07:20:04 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2008-10-13 15:36:31 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -58,12 +58,12 @@ private:
 
   // The data members should never change after construction of the ExceptionData object,
   // to ensure the consistency of the exception data.
-  const std::string m_Location;
-  const std::string m_Description;
-  const std::string m_File;
-  const unsigned int m_Line;
-  std::string m_What;
-  const char * m_WhatPointer;
+  const std::string       m_Location;
+  const std::string       m_Description;
+  const std::string       m_File;
+  const unsigned int      m_Line;
+  std::string             m_What;
+  const char *            m_WhatPointer;
 };
 
 
@@ -80,8 +80,8 @@ private:
 class ExceptionObject::ReferenceCountedExceptionData : public ExceptionData, public LightObject
 {
 public:
-  typedef ReferenceCountedExceptionData Self;
-  typedef SmartPointer<const Self> ConstPointer;
+  typedef ReferenceCountedExceptionData     Self;
+  typedef SmartPointer<const Self>          ConstPointer;
   static ConstPointer ConstNew(
     const std::string& file, unsigned int line,
     const std::string& description,
@@ -128,7 +128,6 @@ private:
   ReferenceCountedExceptionData(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 };
-
 
 
 ExceptionObject::ExceptionObject()
@@ -217,7 +216,7 @@ ExceptionObject::operator==( const ExceptionObject &orig )
 }
 
 void
-ExceptionObject::SetLocation(const std::string& s)    
+ExceptionObject::SetLocation(const std::string& s)
 {
   const bool IsNull = m_ExceptionData.IsNull();
   m_ExceptionData = ReferenceCountedExceptionData::ConstNew(
@@ -239,7 +238,7 @@ ExceptionObject::SetDescription(const std::string& s)
 }
 
 void
-ExceptionObject::SetLocation(const char * s)          
+ExceptionObject::SetLocation(const char * s)
 {
   std::string location;
   if( s ) 
@@ -250,7 +249,7 @@ ExceptionObject::SetLocation(const char * s)
 }
 
 void
-ExceptionObject::SetDescription(const char *s)       
+ExceptionObject::SetDescription(const char *s)
 {
   std::string description;
   if( s ) 

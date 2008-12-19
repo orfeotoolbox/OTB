@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConnectedComponentFunctorImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2005-12-13 21:29:18 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2008-10-13 18:54:27 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkConnectedComponentFunctorImageFilter_txx
-#define _itkConnectedComponentFunctorImageFilter_txx
+#ifndef __itkConnectedComponentFunctorImageFilter_txx
+#define __itkConnectedComponentFunctorImageFilter_txx
 
 #include "itkConnectedComponentFunctorImageFilter.h"
 #include "itkImageRegionIterator.h"
@@ -193,7 +193,9 @@ ConnectedComponentFunctorImageFilter< TInputImage, TOutputImage, TFunctor, TMask
         // create a new entry label
         if (maxLabel == maxPossibleLabel)
           {
-          itkWarningMacro(<< "ConnectedComponentFunctorImageFilter::GenerateData: Number of labels " << (long) maxLabel << " exceeds number of available labels " << (long) maxPossibleLabel << " for the output type." );
+          itkWarningMacro(
+            << "ConnectedComponentFunctorImageFilter::GenerateData: Number of labels " << (long) maxLabel
+            << " exceeds number of available labels " << (long) maxPossibleLabel << " for the output type." );
           }
         else
           {

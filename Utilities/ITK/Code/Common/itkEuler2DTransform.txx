@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkEuler2DTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2005-08-11 16:44:08 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2008-10-13 15:36:31 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkEuler2DTransform_txx
-#define _itkEuler2DTransform_txx
+#ifndef __itkEuler2DTransform_txx
+#define __itkEuler2DTransform_txx
 
 #include "itkEuler2DTransform.h"
 

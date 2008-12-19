@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFiniteDifferenceImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-03-03 13:58:51 $
-  Version:   $Revision: 1.46 $
+  Date:      $Date: 2008-10-16 23:25:41 $
+  Version:   $Revision: 1.47 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkFiniteDifferenceImageFilter_txx_
-#define __itkFiniteDifferenceImageFilter_txx_
+#ifndef __itkFiniteDifferenceImageFilter_txx
+#define __itkFiniteDifferenceImageFilter_txx
 
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"

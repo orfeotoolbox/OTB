@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBioGene.cxx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:28 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2008-10-20 21:28:20 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,18 +14,12 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
-
 #include "itkBioGene.h"
 #include <algorithm>
 
-
-
 namespace itk {
 
-
 namespace bio {
-
 
 /**
  *    Constructor 
@@ -36,9 +30,6 @@ Gene
   m_Name = "Unknown";
 }
 
-
-
-
 /**
  *    Destructor   
  */ 
@@ -46,8 +37,6 @@ Gene
 ::~Gene()
 {
 }
-
-
 
 /**
  *    Copy from another genome
@@ -78,8 +67,6 @@ Gene
     }  
 }
 
-
-
 /**
  *    Set the name of the gene
  */ 
@@ -89,8 +76,6 @@ Gene
 {
   m_Name = name;
 }
- 
-
 
 /**
  *    Set the name of the gene
@@ -102,10 +87,6 @@ Gene
   m_Name = name;
 }
 
-
- 
-
-
 /**
  *    Get the name of the gene
  */ 
@@ -115,12 +96,6 @@ Gene
 {
   return m_Name.c_str();
 }
- 
-
-
-
-
-
 
 /**
  *    Add a protein domain
@@ -131,9 +106,6 @@ Gene
 {
   m_ProteinDomains[ domain ] = affinity;
 }
- 
-
-
 
 /**
  *    Add a protein domain
@@ -152,5 +124,3 @@ Gene
 }  // end namespace bio
 
 }  // end namespace itk
-
-

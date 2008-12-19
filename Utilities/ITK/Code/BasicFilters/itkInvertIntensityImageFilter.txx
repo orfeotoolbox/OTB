@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkInvertIntensityImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-02-03 12:46:46 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2008-10-16 16:45:11 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkInvertIntensityImageFilter_txx
-#define _itkInvertIntensityImageFilter_txx
+#ifndef __itkInvertIntensityImageFilter_txx
+#define __itkInvertIntensityImageFilter_txx
 
 #include "itkInvertIntensityImageFilter.h"
 #include "itkMinimumMaximumImageCalculator.h"

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCurvesLevelSetFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2005-04-17 16:59:50 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2008-10-23 16:15:23 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkCurvesLevelSetFunction_txx_
-#define __itkCurvesLevelSetFunction_txx_
+#ifndef __itkCurvesLevelSetFunction_txx
+#define __itkCurvesLevelSetFunction_txx
 
 #include "itkCurvesLevelSetFunction.h"
 #include "itkImageRegionIterator.h"

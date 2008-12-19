@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshMacro.h,v $
   Language:  C++
-  Date:      $Date: 2008-02-07 15:58:06 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2008-10-03 21:30:29 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -118,6 +118,7 @@ namespace itk
      while( cellIterator != MeshInstance->GetCells()->End() )                \
        {                                                                     \
        /* Users code comes here: */
+
 
 /** \def itkQEMeshForAllCellsEndMacro
  * \brief Terminates a block of code started with the macro

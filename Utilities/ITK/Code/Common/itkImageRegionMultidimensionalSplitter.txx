@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageRegionMultidimensionalSplitter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-03-19 04:36:59 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2008-10-18 21:13:25 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkImageRegionMultidimensionalSplitter_txx
-#define _itkImageRegionMultidimensionalSplitter_txx
+#ifndef __itkImageRegionMultidimensionalSplitter_txx
+#define __itkImageRegionMultidimensionalSplitter_txx
 #include "itkImageRegionMultidimensionalSplitter.h"
 #include <math.h>
 

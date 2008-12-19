@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTileImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-07-01 23:10:54 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2008-10-18 16:11:15 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkTileImageFilter_txx
-#define _itkTileImageFilter_txx
+#ifndef __itkTileImageFilter_txx
+#define __itkTileImageFilter_txx
 #include "itkTileImageFilter.h"
 
 #include "itkExceptionObject.h"
@@ -211,7 +211,7 @@ TileImageFilter<TInputImage, TOutputImage>
       }
     ++input;
     ++it;
-  }
+    }
 
   // Find the size of the largest cell for each "row" in each dimension.
   ImageLinearConstIteratorWithIndex<TileImageType> tit( m_TileImage, m_TileImage->GetRequestedRegion() );

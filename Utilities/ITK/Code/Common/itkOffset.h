@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOffset.h,v $
   Language:  C++
-  Date:      $Date: 2008-05-08 15:41:46 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2008-08-05 18:41:06 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -31,6 +31,12 @@
 #endif
 namespace itk
 {
+
+namespace Functor
+{
+template<unsigned int VOffsetDimension> class OffsetLexicographicCompare;
+}
+
 
 /** 
  * \class Offset
@@ -62,6 +68,9 @@ public:
   typedef   Offset<VOffsetDimension>  OffsetType;
   typedef   long OffsetValueType;
     
+  /** Lexicographic ordering functor type.  */
+  typedef Functor::OffsetLexicographicCompare<VOffsetDimension> LexicographicCompare;
+
   /** Add an offset to an offset. */
   const Self
   operator+(const Self &offset) const
@@ -197,6 +206,38 @@ public:
 
 };
 
+
+namespace Functor
+{
+/** \class OffsetLexicographicCompare
+ * \brief Order Offset instances lexicographically.
+ *
+ * This is a comparison functor suitable for storing Offset instances
+ * in an STL container.  The ordering is total and unique but has
+ * little geometric meaning.
+ */
+template<unsigned int VOffsetDimension>
+class OffsetLexicographicCompare
+{
+public:
+  bool operator()(Offset<VOffsetDimension> const& l,
+                  Offset<VOffsetDimension> const& r) const
+    {
+    for(unsigned int i=0; i < VOffsetDimension; ++i)
+      {
+      if(l.m_Offset[i] < r.m_Offset[i])
+        {
+        return true;
+        }
+      else if(l.m_Offset[i] > r.m_Offset[i])
+        {
+        return false;
+        }
+      }
+    return false;
+    }
+};
+}
 
 template<unsigned int VOffsetDimension>
 Offset<VOffsetDimension> 

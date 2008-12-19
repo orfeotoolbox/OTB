@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMINC2ImageIO.h,v $
   Language:  C++
-  Date:      $Date: 2008-01-27 12:53:07 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2008-10-27 03:11:46 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -34,11 +34,9 @@
 #include "itkMatrix.h"
 
 extern "C" {
-#include <netcdf.h>
-#include <hdf5.h>
 #include <minc2.h>
-
 }
+
 namespace itk
 {
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGaussianImageSource.h,v $
   Language:  C++
-  Date:      $Date: 2005-07-26 15:06:24 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2008-10-16 16:45:07 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,10 +44,10 @@ class ITK_EXPORT GaussianImageSource : public ImageSource<TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef GaussianImageSource   Self;
+  typedef GaussianImageSource        Self;
   typedef ImageSource<TOutputImage>  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>         Pointer;
+  typedef SmartPointer<const Self>   ConstPointer;
 
   /** Typedef for the output image PixelType. */
   typedef typename TOutputImage::PixelType OutputImagePixelType;

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDecisionRuleBase.h,v $
   Language:  C++
-  Date:      $Date: 2008-05-08 15:40:08 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2008-10-07 09:09:39 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -38,10 +38,10 @@ class ITKCommon_EXPORT DecisionRuleBase : public Object
 {
 public:
   /** Standard class typedefs */ 
-  typedef DecisionRuleBase Self ;
-  typedef Object Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+  typedef DecisionRuleBase              Self;
+  typedef Object                        Superclass;
+  typedef SmartPointer<Self>            Pointer;
+  typedef SmartPointer<const Self>      ConstPointer;
   
   /** Run-time type information (and related methods) */
   itkTypeMacro(DecisionRuleBase, Object);
@@ -72,15 +72,8 @@ protected:
 private:
   DecisionRuleBase(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-} ; // end of class
+}; // end of class
 
 } // namespace itk
 
 #endif
-
-
-
-
-
-
-

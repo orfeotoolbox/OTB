@@ -4,8 +4,8 @@ Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkFEMRegistrationFilter.txx,v $
 Language:  C++
 
-Date:      $Date: 2008-02-01 13:10:27 $
-Version:   $Revision: 1.55 $
+Date:      $Date: 2008-12-08 01:10:41 $
+Version:   $Revision: 1.55.6.1 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for detail.
@@ -627,8 +627,9 @@ void FEMRegistrationFilter<TMovingImage,TFixedImage>::WarpImage( const MovingIma
   warper->SetInput( ImageToWarp );
   warper->SetDeformationField( m_Field );
   warper->SetInterpolator( interpolator );
-  warper->SetOutputSpacing( m_FixedImage->GetSpacing() );
   warper->SetOutputOrigin( m_FixedImage->GetOrigin() );
+  warper->SetOutputSpacing( m_FixedImage->GetSpacing() );
+  warper->SetOutputDirection( m_FixedImage->GetDirection() );
   typename FixedImageType::PixelType padValue = 0;
   warper->SetEdgePaddingValue( padValue );
   warper->Update();
@@ -1097,8 +1098,9 @@ void FEMRegistrationFilter<TMovingImage,TFixedImage>
   m_Field = FieldType::New();
 
   m_FieldRegion.SetSize(m_CurrentLevelImageSize );
-  m_Field->SetSpacing( m_FixedImage->GetSpacing() );
   m_Field->SetOrigin( m_FixedImage->GetOrigin() );
+  m_Field->SetSpacing( m_FixedImage->GetSpacing() );
+  m_Field->SetDirection( m_FixedImage->GetDirection() );
   m_Field->SetLargestPossibleRegion( m_FieldRegion );
   m_Field->SetBufferedRegion( m_FieldRegion );
   m_Field->SetLargestPossibleRegion( m_FieldRegion );
@@ -1536,8 +1538,9 @@ void FEMRegistrationFilter<TMovingImage,TFixedImage>::EnforceDiffeomorphism(floa
       warper->SetInput( m_OriginalMovingImage );
       warper->SetDeformationField( fullField );
       warper->SetInterpolator( interpolator );
-      warper->SetOutputSpacing( m_FixedImage->GetSpacing() );
       warper->SetOutputOrigin( m_FixedImage->GetOrigin() );
+      warper->SetOutputSpacing( m_FixedImage->GetSpacing() );
+      warper->SetOutputDirection( m_FixedImage->GetDirection() );
       typename MovingImageType::PixelType padValue = 0;
       warper->SetEdgePaddingValue( padValue );
       warper->Update();
@@ -1621,8 +1624,9 @@ void FEMRegistrationFilter<TMovingImage,TFixedImage>::EnforceDiffeomorphism(floa
       warper->SetInput( m_OriginalMovingImage );
       warper->SetDeformationField( m_TotalField );
       warper->SetInterpolator( interpolator );
-      warper->SetOutputSpacing( m_FixedImage->GetSpacing() );
       warper->SetOutputOrigin( m_FixedImage->GetOrigin() );
+      warper->SetOutputSpacing( m_FixedImage->GetSpacing() );
+      warper->SetOutputDirection( m_FixedImage->GetDirection() );
       typename FixedImageType::PixelType padValue = 0;
       warper->SetEdgePaddingValue( padValue );
       warper->Update();

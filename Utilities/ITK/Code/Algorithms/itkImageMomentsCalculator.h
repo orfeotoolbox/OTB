@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageMomentsCalculator.h,v $
   Language:  C++
-  Date:      $Date: 2008-01-01 21:23:29 $
-  Version:   $Revision: 1.38 $
+  Date:      $Date: 2008-10-06 15:37:59 $
+  Version:   $Revision: 1.41 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.

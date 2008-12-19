@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkErodeObjectMorphologyImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-02-08 14:19:06 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2008-10-14 19:20:33 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -48,9 +48,9 @@ public:
   /** Standard class typedefs. */
   typedef ErodeObjectMorphologyImageFilter Self;
   typedef ObjectMorphologyImageFilter<TInputImage, TOutputImage, TKernel>
-  Superclass;
-  typedef SmartPointer<Self>        Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+                                           Superclass;
+  typedef SmartPointer<Self>               Pointer;
+  typedef SmartPointer<const Self>         ConstPointer;
   
   /** Standard New method */
   itkNewMacro(Self);  
@@ -65,9 +65,9 @@ public:
   typedef TKernel KernelType;
   
   /** Kernel (structuring element) iterator */
-  typedef typename KernelType::ConstIterator KernelIteratorType ;
+  typedef typename KernelType::ConstIterator KernelIteratorType;
  
-  typedef NeighborhoodIterator<TOutputImage> OutputNeighborhoodIteratorType ;
+  typedef NeighborhoodIterator<TOutputImage> OutputNeighborhoodIteratorType;
 
   /** Default boundary condition type */
   typedef typename Superclass::DefaultBoundaryConditionType 
@@ -121,7 +121,7 @@ private:
   // NumericTraits<PixelType>::max()
   DefaultBoundaryConditionType m_ErodeBoundaryCondition;
 
-} ; // end of class
+}; // end of class
 
 } // end namespace itk
   
@@ -130,5 +130,3 @@ private:
 #endif
 
 #endif
-
-

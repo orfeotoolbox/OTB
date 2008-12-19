@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageIOBase.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-06-25 11:30:38 $
-  Version:   $Revision: 1.79 $
+  Date:      $Date: 2008-09-15 16:49:32 $
+  Version:   $Revision: 1.80 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -568,6 +568,8 @@ void ImageIOBase::SetNumberOfDimensions(unsigned int dim)
           }
         }
       this->SetDirection(i, axis);
+      this->SetOrigin(i, 0.0);
+      this->SetSpacing(i, 1.0);
       }
     this->Modified();
     }

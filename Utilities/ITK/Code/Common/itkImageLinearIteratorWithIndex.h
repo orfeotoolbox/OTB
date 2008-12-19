@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageLinearIteratorWithIndex.h,v $
   Language:  C++
-  Date:      $Date: 2007-02-05 13:35:52 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2008-10-18 20:31:36 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -67,8 +67,8 @@ class ITK_EXPORT ImageLinearIteratorWithIndex : public ImageLinearConstIteratorW
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageLinearIteratorWithIndex Self;
-  typedef ImageLinearConstIteratorWithIndex<TImage>  Superclass;
+  typedef ImageLinearIteratorWithIndex                Self;
+  typedef ImageLinearConstIteratorWithIndex<TImage>   Superclass;
   
    /** Types inherited from the Superclass */
   typedef typename Superclass::IndexType              IndexType;
@@ -138,6 +138,3 @@ protected:
 #endif
 
 #endif 
-
-
-

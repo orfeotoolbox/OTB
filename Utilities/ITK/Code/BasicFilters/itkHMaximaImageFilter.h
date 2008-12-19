@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHMaximaImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-10-16 14:22:34 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2008-10-16 16:45:09 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -36,7 +36,7 @@ namespace itk {
  * image, the signicant "peaks" in the image can be identified.  This
  * is what the HConvexImageFilter provides.
  *
- * This filter uses the GrayscaleGeodesicDilateImageFilter.  It
+ * This filter uses the ReconstructionByDilationImageFilter.  It
  * provides its own input as the "mask" input to the geodesic
  * dilation.  The "marker" image for the geodesic dilation is
  * the input image minus the height parameter h.
@@ -45,7 +45,9 @@ namespace itk {
  * Chapter 6 of Pierre Soille's book "Morphological Image Analysis:
  * Principles and Applications", Second Edition, Springer, 2003.
  *
- * \sa GrayscaleGeodesicDilateImageFilter, HMinimaImageFilter, HConvexImageFilter
+ * The height parameter is set using SetHeight.
+ *
+ * \sa ReconstructionByDilationImageFilter, HMinimaImageFilter, HConvexImageFilter
  * \sa MorphologyImageFilter, GrayscaleDilateImageFilter, GrayscaleFunctionDilateImageFilter, BinaryDilateImageFilter
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  */
@@ -55,19 +57,19 @@ class ITK_EXPORT HMaximaImageFilter :
 {
 public:
   /** Standard class typedefs. */
-  typedef HMaximaImageFilter Self;
+  typedef HMaximaImageFilter        Self;
   typedef ImageToImageFilter<TInputImage, TOutputImage>
-  Superclass;
+                                    Superclass;
   typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
   /** Some convenient typedefs. */
-  typedef TInputImage InputImageType;
-  typedef TOutputImage OutputImageType;
+  typedef TInputImage                              InputImageType;
   typedef typename InputImageType::Pointer         InputImagePointer;
   typedef typename InputImageType::ConstPointer    InputImageConstPointer;
   typedef typename InputImageType::RegionType      InputImageRegionType;
   typedef typename InputImageType::PixelType       InputImagePixelType;
+  typedef TOutputImage                             OutputImageType;
   typedef typename OutputImageType::Pointer        OutputImagePointer;
   typedef typename OutputImageType::ConstPointer   OutputImageConstPointer;
   typedef typename OutputImageType::RegionType     OutputImageRegionType;
@@ -132,13 +134,12 @@ protected:
   /** HMaximaImageFilter needs the entire input be
    * available. Thus, it needs to provide an implementation of
    * GenerateInputRequestedRegion(). */
-  void GenerateInputRequestedRegion() ;
+  void GenerateInputRequestedRegion();
 
   /** HMaximaImageFilter will produce the entire output. */
   void EnlargeOutputRequestedRegion(DataObject *itkNotUsed(output));
   
-  /** Single-threaded version of GenerateData.  This filter delegates
-   * to GrayscaleGeodesicErodeImageFilter. */
+  /** Single-threaded version of GenerateData. */
   void GenerateData();
   
 
@@ -147,9 +148,9 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   InputImagePixelType m_Height;
-  unsigned long m_NumberOfIterationsUsed;
+  unsigned long       m_NumberOfIterationsUsed;
   bool                m_FullyConnected;
-} ; // end of class
+}; // end of class
 
 } // end namespace itk
   
@@ -158,5 +159,3 @@ private:
 #endif
 
 #endif
-
-

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageRegionExclusionIteratorWithIndex.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:11 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2008-10-18 21:13:25 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,14 +14,13 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkImageRegionExclusionIteratorWithIndex_txx
-#define _itkImageRegionExclusionIteratorWithIndex_txx
+#ifndef __itkImageRegionExclusionIteratorWithIndex_txx
+#define __itkImageRegionExclusionIteratorWithIndex_txx
 
 #include "itkImageRegionExclusionIteratorWithIndex.h"
 
 namespace itk
 {
-
 
 
 template< typename TImage >
@@ -32,7 +31,6 @@ ImageRegionExclusionIteratorWithIndex<TImage>
 
 
 }
-
 
 
 template< typename TImage >
@@ -70,7 +68,6 @@ ImageRegionExclusionIteratorWithIndex<TImage>
   this->ImageRegionExclusionConstIteratorWithIndex<TImage>::operator=(it);
   return *this;
 }
-
 
 
 } // end namespace itk

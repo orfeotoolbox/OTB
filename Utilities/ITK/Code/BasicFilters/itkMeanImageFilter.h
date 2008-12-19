@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeanImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-29 14:53:40 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2008-10-16 18:05:25 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -16,6 +16,16 @@
 =========================================================================*/
 #ifndef __itkMeanImageFilter_h
 #define __itkMeanImageFilter_h
+
+
+// First make sure that the configuration is available.
+// This line can be removed once the optimized versions
+// gets integrated into the main directories.
+#include "itkConfigure.h"
+
+#ifdef ITK_USE_CONSOLIDATED_MORPHOLOGY
+#include "itkOptMeanImageFilter.h"
+#else
 
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"
@@ -50,14 +60,14 @@ public:
                       TOutputImage::ImageDimension);
 
   /** Convenient typedefs for simplifying declarations. */
-  typedef TInputImage InputImageType;
+  typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
 
   /** Standard class typedefs. */
-  typedef MeanImageFilter Self;
+  typedef MeanImageFilter                                      Self;
   typedef ImageToImageFilter< InputImageType, OutputImageType> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                                   Pointer;
+  typedef SmartPointer<const Self>                             ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -66,14 +76,13 @@ public:
   itkTypeMacro(MeanImageFilter, ImageToImageFilter);
   
   /** Image typedef support. */
-  typedef typename InputImageType::PixelType InputPixelType;
-  typedef typename OutputImageType::PixelType OutputPixelType;
+  typedef typename InputImageType::PixelType               InputPixelType;
+  typedef typename OutputImageType::PixelType              OutputPixelType;
   typedef typename NumericTraits<InputPixelType>::RealType InputRealType;
   
-  typedef typename InputImageType::RegionType InputImageRegionType;
+  typedef typename InputImageType::RegionType  InputImageRegionType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
-
-  typedef typename InputImageType::SizeType InputSizeType;
+  typedef typename InputImageType::SizeType    InputSizeType;
 
   /** Set the radius of the neighborhood used to compute the mean. */
   itkSetMacro(Radius, InputSizeType);
@@ -125,6 +134,8 @@ private:
 
 #ifndef ITK_MANUAL_INSTANTIATION
 #include "itkMeanImageFilter.txx"
+#endif
+
 #endif
 
 #endif

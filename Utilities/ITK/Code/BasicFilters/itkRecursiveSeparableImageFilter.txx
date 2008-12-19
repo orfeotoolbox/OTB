@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRecursiveSeparableImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-08-01 19:16:18 $
-  Version:   $Revision: 1.40 $
+  Date:      $Date: 2008-07-31 09:14:58 $
+  Version:   $Revision: 1.42 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkRecursiveSeparableImageFilter_txx
-#define _itkRecursiveSeparableImageFilter_txx
+#ifndef __itkRecursiveSeparableImageFilter_txx
+#define __itkRecursiveSeparableImageFilter_txx
 
 #include "itkRecursiveSeparableImageFilter.h"
 #include "itkObjectFactory.h"
@@ -52,8 +52,6 @@ RecursiveSeparableImageFilter<TInputImage,TOutputImage>
 }
 
 
-
-
 /**
  * Get Input Image
  */
@@ -67,11 +65,9 @@ RecursiveSeparableImageFilter<TInputImage,TOutputImage>
 }
 
 
-
-
 /**
-* Apply Recursive Filter
-*/
+ * Apply Recursive Filter
+ */
 template <typename TInputImage, typename TOutputImage>
 void
 RecursiveSeparableImageFilter<TInputImage,TOutputImage>
@@ -196,26 +192,76 @@ RecursiveSeparableImageFilter<TInputImage,TOutputImage>
 }
 
 
-/**
- * Compute Recursive filter
- * line by line in one of the dimensions
- */
+template <typename TInputImage, typename TOutputImage>
+int
+RecursiveSeparableImageFilter<TInputImage,TOutputImage>
+::SplitRequestedRegion(int i, int num, OutputImageRegionType& splitRegion)
+{
+  // Get the output pointer
+  OutputImageType * outputPtr = this->GetOutput();
+  const typename TOutputImage::SizeType& requestedRegionSize 
+    = outputPtr->GetRequestedRegion().GetSize();
+
+  int splitAxis;
+  typename TOutputImage::IndexType splitIndex;
+  typename TOutputImage::SizeType splitSize;
+
+  // Initialize the splitRegion to the output requested region
+  splitRegion = outputPtr->GetRequestedRegion();
+  splitIndex = splitRegion.GetIndex();
+  splitSize = splitRegion.GetSize();
+
+  // split on the outermost dimension available
+  // and avoid the current dimension
+  splitAxis = outputPtr->GetImageDimension() - 1;
+  while (requestedRegionSize[splitAxis] == 1 || splitAxis == (int)m_Direction)
+    {
+    --splitAxis;
+    if (splitAxis < 0)
+      { // cannot split
+      itkDebugMacro("  Cannot Split");
+      return 1;
+      }
+    }
+
+  // determine the actual number of pieces that will be generated
+  typename TOutputImage::SizeType::SizeValueType range = requestedRegionSize[splitAxis];
+  int valuesPerThread = (int)::ceil(range/(double)num);
+  int maxThreadIdUsed = (int)::ceil(range/(double)valuesPerThread) - 1;
+
+  // Split the region
+  if (i < maxThreadIdUsed)
+    {
+    splitIndex[splitAxis] += i*valuesPerThread;
+    splitSize[splitAxis] = valuesPerThread;
+    }
+  if (i == maxThreadIdUsed)
+    {
+    splitIndex[splitAxis] += i*valuesPerThread;
+    // last thread needs to process the "rest" dimension being split
+    splitSize[splitAxis] = splitSize[splitAxis] - i*valuesPerThread;
+    }
+  
+  // set the split region ivars
+  splitRegion.SetIndex( splitIndex );
+  splitRegion.SetSize( splitSize );
+
+  itkDebugMacro("  Split Piece: " << splitRegion );
+
+  return maxThreadIdUsed + 1;
+}
+
+
 template <typename TInputImage, typename TOutputImage>
 void
 RecursiveSeparableImageFilter<TInputImage,TOutputImage>
-::GenerateData() 
+::BeforeThreadedGenerateData()
 {
-  typedef typename TOutputImage::PixelType  OutputPixelType;
-
-  typedef ImageLinearConstIteratorWithIndex< TInputImage  >  InputConstIteratorType;
-  typedef ImageLinearIteratorWithIndex< TOutputImage >  OutputIteratorType;
-
   typedef ImageRegion< TInputImage::ImageDimension > RegionType;
     
   typename TInputImage::ConstPointer   inputImage(    this->GetInputImage ()   );
   typename TOutputImage::Pointer       outputImage(   this->GetOutput()        );
-    
- 
+
   const unsigned int imageDimension = inputImage->GetImageDimension();
 
   if( this->m_Direction >= imageDimension )
@@ -223,15 +269,43 @@ RecursiveSeparableImageFilter<TInputImage,TOutputImage>
     itkExceptionMacro("Direction selected for filtering is greater than ImageDimension");
     }
 
-  outputImage->SetBufferedRegion( outputImage->GetRequestedRegion() );
-  outputImage->Allocate();
-
   const typename InputImageType::SpacingType & pixelSize
     = inputImage->GetSpacing();
   
   this->SetUp( pixelSize[m_Direction] );
   
-  RegionType region = inputImage->GetRequestedRegion();
+  RegionType region = outputImage->GetRequestedRegion();
+
+  const unsigned int ln = region.GetSize()[ this->m_Direction ];
+
+  if( ln < 4 )
+    {
+    itkExceptionMacro("The number of pixels along direction " << this->m_Direction << " is less than 4. This filter requires a minimum of four pixels along the dimension to be processed.");
+    }
+
+}
+
+
+/**
+ * Compute Recursive filter
+ * line by line in one of the dimensions
+ */
+template <typename TInputImage, typename TOutputImage>
+void
+RecursiveSeparableImageFilter<TInputImage,TOutputImage>
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId)
+{
+  typedef typename TOutputImage::PixelType  OutputPixelType;
+
+  typedef ImageLinearConstIteratorWithIndex< TInputImage >  InputConstIteratorType;
+  typedef ImageLinearIteratorWithIndex< TOutputImage >      OutputIteratorType;
+
+  typedef ImageRegion< TInputImage::ImageDimension > RegionType;
+    
+  typename TInputImage::ConstPointer   inputImage(    this->GetInputImage ()   );
+  typename TOutputImage::Pointer       outputImage(   this->GetOutput()        );
+    
+  RegionType region = outputRegionForThread;
 
   InputConstIteratorType  inputIterator(  inputImage,  region );
   OutputIteratorType      outputIterator( outputImage, region );
@@ -241,11 +315,6 @@ RecursiveSeparableImageFilter<TInputImage,TOutputImage>
 
   
   const unsigned int ln = region.GetSize()[ this->m_Direction ];
-
-  if( ln < 4 )
-    {
-    itkExceptionMacro("The number of pixels along direction " << this->m_Direction << " is less than 4. This filter requires a minimum of four pixels along the dimension to be processed.");
-    }
 
   RealType *inps = 0;
   RealType *outs = 0;
@@ -287,7 +356,7 @@ RecursiveSeparableImageFilter<TInputImage,TOutputImage>
   const typename TInputImage::OffsetValueType * offsetTable = inputImage->GetOffsetTable();
   
   const unsigned int numberOfLinesToProcess = offsetTable[ TInputImage::ImageDimension ] / ln;
-  ProgressReporter progress(this,0, numberOfLinesToProcess, 10 );
+  ProgressReporter progress(this, threadId, numberOfLinesToProcess, 10 );
 
 
   try  // this try is intended to catch an eventual AbortException.
@@ -354,6 +423,3 @@ RecursiveSeparableImageFilter<TInputImage,TOutputImage>
 } // end namespace itk
 
 #endif
-
-
-

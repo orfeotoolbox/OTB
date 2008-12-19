@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBioRadImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-01-24 21:02:07 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2008-09-12 22:46:38 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -59,6 +59,9 @@ BioRadImageIO::BioRadImageIO()
   m_ByteOrder = LittleEndian;
   m_FileType = Binary;
   m_NumberOfComponents = 1; // default
+  this->AddSupportedWriteExtension(".pic");
+  this->AddSupportedReadExtension(".PIC");
+  this->AddSupportedReadExtension(".pic");
 }
 
 BioRadImageIO::~BioRadImageIO()

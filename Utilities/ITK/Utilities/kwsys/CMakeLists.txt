@@ -154,7 +154,24 @@ IF(KWSYS_STANDALONE OR CMake_SOURCE_DIR)
   SET(KWSYS_USE_SystemInformation 1)
   SET(KWSYS_USE_CPU 1)
 ENDIF(KWSYS_STANDALONE OR CMake_SOURCE_DIR)
-  
+
+# Enforce component dependencies.
+IF(KWSYS_USE_SystemTools)
+  SET(KWSYS_USE_Directory 1)
+ENDIF(KWSYS_USE_SystemTools)
+IF(KWSYS_USE_Glob)
+  SET(KWSYS_USE_Directory 1)
+  SET(KWSYS_USE_SystemTools 1)
+  SET(KWSYS_USE_RegularExpression 1)
+ENDIF(KWSYS_USE_Glob)
+IF(KWSYS_USE_Process)
+  SET(KWSYS_USE_System 1)
+ENDIF(KWSYS_USE_Process)
+IF(KWSYS_USE_SystemInformation)
+  SET(KWSYS_USE_FundamentalType 1)
+  SET(KWSYS_USE_Process 1)
+ENDIF(KWSYS_USE_SystemInformation)
+
 # Setup the large file support default.
 IF(KWSYS_LFS_DISABLE)
   SET(KWSYS_LFS_REQUESTED 0)
@@ -635,19 +652,6 @@ SET(KWSYS_HXX_FILES Configure String
   auto_ptr
   )
 
-# Enforce component dependencies.
-IF(KWSYS_USE_SystemTools)
-  SET(KWSYS_USE_Directory 1)
-ENDIF(KWSYS_USE_SystemTools)
-IF(KWSYS_USE_Glob)
-  SET(KWSYS_USE_Directory 1)
-  SET(KWSYS_USE_SystemTools 1)
-  SET(KWSYS_USE_RegularExpression 1)
-ENDIF(KWSYS_USE_Glob)
-IF(KWSYS_USE_Process)
-  SET(KWSYS_USE_System 1)
-ENDIF(KWSYS_USE_Process)
-
 # Add selected C++ classes.
 SET(cppclasses
   Directory DynamicLoader Glob RegularExpression SystemTools
@@ -991,6 +995,13 @@ IF(KWSYS_STANDALONE OR CMake_SOURCE_DIR)
     FOREACH(n 1 2 3 4 5 6 ${KWSYS_TEST_PROCESS_7})
       ADD_TEST(kwsys.testProcess-${n} ${EXEC_DIR}/${KWSYS_NAMESPACE}TestProcess ${n})
     ENDFOREACH(n)
+
+    # Test SharedForward
+    CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/testSharedForward.c.in
+                   ${PROJECT_BINARY_DIR}/testSharedForward.c @ONLY IMMEDIATE)
+    ADD_EXECUTABLE(${KWSYS_NAMESPACE}TestSharedForward
+                   ${PROJECT_BINARY_DIR}/testSharedForward.c)
+    ADD_TEST(kwsys.testSharedForward ${EXEC_DIR}/${KWSYS_NAMESPACE}TestSharedForward 1)
 
     # Configure some test properties.
     IF(COMMAND SET_TESTS_PROPERTIES AND COMMAND GET_TEST_PROPERTY AND KWSYS_STANDALONE)

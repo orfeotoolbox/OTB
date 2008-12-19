@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGradientImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-02-04 12:34:11 $
-  Version:   $Revision: 1.23 $
+  Date:      $Date: 2008-12-08 01:10:42 $
+  Version:   $Revision: 1.24.2.1 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkGradientImageFilter_txx
-#define _itkGradientImageFilter_txx
+#ifndef __itkGradientImageFilter_txx
+#define __itkGradientImageFilter_txx
 #include "itkGradientImageFilter.h"
 
 #include "itkConstNeighborhoodIterator.h"
@@ -38,7 +38,11 @@ GradientImageFilter<TInputImage, TOperatorValueType, TOutputValueType>
 ::GradientImageFilter()
 {
   this->m_UseImageSpacing   = true;
+#if defined(ITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE)
+  this->m_UseImageDirection = true;
+#else
   this->m_UseImageDirection = false;
+#endif
 }
 
 
@@ -210,10 +214,10 @@ GradientImageFilter< TInputImage, TOperatorValueType, TOutputValueType >
         }
       else
         {
-        it.Value() = gradient;          
+        it.Value() = gradient;
         }
 #else
-      it.Value() = gradient;          
+      it.Value() = gradient;
 #endif
 
       ++nit;

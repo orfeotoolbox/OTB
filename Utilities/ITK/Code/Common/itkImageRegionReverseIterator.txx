@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageRegionReverseIterator.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:12 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2008-10-18 21:13:25 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,14 +14,13 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkImageRegionReverseIterator_txx
-#define _itkImageRegionReverseIterator_txx
+#ifndef __itkImageRegionReverseIterator_txx
+#define __itkImageRegionReverseIterator_txx
 
 #include "itkImageRegionReverseIterator.h"
 
 namespace itk
 {
-
 
 
 template< typename TImage >
@@ -32,7 +31,6 @@ ImageRegionReverseIterator<TImage>
 
 
 }
-
 
 
 template< typename TImage >
@@ -71,8 +69,6 @@ ImageRegionReverseIterator<TImage>
 }
 
 
-
- 
 template< typename TImage >
 ImageRegionReverseIterator<TImage> 
 ImageRegionReverseIterator<TImage>
@@ -82,8 +78,6 @@ ImageRegionReverseIterator<TImage>
 }
 
 
-
- 
 template< typename TImage >
 ImageRegionReverseIterator<TImage> 
 ImageRegionReverseIterator<TImage>
@@ -91,8 +85,6 @@ ImageRegionReverseIterator<TImage>
 { 
   return this->Superclass::End();
 }
-
-
 
 
 } // end namespace itk

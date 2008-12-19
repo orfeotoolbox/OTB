@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkStatisticsImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-03-19 04:36:57 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2008-10-24 17:44:15 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkStatisticsImageFilter_txx
-#define _itkStatisticsImageFilter_txx
+#ifndef __itkStatisticsImageFilter_txx
+#define __itkStatisticsImageFilter_txx
 #include "itkStatisticsImageFilter.h"
 
 #include "itkImageRegionIterator.h"
@@ -65,7 +65,7 @@ StatisticsImageFilter<TInputImage>
 {
   switch (output)
     {
-   case 0:
+    case 0:
       return static_cast<DataObject*>(TInputImage::New().GetPointer());
       break;
     case 1:
@@ -347,10 +347,13 @@ StatisticsImageFilter<TImage>
 {
   Superclass::PrintSelf(os,indent);
 
+// Trying to debug wrapping problem with VS6
+#if !(defined(_MSC_VER) && (_MSC_VER <= 1300)) 
   os << indent << "Minimum: "
      << static_cast<typename NumericTraits<PixelType>::PrintType>(this->GetMinimum()) << std::endl;
   os << indent << "Maximum: "
      << static_cast<typename NumericTraits<PixelType>::PrintType>(this->GetMaximum()) << std::endl;
+#endif
   os << indent << "Sum: "      << this->GetSum() << std::endl;
   os << indent << "Mean: "     << this->GetMean() << std::endl;
   os << indent << "Sigma: "    << this->GetSigma() << std::endl;

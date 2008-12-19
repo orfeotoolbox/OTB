@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageRegionSplitter.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-30 20:56:08 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2008-10-18 21:13:25 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -67,10 +67,10 @@ class ITK_EXPORT ImageRegionSplitter: public Object
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageRegionSplitter              Self;
-  typedef Object  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef ImageRegionSplitter               Self;
+  typedef Object                            Superclass;
+  typedef SmartPointer<Self>                Pointer;
+  typedef SmartPointer<const Self>          ConstPointer;
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -86,12 +86,12 @@ public:
     { return VImageDimension; }
 
   /** Index typedef support. An index is used to access pixel values. */
-  typedef Index<VImageDimension>  IndexType;
-  typedef typename IndexType::IndexValueType  IndexValueType;
+  typedef Index<VImageDimension>                IndexType;
+  typedef typename IndexType::IndexValueType    IndexValueType;
   
   /** Size typedef support. A size is used to define region bounds. */
-  typedef Size<VImageDimension>  SizeType;
-  typedef typename SizeType::SizeValueType  SizeValueType;
+  typedef Size<VImageDimension>                 SizeType;
+  typedef typename SizeType::SizeValueType      SizeValueType;
     
   /** Region typedef support.   */
   typedef ImageRegion<VImageDimension> RegionType;
@@ -140,4 +140,3 @@ private:
 #endif
 
 #endif
-

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVTKImageExport.h,v $
   Language:  C++
-  Date:      $Date: 2004-02-18 22:48:38 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2008-10-09 15:31:37 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -53,9 +53,9 @@ class ITK_EXPORT VTKImageExport: public VTKImageExportBase
 {
 public:
   /** Standard class typedefs. */
-  typedef VTKImageExport Self;
-  typedef VTKImageExportBase Superclass;
-  typedef SmartPointer<Self>  Pointer;
+  typedef VTKImageExport            Self;
+  typedef VTKImageExportBase        Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
   /** Run-time type information (and related methods). */
@@ -75,9 +75,9 @@ protected:
   ~VTKImageExport() {}
   void PrintSelf(std::ostream& os, Indent indent) const;  
 
-  typedef typename InputImageType::Pointer InputImagePointer;
+  typedef typename InputImageType::Pointer    InputImagePointer;
   typedef typename InputImageType::RegionType InputRegionType;
-  typedef typename InputRegionType::SizeType InputSizeType;
+  typedef typename InputRegionType::SizeType  InputSizeType;
   typedef typename InputRegionType::IndexType InputIndexType;
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       InputImageType::ImageDimension );

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFileOutputWindow.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:07 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2008-10-16 23:25:41 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -37,10 +37,10 @@ class ITKCommon_EXPORT FileOutputWindow : public OutputWindow
 {
 public:
   /** Standard class typedefs. */
-  typedef FileOutputWindow        Self;
-  typedef OutputWindow  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef FileOutputWindow            Self;
+  typedef OutputWindow                Superclass;
+  typedef SmartPointer<Self>          Pointer;
+  typedef SmartPointer<const Self>    ConstPointer;
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -76,10 +76,10 @@ protected:
   virtual void PrintSelf(std::ostream& os, Indent indent) const;
   void Initialize();
   
-  std::ofstream *m_Stream;
-  std::string m_FileName;
-  bool m_Flush;
-  bool m_Append;
+  std::ofstream *   m_Stream;
+  std::string       m_FileName;
+  bool              m_Flush;
+  bool              m_Append;
 
 private:
   FileOutputWindow(const Self&); //purposely not implemented

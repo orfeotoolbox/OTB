@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGaussianKernelFunction.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-19 04:36:58 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2008-10-17 01:08:45 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -40,9 +40,9 @@ class ITKCommon_EXPORT GaussianKernelFunction : public KernelFunction
 {
 public:
   /** Standard class typedefs. */
-  typedef GaussianKernelFunction Self;
-  typedef KernelFunction Superclass;
-  typedef SmartPointer<Self>  Pointer;
+  typedef GaussianKernelFunction      Self;
+  typedef KernelFunction              Superclass;
+  typedef SmartPointer<Self>          Pointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self); 

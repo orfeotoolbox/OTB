@@ -3,17 +3,29 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGrayscaleMorphologicalOpeningImageFilter.txx,v $
   Language:  C++
+  Date:      $Date: 2008-10-16 16:45:09 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #ifndef __itkGrayscaleMorphologicalOpeningImageFilter_txx
 #define __itkGrayscaleMorphologicalOpeningImageFilter_txx
+
+// First make sure that the configuration is available.
+// This line can be removed once the optimized versions
+// gets integrated into the main directories.
+#include "itkConfigure.h"
+
+#ifdef ITK_USE_CONSOLIDATED_MORPHOLOGY
+#include "itkOptGrayscaleMorphologicalOpeningImageFilter.h"
+#else
+
 
 #include "itkGrayscaleMorphologicalOpeningImageFilter.h"
 #include "itkGrayscaleErodeImageFilter.h"
@@ -102,4 +114,6 @@ GrayscaleMorphologicalOpeningImageFilter<TInputImage, TOutputImage, TKernel>
 }
 
 }// end namespace itk
+#endif
+
 #endif

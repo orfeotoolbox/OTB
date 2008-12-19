@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDirectory.h,v $
   Language:  C++
-  Date:      $Date: 2006-05-10 20:27:15 $
-  Version:   $Revision: 1.28 $
+  Date:      $Date: 2008-10-07 09:09:39 $
+  Version:   $Revision: 1.29 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -39,15 +39,15 @@ class ITKCommon_EXPORT Directory : public Object
 {
 public:
   /** Standard class typedefs. */
-  typedef Directory           Self;
-  typedef Object  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
-    
+  typedef Directory                   Self;
+  typedef Object                      Superclass;
+  typedef SmartPointer<Self>          Pointer;
+  typedef SmartPointer<const Self>    ConstPointer;
+
   /** Method for creation through the object factory. */
   static Pointer New()
     { Pointer n = new Self; n->UnRegister(); return n; }
-  
+
   /** Return the class name as a string. */
   itkTypeMacro(Directory,Object);
 
@@ -64,7 +64,7 @@ public:
 
 protected:
   Directory();
-  ~Directory() ;
+  ~Directory();
   virtual void PrintSelf(std::ostream& os, Indent indent) const;
 
 private:
@@ -75,5 +75,5 @@ private:
 }; // End Class: Directory
 
 } // end namespace itk
-  
+
 #endif

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRegionOfInterestImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-08-01 19:16:18 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2008-10-17 16:30:51 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkRegionOfInterestImageFilter_txx
-#define _itkRegionOfInterestImageFilter_txx
+#ifndef __itkRegionOfInterestImageFilter_txx
+#define __itkRegionOfInterestImageFilter_txx
 
 #include "itkRegionOfInterestImageFilter.h"
 #include "itkImageRegionIterator.h"
@@ -50,8 +50,6 @@ RegionOfInterestImageFilter<TInputImage,TOutputImage>
   os << indent << "RegionOfInterest: " << m_RegionOfInterest << std::endl;
 }
 
-
-
 template <class TInputImage, class TOutputImage>
 void 
 RegionOfInterestImageFilter<TInputImage,TOutputImage>
@@ -82,9 +80,6 @@ RegionOfInterestImageFilter<TInputImage,TOutputImage>
   // generate everything in the region of interest
   output->SetRequestedRegionToLargestPossibleRegion();
 }
-
-
-
 
 /** 
  * RegionOfInterestImageFilter can produce an image which is a different size
@@ -145,7 +140,7 @@ RegionOfInterestImageFilter<TInputImage,TOutputImage>
       inputOrigin = inputPtr->GetOrigin();
 
     const typename Superclass::InputImageType::SpacingType&
-      spacing = inputPtr->GetSpacing() ;
+      spacing = inputPtr->GetSpacing();
  
     for( unsigned int i=0; i<ImageDimension; i++)
       {
@@ -156,8 +151,6 @@ RegionOfInterestImageFilter<TInputImage,TOutputImage>
   outputPtr->SetOrigin( outputOrigin );
 
 }
-
-
 
 /** 
    * RegionOfInterestImageFilter can be implemented as a multithreaded filter.
@@ -201,7 +194,7 @@ RegionOfInterestImageFilter<TInputImage,TOutputImage>
   inputRegionForThread.SetIndex( start );
   
   // Define the iterators.
-  typedef ImageRegionIterator<TOutputImage> OutputIterator;
+  typedef ImageRegionIterator<TOutputImage>     OutputIterator;
   typedef ImageRegionConstIterator<TInputImage> InputIterator;
 
   OutputIterator outIt(outputPtr, outputRegionForThread);

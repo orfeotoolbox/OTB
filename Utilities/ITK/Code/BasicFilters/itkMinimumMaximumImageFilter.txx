@@ -3,19 +3,19 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMinimumMaximumImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2004-12-22 01:52:26 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2008-10-16 19:33:41 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
-eplace
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkMinimumMaximumImageFilter_txx
-#define _itkMinimumMaximumImageFilter_txx
+#ifndef __itkMinimumMaximumImageFilter_txx
+#define __itkMinimumMaximumImageFilter_txx
 #include "itkMinimumMaximumImageFilter.h"
 
 #include "itkImageRegionIterator.h"
@@ -56,7 +56,7 @@ MinimumMaximumImageFilter<TInputImage>
 {
   switch (output)
     {
-   case 0:
+    case 0:
       return static_cast<DataObject*>(TInputImage::New().GetPointer());
       break;
     case 1:

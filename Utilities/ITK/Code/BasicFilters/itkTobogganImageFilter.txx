@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTobogganImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2005-09-03 11:54:54 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2008-10-18 16:11:15 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -78,7 +78,7 @@ TobogganImageFilter<TInputImage>
   outputImage->Allocate();
   outputImage->FillBuffer ( z );
 
-  typedef ImageRegionConstIterator<InputImageType> InputIterator;
+  typedef ImageRegionConstIterator<InputImageType>  InputIterator;
   typedef ImageRegionConstIterator<OutputImageType> OutputIterator;
   
   InputIterator  inIt(inputImage, inputImage->GetRequestedRegion() );
@@ -250,7 +250,7 @@ TobogganImageFilter<TInputImage>
         outputImage->SetPixel ( Visited[i], LabelForRegion );
         }
       }
-    // On to the next pixel      
+    // On to the next pixel
     ++inIt;
     ++outIt;
     }

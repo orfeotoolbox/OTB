@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkEdgePotentialImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-27 11:36:40 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2008-10-14 19:20:33 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -42,17 +42,17 @@ public:
   EdgePotential() {};
   ~EdgePotential() {};
   bool operator!=( const EdgePotential & ) const
-  {
+    {
     return false;
-  }
+    }
   bool operator==( const EdgePotential & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
   inline TOutput operator()( const TInput & A )
-  {
+    {
     return static_cast<TOutput>( vcl_exp(-1.0 * A.GetNorm() ) );
-  }
+    }
 };
 }
 
@@ -71,8 +71,8 @@ public:
                                   Functor::EdgePotential< 
     typename TInputImage::PixelType, 
     typename TOutputImage::PixelType>   
-  >  Superclass;
-  typedef SmartPointer<Self>   Pointer;
+  >                                 Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
   /** Method for creation through the object factory. */

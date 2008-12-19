@@ -3,8 +3,8 @@
   Program:   MetaIO
   Module:    $RCSfile: metaImage.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-07-24 12:35:14 $
-  Version:   $Revision: 1.97 $
+  Date:      $Date: 2008-09-18 20:00:17 $
+  Version:   $Revision: 1.99 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -1551,7 +1551,10 @@ ReadStream(int _nDims,
         {
         METAIO_STREAM::cerr << "MetaImage: Read: Cannot open data file"
                             << METAIO_STREAM::endl;
-        m_ReadStream->close();
+        if(m_ReadStream)
+          {
+          m_ReadStream->close();
+          }
         return false;
         }
 
@@ -2595,8 +2598,10 @@ M_ReadElements(METAIO_STREAM::ifstream * _fstream, void * _data,
     {
     // if m_CompressedDataSize is not defined we assume the size of the
     // file is the size of the compressed data
+    bool compressedDataDeterminedFromFile = false;
     if(m_CompressedDataSize==0)
       {
+      compressedDataDeterminedFromFile = true;
       _fstream->seekg(0, METAIO_STREAM::ios::end);
       m_CompressedDataSize = _fstream->tellg();
       _fstream->seekg(0, METAIO_STREAM::ios::beg);
@@ -2607,6 +2612,12 @@ M_ReadElements(METAIO_STREAM::ifstream * _fstream, void * _data,
 
     MET_PerformUncompression(compr, m_CompressedDataSize,
                              (unsigned char *)_data, readSize);
+
+    if (compressedDataDeterminedFromFile)
+      {
+      m_CompressedDataSize = 0;
+      }
+
     delete [] compr;
     }
   else // if not compressed
@@ -3106,7 +3117,10 @@ bool MetaImage::ReadROIStream(int * _indexMin, int * _indexMax,
         {
         METAIO_STREAM::cerr << "MetaImage: ReadROI: Cannot open data file"
                             << METAIO_STREAM::endl;
-        m_ReadStream->close();
+        if(m_ReadStream)
+          {
+          m_ReadStream->close();
+          }
         return false;
         }     
      

@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkTriangleMeshToBinaryImageFilter.txx,v $
 Language:  C++
-Date:      $Date: 2008-01-20 18:00:40 $
-Version:   $Revision: 1.10 $
+Date:      $Date: 2008-10-06 14:59:58 $
+Version:   $Revision: 1.11 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,6 +44,7 @@ TriangleMeshToBinaryImageFilter<TInputMesh,TOutputImage>
   m_OutsideValue = NumericTraits<ValueType>::Zero;
   
   m_Tolerance = 1e-5;
+  m_InfoImage = NULL; 
   
 }
 
@@ -170,32 +171,47 @@ TriangleMeshToBinaryImageFilter<TInputMesh,TOutputImage>
 {
   itkDebugMacro(<< "TriangleMeshToBinaryImageFilter::Update() called");
 
-  RasterizeTriangles();
+  
   
   // Get the input and output pointers 
   OutputImagePointer   OutputImage = this->GetOutput();
-
-  if (m_Size[0] == 0 ||  m_Size[1] == 0 ||  m_Size[2] == 0)
+  if (m_InfoImage == NULL)
     {
-    itkExceptionMacro(<< "Must Set Image Size");  
+    if (m_Size[0] == 0 ||  m_Size[1] == 0 ||  m_Size[2] == 0)
+      {
+      itkExceptionMacro(<< "Must Set Image Size");  
+      }
+
+    typename OutputImageType::RegionType region;
+    
+    region.SetSize ( m_Size );
+    region.SetIndex( m_Index );
+    
+    OutputImage->SetLargestPossibleRegion( region);     // 
+    OutputImage->SetBufferedRegion( region );           // set the region 
+    OutputImage->SetRequestedRegion( region );          //
+    OutputImage->SetSpacing(m_Spacing);         // set spacing
+    OutputImage->SetOrigin(m_Origin);   //   and origin
     }
-
-  typename OutputImageType::RegionType region;
-
-  region.SetSize ( m_Size );
-  region.SetIndex( m_Index );
-
-  OutputImage->SetLargestPossibleRegion( region);     // 
-  OutputImage->SetBufferedRegion( region );           // set the region 
-  OutputImage->SetRequestedRegion( region );          //
-  OutputImage->SetSpacing(m_Spacing);         // set spacing
-  OutputImage->SetOrigin(m_Origin);   //   and origin
+  else
+    {
+    std::cout << "Using info image" << std::endl;
+    m_InfoImage->Update();
+    OutputImage->CopyInformation(m_InfoImage);
+    OutputImage->SetRegions(m_InfoImage->GetLargestPossibleRegion());
+    m_Size = m_InfoImage->GetLargestPossibleRegion().GetSize();
+    m_Index = m_InfoImage->GetLargestPossibleRegion().GetIndex();
+    m_Spacing = m_InfoImage->GetSpacing();
+    m_Origin = m_InfoImage->GetOrigin();
+    }
 
   OutputImage->Allocate();   // allocate the image
   
+  RasterizeTriangles();
+  
   typedef itk::ImageRegionIteratorWithIndex<OutputImageType> myIteratorType;
 
-  myIteratorType it(OutputImage,region);
+  myIteratorType it(OutputImage,OutputImage->GetLargestPossibleRegion());
 
   
   int DataIndex=0;

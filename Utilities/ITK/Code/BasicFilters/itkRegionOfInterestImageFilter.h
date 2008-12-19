@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRegionOfInterestImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-22 16:26:44 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2008-10-17 16:30:51 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -38,6 +38,8 @@ namespace itk
  *  to consider the ExtractImageFilter. For example for extracting a 2D image
  *  from a slice of a 3D image.
  *
+ *  The region to extract is set using the method SetRegionOfInterest.
+ * 
  * \sa ExtractImageFilter
  * 
  * \ingroup GeometricTransforms
@@ -48,11 +50,11 @@ class ITK_EXPORT RegionOfInterestImageFilter:
 {
 public:
   /** Standard class typedefs. */
-  typedef RegionOfInterestImageFilter         Self;
+  typedef RegionOfInterestImageFilter                   Self;
   typedef ImageToImageFilter<TInputImage,TOutputImage>  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
-  typedef typename Superclass::InputImageRegionType InputImageRegionType;
+  typedef SmartPointer<Self>                            Pointer;
+  typedef SmartPointer<const Self>                      ConstPointer;
+  typedef typename Superclass::InputImageRegionType     InputImageRegionType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);  

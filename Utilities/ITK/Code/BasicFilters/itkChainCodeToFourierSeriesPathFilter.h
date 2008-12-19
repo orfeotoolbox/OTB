@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkChainCodeToFourierSeriesPathFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:45 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2008-10-13 18:54:26 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -15,8 +15,8 @@
 
 =========================================================================*/
 
-#ifndef _itkChainCodeToFourierSeriesPathFilter_h
-#define _itkChainCodeToFourierSeriesPathFilter_h
+#ifndef __itkChainCodeToFourierSeriesPathFilter_h
+#define __itkChainCodeToFourierSeriesPathFilter_h
 
 #include "itkPathToPathFilter.h"
 #include "itkOffset.h"
@@ -43,11 +43,11 @@ class ITK_EXPORT ChainCodeToFourierSeriesPathFilter : public
 {
 public:
   /** Standard class typedefs. */
-  typedef ChainCodeToFourierSeriesPathFilter  Self;
+  typedef ChainCodeToFourierSeriesPathFilter            Self;
   typedef PathToPathFilter< TInputChainCodePath,
                             TOutputFourierSeriesPath >  Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                            Pointer;
+  typedef SmartPointer<const Self>                      ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

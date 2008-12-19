@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkInverseDeformationFieldImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-01-20 18:00:40 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2008-10-16 16:45:11 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -15,9 +15,8 @@
 
 =========================================================================*/
 
-
-#ifndef _itkInverseDeformationFieldImageFilter_txx
-#define _itkInverseDeformationFieldImageFilter_txx
+#ifndef __itkInverseDeformationFieldImageFilter_txx
+#define __itkInverseDeformationFieldImageFilter_txx
 
 #include "itkInverseDeformationFieldImageFilter.h"
 #include "itkObjectFactory.h"
@@ -74,8 +73,6 @@ InverseDeformationFieldImageFilter<TInputImage, TOutputImage>
   return;
 }
 
-
-
 /**
  * Set the output image spacing.
  */
@@ -88,7 +85,6 @@ InverseDeformationFieldImageFilter<TInputImage,TOutputImage>
   this->SetOutputSpacing( s );
 }
 
-
 /**
  * Set the output image origin.
  */
@@ -100,8 +96,6 @@ InverseDeformationFieldImageFilter<TInputImage,TOutputImage>
   OriginPointType p(origin);
   this->SetOutputOrigin( p );
 }
-
-
 
 /**
  * Sub-sample the input deformation field and prepare the KernelBase
@@ -216,9 +210,6 @@ InverseDeformationFieldImageFilter<TInputImage,TOutputImage>
 
 }
 
-
-
-
 /**
  * GenerateData
  */
@@ -289,7 +280,6 @@ InverseDeformationFieldImageFilter<TInputImage,TOutputImage>
   return;
 }
 
-
 /** 
  * Inform pipeline of necessary input image region
  *
@@ -322,7 +312,6 @@ InverseDeformationFieldImageFilter<TInputImage,TOutputImage>
   return;
 }
 
-
 /** 
  * Inform pipeline of required output region
  */
@@ -353,8 +342,6 @@ InverseDeformationFieldImageFilter<TInputImage,TOutputImage>
   return;
 }
 
-
-
 /** 
  * Verify if any of the components has been modified.
  */
@@ -375,8 +362,6 @@ InverseDeformationFieldImageFilter<TInputImage,TOutputImage>
 
   return latestTime;
 }
-
-
 
 } // end namespace itk
 

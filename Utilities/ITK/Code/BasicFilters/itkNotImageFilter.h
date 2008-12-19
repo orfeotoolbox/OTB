@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNotImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-27 11:36:41 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2008-10-16 19:33:45 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -43,26 +43,26 @@ namespace itk
  *
  * \ingroup IntensityImageFilters  Multithreaded
  */
-namespace Functor {  
+namespace Functor { 
   
 template< class TInput, class TOutput=TInput >
 class NOT
 {
 public:
   NOT() {};
- ~NOT() {};
+  ~NOT() {};
   bool operator!=( const NOT & ) const
-  {
+    {
     return false;
-  }
+    }
   bool operator==( const NOT & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
   inline TOutput operator()( const TInput & A )
-  {
+    {
     return static_cast<TOutput>( !A );
-  }
+    }
 }; 
 
 }
@@ -78,13 +78,14 @@ UnaryFunctorImageFilter<TInputImage,TOutputImage,
 {
 public:
   /** Standard class typedefs. */
-  typedef NotImageFilter  Self;
-  typedef UnaryFunctorImageFilter<TInputImage,TOutputImage, 
-                                   Functor::NOT< 
-    typename TInputImage::PixelType, 
-    typename TOutputImage::PixelType>   
-  >  Superclass;
-  typedef SmartPointer<Self>   Pointer;
+  typedef NotImageFilter            Self;
+  typedef UnaryFunctorImageFilter<
+    TInputImage,TOutputImage, 
+    Functor::NOT< 
+      typename TInputImage::PixelType, 
+      typename TOutputImage::PixelType>   
+    >                               Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
   /** Method for creation through the object factory. */

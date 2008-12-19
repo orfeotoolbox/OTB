@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWatershedEquivalenceRelabeler.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:41 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2008-08-04 23:22:58 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -69,7 +69,7 @@ public:
   typedef SmartPointer<Self> Pointer;
   typedef SmartPointer<const Self> ConstPointer;
   itkNewMacro(Self);
-  itkTypeMacro(EquivalenceRelabeler, ProcessObject);
+  itkTypeMacro(WatershedEquivalenceRelabeler, ProcessObject);
 
   /** Set/Get the image to relabel.   */
   void SetInputImage(ImageType *img)

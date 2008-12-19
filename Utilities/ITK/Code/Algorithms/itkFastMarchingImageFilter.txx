@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFastMarchingImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-01-18 20:07:32 $
-  Version:   $Revision: 1.50 $
+  Date:      $Date: 2008-12-08 01:10:41 $
+  Version:   $Revision: 1.50.6.1 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -48,6 +48,7 @@ FastMarchingImageFilter<TLevelSet,TSpeedImage>
 
   m_OutputOrigin.Fill( 0.0 );
   m_OutputSpacing.Fill( 1.0 );
+  m_OutputDirection.SetIdentity();
   m_OverrideOutputInformation = false;
 
   m_AlivePoints = NULL;
@@ -87,8 +88,9 @@ FastMarchingImageFilter<TLevelSet,TSpeedImage>
   os << indent << "OverrideOutputInformation: ";
   os << m_OverrideOutputInformation << std::endl;
   os << indent << "OutputRegion: " << m_OutputRegion << std::endl;
-  os << indent << "OutputSpacing: " << m_OutputSpacing << std::endl;
   os << indent << "OutputOrigin:  " << m_OutputOrigin << std::endl;
+  os << indent << "OutputSpacing: " << m_OutputSpacing << std::endl;
+  os << indent << "OutputDirection: " << m_OutputDirection << std::endl;
 }
 
 /*
@@ -108,10 +110,10 @@ FastMarchingImageFilter<TLevelSet,TSpeedImage>
     {
     LevelSetPointer output = this->GetOutput();
     output->SetLargestPossibleRegion( m_OutputRegion );
-    output->SetSpacing( m_OutputSpacing );
     output->SetOrigin( m_OutputOrigin );
+    output->SetSpacing( m_OutputSpacing );
+    output->SetDirection( m_OutputDirection );
     }
-    
 }
 
 

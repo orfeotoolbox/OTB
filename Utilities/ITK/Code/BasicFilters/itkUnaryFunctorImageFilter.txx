@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkUnaryFunctorImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2007-02-08 19:37:25 $
-  Version:   $Revision: 1.31 $
+  Date:      $Date: 2008-10-07 17:31:02 $
+  Version:   $Revision: 1.32 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkUnaryFunctorImageFilter_txx
-#define _itkUnaryFunctorImageFilter_txx
+#ifndef __itkUnaryFunctorImageFilter_txx
+#define __itkUnaryFunctorImageFilter_txx
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkImageRegionIterator.h"
@@ -106,7 +106,7 @@ UnaryFunctorImageFilter<TInputImage,TOutputImage,TFunction>
           }
         else
           {
-          outputDirection[j][i] = 0.0;          
+          outputDirection[j][i] = 0.0;
           }
         }
       }
@@ -122,7 +122,7 @@ UnaryFunctorImageFilter<TInputImage,TOutputImage,TFunction>
           }
         else
           {
-          outputDirection[j][i] = 0.0;          
+          outputDirection[j][i] = 0.0;
           }
         }
       }

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDirectory.cxx,v $
   Language:  C++
-  Date:      $Date: 2006-05-10 20:27:15 $
-  Version:   $Revision: 1.28 $
+  Date:      $Date: 2008-10-07 09:09:39 $
+  Version:   $Revision: 1.29 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -75,4 +75,3 @@ const char* Directory::GetFile(unsigned int index)
 }
 
 } // end namespace itk
-

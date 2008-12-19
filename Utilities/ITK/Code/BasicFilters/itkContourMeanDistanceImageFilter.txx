@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkContourMeanDistanceImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-01-19 19:50:01 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2008-10-13 18:54:27 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -15,8 +15,8 @@
 
 =========================================================================*/
 
-#ifndef _itkContourMeanDistanceImageFilter_txx
-#define _itkContourMeanDistanceImageFilter_txx
+#ifndef __itkContourMeanDistanceImageFilter_txx
+#define __itkContourMeanDistanceImageFilter_txx
 #include "itkContourMeanDistanceImageFilter.h"
 
 #include "itkImageRegionIterator.h"
@@ -36,7 +36,7 @@ ContourMeanDistanceImageFilter<TInputImage1, TInputImage2>
   // this filter requires two input images
   this->SetNumberOfRequiredInputs( 2 );
 
-  m_MeanDistance = NumericTraits<RealType>::Zero;      
+  m_MeanDistance = NumericTraits<RealType>::Zero;
 }
 
 
@@ -45,7 +45,7 @@ void
 ContourMeanDistanceImageFilter<TInputImage1, TInputImage2>
 ::SetInput2( const TInputImage2 * image )
 {
-  this->SetNthInput(1, const_cast<TInputImage2 *>( image ) );      
+  this->SetNthInput(1, const_cast<TInputImage2 *>( image ) );
 }
 
 
@@ -58,8 +58,6 @@ ContourMeanDistanceImageFilter<TInputImage1, TInputImage2>
   return static_cast< const TInputImage2 * >
     (this->ProcessObject::GetInput(1));
 }
-
-
 
 template<class TInputImage1, class TInputImage2>
 void
@@ -152,8 +150,6 @@ ContourMeanDistanceImageFilter<TInputImage1, TInputImage2>
     }
 
 }
-
-
 
 template<class TInputImage1, class TInputImage2>
 void 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDerivativeImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-17 14:22:26 $
-  Version:   $Revision: 1.20 $
+  Date:      $Date: 2008-10-14 19:20:33 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -46,17 +46,17 @@ class ITK_EXPORT DerivativeImageFilter :
 {
 public:
   /** Standard class typedefs. */
-  typedef DerivativeImageFilter Self;
+  typedef DerivativeImageFilter                           Self;
   typedef ImageToImageFilter< TInputImage, TOutputImage > Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                              Pointer;
+  typedef SmartPointer<const Self>                        ConstPointer;
 
   /** Extract some information from the image types.  Dimensionality
    * of the two images is assumed to be the same. */
-  typedef typename TOutputImage::PixelType OutputPixelType;
+  typedef typename TOutputImage::PixelType         OutputPixelType;
   typedef typename TOutputImage::InternalPixelType OutputInternalPixelType;
-  typedef typename TInputImage::PixelType InputPixelType;
-  typedef typename TInputImage::InternalPixelType InputInternalPixelType;
+  typedef typename TInputImage::PixelType          InputPixelType;
+  typedef typename TInputImage::InternalPixelType  InputInternalPixelType;
 
   /** Extract some information from the image types.  Dimensionality
    * of the two images is assumed to be the same. */
@@ -90,12 +90,12 @@ public:
   /** Use the image spacing information in calculations. Use this option if you
    *  want derivatives in physical space. Default is UseImageSpacingOn. */
   void SetUseImageSpacingOn()
-  { this->SetUseImageSpacing(true); }
+    { this->SetUseImageSpacing(true); }
   
   /** Ignore the image spacing. Use this option if you want derivatives in
       isotropic pixel space.  Default is UseImageSpacingOn. */
   void SetUseImageSpacingOff()
-  { this->SetUseImageSpacing(false); }
+    { this->SetUseImageSpacing(false); }
   
   /** Set/Get whether or not the filter will use the spacing of the input
       image in its calculations */
@@ -113,11 +113,11 @@ public:
 
 protected:
   DerivativeImageFilter()
-  {
+    {
     m_Order = 1;
     m_Direction = 0;
     m_UseImageSpacing = true;
-  }
+    }
   virtual ~DerivativeImageFilter() {}
   void PrintSelf(std::ostream& os, Indent indent) const;
 

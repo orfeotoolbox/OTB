@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBalloonForceFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-07-07 12:39:15 $
-  Version:   $Revision: 1.70 $
+  Date:      $Date: 2008-10-20 21:28:19 $
+  Version:   $Revision: 1.71 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -611,7 +611,7 @@ BalloonForceFilter<TInputMesh, TOutputMesh>
   typename IPixelType::VectorType u[3];
 
   unsigned long i = 0; // arnaud: I guess i an InputCellIdentifier?
-  for( ; cells_it != myCells->End(); ++cells_it, i++ )
+  for(; cells_it != myCells->End(); ++cells_it, i++ )
     {
     tp = cells_it.Value()->GetPointIds();
     for( unsigned int j = 0; j < 3; j++ )
@@ -643,7 +643,7 @@ BalloonForceFilter<TInputMesh, TOutputMesh>
   InputPointsContainerPointer  myDerives  = m_Derives->GetPoints();
   InputPointsContainerIterator derives_it = myDerives->Begin();
 
-  for ( ; derives_it != myDerives->End(); ++derives_it, ++forces_it )
+  for (; derives_it != myDerives->End(); ++derives_it, ++forces_it )
     {
     derives_it.Value() = forces_it.Value();
     }

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExtrapolateImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2006-02-06 22:01:55 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2008-10-13 15:36:31 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,10 +44,10 @@ class ITK_EXPORT ExtrapolateImageFunction :
 {
 public:
   /** Standard class typedefs. */
-  typedef ExtrapolateImageFunction Self;
-  typedef ImageFunction<TInputImage,double,TCoordRep> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef ExtrapolateImageFunction                        Self;
+  typedef ImageFunction<TInputImage,double,TCoordRep>     Superclass;
+  typedef SmartPointer<Self>                              Pointer;
+  typedef SmartPointer<const Self>                        ConstPointer;
   
   /** Run-time type information (and related methods). */
   itkTypeMacro(ExtrapolateImageFunction, ImageFunction);

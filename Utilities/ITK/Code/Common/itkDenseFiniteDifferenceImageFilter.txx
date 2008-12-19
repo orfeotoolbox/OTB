@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDenseFiniteDifferenceImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-06-04 13:18:06 $
-  Version:   $Revision: 1.30 $
+  Date:      $Date: 2008-12-08 01:10:42 $
+  Version:   $Revision: 1.31.2.1 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkDenseFiniteDifferenceImageFilter_txx_
-#define __itkDenseFiniteDifferenceImageFilter_txx_
+#ifndef __itkDenseFiniteDifferenceImageFilter_txx
+#define __itkDenseFiniteDifferenceImageFilter_txx
 #include "itkDenseFiniteDifferenceImageFilter.h"
 
 #include <list>
@@ -70,8 +70,9 @@ DenseFiniteDifferenceImageFilter<TInputImage, TOutputImage>
   // The update buffer looks just like the output.
   typename TOutputImage::Pointer output = this->GetOutput();
 
-  m_UpdateBuffer->SetSpacing(output->GetSpacing());
   m_UpdateBuffer->SetOrigin(output->GetOrigin());
+  m_UpdateBuffer->SetSpacing(output->GetSpacing());
+  m_UpdateBuffer->SetDirection(output->GetDirection());
   m_UpdateBuffer->SetLargestPossibleRegion(output->GetLargestPossibleRegion());
   m_UpdateBuffer->SetRequestedRegion(output->GetRequestedRegion());
   m_UpdateBuffer->SetBufferedRegion(output->GetBufferedRegion());
@@ -150,7 +151,7 @@ DenseFiniteDifferenceImageFilter<TInputImage, TOutputImage>
   // various threads.  There is one distinct slot for each possible thread,
   // so this data structure is thread-safe.
   threadCount = this->GetMultiThreader()->GetNumberOfThreads();  
-  str.TimeStepList = new TimeStepType[threadCount];                 
+  str.TimeStepList = new TimeStepType[threadCount];
   str.ValidTimeStepList = new bool[threadCount];
   for (int i =0; i < threadCount; ++i)
     {      str.ValidTimeStepList[i] = false;    } 
@@ -229,16 +230,17 @@ DenseFiniteDifferenceImageFilter<TInputImage, TOutputImage>::TimeStepType
 DenseFiniteDifferenceImageFilter<TInputImage, TOutputImage>
 ::ThreadedCalculateChange(const ThreadRegionType &regionToProcess, int)
 {
-  typedef typename OutputImageType::RegionType RegionType;
-  typedef typename OutputImageType::SizeType   SizeType;
-  typedef typename OutputImageType::SizeValueType   SizeValueType;
-  typedef typename OutputImageType::IndexType  IndexType;
-  typedef typename OutputImageType::IndexValueType  IndexValueType;
-  typedef typename FiniteDifferenceFunctionType::NeighborhoodType
-    NeighborhoodIteratorType;
-  typedef ImageRegionIterator<UpdateBufferType> UpdateIteratorType;
+  typedef typename OutputImageType::RegionType        RegionType;
+  typedef typename OutputImageType::SizeType          SizeType;
+  typedef typename OutputImageType::SizeValueType     SizeValueType;
+  typedef typename OutputImageType::IndexType         IndexType;
+  typedef typename OutputImageType::IndexValueType    IndexValueType;
+  typedef typename 
+    FiniteDifferenceFunctionType::NeighborhoodType    NeighborhoodIteratorType;
+  typedef ImageRegionIterator<UpdateBufferType>       UpdateIteratorType;
 
   typename OutputImageType::Pointer output = this->GetOutput();
+
   TimeStepType timeStep;
   void *globalData;
 
@@ -252,10 +254,11 @@ DenseFiniteDifferenceImageFilter<TInputImage, TOutputImage>
   // on the output region because input has been copied to output.
   typedef NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<OutputImageType>
     FaceCalculatorType;
+
   typedef typename FaceCalculatorType::FaceListType FaceListType;
 
   FaceCalculatorType faceCalculator;
-    
+
   FaceListType faceList = faceCalculator(output, regionToProcess, radius);
   typename FaceListType::iterator fIt = faceList.begin();
 

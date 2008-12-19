@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWeightedAddImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-27 11:36:41 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2008-10-07 17:31:02 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,7 +25,7 @@ namespace itk
 {
   
 /** \class WeightedAddImageFilter
- * \brief Implements an operator for computed a weighted sum of two images pixel-wise.
+ * \brief Implements an operator for computing a weighted sum of two images pixel-wise.
  *
  * This class is parametrized over the types of the two 
  * input images and the type of the output image. 
@@ -37,7 +37,7 @@ namespace itk
  *
  *        pixel_from_image_1 * alpha +  pixel_from_image_2 * (1.0 - alpha)
  *
- * Additionally the type resulting from the sum, will be cast to
+ * Additionally the type resulting from the sum will be cast to
  * the pixel type of the output image.
  * 
  * The total operation over one pixel will be
@@ -45,7 +45,8 @@ namespace itk
  *  output_pixel = static_cast<OutputPixelType>( 
  *      input1_pixel * alpha + input2_pixel * (1-alpha) )
  *
- *
+ * The alpha parameter is set using SetAlpha.
+ * 
  * \warning No numeric overflow checking is performed in this filter.
  *
  * \ingroup IntensityImageFilters  Multithreaded
@@ -61,29 +62,33 @@ public:
   WeightedAdd2() {};
   ~WeightedAdd2() {};
   bool operator!=( const WeightedAdd2 & other ) const
-  {
+    {
     if( m_Alpha != other.m_Alpha)
       {
       return true;
       }
     return false;
-   }
+    }
   bool operator==( const WeightedAdd2 & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
 
   inline TOutput operator()( const TInput1 & A, const TInput2 & B)
-  {
+    {
     const RealType sum1 = A * m_Alpha;
     const RealType sum2 = B * m_Beta;
     return static_cast<TOutput>( sum1 + sum2 );
-  }
-  void SetAlpha( RealType alpha ) { 
-       m_Alpha = alpha; 
-       m_Beta  = NumericTraits< RealType >::One - m_Alpha;
-       }
-  RealType GetAlpha() const { return m_Alpha; }
+    }
+  void SetAlpha( RealType alpha )
+    { 
+    m_Alpha = alpha; 
+    m_Beta  = NumericTraits< RealType >::One - m_Alpha;
+    }
+  RealType GetAlpha() const
+    {
+    return m_Alpha;
+    }
 private:
   RealType  m_Alpha;
   RealType  m_Beta;    // auxiliary var to avoid a subtraction at every pixel
@@ -103,14 +108,14 @@ BinaryFunctorImageFilter<TInputImage1,TInputImage2,TOutputImage,
 {
 public:
   /** Standard class typedefs. */
-  typedef WeightedAddImageFilter  Self;
+  typedef WeightedAddImageFilter    Self;
   typedef BinaryFunctorImageFilter<TInputImage1,TInputImage2,TOutputImage, 
                                    Functor::WeightedAdd2< 
     typename TInputImage1::PixelType, 
     typename TInputImage2::PixelType,
     typename TOutputImage::PixelType>   
-  >  Superclass;
-  typedef SmartPointer<Self>   Pointer;
+  >                                 Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
   typedef typename Superclass::FunctorType    FunctorType;
@@ -123,7 +128,7 @@ public:
   itkTypeMacro(WeightedAddImageFilter, 
                BinaryFunctorImageFilter);
 
-  /** Set the weigth for the first operand of the weighted addition */
+  /** Set the weight for the first operand of the weighted addition */
   void SetAlpha( RealType alpha ) 
     {
     this->GetFunctor().SetAlpha( alpha );

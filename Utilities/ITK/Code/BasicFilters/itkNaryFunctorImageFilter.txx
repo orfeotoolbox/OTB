@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNaryFunctorImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2007-04-04 12:43:52 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2008-10-16 19:33:44 $
+  Version:   $Revision: 1.22 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkNaryFunctorImageFilter_txx
-#define _itkNaryFunctorImageFilter_txx
+#ifndef __itkNaryFunctorImageFilter_txx
+#define __itkNaryFunctorImageFilter_txx
 
 #include "itkNaryFunctorImageFilter.h"
 #include "itkImageRegionIterator.h"

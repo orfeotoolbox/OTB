@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPDEDeformableRegistrationFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2004-12-21 22:47:28 $
-  Version:   $Revision: 1.30 $
+  Date:      $Date: 2008-12-08 01:10:41 $
+  Version:   $Revision: 1.30.24.1 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -417,8 +417,9 @@ PDEDeformableRegistrationFilter<TFixedImage,TMovingImage,TDeformationField>
   DeformationFieldPointer field = this->GetOutput();
 
   // copy field to TempField
-  m_TempField->SetSpacing( field->GetSpacing() );
   m_TempField->SetOrigin( field->GetOrigin() );
+  m_TempField->SetSpacing( field->GetSpacing() );
+  m_TempField->SetDirection( field->GetDirection() );
   m_TempField->SetLargestPossibleRegion( 
     field->GetLargestPossibleRegion() );
   m_TempField->SetRequestedRegion(

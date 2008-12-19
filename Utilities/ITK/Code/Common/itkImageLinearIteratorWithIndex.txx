@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageLinearIteratorWithIndex.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:11 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2008-10-18 20:31:36 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,14 +14,13 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkImageLinearIteratorWithIndex_txx
-#define _itkImageLinearIteratorWithIndex_txx
+#ifndef __itkImageLinearIteratorWithIndex_txx
+#define __itkImageLinearIteratorWithIndex_txx
 
 #include "itkImageLinearIteratorWithIndex.h"
 
 namespace itk
 {
-
 
 
 template< typename TImage >
@@ -32,7 +31,6 @@ ImageLinearIteratorWithIndex<TImage>
 
 
 }
-
 
 
 template< typename TImage >
@@ -70,7 +68,6 @@ ImageLinearIteratorWithIndex<TImage>
   this->ImageLinearConstIteratorWithIndex<TImage>::operator=(it);
   return *this;
 }
-
 
 
 } // end namespace itk

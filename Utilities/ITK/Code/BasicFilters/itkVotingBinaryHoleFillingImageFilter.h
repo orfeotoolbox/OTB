@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVotingBinaryHoleFillingImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-04-23 17:32:15 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2008-10-17 20:50:03 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -47,14 +47,14 @@ public:
                       TOutputImage::ImageDimension);
 
   /** Convenient typedefs for simplifying declarations. */
-  typedef TInputImage InputImageType;
+  typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
 
   /** Standard class typedefs. */
-  typedef VotingBinaryHoleFillingImageFilter Self;
+  typedef VotingBinaryHoleFillingImageFilter                        Self;
   typedef VotingBinaryImageFilter< InputImageType, OutputImageType> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                                        Pointer;
+  typedef SmartPointer<const Self>                                  ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -63,10 +63,10 @@ public:
   itkTypeMacro(VotingBinaryHoleFillingImageFilter, VotingBinaryImageFilter);
   
   /** Image typedef support. */
-  typedef typename InputImageType::PixelType InputPixelType;
+  typedef typename InputImageType::PixelType  InputPixelType;
   typedef typename OutputImageType::PixelType OutputPixelType;
 
-  typedef typename InputImageType::RegionType InputImageRegionType;
+  typedef typename InputImageType::RegionType  InputImageRegionType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
   typedef typename InputImageType::SizeType InputSizeType;
@@ -103,9 +103,9 @@ protected:
     * SetSurvivalThreshold() so users of this filter do not have access to
     * them. */
   void SetBirthThreshold( const unsigned int value ) 
-            { this->Superclass::SetBirthThreshold( value );  }
+    { this->Superclass::SetBirthThreshold( value );  }
   void SetSurvivalThreshold( const unsigned int value ) 
-            { this->Superclass::SetSurvivalThreshold( value );  }
+    { this->Superclass::SetSurvivalThreshold( value );  }
 
 
   /** VotingBinaryHoleFillingImageFilter can be implemented as a multithreaded filter.

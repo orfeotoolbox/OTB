@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAtan2ImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-27 11:36:39 $
-  Version:   $Revision: 1.20 $
+  Date:      $Date: 2008-10-07 14:49:30 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -45,21 +45,21 @@ public:
   Atan2() {};
   ~Atan2() {};
   bool operator!=( const Atan2 & ) const
-  {
+    {
     return false;
-  }
+    }
   bool operator==( const Atan2 & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
   inline TOutput operator()( const TInput1 & A, const TInput2 & B)
-  {
+    {
     return static_cast<TOutput>( 
       vcl_atan2(
         static_cast<double>(A),
         static_cast<double>(B)  )
       );
-  }
+    }
 }; 
 }
 
@@ -74,14 +74,14 @@ BinaryFunctorImageFilter<TInputImage1,TInputImage2,TOutputImage,
 {
 public:
   /** Standard class typedefs. */
-  typedef Atan2ImageFilter  Self;
+  typedef Atan2ImageFilter          Self;
   typedef BinaryFunctorImageFilter<TInputImage1,TInputImage2,TOutputImage, 
                                    Functor::Atan2< 
     typename TInputImage1::PixelType, 
     typename TInputImage2::PixelType,
     typename TOutputImage::PixelType>   
-  >  Superclass;
-  typedef SmartPointer<Self>   Pointer;
+  >                                 Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
   /** Method for creation through the object factory. */

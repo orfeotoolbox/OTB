@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLog10ImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-06-25 11:00:17 $
-  Version:   $Revision: 1.22 $
+  Date:      $Date: 2008-10-16 17:40:09 $
+  Version:   $Revision: 1.23 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -36,17 +36,17 @@ public:
   Log10() {}
   ~Log10() {}
   bool operator!=( const Log10 & ) const
-  {
+    {
     return false;
-  }
+    }
   bool operator==( const Log10 & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
   inline TOutput operator()( const TInput & A )
-  {
+    {
     return static_cast<TOutput>( vcl_log10( static_cast<double>( A ) ) );
-  }
+    }
 }; 
 }
 template <class TInputImage, class TOutputImage>
@@ -59,12 +59,13 @@ UnaryFunctorImageFilter<TInputImage,TOutputImage,
 {
 public:
   /** Standard class typedefs. */
-  typedef Log10ImageFilter  Self;
-  typedef UnaryFunctorImageFilter<TInputImage,TOutputImage, 
-                                  Function::Log10< typename TInputImage::PixelType, 
-                                                   typename TOutputImage::PixelType> >  Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef Log10ImageFilter                                Self;
+  typedef UnaryFunctorImageFilter<
+    TInputImage,TOutputImage, 
+    Function::Log10< typename TInputImage::PixelType, 
+                     typename TOutputImage::PixelType> >  Superclass;
+  typedef SmartPointer<Self>                              Pointer;
+  typedef SmartPointer<const Self>                        ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

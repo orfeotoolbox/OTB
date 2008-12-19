@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSliceBySliceImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-07-15 21:14:32 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2008-11-03 15:16:37 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -166,7 +166,7 @@ SliceBySliceImageFilter<TInputImage, TOutputImage, TInputFilter, TOutputFilter, 
   ProgressReporter progress( this, 0, requestedSize[m_Dimension] );
 
   const int sliceRange = 
-    static_cast< int >( requestedSize[m_Dimension] ) - requestedIndex[m_Dimension];
+    static_cast< int >( requestedSize[m_Dimension] ) + requestedIndex[m_Dimension];
 
   for( int slice = requestedIndex[m_Dimension]; slice < sliceRange; slice++ )
     {

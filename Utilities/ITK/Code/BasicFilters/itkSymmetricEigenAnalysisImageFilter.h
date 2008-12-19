@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSymmetricEigenAnalysisImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-10-27 19:51:42 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2008-10-18 16:11:14 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -43,13 +43,13 @@ public:
   ~SymmetricEigenAnalysisFunction() {}
   typedef SymmetricEigenAnalysis< TInput, TOutput > CalculatorType;
   bool operator!=( const SymmetricEigenAnalysisFunction & ) const
-  {
+    {
     return false;
-  }
+    }
   bool operator==( const SymmetricEigenAnalysisFunction & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
 
   inline TOutput operator()( const TInput & x )
     {
@@ -73,9 +73,10 @@ public:
     OrderByValue=1,
     OrderByMagnitude,
     DoNotOrder
-  }EigenValueOrderType;
+  } EigenValueOrderType;
  
-  /** Order eigen values. Default is to OrderByValue:  lambda_1 < lambda_2 < ....*/
+  /** Order eigen values. Default is to OrderByValue:  lambda_1 <
+   * lambda_2 < .... */
   void OrderEigenValuesBy( EigenValueOrderType order )
     {
     if( order == OrderByMagnitude )
@@ -129,14 +130,13 @@ UnaryFunctorImageFilter<TInputImage,TOutputImage,
 public:
   /** Standard class typedefs. */
   typedef SymmetricEigenAnalysisImageFilter  Self;
-  typedef UnaryFunctorImageFilter<TInputImage,TOutputImage, 
-                                  Functor::SymmetricEigenAnalysisFunction< 
-                                        typename TInputImage::PixelType,
-                                        typename TOutputImage::PixelType > >
-                                                                      Superclass;
-
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef UnaryFunctorImageFilter<
+    TInputImage,TOutputImage, 
+    Functor::SymmetricEigenAnalysisFunction< 
+      typename TInputImage::PixelType,
+      typename TOutputImage::PixelType > >   Superclass;
+  typedef SmartPointer<Self>                 Pointer;
+  typedef SmartPointer<const Self>           ConstPointer;
 
   typedef typename Superclass::OutputImageType    OutputImageType;
   typedef typename TOutputImage::PixelType        OutputPixelType;
@@ -151,7 +151,8 @@ public:
    */
   typedef typename FunctorType::EigenValueOrderType         EigenValueOrderType;
  
-  /** Order eigen values. Default is to OrderByValue:  lambda_1 < lambda_2 < ....*/
+  /** Order eigen values. Default is to OrderByValue:  lambda_1 <
+   * lambda_2 < .... */
   void OrderEigenValuesBy( EigenValueOrderType order )
     {
     this->GetFunctor().OrderEigenValuesBy( order );

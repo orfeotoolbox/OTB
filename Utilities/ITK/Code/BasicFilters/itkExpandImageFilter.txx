@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExpandImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-01-19 19:50:01 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2008-10-14 19:20:34 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkExpandImageFilter_txx
-#define _itkExpandImageFilter_txx
+#ifndef __itkExpandImageFilter_txx
+#define __itkExpandImageFilter_txx
 
 #include "itkExpandImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
@@ -65,7 +65,7 @@ ExpandImageFilter<TInputImage,TOutputImage>
   Superclass::PrintSelf( os, indent );
 
   unsigned int j;
-  os << indent << "ExpandFactors: [" ;
+  os << indent << "ExpandFactors: [";
   for( j = 0; j < ImageDimension - 1; j++ )
     {
     os << m_ExpandFactors[j] << ", ";
@@ -175,8 +175,7 @@ ExpandImageFilter<TInputImage,TOutputImage>
   OutputImagePointer outputPtr = this->GetOutput();
 
   // Iterator for walking the output
-  typedef
-    ImageRegionIteratorWithIndex<TOutputImage> OutputIterator;
+  typedef ImageRegionIteratorWithIndex<TOutputImage> OutputIterator;
 
   OutputIterator outIt( outputPtr, outputRegionForThread );
 

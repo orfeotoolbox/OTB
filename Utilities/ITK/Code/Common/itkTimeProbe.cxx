@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTimeProbe.cxx,v $
   Language:  C++
-  Date:      $Date: 2005-11-29 14:51:11 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2008-10-26 15:20:21 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -16,18 +16,13 @@
 =========================================================================*/
 
 #include "itkTimeProbe.h"
-#include "itkNumericTraits.h"
 
 namespace itk
 {
 
 TimeProbe
-::TimeProbe()
+::TimeProbe():ResourceProbe<TimeStampType,TimeStampType>("Time","s") 
 {
-  m_TotalTime       = NumericTraits< TimeStampType >::ZeroValue();
-  m_Start           = NumericTraits< TimeStampType >::ZeroValue();
-  m_NumberOfStarts  = NumericTraits< CountType >::ZeroValue();
-  m_NumberOfStops   = NumericTraits< CountType >::ZeroValue();
   m_RealTimeClock   = RealTimeClock::New();
 }
 
@@ -38,63 +33,19 @@ TimeProbe
 }
 
 
-
-void 
-TimeProbe
-::Start(void)
-{
-  m_NumberOfStarts++;
-  m_Start = m_RealTimeClock->GetTimeStamp();
-}
- 
-
-
-void 
-TimeProbe
-::Stop(void)
-{
-  m_TotalTime += m_RealTimeClock->GetTimeStamp() - m_Start;
-  m_NumberOfStops++;
-}
-
-
-    
-
-TimeProbe::CountType
-TimeProbe
-::GetNumberOfStarts(void) const
-{
-  return m_NumberOfStarts;
-}
-
-    
-
-TimeProbe::CountType
-TimeProbe
-::GetNumberOfStops(void) const
-{
-  return m_NumberOfStops;
-}
-
-
-
-TimeProbe::TimeStampType
+TimeProbe::TimeStampType 
 TimeProbe
 ::GetMeanTime(void) const
 {
-  TimeStampType meanTime = 0.0f;
+  return this->GetMean();
+}
 
-  if( m_NumberOfStops )
-    {
-    meanTime = m_TotalTime / m_NumberOfStops;
-    }
-
-  return meanTime;
-
+TimeProbe::TimeStampType
+TimeProbe
+::GetInstantValue(void) const
+{
+  return m_RealTimeClock->GetTimeStamp();
 }
 
 
-
 } // end namespace itk
-
-

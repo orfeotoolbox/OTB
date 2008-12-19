@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImage.txx,v $
   Language:  C++
-  Date:      $Date: 2007-10-14 22:15:56 $
-  Version:   $Revision: 1.100 $
+  Date:      $Date: 2008-10-18 17:19:48 $
+  Version:   $Revision: 1.102 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -135,6 +135,44 @@ Image<TPixel, VImageDimension>
                          << typeid(const Self *).name() );
       }
     }
+}
+
+//----------------------------------------------------------------------------
+template<class TPixel, unsigned int VImageDimension>
+void 
+Image<TPixel, VImageDimension>
+::ComputeIndexToPhysicalPointMatrices()
+{
+#ifdef ITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE
+
+  this->Superclass::ComputeIndexToPhysicalPointMatrices();
+
+#else
+
+  DirectionType scale;
+
+  for (unsigned int i=0; i < VImageDimension; i++)
+    {
+    if (this->m_Spacing[i] == 0.0)
+      {
+      itkExceptionMacro("A spacing of 0 is not allowed: Spacing is " << this->m_Spacing);
+      }
+    scale[i][i] = this->m_Spacing[i];
+    }
+
+  if (vnl_determinant(this->m_Direction.GetVnlMatrix()) == 0.0)
+    {
+    itkExceptionMacro(<< "Bad direction, determinant is 0. Direction is " << this->m_Direction);
+    }
+
+  // Purposely NOT using the Direction here, in order to replicate
+  // backward-compatible behavior in which the Direction is not taken into
+  // account when converting coordinates between Index and Points.
+  this->Superclass::m_IndexToPhysicalPoint = scale;
+  this->Superclass::m_PhysicalPointToIndex = this->Superclass::m_IndexToPhysicalPoint.GetInverse();
+
+  this->Modified();
+#endif
 }
 
 

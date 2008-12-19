@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBSplineInterpolationWeightFunction.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-30 23:39:52 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2008-10-07 12:04:40 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -59,7 +59,7 @@ public:
   typedef SmartPointer<Self>                 Pointer;
   typedef SmartPointer<const Self>           ConstPointer;
 
-  /** New macro for creation of through the object factory.*/
+  /** New macro for creation of through the object factory. */
   itkNewMacro( Self );
   
   /** Run-time type information (and related methods). */

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFiniteDifferenceFunction.h,v $
   Language:  C++
-  Date:      $Date: 2008-03-03 13:58:49 $
-  Version:   $Revision: 1.20 $
+  Date:      $Date: 2008-10-16 23:25:41 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkFiniteDifferenceFunction_h_
-#define __itkFiniteDifferenceFunction_h_
+#ifndef __itkFiniteDifferenceFunction_h
+#define __itkFiniteDifferenceFunction_h
 
 #include "itkLightObject.h"
 #include "itkConstNeighborhoodIterator.h"
@@ -66,19 +66,18 @@ class ITK_EXPORT FiniteDifferenceFunction : public LightObject
 {
 public:
   /** Standard class typedefs. */
-  typedef FiniteDifferenceFunction Self;
-  typedef LightObject Superclass;
-
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+  typedef FiniteDifferenceFunction      Self;
+  typedef LightObject                   Superclass;
+  typedef SmartPointer<Self>            Pointer;
+  typedef SmartPointer<const Self>      ConstPointer;
 
   /** Run-time type information (and related methods) */
   itkTypeMacro( FiniteDifferenceFunction, LightObject );
 
   /** Extract some parameters from the image type */
-  typedef TImageType ImageType;
-  typedef typename ImageType::PixelType  PixelType;
-  typedef double                         PixelRealType;  
+  typedef TImageType                        ImageType;
+  typedef typename ImageType::PixelType     PixelType;
+  typedef double                            PixelRealType;  
   
   /** Save image dimension. */
   itkStaticConstMacro(ImageDimension, unsigned int, ImageType::ImageDimension);
@@ -151,10 +150,10 @@ public:
    * spacing into account. */
   void SetScaleCoefficients (PixelRealType vals[ImageDimension])
     {
-      for (unsigned int i = 0; i < ImageDimension; i++)
-        {
-        m_ScaleCoefficients[i] = vals[i];
-        }
+    for( unsigned int i = 0; i < ImageDimension; i++ )
+      {
+      m_ScaleCoefficients[i] = vals[i];
+      }
     }
 
   /** Compute the scales that weight the neighborhood during difference operations

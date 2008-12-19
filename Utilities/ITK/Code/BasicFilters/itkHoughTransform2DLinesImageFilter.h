@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHoughTransform2DLinesImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-29 14:53:39 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2008-10-16 16:45:10 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -67,12 +67,12 @@ public:
   typedef HoughTransform2DLinesImageFilter Self;
 
   /** Input Image typedef */
-  typedef Image<TInputPixelType,2> InputImageType;
-  typedef typename InputImageType::Pointer InputImagePointer;
+  typedef Image<TInputPixelType,2>              InputImageType;
+  typedef typename InputImageType::Pointer      InputImagePointer;
   typedef typename InputImageType::ConstPointer InputImageConstPointer;
   
   /** Output Image typedef */
-  typedef Image<TOutputPixelType,2> OutputImageType;
+  typedef Image<TOutputPixelType,2>         OutputImageType;
   typedef typename OutputImageType::Pointer OutputImagePointer;
 
   /** Smart pointer typedef support. */
@@ -182,15 +182,15 @@ protected:
   
 private:
 
-  float m_AngleResolution;
-  float m_Threshold;
+  float              m_AngleResolution;
+  float              m_Threshold;
   OutputImagePointer m_SimplifyAccumulator;
-  LinesListType m_LinesList;
-  unsigned int  m_NumberOfLines;
-  float         m_DiscRadius;
-  float         m_Variance;
-  unsigned long m_OldModifiedTime;
-  unsigned long m_OldNumberOfLines;
+  LinesListType      m_LinesList;
+  unsigned int       m_NumberOfLines;
+  float              m_DiscRadius;
+  float              m_Variance;
+  unsigned long      m_OldModifiedTime;
+  unsigned long      m_OldNumberOfLines;
 };
 
 } // end namespace itk

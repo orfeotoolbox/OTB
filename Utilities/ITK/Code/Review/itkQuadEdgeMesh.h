@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMesh.h,v $
   Language:  C++
-  Date:      $Date: 2008-07-12 00:10:13 $
-  Version:   $Revision: 1.31 $
+  Date:      $Date: 2008-10-03 21:21:53 $
+  Version:   $Revision: 1.32 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -214,7 +214,7 @@ public:
   typedef typename Traits::QEDual         QEDual;
   typedef typename Traits::QEPrimal       QEType;
   // See the TODO entry dated from 2005-05-28
-  // struct QEType : public QEPrimal, public QEDual {};
+  // struct QEType : public QEPrimal, public QEDual {}
   typedef typename Traits::VertexRefType  VertexRefType;
   typedef typename Traits::FaceRefType    FaceRefType;
   typedef typename Traits::VectorType     VectorType;
@@ -261,12 +261,12 @@ public:
   /** another way of deleting all the cells */
   virtual void Clear();
 
-  CellsContainerPointer GetEdgeCells() {return m_EdgeCellsContainer;};
-  const CellsContainerPointer GetEdgeCells() const {return m_EdgeCellsContainer;};
+  CellsContainerPointer GetEdgeCells() {return m_EdgeCellsContainer;}
+  const CellsContainerPointer GetEdgeCells() const {return m_EdgeCellsContainer;}
   void SetEdgeCells(CellsContainerPointer edgeCells)
-    {m_EdgeCellsContainer = edgeCells;}; 
+    {m_EdgeCellsContainer = edgeCells;}
   void SetEdgeCell(CellIdentifier cellId, CellAutoPointer & cellPointer )
-    {m_EdgeCellsContainer->InsertElement(cellId,cellPointer.ReleaseOwnership());};
+    {m_EdgeCellsContainer->InsertElement(cellId,cellPointer.ReleaseOwnership());}
 
 
   /** Overloaded to avoid a bug in Mesh that prevents proper inheritance
@@ -473,8 +473,8 @@ public:
       }
     }
 
-  CellIdentifier GetNumberOfFaces( ) const {return( m_NumberOfFaces );};
-  CellIdentifier GetNumberOfEdges( ) const {return( m_NumberOfEdges );};
+  CellIdentifier GetNumberOfFaces( ) const {return( m_NumberOfFaces ); }
+  CellIdentifier GetNumberOfEdges( ) const {return( m_NumberOfEdges ); }
 
 protected:
   /** Constructor and Destructor. */

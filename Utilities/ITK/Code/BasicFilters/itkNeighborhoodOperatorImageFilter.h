@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNeighborhoodOperatorImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-31 14:31:04 $
-  Version:   $Revision: 1.33 $
+  Date:      $Date: 2008-10-16 19:33:45 $
+  Version:   $Revision: 1.34 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -48,10 +48,10 @@ class ITK_EXPORT NeighborhoodOperatorImageFilter :
 {
 public:
   /** Standard "Self" & Superclass typedef. */
-  typedef NeighborhoodOperatorImageFilter Self;
+  typedef NeighborhoodOperatorImageFilter                 Self;
   typedef ImageToImageFilter< TInputImage, TOutputImage > Superclass;
-  typedef       SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+  typedef       SmartPointer<Self>                        Pointer;
+  typedef SmartPointer<const Self>                        ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -75,8 +75,8 @@ public:
                       TInputImage::ImageDimension);
   
   /** Image typedef support. */
-  typedef TInputImage  InputImageType;
-  typedef TOutputImage OutputImageType;
+  typedef TInputImage                      InputImageType;
+  typedef TOutputImage                     OutputImageType;
   typedef typename InputImageType::Pointer InputImagePointer;
   
   /** Typedef for generic boundary condition pointer. */
@@ -97,10 +97,10 @@ public:
    * that the operator is stored as an internal COPY (it
    * is not part of the pipeline). */
   void SetOperator(const OutputNeighborhoodType &p)
-  {
+    {
     m_Operator = p;
     this->Modified();
-  }
+    }
 
   /** Get the operator that is used to filter the image. */
   const OutputNeighborhoodType& GetOperator() const

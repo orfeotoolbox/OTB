@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVoxBoCUBImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-06-20 23:23:51 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2008-10-04 14:13:19 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -163,10 +163,10 @@ public:
     size_t bwritten = ::gzwrite(m_GzFile, const_cast<void *>(data), bytes);
     if( bwritten != bytes )
       {
-        ExceptionObject exception;
-        exception.SetDescription("Could not write all bytes to file");
-        std::cout<<"Could not write all bytes to file"<<std::endl;
-        throw exception;
+      ExceptionObject exception;
+      exception.SetDescription("Could not write all bytes to file");
+      std::cout << "Could not write all bytes to file" << std::endl;
+      throw exception;
       }
      ::gzflush(m_GzFile,Z_SYNC_FLUSH);
     }
@@ -572,7 +572,7 @@ void VoxBoCUBImageIO::ReadImageInformation()
         OrientationMap::const_iterator it = m_OrientationMap.find(code);
         if(it != m_OrientationMap.end())
           {
-          itk::MetaDataDictionary &dic =this->GetMetaDataDictionary();
+          MetaDataDictionary &dic =this->GetMetaDataDictionary();
           EncapsulateMetaData<OrientationFlags>(
             dic, ITK_CoordinateOrientation, it->second);
           }
@@ -591,7 +591,7 @@ void VoxBoCUBImageIO::ReadImageInformation()
             }
           oss << word;
           }
-        itk::MetaDataDictionary &dic =this->GetMetaDataDictionary();
+        MetaDataDictionary &dic =this->GetMetaDataDictionary();
         EncapsulateMetaData<std::string>(dic, key, oss.str());
        }
       }

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFastSymmetricForcesDemonsRegistrationFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-07-04 22:55:10 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2008-12-08 01:10:42 $
+  Version:   $Revision: 1.2.4.1 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -217,8 +217,9 @@ FastSymmetricForcesDemonsRegistrationFilter<TFixedImage,TMovingImage,TDeformatio
   upbuf->SetLargestPossibleRegion(output->GetLargestPossibleRegion());
   upbuf->SetRequestedRegion(output->GetRequestedRegion());
   upbuf->SetBufferedRegion(output->GetBufferedRegion());
-  upbuf->SetSpacing(output->GetSpacing());
   upbuf->SetOrigin(output->GetOrigin());
+  upbuf->SetSpacing(output->GetSpacing());
+  upbuf->SetDirection(output->GetDirection());
   upbuf->Allocate();
 }
 

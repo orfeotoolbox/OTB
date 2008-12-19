@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDefaultVectorPixelAccessorFunctor.h,v $
   Language:  C++
-  Date:      $Date: 2005-08-29 18:12:38 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2008-10-07 09:09:39 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -85,10 +85,10 @@ public:
     }
 
 private:
-  PixelAccessorType m_PixelAccessor; // The pixel accessor
-  InternalPixelType *m_Begin; // Begin of the buffer
+  PixelAccessorType     m_PixelAccessor; // The pixel accessor
+  InternalPixelType *   m_Begin;         // Begin of the buffer
 };
 
 }
 
-#endif    
+#endif

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVTKImageImport.txx,v $
   Language:  C++
-  Date:      $Date: 2007-10-05 10:29:23 $
-  Version:   $Revision: 1.22 $
+  Date:      $Date: 2008-10-09 15:31:37 $
+  Version:   $Revision: 1.23 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -28,8 +28,8 @@ template <typename TOutputImage>
 VTKImageImport<TOutputImage>
 ::VTKImageImport()
 {
-  typedef typename TOutputImage::PixelType                 PixelType;
-  typedef typename PixelTraits< PixelType >::ValueType    ScalarType;
+  typedef typename TOutputImage::PixelType             PixelType;
+  typedef typename PixelTraits< PixelType >::ValueType ScalarType;
 
   if(typeid(ScalarType) == typeid(double))
     {
@@ -230,8 +230,8 @@ VTKImageImport<TOutputImage>
     const unsigned int components =
       (m_NumberOfComponentsCallback)(m_CallbackUserData);
 
-    typedef typename TOutputImage::PixelType                 PixelType;
-    typedef typename PixelTraits< PixelType >::ValueType    ScalarType;
+    typedef typename TOutputImage::PixelType             PixelType;
+    typedef typename PixelTraits< PixelType >::ValueType ScalarType;
 
     const unsigned int estimatedNumberOfComponents = sizeof( PixelType ) / sizeof( ScalarType );
 

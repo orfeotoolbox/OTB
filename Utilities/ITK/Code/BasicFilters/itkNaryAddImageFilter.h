@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNaryAddImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-27 11:36:41 $
-  Version:   $Revision: 1.34 $
+  Date:      $Date: 2008-10-16 19:33:44 $
+  Version:   $Revision: 1.35 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -62,22 +62,22 @@ public:
   Add1() {}
   ~Add1() {}
   inline TOutput operator()( const std::vector< TInput > & B)
-  {
+    {
     AccumulatorType sum = NumericTraits< TOutput >::Zero;
     for( unsigned int i=0; i< B.size(); i++ )
       {
       sum += static_cast< TOutput >(B[i]);
-      }       
+      }
     return static_cast<TOutput>( sum );
-  }
+    }
   bool operator== (const Add1&) const
-  {
+    {
     return true;
-  }
+    }
   bool operator!= (const Add1&) const
-  {
+    {
     return false;
-  }
+    }
 }; 
 }
 template <class TInputImage, class TOutputImage>
@@ -88,11 +88,13 @@ NaryFunctorImageFilter<TInputImage,TOutputImage,
 {
 public:
   /** Standard class typedefs. */
-  typedef NaryAddImageFilter  Self;
-  typedef NaryFunctorImageFilter<TInputImage,TOutputImage, 
-                                 Functor::Add1<typename TInputImage::PixelType,  
-                                 typename TInputImage::PixelType  > >  Superclass;
-  typedef SmartPointer<Self>   Pointer;
+  typedef NaryAddImageFilter        Self;
+  typedef NaryFunctorImageFilter<
+    TInputImage,TOutputImage, 
+    Functor::Add1<typename TInputImage::PixelType,  
+                  typename TInputImage::PixelType> >
+                                    Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
   /** Method for creation through the object factory. */

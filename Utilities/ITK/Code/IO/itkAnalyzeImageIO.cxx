@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAnalyzeImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-06-27 15:14:49 $
-  Version:   $Revision: 1.91 $
+  Date:      $Date: 2008-09-30 20:04:26 $
+  Version:   $Revision: 1.93 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -79,7 +79,7 @@ GetExtension( const std::string& filename )
   if(fileExt == std::string(".gz"))
     {
     fileExt=itksys::SystemTools::GetFilenameLastExtension(itksys::SystemTools::GetFilenameWithoutLastExtension(filename) );
-    fileExt+=".gz";
+    fileExt += ".gz";
     }
   //Check that a valid extension was found.
   if(fileExt != ".img.gz" && fileExt != ".img" && fileExt != ".hdr")
@@ -1043,6 +1043,39 @@ void AnalyzeImageIO::ReadImageInformation()
         {
         this->SetDirection(2,dirz);
         }
+      else
+        {
+        //
+        // don't allow degenerate direction cosines
+        // This is a pure punt; it will prevent the exception being
+        // thrown, but doesn't do the right thing at all -- replacing e.g
+        // [0, 0, -1] with [0, 1] doesn't make any real sense.
+        // On the other hand, programs that depend on 2D Direction Cosines
+        // are pretty much guaranteed to be disappointed if they expect anything
+        // meaningful in the direction cosines anyway.
+        if(dirx[0] == 0.0 && dirx[1] == 0.0)
+          {
+          if(diry[0] != 0)
+            {
+            dirx[1] = 1.0;
+            }
+          else
+            {
+            dirx[0] = 1.0;
+            }
+          }
+        else if(diry[0] == 0.0 && diry[1] == 0.0)
+          {
+          if(dirx[0] != 0)
+            {
+            diry[1] = 1.0;
+            }
+          else
+            {
+            diry[0] = 1.0;
+            }
+          }
+        }
 #if defined(ITKIO_DEPRECATED_METADATA_ORIENTATION)
       itk::EncapsulateMetaData
         <itk::SpatialOrientation::ValidCoordinateOrientationFlags>
@@ -1256,38 +1289,38 @@ AnalyzeImageIO
 #endif
       typedef itk::SpatialOrientationAdapter::DirectionType DirectionType;
       DirectionType dir;
-      {
-      unsigned int dims = this->GetNumberOfDimensions();
-      std::vector<double> dirx = this->GetDirection(0),
-        diry = this->GetDirection(1);
-      std::vector<double> dirz;
-      if(dims > 2)
         {
-        dirz = this->GetDirection(2);
-        }
-      else
-        {
-        for(unsigned i = 0; i < 3; i++)
+        unsigned int dims = this->GetNumberOfDimensions();
+        std::vector<double> dirx = this->GetDirection(0),
+          diry = this->GetDirection(1);
+        std::vector<double> dirz;
+        if(dims > 2)
           {
-          dirz.push_back(0.0);
+          dirz = this->GetDirection(2);
+          }
+        else
+          {
+          for(unsigned i = 0; i < 3; i++)
+            {
+            dirz.push_back(0.0);
+            }
+          }
+        unsigned int i;
+        for(i = 0; i < dims; i++)
+          {
+          dir[i][0] = dirx[i];
+          dir[i][1] = diry[i];
+          dir[i][2] = dirz[i];
+          }
+        for(; i < 3; i++)
+          {
+          dir[i][0] = 
+            dir[i][1] = 
+            dir[i][2] = 0;
           }
         }
-      unsigned int i;
-      for(i = 0; i < dims; i++)
-        {
-        dir[i][0] = dirx[i];
-        dir[i][1] = diry[i];
-        dir[i][2] = dirz[i];
-        }
-      for(; i < 3; i++)
-        {
-        dir[i][0] = 
-          dir[i][1] = 
-          dir[i][2] = 0;
-        }
-      }
-      coord_orient =
-        itk::SpatialOrientationAdapter().FromDirectionCosines(dir);
+        coord_orient =
+          itk::SpatialOrientationAdapter().FromDirectionCosines(dir);
 #if defined(ITKIO_DEPRECATED_METADATA_ORIENTATION)
       }
 #endif

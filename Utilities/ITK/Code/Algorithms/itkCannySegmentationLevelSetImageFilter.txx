@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCannySegmentationLevelSetImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:28 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2008-10-23 16:15:22 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkCannySegmentationLevelSetImageFilter_txx_
-#define __itkCannySegmentationLevelSetImageFilter_txx_
+#ifndef __itkCannySegmentationLevelSetImageFilter_txx
+#define __itkCannySegmentationLevelSetImageFilter_txx
 
 #include "itkCannySegmentationLevelSetImageFilter.h"
 
@@ -32,8 +32,5 @@ CannySegmentationLevelSetImageFilter<TInputImage, TFeatureImage,
 }
   
 }// end namespace itk
-
-
-
 
 #endif

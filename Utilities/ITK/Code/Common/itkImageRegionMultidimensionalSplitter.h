@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageRegionMultidimensionalSplitter.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-30 20:56:08 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2008-10-18 21:13:25 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -61,10 +61,10 @@ class ITK_EXPORT ImageRegionMultidimensionalSplitter: public ImageRegionSplitter
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageRegionMultidimensionalSplitter              Self;
-  typedef ImageRegionSplitter<VImageDimension>  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef ImageRegionMultidimensionalSplitter             Self;
+  typedef ImageRegionSplitter<VImageDimension>            Superclass;
+  typedef SmartPointer<Self>                              Pointer;
+  typedef SmartPointer<const Self>                        ConstPointer;
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -129,4 +129,3 @@ private:
 #endif
 
 #endif
-

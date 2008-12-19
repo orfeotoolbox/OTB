@@ -47,8 +47,8 @@ ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^2\\.4$")
 #-----------------------------------------------------------------------------
 # ITK version number.  An even minor number corresponds to releases.
 SET(ITK_VERSION_MAJOR "3")
-SET(ITK_VERSION_MINOR "8")
-SET(ITK_VERSION_PATCH "0")
+SET(ITK_VERSION_MINOR "10")
+SET(ITK_VERSION_PATCH "1")
 
 # Version string should not include patch level.  The major.minor is
 # enough to distinguish available features of the toolkit.
@@ -68,27 +68,25 @@ INCLUDE (${CMAKE_ROOT}/Modules/CMakeBackwardCompatibilityCXX.cmake)
 # MESSAGE(FATAL_ERROR ...) commands are invoked.
 INCLUDE(${CMAKE_ROOT}/Modules/Dart.cmake)
 MARK_AS_ADVANCED(TCL_TCLSH DART_ROOT)
+ENABLE_TESTING()
+IF(BUILD_TESTING)
+  CONFIGURE_FILE(${ITK_SOURCE_DIR}/CMake/RemoveTemporaryFiles.cmake.in
+    ${ITK_BINARY_DIR}/CMake/RemoveTemporaryFiles.cmake @ONLY IMMEDIATE)
+  CONFIGURE_FILE(${ITK_SOURCE_DIR}/CMake/itkSampleBuildTest.cmake.in
+    ${ITK_BINARY_DIR}/CMake/itkSampleBuildTest.cmake @ONLY)
+  CONFIGURE_FILE(${ITK_SOURCE_DIR}/CMake/CTestCustom.ctest.in
+    ${ITK_BINARY_DIR}/CMake/CTestCustom.ctest @ONLY)
+  CONFIGURE_FILE(${ITK_SOURCE_DIR}/CMake/CTestCustom.ctest.in
+    ${ITK_BINARY_DIR}/Testing/Code/Common/CTestCustom.ctest @ONLY)
+  FILE(WRITE ${ITK_BINARY_DIR}/CTestCustom.cmake
+    "INCLUDE(\"${ITK_BINARY_DIR}/CMake/CTestCustom.ctest\")\n")
 
-# Commented out by the Orfeo ToolBox development team.
-#ENABLE_TESTING()
-#IF(BUILD_TESTING)
-#  CONFIGURE_FILE(${ITK_SOURCE_DIR}/CMake/RemoveTemporaryFiles.cmake.in
-#    ${ITK_BINARY_DIR}/CMake/RemoveTemporaryFiles.cmake @ONLY IMMEDIATE)
-#  CONFIGURE_FILE(${ITK_SOURCE_DIR}/CMake/itkSampleBuildTest.cmake.in
-#    ${ITK_BINARY_DIR}/CMake/itkSampleBuildTest.cmake @ONLY)
-#  CONFIGURE_FILE(${ITK_SOURCE_DIR}/CMake/CTestCustom.ctest.in
-#    ${ITK_BINARY_DIR}/CMake/CTestCustom.ctest @ONLY)
-#  CONFIGURE_FILE(${ITK_SOURCE_DIR}/CMake/CTestCustom.ctest.in
-#    ${ITK_BINARY_DIR}/Testing/Code/Common/CTestCustom.ctest @ONLY)
-#  FILE(WRITE ${ITK_BINARY_DIR}/CTestCustom.cmake
-#    "INCLUDE(\"${ITK_BINARY_DIR}/CMake/CTestCustom.ctest\")\n")
-#
-#  CONFIGURE_FILE(${ITK_SOURCE_DIR}/InsightLogo.gif
-#                 ${ITK_BINARY_DIR}/Testing/HTML/TestingResults/Icons/Logo.gif
-#                 COPYONLY IMMEDIATE)
-#  SET(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
-#  MARK_AS_ADVANCED(BUILDNAME)
-#ENDIF(BUILD_TESTING)
+  CONFIGURE_FILE(${ITK_SOURCE_DIR}/InsightLogo.gif
+                 ${ITK_BINARY_DIR}/Testing/HTML/TestingResults/Icons/Logo.gif
+                 COPYONLY IMMEDIATE)
+  SET(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
+  MARK_AS_ADVANCED(BUILDNAME)
+ENDIF(BUILD_TESTING)
 
 #-----------------------------------------------------------------------------
 # Output directories.
@@ -169,36 +167,7 @@ MARK_AS_ADVANCED(ITK_USE_REVIEW)
 
 #-----------------------------------------------------------------------------
 # ITK uses KWStyle for checking the coding style
-OPTION(ITK_USE_KWSTYLE "Run KWStyle in order to check for violations of the coding standard." OFF)
-MARK_AS_ADVANCED(ITK_USE_KWSTYLE)
-
-IF(ITK_USE_KWSTYLE)
-  FIND_PROGRAM(KWSTYLE_EXECUTABLE
-  NAMES KWStyle 
-  PATHS
-  /usr/local/bin
-  )
-  
-  OPTION(KWSTYLE_USE_VIM_FORMAT "Set KWStyle to generate errors with a VIM-compatible format." OFF)
-  OPTION(KWSTYLE_USE_MSVC_FORMAT "Set KWStyle to generate errors with a VisualStudio-compatible format." OFF)
-
-  IF(KWSTYLE_USE_VIM_FORMAT)
-    SET(KWSTYLE_ARGUMENTS -vim ${KWSTYLE_ARGUMENTS})
-  ENDIF(KWSTYLE_USE_VIM_FORMAT)
-
-  IF(KWSTYLE_USE_MSVC_FORMAT)
-    SET(KWSTYLE_ARGUMENTS -msvc ${KWSTYLE_ARGUMENTS})
-  ENDIF(KWSTYLE_USE_MSVC_FORMAT)
-
-  MARK_AS_ADVANCED(KWSTYLE_EXECUTABLE)
-  ADD_CUSTOM_COMMAND(
-    OUTPUT ${ITK_BINARY_DIR}/KWStyleReport.txt
-    COMMAND ${KWSTYLE_EXECUTABLE}
-    ARGS    -xml ${ITK_BINARY_DIR}/ITK.kws.xml -o ${ITK_SOURCE_DIR}/Utilities/KWStyle/ITKOverwrite.txt ${KWSTYLE_ARGUMENTS} -D ${ITK_BINARY_DIR}/ITKFiles.txt  
-    COMMENT "Coding Style Checker"
-    )
-  ADD_CUSTOM_TARGET(StyleCheck DEPENDS ${ITK_BINARY_DIR}/KWStyleReport.txt)
-ENDIF(ITK_USE_KWSTYLE)
+INCLUDE(${ITK_SOURCE_DIR}/Utilities/KWStyle/KWStyle.cmake)
 
 #-----------------------------------------------------------------------------
 # ITK turn on concept checking
@@ -215,6 +184,10 @@ ELSE( NOT BORLAND )
 ENDIF( NOT BORLAND )
 
 #-----------------------------------------------------------------------------
+# Make the itk::Image assume the behavior of the itk::OrientedImage
+MARK_AS_ADVANCED(ITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE)
+OPTION(ITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE "Makes itk::Image behave like itk::OrientedImage" ON)
+
 # ITK turn on experimental version of accelerated image registration
 OPTION(ITK_USE_OPTIMIZED_REGISTRATION_METHODS "Turn on the experimental version of accelerated registration methods." OFF)
 MARK_AS_ADVANCED(ITK_USE_OPTIMIZED_REGISTRATION_METHODS)
@@ -223,7 +196,7 @@ IF(ITK_USE_OPTIMIZED_REGISTRATION_METHODS)
     MESSAGE(FATAL_ERROR "ITK_USE_REVIEW is currently OFF but it should be ON if you want to use the experimental optimized registration methods.")
   ENDIF(NOT ITK_USE_REVIEW)
   # Warn the user about the implications of turning optimized registration methods ON
-  SET(msg "Warning: You have chosen to enable the use of Optimizer Registration Methods.")
+  SET(msg "Attention: You have chosen to enable the use of Optimizer Registration Methods.")
   SET(msg "${msg} These methods add multi-threading capabilities to several image metrics")
   SET(msg "${msg} as well as some Transforms and Interpolators. In order to take full advantage")
   SET(msg "${msg} of these new features you will have to also add some new calls to these components.")
@@ -234,6 +207,23 @@ MESSAGE("${msg}")
 
 
 ENDIF(ITK_USE_OPTIMIZED_REGISTRATION_METHODS)
+
+#-----------------------------------------------------------------------------
+# ITK turn on experimental version of accelerated image registration
+OPTION(ITK_USE_CONSOLIDATED_MORPHOLOGY "Turn on the experimental consolidated morphology." OFF)
+MARK_AS_ADVANCED(ITK_USE_CONSOLIDATED_MORPHOLOGY)
+
+IF(ITK_USE_CONSOLIDATED_MORPHOLOGY)
+  IF(NOT ITK_USE_REVIEW)
+    MESSAGE(FATAL_ERROR "ITK_USE_REVIEW is currently OFF but it should be ON if you want to use the experimental consolidated morphology.")
+  ENDIF(NOT ITK_USE_REVIEW)
+  # Warn the user about the implications of turning consolidated morphology ON
+  SET(msg "Attention: You have chosen to enable the use of consolidated morphology.")
+  # TODO: warn more than that
+  # display the message during the setup
+  MESSAGE("${msg}")
+ENDIF(ITK_USE_CONSOLIDATED_MORPHOLOGY)
+
 
 #-----------------------------------------------------------------------------
 # ITK turn on the use of experimental IO factories for the TransformFileReader and TransformFileWriter
@@ -252,7 +242,7 @@ MARK_AS_ADVANCED(ITK_USE_ORIENTED_IMAGE_DIRECTION)
 
 #-----------------------------------------------------------------------------
 # ITK turn on the use of Template Meta Programming techniques for unrolling loops of array-like operations
-OPTION(ITK_USE_TEMPLATE_META_PROGRAMMING_LOOP_UNROLLING "Turn on the use of Template Meta-Programming techniques for unrolling for-loops at compile time." OFF)
+OPTION(ITK_USE_TEMPLATE_META_PROGRAMMING_LOOP_UNROLLING "Turn on the use of Template Meta-Programming techniques for unrolling for-loops at compile time." ON)
 MARK_AS_ADVANCED(ITK_USE_TEMPLATE_META_PROGRAMMING_LOOP_UNROLLING)
 
 OPTION(ITK_USE_DEPRECATED_LEVELSET_INTERPOLATION "Turn on the use of a sparse field level set surface interpolation method that has been deprecated since ITK 3.6. Turn this flag ON to exactly replicate the behavior of ITK<=3.4." OFF)
@@ -330,6 +320,22 @@ STRING(REGEX REPLACE "^/" "" ITK_INSTALL_DOXYGEN_DIR_CM24 "${ITK_INSTALL_DOXYGEN
 STRING(REGEX REPLACE "^/" "" ITK_INSTALL_TCL_DIR_CM24 "${ITK_INSTALL_TCL_DIR}")
 STRING(REGEX REPLACE "^/" "" ITK_INSTALL_JAVA_DIR_CM24 "${ITK_INSTALL_JAVA_DIR}")
 
+# Make sure the user does not try to install on top of the build tree.
+IF(WIN32 OR APPLE OR UNIX)
+  STRING(TOLOWER "${CMAKE_INSTALL_PREFIX}" _PREFIX)
+  STRING(TOLOWER "${ITK_BINARY_DIR}" _BUILD)
+ELSE(WIN32 OR APPLE OR UNIX)
+  SET(_PREFIX "${CMAKE_INSTALL_PREFIX}")
+  SET(_BUILD "${ITK_BINARY_DIR}")
+ENDIF(WIN32 OR APPLE OR UNIX)
+IF("${_PREFIX}" STREQUAL "${_BUILD}")
+  MESSAGE(FATAL_ERROR
+    "The current CMAKE_INSTALL_PREFIX points at the build tree:\n"
+    "  ${CMAKE_INSTALL_PREFIX}\n"
+    "This is not supported."
+    )
+ENDIF("${_PREFIX}" STREQUAL "${_BUILD}")
+
 # set ITK_DIR so it can be used by subprojects
 SET(ITK_DIR "${CMAKE_BINARY_DIR}" CACHE INTERNAL "ITK dir to be used by subprojects")
 
@@ -338,16 +344,16 @@ SET(ITK_DIR "${CMAKE_BINARY_DIR}" CACHE INTERNAL "ITK dir to be used by subproje
 # be particulary useful to distributed prebuilt ITK witk extended languages
 # support enable
 #
-#INCLUDE(InstallRequiredSystemLibraries)
-#SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Insight Toolkit")
-#SET(CPACK_PACKAGE_VENDOR "ISC")
-#SET(CPACK_PACKAGE_VERSION_MAJOR "${ITK_VERSION_MAJOR}")
-#SET(CPACK_PACKAGE_VERSION_MINOR "${ITK_VERSION_MINOR}")
-#SET(CPACK_PACKAGE_VERSION_PATCH "${ITK_VERSION_PATCH}")
-#SET(CPACK_PACKAGE_INSTALL_DIRECTORY "InsightToolkit-${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}")
+INCLUDE(InstallRequiredSystemLibraries)
+SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Insight Toolkit")
+SET(CPACK_PACKAGE_VENDOR "ISC")
+SET(CPACK_PACKAGE_VERSION_MAJOR "${ITK_VERSION_MAJOR}")
+SET(CPACK_PACKAGE_VERSION_MINOR "${ITK_VERSION_MINOR}")
+SET(CPACK_PACKAGE_VERSION_PATCH "${ITK_VERSION_PATCH}")
+SET(CPACK_PACKAGE_INSTALL_DIRECTORY "InsightToolkit-${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}")
 # SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README")
-#SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/Copyright/ITKCopyright.txt")
-#INCLUDE(CPack)
+SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/Copyright/ITKCopyright.txt")
+INCLUDE(CPack)
 
 
 #-----------------------------------------------------------------------------
@@ -369,7 +375,8 @@ IF(WIN32)
    SET(BUILD_SHARED_LIBS OFF)
 ENDIF(WIN32)
 
-OPTION(BUILD_EXAMPLES "Build the Examples directory." ON)
+# OTB Modifications
+#OPTION(BUILD_EXAMPLES "Build the Examples directory." ON)
 
 OPTION(ITK_USE_SYSTEM_VXL "Use an outside build of VXL." OFF)
 MARK_AS_ADVANCED(ITK_USE_SYSTEM_VXL)
@@ -398,10 +405,11 @@ ITK_THIRD_PARTY_OPTION(LIBXML2 libxml2)
 
 #-----------------------------------------------------------------------------
 # If choose to build documentation, then search for Doxygen executables.
-OPTION(BUILD_DOXYGEN "Build Doxygen Documentation" OFF)
-IF(BUILD_DOXYGEN)
-  FIND_PACKAGE(Doxygen)
-ENDIF(BUILD_DOXYGEN)
+# OTB Modifications
+#OPTION(BUILD_DOXYGEN "Build Doxygen Documentation" OFF)
+#IF(BUILD_DOXYGEN)
+#  FIND_PACKAGE(Doxygen)
+#ENDIF(BUILD_DOXYGEN)
 
 #-----------------------------------------------------------------------------
 # Dispatch the build into the proper subdirectories.
@@ -409,11 +417,12 @@ SUBDIRS(Utilities Code)
 
 SUBDIRS(Wrapping)
 
-# Commented out by the Orfeo ToolBox development team
+# OTB Modifications
 #IF (BUILD_TESTING)
 #  SUBDIRS(Testing)
 #ENDIF (BUILD_TESTING)
 
+# OTB Modifications
 #IF(BUILD_EXAMPLES)
 #  SUBDIRS(Examples)
 #ENDIF(BUILD_EXAMPLES)
@@ -672,12 +681,6 @@ IF(NOT ITK_INSTALL_NO_DEVELOPMENT)
     COMPONENT Development)
 ENDIF(NOT ITK_INSTALL_NO_DEVELOPMENT)
 
-CONFIGURE_FILE(${ITK_SOURCE_DIR}/Utilities/KWStyle/ITK.kws.xml.in
-               ${ITK_BINARY_DIR}/ITK.kws.xml)
-
-CONFIGURE_FILE(${ITK_SOURCE_DIR}/Utilities/KWStyle/ITKFiles.txt.in
-               ${ITK_BINARY_DIR}/ITKFiles.txt)
-
 #-----------------------------------------------------------------------------
 # The entire ITK tree should use the same include path, except for the
 # Wrapping directory.
@@ -708,7 +711,11 @@ IF(ITK_USE_SYSTEM_GDCM)
   FIND_PACKAGE(GDCM)
   IF(GDCM_FOUND)
     INCLUDE(${GDCM_USE_FILE})
-    SET(ITK_GDCM_LIBRARIES gdcm)
+    IF( "${GDCM_MAJOR_VERSION}" LESS 2.0 )
+      SET(ITK_GDCM_LIBRARIES gdcm)
+    ELSE( "${GDCM_MAJOR_VERSION}" LESS 2.0 )
+      SET(ITK_GDCM_LIBRARIES gdcmMSFF)
+    ENDIF( "${GDCM_MAJOR_VERSION}" LESS 2.0 )
   ELSE(GDCM_FOUND)
     MESSAGE(FATAL_ERROR "Must set GDCM_DIR for ITK_USE_SYSTEM_GDCM.")
   ENDIF(GDCM_FOUND)

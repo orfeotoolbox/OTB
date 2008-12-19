@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBSplineDeformableTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2008-05-08 23:22:35 $
-  Version:   $Revision: 1.41 $
+  Date:      $Date: 2008-12-08 01:10:42 $
+  Version:   $Revision: 1.41.4.1 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -589,9 +589,9 @@ BSplineDeformableTransform<TScalarType, NDimensions, VSplineOrder>
   if ( images[0] )
     {
     this->SetGridRegion( images[0]->GetBufferedRegion() );
+    this->SetGridOrigin( images[0]->GetOrigin() );
     this->SetGridSpacing( images[0]->GetSpacing() );
     this->SetGridDirection( images[0]->GetDirection() );
-    this->SetGridOrigin( images[0]->GetOrigin() );
 
     for( unsigned int j = 0; j < SpaceDimension; j++ )
       {

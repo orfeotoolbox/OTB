@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDataObjectDecorator.txx,v $
   Language:  C++
-  Date:      $Date: 2007-04-25 22:25:16 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2008-10-07 09:09:39 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkDataObjectDecorator_txx
-#define _itkDataObjectDecorator_txx
+#ifndef __itkDataObjectDecorator_txx
+#define __itkDataObjectDecorator_txx
 
 #include "itkDataObjectDecorator.h"
 

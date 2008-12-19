@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSobelEdgeDetectionImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2007-09-23 21:25:01 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2008-10-17 20:50:03 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkSobelEdgeDetectionImageFilter_txx
-#define _itkSobelEdgeDetectionImageFilter_txx
+#ifndef __itkSobelEdgeDetectionImageFilter_txx
+#define __itkSobelEdgeDetectionImageFilter_txx
 #include "itkSobelEdgeDetectionImageFilter.h"
 
 #include "itkNeighborhoodOperatorImageFilter.h"
@@ -97,12 +97,12 @@ SobelEdgeDetectionImageFilter< TInputImage, TOutputImage >
 
   // Define the filter types used.
   typedef NeighborhoodOperatorImageFilter<InputImageType,
-    OutputImageType> OpFilter;
+    OutputImageType>                                           OpFilter;
   typedef MultiplyImageFilter<OutputImageType,
     OutputImageType,
-    OutputImageType> MultFilter;
+    OutputImageType>                                           MultFilter;
   typedef NaryAddImageFilter<OutputImageType, OutputImageType> AddFilter;
-  typedef SqrtImageFilter<OutputImageType, OutputImageType> SqrtFilter;
+  typedef SqrtImageFilter<OutputImageType, OutputImageType>    SqrtFilter;
   
   unsigned int i;  
   

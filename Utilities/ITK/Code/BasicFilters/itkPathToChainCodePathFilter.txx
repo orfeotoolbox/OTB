@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPathToChainCodePathFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:54 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2008-10-17 16:30:49 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -15,8 +15,8 @@
 
 =========================================================================*/
 
-#ifndef _itkPathToChainCodePathFilter_txx
-#define _itkPathToChainCodePathFilter_txx
+#ifndef __itkPathToChainCodePathFilter_txx
+#define __itkPathToChainCodePathFilter_txx
 
 #include "itkPathToChainCodePathFilter.h"
 

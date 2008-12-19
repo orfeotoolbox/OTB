@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCastImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-08-20 17:57:01 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2008-08-08 13:54:09 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -18,6 +18,7 @@
 #define __itkCastImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
+#include "itkProgressReporter.h"
 
 namespace itk
 {
@@ -50,17 +51,17 @@ public:
   Cast() {};
   virtual ~Cast() {};
   bool operator!=( const Cast & ) const
-  {
+    {
     return false;
-  }
+    }
   bool operator==( const Cast & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
   inline TOutput operator()( const TInput & A )
-  {
+    {
     return static_cast<TOutput>( A );
-  }
+    }
 };
 }
 
@@ -74,14 +75,14 @@ UnaryFunctorImageFilter<TInputImage,TOutputImage,
 {
 public:
   /** Standard class typedefs. */
-  typedef CastImageFilter  Self;
+  typedef CastImageFilter               Self;
   typedef UnaryFunctorImageFilter<TInputImage,TOutputImage, 
-                                  Functor::Cast< 
-    typename TInputImage::PixelType, 
-    typename TOutputImage::PixelType>   
-  >  Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+                        Functor::Cast< 
+                          typename TInputImage::PixelType, 
+                          typename TOutputImage::PixelType>   
+                                     >  Superclass;
+  typedef SmartPointer<Self>            Pointer;
+  typedef SmartPointer<const Self>      ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -100,6 +101,20 @@ public:
 protected:
   CastImageFilter() {}
   virtual ~CastImageFilter() {}
+
+  void GenerateData()
+    {
+    if( this->GetInPlace() && this->CanRunInPlace() )
+      {
+      // nothing to do, so avoid iterating over all the pixels
+      // for nothing! Allocate the output, generate a fake progress and exit
+      this->AllocateOutputs();
+      ProgressReporter progress(this, 0, 1);
+      return;
+      }
+    Superclass::GenerateData();
+    }
+  
 
   
 private:

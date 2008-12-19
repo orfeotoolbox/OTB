@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDifferenceOfGaussiansGradientImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:46 $
-  Version:   $Revision: 1.23 $
+  Date:      $Date: 2008-10-14 19:20:33 $
+  Version:   $Revision: 1.24 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -78,7 +78,7 @@ DifferenceOfGaussiansGradientImageFilter< TInputImage, TDataType >
   typename TOutputImage::IndexType lowerIndex;
 
   // walk the output image, and sample the input image
-  for ( ; !outIt.IsAtEnd(); ++outIt)
+  for (; !outIt.IsAtEnd(); ++outIt)
     {
     // determine the index of the output pixel
     outputIndex = outIt.GetIndex();

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSpatialObjectToImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-01-02 15:12:17 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2008-10-18 16:11:13 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -59,7 +59,7 @@ public:
   typedef typename Superclass::OutputImageRegionType      OutputImageRegionType;
 
   /** Some convenient typedefs. */
-  typedef TInputSpatialObject InputSpatialObjectType;
+  typedef TInputSpatialObject                             InputSpatialObjectType;
   typedef typename InputSpatialObjectType::Pointer        InputSpatialObjectPointer;
   typedef typename InputSpatialObjectType::ConstPointer   InputSpatialObjectConstPointer;
   typedef typename TInputSpatialObject::ChildrenListType  ChildrenListType;

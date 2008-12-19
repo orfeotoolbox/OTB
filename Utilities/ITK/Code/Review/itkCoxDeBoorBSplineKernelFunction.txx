@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCoxDeBoorBSplineKernelFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2008-07-09 18:29:35 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2008-09-29 18:36:38 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -165,7 +165,7 @@ CoxDeBoorBSplineKernelFunction<VSplineOrder>
   for ( unsigned int i = 0; i < this->m_BSplineShapeFunctions.rows(); i++ )
     {
     RealType a = 0.0;
-    RealType b = 0.0;;
+    RealType b = 0.0;
     os << indent << indent;
 
     PolynomialType( this->m_BSplineShapeFunctions.get_row( i ) ).print( os );

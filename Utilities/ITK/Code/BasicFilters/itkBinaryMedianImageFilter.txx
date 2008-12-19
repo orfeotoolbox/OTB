@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryMedianImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-01-11 19:43:31 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2008-10-09 15:31:36 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkBinaryMedianImageFilter_txx
-#define _itkBinaryMedianImageFilter_txx
+#ifndef __itkBinaryMedianImageFilter_txx
+#define __itkBinaryMedianImageFilter_txx
 #include "itkBinaryMedianImageFilter.h"
 
 #include "itkConstNeighborhoodIterator.h"

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWhiteTopHatImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-08-01 19:16:19 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2008-08-08 15:26:45 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -16,6 +16,16 @@
 =========================================================================*/
 #ifndef __itkWhiteTopHatImageFilter_txx
 #define __itkWhiteTopHatImageFilter_txx
+
+// First make sure that the configuration is available.
+// This line can be removed once the optimized versions
+// gets integrated into the main directories.
+#include "itkConfigure.h"
+
+#ifdef ITK_USE_CONSOLIDATED_MORPHOLOGY
+#include "itkOptWhiteTopHatImageFilter.h"
+#else
+
 
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
@@ -115,4 +125,6 @@ WhiteTopHatImageFilter<TInputImage, TOutputImage, TKernel>
 }
 
 }// end namespace itk
+#endif
+
 #endif

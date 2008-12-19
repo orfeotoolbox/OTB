@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkForwardDifferenceOperator.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:08 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2008-10-16 23:25:41 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkForwardDifferenceOperator_txx
-#define _itkForwardDifferenceOperator_txx
+#ifndef __itkForwardDifferenceOperator_txx
+#define __itkForwardDifferenceOperator_txx
 #include "itkForwardDifferenceOperator.h"
 
 #include "itkNumericTraits.h"

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeanSquareRegistrationFunction.h,v $
   Language:  C++
-  Date:      $Date: 2008-02-03 04:05:28 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2008-12-08 01:10:41 $
+  Version:   $Revision: 1.6.6.1 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -165,10 +165,9 @@ protected:
 private:
   MeanSquareRegistrationFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
   /** Cache fixed image information. */
   SpacingType                     m_FixedImageSpacing;
-  PointType                       m_FixedImageOrigin;
 
   /** Function to compute derivatives of the fixed image. */
   GradientCalculatorPointer       m_FixedImageGradientCalculator;
@@ -184,8 +183,6 @@ private:
 
   /** Threshold below which two intensity value are assumed to match. */
   double                          m_IntensityDifferenceThreshold;
-
-
 };
 
 

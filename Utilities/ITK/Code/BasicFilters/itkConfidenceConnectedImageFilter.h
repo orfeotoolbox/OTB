@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConfidenceConnectedImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-08-01 23:06:11 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2008-10-13 18:54:27 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -20,7 +20,7 @@
 #include "itkImage.h"
 #include "itkImageToImageFilter.h"
 
-namespace itk{
+namespace itk {
 
 /** \class ConfidenceConnectedImageFilter
  * \brief Segment pixels with similar statistics using connectivity
@@ -59,10 +59,10 @@ class ITK_EXPORT ConfidenceConnectedImageFilter:
 {
 public:
   /** Standard class typedefs. */
-  typedef ConfidenceConnectedImageFilter Self;
+  typedef ConfidenceConnectedImageFilter               Self;
   typedef ImageToImageFilter<TInputImage,TOutputImage> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+  typedef SmartPointer<Self>                           Pointer;
+  typedef SmartPointer<const Self>                     ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -71,14 +71,14 @@ public:
   itkTypeMacro(ConfidenceConnectedImageFilter,
                ImageToImageFilter);
 
-  typedef TInputImage InputImageType;
+  typedef TInputImage                           InputImageType;
   typedef typename InputImageType::Pointer      InputImagePointer;
   typedef typename InputImageType::RegionType   InputImageRegionType; 
   typedef typename InputImageType::PixelType    InputImagePixelType; 
   typedef typename InputImageType::IndexType    IndexType;
   typedef typename InputImageType::SizeType     SizeType;
   
-  typedef TOutputImage OutputImageType;
+  typedef TOutputImage                          OutputImageType;
   typedef typename OutputImageType::Pointer     OutputImagePointer;
   typedef typename OutputImageType::RegionType  OutputImageRegionType; 
   typedef typename OutputImageType::PixelType   OutputImagePixelType; 
@@ -93,25 +93,23 @@ public:
 
   /** Set seed point. This method is deprecated, please use AddSeed() */
   void SetSeed(const IndexType & seed)
-  {
+    {
     m_Seeds.clear();
     this->AddSeed( seed );
-  };
-
+    }
   
   /** Clear all the seeds. */
   void ClearSeeds()
-  {
+    {
     m_Seeds.clear();
-  };
-
+    }
 
   /** Add seed point. */
   void AddSeed(const IndexType & seed)
-  {
+    {
     m_Seeds.push_back( seed );
     this->Modified();
-  };
+    }
 
   /** Set/Get the multiplier to define the confidence interval.  Multiplier
    * can be anything greater than zero. A typical value is 2.5 */

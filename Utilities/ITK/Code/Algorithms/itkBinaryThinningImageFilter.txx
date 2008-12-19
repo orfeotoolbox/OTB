@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryThinningImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-02-03 04:05:28 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2008-10-20 21:28:20 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkBinaryThinningImageFilter_txx
-#define _itkBinaryThinningImageFilter_txx
+#ifndef __itkBinaryThinningImageFilter_txx
+#define __itkBinaryThinningImageFilter_txx
 
 #include <iostream>
 
@@ -91,19 +91,19 @@ BinaryThinningImageFilter<TInputImage,TOutputImage>
   // Copy the input to the output, changing all foreground pixels to
   // have value 1 in the process.
   while( !ot.IsAtEnd() )
+    {
+    if ( it.Get() )
       {
-      if ( it.Get() )
-        {
-        ot.Set( NumericTraits<OutputImagePixelType>::One );
-        }
-      else
-        {
-        ot.Set( NumericTraits<OutputImagePixelType>::Zero );
-        }
-      ++it;
-      ++ot;
+      ot.Set( NumericTraits<OutputImagePixelType>::One );
       }
-  itkDebugMacro(<< "PrepareData End");    
+    else
+      {
+      ot.Set( NumericTraits<OutputImagePixelType>::Zero );
+      }
+    ++it;
+    ++ot;
+    }
+  itkDebugMacro(<< "PrepareData End");
 }
 
 /**
@@ -254,7 +254,7 @@ BinaryThinningImageFilter<TInputImage,TOutputImage>
           // iteration of the algorithm.
           // A point that satisfies these tests as well as TestA
           // and TestB is a west or north boundary point or a
-          // southeast corner point in the boundary.          
+          // southeast corner point in the boundary.
           // Note that northeast and southwest corner points are
           // satisfied in both the combination of steps 1 and 2 and
           // the combination of steps 3 and 4.
@@ -285,7 +285,9 @@ BinaryThinningImageFilter<TInputImage,TOutputImage>
         } // end image iteration loop
 
       //Loop through the vector of pixels to delete and set these pixels to 0 in the image.
-      for (pixelsToDeleteIt=pixelsToDelete.begin(); pixelsToDeleteIt!=pixelsToDelete.end(); pixelsToDeleteIt++)
+      for (pixelsToDeleteIt=pixelsToDelete.begin();
+           pixelsToDeleteIt != pixelsToDelete.end();
+           pixelsToDeleteIt++)
         {
         thinImage->SetPixel(*pixelsToDeleteIt,0);
         }
@@ -295,7 +297,7 @@ BinaryThinningImageFilter<TInputImage,TOutputImage>
     } // end noChange while loop
   
   
-    itkDebugMacro( << "ComputeThinImage End");
+  itkDebugMacro( << "ComputeThinImage End");
 }
 
 /**

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBSplineDownsampleImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-08-01 19:16:17 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2008-10-09 20:43:43 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkBSplineDownsampleImageFilter_txx
-#define _itkBSplineDownsampleImageFilter_txx
+#ifndef __itkBSplineDownsampleImageFilter_txx
+#define __itkBSplineDownsampleImageFilter_txx
 #include "itkBSplineDownsampleImageFilter.h"
 
 namespace itk

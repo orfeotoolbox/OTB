@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExpImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-11-28 13:36:19 $
-  Version:   $Revision: 1.23 $
+  Date:      $Date: 2008-10-14 19:20:33 $
+  Version:   $Revision: 1.24 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -43,20 +43,20 @@ public:
   Exp() {};
   ~Exp() {};
   bool operator!=( const Exp & ) const
-  {
+    {
     return false;
-  }
+    }
   bool operator==( const Exp & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
 #if defined(_MSC_VER) && (_MSC_VER == 1300)
 #pragma optimize("g",off)
 #endif
   inline TOutput operator()( const TInput & A )
-  {
+    {
     return (TOutput)vcl_exp((double)A);
-  }
+    }
 }; 
 }
 template <class TInputImage, class TOutputImage>
@@ -69,12 +69,13 @@ UnaryFunctorImageFilter<TInputImage,TOutputImage,
 {
 public:
   /** Standard class typedefs. */
-  typedef ExpImageFilter  Self;
-  typedef UnaryFunctorImageFilter<TInputImage,TOutputImage, 
-                                  Function::Exp< typename TInputImage::PixelType, 
-                                                 typename TOutputImage::PixelType> >  Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef ExpImageFilter                                Self;
+  typedef UnaryFunctorImageFilter<
+    TInputImage,TOutputImage, 
+    Function::Exp< typename TInputImage::PixelType, 
+                   typename TOutputImage::PixelType> >  Superclass;
+  typedef SmartPointer<Self>                            Pointer;
+  typedef SmartPointer<const Self>                      ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

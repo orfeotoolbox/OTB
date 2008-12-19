@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRecursiveGaussianImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005-05-12 14:42:04 $
-  Version:   $Revision: 1.26 $
+  Date:      $Date: 2008-10-17 16:30:50 $
+  Version:   $Revision: 1.27 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,7 +25,7 @@ namespace itk
 /** \class RecursiveGaussianImageFilter
  * \brief Base class for computing IIR convolution with an approximation of a  Gaussian kernel.
  *
- *    \f[    
+ *    \f[
  *      \frac{ 1 }{ \sigma \sqrt{ 2 \pi } } \exp{ \left( - \frac{x^2}{ 2 \sigma^2 } \right) }
  *    \f]
  *
@@ -58,13 +58,13 @@ class ITK_EXPORT RecursiveGaussianImageFilter :
 {
 public:
   /** Standard class typedefs. */
-  typedef RecursiveGaussianImageFilter  Self;
+  typedef RecursiveGaussianImageFilter                            Self;
   typedef RecursiveSeparableImageFilter<TInputImage,TOutputImage> Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                                      Pointer;
+  typedef SmartPointer<const Self>                                ConstPointer;
 
-  typedef typename Superclass::RealType      RealType;
-  typedef typename Superclass::ScalarRealType      ScalarRealType;
+  typedef typename Superclass::RealType                           RealType;
+  typedef typename Superclass::ScalarRealType                     ScalarRealType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -90,16 +90,16 @@ public:
       When this flag is ON the filter will be normalized in such a way 
       that larger sigmas will not result in the image fading away.
 
-      \f[    
+      \f[
             \frac{ 1 }{ \sqrt{ 2 \pi } };
       \f]
 
       When the flag is OFF the normalization will conserve contant the 
       integral of the image intensity. 
-      \f[    
+      \f[
             \frac{ 1 }{ \sigma  \sqrt{ 2 \pi } };
       \f]
-      For analyzing an image across Scale Space you want to enable
+  For analyzing an image across Scale Space you want to enable
       this flag.  It is disabled by default.  */
   itkSetMacro( NormalizeAcrossScale, bool );
   itkGetMacro( NormalizeAcrossScale, bool );
@@ -169,4 +169,3 @@ private:
 #endif
 
 #endif
-

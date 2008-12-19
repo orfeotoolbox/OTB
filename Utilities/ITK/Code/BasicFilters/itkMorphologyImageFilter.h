@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMorphologyImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2004-04-30 21:02:04 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2008-10-16 23:24:23 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -16,6 +16,16 @@
 =========================================================================*/
 #ifndef __itkMorphologyImageFilter_h
 #define __itkMorphologyImageFilter_h
+
+// First make sure that the configuration is available.
+// This line can be removed once the optimized versions
+// gets integrated into the main directories.
+#include "itkConfigure.h"
+
+#ifdef ITK_USE_CONSOLIDATED_MORPHOLOGY
+#include "itkOptMorphologyImageFilter.h"
+#else
+
 
 #include "itkImageToImageFilter.h"
 #include "itkNeighborhoodIterator.h"
@@ -74,45 +84,44 @@ class ITK_EXPORT MorphologyImageFilter :
 {
 public:
   /** Standard Self typedef */
-  typedef MorphologyImageFilter Self;
+  typedef MorphologyImageFilter                         Self;
   typedef ImageToImageFilter<TInputImage,TOutputImage>  Superclass;
-  typedef SmartPointer<Self>        Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                            Pointer;
+  typedef SmartPointer<const Self>                      ConstPointer;
   
   /** Runtime information support. */
   itkTypeMacro(MorphologyImageFilter, ImageToImageFilter);
   
   /** Image related typedefs. */
-  typedef TInputImage InputImageType;
-  typedef TOutputImage OutputImageType;
-  typedef typename TInputImage::RegionType RegionType ;
-  typedef typename TInputImage::SizeType SizeType ;
-  typedef typename TInputImage::IndexType IndexType ;
-  typedef typename TInputImage::PixelType PixelType ;
-  typedef typename Superclass::OutputImageRegionType OutputImageRegionType;
+  typedef TInputImage                                   InputImageType;
+  typedef TOutputImage                                  OutputImageType;
+  typedef typename TInputImage::RegionType              RegionType;
+  typedef typename TInputImage::SizeType                SizeType;
+  typedef typename TInputImage::IndexType               IndexType;
+  typedef typename TInputImage::PixelType               PixelType;
+  typedef typename Superclass::OutputImageRegionType    OutputImageRegionType;
   
   /** Image related typedefs. */
-  itkStaticConstMacro(ImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, TInputImage::ImageDimension);
 
   /** Typedef for boundary conditions. */
-  typedef ImageBoundaryCondition<InputImageType> *ImageBoundaryConditionPointerType;
-  typedef ImageBoundaryCondition<InputImageType> const *ImageBoundaryConditionConstPointerType;
-  typedef ConstantBoundaryCondition<InputImageType> DefaultBoundaryConditionType;
+  typedef ImageBoundaryCondition<InputImageType> *       ImageBoundaryConditionPointerType;
+  typedef ImageBoundaryCondition<InputImageType> const * ImageBoundaryConditionConstPointerType;
+  typedef ConstantBoundaryCondition<InputImageType>      DefaultBoundaryConditionType;
   
 
 /** Neighborhood iterator type. */
   typedef ConstNeighborhoodIterator<TInputImage> 
-  NeighborhoodIteratorType ;
+  NeighborhoodIteratorType;
 
   /** Kernel typedef. */
   typedef TKernel KernelType;
   
   /** Kernel (structuring element) iterator. */
-  typedef typename KernelType::ConstIterator KernelIteratorType ;
+  typedef typename KernelType::ConstIterator KernelIteratorType;
   
   /** n-dimensional Kernel radius. */
-  typedef typename KernelType::SizeType RadiusType ;
+  typedef typename KernelType::SizeType RadiusType;
 
   /** Set kernel (structuring element). */
   itkSetMacro(Kernel, KernelType);
@@ -125,7 +134,7 @@ public:
    * requested region is expanded by the radius of the structuring element.
    * If the request extends past the LargestPossibleRegion for the input,
    * the request is cropped by the LargestPossibleRegion. */
-  void GenerateInputRequestedRegion() ;
+  void GenerateInputRequestedRegion();
 
   /** Allows a user to override the internal boundary condition. Care should be
    * be taken to ensure that the overriding boundary condition is a persistent
@@ -150,7 +159,7 @@ protected:
   /** Multi-thread version GenerateData. */
   void  ThreadedGenerateData (const OutputImageRegionType& 
                               outputRegionForThread,
-                              int threadId) ;
+                              int threadId);
 
   /** Evaluate image neighborhood with kernel to find the new value 
    * for the center pixel value. */
@@ -163,7 +172,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   /** kernel or structuring element to use. */
-  KernelType m_Kernel ;
+  KernelType m_Kernel;
 
   /** Pointer to a persistent boundary condition object used
    * for the image iterator. */
@@ -172,12 +181,14 @@ private:
   /** Default boundary condition */
   DefaultBoundaryConditionType m_DefaultBoundaryCondition;
   
-} ; // end of class
+}; // end of class
 
 } // end namespace itk
   
 #ifndef ITK_MANUAL_INSTANTIATION
 #include "itkMorphologyImageFilter.txx"
+#endif
+
 #endif
 
 #endif

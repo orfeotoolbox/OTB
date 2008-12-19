@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVotingBinaryIterativeHoleFillingImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-04-04 13:13:51 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2008-10-17 20:50:03 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -60,10 +60,10 @@ public:
   typedef TImage OutputImageType;
 
   /** Standard class typedefs. */
-  typedef VotingBinaryIterativeHoleFillingImageFilter Self;
+  typedef VotingBinaryIterativeHoleFillingImageFilter          Self;
   typedef ImageToImageFilter< InputImageType, OutputImageType> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                                   Pointer;
+  typedef SmartPointer<const Self>                             ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -78,10 +78,10 @@ public:
                                                       > VotingFilterType;
 
   /** Image typedef support. */
-  typedef typename InputImageType::PixelType InputPixelType;
+  typedef typename InputImageType::PixelType  InputPixelType;
   typedef typename OutputImageType::PixelType OutputPixelType;
 
-  typedef typename InputImageType::RegionType InputImageRegionType;
+  typedef typename InputImageType::RegionType  InputImageRegionType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
   typedef typename InputImageType::SizeType InputSizeType;

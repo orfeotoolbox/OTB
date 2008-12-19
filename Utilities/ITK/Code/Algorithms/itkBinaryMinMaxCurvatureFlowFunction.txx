@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryMinMaxCurvatureFlowFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2004-12-21 22:47:26 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2008-10-20 21:28:19 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -23,7 +23,7 @@
 
 namespace itk {
 
-/*
+/**
  * Constructor
  */
 template<class TImage>
@@ -35,9 +35,7 @@ BinaryMinMaxCurvatureFlowFunction<TImage>
 
 }
 
-
-
-/*
+/**
  * Update the solution at pixels which does not lie on the
  * data boundary.
  */

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMorphologyImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-01-11 19:43:31 $
-  Version:   $Revision: 1.31 $
+  Date:      $Date: 2008-10-16 19:33:41 $
+  Version:   $Revision: 1.33 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -16,6 +16,16 @@
 =========================================================================*/
 #ifndef __itkMorphologyImageFilter_txx
 #define __itkMorphologyImageFilter_txx
+
+// First make sure that the configuration is available.
+// This line can be removed once the optimized versions
+// gets integrated into the main directories.
+#include "itkConfigure.h"
+
+#ifdef ITK_USE_CONSOLIDATED_MORPHOLOGY
+#include "itkOptMorphologyImageFilter.txx"
+#else
+
 
 #include <limits.h>
 
@@ -131,8 +141,6 @@ MorphologyImageFilter<TInputImage, TOutputImage, TKernel>
   
 }
 
-
-
 template<class TInputImage, class TOutputImage, class TKernel>
 void
 MorphologyImageFilter<TInputImage, TOutputImage, TKernel>
@@ -145,4 +153,6 @@ MorphologyImageFilter<TInputImage, TOutputImage, TKernel>
 }
 
 }// end namespace itk
+#endif
+
 #endif

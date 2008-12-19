@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLogLikelihoodGoodnessOfFitFunction.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:46 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2008-10-24 08:14:13 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -29,7 +29,7 @@ namespace Statistics{
  * histogram. 
  *
  * The statistics is
- *    \f$ \sum^{k}_{i=1}x_{i}\log(x_{i}/n\pi_{0i}\f$
+ *    \f$ \sum^{k}_{i=1}x_{i}\log(x_{i}/n\pi_{0i})\f$
  *  
  *  where \f$ x_{i} \f$ is the observed frequency of the \f$i\f$th bin, and
  * \f$n\pi_{0i}\f$ is the expected frequency.

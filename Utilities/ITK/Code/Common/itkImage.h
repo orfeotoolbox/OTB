@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImage.h,v $
   Language:  C++
-  Date:      $Date: 2008-02-04 12:34:11 $
-  Version:   $Revision: 1.143 $
+  Date:      $Date: 2008-10-18 17:19:48 $
+  Version:   $Revision: 1.149 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -23,7 +23,6 @@
 #include "itkDefaultPixelAccessor.h"
 #include "itkDefaultPixelAccessorFunctor.h"
 #include "itkPoint.h"
-#include "itkContinuousIndex.h"
 #include "itkFixedArray.h"
 #include "itkWeakPointer.h"
 #include "itkNeighborhoodAccessorFunctor.h"
@@ -264,9 +263,9 @@ public:
    * and then copies over the pixel container. */
   virtual void Graft(const DataObject *data);
 
-  
+
   /** Return the Pixel Accessor object */
-  AccessorType GetPixelAccessor( void ) 
+  AccessorType GetPixelAccessor( void )
     { return AccessorType(); }
 
   /** Return the Pixel Accesor object */
@@ -274,123 +273,32 @@ public:
     { return AccessorType(); }
 
   /** Return the NeighborhoodAccessor functor */
-  NeighborhoodAccessorFunctorType GetNeighborhoodAccessor() 
+  NeighborhoodAccessorFunctorType GetNeighborhoodAccessor()
     { return NeighborhoodAccessorFunctorType(); }
-  
+
   /** Return the NeighborhoodAccessor functor */
   const NeighborhoodAccessorFunctorType GetNeighborhoodAccessor() const
     { return NeighborhoodAccessorFunctorType(); }
-  
-
-  /** \brief Get the continuous index from a physical point
-   *
-   * Returns true if the resulting index is within the image, false otherwise.
-   * \sa Transform */
-  template<class TCoordRep>
-  bool TransformPhysicalPointToContinuousIndex(
-              const Point<TCoordRep, VImageDimension>& point,
-              ContinuousIndex<TCoordRep, VImageDimension>& index   ) const
-    {
-    // Update the output index
-    for (unsigned int i = 0; i < VImageDimension; i++)
-      {
-      index[i] = static_cast<TCoordRep>( (point[i]- this->m_Origin[i]) / this->m_Spacing[i] );
-      }
-
-    // Now, check to see if the index is within allowed bounds
-    const bool isInside =
-      this->GetLargestPossibleRegion().IsInside( index );
-
-    return isInside;
-    }
-
-  /** Get the index (discrete) from a physical point.
-   * Floating point index results are truncated to integers.
-   * Returns true if the resulting index is within the image, false otherwise
-   * \sa Transform */
-  template<class TCoordRep>
-  bool TransformPhysicalPointToIndex(
-            const Point<TCoordRep, VImageDimension>& point,
-            IndexType & index                                ) const
-    {
-    // Update the output index
-    for (unsigned int i = 0; i < VImageDimension; i++)
-      {
-      index[i] = static_cast<IndexValueType>( (point[i]- this->m_Origin[i]) / this->m_Spacing[i] );
-      }
-
-    // Now, check to see if the index is within allowed bounds
-    const bool isInside =
-      this->GetLargestPossibleRegion().IsInside( index );
-
-    return isInside;
-    }
-
-  /** Get a physical point (in the space which
-   * the origin and spacing infomation comes from)
-   * from a continuous index (in the index space)
-   * \sa Transform */
-  template<class TCoordRep>
-  void TransformContinuousIndexToPhysicalPoint(
-            const ContinuousIndex<TCoordRep, VImageDimension>& index,
-            Point<TCoordRep, VImageDimension>& point        ) const
-    {
-    for (unsigned int i = 0; i < VImageDimension; i++)
-      {
-      point[i] = static_cast<TCoordRep>( this->m_Spacing[i] * index[i] + this->m_Origin[i] );
-      }
-    }
-
-  /** Get a physical point (in the space which
-   * the origin and spacing infomation comes from)
-   * from a discrete index (in the index space)
-   *
-   * \sa Transform */
-  template<class TCoordRep>
-  void TransformIndexToPhysicalPoint(
-                      const IndexType & index,
-                      Point<TCoordRep, VImageDimension>& point ) const
-    {
-    for (unsigned int i = 0; i < VImageDimension; i++)
-      {
-      point[i] = static_cast<TCoordRep>( this->m_Spacing[i] *
-        static_cast<double>( index[i] ) + this->m_Origin[i] );
-      }
-    }
-
-  /** Take a vector or covariant vector that has been computed in the
-   * coordinate system parallel to the image grid and rotate it by the
-   * direction cosines in order to get it in terms of the coordinate system of
-   * the image acquisition device.  This implementation in the Image only needs
-   * to copy the input vector or covariant vector given that the Image class
-   * implicitly has an Identity Matrix as direction cosines. The arguments of
-   * the method are of type FixedArray to make possible to use this method with
-   * both Vector and CovariantVector. The Method is implemented differently in
-   * the itk::OrientedImage. 
-   *
-   * \sa OrientedImage
-   */ 
-  template<class TCoordRep>
-  void TransformLocalVectorToPhysicalVector(
-    const FixedArray<TCoordRep, VImageDimension> & inputGradient,
-          FixedArray<TCoordRep, VImageDimension> & outputGradient ) const
-    {
-    for( unsigned int i = 0; i < VImageDimension; i++ )
-      {
-      outputGradient[i] = inputGradient[i];
-      }
-    }
 
 protected:
   Image();
   void PrintSelf(std::ostream& os, Indent indent) const;
   virtual ~Image() {};
+
+  /** Compute helper matrices used to transform Index coordinates to
+   * PhysicalPoint coordinates and back. This method is virtual and will be
+   * overloaded in derived classes in order to provide backward compatibility
+   * behavior in classes that did not used to take image orientation into
+   * account.  */ 
+  virtual void ComputeIndexToPhysicalPointMatrices();
+
 private:
   Image(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   /** Memory for the current buffer. */
   PixelContainerPointer m_Buffer;
+
 };
 
 } // end namespace itk

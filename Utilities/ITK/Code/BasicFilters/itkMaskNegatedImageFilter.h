@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMaskNegatedImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-27 11:36:40 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2008-10-16 18:05:25 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -61,15 +61,15 @@ public:
   MaskNegatedInput() {};
   ~MaskNegatedInput() {};
   bool operator!=( const MaskNegatedInput & ) const
-  {
+    {
     return false;
-  }
+    }
   bool operator==( const MaskNegatedInput & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
   inline TOutput operator()( const TInput & A, const TMask & B)
-  {
+    {
     if (B != NumericTraits< TMask >::Zero ) 
       {
       return NumericTraits< TOutput >::Zero;
@@ -78,7 +78,7 @@ public:
       {
       return static_cast<TOutput>( A );
       }
-  }
+    }
 }; 
 
 }
@@ -95,14 +95,14 @@ BinaryFunctorImageFilter<TInputImage,TMaskImage,TOutputImage,
 {
 public:
   /** Standard class typedefs. */
-  typedef MaskNegatedImageFilter  Self;
+  typedef MaskNegatedImageFilter    Self;
   typedef BinaryFunctorImageFilter<TInputImage,TMaskImage,TOutputImage, 
                                    Functor::MaskNegatedInput< 
     typename TInputImage::PixelType, 
     typename TMaskImage::PixelType,
     typename TOutputImage::PixelType>   
-  >  Superclass;
-  typedef SmartPointer<Self>   Pointer;
+  >                                 Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
   /** Method for creation through the object factory. */

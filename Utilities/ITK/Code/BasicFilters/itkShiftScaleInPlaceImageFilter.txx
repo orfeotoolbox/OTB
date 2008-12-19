@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkShiftScaleInPlaceImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2003-12-15 14:13:18 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2008-10-17 20:49:55 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkShiftScaleInPlaceImageFilter_txx
-#define _itkShiftScaleInPlaceImageFilter_txx
+#ifndef __itkShiftScaleInPlaceImageFilter_txx
+#define __itkShiftScaleInPlaceImageFilter_txx
 #include "itkShiftScaleInPlaceImageFilter.h"
 
 #include "itkImageRegionIterator.h"
@@ -100,7 +100,7 @@ ShiftScaleInPlaceImageFilter<TInputImage>
       }
     else if (value > NumericTraits<OutputImagePixelType>::max())
       {
-      ot.Set (NumericTraits<OutputImagePixelType>::max());      
+      ot.Set (NumericTraits<OutputImagePixelType>::max());
       m_ThreadOverflow[threadId]++;
       }
     else

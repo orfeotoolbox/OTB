@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGrayscaleDilateImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2004-04-30 21:02:03 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2008-10-16 16:45:08 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -16,6 +16,16 @@
 =========================================================================*/
 #ifndef __itkGrayscaleDilateImageFilter_txx
 #define __itkGrayscaleDilateImageFilter_txx
+
+// First make sure that the configuration is available.
+// This line can be removed once the optimized versions
+// gets integrated into the main directories.
+#include "itkConfigure.h"
+
+#ifdef ITK_USE_CONSOLIDATED_MORPHOLOGY
+#include "itkOptGrayscaleDilateImageFilter.txx"
+#else
+
 
 #include "itkGrayscaleDilateImageFilter.h"
 
@@ -53,13 +63,17 @@ GrayscaleDilateImageFilter<TInputImage, TOutputImage, TKernel>
       temp = nit.GetPixel(i);
 
       if (temp > max)
-        max = temp ;
+        {
+        max = temp;
+        }
       }
     }
   
-  return max ;
+  return max;
 } 
 
 
 }// end namespace itk
+#endif
+
 #endif

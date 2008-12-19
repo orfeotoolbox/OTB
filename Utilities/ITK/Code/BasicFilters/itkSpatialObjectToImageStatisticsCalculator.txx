@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkSpatialObjectToImageStatisticsCalculator.txx,v $
 Language:  C++
-Date:      $Date: 2008-01-20 18:00:40 $
-Version:   $Revision: 1.24 $
+Date:      $Date: 2008-10-18 20:32:37 $
+Version:   $Revision: 1.26 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkSpatialObjectToImageStatisticsCalculator_txx
-#define _itkSpatialObjectToImageStatisticsCalculator_txx
+#ifndef __itkSpatialObjectToImageStatisticsCalculator_txx
+#define __itkSpatialObjectToImageStatisticsCalculator_txx
 
 #include "itkSpatialObjectToImageStatisticsCalculator.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
@@ -51,11 +51,11 @@ SpatialObjectToImageStatisticsCalculator<TInputImage,TInputSpatialObject,TSample
 ::ComputeStatistics()
 {
   typedef itk::Statistics::MeanCalculator< SampleType >
-    MeanAlgorithmType ;
+    MeanAlgorithmType;
   
-  typename MeanAlgorithmType::Pointer meanAlgorithm = MeanAlgorithmType::New() ;
-  meanAlgorithm->SetInputSample( m_Sample ) ;
-  meanAlgorithm->Update() ;
+  typename MeanAlgorithmType::Pointer meanAlgorithm = MeanAlgorithmType::New();
+  meanAlgorithm->SetInputSample( m_Sample );
+  meanAlgorithm->Update();
 
   typename MeanAlgorithmType::OutputType mean = 
                                 *(meanAlgorithm->GetOutput());
@@ -65,13 +65,13 @@ SpatialObjectToImageStatisticsCalculator<TInputImage,TInputSpatialObject,TSample
     }
 
   typedef itk::Statistics::CovarianceCalculator< SampleType >
-    CovarianceAlgorithmType ;
+    CovarianceAlgorithmType;
   
   typename CovarianceAlgorithmType::Pointer covarianceAlgorithm = 
-    CovarianceAlgorithmType::New() ;
+    CovarianceAlgorithmType::New();
 
-  covarianceAlgorithm->SetInputSample( m_Sample ) ;
-  covarianceAlgorithm->SetMean( meanAlgorithm->GetOutput() ) ;
+  covarianceAlgorithm->SetInputSample( m_Sample );
+  covarianceAlgorithm->SetMean( meanAlgorithm->GetOutput() );
   covarianceAlgorithm->Update();
   
   typename CovarianceAlgorithmType::OutputType covarianceMatrix
@@ -123,9 +123,9 @@ SpatialObjectToImageStatisticsCalculator<TInputImage,TInputSpatialObject,TSample
     typedef Image<unsigned char,itkGetStaticConstMacro(ObjectDimension)> MaskImageType;
     typedef ImageMaskSpatialObject<itkGetStaticConstMacro(ObjectDimension)> MaskSOType;
 
-     // This apparently redundant construction is added here in order to 
-     // force the SGI CC compiler to instantiate the symbols of the 
-     // ImageMaskSpatialObject class. Otherwise, there is no readon for calling New().
+    // This apparently redundant construction is added here in order to 
+    // force the SGI CC compiler to instantiate the symbols of the 
+    // ImageMaskSpatialObject class. Otherwise, there is no readon for calling New().
     typename MaskSOType::Pointer maskSpatialObject = MaskSOType::New();
 
     maskSpatialObject = dynamic_cast< MaskSOType * >( m_SpatialObject.GetPointer() );
@@ -184,7 +184,7 @@ SpatialObjectToImageStatisticsCalculator<TInputImage,TInputSpatialObject,TSample
     while(!it.IsAtEnd())
       {
       IndexType ind = it.GetIndex();
-      VectorType mv ;
+      VectorType mv;
       mv[0] = it.Get();
       m_Sum += static_cast< AccumulateType >(mv[0]);
       for(unsigned int i=1;i<itkGetStaticConstMacro(SampleDimension);i++)

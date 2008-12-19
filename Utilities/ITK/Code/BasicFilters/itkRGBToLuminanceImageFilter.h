@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRGBToLuminanceImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-27 11:36:41 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2008-10-17 16:30:50 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -38,21 +38,21 @@ template< class TInput, class TOutput>
 class RGBToLuminance
 {
 public:
-  typedef typename TInput::ComponentType      ComponentType;
-  typedef typename itk::NumericTraits< ComponentType >::RealType  RealType;
+  typedef typename TInput::ComponentType                         ComponentType;
+  typedef typename itk::NumericTraits< ComponentType >::RealType RealType;
 
   RGBToLuminance() {}
   ~RGBToLuminance() {}
   bool operator!=( const RGBToLuminance & ) const
-  {
+    {
     return false;
-  }
+    }
   bool operator==( const RGBToLuminance & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
   inline TOutput operator()( const TInput & A )
-  { return static_cast<TOutput>( A.GetLuminance() ); }
+    { return static_cast<TOutput>( A.GetLuminance() ); }
 }; 
 }
 
@@ -66,12 +66,13 @@ UnaryFunctorImageFilter<TInputImage,TOutputImage,
 {
 public:
   /** Standard class typedefs. */
-  typedef RGBToLuminanceImageFilter  Self;
-  typedef UnaryFunctorImageFilter<TInputImage,TOutputImage, 
-                                  Function::RGBToLuminance< typename TInputImage::PixelType, 
-                                                 typename TOutputImage::PixelType> >  Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef RGBToLuminanceImageFilter                               Self;
+  typedef UnaryFunctorImageFilter<
+    TInputImage,TOutputImage, 
+    Function::RGBToLuminance<typename TInputImage::PixelType, 
+                             typename TOutputImage::PixelType> >  Superclass;
+  typedef SmartPointer<Self>                                      Pointer;
+  typedef SmartPointer<const Self>                                ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

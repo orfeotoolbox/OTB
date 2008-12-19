@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkIntensityWindowingImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2004-03-31 03:37:17 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2008-10-16 16:45:10 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkIntensityWindowingImageFilter_txx
-#define _itkIntensityWindowingImageFilter_txx
+#ifndef __itkIntensityWindowingImageFilter_txx
+#define __itkIntensityWindowingImageFilter_txx
 
 #include "itkIntensityWindowingImageFilter.h"
 #include "itkMinimumMaximumImageCalculator.h"

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDiffusionTensor3D.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-30 20:56:07 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2008-10-07 09:09:39 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -80,8 +80,8 @@ class DiffusionTensor3D: public SymmetricSecondRankTensor<TComponent,3>
 {
 public:
   /** Standard class typedefs. */
-  typedef DiffusionTensor3D  Self;
-  typedef SymmetricSecondRankTensor<TComponent, 3> Superclass;
+  typedef DiffusionTensor3D                           Self;
+  typedef SymmetricSecondRankTensor<TComponent, 3>    Superclass;
   
   /** Propagating some typedef from the superclass */
   typedef typename Superclass::ValueType             ValueType;

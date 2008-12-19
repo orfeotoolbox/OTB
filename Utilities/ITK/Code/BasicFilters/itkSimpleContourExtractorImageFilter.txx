@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSimpleContourExtractorImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-01-11 19:43:32 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2008-10-17 20:49:56 $
+  Version:   $Revision: 1.5 $
   
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,18 @@
     PURPOSE.  See the above copyright notices for more information.
     
 =========================================================================*/
-#ifndef _itkSimpleContourExtractorImageFilter_txx
-#define _itkSimpleContourExtractorImageFilter_txx
+#ifndef __itkSimpleContourExtractorImageFilter_txx
+#define __itkSimpleContourExtractorImageFilter_txx
+
+
+// First make sure that the configuration is available.
+// This line can be removed once the optimized versions
+// gets integrated into the main directories.
+#include "itkConfigure.h"
+
+#ifdef ITK_USE_CONSOLIDATED_MORPHOLOGY
+#include "itkOptSimpleContourExtractorImageFilter.h"
+#else
 
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNeighborhoodInnerProduct.h"
@@ -159,7 +169,7 @@ SimpleContourExtractorImageFilter< TInputImage, TOutputImage>
         else
           {
           it.Set( m_OutputBackgroundValue );  
-          }          
+          }
         }
       else
         {
@@ -190,13 +200,15 @@ SimpleContourExtractorImageFilter<TInputImage, TOutput>
   os << indent << "Input Foreground Value: " 
      << static_cast<typename NumericTraits<InputPixelType>::PrintType>(m_InputForegroundValue) << std::endl;
   os << indent << "Input Background Value: "
-     << static_cast<typename NumericTraits<InputPixelType>::PrintType>(m_InputBackgroundValue) << std::endl;    
+     << static_cast<typename NumericTraits<InputPixelType>::PrintType>(m_InputBackgroundValue) << std::endl;
   os << indent << "Output Foreground Value: "
      << static_cast<typename NumericTraits<OutputPixelType>::PrintType>(m_OutputForegroundValue) << std::endl;
   os << indent << "Output Background Value: "
-     << static_cast<typename NumericTraits<OutputPixelType>::PrintType>(m_OutputBackgroundValue) << std::endl;    
+     << static_cast<typename NumericTraits<OutputPixelType>::PrintType>(m_OutputBackgroundValue) << std::endl;
 }
   
 } // end namespace itk
+
+#endif
 
 #endif

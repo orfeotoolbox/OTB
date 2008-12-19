@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageRandomConstIteratorWithIndex.txx,v $
   Language:  C++
-  Date:      $Date: 2005-10-04 17:22:52 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2008-10-18 21:13:25 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkImageRandomConstIteratorWithIndex_txx
-#define _itkImageRandomConstIteratorWithIndex_txx
+#ifndef __itkImageRandomConstIteratorWithIndex_txx
+#define __itkImageRandomConstIteratorWithIndex_txx
 
 #include "itkImageRandomConstIteratorWithIndex.h"
 

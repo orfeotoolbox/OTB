@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConstNeighborhoodIterator.h,v $
   Language:  C++
-  Date:      $Date: 2007-02-07 13:59:35 $
-  Version:   $Revision: 1.37 $
+  Date:      $Date: 2008-10-07 12:04:17 $
+  Version:   $Revision: 1.38 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -46,7 +46,7 @@ namespace itk {
  * \ingroup ImageIterators
  *
  * \sa Neighborhood \sa ImageIterator \sa NeighborhoodIterator
- **/
+ */
 template<class TImage,  class TBoundaryCondition
                        = ZeroFluxNeumannBoundaryCondition<TImage> >
 class ITK_EXPORT ConstNeighborhoodIterator
@@ -501,7 +501,7 @@ protected:
   /** Default boundary condition. */
   TBoundaryCondition m_InternalBoundaryCondition;
 
-  /** Does the specified region need to worry about boundary conditions? **/
+  /** Does the specified region need to worry about boundary conditions? */
   bool m_NeedToUseBoundaryCondition;
 
   /** Functor type used to access neighborhoods of pixel pointers */

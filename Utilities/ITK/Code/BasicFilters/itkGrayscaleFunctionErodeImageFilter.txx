@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGrayscaleFunctionErodeImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2004-04-30 21:02:04 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2008-10-16 16:45:09 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkGrayscaleFunctionErodeImage_txx
-#define __itkGrayscaleFunctionErodeImage_txx
+#ifndef __itkGrayscaleFunctionErodeImageFilter_txx
+#define __itkGrayscaleFunctionErodeImageFilter_txx
 
 #include "itkGrayscaleFunctionErodeImageFilter.h"
 
@@ -54,7 +54,9 @@ GrayscaleFunctionErodeImageFilter<TInputImage, TOutputImage, TKernel>
       temp = nit.GetPixel(i) - (PixelType) *kernel_it;
 
       if (temp < min)
-        min = temp ;
+        {
+        min = temp;
+        }
       }
     }
   

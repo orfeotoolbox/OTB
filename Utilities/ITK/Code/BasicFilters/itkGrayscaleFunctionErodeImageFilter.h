@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGrayscaleFunctionErodeImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-28 19:59:05 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2008-10-16 16:45:09 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -70,7 +70,7 @@ public:
   typedef typename Superclass::KernelIteratorType  KernelIteratorType;
  
   /** Neighborhood iterator type. */
-  typedef typename Superclass::NeighborhoodIteratorType NeighborhoodIteratorType ;
+  typedef typename Superclass::NeighborhoodIteratorType NeighborhoodIteratorType;
 
   /** Kernel typedef. */
   typedef typename Superclass::KernelType KernelType;
@@ -128,7 +128,7 @@ private:
   // NumericTraits<PixelType>::max()
   DefaultBoundaryConditionType m_ErodeBoundaryCondition;
 
-} ; // end of class
+}; // end of class
 
 } // end namespace itk
   
@@ -137,5 +137,3 @@ private:
 #endif
 
 #endif
-
-

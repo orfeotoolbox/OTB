@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLSMImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2007-08-20 07:46:23 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2008-09-12 22:46:38 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -88,6 +88,12 @@ LSMImageIO::LSMImageIO()
 {
   m_ByteOrder = LittleEndian;
   m_FileType = Binary;
+
+  this->AddSupportedWriteExtension(".lsm");
+  this->AddSupportedWriteExtension(".LSM");
+
+  this->AddSupportedReadExtension(".lsm");
+  this->AddSupportedReadExtension(".LSM");
 }
 
 LSMImageIO::~LSMImageIO()

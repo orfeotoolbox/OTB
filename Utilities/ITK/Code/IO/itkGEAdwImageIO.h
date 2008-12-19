@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGEAdwImageIO.h,v $
   Language:  C++
-  Date:      $Date: 2007-12-03 13:13:09 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2008-10-06 16:57:07 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -160,7 +160,9 @@ private:
     GE_ADW_EX_SYSID=444,      /**< Creator Suite and Host - String */
     GE_ADW_EX_SYSID_LEN=9,
 
-    /*** Series Header Variables ***/
+    /**
+     * Series Header Variables
+     */
     GE_ADW_SE_SUID=1156,  /**< Suite Id for Series  - String */
     GE_ADW_SE_SUID_LEN=4,
     GE_ADW_SE_UNIQ=1160,  /**< The Make-Unique Flag - Short Integer */
@@ -196,7 +198,9 @@ private:
     GE_ADW_SE_NUMIMAGES=1368,         /**< Number of Images Existing - Integer */
     GE_ADW_SE_NUMIMAGES_LEN=4,
 
-    /*** Image Header Variables ***/
+    /**
+     * Image Header Variables
+     */
     GE_ADW_IM_SUID=2184,  /**< Suite ID for this image - String */
     GE_ADW_IM_SUID_LEN=4,
     GE_ADW_IM_UNIQ=2188,  /**< The make unique flag - Short Integer */

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageReverseConstIterator.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:12 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2008-10-18 21:13:25 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkImageReverseConstIterator_txx
-#define _itkImageReverseConstIterator_txx
+#ifndef __itkImageReverseConstIterator_txx
+#define __itkImageReverseConstIterator_txx
 
 #include "itkImageReverseConstIterator.h"
 

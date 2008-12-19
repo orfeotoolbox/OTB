@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageAdaptor.h,v $
   Language:  C++
-  Date:      $Date: 2008-02-04 12:34:11 $
-  Version:   $Revision: 1.69 $
+  Date:      $Date: 2008-10-19 12:33:32 $
+  Version:   $Revision: 1.70 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -233,7 +233,7 @@ public:
   const InternalPixelType *GetBufferPointer() const;
   
   /** Set the spacing (size of a pixel) of the image. */
-  virtual void SetSpacing( const SpacingType values );
+  virtual void SetSpacing( const SpacingType &values );
   virtual void SetSpacing( const double* values /*[ImageDimension]*/ );
   virtual void SetSpacing( const float* values /*[ImageDimension]*/ );
   

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCentralDifferenceImageFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2008-02-04 12:34:11 $
-  Version:   $Revision: 1.32 $
+  Date:      $Date: 2008-12-08 01:10:42 $
+  Version:   $Revision: 1.32.6.1 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -30,7 +30,11 @@ template <class TInputImage, class TCoordRep>
 CentralDifferenceImageFunction<TInputImage,TCoordRep>
 ::CentralDifferenceImageFunction()
 {
+#if defined(ITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE)
+  this->m_UseImageDirection = true;
+#else
   this->m_UseImageDirection = false;
+#endif
 }
 
 

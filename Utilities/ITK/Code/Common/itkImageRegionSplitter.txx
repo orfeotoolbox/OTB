@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageRegionSplitter.txx,v $
   Language:  C++
-  Date:      $Date: 2004-01-05 17:55:59 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2008-10-18 21:13:25 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,9 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkImageRegionSplitter_txx
-#define _itkImageRegionSplitter_txx
+#ifndef __itkImageRegionSplitter_txx
+#define __itkImageRegionSplitter_txx
+
 #include "itkImageRegionSplitter.h"
 #include <math.h>
 

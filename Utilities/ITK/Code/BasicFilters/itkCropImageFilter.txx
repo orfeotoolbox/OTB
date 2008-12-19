@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCropImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-08-01 19:16:17 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2008-10-13 18:54:28 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkCropImageFilter_txx
-#define _itkCropImageFilter_txx
+#ifndef __itkCropImageFilter_txx
+#define __itkCropImageFilter_txx
 
 #include "itkCropImageFilter.h"
 
@@ -71,9 +71,6 @@ CropImageFilter<TInputImage,TOutputImage>
   os << indent << "LowerBoundaryCropSize: " << m_LowerBoundaryCropSize <<
     std::endl;
 }
-
- 
-
   
 } // end namespace itk
 

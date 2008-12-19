@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHessianRecursiveGaussianImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-02-13 15:59:36 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2008-10-16 16:45:10 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkHessianRecursiveGaussianImageFilter_txx
-#define _itkHessianRecursiveGaussianImageFilter_txx
+#ifndef __itkHessianRecursiveGaussianImageFilter_txx
+#define __itkHessianRecursiveGaussianImageFilter_txx
 
 #include "itkHessianRecursiveGaussianImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
@@ -74,8 +74,6 @@ HessianRecursiveGaussianImageFilter<TInputImage,TOutputImage>
 
 }
 
-
-
 /**
  * Set value of Sigma
  */
@@ -95,8 +93,6 @@ HessianRecursiveGaussianImageFilter<TInputImage,TOutputImage>
   this->Modified();
 
 }
-
-
 
 /**
  * Set Normalize Across Scale Space

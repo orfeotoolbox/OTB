@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinomialBlurImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-01-19 19:50:01 $
-  Version:   $Revision: 1.25 $
+  Date:      $Date: 2008-10-09 15:31:37 $
+  Version:   $Revision: 1.26 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -132,10 +132,10 @@ BinomialBlurImageFilter< TInputImage, TOutputImage >
   typename TInputImage::IndexType startIndex=inputPtr->GetRequestedRegion().GetIndex();
   
   // Iterator Typedefs for this routine
-  typedef ImageRegionIterator<TTempImage> TempIterator;
+  typedef ImageRegionIterator<TTempImage>        TempIterator;
   typedef ImageRegionReverseIterator<TTempImage> TempReverseIterator;
-  typedef ImageRegionConstIterator<TInputImage> InputIterator;
-  typedef ImageRegionIterator<TOutputImage> OutputIterator;
+  typedef ImageRegionConstIterator<TInputImage>  InputIterator;
+  typedef ImageRegionIterator<TOutputImage>      OutputIterator;
 
   // Create a progress reporter
   ProgressReporter progress(this, 0, (outputPtr->GetRequestedRegion().GetNumberOfPixels()) * m_Repetitions * 2 * NDimensions);
@@ -224,7 +224,7 @@ BinomialBlurImageFilter< TInputImage, TOutputImage >
         index = tempReverseIt.GetIndex();
 
         if (index[dim] > startIndex[dim])
-          {    
+          {
           // Figure out the location of the "neighbor" pixel
           for (unsigned int i = 0; i < NDimensions; i++)
             {

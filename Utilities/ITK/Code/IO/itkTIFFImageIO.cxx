@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTIFFImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-05-13 18:46:18 $
-  Version:   $Revision: 1.61 $
+  Date:      $Date: 2008-09-13 21:11:48 $
+  Version:   $Revision: 1.64 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -1376,6 +1376,17 @@ TIFFImageIO::TIFFImageIO()
   m_Origin[1] = 0.0;
 
   m_Compression = TIFFImageIO::PackBits;
+
+  this->AddSupportedWriteExtension(".tif");
+  this->AddSupportedWriteExtension(".TIF");
+  this->AddSupportedWriteExtension(".tiff");
+  this->AddSupportedWriteExtension(".TIFF");
+
+  this->AddSupportedReadExtension(".tif");
+  this->AddSupportedReadExtension(".TIF");
+  this->AddSupportedReadExtension(".tiff");
+  this->AddSupportedReadExtension(".TIFF");
+
 }
 
 TIFFImageIO::~TIFFImageIO()

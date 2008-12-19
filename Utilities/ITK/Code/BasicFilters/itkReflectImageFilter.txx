@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkReflectImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:55 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2008-10-17 16:30:50 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkReflectImageFilter_txx
-#define _itkReflectImageFilter_txx
+#ifndef __itkReflectImageFilter_txx
+#define __itkReflectImageFilter_txx
 
 #include "itkReflectImageFilter.h"
 #include "itkImageLinearIteratorWithIndex.h"
@@ -54,7 +54,7 @@ ReflectImageFilter<TInputImage,TOutputImage>
   outputPtr->Allocate();
 
   typedef ImageLinearConstIteratorWithIndex<TInputImage>  InputIterator;
-  typedef ImageLinearIteratorWithIndex<TOutputImage> OutputIterator;
+  typedef ImageLinearIteratorWithIndex<TOutputImage>      OutputIterator;
 
   InputIterator  inputIt(  inputPtr,  inputPtr->GetRequestedRegion() );
   OutputIterator outputIt( outputPtr, outputPtr->GetRequestedRegion() );

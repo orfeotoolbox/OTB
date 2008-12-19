@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNormalVectorDiffusionFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2008-03-03 13:58:45 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2008-10-16 19:33:45 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
      =========================================================================*/
-#ifndef __itkNormalVectorDiffusionFunction_txx_
-#define __itkNormalVectorDiffusionFunction_txx_
+#ifndef __itkNormalVectorDiffusionFunction_txx
+#define __itkNormalVectorDiffusionFunction_txx
 
 #include "itkNormalVectorDiffusionFunction.h"
 #include "itkNumericTraits.h"

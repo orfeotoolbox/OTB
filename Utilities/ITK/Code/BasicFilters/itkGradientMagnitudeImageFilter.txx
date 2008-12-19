@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGradientMagnitudeImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-01-11 19:43:31 $
-  Version:   $Revision: 1.33 $
+  Date:      $Date: 2008-10-16 16:45:08 $
+  Version:   $Revision: 1.34 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkGradientMagnitudeImageFilter_txx
-#define _itkGradientMagnitudeImageFilter_txx
+#ifndef __itkGradientMagnitudeImageFilter_txx
+#define __itkGradientMagnitudeImageFilter_txx
 #include "itkGradientMagnitudeImageFilter.h"
 
 #include "itkConstNeighborhoodIterator.h"

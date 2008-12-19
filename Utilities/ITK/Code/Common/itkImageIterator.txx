@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageIterator.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:10 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2008-10-18 20:31:36 $
+  Version:   $Revision: 1.22 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,14 +14,13 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkImageIterator_txx
-#define _itkImageIterator_txx
+#ifndef __itkImageIterator_txx
+#define __itkImageIterator_txx
 
 #include "itkImageIterator.h"
 
 namespace itk
 {
-
 
 
 //----------------------------------------------------------------------
@@ -34,7 +33,6 @@ ImageIterator<TImage>
 }
 
 
-
 //----------------------------------------------------------------------
 //  Constructor
 //----------------------------------------------------------------------
@@ -44,7 +42,6 @@ ImageIterator<TImage>
   ImageConstIterator<TImage>(it)
 {
 }
-
 
 
 //----------------------------------------------------------------------
@@ -125,11 +122,6 @@ ImageIterator<TImage>
 }
 
 
-
-
 } // end namespace itk
-
-
-
 
 #endif

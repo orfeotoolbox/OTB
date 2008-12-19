@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshToQuadEdgeMeshFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-07-08 22:13:48 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2008-09-27 16:40:11 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -56,8 +56,8 @@ QuadEdgeMeshToQuadEdgeMeshFilter< TInputMesh, TOutputMesh >
   InputCellsContainerConstIterator cIt = in->GetCells()->Begin();
   while( cIt != in->GetCells()->End() )
     {
-    InputEdgeCellType* qe = (InputEdgeCellType*)0;
-    InputPolygonCellType* pe = (InputPolygonCellType*)0;
+    InputEdgeCellType* qe;// = (InputEdgeCellType*)0;
+    InputPolygonCellType* pe;// = (InputPolygonCellType*)0;
     if( ( qe = dynamic_cast< InputEdgeCellType* >( cIt.Value() ) ) )
       {
       InputQEPrimal* QEGeom = qe->GetQEGeom( );

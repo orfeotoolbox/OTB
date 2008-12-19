@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExceptionObject.h,v $
   Language:  C++
-  Date:      $Date: 2008-06-13 07:20:05 $
-  Version:   $Revision: 1.39 $
+  Date:      $Date: 2008-10-13 15:36:31 $
+  Version:   $Revision: 1.40 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -104,7 +104,9 @@ public:
   virtual const char* what() const throw();
   
 private:
-  /** Exception data.  Location of the error and description of the error.
+  /** \class ReferenceCounterInterface
+   *
+   *  Exception data.  Location of the error and description of the error.
    *
    *  Class hierarchy
    *
@@ -116,8 +118,8 @@ private:
    *                     ^                  ^
    *                     |                  |
    *                   ReferenceCountedExceptionData (Register/UnRegister)
-   *                               
-   *                               
+   *
+   *
    *
    *  The ReferenceCounterInterface is an abstract class providing
    *  the API interface expected by the SmartPointer. Its second derived
@@ -127,13 +129,13 @@ private:
    *
    */
   class ReferenceCounterInterface
-  {
-  public:
-    virtual void Register() const = 0;
-    virtual void UnRegister() const = 0;
-    ReferenceCounterInterface() {};
-    virtual ~ReferenceCounterInterface() {};
-  };
+    {
+    public:
+      virtual void Register() const = 0;
+      virtual void UnRegister() const = 0;
+      ReferenceCounterInterface() {}
+      virtual ~ReferenceCounterInterface() {}
+    };
   class ExceptionData;
   class ReferenceCountedExceptionData;
   SmartPointer<const ReferenceCounterInterface> m_ExceptionData;

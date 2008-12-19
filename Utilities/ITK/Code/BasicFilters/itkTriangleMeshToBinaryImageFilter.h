@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTriangleMeshToBinaryImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-12-30 13:12:54 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2008-10-18 16:11:15 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -173,6 +173,15 @@ public:
   /** Set the mesh input of this process object.  */
   void SetInput(InputMeshType *input);
 
+  void SetInfoImage(OutputImageType *InfoImage)
+    {
+    if (InfoImage != m_InfoImage)
+      {
+      this->Modified();
+      m_InfoImage = InfoImage;
+      }
+    }
+
   /** Get the mesh input of this process object.  */
   InputMeshType * GetInput(void);
   InputMeshType * GetInput(unsigned int idx);
@@ -191,14 +200,14 @@ protected:
   virtual void RasterizeTriangles();
   static int PolygonToImageRaster( PointVector coords, Point1DArray & zymatrix, int extent[6]);
   
-  
-  IndexType    m_Index;
-  SizeType     m_Size;
-  SpacingType  m_Spacing;
-  PointType    m_Origin; //start value
-  double       m_Tolerance;
-  ValueType    m_InsideValue;
-  ValueType    m_OutsideValue;
+  OutputImageType *m_InfoImage;
+  IndexType        m_Index;
+  SizeType         m_Size;
+  SpacingType      m_Spacing;
+  PointType        m_Origin; //start value
+  double           m_Tolerance;
+  ValueType        m_InsideValue;
+  ValueType        m_OutsideValue;
 
   StencilIndexVector m_StencilIndex;
 
@@ -210,6 +219,7 @@ private:
 
   static bool ComparePoints2D(Point2DType a, Point2DType b);
   static bool ComparePoints1D(Point1D a, Point1D b);
+
 };
 
 } // end namespace itk

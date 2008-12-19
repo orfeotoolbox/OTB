@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNormalVectorFunctionBase.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:53 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2008-10-16 19:33:45 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,14 +14,14 @@
      PURPOSE.  See the above copyright notices for more information.
 
      =========================================================================*/
-#ifndef __itkNormalVectorFunctionBase_h_
-#define __itkNormalVectorFunctionBase_h_
+#ifndef __itkNormalVectorFunctionBase_h
+#define __itkNormalVectorFunctionBase_h
 
 #include "itkFiniteDifferenceSparseImageFunction.h"
 
 namespace itk {
 
-/*
+/**
  * \class NormalVectorFunctionBase
  *
  * \brief This class defines the common functionality for Sparse Image
@@ -52,10 +52,10 @@ class ITK_EXPORT NormalVectorFunctionBase
 {
 public:
   /** Standard class typedef. */
-  typedef NormalVectorFunctionBase Self;
+  typedef NormalVectorFunctionBase                              Self;
   typedef FiniteDifferenceSparseImageFunction<TSparseImageType> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+  typedef SmartPointer<Self>                                    Pointer;
+  typedef SmartPointer<const Self>                              ConstPointer;
 
   /** Run-time type information (and related methods) */
   itkTypeMacro( NormalVectorFunctionBase, FiniteDifferenceSparseImageFunction );
@@ -90,11 +90,11 @@ public:
 
   /** Sets the time step. */
   void SetTimeStep( const TimeStepType &ts )
-  { m_TimeStep = ts; }
+    { m_TimeStep = ts; }
 
   /** Returns the time step. */
   TimeStepType GetTimeStep() const
-  { return m_TimeStep; } 
+    { return m_TimeStep; } 
 
 protected:
   NormalVectorFunctionBase();
