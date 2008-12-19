@@ -10,6 +10,12 @@ TARGET_LINK_LIBRARIES(DEMToRainbowExample OTBCommon OTBIO)
 ADD_EXECUTABLE(ScalingFilterExample ScalingFilterExample.cxx )
 TARGET_LINK_LIBRARIES(ScalingFilterExample OTBCommon OTBIO)
 
+ADD_EXECUTABLE(PrintableImageFilterExample PrintableImageFilterExample.cxx )
+TARGET_LINK_LIBRARIES(PrintableImageFilterExample OTBCommon OTBIO)
+
+ADD_EXECUTABLE(IndexedToRGBExample IndexedToRGBExample.cxx )
+TARGET_LINK_LIBRARIES(IndexedToRGBExample OTBCommon OTBIO)
+
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/BasicFilters)
@@ -46,7 +52,7 @@ ADD_TEST(DEMToRainbowExampleTest ${EXE_TESTS}
 )
 
 
-# ------- LeeImageFilterTest----------
+# ------- ScalingFilterExampleTest ----------
 
 ADD_TEST(ScalingFilterExampleTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 2
@@ -58,6 +64,42 @@ ADD_TEST(ScalingFilterExampleTest ${EXE_TESTS}
 	${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
 	${TEMP}/QB_Toulouse_Ortho_PAN_rescaled.png
 	${TEMP}/QB_Toulouse_Ortho_PAN_casted.png
+)
+
+# ------- PrintableImageFilterTest----------
+
+ADD_TEST(PrintableImageFilterExample1Test ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/PrintableExampleOutput1.png
+	${TEMP}/PrintableExampleOutput1.png
+	PrintableImageFilterExample1Test
+	${INPUTDATA}/IMAGERY_SSECH.tif
+	${TEMP}/PrintableExampleOutput1.png
+    1 2 3
+)
+
+ADD_TEST(PrintableImageFilteExample2rTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/PrintableExampleOutput2.png
+	${TEMP}/PrintableExampleOutput2.png
+	PrintableImageFilterExample2Test
+	${INPUTDATA}/IMAGERY_SSECH.tif
+	${TEMP}/PrintableExampleOutput2.png
+    1 4 2
+)
+
+# ------- IndexedToRGBExampleTest----------
+
+ADD_TEST(IndexedToRGBExampleTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 2
+	${BASELINE}/buildingExtractionRGB.png
+	${TEMP}/buildingExtractionRGB.png
+	${BASELINE}/buildingExtractionIndexed_scaled.png
+	${TEMP}/buildingExtractionIndexed_scaled.png
+	IndexedToRGBExampleTest
+	${INPUTDATA}/buildingExtractionIndexed.tif
+	${TEMP}/buildingExtractionRGB.png
+	${TEMP}/buildingExtractionIndexed_scaled.png
 )
 
 ADD_EXECUTABLE(otbBasicFiltersExamplesTests otbBasicFiltersExamplesTests.cxx)

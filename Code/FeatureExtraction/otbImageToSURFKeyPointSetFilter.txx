@@ -131,10 +131,11 @@ namespace otb
 	m_determinantImage = m_DetHessianFilter->GetOutput() ;
 
 	  if(i+j==0)
-	    otbGenericMsgDebugMacro( <<"ImageToSURFKeyPointSetFilter:: Size of the image at the octave : " \
-				     << i << " is " \
+	  {
+		 otbGenericMsgDebugMacro( <<"ImageToSURFKeyPointSetFilter:: Size of the image at the octave : "
+				     << i << " is " 
 				     <<m_determinantImage->GetLargestPossibleRegion().GetSize() );
-
+	  }
 
 	  /** For each octave, we fill the imageList for the extremum search*/
 	  m_ImageList->PushBack(m_determinantImage);

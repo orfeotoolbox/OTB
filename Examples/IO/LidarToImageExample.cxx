@@ -62,7 +62,7 @@
 // Here a note is important. The \doxygen{itk}{BSplineScatteredDataPointSetToImageFilter}
 // is on the review directory of ITK, which means that it won't be compiled by default.
 // If you want to use it, you have to set:
-// ITK_USE_REVIEW                   ON
+// ITK\_USE\_REVIEW to ON
 // in the ccmake of OTB.
 //
 // Software Guide : EndLatex
