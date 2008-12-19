@@ -458,7 +458,7 @@ namespace otb
 	  {
 	  case RGB:
 	    {
-	      m_OpenGlBuffer[index] = Normalize(it.Get()[m_RedChannelIndex],m_RedChannelIndex);
+	      m_OpenGlBuffer[index] =   Normalize(it.Get()[m_RedChannelIndex],m_RedChannelIndex);
 	      m_OpenGlBuffer[index+1] = Normalize(it.Get()[m_GreenChannelIndex],m_GreenChannelIndex);
 	      m_OpenGlBuffer[index+2] = Normalize(it.Get()[m_BlueChannelIndex],m_BlueChannelIndex);
 	      m_OpenGlBuffer[index+3] = 255;
