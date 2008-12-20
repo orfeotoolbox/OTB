@@ -41,19 +41,15 @@ namespace otb
    *
    */
 
-  template <class TInputImage,
-            class TOutputImage,
-            class TMapProjection,
-            class TInterpolatorPrecision=double>
-    class ITK_EXPORT OrthoRectificationFilter : public StreamingResampleImageFilter<TInputImage,
-                                                                                    TOutputImage,
-                                                                                    TInterpolatorPrecision>
-    {
-      public :
+  template <class TInputImage, class TOutputImage, class TMapProjection, class TInterpolatorPrecision=double>
+      class ITK_EXPORT OrthoRectificationFilter :
+          public StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
+  {
+    public :
       /** Standard class typedefs */
       typedef StreamingResampleImageFilter<TInputImage,
-                                           TOutputImage,
-                                           TInterpolatorPrecision>  Superclass;
+      TOutputImage,
+      TInterpolatorPrecision>  Superclass;
       typedef OrthoRectificationFilter    			    Self;
       typedef itk::SmartPointer<Self>              		    Pointer;
       typedef itk::SmartPointer<const Self>        		    ConstPointer;
@@ -84,13 +80,13 @@ namespace otb
       /** Accessors */
       virtual void SetMapProjection (MapProjectionType* _arg)
       {
-				if (this->m_MapProjection != _arg)
-	  		{
-	    		this->m_MapProjection = _arg;
-	    		m_CompositeTransform->SetFirstTransform(_arg);
-	    		m_IsComputed = false;
-	    		this->Modified();
-	  		}
+        if (this->m_MapProjection != _arg)
+        {
+          this->m_MapProjection = _arg;
+          m_CompositeTransform->SetFirstTransform(_arg);
+          m_IsComputed = false;
+          this->Modified();
+        }
       }
 
       itkGetObjectMacro(MapProjection, MapProjectionType);
@@ -98,35 +94,36 @@ namespace otb
       /** Specify where are DEM files, and load useful ones */
       virtual void SetDEMDirectory(const std::string& directory)
       {
-	m_SensorModel->SetDEMDirectory(directory);
-	this->Modified();
+        m_SensorModel->SetDEMDirectory(directory);
+        this->Modified();
       }
 
-      /** Methods to decide to use DEM */
+      /** Methods to enable DEM */
       virtual void EnableDEM()
-	{
-		m_SensorModel->EnableDEM();
-  		this->Modified();
-	}
+      {
+        m_SensorModel->EnableDEM();
+        this->Modified();
+      }
 
-	virtual void DisableDEM()
-	{
-		m_SensorModel->DisableDEM();
-		this->Modified();
-	}
+      /** Methods to desable DEM */
+      virtual void DisableDEM()
+      {
+        m_SensorModel->DisableDEM();
+        this->Modified();
+      }
 
 
       /** Specify average elevation.*/
       virtual void SetAverageElevation(double elevation)
       {
-	m_SensorModel->SetAverageElevation(elevation);
-	this->Modified();
+        m_SensorModel->SetAverageElevation(elevation);
+        this->Modified();
       }
 
 
 
 
-      protected:
+    protected:
       OrthoRectificationFilter();
       ~OrthoRectificationFilter();
       void PrintSelf(std::ostream& os, itk::Indent indent) const;
@@ -134,11 +131,11 @@ namespace otb
       virtual void GenerateInputRequestedRegion();
 
 
-      private:
+    private:
       OrthoRectificationFilter(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
 
-      /** Calculate transformation model from sensor model & map projection	composition */
+      /** Calculate transformation model from sensor model and map projection	composition */
       void ComputeResampleTransformationModel();
 
       /** Boolean used to know if transformation model computation is needed */
@@ -153,7 +150,7 @@ namespace otb
       /** Composite Transform of Sensor Model and Map Projection, used for Resampler */
       CompositeTransformPointerType m_CompositeTransform;
 
-    };
+  };
 
 } // namespace otb
 
