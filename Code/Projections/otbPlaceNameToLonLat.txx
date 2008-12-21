@@ -74,16 +74,6 @@ bool PlaceNameToLonLat::Evaluate()
   if ((m_Lat == -1000.0) && (m_Lon == -1000.0))
   {
     std::ostringstream urlStream;
-    urlStream << "http://maps.google.fr/maps?q=";
-    urlStream << m_PlaceName;
-    urlStream << "&sll=38.9594,-95.2655&sspn=119.526,360&output=kml&ie=utf-8&v=2.2&cv=4.2.0180.1134&hl=en";
-    RetrieveXML(urlStream);
-    ParseXMLGoogle();
-  }
-
-  if ((m_Lat == -1000.0) && (m_Lon == -1000.0))
-  {
-    std::ostringstream urlStream;
     urlStream << "http://api.local.yahoo.com/MapsService/V1/geocode?appid=com.sun.blueprints.ui.geocoder&location=";
     urlStream << m_PlaceName;
     RetrieveXML(urlStream);
@@ -185,6 +175,10 @@ void PlaceNameToLonLat::ParseXMLGoogle()
   {
     m_Lon=atof(childLon->GetText());
   }
+
+}
+void PlaceNameToLonLat::ParseXMLGeonames()
+{
 
 }
 

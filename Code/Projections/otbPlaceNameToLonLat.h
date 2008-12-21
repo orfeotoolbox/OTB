@@ -55,6 +55,8 @@ public:
   itkSetMacro( Lat, double );
   itkSetMacro( PlaceName, std::string );
 
+  typedef enum {ALL, GEONAMES, GOOGLE, YAHOO} SearchMethodEnum;//Not implemented yet TODO
+
   virtual bool Evaluate();
 
 protected:
@@ -64,6 +66,7 @@ protected:
   void RetrieveXML(std::ostringstream& urlStream);
   void ParseXMLYahoo();
   void ParseXMLGoogle();
+  void ParseXMLGeonames();//Not implemented yet TODO
 
 private:
   PlaceNameToLonLat( const Self& ); //purposely not implemented
@@ -72,7 +75,7 @@ private:
   double m_Lon;
   double m_Lat;
   std::string m_PlaceName;
-
+  SearchMethodEnum m_SearchMethod;//Not implemented yet TODO
 };
 
 } // namespace otb
