@@ -22,53 +22,45 @@ SET(PROJECTIONS_TESTS3 ${CXX_TEST_PATH}/otbProjectionsTests3)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbPROJECTIONS_TESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# TEST 1
 ADD_TEST(prTuProjectionBaseNew ${PROJECTIONS_TESTS1}  otbProjectionBaseNew )
 
-# TEST 2
 ADD_TEST(prTuMapProjectionsNew ${PROJECTIONS_TESTS1}  otbMapProjectionsNew )
 
-# TEST 3
+ADD_TEST(prTvMapProjection ${PROJECTIONS_TESTS1}  otbMapProjection )
+
 ADD_TEST(prTuSensorModelsNew ${PROJECTIONS_TESTS1}  otbSensorModelsNew )
 
-# TEST 4
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(prTvTestCreateProjectionWithOSSIM_Toulouse ${PROJECTIONS_TESTS1}
         otbCreateProjectionWithOSSIM
         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         )
 
-# TEST 5
 ADD_TEST(prTvTestCreateProjectionWithOSSIM_Cevennes ${PROJECTIONS_TESTS1}
         otbCreateProjectionWithOSSIM
         ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         )
 
-# TEST 6
 ADD_TEST(prTvTestCreateProjectionWithOTB_Toulouse ${PROJECTIONS_TESTS1}
         otbCreateProjectionWithOTB
         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         )
 
-# TEST 7
 ADD_TEST(prTvTestCreateProjectionWithOTB_Cevennes ${PROJECTIONS_TESTS1}
         otbCreateProjectionWithOTB
         ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         )
 
-# TEST 8
 ADD_TEST(prTvTestCreateInverseForwardSensorModel_Toulouse ${PROJECTIONS_TESTS1}
         otbCreateInverseForwardSensorModel
         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         )
 
-# TEST 9
 ADD_TEST(prTvTestCreateInverseForwardSensorModel_Cevennes ${PROJECTIONS_TESTS1}
         otbCreateInverseForwardSensorModel
         ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         )
 #=======================================================================================
-# TEST 10
 #   ADD_TEST(prTvRegionProjectionToulouse ${PROJECTIONS_TESTS1}
 #     --compare-image ${TOL}  ${BASELINE}/prTvRegionProjectionToulouse.tif
 #                             ${TEMP}/prTvRegionProjectionToulouse.tif
@@ -82,7 +74,6 @@ ADD_TEST(prTvTestCreateInverseForwardSensorModel_Cevennes ${PROJECTIONS_TESTS1}
 #   				0.00001
 #   				-0.00001
 #           )
-# TEST 11
 #   ADD_TEST(prTvRegionProjectionCevennes ${PROJECTIONS_TESTS1}
 #     --compare-image ${TOL}  ${BASELINE}/prTvRegionProjectionCevennes.tif
 #                             ${TEMP}/prTvRegionProjectionCevennes.tif
@@ -97,7 +88,6 @@ ADD_TEST(prTvTestCreateInverseForwardSensorModel_Cevennes ${PROJECTIONS_TESTS1}
 #   				-0.00001
 #           )
 #=======================================================================================
-# TEST 12
 ADD_TEST(prTvRegionProjectionResamplerToulouse ${PROJECTIONS_TESTS1}
   --compare-image ${EPSILON}  ${BASELINE}/prTvRegionProjectionResamplerToulouse.tif
                           ${TEMP}/prTvRegionProjectionResamplerToulouse.tif
@@ -111,7 +101,7 @@ ADD_TEST(prTvRegionProjectionResamplerToulouse ${PROJECTIONS_TESTS1}
 				0.00001
 				-0.00001
         )
-# TEST 13
+
 ADD_TEST(prTvRegionProjectionResamplerCevennes ${PROJECTIONS_TESTS1}
   --compare-image ${EPSILON}  ${BASELINE}/prTvRegionProjectionResamplerCevennes.tif
                           ${TEMP}/prTvRegionProjectionResamplerCevennes.tif
@@ -131,7 +121,6 @@ ADD_TEST(prTvRegionProjectionResamplerCevennes ${PROJECTIONS_TESTS1}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #=======================================================================================
-# TEST 14
 #ADD_TEST(prTvSensorImageToCartoToulouse ${PROJECTIONS_TESTS2}
 #  --compare-image ${TOL}  ${BASELINE}/prTvSensorImageToCartoToulouse_UTM.tif
 #                          ${TEMP}/prTvSensorImageToCartoToulouse_UTM.tif
@@ -147,7 +136,6 @@ ADD_TEST(prTvRegionProjectionResamplerCevennes ${PROJECTIONS_TESTS1}
 #	   -0.5
 #           )
 
-# TEST 15
 #ADD_TEST(prTvSensorImageToCartoCevennes ${PROJECTIONS_TESTS2}
 #  --compare-image ${TOL}  ${BASELINE}/prTvSensorImageToCartoCevennes_UTM.tif
 #                          ${TEMP}/prTvSensorImageToCartoCevennes_UTM.tif
@@ -171,7 +159,6 @@ ADD_TEST(prTuOrthoRectificationFilterNew ${PROJECTIONS_TESTS2}
         otbOrthoRectificationFilterNew )
 
 
-# TEST 16.2
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(prTvOrthoRectificationToulouse ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON}  ${BASELINE}/prTvOrthoRectificationToulouse_UTM.tif
@@ -190,7 +177,6 @@ ADD_TEST(prTvOrthoRectificationToulouse ${PROJECTIONS_TESTS2}
         N
         )
 
-# TEST 17
 ADD_TEST(prTvOrthoRectificationCevennes ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON}  ${BASELINE}/prTvOrthoRectificationCevennes_UTM.tif
                           ${TEMP}/prTvOrthoRectificationCevennes_UTM.tif
@@ -208,7 +194,6 @@ ADD_TEST(prTvOrthoRectificationCevennes ${PROJECTIONS_TESTS2}
         N
         )
 #=======================================================================================
-# TEST 18
 #ADD_TEST(prTvSensorImageDEMToCartoToulouse ${PROJECTIONS_TESTS2}
 #  --compare-image ${TOL}  ${BASELINE}/prTvSensorImageDEMToCartoToulouse_UTM.tif
 #                          ${TEMP}/prTvSensorImageDEMToCartoToulouse_UTM.tif
@@ -225,7 +210,6 @@ ADD_TEST(prTvOrthoRectificationCevennes ${PROJECTIONS_TESTS2}
 #				-0.5
 #        )
 
-# TEST 19
 #ADD_TEST(prTvSensorImageDEMToCartoCevennes ${PROJECTIONS_TESTS2}
 #  --compare-image ${TOL}  ${BASELINE}/prTvSensorImageDEMToCartoCevennes_UTM.tif
 #                          ${TEMP}/prTvSensorImageDEMToCartoCevennes_UTM.tif
@@ -243,7 +227,6 @@ ADD_TEST(prTvOrthoRectificationCevennes ${PROJECTIONS_TESTS2}
 #        )
 #=======================================================================================
 
-# TEST 20.2
 ADD_TEST(prTvOrthoRectificationToulouseWithDEM ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON}  ${BASELINE}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
                           ${TEMP}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
@@ -263,7 +246,6 @@ ADD_TEST(prTvOrthoRectificationToulouseWithDEM ${PROJECTIONS_TESTS2}
 #         ${TEMP}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
         )
 
-# TEST 21
 ADD_TEST(prTvOrthoRectificationCevennesWithDEM ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON}  ${BASELINE}/prTvOrthoRectificationCevennesWithDEM_UTM.tif
                           ${TEMP}/prTvOrthoRectificationCevennesWithDEM_UTM.tif
@@ -321,7 +303,6 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 #SET(EMMANUELDATA ${OTB_DATA_ROOT}/Emmanuel/Singapour/000000173549_01_P001_MUL)
 
-# TEST 22
 #ADD_TEST(prTvRegionProjectionResamplerSingapour ${PROJECTIONS_TESTS2}
 #				otbRegionProjectionResampler
 #        ${EMMANUELDATA}/04MAR21031747-M1BS-000000173549_01_P001.TIF
@@ -334,7 +315,6 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 #				 -0.00001
 #        )
 
-# TEST 23
 #ADD_TEST(prTvOrthoRectificationSingapour ${PROJECTIONS_TESTS2}
 #        otbOrthoRectificationFilter
 #        ${EMMANUELDATA}/04MAR21031747-M1BS-000000173549_01_P001.TIF

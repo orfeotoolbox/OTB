@@ -21,7 +21,7 @@
 #include "otbMapProjections.h"
 
 
-
+//TODO add control baseline
 int otbMapProjection( int argc, char* argv[] )
 {
 
