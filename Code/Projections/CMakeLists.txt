@@ -1,7 +1,7 @@
 FILE(GLOB OTBProjections_SRCS "*.cxx" )
 
 ADD_LIBRARY(OTBProjections ${OTBProjections_SRCS})
-TARGET_LINK_LIBRARIES(OTBProjections OTBIO)
+TARGET_LINK_LIBRARIES(OTBProjections OTBIO otbossimplugins)
 IF( OTB_USE_CURL )
     TARGET_LINK_LIBRARIES (OTBProjections ${CURL_LIBRARY})
 ENDIF( OTB_USE_CURL )

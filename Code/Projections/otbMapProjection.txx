@@ -357,6 +357,20 @@ namespace otb
     metersPerPixel[1]=ossimMetersPerPixel.y;
   }
 
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+      std::string
+          MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
+  ::GetWkt() const
+  {
+    ossimKeywordlist kwl;
+    m_MapProjection->saveState(kwl);
+    ossimOgcWktTranslator wktTranslator;
+    std::string wkt;
+    wkt = wktTranslator.fromOssimKwl(kwl);
+    return wkt;
+  }
+
+
 	template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 	void
   MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>

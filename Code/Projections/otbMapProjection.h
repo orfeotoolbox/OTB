@@ -31,7 +31,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "base/ossimEllipsoid.h"
 #include "base/ossimEllipsoidFactory.h"
 #include "base/ossimString.h"
-
+#include "ossimOgcWktTranslator.h"
 
 namespace otb
 {
@@ -112,7 +112,10 @@ namespace otb
       //virtual void SetMatrix(double rotation,  const OutputPointType &scale, const OutputPointType &translation);
       void SetFalseEasting(double falseEasting);
 
-			virtual void PrintMap() const ;
+      virtual std::string GetWkt() const;
+
+			virtual void PrintMap() const;
+
 
       protected:
       MapProjection();
