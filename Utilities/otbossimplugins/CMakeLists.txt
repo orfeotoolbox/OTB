@@ -1,0 +1,26 @@
+PROJECT(ossimplugins)
+
+SET(ossimplugins_VERSION_MAJOR "1")
+SET(ossimplugins_VERSION_MINOR "7")
+SET(ossimplugins_VERSION_PATCH "9")
+
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+
+SET(ossimplugins_SOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+SET(ossimplugins_SOURCES
+  ${ossimplugins_SOURCES_DIR}/ossimOgcWktTranslator.cpp
+)
+
+
+ADD_LIBRARY(otbossimplugins ${ossimplugins_SOURCES} )
+
+INSTALL(TARGETS otbossimplugins
+RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
+LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
+ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
+
+FILE(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+INSTALL(FILES ${__files1}
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossimplugins/
+    COMPONENT Development)
+
