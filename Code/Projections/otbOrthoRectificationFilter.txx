@@ -70,10 +70,11 @@ namespace otb
     if (m_IsComputed == false)
     {
       otbMsgDevMacro(<< "COMPUTE RESAMPLE TRANSFORMATION MODEL");
-      typename TOutputImage::Pointer output = this->GetOutput();
+
+      typename TInputImage::ConstPointer input = this->GetInput();
 
        // Get OSSIM sensor model from image keywordlist
-      m_SensorModel->SetImageGeometry(output->GetImageKeywordlist());
+      m_SensorModel->SetImageGeometry(input->GetImageKeywordlist());
 
        // Initialize Map Projection if needed
 /*     PointType geoPoint;
