@@ -43,8 +43,8 @@ public:
   virtual void Print(std::ostream& os) const;
 
   // Declare the datastructure that will be used to hold the
-  // dictionary. 
-  class MetaDataDictionaryMapType 
+  // dictionary.
+  class MetaDataDictionaryMapType
     : public std::map<std::string, MetaDataObjectBase::Pointer>
       {
       };
@@ -73,10 +73,10 @@ public:
   // API. The implementation will be in the DLL.
   MetaDataObjectBase::Pointer &operator [](const std::string &);
   const MetaDataObjectBase   * operator [](const std::string &) const;
-  bool HasKey (const std::string &);
+  bool HasKey (const std::string &) const;
 
 
-  /** \warning the following functions SHOULD NOT be used with 
+  /** \warning the following functions SHOULD NOT be used with
    * the visual studio 6 compiler since iterator outside of the dll
    * context cannot be dereferenced safely */
 

@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -45,7 +45,7 @@ MetaDataDictionary
 void MetaDataDictionary
 ::operator=(const MetaDataDictionary &old)
 {
-  *m_Dictionary = *(old.m_Dictionary);  
+  *m_Dictionary = *(old.m_Dictionary);
 }
 
 void
@@ -80,7 +80,7 @@ MetaDataDictionary
 
 bool
 MetaDataDictionary
-::HasKey(const std::string &key)
+::HasKey(const std::string &key) const
 {
   return m_Dictionary->find(key) != m_Dictionary->end();
 }
