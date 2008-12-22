@@ -77,12 +77,12 @@ namespace otb
 
     pointTmp=m_FirstTransform->TransformPoint(point1);
 
-    otbMsgDevMacro(<< "Geographic point is ("<<  pointTmp[0]<< ","<<  pointTmp[1]<< ")");
+//     otbMsgDevMacro(<< "Geographic point is ("<<  pointTmp[0]<< ","<<  pointTmp[1]<< ")");
 
     point2=m_SecondTransform->TransformPoint(pointTmp);
 
-    otbMsgDevMacro(<< "Coresponding coordinates in sensor geometry are: " << std::endl
-		   << point2[0] << ","<< point2[1] );
+//     otbMsgDevMacro(<< "Corresponding coordinates in sensor geometry are: " << std::endl
+// 		   << point2[0] << ","<< point2[1] );
 
     return point2;
   }

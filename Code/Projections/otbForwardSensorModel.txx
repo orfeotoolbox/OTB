@@ -67,7 +67,7 @@ template < class TScalarType,
                    NParametersDimensions>
   ::TransformPoint(const InputPointType &point) const
 {
-  otbMsgDevMacro(<< "Point in sensor geometry: (" << point[0] << "," <<	point[1] << ")");
+//   otbMsgDevMacro(<< "Point in sensor geometry: (" << point[0] << "," <<	point[1] << ")");
 
 	// "itk::point" to "ossim::ossimDpt" transformation
   ossimDpt ossimPoint(point[0], point[1]);
@@ -100,7 +100,7 @@ template < class TScalarType,
       if (nbIter != 0)
         height = heightTmp;
 
-      otbMsgDevMacro(<< "PointG Before iter : (" << ossimGPointRef.lat << "," << ossimGPointRef.lon <<")");
+//       otbMsgDevMacro(<< "PointG Before iter : (" << ossimGPointRef.lat << "," << ossimGPointRef.lon <<")");
 
       point[0] = ossimGPointRef.lon;
       point[1] = ossimGPointRef.lat;
@@ -114,10 +114,10 @@ template < class TScalarType,
       {
         heightTmp = this->m_AverageElevation;
       }
-      otbMsgDevMacro(<< "height : " << heightTmp) ;
+//       otbMsgDevMacro(<< "height : " << heightTmp) ;
 
       this->m_Model->lineSampleHeightToWorld(ossimPoint, heightTmp, ossimGPointRef);
-      otbMsgDevMacro(<< "Point After iter :    (" << ossimGPointRef.lat << "," << ossimGPointRef.lon << ")");
+//       otbMsgDevMacro(<< "Point After iter :    (" << ossimGPointRef.lat << "," << ossimGPointRef.lon << ")");
 
       diffHeight = fabs(heightTmp - height);
 
@@ -132,7 +132,7 @@ template < class TScalarType,
   outputPoint[0]=ossimGPoint.lon;
   outputPoint[1]=ossimGPoint.lat;
 
-  otbMsgDevMacro(<< "Geographic point lon/lat : (" << outputPoint[1] << "," <<	outputPoint[0] << ")");
+//   otbMsgDevMacro(<< "Geographic point lon/lat : (" << outputPoint[1] << "," <<	outputPoint[0] << ")");
 
   return outputPoint;
 }
