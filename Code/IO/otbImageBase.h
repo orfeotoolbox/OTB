@@ -49,61 +49,62 @@ public:
 
   typedef ImageKeywordlist              ImageKeywordlistType;
 
+
   /** Get the projection coordinate system of the image. */
 
-  static std::string GetProjectionRef( MetaDataDictionaryType & dict );
-  virtual std::string GetProjectionRef( void ) = 0;
+  std::string GetProjectionRef( const MetaDataDictionaryType & dict ) const;
+  virtual std::string GetProjectionRef( void ) const = 0;
 
   /** Get the GCP projection coordinates of the image. */
 
-  static std::string GetGCPProjection( MetaDataDictionaryType & dict );
-  virtual std::string GetGCPProjection( void ) = 0;
+  std::string GetGCPProjection( const MetaDataDictionaryType & dict ) const;
+  virtual std::string GetGCPProjection( void ) const = 0;
 
-  static unsigned int GetGCPCount( MetaDataDictionaryType & dict );
-  virtual unsigned int GetGCPCount( void ) = 0;
+  unsigned int GetGCPCount( const MetaDataDictionaryType & dict ) const;
+  virtual unsigned int GetGCPCount( void ) const = 0;
 
-  OTB_GCP & GetGCPs(MetaDataDictionaryType & dict, unsigned int GCPnum );
+  OTB_GCP & GetGCPs( MetaDataDictionaryType & dict, unsigned int GCPnum );
   virtual OTB_GCP & GetGCPs( unsigned int GCPnum ) = 0;
 
-  static std::string GetGCPId( MetaDataDictionaryType & dict, unsigned int GCPnum );
-  virtual std::string GetGCPId( unsigned int GCPnum ) = 0;
+  std::string GetGCPId( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const;
+  virtual std::string GetGCPId( unsigned int GCPnum ) const = 0;
 
-  static std::string GetGCPInfo( MetaDataDictionaryType & dict, unsigned int GCPnum );
-  virtual std::string GetGCPInfo( unsigned int GCPnum ) = 0;
+  std::string GetGCPInfo( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const;
+  virtual std::string GetGCPInfo( unsigned int GCPnum ) const = 0;
 
-  static double GetGCPRow( MetaDataDictionaryType & dict, unsigned int GCPnum );
-  virtual double GetGCPRow( unsigned int GCPnum ) = 0;
+  double GetGCPRow( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const;
+  virtual double GetGCPRow( unsigned int GCPnum ) const = 0;
 
-  static double GetGCPCol( MetaDataDictionaryType & dict, unsigned int GCPnum );
-  virtual double GetGCPCol( unsigned int GCPnum ) = 0;
+  double GetGCPCol( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const;
+  virtual double GetGCPCol( unsigned int GCPnum ) const = 0;
 
-  static double GetGCPX( MetaDataDictionaryType & dict, unsigned int GCPnum );
-  virtual double GetGCPX( unsigned int GCPnum ) = 0;
+  double GetGCPX( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const;
+  virtual double GetGCPX( unsigned int GCPnum ) const = 0;
 
-  static double GetGCPY( MetaDataDictionaryType & dict, unsigned int GCPnum );
-  virtual double GetGCPY( unsigned int GCPnum ) = 0;
+  double GetGCPY( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const;
+  virtual double GetGCPY( unsigned int GCPnum ) const = 0;
 
-  static double GetGCPZ( MetaDataDictionaryType & dict, unsigned int GCPnum );
-  virtual double GetGCPZ( unsigned int GCPnum ) = 0;
+  double GetGCPZ( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const;
+  virtual double GetGCPZ( unsigned int GCPnum ) const = 0;
 
   /** Get the six coefficients of affine geoTtransform. */
 
-  static VectorType GetGeoTransform( MetaDataDictionaryType & dict );
-  virtual VectorType GetGeoTransform( void ) = 0;
+  VectorType GetGeoTransform( const MetaDataDictionaryType & dict ) const;
+  virtual VectorType GetGeoTransform( void ) const = 0;
 
   /** Get image corners. */
 
-  static VectorType GetUpperLeftCorner( MetaDataDictionaryType & dict );
-  virtual VectorType GetUpperLeftCorner() = 0;
+  VectorType GetUpperLeftCorner( const MetaDataDictionaryType & dict ) const;
+  virtual VectorType GetUpperLeftCorner() const = 0;
 
-  static VectorType GetUpperRightCorner( MetaDataDictionaryType & dict );
-  virtual VectorType GetUpperRightCorner() = 0;
+  VectorType GetUpperRightCorner( const MetaDataDictionaryType & dict ) const;
+  virtual VectorType GetUpperRightCorner() const = 0;
 
-  static VectorType GetLowerLeftCorner( MetaDataDictionaryType & dict );
-  virtual VectorType GetLowerLeftCorner() = 0;
+  VectorType GetLowerLeftCorner( const MetaDataDictionaryType & dict ) const;
+  virtual VectorType GetLowerLeftCorner() const = 0;
 
-  static VectorType GetLowerRightCorner( MetaDataDictionaryType & dict );
-  virtual VectorType GetLowerRightCorner() = 0;
+  VectorType GetLowerRightCorner( const MetaDataDictionaryType & dict ) const;
+  virtual VectorType GetLowerRightCorner() const = 0;
 
   /** Get the ImageKeywordlist */
   ImageKeywordlistType GetImageKeywordlist( MetaDataDictionaryType & dict );

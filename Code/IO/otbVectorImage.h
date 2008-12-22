@@ -121,31 +121,31 @@ public:
 
 
   /** Get the projection coordinate system of the image. */
-  virtual std::string GetProjectionRef( void );
+  virtual std::string GetProjectionRef( void ) const;
 
   /** Get the GCP projection coordinates of the image. */
-  virtual std::string GetGCPProjection( void );
+  virtual std::string GetGCPProjection( void ) const;
 
-  virtual unsigned int GetGCPCount( void );
+  virtual unsigned int GetGCPCount( void ) const;
 
   virtual OTB_GCP & GetGCPs ( unsigned int GCPnum );
 
-  virtual std::string GetGCPId( unsigned int GCPnum );
-  virtual std::string GetGCPInfo( unsigned int GCPnum );
-  virtual double GetGCPRow( unsigned int GCPnum );
-  virtual double GetGCPCol( unsigned int GCPnum );
-  virtual double GetGCPX( unsigned int GCPnum );
-  virtual double GetGCPY( unsigned int GCPnum );
-  virtual double GetGCPZ( unsigned int GCPnum );
+  virtual std::string GetGCPId( unsigned int GCPnum ) const;
+  virtual std::string GetGCPInfo( unsigned int GCPnum ) const;
+  virtual double GetGCPRow( unsigned int GCPnum ) const;
+  virtual double GetGCPCol( unsigned int GCPnum ) const;
+  virtual double GetGCPX( unsigned int GCPnum ) const;
+  virtual double GetGCPY( unsigned int GCPnum ) const;
+  virtual double GetGCPZ( unsigned int GCPnum ) const;
 
   /** Get the six coefficients of affine geoTtransform. */
-  virtual VectorType GetGeoTransform( void );
+  virtual VectorType GetGeoTransform( void ) const;
 
   /** Get image corners. */
-  virtual VectorType GetUpperLeftCorner( void );
-  virtual VectorType GetUpperRightCorner( void );
-  virtual VectorType GetLowerLeftCorner( void );
-  virtual VectorType GetLowerRightCorner( void );
+  virtual VectorType GetUpperLeftCorner( void ) const;
+  virtual VectorType GetUpperRightCorner( void ) const;
+  virtual VectorType GetLowerLeftCorner( void ) const;
+  virtual VectorType GetLowerRightCorner( void ) const;
 
   /** Get image keyword list */
   virtual ImageKeywordlistType GetImageKeywordlist(void);

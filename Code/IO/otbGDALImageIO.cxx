@@ -35,6 +35,7 @@
 #include "otbMacro.h"
 #include "otbSystem.h"
 #include "otbImageBase.h"
+#include "otbImage.h"
 
 #include "itkMetaDataObject.h"
 #include "itkPNGImageIO.h"
@@ -976,8 +977,11 @@ namespace otb
     /* -------------------------------------------------------------------- */
     /* Set the GCPs	                                                        */
     /* -------------------------------------------------------------------- */
-
-    unsigned int gcpCount = ImageBase::GetGCPCount(dico);
+    typedef otb::Image<bool, 1> VirtualImageType;
+    VirtualImageType::Pointer imageBase = VirtualImageType::New();//this is just a facility to use
+    // the GCP related methods. Those should be in a class separated from ImageBase
+    // TODO ImageBase refactoring needed.
+    unsigned int gcpCount = imageBase->ImageBase::GetGCPCount(dico);
 
     if(gcpCount>0)
     {
@@ -987,17 +991,17 @@ namespace otb
 
       for(unsigned int gcpIndex = 0; gcpIndex < gcpCount;++gcpIndex)
       {
-        gdalGcps[gcpIndex].pszId = const_cast<char *>(ImageBase::GetGCPId(dico,gcpIndex).c_str());
-        gdalGcps[gcpIndex].pszInfo = const_cast<char *>(ImageBase::GetGCPInfo(dico,gcpIndex).c_str());
-        gdalGcps[gcpIndex].dfGCPPixel = ImageBase::GetGCPCol(dico,gcpIndex);
-        gdalGcps[gcpIndex].dfGCPLine = ImageBase::GetGCPRow(dico,gcpIndex);
-        gdalGcps[gcpIndex].dfGCPX = ImageBase::GetGCPX(dico,gcpIndex);
-        gdalGcps[gcpIndex].dfGCPY = ImageBase::GetGCPY(dico,gcpIndex);
-        gdalGcps[gcpIndex].dfGCPZ = ImageBase::GetGCPZ(dico,gcpIndex);
+        gdalGcps[gcpIndex].pszId = const_cast<char *>(imageBase->ImageBase::GetGCPId(dico,gcpIndex).c_str());
+        gdalGcps[gcpIndex].pszInfo = const_cast<char *>(imageBase->ImageBase::GetGCPInfo(dico,gcpIndex).c_str());
+        gdalGcps[gcpIndex].dfGCPPixel = imageBase->ImageBase::GetGCPCol(dico,gcpIndex);
+        gdalGcps[gcpIndex].dfGCPLine = imageBase->ImageBase::GetGCPRow(dico,gcpIndex);
+        gdalGcps[gcpIndex].dfGCPX = imageBase->ImageBase::GetGCPX(dico,gcpIndex);
+        gdalGcps[gcpIndex].dfGCPY = imageBase->ImageBase::GetGCPY(dico,gcpIndex);
+        gdalGcps[gcpIndex].dfGCPZ = imageBase->ImageBase::GetGCPZ(dico,gcpIndex);
 
       }
 
-      m_poDataset->SetGCPs(gcpCount,gdalGcps,ImageBase::GetGCPProjection(dico).c_str());
+      m_poDataset->SetGCPs(gcpCount,gdalGcps,imageBase->ImageBase::GetGCPProjection(dico).c_str());
 
       delete [] gdalGcps;
     }
@@ -1007,9 +1011,9 @@ namespace otb
     /* -------------------------------------------------------------------- */
 
 
-    if(!ImageBase::GetProjectionRef(dico).empty())
+    if(!imageBase->ImageBase::GetProjectionRef(dico).empty())
     {
-      m_poDataset->SetProjection(ImageBase::GetProjectionRef(dico).c_str());
+      m_poDataset->SetProjection(imageBase->ImageBase::GetProjectionRef(dico).c_str());
     }
 
     /* -------------------------------------------------------------------- */
