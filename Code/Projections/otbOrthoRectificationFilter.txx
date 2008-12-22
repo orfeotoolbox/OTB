@@ -19,7 +19,7 @@ PURPOSE.  See the above copyright notices for more information.
 #define __otbOrthoRectificationFilter_txx
 
 #include "otbOrthoRectificationFilter.h"
-
+#include "itkMetaDataObject.h"
 
 namespace otb
 {
@@ -59,6 +59,24 @@ namespace otb
     this->ComputeResampleTransformationModel();
 
     Superclass::GenerateInputRequestedRegion();
+  }
+
+  template <class TInputImage, class TOutputImage, class TMapProjection, class TInterpolatorPrecision>
+      void
+          OrthoRectificationFilter<TInputImage, TOutputImage, TMapProjection, TInterpolatorPrecision>
+  ::GenerateOutputInformation()
+  {
+    // call the superclass' implementation of this method
+    Superclass::GenerateOutputInformation();
+
+    // fill up the metadata information for ProjectionRef
+    typename TOutputImage::Pointer output = this->GetOutput();
+    itk::MetaDataDictionary & dict = output->GetMetaDataDictionary();
+
+    std::string projectionRef = m_MapProjection->GetWkt();
+
+    itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::m_ProjectionRefKey, projectionRef );
+
   }
 
 

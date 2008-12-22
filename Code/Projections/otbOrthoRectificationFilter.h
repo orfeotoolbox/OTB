@@ -129,6 +129,7 @@ namespace otb
       void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
       virtual void GenerateInputRequestedRegion();
+      virtual void GenerateOutputInformation( void );
 
 
     private:
