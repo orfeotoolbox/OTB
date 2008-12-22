@@ -198,9 +198,9 @@ namespace otb
     otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
 
     std::streamoff lNbPixels = (static_cast<std::streamoff>(lNbColumns))*(static_cast<std::streamoff>(lNbLines));
-    std::streamoff lTailleBuffer = static_cast<std::streamoff>(m_NbOctetPixel)*lNbPixels;
+    std::streamoff lBufferSize = static_cast<std::streamoff>(m_NbOctetPixel)*lNbPixels;
 
-    otbMsgDevMacro( <<" Allocation buff size : "<<lNbPixels<<"*"<<m_NbOctetPixel<<" (NbOctetPixel) = "<<lTailleBuffer);
+    otbMsgDevMacro( <<" Allocation buff size : "<<lNbPixels<<"*"<<m_NbOctetPixel<<" (NbOctetPixel) = "<<lBufferSize);
     otbMsgDevMacro( <<" sizeof(streamsize)    : "<<sizeof(std::streamsize));
     otbMsgDevMacro( <<" sizeof(streampos)     : "<<sizeof(std::streampos));
     otbMsgDevMacro( <<" sizeof(streamoff)     : "<<sizeof(std::streamoff));
@@ -212,7 +212,7 @@ namespace otb
 
 
 
-    unsigned char* value = new unsigned char[lTailleBuffer];
+    unsigned char* value = new unsigned char[lBufferSize];
     if(value==NULL)
     {
       itkExceptionMacro(<<"Memory allocation error");
@@ -233,7 +233,7 @@ namespace otb
         itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName.c_str()<<".");
       }
       cpt = 0;
-      for ( std::streamoff  i=0 ; i < lTailleBuffer ; i = i+static_cast<std::streamoff>(m_NbOctetPixel) )
+      for ( std::streamoff  i=0 ; i < lBufferSize ; i = i+static_cast<std::streamoff>(m_NbOctetPixel) )
       {
         memcpy((void*)(&(p[cpt])),(const void*)(&(value[i])),(size_t)(m_NbOctetPixel));
         cpt += static_cast<std::streamoff>(m_NbOctetPixel);
@@ -253,7 +253,7 @@ namespace otb
         }
                 	// Recopie dans le buffer
         cpt = static_cast<std::streamoff>(nbComponents)*static_cast<std::streamoff>(m_NbOctetPixel);
-        for ( std::streamoff  i=0 ; i < lTailleBuffer ; i = i+static_cast<std::streamoff>(m_NbOctetPixel) )
+        for ( std::streamoff  i=0 ; i < lBufferSize ; i = i+static_cast<std::streamoff>(m_NbOctetPixel) )
         {
           memcpy((void*)(&(p[cpt])),(const void*)(&(value[i])),(size_t)(m_NbOctetPixel));
           cpt += step;
@@ -798,10 +798,10 @@ namespace otb
     otbMsgDevMacro( << "GDALImageIO::Write() IORegion Start["<<this->GetIORegion().GetIndex()[0]<<","<<this->GetIORegion().GetIndex()[1]<<"] Size ["<<this->GetIORegion().GetSize()[0]<<","<<this->GetIORegion().GetSize()[1]<<"] on Image size ["<<m_Dimensions[0]<<","<<m_Dimensions[1]<<"]");
 
     std::streamoff lNbPixels = static_cast<std::streamoff>(lNbColumns)*static_cast<std::streamoff>(lNbLines);
-    std::streamoff lTailleBuffer = static_cast<std::streamoff>(m_NbOctetPixel)*lNbPixels;
-    otbMsgDevMacro( <<" TailleBuffer allocated : "<< lTailleBuffer);
+    std::streamoff lBufferSize = static_cast<std::streamoff>(m_NbOctetPixel)*lNbPixels;
+    otbMsgDevMacro( <<" BufferSize allocated : "<< lBufferSize);
 
-    unsigned char* value = new unsigned char[lTailleBuffer];
+    unsigned char* value = new unsigned char[lBufferSize];
     if(value==NULL)
     {
       itkExceptionMacro(<<"Memory allocation error");
@@ -818,14 +818,14 @@ namespace otb
     {
       cpt = static_cast<std::streamoff>(nbComponents)* static_cast<std::streamoff>(m_NbOctetPixel);
 
-      for ( std::streamoff i=0 ; i < lTailleBuffer ; i = i+static_cast<std::streamoff>(m_NbOctetPixel) )
+      for ( std::streamoff i=0 ; i < lBufferSize ; i = i+static_cast<std::streamoff>(m_NbOctetPixel) )
       {
         memcpy((void*)(&(value[i])),(const void*)(&(p[cpt])),(size_t)(m_NbOctetPixel));
         cpt += step;
       }
-      otbMsgDevMacro( << "NbOctets/pix : " << m_NbOctetPixel << " pxType : " << m_PxType);
-      otbMsgDevMacro( << "PremiereCol : " << lFirstColumn << " PremiereLig : " << lFirstLine);
-      otbMsgDevMacro( << "NbCol : " << lNbColumns << " NbLig : " << lNbLines);
+      otbMsgDevMacro( << "NbBytes/pix : " << m_NbOctetPixel << " pxType : " << m_PxType);
+      otbMsgDevMacro( << "FirstCol : " << lFirstColumn << " FirsteLine : " << lFirstLine);
+      otbMsgDevMacro( << "NbCol : " << lNbColumns << " NbLines : " << lNbLines);
       GDALRasterBand *poBand;
       poBand =  m_poBands[nbComponents]; //m_poDataset->GetRasterBand(nbComponents+1);
 //        	lCrGdal = poBand->RasterIO(GF_Write,lFirstColumn,lFirstLine,lNbColumns, lNbLines, value , lNbColumns, lNbLines, m_PxType,0, 0 ) ;
@@ -1079,7 +1079,7 @@ namespace otb
 //			extGDAL="JPEG";
     else
       extGDAL="NOT-FOUND";
-    return(extGDAL);
+    return extGDAL;
   }
 
   std::string GDALImageIO::GetGdalWriteImageFileName(std::string & extGDAL, std::string filename)
@@ -1092,7 +1092,7 @@ namespace otb
     {
       gdalFileName = System::GetRootName(filename);
     }
-    return(gdalFileName);
+    return gdalFileName;
   }
 
   bool GDALImageIO::GDALInfoReportCorner( const char * corner_name, double x, double y, double &GeoX, double &GeoY)
