@@ -135,6 +135,11 @@ ImageBase::ImageKeywordlistType VectorImage<TPixel, VImageDimension>::GetImageKe
    return ( ImageBase::GetImageKeywordlist( this->GetMetaDataDictionary() ) );
 }
 
+template <class TPixel, unsigned int VImageDimension>
+   const ImageBase::ImageKeywordlistType VectorImage<TPixel, VImageDimension>::GetImageKeywordlist( void ) const
+{
+  return ( ImageBase::GetImageKeywordlist( this->GetMetaDataDictionary() ) );
+}
 
 template <class TPixel, unsigned int VImageDimension>
 void

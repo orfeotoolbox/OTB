@@ -287,6 +287,17 @@ ImageBase::ImageKeywordlistType ImageBase::GetImageKeywordlist( MetaDataDictiona
    return ( ImageKeywordlist );
 }
 
+const ImageBase::ImageKeywordlistType ImageBase::GetImageKeywordlist(const MetaDataDictionaryType & dict ) const
+{
+  ImageKeywordlistType ImageKeywordlist;
+
+  if(dict.HasKey(MetaDataKey::m_OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::m_OSSIMKeywordlistKey, ImageKeywordlist);
+  }
+  return ( ImageKeywordlist );
+}
+
 void
 ImageBase::PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType & dict) const
 {

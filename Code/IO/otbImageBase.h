@@ -106,8 +106,11 @@ public:
   virtual VectorType GetLowerRightCorner() = 0;
 
   /** Get the ImageKeywordlist */
-  static ImageKeywordlistType GetImageKeywordlist( MetaDataDictionaryType & dict );
+  ImageKeywordlistType GetImageKeywordlist( MetaDataDictionaryType & dict );
+  const ImageKeywordlistType GetImageKeywordlist(const MetaDataDictionaryType & dict ) const;
+
   virtual ImageKeywordlistType GetImageKeywordlist() = 0;
+  virtual const ImageKeywordlistType GetImageKeywordlist(void) const = 0;
 
   void PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType & dict) const;
 

@@ -149,6 +149,7 @@ public:
 
   /** Get image keyword list */
   virtual ImageKeywordlistType GetImageKeywordlist(void);
+  virtual const ImageKeywordlistType GetImageKeywordlist(void) const;
 
   /// Copy metadata from a DataObject
   virtual void CopyInformation(const itk::DataObject *);

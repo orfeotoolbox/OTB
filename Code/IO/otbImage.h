@@ -175,6 +175,7 @@ public:
 
   /** Get image keyword list */
   virtual ImageKeywordlistType GetImageKeywordlist(void);
+  virtual const ImageKeywordlistType GetImageKeywordlist(void) const;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
