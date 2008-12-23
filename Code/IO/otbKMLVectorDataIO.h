@@ -93,24 +93,23 @@ public:
 /*   /\** Set the spacing and dimention information for the set filename. *\/ */
 /*   virtual void ReadVectorDataInformation(); */
 
-  /** Reads the data from disk into the memory buffer provided. */
+  /** Reads the data from disk into the data structure provided. */
   virtual void Read(VectorDataPointerType data);
 
   /*-------- This part of the interfaces deals with writing data. ----- */
 
-  /** Determine the file type. Returns true if this ImageIO can read the
+  /** Determine the file type. Returns true if this VectorDataIO can read the
    * file specified. */
   virtual bool CanWriteFile(const char*);
 
-  /** Determine the file type. Returns true if the ImageIO can stream write the specified file */
+  /** Determine the file type. Returns true if the VectorDataIO can stream write the specified file */
   virtual bool CanStreamWrite() { return false; };
 
 /*   /\** Writes the spacing and dimentions of the image. */
 /*    * Assumes SetFileName has been called with a valid file name. *\/ */
 /*   virtual void WriteVectorDataInformation(); */
 
-  /** Writes the data to disk from the memory buffer provided. Make sure
-   * that the IORegion has been set properly. */
+  /** Writes the data to disk from the data structure provided */
   virtual void Write(VectorDataConstPointerType data);
 
 protected:
