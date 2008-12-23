@@ -1486,6 +1486,11 @@ ADD_TEST(ioTvVectorDataFileWriter ${IO_TESTS15}
 	${TEMP}/ioTvVectorDataFileWriterOutput.shp
 	)
 
+ADD_TEST(ioTvVectorDataFileWriterTwice ${IO_TESTS15}
+        otbVectorDataFileWriter
+	${TEMP}/ioTvVectorDataFileWriterOutput.shp
+	)
+
 # If the file exists, try remove it to prevent test failure
 FILE(REMOVE ${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp)
 
