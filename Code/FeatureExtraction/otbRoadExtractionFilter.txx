@@ -51,9 +51,7 @@ RoadExtractionFilter<TInputImage, TOutputPath>
    typename InputImageType::ConstPointer inputImage     = this->GetInput();
    typename OutputPathListType::Pointer outputPathList  = this->GetOutput();
 
-  //
   m_SpectralAngleDistanceImageFilter->SetInput(inputImage);
-//   m_SpectralAngleDistanceImageFilter->SetReferencePixel(m_ReferencePixel);
 
   m_GenericRoadExtractionFilter->SetInput(m_SpectralAngleDistanceImageFilter->GetOutput());
 

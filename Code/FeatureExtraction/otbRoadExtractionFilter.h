@@ -161,8 +161,6 @@ template <class TInputImage, class TOutputPath>
     typename SpectralAngleDistanceImageFilterType::Pointer      m_SpectralAngleDistanceImageFilter;
     typename GenericRoadExtractionFilterType::Pointer m_GenericRoadExtractionFilter;
 
-  /** The reference pixel (use by the SpectralAngleDistanceImageFilter)*/
-//   InputPixelType m_ReferencePixel;
 
 
   };
