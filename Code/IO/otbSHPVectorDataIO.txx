@@ -564,18 +564,7 @@ namespace otb
 	itkExceptionMacro(<<"Failed to create OGR data source for file "<<this->m_FileName<<". Since OGR can not overwrite existing file, be sure that this file does not already exist");
       }
 
-    // Retrieving root node
-    DataTreeConstPointerType tree = data->GetDataTree();
-    DataNodePointerType root = tree->GetRoot()->Get();
-
-    typedef itk::PreOrderTreeIterator<DataTreeType> TreeIteratorType;
-
-    OGRSpatialReference * oSRS =NULL;
-    OGRLayer * ogrCurrentLayer = NULL;
-    std::vector<OGRFeature *> ogrFeatures;
-    OGRGeometryCollection * ogrCollection = NULL;
-    // OGRGeometry * ogrCurrentGeometry = NULL;
-
+    // Retrieve data required for georeferencing
     typename VectorDataType::PointType origin;
     typename VectorDataType::SpacingType spacing;
     origin.Fill(0.0);
@@ -596,6 +585,18 @@ namespace otb
     {
       otbMsgDevMacro(<< "Projection information unavailable => spacing set to 1 and origin to 0");
     }
+
+    // Retrieving root node
+    DataTreeConstPointerType tree = data->GetDataTree();
+    DataNodePointerType root = tree->GetRoot()->Get();
+
+    typedef itk::PreOrderTreeIterator<DataTreeType> TreeIteratorType;
+
+    OGRSpatialReference * oSRS =NULL;
+    OGRLayer * ogrCurrentLayer = NULL;
+    std::vector<OGRFeature *> ogrFeatures;
+    OGRGeometryCollection * ogrCollection = NULL;
+    // OGRGeometry * ogrCurrentGeometry = NULL;
 
     TreeIteratorType it(tree);
     it.GoToBegin();
