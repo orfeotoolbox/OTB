@@ -26,7 +26,12 @@ ADD_TEST(prTuProjectionBaseNew ${PROJECTIONS_TESTS1}  otbProjectionBaseNew )
 
 ADD_TEST(prTuMapProjectionsNew ${PROJECTIONS_TESTS1}  otbMapProjectionsNew )
 
-ADD_TEST(prTvMapProjection ${PROJECTIONS_TESTS1}  otbMapProjection )
+ADD_TEST(prTvMapProjection ${PROJECTIONS_TESTS1}
+        --compare-ascii ${EPSILON} ${BASELINE}/prTvMapProjection.txt
+        ${TEMP}/prTvMapProjection.txt
+        otbMapProjection
+        ${TEMP}/prTvMapProjection.txt
+)
 
 ADD_TEST(prTuSensorModelsNew ${PROJECTIONS_TESTS1}  otbSensorModelsNew )
 

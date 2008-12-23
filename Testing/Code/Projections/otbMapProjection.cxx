@@ -24,10 +24,15 @@
 //TODO add control baseline
 int otbMapProjection( int argc, char* argv[] )
 {
+  const char * outFileName = argv[1];
+  std::ofstream file;
+  file.open(outFileName);
 
   otb::UtmInverseProjection::Pointer lUtmProjection = otb::UtmInverseProjection::New();
-  std::cout << lUtmProjection->GetWkt() << std::endl;
+  file << lUtmProjection->GetWkt() << std::endl << std::endl;
 
+
+  file.close();
   return EXIT_SUCCESS;
 
 }
