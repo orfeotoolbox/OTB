@@ -73,6 +73,7 @@ public:
   typedef typename LineType::VertexListType      VertexListType;
   typedef typename VertexListType::ConstPointer  VertexListConstPointerType;
   typedef typename LineType::Pointer             LinePointerType;
+  typedef typename LineType::VertexType          VertexType;
   typedef typename DataNodeType::PolygonType     PolygonType;
   typedef typename PolygonType::Pointer          PolygonPointerType;
   typedef typename DataNodeType::PolygonListType PolygonListType;
