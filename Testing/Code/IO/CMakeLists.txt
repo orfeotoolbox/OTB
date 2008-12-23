@@ -1410,6 +1410,12 @@ ADD_TEST(ioTuOGRDriverTest ${IO_TESTS14}
 				)
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+ADD_TEST(ioTuOGRDriver2Test ${IO_TESTS14}
+				otbOGRDriverTest
+				${INPUTDATA}/france_coastline.shp
+				foo
+				)
+
 ADD_TEST(ioTvGDALDriverDoubleWritingTest ${IO_TESTS14}
 		--compare-n-images ${TOL} 4
 			${INPUTDATA}/poupees.tif
