@@ -73,6 +73,9 @@ public:
   typedef typename VectorDataType::ConstPointer  VectorDataConstPointerType;
 
 
+  /** */
+
+
   /*-------- This part of the interface deals with reading data. ------ */
 
   /** Determine the file type. Returns true if this VectorDataIO can read the
@@ -131,6 +134,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   OGRDataSource * m_DataSource;
+
 
   /** Is this necessary ? */
 

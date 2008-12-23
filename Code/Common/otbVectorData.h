@@ -21,6 +21,8 @@
 #include "itkTreeContainer.h"
 #include "itkDataObject.h"
 #include "otbDataNode.h"
+#include "itkVector.h"
+#include "itkPoint.h"
 
 namespace otb
 {
@@ -38,50 +40,73 @@ namespace otb
    * \sa VectorDataFileWriter
    *
    */
-template <class TPrecision = double, unsigned int VDimension =2>
-class VectorData
+  template <class TPrecision = double, unsigned int VDimension =2>
+      class VectorData
   : public itk::DataObject
-{
-  public:
-  /** Standard class typedefs */
-  typedef VectorData Self;
-  typedef itk::DataObject Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  {
+    public:
+      /** Standard class typedefs */
+      typedef VectorData Self;
+      typedef itk::DataObject Superclass;
+      typedef itk::SmartPointer<Self> Pointer;
+      typedef itk::SmartPointer<const Self> ConstPointer;
+
+      typedef itk::Vector<double, VDimension> SpacingType;
+      typedef itk::Point<double, VDimension> PointType;
+
+      /** Standard macros */
+      itkNewMacro(Self);
+      itkTypeMacro(VectorData,TreeContainer);
+      itkStaticConstMacro(Dimension, unsigned int, VDimension);
+
+      /** Template parameters typedef */
+      typedef TPrecision PrecisionType;
+      typedef otb::DataNode<TPrecision,VDimension> DataNodeType;
+      typedef typename DataNodeType::Pointer DataNodePointerType;
+      typedef itk::TreeContainer<DataNodePointerType > DataTreeType;
+      typedef typename DataTreeType::Pointer DataTreePointerType;
+
+      itkGetObjectMacro(DataTree,DataTreeType);
+      itkGetConstObjectMacro(DataTree,DataTreeType);
+
+      /** Set the origin of the vector data.
+        * \sa GetOrigin() */
+      itkSetMacro(Origin, PointType);
+      virtual void SetOrigin( const double origin[VDimension] );
+      virtual void SetOrigin( const float origin[VDimension] );
+
+      itkGetConstReferenceMacro(Origin, PointType);
 
 
-  /** Standard macros */
-  itkNewMacro(Self);
-  itkTypeMacro(VectorData,TreeContainer);
-  itkStaticConstMacro(Dimension, unsigned int, VDimension);
+       /** Set the spacing (size of a pixel) of the vector data.
+         * \sa GetSpacing() */
+      virtual void SetSpacing (const SpacingType & spacing);
+      virtual void SetSpacing (const double spacing[VDimension]);
+      virtual void SetSpacing (const float spacing[VDimension]);
 
-  /** Template parameters typedef */
-  typedef TPrecision PrecisionType;
-  typedef otb::DataNode<TPrecision,VDimension> DataNodeType;
-  typedef typename DataNodeType::Pointer DataNodePointerType;
-  typedef itk::TreeContainer<DataNodePointerType > DataTreeType;
-  typedef typename DataTreeType::Pointer DataTreePointerType;
+      itkGetConstReferenceMacro(Spacing, SpacingType);
 
-  itkGetObjectMacro(DataTree,DataTreeType);
-  itkGetConstObjectMacro(DataTree,DataTreeType);
+      virtual void SetProjectionRef(std::string projectionRef);
+      virtual std::string GetProjectionRef() const;
 
-  protected:
-  /** Constructor */
-  VectorData();
-  /** Destructor */
-  virtual ~VectorData(){};
-  /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+    protected:
+      /** Constructor */
+      VectorData();
+      /** Destructor */
+      virtual ~VectorData(){};
+      /** PrintSelf method */
+      void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  private:
-  VectorData(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+    private:
+      VectorData(const Self&); //purposely not implemented
+      void operator=(const Self&); //purposely not implemented
+      SpacingType         m_Spacing;
+      PointType           m_Origin;
 
+      /** Data tree */
+      DataTreePointerType m_DataTree;
 
-  /** Data tree */
-  DataTreePointerType m_DataTree;
-
-};
+  };
 }// end namespace otb
 
 

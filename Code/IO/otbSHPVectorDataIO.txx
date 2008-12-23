@@ -570,11 +570,32 @@ namespace otb
 
     typedef itk::PreOrderTreeIterator<DataTreeType> TreeIteratorType;
 
+    OGRSpatialReference * oSRS =NULL;
     OGRLayer * ogrCurrentLayer = NULL;
     std::vector<OGRFeature *> ogrFeatures;
     OGRGeometryCollection * ogrCollection = NULL;
     // OGRGeometry * ogrCurrentGeometry = NULL;
 
+    typename VectorDataType::PointType origin;
+    typename VectorDataType::SpacingType spacing;
+    origin.Fill(0.0);
+    spacing.Fill(1.0);
+
+    std::string projectionRefWkt = data->GetProjectionRef();
+    bool projectionInformationAvailable = !projectionRefWkt.empty();
+
+    if (projectionInformationAvailable)
+    {
+      origin = data->GetOrigin();
+      spacing = data->GetSpacing();
+      otbMsgDevMacro(<< "Projection information : " << projectionRefWkt);
+      otbMsgDevMacro(<< " - Origin : " << origin);
+      otbMsgDevMacro(<< " - Spacing : " << spacing);
+    }
+    else
+    {
+      otbMsgDevMacro(<< "Projection information unavailable => spacing set to 1 and origin to 0");
+    }
 
     TreeIteratorType it(tree);
     it.GoToBegin();
@@ -604,7 +625,13 @@ namespace otb
 		    }
 		}
 	      ogrFeatures.clear();
-	      ogrCurrentLayer = m_DataSource->CreateLayer(it.Get()->GetNodeId(),NULL,wkbUnknown,NULL);
+              //TODO georeference here from OGRSpatialReference http://www.gdal.org/ogr/classOGRDataSource.html
+              if (projectionInformationAvailable)
+              {
+                oSRS = new OGRSpatialReference(projectionRefWkt.c_str());
+              }
+
+              ogrCurrentLayer = m_DataSource->CreateLayer(it.Get()->GetNodeId(),oSRS,wkbUnknown,NULL);
 	      if(ogrCurrentLayer == NULL)
 	      {
 		itkExceptionMacro(<<"Failed to create layer "<<it.Get()->GetNodeId());
@@ -628,12 +655,13 @@ namespace otb
 	    case FEATURE_POINT:
 	      {
 		OGRPoint ogrPoint;
-		ogrPoint.setX(it.Get()->GetPoint()[0]);
-		ogrPoint.setY(it.Get()->GetPoint()[1]);
+                ogrPoint.setX(it.Get()->GetPoint()[0] * spacing[0] + origin[0]);
+                ogrPoint.setY(it.Get()->GetPoint()[1] * spacing[1] + origin[1]);
+
 
 		if(DataNodeType::Dimension>2)
 		  {
-		    ogrPoint.setZ(it.Get()->GetPoint()[2]);
+                    ogrPoint.setZ(it.Get()->GetPoint()[2] * spacing[2] + origin[2]);
 		  }
 
 		if(ogrCollection == NULL)
@@ -658,11 +686,11 @@ namespace otb
 		while(vIt != vertexList->End())
 		  {
 		    OGRPoint ogrPoint;
-		    ogrPoint.setX(vIt.Value()[0]);
-		    ogrPoint.setY(vIt.Value()[1]);
+                    ogrPoint.setX(vIt.Value()[0] * spacing[0] + origin[0]);
+                    ogrPoint.setY(vIt.Value()[1] * spacing[1] + origin[1]);
 		    if(DataNodeType::Dimension>2)
 		      {
-			ogrPoint.setZ(vIt.Value()[2]);
+                        ogrPoint.setZ(vIt.Value()[2] * spacing[2] + origin[2]);
 		      }
 		    ogrLine.addPoint(&ogrPoint);
 		    ++vIt;
@@ -691,11 +719,11 @@ namespace otb
 		while(vIt != vertexList->End())
 		  {
 		    OGRPoint ogrPoint;
-		    ogrPoint.setX(vIt.Value()[0]);
-		    ogrPoint.setY(vIt.Value()[1]);
+                    ogrPoint.setX(vIt.Value()[0] * spacing[0] + origin[0]);
+                    ogrPoint.setY(vIt.Value()[1] * spacing[1] + origin[1]);
 		    if(DataNodeType::Dimension>2)
 		      {
-			ogrPoint.setZ(vIt.Value()[2]);
+                        ogrPoint.setZ(vIt.Value()[2] * spacing[2] + origin[2]);
 		      }
 
 		    ogrExternalRing->addPoint(&ogrPoint);
@@ -715,11 +743,11 @@ namespace otb
 		    while(vIt != vertexList->End())
 		      {
 			OGRPoint ogrPoint;
-			ogrPoint.setX(vIt.Value()[0]);
-			ogrPoint.setY(vIt.Value()[1]);
+                        ogrPoint.setX(vIt.Value()[0] * spacing[0] + origin[0]);
+                        ogrPoint.setY(vIt.Value()[1] * spacing[1] + origin[1]);
 			if(DataNodeType::Dimension>2)
 			  {
-			    ogrPoint.setZ(vIt.Value()[2]);
+                            ogrPoint.setZ(vIt.Value()[2] * spacing[2] + origin[2]);
 			  }
 			ogrInternalRing->addPoint(&ogrPoint);
 			++vIt;
