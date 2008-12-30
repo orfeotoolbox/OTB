@@ -576,6 +576,7 @@ namespace otb
 //           new_line->SetInternalValueToAlphaChannel(true);
 
           new_line->SetColor(m_DefaultROIColor);
+          new_line->SetLineWidth(m_LineWidth);
 
           new_list->PushBack(new_line);
         }

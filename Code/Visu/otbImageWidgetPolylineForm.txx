@@ -29,6 +29,7 @@ ImageWidgetPolylineForm<TValue>
 {
   m_Polyline = PolylineType::New();
   m_InternalValueToAlphaChannel = false;
+  m_LineWidth = 1.0;
 }
 template<class TValue>
 ImageWidgetPolylineForm<TValue>
@@ -42,7 +43,9 @@ ImageWidgetPolylineForm<TValue>
 ::Draw(double openGlZoom, unsigned int originx, unsigned int originy, unsigned int windowh,unsigned ss_rate)
 {
   if(this->GetVisible())
-    {
+  {
+      // Set the point size
+      glLineWidth(m_LineWidth);
       glEnable(GL_BLEND);
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
       if(m_InternalValueToAlphaChannel)
@@ -56,7 +59,6 @@ ImageWidgetPolylineForm<TValue>
       glBegin(GL_LINE_STRIP);
 
       VertexListConstIteratorType it =  this->GetPolyline()->GetVertexList()->Begin();
-
       while(it != this->GetPolyline()->GetVertexList()->End())
 	{
 	  double x1 = it.Value()[0];
@@ -64,11 +66,14 @@ ImageWidgetPolylineForm<TValue>
 
 	  x1 = static_cast<int>((x1-originx)*openGlZoom*(1/static_cast<double>(ss_rate)));
 	  y1 = static_cast<int>(windowh+(originy-y1)*openGlZoom*(1/static_cast<double>(ss_rate)));
-          glVertex2f(x1,y1);
+
+            glVertex2f(x1,y1);
+
 	  ++it;
 	}
       glEnd();
       glDisable(GL_BLEND);
+      glLineWidth(1.0);
     }
 }
 

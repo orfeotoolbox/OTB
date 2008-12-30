@@ -236,7 +236,8 @@ namespace otb
       itkSetMacro(ShowHistograms,bool);
       itkGetMacro(ShowHistograms,bool);
       itkGetObjectMacro(TransferFunctionList,TransferFunctionListType);
-
+      itkSetMacro(LineWidth,double);
+      itkGetMacro(LineWidth,double);
 
       /** Set the input image (VectorImage version) */
       virtual void SetImage(ImageType * img);
@@ -420,6 +421,9 @@ namespace otb
       // Constructor and destructor
       ImageViewerBase();
       ~ImageViewerBase();
+
+      /** Line width*/
+      double m_LineWidth;
 
       private:
       ImageViewerBase(const Self&); //purposely not implemented
