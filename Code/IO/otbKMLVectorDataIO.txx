@@ -564,7 +564,7 @@ namespace otb
 
       if (!projection)
       {
-        itkExceptionMacro(<<"Cannot create ossim projection from: "<< projectionRefWkt);
+        projectionInformationAvailable = false;
       }
 
       origin = data->GetOrigin();
