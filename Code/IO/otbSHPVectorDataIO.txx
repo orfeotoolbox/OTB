@@ -27,6 +27,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbSystem.h"
 #include "otbDataNode.h"
 #include "itkPreOrderTreeIterator.h"
+#include "otbMetaDataKey.h"
 
 namespace otb
 {
@@ -100,6 +101,15 @@ namespace otb
     // Retrieving root node
     DataTreePointerType tree = data->GetDataTree();
     DataNodePointerType root = tree->GetRoot()->Get();
+
+    OGRSpatialReference * oSRS =NULL;
+    //We take the assumption that the spatial reference is common to all layers
+    oSRS = m_DataSource->GetLayer(0)->GetSpatialRef();
+    char * projectionRefChar;
+    oSRS->exportToWkt(&projectionRefChar);
+    std::string projectionRef = projectionRefChar;
+    itk::MetaDataDictionary & dict = data->GetMetaDataDictionary();
+    itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::m_ProjectionRefKey, projectionRef );
 
 
     // For each layer
