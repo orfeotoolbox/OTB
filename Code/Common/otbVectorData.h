@@ -97,11 +97,14 @@ namespace otb
       /** PrintSelf method */
       void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
+
+      SpacingType         m_Spacing;
+      PointType           m_Origin;
+
     private:
       VectorData(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
-      SpacingType         m_Spacing;
-      PointType           m_Origin;
+
 
       /** Data tree */
       DataTreePointerType m_DataTree;

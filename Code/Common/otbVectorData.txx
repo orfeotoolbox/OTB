@@ -33,6 +33,8 @@ VectorData<TPrecision,VDimension>
   DataNodePointerType root = DataNodeType::New();
   root->SetNodeId("Root");
   m_DataTree->SetRoot(root);
+  m_Spacing.Fill(1);
+  m_Origin.Fill(0);
 }
 
 //----------------------------------------------------------------------------
