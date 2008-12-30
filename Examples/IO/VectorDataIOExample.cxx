@@ -69,7 +69,7 @@ int main(int argc, char * argv[])
     return EXIT_FAILURE;
   }
 
-  typedef double PixelType;
+  typedef unsigned short int PixelType;
 
 //  Software Guide : BeginLatex
   //
