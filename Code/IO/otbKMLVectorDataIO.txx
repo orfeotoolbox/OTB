@@ -34,6 +34,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "projection/ossimMapProjection.h"
 #include "projection/ossimMapProjectionFactory.h"
 #include "ossimOgcWktTranslator.h"
+#include "otbMetaDataKey.h"
 
 using kmldom::ElementPtr;
 using kmldom::FeaturePtr;
@@ -489,6 +490,13 @@ namespace otb
     {
       itkExceptionMacro(<<"Failed to open KML data file "<<errors);
     }
+
+    //Fill up projection information
+    //for KML files, this is geographic coordinates
+
+    std::string projectionRef = "GEOGCS[\"GCS_WGS_1984\", DATUM[\"WGS_1984\", SPHEROID[\"WGS_1984\",6378137,298.257223563]], PRIMEM[\"Greenwich\",0], UNIT[\"Degree\",0.017453292519943295]]";
+    itk::MetaDataDictionary & dict = data->GetMetaDataDictionary();
+    itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::m_ProjectionRefKey, projectionRef );
 
     const FeaturePtr feature = GetRootFeature(root);
     if (feature) {

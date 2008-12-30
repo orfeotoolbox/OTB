@@ -1508,6 +1508,12 @@ ADD_TEST(ioTvVectorDataFileGeoReaderWriter ${IO_TESTS15}
 	${TEMP}/ioTvVectorDataFileGeoReaderWriterOutput.shp
 	)
 
+ADD_TEST(ioTvVectorDataFileGeoReaderWriter2 ${IO_TESTS15}
+        otbVectorDataFileGeoReaderWriter
+	${INPUTDATA}/Capitole-Shadows.kml
+	${TEMP}/ioTvVectorDataFileGeoReaderWriterOutput2.shp
+	)
+
 ADD_TEST(ioTuKMLVectorDataIO ${IO_TESTS15}
         otbKMLVectorDataIONew )
 
