@@ -178,7 +178,7 @@ ADD_TEST(ioTuMWImageIOCanReadMW ${IO_TESTS1} otbMWImageIOTestCanRead
 
 
 ADD_TEST(ioTvImageFileReaderMW2TIFIMG ${IO_TESTS1}
-  --compare-image ${TOL}        ${BASELINE}/QB_Toulouse_Ortho_PAN.img
+  --compare-image ${TOL}        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
                                 ${TEMP}/ioImageFileReaderMW2TIF.tif
         otbImageFileReaderTestFloat
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
@@ -201,7 +201,7 @@ ADD_TEST(ioTvImageFileReaderTIF2MW ${IO_TESTS1}
   --compare-image ${TOL}        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
                                 ${TEMP}/ioImageFileReaderTIF2MW.mw
         otbImageFileReaderTestFloat
-        ${BASELINE}/QB_Toulouse_Ortho_PAN.mw
+        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
         ${TEMP}/ioImageFileReaderTIF2MW.mw )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1502,6 +1502,12 @@ ADD_TEST(ioTvVectorDataFileReaderWriter ${IO_TESTS15}
 	)
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+ADD_TEST(ioTvVectorDataFileGeoReaderWriter ${IO_TESTS15}
+        otbVectorDataFileGeoReaderWriter
+	${INPUTDATA}/ToulouseRoad-examples.shp
+	${TEMP}/ioTvVectorDataFileGeoReaderWriterOutput.shp
+	)
+
 ADD_TEST(ioTuKMLVectorDataIO ${IO_TESTS15}
         otbKMLVectorDataIONew )
 
@@ -1722,6 +1728,7 @@ otbVectorDataFileReader.cxx
 otbVectorDataFileWriterNew.cxx
 otbVectorDataFileWriter.cxx
 otbVectorDataFileReaderWriter.cxx
+otbVectorDataFileGeoReaderWriter.cxx
 otbSHPVectorDataIONew.cxx
 otbKMLVectorDataIONew.cxx
 otbKMLVectorDataIOTestCanRead.cxx
