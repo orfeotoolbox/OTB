@@ -86,6 +86,12 @@ int otbMapProjectionsNew( int argc, char* argv[] )
   otb::UtmForwardProjection::Pointer lUtmProjection2 = otb::UtmForwardProjection::New();
   otb::VanDerGrintenInverseProjection::Pointer lVanDerGrintenProjection = otb::VanDerGrintenInverseProjection::New();
   otb::VanDerGrintenForwardProjection::Pointer lVanDerGrintenProjection2 = otb::VanDerGrintenForwardProjection::New();
+  otb::Lambert2EtenduInverseProjection::Pointer lLambert2Etendu = otb::Lambert2EtenduInverseProjection::New();
+  otb::Lambert2EtenduForwardProjection::Pointer lLambert2Etendu2 = otb::Lambert2EtenduForwardProjection::New();
+  otb::Lambert93InverseProjection::Pointer lLambert93 = otb::Lambert93InverseProjection::New();
+  otb::Lambert93ForwardProjection::Pointer lLambert93_2 = otb::Lambert93ForwardProjection::New();
+  otb::SVY21InverseProjection::Pointer lSVY21 = otb::SVY21InverseProjection::New();
+  otb::SVY21ForwardProjection::Pointer lSVY21_2 = otb::SVY21ForwardProjection::New();
 
   return EXIT_SUCCESS;
 }
