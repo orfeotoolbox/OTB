@@ -71,6 +71,7 @@ public:
   typedef typename PolygonListType::Pointer      PolygonListPointerType;
   typedef typename VectorDataType::Pointer       VectorDataPointerType;
   typedef typename VectorDataType::ConstPointer  VectorDataConstPointerType;
+  typedef typename Superclass::SpacingType       SpacingType;
 
 
   /** */
@@ -121,11 +122,11 @@ protected:
 
   /** Conversion tools */
 
-  static DataNodePointerType ConvertGeometryToPointNode(const OGRGeometry * ogrGeometry);
+  DataNodePointerType ConvertGeometryToPointNode(const OGRGeometry * ogrGeometry) const;
 
-  static DataNodePointerType  ConvertGeometryToLineNode(const OGRGeometry * ogrGeometry);
+  DataNodePointerType  ConvertGeometryToLineNode(const OGRGeometry * ogrGeometry) const;
 
-  static DataNodePointerType ConvertGeometryToPolygonNode(const OGRGeometry * ogrGeometry);
+  DataNodePointerType ConvertGeometryToPolygonNode(const OGRGeometry * ogrGeometry) const;
 
   /** end conversion tools */
 

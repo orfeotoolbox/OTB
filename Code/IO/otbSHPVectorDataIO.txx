@@ -111,6 +111,23 @@ namespace otb
     itk::MetaDataDictionary & dict = data->GetMetaDataDictionary();
     itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::m_ProjectionRefKey, projectionRef );
 
+    std::string projectionRefWkt = data->GetProjectionRef();
+    bool projectionInformationAvailable = !projectionRefWkt.empty();
+
+    if (projectionInformationAvailable)
+    {
+      otbMsgDevMacro(<< "Projection information : " << projectionRefWkt);
+      otbMsgDevMacro(<< " - Origin : " << this->m_Origin);
+      otbMsgDevMacro(<< " - Spacing : " << this->m_Spacing);
+    }
+    else
+    {
+      this->m_Origin.Fill(0.0);
+      this->m_Spacing.Fill(1.0);
+      otbMsgDevMacro(<< "Projection information unavailable => spacing set to 1 and origin to 0");
+    }
+    data->SetOrigin(this->m_Origin);
+    data->SetSpacing(this->m_Spacing);
 
     // For each layer
     for(int layerIndex = 0;layerIndex<m_DataSource->GetLayerCount();++layerIndex)
@@ -398,23 +415,25 @@ namespace otb
   typename SHPVectorDataIO<TData>
   ::DataNodePointerType
   SHPVectorDataIO<TData>
-  ::ConvertGeometryToPointNode(const OGRGeometry * ogrGeometry)
+  ::ConvertGeometryToPointNode(const OGRGeometry * ogrGeometry) const
   {
     OGRPoint * ogrPoint = (OGRPoint *) ogrGeometry;
 
     if(ogrPoint == NULL)
-      {
-	itkGenericExceptionMacro(<<"Failed to convert OGRGeometry to OGRPoint");
-      }
+    {
+      itkGenericExceptionMacro(<<"Failed to convert OGRGeometry to OGRPoint");
+    }
+    SpacingType spacing = this->m_Spacing;
+    PointType origin = this->m_Origin;
 
     PointType otbPoint;
     otbPoint.Fill(0);
-    otbPoint[0] = static_cast<typename DataNodeType::PrecisionType>(ogrPoint->getX());
-    otbPoint[1] = static_cast<typename DataNodeType::PrecisionType>(ogrPoint->getY());
+    otbPoint[0] = (static_cast<typename DataNodeType::PrecisionType>(ogrPoint->getX())-origin[0])/spacing[0];
+    otbPoint[1] = (static_cast<typename DataNodeType::PrecisionType>(ogrPoint->getY())-origin[1])/spacing[1];
 
     if(DataNodeType::Dimension > 2)
       {
-	otbPoint[2]=static_cast<typename DataNodeType::PrecisionType>(ogrPoint->getZ());
+        otbPoint[2]=(static_cast<typename DataNodeType::PrecisionType>(ogrPoint->getZ())-origin[2])/spacing[2];
       }
 
     DataNodePointerType node = DataNodeType::New();
@@ -426,15 +445,16 @@ namespace otb
   typename SHPVectorDataIO<TData>
   ::DataNodePointerType
   SHPVectorDataIO<TData>
-  ::ConvertGeometryToLineNode(const OGRGeometry * ogrGeometry)
+  ::ConvertGeometryToLineNode(const OGRGeometry * ogrGeometry) const
   {
     OGRLineString * ogrLine = (OGRLineString *)ogrGeometry;
 
     if(ogrLine == NULL)
-      {
-	itkGenericExceptionMacro(<<"Failed to convert OGRGeometry to OGRLine");
-      }
-
+    {
+      itkGenericExceptionMacro(<<"Failed to convert OGRGeometry to OGRLine");
+    }
+    SpacingType spacing = this->m_Spacing;
+    PointType origin = this->m_Origin;
 
     LinePointerType line = LineType::New();
 
@@ -447,12 +467,12 @@ namespace otb
 
 	typename LineType::VertexType vertex;
 
-	vertex[0] = ogrTmpPoint->getX();
-	vertex[1] = ogrTmpPoint->getY();
+        vertex[0] = (ogrTmpPoint->getX()-origin[0])/spacing[0];
+        vertex[1] = (ogrTmpPoint->getY()-origin[1])/spacing[1];
 
 	if(DataNodeType::Dimension > 2)
 	  {
-	    vertex[2]= ogrTmpPoint->getZ();
+            vertex[2]= (ogrTmpPoint->getZ()-origin[2])/spacing[2];
 	  }
 
 	line->AddVertex(vertex);
@@ -469,14 +489,16 @@ namespace otb
   typename SHPVectorDataIO<TData>
   ::DataNodePointerType
   SHPVectorDataIO<TData>
-  ::ConvertGeometryToPolygonNode(const OGRGeometry * ogrGeometry)
+  ::ConvertGeometryToPolygonNode(const OGRGeometry * ogrGeometry) const
   {
     OGRPolygon * ogrPolygon = (OGRPolygon *)ogrGeometry;
 
     if(ogrPolygon == NULL)
-      {
-	itkGenericExceptionMacro(<<"Failed to convert OGRGeometry to OGRPolygon");
-      }
+    {
+      itkGenericExceptionMacro(<<"Failed to convert OGRGeometry to OGRPolygon");
+    }
+    SpacingType spacing = this->m_Spacing;
+    PointType origin = this->m_Origin;
 
     OGRPoint * ogrTmpPoint = new OGRPoint();
 
@@ -488,12 +510,12 @@ namespace otb
       {
 	ogrRing->getPoint(pIndex,ogrTmpPoint);
 	typename PolygonType::VertexType vertex;
-	vertex[0] = ogrTmpPoint->getX();
-	vertex[1] = ogrTmpPoint->getY();
+        vertex[0] = (ogrTmpPoint->getX()-origin[0])/spacing[0];
+        vertex[1] = (ogrTmpPoint->getY()-origin[1])/spacing[1];
 
 	if(DataNodeType::Dimension > 2)
 	  {
-	    vertex[2]= ogrTmpPoint->getZ();
+            vertex[2]= (ogrTmpPoint->getZ()-origin[2])/spacing[2];
 	  }
 
 	extRing->AddVertex(vertex);
@@ -510,11 +532,11 @@ namespace otb
 	    ogrRing->getPoint(pIndex,ogrTmpPoint);
 	    typename PolygonType::VertexType vertex;
 
-	    vertex[0] = ogrTmpPoint->getX();
-	    vertex[1] = ogrTmpPoint->getY();
+            vertex[0] = (ogrTmpPoint->getX()-origin[0])/spacing[0];
+            vertex[1] = (ogrTmpPoint->getY()-origin[1])/spacing[1];
 	    if(DataNodeType::Dimension > 2)
 	      {
-		vertex[2]= ogrTmpPoint->getZ();
+                vertex[2]= (ogrTmpPoint->getZ()-origin[2])/spacing[2];
 	      }
   	    ring->AddVertex(vertex);
 	  }

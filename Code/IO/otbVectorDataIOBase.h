@@ -22,6 +22,8 @@
 #include "itkObjectFactory.h"
 #include "itkIndent.h"
 #include "vnl/vnl_vector.h"
+#include "itkVector.h"
+#include "itkPoint.h"
 
 #include <string>
 
@@ -65,10 +67,31 @@ public:
   typedef typename VectorDataType::Pointer VectorDataPointerType;
   typedef typename VectorDataType::ConstPointer VectorDataConstPointerType;
 
+  itkStaticConstMacro(VDimension, unsigned int, VectorDataType::DataNodeType::Dimension);
+  typedef itk::Vector<double, VDimension> SpacingType;
+  typedef itk::Point<double, VDimension> PointType;
 
   /** Set/Get the name of the file to be read. */
   itkSetStringMacro(FileName);
   itkGetStringMacro(FileName);
+
+
+  /** Set the origin for the conversion when reading data.
+    * \sa GetOrigin() */
+  itkSetMacro(Origin, PointType);
+  virtual void SetOrigin( const double origin[VDimension] );
+  virtual void SetOrigin( const float origin[VDimension] );
+
+  itkGetConstReferenceMacro(Origin, PointType);
+
+
+  /** Set the spacing (size of a pixel) for the conversion when reading dat.
+    * \sa GetSpacing() */
+  virtual void SetSpacing (const SpacingType & spacing);
+  virtual void SetSpacing (const double spacing[VDimension]);
+  virtual void SetSpacing (const float spacing[VDimension]);
+
+  itkGetConstReferenceMacro(Spacing, SpacingType);
 
   /** Enums used to specify byte order; whether Big Endian or Little Endian.
    * Some subclasses use this, some ignore it. */
@@ -165,9 +188,16 @@ protected:
   /** Return the object to an initialized state, ready to be used */
   virtual void Reset(const bool freeDynamic = true);
 
+  /** Use to fill up information when data are read
+   * and eventually to do a conversion from geo
+   * coordinates to image coordinates */
+  SpacingType         m_Spacing;
+  PointType           m_Origin;
+
 private:
   VectorDataIOBase(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
+
 
 
 };
