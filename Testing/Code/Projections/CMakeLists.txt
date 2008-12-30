@@ -27,7 +27,7 @@ ADD_TEST(prTuProjectionBaseNew ${PROJECTIONS_TESTS1}  otbProjectionBaseNew )
 ADD_TEST(prTuMapProjectionsNew ${PROJECTIONS_TESTS1}  otbMapProjectionsNew )
 
 ADD_TEST(prTvMapProjection ${PROJECTIONS_TESTS1}
-        --compare-ascii ${EPSILON} ${BASELINE}/prTvMapProjection.txt
+        --compare-ascii ${EPSILON} ${BASELINE_FILES}/prTvMapProjection.txt
         ${TEMP}/prTvMapProjection.txt
         otbMapProjection
         ${TEMP}/prTvMapProjection.txt
