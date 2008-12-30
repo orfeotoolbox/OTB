@@ -8,9 +8,9 @@
 // Description:
 //
 // Contains code implementation translation between OGC WKT format,
-// and OSSIM projection keyword lists.  Note that services from 
+// and OSSIM projection keyword lists.  Note that services from
 // GDAL's OGRSpatialReference class are used via the GDAL bridge to
-// accomplish the translation. 
+// accomplish the translation.
 //
 //*******************************************************************
 //  $Id: ossimOgcWktTranslator.cpp 12031 2007-11-13 18:03:57Z gpotts $
@@ -34,7 +34,7 @@
 #include <ossim/base/ossimUnitConversionTool.h>
 #include <ossim/base/ossimUnitTypeLut.h>
 
-   
+
 static const double SEMI_MAJOR_AXIS_WGS84 = 6378137.0;
 static const double SEMI_MINOR_AXIS_WGS84 = 6356752.3142;
 
@@ -54,15 +54,15 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
 {
    ossimString projType = kwl.find(ossimKeywordNames::TYPE_KW);
    ossimString datumType = kwl.find(ossimKeywordNames::DATUM_KW);
-   
+
    ossimString wktString;
    OGRSpatialReference oSRS;
-   
+
    if(projType == "")
    {
       return wktString;
    }
-   
+
    ossimString zone = kwl.find(prefix, ossimKeywordNames::ZONE_KW);
    ossimString hemisphere = kwl.find(prefix, ossimKeywordNames::HEMISPHERE_KW);
    ossimString parallel1  = kwl.find(prefix, ossimKeywordNames::STD_PARALLEL_1_KW);
@@ -82,13 +82,13 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
       ossimUnitType units =
          static_cast<ossimUnitType>(ossimUnitTypeLut::instance()->
                                     getEntryNumber(lookup));
-      
+
       lookup = kwl.find(prefix, ossimKeywordNames::FALSE_EASTING_NORTHING_KW);
       if (lookup)
       {
          ossimDpt eastingNorthing;
          eastingNorthing.toPoint(std::string(lookup));
-         
+
          switch (units)
          {
             case OSSIM_METERS:
@@ -113,14 +113,14 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
                   << "ossimOgcWktTranslator::fromOssimKwl WARNING!"
                   << "Unhandled unit type for "
                   << ossimKeywordNames::FALSE_EASTING_NORTHING_UNITS_KW
-                  << ":  " 
+                  << ":  "
                   << ( ossimUnitTypeLut::instance()->
                        getEntryString(units).c_str() )
                   << endl;
                break;
             }
          } // End of switch (units)
-         
+
       }  // End of if (FALSE_EASTING_NORTHING_KW)
 
    } // End of if (FALSE_EASTING_NORTHING_UNITS_KW)
@@ -132,7 +132,7 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
       {
          falseEastingNorthing.x = fabs(ossimString(lookup).toFloat64());
       }
-      
+
       lookup =  kwl.find(prefix, ossimKeywordNames::FALSE_NORTHING_KW);
       if(lookup)
       {
@@ -141,11 +141,11 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
    }
 
    oSRS.SetLinearUnits("Meter", 1.0);
-   
+
    if(projType == "ossimUtmProjection")
    {
       hemisphere = hemisphere.trim().upcase();
-      
+
       if(hemisphere != "")
       {
          oSRS.SetUTM(zone.toLong(), hemisphere != "S");
@@ -158,26 +158,26 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
    else if(projType == "ossimLlxyProjection")
    {
       OGRSpatialReference oGeogCS;
-      
+
       oGeogCS.SetEquirectangular(0.0,
                                  0.0,
                                  0.0,
                                  0.0);
       oGeogCS.SetAngularUnits(SRS_UA_DEGREE, atof(SRS_UA_DEGREE_CONV));
-      
-      oSRS.CopyGeogCSFrom( &oGeogCS );  
+
+      oSRS.CopyGeogCSFrom( &oGeogCS );
    }
    else if(projType == "ossimEquDistCylProjection")
    {
       OGRSpatialReference oGeogCS;
-      
+
       oGeogCS.SetEquirectangular(originLat.toDouble(),
                                  centralMeridian.toDouble(),
                                  falseEastingNorthing.x,
                                  falseEastingNorthing.y);
       oGeogCS.SetAngularUnits(SRS_UA_DEGREE, atof(SRS_UA_DEGREE_CONV));
-      
-      oSRS.CopyGeogCSFrom( &oGeogCS );  
+
+      oSRS.CopyGeogCSFrom( &oGeogCS );
    }
    else if(projType == "ossimSinusoidalProjection")
    {
@@ -315,7 +315,7 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
                  falseEastingNorthing.x,
                  falseEastingNorthing.y);
    }
-   else 
+   else
    {
       cerr << "ossimOgcWktTranslator::fromOssimKwl:\n"
            << "Projection translation for "
@@ -323,24 +323,24 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
            << " not supported "
            << endl;
    }
-   
+
    datumType =  datumType.upcase();
-   
+
    if(datumType == "WGE")
    {
       oSRS.SetWellKnownGeogCS("WGS84");
    }
    else if(datumType == "WGD")
    {
-      oSRS.SetWellKnownGeogCS("WGS72");      
+      oSRS.SetWellKnownGeogCS("WGS72");
    }
    else if(datumType == "NAS-C") //1927
    {
-      oSRS.SetWellKnownGeogCS("NAD27");      
+      oSRS.SetWellKnownGeogCS("NAD27");
    }
    else if(datumType == "NAS") //1927
    {
-      oSRS.SetWellKnownGeogCS("NAD27");      
+      oSRS.SetWellKnownGeogCS("NAD27");
    }
    else if(datumType == "NAR-C") // 1983
    {
@@ -350,6 +350,10 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
    {
       oSRS.SetWellKnownGeogCS("NAD83");
    }
+   else if(datumType == "NTF")
+   {
+     oSRS.SetWellKnownGeogCS("EPSG:4275");
+   }
    else
    {
       cerr << "ossimOgcWktTranslator::fromOssimKwl: Datum translation for "
@@ -357,18 +361,18 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
            <<" not supported"
            << endl;
    }
-   
+
    char* exportString = NULL;
    oSRS.exportToWkt(&exportString);
-   
+
    if(exportString)
    {
       wktString = exportString;
       OGRFree(exportString);
    }
-   
+
    return wktString;
-   
+
 }
 
 bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
@@ -377,20 +381,20 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
 
 {
    static const char MODULE[] = "ossimOgcWktTranslator::toOssimKwl";
-   
+
    const char* wkt = wktString.c_str();
-   
+
    OGRSpatialReferenceH  hSRS = NULL;
    ossimDpt falseEastingNorthing;
-   
-   // Translate the WKT into an OGRSpatialReference. 
+
+   // Translate the WKT into an OGRSpatialReference.
    hSRS = OSRNewSpatialReference(NULL);
    if( OSRImportFromWkt( hSRS, (char **) &wkt ) != OGRERR_NONE )
    {
       OSRDestroySpatialReference( hSRS );
       return false;
    }
-   
+
    // Determine if State Plane Coordinate System
    ossimString ossimProj = "";
    const ossimStatePlaneProjectionInfo* spi = NULL;
@@ -400,7 +404,7 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
       ossimStatePlaneProjectionFactory* spf =
          ossimStatePlaneProjectionFactory::instance();
       spi = spf->getInfo(ossimString::toInt(epsg_code));
-      
+
       if(spi)
       {
          ossimProj = "ossimStatePlaneProjection";
@@ -408,11 +412,11 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
     }
 
 
-   // Extract Units 
+   // Extract Units
    //
    const char* units = OSRGetAttrValue( hSRS, "UNIT", 0 );
    ossimString ossim_units = "meters";
-   
+
    if(units)
    {
       if(ossimString(units) == ossimString("U.S. Foot"))
@@ -482,7 +486,7 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
               ossimKeywordNames::STD_PARALLEL_1_KW,
               OSRGetProjParm(hSRS, SRS_PP_STANDARD_PARALLEL_1, 0.0, NULL),
               true);
-      
+
       kwl.add(prefix,
               ossimKeywordNames::ORIGIN_LATITUDE_KW,
               OSRGetProjParm(hSRS, SRS_PP_STANDARD_PARALLEL_1, 0.0, NULL),
@@ -496,12 +500,12 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
               ossimKeywordNames::FALSE_EASTING_NORTHING_UNITS_KW,
               ossim_units,
               true);
-              
+
 //       kwl.add(prefix,
 //               ossimKeywordNames::FALSE_EASTING_KW,
 //               OSRGetProjParm(hSRS, SRS_PP_FALSE_EASTING, 0.0, NULL),
 //               true);
-      
+
 //       kwl.add(prefix,
 //               ossimKeywordNames::FALSE_NORTHING_KW,
 //               OSRGetProjParm(hSRS, SRS_PP_FALSE_NORTHING, 0.0, NULL),
@@ -608,14 +612,14 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
    {
       int bNorth;
       int nZone = OSRGetUTMZone( hSRS, &bNorth );
-      
+
       if( nZone != 0 )
       {
          kwl.add(prefix,
                  ossimKeywordNames::TYPE_KW,
                  "ossimUtmProjection",
                    true);
-         
+
          kwl.add(prefix,
                  ossimKeywordNames::ZONE_KW,
                  nZone,
@@ -628,14 +632,14 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
          {
             kwl.add(prefix, ossimKeywordNames::HEMISPHERE_KW, "S", true);
          }
-      }            
+      }
       else
       {
          kwl.add(prefix,
                  ossimKeywordNames::TYPE_KW,
                  "ossimTransMercatorProjection",
                    true);
-         
+
          kwl.add(prefix,
                  ossimKeywordNames::ORIGIN_LATITUDE_KW,
                  OSRGetProjParm(hSRS, SRS_PP_LATITUDE_OF_ORIGIN, 0.0, NULL),
@@ -661,7 +665,7 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
           ossimNotify(ossimNotifyLevel_DEBUG)
              << "ossimOgcWktTranslator::toOssimKwl DEBUG:\n"
              << "Projection conversion to OSSIM not supported !!!!!!!!!\n"
-             << "Please send the following string to the development staff\n" 
+             << "Please send the following string to the development staff\n"
              << "to be added to the transaltion to OSSIM\n"
              << wkt << endl;
        }
@@ -671,7 +675,7 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
     //
     const char *datum = OSRGetAttrValue( hSRS, "DATUM", 0 );
     ossimString oDatum = "WGE";
-    
+
     if( datum )
     {
        oDatum = wktToOssimDatum(datum);
@@ -680,12 +684,12 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
           oDatum = "WGE";
        }
     }
-       
+
     kwl.add(prefix, ossimKeywordNames::DATUM_KW, oDatum, true);
 
-     
+
     OSRDestroySpatialReference( hSRS );
-    
+
     return true;
 }
 
@@ -694,14 +698,14 @@ void ossimOgcWktTranslator::initializeDatumTable()
 {
 //    theWktToOssimDatumTranslation.insert(make_pair(ossimString("North_American_Datum_1927"),
 //                                                   ossimString("NAS-C")));
-  
+
 //    theWktToOssimDatumTranslation.insert(make_pair(ossimString("North_American_Datum_1983"),
 //                                                   ossimString("NAR-C")));
 //    theWktToOssimDatumTranslation.insert(make_pair(ossimString("WGS_1984"),
 //                                                   ossimString("WGE")));
 //    theWktToOssimDatumTranslation.insert(make_pair(ossimString("OSGB_1936"),
 //                                                   ossimString("OSGB_1936")));
-  
+
    theOssimToWktDatumTranslation.insert(make_pair(ossimString("NAS-C"),
                                                   ossimString("North_American_Datum_1927")));
    theOssimToWktDatumTranslation.insert(make_pair(ossimString("NAR-C"),
@@ -713,7 +717,7 @@ void ossimOgcWktTranslator::initializeDatumTable()
    theOssimToWktDatumTranslation.insert(make_pair(ossimString("WGE"),
                                                   ossimString("WGS_1984")));
    theWktToOssimDatumTranslation.insert(make_pair(ossimString("OSGB_1936"),
-                                                  ossimString("OSGB_1936"))); 
+                                                  ossimString("OSGB_1936")));
 }
 
 void ossimOgcWktTranslator::initializeProjectionTable()
@@ -742,7 +746,7 @@ void ossimOgcWktTranslator::initializeProjectionTable()
                                                        ossimString(SRS_PT_SINUSOIDAL)));
    theOssimToWktProjectionTranslation.insert(make_pair(ossimString("ossimMercatorProjection"),
                                                        ossimString(SRS_PT_MERCATOR_1SP)));
-   
+
 }
 
 ossimString ossimOgcWktTranslator::wktToOssimDatum(const ossimString& datum)const
