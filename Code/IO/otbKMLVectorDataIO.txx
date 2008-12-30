@@ -562,6 +562,11 @@ namespace otb
       projectionInformationAvailable = wktTranslator.toOssimKwl(projectionRefWkt, kwl);
       projection = ossimMapProjectionFactory::instance()->createProjection(kwl);
 
+      if (!projection)
+      {
+        itkExceptionMacro(<<"Cannot create ossim projection from: "<< projectionRefWkt);
+      }
+
       origin = data->GetOrigin();
       spacing = data->GetSpacing();
       otbMsgDevMacro(<< "Projection information : " << projectionRefWkt);
