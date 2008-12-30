@@ -424,7 +424,7 @@ namespace otb
       itkGenericExceptionMacro(<<"Failed to convert OGRGeometry to OGRPoint");
     }
     SpacingType spacing = this->m_Spacing;
-    PointType origin = this->m_Origin;
+    OriginType origin = this->m_Origin;
 
     PointType otbPoint;
     otbPoint.Fill(0);
@@ -454,7 +454,7 @@ namespace otb
       itkGenericExceptionMacro(<<"Failed to convert OGRGeometry to OGRLine");
     }
     SpacingType spacing = this->m_Spacing;
-    PointType origin = this->m_Origin;
+    OriginType origin = this->m_Origin;
 
     LinePointerType line = LineType::New();
 
@@ -498,7 +498,7 @@ namespace otb
       itkGenericExceptionMacro(<<"Failed to convert OGRGeometry to OGRPolygon");
     }
     SpacingType spacing = this->m_Spacing;
-    PointType origin = this->m_Origin;
+    OriginType origin = this->m_Origin;
 
     OGRPoint * ogrTmpPoint = new OGRPoint();
 
@@ -597,8 +597,8 @@ namespace otb
       }
 
     // Retrieve data required for georeferencing
-    typename VectorDataType::PointType origin;
-    typename VectorDataType::SpacingType spacing;
+    OriginType origin;
+    SpacingType spacing;
     origin.Fill(0.0);
     spacing.Fill(1.0);
 

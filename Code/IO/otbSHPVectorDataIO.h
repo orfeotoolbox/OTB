@@ -72,7 +72,7 @@ public:
   typedef typename VectorDataType::Pointer       VectorDataPointerType;
   typedef typename VectorDataType::ConstPointer  VectorDataConstPointerType;
   typedef typename Superclass::SpacingType       SpacingType;
-
+  typedef typename Superclass::PointType       OriginType;
 
   /** */
 
