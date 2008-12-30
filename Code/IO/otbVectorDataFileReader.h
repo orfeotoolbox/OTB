@@ -98,9 +98,31 @@ public :
   typedef TOutputVectorData       OutputVectorType;
   typedef VectorDataIOBase<OutputVectorType> VectorDataIOBaseType;
 
+  itkStaticConstMacro(VDimension, unsigned int, OutputVectorType::DataNodeType::Dimension);
+  typedef itk::Vector<double, VDimension> SpacingType;
+  typedef itk::Point<double, VDimension> PointType;
+
   /** Specify the file to read */
   itkSetStringMacro(FileName);
   itkGetStringMacro(FileName);
+
+  /** Set the origin for the conversion when reading data.
+   * \sa GetOrigin() */
+  itkSetMacro(Origin, PointType);
+  virtual void SetOrigin( const double origin[VDimension] );
+  virtual void SetOrigin( const float origin[VDimension] );
+
+  itkGetConstReferenceMacro(Origin, PointType);
+
+
+  /** Set the spacing (size of a pixel) for the conversion when reading dat.
+   * \sa GetSpacing() */
+  virtual void SetSpacing (const SpacingType & spacing);
+  virtual void SetSpacing (const double spacing[VDimension]);
+  virtual void SetSpacing (const float spacing[VDimension]);
+
+  itkGetConstReferenceMacro(Spacing, SpacingType);
+
 
   /** Set/Get the VectorDataIO helper class. Often this is created via the object
    * factory mechanism that determines whether a particular VectorDataIO can
@@ -130,6 +152,12 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   std::string m_FileName; // The file to be read
+
+  /** Use to fill up information when data are read
+   * and eventually to do a conversion from geo
+   * coordinates to image coordinates */
+  SpacingType         m_Spacing;
+  PointType           m_Origin;
 
 private:
   VectorDataFileReader(const Self&); //purposely not implemented

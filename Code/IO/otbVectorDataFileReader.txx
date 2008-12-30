@@ -38,6 +38,8 @@ VectorDataFileReader<TOutputVectorData>
   m_VectorDataIO = 0;
   m_FileName = "";
   m_UserSpecifiedVectorDataIO = false;
+  m_Spacing.Fill(1);
+  m_Origin.Fill(0);
 }
 /**
  * Destructor
@@ -48,14 +50,68 @@ VectorDataFileReader<TOutputVectorData>
 {
 }
 
-/*template <class TSpatialObject>
-void
-SpatialObjectDXFReader<TSpatialObject>
-::SetFileName(char * filename)
+
+//----------------------------------------------------------------------------
+template <class TOutputVectorData>
+    void
+    VectorDataFileReader<TOutputVectorData>
+  ::SetSpacing(const SpacingType & spacing )
 {
-  m_FileName = filename;
-  this->Modified();
-}*/
+  itkDebugMacro("setting Spacing to " << spacing);
+  if( this->m_Spacing != spacing )
+  {
+    this->m_Spacing = spacing;
+    this->Modified();
+  }
+}
+
+
+//----------------------------------------------------------------------------
+template <class TOutputVectorData>
+    void
+    VectorDataFileReader<TOutputVectorData>
+  ::SetSpacing(const double spacing[VDimension] )
+{
+  SpacingType s(spacing);
+  this->SetSpacing(s);
+}
+
+
+//----------------------------------------------------------------------------
+template <class TOutputVectorData>
+    void
+    VectorDataFileReader<TOutputVectorData>
+  ::SetSpacing(const float spacing[VDimension] )
+{
+  itk::Vector<float, VDimension> sf(spacing);
+  SpacingType s;
+  s.CastFrom( sf );
+  this->SetSpacing(s);
+}
+
+//----------------------------------------------------------------------------
+template <class TOutputVectorData>
+    void
+    VectorDataFileReader<TOutputVectorData>
+  ::SetOrigin(const double origin[VDimension] )
+{
+  PointType p(origin);
+  this->SetOrigin( p );
+}
+
+
+//----------------------------------------------------------------------------
+template <class TOutputVectorData>
+    void
+    VectorDataFileReader<TOutputVectorData>
+  ::SetOrigin(const float origin[VDimension] )
+{
+  itk::Point<float, VDimension> of(origin);
+  PointType p;
+  p.CastFrom( of );
+  this->SetOrigin( p );
+}
+
 
  /** Test whether the given filename exist and it is readable,
       this is intended to be called before attempting to use
@@ -181,7 +237,8 @@ VectorDataFileReader<TOutputVectorData>
 
   m_VectorDataIO->SetFileName(m_FileName.c_str());
 //   m_VectorDataIO->ReadVectorDataInformation();
-
+  m_VectorDataIO->SetOrigin(m_Origin);
+  m_VectorDataIO->SetSpacing(m_Spacing);
 
   //Copy MetaDataDictionary from instantiated reader to output VectorData.
   output->SetMetaDataDictionary(m_VectorDataIO->GetMetaDataDictionary());
