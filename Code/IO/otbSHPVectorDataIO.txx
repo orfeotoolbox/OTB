@@ -28,6 +28,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbDataNode.h"
 #include "itkPreOrderTreeIterator.h"
 #include "otbMetaDataKey.h"
+#include "otbFileName.h"
 
 namespace otb
 {
@@ -570,6 +571,7 @@ namespace otb
 	return false;
       }
   }
+
   template<class TData>
   void SHPVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
   {
@@ -586,6 +588,14 @@ namespace otb
       {
 	OGRDataSource::DestroyDataSource(m_DataSource);
       }
+
+   //if file exist, OGR can't overwrite: remove it  first
+    otb::FileName filename(this->m_FileName.c_str());
+    if (filename.exists())
+    {
+      filename.remove();
+    }
+
     // m_DataSource = OGRSFDriverRegistrar::Open(this->m_FileName.c_str(), TRUE);
     m_DataSource = ogrDriver->CreateDataSource(this->m_FileName.c_str(),NULL);
 
