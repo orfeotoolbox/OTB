@@ -36,7 +36,7 @@ UnaryFunctorObjectListFilter<TInputList,TOutputList,TFunction>
 
 
 /**
- * GenerateData Performs the pixel-wise addition
+ * GenerateData apply the functor on each element of the list
  */
 template <class TInputList, class TOutputList, class TFunction  >
 void
