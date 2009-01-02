@@ -171,7 +171,7 @@ namespace otb
           /**PrintSelf method */
           virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-          /** Ensure that the list are cleared before processing */
+          /** Ensure that the output lists are cleared before processing */
           virtual void  AllocateOutputs();
 
   /** ObjectListSource can be implemented as a multithreaded filter.
