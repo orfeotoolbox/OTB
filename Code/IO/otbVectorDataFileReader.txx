@@ -239,6 +239,7 @@ VectorDataFileReader<TOutputVectorData>
 //   m_VectorDataIO->ReadVectorDataInformation();
   m_VectorDataIO->SetOrigin(m_Origin);
   m_VectorDataIO->SetSpacing(m_Spacing);
+  m_VectorDataIO->SetTargetProjection(m_TargetProjection);
 
   //Copy MetaDataDictionary from instantiated reader to output VectorData.
   output->SetMetaDataDictionary(m_VectorDataIO->GetMetaDataDictionary());

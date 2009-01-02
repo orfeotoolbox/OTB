@@ -116,9 +116,22 @@ namespace otb
       itk::MetaDataDictionary & dict = data->GetMetaDataDictionary();
       itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::m_ProjectionRefKey, projectionRef );
     }
+    else
+    {
+      otbMsgDevMacro(<< "Can't retrieve the OGRSpatialReference from the shapefile");
+    }
+
 
 
     std::string projectionRefWkt = data->GetProjectionRef();
+
+    if (projectionRefWkt != this->m_TargetProjection)
+    {
+      itkGenericExceptionMacro(<<"OTB is currently not able to reproject shapefiles from: \n"
+          << projectionRefWkt << "\n to \n" << this->m_TargetProjection);
+    }
+
+
     bool projectionInformationAvailable = !projectionRefWkt.empty();
 
     if (projectionInformationAvailable)

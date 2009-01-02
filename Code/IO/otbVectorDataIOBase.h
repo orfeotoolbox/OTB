@@ -93,6 +93,10 @@ public:
 
   itkGetConstReferenceMacro(Spacing, SpacingType);
 
+  /** Set/Get the target projection for the vector data */
+  itkSetStringMacro(TargetProjection);
+  itkGetStringMacro(TargetProjection);
+
   /** Enums used to specify byte order; whether Big Endian or Little Endian.
    * Some subclasses use this, some ignore it. */
   typedef  enum {BigEndian,LittleEndian,OrderNotApplicable} ByteOrder;
@@ -193,6 +197,7 @@ protected:
    * coordinates to image coordinates */
   SpacingType         m_Spacing;
   PointType           m_Origin;
+  std::string         m_TargetProjection;
 
 private:
   VectorDataIOBase(const Self&); //purposely not implemented

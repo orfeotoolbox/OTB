@@ -123,6 +123,9 @@ public :
 
   itkGetConstReferenceMacro(Spacing, SpacingType);
 
+  /** Set/Get the target projection for the vector data */
+  itkSetStringMacro(TargetProjection);
+  itkGetStringMacro(TargetProjection);
 
   /** Set/Get the VectorDataIO helper class. Often this is created via the object
    * factory mechanism that determines whether a particular VectorDataIO can
@@ -158,6 +161,7 @@ protected:
    * coordinates to image coordinates */
   SpacingType         m_Spacing;
   PointType           m_Origin;
+  std::string         m_TargetProjection;
 
 private:
   VectorDataFileReader(const Self&); //purposely not implemented
