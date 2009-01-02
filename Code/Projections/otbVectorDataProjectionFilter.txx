@@ -20,6 +20,8 @@
 
 #include "otbVectorDataProjectionFilter.h"
 #include "itkProgressReporter.h"
+#include "itkMetaDataObject.h"
+#include "otbMetaDataKey.h"
 
 namespace otb
 {
@@ -31,12 +33,26 @@ namespace otb
       VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
   ::VectorDataProjectionFilter()
   {
+    m_InputProjection.clear();
+    m_OutputProjection.clear();
   }
 
+  template <class TInputVectorData, class TOutputVectorData >
+      void
+          VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
+  ::GenerateOutputInformation(void)
+  {
+    Superclass::GenerateOutputInformation();
 
+    OutputVectorDataPointer output = this->GetOutput();
+    itk::MetaDataDictionary & dict = output->GetMetaDataDictionary();
+
+    itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::m_ProjectionRefKey, m_OutputProjection );
+
+  }
 
 /**
-   * GenerateData Performs the pixel-wise addition
+   * GenerateData Performs the coordinate convertion for each element in the tree
  */
   template <class TInputVectorData, class TOutputVectorData >
       void
@@ -44,11 +60,14 @@ namespace otb
   ::GenerateData(void)
   {
     this->AllocateOutputs();
-
     InputVectorDataPointer inputPtr = this->GetInput();
     OutputVectorDataPointer outputPtr = this->GetOutput();
 
+    //Instanciate the transform
+
+
     itk::ProgressReporter progress(this, 0, inputPtr->Size());
+
 
 
 

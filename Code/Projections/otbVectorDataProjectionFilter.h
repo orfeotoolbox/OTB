@@ -19,7 +19,7 @@
 #define __otbVectorDataProjectionFilter_h
 
 #include "otbVectorDataToVectorDataFilter.h"
-
+#include "itkTransform.h"
 namespace otb
 {
 
@@ -41,6 +41,8 @@ namespace otb
       typedef otb::VectorDataToVectorDataFilter<TInputVectorData,TOutputVectorData>  Superclass;
       typedef itk::SmartPointer<Self>   Pointer;
       typedef itk::SmartPointer<const Self>  ConstPointer;
+      typedef itk::Transform<double, 2, 2> GenericTransformType;
+      typedef typename GenericTransformType::Pointer GenericTransformPointerType;
 
       /** Method for creation through the object factory. */
       itkNewMacro(Self);
@@ -58,11 +60,17 @@ namespace otb
       VectorDataProjectionFilter();
       virtual ~VectorDataProjectionFilter() {};
 
+      void GenerateOutputInformation(void);
       void GenerateData(void);
 
     private:
       VectorDataProjectionFilter(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
+
+      GenericTransformPointerType m_Transform;
+      std::string m_InputProjection;
+      std::string m_OutputProjection;
+
 
   };
 
