@@ -39,9 +39,26 @@ VectorDataSource<TOutputVectorData>
 ::~VectorDataSource()
 {
 }
+
+template <class TOutputVectorData>
+void
+VectorDataSource<TOutputVectorData>
+::AllocateOutputs()
+{
+  OutputVectorDataPointer outputPtr;
+
+  // Allocate the output memory
+  for (unsigned int i=0; i < this->GetNumberOfOutputs(); i++)
+  {
+    outputPtr = this->GetOutput(i);
+    outputPtr->Clear();
+  }
+}
+
+
 /**
- * Get the output image list
- * \return The image list produced.
+ * Get the output vector data
+ * \return The vector data produced.
  */
 template <class TOutputVectorData>
 typename VectorDataSource<TOutputVectorData>::OutputVectorDataType *
@@ -54,6 +71,16 @@ VectorDataSource<TOutputVectorData>
     }
   return static_cast<OutputVectorDataType *> (this->ProcessObject::GetOutput(0));
 }
+
+template <class TOutputVectorData>
+    typename VectorDataSource<TOutputVectorData>::OutputVectorDataType *
+    VectorDataSource<TOutputVectorData>
+  ::GetOutput(unsigned int idx)
+{
+  return static_cast<OutputVectorDataType*>
+      (this->Superclass::GetOutput(idx));
+}
+
 /**
  * PrintSelf Method
  */

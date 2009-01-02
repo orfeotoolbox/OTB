@@ -55,11 +55,11 @@ public :
   itkTypeMacro(VectorDataSource, itk::ProcessObject);
 
   typedef TOutputVectorData     OutputVectorDataType;
-
+  typedef typename TOutputVectorData::Pointer OutputVectorDataPointer;
 
   /** Overriding GetOutput() method */
   virtual OutputVectorDataType* GetOutput(void);
-
+  virtual OutputVectorDataType* GetOutput(unsigned int idx);
 
 protected:
   VectorDataSource();
@@ -67,6 +67,8 @@ protected:
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
+  /** Ensure that the output vector data are cleared before processing */
+  virtual void  AllocateOutputs();
 
 private:
   VectorDataSource(const Self&); //purposely not implemented
