@@ -125,11 +125,11 @@ namespace otb
 
     std::string projectionRefWkt = data->GetProjectionRef();
 
-    if (projectionRefWkt.compare(this->m_TargetProjection) != 0)
-    {
-      itkGenericExceptionMacro(<<"OTB is currently not able to reproject shapefiles from: \n"
-          << projectionRefWkt << "\n to \n" << this->m_TargetProjection);
-    }
+//     if (projectionRefWkt.compare(this->m_TargetProjection) != 0)
+//     {
+//       itkGenericExceptionMacro(<<"OTB is currently not able to reproject shapefiles from: \n"
+//           << projectionRefWkt << "\n to \n" << this->m_TargetProjection);
+//     }
 
 
     bool projectionInformationAvailable = !projectionRefWkt.empty();
