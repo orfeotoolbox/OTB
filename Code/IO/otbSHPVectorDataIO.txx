@@ -106,11 +106,17 @@ namespace otb
     OGRSpatialReference * oSRS =NULL;
     //We take the assumption that the spatial reference is common to all layers
     oSRS = m_DataSource->GetLayer(0)->GetSpatialRef();
-    char * projectionRefChar;
-    oSRS->exportToWkt(&projectionRefChar);
-    std::string projectionRef = projectionRefChar;
-    itk::MetaDataDictionary & dict = data->GetMetaDataDictionary();
-    itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::m_ProjectionRefKey, projectionRef );
+
+    if (oSRS != NULL)
+    {
+      char * projectionRefChar;
+      oSRS->exportToWkt(&projectionRefChar);
+      std::string projectionRef = projectionRefChar;
+      OGRFree(projectionRefChar);
+      itk::MetaDataDictionary & dict = data->GetMetaDataDictionary();
+      itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::m_ProjectionRefKey, projectionRef );
+    }
+
 
     std::string projectionRefWkt = data->GetProjectionRef();
     bool projectionInformationAvailable = !projectionRefWkt.empty();

@@ -117,8 +117,8 @@ DataNode<TPrecision,VDimension>
        itkGenericExceptionMacro(<<"Invalid line node.");
      }
    return m_Data.line;
-
 }
+
 template <class TPrecision, unsigned int VDimension>
 typename DataNode<TPrecision,VDimension>
 ::PolygonPointerType
