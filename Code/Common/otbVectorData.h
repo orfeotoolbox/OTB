@@ -89,6 +89,12 @@ namespace otb
       virtual void SetProjectionRef(std::string projectionRef);
       virtual std::string GetProjectionRef() const;
 
+      /** Clear the vector data  */
+      virtual bool Clear();
+
+      /** Return the number of element in the tree */
+      virtual int Size() const;
+
     protected:
       /** Constructor */
       VectorData();

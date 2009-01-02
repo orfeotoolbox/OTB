@@ -123,6 +123,22 @@ template<class TPrecision, unsigned int VDimension>
 }
 
 template <class TPrecision, unsigned int VDimension>
+bool
+VectorData<TPrecision,VDimension>
+::Clear()
+{
+  return m_DataTree->Clear();
+}
+
+template <class TPrecision, unsigned int VDimension>
+    int
+        VectorData<TPrecision,VDimension>
+  ::Size() const
+{
+  return m_DataTree->Count();
+}
+
+template <class TPrecision, unsigned int VDimension>
 void
 VectorData<TPrecision,VDimension>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
