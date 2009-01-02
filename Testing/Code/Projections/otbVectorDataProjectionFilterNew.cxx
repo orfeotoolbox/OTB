@@ -15,17 +15,23 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "itkExceptionObject.h"
+#include "otbVectorDataProjectionFilter.h"
+#include "otbVectorData.h"
 
-// this file defines the otbProjectionsTest for the test driver
-// and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
-
-#include <iostream>
-#include "otbTestMain.h"
-
-void RegisterTests()
+int otbVectorDataProjectionFilterNew(int argc, char * argv[])
 {
-  REGISTER_TEST(otbVectorDataProjectionFilterNew);
+
+
+  typedef otb::VectorData<double > InputVectorDataType;
+  typedef otb::VectorData<double > OutputVectorDataType;
+
+  typedef otb::VectorDataProjectionFilter<InputVectorDataType,OutputVectorDataType> VectorDataFilterType;
+
+  VectorDataFilterType::Pointer vectorData = VectorDataFilterType::New();
+
+
+  return EXIT_SUCCESS;
 }
+
+

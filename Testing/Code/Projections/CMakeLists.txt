@@ -337,6 +337,8 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbPROJECTIONS_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+ADD_TEST(prTuVectorDataProjectionFilterNew ${PROJECTIONS_TESTS3}  otbVectorDataProjectionFilterNew )
+
 #=======================================================================================
 SET(Projections_SRCS1
 otbProjectionBaseNew.cxx
@@ -358,6 +360,7 @@ otbOrthoRectificationMonoThreadFilter.cxx
 #otbSensorImageDEMToCarto.cxx
 )
 SET(Projections_SRCS3
+otbVectorDataProjectionFilterNew.cxx
 )
 
 
