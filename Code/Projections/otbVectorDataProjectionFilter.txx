@@ -33,8 +33,8 @@ namespace otb
       VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
   ::VectorDataProjectionFilter()
   {
-    m_InputProjection.clear();
-    m_OutputProjection.clear();
+    m_InputProjectionRef.clear();
+    m_OutputProjectionRef.clear();
   }
 
   template <class TInputVectorData, class TOutputVectorData >
@@ -47,7 +47,7 @@ namespace otb
     OutputVectorDataPointer output = this->GetOutput();
     itk::MetaDataDictionary & dict = output->GetMetaDataDictionary();
 
-    itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::m_ProjectionRefKey, m_OutputProjection );
+    itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::m_ProjectionRefKey, m_OutputProjectionRef );
 
   }
 

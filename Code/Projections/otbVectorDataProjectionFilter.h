@@ -56,6 +56,16 @@ namespace otb
       typedef typename TInputVectorData::ConstPointer InputVectorDataPointer;
       typedef typename TOutputVectorData::Pointer OutputVectorDataPointer;
 
+      /** Set/Get for input and output projections.
+       Note that there is not Set for the input projection which is specified
+       by the input data itself
+      */
+      itkGetStringMacro(InputProjectionRef);
+
+      itkSetStringMacro(OutputProjectionRef);
+      itkGetStringMacro(OutputProjectionRef);
+
+
     protected:
       VectorDataProjectionFilter();
       virtual ~VectorDataProjectionFilter() {};
@@ -68,8 +78,8 @@ namespace otb
       void operator=(const Self&); //purposely not implemented
 
       GenericTransformPointerType m_Transform;
-      std::string m_InputProjection;
-      std::string m_OutputProjection;
+      std::string m_InputProjectionRef;
+      std::string m_OutputProjectionRef;
 
 
   };
