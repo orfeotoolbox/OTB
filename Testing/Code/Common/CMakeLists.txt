@@ -338,6 +338,10 @@ ADD_TEST(coTuImageListToImageFilterNew ${COMMON_TESTS4}
 ADD_TEST(coTuObjectListToObjectListFilterNew ${COMMON_TESTS4}
          otbObjectListToObjectListFilterNew)
 
+# -------            otb::VectorDataToVectorDataFilterNew   -------------------------------------------
+ADD_TEST(coTuVectorDataToVectorDataFilterNew ${COMMON_TESTS4}
+         otbVectorDataToVectorDataFilterNew)
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests5 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -589,6 +593,7 @@ otbImageListSourceNew.cxx
 otbImageToImageListFilterNew.cxx
 otbImageListToImageFilterNew.cxx
 otbObjectListToObjectListFilterNew.cxx
+otbVectorDataToVectorDataFilterNew.cxx
 )
 SET(BasicCommon_SRCS5
 otbImageListToImageListFilterNew.cxx

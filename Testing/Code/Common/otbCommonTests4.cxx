@@ -38,4 +38,5 @@ REGISTER_TEST(otbImageListSourceNew);
 REGISTER_TEST(otbImageToImageListFilterNew);
 REGISTER_TEST(otbImageListToImageFilterNew);
 REGISTER_TEST(otbObjectListToObjectListFilterNew);
+REGISTER_TEST(otbVectorDataToVectorDataFilterNew);
 }
