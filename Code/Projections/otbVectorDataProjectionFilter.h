@@ -20,6 +20,8 @@
 
 #include "otbVectorDataToVectorDataFilter.h"
 #include "itkTransform.h"
+#include "otbCompositeTransform.h"
+
 namespace otb
 {
 
@@ -42,7 +44,8 @@ namespace otb
       typedef itk::SmartPointer<Self>   Pointer;
       typedef itk::SmartPointer<const Self>  ConstPointer;
       typedef itk::Transform<double, 2, 2> GenericTransformType;
-      typedef typename GenericTransformType::Pointer GenericTransformPointerType;
+      typedef otb::CompositeTransform<GenericTransformType, GenericTransformType, double, 2, 2> InternalTransformType;
+      typedef typename InternalTransformType::Pointer InternalTransformPointerType;
 
       /** Method for creation through the object factory. */
       itkNewMacro(Self);
@@ -77,10 +80,9 @@ namespace otb
       VectorDataProjectionFilter(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
 
-      GenericTransformPointerType m_Transform;
+      InternalTransformPointerType m_Transform;
       std::string m_InputProjectionRef;
       std::string m_OutputProjectionRef;
-
 
   };
 

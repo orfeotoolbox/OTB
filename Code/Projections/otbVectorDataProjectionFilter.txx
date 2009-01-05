@@ -65,6 +65,7 @@ namespace otb
 
     //Instanciate the transform
 
+//     m_InputProjectionRef
 
     itk::ProgressReporter progress(this, 0, inputPtr->Size());
 
