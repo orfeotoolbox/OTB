@@ -29,8 +29,11 @@ namespace otb
   MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::MapProjection() : Superclass(SpaceDimension,ParametersDimension)
   {
-    m_MapProjection =  new OssimMapProjectionType();
+    m_MapProjection = NULL;
+    m_ProjectionRefWkt.clear();
   }
+
+
 
 
   template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
@@ -41,13 +44,53 @@ namespace otb
   }
 
 
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+      TOssimMapProjection*
+          MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
+  ::GetMapProjection ()
+  {
+    itkDebugMacro("returning MapProjection address " << this->m_MapProjection );
+    if(m_MapProjection == NULL)
+    {
+      m_MapProjection =  new OssimMapProjectionType();
+    }
+
+    return this->m_MapProjection;
+  }
+
+
+  template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+      ossimMapProjection*
+          MapProjection<ossimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
+  ::GetMapProjection ()
+  {
+    itkDebugMacro("returning MapProjection address " << this->m_MapProjection );
+    if(m_MapProjection == NULL)
+    {
+      ossimKeywordlist kwl;
+      ossimOgcWktTranslator wktTranslator;
+
+      bool projectionInformationAvailable = wktTranslator.toOssimKwl(m_ProjectionRefWkt, kwl);
+
+      if (!projectionInformationAvailable)
+      {
+        itkExceptionMacro(<<"Impossible to create the projection from string: "<< m_ProjectionRefWkt);
+      }
+
+      m_MapProjection = dynamic_cast<ossimMapProjection*>(ossimMapProjectionFactory::instance()->createProjection(kwl));
+
+    }
+
+    return this->m_MapProjection;
+  }
+
   /// Method to set the projection ellipsoid
   template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
   void MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::SetEllipsoid()
   {
     ossimEllipsoid ellipsoid;
-    m_MapProjection->setEllipsoid(ellipsoid);
+    this->GetMapProjection()->setEllipsoid(ellipsoid);
   }
 
   /// Method to set the projection ellipsoid by copy
@@ -376,18 +419,8 @@ namespace otb
           MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::SetWkt(std::string projectionRefWkt)
   {
-    ossimKeywordlist kwl;
-    ossimOgcWktTranslator wktTranslator;
-
-    bool projectionInformationAvailable = wktTranslator.toOssimKwl(projectionRefWkt, kwl);
-
-    if (!projectionInformationAvailable)
-    {
-      itkExceptionMacro(<<"Impossible to create the projection from string: "<< projectionRefWkt);
-    }
-
-    m_MapProjection = dynamic_cast<OssimMapProjectionType*>(ossimMapProjectionFactory::instance()->createProjection(kwl));
-
+    this->m_ProjectionRefWkt=projectionRefWkt;
+    this->Modified();
   }
 
   template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>

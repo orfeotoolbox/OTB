@@ -74,6 +74,9 @@ namespace otb
       /** Run-time type information (and related methods). */
       itkTypeMacro( MapProjection, Transform );
 
+      itkSetObjectMacro(MapProjection,OssimMapProjectionType);
+      virtual OssimMapProjectionType* GetMapProjection ();
+
       typedef InverseOrForwardTransformationEnum DirectionOfMappingEnumType;
 
       itkStaticConstMacro(DirectionOfMapping,DirectionOfMappingEnumType,transform);
@@ -125,6 +128,7 @@ namespace otb
       MapProjection();
       virtual ~MapProjection();
       OssimMapProjectionType* m_MapProjection;
+      std::string m_ProjectionRefWkt;
 
     private :
       MapProjection(const Self&); //purposely not implemented
