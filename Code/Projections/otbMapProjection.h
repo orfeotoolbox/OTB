@@ -112,9 +112,13 @@ namespace otb
       //virtual void SetMatrix(double rotation,  const OutputPointType &scale, const OutputPointType &translation);
       void SetFalseEasting(double falseEasting);
 
+      /** Return the Wkt representation of the projection*/
       virtual std::string GetWkt() const;
 
-			virtual void PrintMap() const;
+      /** Instanciate the projection according to the Wkt specification*/
+      virtual void SetWkt(std::string projectionRefWkt);
+
+      virtual void PrintMap() const;
 
 
       protected:

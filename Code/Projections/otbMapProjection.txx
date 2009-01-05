@@ -20,6 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbMapProjection.h"
 #include "otbMacro.h"
+#include "projection/ossimMapProjectionFactory.h"
 
 namespace otb
 {
@@ -370,14 +371,32 @@ namespace otb
     return wkt;
   }
 
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+      void
+          MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
+  ::SetWkt(std::string projectionRefWkt)
+  {
+    ossimKeywordlist kwl;
+    ossimOgcWktTranslator wktTranslator;
 
-	template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-	void
-  MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
+    bool projectionInformationAvailable = wktTranslator.toOssimKwl(projectionRefWkt, kwl);
+
+    if (!projectionInformationAvailable)
+    {
+      itkExceptionMacro(<<"Impossible to create the projection from string: "<< projectionRefWkt);
+    }
+
+    m_MapProjection = dynamic_cast<OssimMapProjectionType*>(ossimMapProjectionFactory::instance()->createProjection(kwl));
+
+  }
+
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+      void
+          MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::PrintMap() const
-	{
-		std::cout << m_MapProjection->print(std::cout);
-	}
+  {
+    std::cout << m_MapProjection->print(std::cout);
+  }
 
 
 
