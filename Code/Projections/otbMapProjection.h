@@ -53,8 +53,8 @@ namespace otb
     class ITK_EXPORT MapProjection: public itk::Transform<TScalarType,       // Data type for scalars
                                                           NInputDimensions,  // Number of dimensions in the input space
                                                           NOutputDimensions> // Number of dimensions in the output space
-    {
-      public :
+  {
+    public :
       /** Standard class typedefs. */
       typedef itk::Transform< TScalarType,
                               NInputDimensions,
@@ -121,15 +121,16 @@ namespace otb
       virtual void PrintMap() const;
 
 
-      protected:
+    protected:
       MapProjection();
       virtual ~MapProjection();
       OssimMapProjectionType* m_MapProjection;
 
-      private :
+    private :
       MapProjection(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
-    };
+
+  };
 
 } // namespace otb
 
