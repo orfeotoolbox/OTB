@@ -20,14 +20,14 @@
 #include "otbImage.h"
 #include "otbMapProjections.h"
 
-
-//TODO add control baseline
 int otbMapProjection( int argc, char* argv[] )
 {
   const char * outFileName = argv[1];
   std::ofstream file;
   file.open(outFileName);
 
+
+  /** Test the output of the projection in Wkt format*/
   otb::UtmInverseProjection::Pointer lUtmProjection = otb::UtmInverseProjection::New();
   file << lUtmProjection->GetWkt() << std::endl << std::endl;
 

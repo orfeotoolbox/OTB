@@ -647,8 +647,8 @@ namespace otb
           {
             ossimDpt cartoPoint(pointCoord[0] * spacing[0] + origin[0], pointCoord[1] * spacing[1] + origin[1]);
             ossimGpt geoPoint = projection->inverse(cartoPoint);
-            pointCoord[0] = geoPoint.lond();
-            pointCoord[1] = geoPoint.latd();
+            pointCoord[0] = static_cast<typename PointType::ValueType>(geoPoint.lond());
+            pointCoord[1] = static_cast<typename PointType::ValueType>(geoPoint.latd());
           }
           if(DataNodeType::Dimension>2)
           {
