@@ -20,7 +20,6 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbMapProjection.h"
 #include "otbMacro.h"
-#include "projection/ossimMapProjectionFactory.h"
 
 namespace otb
 {
@@ -31,6 +30,7 @@ namespace otb
   {
     m_MapProjection = NULL;
     m_ProjectionRefWkt.clear();
+    this->InstanciateProjection();
   }
 
 
@@ -40,49 +40,37 @@ namespace otb
   MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::~MapProjection()
   {
-    delete m_MapProjection;
+    if (m_MapProjection != NULL)
+    {
+      delete m_MapProjection;
+    }
   }
 
+
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+      const TOssimMapProjection*
+          MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
+  ::GetMapProjection () const
+  {
+    return this->m_MapProjection;
+  }
 
   template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
       TOssimMapProjection*
           MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::GetMapProjection ()
   {
-    itkDebugMacro("returning MapProjection address " << this->m_MapProjection );
-    if(m_MapProjection == NULL)
-    {
-      m_MapProjection =  new OssimMapProjectionType();
-    }
-
     return this->m_MapProjection;
   }
 
-
-  template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-      ossimMapProjection*
-          MapProjection<ossimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
-  ::GetMapProjection ()
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+      void
+          MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
+  ::InstanciateProjection ()
   {
-    itkDebugMacro("returning MapProjection address " << this->m_MapProjection );
-    if(m_MapProjection == NULL)
-    {
-      ossimKeywordlist kwl;
-      ossimOgcWktTranslator wktTranslator;
-
-      bool projectionInformationAvailable = wktTranslator.toOssimKwl(m_ProjectionRefWkt, kwl);
-
-      if (!projectionInformationAvailable)
-      {
-        itkExceptionMacro(<<"Impossible to create the projection from string: "<< m_ProjectionRefWkt);
-      }
-
-      m_MapProjection = dynamic_cast<ossimMapProjection*>(ossimMapProjectionFactory::instance()->createProjection(kwl));
-
-    }
-
-    return this->m_MapProjection;
+    m_MapProjection =  new OssimMapProjectionType();
   }
+
 
   /// Method to set the projection ellipsoid
   template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
@@ -98,7 +86,7 @@ namespace otb
   void MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::SetEllipsoid(const ossimEllipsoid &ellipsoid)
   {
-    m_MapProjection->setEllipsoid(ellipsoid);
+    this->GetMapProjection()->setEllipsoid(ellipsoid);
   }
 
   ///// Method to set the projection ellipsoid by knowing its code
@@ -107,7 +95,7 @@ namespace otb
   ::SetEllipsoid(std::string code)
   {
     const ossimEllipsoid ellipsoid = *(ossimEllipsoidFactory::instance()->create(ossimString(code)));
-    m_MapProjection->setEllipsoid(ellipsoid);
+    this->GetMapProjection()->setEllipsoid(ellipsoid);
   }
 
   ///// Method to set the projection ellipsoid by knowing its axis
@@ -116,7 +104,7 @@ namespace otb
   ::SetEllipsoid(const double &major_axis, const double &minor_axis)
   {
     ossimEllipsoid ellipsoid(major_axis,minor_axis);
-    m_MapProjection->setEllipsoid(ellipsoid);
+    this->GetMapProjection()->setEllipsoid(ellipsoid);
   }
 
   template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
@@ -137,9 +125,9 @@ namespace otb
 
 	  //map projection
 	  ossimGpt ossimGPoint;
-	  ossimGPoint=m_MapProjection->inverse(ossimDPoint);
+	  ossimGPoint=this->GetMapProjection()->inverse(ossimDPoint);
           ossimGPoint.changeDatum(ossimDatumFactory::instance()->wgs84() );
-//	 	otbGenericMsgDebugMacro(<< "Inverse : " << std::endl << m_MapProjection->print(std::cout));
+//	 	otbGenericMsgDebugMacro(<< "Inverse : " << std::endl << this->GetMapProjection()->print(std::cout));
 
 	  outputPoint[0]=ossimGPoint.lon;
 	  outputPoint[1]=ossimGPoint.lat;
@@ -154,7 +142,7 @@ namespace otb
 
 	  //map projection
           ossimDpt ossimDPoint;
-	  ossimDPoint=m_MapProjection->forward(ossimGPoint);
+	  ossimDPoint=this->GetMapProjection()->forward(ossimGPoint);
 //	 	otbGenericMsgDebugMacro(<< "Forward : ========================= " << std::endl << m_MapProjection->print(std::cout));
 	  outputPoint[0]=ossimDPoint.x;
 	  outputPoint[1]=ossimDPoint.y;
@@ -181,7 +169,7 @@ namespace otb
   MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::Origin()
   {
-    ossimGpt ossimOrigin=m_MapProjection->origin();
+    ossimGpt ossimOrigin=this->GetMapProjection()->origin();
     InputPointType otbOrigin;
     otbOrigin[0]= ossimOrigin.lat;
     otbOrigin[1]= ossimOrigin.lon;
@@ -195,7 +183,7 @@ namespace otb
   MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::GetFalseNorthing() const
   {
-    double falseNorthing=m_MapProjection->getFalseNorthing();
+    double falseNorthing=this->GetMapProjection()->getFalseNorthing();
 
     return falseNorthing;
   }
@@ -206,7 +194,7 @@ namespace otb
   MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::GetFalseEasting() const
   {
-    double falseEasting=m_MapProjection->getFalseEasting();
+    double falseEasting=this->GetMapProjection()->getFalseEasting();
 
     return falseEasting;
   }
@@ -217,7 +205,7 @@ namespace otb
   MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::GetStandardParallel1() const
   {
-    double standardParallel1=m_MapProjection->getStandardParallel1();
+    double standardParallel1=this->GetMapProjection()->getStandardParallel1();
 
     return standardParallel1;
   }
@@ -228,7 +216,7 @@ namespace otb
   MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::GetStandardParallel2() const
   {
-    double standardParallel2=m_MapProjection->getStandardParallel2();
+    double standardParallel2=this->GetMapProjection()->getStandardParallel2();
 
     return standardParallel2;
   }
@@ -240,7 +228,7 @@ namespace otb
   ::GetProjectionName() const
   {
     std::string projectionName;
-    projectionName=m_MapProjection->getProjectionName();
+    projectionName=this->GetMapProjection()->getProjectionName();
 
     return projectionName;
   }
@@ -251,7 +239,7 @@ namespace otb
   MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::IsGeographic() const
   {
-    return (m_MapProjection->isGeographic());
+    return (this->GetMapProjection()->isGeographic());
   }
 
   ///\return the major axis of the ellipsoid
@@ -260,7 +248,7 @@ namespace otb
   MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::GetA() const
   {
-    double majorAxis=m_MapProjection->getA();
+    double majorAxis=this->GetMapProjection()->getA();
 
     return majorAxis;
   }
@@ -271,7 +259,7 @@ namespace otb
   MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::GetB() const
   {
-    double minorAxis=m_MapProjection->getB();
+    double minorAxis=this->GetMapProjection()->getB();
 
     return minorAxis;
   }
@@ -282,7 +270,7 @@ namespace otb
   MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::GetF() const
   {
-    double flattening=m_MapProjection->getF();
+    double flattening=this->GetMapProjection()->getF();
 
     return flattening;
   }
@@ -293,7 +281,7 @@ namespace otb
   MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::GetMetersPerPixel() const
   {
-    ossimDpt ossimMetersPerPixels=m_MapProjection->getMetersPerPixel();
+    ossimDpt ossimMetersPerPixels=this->GetMapProjection()->getMetersPerPixel();
     OutputPointType metersPerPixels;
 
     metersPerPixels[0]=ossimMetersPerPixels.x;
@@ -308,7 +296,7 @@ namespace otb
   MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::GetDecimalDegreesPerPixel() const
   {
-    ossimDpt ossimDecimalDegreesPerPixels=m_MapProjection->getDecimalDegreesPerPixel();
+    ossimDpt ossimDecimalDegreesPerPixels=this->GetMapProjection()->getDecimalDegreesPerPixel();
     OutputPointType DecimalDegreesPerPixels;
 
     DecimalDegreesPerPixels[0]=ossimDecimalDegreesPerPixels.x;
@@ -322,7 +310,7 @@ namespace otb
   void MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::SetAB(double a, double b)
   {
-    m_MapProjection->setAB(a,b);
+    this->GetMapProjection()->setAB(a,b);
   }
 
   ///Set the origin
@@ -331,10 +319,10 @@ namespace otb
   ::SetOrigin(const InputPointType &origin)
   {
     ossimGpt ossimOrigin(origin[1], origin[0]);
-    m_MapProjection->setOrigin(ossimOrigin);
+    this->GetMapProjection()->setOrigin(ossimOrigin);
     //TODO: 29-02-2008 Emmanuel: when ossim version > 1.7.2 only
     // SetOrigin required (remove SetDatum)
-    m_MapProjection->setDatum(ossimOrigin.datum());
+    this->GetMapProjection()->setDatum(ossimOrigin.datum());
   }
 
   ///Set the origin in a given datum
@@ -343,8 +331,8 @@ namespace otb
   ::SetOrigin(const InputPointType &origin, std::string datumCode)
   {
     ossimGpt ossimOrigin(origin[1], origin[0], 0, ossimDatumFactory::instance()->create(datumCode));
-    m_MapProjection->setOrigin(ossimOrigin);
-    m_MapProjection->setDatum(ossimOrigin.datum());
+    this->GetMapProjection()->setOrigin(ossimOrigin);
+    this->GetMapProjection()->setDatum(ossimOrigin.datum());
   }
 
   ///Set the map resolution in meters
@@ -353,7 +341,7 @@ namespace otb
   ::SetMetersPerPixel(const OutputPointType &point)
   {
     ossimDpt ossimDPoint(point[0], point[1]);
-    m_MapProjection->setMetersPerPixel(ossimDPoint);
+    this->GetMapProjection()->setMetersPerPixel(ossimDPoint);
   }
 
   ///Set the map resolution in degree
@@ -362,7 +350,7 @@ namespace otb
   ::SetDecimalDegreesPerPixel(const OutputPointType &point)
   {
     ossimDpt ossimDPoint(point[0], point[1]);
-    m_MapProjection->setDecimalDegreesPerPixel(ossimDPoint);
+    this->GetMapProjection()->setDecimalDegreesPerPixel(ossimDPoint);
   }
 
   ///\return an approximation of the resolution in degree
@@ -372,7 +360,7 @@ namespace otb
   {
     ossimDpt ossimMetersPerPixel(metersPerPixel[0], metersPerPixel[1]);
     ossimGpt ossimGround(ground[1],ground[0]);
-    m_MapProjection->computeDegreesPerPixel(ossimGround,ossimMetersPerPixel,deltaLat,deltaLon);
+    this->GetMapProjection()->computeDegreesPerPixel(ossimGround,ossimMetersPerPixel,deltaLat,deltaLon);
   }
 
   ///\return an approximation of the resolution in meters
@@ -384,7 +372,7 @@ namespace otb
     //Correction
     ossimGpt ossimCenter(center[1],center[0]);
     ossimDpt ossimMetersPerPixel;
-    m_MapProjection->computeMetersPerPixel(ossimCenter,deltaDegreesPerPixelLat, deltaDegreesPerPixelLon,ossimMetersPerPixel);
+    this->GetMapProjection()->computeMetersPerPixel(ossimCenter,deltaDegreesPerPixelLat, deltaDegreesPerPixelLon,ossimMetersPerPixel);
     metersPerPixel[0]=ossimMetersPerPixel.x;
     metersPerPixel[1]=ossimMetersPerPixel.y;
   }
@@ -396,7 +384,7 @@ namespace otb
   ::ComputeMetersPerPixel(double deltaDegreesPerPixelLat, double deltaDegreesPerPixelLon, OutputPointType &metersPerPixel)
   {
     ossimDpt ossimMetersPerPixel;
-    m_MapProjection->computeMetersPerPixel(m_MapProjection->origin(),deltaDegreesPerPixelLat, deltaDegreesPerPixelLon,ossimMetersPerPixel);
+    this->GetMapProjection()->computeMetersPerPixel(this->GetMapProjection()->origin(),deltaDegreesPerPixelLat, deltaDegreesPerPixelLon,ossimMetersPerPixel);
     metersPerPixel[0]=ossimMetersPerPixel.x;
     metersPerPixel[1]=ossimMetersPerPixel.y;
   }
@@ -407,7 +395,7 @@ namespace otb
   ::GetWkt() const
   {
     ossimKeywordlist kwl;
-    m_MapProjection->saveState(kwl);
+    this->GetMapProjection()->saveState(kwl);
     ossimOgcWktTranslator wktTranslator;
     std::string wkt;
     wkt = wktTranslator.fromOssimKwl(kwl);
@@ -428,7 +416,7 @@ namespace otb
           MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::PrintMap() const
   {
-    std::cout << m_MapProjection->print(std::cout);
+    std::cout << this->GetMapProjection()->print(std::cout);
   }
 
 

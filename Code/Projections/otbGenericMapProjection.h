@@ -15,13 +15,13 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMapProjection_h
-#define __otbMapProjection_h
+#ifndef __otbGenericMapProjection_h
+#define __otbGenericMapProjection_h
 
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
-#include "projection/ossimMapProjection.h"
+#include "projection/ossimProjection.h"
 #include "itkTransform.h"
 #include "itkExceptionObject.h"
 #include "itkMacro.h"
@@ -36,8 +36,9 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 
-  /** \class MapProjection
-   *  \brief This is the base class for all geographic projections (UTM, Lambert, ...)
+  /** \class GenericMapProjection
+   *  \brief This is the base class for generic map projection transformation
+   *
    *
    * All derived class assume that the latitude and longitude are given according to the
    * WGS84 ellipsoid model.
@@ -45,12 +46,11 @@ namespace otb
 
   typedef enum {FORWARD=0, INVERSE=1} InverseOrForwardTransformationEnum;
 
-  template <class TOssimMapProjection,
-            InverseOrForwardTransformationEnum Transform,
+  template <InverseOrForwardTransformationEnum Transform,
             class TScalarType = double,
             unsigned int NInputDimensions=2,
             unsigned int NOutputDimensions=2>
-    class ITK_EXPORT MapProjection: public itk::Transform<TScalarType,       // Data type for scalars
+    class ITK_EXPORT GenericMapProjection: public itk::Transform<TScalarType,       // Data type for scalars
                                                           NInputDimensions,  // Number of dimensions in the input space
                                                           NOutputDimensions> // Number of dimensions in the output space
   {
@@ -59,12 +59,12 @@ namespace otb
       typedef itk::Transform< TScalarType,
                               NInputDimensions,
                               NOutputDimensions >       Superclass;
-      typedef MapProjection                    	        Self;
+      typedef GenericMapProjection                    	        Self;
       typedef itk::SmartPointer<Self>                   Pointer;
       typedef itk::SmartPointer<const Self>             ConstPointer;
 
       typedef typename Superclass::ScalarType 	        ScalarType;
-      typedef TOssimMapProjection  			OssimMapProjectionType;
+      typedef ossimProjection 			OssimMapProjectionType;
       typedef itk::Point<ScalarType,NInputDimensions >  InputPointType;
       typedef itk::Point<ScalarType,NOutputDimensions > OutputPointType;
 
@@ -72,9 +72,9 @@ namespace otb
       itkNewMacro( Self );
 
       /** Run-time type information (and related methods). */
-      itkTypeMacro( MapProjection, Transform );
+      itkTypeMacro( GenericMapProjection, Transform );
 
-      virtual const OssimMapProjectionType* GetMapProjection () const;
+      itkSetObjectMacro(MapProjection,OssimMapProjectionType);
       virtual OssimMapProjectionType* GetMapProjection ();
 
       typedef InverseOrForwardTransformationEnum DirectionOfMappingEnumType;
@@ -86,53 +86,26 @@ namespace otb
       itkStaticConstMacro(ParametersDimension, unsigned int,NInputDimensions*(NInputDimensions+1));
 
 
-      virtual void SetEllipsoid ();
-      void SetEllipsoid (const ossimEllipsoid &ellipsoid);
-      void SetEllipsoid(std::string code);
-      void SetEllipsoid(const double &major_axis, const double &minor_axis);
-
-      OutputPointType TransformPoint(const InputPointType &point) const;
-      virtual InputPointType Origin();
-      virtual double GetFalseNorthing() const;
-      virtual double GetFalseEasting() const;
-      virtual double GetStandardParallel1() const;
-      virtual double GetStandardParallel2() const;
-      virtual std::string GetProjectionName() const;
-      virtual bool IsGeographic() const;
-      virtual double GetA() const;
-      virtual double GetB() const;
-      virtual double GetF() const;
-      virtual OutputPointType GetMetersPerPixel() const;
-      virtual OutputPointType GetDecimalDegreesPerPixel() const;
-      virtual void SetAB(double a, double b);
-      virtual void SetOrigin(const InputPointType &origin);
-      virtual void SetOrigin(const InputPointType &origin, std::string datumCode);
-      virtual void SetMetersPerPixel(const OutputPointType &point);
-      virtual void SetDecimalDegreesPerPixel(const OutputPointType &point);
-      virtual void ComputeDegreesPerPixel(const InputPointType &ground, const OutputPointType &metersPerPixel, double &deltaLat, double &deltaLon);
-      virtual void ComputeMetersPerPixel(const InputPointType &center, double deltaDegreesPerPixelLat, double deltaDegreesPerPixelLon, OutputPointType &metersPerPixel);
-      virtual void ComputeMetersPerPixel(double deltaDegreesPerPixelLat, double deltaDegreesPerPixelLon, OutputPointType &metersPerPixel);
-      //virtual void SetMatrix(double rotation,  const OutputPointType &scale, const OutputPointType &translation);
-      void SetFalseEasting(double falseEasting);
-
       /** Return the Wkt representation of the projection*/
-      virtual std::string GetWkt() const;
+      virtual std::string GetWkt();
 
       /** Instanciate the projection according to the Wkt specification*/
       virtual void SetWkt(std::string projectionRefWkt);
 
       virtual void PrintMap() const;
 
+      OutputPointType TransformPoint(const InputPointType &point);
 
     protected:
-      MapProjection();
-      virtual ~MapProjection();
+      GenericMapProjection();
+      virtual ~GenericMapProjection();
       OssimMapProjectionType* m_MapProjection;
       std::string m_ProjectionRefWkt;
       virtual void InstanciateProjection();
+      bool reinstanciateProjection;
 
     private :
-      MapProjection(const Self&); //purposely not implemented
+      GenericMapProjection(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
 
   };
@@ -142,7 +115,7 @@ namespace otb
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMapProjection.txx"
+#include "otbGenericMapProjection.txx"
 #endif
 
 #endif
