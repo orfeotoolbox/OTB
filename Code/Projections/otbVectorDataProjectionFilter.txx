@@ -90,10 +90,11 @@ namespace otb
     }
 
 
-    if ((m_InputTransform == NULL) && ( !m_InputProjectionRef.empty() ))//map projection
+    if ((m_InputTransform.IsNull()) && ( !m_InputProjectionRef.empty() ))//map projection
     {
       typedef otb::GenericMapProjection<otb::INVERSE> InverseMapProjectionType;
-      InverseMapProjectionType* mapTransform = InverseMapProjectionType::New();
+      InverseMapProjectionType::Pointer mapTransformSmartPointer = InverseMapProjectionType::New();
+      InverseMapProjectionType* mapTransform = mapTransformSmartPointer.GetPointer();
       mapTransform->SetWkt(m_InputProjectionRef);
       if (mapTransform->GetMapProjection() != NULL)
       {
@@ -103,7 +104,7 @@ namespace otb
 
     }
 
-    if(m_InputTransform == NULL)//default if we didn't manage to instantiate it before
+    if(m_InputTransform.IsNull())//default if we didn't manage to instantiate it before
     {
       m_InputTransform = itk::IdentityTransform< double, 2 >::New();
       otbMsgDevMacro(<< "Input projection set to identity")
@@ -113,7 +114,7 @@ namespace otb
     //Set the output transformation
     //*****************************
 
-
+    m_Transform = InternalTransformType::New();
     m_Transform->SetFirstTransform(m_InputTransform);
     m_Transform->SetSecondTransform(m_OutputTransform);
   }

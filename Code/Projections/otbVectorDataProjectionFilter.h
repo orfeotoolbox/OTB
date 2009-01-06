@@ -84,8 +84,8 @@ namespace otb
       void operator=(const Self&); //purposely not implemented
 
       InternalTransformPointerType m_Transform;
-      GenericTransformType* m_InputTransform;
-      GenericTransformType* m_OutputTransform;
+      GenericTransformPointerType m_InputTransform;
+      GenericTransformPointerType m_OutputTransform;
       std::string m_InputProjectionRef;
       std::string m_OutputProjectionRef;
       ossimKeywordlist m_InputKeywordList;

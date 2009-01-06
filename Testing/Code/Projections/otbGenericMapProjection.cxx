@@ -40,6 +40,11 @@ int otbGenericMapProjection( int argc, char* argv[] )
   genericMapProjectionInverse->SetWkt(projectionRefWkt);
   file << genericMapProjectionInverse->GetWkt() << std::endl << std::endl;
 
+//   GenericMapProjectionInverse::Pointer mapTransformSmartPointer = GenericMapProjectionInverse::New();
+//   GenericMapProjectionInverse* mapTransform = mapTransformSmartPointer.GetPointer();
+//   GenericMapProjectionInverse* mapTransform = (GenericMapProjectionInverse::New()).GetPointer();
+//   mapTransform->SetWkt(projectionRefWkt);
+
   file.close();
   return EXIT_SUCCESS;
 
