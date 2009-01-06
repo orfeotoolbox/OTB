@@ -649,6 +649,10 @@ namespace otb
 
     // Retrieving root node
     DataTreeConstPointerType tree = data->GetDataTree();
+    if (tree->GetRoot() == NULL)
+    {
+      itkExceptionMacro(<<"Data tree is empty: Root == NULL");
+    }
     DataNodePointerType root = tree->GetRoot()->Get();
 
     typedef itk::PreOrderTreeIterator<DataTreeType> TreeIteratorType;
