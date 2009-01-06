@@ -448,12 +448,12 @@ namespace otb
 
     PointType otbPoint;
     otbPoint.Fill(0);
-    otbPoint[0] = (static_cast<typename DataNodeType::PrecisionType>(ogrPoint->getX())-origin[0])/spacing[0];
-    otbPoint[1] = (static_cast<typename DataNodeType::PrecisionType>(ogrPoint->getY())-origin[1])/spacing[1];
+    otbPoint[0] = static_cast<typename DataNodeType::PrecisionType>((ogrPoint->getX()-origin[0])/spacing[0]);
+    otbPoint[1] = static_cast<typename DataNodeType::PrecisionType>((ogrPoint->getY()-origin[1])/spacing[1]);
 
     if(DataNodeType::Dimension > 2)
       {
-        otbPoint[2]=(static_cast<typename DataNodeType::PrecisionType>(ogrPoint->getZ())-origin[2])/spacing[2];
+        otbPoint[2]=static_cast<typename DataNodeType::PrecisionType>((ogrPoint->getZ()-origin[2])/spacing[2]);
       }
 
     DataNodePointerType node = DataNodeType::New();
