@@ -32,6 +32,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "base/ossimEllipsoidFactory.h"
 #include "base/ossimString.h"
 #include "ossimOgcWktTranslator.h"
+#include "otbGenericMapProjection.h"
 
 namespace otb
 {
@@ -42,8 +43,6 @@ namespace otb
    * All derived class assume that the latitude and longitude are given according to the
    * WGS84 ellipsoid model.
    **/
-
-  typedef enum {FORWARD=0, INVERSE=1} InverseOrForwardTransformationEnum;
 
   template <class TOssimMapProjection,
             InverseOrForwardTransformationEnum Transform,

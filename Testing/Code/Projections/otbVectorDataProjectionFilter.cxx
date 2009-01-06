@@ -34,7 +34,7 @@ int otbVectorDataProjectionFilter(int argc, char * argv[])
   VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
 
   reader->SetFileName(argv[1]);
-  reader->Update();
+  reader->UpdateOutputInformation();
 
 
 

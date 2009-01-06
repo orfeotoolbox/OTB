@@ -59,12 +59,12 @@ namespace otb
       typedef itk::Transform< TScalarType,
                               NInputDimensions,
                               NOutputDimensions >       Superclass;
-      typedef GenericMapProjection                    	        Self;
+      typedef GenericMapProjection                      Self;
       typedef itk::SmartPointer<Self>                   Pointer;
       typedef itk::SmartPointer<const Self>             ConstPointer;
 
-      typedef typename Superclass::ScalarType 	        ScalarType;
-      typedef ossimProjection 			OssimMapProjectionType;
+      typedef typename Superclass::ScalarType           ScalarType;
+      typedef ossimProjection                           OssimMapProjectionType;
       typedef itk::Point<ScalarType,NInputDimensions >  InputPointType;
       typedef itk::Point<ScalarType,NOutputDimensions > OutputPointType;
 

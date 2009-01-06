@@ -44,6 +44,7 @@ namespace otb
       typedef itk::SmartPointer<Self>   Pointer;
       typedef itk::SmartPointer<const Self>  ConstPointer;
       typedef itk::Transform<double, 2, 2> GenericTransformType;
+      typedef typename GenericTransformType::Pointer GenericTransformPointerType;
       typedef otb::CompositeTransform<GenericTransformType, GenericTransformType, double, 2, 2> InternalTransformType;
       typedef typename InternalTransformType::Pointer InternalTransformPointerType;
 
@@ -73,6 +74,8 @@ namespace otb
       VectorDataProjectionFilter();
       virtual ~VectorDataProjectionFilter() {};
 
+      void InstanciateTransform(void);
+
       void GenerateOutputInformation(void);
       void GenerateData(void);
 
@@ -81,9 +84,12 @@ namespace otb
       void operator=(const Self&); //purposely not implemented
 
       InternalTransformPointerType m_Transform;
+      GenericTransformType* m_InputTransform;
+      GenericTransformType* m_OutputTransform;
       std::string m_InputProjectionRef;
       std::string m_OutputProjectionRef;
-
+      ossimKeywordlist m_InputKeywordList;
+      ossimKeywordlist m_OutputKeywordList;
   };
 
 } // end namespace otb
