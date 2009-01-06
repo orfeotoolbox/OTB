@@ -204,11 +204,7 @@ namespace otb
       itkSetMacro(NextROILabel,LabelType);
       itkGetMacro(NextROILabel,LabelType);
       itkGetMacro(FullWidget,FullWidgetPointerType);
-      /**GUILLAUME MODIF FOR ROADEXTRACTION : TEMPORARY*/
-      itkSetMacro(ScrollWidget,ScrollWidgetPointerType);
-      itkSetMacro(FullWidget,FullWidgetPointerType);
-
-      itkGetMacro(ScrollWidget,ScrollWidgetPointerType);
+       itkGetMacro(ScrollWidget,ScrollWidgetPointerType);
       itkGetMacro(ZoomWidget,ZoomWidgetPointerType);
       itkGetMacro(RedHistogramWidget,HistogramWidgetPointerType);
       itkGetMacro(GreenHistogramWidget,HistogramWidgetPointerType);
