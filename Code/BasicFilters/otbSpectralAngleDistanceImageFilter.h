@@ -95,6 +95,8 @@ protected:
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                             int threadId );
 
+  void BeforeThreadedGenerateData();
+
 private:
   SpectralAngleDistanceImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

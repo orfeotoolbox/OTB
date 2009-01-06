@@ -253,6 +253,14 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 		    337 557 432 859
 )
 
+ ADD_TEST(bfTvSpectralAngleDistanceImageFilterOneChannel ${BASICFILTERS_TESTS3} 
+		    otbSpectralAngleDistanceImageFilter
+		    ${INPUTDATA}/DeuxCercles.hdr
+	            ${TEMP}/bfTvSpectralAngleDistanceOneChannelOutput.hdr
+		    100
+)
+
+SET_TESTS_PROPERTIES(bfTvSpectralAngleDistanceImageFilterOneChannel PROPERTIES WILL_FAIL true)
 
 # -------            otb::VectorRescaleIntensityImageFilter   ----------------------------
 
