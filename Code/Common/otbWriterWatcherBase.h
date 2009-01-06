@@ -41,7 +41,7 @@ namespace otb
    *  \li EndFilter          : callback called at the end of filter execution for a given tile
    *
    */
-  class ITK_EXPORT WriterWatcherBase
+  class /*ITK_EXPORT*/ WriterWatcherBase
     {
     public:
 
