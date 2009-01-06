@@ -204,7 +204,7 @@ namespace otb
       itkSetMacro(NextROILabel,LabelType);
       itkGetMacro(NextROILabel,LabelType);
       itkGetMacro(FullWidget,FullWidgetPointerType);
-      itkGetMacro(ScrollWidget,ScrollWidgetPointerType);
+       itkGetMacro(ScrollWidget,ScrollWidgetPointerType);
       itkGetMacro(ZoomWidget,ZoomWidgetPointerType);
       itkGetMacro(RedHistogramWidget,HistogramWidgetPointerType);
       itkGetMacro(GreenHistogramWidget,HistogramWidgetPointerType);

@@ -36,6 +36,19 @@ SpectralAngleDistanceImageFilter<TInputImage,TOutputImage>
 {
   m_ReferencePixel=0;
 }
+
+template <class TInputImage, class TOutputImage>
+void
+SpectralAngleDistanceImageFilter<TInputImage,TOutputImage>
+::BeforeThreadedGenerateData()
+{
+  if ( this->GetInput()->GetNumberOfComponentsPerPixel() == 1 )
+    {
+      itkExceptionMacro(<<"Not valid input image : mono channel image not supported.");
+    }
+}
+
+
 template <class TInputImage, class TOutputImage>
 void
 SpectralAngleDistanceImageFilter<TInputImage,TOutputImage>

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef  __otb_DataNode_h
-#define  __otb_DataNode_h
+#ifndef  __otbDataNode_h
+#define  __otbDataNode_h
 
 #include "itkPoint.h"
 #include "otbPolyLineParametricPathWithValue.h"
@@ -30,8 +30,20 @@ namespace otb
 /**
  * This enumeration describes the type fo nodes used to represent a tree of vector data in the Orfeo ToolBox.
  */
+
 typedef
-enum{ROOT,DOCUMENT,FOLDER,FEATURE_POINT,FEATURE_LINE,FEATURE_POLYGON,FEATURE_MULTIPOINT,FEATURE_MULTILINE,FEATURE_MULTIPOLYGON,FEATURE_COLLECTION} NodeType;
+enum{
+  ROOT=0,
+  DOCUMENT=1,
+  FOLDER=2,
+  FEATURE_POINT=3,
+  FEATURE_LINE=4,
+  FEATURE_POLYGON=5,
+  FEATURE_MULTIPOINT=6,
+  FEATURE_MULTILINE=7,
+  FEATURE_MULTIPOLYGON=8,
+  FEATURE_COLLECTION=9
+} NodeType;
 
 
 /** \class DataNode
@@ -70,10 +82,13 @@ class DataNode
    typedef itk::Point<PrecisionType,VDimension>       PointType;
    typedef otb::PolyLineParametricPathWithValue<double,VDimension>    LineType;
    typedef typename LineType::Pointer                 LinePointerType;
+   typedef typename LineType::ConstPointer            LineConstPointerType;
    typedef Polygon<PrecisionType>                     PolygonType;
    typedef typename PolygonType::Pointer              PolygonPointerType;
+   typedef typename PolygonType::ConstPointer         PolygonConstPointerType;
    typedef ObjectList<PolygonType>                    PolygonListType;
    typedef typename PolygonListType::Pointer          PolygonListPointerType;
+   typedef typename PolygonListType::ConstPointer     PolygonListConstPointerType;
 
    /** Fields typedef */
    typedef std::map<std::string,std::string>          FieldMapType;

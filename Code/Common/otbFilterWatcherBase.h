@@ -38,7 +38,7 @@ namespace otb
    *  \li EndFilter    : callback called at the end of process
    *
    */
-  class ITK_EXPORT FilterWatcherBase
+  class /*ITK_EXPORT*/ FilterWatcherBase
     {
     public:
 
