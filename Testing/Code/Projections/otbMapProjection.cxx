@@ -20,7 +20,6 @@
 #include "otbImage.h"
 #include "otbMapProjections.h"
 
-//TODO add control baseline
 int otbMapProjection( int argc, char* argv[] )
 {
   const char * outFileName = argv[1];
