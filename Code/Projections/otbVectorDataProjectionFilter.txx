@@ -25,6 +25,7 @@
 #include "otbGenericMapProjection.h"
 #include "itkIdentityTransform.h"
 #include "otbInverseSensorModel.h"
+#include "otbDataNode.h"
 
 namespace otb
 {
@@ -40,8 +41,8 @@ namespace otb
     m_OutputProjectionRef.clear();
     m_InputKeywordList.clear();
     m_OutputKeywordList.clear();
-    m_Spacing.Fill(1);
-    m_Origin.Fill(0);
+    m_InputSpacing.Fill(1);
+    m_InputOrigin.Fill(0);
   }
 
 
@@ -49,12 +50,12 @@ namespace otb
   template <class TInputVectorData, class TOutputVectorData >
       void
           VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
-  ::SetSpacing(const SpacingType & spacing )
+  ::SetInputSpacing(const SpacingType & spacing )
   {
     itkDebugMacro("setting Spacing to " << spacing);
-    if( this->m_Spacing != spacing )
+    if( this->m_InputSpacing != spacing )
     {
-      this->m_Spacing = spacing;
+      this->m_InputSpacing = spacing;
       this->Modified();
     }
   }
@@ -64,10 +65,10 @@ namespace otb
   template <class TInputVectorData, class TOutputVectorData >
       void
           VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
-  ::SetSpacing(const double spacing[2] )
+  ::SetInputSpacing(const double spacing[2] )
   {
     SpacingType s(spacing);
-    this->SetSpacing(s);
+    this->SetInputSpacing(s);
   }
 
 
@@ -75,22 +76,22 @@ namespace otb
   template <class TInputVectorData, class TOutputVectorData >
       void
           VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
-  ::SetSpacing(const float spacing[2] )
+  ::SetInputSpacing(const float spacing[2] )
   {
     itk::Vector<float, 2> sf(spacing);
     SpacingType s;
     s.CastFrom( sf );
-    this->SetSpacing(s);
+    this->SetInputSpacing(s);
   }
 
 //----------------------------------------------------------------------------
   template <class TInputVectorData, class TOutputVectorData >
       void
           VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
-  ::SetOrigin(const double origin[2] )
+  ::SetInputOrigin(const double origin[2] )
   {
     OriginType p(origin);
-    this->SetOrigin( p );
+    this->SetInputOrigin( p );
   }
 
 
@@ -98,12 +99,12 @@ namespace otb
   template <class TInputVectorData, class TOutputVectorData >
       void
           VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
-  ::SetOrigin(const float origin[2] )
+  ::SetInputOrigin(const float origin[2] )
   {
     itk::Point<float, 2> of(origin);
     OriginType p;
     p.CastFrom( of );
-    this->SetOrigin( p );
+    this->SetInputOrigin( p );
   }
 
 
@@ -122,8 +123,36 @@ namespace otb
 
   }
 
+  /**
+   * Convert line
+   */
+  template <class TInputVectorData, class TOutputVectorData >
+      typename VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>::LinePointerType
+          VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
+  ::ReprojectLine(LinePointerType line) const
+  {
+    typedef typename LineType::VertexListType::ConstPointer VertexListConstPointerType;
+    typedef typename LineType::VertexListConstIteratorType VertexListConstIteratorType;
+    VertexListConstPointerType  vertexList = line->GetVertexList();
+    VertexListConstIteratorType it = vertexList->Begin();
+    typename LineType::Pointer newLine = LineType::New();
+    itk::Point<double,2> point;
+    itk::ContinuousIndex<double,2> index;
+    while ( it != vertexList->End())
+    {
+      typename LineType::VertexType pointCoord = it.Value();
+      pointCoord[0] = pointCoord[0] * m_InputSpacing[0] + m_InputOrigin[0];
+      pointCoord[1] = pointCoord[1] * m_InputSpacing[1] + m_InputOrigin[1];
+      point = m_Transform->TransformPoint(pointCoord);
+      index[0]=point[0];
+      index[1]=point[1];
+      otbMsgDevMacro(<< "Converting: " << it.Value() << " -> " << index);
+      newLine->AddVertex(index);
+      it++;
+    }
 
-
+    return newLine;
+  }
 
   /**
    * Instanciate the transformation according to informations
@@ -249,13 +278,66 @@ namespace otb
     itk::ProgressReporter progress(this, 0, inputPtr->Size());
 
     InputTreeIteratorType it(inputPtr->GetDataTree());
-    while(!it.IsAtEnd())
+    OutputDataTreePointerType tree = outputPtr->GetDataTree();
+    if (tree->GetRoot() == NULL)
     {
+      itkExceptionMacro(<<"Data tree is empty: Root == NULL");
+    }
+    OutputDataNodePointerType currentContainer = tree->GetRoot()->Get();
 
-
-
-
-
+    while(!it.IsAtEnd())//FIXME this VectorData tree processing would better be in a generic class
+    {
+      InputDataNodePointerType dataNode = it.Get();
+      OutputDataNodePointerType newDataNode = OutputDataNodeType::New();
+      newDataNode->SetNodeType(dataNode->GetNodeType());
+      newDataNode->SetNodeId(dataNode->GetNodeId());
+      switch(dataNode->GetNodeType())
+      {
+        case ROOT:
+        {
+          //do nothing
+          break;
+        }
+        case DOCUMENT:
+        {
+          tree->Add(newDataNode,currentContainer);
+          break;
+        }
+        case FOLDER:
+        {
+          tree->Add(newDataNode,currentContainer);
+          break;
+        }
+        case FEATURE_POINT:
+        {
+          break;
+        }
+        case FEATURE_LINE:
+        {
+          newDataNode->SetLine(this->ReprojectLine(dataNode->GetLine()));
+          break;
+        }
+        case FEATURE_POLYGON:
+        {
+          break;
+        }
+        case FEATURE_MULTIPOINT:
+        {
+          break;
+        }
+        case FEATURE_MULTILINE:
+        {
+          break;
+        }
+        case FEATURE_MULTIPOLYGON:
+        {
+          break;
+        }
+        case FEATURE_COLLECTION:
+        {
+          break;
+        }
+      }
       progress.CompletedPixel();
       ++it;
     }

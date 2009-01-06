@@ -59,8 +59,15 @@ namespace otb
       typedef itk::Vector<double, 2> SpacingType;
       typedef itk::Point<double, 2> OriginType;
 
-
       typedef itk::PreOrderTreeIterator<typename InputVectorDataType::DataTreeType>       InputTreeIteratorType;
+      typedef typename InputVectorDataType::DataNodePointerType InputDataNodePointerType;
+      typedef typename OutputVectorDataType::DataNodeType OutputDataNodeType;
+      typedef typename OutputVectorDataType::DataNodePointerType OutputDataNodePointerType;
+      typedef typename OutputVectorDataType::DataTreePointerType OutputDataTreePointerType;
+
+      typedef typename OutputDataNodeType::LineType LineType;
+      typedef typename OutputDataNodeType::LineConstPointerType LineConstPointerType;
+      typedef typename OutputDataNodeType::LinePointerType LinePointerType;
 
 
       /** Method for creation through the object factory. */
@@ -83,24 +90,26 @@ namespace otb
 
        /** Set the origin of the vector data.
         * \sa GetOrigin() */
-      itkSetMacro(Origin, OriginType);
-      virtual void SetOrigin( const double origin[2] );
-      virtual void SetOrigin( const float origin[2] );
+      itkSetMacro(InputOrigin, OriginType);
+      virtual void SetInputOrigin( const double origin[2] );
+      virtual void SetInputOrigin( const float origin[2] );
 
-      itkGetConstReferenceMacro(Origin, OriginType);
+      itkGetConstReferenceMacro(InputOrigin, OriginType);
 
 
        /** Set the spacing (size of a pixel) of the vector data.
         * \sa GetSpacing() */
-      virtual void SetSpacing (const SpacingType & spacing);
-      virtual void SetSpacing (const double spacing[2]);
-      virtual void SetSpacing (const float spacing[2]);
+      virtual void SetInputSpacing (const SpacingType & spacing);
+      virtual void SetInputSpacing (const double spacing[2]);
+      virtual void SetInputSpacing (const float spacing[2]);
 
-      itkGetConstReferenceMacro(Spacing, SpacingType);
+      itkGetConstReferenceMacro(InputSpacing, SpacingType);
 
     protected:
       VectorDataProjectionFilter();
       virtual ~VectorDataProjectionFilter() {};
+
+      LinePointerType ReprojectLine(LinePointerType line) const;
 
       void InstanciateTransform(void);
 
@@ -120,8 +129,8 @@ namespace otb
       ossimKeywordlist m_OutputKeywordList;
       std::string m_DEMDirectory;
 
-      SpacingType         m_Spacing;
-      OriginType           m_Origin;
+      SpacingType         m_InputSpacing;
+      OriginType          m_InputOrigin;
 
   };
 
