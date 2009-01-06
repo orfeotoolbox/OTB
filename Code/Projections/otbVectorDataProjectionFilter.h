@@ -21,6 +21,7 @@
 #include "otbVectorDataToVectorDataFilter.h"
 #include "itkTransform.h"
 #include "otbCompositeTransform.h"
+#include "itkPreOrderTreeIterator.h"
 
 namespace otb
 {
@@ -43,22 +44,30 @@ namespace otb
       typedef otb::VectorDataToVectorDataFilter<TInputVectorData,TOutputVectorData>  Superclass;
       typedef itk::SmartPointer<Self>   Pointer;
       typedef itk::SmartPointer<const Self>  ConstPointer;
+
+      typedef TInputVectorData InputVectorDataType;
+      typedef TOutputVectorData OutputVectorDataType;
+      typedef typename TInputVectorData::ConstPointer InputVectorDataPointer;
+      typedef typename TOutputVectorData::Pointer OutputVectorDataPointer;
+
+      /** Some typedefs. */
       typedef itk::Transform<double, 2, 2> GenericTransformType;
       typedef typename GenericTransformType::Pointer GenericTransformPointerType;
       typedef otb::CompositeTransform<GenericTransformType, GenericTransformType, double, 2, 2> InternalTransformType;
       typedef typename InternalTransformType::Pointer InternalTransformPointerType;
+
+      typedef itk::Vector<double, 2> SpacingType;
+      typedef itk::Point<double, 2> OriginType;
+
+
+      typedef itk::PreOrderTreeIterator<typename InputVectorDataType::DataTreeType>       InputTreeIteratorType;
+
 
       /** Method for creation through the object factory. */
       itkNewMacro(Self);
 
       /** Run-time type information (and related methods). */
       itkTypeMacro(VectorDataProjectionFilter, VectorDataToVectorDataFilter);
-
-      /** Some typedefs. */
-      typedef TInputVectorData InputVectorDataType;
-      typedef TOutputVectorData OutputVectorDataType;
-      typedef typename TInputVectorData::ConstPointer InputVectorDataPointer;
-      typedef typename TOutputVectorData::Pointer OutputVectorDataPointer;
 
       /** Set/Get for input and output projections.
        Note that there is not Set for the input projection which is specified
@@ -69,6 +78,25 @@ namespace otb
       itkSetStringMacro(OutputProjectionRef);
       itkGetStringMacro(OutputProjectionRef);
 
+      itkSetStringMacro(DEMDirectory);
+      itkGetStringMacro(DEMDirectory);
+
+       /** Set the origin of the vector data.
+        * \sa GetOrigin() */
+      itkSetMacro(Origin, OriginType);
+      virtual void SetOrigin( const double origin[2] );
+      virtual void SetOrigin( const float origin[2] );
+
+      itkGetConstReferenceMacro(Origin, OriginType);
+
+
+       /** Set the spacing (size of a pixel) of the vector data.
+        * \sa GetSpacing() */
+      virtual void SetSpacing (const SpacingType & spacing);
+      virtual void SetSpacing (const double spacing[2]);
+      virtual void SetSpacing (const float spacing[2]);
+
+      itkGetConstReferenceMacro(Spacing, SpacingType);
 
     protected:
       VectorDataProjectionFilter();
@@ -90,6 +118,11 @@ namespace otb
       std::string m_OutputProjectionRef;
       ossimKeywordlist m_InputKeywordList;
       ossimKeywordlist m_OutputKeywordList;
+      std::string m_DEMDirectory;
+
+      SpacingType         m_Spacing;
+      OriginType           m_Origin;
+
   };
 
 } // end namespace otb
