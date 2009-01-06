@@ -66,7 +66,7 @@ namespace otb
   ::SetTitle(const std::string & title)
   {
         std::string str(title);
-        str = str + " messages reporter window";
+        str = str + " message reporter window";
         this->wMainWindow->label(str.c_str());
   }
   //Send Msg
