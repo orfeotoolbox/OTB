@@ -61,15 +61,15 @@ MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType>
 ::GenerateOutputInformation()
 {
         typename Superclass::InputImageConstPointer  inputPtr = this->GetInput();
-        // Analyse du canal traité
+        // Analyse du canal traitï¿½
         if ( (m_Channel <= 0) || (m_Channel > inputPtr->GetVectorLength() ) )
         {
-                        itkExceptionMacro(<< "otb::ExtractImMultiToMonoChannelExtractROIageFilter::GenerateOutputInformation "
-                      << "le canal a traiter doivent etre dans l'intervalle [1;"<<inputPtr->GetVectorLength()<<"] "
+                        itkExceptionMacro(<< "otb::MultiToMonoChannelExtractROI::GenerateOutputInformation "
+                      << "The selected channel must in the range [1;"<<inputPtr->GetVectorLength()<<"] "
                       << typeid(itk::ImageBase<InputImageDimension>*).name() );
         }
 
-        // Appel à la methode de la classe de base
+        // Appel ï¿½ la methode de la classe de base
         Superclass::GenerateOutputInformation();
 }
 
