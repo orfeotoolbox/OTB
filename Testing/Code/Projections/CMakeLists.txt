@@ -337,7 +337,18 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbPROJECTIONS_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+ADD_TEST(prTuGenericMapProjectionNew ${PROJECTIONS_TESTS3}  otbGenericMapProjectionNew )
+
+ADD_TEST(prTvGenericMapProjection ${PROJECTIONS_TESTS3}
+        --compare-ascii ${EPSILON} ${BASELINE_FILES}/prTvGenericMapProjection.txt
+        ${TEMP}/prTvGenericMapProjection.txt
+        otbGenericMapProjection
+        ${TEMP}/prTvGenericMapProjection.txt
+)
+
 ADD_TEST(prTuVectorDataProjectionFilterNew ${PROJECTIONS_TESTS3}  otbVectorDataProjectionFilterNew )
+
+
 
 #=======================================================================================
 SET(Projections_SRCS1
@@ -361,6 +372,8 @@ otbOrthoRectificationMonoThreadFilter.cxx
 )
 SET(Projections_SRCS3
 otbVectorDataProjectionFilterNew.cxx
+otbGenericMapProjectionNew.cxx
+otbGenericMapProjection.cxx
 )
 
 
