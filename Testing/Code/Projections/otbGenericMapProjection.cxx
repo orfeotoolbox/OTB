@@ -53,7 +53,7 @@ int otbGenericMapProjection( int argc, char* argv[] )
   point[1]=4829184.8;
   file << "Inverse projection: " << std::endl;
   file << point << " -> ";
-  file << genericMapProjection->TransformPoint(point);
+  file << genericMapProjectionInverse->TransformPoint(point);
   file << std::endl << std::endl;
 
   file.close();
