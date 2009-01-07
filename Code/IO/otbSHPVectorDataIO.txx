@@ -114,7 +114,7 @@ namespace otb
       std::string projectionRef = projectionRefChar;
       OGRFree(projectionRefChar);
       itk::MetaDataDictionary & dict = data->GetMetaDataDictionary();
-      itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::m_ProjectionRefKey, projectionRef );
+      itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef );
     }
     else
     {

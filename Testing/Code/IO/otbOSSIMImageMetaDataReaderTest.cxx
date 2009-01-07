@@ -57,7 +57,7 @@ int otbOSSIMImageMetaDataReaderTest (int argc, char* argv[])
 
   otb::ImageKeywordlist otb_tmp_image;
   /*	itk::ExposeMetaData< otb::ImageKeywordlist >(image_medianFilter->GetOutput()->GetMetaDataDictionary(),
-	otb::MetaDataKey::m_OSSIMKeywordlistKey,
+	otb::MetaDataKey::OSSIMKeywordlistKey,
 	otb_tmp_image);*/
 
   otb_tmp_image = image_reader->GetOutput()->GetImageKeywordlist();
@@ -81,7 +81,7 @@ int otbOSSIMImageMetaDataReaderTest (int argc, char* argv[])
   vector_image_reader->GenerateOutputInformation ();
 
   /*	itk::ExposeMetaData< otb::ImageKeywordlist >(vector_image_reader->GetOutput()->GetMetaDataDictionary(),
-	otb::MetaDataKey::m_OSSIMKeywordlistKey,
+	otb::MetaDataKey::OSSIMKeywordlistKey,
 	otb_tmp_vector_image);*/
   otb::ImageKeywordlist otb_tmp_vector_image;
   otb_tmp_vector_image = vector_image_reader->GetOutput()->GetImageKeywordlist();

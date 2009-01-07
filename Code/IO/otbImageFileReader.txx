@@ -397,12 +397,12 @@ ImageFileReader<TOutputImage>
 
 //		  otbMsgDebugMacro( <<"Before write ITK Dictionnary ? ");
 	  	  itk::EncapsulateMetaData< ImageKeywordlist >(dico,
-	  											 MetaDataKey::m_OSSIMKeywordlistKey,
+	  											 MetaDataKey::OSSIMKeywordlistKey,
 												 otb_kwl);
 
 //		  otbMsgDebugMacro( <<"After write ITK Dictionnary ? ");
 //		  itk::ExposeMetaData< ImageKeywordlist >(dico,
-//	  											 MetaDataKey::m_OSSIMKeywordlistKey,
+//	  											 MetaDataKey::OSSIMKeywordlistKey,
 //												 otb_tmp);
 //		  otbMsgDebugMacro( <<"After read ITK Dictionnary ? ");
 

@@ -334,7 +334,7 @@ namespace otb
 //           {
 //             std::cout << papszMetadata[cpt] << std::endl;
 //               ::itk::OStringStream lStream;
-//               lStream << MetaDataKey::m_SubMetadataKey << cpt;
+//               lStream << MetaDataKey::SubMetadataKey << cpt;
 //               key = lStream.str();
 //
 //               itk::EncapsulateMetaData<std::string>(dict, key,
@@ -514,9 +514,9 @@ namespace otb
 
     hDriver = m_poDataset->GetDriver();
 
-    itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::m_DriverShortNameKey,
+    itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::DriverShortNameKey,
                                           static_cast<std::string>( GDALGetDriverShortName( hDriver ) ) );
-    itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::m_DriverLongNameKey,
+    itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::DriverLongNameKey,
                                           static_cast<std::string>( GDALGetDriverLongName( hDriver ) ) );
 
 
@@ -538,13 +538,13 @@ namespace otb
         char *	pszPrettyWkt = NULL;
 
         pSR->exportToPrettyWkt( &pszPrettyWkt, FALSE );
-        itk::EncapsulateMetaData<std::string> ( dict, MetaDataKey::m_ProjectionRefKey,
+        itk::EncapsulateMetaData<std::string> ( dict, MetaDataKey::ProjectionRefKey,
             static_cast<std::string>( pszPrettyWkt ) );
 
         CPLFree( pszPrettyWkt );
       }
       else
-        itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::m_ProjectionRefKey,
+        itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey,
                                               static_cast<std::string>( m_poDataset->GetProjectionRef() ) );
 
       if (pSR != NULL)
@@ -559,19 +559,20 @@ namespace otb
     /* Get the GCP projection coordinates of the image : GCPProjection	*/
     /* -------------------------------------------------------------------- */
 
-    if( m_poDataset->GetGCPCount() > 0 )
+    unsigned int gcpCount = 0;
+    gcpCount = m_poDataset->GetGCPCount();
+    if( gcpCount > 0 )
     {
-      itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::m_GCPProjectionKey,
+      itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::GCPProjectionKey,
                                             static_cast<std::string>( m_poDataset->GetGCPProjection() ) );
 
       std::string key;
 
-      itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::m_GCPCountKey,
-                                             static_cast<unsigned int>( m_poDataset->GetGCPCount() ) );
+      itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::GCPCountKey,gcpCount);
 
 
 
-      for( int cpt = 0; cpt < m_poDataset->GetGCPCount(); cpt++ )
+      for( int cpt = 0; cpt < gcpCount; cpt++ )
       {
         const GDAL_GCP	*psGCP;
 
@@ -581,7 +582,7 @@ namespace otb
 
             // Complete the key with the GCP number : GCP_i
           ::itk::OStringStream lStream;
-          lStream << MetaDataKey::m_GCPParametersKey << cpt;
+          lStream << MetaDataKey::GCPParametersKey << cpt;
           key = lStream.str();
 
           itk::EncapsulateMetaData<OTB_GCP>(dict, key, pOtbGCP);
@@ -603,7 +604,7 @@ namespace otb
     {
       for(int cpt = 0 ; cpt < 6 ; cpt++ ) VadfGeoTransform.push_back(adfGeoTransform[cpt]);
 
-      itk::EncapsulateMetaData<VectorType>(dict, MetaDataKey::m_GeoTransformKey, VadfGeoTransform);
+      itk::EncapsulateMetaData<VectorType>(dict, MetaDataKey::GeoTransformKey, VadfGeoTransform);
 
 	/// retrieve orgin and spacing from the geo transform
       m_Origin[0]=VadfGeoTransform[0];
@@ -624,7 +625,7 @@ namespace otb
       for( int cpt = 0; papszMetadata[cpt] != NULL; cpt++ )
       {
           ::itk::OStringStream lStream;
-          lStream << MetaDataKey::m_MetadataKey << cpt;
+          lStream << MetaDataKey::MetadataKey << cpt;
           key = lStream.str();
 
           itk::EncapsulateMetaData<std::string>(dict, key,
@@ -644,7 +645,7 @@ namespace otb
       for( int cpt = 0; papszMetadata[cpt] != NULL; cpt++ )
       {
           ::itk::OStringStream lStream;
-          lStream << MetaDataKey::m_SubMetadataKey << cpt;
+          lStream << MetaDataKey::SubMetadataKey << cpt;
           key = lStream.str();
 
           itk::EncapsulateMetaData<std::string>(dict, key,
@@ -664,7 +665,7 @@ namespace otb
     VGeo.push_back(GeoX);
     VGeo.push_back(GeoY);
 
-    itk::EncapsulateMetaData<VectorType>(dict, MetaDataKey::m_UpperLeftCornerKey, VGeo);
+    itk::EncapsulateMetaData<VectorType>(dict, MetaDataKey::UpperLeftCornerKey, VGeo);
 
     VGeo.clear();
 
@@ -672,7 +673,7 @@ namespace otb
     VGeo.push_back(GeoX);
     VGeo.push_back(GeoY);
 
-    itk::EncapsulateMetaData<VectorType>(dict, MetaDataKey::m_UpperRightCornerKey, VGeo);
+    itk::EncapsulateMetaData<VectorType>(dict, MetaDataKey::UpperRightCornerKey, VGeo);
 
     VGeo.clear();
 
@@ -680,7 +681,7 @@ namespace otb
     VGeo.push_back(GeoX);
     VGeo.push_back(GeoY);
 
-    itk::EncapsulateMetaData<VectorType>(dict, MetaDataKey::m_LowerLeftCornerKey, VGeo);
+    itk::EncapsulateMetaData<VectorType>(dict, MetaDataKey::LowerLeftCornerKey, VGeo);
 
     VGeo.clear();
 
@@ -688,7 +689,7 @@ namespace otb
     VGeo.push_back(GeoX);
     VGeo.push_back(GeoY);
 
-    itk::EncapsulateMetaData<VectorType>(dict, MetaDataKey::m_LowerRightCornerKey, VGeo);
+    itk::EncapsulateMetaData<VectorType>(dict, MetaDataKey::LowerRightCornerKey, VGeo);
 
     VGeo.clear();
 
@@ -705,11 +706,11 @@ namespace otb
       {
         unsigned int ColorEntryCount=GDALGetColorEntryCount(hTable);
 
-        itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::m_ColorTableNameKey,
+        itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ColorTableNameKey,
                                               static_cast<std::string>( GDALGetPaletteInterpretationName(
                                                   GDALGetPaletteInterpretation( hTable ) ) ) );
 
-        itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::m_ColorEntryCountKey, ColorEntryCount);
+        itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::ColorEntryCountKey, ColorEntryCount);
 
         for(int i = 0; i < GDALGetColorEntryCount( hTable ); i++ )
         {
@@ -723,7 +724,7 @@ namespace otb
           VColorEntry.push_back(sEntry.c3);
           VColorEntry.push_back(sEntry.c4);
 
-          itk::EncapsulateMetaData<VectorType>(dict, MetaDataKey::m_ColorEntryAsRGBKey, VColorEntry);
+          itk::EncapsulateMetaData<VectorType>(dict, MetaDataKey::ColorEntryAsRGBKey, VColorEntry);
 
         }
       }
@@ -984,9 +985,9 @@ namespace otb
 
 //     unsigned int gcpCount = imageBase->ImageBase::GetGCPCount(dict);
 
-    //TODO here is how it should be done...
+    //TODO here is how it could be done instead...
     unsigned int gcpCount = 0;
-    itk::ExposeMetaData<unsigned int>(dict, MetaDataKey::m_GCPCountKey, gcpCount);
+    itk::ExposeMetaData<unsigned int>(dict, MetaDataKey::GCPCountKey, gcpCount);
 
 
     if(gcpCount>0)
@@ -1053,7 +1054,7 @@ namespace otb
 
     for (unsigned int itkey=0; itkey<keys.size(); itkey++)
     {
-      if(keys[itkey].compare(0,key.m_MetadataKey.length(),key.m_MetadataKey)==0)
+      if(keys[itkey].compare(0,key.MetadataKey.length(),key.MetadataKey)==0)
       {
         itk::ExposeMetaData<std::string>(dict,keys[itkey],svalue);
         unsigned int equalityPos = svalue.find_first_of('=');

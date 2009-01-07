@@ -45,31 +45,31 @@ public:
   MetaDataKey(){};
   virtual ~MetaDataKey(){};
 
-  static const std::string m_DriverShortNameKey;
-  static const std::string m_DriverLongNameKey;
+  static const std::string DriverShortNameKey;
+  static const std::string DriverLongNameKey;
 
-  static const std::string m_ProjectionRefKey;
+  static const std::string ProjectionRefKey;
 
-  static const std::string m_GCPProjectionKey;
-  static const std::string m_GCPParametersKey;
-  static const std::string m_GCPCountKey;
+  static const std::string GCPProjectionKey;
+  static const std::string GCPParametersKey;
+  static const std::string GCPCountKey;
 
-  static const std::string m_GeoTransformKey;
+  static const std::string GeoTransformKey;
 
-  static const std::string m_MetadataKey;
-  static const std::string m_SubMetadataKey;
+  static const std::string MetadataKey;
+  static const std::string SubMetadataKey;
 
-  static const std::string m_UpperLeftCornerKey;
-  static const std::string m_UpperRightCornerKey;
-  static const std::string m_LowerLeftCornerKey;
-  static const std::string m_LowerRightCornerKey;
+  static const std::string UpperLeftCornerKey;
+  static const std::string UpperRightCornerKey;
+  static const std::string LowerLeftCornerKey;
+  static const std::string LowerRightCornerKey;
 
-  static const std::string m_ColorTableNameKey;
-  static const std::string m_ColorEntryCountKey;
-  static const std::string m_ColorEntryAsRGBKey;
+  static const std::string ColorTableNameKey;
+  static const std::string ColorEntryCountKey;
+  static const std::string ColorEntryAsRGBKey;
 
-  static const std::string m_OSSIMKeywordlistKey;
-  static const std::string m_OSSIMKeywordlistDelimiterKey;
+  static const std::string OSSIMKeywordlistKey;
+  static const std::string OSSIMKeywordlistDelimiterKey;
 
   enum  KeyType {
   	TSTRING,

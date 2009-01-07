@@ -128,7 +128,7 @@ int otbSensorImageToCarto( int argc, char* argv[] )
 
   otb::ImageKeywordlist otb_tmp_image;
   /*	itk::ExposeMetaData< otb::ImageKeywordlist >(image_medianFilter->GetOutput()->GetMetaDataDictionary(),
-	otb::MetaDataKey::m_OSSIMKeywordlistKey,
+	otb::MetaDataKey::OSSIMKeywordlistKey,
 	otb_tmp_image);*/
 
   otb_tmp_image = reader->GetOutput()->GetImageKeywordlist();

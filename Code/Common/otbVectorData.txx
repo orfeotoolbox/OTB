@@ -105,7 +105,7 @@ template<class TPrecision, unsigned int VDimension>
 {
   itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
 
-  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::m_ProjectionRefKey, projectionRef );
+  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef );
   this->Modified();
 }
 
@@ -117,7 +117,7 @@ template<class TPrecision, unsigned int VDimension>
   const itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
 
   std::string projectionRef;
-  itk::ExposeMetaData<std::string>(dict, MetaDataKey::m_ProjectionRefKey, projectionRef );
+  itk::ExposeMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef );
 
   return projectionRef;
 }

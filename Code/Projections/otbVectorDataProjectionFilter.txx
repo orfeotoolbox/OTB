@@ -119,7 +119,7 @@ namespace otb
     OutputVectorDataPointer output = this->GetOutput();
     itk::MetaDataDictionary & dict = output->GetMetaDataDictionary();
 
-    itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::m_ProjectionRefKey, m_OutputProjectionRef );
+    itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, m_OutputProjectionRef );
 
   }
 
@@ -170,11 +170,11 @@ namespace otb
     //If the information were not specified by the user, it is filled from the metadata
     if (m_InputKeywordList.getSize()  == 0)
     {
-      itk::ExposeMetaData<ossimKeywordlist>(inputDict, MetaDataKey::m_OSSIMKeywordlistKey, m_InputKeywordList );
+      itk::ExposeMetaData<ossimKeywordlist>(inputDict, MetaDataKey::OSSIMKeywordlistKey, m_InputKeywordList );
     }
     if (m_InputProjectionRef.empty())
     {
-      itk::ExposeMetaData<std::string>(inputDict, MetaDataKey::m_ProjectionRefKey, m_InputProjectionRef );
+      itk::ExposeMetaData<std::string>(inputDict, MetaDataKey::ProjectionRefKey, m_InputProjectionRef );
     }
 
 

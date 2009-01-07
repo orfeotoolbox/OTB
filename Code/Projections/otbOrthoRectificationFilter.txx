@@ -75,7 +75,7 @@ namespace otb
 
     std::string projectionRef = m_MapProjection->GetWkt();
 
-    itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::m_ProjectionRefKey, projectionRef );
+    itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef );
 
   }
 

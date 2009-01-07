@@ -41,9 +41,9 @@ std::string ImageBase::GetProjectionRef( const MetaDataDictionaryType & dict ) c
 {
   std::string metadata;
 
-  if(dict.HasKey(MetaDataKey::m_ProjectionRefKey))
+  if(dict.HasKey(MetaDataKey::ProjectionRefKey))
      {
-     itk::ExposeMetaData<std::string>(dict, static_cast<std::string>(MetaDataKey::m_ProjectionRefKey), metadata);
+     itk::ExposeMetaData<std::string>(dict, static_cast<std::string>(MetaDataKey::ProjectionRefKey), metadata);
      return ( metadata );
      }
   else
@@ -54,9 +54,9 @@ std::string ImageBase::GetGCPProjection( const MetaDataDictionaryType & dict ) c
 {
   std::string metadata;
 
-  if(dict.HasKey(MetaDataKey::m_GCPProjectionKey))
+  if(dict.HasKey(MetaDataKey::GCPProjectionKey))
      {
-     itk::ExposeMetaData<std::string>(dict, static_cast<std::string>(MetaDataKey::m_GCPProjectionKey), metadata);
+     itk::ExposeMetaData<std::string>(dict, static_cast<std::string>(MetaDataKey::GCPProjectionKey), metadata);
      return ( metadata );
      }
   else
@@ -67,9 +67,9 @@ unsigned int ImageBase::GetGCPCount( const MetaDataDictionaryType & dict) const
 {
   unsigned int GCPCount = 0;
 
-  if(dict.HasKey(MetaDataKey::m_GCPCountKey))
+  if(dict.HasKey(MetaDataKey::GCPCountKey))
      {
-     itk::ExposeMetaData<unsigned int>(dict, MetaDataKey::m_GCPCountKey, GCPCount);
+     itk::ExposeMetaData<unsigned int>(dict, MetaDataKey::GCPCountKey, GCPCount);
      }
 
   return (GCPCount);
@@ -81,7 +81,7 @@ OTB_GCP & ImageBase::GetGCPs( MetaDataDictionaryType & dict, unsigned int GCPnum
   std::string key;
 
   ::itk::OStringStream lStream;
-  lStream << MetaDataKey::m_GCPParametersKey << GCPnum;
+  lStream << MetaDataKey::GCPParametersKey << GCPnum;
   key = lStream.str();
 
   if(dict.HasKey(key))
@@ -98,7 +98,7 @@ std::string ImageBase::GetGCPId( const MetaDataDictionaryType & dict, unsigned i
   std::string key;
 
   ::itk::OStringStream lStream;
-  lStream << MetaDataKey::m_GCPParametersKey << GCPnum;
+  lStream << MetaDataKey::GCPParametersKey << GCPnum;
   key = lStream.str();
 
   if(dict.HasKey(key))
@@ -116,7 +116,7 @@ std::string ImageBase::GetGCPInfo( const MetaDataDictionaryType & dict, unsigned
   std::string key;
 
   ::itk::OStringStream lStream;
-  lStream << MetaDataKey::m_GCPParametersKey << GCPnum;
+  lStream << MetaDataKey::GCPParametersKey << GCPnum;
   key = lStream.str();
 
   if(dict.HasKey(key))
@@ -134,7 +134,7 @@ double ImageBase::GetGCPRow( const MetaDataDictionaryType & dict, unsigned int G
   std::string key;
 
   ::itk::OStringStream lStream;
-  lStream << MetaDataKey::m_GCPParametersKey << GCPnum;
+  lStream << MetaDataKey::GCPParametersKey << GCPnum;
   key = lStream.str();
 
 
@@ -153,7 +153,7 @@ double ImageBase::GetGCPCol( const MetaDataDictionaryType & dict, unsigned int G
   std::string key;
 
   ::itk::OStringStream lStream;
-  lStream << MetaDataKey::m_GCPParametersKey << GCPnum;
+  lStream << MetaDataKey::GCPParametersKey << GCPnum;
   key = lStream.str();
 
 
@@ -172,7 +172,7 @@ double ImageBase::GetGCPX( const MetaDataDictionaryType & dict, unsigned int GCP
   std::string key;
 
   ::itk::OStringStream lStream;
-  lStream << MetaDataKey::m_GCPParametersKey << GCPnum;
+  lStream << MetaDataKey::GCPParametersKey << GCPnum;
   key = lStream.str();
 
   if(dict.HasKey(key))
@@ -190,7 +190,7 @@ double ImageBase::GetGCPY( const MetaDataDictionaryType & dict, unsigned int GCP
   std::string key;
 
   ::itk::OStringStream lStream;
-  lStream << MetaDataKey::m_GCPParametersKey << GCPnum;
+  lStream << MetaDataKey::GCPParametersKey << GCPnum;
   key = lStream.str();
 
   if(dict.HasKey(key))
@@ -208,7 +208,7 @@ double ImageBase::GetGCPZ( const MetaDataDictionaryType & dict, unsigned int GCP
   std::string key;
 
   ::itk::OStringStream lStream;
-  lStream << MetaDataKey::m_GCPParametersKey << GCPnum;
+  lStream << MetaDataKey::GCPParametersKey << GCPnum;
   key = lStream.str();
 
   if(dict.HasKey(key))
@@ -225,9 +225,9 @@ ImageBase::VectorType ImageBase::GetGeoTransform( const MetaDataDictionaryType &
 {
   VectorType adfGeoTransform;
 
-  if(dict.HasKey(MetaDataKey::m_GeoTransformKey))
+  if(dict.HasKey(MetaDataKey::GeoTransformKey))
      {
-     itk::ExposeMetaData<VectorType>(dict, MetaDataKey::m_GeoTransformKey, adfGeoTransform);
+     itk::ExposeMetaData<VectorType>(dict, MetaDataKey::GeoTransformKey, adfGeoTransform);
      }
   return ( adfGeoTransform );
 }
@@ -236,9 +236,9 @@ ImageBase::VectorType ImageBase::GetUpperLeftCorner( const MetaDataDictionaryTyp
 {
   VectorType UpperLeftCorner;
 
-  if(dict.HasKey(MetaDataKey::m_UpperLeftCornerKey))
+  if(dict.HasKey(MetaDataKey::UpperLeftCornerKey))
      {
-     itk::ExposeMetaData<VectorType>(dict, MetaDataKey::m_UpperLeftCornerKey, UpperLeftCorner);
+     itk::ExposeMetaData<VectorType>(dict, MetaDataKey::UpperLeftCornerKey, UpperLeftCorner);
      }
    return ( UpperLeftCorner );
 }
@@ -247,9 +247,9 @@ ImageBase::VectorType ImageBase::GetUpperRightCorner( const MetaDataDictionaryTy
 {
   VectorType UpperRightCorner;
 
-  if(dict.HasKey(MetaDataKey::m_UpperRightCornerKey))
+  if(dict.HasKey(MetaDataKey::UpperRightCornerKey))
      {
-     itk::ExposeMetaData<VectorType>(dict, MetaDataKey::m_UpperRightCornerKey, UpperRightCorner);
+     itk::ExposeMetaData<VectorType>(dict, MetaDataKey::UpperRightCornerKey, UpperRightCorner);
      }
    return ( UpperRightCorner );
 }
@@ -258,9 +258,9 @@ ImageBase::VectorType ImageBase::GetLowerLeftCorner( const MetaDataDictionaryTyp
 {
   VectorType LowerLeftCorner;
 
-  if(dict.HasKey(MetaDataKey::m_LowerLeftCornerKey))
+  if(dict.HasKey(MetaDataKey::LowerLeftCornerKey))
      {
-     itk::ExposeMetaData<VectorType>(dict, MetaDataKey::m_LowerLeftCornerKey, LowerLeftCorner);
+     itk::ExposeMetaData<VectorType>(dict, MetaDataKey::LowerLeftCornerKey, LowerLeftCorner);
      }
    return ( LowerLeftCorner );
 }
@@ -269,9 +269,9 @@ ImageBase::VectorType ImageBase::GetLowerRightCorner( const MetaDataDictionaryTy
 {
   VectorType LowerRightCorner;
 
-  if(dict.HasKey(MetaDataKey::m_LowerRightCornerKey))
+  if(dict.HasKey(MetaDataKey::LowerRightCornerKey))
      {
-     itk::ExposeMetaData<VectorType>(dict, MetaDataKey::m_LowerRightCornerKey, LowerRightCorner);
+     itk::ExposeMetaData<VectorType>(dict, MetaDataKey::LowerRightCornerKey, LowerRightCorner);
      }
    return ( LowerRightCorner );
 }
@@ -280,9 +280,9 @@ ImageBase::ImageKeywordlistType ImageBase::GetImageKeywordlist( MetaDataDictiona
 {
   ImageKeywordlistType ImageKeywordlist;
 
-  if(dict.HasKey(MetaDataKey::m_OSSIMKeywordlistKey))
+  if(dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
      {
-     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::m_OSSIMKeywordlistKey, ImageKeywordlist);
+     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, ImageKeywordlist);
      }
    return ( ImageKeywordlist );
 }
@@ -291,9 +291,9 @@ const ImageBase::ImageKeywordlistType ImageBase::GetImageKeywordlist(const MetaD
 {
   ImageKeywordlistType ImageKeywordlist;
 
-  if(dict.HasKey(MetaDataKey::m_OSSIMKeywordlistKey))
+  if(dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
   {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::m_OSSIMKeywordlistKey, ImageKeywordlist);
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, ImageKeywordlist);
   }
   return ( ImageKeywordlist );
 }

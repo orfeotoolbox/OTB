@@ -496,7 +496,7 @@ namespace otb
 
     std::string projectionRef = "GEOGCS[\"GCS_WGS_1984\", DATUM[\"WGS_1984\", SPHEROID[\"WGS_1984\",6378137,298.257223563]], PRIMEM[\"Greenwich\",0], UNIT[\"Degree\",0.017453292519943295]]";
     itk::MetaDataDictionary & dict = data->GetMetaDataDictionary();
-    itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::m_ProjectionRefKey, projectionRef );
+    itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef );
 
     const FeaturePtr feature = GetRootFeature(root);
     if (feature) {
