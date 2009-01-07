@@ -348,14 +348,27 @@ ADD_TEST(prTvGenericMapProjection ${PROJECTIONS_TESTS3}
 
 ADD_TEST(prTuVectorDataProjectionFilterNew ${PROJECTIONS_TESTS3}  otbVectorDataProjectionFilterNew )
 
-ADD_TEST(prTvVectorDataProjectionFilter ${PROJECTIONS_TESTS3}
+#test lines
+ADD_TEST(prTvVectorDataProjectionFilterLines ${PROJECTIONS_TESTS3}
         --compare-binary
-        ${BASELINE_FILES}/prTvVectorDataProjectionFilter.shp
-        ${TEMP}/prTvVectorDataProjectionFilter.shp
+        ${BASELINE_FILES}/prTvVectorDataProjectionFilterLines.shp
+        ${TEMP}/prTvVectorDataProjectionFilterLines.shp
+        otbVectorDataProjectionFilter
+        ${INPUTDATA}/ToulouseRoad-examples.shp
+        ${TEMP}/prTvVectorDataProjectionFilterLines.shp
+)
+
+# test polygons
+ADD_TEST(prTvVectorDataProjectionFilterPolygons ${PROJECTIONS_TESTS3}
+        --compare-binary
+        ${BASELINE_FILES}/prTvVectorDataProjectionFilterPolygons.shp
+        ${TEMP}/prTvVectorDataProjectionFilterPolygons.shp
         otbVectorDataProjectionFilter
         ${INPUTDATA}/Capitole-Shadows.shp
-        ${TEMP}/prTvVectorDataProjectionFilter.shp
+        ${TEMP}/prTvVectorDataProjectionFilterPolygons.shp
 )
+
+
 
 #=======================================================================================
 SET(Projections_SRCS1
