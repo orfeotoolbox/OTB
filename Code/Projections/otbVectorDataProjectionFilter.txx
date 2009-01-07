@@ -43,6 +43,8 @@ namespace otb
     m_OutputKeywordList.clear();
     m_InputSpacing.Fill(1);
     m_InputOrigin.Fill(0);
+    m_OutputSpacing.Fill(1);
+    m_OutputOrigin.Fill(0);
   }
 
 
@@ -144,6 +146,8 @@ namespace otb
       pointCoord[0] = pointCoord[0] * m_InputSpacing[0] + m_InputOrigin[0];
       pointCoord[1] = pointCoord[1] * m_InputSpacing[1] + m_InputOrigin[1];
       point = m_Transform->TransformPoint(pointCoord);
+      point[0] = (point[0] - m_OutputOrigin[0]) / m_OutputSpacing[0];
+      point[1] = (point[1] - m_OutputOrigin[1]) / m_OutputSpacing[1];
       index[0]=point[0];
       index[1]=point[1];
       otbMsgDevMacro(<< "Converting: " << it.Value() << " -> " << index);
@@ -301,11 +305,13 @@ namespace otb
         case DOCUMENT:
         {
           tree->Add(newDataNode,currentContainer);
+          currentContainer = newDataNode;
           break;
         }
         case FOLDER:
         {
           tree->Add(newDataNode,currentContainer);
+          currentContainer = newDataNode;
           break;
         }
         case FEATURE_POINT:
@@ -315,6 +321,7 @@ namespace otb
         case FEATURE_LINE:
         {
           newDataNode->SetLine(this->ReprojectLine(dataNode->GetLine()));
+          tree->Add(newDataNode,currentContainer);
           break;
         }
         case FEATURE_POLYGON:

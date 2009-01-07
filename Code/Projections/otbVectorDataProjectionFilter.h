@@ -27,10 +27,32 @@ namespace otb
 {
 
 /** \class VectorDataProjectionFilter
-   * \brief Reproject vector data in a different coordinate system
-   *
-   *
-   * \ingroup VectorDataFilter
+  * \brief Reproject vector data in a different coordinate system
+  *
+  * This class is used to reproject vector data into a different coordinate system.
+ * the input and output coordinate system can be a map projection, a raw image from a
+ * sensor (the sensor model will be used), or the local coordinate system of an image.
+ *
+ * This filter works on otb::VectorData as input and output.
+ *
+ * The process goes as follow:
+ * - offset/scaling of the input coordinates
+ * - transform to get the data in geographic coordinates (lon/lat)
+ * - transform from geographic coordinates
+ * - offset/scaling of the output coordinates
+ *
+ * Each of this step is optional and would default to and identity transform is nothing
+ * is specified.
+ *
+ * The offset/scaling step are necessary only when working with the local coordinate
+ * system of the image. The value need to be provided by the SetInputSpacing, SetInputOrigin,
+ * SetOutputSpacing and SetOutputOrigin methods.
+ *
+ * The two transforms are itk::Transform that will be instanciated as otb::GenericMapProjection
+ * or otb::InverseSensorModel or otb::ForwardSensorModel.
+  *
+  * \ingroup VectorDataFilter
+ * \ingroup Projection
  */
 
   template <class TInputVectorData, class TOutputVectorData>
@@ -131,7 +153,8 @@ namespace otb
 
       SpacingType         m_InputSpacing;
       OriginType          m_InputOrigin;
-
+      SpacingType         m_OutputSpacing;
+      OriginType          m_OutputOrigin;
   };
 
 } // end namespace otb
