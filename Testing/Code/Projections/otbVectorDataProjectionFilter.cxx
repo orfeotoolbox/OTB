@@ -36,8 +36,6 @@ int otbVectorDataProjectionFilter(int argc, char * argv[])
   reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
 
-
-
   typedef otb::VectorDataProjectionFilter<InputVectorDataType,OutputVectorDataType> VectorDataFilterType;
 
   VectorDataFilterType::Pointer vectorDataProjection = VectorDataFilterType::New();
@@ -55,6 +53,21 @@ int otbVectorDataProjectionFilter(int argc, char * argv[])
   writer->SetInput(vectorDataProjection->GetOutput());
   writer->Update();
 
+
+  //Output the tree in a text file
+  if (argc > 4)
+  {
+    const char * outfile = argv[3];
+    std::ofstream file;
+    file.open(outfile);
+    file << "Original data" << std::endl;
+    file << reader->GetOutput();
+    file << std::endl << std::endl;
+    file << "Reprojected data" << std::endl;
+    file << vectorDataProjection->GetOutput();
+    file << std::endl << std::endl;
+    file.close();
+  }
 
   return EXIT_SUCCESS;
 }
