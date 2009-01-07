@@ -61,7 +61,7 @@ MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType>
 ::GenerateOutputInformation()
 {
         typename Superclass::InputImageConstPointer  inputPtr = this->GetInput();
-        // Analyse du canal trait�
+        // Bounds checking for the channel to process
         if ( (m_Channel <= 0) || (m_Channel > inputPtr->GetVectorLength() ) )
         {
                         itkExceptionMacro(<< "otb::MultiToMonoChannelExtractROI::GenerateOutputInformation "
@@ -69,7 +69,7 @@ MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType>
                       << typeid(itk::ImageBase<InputImageDimension>*).name() );
         }
 
-        // Appel � la methode de la classe de base
+        // Calling the superclass method
         Superclass::GenerateOutputInformation();
 }
 
