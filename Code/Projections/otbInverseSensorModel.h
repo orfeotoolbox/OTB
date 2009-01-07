@@ -39,6 +39,7 @@ namespace otb
    * Notice that the elevation h is optional.
    *
    * \ingroup Transform
+   * \ingroup Projection
    */
   template <class TScalarType,
   unsigned int NInputDimensions=2,

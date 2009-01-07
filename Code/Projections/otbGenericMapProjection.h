@@ -42,6 +42,9 @@ namespace otb
    *
    * All derived class assume that the latitude and longitude are given according to the
    * WGS84 ellipsoid model.
+   *
+   * \ingroup Projection
+   *
    **/
 
   typedef enum {FORWARD=0, INVERSE=1} InverseOrForwardTransformationEnum;

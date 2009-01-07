@@ -36,6 +36,9 @@ namespace otb
    *  \brief Base class for the sensor model projection classes.
    *  This class allows to transform a geographic point in (lat,long) to a point in the sensor geometry.
    *  (lat,lon) -> (i,j) ou (lat,lon,h) -> (i,j)
+   *
+   * \ingroup Projection
+   *
    */
   template <class TScalarType,
   unsigned int NInputDimensions=3,
