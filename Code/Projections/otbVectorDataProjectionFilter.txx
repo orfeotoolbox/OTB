@@ -24,6 +24,7 @@
 #include "otbMetaDataKey.h"
 #include "otbGenericMapProjection.h"
 #include "itkIdentityTransform.h"
+#include "otbForwardSensorModel.h"
 #include "otbInverseSensorModel.h"
 #include "otbDataNode.h"
 
@@ -150,7 +151,7 @@ namespace otb
       point[1] = (point[1] - m_OutputOrigin[1]) / m_OutputSpacing[1];
       index[0]=point[0];
       index[1]=point[1];
-      otbMsgDevMacro(<< "Converting: " << it.Value() << " -> " << index);
+      otbMsgDevMacro(<< "Converting: " << it.Value() << " -> " << pointCoord << " -> " << point << " -> " << index);
       newLine->AddVertex(index);
       it++;
     }
@@ -181,6 +182,15 @@ namespace otb
       itk::ExposeMetaData<std::string>(inputDict, MetaDataKey::ProjectionRefKey, m_InputProjectionRef );
     }
 
+    otbMsgDevMacro(<< "Information to instanciate transform: ");
+    otbMsgDevMacro(<< " - Input Origin: " << m_InputOrigin);
+    otbMsgDevMacro(<< " - Input Spacing: " << m_InputSpacing);
+    otbMsgDevMacro(<< " - Input keyword list: " << m_InputKeywordList);
+    otbMsgDevMacro(<< " - Input projection: " << m_InputProjectionRef);
+    otbMsgDevMacro(<< " - Output keyword list: " << m_OutputKeywordList);
+    otbMsgDevMacro(<< " - Output projection: " << m_OutputProjectionRef);
+    otbMsgDevMacro(<< " - Output Origin: " << m_OutputOrigin);
+    otbMsgDevMacro(<< " - Output Spacing: " << m_OutputSpacing);
 
     //*****************************
     //Set the input transformation
@@ -208,7 +218,7 @@ namespace otb
       if (mapTransform->GetMapProjection() != NULL)
       {
         m_InputTransform = mapTransform;
-        otbMsgDevMacro(<< "Input projection set to map trasform");
+        otbMsgDevMacro(<< "Input projection set to map transform: " << m_InputTransform);
       }
 
     }
@@ -224,8 +234,8 @@ namespace otb
     //*****************************
     if (m_OutputKeywordList.getSize()  > 0)
     {
-      typedef otb::InverseSensorModel<double> InverseSensorModelType;
-      InverseSensorModelType* sensorModel = InverseSensorModelType::New();
+      typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
+      ForwardSensorModelType* sensorModel = ForwardSensorModelType::New();
       sensorModel->SetImageGeometry(m_OutputKeywordList);
       if ( !m_DEMDirectory.empty())
       {
@@ -238,14 +248,14 @@ namespace otb
 
     if ((m_OutputTransform.IsNull()) && ( !m_OutputProjectionRef.empty() ))//map projection
     {
-      typedef otb::GenericMapProjection<otb::INVERSE> InverseMapProjectionType;
-      InverseMapProjectionType::Pointer mapTransformSmartPointer = InverseMapProjectionType::New();
-      InverseMapProjectionType* mapTransform = mapTransformSmartPointer.GetPointer();
+      typedef otb::GenericMapProjection<otb::FORWARD> ForwardMapProjectionType;
+      ForwardMapProjectionType::Pointer mapTransformSmartPointer = ForwardMapProjectionType::New();
+      ForwardMapProjectionType* mapTransform = mapTransformSmartPointer.GetPointer();
       mapTransform->SetWkt(m_OutputProjectionRef);
       if (mapTransform->GetMapProjection() != NULL)
       {
         m_OutputTransform = mapTransform;
-        otbMsgDevMacro(<< "Output projection set to map trasform");
+        otbMsgDevMacro(<< "Output projection set to map transform: " << m_OutputTransform);
       }
 
     }
@@ -283,11 +293,8 @@ namespace otb
 
     InputTreeIteratorType it(inputPtr->GetDataTree());
     OutputDataTreePointerType tree = outputPtr->GetDataTree();
-    if (tree->GetRoot() == NULL)
-    {
-      itkExceptionMacro(<<"Data tree is empty: Root == NULL");
-    }
-    OutputDataNodePointerType currentContainer = tree->GetRoot()->Get();
+
+    OutputDataNodePointerType currentContainer;
 
     while(!it.IsAtEnd())//FIXME this VectorData tree processing would better be in a generic class
     {
@@ -299,7 +306,8 @@ namespace otb
       {
         case ROOT:
         {
-          //do nothing
+          tree->SetRoot(newDataNode);
+          currentContainer = newDataNode;
           break;
         }
         case DOCUMENT:
