@@ -978,14 +978,7 @@ namespace otb
     /* -------------------------------------------------------------------- */
     /* Set the GCPs	                                                        */
     /* -------------------------------------------------------------------- */
-    typedef otb::Image<bool, 1> VirtualImageType;
-    VirtualImageType::Pointer imageBase = VirtualImageType::New();//this is just a facility to use
-    // the GCP related methods. Those should be in a class separated from ImageBase
-    // TODO ImageBase refactoring needed.
 
-//     unsigned int gcpCount = imageBase->ImageBase::GetGCPCount(dict);
-
-    //TODO here is how it could be done instead...
     unsigned int gcpCount = 0;
     itk::ExposeMetaData<unsigned int>(dict, MetaDataKey::GCPCountKey, gcpCount);
 
@@ -998,17 +991,27 @@ namespace otb
 
       for(unsigned int gcpIndex = 0; gcpIndex < gcpCount;++gcpIndex)
       {
-        gdalGcps[gcpIndex].pszId = const_cast<char *>(imageBase->ImageBase::GetGCPId(dict,gcpIndex).c_str());
-        gdalGcps[gcpIndex].pszInfo = const_cast<char *>(imageBase->ImageBase::GetGCPInfo(dict,gcpIndex).c_str());
-        gdalGcps[gcpIndex].dfGCPPixel = imageBase->ImageBase::GetGCPCol(dict,gcpIndex);
-        gdalGcps[gcpIndex].dfGCPLine = imageBase->ImageBase::GetGCPRow(dict,gcpIndex);
-        gdalGcps[gcpIndex].dfGCPX = imageBase->ImageBase::GetGCPX(dict,gcpIndex);
-        gdalGcps[gcpIndex].dfGCPY = imageBase->ImageBase::GetGCPY(dict,gcpIndex);
-        gdalGcps[gcpIndex].dfGCPZ = imageBase->ImageBase::GetGCPZ(dict,gcpIndex);
+        //Build the GCP string in the form of GCP_n
+        itk::OStringStream lStream;
+        lStream << MetaDataKey::GCPParametersKey << gcpIndex;
+        std::string key = lStream.str();
+
+        OTB_GCP gcp;
+        itk::ExposeMetaData<OTB_GCP>(dict, key, gcp);
+
+        gdalGcps[gcpIndex].pszId = const_cast<char *>(gcp.m_Id.c_str());
+        gdalGcps[gcpIndex].pszInfo = const_cast<char *>(gcp.m_Info.c_str());
+        gdalGcps[gcpIndex].dfGCPPixel = gcp.m_GCPCol;
+        gdalGcps[gcpIndex].dfGCPLine = gcp.m_GCPRow;
+        gdalGcps[gcpIndex].dfGCPX = gcp.m_GCPX;
+        gdalGcps[gcpIndex].dfGCPY = gcp.m_GCPY;
+        gdalGcps[gcpIndex].dfGCPZ = gcp.m_GCPZ;
 
       }
 
-      m_poDataset->SetGCPs(gcpCount,gdalGcps,imageBase->ImageBase::GetGCPProjection(dict).c_str());
+      std::string gcpProjectionRef;
+      itk::ExposeMetaData<std::string>(dict, MetaDataKey::GCPProjectionKey, gcpProjectionRef );
+      m_poDataset->SetGCPs(gcpCount,gdalGcps,gcpProjectionRef.c_str());
 
       delete [] gdalGcps;
     }
@@ -1017,10 +1020,11 @@ namespace otb
     /* Set the projection coordinate system of the image : ProjectionRef	*/
     /* -------------------------------------------------------------------- */
 
-
-    if(!imageBase->ImageBase::GetProjectionRef(dict).empty())
+    std::string projectionRef;
+    itk::ExposeMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef );
+    if(! projectionRef.empty())
     {
-      m_poDataset->SetProjection(imageBase->ImageBase::GetProjectionRef(dict).c_str());
+      m_poDataset->SetProjection(projectionRef.c_str());
     }
 
     /* -------------------------------------------------------------------- */
