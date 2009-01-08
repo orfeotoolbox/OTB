@@ -87,6 +87,8 @@ namespace otb
       typedef typename OutputVectorDataType::DataNodePointerType OutputDataNodePointerType;
       typedef typename OutputVectorDataType::DataTreePointerType OutputDataTreePointerType;
 
+      typedef typename OutputDataNodeType::PointType PointType;
+
       typedef typename OutputDataNodeType::LineType LineType;
       typedef typename OutputDataNodeType::LineConstPointerType LineConstPointerType;
       typedef typename OutputDataNodeType::LinePointerType LinePointerType;
@@ -139,6 +141,7 @@ namespace otb
       VectorDataProjectionFilter();
       virtual ~VectorDataProjectionFilter() {};
 
+      PointType ReprojectPoint(PointType point) const;
       LinePointerType ReprojectLine(LinePointerType line) const;
       PolygonPointerType ReprojectPolygon(PolygonPointerType polygon) const;
       PolygonListPointerType ReprojectPolygonList(PolygonListPointerType polygonList) const;

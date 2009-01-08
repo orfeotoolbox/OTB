@@ -126,6 +126,40 @@ namespace otb
 
   }
 
+    /**
+   * Convert point
+     */
+  template <class TInputVectorData, class TOutputVectorData >
+      typename VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>::PointType
+          VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
+  ::ReprojectPoint(PointType pointCoord) const
+  {
+//     typedef typename LineType::VertexListType::ConstPointer VertexListConstPointerType;
+//     typedef typename LineType::VertexListConstIteratorType VertexListConstIteratorType;
+//     VertexListConstPointerType  vertexList = line->GetVertexList();
+//     VertexListConstIteratorType it = vertexList->Begin();
+//     typename LineType::Pointer newLine = LineType::New();
+//     while ( it != vertexList->End())
+//     {
+      itk::Point<double,2> point;
+//       itk::ContinuousIndex<double,2> index;
+//       typename LineType::VertexType pointCoord = it.Value();
+      pointCoord[0] = pointCoord[0] * m_InputSpacing[0] + m_InputOrigin[0];
+      pointCoord[1] = pointCoord[1] * m_InputSpacing[1] + m_InputOrigin[1];
+      point = m_Transform->TransformPoint(pointCoord);
+      point[0] = (point[0] - m_OutputOrigin[0]) / m_OutputSpacing[0];
+      point[1] = (point[1] - m_OutputOrigin[1]) / m_OutputSpacing[1];
+//       index[0]=point[0];
+//       index[1]=point[1];
+//       otbMsgDevMacro(<< "Converting: " << it.Value() << " -> " << pointCoord << " -> " << point << " -> " << index);
+//       newLine->AddVertex(index);
+//       it++;
+//     }
+
+    return point;
+  }
+
+
   /**
    * Convert line
    */
@@ -184,7 +218,7 @@ namespace otb
       point[1] = (point[1] - m_OutputOrigin[1]) / m_OutputSpacing[1];
       index[0]=point[0];
       index[1]=point[1];
-      otbMsgDevMacro(<< "Converting: " << it.Value() << " -> " << pointCoord << " -> " << point << " -> " << index);
+//       otbMsgDevMacro(<< "Converting: " << it.Value() << " -> " << pointCoord << " -> " << point << " -> " << index);
       newPolygon->AddVertex(index);
       it++;
     }
@@ -220,12 +254,10 @@ namespace otb
 
     m_Transform = InternalTransformType::New();
 
+    //If the information was not specified by the user, it is filled from the metadata
     InputVectorDataPointer input = this->GetInput();
-    OutputVectorDataPointer output = this->GetOutput();
     const itk::MetaDataDictionary & inputDict = input->GetMetaDataDictionary();
-    itk::MetaDataDictionary & outputDict = output->GetMetaDataDictionary();
 
-    //If the information were not specified by the user, it is filled from the metadata
     if (m_InputKeywordList.getSize()  == 0)
     {
       itk::ExposeMetaData<ossimKeywordlist>(inputDict, MetaDataKey::OSSIMKeywordlistKey, m_InputKeywordList );
@@ -234,6 +266,20 @@ namespace otb
     {
       itk::ExposeMetaData<std::string>(inputDict, MetaDataKey::ProjectionRefKey, m_InputProjectionRef );
     }
+
+    //If the projection information for the output is provided, propagate it
+    OutputVectorDataPointer output = this->GetOutput();
+    itk::MetaDataDictionary & outputDict = output->GetMetaDataDictionary();
+
+    if (m_OutputKeywordList.getSize()  != 0)
+    {
+      itk::EncapsulateMetaData<ossimKeywordlist>(outputDict, MetaDataKey::OSSIMKeywordlistKey, m_OutputKeywordList );
+    }
+    if (m_InputProjectionRef.empty())
+    {
+      itk::EncapsulateMetaData<std::string>(outputDict, MetaDataKey::ProjectionRefKey, m_OutputProjectionRef );
+    }
+
 
     otbMsgDevMacro(<< "Information to instanciate transform: ");
     otbMsgDevMacro(<< " - Input Origin: " << m_InputOrigin);
@@ -375,7 +421,8 @@ namespace otb
         }
         case FEATURE_POINT:
         {
-          itkExceptionMacro(<<"Can't handle FEATURE_POINT yet!");
+          newDataNode->SetPoint(this->ReprojectPoint(dataNode->GetPoint()));
+          tree->Add(newDataNode,currentContainer);
           break;
         }
         case FEATURE_LINE:
