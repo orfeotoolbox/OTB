@@ -1031,7 +1031,7 @@ ENDIF(USE_FFTWD)
 
 ADD_TEST(bfTvPolygonCompacityFunctor ${BASICFILTERS_TESTS10}
 	--compare-ascii ${TOL}
-	    ${BASELINE}/bfPolygonCompacityFunctorTest.txt
+	    ${BASELINE_FILES}/bfPolygonCompacityFunctorTest.txt
 	    ${TEMP}/bfPolygonCompacityFunctorTest.txt
 	 otbPolygonCompacityFunctor
 	 ${INPUTDATA}/polygon.png
@@ -1048,7 +1048,7 @@ ADD_TEST(bfTuPersistentVectorizationImageFilterNew ${BASICFILTERS_TESTS10}
 
 ADD_TEST(bfTvPersistentVectorizationImageFilter ${BASICFILTERS_TESTS10}
 --compare-ascii ${TOL}
-	    ${BASELINE}/bfTvPersistentVectorizationImageFilterOutput.txt
+	    ${BASELINE_FILES}/bfTvPersistentVectorizationImageFilterOutput.txt
 	    ${TEMP}/bfTvPersistentVectorizationImageFilterOutput.txt
 	 otbPersistentVectorizationFilter
 	 ${INPUTDATA}/Seg1InputForRCC8Graph.tif
