@@ -50,7 +50,7 @@ std::map<std::string, MainFuncPointer> StringToTestFunctionMap;
 extern int test(int, char* [] ); \
 StringToTestFunctionMap[#test] = test
 
-std::map<std::string,int> RegressionTestBaselines (char *);
+std::map<std::string,int> RegressionTestbaselines (char *);
 
 int RegressionTestImage (int, const char *, const char *, int, const double);
 int RegressionTestBinaryFile(const char *, const char *, int);
@@ -76,14 +76,16 @@ int main(int ac, char* av[] )
   bool lFlagRegression(false);
   double lToleranceDiffPixelImage(0);
   double lEpsilon(0);
-  char *baselineFilenameBinary = NULL;
-  char *testFilenameBinary = NULL;
+//   char *baselineFilenameBinary = NULL;
+//   char *testFilenameBinary = NULL;
+  std::vector<std::string> baselineFilenamesBinary;
+  std::vector<std::string> testFilenamesBinary;
   std::vector<std::string> baselineFilenamesMetaData;
   std::vector<std::string> testFilenamesMetaData;
   // vector if image filenames to compare
-  std::vector<std::string> baseLineFilenamesImage;
+  std::vector<std::string> baselineFilenamesImage;
   std::vector<std::string> testFilenamesImage;
-  std::vector<std::string> baseLineFilenamesAscii;
+  std::vector<std::string> baselineFilenamesAscii;
   std::vector<std::string> testFilenamesAscii;
 
 
@@ -133,9 +135,9 @@ int main(int ac, char* av[] )
     {
       lFlagRegression = true;
       lToleranceDiffPixelImage = (double)(::atof(av[2]));
-      baseLineFilenamesImage.reserve(1);
+      baselineFilenamesImage.reserve(1);
       testFilenamesImage.reserve(1);
-      baseLineFilenamesImage.push_back(av[3]);
+      baselineFilenamesImage.push_back(av[3]);
       testFilenamesImage.push_back(av[4]);
       av += 4;
       ac -= 4;
@@ -146,12 +148,12 @@ int main(int ac, char* av[] )
       lToleranceDiffPixelImage = (double)(::atof(av[2]));
 	// Number of comparisons to do
       unsigned int nbComparisons=(unsigned int)(::atoi(av[3]));
-      baseLineFilenamesImage.reserve(nbComparisons);
+      baselineFilenamesImage.reserve(nbComparisons);
       testFilenamesImage.reserve(nbComparisons);
 	// Retrieve all the file names
       for(unsigned int i = 0; i<nbComparisons;i++)
       {
-        baseLineFilenamesImage.push_back(av[4+2*i]);
+        baselineFilenamesImage.push_back(av[4+2*i]);
         testFilenamesImage.push_back(av[5+2*i]);
       }
       av+=3+2*nbComparisons;
@@ -160,18 +162,35 @@ int main(int ac, char* av[] )
     else if (strcmp(av[1], "--compare-binary") == 0)
     {
       lFlagRegression = true;
-      baselineFilenameBinary = av[2];
-      testFilenameBinary = av[3];
+      baselineFilenamesBinary.reserve(1);
+      testFilenamesBinary.reserve(1);
+      baselineFilenamesBinary.push_back(av[2]);
+      testFilenamesBinary.push_back(av[3]);
       av += 3;
       ac -= 3;
+    }
+    else if (strcmp(av[1], "--compare-n-binary") == 0)
+    {
+      lFlagRegression = true;
+      unsigned int nbComparisons=(unsigned int)(::atoi(av[2]));
+      baselineFilenamesBinary.reserve(nbComparisons);
+      testFilenamesBinary.reserve(nbComparisons);
+        // Retrieve all the file names
+      for(unsigned int i = 0; i<nbComparisons;i++)
+      {
+        baselineFilenamesBinary.push_back(av[3+2*i]);
+        testFilenamesBinary.push_back(av[4+2*i]);
+      }
+      av+=2+2*nbComparisons;
+      ac-=2+2*nbComparisons;
     }
     else if (strcmp(av[1], "--compare-ascii") == 0)
     {
       lFlagRegression = true;
       lEpsilon = (double)(::atof(av[2]));
-      baseLineFilenamesAscii.reserve(1);
+      baselineFilenamesAscii.reserve(1);
       testFilenamesAscii.reserve(1);
-      baseLineFilenamesAscii.push_back(av[3]);
+      baselineFilenamesAscii.push_back(av[3]);
       testFilenamesAscii.push_back(av[4]);
       av += 4;
       ac -= 4;
@@ -182,12 +201,12 @@ int main(int ac, char* av[] )
       lEpsilon = (double)(::atof(av[2]));
         // Number of comparisons to do
       unsigned int nbComparisons=(unsigned int)(::atoi(av[3]));
-      baseLineFilenamesAscii.reserve(nbComparisons);
+      baselineFilenamesAscii.reserve(nbComparisons);
       testFilenamesAscii.reserve(nbComparisons);
         // Retrieve all the file names
       for(unsigned int i = 0; i<nbComparisons;i++)
       {
-        baseLineFilenamesAscii.push_back(av[4+2*i]);
+        baselineFilenamesAscii.push_back(av[4+2*i]);
         testFilenamesAscii.push_back(av[5+2*i]);
       }
       av+=3+2*nbComparisons;
@@ -262,21 +281,21 @@ int main(int ac, char* av[] )
           std::cout << "-------------  Start control baseline tests    -------------"<<std::endl;
                         // Make a list of possible baselines
                         // Test de non regression sur des images
-          if ((baseLineFilenamesImage.size()>0) && (testFilenamesImage.size()>0))
+          if ((baselineFilenamesImage.size()>0) && (testFilenamesImage.size()>0))
           {
 	                        // Creates iterators on baseline filenames vector and test filenames vector
-            std::vector<std::string>::iterator itBaselineFilenames = baseLineFilenamesImage.begin();
+            std::vector<std::string>::iterator itbaselineFilenames = baselineFilenamesImage.begin();
             std::vector<std::string>::iterator itTestFilenames = testFilenamesImage.begin();
             int cpt(1);
 	                        // For each couple of baseline and test file, do the comparison
-            for(;(itBaselineFilenames != baseLineFilenamesImage.end())
+            for(;(itbaselineFilenames != baselineFilenamesImage.end())
                   &&(itTestFilenames != testFilenamesImage.end());
-                  ++itBaselineFilenames,++itTestFilenames)
+                  ++itbaselineFilenames,++itTestFilenames)
             {
-              std::string baselineFilenameImage = (*itBaselineFilenames);
+              std::string baselineFilenameImage = (*itbaselineFilenames);
               std::string testFilenameImage = (*itTestFilenames);
 
-              std::map<std::string,int> baselines = RegressionTestBaselines(const_cast<char*>(baselineFilenameImage.c_str()));
+              std::map<std::string,int> baselines = RegressionTestbaselines(const_cast<char*>(baselineFilenameImage.c_str()));
               std::map<std::string,int>::reverse_iterator baseline = baselines.rbegin();
               multiResult = 1;
               std::cout<<"Number of baseline images: "<<baselines.size()<<std::endl;
@@ -310,17 +329,17 @@ int main(int ac, char* av[] )
           if ((baselineFilenamesMetaData.size()>0) && (testFilenamesMetaData.size()>0))
           {
 	                        // Creates iterators on baseline filenames vector and test filenames vector
-            std::vector<std::string>::iterator itBaselineFilenames = baselineFilenamesMetaData.begin();
+            std::vector<std::string>::iterator itbaselineFilenames = baselineFilenamesMetaData.begin();
             std::vector<std::string>::iterator itTestFilenames = testFilenamesMetaData.begin();
 	                        // For each couple of baseline and test file, do the comparison
-            for(;(itBaselineFilenames != baselineFilenamesMetaData.end())
+            for(;(itbaselineFilenames != baselineFilenamesMetaData.end())
                   &&(itTestFilenames != testFilenamesMetaData.end());
-                  ++itBaselineFilenames,++itTestFilenames)
+                  ++itbaselineFilenames,++itTestFilenames)
             {
-              std::string baselineFilenameImage = (*itBaselineFilenames);
+              std::string baselineFilenameImage = (*itbaselineFilenames);
               std::string testFilenameImage = (*itTestFilenames);
 
-              std::map<std::string,int> baselines = RegressionTestBaselines(const_cast<char*>(baselineFilenameImage.c_str()));
+              std::map<std::string,int> baselines = RegressionTestbaselines(const_cast<char*>(baselineFilenameImage.c_str()));
               std::map<std::string,int>::reverse_iterator baseline = baselines.rbegin();
               multiResult = 1;
               std::cout<<"Number of baseline images: "<<baselines.size()<<std::endl;
@@ -349,20 +368,20 @@ int main(int ac, char* av[] )
           }
 
           // Test de non regression sur des fichiers ascii
-          if ((baseLineFilenamesAscii.size()>0) && (testFilenamesAscii.size()>0))
+          if ((baselineFilenamesAscii.size()>0) && (testFilenamesAscii.size()>0))
           {
 	          // Creates iterators on baseline filenames vector and test filenames vector
-            std::vector<std::string>::iterator itBaselineFilenames = baseLineFilenamesAscii.begin();
+            std::vector<std::string>::iterator itbaselineFilenames = baselineFilenamesAscii.begin();
             std::vector<std::string>::iterator itTestFilenames = testFilenamesAscii.begin();
 	          // For each couple of baseline and test file, do the comparison
-            for(;(itBaselineFilenames != baseLineFilenamesAscii.end())
+            for(;(itbaselineFilenames != baselineFilenamesAscii.end())
                   &&(itTestFilenames != testFilenamesAscii.end());
-                  ++itBaselineFilenames,++itTestFilenames)
+                  ++itbaselineFilenames,++itTestFilenames)
             {
-              std::string baselineFilenameAscii = (*itBaselineFilenames);
+              std::string baselineFilenameAscii = (*itbaselineFilenames);
               std::string testFilenameAscii = (*itTestFilenames);
 
-              std::map<std::string,int> baselines = RegressionTestBaselines(const_cast<char*>(baselineFilenameAscii.c_str()));
+              std::map<std::string,int> baselines = RegressionTestbaselines(const_cast<char*>(baselineFilenameAscii.c_str()));
               std::map<std::string,int>::reverse_iterator baseline = baselines.rbegin();
               multiResult = 1;
               std::cout<<"Number of baseline files: "<<baselines.size()<<std::endl;
@@ -390,22 +409,56 @@ int main(int ac, char* av[] )
             }
           }
                         // Test de non regression sur des fichiers binaires
-          if (baselineFilenameBinary && testFilenameBinary)
+          if ((baselineFilenamesBinary.size()>0) && (testFilenamesBinary.size()>0))
           {
-
-            std::map<std::string,int> baselines;
-            baselines[std::string(baselineFilenameBinary)] = 0;
-            std::map<std::string,int>::iterator baseline = baselines.begin();
-            baseline->second = RegressionTestBinaryFile(testFilenameBinary,
-                (baseline->first).c_str(),
-                 0);
-            if (baseline->second != 0)
+	          // Creates iterators on baseline filenames vector and test filenames vector
+            std::vector<std::string>::iterator itbaselineFilenames = baselineFilenamesBinary.begin();
+            std::vector<std::string>::iterator itTestFilenames = testFilenamesBinary.begin();
+	          // For each couple of baseline and test file, do the comparison
+            for(;(itbaselineFilenames != baselineFilenamesBinary.end())
+                  &&(itTestFilenames != testFilenamesBinary.end());
+                  ++itbaselineFilenames,++itTestFilenames)
             {
-              baseline->second = RegressionTestBinaryFile(testFilenameBinary,
-                  (baseline->first).c_str(),
-                   1);
+              std::string baselineFilenameBinary = (*itbaselineFilenames);
+              std::string testFilenameBinary = (*itTestFilenames);
+
+              std::map<std::string,int> baselines = RegressionTestbaselines(const_cast<char*>(baselineFilenameBinary.c_str()));
+              std::map<std::string,int>::reverse_iterator baseline = baselines.rbegin();
+              multiResult = 1;
+              std::cout<<"Number of baseline files: "<<baselines.size()<<std::endl;
+              while(baseline!=baselines.rend() && (multiResult!=0))
+              {
+                std::cout<<"Testing non-regression on file: "<<(baseline->first).c_str()<<std::endl;
+                baseline->second = RegressionTestBinaryFile(testFilenameBinary.c_str(),
+                    (baseline->first).c_str(),
+                     0);
+
+                multiResult = baseline->second;
+                ++baseline;
+              }
+              if (multiResult != 0)
+              {
+                baseline = baselines.rbegin();
+                baseline->second
+                    = RegressionTestBinaryFile(testFilenameBinary.c_str(),
+                                              (baseline->first).c_str(),
+                                               1);
+              }
+              result += multiResult;
             }
-            result += baseline->second;
+//             std::map<std::string,int> baselines;
+//             baselines[std::string(baselineFilenameBinary)] = 0;
+//             std::map<std::string,int>::iterator baseline = baselines.begin();
+//             baseline->second = RegressionTestBinaryFile(testFilenameBinary,
+//                 (baseline->first).c_str(),
+//                  0);
+//             if (baseline->second != 0)
+//             {
+//               baseline->second = RegressionTestBinaryFile(testFilenameBinary,
+//                   (baseline->first).c_str(),
+//                    1);
+//             }
+//             result += baseline->second;
           }
 
         }
@@ -881,7 +934,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
     std::cout << nbdiff;
     std::cout <<  "</DartMeasurement>" << std::endl;
     std::cout << "================================================================"<<std::endl;
-    std::cout << "Baseline ASCII File : "<<baselineAsciiFileName << std::endl;
+    std::cout << "baseline ASCII File : "<<baselineAsciiFileName << std::endl;
     std::cout << "Test ASCII File     : "<<testAsciiFileName << std::endl;
     std::cout << "Diff ASCII File     : "<<diffAsciiFileName << std::endl;
     std::cout << "Tolerance value     : "<<epsilon << std::endl;
@@ -979,8 +1032,8 @@ int RegressionTestImage (int cpt, const char *testImageFilename, const char *bas
 
   if (baselineSize != testSize)
   {
-    std::cerr << "The size of the Baseline image and Test image do not match!" << std::endl;
-    std::cerr << "Baseline image: " << baselineImageFilename
+    std::cerr << "The size of the baseline image and Test image do not match!" << std::endl;
+    std::cerr << "baseline image: " << baselineImageFilename
         << " has size " << baselineSize << std::endl;
     std::cerr << "Test image:     " << testImageFilename
         << " has size " << testSize << std::endl;
@@ -1084,8 +1137,8 @@ int RegressionTestImage (int cpt, const char *testImageFilename, const char *bas
         itkGenericExceptionMacro(<<"Error during write of " << baseName.str() );
       }
 
-//    std::cout << "<DartMeasurementFile name=\"BaselineImage\" type=\"image/png\">";
-      std::cout << "<DartMeasurementFile name=\"BaselineImage "<<cpt<<"\" type=\"image/png\">";
+//    std::cout << "<DartMeasurementFile name=\"baselineImage\" type=\"image/png\">";
+      std::cout << "<DartMeasurementFile name=\"baselineImage "<<cpt<<"\" type=\"image/png\">";
       std::cout << baseName.str();
       std::cout << "</DartMeasurementFile>" << std::endl;
 
@@ -1159,8 +1212,8 @@ int RegressionTestMetaData (const char *testImageFilename, const char *baselineI
 
   if (baselineSize != testSize)
   {
-    std::cerr << "The size of the Baseline image and Test image do not match!" << std::endl;
-    std::cerr << "Baseline image: " << baselineImageFilename
+    std::cerr << "The size of the baseline image and Test image do not match!" << std::endl;
+    std::cerr << "baseline image: " << baselineImageFilename
         << " has size " << baselineSize << std::endl;
     std::cerr << "Test image:     " << testImageFilename
         << " has size " << testSize << std::endl;
@@ -1172,8 +1225,8 @@ int RegressionTestMetaData (const char *testImageFilename, const char *baselineI
   // test orgin
   if(blImPtr->GetOrigin()!=testImPtr->GetOrigin())
   {
-    std::cerr << "The origin of the Baseline image and Test image do not match!" << std::endl;
-    std::cerr << "Baseline image: " << baselineImageFilename
+    std::cerr << "The origin of the baseline image and Test image do not match!" << std::endl;
+    std::cerr << "baseline image: " << baselineImageFilename
         << " has origin " << blImPtr->GetOrigin() << std::endl;
     std::cerr << "Test image:     " << testImageFilename
         << " has origin "<< testImPtr->GetOrigin() << std::endl;
@@ -1183,8 +1236,8 @@ int RegressionTestMetaData (const char *testImageFilename, const char *baselineI
   // test spacing
   if(blImPtr->GetSpacing()!=testImPtr->GetSpacing())
   {
-    std::cerr << "The spacing of the Baseline image and Test image do not match!" << std::endl;
-    std::cerr << "Baseline image: " << baselineImageFilename
+    std::cerr << "The spacing of the baseline image and Test image do not match!" << std::endl;
+    std::cerr << "baseline image: " << baselineImageFilename
         << " has spacing " << blImPtr->GetSpacing() << std::endl;
     std::cerr << "Test image:     " << testImageFilename
         << " has spacing "<< testImPtr->GetSpacing() << std::endl;
@@ -1194,8 +1247,8 @@ int RegressionTestMetaData (const char *testImageFilename, const char *baselineI
   // test projection reference
   if(blImPtr->GetProjectionRef().compare(testImPtr->GetProjectionRef())!=0)
   {
-    std::cerr << "The projection reference of the Baseline image and Test image do not match!" << std::endl;
-    std::cerr << "Baseline image: " << baselineImageFilename
+    std::cerr << "The projection reference of the baseline image and Test image do not match!" << std::endl;
+    std::cerr << "baseline image: " << baselineImageFilename
         << " has projection reference " << blImPtr->GetProjectionRef() << std::endl;
     std::cerr << "Test image:     " << testImageFilename
         << " has projection reference " << testImPtr->GetProjectionRef() << std::endl;
@@ -1205,8 +1258,8 @@ int RegressionTestMetaData (const char *testImageFilename, const char *baselineI
   // test Geographic transform
   if(blImPtr->GetGeoTransform()!=testImPtr->GetGeoTransform())
   {
-    std::cerr << "The geographic transform of the Baseline image and Test image do not match!" << std::endl;
-    std::cerr << "Baseline image: " << baselineImageFilename
+    std::cerr << "The geographic transform of the baseline image and Test image do not match!" << std::endl;
+    std::cerr << "baseline image: " << baselineImageFilename
         << " has geographic transform " << VectorToString(blImPtr->GetGeoTransform()) << std::endl;
     std::cerr << "Test image:     " << testImageFilename
         << " has geographic transform " << VectorToString(testImPtr->GetGeoTransform()) << std::endl;
@@ -1216,8 +1269,8 @@ int RegressionTestMetaData (const char *testImageFilename, const char *baselineI
 // test upper left corner
   if(blImPtr->GetUpperLeftCorner()!=testImPtr->GetUpperLeftCorner())
   {
-    std::cerr << "The upper left corner of the Baseline image and Test image do not match!" << std::endl;
-    std::cerr << "Baseline image: " << baselineImageFilename
+    std::cerr << "The upper left corner of the baseline image and Test image do not match!" << std::endl;
+    std::cerr << "baseline image: " << baselineImageFilename
         << " has upper left corner " << VectorToString(blImPtr->GetUpperLeftCorner()) << std::endl;
     std::cerr << "Test image:     " << testImageFilename
         << " has upper left corner " <<VectorToString( testImPtr->GetUpperLeftCorner()) << std::endl;
@@ -1227,8 +1280,8 @@ int RegressionTestMetaData (const char *testImageFilename, const char *baselineI
 // test upper right corner
   if(blImPtr->GetUpperRightCorner()!=testImPtr->GetUpperRightCorner())
   {
-    std::cerr << "The upper right corner of the Baseline image and Test image do not match!" << std::endl;
-    std::cerr << "Baseline image: " << baselineImageFilename
+    std::cerr << "The upper right corner of the baseline image and Test image do not match!" << std::endl;
+    std::cerr << "baseline image: " << baselineImageFilename
         << " has upper right corner " <<VectorToString( blImPtr->GetUpperRightCorner()) << std::endl;
     std::cerr << "Test image:     " << testImageFilename
         << " has upper right corner " << VectorToString(testImPtr->GetUpperRightCorner()) << std::endl;
@@ -1238,8 +1291,8 @@ int RegressionTestMetaData (const char *testImageFilename, const char *baselineI
 // test lower left corner
   if(blImPtr->GetLowerLeftCorner()!=testImPtr->GetLowerLeftCorner())
   {
-    std::cerr << "The lower left corner  of the Baseline image and Test image do not match!" << std::endl;
-    std::cerr << "Baseline image: " << baselineImageFilename
+    std::cerr << "The lower left corner  of the baseline image and Test image do not match!" << std::endl;
+    std::cerr << "baseline image: " << baselineImageFilename
         << " has lower left corner " << VectorToString(blImPtr->GetLowerLeftCorner()) << std::endl;
     std::cerr << "Test image:     " << testImageFilename
         << " has lower left corner " << VectorToString(testImPtr->GetLowerLeftCorner()) << std::endl;
@@ -1249,8 +1302,8 @@ int RegressionTestMetaData (const char *testImageFilename, const char *baselineI
   // test lower right corner
   if(blImPtr->GetLowerRightCorner()!=testImPtr->GetLowerRightCorner())
   {
-    std::cerr << "The lower right of the Baseline image and Test image do not match!" << std::endl;
-    std::cerr << "Baseline image: " << baselineImageFilename
+    std::cerr << "The lower right of the baseline image and Test image do not match!" << std::endl;
+    std::cerr << "baseline image: " << baselineImageFilename
         << " has lower right corner " << VectorToString(blImPtr->GetLowerRightCorner()) << std::endl;
     std::cerr << "Test image:     " << testImageFilename
         << " has lower right corner " << VectorToString(testImPtr->GetLowerRightCorner()) << std::endl;
@@ -1260,8 +1313,8 @@ int RegressionTestMetaData (const char *testImageFilename, const char *baselineI
   // test gcp projection
   if(blImPtr->GetGCPProjection().compare(testImPtr->GetGCPProjection())!=0)
   {
-    std::cerr << "The gcp projection of the Baseline image and Test image do not match!" << std::endl;
-    std::cerr << "Baseline image: " << baselineImageFilename
+    std::cerr << "The gcp projection of the baseline image and Test image do not match!" << std::endl;
+    std::cerr << "baseline image: " << baselineImageFilename
         << " has gcp projection " << blImPtr->GetGCPProjection() << std::endl;
     std::cerr << "Test image:     " << testImageFilename
         << " has gcp projection " << testImPtr->GetGCPProjection() << std::endl;
@@ -1272,8 +1325,8 @@ int RegressionTestMetaData (const char *testImageFilename, const char *baselineI
   // test gcp count
   if(blImPtr->GetGCPCount()!=testImPtr->GetGCPCount())
   {
-    std::cerr << "The gcp count of the Baseline image and Test image do not match!" << std::endl;
-    std::cerr << "Baseline image: " << baselineImageFilename
+    std::cerr << "The gcp count of the baseline image and Test image do not match!" << std::endl;
+    std::cerr << "baseline image: " << baselineImageFilename
         << " has gcp count " << blImPtr->GetGCPCount() << std::endl;
     std::cerr << "Test image:     " << testImageFilename
         << " has gcp count " << testImPtr->GetGCPCount() << std::endl;
@@ -1291,8 +1344,8 @@ int RegressionTestMetaData (const char *testImageFilename, const char *baselineI
           ||(blImPtr->GetGCPY(i)!=testImPtr->GetGCPY(i))
           ||(blImPtr->GetGCPZ(i)!=testImPtr->GetGCPZ(i)))
       {
-        std::cerr << "The GCP number "<<i<<" of the Baseline image and Test image do not match!" << std::endl;
-        std::cerr << "Baseline image: " << baselineImageFilename
+        std::cerr << "The GCP number "<<i<<" of the baseline image and Test image do not match!" << std::endl;
+        std::cerr << "baseline image: " << baselineImageFilename
             << " has gcp number "<<i<<" ("
             <<"id: "<<blImPtr->GetGCPId(i)<<", "
             <<"info: "<<blImPtr->GetGCPInfo(i)<<", "
@@ -1332,7 +1385,7 @@ int RegressionTestMetaData (const char *testImageFilename, const char *baselineI
 // 3) append the original suffix.
 // It the file exists, increment x and continue
 //
-std::map<std::string,int> RegressionTestBaselines (char *baselineFilename)
+std::map<std::string,int> RegressionTestbaselines (char *baselineFilename)
 {
   std::map<std::string,int> baselines;
   baselines[std::string(baselineFilename)] = 0;
