@@ -55,16 +55,22 @@ int otbVectorDataProjectionFilter(int argc, char * argv[])
 
 
   //Output the tree in a text file
-  if (argc > 4)
+  if (argc >= 4)
   {
     const char * outfile = argv[3];
     std::ofstream file;
     file.open(outfile);
+
+    InputVectorDataType::Pointer data;
+    data = reader->GetOutput();
     file << "Original data" << std::endl;
-    file << reader->GetOutput();
+    file << data;
     file << std::endl << std::endl;
+
+    OutputVectorDataType::Pointer data2;
+    data2 = vectorDataProjection->GetOutput();
     file << "Reprojected data" << std::endl;
-    file << vectorDataProjection->GetOutput();
+    file << data2;
     file << std::endl << std::endl;
     file.close();
   }

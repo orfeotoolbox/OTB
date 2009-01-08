@@ -360,6 +360,22 @@ ADD_TEST(prTvGenericMapProjection ${PROJECTIONS_TESTS3}
 
 ADD_TEST(prTuVectorDataProjectionFilterNew ${PROJECTIONS_TESTS3}  otbVectorDataProjectionFilterNew )
 
+#test points
+ADD_TEST(prTvVectorDataProjectionFilterPoints ${PROJECTIONS_TESTS3}
+        --compare-n-binary 4
+        ${BASELINE_FILES}/prTvVectorDataProjectionFilterPoints.shp
+        ${TEMP}/prTvVectorDataProjectionFilterPoints.shp
+        ${BASELINE_FILES}/prTvVectorDataProjectionFilterPoints.shx
+        ${TEMP}/prTvVectorDataProjectionFilterPoints.shx
+        ${BASELINE_FILES}/prTvVectorDataProjectionFilterPoints.dbf
+        ${TEMP}/prTvVectorDataProjectionFilterPoints.dbf
+        ${BASELINE_FILES}/prTvVectorDataProjectionFilterPoints.prj
+        ${TEMP}/prTvVectorDataProjectionFilterPoints.prj
+        otbVectorDataProjectionFilter
+        ${INPUTDATA}/ToulousePoints-examples.shp
+        ${TEMP}/prTvVectorDataProjectionFilterPoints.shp
+)
+
 #test lines
 ADD_TEST(prTvVectorDataProjectionFilterLines ${PROJECTIONS_TESTS3}
         --compare-n-binary 4
