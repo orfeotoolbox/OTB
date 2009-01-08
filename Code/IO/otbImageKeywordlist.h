@@ -56,6 +56,11 @@ public:
   	m_Keywordlist.clear();
   }
 
+  unsigned int GetSize(void) const
+  {
+    return m_Keywordlist.size();
+  }
+
   virtual void convertToOSSIMKeywordlist(ossimKeywordlist& kwl) const;
 
   virtual void Print(std::ostream& os, itk::Indent indent=0) const;
