@@ -35,12 +35,6 @@ namespace otb
   * 	 T1    T2	    T3
   * (x,y) -> (x',y') -> (x'',y'')   =>    (x,y) -> (x'',y'')
   *
-  * The class can also be used as a generic class templated on itk::Transform. In this case,
-   * the user need to specify the transform type using methods SetFirstTransformProjectionType()
-   * and SetSecondTransformProjectionType(). This information is passed using the ProjectionTypeEnum.
-   *
-   * According to this information a dynamic_cast will occur to call the desired transform method. By
-   * default, no cast is performed.
    *
   * \ingroup Transform
   */
@@ -117,10 +111,6 @@ namespace otb
       itkSetObjectMacro(SecondTransform,SecondTransformType);
 
 
-      itkSetMacro(FirstTransformProjectionType,ProjectionTypeEnum);
-      itkGetMacro(FirstTransformProjectionType,ProjectionTypeEnum);
-      itkSetMacro(SecondTransformProjectionType,ProjectionTypeEnum);
-      itkGetMacro(SecondTransformProjectionType,ProjectionTypeEnum);
 
       /**  Method to transform a point. */
       virtual SecondTransformOutputPointType TransformPoint(const FirstTransformInputPointType  & ) const;
@@ -138,13 +128,11 @@ namespace otb
       CompositeTransform();
       ~CompositeTransform();
 
-//       FirstTransformPointerType  m_FirstTransform;
-//       SecondTransformPointerType m_SecondTransform;
-      FirstTransformType*  m_FirstTransform;
-      SecondTransformType* m_SecondTransform;
+      FirstTransformPointerType  m_FirstTransform;
+      SecondTransformPointerType m_SecondTransform;
+//       FirstTransformType*  m_FirstTransform;
+//       SecondTransformType* m_SecondTransform;
 
-      ProjectionTypeEnum m_FirstTransformProjectionType;
-      ProjectionTypeEnum m_SecondTransformProjectionType;
 
       private:
       CompositeTransform(const Self&); //purposely not implemented

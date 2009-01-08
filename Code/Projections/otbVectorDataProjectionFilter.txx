@@ -208,7 +208,6 @@ namespace otb
         sensorModel->SetDEMDirectory(m_DEMDirectory);
       }
       m_InputTransform = sensorModel;
-      m_Transform->SetFirstTransformProjectionType(otb::PROJSENSORINVERSE);
       otbMsgDevMacro(<< "Input projection set to sensor model");
     }
 
@@ -222,7 +221,6 @@ namespace otb
       if (mapTransform->GetMapProjection() != NULL)
       {
         m_InputTransform = mapTransform;
-        m_Transform->SetFirstTransformProjectionType(otb::PROJMAPINVERSE);
         otbMsgDevMacro(<< "Input projection set to map transform: " << m_InputTransform);
       }
 
@@ -231,7 +229,6 @@ namespace otb
     if(m_InputTransform.IsNull())//default if we didn't manage to instantiate it before
     {
       m_InputTransform = itk::IdentityTransform< double, 2 >::New();
-      m_Transform->SetFirstTransformProjectionType(otb::PROJIDENTITY);
       otbMsgDevMacro(<< "Input projection set to identity")
     }
 
@@ -248,7 +245,6 @@ namespace otb
         sensorModel->SetDEMDirectory(m_DEMDirectory);
       }
       m_OutputTransform = sensorModel;
-      m_Transform->SetSecondTransformProjectionType(otb::PROJSENSORFORWARD);
       otbMsgDevMacro(<< "Output projection set to sensor model");
     }
 
@@ -262,7 +258,6 @@ namespace otb
       if (mapTransform->GetMapProjection() != NULL)
       {
         m_OutputTransform = mapTransform;
-        m_Transform->SetSecondTransformProjectionType(otb::PROJMAPFORWARD);
         otbMsgDevMacro(<< "Output projection set to map transform: " << m_OutputTransform);
       }
 
@@ -271,7 +266,6 @@ namespace otb
     if(m_OutputTransform.IsNull())//default if we didn't manage to instantiate it before
     {
       m_OutputTransform = itk::IdentityTransform< double, 2 >::New();
-      m_Transform->SetSecondTransformProjectionType(otb::PROJIDENTITY);
       otbMsgDevMacro(<< "Output projection set to identity")
     }
 

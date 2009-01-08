@@ -42,8 +42,6 @@ namespace otb
   {
     m_FirstTransform = 0;
     m_SecondTransform = 0;
-    m_FirstTransformProjectionType = PROJDEFAULT;
-    m_SecondTransformProjectionType = PROJDEFAULT;
   }
 
   template<class TFirstTransform,
@@ -77,93 +75,15 @@ namespace otb
                      NInputDimensions,
                      NOutputDimensions>
   ::TransformPoint(const FirstTransformInputPointType &point1) const
-  {
-
-    typedef itk::IdentityTransform< double, 2 > IdentityTransformType;
-    typedef otb::GenericMapProjection<otb::FORWARD> ForwardMapProjectionType;
-    typedef otb::GenericMapProjection<otb::INVERSE> InverseMapProjectionType;
-    typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
-    typedef otb::InverseSensorModel<double> InverseSensorModelType;
-
-    FirstTransformOutputPointType geoPoint;
-
-    switch(m_FirstTransformProjectionType)
     {
-      case PROJDEFAULT:
-      {
-        geoPoint=m_FirstTransform->TransformPoint(point1);
-        break;
-      }
-      case PROJIDENTITY:
-      {
-        geoPoint=dynamic_cast<IdentityTransformType*>(m_FirstTransform)->TransformPoint(point1);
-        break;
-      }
-      case PROJMAPFORWARD:
-      {
-        geoPoint=dynamic_cast<ForwardMapProjectionType*>(m_FirstTransform)->TransformPoint(point1);
-        break;
-      }
-      case PROJMAPINVERSE:
-      {
-        geoPoint=dynamic_cast<InverseMapProjectionType*>(m_FirstTransform)->TransformPoint(point1);
-        break;
-      }
-      case PROJSENSORFORWARD:
-      {
-        geoPoint=dynamic_cast<ForwardSensorModelType*>(m_FirstTransform)->TransformPoint(point1);
-        break;
-      }
-      case PROJSENSORINVERSE:
-      {
-        geoPoint=dynamic_cast<InverseSensorModelType*>(m_FirstTransform)->TransformPoint(point1);
-        break;
-      }
+      FirstTransformOutputPointType geoPoint;
+      geoPoint=m_FirstTransform->TransformPoint(point1);
+
+      SecondTransformOutputPointType outputPoint;
+      outputPoint=m_SecondTransform->TransformPoint(geoPoint);
+
+      return outputPoint;
     }
-
-//     otbMsgDevMacro(<< "Geographic point is ("<<  geoPoint[0]<< ","<<  geoPoint[1]<< ")");
-
-    SecondTransformOutputPointType outputPoint;
-
-    switch(m_SecondTransformProjectionType)
-    {
-      case PROJDEFAULT:
-      {
-        outputPoint=m_SecondTransform->TransformPoint(geoPoint);
-        break;
-      }
-      case PROJIDENTITY:
-      {
-        outputPoint=dynamic_cast<IdentityTransformType*>(m_SecondTransform)->TransformPoint(geoPoint);
-        break;
-      }
-      case PROJMAPFORWARD:
-      {
-        outputPoint=dynamic_cast<ForwardMapProjectionType*>(m_SecondTransform)->TransformPoint(geoPoint);
-        break;
-      }
-      case PROJMAPINVERSE:
-      {
-        outputPoint=dynamic_cast<InverseMapProjectionType*>(m_SecondTransform)->TransformPoint(geoPoint);
-        break;
-      }
-      case PROJSENSORFORWARD:
-      {
-        outputPoint=dynamic_cast<ForwardSensorModelType*>(m_SecondTransform)->TransformPoint(geoPoint);
-        break;
-      }
-      case PROJSENSORINVERSE:
-      {
-        outputPoint=dynamic_cast<InverseSensorModelType*>(m_SecondTransform)->TransformPoint(geoPoint);
-        break;
-      }
-    }
-
-//     otbMsgDevMacro(<< "Corresponding coordinates in sensor geometry are: " << std::endl
-//         << outputPoint[0] << ","<< outputPoint[1] );
-
-    return outputPoint;
-  }
 
   /*template<class TFirstTransform, class TSecondTransform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
     typename CompositeTransform<TFirstTransform, TSecondTransform, TScalarType, NInputDimensions, NOutputDimensions>::OutputVectorType
