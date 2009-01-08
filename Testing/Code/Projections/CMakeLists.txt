@@ -360,6 +360,22 @@ ADD_TEST(prTvGenericMapProjection ${PROJECTIONS_TESTS3}
 
 ADD_TEST(prTuVectorDataProjectionFilterNew ${PROJECTIONS_TESTS3}  otbVectorDataProjectionFilterNew )
 
+#test points
+ADD_TEST(prTvVectorDataProjectionFilterPoints ${PROJECTIONS_TESTS3}
+        --compare-n-binary 4
+        ${BASELINE_FILES}/prTvVectorDataProjectionFilterPoints.shp
+        ${TEMP}/prTvVectorDataProjectionFilterPoints.shp
+        ${BASELINE_FILES}/prTvVectorDataProjectionFilterPoints.shx
+        ${TEMP}/prTvVectorDataProjectionFilterPoints.shx
+        ${BASELINE_FILES}/prTvVectorDataProjectionFilterPoints.dbf
+        ${TEMP}/prTvVectorDataProjectionFilterPoints.dbf
+        ${BASELINE_FILES}/prTvVectorDataProjectionFilterPoints.prj
+        ${TEMP}/prTvVectorDataProjectionFilterPoints.prj
+        otbVectorDataProjectionFilter
+        ${INPUTDATA}/ToulousePoints-examples.shp
+        ${TEMP}/prTvVectorDataProjectionFilterPoints.shp
+)
+
 #test lines
 ADD_TEST(prTvVectorDataProjectionFilterLines ${PROJECTIONS_TESTS3}
         --compare-n-binary 4
@@ -393,6 +409,24 @@ ADD_TEST(prTvVectorDataProjectionFilterPolygons ${PROJECTIONS_TESTS3}
 )
 
 
+# test to sensor
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(prTvVectorDataProjectionFilterFromMapToSensor ${PROJECTIONS_TESTS3}
+        --compare-n-binary 4
+        ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.shp
+        ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.shp
+        ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.shx
+        ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.shx
+        ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.dbf
+        ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.dbf
+        ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.prj
+        ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.prj
+        otbVectorDataProjectionFilterFromMapToSensor
+        ${INPUTDATA}/ToulousePoints-examples.shp
+        ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.shp
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 #=======================================================================================
 SET(Projections_SRCS1
@@ -421,6 +455,7 @@ otbGenericMapProjectionNew.cxx
 otbGenericMapProjection.cxx
 otbVectorDataProjectionFilterNew.cxx
 otbVectorDataProjectionFilter.cxx
+otbVectorDataProjectionFilterFromMapToSensor.cxx
 )
 
 
