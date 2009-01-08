@@ -337,6 +337,8 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbPROJECTIONS_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+ADD_TEST(prTuCompositeTransformNew ${PROJECTIONS_TESTS3}  otbCompositeTransformNew )
+
 ADD_TEST(prTuGenericMapProjectionNew ${PROJECTIONS_TESTS3}  otbGenericMapProjectionNew )
 
 ADD_TEST(prTvGenericMapProjection ${PROJECTIONS_TESTS3}
@@ -391,6 +393,7 @@ otbOrthoRectificationMonoThreadFilter.cxx
 #otbSensorImageDEMToCarto.cxx
 )
 SET(Projections_SRCS3
+otbCompositeTransformNew.cxx
 otbGenericMapProjectionNew.cxx
 otbGenericMapProjection.cxx
 otbVectorDataProjectionFilterNew.cxx

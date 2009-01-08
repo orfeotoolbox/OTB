@@ -15,21 +15,27 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
-// this file defines the otbProjectionsTest for the test driver
-// and all it expects is that you have a function called RegisterTests
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
 
+#include "itkExceptionObject.h"
+#include "itkImage.h"
 #include <iostream>
-#include "otbTestMain.h"
 
-void RegisterTests()
+#include "otbCompositeTransform.h"
+#include "otbMapProjections.h"
+#include "otbInverseSensorModel.h"
+
+int otbCompositeTransformNew( int argc, char* argv[] )
 {
-  REGISTER_TEST(otbCompositeTransformNew);
-  REGISTER_TEST(otbGenericMapProjectionNew);
-  REGISTER_TEST(otbGenericMapProjection);
-  REGISTER_TEST(otbVectorDataProjectionFilterNew);
-  REGISTER_TEST(otbVectorDataProjectionFilter);
+  typedef otb::UtmInverseProjection MapProjectionType;
+  typedef otb::InverseSensorModel<double>   SensorModelType;
+
+  typedef otb::CompositeTransform< MapProjectionType,SensorModelType> CompositeTransformType;
+  CompositeTransformType::Pointer compositeTransform = CompositeTransformType::New();
+
+  return EXIT_SUCCESS;
 }
+
+
