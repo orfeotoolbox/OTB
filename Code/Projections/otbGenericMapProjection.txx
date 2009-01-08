@@ -116,7 +116,7 @@ namespace otb
   ::TransformPoint(const InputPointType & point)
   {
     OutputPointType outputPoint;
-
+//     otbMsgDevMacro(<< "DirectionOfMapping: " << DirectionOfMapping);
     switch(DirectionOfMapping)
     {
       case INVERSE:

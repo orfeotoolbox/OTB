@@ -121,7 +121,7 @@ namespace otb
       }
     }
 
-    otbMsgDevMacro(<< "Geographic point is ("<<  geoPoint[0]<< ","<<  geoPoint[1]<< ")");
+//     otbMsgDevMacro(<< "Geographic point is ("<<  geoPoint[0]<< ","<<  geoPoint[1]<< ")");
 
     SecondTransformOutputPointType outputPoint;
 
@@ -159,8 +159,8 @@ namespace otb
       }
     }
 
-    otbMsgDevMacro(<< "Corresponding coordinates in sensor geometry are: " << std::endl
-        << outputPoint[0] << ","<< outputPoint[1] );
+//     otbMsgDevMacro(<< "Corresponding coordinates in sensor geometry are: " << std::endl
+//         << outputPoint[0] << ","<< outputPoint[1] );
 
     return outputPoint;
   }
