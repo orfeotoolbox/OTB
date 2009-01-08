@@ -91,6 +91,14 @@ namespace otb
       typedef typename OutputDataNodeType::LineConstPointerType LineConstPointerType;
       typedef typename OutputDataNodeType::LinePointerType LinePointerType;
 
+      typedef typename OutputDataNodeType::PolygonType PolygonType;
+      typedef typename OutputDataNodeType::PolygonConstPointerType PolygonConstPointerType;
+      typedef typename OutputDataNodeType::PolygonPointerType PolygonPointerType;
+
+      typedef typename OutputDataNodeType::PolygonListType PolygonListType;
+      typedef typename OutputDataNodeType::PolygonListConstPointerType PolygonListConstPointerType;
+      typedef typename OutputDataNodeType::PolygonListPointerType PolygonListPointerType;
+
 
       /** Method for creation through the object factory. */
       itkNewMacro(Self);
@@ -132,6 +140,8 @@ namespace otb
       virtual ~VectorDataProjectionFilter() {};
 
       LinePointerType ReprojectLine(LinePointerType line) const;
+      PolygonPointerType ReprojectPolygon(PolygonPointerType polygon) const;
+      PolygonListPointerType ReprojectPolygonList(PolygonListPointerType polygonList) const;
 
       void InstanciateTransform(void);
 

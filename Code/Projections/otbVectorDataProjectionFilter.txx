@@ -160,6 +160,56 @@ namespace otb
   }
 
   /**
+   * Convert polygon
+   */
+  template <class TInputVectorData, class TOutputVectorData >
+      typename VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>::PolygonPointerType
+          VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
+  ::ReprojectPolygon(PolygonPointerType polygon) const
+  {
+    typedef typename PolygonType::VertexListType::ConstPointer VertexListConstPointerType;
+    typedef typename PolygonType::VertexListConstIteratorType VertexListConstIteratorType;
+    VertexListConstPointerType  vertexList = polygon->GetVertexList();
+    VertexListConstIteratorType it = vertexList->Begin();
+    typename PolygonType::Pointer newPolygon = PolygonType::New();
+    while ( it != vertexList->End())
+    {
+      itk::Point<double,2> point;
+      itk::ContinuousIndex<double,2> index;
+      typename PolygonType::VertexType pointCoord = it.Value();
+      pointCoord[0] = pointCoord[0] * m_InputSpacing[0] + m_InputOrigin[0];
+      pointCoord[1] = pointCoord[1] * m_InputSpacing[1] + m_InputOrigin[1];
+      point = m_Transform->TransformPoint(pointCoord);
+      point[0] = (point[0] - m_OutputOrigin[0]) / m_OutputSpacing[0];
+      point[1] = (point[1] - m_OutputOrigin[1]) / m_OutputSpacing[1];
+      index[0]=point[0];
+      index[1]=point[1];
+      otbMsgDevMacro(<< "Converting: " << it.Value() << " -> " << pointCoord << " -> " << point << " -> " << index);
+      newPolygon->AddVertex(index);
+      it++;
+    }
+    return newPolygon;
+  }
+
+    /**
+   * Convert polygon list
+     */
+  template <class TInputVectorData, class TOutputVectorData >
+      typename VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>::PolygonListPointerType
+          VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
+  ::ReprojectPolygonList(PolygonListPointerType polygonList) const
+  {
+
+    PolygonListPointerType newPolygonList = PolygonListType::New();
+    for(typename PolygonListType::ConstIterator it = polygonList->Begin();
+        it != polygonList->End(); ++it)
+    {
+      newPolygonList->PushBack(this->ReprojectPolygon(it.Get()));
+    }
+    return newPolygonList;
+  }
+
+  /**
    * Instanciate the transformation according to informations
    */
   template <class TInputVectorData, class TOutputVectorData >
@@ -325,6 +375,7 @@ namespace otb
         }
         case FEATURE_POINT:
         {
+          itkExceptionMacro(<<"Can't handle FEATURE_POINT yet!");
           break;
         }
         case FEATURE_LINE:
@@ -335,22 +386,33 @@ namespace otb
         }
         case FEATURE_POLYGON:
         {
+          newDataNode->SetPolygonExteriorRing(this->ReprojectPolygon(dataNode->GetPolygonExteriorRing()));
+          newDataNode->SetPolygonInteriorRings(this->ReprojectPolygonList(dataNode->GetPolygonInteriorRings()));
+          tree->Add(newDataNode,currentContainer);
           break;
         }
         case FEATURE_MULTIPOINT:
         {
+          tree->Add(newDataNode,currentContainer);
+          currentContainer = newDataNode;
           break;
         }
         case FEATURE_MULTILINE:
         {
+          tree->Add(newDataNode,currentContainer);
+          currentContainer = newDataNode;
           break;
         }
         case FEATURE_MULTIPOLYGON:
         {
+          tree->Add(newDataNode,currentContainer);
+          currentContainer = newDataNode;
           break;
         }
         case FEATURE_COLLECTION:
         {
+          tree->Add(newDataNode,currentContainer);
+          currentContainer = newDataNode;
           break;
         }
       }
