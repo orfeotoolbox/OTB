@@ -40,8 +40,8 @@ namespace otb
   {
     m_InputProjectionRef.clear();
     m_OutputProjectionRef.clear();
-    m_InputKeywordList.clear();
-    m_OutputKeywordList.clear();
+    m_InputKeywordList.Clear();
+    m_OutputKeywordList.Clear();
     m_InputSpacing.Fill(1);
     m_InputOrigin.Fill(0);
     m_OutputSpacing.Fill(1);
@@ -108,6 +108,69 @@ namespace otb
     OriginType p;
     p.CastFrom( of );
     this->SetInputOrigin( p );
+  }
+
+
+
+  //----------------------------------------------------------------------------
+  template <class TInputVectorData, class TOutputVectorData >
+      void
+          VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
+  ::SetOutputSpacing(const SpacingType & spacing )
+  {
+    itkDebugMacro("setting Spacing to " << spacing);
+    if( this->m_OutputSpacing != spacing )
+    {
+      this->m_OutputSpacing = spacing;
+      this->Modified();
+    }
+  }
+
+
+//----------------------------------------------------------------------------
+  template <class TInputVectorData, class TOutputVectorData >
+      void
+          VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
+  ::SetOutputSpacing(const double spacing[2] )
+  {
+    SpacingType s(spacing);
+    this->SetOutputSpacing(s);
+  }
+
+
+//----------------------------------------------------------------------------
+  template <class TInputVectorData, class TOutputVectorData >
+      void
+          VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
+  ::SetOutputSpacing(const float spacing[2] )
+  {
+    itk::Vector<float, 2> sf(spacing);
+    SpacingType s;
+    s.CastFrom( sf );
+    this->SetOutputSpacing(s);
+  }
+
+//----------------------------------------------------------------------------
+  template <class TInputVectorData, class TOutputVectorData >
+      void
+          VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
+  ::SetOutputOrigin(const double origin[2] )
+  {
+    OriginType p(origin);
+    this->SetOutputOrigin( p );
+  }
+
+
+//----------------------------------------------------------------------------
+  template <class TInputVectorData, class TOutputVectorData >
+      void
+          VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
+  ::SetOutputOrigin(const float origin[2] )
+  {
+    itk::Point<float, 2> of(origin);
+    OriginType p;
+    p.CastFrom( of );
+    this->SetOutputOrigin( p );
   }
 
 
@@ -258,7 +321,7 @@ namespace otb
     InputVectorDataPointer input = this->GetInput();
     const itk::MetaDataDictionary & inputDict = input->GetMetaDataDictionary();
 
-    if (m_InputKeywordList.getSize()  == 0)
+    if (m_InputKeywordList.GetSize()  == 0)
     {
       itk::ExposeMetaData<ossimKeywordlist>(inputDict, MetaDataKey::OSSIMKeywordlistKey, m_InputKeywordList );
     }
@@ -271,7 +334,7 @@ namespace otb
     OutputVectorDataPointer output = this->GetOutput();
     itk::MetaDataDictionary & outputDict = output->GetMetaDataDictionary();
 
-    if (m_OutputKeywordList.getSize()  != 0)
+    if (m_OutputKeywordList.GetSize()  != 0)
     {
       itk::EncapsulateMetaData<ossimKeywordlist>(outputDict, MetaDataKey::OSSIMKeywordlistKey, m_OutputKeywordList );
     }
@@ -294,7 +357,7 @@ namespace otb
     //*****************************
     //Set the input transformation
     //*****************************
-    if (m_InputKeywordList.getSize()  > 0)
+    if (m_InputKeywordList.GetSize()  > 0)
     {
       typedef otb::InverseSensorModel<double> InverseSensorModelType;
       InverseSensorModelType* sensorModel = InverseSensorModelType::New();
@@ -331,7 +394,7 @@ namespace otb
     //*****************************
     //Set the output transformation
     //*****************************
-    if (m_OutputKeywordList.getSize()  > 0)
+    if (m_OutputKeywordList.GetSize()  > 0)
     {
       typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
       ForwardSensorModelType* sensorModel = ForwardSensorModelType::New();
