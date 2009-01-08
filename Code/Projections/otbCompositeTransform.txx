@@ -20,6 +20,10 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbCompositeTransform.h"
 #include "otbMapProjections.h"
+#include "otbGenericMapProjection.h"
+#include "otbForwardSensorModel.h"
+#include "otbInverseSensorModel.h"
+#include "itkIdentityTransform.h"
 
 namespace otb
 {
@@ -36,8 +40,10 @@ namespace otb
                      NOutputDimensions>
   ::CompositeTransform() : Superclass(SpaceDimension,ParametersDimension)
   {
-    m_FirstTransform = FirstTransformType::New();
-    m_SecondTransform = SecondTransformType::New();
+    m_FirstTransform = 0;
+    m_SecondTransform = 0;
+    m_FirstTransformProjectionType = PROJDEFAULT;
+    m_SecondTransformProjectionType = PROJDEFAULT;
   }
 
   template<class TFirstTransform,
@@ -72,19 +78,91 @@ namespace otb
                      NOutputDimensions>
   ::TransformPoint(const FirstTransformInputPointType &point1) const
   {
-    FirstTransformOutputPointType pointTmp;
-    SecondTransformOutputPointType point2;
 
-    pointTmp=m_FirstTransform->TransformPoint(point1);
+    typedef itk::IdentityTransform< double, 2 > IdentityTransformType;
+    typedef otb::GenericMapProjection<otb::FORWARD> ForwardMapProjectionType;
+    typedef otb::GenericMapProjection<otb::INVERSE> InverseMapProjectionType;
+    typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
+    typedef otb::InverseSensorModel<double> InverseSensorModelType;
 
-//     otbMsgDevMacro(<< "Geographic point is ("<<  pointTmp[0]<< ","<<  pointTmp[1]<< ")");
+    FirstTransformOutputPointType geoPoint;
 
-    point2=m_SecondTransform->TransformPoint(pointTmp);
+    switch(m_FirstTransformProjectionType)
+    {
+      case PROJDEFAULT:
+      {
+        geoPoint=m_FirstTransform->TransformPoint(point1);
+        break;
+      }
+      case PROJIDENTITY:
+      {
+        geoPoint=dynamic_cast<IdentityTransformType*>(m_FirstTransform)->TransformPoint(point1);
+        break;
+      }
+      case PROJMAPFORWARD:
+      {
+        geoPoint=dynamic_cast<ForwardMapProjectionType*>(m_FirstTransform)->TransformPoint(point1);
+        break;
+      }
+      case PROJMAPINVERSE:
+      {
+        geoPoint=dynamic_cast<InverseMapProjectionType*>(m_FirstTransform)->TransformPoint(point1);
+        break;
+      }
+      case PROJSENSORFORWARD:
+      {
+        geoPoint=dynamic_cast<ForwardSensorModelType*>(m_FirstTransform)->TransformPoint(point1);
+        break;
+      }
+      case PROJSENSORINVERSE:
+      {
+        geoPoint=dynamic_cast<InverseSensorModelType*>(m_FirstTransform)->TransformPoint(point1);
+        break;
+      }
+    }
 
-//     otbMsgDevMacro(<< "Corresponding coordinates in sensor geometry are: " << std::endl
-// 		   << point2[0] << ","<< point2[1] );
+    otbMsgDevMacro(<< "Geographic point is ("<<  geoPoint[0]<< ","<<  geoPoint[1]<< ")");
 
-    return point2;
+    SecondTransformOutputPointType outputPoint;
+
+    switch(m_SecondTransformProjectionType)
+    {
+      case PROJDEFAULT:
+      {
+        outputPoint=m_SecondTransform->TransformPoint(geoPoint);
+        break;
+      }
+      case PROJIDENTITY:
+      {
+        outputPoint=dynamic_cast<IdentityTransformType*>(m_SecondTransform)->TransformPoint(geoPoint);
+        break;
+      }
+      case PROJMAPFORWARD:
+      {
+        outputPoint=dynamic_cast<ForwardMapProjectionType*>(m_SecondTransform)->TransformPoint(geoPoint);
+        break;
+      }
+      case PROJMAPINVERSE:
+      {
+        outputPoint=dynamic_cast<InverseMapProjectionType*>(m_SecondTransform)->TransformPoint(geoPoint);
+        break;
+      }
+      case PROJSENSORFORWARD:
+      {
+        outputPoint=dynamic_cast<ForwardSensorModelType*>(m_SecondTransform)->TransformPoint(geoPoint);
+        break;
+      }
+      case PROJSENSORINVERSE:
+      {
+        outputPoint=dynamic_cast<InverseSensorModelType*>(m_SecondTransform)->TransformPoint(geoPoint);
+        break;
+      }
+    }
+
+    otbMsgDevMacro(<< "Corresponding coordinates in sensor geometry are: " << std::endl
+        << outputPoint[0] << ","<< outputPoint[1] );
+
+    return outputPoint;
   }
 
   /*template<class TFirstTransform, class TSecondTransform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
