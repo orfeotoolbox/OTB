@@ -28,6 +28,7 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbCompositeTransformNew);
+  REGISTER_TEST(otbCompositeTransform);
   REGISTER_TEST(otbGenericMapProjectionNew);
   REGISTER_TEST(otbGenericMapProjection);
   REGISTER_TEST(otbVectorDataProjectionFilterNew);

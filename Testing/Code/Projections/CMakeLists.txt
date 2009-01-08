@@ -339,6 +339,16 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(prTuCompositeTransformNew ${PROJECTIONS_TESTS3}  otbCompositeTransformNew )
 
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(prTvCompositeTransform ${PROJECTIONS_TESTS3}
+        --compare-ascii ${EPSILON} ${BASELINE_FILES}/prTvCompositeTransform.txt
+        ${TEMP}/prTvCompositeTransform.txt
+        otbCompositeTransform
+        ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${TEMP}/prTvCompositeTransform.txt
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 ADD_TEST(prTuGenericMapProjectionNew ${PROJECTIONS_TESTS3}  otbGenericMapProjectionNew )
 
 ADD_TEST(prTvGenericMapProjection ${PROJECTIONS_TESTS3}
@@ -394,6 +404,7 @@ otbOrthoRectificationMonoThreadFilter.cxx
 )
 SET(Projections_SRCS3
 otbCompositeTransformNew.cxx
+otbCompositeTransform.cxx
 otbGenericMapProjectionNew.cxx
 otbGenericMapProjection.cxx
 otbVectorDataProjectionFilterNew.cxx
