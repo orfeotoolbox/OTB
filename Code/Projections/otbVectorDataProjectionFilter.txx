@@ -323,7 +323,9 @@ namespace otb
 
     if (m_InputKeywordList.GetSize()  == 0)
     {
-      itk::ExposeMetaData<ossimKeywordlist>(inputDict, MetaDataKey::OSSIMKeywordlistKey, m_InputKeywordList );
+      ossimKeywordlist kwl;
+      itk::ExposeMetaData<ossimKeywordlist>(inputDict, MetaDataKey::OSSIMKeywordlistKey, kwl );
+      m_InputKeywordList.SetKeywordlist(kwl);
     }
     if (m_InputProjectionRef.empty())
     {
@@ -336,7 +338,9 @@ namespace otb
 
     if (m_OutputKeywordList.GetSize()  != 0)
     {
-      itk::EncapsulateMetaData<ossimKeywordlist>(outputDict, MetaDataKey::OSSIMKeywordlistKey, m_OutputKeywordList );
+      ossimKeywordlist kwl;
+      m_OutputKeywordList.convertToOSSIMKeywordlist (kwl);
+      itk::EncapsulateMetaData<ossimKeywordlist>(outputDict, MetaDataKey::OSSIMKeywordlistKey, kwl );
     }
     if (m_InputProjectionRef.empty())
     {
