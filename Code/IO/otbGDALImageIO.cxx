@@ -572,7 +572,7 @@ namespace otb
 
 
 
-      for( int cpt = 0; cpt < gcpCount; cpt++ )
+      for( unsigned int cpt = 0; cpt < gcpCount; cpt++ )
       {
         const GDAL_GCP	*psGCP;
 
