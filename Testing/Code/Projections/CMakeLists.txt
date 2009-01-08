@@ -362,9 +362,15 @@ ADD_TEST(prTuVectorDataProjectionFilterNew ${PROJECTIONS_TESTS3}  otbVectorDataP
 
 #test lines
 ADD_TEST(prTvVectorDataProjectionFilterLines ${PROJECTIONS_TESTS3}
-        --compare-binary
+        --compare-n-binary 4
         ${BASELINE_FILES}/prTvVectorDataProjectionFilterLines.shp
         ${TEMP}/prTvVectorDataProjectionFilterLines.shp
+        ${BASELINE_FILES}/prTvVectorDataProjectionFilterLines.shx
+        ${TEMP}/prTvVectorDataProjectionFilterLines.shx
+        ${BASELINE_FILES}/prTvVectorDataProjectionFilterLines.dbf
+        ${TEMP}/prTvVectorDataProjectionFilterLines.dbf
+        ${BASELINE_FILES}/prTvVectorDataProjectionFilterLines.prj
+        ${TEMP}/prTvVectorDataProjectionFilterLines.prj
         otbVectorDataProjectionFilter
         ${INPUTDATA}/ToulouseRoad-examples.shp
         ${TEMP}/prTvVectorDataProjectionFilterLines.shp
@@ -372,9 +378,15 @@ ADD_TEST(prTvVectorDataProjectionFilterLines ${PROJECTIONS_TESTS3}
 
 # test polygons
 ADD_TEST(prTvVectorDataProjectionFilterPolygons ${PROJECTIONS_TESTS3}
-        --compare-binary
+        --compare-n-binary 4
         ${BASELINE_FILES}/prTvVectorDataProjectionFilterPolygons.shp
         ${TEMP}/prTvVectorDataProjectionFilterPolygons.shp
+        ${BASELINE_FILES}/prTvVectorDataProjectionFilterPolygons.shx
+        ${TEMP}/prTvVectorDataProjectionFilterPolygons.shx
+        ${BASELINE_FILES}/prTvVectorDataProjectionFilterPolygons.dbf
+        ${TEMP}/prTvVectorDataProjectionFilterPolygons.dbf
+        ${BASELINE_FILES}/prTvVectorDataProjectionFilterPolygons.prj
+        ${TEMP}/prTvVectorDataProjectionFilterPolygons.prj
         otbVectorDataProjectionFilter
         ${INPUTDATA}/Capitole-Shadows.shp
         ${TEMP}/prTvVectorDataProjectionFilterPolygons.shp

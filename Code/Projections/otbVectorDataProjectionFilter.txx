@@ -139,10 +139,10 @@ namespace otb
     VertexListConstPointerType  vertexList = line->GetVertexList();
     VertexListConstIteratorType it = vertexList->Begin();
     typename LineType::Pointer newLine = LineType::New();
-    itk::Point<double,2> point;
-    itk::ContinuousIndex<double,2> index;
     while ( it != vertexList->End())
     {
+      itk::Point<double,2> point;
+      itk::ContinuousIndex<double,2> index;
       typename LineType::VertexType pointCoord = it.Value();
       pointCoord[0] = pointCoord[0] * m_InputSpacing[0] + m_InputOrigin[0];
       pointCoord[1] = pointCoord[1] * m_InputSpacing[1] + m_InputOrigin[1];
@@ -151,7 +151,7 @@ namespace otb
       point[1] = (point[1] - m_OutputOrigin[1]) / m_OutputSpacing[1];
       index[0]=point[0];
       index[1]=point[1];
-      otbMsgDevMacro(<< "Converting: " << it.Value() << " -> " << pointCoord << " -> " << point << " -> " << index);
+//       otbMsgDevMacro(<< "Converting: " << it.Value() << " -> " << pointCoord << " -> " << point << " -> " << index);
       newLine->AddVertex(index);
       it++;
     }
@@ -167,6 +167,9 @@ namespace otb
           VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
   ::InstanciateTransform(void)
   {
+
+    m_Transform = InternalTransformType::New();
+
     InputVectorDataPointer input = this->GetInput();
     OutputVectorDataPointer output = this->GetOutput();
     const itk::MetaDataDictionary & inputDict = input->GetMetaDataDictionary();
@@ -205,6 +208,7 @@ namespace otb
         sensorModel->SetDEMDirectory(m_DEMDirectory);
       }
       m_InputTransform = sensorModel;
+      m_Transform->SetFirstTransformProjectionType(otb::PROJSENSORINVERSE);
       otbMsgDevMacro(<< "Input projection set to sensor model");
     }
 
@@ -218,6 +222,7 @@ namespace otb
       if (mapTransform->GetMapProjection() != NULL)
       {
         m_InputTransform = mapTransform;
+        m_Transform->SetFirstTransformProjectionType(otb::PROJMAPINVERSE);
         otbMsgDevMacro(<< "Input projection set to map transform: " << m_InputTransform);
       }
 
@@ -226,6 +231,7 @@ namespace otb
     if(m_InputTransform.IsNull())//default if we didn't manage to instantiate it before
     {
       m_InputTransform = itk::IdentityTransform< double, 2 >::New();
+      m_Transform->SetFirstTransformProjectionType(otb::PROJIDENTITY);
       otbMsgDevMacro(<< "Input projection set to identity")
     }
 
@@ -242,6 +248,7 @@ namespace otb
         sensorModel->SetDEMDirectory(m_DEMDirectory);
       }
       m_OutputTransform = sensorModel;
+      m_Transform->SetSecondTransformProjectionType(otb::PROJSENSORFORWARD);
       otbMsgDevMacro(<< "Output projection set to sensor model");
     }
 
@@ -255,6 +262,7 @@ namespace otb
       if (mapTransform->GetMapProjection() != NULL)
       {
         m_OutputTransform = mapTransform;
+        m_Transform->SetSecondTransformProjectionType(otb::PROJMAPFORWARD);
         otbMsgDevMacro(<< "Output projection set to map transform: " << m_OutputTransform);
       }
 
@@ -263,11 +271,10 @@ namespace otb
     if(m_OutputTransform.IsNull())//default if we didn't manage to instantiate it before
     {
       m_OutputTransform = itk::IdentityTransform< double, 2 >::New();
+      m_Transform->SetSecondTransformProjectionType(otb::PROJIDENTITY);
       otbMsgDevMacro(<< "Output projection set to identity")
     }
 
-
-    m_Transform = InternalTransformType::New();
     m_Transform->SetFirstTransform(m_InputTransform);
     m_Transform->SetSecondTransform(m_OutputTransform);
 
