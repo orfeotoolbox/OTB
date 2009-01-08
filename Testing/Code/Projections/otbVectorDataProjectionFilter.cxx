@@ -25,6 +25,12 @@
 int otbVectorDataProjectionFilter(int argc, char * argv[])
 {
 
+  if(argc < 3  )
+  {
+    std::cout << argv[0] <<" <input filename> <output filename> [<output text>]"  << std::endl;
+
+    return EXIT_FAILURE;
+  }
 
   typedef otb::VectorData<double > InputVectorDataType;
   typedef otb::VectorData<double > OutputVectorDataType;
