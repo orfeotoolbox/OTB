@@ -21,13 +21,16 @@
 #include "otbVectorDataFileReader.h"
 #include "otbVectorDataFileWriter.h"
 
+#include "otbImage.h"
+#include "otbImageFileReader.h"
 
-int otbVectorDataProjectionFilter(int argc, char * argv[])
+int otbVectorDataProjectionFilterFromMapToSensor(int argc, char * argv[])
 {
 
   if(argc < 3  )
   {
-    std::cout << argv[0] <<" <input filename> <output filename> [<output text>]"  << std::endl;
+    std::cout << argv[0] <<" <input vector filename> <input image filename>"
+        << " <output vector filename> "  << std::endl;
 
     return EXIT_FAILURE;
   }
@@ -42,44 +45,34 @@ int otbVectorDataProjectionFilter(int argc, char * argv[])
   reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
 
+
+  typedef otb::Image<unsigned short int, 2> ImageType;
+  typedef otb::ImageFileReader<ImageType> ImageReaderType;
+  ImageReaderType::Pointer imageReader = ImageReaderType::New();
+  imageReader->SetFileName(argv[2]);
+  imageReader->UpdateOutputInformation();
+
+
   typedef otb::VectorDataProjectionFilter<InputVectorDataType,OutputVectorDataType> VectorDataFilterType;
 
   VectorDataFilterType::Pointer vectorDataProjection = VectorDataFilterType::New();
 
   vectorDataProjection->SetInput(reader->GetOutput());
 
+//   ossimKeywordlist kwl;
+//   (imageReader->GetOutput()->GetImageKeywordlist()).convertToOSSIMKeywordlist(kwl);
+//   vectorDataProjection->SetOutputKeywordList(kwl);
+  vectorDataProjection->SetOutputKeywordList(imageReader->GetOutput()->GetImageKeywordlist());
+  vectorDataProjection->SetOutputOrigin(imageReader->GetOutput()->GetOrigin());
+  vectorDataProjection->SetOutputSpacing(imageReader->GetOutput()->GetSpacing());
 
-  std::string projectionRefWkt ="PROJCS[\"UTM Zone 31, Northern Hemisphere\",GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],TOWGS84[0,0,0,0,0,0,0],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9108\"]],AXIS[\"Lat\",NORTH],AXIS[\"Long\",EAST],AUTHORITY[\"EPSG\",\"4326\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",3],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"Meter\",1]]";
-
-  vectorDataProjection->SetOutputProjectionRef(projectionRefWkt);
 
   typedef otb::VectorDataFileWriter<OutputVectorDataType> VectorDataFileWriterType;
   VectorDataFileWriterType::Pointer writer = VectorDataFileWriterType::New();
-  writer->SetFileName(argv[2]);
+  writer->SetFileName(argv[3]);
   writer->SetInput(vectorDataProjection->GetOutput());
   writer->Update();
 
-
-  //Output the tree in a text file
-  if (argc >= 4)
-  {
-    const char * outfile = argv[3];
-    std::ofstream file;
-    file.open(outfile);
-
-    InputVectorDataType::Pointer data;
-    data = reader->GetOutput();
-    file << "Original data" << std::endl;
-    file << data;
-    file << std::endl << std::endl;
-
-    OutputVectorDataType::Pointer data2;
-    data2 = vectorDataProjection->GetOutput();
-    file << "Reprojected data" << std::endl;
-    file << data2;
-    file << std::endl << std::endl;
-    file.close();
-  }
 
   return EXIT_SUCCESS;
 }

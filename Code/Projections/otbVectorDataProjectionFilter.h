@@ -22,6 +22,7 @@
 #include "itkTransform.h"
 #include "otbCompositeTransform.h"
 #include "itkPreOrderTreeIterator.h"
+#include "otbImageKeywordlist.h"
 
 namespace otb
 {
@@ -87,9 +88,19 @@ namespace otb
       typedef typename OutputVectorDataType::DataNodePointerType OutputDataNodePointerType;
       typedef typename OutputVectorDataType::DataTreePointerType OutputDataTreePointerType;
 
+      typedef typename OutputDataNodeType::PointType PointType;
+
       typedef typename OutputDataNodeType::LineType LineType;
       typedef typename OutputDataNodeType::LineConstPointerType LineConstPointerType;
       typedef typename OutputDataNodeType::LinePointerType LinePointerType;
+
+      typedef typename OutputDataNodeType::PolygonType PolygonType;
+      typedef typename OutputDataNodeType::PolygonConstPointerType PolygonConstPointerType;
+      typedef typename OutputDataNodeType::PolygonPointerType PolygonPointerType;
+
+      typedef typename OutputDataNodeType::PolygonListType PolygonListType;
+      typedef typename OutputDataNodeType::PolygonListConstPointerType PolygonListConstPointerType;
+      typedef typename OutputDataNodeType::PolygonListPointerType PolygonListPointerType;
 
 
       /** Method for creation through the object factory. */
@@ -98,10 +109,8 @@ namespace otb
       /** Run-time type information (and related methods). */
       itkTypeMacro(VectorDataProjectionFilter, VectorDataToVectorDataFilter);
 
-      /** Set/Get for input and output projections.
-       Note that there is not Set for the input projection which is specified
-       by the input data itself
-      */
+      /** Set/Get for input and output projections.  */
+      itkSetStringMacro(InputProjectionRef);
       itkGetStringMacro(InputProjectionRef);
 
       itkSetStringMacro(OutputProjectionRef);
@@ -109,6 +118,21 @@ namespace otb
 
       itkSetStringMacro(DEMDirectory);
       itkGetStringMacro(DEMDirectory);
+
+
+      itkGetMacro(InputKeywordList,ImageKeywordlist);
+      void SetInputKeywordList(ImageKeywordlist kwl)
+      {
+        this->m_InputKeywordList = kwl;
+        this->Modified();
+      }
+
+      itkGetMacro(OutputKeywordList,ImageKeywordlist);
+      void SetOutputKeywordList(ImageKeywordlist kwl)
+      {
+        this->m_OutputKeywordList = kwl;
+        this->Modified();
+      }
 
        /** Set the origin of the vector data.
         * \sa GetOrigin() */
@@ -127,11 +151,33 @@ namespace otb
 
       itkGetConstReferenceMacro(InputSpacing, SpacingType);
 
+
+             /** Set the origin of the vector data.
+              * \sa GetOrigin() */
+      itkSetMacro(OutputOrigin, OriginType);
+      virtual void SetOutputOrigin( const double origin[2] );
+      virtual void SetOutputOrigin( const float origin[2] );
+
+      itkGetConstReferenceMacro(OutputOrigin, OriginType);
+
+
+       /** Set the spacing (size of a pixel) of the vector data.
+        * \sa GetSpacing() */
+      virtual void SetOutputSpacing (const SpacingType & spacing);
+      virtual void SetOutputSpacing (const double spacing[2]);
+      virtual void SetOutputSpacing (const float spacing[2]);
+
+      itkGetConstReferenceMacro(OutputSpacing, SpacingType);
+
+
     protected:
       VectorDataProjectionFilter();
       virtual ~VectorDataProjectionFilter() {};
 
+      PointType ReprojectPoint(PointType point) const;
       LinePointerType ReprojectLine(LinePointerType line) const;
+      PolygonPointerType ReprojectPolygon(PolygonPointerType polygon) const;
+      PolygonListPointerType ReprojectPolygonList(PolygonListPointerType polygonList) const;
 
       void InstanciateTransform(void);
 
@@ -147,8 +193,8 @@ namespace otb
       GenericTransformPointerType m_OutputTransform;
       std::string m_InputProjectionRef;
       std::string m_OutputProjectionRef;
-      ossimKeywordlist m_InputKeywordList;
-      ossimKeywordlist m_OutputKeywordList;
+      ImageKeywordlist m_InputKeywordList;
+      ImageKeywordlist m_OutputKeywordList;
       std::string m_DEMDirectory;
 
       SpacingType         m_InputSpacing;

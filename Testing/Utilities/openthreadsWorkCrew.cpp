@@ -243,8 +243,8 @@ private:
 	for(i=0; i<_work->datapts.size();++i) {
 	    for(total=0, j=0; j<10000000; ++j) {
 #if defined(WIN32) && !defined(__CYGWIN__)
-		total += double(rand()) / double(RAND_MAX);
-		total -= double(rand()) / double(RAND_MAX);
+		total += (float)( double(rand()) / double(RAND_MAX) );
+		total -= (float)( double(rand()) / double(RAND_MAX) );
 #else
 		total += drand48();
 		total -= drand48();

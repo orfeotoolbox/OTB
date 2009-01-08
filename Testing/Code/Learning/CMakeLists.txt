@@ -347,6 +347,11 @@ ADD_TEST(leTvSVMModelCopyComposedKernel ${LEARNING_TESTS3}
 	${INPUTDATA}/svm_model_composed
 	${TEMP}/svmcopycomposed_test)
 
+ADD_TEST(leTuSVMInverseCosSpectralAngleKernelFunctorImageModelEstimatorTest ${LEARNING_TESTS3}
+        otbSVMInverseCosSpectralAngleKernelFunctorImageModelEstimatorTest
+	${INPUTDATA}/ROI_QB_MUL_4.tif
+	${INPUTDATA}/ROI_QB_MUL_4_train_one_class.tif
+	${TEMP}/leTvsvm_model_image_one_class)
 
 
 # A enrichir
@@ -393,6 +398,7 @@ otbSVMModelGenericKernelsTest.cxx
 otbSVMModelCopyTest.cxx
 otbSVMModelCopyGenericKernelTest.cxx
 otbSVMModelCopyComposedKernelTest.cxx
+otbSVMInverseCosSpectralAngleKernelFunctorImageModelEstimatorTest.cxx
 )
 
 

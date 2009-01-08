@@ -75,10 +75,11 @@ namespace otb
       itkNewMacro( Self );
 
       /** Run-time type information (and related methods). */
-      itkTypeMacro( GenericMapProjection, Transform );
+      itkTypeMacro( GenericMapProjection, itk::Transform );
 
       itkSetObjectMacro(MapProjection,OssimMapProjectionType);
       virtual OssimMapProjectionType* GetMapProjection ();
+      virtual const OssimMapProjectionType* GetMapProjection () const;
 
       typedef InverseOrForwardTransformationEnum DirectionOfMappingEnumType;
 
@@ -97,14 +98,16 @@ namespace otb
 
       virtual void PrintMap() const;
 
-      OutputPointType TransformPoint(const InputPointType &point);
+      OutputPointType TransformPoint(const InputPointType &point) const;
+
+      virtual bool InstanciateProjection();
 
     protected:
       GenericMapProjection();
       virtual ~GenericMapProjection();
       OssimMapProjectionType* m_MapProjection;
       std::string m_ProjectionRefWkt;
-      virtual void InstanciateProjection();
+
       bool reinstanciateProjection;
 
     private :

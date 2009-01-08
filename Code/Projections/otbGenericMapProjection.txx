@@ -66,6 +66,21 @@ namespace otb
   }
 
 
+  template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+     const typename GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions>::OssimMapProjectionType*
+          GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions>
+  ::GetMapProjection () const
+  {
+    itkDebugMacro("returning MapProjection address " << this->m_MapProjection );
+    if ((reinstanciateProjection) || (m_MapProjection == NULL))
+    {
+      itkExceptionMacro(<<"m_MapProjection not up-to-date, call InstanciateProjection() first");
+    }
+
+    return this->m_MapProjection;
+  }
+
+
 
   template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
       std::string
@@ -87,36 +102,43 @@ namespace otb
   {
     this->m_ProjectionRefWkt=projectionRefWkt;
     reinstanciateProjection = true;
+    this->InstanciateProjection();
     this->Modified();
   }
 
   template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-      void
+      bool
           GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::InstanciateProjection()
   {
-    ossimKeywordlist kwl;
-    ossimOgcWktTranslator wktTranslator;
-
-    bool projectionInformationAvailable = wktTranslator.toOssimKwl(m_ProjectionRefWkt, kwl);
-
-    if (!projectionInformationAvailable)
+    if ((this->reinstanciateProjection) || (m_MapProjection == NULL))
     {
-      itkExceptionMacro(<<"Impossible to create the projection from string: "<< m_ProjectionRefWkt);
-    }
+      ossimKeywordlist kwl;
+      ossimOgcWktTranslator wktTranslator;
 
-    m_MapProjection = ossimMapProjectionFactory::instance()->createProjection(kwl);
-    this->reinstanciateProjection = false;
+      bool projectionInformationAvailable = wktTranslator.toOssimKwl(m_ProjectionRefWkt, kwl);
+
+      if (!projectionInformationAvailable)
+      {
+        itkExceptionMacro(<<"Impossible to create the projection from string: "<< m_ProjectionRefWkt);
+      }
+
+      m_MapProjection = ossimMapProjectionFactory::instance()->createProjection(kwl);
+      this->reinstanciateProjection = false;
+      return true;
+    }
+    return false;
   }
 
 
   template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
       typename GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
           GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions>
-  ::TransformPoint(const InputPointType & point)
+  ::TransformPoint(const InputPointType & point) const
   {
     OutputPointType outputPoint;
 
+//     otbMsgDevMacro(<< "DirectionOfMapping: " << DirectionOfMapping);
     switch(DirectionOfMapping)
     {
       case INVERSE:

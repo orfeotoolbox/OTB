@@ -20,6 +20,10 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbCompositeTransform.h"
 #include "otbMapProjections.h"
+#include "otbGenericMapProjection.h"
+#include "otbForwardSensorModel.h"
+#include "otbInverseSensorModel.h"
+#include "itkIdentityTransform.h"
 
 namespace otb
 {
@@ -36,8 +40,8 @@ namespace otb
                      NOutputDimensions>
   ::CompositeTransform() : Superclass(SpaceDimension,ParametersDimension)
   {
-    m_FirstTransform = FirstTransformType::New();
-    m_SecondTransform = SecondTransformType::New();
+    m_FirstTransform = 0;
+    m_SecondTransform = 0;
   }
 
   template<class TFirstTransform,
@@ -71,21 +75,15 @@ namespace otb
                      NInputDimensions,
                      NOutputDimensions>
   ::TransformPoint(const FirstTransformInputPointType &point1) const
-  {
-    FirstTransformOutputPointType pointTmp;
-    SecondTransformOutputPointType point2;
+    {
+      FirstTransformOutputPointType geoPoint;
+      geoPoint=m_FirstTransform->TransformPoint(point1);
 
-    pointTmp=m_FirstTransform->TransformPoint(point1);
+      SecondTransformOutputPointType outputPoint;
+      outputPoint=m_SecondTransform->TransformPoint(geoPoint);
 
-//     otbMsgDevMacro(<< "Geographic point is ("<<  pointTmp[0]<< ","<<  pointTmp[1]<< ")");
-
-    point2=m_SecondTransform->TransformPoint(pointTmp);
-
-//     otbMsgDevMacro(<< "Corresponding coordinates in sensor geometry are: " << std::endl
-// 		   << point2[0] << ","<< point2[1] );
-
-    return point2;
-  }
+      return outputPoint;
+    }
 
   /*template<class TFirstTransform, class TSecondTransform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
     typename CompositeTransform<TFirstTransform, TSecondTransform, TScalarType, NInputDimensions, NOutputDimensions>::OutputVectorType

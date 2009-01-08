@@ -48,7 +48,7 @@ namespace otb
       itkNewMacro( Self );
 
       /** Run-time type information (and related methods). */
-      itkTypeMacro( Lambert2EtenduProjection, MapProjection );
+      itkTypeMacro( Lambert2EtenduProjection, LambertConformalConicMapProjection );
 
 
     protected:
