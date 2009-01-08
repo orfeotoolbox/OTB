@@ -1028,9 +1028,6 @@ IF(USE_FFTWD)
 
 ENDIF(USE_FFTWD)
 
-# ADD_TEST(bfTuGaborFilterGeneratorNew ${BASICFILTERS_TESTS10}
-# 	otbGaborFilterGeneratorNew
-# 	 )
 
 ADD_TEST(bfTvPolygonCompacityFunctor ${BASICFILTERS_TESTS10}
 	--compare-ascii ${TOL}
@@ -1040,6 +1037,25 @@ ADD_TEST(bfTvPolygonCompacityFunctor ${BASICFILTERS_TESTS10}
 	 ${INPUTDATA}/polygon.png
 	 ${TEMP}/bfPolygonCompacityFunctorTest.txt
 )
+
+
+
+# -------            otb::PersistentVectorizationImageFilter   ----------------------------
+
+ADD_TEST(bfTuPersistentVectorizationImageFilterNew ${BASICFILTERS_TESTS10}
+	otbPersistentVectorizationFilterNew
+	 )
+
+ADD_TEST(bfTvPersistentVectorizationImageFilter ${BASICFILTERS_TESTS10}
+--compare-ascii ${TOL}
+	    ${BASELINE}/bfTvPersistentVectorizationImageFilterOutput.txt
+	    ${TEMP}/bfTvPersistentVectorizationImageFilterOutput.txt
+	 otbPersistentVectorizationFilter
+	 ${INPUTDATA}/Seg1InputForRCC8Graph.tif
+	 ${TEMP}/bfTvPersistentVectorizationImageFilterOutput.txt
+)
+
+
 
 # A enrichir
 SET(BasicFilters_SRCS1
@@ -1186,6 +1202,8 @@ otbScalarVectorImageTextureFunctor.cxx
 otbGaborFilterGeneratorNew.cxx
 otbGaborFilterGenerator.cxx
 otbPolygonCompacityFunctor.cxx
+otbPersistentVectorizationFilterNew.cxx
+otbPersistentVectorizationFilter.cxx
 )
 
 

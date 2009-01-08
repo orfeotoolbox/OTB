@@ -39,4 +39,6 @@ REGISTER_TEST(otbOverlapSaveConvolutionImageFilter);
 REGISTER_TEST(otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter);
 #endif
 REGISTER_TEST(otbPolygonCompacityFunctor);
+REGISTER_TEST(otbPersistentVectorizationFilterNew);
+REGISTER_TEST(otbPersistentVectorizationFilter);
 }

@@ -59,17 +59,19 @@ namespace otb {
       typedef typename TInputImage::InternalPixelType                                 InternalPixelType;
 
       // Output path type
-      typedef TOuptutPath                                                             PathType;
+      typedef TOutputPath                                                             PathType;
       typedef otb::ObjectList<PathType>                                               PathListType;
       typedef typename PathListType::Pointer                                          PathListPointerType;
       typedef typename PathType::Pointer                                              PathPointerType;
       typedef itk::MinimumMaximumImageFilter<ImageType>                               MinMaxFilterType;
       typedef typename MinMaxFilterType::Pointer                                      MinMaxFilterPointerType;
-      typedef otb::ImageToEdgePathFilter<ImageType,OutputPathType>                    ImageToEdgePathFilterType;
+      typedef otb::ImageToEdgePathFilter<ImageType,PathType>                          ImageToEdgePathFilterType;
       typedef typename ImageToEdgePathFilterType::Pointer                             ImageToEdgePathFilterPointerType;   
 
       virtual void Reset(void);
       virtual void Synthetize(void);
+
+      itkGetObjectMacro(PathList,PathListType);
       
     protected:
       PersistentVectorizationImageFilter();
