@@ -76,13 +76,12 @@ int main(int ac, char* av[] )
   bool lFlagRegression(false);
   double lToleranceDiffPixelImage(0);
   double lEpsilon(0);
-//   char *baselineFilenameBinary = NULL;
-//   char *testFilenameBinary = NULL;
+
   std::vector<std::string> baselineFilenamesBinary;
   std::vector<std::string> testFilenamesBinary;
   std::vector<std::string> baselineFilenamesMetaData;
   std::vector<std::string> testFilenamesMetaData;
-  // vector if image filenames to compare
+
   std::vector<std::string> baselineFilenamesImage;
   std::vector<std::string> testFilenamesImage;
   std::vector<std::string> baselineFilenamesAscii;
@@ -146,11 +145,11 @@ int main(int ac, char* av[] )
     {
       lFlagRegression = true;
       lToleranceDiffPixelImage = (double)(::atof(av[2]));
-	// Number of comparisons to do
+      // Number of comparisons to do
       unsigned int nbComparisons=(unsigned int)(::atoi(av[3]));
       baselineFilenamesImage.reserve(nbComparisons);
       testFilenamesImage.reserve(nbComparisons);
-	// Retrieve all the file names
+      // Retrieve all the file names
       for(unsigned int i = 0; i<nbComparisons;i++)
       {
         baselineFilenamesImage.push_back(av[4+2*i]);
@@ -175,7 +174,7 @@ int main(int ac, char* av[] )
       unsigned int nbComparisons=(unsigned int)(::atoi(av[2]));
       baselineFilenamesBinary.reserve(nbComparisons);
       testFilenamesBinary.reserve(nbComparisons);
-        // Retrieve all the file names
+      // Retrieve all the file names
       for(unsigned int i = 0; i<nbComparisons;i++)
       {
         baselineFilenamesBinary.push_back(av[3+2*i]);
@@ -199,11 +198,11 @@ int main(int ac, char* av[] )
     {
       lFlagRegression = true;
       lEpsilon = (double)(::atof(av[2]));
-        // Number of comparisons to do
+      // Number of comparisons to do
       unsigned int nbComparisons=(unsigned int)(::atoi(av[3]));
       baselineFilenamesAscii.reserve(nbComparisons);
       testFilenamesAscii.reserve(nbComparisons);
-        // Retrieve all the file names
+      // Retrieve all the file names
       for(unsigned int i = 0; i<nbComparisons;i++)
       {
         baselineFilenamesAscii.push_back(av[4+2*i]);
@@ -280,14 +279,15 @@ int main(int ac, char* av[] )
 
           std::cout << "-------------  Start control baseline tests    -------------"<<std::endl;
                         // Make a list of possible baselines
-                        // Test de non regression sur des images
+
+          // Non regression test for images
           if ((baselineFilenamesImage.size()>0) && (testFilenamesImage.size()>0))
           {
-	                        // Creates iterators on baseline filenames vector and test filenames vector
+            // Creates iterators on baseline filenames vector and test filenames vector
             std::vector<std::string>::iterator itbaselineFilenames = baselineFilenamesImage.begin();
             std::vector<std::string>::iterator itTestFilenames = testFilenamesImage.begin();
             int cpt(1);
-	                        // For each couple of baseline and test file, do the comparison
+            // For each couple of baseline and test file, do the comparison
             for(;(itbaselineFilenames != baselineFilenamesImage.end())
                   &&(itTestFilenames != testFilenamesImage.end());
                   ++itbaselineFilenames,++itTestFilenames)
@@ -325,13 +325,13 @@ int main(int ac, char* av[] )
 
           }
 
-                        // Non-regression testing on metadata.
+          // Non-regression test for metadata.
           if ((baselineFilenamesMetaData.size()>0) && (testFilenamesMetaData.size()>0))
           {
-	                        // Creates iterators on baseline filenames vector and test filenames vector
+            // Creates iterators on baseline filenames vector and test filenames vector
             std::vector<std::string>::iterator itbaselineFilenames = baselineFilenamesMetaData.begin();
             std::vector<std::string>::iterator itTestFilenames = testFilenamesMetaData.begin();
-	                        // For each couple of baseline and test file, do the comparison
+            // For each couple of baseline and test file, do the comparison
             for(;(itbaselineFilenames != baselineFilenamesMetaData.end())
                   &&(itTestFilenames != testFilenamesMetaData.end());
                   ++itbaselineFilenames,++itTestFilenames)
@@ -367,13 +367,13 @@ int main(int ac, char* av[] )
             }
           }
 
-          // Test de non regression sur des fichiers ascii
+          // Non regression test for ascii files
           if ((baselineFilenamesAscii.size()>0) && (testFilenamesAscii.size()>0))
           {
-	          // Creates iterators on baseline filenames vector and test filenames vector
+            // Creates iterators on baseline filenames vector and test filenames vector
             std::vector<std::string>::iterator itbaselineFilenames = baselineFilenamesAscii.begin();
             std::vector<std::string>::iterator itTestFilenames = testFilenamesAscii.begin();
-	          // For each couple of baseline and test file, do the comparison
+            // For each couple of baseline and test file, do the comparison
             for(;(itbaselineFilenames != baselineFilenamesAscii.end())
                   &&(itTestFilenames != testFilenamesAscii.end());
                   ++itbaselineFilenames,++itTestFilenames)
@@ -408,13 +408,13 @@ int main(int ac, char* av[] )
               result += multiResult;
             }
           }
-                        // Test de non regression sur des fichiers binaires
+          // Non regression test for binary files
           if ((baselineFilenamesBinary.size()>0) && (testFilenamesBinary.size()>0))
           {
-	          // Creates iterators on baseline filenames vector and test filenames vector
+            // Creates iterators on baseline filenames vector and test filenames vector
             std::vector<std::string>::iterator itbaselineFilenames = baselineFilenamesBinary.begin();
             std::vector<std::string>::iterator itTestFilenames = testFilenamesBinary.begin();
-	          // For each couple of baseline and test file, do the comparison
+            // For each couple of baseline and test file, do the comparison
             for(;(itbaselineFilenames != baselineFilenamesBinary.end())
                   &&(itTestFilenames != testFilenamesBinary.end());
                   ++itbaselineFilenames,++itTestFilenames)
@@ -446,19 +446,6 @@ int main(int ac, char* av[] )
               }
               result += multiResult;
             }
-//             std::map<std::string,int> baselines;
-//             baselines[std::string(baselineFilenameBinary)] = 0;
-//             std::map<std::string,int>::iterator baseline = baselines.begin();
-//             baseline->second = RegressionTestBinaryFile(testFilenameBinary,
-//                 (baseline->first).c_str(),
-//                  0);
-//             if (baseline->second != 0)
-//             {
-//               baseline->second = RegressionTestBinaryFile(testFilenameBinary,
-//                   (baseline->first).c_str(),
-//                    1);
-//             }
-//             result += baseline->second;
           }
 
         }
@@ -735,7 +722,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
         unsigned int i=0;
         if(!isHexaPointerAddress(strRef))
         {
-			    //Analyse if strRef contains scientific value (ex: "-142.124e-012")
+          //Analyse if strRef contains scientific value (ex: "-142.124e-012")
           if(isScientificNumeric(strRef))
           {
             if(!isScientificNumeric(strTest))
@@ -777,11 +764,11 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
               else
                 etatCour = ETAT_CHAR;
 
-				// "reference" state initialisation.
+              // "reference" state initialisation.
               if (i==0)
                 etatPrec=etatCour;
 
-				// Case where there's a number after characteres.
+              // Case where there's a number after characteres.
               if ((etatCour==ETAT_NUM)&&(etatPrec==ETAT_CHAR))
               {
                 if ( strCharRef != strCharTest )
@@ -802,7 +789,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
                 strNumTest=charTmpTest;
                 chgt=true;
               }
-				// Case where there's a character after numbers.
+              // Case where there's a character after numbers.
               else if ((etatCour==ETAT_CHAR)&&(etatPrec==ETAT_NUM))
               {
 
@@ -842,7 +829,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
               i++;
             }
 
-			    // Simpliest case : string characters or numeric value between 2 separators
+            // Simpliest case : string characters or numeric value between 2 separators
             if (!chgt)
             {
               if (isNumeric(strRef))
@@ -889,7 +876,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
       }
 
       numLine++;
-    //Store alls differences lines
+      //Store alls differences lines
       if ( nblinediff!=0 && reportErrors)
       {
         listStrDiffLineFileRef.push_back(strfileref);
@@ -973,10 +960,7 @@ int RegressionTestBinaryFile(const char * testBinaryFileName, const char * basel
       nbdiff++;
     }
   }
-/*    	if ( feof(fluxfiletest) != feof(fluxfileref) )
-  {
-  fprintf(stderr,"L'un des fichiers n'a pas �t� lu enti�rement\n");
-}*/
+
   fclose(fluxfiletest);
   fclose(fluxfileref);
   if ( nbdiff!=0 && reportErrors)
@@ -1007,7 +991,8 @@ int RegressionTestImage (int cpt, const char *testImageFilename, const char *bas
   }
   catch (itk::ExceptionObject& e)
   {
-    itkGenericExceptionMacro(<< "Exception detected while reading " << baselineImageFilename << " : "  << e.GetDescription());
+    itkGenericExceptionMacro(<< "Exception detected while reading "
+        << baselineImageFilename << " : "  << e.GetDescription());
     return 1000;
   }
 
@@ -1020,7 +1005,8 @@ int RegressionTestImage (int cpt, const char *testImageFilename, const char *bas
   }
   catch (itk::ExceptionObject& e)
   {
-    itkGenericExceptionMacro(<< "Exception detected while reading " << testImageFilename << " : "  << e.GetDescription() );
+    itkGenericExceptionMacro(<< "Exception detected while reading "
+        << testImageFilename << " : "  << e.GetDescription() );
     return 1000;
   }
 
@@ -1056,7 +1042,8 @@ int RegressionTestImage (int cpt, const char *testImageFilename, const char *bas
   if(reportErrors == 0)
   {
     otbGenericMsgDebugMacro(<< "RegressionTestImage DifferenceThreshold: "<<toleranceDiffPixelImage);
-    otbGenericMsgDebugMacro(<< "Status diff->GetTotalDifference:         "<<status<<" for "<<numberOfPixelsWithDifferences<<" pixel(s)." );
+    otbGenericMsgDebugMacro(<< "Status diff->GetTotalDifference:         "
+        << status <<" for "<<numberOfPixelsWithDifferences<<" pixel(s)." );
   }
   // if there are discrepencies, create an diff image
   if (status.GetSquaredNorm()>0 && reportErrors)
@@ -1188,7 +1175,8 @@ int RegressionTestMetaData (const char *testImageFilename, const char *baselineI
   }
   catch (itk::ExceptionObject& e)
   {
-    itkGenericExceptionMacro(<< "Exception detected while reading " << baselineImageFilename << " : "  << e.GetDescription());
+    itkGenericExceptionMacro(<< "Exception detected while reading "
+        << baselineImageFilename << " : "  << e.GetDescription());
   }
 
    // Read the baseline file
@@ -1200,7 +1188,8 @@ int RegressionTestMetaData (const char *testImageFilename, const char *baselineI
   }
   catch (itk::ExceptionObject& e)
   {
-    itkGenericExceptionMacro(<< "Exception detected while reading " << baselineImageFilename << " : "  << e.GetDescription());
+    itkGenericExceptionMacro(<< "Exception detected while reading "
+        << baselineImageFilename << " : "  << e.GetDescription());
   }
 
   unsigned int errcount = 0;
