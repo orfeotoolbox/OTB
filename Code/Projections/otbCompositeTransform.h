@@ -130,9 +130,6 @@ namespace otb
 
       FirstTransformPointerType  m_FirstTransform;
       SecondTransformPointerType m_SecondTransform;
-//       FirstTransformType*  m_FirstTransform;
-//       SecondTransformType* m_SecondTransform;
-
 
       private:
       CompositeTransform(const Self&); //purposely not implemented
