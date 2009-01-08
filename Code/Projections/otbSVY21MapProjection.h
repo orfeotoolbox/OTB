@@ -48,7 +48,7 @@ namespace otb
       itkNewMacro( Self );
 
       /** Run-time type information (and related methods). */
-      itkTypeMacro( SVY21MapProjection, MapProjection );
+      itkTypeMacro( SVY21MapProjection, TransMercatorMapProjection );
 
 
     protected:

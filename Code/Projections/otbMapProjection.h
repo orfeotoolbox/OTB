@@ -74,7 +74,7 @@ namespace otb
       itkNewMacro( Self );
 
       /** Run-time type information (and related methods). */
-      itkTypeMacro( MapProjection, Transform );
+      itkTypeMacro( MapProjection, itk::Transform );
 
       virtual const OssimMapProjectionType* GetMapProjection () const;
       virtual OssimMapProjectionType* GetMapProjection ();
