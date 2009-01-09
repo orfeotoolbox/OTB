@@ -62,10 +62,6 @@ private:
 
 } // end of namespace otb
 
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbChangeProfileKernelFunctor.txx"
-#endif
-
 
 #endif
 

@@ -28,13 +28,14 @@
 #include "otbVectorImage.h"
 #include <iostream>
 
+#include "otbSVMImageClassificationFilter.h"
 #include "otbSVMImageModelEstimator.h"
 #include "otbSVMKernels.h"
 
 
 #include "otbImageFileReader.h"
 
-int otbSVMInverseCosSpectralAngleKernelFunctorImageModelEstimatorTest( int argc, char* argv[] )
+int otbSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest( int argc, char* argv[] )
 {
   const char* inputImageFileName = argv[1];
   const char* trainingImageFileName = argv[2];
@@ -64,19 +65,29 @@ int otbSVMInverseCosSpectralAngleKernelFunctorImageModelEstimatorTest( int argc,
   svmEstimator->SetNumberOfClasses( 2 );
   svmEstimator->SetSVMType(ONE_CLASS);
 
-  	otb::InverseCosSAMKernelFunctor myKernel;
-	myKernel.SetValue( "Coef", 1.0 );
-	myKernel.Update();
+  otb::InverseCosSAMKernelFunctor myKernel;
+  myKernel.SetValue( "Coef", 1.0 );
+  myKernel.Update();
 
-	svmEstimator->SetKernelFunctor( &myKernel );
-	svmEstimator->SetKernelType( GENERIC );
+  svmEstimator->SetKernelFunctor( &myKernel );
+  svmEstimator->SetKernelType( GENERIC );
 
-  
+
+   
   svmEstimator->Update();
 
   otbGenericMsgDebugMacro(<<"Saving model");
   svmEstimator->SaveModel(outputModelFileName);
 
+
+  typedef otb::SVMImageClassificationFilter<InputImageType,
+                      TrainingImageType>           ClassifierType;
+
+  ClassifierType::Pointer classifier = ClassifierType::New();
+
+  classifier->SetModel(svmEstimator->GetModel());
+  classifier->SetInput(inputReader->GetOutput());
+  classifier->Update();
 
   return EXIT_SUCCESS;
 }

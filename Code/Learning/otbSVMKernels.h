@@ -129,6 +129,23 @@ class RadialSAMKernelFunctor : public GenericKernelFunctorBase
       }
   };
 
+ /** \class InverseCosSAMKernelFunctor
+   * \brief Undocumented
+  */
+class InverseCosSAMKernelFunctor : public GenericKernelFunctorBase
+  {
+    public:
+    InverseCosSAMKernelFunctor(): GenericKernelFunctorBase() { this->SetName("InverseCosSAM"); };
+    virtual ~InverseCosSAMKernelFunctor() {};
+
+    virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const
+      {
+	SAMKernelFunctor sam;
+	return 1.0 - vcl_cos( sam( x, y, param ) );
+      }
+  };
+
+
 
  /** \class InvMultiQuadraticSAMKernelFunctor
    * \brief Undocumented

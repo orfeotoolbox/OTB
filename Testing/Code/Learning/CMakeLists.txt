@@ -353,6 +353,12 @@ ADD_TEST(leTuSVMInverseCosSpectralAngleKernelFunctorImageModelEstimatorTest ${LE
 	${INPUTDATA}/ROI_QB_MUL_4_train_one_class.tif
 	${TEMP}/leTvsvm_model_image_one_class)
 
+ADD_TEST(leTuSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest ${LEARNING_TESTS3}
+        otbSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest
+	${INPUTDATA}/ROI_QB_MUL_4.tif
+	${INPUTDATA}/ROI_QB_MUL_4_train_one_class.tif
+	${TEMP}/leTvsvm_model_image_one_class)
+      
 
 # A enrichir
 SET(BasicLearning_SRCS1
@@ -399,6 +405,7 @@ otbSVMModelCopyTest.cxx
 otbSVMModelCopyGenericKernelTest.cxx
 otbSVMModelCopyComposedKernelTest.cxx
 otbSVMInverseCosSpectralAngleKernelFunctorImageModelEstimatorTest.cxx
+otbSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest.cxx
 )
 
 

@@ -20,6 +20,7 @@
 #ifndef __otbChangeProfileKernelFunctor_txx
 #define __otbChangeProfileKernelFunctor_txx
 
+#include <cmath>
 #include "otbChangeProfileKernelFunctor.h"
 
 namespace otb
