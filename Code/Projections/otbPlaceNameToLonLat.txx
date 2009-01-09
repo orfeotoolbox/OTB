@@ -90,7 +90,10 @@ bool PlaceNameToLonLat::Evaluate()
   return true;
 }
 
-
+/*
+//This method will be necessary to process the file directly in memory
+//without writing it to the disk. Waiting for the xml lib to handle that
+//also
 static size_t
 curlHandlerWriteMemoryCallback(void *ptr, size_t size, size_t nmemb,
   void *data)
@@ -104,6 +107,7 @@ curlHandlerWriteMemoryCallback(void *ptr, size_t size, size_t nmemb,
 
   return realsize;
 }
+*/
 
 void PlaceNameToLonLat::RetrieveXML(std::ostringstream& urlStream)
 {
