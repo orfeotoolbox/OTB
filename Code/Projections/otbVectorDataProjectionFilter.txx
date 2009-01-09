@@ -197,27 +197,14 @@ namespace otb
           VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
   ::ReprojectPoint(PointType pointCoord) const
   {
-//     typedef typename LineType::VertexListType::ConstPointer VertexListConstPointerType;
-//     typedef typename LineType::VertexListConstIteratorType VertexListConstIteratorType;
-//     VertexListConstPointerType  vertexList = line->GetVertexList();
-//     VertexListConstIteratorType it = vertexList->Begin();
-//     typename LineType::Pointer newLine = LineType::New();
-//     while ( it != vertexList->End())
-//     {
-      itk::Point<double,2> point;
-//       itk::ContinuousIndex<double,2> index;
-//       typename LineType::VertexType pointCoord = it.Value();
-      pointCoord[0] = pointCoord[0] * m_InputSpacing[0] + m_InputOrigin[0];
-      pointCoord[1] = pointCoord[1] * m_InputSpacing[1] + m_InputOrigin[1];
-      point = m_Transform->TransformPoint(pointCoord);
-      point[0] = (point[0] - m_OutputOrigin[0]) / m_OutputSpacing[0];
-      point[1] = (point[1] - m_OutputOrigin[1]) / m_OutputSpacing[1];
-//       index[0]=point[0];
-//       index[1]=point[1];
-//       otbMsgDevMacro(<< "Converting: " << it.Value() << " -> " << pointCoord << " -> " << point << " -> " << index);
-//       newLine->AddVertex(index);
-//       it++;
-//     }
+
+    itk::Point<double,2> point;
+
+    pointCoord[0] = pointCoord[0] * m_InputSpacing[0] + m_InputOrigin[0];
+    pointCoord[1] = pointCoord[1] * m_InputSpacing[1] + m_InputOrigin[1];
+    point = m_Transform->TransformPoint(pointCoord);
+    point[0] = (point[0] - m_OutputOrigin[0]) / m_OutputSpacing[0];
+    point[1] = (point[1] - m_OutputOrigin[1]) / m_OutputSpacing[1];
 
     return point;
   }
@@ -332,20 +319,7 @@ namespace otb
       itk::ExposeMetaData<std::string>(inputDict, MetaDataKey::ProjectionRefKey, m_InputProjectionRef );
     }
 
-    //If the projection information for the output is provided, propagate it
-    OutputVectorDataPointer output = this->GetOutput();
-    itk::MetaDataDictionary & outputDict = output->GetMetaDataDictionary();
 
-    if (m_OutputKeywordList.GetSize()  != 0)
-    {
-      ossimKeywordlist kwl;
-      m_OutputKeywordList.convertToOSSIMKeywordlist (kwl);
-      itk::EncapsulateMetaData<ossimKeywordlist>(outputDict, MetaDataKey::OSSIMKeywordlistKey, kwl );
-    }
-    if (m_InputProjectionRef.empty())
-    {
-      itk::EncapsulateMetaData<std::string>(outputDict, MetaDataKey::ProjectionRefKey, m_OutputProjectionRef );
-    }
 
 
     otbMsgDevMacro(<< "Information to instanciate transform: ");
@@ -357,6 +331,8 @@ namespace otb
     otbMsgDevMacro(<< " - Output projection: " << m_OutputProjectionRef);
     otbMsgDevMacro(<< " - Output Origin: " << m_OutputOrigin);
     otbMsgDevMacro(<< " - Output Spacing: " << m_OutputSpacing);
+
+    bool firstTransformGiveGeo = true;
 
     //*****************************
     //Set the input transformation
@@ -391,6 +367,7 @@ namespace otb
     if(m_InputTransform.IsNull())//default if we didn't manage to instantiate it before
     {
       m_InputTransform = itk::IdentityTransform< double, 2 >::New();
+      bool firstTransformGiveGeo = false;
       otbMsgDevMacro(<< "Input projection set to identity")
     }
 
@@ -427,8 +404,29 @@ namespace otb
     if(m_OutputTransform.IsNull())//default if we didn't manage to instantiate it before
     {
       m_OutputTransform = itk::IdentityTransform< double, 2 >::New();
-      otbMsgDevMacro(<< "Output projection set to identity")
+      if (firstTransformGiveGeo)
+      {
+        m_OutputProjectionRef = "GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137,298.257223563]],PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.017453292519943295]]";
+      }
+      otbMsgDevMacro(<< "Output projection set to identity");
     }
+
+
+    //If the projection information for the output is provided, propagate it
+    OutputVectorDataPointer output = this->GetOutput();
+    itk::MetaDataDictionary & outputDict = output->GetMetaDataDictionary();
+
+    if (m_OutputKeywordList.GetSize()  != 0)
+    {
+      ossimKeywordlist kwl;
+      m_OutputKeywordList.convertToOSSIMKeywordlist (kwl);
+      itk::EncapsulateMetaData<ossimKeywordlist>(outputDict, MetaDataKey::OSSIMKeywordlistKey, kwl );
+    }
+    if ( !m_OutputProjectionRef.empty())
+    {
+      itk::EncapsulateMetaData<std::string>(outputDict, MetaDataKey::ProjectionRefKey, m_OutputProjectionRef );
+    }
+
 
     m_Transform->SetFirstTransform(m_InputTransform);
     m_Transform->SetSecondTransform(m_OutputTransform);

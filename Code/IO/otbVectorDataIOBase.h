@@ -76,27 +76,6 @@ public:
   itkGetStringMacro(FileName);
 
 
-  /** Set the origin for the conversion when reading data.
-    * \sa GetOrigin() */
-  itkSetMacro(Origin, PointType);
-  virtual void SetOrigin( const double origin[VDimension] );
-  virtual void SetOrigin( const float origin[VDimension] );
-
-  itkGetConstReferenceMacro(Origin, PointType);
-
-
-  /** Set the spacing (size of a pixel) for the conversion when reading dat.
-    * \sa GetSpacing() */
-  virtual void SetSpacing (const SpacingType & spacing);
-  virtual void SetSpacing (const double spacing[VDimension]);
-  virtual void SetSpacing (const float spacing[VDimension]);
-
-  itkGetConstReferenceMacro(Spacing, SpacingType);
-
-  /** Set/Get the target projection for the vector data */
-  itkSetStringMacro(TargetProjection);
-  itkGetStringMacro(TargetProjection);
-
   /** Enums used to specify byte order; whether Big Endian or Little Endian.
    * Some subclasses use this, some ignore it. */
   typedef  enum {BigEndian,LittleEndian,OrderNotApplicable} ByteOrder;
@@ -192,12 +171,6 @@ protected:
   /** Return the object to an initialized state, ready to be used */
   virtual void Reset(const bool freeDynamic = true);
 
-  /** Use to fill up information when data are read
-   * and eventually to do a conversion from geo
-   * coordinates to image coordinates */
-  SpacingType         m_Spacing;
-  PointType           m_Origin;
-  std::string         m_TargetProjection;
 
 private:
   VectorDataIOBase(const Self&); //purposely not implemented

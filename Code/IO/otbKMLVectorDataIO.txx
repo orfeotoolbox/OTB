@@ -36,6 +36,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "ossimOgcWktTranslator.h"
 #include "otbMetaDataKey.h"
 
+#include "ogrsf_frmts.h"
+
 using kmldom::ElementPtr;
 using kmldom::FeaturePtr;
 using kmldom::KmlPtr;
@@ -540,45 +542,17 @@ namespace otb
   {
 
     // Retrieve data required for georeferencing
-    typename VectorDataType::PointType origin;
-    typename VectorDataType::SpacingType spacing;
-    origin.Fill(0.0);
-    spacing.Fill(1.0);
 
     std::string projectionRefWkt = data->GetProjectionRef();
-    bool projectionInformationAvailable = !projectionRefWkt.empty();
-    ossimProjection * projection = NULL;
-
-
-    //Currently only handling map projections. Should be able to add the sensor models
-    //quite easily
-    if (projectionInformationAvailable)
+    OGRSpatialReference * oSRS = new OGRSpatialReference(projectionRefWkt.c_str());
+    if( !oSRS->IsGeographic() )
     {
-      //TODO a mechanism similar to the SensorModel would be needed here for the MapProjection
-      // to instanciate directly from the keyword list staying at the OTB level.
-      ossimKeywordlist kwl;
-      ossimOgcWktTranslator wktTranslator;
-
-      projectionInformationAvailable = wktTranslator.toOssimKwl(projectionRefWkt, kwl);
-      projection = ossimMapProjectionFactory::instance()->createProjection(kwl);
-
-      if (!projection)
-      {
-        projectionInformationAvailable = false;
-      }
-
-      origin = data->GetOrigin();
-      spacing = data->GetSpacing();
-      otbMsgDevMacro(<< "Projection information : " << projectionRefWkt);
-      otbMsgDevMacro(<< " - Origin : " << origin);
-      otbMsgDevMacro(<< " - Spacing : " << spacing);
+      itkWarningMacro(<<"Vector data should be reprojected in geographic coordinates"
+          << " before saving to KML. Please use otbVectorDataProjectionFilter. "
+          << " The projection information is currently: " << projectionRefWkt
+          << "\n We assume that you know what you're doing and proceed to save the KML file.");
     }
-
-    if (!projectionInformationAvailable)
-    {
-      otbMsgDevMacro(<< "Projection information unavailable => spacing set to 1 and origin to 0");
-    }
-
+    delete oSRS;
 
     //Create the factory
     KmlFactory* factory = KmlFactory::GetFactory();
@@ -643,13 +617,6 @@ namespace otb
         // Create <coordinates>
           CoordinatesPtr coordinates = factory->CreateCoordinates();
           PointType pointCoord = it.Get()->GetPoint();
-          if (projectionInformationAvailable)
-          {
-            ossimDpt cartoPoint(pointCoord[0] * spacing[0] + origin[0], pointCoord[1] * spacing[1] + origin[1]);
-            ossimGpt geoPoint = projection->inverse(cartoPoint);
-            pointCoord[0] = static_cast<typename PointType::ValueType>(geoPoint.lond());
-            pointCoord[1] = static_cast<typename PointType::ValueType>(geoPoint.latd());
-          }
           if(DataNodeType::Dimension>2)
           {
             coordinates->add_latlngalt(pointCoord[1],pointCoord[0],pointCoord[2]);
@@ -698,13 +665,6 @@ namespace otb
           while(vIt != vertexList->End())
           {
             VertexType pointCoord = vIt.Value();
-            if (projectionInformationAvailable)
-            {
-              ossimDpt cartoPoint(pointCoord[0] * spacing[0] + origin[0], pointCoord[1] * spacing[1] + origin[1]);
-              ossimGpt geoPoint = projection->inverse(cartoPoint);
-              pointCoord[0] = geoPoint.lond();
-              pointCoord[1] = geoPoint.latd();
-            }
             if(DataNodeType::Dimension>2)
             {
               coordinates->add_latlngalt(pointCoord[1],pointCoord[0],pointCoord[2]);
@@ -761,13 +721,6 @@ namespace otb
           while(vIt != vertexList->End())
           {
             VertexType pointCoord = vIt.Value();
-            if (projectionInformationAvailable)
-            {
-              ossimDpt cartoPoint(pointCoord[0] * spacing[0] + origin[0], pointCoord[1] * spacing[1] + origin[1]);
-              ossimGpt geoPoint = projection->inverse(cartoPoint);
-              pointCoord[0] = geoPoint.lond();
-              pointCoord[1] = geoPoint.latd();
-            }
             if(DataNodeType::Dimension>2)
             {
               coordinates->add_latlngalt(pointCoord[1],pointCoord[0],pointCoord[2]+1);//Drawing polygon 1m above ground to avoid z-buffer issues
@@ -784,13 +737,6 @@ namespace otb
           //Adding the first point again to close the polygon
           vIt = vertexList->Begin();
           VertexType pointCoord = vIt.Value();
-          if (projectionInformationAvailable)
-          {
-            ossimDpt cartoPoint(pointCoord[0] * spacing[0] + origin[0], pointCoord[1] * spacing[1] + origin[1]);
-            ossimGpt geoPoint = projection->inverse(cartoPoint);
-            pointCoord[0] = geoPoint.lond();
-            pointCoord[1] = geoPoint.latd();
-          }
           if(DataNodeType::Dimension>2)
           {
             coordinates->add_latlngalt(pointCoord[1],pointCoord[0],pointCoord[2]+1);//Drawing polygon 1m above ground to avoid z-buffer issues
@@ -816,13 +762,6 @@ namespace otb
             {
               vIt = vertexList->Begin();
               VertexType pointCoord = vIt.Value();
-              if (projectionInformationAvailable)
-              {
-                ossimDpt cartoPoint(pointCoord[0] * spacing[0] + origin[0], pointCoord[1] * spacing[1] + origin[1]);
-                ossimGpt geoPoint = projection->inverse(cartoPoint);
-                pointCoord[0] = geoPoint.lond();
-                pointCoord[1] = geoPoint.latd();
-              }
               if(DataNodeType::Dimension>2)
               {
                 coordinates->add_latlngalt(pointCoord[1],pointCoord[0],pointCoord[2]+1);//Drawing polygon 1m above ground to avoid z-buffer issues
@@ -839,13 +778,6 @@ namespace otb
             //Adding the first point again to close the polygon
             vIt = vertexList->Begin();
             VertexType pointCoord = vIt.Value();
-            if (projectionInformationAvailable)
-            {
-              ossimDpt cartoPoint(pointCoord[0] * spacing[0] + origin[0], pointCoord[1] * spacing[1] + origin[1]);
-              ossimGpt geoPoint = projection->inverse(cartoPoint);
-              pointCoord[0] = geoPoint.lond();
-              pointCoord[1] = geoPoint.latd();
-            }
             if(DataNodeType::Dimension>2)
             {
               coordinates->add_latlngalt(pointCoord[1],pointCoord[0],pointCoord[2]+1);//Drawing polygon 1m above ground to avoid z-buffer issues
