@@ -69,23 +69,6 @@ namespace otb
       itkGetObjectMacro(DataTree,DataTreeType);
       itkGetConstObjectMacro(DataTree,DataTreeType);
 
-      /** Set the origin of the vector data.
-        * \sa GetOrigin() */
-      itkSetMacro(Origin, PointType);
-      virtual void SetOrigin( const double origin[VDimension] );
-      virtual void SetOrigin( const float origin[VDimension] );
-
-      itkGetConstReferenceMacro(Origin, PointType);
-
-
-       /** Set the spacing (size of a pixel) of the vector data.
-         * \sa GetSpacing() */
-      virtual void SetSpacing (const SpacingType & spacing);
-      virtual void SetSpacing (const double spacing[VDimension]);
-      virtual void SetSpacing (const float spacing[VDimension]);
-
-      itkGetConstReferenceMacro(Spacing, SpacingType);
-
       virtual void SetProjectionRef(std::string projectionRef);
       virtual std::string GetProjectionRef() const;
 
@@ -102,10 +85,6 @@ namespace otb
       virtual ~VectorData(){};
       /** PrintSelf method */
       void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
-
-      SpacingType         m_Spacing;
-      PointType           m_Origin;
 
     private:
       VectorData(const Self&); //purposely not implemented

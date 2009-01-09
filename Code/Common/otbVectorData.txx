@@ -33,69 +33,6 @@ VectorData<TPrecision,VDimension>
   DataNodePointerType root = DataNodeType::New();
   root->SetNodeId("Root");
   m_DataTree->SetRoot(root);
-  m_Spacing.Fill(1);
-  m_Origin.Fill(0);
-}
-
-//----------------------------------------------------------------------------
-template<class TPrecision, unsigned int VDimension>
-    void
-    VectorData<TPrecision,VDimension>
-  ::SetSpacing(const SpacingType & spacing )
-{
-  itkDebugMacro("setting Spacing to " << spacing);
-  if( this->m_Spacing != spacing )
-  {
-    this->m_Spacing = spacing;
-    this->Modified();
-  }
-}
-
-
-//----------------------------------------------------------------------------
-template<class TPrecision, unsigned int VDimension>
-    void
-    VectorData<TPrecision,VDimension>
-  ::SetSpacing(const double spacing[VDimension] )
-{
-  SpacingType s(spacing);
-  this->SetSpacing(s);
-}
-
-
-//----------------------------------------------------------------------------
-template<class TPrecision, unsigned int VDimension>
-    void
-    VectorData<TPrecision,VDimension>
-  ::SetSpacing(const float spacing[VDimension] )
-{
-  itk::Vector<float, VDimension> sf(spacing);
-  SpacingType s;
-  s.CastFrom( sf );
-  this->SetSpacing(s);
-}
-
-//----------------------------------------------------------------------------
-template<class TPrecision, unsigned int VDimension>
-    void
-    VectorData<TPrecision,VDimension>
-  ::SetOrigin(const double origin[VDimension] )
-{
-  PointType p(origin);
-  this->SetOrigin( p );
-}
-
-
-//----------------------------------------------------------------------------
-template<class TPrecision, unsigned int VDimension>
-    void
-    VectorData<TPrecision,VDimension>
-  ::SetOrigin(const float origin[VDimension] )
-{
-  itk::Point<float, VDimension> of(origin);
-  PointType p;
-  p.CastFrom( of );
-  this->SetOrigin( p );
 }
 
 template<class TPrecision, unsigned int VDimension>
