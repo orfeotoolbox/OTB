@@ -410,17 +410,16 @@ ADD_TEST(prTvVectorDataProjectionFilterPolygons ${PROJECTIONS_TESTS3}
 
 
 # test to sensor
+# NB: no prj file here as it is in sensor geometry
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(prTvVectorDataProjectionFilterFromMapToSensor ${PROJECTIONS_TESTS3}
-        --compare-n-binary 4
+        --compare-n-binary 3
         ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.shp
         ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.shp
         ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.shx
         ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.shx
         ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.dbf
         ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.dbf
-        ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.prj
-        ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.prj
         otbVectorDataProjectionFilterFromMapToSensor
         ${INPUTDATA}/ToulousePoints-examples.shp
         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF

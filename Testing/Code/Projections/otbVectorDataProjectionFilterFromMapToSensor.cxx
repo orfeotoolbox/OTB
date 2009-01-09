@@ -59,9 +59,6 @@ int otbVectorDataProjectionFilterFromMapToSensor(int argc, char * argv[])
 
   vectorDataProjection->SetInput(reader->GetOutput());
 
-//   ossimKeywordlist kwl;
-//   (imageReader->GetOutput()->GetImageKeywordlist()).convertToOSSIMKeywordlist(kwl);
-//   vectorDataProjection->SetOutputKeywordList(kwl);
   vectorDataProjection->SetOutputKeywordList(imageReader->GetOutput()->GetImageKeywordlist());
   vectorDataProjection->SetOutputOrigin(imageReader->GetOutput()->GetOrigin());
   vectorDataProjection->SetOutputSpacing(imageReader->GetOutput()->GetSpacing());

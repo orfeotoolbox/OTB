@@ -82,6 +82,8 @@ namespace otb
       SecondTransformOutputPointType outputPoint;
       outputPoint=m_SecondTransform->TransformPoint(geoPoint);
 
+//       otbMsgDevMacro(<< "Converting: " << point1 << " -> " <<  geoPoint<< " -> " << outputPoint);
+
       return outputPoint;
     }
 
