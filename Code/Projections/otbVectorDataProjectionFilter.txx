@@ -378,12 +378,11 @@ namespace otb
     if ((m_InputTransform.IsNull()) && ( !m_InputProjectionRef.empty() ))//map projection
     {
       typedef otb::GenericMapProjection<otb::INVERSE> InverseMapProjectionType;
-      InverseMapProjectionType::Pointer mapTransformSmartPointer = InverseMapProjectionType::New();
-      InverseMapProjectionType* mapTransform = mapTransformSmartPointer.GetPointer();
+      InverseMapProjectionType::Pointer mapTransform = InverseMapProjectionType::New();
       mapTransform->SetWkt(m_InputProjectionRef);
       if (mapTransform->GetMapProjection() != NULL)
       {
-        m_InputTransform = mapTransform;
+        m_InputTransform = mapTransform.GetPointer();
         otbMsgDevMacro(<< "Input projection set to map transform: " << m_InputTransform);
       }
 
@@ -416,12 +415,11 @@ namespace otb
     if ((m_OutputTransform.IsNull()) && ( !m_OutputProjectionRef.empty() ))//map projection
     {
       typedef otb::GenericMapProjection<otb::FORWARD> ForwardMapProjectionType;
-      ForwardMapProjectionType::Pointer mapTransformSmartPointer = ForwardMapProjectionType::New();
-      ForwardMapProjectionType* mapTransform = mapTransformSmartPointer.GetPointer();
+      ForwardMapProjectionType::Pointer mapTransform = ForwardMapProjectionType::New();
       mapTransform->SetWkt(m_OutputProjectionRef);
       if (mapTransform->GetMapProjection() != NULL)
       {
-        m_OutputTransform = mapTransform;
+        m_OutputTransform = mapTransform.GetPointer();
         otbMsgDevMacro(<< "Output projection set to map transform: " << m_OutputTransform);
       }
 
