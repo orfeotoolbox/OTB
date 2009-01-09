@@ -367,7 +367,7 @@ namespace otb
     if(m_InputTransform.IsNull())//default if we didn't manage to instantiate it before
     {
       m_InputTransform = itk::IdentityTransform< double, 2 >::New();
-      bool firstTransformGiveGeo = false;
+      firstTransformGiveGeo = false;
       otbMsgDevMacro(<< "Input projection set to identity")
     }
 
