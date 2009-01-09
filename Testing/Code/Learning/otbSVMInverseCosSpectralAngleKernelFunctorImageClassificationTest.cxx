@@ -30,7 +30,7 @@
 
 #include "otbSVMImageClassificationFilter.h"
 #include "otbSVMImageModelEstimator.h"
-#include "otbInverseCosSpectralAngleKernelFunctor.h"
+#include "otbSVMKernels.h"
 
 
 #include "otbImageFileReader.h"
@@ -65,7 +65,7 @@ int otbSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest( int argc,
   svmEstimator->SetNumberOfClasses( 2 );
   svmEstimator->SetSVMType(ONE_CLASS);
 
-  	otb::InverseCosSpectralAngleKernelFunctor myKernel;
+  	otb::InverseCosSAMKernelFunctor myKernel;
 	myKernel.SetValue( "Coef", 1.0 );
 	myKernel.Update();
 
