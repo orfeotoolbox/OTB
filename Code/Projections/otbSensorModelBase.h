@@ -149,12 +149,14 @@ namespace otb
           /** Specify an average elevation to use */
           TScalarType m_AverageElevation;
 
+          /** Specify if DEM is loaded */
+          bool m_DEMIsLoaded ;
+
         private :
           SensorModelBase(const Self&); //purposely not implemented
           void operator=(const Self&); //purposely not implemented
 
-          /** Specify if DEM is loaded */
-          bool m_DEMIsLoaded ;
+
 
 
 
