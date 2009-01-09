@@ -43,6 +43,9 @@ namespace otb
    * All derived class assume that the latitude and longitude are given according to the
    * WGS84 ellipsoid model.
    *
+   * If you can't specify the map projection at compile time, you should use the
+   * GenericMapProjection instead.
+   *
    * \ingroup Projection
    *
    **/
