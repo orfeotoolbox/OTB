@@ -364,13 +364,13 @@ namespace otb
     if (m_InputKeywordList.GetSize()  > 0)
     {
       typedef otb::InverseSensorModel<double> InverseSensorModelType;
-      InverseSensorModelType* sensorModel = InverseSensorModelType::New();
+      InverseSensorModelType::Pointer sensorModel = InverseSensorModelType::New();
       sensorModel->SetImageGeometry(m_InputKeywordList);
       if ( !m_DEMDirectory.empty())
       {
         sensorModel->SetDEMDirectory(m_DEMDirectory);
       }
-      m_InputTransform = sensorModel;
+      m_InputTransform = sensorModel.GetPointer();
       otbMsgDevMacro(<< "Input projection set to sensor model");
     }
 
@@ -401,13 +401,14 @@ namespace otb
     if (m_OutputKeywordList.GetSize()  > 0)
     {
       typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
-      ForwardSensorModelType* sensorModel = ForwardSensorModelType::New();
+      ForwardSensorModelType::Pointer sensorModel = ForwardSensorModelType::New();
+      std::cerr << m_OutputKeywordList << std::endl;
       sensorModel->SetImageGeometry(m_OutputKeywordList);
       if ( !m_DEMDirectory.empty())
       {
         sensorModel->SetDEMDirectory(m_DEMDirectory);
       }
-      m_OutputTransform = sensorModel;
+      m_OutputTransform = sensorModel.GetPointer();
       otbMsgDevMacro(<< "Output projection set to sensor model");
     }
 
