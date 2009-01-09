@@ -31,30 +31,31 @@ namespace otb
   * \brief Reproject vector data in a different coordinate system
   *
   * This class is used to reproject vector data into a different coordinate system.
- * the input and output coordinate system can be a map projection, a raw image from a
- * sensor (the sensor model will be used), or the local coordinate system of an image.
- *
- * This filter works on otb::VectorData as input and output.
- *
- * The process goes as follow:
- * - offset/scaling of the input coordinates
- * - transform to get the data in geographic coordinates (lon/lat)
- * - transform from geographic coordinates
- * - offset/scaling of the output coordinates
- *
- * Each of this step is optional and would default to and identity transform is nothing
- * is specified.
- *
- * The offset/scaling step are necessary only when working with the local coordinate
- * system of the image. The value need to be provided by the SetInputSpacing, SetInputOrigin,
- * SetOutputSpacing and SetOutputOrigin methods.
- *
- * The two transforms are itk::Transform that will be instanciated as otb::GenericMapProjection
- * or otb::InverseSensorModel or otb::ForwardSensorModel.
+  * the input and output coordinate system can be a map projection, a raw image from a
+  * sensor (the sensor model will be used), or the local coordinate system of an image.
+  *
+  * This filter works on otb::VectorData as input and output.
+  *
+  * The process goes as follow:
+  * - offset/scaling of the input coordinates
+  * - transform to get the data in geographic coordinates (lon/lat)
+  * - transform from geographic coordinates
+  * - offset/scaling of the output coordinates
+  *
+  * Each of this step is optional and would default to an identity transform if nothing
+  * is specified.
+  *
+  * The offset/scaling steps are necessary only when working with the local coordinate
+  * system of the image (origin on the top left). The value need to be provided by the
+  * SetInputSpacing, SetInputOrigin, SetOutputSpacing and SetOutputOrigin methods.
+  *
+  * The two transforms derived from itk::Transform and will be instanciated as
+  * otb::GenericMapProjection or otb::InverseSensorModel or otb::ForwardSensorModel
+  * (according to the available information).
   *
   * \ingroup VectorDataFilter
- * \ingroup Projection
- */
+  * \ingroup Projection
+  */
 
   template <class TInputVectorData, class TOutputVectorData>
       class ITK_EXPORT VectorDataProjectionFilter :

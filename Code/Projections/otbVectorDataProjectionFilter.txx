@@ -197,27 +197,14 @@ namespace otb
           VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
   ::ReprojectPoint(PointType pointCoord) const
   {
-//     typedef typename LineType::VertexListType::ConstPointer VertexListConstPointerType;
-//     typedef typename LineType::VertexListConstIteratorType VertexListConstIteratorType;
-//     VertexListConstPointerType  vertexList = line->GetVertexList();
-//     VertexListConstIteratorType it = vertexList->Begin();
-//     typename LineType::Pointer newLine = LineType::New();
-//     while ( it != vertexList->End())
-//     {
-      itk::Point<double,2> point;
-//       itk::ContinuousIndex<double,2> index;
-//       typename LineType::VertexType pointCoord = it.Value();
-      pointCoord[0] = pointCoord[0] * m_InputSpacing[0] + m_InputOrigin[0];
-      pointCoord[1] = pointCoord[1] * m_InputSpacing[1] + m_InputOrigin[1];
-      point = m_Transform->TransformPoint(pointCoord);
-      point[0] = (point[0] - m_OutputOrigin[0]) / m_OutputSpacing[0];
-      point[1] = (point[1] - m_OutputOrigin[1]) / m_OutputSpacing[1];
-//       index[0]=point[0];
-//       index[1]=point[1];
-//       otbMsgDevMacro(<< "Converting: " << it.Value() << " -> " << pointCoord << " -> " << point << " -> " << index);
-//       newLine->AddVertex(index);
-//       it++;
-//     }
+
+    itk::Point<double,2> point;
+
+    pointCoord[0] = pointCoord[0] * m_InputSpacing[0] + m_InputOrigin[0];
+    pointCoord[1] = pointCoord[1] * m_InputSpacing[1] + m_InputOrigin[1];
+    point = m_Transform->TransformPoint(pointCoord);
+    point[0] = (point[0] - m_OutputOrigin[0]) / m_OutputSpacing[0];
+    point[1] = (point[1] - m_OutputOrigin[1]) / m_OutputSpacing[1];
 
     return point;
   }
