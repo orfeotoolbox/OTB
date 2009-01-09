@@ -31,72 +31,7 @@ VectorDataIOBase<TData>
   m_ByteOrder(OrderNotApplicable)
 {
   Reset(false);
-  m_Spacing.Fill(1);
-  m_Origin.Fill(0);
 }
-
-
-//----------------------------------------------------------------------------
-template <class TData>
-    void
-        VectorDataIOBase<TData>
-  ::SetSpacing(const SpacingType & spacing )
-{
-  itkDebugMacro("setting Spacing to " << spacing);
-  if( this->m_Spacing != spacing )
-  {
-    this->m_Spacing = spacing;
-    this->Modified();
-  }
-}
-
-
-//----------------------------------------------------------------------------
-template <class TData>
-    void
-        VectorDataIOBase<TData>
-  ::SetSpacing(const double spacing[VDimension] )
-{
-  SpacingType s(spacing);
-  this->SetSpacing(s);
-}
-
-
-//----------------------------------------------------------------------------
-template <class TData>
-    void
-        VectorDataIOBase<TData>
-  ::SetSpacing(const float spacing[VDimension] )
-{
-  itk::Vector<float, VDimension> sf(spacing);
-  SpacingType s;
-  s.CastFrom( sf );
-  this->SetSpacing(s);
-}
-
-//----------------------------------------------------------------------------
-template <class TData>
-    void
-        VectorDataIOBase<TData>
-  ::SetOrigin(const double origin[VDimension] )
-{
-  PointType p(origin);
-  this->SetOrigin( p );
-}
-
-
-//----------------------------------------------------------------------------
-template <class TData>
-    void
-        VectorDataIOBase<TData>
-  ::SetOrigin(const float origin[VDimension] )
-{
-  itk::Point<float, VDimension> of(origin);
-  PointType p;
-  p.CastFrom( of );
-  this->SetOrigin( p );
-}
-
 
 
 template <class TData>

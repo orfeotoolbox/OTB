@@ -332,20 +332,7 @@ namespace otb
       itk::ExposeMetaData<std::string>(inputDict, MetaDataKey::ProjectionRefKey, m_InputProjectionRef );
     }
 
-    //If the projection information for the output is provided, propagate it
-    OutputVectorDataPointer output = this->GetOutput();
-    itk::MetaDataDictionary & outputDict = output->GetMetaDataDictionary();
 
-    if (m_OutputKeywordList.GetSize()  != 0)
-    {
-      ossimKeywordlist kwl;
-      m_OutputKeywordList.convertToOSSIMKeywordlist (kwl);
-      itk::EncapsulateMetaData<ossimKeywordlist>(outputDict, MetaDataKey::OSSIMKeywordlistKey, kwl );
-    }
-    if (m_InputProjectionRef.empty())
-    {
-      itk::EncapsulateMetaData<std::string>(outputDict, MetaDataKey::ProjectionRefKey, m_OutputProjectionRef );
-    }
 
 
     otbMsgDevMacro(<< "Information to instanciate transform: ");
@@ -357,6 +344,8 @@ namespace otb
     otbMsgDevMacro(<< " - Output projection: " << m_OutputProjectionRef);
     otbMsgDevMacro(<< " - Output Origin: " << m_OutputOrigin);
     otbMsgDevMacro(<< " - Output Spacing: " << m_OutputSpacing);
+
+    bool firstTransformGiveGeo = true;
 
     //*****************************
     //Set the input transformation
@@ -391,6 +380,7 @@ namespace otb
     if(m_InputTransform.IsNull())//default if we didn't manage to instantiate it before
     {
       m_InputTransform = itk::IdentityTransform< double, 2 >::New();
+      bool firstTransformGiveGeo = false;
       otbMsgDevMacro(<< "Input projection set to identity")
     }
 
@@ -427,8 +417,29 @@ namespace otb
     if(m_OutputTransform.IsNull())//default if we didn't manage to instantiate it before
     {
       m_OutputTransform = itk::IdentityTransform< double, 2 >::New();
+      if (firstTransformGiveGeo)
+      {
+        m_OutputProjectionRef = "GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137,298.257223563]],PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.017453292519943295]]";
+      }
       otbMsgDevMacro(<< "Output projection set to identity")
     }
+
+
+    //If the projection information for the output is provided, propagate it
+    OutputVectorDataPointer output = this->GetOutput();
+    itk::MetaDataDictionary & outputDict = output->GetMetaDataDictionary();
+
+    if (m_OutputKeywordList.GetSize()  != 0)
+    {
+      ossimKeywordlist kwl;
+      m_OutputKeywordList.convertToOSSIMKeywordlist (kwl);
+      itk::EncapsulateMetaData<ossimKeywordlist>(outputDict, MetaDataKey::OSSIMKeywordlistKey, kwl );
+    }
+    if (m_InputProjectionRef.empty())
+    {
+      itk::EncapsulateMetaData<std::string>(outputDict, MetaDataKey::ProjectionRefKey, m_OutputProjectionRef );
+    }
+
 
     m_Transform->SetFirstTransform(m_InputTransform);
     m_Transform->SetSecondTransform(m_OutputTransform);
