@@ -27,7 +27,7 @@
 
 namespace otb {
 
-/** ROIdataConversion class.
+/** \class ROIdataConversion
  * \brief image data to vector conversion.
  *
  * A class that extract pixel value from an input image according to a ROI

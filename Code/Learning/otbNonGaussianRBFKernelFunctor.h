@@ -29,13 +29,14 @@ namespace otb
    * \brief Performs an RBF kernel evaluation that better suit sample distribution with high Kurtosis.
    *
    * It is of kind
-   * $\exp\left( - \gamma \sum_i | x_i^\alpha - y_i^\alpha |^\beta \right)$
-   * where $0 \leqslant \alpha \leqslant 1$ and
-   * $0 \leqslant \beta \leqslant 2$.
+   * \f$ \exp\left( - \gamma \sum_i | x_i^\alpha - y_i^\alpha |^\beta \right) \f$
+   * where \f$ 0 \leqslant \alpha \leqslant 1 \f$ and
+   * \f$ 0 \leqslant \beta \leqslant 2 \f$.
    *
    * Variables to be instanciated (through \code SetValue \endcode) are:
    * Alpha (def=1), Beta (def=2) and Gamma (def 1.0).
-   * */
+   *
+   */
 class NonGaussianRBFKernelFunctor
 		: public GenericKernelFunctorBase
 {

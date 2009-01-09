@@ -26,6 +26,9 @@
 
 namespace otb
 {
+  /** \class CustomKernelFunctor
+   * \brief Undocumented
+   */
 class CustomKernelFunctor : public GenericKernelFunctorBase
   {
     public:
@@ -38,7 +41,9 @@ class CustomKernelFunctor : public GenericKernelFunctorBase
     }
   };
 
-
+  /** \class InvMultiQuadricKernelFunctor
+   * \brief Undocumented
+   */
 class InvMultiQuadricKernelFunctor : public GenericKernelFunctorBase
   {
     public:
@@ -61,7 +66,9 @@ class InvMultiQuadricKernelFunctor : public GenericKernelFunctorBase
     }
   };
 
-
+  /** \class KModKernelFunctor
+   * \brief Undocumented
+   */
 class KModKernelFunctor : public GenericKernelFunctorBase
   {
     public:
@@ -85,7 +92,9 @@ class KModKernelFunctor : public GenericKernelFunctorBase
     }
   };
 
-
+  /** \class SAMKernelFunctor
+   * \brief Undocumented
+   */
 class SAMKernelFunctor : public GenericKernelFunctorBase
   {
     public:
@@ -104,7 +113,9 @@ class SAMKernelFunctor : public GenericKernelFunctorBase
     }
   };
 
-
+ /** \class RadialSAMKernelFunctor
+   * \brief Undocumented
+  */
 class RadialSAMKernelFunctor : public GenericKernelFunctorBase
   {
     public:
@@ -119,6 +130,9 @@ class RadialSAMKernelFunctor : public GenericKernelFunctorBase
   };
 
 
+ /** \class InvMultiQuadraticSAMKernelFunctor
+   * \brief Undocumented
+  */
 class InvMultiQuadraticSAMKernelFunctor : public GenericKernelFunctorBase
   {
     public:
@@ -142,7 +156,9 @@ class InvMultiQuadraticSAMKernelFunctor : public GenericKernelFunctorBase
     }
   };
 
-
+ /** \class KModSAMKernelFunctor
+   * \brief Undocumented
+  */
 class KModSAMKernelFunctor : public GenericKernelFunctorBase
   {
   public:
@@ -166,6 +182,9 @@ class KModSAMKernelFunctor : public GenericKernelFunctorBase
       }
   };
 
+ /** \class RBFKernelFunctor
+   * \brief Undocumented
+  */
 class RBFKernelFunctor : public GenericKernelFunctorBase
   {
   public:
@@ -254,6 +273,9 @@ class RBFKernelFunctor : public GenericKernelFunctorBase
 
   };
 
+   /** \class RBFRBFSAMKernelFunctor
+   * \brief Undocumented
+    */
 class RBFRBFSAMKernelFunctor : public GenericKernelFunctorBase
   {
     public:
@@ -273,7 +295,9 @@ class RBFRBFSAMKernelFunctor : public GenericKernelFunctorBase
     }
   };
 
-
+   /** \class PolyRBFSAMKernelFunctor
+   * \brief Undocumented
+    */
 class PolyRBFSAMKernelFunctor : public GenericKernelFunctorBase
   {
     public:
@@ -294,7 +318,9 @@ class PolyRBFSAMKernelFunctor : public GenericKernelFunctorBase
     }
   };
 
-
+   /** \class RBFDiffKernelFunctor
+   * \brief Undocumented
+    */
 class RBFDiffKernelFunctor : public GenericKernelFunctorBase
   {
     public:
@@ -330,7 +356,9 @@ class RBFDiffKernelFunctor : public GenericKernelFunctorBase
     }
   };
 
-
+   /** \class CustomLinearKernelFunctor
+   * \brief Undocumented
+    */
 class CustomLinearKernelFunctor : public GenericKernelFunctorBase
   {
   public:
@@ -344,7 +372,9 @@ class CustomLinearKernelFunctor : public GenericKernelFunctorBase
     }
   };
 
-
+   /** \class GroupedRBFKernelFunctor
+   * \brief Undocumented
+    */
 class GroupedRBFKernelFunctor : public GenericKernelFunctorBase
   {
   public:
@@ -509,6 +539,9 @@ class GroupedRBFKernelFunctor : public GenericKernelFunctorBase
 
 
 
+  /** \class GroupingAdaptiveKernelFunctor
+   * \brief Undocumented
+   */
 class GroupingAdaptiveKernelFunctor : public GenericKernelFunctorBase
   {
   public:

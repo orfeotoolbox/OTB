@@ -25,22 +25,25 @@
 namespace otb
 {
 
+  /** \class ChangeProfileKernelFunctor
+   * \brief Change Profile Kernel.
+   * Performs a decision point of view dedicated to the multiscale
+   * change profile delivered by
+   * \subdoxygen{otb}{KullbackLeiblerProfileImageFilter}.
+   *
+   * It is implemented as a polynomial kernel:
+   * \f$ \exp - \left( \gamma \left( \max_i | x_i - y_i | \right)^\textrm{degree} + \textrm{coef} \right) \f$.
+   *
+   * The parameters \f$ \gamma \f$, \f$ \textrm{coef} \f$ and \f$ \textrm{degree} \f$ are
+   * to be fixed through \code SetValue \endcode with keywords: Gamma (def 1.0),
+   * Coef (def 1.0) and Degree (def 1.0).
+   */
+
 class ChangeProfileKernelFunctor
 		: public GenericKernelFunctorBase
 {
 public:
-	/** Change Profile Kernel.
-	 * Performs a decision point of view dedicated to the multiscale
-	 * change profile delivered by
-	 * \subdoxygen{otb}{KullbackLeiblerProfileImageFilter}.
-	 *
-	 * It is implemented as a polynomial kernel:
-	 * $\exp - \left( \gamma \left( \max_i | x_i - y_i | \right)^\textrm{degree} + \textrm{coef} \right)$.
-	 *
-	 * The parameters $\gamma$, $\textrm{coef}$ and $\textrm{degree}$ are
-	 * to be fixed through \code SetValue \endcode with keywords: Gamma (def 1.0),
-	 * Coef (def 1.0) and Degree (def 1.0).
-	 */
+
 	double operator() ( const svm_node * x, const svm_node * y,
 						const svm_parameter & param ) const;
 

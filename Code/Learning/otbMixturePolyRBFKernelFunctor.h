@@ -25,19 +25,23 @@
 namespace otb
 {
 
+  /** \class MixturePolyRBFKernelFunctor
+   * \brief Mixture of kernels.
+   *
+   * Performs the mixture of kind: \f$ \mu k_1(x,y) + (1-\mu) k_2(x,y) \f$
+   * with \f$ k_1(x,y)=\left( \gamma_1 x\cdot y + c_0 \right) ^d \f$ a
+   * polynomial kernel and
+   * \f$ k_2(x,y) = \exp\left( - \gamma_2 \| x-y\-^2 \right) \f$ an RBF one.
+   *
+   * Variable to be instanciated (through \code SetValue \endcode) are:
+   * Mixture (def=0.5), GammaPoly (def=1.0), CoefPoly (def=1.0),
+   * DegreePoly (def=2), GammaRBF (def=1.0)
+   */
+
 class MixturePolyRBFKernelFunctor
 		: public GenericKernelFunctorBase
 {
-public:
-	/** Mixture of kernels.
-	 * Performs the mixture of kind: $\mu k_1(x,y) + (1-\mu) k_2(x,y)$
-	 * with $k_1(x,y)=\left( \gamma_1 x\cdot y + c_0 \right) ^d$ a
-	 * polynomial kernel and
-	 * $k_2(x,y) = \exp\left( - \gamma_2 \| x-y\-^2 \right)$ an RBF one.
-	 *
-	 * Variable to be instanciated (through \code SetValue \endcode) are:
-	 * Mixture (def=0.5), GammaPoly (def=1.0), CoefPoly (def=1.0),
-	 * DegreePoly (def=2), GammaRBF (def=1.0) */
+  public:
 	double operator() ( const svm_node * x, const svm_node * y,
 						const svm_parameter & param ) const;
 

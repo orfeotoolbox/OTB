@@ -32,10 +32,10 @@ namespace Functor {
 	*	This class implements an standart evolution of the \f$ \beta \f$ weightening
 	*	coefficient over the SOM training.
 	*
-	*	\f$
+	*	\f[
 		\beta = \beta_0 + \left( \beta_{\textrm{end}} - \beta_0 \right)
 			\frac{t}{t_{\textrm{end}}}
-		\f$
+		\f]
 	*
 	*	\sa SOM
 	*/
