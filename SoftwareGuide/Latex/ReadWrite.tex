@@ -13,10 +13,10 @@ We begin the chapter with some simple examples of file I/O.
 \label{sec:ImagReadWrite}
 \input{ImageReadWrite.tex}
 
-To better understand the IO architecture, please refer to Figures 
-\ref{fig:ImageIOCollaborationDiagram}, 
+To better understand the IO architecture, please refer to Figures
+\ref{fig:ImageIOCollaborationDiagram},
 \ref{fig:ImageIOFactoriesUseCases}, and
-\ref{fig:ImageIOFactoriesClassDiagram}. 
+\ref{fig:ImageIOFactoriesClassDiagram}.
 
 \begin{figure}
 \center
@@ -108,7 +108,7 @@ image formats. In order to do so, the Geospatial Data Abstraction Library, GDAL
 
       Since GDAL is itself a multi-format library, the GDAL IO
 factory is able to choose the appropriate ressource for reading and
-writing images. 
+writing images.
 
 In most cases the mechanism is transparent to the user who only interacts
 with the ImageFileReader and ImageFileWriter. It is
@@ -222,32 +222,4 @@ images is the processing of SLC SAR images, which are complex.
 %% %\input{RGBImageSeriesReadWrite.tex}
 
 
-\section{Reading and Writing Vector Data}
-\index{vector data}
-\label{sec:ReadingVectorData}
-In Remote Sensing the use of vector data is common. Vector data is
-used to represent cartographic objects, segmentation results, etc:  
-basically, everything which can be seen as point, line or polygons. OTB
-provides functionnalities for accessing this kind of data.
 
-\subsection{Lidar data Files}
-\index{vector data!lidar}
-\label{sec:ReadLidar}
-\input{LidarReaderExample.tex}
-\input{LidarToImageExample.tex}
-
-\subsection{Reading DXF Files}
-\index{vector data!dxf}
-\label{sec:ReadDXF}
-\input{DXFReaderExample.tex}
-
-\subsection{Reading and Writing Vector Data Files}
-\index{vector data!shapefile}
-\label{sec:ReadVectorData}
-\input{VectorDataIOExample.tex}
-
-
-\section{Reading DEM Files}
-\index{Digital elevation model}
-\label{sec:ReadDEM}
-\input{DEMToImageGenerator.tex}
