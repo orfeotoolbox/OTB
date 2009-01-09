@@ -13,10 +13,12 @@ class MsgReporterGUI {open
       Fl_Group gMsgReporter {open
         tooltip {Navigate through the image} xywh {0 -4 670 93} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       } {
-        Fl_Text_Display textArea {selected
+        Fl_Text_Display textArea {
           xywh {10 10 650 70}
         }
       }
     }
   }
+  Function {~MsgReporterGUI()} {open selected return_type virtual
+  } {}
 } 
