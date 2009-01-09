@@ -28,7 +28,7 @@ InverseCosSpectralAngleKernelFunctor
 ::InverseCosSpectralAngleKernelFunctor ()
 		: GenericKernelFunctorBase ()
 {
-	m_Coef = 2.0;
+	m_Coef = 1.0;
 
 	SetValue( "Coef", m_Coef );
 }
@@ -45,7 +45,7 @@ InverseCosSpectralAngleKernelFunctor
 ::operator()( const svm_node * x, const svm_node * y,
 				const svm_parameter & param ) const
 {
-	double mq = m_Coef + SAM( x, y );
+	double mq = m_Coef - vcl_cos( SAM( x, y ));
 
 	if ( mq == 0.0 )
 		return DBL_MAX;
