@@ -19,7 +19,7 @@
 //  Software Guide : BeginLatex
 //
 //  Although specific vector data import approaches, as the one
-//  presented in \ref{DXFExample}, can be useful, it is even more
+//  presented later in \ref{sec:ReadDXF}, can be useful, it is even more
 //  interesting to have available approaches which are independent of
 //  the input format. Unfortunately, many vector data formats do not
 //  share the models for the data they represent. However, in some
@@ -28,9 +28,13 @@
 //  the case for the Shapefile and the KML (Keyhole Markup Language),
 //  for instance.
 //
-//  Even though specific reader/writer for Shapefile (and soon KML)
+//  Even though specific reader/writer for Shapefile and the Google KML
 //  are available in OTB, we designed a generic approach for the IO of
 //  this kind of data.
+//
+//  In \ref{sec:VectorDataProjection}, you will find more information on
+//  how projection work for the vector data and how you can export
+//  the results obtained with OTB to the real world.
 //
 //  This example illustrates the use of OTB's vector data IO
 //  framework.
