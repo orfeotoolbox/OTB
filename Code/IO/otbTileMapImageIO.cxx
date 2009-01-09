@@ -149,7 +149,7 @@ namespace otb
     otbMsgDevMacro( <<" Region read (IORegion)  : "<<this->GetIORegion());
     otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
 
-    std::streamoff lNbPixels = (static_cast<std::streamoff>(totSamples))*(static_cast<std::streamoff>(totLines));
+//     std::streamoff lNbPixels = (static_cast<std::streamoff>(totSamples))*(static_cast<std::streamoff>(totLines));
 
     //otbMsgDevMacro( <<" Allocation buff tempon taille : "<<lNbPixels<<"*"<<m_NbOctetPixel<<" (NbOctetPixel) = "<<lTailleBuffer);
     otbMsgDevMacro( <<" sizeof(streamsize)    : "<<sizeof(std::streamsize));
@@ -512,10 +512,10 @@ namespace otb
     otbMsgDevMacro( <<" Region read (IORegion)  : "<<this->GetIORegion());
     otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
 
-    std::streamoff lNbPixels = (static_cast<std::streamoff>(totSamples))*(static_cast<std::streamoff>(totLines));
-    std::streamoff lTailleBuffer = static_cast<std::streamoff>(m_NbOctetPixel)*lNbPixels;
+//     std::streamoff lNbPixels = (static_cast<std::streamoff>(totSamples))*(static_cast<std::streamoff>(totLines));
+//     std::streamoff lTailleBuffer = static_cast<std::streamoff>(m_NbOctetPixel)*lNbPixels;
 
-    otbMsgDevMacro( <<" Allocation buff tempon taille : "<<lNbPixels<<"*"<<m_NbOctetPixel<<" (NbOctetPixel) = "<<lTailleBuffer);
+//     otbMsgDevMacro( <<" Allocation buff tempon taille : "<<lNbPixels<<"*"<<m_NbOctetPixel<<" (NbOctetPixel) = "<<lTailleBuffer);
     otbMsgDevMacro( <<" sizeof(streamsize)    : "<<sizeof(std::streamsize));
     otbMsgDevMacro( <<" sizeof(streampos)     : "<<sizeof(std::streampos));
     otbMsgDevMacro( <<" sizeof(streamoff)     : "<<sizeof(std::streamoff));
