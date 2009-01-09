@@ -65,9 +65,6 @@ private:
 
 } // end of namespace otb
 
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMixturePolyRBFKernelFunctor.txx"
-#endif
 
 #endif
 
