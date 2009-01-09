@@ -55,9 +55,6 @@ protected:
 
 } // end of namespace otb
 
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbInverseCosSpectralAngleKernelFunctor.txx"
-#endif
 
 
 #endif
