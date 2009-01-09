@@ -39,10 +39,10 @@ ADD_EXECUTABLE(SEMModelEstimatorExample SEMModelEstimatorExample.cxx )
 TARGET_LINK_LIBRARIES(SEMModelEstimatorExample ITKIO OTBIO OTBCommon ITKCommon  OTBLearning  gdal)
 
 ADD_EXECUTABLE(SVMGenericKernelImageModelEstimatorExample SVMGenericKernelImageModelEstimatorExample.cxx)
-TARGET_LINK_LIBRARIES(SVMGenericKernelImageModelEstimatorExample otbsvm OTBCommon OTBIO ITKCommon)
+TARGET_LINK_LIBRARIES(SVMGenericKernelImageModelEstimatorExample OTBLearning OTBCommon OTBIO ITKCommon)
 
 ADD_EXECUTABLE(SVMGenericKernelImageClassificationExample SVMGenericKernelImageClassificationExample.cxx)
-TARGET_LINK_LIBRARIES(SVMGenericKernelImageClassificationExample otbsvm OTBCommon OTBIO ITKCommon)
+TARGET_LINK_LIBRARIES(SVMGenericKernelImageClassificationExample OTBLearning OTBCommon OTBIO ITKCommon)
 
 
 
