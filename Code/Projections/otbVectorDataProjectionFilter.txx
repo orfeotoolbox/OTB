@@ -401,7 +401,6 @@ namespace otb
     {
       typedef otb::InverseSensorModel<double> InverseSensorModelType;
       InverseSensorModelType::Pointer sensorModel = InverseSensorModelType::New();
-      std::cerr << m_OutputKeywordList << std::endl;
       sensorModel->SetImageGeometry(m_OutputKeywordList);
       if ( !m_DEMDirectory.empty())
       {
