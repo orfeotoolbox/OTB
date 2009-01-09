@@ -36,6 +36,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "ossimOgcWktTranslator.h"
 #include "otbMetaDataKey.h"
 
+#include "ogrsf_frmts.h"
+
 using kmldom::ElementPtr;
 using kmldom::FeaturePtr;
 using kmldom::KmlPtr;
@@ -542,14 +544,15 @@ namespace otb
     // Retrieve data required for georeferencing
 
     std::string projectionRefWkt = data->GetProjectionRef();
-
-    if( projectionRefWkt.compare("GEOGCS[\"GCS_WGS_1984\", DATUM[\"WGS_1984\", SPHEROID[\"WGS_1984\",6378137,298.257223563]], PRIMEM[\"Greenwich\",0], UNIT[\"Degree\",0.017453292519943295]]") )
+    OGRSpatialReference * oSRS = new OGRSpatialReference(projectionRefWkt.c_str());
+    if( !oSRS->IsGeographic() )
     {
       itkWarningMacro(<<"Vector data should be reprojected in geographic coordinates"
           << " before saving to KML. Please use otbVectorDataProjectionFilter. "
           << " The projection information is currently: " << projectionRefWkt
           << "\n We assume that you know what you're doing and proceed to save the KML file.");
     }
+    delete oSRS;
 
     //Create the factory
     KmlFactory* factory = KmlFactory::GetFactory();

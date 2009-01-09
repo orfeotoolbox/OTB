@@ -421,7 +421,7 @@ namespace otb
       {
         m_OutputProjectionRef = "GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137,298.257223563]],PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.017453292519943295]]";
       }
-      otbMsgDevMacro(<< "Output projection set to identity")
+      otbMsgDevMacro(<< "Output projection set to identity");
     }
 
 
@@ -435,7 +435,7 @@ namespace otb
       m_OutputKeywordList.convertToOSSIMKeywordlist (kwl);
       itk::EncapsulateMetaData<ossimKeywordlist>(outputDict, MetaDataKey::OSSIMKeywordlistKey, kwl );
     }
-    if (m_InputProjectionRef.empty())
+    if ( !m_OutputProjectionRef.empty())
     {
       itk::EncapsulateMetaData<std::string>(outputDict, MetaDataKey::ProjectionRefKey, m_OutputProjectionRef );
     }
