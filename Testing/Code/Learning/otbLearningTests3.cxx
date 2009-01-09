@@ -41,5 +41,6 @@ REGISTER_TEST(otbSVMModelCopyGenericKernelTest);
 REGISTER_TEST(otbSVMModelCopyComposedKernelTest);
 REGISTER_TEST(otbKMeansImageClassificationFilterNew);
 REGISTER_TEST(otbKMeansImageClassificationFilter);
-REGISTER_TEST(otbSVMInverseCosSpectralAngleKernelFunctorImageModelEstimatorTest); 
+REGISTER_TEST(otbSVMInverseCosSpectralAngleKernelFunctorImageModelEstimatorTest);
+ REGISTER_TEST(otbSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest); 
 }

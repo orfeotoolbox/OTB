@@ -9,9 +9,6 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) GET / ENST Bretagne. All rights reserved.
-  See GETCopyright.txt for details.
-
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
@@ -48,12 +45,12 @@ InverseCosSpectralAngleKernelFunctor
 ::operator()( const svm_node * x, const svm_node * y,
 				const svm_parameter & param ) const
 {
-	double mq = m_Coef - vcl_cos( SAM( x, y ) );
+	double mq = m_Coef + SAM( x, y );
 
-	if ( mq < 0.0 )
-		return 0.0;
+	if ( mq == 0.0 )
+		return DBL_MAX;
 
-	return mq;
+	return 1.0 / sqrt( mq );
 }
 
 double
