@@ -34,4 +34,5 @@ void RegisterTests()
   REGISTER_TEST(otbVectorDataProjectionFilterNew);
   REGISTER_TEST(otbVectorDataProjectionFilter);
   REGISTER_TEST(otbVectorDataProjectionFilterFromMapToSensor);
+  REGISTER_TEST(otbVectorDataProjectionFilterFromMapToGeo);
 }

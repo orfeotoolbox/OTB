@@ -427,6 +427,17 @@ ADD_TEST(prTvVectorDataProjectionFilterFromMapToSensor ${PROJECTIONS_TESTS3}
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+ADD_TEST(prTvVectorDataProjectionFilterFromMapToGeo ${PROJECTIONS_TESTS3}
+        --compare-ascii ${TOL}
+        ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.kml
+        ${TEMP}/prTvVectorDataProjectionFilterFromMapToGeo.kml
+        otbVectorDataProjectionFilterFromMapToGeo
+        ${INPUTDATA}/ToulousePoints-examples.shp
+        ${TEMP}/prTvVectorDataProjectionFilterFromMapToGeo.kml
+)
+
+
+
 #=======================================================================================
 SET(Projections_SRCS1
 otbProjectionBaseNew.cxx
@@ -455,6 +466,7 @@ otbGenericMapProjection.cxx
 otbVectorDataProjectionFilterNew.cxx
 otbVectorDataProjectionFilter.cxx
 otbVectorDataProjectionFilterFromMapToSensor.cxx
+otbVectorDataProjectionFilterFromMapToGeo.cxx
 )
 
 
