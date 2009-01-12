@@ -304,12 +304,12 @@ ImageBase::PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDiction
 
   std::vector<std::string> keys = dict.GetKeys();
   std::string svalue;
-  unsigned int ivalue;
+  unsigned int ivalue(0);
   VectorType vvalue;
   double dvalue;
   OTB_GCP gcpvalue;
   ImageKeywordlist ossimvalue;
-  unsigned int i ;
+  unsigned int i(0);
 
   // Copy of the const metadata dictionary in a metadata dictionary to be used
   // by the ExposeMetaData method
