@@ -15,7 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
+#ifndef __otbTestMain_h
+#define __otbTestMain_h
 
 #include "itkWin32Header.h"
 #include <map>
@@ -1404,4 +1405,5 @@ std::map<std::string,int> RegressionTestbaselines (char *baselineFilename)
   return baselines;
 }
 
+#endif
 

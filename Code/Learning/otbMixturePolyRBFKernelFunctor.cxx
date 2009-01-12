@@ -17,11 +17,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMixturePolyRBFKernelFunctor_txx
-#define __otbMixturePolyRBFKernelFunctor_txx
-
 #include <cmath>
-
 #include "otbMixturePolyRBFKernelFunctor.h"
 
 namespace otb
@@ -109,14 +105,6 @@ MixturePolyRBFKernelFunctor
 	m_CoefPoly = GetValue<double>( "CoefPoly" );
 	m_DegreePoly = GetValue<int>( "DegreePoly" );
 	m_GammaRBF = GetValue<double>( "GammaRBF" );
-
-#if 0
-	std::cerr << "m_Mixture = " << m_Mixture << "\n";
-	std::cerr << "m_GammaPoly = " << m_GammaPoly << "\n";
-	std::cerr << "m_CoefPoly = " << m_CoefPoly << "\n";
-	std::cerr << "m_DegreePoly = " << m_DegreePoly << "\n";
-	std::cerr << "m_GammaRBF = " << m_GammaRBF << "\n";
-#endif
 }
 
 double
@@ -134,8 +122,4 @@ MixturePolyRBFKernelFunctor
 }
 
 } // end of namespace otb
-
-
-#endif
-
 

@@ -15,6 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef __otbLabelizeNeighborhoodConnectedImageFilter_txx
+#define __otbLabelizeNeighborhoodConnectedImageFilter_txx
 
 #include "otbLabelizeNeighborhoodConnectedImageFilter.h"
 
@@ -65,3 +67,5 @@ namespace otb
     os << indent << "ReplaceValue: " << m_ReplaceValue << std::endl;
   }
 } // end namespace otb
+
+#endif

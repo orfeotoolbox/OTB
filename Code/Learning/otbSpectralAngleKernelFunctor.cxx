@@ -17,9 +17,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSpectralAngleKernelFunctor_txx
-#define __otbSpectralAngleKernelFunctor_txx
-
 #include <cmath>
 #include <cfloat>
 
@@ -69,8 +66,6 @@ SpectralAngleKernelFunctor
 }
 
 }
-
-#endif
 
 
 

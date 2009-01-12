@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __ProgressObserver_h
-#define __ProgressObserver_h
+#ifndef __otbCommandProgressUpdate_h
+#define __otbCommandProgressUpdate_h
 
 #include "itkCommand.h"
 #include <sstream>

@@ -17,11 +17,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNonGaussianRBFKernelFunctor_txx
-#define __otbNonGaussianRBFKernelFunctor_txx
-
 #include <cmath>
-
 #include "otbNonGaussianRBFKernelFunctor.h"
 
 namespace otb {
@@ -73,9 +69,4 @@ NonGaussianRBFKernelFunctor
 
 
 } // end of namespace otb
-
-
-#endif
-
-
 

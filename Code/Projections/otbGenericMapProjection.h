@@ -49,7 +49,7 @@ namespace otb
 
   typedef enum {FORWARD=0, INVERSE=1} InverseOrForwardTransformationEnum;
 
-  template <InverseOrForwardTransformationEnum Transform,
+  template <InverseOrForwardTransformationEnum TDirectionOfMapping,
             class TScalarType = double,
             unsigned int NInputDimensions=2,
             unsigned int NOutputDimensions=2>
@@ -83,7 +83,7 @@ namespace otb
 
       typedef InverseOrForwardTransformationEnum DirectionOfMappingEnumType;
 
-      itkStaticConstMacro(DirectionOfMapping,DirectionOfMappingEnumType,Transform);
+      itkStaticConstMacro(DirectionOfMapping,DirectionOfMappingEnumType,TDirectionOfMapping);
       itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
       itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
       itkStaticConstMacro(SpaceDimension, unsigned int, NInputDimensions);

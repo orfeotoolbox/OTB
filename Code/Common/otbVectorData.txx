@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otb_VectorData_txx
-#define __otb_VectorData_txx
+#ifndef __otbVectorData_txx
+#define __otbVectorData_txx
 
 #include "otbVectorData.h"
 #include "itkPreOrderTreeIterator.h"
