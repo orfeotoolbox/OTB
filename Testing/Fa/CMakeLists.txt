@@ -25,13 +25,13 @@ SET(VISU_TESTS   ${CXX_TEST_PATH}/otbVisuTests1)
 # -------       FAs traitees -----------------------------------
 
 # ---  FA 00005 ENVI (GDAL) image multi-canal ---
-ADD_TEST(FA-00005-io_EnviMultiBande_RW ${IO_TESTS} 
+ADD_TEST(FA-00005-io_EnviMultiBande_RW ${IO_TESTS}
          otbVectorImageFileReaderWriterTest
          ${INPUTDATA}/GomaBestScale_w15_50.raw.hdr
          ${TEMP}/FA-00005-io_EnviMultiBande_GomaBestScale_w15.hdr
          )
 
-ADD_TEST(FA-00005-io_EnviMultiBande ${COMMON_TESTS2} 
+ADD_TEST(FA-00005-io_EnviMultiBande ${COMMON_TESTS2}
 #   --compare-image ${TOL}  ${BASELINE}/FA-00005-io_EnviMultiBande_GomaBestScale_w15_50_100_120_150_200.hdr
 #                     ${TEMP}/FA-00005-io_EnviMultiBande_GomaBestScale_w15_50_100_120_150_200.hdr
          otbMultiChannelExtractROI
@@ -42,52 +42,52 @@ ADD_TEST(FA-00005-io_EnviMultiBande ${COMMON_TESTS2}
 
 # ---  FA 00006 ENVI (GDAL) Conversion Type de pixel ---
 
-ADD_TEST(FA-00006-io_Amst_ers1_Double2UChar ${COMMON_TESTS} 
+ADD_TEST(FA-00006-io_Amst_ers1_Double2UChar ${COMMON_TESTS}
 #     --compare-image ${TOL}  ${INPUTDATA}/amst_ers1.ima.hdr
 #                       ${TEMP}/FA-00006-io_amst_ers1_double2uchar.hdr
          otbMultiToMonoChannelExtractROI
-         -double ${INPUTDATA}/amst_ers1.ima.hdr 
+         -double ${INPUTDATA}/amst_ers1.ima.hdr
          -uchar ${TEMP}/FA-00006-io_amst_ers1_double2uchar.hdr )
-ADD_TEST(FA-00006-io_Amst_ers1_UChar2UChar ${COMMON_TESTS} 
+ADD_TEST(FA-00006-io_Amst_ers1_UChar2UChar ${COMMON_TESTS}
 #     --compare-image ${TOL}   ${INPUTDATA}/amst_ers1.ima.hdr
 #                       ${TEMP}/FA-00006-io_amst_ers1_uchar2uchar.hdr
          otbMultiToMonoChannelExtractROI
-         -uchar ${INPUTDATA}/amst_ers1.ima.hdr 
+         -uchar ${INPUTDATA}/amst_ers1.ima.hdr
          -uchar ${TEMP}/FA-00006-io_amst_ers1_uchar2uchar.hdr )
 
-ADD_TEST(FA-00006-io_Amst_ers1_Double2Double ${COMMON_TESTS} 
+ADD_TEST(FA-00006-io_Amst_ers1_Double2Double ${COMMON_TESTS}
          otbMultiToMonoChannelExtractROI
          -double ${INPUTDATA}/amst_ers1.ima.hdr
          -double ${TEMP}/FA-00006-io_amst_ers1_double2double.hdr )
 
-ADD_TEST(FA-00006-io_Amst_ers1_UChar2Double ${COMMON_TESTS} 
+ADD_TEST(FA-00006-io_Amst_ers1_UChar2Double ${COMMON_TESTS}
          otbMultiToMonoChannelExtractROI
          -uchar ${INPUTDATA}/amst_ers1.ima.hdr
          -double ${TEMP}/FA-00006-io_amst_ers1_uchar2double.hdr )
 
 
-ADD_TEST(FA-00006-io_Poupees_OCT_UChar2Double ${COMMON_TESTS} 
+ADD_TEST(FA-00006-io_Poupees_OCT_UChar2Double ${COMMON_TESTS}
 #   --compare-image ${TOL}   ${BASELINE}/ioMultiMonoChannelROI_ENVI2PNG_poupees_1canal_302_2_134_330.png
 #                     ${TEMP}/ioMultiMonoChannelROI_ENVI2PNG_poupees_1canal_302_2_134_330.png
          otbMultiToMonoChannelExtractROI
          -uchar ${INPUTDATA}/poupees_1canal.c1.hdr
          -double ${TEMP}/FA-00006-io_Poupees_1canal_r8.hdr )
 
-ADD_TEST(FA-00006-io_Poupees_OCT_Double2Double ${COMMON_TESTS} 
+ADD_TEST(FA-00006-io_Poupees_OCT_Double2Double ${COMMON_TESTS}
 #     --compare-image ${TOL}  ${TEMP}/FA-00006-io_Poupees_1canal_r8.hdr
 #                       ${TEMP}/FA-00006-io_Poupees_1canal_r8_bis.hdr
          otbMultiToMonoChannelExtractROI
-         -double ${INPUTDATA}/poupees_1canal.c1.hdr 
+         -double ${INPUTDATA}/poupees_1canal.c1.hdr
          -double ${TEMP}/FA-00006-io_Poupees_1canal_r8_bis.hdr )
 
-ADD_TEST(FA-00006-io_Poupees_OCT_Double2UChar ${COMMON_TESTS} 
+ADD_TEST(FA-00006-io_Poupees_OCT_Double2UChar ${COMMON_TESTS}
 #     --compare-image ${TOL} ${INPUTDATA}/poupees_1canal.c1.hdr
 #                       ${TEMP}/FA-00006-io_Poupees_1canal_oct.hdr
          otbMultiToMonoChannelExtractROI
-         -double ${INPUTDATA}/poupees_1canal.c1.hdr 
+         -double ${INPUTDATA}/poupees_1canal.c1.hdr
          -uchar ${TEMP}/FA-00006-io_Poupees_1canal_oct.hdr )
 
-ADD_TEST(FA-00006-io_Poupees_R8_Double2UCharBis ${COMMON_TESTS} 
+ADD_TEST(FA-00006-io_Poupees_R8_Double2UCharBis ${COMMON_TESTS}
 #     --compare-image ${TOL}  ${INPUTDATA}/poupees_1canal.c1.hdr
 #                       ${TEMP}/FA-00006-io_Poupees_1canal_oct_bis.hdr
          otbMultiToMonoChannelExtractROI
@@ -96,25 +96,25 @@ ADD_TEST(FA-00006-io_Poupees_R8_Double2UCharBis ${COMMON_TESTS}
 
 # ------   RADARSAT   ------------
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(FA-00006-io_Radarsat_UI2_UShort2UShort ${COMMON_TESTS} 
+ADD_TEST(FA-00006-io_Radarsat_UI2_UShort2UShort ${COMMON_TESTS}
          otbMultiToMonoChannelExtractROI
          -ushort ${IMAGEDATA}/RADARSAT1/SCENE01/
          -ushort ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_ui2.hdr
          -startX 2559 -startY 3591 -sizeX 337 -sizeY 280 )
 
-ADD_TEST(FA-00006-io_Radarsat_UI2_Int2Int ${COMMON_TESTS} 
+ADD_TEST(FA-00006-io_Radarsat_UI2_Int2Int ${COMMON_TESTS}
          otbMultiToMonoChannelExtractROI
          -int ${IMAGEDATA}/RADARSAT1/SCENE01/
          -int ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_i4.hdr
          -startX 2559 -startY 3591 -sizeX 337 -sizeY 280 )
 
-ADD_TEST(FA-00006-io_Radarsat_UI2_Double2Double_ ${COMMON_TESTS} 
+ADD_TEST(FA-00006-io_Radarsat_UI2_Double2Double_ ${COMMON_TESTS}
          otbMultiToMonoChannelExtractROI
          -double ${IMAGEDATA}/RADARSAT1/SCENE01/
          -double ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_r8.hdr
          -startX 2559 -startY 3591 -sizeX 337 -sizeY 280 )
 
-ADD_TEST(FA-00006-io_Radarsat_I4_Int2Double ${COMMON_TESTS} 
+ADD_TEST(FA-00006-io_Radarsat_I4_Int2Double ${COMMON_TESTS}
 #     --compare-image ${TOL}  ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_r8.hdr
 #                       ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_r8_bis.hdr
          otbMultiToMonoChannelExtractROI
@@ -122,7 +122,7 @@ ADD_TEST(FA-00006-io_Radarsat_I4_Int2Double ${COMMON_TESTS}
          -double ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_r8_bis.hdr
          )
 
-ADD_TEST(FA-00006-io_Radarsat_I4_Double2Double ${COMMON_TESTS} 
+ADD_TEST(FA-00006-io_Radarsat_I4_Double2Double ${COMMON_TESTS}
 #     --compare-image ${TOL}  ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_r8.hdr
 #                       ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_r8_ter.hdr
          otbMultiToMonoChannelExtractROI
@@ -130,7 +130,7 @@ ADD_TEST(FA-00006-io_Radarsat_I4_Double2Double ${COMMON_TESTS}
          -double ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_r8_ter.hdr
          )
 
-ADD_TEST(FA-00006-io_Radarsat_R8_Double2Double ${COMMON_TESTS} 
+ADD_TEST(FA-00006-io_Radarsat_R8_Double2Double ${COMMON_TESTS}
 #    --compare-image ${TOL}  ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_r8.hdr
 #                       ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_r8_4.hdr
          otbMultiToMonoChannelExtractROI
@@ -141,19 +141,19 @@ ADD_TEST(FA-00006-io_Radarsat_R8_Double2Double ${COMMON_TESTS}
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(FA-00012-co_AlignementsQB ${CXX_TEST_PATH}/AlignementsQB
-        ${INPUTDATA}/poupees.hdr 
-        ${TEMP}/FA-00012-co_AlignementsQB.png 
+        ${INPUTDATA}/poupees.hdr
+        ${TEMP}/FA-00012-co_AlignementsQB.png
         )
 
 
 # ---  FA 00013 : impossible to write a TIFF(CAI) -> GDAL  ---
-ADD_TEST(FA-00013-io_WriteImageTIFF ${IO_TESTS2} 
+ADD_TEST(FA-00013-io_WriteImageTIFF ${IO_TESTS2}
         otbImageFileWriterTest
-        ${INPUTDATA}/sbuv_NB_c1.png 
+        ${INPUTDATA}/sbuv_NB_c1.png
         ${TEMP}/FA-00013-io_WriteImageTIFF_sbuv_NB_c1.tif )
 
 
-ADD_TEST(FA-00013-io_WriteImageTIFF_bis ${COMMON_TESTS} 
+ADD_TEST(FA-00013-io_WriteImageTIFF_bis ${COMMON_TESTS}
          otbMultiToMonoChannelExtractROI
          ${INPUTDATA}/sbuv_NB_c1.png
          ${TEMP}/FA-00013-io_WriteImageTIFF_sbuv_NB_c1_extrait.tif
@@ -191,6 +191,30 @@ ADD_TEST(FA-00070-vi_Streaming_Stat_bis ${CXX_TEST_PATH}/StreamingStat
 	${EXAMPLES_DATA}/amst.png
          )
 
+
+# -------       From Mantis tracker   -----------------------------------
+ADD_TEST(FA-0000041-mean_shift1 ${CXX_TEST_PATH}/0000041-mean_shift
+	${INPUTDATA}/QB_Suburb.png
+        12
+        7
+        100
+        ${TEMP}/filtered_image1.tif
+        ${TEMP}/segmented_image1.tif
+        ${TEMP}/labelled_image1.tif
+        ${TEMP}/boundary_of_labelled_image1.tif
+	)
+
+ADD_TEST(FA-0000041-mean_shift2 ${CXX_TEST_PATH}/0000041-mean_shift
+	${INPUTDATA}/QB_Suburb.png
+        20
+        7
+        100
+        ${TEMP}/filtered_image2.tif
+        ${TEMP}/segmented_image2.tif
+        ${TEMP}/labelled_image2.tif
+        ${TEMP}/boundary_of_labelled_image2.tif
+	)
+
 ADD_EXECUTABLE(AlignementsQB  AlignementsQB.cxx)
 TARGET_LINK_LIBRARIES(AlignementsQB OTBFeatureExtraction OTBIO OTBCommon gdal ITKIO ITKCommon)
 
@@ -200,6 +224,8 @@ TARGET_LINK_LIBRARIES(MapActivation OTBFeatureExtraction OTBIO OTBCommon gdal IT
 ADD_EXECUTABLE(StreamingStat  StreamingStat.cxx)
 TARGET_LINK_LIBRARIES(StreamingStat OTBFeatureExtraction OTBIO OTBCommon gdal ITKIO ITKCommon)
 
+ADD_EXECUTABLE(0000041-mean_shift  0000041-mean_shift.cxx)
+TARGET_LINK_LIBRARIES(0000041-mean_shift OTBIO OTBCommon OTBBasicFilters)
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
