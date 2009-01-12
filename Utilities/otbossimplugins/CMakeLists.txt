@@ -13,7 +13,6 @@ SET(ossimplugins_SOURCES
 
 
 ADD_LIBRARY(otbossimplugins ${ossimplugins_SOURCES} )
-TARGET_LINK_LIBRARIES(otbossimplugins gdal )
 
 INSTALL(TARGETS otbossimplugins
 RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
