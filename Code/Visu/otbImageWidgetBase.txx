@@ -329,12 +329,11 @@ namespace otb
     this->ortho();
     glDisable(GL_BLEND);
 
-    int displayHeight = static_cast<int>(vcl_ceil(m_BufferedRegion.GetSize()[1]*m_OpenGlIsotropicZoom));
-    int displayWidth  = static_cast<int>(vcl_ceil(m_BufferedRegion.GetSize()[0]*m_OpenGlIsotropicZoom));
 
 #ifndef OTB_GL_USE_ACCEL
-    
+
     // To be consistent with old method
+    int displayHeight = static_cast<int>(vcl_ceil(m_BufferedRegion.GetSize()[1]*m_OpenGlIsotropicZoom));
     int viewPortOffset = 0;
     viewPortOffset = h()-displayHeight;
     glRasterPos2i(0,viewPortOffset);
@@ -363,9 +362,9 @@ namespace otb
     glBegin (GL_QUADS);
     int hOffset = this->h() - this->hDisplayed();
     glTexCoord2f (0.0, 1.0);  glVertex3f (0.0, 0.0+hOffset, 0.0);
-    glTexCoord2f (1.0, 1.0);  glVertex3f (displayWidth, 0.0+hOffset, 0.0);
-    glTexCoord2f (1.0, 0.0);  glVertex3f (displayWidth,displayHeight+hOffset, 0.0);
-    glTexCoord2f (0.0, 0.0);  glVertex3f (0.0,displayHeight +hOffset, 0.0);
+    glTexCoord2f (1.0, 1.0);  glVertex3f (this->wDisplayed(), 0.0+hOffset, 0.0);
+    glTexCoord2f (1.0, 0.0);  glVertex3f (this->wDisplayed(), this->hDisplayed()+hOffset, 0.0);
+    glTexCoord2f (0.0, 0.0);  glVertex3f (0.0, this->hDisplayed()+hOffset, 0.0);
     glEnd ();
 
     glDisable(GL_TEXTURE_2D);
@@ -400,12 +399,10 @@ namespace otb
 	glBindTexture (GL_TEXTURE_2D, textureOverlay);
 	glBegin (GL_QUADS);
 	int hOffset = this->h() - this->hDisplayed();
-
-	glTexCoord2f (0.0, 1.0);  glVertex3f (0.0, 0.0+hOffset, 0.0);
-	glTexCoord2f (1.0, 1.0);  glVertex3f (displayWidth, 0.0+hOffset, 0.0);
-	glTexCoord2f (1.0, 0.0);  glVertex3f (displayWidth,displayHeight+hOffset, 0.0);
-	glTexCoord2f (0.0, 0.0);  glVertex3f (0.0,displayHeight +hOffset, 0.0);
-	
+	glTexCoord2f (0.0, 1.0);  glVertex3f (0.0, 0.0+hOffset, 1.0);
+	glTexCoord2f (1.0, 1.0);  glVertex3f (this->wDisplayed(), 0.0+hOffset, 1.0);
+	glTexCoord2f (1.0, 0.0);  glVertex3f (this->wDisplayed(), this->hDisplayed()+hOffset, 1.0);
+	glTexCoord2f (0.0, 0.0);  glVertex3f (0.0, this->hDisplayed()+hOffset, 1.0);
 	glEnd ();
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_BLEND);
