@@ -55,6 +55,9 @@ namespace otb
   *
   * \ingroup VectorDataFilter
   * \ingroup Projection
+  *
+  * \example Projections/VectorDataProjectionExample.cxx
+  *
   */
 
   template <class TInputVectorData, class TOutputVectorData>

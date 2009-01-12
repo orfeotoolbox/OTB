@@ -23,6 +23,9 @@ ADD_EXECUTABLE(PlaceNameToLonLat PlaceNameToLonLat.cxx )
 TARGET_LINK_LIBRARIES(PlaceNameToLonLat OTBProjections OTBCommon OTBIO ITKCommon ITKIO ${CURL_LIBRARY} tinyXML)
 ENDIF( OTB_USE_CURL )
 
+ADD_EXECUTABLE(VectorDataProjectionExample VectorDataProjectionExample.cxx )
+TARGET_LINK_LIBRARIES(VectorDataProjectionExample OTBProjections OTBCommon OTBIO)
+
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Projections)
@@ -44,36 +47,36 @@ ADD_TEST(OrthoRectificationExampleTest ${EXE_TESTS}
 	--compare-image ${TOL}
 	${BASELINE}/panOrthoToul.tif
 	${TEMP}/panOrthoToul.tif
-    OrthoRectificationExampleTest  
-	 ${INPUTLARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF 
-	${TEMP}/panOrthoToul.tif 
+    OrthoRectificationExampleTest
+	 ${INPUTLARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+	${TEMP}/panOrthoToul.tif
 	31
 	N
-	375000 
-	4828100 
-	500 
-	500 
-	0.6 
+	375000
+	4828100
+	500
+	500
+	0.6
 	-0.6
-	
+
 )
 
 ADD_TEST(OrthoRectificationExampleXSTest ${EXE_TESTS}
 	--compare-image ${TOL}
 	${BASELINE}/xsOrthoToul.tif
 	${TEMP}/xsOrthoToul.tif
-    OrthoRectificationExampleTest  
+    OrthoRectificationExampleTest
 	 ${INPUTLARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
-	${TEMP}/xsOrthoToul.tif 
+	${TEMP}/xsOrthoToul.tif
 	31
 	N
-	375000 
-	4828100 
-	500 
-	500 
-	0.6 
+	375000
+	4828100
+	500
+	500
+	0.6
 	-0.6
-	
+
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
