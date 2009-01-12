@@ -3,18 +3,29 @@
 SET(LIB_NAME OpenThreads)
 SET(LIB_PUBLIC_HEADERS ${OpenThreads_PUBLIC_HEADERS})
 
+SET(OPENTHREADS_SRCS
+        PThread.c++
+        PThreadBarrier.c++
+        PThreadBarrierPrivateData.h
+        PThreadCondition.c++
+        PThreadConditionPrivateData.h
+        PThreadMutex.c++
+        PThreadMutexPrivateData.h
+        PThreadPrivateData.h
+)
+ 
 ADD_LIBRARY(${LIB_NAME}
     ${OPENTHREADS_USER_DEFINED_DYNAMIC_OR_STATIC}
     ${LIB_PUBLIC_HEADERS}
-	PThread.c++
-	PThreadBarrier.c++
-	PThreadBarrierPrivateData.h
-	PThreadCondition.c++
-	PThreadConditionPrivateData.h
-	PThreadMutex.c++
-	PThreadMutexPrivateData.h
-	PThreadPrivateData.h
+    ${OPENTHREADS_SRCS}
 )
+
+IF(CMAKE_COMPILER_IS_GNUCXX)
+  FOREACH(f ${OPENTHREADS_SRCS} )
+        SET_SOURCE_FILES_PROPERTIES( ${f} PROPERTIES COMPILE_FLAGS -w )
+  ENDFOREACH(f)
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
 
 IF(OPENTHREADS_SONAMES)
   SET_TARGET_PROPERTIES(${LIB_NAME} PROPERTIES VERSION ${OPENTHREADS_VERSION} SOVERSION ${OPENTHREADS_SOVERSION})
