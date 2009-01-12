@@ -23,7 +23,6 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <stdio.h> // fopen, fread, ...
 
 #include "itkNumericTraits.h"
 #include "itkMultiThreader.h"
@@ -941,29 +940,18 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 int RegressionTestBinaryFile(const char * testBinaryFileName, const char * baselineBinaryFileName, int reportErrors)
 {
   int nbdiff(0);
-  FILE *fluxfiletest=NULL;
-  FILE *fluxfileref=NULL;
-  fluxfiletest = fopen(testBinaryFileName,"rb");
-  fluxfileref = fopen(baselineBinaryFileName,"rb");
-  if ( fluxfiletest==NULL	)
+  std::ifstream fluxfiletest(testBinaryFileName,std::ifstream::binary);
+  std::ifstream fluxfileref(baselineBinaryFileName,std::ifstream::binary);
+  while( !fluxfiletest.eof() && !fluxfileref.eof() )
   {
-    itkGenericExceptionMacro(<<"Impossible to open the test BINARY file <"<<testBinaryFileName<<">.");
-  }
-  if ( fluxfileref==NULL	)
-  {
-    itkGenericExceptionMacro(<<"Impossible to open the baseline BINARY file <"<<baselineBinaryFileName<<">.");
-  }
-
-  while( !feof(fluxfiletest) && !feof(fluxfileref) )
-  {
-    if ( fgetc(fluxfiletest) != fgetc(fluxfileref) )
+    if ( fluxfiletest.get() != fluxfileref.get() )
     {
       nbdiff++;
     }
   }
+  fluxfiletest.close();
+  fluxfileref.close();
 
-  fclose(fluxfiletest);
-  fclose(fluxfileref);
   if ( nbdiff!=0 && reportErrors)
   {
     std::cout << "<DartMeasurement name=\"BINARYFileError\" type=\"numeric/int\">";
