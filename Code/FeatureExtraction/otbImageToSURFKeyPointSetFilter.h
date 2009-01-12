@@ -17,8 +17,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbImageToSURFKeyPointSetFilter_h
-#define _otbImageToSURFKeyPointSetFilter_h
+#ifndef __otbImageToSURFKeyPointSetFilter_h
+#define __otbImageToSURFKeyPointSetFilter_h
 
 #include "itkProcessObject.h"
 #include "itkConstNeighborhoodIterator.h"

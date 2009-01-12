@@ -15,6 +15,9 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef __otbRationalQuotientResampleImageFilter_txx
+#define __otbRationalQuotientResampleImageFilter_txx
+
 #include "otbRationalQuotientResampleImageFilter.h"
 
 namespace otb
@@ -184,3 +187,6 @@ namespace otb
   }
 
 } // End namespace otb
+
+#endif
+

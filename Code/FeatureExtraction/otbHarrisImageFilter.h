@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHarrisFilter_h
-#define __otbHarrisFilter_h
+#ifndef __otbHarrisImageFilter_h
+#define __otbHarrisImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkRecursiveGaussianImageFilter.h"

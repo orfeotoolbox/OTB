@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef _MRFOptimizerICM_h
-#define _MRFOptimizerICM_h
+#ifndef __otbMRFOptimizerICM_h
+#define __otbMRFOptimizerICM_h
 
 #include "otbMRFOptimizer.h"
 

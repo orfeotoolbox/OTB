@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbMIRegistrationFilter_h_
-#define __otbMIRegistrationFilter_h_
+#ifndef __otbMIRegistrationFilter_h
+#define __otbMIRegistrationFilter_h
 
 #include "itkPDEDeformableRegistrationFilter.h"
 #include "itkMIRegistrationFunction.h"

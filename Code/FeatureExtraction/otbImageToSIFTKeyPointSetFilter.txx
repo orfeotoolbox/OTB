@@ -15,6 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef __otbImageToSIFTKeyPointSetFilter_txx
+#define __otbImageToSIFTKeyPointSetFilter_txx
 
 #include "otbImageToSIFTKeyPointSetFilter.h"
 
@@ -887,3 +889,5 @@ namespace otb
   }
 
 } // End namespace otb
+
+#endif
