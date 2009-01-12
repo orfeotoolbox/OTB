@@ -28,6 +28,8 @@ namespace otb
 {
 template <class TPixel, class TLabel> class ImageViewerBase;
 /**
+ * \class ImageViewerZoomWidget
+ *
  * \brief Custom scroll image widget.
  *
  * This class derives from otb::ZoomableImageWidget, and implements behaviours specific to the image viewer.

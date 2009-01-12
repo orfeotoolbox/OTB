@@ -24,6 +24,8 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
   /**
+   * \class ImageViewer
+   *
    * \brief Simple image viewer.
    *
    * This class is a simple image viewer using fltk gui and opengl drawing.

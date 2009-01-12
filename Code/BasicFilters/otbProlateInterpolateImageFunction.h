@@ -28,10 +28,12 @@ namespace otb
 
 namespace Function
 {
-/**
- * Prolate function give the value of the prolate profile following
- * one of the 2 image dimension.
- */
+  /** \class ProlateFunction
+   *
+   * \brief Prolate function give the value of the prolate profile following
+   * one of the 2 image dimension.
+   *
+   */
 template<class TInput, class TOutput>
 class ProlateFunction
 {
