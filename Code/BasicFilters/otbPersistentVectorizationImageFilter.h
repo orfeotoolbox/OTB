@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbStreamingVectorizationImageFilter_h
-#define __otbStreamingVectorizationImageFilter_h
+#ifndef __otbPersistentVectorizationImageFilter_h
+#define __otbPersistentVectorizationImageFilter_h
 
 #include "otbPersistentImageFilter.h"
 
@@ -31,7 +31,7 @@ namespace otb {
 
   /** \class PersistentVectorizationImageFilter
    *  \brief Perform vectorization in a persistent way.
-   * 
+   *
    * This filter allows to vectorize input labeled image while it is streamed
    * through it. The GetPathList() method allows to get the vectorized boundaries,
    * while the GetOutput() method allows to get the input image itself.
@@ -76,13 +76,13 @@ namespace otb {
       typedef itk::MinimumMaximumImageFilter<ImageType>                               MinMaxFilterType;
       typedef typename MinMaxFilterType::Pointer                                      MinMaxFilterPointerType;
       typedef otb::ImageToEdgePathFilter<ImageType,PathType>                          ImageToEdgePathFilterType;
-      typedef typename ImageToEdgePathFilterType::Pointer                             ImageToEdgePathFilterPointerType;   
+      typedef typename ImageToEdgePathFilterType::Pointer                             ImageToEdgePathFilterPointerType;
 
       virtual void Reset(void);
       virtual void Synthetize(void);
 
       itkGetObjectMacro(PathList,PathListType);
-      
+
     protected:
       PersistentVectorizationImageFilter();
       ~PersistentVectorizationImageFilter(){};
@@ -92,7 +92,7 @@ namespace otb {
     private:
       PersistentVectorizationImageFilter(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
-      
+
       // Min max filter (the mini-pipeline)
       MinMaxFilterPointerType m_MinMaxFilter;
 

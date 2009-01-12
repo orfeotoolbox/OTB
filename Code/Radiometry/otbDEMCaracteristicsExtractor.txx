@@ -18,6 +18,9 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef __otbDEMCaracteristicsExtractor_txx
+#define __otbDEMCaracteristicsExtractor_txx
+
 #include "otbDEMCaracteristicsExtractor.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkImageRegionIterator.h"
@@ -221,3 +224,5 @@ namespace otb
   }
 
 } // end namespace otb
+
+#endif

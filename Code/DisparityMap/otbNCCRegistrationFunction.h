@@ -13,13 +13,13 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbNCCRegistrationFunction_h_
-#define _otbNCCRegistrationFunction_h_
+#ifndef _otbNCCRegistrationFunction_h
+#define _otbNCCRegistrationFunction_h
 
 #include "itkPDEDeformableRegistrationFunction.h"
 #include "itkPoint.h"
@@ -44,7 +44,7 @@ namespace otb {
  * \ingroup FiniteDifferenceFunctions
  */
 template<class TFixedImage, class TMovingImage, class TDeformationField>
-class ITK_EXPORT NCCRegistrationFunction : 
+class ITK_EXPORT NCCRegistrationFunction :
   public itk::PDEDeformableRegistrationFunction< TFixedImage,
     TMovingImage, TDeformationField>
 {
@@ -60,7 +60,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro( NCCRegistrationFunction, 
+  itkTypeMacro( NCCRegistrationFunction,
     PDEDeformableRegistrationFunction );
 
   /** MovingImage image type. */
@@ -73,10 +73,10 @@ public:
   typedef typename FixedImageType::IndexType      IndexType;
   typedef typename FixedImageType::SizeType       SizeType;
   typedef typename FixedImageType::SpacingType    SpacingType;
-  
+
   /** Deformation field type. */
   typedef typename Superclass::DeformationFieldType    DeformationFieldType;
-  typedef typename Superclass::DeformationFieldTypePointer   
+  typedef typename Superclass::DeformationFieldTypePointer
     DeformationFieldTypePointer;
 
   /** Inherit some enums from the superclass. */
@@ -157,7 +157,7 @@ protected:
 private:
   NCCRegistrationFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
   /** Cache fixed image information. */
   SpacingType                     m_FixedImageSpacing;
   PointType                       m_FixedImageOrigin;

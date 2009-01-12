@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _MRFSampler_h
-#define _MRFSampler_h
+#ifndef __otbMRFSampler_h
+#define __otbMRFSampler_h
 
 #include "otbMRFEnergy.h"
 #include "itkNeighborhoodIterator.h"

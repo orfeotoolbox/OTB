@@ -13,18 +13,18 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbNCCRegistrationFunction_txx_
-#define _otbNCCRegistrationFunction_txx_
+#ifndef _otbNCCRegistrationFunction_txx
+#define _otbNCCRegistrationFunction_txx
 
 #include "otbNCCRegistrationFunction.h"
 #include "itkExceptionObject.h"
 #include "vnl/vnl_math.h"
- 
+
 namespace otb {
 
 /*
@@ -71,7 +71,7 @@ void
 NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  
+
   Superclass::PrintSelf(os, indent);
 /*
   os << indent << "MovingImageIterpolator: ";
@@ -126,7 +126,7 @@ typename NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
 ::PixelType
 NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
 ::ComputeUpdate(const NeighborhoodType &it, void * itkNotUsed(globalData),
-                const FloatOffsetType& itkNotUsed(offset)) 
+                const FloatOffsetType& itkNotUsed(offset))
 {
 
   PixelType update;
@@ -136,13 +136,13 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
   IndexType oindex = it.GetIndex();
 
   typename FixedImageType::SizeType hradius=it.GetRadius();
- 
-  FixedImageType* img =const_cast<FixedImageType *>(this->m_FixedImage.GetPointer()); 
+
+  FixedImageType* img =const_cast<FixedImageType *>(this->m_FixedImage.GetPointer());
 
   typename FixedImageType::SizeType imagesize=img->GetLargestPossibleRegion().GetSize();
-  
 
-  itk::NeighborhoodIterator<FixedImageType> 
+
+  itk::NeighborhoodIterator<FixedImageType>
     hoodIt( hradius , img, img->GetRequestedRegion());
   hoodIt.SetLocation(oindex);
 
@@ -166,20 +166,20 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
   {
 
     IndexType index=hoodIt.GetIndex(indct);
- 
+
 
     bool inimage=true;
     for (unsigned int dd=0; dd<ImageDimension; dd++)
     {
       if ( index[dd] < 0 || index[dd] > static_cast<typename IndexType::IndexValueType>(imagesize[dd]-1) ) inimage=false;
     }
-    
+
     if (inimage)
     {
 
 
         // Get fixed image related information
-      
+
       CovariantVectorType fixedGradient;
       double fixedGradientSquaredMagnitude = 0;
 
@@ -187,18 +187,18 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
       // fixed image buffer. This is done by the external filter.
       fixedValue = (double) this->m_FixedImage->GetPixel( index );
 
-      fixedGradient = m_FixedImageGradientCalculator->EvaluateAtIndex( index ); 
+      fixedGradient = m_FixedImageGradientCalculator->EvaluateAtIndex( index );
       for( j = 0; j < ImageDimension; j++ )
       {
         fixedGradientSquaredMagnitude += vnl_math_sqr( fixedGradient[j] ) * m_FixedImageSpacing[j];
-      } 
+      }
 
       // Get moving image related information
-      
+
       PointType mappedPoint;
 
       typedef typename TDeformationField::PixelType  DeformationPixelType;
-      
+
       // Edited by OTB developpers
       DeformationPixelType vec;
       vec.Fill(0);
@@ -210,7 +210,7 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
 
       for( j = 0; j < ImageDimension; j++ )
         {
-        mappedPoint[j] = double( index[j] ) * m_FixedImageSpacing[j] + 
+        mappedPoint[j] = double( index[j] ) * m_FixedImageSpacing[j] +
         m_FixedImageOrigin[j];
         mappedPoint[j] += vec[j];
         }
@@ -233,8 +233,8 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
         derivativeF[dim]+= fixedValue  * differential;
         derivativeM[dim]+= movingValue * differential;
       }
-    } 
-   
+    }
+
   }
 
   double updatenorm=0.0;
@@ -249,7 +249,7 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
     updatenorm=vcl_sqrt(updatenorm);
     m_MetricTotal+=sfm*factor;
     this->m_Energy+=sfm*factor;
-  } 
+  }
   else
   {
     for(unsigned int i=0; i<ImageDimension; i++)
@@ -257,11 +257,11 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
       update[i] = 0.0;
     }
     updatenorm=1.0;
-  } 
+  }
 
 //  if ( fixedValue > 0.40 && movingValue > 0.40)  std::cout << " update norm " << updatenorm;
-  
-  if (this->GetNormalizeGradient() && updatenorm !=0.0 ) 
+
+  if (this->GetNormalizeGradient() && updatenorm !=0.0 )
   {
     update/=(updatenorm);
   }

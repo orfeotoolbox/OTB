@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otb_VectorData_h
-#define __otb_VectorData_h
+#ifndef __otbVectorData_h
+#define __otbVectorData_h
 
 #include "itkTreeContainer.h"
 #include "itkDataObject.h"

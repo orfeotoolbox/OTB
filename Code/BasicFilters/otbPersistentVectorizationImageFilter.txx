@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorizationImageFilter_txx
-#define __otbVectorizationImageFilter_txx
+#ifndef __otbPersistentVectorizationImageFilter_txx
+#define __otbPersistentVectorizationImageFilter_txx
 
 #include "otbPersistentVectorizationImageFilter.h"
 
@@ -61,8 +61,8 @@ PersistentVectorizationImageFilter<TInputImage, TOutputPath>
   m_MinMaxFilter->Update();
   this->GraftOutput(m_MinMaxFilter->GetOutput());
 
- 
-  
+
+
   for(PixelType label = m_MinMaxFilter->GetMinimum()+1; label<=m_MinMaxFilter->GetMaximum(); ++label)
     {
       ImageToEdgePathFilterPointerType edgeFilter = ImageToEdgePathFilterType::New();

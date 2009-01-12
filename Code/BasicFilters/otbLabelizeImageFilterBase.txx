@@ -15,6 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef __otbLabelizeImageFilterBase_txx
+#define __otbLabelizeImageFilterBase_txx
 
 #include "otbLabelizeImageFilterBase.h"
 
@@ -110,3 +112,5 @@ namespace otb
     os << indent << m_RegionGrowingFilter << std::endl;
   }
 } // end namespace otb
+
+#endif
