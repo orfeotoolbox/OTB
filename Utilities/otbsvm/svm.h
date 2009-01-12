@@ -47,7 +47,7 @@ struct svm_parameter
   /*otb::*/GenericKernelFunctorBase * kernel_generic;
   // Composed kernel
   ComposedKernelFunctor * kernel_composed;
-  
+
   /* these are for training only */
   double cache_size; /* in MB */
   double eps;	/* stopping criteria */
@@ -74,9 +74,9 @@ struct svm_model
   double *rho;		// constants in decision functions (rho[k*(k-1)/2])
   double *probA;        // pariwise probability information
   double *probB;
-  
+
   // for classification only
-  
+
   int *label;		// label of each class (label[k])
   int *nSV;		// number of SVs for each class (nSV[k])
   // nSV[0] + nSV[1] + ... + nSV[k-1] = l
@@ -120,6 +120,9 @@ namespace otb
 {
 */
 //OTB's modifications
+/** \class GenericKernelFunctorBase
+ * \brief Undocumented
+ */
 class GenericKernelFunctorBase
 {
 public:
@@ -128,7 +131,7 @@ public:
   /** Recopy constructor */
   GenericKernelFunctorBase( const GenericKernelFunctorBase& copy);
   virtual GenericKernelFunctorBase& operator=(const GenericKernelFunctorBase& copy);
-  
+
   virtual ~GenericKernelFunctorBase() {};
 
   typedef GenericKernelFunctorBase          Superclass;
@@ -136,7 +139,7 @@ public:
   typedef MapType::iterator                 MapIterator;
   typedef MapType::const_iterator           MapConstIterator;
 
-  template<class T> 
+  template<class T>
   T GetValue(const char *option) const
   {
         std::string Value = m_MapParameters.find(std::string(option))->second;
@@ -146,7 +149,7 @@ public:
         flux >> lValeur;
         return lValeur;
   }
-  template<class T> 
+  template<class T>
   void SetValue(const char *option, const T & value)
   {
         std::string lValeur;
@@ -167,7 +170,7 @@ public:
         flux >> lValeur;                                                            \
         return lValeur;                                                             \
   }
-  
+
   otbGetValueMacro(String,std::string);
   otbGetValueMacro(Short,short);
   otbGetValueMacro(UShort,unsigned short);
@@ -187,7 +190,7 @@ public:
         flux >> lValeur;                                                            \
         m_MapParameters[std::string(option)] = lValeur;\
   }
-  
+
   otbSetValueMacro(String,std::string);
   otbSetValueMacro(Short,short);
   otbSetValueMacro(UShort,unsigned short);
@@ -198,8 +201,8 @@ public:
   otbSetValueMacro(Float,float);
   otbSetValueMacro(Double,double);
 */
-   
-  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const 
+
+  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const
     {
       itkGenericExceptionMacro(<<"Kernel functor not definied (Null)");
       return static_cast<double>(0.);
@@ -210,7 +213,7 @@ public:
   // index is the current value
   // isAtEnd to indicate that it's the last possible derivation
   // baseValue is the constant of the formula
-  virtual double derivative(const svm_node *x, const svm_node *y, const svm_parameter& param, int degree, int index, bool isAtEnd, double constValue)const 
+  virtual double derivative(const svm_node *x, const svm_node *y, const svm_parameter& param, int degree, int index, bool isAtEnd, double constValue)const
     {
       itkGenericExceptionMacro(<<"derivative method not definied (Null)");
       return 0.;
@@ -221,7 +224,7 @@ public:
   virtual int save_parameters(FILE ** pfile, const char * generic_kernel_parameters_keyword)const;
 
   virtual void print_parameters(void)const;
-  
+
   virtual void Update(void){ }
 
   virtual double dot(const svm_node *px, const svm_node *py)const;
@@ -242,13 +245,15 @@ private:
 
     /** Kernel functor parameters */
     MapType m_MapParameters;
-    
+
     /** Functor label name (without space) */
     std::string m_Name;
 };
 
 
-
+/** \class ComposedKernelFunctor
+ * \brief Undocumented
+ */
 class ComposedKernelFunctor : public GenericKernelFunctorBase
 {
 public:
@@ -257,7 +262,7 @@ public:
       this->SetName("ComposedFunctorName");
       this->SetValue<bool>("MultiplyKernelFunctor", false);
     };
-  virtual ~ComposedKernelFunctor() 
+  virtual ~ComposedKernelFunctor()
     {
       for(unsigned int i=0; i<m_HaveToBeDeletedList.size(); i++)
 	{
@@ -278,7 +283,7 @@ public:
 /*                                                            m_HaveToBeDeletedList(c.m_HaveToBeDeletedList) */
 /*                                                            m_PonderationList(c.m_PonderationList)         {}; */
   ComposedKernelFunctor& operator=(const ComposedKernelFunctor& copy);
-  
+
   typedef std::vector<GenericKernelFunctorBase *> KernelListType;
 
   virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const // = 0
@@ -310,7 +315,7 @@ public:
   // index is the current value
   // isAtEnd to indicate that it's the last possible derivation
   // baseValue is the constant of the formula
-  virtual double derivative(const svm_node *x, const svm_node *y, const svm_parameter& param, int degree, int index, bool isAtEnd, double constValue)const 
+  virtual double derivative(const svm_node *x, const svm_node *y, const svm_parameter& param, int degree, int index, bool isAtEnd, double constValue)const
     {
      double out = 0.;
       if (m_KernelFunctorList.size() != 0 && m_PonderationList.size() != 0 && m_KernelFunctorList.size() == m_PonderationList.size())
@@ -339,7 +344,7 @@ public:
   virtual int save_parameters(FILE ** pfile, const char * composed_kernel_parameters_keyword) const;
 
   virtual void print_parameters(void)const;
-  
+
   //virtual void Update(void){};
 
 
@@ -360,7 +365,7 @@ public:
   void SetPonderationModelList(const std::vector<double> & list){ m_PonderationList = list; };
   // Add 1 element to the end of the list
   void AddPonderationToPonderationList(const double & pond){ m_PonderationList.push_back(pond); };
-  
+
    /** Set/Get the boolean to know which operation has to be done with the kernel functors. */
    void SetMultiplyKernelFunctor( bool val ){ this->SetValue<bool>("MultiplyKernelFunctor", val); };
    bool GetMultiplyKernelFunctor(){ return (this->GetValue<bool>("MultiplyKernelFunctor")); };
@@ -373,13 +378,13 @@ private:
 
    /** Generic kernel functors that composed kernel */
    KernelListType m_KernelFunctorList;
-  /** Generic kernel functors that have to be deleted. 
+  /** Generic kernel functors that have to be deleted.
     * This list was made for the load_parameters methods where you set new functors using new.
     * But, in other cases, functor can be added with reference. Thus, we need to know which ones have to be deleted.  */
    KernelListType m_HaveToBeDeletedList;
    /** Ponderation list to apply to each svm_model of the composed kernel*/
    std::vector<double> m_PonderationList;
- 
+
 };
 
 
