@@ -17,9 +17,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbChangeProfileKernelFunctor_txx
-#define __otbChangeProfileKernelFunctor_txx
-
 #include <cmath>
 #include "otbChangeProfileKernelFunctor.h"
 
@@ -53,8 +50,8 @@ ChangeProfileKernelFunctor
 ::operator() ( const svm_node * x, const svm_node * y,
 				const svm_parameter & param ) const
 {
-	double theMax = 0.0;
-	double theCur;
+	double theMax(0.);
+	double theCur(0.);
 
 	while(x->index != -1 && y->index != -1)
 	{
@@ -81,5 +78,4 @@ ChangeProfileKernelFunctor
 
 } // end of namespace otb
 
-#endif
 
