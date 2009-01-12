@@ -152,7 +152,7 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
     // While unexplored pixels remain and no edge was found
     while((move<nextStart+8)&&(!EdgeFound))
       {
-      otbMsgDevMacro(<<"SEARCH: "<<move%8<<" "<<it.GetPixel(rotation[move%8])<<" LAST: "<<LastWasPositive);
+      //otbMsgDevMacro(<<"SEARCH: "<<move%8<<" "<<it.GetPixel(rotation[move%8])<<" LAST: "<<LastWasPositive);
       // If last pixel was not in the object and the current is, we have found the edge
       if((!LastWasPositive) && (it.GetPixel(rotation[move%8]) == m_ForegroundValue) )
 	{
