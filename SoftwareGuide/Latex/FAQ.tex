@@ -163,18 +163,19 @@ Support for the following platforms is planned:
 \begin{itemize}
 \item CMake (\url{http://www.cmake.org})
 \item GDAL (\url{http://www.gdal.org})
-\item Fltk (\url{http://www.fltk.org})
+\item Optional (you may use the version included in OTB): Fltk (\url{http://www.fltk.org}) and ITK (\url{www.itk.org})
+\item Optional (OTB will compile but some small functionalities will be missing): cURL (\url{http://curl.haxx.se/}), FFTW (\url{www.fftw.org}).
 \end{itemize}
 
 \subsection{Main steps}
 In order to install OTB on your system follow these steps (in the
 given order):
 \begin{enumerate}
-  \item Install CMake.
-  \item Install GDAL.
-  \item Install Fltk using the CMake scripts. Do not use the
-  \texttt{configure} approach or the project files for Microsoft
-  Visual Studio shipped with Fltk.
+  \item Install CMake (binary packages are available for most platforms).
+  \item Install GDAL (binary packages are available for most platforms).
+%   \item Install Fltk using the CMake scripts. Do not use the
+%   \texttt{configure} approach or the project files for Microsoft
+%   Visual Studio shipped with Fltk.
 %   \item Install ITK if you do not want to use the ITK version provided
 %   with OTB. Use CMake for the configuration.
   \item Install OTB using CMake for the configuration.
@@ -186,7 +187,7 @@ whatever you want. Make sure that you have downloaded the source code for:
   \begin{itemize}
   \item CMake (\url{http://www.cmake.org})
   \item GDAL (\url{http://www.gdal.org})
-  \item Fltk (\url{http://www.fltk.org})
+%   \item Fltk (\url{http://www.fltk.org})
   \end{itemize}
 
 \subsubsection{Unix/Linux Platforms}
@@ -197,7 +198,7 @@ packages, you can skip to step 4.
 
 \begin{enumerate}
 
-\item Install GDAL (or use your distribution package)
+\item Install GDAL (or \textbf{use your distribution package})
   \begin{verbatim}
       cd INSTALL_DIR
       gunzip gdal.1.5.2.tar.gz
@@ -214,7 +215,7 @@ Actually, since this is the last step in the GDAL install procedure, when you ge
 
 The \texttt{--without-python} option passed to the \texttt{configure} step avoids this. However, some users may want to have Python bindings, so recommending this option for the install may not be OK for everybody.
 
-\item Install CMake (or use your distribution package)
+\item Install CMake (or \textbf{use your distribution package})
   \begin{verbatim}
       cd INSTALL_DIR
       gunzip cmake-2.6.0.tar.gz
@@ -228,7 +229,7 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
       your path with \texttt{export PATH=\$PATH:INSTALL\_DIR/bin} or
       something similar.
 
-\item Install Fltk (optional) using CMake (do not use the configure script) (or use your distribution package)
+\item Install Fltk (optional) using CMake (do not use the configure script) (or \textbf{use your distribution package})
   \begin{verbatim}
       cd INSTALL_DIR
       bunzip2 fltk-1.1.9-source.tar.bz2 OR
@@ -248,17 +249,16 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
       example which makes use of the OpenGL library needed by OTB.
   \end{verbatim}
 
-   You can choose not to install Fltk but in this case, you will not be able to
-   compile the visualization features of OTB.
+   You can also choose to use the FLTK version we included in the source of OTB, in this case, everything will be compile at the same time. To do that, you will have to set the option \texttt{OTB\_USE\_EXTERNAL\_FLTK} to \texttt{OFF}
 
 \item Install OTB
   \begin{verbatim}
       cd INSTALL_DIR
-      gunzip OrfeoToolbox-2.6.0.tgz
-      tar xvf OrfeoToolbox-2.6.0.tar
+      gunzip OrfeoToolbox-2.8.0.tgz
+      tar xvf OrfeoToolbox-2.8.0.tar
       mkdir OTB-Binary
       cd OTB-Binary
-      ccmake ../OrfeoToolbox-2.6.0
+      ccmake ../OrfeoToolbox-2.8.0
       --> follow the CMake instructions, in particular:
 	  --> set BUILD_EXAMPLES to ON within CMake
 	  --> set BUILD_SHARED_LIBS to ON within CMake
@@ -271,7 +271,7 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 	      if you do not have FLTK press 't' to change to advanced
               mode and set OTB_USE_VISU to OFF
 	  --> generate the configuration with 'g'
-       make
+       make -j 2
   \end{verbatim}
 
   If you want a faster compilation and don't want the compilation of the examples, you
@@ -280,7 +280,7 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
   with that, you can set \texttt{BUILD\_SHARED\_LIBS} to \texttt{OFF} but the
   built size might reach 1~GB.
 
-  After these steps, you have the source of OTB in \texttt{INSTALL\_DIR/OrfeoToolbox-2.4.0}
+  After these steps, you have the source of OTB in \texttt{INSTALL\_DIR/OrfeoToolbox-2.8.0}
   and the compiled binaries and libraries in \texttt{INSTALL\_DIR/OTB-Binary}. Keeping
   the sources is important as most programs you will designed will need an access
   to the txx files during compilation. However, the binaries directory knows were
@@ -293,7 +293,7 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
       make install
   \end{verbatim}
 
-  but this is only optional.
+  but \textbf{this is only optional}.
 
 
 \end{enumerate}
@@ -301,6 +301,11 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 \subsubsection{Microsoft Visual Studio C++ 7.1}
 \begin{enumerate}
 \item Install GDAL
+
+	Get the binary package from \url{http://www.gdal.org/} and follow the instruction to install. If it fail, proceed to the installation from the source.
+
+
+        From source:
 
 	MSVC++ 7.1 project files are needed to compile GDAL.
 
@@ -312,15 +317,17 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 
 	More details can be found at \url{http://vterrain.org/Distrib/gdal.html}.
 
-\item Install Fltk
-
-	Use CMake on Windows to generate MSVC++ 7.1 project files from fltk sources.
-
-	Open the solution and build the fltk project.
+% \item Install Fltk
+%
+% 	Use CMake on Windows to generate MSVC++ 7.1 project files from fltk sources.
+%
+% 	Open the solution and build the fltk project.
 
 \item Install OTB
 
 	Use CMake on Windows to generate MSVC++ 7.1 project files from otb sources.
+
+	Set the \texttt{OTB\_USE\_EXTERNAL\_FLTK} option to \texttt{OFF}
 
 	Open the solution and build the otb project.
 
@@ -328,7 +335,13 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 
 \subsubsection{Microsoft Visual Studio C++ 8.0}
 \begin{enumerate}
-\item Install GDAL
+\item Install GDAL (from source)
+
+	Get the binary package from \url{http://www.gdal.org/} and follow the instruction to install. If it fail, proceed to the installation from the source.
+
+
+
+        From source:
 
         Open a MS-DOS prompt.
 
@@ -348,15 +361,17 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
         More details about this install can be found at \url{http://www.gdal.org/gdal_building.html}.
 
 
-\item Install Fltk
-
-	Use CMake on Windows to generate MSVC++ 8.0 project files from fltk sources.
-
-	Open the solution and build the fltk project.
+% \item Install Fltk
+%
+% 	Use CMake on Windows to generate MSVC++ 8.0 project files from fltk sources.
+%
+% 	Open the solution and build the fltk project.
 
 \item Install OTB
 
 	Use CMake on Windows to generate MSVC++ 8.0 project files from otb sources.
+
+	Set the \texttt{OTB\_USE\_EXTERNAL\_FLTK} option to \texttt{OFF}
 
 	Open the solution and build the otb project.
 
@@ -380,11 +395,11 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 \end{verbatim}
 	Then the usual make and make install.
 
-\item Install Fltk
-
-	Generate MSYS Makefiles with CMake (Windows version) from fltk sources.
-
-	Then, under prompt, tape make and make install where you have generated Makefiles with CMake.
+% \item Install Fltk
+%
+% 	Generate MSYS Makefiles with CMake (Windows version) from fltk sources.
+%
+% 	Then, under prompt, tape make and make install where you have generated Makefiles with CMake.
 
 \item Install OTB
 
@@ -407,9 +422,9 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 \end{verbatim}
 	Then the usual make and make install.
 
-\item Install Fltk
-
-	See Linux part for details (same procedure).
+% \item Install Fltk
+%
+% 	See Linux part for details (same procedure).
 
 \item Install OTB
 
@@ -504,7 +519,7 @@ point for any new OTB user. The code source for these examples is
 distributed with the toolbox. Another information source is the
 on-line API documentation which is available at \url{http://orfeo-toolbox.sourceforge.net/Doxygen}.
 
-\section{Contributing to OTB}
+\section{Contributing to OTB}\label{sec:contributing}
 
 \subsection{I want to contribute to OTB, where to begin?}
 
@@ -513,6 +528,9 @@ you would like to introduce in OTB. If the functionality seems important for the
 OTB users, we will then discuss on how to send your code,
 make the necessary adaptions, check with you that the results are correct and finally
 include it in the next release.
+
+You can also run the nightly tests so we have a wider range of plateforms to detect the
+bug faster. Look at section \ref{sec:runningTheTests}.
 
 \subsection{What are the benefits of contributing to OTB?}
 
@@ -532,7 +550,55 @@ object detection, segmentation, interpolation, etc.
 
 More specific applications can be contributed to the OTB-Applications package.
 
+\section{Running the tests}\label{sec:runningTheTests}
+
+\subsection{What are the tests?}
+
+OTB is an ever changing library, it is quite active and have scores of changes per day from different people. It would be a headache to make sure that the brand new improvement that you introduced didn't break anything without automated tests. You also have to take into account the different OS, compilers, options, versions of external libraries, etc.
+
+For each class, at minimum there is a test which tries to instantiate it and another one which uses the class. The output of each test (image, text file, binary file) is controlled against a baseline to make sure that the result hasn't change.
+
+All these test are available in the directory \texttt{Testing} and are also good examples on how to use the library.
+
+\subsection{How to run the tests?}
+
+There is more than 1000 tests for OTB and about 100 for the applications and it takes from 20 minutes to 3 hours to run all the test, mainly depending on your compilation option (Release mode does make a difference) and of course your hardware.
+
+To run the test, you first have to make sure that you set the option \texttt{BUILD\_TESTING} to \texttt{ON} before building the library. If you want to modify it, just rerun ccmake, change the option, then make.
+
+For some of the test, you also need the test data and the baselines (see below).
+
+Once OTB is built with the test, you just have to go to the binary directory where you built OTB and run \texttt{ctest -N} to have a list of all the tests. Just using \texttt{ctest} will run all the tests. To select a subset, you can do \testtt{ctest -R Kml} to run all tests related to kml files or \texttt{ctest -I 1,10} to run tests from 1 to 10.
+
+\subsection{How to get the test data?}
+
+Tests data are also controlled by mercurial (see \ref{sec:FAQMercurial}).
+
+You can get the base doing:
+\begin{verbatim}
+      hg clone http://hg.orfeo-toolbox.org/OTB-Data
+\end{verbatim}
+
+This is about 1~GB of data, so it will take a while, but you have to do it only once, as after, a simple
+\begin{verbatim}
+      hg pull -u
+\end{verbatim}
+will update you to the latest version of the repository.
+
+
+\subsection{How to submit the results?}
+
+Once you know how to run the test, you can also help us to detect the bugs or configuration problems specific to your configuration. As mentionned before, the possible combination between OS, compiler, option, external libraries version is too big to be tested completely, but the more the better.
+
+You just have to launch ctest with the \texttt{-D Experimental} switch. Hence:
+\begin{verbatim}
+      ctest -D Experimental
+\end{verbatim}
+
+If you are interested in setting up a nightly test (automatically launched every night), please contact us and we will give you the details.
+
 \section{OTB's Roadmap}
+
 \subsection{Which will be the next version of OTB?}
 OTB's version numbers have 3 digits. The first one is for major
 versions, the second one is for minor versions and the last one is for
@@ -540,8 +606,8 @@ bugfixes.
 
 The first version was 1.0.0 in July 2006. Version 1.2.0, 1.4.0 and 1.6.0 were
 released in between. The 2.0.0 major version  was released in December 2007.
-The 2.2.0 and 2.4.0 update in June and July 2008 respectively.
-The current one is 2.6.0.
+The 2.2.0, 2.4.0 and 2.6.0 in June, July and November 2008 respectively.
+The current one is 2.8.0.
 
 \subsubsection{What is a major version?}
 A major version of the library implies the addition of high-level
@@ -558,7 +624,7 @@ A bugfix version is released when significant bugs are identified and fixed.
 \subsection{When will the next version of OTB be available?}
 We plan to release major new OTB version once a year, that is, version
 2.0.0 was available at the end of 2007, version 3.0.0 should be released
-by the end of 2008, and so on.
+by the beginning of 2009, and so on.
 
 \subsection{What features will the OTB include and when?}
 There is no detailed plan about the availability of OTB new features,
