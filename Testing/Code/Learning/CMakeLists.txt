@@ -143,12 +143,12 @@ ADD_TEST(leTvSVMClassifierImageOneClass ${LEARNING_TESTS2}
 	${TEMP}/leSVMClassifierImageOneClassOutput.png)
 
 ADD_TEST(leTvSVMClassifierImageWithGenericKernalLinear ${LEARNING_TESTS2}  
---compare-image ${TOL}  ${TEMP}/svm_classified_image.png
-                        ${TEMP}/svm_classified_image_with_generic_kernel_linear.png
-        otbSVMClassifierImage
+--compare-image ${TOL}  ${BASELINE}/leTvSVMClassifierImageWithGenericKernalLinearOutput.png
+                        ${TEMP}/leTvSVMClassifierImageWithGenericKernalLinearOutput.png
+	otbSVMClassifierImage
 	${INPUTDATA}/ROI_QB_MUL_4.tif
 	${INPUTDATA}/svm_model_image_generic_linear
-	${TEMP}/svm_classified_image_with_generic_kernel_linear.png)
+	${TEMP}/leTvSVMClassifierImageWithGenericKernalLinearOutput.png)
 
 
 
