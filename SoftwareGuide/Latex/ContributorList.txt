@@ -3,7 +3,7 @@ Thomas Feuvrier (CS)
 Julien Michel (CS)
 Romain Garrigues (CS)
 Emmanuel Christophe (CNES then CRISP)
-Cyrille Valladeau (CS) 
+Cyrille Valladeau (CS)
 Julien Radoux (UCL)
 Gr\'egoire Mercier (Telecom Bretagne)
 Vincent Poulain (CNES)
@@ -17,4 +17,7 @@ Vincent Schut (Sarvision)
 David Dubois
 Jan Wegner
 Otmane Lahlou (CS)
-
+Michael Seymour (EADS)
+Julien Osman
+Christophe Lay
+Yannick Reynard

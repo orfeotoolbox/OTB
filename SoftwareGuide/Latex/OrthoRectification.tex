@@ -1,4 +1,4 @@
-\chapter{Ortho-registration}\label{sec:Ortho}
+\chapter{Orthorectification and Map Projection}\label{sec:Ortho}
 
 
 \begin{figure}[h]
@@ -325,13 +325,15 @@ your application. In this case, the \doxygen{otb}{GenericMapProjection}
 allow you to set the map projection at run-time by passing the WKT identification
 for the projection.
 
+\input{MapProjectionExample.tex}
+
 You will seldom use a map projection by itself, but rather in an
 ortho-rectification framework. An example is given in the next section.
 
 
 
 
-\section{Ortho-rectification with OTB}
+\section{Orthorectification with OTB}
 \ifitkFullVersion
 \label{sec:OrthorectificationwithOTB}
 \input{OrthoRectificationExample.tex}
