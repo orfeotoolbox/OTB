@@ -71,14 +71,14 @@ class ITK_EXPORT Polygon
    * \param point The point to check.
    * \return True if the point is inside the polygon.
    */
-  bool IsInside(VertexType point);
+  bool IsInside(VertexType point) const;
 
   /**
    * Check wether point is strictly on the edge of the polygon.
    * \param point The point to check.
    * \return True if the point is on the edge of the polygon.
    */
-  bool IsOnEdge(VertexType point);
+  bool IsOnEdge(VertexType point) const;
 
   /**
    * Returns the number of crossings of the polygon with a given segment.
@@ -86,7 +86,7 @@ class ITK_EXPORT Polygon
    * \param b Second point of the segment,
    * \return the number of strict crossings of segment [ab] with the polygon.
    */
-  unsigned int NbCrossing(VertexType a, VertexType b);
+  unsigned int NbCrossing(VertexType a, VertexType b) const;
 
   /**
    * Returns the number of touchings without crossing of the polygon with a given segment.
@@ -94,7 +94,7 @@ class ITK_EXPORT Polygon
    * \param b Second point of the segment,
    * \return the number of touchings without crossing of segment [ab] with the polygon.
    */
-  unsigned int NbTouching(VertexType a, VertexType b);
+  unsigned int NbTouching(VertexType a, VertexType b) const;
 
   /**
    * Check wether two segments [a1a2] and [b1b2] are strictly crossing.
@@ -104,7 +104,7 @@ class ITK_EXPORT Polygon
    * \param a1 Second point of the second segment.
    * \return True if the two segments are strictly crossing.
    */
-  bool IsCrossing(VertexType a1, VertexType a2, VertexType b1, VertexType b2);
+  bool IsCrossing(VertexType a1, VertexType a2, VertexType b1, VertexType b2) const;
 
   /**
    * Check wether two segments[a1a2] and [b1b2] are touching without crossing.
@@ -114,7 +114,7 @@ class ITK_EXPORT Polygon
    * \param a1 Second point of the second segment.
    * \return True if the two segments are touching without crossing.
    */
-   bool IsTouching(VertexType a1, VertexType a2, VertexType b1, VertexType b2);
+   bool IsTouching(VertexType a1, VertexType a2, VertexType b1, VertexType b2) const;
 
  /**
   * Compute the polygon bounding region.
@@ -126,13 +126,13 @@ class ITK_EXPORT Polygon
   * Return the polygon surface.
   * \return The surface.
   */
- double GetSurface();
+ double GetSurface() const;
 
   /**
   * Return the polygon length (perimeter).
   * \return The length.
   */
- virtual double GetLength();
+ virtual double GetLength() const;
 
 protected:
   /** Constructor */
@@ -153,7 +153,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   double m_Epsilon;
-  double m_Surface;
+
 };
 }// End namespace otb
 

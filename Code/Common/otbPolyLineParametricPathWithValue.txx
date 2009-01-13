@@ -36,7 +36,7 @@ namespace otb
 
   template < class TValue,unsigned int VDimension>
       double PolyLineParametricPathWithValue<TValue,VDimension>
-  ::GetLength()
+  ::GetLength() const
   {
     double length = 0.0;
     VertexListConstIteratorType it =  this->GetVertexList()->Begin();
