@@ -22,8 +22,8 @@
 
 namespace otb
 {
-template <class TPrecision, unsigned int VDimension>
-DataNode<TPrecision,VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
+DataNode<TPrecision,VDimension,TValuePrecision>
 ::DataNode()
 {
   m_NodeType = ROOT;
@@ -31,18 +31,18 @@ DataNode<TPrecision,VDimension>
   m_Data.valid = false;
 }
 
-template <class TPrecision, unsigned int VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 void
-DataNode<TPrecision,VDimension>
+DataNode<TPrecision,VDimension,TValuePrecision>
 ::SetNodeType(NodeType type)
 {
   m_NodeType = type;
   m_Data.valid = false;
 }
 
-template <class TPrecision, unsigned int VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 void
-DataNode<TPrecision,VDimension>
+DataNode<TPrecision,VDimension,TValuePrecision>
 ::SetPoint(PointType point)
 {
   m_NodeType = FEATURE_POINT;
@@ -50,17 +50,17 @@ DataNode<TPrecision,VDimension>
   m_Data.valid = true;
 }
 
-template <class TPrecision, unsigned int VDimension>
-  void DataNode<TPrecision,VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
+  void DataNode<TPrecision,VDimension,TValuePrecision>
 ::SetLine(LineType* line)
 {
   m_NodeType = FEATURE_LINE;
   m_Data.line = line;
   m_Data.valid = true;
 }
-template <class TPrecision, unsigned int VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
  void
-DataNode<TPrecision,VDimension>
+DataNode<TPrecision,VDimension,TValuePrecision>
 ::SetPolygonExteriorRing(PolygonType* polygon)
 {
   m_NodeType = FEATURE_POLYGON;
@@ -72,9 +72,9 @@ DataNode<TPrecision,VDimension>
   m_Data.valid = true;
 }
 
-template <class TPrecision, unsigned int VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
  void
-DataNode<TPrecision,VDimension>
+DataNode<TPrecision,VDimension,TValuePrecision>
   ::SetPolygonInteriorRings(PolygonListType* polygonList)
 {
   m_NodeType = FEATURE_POLYGON;
@@ -86,10 +86,10 @@ DataNode<TPrecision,VDimension>
   m_Data.valid = true;
 }
 
-template <class TPrecision, unsigned int VDimension>
-typename DataNode<TPrecision,VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
+typename DataNode<TPrecision,VDimension,TValuePrecision>
 ::PointType
-DataNode<TPrecision,VDimension>
+DataNode<TPrecision,VDimension,TValuePrecision>
 ::GetPoint() const
 {
   if(!IsPointFeature())
@@ -102,10 +102,10 @@ DataNode<TPrecision,VDimension>
      }
    return m_Data.point;
 }
-template <class TPrecision, unsigned int VDimension>
-typename DataNode<TPrecision,VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
+typename DataNode<TPrecision,VDimension,TValuePrecision>
 ::LinePointerType
-DataNode<TPrecision,VDimension>
+DataNode<TPrecision,VDimension,TValuePrecision>
 ::GetLine() const
 {
   if(!IsLineFeature())
@@ -119,10 +119,10 @@ DataNode<TPrecision,VDimension>
    return m_Data.line;
 }
 
-template <class TPrecision, unsigned int VDimension>
-typename DataNode<TPrecision,VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
+typename DataNode<TPrecision,VDimension,TValuePrecision>
 ::PolygonPointerType
-DataNode<TPrecision,VDimension>
+DataNode<TPrecision,VDimension,TValuePrecision>
 ::GetPolygonExteriorRing() const
 {
    if(!IsPolygonFeature())
@@ -136,10 +136,10 @@ DataNode<TPrecision,VDimension>
    return m_Data.exteriorRing;
 }
 
-template <class TPrecision, unsigned int VDimension>
-typename DataNode<TPrecision,VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
+typename DataNode<TPrecision,VDimension,TValuePrecision>
 ::PolygonListPointerType
-DataNode<TPrecision,VDimension>
+DataNode<TPrecision,VDimension,TValuePrecision>
 ::GetPolygonInteriorRings() const
 {
    if(!IsPolygonFeature())
@@ -153,18 +153,18 @@ DataNode<TPrecision,VDimension>
    return m_Data.interiorRings;
 }
 
-template <class TPrecision, unsigned int VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 void
-DataNode<TPrecision,VDimension>
+DataNode<TPrecision,VDimension,TValuePrecision>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   os<<indent<<this->GetNodeTypeAsString();
 }
 
 
-template <class TPrecision, unsigned int VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 std::string
-DataNode<TPrecision,VDimension>
+DataNode<TPrecision,VDimension,TValuePrecision>
 ::GetNodeTypeAsString() const
 {
   itk::OStringStream oss;
@@ -224,16 +224,16 @@ DataNode<TPrecision,VDimension>
   return oss.str();
 }
 
-template <class TPrecision, unsigned int VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 void
-DataNode<TPrecision,VDimension>
+DataNode<TPrecision,VDimension,TValuePrecision>
 ::SetField(std::string key, std::string value)
 {
   m_FieldMap[key] = value;
 }
-template <class TPrecision, unsigned int VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
   std::string
-DataNode<TPrecision,VDimension>
+DataNode<TPrecision,VDimension,TValuePrecision>
 ::GetField(std::string key) const
 {
   if(HasField(key))
@@ -245,24 +245,24 @@ DataNode<TPrecision,VDimension>
       return "Unknown Key";
     }
 }
-template <class TPrecision, unsigned int VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
   void
-DataNode<TPrecision,VDimension>
+DataNode<TPrecision,VDimension,TValuePrecision>
 ::RemoveField(std::string key)
 {
   m_FieldMap.erase(key);
 }
-template <class TPrecision, unsigned int VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 bool
-DataNode<TPrecision,VDimension>
+DataNode<TPrecision,VDimension,TValuePrecision>
 ::HasField(std::string key) const
 {
   return (m_FieldMap.find(key)!=m_FieldMap.end());
 }
-template <class TPrecision, unsigned int VDimension>
-typename DataNode<TPrecision,VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
+typename DataNode<TPrecision,VDimension,TValuePrecision>
 ::FieldType
-DataNode<TPrecision,VDimension>
+DataNode<TPrecision,VDimension,TValuePrecision>
 ::GetNthField(unsigned int index) const
 {
   if(index<GetNumberOfFields())
@@ -277,90 +277,90 @@ DataNode<TPrecision,VDimension>
     }
   return FieldType("No key","No value");
 }
-template <class TPrecision, unsigned int VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
   unsigned int
-DataNode<TPrecision,VDimension>
+DataNode<TPrecision,VDimension,TValuePrecision>
 ::GetNumberOfFields() const
 {
   return m_FieldMap.size();
 }
-template <class TPrecision, unsigned int VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
   void
-DataNode<TPrecision,VDimension>
+DataNode<TPrecision,VDimension,TValuePrecision>
 ::ClearFields()
 {
   m_FieldMap.clear();
 }
-template <class TPrecision, unsigned int VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
   bool
-DataNode<TPrecision,VDimension>
+DataNode<TPrecision,VDimension,TValuePrecision>
 ::IsDocument() const
 {
   return m_NodeType == DOCUMENT;
 }
-template <class TPrecision, unsigned int VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
   bool
-DataNode<TPrecision,VDimension>
+DataNode<TPrecision,VDimension,TValuePrecision>
 ::IsRoot() const
 {
   return m_NodeType == ROOT;
 }
-template <class TPrecision, unsigned int VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
   bool
-DataNode<TPrecision,VDimension>
+DataNode<TPrecision,VDimension,TValuePrecision>
 ::IsFolder() const
 {
   return m_NodeType == FOLDER;
 }
-template <class TPrecision, unsigned int VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
   bool
-DataNode<TPrecision,VDimension>
+DataNode<TPrecision,VDimension,TValuePrecision>
 ::IsPointFeature() const
 {
   return m_NodeType == FEATURE_POINT;
 }
-template <class TPrecision, unsigned int VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
   bool
-DataNode<TPrecision,VDimension>
+DataNode<TPrecision,VDimension,TValuePrecision>
 ::IsLineFeature() const
 {
   return m_NodeType == FEATURE_LINE;
 }
-template <class TPrecision, unsigned int VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
   bool
-DataNode<TPrecision,VDimension>
+DataNode<TPrecision,VDimension,TValuePrecision>
 ::IsPolygonFeature() const
 {
   return m_NodeType == FEATURE_POLYGON;
 }
 
-template <class TPrecision, unsigned int VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
   bool
-DataNode<TPrecision,VDimension>
+DataNode<TPrecision,VDimension,TValuePrecision>
 ::IsMultiPointFeature() const
 {
   return m_NodeType == FEATURE_MULTIPOINT;
 }
 
-template <class TPrecision, unsigned int VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
   bool
-DataNode<TPrecision,VDimension>
+DataNode<TPrecision,VDimension,TValuePrecision>
 ::IsMultiLineFeature() const
 {
   return m_NodeType == FEATURE_MULTILINE;
 }
 
-template <class TPrecision, unsigned int VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
   bool
-DataNode<TPrecision,VDimension>
+DataNode<TPrecision,VDimension,TValuePrecision>
 ::IsMultiPolygonFeature() const
 {
   return m_NodeType = FEATURE_MULTIPOLYGON;
 }
 
-template <class TPrecision, unsigned int VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
   bool
-DataNode<TPrecision,VDimension>
+DataNode<TPrecision,VDimension,TValuePrecision>
 ::IsCollectionFeature() const
 {
   return m_NodeType == FEATURE_COLLECTION;
