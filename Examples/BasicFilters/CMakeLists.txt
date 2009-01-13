@@ -16,6 +16,10 @@ TARGET_LINK_LIBRARIES(PrintableImageFilterExample OTBCommon OTBIO)
 ADD_EXECUTABLE(IndexedToRGBExample IndexedToRGBExample.cxx )
 TARGET_LINK_LIBRARIES(IndexedToRGBExample OTBCommon OTBIO)
 
+ADD_EXECUTABLE(MeanShiftVectorImageFilterExample MeanShiftVectorImageFilterExample.cxx )
+TARGET_LINK_LIBRARIES(MeanShiftVectorImageFilterExample OTBCommon OTBIO)
+
+
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/BasicFilters)

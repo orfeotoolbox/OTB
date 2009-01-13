@@ -196,16 +196,16 @@ int main(int argc, char * argv[])
   typedef itk::RescaleIntensityImageFilter< ImageType,
                                    LabeledImageType> RescalerType;
 
-  RescalerType::Pointer rescaler = Rescaler::New();
-  rescaler->SetOutputMinimum( itk::NumericTraits<LabeledImageType>::Zero() );
-  rescaler->SetOutputMaximum( itk::NumericTraits<LabeledImageType>::max() );
+  RescalerType::Pointer rescaler = RescalerType::New();
+  rescaler->SetOutputMinimum( 0 );
+  rescaler->SetOutputMaximum( 255 );
 
-  witer3->SetFileName( filteredPretty );
+  writer3->SetFileName( filteredPretty );
   rescaler->SetInput( filter->GetOutput() );
   writer3->SetInput( rescaler->GetOutput() );
   writer3->Update();
 
-  witer3->SetFileName( clusteredPretty );
+  writer3->SetFileName( clusteredPretty );
   rescaler->SetInput( filter->GetClusteredOutput() );
   writer3->SetInput( rescaler->GetOutput() );
   writer3->Update();
