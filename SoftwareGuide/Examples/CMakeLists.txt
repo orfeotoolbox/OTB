@@ -216,6 +216,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration5.cxx
   ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration9.cxx
   ${OTB_SOURCE_DIR}/Examples/Projections/SensorModelExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/Projections/MapProjectionExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Projections/OrthoRectificationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Projections/VectorDataProjectionExample.cxx
   ${OTB_SOURCE_DIR}/Examples/DisparityMap/SimpleDisparityMapEstimationExample.cxx
