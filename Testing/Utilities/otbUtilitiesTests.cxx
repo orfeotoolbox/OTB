@@ -66,5 +66,6 @@ REGISTER_TEST(kmlhellohref);
 REGISTER_TEST(kmlhellokmz);
 REGISTER_TEST(kmlhelloregion);
 REGISTER_TEST(kmlprettykml);
+REGISTER_TEST(SiftFast);
 }
 
