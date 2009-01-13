@@ -26,18 +26,37 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {}
-//    OUTPUTS: {}, {}
+//    OUTPUTS: {MSFilteredOutput.png}, {MSClusteredOutput.png}, {MSLabelledOutput.png}, {MSBoundariesOutput.png}
+// 5 50 20
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginLatex
 //
+//  This example demonstrates the use of the
+//  \doxygen{otb}{MeanShiftVectorImageFilter} class which implements
+//  filtering and clustering using the mean shift algorithm
+//  \cite{Comaniciu2002}. 
+//
+//  Software Guide : EndLatex
 
 #include "itkExceptionObject.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
-#include "otbMeanShiftVectorImageFilter.h"
 
+//  Software Guide : BeginLatex
+//
+//  Two implementations for the filter exist, one for scalar images
+//  (\doxygen{otb}{MeanShiftImageFilter}). And another one (the one
+//  presented in this example) for vector images. They have the same
+//  interface, so they can be used in the same way. We start by
+//  including the needed header file.
+//
+//  Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet
+#include "otbMeanShiftVectorImageFilter.h"
+// Software Guide : EndCodeSnippet
 int main(int argc, char * argv[])
 {
    if(argc != 10)
