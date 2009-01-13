@@ -43,4 +43,7 @@ REGISTER_TEST(otbImageToSURFKeyPointSetFilterOutputAscii);
 REGISTER_TEST(otbImageToFastSIFTKeyPointSetFilterNew);
 REGISTER_TEST(otbImageToFastSIFTKeyPointSetFilterOutputImage);
 REGISTER_TEST(otbImageToFastSIFTKeyPointSetFilterOutputAscii);
+REGISTER_TEST(otbKeyPointSetsMatchingFilterNew);
+REGISTER_TEST(otbKeyPointSetsMatchingFilter);
+REGISTER_TEST(otbLandmarkNew);
 }

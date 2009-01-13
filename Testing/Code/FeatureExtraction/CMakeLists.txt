@@ -906,7 +906,24 @@ ADD_TEST(feTvImageToFastSIFTKeyPointSetFilterSceneOutputAscii ${FEATUREEXTRACTIO
 		6  
 )
 
-				     
+
+
+# --------- MatchingFilter ----------------
+ADD_TEST(KeyPointSetsMatchingFilterNew ${FEATUREEXTRACTION_TESTS9} 
+	otbKeyPointSetsMatchingFilterNew)
+
+ADD_TEST(KeyPointSetsMatchingFilter ${FEATUREEXTRACTION_TESTS9}
+--compare-ascii ${EPS}				   
+	${BASELINE}/feTvKeyPointSetsMatchingFilterOutputAscii.txt
+	${TEMP}/feTvKeyPointSetsMatchingFilterOutputAscii.txt	
+    otbKeyPointSetsMatchingFilter
+	${TEMP}/feTvKeyPointSetsMatchingFilterOutputAscii.txt
+	0.6 0
+)
+	
+#--------- LandMark
+ADD_TEST(LandmarkNew ${FEATUREEXTRACTION_TESTS9} 
+	otbLandmarkNew)			     
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
@@ -1020,6 +1037,9 @@ otbImageToSURFKeyPointSetFilterOutputAscii.cxx
 otbImageToFastSIFTKeyPointSetFilterNew.cxx
 otbImageToFastSIFTKeyPointSetFilterOutputImage.cxx
 otbImageToFastSIFTKeyPointSetFilterOutputAscii.cxx
+otbKeyPointSetsMatchingFilterNew.cxx
+otbKeyPointSetsMatchingFilter.cxx
+otbLandmarkNew.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
