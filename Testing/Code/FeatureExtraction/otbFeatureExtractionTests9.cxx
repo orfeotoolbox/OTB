@@ -40,4 +40,5 @@ REGISTER_TEST(otbImageFittingPolygonListFilterNew);
 REGISTER_TEST(otbImageToSURFKeyPointSetFilterNew);
 REGISTER_TEST(otbImageToSURFKeyPointSetFilterOutputImage);
 REGISTER_TEST(otbImageToSURFKeyPointSetFilterOutputAscii);
+REGISTER_TEST(otbImageToFastSIFTKeyPointSetFilterNew);
 }
