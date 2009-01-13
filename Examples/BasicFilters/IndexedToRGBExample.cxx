@@ -30,7 +30,7 @@
 
 //  Software Guide : BeginLatex
 //
-//  Some algorithm produces as an output an indexed image. In such images,
+//  Some algorithms produce as an output an indexed image. In such images,
 // each pixel is given a value according to the region number it belongs to.
 // This value starting at 0 or 1 is usually an integer value.
 // Often, such images are produced by segmentation or classification algorithm.

@@ -59,7 +59,7 @@ namespace otb
    *
    * This is the implementation of the mean shift clustering and edge-preserving smoothing filter adapted to
    * otb::VectorImage or itk::VectorImage. For the full documentation, please refer to the
-   * base class otb::MeanShiftImageFilterBase.
+   * base class otb::MeanShiftImageFilter.
    *
    * \sa MeanShiftImageFilter
    * \ingroup ImageEnhancement
