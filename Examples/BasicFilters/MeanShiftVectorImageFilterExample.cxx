@@ -25,7 +25,7 @@
 #endif
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {}
+//    INPUTS: {ROI_QB_MUL_1.png}
 //    OUTPUTS: {MSFilteredOutput.png}, {MSClusteredOutput.png}, {MSLabelledOutput.png}, {MSBoundariesOutput.png}
 // 5 50 20
 //  Software Guide : EndCommandLineArgs
