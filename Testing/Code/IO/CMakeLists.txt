@@ -176,7 +176,6 @@ ADD_TEST(ioTuMWImageIOCanReadIMG ${IO_TESTS1} otbMWImageIOTestCanRead
 ADD_TEST(ioTuMWImageIOCanReadMW ${IO_TESTS1} otbMWImageIOTestCanRead
         ${BASELINE}/QB_Toulouse_Ortho_PAN.mw)
 
-
 ADD_TEST(ioTvImageFileReaderMW2TIFIMG ${IO_TESTS1}
   --compare-image ${TOL}        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
                                 ${TEMP}/ioImageFileReaderMW2TIF.tif
@@ -190,7 +189,6 @@ ADD_TEST(ioTvImageFileReaderMW2TIFMW ${IO_TESTS1}
         otbImageFileReaderTestFloat
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
         ${TEMP}/ioImageFileReaderMW2TIF.tif )
-
 
 
 # CanWrite()
@@ -452,6 +450,12 @@ ADD_TEST(ioTuGDALImageIOCanRead_ENVI ${IO_TESTS5} otbGDALImageIOTestCanRead
 #        ${INPUTDATA}/poupees_1canal.c1.hdr )
         ${INPUTDATA}/poupees_1canal.c1 )
 
+ADD_TEST(ioTuGDALImageIOCanRead_PDS1 ${IO_TESTS5} otbGDALImageIOTestCanRead
+        ${INPUTDATA}/pdsImage1.img )
+
+ADD_TEST(ioTuGDALImageIOCanRead_PDS2 ${IO_TESTS5} otbGDALImageIOTestCanRead
+        ${INPUTDATA}/pdsImage2.img )
+
 IF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(ioTuGDALImageIOCanRead_RADARSAT ${IO_TESTS5} otbGDALImageIOTestCanRead
@@ -648,6 +652,7 @@ ADD_TEST(ioTvImageFileWriterPNG2BSQ ${IO_TESTS8}
         otbImageFileWriterTest
         ${INPUTDATA}/cthead1.png
         ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1.hdr )
+
 ADD_TEST(ioTvImageFileReaderENVI2PNG ${IO_TESTS8}
   --compare-image ${TOL}   ${INPUTDATA}/cthead1.png
                     ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1_2.png
@@ -655,6 +660,19 @@ ADD_TEST(ioTvImageFileReaderENVI2PNG ${IO_TESTS8}
         ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1.hdr
         ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1_2.png )
 
+ADD_TEST(ioTvImageFileReaderPDS2TIFF1 ${IO_TESTS8}
+  --compare-image ${TOL}   ${INPUTDATA}/pdsImage1.img
+                           ${TEMP}/ioTvImageFileReaderPDS2TIFF1.tif
+        otbImageFileReaderTest
+        ${INPUTDATA}/pdsImage1.img
+        ${TEMP}/ioTvImageFileReaderPDS2TIFF1.tif)
+
+ADD_TEST(ioTvImageFileReaderPDS2TIFF2 ${IO_TESTS8}
+  --compare-image ${TOL}   ${INPUTDATA}/pdsImage2.img
+                           ${TEMP}/ioTvImageFileReaderPDS2TIFF2.tif
+        otbImageFileReaderTest
+        ${INPUTDATA}/pdsImage2.img
+        ${TEMP}/ioTvImageFileReaderPDS2TIFF2.tif)
 # RGB
 
 ADD_TEST(ioTvImageFileWriterRGB_PNG2PNG ${IO_TESTS8}
