@@ -880,6 +880,11 @@ ADD_TEST(feTvImageFittingPolygonListFilter ${FEATUREEXTRACTION_TESTS9}
 		5 10
 )
 
+# -------            otb::ImageToSIFTKeyPointSetFilter   -------------
+
+ADD_TEST(feTuImageToFastSIFTKeyPointSetFilterNew ${FEATUREEXTRACTION_TESTS9} 
+         otbImageToFastSIFTKeyPointSetFilterNew)
+
 	
 				     
 
@@ -992,6 +997,10 @@ otbImageFittingPolygonListFilterNew.cxx
 otbImageToSURFKeyPointSetFilterNew.cxx	
 otbImageToSURFKeyPointSetFilterOutputImage.cxx
 otbImageToSURFKeyPointSetFilterOutputAscii.cxx
+otbImageToFastSIFTKeyPointSetFilterNew.cxx
+#otbImageToFastSIFTKeyPointSetFilterOutputAscii.cxx
+#otbImageToFastSIFTKeyPointSetFilterOutputImage.cx
+
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
