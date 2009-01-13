@@ -67,7 +67,7 @@ namespace otb
    * Mean shift can be used for edge-preserving smoothing, or for clustering. The GetOutput() method will allow
    * you to get the smoothed image, whereas the
    * GetClusteredOuptut() methods returns the clustered output. The GetLabeledClusteredOutput() returns
-   * a labeled clustered images, and the GetClusterBoundariesOutput()
+   * a labeled clustered image, and the GetClusterBoundariesOutput()
    * an image of the cluster boundaries.
    *
    * The MinimumRegionSize parameter allows you to prune small clustered regions.
