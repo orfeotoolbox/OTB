@@ -64,6 +64,10 @@ void FltkWriterWatcher
   m_WriterProgress->label("writing");
   m_WriterProgress->align(FL_ALIGN_INSIDE);
   m_Window->end();
+
+  m_FilterProgress->show();
+  m_WriterProgress->show();
+  Fl::check();
 }
 
 FltkWriterWatcher

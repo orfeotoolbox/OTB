@@ -63,7 +63,8 @@ public:
     m_Window->hide();
   }
 
-  virtual void EndFilter(){}
+  virtual void EndFilter()
+  {}
 
 protected:
 
@@ -93,6 +94,7 @@ protected:
     m_Window->show();
     m_FilterProgress->show();
     m_WriterProgress->show();
+    Fl::check();
   }
 
 
@@ -102,6 +104,7 @@ protected:
     m_Window->show();
     m_FilterProgress->show();
     m_WriterProgress->show();
+    Fl::check();
   }
 
   void BuildGUI(int x, int y, int w, int h,const char * comment);
