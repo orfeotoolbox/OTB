@@ -345,8 +345,12 @@ namespace otb
   ::IncrementalOpenGlBufferUpdate()
   {
     IndexType focusOffset;
-    focusOffset[0]=static_cast<long>(static_cast<double>(m_ViewedRegionCenter[0]-m_OldViewedRegionCenter[0])/m_SpacingZoomFactor);
-    focusOffset[1]=static_cast<long>(static_cast<double>(m_ViewedRegionCenter[1]-m_OldViewedRegionCenter[1])/m_SpacingZoomFactor);
+    focusOffset[0]=static_cast<long>(static_cast<double>(
+                                     m_ViewedRegionCenter[0]-m_OldViewedRegionCenter[0])/m_SpacingZoomFactor
+                                    );
+    focusOffset[1]=static_cast<long>(static_cast<double>(
+                                     m_ViewedRegionCenter[1]-m_OldViewedRegionCenter[1])/m_SpacingZoomFactor
+                                    );
 
     IndexType newBufferedRegionIndex;
 
@@ -360,9 +364,9 @@ namespace otb
     m_BufferedRegion.SetSize(newBufferedRegionSize);
 
     newBufferedRegionIndex[0]=(static_cast<long>(m_DisplayExtent.GetSize()[0])
-             -static_cast<long>(m_BufferedRegion.GetSize()[0]))/2;
+        -static_cast<long>(m_BufferedRegion.GetSize()[0]))/2;
     newBufferedRegionIndex[1]=(static_cast<long>(m_DisplayExtent.GetSize()[1])
-             -static_cast<long>(m_BufferedRegion.GetSize()[1]))/2;
+        -static_cast<long>(m_BufferedRegion.GetSize()[1]))/2;
     newBufferedRegionIndex[0]-=focusOffset[0];
     newBufferedRegionIndex[1]-=focusOffset[1];
     m_BufferedRegion.SetIndex(newBufferedRegionIndex);
@@ -370,159 +374,161 @@ namespace otb
     PointType center;
     m_Image->TransformIndexToPhysicalPoint(m_ViewedRegionCenter,center);
 
-     if(m_SpacingZoomFactor != m_OldSpacingZoomFactor)
-       {
-  m_BufferedRegion.Crop(m_DisplayExtent);
-
-  SpacingType spacing = m_Image->GetSpacing()*m_SpacingZoomFactor;
-  SpacingType oldSpacing = m_Image->GetSpacing()*m_OldSpacingZoomFactor;
-
-  PointType origin;
-  origin[0]=center[0]-(static_cast<double>(this->m_DisplayExtent.GetSize()[0])/2-1)*spacing[0];
-  origin[1]=center[1]-(static_cast<double>(this->m_DisplayExtent.GetSize()[1])/2-1)*spacing[1];
-
-  PointType oldOrigin;
-  oldOrigin[0]=center[0]-(static_cast<double>(this->m_DisplayExtent.GetSize()[0])/2-1)*oldSpacing[0];
-  oldOrigin[1]=center[1]-(static_cast<double>(this->m_DisplayExtent.GetSize()[1])/2-1)*oldSpacing[1];
-
-  PointType oldBufferedUpperLeft;
-  oldBufferedUpperLeft[0]=oldOrigin[0]+static_cast<double>(m_OldBufferedRegion.GetIndex()[0])*oldSpacing[0];
-  oldBufferedUpperLeft[1]=oldOrigin[1]+static_cast<double>(m_OldBufferedRegion.GetIndex()[1])*oldSpacing[1];
-
-  PointType bufferedUpperLeft;
-  bufferedUpperLeft[0]=origin[0]+static_cast<double>(m_BufferedRegion.GetIndex()[0])*spacing[0];
-  bufferedUpperLeft[1]=origin[1]+static_cast<double>(m_BufferedRegion.GetIndex()[1])*spacing[1];
-
-  unsigned char *  newBuffer = NULL;
-  unsigned int bufferLenght = 3*m_BufferedRegion.GetSize()[0]*m_BufferedRegion.GetSize()[1];
-
-  newBuffer = new unsigned char[bufferLenght];
-  typename ImageListType::Pointer bandList;
-  unsigned int index = 0;
-  PixelType interpolatedValue = 0;
-  PointType interpolatedPos;
-  interpolatedPos.Fill(0);
-  unsigned int numberOfSplits=1;
-
-  unsigned int optiCount = 0;
-  InterpolatorPointerType interpolator;
-  if(m_SpacingZoomFactor>1)
+    if(m_SpacingZoomFactor != m_OldSpacingZoomFactor)
     {
-      numberOfSplits=max((static_cast<unsigned int>(m_SpacingZoomFactor))*(static_cast<unsigned int>(m_SpacingZoomFactor)),1U);
-      interpolator = m_ZoomOutInterpolator;
-    }
-  else
-    {
-      interpolator = m_ZoomInInterpolator;
-    }
+      m_BufferedRegion.Crop(m_DisplayExtent);
 
-  unsigned int splitterNumberOfSplits = m_Splitter->GetNumberOfSplits(m_BufferedRegion,numberOfSplits);
+      SpacingType spacing = m_Image->GetSpacing()*m_SpacingZoomFactor;
+      SpacingType oldSpacing = m_Image->GetSpacing()*m_OldSpacingZoomFactor;
 
-  for(unsigned int splitIndex = 0;splitIndex<splitterNumberOfSplits;++splitIndex)
-    {
-      RegionType splitRegion = m_Splitter->GetSplit(splitIndex,splitterNumberOfSplits,m_BufferedRegion);
-      m_RequestedRegion = ComputeRequestedRegion(splitRegion);
-      if(! m_RequestedRegion.Crop(m_Image->GetLargestPossibleRegion()))
-        {
-    SizeType nullSize;
-    nullSize.Fill(0);
-    IndexType nullIndex;
-    nullIndex.Fill(0);
-    m_RequestedRegion.SetSize(nullSize);
-    m_RequestedRegion.SetIndex(nullIndex);
-        }
-      m_DecompositionFilter = VectorImageDecompositionFilterType::New();
-      m_DecompositionFilter->SetInput(m_Image);
-      bandList = m_DecompositionFilter->GetOutput();
-      bandList->UpdateOutputInformation();
-      bandList->GetNthElement(m_RedChannelIndex)->SetRequestedRegion(m_RequestedRegion);
-      if(m_ViewModelIsRGB)
-        {
-    bandList->GetNthElement(m_GreenChannelIndex)->SetRequestedRegion(m_RequestedRegion);
-    bandList->GetNthElement(m_BlueChannelIndex)->SetRequestedRegion(m_RequestedRegion);
-        }
-      bandList->PropagateRequestedRegion();
-      bandList->UpdateOutputData();
+      PointType origin;
+      origin[0]=center[0]-(static_cast<double>(this->m_DisplayExtent.GetSize()[0])/2-1)*spacing[0];
+      origin[1]=center[1]-(static_cast<double>(this->m_DisplayExtent.GetSize()[1])/2-1)*spacing[1];
 
+      PointType oldOrigin;
+      oldOrigin[0]=center[0]-(static_cast<double>(this->m_DisplayExtent.GetSize()[0])/2-1)*oldSpacing[0];
+      oldOrigin[1]=center[1]-(static_cast<double>(this->m_DisplayExtent.GetSize()[1])/2-1)*oldSpacing[1];
 
-      PointType upperLeft;
-      upperLeft[0]=origin[0]+static_cast<double>(splitRegion.GetIndex()[0])*spacing[0];
-      upperLeft[1]=origin[1]+static_cast<double>(splitRegion.GetIndex()[1])*spacing[1];
+      PointType oldBufferedUpperLeft;
+      oldBufferedUpperLeft[0]=oldOrigin[0]+static_cast<double>(m_OldBufferedRegion.GetIndex()[0])*oldSpacing[0];
+      oldBufferedUpperLeft[1]=oldOrigin[1]+static_cast<double>(m_OldBufferedRegion.GetIndex()[1])*oldSpacing[1];
 
+      PointType bufferedUpperLeft;
+      bufferedUpperLeft[0]=origin[0]+static_cast<double>(m_BufferedRegion.GetIndex()[0])*spacing[0];
+      bufferedUpperLeft[1]=origin[1]+static_cast<double>(m_BufferedRegion.GetIndex()[1])*spacing[1];
 
-      interpolatedPos[1]=upperLeft[1];
-      for(unsigned int j = 0;j<splitRegion.GetSize()[1];++j)
-        {
-    interpolatedPos[0]=upperLeft[0];
-    for(unsigned int i = 0;i<splitRegion.GetSize()[0];++i)
+      unsigned char *  newBuffer = NULL;
+      unsigned int bufferLenght = 3*m_BufferedRegion.GetSize()[0]*m_BufferedRegion.GetSize()[1];
+
+      newBuffer = new unsigned char[bufferLenght];
+      typename ImageListType::Pointer bandList;
+      unsigned int index = 0;
+      PixelType interpolatedValue = 0;
+      PointType interpolatedPos;
+      interpolatedPos.Fill(0);
+      unsigned int numberOfSplits=1;
+
+      unsigned int optiCount = 0;
+      InterpolatorPointerType interpolator;
+      if(m_SpacingZoomFactor>1)
       {
-
-        long indexInOldBuffer = IndexInOldGrid(interpolatedPos,oldBufferedUpperLeft,oldSpacing,m_OldBufferedRegion.GetSize());
-        if(indexInOldBuffer>0)
-          {
-      newBuffer[index] = m_OpenGlBuffer[indexInOldBuffer];
-      newBuffer[index+1] = m_OpenGlBuffer[indexInOldBuffer+1];
-      newBuffer[index+2] = m_OpenGlBuffer[indexInOldBuffer+2];
-      index+=3;
-      optiCount++;
-          }
-        else
-          {
-      interpolator->SetInputImage(bandList->GetNthElement(m_RedChannelIndex));
-      if(interpolator->IsInsideBuffer(interpolatedPos))
-        {
-          interpolatedValue = static_cast<PixelType>(m_ZoomInInterpolator->Evaluate(interpolatedPos));
-        }
-      else
-        {
-          interpolatedValue = 0;
-        }
-      newBuffer[index] = Normalize(interpolatedValue,m_RedChannelIndex);
-      if(m_ViewModelIsRGB)
-        {
-          m_ZoomInInterpolator->SetInputImage(bandList->GetNthElement(m_GreenChannelIndex));
-          if( m_ZoomInInterpolator->IsInsideBuffer(interpolatedPos))
-            {
-        interpolatedValue = static_cast<PixelType>(interpolator->Evaluate(interpolatedPos));
-            }
-          else
-            {
-        interpolatedValue = 0;
-            }
-          newBuffer[index+1] = Normalize(interpolatedValue,m_GreenChannelIndex);
-          interpolator->SetInputImage(bandList->GetNthElement(m_BlueChannelIndex));
-          if( interpolator->IsInsideBuffer(interpolatedPos))
-            {
-        interpolatedValue = static_cast<PixelType>(interpolator->Evaluate(interpolatedPos));
-            }
-          else
-            {
-        interpolatedValue = 0;
-            }
-          newBuffer[index+2] = Normalize(interpolatedValue,m_BlueChannelIndex);
-          index+=3;
-        }
-      else
-        {
-          newBuffer[index+1] = Normalize(interpolatedValue,m_RedChannelIndex);
-          newBuffer[index+2] = Normalize(interpolatedValue,m_RedChannelIndex);
-          index+=3;
-        }
-           }
-        interpolatedPos[0] +=spacing[0];
+        numberOfSplits=max(
+            (static_cast<unsigned int>(m_SpacingZoomFactor))*(static_cast<unsigned int>(m_SpacingZoomFactor))
+            ,1U);
+        interpolator = m_ZoomOutInterpolator;
       }
-    interpolatedPos[1] +=spacing[1];
-        }
-    }
-  if(m_OpenGlBuffer!=NULL)
-    {
-      delete [] m_OpenGlBuffer;
-    }
-  m_OpenGlBuffer = newBuffer;
+      else
+      {
+        interpolator = m_ZoomInInterpolator;
+      }
 
-  m_OldSpacingZoomFactor = m_SpacingZoomFactor;
+      unsigned int splitterNumberOfSplits = m_Splitter->GetNumberOfSplits(m_BufferedRegion,numberOfSplits);
+
+      for(unsigned int splitIndex = 0;splitIndex<splitterNumberOfSplits;++splitIndex)
+      {
+        RegionType splitRegion = m_Splitter->GetSplit(splitIndex,splitterNumberOfSplits,m_BufferedRegion);
+        m_RequestedRegion = ComputeRequestedRegion(splitRegion);
+        if(! m_RequestedRegion.Crop(m_Image->GetLargestPossibleRegion()))
+        {
+          SizeType nullSize;
+          nullSize.Fill(0);
+          IndexType nullIndex;
+          nullIndex.Fill(0);
+          m_RequestedRegion.SetSize(nullSize);
+          m_RequestedRegion.SetIndex(nullIndex);
+        }
+        m_DecompositionFilter = VectorImageDecompositionFilterType::New();
+        m_DecompositionFilter->SetInput(m_Image);
+        bandList = m_DecompositionFilter->GetOutput();
+        bandList->UpdateOutputInformation();
+        bandList->GetNthElement(m_RedChannelIndex)->SetRequestedRegion(m_RequestedRegion);
+        if(m_ViewModelIsRGB)
+        {
+          bandList->GetNthElement(m_GreenChannelIndex)->SetRequestedRegion(m_RequestedRegion);
+          bandList->GetNthElement(m_BlueChannelIndex)->SetRequestedRegion(m_RequestedRegion);
+        }
+        bandList->PropagateRequestedRegion();
+        bandList->UpdateOutputData();
+
+
+        PointType upperLeft;
+        upperLeft[0]=origin[0]+static_cast<double>(splitRegion.GetIndex()[0])*spacing[0];
+        upperLeft[1]=origin[1]+static_cast<double>(splitRegion.GetIndex()[1])*spacing[1];
+
+
+        interpolatedPos[1]=upperLeft[1];
+        for(unsigned int j = 0;j<splitRegion.GetSize()[1];++j)
+        {
+          interpolatedPos[0]=upperLeft[0];
+          for(unsigned int i = 0;i<splitRegion.GetSize()[0];++i)
+          {
+
+            long indexInOldBuffer = IndexInOldGrid(interpolatedPos,oldBufferedUpperLeft,oldSpacing,m_OldBufferedRegion.GetSize());
+            if(indexInOldBuffer>0)
+            {
+              newBuffer[index] = m_OpenGlBuffer[indexInOldBuffer];
+              newBuffer[index+1] = m_OpenGlBuffer[indexInOldBuffer+1];
+              newBuffer[index+2] = m_OpenGlBuffer[indexInOldBuffer+2];
+              index+=3;
+              optiCount++;
+            }
+            else
+            {
+              interpolator->SetInputImage(bandList->GetNthElement(m_RedChannelIndex));
+              if(interpolator->IsInsideBuffer(interpolatedPos))
+              {
+                interpolatedValue = static_cast<PixelType>(m_ZoomInInterpolator->Evaluate(interpolatedPos));
+              }
+              else
+              {
+                interpolatedValue = 0;
+              }
+              newBuffer[index] = Normalize(interpolatedValue,m_RedChannelIndex);
+              if(m_ViewModelIsRGB)
+              {
+                m_ZoomInInterpolator->SetInputImage(bandList->GetNthElement(m_GreenChannelIndex));
+                if( m_ZoomInInterpolator->IsInsideBuffer(interpolatedPos))
+                {
+                  interpolatedValue = static_cast<PixelType>(interpolator->Evaluate(interpolatedPos));
+                }
+                else
+                {
+                  interpolatedValue = 0;
+                }
+                newBuffer[index+1] = Normalize(interpolatedValue,m_GreenChannelIndex);
+                interpolator->SetInputImage(bandList->GetNthElement(m_BlueChannelIndex));
+                if( interpolator->IsInsideBuffer(interpolatedPos))
+                {
+                  interpolatedValue = static_cast<PixelType>(interpolator->Evaluate(interpolatedPos));
+                }
+                else
+                {
+                  interpolatedValue = 0;
+                }
+                newBuffer[index+2] = Normalize(interpolatedValue,m_BlueChannelIndex);
+                index+=3;
+              }
+              else
+              {
+                newBuffer[index+1] = Normalize(interpolatedValue,m_RedChannelIndex);
+                newBuffer[index+2] = Normalize(interpolatedValue,m_RedChannelIndex);
+                index+=3;
+              }
+            }
+            interpolatedPos[0] +=spacing[0];
+          }
+          interpolatedPos[1] +=spacing[1];
+        }
+      }
+      if(m_OpenGlBuffer!=NULL)
+      {
+        delete [] m_OpenGlBuffer;
+      }
+      m_OpenGlBuffer = newBuffer;
+
+      m_OldSpacingZoomFactor = m_SpacingZoomFactor;
+    }
   }
-}
 
   template <class TPixel>
   typename ImageAlternateViewer<TPixel>
@@ -676,9 +682,9 @@ namespace otb
     unsigned int bufferLenght = 3*region.GetSize()[0]*region.GetSize()[1];
 
     if(bufferLenght == 0)
-      {
-  return result;
-      }
+    {
+      return result;
+    }
 
     result = new unsigned char[bufferLenght];
 
@@ -694,14 +700,16 @@ namespace otb
 
     InterpolatorPointerType interpolator;
     if(m_SpacingZoomFactor>1)
-      {
-  numberOfSplits=max((static_cast<unsigned int>(m_SpacingZoomFactor))*(static_cast<unsigned int>(m_SpacingZoomFactor)),1U);
-  interpolator = m_ZoomOutInterpolator;
-      }
+    {
+      numberOfSplits=max(
+          (static_cast<unsigned int>(m_SpacingZoomFactor))*(static_cast<unsigned int>(m_SpacingZoomFactor))
+          ,1U);
+      interpolator = m_ZoomOutInterpolator;
+    }
     else
-      {
-  interpolator = m_ZoomInInterpolator;
-      }
+    {
+      interpolator = m_ZoomInInterpolator;
+    }
 
     unsigned int splitterNumberOfSplits = m_Splitter->GetNumberOfSplits(region,numberOfSplits);
 
@@ -714,93 +722,90 @@ namespace otb
     origin[1]=center[1]-(static_cast<double>(this->m_DisplayExtent.GetSize()[1])/2-1)*spacing[1];
 
     for(unsigned int splitIndex = 0;splitIndex<splitterNumberOfSplits;++splitIndex)
+    {
+      RegionType splitRegion = m_Splitter->GetSplit(splitIndex,splitterNumberOfSplits,region);
+
+      PointType upperLeft;
+      upperLeft[0]=origin[0]+(static_cast<double>(splitRegion.GetIndex()[0]))*spacing[0];
+      upperLeft[1]=origin[1]+(static_cast<double>(splitRegion.GetIndex()[1]))*spacing[1];
+      m_RequestedRegion = ComputeRequestedRegion(splitRegion);
+      if(!m_RequestedRegion.Crop(image->GetLargestPossibleRegion()))
       {
-  RegionType splitRegion = m_Splitter->GetSplit(splitIndex,splitterNumberOfSplits,region);
+        SizeType nullSize;
+        nullSize.Fill(0);
+        IndexType nullIndex;
+        nullIndex.Fill(0);
+        m_RequestedRegion.SetSize(nullSize);
+        m_RequestedRegion.SetIndex(nullIndex);
+      }
+      m_DecompositionFilter = VectorImageDecompositionFilterType::New();
+      m_DecompositionFilter->SetInput(image);
+      bandList = m_DecompositionFilter->GetOutput();
 
-  PointType upperLeft;
-  upperLeft[0]=origin[0]+(static_cast<double>(splitRegion.GetIndex()[0]))*spacing[0];
-  upperLeft[1]=origin[1]+(static_cast<double>(splitRegion.GetIndex()[1]))*spacing[1];
-  m_RequestedRegion = ComputeRequestedRegion(splitRegion);
-  if(!m_RequestedRegion.Crop(image->GetLargestPossibleRegion()))
-    {
-      SizeType nullSize;
-      nullSize.Fill(0);
-      IndexType nullIndex;
-      nullIndex.Fill(0);
-      m_RequestedRegion.SetSize(nullSize);
-      m_RequestedRegion.SetIndex(nullIndex);
-    }
-  m_DecompositionFilter = VectorImageDecompositionFilterType::New();
-  m_DecompositionFilter->SetInput(image);
-  bandList = m_DecompositionFilter->GetOutput();
+      bandList->UpdateOutputInformation();
+      bandList->GetNthElement(m_RedChannelIndex)->SetRequestedRegion(m_RequestedRegion);
+      if(rgb)
+      {
+        bandList->GetNthElement(m_GreenChannelIndex)->SetRequestedRegion(m_RequestedRegion);
+        bandList->GetNthElement(m_BlueChannelIndex)->SetRequestedRegion(m_RequestedRegion);
+      }
+      bandList->PropagateRequestedRegion();
+      bandList->UpdateOutputData();
 
-  bandList->UpdateOutputInformation();
-  bandList->GetNthElement(m_RedChannelIndex)->SetRequestedRegion(m_RequestedRegion);
-  if(rgb)
-    {
-      bandList->GetNthElement(m_GreenChannelIndex)->SetRequestedRegion(m_RequestedRegion);
-      bandList->GetNthElement(m_BlueChannelIndex)->SetRequestedRegion(m_RequestedRegion);
-    }
-  bandList->PropagateRequestedRegion();
-  bandList->UpdateOutputData();
+      filter.Stop();
 
-  filter.Stop();
-
-  interpolation.Start();
-  interpolatedPos[1]=upperLeft[1];
-  for(unsigned int j = 0;j<splitRegion.GetSize()[1];++j)
-    {
-      interpolatedPos[0]=upperLeft[0];
-      for(unsigned int i = 0;i<splitRegion.GetSize()[0];++i)
+      interpolation.Start();
+      interpolatedPos[1]=upperLeft[1];
+      for(unsigned int j = 0;j<splitRegion.GetSize()[1];++j)
+      {
+        interpolatedPos[0]=upperLeft[0];
+        for(unsigned int i = 0;i<splitRegion.GetSize()[0];++i)
         {
-    interpolator->SetInputImage(bandList->GetNthElement(m_RedChannelIndex));
-    if( interpolator->IsInsideBuffer(interpolatedPos))
-      {
-        interpolatedValue = static_cast<PixelType>(interpolator->Evaluate(interpolatedPos));
-      }
-    else
-      {
-        interpolatedValue = 0;
-      }
-    result[index] = Normalize(interpolatedValue,m_RedChannelIndex);
-    if(rgb)
-      {
-        interpolator->SetInputImage(bandList->GetNthElement(m_GreenChannelIndex));
-        if( interpolator->IsInsideBuffer(interpolatedPos))
+          interpolator->SetInputImage(bandList->GetNthElement(m_RedChannelIndex));
+          if( interpolator->IsInsideBuffer(interpolatedPos))
           {
-      interpolatedValue = static_cast<PixelType>( interpolator->Evaluate(interpolatedPos));
+            interpolatedValue = static_cast<PixelType>(interpolator->Evaluate(interpolatedPos));
           }
-        else
+          else
           {
-      interpolatedValue = 0;
+            interpolatedValue = 0;
           }
-        result[index+1] = Normalize(interpolatedValue,m_GreenChannelIndex);
-        interpolator->SetInputImage(bandList->GetNthElement(m_BlueChannelIndex));
-        if( interpolator->IsInsideBuffer(interpolatedPos))
+          result[index] = Normalize(interpolatedValue,m_RedChannelIndex);
+          if(rgb)
           {
-      interpolatedValue = static_cast<PixelType>(interpolator->Evaluate(interpolatedPos));
+            interpolator->SetInputImage(bandList->GetNthElement(m_GreenChannelIndex));
+            if( interpolator->IsInsideBuffer(interpolatedPos))
+            {
+              interpolatedValue = static_cast<PixelType>( interpolator->Evaluate(interpolatedPos));
+            }
+            else
+            {
+              interpolatedValue = 0;
+            }
+            result[index+1] = Normalize(interpolatedValue,m_GreenChannelIndex);
+            interpolator->SetInputImage(bandList->GetNthElement(m_BlueChannelIndex));
+            if( interpolator->IsInsideBuffer(interpolatedPos))
+            {
+              interpolatedValue = static_cast<PixelType>(interpolator->Evaluate(interpolatedPos));
+            }
+            else
+            {
+              interpolatedValue = 0;
+            }
+            result[index+2] = Normalize(interpolatedValue,m_BlueChannelIndex);
+            index+=3;
           }
-        else
+          else
           {
-      interpolatedValue = 0;
+            result[index+1] = Normalize(interpolatedValue,m_RedChannelIndex);
+            result[index+2] = Normalize(interpolatedValue,m_RedChannelIndex);
+            index+=3;
           }
-        result[index+2] = Normalize(interpolatedValue,m_BlueChannelIndex);
-        index+=3;
-      }
-    else
-      {
-        result[index+1] = Normalize(interpolatedValue,m_RedChannelIndex);
-        result[index+2] = Normalize(interpolatedValue,m_RedChannelIndex);
-        index+=3;
-      }
-    interpolatedPos[0] +=spacing[0];
+          interpolatedPos[0] +=spacing[0];
         }
-      interpolatedPos[1] +=spacing[1];
-    }
+        interpolatedPos[1] +=spacing[1];
       }
-
-
-
+    }
 
     interpolation.Stop();
     total.Stop();
@@ -815,83 +820,91 @@ namespace otb
     if(m_Updating)
       return 0;
     switch(event)
-      {
+    {
       case FL_PUSH:
-  {
-    if(!m_Drag)
       {
-        m_OldMousePos[0]= static_cast<long int>(static_cast<double>(m_DisplayExtent.GetSize()[0]/2)
-                  +(static_cast<double>(Fl::event_x())-static_cast<double>(m_DisplayExtent.GetSize()[0]/2))/m_OpenGlIsotropicZoom);
-        m_OldMousePos[1]= static_cast<long int>(static_cast<double>(m_DisplayExtent.GetSize()[1]/2)
-                  +(static_cast<double>(Fl::event_y())-static_cast<double>(m_DisplayExtent.GetSize()[1]/2))/m_OpenGlIsotropicZoom);
+        if(!m_Drag)
+        {
+          m_OldMousePos[0]= static_cast<long int>(
+              static_cast<double>(m_DisplayExtent.GetSize()[0]/2)
+              +(static_cast<double>(Fl::event_x())-static_cast<double>(m_DisplayExtent.GetSize()[0]/2))/m_OpenGlIsotropicZoom
+                                                 );
+          m_OldMousePos[1]= static_cast<long int>(
+              static_cast<double>(m_DisplayExtent.GetSize()[1]/2)
+              +(static_cast<double>(Fl::event_y())-static_cast<double>(m_DisplayExtent.GetSize()[1]/2))/m_OpenGlIsotropicZoom
+                                                 );
           m_Drag=true;
-        m_DragEventCounter=0;
+          m_DragEventCounter=0;
 
-        if(m_SubWindowRegion.IsInside(m_OldMousePos))
-    {
-      m_SubWindowMove = true;
-    }
-        else
-    {
-      m_OldViewedRegionCenter = m_ViewedRegionCenter;
-    }
+          if(m_SubWindowRegion.IsInside(m_OldMousePos))
+          {
+            m_SubWindowMove = true;
+          }
+          else
+          {
+            m_OldViewedRegionCenter = m_ViewedRegionCenter;
+          }
+        }
+        return 1;
       }
-     return 1;
-   }
 
       case FL_DRAG:
-  {
-     m_Drag=true;
-
-    int x =static_cast<int>(static_cast<double>(m_DisplayExtent.GetSize()[0]/2)
-          +(Fl::event_x()-static_cast<double>(m_DisplayExtent.GetSize()[0]/2))/m_OpenGlIsotropicZoom);
-    int y = static_cast<long int>(static_cast<double>(m_DisplayExtent.GetSize()[1]/2)
-          +(Fl::event_y()-static_cast<double>(m_DisplayExtent.GetSize()[1]/2))/m_OpenGlIsotropicZoom);
-    if(Fl::event_button()==FL_MIDDLE_MOUSE)
       {
-        if(!m_SubWindowMode)
-    m_SubWindowMode = true;
-        IndexType newIndex;
-        SizeType newSize;
+        m_Drag=true;
 
-        newIndex[0]=(x>m_OldMousePos[0] ? m_OldMousePos[0] : x);
-        newIndex[1]=(y>m_OldMousePos[1] ? m_OldMousePos[1] : y);
-        newSize[0]=vcl_abs(x-m_OldMousePos[0]);
-        newSize[1]=vcl_abs(y-m_OldMousePos[1]);
-        m_SubWindowRegion.SetIndex(newIndex);
-        m_SubWindowRegion.SetSize(newSize);
-        this->redraw();
-        m_DragEventCounter++;
-      }
-    else if(m_SubWindowMove)
-      {
-        IndexType index = m_SubWindowRegion.GetIndex();
-        index[0]+=(x-m_OldMousePos[0]);
-        index[1]+=(y-m_OldMousePos[1]);
-        m_SubWindowRegion.SetIndex(index);
-        m_OldMousePos[0]=x;
-        m_OldMousePos[1]=y;
-        this->redraw();
-        m_DragEventCounter++;
-      }
+        int x =static_cast<int>(static_cast<double>(m_DisplayExtent.GetSize()[0]/2)
+            +(Fl::event_x()-static_cast<double>(m_DisplayExtent.GetSize()[0]/2))/m_OpenGlIsotropicZoom);
+        int y = static_cast<long int>(static_cast<double>(m_DisplayExtent.GetSize()[1]/2)
+            +(Fl::event_y()-static_cast<double>(m_DisplayExtent.GetSize()[1]/2))/m_OpenGlIsotropicZoom);
+        if(Fl::event_button()==FL_MIDDLE_MOUSE)
+        {
+          if(!m_SubWindowMode)
+            m_SubWindowMode = true;
+          IndexType newIndex;
+          SizeType newSize;
 
-    else
-      {
-        SpacingType spacing = m_Image->GetSpacing()*m_SpacingZoomFactor;
-        PointType origin;
-        origin[0]=static_cast<double>(m_OldViewedRegionCenter[0])-static_cast<double>(this->m_DisplayExtent.GetSize()[0]/2)*spacing[0];
-        origin[1]=static_cast<double>(m_OldViewedRegionCenter[1])-static_cast<double>(this->m_DisplayExtent.GetSize()[1]/2)*spacing[1];
-        PointType newCenter;
-        newCenter[0]=origin[0]+static_cast<double>(m_OldMousePos[0]-x+static_cast<long>(this->m_DisplayExtent.GetSize()[0])/2)*spacing[0];
-        newCenter[1]=origin[1]+static_cast<double>(m_OldMousePos[1]-y+static_cast<long>(this->m_DisplayExtent.GetSize()[1])/2)*spacing[1];
-        m_Image->TransformPhysicalPointToIndex(newCenter,m_ViewedRegionCenter);
-        this->redraw();
-        m_DragEventCounter++;
-      }
+          newIndex[0]=(x>m_OldMousePos[0] ? m_OldMousePos[0] : x);
+          newIndex[1]=(y>m_OldMousePos[1] ? m_OldMousePos[1] : y);
+          newSize[0]=vcl_abs(x-m_OldMousePos[0]);
+          newSize[1]=vcl_abs(y-m_OldMousePos[1]);
+          m_SubWindowRegion.SetIndex(newIndex);
+          m_SubWindowRegion.SetSize(newSize);
+          this->redraw();
+          m_DragEventCounter++;
+        }
+        else if(m_SubWindowMove)
+        {
+          IndexType index = m_SubWindowRegion.GetIndex();
+          index[0]+=(x-m_OldMousePos[0]);
+          index[1]+=(y-m_OldMousePos[1]);
+          m_SubWindowRegion.SetIndex(index);
+          m_OldMousePos[0]=x;
+          m_OldMousePos[1]=y;
+          this->redraw();
+          m_DragEventCounter++;
+        }
 
-    DecorationRedraw();
-    return 1;
-  }
+        else
+        {
+          SpacingType spacing = m_Image->GetSpacing()*m_SpacingZoomFactor;
+          PointType origin;
+          origin[0]=static_cast<double>(m_OldViewedRegionCenter[0])
+              -static_cast<double>(this->m_DisplayExtent.GetSize()[0]/2)*spacing[0];
+          origin[1]=static_cast<double>(m_OldViewedRegionCenter[1])
+              -static_cast<double>(this->m_DisplayExtent.GetSize()[1]/2)*spacing[1];
+          PointType newCenter;
+          newCenter[0]=origin[0]
+              +static_cast<double>(m_OldMousePos[0]-x+static_cast<long>(this->m_DisplayExtent.GetSize()[0])/2)*spacing[0];
+          newCenter[1]=origin[1]
+              +static_cast<double>(m_OldMousePos[1]-y+static_cast<long>(this->m_DisplayExtent.GetSize()[1])/2)*spacing[1];
+          m_Image->TransformPhysicalPointToIndex(newCenter,m_ViewedRegionCenter);
+          this->redraw();
+          m_DragEventCounter++;
+        }
+
+        DecorationRedraw();
+        return 1;
+      }
 
       case FL_RELEASE:
   {
@@ -1010,7 +1023,12 @@ namespace otb
       }
 
     unsigned int lineOffset = static_cast<unsigned int>(-min(0L,m_BufferedRegion.GetIndex()[0]));
-    unsigned int lineOffsetEnd = static_cast<unsigned int>(-min(0L,static_cast<long>(m_DisplayExtent.GetSize()[0])-m_BufferedRegion.GetIndex()[0]-static_cast<long>(m_BufferedRegion.GetSize()[0])));
+    unsigned int lineOffsetEnd = static_cast<unsigned int>(
+        -min(0L,
+             static_cast<long>(m_DisplayExtent.GetSize()[0])-m_BufferedRegion.GetIndex()[0]
+                 -static_cast<long>(m_BufferedRegion.GetSize()[0])
+            )
+                                                          );
     unsigned int columnOffset = static_cast<unsigned int>(-min(0L,m_BufferedRegion.GetIndex()[1]));
     unsigned int offsety= columnOffset*(static_cast<int>(m_BufferedRegion.GetSize()[0]))*3;
     unsigned int offsetx = lineOffset*3;
@@ -1144,8 +1162,10 @@ namespace otb
       double zoomOffsetX = 0;
       double zoomOffsetY = 0;
 
-      zoomOffsetX = (1-m_OpenGlIsotropicZoom)*(static_cast<double>(m_DisplayExtent.GetSize()[0]/2)-static_cast<double>(region.GetIndex()[0]));
-      zoomOffsetY = (1-m_OpenGlIsotropicZoom)*( static_cast<double>(m_DisplayExtent.GetSize()[1]/2)-static_cast<double>(region.GetIndex()[1]));
+      zoomOffsetX = (1-m_OpenGlIsotropicZoom)
+          *(static_cast<double>(m_DisplayExtent.GetSize()[0]/2)-static_cast<double>(region.GetIndex()[0]));
+      zoomOffsetY = (1-m_OpenGlIsotropicZoom)
+          *( static_cast<double>(m_DisplayExtent.GetSize()[1]/2)-static_cast<double>(region.GetIndex()[1]));
 
 //      double movex = static_cast<double>(region.GetIndex()[0])+zoomOffsetX;
 //      double movey = static_cast<double>(m_DisplayExtent.GetSize()[1])-static_cast<double>(region.GetIndex()[1])-zoomOffsetY;
@@ -1206,13 +1226,16 @@ namespace otb
     double zoomOffsetX = 0;
     double zoomOffsetY = 0;
 
-    zoomOffsetX = (1-m_OpenGlIsotropicZoom)*(static_cast<double>(m_DisplayExtent.GetSize()[0]/2)-static_cast<double>(region.GetIndex()[0]));
-    zoomOffsetY = (1-m_OpenGlIsotropicZoom)*( static_cast<double>(m_DisplayExtent.GetSize()[1]/2)-static_cast<double>(region.GetIndex()[1]));
+    zoomOffsetX = (1-m_OpenGlIsotropicZoom)
+        *(static_cast<double>(m_DisplayExtent.GetSize()[0]/2)-static_cast<double>(region.GetIndex()[0]));
+    zoomOffsetY = (1-m_OpenGlIsotropicZoom)
+        *( static_cast<double>(m_DisplayExtent.GetSize()[1]/2)-static_cast<double>(region.GetIndex()[1]));
     double minx,maxx,miny,maxy;
 
     minx = static_cast<double>(region.GetIndex()[0])/**m_OpenGlIsotropicZoom*/+zoomOffsetX;
     maxx = minx + static_cast<double>(region.GetSize()[0])*m_OpenGlIsotropicZoom;
-    miny = static_cast<double>(m_DisplayExtent.GetSize()[1])-static_cast<double>(region.GetIndex()[1])/**m_OpenGlIsotropicZoom*/-zoomOffsetY;
+    miny = static_cast<double>(m_DisplayExtent.GetSize()[1])
+        -static_cast<double>(region.GetIndex()[1])/**m_OpenGlIsotropicZoom*/-zoomOffsetY;
     maxy = miny-static_cast<double>(region.GetSize()[1])*m_OpenGlIsotropicZoom;
 
     glEnable(GL_BLEND);
@@ -1233,14 +1256,14 @@ namespace otb
   ::ResetOpenGlContext(void)
   {
     if (!this->valid())
-      {
-  valid(1);
-   glLoadIdentity();
-   glViewport(0,0,m_DisplayExtent.GetSize()[0],m_DisplayExtent.GetSize()[1]);
-  glClearColor((float)0.0, (float)0.0, (float)0.0, (float)0.0);
-  glShadeModel(GL_SMOOTH);
-  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-      }
+    {
+      valid(1);
+      glLoadIdentity();
+      glViewport(0,0,m_DisplayExtent.GetSize()[0],m_DisplayExtent.GetSize()[1]);
+      glClearColor((float)0.0, (float)0.0, (float)0.0, (float)0.0);
+      glShadeModel(GL_SMOOTH);
+      glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    }
 
     glClear(GL_COLOR_BUFFER_BIT);    //this clears and paints to black
     glMatrixMode(GL_PROJECTION);
@@ -1261,28 +1284,29 @@ namespace otb
     PixelType max = 255;
     PixelType min = 0;
     if(channelIndex<m_MaxComponentValues.GetSize())
-      {
-  max = m_MaxComponentValues[channelIndex];
-      }
+    {
+      max = m_MaxComponentValues[channelIndex];
+    }
     if(channelIndex<m_MinComponentValues.GetSize())
-      {
-  min = m_MinComponentValues[channelIndex];
-      }
+    {
+      min = m_MinComponentValues[channelIndex];
+    }
     if(value>=max)
-      {
-  return 255;
-      }
+    {
+      return 255;
+    }
 
     else if(value<=min)
-      {
-  return 0;
-      }
+    {
+      return 0;
+    }
     else
-      {
-  return static_cast<unsigned char>(255.*static_cast<double>(value-min)
+    {
+      return static_cast<unsigned char>(255.*static_cast<double>(value-min)
             /static_cast<double>(max-min));
-      }
+    }
   }
+
   /**
    * PrintSelf Method
    */

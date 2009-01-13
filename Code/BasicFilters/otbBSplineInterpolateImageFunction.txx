@@ -140,8 +140,10 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
   SetInterpolationWeights( x, EvaluateIndex, weights, m_SplineOrder );
 
   //std::cout<<"EvaluateIndex: "<<std::endl;
-  //std::cout<<EvaluateIndex[0][0]<<"\t"<<EvaluateIndex[0][1]<<"\t"<<EvaluateIndex[0][2]<<"\t"<<EvaluateIndex[0][3]<<std::endl;
-  //std::cout<<EvaluateIndex[1][0]<<"\t"<<EvaluateIndex[1][1]<<"\t"<<EvaluateIndex[1][2]<<"\t"<<EvaluateIndex[1][3]<<std::endl;
+  //std::cout<<EvaluateIndex[0][0]<<"\t"<<EvaluateIndex[0][1]<<"\t"
+  //     <<EvaluateIndex[0][2]<<"\t"<<EvaluateIndex[0][3]<<std::endl;
+  //std::cout<<EvaluateIndex[1][0]<<"\t"<<EvaluateIndex[1][1]<<"\t"
+  //     <<EvaluateIndex[1][2]<<"\t"<<EvaluateIndex[1][3]<<std::endl;
 
   // Modify EvaluateIndex at the boundaries using mirror boundary conditions
   this->ApplyMirrorBoundaryConditions(EvaluateIndex, m_SplineOrder);
