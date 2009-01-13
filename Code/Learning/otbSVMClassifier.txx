@@ -21,7 +21,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbSVMClassifier.h"
 #include "otbMacro.h"
 
-namespace otb{
+namespace otb
+{
 
   template< class TSample, class TLabel >
   SVMClassifier< TSample, TLabel >
