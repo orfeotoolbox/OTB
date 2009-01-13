@@ -31,7 +31,7 @@ namespace otb
 template<class TValue>
 bool
 Polygon<TValue>
-::IsInside(VertexType point)
+::IsInside(VertexType point) const
 {
   double x = point[0];
   double y = point[1];
@@ -110,7 +110,7 @@ Polygon<TValue>
 template<class TValue>
 bool
 Polygon<TValue>
-::IsOnEdge(VertexType point)
+::IsOnEdge(VertexType point) const
 {
   //std::cout<<"Checking point "<<point<<std::endl;
   bool resp = false;
@@ -198,7 +198,7 @@ Polygon<TValue>
 template<class TValue>
 unsigned int
 Polygon<TValue>
-::NbCrossing(VertexType a, VertexType b)
+::NbCrossing(VertexType a, VertexType b) const
 {
   unsigned int resp = 0;
   VertexListConstIteratorType it = this->GetVertexList()->Begin();
@@ -232,7 +232,7 @@ Polygon<TValue>
 template<class TValue>
 unsigned int
 Polygon<TValue>
-::NbTouching(VertexType a, VertexType b)
+::NbTouching(VertexType a, VertexType b) const
 {
   unsigned int resp = 0;
   VertexListConstIteratorType it = this->GetVertexList()->Begin();
@@ -268,7 +268,7 @@ Polygon<TValue>
 template<class TValue>
 bool
 Polygon<TValue>
-::IsCrossing(VertexType a1, VertexType a2, VertexType b1, VertexType b2)
+::IsCrossing(VertexType a1, VertexType a2, VertexType b1, VertexType b2) const
 {
   bool resp = false;
   double xbmin = std::min(b1[0],b2[0]);
@@ -325,7 +325,7 @@ Polygon<TValue>
 template<class TValue>
 bool
 Polygon<TValue>
-::IsTouching(VertexType a1, VertexType a2, VertexType b1, VertexType  b2)
+::IsTouching(VertexType a1, VertexType a2, VertexType b1, VertexType  b2) const
 {
   bool resp = false;
   double xbmin = std::min(b1[0],b2[0]);
@@ -480,8 +480,9 @@ Polygon<TValue>
 template<class TValue>
     double
     Polygon<TValue>
-  ::GetSurface()
+  ::GetSurface() const
 {
+  double m_Surface;
   m_Surface = 0.0;
   VertexListConstIteratorType it =  this->GetVertexList()->Begin();
 
@@ -522,7 +523,7 @@ template<class TValue>
  */
  template < class TValue>
      double Polygon<TValue>
-  ::GetLength()
+  ::GetLength() const
 {
   double length = 0.0;
   VertexListConstIteratorType it =  this->GetVertexList()->Begin();
