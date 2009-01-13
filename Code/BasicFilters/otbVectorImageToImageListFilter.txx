@@ -23,6 +23,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include <vector>
 #include "otbMacro.h"
+#include "itkProgressReporter.h"
 
 namespace otb
 {
@@ -82,7 +83,6 @@ void
 VectorImageToImageListFilter<TVectorImageType,TImageList>
 ::GenerateData(void)
 {
-
   OutputImageListPointerType outputPtr = this->GetOutput();
   InputVectorImagePointerType inputPtr = this->GetInput();
 
@@ -103,6 +103,8 @@ VectorImageToImageListFilter<TVectorImageType,TImageList>
 
   InputIteratorType inputIt(inputPtr,outputPtr->GetNthElement(0)->GetRequestedRegion());
 
+  itk::ProgressReporter progress(this,0,outputPtr->GetNthElement(0)->GetRequestedRegion().GetNumberOfPixels());
+
   inputIt.GoToBegin();
   while(!inputIt.IsAtEnd())
     {
@@ -121,6 +123,7 @@ VectorImageToImageListFilter<TVectorImageType,TImageList>
 	      itkGenericExceptionMacro("End of image for band "<<counter<<" at index "<<(*it).GetIndex()<<" !");
 	    }
 	}
+      progress.CompletedPixel();
       ++inputIt;
     }
 }
