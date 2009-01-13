@@ -459,6 +459,9 @@ StreamingImageFileWriter<TInputImage>
    */
   otbMsgDebugMacro(<< "Number Of Stream Divisions : " << numDivisions);
 
+  // Notify end event observers
+  this->InvokeEvent( itk::StartEvent() );
+
   this->UpdateProgress(0);
 
   unsigned int piece;
