@@ -65,10 +65,10 @@ class ITK_EXPORT PolyLineParametricPathWithValue
    itk::EncapsulateMetaData<ValueType>(dict,m_Key,value);
  }
 
- ValueType GetValue(void)
+ ValueType GetValue(void) const
  {
    ValueType resp = itk::NumericTraits<ValueType>::Zero;
-   itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
+   const itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
    if(dict.HasKey(m_Key))
    {
      itk::ExposeMetaData<ValueType>(dict,m_Key,resp);
@@ -84,7 +84,7 @@ class ITK_EXPORT PolyLineParametricPathWithValue
   * Return the path length (perimeter).
   * \return The length.
   */
- virtual double GetLength();
+ virtual double GetLength() const;
 
 protected:
   /** Constructor */
