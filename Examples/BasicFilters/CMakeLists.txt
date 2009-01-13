@@ -17,7 +17,7 @@ ADD_EXECUTABLE(IndexedToRGBExample IndexedToRGBExample.cxx )
 TARGET_LINK_LIBRARIES(IndexedToRGBExample OTBCommon OTBIO)
 
 ADD_EXECUTABLE(MeanShiftVectorImageFilterExample MeanShiftVectorImageFilterExample.cxx )
-TARGET_LINK_LIBRARIES(MeanShiftVectorImageFilterExample OTBCommon OTBIO)
+TARGET_LINK_LIBRARIES(MeanShiftVectorImageFilterExample OTBCommon OTBIO OTBBasicFilters)
 
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

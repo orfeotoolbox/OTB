@@ -48,7 +48,7 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
-#include "itkRescaleIntensityImageFilter.h"
+#include "otbPrintableImageFilter.h"
 
 //  Software Guide : BeginLatex
 //
@@ -193,22 +193,27 @@ int main(int argc, char * argv[])
   writer4->Update();
   // Software Guide : EndCodeSnippet
 
-  typedef itk::RescaleIntensityImageFilter< ImageType,
-                                   LabeledImageType> RescalerType;
+  typedef otb::PrintableImageFilter< ImageType >   PrintableFilterType;
+  PrintableFilterType::Pointer printableImageFilter = PrintableFilterType::New();
 
-  RescalerType::Pointer rescaler = RescalerType::New();
-  rescaler->SetOutputMinimum( 0 );
-  rescaler->SetOutputMaximum( 255 );
+  printableImageFilter->SetChannel(1);
+  printableImageFilter->SetChannel(2);
+  printableImageFilter->SetChannel(3);
 
-  writer3->SetFileName( filteredPretty );
-  rescaler->SetInput( filter->GetOutput() );
-  writer3->SetInput( rescaler->GetOutput() );
-  writer3->Update();
+  typedef PrintableFilterType::OutputImageType OutputImageType;
+  typedef otb::StreamingImageFileWriter< OutputImageType >
+                                              PrettyWriterType;
+  PrettyWriterType::Pointer prettyWriter = PrettyWriterType::New();
 
-  writer3->SetFileName( clusteredPretty );
-  rescaler->SetInput( filter->GetClusteredOutput() );
-  writer3->SetInput( rescaler->GetOutput() );
-  writer3->Update();
+  printableImageFilter->SetInput( filter->GetOutput() );
+  prettyWriter->SetFileName( filteredPretty );
+  prettyWriter->SetInput( printableImageFilter->GetOutput() );
+  prettyWriter->Update();
+
+  printableImageFilter->SetInput( filter->GetClusteredOutput() );
+  prettyWriter->SetFileName( clusteredPretty );
+  prettyWriter->SetInput( printableImageFilter->GetOutput() );
+  prettyWriter->Update();
 
   
   return EXIT_SUCCESS;
