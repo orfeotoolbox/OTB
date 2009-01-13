@@ -41,13 +41,13 @@ class ITK_EXPORT PrintableImageFilter :
       public:
         typedef PrintableImageFilter                            Self;
         typedef itk::ImageToImageFilter
-	  <TInputImage, otb::VectorImage<unsigned char,2> >     Superclass;
+    <TInputImage, otb::VectorImage<unsigned char,2> >     Superclass;
         typedef itk::SmartPointer<Self>                         Pointer;
         typedef itk::SmartPointer<const Self>                   ConstPointer;
 
-	typedef TInputImage                                     InputImageType;
-	typedef typename InputImageType::PixelType              InputPixelType;
-	typedef unsigned char                                   OutputPixelType;
+  typedef TInputImage                                     InputImageType;
+  typedef typename InputImageType::PixelType              InputPixelType;
+  typedef unsigned char                                   OutputPixelType;
         typedef otb::VectorImage<OutputPixelType,2>             OutputImageType;
 
         typedef otb::VectorRescaleIntensityImageFilter
@@ -70,12 +70,12 @@ class ITK_EXPORT PrintableImageFilter :
         void SetChannel( unsigned int channel);
         const ChannelsType GetChannels(void) const;
 
-	otbSetObjectMemberMacro(Rescaler,AutomaticInputMinMaxComputation,bool);
-	otbGetObjectMemberMacro(Rescaler,AutomaticInputMinMaxComputation,bool);
-	otbSetObjectMemberMacro(Rescaler,InputMinimum,InputPixelType);
-	otbGetObjectMemberMacro(Rescaler,InputMinimum,InputPixelType);
-	otbSetObjectMemberMacro(Rescaler,InputMaximum,InputPixelType);
-	otbGetObjectMemberMacro(Rescaler,InputMaximum,InputPixelType);
+  otbSetObjectMemberMacro(Rescaler,AutomaticInputMinMaxComputation,bool);
+  otbGetObjectMemberMacro(Rescaler,AutomaticInputMinMaxComputation,bool);
+  otbSetObjectMemberMacro(Rescaler,InputMinimum,InputPixelType);
+  otbGetObjectMemberMacro(Rescaler,InputMinimum,InputPixelType);
+  otbSetObjectMemberMacro(Rescaler,InputMaximum,InputPixelType);
+  otbGetObjectMemberMacro(Rescaler,InputMaximum,InputPixelType);
 
       protected:
 

@@ -119,12 +119,12 @@ VectorImageTo3DScalarImageFilter<TInputImage, TOutputImage>
       ++inIt;
       if(inIt.IsAtEnd())
       {
- 	    inIt.GoToBegin();
+       inIt.GoToBegin();
       }
       ++outIt;
       if(outIt.IsAtEndOfLine())
       {
- 	   outIt.NextLine();
+      outIt.NextLine();
       }
       if(outIt.IsAtEndOfSlice())
       {

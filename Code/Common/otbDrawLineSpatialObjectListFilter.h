@@ -44,13 +44,13 @@ class  ITK_EXPORT DrawLineSpatialObjectListFilter :
 public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
-  /** 	Extract dimensions as well of the images of entry of exit. */
-  itkStaticConstMacro(		InputImageDimension,
-  				unsigned int,
-                      		TInputImage::ImageDimension);
-  itkStaticConstMacro(		OutputImageDimension,
-  				unsigned int,
-                      		TOutputImage::ImageDimension);
+  /**   Extract dimensions as well of the images of entry of exit. */
+  itkStaticConstMacro(    InputImageDimension,
+          unsigned int,
+                          TInputImage::ImageDimension);
+  itkStaticConstMacro(    OutputImageDimension,
+          unsigned int,
+                          TOutputImage::ImageDimension);
 
 
   typedef TInputImage InputImageType;
@@ -64,7 +64,7 @@ public:
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
   typedef LineSpatialObjectList                           LinesListType;
-  typedef LinesListType::LineType                  	  LineType;
+  typedef LinesListType::LineType                      LineType;
 
   typedef typename LinesListType::const_iterator LineListIterator;
 
@@ -107,7 +107,7 @@ private:
   DrawLineSpatialObjectListFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  typename DrawLineType::Pointer	m_DrawLineFilter;
+  typename DrawLineType::Pointer  m_DrawLineFilter;
   typename RescalerType::Pointer        m_RescaleFilter;
 
 

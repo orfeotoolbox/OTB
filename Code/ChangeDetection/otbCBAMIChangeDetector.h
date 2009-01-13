@@ -110,7 +110,7 @@ protected:
 
     for( itx = vx.begin(); itx < vx.end(); itx++)
       {
-				Vx  += vcl_pow((*itx)-Ex,2);
+        Vx  += vcl_pow((*itx)-Ex,2);
       }
 
     Vx /= (vx.size());
@@ -174,14 +174,14 @@ protected:
     IteratorType itt;
 
     for( itx = vx.begin(),
-	   ity = vy.begin(),
-	   itz = vz.begin(),
-	   itt = vt.begin();
-	 itx < vx.end();
-	 itx++,
-	   ity++,
-	   itz++,
-	   itt++)
+     ity = vy.begin(),
+     itz = vz.begin(),
+     itt = vt.begin();
+   itx < vx.end();
+   itx++,
+     ity++,
+     itz++,
+     itt++)
       {
       //Ex  += (*itx);
       //Ey  += (*ity);
@@ -279,17 +279,17 @@ protected:
 
     for( iti = donnees.begin(); iti < donnees.end(); iti++ )
       for( itj = donnees.begin(); itj < donnees.end(); itj++ )
-	{
-	if(iti != itj)
-	  termeR += vcl_pow(Rxy((*iti),(*itj)),2);
+  {
+  if(iti != itj)
+    termeR += vcl_pow(Rxy((*iti),(*itj)),2);
 
-	for( itk = donnees.begin(); itk < donnees.end(); itk++ )
-	  for( itl = donnees.begin(); itl < donnees.end(); itl++ )
-	    {
-	    if((iti != itj) || (iti != itk) || (iti != itl))
-	      termeQ += vcl_pow( Qxijkl((*iti),(*itj),(*itk),(*itl)),2);
-	    }
-	}
+  for( itk = donnees.begin(); itk < donnees.end(); itk++ )
+    for( itl = donnees.begin(); itl < donnees.end(); itl++ )
+      {
+      if((iti != itj) || (iti != itk) || (iti != itl))
+        termeQ += vcl_pow( Qxijkl((*iti),(*itj),(*itk),(*itl)),2);
+      }
+  }
 
 
     return 1.0/4.0*termeR + 1.0/48.0*termeQ;
@@ -306,7 +306,7 @@ class ITK_EXPORT CBAMIChangeDetector :
             Functor::CBAMI<
                    ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
                    ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
-		   ITK_TYPENAME TOutputImage::PixelType>   >
+       ITK_TYPENAME TOutputImage::PixelType>   >
 {
 public:
   /** Standard class typedefs. */

@@ -67,8 +67,8 @@ Shape::mw_get_parent_shape(Shape *sh)
   do
     if((sh = sh->parent) == NULL)
       {
-	std::cerr << "[mw_get_parent_shape] the root of the shapes is removed" << std::endl;
-	return(NULL);
+  std::cerr << "[mw_get_parent_shape] the root of the shapes is removed" << std::endl;
+  return(NULL);
       }
   while(sh->removed);
   return(sh);
@@ -116,8 +116,8 @@ Shape::mw_get_next_sibling_shape(Shape *sh)
       sh = sh->parent;
       /* Look at the siblings of this node */
       for(sh1 = sh->next_sibling; sh1 != NULL; sh1 = sh1->next_sibling)
-	if((sh2 = mw_get_not_removed_shape(sh1)) != NULL)
-	  return(sh2);
+  if((sh2 = mw_get_not_removed_shape(sh1)) != NULL)
+    return(sh2);
     }   while(sh->parent->removed);
   return(NULL);
 }
@@ -267,7 +267,7 @@ Shapes::allocate_pixels(int* tabNbOfProperPixels)
       pShape = pShape->child;
     } else {
       if(iSizeOfStack == 0)
-	break;
+  break;
       pShape = tabpShapesOfStack[--iSizeOfStack]->next_sibling; /* Pop */
     }
   delete[] tabpShapesOfStack;
@@ -300,9 +300,9 @@ Shapes::flst_pixels()
   for(i = nrow-1; i >= 0; i--)
     for(j = ncol-1; j >= 0; j--, ppShape--)
       {
-	iIndex = (*ppShape) - the_shapes;
-	pCurrentPoint = &(*ppShape)->pixels[--tabNbOfProperPixels[iIndex]];
-	pCurrentPoint->x = j; pCurrentPoint->y = i;
+  iIndex = (*ppShape) - the_shapes;
+  pCurrentPoint = &(*ppShape)->pixels[--tabNbOfProperPixels[iIndex]];
+  pCurrentPoint->x = j; pCurrentPoint->y = i;
       }
 
   delete[] tabNbOfProperPixels;
@@ -337,12 +337,12 @@ Shapes::point_in_shape(int x,int y,Shape *pShape)
 
   Shape *pShapePoint = smallest_shape[y*ncol+x];
   result = (pShape->pixels <= pShapePoint->pixels &&
-	  pShapePoint->pixels < pShape->pixels+pShape->area);
+    pShapePoint->pixels < pShape->pixels+pShape->area);
 
   otbMsgDevMacro( << "PointInShape() -->"<<x<<" "<<y<<" " << pShape->value << " Result : "<< int(result));
 
   return (pShape->pixels <= pShapePoint->pixels &&
-	  pShapePoint->pixels < pShape->pixels+pShape->area);
+    pShapePoint->pixels < pShape->pixels+pShape->area);
 }
 
 /* Find the dual point following pDualPoint as we follow the shape boundary */
@@ -548,7 +548,7 @@ Shapes::find_open_boundary(Shape *pShape,PathPointer pBoundary)
     otbMsgDevMacro( << "Shapes::find_open_boundary() DO WHILE" );
     find_next_dual_point(&dualPoint, &cDirection,pShape);
   } while(0 < dualPoint.x && dualPoint.x < iWidth &&
-	  0 < dualPoint.y && dualPoint.y < iHeight);
+    0 < dualPoint.y && dualPoint.y < iHeight);
 
  /* We store the exit */
 

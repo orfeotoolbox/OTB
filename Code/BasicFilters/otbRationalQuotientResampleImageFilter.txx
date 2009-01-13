@@ -33,8 +33,8 @@ namespace otb
     unsigned int dimension = 0;
     for (dimension=0; dimension != ImageDimension; dimension++)
       {
-	m_Numerators[dimension]=1;
-	m_Denominators[dimension]=1;
+  m_Numerators[dimension]=1;
+  m_Denominators[dimension]=1;
       }
 
     // Internal filter
@@ -75,7 +75,7 @@ namespace otb
     unsigned int dimension = 0;
     for(dimension=0; dimension != ImageDimension; dimension++)
       {
-	os << m_Numerators[dimension] << ":" << m_Denominators[dimension] << " ";
+  os << m_Numerators[dimension] << ":" << m_Denominators[dimension] << " ";
       }
     os << std::endl;
   }
@@ -88,14 +88,14 @@ namespace otb
     unsigned int dimension = 0;
     for (dimension=0; dimension!=ImageDimension; dimension++)
       {
-	if (denominator < 1)
-	  {
-	    m_Denominators[dimension]=1;
-	  }
-	else
-	  {
-	    m_Denominators[dimension] = denominator;
-	  }
+  if (denominator < 1)
+    {
+      m_Denominators[dimension]=1;
+    }
+  else
+    {
+      m_Denominators[dimension] = denominator;
+    }
       }
   }
 
@@ -107,14 +107,14 @@ namespace otb
     unsigned int dimension = 0;
     for (dimension=0; dimension!=ImageDimension; dimension++)
       {
-	if (denominators[dimension] < 1)
-	  {
-	    m_Denominators[dimension] = 1;
-	  }
-	else
-	  {
-	    m_Denominators[dimension] = denominators[dimension];
-	  }
+  if (denominators[dimension] < 1)
+    {
+      m_Denominators[dimension] = 1;
+    }
+  else
+    {
+      m_Denominators[dimension] = denominators[dimension];
+    }
       }
   }
 
@@ -125,11 +125,11 @@ namespace otb
   {
     if (denominator < 1)
       {
-	m_Denominators[i]=1;
+  m_Denominators[i]=1;
       }
     else
       {
-	m_Denominators[i] = denominator;
+  m_Denominators[i] = denominator;
       }
   }
 
@@ -141,14 +141,14 @@ namespace otb
     unsigned int dimension = 0;
     for (dimension=0; dimension!=ImageDimension; dimension++)
       {
-	if (numerator < 1)
-	  {
-	    m_Numerators[dimension]=1;
-	  }
-	else
-	  {
-	    m_Numerators[dimension] = numerator;
-	  }
+  if (numerator < 1)
+    {
+      m_Numerators[dimension]=1;
+    }
+  else
+    {
+      m_Numerators[dimension] = numerator;
+    }
       }
   }
 
@@ -160,14 +160,14 @@ namespace otb
     unsigned int dimension = 0;
     for (dimension=0; dimension!=ImageDimension; dimension++)
       {
-	if (numerators[dimension] < 1)
-	  {
-	    m_Numerators[dimension] = 1;
-	  }
-	else
-	  {
-	    m_Numerators[dimension] = numerators[dimension];
-	  }
+  if (numerators[dimension] < 1)
+    {
+      m_Numerators[dimension] = 1;
+    }
+  else
+    {
+      m_Numerators[dimension] = numerators[dimension];
+    }
       }
   }
 
@@ -178,11 +178,11 @@ namespace otb
   {
     if (numerator < 1)
       {
-	m_Numerators[i]=1;
+  m_Numerators[i]=1;
       }
     else
       {
-	m_Numerators[i] = numerator;
+  m_Numerators[i] = numerator;
       }
   }
 

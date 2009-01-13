@@ -25,8 +25,8 @@
 namespace otb
 {
 
-template <class TPrecision, unsigned int VDimension>
-VectorData<TPrecision,VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
+VectorData<TPrecision,VDimension,TValuePrecision>
 ::VectorData()
 {
   m_DataTree = DataTreeType::New();
@@ -35,9 +35,9 @@ VectorData<TPrecision,VDimension>
   m_DataTree->SetRoot(root);
 }
 
-template<class TPrecision, unsigned int VDimension>
+template<class TPrecision, unsigned int VDimension, class TValuePrecision>
     void
-        VectorData<TPrecision,VDimension>
+        VectorData<TPrecision,VDimension,TValuePrecision>
   ::SetProjectionRef(std::string projectionRef)
 {
   itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
@@ -46,9 +46,9 @@ template<class TPrecision, unsigned int VDimension>
   this->Modified();
 }
 
-template<class TPrecision, unsigned int VDimension>
+template<class TPrecision, unsigned int VDimension, class TValuePrecision>
     std::string
-        VectorData<TPrecision,VDimension>
+        VectorData<TPrecision,VDimension,TValuePrecision>
   ::GetProjectionRef() const
 {
   const itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
@@ -59,25 +59,25 @@ template<class TPrecision, unsigned int VDimension>
   return projectionRef;
 }
 
-template <class TPrecision, unsigned int VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 bool
-VectorData<TPrecision,VDimension>
+VectorData<TPrecision,VDimension,TValuePrecision>
 ::Clear()
 {
   return m_DataTree->Clear();
 }
 
-template <class TPrecision, unsigned int VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
     int
-        VectorData<TPrecision,VDimension>
+        VectorData<TPrecision,VDimension,TValuePrecision>
   ::Size() const
 {
   return m_DataTree->Count();
 }
 
-template <class TPrecision, unsigned int VDimension>
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 void
-VectorData<TPrecision,VDimension>
+VectorData<TPrecision,VDimension,TValuePrecision>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
@@ -91,10 +91,10 @@ VectorData<TPrecision,VDimension>
       itk::PreOrderTreeIterator<DataTreeType> itParent = it;
       bool goesOn = true;
       while(itParent.HasParent() && goesOn )
-	{
-	  os<<indent;
-	  goesOn = itParent.GoToParent();
-	}
+  {
+    os<<indent;
+    goesOn = itParent.GoToParent();
+  }
       os<<"+"<<it.Get()->GetNodeTypeAsString()<<std::endl;
       ++it;
     }

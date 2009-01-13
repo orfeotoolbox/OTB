@@ -98,7 +98,7 @@ namespace otb
 /*     PointType geoPoint;
       geoPoint[1] = this->GetOutputOrigin()[1] + this->GetSize()[0]*this->GetOutputSpacing()[0]/2;
       geoPoint[0] = this->GetOutputOrigin()[0] + this->GetSize()[1]*this->GetOutputSpacing()[1]/2;
-      m_MapProjection->Initialize(geoPoint);			*/
+      m_MapProjection->Initialize(geoPoint);      */
 
       m_CompositeTransform->SetFirstTransform(m_MapProjection);
       m_CompositeTransform->SetSecondTransform(m_SensorModel);

@@ -160,7 +160,7 @@ namespace otb
        *  \return true if the Central pixel is extremum
        */
       virtual bool IsLocalExtremumAround(const NeighborhoodType& neigh,
-					 double CenterValue);
+           double CenterValue);
 
 
       /** AssignOrientation
@@ -171,7 +171,7 @@ namespace otb
        * \return  key point orientation
        */
       virtual double AssignOrientation(const NeighborhoodType& neigh,
-				       double S);
+               double S);
 
       /** ComputeDescriptor
        *
@@ -182,14 +182,14 @@ namespace otb
        * \return hsitogram descriptor
        */
       virtual VectorType ComputeDescriptor(const NeighborhoodType& neigh,
-				     double O,
-				     double S);
+             double O,
+             double S);
       /**
        * Compute min a b c
        */
       virtual int GetMin( int a , int b , int c);
 
-	private:
+  private:
 
       ImageToSURFKeyPointSetFilter(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented

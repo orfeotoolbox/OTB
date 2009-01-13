@@ -194,7 +194,7 @@ namespace otb
         }
         case kmldom::Type_Placemark:
         {
-	      // We just ignore placemarks
+        // We just ignore placemarks
           WalkFeature(feature,father);
           break;
         }
@@ -253,7 +253,7 @@ namespace otb
       }
       case kmldom::Type_MultiGeometry:
       {
-	  // this case is treated downer
+    // this case is treated downer
         break;
       }
       case kmldom::Type_Model:

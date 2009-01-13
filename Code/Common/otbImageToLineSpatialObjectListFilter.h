@@ -42,10 +42,10 @@ class ITK_EXPORT ImageToLineSpatialObjectListFilter : public itk::ProcessObject
 {
 public:
 
-  /** 	Extract dimensions as well of the images of entry of exit. */
-  itkStaticConstMacro(		InputImageDimension,
-  				unsigned int,
-                      		TInputImage::ImageDimension);
+  /**   Extract dimensions as well of the images of entry of exit. */
+  itkStaticConstMacro(    InputImageDimension,
+          unsigned int,
+                          TInputImage::ImageDimension);
 
 
   typedef TInputImage InputImageType;
@@ -65,7 +65,7 @@ public:
 
   /** Some convenient typedefs. */
   typedef LineSpatialObjectList                           LinesListType;
-  typedef typename LinesListType::LineType                  	  LineType;
+  typedef typename LinesListType::LineType                      LineType;
 
   /** Definition of the input and output images */
   typedef typename InputImageType::PixelType InputPixelType;

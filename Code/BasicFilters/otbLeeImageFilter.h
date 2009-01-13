@@ -43,13 +43,13 @@ template <class TInputImage, class TOutputImage>
 class ITK_EXPORT LeeImageFilter :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
-  /** 	Extract input and output image dimension */
-  itkStaticConstMacro(		InputImageDimension,
-  				unsigned int,
-                      		TInputImage::ImageDimension);
-  itkStaticConstMacro(		OutputImageDimension,
-  				unsigned int,
-                      		TOutputImage::ImageDimension);
+  /**   Extract input and output image dimension */
+  itkStaticConstMacro(    InputImageDimension,
+          unsigned int,
+                          TInputImage::ImageDimension);
+  itkStaticConstMacro(    OutputImageDimension,
+          unsigned int,
+                          TOutputImage::ImageDimension);
 
 
   typedef TInputImage InputImageType;
@@ -101,10 +101,10 @@ protected:
   /** LeeImageFilter can be multithreaded.
    * As such, it provides a definition of ThreadedGenerateData()
    *
-   *	LEE filter:
-   *\f$ 	R = E[I] + b(I-E[I])\f$ with \f$	b  = C^2r / ( C^2r + C^2v )\f$
-   *					\f$ Cv = 1 / \sqrt(L) \f$ with L the number of look.
-   *					\f$ Cr = \sqrt(Var(I)) / E[I] avec Var(I) = E[I^2] - E[I]^2 \f$
+   *  LEE filter:
+   *\f$   R = E[I] + b(I-E[I])\f$ with \f$  b  = C^2r / ( C^2r + C^2v )\f$
+   *          \f$ Cv = 1 / \sqrt(L) \f$ with L the number of look.
+   *          \f$ Cr = \sqrt(Var(I)) / E[I] avec Var(I) = E[I^2] - E[I]^2 \f$
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData() */

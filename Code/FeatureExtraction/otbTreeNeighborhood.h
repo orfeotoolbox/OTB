@@ -72,7 +72,7 @@ public:
   int ORDER_MIN2(int k,int l) { return (tabPoints[k].value <= tabPoints[l].value); };
   void SWAP(int k,int l){ tabPoints[0] = tabPoints[k];
                           tabPoints[k] = tabPoints[l];
-			  tabPoints[l] = tabPoints[0]; };
+        tabPoints[l] = tabPoints[0]; };
 
   void fix_up();
   void fix_down();

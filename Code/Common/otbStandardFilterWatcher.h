@@ -53,7 +53,7 @@ namespace otb
       /** Constructor. Takes a ProcessObject to monitor and an optional
        * comment string that is prepended to each event message. */
       StandardFilterWatcher(itk::ProcessObject* process,
-			    const char *comment="");
+          const char *comment="");
 
       /** Copy constructor */
       StandardFilterWatcher(const StandardFilterWatcher&);

@@ -519,7 +519,7 @@ namespace otb
     int lFirstColumn = this->GetIORegion().GetIndex()[0] ; // [1... ]
 
         // Special case : we control that if the region to write has the same dimension that the entire picture,
-	// we start to the offset to 0 ( when ze4re not in "Streaming")
+  // we start to the offset to 0 ( when ze4re not in "Streaming")
     if( (lNbLines == m_Dimensions[1]) && (lNbColumns == m_Dimensions[0]))
     {
       otbMsgDevMacro(<<"Force the IORegion offset to 0");

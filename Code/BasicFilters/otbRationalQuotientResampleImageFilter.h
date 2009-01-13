@@ -50,9 +50,9 @@ namespace otb
       itkTypeMacro(RationalQuotientResampleImageFilter, ImageToImageFilter);
 
       itkStaticConstMacro(ImageDimension, unsigned int,
-			  TInputImage::ImageDimension);
+        TInputImage::ImageDimension);
       itkStaticConstMacro(OutputImageDimension, unsigned int,
-			  TOutputImage::ImageDimension );
+        TOutputImage::ImageDimension );
 
       /** Display */
       void PrintSelf( std::ostream& os, itk::Indent indent ) const;
@@ -78,13 +78,13 @@ namespace otb
        *  \param numerator The factor for expand filter
        */
       virtual void SetNumeratorFactors( const unsigned int i,
-					const unsigned int numerator);
+          const unsigned int numerator);
 
       /** Get numerator factors
        *  \return tab of numerator factors
        */
       virtual const unsigned int* GetNumeratorFactors() const
-	{ return m_Numerators;}
+  { return m_Numerators;}
 
       /** Set denominator factors
        *  \param denominator The factor for shrink filter, same along each dimension
@@ -93,7 +93,7 @@ namespace otb
 
       /** Set denominator factors
         *  \param denominators Tab of shrink filter factors, along each dimension
-	*/
+  */
       virtual void SetDenominatorFactors(const unsigned int* denominators);
 
       /** Set denominator factors
@@ -101,23 +101,23 @@ namespace otb
        *  \param denominator The factor for shrink filter
        */
       virtual void SetDenominatorFactors(const unsigned int i,
-					 const unsigned int denominator);
+           const unsigned int denominator);
 
       /** Get denominator factors
         * \return tab of denominator factors
-	*/
+  */
       virtual const unsigned int* GetDenominatorFactors() const
-	{ return m_Denominators;}
+  { return m_Denominators;}
 
     protected:
 
       /** Internal filters typedefs */
       typedef itk::ShrinkImageFilter<InputImageType, OutputImageType>
-	ShrinkFilterType;
+  ShrinkFilterType;
       typedef typename ShrinkFilterType::Pointer ShrinkFilterPointerType;
 
       typedef itk::ExpandImageFilter<InputImageType, OutputImageType>
-	ExpandFilterType;
+  ExpandFilterType;
       typedef typename ExpandFilterType::Pointer ExpandFilterPointerType;
 
       /** Actually process the input */

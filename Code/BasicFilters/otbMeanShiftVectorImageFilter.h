@@ -29,30 +29,30 @@ namespace otb
        *   This class handles buffer conversion when pixel type is scalar.
        **/
       class VectorBufferConverter
-	{
-	public:
-	  /**
-	   * Fill the pixel with the float array values at index, using nbComp values scaled by scale.
-	   */
-	  template <class TPixel> static inline void FloatArrayToPixel(const float * data, unsigned int index, TPixel & pixel, const unsigned int nbComp, double scale)
-	    {
-	      pixel.SetSize(nbComp);
-	      for(unsigned int i = 0; i<pixel.Size();++i)
-		{
-		  pixel[i]= static_cast<typename TPixel::ValueType> (scale * data[index+i]);
-		}
-	    }
-	  /**
-	   * Fill the float array data with the pixel values at index, using nbComp values scaled by scale.
-	   */
-	  template <class TPixel> static inline void PixelToFloatArray(float * data, unsigned int index, const TPixel & pixel,double scale)
-	    {
-	      for(unsigned int i = 0; i<pixel.Size();++i)
-		{
-		  data[index+i]=static_cast<float>(scale * pixel[i]);
-		}
-	    }
-	};
+  {
+  public:
+    /**
+     * Fill the pixel with the float array values at index, using nbComp values scaled by scale.
+     */
+    template <class TPixel> static inline void FloatArrayToPixel(const float * data, unsigned int index, TPixel & pixel, const unsigned int nbComp, double scale)
+      {
+        pixel.SetSize(nbComp);
+        for(unsigned int i = 0; i<pixel.Size();++i)
+    {
+      pixel[i]= static_cast<typename TPixel::ValueType> (scale * data[index+i]);
+    }
+      }
+    /**
+     * Fill the float array data with the pixel values at index, using nbComp values scaled by scale.
+     */
+    template <class TPixel> static inline void PixelToFloatArray(float * data, unsigned int index, const TPixel & pixel,double scale)
+      {
+        for(unsigned int i = 0; i<pixel.Size();++i)
+    {
+      data[index+i]=static_cast<float>(scale * pixel[i]);
+    }
+      }
+  };
     }
 
   /** \class MeanShiftVectorImageFilter
@@ -92,7 +92,7 @@ namespace otb
       /**PrintSelf method */
       virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
       {
-	Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os,indent);
       }
 
       private:

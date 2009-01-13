@@ -79,8 +79,8 @@ public:
     for(unsigned long pos = 0; pos< itA.Size(); ++pos)
       {
 
-		  varA += static_cast<TOutput>( vcl_pow( static_cast<double>(itA.GetPixel(pos))-static_cast<double>(meanA),static_cast<double>(2.0)));
-		  varB += static_cast<TOutput>( vcl_pow( static_cast<double>(itB.GetPixel(pos))-static_cast<double>(meanB),static_cast<double>(2.0)));
+      varA += static_cast<TOutput>( vcl_pow( static_cast<double>(itA.GetPixel(pos))-static_cast<double>(meanA),static_cast<double>(2.0)));
+      varB += static_cast<TOutput>( vcl_pow( static_cast<double>(itB.GetPixel(pos))-static_cast<double>(meanB),static_cast<double>(2.0)));
 
       }
 
@@ -90,15 +90,15 @@ public:
     TOutput crossCorrel = itk::NumericTraits<TOutput>::Zero;
 
     if(varA!= itk::NumericTraits<TOutput>::Zero && varB!= itk::NumericTraits<TOutput>::Zero)
-	  {
-	    for(unsigned long pos = 0; pos< itA.Size(); ++pos)
-	      {
-		crossCorrel += (static_cast<TOutput>(itA.GetPixel(pos))-meanA)*(static_cast<TOutput>(itB.GetPixel(pos))-meanB)/(itA.Size()*vcl_sqrt(varA*varB));
-	      }
-	  }
+    {
+      for(unsigned long pos = 0; pos< itA.Size(); ++pos)
+        {
+    crossCorrel += (static_cast<TOutput>(itA.GetPixel(pos))-meanA)*(static_cast<TOutput>(itB.GetPixel(pos))-meanB)/(itA.Size()*vcl_sqrt(varA*varB));
+        }
+    }
     else if(varA==itk::NumericTraits<TOutput>::Zero && varB==itk::NumericTraits<TOutput>::Zero)
       {
-	crossCorrel = itk::NumericTraits<TOutput>::One;
+  crossCorrel = itk::NumericTraits<TOutput>::One;
       }
     return static_cast<TOutput>( itk::NumericTraits<TOutput>::One - crossCorrel );
   }
@@ -112,7 +112,7 @@ class ITK_EXPORT CorrelationChangeDetector :
             Functor::CrossCorrelation<
                    ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
                    ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
-		   ITK_TYPENAME TOutputImage::PixelType>   >
+       ITK_TYPENAME TOutputImage::PixelType>   >
 {
 public:
   /** Standard class typedefs. */

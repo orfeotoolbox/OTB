@@ -54,7 +54,7 @@ namespace otb
  *
  */
 class ITK_EXPORT GDALImageIO : public itk::ImageIOBase,
-			       public MetaDataKey
+             public MetaDataKey
 {
 public:
 

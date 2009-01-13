@@ -53,17 +53,17 @@ namespace otb
 
       /** Set vector that contains the filter function value. */
       void SetFilterFunctionValues(const ValuesVectorType & vect)
-	{
-	  m_FilterFunctionValues = vect;
-	  this->Modified();
-	};
+  {
+    m_FilterFunctionValues = vect;
+    this->Modified();
+  };
       /** Get vector that contains the filter function value. */
       const ValuesVectorType & GetFilterFunctionValues() const { return m_FilterFunctionValues; };
       /** Get vector that contains the filter function value 6S. */
       void SetFilterFunctionValues6S(const ValuesVectorType & vect)
       {
           m_FilterFunctionValues6S = vect;
-	  this->Modified();
+    this->Modified();
       };
       /** Get vector that contains the filter function value 6S. */
       const ValuesVectorType & GetFilterFunctionValues6S() const { return m_FilterFunctionValues6S; };
@@ -209,13 +209,13 @@ public:
   void SetWavelenghtSpectralBandWithIndex( unsigned int id, const FilterFunctionValues::Pointer & function)
     {
       if (m_WavelenghtSpectralBand.size() <  id+1)
-	{
-	  for(unsigned int j=0; j<(id+1-m_WavelenghtSpectralBand.size());j++)
-	    {
-	      FilterFunctionValues::Pointer temp;
-	      m_WavelenghtSpectralBand.push_back(temp);
-	    }
-	}
+  {
+    for(unsigned int j=0; j<(id+1-m_WavelenghtSpectralBand.size());j++)
+      {
+        FilterFunctionValues::Pointer temp;
+        m_WavelenghtSpectralBand.push_back(temp);
+      }
+  }
       m_WavelenghtSpectralBand[id] = function;
     };
   WavelenghtSpectralBandVectorType GetWavelenghtSpectralBand(){ return m_WavelenghtSpectralBand; };

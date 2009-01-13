@@ -196,19 +196,19 @@ namespace otb
     otbMsgDebugMacro(<<"Entering build method");
     if(!m_InputImage)
       {
-	itkExceptionMacro(<<"No input image !");
+  itkExceptionMacro(<<"No input image !");
       }
 
     if(m_UseImageOverlay && !m_InputImageOverlay)
       {
-	itkExceptionMacro(<<"UseImageOverlay option toggled, but no image overlay specified !");
+  itkExceptionMacro(<<"UseImageOverlay option toggled, but no image overlay specified !");
       }
 
     if(m_UseImageOverlay
        &&m_InputImage->GetLargestPossibleRegion().GetSize()
        != m_InputImageOverlay->GetLargestPossibleRegion().GetSize())
       {
-	itkExceptionMacro(<<"Input image and input image overlay do not have the same size !");
+  itkExceptionMacro(<<"Input image and input image overlay do not have the same size !");
       }
 
     itk::OStringStream oss;
@@ -225,40 +225,40 @@ namespace otb
     // decide wether to use scroll view or not
     if(size[0]<m_ScrollLimitSize&&size[1]<m_ScrollLimitSize)
       {
-	m_UseScroll=false;
+  m_UseScroll=false;
       }
     else
       {
-	m_UseScroll=true;
-	// Compute scroll size :
-	if(m_ImageGeometry<1)
-	  {
-	    hscroll = m_ScrollMaxInitialSize;
-	    wscroll = static_cast<int>(static_cast<double>(m_ScrollMaxInitialSize)*m_ImageGeometry);
-	  }
-	else
-	  {
-	    wscroll = m_ScrollMaxInitialSize;
-	    hscroll = static_cast<int>(static_cast<double>(m_ScrollMaxInitialSize)/m_ImageGeometry);
-	  }
-	// Create the quicklook
-	m_Shrink->SetInput(m_InputImage);
-	if(size[0]/hscroll < size[1]/wscroll)
-	  {
-	    m_ShrinkFactor = static_cast<unsigned int>(vcl_ceil((static_cast<double>(size[0])/static_cast<double>(wscroll))/m_QuicklookRatioCoef));
-	  }
-	else
-	  {
-	    m_ShrinkFactor = static_cast<unsigned int>(vcl_ceil((static_cast<double>(size[1])/static_cast<double>(hscroll))/m_QuicklookRatioCoef));
-	  }
+  m_UseScroll=true;
+  // Compute scroll size :
+  if(m_ImageGeometry<1)
+    {
+      hscroll = m_ScrollMaxInitialSize;
+      wscroll = static_cast<int>(static_cast<double>(m_ScrollMaxInitialSize)*m_ImageGeometry);
+    }
+  else
+    {
+      wscroll = m_ScrollMaxInitialSize;
+      hscroll = static_cast<int>(static_cast<double>(m_ScrollMaxInitialSize)/m_ImageGeometry);
+    }
+  // Create the quicklook
+  m_Shrink->SetInput(m_InputImage);
+  if(size[0]/hscroll < size[1]/wscroll)
+    {
+      m_ShrinkFactor = static_cast<unsigned int>(vcl_ceil((static_cast<double>(size[0])/static_cast<double>(wscroll))/m_QuicklookRatioCoef));
+    }
+  else
+    {
+      m_ShrinkFactor = static_cast<unsigned int>(vcl_ceil((static_cast<double>(size[1])/static_cast<double>(hscroll))/m_QuicklookRatioCoef));
+    }
 
 
 
-	otbMsgDebugMacro(<<"Shrink factor: "<<m_ShrinkFactor);
-	m_Shrink->SetShrinkFactor(m_ShrinkFactor);
-	typedef otb::FltkFilterWatcher WatcherType;
-	WatcherType watcher(m_Shrink,wfull-200,hfull/2,200,20, "Generating Quicklook ...");
-	m_Shrink->Update();
+  otbMsgDebugMacro(<<"Shrink factor: "<<m_ShrinkFactor);
+  m_Shrink->SetShrinkFactor(m_ShrinkFactor);
+  typedef otb::FltkFilterWatcher WatcherType;
+  WatcherType watcher(m_Shrink,wfull-200,hfull/2,200,20, "Generating Quicklook ...");
+  m_Shrink->Update();
       }
 
 
@@ -269,8 +269,8 @@ namespace otb
     m_FullWidget->SetInput(m_InputImage);
     if(m_UseImageOverlay)
       {
-	m_FullWidget->SetInputOverlay(m_InputImageOverlay);
-	m_FullWidget->SetImageOverlayVisible(true);
+  m_FullWidget->SetInputOverlay(m_InputImageOverlay);
+  m_FullWidget->SetImageOverlayVisible(true);
       }
     m_FullWidget->Init(0,0,wfull,hfull,"");
     m_FullWidget->box( FL_EMBOSSED_BOX );
@@ -283,8 +283,8 @@ namespace otb
     m_ZoomWidget->SetInput(m_InputImage);
     if(m_UseImageOverlay)
       {
-	m_ZoomWidget->SetInputOverlay(m_InputImageOverlay);
-	m_ZoomWidget->SetImageOverlayVisible(true);
+  m_ZoomWidget->SetInputOverlay(m_InputImageOverlay);
+  m_ZoomWidget->SetImageOverlayVisible(true);
       }
     m_ZoomWidget->Init(0,0,m_ZoomMaxInitialSize,m_ZoomMaxInitialSize,"");
     m_ZoomWidget->box( FL_EMBOSSED_BOX );
@@ -293,55 +293,55 @@ namespace otb
     // Create the zoom selection mode
     if(m_ShowZoomWidget)
       {
-	BoxPointerType zoomBox = BoxType::New();
-	SizeType zoomBoxSize;
-	IndexType zoomBoxIndex;
-	zoomBoxSize[0]=(m_ZoomWidget->GetViewedRegion().GetSize()[0]+2);
-	zoomBoxSize[1]=(m_ZoomWidget->GetViewedRegion().GetSize()[1]+2);
-	zoomBoxIndex[0]=(m_ZoomWidget->GetViewedRegion().GetIndex()[0]-1);
-	zoomBoxIndex[1]=(m_ZoomWidget->GetViewedRegion().GetIndex()[1]-1);
-	zoomBox->SetIndex(zoomBoxIndex);
-	zoomBox->SetSize(zoomBoxSize);
-	zoomBox->SetColor(m_InterfaceBoxesColor);
-	m_InterfaceBoxesList->PushBack(zoomBox);
+  BoxPointerType zoomBox = BoxType::New();
+  SizeType zoomBoxSize;
+  IndexType zoomBoxIndex;
+  zoomBoxSize[0]=(m_ZoomWidget->GetViewedRegion().GetSize()[0]+2);
+  zoomBoxSize[1]=(m_ZoomWidget->GetViewedRegion().GetSize()[1]+2);
+  zoomBoxIndex[0]=(m_ZoomWidget->GetViewedRegion().GetIndex()[0]-1);
+  zoomBoxIndex[1]=(m_ZoomWidget->GetViewedRegion().GetIndex()[1]-1);
+  zoomBox->SetIndex(zoomBoxIndex);
+  zoomBox->SetSize(zoomBoxSize);
+  zoomBox->SetColor(m_InterfaceBoxesColor);
+  m_InterfaceBoxesList->PushBack(zoomBox);
       }
 
     if(m_UseScroll)
       {
-	// Create the scroll window
-	m_ScrollWidget = ScrollWidgetType::New();
-	m_ScrollWidget->SetInput(m_Shrink->GetOutput());
-	m_ScrollWidget->SetParent(this);
-	m_ScrollWidget->Init(0,0,wscroll,hscroll,oss.str().c_str());
-	m_ScrollWidget->box( FL_EMBOSSED_BOX );
-	m_ScrollWidget->SetFormOverlayVisible(true);
-	m_ScrollWidget->SetSubSamplingRate(m_ShrinkFactor);
+  // Create the scroll window
+  m_ScrollWidget = ScrollWidgetType::New();
+  m_ScrollWidget->SetInput(m_Shrink->GetOutput());
+  m_ScrollWidget->SetParent(this);
+  m_ScrollWidget->Init(0,0,wscroll,hscroll,oss.str().c_str());
+  m_ScrollWidget->box( FL_EMBOSSED_BOX );
+  m_ScrollWidget->SetFormOverlayVisible(true);
+  m_ScrollWidget->SetSubSamplingRate(m_ShrinkFactor);
 
-	if(m_UseImageOverlay)
-	  {
-	    m_ShrinkOverlay = OverlayShrinkFilterType::New();
-	    m_ShrinkOverlay->SetInput(m_InputImageOverlay);
-	    m_ShrinkOverlay->SetShrinkFactor(m_ShrinkFactor);
-	    typedef otb::FltkFilterWatcher WatcherType;
-	    WatcherType watcher(m_ShrinkOverlay,wfull-200,hfull/2,200,20, "Generating Overlay Quicklook ...");
-	    m_ShrinkOverlay->Update();
-	    m_ScrollWidget->SetInputOverlay(m_ShrinkOverlay->GetOutput());
-	    m_ScrollWidget->SetImageOverlayVisible(true);
-	  }
+  if(m_UseImageOverlay)
+    {
+      m_ShrinkOverlay = OverlayShrinkFilterType::New();
+      m_ShrinkOverlay->SetInput(m_InputImageOverlay);
+      m_ShrinkOverlay->SetShrinkFactor(m_ShrinkFactor);
+      typedef otb::FltkFilterWatcher WatcherType;
+      WatcherType watcher(m_ShrinkOverlay,wfull-200,hfull/2,200,20, "Generating Overlay Quicklook ...");
+      m_ShrinkOverlay->Update();
+      m_ScrollWidget->SetInputOverlay(m_ShrinkOverlay->GetOutput());
+      m_ScrollWidget->SetImageOverlayVisible(true);
+    }
 
-	// Create the scroll selection box
-	BoxPointerType box = BoxType::New();
-	SizeType scrollBoxSize;
-	IndexType scrollBoxIndex;
-	scrollBoxSize[0]=(m_FullWidget->GetViewedRegion().GetSize()[0]+2);
-	scrollBoxSize[1]=(m_FullWidget->GetViewedRegion().GetSize()[1]+2);
-	scrollBoxIndex[0]=(m_FullWidget->GetViewedRegion().GetIndex()[0]-1);
-	scrollBoxIndex[1]=(m_FullWidget->GetViewedRegion().GetIndex()[1]-1);
-	otbMsgDebugMacro(<<"Scroll box: "<<scrollBoxIndex<<" "<<scrollBoxSize);
-	box->SetSize(scrollBoxSize);
-	box->SetIndex(scrollBoxIndex);
-	box->SetColor(m_InterfaceBoxesColor);
-	m_InterfaceBoxesList->PushBack(box);
+  // Create the scroll selection box
+  BoxPointerType box = BoxType::New();
+  SizeType scrollBoxSize;
+  IndexType scrollBoxIndex;
+  scrollBoxSize[0]=(m_FullWidget->GetViewedRegion().GetSize()[0]+2);
+  scrollBoxSize[1]=(m_FullWidget->GetViewedRegion().GetSize()[1]+2);
+  scrollBoxIndex[0]=(m_FullWidget->GetViewedRegion().GetIndex()[0]-1);
+  scrollBoxIndex[1]=(m_FullWidget->GetViewedRegion().GetIndex()[1]-1);
+  otbMsgDebugMacro(<<"Scroll box: "<<scrollBoxIndex<<" "<<scrollBoxSize);
+  box->SetSize(scrollBoxSize);
+  box->SetIndex(scrollBoxIndex);
+  box->SetColor(m_InterfaceBoxesColor);
+  m_InterfaceBoxesList->PushBack(box);
       }
 
     // Compute the normalization factors
@@ -387,11 +387,11 @@ namespace otb
    {
      if(m_UseScroll)
        {
-	 return m_Shrink->GetOutput();
+   return m_Shrink->GetOutput();
        }
      else
        {
-	 return m_InputImage;
+   return m_InputImage;
        }
    }
   /// Set the image (Image version)
@@ -415,12 +415,12 @@ namespace otb
     //comment: std::cout<<"Entering show method"<<std::endl;
     if(!m_Built)
       {
-	this->Build();
+  this->Build();
       }
     Fl::check();
     if(m_UseScroll && m_ShowScrollWidget)
       {
- 	m_ScrollWidget->Show();
+   m_ScrollWidget->Show();
       }
 
       if(m_ShowFullWidget)
@@ -434,13 +434,13 @@ namespace otb
     }
     if(m_ShowHistograms)
       {
-	m_RedHistogramWidget->show();
+  m_RedHistogramWidget->show();
 
-	if(this->GetViewModel()== ScrollWidgetType::RGB)
-	  {
-	    m_GreenHistogramWidget->show();
-	    m_BlueHistogramWidget->show();
-	  }
+  if(this->GetViewModel()== ScrollWidgetType::RGB)
+    {
+      m_GreenHistogramWidget->show();
+      m_BlueHistogramWidget->show();
+    }
       }
 
     Fl::check();
@@ -467,7 +467,7 @@ namespace otb
     Fl::check();
     if(m_UseScroll)
       {
-	m_ScrollWidget->hide();
+  m_ScrollWidget->hide();
       }
     m_FullWidget->hide();
     m_ZoomWidget->hide();
@@ -476,8 +476,8 @@ namespace otb
 
     if(this->GetViewModel()==ScrollWidgetType::RGB)
       {
-	m_GreenHistogramWidget->hide();
-	m_BlueHistogramWidget->hide();
+  m_GreenHistogramWidget->hide();
+  m_BlueHistogramWidget->hide();
       }
 
 
@@ -493,17 +493,17 @@ namespace otb
     FormListPointerType new_list = FormListType::New();
     if(m_ShowZoomWidget)
       {
-	BoxPointerType zoomBox = BoxType::New();
-	SizeType zoomBoxSize;
-	IndexType zoomBoxIndex;
-	zoomBoxSize[0]=(m_ZoomWidget->GetViewedRegion().GetSize()[0]+2);
-	zoomBoxSize[1]=(m_ZoomWidget->GetViewedRegion().GetSize()[1]+2);
-	zoomBoxIndex[0]=(m_ZoomWidget->GetViewedRegion().GetIndex()[0]-1);
-	zoomBoxIndex[1]=(m_ZoomWidget->GetViewedRegion().GetIndex()[1]-1);
-	zoomBox->SetIndex(zoomBoxIndex);
-	zoomBox->SetSize(zoomBoxSize);
-	zoomBox->SetColor(m_InterfaceBoxesColor);
-	m_InterfaceBoxesList->SetNthElement(0,zoomBox);
+  BoxPointerType zoomBox = BoxType::New();
+  SizeType zoomBoxSize;
+  IndexType zoomBoxIndex;
+  zoomBoxSize[0]=(m_ZoomWidget->GetViewedRegion().GetSize()[0]+2);
+  zoomBoxSize[1]=(m_ZoomWidget->GetViewedRegion().GetSize()[1]+2);
+  zoomBoxIndex[0]=(m_ZoomWidget->GetViewedRegion().GetIndex()[0]-1);
+  zoomBoxIndex[1]=(m_ZoomWidget->GetViewedRegion().GetIndex()[1]-1);
+  zoomBox->SetIndex(zoomBoxIndex);
+  zoomBox->SetSize(zoomBoxSize);
+  zoomBox->SetColor(m_InterfaceBoxesColor);
+  m_InterfaceBoxesList->SetNthElement(0,zoomBox);
       }
 
     if(m_UseScroll)
@@ -520,13 +520,13 @@ namespace otb
       box->SetColor(m_InterfaceBoxesColor);
       int idx;
       if(m_ShowZoomWidget)
-	{
-	  idx = 1;
-	}
+  {
+    idx = 1;
+  }
       else
-	{
-	  idx = 0;
-	}
+  {
+    idx = 0;
+  }
       m_InterfaceBoxesList->SetNthElement(idx,box);
     }
 
@@ -542,16 +542,16 @@ namespace otb
             ImageWidgetPolygonFormPointerType new_poly = ImageWidgetPolygonFormType::New();
             new_poly->SetPolygon(it2.Get());
 
-	    ColorType color;
+      ColorType color;
 
-	    if(this->GetROIColorMapEntry(it2.Get()->GetValue(),color))
-	      {
-		 new_poly->SetColor(color);
-	      }
-	    else
-	      {
-		new_poly->SetColor(m_DefaultROIColor);
-	      }
+      if(this->GetROIColorMapEntry(it2.Get()->GetValue(),color))
+        {
+     new_poly->SetColor(color);
+        }
+      else
+        {
+    new_poly->SetColor(m_DefaultROIColor);
+        }
 
             for(PolygonIteratorType pIt = it2.Get()->GetVertexList()->Begin();
               pIt != it2.Get()->GetVertexList()->End();++pIt)
@@ -613,8 +613,8 @@ namespace otb
 
     if(this->GetViewModel()==ScrollWidgetType::RGB)
       {
-	m_GreenHistogramWidget->redraw();
-	m_BlueHistogramWidget->redraw();
+  m_GreenHistogramWidget->redraw();
+  m_BlueHistogramWidget->redraw();
       }
 
 
@@ -625,7 +625,7 @@ namespace otb
     while(linkedIt!=m_LinkedViewerList->End()&&offIt!=m_LinkedViewerOffsetList.end())
     {
       if(!linkedIt.Get()->GetUpdating() && linkedIt.Get()->GetBuilt())
-	{
+  {
           linkedIt.Get()->Update();
         }
       ++linkedIt;
@@ -655,7 +655,7 @@ namespace otb
 
     if(m_InputImage->GetBufferedRegion().IsInside(index))
     {
-	  //comment: std::cout<<"Index: "<<index<<std::endl;
+    //comment: std::cout<<"Index: "<<index<<std::endl;
 
       typename ImageType::PixelType newPixel = m_InputImage->GetPixel(index);
 
@@ -750,13 +750,13 @@ namespace otb
   {
     if(m_UseImageOverlay)
       {
-	m_FullWidget->SetImageOverlayOpacity(opacity);
-	m_ZoomWidget->SetImageOverlayOpacity(opacity);
+  m_FullWidget->SetImageOverlayOpacity(opacity);
+  m_ZoomWidget->SetImageOverlayOpacity(opacity);
 
-	if(m_UseScroll)
-	  {
-	    m_ScrollWidget->SetImageOverlayOpacity(opacity);
-	  }
+  if(m_UseScroll)
+    {
+      m_ScrollWidget->SetImageOverlayOpacity(opacity);
+    }
       }
   }
 
@@ -783,7 +783,7 @@ namespace otb
   {
     if(m_UseScroll)
       {
-	m_ScrollWidget->redraw();
+  m_ScrollWidget->redraw();
       }
   }
 
@@ -806,21 +806,21 @@ ImageViewerBase<TPixel,TLabel>
       SizeType size = smallRegion.GetSize();
 
       if(smallRegion.GetIndex()[0]<bigRegion.GetIndex()[0])
-	{
-	  index[0]=bigRegion.GetIndex()[0];
-	}
+  {
+    index[0]=bigRegion.GetIndex()[0];
+  }
       if(smallRegion.GetIndex()[1]<bigRegion.GetIndex()[1])
-	{
-	  index[1]=bigRegion.GetIndex()[1];
-	}
+  {
+    index[1]=bigRegion.GetIndex()[1];
+  }
       if(index[0]+size[0]>=bigRegion.GetIndex()[0]+bigRegion.GetSize()[0])
-	{
-	  index[0]=bigRegion.GetIndex()[0]+bigRegion.GetSize()[0]-size[0];
-	}
+  {
+    index[0]=bigRegion.GetIndex()[0]+bigRegion.GetSize()[0]-size[0];
+  }
       if(index[1]+size[1]>=bigRegion.GetIndex()[1]+bigRegion.GetSize()[1])
-	{
-	  index[1]=bigRegion.GetIndex()[1]+bigRegion.GetSize()[1]-size[1];
-	}
+  {
+    index[1]=bigRegion.GetIndex()[1]+bigRegion.GetSize()[1]-size[1];
+  }
       resp.SetSize(size);
       resp.SetIndex(index);
       return resp;
@@ -850,12 +850,12 @@ ImageViewerBase<TPixel,TLabel>
   while(linkedIt!=m_LinkedViewerList->End()&&offIt!=m_LinkedViewerOffsetList.end())
     {
       if(!linkedIt.Get()->GetUpdating())
-	{
-	  IndexType linkedIndex;
-	  linkedIndex[0] = clickedIndex[0]+(*offIt)[0];
-	  linkedIndex[1] = clickedIndex[1]+(*offIt)[1];
-	  linkedIt.Get()->ChangeFullViewedRegion(linkedIndex);
-	}
+  {
+    IndexType linkedIndex;
+    linkedIndex[0] = clickedIndex[0]+(*offIt)[0];
+    linkedIndex[1] = clickedIndex[1]+(*offIt)[1];
+    linkedIt.Get()->ChangeFullViewedRegion(linkedIndex);
+  }
       ++offIt;
       ++linkedIt;
     }
@@ -886,17 +886,17 @@ template <class TPixel, class TLabel>
       typename OffsetListType::iterator offIt = m_LinkedViewerOffsetList.begin();
 
       while(linkedIt!=m_LinkedViewerList->End()&&offIt!=m_LinkedViewerOffsetList.end())
-	{
-	  if(!linkedIt.Get()->GetUpdating())
-	    {
-	      IndexType linkedIndex;
-	      linkedIndex[0] = clickedIndex[0]+(*offIt)[0];
-	      linkedIndex[1] = clickedIndex[1]+(*offIt)[1];
-	      linkedIt.Get()->ChangeZoomViewedRegion(linkedIndex);
-	    }
-	  ++offIt;
-	  ++linkedIt;
-	}
+  {
+    if(!linkedIt.Get()->GetUpdating())
+      {
+        IndexType linkedIndex;
+        linkedIndex[0] = clickedIndex[0]+(*offIt)[0];
+        linkedIndex[1] = clickedIndex[1]+(*offIt)[1];
+        linkedIt.Get()->ChangeZoomViewedRegion(linkedIndex);
+      }
+    ++offIt;
+    ++linkedIt;
+  }
     }
   //comment: std::cout<<"ChangeZoomViewedRegion: "<<m_Label<<" Updating flag off"<<std::endl;
   m_Updating = false;
@@ -913,10 +913,10 @@ ImageViewerBase<TPixel,TLabel>
   while(it!=m_LinkedViewerList->End())
     {
       if(it.Get()==viewer)
-	{
-	  otbMsgDebugMacro(<<"This viewer is already linked !");
-	  return;
-	}
+  {
+    otbMsgDebugMacro(<<"This viewer is already linked !");
+    return;
+  }
       ++it;
     }
   // If not, add it with its offset
@@ -964,13 +964,13 @@ ImageViewerBase<TPixel,TLabel>
   while(!found&&it!=m_LinkedViewerList->End())
     {
       if(it.Get()==viewer)
-	{
-	  found = true;
-	}
+  {
+    found = true;
+  }
       else
-	{
-	  ++counter;
-	}
+  {
+    ++counter;
+  }
       ++it;
     }
 
@@ -1003,9 +1003,9 @@ ImageViewerBase<TPixel,TLabel>
   while(it!=m_LinkedViewerList->End())
     {
       if(it.Get()==viewer)
-	{
-	  return counter;
-	}
+  {
+    return counter;
+  }
       ++counter;
       ++it;
     }
@@ -1056,61 +1056,61 @@ ImageViewerBase<TPixel,TLabel>
     case ScrollWidgetType::RGB:
     {
 //       if(m_InputImage->GetNumberOfComponentsPerPixel()>2)
-// 	{ //NOTE: No reason to prevent a 2 bands image to be displayed in RGB
+//   { //NOTE: No reason to prevent a 2 bands image to be displayed in RGB
 //       and the image is not necessarily loaded at that time.
-	  if(m_UseScroll)
-	    {
-	      m_ScrollWidget->SetViewModel(viewModel);
-	      m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
-	      m_ScrollWidget->SetGreenChannelIndex(m_GreenChannelIndex);
-	      m_ScrollWidget->SetBlueChannelIndex(m_BlueChannelIndex);
-	    }
-	  m_FullWidget->SetViewModel(viewModel);
-	  m_ZoomWidget->SetViewModel(viewModel);
-	  m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
-	  m_ZoomWidget->SetGreenChannelIndex(m_GreenChannelIndex);
-	  m_ZoomWidget->SetBlueChannelIndex(m_BlueChannelIndex);
-	  m_FullWidget->SetRedChannelIndex(m_RedChannelIndex);
-	  m_FullWidget->SetGreenChannelIndex(m_GreenChannelIndex);
-	  m_FullWidget->SetBlueChannelIndex(m_BlueChannelIndex);
+    if(m_UseScroll)
+      {
+        m_ScrollWidget->SetViewModel(viewModel);
+        m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
+        m_ScrollWidget->SetGreenChannelIndex(m_GreenChannelIndex);
+        m_ScrollWidget->SetBlueChannelIndex(m_BlueChannelIndex);
+      }
+    m_FullWidget->SetViewModel(viewModel);
+    m_ZoomWidget->SetViewModel(viewModel);
+    m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
+    m_ZoomWidget->SetGreenChannelIndex(m_GreenChannelIndex);
+    m_ZoomWidget->SetBlueChannelIndex(m_BlueChannelIndex);
+    m_FullWidget->SetRedChannelIndex(m_RedChannelIndex);
+    m_FullWidget->SetGreenChannelIndex(m_GreenChannelIndex);
+    m_FullWidget->SetBlueChannelIndex(m_BlueChannelIndex);
 
-	  ComputeNormalizationFactors();
+    ComputeNormalizationFactors();
 
-	  typename HistogramWidgetType::ColorType blue,red,green;
+    typename HistogramWidgetType::ColorType blue,red,green;
 
-	  red[0]=0.5;
-	  red[1]=0;
-	  red[2]=0;
+    red[0]=0.5;
+    red[1]=0;
+    red[2]=0;
 
-	  green[0]=0;
-	  green[1]=0.5;
-	  green[2]=0;
+    green[0]=0;
+    green[1]=0.5;
+    green[2]=0;
 
-	  blue[0]=0;
-	  blue[1]=0;
-	  blue[2]=0.5;
+    blue[0]=0;
+    blue[1]=0;
+    blue[2]=0.5;
 
-	  m_RedHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(m_RedChannelIndex)->GetOutput());
-	  m_RedHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(m_RedChannelIndex));
-	  m_RedHistogramWidget->SetLabel("Red channel");
-	  m_RedHistogramWidget->SetTransferFunctionLabel("Affine");
-	  m_RedHistogramWidget->SetHistogramColor(red);
-	  m_RedHistogramWidget->SetTextColor(red);
+    m_RedHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(m_RedChannelIndex)->GetOutput());
+    m_RedHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(m_RedChannelIndex));
+    m_RedHistogramWidget->SetLabel("Red channel");
+    m_RedHistogramWidget->SetTransferFunctionLabel("Affine");
+    m_RedHistogramWidget->SetHistogramColor(red);
+    m_RedHistogramWidget->SetTextColor(red);
 
-	  m_BlueHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(m_BlueChannelIndex)->GetOutput());
-	  m_BlueHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(m_BlueChannelIndex));
-	  m_BlueHistogramWidget->SetLabel("Blue channel");
-	  m_BlueHistogramWidget->SetTransferFunctionLabel("Affine");
-	  m_BlueHistogramWidget->SetHistogramColor(blue);
-	  m_BlueHistogramWidget->SetTextColor(blue);
-	  m_GreenHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(m_GreenChannelIndex)->GetOutput());
-	  m_GreenHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(m_GreenChannelIndex));
-	  m_GreenHistogramWidget->SetLabel("Green channel");
-	  m_GreenHistogramWidget->SetTransferFunctionLabel("Affine");
-	  m_GreenHistogramWidget->SetHistogramColor(green);
-	  m_GreenHistogramWidget->SetTextColor(green);
-	  break;
-// 	}
+    m_BlueHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(m_BlueChannelIndex)->GetOutput());
+    m_BlueHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(m_BlueChannelIndex));
+    m_BlueHistogramWidget->SetLabel("Blue channel");
+    m_BlueHistogramWidget->SetTransferFunctionLabel("Affine");
+    m_BlueHistogramWidget->SetHistogramColor(blue);
+    m_BlueHistogramWidget->SetTextColor(blue);
+    m_GreenHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(m_GreenChannelIndex)->GetOutput());
+    m_GreenHistogramWidget->SetTransferFunction(m_TransferFunctionList->GetNthElement(m_GreenChannelIndex));
+    m_GreenHistogramWidget->SetLabel("Green channel");
+    m_GreenHistogramWidget->SetTransferFunctionLabel("Affine");
+    m_GreenHistogramWidget->SetHistogramColor(green);
+    m_GreenHistogramWidget->SetTextColor(green);
+    break;
+//   }
     }
     case ScrollWidgetType::GRAYSCALE:
     {
@@ -1143,7 +1143,7 @@ ImageViewerBase<TPixel,TLabel>
       {
         m_ScrollWidget->SetViewModel(viewModel);
         m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
-	  m_ScrollWidget->SetGreenChannelIndex(m_GreenChannelIndex);
+    m_ScrollWidget->SetGreenChannelIndex(m_GreenChannelIndex);
       }
       m_FullWidget->SetViewModel(viewModel);
       m_ZoomWidget->SetViewModel(viewModel);
@@ -1171,7 +1171,7 @@ ImageViewerBase<TPixel,TLabel>
       {
         m_ScrollWidget->SetViewModel(viewModel);
         m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
-	  m_ScrollWidget->SetGreenChannelIndex(m_GreenChannelIndex);
+    m_ScrollWidget->SetGreenChannelIndex(m_GreenChannelIndex);
       }
       m_FullWidget->SetViewModel(viewModel);
       m_ZoomWidget->SetViewModel(viewModel);
@@ -1203,11 +1203,11 @@ ImageViewerBase<TPixel,TLabel>
 {
    if(m_InputImage->GetNumberOfComponentsPerPixel()>2)
        {
-	 this->SetViewModel(ScrollWidgetType::RGB);
+   this->SetViewModel(ScrollWidgetType::RGB);
        }
      else
        {
-	 this->SetViewModel(ScrollWidgetType::GRAYSCALE);
+   this->SetViewModel(ScrollWidgetType::GRAYSCALE);
        }
 }
 

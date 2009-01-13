@@ -35,18 +35,18 @@ namespace otb
  *
  */
 template <class TInputImage,
-	class TInputImageDirection,
-	class TOutputImage >
+  class TInputImageDirection,
+  class TOutputImage >
 class ITK_EXPORT ModulusAndDirectionImageToImageFilter :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
-  /** 	Extract dimensions as well of the images of entry of exit. */
-  itkStaticConstMacro(		InputImageDimension,
-  				unsigned int,
-                      		TInputImage::ImageDimension);
-  itkStaticConstMacro(		OutputImageDimension,
-  				unsigned int,
-                      		TOutputImage::ImageDimension);
+  /**   Extract dimensions as well of the images of entry of exit. */
+  itkStaticConstMacro(    InputImageDimension,
+          unsigned int,
+                          TInputImage::ImageDimension);
+  itkStaticConstMacro(    OutputImageDimension,
+          unsigned int,
+                          TOutputImage::ImageDimension);
 
   /** typedef for the classes standards. */
   typedef ModulusAndDirectionImageToImageFilter Self;
@@ -60,9 +60,9 @@ public:
   /** Return the name of the class. */
   itkTypeMacro(ModulusAndDirectionImageToImageFilter, itk::ImageToImageFilter);
 
-  typedef typename Superclass::InputImageType 	InputImageType;
-  typedef TInputImageDirection 				    InputImageDirectionType;
-  typedef typename Superclass::OutputImageType	OutputImageType;
+  typedef typename Superclass::InputImageType   InputImageType;
+  typedef TInputImageDirection             InputImageDirectionType;
+  typedef typename Superclass::OutputImageType  OutputImageType;
 
   /** Set/Get the image input of this process object.  */
   virtual void SetInput( const InputImageType *input);

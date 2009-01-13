@@ -61,9 +61,9 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
   if(m_WeightOffsetTable!=NULL)
     {
       for(unsigned int i=0; i < m_OffsetTableSize; i++)
-	{
-	  delete [] m_WeightOffsetTable[i];
-	}
+  {
+    delete [] m_WeightOffsetTable[i];
+  }
       delete[] m_WeightOffsetTable;
       m_WeightOffsetTable = NULL;
     }
@@ -147,35 +147,35 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
       int empty = static_cast<int>(this->GetRadius());
 
       for(unsigned int iPos = 0; iPos < it.Size(); iPos++)
-	{
-	// Get the offset (index)
-	typename IteratorType::OffsetType off = it.GetOffset(iPos);
+  {
+  // Get the offset (index)
+  typename IteratorType::OffsetType off = it.GetOffset(iPos);
 
-	// Check if the offset has zero weights
-	bool nonzero = true;
-	for(unsigned int dim = 0; dim < ImageDimension; dim++)
-	  {
-	    if(off[dim] == -empty)
-	      {
-		nonzero = false;
-		break;
-	      }
-	  }
-	// Only use offsets with non-zero indices
-	if(nonzero)
-	  {
-	    // Set the offset index
-	    m_OffsetTable[iOffset] = iPos;
+  // Check if the offset has zero weights
+  bool nonzero = true;
+  for(unsigned int dim = 0; dim < ImageDimension; dim++)
+    {
+      if(off[dim] == -empty)
+        {
+    nonzero = false;
+    break;
+        }
+    }
+  // Only use offsets with non-zero indices
+  if(nonzero)
+    {
+      // Set the offset index
+      m_OffsetTable[iOffset] = iPos;
 
-	    // Set the weight table indices
-	    for(unsigned int dim = 0; dim < ImageDimension; dim++)
-	      {
-		m_WeightOffsetTable[iOffset][dim] = off[dim] + this->GetRadius() - 1;
-	      }
-	    // Increment the index
-	    iOffset++;
-	  }
-	}
+      // Set the weight table indices
+      for(unsigned int dim = 0; dim < ImageDimension; dim++)
+        {
+    m_WeightOffsetTable[iOffset][dim] = off[dim] + this->GetRadius() - 1;
+        }
+      // Increment the index
+      iOffset++;
+    }
+  }
     }
   else
     {
@@ -212,18 +212,18 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
       // having to call floor.
       //    baseIndex[dim] = (long) vcl_floor(index[dim] );
       if (index[dim] >= 0.0)
-	{
-	  baseIndex[dim] = (long) index[dim];
-	}
+  {
+    baseIndex[dim] = (long) index[dim];
+  }
       else
-	{
-	  long tIndex = (long) index[dim];
-	  if (double(tIndex) != index[dim])
-	    {
-	      tIndex--;
-	    }
-	  baseIndex[dim] = tIndex;
-	}
+  {
+    long tIndex = (long) index[dim];
+    if (double(tIndex) != index[dim])
+      {
+        tIndex--;
+      }
+    baseIndex[dim] = tIndex;
+  }
       distance[dim] = index[dim] - double( baseIndex[dim] );
     }
 
@@ -255,7 +255,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
       {
       for( unsigned int i = 0; i < m_WindowSize; i++)
         {
-	  xWeight[dim][i] = static_cast<int>(i) == (static_cast<int>(this->GetRadius()) - 1) ? 1. : 0.;
+    xWeight[dim][i] = static_cast<int>(i) == (static_cast<int>(this->GetRadius()) - 1) ? 1. : 0.;
         }
       }
     else
@@ -264,34 +264,34 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
       // i is the relative offset in dimension dim.
       for( unsigned int i = 0; i < m_WindowSize; i++)
         {
-	  // Increment the offset, taking it through the range
-	  // (dist + rad - 1, ..., dist - rad), i.e. all x
-	  // such that vcl_abs(x) <= rad
-	  x -= 1.0;
-	  // Compute the weight for this m
-	  xWeight[dim][i] = m_Function(x);
+    // Increment the offset, taking it through the range
+    // (dist + rad - 1, ..., dist - rad), i.e. all x
+    // such that vcl_abs(x) <= rad
+    x -= 1.0;
+    // Compute the weight for this m
+    xWeight[dim][i] = m_Function(x);
         }
       //}
     }
   if (m_NormalizeWeight == true)
     {
       for( unsigned int dim = 0; dim < ImageDimension; dim++ )
-	{
-	  double sum = 0.;
-	  // Compute the weights sum
-	  for( unsigned int i = 0; i < m_WindowSize; i++)
-	    {
-	      sum += xWeight[dim][i];
-	    }
-	  if (sum != 1.)
-	    {
-	      // Normalize the weights
-	      for( unsigned int i = 0; i < m_WindowSize; i++)
-		{
-		  xWeight[dim][i] =  xWeight[dim][i]/sum;
-		}
-	    }
-	}
+  {
+    double sum = 0.;
+    // Compute the weights sum
+    for( unsigned int i = 0; i < m_WindowSize; i++)
+      {
+        sum += xWeight[dim][i];
+      }
+    if (sum != 1.)
+      {
+        // Normalize the weights
+        for( unsigned int i = 0; i < m_WindowSize; i++)
+    {
+      xWeight[dim][i] =  xWeight[dim][i]/sum;
+    }
+      }
+  }
     }
 
 

@@ -50,7 +50,7 @@ template < class TInputPath,
            class TPrecision = double>
 class ITK_EXPORT ComplexMomentPathFunction :
     public GeometricMomentPathFunction< TInputPath,
-					TOutput,
+          TOutput,
                                         TPrecision >
 {
 public:

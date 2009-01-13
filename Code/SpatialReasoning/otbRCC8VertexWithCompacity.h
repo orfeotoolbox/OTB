@@ -31,7 +31,7 @@ namespace otb
    */
   template <class TPath, class TPrecision = float>
     class ITK_EXPORT RCC8VertexWithCompacity
-		: public RCC8VertexBase<TPath>
+    : public RCC8VertexBase<TPath>
     {
       public:
       /** Standard class typedefs */

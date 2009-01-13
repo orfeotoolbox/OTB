@@ -53,7 +53,7 @@ void
 VectorDataFileWriter<TInputVectorData>
 ::SetInput(const InputVectorDataType *input)
 {
-	// ProcessObject is not const_correct so this cast is required here.
+  // ProcessObject is not const_correct so this cast is required here.
   this->ProcessObject::SetNthInput(0,
                                    const_cast<TInputVectorData *>(input ) );
 }
@@ -201,8 +201,8 @@ void
 VectorDataFileWriter<TInputVectorData>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-	Superclass::PrintSelf(os, indent);
-	os << indent << "VectorDataFileWriter" << std::endl;
+  Superclass::PrintSelf(os, indent);
+  os << indent << "VectorDataFileWriter" << std::endl;
 }
 
 

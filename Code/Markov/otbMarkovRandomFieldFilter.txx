@@ -38,7 +38,7 @@ MarkovRandomFieldFilter<TInputImage,TClassifiedImage>
   m_NumberOfIterations(0),
   m_StopCondition(MaximumNumberOfIterations),
   m_ExternalClassificationSet(false)
-			       */
+             */
 {
   m_NumberOfClasses = 0;
   m_MaximumNumberOfIterations = 50;
@@ -303,26 +303,26 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
           trainingImageIt( trainingImage, outputPtr->GetRequestedRegion() );
 
       while ( !outImageIt.IsAtEnd() )
-	{
-	  LabelledImagePixelType labelvalue =  static_cast<LabelledImagePixelType> (trainingImageIt.Get());
+  {
+    LabelledImagePixelType labelvalue =  static_cast<LabelledImagePixelType> (trainingImageIt.Get());
 
-	  outImageIt.Set( labelvalue );
-	  ++trainingImageIt;
-	  ++outImageIt;
-	}// end while
+    outImageIt.Set( labelvalue );
+    ++trainingImageIt;
+    ++outImageIt;
+  }// end while
     }
   else //set to random value
     {
 //       srand((unsigned)time(0));
 
       while ( !outImageIt.IsAtEnd() )
-	{
-	  LabelledImagePixelType randomvalue = static_cast<LabelledImagePixelType>(
+  {
+    LabelledImagePixelType randomvalue = static_cast<LabelledImagePixelType>(
               m_Generator->GetIntegerVariate() % static_cast<int>(m_NumberOfClasses)
             );
-	  outImageIt.Set( randomvalue );
-	  ++outImageIt;
-	}// end while
+    outImageIt.Set( randomvalue );
+    ++outImageIt;
+  }// end while
 
 
     }
@@ -380,7 +380,7 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 
     if( !m_Sampler )
       {
-	itkExceptionMacro(<<"Sampler is not present");
+  itkExceptionMacro(<<"Sampler is not present");
       }
 
     m_Sampler->SetLambda(m_Lambda);
@@ -402,13 +402,13 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 
   //Note: error should be defined according to the number of valid pixel in the output
   int maxNumPixelError = (int) ( vnl_math_rnd (m_ErrorTolerance *
-					       m_TotalNumberOfPixelsInInputImage) );
+                 m_TotalNumberOfPixelsInInputImage) );
 
   m_NumberOfIterations = 0;
   m_ErrorCounter = m_TotalNumberOfValidPixelsInOutputImage;
 
   while(( m_NumberOfIterations < m_MaximumNumberOfIterations ) &&
- 	( m_ErrorCounter >= maxNumPixelError ) )
+   ( m_ErrorCounter >= maxNumPixelError ) )
     {
       otbMsgDebugMacro(<< "Iteration No." << m_NumberOfIterations);
 //       std::cerr <<  "Iteration No." << m_NumberOfIterations << std::endl;
@@ -416,9 +416,9 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
       this->MinimizeOnce();
 
       otbMsgDebugMacro(<< "m_ErrorCounter/m_TotalNumberOfPixelsInInputImage: "
-		       << m_ErrorCounter/((double)(m_TotalNumberOfPixelsInInputImage)));
+           << m_ErrorCounter/((double)(m_TotalNumberOfPixelsInInputImage)));
 //       std::cerr << "m_ErrorCounter/m_TotalNumberOfPixelsInInputImage: "
-// 		       << m_ErrorCounter/((double)(m_TotalNumberOfPixelsInInputImage))
+//            << m_ErrorCounter/((double)(m_TotalNumberOfPixelsInInputImage))
 //           << std::endl;
 //       std::cerr <<  "m_ImageDeltaEnergy: " << m_ImageDeltaEnergy << std::endl;
 

@@ -111,17 +111,17 @@ class ITK_EXPORT ImageWidgetAffineTransferFunction
   virtual unsigned char Map(PixelType value)
     {
       if(value<this->GetLowerBound())
-	{
-	  return 0;
-	}
+  {
+    return 0;
+  }
       else if(value>this->GetUpperBound())
-	{
-	  return 255;
-	}
+  {
+    return 255;
+  }
       else
-	{
-	  return static_cast<unsigned char>(vcl_floor(255.*(value-this->GetLowerBound())/(this->GetUpperBound()-this->GetLowerBound())+0.5));
-	}
+  {
+    return static_cast<unsigned char>(vcl_floor(255.*(value-this->GetLowerBound())/(this->GetUpperBound()-this->GetLowerBound())+0.5));
+  }
 
     }
  protected:
@@ -160,19 +160,19 @@ class ITK_EXPORT ImageWidgetSquareRootTransferFunction
   virtual unsigned char Map(PixelType value)
     {
       if(value<this->GetLowerBound())
-	{
-	  return 0;
-	}
+  {
+    return 0;
+  }
       else if(value>this->GetUpperBound())
-	{
-	  return 255;
-	}
+  {
+    return 255;
+  }
       else
-	{
-	  double b = vcl_sqrt(static_cast<double>(this->GetLowerBound()));
-	  double a = 255. /(vcl_sqrt(static_cast<double>(this->GetUpperBound()))-b);
-	  return static_cast<unsigned char>(vcl_floor(a * (vcl_sqrt(static_cast<double>(value))-b)+0.5));
-	}
+  {
+    double b = vcl_sqrt(static_cast<double>(this->GetLowerBound()));
+    double a = 255. /(vcl_sqrt(static_cast<double>(this->GetUpperBound()))-b);
+    return static_cast<unsigned char>(vcl_floor(a * (vcl_sqrt(static_cast<double>(value))-b)+0.5));
+  }
 
     }
  protected:
@@ -211,19 +211,19 @@ class ITK_EXPORT ImageWidgetLogTransferFunction
   virtual unsigned char Map(PixelType value)
     {
       if(value<this->GetLowerBound())
-	{
-	  return 0;
-	}
+  {
+    return 0;
+  }
       else if(value>this->GetUpperBound())
-	{
-	  return 255;
-	}
+  {
+    return 255;
+  }
       else
-	{
-	  double b = vcl_log(1.+static_cast<double>(this->GetLowerBound()));
-	  double a = 255. /(vcl_log(1.+static_cast<double>(this->GetUpperBound()))-b);
-	  return static_cast<unsigned char>(vcl_floor(a * (vcl_log(1.+static_cast<double>(value))-b)+0.5));
-	}
+  {
+    double b = vcl_log(1.+static_cast<double>(this->GetLowerBound()));
+    double a = 255. /(vcl_log(1.+static_cast<double>(this->GetUpperBound()))-b);
+    return static_cast<unsigned char>(vcl_floor(a * (vcl_log(1.+static_cast<double>(value))-b)+0.5));
+  }
 
     }
  protected:
@@ -262,19 +262,19 @@ class ITK_EXPORT ImageWidgetSquareTransferFunction
   virtual unsigned char Map(PixelType value)
     {
       if(value<this->GetLowerBound())
-	{
-	  return 0;
-	}
+  {
+    return 0;
+  }
       else if(value>this->GetUpperBound())
-	{
-	  return 255;
-	}
+  {
+    return 255;
+  }
       else
-	{
-	  double b = vcl_pow(static_cast<double>(this->GetLowerBound()),2);
-	  double a = 255. /(vcl_pow(static_cast<double>(this->GetUpperBound()),2)-b);
-	  return static_cast<unsigned char>(vcl_floor(a * (vcl_pow(static_cast<double>(value),2)-b)+0.5));
-	}
+  {
+    double b = vcl_pow(static_cast<double>(this->GetLowerBound()),2);
+    double a = 255. /(vcl_pow(static_cast<double>(this->GetUpperBound()),2)-b);
+    return static_cast<unsigned char>(vcl_floor(a * (vcl_pow(static_cast<double>(value),2)-b)+0.5));
+  }
 
     }
  protected:

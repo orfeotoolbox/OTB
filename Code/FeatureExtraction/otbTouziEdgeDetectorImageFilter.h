@@ -39,7 +39,7 @@ namespace otb
  *
  * The response of the edge detector between two regions 1 and 2 in
  * one direction \f$ \theta_{i} \f$ is:
- *	\f[R(\theta_{i}) = 1 - \min (\frac{\mu_{1}}{\mu_{2}};\frac{\mu_{2}}{\mu_{1}}) \f]
+ *  \f[R(\theta_{i}) = 1 - \min (\frac{\mu_{1}}{\mu_{2}};\frac{\mu_{2}}{\mu_{1}}) \f]
  * where \f$ \mu_{1} \f$ and  \f$ \mu_{2} \f$ are the mean of regions 1 and 2.
  *
  * The intensity of contour is calculated in four directions
@@ -47,10 +47,10 @@ namespace otb
  *
  * The output is an image of intensity of the detection of contour R, the
  * maximum response of the ratio edge detector of \f$ R(\theta_{i}) \f$ :
- *	\f[R = \max ( R(\theta_{i}) ) \f]
+ *  \f[R = \max ( R(\theta_{i}) ) \f]
  *
  * An image of the direction of contours can also be determined by this filter:
- * 	\f[D = \frac{\sum_{i=1}^{4} s_{i}\theta_{i}R(\theta_{i})}{\sum_{i=1}^{4} R(\theta_{i}}  \f]
+ *   \f[D = \frac{\sum_{i=1}^{4} s_{i}\theta_{i}R(\theta_{i})}{\sum_{i=1}^{4} R(\theta_{i}}  \f]
  * where if  \f[ \mu_{1}>\mu_{2} s_{i}=+1 \f]
  * else if \f[ \mu_{1}<\mu_{2} s_{i}=-1 \f]
  *
@@ -61,12 +61,12 @@ class  ITK_EXPORT TouziEdgeDetectorImageFilter :  public ImageToModulusAndDirect
 {
 public:
   /** Extract input and output images sizes. */
-  itkStaticConstMacro(		InputImageDimension,
-  				unsigned int,
-                      		TInputImage::ImageDimension);
-  itkStaticConstMacro(		OutputImageDimension,
-  				unsigned int,
-                      		TOutputImage::ImageDimension);
+  itkStaticConstMacro(    InputImageDimension,
+          unsigned int,
+                          TInputImage::ImageDimension);
+  itkStaticConstMacro(    OutputImageDimension,
+          unsigned int,
+                          TOutputImage::ImageDimension);
 
   /** typedef for the classes standards. */
   typedef TouziEdgeDetectorImageFilter Self;

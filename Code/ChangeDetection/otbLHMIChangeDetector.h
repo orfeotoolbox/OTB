@@ -106,16 +106,16 @@ public:
       TOutput value = static_cast<TOutput>(itA.GetPixel(pos));
 
       if(value > maxA)
-	maxA = value;
+  maxA = value;
       else if (value < minA)
-	minA = value;
+  minA = value;
 
       value = static_cast<TOutput>(itB.GetPixel(pos));
 
       if(value > maxB)
-	maxB = value;
+  maxB = value;
       else if (value < minB)
-	minB = value;
+  minB = value;
 
 
       }
@@ -140,9 +140,9 @@ public:
         typename HistogramType::MeasurementVectorType sample;
         sample[0] = itA.GetPixel(pos);
         sample[1] = itB.GetPixel(pos);
-	/*if(sample[0]!=NumericTraits<TOutput>::Zero &&
-	   sample[1]!=NumericTraits<TOutput>::Zero)*/
-	  histogram->IncreaseFrequency(sample, 1);
+  /*if(sample[0]!=NumericTraits<TOutput>::Zero &&
+     sample[1]!=NumericTraits<TOutput>::Zero)*/
+    histogram->IncreaseFrequency(sample, 1);
 
     }
 
@@ -205,7 +205,7 @@ class ITK_EXPORT LHMIChangeDetector :
             Functor::LHMI<
                    ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
                    ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
-		   ITK_TYPENAME TOutputImage::PixelType>   >
+       ITK_TYPENAME TOutputImage::PixelType>   >
 {
 public:
   /** Standard class typedefs. */

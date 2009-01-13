@@ -159,8 +159,8 @@ RCC8GraphFileWriter<TInputGraph>
   for(eIt.GoToBegin();!eIt.IsAtEnd();++eIt)
     {
       this->WriteEdge(out, eIt.GetSourceIndex(),
-		      eIt.GetTargetIndex(),
-		      eIt.GetValue());
+          eIt.GetTargetIndex(),
+          eIt.GetValue());
     }
 
   // Ends the graph writing
@@ -180,7 +180,7 @@ RCC8GraphFileWriter<TInputGraph>
 void
 RCC8GraphFileWriter<TInputGraph>
 ::WriteEdge(std::ofstream& of,VertexDescriptorType source,
-		 VertexDescriptorType target, RCC8ValueType value)
+     VertexDescriptorType target, RCC8ValueType value)
 {
   otbMsgDevMacro(<<"RCC8GraphFileWriter: WriteEdge call: "<<source<<" "<<target<<" "<<value);
   of<<source<<" -> "<<target<<" ";
@@ -197,7 +197,7 @@ template <class TInputGraph>
 void
 RCC8GraphFileWriter<TInputGraph>
 ::WriteVertex(std::ofstream& of, VertexDescriptorType index,
-		   VertexPointerType vertex)
+       VertexPointerType vertex)
 {
   typedef typename VertexType::AttributesMapType AttributesMapType;
   typedef typename AttributesMapType::iterator IteratorType;
@@ -211,13 +211,13 @@ RCC8GraphFileWriter<TInputGraph>
       of<<(*it).second<<"\"";
       ++it;
       if(it==attr.end())
-	{
-	  of<<"];"<<std::endl;
-	}
+  {
+    of<<"];"<<std::endl;
+  }
       else
-	{
-	  of<<",";
-	}
+  {
+    of<<",";
+  }
     }
 }
 /**

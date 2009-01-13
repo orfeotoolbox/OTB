@@ -112,7 +112,7 @@ SIXSTraits::ComputeAtmosphericParameters(
                 otbMsgDevMacro(<< "Start call 6S main function ...");
                 otb_6s_ssssss_otb_main_function(        &asol, &phi0, &avis, &phiv, &month, &jday,
                                                         &pressure, &uw, &uo3,
-	                                                &iaer,
+                                                  &iaer,
                                                         &taer55,
                                                         &wlinf, &wlsup,
                                                         s,
@@ -171,39 +171,39 @@ SIXSTraits::ComputeWavelenghtSpectralBandValuesFor6S(
         {
                 ValuesVectorType values(1, FilterFunctionValues[0]); //vector size 1 with the value vect[0]
 
-	        // Stop the interpolation at the max spectral value.
-	        value = i*SIXSStepOfWavelenghtSpectralBandValues;
+          // Stop the interpolation at the max spectral value.
+          value = i*SIXSStepOfWavelenghtSpectralBandValues;
                 while(L_min+value <= L_max )
-	        {
-	                // Search the User interval that surround the StepOfWavelenghtSpectralBandValues current value.
+          {
+                  // Search the User interval that surround the StepOfWavelenghtSpectralBandValues current value.
 
-			// removed the <= here, might be wrong
-	                while(j*L_userStep < value)
-	                {
-		                j++;
-	                }
+      // removed the <= here, might be wrong
+                  while(j*L_userStep < value)
+                  {
+                    j++;
+                  }
 
-			// Check if we are not out of bound
-			if(j>=FilterFunctionValues.size())
-			{
-				itkGenericExceptionMacro(<<"Index "<<j<<" out of bound for FilterFunctionValues vector (size: "<<FilterFunctionValues.size()<<").");
-			}
+      // Check if we are not out of bound
+      if(j>=FilterFunctionValues.size())
+      {
+        itkGenericExceptionMacro(<<"Index "<<j<<" out of bound for FilterFunctionValues vector (size: "<<FilterFunctionValues.size()<<").");
+      }
 
-	                double valueTemp;
-	                valueTemp = static_cast<double>(FilterFunctionValues[j-1])
-	                                + ((static_cast<double>(FilterFunctionValues[j])-static_cast<double>(FilterFunctionValues[j-1]))*invStep)
-	                                *(value-L_userStep*(j-1));
-	                values.push_back(static_cast<WavelenghtSpectralBandType>(valueTemp));
+                  double valueTemp;
+                  valueTemp = static_cast<double>(FilterFunctionValues[j-1])
+                                  + ((static_cast<double>(FilterFunctionValues[j])-static_cast<double>(FilterFunctionValues[j-1]))*invStep)
+                                  *(value-L_userStep*(j-1));
+                  values.push_back(static_cast<WavelenghtSpectralBandType>(valueTemp));
 
-	                i++;
+                  i++;
                         value = i*SIXSStepOfWavelenghtSpectralBandValues;
-	        }
+          }
 
-	        if (L_min+(i-1)*SIXSStepOfWavelenghtSpectralBandValues != L_max)
-	        {
-	                values.push_back(0);
-	        }
-	         // Store this values
+          if (L_min+(i-1)*SIXSStepOfWavelenghtSpectralBandValues != L_max)
+          {
+                  values.push_back(0);
+          }
+           // Store this values
                 WavelenghtSpectralBand->SetFilterFunctionValues6S(values);
                 // Store the new Max MaxSpectralValue
                 WavelenghtSpectralBand->SetMaxSpectralValue(static_cast<WavelenghtSpectralBandType>(L_min + i*SIXSStepOfWavelenghtSpectralBandValues));
@@ -218,13 +218,13 @@ SIXSTraits::ComputeWavelenghtSpectralBandValuesFor6S(
 
 void
 SIXSTraits::ComputeEnvironmentalContribution(const double diffuseTransmittanceForRayleighScattering,
-					     const double diffuseTransmittanceForAerosolScattering,
-					     const double radiusInKilometers,
-					     const double altitude,
-					     const double cosineOfViewingAngle,
-					       double & rayleighEstimation,
-					       double & aerosolEstimation,
-					       double & globalEstimation)
+               const double diffuseTransmittanceForAerosolScattering,
+               const double radiusInKilometers,
+               const double altitude,
+               const double cosineOfViewingAngle,
+                 double & rayleighEstimation,
+                 double & aerosolEstimation,
+                 double & globalEstimation)
 {
   otb_6s_doublereal difr(static_cast<otb_6s_doublereal>(diffuseTransmittanceForRayleighScattering));
   otb_6s_doublereal difa(static_cast<otb_6s_doublereal>(diffuseTransmittanceForAerosolScattering));

@@ -140,8 +140,10 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
   SetInterpolationWeights( x, EvaluateIndex, weights, m_SplineOrder );
 
   //std::cout<<"EvaluateIndex: "<<std::endl;
-  //std::cout<<EvaluateIndex[0][0]<<"\t"<<EvaluateIndex[0][1]<<"\t"<<EvaluateIndex[0][2]<<"\t"<<EvaluateIndex[0][3]<<std::endl;
-  //std::cout<<EvaluateIndex[1][0]<<"\t"<<EvaluateIndex[1][1]<<"\t"<<EvaluateIndex[1][2]<<"\t"<<EvaluateIndex[1][3]<<std::endl;
+  //std::cout<<EvaluateIndex[0][0]<<"\t"<<EvaluateIndex[0][1]<<"\t"
+  //     <<EvaluateIndex[0][2]<<"\t"<<EvaluateIndex[0][3]<<std::endl;
+  //std::cout<<EvaluateIndex[1][0]<<"\t"<<EvaluateIndex[1][1]<<"\t"
+  //     <<EvaluateIndex[1][2]<<"\t"<<EvaluateIndex[1][3]<<std::endl;
 
   // Modify EvaluateIndex at the boundaries using mirror boundary conditions
   this->ApplyMirrorBoundaryConditions(EvaluateIndex, m_SplineOrder);
@@ -552,11 +554,11 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
       for (unsigned int k = 0; k <= splineOrder; k++)
         {
         // btw - Think about this couldn't this be replaced with a more elagent modulus method?
-	  evaluateIndex[n][k] = (evaluateIndex[n][k] < dataOffset) ? (dataOffset+(dataOffset-evaluateIndex[n][k])%dataLength)
+    evaluateIndex[n][k] = (evaluateIndex[n][k] < dataOffset) ? (dataOffset+(dataOffset-evaluateIndex[n][k])%dataLength)
           : (evaluateIndex[n][k]);
         if ((long) dataLength+dataOffset <= evaluateIndex[n][k])
           {
-	    evaluateIndex[n][k] = dataOffset + dataLength - (evaluateIndex[n][k]-dataOffset - dataLength)%dataLength;
+      evaluateIndex[n][k] = dataOffset + dataLength - (evaluateIndex[n][k]-dataOffset - dataLength)%dataLength;
           }
         }
 

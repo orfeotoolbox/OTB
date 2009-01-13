@@ -104,7 +104,7 @@ UnaryFunctorNeighborhoodImageFilter<TInputImage, TOutputImage, TFunction>
   // ImageToImageFilter::GetInput(int) always returns a pointer to a
   // TInputImage so it cannot be used for the second input.
   InputImagePointer inputPtr
-	  = dynamic_cast<const TInputImage*>(ProcessObjectType::GetInput(0));
+    = dynamic_cast<const TInputImage*>(ProcessObjectType::GetInput(0));
   OutputImagePointer outputPtr = this->GetOutput(0);
 
   RadiusType r;

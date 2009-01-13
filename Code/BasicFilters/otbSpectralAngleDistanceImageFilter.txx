@@ -68,7 +68,7 @@ SpectralAngleDistanceImageFilter<TInputImage,TOutputImage>
   if (m_ReferencePixel.GetSize() != inputPtr->GetNumberOfComponentsPerPixel())
     {
       itkExceptionMacro(<<"Reference pixel size ("<<m_ReferencePixel.GetSize()<<" and input image pixel size ("
-			<<inputPtr->GetNumberOfComponentsPerPixel()<<") don't match!");
+      <<inputPtr->GetNumberOfComponentsPerPixel()<<") don't match!");
     }
 
 
@@ -95,21 +95,21 @@ SpectralAngleDistanceImageFilter<TInputImage,TOutputImage>
       double normProd2=0.0;
       InputPixelType pixel = inputIt.Get();
       for (unsigned int i=0; i<pixel.Size(); i++)
-	{
-	  scalarProd += pixel[i]*m_ReferencePixel[i];
-	  normProd1 += pixel[i]*pixel[i];
-	  normProd2 += m_ReferencePixel[i]*m_ReferencePixel[i];
-	}
+  {
+    scalarProd += pixel[i]*m_ReferencePixel[i];
+    normProd1 += pixel[i]*pixel[i];
+    normProd2 += m_ReferencePixel[i]*m_ReferencePixel[i];
+  }
       normProd = normProd1 * normProd2;
 
       if ( normProd == 0.0)
-	{
-	  dist = 0.0;
-	}
+  {
+    dist = 0.0;
+  }
       else
-	{
-	  dist = vcl_acos(scalarProd/vcl_sqrt(normProd));
-	}
+  {
+    dist = vcl_acos(scalarProd/vcl_sqrt(normProd));
+  }
       //------ This part was supressed since the filter must perform only the spectral angle computation ---
       // Spectral angle normalisation
       // dist = dist/(M_PI/2);

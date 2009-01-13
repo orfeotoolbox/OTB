@@ -47,7 +47,7 @@ namespace otb
  */
 template <class TNeuron=itk::VariableLengthVector<double>,
           class TDistance=itk::Statistics::EuclideanDistance<TNeuron>,
-		  unsigned int VMapDimension=2>
+      unsigned int VMapDimension=2>
 class ITK_EXPORT SOMMap
 : public otb::VectorImage<typename TNeuron::ComponentType,VMapDimension>
 {

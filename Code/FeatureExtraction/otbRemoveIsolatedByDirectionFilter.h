@@ -35,29 +35,29 @@ namespace Functor
       class RemoveIsolatedByDirectionFunctor
       {
       public:
-	RemoveIsolatedByDirectionFunctor() {};
-	~RemoveIsolatedByDirectionFunctor() {};
-	inline TOutput operator()(const TInput1 & itA, const TInput2 &itB)
-	  {
-	    double currentDirection = itB.GetCenterPixel();
-	    int nEqualNeighbors = 0;
+  RemoveIsolatedByDirectionFunctor() {};
+  ~RemoveIsolatedByDirectionFunctor() {};
+  inline TOutput operator()(const TInput1 & itA, const TInput2 &itB)
+    {
+      double currentDirection = itB.GetCenterPixel();
+      int nEqualNeighbors = 0;
            for (int neighborhoodIndex=0; neighborhoodIndex < 9; ++neighborhoodIndex)
-	     {
+       {
              if (itB.GetPixel(neighborhoodIndex) == currentDirection)
-	       {
+         {
                ++nEqualNeighbors;
-	       }
-	     }
+         }
+       }
            if (nEqualNeighbors <= 1)
-	     {
-	       //should never be 0 as it is at least equal to itself
-	       return 0;
-	     }
-	   else
-	     {
-	       return static_cast<TOutput>(itA.GetCenterPixel());
-	     }
-	  }
+       {
+         //should never be 0 as it is at least equal to itself
+         return 0;
+       }
+     else
+       {
+         return static_cast<TOutput>(itA.GetCenterPixel());
+       }
+    }
       };
   }
 /** \class RemoveIsolatedByDirectionFilter

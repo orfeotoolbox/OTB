@@ -71,58 +71,58 @@ class ITK_EXPORT ImageViewerScrollWidget
   virtual int handle(int event)
     {
       switch(event)
-	{
-	case FL_PUSH:
-	  {
-	    int x = Fl::event_x();
-	    int y = Fl::event_y();
-	    IndexType clickedIndex;
-	    clickedIndex[0]=x;
-	    clickedIndex[1]=y;
-	    clickedIndex=this->WindowToImageCoordinates(clickedIndex);
-	    clickedIndex[0]=clickedIndex[0]*m_Parent->GetShrinkFactor();
-	    clickedIndex[1]=clickedIndex[1]*m_Parent->GetShrinkFactor();
-	    //std::cout<<"Scroll widget: "<<m_Parent->GetLabel()<<" before parent update"<<std::endl;
-	    m_Parent->ChangeFullViewedRegion(clickedIndex);
-	    m_Parent->ChangeZoomViewedRegion(clickedIndex);
+  {
+  case FL_PUSH:
+    {
+      int x = Fl::event_x();
+      int y = Fl::event_y();
+      IndexType clickedIndex;
+      clickedIndex[0]=x;
+      clickedIndex[1]=y;
+      clickedIndex=this->WindowToImageCoordinates(clickedIndex);
+      clickedIndex[0]=clickedIndex[0]*m_Parent->GetShrinkFactor();
+      clickedIndex[1]=clickedIndex[1]*m_Parent->GetShrinkFactor();
+      //std::cout<<"Scroll widget: "<<m_Parent->GetLabel()<<" before parent update"<<std::endl;
+      m_Parent->ChangeFullViewedRegion(clickedIndex);
+      m_Parent->ChangeZoomViewedRegion(clickedIndex);
             m_Parent->Update();
-	    //std::cout<<"Scroll widget: "<<m_Parent->GetLabel()<<" after parent update"<<std::endl;
-	    return 1;
-	  }
-	case FL_ENTER:
-	  {
-	    m_MouseIn = true;
-	    return 1;
-	  }
-	case FL_LEAVE:
-	  {
-	  m_MouseIn = false;
-	  m_Parent->ClearPixLocVal();
-	  return 1;
-	  }
-	case FL_MOVE:
-	  {
-	    m_MouseIn=true;
-	    if(m_MouseMoveCount%m_ValueUpdateFrequency==0)
-	      {
-		m_MousePos[0]=Fl::event_x();
-		m_MousePos[1]=Fl::event_y();
-		IndexType newIndex = this->WindowToImageCoordinates(m_MousePos);
-		IndexType realIndex;
-		realIndex[0]=newIndex[0]*m_Parent->GetShrinkFactor();
-		realIndex[1]=newIndex[1]*m_Parent->GetShrinkFactor();
-		m_Parent->ReportPixel(realIndex);
-		m_MouseMoveCount=0;
-	      }
-	  m_MouseMoveCount++;
-	  return 1;
-	  }
-	case FL_HIDE:
-	  {
-	    m_Parent->Hide();
-	    return 0;
-	  }
-	}
+      //std::cout<<"Scroll widget: "<<m_Parent->GetLabel()<<" after parent update"<<std::endl;
+      return 1;
+    }
+  case FL_ENTER:
+    {
+      m_MouseIn = true;
+      return 1;
+    }
+  case FL_LEAVE:
+    {
+    m_MouseIn = false;
+    m_Parent->ClearPixLocVal();
+    return 1;
+    }
+  case FL_MOVE:
+    {
+      m_MouseIn=true;
+      if(m_MouseMoveCount%m_ValueUpdateFrequency==0)
+        {
+    m_MousePos[0]=Fl::event_x();
+    m_MousePos[1]=Fl::event_y();
+    IndexType newIndex = this->WindowToImageCoordinates(m_MousePos);
+    IndexType realIndex;
+    realIndex[0]=newIndex[0]*m_Parent->GetShrinkFactor();
+    realIndex[1]=newIndex[1]*m_Parent->GetShrinkFactor();
+    m_Parent->ReportPixel(realIndex);
+    m_MouseMoveCount=0;
+        }
+    m_MouseMoveCount++;
+    return 1;
+    }
+  case FL_HIDE:
+    {
+      m_Parent->Hide();
+      return 0;
+    }
+  }
       return 0;
     }
 
@@ -142,7 +142,7 @@ class ITK_EXPORT ImageViewerScrollWidget
    */
   ~ImageViewerScrollWidget()
   {
-  	m_Parent = NULL;
+    m_Parent = NULL;
   }
 
  private:

@@ -35,8 +35,8 @@ ExtractSegmentsImageFilter<TInputImage, TOutputImage>
   this->SetNumberOfRequiredOutputs(1);
 
   m_PixelSuppression     = PixelSuppressionType::New();
-  m_LocalHough   	 = LocalHoughType::New();
-  m_FillGaps   	 	 = FillGapsType::New();
+  m_LocalHough      = LocalHoughType::New();
+  m_FillGaps         = FillGapsType::New();
   m_DrawLineList         = DrawLineListType::New();
 }
 

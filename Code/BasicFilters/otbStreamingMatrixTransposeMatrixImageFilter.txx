@@ -123,9 +123,9 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
     }
 
   if(this->GetOutput()->GetRequestedRegion().GetNumberOfPixels()==0)
-	  {
-	    this->GetOutput()->SetRequestedRegion(this->GetOutput()->GetLargestPossibleRegion());
-	  }
+    {
+      this->GetOutput()->SetRequestedRegion(this->GetOutput()->GetLargestPossibleRegion());
+    }
 }
 
 template<class TInputImage, class TInputImage2>
@@ -159,10 +159,10 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
   if ( inputPtr1->GetLargestPossibleRegion().GetSize() !=  inputPtr2->GetLargestPossibleRegion().GetSize() )
     {
       itkExceptionMacro( <<" Can't multiply the transposed matrix of a "
-			 << inputPtr1->GetLargestPossibleRegion().GetSize()
-			 << " and a "
-			 << inputPtr2->GetLargestPossibleRegion().GetSize()
-			 << " matrix " );
+       << inputPtr1->GetLargestPossibleRegion().GetSize()
+       << " and a "
+       << inputPtr2->GetLargestPossibleRegion().GetSize()
+       << " matrix " );
     }
 
   m_NumberOfComponents1 = inputPtr1->GetNumberOfComponentsPerPixel();
@@ -209,12 +209,12 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
        * resultMatrix += m_ThreadSum[thread];
        **/
       for (unsigned int i=0; i<resultMatrix.Rows(); i++)
-	{
-	  for (unsigned int j=0; j<resultMatrix.Cols(); j++)
-	    {
-	      resultMatrix(i, j) += m_ThreadSum[thread](i, j);
-	    }
-	}
+  {
+    for (unsigned int j=0; j<resultMatrix.Cols(); j++)
+      {
+        resultMatrix(i, j) += m_ThreadSum[thread](i, j);
+      }
+  }
       /********END TODO ******/
     }
   this->GetResultOutput()->Set( resultMatrix );
@@ -253,39 +253,39 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 
       // Add a first component to vectorValue2 and vectorValue1 filled with ones.
       if (m_UsePadFirstInput == true)
-	{
-	  PixelType vectortemp1(vectorValue1.Size()+1);
-	  vectortemp1[0] = 1;
-	  for (unsigned int n=0; n<vectorValue1.Size(); n++)
-	    {
-		   vectortemp1[n+1] = vectorValue1[n];
+  {
+    PixelType vectortemp1(vectorValue1.Size()+1);
+    vectortemp1[0] = 1;
+    for (unsigned int n=0; n<vectorValue1.Size(); n++)
+      {
+       vectortemp1[n+1] = vectorValue1[n];
 
-	    }
-	  vectorValue1.SetSize(vectortemp1.Size());
-	  vectorValue1 = vectortemp1;
-	}
+      }
+    vectorValue1.SetSize(vectortemp1.Size());
+    vectorValue1 = vectortemp1;
+  }
 
       if (m_UsePadSecondInput == true)
-	{
-	  PixelType2 vectortemp2(vectorValue2.Size()+1);
-	  vectortemp2[0] = 1;
-	  for (unsigned int m=0; m<vectorValue2.Size(); m++)
-	    {
-	      vectortemp2[m+1] = vectorValue2[m];
+  {
+    PixelType2 vectortemp2(vectorValue2.Size()+1);
+    vectortemp2[0] = 1;
+    for (unsigned int m=0; m<vectorValue2.Size(); m++)
+      {
+        vectortemp2[m+1] = vectorValue2[m];
 
-	    }
-	  vectorValue2.SetSize(vectortemp2.Size());
-	  vectorValue2 = vectortemp2;
-	}
+      }
+    vectorValue2.SetSize(vectortemp2.Size());
+    vectorValue2 = vectortemp2;
+  }
 
       for (unsigned int i=0; i<vectorValue1.Size(); i++)
-	{
-	  for (unsigned int j=0; j<vectorValue2.Size(); j++)
-	    {
-	      m_ThreadSum[threadId](i, j) += static_cast<RealType>(vectorValue1[i])*static_cast<RealType>(vectorValue2[j]);
-	    }
+  {
+    for (unsigned int j=0; j<vectorValue2.Size(); j++)
+      {
+        m_ThreadSum[threadId](i, j) += static_cast<RealType>(vectorValue1[i])*static_cast<RealType>(vectorValue2[j]);
+      }
 
-	}
+  }
       ++it1;
       ++it2;
       progress.CompletedPixel();

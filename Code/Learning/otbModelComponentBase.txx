@@ -26,8 +26,10 @@
 #include "otbMacro.h"
 #include "otbModelComponentBase.h"
 
-namespace otb{
-namespace Statistics{
+namespace otb
+{
+namespace Statistics
+{
 
 template< class TSample >
 ModelComponentBase< TSample >

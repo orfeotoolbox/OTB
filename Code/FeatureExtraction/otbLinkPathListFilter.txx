@@ -63,138 +63,138 @@ LinkPathListFilter<TPath>
   while(outputIt1!=outputPtr->End())
     {
       if(!eraseFlagVector[index1])
-	{
-	  IteratorType outputIt2 = outputIt1;
-	  ++outputIt2;
-	  // indicate if a path was found and wath is its index
-	  unsigned int pathToLinkIndex = 0;
-	  double distance = -1.0;
-	  unsigned int index2 = index1+1;
-	  bool found = false;
-	  bool revert1 = false;
-	  bool revert2 = false;
-	  if(!eraseFlagVector[index1])
-	    {
-	      while(outputIt2!=outputPtr->End())
-		{
-		  if(!eraseFlagVector[index2])
-		    {
-		      //otbMsgDevMacro(<<"Examining links between path "<<index1<<" and path "<<index2);
-		      // Examining end of path1 with beginning of path2
-		      VertexIteratorType vSourceIt = outputIt1.Get()->GetVertexList()->End();
-		      VertexIteratorType vTargetIt = outputIt2.Get()->GetVertexList()->Begin();
-		      --vSourceIt;
-		      VertexType v2 = vSourceIt.Value();
-		      --vSourceIt;
-		      VertexType v1 = vSourceIt.Value();
-		      VertexType v3 = vTargetIt.Value();
-		      ++vTargetIt;
-		      VertexType v4 = vTargetIt.Value();
-		      double tmpDistance = vcl_sqrt(vcl_pow(v2[0]-v3[0],2)+vcl_pow(v2[1]-v3[1],2));
-		      if((tmpDistance<static_cast<double>(m_DistanceThreshold)) && ((!found)||(tmpDistance<distance)))
-			{
-			  if(VerifyAngularCondition(v1,v2,v3,v4))
-			    {
-			      // we found a better candidate
-			      //otbMsgDevMacro(<<"Link between end of path "<<index1<<" and beginning of path "<<index2<<" is currently the best choice");
-			      distance = tmpDistance;
-			      pathToLinkIndex = index2;
-			      revert1 = false;
-			      revert2 = false;
-			      if(!found)
-				{
-				  found = true;
-				}
-			    }
-			}
-		      // Examining end of path1 with end of path2
-		      vTargetIt = outputIt2.Get()->GetVertexList()->End();
-		      --vTargetIt;
-		      v3 = vTargetIt.Value();
-		      --vTargetIt;
-		      v4 = vTargetIt.Value();
-		      tmpDistance = vcl_sqrt(vcl_pow(v2[0]-v3[0],2)+vcl_pow(v2[1]-v3[1],2));
+  {
+    IteratorType outputIt2 = outputIt1;
+    ++outputIt2;
+    // indicate if a path was found and wath is its index
+    unsigned int pathToLinkIndex = 0;
+    double distance = -1.0;
+    unsigned int index2 = index1+1;
+    bool found = false;
+    bool revert1 = false;
+    bool revert2 = false;
+    if(!eraseFlagVector[index1])
+      {
+        while(outputIt2!=outputPtr->End())
+    {
+      if(!eraseFlagVector[index2])
+        {
+          //otbMsgDevMacro(<<"Examining links between path "<<index1<<" and path "<<index2);
+          // Examining end of path1 with beginning of path2
+          VertexIteratorType vSourceIt = outputIt1.Get()->GetVertexList()->End();
+          VertexIteratorType vTargetIt = outputIt2.Get()->GetVertexList()->Begin();
+          --vSourceIt;
+          VertexType v2 = vSourceIt.Value();
+          --vSourceIt;
+          VertexType v1 = vSourceIt.Value();
+          VertexType v3 = vTargetIt.Value();
+          ++vTargetIt;
+          VertexType v4 = vTargetIt.Value();
+          double tmpDistance = vcl_sqrt(vcl_pow(v2[0]-v3[0],2)+vcl_pow(v2[1]-v3[1],2));
+          if((tmpDistance<static_cast<double>(m_DistanceThreshold)) && ((!found)||(tmpDistance<distance)))
+      {
+        if(VerifyAngularCondition(v1,v2,v3,v4))
+          {
+            // we found a better candidate
+            //otbMsgDevMacro(<<"Link between end of path "<<index1<<" and beginning of path "<<index2<<" is currently the best choice");
+            distance = tmpDistance;
+            pathToLinkIndex = index2;
+            revert1 = false;
+            revert2 = false;
+            if(!found)
+        {
+          found = true;
+        }
+          }
+      }
+          // Examining end of path1 with end of path2
+          vTargetIt = outputIt2.Get()->GetVertexList()->End();
+          --vTargetIt;
+          v3 = vTargetIt.Value();
+          --vTargetIt;
+          v4 = vTargetIt.Value();
+          tmpDistance = vcl_sqrt(vcl_pow(v2[0]-v3[0],2)+vcl_pow(v2[1]-v3[1],2));
 
-		      if((tmpDistance<static_cast<double>(m_DistanceThreshold)) && ((!found)||(tmpDistance<distance)))
-			{
-			  if(VerifyAngularCondition(v1,v2,v3,v4))
-			    {
-			      // we found a better candidate
-			      //otbMsgDevMacro(<<"Link between end of path "<<index1<<" and end of path "<<index2<<" is currently the best choice");
-			      distance = tmpDistance;
-			      pathToLinkIndex = index2;
-			      revert1 = false;
-			      revert2 = true;
-			      if(!found)
-				{
-				  found = true;
-				}
-			    }
-			}
-		      // Examining beginning of path1 with end of path2
-		      vSourceIt = outputIt1.Get()->GetVertexList()->Begin();
-		      v2 = vSourceIt.Value();
-		      ++vSourceIt;
-		      v1 = vSourceIt.Value();
-		      tmpDistance = vcl_sqrt(vcl_pow(v2[0]-v3[0],2)+vcl_pow(v2[1]-v3[1],2));
+          if((tmpDistance<static_cast<double>(m_DistanceThreshold)) && ((!found)||(tmpDistance<distance)))
+      {
+        if(VerifyAngularCondition(v1,v2,v3,v4))
+          {
+            // we found a better candidate
+            //otbMsgDevMacro(<<"Link between end of path "<<index1<<" and end of path "<<index2<<" is currently the best choice");
+            distance = tmpDistance;
+            pathToLinkIndex = index2;
+            revert1 = false;
+            revert2 = true;
+            if(!found)
+        {
+          found = true;
+        }
+          }
+      }
+          // Examining beginning of path1 with end of path2
+          vSourceIt = outputIt1.Get()->GetVertexList()->Begin();
+          v2 = vSourceIt.Value();
+          ++vSourceIt;
+          v1 = vSourceIt.Value();
+          tmpDistance = vcl_sqrt(vcl_pow(v2[0]-v3[0],2)+vcl_pow(v2[1]-v3[1],2));
 
-		      if((tmpDistance<static_cast<double>(m_DistanceThreshold)) && ((!found)||(tmpDistance<distance)))
-			{
-			  if(VerifyAngularCondition(v1,v2,v3,v4))
-			    {
-			      // we found a better candidate
-			      //otbMsgDevMacro(<<"Link between beginning of path "<<index1<<" and end of path "<<index2<<" is currently the best choice");
-			      distance = tmpDistance;
-			      pathToLinkIndex = index2;
-			      revert1 = true;
-			      revert2 = true;
-			      if(!found)
-				{
-				  found = true;
-				}
-			    }
-			}
-		      // Examining beginning of path1 with beginning of path2
-		      vTargetIt = outputIt2.Get()->GetVertexList()->Begin();
-		      v3 = vTargetIt.Value();
-		      ++vTargetIt;
-		      v4 = vTargetIt.Value();
-		      tmpDistance = vcl_sqrt(vcl_pow(v2[0]-v3[0],2)+vcl_pow(v2[1]-v3[1],2));
- 		      if((tmpDistance<static_cast<double>(m_DistanceThreshold)) && ((!found)||(tmpDistance<distance)))
-			{
-			  if(VerifyAngularCondition(v1,v2,v3,v4))
-			    {
-			      // we found a better candidate
-			      //otbMsgDevMacro(<<"Link between beginning of path "<<index1<<" and beginning of path "<<index2<<" is currently the best choice");
-			      distance = tmpDistance;
-			      pathToLinkIndex = index2;
-			      revert1 = true;
-			      revert2 = false;
-			      if(!found)
-				{
-				  found = true;
-				}
-			    }
-			}
-		    }
-		  ++index2;
-		  ++outputIt2;
-		}
-	      if(found)
-		{
-		  //otbMsgDevMacro(<<"Search ended, merging path "<<index1<<" and path "<<pathToLinkIndex);
-		  // an appropriate path was found
-		  outputIt2 = outputPtr->Begin() + pathToLinkIndex;
-		  PathPointerType newPath = this->LinkPath(outputIt1.Get(),revert1,outputIt2.Get(),revert2);
-		  outputPtr->PushBack(newPath);
-		  // add a non erased flag for the new path
-		  eraseFlagVector.push_back(false);
-		  // mark the old path as erased
-		  eraseFlagVector[index1]=true;
-		  eraseFlagVector[pathToLinkIndex]=true;
-		}
-	    }
-	}
+          if((tmpDistance<static_cast<double>(m_DistanceThreshold)) && ((!found)||(tmpDistance<distance)))
+      {
+        if(VerifyAngularCondition(v1,v2,v3,v4))
+          {
+            // we found a better candidate
+            //otbMsgDevMacro(<<"Link between beginning of path "<<index1<<" and end of path "<<index2<<" is currently the best choice");
+            distance = tmpDistance;
+            pathToLinkIndex = index2;
+            revert1 = true;
+            revert2 = true;
+            if(!found)
+        {
+          found = true;
+        }
+          }
+      }
+          // Examining beginning of path1 with beginning of path2
+          vTargetIt = outputIt2.Get()->GetVertexList()->Begin();
+          v3 = vTargetIt.Value();
+          ++vTargetIt;
+          v4 = vTargetIt.Value();
+          tmpDistance = vcl_sqrt(vcl_pow(v2[0]-v3[0],2)+vcl_pow(v2[1]-v3[1],2));
+           if((tmpDistance<static_cast<double>(m_DistanceThreshold)) && ((!found)||(tmpDistance<distance)))
+      {
+        if(VerifyAngularCondition(v1,v2,v3,v4))
+          {
+            // we found a better candidate
+            //otbMsgDevMacro(<<"Link between beginning of path "<<index1<<" and beginning of path "<<index2<<" is currently the best choice");
+            distance = tmpDistance;
+            pathToLinkIndex = index2;
+            revert1 = true;
+            revert2 = false;
+            if(!found)
+        {
+          found = true;
+        }
+          }
+      }
+        }
+      ++index2;
+      ++outputIt2;
+    }
+        if(found)
+    {
+      //otbMsgDevMacro(<<"Search ended, merging path "<<index1<<" and path "<<pathToLinkIndex);
+      // an appropriate path was found
+      outputIt2 = outputPtr->Begin() + pathToLinkIndex;
+      PathPointerType newPath = this->LinkPath(outputIt1.Get(),revert1,outputIt2.Get(),revert2);
+      outputPtr->PushBack(newPath);
+      // add a non erased flag for the new path
+      eraseFlagVector.push_back(false);
+      // mark the old path as erased
+      eraseFlagVector[index1]=true;
+      eraseFlagVector[pathToLinkIndex]=true;
+    }
+      }
+  }
       ++index1;
       // This replaces ++outputIt1 because the iterators is somehow invalidated by a pushback.
       outputIt1 = outputPtr->Begin() + index1;
@@ -206,9 +206,9 @@ LinkPathListFilter<TPath>
   while(it!=eraseFlagVector.rend())
     {
       if(eraseFlagVector[index1])
-	{
-	  outputPtr->Erase(index1);
-	}
+  {
+    outputPtr->Erase(index1);
+  }
       --index1;
       ++it;
     }
@@ -270,33 +270,33 @@ LinkPathListFilter<TPath>
   if(revert1)
     {
       for(it=(p1->GetVertexList()->End());it!=p1->GetVertexList()->Begin();)
-	{
-	  --it;
-	  resp->AddVertex((it).Value());
-	}
+  {
+    --it;
+    resp->AddVertex((it).Value());
+  }
     }
   else
     {
       for(it=p1->GetVertexList()->Begin();it!=p1->GetVertexList()->End();++it)
-	{
-	  resp->AddVertex((it).Value());
-	}
+  {
+    resp->AddVertex((it).Value());
+  }
     }
 
   if(revert2)
     {
       for(it=(p2->GetVertexList()->End());it!=p2->GetVertexList()->Begin();)
-	{
-	  --it;
-	  resp->AddVertex((it).Value());
-	}
+  {
+    --it;
+    resp->AddVertex((it).Value());
+  }
     }
   else
     {
       for(it=p2->GetVertexList()->Begin();it!=p2->GetVertexList()->End();++it)
-	{
-	  resp->AddVertex(it.Value());
-	}
+  {
+    resp->AddVertex(it.Value());
+  }
     }
   return resp;
 }

@@ -176,10 +176,10 @@ ProfileDerivativeToMultiScaleCharacteristicsFilter<TInputImage,TOutputImage,TLab
 
   bool inputIteratorsAtEnd = false;
   for(typename InputIteratorListType::iterator it = inputIteratorList.begin();
-	  it != inputIteratorList.end();++it)
-	{
-	  inputIteratorsAtEnd = inputIteratorsAtEnd || it->IsAtEnd();
-	}
+    it != inputIteratorList.end();++it)
+  {
+    inputIteratorsAtEnd = inputIteratorsAtEnd || it->IsAtEnd();
+  }
 
 
   while(!outputIt.IsAtEnd() && !labeledIt.IsAtEnd() && !inputIteratorsAtEnd)
@@ -190,25 +190,25 @@ ProfileDerivativeToMultiScaleCharacteristicsFilter<TInputImage,TOutputImage,TLab
 
        // for each input iterator, check the output and characteristics
       for(typename InputIteratorListType::iterator it = inputIteratorList.begin();
-	  it != inputIteratorList.end();++it)
-	{
-	  if(it->Get()>outputPixel)
-	    {
-	      outputPixel = it->Get();
-	      outputChar = m_InitialValue+m_Step*(static_cast<LabeledPixelType>(index));
-	    }
-	  ++index;
-	}
+    it != inputIteratorList.end();++it)
+  {
+    if(it->Get()>outputPixel)
+      {
+        outputPixel = it->Get();
+        outputChar = m_InitialValue+m_Step*(static_cast<LabeledPixelType>(index));
+      }
+    ++index;
+  }
       outputIt.Set(outputPixel);
       labeledIt.Set(outputChar);
       ++outputIt;
       ++labeledIt;
        for(typename InputIteratorListType::iterator it = inputIteratorList.begin();
-	  it != inputIteratorList.end();++it)
-	{
-	  ++(*it);
-	  inputIteratorsAtEnd = inputIteratorsAtEnd || it->IsAtEnd();
-	}
+    it != inputIteratorList.end();++it)
+  {
+    ++(*it);
+    inputIteratorsAtEnd = inputIteratorsAtEnd || it->IsAtEnd();
+  }
     }
 }
 /**

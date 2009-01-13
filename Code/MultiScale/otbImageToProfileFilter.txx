@@ -49,26 +49,26 @@ ImageToProfileFilter<TInputImage,TOutputImage,TFilter,TParameter>
   if(outputPtr)
     {
       if(outputPtr->Size()!=m_ProfileSize)
-	{
-	  // in this case, clear the list
-	  outputPtr->Clear();
-	  for(unsigned int i = 0;i<m_ProfileSize;++i)
-	    {
-	      //Create the output image
-	      outputPtr->PushBack(OutputImageType::New());
-	    }
-	}
+  {
+    // in this case, clear the list
+    outputPtr->Clear();
+    for(unsigned int i = 0;i<m_ProfileSize;++i)
+      {
+        //Create the output image
+        outputPtr->PushBack(OutputImageType::New());
+      }
+  }
       // For each output image
       typename OutputImageListType::Iterator outputListIt = outputPtr->Begin();
       m_Filter->SetInput(inputPtr);
       m_Filter->UpdateOutputInformation();
       while(outputListIt!=outputPtr->End())
-	{
-	  //Set the image information
-	  outputListIt.Get()->CopyInformation(m_Filter->GetOutput(m_OutputIndex));
-	  outputListIt.Get()->SetLargestPossibleRegion(m_Filter->GetOutput(m_OutputIndex)->GetLargestPossibleRegion());
-	  ++outputListIt;
-	}
+  {
+    //Set the image information
+    outputListIt.Get()->CopyInformation(m_Filter->GetOutput(m_OutputIndex));
+    outputListIt.Get()->SetLargestPossibleRegion(m_Filter->GetOutput(m_OutputIndex)->GetLargestPossibleRegion());
+    ++outputListIt;
+  }
     }
 }
 /**

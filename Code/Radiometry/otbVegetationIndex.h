@@ -35,10 +35,10 @@ namespace Functor
       class NDVI
       {
       public:
-	NDVI() {};
-	~NDVI() {};
-	inline TOutput operator()(const TInput1 &r, const TInput2 &nir)
-	{
+  NDVI() {};
+  ~NDVI() {};
+  inline TOutput operator()(const TInput1 &r, const TInput2 &nir)
+  {
                 double dr = static_cast<double>(r);
                 double dnir = static_cast<double>(nir);
                 if( (nir + r) == 0 )
@@ -47,7 +47,7 @@ namespace Functor
                 }
 
                 return ( static_cast<TOutput>((dnir-dr)/(dnir+dr)));
-	}
+  }
       };
 
     /** \class RVI
@@ -61,10 +61,10 @@ namespace Functor
       class RVI
       {
       public:
-	RVI() {};
-	~RVI() {};
-	inline TOutput operator()(const TInput1 &r, const TInput2 &nir)
-	{
+  RVI() {};
+  ~RVI() {};
+  inline TOutput operator()(const TInput1 &r, const TInput2 &nir)
+  {
                 double dr = static_cast<double>(r);
                 double dnir = static_cast<double>(nir);
                 if( r == 0 )
@@ -72,7 +72,7 @@ namespace Functor
                         return static_cast<TOutput>(0.);
                 }
                 return ( static_cast<TOutput>(dnir/dr));
-	}
+  }
       };
     /** \class PVI
      *  \brief This functor calculate the Perpendicular Vegetation Index (PVI)
@@ -85,14 +85,14 @@ namespace Functor
       class PVI
       {
       public:
-	PVI() {};
-	~PVI() {};
-	inline TOutput operator()(const TInput1 &r, const TInput2 &nir)
-	{
+  PVI() {};
+  ~PVI() {};
+  inline TOutput operator()(const TInput1 &r, const TInput2 &nir)
+  {
                 double dnir = static_cast<double>(nir);
                 double dr = static_cast<double>(r);
                 return ( static_cast<TOutput>(  (dnir - m_A*dr - m_B)*m_Coeff) );
-	 }
+   }
          /** Set/Get A and B parameters */
          void SetA(const double A)
          {
@@ -125,10 +125,10 @@ namespace Functor
       class SAVI
       {
       public:
-	SAVI() : m_L(0.5) {};
-	~SAVI() {};
-	inline TOutput operator()(const TInput1 &r, const TInput2 &nir)
-	{
+  SAVI() : m_L(0.5) {};
+  ~SAVI() {};
+  inline TOutput operator()(const TInput1 &r, const TInput2 &nir)
+  {
                 double dnir = static_cast<double>(nir);
                 double dr = static_cast<double>(r);
                 double denominator = dnir + dr + m_L;
@@ -137,7 +137,7 @@ namespace Functor
                         return static_cast<TOutput>(0.);
                 }
                 return ( static_cast<TOutput>(  ((dnir-dr)*(1+m_L))/denominator ) );
-	 }
+   }
          /** Set/Get L correction */
          void SetL(const double L) { m_L = L; }
          double GetL(void)const    { return (  m_L ); }
@@ -159,10 +159,10 @@ namespace Functor
       class TSAVI
       {
       public:
-	TSAVI() : m_X(0.08) {};
-	~TSAVI() {};
-	inline TOutput operator()(const TInput1 &r, const TInput2 &nir)
-	{
+  TSAVI() : m_X(0.08) {};
+  ~TSAVI() {};
+  inline TOutput operator()(const TInput1 &r, const TInput2 &nir)
+  {
                 double dnir = static_cast<double>(nir);
                 double dr = static_cast<double>(r);
                 double denominator = m_A*dnir + dr + m_X*(1.+m_A*m_A);
@@ -171,7 +171,7 @@ namespace Functor
                         return static_cast<TOutput>(0.);
                 }
                 return ( static_cast<TOutput>(  (m_A*(dnir - m_A*dr - m_B))/denominator ) );
-	 }
+   }
          /** Set/Get A and B parameters */
          void SetA(const double A) { m_A = A; }
          double GetA(void)const    { return (m_A); }
@@ -202,10 +202,10 @@ namespace Functor
       class MSAVI
       {
       public:
-	MSAVI() {};
-	~MSAVI() {};
-	inline TOutput operator()(const TInput1 &r, const TInput2 &nir)
-	{
+  MSAVI() {};
+  ~MSAVI() {};
+  inline TOutput operator()(const TInput1 &r, const TInput2 &nir)
+  {
                 double dnir = static_cast<double>(nir);
                 double dr = static_cast<double>(r);
                 double sqrt_value = (2*dr+1)*(2*dr+1) - 8*(dr-dnir);
@@ -214,7 +214,7 @@ namespace Functor
                         return static_cast<TOutput>(0.);
                 }
                 return ( static_cast<TOutput>(  (2*dr + 1 - vcl_sqrt(sqrt_value))/2. ) );
-	 }
+   }
 
       };
 
@@ -231,10 +231,10 @@ namespace Functor
       class ARVI
       {
       public:
-	ARVI() : m_Gamma(0.5) {};
-	~ARVI() {};
-	inline TOutput operator()(const TInput1 &r, const TInput2 &b, const TInput3 &nir)
-	{
+  ARVI() : m_Gamma(0.5) {};
+  ~ARVI() {};
+  inline TOutput operator()(const TInput1 &r, const TInput2 &b, const TInput3 &nir)
+  {
                 double dr = static_cast<double>(r);
                 double db = static_cast<double>(b);
                 double dnir = static_cast<double>(nir);
@@ -245,7 +245,7 @@ namespace Functor
                         return static_cast<TOutput>(0.);
                 }
                 return ( static_cast<TOutput>(  (dnir - RHOrb)/denominator ) );
-	 }
+   }
          /** Set/Get Gamma parameter */
          void SetGamma(const double gamma) { m_Gamma = gamma; }
          double GetGamma(void)const    { return (m_Gamma); }

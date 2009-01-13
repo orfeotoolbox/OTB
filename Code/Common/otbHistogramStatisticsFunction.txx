@@ -38,7 +38,7 @@ HistogramStatisticsFunction< TInputHistogram, TOutput>
 {
   if(m_IsModified == true)
   {
-  	this->Update();
+    this->Update();
   }
   return m_entropy;
 }
@@ -50,7 +50,7 @@ HistogramStatisticsFunction< TInputHistogram, TOutput>
 {
   if(m_IsModified == true)
   {
-  	this->Update();
+    this->Update();
   }
   return m_mean;
 }
@@ -62,7 +62,7 @@ HistogramStatisticsFunction< TInputHistogram, TOutput>
 {
   if(m_IsModified == true)
   {
-  	this->Update();
+    this->Update();
   }
   return m_covariance;
 }
@@ -179,10 +179,10 @@ HistogramStatisticsFunction< TInputHistogram, TOutput>
 ::GenerateData()
 {
 
-  	CalculateEntropy();
-	CalculateMean();
-	CalculateCovariance();
-	m_IsModified = false;
+    CalculateEntropy();
+  CalculateMean();
+  CalculateCovariance();
+  m_IsModified = false;
 }
 
 

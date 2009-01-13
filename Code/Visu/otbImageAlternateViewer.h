@@ -179,7 +179,7 @@ protected:
   unsigned char * CreateAdditionalBuffer(RegionType region,ImagePointerType image,bool rgb);
 
   virtual void MergeBuffersAndFreeMemory(std::vector<unsigned char *> bufferList,
-					 std::vector<RegionType> bufferRegionList);
+           std::vector<RegionType> bufferRegionList);
 
   virtual void AdditionalRedraw(void);
 

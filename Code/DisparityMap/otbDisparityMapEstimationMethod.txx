@@ -255,7 +255,7 @@ DisparityMapEstimationMethod<TFixedImage,TMovingImage,TPointSet>
 
     for(unsigned int i = 0;i<finalParameters.GetSize();++i)
       {
-	data[i+3] = finalParameters[i];
+  data[i+3] = finalParameters[i];
       }
 
     // Set the parameters value in the point set data container.

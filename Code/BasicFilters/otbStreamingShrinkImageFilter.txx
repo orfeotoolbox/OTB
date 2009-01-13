@@ -164,33 +164,33 @@ StreamingShrinkImageFilter<TInputImage, TOutputImage>
   typename OutputImageType::SizeType size = outputRegion.GetSize();
 
   for(unsigned int i=0;i<size[1]&&!it.IsAtEnd();++i)
-	{
-	  typename InputImageType::IndexType readIndex;
-	  readIndex[0] = origin[0];
-	  readIndex[1] = i*m_ShrinkFactor+origin[1];
-	  typename InputImageType::SizeType readSize;
-	  readSize[0]=size[0]*m_ShrinkFactor;
-	  readSize[1]=1;
-	  typename InputImageType::RegionType readRegion;
-	  readRegion.SetSize(readSize);
-	  readRegion.SetIndex(readIndex);
-	  // otbMsgDebugMacro(<<"Read region: "<<readRegion);
-//  	  otbMsgDebugMacro(<<"Largest input region: "<<inputPtr->GetLargestPossibleRegion());
-	  inputPtr->SetRequestedRegion(readRegion);
-	  inputPtr->PropagateRequestedRegion();
-	  inputPtr->UpdateOutputData();
-	  InputIteratorType readIt(inputPtr,readRegion);
-	  unsigned int count=0;
-	  for(readIt.GoToBegin();!readIt.IsAtEnd()&&!it.IsAtEnd();++readIt,++count)
-	    {
-	      if(count%m_ShrinkFactor==0)
-		{
-		  it.Set(readIt.Get());
-		  ++it;
-		}
-	    }
-	  this->UpdateProgress(static_cast<float>(i)/ static_cast<float>(size[1]));
-	}
+  {
+    typename InputImageType::IndexType readIndex;
+    readIndex[0] = origin[0];
+    readIndex[1] = i*m_ShrinkFactor+origin[1];
+    typename InputImageType::SizeType readSize;
+    readSize[0]=size[0]*m_ShrinkFactor;
+    readSize[1]=1;
+    typename InputImageType::RegionType readRegion;
+    readRegion.SetSize(readSize);
+    readRegion.SetIndex(readIndex);
+    // otbMsgDebugMacro(<<"Read region: "<<readRegion);
+//      otbMsgDebugMacro(<<"Largest input region: "<<inputPtr->GetLargestPossibleRegion());
+    inputPtr->SetRequestedRegion(readRegion);
+    inputPtr->PropagateRequestedRegion();
+    inputPtr->UpdateOutputData();
+    InputIteratorType readIt(inputPtr,readRegion);
+    unsigned int count=0;
+    for(readIt.GoToBegin();!readIt.IsAtEnd()&&!it.IsAtEnd();++readIt,++count)
+      {
+        if(count%m_ShrinkFactor==0)
+    {
+      it.Set(readIt.Get());
+      ++it;
+    }
+      }
+    this->UpdateProgress(static_cast<float>(i)/ static_cast<float>(size[1]));
+  }
   /**
    * If we ended due to aborting, push the progress up to 1.0 (since
    * it probably didn't end there)
@@ -208,7 +208,7 @@ StreamingShrinkImageFilter<TInputImage, TOutputImage>
    */
   if (this->GetOutput(0))
       {
-	this->GetOutput(0)->DataHasBeenGenerated();
+  this->GetOutput(0)->DataHasBeenGenerated();
       }
   /**
    * Release any inputs if marked for release

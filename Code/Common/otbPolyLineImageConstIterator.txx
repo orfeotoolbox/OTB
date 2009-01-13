@@ -30,8 +30,8 @@ template <class TImage, class TPath>
 PolyLineImageConstIterator<TImage, TPath>
 ::PolyLineImageConstIterator(const ImageType *imagePtr,const PathType * pathPtr)
   : m_InternalImageIterator(const_cast<ImageType *>(imagePtr),
-			    imagePtr->GetLargestPossibleRegion().GetIndex(),
-			    imagePtr->GetLargestPossibleRegion().GetIndex())
+          imagePtr->GetLargestPossibleRegion().GetIndex(),
+          imagePtr->GetLargestPossibleRegion().GetIndex())
 {
   m_Image = imagePtr;
   m_Path = pathPtr;
@@ -114,7 +114,7 @@ PolyLineImageConstIterator<TImage,TPath>
       {
         source[i] = static_cast<unsigned int>(m_InternalVertexIterator.Value()[i]);
       }
-	  // otbMsgDebugMacro(<<"Source: "<<source);
+    // otbMsgDebugMacro(<<"Source: "<<source);
       ++m_InternalVertexIterator;
       if(m_InternalVertexIterator!=m_Path->GetVertexList()->End())
       {
@@ -123,7 +123,7 @@ PolyLineImageConstIterator<TImage,TPath>
         {
           target[i] = static_cast<unsigned int>(m_InternalVertexIterator.Value()[i]);
         }
-	      // otbMsgDebugMacro(<<"Target: "<<target);
+        // otbMsgDebugMacro(<<"Target: "<<target);
         m_InternalImageIterator = InternalImageIteratorType(const_cast<ImageType *>(m_Image.GetPointer()),source,target);
         ++m_InternalImageIterator;
       }

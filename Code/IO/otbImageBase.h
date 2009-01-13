@@ -43,9 +43,9 @@ public:
 
   typedef ImageBase Self;
 
-  typedef itk::MetaDataDictionary 	MetaDataDictionaryType;
+  typedef itk::MetaDataDictionary   MetaDataDictionaryType;
 
-  typedef MetaDataKey::VectorType	VectorType;
+  typedef MetaDataKey::VectorType  VectorType;
 
   typedef ImageKeywordlist              ImageKeywordlistType;
 

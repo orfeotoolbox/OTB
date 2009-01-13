@@ -41,13 +41,13 @@ class  ITK_EXPORT DrawLineSpatialObjectFilter :
 public itk::SpatialObjectToImageFilter< itk::LineSpatialObject<2>, TOutputImage >
 {
 public:
-  /** 	Extract dimensions as well of the images of entry of exit. */
-  itkStaticConstMacro(		InputImageDimension,
-  				unsigned int,
-                      		TInputImage::ImageDimension);
-  itkStaticConstMacro(		OutputImageDimension,
-  				unsigned int,
-                      		TOutputImage::ImageDimension);
+  /**   Extract dimensions as well of the images of entry of exit. */
+  itkStaticConstMacro(    InputImageDimension,
+          unsigned int,
+                          TInputImage::ImageDimension);
+  itkStaticConstMacro(    OutputImageDimension,
+          unsigned int,
+                          TOutputImage::ImageDimension);
 
 
   typedef TInputImage InputImageType;

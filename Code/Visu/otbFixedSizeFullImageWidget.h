@@ -68,30 +68,30 @@ namespace otb
 
       /** Return the width and heigh of the displayed image (overloaded for scroll)*/
       int wDisplayed()
-	{
-	  if (this->GetViewedRegion().GetSize()[0] / static_cast<float>(this->GetViewedRegion().GetSize()[1])
-	      > this->w() / static_cast<float>(this->h()))
-	    {
-	      return this->w();
-	    }
-	  else
-	    {
-	      return this->h()*this->GetViewedRegion().GetSize()[0] / this->GetViewedRegion().GetSize()[1];
-	    }
-	}
+  {
+    if (this->GetViewedRegion().GetSize()[0] / static_cast<float>(this->GetViewedRegion().GetSize()[1])
+        > this->w() / static_cast<float>(this->h()))
+      {
+        return this->w();
+      }
+    else
+      {
+        return this->h()*this->GetViewedRegion().GetSize()[0] / this->GetViewedRegion().GetSize()[1];
+      }
+  }
 
       int hDisplayed()
-	{
-	  if (this->GetViewedRegion().GetSize()[0] / static_cast<float>(this->GetViewedRegion().GetSize()[1])
-	      > this->w() / static_cast<float>(this->h()))
-	    {
-	      return this->w()*this->GetViewedRegion().GetSize()[1] / this->GetViewedRegion().GetSize()[0];
-	    }
-	  else
-	    {
-	      return this->h();
-	    }
-	}
+  {
+    if (this->GetViewedRegion().GetSize()[0] / static_cast<float>(this->GetViewedRegion().GetSize()[1])
+        > this->w() / static_cast<float>(this->h()))
+      {
+        return this->w()*this->GetViewedRegion().GetSize()[1] / this->GetViewedRegion().GetSize()[0];
+      }
+    else
+      {
+        return this->h();
+      }
+  }
     
     private:
       FixedSizeFullImageWidget(const Self&);// purposely not implemented

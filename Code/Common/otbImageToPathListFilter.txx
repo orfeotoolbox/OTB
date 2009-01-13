@@ -46,8 +46,8 @@ ImageToPathListFilter<TInputImage,TOutputPath>
 {
   // We have 1 input:  an image
 
-	// Process object is not const-correct so the const_cast is required here
-	this->ProcessObjectType::SetNthInput(0,const_cast< InputImageType * >( image ) );
+  // Process object is not const-correct so the const_cast is required here
+  this->ProcessObjectType::SetNthInput(0,const_cast< InputImageType * >( image ) );
 }
 
 template <class TInputImage, class TOutputPath>
@@ -56,14 +56,14 @@ ImageToPathListFilter<TInputImage,TOutputPath>
 ::GetInput(void)
 {
   
-	
-	if (this->GetNumberOfInputs() < 1)
+  
+  if (this->GetNumberOfInputs() < 1)
     {
     return 0;
     }
 
   return static_cast<const TInputImage * >
-	  (this->ProcessObjectType::GetInput(0) );
+    (this->ProcessObjectType::GetInput(0) );
 }
 
 /**

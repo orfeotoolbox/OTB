@@ -189,7 +189,7 @@ BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputImage, T
   // ImageToImageFilter::GetInput(int) always returns a pointer to a
   // TInputImage1 so it cannot be used for the second input.
   Input1ImageConstPointer inputPtr1
-	  = dynamic_cast<const TInputImage1*>(ProcessObjectType::GetInput(0));
+    = dynamic_cast<const TInputImage1*>(ProcessObjectType::GetInput(0));
   Input2ImageConstPointer inputPtr2
     = dynamic_cast<const TInputImage2*>(ProcessObjectType::GetInput(1));
   OutputImagePointer outputPtr = this->GetOutput(0);

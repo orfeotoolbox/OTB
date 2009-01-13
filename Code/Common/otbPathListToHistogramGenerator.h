@@ -57,9 +57,9 @@ public:
   /** standard New() method support */
   itkNewMacro(Self) ;
 
-  typedef TPath                                   	  PathType;
+  typedef TPath                                       PathType;
   typedef typename PathType::Pointer                      PathPointer;
-  typedef std::vector< PathPointer >   		          PathListType;
+  typedef std::vector< PathPointer >                 PathListType;
 
   typedef PathListType *                                  PathListPointer;
   typedef const PathListType *                            PathListConstPointer;
@@ -79,7 +79,7 @@ public:
 
   typedef itk::Statistics::ListSampleToHistogramGenerator<
                          ListSampleType,
-			 MeasurementType,
+       MeasurementType,
                          FrequencyContainerType,1>        GeneratorType;
 
 

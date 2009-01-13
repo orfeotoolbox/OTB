@@ -22,7 +22,8 @@
 #include "otbSVMModel.h"
 #include "itkVectorImage.h"
 
-namespace otb{
+namespace otb
+{
 
 /** \class SVMClassifier
  *  \brief SVM-based classifier

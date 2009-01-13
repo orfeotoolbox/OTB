@@ -106,13 +106,13 @@ PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
       p[0]=it.Value()[0];
       p[1]=it.Value()[1];
       if(vcl_abs(this->GetPointSet()->GetPointData()->GetElement(j)[0])>=m_MetricThreshold)
-	{
+  {
 
-	  distanceVector.push_back(EuclideanDistance(index,p));
-	  sortVector.push_back(i);
-	  indexVector.push_back(j);
-	  ++i;
-	}
+    distanceVector.push_back(EuclideanDistance(index,p));
+    sortVector.push_back(i);
+    indexVector.push_back(j);
+    ++i;
+  }
       ++j;
     }
 

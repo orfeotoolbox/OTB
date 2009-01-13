@@ -57,78 +57,78 @@ namespace Functor
       {
 
       public:
-	/**
-	 * Constructor
-	 */
-	MultiScaleConvexOrConcaveDecisionRule()
-	  {
-	    m_Sigma = 0.0;
-	    m_LabelSeparator = 10;
-	  }
-	/**
-	 * Destructor
-	 */
-	~MultiScaleConvexOrConcaveDecisionRule(){};
-	/**
-	 * Label the pixel to convex, concave or flat
-	 * \return The label of the pixel
-	 * \param opDeMax The max of the opening profile derivative
-	 * \param cloDeMax  The max of the closing profile derivative
-	 * \param opDeChar The characteristic of the opening profile
-	 * \param cloDeChar The characteristic of the closing profile
-	 */
-	inline TLabeled operator()(const TInput& opDeMax, const TInput& cloDeMax,const TLabeled& opDeChar, const TLabeled& cloDeChar)
-	  {
-	    TLabeled resp = 0;
+  /**
+   * Constructor
+   */
+  MultiScaleConvexOrConcaveDecisionRule()
+    {
+      m_Sigma = 0.0;
+      m_LabelSeparator = 10;
+    }
+  /**
+   * Destructor
+   */
+  ~MultiScaleConvexOrConcaveDecisionRule(){};
+  /**
+   * Label the pixel to convex, concave or flat
+   * \return The label of the pixel
+   * \param opDeMax The max of the opening profile derivative
+   * \param cloDeMax  The max of the closing profile derivative
+   * \param opDeChar The characteristic of the opening profile
+   * \param cloDeChar The characteristic of the closing profile
+   */
+  inline TLabeled operator()(const TInput& opDeMax, const TInput& cloDeMax,const TLabeled& opDeChar, const TLabeled& cloDeChar)
+    {
+      TLabeled resp = 0;
 
-	    if( opDeMax>cloDeMax && static_cast<double>(opDeMax)>m_Sigma)
-	      {
-		resp = m_LabelSeparator + opDeChar;
-	      }
-	    else if (cloDeMax>opDeMax && static_cast<double>(cloDeMax)>m_Sigma)
-	      {
-		resp = cloDeChar;
-	      }
-	    return resp;
-	  }
-	/**
-	 * Set the tolerance value
-	 * \param sigma the tolerance value
-	 */
-	void SetSigma(const double & sigma)
-	  {
-	    m_Sigma = sigma;
-	  }
-	/**
-	 * Get the tolerance value
-	 * \return the tolerance value
-	 */
-	double GetSigma(void)
-	  {
-	    return m_Sigma;
-	  }
-	/**
-	 * Set the label separator
-	 * \param labelSeparator the label separator
-	 */
-	void SetLabelSeparator(const TLabeled& labelSeparator)
-	  {
-	    m_LabelSeparator = labelSeparator;
-	  }
-	/**
-	 * Get the label separator
-	 * \return the label separator
-	 */
-	TLabeled GetLabelSeparator(void)
-	  {
-	    return m_LabelSeparator;
-	  }
+      if( opDeMax>cloDeMax && static_cast<double>(opDeMax)>m_Sigma)
+        {
+    resp = m_LabelSeparator + opDeChar;
+        }
+      else if (cloDeMax>opDeMax && static_cast<double>(cloDeMax)>m_Sigma)
+        {
+    resp = cloDeChar;
+        }
+      return resp;
+    }
+  /**
+   * Set the tolerance value
+   * \param sigma the tolerance value
+   */
+  void SetSigma(const double & sigma)
+    {
+      m_Sigma = sigma;
+    }
+  /**
+   * Get the tolerance value
+   * \return the tolerance value
+   */
+  double GetSigma(void)
+    {
+      return m_Sigma;
+    }
+  /**
+   * Set the label separator
+   * \param labelSeparator the label separator
+   */
+  void SetLabelSeparator(const TLabeled& labelSeparator)
+    {
+      m_LabelSeparator = labelSeparator;
+    }
+  /**
+   * Get the label separator
+   * \return the label separator
+   */
+  TLabeled GetLabelSeparator(void)
+    {
+      return m_LabelSeparator;
+    }
 
       private:
-	/** Sigma (tolerance) parameter */
-	double m_Sigma;
-	/** Seperate between convex and concave labels */
-	TLabeled m_LabelSeparator;
+  /** Sigma (tolerance) parameter */
+  double m_Sigma;
+  /** Seperate between convex and concave labels */
+  TLabeled m_LabelSeparator;
 
       };
   } //end namespace Functor

@@ -53,12 +53,12 @@ class HarrisImageFilter :  public itk::ImageToImageFilter< TInputImage, TOutputI
 {
 public:
 
-  itkStaticConstMacro(		InputImageDimension,
-  				unsigned int,
-                      		TInputImage::ImageDimension);
-  itkStaticConstMacro(		OutputImageDimension,
-  				unsigned int,
-                      		TOutputImage::ImageDimension);
+  itkStaticConstMacro(    InputImageDimension,
+          unsigned int,
+                          TInputImage::ImageDimension);
+  itkStaticConstMacro(    OutputImageDimension,
+          unsigned int,
+                          TOutputImage::ImageDimension);
 
   typedef TInputImage InputImageType;
   typedef TOutputImage OutputImageType;

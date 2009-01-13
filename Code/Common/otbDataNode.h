@@ -56,9 +56,14 @@ enum{
  *  A DataNode has also a dictionnary of fields which can be used to store associated data.
  *  Depending of the writing vector data file format, fields will be used by the writing driver.
  *
+ * The three templates indicate
+ * - the precision of the points coordinates (default double)
+ * - the number of dimensions of the space (default 2)
+ * - the precision of the value associated with objects such as line or polygons (default double)
+ *
  * \sa VectorData
  */
-template <class TPrecision = double, unsigned VDimension = 2>
+template <class TPrecision = double, unsigned VDimension = 2, class TValuePrecision = double>
 class DataNode
 : public itk::Object
  {
@@ -75,15 +80,16 @@ class DataNode
 
    /** Template parameters typedefs */
    typedef TPrecision PrecisionType;
+   typedef TValuePrecision ValuePrecisionType;
    itkStaticConstMacro(Dimension, unsigned int, VDimension);
 
 
    /** Internal data typedef */
    typedef itk::Point<PrecisionType,VDimension>       PointType;
-   typedef otb::PolyLineParametricPathWithValue<double,VDimension>    LineType;
+   typedef otb::PolyLineParametricPathWithValue<ValuePrecisionType,VDimension>    LineType;
    typedef typename LineType::Pointer                 LinePointerType;
    typedef typename LineType::ConstPointer            LineConstPointerType;
-   typedef Polygon<PrecisionType>                     PolygonType;
+   typedef Polygon<ValuePrecisionType>                PolygonType;
    typedef typename PolygonType::Pointer              PolygonPointerType;
    typedef typename PolygonType::ConstPointer         PolygonConstPointerType;
    typedef ObjectList<PolygonType>                    PolygonListType;

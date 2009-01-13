@@ -53,35 +53,35 @@ class ProlateFunction
     {
       TOutput val = itk::NumericTraits< TOutput >::Zero;
       if ( A != itk::NumericTraits< TInput >::Zero && vcl_abs(A) != static_cast<TInput>(m_Radius) && m_Radius!=0 )
-	{
-	   double ival = static_cast<double>(m_OriginalProfileSize)*static_cast<double>(vcl_abs(A))/static_cast<double>(m_Radius);
-	   double ivalFloor = vcl_floor(ival);
-	   double left = ival - ivalFloor;
+  {
+     double ival = static_cast<double>(m_OriginalProfileSize)*static_cast<double>(vcl_abs(A))/static_cast<double>(m_Radius);
+     double ivalFloor = vcl_floor(ival);
+     double left = ival - ivalFloor;
 
-	   if ( ivalFloor < m_OriginalProfileSize-1 )
-	     {
-	       val = left*m_OriginalProfile[static_cast<unsigned int>(ivalFloor)] + (1-left)*m_OriginalProfile[static_cast<unsigned int>(ivalFloor)+1];
-	     }
-	   else
-	     {
-	       itkGenericExceptionMacro(<<"Out of Profile limits ("<<ivalFloor<<" -1 > 721)");
+     if ( ivalFloor < m_OriginalProfileSize-1 )
+       {
+         val = left*m_OriginalProfile[static_cast<unsigned int>(ivalFloor)] + (1-left)*m_OriginalProfile[static_cast<unsigned int>(ivalFloor)+1];
+       }
+     else
+       {
+         itkGenericExceptionMacro(<<"Out of Profile limits ("<<ivalFloor<<" -1 > 721)");
 
-	     }
-	}
+       }
+  }
       else
-	{
-	  if ( A == itk::NumericTraits< TInput >::Zero || m_Radius==0)
-	    {
-	      val = m_OriginalProfile[0];
-	    }
-	  else
-	    {
-	      if ( vcl_abs(A) == static_cast<TInput>(m_Radius) )
-		{
-		  val = m_OriginalProfile[m_OriginalProfileSize-1];
-		}
-	    }
-	}
+  {
+    if ( A == itk::NumericTraits< TInput >::Zero || m_Radius==0)
+      {
+        val = m_OriginalProfile[0];
+      }
+    else
+      {
+        if ( vcl_abs(A) == static_cast<TInput>(m_Radius) )
+    {
+      val = m_OriginalProfile[m_OriginalProfileSize-1];
+    }
+      }
+  }
       return val;
     }
 

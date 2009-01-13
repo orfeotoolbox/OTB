@@ -21,7 +21,8 @@
 #include "otbSOMClassifier.h"
 #include "otbMacro.h"
 
-namespace otb{
+namespace otb
+{
 /**
  * Constructor
  */

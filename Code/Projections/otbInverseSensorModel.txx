@@ -27,9 +27,9 @@ namespace otb
 {
 
   template < class TScalarType,
-	     unsigned int NInputDimensions,
-	     unsigned int NOutputDimensions,
-	     unsigned int NParametersDimensions >
+       unsigned int NInputDimensions,
+       unsigned int NOutputDimensions,
+       unsigned int NParametersDimensions >
   InverseSensorModel< TScalarType,
                       NInputDimensions,
                       NOutputDimensions,
@@ -39,9 +39,9 @@ namespace otb
   }
 
   template < class TScalarType,
-	     unsigned int NInputDimensions,
-	     unsigned int NOutputDimensions,
-	     unsigned int NParametersDimensions >
+       unsigned int NInputDimensions,
+       unsigned int NOutputDimensions,
+       unsigned int NParametersDimensions >
   InverseSensorModel< TScalarType,
                       NInputDimensions,
                       NOutputDimensions,
@@ -53,9 +53,9 @@ namespace otb
 
 
   template < class TScalarType,
-	     unsigned int NInputDimensions,
-	     unsigned int NOutputDimensions,
-	     unsigned int NParametersDimensions >
+       unsigned int NInputDimensions,
+       unsigned int NOutputDimensions,
+       unsigned int NParametersDimensions >
   typename InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>::OutputPointType
   InverseSensorModel< TScalarType,
                       NInputDimensions,
@@ -63,18 +63,18 @@ namespace otb
                       NParametersDimensions>
   ::TransformPoint(const InputPointType &point) const
   {
-//     otbMsgDevMacro(<< "Geographic point lon/lat : (" << point[0] << "," <<	point[1] << ")");
+//     otbMsgDevMacro(<< "Geographic point lon/lat : (" << point[0] << "," <<  point[1] << ")");
 
     // Transformation of "itk::point" in "ossim::ossimGpt"
     ossimGpt ossimGPoint(point[1], point[0]);
 
     if (this->m_UseDEM)
     {
-// 			otbMsgDevMacro(<< "USING DEM ! ") ;
-// 			otbMsgDevMacro(<< "Point : (" << point[1] << "," << point[0] << ")");
-			double height = this->m_DEMHandler->GetHeightAboveMSL(point);
-// 			otbMsgDevMacro(<< "height : " << height) ;
-			ossimGPoint.height(height);
+//       otbMsgDevMacro(<< "USING DEM ! ") ;
+//       otbMsgDevMacro(<< "Point : (" << point[1] << "," << point[0] << ")");
+      double height = this->m_DEMHandler->GetHeightAboveMSL(point);
+//       otbMsgDevMacro(<< "height : " << height) ;
+      ossimGPoint.height(height);
     }
     else
     {
@@ -89,7 +89,7 @@ namespace otb
 
     if( this->m_Model == NULL)
     {
-  		itkExceptionMacro(<<"TransformPoint(): Invalid Model pointer m_Model == NULL !");
+      itkExceptionMacro(<<"TransformPoint(): Invalid Model pointer m_Model == NULL !");
     }
 
     this->m_Model->worldToLineSample(ossimGPoint, ossimDPoint); //"worldToLineSample" appelle la m�thode "lineSampleHeightToWorld" pour prendre en compte l'�l�vation.
@@ -101,15 +101,15 @@ namespace otb
     outputPoint[0]=ossimDPoint.x;
     outputPoint[1]=ossimDPoint.y;
 
-//     otbMsgDevMacro(<< "Point in sensor geometry: (" << outputPoint[0] << "," <<	outputPoint[1] << ")");
+//     otbMsgDevMacro(<< "Point in sensor geometry: (" << outputPoint[0] << "," <<  outputPoint[1] << ")");
 
     return outputPoint;
   }
 
   template < class TScalarType,
-	     unsigned int NInputDimensions,
-	     unsigned int NOutputDimensions,
-	     unsigned int NParametersDimensions >
+       unsigned int NInputDimensions,
+       unsigned int NOutputDimensions,
+       unsigned int NParametersDimensions >
   void
   InverseSensorModel< TScalarType,
                       NInputDimensions,

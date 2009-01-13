@@ -26,17 +26,17 @@ namespace otb
   namespace Functor
     {
       template < class TInput, class TOutput>
-	class VectorToAmplitudeFunctor
-	{
-	public:
-	  VectorToAmplitudeFunctor(){};
-	  ~VectorToAmplitudeFunctor(){};
+  class VectorToAmplitudeFunctor
+  {
+  public:
+    VectorToAmplitudeFunctor(){};
+    ~VectorToAmplitudeFunctor(){};
 
-	  inline TOutput operator()(const TInput & A)
-	    {
-	      return static_cast<TOutput>(vcl_sqrt(A.GetSquaredNorm()));
-	    }
-	}; // end namespace Functor
+    inline TOutput operator()(const TInput & A)
+      {
+        return static_cast<TOutput>(vcl_sqrt(A.GetSquaredNorm()));
+      }
+  }; // end namespace Functor
     }
 
 

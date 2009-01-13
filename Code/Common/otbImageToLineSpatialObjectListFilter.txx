@@ -73,7 +73,7 @@ ImageToLineSpatialObjectListFilter<TInputImage>
 ::GetOutput(void)
 {
     return static_cast<LinesListType *>
-    	(this->ProcessObjectType::GetOutput(0) );
+      (this->ProcessObjectType::GetOutput(0) );
 }
 
 

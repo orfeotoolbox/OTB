@@ -81,7 +81,7 @@ class ITK_EXPORT MeanDifferenceImageFilter :
             Functor::MeanDifference<
                    ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
                    ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
-		   ITK_TYPENAME TOutputImage::PixelType>   >
+       ITK_TYPENAME TOutputImage::PixelType>   >
 {
 public:
   /** Standard class typedefs. */

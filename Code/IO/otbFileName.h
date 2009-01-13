@@ -35,13 +35,13 @@ class ITK_EXPORT FileName : public ossimFilename
 {
 public:
 
-	 FileName();
-	 FileName(const FileName& src);
+   FileName();
+   FileName(const FileName& src);
    FileName(const ossimFilename& src);
    FileName(const ossimString& src);
    FileName(const char* src);
 
-	 /**
+   /**
     *  Return "t1" if file is "/data/images/t1.tif".
     */
    FileName ObtainFileNameWithNoExtension() const;

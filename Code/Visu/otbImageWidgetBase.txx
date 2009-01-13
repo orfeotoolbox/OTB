@@ -69,11 +69,11 @@ namespace otb
   {
     if(m_OpenGlBuffer != NULL)
       {
-	delete [] m_OpenGlBuffer;
+  delete [] m_OpenGlBuffer;
       }
     if(m_OpenGlImageOverlayBuffer != NULL)
       {
-	delete [] m_OpenGlImageOverlayBuffer;
+  delete [] m_OpenGlImageOverlayBuffer;
       }
   }
   /**
@@ -116,10 +116,10 @@ namespace otb
 #endif
     for(unsigned int i = 0; i<m_Image->GetNumberOfComponentsPerPixel();++i)
       {
-	if(i>=m_TransferFunctionList->Size())
-	  {
-	    m_TransferFunctionList->PushBack(AffineTransferFunctionType::New());
-	  }
+  if(i>=m_TransferFunctionList->Size())
+    {
+      m_TransferFunctionList->PushBack(AffineTransferFunctionType::New());
+    }
       }
 
   }
@@ -148,29 +148,29 @@ namespace otb
 
     if(x<maxIndex[0])
       {
-	resp[0]=maxIndex[0];
+  resp[0]=maxIndex[0];
       }
     else if(x>maxIndex[0]+maxSize[0])
       {
-	resp[0] = maxIndex[0]+maxSize[0];
+  resp[0] = maxIndex[0]+maxSize[0];
       }
     else
       {
-	resp[0]=static_cast<int>(x);
+  resp[0]=static_cast<int>(x);
       }
 
     if(y<maxIndex[1])
       {
-	resp[1]=maxIndex[1];
+  resp[1]=maxIndex[1];
 
       }
     else if(y>maxIndex[1]+maxSize[1])
       {
-	resp[1] = maxIndex[1]+maxSize[1];
+  resp[1] = maxIndex[1]+maxSize[1];
       }
     else
       {
-	resp[1]=static_cast<int>(y);
+  resp[1]=static_cast<int>(y);
       }
     return resp;
   }
@@ -261,15 +261,15 @@ namespace otb
   {
     if(!m_Image)
       {
-	itkExceptionMacro(<<"No input image !");
+  itkExceptionMacro(<<"No input image !");
       }
     else
       {
-	//otbMsgDebugMacro(<<"Zoomable widget Show");
-	this->show();
-	//otbMsgDebugMacro(<<"Before redraw.");
-	this->redraw();
-	//otbMsgDebugMacro(<<"After redraw.");
+  //otbMsgDebugMacro(<<"Zoomable widget Show");
+  this->show();
+  //otbMsgDebugMacro(<<"Before redraw.");
+  this->redraw();
+  //otbMsgDebugMacro(<<"After redraw.");
       }
   }
 
@@ -294,32 +294,32 @@ namespace otb
 
     if(this->UpdateOpenGlBufferedRegionRequested())
       {
-	UpdateOpenGlBufferedRegion();
-	m_Image->SetRequestedRegion(m_BufferedRegion);
-	m_Image->PropagateRequestedRegion();
-	m_Image->UpdateOutputData();
-	RebuildOpenGlBuffer();
-	if(m_ImageOverlayVisible)
-	  {
-	    m_ImageOverlay->SetRequestedRegion(m_BufferedRegion);
-	    m_ImageOverlay->PropagateRequestedRegion();
-	    m_ImageOverlay->UpdateOutputData();
-	  }
+  UpdateOpenGlBufferedRegion();
+  m_Image->SetRequestedRegion(m_BufferedRegion);
+  m_Image->PropagateRequestedRegion();
+  m_Image->UpdateOutputData();
+  RebuildOpenGlBuffer();
+  if(m_ImageOverlayVisible)
+    {
+      m_ImageOverlay->SetRequestedRegion(m_BufferedRegion);
+      m_ImageOverlay->PropagateRequestedRegion();
+      m_ImageOverlay->UpdateOutputData();
+    }
       }
 
     if(m_ImageOverlayVisible)
       {
-	RebuildOpenGlImageOverlayBuffer();
+  RebuildOpenGlImageOverlayBuffer();
       }
 
     if (!this->valid())
       {
-	valid(1);
-	glLoadIdentity();
-	glViewport(0,0,w(),h());
-	glClearColor((float)0.0, (float)0.0, (float)0.0, (float)0.0);
-	glShadeModel(GL_FLAT);
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+  valid(1);
+  glLoadIdentity();
+  glViewport(0,0,w(),h());
+  glClearColor((float)0.0, (float)0.0, (float)0.0, (float)0.0);
+  glShadeModel(GL_FLAT);
+  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
       }
 
     glClear(GL_COLOR_BUFFER_BIT);    //this clears and paints to black
@@ -342,10 +342,10 @@ namespace otb
 
     // display the image
     glDrawPixels(m_BufferedRegion.GetSize()[0],
-		 m_BufferedRegion.GetSize()[1],
-		 GL_RGBA,
-		 GL_UNSIGNED_BYTE,
-		 m_OpenGlBuffer);
+     m_BufferedRegion.GetSize()[1],
+     GL_RGBA,
+     GL_UNSIGNED_BYTE,
+     m_OpenGlBuffer);
 #else
     glEnable(GL_TEXTURE_2D);
     glColor4f(1.0,1.0,1.0,0.0);
@@ -353,10 +353,10 @@ namespace otb
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
     glTexImage2D(GL_TEXTURE_2D, 0, 3, m_BufferedRegion.GetSize()[0], m_BufferedRegion.GetSize()[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, m_OpenGlBuffer);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);	// Nearest Filtering
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);	// Nearest Filtering
-    //   glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);	// Linear Filtering
-    //   glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);	// Linear Filtering
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);  // Nearest Filtering
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);  // Nearest Filtering
+    //   glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);  // Linear Filtering
+    //   glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);  // Linear Filtering
 
     glBindTexture (GL_TEXTURE_2D, texture);
     glBegin (GL_QUADS);
@@ -374,53 +374,53 @@ namespace otb
     if(m_ImageOverlayVisible)
       {
 #ifndef OTB_GL_USE_ACCEL
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-	glDrawPixels(m_BufferedRegion.GetSize()[0],
-		     m_BufferedRegion.GetSize()[1],
-		     GL_RGBA,
-		     GL_UNSIGNED_BYTE,
-		     m_OpenGlImageOverlayBuffer);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+  glDrawPixels(m_BufferedRegion.GetSize()[0],
+         m_BufferedRegion.GetSize()[1],
+         GL_RGBA,
+         GL_UNSIGNED_BYTE,
+         m_OpenGlImageOverlayBuffer);
 
-	glDisable(GL_BLEND);
-	glEnd();
+  glDisable(GL_BLEND);
+  glEnd();
 #else
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_TEXTURE_2D);
-	glColor4f(1.0,1.0,1.0,1.0);
-	GLuint textureOverlay;
-	glGenTextures(1, &textureOverlay);
-	glBindTexture(GL_TEXTURE_2D, textureOverlay);
-	glTexImage2D(GL_TEXTURE_2D, 0, 4, m_BufferedRegion.GetSize()[0], m_BufferedRegion.GetSize()[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, m_OpenGlImageOverlayBuffer);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);  // Nearest Filtering
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);  // Nearest Filtering
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glEnable(GL_TEXTURE_2D);
+  glColor4f(1.0,1.0,1.0,1.0);
+  GLuint textureOverlay;
+  glGenTextures(1, &textureOverlay);
+  glBindTexture(GL_TEXTURE_2D, textureOverlay);
+  glTexImage2D(GL_TEXTURE_2D, 0, 4, m_BufferedRegion.GetSize()[0], m_BufferedRegion.GetSize()[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, m_OpenGlImageOverlayBuffer);
+  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);  // Nearest Filtering
+  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);  // Nearest Filtering
 
-	glBindTexture (GL_TEXTURE_2D, textureOverlay);
-	glBegin (GL_QUADS);
-	int hOffset = this->h() - this->hDisplayed();
-	glTexCoord2f (0.0, 1.0);  glVertex3f (0.0, 0.0+hOffset, 1.0);
-	glTexCoord2f (1.0, 1.0);  glVertex3f (this->wDisplayed(), 0.0+hOffset, 1.0);
-	glTexCoord2f (1.0, 0.0);  glVertex3f (this->wDisplayed(), this->hDisplayed()+hOffset, 1.0);
-	glTexCoord2f (0.0, 0.0);  glVertex3f (0.0, this->hDisplayed()+hOffset, 1.0);
-	glEnd ();
-	glDisable(GL_TEXTURE_2D);
-	glDisable(GL_BLEND);
+  glBindTexture (GL_TEXTURE_2D, textureOverlay);
+  glBegin (GL_QUADS);
+  int hOffset = this->h() - this->hDisplayed();
+  glTexCoord2f (0.0, 1.0);  glVertex3f (0.0, 0.0+hOffset, 1.0);
+  glTexCoord2f (1.0, 1.0);  glVertex3f (this->wDisplayed(), 0.0+hOffset, 1.0);
+  glTexCoord2f (1.0, 0.0);  glVertex3f (this->wDisplayed(), this->hDisplayed()+hOffset, 1.0);
+  glTexCoord2f (0.0, 0.0);  glVertex3f (0.0, this->hDisplayed()+hOffset, 1.0);
+  glEnd ();
+  glDisable(GL_TEXTURE_2D);
+  glDisable(GL_BLEND);
 #endif
 
       }
 
     if(m_FormOverlayVisible)
       {
-	ReverseIteratorType it =  m_FormList->ReverseBegin();
-	//otbMsgDebugMacro(<<"Formlist size: "<<m_FormList->Size());
-	for(;it!=m_FormList->ReverseEnd();++it)
-	  {
-	    it.Get()->Draw(m_OpenGlIsotropicZoom,
-			   m_ViewedRegion.GetIndex()[0],
-			   m_ViewedRegion.GetIndex()[1],
-			   this->h(), m_SubSamplingRate);
-	  }
+  ReverseIteratorType it =  m_FormList->ReverseBegin();
+  //otbMsgDebugMacro(<<"Formlist size: "<<m_FormList->Size());
+  for(;it!=m_FormList->ReverseEnd();++it)
+    {
+      it.Get()->Draw(m_OpenGlIsotropicZoom,
+         m_ViewedRegion.GetIndex()[0],
+         m_ViewedRegion.GetIndex()[1],
+         this->h(), m_SubSamplingRate);
+    }
       }
 
   }
@@ -436,8 +436,8 @@ namespace otb
     //otbMsgDebugMacro(<<"RebuildOpenGlBuffer");
     if(m_OpenGlBuffer != NULL)
       {
-	//otbMsgDebugMacro(<<"Deleting previous buffer ...");
-	delete [] m_OpenGlBuffer;
+  //otbMsgDebugMacro(<<"Deleting previous buffer ...");
+  delete [] m_OpenGlBuffer;
       }
     //otbMsgDebugMacro(<<"Buffered region: "<<m_BufferedRegion);
     unsigned int bufferLenght = 4*m_BufferedRegion.GetNumberOfPixels();
@@ -450,52 +450,52 @@ namespace otb
     for(it.GoToBegin();!it.IsAtEnd();++it)
       {
 #ifdef OTB_GL_USE_ACCEL
-	index = GetBufferIndex(it.GetIndex());
+  index = GetBufferIndex(it.GetIndex());
 #else
-	index = GetRevertedBufferIndex(it.GetIndex());
+  index = GetRevertedBufferIndex(it.GetIndex());
 #endif
-	switch(m_ViewModel)
-	  {
-	  case RGB:
-	    {
-	      m_OpenGlBuffer[index] =   Normalize(it.Get()[m_RedChannelIndex],m_RedChannelIndex);
-	      m_OpenGlBuffer[index+1] = Normalize(it.Get()[m_GreenChannelIndex],m_GreenChannelIndex);
-	      m_OpenGlBuffer[index+2] = Normalize(it.Get()[m_BlueChannelIndex],m_BlueChannelIndex);
-	      m_OpenGlBuffer[index+3] = 255;
-	      break;
-	    }
-	  case GRAYSCALE:
-	    {
-	      unsigned char  gray = Normalize(it.Get()[m_RedChannelIndex],m_RedChannelIndex);
-	      m_OpenGlBuffer[index] =   gray;
-	      m_OpenGlBuffer[index+1] = gray;
-	      m_OpenGlBuffer[index+2] = gray;
-	      m_OpenGlBuffer[index+3] = 255;
-	      break;
-	    }
-	  case COMPLEX_MODULUS:
-	    {
-	      double re = static_cast<double>(it.Get()[m_RedChannelIndex]);
-	      double im = static_cast<double>(it.Get()[m_GreenChannelIndex]);
-	      //     std::cout << " *** " << m_RedChannelIndex << " " << m_GreenChannelIndex << std::endl;
-	      unsigned char  modulus = Normalize(static_cast<PixelType>(vcl_sqrt(static_cast<double>(im*im+re*re))),0);
-	      //     std::cout << " ** " << im << " " << re << " -> " << static_cast<int>(modulus) << std::endl;
-	      m_OpenGlBuffer[index] =   modulus;
-	      m_OpenGlBuffer[index+1] = modulus;
-	      m_OpenGlBuffer[index+2] = modulus;
-	      m_OpenGlBuffer[index+3] = 255;
-	      break;
-	    }
-	  case COMPLEX_PHASE:
-	    {
-	      unsigned char phase =  Normalize(static_cast<PixelType>(vcl_atan2(static_cast<double>(it.Get()[m_GreenChannelIndex]),static_cast<double>(it.Get()[m_RedChannelIndex]))),0);
-	      m_OpenGlBuffer[index]   = phase;
-	      m_OpenGlBuffer[index+1] = phase;
-	      m_OpenGlBuffer[index+2] = phase;
-	      m_OpenGlBuffer[index+3] = 255;
-	      break;
-	    }
-	  }
+  switch(m_ViewModel)
+    {
+    case RGB:
+      {
+        m_OpenGlBuffer[index] =   Normalize(it.Get()[m_RedChannelIndex],m_RedChannelIndex);
+        m_OpenGlBuffer[index+1] = Normalize(it.Get()[m_GreenChannelIndex],m_GreenChannelIndex);
+        m_OpenGlBuffer[index+2] = Normalize(it.Get()[m_BlueChannelIndex],m_BlueChannelIndex);
+        m_OpenGlBuffer[index+3] = 255;
+        break;
+      }
+    case GRAYSCALE:
+      {
+        unsigned char  gray = Normalize(it.Get()[m_RedChannelIndex],m_RedChannelIndex);
+        m_OpenGlBuffer[index] =   gray;
+        m_OpenGlBuffer[index+1] = gray;
+        m_OpenGlBuffer[index+2] = gray;
+        m_OpenGlBuffer[index+3] = 255;
+        break;
+      }
+    case COMPLEX_MODULUS:
+      {
+        double re = static_cast<double>(it.Get()[m_RedChannelIndex]);
+        double im = static_cast<double>(it.Get()[m_GreenChannelIndex]);
+        //     std::cout << " *** " << m_RedChannelIndex << " " << m_GreenChannelIndex << std::endl;
+        unsigned char  modulus = Normalize(static_cast<PixelType>(vcl_sqrt(static_cast<double>(im*im+re*re))),0);
+        //     std::cout << " ** " << im << " " << re << " -> " << static_cast<int>(modulus) << std::endl;
+        m_OpenGlBuffer[index] =   modulus;
+        m_OpenGlBuffer[index+1] = modulus;
+        m_OpenGlBuffer[index+2] = modulus;
+        m_OpenGlBuffer[index+3] = 255;
+        break;
+      }
+    case COMPLEX_PHASE:
+      {
+        unsigned char phase =  Normalize(static_cast<PixelType>(vcl_atan2(static_cast<double>(it.Get()[m_GreenChannelIndex]),static_cast<double>(it.Get()[m_RedChannelIndex]))),0);
+        m_OpenGlBuffer[index]   = phase;
+        m_OpenGlBuffer[index+1] = phase;
+        m_OpenGlBuffer[index+2] = phase;
+        m_OpenGlBuffer[index+3] = 255;
+        break;
+      }
+    }
       }
   }
   /**
@@ -509,8 +509,8 @@ namespace otb
     //otbMsgDebugMacro(<<"RebuildOpenGlImageOverlayBuffer");
     if(m_OpenGlImageOverlayBuffer != NULL)
       {
-	//otbMsgDebugMacro(<<"Deleting previous buffer ...");
-	delete [] m_OpenGlImageOverlayBuffer;
+  //otbMsgDebugMacro(<<"Deleting previous buffer ...");
+  delete [] m_OpenGlImageOverlayBuffer;
       }
     //otbMsgDebugMacro(<<"Buffered region: "<<m_BufferedRegion);
     unsigned int bufferLenght = 4*m_BufferedRegion.GetNumberOfPixels();
@@ -522,43 +522,43 @@ namespace otb
     unsigned int index = 0;
     if(m_BlackTransparency)
       {
-	for(it.GoToBegin();!it.IsAtEnd();++it)
-	  {
+  for(it.GoToBegin();!it.IsAtEnd();++it)
+    {
 #ifdef OTB_GL_USE_ACCEL
-	    index = GetBufferIndex(it.GetIndex());
+      index = GetBufferIndex(it.GetIndex());
 #else
-	    index = GetRevertedBufferIndex(it.GetIndex());
+      index = GetRevertedBufferIndex(it.GetIndex());
 #endif
-	    if ((it.Get()[0]==0)&&(it.Get()[1]==0)&&(it.Get()[2]==0))
-	      {
-		m_OpenGlImageOverlayBuffer[index] = 0;
-		m_OpenGlImageOverlayBuffer[index+1] = 0;
-		m_OpenGlImageOverlayBuffer[index+2] =0;
-		m_OpenGlImageOverlayBuffer[index+3] = 0;
-	      }
-	    else
-	      {
-		m_OpenGlImageOverlayBuffer[index] =   static_cast<unsigned char>(it.Get()[0]);
-		m_OpenGlImageOverlayBuffer[index+1] = static_cast<unsigned char>( it.Get()[1]);
-		m_OpenGlImageOverlayBuffer[index+2] = static_cast<unsigned char>(it.Get()[2]);
-		m_OpenGlImageOverlayBuffer[index+3] = m_ImageOverlayOpacity;
-	      }
-	  }
+      if ((it.Get()[0]==0)&&(it.Get()[1]==0)&&(it.Get()[2]==0))
+        {
+    m_OpenGlImageOverlayBuffer[index] = 0;
+    m_OpenGlImageOverlayBuffer[index+1] = 0;
+    m_OpenGlImageOverlayBuffer[index+2] =0;
+    m_OpenGlImageOverlayBuffer[index+3] = 0;
+        }
+      else
+        {
+    m_OpenGlImageOverlayBuffer[index] =   static_cast<unsigned char>(it.Get()[0]);
+    m_OpenGlImageOverlayBuffer[index+1] = static_cast<unsigned char>( it.Get()[1]);
+    m_OpenGlImageOverlayBuffer[index+2] = static_cast<unsigned char>(it.Get()[2]);
+    m_OpenGlImageOverlayBuffer[index+3] = m_ImageOverlayOpacity;
+        }
+    }
       }
     else
       {
-	for(it.GoToBegin();!it.IsAtEnd();++it)
-	  {
+  for(it.GoToBegin();!it.IsAtEnd();++it)
+    {
 #ifdef OTB_GL_USE_ACCEL
-	    index = GetBufferIndex(it.GetIndex());
+      index = GetBufferIndex(it.GetIndex());
 #else
-	    index = GetRevertedBufferIndex(it.GetIndex());
+      index = GetRevertedBufferIndex(it.GetIndex());
 #endif
-	    m_OpenGlImageOverlayBuffer[index] =  static_cast<unsigned char>(it.Get()[0]);
-	    m_OpenGlImageOverlayBuffer[index+1] =static_cast<unsigned char>(it.Get()[1]);
-	    m_OpenGlImageOverlayBuffer[index+2] =static_cast<unsigned char>(it.Get()[2]);
-	    m_OpenGlImageOverlayBuffer[index+3] =m_ImageOverlayOpacity;
-	  }
+      m_OpenGlImageOverlayBuffer[index] =  static_cast<unsigned char>(it.Get()[0]);
+      m_OpenGlImageOverlayBuffer[index+1] =static_cast<unsigned char>(it.Get()[1]);
+      m_OpenGlImageOverlayBuffer[index+2] =static_cast<unsigned char>(it.Get()[2]);
+      m_OpenGlImageOverlayBuffer[index+3] =m_ImageOverlayOpacity;
+    }
       }
   }
 }// end namespace otb

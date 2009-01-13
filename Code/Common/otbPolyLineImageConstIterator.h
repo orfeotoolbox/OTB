@@ -89,8 +89,8 @@ class ITK_EXPORT PolyLineImageConstIterator
   /** Is the iterator at the end of the line? */
   bool IsAtEnd()
     {
-	  return (m_InternalVertexIterator == m_Path->GetVertexList()->End())
-	    && m_InternalImageIterator.IsAtEnd();
+    return (m_InternalVertexIterator == m_Path->GetVertexList()->End())
+      && m_InternalImageIterator.IsAtEnd();
     }
   /** Move an iterator to the beginning of the line. */
   void GoToBegin();

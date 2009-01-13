@@ -50,19 +50,19 @@ namespace otb
       /** Standard class typedefs */
       typedef itk::Transform< TScalarType,
                               NInputDimensions,
-                              NOutputDimensions >  	 Superclass;
+                              NOutputDimensions >     Superclass;
       typedef MapToMapProjection                         Self;
-      typedef itk::SmartPointer<Self>              	 Pointer;
-      typedef itk::SmartPointer<const Self>        	 ConstPointer;
+      typedef itk::SmartPointer<Self>                 Pointer;
+      typedef itk::SmartPointer<const Self>           ConstPointer;
 
-      typedef TInputMapProjection                  	 		InputMapProjectionType;
-			typedef typename InputMapProjectionType::Pointer	InputMapProjectionPointerType;
-			typedef typename InputMapProjectionType::OutputPointType OutputPointOfInputMapProjectionType;
+      typedef TInputMapProjection                         InputMapProjectionType;
+      typedef typename InputMapProjectionType::Pointer  InputMapProjectionPointerType;
+      typedef typename InputMapProjectionType::OutputPointType OutputPointOfInputMapProjectionType;
 
-      typedef TOutputMapProjection                 	 		OutputMapProjectionType;
-			typedef typename OutputMapProjectionType::Pointer	OutputMapProjectionPointerType;
+      typedef TOutputMapProjection                        OutputMapProjectionType;
+      typedef typename OutputMapProjectionType::Pointer  OutputMapProjectionPointerType;
 
-			typedef typename Superclass::InputPointType  InputPointType;
+      typedef typename Superclass::InputPointType  InputPointType;
       typedef typename Superclass::OutputPointType  OutputPointType;
 
       /** Method for creation through the object factory. */
@@ -82,13 +82,13 @@ namespace otb
       /** Set MapProjection2. */
       itkSetObjectMacro(OutputMapProjection,OutputMapProjectionType);
 
-			/** Transform Point from MapProjection1 to MapProjection2 */
+      /** Transform Point from MapProjection1 to MapProjection2 */
       OutputPointType TransformPoint(const InputPointType &point) const;
 
 //    Compute MapProjection1 coordinates to MapProjection2 coordinates. */
 //    OutputPointType ComputeProjection1ToProjection2(const InputPointType &point1);
 
-//		Compute MapProjection1 coordinates to MapProjection2 coordinates. */
+//    Compute MapProjection1 coordinates to MapProjection2 coordinates. */
 //    InputPointType ComputeProjection2ToProjection1(const OutputPointType &point2);
 
       protected:

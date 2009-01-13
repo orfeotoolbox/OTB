@@ -136,24 +136,24 @@ namespace otb {
       void SetSecondInput(const TInputImage2 *input2){ this->SetInput(1, input2 ); };
 
       const TInputImage* GetFirstInput()
-	{
-	  if( this->GetNumberOfInputs() < 1 )
-	    {
-	      return 0;
-	    }
-	  else
-	    return( static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(0)) );
-	}
+  {
+    if( this->GetNumberOfInputs() < 1 )
+      {
+        return 0;
+      }
+    else
+      return( static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(0)) );
+  }
 
       const TInputImage2* GetSecondInput()
-	{
-	  if( this->GetNumberOfInputs() < 2 )
-	    {
-	      return 0;
-	    }
-	  else
-	    return( static_cast<const TInputImage2 *>(this->itk::ProcessObject::GetInput(1)) );
-	}
+  {
+    if( this->GetNumberOfInputs() < 2 )
+      {
+        return 0;
+      }
+    else
+      return( static_cast<const TInputImage2 *>(this->itk::ProcessObject::GetInput(1)) );
+  }
 
     protected:
       PersistentMatrixTransposeMatrixImageFilter();

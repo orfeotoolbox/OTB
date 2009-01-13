@@ -54,10 +54,10 @@ public:
 
 
   /** Standard class typedefs. */
-  typedef LocalHoughFilter                              	Self;
-  typedef ImageToLineSpatialObjectListFilter<TInputImage>	Superclass;
-  typedef itk::SmartPointer<Self>                       	Pointer;
-  typedef itk::SmartPointer<const Self>                 	ConstPointer;
+  typedef LocalHoughFilter                                Self;
+  typedef ImageToLineSpatialObjectListFilter<TInputImage>  Superclass;
+  typedef itk::SmartPointer<Self>                         Pointer;
+  typedef itk::SmartPointer<const Self>                   ConstPointer;
 
     /** Method for management of the "object factory". */
   itkNewMacro(Self);
@@ -67,19 +67,19 @@ public:
 
 
   /** Definition of the list of lines. */
-  typedef typename Superclass::LinesListType	 LinesListType;
+  typedef typename Superclass::LinesListType   LinesListType;
   typedef typename LinesListType::const_iterator LineIterator;
 
-  typedef typename LinesListType::LineType	 LineType;
-  typedef typename LineType::Pointer   		 LinePointer;
+  typedef typename LinesListType::LineType   LineType;
+  typedef typename LineType::Pointer        LinePointer;
 
-  typedef typename LineType::PointListType  	PointListType;
+  typedef typename LineType::PointListType    PointListType;
   typedef typename LineType::LinePointType      LinePointType;
 
-  /** 	Extract dimensions as well of the images of entry of exit. */
-  itkStaticConstMacro(		InputImageDimension,
-  				unsigned int,
-                      		TInputImage::ImageDimension);
+  /**   Extract dimensions as well of the images of entry of exit. */
+  itkStaticConstMacro(    InputImageDimension,
+          unsigned int,
+                          TInputImage::ImageDimension);
 
 
   typedef TInputImage InputImageType;
@@ -90,18 +90,18 @@ public:
    //-----------------------------------------------
 
   /** Definition of the pixel type of the input and output images */
-  typedef typename InputImageType::PixelType 	InputPixelType;
-  typedef   float           			AccumulatorPixelType;
+  typedef typename InputImageType::PixelType   InputPixelType;
+  typedef   float                 AccumulatorPixelType;
 
-  typedef typename InputImageType::RegionType	InputImageRegionType;
+  typedef typename InputImageType::RegionType  InputImageRegionType;
 
   /** Definition of the size of the images. */
   typedef typename InputImageType::SizeType SizeType;
 
-  typedef typename InputImageType::RegionType::IndexType	IndexType;
+  typedef typename InputImageType::RegionType::IndexType  IndexType;
 
   /** Typedefs to define the extract ROI filter. */
-  typedef ExtractROI< InputPixelType, InputPixelType>	ROIFilterType;
+  typedef ExtractROI< InputPixelType, InputPixelType>  ROIFilterType;
 
 
   /** Set the radius of the local region where to apply the Hough filter. */
@@ -144,7 +144,7 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Definition of the Hough Filter. */
-  typedef itk::HoughTransform2DLinesImageFilter<InputPixelType, AccumulatorPixelType>	HoughFilterType;
+  typedef itk::HoughTransform2DLinesImageFilter<InputPixelType, AccumulatorPixelType>  HoughFilterType;
 
 
   virtual void GenerateData();

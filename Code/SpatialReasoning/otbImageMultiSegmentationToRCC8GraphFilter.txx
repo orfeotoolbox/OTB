@@ -142,7 +142,7 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
 
   // invert value vector
   RCC8ValueType invert[8]={OTB_RCC8_DC,OTB_RCC8_EC,OTB_RCC8_PO,OTB_RCC8_TPPI,
-			   OTB_RCC8_TPP,OTB_RCC8_NTPPI,OTB_RCC8_NTPP,OTB_RCC8_EQ};
+         OTB_RCC8_TPP,OTB_RCC8_NTPPI,OTB_RCC8_NTPP,OTB_RCC8_EQ};
 
   // Some typedefs
   typedef otb::ImageToEdgePathFilter<InputImageType,PathType> EdgeExtractionFilterType;
@@ -172,33 +172,33 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
       minMax->ComputeMaximum();
       maxLabelVector.push_back(minMax->GetMaximum());
       otbMsgDebugMacro(<<"Number of objects in image "<<segmentationImageIndex<<": "
-	       <<minMax->GetMaximum());
+         <<minMax->GetMaximum());
 
       // then for each region of the images
       for(PixelType label=1; label<=maxLabelVector.back();++label)
-	{
-	  typename PathListType::Pointer region = PathListType::New();
-	  typename EdgeExtractionFilterType::Pointer extraction = EdgeExtractionFilterType::New();
-	  extraction->SetInput(it.Get());
-	  extraction->SetForegroundValue(label);
-	  extraction->Update();
-	  region->PushBack(extraction->GetOutput());
-	  typename SimplifyPathFilterType::Pointer simplifier = SimplifyPathFilterType::New();
-	  simplifier->SetInput(region);
-	  simplifier->GetFunctor().SetTolerance(0.1);
-	  simplifier->Update();
+  {
+    typename PathListType::Pointer region = PathListType::New();
+    typename EdgeExtractionFilterType::Pointer extraction = EdgeExtractionFilterType::New();
+    extraction->SetInput(it.Get());
+    extraction->SetForegroundValue(label);
+    extraction->Update();
+    region->PushBack(extraction->GetOutput());
+    typename SimplifyPathFilterType::Pointer simplifier = SimplifyPathFilterType::New();
+    simplifier->SetInput(region);
+    simplifier->GetFunctor().SetTolerance(0.1);
+    simplifier->Update();
 
-	  // Create a new vertex
-	  VertexPointerType vertex = VertexType::New();
-	  // Set its properties
-	  vertex->SetPath(simplifier->GetOutput()->GetNthElement(0));
-	  vertex->SetSegmentationLevel(segmentationImageIndex/2);
-	  vertex->SetSegmentationType(segmentationImageIndex%2);
-	  // Put it in the graph
-	  graph->SetVertex(vertexIndex,vertex);
-	  vertexIndex++;
-	  ++nbVertices;
-	}
+    // Create a new vertex
+    VertexPointerType vertex = VertexType::New();
+    // Set its properties
+    vertex->SetPath(simplifier->GetOutput()->GetNthElement(0));
+    vertex->SetSegmentationLevel(segmentationImageIndex/2);
+    vertex->SetSegmentationType(segmentationImageIndex%2);
+    // Put it in the graph
+    graph->SetVertex(vertexIndex,vertex);
+    vertexIndex++;
+    ++nbVertices;
+  }
       segmentationImageIndex++;
     }
 
@@ -211,97 +211,97 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
   for(vIt1.GoToBegin();!vIt1.IsAtEnd();++vIt1)
     {
       for(vIt2.GoToBegin();!vIt2.IsAtEnd();++vIt2)
-	{
-	  //We do not examine each couple because of the RCC8 symmetry
-	  if(vIt1.GetIndex()<vIt2.GetIndex())
-	    {
+  {
+    //We do not examine each couple because of the RCC8 symmetry
+    if(vIt1.GetIndex()<vIt2.GetIndex())
+      {
 
-	      // Compute the RCC8 relation
-	      typename RCC8CalculatorType::Pointer calc = RCC8CalculatorType::New();
-	      calc->SetPolygon1(vIt1.Get()->GetPath());
-	      calc->SetPolygon2(vIt2.Get()->GetPath());
-	      RCC8ValueType value=OTB_RCC8_DC;
+        // Compute the RCC8 relation
+        typename RCC8CalculatorType::Pointer calc = RCC8CalculatorType::New();
+        calc->SetPolygon1(vIt1.Get()->GetPath());
+        calc->SetPolygon2(vIt2.Get()->GetPath());
+        RCC8ValueType value=OTB_RCC8_DC;
 
-	      // if the optimisations are activated
-	      if(m_Optimisation)
-		{
-		 //  otbMsgDebugMacro(<<"RCC8GraphFilter: Entering optimisation loop");
-		  InEdgeIteratorType inIt1(vIt1.GetIndex(),graph);
-		  InEdgeIteratorType inIt2(vIt2.GetIndex(),graph);
-		  // otbMsgDebugMacro(<<"Optimisation loop: iterators initialised");
-		  VertexDescriptorType betweenIndex;
-		  KnowledgeStateType know(NO_INFO,OTB_RCC8_DC);
-		  inIt1.GoToBegin();
+        // if the optimisations are activated
+        if(m_Optimisation)
+    {
+     //  otbMsgDebugMacro(<<"RCC8GraphFilter: Entering optimisation loop");
+      InEdgeIteratorType inIt1(vIt1.GetIndex(),graph);
+      InEdgeIteratorType inIt2(vIt2.GetIndex(),graph);
+      // otbMsgDebugMacro(<<"Optimisation loop: iterators initialised");
+      VertexDescriptorType betweenIndex;
+      KnowledgeStateType know(NO_INFO,OTB_RCC8_DC);
+      inIt1.GoToBegin();
 
-		  // Iterate through the edges going to the first vertex
-		  while(!inIt1.IsAtEnd()&&(know.first!=FULL))
-		    {
-		      betweenIndex = inIt1.GetSourceIndex();
-		      inIt2.GoToBegin();
-		      bool edgeFound = false;
-		      while(!inIt2.IsAtEnd()&&(know.first!=FULL))
-			{
-			  // try to find an intermediate vertex between the two ones which
-			  // we vant to compute the relationship
-			  if(inIt2.GetSourceIndex()==betweenIndex)
-			    {
-			      // if an intermediate vertex is found
-			      edgeFound = true;
-			      // otbMsgDebugMacro(<<"Optimisation loop: found an intermediary vertex:" <<betweenIndex);
-			      // See if it brings some info on the RCCC8 value
-			      know = GetKnowledge(invert[inIt1.GetValue()],inIt2.GetValue());
-			      calc->SetLevel1APrioriKnowledge(know.first==LEVEL_1);
-			      calc->SetLevel3APrioriKnowledge(know.first==LEVEL_3);
-			     //  otbMsgDebugMacro(<<"Optimisation loop: knowledge: "<<know.first<<","<<know.second);
-			    }
-			  ++inIt2;
-			}
-		      // If no intermediate was found
-		      if(!edgeFound)
-			{
-			 //  otbMsgDebugMacro(<<"Optimisation loop: found an intermediary vertex:" <<betweenIndex);
-			  // Try using a DC relationship
-			  know = GetKnowledge(invert[inIt1.GetValue()],OTB_RCC8_DC);
-			  calc->SetLevel1APrioriKnowledge(know.first==LEVEL_1);
-			  calc->SetLevel3APrioriKnowledge(know.first==LEVEL_3);
-			  // otbMsgDebugMacro(<<"Optimisation loop: knowledge: "<<know.first<<","<<know.second);
-			}
-		      ++inIt1;
-		    }
-		  // If the search has fully determined the RCC8
-		  if(know.first==FULL)
-		    {
-		      // Get the value
-		      value=know.second;
-		    }
-		  else
-		    {
-		      // Else trigger the computation
-		      // (which will take the optimisation phase info into account)
-		      calc->Compute();
-		      value=calc->GetValue();
-		    }
-		  // otbMsgDebugMacro(<<"RCC8GraphFilter: Leaving optimisation loop");
-		}
-	      // If the optimisations are not activated
-	      else
-		{
-		  calc->Compute();
-		  value=calc->GetValue();
-		}
-	      m_Accumulator[value]+=1;
-	      m_Accumulator[invert[value]]+=1;
-	      // If the vertices are connected
-	      if(value>OTB_RCC8_DC)
-		{
-		  // Add the edge to the graph.
-		  otbMsgDevMacro(<<"Adding edge: "<<vIt1.GetIndex()<<" -> "<<vIt2.GetIndex()<<": "<<value);
-		  graph->AddEdge(vIt1.GetIndex(),vIt2.GetIndex(),value);
-		}
-	    }
-	  progress.CompletedPixel();
-	  progress.CompletedPixel();
-	}
+      // Iterate through the edges going to the first vertex
+      while(!inIt1.IsAtEnd()&&(know.first!=FULL))
+        {
+          betweenIndex = inIt1.GetSourceIndex();
+          inIt2.GoToBegin();
+          bool edgeFound = false;
+          while(!inIt2.IsAtEnd()&&(know.first!=FULL))
+      {
+        // try to find an intermediate vertex between the two ones which
+        // we vant to compute the relationship
+        if(inIt2.GetSourceIndex()==betweenIndex)
+          {
+            // if an intermediate vertex is found
+            edgeFound = true;
+            // otbMsgDebugMacro(<<"Optimisation loop: found an intermediary vertex:" <<betweenIndex);
+            // See if it brings some info on the RCCC8 value
+            know = GetKnowledge(invert[inIt1.GetValue()],inIt2.GetValue());
+            calc->SetLevel1APrioriKnowledge(know.first==LEVEL_1);
+            calc->SetLevel3APrioriKnowledge(know.first==LEVEL_3);
+           //  otbMsgDebugMacro(<<"Optimisation loop: knowledge: "<<know.first<<","<<know.second);
+          }
+        ++inIt2;
+      }
+          // If no intermediate was found
+          if(!edgeFound)
+      {
+       //  otbMsgDebugMacro(<<"Optimisation loop: found an intermediary vertex:" <<betweenIndex);
+        // Try using a DC relationship
+        know = GetKnowledge(invert[inIt1.GetValue()],OTB_RCC8_DC);
+        calc->SetLevel1APrioriKnowledge(know.first==LEVEL_1);
+        calc->SetLevel3APrioriKnowledge(know.first==LEVEL_3);
+        // otbMsgDebugMacro(<<"Optimisation loop: knowledge: "<<know.first<<","<<know.second);
+      }
+          ++inIt1;
+        }
+      // If the search has fully determined the RCC8
+      if(know.first==FULL)
+        {
+          // Get the value
+          value=know.second;
+        }
+      else
+        {
+          // Else trigger the computation
+          // (which will take the optimisation phase info into account)
+          calc->Compute();
+          value=calc->GetValue();
+        }
+      // otbMsgDebugMacro(<<"RCC8GraphFilter: Leaving optimisation loop");
+    }
+        // If the optimisations are not activated
+        else
+    {
+      calc->Compute();
+      value=calc->GetValue();
+    }
+        m_Accumulator[value]+=1;
+        m_Accumulator[invert[value]]+=1;
+        // If the vertices are connected
+        if(value>OTB_RCC8_DC)
+    {
+      // Add the edge to the graph.
+      otbMsgDevMacro(<<"Adding edge: "<<vIt1.GetIndex()<<" -> "<<vIt2.GetIndex()<<": "<<value);
+      graph->AddEdge(vIt1.GetIndex(),vIt2.GetIndex(),value);
+    }
+      }
+    progress.CompletedPixel();
+    progress.CompletedPixel();
+  }
     }
 }
 

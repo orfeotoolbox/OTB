@@ -32,7 +32,7 @@ namespace otb
     class ITK_EXPORT FusionImageBase :  public itk::TernaryFunctorImageFilter<TInputMultiSpectralImage, TInputMultiSpectralInterpImage, TInputPanchroImage, TOutputImage, TFunctor>
     {
     public:
-      /** 	Extract input and output images dimensions.*/
+      /**   Extract input and output images dimensions.*/
       itkStaticConstMacro( InputImageDimension,unsigned int, TInputMultiSpectralImage::ImageDimension);
       itkStaticConstMacro( OutputImageDimension,unsigned int, TOutputImage::ImageDimension);
 
@@ -46,7 +46,7 @@ namespace otb
       /** "typedef" for standard classes. */
       typedef FusionImageBase Self;
       typedef itk::TernaryFunctorImageFilter< InputMultiSpectralImageType,
-	                                      InputMultiSpectralInterpImageType,
+                                        InputMultiSpectralInterpImageType,
                                               InputPanchroImageType,
                                               OutputImageType,
                                               FunctorType> Superclass;
@@ -82,34 +82,34 @@ namespace otb
       void SetPanchro(const InputPanchroImageType *panchro){ this->SetInput3( panchro ); };
 
       const InputMultiSpectralImageType* GetMultiSpect()
-	{
-	  if( this->GetNumberOfInputs() < 1 )
-	    {
-	      return 0;
-	    }
-	  else
-	    return( static_cast<const InputMultiSpectralImageType *>(this->itk::ProcessObject::GetInput(0)) );
-	}
+  {
+    if( this->GetNumberOfInputs() < 1 )
+      {
+        return 0;
+      }
+    else
+      return( static_cast<const InputMultiSpectralImageType *>(this->itk::ProcessObject::GetInput(0)) );
+  }
 
       const InputMultiSpectralInterpImageType* GetMultiSpectInterp()
-	{
-	  if( this->GetNumberOfInputs() < 2 )
-	    {
-	      return 0;
-	    }
-	  else
-	    return( static_cast<const InputMultiSpectralInterpImageType *>(this->itk::ProcessObject::GetInput(1)) );
-	}
+  {
+    if( this->GetNumberOfInputs() < 2 )
+      {
+        return 0;
+      }
+    else
+      return( static_cast<const InputMultiSpectralInterpImageType *>(this->itk::ProcessObject::GetInput(1)) );
+  }
 
       const InputPanchroImageType* GetPanchro()
-	{
-	  if( this->GetNumberOfInputs() < 3 )
-	    {
-	      return 0;
-	    }
-	  else
-	    return( static_cast<const InputPanchroImageType *>(this->itk::ProcessObject::GetInput(2)) );
-	}
+  {
+    if( this->GetNumberOfInputs() < 3 )
+      {
+        return 0;
+      }
+    else
+      return( static_cast<const InputPanchroImageType *>(this->itk::ProcessObject::GetInput(2)) );
+  }
 
 
     };

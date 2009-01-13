@@ -45,32 +45,32 @@ ImageListToImageListApplyFilter<TInputImageList,TOutputImageList,TFilter>
   if(outputPtr)
     {
       if(outputPtr->Size()!=inputPtr->Size())
-	{
-	  // in this case, clear the list
-	  outputPtr->Clear();
-	  typename InputImageListType::ConstIterator inputListIt = inputPtr->Begin();
-	  while(inputListIt!=inputPtr->End())
-	    {
-	      outputPtr->PushBack(OutputImageType::New());
-	      ++inputListIt;
-	    }
-	}
+  {
+    // in this case, clear the list
+    outputPtr->Clear();
+    typename InputImageListType::ConstIterator inputListIt = inputPtr->Begin();
+    while(inputListIt!=inputPtr->End())
+      {
+        outputPtr->PushBack(OutputImageType::New());
+        ++inputListIt;
+      }
+  }
 
       // For each input image
       typename InputImageListType::ConstIterator inputListIt = inputPtr->Begin();
       typename OutputImageListType::Iterator outputListIt = outputPtr->Begin();
 
       while(inputListIt!=inputPtr->End()&&outputListIt!=outputPtr->End())
-	{
-	  // Create the output image and set its information
+  {
+    // Create the output image and set its information
 
-	  m_Filter->SetInput(inputListIt.Get());
-	  m_Filter->UpdateOutputInformation();
-	  outputListIt.Get()->CopyInformation(m_Filter->GetOutput(m_OutputIndex));
-	  outputListIt.Get()->SetLargestPossibleRegion(m_Filter->GetOutput(m_OutputIndex)->GetLargestPossibleRegion());
-	  ++inputListIt;
-	  ++outputListIt;
-	}
+    m_Filter->SetInput(inputListIt.Get());
+    m_Filter->UpdateOutputInformation();
+    outputListIt.Get()->CopyInformation(m_Filter->GetOutput(m_OutputIndex));
+    outputListIt.Get()->SetLargestPossibleRegion(m_Filter->GetOutput(m_OutputIndex)->GetLargestPossibleRegion());
+    ++inputListIt;
+    ++outputListIt;
+  }
     }
 }
 /** Generate input requested region for each image in the List. */
@@ -89,13 +89,13 @@ ImageListToImageListApplyFilter<TInputImageList,TOutputImageList,TFilter>
 
   // Use the filter to generate input requested region
   while(inputListIt!=inputPtr->End()&&outputListIt!=outputPtr->End())
-	{
-	  m_Filter->SetInput(inputListIt.Get());
-	  m_Filter->GetOutput(m_OutputIndex)->SetRequestedRegion(outputListIt.Get()->GetRequestedRegion());
-	  m_Filter->PropagateRequestedRegion(outputListIt.Get());
-	  ++inputListIt;
-	  ++outputListIt;
-	}
+  {
+    m_Filter->SetInput(inputListIt.Get());
+    m_Filter->GetOutput(m_OutputIndex)->SetRequestedRegion(outputListIt.Get()->GetRequestedRegion());
+    m_Filter->PropagateRequestedRegion(outputListIt.Get());
+    ++inputListIt;
+    ++outputListIt;
+  }
 }
 /** Main computation method */
 template <class TInputImageList, class TOutputImageList, class TFilter>
@@ -114,16 +114,16 @@ ImageListToImageListApplyFilter<TInputImageList,TOutputImageList,TFilter>
 
 
   while(inputListIt!=inputPtr->End()&&outputListIt!=outputPtr->End())
-	{
-	  m_Filter->SetInput(inputListIt.Get());
-	  m_Filter->GetOutput(m_OutputIndex)->SetRequestedRegion(outputListIt.Get()->GetRequestedRegion());
-	  m_Filter->Update();
-	  outputPtr->SetNthElement(counter,static_cast<OutputImageType *>(m_Filter->GetOutput(m_OutputIndex)));
-	  outputListIt.Get()->DisconnectPipeline();
-	  ++inputListIt;
-	  ++outputListIt;
-	  ++counter;
-	}
+  {
+    m_Filter->SetInput(inputListIt.Get());
+    m_Filter->GetOutput(m_OutputIndex)->SetRequestedRegion(outputListIt.Get()->GetRequestedRegion());
+    m_Filter->Update();
+    outputPtr->SetNthElement(counter,static_cast<OutputImageType *>(m_Filter->GetOutput(m_OutputIndex)));
+    outputListIt.Get()->DisconnectPipeline();
+    ++inputListIt;
+    ++outputListIt;
+    ++counter;
+  }
 }
 /**
  * PrintSelf Method

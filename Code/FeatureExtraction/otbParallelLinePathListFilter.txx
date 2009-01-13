@@ -78,57 +78,57 @@ ParallelLinePathListFilter<TPath>
 while(firstLineCounter < VectorSize)
     {
       if(!eraseFlagVector1[index1])
-		{
-		  IteratorType outputIt2 = outputIt1;
-		  ++outputIt2;
-		  unsigned int index2 = index1+1;
+    {
+      IteratorType outputIt2 = outputIt1;
+      ++outputIt2;
+      unsigned int index2 = index1+1;
 
           // Check if any of the following lines are parallel
-		  while(outputIt2!=outputPtr->End())
-			{
+      while(outputIt2!=outputPtr->End())
+      {
 
-			 if(!eraseFlagVector1[index2])
-			  { // Read the first and the last vertex of each line pair that is checked
-			    VertexIteratorType vSourceIt = outputIt1.Get()->GetVertexList()->Begin();
-				VertexType v1 = vSourceIt.Value();
-				vSourceIt = outputIt1.Get()->GetVertexList()->End();
-				--vSourceIt;
-		        VertexType v2 = vSourceIt.Value();
+       if(!eraseFlagVector1[index2])
+        { // Read the first and the last vertex of each line pair that is checked
+          VertexIteratorType vSourceIt = outputIt1.Get()->GetVertexList()->Begin();
+        VertexType v1 = vSourceIt.Value();
+        vSourceIt = outputIt1.Get()->GetVertexList()->End();
+        --vSourceIt;
+            VertexType v2 = vSourceIt.Value();
 
-		        VertexIteratorType vTargetIt = outputIt2.Get()->GetVertexList()->Begin();
-		        VertexType v3 = vTargetIt.Value();
-	            vTargetIt = outputIt2.Get()->GetVertexList()->End();
-	            --vTargetIt;
-		        VertexType v4 = vTargetIt.Value();
+            VertexIteratorType vTargetIt = outputIt2.Get()->GetVertexList()->Begin();
+            VertexType v3 = vTargetIt.Value();
+              vTargetIt = outputIt2.Get()->GetVertexList()->End();
+              --vTargetIt;
+            VertexType v4 = vTargetIt.Value();
 
-			    // Check for parallel lines
-				if(VerifyAngularCondition(v1,v2,v3,v4))
-			     {
-			     	 ++parallelLineCounter;
-					 if(VerifyMaxDistanceCondition(v1,v2,v3,v4))
-					  {
-					   	 ++maxDistCounter;
-						 if(VerifyCommonDistanceCondition(v1,v2,v3,v4))
-						  {
-						     ++commonDistCounter;
-							 // Write index of first parallel path
-							 parallelLineIndex.push_back(index1);
+          // Check for parallel lines
+        if(VerifyAngularCondition(v1,v2,v3,v4))
+           {
+              ++parallelLineCounter;
+           if(VerifyMaxDistanceCondition(v1,v2,v3,v4))
+            {
+                ++maxDistCounter;
+             if(VerifyCommonDistanceCondition(v1,v2,v3,v4))
+              {
+                 ++commonDistCounter;
+               // Write index of first parallel path
+               parallelLineIndex.push_back(index1);
 
-							 // Write index of second parallel path
-							 parallelLineIndex.push_back(index2);
-						  }
-					  }
-			     }
-			  }
+               // Write index of second parallel path
+               parallelLineIndex.push_back(index2);
+              }
+            }
+           }
+        }
 
-			 ++index2;
-			 ++outputIt2;
-			}
-		}
+       ++index2;
+       ++outputIt2;
+      }
+    }
 
-	  // mark the old path as erased
-	  eraseFlagVector1[index1]=true;
-	  ++firstLineCounter;
+    // mark the old path as erased
+    eraseFlagVector1[index1]=true;
+    ++firstLineCounter;
       ++index1;
       ++outputIt1;
     }// end of for loop
@@ -144,12 +144,12 @@ while(firstLineCounter < VectorSize)
     {
       IteratorType outputIt3 = outputPtr->Begin() + parallelLineIndex[sortLineIndex];
 
-	  PathPointerType newPath1 = this->WriteParallelPath(outputIt3.Get());
-	  outputPtr->PushBack(newPath1);
-	  // add a non-erase flag for the new path
-	  eraseFlagVector1.push_back(false);
-	  ++sortLineIndex;
-	  std::cout<<"Number of lines written in the path list: "<< sortLineIndex<<std::endl;
+    PathPointerType newPath1 = this->WriteParallelPath(outputIt3.Get());
+    outputPtr->PushBack(newPath1);
+    // add a non-erase flag for the new path
+    eraseFlagVector1.push_back(false);
+    ++sortLineIndex;
+    std::cout<<"Number of lines written in the path list: "<< sortLineIndex<<std::endl;
       ++lineIt1;
     }
 
@@ -160,7 +160,7 @@ while(firstLineCounter < VectorSize)
   while(it1!=eraseFlagVector1.rend())
     {
       if(eraseFlagVector1[index1])
-		{ outputPtr->Erase(index1); }
+    { outputPtr->Erase(index1); }
 
       --index1;
       ++it1;
@@ -265,20 +265,20 @@ ParallelLinePathListFilter<TPath>
 
   if (v1[1] == v2[1])
   {
-	if (v1[0] < v2[0])
-	{
-	  tempv1[0] = 0., tempv1[1] = 0.;
-	  tempv2[0] = 0., tempv2[1] = length12;
-	  tempv3[0] = v3[0]-v1[0], tempv3[1] = v3[1]-v1[1];
-	  tempv4[0] = v4[0]-v1[0], tempv4[1] = v4[1]-v1[1];
-	}
-	else
-	{
-	  tempv2[0] = 0., tempv2[1] = 0.;
-	  tempv1[0] = 0., tempv1[1] = length12;
-	  tempv3[0] = v3[0]-v2[0], tempv3[1] = v3[1]-v2[1];
-	  tempv4[0] = v4[0]-v2[0], tempv4[1] = v4[1]-v2[1];
-	}
+  if (v1[0] < v2[0])
+  {
+    tempv1[0] = 0., tempv1[1] = 0.;
+    tempv2[0] = 0., tempv2[1] = length12;
+    tempv3[0] = v3[0]-v1[0], tempv3[1] = v3[1]-v1[1];
+    tempv4[0] = v4[0]-v1[0], tempv4[1] = v4[1]-v1[1];
+  }
+  else
+  {
+    tempv2[0] = 0., tempv2[1] = 0.;
+    tempv1[0] = 0., tempv1[1] = length12;
+    tempv3[0] = v3[0]-v2[0], tempv3[1] = v3[1]-v2[1];
+    tempv4[0] = v4[0]-v2[0], tempv4[1] = v4[1]-v2[1];
+  }
   }
   // Check the direction of the line (vector).
   // The origin of the new coordinate system is
@@ -291,28 +291,28 @@ ParallelLinePathListFilter<TPath>
 
   if (v1[1] < v2[1])
   {
-	 if (v1[0] == v2[0])
-	  {
-		tempv1[0] = 0., tempv1[1] = 0.;
-		tempv2[0] = 0., tempv2[1] = length12;
-		tempv3[0] = v3[0]-v1[0], tempv3[1] = v3[1]-v1[1];
-		tempv4[0] = v4[0]-v1[0], tempv4[1] = v4[1]-v1[1];
-	  }
+   if (v1[0] == v2[0])
+    {
+    tempv1[0] = 0., tempv1[1] = 0.;
+    tempv2[0] = 0., tempv2[1] = length12;
+    tempv3[0] = v3[0]-v1[0], tempv3[1] = v3[1]-v1[1];
+    tempv4[0] = v4[0]-v1[0], tempv4[1] = v4[1]-v1[1];
+    }
 
     else
       {
-		// Coordinates of the first line in the new coordinate system
+    // Coordinates of the first line in the new coordinate system
         tempv1[0] = 0.;
         tempv1[1] = 0.;
         tempv2[0] = 0.;
         tempv2[1] = length12;
 
-     	// Rotate the system clockwise
-	    double sinealpha;
-		if (v2[0] > v1[0])
-		{ sinealpha = (v2[0]-v1[0])/length12; }
-		else
-		{ sinealpha = (v1[0]-v2[0])/length12; }
+       // Rotate the system clockwise
+      double sinealpha;
+    if (v2[0] > v1[0])
+    { sinealpha = (v2[0]-v1[0])/length12; }
+    else
+    { sinealpha = (v1[0]-v2[0])/length12; }
         double alpha1 = vcl_asin(sinealpha);
 
         // Translation
@@ -322,66 +322,66 @@ ParallelLinePathListFilter<TPath>
         temptransv4[1] = v4[1] - v1[1];
 
         // Rotation
-	    tempv3[0] = temptransv3[0]*cos(alpha1)+temptransv3[1]*sin(alpha1);
+      tempv3[0] = temptransv3[0]*cos(alpha1)+temptransv3[1]*sin(alpha1);
         tempv3[1] = temptransv3[1]*cos(alpha1)-temptransv3[0]*sin(alpha1);
         tempv4[0] = temptransv4[0]*cos(alpha1)+temptransv4[1]*sin(alpha1);
         tempv4[1] = temptransv4[1]*cos(alpha1)-temptransv4[0]*sin(alpha1);
 
         std::cout<< "tempv1[0], tempv1[1], tempv2[0], tempv2[1]: ";
-		std::cout<< tempv1[0] <<", " << tempv1[1] <<", " << tempv2[0] <<", " <<tempv2[1] << std::endl;
-		std::cout<< "Alpha: "<< alpha1 << std::endl;
-	    std::cout<< "tempv3[0], tempv3[1], tempv4[0], tempv4[1]: ";
-		std::cout<< tempv3[0] <<", " << tempv3[1] <<", " << tempv4[0] <<", " <<tempv4[1] << std::endl;
-		std::cout<< "Calculated length of the second line: " << sqrt( pow((tempv4[0]-tempv3[0]),2) + pow((tempv4[1]-tempv3[1]),2) ) <<std::endl;
-		std::cout<< "Original length of line 1:       " << length12 <<std::endl;
+    std::cout<< tempv1[0] <<", " << tempv1[1] <<", " << tempv2[0] <<", " <<tempv2[1] << std::endl;
+    std::cout<< "Alpha: "<< alpha1 << std::endl;
+      std::cout<< "tempv3[0], tempv3[1], tempv4[0], tempv4[1]: ";
+    std::cout<< tempv3[0] <<", " << tempv3[1] <<", " << tempv4[0] <<", " <<tempv4[1] << std::endl;
+    std::cout<< "Calculated length of the second line: " << sqrt( pow((tempv4[0]-tempv3[0]),2) + pow((tempv4[1]-tempv3[1]),2) ) <<std::endl;
+    std::cout<< "Original length of line 1:       " << length12 <<std::endl;
       }
   }
 
   if (v2[1] < v1[1])
   {
 
-	 if (v1[0] == v2[0])
-	  {
-	    tempv2[0] = 0., tempv2[1] = 0.;
-		tempv1[0] = 0., tempv1[1] = length12;
-		tempv3[0] = v3[0]-v2[0], tempv3[1] = v3[1]-v2[1];
-		tempv4[0] = v4[0]-v2[0], tempv4[1] = v4[1]-v2[1];
-	  }
-	  else
-	  {
-		tempv1[0] = 0.;
-		tempv1[1] = 0.;
-		tempv2[0] = 0.;
-		tempv2[1] = length12;
+   if (v1[0] == v2[0])
+    {
+      tempv2[0] = 0., tempv2[1] = 0.;
+    tempv1[0] = 0., tempv1[1] = length12;
+    tempv3[0] = v3[0]-v2[0], tempv3[1] = v3[1]-v2[1];
+    tempv4[0] = v4[0]-v2[0], tempv4[1] = v4[1]-v2[1];
+    }
+    else
+    {
+    tempv1[0] = 0.;
+    tempv1[1] = 0.;
+    tempv2[0] = 0.;
+    tempv2[1] = length12;
 
-		// Rotate the system clockwise
-		double sinealpha;
-		if (v2[0] > v1[0])
-		{ sinealpha = (v2[0]-v1[0])/length12; }
-		else
-		{ sinealpha = (v1[0]-v2[0])/length12; }
+    // Rotate the system clockwise
+    double sinealpha;
+    if (v2[0] > v1[0])
+    { sinealpha = (v2[0]-v1[0])/length12; }
+    else
+    { sinealpha = (v1[0]-v2[0])/length12; }
 
-		double alpha1 = vcl_asin(sinealpha);
+    double alpha1 = vcl_asin(sinealpha);
 
-		// Translation
-		temptransv3[0] = v3[0] - v2[0];
+    // Translation
+    temptransv3[0] = v3[0] - v2[0];
         temptransv3[1] = v3[1] - v2[1];
         temptransv4[0] = v4[0] - v2[0];
         temptransv4[1] = v4[1] - v2[1];
 
         // Rotation
-	    tempv3[0] = temptransv3[0]*cos(alpha1)+temptransv3[1]*sin(alpha1);
+      tempv3[0] = temptransv3[0]*cos(alpha1)+temptransv3[1]*sin(alpha1);
         tempv3[1] = temptransv3[1]*cos(alpha1)-temptransv3[0]*sin(alpha1);
         tempv4[0] = temptransv4[0]*cos(alpha1)+temptransv4[1]*sin(alpha1);
         tempv4[1] = temptransv4[1]*cos(alpha1)-temptransv4[0]*sin(alpha1);
 
         std::cout<< "tempv1[0], tempv1[1], tempv2[0], tempv2[1]: ";
-		std::cout<< tempv1[0] <<", " << tempv1[1] <<", " << tempv2[0] <<", " <<tempv2[1] << std::endl;
-		std::cout<< "Alpha: "<< alpha1 << std::endl;
-	    std::cout<< "tempv3[0], tempv3[1], tempv4[0], tempv4[1]: ";
-		std::cout<< tempv3[0] <<", " << tempv3[1] <<", " << tempv4[0] <<", " <<tempv4[1] << std::endl;
-		std::cout<< "Calculated length of the second line: " << sqrt( pow((tempv4[0]-tempv3[0]),2) + pow((tempv4[1]-tempv3[1]),2) ) <<std::endl;
-	    std::cout<< "Original length of line 1:       " << length12 <<std::endl;
+    std::cout<< tempv1[0] <<", " << tempv1[1] <<", " << tempv2[0] <<", " <<tempv2[1] << std::endl;
+    std::cout<< "Alpha: "<< alpha1 << std::endl;
+      std::cout<< "tempv3[0], tempv3[1], tempv4[0], tempv4[1]: ";
+    std::cout<< tempv3[0] <<", " << tempv3[1] <<", " << tempv4[0] <<", " <<tempv4[1] << std::endl;
+    std::cout<< "Calculated length of the second line: " << sqrt( pow((tempv4[0]-tempv3[0]),2) + pow((tempv4[1]-tempv3[1]),2) ) <<std::endl;
+      std::cout<< "Original length of line 1:       " << length12 <<std::endl;
       }
   }
 
@@ -394,64 +394,64 @@ ParallelLinePathListFilter<TPath>
 
   if (tempv3[1] >= tempv4[1])
   {
-	if (tempv3[1] >=0 && tempv3[1] <= tempv2[1])
-	{
-		if (tempv4[1] >=0)
-		{commonDist = vcl_abs(tempv4[1]-tempv3[1]);}
+  if (tempv3[1] >=0 && tempv3[1] <= tempv2[1])
+  {
+    if (tempv4[1] >=0)
+    {commonDist = vcl_abs(tempv4[1]-tempv3[1]);}
 
-		else if (tempv4[1] < 0)
-		{commonDist = tempv3[1];}
-	}
+    else if (tempv4[1] < 0)
+    {commonDist = tempv3[1];}
+  }
     else if (tempv3[1] >= 0 && tempv3[1] >= tempv2[1])
-	{
-		if (tempv4[1] >=0)
-		{commonDist = tempv2[1]-tempv4[1];}
+  {
+    if (tempv4[1] >=0)
+    {commonDist = tempv2[1]-tempv4[1];}
 
-		else if (tempv4[1] < 0)
-		{commonDist = tempv2[1];}
+    else if (tempv4[1] < 0)
+    {commonDist = tempv2[1];}
 
-	}
-	else if (tempv4[1] >= tempv2[1])
-	{	// No overlapping parts exist. The (negative) distance
-	    // between the two closest endpoints is calculated.
-		commonDist = -vcl_abs(tempv4[1]-tempv2[1]);
-	}
-	else if (tempv3[1] < 0)
-	{	// No overlapping parts exist. The (negative) distance
-	    // between the two closest endpoints is calculated.
-		commonDist = tempv3[1];
-	}
+  }
+  else if (tempv4[1] >= tempv2[1])
+  {  // No overlapping parts exist. The (negative) distance
+      // between the two closest endpoints is calculated.
+    commonDist = -vcl_abs(tempv4[1]-tempv2[1]);
+  }
+  else if (tempv3[1] < 0)
+  {  // No overlapping parts exist. The (negative) distance
+      // between the two closest endpoints is calculated.
+    commonDist = tempv3[1];
+  }
   }
 
   else
   {
-	 if (tempv4[1] >=0 && tempv4[1] <= tempv2[1])
-	 {
-		if (tempv3[1] >=0)
-		{commonDist = vcl_abs(tempv3[1]-tempv4[1]);}
+   if (tempv4[1] >=0 && tempv4[1] <= tempv2[1])
+   {
+    if (tempv3[1] >=0)
+    {commonDist = vcl_abs(tempv3[1]-tempv4[1]);}
 
-		else if (tempv3[1] < 0)
-		{commonDist = tempv4[1];}
-	 }
-	 else if (tempv4[1] >= 0 && tempv4[1] >= tempv2[1])
-	 {
-		if (tempv3[1] >=0)
-		{commonDist = tempv2[1]-tempv3[1];}
+    else if (tempv3[1] < 0)
+    {commonDist = tempv4[1];}
+   }
+   else if (tempv4[1] >= 0 && tempv4[1] >= tempv2[1])
+   {
+    if (tempv3[1] >=0)
+    {commonDist = tempv2[1]-tempv3[1];}
 
-		else if (tempv3[1] < 0)
-		{commonDist = tempv2[1];}
+    else if (tempv3[1] < 0)
+    {commonDist = tempv2[1];}
 
-	 }
-	 else if (tempv3[1] >= tempv2[1])
-	 {	// No overlapping parts exist. The (negative) distance
-		// between the two closest endpoints is calculated.
-		commonDist = -vcl_abs(tempv3[1]-tempv2[1]);
-	 }
-	 else if (tempv4[1] < 0)
-	 {	// No overlapping parts exist. The (negative) distance
-	    // between the two closest endpoints is calculated.
-	 	commonDist = tempv4[1];
-	 }
+   }
+   else if (tempv3[1] >= tempv2[1])
+   {  // No overlapping parts exist. The (negative) distance
+    // between the two closest endpoints is calculated.
+    commonDist = -vcl_abs(tempv3[1]-tempv2[1]);
+   }
+   else if (tempv4[1] < 0)
+   {  // No overlapping parts exist. The (negative) distance
+      // between the two closest endpoints is calculated.
+     commonDist = tempv4[1];
+   }
   }
   // The common parallel parts of the two lines have to be greater than
   // the provided threshold.
@@ -476,7 +476,7 @@ ParallelLinePathListFilter<TPath>
   VertexIteratorType it;
 
   for(it=p1->GetVertexList()->Begin();it!=p1->GetVertexList()->End();++it)
-	{ resp->AddVertex((it).Value()); }
+  { resp->AddVertex((it).Value()); }
 
   return resp;
 }

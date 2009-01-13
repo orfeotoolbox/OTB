@@ -138,9 +138,9 @@ template <class TInputImage, class TOutputImage, class TOutputImageDirection, cl
 void
 LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, InterpolatorType>
 ::ThreadedGenerateData(
-			const 	OutputImageRegionType& 		outputRegionForThread,
-                       	int 	threadId
-		       )
+      const   OutputImageRegionType&     outputRegionForThread,
+                         int   threadId
+           )
 {
 
   typename InputImageType::ConstPointer input  = this->GetInput();
@@ -150,11 +150,11 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
   interpolator2->SetInputImage(input);
 
 
-  itk::ZeroFluxNeumannBoundaryCondition<InputImageType> 	nbc;
-  itk::ConstNeighborhoodIterator<InputImageType> 		bit,cit;
-  typename itk::ConstNeighborhoodIterator<InputImageType>::OffsetType	off;
-  itk::ImageRegionIterator<OutputImageType> 			it;
-  itk::ImageRegionIterator<OutputImageType> 			itdir;
+  itk::ZeroFluxNeumannBoundaryCondition<InputImageType>   nbc;
+  itk::ConstNeighborhoodIterator<InputImageType>     bit,cit;
+  typename itk::ConstNeighborhoodIterator<InputImageType>::OffsetType  off;
+  itk::ImageRegionIterator<OutputImageType>       it;
+  itk::ImageRegionIterator<OutputImageType>       itdir;
   typedef  itk::ImageRegionIterator<InputImageType> InputIteratorType;
   typedef itk::ImageRegionConstIterator<InputImageType> ConstInputIteratorType;
 
@@ -163,8 +163,8 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
   typename OutputImageType::Pointer     outputDir = this->GetOutputDirection();
 
   // Find the data-set boundary "faces"
-  typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType 		faceList;
-  typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType::iterator 	fit;
+  typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType     faceList;
+  typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType::iterator   fit;
 
   itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType> bC;
   faceList = bC(input, outputRegionForThread, m_FaceList);
@@ -245,48 +245,48 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
 
     while ( (!bit.IsAtEnd())&&(!cit.IsAtEnd()) )
       {
-	InterpolatorPointer interpolator = InterpolatorType::New();
-	// Location of the central pixel of the region
-	off.Fill(0);
-	bitIndex = bit.GetIndex(off);
-	Xc = bitIndex[0];
-	Yc = bitIndex[1];
+  InterpolatorPointer interpolator = InterpolatorType::New();
+  // Location of the central pixel of the region
+  off.Fill(0);
+  bitIndex = bit.GetIndex(off);
+  Xc = bitIndex[0];
+  Yc = bitIndex[1];
 
-	// JULIEN :  If the processed region is the center face
-	// the input image can be used for the interpolation
-	if(interiorFace)
-	  {
-	    interpolator->SetInputImage(input);
-	  }
-	// else we must feed the interpolator with a partial image corresponding
-	// to the boundary conditions
-	else
-	  {
-	    typename InputImageType::RegionType tempRegion;
-	    typename InputImageType::SizeType tempSize;
-	    tempSize[0] = 2*m_FaceList[0]+1;
-	    tempSize[1] = 2*m_FaceList[1]+1;
-	    tempRegion.SetSize(tempSize);
-	    typename itk::ConstNeighborhoodIterator<InputImageType>::OffsetType tempIndex;
-	    tempIndex[0]=off[0]-m_FaceList[0];
-	    tempIndex[1]=off[1]-m_FaceList[1];
-	    tempRegion.SetIndex(cit.GetIndex(tempIndex));
-	    typename InputImageType::Pointer tempImage = InputImageType::New();
-	    tempImage->SetRegions(tempRegion);
-	    tempImage->Allocate();
+  // JULIEN :  If the processed region is the center face
+  // the input image can be used for the interpolation
+  if(interiorFace)
+    {
+      interpolator->SetInputImage(input);
+    }
+  // else we must feed the interpolator with a partial image corresponding
+  // to the boundary conditions
+  else
+    {
+      typename InputImageType::RegionType tempRegion;
+      typename InputImageType::SizeType tempSize;
+      tempSize[0] = 2*m_FaceList[0]+1;
+      tempSize[1] = 2*m_FaceList[1]+1;
+      tempRegion.SetSize(tempSize);
+      typename itk::ConstNeighborhoodIterator<InputImageType>::OffsetType tempIndex;
+      tempIndex[0]=off[0]-m_FaceList[0];
+      tempIndex[1]=off[1]-m_FaceList[1];
+      tempRegion.SetIndex(cit.GetIndex(tempIndex));
+      typename InputImageType::Pointer tempImage = InputImageType::New();
+      tempImage->SetRegions(tempRegion);
+      tempImage->Allocate();
 
-	    for(unsigned int p = 0; p<=2*m_FaceList[0];p++)
-	      {
-		for(unsigned int q = 0; q<=2*m_FaceList[1];q++)
-		  {
-		    typename itk::ConstNeighborhoodIterator<InputImageType>::OffsetType  index;
-		    index[0]=p-m_FaceList[0];
-		    index[1]=q-m_FaceList[1];
-		    tempImage->SetPixel(cit.GetIndex(index),cit.GetPixel(index));
-		  }
-	      }
-	    interpolator->SetInputImage(tempImage);
-	  }
+      for(unsigned int p = 0; p<=2*m_FaceList[0];p++)
+        {
+    for(unsigned int q = 0; q<=2*m_FaceList[1];q++)
+      {
+        typename itk::ConstNeighborhoodIterator<InputImageType>::OffsetType  index;
+        index[0]=p-m_FaceList[0];
+        index[1]=q-m_FaceList[1];
+        tempImage->SetPixel(cit.GetIndex(index),cit.GetPixel(index));
+      }
+        }
+      interpolator->SetInputImage(tempImage);
+    }
 
 
       // Location of the central pixel between zone 1 and zone 2
@@ -297,31 +297,31 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
 
 
       // Contains for the 4 directions the the pixels belonging to each zone
-	  //std::vector<double> PixelValues[NB_DIR][NB_ZONE];
-	  // ROMAIN
+    //std::vector<double> PixelValues[NB_DIR][NB_ZONE];
+    // ROMAIN
         std::vector<double>** PixelValues = NULL;
         PixelValues = new std::vector<double>*[NB_DIR];
-	for (unsigned int i=0; i<NB_DIR; i++)
+  for (unsigned int i=0; i<NB_DIR; i++)
         {
-		PixelValues[i] = NULL;
+    PixelValues[i] = NULL;
                 PixelValues[i] = new std::vector<double>[NB_ZONE];
         }
-	//otbMsgDevMacro( << "\tCentre Xc/Yc="<<Xc<<" "<<Yc<<" Yc12/Yc13="<<Yc12<<" "<<Yc13);
+  //otbMsgDevMacro( << "\tCentre Xc/Yc="<<Xc<<" "<<Yc<<" Yc12/Yc13="<<Yc12<<" "<<Yc13);
       // Loop on the region
       for (unsigned int i = 0; i < m_Radius[0]; i++)
-	for (unsigned int j = 0; j < m_Radius[1]; j++)
+  for (unsigned int j = 0; j < m_Radius[1]; j++)
         {
 
-	off[0]=i-m_Radius[0]/2;
-	off[1]=j-m_Radius[1]/2;
+  off[0]=i-m_Radius[0]/2;
+  off[1]=j-m_Radius[1]/2;
 
         bitIndex = bit.GetIndex(off);
         X = bitIndex[0];
         Y = bitIndex[1];
 
-	// We determine in the horizontal direction with which zone the pixel belongs.
+  // We determine in the horizontal direction with which zone the pixel belongs.
         if ( Y < Yc12 )
-      	  zone = 1;
+          zone = 1;
         else if ( ( Yc12 < Y ) && ( Y < Yc13 ) )
           zone = 0;
         else if ( Y > Yc13 )
@@ -332,16 +332,16 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
         // Loop on the directions
         for (unsigned int dir=0; dir<NB_DIR; dir++ )
           {
-	  //ROTATION( (X-Xc), (Y-Yc), Theta[dir], xout, yout);
+    //ROTATION( (X-Xc), (Y-Yc), Theta[dir], xout, yout);
 
-	  xout = (X-Xc)*vcl_cos(Theta[dir]) - (Y-Yc)*vcl_sin(Theta[dir]);
-	  yout = (X-Xc)*vcl_sin(Theta[dir]) + (Y-Yc)*vcl_cos(Theta[dir]);
+    xout = (X-Xc)*vcl_cos(Theta[dir]) - (Y-Yc)*vcl_sin(Theta[dir]);
+    yout = (X-Xc)*vcl_sin(Theta[dir]) + (Y-Yc)*vcl_cos(Theta[dir]);
 
-	  Index[0] = static_cast<CoordRepType>(xout + Xc);
-	  Index[1] = static_cast<CoordRepType>(yout + Yc);
+    Index[0] = static_cast<CoordRepType>(xout + Xc);
+    Index[1] = static_cast<CoordRepType>(yout + Yc);
 
-	  PixelValues[dir][zone].push_back(static_cast<double>(interpolator->EvaluateAtContinuousIndex( Index )));
-	  }
+    PixelValues[dir][zone].push_back(static_cast<double>(interpolator->EvaluateAtContinuousIndex( Index )));
+    }
         } // end of the loop on the pixels of the region
 
       R = 0.;
@@ -350,56 +350,56 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
       // Loop on the 4 directions
 
 
-	for (unsigned int dir=0; dir<NB_DIR; dir++ )
-	  {
+  for (unsigned int dir=0; dir<NB_DIR; dir++ )
+    {
 
 
-	  double Rtemp = this->ComputeMeasure(&PixelValues[dir][0], &PixelValues[dir][1], &PixelValues[dir][2]);
+    double Rtemp = this->ComputeMeasure(&PixelValues[dir][0], &PixelValues[dir][1], &PixelValues[dir][2]);
 
-	  if( Rtemp > R)
-	    {
-	    R = Rtemp;
-	    Direction = Theta[dir];
-	    }
+    if( Rtemp > R)
+      {
+      R = Rtemp;
+      Direction = Theta[dir];
+      }
 
-	  } // end of the loop on the directions
+    } // end of the loop on the directions
 
         //otbMsgDevMacro( << "\t\tR,Direction : "<<R<<","<<Direction);
-	if( R >= this->GetThreshold() )
-	  {
+  if( R >= this->GetThreshold() )
+    {
 
-	  // Assignment of this value to the output pixel
-	  it.Set( static_cast<OutputPixelType>(R) );
+    // Assignment of this value to the output pixel
+    it.Set( static_cast<OutputPixelType>(R) );
 
-	  // Assignment of this value to the "outputdir" pixel
-	  itdir.Set( static_cast<OutputPixelType>(Direction) );
-	  }
-	else
-	  {
+    // Assignment of this value to the "outputdir" pixel
+    itdir.Set( static_cast<OutputPixelType>(Direction) );
+    }
+  else
+    {
 
-	  it.Set( itk::NumericTraits<OutputPixelType>::Zero );
+    it.Set( itk::NumericTraits<OutputPixelType>::Zero );
 
-	  itdir.Set( static_cast<OutputPixelType>(0) );
-	  }
-	++bit;
-	++cit;
-	++it;
-	++itdir;
-	interiorFace=false;
-	progress.CompletedPixel();
+    itdir.Set( static_cast<OutputPixelType>(0) );
+    }
+  ++bit;
+  ++cit;
+  ++it;
+  ++itdir;
+  interiorFace=false;
+  progress.CompletedPixel();
 
-	// ROMAIN
-	for (unsigned int i=0; i<NB_DIR; i++)
+  // ROMAIN
+  for (unsigned int i=0; i<NB_DIR; i++)
         {
-		delete[] PixelValues[i];
+    delete[] PixelValues[i];
                 PixelValues[i] = NULL;
         }
-	delete[] PixelValues;
+  delete[] PixelValues;
         PixelValues = NULL;
     }
 
     }
-	delete[] Theta;
+  delete[] Theta;
 }
 
 template <class TInputImage, class TOutputImage, class TOutputImageDirection, class InterpolatorType >

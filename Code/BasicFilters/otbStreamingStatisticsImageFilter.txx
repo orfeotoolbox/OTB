@@ -41,17 +41,17 @@ namespace otb {
     // just decorators around pixel types
     for (int i=1; i < 3; ++i)
       {
-	typename PixelObjectType::Pointer output
-	  = static_cast<PixelObjectType*>(this->MakeOutput(i).GetPointer());
-	this->itk::ProcessObject::SetNthOutput(i, output.GetPointer());
+  typename PixelObjectType::Pointer output
+    = static_cast<PixelObjectType*>(this->MakeOutput(i).GetPointer());
+  this->itk::ProcessObject::SetNthOutput(i, output.GetPointer());
       }
     // allocate the data objects for the outputs which are
     // just decorators around real types
     for (int i=3; i < 7; ++i)
       {
-	typename RealObjectType::Pointer output
-	  = static_cast<RealObjectType*>(this->MakeOutput(i).GetPointer());
-	this->itk::ProcessObject::SetNthOutput(i, output.GetPointer());
+  typename RealObjectType::Pointer output
+    = static_cast<RealObjectType*>(this->MakeOutput(i).GetPointer());
+  this->itk::ProcessObject::SetNthOutput(i, output.GetPointer());
       }
 
     this->GetMinimumOutput()->Set( itk::NumericTraits<PixelType>::max() );
@@ -72,24 +72,24 @@ namespace otb {
     switch (output)
       {
       case 0:
-	return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
-	break;
+  return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
+  break;
       case 1:
-	return static_cast<itk::DataObject*>(PixelObjectType::New().GetPointer());
-	break;
+  return static_cast<itk::DataObject*>(PixelObjectType::New().GetPointer());
+  break;
       case 2:
-	return static_cast<itk::DataObject*>(PixelObjectType::New().GetPointer());
-	break;
+  return static_cast<itk::DataObject*>(PixelObjectType::New().GetPointer());
+  break;
       case 3:
       case 4:
       case 5:
       case 6:
-	return static_cast<itk::DataObject*>(RealObjectType::New().GetPointer());
-	break;
+  return static_cast<itk::DataObject*>(RealObjectType::New().GetPointer());
+  break;
       default:
-	// might as well make an image
-	return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
-	break;
+  // might as well make an image
+  return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
+  break;
       }
   }
 
@@ -202,13 +202,13 @@ namespace otb {
     Superclass::GenerateOutputInformation();
     if ( this->GetInput() )
       {
-	this->GetOutput()->CopyInformation(this->GetInput());
-	this->GetOutput()->SetLargestPossibleRegion(this->GetInput()->GetLargestPossibleRegion());
+  this->GetOutput()->CopyInformation(this->GetInput());
+  this->GetOutput()->SetLargestPossibleRegion(this->GetInput()->GetLargestPossibleRegion());
 
-	if(this->GetOutput()->GetRequestedRegion().GetNumberOfPixels()==0)
-	  {
-	    this->GetOutput()->SetRequestedRegion(this->GetOutput()->GetLargestPossibleRegion());
-	  }
+  if(this->GetOutput()->GetRequestedRegion().GetNumberOfPixels()==0)
+    {
+      this->GetOutput()->SetRequestedRegion(this->GetOutput()->GetLargestPossibleRegion());
+    }
       }
   }
   template<class TInputImage>
@@ -250,18 +250,18 @@ namespace otb {
     maximum = itk::NumericTraits<PixelType>::NonpositiveMin();
     for( i = 0; i < numberOfThreads; i++)
       {
-	count += m_Count[i];
-	sum += m_ThreadSum[i];
-	sumOfSquares += m_SumOfSquares[i];
+  count += m_Count[i];
+  sum += m_ThreadSum[i];
+  sumOfSquares += m_SumOfSquares[i];
 
-	if (m_ThreadMin[i] < minimum)
-	  {
-	    minimum = m_ThreadMin[i];
-	  }
-	if (m_ThreadMax[i] > maximum)
-	  {
-	    maximum = m_ThreadMax[i];
-	  }
+  if (m_ThreadMin[i] < minimum)
+    {
+      minimum = m_ThreadMin[i];
+    }
+  if (m_ThreadMax[i] > maximum)
+    {
+      maximum = m_ThreadMax[i];
+    }
       }
     // compute statistics
     mean = sum / static_cast<RealType>(count);
@@ -307,7 +307,7 @@ namespace otb {
   void
   PersistentStatisticsImageFilter<TInputImage>
   ::ThreadedGenerateData(const RegionType& outputRegionForThread,
-			 int threadId)
+       int threadId)
   {
     /**
      * Grab the input
@@ -325,22 +325,22 @@ namespace otb {
     // do the work
     while (!it.IsAtEnd())
       {
-	value = it.Get();
-	realValue = static_cast<RealType>( value );
-	if (value < m_ThreadMin[threadId])
-	  {
-	    m_ThreadMin[threadId] = value;
-	  }
-	if (value > m_ThreadMax[threadId])
-	  {
-	    m_ThreadMax[threadId] = value;
-	  }
+  value = it.Get();
+  realValue = static_cast<RealType>( value );
+  if (value < m_ThreadMin[threadId])
+    {
+      m_ThreadMin[threadId] = value;
+    }
+  if (value > m_ThreadMax[threadId])
+    {
+      m_ThreadMax[threadId] = value;
+    }
 
-	m_ThreadSum[threadId] += realValue;
-	m_SumOfSquares[threadId] += (realValue * realValue);
-	m_Count[threadId]++;
-	++it;
-	progress.CompletedPixel();
+  m_ThreadSum[threadId] += realValue;
+  m_SumOfSquares[threadId] += (realValue * realValue);
+  m_Count[threadId]++;
+  ++it;
+  progress.CompletedPixel();
       }
   }
 template <class TImage>

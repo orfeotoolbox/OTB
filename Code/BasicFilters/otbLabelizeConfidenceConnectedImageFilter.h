@@ -57,19 +57,19 @@ namespace otb
 
       /** Get multiplier */
       double& GetMultiplier() const
-	{ return this->m_RegionGrowingFilter->GetMultiplier(); }
+  { return this->m_RegionGrowingFilter->GetMultiplier(); }
 
       /** Set multiplier */
       void SetMultiplier(const double multiplier)
-	{ this->m_RegionGrowingFilter->SetMultiplier(multiplier); }
+  { this->m_RegionGrowingFilter->SetMultiplier(multiplier); }
 
       /** Get number of iterations */
       unsigned int& GetNumberOfIterations() const
-	{ return this->m_RegionGrowingFilter->GetNumberOfIterations(); }
+  { return this->m_RegionGrowingFilter->GetNumberOfIterations(); }
 
       /** Set number of iterations */
       void SetNumberOfIterations( const unsigned int iteration )
-	{ this->m_RegionGrowingFilter->SetNumberOfIterations(iteration); }
+  { this->m_RegionGrowingFilter->SetNumberOfIterations(iteration); }
 
       /** Get replace value */
       itkGetMacro(ReplaceValue, OutputPixelType);
@@ -79,11 +79,11 @@ namespace otb
 
       /** Set initial neigborhood radius */
       const unsigned int& GetInitialNeighborhoodRadius()
-	{ return this->m_RegionGrowingFilter->GetInitialNeighborhoodRadius(); }
+  { return this->m_RegionGrowingFilter->GetInitialNeighborhoodRadius(); }
 
       /** Set initial neigborhood radius */
       void SetInitialNeighborhoodRadius(const unsigned int initial )
-	{ this->m_RegionGrowingFilter->SetInitialNeighborhoodRadius(initial); }
+  { this->m_RegionGrowingFilter->SetInitialNeighborhoodRadius(initial); }
 
     protected:
       LabelizeConfidenceConnectedImageFilter();

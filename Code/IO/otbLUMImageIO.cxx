@@ -80,7 +80,7 @@ namespace otb
   bool LUMImageIO::CanReadFile( const char* filename )
   {
     std::string lFileName(filename);
-	// Test the extension
+  // Test the extension
     std::string extension = System::GetExtension(filename);
     if ((extension!="LUM")&&(extension!="lum"))
     {
@@ -103,7 +103,7 @@ namespace otb
       return false;
     }
 
-	//Read header informations
+  //Read header informations
     bool lResult = InternalReadHeaderInformation(header_file,false);
     header_file.close();
     return (lResult);
@@ -345,8 +345,8 @@ namespace otb
     unsigned long lFirstLine   = this->GetIORegion().GetIndex()[1] ; // [1... ]
     int lFirstColumn = this->GetIORegion().GetIndex()[0] ; // [1... ]
 
-	// Cas particuliers : on controle que si la r�gion � �crire est de la m�me dimension que l'image enti�re,
-	// on commence l'offset � 0 (lorsque que l'on est pas en "Streaming")
+  // Cas particuliers : on controle que si la r�gion � �crire est de la m�me dimension que l'image enti�re,
+  // on commence l'offset � 0 (lorsque que l'on est pas en "Streaming")
     if( (lNbLines == m_Dimensions[1]) && (lNbColumns == m_Dimensions[0]))
     {
       otbMsgDevMacro(<<"Force l'offset de l'IORegion � 0");
@@ -455,9 +455,9 @@ namespace otb
                                           int &           inbbits,
                                           std::string &   str_cod_pix)
   {
-    unsigned int ind;	/* indice de boucle sur les types reconnus */
+    unsigned int ind;  /* indice de boucle sur les types reconnus */
     int trouve,icr,taille;  /* indice pour la recherche                */
-    int mod2;		/* modulo2				   */
+    int mod2;    /* modulo2           */
     char* pch0;
     char sens_code[3];       /* type code+ordre rangement octets dans entete*/
     char cod_pix[5];

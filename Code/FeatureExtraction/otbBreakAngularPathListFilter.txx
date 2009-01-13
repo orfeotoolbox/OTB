@@ -65,8 +65,8 @@ BreakAngularPathListFilter<TPath>
 
                                 alpha1 = vcl_atan2((pixel1[1]-pixel2[1]),(pixel1[0]-pixel2[0]));
                                 alpha2 = vcl_atan2((pixel2[1]-pixel3[1]),(pixel2[0]-pixel3[0]));
-								alpha1 = (alpha1 >= 0)?alpha1:(alpha1+2.*M_PI);
-					            alpha2 = (alpha2 >= 0)?alpha2:(alpha2+2.*M_PI);
+                alpha1 = (alpha1 >= 0)?alpha1:(alpha1+2.*M_PI);
+                      alpha2 = (alpha2 >= 0)?alpha2:(alpha2+2.*M_PI);
                                 if (vcl_abs(alpha1-alpha2) > static_cast<double>(maxAngle) )
                                 {
                                         // Add Pixel 2

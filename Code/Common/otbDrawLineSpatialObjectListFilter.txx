@@ -62,7 +62,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
 ::GetInputLineSpatialObjectList(void)
 {
     //ROMAIN
-	return static_cast</*const */LinesListType *>
+  return static_cast</*const */LinesListType *>
     (this->ProcessObjectType::GetInput(1) );
 }
 
@@ -74,7 +74,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
 
   typename InputImageType::ConstPointer input  = this->GetInput();
   typename OutputImageType::Pointer output  = this->GetOutput();
-  typename LinesListType::Pointer  	list = this->GetInputLineSpatialObjectList();
+  typename LinesListType::Pointer    list = this->GetInputLineSpatialObjectList();
 
 
   typename OutputImageType::RegionType region;

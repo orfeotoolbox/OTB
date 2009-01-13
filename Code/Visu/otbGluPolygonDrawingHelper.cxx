@@ -26,10 +26,10 @@ PURPOSE.  See the above copyright notices for more information.
 // There are function prototype conflits under cygwin between standard w32 API
 // and standard C ones
 #ifndef CALLBACK
-	#if defined(__CYGWIN__)
-		#define CALLBACK __stdcall
+  #if defined(__CYGWIN__)
+    #define CALLBACK __stdcall
         #else
-		#define CALLBACK
+    #define CALLBACK
         #endif
 #endif
 
@@ -49,7 +49,7 @@ extern "C"
  void ErrorCallback(GLenum errorCode)
 {
   const GLubyte * estring = gluErrorString(errorCode);
-	std::cout<<"Glu Tesselation error: "<<estring<<std::endl;
+  std::cout<<"Glu Tesselation error: "<<estring<<std::endl;
 }
 } // end extern C
 

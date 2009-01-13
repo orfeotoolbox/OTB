@@ -62,8 +62,8 @@ namespace otb
           typedef itk::Point<TScalarType, NInputDimensions >  InputPointType;
           typedef itk::Point<TScalarType, NOutputDimensions > OutputPointType;
 
-          typedef DEMHandler				 DEMHandlerType;
-          typedef typename DEMHandlerType::Pointer		 DEMHandlerPointerType;
+          typedef DEMHandler         DEMHandlerType;
+          typedef typename DEMHandlerType::Pointer     DEMHandlerPointerType;
 
           /** Method for creation through the object factory. */
           itkNewMacro( Self );

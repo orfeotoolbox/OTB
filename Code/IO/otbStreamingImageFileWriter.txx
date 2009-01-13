@@ -392,8 +392,8 @@ StreamingImageFileWriter<TInputImage>
       }
     else if( inputPtr->GetBufferedRegion() == inputPtr->GetLargestPossibleRegion())
       {
-	otbMsgDebugMacro(<<"WARNING : Buffered region is the largest possible region, there is no need for streaming.");
-	numDivisions = 1;
+  otbMsgDebugMacro(<<"WARNING : Buffered region is the largest possible region, there is no need for streaming.");
+  numDivisions = 1;
 
       }
     else
@@ -472,11 +472,11 @@ StreamingImageFileWriter<TInputImage>
                 streamRegion = m_RegionSplitter->GetSplit(piece, numDivisions,
                                               outputRegion);
 
-		otbMsgDebugMacro(<<"Piece : " << piece );
-		otbMsgDebugMacro(<<"RegionSplit : Index(" << streamRegion.GetIndex()[0]
-				 << "," << streamRegion.GetIndex()[1]
-				 << ") Size(" << streamRegion.GetSize()[0]
-				 << "," << streamRegion.GetSize()[1] << ")");
+    otbMsgDebugMacro(<<"Piece : " << piece );
+    otbMsgDebugMacro(<<"RegionSplit : Index(" << streamRegion.GetIndex()[0]
+         << "," << streamRegion.GetIndex()[1]
+         << ") Size(" << streamRegion.GetSize()[0]
+         << "," << streamRegion.GetSize()[1] << ")");
 
 
                 inputPtr->SetRequestedRegion(streamRegion);

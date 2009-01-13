@@ -46,9 +46,9 @@ public:
 
   Point_plane()
        {
-  	x = -1;
-  	y = -1;
-	}
+    x = -1;
+    y = -1;
+  }
   ~Point_plane() {};
 
 protected:
@@ -124,7 +124,7 @@ public:
   int nrow;               /* Number of rows (dy) of the image */
   int ncol;               /* Number of columns (dx) of the image */
   int interpolation;      /* Interpolation used for the level lines:
-			     0=nearest neighbor, 1=bilinear */
+           0=nearest neighbor, 1=bilinear */
   Shape *the_shapes;      /* Array of the shapes.  The root of the tree is at index 0 */
   int nb_shapes;          /* The number of shapes (the size of the array the_shapes) */
 
@@ -164,11 +164,11 @@ another module, when this field is needed */
   char point_in_shape(int x,int y,Shape *pShape);
   void find_next_dual_point(Point_plane *pDualPoint,
                             int *cDirection,
-			    Shape *pShape);
+          Shape *pShape);
   int find_closed_boundary(Shape *pShape,PathPointer pBoundary);
 /* Find an initial point (to follow the boundary) at the border of the image */
   void initial_point_border(Point_plane *pDualPoint,
-   			    int *cDirection,Shape *pShape);
+             int *cDirection,Shape *pShape);
 /* Find an open boundary */
   void find_open_boundary(Shape *pShape,PathPointer pBoundary);
   PathPointer flst_shape_boundary(Shape *pShape);

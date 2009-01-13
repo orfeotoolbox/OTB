@@ -29,9 +29,9 @@ namespace otb
   RCC8VertexIterator<TGraph>
   ::RCC8VertexIterator()
   {
-		m_Graph = GraphType::New();
-		tie(m_Iter,m_End)= vertices(*(m_Graph->GetGraph()));
-	}
+    m_Graph = GraphType::New();
+    tie(m_Iter,m_End)= vertices(*(m_Graph->GetGraph()));
+  }
   /**
    * Copy operator.
    */

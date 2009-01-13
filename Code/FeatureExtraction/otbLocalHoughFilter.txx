@@ -31,10 +31,10 @@ namespace otb
  */
 template <class TInputImage>
 LocalHoughFilter<TInputImage>::LocalHoughFilter() : ImageToLineSpatialObjectListFilter<TInputImage>(),
-						    m_NumberOfLines(1),
-						    m_Variance(5),
-						    m_DiscRadius(10),
-						    m_Threshold(0)
+                m_NumberOfLines(1),
+                m_Variance(5),
+                m_DiscRadius(10),
+                m_Threshold(0)
 {
    m_Radius.Fill(20);
    m_Overlap.Fill(0);
@@ -136,16 +136,16 @@ LocalHoughFilter<TInputImage>
 ::GenerateData()
 {
 
-   typename InputImageType::ConstPointer 	input  = this->GetInput();
+   typename InputImageType::ConstPointer   input  = this->GetInput();
 
-   typename LinesListType::Pointer 	 	list;
+   typename LinesListType::Pointer      list;
    list = this->GetOutput();
 
-   typename ROIFilterType::Pointer	ROIfilter = ROIFilterType::New();
+   typename ROIFilterType::Pointer  ROIfilter = ROIFilterType::New();
 
-   typename HoughFilterType::LinesListType	lines;
+   typename HoughFilterType::LinesListType  lines;
 
-   typename HoughFilterType::Pointer	houghFilter = HoughFilterType::New();
+   typename HoughFilterType::Pointer  houghFilter = HoughFilterType::New();
 
 
    // Get image size
@@ -163,93 +163,93 @@ LocalHoughFilter<TInputImage>
 
       // Number of pixels of the local region
       if ( (x+m_Radius[0]) < size[0] )
-      	 ROIfilter->SetSizeX(m_Radius[0]);
+         ROIfilter->SetSizeX(m_Radius[0]);
       else
-      	 ROIfilter->SetSizeX(size[0]-x-1);
+         ROIfilter->SetSizeX(size[0]-x-1);
 
 
       // Direction Y
       for ( unsigned long y=0; y < size[1]-1; y += (m_Radius[1]-m_Overlap[1]) )
          {
 
-  	 // Initialize the extract ROI filter in the direction Y
-      	 ROIfilter->SetStartY(y);
+     // Initialize the extract ROI filter in the direction Y
+         ROIfilter->SetStartY(y);
 
-      	 if ( (y+m_Radius[1]) < size[1] )
-      	    ROIfilter->SetSizeY(m_Radius[1]);
-      	 else
-      	    ROIfilter->SetSizeY(size[1]-y-1);
-
-
-
-      	 // Extract the local region of the input image
-      	 ROIfilter->SetInput( this->GetInput() );
-
-      	 // ----------------------------------------------------
-      	 // Create a copy of the extract ROI filter output image
-     	 // ----------------------------------------------------
-
-	 typename InputImageType::Pointer 	localImage = InputImageType::New();
-	 typename InputImageType::Pointer     	filterImage = InputImageType::New();
+         if ( (y+m_Radius[1]) < size[1] )
+            ROIfilter->SetSizeY(m_Radius[1]);
+         else
+            ROIfilter->SetSizeY(size[1]-y-1);
 
 
-	 ROIfilter->UpdateLargestPossibleRegion();
-	 ROIfilter->Update();
 
-	 filterImage = ROIfilter->GetOutput();
+         // Extract the local region of the input image
+         ROIfilter->SetInput( this->GetInput() );
 
-	 // Create a new image from the extracted region. The starting
-	 // index is the corner of the newly generated image (0,0)
+         // ----------------------------------------------------
+         // Create a copy of the extract ROI filter output image
+        // ----------------------------------------------------
 
-	 typename InputImageType::RegionType region;
-
-	 IndexType	index;
-
-	 index[0] = 0;
-	 index[1] = 0;
-
-	 region.SetSize(filterImage->GetLargestPossibleRegion().GetSize());
-	 region.SetIndex(index);
-	 localImage->SetRegions( region );
-	 localImage->SetOrigin(filterImage->GetOrigin());
-	 localImage->SetSpacing(filterImage->GetSpacing());
-	 localImage->Allocate();
-
-	 typedef itk::ImageRegionIteratorWithIndex< InputImageType > LocalIteratorType;
-	 typedef itk::ImageRegionConstIteratorWithIndex< InputImageType >  FilterIteratorType;
-
-	 LocalIteratorType    localIt( localImage, localImage->GetRequestedRegion() );
-	 FilterIteratorType   filterIt(  filterImage,  filterImage->GetRequestedRegion() );
-
-	 localIt.GoToBegin();
-	 filterIt.GoToBegin();
+   typename InputImageType::Pointer   localImage = InputImageType::New();
+   typename InputImageType::Pointer       filterImage = InputImageType::New();
 
 
-	 // Copy the filter image in the new local image
-	 for ( localIt.GoToBegin(); !localIt.IsAtEnd(); ++localIt,++filterIt)
-	    localIt.Set( static_cast<InputPixelType>(filterIt.Get()) );
+   ROIfilter->UpdateLargestPossibleRegion();
+   ROIfilter->Update();
+
+   filterImage = ROIfilter->GetOutput();
+
+   // Create a new image from the extracted region. The starting
+   // index is the corner of the newly generated image (0,0)
+
+   typename InputImageType::RegionType region;
+
+   IndexType  index;
+
+   index[0] = 0;
+   index[1] = 0;
+
+   region.SetSize(filterImage->GetLargestPossibleRegion().GetSize());
+   region.SetIndex(index);
+   localImage->SetRegions( region );
+   localImage->SetOrigin(filterImage->GetOrigin());
+   localImage->SetSpacing(filterImage->GetSpacing());
+   localImage->Allocate();
+
+   typedef itk::ImageRegionIteratorWithIndex< InputImageType > LocalIteratorType;
+   typedef itk::ImageRegionConstIteratorWithIndex< InputImageType >  FilterIteratorType;
+
+   LocalIteratorType    localIt( localImage, localImage->GetRequestedRegion() );
+   FilterIteratorType   filterIt(  filterImage,  filterImage->GetRequestedRegion() );
+
+   localIt.GoToBegin();
+   filterIt.GoToBegin();
 
 
-      	 // -------------------------------
-      	 // Application of Hough filter
-      	 // -------------------------------
+   // Copy the filter image in the new local image
+   for ( localIt.GoToBegin(); !localIt.IsAtEnd(); ++localIt,++filterIt)
+      localIt.Set( static_cast<InputPixelType>(filterIt.Get()) );
 
-       	 houghFilter->SetInput( localImage );
-       	 houghFilter->SetNumberOfLines( m_NumberOfLines );
-       	 houghFilter->SetVariance( m_Variance );
-       	 houghFilter->SetDiscRadius( m_DiscRadius );
-	 			 houghFilter->SetThreshold( m_Threshold );
 
-      	 houghFilter->Modified();
+         // -------------------------------
+         // Application of Hough filter
+         // -------------------------------
 
-      	 houghFilter->Update();
+          houghFilter->SetInput( localImage );
+          houghFilter->SetNumberOfLines( m_NumberOfLines );
+          houghFilter->SetVariance( m_Variance );
+          houghFilter->SetDiscRadius( m_DiscRadius );
+          houghFilter->SetThreshold( m_Threshold );
+
+         houghFilter->Modified();
+
+         houghFilter->Update();
 
 
          // ---------------------------------------
-      	 // Get the list of LineSpatialObject lines
-      	 // ---------------------------------------
+         // Get the list of LineSpatialObject lines
+         // ---------------------------------------
 
-      	 lines = houghFilter->GetLines(m_NumberOfLines);
+         lines = houghFilter->GetLines(m_NumberOfLines);
 
 
          LineIterator itLines = lines.begin();
@@ -260,23 +260,23 @@ LocalHoughFilter<TInputImage>
 
             LinePointer line = LineType::New();
 
-            IndexType	origin;
+            IndexType  origin;
 
             origin[0] = x;
             origin[1] = y;
 
-	    // Call the private method that researchs the two points
-	    // used to define a line
-	    line = LinePointResearch(itLines, localImage, origin);
+      // Call the private method that researchs the two points
+      // used to define a line
+      line = LinePointResearch(itLines, localImage, origin);
 
-	    if (line->GetNumberOfPoints() != 0)
-  	       list->push_back(line);
+      if (line->GetNumberOfPoints() != 0)
+           list->push_back(line);
 
-	    itLines++;
+      itLines++;
 
-	    }
+      }
 
-	 lines.clear();
+   lines.clear();
 
          } // end of loop in y direction
 

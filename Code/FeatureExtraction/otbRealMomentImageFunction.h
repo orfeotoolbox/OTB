@@ -34,7 +34,7 @@ namespace otb
 template < class TInput,
            class TOutput = float,
            class TPrecision = double,
-	   class TCoordRep = float >
+     class TCoordRep = float >
 class ITK_EXPORT RealMomentImageFunction :
   public GeometricMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep >
 {

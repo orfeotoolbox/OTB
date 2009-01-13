@@ -29,7 +29,7 @@ namespace otb
    *  It converts coordinates in longitude,latitude (WGS84) to Mollweid map coordinates.
    */
   template <InverseOrForwardTransformationEnum transform>
-      class ITK_EXPORT MollweidMapProjection : public	MapProjection<ossimMollweidProjection, transform>
+      class ITK_EXPORT MollweidMapProjection : public  MapProjection<ossimMollweidProjection, transform>
   {
     public :
       /** Standard class typedefs. */
@@ -38,9 +38,9 @@ namespace otb
       typedef itk::SmartPointer<Self>                 Pointer;
       typedef itk::SmartPointer<const Self>           ConstPointer;
 
-      typedef typename Superclass::ScalarType  		 ScalarType;
-      typedef itk::Point<ScalarType,2 >   	      	 InputPointType;
-      typedef itk::Point<ScalarType,2 >  	      	 OutputPointType;
+      typedef typename Superclass::ScalarType       ScalarType;
+      typedef itk::Point<ScalarType,2 >              InputPointType;
+      typedef itk::Point<ScalarType,2 >             OutputPointType;
 
       /** Method for creation through the object factory. */
       itkNewMacro(Self);

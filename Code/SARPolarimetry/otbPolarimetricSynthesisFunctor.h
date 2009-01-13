@@ -50,15 +50,15 @@ namespace Functor
         }
 
         /** Constructor */
-	PolarimetricSynthesisFunctor()
+  PolarimetricSynthesisFunctor()
         {
                 m_Ei.Fill(1);
                 m_Er.Fill(1);
         };
         /** Destructor */
-	virtual ~PolarimetricSynthesisFunctor() {};
+  virtual ~PolarimetricSynthesisFunctor() {};
         inline TOutput operator()(const TInput1 &Shh, const TInput2 &Shv, const TInput3 &Svh, const TInput4 &Svv)
-	{
+  {
                 ComplexType tmp;
                 double scalar;
 

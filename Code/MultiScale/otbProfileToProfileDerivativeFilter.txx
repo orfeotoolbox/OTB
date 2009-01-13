@@ -45,30 +45,30 @@ ProfileToProfileDerivativeFilter<TInputImageList,TOutputImageList>
   if(outputPtr)
     {
       if(outputPtr->Size()!=inputPtr->Size()-1)
-	{
-	  // in this case, clear the list
-	  outputPtr->Clear();
-	  typename InputImageListType::ConstIterator inputListIt = inputPtr->Begin();
-	  ++inputListIt;
-	  while(inputListIt!=inputPtr->End())
-	    {
-	      outputPtr->PushBack(OutputImageType::New());
-	      ++inputListIt;
-	    }
-	}
+  {
+    // in this case, clear the list
+    outputPtr->Clear();
+    typename InputImageListType::ConstIterator inputListIt = inputPtr->Begin();
+    ++inputListIt;
+    while(inputListIt!=inputPtr->End())
+      {
+        outputPtr->PushBack(OutputImageType::New());
+        ++inputListIt;
+      }
+  }
 
       // For each input image
       typename InputImageListType::ConstIterator inputListIt = inputPtr->Begin();
       typename OutputImageListType::Iterator outputListIt = outputPtr->Begin();
       ++inputListIt;
       while(inputListIt!=inputPtr->End()&&outputListIt!=outputPtr->End())
-	{
-	  // Create the output image and set its information
-	  outputListIt.Get()->CopyInformation(inputListIt.Get());
-	  outputListIt.Get()->SetLargestPossibleRegion(inputListIt.Get()->GetLargestPossibleRegion());
-	  ++inputListIt;
-	  ++outputListIt;
-	}
+  {
+    // Create the output image and set its information
+    outputListIt.Get()->CopyInformation(inputListIt.Get());
+    outputListIt.Get()->SetLargestPossibleRegion(inputListIt.Get()->GetLargestPossibleRegion());
+    ++inputListIt;
+    ++outputListIt;
+  }
     }
 }
 /** Generate input requested region for each image in the List. */
@@ -87,11 +87,11 @@ ProfileToProfileDerivativeFilter<TInputImageList,TOutputImageList>
 
   // Use the filter to generate input requested region
   while(inputListIt!=inputPtr->End()&&outputListIt!=outputPtr->End())
-	{
-	  inputListIt.Get() ->SetRequestedRegion(outputListIt.Get()->GetRequestedRegion());
-	  ++inputListIt;
-	  ++outputListIt;
-	}
+  {
+    inputListIt.Get() ->SetRequestedRegion(outputListIt.Get()->GetRequestedRegion());
+    ++inputListIt;
+    ++outputListIt;
+  }
 }
 /** Main computation method */
 template <class TInputImageList, class TOutputImageList>
@@ -114,18 +114,18 @@ ProfileToProfileDerivativeFilter<TInputImageList,TOutputImageList>
   ++inputListIt;
 
   while(inputListIt!=inputPtr->End()&&outputListIt!=outputPtr->End())
-	{
-	  m_SubtractFilter->SetInput1(inputListIt.Get());
-	  m_SubtractFilter->SetInput2(lastImage);
-	  m_AbsFilter->GetOutput()->SetRequestedRegion(outputListIt.Get()->GetRequestedRegion());
-	  m_AbsFilter->Update();
-	  outputPtr->SetNthElement(counter,static_cast<OutputImageType *>(m_AbsFilter->GetOutput()));
-	  outputListIt.Get()->DisconnectPipeline();
-	  lastImage=inputListIt.Get();
-	  ++inputListIt;
-	  ++outputListIt;
-	  ++counter;
-	}
+  {
+    m_SubtractFilter->SetInput1(inputListIt.Get());
+    m_SubtractFilter->SetInput2(lastImage);
+    m_AbsFilter->GetOutput()->SetRequestedRegion(outputListIt.Get()->GetRequestedRegion());
+    m_AbsFilter->Update();
+    outputPtr->SetNthElement(counter,static_cast<OutputImageType *>(m_AbsFilter->GetOutput()));
+    outputListIt.Get()->DisconnectPipeline();
+    lastImage=inputListIt.Get();
+    ++inputListIt;
+    ++outputListIt;
+    ++counter;
+  }
 }
 /**
  * PrintSelf Method

@@ -38,44 +38,44 @@ namespace otb {
 template <class TInput>
 class CumulantsForEdgeworthProfile
 {
-	public :
-		typedef itk::Vector<double,4> CumulantType;
-		typedef std::vector< CumulantType > CumulantSet;
-		typedef CumulantSet::iterator Iterator;
+  public :
+    typedef itk::Vector<double,4> CumulantType;
+    typedef std::vector< CumulantType > CumulantSet;
+    typedef CumulantSet::iterator Iterator;
 
-		CumulantsForEdgeworthProfile ( const TInput & input, std::vector< itk::Array2D<int> > & mask );
-		virtual ~CumulantsForEdgeworthProfile () { }
+    CumulantsForEdgeworthProfile ( const TInput & input, std::vector< itk::Array2D<int> > & mask );
+    virtual ~CumulantsForEdgeworthProfile () { }
 
-		// Kullback-Leibler Profile
-		template <class TInput2>
-		itk::VariableLengthVector<double> KL_profile ( CumulantsForEdgeworthProfile<TInput2> & cumulants );
-		// Kullback-Leibler divergence at a given scale
-		double KL_profile ( const CumulantType & cumulants1, const CumulantType & cumulants2 );
-		// Access to data
-		inline	CumulantType &	GetCumulantAtScale( int i )	{ return this->fCum[i]; }
+    // Kullback-Leibler Profile
+    template <class TInput2>
+    itk::VariableLengthVector<double> KL_profile ( CumulantsForEdgeworthProfile<TInput2> & cumulants );
+    // Kullback-Leibler divergence at a given scale
+    double KL_profile ( const CumulantType & cumulants1, const CumulantType & cumulants2 );
+    // Access to data
+    inline  CumulantType &  GetCumulantAtScale( int i )  { return this->fCum[i]; }
 
-		// debug
-		int m_debug;
+    // debug
+    int m_debug;
 
-	protected :
+  protected :
 
-		// Estimation des moments � partir de voisinnages emboit�s
-		int	MakeSumAndMoments	( const TInput & input, std::vector< itk::Array2D<int> > & mask );
-		// Estimation des moments � partir de la petite taille de fenetre
-		int InitSumAndMoments ( const TInput & input, itk::Array2D<int> & mask );
-		//
-		int ReInitSumAndMoments ( const TInput & input, itk::Array2D<int> & mask, int level );
-		// transformation moment -> cumulants (pour Edgeworth)
-		int MakeCumulants();
+    // Estimation des moments � partir de voisinnages emboit�s
+    int  MakeSumAndMoments  ( const TInput & input, std::vector< itk::Array2D<int> > & mask );
+    // Estimation des moments � partir de la petite taille de fenetre
+    int InitSumAndMoments ( const TInput & input, itk::Array2D<int> & mask );
+    //
+    int ReInitSumAndMoments ( const TInput & input, itk::Array2D<int> & mask, int level );
+    // transformation moment -> cumulants (pour Edgeworth)
+    int MakeCumulants();
 
-		// Attributs internes � la classe
-		double	fSum0, fSum1, fSum2, fSum3, fSum4;
-		CumulantSet fMu;
-		CumulantSet fCum;
+    // Attributs internes � la classe
+    double  fSum0, fSum1, fSum2, fSum3, fSum4;
+    CumulantSet fMu;
+    CumulantSet fCum;
 
-	private :
-		CumulantsForEdgeworthProfile (); // Not implemented
-		CumulantsForEdgeworthProfile ( const TInput & input ); // Not implemented
+  private :
+    CumulantsForEdgeworthProfile (); // Not implemented
+    CumulantsForEdgeworthProfile ( const TInput & input ); // Not implemented
 
 };
 
@@ -84,28 +84,28 @@ namespace Functor {
    * \brief Functor for KullbackLeiblerProfileImageFilter. Please refer to KullbackLeiblerProfileImageFilter.
    *
    */
-	template< class TInput1, class TInput2, class TOutput >
-	class KullbackLeiblerProfile
-	{
-		public :
-			KullbackLeiblerProfile ();
-			virtual ~KullbackLeiblerProfile () { }
-			// Gives the radius min and max of neighborhood
-			void SetRadius ( const unsigned char & min, const unsigned char & max );
-			unsigned char GetRadiusMin(void);
-			unsigned char GetRadiusMax(void);
-			// Gives the size of the profile
-			int	GetNumberOfComponentsPerPixel() const { return m_mask.size(); }
-			// functor
-			TOutput operator () ( const TInput1 & it1, const TInput2 & it2 );
-		protected :
-			// Make the set of masks to play the increase in window size
-			void MakeMultiscaleProfile ();
-			// Internal attributes
-			unsigned char m_RadiusMin;
-			unsigned char m_RadiusMax;
-			std::vector< itk::Array2D<int> > m_mask;
-	};
+  template< class TInput1, class TInput2, class TOutput >
+  class KullbackLeiblerProfile
+  {
+    public :
+      KullbackLeiblerProfile ();
+      virtual ~KullbackLeiblerProfile () { }
+      // Gives the radius min and max of neighborhood
+      void SetRadius ( const unsigned char & min, const unsigned char & max );
+      unsigned char GetRadiusMin(void);
+      unsigned char GetRadiusMax(void);
+      // Gives the size of the profile
+      int  GetNumberOfComponentsPerPixel() const { return m_mask.size(); }
+      // functor
+      TOutput operator () ( const TInput1 & it1, const TInput2 & it2 );
+    protected :
+      // Make the set of masks to play the increase in window size
+      void MakeMultiscaleProfile ();
+      // Internal attributes
+      unsigned char m_RadiusMin;
+      unsigned char m_RadiusMax;
+      std::vector< itk::Array2D<int> > m_mask;
+  };
 } // Functor
 
 /** \class KullbackLeiblerProfileImageFilter
@@ -134,42 +134,42 @@ namespace Functor {
  * "Edgeworth Expansions of the Kullback-Leibler Information" (submitted to JASA, nov 25, 1999)
  * http://www.math.ucdavis.edu/~saito/publications
  *
- *	TOutput is expected to be a itk::VariableLengthVector< TPixel > and comes from an otbVectorImage< TPixel, 2 >
+ *  TOutput is expected to be a itk::VariableLengthVector< TPixel > and comes from an otbVectorImage< TPixel, 2 >
  *
  * \ingroup IntensityImageFilters Multithreaded
  */
 template <class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT KullbackLeiblerProfileImageFilter :
-	public BinaryFunctorNeighborhoodVectorImageFilter<
-			TInputImage1,TInputImage2,TOutputImage,
-			Functor::KullbackLeiblerProfile<
-				typename itk::ConstNeighborhoodIterator<TInputImage1>,
-				typename itk::ConstNeighborhoodIterator<TInputImage2>,
-				typename TOutputImage::PixelType> >
+  public BinaryFunctorNeighborhoodVectorImageFilter<
+      TInputImage1,TInputImage2,TOutputImage,
+      Functor::KullbackLeiblerProfile<
+        typename itk::ConstNeighborhoodIterator<TInputImage1>,
+        typename itk::ConstNeighborhoodIterator<TInputImage2>,
+        typename TOutputImage::PixelType> >
 {
-	public:
-		/** Standard class typedefs. */
-		typedef KullbackLeiblerProfileImageFilter Self;
-		typedef /*typename*/ BinaryFunctorNeighborhoodVectorImageFilter<
-								TInputImage1,TInputImage2,TOutputImage,
-								Functor::KullbackLeiblerProfile<
-									typename itk::ConstNeighborhoodIterator<TInputImage1>,
-									typename itk::ConstNeighborhoodIterator<TInputImage2>,
-									typename TOutputImage::PixelType>
-								>  Superclass;
-		typedef itk::SmartPointer<Self> Pointer;
-		typedef itk::SmartPointer<const Self> ConstPointer;
+  public:
+    /** Standard class typedefs. */
+    typedef KullbackLeiblerProfileImageFilter Self;
+    typedef /*typename*/ BinaryFunctorNeighborhoodVectorImageFilter<
+                TInputImage1,TInputImage2,TOutputImage,
+                Functor::KullbackLeiblerProfile<
+                  typename itk::ConstNeighborhoodIterator<TInputImage1>,
+                  typename itk::ConstNeighborhoodIterator<TInputImage2>,
+                  typename TOutputImage::PixelType>
+                >  Superclass;
+    typedef itk::SmartPointer<Self> Pointer;
+    typedef itk::SmartPointer<const Self> ConstPointer;
 
-		/** Method for creation through the object factory. */
-		itkNewMacro(Self);
+    /** Method for creation through the object factory. */
+    itkNewMacro(Self);
 
-	protected:
-		KullbackLeiblerProfileImageFilter() {}
-		virtual ~KullbackLeiblerProfileImageFilter() {}
+  protected:
+    KullbackLeiblerProfileImageFilter() {}
+    virtual ~KullbackLeiblerProfileImageFilter() {}
 
-	private:
-		KullbackLeiblerProfileImageFilter(const Self&); //purposely not implemented
-		void operator=(const Self&); //purposely not implemented
+  private:
+    KullbackLeiblerProfileImageFilter(const Self&); //purposely not implemented
+    void operator=(const Self&); //purposely not implemented
 
 };
 

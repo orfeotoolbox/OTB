@@ -89,7 +89,7 @@ class ITK_EXPORT MeanRatioImageFilter :
             Functor::MeanRatio<
                    ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
                    ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
-		   ITK_TYPENAME TOutputImage::PixelType>   >
+       ITK_TYPENAME TOutputImage::PixelType>   >
 {
 public:
   /** Standard class typedefs. */

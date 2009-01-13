@@ -116,10 +116,10 @@ public:
   }
 
   /** Set the kernel type to LINEAR, POLY, RBF, SIGMOID
-	linear: u'*v
-	polynomial: (gamma*u'*v + coef0)^degree
-	radial basis function: exp(-gamma*|u-v|^2)
-	sigmoid: tanh(gamma*u'*v + coef0)*/
+  linear: u'*v
+  polynomial: (gamma*u'*v + coef0)^degree
+  radial basis function: exp(-gamma*|u-v|^2)
+  sigmoid: tanh(gamma*u'*v + coef0)*/
   void SetKernelType(int kerneltype)
   {
     m_Model->SetKernelType(kerneltype);

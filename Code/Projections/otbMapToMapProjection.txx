@@ -54,20 +54,20 @@ MapToMapProjection<TInputMapProjection,
 
   ///Pass from projection 1 to projection 2
 /*  template<class TInputMapProjection,
-	   class TOutputMapProjection,
-	   class TScalarType,
-	   unsigned int NInputDimensions,
-	   unsigned int NOutputDimensions>
+     class TOutputMapProjection,
+     class TScalarType,
+     unsigned int NInputDimensions,
+     unsigned int NOutputDimensions>
   typename MapToMapProjection<TInputMapProjection,
-			      TOutputMapProjection,
-			      TScalarType,
-			      NInputDimensions,
-			      NOutputDimensions>::OutputPointType
+            TOutputMapProjection,
+            TScalarType,
+            NInputDimensions,
+            NOutputDimensions>::OutputPointType
   MapToMapProjection<TInputMapProjection,
-		     TOutputMapProjection,
-		     TScalarType,
-		     NInputDimensions,
-		     NOutputDimensions>::ComputeProjection1ToProjection2(const InputPointType &point1)
+         TOutputMapProjection,
+         TScalarType,
+         NInputDimensions,
+         NOutputDimensions>::ComputeProjection1ToProjection2(const InputPointType &point1)
   {
     InputPointType geopoint;
     OutputPointType point2;
@@ -82,20 +82,20 @@ MapToMapProjection<TInputMapProjection,
 
   ///Pass from projection 2 to projection 1
   template<class TInputMapProjection,
-	   class TOutputMapProjection,
-	   class TScalarType,
-	   unsigned int NInputDimensions,
-	   unsigned int NOutputDimensions>
+     class TOutputMapProjection,
+     class TScalarType,
+     unsigned int NInputDimensions,
+     unsigned int NOutputDimensions>
   typename MapToMapProjection<TInputMapProjection,
-			      TOutputMapProjection,
-			      TScalarType,
-			      NInputDimensions,
-			      NOutputDimensions>::InputPointType
+            TOutputMapProjection,
+            TScalarType,
+            NInputDimensions,
+            NOutputDimensions>::InputPointType
   MapToMapProjection<TInputMapProjection,
-		     TOutputMapProjection,
-		     TScalarType,
-		     NInputDimensions,
-		     NOutputDimensions>::ComputeProjection2ToProjection1(const OutputPointType &point2)
+         TOutputMapProjection,
+         TScalarType,
+         NInputDimensions,
+         NOutputDimensions>::ComputeProjection2ToProjection1(const OutputPointType &point2)
   {
 
     OutputPointType geopoint;
@@ -133,7 +133,7 @@ TransformPoint(const InputPointType &point) const
     //(lat,lon) projection
     geopoint=m_InputMapProjection->TransformPoint(point);
 
-		//map projection
+    //map projection
     point2=m_OutputMapProjection->TransformPoint(geopoint);
 
     return point2;

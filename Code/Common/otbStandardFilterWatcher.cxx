@@ -25,7 +25,7 @@ namespace otb
 
 StandardFilterWatcher
 ::StandardFilterWatcher(itk::ProcessObject* process,
-			const char *comment)
+      const char *comment)
   : FilterWatcherBase(process, comment)
 {
   m_StarsCount = 50;
@@ -65,7 +65,7 @@ StandardFilterWatcher
 {
   m_TimeProbe.Start();
   std::cout << (m_Process.GetPointer() ? m_Process->GetNameOfClass() : "None")
-	    << " \"" << m_Comment << "\" " << std::endl;
+      << " \"" << m_Comment << "\" " << std::endl;
 }
 
 void
@@ -74,8 +74,8 @@ StandardFilterWatcher
 {
   m_TimeProbe.Stop();
   std::cout << std::endl << "Filter took "
-	    << m_TimeProbe.GetMeanTime()
-	    << " seconds." << std::endl;
+      << m_TimeProbe.GetMeanTime()
+      << " seconds." << std::endl;
 }
 
 } // end namespace otb

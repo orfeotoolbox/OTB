@@ -57,9 +57,9 @@ ZoomableImageWidget<TPixel>
     {
       Superclass::Init(x,y,w,h,l);
 //       if(this->GetImageOverlayVisible())
-// 	{
-// 	  this->GetInputOverlay()->Update();
-// 	}
+//   {
+//     this->GetInputOverlay()->Update();
+//   }
       this->label(l);
       this->resize(x, y, w, h);
     }
@@ -99,9 +99,9 @@ ZoomableImageWidget<TPixel>
   IndexType viewedRDCorner = viewed.GetIndex()+viewed.GetSize();
   IndexType bufferedRDCorner = buffered.GetIndex()+buffered.GetSize();
  //  return ( viewedULCorner[0]<bufferedULCorner[0]
-//  	   ||viewedULCorner[1]<bufferedULCorner[1]
-//  	   ||viewedRDCorner[0]>bufferedRDCorner[0]
-//  	   ||viewedRDCorner[1]>bufferedRDCorner[1]);
+//       ||viewedULCorner[1]<bufferedULCorner[1]
+//       ||viewedRDCorner[0]>bufferedRDCorner[0]
+//       ||viewedRDCorner[1]>bufferedRDCorner[1]);
   return true;
 }
 

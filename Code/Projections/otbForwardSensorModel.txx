@@ -36,8 +36,8 @@ ForwardSensorModel< TScalarType,
                     NParametersDimensions>
 ::ForwardSensorModel()
 {
-	m_Epsilon = 0.0001;
-	m_NbIter = 1;
+  m_Epsilon = 0.0001;
+  m_NbIter = 1;
 }
 
 template < class TScalarType,
@@ -67,9 +67,9 @@ template < class TScalarType,
                    NParametersDimensions>
   ::TransformPoint(const InputPointType &point) const
 {
-//   otbMsgDevMacro(<< "Point in sensor geometry: (" << point[0] << "," <<	point[1] << ")");
+//   otbMsgDevMacro(<< "Point in sensor geometry: (" << point[0] << "," <<  point[1] << ")");
 
-	// "itk::point" to "ossim::ossimDpt" transformation
+  // "itk::point" to "ossim::ossimDpt" transformation
   ossimDpt ossimPoint(point[0], point[1]);
 
   // Calculation
@@ -93,7 +93,7 @@ template < class TScalarType,
 
     otbMsgDevMacro(<< "USING DEM ! ") ;
 
-    while ((diffHeight > m_Epsilon)	&& (nbIter < m_NbIter))
+    while ((diffHeight > m_Epsilon)  && (nbIter < m_NbIter))
     {
       otbMsgDevMacro(<< "Iter " << nbIter);
 
@@ -105,7 +105,7 @@ template < class TScalarType,
       point[0] = ossimGPointRef.lon;
       point[1] = ossimGPointRef.lat;
 
-//			otbMsgDevMacro(<< "PointP Before iter : (" << point[1] << "," << point[0] <<")");
+//      otbMsgDevMacro(<< "PointP Before iter : (" << point[1] << "," << point[0] <<")");
       if (this->m_UseDEM)
       {
         heightTmp = this->m_DEMHandler->GetHeightAboveMSL(point);
@@ -132,7 +132,7 @@ template < class TScalarType,
   outputPoint[0]=ossimGPoint.lon;
   outputPoint[1]=ossimGPoint.lat;
 
-//   otbMsgDevMacro(<< "Geographic point lon/lat : (" << outputPoint[1] << "," <<	outputPoint[0] << ")");
+//   otbMsgDevMacro(<< "Geographic point lon/lat : (" << outputPoint[1] << "," <<  outputPoint[0] << ")");
 
   return outputPoint;
 }

@@ -71,13 +71,13 @@ GaborFilterGenerator<TPrecision>
     {
       for(PrecisionType x = - static_cast<PrecisionType>(m_Radius[0]);
       x<=static_cast<PrecisionType>(m_Radius[0]);x+=1)
-	{
-	  xr = x * costheta + y * sintheta;
-	  yr = y * costheta - x * sintheta;
-	  coef = vcl_exp(-M_PI*(vcl_pow(m_A*xr,2)+vcl_pow(m_B*yr,2)))*cos(2*M_PI*(m_U0*x+m_V0*y)+m_Phi);
-	  m_Filter.SetElement(k,coef);
-	  ++k;
-	}
+  {
+    xr = x * costheta + y * sintheta;
+    yr = y * costheta - x * sintheta;
+    coef = vcl_exp(-M_PI*(vcl_pow(m_A*xr,2)+vcl_pow(m_B*yr,2)))*cos(2*M_PI*(m_U0*x+m_V0*y)+m_Phi);
+    m_Filter.SetElement(k,coef);
+    ++k;
+  }
     }
 }
 

@@ -48,12 +48,12 @@ public:
 
   void SetKeywordlist(const ossimKeywordlist& kwl)
   {
-  	m_Keywordlist = kwl.getMap();
+    m_Keywordlist = kwl.getMap();
   }
 
   void Clear(void)
   {
-  	m_Keywordlist.clear();
+    m_Keywordlist.clear();
   }
 
   unsigned int GetSize(void) const

@@ -43,7 +43,7 @@ namespace otb
 // Le 3ieme parametre template est bidon MAIS necessaire pour compiler avec Microsoft Visual C++ 6.0
 template <class TPixel,unsigned int VImageDimension>
 class ITK_EXPORT Image : public itk::Image<TPixel,VImageDimension>,
-			public ImageBase
+      public ImageBase
 
 {
 public:
@@ -54,8 +54,8 @@ public:
   typedef itk::SmartPointer<const Self>  ConstPointer;
   typedef itk::WeakPointer<const Self>  ConstWeakPointer;
 
-  typedef ImageBase::VectorType	VectorType;
-  typedef ImageBase::ImageKeywordlistType	ImageKeywordlistType;
+  typedef ImageBase::VectorType  VectorType;
+  typedef ImageBase::ImageKeywordlistType  ImageKeywordlistType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

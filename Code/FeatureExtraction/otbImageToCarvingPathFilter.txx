@@ -35,7 +35,7 @@ template <class TInputImage, class TOutputPath>
 ImageToCarvingPathFilter<TInputImage, TOutputPath>
 ::ImageToCarvingPathFilter()
 {
-	m_ForegroundValue = PixelType(255);
+  m_ForegroundValue = PixelType(255);
         m_Direction = 0;
         m_EnergyPerPix = 0.0;
 }

@@ -106,13 +106,13 @@ PointSetBasedResamplingFilter<TInputImage, TPointSet, TOutputImage>
       otbMsgDevMacro(<<"back point: "<<inputPoint<<"(inverse trasform param: "<<inverseTransform->GetParameters()<<")");
 
       if(m_Interpolator->IsInsideBuffer(inputPoint))
-	{
-	  outputIt.Set(m_Interpolator->Evaluate(inputPoint));
-	}
+  {
+    outputIt.Set(m_Interpolator->Evaluate(inputPoint));
+  }
       else
-	{
-	  outputIt.Set(m_DefaultValue);
-	}
+  {
+    outputIt.Set(m_DefaultValue);
+  }
     }
 }
 /**
@@ -142,28 +142,28 @@ PointSetBasedResamplingFilter<TInputImage, TPointSet, TOutputImage>
     {
       // If the point has a sufficient score
       if(vcl_abs(itData.Value()[0])>m_MetricThreshold)
-	{
-	  ParametersType tmpParameters(m_Transform->GetNumberOfParameters());
-	  PointType inputPoint, outputPoint;
+  {
+    ParametersType tmpParameters(m_Transform->GetNumberOfParameters());
+    PointType inputPoint, outputPoint;
 
-	  for(unsigned int i = 0; i<m_Transform->GetNumberOfParameters();++i)
-	    {
-	      tmpParameters[i]=itData.Value()[i+1];
-	    }
-	  inputPoint[0] = it.Value()[0];
-	  inputPoint[1] = it.Value()[1];
+    for(unsigned int i = 0; i<m_Transform->GetNumberOfParameters();++i)
+      {
+        tmpParameters[i]=itData.Value()[i+1];
+      }
+    inputPoint[0] = it.Value()[0];
+    inputPoint[1] = it.Value()[1];
 
-	  m_Transform->SetParameters(tmpParameters);
-	  outputPoint = m_Transform->TransformPoint(inputPoint);
-	  // compute the distance to current point
-	  double d = vcl_pow(outputPoint[0]-indexPoint[0],2) + vcl_pow(outputPoint[1]-indexPoint[1],2);
+    m_Transform->SetParameters(tmpParameters);
+    outputPoint = m_Transform->TransformPoint(inputPoint);
+    // compute the distance to current point
+    double d = vcl_pow(outputPoint[0]-indexPoint[0],2) + vcl_pow(outputPoint[1]-indexPoint[1],2);
 
-	  if(distance<0||distance>d)
-	    {
-	      distance = d;
-	      parameters = tmpParameters;
-	    }
-	}
+    if(distance<0||distance>d)
+      {
+        distance = d;
+        parameters = tmpParameters;
+      }
+  }
     }
   return parameters;
 }

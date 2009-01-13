@@ -63,16 +63,16 @@ class ITK_EXPORT MRFSamplerRandom: public MRFSampler< TInput1, TInput2>
 
     inline int Compute( const InputImageNeighborhoodIterator & itData, const LabelledImageNeighborhoodIterator & itRegul)
       {
-	this->m_EnergyBefore = this->m_EnergyFidelity->GetValue(itData, itRegul.GetCenterPixel());
-	this->m_EnergyBefore += this->m_Lambda
-	                              * this->m_EnergyRegularization->GetValue(itRegul, itRegul.GetCenterPixel());
+  this->m_EnergyBefore = this->m_EnergyFidelity->GetValue(itData, itRegul.GetCenterPixel());
+  this->m_EnergyBefore += this->m_Lambda
+                                * this->m_EnergyRegularization->GetValue(itRegul, itRegul.GetCenterPixel());
 
-	this->m_Value = static_cast<LabelledImagePixelType>(m_Generator->GetIntegerVariate() % this->m_NumberOfClasses);
-	this->m_EnergyAfter = this->m_EnergyFidelity->GetValue(itData, this->m_Value);
-	this->m_EnergyAfter +=  this->m_Lambda * this->m_EnergyRegularization->GetValue(itRegul, this->m_Value);
-	this->m_DeltaEnergy=  this->m_EnergyAfter - this->m_EnergyBefore;
+  this->m_Value = static_cast<LabelledImagePixelType>(m_Generator->GetIntegerVariate() % this->m_NumberOfClasses);
+  this->m_EnergyAfter = this->m_EnergyFidelity->GetValue(itData, this->m_Value);
+  this->m_EnergyAfter +=  this->m_Lambda * this->m_EnergyRegularization->GetValue(itRegul, this->m_Value);
+  this->m_DeltaEnergy=  this->m_EnergyAfter - this->m_EnergyBefore;
 
-	return 0;
+  return 0;
       }
 
     /** Methods to cancel random effects.*/
@@ -83,8 +83,8 @@ class ITK_EXPORT MRFSamplerRandom: public MRFSampler< TInput1, TInput2>
     // The constructor and destructor.
     MRFSamplerRandom()
       {
-	m_Generator = RandomGeneratorType::New();
-	m_Generator->SetSeed();
+  m_Generator = RandomGeneratorType::New();
+  m_Generator->SetSeed();
       }
     virtual ~MRFSamplerRandom() {}
 

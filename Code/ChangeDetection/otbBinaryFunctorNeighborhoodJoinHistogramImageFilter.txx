@@ -271,9 +271,9 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOut
         typename HistogramType::MeasurementVectorType sample;
         sample[0] = ti1.Get();
         sample[1] = ti2.Get();
-	if(sample[0]!=itk::NumericTraits<Input1ImagePixelType>::Zero &&
-	   sample[1]!=itk::NumericTraits<Input2ImagePixelType>::Zero)
-	  histogram->IncreaseFrequency(sample, 1);
+  if(sample[0]!=itk::NumericTraits<Input1ImagePixelType>::Zero &&
+     sample[1]!=itk::NumericTraits<Input2ImagePixelType>::Zero)
+    histogram->IncreaseFrequency(sample, 1);
 
     ++ti1;
     ++ti2;

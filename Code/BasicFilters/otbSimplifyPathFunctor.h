@@ -75,12 +75,12 @@ namespace otb
 
         OutputPathPointerType newPath = OutputPathType::New();
         newPath->Initialize();
-	// Getting the verices list of the current input paths
+  // Getting the verices list of the current input paths
         VertexListConstPointerType  vertexList = input->GetVertexList();
         VertexListConstIteratorType beginIt = vertexList->Begin();
         VertexListConstIteratorType beforeTheEndIt = --(vertexList->End());
 
-	// Add the first vertex
+  // Add the first vertex
         newPath->AddVertex(beginIt.Value());
 
         while ( beginIt != beforeTheEndIt)

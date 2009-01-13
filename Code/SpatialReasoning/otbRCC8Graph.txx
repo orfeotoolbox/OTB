@@ -52,9 +52,9 @@ namespace otb
   {
     for(unsigned int i = boost::num_vertices(m_Graph); i<=num;i++)
       {
-	VertexDescriptorType id = boost::add_vertex(m_Graph);
-	VertexPointerType vertex = VertexType::New();
-	m_Graph[id]=vertex;
+  VertexDescriptorType id = boost::add_vertex(m_Graph);
+  VertexPointerType vertex = VertexType::New();
+  m_Graph[id]=vertex;
       }
   }
   /**
@@ -69,8 +69,8 @@ namespace otb
   {
     if(index>=m_NumberOfVertices)
       {
-	this->Initialize(index);
-	m_NumberOfVertices = index+1;
+  this->Initialize(index);
+  m_NumberOfVertices = index+1;
       }
     VertexDescriptorType v = *boost::vertices(m_Graph).first;
     m_Graph[v+index]= vertex;

@@ -85,16 +85,16 @@ namespace otb
     this->SetZone(zone);
   }
 
-	/*template <InverseOrForwardTransformationEnum transform>
+  /*template <InverseOrForwardTransformationEnum transform>
   void UtmMapProjection<transform>
   ::SetZoneAndHemisphereFromCartoPoint(const OutputPointType &cartoPoint)
   {
   InputPointType geoPoint;
 
-		// TODO : Tester que la projection est bien inverse !!!
+    // TODO : Tester que la projection est bien inverse !!!
   geoPoint = this->TransformPoint(cartoPoint);
   this->SetZoneAndHemisphereFromGeoPoint(geoPoint);
-}	*/
+}  */
 
 
   ///\return the zone
@@ -125,18 +125,18 @@ namespace otb
   ::GetZoneFromGeoPoint(const InputPointType& geoPoint)
   {
     double longitude = geoPoint[0];
-		//double latitude = geoPoint[1];
+    //double latitude = geoPoint[1];
     int zone;
 
-		// Each UTM zone is a narrow zone of 6 degrees in width
-		// Zone 31 is between 0 and 6 degrees (lon)
-		// There is 60 zones in each hemisphere
+    // Each UTM zone is a narrow zone of 6 degrees in width
+    // Zone 31 is between 0 and 6 degrees (lon)
+    // There is 60 zones in each hemisphere
     zone = ((static_cast<int>(floor(longitude/6))+30)%60+60)%60+1 ;
 
     return zone;
   }
 
-/*	template <InverseOrForwardTransformationEnum transform>
+/*  template <InverseOrForwardTransformationEnum transform>
   void UtmMapProjection<transform>
   ::Initialize(const InputPointType& middlePoint)
   {

@@ -219,16 +219,16 @@ DifferenceImageFilter<TInputImage, TOutputImage>
 
       if(isDifferent)
       {
-	    // Store the minimum difference value in the output image.
+      // Store the minimum difference value in the output image.
         out.Set(minimumDifference);
 
-	    // Update difference image statistics.
+      // Update difference image statistics.
         m_ThreadDifferenceSum[threadId] += minimumDifference;
         m_ThreadNumberOfPixels[threadId]++;
       }
       else
       {
-	    // Difference is below threshold.
+      // Difference is below threshold.
         out.Set(itk::NumericTraits<OutputPixelType>::Zero(minimumDifference));
       }
 

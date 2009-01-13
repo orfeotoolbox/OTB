@@ -72,9 +72,9 @@ KMeansImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMa
       m_CentroidsMap[label]=new_centroid;
 
       for(unsigned int i=0;i<MaxSampleDimension;++i)
-	{
-	  m_CentroidsMap[label][i] = static_cast<ValueType>(m_Centroids[MaxSampleDimension*(static_cast<unsigned int>(label)-1)+i]);
-	}
+  {
+    m_CentroidsMap[label][i] = static_cast<ValueType>(m_Centroids[MaxSampleDimension*(static_cast<unsigned int>(label)-1)+i]);
+  }
     }
 }
 
@@ -102,7 +102,7 @@ KMeansImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMa
     }
   unsigned int maxDimension = SampleType::Dimension;
   unsigned int sampleSize = std::min(inputPtr->GetNumberOfComponentsPerPixel(),
-				    maxDimension);
+            maxDimension);
 
   bool validPoint = true;
 
@@ -121,34 +121,34 @@ KMeansImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMa
    while(!outIt.IsAtEnd()&&(!inIt.IsAtEnd()))
      {
        if(inputMaskPtr)
-	 {
-	   validPoint = maskIt.Get()>0;
-	   ++maskIt;
-	 }
+   {
+     validPoint = maskIt.Get()>0;
+     ++maskIt;
+   }
        if(validPoint)
-	 {
-	   LabelType label =1;
-	   LabelType current_label =1;
-	   SampleType pixel;
-	   pixel.Fill(0);
-	   for(unsigned int i=0;i<sampleSize;++i)
-	     {
-	       pixel[i]=inIt.Get()[i];
-	     }
+   {
+     LabelType label =1;
+     LabelType current_label =1;
+     SampleType pixel;
+     pixel.Fill(0);
+     for(unsigned int i=0;i<sampleSize;++i)
+       {
+         pixel[i]=inIt.Get()[i];
+       }
 
-	   double current_distance = distance->Evaluate(pixel,m_CentroidsMap[label]);
+     double current_distance = distance->Evaluate(pixel,m_CentroidsMap[label]);
 
-	   for(label=2;label<=static_cast<LabelType>(m_CentroidsMap.size());++label)
-	     {
-	       double tmp_dist = distance->Evaluate(pixel,m_CentroidsMap[label]);
-	       if(tmp_dist<current_distance)
-		 {
-		   current_label = label;
-		   current_distance = tmp_dist;
-		 }
-	     }
-	   outIt.Set(current_label);
-	 }
+     for(label=2;label<=static_cast<LabelType>(m_CentroidsMap.size());++label)
+       {
+         double tmp_dist = distance->Evaluate(pixel,m_CentroidsMap[label]);
+         if(tmp_dist<current_distance)
+     {
+       current_label = label;
+       current_distance = tmp_dist;
+     }
+       }
+     outIt.Set(current_label);
+   }
        ++outIt;
        ++inIt;
      }

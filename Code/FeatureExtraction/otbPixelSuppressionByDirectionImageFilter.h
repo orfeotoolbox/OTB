@@ -51,13 +51,13 @@ template <class TInputImage, class TOutputImage>
 class ITK_EXPORT PixelSuppressionByDirectionImageFilter :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
-  /** 	Extract input and output image dimensions */
-  itkStaticConstMacro(		InputImageDimension,
-  				unsigned int,
-                      		TInputImage::ImageDimension);
-  itkStaticConstMacro(		OutputImageDimension,
-  				unsigned int,
-                      		TOutputImage::ImageDimension);
+  /**   Extract input and output image dimensions */
+  itkStaticConstMacro(    InputImageDimension,
+          unsigned int,
+                          TInputImage::ImageDimension);
+  itkStaticConstMacro(    OutputImageDimension,
+          unsigned int,
+                          TOutputImage::ImageDimension);
 
 
   typedef TInputImage InputImageType;

@@ -124,7 +124,7 @@ protected:
    * \param value  The value of the edge.
    */
   void WriteEdge(std::ofstream& of,VertexDescriptorType source,
-		 VertexDescriptorType target, RCC8ValueType value);
+     VertexDescriptorType target, RCC8ValueType value);
   /**
    * Write a vertex to file.
    * \param of The output file stream.
@@ -132,7 +132,7 @@ protected:
    * \param vertex The pointer to the vertex object.
   */
   void WriteVertex(std::ofstream& of, VertexDescriptorType index,
-		   VertexPointerType vertex);
+       VertexPointerType vertex);
   /**
    * PrintSelf method
    */

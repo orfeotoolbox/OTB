@@ -25,8 +25,8 @@ namespace otb
 
 FltkFilterWatcher
 ::FltkFilterWatcher(itk::ProcessObject* process,
-		    int x, int y, int w, int h,
-		    const char *comment)
+        int x, int y, int w, int h,
+        const char *comment)
   : FilterWatcherBase(process, comment)
 {
   m_Window = new Fl_Window(x,y,w+10,h+10);

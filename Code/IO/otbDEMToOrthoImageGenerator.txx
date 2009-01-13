@@ -115,12 +115,12 @@ namespace otb
       // OSSIM has chosen to change this default value in OSSIM_DBL_NAN (-4.5036e15).
       if (!ossim::isnan(height))
       {
-		    // Fill the image
+        // Fill the image
         DEMImage->SetPixel(currentindex, static_cast<PixelType>(height) );
       }
       else
       {
-	  	  // Back to the MNT default value
+        // Back to the MNT default value
         DEMImage->SetPixel(currentindex, m_DefaultUnknownValue);
       }
     }

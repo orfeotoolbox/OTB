@@ -83,13 +83,13 @@ public:
         );
 
   static void ComputeEnvironmentalContribution(const double diffuseTransmittanceForRayleighScattering,
-					       const double diffuseTransmittanceForAerosolScattering,
-					       const double radiusInKilometers,
-					       const double altitude,
-					       const double cosineOfViewingAngle,
-					       double & rayleighEstimation,
-					       double & aerosolEstimation,
-					       double & globalEstimation);
+                 const double diffuseTransmittanceForAerosolScattering,
+                 const double radiusInKilometers,
+                 const double altitude,
+                 const double cosineOfViewingAngle,
+                 double & rayleighEstimation,
+                 double & aerosolEstimation,
+                 double & globalEstimation);
 };
 
 } // namespace otb

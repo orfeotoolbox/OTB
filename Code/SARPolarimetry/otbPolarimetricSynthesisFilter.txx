@@ -176,7 +176,7 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
   switch(m_ArchitectureType->GetArchitectureType())
     {
       case HH_HV :
-      	// Forcing KhiI=0 PsiI=0
+        // Forcing KhiI=0 PsiI=0
         this->SetKhiI(0);
         this->SetPsiI(0);
         break;

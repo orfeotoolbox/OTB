@@ -52,8 +52,8 @@ namespace otb
  * \sa CzihoSOMNeighborhoodBehaviorFunctor
  */
 template < class TListSample, class TMap,
-		 class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
-		 class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor >
+     class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
+     class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor >
 class ITK_EXPORT SOM
 : public itk::ImageSource<TMap>
 {
@@ -108,10 +108,10 @@ class ITK_EXPORT SOM
   itkSetObjectMacro(ListSample,ListSampleType);
 
   void SetBetaFunctor ( const SOMLearningBehaviorFunctorType & functor ) {
-	  m_BetaFunctor = functor; }
+    m_BetaFunctor = functor; }
 
   void SetNeighborhoodSizeFunctor ( const SOMNeighborhoodBehaviorFunctorType & functor ) {
-	  m_NeighborhoodSizeFunctor = functor; }
+    m_NeighborhoodSizeFunctor = functor; }
 
   protected:
   /** Constructor */

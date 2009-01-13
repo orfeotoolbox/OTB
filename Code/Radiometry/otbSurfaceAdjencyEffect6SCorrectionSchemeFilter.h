@@ -40,70 +40,70 @@ namespace otb
        *  \ingroup Functor
        */
       template <class TNeighIter, class TOutput>
-	class ComputeNeighborhoodContributionFunctor
-	{
-	public:
-	  ComputeNeighborhoodContributionFunctor() {};
-	  ~ComputeNeighborhoodContributionFunctor() {};
+  class ComputeNeighborhoodContributionFunctor
+  {
+  public:
+    ComputeNeighborhoodContributionFunctor() {};
+    ~ComputeNeighborhoodContributionFunctor() {};
 
-	  typedef itk::VariableSizeMatrix<double>             WeightingMatrixType;
-	  typedef typename std::vector<WeightingMatrixType>   WeightingValuesContainerType;
-	  typedef typename TOutput::RealValueType             RealValueType;
-	  typedef std::vector<double>                         DoubleContainerType;
+    typedef itk::VariableSizeMatrix<double>             WeightingMatrixType;
+    typedef typename std::vector<WeightingMatrixType>   WeightingValuesContainerType;
+    typedef typename TOutput::RealValueType             RealValueType;
+    typedef std::vector<double>                         DoubleContainerType;
 
-	  void SetWeightingValues(const WeightingValuesContainerType & cont){ m_WeightingValues = cont; };
-	  void SetUpwardTransmittanceRatio(DoubleContainerType upwardTransmittanceRatio){ m_UpwardTransmittanceRatio = upwardTransmittanceRatio;};
-	  void SetDiffuseRatio(DoubleContainerType diffuseRatio){ m_DiffuseRatio = diffuseRatio;};
-	  WeightingValuesContainerType GetWeightingValues(){ return m_WeightingValues;};
-	  DoubleContainerType GetUpwardTransmittanceRatio(){ return m_UpwardTransmittanceRatio;};
-	  DoubleContainerType GetDiffuseRatio(){ return m_DiffuseRatio;};
+    void SetWeightingValues(const WeightingValuesContainerType & cont){ m_WeightingValues = cont; };
+    void SetUpwardTransmittanceRatio(DoubleContainerType upwardTransmittanceRatio){ m_UpwardTransmittanceRatio = upwardTransmittanceRatio;};
+    void SetDiffuseRatio(DoubleContainerType diffuseRatio){ m_DiffuseRatio = diffuseRatio;};
+    WeightingValuesContainerType GetWeightingValues(){ return m_WeightingValues;};
+    DoubleContainerType GetUpwardTransmittanceRatio(){ return m_UpwardTransmittanceRatio;};
+    DoubleContainerType GetDiffuseRatio(){ return m_DiffuseRatio;};
 
-	  inline TOutput operator()(const TNeighIter & it)
-	    {
-	      unsigned int neighborhoodSize = it.Size();
-	      double contribution = 0.;
-	      TOutput outPixel;
-	      outPixel.SetSize(it.GetCenterPixel().Size());
+    inline TOutput operator()(const TNeighIter & it)
+      {
+        unsigned int neighborhoodSize = it.Size();
+        double contribution = 0.;
+        TOutput outPixel;
+        outPixel.SetSize(it.GetCenterPixel().Size());
 
-	      // Loop over each component
-	      for (unsigned int j=0; j<outPixel.GetSize(); j++)
-		{
-		  contribution = 0;
-		  // Load the current channel ponderation value matrix
-		  WeightingMatrixType TempChannelWeighting = m_WeightingValues[j];
-		  // Loop over the neighborhood
-		  for (unsigned int i = 0; i < neighborhoodSize; ++i)
-		    {
-		      // Current neighborhood pixel index calculation
-		      unsigned int RowIdx = 0;
-		      unsigned int ColIdx = 0;
-		      RowIdx = i/TempChannelWeighting.Cols();
-		      if(RowIdx != 0)
-			{
-			  ColIdx = (i+1)-RowIdx*TempChannelWeighting.Cols()-1;
-			}
-		      else
-			{
-			  ColIdx = i;
-			}
-		      // Extract the current neighborhood pixel ponderation
-		      double idVal = TempChannelWeighting(RowIdx, ColIdx);
-		      // Extract the current neighborhood pixel value
-		      TOutput tempPix = it.GetPixel(i);
+        // Loop over each component
+        for (unsigned int j=0; j<outPixel.GetSize(); j++)
+    {
+      contribution = 0;
+      // Load the current channel ponderation value matrix
+      WeightingMatrixType TempChannelWeighting = m_WeightingValues[j];
+      // Loop over the neighborhood
+      for (unsigned int i = 0; i < neighborhoodSize; ++i)
+        {
+          // Current neighborhood pixel index calculation
+          unsigned int RowIdx = 0;
+          unsigned int ColIdx = 0;
+          RowIdx = i/TempChannelWeighting.Cols();
+          if(RowIdx != 0)
+      {
+        ColIdx = (i+1)-RowIdx*TempChannelWeighting.Cols()-1;
+      }
+          else
+      {
+        ColIdx = i;
+      }
+          // Extract the current neighborhood pixel ponderation
+          double idVal = TempChannelWeighting(RowIdx, ColIdx);
+          // Extract the current neighborhood pixel value
+          TOutput tempPix = it.GetPixel(i);
 
-		      contribution += static_cast<double>( tempPix[j] )*idVal;
+          contribution += static_cast<double>( tempPix[j] )*idVal;
 
-		    }
-		  outPixel[j] = static_cast<RealValueType>(it.GetCenterPixel()[j])*m_UpwardTransmittanceRatio[j] + contribution*m_DiffuseRatio[j];
-		}
-	      return outPixel;
-	    }
+        }
+      outPixel[j] = static_cast<RealValueType>(it.GetCenterPixel()[j])*m_UpwardTransmittanceRatio[j] + contribution*m_DiffuseRatio[j];
+    }
+        return outPixel;
+      }
 
-	private:
-	  WeightingValuesContainerType m_WeightingValues;
-	  DoubleContainerType m_UpwardTransmittanceRatio;
-	  DoubleContainerType m_DiffuseRatio;
-	};
+  private:
+    WeightingValuesContainerType m_WeightingValues;
+    DoubleContainerType m_UpwardTransmittanceRatio;
+    DoubleContainerType m_DiffuseRatio;
+  };
 
     }
 
@@ -143,7 +143,7 @@ public:
   /** return class name. */
   itkTypeMacro(SurfaceAdjencyEffect6SCorrectionSchemeFilter, UnaryFunctorNeighborhoodImageFilter);
 
-/** 	Extract input and output images dimensions.*/
+/**   Extract input and output images dimensions.*/
   itkStaticConstMacro( InputImageDimension, unsigned int, TInputImage::ImageDimension);
   itkStaticConstMacro( OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 

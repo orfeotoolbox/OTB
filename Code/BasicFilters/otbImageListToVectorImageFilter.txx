@@ -38,11 +38,11 @@ ImageListToVectorImageFilter<TImageList,TVectorImage>
   if(this->GetOutput())
     {
       if(this->GetInput()->Size()>0)
-	{
-	  this->GetOutput()->CopyInformation(this->GetInput()->GetNthElement(0));
-	  this->GetOutput()->SetNumberOfComponentsPerPixel(this->GetInput()->Size());
-	  this->GetOutput()->SetLargestPossibleRegion(this->GetInput()->GetNthElement(0)->GetLargestPossibleRegion());
-	}
+  {
+    this->GetOutput()->CopyInformation(this->GetInput()->GetNthElement(0));
+    this->GetOutput()->SetNumberOfComponentsPerPixel(this->GetInput()->Size());
+    this->GetOutput()->SetLargestPossibleRegion(this->GetInput()->GetNthElement(0)->GetLargestPossibleRegion());
+  }
     }
 }
 /**
@@ -110,15 +110,15 @@ ImageListToVectorImageFilter<TImageList,TVectorImage>
       unsigned int counter = 0;
       // for each input iterator, fill the right component
       for(typename InputIteratorListType::iterator it = inputIteratorList.begin();
-	  it != inputIteratorList.end();++it)
-	{
-	   if(!it->IsAtEnd())
-	     {
-	      pixel[counter]=static_cast<typename OutputVectorImageType::InternalPixelType>(it->Get());
-	      ++(*it);
-	      ++counter;
-	     }
-	}
+    it != inputIteratorList.end();++it)
+  {
+     if(!it->IsAtEnd())
+       {
+        pixel[counter]=static_cast<typename OutputVectorImageType::InternalPixelType>(it->Get());
+        ++(*it);
+        ++counter;
+       }
+  }
       outputIt.Set(pixel);
       progress.CompletedPixel();
       ++outputIt;

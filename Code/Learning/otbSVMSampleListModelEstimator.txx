@@ -29,7 +29,7 @@ template<class TInputSampleList,
          class TTrainingSampleList>
 SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList>
 ::SVMSampleListModelEstimator(void):  SVMModelEstimator<ITK_TYPENAME TInputSampleList::MeasurementType,
-							ITK_TYPENAME TTrainingSampleList::MeasurementType>()
+              ITK_TYPENAME TTrainingSampleList::MeasurementType>()
 
 {
 

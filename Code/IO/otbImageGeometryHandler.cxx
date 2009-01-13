@@ -63,11 +63,11 @@ ImageGeometryHandler::~ImageGeometryHandler()
 //Encapsulation de la methode "open"
 void ImageGeometryHandler::SetFileName(char *src)
 {
-	otbDebugMacro(<<"Creation handler... ");
- 	handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(src));
+  otbDebugMacro(<<"Creation handler... ");
+   handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(src));
     if(!handler)
     {
-		itkExceptionMacro(<< "Unable to open input image: " << src);
+    itkExceptionMacro(<< "Unable to open input image: " << src);
     }
 }
 

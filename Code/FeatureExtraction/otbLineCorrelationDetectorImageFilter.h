@@ -32,19 +32,19 @@ namespace otb
    */
 
 template <class TInputImage,
-	  class TOutputImage,
+    class TOutputImage,
           class TOutputImageDirection = TOutputImage,
-	  class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
+    class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
 class ITK_EXPORT LineCorrelationDetectorImageFilter :  public LineDetectorImageFilterBase< TInputImage, TOutputImage, TOutputImageDirection, TInterpolator >
 {
 public:
-  /** 	Extract dimensions as well of the images of entry of exit. */
-  itkStaticConstMacro(		InputImageDimension,
-  				unsigned int,
-                      		TInputImage::ImageDimension);
-  itkStaticConstMacro(		OutputImageDimension,
-  				unsigned int,
-                      		TOutputImage::ImageDimension);
+  /**   Extract dimensions as well of the images of entry of exit. */
+  itkStaticConstMacro(    InputImageDimension,
+          unsigned int,
+                          TInputImage::ImageDimension);
+  itkStaticConstMacro(    OutputImageDimension,
+          unsigned int,
+                          TOutputImage::ImageDimension);
 
   /** typedef for the classes standards. */
   typedef LineCorrelationDetectorImageFilter Self;
@@ -58,9 +58,9 @@ public:
   /** Return the name of the class. */
   itkTypeMacro(LineCorrelationDetectorImageFilter, LineDetectorImageFilterBase);
 
-  typedef typename Superclass::InputImageType 			InputImageType;
-  typedef typename Superclass::OutputImageType			OutputImageType;
-  typedef typename Superclass::OutputImageDirectionType 	OutputImageDirectionType;
+  typedef typename Superclass::InputImageType       InputImageType;
+  typedef typename Superclass::OutputImageType      OutputImageType;
+  typedef typename Superclass::OutputImageDirectionType   OutputImageDirectionType;
   typedef typename Superclass::InterpolatorType                 InterpolatorType;
 
   /** Typedefs to describe and access Interpolator */

@@ -32,7 +32,7 @@ namespace otb
   /** \class CompositeTransform
 
   * \brief Class which compose two itk::Transform to obtain one itk::Transform
-  * 	 T1    T2	    T3
+  *    T1    T2      T3
   * (x,y) -> (x',y') -> (x'',y'')   =>    (x,y) -> (x'',y'')
   *
    *
@@ -63,14 +63,14 @@ namespace otb
       /** Standard class typedefs */
       typedef itk::Transform< TScalarType,
       NInputDimensions,
-      NOutputDimensions >  			 Superclass;
+      NOutputDimensions >         Superclass;
       typedef CompositeTransform                 Self;
       typedef itk::SmartPointer<Self>            Pointer;
       typedef itk::SmartPointer<const Self>      ConstPointer;
 
-      typedef TFirstTransform			 FirstTransformType;
+      typedef TFirstTransform       FirstTransformType;
       typedef typename TFirstTransform::Pointer  FirstTransformPointerType;
-      typedef TSecondTransform			 SecondTransformType;
+      typedef TSecondTransform       SecondTransformType;
       typedef typename TSecondTransform::Pointer SecondTransformPointerType;
 
       /** Standard vector type for this class. */
@@ -90,7 +90,7 @@ namespace otb
       typedef typename TFirstTransform::OutputPointType FirstTransformOutputPointType;
       /** TSecondTransform::InputPointType is purposely not defined
        *  It contrains user to choose First Transform Output compatible
-       *	with Second Transform Input */
+       *  with Second Transform Input */
       typedef typename Superclass::OutputPointType      SecondTransformOutputPointType;
 
       /** Method for creation through the object factory. */

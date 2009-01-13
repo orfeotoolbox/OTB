@@ -46,14 +46,14 @@ namespace otb
   class ITK_EXPORT DEMHandler: public itk::Object
     {
       public :
-	/** Standard class typedefs. */
-	typedef itk::Indent														Indent;
+  /** Standard class typedefs. */
+  typedef itk::Indent                            Indent;
       typedef DEMHandler                            Self;
-      typedef itk::Object														Superclass;
+      typedef itk::Object                            Superclass;
       typedef itk::SmartPointer<Self>               Pointer;
       typedef itk::SmartPointer<const Self>         ConstPointer;
 
-      typedef itk::Point<double, 2> 		PointType;
+      typedef itk::Point<double, 2>     PointType;
 
       /** Method for creation through the object factory. */
       itkNewMacro(Self);

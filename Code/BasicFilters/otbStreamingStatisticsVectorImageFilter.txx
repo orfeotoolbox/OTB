@@ -42,8 +42,8 @@ namespace otb {
 
     for (int i=1; i < 3; ++i)
       {
-	typename PixelObjectType::Pointer output = static_cast<PixelObjectType*>(this->MakeOutput(i).GetPointer());
-	this->itk::ProcessObject::SetNthOutput(i, output.GetPointer());
+  typename PixelObjectType::Pointer output = static_cast<PixelObjectType*>(this->MakeOutput(i).GetPointer());
+  this->itk::ProcessObject::SetNthOutput(i, output.GetPointer());
       }
 
     // allocate the data objects for the outputs which are
@@ -51,8 +51,8 @@ namespace otb {
 
     for (int i=3; i < 5; ++i)
       {
-	typename RealPixelObjectType::Pointer output = static_cast<RealPixelObjectType*>(this->MakeOutput(i).GetPointer());
-	this->itk::ProcessObject::SetNthOutput(i, output.GetPointer());
+  typename RealPixelObjectType::Pointer output = static_cast<RealPixelObjectType*>(this->MakeOutput(i).GetPointer());
+  this->itk::ProcessObject::SetNthOutput(i, output.GetPointer());
       }
 
     // allocate the data objects for the outputs which are
@@ -69,23 +69,23 @@ namespace otb {
     switch (output)
       {
       case 0:
-	return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
-	break;
+  return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
+  break;
       case 1:
       case 2:
-	return static_cast<itk::DataObject*>(PixelObjectType::New().GetPointer());
-	break;
+  return static_cast<itk::DataObject*>(PixelObjectType::New().GetPointer());
+  break;
       case 3:
       case 4:
-	return static_cast<itk::DataObject*>(RealPixelObjectType::New().GetPointer());
-	break;
+  return static_cast<itk::DataObject*>(RealPixelObjectType::New().GetPointer());
+  break;
       case 5:
-	return static_cast<itk::DataObject*>(MatrixObjectType::New().GetPointer());
-	break;
+  return static_cast<itk::DataObject*>(MatrixObjectType::New().GetPointer());
+  break;
       default:
-	// might as well make an image
-	return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
-	break;
+  // might as well make an image
+  return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
+  break;
       }
 
   }
@@ -182,13 +182,13 @@ namespace otb {
     Superclass::GenerateOutputInformation();
     if ( this->GetInput() )
       {
-	this->GetOutput()->CopyInformation(this->GetInput());
-	this->GetOutput()->SetLargestPossibleRegion(this->GetInput()->GetLargestPossibleRegion());
+  this->GetOutput()->CopyInformation(this->GetInput());
+  this->GetOutput()->SetLargestPossibleRegion(this->GetInput()->GetLargestPossibleRegion());
 
-	if(this->GetOutput()->GetRequestedRegion().GetNumberOfPixels()==0)
-	  {
-	    this->GetOutput()->SetRequestedRegion(this->GetOutput()->GetLargestPossibleRegion());
-	  }
+  if(this->GetOutput()->GetRequestedRegion().GetNumberOfPixels()==0)
+    {
+      this->GetOutput()->SetRequestedRegion(this->GetOutput()->GetLargestPossibleRegion());
+    }
       }
   }
 
@@ -290,45 +290,45 @@ namespace otb {
     // sum of squares
     for( i = 0; i < numberOfThreads; i++)
       {
-	count += m_Count[i];
-	/** TODO
-	 *  To modify using + method operator. If we use it now -> exceptionmacro (no GetClassName...)
-	 * crossedMatrix += m_XX[i];
-	 **/
-	if( (m_XX[i].Rows() != crossedMatrix.Rows()) || (m_XX[i].Cols() != crossedMatrix.Cols()))
-	  {
-	    itkExceptionMacro( << "Matrix with size (" << m_XX[i].Rows() << "," <<
-			       m_XX[i].Cols() << ") cannot be subtracted from matrix with size (" <<
-			       crossedMatrix.Rows() << "," << crossedMatrix.Cols() );
-	  }
+  count += m_Count[i];
+  /** TODO
+   *  To modify using + method operator. If we use it now -> exceptionmacro (no GetClassName...)
+   * crossedMatrix += m_XX[i];
+   **/
+  if( (m_XX[i].Rows() != crossedMatrix.Rows()) || (m_XX[i].Cols() != crossedMatrix.Cols()))
+    {
+      itkExceptionMacro( << "Matrix with size (" << m_XX[i].Rows() << "," <<
+             m_XX[i].Cols() << ") cannot be subtracted from matrix with size (" <<
+             crossedMatrix.Rows() << "," << crossedMatrix.Cols() );
+    }
 
-	for( unsigned int r=0; r<m_XX[i].Rows(); r++)
-	  {
-	    for( unsigned int c=0; c<m_XX[i].Cols(); c++ )
-	      {
-		crossedMatrix(r,c) += m_XX[i](r,c);
-	      }
-	  }
-	//**** END TODO ****
+  for( unsigned int r=0; r<m_XX[i].Rows(); r++)
+    {
+      for( unsigned int c=0; c<m_XX[i].Cols(); c++ )
+        {
+    crossedMatrix(r,c) += m_XX[i](r,c);
+        }
+    }
+  //**** END TODO ****
 
-	for (unsigned int j=0; j<numberOfComponent; j++)
-	  {
-	    sumVector[j] += m_ThreadSum[i][j];
-	    if (m_ThreadMin[i][j] < minimumVector[j])
-	      {
-		minimumVector[j] = m_ThreadMin[i][j];
-	      }
-	    if (m_ThreadMax[i][j] > maximumVector[j])
-	      {
-		maximumVector[j] = m_ThreadMax[i][j];
-	      }
-	  }
+  for (unsigned int j=0; j<numberOfComponent; j++)
+    {
+      sumVector[j] += m_ThreadSum[i][j];
+      if (m_ThreadMin[i][j] < minimumVector[j])
+        {
+    minimumVector[j] = m_ThreadMin[i][j];
+        }
+      if (m_ThreadMax[i][j] > maximumVector[j])
+        {
+    maximumVector[j] = m_ThreadMax[i][j];
+        }
+    }
       } // end for( i = 0; i < numberOfThreads; i++)
 
     for (unsigned int j=0; j<numberOfComponent; j++)
       {
-	// compute statistics
-	meanVector[j] = sumVector[j] / static_cast<RealType>(count);
+  // compute statistics
+  meanVector[j] = sumVector[j] / static_cast<RealType>(count);
       }
 
     // Compute Matrix Covariance
@@ -337,7 +337,7 @@ namespace otb {
     pixelSumMatrix.Fill(itk::NumericTraits<RealType>::Zero);
     for( unsigned int j = 0; j < numberOfComponent; j++)
       {
-	pixelSumMatrix(j, 0) = sumVector[j];
+  pixelSumMatrix(j, 0) = sumVector[j];
       }
 
     MatrixType covMatrix, covMatrixTemp, tempTranspose;
@@ -355,17 +355,17 @@ namespace otb {
      **/
     if( (covMatrix.Rows() != covMatrixTemp.Rows()) || (covMatrix.Cols() != covMatrixTemp.Cols()))
       {
-	itkExceptionMacro( << "Matrix with size (" << covMatrix.Rows() << "," <<
-			   covMatrix.Cols() << ") cannot be subtracted from matrix with size (" <<
-			   covMatrixTemp.Rows() << "," << covMatrixTemp.Cols() );
+  itkExceptionMacro( << "Matrix with size (" << covMatrix.Rows() << "," <<
+         covMatrix.Cols() << ") cannot be subtracted from matrix with size (" <<
+         covMatrixTemp.Rows() << "," << covMatrixTemp.Cols() );
       }
 
     for( unsigned int r=0; r<covMatrix.Rows(); r++)
       {
-	for( unsigned int c=0; c<covMatrix.Cols(); c++ )
-	  {
-	    covMatrix(r,c) -= covMatrixTemp(r,c);
-	  }
+  for( unsigned int c=0; c<covMatrix.Cols(); c++ )
+    {
+      covMatrix(r,c) -= covMatrixTemp(r,c);
+    }
       }
     //**** END TODO ****/
 
@@ -407,49 +407,49 @@ namespace otb {
     // do the work
     while (!it.IsAtEnd())
       {
-	IndexType index = it.GetIndex();
-	PixelType vectorValue = it.Get();
-	for (unsigned int j=0; j<vectorValue.GetSize(); j++)
-	  {
-	    InternalPixelType value = vectorValue[j];
+  IndexType index = it.GetIndex();
+  PixelType vectorValue = it.Get();
+  for (unsigned int j=0; j<vectorValue.GetSize(); j++)
+    {
+      InternalPixelType value = vectorValue[j];
 
-	    RealType realValue = static_cast<RealType>( value );
-	    if (value < m_ThreadMin[threadId][j])
-	      {
-		m_ThreadMin[threadId][j] = value;
-	      }
-	    if (value > m_ThreadMax[threadId][j])
-	      {
-		m_ThreadMax[threadId][j] = value;
-	      }
-	    m_ThreadSum[threadId][j] += realValue;
-	    pixelVector(j, 0) = realValue;
-	  }
+      RealType realValue = static_cast<RealType>( value );
+      if (value < m_ThreadMin[threadId][j])
+        {
+    m_ThreadMin[threadId][j] = value;
+        }
+      if (value > m_ThreadMax[threadId][j])
+        {
+    m_ThreadMax[threadId][j] = value;
+        }
+      m_ThreadSum[threadId][j] += realValue;
+      pixelVector(j, 0) = realValue;
+    }
 
-	++it;
-	progress.CompletedPixel();
-	pixelTransposeVector = pixelVector.GetTranspose();
+  ++it;
+  progress.CompletedPixel();
+  pixelTransposeVector = pixelVector.GetTranspose();
         /** TODO
          *  To modify using + method operator. If we use it now -> exceptionmacro (no GetClassName...)
-	 * m_XX[threadId]+=pixelVector*pixelTransposeVector;
-	 **/
-	tempMatrix = pixelVector*pixelTransposeVector;
-	if( (m_XX[threadId].Rows() != tempMatrix.Rows()) || (m_XX[threadId].Cols() != tempMatrix.Cols()))
-	  {
-	    itkExceptionMacro( << "Matrix with size (" << m_XX[threadId].Rows() << "," <<
-			       m_XX[threadId].Cols() << ") cannot be subtracted from matrix with size (" <<
-			       tempMatrix.Rows() << "," << tempMatrix.Cols() );
-	  }
+   * m_XX[threadId]+=pixelVector*pixelTransposeVector;
+   **/
+  tempMatrix = pixelVector*pixelTransposeVector;
+  if( (m_XX[threadId].Rows() != tempMatrix.Rows()) || (m_XX[threadId].Cols() != tempMatrix.Cols()))
+    {
+      itkExceptionMacro( << "Matrix with size (" << m_XX[threadId].Rows() << "," <<
+             m_XX[threadId].Cols() << ") cannot be subtracted from matrix with size (" <<
+             tempMatrix.Rows() << "," << tempMatrix.Cols() );
+    }
 
-	for( unsigned int r=0; r<m_XX[threadId].Rows(); r++)
-	  {
-	    for( unsigned int c=0; c<m_XX[threadId].Cols(); c++ )
-	      {
-		m_XX[threadId](r,c) += tempMatrix(r,c);
-	      }
-	  }
-	//**** END TODO ****
-	m_Count[threadId]++;
+  for( unsigned int r=0; r<m_XX[threadId].Rows(); r++)
+    {
+      for( unsigned int c=0; c<m_XX[threadId].Cols(); c++ )
+        {
+    m_XX[threadId](r,c) += tempMatrix(r,c);
+        }
+    }
+  //**** END TODO ****
+  m_Count[threadId]++;
       }
   }
 

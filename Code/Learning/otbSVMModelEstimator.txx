@@ -38,18 +38,18 @@ m_NumberOfClasses( 0 )
         // default values
 
         m_Model->SetSVMType(C_SVC);
-	m_Model->SetKernelType(LINEAR);
-	m_Model->SetPolynomialKernelDegree(3);
-	m_Model->SetKernelGamma(0.);	// 1/k
-	m_Model->SetKernelCoef0(0);
+  m_Model->SetKernelType(LINEAR);
+  m_Model->SetPolynomialKernelDegree(3);
+  m_Model->SetKernelGamma(0.);  // 1/k
+  m_Model->SetKernelCoef0(0);
         m_Model->SetKernelFunctor(NULL);
-	m_Model->SetNu(0.5);
-	m_Model->SetCacheSize(40);
-	m_Model->SetC(1);
-	m_Model->SetEpsilon(1e-3);
-	m_Model->SetP(0.1);
-	m_Model->DoShrinking(1);
-	m_Model->DoProbabilityEstimates(true);
+  m_Model->SetNu(0.5);
+  m_Model->SetCacheSize(40);
+  m_Model->SetC(1);
+  m_Model->SetEpsilon(1e-3);
+  m_Model->SetP(0.1);
+  m_Model->DoShrinking(1);
+  m_Model->DoProbabilityEstimates(true);
 
 }
 
@@ -99,14 +99,14 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
   if(m_Model->GetSVMType() == ONE_CLASS)
     {
       if(m_NumberOfClasses>2)
-	{
-	  itkExceptionMacro(<<"Can not do ONE_CLASS SVM estimation with more than 2 classes");
-	}
+  {
+    itkExceptionMacro(<<"Can not do ONE_CLASS SVM estimation with more than 2 classes");
+  }
       if(m_Model->GetDoProbabilityEstimates())
-	{
-	  otbMsgDebugMacro(<<"Disabling SVM probability estimates for ONE_CLASS SVM type.");
-	  m_Model->DoProbabilityEstimates(false);
-	}
+  {
+    otbMsgDebugMacro(<<"Disabling SVM probability estimates for ONE_CLASS SVM type.");
+    m_Model->DoProbabilityEstimates(false);
+  }
     }
 
   if(!m_Done)
@@ -193,16 +193,16 @@ SVMModelEstimator< InputPixelType, LabelPixelType >
       int k=0;
 
       while(compIt!=compEnd)
-	{
+  {
 
-	x_space[j].index = k+1;
-	x_space[j].value = (*compIt);
-	++j;
-	++k;
-	++compIt;
-	}
+  x_space[j].index = k+1;
+  x_space[j].value = (*compIt);
+  ++j;
+  ++k;
+  ++compIt;
+  }
       if(j>=1 && x_space[j-1].index > max_index)
-	max_index = x_space[j-1].index;
+  max_index = x_space[j-1].index;
       x_space[j++].index = -1;
       ++i;
 

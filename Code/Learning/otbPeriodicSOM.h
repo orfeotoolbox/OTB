@@ -52,69 +52,69 @@ namespace otb {
  * \sa CzihoSOMNeighborhoodBehaviorFunctor
  */
 template <class TListSample, class TMap,
-		 class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
-		 class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor >
+     class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
+     class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor >
 class ITK_EXPORT PeriodicSOM
-	: public SOM< TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor >
+  : public SOM< TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor >
 {
 public:
-	/** Standard typedefs */
-	typedef PeriodicSOM Self;
-	typedef SOM< TListSample, TMap,
-					TSOMLearningBehaviorFunctor,
-					TSOMNeighborhoodBehaviorFunctor > Superclass;
-	typedef itk::SmartPointer<Self> Pointer;
-	typedef itk::SmartPointer<const Self> ConstPointer;
+  /** Standard typedefs */
+  typedef PeriodicSOM Self;
+  typedef SOM< TListSample, TMap,
+          TSOMLearningBehaviorFunctor,
+          TSOMNeighborhoodBehaviorFunctor > Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-	/** Creation through object factory macro */
-	itkNewMacro(Self);
+  /** Creation through object factory macro */
+  itkNewMacro(Self);
 
-	/** Runtime informations macro */
-	itkTypeMacro( PeriodicSOM, SOM );
+  /** Runtime informations macro */
+  itkTypeMacro( PeriodicSOM, SOM );
 
-	typedef TListSample ListSampleType;
-	typedef typename ListSampleType::Pointer ListSamplePointerType;
-	typedef TMap MapType;
-	typedef typename MapType::PixelType NeuronType;
-	typedef typename NeuronType::ValueType ValueType;
-	typedef typename MapType::IndexType IndexType;
-	typedef typename MapType::SizeType SizeType;
-	typedef typename MapType::RegionType RegionType;
-	typedef typename MapType::Pointer MapPointerType;
+  typedef TListSample ListSampleType;
+  typedef typename ListSampleType::Pointer ListSamplePointerType;
+  typedef TMap MapType;
+  typedef typename MapType::PixelType NeuronType;
+  typedef typename NeuronType::ValueType ValueType;
+  typedef typename MapType::IndexType IndexType;
+  typedef typename MapType::SizeType SizeType;
+  typedef typename MapType::RegionType RegionType;
+  typedef typename MapType::Pointer MapPointerType;
 
 protected:
-	/** Constructor */
-	PeriodicSOM() {}
-	/** Destructor */
-	virtual ~PeriodicSOM() {}
-	/** Output information redefinition */
-	virtual void GenerateOutputInformation () {
-	  	Superclass::GenerateOutputInformation (); }
-	/** Output allocation redefinition */
-	virtual void AllocateOutputs() {
-	  	Superclass::AllocateOutputs(); }
-	/** Main computation method */
-	virtual void GenerateData(void) {
-		Superclass::GenerateData(); }
-	/**
-	* Update the output map with a new sample.
-	* \param sample The new sample to learn,
-	* \param beta The learning coefficient,
-	* \param radius The radius of the nieghbourhood.
-	*/
-	virtual void UpdateMap(const NeuronType& sample, double beta, SizeType& radius);
-	/**
-	* Step one iteration.
-	*/
-	virtual void Step(unsigned int currentIteration) {
-		Superclass::Step( currentIteration ); }
-	/** PrintSelf method */
-	void PrintSelf(std::ostream& os, itk::Indent indent) const {
-		Superclass::PrintSelf(os,indent); }
+  /** Constructor */
+  PeriodicSOM() {}
+  /** Destructor */
+  virtual ~PeriodicSOM() {}
+  /** Output information redefinition */
+  virtual void GenerateOutputInformation () {
+      Superclass::GenerateOutputInformation (); }
+  /** Output allocation redefinition */
+  virtual void AllocateOutputs() {
+      Superclass::AllocateOutputs(); }
+  /** Main computation method */
+  virtual void GenerateData(void) {
+    Superclass::GenerateData(); }
+  /**
+  * Update the output map with a new sample.
+  * \param sample The new sample to learn,
+  * \param beta The learning coefficient,
+  * \param radius The radius of the nieghbourhood.
+  */
+  virtual void UpdateMap(const NeuronType& sample, double beta, SizeType& radius);
+  /**
+  * Step one iteration.
+  */
+  virtual void Step(unsigned int currentIteration) {
+    Superclass::Step( currentIteration ); }
+  /** PrintSelf method */
+  void PrintSelf(std::ostream& os, itk::Indent indent) const {
+    Superclass::PrintSelf(os,indent); }
 
 private:
-	PeriodicSOM(const Self&); // purposely not implemented
-	void operator=(const Self&); // purposely not implemented
+  PeriodicSOM(const Self&); // purposely not implemented
+  void operator=(const Self&); // purposely not implemented
 
 }; // end of class
 

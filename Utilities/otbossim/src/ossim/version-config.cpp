@@ -24,7 +24,7 @@
 // Caller should pass in path to ossim/include/ossim/ossimVersion.h
 int main(int argc, char* argv[])
 {
-   if (argc != 2)
+   if (argc < 2)
    {
       return(1);
    }
@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
    versionString += "?.?.?";
    versionNumber += "?.?.?";
 #endif
-   
+
    // Get the build date in the format of (yyyymmdd).
    char s[11];
    s[10] = '\0';
@@ -75,9 +75,9 @@ int main(int argc, char* argv[])
       << "\n"
       << "#endif /* End of #ifndef ossimVersion_HEADER */"
       << std::endl;
-   
+
    os.close();
-   
+
    std::cout << "wrote file: " << argv[1] << std::endl;
 //OTB Modifications
 //   exit(0);

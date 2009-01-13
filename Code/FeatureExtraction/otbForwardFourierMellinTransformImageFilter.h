@@ -47,7 +47,7 @@ namespace otb
 
 template < class TPixel,
            class TInterpol,
-	   unsigned int  Dimension = 2 >
+     unsigned int  Dimension = 2 >
 
 class ITK_EXPORT ForwardFourierMellinTransformImageFilter :
     public itk::ImageToImageFilter<Image< TPixel , Dimension >,
@@ -55,7 +55,7 @@ class ITK_EXPORT ForwardFourierMellinTransformImageFilter :
 {
   public:
 
-  //typedef TPixel						     PixelType;
+  //typedef TPixel                 PixelType;
   typedef Image< TPixel , Dimension >                           InputImageType;
   /*   typedef otb::Image< std::complex< TPixel > , Dimension >           OutputImageType; */
 
@@ -70,7 +70,7 @@ class ITK_EXPORT ForwardFourierMellinTransformImageFilter :
   typedef itk::SmartPointer<const Self>                               ConstPointer;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(	ForwardFourierMellinTransformImageFilter, itk::ImageToImageFilter);
+  itkTypeMacro(  ForwardFourierMellinTransformImageFilter, itk::ImageToImageFilter);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -89,17 +89,17 @@ class ITK_EXPORT ForwardFourierMellinTransformImageFilter :
   typedef typename OutputImageType::SizeType             OutputSizeType;
   typedef typename OutputImageType::Pointer              OutputImagePointer;
   typedef typename OutputImageType::ConstPointer         OutputImageConstPointer;
-  typedef typename OutputImageType::RegionType 	  	 OutputImageRegionType;
+  typedef typename OutputImageType::RegionType        OutputImageRegionType;
 
 
   typedef typename OutputImageType::PixelType            ComplexType;
 
   /** Typedefs to describe and access Interpolator */
-  typedef TInterpol 					        InterpolatorType;
-  typedef typename InterpolatorType::Pointer 			InterpolatorPointerType;
-  typedef typename InterpolatorType::ConstPointer 		InterpolatorConstPointerType;
-  typedef typename InterpolatorType::CoordRepType 		CoordRepType;
-  typedef typename InterpolatorType::PointType   		PointType;
+  typedef TInterpol                   InterpolatorType;
+  typedef typename InterpolatorType::Pointer       InterpolatorPointerType;
+  typedef typename InterpolatorType::ConstPointer     InterpolatorConstPointerType;
+  typedef typename InterpolatorType::CoordRepType     CoordRepType;
+  typedef typename InterpolatorType::PointType       PointType;
 
 
   typedef LogPolarTransform<CoordRepType> LogPolarTransformType;
@@ -109,8 +109,8 @@ class ITK_EXPORT ForwardFourierMellinTransformImageFilter :
   typedef itk::ImageRegionIteratorWithIndex<InputImageType> IteratorType;
 
 
-  typedef typename FourierImageFilterType::Pointer 			FourierImageFilterPointer;
-  typedef typename FourierImageFilterType::ConstPointer 		FourierImageFilterConstPointer;
+  typedef typename FourierImageFilterType::Pointer       FourierImageFilterPointer;
+  typedef typename FourierImageFilterType::ConstPointer     FourierImageFilterConstPointer;
 
   /** Set/Get the output size of the transform  (should be powers of two in both directions */
   itkSetMacro(OutputSize,OutputSizeType);

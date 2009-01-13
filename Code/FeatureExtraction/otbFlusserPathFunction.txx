@@ -69,144 +69,144 @@ FlusserPathFunction<TInputPath, TOutput, TPrecision >
     {
     case 1 :
         {
-	ComplexType C11;
-	function->SetP(1);
-	function->SetQ(1);
-	C11 = function->Evaluate( );
+  ComplexType C11;
+  function->SetP(1);
+  function->SetQ(1);
+  C11 = function->Evaluate( );
         FlusserValue = C11.real() ;
-	}
-	break;
+  }
+  break;
     case 2:
         {
-	ComplexType C21,C12;
-	function->SetP(2);
-	function->SetQ(1);
-	C21 = function->Evaluate( );
-	function->SetP(1);
-	function->SetQ(2);
-	C12 = function->Evaluate(  );
+  ComplexType C21,C12;
+  function->SetP(2);
+  function->SetQ(1);
+  C21 = function->Evaluate( );
+  function->SetP(1);
+  function->SetQ(2);
+  C12 = function->Evaluate(  );
 
-	FlusserValue = vcl_abs( C21 * C12 ) ;
-	}
-	break;
+  FlusserValue = vcl_abs( C21 * C12 ) ;
+  }
+  break;
     case 3:
         {
-	ComplexType C20,C12;
-	function->SetP(2);
-	function->SetQ(0);
-	C20 = function->Evaluate( );
-	function->SetP(1);
-	function->SetQ(2);
-	C12 = function->Evaluate( );
-	FlusserValueComplex = C20 * vcl_pow(C12,2);
-	FlusserValue = FlusserValueComplex.real();
-	}
-	break;
+  ComplexType C20,C12;
+  function->SetP(2);
+  function->SetQ(0);
+  C20 = function->Evaluate( );
+  function->SetP(1);
+  function->SetQ(2);
+  C12 = function->Evaluate( );
+  FlusserValueComplex = C20 * vcl_pow(C12,2);
+  FlusserValue = FlusserValueComplex.real();
+  }
+  break;
     case 4:
         {
-	ComplexType C20,C12;
-	function->SetP(2);
-	function->SetQ(0);
-	C20 = function->Evaluate( );
-	function->SetP(1);
-	function->SetQ(2);
-	C12 = function->Evaluate( );
-	FlusserValueComplex = C20 * vcl_pow(C12,2);
-	FlusserValue = FlusserValueComplex.imag();
-	}
-	break;
+  ComplexType C20,C12;
+  function->SetP(2);
+  function->SetQ(0);
+  C20 = function->Evaluate( );
+  function->SetP(1);
+  function->SetQ(2);
+  C12 = function->Evaluate( );
+  FlusserValueComplex = C20 * vcl_pow(C12,2);
+  FlusserValue = FlusserValueComplex.imag();
+  }
+  break;
     case 5:
         {
-	ComplexType C30,C12;
-	function->SetP(3);
-	function->SetQ(0);
-	C30 = function->Evaluate( );
-	function->SetP(1);
-	function->SetQ(2);
-	C12 = function->Evaluate( );
+  ComplexType C30,C12;
+  function->SetP(3);
+  function->SetQ(0);
+  C30 = function->Evaluate( );
+  function->SetP(1);
+  function->SetQ(2);
+  C12 = function->Evaluate( );
 
-	FlusserValueComplex = C30 * vcl_pow(C12,3) ;
-	FlusserValue = FlusserValueComplex.real();
-	}
-	break;
+  FlusserValueComplex = C30 * vcl_pow(C12,3) ;
+  FlusserValue = FlusserValueComplex.real();
+  }
+  break;
     case 6:
         {
-	ComplexType C30,C12;
-	function->SetP(3);
-	function->SetQ(0);
-	C30 = function->Evaluate( );
-	function->SetP(1);
-	function->SetQ(2);
-	C12 = function->Evaluate( );
+  ComplexType C30,C12;
+  function->SetP(3);
+  function->SetQ(0);
+  C30 = function->Evaluate( );
+  function->SetP(1);
+  function->SetQ(2);
+  C12 = function->Evaluate( );
 
-	FlusserValueComplex = C30 * vcl_pow(C12,3) ;
-	FlusserValue = FlusserValueComplex.imag();
-	}
-	break;
+  FlusserValueComplex = C30 * vcl_pow(C12,3) ;
+  FlusserValue = FlusserValueComplex.imag();
+  }
+  break;
     case 7 :
         {
-	ComplexType C22;
-	function->SetP(2);
-	function->SetQ(2);
-	C22 = function->Evaluate( );
+  ComplexType C22;
+  function->SetP(2);
+  function->SetQ(2);
+  C22 = function->Evaluate( );
         FlusserValue = C22.real() ;
-	}
-	break;
+  }
+  break;
     case 8:
         {
-	ComplexType C31,C12;
-	function->SetP(3);
-	function->SetQ(1);
-	C31 = function->Evaluate( );
-	function->SetP(1);
-	function->SetQ(2);
-	C12 = function->Evaluate( );
-	FlusserValueComplex = C31 * vcl_pow(C12,2);
-	FlusserValue = FlusserValueComplex.real();
-	}
-	break;
+  ComplexType C31,C12;
+  function->SetP(3);
+  function->SetQ(1);
+  C31 = function->Evaluate( );
+  function->SetP(1);
+  function->SetQ(2);
+  C12 = function->Evaluate( );
+  FlusserValueComplex = C31 * vcl_pow(C12,2);
+  FlusserValue = FlusserValueComplex.real();
+  }
+  break;
     case 9:
         {
-	ComplexType C31,C12;
-	function->SetP(3);
-	function->SetQ(1);
-	C31 = function->Evaluate( );
-	function->SetP(1);
-	function->SetQ(2);
-	C12 = function->Evaluate( );
-	FlusserValueComplex = C31 * vcl_pow(C12,2);
-	FlusserValue = FlusserValueComplex.imag();
-	}
-	break;
+  ComplexType C31,C12;
+  function->SetP(3);
+  function->SetQ(1);
+  C31 = function->Evaluate( );
+  function->SetP(1);
+  function->SetQ(2);
+  C12 = function->Evaluate( );
+  FlusserValueComplex = C31 * vcl_pow(C12,2);
+  FlusserValue = FlusserValueComplex.imag();
+  }
+  break;
     case 10:
         {
-	ComplexType C40,C12;
-	function->SetP(4);
-	function->SetQ(0);
-	C40 = function->Evaluate( );
-	function->SetP(1);
-	function->SetQ(2);
-	C12 = function->Evaluate( );
-	FlusserValueComplex = C40 * vcl_pow(C12,4);
-	FlusserValue = FlusserValueComplex.real();
-	}
-	break;
+  ComplexType C40,C12;
+  function->SetP(4);
+  function->SetQ(0);
+  C40 = function->Evaluate( );
+  function->SetP(1);
+  function->SetQ(2);
+  C12 = function->Evaluate( );
+  FlusserValueComplex = C40 * vcl_pow(C12,4);
+  FlusserValue = FlusserValueComplex.real();
+  }
+  break;
     case 11:
         {
-	ComplexType C40,C12;
-	function->SetP(4);
-	function->SetQ(0);
-	C40 = function->Evaluate( );
-	function->SetP(1);
-	function->SetQ(2);
-	C12 = function->Evaluate( );
-	FlusserValueComplex = C40 * vcl_pow(C12,4);
-	FlusserValue = FlusserValueComplex.imag();
-	}
-	break;
+  ComplexType C40,C12;
+  function->SetP(4);
+  function->SetQ(0);
+  C40 = function->Evaluate( );
+  function->SetP(1);
+  function->SetQ(2);
+  C12 = function->Evaluate( );
+  FlusserValueComplex = C40 * vcl_pow(C12,4);
+  FlusserValue = FlusserValueComplex.imag();
+  }
+  break;
 
     default:
-	itkWarningMacro("Flusser's invariant parameters are between 1 and 11");
+  itkWarningMacro("Flusser's invariant parameters are between 1 and 11");
     }
 
 

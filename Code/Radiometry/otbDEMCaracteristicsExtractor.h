@@ -104,26 +104,26 @@ namespace otb
 
       /** Get the slop output image */
       OutputImageType* GetSlopOutput()
-	{
-	  return static_cast<OutputImageType*>( this->itk::ProcessObject::GetOutput(0) );
-	};
+  {
+    return static_cast<OutputImageType*>( this->itk::ProcessObject::GetOutput(0) );
+  };
 
       /** Get the aspect output image */
       OutputImageType* GetAspectOutput()
-	{
-	  return static_cast<OutputImageType*>( this->itk::ProcessObject::GetOutput(1) );
-	};
+  {
+    return static_cast<OutputImageType*>( this->itk::ProcessObject::GetOutput(1) );
+  };
       /** Get the incidence output image */
       OutputImageType* GetIncidenceOutput()
-	{
-	  return static_cast<OutputImageType*>( this->itk::ProcessObject::GetOutput(2) );
-	};
+  {
+    return static_cast<OutputImageType*>( this->itk::ProcessObject::GetOutput(2) );
+  };
 
       /** Get the exitance output image */
       OutputImageType* GetExitanceOutput()
-	{
-	  return static_cast<OutputImageType*>( this->itk::ProcessObject::GetOutput(3) );
-	};
+  {
+    return static_cast<OutputImageType*>( this->itk::ProcessObject::GetOutput(3) );
+  };
 
 
       /** Angle parameters*/

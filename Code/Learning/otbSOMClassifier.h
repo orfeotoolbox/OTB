@@ -21,7 +21,8 @@
 #include "itkProcessObject.h"
 #include "itkMembershipSample.h"
 
-namespace otb{
+namespace otb
+{
 
 /** \class SOMClassifier
  *  \brief This class implements a SOM-Based classifier.

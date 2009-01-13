@@ -36,9 +36,9 @@ class ITK_EXPORT HarrisImageToPointSetFilter :
 {
 public:
 
-  itkStaticConstMacro(		InputImageDimension,
-  				unsigned int,
-                      		TInputImage::ImageDimension);
+  itkStaticConstMacro(    InputImageDimension,
+          unsigned int,
+                          TInputImage::ImageDimension);
 
   typedef TInputImage     InputImageType;
   typedef TOutputPointSet OutputPointSetType;
@@ -57,7 +57,7 @@ public:
 
   typedef typename otb::HarrisImageFilter<InputImageType,InputImageType>         HarrisImageFilterType;
   typedef typename otb::ThresholdImageToPointSetFilter<InputImageType,
-  			 			  OutputPointSetType>       ThresholdImageToPointSetType;
+                 OutputPointSetType>       ThresholdImageToPointSetType;
 
   typedef typename OutputPointSetType::PixelType OutputPixelType;
 

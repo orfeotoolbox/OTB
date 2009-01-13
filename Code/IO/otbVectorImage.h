@@ -40,7 +40,7 @@ namespace otb
  */
 template <class TPixel, unsigned int VImageDimension=2>
 class ITK_EXPORT VectorImage : public itk::VectorImage<TPixel, VImageDimension>,
-			 public ImageBase
+       public ImageBase
 {
 public:
 
@@ -51,8 +51,8 @@ public:
   typedef itk::SmartPointer<const Self>  ConstPointer;
   typedef itk::WeakPointer<const Self> ConstWeakPointer;
 
-  typedef ImageBase::VectorType	VectorType;
-  typedef ImageBase::ImageKeywordlistType	ImageKeywordlistType;
+  typedef ImageBase::VectorType  VectorType;
+  typedef ImageBase::ImageKeywordlistType  ImageKeywordlistType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

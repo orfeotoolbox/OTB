@@ -60,95 +60,95 @@ namespace Functor {
 
 
       bool operator!=( const VectorAffineTransform & other ) const
-	{
-	  if(m_OutputMaximum.Size()==other.GetOutputMaximum().Size())
-	    {
-	      for(unsigned int i = 0;i<m_OutputMaximum.Size();++i)
-		{
-		  if( m_OutputMaximum[i] != other.GetOutputMaximum()[i] )
-		    {
-		      return true;
-		    }
-		}
-	    }
-	  if(m_OutputMaximum.Size()==other.GetOutputMaximum().Size())
-	    {
-	      for(unsigned int i = 0;i<m_OutputMaximum.Size();++i)
-		{
-		  if( m_OutputMaximum[i] != other.GetOutputMaximum()[i] )
-		    {
-		      return true;
-		    }
-		}
-	    }
-	  if(m_InputMinimum.Size()==other.GetInputMinimum().Size())
-	    {
-	      for(unsigned int i = 0;i<m_InputMinimum.Size();++i)
-		{
-		  if( m_InputMinimum[i] != other.GetInputMinimum()[i] )
-		    {
-		      return true;
-		    }
-		}
-	    }
-	  if(m_InputMaximum.Size()==other.GetInputMaximum().Size())
-	    {
-	      for(unsigned int i = 0;i<m_InputMaximum.Size();++i)
-		{
-		  if( m_InputMaximum[i] != other.GetInputMaximum()[i] )
-		    {
-		      return true;
-		    }
-		}
-	    }
-	  return false;
-	}
+  {
+    if(m_OutputMaximum.Size()==other.GetOutputMaximum().Size())
+      {
+        for(unsigned int i = 0;i<m_OutputMaximum.Size();++i)
+    {
+      if( m_OutputMaximum[i] != other.GetOutputMaximum()[i] )
+        {
+          return true;
+        }
+    }
+      }
+    if(m_OutputMaximum.Size()==other.GetOutputMaximum().Size())
+      {
+        for(unsigned int i = 0;i<m_OutputMaximum.Size();++i)
+    {
+      if( m_OutputMaximum[i] != other.GetOutputMaximum()[i] )
+        {
+          return true;
+        }
+    }
+      }
+    if(m_InputMinimum.Size()==other.GetInputMinimum().Size())
+      {
+        for(unsigned int i = 0;i<m_InputMinimum.Size();++i)
+    {
+      if( m_InputMinimum[i] != other.GetInputMinimum()[i] )
+        {
+          return true;
+        }
+    }
+      }
+    if(m_InputMaximum.Size()==other.GetInputMaximum().Size())
+      {
+        for(unsigned int i = 0;i<m_InputMaximum.Size();++i)
+    {
+      if( m_InputMaximum[i] != other.GetInputMaximum()[i] )
+        {
+          return true;
+        }
+    }
+      }
+    return false;
+  }
       bool operator==( const VectorAffineTransform & other ) const
-	{
-	  return !(*this != other);
-	}
+  {
+    return !(*this != other);
+  }
 
       // main computation method
       inline TOutput operator()( const TInput & x )
-	{
-	  // output instantiation
-	  TOutput  result;
-	  result.SetSize(x.GetSize());
+  {
+    // output instantiation
+    TOutput  result;
+    result.SetSize(x.GetSize());
 
-	  // consistency checking
-	  if(   result.GetSize()!=m_OutputMaximum.GetSize()
-	     || result.GetSize() != m_OutputMaximum.GetSize()
-	     || result.GetSize() != m_InputMinimum.GetSize()
-	     || result.GetSize() != m_InputMaximum.GetSize())
-	    {
-	      itkGenericExceptionMacro(<<"Pixel size different from scale or shift size !");
-	    }
+    // consistency checking
+    if(   result.GetSize()!=m_OutputMaximum.GetSize()
+       || result.GetSize() != m_OutputMaximum.GetSize()
+       || result.GetSize() != m_InputMinimum.GetSize()
+       || result.GetSize() != m_InputMaximum.GetSize())
+      {
+        itkGenericExceptionMacro(<<"Pixel size different from scale or shift size !");
+      }
 
-	  // transformation
-	  for(unsigned int i=0; i<x.GetSize();++i)
-	    {
-	      if(x[i]<m_InputMinimum[i])
-		{
-		  result[i] = m_OutputMinimum[i];
-		}
-	      else if (x[i]>m_InputMaximum[i])
-		{
-		  result[i] = m_OutputMaximum[i];
-		}
-	      else if(m_InputMaximum[i]==m_InputMinimum[i])
-		{
-		  result[i]=m_OutputMinimum[i];
-		}
-	      else
-		{
-		  const RealType scaledComponent = static_cast<RealType>( x[i]-m_InputMinimum[i] )
-		    * static_cast<RealType> (m_OutputMaximum[i] - m_OutputMinimum[i])
-		    / static_cast<RealType> (m_InputMaximum[i] - m_InputMinimum[i]);
-		  result[i]= static_cast< typename TOutput::ValueType >( scaledComponent+m_OutputMinimum[i] );
-		}
-	    }
-	  return result;
-	}
+    // transformation
+    for(unsigned int i=0; i<x.GetSize();++i)
+      {
+        if(x[i]<m_InputMinimum[i])
+    {
+      result[i] = m_OutputMinimum[i];
+    }
+        else if (x[i]>m_InputMaximum[i])
+    {
+      result[i] = m_OutputMaximum[i];
+    }
+        else if(m_InputMaximum[i]==m_InputMinimum[i])
+    {
+      result[i]=m_OutputMinimum[i];
+    }
+        else
+    {
+      const RealType scaledComponent = static_cast<RealType>( x[i]-m_InputMinimum[i] )
+        * static_cast<RealType> (m_OutputMaximum[i] - m_OutputMinimum[i])
+        / static_cast<RealType> (m_InputMaximum[i] - m_InputMinimum[i]);
+      result[i]= static_cast< typename TOutput::ValueType >( scaledComponent+m_OutputMinimum[i] );
+    }
+      }
+    return result;
+  }
     private:
       TOutput m_OutputMaximum;
       TOutput m_OutputMinimum;

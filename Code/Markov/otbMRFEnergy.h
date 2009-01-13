@@ -64,39 +64,39 @@ class ITK_EXPORT MRFEnergy : public itk::Object
     // Get the parameters
     const ParametersType& GetParameters( void ) const
       {
-	return this->m_Parameters;
+  return this->m_Parameters;
       }
 
     void SetParameters( const ParametersType & parameters )
       {
-      	if( parameters.Size() != m_NumberOfParameters )
-	  {
-	    itkExceptionMacro(<<"Invalid number of parameters");
-	  }
-	m_Parameters = parameters;
-	this->Modified();
+        if( parameters.Size() != m_NumberOfParameters )
+    {
+      itkExceptionMacro(<<"Invalid number of parameters");
+    }
+  m_Parameters = parameters;
+  this->Modified();
     }
 
     virtual double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)
       {
-	itkExceptionMacro(<<"GetSingleValue() has to be declared in child classes.");
+  itkExceptionMacro(<<"GetSingleValue() has to be declared in child classes.");
       }
 
     double GetValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)
       {
-	return GetSingleValue(value1, value2);
+  return GetSingleValue(value1, value2);
       }
 
     double GetValue(const LabelledNeighborhoodIterator & it,  const LabelledImagePixelType & value2)
       {
-	double result = 0.0;
-	unsigned int centerIndex = it.GetCenterNeighborhoodIndex();
-	InputImagePixelType value1; //TODO put also the other neighborhood ?
-	bool isInside=false;
-	unsigned int insideNeighbors = 0;
-	for(unsigned long pos = 0; pos< it.Size(); ++pos)
-	  {
-	    if (pos !=  centerIndex)//TODO put outside loop for faster access ?
+  double result = 0.0;
+  unsigned int centerIndex = it.GetCenterNeighborhoodIndex();
+  InputImagePixelType value1; //TODO put also the other neighborhood ?
+  bool isInside=false;
+  unsigned int insideNeighbors = 0;
+  for(unsigned long pos = 0; pos< it.Size(); ++pos)
+    {
+      if (pos !=  centerIndex)//TODO put outside loop for faster access ?
               {
                 value1 = it.GetPixel(pos, isInside);
                 if (isInside){
@@ -104,30 +104,30 @@ class ITK_EXPORT MRFEnergy : public itk::Object
                   insideNeighbors++;
                 }
               }
-	  }
-	return result/insideNeighbors;
+    }
+  return result/insideNeighbors;
       }
 
     double GetValue(const InputNeighborhoodIterator & it,  const LabelledImagePixelType & value2)
       {
-	double result = 0.0;
-	unsigned int centerIndex = it.GetCenterNeighborhoodIndex();
-	InputImagePixelType value1; //TODO put also the other neighborhood ?
-	bool isInside=false;
-	unsigned int insideNeighbors = 0;
-	for(unsigned long pos = 0; pos< it.Size(); ++pos)
-	  {
-	    if (pos !=  centerIndex)//TODO put outside loop for faster access ?
+  double result = 0.0;
+  unsigned int centerIndex = it.GetCenterNeighborhoodIndex();
+  InputImagePixelType value1; //TODO put also the other neighborhood ?
+  bool isInside=false;
+  unsigned int insideNeighbors = 0;
+  for(unsigned long pos = 0; pos< it.Size(); ++pos)
+    {
+      if (pos !=  centerIndex)//TODO put outside loop for faster access ?
               {
                 value1 = it.GetPixel(pos, isInside);
                 if (isInside)
-		  {
-		    result += GetSingleValue(value1, value2);
-		    insideNeighbors++;
-		  }
+      {
+        result += GetSingleValue(value1, value2);
+        insideNeighbors++;
+      }
               }
-	  }
-	return result/insideNeighbors;
+    }
+  return result/insideNeighbors;
       }
 
   protected:
@@ -166,7 +166,7 @@ class ITK_EXPORT MRFEnergy<TInput2,TInput2> : public itk::Object
     // Get the parameters
     const ParametersType& GetParameters( void ) const
       {
-	return this->m_Parameters;
+  return this->m_Parameters;
       }
 
 
@@ -174,33 +174,33 @@ class ITK_EXPORT MRFEnergy<TInput2,TInput2> : public itk::Object
     void SetParameters( const ParametersType & parameters )
       {
         if( parameters.Size() != m_NumberOfParameters )
-	  {
-	    itkExceptionMacro(<<"Invalid number of parameters");
-	  }
-	m_Parameters = parameters;
-	this->Modified();
+    {
+      itkExceptionMacro(<<"Invalid number of parameters");
+    }
+  m_Parameters = parameters;
+  this->Modified();
       }
 
     virtual double GetSingleValue(const LabelledImagePixelType & value1,  const LabelledImagePixelType & value2)
       {
-	itkExceptionMacro(<<"GetSingleValue() has to be declared in child classes.");
+  itkExceptionMacro(<<"GetSingleValue() has to be declared in child classes.");
       }
 
     double GetValue(const LabelledImagePixelType & value1,  const LabelledImagePixelType & value2)
       {
-	return GetSingleValue(value1, value2);
+  return GetSingleValue(value1, value2);
       }
 
     double GetValue(const LabelledNeighborhoodIterator & it,  const LabelledImagePixelType & value2)
       {
-	double result = 0.0;
-	unsigned int centerIndex = it.GetCenterNeighborhoodIndex();
-	LabelledImagePixelType value1; //TODO put also the other neighborhood ?
-	bool isInside=false;
-	unsigned int insideNeighbors = 0;
-	for(unsigned long pos = 0; pos< it.Size(); ++pos)
-	  {
-	    if (pos !=  centerIndex)//TODO put outside loop for faster access ?
+  double result = 0.0;
+  unsigned int centerIndex = it.GetCenterNeighborhoodIndex();
+  LabelledImagePixelType value1; //TODO put also the other neighborhood ?
+  bool isInside=false;
+  unsigned int insideNeighbors = 0;
+  for(unsigned long pos = 0; pos< it.Size(); ++pos)
+    {
+      if (pos !=  centerIndex)//TODO put outside loop for faster access ?
               {
                 value1 = it.GetPixel(pos, isInside);
                 if (isInside){
@@ -208,8 +208,8 @@ class ITK_EXPORT MRFEnergy<TInput2,TInput2> : public itk::Object
                   insideNeighbors++;
                 }
               }
-	  }
-	return result/insideNeighbors;
+    }
+  return result/insideNeighbors;
       }
 
 

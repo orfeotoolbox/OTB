@@ -25,8 +25,8 @@ namespace otb
 
 FltkWriterWatcher
 ::FltkWriterWatcher(itk::ProcessObject* process,
-		    int x, int y, int w, int h,
-		    const char *comment)
+        int x, int y, int w, int h,
+        const char *comment)
   : WriterWatcherBase(process, comment)
 {
   this->BuildGUI(x,y,w,h,comment);
@@ -35,9 +35,9 @@ FltkWriterWatcher
 
 FltkWriterWatcher
 ::FltkWriterWatcher(itk::ProcessObject* process,
-		    itk::ProcessObject* source,
-		    int x, int y, int w, int h,
-		    const char *comment)
+        itk::ProcessObject* source,
+        int x, int y, int w, int h,
+        const char *comment)
   : WriterWatcherBase(process,source,comment)
 {
   this->BuildGUI(x,y,w,h,comment);

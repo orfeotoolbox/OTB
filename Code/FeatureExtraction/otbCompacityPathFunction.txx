@@ -48,10 +48,10 @@ CompacityPathFunction<TInputPath,TOutput>
   VertexType                          cindex;
   VertexType                          IndexOut;
   int                                 nbPath;
-  RealType  	     		      Surface=0.0;
-  RealType  	     		      Perimeter=0.0;
+  RealType                   Surface=0.0;
+  RealType                   Perimeter=0.0;
   RealType                            Compacity;
-  RealType			      x1,x2,y1,y2;
+  RealType            x1,x2,y1,y2;
 
   vertexList = path.GetVertexList();
   nbPath = vertexList->Size();

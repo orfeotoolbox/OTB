@@ -61,7 +61,7 @@ RCC8GraphFileReader<TOutputGraph>
   typename std::string::size_type pos5 = line.find_first_of("\" ",pos4+1);
   RCC8ValueType value =static_cast<RCC8ValueType>(atoi(line.substr(pos4+1,pos5-pos4-1).c_str()));
   otbMsgDevMacro(<<"RCC8GraphFileReader: Edge line parsed: "<<source<<" -> "
-		   <<target<<" "<<value);
+       <<target<<" "<<value);
   this->GetOutput()->AddEdge(source,target,value);
 }
 /**
@@ -128,15 +128,15 @@ RCC8GraphFileReader<TOutputGraph>
     {
       std::getline(fin,line);
       if(line.find("->")!=std::string::npos)
-	{
-	  // edge line
-	  this->ParseEdge(line);
-	}
+  {
+    // edge line
+    this->ParseEdge(line);
+  }
       else if(line.find("[")!=std::string::npos)
-	{
-	  // vertex line
-	  this->ParseVertex(line);
-	}
+  {
+    // vertex line
+    this->ParseVertex(line);
+  }
     }
   fin.close();
 }

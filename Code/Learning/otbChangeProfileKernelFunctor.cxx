@@ -25,55 +25,55 @@ namespace otb
 
 ChangeProfileKernelFunctor
 ::ChangeProfileKernelFunctor ()
-		: GenericKernelFunctorBase ()
+    : GenericKernelFunctorBase ()
 {
-	m_Coef = 0.0;
-	m_Degree = 1.0;
-	m_Gamma = 1.0;
+  m_Coef = 0.0;
+  m_Degree = 1.0;
+  m_Gamma = 1.0;
 
-	SetValue( "Coef", m_Coef );
-	SetValue( "Degree", m_Degree );
-	SetValue( "Gamma", m_Gamma );
+  SetValue( "Coef", m_Coef );
+  SetValue( "Degree", m_Degree );
+  SetValue( "Gamma", m_Gamma );
 }
 
 void
 ChangeProfileKernelFunctor
 ::Update ()
 {
-	m_Coef = GetValue<double>( "Coef" );
-	m_Degree = GetValue<double>( "Degree" );
-	m_Gamma = GetValue<double>( "Gamma" );
+  m_Coef = GetValue<double>( "Coef" );
+  m_Degree = GetValue<double>( "Degree" );
+  m_Gamma = GetValue<double>( "Gamma" );
 }
 
 double
 ChangeProfileKernelFunctor
 ::operator() ( const svm_node * x, const svm_node * y,
-				const svm_parameter & param ) const
+        const svm_parameter & param ) const
 {
-	double theMax(0.);
-	double theCur(0.);
+  double theMax(0.);
+  double theCur(0.);
 
-	while(x->index != -1 && y->index != -1)
-	{
-		if(x->index == y->index)
-		{
-			theCur = fabs( x->value - y->value );
-			++x;
-			++y;
-		}
-		else
-		{
-			if(x->index > y->index)
-				++y;
-			else
-				++x;
-		}
+  while(x->index != -1 && y->index != -1)
+  {
+    if(x->index == y->index)
+    {
+      theCur = fabs( x->value - y->value );
+      ++x;
+      ++y;
+    }
+    else
+    {
+      if(x->index > y->index)
+        ++y;
+      else
+        ++x;
+    }
 
-		if ( theCur > theMax )
-			theMax = theCur;
-	}
+    if ( theCur > theMax )
+      theMax = theCur;
+  }
 
-	return exp( - m_Gamma * pow( theMax, m_Degree ) + m_Coef );
+  return exp( - m_Gamma * pow( theMax, m_Degree ) + m_Coef );
 }
 
 } // end of namespace otb

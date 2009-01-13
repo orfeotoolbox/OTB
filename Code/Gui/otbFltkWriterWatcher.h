@@ -44,13 +44,13 @@ public:
   /** Constructor. Takes a ProcessObject to monitor and an optional
    * comment string that is prepended to each event message. */
   FltkWriterWatcher(itk::ProcessObject* process,
-		    int x, int y, int w,int h,
-		    const char *comment="");
+        int x, int y, int w,int h,
+        const char *comment="");
 
   FltkWriterWatcher(itk::ProcessObject* process,
-		    itk::ProcessObject * source,
-		    int x, int y, int w,int h,
-		    const char *comment="");
+        itk::ProcessObject * source,
+        int x, int y, int w,int h,
+        const char *comment="");
 
 
   /** Destructor. */
@@ -73,8 +73,8 @@ protected:
   {
     if (m_SourceProcess)
       {
-	m_FilterProgress->value(m_SourceProcess->GetProgress());
-	Fl::check();
+  m_FilterProgress->value(m_SourceProcess->GetProgress());
+  Fl::check();
       }
   }
 
@@ -83,8 +83,8 @@ protected:
   {
     if (m_Process)
       {
-	m_WriterProgress->value(m_Process->GetProgress());
-	Fl::check();
+  m_WriterProgress->value(m_Process->GetProgress());
+  Fl::check();
       }
   }
 
