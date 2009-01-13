@@ -59,7 +59,7 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage>
 
     if ( !inputPtr || !outputPtr )
       {
-	return;
+  return;
       }
 
     // get a copy of the input requested region (should equal the output
@@ -73,25 +73,25 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage>
     // crop the input requested region at the input's largest possible region
     if(inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()))
       {
-	inputPtr->SetRequestedRegion(inputRequestedRegion);
-	return;
+  inputPtr->SetRequestedRegion(inputRequestedRegion);
+  return;
       }
     else
       {
-	// Couldn't crop the region (requested region is outside the largest
-	// possible region).  Throw an exception.
+  // Couldn't crop the region (requested region is outside the largest
+  // possible region).  Throw an exception.
 
-	// store what we tried to request (prior to trying to crop)
-	inputPtr->SetRequestedRegion(inputRequestedRegion);
+  // store what we tried to request (prior to trying to crop)
+  inputPtr->SetRequestedRegion(inputRequestedRegion);
 
 
 
-	// build an exception
-	itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
-	e.SetLocation(ITK_LOCATION);
-	e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
-	e.SetDataObject(inputPtr);
-	throw e;
+  // build an exception
+  itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
+  e.SetLocation(ITK_LOCATION);
+  e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
+  e.SetDataObject(inputPtr);
+  throw e;
       }
   }
 
@@ -107,7 +107,7 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage>
     typename InputImageType::ConstPointer input = this->GetInput();
 
     /** TODO: This is a patch to switch from GenerateData() to ThreadedGenerateData(). Remove these two lines
-	once multi-threading problem is solved */
+  once multi-threading problem is solved */
     this->AllocateOutputs();
     OutputImageRegionType outputRegionForThread = output->GetRequestedRegion();
 
@@ -177,11 +177,11 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage>
     // Filling the buffer with image values
     for(l = 0;l<inputSize[1];++l)
       {
-	for(k = 0;k<inputSize[0];++k)
-	  {
-	    inputPiece[topskip+pieceSize[0]*l+k+leftskip]=bit.GetCenterPixel();
-	    ++bit;
-	  }
+  for(k = 0;k<inputSize[0];++k)
+    {
+      inputPiece[topskip+pieceSize[0]*l+k+leftskip]=bit.GetCenterPixel();
+      ++bit;
+    }
       }
 
     FFTWProxyType::Execute(inputPlan);
@@ -193,11 +193,11 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage>
     // Filling the buffer with filter values
     for(j=0;j<sizeOfFilter[1];j++)
       {
-	for(i=0;i<sizeOfFilter[0];i++)
-	  {
-	    resampledFilterPiece[i+j*pieceSize[0]]=m_Filter.GetElement(k);//Copy values
-	    k++;
-	  }
+  for(i=0;i<sizeOfFilter[0];i++)
+    {
+      resampledFilterPiece[i+j*pieceSize[0]]=m_Filter.GetElement(k);//Copy values
+      k++;
+    }
       }
 
     FFTWProxyType::Execute(filterPlan);
@@ -216,9 +216,9 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage>
     // Filling the buffer with complex product values
     for(k=0;k<sizeFFT;k++)
       {
-	//complex mutiplication
-	multipliedFFTarray[k][0]=inputPieceFFT[k][0]*filterPieceFFT[k][0]-inputPieceFFT[k][1]*filterPieceFFT[k][1];
-	multipliedFFTarray[k][1]=inputPieceFFT[k][0]*filterPieceFFT[k][1]+inputPieceFFT[k][1]*filterPieceFFT[k][0];
+  //complex mutiplication
+  multipliedFFTarray[k][0]=inputPieceFFT[k][0]*filterPieceFFT[k][0]-inputPieceFFT[k][1]*filterPieceFFT[k][1];
+  multipliedFFTarray[k][1]=inputPieceFFT[k][0]*filterPieceFFT[k][1]+inputPieceFFT[k][1]*filterPieceFFT[k][0];
       }
 
     FFTWProxyType::Execute(outputPlan);
@@ -227,33 +227,33 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage>
 
     if(m_NormalizeFilter)
       {
-	norm = itk::NumericTraits<InputRealType>::Zero;
-	for(i=0;i<sizeOfFilter[0]*sizeOfFilter[1];i++)
-	  {
-	    norm += static_cast<InputRealType>(m_Filter(i));
-	  }
-	if(norm == 0.0)
-	  {
-	    norm = 1.0;
-	  }
-	else
-	  {
-	    norm = 1/norm;
-	  }
+  norm = itk::NumericTraits<InputRealType>::Zero;
+  for(i=0;i<sizeOfFilter[0]*sizeOfFilter[1];i++)
+    {
+      norm += static_cast<InputRealType>(m_Filter(i));
+    }
+  if(norm == 0.0)
+    {
+      norm = 1.0;
+    }
+  else
+    {
+      norm = 1/norm;
+    }
       }
     else
       {
-	norm = 1.0;
+  norm = 1.0;
       }
 
     // Fill the ouptut image
     it.GoToBegin();
     while(!it.IsAtEnd())
       {
-	typename InputImageType::IndexType index = it.GetIndex();
-	unsigned int linearIndex = (index[1]+sizeOfFilter[1]-1-outputRegionForThread.GetIndex()[1])*pieceSize[0]-1+index[0]+sizeOfFilter[0]-outputRegionForThread.GetIndex()[0];
-	it.Set( static_cast<OutputPixelType>((inverseFFTpiece[linearIndex]/pieceNbOfPixel)*static_cast<double>(norm) ));
-	++it;
+  typename InputImageType::IndexType index = it.GetIndex();
+  unsigned int linearIndex = (index[1]+sizeOfFilter[1]-1-outputRegionForThread.GetIndex()[1])*pieceSize[0]-1+index[0]+sizeOfFilter[0]-outputRegionForThread.GetIndex()[0];
+  it.Set( static_cast<OutputPixelType>((inverseFFTpiece[linearIndex]/pieceNbOfPixel)*static_cast<double>(norm) ));
+  ++it;
       }
 
     // destroy the FFT plans

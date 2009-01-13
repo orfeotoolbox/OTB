@@ -337,10 +337,10 @@ ImageBase::PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDiction
            itk::ExposeMetaData<VectorType>(dict2, keys[itkey], vvalue);
 
            for(i = 0 ; i < vvalue.size() ; i++ )
-	      {
-	      os << indent << "---> " << keys[itkey] << "[" << i <<"] = "<< vvalue[i]<< std::endl;
-	      }
-	   vvalue.clear();
+        {
+        os << indent << "---> " << keys[itkey] << "[" << i <<"] = "<< vvalue[i]<< std::endl;
+        }
+     vvalue.clear();
 
            break;
 
@@ -355,14 +355,14 @@ ImageBase::PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDiction
            os << indent << "---> " << keys[itkey] << std::endl;
            gcpvalue.Print(os);
            break;
-		case MetaDataKey::TOSSIMKEYWORDLIST:
-		   itk::ExposeMetaData<ImageKeywordlist>(dict2, keys[itkey], ossimvalue);
+    case MetaDataKey::TOSSIMKEYWORDLIST:
+       itk::ExposeMetaData<ImageKeywordlist>(dict2, keys[itkey], ossimvalue);
 
-		   os << indent << "---> " << keys[itkey] << std::endl;
-		   ossimvalue.Print(os);
-		   // ossimvalue.Print(os);
-		   break;
-		}
+       os << indent << "---> " << keys[itkey] << std::endl;
+       ossimvalue.Print(os);
+       // ossimvalue.Print(os);
+       break;
+    }
 
      }
 

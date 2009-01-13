@@ -51,13 +51,13 @@ class ITK_EXPORT MRFOptimizerICM : public MRFOptimizer
   inline bool Compute(double deltaEnergy)
     {
       if (deltaEnergy < 0)
-	{
-	  return true;
-	}
+  {
+    return true;
+  }
       else
-	{
-	  return false;
-	}
+  {
+    return false;
+  }
     }
 
 

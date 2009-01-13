@@ -76,7 +76,7 @@ class ITK_EXPORT MRFSampler : public itk::Object
     itkSetObjectMacro( EnergyFidelity, EnergyFidelityType);
 
     virtual int Compute( const InputImageNeighborhoodIterator & itData,
-			 const LabelledImageNeighborhoodIterator & itRegul) = 0;
+       const LabelledImageNeighborhoodIterator & itRegul) = 0;
 
   protected:
     unsigned int m_NumberOfClasses;
@@ -96,14 +96,14 @@ class ITK_EXPORT MRFSampler : public itk::Object
     // The constructor and destructor.
     MRFSampler()
       {
-	m_EnergyRegularization = EnergyRegularizationType::New();
-	m_EnergyFidelity =  EnergyFidelityType::New(),
-	m_NumberOfClasses =1;
-	m_EnergyBefore = 1.;
-	m_EnergyAfter = 1.;
-	m_DeltaEnergy = 1.;
-	m_EnergyCurrent = 1.;
-	m_Lambda = 1.;
+  m_EnergyRegularization = EnergyRegularizationType::New();
+  m_EnergyFidelity =  EnergyFidelityType::New(),
+  m_NumberOfClasses =1;
+  m_EnergyBefore = 1.;
+  m_EnergyAfter = 1.;
+  m_DeltaEnergy = 1.;
+  m_EnergyCurrent = 1.;
+  m_Lambda = 1.;
       };
     virtual ~MRFSampler() {};
 

@@ -407,107 +407,107 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
       /*** third loop : start positions ***/
       for (pos=0;pos<posmax;pos++) {
 
-	/* clear segment array */
-	iseg = 0;
+  /* clear segment array */
+  iseg = 0;
 
-	/*** fourth loop : phase for two-spaced pixels ***/
+  /*** fourth loop : phase for two-spaced pixels ***/
         for (lphase=0;lphase<2;lphase++) {
 
-	  /*** detect aligned points by blocs ***/
-	  inbloc = nblocs = cur = l = count[0] = 0;
-	  xx = ox+pos*mx + (int)(dx*(double)(l*2+lphase));
-	  yy = oy+pos*my + (int)(dy*(double)(l*2+lphase));
+    /*** detect aligned points by blocs ***/
+    inbloc = nblocs = cur = l = count[0] = 0;
+    xx = ox+pos*mx + (int)(dx*(double)(l*2+lphase));
+    yy = oy+pos*my + (int)(dy*(double)(l*2+lphase));
 
 
-	  for (;xx>=0 && xx<nx && yy>=0 && yy<ny;) {
+    for (;xx>=0 && xx<nx && yy>=0 && yy<ny;) {
             indexAngle[0] = xx;
-	    indexAngle[1] = yy;
-	    // indice  = yy*nx+xx
-	    assert( indexAngle[0] < nx );
-	    assert( indexAngle[1] < ny );
-	    assert( indexAngle[0] >= 0 );
-	    assert( indexAngle[1] >= 0 );
+      indexAngle[1] = yy;
+      // indice  = yy*nx+xx
+      assert( indexAngle[0] < nx );
+      assert( indexAngle[1] < ny );
+      assert( indexAngle[0] >= 0 );
+      assert( indexAngle[1] >= 0 );
 
-	    error = static_cast<double>( m_AngleImage->GetPixel(indexAngle) );
-	    if (error>-100.0) {
-	      error -= theta;
-	      while (error<=-M_PI) error += 2.0*M_PI;
-	      while (error>M_PI) error -= 2.0*M_PI;
-	      if (error<0.0) error = -error;
-	      if (error<prec) {
-		cur++;
-		if (!inbloc) {
-		  startbloc[nblocs]=l;
-		  inbloc=1;
-		}
-	      } else {
-		if (inbloc) {
-		  endbloc[nblocs] = l-1;
-		  nblocs++;
-		  count[nblocs] = cur;
-		}
-		inbloc=0;
-	      }
-	    }
-	    /* compute next point */
-	    l++;
-	    xx = ox+pos*mx + (int)(dx*(double)(l*2+lphase));
-	    yy = oy+pos*my + (int)(dy*(double)(l*2+lphase));
-	  }
+      error = static_cast<double>( m_AngleImage->GetPixel(indexAngle) );
+      if (error>-100.0) {
+        error -= theta;
+        while (error<=-M_PI) error += 2.0*M_PI;
+        while (error>M_PI) error -= 2.0*M_PI;
+        if (error<0.0) error = -error;
+        if (error<prec) {
+    cur++;
+    if (!inbloc) {
+      startbloc[nblocs]=l;
+      inbloc=1;
+    }
+        } else {
+    if (inbloc) {
+      endbloc[nblocs] = l-1;
+      nblocs++;
+      count[nblocs] = cur;
+    }
+    inbloc=0;
+        }
+      }
+      /* compute next point */
+      l++;
+      xx = ox+pos*mx + (int)(dx*(double)(l*2+lphase));
+      yy = oy+pos*my + (int)(dy*(double)(l*2+lphase));
+    }
 
-	  /*** detect meaningful segments ***/
-	  for (i=0;i<nblocs;i++)
-	    for (j=i;j<nblocs;j++)
-	      if ((nfa = test[count[j+1]-count[i]
-			     +(n+1)*(1+endbloc[j]-startbloc[i])]) < max_nfa) {
-		seg[iseg].start = startbloc[i]*2+lphase;
-		seg[iseg].end = endbloc[j]*2+lphase;
-		seg[iseg].nfa = nfa;
-		seg[iseg].ok = 1;
-		iseg++;
-		/* reallocate if necessary */
-		if (iseg==size_seg) {
-		  size_seg = (size_seg*3)/2;
-		  seg.resize(size_seg);
-//		  if (!seg)
-//		    mwerror(FATAL,1,"Not enough memory.");
-		}
-	      }
-	}
-	/*** end of phase loop ***/
+    /*** detect meaningful segments ***/
+    for (i=0;i<nblocs;i++)
+      for (j=i;j<nblocs;j++)
+        if ((nfa = test[count[j+1]-count[i]
+           +(n+1)*(1+endbloc[j]-startbloc[i])]) < max_nfa) {
+    seg[iseg].start = startbloc[i]*2+lphase;
+    seg[iseg].end = endbloc[j]*2+lphase;
+    seg[iseg].nfa = nfa;
+    seg[iseg].ok = 1;
+    iseg++;
+    /* reallocate if necessary */
+    if (iseg==size_seg) {
+      size_seg = (size_seg*3)/2;
+      seg.resize(size_seg);
+//      if (!seg)
+//        mwerror(FATAL,1,"Not enough memory.");
+    }
+        }
+  }
+  /*** end of phase loop ***/
 
-	/*** remove non-maximal segments ***/
-	if (!m_isMeaningfulSegment)
-	  for (i=0;i<iseg;i++)
-	    for (j=0;j<iseg;j++)
-	      if (i!=j)
+  /*** remove non-maximal segments ***/
+  if (!m_isMeaningfulSegment)
+    for (i=0;i<iseg;i++)
+      for (j=0;j<iseg;j++)
+        if (i!=j)
 
-		/* seg[i] is included in seg[j] ? */
-		if (seg[i].start>=seg[j].start && seg[i].end<=seg[j].end) {
+    /* seg[i] is included in seg[j] ? */
+    if (seg[i].start>=seg[j].start && seg[i].end<=seg[j].end) {
 
-		  /* remove the less meaningful of seg[i] and seg[j] */
-		  if (seg[i].nfa<seg[j].nfa) seg[j].ok=0;
-		  else seg[i].ok=0;
+      /* remove the less meaningful of seg[i] and seg[j] */
+      if (seg[i].nfa<seg[j].nfa) seg[j].ok=0;
+      else seg[i].ok=0;
 
-		}
+    }
 
-	/*** store detected segments ***/
-	for (i=0;i<iseg;i++)
-	  if (seg[i].ok) {
-	    seglist[iseglist*5  ]=(double)(ox+pos*mx)+dx*(double)(seg[i].start);
-	    seglist[iseglist*5+1]=(double)(oy+pos*my)+dy*(double)(seg[i].start);
-	    seglist[iseglist*5+2]=(double)(ox+pos*mx)+dx*(double)(seg[i].end);
-	    seglist[iseglist*5+3]=(double)(oy+pos*my)+dy*(double)(seg[i].end);
-	    seglist[iseglist*5+4]=-(double)log10(seg[i].nfa);
-	    iseglist++;
-	    /* reallocate seglist if necessary */
-	    if (iseglist==size_seglist) {
-	      size_seglist = (size_seglist*3)/2;
-	      seglist.resize(size_seglist);
-//	      if (!seglist)
-//		mwerror(FATAL,1,"Not enough memory.");
-	    }
-	  }
+  /*** store detected segments ***/
+  for (i=0;i<iseg;i++)
+    if (seg[i].ok) {
+      seglist[iseglist*5  ]=(double)(ox+pos*mx)+dx*(double)(seg[i].start);
+      seglist[iseglist*5+1]=(double)(oy+pos*my)+dy*(double)(seg[i].start);
+      seglist[iseglist*5+2]=(double)(ox+pos*mx)+dx*(double)(seg[i].end);
+      seglist[iseglist*5+3]=(double)(oy+pos*my)+dy*(double)(seg[i].end);
+      seglist[iseglist*5+4]=-(double)log10(seg[i].nfa);
+      iseglist++;
+      /* reallocate seglist if necessary */
+      if (iseglist==size_seglist) {
+        size_seglist = (size_seglist*3)/2;
+        seglist.resize(size_seglist);
+//        if (!seglist)
+//    mwerror(FATAL,1,"Not enough memory.");
+      }
+    }
       }
     }
     /*** end of second loop ***/

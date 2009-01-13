@@ -57,9 +57,9 @@ class ITK_EXPORT MRFOptimizer : public itk::Object
     virtual void SetParameters( const ParametersType & parameters )
     {
       if( parameters.GetSize() != m_NumberOfParameters )
-	{
-	  itkExceptionMacro(<<"Invalid number of parameters ("<<parameters.GetSize()<<" , "<<m_NumberOfParameters<<")");
-	}
+  {
+    itkExceptionMacro(<<"Invalid number of parameters ("<<parameters.GetSize()<<" , "<<m_NumberOfParameters<<")");
+  }
       m_Parameters = parameters;
       this->Modified();
     }

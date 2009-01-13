@@ -54,19 +54,19 @@ namespace otb
  */
 
 template <class TInputImage,
-	  class TOutputImage,
-	  class TOutputImageDirection = TOutputImage,
-	  class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
+    class TOutputImage,
+    class TOutputImageDirection = TOutputImage,
+    class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
 class ITK_EXPORT LineDetectorImageFilterBase :  public ImageToModulusAndDirectionImageFilter< TInputImage, TOutputImage, TOutputImageDirection >
 {
 public:
-  /** 	Extract dimensions as well of the images of entry of exit. */
-  itkStaticConstMacro(		InputImageDimension,
-  				unsigned int,
-                      		TInputImage::ImageDimension);
-  itkStaticConstMacro(		OutputImageDimension,
-  				unsigned int,
-                      		TOutputImage::ImageDimension);
+  /**   Extract dimensions as well of the images of entry of exit. */
+  itkStaticConstMacro(    InputImageDimension,
+          unsigned int,
+                          TInputImage::ImageDimension);
+  itkStaticConstMacro(    OutputImageDimension,
+          unsigned int,
+                          TOutputImage::ImageDimension);
 
   /** typedef for the classes standards. */
   typedef LineDetectorImageFilterBase Self;
@@ -80,10 +80,10 @@ public:
   /** Return the name of the class. */
   itkTypeMacro(LineDetectorImageFilterBase, ImageToModulusAndDirectionImageFilter);
 
-  typedef typename Superclass::InputImageType 				InputImageType;
-  typedef typename Superclass::OutputImageType				OutputImageType;
-  typedef typename Superclass::OutputImageDirectionType 	OutputImageDirectionType;
-  typedef TInterpolator 									InterpolatorType;
+  typedef typename Superclass::InputImageType         InputImageType;
+  typedef typename Superclass::OutputImageType        OutputImageType;
+  typedef typename Superclass::OutputImageDirectionType   OutputImageDirectionType;
+  typedef TInterpolator                   InterpolatorType;
 
   /** Typedefs to describe and access Interpolator */
   typedef typename InterpolatorType::Pointer InterpolatorPointer;

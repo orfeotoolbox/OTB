@@ -93,27 +93,27 @@ SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskI
     }
 
   unsigned int sampleSize = std::min(inputPtr->GetNumberOfComponentsPerPixel(),
-				     VMaxSampleDimension);
+             VMaxSampleDimension);
 
   bool validPoint = true;
 
   for(inIt.GoToBegin();!inIt.IsAtEnd();++inIt)
     {
       if(inputMaskPtr)
-	{
-	  validPoint = maskIt.Get()>0;
-	  ++maskIt;
-	}
+  {
+    validPoint = maskIt.Get()>0;
+    ++maskIt;
+  }
       if(validPoint)
-	{
-	  MeasurementVectorType sample;
-	  sample.Fill(itk::NumericTraits<ValueType>::ZeroValue());
-	  for(unsigned int i=0;i<sampleSize;i++)
-	    {
-	      sample[i]=inIt.Get()[i];
-	    }
-	  listSample->PushBack(sample);
-	}
+  {
+    MeasurementVectorType sample;
+    sample.Fill(itk::NumericTraits<ValueType>::ZeroValue());
+    for(unsigned int i=0;i<sampleSize;i++)
+      {
+        sample[i]=inIt.Get()[i];
+      }
+    listSample->PushBack(sample);
+  }
     }
   ClassifierPointerType classifier =ClassifierType::New();
   classifier->SetModel(m_Model);
@@ -146,15 +146,15 @@ SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskI
    while(!outIt.IsAtEnd()&&(sampleIter!=sampleLast))
      {
        if(inputMaskPtr)
-	 {
-	   validPoint = maskIt.Get()>0;
-	   ++maskIt;
-	 }
+   {
+     validPoint = maskIt.Get()>0;
+     ++maskIt;
+   }
        if(validPoint)
-	 {
-	   outIt.Set(sampleIter.GetClassLabel());
-	   ++sampleIter;
-	 }
+   {
+     outIt.Set(sampleIter.GetClassLabel());
+     ++sampleIter;
+   }
        ++outIt;
      }
 }

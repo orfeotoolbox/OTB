@@ -71,10 +71,10 @@ class ScalarVectorImageTextureFunctor
       IteratorrrType inputIt( image, image->GetLargestPossibleRegion() );
       inputIt.GoToBegin();
       for (unsigned int i = 0; i < neighborhoodSize; ++i)
-	{
-	  inputIt.Set(it.GetPixel(i));
-	  ++inputIt;
-	}
+  {
+    inputIt.Set(it.GetPixel(i));
+    ++inputIt;
+  }
 
       textureFilter->FastCalculationsOn();
       textureFilter->SetInput(image);

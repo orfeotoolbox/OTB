@@ -27,9 +27,9 @@ namespace otb
   RCC8EdgeIterator<TGraph>
   ::RCC8EdgeIterator()
   {
-	m_Graph = GraphType::New();
-	tie(m_Iter,m_End)=edges(*m_Graph->GetGraph());
-	}
+  m_Graph = GraphType::New();
+  tie(m_Iter,m_End)=edges(*m_Graph->GetGraph());
+  }
   /**
    * Copy operator.
    */

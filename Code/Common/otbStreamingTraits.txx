@@ -179,55 +179,55 @@ unsigned int StreamingTraits<TImage>::CalculateNeededRadiusForInterpolator(const
         className = interpolator->GetNameOfClass();
 
         if (className == "LinearInterpolateImageFunction")
-	  {
-	    otbMsgDevMacro(<<"Linear Interpolator");
-	    neededRadius = 1;
-	  }
+    {
+      otbMsgDevMacro(<<"Linear Interpolator");
+      neededRadius = 1;
+    }
         else if (className == "NearestNeighborInterpolateImageFunction")
-	  {
-	    otbMsgDevMacro(<<"Nearest Neighbor Interpolator");
-	    neededRadius = 1;
-	  }
+    {
+      otbMsgDevMacro(<<"Nearest Neighbor Interpolator");
+      neededRadius = 1;
+    }
         else if (className == "BSplineInterpolateImageFunction")
-	  {
-	    otbMsgDevMacro(<<"Nearest Neighbor Interpolator");
-	    neededRadius = 2;
-	  }
-       	else if (className == "ProlateInterpolateImageFunction")
-	  {
-	    otbMsgDevMacro(<<"Prolate Interpolator");
-	    neededRadius = dynamic_cast<const ProlateInterpolationType *>(interpolator)->GetRadius();
-	  }
-	else if (className == "WindowedSincInterpolateImageGaussianFunction")
-	  {
-	    otbMsgDevMacro(<<"Gaussian Windowed Interpolator");
-	    neededRadius = dynamic_cast<const GaussianInterpolationType *>(interpolator)->GetRadius();
-	  }
-	else if (className == "WindowedSincInterpolateImageHammingFunction")
-	  {
-	    otbMsgDevMacro(<<"Hamming Windowed Interpolator");
-	    neededRadius = dynamic_cast<const HammingInterpolationType *>(interpolator)->GetRadius();
-	  }
-	else if (className == "WindowedSincInterpolateImageCosineFunction")
-	  {
-	    otbMsgDevMacro(<<"Cosine Windowed Interpolator");
-	    neededRadius = dynamic_cast<const CosineInterpolationType *>(interpolator)->GetRadius();
-	  }
-	else if (className == "WindowedSincInterpolateImageWelchFunction")
-	  {
-	    otbMsgDevMacro(<<"Welch Windowed Interpolator");
-	    neededRadius = dynamic_cast<const WelchInterpolationType *>(interpolator)->GetRadius();
-	  }
-	else if (className == "WindowedSincInterpolateImageLanczosFunction")
-	  {
-	    otbMsgDevMacro(<<"Lanczos Windowed Interpolator");
-	    neededRadius = dynamic_cast<const LanczosInterpolationType *>(interpolator)->GetRadius();
-	  }
-	else if (className == "WindowedSincInterpolateImageBlackmanFunction")
-	  {
-	    otbMsgDevMacro(<<"Blackman Windowed Interpolator");
-	    neededRadius = dynamic_cast<const BlackmanInterpolationType *>(interpolator)->GetRadius();
-	  }
+    {
+      otbMsgDevMacro(<<"Nearest Neighbor Interpolator");
+      neededRadius = 2;
+    }
+         else if (className == "ProlateInterpolateImageFunction")
+    {
+      otbMsgDevMacro(<<"Prolate Interpolator");
+      neededRadius = dynamic_cast<const ProlateInterpolationType *>(interpolator)->GetRadius();
+    }
+  else if (className == "WindowedSincInterpolateImageGaussianFunction")
+    {
+      otbMsgDevMacro(<<"Gaussian Windowed Interpolator");
+      neededRadius = dynamic_cast<const GaussianInterpolationType *>(interpolator)->GetRadius();
+    }
+  else if (className == "WindowedSincInterpolateImageHammingFunction")
+    {
+      otbMsgDevMacro(<<"Hamming Windowed Interpolator");
+      neededRadius = dynamic_cast<const HammingInterpolationType *>(interpolator)->GetRadius();
+    }
+  else if (className == "WindowedSincInterpolateImageCosineFunction")
+    {
+      otbMsgDevMacro(<<"Cosine Windowed Interpolator");
+      neededRadius = dynamic_cast<const CosineInterpolationType *>(interpolator)->GetRadius();
+    }
+  else if (className == "WindowedSincInterpolateImageWelchFunction")
+    {
+      otbMsgDevMacro(<<"Welch Windowed Interpolator");
+      neededRadius = dynamic_cast<const WelchInterpolationType *>(interpolator)->GetRadius();
+    }
+  else if (className == "WindowedSincInterpolateImageLanczosFunction")
+    {
+      otbMsgDevMacro(<<"Lanczos Windowed Interpolator");
+      neededRadius = dynamic_cast<const LanczosInterpolationType *>(interpolator)->GetRadius();
+    }
+  else if (className == "WindowedSincInterpolateImageBlackmanFunction")
+    {
+      otbMsgDevMacro(<<"Blackman Windowed Interpolator");
+      neededRadius = dynamic_cast<const BlackmanInterpolationType *>(interpolator)->GetRadius();
+    }
 
         /*else if (className == "WindowedSincInterpolateImageFunction")
         {

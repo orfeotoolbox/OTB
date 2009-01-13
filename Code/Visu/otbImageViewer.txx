@@ -40,45 +40,45 @@ namespace otb
   {
     if(m_HistogramWindow!=NULL)
       {
-	m_HistogramWindow->remove(this->GetRedHistogramWidget());
-	if(this->GetFullWidget()->GetViewModel() == Superclass::ScrollWidgetType::RGB)
-	  {
-	    m_HistogramWindow->remove(this->GetGreenHistogramWidget());
-	    m_HistogramWindow->remove(this->GetBlueHistogramWidget());
-	  }
-	delete m_HistogramWindow;
-	m_HistogramWindow = NULL;
+  m_HistogramWindow->remove(this->GetRedHistogramWidget());
+  if(this->GetFullWidget()->GetViewModel() == Superclass::ScrollWidgetType::RGB)
+    {
+      m_HistogramWindow->remove(this->GetGreenHistogramWidget());
+      m_HistogramWindow->remove(this->GetBlueHistogramWidget());
+    }
+  delete m_HistogramWindow;
+  m_HistogramWindow = NULL;
       }
 
     if (m_FullWindow!=NULL)
       {
-	m_FullWindow->remove(this->GetFullWidget());
-	delete m_FullWindow;
-	m_FullWindow = NULL;
+  m_FullWindow->remove(this->GetFullWidget());
+  delete m_FullWindow;
+  m_FullWindow = NULL;
       }
     if(m_ZoomWindow!=NULL)
       {
-	m_ZoomWindow->remove(this->GetZoomWidget());
-	delete m_ZoomWindow;
-	m_ZoomWindow = NULL;
+  m_ZoomWindow->remove(this->GetZoomWidget());
+  delete m_ZoomWindow;
+  m_ZoomWindow = NULL;
       }
     if(m_ScrollWindow!=NULL)
       {
-	m_ScrollWindow->remove(this->GetScrollWidget());
-	delete m_ScrollWindow;
-	m_ScrollWindow = NULL;
+  m_ScrollWindow->remove(this->GetScrollWidget());
+  delete m_ScrollWindow;
+  m_ScrollWindow = NULL;
       }
 
     if(m_PixLocWindow!=NULL)
       {
-	m_PixLocWindow->remove(m_PixLocOutput);
-	delete m_PixLocWindow;
-	m_PixLocWindow = NULL;
+  m_PixLocWindow->remove(m_PixLocOutput);
+  delete m_PixLocWindow;
+  m_PixLocWindow = NULL;
       }
     if(m_PixLocOutput!=NULL)
       {
-	delete m_PixLocOutput;
-	m_PixLocOutput = NULL;
+  delete m_PixLocOutput;
+  m_PixLocOutput = NULL;
       }
   }
 
@@ -112,13 +112,13 @@ namespace otb
     m_HistogramWindow->add(this->GetGreenHistogramWidget());
     m_HistogramWindow->add(this->GetBlueHistogramWidget());
     this->GetGreenHistogramWidget()->resize(this->GetRedHistogramWidget()->w(),
-					    0,
-					    this->GetGreenHistogramWidget()->w(),
-					    this->GetGreenHistogramWidget()->h());
+              0,
+              this->GetGreenHistogramWidget()->w(),
+              this->GetGreenHistogramWidget()->h());
     this->GetBlueHistogramWidget()->resize(2*this->GetRedHistogramWidget()->w(),
-					   0,
-					   this->GetBlueHistogramWidget()->w(),
-					   this->GetBlueHistogramWidget()->h());
+             0,
+             this->GetBlueHistogramWidget()->w(),
+             this->GetBlueHistogramWidget()->h());
     m_HistogramWindow->resizable(m_HistogramWindow);
     m_HistogramWindow->end();
 

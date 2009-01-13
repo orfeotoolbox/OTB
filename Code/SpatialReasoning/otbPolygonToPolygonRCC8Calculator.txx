@@ -80,37 +80,37 @@ PolygonToPolygonRCC8Calculator<TInputPolygon>
     {
       /// If not, we must consider the intersection between exterior
       if(this->GetLevel3APrioriKnowledge())
-	{
-	  /// If the Level3APRioriKnowledge flag is set, this boolean
-	  /// can be determined from the two others
-	  exterInterBool=true;
-	}
+  {
+    /// If the Level3APRioriKnowledge flag is set, this boolean
+    /// can be determined from the two others
+    exterInterBool=true;
+  }
       else
-	{
-	  /// Else it must be computed
-	  exterInterBool = ComputeInterExter(m_Polygon2,m_Polygon1);
-	}
+  {
+    /// Else it must be computed
+    exterInterBool = ComputeInterExter(m_Polygon2,m_Polygon1);
+  }
 
       //std::cout<<"ExterInter: "<<exterInterBool<<std::endl;
 
       /// If it is not sufficient to compute the relation
       if(!ComputeRelation(edgeEdgeBool,interExterBool,exterInterBool))
-	{
-	  /// Compute the last boolean
-	  interInterBool = ComputeInterInter(m_Polygon1,m_Polygon2);
+  {
+    /// Compute the last boolean
+    interInterBool = ComputeInterInter(m_Polygon1,m_Polygon2);
 
-	  //std::cout<<"InterInter: "<<interInterBool<<std::endl;
+    //std::cout<<"InterInter: "<<interInterBool<<std::endl;
 
-	  /// Which allow the full determination
-	  if ((interExterBool)&&(edgeEdgeBool)&&(exterInterBool)&&(!interInterBool))
-	    {
-	      m_Value=OTB_RCC8_EC;
-	    }
-	  else
-	    {
-	      m_Value=OTB_RCC8_PO;
-	    }
-	}
+    /// Which allow the full determination
+    if ((interExterBool)&&(edgeEdgeBool)&&(exterInterBool)&&(!interInterBool))
+      {
+        m_Value=OTB_RCC8_EC;
+      }
+    else
+      {
+        m_Value=OTB_RCC8_PO;
+      }
+  }
     }
 }
 template<class TInputPolygon>
@@ -179,19 +179,19 @@ PolygonToPolygonRCC8Calculator<TInputPolygon>
       bool nextIsInside = polygon2->IsInside(it.Value());
 
       if (isInside && nextIsInside)
-	{
-	  //std::cout<<current<<" is inside and "<<it.Value()<<" is inside, nb crossings: "<<polygon2->NbCrossing(current,it.Value())<<std::endl;
-	  resp = polygon2->NbCrossing(current,it.Value()) >0;
-	}
+  {
+    //std::cout<<current<<" is inside and "<<it.Value()<<" is inside, nb crossings: "<<polygon2->NbCrossing(current,it.Value())<<std::endl;
+    resp = polygon2->NbCrossing(current,it.Value()) >0;
+  }
       current = it.Value();
       isInside  = nextIsInside;
       isExterior = !isInside && !polygon2->IsOnEdge(current) ;
       //std::cout<<current<<" is inside: "<<isInside<<std::endl;
       //std::cout<<current<<" is on edge: "<<polygon2->IsOnEdge(current)<<std::endl;
        if(isExterior)
-	 {
-	   resp = true;
-	 }
+   {
+     resp = true;
+   }
 
        ++index;
        ++it;
@@ -230,27 +230,27 @@ PolygonToPolygonRCC8Calculator<TInputPolygon>
       bool nextIsInside = polygon2->IsInside(it.Value());
 
       if (!currentIsInside && !nextIsInside && !polygon2->IsOnEdge(current) && !polygon2->IsOnEdge(it.Value()))
-	{
-	  unsigned int nbCrossings = polygon2->NbCrossing(current,it.Value());
+  {
+    unsigned int nbCrossings = polygon2->NbCrossing(current,it.Value());
 
-	  resp = nbCrossings>0;
-	}
+    resp = nbCrossings>0;
+  }
        currentIsInside =nextIsInside;
        current = it.Value();
 
        if(currentIsInside)
-	 {
-	   resp = true;
-	 }
+   {
+     resp = true;
+   }
       ++it;
     }
 
     if (!resp && !currentIsInside && !firstIsInside && !polygon2->IsOnEdge(current) && !polygon2->IsOnEdge(first))
-	{
-	  unsigned int nbCrossings = polygon2->NbCrossing(current,first);
+  {
+    unsigned int nbCrossings = polygon2->NbCrossing(current,first);
 
-	  resp = nbCrossings>0;
-	}
+    resp = nbCrossings>0;
+  }
   return resp;
 }
 template<class TInputPolygon>
@@ -271,22 +271,22 @@ PolygonToPolygonRCC8Calculator<TInputPolygon>
   while (! resp && it != it_end)
     {
       if(polygon2->NbTouching(current,it.Value())>0)
-	{
-	  resp = true;
-	  //std::cout<<"NbCrossing: "<<current<<" -> "<<it.Value()<<": "<<polygon2->NbCrossing(current,it.Value())<<std::endl;
-	}
+  {
+    resp = true;
+    //std::cout<<"NbCrossing: "<<current<<" -> "<<it.Value()<<": "<<polygon2->NbCrossing(current,it.Value())<<std::endl;
+  }
       if(polygon2->NbCrossing(current,it.Value())>0)
-	{
-	  resp = true;
-	  //std::cout<<"NbTouching: "<<current<<" -> "<<it.Value()<<": "<<polygon2->NbTouching(current,it.Value())<<std::endl;
-	}
+  {
+    resp = true;
+    //std::cout<<"NbTouching: "<<current<<" -> "<<it.Value()<<": "<<polygon2->NbTouching(current,it.Value())<<std::endl;
+  }
       current = it.Value();
 
       if(polygon2->IsOnEdge(current))
-	{
-	  resp = true;
-	  //std::cout<<"IsOnEdge: "<<current<<": "<<polygon2->IsOnEdge(current)<<std::endl;
-	}
+  {
+    resp = true;
+    //std::cout<<"IsOnEdge: "<<current<<": "<<polygon2->IsOnEdge(current)<<std::endl;
+  }
        ++it;
     }
   if(!resp && polygon2->NbTouching(current,first)>0)

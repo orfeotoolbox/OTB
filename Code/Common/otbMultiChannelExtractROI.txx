@@ -145,35 +145,35 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
     {
       // - User SetFirst/LastChannel()
       if( m_ChannelsKind == 1)
-	{
-	  this->SetChannelsWorkWithLimits();
-	}
+  {
+    this->SetChannelsWorkWithLimits();
+  }
       else
-	{
-	  // - User called SetChannels()
-	  if( m_Channels.empty() == true && m_ChannelsKind == 2)
-	    {
-	      m_ChannelsWorks = m_Channels;
-	    }
-	}
+  {
+    // - User called SetChannels()
+    if( m_Channels.empty() == true && m_ChannelsKind == 2)
+      {
+        m_ChannelsWorks = m_Channels;
+      }
+  }
     }
   // Second passage in the method: Update already donne
   else
     {
       // - User SetFirst/LastChannel()
       if( m_ChannelsKind == 1)
-	{
-	  m_Channels.clear();
-	  this->SetChannelsWorkWithLimits();
-	}
+  {
+    m_Channels.clear();
+    this->SetChannelsWorkWithLimits();
+  }
       else
-	{
-	  // - User called SetChannels()
-	  if( m_ChannelsKind == 2)
-	    {
-	      m_ChannelsWorks = m_Channels;
-	    }
-	}
+  {
+    // - User called SetChannels()
+    if( m_ChannelsKind == 2)
+      {
+        m_ChannelsWorks = m_Channels;
+      }
+  }
     }
 }
 
@@ -185,14 +185,14 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
   if ((m_FirstChannel == 0) || (m_LastChannel == 0))
     {
       itkExceptionMacro(<< "otb::ExtractImageFilter::GenerateOutputInformation "
-			<< "Channels must reside into [1...] "
-			 << typeid(itk::ImageBase<InputImageDimension>*).name() );
+      << "Channels must reside into [1...] "
+       << typeid(itk::ImageBase<InputImageDimension>*).name() );
     }
   if ( m_FirstChannel > m_LastChannel )
     {
       itkExceptionMacro(<< "otb::ExtractImageFilter::GenerateOutputInformation "
-			<< "FirstChannel is greater than LastChannel"
-			<< typeid(itk::ImageBase<InputImageDimension>*).name() );
+      << "FirstChannel is greater than LastChannel"
+      << typeid(itk::ImageBase<InputImageDimension>*).name() );
     }
 
   for( unsigned int channel = m_FirstChannel ; channel <= m_LastChannel ; channel ++ )
@@ -233,33 +233,33 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
       ChannelsType  m_BadChannels;
       m_BadChannels.clear();
       for(unsigned int i=0 ; i < m_ChannelsWorks.size() ; i++)
-	{
-	  if( ( m_ChannelsWorks[i] < 1 )||(m_ChannelsWorks[i] > nbComponentsPerPixel) )
-	    {
-	      bool isInsideBadChannels = false;
-	      for(unsigned int j=0 ; j < m_BadChannels.size() ; j++)
-		{
-		  if ( m_BadChannels[j]==m_ChannelsWorks[i] )
-		    isInsideBadChannels = true;
+  {
+    if( ( m_ChannelsWorks[i] < 1 )||(m_ChannelsWorks[i] > nbComponentsPerPixel) )
+      {
+        bool isInsideBadChannels = false;
+        for(unsigned int j=0 ; j < m_BadChannels.size() ; j++)
+    {
+      if ( m_BadChannels[j]==m_ChannelsWorks[i] )
+        isInsideBadChannels = true;
 
-		}
-	      if( !isInsideBadChannels)
-		m_BadChannels.push_back(m_ChannelsWorks[i]);
-	    }
-	}
+    }
+        if( !isInsideBadChannels)
+    m_BadChannels.push_back(m_ChannelsWorks[i]);
+      }
+  }
       if( m_BadChannels.empty() == false )
-	{
-	  itk::OStringStream oss;
-	  oss << "otb::ExtractImageFilter::GenerateOutputInformation : ";
-	  oss <<  "Channel(s) [ ";
-	  for(unsigned int i=0 ; i < m_BadChannels.size() ; i++)
-	    {
-	      oss << m_BadChannels[i] << " ";
-	    }
-	  oss << "] not authorized.";
-	  oss << " Each channel index has to be in [1," << nbComponentsPerPixel << "].";
-	  itkExceptionMacro(<< oss.str().c_str());
-	}
+  {
+    itk::OStringStream oss;
+    oss << "otb::ExtractImageFilter::GenerateOutputInformation : ";
+    oss <<  "Channel(s) [ ";
+    for(unsigned int i=0 ; i < m_BadChannels.size() ; i++)
+      {
+        oss << m_BadChannels[i] << " ";
+      }
+    oss << "] not authorized.";
+    oss << " Each channel index has to be in [1," << nbComponentsPerPixel << "].";
+    itkExceptionMacro(<< oss.str().c_str());
+  }
       nbComponentsPerPixel = m_ChannelsWorks.size();
     }
 
@@ -319,20 +319,20 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
       InputImagePixelType  pixelInput;
       while( !outIt.IsAtEnd() )
         {
-	  OutputImagePixelType pixelOutput;
-	  pixelOutput.Reserve( outputPtr->GetVectorLength() );
-	  pixelInput = inIt.Get();
-	  channelOut = 0;
-	  for ( nbChannels = 0 ; nbChannels < m_ChannelsWorks.size() ; nbChannels++)
-	    {
-	      channelIn = m_ChannelsWorks[nbChannels] - 1;
-	      pixelOutput[channelOut] = static_cast<OutputValueType>(pixelInput[channelIn]);
-	      channelOut++;
-	    }
-	  outIt.Set( pixelOutput );
-	  ++outIt;
-	  ++inIt;
-	  progress.CompletedPixel();
+    OutputImagePixelType pixelOutput;
+    pixelOutput.Reserve( outputPtr->GetVectorLength() );
+    pixelInput = inIt.Get();
+    channelOut = 0;
+    for ( nbChannels = 0 ; nbChannels < m_ChannelsWorks.size() ; nbChannels++)
+      {
+        channelIn = m_ChannelsWorks[nbChannels] - 1;
+        pixelOutput[channelOut] = static_cast<OutputValueType>(pixelInput[channelIn]);
+        channelOut++;
+      }
+    outIt.Set( pixelOutput );
+    ++outIt;
+    ++inIt;
+    progress.CompletedPixel();
         }
     }
 }

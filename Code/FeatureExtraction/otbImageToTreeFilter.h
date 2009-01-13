@@ -35,7 +35,7 @@ class ITK_EXPORT ImageToTreeFilter : public TreeSource<TOutputTree>
 public:
   /** Standard class typedefs. */
   typedef ImageToTreeFilter                 Self;
-  typedef TreeSource<TOutputTree>	    Superclass;
+  typedef TreeSource<TOutputTree>      Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
 

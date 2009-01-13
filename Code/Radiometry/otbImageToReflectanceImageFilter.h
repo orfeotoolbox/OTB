@@ -42,41 +42,41 @@ namespace otb
        * \ingroup LuminanceToReflectanceFunctor
        */
       template <class TInput, class TOutput>
-	class ImageToReflectanceImageFunctor
-	{
-	public:
-	  ImageToReflectanceImageFunctor() {};
-	  ~ImageToReflectanceImageFunctor() {};
+  class ImageToReflectanceImageFunctor
+  {
+  public:
+    ImageToReflectanceImageFunctor() {};
+    ~ImageToReflectanceImageFunctor() {};
 
-	  typedef Functor::ImageToLuminanceImageFunctor<TInput, TOutput>        ImToLumFunctorType;
-	  typedef Functor::LuminanceToReflectanceImageFunctor<TInput, TOutput>  LumToReflecFunctorType;
+    typedef Functor::ImageToLuminanceImageFunctor<TInput, TOutput>        ImToLumFunctorType;
+    typedef Functor::LuminanceToReflectanceImageFunctor<TInput, TOutput>  LumToReflecFunctorType;
 
-	  void SetAlpha(double alpha){ m_ImToLumFunctor.SetAlpha(alpha); };
-	  void SetBeta(double beta){ m_ImToLumFunctor.SetBeta(beta); };
-	  void SetSolarIllumination(double solarIllumination){ m_LumToReflecFunctor.SetSolarIllumination(solarIllumination); };
-	  void SetIlluminationCorrectionCoefficient(double coef){ m_LumToReflecFunctor.SetIlluminationCorrectionCoefficient(coef); };
+    void SetAlpha(double alpha){ m_ImToLumFunctor.SetAlpha(alpha); };
+    void SetBeta(double beta){ m_ImToLumFunctor.SetBeta(beta); };
+    void SetSolarIllumination(double solarIllumination){ m_LumToReflecFunctor.SetSolarIllumination(solarIllumination); };
+    void SetIlluminationCorrectionCoefficient(double coef){ m_LumToReflecFunctor.SetIlluminationCorrectionCoefficient(coef); };
 
-	  double GetAlpha(){ return m_ImToLumFunctor.GetAlpha();};
-	  double GetBeta(){ return m_ImToLumFunctor.GetBeta();};
-	  double GetSolarIllumination(){ return  m_LumToReflecFunctor.GetSolarIllumination();};
-	  double GetIlluminationCorrectionCoefficient(){ return m_LumToReflecFunctor.GetIlluminationCorrectionCoefficient();};
+    double GetAlpha(){ return m_ImToLumFunctor.GetAlpha();};
+    double GetBeta(){ return m_ImToLumFunctor.GetBeta();};
+    double GetSolarIllumination(){ return  m_LumToReflecFunctor.GetSolarIllumination();};
+    double GetIlluminationCorrectionCoefficient(){ return m_LumToReflecFunctor.GetIlluminationCorrectionCoefficient();};
 
-	  inline TOutput operator() (const TInput & inPixel)
-	    {
-	      TOutput outPixel;
-	      TOutput tempPix;
-	      tempPix = m_ImToLumFunctor(inPixel);
- 	      outPixel = m_LumToReflecFunctor(tempPix);
+    inline TOutput operator() (const TInput & inPixel)
+      {
+        TOutput outPixel;
+        TOutput tempPix;
+        tempPix = m_ImToLumFunctor(inPixel);
+         outPixel = m_LumToReflecFunctor(tempPix);
 
-	      return outPixel;
-	    }
+        return outPixel;
+      }
 
-	private:
-	  ImToLumFunctorType m_ImToLumFunctor;
-	  LumToReflecFunctorType m_LumToReflecFunctor;
+  private:
+    ImToLumFunctorType m_ImToLumFunctor;
+    LumToReflecFunctorType m_LumToReflecFunctor;
 
 
-	};
+  };
     }
 
 /** \class ImageToReflectanceImageFilter
@@ -99,7 +99,7 @@ public UnaryImageFunctorWithVectorImageFilter< TInputImage,
                                                                                                    ITK_TYPENAME TOutputImage::InternalPixelType > >
 {
 public:
-/** 	Extract input and output images dimensions.*/
+/**   Extract input and output images dimensions.*/
   itkStaticConstMacro( InputImageDimension, unsigned int, TInputImage::ImageDimension);
   itkStaticConstMacro( OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
@@ -195,35 +195,35 @@ public:
     {
       this->GetFunctorVector().clear();
       for(unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
-	{
-	  FunctorType functor;
-	  double coefTemp = 0.;
-	  if (!m_IsSetFluxNormalizationCoefficient)
-	    {
-	      if (m_Day*m_Month != 0 && m_Day<32 && m_Month<13)
-		{
-		  otb_6s_doublereal dsol = 0.;
-		  otb_6s_integer day = static_cast<otb_6s_integer>(m_Day);
-		  otb_6s_integer mounth = static_cast<otb_6s_integer>(m_Month);
-		  int cr(0);
-		  cr = otb_6s_varsol_(&day, &mounth, &dsol);
-		  coefTemp = vcl_cos(m_ZenithalSolarAngle*M_PI/180.)*static_cast<double>(dsol);
-		}
-	      else
-		{
-		  itkExceptionMacro( << "Day has to be included between 1 and 31, Month beetween 1 and 12.");
-		}
-	    }
-	  else
-	    {
-	      coefTemp = vcl_cos(m_ZenithalSolarAngle*M_PI/180.)*m_FluxNormalizationCoefficient*m_FluxNormalizationCoefficient;
-	    }
-	  functor.SetIlluminationCorrectionCoefficient(1. / coefTemp);
-	  functor.SetAlpha(m_Alpha[i]);
-	  functor.SetBeta(m_Beta[i]);
-	  functor.SetSolarIllumination(m_SolarIllumination[i]);
-	  this->GetFunctorVector().push_back(functor);
-	}
+  {
+    FunctorType functor;
+    double coefTemp = 0.;
+    if (!m_IsSetFluxNormalizationCoefficient)
+      {
+        if (m_Day*m_Month != 0 && m_Day<32 && m_Month<13)
+    {
+      otb_6s_doublereal dsol = 0.;
+      otb_6s_integer day = static_cast<otb_6s_integer>(m_Day);
+      otb_6s_integer mounth = static_cast<otb_6s_integer>(m_Month);
+      int cr(0);
+      cr = otb_6s_varsol_(&day, &mounth, &dsol);
+      coefTemp = vcl_cos(m_ZenithalSolarAngle*M_PI/180.)*static_cast<double>(dsol);
+    }
+        else
+    {
+      itkExceptionMacro( << "Day has to be included between 1 and 31, Month beetween 1 and 12.");
+    }
+      }
+    else
+      {
+        coefTemp = vcl_cos(m_ZenithalSolarAngle*M_PI/180.)*m_FluxNormalizationCoefficient*m_FluxNormalizationCoefficient;
+      }
+    functor.SetIlluminationCorrectionCoefficient(1. / coefTemp);
+    functor.SetAlpha(m_Alpha[i]);
+    functor.SetBeta(m_Beta[i]);
+    functor.SetSolarIllumination(m_SolarIllumination[i]);
+    this->GetFunctorVector().push_back(functor);
+  }
     }
 
 

@@ -40,24 +40,24 @@ namespace otb
    */
 
 class ChangeProfileKernelFunctor
-		: public GenericKernelFunctorBase
+    : public GenericKernelFunctorBase
 {
 public:
 
-	double operator() ( const svm_node * x, const svm_node * y,
-						const svm_parameter & param ) const;
+  double operator() ( const svm_node * x, const svm_node * y,
+            const svm_parameter & param ) const;
 
-	ChangeProfileKernelFunctor ();
-	virtual ~ChangeProfileKernelFunctor () { }
+  ChangeProfileKernelFunctor ();
+  virtual ~ChangeProfileKernelFunctor () { }
 
-	/** Specific implementation of \code Update \endcode to split m_MapParameters
-	 * into specific variables to speed up kernel evaluations */
-	void Update ();
+  /** Specific implementation of \code Update \endcode to split m_MapParameters
+   * into specific variables to speed up kernel evaluations */
+  void Update ();
 
 private:
-	double m_Coef;
-	double m_Degree;
-	double m_Gamma;
+  double m_Coef;
+  double m_Degree;
+  double m_Gamma;
 };
 
 } // end of namespace otb

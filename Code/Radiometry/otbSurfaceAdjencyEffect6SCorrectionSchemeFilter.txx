@@ -102,15 +102,15 @@ SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
   for(unsigned int i = 0; i<m_WindowRadius+1; ++i)
     {
       for(unsigned int j = 0; j<m_WindowRadius+1; ++j)
-	{
-	  double id = static_cast<double>(i);
-	  double jd = static_cast<double>(j);
-	  double currentRadius = m_PixelSpacingInKilometers*vcl_sqrt(vcl_pow(id-center,2)+vcl_pow(jd-center,2));
-	  radiusMatrix(i,j)=currentRadius;
-	  radiusMatrix(2*m_WindowRadius-i,j)=currentRadius;
-	  radiusMatrix(2*m_WindowRadius-i,2*m_WindowRadius-j)=currentRadius;
-	  radiusMatrix(i,2*m_WindowRadius-j)=currentRadius;
-	}
+  {
+    double id = static_cast<double>(i);
+    double jd = static_cast<double>(j);
+    double currentRadius = m_PixelSpacingInKilometers*vcl_sqrt(vcl_pow(id-center,2)+vcl_pow(jd-center,2));
+    radiusMatrix(i,j)=currentRadius;
+    radiusMatrix(2*m_WindowRadius-i,j)=currentRadius;
+    radiusMatrix(2*m_WindowRadius-i,2*m_WindowRadius-j)=currentRadius;
+    radiusMatrix(i,2*m_WindowRadius-j)=currentRadius;
+  }
     }
 
   for(unsigned int band = 0; band<inputPtr->GetNumberOfComponentsPerPixel();++band)
@@ -122,16 +122,16 @@ SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
       currentWeightingMatrix.Fill(0.);
 
       for(unsigned int i = 0; i<2*m_WindowRadius+1; ++i)
-	{
-	  for(unsigned int j = 0; j<2*m_WindowRadius+1; ++j)
-	    {
-	      double notUsed1,notUsed2;
-	      double factor = 1;
-	      double palt = 1000.;
-	      SIXSTraits::ComputeEnvironmentalContribution(rayleigh,aerosol,radiusMatrix(i,j),palt,vcl_cos(m_ZenithalViewingAngle*M_PI/180.),notUsed1,notUsed2,factor); //Call to 6S
-	      currentWeightingMatrix(i,j)=factor;
-	    }
-	}
+  {
+    for(unsigned int j = 0; j<2*m_WindowRadius+1; ++j)
+      {
+        double notUsed1,notUsed2;
+        double factor = 1;
+        double palt = 1000.;
+        SIXSTraits::ComputeEnvironmentalContribution(rayleigh,aerosol,radiusMatrix(i,j),palt,vcl_cos(m_ZenithalViewingAngle*M_PI/180.),notUsed1,notUsed2,factor); //Call to 6S
+        currentWeightingMatrix(i,j)=factor;
+      }
+  }
       m_WeightingValues.push_back(currentWeightingMatrix);
     }
 

@@ -39,54 +39,54 @@ namespace Functor
       class ColorAnaglyphFunctor
       {
       public:
-	/// Constructor
-	ColorAnaglyphFunctor()
-	  {
-	    m_RedChannelIndex = 0;
-	    m_GreenChannelIndex = 1;
-	    m_BlueChannelIndex = 2;
-	  };
-	/// Destructor
-	~ColorAnaglyphFunctor(){};
+  /// Constructor
+  ColorAnaglyphFunctor()
+    {
+      m_RedChannelIndex = 0;
+      m_GreenChannelIndex = 1;
+      m_BlueChannelIndex = 2;
+    };
+  /// Destructor
+  ~ColorAnaglyphFunctor(){};
 
-	inline TOutputPixel operator()(const TInputPixel1& pixel1, const TInputPixel2& pixel2)
-	  {
-	    TOutputPixel result(3);
-	    result[0]=static_cast<typename TOutputPixel::ValueType>(pixel1[m_RedChannelIndex]);
-	    result[1]=static_cast<typename TOutputPixel::ValueType>(pixel2[m_GreenChannelIndex]);
-	    result[2]=static_cast<typename TOutputPixel::ValueType>(pixel2[m_BlueChannelIndex]);
-	    return result;
-	  }
+  inline TOutputPixel operator()(const TInputPixel1& pixel1, const TInputPixel2& pixel2)
+    {
+      TOutputPixel result(3);
+      result[0]=static_cast<typename TOutputPixel::ValueType>(pixel1[m_RedChannelIndex]);
+      result[1]=static_cast<typename TOutputPixel::ValueType>(pixel2[m_GreenChannelIndex]);
+      result[2]=static_cast<typename TOutputPixel::ValueType>(pixel2[m_BlueChannelIndex]);
+      return result;
+    }
 
-	void SetRedChannelIndex(unsigned int index)
-	  {
-	    m_RedChannelIndex = index;
-	  }
-	void SetGreenChannelIndex(unsigned int index)
-	  {
-	    m_GreenChannelIndex = index;
-	  }
-	void SetBlueChannelIndex(unsigned int index)
-	  {
-	    m_BlueChannelIndex = index;
-	  }
-	unsigned int GetRedChannelIndex(void)
-	  {
-	    return m_RedChannelIndex;
-	  }
-	unsigned int GetGreenChannelIndex(void)
-	  {
-	    return m_GreenChannelIndex;
-	  }
-	unsigned int GetBlueChannelIndex(void)
-	  {
-	    return m_BlueChannelIndex;
-	  }
+  void SetRedChannelIndex(unsigned int index)
+    {
+      m_RedChannelIndex = index;
+    }
+  void SetGreenChannelIndex(unsigned int index)
+    {
+      m_GreenChannelIndex = index;
+    }
+  void SetBlueChannelIndex(unsigned int index)
+    {
+      m_BlueChannelIndex = index;
+    }
+  unsigned int GetRedChannelIndex(void)
+    {
+      return m_RedChannelIndex;
+    }
+  unsigned int GetGreenChannelIndex(void)
+    {
+      return m_GreenChannelIndex;
+    }
+  unsigned int GetBlueChannelIndex(void)
+    {
+      return m_BlueChannelIndex;
+    }
       private:
-	/// Color composition channels indices
-	unsigned int m_RedChannelIndex;
-	unsigned int m_GreenChannelIndex;
-	unsigned int m_BlueChannelIndex;
+  /// Color composition channels indices
+  unsigned int m_RedChannelIndex;
+  unsigned int m_GreenChannelIndex;
+  unsigned int m_BlueChannelIndex;
       };
   }
  /** \class VectorImageToColorAnaglyphVectorImageFilter

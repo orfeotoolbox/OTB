@@ -26,43 +26,43 @@ namespace otb {
 
 SpectralAngleKernelFunctor
 ::SpectralAngleKernelFunctor ()
-		: GenericKernelFunctorBase ()
+    : GenericKernelFunctorBase ()
 {
-	m_Coef = 2.0;
+  m_Coef = 2.0;
 
-	SetValue( "Coef", m_Coef );
+  SetValue( "Coef", m_Coef );
 }
 
 void
 SpectralAngleKernelFunctor
 ::Update ()
 {
-	m_Coef = GetValue<double>( "Coef" );
+  m_Coef = GetValue<double>( "Coef" );
 }
 
 double
 SpectralAngleKernelFunctor
 ::operator()( const svm_node * x, const svm_node * y,
-				const svm_parameter & param ) const
+        const svm_parameter & param ) const
 {
-	double mq = m_Coef + SAM( x, y );
+  double mq = m_Coef + SAM( x, y );
 
-	if ( mq == 0.0 )
-		return DBL_MAX;
+  if ( mq == 0.0 )
+    return DBL_MAX;
 
-	return 1.0 / sqrt( mq );
+  return 1.0 / sqrt( mq );
 }
 
 double
 SpectralAngleKernelFunctor
 ::SAM ( const svm_node * x, const svm_node * y ) const
 {
-	double den = dot(x,x) * dot(y,y);
-	if ( den <= 0.0 )
-		return 0.0;
+  double den = dot(x,x) * dot(y,y);
+  if ( den <= 0.0 )
+    return 0.0;
 
-	double ss = dot(x,y);
-	return /*acos*/( ss / sqrt( den ) );
+  double ss = dot(x,y);
+  return /*acos*/( ss / sqrt( den ) );
 }
 
 }

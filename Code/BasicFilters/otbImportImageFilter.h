@@ -73,7 +73,7 @@ public:
   typedef itk::ImageRegion<OutputImageType::ImageDimension>  RegionType;
 
   /** Type of the output image pixel type. */
-	typedef typename OutputImageType::PixelType TPixel;
+  typedef typename OutputImageType::PixelType TPixel;
 
   /** Get the pointer from which the image data is imported. */
   TPixel *GetImportPointer();

@@ -36,7 +36,7 @@ class ITK_EXPORT StreamingResampleImageFilter :  public itk::ResampleImageFilter
 {
 public:
 
-	/** Standard class typedefs. */
+  /** Standard class typedefs. */
   typedef StreamingResampleImageFilter Self;
   typedef itk::ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType> Superclass;
   typedef itk::SmartPointer<Self> Pointer;
@@ -46,8 +46,8 @@ public:
   typedef typename TInputImage::Pointer InputImagePointer;
   typedef typename TOutputImage::Pointer OutputImagePointer;
 
-	typedef typename TInputImage::IndexType IndexType;
-	typedef typename TInputImage::SizeType SizeType;
+  typedef typename TInputImage::IndexType IndexType;
+  typedef typename TInputImage::SizeType SizeType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -55,28 +55,28 @@ public:
    /** Run-time type information (and related methods). */
   itkTypeMacro(StreamingResampleImageFilter, itk::ResampleImageFilter);
 
-	/** Type definitions */
+  /** Type definitions */
   typedef typename TInputImage::PixelType InputPixelType;
   typedef typename TOutputImage::PixelType OutputPixelType;
 
-	typedef typename TInputImage::RegionType InputImageRegionType;
+  typedef typename TInputImage::RegionType InputImageRegionType;
   typedef typename TOutputImage::RegionType OutputImageRegionType;
 
-	typedef typename Superclass::InterpolatorType InterpolatorType;
-	typedef typename InterpolatorType::PointType  PointType;
+  typedef typename Superclass::InterpolatorType InterpolatorType;
+  typedef typename InterpolatorType::PointType  PointType;
 
   itkSetMacro(InterpolatorNeighborhoodRadius,unsigned int);
-	itkGetMacro(InterpolatorNeighborhoodRadius,unsigned int);
+  itkGetMacro(InterpolatorNeighborhoodRadius,unsigned int);
 
   itkSetMacro(AddedRadius,unsigned int);
-	itkGetMacro(AddedRadius,unsigned int);
+  itkGetMacro(AddedRadius,unsigned int);
 
   /** ResampleImageFilter needs a different input requested region than
    * the output requested region.  As such, ResampleImageFilter needs
    * to provide an implementation for GenerateInputRequestedRegion()
    * in order to inform the pipeline execution model.
    * \sa ProcessObject::GenerateInputRequestedRegion()
-	 */
+   */
   virtual void GenerateInputRequestedRegion() ;
 
 protected:
@@ -89,11 +89,11 @@ private:
   StreamingResampleImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-	// Determine size of pad needed for interpolators neighborhood
-	unsigned int m_InterpolatorNeighborhoodRadius;
+  // Determine size of pad needed for interpolators neighborhood
+  unsigned int m_InterpolatorNeighborhoodRadius;
 
-	// Used to be sure that each final region will be contiguous
-	unsigned int m_AddedRadius;
+  // Used to be sure that each final region will be contiguous
+  unsigned int m_AddedRadius;
 
 };
 

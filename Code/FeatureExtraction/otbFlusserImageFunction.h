@@ -62,7 +62,7 @@ namespace otb
 template < class TInput,
            class TOutput    = double,
            class TPrecision = double,
-	   class TCoordRep  = float >
+     class TCoordRep  = float >
 class ITK_EXPORT FlusserImageFunction :
   public RealMomentImageFunction< TInput, TOutput, TPrecision, TCoordRep >
 {

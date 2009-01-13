@@ -585,7 +585,7 @@ bool isHexaPointerAddress(std::string str)
   bool result(false);
   unsigned int start(0);
   //If (0xadresss)
-  if(	(str[0]==40) &&
+  if(  (str[0]==40) &&
        (str[str.size()-1]==41) &&
        (str[1]==48) &&
        (str[2]==120) &&

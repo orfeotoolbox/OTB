@@ -95,7 +95,7 @@ ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
   VertexType                          cindex;
   VertexType                          IndexOut;
   int                                 nbPath;
-  ComplexType  	     		      Value;
+  ComplexType                   Value;
 
   Value = static_cast<ComplexType>(0.0);
 
@@ -121,11 +121,11 @@ ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
 
        for(RealType k = 0 ; k <=Norm ; k+=m_Step)
          {
-	 IndexOut[0] = x1 + k * vcl_cos(Theta);
-	 IndexOut[1] = y1 + k * vcl_sin(Theta);
+   IndexOut[0] = x1 + k * vcl_cos(Theta);
+   IndexOut[1] = y1 + k * vcl_sin(Theta);
 
-	 Value += EvaluateComplexMomentAtIndex(IndexOut );
-	 }
+   Value += EvaluateComplexMomentAtIndex(IndexOut );
+   }
        } // FOR loop
      } // IF loop
   return (static_cast<OutputType>(Value) );

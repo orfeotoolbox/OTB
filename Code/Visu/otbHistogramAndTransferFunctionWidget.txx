@@ -76,9 +76,9 @@ HistogramAndTransferFunctionWidget<THistogram,TPixel>
       glLoadIdentity();
       glViewport(0,0,w(),h());
       glClearColor(m_BackgroundColor[0],
-		   m_BackgroundColor[1],
-		   m_BackgroundColor[2],
-		   1);
+       m_BackgroundColor[1],
+       m_BackgroundColor[2],
+       1);
     }
   glShadeModel(GL_FLAT);
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -216,7 +216,7 @@ HistogramAndTransferFunctionWidget<THistogram,TPixel>
  for(unsigned int i=0;i<m_GridSizeY;++i)
     {
       unsigned int value = static_cast<unsigned int>(i
-	*maxFrequency/(m_HistogramClamping*static_cast<double>(m_GridSizeY)));
+  *maxFrequency/(m_HistogramClamping*static_cast<double>(m_GridSizeY)));
       oss<<value;
       y=static_cast<double>(i)*gridYSpacing+m_MarginY;
       x=0;
@@ -244,7 +244,7 @@ HistogramAndTransferFunctionWidget<THistogram,TPixel>
   for(unsigned int i=0;i<m_Histogram->Size()+1;++i)
     {
       PixelType value = static_cast<PixelType>(m_Histogram->Quantile(0,0.)
-					       +static_cast<double>(i)*step);
+                 +static_cast<double>(i)*step);
 
       x = m_MarginX + static_cast<double>(i)*xscale;
       y = m_MarginY + yscale * static_cast<double>(m_TransferFunction->Map(value));
@@ -274,9 +274,9 @@ HistogramAndTransferFunctionWidget<THistogram,TPixel>
   for(vit=outputHistogram.begin();vit!=outputHistogram.end();++vit)
     {
       if(maxFrequency<(*vit))
-	{
-	  maxFrequency=(*vit);
-	}
+  {
+    maxFrequency=(*vit);
+  }
     }
 
   // Temporary vertex coordinates
@@ -291,19 +291,19 @@ HistogramAndTransferFunctionWidget<THistogram,TPixel>
      // Rendering histogram
      for(vit=outputHistogram.begin();vit!=outputHistogram.end();++vit,starty+=binWidth)
        {
-	 glBegin(GL_POLYGON);
-	 glColor3d(m_TransferFunctionColor[0],m_TransferFunctionColor[1],m_TransferFunctionColor[2]);
+   glBegin(GL_POLYGON);
+   glColor3d(m_TransferFunctionColor[0],m_TransferFunctionColor[1],m_TransferFunctionColor[2]);
 
-	 x =static_cast<double>(this->w())-m_OutputHistogramMargin*static_cast<double>(this->w())-m_MarginX/2;
-	 y = starty;
-	 glVertex2d(x,y);
-	 x += binLengthRatio*static_cast<double>((*vit)> maxFrequency/m_HistogramClamping ? maxFrequency/m_HistogramClamping : (*vit));
-	 glVertex2d(x,y);
-	 y += binWidth;
-	 glVertex2d(x,y);
-	 x =static_cast<double>(this->w())-m_OutputHistogramMargin*static_cast<double>(this->w())-m_MarginX/2;
-	 glVertex2d(x,y);
-	 glEnd();
+   x =static_cast<double>(this->w())-m_OutputHistogramMargin*static_cast<double>(this->w())-m_MarginX/2;
+   y = starty;
+   glVertex2d(x,y);
+   x += binLengthRatio*static_cast<double>((*vit)> maxFrequency/m_HistogramClamping ? maxFrequency/m_HistogramClamping : (*vit));
+   glVertex2d(x,y);
+   y += binWidth;
+   glVertex2d(x,y);
+   x =static_cast<double>(this->w())-m_OutputHistogramMargin*static_cast<double>(this->w())-m_MarginX/2;
+   glVertex2d(x,y);
+   glEnd();
        }
    }
  glBegin(GL_LINE_LOOP);
@@ -354,9 +354,9 @@ HistogramAndTransferFunctionWidget<THistogram,TPixel>
   for(it=m_Histogram->Begin();it!=m_Histogram->End();++it)
     {
       if(it.GetFrequency()>maxFrequency)
-	{
-	  maxFrequency = it.GetFrequency();
-	}
+  {
+    maxFrequency = it.GetFrequency();
+  }
     }
 
   double binWidth = static_cast<double>(this->w()-2*m_MarginX-m_OutputHistogramMargin*static_cast<double>(this->w()))/static_cast<double>(m_Histogram->GetSize()[0]);

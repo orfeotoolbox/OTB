@@ -137,11 +137,11 @@ protected:
 private:
   ImageToPathListAlignFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  bool		m_isMeaningfulSegment;	/// to get all meaningful segments (maximal or not
-  int		m_NbGradDirection; 	/// Number of allowed gradient direction, default 16
-  int		m_NbLineDirection; 	/// Number of line directions to scan, default 96)
-  double	m_MinGradNorm;		/// Minimum gradient norm to define a direction, default 2.
-  double	m_Eps;			/// -log10(max. number of false alarms), default 0
+  bool    m_isMeaningfulSegment;  /// to get all meaningful segments (maximal or not
+  int    m_NbGradDirection;   /// Number of allowed gradient direction, default 16
+  int    m_NbLineDirection;   /// Number of line directions to scan, default 96)
+  double  m_MinGradNorm;    /// Minimum gradient norm to define a direction, default 2.
+  double  m_Eps;      /// -log10(max. number of false alarms), default 0
   std::vector<double> m_seglist;
 
   RealImageType * m_AngleImage; //Angle image use by GenerateData and AngleCalculate methods

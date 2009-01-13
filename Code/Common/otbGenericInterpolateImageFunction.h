@@ -131,8 +131,8 @@ public itk::InterpolateImageFunction<TInputImage,TCoordRep>
     unsigned int m_ImageDimension;
 
     /** These members are declared mutable so that they can be
-	regenerated seamlessly inside the EvaluateAtContinuousIndex method if
-	they need to */
+  regenerated seamlessly inside the EvaluateAtContinuousIndex method if
+  they need to */
     /** Size of the offset table */
     mutable unsigned int m_OffsetTableSize;
     /** The offset array, used to keep a list of relevant

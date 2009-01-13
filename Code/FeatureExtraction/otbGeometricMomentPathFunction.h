@@ -33,7 +33,7 @@ namespace otb
 
 template < class TInputPath,
            class TOutput,
-       	   class TPrecision = double>
+            class TPrecision = double>
 class ITK_EXPORT GeometricMomentPathFunction :
   public PathFunction< TInputPath, TOutput>
 {

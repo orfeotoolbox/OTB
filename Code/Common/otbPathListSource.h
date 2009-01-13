@@ -53,7 +53,7 @@ public:
   itkTypeMacro(PathListSource,ObjectListSource);
 
   /** Some convenient typedefs. */
-  typedef itk::DataObject::Pointer             		DataObjectPointer;
+  typedef itk::DataObject::Pointer                 DataObjectPointer;
 
   typedef TOutputPath                               OutputPathType;
   typedef typename OutputPathType::Pointer          OutputPathPointerType;

@@ -45,11 +45,11 @@ Segmenter<TInputImage, TOutputImage>
 ::Segmenter()
 {
   this->SetNumberOfRequiredInputs(2);
-	m_SeedsQuantile = 0.9;
-	m_MinimumObjectSize = 10;
-	m_SegmentDarkDetailsBool = false;
-	m_NumberOfObjects = 0;
-	m_ConnectedThresholdQuantile = 0.9;
+  m_SeedsQuantile = 0.9;
+  m_MinimumObjectSize = 10;
+  m_SegmentDarkDetailsBool = false;
+  m_NumberOfObjects = 0;
+  m_ConnectedThresholdQuantile = 0.9;
 }
 /**
  * Set the details image.
@@ -280,15 +280,15 @@ Segmenter<TInputImage, TOutputImage>
   if(relabeler->GetNumberOfObjects()==1)
     {
       unsigned int surface = mult->GetOutput()->GetLargestPossibleRegion().GetSize()[0]
-	*mult->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
+  *mult->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
       if(relabeler->GetSizeOfObjectsInPixels()[0]==surface)
-	{
-	  num = 0;
-	}
+  {
+    num = 0;
+  }
       else
-	{
-	  num=1;
-	}
+  {
+    num=1;
+  }
     }
   else
     {

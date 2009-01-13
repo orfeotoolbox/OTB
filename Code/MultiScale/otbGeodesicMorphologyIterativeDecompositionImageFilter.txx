@@ -87,69 +87,69 @@ namespace otb
     OutputImageListPointerType concOutputPtr = this->GetConcaveOutput();
     if(outputPtr)
       {
-	if(outputPtr->Size()!=m_NumberOfIterations)
-	  {
-	    // in this case, clear the list
-	    outputPtr->Clear();
-	    for(unsigned int i = 0;i<m_NumberOfIterations;++i)
-	      {
-		//Create the output image
-		outputPtr->PushBack(OutputImageType::New());
-	      }
-	  }
-	// For each output image
-	typename OutputImageListType::Iterator outputListIt = outputPtr->Begin();
-	while(outputListIt!=outputPtr->End())
-	  {
-	    //Set the image information
-	    outputListIt.Get()->CopyInformation(this->GetInput());
-	    outputListIt.Get()->SetRequestedRegion(this->GetInput()->GetLargestPossibleRegion());
-	    ++outputListIt;
-	  }
+  if(outputPtr->Size()!=m_NumberOfIterations)
+    {
+      // in this case, clear the list
+      outputPtr->Clear();
+      for(unsigned int i = 0;i<m_NumberOfIterations;++i)
+        {
+    //Create the output image
+    outputPtr->PushBack(OutputImageType::New());
+        }
+    }
+  // For each output image
+  typename OutputImageListType::Iterator outputListIt = outputPtr->Begin();
+  while(outputListIt!=outputPtr->End())
+    {
+      //Set the image information
+      outputListIt.Get()->CopyInformation(this->GetInput());
+      outputListIt.Get()->SetRequestedRegion(this->GetInput()->GetLargestPossibleRegion());
+      ++outputListIt;
+    }
       }
     if(convOutputPtr)
       {
-	if(convOutputPtr->Size()!=m_NumberOfIterations)
-	  {
-	    // in this case, clear the list
-	    convOutputPtr->Clear();
-	    for(unsigned int i = 0;i<m_NumberOfIterations;++i)
-	      {
-		//Create the output image
-		convOutputPtr->PushBack(OutputImageType::New());
-	      }
-	  }
-	// For each output image
-	typename OutputImageListType::Iterator outputListIt = convOutputPtr->Begin();
-	while(outputListIt!=convOutputPtr->End())
-	  {
-	    //Set the image information
-	    outputListIt.Get()->CopyInformation(this->GetInput());
-	    outputListIt.Get()->SetRequestedRegion(this->GetInput()->GetLargestPossibleRegion());
-	    ++outputListIt;
-	  }
+  if(convOutputPtr->Size()!=m_NumberOfIterations)
+    {
+      // in this case, clear the list
+      convOutputPtr->Clear();
+      for(unsigned int i = 0;i<m_NumberOfIterations;++i)
+        {
+    //Create the output image
+    convOutputPtr->PushBack(OutputImageType::New());
+        }
+    }
+  // For each output image
+  typename OutputImageListType::Iterator outputListIt = convOutputPtr->Begin();
+  while(outputListIt!=convOutputPtr->End())
+    {
+      //Set the image information
+      outputListIt.Get()->CopyInformation(this->GetInput());
+      outputListIt.Get()->SetRequestedRegion(this->GetInput()->GetLargestPossibleRegion());
+      ++outputListIt;
+    }
       }
     if(concOutputPtr)
       {
-	if(concOutputPtr->Size()!=m_NumberOfIterations)
-	  {
-	    // in this case, clear the list
-	    concOutputPtr->Clear();
-	    for(unsigned int i = 0;i<m_NumberOfIterations;++i)
-	      {
-		//Create the output image
-		concOutputPtr->PushBack(OutputImageType::New());
-	      }
-	  }
-	// For each output image
-	typename OutputImageListType::Iterator outputListIt = concOutputPtr->Begin();
-	while(outputListIt!=concOutputPtr->End())
-	  {
-	    //Set the image information
-	    outputListIt.Get()->CopyInformation(this->GetInput());
-	    outputListIt.Get()->SetRequestedRegion(this->GetInput()->GetLargestPossibleRegion());
-	    ++outputListIt;
-	  }
+  if(concOutputPtr->Size()!=m_NumberOfIterations)
+    {
+      // in this case, clear the list
+      concOutputPtr->Clear();
+      for(unsigned int i = 0;i<m_NumberOfIterations;++i)
+        {
+    //Create the output image
+    concOutputPtr->PushBack(OutputImageType::New());
+        }
+    }
+  // For each output image
+  typename OutputImageListType::Iterator outputListIt = concOutputPtr->Begin();
+  while(outputListIt!=concOutputPtr->End())
+    {
+      //Set the image information
+      outputListIt.Get()->CopyInformation(this->GetInput());
+      outputListIt.Get()->SetRequestedRegion(this->GetInput()->GetLargestPossibleRegion());
+      ++outputListIt;
+    }
       }
   }
 
@@ -188,23 +188,23 @@ namespace otb
 
     while(i<m_NumberOfIterations)
       {
-	filter = DecompositionFilterType::New();
-	typename StructuringElementType::RadiusType radius;
-	radius.Fill(m_InitialValue+i*m_Step);
-	filter->SetRadius(radius);
-	filter->SetInput(current);
-	filter->GetOutput()->UpdateOutputInformation();
-	filter->GetOutput()->SetRequestedRegion(outputPtr->GetNthElement(i)->GetRequestedRegion());
-	filter->GetOutput()->PropagateRequestedRegion();
-	filter->GetOutput()->UpdateOutputData();
+  filter = DecompositionFilterType::New();
+  typename StructuringElementType::RadiusType radius;
+  radius.Fill(m_InitialValue+i*m_Step);
+  filter->SetRadius(radius);
+  filter->SetInput(current);
+  filter->GetOutput()->UpdateOutputInformation();
+  filter->GetOutput()->SetRequestedRegion(outputPtr->GetNthElement(i)->GetRequestedRegion());
+  filter->GetOutput()->PropagateRequestedRegion();
+  filter->GetOutput()->UpdateOutputData();
 
-	outputPtr->SetNthElement(i,filter->GetOutput());
-	concOutputPtr->SetNthElement(i,filter->GetConvexMap());
-	convOutputPtr->SetNthElement(i,filter->GetConcaveMap());
+  outputPtr->SetNthElement(i,filter->GetOutput());
+  concOutputPtr->SetNthElement(i,filter->GetConvexMap());
+  convOutputPtr->SetNthElement(i,filter->GetConcaveMap());
 
-	current=filter->GetOutput();
+  current=filter->GetOutput();
 
-	++i;
+  ++i;
       }
 
   }

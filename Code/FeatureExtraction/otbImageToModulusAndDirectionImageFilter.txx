@@ -47,11 +47,11 @@ const typename ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, 
 ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::
 GetOutput() const
 {
-	if (this->GetNumberOfOutputs() < 1)
+  if (this->GetNumberOfOutputs() < 1)
     {
-    	return 0;
+      return 0;
     }
-	return static_cast<const OutputImageType * >
+  return static_cast<const OutputImageType * >
     (this->itk::ProcessObject::GetOutput(0) );
 }
 /** Return the output image modulus */
@@ -60,11 +60,11 @@ typename ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutpu
 ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::
 GetOutput()
 {
-	if (this->GetNumberOfOutputs() < 1)
+  if (this->GetNumberOfOutputs() < 1)
     {
-    	return 0;
+      return 0;
     }
-	return static_cast<OutputImageType * >
+  return static_cast<OutputImageType * >
     (this->itk::ProcessObject::GetOutput(0) );
 }
 
@@ -74,11 +74,11 @@ const typename ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, 
 ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::
 GetOutputDirection()const
 {
-	if (this->GetNumberOfOutputs() < 2)
+  if (this->GetNumberOfOutputs() < 2)
     {
-    	return 0;
+      return 0;
     }
-	return static_cast<const OutputImageDirectionType * >
+  return static_cast<const OutputImageDirectionType * >
     (this->itk::ProcessObject::GetOutput(1) );
 }
 
@@ -88,11 +88,11 @@ typename ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutpu
 ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::
 GetOutputDirection()
 {
-	if (this->GetNumberOfOutputs() < 2)
+  if (this->GetNumberOfOutputs() < 2)
     {
-    	return 0;
+      return 0;
     }
-	return static_cast<OutputImageDirectionType * >
+  return static_cast<OutputImageDirectionType * >
     (this->itk::ProcessObject::GetOutput(1) );
 }
 

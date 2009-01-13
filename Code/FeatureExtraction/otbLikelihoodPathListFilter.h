@@ -58,7 +58,7 @@ class ITK_EXPORT LikelihoodPathListFilter
   typedef typename PathType::VertexType VertexType;
   typedef typename PathType::VertexListType VertexListType;
   typedef typename VertexListType::ConstIterator VertexIteratorType;
-  typedef double 		                 RealType;
+  typedef double                      RealType;
 
   typedef TImage ImageType;
   typedef typename ImageType::Pointer ImagePointerType;

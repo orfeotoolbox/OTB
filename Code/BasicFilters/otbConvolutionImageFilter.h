@@ -120,13 +120,13 @@ public:
   void SetFilter( ArrayType filter )
     {
       if(filter.Size()!= m_Filter.Size())
-	{
-	  itkExceptionMacro("Error in SetFilter, invalid filter size:"<< filter.Size()<<" instead of 2*(m_Radius[0]+1)*(2*m_Radius[1]+1): "<<m_Filter.Size());
-	}
+  {
+    itkExceptionMacro("Error in SetFilter, invalid filter size:"<< filter.Size()<<" instead of 2*(m_Radius[0]+1)*(2*m_Radius[1]+1): "<<m_Filter.Size());
+  }
       else
-	{
-	  m_Filter = filter;
-	}
+  {
+    m_Filter = filter;
+  }
       this->Modified();
     }
   itkGetConstReferenceMacro(Filter, ArrayType);

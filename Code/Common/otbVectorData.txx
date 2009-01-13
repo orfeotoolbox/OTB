@@ -91,10 +91,10 @@ VectorData<TPrecision,VDimension>
       itk::PreOrderTreeIterator<DataTreeType> itParent = it;
       bool goesOn = true;
       while(itParent.HasParent() && goesOn )
-	{
-	  os<<indent;
-	  goesOn = itParent.GoToParent();
-	}
+  {
+    os<<indent;
+    goesOn = itParent.GoToParent();
+  }
       os<<"+"<<it.Get()->GetNodeTypeAsString()<<std::endl;
       ++it;
     }

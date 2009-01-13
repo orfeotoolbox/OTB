@@ -39,9 +39,9 @@ namespace otb
       typedef itk::SmartPointer<Self>           Pointer;
       typedef itk::SmartPointer<const Self>     ConstPointer;
 
-      typedef typename Superclass::ScalarType 		ScalarType;
-      typedef itk::Point<ScalarType,2>   	InputPointType;
-      typedef itk::Point<ScalarType,2>  	OutputPointType;
+      typedef typename Superclass::ScalarType     ScalarType;
+      typedef itk::Point<ScalarType,2>     InputPointType;
+      typedef itk::Point<ScalarType,2>    OutputPointType;
 
       /** Method for creation through the object factory. */
       itkNewMacro( Self );
@@ -56,7 +56,7 @@ namespace otb
       virtual const char GetHemisphere() const;
 
       virtual void SetZoneAndHemisphereFromGeoPoint(const InputPointType &geoPoint);
-//			virtual void SetZoneAndHemisphereFromCartoPoint(const OutputPointType &cartoPoint);
+//      virtual void SetZoneAndHemisphereFromCartoPoint(const OutputPointType &cartoPoint);
       virtual int GetZoneFromGeoPoint(const InputPointType& geoPoint);
 
 //      virtual void Initialize(const InputPointType& middlePoint);

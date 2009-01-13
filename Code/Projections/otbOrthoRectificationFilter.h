@@ -52,19 +52,19 @@ namespace otb
       typedef StreamingResampleImageFilter<TInputImage,
       TOutputImage,
       TInterpolatorPrecision>  Superclass;
-      typedef OrthoRectificationFilter    			    Self;
-      typedef itk::SmartPointer<Self>              		    Pointer;
-      typedef itk::SmartPointer<const Self>        		    ConstPointer;
+      typedef OrthoRectificationFilter              Self;
+      typedef itk::SmartPointer<Self>                      Pointer;
+      typedef itk::SmartPointer<const Self>                ConstPointer;
 
-      typedef typename TInputImage::IndexType 	  IndexType;
-      typedef typename TInputImage::SizeType  	  SizeType;
+      typedef typename TInputImage::IndexType     IndexType;
+      typedef typename TInputImage::SizeType      SizeType;
       typedef typename TInputImage::SpacingType   SpacingType;
-      typedef typename TInputImage::PointType	  PointType;
+      typedef typename TInputImage::PointType    PointType;
       typedef typename TInputImage::RegionType    RegionType;
 
       typedef typename TOutputImage::PixelType    OutputPixelType;
 
-      typedef TMapProjection			  MapProjectionType;
+      typedef TMapProjection        MapProjectionType;
       typedef typename TMapProjection::Pointer    MapProjectionPointerType;
 
       typedef InverseSensorModel<double>          SensorModelType;
@@ -138,16 +138,16 @@ namespace otb
       OrthoRectificationFilter(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
 
-      /** Calculate transformation model from sensor model and map projection	composition */
+      /** Calculate transformation model from sensor model and map projection  composition */
       void ComputeResampleTransformationModel();
 
       /** Boolean used to know if transformation model computation is needed */
       bool m_IsComputed;
 
-      /** Sensor Model used to transform geographic coordinates in image sensor	index */
+      /** Sensor Model used to transform geographic coordinates in image sensor  index */
       SensorModelPointerType m_SensorModel;
 
-      /** Map Projection used to transform cartographic coordinates in geographic	coordinates */
+      /** Map Projection used to transform cartographic coordinates in geographic  coordinates */
       MapProjectionPointerType m_MapProjection;
 
       /** Composite Transform of Sensor Model and Map Projection, used for Resampler */

@@ -35,20 +35,20 @@ namespace Functor
       class GrayscaleAnaglyphFunctor
       {
       public:
-	/// Constructor
-	GrayscaleAnaglyphFunctor(){};
-	/// Destructor
-	~GrayscaleAnaglyphFunctor(){};
+  /// Constructor
+  GrayscaleAnaglyphFunctor(){};
+  /// Destructor
+  ~GrayscaleAnaglyphFunctor(){};
 
 
-	inline TOutputPixel operator()(const TInputPixel1& pixel1, const TInputPixel2& pixel2)
-	  {
-	    TOutputPixel result(3);
-	    result[0]=static_cast<typename TOutputPixel::ValueType>(pixel1);
-	    result[1]=static_cast<typename TOutputPixel::ValueType>(pixel2);
-	    result[2]=static_cast<typename TOutputPixel::ValueType>(pixel2);
-	    return result;
-	  }
+  inline TOutputPixel operator()(const TInputPixel1& pixel1, const TInputPixel2& pixel2)
+    {
+      TOutputPixel result(3);
+      result[0]=static_cast<typename TOutputPixel::ValueType>(pixel1);
+      result[1]=static_cast<typename TOutputPixel::ValueType>(pixel2);
+      result[2]=static_cast<typename TOutputPixel::ValueType>(pixel2);
+      return result;
+    }
       };
   }
  /** \class ImageToGrayscaleAnaglyphImageFilter

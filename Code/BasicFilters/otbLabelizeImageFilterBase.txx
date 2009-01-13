@@ -73,24 +73,24 @@ namespace otb
 
     while( itList != pointsContainer->End() )
       {
-	typename PointSetType::PointType pCoordinate = (itList.Value());
-	typename InputImageType::IndexType index;
+  typename PointSetType::PointType pCoordinate = (itList.Value());
+  typename InputImageType::IndexType index;
 
- 	index[0] = static_cast <int> (pCoordinate[0]);
- 	index[1] = static_cast <int> (pCoordinate[1]);
- 	if (outputImage->GetPixel(index) ==
-	    itk::NumericTraits<OutputPixelType>::ZeroValue() )
- 	  {
-	    this->RegionGrowing(index);
+   index[0] = static_cast <int> (pCoordinate[0]);
+   index[1] = static_cast <int> (pCoordinate[1]);
+   if (outputImage->GetPixel(index) ==
+      itk::NumericTraits<OutputPixelType>::ZeroValue() )
+     {
+      this->RegionGrowing(index);
 
-	    AddImageFilterPointerType addImage = AddImageFilterType::New();
-	    addImage->SetInput1(outputImage);
-	    addImage->SetInput2(m_RegionGrowingFilter->GetOutput());
-	    addImage->Update();
-	    outputImage = addImage->GetOutput();
+      AddImageFilterPointerType addImage = AddImageFilterType::New();
+      addImage->SetInput1(outputImage);
+      addImage->SetInput2(m_RegionGrowingFilter->GetOutput());
+      addImage->Update();
+      outputImage = addImage->GetOutput();
             ++m_ObjectCount;
-	  }
- 	++itList;
+    }
+   ++itList;
       }
 
     this->GraftOutput(outputImage);

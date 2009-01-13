@@ -42,28 +42,28 @@ namespace otb
  */
 
 template <class TInputImage,
-	  class TOutputImage>
+    class TOutputImage>
 class ITK_EXPORT ExtractSegmentsImageFilter :
 public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
 
-  itkStaticConstMacro(		InputImageDimension,
-  				unsigned int,
-                      		TInputImage::ImageDimension);
-  itkStaticConstMacro(		OutputImageDimension,
-  				unsigned int,
-                      		TOutputImage::ImageDimension);
+  itkStaticConstMacro(    InputImageDimension,
+          unsigned int,
+                          TInputImage::ImageDimension);
+  itkStaticConstMacro(    OutputImageDimension,
+          unsigned int,
+                          TOutputImage::ImageDimension);
 
   typedef TInputImage InputImageType;
   typedef TOutputImage OutputImageType;
 
   typedef TInputImage PSOutputImageType;
 
-  typedef ExtractSegmentsImageFilter 				    Self;
+  typedef ExtractSegmentsImageFilter             Self;
   typedef itk::ImageToImageFilter< InputImageType, OutputImageType> Superclass;
-  typedef itk::SmartPointer<Self> 				    Pointer;
-  typedef itk::SmartPointer<const Self>  			    ConstPointer;
+  typedef itk::SmartPointer<Self>             Pointer;
+  typedef itk::SmartPointer<const Self>            ConstPointer;
 
   itkNewMacro(Self);
 
@@ -76,7 +76,7 @@ public:
 
 
   /** Definition of the list of lines. */
-  typedef LineSpatialObjectList	 LinesListType;
+  typedef LineSpatialObjectList   LinesListType;
 
 
   /** Set/Get the radius of the region of the pixel suppression by direction image filter. */
@@ -133,10 +133,10 @@ protected:
   ExtractSegmentsImageFilter();
   virtual ~ExtractSegmentsImageFilter() {};
 
-  typedef PixelSuppressionByDirectionImageFilter< InputImageType, PSOutputImageType > 	PixelSuppressionType;
-  typedef LocalHoughFilter< InputImageType >						LocalHoughType;
-  typedef FillGapsFilter								FillGapsType;
-  typedef DrawLineSpatialObjectListFilter< InputImageType, OutputImageType > 		DrawLineListType;
+  typedef PixelSuppressionByDirectionImageFilter< InputImageType, PSOutputImageType >   PixelSuppressionType;
+  typedef LocalHoughFilter< InputImageType >            LocalHoughType;
+  typedef FillGapsFilter                FillGapsType;
+  typedef DrawLineSpatialObjectListFilter< InputImageType, OutputImageType >     DrawLineListType;
 
   virtual void GenerateData();
 
@@ -147,10 +147,10 @@ private:
   void operator=(const Self&); //purposely not implemented
 
 
-  typename PixelSuppressionType::Pointer	m_PixelSuppression;
-  typename LocalHoughType::Pointer		m_LocalHough;
-  typename FillGapsType::Pointer		m_FillGaps;
-  typename DrawLineListType::Pointer		m_DrawLineList;
+  typename PixelSuppressionType::Pointer  m_PixelSuppression;
+  typename LocalHoughType::Pointer    m_LocalHough;
+  typename FillGapsType::Pointer    m_FillGaps;
+  typename DrawLineListType::Pointer    m_DrawLineList;
 };
 } // end namespace otb
 

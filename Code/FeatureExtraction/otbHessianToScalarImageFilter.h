@@ -56,7 +56,7 @@ public:
   }
   double GetAlpha(void)const
   {
-  	return (  m_Alpha );
+    return (  m_Alpha );
   }
 
 private:
@@ -70,17 +70,17 @@ class ITK_EXPORT HessianToScalarImageFilter :
             TInputImage,TOutputImage,
             Functor::HessianToScalar<
                    ITK_TYPENAME TInputImage::PixelType,
-		   ITK_TYPENAME TOutputImage::PixelType>   >
+       ITK_TYPENAME TOutputImage::PixelType>   >
 {
 public:
   /** Standard class typedefs. */
   typedef HessianToScalarImageFilter                                      Self;
   typedef typename itk::UnaryFunctorImageFilter<
                              TInputImage,
-		             TOutputImage,
+                 TOutputImage,
                              Functor::HessianToScalar<
-				       ITK_TYPENAME TInputImage::PixelType,
-		                       ITK_TYPENAME TOutputImage::PixelType> > Superclass;
+               ITK_TYPENAME TInputImage::PixelType,
+                           ITK_TYPENAME TOutputImage::PixelType> > Superclass;
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -89,12 +89,12 @@ public:
 
   void SetAlpha(double Alpha)
   {
-	this->GetFunctor().SetAlpha( Alpha );
+  this->GetFunctor().SetAlpha( Alpha );
         this->Modified();
   }
   double GetAlpha(void)const
   {
-	return( this->GetFunctor().GetAlpha() );
+  return( this->GetFunctor().GetAlpha() );
   }
 protected:
   HessianToScalarImageFilter() {}

@@ -32,24 +32,24 @@ template<class TInputImage, class TTrainingImage>
 SVMImageModelEstimator<TInputImage, TTrainingImage>
 ::SVMImageModelEstimator()
 {
-	this->m_NumberOfClasses = 0;
+  this->m_NumberOfClasses = 0;
         this->m_Model = Superclass::SVMModelType::New();
 
         this->m_Done = 0;
 
         this->m_Model->SetSVMType(C_SVC);
-	this->m_Model->SetKernelType(LINEAR);
-	this->m_Model->SetPolynomialKernelDegree(3);
-	this->m_Model->SetKernelGamma(0.);	// 1/k
-	this->m_Model->SetKernelCoef0(0);
+  this->m_Model->SetKernelType(LINEAR);
+  this->m_Model->SetPolynomialKernelDegree(3);
+  this->m_Model->SetKernelGamma(0.);  // 1/k
+  this->m_Model->SetKernelCoef0(0);
         this->m_Model->SetKernelFunctor(NULL);
-	this->m_Model->SetNu(0.5);
-	this->m_Model->SetCacheSize(40);
-	this->m_Model->SetC(1);
-	this->m_Model->SetEpsilon(1e-3);
-	this->m_Model->SetP(0.1);
-	this->m_Model->DoShrinking(1);
-	this->m_Model->DoProbabilityEstimates(true);
+  this->m_Model->SetNu(0.5);
+  this->m_Model->SetCacheSize(40);
+  this->m_Model->SetC(1);
+  this->m_Model->SetEpsilon(1e-3);
+  this->m_Model->SetP(0.1);
+  this->m_Model->DoShrinking(1);
+  this->m_Model->DoProbabilityEstimates(true);
 }
 
 template<class TInputImage,
@@ -143,9 +143,9 @@ SVMImageModelEstimator<TInputImage,  TTrainingImage>
       typename Superclass::MeasurementVectorType v;
 
       for(unsigned int k=0; k<numberOfComponents; k++)
-	{
-	v.push_back(inIt.Get()[k]);
-	}
+  {
+  v.push_back(inIt.Get()[k]);
+  }
 
       this->m_Measures.push_back(v);
 

@@ -88,7 +88,7 @@ template <class TInputImage, class TOutputPath>
     typedef typename Superclass::InputImageType                         InputImageType;
     typedef typename Superclass::OutputPathType                         OutputPathType;
     typedef typename Superclass::OutputPathListType                     OutputPathListType;
-    typedef typename InputImageType::PixelType 				InputPixelType;
+    typedef typename InputImageType::PixelType         InputPixelType;
     typedef double                                                      InternalPixelType;
 
     typedef otb::VectorImage<InternalPixelType,InputImageType::ImageDimension>  VectorImageType;
@@ -137,7 +137,7 @@ template <class TInputImage, class TOutputPath>
     typedef BreakAngularPathListFilter<OutputPathType>          BreakAngularPathListFilterType;
     typedef RemoveTortuousPathListFilter<OutputPathType>        RemoveTortuousPathListFilterType;
     typedef LinkPathListFilter<OutputPathType>                  LinkPathListFilterType;
-    typedef LikelihoodPathListFilter<OutputPathType, ModulusType>	LikelihoodPathListFilterType;
+    typedef LikelihoodPathListFilter<OutputPathType, ModulusType>  LikelihoodPathListFilterType;
 
     /** Template parameters typedefs for internals filters */
     typedef typename GradientFilterType::RealType SigmaType;
@@ -217,7 +217,7 @@ template <class TInputImage, class TOutputPath>
     typename RemoveTortuousPathListFilterType::Pointer          m_FirstRemoveTortuousPathListFilter;
     typename RemoveTortuousPathListFilterType::Pointer          m_SecondRemoveTortuousPathListFilter;
     typename LinkPathListFilterType::Pointer                    m_LinkPathListFilter;
-    typename LikelihoodPathListFilterType::Pointer 		m_LikelihoodPathListFilter;
+    typename LikelihoodPathListFilterType::Pointer     m_LikelihoodPathListFilter;
 
 
   /** Amplitude threshold to start following a path (use by the VectorizationPathListFilter)*/

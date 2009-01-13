@@ -144,10 +144,10 @@ namespace otb
 
     for(int i=0;i<ImageType::ImageDimension;i++)
       {
-	index[i]=std::min(region1.GetIndex()[i],region2.GetIndex()[i]);
-	int potSize = std::max(region1.GetIndex()[i]+region1.GetSize()[i],
-			 region2.GetIndex()[i]+region2.GetSize()[i]);
-	size[i]=(potSize-index[i]<0 ? 0 : potSize-index[i]);
+  index[i]=std::min(region1.GetIndex()[i],region2.GetIndex()[i]);
+  int potSize = std::max(region1.GetIndex()[i]+region1.GetSize()[i],
+       region2.GetIndex()[i]+region2.GetSize()[i]);
+  size[i]=(potSize-index[i]<0 ? 0 : potSize-index[i]);
       }
     region.SetIndex(index);
     region.SetSize(size);
@@ -362,32 +362,32 @@ ImageToImageRCC8Calculator<TInputImage>
     // This decision process is based on a decision tree
     if ((!interExterBool)&&(edgeEdgeBool)&&(!exterInterBool))
       {
-	m_Value=OTB_RCC8_EQ;
-	return true;
+  m_Value=OTB_RCC8_EQ;
+  return true;
       }
     else if ((!interExterBool)&&(edgeEdgeBool)&&(exterInterBool))
       {
-	m_Value=OTB_RCC8_TPP;
-	return true;
+  m_Value=OTB_RCC8_TPP;
+  return true;
       }
     else if ((interExterBool)&&(!edgeEdgeBool)&&(!exterInterBool))
       {
-	m_Value=OTB_RCC8_NTPPI;
-	return true;
+  m_Value=OTB_RCC8_NTPPI;
+  return true;
       }
     else if ((interExterBool)&&(!edgeEdgeBool)&&(exterInterBool))
       {
-	m_Value=OTB_RCC8_DC;
-	return true;
+  m_Value=OTB_RCC8_DC;
+  return true;
       }
     else if ((interExterBool)&&(edgeEdgeBool)&&(!exterInterBool))
       {
-	m_Value=OTB_RCC8_TPPI;
-	return true;
+  m_Value=OTB_RCC8_TPPI;
+  return true;
       }
     else
       {
-	return false;
+  return false;
       }
   }
   /**
@@ -407,11 +407,11 @@ ImageToImageRCC8Calculator<TInputImage>
     it.GoToBegin();
     while(!it.IsAtEnd())
       {
-	if(it.Get())
-	  {
-	    return true;
-	  }
-	++it;
+  if(it.Get())
+    {
+      return true;
+    }
+  ++it;
       }
     return false;
   }
@@ -429,80 +429,80 @@ ImageToImageRCC8Calculator<TInputImage>
     /// If they are disjoint, the answer is trivial
     if((m_MinimalROI.GetSize()[0]<=1)||(m_MinimalROI.GetSize()[1]<=1))
       {
-	/// The relation is DC
-	m_Value=OTB_RCC8_DC;
-	// otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): Disjoint regions");
+  /// The relation is DC
+  m_Value=OTB_RCC8_DC;
+  // otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): Disjoint regions");
       }
     else
       {
-	/// else each input images is cast to boolean type and reduced to
-	// the minimal region
-	m_BoolImage1=ConvertToBoolImage(this->GetInput1(),m_InsideValue1);
-	m_BoolImage2=ConvertToBoolImage(this->GetInput2(),m_InsideValue2);
-	// otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): Bool images computed: "<<m_BoolImage1->GetLargestPossibleRegion().GetSize());
-	/// Then the boolean which will be used to determine the relation
-	/// are declared
-	bool edgeEdgeBool,interExterBool,exterInterBool,interInterBool;
-	/// The boolean edgeEdge is needed in each case, so it si computed
-	/// now
-	edgeEdgeBool = ComputeEdgeEdgeBool();
-	// otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): edgeEdge "<<edgeEdgeBool);
-  //TODELETE	std::cout<<"RCC8Calculator->GenerateData(): edgeEdge "<<edgeEdgeBool<<std::endl;
-	/// Here comes the outside knowledge
-	if(this->GetLevel1APrioriKnowledge())
-	  {
-	    /// If the Level1APrioriKnowledge is set, then the
-	    /// interExterBool is set to true
-	    // otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): Level1APrioriKnowledge.");
-	    interExterBool=true;
-	  }
-	else
-	  {
-	    /// Else it must be computed
-	    interExterBool = ComputeInterExterBool();
-	    // otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): interExter "<<interExterBool);
-	  }
-	/// At this stage we can determine if the relation is of type NTPP
-  //TODELETE	std::cout<<"RCC8Calculator->GenerateData(): interExter "<<interExterBool<<std::endl;
-	if((!interExterBool)&&(!edgeEdgeBool))
-	  {
-	    m_Value=OTB_RCC8_NTPP;
-	  }
-	else
-	  {
-	    /// If not, we must consider the intersection between exterior
-	    if(this->GetLevel3APrioriKnowledge())
-	      {
-		/// If the Level3APRioriKnowledge flag is set, this boolean
-		/// can be determined from the two others
-		// otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): Level3APrioriKnowledge.");
-		exterInterBool=true;
-	      }
-	    else
-	      {
-		/// Else it must be computed
-		exterInterBool = ComputeExterInterBool();
-		// otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): ExterInter "<<exterInterBool);
-	      }
-	//TODELETE      std::cout<<"RCC8Calculator->GenerateData(): ExterInter "<<exterInterBool<<std::endl;
-	    /// If it is not sufficient to compute the relation
-	    if(!ComputeRelation(edgeEdgeBool,interExterBool,exterInterBool))
-	      {
-		/// Compute the last boolean
-		interInterBool = ComputeInterInterBool();
-	 //TODELETE  	std::cout<<"RCC8Calculator->GenerateData(): InterInter "<<interInterBool<<std::endl;
-		// otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): InterInter "<<interInterBool);
-		/// Which allow the full determination
-		if ((interExterBool)&&(edgeEdgeBool)&&(exterInterBool)&&(!interInterBool))
-		  {
-		    m_Value=OTB_RCC8_EC;
-		  }
-		else
-		  {
-		    m_Value=OTB_RCC8_PO;
-		  }
-	      }
-	  }
+  /// else each input images is cast to boolean type and reduced to
+  // the minimal region
+  m_BoolImage1=ConvertToBoolImage(this->GetInput1(),m_InsideValue1);
+  m_BoolImage2=ConvertToBoolImage(this->GetInput2(),m_InsideValue2);
+  // otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): Bool images computed: "<<m_BoolImage1->GetLargestPossibleRegion().GetSize());
+  /// Then the boolean which will be used to determine the relation
+  /// are declared
+  bool edgeEdgeBool,interExterBool,exterInterBool,interInterBool;
+  /// The boolean edgeEdge is needed in each case, so it si computed
+  /// now
+  edgeEdgeBool = ComputeEdgeEdgeBool();
+  // otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): edgeEdge "<<edgeEdgeBool);
+  //TODELETE  std::cout<<"RCC8Calculator->GenerateData(): edgeEdge "<<edgeEdgeBool<<std::endl;
+  /// Here comes the outside knowledge
+  if(this->GetLevel1APrioriKnowledge())
+    {
+      /// If the Level1APrioriKnowledge is set, then the
+      /// interExterBool is set to true
+      // otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): Level1APrioriKnowledge.");
+      interExterBool=true;
+    }
+  else
+    {
+      /// Else it must be computed
+      interExterBool = ComputeInterExterBool();
+      // otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): interExter "<<interExterBool);
+    }
+  /// At this stage we can determine if the relation is of type NTPP
+  //TODELETE  std::cout<<"RCC8Calculator->GenerateData(): interExter "<<interExterBool<<std::endl;
+  if((!interExterBool)&&(!edgeEdgeBool))
+    {
+      m_Value=OTB_RCC8_NTPP;
+    }
+  else
+    {
+      /// If not, we must consider the intersection between exterior
+      if(this->GetLevel3APrioriKnowledge())
+        {
+    /// If the Level3APRioriKnowledge flag is set, this boolean
+    /// can be determined from the two others
+    // otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): Level3APrioriKnowledge.");
+    exterInterBool=true;
+        }
+      else
+        {
+    /// Else it must be computed
+    exterInterBool = ComputeExterInterBool();
+    // otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): ExterInter "<<exterInterBool);
+        }
+  //TODELETE      std::cout<<"RCC8Calculator->GenerateData(): ExterInter "<<exterInterBool<<std::endl;
+      /// If it is not sufficient to compute the relation
+      if(!ComputeRelation(edgeEdgeBool,interExterBool,exterInterBool))
+        {
+    /// Compute the last boolean
+    interInterBool = ComputeInterInterBool();
+   //TODELETE    std::cout<<"RCC8Calculator->GenerateData(): InterInter "<<interInterBool<<std::endl;
+    // otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): InterInter "<<interInterBool);
+    /// Which allow the full determination
+    if ((interExterBool)&&(edgeEdgeBool)&&(exterInterBool)&&(!interInterBool))
+      {
+        m_Value=OTB_RCC8_EC;
+      }
+    else
+      {
+        m_Value=OTB_RCC8_PO;
+      }
+        }
+    }
       }
   }
    /**

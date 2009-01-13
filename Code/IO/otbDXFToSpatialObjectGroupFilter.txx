@@ -57,22 +57,22 @@ namespace otb
     //If the previous object is a vertex we create the polyline:
     if (m_CurrentObjectType==6)
       {
-	//If the polyline is closed then we add the first point at the end of the list:
-	if (m_PolylineClosed==1)
-	  {
-	    m_PointList.push_back(m_PremierPoint);
-	  }
-	LinePointer m_CurrentPolyLine=LineType::New();
-	m_CurrentPolyLine->SetPoints(m_PointList);
-	if(layerspecified)
-	  {
-	    if (!strcmp(attributes.getLayer().c_str(),m_layer))
-	      {
-		grpPtr->AddSpatialObject(m_CurrentPolyLine);
-	      }
-	  }
-	else
-	  grpPtr->AddSpatialObject(m_CurrentPolyLine);
+  //If the polyline is closed then we add the first point at the end of the list:
+  if (m_PolylineClosed==1)
+    {
+      m_PointList.push_back(m_PremierPoint);
+    }
+  LinePointer m_CurrentPolyLine=LineType::New();
+  m_CurrentPolyLine->SetPoints(m_PointList);
+  if(layerspecified)
+    {
+      if (!strcmp(attributes.getLayer().c_str(),m_layer))
+        {
+    grpPtr->AddSpatialObject(m_CurrentPolyLine);
+        }
+    }
+  else
+    grpPtr->AddSpatialObject(m_CurrentPolyLine);
       }
     m_CurrentObjectType=0;
     otbMsgDebugMacro(<<"LAYER: "<< data.name <<" flags: "<<data.flags);
@@ -90,22 +90,22 @@ namespace otb
     //If the previous object is a vertex we create the polyline:
     if (m_CurrentObjectType==6)
       {
-	//If the polyline is closed then we add the first point at the end of the list:
-	if (m_PolylineClosed==1)
-	  {
-	    m_PointList.push_back(m_PremierPoint);
-	  }
-	LinePointer m_CurrentPolyLine=LineType::New();
-	m_CurrentPolyLine->SetPoints(m_PointList);
-	if(layerspecified)
-	  {
-	    if (!strcmp( attributes.getLayer().c_str(),m_layer))
-	      {
-		grpPtr->AddSpatialObject(m_CurrentPolyLine);
-	      }
-	  }
-	else
-	  grpPtr->AddSpatialObject(m_CurrentPolyLine);
+  //If the polyline is closed then we add the first point at the end of the list:
+  if (m_PolylineClosed==1)
+    {
+      m_PointList.push_back(m_PremierPoint);
+    }
+  LinePointer m_CurrentPolyLine=LineType::New();
+  m_CurrentPolyLine->SetPoints(m_PointList);
+  if(layerspecified)
+    {
+      if (!strcmp( attributes.getLayer().c_str(),m_layer))
+        {
+    grpPtr->AddSpatialObject(m_CurrentPolyLine);
+        }
+    }
+  else
+    grpPtr->AddSpatialObject(m_CurrentPolyLine);
       }
     m_CurrentObjectType=1;
     LandmarkPointer landmark=LandmarkType::New();
@@ -117,9 +117,9 @@ namespace otb
     if(layerspecified)
       {
         if (!strcmp(attributes.getLayer().c_str(),m_layer))
-	  {
-	    grpPtr->AddSpatialObject(landmark);
-	  }
+    {
+      grpPtr->AddSpatialObject(landmark);
+    }
       }
     else
       grpPtr->AddSpatialObject(landmark);
@@ -138,22 +138,22 @@ namespace otb
     //If the previous object is a vertex we create the polyline:
     if (m_CurrentObjectType==6)
       {
-	//If the polyline is closed then we add the first point at the end of the list:
-	if (m_PolylineClosed==1)
-	  {
-	    m_PointList.push_back(m_PremierPoint);
-	  }
-	LinePointer m_CurrentPolyLine=LineType::New();
-	m_CurrentPolyLine->SetPoints(m_PointList);
-	if(layerspecified)
-	  {
-	    if (!strcmp( attributes.getLayer().c_str(),m_layer))
-	      {
-		grpPtr->AddSpatialObject(m_CurrentPolyLine);
-	      }
-	  }
-	else
-	  grpPtr->AddSpatialObject(m_CurrentPolyLine);
+  //If the polyline is closed then we add the first point at the end of the list:
+  if (m_PolylineClosed==1)
+    {
+      m_PointList.push_back(m_PremierPoint);
+    }
+  LinePointer m_CurrentPolyLine=LineType::New();
+  m_CurrentPolyLine->SetPoints(m_PointList);
+  if(layerspecified)
+    {
+      if (!strcmp( attributes.getLayer().c_str(),m_layer))
+        {
+    grpPtr->AddSpatialObject(m_CurrentPolyLine);
+        }
+    }
+  else
+    grpPtr->AddSpatialObject(m_CurrentPolyLine);
       }
     m_CurrentObjectType=2;
     LinePointer line=LineType::New();
@@ -168,14 +168,14 @@ namespace otb
     if(layerspecified)
       {
         if (!strcmp(attributes.getLayer().c_str(),m_layer))
-	  {
-	    grpPtr->AddSpatialObject(line);
-	  }
+    {
+      grpPtr->AddSpatialObject(line);
+    }
       }
     else
       grpPtr->AddSpatialObject(line);
     otbMsgDebugMacro(<<"LINE "<<"("<<data.x1<<", "<<data.y1<<", "<<data.z1<<") ("
-		     <<data.x2<<", "<<data.y2<<", "<<data.z2 <<grpPtr->GetNumberOfChildren()<<")");
+         <<data.x2<<", "<<data.y2<<", "<<data.z2 <<grpPtr->GetNumberOfChildren()<<")");
 
   }
   /**
@@ -190,22 +190,22 @@ namespace otb
     //If the previous object is a vertex we create the polyline:
     if (m_CurrentObjectType==6)
       {
-	//If the polyline is closed then we add the first point at the end of the list:
-	if (m_PolylineClosed==1)
-	  {
-	    m_PointList.push_back(m_PremierPoint);
-	  }
-	LinePointer m_CurrentPolyLine=LineType::New();
-	m_CurrentPolyLine->SetPoints(m_PointList);
-	if(layerspecified)
-	  {
-	    if (!strcmp(attributes.getLayer().c_str(),m_layer))
-	      {
-		grpPtr->AddSpatialObject(m_CurrentPolyLine);
-	      }
-	  }
-	else
-	  grpPtr->AddSpatialObject(m_CurrentPolyLine);
+  //If the polyline is closed then we add the first point at the end of the list:
+  if (m_PolylineClosed==1)
+    {
+      m_PointList.push_back(m_PremierPoint);
+    }
+  LinePointer m_CurrentPolyLine=LineType::New();
+  m_CurrentPolyLine->SetPoints(m_PointList);
+  if(layerspecified)
+    {
+      if (!strcmp(attributes.getLayer().c_str(),m_layer))
+        {
+    grpPtr->AddSpatialObject(m_CurrentPolyLine);
+        }
+    }
+  else
+    grpPtr->AddSpatialObject(m_CurrentPolyLine);
       }
     m_CurrentObjectType=7;
     LinePointer line=LineType::New();
@@ -225,17 +225,17 @@ namespace otb
     if(layerspecified)
       {
         if (!strcmp(attributes.getLayer().c_str(),m_layer))
-	  {
-	    grpPtr->AddSpatialObject(line);
-	  }
+    {
+      grpPtr->AddSpatialObject(line);
+    }
       }
     else
       grpPtr->AddSpatialObject(line);
     otbMsgDebugMacro(<<"3D Face "<<"("<<data.x1<<", "<<data.y1<<", "<<data.z1<<") ("
-		     <<data.x2<<", "<<data.y2<<", "<<data.z2<<") ("
-		     <<data.x3<<", "<<data.y3<<", "<<data.z3<<") ("
-		     <<data.x4<<", "<<data.y4<<", "<<data.z4<<") ("
-		     <<grpPtr->GetNumberOfChildren()<<")");
+         <<data.x2<<", "<<data.y2<<", "<<data.z2<<") ("
+         <<data.x3<<", "<<data.y3<<", "<<data.z3<<") ("
+         <<data.x4<<", "<<data.y4<<", "<<data.z4<<") ("
+         <<grpPtr->GetNumberOfChildren()<<")");
 
   }
   /**
@@ -250,26 +250,26 @@ namespace otb
     //If the previous object is a vertex we create the polyline:
     if (m_CurrentObjectType==6)
       {
-	//If the polyline is closed then we add the first point at the end of the list:
-	if (m_PolylineClosed==1)
-	  {
-	    m_PointList.push_back(m_PremierPoint);
-	  }
-	LinePointer m_CurrentPolyLine=LineType::New();
-	m_CurrentPolyLine->SetPoints(m_PointList);
-	if(layerspecified)
-	  {
-	    if (!strcmp(attributes.getLayer().c_str(),m_layer))
-	      {
-		grpPtr->AddSpatialObject(m_CurrentPolyLine);
-	      }
-	  }
-	else
-	  grpPtr->AddSpatialObject(m_CurrentPolyLine);
+  //If the polyline is closed then we add the first point at the end of the list:
+  if (m_PolylineClosed==1)
+    {
+      m_PointList.push_back(m_PremierPoint);
+    }
+  LinePointer m_CurrentPolyLine=LineType::New();
+  m_CurrentPolyLine->SetPoints(m_PointList);
+  if(layerspecified)
+    {
+      if (!strcmp(attributes.getLayer().c_str(),m_layer))
+        {
+    grpPtr->AddSpatialObject(m_CurrentPolyLine);
+        }
+    }
+  else
+    grpPtr->AddSpatialObject(m_CurrentPolyLine);
       }
     otbMsgDebugMacro(<<"ARC ("<<data.cx<<", "<<data.cy<<", "<<data.cz<<") "
-		     <<data.radius<<", "<<data.angle1<<", "<<data.angle2
-		     <<" (nb objects "<<grpPtr->GetNumberOfChildren()<<")");
+         <<data.radius<<", "<<data.angle1<<", "<<data.angle2
+         <<" (nb objects "<<grpPtr->GetNumberOfChildren()<<")");
 
   }
 
@@ -285,22 +285,22 @@ namespace otb
     //If the previous object is a vertex we create the polyline:
     if (m_CurrentObjectType==6)
       {
-	//If the polyline is closed then we add the first point at the end of the list:
-	if (m_PolylineClosed==1)
-	  {
-	    m_PointList.push_back(m_PremierPoint);
-	  }
-	LinePointer m_CurrentPolyLine=LineType::New();
-	m_CurrentPolyLine->SetPoints(m_PointList);
-	if(layerspecified)
-	  {
-	    if (!strcmp(attributes.getLayer().c_str(),m_layer))
-	      {
-		grpPtr->AddSpatialObject(m_CurrentPolyLine);
-	      }
-	  }
-	else
-	  grpPtr->AddSpatialObject(m_CurrentPolyLine);
+  //If the polyline is closed then we add the first point at the end of the list:
+  if (m_PolylineClosed==1)
+    {
+      m_PointList.push_back(m_PremierPoint);
+    }
+  LinePointer m_CurrentPolyLine=LineType::New();
+  m_CurrentPolyLine->SetPoints(m_PointList);
+  if(layerspecified)
+    {
+      if (!strcmp(attributes.getLayer().c_str(),m_layer))
+        {
+    grpPtr->AddSpatialObject(m_CurrentPolyLine);
+        }
+    }
+  else
+    grpPtr->AddSpatialObject(m_CurrentPolyLine);
       }
     m_CurrentObjectType=4;
     EllipsePointer ellipse=EllipseType::New();
@@ -317,16 +317,16 @@ namespace otb
     if(layerspecified)
       {
         if (!strcmp(attributes.getLayer().c_str(),m_layer))
-	  {
-	    grpPtr->AddSpatialObject(ellipse);
-	  }
+    {
+      grpPtr->AddSpatialObject(ellipse);
+    }
       }
     else
       grpPtr->AddSpatialObject(ellipse);
 
     otbMsgDebugMacro(<<"CIRCLE ("<<data.cx<<", "<<data.cy<<", "<<data.cz<<") "
-		     <<data.radius
-		     <<" (nb objects "<<grpPtr->GetNumberOfChildren()<<")");
+         <<data.radius
+         <<" (nb objects "<<grpPtr->GetNumberOfChildren()<<")");
 
   }
   /**
@@ -341,22 +341,22 @@ namespace otb
     //If the previous object is a vertex we create the polyline:
     if (m_CurrentObjectType==6)
       {
-	//If the polyline is closed then we add the first point at the end of the list:
-	if (m_PolylineClosed==1)
-	  {
-	    m_PointList.push_back(m_PremierPoint);
-	  }
-	LinePointer m_CurrentPolyLine=LineType::New();
-	m_CurrentPolyLine->SetPoints(m_PointList);
-	if(layerspecified)
-	  {
-	    if (!strcmp( attributes.getLayer().c_str(),m_layer))
-	      {
-		grpPtr->AddSpatialObject(m_CurrentPolyLine);
-	      }
-	  }
-	else
-	  grpPtr->AddSpatialObject(m_CurrentPolyLine);
+  //If the polyline is closed then we add the first point at the end of the list:
+  if (m_PolylineClosed==1)
+    {
+      m_PointList.push_back(m_PremierPoint);
+    }
+  LinePointer m_CurrentPolyLine=LineType::New();
+  m_CurrentPolyLine->SetPoints(m_PointList);
+  if(layerspecified)
+    {
+      if (!strcmp( attributes.getLayer().c_str(),m_layer))
+        {
+    grpPtr->AddSpatialObject(m_CurrentPolyLine);
+        }
+    }
+  else
+    grpPtr->AddSpatialObject(m_CurrentPolyLine);
       }
     m_CurrentObjectType=5;
 
@@ -389,8 +389,8 @@ namespace otb
     m_PointList.push_back(point);
     m_PremierPoint=m_PointList[0];
     otbMsgDebugMacro(<<"VERTEX ("<<data.x<<", "<<data.y<<", "<<data.z<<") "
-		     <<data.bulge
-		     <<" (nb objects "<<grpPtr->GetNumberOfChildren()<<")");
+         <<data.bulge
+         <<" (nb objects "<<grpPtr->GetNumberOfChildren()<<")");
 
   }
 
@@ -403,22 +403,22 @@ namespace otb
     //If the previous object is a vertex we create the polyline:
     if (m_CurrentObjectType==6)
       {
-	//If the polyline is closed then we add the first point at the end of the list:
-	if (m_PolylineClosed==1)
-	  {
-	    m_PointList.push_back(m_PremierPoint);
-	  }
-	LinePointer m_CurrentPolyLine=LineType::New();
-	m_CurrentPolyLine->SetPoints(m_PointList);
-	if(layerspecified)
-	  {
-	    if (!strcmp( attributes.getLayer().c_str(),m_layer))
-	      {
-		grpPtr->AddSpatialObject(m_CurrentPolyLine);
-	      }
-	  }
-	else
-	  grpPtr->AddSpatialObject(m_CurrentPolyLine);
+  //If the polyline is closed then we add the first point at the end of the list:
+  if (m_PolylineClosed==1)
+    {
+      m_PointList.push_back(m_PremierPoint);
+    }
+  LinePointer m_CurrentPolyLine=LineType::New();
+  m_CurrentPolyLine->SetPoints(m_PointList);
+  if(layerspecified)
+    {
+      if (!strcmp( attributes.getLayer().c_str(),m_layer))
+        {
+    grpPtr->AddSpatialObject(m_CurrentPolyLine);
+        }
+    }
+  else
+    grpPtr->AddSpatialObject(m_CurrentPolyLine);
       }
   }
 

@@ -56,32 +56,32 @@ class ITK_EXPORT MRFEnergyGaussianClassification:public MRFEnergy< TInput1, TInp
     typedef typename InputImageType::PixelType    InputImagePixelType;
     typedef typename LabelledImageType::PixelType LabelledImagePixelType;
     typedef itk::Array < double >                 ParametersType;
-	    
+      
     itkNewMacro(Self);
     
     itkTypeMacro(MRFEnergyGaussianClassification, MRFEnergy);
     
     void SetNumberOfParameters(const unsigned int nParameters)
       { 
-	Superclass::SetNumberOfParameters(nParameters);
-	this->m_Parameters.SetSize(nParameters);
-	this->Modified();
+  Superclass::SetNumberOfParameters(nParameters);
+  this->m_Parameters.SetSize(nParameters);
+  this->Modified();
       }
     
 
     double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)   
       {
-	if ((unsigned int)value2 >= this->GetNumberOfParameters()/2)
-	  {
+  if ((unsigned int)value2 >= this->GetNumberOfParameters()/2)
+    {
               itkExceptionMacro(<<"Number of parameters does not correspond to number of classes" );
-	  }
-	double val1 = static_cast<double>(value1);
-	
-	double result = M_SQUARE(val1-this->m_Parameters[2*static_cast<int>(value2)])
-	                / (2*M_SQUARE(this->m_Parameters[2*static_cast<int>(value2)+1]))
-	                + vcl_log(vcl_sqrt(2*M_PI)*this->m_Parameters[2*static_cast<int>(value2)+1]);
-	
-	return static_cast<double>( result );
+    }
+  double val1 = static_cast<double>(value1);
+  
+  double result = M_SQUARE(val1-this->m_Parameters[2*static_cast<int>(value2)])
+                  / (2*M_SQUARE(this->m_Parameters[2*static_cast<int>(value2)+1]))
+                  + vcl_log(vcl_sqrt(2*M_PI)*this->m_Parameters[2*static_cast<int>(value2)+1]);
+  
+  return static_cast<double>( result );
       }
     
     

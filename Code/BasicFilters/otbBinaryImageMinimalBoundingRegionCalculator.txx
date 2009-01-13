@@ -65,60 +65,60 @@ BinaryImageMinimalBoundingRegionCalculator<TInputImage>
     max[1]=0;
     for ( unsigned int axis = 0; axis < InputImageType::ImageDimension; axis++ )
       { // Create the forward iterator to find lower bound
-	SliceIteratorType fit(image,image->GetLargestPossibleRegion());
+  SliceIteratorType fit(image,image->GetLargestPossibleRegion());
 
-	fit.SetFirstDirection( !axis );
-	fit.SetSecondDirection( axis );
-	fit.GoToBegin();
+  fit.SetFirstDirection( !axis );
+  fit.SetSecondDirection( axis );
+  fit.GoToBegin();
 ;
-	// Walk through the two images line by line
-	while (!fit.IsAtEnd())
-	  {
-	    while (!fit.IsAtEndOfSlice())
-	      {
-		while(!fit.IsAtEndOfLine())
-		  {
-		    // If a common intersection is found
-		    if (fit.Get()==m_InsideValue)
-		      {
-			// then the lower bound is found
-			min[axis]=fit.GetIndex()[axis];
-			fit.GoToReverseBegin(); // skip to the end
-			break;
-		      }
-		    ++fit;
-		  }
-		fit.NextLine();
-	      }
-	    fit.NextSlice();
-	  }
-	// Create the reverse iterator to find upper bound
-	SliceIteratorType rit(image,image->GetLargestPossibleRegion());
-	rit.SetFirstDirection(!axis);
-	rit.SetSecondDirection(axis);
-	rit.GoToReverseBegin();
-	// Walk through the two images line by line
-	while (!rit.IsAtReverseEnd())
-	  {
-	    while (!rit.IsAtReverseEndOfSlice())
-	      {
-		while (!rit.IsAtReverseEndOfLine())
-		  {
-		    // If a common intersection is found
-		    if (rit.Get()==m_InsideValue)
-		      {
-			max[axis]=rit.GetIndex()[axis];
-			rit.GoToBegin(); //Skip to reverse end
-			break;
-		      }
-		    --rit;
+  // Walk through the two images line by line
+  while (!fit.IsAtEnd())
+    {
+      while (!fit.IsAtEndOfSlice())
+        {
+    while(!fit.IsAtEndOfLine())
+      {
+        // If a common intersection is found
+        if (fit.Get()==m_InsideValue)
+          {
+      // then the lower bound is found
+      min[axis]=fit.GetIndex()[axis];
+      fit.GoToReverseBegin(); // skip to the end
+      break;
+          }
+        ++fit;
+      }
+    fit.NextLine();
+        }
+      fit.NextSlice();
+    }
+  // Create the reverse iterator to find upper bound
+  SliceIteratorType rit(image,image->GetLargestPossibleRegion());
+  rit.SetFirstDirection(!axis);
+  rit.SetSecondDirection(axis);
+  rit.GoToReverseBegin();
+  // Walk through the two images line by line
+  while (!rit.IsAtReverseEnd())
+    {
+      while (!rit.IsAtReverseEndOfSlice())
+        {
+    while (!rit.IsAtReverseEndOfLine())
+      {
+        // If a common intersection is found
+        if (rit.Get()==m_InsideValue)
+          {
+      max[axis]=rit.GetIndex()[axis];
+      rit.GoToBegin(); //Skip to reverse end
+      break;
+          }
+        --rit;
 
-		  }
-		rit.PreviousLine();
+      }
+    rit.PreviousLine();
 
-	      }
-	    rit.PreviousSlice();
-	  }
+        }
+      rit.PreviousSlice();
+    }
       }
 
     typename InputImageType::SizeType size;
@@ -126,8 +126,8 @@ BinaryImageMinimalBoundingRegionCalculator<TInputImage>
 
     for(int i=0;i<InputImageType::ImageDimension;i++)
       {
-	size[i]=max[i]-min[i]+1;
-	index[i]=min[i];
+  size[i]=max[i]-min[i]+1;
+  index[i]=min[i];
       }
 
     m_Region.SetIndex(index);
@@ -135,7 +135,7 @@ BinaryImageMinimalBoundingRegionCalculator<TInputImage>
 
     if(m_Pad)
       {
-	m_Region.PadByRadius(m_Pad);
+  m_Region.PadByRadius(m_Pad);
       }
 
     m_Region.Crop(image->GetLargestPossibleRegion());

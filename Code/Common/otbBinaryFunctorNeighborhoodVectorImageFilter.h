@@ -35,7 +35,7 @@ namespace otb {
 template <class TInputImage1, class TInputImage2,
           class TOutputImage, class TFunction >
 class ITK_EXPORT BinaryFunctorNeighborhoodVectorImageFilter
-	: public itk::InPlaceImageFilter<TInputImage1,TOutputImage>
+  : public itk::InPlaceImageFilter<TInputImage1,TOutputImage>
 {
 public:
   /** Standard class typedefs. */

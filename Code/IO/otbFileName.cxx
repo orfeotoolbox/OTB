@@ -43,7 +43,7 @@ FileName::FileName(const char* src)
 
 FileName FileName::ObtainFileNameWithNoExtension() const
 {
-	return this->fileNoExtension();
+  return this->fileNoExtension();
 }
 
 } // end namespace otb

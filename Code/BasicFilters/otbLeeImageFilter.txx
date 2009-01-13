@@ -55,7 +55,7 @@ namespace otb
 
     if ( !inputPtr || !outputPtr )
       {
-	return;
+  return;
       }
 
     // get a copy of the input requested region (should equal the output
@@ -69,35 +69,35 @@ namespace otb
     // crop the input requested region at the input's largest possible region
     if ( inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
       {
-	inputPtr->SetRequestedRegion( inputRequestedRegion );
-	return;
+  inputPtr->SetRequestedRegion( inputRequestedRegion );
+  return;
       }
     else
       {
-	// Couldn't crop the region (requested region is outside the largest
-	// possible region).  Throw an exception.
+  // Couldn't crop the region (requested region is outside the largest
+  // possible region).  Throw an exception.
 
-	// store what we tried to request (prior to trying to crop)
-	inputPtr->SetRequestedRegion( inputRequestedRegion );
+  // store what we tried to request (prior to trying to crop)
+  inputPtr->SetRequestedRegion( inputRequestedRegion );
 
-	// build an exception
-	itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
-	itk::OStringStream msg;
-	msg << static_cast<const char *>(this->GetNameOfClass())
-	    << "::GenerateInputRequestedRegion()";
-	e.SetLocation(msg.str().c_str());
-	e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
-	e.SetDataObject(inputPtr);
-	throw e;
+  // build an exception
+  itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
+  itk::OStringStream msg;
+  msg << static_cast<const char *>(this->GetNameOfClass())
+      << "::GenerateInputRequestedRegion()";
+  e.SetLocation(msg.str().c_str());
+  e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
+  e.SetDataObject(inputPtr);
+  throw e;
       }
   }
 
 
   template< class TInputImage, class TOutputImage>
   void LeeImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(
-									const 	OutputImageRegionType& 		outputRegionForThread,
-									int 	threadId
-									)
+                  const   OutputImageRegionType&     outputRegionForThread,
+                  int   threadId
+                  )
   {
     unsigned int i;
     itk::ZeroFluxNeumannBoundaryCondition<InputImageType> nbc;
@@ -110,8 +110,8 @@ namespace otb
     typename InputImageType::ConstPointer input  = this->GetInput();
 
     // Find the data-set boundary "faces"
-    typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType 		faceList;
-    typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType::iterator 	fit;
+    typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType     faceList;
+    typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType::iterator   fit;
 
     itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType> bC;
     faceList = bC(input, outputRegionForThread, m_Radius);
@@ -137,43 +137,43 @@ namespace otb
     // the edge of the buffer.
     for (fit=faceList.begin(); fit != faceList.end(); ++fit)
       {
-	bit = itk::ConstNeighborhoodIterator<InputImageType>(m_Radius, input, *fit);
-	unsigned int neighborhoodSize = bit.Size();
-	it = itk::ImageRegionIterator<OutputImageType>(output, *fit);
-	bit.OverrideBoundaryCondition(&nbc);
-	bit.GoToBegin();
+  bit = itk::ConstNeighborhoodIterator<InputImageType>(m_Radius, input, *fit);
+  unsigned int neighborhoodSize = bit.Size();
+  it = itk::ImageRegionIterator<OutputImageType>(output, *fit);
+  bit.OverrideBoundaryCondition(&nbc);
+  bit.GoToBegin();
 
-	while ( ! bit.IsAtEnd() )
-	  {
-	    sum = itk::NumericTraits<InputRealType>::Zero;
-	    sum2 = itk::NumericTraits<InputRealType>::Zero;
-	    //Parcours du voisinage
-	    for (i = 0; i < neighborhoodSize; ++i)
-	      {
-        	dPixel = static_cast<double>( bit.GetPixel(i) );
-		sum += dPixel;
-		sum2 += dPixel * dPixel;
-	      }
-	    E_I   = sum / double(neighborhoodSize);
-	    Var_I = sum2 / double(neighborhoodSize) - E_I*E_I ;
-	    I = static_cast<double>( bit.GetCenterPixel() );
-	    if(E_I==0)
-	      {
-		dPixel = itk::NumericTraits<OutputPixelType>::Zero;
-	      }
-	    else
-	      {
-		Cr2    = Var_I / (E_I*E_I);
-		dPixel = E_I + ((I-E_I)*(Cr2))/(Cr2 + Cv2);
+  while ( ! bit.IsAtEnd() )
+    {
+      sum = itk::NumericTraits<InputRealType>::Zero;
+      sum2 = itk::NumericTraits<InputRealType>::Zero;
+      //Parcours du voisinage
+      for (i = 0; i < neighborhoodSize; ++i)
+        {
+          dPixel = static_cast<double>( bit.GetPixel(i) );
+    sum += dPixel;
+    sum2 += dPixel * dPixel;
+        }
+      E_I   = sum / double(neighborhoodSize);
+      Var_I = sum2 / double(neighborhoodSize) - E_I*E_I ;
+      I = static_cast<double>( bit.GetCenterPixel() );
+      if(E_I==0)
+        {
+    dPixel = itk::NumericTraits<OutputPixelType>::Zero;
+        }
+      else
+        {
+    Cr2    = Var_I / (E_I*E_I);
+    dPixel = E_I + ((I-E_I)*(Cr2))/(Cr2 + Cv2);
 
-	      }
-	    // get the mean value
-	    it.Set( static_cast<OutputPixelType>( dPixel ) );
+        }
+      // get the mean value
+      it.Set( static_cast<OutputPixelType>( dPixel ) );
 
-	    ++bit;
-	    ++it;
-	    progress.CompletedPixel();
-	  }
+      ++bit;
+      ++it;
+      progress.CompletedPixel();
+    }
       }
   }
 

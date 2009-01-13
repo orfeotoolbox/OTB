@@ -135,8 +135,8 @@ VarianceImageFilter< TInputImage, TOutputImage>
       for (i = 0; i < neighborhoodSize; ++i)
         {
         const InputRealType value = static_cast<InputRealType>( bit.GetPixel(i) );
-	sum += value;
-	sumOfSquares += value * value;
+  sum += value;
+  sumOfSquares += value * value;
         }
 
       // get the mean value

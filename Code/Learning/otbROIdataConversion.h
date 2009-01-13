@@ -38,54 +38,54 @@ class ROIdataConversion
   : public itk::ImageToImageFilter< TInputImage, otb::Image<typename TInputImage::PixelType, 1> >
 {
 public:
-	typedef ROIdataConversion Self;
-	typedef itk::ImageToImageFilter< TInputImage, otb::Image<typename TInputImage::PixelType, 1> > Superclass;
-	typedef itk::SmartPointer<Self> Pointer;
-	typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef ROIdataConversion Self;
+  typedef itk::ImageToImageFilter< TInputImage, otb::Image<typename TInputImage::PixelType, 1> > Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-	itkNewMacro(Self);
-	itkTypeMacro(ROIdataConversion, itk::ImageToImageFilter);
+  itkNewMacro(Self);
+  itkTypeMacro(ROIdataConversion, itk::ImageToImageFilter);
 
-	typedef TInputImage InputImageType;
-	typedef typename TInputImage::PixelType InputImagePixelType;
-	typedef typename TInputImage::Pointer InputImagePointerType;
-	typedef TInputROIImage InputROIImageType;
-	typedef typename TInputROIImage::Pointer InputROIImagePointerType;
-	typedef typename Superclass::OutputImageType OutputImageType;
-	typedef typename OutputImageType::Pointer OutputImagePointerType;
+  typedef TInputImage InputImageType;
+  typedef typename TInputImage::PixelType InputImagePixelType;
+  typedef typename TInputImage::Pointer InputImagePointerType;
+  typedef TInputROIImage InputROIImageType;
+  typedef typename TInputROIImage::Pointer InputROIImagePointerType;
+  typedef typename Superclass::OutputImageType OutputImageType;
+  typedef typename OutputImageType::Pointer OutputImagePointerType;
 
-	typedef typename OutputImageType::SizeType::SizeValueType SizeValueType;
+  typedef typename OutputImageType::SizeType::SizeValueType SizeValueType;
 
-	/** Gets/Sets the input image */
-	const InputImageType * GetInputImage () {
-		return this->Superclass::GetInput();
-	}
-	void SetInputImage ( const InputImageType * img ) {
-		this->Superclass::SetInput(img);
-	}
+  /** Gets/Sets the input image */
+  const InputImageType * GetInputImage () {
+    return this->Superclass::GetInput();
+  }
+  void SetInputImage ( const InputImageType * img ) {
+    this->Superclass::SetInput(img);
+  }
 
-	/** Gets/Sets the ROI image */
-	InputROIImageType * GetROIImage () {
-		return static_cast< InputROIImageType *> (this->itk::ProcessObject::GetInput(1));
-	}
-	void SetROIImage ( const InputROIImageType * img ) {
-		this->itk::ProcessObject::SetNthInput( 1, const_cast<InputROIImageType *>(img) );
-	}
+  /** Gets/Sets the ROI image */
+  InputROIImageType * GetROIImage () {
+    return static_cast< InputROIImageType *> (this->itk::ProcessObject::GetInput(1));
+  }
+  void SetROIImage ( const InputROIImageType * img ) {
+    this->itk::ProcessObject::SetNthInput( 1, const_cast<InputROIImageType *>(img) );
+  }
 
 protected:
-	ROIdataConversion();
-	virtual ~ROIdataConversion() { }
-	virtual void GenerateOutputInformation();
-	virtual void GenerateInputRequestedRegion();
-	void PrintSelf(std::ostream& os, itk::Indent indent) const {
-		Superclass::PrintSelf( os, indent );
-	}
+  ROIdataConversion();
+  virtual ~ROIdataConversion() { }
+  virtual void GenerateOutputInformation();
+  virtual void GenerateInputRequestedRegion();
+  void PrintSelf(std::ostream& os, itk::Indent indent) const {
+    Superclass::PrintSelf( os, indent );
+  }
 
-	/** Performs its job! */
-	virtual void GenerateData ();
+  /** Performs its job! */
+  virtual void GenerateData ();
 
-	/** Count the number for sample in the training area */
-	SizeValueType GetNumberOfSample ();
+  /** Count the number for sample in the training area */
+  SizeValueType GetNumberOfSample ();
 };
 
 

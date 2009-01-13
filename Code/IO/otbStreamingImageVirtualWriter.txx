@@ -65,8 +65,8 @@ void
 StreamingImageVirtualWriter<TInputImage>
 ::SetBufferMemorySize(unsigned long memory_size_divisions)
 {
-	m_BufferMemorySize = memory_size_divisions;
-	m_CalculationDivision = SET_BUFFER_MEMORY_SIZE;
+  m_BufferMemorySize = memory_size_divisions;
+  m_CalculationDivision = SET_BUFFER_MEMORY_SIZE;
   this->Modified();
 }
 
@@ -78,8 +78,8 @@ void
 StreamingImageVirtualWriter<TInputImage>
 ::SetBufferNumberOfLinesDivisions(unsigned long nb_lines_divisions)
 {
-	m_BufferNumberOfLinesDivisions = nb_lines_divisions;
-	m_CalculationDivision = SET_BUFFER_NUMBER_OF_LINES;
+  m_BufferNumberOfLinesDivisions = nb_lines_divisions;
+  m_CalculationDivision = SET_BUFFER_NUMBER_OF_LINES;
   this->Modified();
 }
 
@@ -91,8 +91,8 @@ void
 StreamingImageVirtualWriter<TInputImage>
 ::SetNumberOfStreamDivisions(unsigned long nb_divisions)
 {
-	m_NumberOfStreamDivisions = nb_divisions;
-	m_CalculationDivision = SET_NUMBER_OF_STREAM_DIVISIONS;
+  m_NumberOfStreamDivisions = nb_divisions;
+  m_CalculationDivision = SET_NUMBER_OF_STREAM_DIVISIONS;
   this->Modified();
 }
 
@@ -104,7 +104,7 @@ void
 StreamingImageVirtualWriter<TInputImage>
 ::SetAutomaticNumberOfStreamDivisions(void)
 {
-	m_CalculationDivision = SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS;
+  m_CalculationDivision = SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS;
         this->Modified();
 }
 
@@ -116,8 +116,8 @@ void
 StreamingImageVirtualWriter<TInputImage>
 ::SetTilingStreamDivisions(void)
 {
-	m_CalculationDivision = SET_TILING_WITH_SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS;
-	m_RegionSplitter = itk::ImageRegionMultidimensionalSplitter<InputImageDimension>::New();
+  m_CalculationDivision = SET_TILING_WITH_SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS;
+  m_RegionSplitter = itk::ImageRegionMultidimensionalSplitter<InputImageDimension>::New();
   this->Modified();
 }
 
@@ -126,9 +126,9 @@ void
 StreamingImageVirtualWriter<TInputImage>
 ::SetTilingStreamDivisions(unsigned long nb_divisions)
 {
-	m_CalculationDivision = SET_TILING_WITH_SET_NUMBER_OF_STREAM_DIVISIONS;
-	m_NumberOfStreamDivisions = nb_divisions;
-	m_RegionSplitter = itk::ImageRegionMultidimensionalSplitter<InputImageDimension>::New();
+  m_CalculationDivision = SET_TILING_WITH_SET_NUMBER_OF_STREAM_DIVISIONS;
+  m_NumberOfStreamDivisions = nb_divisions;
+  m_RegionSplitter = itk::ImageRegionMultidimensionalSplitter<InputImageDimension>::New();
   this->Modified();
 }
 
@@ -196,14 +196,14 @@ unsigned long
 StreamingImageVirtualWriter<TInputImage>
 ::CalculateNumberOfStreamDivisions(void)
 {
-	return StreamingTraitsType
+  return StreamingTraitsType
     ::CalculateNumberOfStreamDivisions(this->GetInput(),
-				       this->GetInput()->GetLargestPossibleRegion(),
+               this->GetInput()->GetLargestPossibleRegion(),
                                        m_RegionSplitter,
-				       m_CalculationDivision,
-				       m_NumberOfStreamDivisions,
-				       m_BufferMemorySize,
-				       m_BufferNumberOfLinesDivisions);
+               m_CalculationDivision,
+               m_NumberOfStreamDivisions,
+               m_BufferMemorySize,
+               m_BufferNumberOfLinesDivisions);
 }
 /**
  *

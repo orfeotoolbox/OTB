@@ -66,7 +66,7 @@ class ITK_EXPORT LinkPathListFilter
   typedef typename PathType::VertexType VertexType;
   typedef typename PathType::VertexListType VertexListType;
   typedef typename VertexListType::ConstIterator VertexIteratorType;
-  typedef double 								RealType;
+  typedef double                 RealType;
 
   itkSetMacro(AngularThreshold,RealType);
   itkGetMacro(AngularThreshold,RealType);

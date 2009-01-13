@@ -90,8 +90,8 @@ namespace otb
       /** Constructor */
       PointSetAndValuesFunction()
       {
-	m_PointSet = PointSetType::New();
-	m_ValueVector = ValueVectorType::New();
+  m_PointSet = PointSetType::New();
+  m_ValueVector = ValueVectorType::New();
 
       }
       /** Destructor */

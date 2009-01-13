@@ -121,15 +121,15 @@ namespace otb
     otbMsgDevMacro(  << "XSpace Allocated" );
     if(svm_check_probability_model(model)==0)
       {
-	if(m_Model->GetSVMType() == ONE_CLASS)
-	  {
-	    predict_probability = 0;
-	  }
-	else
-	  {
-	    throw itk::ExceptionObject(__FILE__, __LINE__,
-				       "Model does not support probabiliy estimates",ITK_LOCATION);
-	  }
+  if(m_Model->GetSVMType() == ONE_CLASS)
+    {
+      predict_probability = 0;
+    }
+  else
+    {
+      throw itk::ExceptionObject(__FILE__, __LINE__,
+               "Model does not support probabiliy estimates",ITK_LOCATION);
+    }
       }
 
     int svm_type=svm_get_svm_type(model);
@@ -143,63 +143,63 @@ namespace otb
 
     if(predict_probability)
       {
-	if (svm_type==NU_SVR || svm_type==EPSILON_SVR)
+  if (svm_type==NU_SVR || svm_type==EPSILON_SVR)
         {
-	  otbMsgDevMacro(<<"Prob. model for test data: target value = predicted value + z,\nz: Laplace distribution e^(-|z|/sigma)/(2sigma),sigma="<<svm_get_svr_probability(model));
+    otbMsgDevMacro(<<"Prob. model for test data: target value = predicted value + z,\nz: Laplace distribution e^(-|z|/sigma)/(2sigma),sigma="<<svm_get_svr_probability(model));
         }
-	else
-	  {
+  else
+    {
 
-	    svm_get_labels(model,labels);
+      svm_get_labels(model,labels);
 
-	    prob_estimates = (double *) malloc(nr_class*sizeof(double));
-	  }
+      prob_estimates = (double *) malloc(nr_class*sizeof(double));
+    }
       }
 
     otbMsgDevMacro(  << "Starting iterations " );
     while (iter != end && iterO != endO)
       {
 
-	int i = 0;
-	double v;
+  int i = 0;
+  double v;
 
-	measurements = iter.GetMeasurementVector() ;
-	// otbMsgDevMacro(  << "Loop on components " << svm_type );
-	for(i=0; i<numberOfComponentsPerSample; i++)
-	  {
-	    x[i].index = i+1 ;
-	    x[i].value = measurements[i];
+  measurements = iter.GetMeasurementVector() ;
+  // otbMsgDevMacro(  << "Loop on components " << svm_type );
+  for(i=0; i<numberOfComponentsPerSample; i++)
+    {
+      x[i].index = i+1 ;
+      x[i].value = measurements[i];
 
-	  }
-	x[i].index = -1;
-
-
-	if (predict_probability && (svm_type==C_SVC || svm_type==NU_SVC))
-	  {
-	    v = svm_predict_probability(model,x,prob_estimates);
-	  }
-	else
-	  {
-	    v = svm_predict(model,x);
-	  }
+    }
+  x[i].index = -1;
 
 
-	ClassLabelType classLabel;
-	// Julien: Event if we support larger type for class labels,
-	// the AddInstance method wait for an unsigned int, so we cast it here.
-	classLabel = static_cast<unsigned int>(v);
+  if (predict_probability && (svm_type==C_SVC || svm_type==NU_SVC))
+    {
+      v = svm_predict_probability(model,x,prob_estimates);
+    }
+  else
+    {
+      v = svm_predict(model,x);
+    }
 
-	m_Output->AddInstance(classLabel, iterO.GetInstanceIdentifier()) ;
 
-	++iter;
-	++iterO;
+  ClassLabelType classLabel;
+  // Julien: Event if we support larger type for class labels,
+  // the AddInstance method wait for an unsigned int, so we cast it here.
+  classLabel = static_cast<unsigned int>(v);
+
+  m_Output->AddInstance(classLabel, iterO.GetInstanceIdentifier()) ;
+
+  ++iter;
+  ++iterO;
 
       }
 
     if(predict_probability)
       {
-	free(prob_estimates);
-	free(labels);
+  free(prob_estimates);
+  free(labels);
       }
 
 

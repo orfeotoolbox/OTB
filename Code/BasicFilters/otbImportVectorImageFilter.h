@@ -73,8 +73,8 @@ public:
   typedef itk::ImageRegion<OutputImageType::ImageDimension>  RegionType;
 
   /** Type of the output image pixel type. */
-	typedef typename OutputImageType::PixelType TOutputPixel;
-	typedef typename TOutputPixel::ValueType TPixel;
+  typedef typename OutputImageType::PixelType TOutputPixel;
+  typedef typename TOutputPixel::ValueType TPixel;
 
 
   /** Get the pointer from which the image data is imported. */
@@ -120,8 +120,8 @@ public:
   itkSetVectorMacro(Origin, const float, OutputImageType::ImageDimension);
   void SetOrigin( const OriginType & origin );
 
-	itkGetMacro(NumberOfComponents, unsigned int);
-	itkSetMacro(NumberOfComponents, unsigned int);
+  itkGetMacro(NumberOfComponents, unsigned int);
+  itkSetMacro(NumberOfComponents, unsigned int);
 
   /** Get the origin of the image.
    * \sa SetOrigin() */
@@ -170,7 +170,7 @@ private:
 
   TPixel*  m_ImportPointer;
   bool     m_FilterManageMemory;
-	unsigned int m_NumberOfComponents;
+  unsigned int m_NumberOfComponents;
   unsigned long m_Size;
 };
 

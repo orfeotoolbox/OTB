@@ -51,7 +51,7 @@ namespace otb
   {
     if (this->GetNumberOfOutputs() < 2)
       {
-	return 0;
+  return 0;
       }
     return static_cast<const OutputImageType * >(this->itk::ProcessObject::GetOutput(1));
   }
@@ -63,7 +63,7 @@ namespace otb
   {
     if (this->GetNumberOfOutputs() < 2)
       {
-	return 0;
+  return 0;
       }
     return static_cast< OutputImageType * >(this->itk::ProcessObject::GetOutput(1));
   }
@@ -76,7 +76,7 @@ namespace otb
   {
     if (this->GetNumberOfOutputs() < 3)
       {
-	return 0;
+  return 0;
       }
     return static_cast<const LabeledOutputType * >(this->itk::ProcessObject::GetOutput(2));
   }
@@ -88,7 +88,7 @@ namespace otb
   {
     if (this->GetNumberOfOutputs() < 3)
       {
-	return 0;
+  return 0;
       }
     return static_cast< LabeledOutputType * >(this->itk::ProcessObject::GetOutput(2));
   }
@@ -101,7 +101,7 @@ namespace otb
   {
     if (this->GetNumberOfOutputs() < 4)
       {
-	return 0;
+  return 0;
       }
     return static_cast<const LabeledOutputType * >(this->itk::ProcessObject::GetOutput(3));
   }
@@ -113,7 +113,7 @@ namespace otb
   {
     if (this->GetNumberOfOutputs() < 4)
       {
-	return 0;
+  return 0;
       }
     return static_cast< LabeledOutputType * >(this->itk::ProcessObject::GetOutput(3));
   }
@@ -157,7 +157,7 @@ namespace otb
 
     if ( !inputPtr || !outputPtr )
       {
-	return;
+  return;
       }
 
     // get a copy of the input requested region (should equal the output
@@ -171,23 +171,23 @@ namespace otb
     // crop the input requested region at the input's largest possible region
     if ( inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
       {
-	inputPtr->SetRequestedRegion( inputRequestedRegion );
-	return;
+  inputPtr->SetRequestedRegion( inputRequestedRegion );
+  return;
       }
     else
       {
-	// Couldn't crop the region (requested region is outside the largest
-	// possible region).  Throw an exception.
+  // Couldn't crop the region (requested region is outside the largest
+  // possible region).  Throw an exception.
 
-	// store what we tried to request (prior to trying to crop)
-	inputPtr->SetRequestedRegion( inputRequestedRegion );
+  // store what we tried to request (prior to trying to crop)
+  inputPtr->SetRequestedRegion( inputRequestedRegion );
 
-	// build an exception
-	itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
-	e.SetLocation(ITK_LOCATION);
-	e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
-	e.SetDataObject(inputPtr);
-	throw e;
+  // build an exception
+  itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
+  e.SetLocation(ITK_LOCATION);
+  e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
+  e.SetDataObject(inputPtr);
+  throw e;
       }
   }
 
@@ -222,15 +222,15 @@ namespace otb
 
     for(inputIt.GoToBegin();!inputIt.IsAtEnd();++inputIt)
       {
-	TBufferConverter::PixelToFloatArray(data,index,inputIt.Get(),m_Scale);
-	index+=inputPtr->GetNumberOfComponentsPerPixel();
+  TBufferConverter::PixelToFloatArray(data,index,inputIt.Get(),m_Scale);
+  index+=inputPtr->GetNumberOfComponentsPerPixel();
       }
 
     edisonProcessor.DefineLInput(data,inputRequestedRegion.GetSize()[1],inputRequestedRegion.GetSize()[0],inputPtr->GetNumberOfComponentsPerPixel());
 
     //define default kernel paramerters...
-    kernelType	k[2] = {Uniform, Uniform};
-    int		P[2] = {2, inputPtr->GetNumberOfComponentsPerPixel()};
+    kernelType  k[2] = {Uniform, Uniform};
+    int    P[2] = {2, inputPtr->GetNumberOfComponentsPerPixel()};
     float   tempH[2] = {1.0 , 1.0};
 
     edisonProcessor.DefineKernel(k, tempH, P, 2);
@@ -239,7 +239,7 @@ namespace otb
 
     if(edisonProcessor.ErrorStatus)
       {
-	itkExceptionMacro(<<"Error while running edison!");
+  itkExceptionMacro(<<"Error while running edison!");
       }
 
 
@@ -254,18 +254,18 @@ namespace otb
 
     if(edisonProcessor.ErrorStatus)
       {
-	itkExceptionMacro(<<"Error while running edison!");
+  itkExceptionMacro(<<"Error while running edison!");
       }
 
 
     index = 0;
     for(tmpIt.GoToBegin();!tmpIt.IsAtEnd();++tmpIt)
       {
-	OutputPixelType pixel;
+  OutputPixelType pixel;
 
-	TBufferConverter::FloatArrayToPixel(data,index,pixel,outputPtr->GetNumberOfComponentsPerPixel(),invScale);
-	tmpIt.Set(pixel);
-	index+=outputPtr->GetNumberOfComponentsPerPixel();
+  TBufferConverter::FloatArrayToPixel(data,index,pixel,outputPtr->GetNumberOfComponentsPerPixel(),invScale);
+  tmpIt.Set(pixel);
+  index+=outputPtr->GetNumberOfComponentsPerPixel();
       }
 
     tmp2It.GoToBegin();
@@ -273,9 +273,9 @@ namespace otb
 
     while(!tmp2It.IsAtEnd() && !outputIt.IsAtEnd())
       {
-	outputIt.Set(tmp2It.Get());
-	++tmp2It;
-	++outputIt;
+  outputIt.Set(tmp2It.Get());
+  ++tmp2It;
+  ++outputIt;
       }
 
     delete [] data;
@@ -308,15 +308,15 @@ namespace otb
 
     for(outputIt.GoToBegin();!outputIt.IsAtEnd();++outputIt)
       {
-	TBufferConverter::PixelToFloatArray(data,index,outputIt.Get(),m_Scale);
-	index+=outputPtr->GetNumberOfComponentsPerPixel();
+  TBufferConverter::PixelToFloatArray(data,index,outputIt.Get(),m_Scale);
+  index+=outputPtr->GetNumberOfComponentsPerPixel();
       }
 
     edisonProcessor.DefineLInput(data,outputRequestedRegion.GetSize()[1],outputRequestedRegion.GetSize()[0],outputPtr->GetNumberOfComponentsPerPixel());
 
     // define default kernel paramerters...
-    kernelType	k[2] = {Uniform, Uniform};
-    int		P[2] = {2, outputPtr->GetNumberOfComponentsPerPixel()};
+    kernelType  k[2] = {Uniform, Uniform};
+    int    P[2] = {2, outputPtr->GetNumberOfComponentsPerPixel()};
     float   tempH[2] = {1.0 , 1.0};
 
     edisonProcessor.DefineKernel(k, tempH, P, 2);
@@ -325,23 +325,23 @@ namespace otb
 
     if(edisonProcessor.ErrorStatus)
       {
-	itkExceptionMacro(<<"Error while running edison!");
+  itkExceptionMacro(<<"Error while running edison!");
       }
 
     edisonProcessor.GetRawData(data);
 
     if(edisonProcessor.ErrorStatus)
       {
-	itkExceptionMacro(<<"Error while running edison!");
+  itkExceptionMacro(<<"Error while running edison!");
       }
 
     index = 0;
     for(clusteredOutputIt.GoToBegin();!clusteredOutputIt.IsAtEnd();++clusteredOutputIt)
       {
-	OutputPixelType pixel;
-	TBufferConverter::FloatArrayToPixel(data,index,pixel,clusteredOutputPtr->GetNumberOfComponentsPerPixel(),invScale);
-	clusteredOutputIt.Set(pixel);
-	index+=clusteredOutputPtr->GetNumberOfComponentsPerPixel();
+  OutputPixelType pixel;
+  TBufferConverter::FloatArrayToPixel(data,index,pixel,clusteredOutputPtr->GetNumberOfComponentsPerPixel(),invScale);
+  clusteredOutputIt.Set(pixel);
+  index+=clusteredOutputPtr->GetNumberOfComponentsPerPixel();
       }
 
     delete [] data;
@@ -354,7 +354,7 @@ namespace otb
 
     if(edisonProcessor.ErrorStatus)
       {
-	itkExceptionMacro(<<"Error while running edison!");
+  itkExceptionMacro(<<"Error while running edison!");
       }
 
     itk::ImageRegionIteratorWithIndex<LabeledOutputType> lcIt(labeledClusteredOutputPtr,labeledClusteredOutputPtr->GetRequestedRegion());
@@ -365,8 +365,8 @@ namespace otb
 
     for(lcIt.GoToBegin();!lcIt.IsAtEnd();++lcIt)
       {
-	lcIt.Set(static_cast<LabelType>(labels[index]));
-	++index;
+  lcIt.Set(static_cast<LabelType>(labels[index]));
+  ++index;
       }
 
     delete [] labels;
@@ -385,16 +385,16 @@ namespace otb
     // TODO: Here it would be possible to extract the polygon edges for each region
     for(LabelType label = 0; label < numRegions;++label)
       {
-	regionIndeces = regionList->GetRegionIndeces(label);
-	for(int  i = 0; i < regionList->GetRegionCount(label);++i)
-	  {
-	    boundIndex[0]= regionIndeces[i] % clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0];
-	    boundIndex[1]= regionIndeces[i] / clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0];
-	    if(clusterBoudariesOutputPtr->GetBufferedRegion().IsInside(boundIndex))
-	      {
-		clusterBoudariesOutputPtr->SetPixel(boundIndex,1);
-	      }
-	  }
+  regionIndeces = regionList->GetRegionIndeces(label);
+  for(int  i = 0; i < regionList->GetRegionCount(label);++i)
+    {
+      boundIndex[0]= regionIndeces[i] % clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0];
+      boundIndex[1]= regionIndeces[i] / clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0];
+      if(clusterBoudariesOutputPtr->GetBufferedRegion().IsInside(boundIndex))
+        {
+    clusterBoudariesOutputPtr->SetPixel(boundIndex,1);
+        }
+    }
       }
   }
 

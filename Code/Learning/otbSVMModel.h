@@ -219,10 +219,10 @@ public:
   }
 
   /** Set the kernel type to LINEAR, POLY, RBF, SIGMOID
-	linear: u'*v
-	polynomial: (gamma*u'*v + coef0)^degree
-	radial basis function: exp(-gamma*|u-v|^2)
-	sigmoid: tanh(gamma*u'*v + coef0)*/
+  linear: u'*v
+  polynomial: (gamma*u'*v + coef0)^degree
+  radial basis function: exp(-gamma*|u-v|^2)
+  sigmoid: tanh(gamma*u'*v + coef0)*/
   void SetKernelType(int kerneltype)
   {
     //m_Parameters.kernel_type = kerneltype;
@@ -432,7 +432,7 @@ public:
   /** Return the alphas values (SV Coef) */
   double ** GetAlpha (void)
   {
-	return m_Model->sv_coef;
+  return m_Model->sv_coef;
   }
  /** Set the alphas values (SV Coef) */
   void SetAlpha( double ** alpha, int nbOfSupportVector );
@@ -444,7 +444,7 @@ public:
   void SetNumberOfSVPerClasse( int * vect)
     {
       for(int i=0;i<m_Model->nr_class;i++)
-	m_Model->nSV[i] = vect[i];
+  m_Model->nSV[i] = vect[i];
       this->Modified();
     }
 

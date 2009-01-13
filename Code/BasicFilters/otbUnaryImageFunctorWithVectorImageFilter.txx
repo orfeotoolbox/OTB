@@ -107,12 +107,12 @@ UnaryImageFunctorWithVectorImageFilter<TInputImage,TOutputImage,TFunction>
       outPixel.Fill(itk::NumericTraits<OutputInternalPixelType>::Zero);
       // if the input pixel in null, the output is considered as null ( no sensor informations )
       if( inPixel!= nullPixel)
-	{
+  {
       for (unsigned int j=0; j<inputPtr->GetNumberOfComponentsPerPixel(); j++)
-	{
-	  outPixel[j] = m_FunctorVector[j]( inPixel[j] );
-	}
-	}
+  {
+    outPixel[j] = m_FunctorVector[j]( inPixel[j] );
+  }
+  }
       outputIt.Set(outPixel);
       ++inputIt;
       ++outputIt;

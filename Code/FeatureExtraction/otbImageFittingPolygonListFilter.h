@@ -57,7 +57,7 @@ class ITK_EXPORT ImageFittingPolygonListFilter
   typedef typename PathType::VertexType VertexType;
   typedef typename PathType::VertexListType VertexListType;
   typedef typename VertexListType::ConstIterator VertexListConstIteratorType;
-  typedef double 		                 RealType;
+  typedef double                      RealType;
 
   typedef TImage ImageType;
   typedef typename ImageType::Pointer ImagePointerType;

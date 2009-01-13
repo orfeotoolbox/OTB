@@ -62,31 +62,31 @@ class ITK_EXPORT MRFOptimizerMetropolis : public MRFOptimizer
     /** Set parameter to a one array filled with paramVal.*/
     void SetSingleParameter( double parameterVal )
       {
-	this->m_Parameters.SetSize(1);
-	this->m_Parameters.Fill(parameterVal);
-	this->Modified();
+  this->m_Parameters.SetSize(1);
+  this->m_Parameters.Fill(parameterVal);
+  this->Modified();
       }
 
 
     inline bool Compute(double deltaEnergy)
       {
-	if (deltaEnergy < 0)
-	  {
-	    return true;
-	  }
-	if (deltaEnergy == 0)
-	  {
-	    return false;
-	  }
-	else
+  if (deltaEnergy < 0)
+    {
+      return true;
+    }
+  if (deltaEnergy == 0)
+    {
+      return false;
+    }
+  else
               {
                 double proba = vcl_exp(-(deltaEnergy)/this->m_Parameters[0]);
                 if ( (m_Generator->GetIntegerVariate() % 10000) < proba*10000)
-		  {
-		    return true;
-		  }
+      {
+        return true;
+      }
               }
-	return false;
+  return false;
       }
 
     /** Methods to cancel random effects.*/

@@ -42,7 +42,7 @@ void
 ImageKeywordlist::
 operator=(const Self& p)
 {
-	m_Keywordlist = p.m_Keywordlist;
+  m_Keywordlist = p.m_Keywordlist;
 }
 
 
@@ -50,7 +50,7 @@ void
 ImageKeywordlist::
 convertToOSSIMKeywordlist(ossimKeywordlist& kwl) const
 {
-	kwl.getMap() = m_Keywordlist;
+  kwl.getMap() = m_Keywordlist;
 }
 
 void

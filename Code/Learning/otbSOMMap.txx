@@ -70,10 +70,10 @@ SOMMap<TNeuron,TDistance,VMapDimension>
     {
       double tempDistance = activation->Evaluate(sample,it.Get());
       if(tempDistance<=minDistance)
-	{
-	  minDistance = tempDistance;
-	  minPos = it.GetIndex();
-	}
+  {
+    minDistance = tempDistance;
+    minPos = it.GetIndex();
+  }
     }
   // Return the index of the winner
   return minPos;

@@ -41,7 +41,7 @@ class ITK_EXPORT VectorDataBase : public itk::DataObject
 {
 public:
 
-	/** Standard class typedefs. */
+  /** Standard class typedefs. */
   typedef VectorDataBase                Self;
   typedef itk::DataObject               Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
@@ -56,8 +56,8 @@ public:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 protected:
-	VectorDataBase();
-	~VectorDataBase();
+  VectorDataBase();
+  ~VectorDataBase();
 
 private:
   VectorDataBase(const Self&); //purposely not implemented

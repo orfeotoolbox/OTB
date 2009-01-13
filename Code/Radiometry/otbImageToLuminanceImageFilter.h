@@ -41,35 +41,35 @@ namespace otb
        */
 
       template <class TInput, class TOutput>
-	class ImageToLuminanceImageFunctor
-	{
-	public:
-	  ImageToLuminanceImageFunctor()
-	    {
-	      m_Alpha = 1.;
-	      m_Beta = 0.;
-	    };
-	  ~ImageToLuminanceImageFunctor() {};
+  class ImageToLuminanceImageFunctor
+  {
+  public:
+    ImageToLuminanceImageFunctor()
+      {
+        m_Alpha = 1.;
+        m_Beta = 0.;
+      };
+    ~ImageToLuminanceImageFunctor() {};
 
-	   void SetAlpha(double alpha){ m_Alpha = alpha;};
-	   void SetBeta(double beta){ m_Beta = beta;};
-	   double GetAlpha(){ return m_Alpha;};
-	   double GetBeta(){ return m_Beta;};
+     void SetAlpha(double alpha){ m_Alpha = alpha;};
+     void SetBeta(double beta){ m_Beta = beta;};
+     double GetAlpha(){ return m_Alpha;};
+     double GetBeta(){ return m_Beta;};
 
 
-	  inline TOutput operator() (const TInput & inPixel)
-	    {
-	      TOutput outPixel;
-	      double temp;
- 	      temp = static_cast<double>(inPixel)/m_Alpha + m_Beta;
-	      outPixel = static_cast<TOutput>(temp);
-	      return outPixel;
-	    }
+    inline TOutput operator() (const TInput & inPixel)
+      {
+        TOutput outPixel;
+        double temp;
+         temp = static_cast<double>(inPixel)/m_Alpha + m_Beta;
+        outPixel = static_cast<TOutput>(temp);
+        return outPixel;
+      }
 
-	private:
-	  double m_Alpha;
-	  double m_Beta;
-	};
+  private:
+    double m_Alpha;
+    double m_Beta;
+  };
     }
 
   /** \class ImageToLuminanceImageFilter
@@ -85,7 +85,7 @@ public UnaryImageFunctorWithVectorImageFilter< TInputImage,
                                                                                                    ITK_TYPENAME TOutputImage::InternalPixelType > >
 {
 public:
-  /** 	Extract input and output images dimensions.*/
+  /**   Extract input and output images dimensions.*/
   itkStaticConstMacro( InputImageDimension, unsigned int, TInputImage::ImageDimension);
   itkStaticConstMacro( OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
@@ -148,12 +148,12 @@ public:
     {
       this->GetFunctorVector().clear();
       for(unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
-	{
-	  FunctorType functor;
-	  functor.SetAlpha(m_Alpha[i]);
-	  functor.SetBeta(m_Beta[i]);
-	  this->GetFunctorVector().push_back(functor);
-	}
+  {
+    FunctorType functor;
+    functor.SetAlpha(m_Alpha[i]);
+    functor.SetBeta(m_Beta[i]);
+    this->GetFunctorVector().push_back(functor);
+  }
     }
 
 

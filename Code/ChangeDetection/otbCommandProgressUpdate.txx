@@ -46,16 +46,16 @@ void CommandProgressUpdate<TFilter>::Execute(const itk::Object * object, const i
       int val = int(filter->GetProgress()*factor);
 
       if((val%2) == 0)
-	{
-	std::cout << "|";
-	std::cout.flush();
-	}
+  {
+  std::cout << "|";
+  std::cout.flush();
+  }
 
       if(val == factor)
-	{
-	std::cout << ">" ;
-	std::cout.flush();
-	}
+  {
+  std::cout << ">" ;
+  std::cout.flush();
+  }
     }
 
 

@@ -116,7 +116,7 @@ private:
   int CaiGetTypeLum(                            const   char *          type_code,
                                                 std::string &   str_sens_code,
                                                 int &           inbbits,
-					        std::string &   str_cod_pix);
+                  std::string &   str_cod_pix);
 
 
 #define otbSwappFileOrderToSystemOrderMacro(StrongType, buffer, buffer_size) \

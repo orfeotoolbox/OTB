@@ -44,7 +44,7 @@ namespace otb
  * zones 1 and 3 according to the principle of the Touzi's filter.
  *
  * The response of the edge detector between two zones i and j is:
- *	 \f[R_{ij}=1-\min (\frac{\mu_{i}}{\mu_{j}};\frac{\mu_{j}}{\mu_{i}}) \f]
+ *   \f[R_{ij}=1-\min (\frac{\mu_{i}}{\mu_{j}};\frac{\mu_{j}}{\mu_{i}}) \f]
  *
  * The intensity of detection in the three other directions \f$ R(\theta_{i}) \f$
  * is determined by rotation of the pixels of each zone around the
@@ -54,7 +54,7 @@ namespace otb
  * Finally, the intensity of detection formed by the two parallel lines
  * is determined by the minimum response of a ration edge detector on both sides
  * of the linear structure:
- *	\f[ R = \min (R_{12};R_{13}) \f]
+ *  \f[ R = \min (R_{12};R_{13}) \f]
  * where \f$ R_{12} \f$ and \f$ R_{13}\f$ are the maximum response of the ratio edge
  * detector of \f$ R(\theta_{i}) \f$. The intensity of detection lies in
  * the interval \f$ [0, 1] \f$.
@@ -62,19 +62,19 @@ namespace otb
  *
  */
 template <class TInputImage,
-	  class TOutputImage,
+    class TOutputImage,
           class TOutputImageDirection = TOutputImage,
-	  class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
+    class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
 class ITK_EXPORT LineRatioDetectorImageFilter :  public LineDetectorImageFilterBase< TInputImage, TOutputImage, TOutputImageDirection, TInterpolator >
 {
 public:
-  /** 	Extract dimensions as well of the images of entry of exit. */
-  itkStaticConstMacro(		InputImageDimension,
-  				unsigned int,
-                      		TInputImage::ImageDimension);
-  itkStaticConstMacro(		OutputImageDimension,
-  				unsigned int,
-                      		TOutputImage::ImageDimension);
+  /**   Extract dimensions as well of the images of entry of exit. */
+  itkStaticConstMacro(    InputImageDimension,
+          unsigned int,
+                          TInputImage::ImageDimension);
+  itkStaticConstMacro(    OutputImageDimension,
+          unsigned int,
+                          TOutputImage::ImageDimension);
 
   /** typedef for the classes standards. */
   typedef LineRatioDetectorImageFilter Self;
@@ -88,9 +88,9 @@ public:
   /** Return the name of the class. */
   itkTypeMacro(LineRatioDetectorImageFilter, LineDetectorImageFilterBase);
 
-  typedef typename Superclass::InputImageType 			InputImageType;
-  typedef typename Superclass::OutputImageType			OutputImageType;
-  typedef typename Superclass::OutputImageDirectionType 	OutputImageDirectionType;
+  typedef typename Superclass::InputImageType       InputImageType;
+  typedef typename Superclass::OutputImageType      OutputImageType;
+  typedef typename Superclass::OutputImageDirectionType   OutputImageDirectionType;
   typedef typename Superclass::InterpolatorType                 InterpolatorType;
 
   /** Typedefs to describe and access Interpolator */

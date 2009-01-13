@@ -95,15 +95,15 @@ void FrostImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
 
 template< class TInputImage, class TOutputImage>
 void FrostImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(
-			const 	OutputImageRegionType& 		outputRegionForThread,
-                       	int 	threadId
-				)
+      const   OutputImageRegionType&     outputRegionForThread,
+                         int   threadId
+        )
 {
   unsigned int i;
-  itk::ZeroFluxNeumannBoundaryCondition<InputImageType> 	nbc;
-  itk::ConstNeighborhoodIterator<InputImageType> 		bit;
-  typename itk::ConstNeighborhoodIterator<InputImageType>::OffsetType	off;
-  itk::ImageRegionIterator<OutputImageType> 			it;
+  itk::ZeroFluxNeumannBoundaryCondition<InputImageType>   nbc;
+  itk::ConstNeighborhoodIterator<InputImageType>     bit;
+  typename itk::ConstNeighborhoodIterator<InputImageType>::OffsetType  off;
+  itk::ImageRegionIterator<OutputImageType>       it;
 
 
   // Allocate output
@@ -111,8 +111,8 @@ void FrostImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(
   typename InputImageType::ConstPointer input  = this->GetInput();
 
   // Find the data-set boundary "faces"
-  typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType 		faceList;
-  typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType::iterator 	fit;
+  typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType     faceList;
+  typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType::iterator   fit;
 
   itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType> bC;
   faceList = bC(input, outputRegionForThread, m_Radius);
@@ -124,12 +124,12 @@ void FrostImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(
   InputRealType sum;
   InputRealType sum2;
 
-  double 	Mean, Variance;
-  double	Alpha;
-  double    	NormFilter;
-  double	FrostFilter;
-  double	CoefFilter;
-  double	dPixel;
+  double   Mean, Variance;
+  double  Alpha;
+  double      NormFilter;
+  double  FrostFilter;
+  double  CoefFilter;
+  double  dPixel;
 
 
   // Process each of the boundary faces.  These are N-d regions which border
@@ -148,21 +148,21 @@ void FrostImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(
       sum2 = itk::NumericTraits<InputRealType>::Zero;
       for (i = 0; i < neighborhoodSize; ++i)
         {
-        	dPixel = static_cast<double>( bit.GetPixel(i) );
-		sum += dPixel;
-		sum2 += dPixel * dPixel;
+          dPixel = static_cast<double>( bit.GetPixel(i) );
+    sum += dPixel;
+    sum2 += dPixel * dPixel;
         }
       Mean   = sum  / double(neighborhoodSize);
       Variance  = sum2 / double(neighborhoodSize) - Mean * Mean ;
 
       if(Mean == 0)
-	{
-	  Alpha = 0;
-	}
+  {
+    Alpha = 0;
+  }
       else
-	{
-	  Alpha = m_Deramp * Variance / (Mean * Mean) ;
-	}
+  {
+    Alpha = m_Deramp * Variance / (Mean * Mean) ;
+  }
 
       NormFilter  = 0.0;
       FrostFilter = 0.0;
@@ -171,26 +171,26 @@ void FrostImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(
       const double rad_y = static_cast<double>(m_Radius[1]);
 
       for (double x = -rad_x; x<= rad_x; x++)
-      	{
-       	for (double y = -rad_y; y <= rad_y; y++)
-		{
-		double Dist = double(vcl_sqrt(x*x+y*y));
-		off[0]= static_cast<int>(x);
-		off[1]= static_cast<int>(y);
-//		i = (unsigned int)((y+rad_y)*(2*rad_y+1)+(x+rad_x));
-		dPixel= static_cast<double>( bit.GetPixel(off));
-//		dPixel= static_cast<double>( bit.GetPixel(i));
-		CoefFilter = Alpha * vcl_exp(-Alpha *Dist);
-		NormFilter  = NormFilter  + CoefFilter;
-		FrostFilter = FrostFilter + (CoefFilter * dPixel);
-		}
+        {
+         for (double y = -rad_y; y <= rad_y; y++)
+    {
+    double Dist = double(vcl_sqrt(x*x+y*y));
+    off[0]= static_cast<int>(x);
+    off[1]= static_cast<int>(y);
+//    i = (unsigned int)((y+rad_y)*(2*rad_y+1)+(x+rad_x));
+    dPixel= static_cast<double>( bit.GetPixel(off));
+//    dPixel= static_cast<double>( bit.GetPixel(i));
+    CoefFilter = Alpha * vcl_exp(-Alpha *Dist);
+    NormFilter  = NormFilter  + CoefFilter;
+    FrostFilter = FrostFilter + (CoefFilter * dPixel);
+    }
         }
 
 
-	  if (NormFilter==0.)
-	  	  dPixel=0.;
-	  else
-		  dPixel=FrostFilter/NormFilter;
+    if (NormFilter==0.)
+        dPixel=0.;
+    else
+      dPixel=FrostFilter/NormFilter;
 
       it.Set( static_cast<OutputPixelType>( dPixel ) );
 

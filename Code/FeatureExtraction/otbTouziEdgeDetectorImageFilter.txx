@@ -120,15 +120,15 @@ template <class TInputImage, class TOutputImage, class TOutputImageDirection >
 void
 TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
 ::ThreadedGenerateData(
-			const 	OutputImageRegionType& 		outputRegionForThread,
-                       	int 	threadId
-		       )
+      const   OutputImageRegionType&     outputRegionForThread,
+                         int   threadId
+           )
 {
   unsigned int i;
-  itk::ZeroFluxNeumannBoundaryCondition<InputImageType> 	nbc;
-  itk::ConstNeighborhoodIterator<InputImageType> 		bit;
-  itk::ImageRegionIterator<OutputImageType> 			it;
-  itk::ImageRegionIterator<OutputImageType> 			it_dir;
+  itk::ZeroFluxNeumannBoundaryCondition<InputImageType>   nbc;
+  itk::ConstNeighborhoodIterator<InputImageType>     bit;
+  itk::ImageRegionIterator<OutputImageType>       it;
+  itk::ImageRegionIterator<OutputImageType>       it_dir;
 
 
   // Allocate output
@@ -137,8 +137,8 @@ TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
   typename OutputImageDirectionType::Pointer     outputDir = this->GetOutputDirection();
 
   // Find the data-set boundary "faces"
-  typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType 		faceList;
-  typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType::iterator 	fit;
+  typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType     faceList;
+  typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType::iterator   fit;
 
   itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType> bC;
   faceList = bC(input, outputRegionForThread, m_Radius);
@@ -239,25 +239,25 @@ TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
 
          // Horizontal direction
         if ( y < yc )
-      	  Sum[0][0] += static_cast<double>(bit.GetPixel(i));
+          Sum[0][0] += static_cast<double>(bit.GetPixel(i));
         else if ( y > yc )
           Sum[0][1] += static_cast<double>(bit.GetPixel(i));
 
         // Diagonal direction 1
         if ( (y-yc) < (x-xc) )
-      	  Sum[1][0] += static_cast<double>(bit.GetPixel(i));
+          Sum[1][0] += static_cast<double>(bit.GetPixel(i));
         else if ( (y-yc) > (x-xc) )
           Sum[1][1] += static_cast<double>(bit.GetPixel(i));
 
         // Vertical direction
         if ( x > xc )
-      	  Sum[2][0] += static_cast<double>(bit.GetPixel(i));
+          Sum[2][0] += static_cast<double>(bit.GetPixel(i));
         else if ( x < xc )
           Sum[2][1] += static_cast<double>(bit.GetPixel(i));
 
         // Diagonal direction 2
         if ( (y-yc) > -(x-xc) )
-      	  Sum[3][0] += static_cast<double>(bit.GetPixel(i));
+          Sum[3][0] += static_cast<double>(bit.GetPixel(i));
         else if ( (y-yc) < -(x-xc) )
           Sum[3][1] += static_cast<double>(bit.GetPixel(i));
 
@@ -277,9 +277,9 @@ TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
         if (( M1 != 0 ) && (M2 != 0))
           R_theta[dir] = static_cast<double>( 1 - MINI( (M1/M2), (M2/M1) ) );
         else
-	  R_theta[dir] = 0.;
+    R_theta[dir] = 0.;
 
-	// Determination of the maximum intensity of the contour
+  // Determination of the maximum intensity of the contour
         R_contour = static_cast<double>( MAXI( R_contour, R_theta[dir] ) );
 
         // Determination of the sign of contour

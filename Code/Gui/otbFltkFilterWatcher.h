@@ -44,8 +44,8 @@ public:
   /** Constructor. Takes a ProcessObject to monitor and an optional
    * comment string that is prepended to each event message. */
   FltkFilterWatcher(itk::ProcessObject* process,
-		    int x, int y, int w,int h,
-		    const char *comment="");
+        int x, int y, int w,int h,
+        const char *comment="");
 
   /** Destructor. */
   virtual ~FltkFilterWatcher();
@@ -64,8 +64,8 @@ protected:
   {
     if (m_Process)
       {
-	m_Progress->value(m_Process->GetProgress());
-	Fl::check();
+  m_Progress->value(m_Process->GetProgress());
+  Fl::check();
       }
   }
 

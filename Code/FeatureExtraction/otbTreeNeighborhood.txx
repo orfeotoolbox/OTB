@@ -71,14 +71,14 @@ Neighborhood::fix_up()
   if(type == MAX)
     while(k > 1 && ORDER_MAX(k, l=k>>1))
       {
-	SWAP(k, l);
-	k = l;
+  SWAP(k, l);
+  k = l;
       }
   else
     while(k > 1 && ORDER_MIN(k, l=k>>1))
       {
-	SWAP(k, l);
-	k = l;
+  SWAP(k, l);
+  k = l;
       }
 }
 
@@ -94,20 +94,20 @@ Neighborhood::fix_down()
   if(type == MAX)
     while((l = k << 1) <= N)
       {
-	if(l < N && ORDER_MAX(l+1,l)) ++l;
-	if(ORDER_MAX2(k,l))
-	  break;
-	SWAP(k, l);
-	k = l;
+  if(l < N && ORDER_MAX(l+1,l)) ++l;
+  if(ORDER_MAX2(k,l))
+    break;
+  SWAP(k, l);
+  k = l;
       }
   else
     while((l = k << 1) <= N)
       {
-	if(l < N && ORDER_MIN(l+1,l)) ++l;
-	if(ORDER_MIN2(k,l))
-	  break;
-	SWAP(k, l);
-	k = l;
+  if(l < N && ORDER_MIN(l+1,l)) ++l;
+  if(ORDER_MIN2(k,l))
+    break;
+  SWAP(k, l);
+  k = l;
       }
 }
 

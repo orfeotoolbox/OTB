@@ -197,12 +197,12 @@ public:
     };
 
     /**
-	    * Get the current internal iterator
-		*/
+      * Get the current internal iterator
+    */
     InternalIteratorType & GetIter(void)
     {
       return(m_Iter);
-	}
+  }
   private:
     // Internal iterator.
     InternalIteratorType m_Iter;

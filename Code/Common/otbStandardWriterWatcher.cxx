@@ -25,7 +25,7 @@ namespace otb
 
 StandardWriterWatcher
 ::StandardWriterWatcher(itk::ProcessObject* process,
-			const char *comment)
+      const char *comment)
   : WriterWatcherBase(process, comment)
 {
   m_StarsCount = 50;
@@ -33,7 +33,7 @@ StandardWriterWatcher
 
 StandardWriterWatcher
 ::StandardWriterWatcher(itk::ProcessObject* process,itk::ProcessObject * source,
-			const char *comment)
+      const char *comment)
   : WriterWatcherBase(process,source,comment)
 {
   m_StarsCount = 50;
@@ -84,13 +84,13 @@ StandardWriterWatcher
       std::string blanks(m_StarsCount - stars.length(),' ');
       oss << "Current Tile: ";
       if(progressPercent<10)
-	{
-	  oss<<" ";
-	}
+  {
+    oss<<" ";
+  }
       if(progressPercent<100)
-	{
-	  oss<<" ";
-	}
+  {
+    oss<<" ";
+  }
       oss<<progressPercent << "% [" << stars << blanks << "]  ";
     }
 
@@ -102,13 +102,13 @@ StandardWriterWatcher
       std::string blanks(m_StarsCount - stars.length(),' ');
       oss << "Writing: ";
       if(progressPercent<10)
-	{
-	  oss<<" ";
-	}
+  {
+    oss<<" ";
+  }
       if(progressPercent<100)
-	{
-	  oss<<" ";
-	}
+  {
+    oss<<" ";
+  }
       oss<< progressPercent << "% [" << stars << blanks << "]" << std::flush;
     }
   std::cout<<oss.str();
@@ -132,8 +132,8 @@ StandardWriterWatcher
 {
   m_TimeProbe.Stop();
   std::cout << std::endl << "Writing task took "
-	    << m_TimeProbe.GetMeanTime()
-	    << " seconds." << std::endl;
+      << m_TimeProbe.GetMeanTime()
+      << " seconds." << std::endl;
 }
 
 } // end namespace otb

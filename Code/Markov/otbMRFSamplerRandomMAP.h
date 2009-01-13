@@ -70,74 +70,74 @@ class ITK_EXPORT MRFSamplerRandomMAP: public MRFSampler< TInput1, TInput2>
 
     void SetNumberOfClasses(const unsigned int nClasses)
       {
-	if (nClasses != this->m_NumberOfClasses || energiesInvalid == true)
-	  {
-	    this->m_NumberOfClasses = nClasses;
-	    if (energy != NULL)
-	      free(energy);
-	    if (repartitionFunction != NULL)
-	      free(repartitionFunction);
-	    energy = (double *) calloc(this->m_NumberOfClasses, sizeof(double));
-	    repartitionFunction = (double *) calloc(this->m_NumberOfClasses, sizeof(double));
-	    this->Modified();
-	  }
+  if (nClasses != this->m_NumberOfClasses || energiesInvalid == true)
+    {
+      this->m_NumberOfClasses = nClasses;
+      if (energy != NULL)
+        free(energy);
+      if (repartitionFunction != NULL)
+        free(repartitionFunction);
+      energy = (double *) calloc(this->m_NumberOfClasses, sizeof(double));
+      repartitionFunction = (double *) calloc(this->m_NumberOfClasses, sizeof(double));
+      this->Modified();
+    }
       }
 
     inline int Compute( const InputImageNeighborhoodIterator & itData, const LabelledImageNeighborhoodIterator & itRegul)
       {
-	if (this->m_NumberOfClasses == 0)
-	  {
+  if (this->m_NumberOfClasses == 0)
+    {
             itkExceptionMacro(<<"NumberOfClasse has to be greater than 0.");
-	  }
+    }
 
-	this->m_EnergyBefore = this->m_EnergyFidelity->GetValue(itData, itRegul.GetCenterPixel());
-	this->m_EnergyBefore += this->m_Lambda
-	                        * this->m_EnergyRegularization->GetValue(itRegul, itRegul.GetCenterPixel());
+  this->m_EnergyBefore = this->m_EnergyFidelity->GetValue(itData, itRegul.GetCenterPixel());
+  this->m_EnergyBefore += this->m_Lambda
+                          * this->m_EnergyRegularization->GetValue(itRegul, itRegul.GetCenterPixel());
 
-	//Try all possible value (how to be generic ?)
-	this->m_EnergyAfter = this->m_EnergyBefore; //default values to current one
-	this->m_Value = itRegul.GetCenterPixel();
+  //Try all possible value (how to be generic ?)
+  this->m_EnergyAfter = this->m_EnergyBefore; //default values to current one
+  this->m_Value = itRegul.GetCenterPixel();
 
-	//Compute probability for each possibility
-	double totalProba=0.0;
-	unsigned int  valueCurrent = 0;
-	for (valueCurrent = 0; valueCurrent < this->m_NumberOfClasses; ++valueCurrent)
-	  {
-	    this->m_EnergyCurrent = this->m_EnergyFidelity->GetValue(itData, static_cast<LabelledImagePixelType>(valueCurrent));
-	    this->m_EnergyCurrent += this->m_Lambda
-	                             * this->m_EnergyRegularization->GetValue(itRegul, static_cast<LabelledImagePixelType>(valueCurrent));
+  //Compute probability for each possibility
+  double totalProba=0.0;
+  unsigned int  valueCurrent = 0;
+  for (valueCurrent = 0; valueCurrent < this->m_NumberOfClasses; ++valueCurrent)
+    {
+      this->m_EnergyCurrent = this->m_EnergyFidelity->GetValue(itData, static_cast<LabelledImagePixelType>(valueCurrent));
+      this->m_EnergyCurrent += this->m_Lambda
+                               * this->m_EnergyRegularization->GetValue(itRegul, static_cast<LabelledImagePixelType>(valueCurrent));
 
-	    energy[valueCurrent] = this->m_EnergyCurrent;
-	    repartitionFunction[valueCurrent] = vcl_exp(-this->m_EnergyCurrent)+totalProba;
-	    totalProba = repartitionFunction[valueCurrent];
+      energy[valueCurrent] = this->m_EnergyCurrent;
+      repartitionFunction[valueCurrent] = vcl_exp(-this->m_EnergyCurrent)+totalProba;
+      totalProba = repartitionFunction[valueCurrent];
 
-	  }
+    }
 
-	//Pick a value according to probability
+  //Pick a value according to probability
 
-	//double select = (m_Generator->GetIntegerVariate()/(double(RAND_MAX)+1) * totalProba);
-	double select = (m_Generator->GetIntegerVariate()/(double(itk::NumericTraits<RandomGeneratorType::IntegerType>::max())+1) * totalProba);
-	valueCurrent = 0;
+  //double select = (m_Generator->GetIntegerVariate()/(double(RAND_MAX)+1) * totalProba);
+  double select = (m_Generator->GetIntegerVariate()/(double(itk::NumericTraits<RandomGeneratorType::IntegerType>::max())+1) * totalProba);
+  valueCurrent = 0;
         while( valueCurrent<this->GetNumberOfClasses() && repartitionFunction[valueCurrent] <= select)
-	  {
+    {
             valueCurrent++;
-	  }
+    }
 
         if ( valueCurrent==this->GetNumberOfClasses() )
-	  {
+    {
             valueCurrent = this->GetNumberOfClasses()-1;
-	  }
+    }
 
 
-	if ( this->m_Value != static_cast<LabelledImagePixelType>(valueCurrent))
-	  {
-	    this->m_Value = static_cast<LabelledImagePixelType>(valueCurrent);
-	    this->m_EnergyAfter = energy[static_cast<unsigned int>(valueCurrent)];
-	  }
+  if ( this->m_Value != static_cast<LabelledImagePixelType>(valueCurrent))
+    {
+      this->m_Value = static_cast<LabelledImagePixelType>(valueCurrent);
+      this->m_EnergyAfter = energy[static_cast<unsigned int>(valueCurrent)];
+    }
 
-	this->m_DeltaEnergy=  this->m_EnergyAfter - this->m_EnergyBefore;
+  this->m_DeltaEnergy=  this->m_EnergyAfter - this->m_EnergyBefore;
 
-	return 0;
+  return 0;
       }
 
     /** Methods to cancel random effects.*/
@@ -154,18 +154,18 @@ class ITK_EXPORT MRFSamplerRandomMAP: public MRFSampler< TInput1, TInput2>
     // The constructor and destructor.
     MRFSamplerRandomMAP()
       {
-	energy=NULL;
-	repartitionFunction=NULL;
-	energiesInvalid = true;
-	m_Generator = RandomGeneratorType::New();
-	m_Generator->SetSeed();
+  energy=NULL;
+  repartitionFunction=NULL;
+  energiesInvalid = true;
+  m_Generator = RandomGeneratorType::New();
+  m_Generator->SetSeed();
       }
     virtual ~MRFSamplerRandomMAP()
       {
-	if (energy != NULL)
-	  free(energy);
-	if (repartitionFunction != NULL)
-	  free(repartitionFunction);
+  if (energy != NULL)
+    free(energy);
+  if (repartitionFunction != NULL)
+    free(repartitionFunction);
       }
   };
 }

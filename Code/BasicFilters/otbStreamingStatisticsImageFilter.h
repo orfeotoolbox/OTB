@@ -71,11 +71,11 @@ namespace otb {
       typedef typename TInputImage::PixelType  PixelType;
 
       itkStaticConstMacro(InputImageDimension, unsigned int,
-			  TInputImage::ImageDimension);
+        TInputImage::ImageDimension);
 
       /** Image related typedefs. */
       itkStaticConstMacro(ImageDimension, unsigned int,
-			  TInputImage::ImageDimension );
+        TInputImage::ImageDimension );
 
       /** Type to use for computations. */
       typedef typename itk::NumericTraits<PixelType>::RealType RealType;
@@ -89,37 +89,37 @@ namespace otb {
 
       /** Return the computed Minimum. */
       PixelType GetMinimum() const
-	{ return this->GetMinimumOutput()->Get(); }
+  { return this->GetMinimumOutput()->Get(); }
       PixelObjectType* GetMinimumOutput();
       const PixelObjectType* GetMinimumOutput() const;
 
       /** Return the computed Maximum. */
       PixelType GetMaximum() const
-	{ return this->GetMaximumOutput()->Get(); }
+  { return this->GetMaximumOutput()->Get(); }
       PixelObjectType* GetMaximumOutput();
       const PixelObjectType* GetMaximumOutput() const;
 
       /** Return the computed Mean. */
       RealType GetMean() const
-	{ return this->GetMeanOutput()->Get(); }
+  { return this->GetMeanOutput()->Get(); }
       RealObjectType* GetMeanOutput();
       const RealObjectType* GetMeanOutput() const;
 
       /** Return the computed Standard Deviation. */
       RealType GetSigma() const
-	{ return this->GetSigmaOutput()->Get(); }
+  { return this->GetSigmaOutput()->Get(); }
       RealObjectType* GetSigmaOutput();
       const RealObjectType* GetSigmaOutput() const;
 
       /** Return the computed Variance. */
       RealType GetVariance() const
-	{ return this->GetVarianceOutput()->Get(); }
+  { return this->GetVarianceOutput()->Get(); }
       RealObjectType* GetVarianceOutput();
       const RealObjectType* GetVarianceOutput() const;
 
       /** Return the compute Sum. */
       RealType GetSum() const
-	{ return this->GetSumOutput()->Get(); }
+  { return this->GetSumOutput()->Get(); }
       RealObjectType* GetSumOutput();
       const RealObjectType* GetSumOutput() const;
 
@@ -142,8 +142,8 @@ namespace otb {
 
       /** Multi-thread version GenerateData. */
       void  ThreadedGenerateData (const RegionType&
-				  outputRegionForThread,
-				  int threadId);
+          outputRegionForThread,
+          int threadId);
 
     private:
       PersistentStatisticsImageFilter(const Self&); //purposely not implemented
@@ -194,7 +194,7 @@ namespace otb {
       /** Standard Self typedef */
       typedef StreamingStatisticsImageFilter           Self;
       typedef PersistentFilterStreamingDecorator
-	< PersistentStatisticsImageFilter<TInputImage> > Superclass;
+  < PersistentStatisticsImageFilter<TInputImage> > Superclass;
       typedef itk::SmartPointer<Self>                  Pointer;
       typedef itk::SmartPointer<const Self>            ConstPointer;
 
@@ -214,91 +214,91 @@ namespace otb {
       typedef itk::SimpleDataObjectDecorator<PixelType> PixelObjectType;
 
       void SetInput(InputImageType * input)
-	{
-	  this->GetFilter()->SetInput(input);
-	}
+  {
+    this->GetFilter()->SetInput(input);
+  }
 
       /** Return the computed Minimum. */
       PixelType GetMinimum() const
-	{
-	  return this->GetFilter()->GetMinimumOutput()->Get();
-	}
+  {
+    return this->GetFilter()->GetMinimumOutput()->Get();
+  }
       PixelObjectType* GetMinimumOutput()
-	{
-	  return this->GetFilter()->MinimumOutput();
-	}
+  {
+    return this->GetFilter()->MinimumOutput();
+  }
       const PixelObjectType* GetMinimumOutput() const
-	{
-	  return this->GetFilter()->MinimumOutput();
-	}
+  {
+    return this->GetFilter()->MinimumOutput();
+  }
       /** Return the computed Maximum. */
       PixelType GetMaximum() const
-	{
-	  return this->GetFilter()->GetMaximumOutput()->Get();
-	}
+  {
+    return this->GetFilter()->GetMaximumOutput()->Get();
+  }
       PixelObjectType* GetMaximumOutput()
-	{
-	  return this->GetFilter()->GetMaximumOutput();
-	}
+  {
+    return this->GetFilter()->GetMaximumOutput();
+  }
       const PixelObjectType* GetMaximumOutput() const
-	{
-	  return this->GetFilter()->GetMaximumOutput();
-	}
+  {
+    return this->GetFilter()->GetMaximumOutput();
+  }
       /** Return the computed Mean. */
       RealType GetMean() const
-	{
-	  return this->GetFilter()->GetMeanOutput()->Get();
-	}
+  {
+    return this->GetFilter()->GetMeanOutput()->Get();
+  }
       RealObjectType* GetMeanOutput()
-	{
-	  return this->GetFilter()->GetMeanOutput();
-	}
+  {
+    return this->GetFilter()->GetMeanOutput();
+  }
       const RealObjectType* GetMeanOutput() const
-	{
-	  return this->GetFilter()->GetMeanOutput();
-	}
+  {
+    return this->GetFilter()->GetMeanOutput();
+  }
 
       /** Return the computed Standard Deviation. */
       RealType GetSigma() const
-	{
-	  return this->GetSigmaOutput()->Get();
-	}
+  {
+    return this->GetSigmaOutput()->Get();
+  }
       RealObjectType* GetSigmaOutput()
-	{
-	  return this->GetFilter()->GetSigmaOutput();
-	}
+  {
+    return this->GetFilter()->GetSigmaOutput();
+  }
       const RealObjectType* GetSigmaOutput() const
-	{
-	  return this->GetFilter()->GetSigmaOutput();
-	}
+  {
+    return this->GetFilter()->GetSigmaOutput();
+  }
 
       /** Return the computed Variance. */
       RealType GetVariance() const
-	{
-	  return this->GetFilter()->GetVarianceOutput()->Get();
-	}
+  {
+    return this->GetFilter()->GetVarianceOutput()->Get();
+  }
       RealObjectType* GetVarianceOutput()
-	{
-	  return this->GetFilter()->GetVarianceOutput();
-	}
+  {
+    return this->GetFilter()->GetVarianceOutput();
+  }
       const RealObjectType* GetVarianceOutput() const
-	{
-	  return this->GetFilter()->GetVarianceOutput();
-	}
+  {
+    return this->GetFilter()->GetVarianceOutput();
+  }
 
       /** Return the compute Sum. */
       RealType GetSum() const
-	{
-	  return this->GetFilter()->GetSumOutput()->Get();
-	}
+  {
+    return this->GetFilter()->GetSumOutput()->Get();
+  }
       RealObjectType* GetSumOutput()
-	{
-	  return this->GetFilter()->GetSumOutput();
-	}
+  {
+    return this->GetFilter()->GetSumOutput();
+  }
       const RealObjectType* GetSumOutput() const
-	{
-	  return this->GetFilter()->GetSumOutput();
-	}
+  {
+    return this->GetFilter()->GetSumOutput();
+  }
 
 
     protected:

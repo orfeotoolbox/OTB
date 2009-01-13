@@ -60,17 +60,17 @@ ImageWidgetPolylineForm<TValue>
 
       VertexListConstIteratorType it =  this->GetPolyline()->GetVertexList()->Begin();
       while(it != this->GetPolyline()->GetVertexList()->End())
-	{
-	  double x1 = it.Value()[0];
-	  double y1 = it.Value()[1];
+  {
+    double x1 = it.Value()[0];
+    double y1 = it.Value()[1];
 
-	  x1 = static_cast<int>((x1-originx)*openGlZoom*(1/static_cast<double>(ss_rate)));
-	  y1 = static_cast<int>(windowh+(originy-y1)*openGlZoom*(1/static_cast<double>(ss_rate)));
+    x1 = static_cast<int>((x1-originx)*openGlZoom*(1/static_cast<double>(ss_rate)));
+    y1 = static_cast<int>(windowh+(originy-y1)*openGlZoom*(1/static_cast<double>(ss_rate)));
 
             glVertex2f(x1,y1);
 
-	  ++it;
-	}
+    ++it;
+  }
       glEnd();
       glDisable(GL_BLEND);
       glLineWidth(1.0);

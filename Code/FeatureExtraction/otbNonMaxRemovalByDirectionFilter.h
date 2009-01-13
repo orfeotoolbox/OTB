@@ -36,58 +36,58 @@ namespace Functor
       class NonMaxRemovalByDirectionFunctor
       {
       public:
-	NonMaxRemovalByDirectionFunctor() {};
-	~NonMaxRemovalByDirectionFunctor() {};
-	inline TOutput operator()(const TInput1 & itA, const TInput2 &itB)
-	  {
-	    TOutput resp = 0;
-	    if (itA.GetCenterPixel() != 0)
-	      {
-		typename TInput1::OffsetType offset1,offset2;
-		int neighborhoodNumber;
-		if (itB.GetCenterPixel() > 0)
-		  {
-		    neighborhoodNumber = static_cast<int>(itB.GetCenterPixel()/(M_PI/4)-1);
-		  }
-		else
-		  {
-		    neighborhoodNumber = static_cast<int>((itB.GetCenterPixel()+M_PI)/(M_PI/4)-1);
-		  }
-		switch( neighborhoodNumber )
-		  {
-		case 0:
-		  offset1[0] =  1;
-		  offset1[1] = -1;
-		  offset2[0] = -1;
-		  offset2[1] =  1;
-		  break;
-		case 1:
-		  offset1[0] =  1;
-		  offset1[1] =  0;
-		  offset2[0] = -1;
-		  offset2[1] =  0;
-		  break;
-		case 2:
-		  offset1[0] =  1;
-		  offset1[1] =  1;
-		  offset2[0] = -1;
-		  offset2[1] = -1;
-		  break;
-		case 3:
-		  offset1[0] =  0;
-		  offset1[1] =  1;
-		  offset2[0] =  0;
-		  offset2[1] = -1;
-		  break;
-		}
-		if ((itA.GetCenterPixel() > itA.GetPixel(offset1))
-		    && (itA.GetCenterPixel() > itA.GetPixel(offset2)))
-		  {
-		    resp =  itA.GetCenterPixel();
-		  }
-	      }
-	    return resp;
-	  }
+  NonMaxRemovalByDirectionFunctor() {};
+  ~NonMaxRemovalByDirectionFunctor() {};
+  inline TOutput operator()(const TInput1 & itA, const TInput2 &itB)
+    {
+      TOutput resp = 0;
+      if (itA.GetCenterPixel() != 0)
+        {
+    typename TInput1::OffsetType offset1,offset2;
+    int neighborhoodNumber;
+    if (itB.GetCenterPixel() > 0)
+      {
+        neighborhoodNumber = static_cast<int>(itB.GetCenterPixel()/(M_PI/4)-1);
+      }
+    else
+      {
+        neighborhoodNumber = static_cast<int>((itB.GetCenterPixel()+M_PI)/(M_PI/4)-1);
+      }
+    switch( neighborhoodNumber )
+      {
+    case 0:
+      offset1[0] =  1;
+      offset1[1] = -1;
+      offset2[0] = -1;
+      offset2[1] =  1;
+      break;
+    case 1:
+      offset1[0] =  1;
+      offset1[1] =  0;
+      offset2[0] = -1;
+      offset2[1] =  0;
+      break;
+    case 2:
+      offset1[0] =  1;
+      offset1[1] =  1;
+      offset2[0] = -1;
+      offset2[1] = -1;
+      break;
+    case 3:
+      offset1[0] =  0;
+      offset1[1] =  1;
+      offset2[0] =  0;
+      offset2[1] = -1;
+      break;
+    }
+    if ((itA.GetCenterPixel() > itA.GetPixel(offset1))
+        && (itA.GetCenterPixel() > itA.GetPixel(offset2)))
+      {
+        resp =  itA.GetCenterPixel();
+      }
+        }
+      return resp;
+    }
       };
   }
 /** \class NonMaxRemovalByDirectionFilter

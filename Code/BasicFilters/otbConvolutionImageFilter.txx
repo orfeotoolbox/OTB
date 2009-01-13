@@ -141,7 +141,7 @@ ConvolutionImageFilter< TInputImage, TOutputImage, TBoundaryCondition>
         norm += static_cast<InputRealType>( m_Filter(i) );
       }
 
-	    // get the mean value
+      // get the mean value
       if (m_NormalizeFilter)
       {
         it.Set( static_cast<OutputPixelType>(sum / double(norm)) );

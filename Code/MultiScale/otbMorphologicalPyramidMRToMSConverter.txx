@@ -265,13 +265,13 @@ namespace otb
       supFilterFullResolution->PushBack(it.Get());
       ++it;
       for(;it!=supFilter->End();++it)
-	{
-	  resampler = ResamplerType::New();
-	  resampler->SetSize(frsize);
-	  resampler->SetInput(it.Get());
-	  resampler->Update();
-	  supFilterFullResolution->PushBack(resampler->GetOutput());
-	}
+  {
+    resampler = ResamplerType::New();
+    resampler->SetSize(frsize);
+    resampler->SetInput(it.Get());
+    resampler->Update();
+    supFilterFullResolution->PushBack(resampler->GetOutput());
+  }
       otbMsgDevMacro(<<"MRToMSConverter: InfFilter resampling.");
       // InfFilter resampling
       it = infFilter->Begin();
@@ -279,67 +279,67 @@ namespace otb
       infFilterFullResolution->PushBack(it.Get());
       ++it;
       for(;it!=infFilter->End();++it)
-	{
-	  resampler = ResamplerType::New();
-	  resampler->SetSize(frsize);
-	  resampler->SetInput(it.Get());
-	  resampler->Update();
-	  infFilterFullResolution->PushBack(resampler->GetOutput());
-	}
+  {
+    resampler = ResamplerType::New();
+    resampler->SetSize(frsize);
+    resampler->SetInput(it.Get());
+    resampler->Update();
+    infFilterFullResolution->PushBack(resampler->GetOutput());
+  }
 
       if(inputList)
-	{
-	  otbMsgDevMacro(<<"MRToMSConverter: Optional inputList resampling.");
-	  // Analyse image resampling
-	  it = inputList->Begin();
-	  // The first image does not need any resampling
-	  outputList->PushBack(it.Get());
-	  ++it;
-	  for(;it!=inputList->End();++it)
-	    {
-	      resampler = ResamplerType::New();
-	      resampler->SetSize(frsize);
-	      resampler->SetInput(it.Get());
-	      resampler->Update();
-	      outputList->PushBack(resampler->GetOutput());
-	    }
-	}
+  {
+    otbMsgDevMacro(<<"MRToMSConverter: Optional inputList resampling.");
+    // Analyse image resampling
+    it = inputList->Begin();
+    // The first image does not need any resampling
+    outputList->PushBack(it.Get());
+    ++it;
+    for(;it!=inputList->End();++it)
+      {
+        resampler = ResamplerType::New();
+        resampler->SetSize(frsize);
+        resampler->SetInput(it.Get());
+        resampler->Update();
+        outputList->PushBack(resampler->GetOutput());
+      }
+  }
 
       if(supDeci)
-	{
-	  otbMsgDevMacro(<<"MRToMSConverter: Optional supDeci resampling.");
-	  // SupDeci resampling
-	  it = supDeci->Begin();
-	  // The first image does not need any resampling
-	  supDeciFullResolution->PushBack(it.Get());
-	  ++it;
-	  for(;it!=supDeci->End();++it)
-	    {
-	      resampler = ResamplerType::New();
-	      resampler->SetSize(frsize);
-	      resampler->SetInput(it.Get());
-	      resampler->Update();
-	      supDeciFullResolution->PushBack(resampler->GetOutput());
-	    }
-	}
+  {
+    otbMsgDevMacro(<<"MRToMSConverter: Optional supDeci resampling.");
+    // SupDeci resampling
+    it = supDeci->Begin();
+    // The first image does not need any resampling
+    supDeciFullResolution->PushBack(it.Get());
+    ++it;
+    for(;it!=supDeci->End();++it)
+      {
+        resampler = ResamplerType::New();
+        resampler->SetSize(frsize);
+        resampler->SetInput(it.Get());
+        resampler->Update();
+        supDeciFullResolution->PushBack(resampler->GetOutput());
+      }
+  }
 
       if(infDeci)
-	{
-	  otbMsgDevMacro(<<"MRToMSConverter: Optional infDeci resampling.");
-	  // InfDeci resampling
-	  it = infDeci->Begin();
-	  // The first image does not need any resampling
-	  infDeciFullResolution->PushBack(it.Get());
-	  ++it;
-	  for(;it!=infDeci->End();++it)
-	    {
-	      resampler = ResamplerType::New();
-	      resampler->SetSize(frsize);
-	      resampler->SetInput(it.Get());
-	      resampler->Update();
-	      infDeciFullResolution->PushBack(resampler->GetOutput());
-	    }
-	}
+  {
+    otbMsgDevMacro(<<"MRToMSConverter: Optional infDeci resampling.");
+    // InfDeci resampling
+    it = infDeci->Begin();
+    // The first image does not need any resampling
+    infDeciFullResolution->PushBack(it.Get());
+    ++it;
+    for(;it!=infDeci->End();++it)
+      {
+        resampler = ResamplerType::New();
+        resampler->SetSize(frsize);
+        resampler->SetInput(it.Get());
+        resampler->Update();
+        infDeciFullResolution->PushBack(resampler->GetOutput());
+      }
+  }
     }
     /**
      * PrintSelf method

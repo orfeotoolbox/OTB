@@ -158,7 +158,7 @@ SVMModel<TInputPixel, TLabel>
   if(svm_save_model(model_file_name, m_Model)!=0)
     {
       itkExceptionMacro( << "Problem while saving SVM model "
-			 << std::string(model_file_name) );
+       << std::string(model_file_name) );
     }
 }
 
@@ -172,7 +172,7 @@ SVMModel<TInputPixel, TLabel>
   if(m_Model == 0)
     {
       itkExceptionMacro( << "Problem while loading SVM model "
-			 << std::string(model_file_name) );
+       << std::string(model_file_name) );
     }
 }
 
@@ -249,17 +249,17 @@ SVMModel<TInputPixel, TLabel>
       const svm_node *tempNode = sv[p];
       std::cout<<p<<"  ";
       while(tempNode->index != -1)
-	{
-	  tempNode++;
-	  elements++;
-	}
+  {
+    tempNode++;
+    elements++;
+  }
       elements++;// for -1 values
     }
 
   if(m_Model->l>0)
       {
         SV[0] = Malloc(svm_node,elements);
-	memcpy( SV[0],sv[0],sizeof(svm_node*)*elements);
+  memcpy( SV[0],sv[0],sizeof(svm_node*)*elements);
       }
   svm_node *x_space =  SV[0];
 
@@ -271,13 +271,13 @@ SVMModel<TInputPixel, TLabel>
       const svm_node *p = sv[i];
       svm_node *pCpy = SV[i];
       while(p->index != -1)
-	{
-	  pCpy->index = p->index;
-	  pCpy->value = p->value;
-	  p++;
-	  pCpy++;
-	  j++;
-	}
+  {
+    pCpy->index = p->index;
+    pCpy->value = p->value;
+    p++;
+    pCpy++;
+    j++;
+  }
       pCpy->index = -1;
       j++;
     }
@@ -307,9 +307,9 @@ SVMModel<TInputPixel, TLabel>
     {
       // sv_coef
       for(int k=0; k<m_Model->nr_class-1; k++)
-	{
-	  m_Model->sv_coef[k][i] = alpha[k][i];
-	}
+  {
+    m_Model->sv_coef[k][i] = alpha[k][i];
+  }
     }
    this->Modified();
 }

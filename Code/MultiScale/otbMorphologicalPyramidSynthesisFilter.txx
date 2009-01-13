@@ -201,10 +201,10 @@ MorphologicalPyramidSynthesisFilter<TInputImage,TOutputImage>
   //                      Main loop                         //
   //--------------------------------------------------------//
   while(   itinfFilter!=infFilter->ReverseEnd()
-	&& itsupFilter!=supFilter->ReverseEnd()
-	&& itinfDeci!=infDeci->ReverseEnd()
-	&& itsupDeci!=supDeci->ReverseEnd()
-	&& itSize!=size.rend())
+  && itsupFilter!=supFilter->ReverseEnd()
+  && itinfDeci!=infDeci->ReverseEnd()
+  && itsupDeci!=supDeci->ReverseEnd()
+  && itSize!=size.rend())
     {
 
       ++i;

@@ -49,8 +49,8 @@ namespace otb
     ossimDirectory od(DEMDirectory);
     if (!m_ElevManager->loadElevationPath(ossimDEMDir))
     {
-	m_Mutex.Unlock();
-	itkExceptionMacro("Failed to open DEM Directory: "<<ossimDEMDir);
+  m_Mutex.Unlock();
+  itkExceptionMacro("Failed to open DEM Directory: "<<ossimDEMDir);
     }
 
     m_Mutex.Unlock();

@@ -35,29 +35,29 @@ namespace Functor
       class LevelingFunctor
       {
       public:
-	/// Constructor
-	LevelingFunctor(){};
-	/// Destructor
-	~LevelingFunctor(){};
+  /// Constructor
+  LevelingFunctor(){};
+  /// Destructor
+  ~LevelingFunctor(){};
 
-	inline TOutput operator()(const TInput& pixel, const TInputMap& convexPixel, const TInputMap& concavePixel)
-	  {
-	    TOutput result;
+  inline TOutput operator()(const TInput& pixel, const TInputMap& convexPixel, const TInputMap& concavePixel)
+    {
+      TOutput result;
 
-	    if(convexPixel>concavePixel)
-	      {
-		result = static_cast<TOutput>(pixel-convexPixel);
-	      }
-	    else if(convexPixel<concavePixel)
-	      {
-		result = static_cast<TOutput>(concavePixel+pixel);
-	      }
-	    else
-	      {
-		result = static_cast<TOutput>(pixel);
-	      }
-	    return result;
-	  }
+      if(convexPixel>concavePixel)
+        {
+    result = static_cast<TOutput>(pixel-convexPixel);
+        }
+      else if(convexPixel<concavePixel)
+        {
+    result = static_cast<TOutput>(concavePixel+pixel);
+        }
+      else
+        {
+    result = static_cast<TOutput>(pixel);
+        }
+      return result;
+    }
       };
   }// end namespace Functor
 

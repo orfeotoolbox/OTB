@@ -117,9 +117,9 @@ private:
   /** Internal method to read header informations */
   bool InternalReadHeaderInformation(std::fstream & file, const bool reportError);
   inline void ByteSplitting(unsigned short a, unsigned short &low, unsigned short &high){
-	  unsigned short b = 255;
-	  low = a & b;
-	  high = (a>>8) & b;
+    unsigned short b = 255;
+    low = a & b;
+    high = (a>>8) & b;
   }
 
 

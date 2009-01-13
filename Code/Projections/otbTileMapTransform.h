@@ -55,12 +55,12 @@ namespace otb
           typedef itk::Transform< TScalarType,
           NInputDimensions,
           NOutputDimensions >       Superclass;
-          typedef TileMapTransform                    	        Self;
+          typedef TileMapTransform                              Self;
           typedef itk::SmartPointer<Self>                   Pointer;
           typedef itk::SmartPointer<const Self>             ConstPointer;
 
-          typedef typename Superclass::ScalarType 	        ScalarType;
-          typedef ossimTileMapModel	OssimTileMapTransformType;
+          typedef typename Superclass::ScalarType           ScalarType;
+          typedef ossimTileMapModel  OssimTileMapTransformType;
           typedef itk::Point<ScalarType,NInputDimensions >  InputPointType;
           typedef itk::Point<ScalarType,NOutputDimensions > OutputPointType;
 

@@ -54,14 +54,14 @@ namespace otb
       {
 //         otbMsgDevMacro(<< "Cartographic coordinates: (" << point[0] << "," << point[1] << ")");
 
-	  //from "itk::point" to "ossim::ossimDpt"
+    //from "itk::point" to "ossim::ossimDpt"
         ossimDpt ossimDPoint(point[0], point[1]);
 
-	  //map projection
+    //map projection
         ossimGpt ossimGPoint;
 //         ossimGPoint=m_TileMapTransform->inverse(ossimDPoint);
         m_TileMapTransform->lineSampleToWorld(ossimDPoint, ossimGPoint);
-//	 	otbGenericMsgDebugMacro(<< "Inverse : " << std::endl << m_TileMapTransform->print(std::cout));
+//     otbGenericMsgDebugMacro(<< "Inverse : " << std::endl << m_TileMapTransform->print(std::cout));
 
         outputPoint[0]=ossimGPoint.lon;
         outputPoint[1]=ossimGPoint.lat;
@@ -71,14 +71,14 @@ namespace otb
       case FORWARD:
       {
 //         otbMsgDevMacro(<< "Geographic coordinates (long/lat) : (" << point[1] << "," << point[0] << ")");
-		//from "itk::point" to "ossim::ossimGpt"
+    //from "itk::point" to "ossim::ossimGpt"
         ossimGpt ossimGPoint(point[1], point[0]);
 
-	  //map projection
+    //map projection
         ossimDpt ossimDPoint;
 //         ossimDPoint=m_TileMapTransform->forward(ossimGPoint);
         m_TileMapTransform->worldToLineSample(ossimGPoint, ossimDPoint);
-//	 	otbGenericMsgDebugMacro(<< "Forward : ========================= " << std::endl << m_TileMapTransform->print(std::cout));
+//     otbGenericMsgDebugMacro(<< "Forward : ========================= " << std::endl << m_TileMapTransform->print(std::cout));
         outputPoint[0]=ossimDPoint.x;
         outputPoint[1]=ossimDPoint.y;
 

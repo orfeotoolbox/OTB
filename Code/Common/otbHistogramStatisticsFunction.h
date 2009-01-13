@@ -73,7 +73,7 @@ public:
       {
         m_InputHistogram = histogram ;
         this->Modified() ;
-	m_IsModified = true;
+  m_IsModified = true;
       }
   }
 

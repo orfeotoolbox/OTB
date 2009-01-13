@@ -76,7 +76,7 @@ template <class TInputImage, class TOutputPath>
     typedef typename Superclass::InputImageType                         InputImageType;
     typedef typename Superclass::OutputPathType                         OutputPathType;
     typedef typename Superclass::OutputPathListType                     OutputPathListType;
-    typedef typename InputImageType::PixelType 				InputPixelType;
+    typedef typename InputImageType::PixelType         InputPixelType;
     typedef double                                                      InternalPixelType;
 
     typedef otb::VectorImage<InternalPixelType,InputImageType::ImageDimension>  VectorImageType;

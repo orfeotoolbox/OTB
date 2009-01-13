@@ -93,31 +93,31 @@ namespace otb
     ImageIteratorType outIt = ImageIteratorType(DEMImage,DEMImage->GetRequestedRegion());
 
     // Walk the output image, evaluating the height at each pixel
-    IndexType 			currentindex;
-    PointType 			phyPoint;
-    double			height;
+    IndexType       currentindex;
+    PointType       phyPoint;
+    double      height;
 
     for (outIt.GoToBegin(); !outIt.IsAtEnd(); ++outIt)
     {
-			currentindex=outIt.GetIndex();
-			DEMImage->TransformIndexToPhysicalPoint(currentindex, phyPoint);
+      currentindex=outIt.GetIndex();
+      DEMImage->TransformIndexToPhysicalPoint(currentindex, phyPoint);
 
-			otbMsgDevMacro(<< "PhyPoint : (" << phyPoint[0] << "," << phyPoint[1] << ")") ;
+      otbMsgDevMacro(<< "PhyPoint : (" << phyPoint[0] << "," << phyPoint[1] << ")") ;
 
-			height=m_DEMHandler->GetHeightAboveMSL(phyPoint); // Altitude calculation
-			otbMsgDevMacro(<< "height" << height) ;
-			// MNT sets a default value (-32768) at point where it doesn't have altitude information.
-			// OSSIM has chosen to change this default value in OSSIM_DBL_NAN (-4.5036e15).
-			if (!ossim::isnan(height))
-	  	{
-		    // Fill the image
-		    DEMImage->SetPixel(currentindex, static_cast<PixelType>(height) );
-		  }
-			else
-	  	{
-	  	  // Back to the MNT default value
-	  	  DEMImage->SetPixel(currentindex, m_DefaultUnknownValue);
-	  	}
+      height=m_DEMHandler->GetHeightAboveMSL(phyPoint); // Altitude calculation
+      otbMsgDevMacro(<< "height" << height) ;
+      // MNT sets a default value (-32768) at point where it doesn't have altitude information.
+      // OSSIM has chosen to change this default value in OSSIM_DBL_NAN (-4.5036e15).
+      if (!ossim::isnan(height))
+      {
+        // Fill the image
+        DEMImage->SetPixel(currentindex, static_cast<PixelType>(height) );
+      }
+      else
+      {
+        // Back to the MNT default value
+        DEMImage->SetPixel(currentindex, m_DefaultUnknownValue);
+      }
     }
   }
 

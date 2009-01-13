@@ -291,7 +291,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
           // Only HH and HV are present
           case HH_HV :
 
-        	// Forcing KhiI=0 PsiI=0
+          // Forcing KhiI=0 PsiI=0
                 this->SetKhiI(0);
                 this->SetPsiI(0);
                 break;

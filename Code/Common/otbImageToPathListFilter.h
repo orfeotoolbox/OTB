@@ -36,7 +36,7 @@ class ITK_EXPORT ImageToPathListFilter : public PathListSource<TOutputPath>
 public:
   /** Standard class typedefs. */
   typedef ImageToPathListFilter             Self;
-  typedef PathListSource<TOutputPath>	    Superclass;
+  typedef PathListSource<TOutputPath>      Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
 

@@ -55,113 +55,113 @@ namespace Functor
       {
 
       public:
-	/**
-	 * Constructor
-	 */
-	ConvexOrConcaveDecisionRule()
-	  {
-	    m_ConvexLabel = 1;
-	    m_ConcaveLabel = 2;
-	    m_FlatLabel = 0;
-	    m_Sigma = 0.0;
-	  }
-	/**
-	 * Destructor
-	 */
-	~ConvexOrConcaveDecisionRule(){};
-	/**
-	 * Label the pixel to convex, concave or flat
-	 * \return The label of the pixel
-	 * \param x The image value
-	 * \param xlevel The leveling value
-	 */
-	inline TOutput operator()(const TInput& x, const TInput& xlevel)
-	  {
-	    TOutput resp = m_FlatLabel;
+  /**
+   * Constructor
+   */
+  ConvexOrConcaveDecisionRule()
+    {
+      m_ConvexLabel = 1;
+      m_ConcaveLabel = 2;
+      m_FlatLabel = 0;
+      m_Sigma = 0.0;
+    }
+  /**
+   * Destructor
+   */
+  ~ConvexOrConcaveDecisionRule(){};
+  /**
+   * Label the pixel to convex, concave or flat
+   * \return The label of the pixel
+   * \param x The image value
+   * \param xlevel The leveling value
+   */
+  inline TOutput operator()(const TInput& x, const TInput& xlevel)
+    {
+      TOutput resp = m_FlatLabel;
 
-	    if(static_cast<double>(x-xlevel)>m_Sigma)
-	      {
-		resp = m_ConvexLabel;
-	      }
-	    else if (static_cast<double>(xlevel-x)>m_Sigma)
-	      {
-		resp = m_ConcaveLabel;
-	      }
-	    return resp;
-	  }
-	/**
-	 * Set the convex label
-	 * \param label the convex label
-	 */
-	void SetConvexLabel(const TOutput& label)
-	  {
-	    m_ConvexLabel=label;
-	  }
-	/**
-	 * Get the convex label
-	 * \return the convex label
-	 */
-	TOutput GetConvexLabel(void)
-	  {
-	    return m_ConvexLabel;
-	  }
-	/**
-	 * Set the concave label
-	 * \param label the concave label
-	 */
-	void SetConcaveLabel(const TOutput& label)
-	  {
-	    m_ConcaveLabel=label;
-	  }
-	/**
-	 * Get the concave label
-	 * \return the concave label
-	 */
-	TOutput GetConcaveLabel(void)
-	  {
-	    return m_ConcaveLabel;
-	  }
-	/**
-	 * Set the flat label
-	 * \param label the flat label
-	 */
-	void SetFlatLabel(const TOutput& label)
-	  {
-	    m_FlatLabel=label;
-	  }
-	/**
-	 * Get the flat label
-	 * \return the flat label
-	 */
-	TOutput GetFlatLabel(void)
-	  {
-	    return m_FlatLabel;
-	  }
-	/**
-	 * Set the tolerance value
-	 * \param sigma the tolerance value
-	 */
-	void SetSigma(const double & sigma)
-	  {
-	    m_Sigma = sigma;
-	  }
-	/**
-	 * Get the tolerance value
-	 * \return the tolerance value
-	 */
-	double GetSigma(void)
-	  {
-	    return m_Sigma;
-	  }
+      if(static_cast<double>(x-xlevel)>m_Sigma)
+        {
+    resp = m_ConvexLabel;
+        }
+      else if (static_cast<double>(xlevel-x)>m_Sigma)
+        {
+    resp = m_ConcaveLabel;
+        }
+      return resp;
+    }
+  /**
+   * Set the convex label
+   * \param label the convex label
+   */
+  void SetConvexLabel(const TOutput& label)
+    {
+      m_ConvexLabel=label;
+    }
+  /**
+   * Get the convex label
+   * \return the convex label
+   */
+  TOutput GetConvexLabel(void)
+    {
+      return m_ConvexLabel;
+    }
+  /**
+   * Set the concave label
+   * \param label the concave label
+   */
+  void SetConcaveLabel(const TOutput& label)
+    {
+      m_ConcaveLabel=label;
+    }
+  /**
+   * Get the concave label
+   * \return the concave label
+   */
+  TOutput GetConcaveLabel(void)
+    {
+      return m_ConcaveLabel;
+    }
+  /**
+   * Set the flat label
+   * \param label the flat label
+   */
+  void SetFlatLabel(const TOutput& label)
+    {
+      m_FlatLabel=label;
+    }
+  /**
+   * Get the flat label
+   * \return the flat label
+   */
+  TOutput GetFlatLabel(void)
+    {
+      return m_FlatLabel;
+    }
+  /**
+   * Set the tolerance value
+   * \param sigma the tolerance value
+   */
+  void SetSigma(const double & sigma)
+    {
+      m_Sigma = sigma;
+    }
+  /**
+   * Get the tolerance value
+   * \return the tolerance value
+   */
+  double GetSigma(void)
+    {
+      return m_Sigma;
+    }
       private:
-	/** Label of the convex class */
-	TOutput m_ConvexLabel;
-	/** Label of the concave class */
-	TOutput m_ConcaveLabel;
-	/** Label of the flat class */
-	TOutput m_FlatLabel;
-	/** Sigma (tolerance) parameter */
-	double m_Sigma;
+  /** Label of the convex class */
+  TOutput m_ConvexLabel;
+  /** Label of the concave class */
+  TOutput m_ConcaveLabel;
+  /** Label of the flat class */
+  TOutput m_FlatLabel;
+  /** Sigma (tolerance) parameter */
+  double m_Sigma;
 
       };
   } //end namespace Functor

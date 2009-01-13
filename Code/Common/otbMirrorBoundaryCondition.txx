@@ -60,16 +60,16 @@ MirrorBoundaryCondition<TImage>
     {
     if (boundary_offset[i] != 0)
       {
-	// If the neighborhood overlaps on the low edge, then wrap from the
-	// high edge of the image.
-	if (point_index[i] < static_cast<OffsetValueType>(iterator->GetRadius(i)))
-	  {
-	    ptr +=  boundary_offset[i] * offset_table[i];
-	  }
-	else // wrap from the low side of the image
-	  {
-	    ptr -= boundary_offset[i] * offset_table[i];
-	  }
+  // If the neighborhood overlaps on the low edge, then wrap from the
+  // high edge of the image.
+  if (point_index[i] < static_cast<OffsetValueType>(iterator->GetRadius(i)))
+    {
+      ptr +=  boundary_offset[i] * offset_table[i];
+    }
+  else // wrap from the low side of the image
+    {
+      ptr -= boundary_offset[i] * offset_table[i];
+    }
       }
     }
 
@@ -116,16 +116,16 @@ MirrorBoundaryCondition<TImage>
     {
     if (boundary_offset[i] != 0)
       {
-	// If the neighborhood overlaps on the low edge, then wrap from the
-	// high edge of the image.
-	if (point_index[i] < static_cast<OffsetValueType>(iterator->GetRadius(i)))
-	  {
-	    ptr +=  boundary_offset[i] * offset_table[i];
-	  }
-	else // wrap from the low side of the image
-	  {
-	    ptr -= boundary_offset[i] * offset_table[i];
-	  }
+  // If the neighborhood overlaps on the low edge, then wrap from the
+  // high edge of the image.
+  if (point_index[i] < static_cast<OffsetValueType>(iterator->GetRadius(i)))
+    {
+      ptr +=  boundary_offset[i] * offset_table[i];
+    }
+  else // wrap from the low side of the image
+    {
+      ptr -= boundary_offset[i] * offset_table[i];
+    }
       }
     }
 

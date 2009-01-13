@@ -53,9 +53,9 @@ namespace otb
       /** Constructor. Takes a ProcessObject to monitor and an optional
        * comment string that is prepended to each event message. */
       StandardWriterWatcher(itk::ProcessObject* process,
-			    const char *comment="");
+          const char *comment="");
       StandardWriterWatcher(itk::ProcessObject* process,itk::ProcessObject * source,
-			    const char *comment="");
+          const char *comment="");
 
       /** Copy constructor */
       StandardWriterWatcher(const StandardWriterWatcher&);

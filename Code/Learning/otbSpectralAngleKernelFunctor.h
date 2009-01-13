@@ -44,25 +44,25 @@ namespace otb
 
 
 class SpectralAngleKernelFunctor
-		: public GenericKernelFunctorBase
+    : public GenericKernelFunctorBase
 {
 public:
 
 
-	double operator() ( const svm_node * x, const svm_node * y,
-						const svm_parameter & param ) const;
+  double operator() ( const svm_node * x, const svm_node * y,
+            const svm_parameter & param ) const;
 
-	SpectralAngleKernelFunctor ();
-	virtual ~SpectralAngleKernelFunctor () { }
+  SpectralAngleKernelFunctor ();
+  virtual ~SpectralAngleKernelFunctor () { }
 
-	/** Specific implementation of \code Update \endcode to split m_MapParameters
-	 * into specific variables to speed up kernel evaluations */
-	void Update ();
+  /** Specific implementation of \code Update \endcode to split m_MapParameters
+   * into specific variables to speed up kernel evaluations */
+  void Update ();
 
 protected:
-	inline	double	SAM ( const svm_node * x, const svm_node * y ) const;
+  inline  double  SAM ( const svm_node * x, const svm_node * y ) const;
 
-	double m_Coef;
+  double m_Coef;
 };
 
 } // end of namespace otb

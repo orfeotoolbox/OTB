@@ -33,7 +33,7 @@ namespace otb
 
 template < class TInput,
            class TOutput = float,
-	   class TPrecision = double,
+     class TPrecision = double,
            class TCoordRep = float >
 class ITK_EXPORT GeometricMomentImageFunction :
   public itk::ImageFunction<TInput, TOutput,TCoordRep >
@@ -66,9 +66,9 @@ public:
 
 protected:
   GeometricMomentImageFunction()
-  	{
-	m_NeighborhoodRadius = -1;
-	};
+    {
+  m_NeighborhoodRadius = -1;
+  };
 
   ~GeometricMomentImageFunction(){};
   void PrintSelf(std::ostream& os, itk::Indent indent) const

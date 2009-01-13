@@ -179,14 +179,14 @@ ImportVectorImageFilter<TOutputImage>
   outputPtr->SetDirection( m_Direction );
   outputPtr->SetLargestPossibleRegion( m_Region );
 
-	typename RegionType::SizeType size = m_Region.GetSize();
+  typename RegionType::SizeType size = m_Region.GetSize();
 
-	int numberOfBands= m_Size/(size[0]*size[1]);
+  int numberOfBands= m_Size/(size[0]*size[1]);
 
-	if (numberOfBands!=static_cast<int>(numberOfBands))
-		itkExceptionMacro(<<"Buffer size and image size are not compatible !");
+  if (numberOfBands!=static_cast<int>(numberOfBands))
+    itkExceptionMacro(<<"Buffer size and image size are not compatible !");
 
-	 outputPtr->SetNumberOfComponentsPerPixel(numberOfBands);
+   outputPtr->SetNumberOfComponentsPerPixel(numberOfBands);
 }
 
 

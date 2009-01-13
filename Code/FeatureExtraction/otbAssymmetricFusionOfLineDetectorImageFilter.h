@@ -39,20 +39,20 @@ namespace otb
  */
 
 template <class TInputImage,
-	  class TOutputImage,
+    class TOutputImage,
           class TOutputImageDirection = TOutputImage,
-	  class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
+    class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
 class ITK_EXPORT AssymmetricFusionOfLineDetectorImageFilter :
     public LineDetectorImageFilterBase< TInputImage, TOutputImage, TOutputImageDirection, TInterpolator >
 {
 public:
 
-  itkStaticConstMacro(		InputImageDimension,
-  				unsigned int,
-                      		TInputImage::ImageDimension);
-  itkStaticConstMacro(		OutputImageDimension,
-  				unsigned int,
-                      		TOutputImage::ImageDimension);
+  itkStaticConstMacro(    InputImageDimension,
+          unsigned int,
+                          TInputImage::ImageDimension);
+  itkStaticConstMacro(    OutputImageDimension,
+          unsigned int,
+                          TOutputImage::ImageDimension);
 
   typedef AssymmetricFusionOfLineDetectorImageFilter Self;
   typedef LineDetectorImageFilterBase<  TInputImage, TOutputImage, TOutputImageDirection, TInterpolator > Superclass;
@@ -63,9 +63,9 @@ public:
 
   itkTypeMacro(AssymmetricFusionOfLineDetectorImageFilter, LineDetectorImageFilterBase);
 
-  typedef typename Superclass::InputImageType 			InputImageType;
-  typedef typename Superclass::OutputImageType			OutputImageType;
-  typedef typename Superclass::OutputImageDirectionType 	OutputImageDirectionType;
+  typedef typename Superclass::InputImageType       InputImageType;
+  typedef typename Superclass::OutputImageType      OutputImageType;
+  typedef typename Superclass::OutputImageDirectionType   OutputImageDirectionType;
   typedef typename Superclass::InterpolatorType                 InterpolatorType;
 
   typedef OutputImageType InputImageType1;
@@ -81,7 +81,7 @@ protected:
   AssymmetricFusionOfLineDetectorImageFilter();
   virtual ~AssymmetricFusionOfLineDetectorImageFilter() {};
 
-  typedef otb::LineRatioDetectorImageFilter< InputImageType, OutputImageType, OutputImageDirectionType, InterpolatorType > 	LineRatioType;
+  typedef otb::LineRatioDetectorImageFilter< InputImageType, OutputImageType, OutputImageDirectionType, InterpolatorType >   LineRatioType;
   typedef otb::LineCorrelationDetectorImageFilter< InputImageType, OutputImageType, OutputImageDirectionType, InterpolatorType > LineCorrelationType;
   typedef otb::AssociativeSymmetricalSumImageFilter< InputImageType1, InputImageType2, OutputImageType > AssSymSumType;
 
@@ -94,9 +94,9 @@ private:
   void operator=(const Self&); //purposely not implemented
 
 
-  typename LineRatioType::Pointer	m_LineRatio;
-  typename LineCorrelationType::Pointer	m_LineCorrelation;
-  typename AssSymSumType::Pointer	m_AssSymSum;
+  typename LineRatioType::Pointer  m_LineRatio;
+  typename LineCorrelationType::Pointer  m_LineCorrelation;
+  typename AssSymSumType::Pointer  m_AssSymSum;
 };
 } // end namespace otb
 

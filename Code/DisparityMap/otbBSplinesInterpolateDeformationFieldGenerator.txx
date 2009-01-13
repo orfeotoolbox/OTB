@@ -61,17 +61,17 @@ BSplinesInterpolateDeformationFieldGenerator<TPointSet, TDeformationField>
       typename PointDataContainer::Element valueAndDeformations = pointDataIterator.Value();
 
       if(vcl_abs(valueAndDeformations[0])>=this->GetMetricThreshold())
-	{
-	  typename PointSetType::PointType p = pointIterator.Value();   // access the point
-	  sourcePoint[0] = p[0];
-	  sourcePoint[1] = p[1];
-	  targetPoint[0] = p[0] - valueAndDeformations[1];
-	  targetPoint[1] = p[1] - valueAndDeformations[2];
-	  otbMsgDebugMacro(<<"Adding landmark "<<pointId<<", source point: "<<sourcePoint<<", targetpoint: "<<targetPoint);
-	  sourceLandmarks->InsertElement( pointId, sourcePoint );
-	  targetLandmarks->InsertElement( pointId, targetPoint );
-	  ++pointId;
-	}
+  {
+    typename PointSetType::PointType p = pointIterator.Value();   // access the point
+    sourcePoint[0] = p[0];
+    sourcePoint[1] = p[1];
+    targetPoint[0] = p[0] - valueAndDeformations[1];
+    targetPoint[1] = p[1] - valueAndDeformations[2];
+    otbMsgDebugMacro(<<"Adding landmark "<<pointId<<", source point: "<<sourcePoint<<", targetpoint: "<<targetPoint);
+    sourceLandmarks->InsertElement( pointId, sourcePoint );
+    targetLandmarks->InsertElement( pointId, targetPoint );
+    ++pointId;
+  }
       ++pointIterator;
       ++pointDataIterator;
     }

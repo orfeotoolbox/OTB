@@ -56,7 +56,7 @@ public:
   /** Standard class typedefs. */
   typedef SVMPointSetModelEstimator   Self;
   typedef SVMModelEstimator<typename TInputPointSet::PixelType::value_type,
-			    typename TTrainingPointSet::PixelType>
+          typename TTrainingPointSet::PixelType>
                             Superclass;
 
   typedef itk::SmartPointer<Self>  Pointer;

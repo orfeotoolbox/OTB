@@ -71,7 +71,7 @@ class ITK_EXPORT ImageList
     /** PrintSelf method */
     void PrintSelf(std::ostream& os, itk::Indent indent) const
       {
-	Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os,indent);
       };
 
   private:

@@ -71,7 +71,7 @@ namespace otb
     params[1]=0.5*static_cast<double>(this->GetInput()->GetLargestPossibleRegion().GetSize()[1]);
     params[2]=360./m_OutputSize[0];
     params[3]=vcl_log(vcl_sqrt(vcl_pow(static_cast<double>(this->GetInput()->GetLargestPossibleRegion().GetSize()[0]),2)
-		       +vcl_pow(static_cast<double>(this->GetInput()->GetLargestPossibleRegion().GetSize()[1]),2.))/2)/m_OutputSize[1];
+           +vcl_pow(static_cast<double>(this->GetInput()->GetLargestPossibleRegion().GetSize()[1]),2.))/2)/m_OutputSize[1];
   m_Transform->SetParameters(params);
 
   // log polar resampling
@@ -101,15 +101,15 @@ namespace otb
 
     if( value < minOutputValue )
       {
-	pixval = minOutputValue;
+  pixval = minOutputValue;
       }
     else if( value > maxOutputValue )
       {
-	pixval = maxOutputValue;
+  pixval = maxOutputValue;
       }
     else
       {
-	pixval = static_cast<PixelType>(value);
+  pixval = static_cast<PixelType>(value);
       }
     m_Iterator.Set(pixval);
   }

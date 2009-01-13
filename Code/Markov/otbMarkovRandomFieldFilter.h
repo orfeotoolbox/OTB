@@ -155,7 +155,7 @@ public itk::ImageToImageFilter<TInputImage,TClassifiedImage>
 
     /** Labelled Image dimension */
     itkStaticConstMacro(ClassifiedImageDimension, unsigned int,
-			TClassifiedImage::ImageDimension);
+      TClassifiedImage::ImageDimension);
 
     /** Type definitions for classifier to be used for the MRF lavbelling. */
     typedef itk::ImageClassifierBase<TInputImage,TClassifiedImage> ClassifierType;
@@ -275,12 +275,12 @@ public itk::ImageToImageFilter<TInputImage,TClassifiedImage>
     /** Get the neighborhood radius */
     const NeighborhoodRadiusType GetNeighborhoodRadius() const
       {
-	NeighborhoodRadiusType m_NeighborhoodRadius;
+  NeighborhoodRadiusType m_NeighborhoodRadius;
 
-	for(int i=0; i<InputImageDimension; ++i)
-	  m_NeighborhoodRadius[i] = m_InputImageNeighborhoodRadius[i];
+  for(int i=0; i<InputImageDimension; ++i)
+    m_NeighborhoodRadius[i] = m_InputImageNeighborhoodRadius[i];
 
-	return m_NeighborhoodRadius;
+  return m_NeighborhoodRadius;
       }
 
 
@@ -295,7 +295,7 @@ public itk::ImageToImageFilter<TInputImage,TClassifiedImage>
     //Enum to get the stopping condition of the MRF filter
     typedef enum{
       MaximumNumberOfIterations=1,
-	ErrorTolerance
+  ErrorTolerance
         } StopConditionType;
 
     /** Get condition that stops the MRF filter (Number of Iterations
@@ -308,15 +308,15 @@ public itk::ImageToImageFilter<TInputImage,TClassifiedImage>
 #ifdef ITK_USE_CONCEPT_CHECKING
     /** Begin concept checking */
     itkConceptMacro(UnsignedIntConvertibleToClassifiedCheck,
-		    (itk::Concept::Convertible<unsigned int, LabelledImagePixelType>));
+        (itk::Concept::Convertible<unsigned int, LabelledImagePixelType>));
     itkConceptMacro(ClassifiedConvertibleToUnsignedIntCheck,
-		    (itk::Concept::Convertible<LabelledImagePixelType, unsigned int> ));
+        (itk::Concept::Convertible<LabelledImagePixelType, unsigned int> ));
     itkConceptMacro(ClassifiedConvertibleToIntCheck,
-		    (itk::Concept::Convertible<LabelledImagePixelType, int> ));
+        (itk::Concept::Convertible<LabelledImagePixelType, int> ));
     itkConceptMacro(IntConvertibleToClassifiedCheck,
-		    (itk::Concept::Convertible<int, LabelledImagePixelType>));
+        (itk::Concept::Convertible<int, LabelledImagePixelType>));
     itkConceptMacro(SameDimensionCheck,
-		    (itk::Concept::SameDimension<InputImageDimension, ClassifiedImageDimension>));
+        (itk::Concept::SameDimension<InputImageDimension, ClassifiedImageDimension>));
     /** End concept checking */
 #endif
 

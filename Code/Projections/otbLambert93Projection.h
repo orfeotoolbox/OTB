@@ -37,12 +37,12 @@ namespace otb
       /** Standard class typedefs. */
       typedef Lambert93Projection                  Self;
       typedef LambertConformalConicMapProjection<transform>   Superclass;
-      typedef itk::SmartPointer<Self>                    	    Pointer;
-      typedef itk::SmartPointer<const Self>              	    ConstPointer;
+      typedef itk::SmartPointer<Self>                          Pointer;
+      typedef itk::SmartPointer<const Self>                    ConstPointer;
 
       typedef typename Superclass::ScalarType                 ScalarType;
-      typedef itk::Point<ScalarType,2 >   	                  InputPointType;
-      typedef itk::Point<ScalarType,2 >              	        OutputPointType;
+      typedef itk::Point<ScalarType,2 >                       InputPointType;
+      typedef itk::Point<ScalarType,2 >                        OutputPointType;
 
       /** Method for creation through the object factory. */
       itkNewMacro( Self );

@@ -169,58 +169,58 @@ DataNode<TPrecision,VDimension>
 {
   itk::OStringStream oss;
   switch(m_NodeType)
-    {
+  {
     case ROOT:
-      {
-	oss<<"Root ("<<m_NodeId<<")";
-	break;
-      }
-    case DOCUMENT:
-      {
-	oss<<"Document ("<<m_NodeId<<")";
-	break;
-      }
-    case FOLDER:
-      {
-	oss<<"Folder ("<<m_NodeId<<")";
-	break;
-      }
-    case FEATURE_POINT:
-      {
-	oss<<"Point ("<<m_NodeId<<") "<<m_Data.point;
-	break;
-      }
-    case FEATURE_LINE:
-      {
-	oss<<"Line ("<<m_NodeId<<") "<<m_Data.line->GetVertexList()->Size()<<" points";
-	break;
-      }
-    case FEATURE_POLYGON:
-      {
-	oss<<"Polygon ("<<m_NodeId<<") "<<this->GetPolygonExteriorRing()->GetVertexList()->Size()<<" points, "<<this->GetPolygonInteriorRings()->Size()<<" interior rings";
-	break;
-      }
-    case FEATURE_MULTIPOINT:
-      {
-	oss<<"MultiPoint ("<<m_NodeId<<")";
-	break;
-      }
-    case FEATURE_MULTILINE:
-      {
-	oss<<"MultiLine ("<<m_NodeId<<")";
-	break;
-      }
-    case FEATURE_MULTIPOLYGON:
-      {
-	oss<<"MultiPolygon ("<<m_NodeId<<")";
-	break;
-      }
-    case FEATURE_COLLECTION:
-      {
-	oss<<"Collection ("<<m_NodeId<<")";
-	break;
-      }
+    {
+      oss<<"Root ("<<m_NodeId<<")";
+      break;
     }
+    case DOCUMENT:
+    {
+      oss<<"Document ("<<m_NodeId<<")";
+      break;
+    }
+    case FOLDER:
+    {
+      oss<<"Folder ("<<m_NodeId<<")";
+      break;
+    }
+    case FEATURE_POINT:
+    {
+      oss<<"Point ("<<m_NodeId<<") "<<m_Data.point;
+      break;
+    }
+    case FEATURE_LINE:
+    {
+      oss<<"Line ("<<m_NodeId<<") "<<m_Data.line->GetVertexList()->Size()<<" points";
+      break;
+    }
+    case FEATURE_POLYGON:
+    {
+      oss<<"Polygon ("<<m_NodeId<<") "<<this->GetPolygonExteriorRing()->GetVertexList()->Size()<<" points, "<<this->GetPolygonInteriorRings()->Size()<<" interior rings";
+      break;
+    }
+    case FEATURE_MULTIPOINT:
+    {
+      oss<<"MultiPoint ("<<m_NodeId<<")";
+      break;
+    }
+    case FEATURE_MULTILINE:
+    {
+      oss<<"MultiLine ("<<m_NodeId<<")";
+      break;
+    }
+    case FEATURE_MULTIPOLYGON:
+    {
+      oss<<"MultiPolygon ("<<m_NodeId<<")";
+      break;
+    }
+    case FEATURE_COLLECTION:
+    {
+      oss<<"Collection ("<<m_NodeId<<")";
+      break;
+    }
+  }
   return oss.str();
 }
 
@@ -270,9 +270,9 @@ DataNode<TPrecision,VDimension>
       FieldMapType::iterator it = m_FieldMap.begin();
 
       for(unsigned int i = 0;i<index;++i)
-	{
-	  ++it;
-	}
+  {
+    ++it;
+  }
       return (*it);
     }
   return FieldType("No key","No value");

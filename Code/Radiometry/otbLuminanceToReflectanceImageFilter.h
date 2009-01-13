@@ -40,38 +40,38 @@ namespace otb
        * \ingroup Functor
        */
       template <class TInput, class TOutput>
-	class LuminanceToReflectanceImageFunctor
-	{
-	public:
-	  LuminanceToReflectanceImageFunctor()
-	    {
-	      m_SolarIllumination = 1.;
-	      m_IlluminationCorrectionCoefficient = 1.;
-	    };
-	  ~LuminanceToReflectanceImageFunctor() {};
+  class LuminanceToReflectanceImageFunctor
+  {
+  public:
+    LuminanceToReflectanceImageFunctor()
+      {
+        m_SolarIllumination = 1.;
+        m_IlluminationCorrectionCoefficient = 1.;
+      };
+    ~LuminanceToReflectanceImageFunctor() {};
 
-	  void SetSolarIllumination(double solarIllumination){ m_SolarIllumination = solarIllumination;};
-	  void SetIlluminationCorrectionCoefficient(double coef){ m_IlluminationCorrectionCoefficient = coef;};
+    void SetSolarIllumination(double solarIllumination){ m_SolarIllumination = solarIllumination;};
+    void SetIlluminationCorrectionCoefficient(double coef){ m_IlluminationCorrectionCoefficient = coef;};
 
-	  double GetSolarIllumination(){ return m_SolarIllumination;};
-	  double GetIlluminationCorrectionCoefficient(){ return m_IlluminationCorrectionCoefficient;};
+    double GetSolarIllumination(){ return m_SolarIllumination;};
+    double GetIlluminationCorrectionCoefficient(){ return m_IlluminationCorrectionCoefficient;};
 
-	  inline TOutput operator() (const TInput & inPixel)
-	    {
-	      TOutput outPixel;
-	      double temp;
- 	      temp = static_cast<double>(inPixel)
-		         * static_cast<double>(M_PI)
+    inline TOutput operator() (const TInput & inPixel)
+      {
+        TOutput outPixel;
+        double temp;
+         temp = static_cast<double>(inPixel)
+             * static_cast<double>(M_PI)
                          * m_IlluminationCorrectionCoefficient
-		         / m_SolarIllumination;
-	      outPixel = static_cast<TOutput>(temp);
-	      return outPixel;
-	    }
+             / m_SolarIllumination;
+        outPixel = static_cast<TOutput>(temp);
+        return outPixel;
+      }
 
-	private:
-	  double m_SolarIllumination;
-	  double m_IlluminationCorrectionCoefficient;
-	};
+  private:
+    double m_SolarIllumination;
+    double m_IlluminationCorrectionCoefficient;
+  };
     }
 
   /** \class LuminanceToReflectanceImageFilter
@@ -88,7 +88,7 @@ public UnaryImageFunctorWithVectorImageFilter< TInputImage,
                                                                                                    ITK_TYPENAME TOutputImage::InternalPixelType > >
 {
 public:
-/** 	Extract input and output images dimensions.*/
+/**   Extract input and output images dimensions.*/
   itkStaticConstMacro( InputImageDimension, unsigned int, TInputImage::ImageDimension);
   itkStaticConstMacro( OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
@@ -181,34 +181,34 @@ public:
       this->GetFunctorVector().clear();
 
       for(unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
-	{
-	  FunctorType functor;
-	  double coefTemp = 0.;
-	  if (!m_IsSetFluxNormalizationCoefficient)
-	    {
-	      if (m_Day*m_Month != 0 && m_Day<32 && m_Month<13)
-		{
-		  otb_6s_doublereal dsol = 0.;
-		  otb_6s_integer day = static_cast<otb_6s_integer>(m_Day);
-		  otb_6s_integer month = static_cast<otb_6s_integer>(m_Month);
-		  int cr(0);
-		  cr = otb_6s_varsol_(&day, &month, &dsol);
-		  coefTemp = vcl_cos(m_ZenithalSolarAngle*M_PI/180.)*static_cast<double>(dsol);
-		}
-	      else
-		{
-		  itkExceptionMacro( << "Day has to be included between 1 and 31, Month beetween 1 and 12.");
-		}
-	    }
-	  else
-	    {
-	      coefTemp = vcl_cos(m_ZenithalSolarAngle*M_PI/180.)*m_FluxNormalizationCoefficient*m_FluxNormalizationCoefficient;
-	    }
-	  functor.SetIlluminationCorrectionCoefficient(1. / coefTemp);
-	  functor.SetSolarIllumination(static_cast<double>(m_SolarIllumination[i]));
+  {
+    FunctorType functor;
+    double coefTemp = 0.;
+    if (!m_IsSetFluxNormalizationCoefficient)
+      {
+        if (m_Day*m_Month != 0 && m_Day<32 && m_Month<13)
+    {
+      otb_6s_doublereal dsol = 0.;
+      otb_6s_integer day = static_cast<otb_6s_integer>(m_Day);
+      otb_6s_integer month = static_cast<otb_6s_integer>(m_Month);
+      int cr(0);
+      cr = otb_6s_varsol_(&day, &month, &dsol);
+      coefTemp = vcl_cos(m_ZenithalSolarAngle*M_PI/180.)*static_cast<double>(dsol);
+    }
+        else
+    {
+      itkExceptionMacro( << "Day has to be included between 1 and 31, Month beetween 1 and 12.");
+    }
+      }
+    else
+      {
+        coefTemp = vcl_cos(m_ZenithalSolarAngle*M_PI/180.)*m_FluxNormalizationCoefficient*m_FluxNormalizationCoefficient;
+      }
+    functor.SetIlluminationCorrectionCoefficient(1. / coefTemp);
+    functor.SetSolarIllumination(static_cast<double>(m_SolarIllumination[i]));
 
-	  this->GetFunctorVector().push_back(functor);
-	}
+    this->GetFunctorVector().push_back(functor);
+  }
     }
 
 private:

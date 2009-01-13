@@ -54,14 +54,14 @@ class LanczosWindowFunction
       double px = M_PI * x;
       double temp;
       if(x == 0.0)
-	{
-	  temp = 1.0;
-	}
+  {
+    temp = 1.0;
+  }
       else
-	{
-	  double z = m_Factor * x;
-	  temp =  vcl_sin(z) / z;
-	}
+  {
+    double z = m_Factor * x;
+    temp =  vcl_sin(z) / z;
+  }
       return (x == 0.0) ? static_cast<TOutput>(temp) : static_cast<TOutput>(temp * vcl_sin(px) / px);
     }
     private:

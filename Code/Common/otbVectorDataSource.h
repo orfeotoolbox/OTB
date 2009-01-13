@@ -42,7 +42,7 @@ class ITK_EXPORT VectorDataSource : public itk::ProcessObject
 {
 public :
 
-	/** Standard class typedefs. */
+  /** Standard class typedefs. */
   typedef VectorDataSource                      Self;
   typedef itk::ProcessObject                    Superclass;
   typedef itk::SmartPointer<Self>               Pointer;

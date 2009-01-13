@@ -117,12 +117,12 @@ public:
         sample[1] = valueB;
 
 
-	HistogramFrequencyType freq = histogram->GetFrequency(
-	                               histogram->GetIndex(sample));
-	if (freq > 0)
-	  {
-	  jointEntropy += freq*vcl_log(freq);
-	  }
+  HistogramFrequencyType freq = histogram->GetFrequency(
+                                 histogram->GetIndex(sample));
+  if (freq > 0)
+    {
+    jointEntropy += freq*vcl_log(freq);
+    }
 
       }
 
@@ -162,7 +162,7 @@ class ITK_EXPORT JoinHistogramMIImageFilter :
             Functor::JoinHistogramMI<
                    typename itk::ConstNeighborhoodIterator<TInputImage1>,
                    typename itk::ConstNeighborhoodIterator<TInputImage2>,
-		   typename TOutputImage::PixelType>   >
+       typename TOutputImage::PixelType>   >
 {
 public:
   /** Standard class typedefs. */

@@ -124,7 +124,7 @@ namespace otb
     tptr = (char *) strstr(tbuff,"PhoenixHeaderLength= ");
     if (tptr == (char *) NULL)
     {
-//	  fprintf(stderr,"Can not determine Phoenix header length!\n");
+//    fprintf(stderr,"Can not determine Phoenix header length!\n");
       fclose(MSTARfp);
       return false;
     } else
@@ -136,7 +136,7 @@ namespace otb
     tptr = (char *) strstr(tbuff,"native_header_length= ");
     if (tptr == (char *) NULL)
     {
-//	  fprintf(stderr,"Can not determine native header length!\n");
+//    fprintf(stderr,"Can not determine native header length!\n");
       fclose(MSTARfp);
       return false;
     } else
@@ -477,7 +477,7 @@ namespace otb
      //n = fwrite(FSCENEdata, sizeof(short), nchunks, RAWfp);
         for ( int nbComponents = 0 ; nbComponents < 1 ; nbComponents++)
         {
-	// Recopie dans le buffer
+  // Recopie dans le buffer
 
           unsigned long cpt(0);
           cpt = (unsigned long )(nbComponents)* (unsigned long)(m_NbOctetPixel);
@@ -519,7 +519,7 @@ namespace otb
 //     n = fwrite(FSCENEdata, sizeof(short), nchunks, RAWfp);
         for ( unsigned int nbComponents = 1 ; nbComponents < this->GetNumberOfComponents() ; nbComponents++)
         {
-	// Recopie dans le buffer
+  // Recopie dans le buffer
 
           unsigned long cpt(0);
           cpt = (unsigned long )(nbComponents)* (unsigned long)(m_NbOctetPixel);

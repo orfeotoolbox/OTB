@@ -33,7 +33,7 @@ template <class TInputImage, class TOutputPath>
 ImageToEdgePathFilter<TInputImage, TOutputPath>
 ::ImageToEdgePathFilter()
 {
-	m_ForegroundValue = PixelType(255);
+  m_ForegroundValue = PixelType(255);
 }
 /**
  * Main computation method.
@@ -52,7 +52,7 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
   PixelType initPadConstant(0);
   if( initPadConstant == m_ForegroundValue )
   {
-  	initPadConstant = 1;
+    initPadConstant = 1;
   }
 
   typedef itk::ConstantPadImageFilter<InputImageType,InputImageType> PadFilterType;
@@ -79,7 +79,7 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
       }
       else
       {
-    	++linIter;
+      ++linIter;
       }
     }
   typename InputImageType::IndexType start = linIter.GetIndex();
@@ -155,15 +155,15 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
       //otbMsgDevMacro(<<"SEARCH: "<<move%8<<" "<<it.GetPixel(rotation[move%8])<<" LAST: "<<LastWasPositive);
       // If last pixel was not in the object and the current is, we have found the edge
       if((!LastWasPositive) && (it.GetPixel(rotation[move%8]) == m_ForegroundValue) )
-	{
-	EdgeFound=true;
-	}
+  {
+  EdgeFound=true;
+  }
       else
-	{
-	//  Else goes on
-	LastWasPositive=(it.GetPixel(rotation[move%8]) == m_ForegroundValue);
-	move++;
-	}
+  {
+  //  Else goes on
+  LastWasPositive=(it.GetPixel(rotation[move%8]) == m_ForegroundValue);
+  move++;
+  }
       }
     // Once the search has been completed, if an edge pixel was found
     if(EdgeFound)
@@ -173,34 +173,34 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
       nextStart=(move+5)%8;
       newVertex = it.GetIndex(CENTER);
       if(it.GetPixel(RIGHT)==m_ForegroundValue)
-	newVertex[0]-=0.5;
+  newVertex[0]-=0.5;
       if(it.GetPixel(LEFT)==m_ForegroundValue)
-	newVertex[0]+=0.5;
+  newVertex[0]+=0.5;
       if(it.GetPixel(UP)==m_ForegroundValue)
-	newVertex[1]+=0.5;
+  newVertex[1]+=0.5;
       if(it.GetPixel(DOWN)==m_ForegroundValue)
-	newVertex[1]-=0.5;
+  newVertex[1]-=0.5;
       outputPath->AddVertex(newVertex);
       otbMsgDebugMacro(<<newVertex);
       // If we came back to our start point after a sufficient number of moves
       if((it.GetIndex(CENTER)==start)&&(nbMove>=2))
-	{
-	// search end
+  {
+  // search end
         flag=false;
-	}
+  }
       else
-	{
-	// else
+  {
+  // else
         for(int i=0;i<8;i++)
-	  {
-	  // If we came back near our starting pointer after a sufficient number of moves
-	  if((it.GetIndex(rotation[i])==start)&&(nbMove>=2))
-	    {
-	    // search end
+    {
+    // If we came back near our starting pointer after a sufficient number of moves
+    if((it.GetIndex(rotation[i])==start)&&(nbMove>=2))
+      {
+      // search end
             flag=false;
-	    }
-	  }
-	}
+      }
+    }
+  }
       }
       // else
       else

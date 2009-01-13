@@ -497,8 +497,8 @@ namespace otb
     int lFirstLine   = this->GetIORegion().GetIndex()[1] ; // [1... ]
     int lFirstColumn = this->GetIORegion().GetIndex()[0] ; // [1... ]
 
-	// Cas particuliers : on controle que si la r�gion � �crire est de la m�me dimension que l'image enti�re,
-	// on commence l'offset � 0 (lorsque que l'on est pas en "Streaming")
+  // Cas particuliers : on controle que si la r�gion � �crire est de la m�me dimension que l'image enti�re,
+  // on commence l'offset � 0 (lorsque que l'on est pas en "Streaming")
     if( (lNbLines == m_Dimensions[1]) && (lNbColumns == m_Dimensions[0]))
     {
       otbMsgDevMacro(<<"Force l'offset de l'IORegion � 0");

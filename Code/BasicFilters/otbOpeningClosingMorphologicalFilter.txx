@@ -32,8 +32,8 @@ template <class TInputImage,class TOutputImage, class TKernel>
 OpeningClosingMorphologicalFilter<TInputImage, TOutputImage, TKernel>
 ::OpeningClosingMorphologicalFilter()
 {
-	m_Kernel.SetRadius(1);
-	m_Kernel.CreateStructuringElement();
+  m_Kernel.SetRadius(1);
+  m_Kernel.CreateStructuringElement();
 }
 
 /**

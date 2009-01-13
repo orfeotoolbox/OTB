@@ -56,7 +56,7 @@ public:
   /** Standard class typedefs. */
   typedef SVMSampleListModelEstimator   Self;
   typedef SVMModelEstimator<typename TInputSampleList::MeasurementType,
-			    typename TTrainingSampleList::MeasurementType>
+          typename TTrainingSampleList::MeasurementType>
                             Superclass;
 
   typedef itk::SmartPointer<Self>  Pointer;

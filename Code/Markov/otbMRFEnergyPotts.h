@@ -63,11 +63,11 @@ class ITK_EXPORT MRFEnergyPotts:public MRFEnergy< TInput1, TInput2>
 
     double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)
       {
-	if (value1 != value2)
+  if (value1 != value2)
           {
             return this->m_Parameters[0];
           }
-	else
+  else
           {
             return -this->m_Parameters[0];
           }

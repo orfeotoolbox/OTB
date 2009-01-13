@@ -29,13 +29,13 @@ namespace otb
 {
 
   template <class TInputMultiSpectralImage,
-	    class TInputMultiSpectralInterpImage,
-	    class TInputPanchroImage,
-	    class TOutputImage>
+      class TInputMultiSpectralInterpImage,
+      class TInputPanchroImage,
+      class TOutputImage>
   BayesianFusionFilter<TInputMultiSpectralImage,
-		       TInputMultiSpectralInterpImage,
-		       TInputPanchroImage,
-		       TOutputImage>
+           TInputMultiSpectralInterpImage,
+           TInputPanchroImage,
+           TOutputImage>
   ::BayesianFusionFilter()
   {
     m_Lambda = 0.9999;
@@ -45,13 +45,13 @@ namespace otb
 
 
   template <class TInputMultiSpectralImage,
-	    class TInputMultiSpectralInterpImage,
-	    class TInputPanchroImage,
-	    class TOutputImage>
+      class TInputMultiSpectralInterpImage,
+      class TInputPanchroImage,
+      class TOutputImage>
   BayesianFusionFilter<TInputMultiSpectralImage,
-		       TInputMultiSpectralInterpImage,
-		       TInputPanchroImage,
-		       TOutputImage>
+           TInputMultiSpectralInterpImage,
+           TInputPanchroImage,
+           TOutputImage>
   ::~BayesianFusionFilter()
   {
 
@@ -72,14 +72,14 @@ namespace otb
       }
 
   template <class TInputMultiSpectralImage,
-	    class TInputMultiSpectralInterpImage,
-	    class TInputPanchroImage,
-	    class TOutputImage>
+      class TInputMultiSpectralInterpImage,
+      class TInputPanchroImage,
+      class TOutputImage>
   void
   BayesianFusionFilter<TInputMultiSpectralImage,
-		       TInputMultiSpectralInterpImage,
-		       TInputPanchroImage,
-		       TOutputImage>
+           TInputMultiSpectralInterpImage,
+           TInputPanchroImage,
+           TOutputImage>
   ::BeforeThreadedGenerateData ()
   {
     if(!m_StatisticsHaveBeenGenerated)
@@ -180,16 +180,16 @@ namespace otb
      **/
     if( (S.Rows() != tempS.Rows()) || (S.Cols() != tempS.Cols()))
       {
-	itkExceptionMacro( << "Matrix with size (" << S.Rows() << "," <<
-			   S.Cols() << ") cannot be subtracted from matrix with size (" <<
-			   tempS.Rows() << "," << tempS.Cols() <<" )" );
+  itkExceptionMacro( << "Matrix with size (" << S.Rows() << "," <<
+         S.Cols() << ") cannot be subtracted from matrix with size (" <<
+         tempS.Rows() << "," << tempS.Cols() <<" )" );
       }
     for( unsigned int r=0; r<S.Rows(); r++)
       {
-	for( unsigned int c=0; c<S.Cols(); c++ )
-	  {
-	    S(r,c) -= tempS(r,c);
-	  }
+  for( unsigned int c=0; c<S.Cols(); c++ )
+    {
+      S(r,c) -= tempS(r,c);
+    }
       }
     //**** END TODO ****/
 
@@ -202,17 +202,17 @@ namespace otb
      **/
     if( (S.Rows() != tempS.Rows()) || (S.Cols() != tempS.Cols()) )
       {
-	itkExceptionMacro( << "Matrix with size (" << S.Rows() << "," <<
-			   S.Cols() << ") cannot be subtracted from matrix with size (" <<
-			   tempS.Rows() << "," << tempS.Cols() << " )" );
+  itkExceptionMacro( << "Matrix with size (" << S.Rows() << "," <<
+         S.Cols() << ") cannot be subtracted from matrix with size (" <<
+         tempS.Rows() << "," << tempS.Cols() << " )" );
 
       }
     for( unsigned int r=0; r<S.Rows(); r++)
       {
-	for( unsigned int c=0; c<S.Cols(); c++ )
-	  {
-	    S(r,c) -= tempS(r,c);
-	  }
+  for( unsigned int c=0; c<S.Cols(); c++ )
+    {
+      S(r,c) -= tempS(r,c);
+    }
       }
     //**** END TODO ****/
 
@@ -228,17 +228,17 @@ namespace otb
      **/
     if( (S.Cols() != xxTbTb.Cols()) || (S.Cols() != xxTbTb.Cols()) )
       {
-	itkExceptionMacro( << "Matrix with size (" << S.Rows() << "," <<
-			   S.Cols() << ") cannot be subtracted from matrix with size (" <<
-			   xxTbTb.Rows() << "," << xxTbTb.Cols() << " )" );
+  itkExceptionMacro( << "Matrix with size (" << S.Rows() << "," <<
+         S.Cols() << ") cannot be subtracted from matrix with size (" <<
+         xxTbTb.Rows() << "," << xxTbTb.Cols() << " )" );
       }
 
     for( unsigned int r=0; r<S.Rows(); r++)
       {
-	for( unsigned int c=0; c<S.Cols(); c++ )
-	  {
-	    S(r,c) += xxTbTb(r,c);
-	  }
+  for( unsigned int c=0; c<S.Cols(); c++ )
+    {
+      S(r,c) += xxTbTb(r,c);
+    }
       }
     //**** END TODO ****/
 
@@ -257,7 +257,7 @@ namespace otb
     // Take the N-1 m_Beta last elements
     for( unsigned int r=1; r<m_Beta.Rows(); r++ )
       {
-	cutBeta(r-1,0) = m_Beta(r,0);
+  cutBeta(r-1,0) = m_Beta(r,0);
       }
     varPan = cutBeta;
 
@@ -272,7 +272,7 @@ namespace otb
     eye.Fill(itk::NumericTraits<InputMultiSpectralInterpRealType>::Zero);
     for( unsigned int r=1; r<eye.Rows(); r++)
       {
-	eye(r,r) = vcl_pow(10., -12.);
+  eye(r,r) = vcl_pow(10., -12.);
       }
 
     /** TODO
@@ -280,21 +280,21 @@ namespace otb
      *  m_Vcondopt = 2 *m_Lambda*varPan+2*m_CovarianceInvMatrix*(1-m_Lambda)+eye;
      **/
     if( (m_Vcondopt.Cols() != varPan.Cols()) || (m_Vcondopt.Cols() != varPan.Cols())
-	|| (m_Vcondopt.Cols() != m_CovarianceInvMatrix.Cols()) || (m_Vcondopt.Cols() != m_CovarianceInvMatrix.Cols()))
+  || (m_Vcondopt.Cols() != m_CovarianceInvMatrix.Cols()) || (m_Vcondopt.Cols() != m_CovarianceInvMatrix.Cols()))
       {
-	itkExceptionMacro( << "Matrix with size (" << m_Vcondopt.Rows() << "," <<
-			 m_Vcondopt.Cols() << ") cannot be subtracted from matrix with size (" <<
-			   varPan.Rows() << "," << varPan.Cols() << " ) or ( " <<
-			 m_CovarianceInvMatrix.Rows() << "," << m_CovarianceInvMatrix.Cols()<<")"  );
+  itkExceptionMacro( << "Matrix with size (" << m_Vcondopt.Rows() << "," <<
+       m_Vcondopt.Cols() << ") cannot be subtracted from matrix with size (" <<
+         varPan.Rows() << "," << varPan.Cols() << " ) or ( " <<
+       m_CovarianceInvMatrix.Rows() << "," << m_CovarianceInvMatrix.Cols()<<")"  );
       }
     for( unsigned int r=0; r<m_Vcondopt.Rows(); r++)
       {
-	for( unsigned int c=0; c<m_Vcondopt.Cols(); c++ )
-	  {
-	    m_Vcondopt(r,c) = 2 *m_Lambda*varPan(r,c)
-	      +2*m_CovarianceInvMatrix(r,c)*(1-m_Lambda)
-	      +eye(r,c);
-	  }
+  for( unsigned int c=0; c<m_Vcondopt.Cols(); c++ )
+    {
+      m_Vcondopt(r,c) = 2 *m_Lambda*varPan(r,c)
+        +2*m_CovarianceInvMatrix(r,c)*(1-m_Lambda)
+        +eye(r,c);
+    }
       }
   //**** END TODO ****/
     m_Vcondopt = m_Vcondopt.GetInverse();

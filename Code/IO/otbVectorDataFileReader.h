@@ -84,7 +84,7 @@ class ITK_EXPORT VectorDataFileReader : public VectorDataSource<TOutputVectorDat
 public :
 
   /** Standard class typedefs. */
-  typedef VectorDataFileReader			Self;
+  typedef VectorDataFileReader      Self;
   typedef VectorDataSource<TOutputVectorData>   Superclass;
   typedef itk::SmartPointer<Self>               Pointer;
   typedef itk::SmartPointer<const Self>         ConstPointer;
@@ -140,7 +140,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   /** Test whether the given filename exist and it is readable.
-		  If the file doesn't exist or it is not readable, and exception with an
+      If the file doesn't exist or it is not readable, and exception with an
       appropriate message will be thrown. */
   void TestFileExistanceAndReadability();
 

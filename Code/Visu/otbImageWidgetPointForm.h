@@ -54,18 +54,18 @@ class ImageWidgetPointForm
   void Draw(double openGlZoom, unsigned int originx, unsigned int originy, unsigned int windowh, unsigned int ss_rate)
     {
       if(this->GetVisible())
-	{
-	  unsigned int x,y;
-	  x = static_cast<unsigned int>((m_Index[0]-originx)*openGlZoom*ss_rate);
-	  y = static_cast<unsigned int>(windowh-(m_Index[1]-originy)*openGlZoom*ss_rate);
+  {
+    unsigned int x,y;
+    x = static_cast<unsigned int>((m_Index[0]-originx)*openGlZoom*ss_rate);
+    y = static_cast<unsigned int>(windowh-(m_Index[1]-originy)*openGlZoom*ss_rate);
 
-	  glEnable(GL_BLEND);
-	  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	  glColor4f(m_Color[0],m_Color[1],m_Color[2],m_Color[3]);
-	  glBegin(GL_POINTS);
-	  glVertex2f(x,y);
-	  glEnd();
-	}
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glColor4f(m_Color[0],m_Color[1],m_Color[2],m_Color[3]);
+    glBegin(GL_POINTS);
+    glVertex2f(x,y);
+    glEnd();
+  }
     }
 
   RegionType GetRegion(void)
@@ -82,7 +82,7 @@ class ImageWidgetPointForm
   /** Constructor. */
     ImageWidgetPointForm()
       {
-	m_Index.Fill(0);
+  m_Index.Fill(0);
       }
 
     /** Destructor. */

@@ -144,18 +144,18 @@ void PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>::Generate
 
 template< class TInputImage, class TOutputImage>
 void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(
-			const 	OutputImageRegionType& 		outputRegionForThread,
-                       	int 	threadId
-				)
+      const   OutputImageRegionType&     outputRegionForThread,
+                         int   threadId
+        )
 {
 
-  itk::ConstantBoundaryCondition<InputImageType> 		cbc;
+  itk::ConstantBoundaryCondition<InputImageType>     cbc;
   const InputPixelType cvalue = 255;
   cbc.SetConstant(cvalue);
 
-  itk::ConstNeighborhoodIterator<InputImageType> 		bit;
-  itk::ImageRegionConstIterator<InputImageType> 		itin;
-  itk::ImageRegionIterator<OutputImageType> 			itout;
+  itk::ConstNeighborhoodIterator<InputImageType>     bit;
+  itk::ImageRegionConstIterator<InputImageType>     itin;
+  itk::ImageRegionIterator<OutputImageType>       itout;
 
 
   // Allocate output
@@ -164,8 +164,8 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
   typename InputImageType::ConstPointer inputDirection  = this->GetInputImageDirection();
 
   // Find the data-set boundary "faces"
-  typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType 		faceList;
-  typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType::iterator 	fit;
+  typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType     faceList;
+  typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType::iterator   fit;
 
 
   itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType> bC;
@@ -227,14 +227,14 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
 
       bool IsLine = false;
 
-      typename itk::ConstNeighborhoodIterator<InputImageType>::OffsetType	off;
+      typename itk::ConstNeighborhoodIterator<InputImageType>::OffsetType  off;
       // Loop on the region
       for (unsigned int i = 0; i < 2*m_Radius[0]+1; ++i)
-	for (unsigned int j = 0; j < 2*m_Radius[1]+1; ++j)
+  for (unsigned int j = 0; j < 2*m_Radius[1]+1; ++j)
         {
 
-	off[0]=i-m_Radius[0];
-	off[1]=j-m_Radius[1];
+  off[0]=i-m_Radius[0];
+  off[1]=j-m_Radius[1];
 
         x = off[0];
         y = off[1];
@@ -244,47 +244,47 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
         if (( x == 0 ) && ( y == 0 ))
            continue;
 
-	Thetaxtyt = vcl_atan2( static_cast<double>(y), static_cast<double>(x) ); //result is [-PI,PI]
-	while(Thetaxtyt < 0)
-	  Thetaxtyt = M_PI + Thetaxtyt; // Theta is now [0,PI] as is
-					// the result of detectors
-	while(Thetaxtyt > M_PI/2.0)
-	  Thetaxtyt = Thetaxtyt-M_PI; // Theta is now [-PI/2,PI/2]
+  Thetaxtyt = vcl_atan2( static_cast<double>(y), static_cast<double>(x) ); //result is [-PI,PI]
+  while(Thetaxtyt < 0)
+    Thetaxtyt = M_PI + Thetaxtyt; // Theta is now [0,PI] as is
+          // the result of detectors
+  while(Thetaxtyt > M_PI/2.0)
+    Thetaxtyt = Thetaxtyt-M_PI; // Theta is now [-PI/2,PI/2]
 
 
-	if( (vcl_abs(vcl_cos(Thetaxtyt-ThetaXcYc)) >= vcl_cos(m_AngularBeam)) // this
-								   // pixel
-								   // is
-								   // in
-								   // the
-								   // angular beam
-	    && (vcl_abs(vcl_cos(bit.GetPixel(off)-ThetaXcYc)) >= vcl_cos(m_AngularBeam)) ) //and
-										//its
-										//direction
-										//is
-										//also
-										//in
-										//the beam
-	  {
-	  IsLine = true;
-	  continue;
-	  }
+  if( (vcl_abs(vcl_cos(Thetaxtyt-ThetaXcYc)) >= vcl_cos(m_AngularBeam)) // this
+                   // pixel
+                   // is
+                   // in
+                   // the
+                   // angular beam
+      && (vcl_abs(vcl_cos(bit.GetPixel(off)-ThetaXcYc)) >= vcl_cos(m_AngularBeam)) ) //and
+                    //its
+                    //direction
+                    //is
+                    //also
+                    //in
+                    //the beam
+    {
+    IsLine = true;
+    continue;
+    }
 
 
-	}
+  }
 
       // end of the loop on the pixels of the region
 
 
       // Assignment of this value to the output pixel
       if (IsLine == true)
-	{
-	itout.Set( static_cast<OutputPixelType>(PixelValue) );
-	}
+  {
+  itout.Set( static_cast<OutputPixelType>(PixelValue) );
+  }
       else
-	{
-	itout.Set( static_cast<OutputPixelType>(0.) );
-	}
+  {
+  itout.Set( static_cast<OutputPixelType>(0.) );
+  }
 
 
       ++bit;

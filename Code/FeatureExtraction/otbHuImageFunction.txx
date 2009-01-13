@@ -84,101 +84,101 @@ HuImageFunction<TInput,TOutput,TPrecision,TCoordRep>
     {
     case 1 :
         {
-	ComplexType C11;
-	function->SetP(1);
-	function->SetQ(1);
-	C11 = function->EvaluateAtIndex( index );
+  ComplexType C11;
+  function->SetP(1);
+  function->SetQ(1);
+  C11 = function->EvaluateAtIndex( index );
         HuValue = C11.real() ;
-	}
-	break;
+  }
+  break;
     case 2:
         {
-	ComplexType C20,C02;
-	function->SetP(2);
-	function->SetQ(0);
-	C20 = function->EvaluateAtIndex( index );
-	function->SetP(0);
-	function->SetQ(2);
-	C02 = function->EvaluateAtIndex( index );
+  ComplexType C20,C02;
+  function->SetP(2);
+  function->SetQ(0);
+  C20 = function->EvaluateAtIndex( index );
+  function->SetP(0);
+  function->SetQ(2);
+  C02 = function->EvaluateAtIndex( index );
 
-	HuValue = vcl_abs( C20 * C02 ) ;
+  HuValue = vcl_abs( C20 * C02 ) ;
 
-	}
-	break;
+  }
+  break;
     case 3:
         {
-	ComplexType C30,C03;
-	function->SetP(3);
-	function->SetQ(0);
-	C30 = function->EvaluateAtIndex( index );
-	function->SetP(0);
-	function->SetQ(3);
-	C03 = function->EvaluateAtIndex( index );
+  ComplexType C30,C03;
+  function->SetP(3);
+  function->SetQ(0);
+  C30 = function->EvaluateAtIndex( index );
+  function->SetP(0);
+  function->SetQ(3);
+  C03 = function->EvaluateAtIndex( index );
 
-	HuValue = vcl_abs( C30 * C03 );
-	}
-	break;
+  HuValue = vcl_abs( C30 * C03 );
+  }
+  break;
     case 4:
         {
-	ComplexType C21,C12;
-	function->SetP(2);
-	function->SetQ(1);
-	C21 = function->EvaluateAtIndex( index );
-	function->SetP(1);
-	function->SetQ(2);
-	C12 = function->EvaluateAtIndex( index );
+  ComplexType C21,C12;
+  function->SetP(2);
+  function->SetQ(1);
+  C21 = function->EvaluateAtIndex( index );
+  function->SetP(1);
+  function->SetQ(2);
+  C12 = function->EvaluateAtIndex( index );
 
-	HuValue = vcl_abs( C21 * C12 );
-	}
-	break;
+  HuValue = vcl_abs( C21 * C12 );
+  }
+  break;
 
     case 5:
         {
-	ComplexType C30,C12;
-	function->SetP(3);
-	function->SetQ(0);
-	C30 = function->EvaluateAtIndex( index );
-	function->SetP(1);
-	function->SetQ(2);
-	C12 = function->EvaluateAtIndex( index );
+  ComplexType C30,C12;
+  function->SetP(3);
+  function->SetQ(0);
+  C30 = function->EvaluateAtIndex( index );
+  function->SetP(1);
+  function->SetQ(2);
+  C12 = function->EvaluateAtIndex( index );
 
-	HuValueComplex = C30 * vcl_pow(C12,3) ;
-	HuValue = HuValueComplex.real();
-	}
-	break;
+  HuValueComplex = C30 * vcl_pow(C12,3) ;
+  HuValue = HuValueComplex.real();
+  }
+  break;
 
     case 6:
         {
-	ComplexType C20,C12;
-	function->SetP(2);
-	function->SetQ(0);
-	C20 = function->EvaluateAtIndex( index );
-	function->SetP(1);
-	function->SetQ(2);
-	C12 = function->EvaluateAtIndex( index );
+  ComplexType C20,C12;
+  function->SetP(2);
+  function->SetQ(0);
+  C20 = function->EvaluateAtIndex( index );
+  function->SetP(1);
+  function->SetQ(2);
+  C12 = function->EvaluateAtIndex( index );
 
-	HuValueComplex = C20 * vcl_pow( C12 ,2 );
-	HuValue = HuValueComplex.real();
-	}
-	break;
+  HuValueComplex = C20 * vcl_pow( C12 ,2 );
+  HuValue = HuValueComplex.real();
+  }
+  break;
 
     case 7:
         {
-	ComplexType C30,C12;
-	function->SetP(3);
-	function->SetQ(0);
-	C30 = function->EvaluateAtIndex( index );
-	function->SetP(1);
-	function->SetQ(2);
-	C12 = function->EvaluateAtIndex( index );
+  ComplexType C30,C12;
+  function->SetP(3);
+  function->SetQ(0);
+  C30 = function->EvaluateAtIndex( index );
+  function->SetP(1);
+  function->SetQ(2);
+  C12 = function->EvaluateAtIndex( index );
 
-	HuValueComplex = C30 * vcl_pow( C12 , 3);
-	HuValue = HuValueComplex.imag();
-	}
-	break;
+  HuValueComplex = C30 * vcl_pow( C12 , 3);
+  HuValue = HuValueComplex.imag();
+  }
+  break;
 
     default:
-	itkWarningMacro("Hu's invariant parameters are between 1 and 7");
+  itkWarningMacro("Hu's invariant parameters are between 1 and 7");
     }
 
 

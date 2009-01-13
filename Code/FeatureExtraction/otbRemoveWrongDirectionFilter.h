@@ -39,19 +39,19 @@ namespace Functor
       class RemoveWrongDirectionFunctor
       {
       public:
-	RemoveWrongDirectionFunctor() {};
-	~RemoveWrongDirectionFunctor() {};
-	inline TOutput operator()(const TInput1 &A, const TInput2 &B)
-	  {
-	    if(B < M_PI/8)
-	      {
-		return 0;
-	      }
-	    else
-	      {
-		return A;
-	      }
-	  }
+  RemoveWrongDirectionFunctor() {};
+  ~RemoveWrongDirectionFunctor() {};
+  inline TOutput operator()(const TInput1 &A, const TInput2 &B)
+    {
+      if(B < M_PI/8)
+        {
+    return 0;
+        }
+      else
+        {
+    return A;
+        }
+    }
       };
   }
 /** \class RemoveWrongDirectionFilter

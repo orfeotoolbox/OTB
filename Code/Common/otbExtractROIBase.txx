@@ -150,8 +150,8 @@ ExtractROIBase<TInputImage,TOutputImage>
 
   for (unsigned int i=0; i < InputImageDimension; ++i)
         {
-	  index[i]+=offset[i];
-	}
+    index[i]+=offset[i];
+  }
   requestedRegion.SetIndex(index);
   inputPtr->SetRequestedRegion(requestedRegion);
 }

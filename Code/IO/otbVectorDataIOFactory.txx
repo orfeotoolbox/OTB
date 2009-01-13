@@ -52,8 +52,8 @@ VectorDataIOFactory<TData>
       }
     else
       {
-	itkGenericExceptionMacro(<< "Error VectorDataIO factory did not return an VectorDataIOBase: "
-			  << (*i)->GetNameOfClass());
+  itkGenericExceptionMacro(<< "Error VectorDataIO factory did not return an VectorDataIOBase: "
+        << (*i)->GetNameOfClass());
       }
     }
   for(typename std::list<VectorDataIOBasePointerType>::iterator k = possibleVectorDataIO.begin();
@@ -91,7 +91,7 @@ VectorDataIOFactory<TData>
     itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder( mutex );
     if( firstTime )
       {
-	itk::ObjectFactoryBase::RegisterFactory( SHPVectorDataIOFactory<TData>::New() );
+  itk::ObjectFactoryBase::RegisterFactory( SHPVectorDataIOFactory<TData>::New() );
         itk::ObjectFactoryBase::RegisterFactory( KMLVectorDataIOFactory<TData>::New() );
       firstTime = false;
       }

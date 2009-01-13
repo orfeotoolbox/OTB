@@ -45,36 +45,36 @@ namespace otb
        *  \brief This functor computes the magnitude of a covariant vector.
        */
       template <class TInputPixel,class TOutputPixel>
-	class MagnitudeFunctor
-	{
-	public:
+  class MagnitudeFunctor
+  {
+  public:
 
-	  inline TOutputPixel operator()(const TInputPixel& input)
-	    {
-	      return vcl_sqrt(input[0]*input[0]+input[1]*input[1]);
-	    }
-	};
+    inline TOutputPixel operator()(const TInputPixel& input)
+      {
+        return vcl_sqrt(input[0]*input[0]+input[1]*input[1]);
+      }
+  };
 
       /** \class OrientationFunctor
        *  \brief This functor computes the orientation of a cavariant vector<br>
        *   Orientation values lies between 0 and 2*Pi.
        */
       template <class TInputPixel,class TOutputPixel>
-	class OrientationFunctor
-	{
-	public:
+  class OrientationFunctor
+  {
+  public:
 
-	  inline TOutputPixel operator()(const TInputPixel& input)
-	    {
-	      TOutputPixel resp = vcl_atan2(input[1],input[0]);
-	      if(resp<0)
-		{
-		  resp+=2*M_PI;
-		}
+    inline TOutputPixel operator()(const TInputPixel& input)
+      {
+        TOutputPixel resp = vcl_atan2(input[1],input[0]);
+        if(resp<0)
+    {
+      resp+=2*M_PI;
+    }
 
-	      return resp;
-	    }
-	};
+        return resp;
+      }
+  };
     }// end namespace Functor
 
   /** \class ImageToSIFTKeyPointSetFilter
@@ -205,11 +205,11 @@ namespace otb
       typedef typename GradientFilterType::OutputImageType GradientOutputImageType;
 
       typedef itk::UnaryFunctorImageFilter<GradientOutputImageType,InputImageType,
-	Functor::MagnitudeFunctor<typename GradientOutputImageType::PixelType,typename InputImageType::PixelType> > MagnitudeFilterType;
+  Functor::MagnitudeFunctor<typename GradientOutputImageType::PixelType,typename InputImageType::PixelType> > MagnitudeFilterType;
       typedef typename MagnitudeFilterType::Pointer MagnitudeFilterPointerType;
 
       typedef itk::UnaryFunctorImageFilter<GradientOutputImageType,InputImageType,
-	Functor::OrientationFunctor<typename GradientOutputImageType::PixelType,typename InputImageType::PixelType> > OrientationFilterType;
+  Functor::OrientationFunctor<typename GradientOutputImageType::PixelType,typename InputImageType::PixelType> > OrientationFilterType;
       typedef typename OrientationFilterType::Pointer OrientationFilterPointerType;
 
     protected:
@@ -246,8 +246,8 @@ namespace otb
        *  \return true if the pixel is extremum
        */
       bool IsLocalExtremum( const NeighborhoodIteratorType& currentScale,
-			    const NeighborhoodIteratorType& previousScale,
-			    const NeighborhoodIteratorType& nextScale ) const;
+          const NeighborhoodIteratorType& previousScale,
+          const NeighborhoodIteratorType& nextScale ) const;
 
       /** Refine location key point
        *
@@ -263,9 +263,9 @@ namespace otb
        *  \return true if key point is accepted, false otherwise
        */
       bool RefineLocationKeyPoint( const NeighborhoodIteratorType& currentScale,
-				   const NeighborhoodIteratorType& previousScale,
-				   const NeighborhoodIteratorType& nextScale,
-				   VectorPointType& solution);
+           const NeighborhoodIteratorType& previousScale,
+           const NeighborhoodIteratorType& nextScale,
+           VectorPointType& solution);
 
       /** Assign key point orientation
        *
@@ -276,8 +276,8 @@ namespace otb
        * \return orientation key point orientation
        */
       std::vector<PixelType> ComputeKeyPointOrientations(const NeighborhoodIteratorType& currentScale,
-					   const unsigned int scale,
-					   const PixelType translation);
+             const unsigned int scale,
+             const PixelType translation);
 
       /** Compute local image descriptor
        *
@@ -288,8 +288,8 @@ namespace otb
        * \return histogram descriptor
        */
       std::vector<PixelType> ComputeKeyPointDescriptor(const NeighborhoodIteratorType& currentScale,
-						       const unsigned int scale,
-						       const PixelType& orientation);
+                   const unsigned int scale,
+                   const PixelType& orientation);
 
     private:
       ImageToSIFTKeyPointSetFilter(const Self&); //purposely not implemented

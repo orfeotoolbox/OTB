@@ -33,7 +33,7 @@ GenericRoadExtractionFilter<TInputImage, TOutputPath>
         this->SetNumberOfRequiredInputs(1);
         this->SetNumberOfRequiredOutputs(1);
 
-	m_SquareRootImageFilter = SquareRootImageFilterType::New();
+  m_SquareRootImageFilter = SquareRootImageFilterType::New();
         m_GradientFilter = GradientFilterType::New();
         m_NeighborhoodScalarProductFilter = NeighborhoodScalarProductFilterType::New();
         m_RemoveIsolatedByDirectionFilter = RemoveIsolatedByDirectionFilterType::New();
@@ -157,7 +157,7 @@ GenericRoadExtractionFilter<TInputImage, TOutputPath>
   m_LikelihoodPathListFilter->Update();
   // outputPathList =  m_LikelihoodPathListFilter->GetOutput();
     for(typename LikelihoodPathListFilterType::PathListType::ConstIterator it
-	  = m_LikelihoodPathListFilter->GetOutput()->Begin();
+    = m_LikelihoodPathListFilter->GetOutput()->Begin();
       it!=m_LikelihoodPathListFilter->GetOutput()->End();
       ++it)
     {

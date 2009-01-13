@@ -251,7 +251,7 @@ ImageFileReader<TOutputImage>
   bool found = GetGdalReadImageFileName(this->m_FileName,lFileName);
   if( found == false )
   {
-  	  otbMsgDebugMacro( <<"Filename was NOT unknowed. May be reconize by a Image factory ! ");
+      otbMsgDebugMacro( <<"Filename was NOT unknowed. May be reconize by a Image factory ! ");
   }
   // Update FileName
   this->m_FileName = lFileName;
@@ -362,60 +362,60 @@ ImageFileReader<TOutputImage>
 
   if (!handler)
   {
-  	  otbMsgDebugMacro( <<"OSSIM Open Image FAILED ! ");
+      otbMsgDebugMacro( <<"OSSIM Open Image FAILED ! ");
   }
 
   else
   {
-  	  otbMsgDebugMacro( <<"OSSIM Open Image SUCCESS ! ");
-	  ossimKeywordlist geom_kwl, tmp_kwl, tmp_kwl2;// = new ossimKeywordlist();
+      otbMsgDebugMacro( <<"OSSIM Open Image SUCCESS ! ");
+    ossimKeywordlist geom_kwl, tmp_kwl, tmp_kwl2;// = new ossimKeywordlist();
 
-	  // Read OSSIM Keyword List
-	  bool hasMetaData = handler->getImageGeometry(geom_kwl);
-	  otbMsgDevMacro( << " AVANT *geom_kwl : "<<geom_kwl<<std::endl);
+    // Read OSSIM Keyword List
+    bool hasMetaData = handler->getImageGeometry(geom_kwl);
+    otbMsgDevMacro( << " AVANT *geom_kwl : "<<geom_kwl<<std::endl);
 
-	  if (!hasMetaData)
-	  {
-	  	  otbMsgDebugMacro( <<"OSSIM MetaData not present ! ");
-	  }
-	  else
-	  {
-	  	  otbMsgDebugMacro( <<"OSSIM MetaData present ! ");
+    if (!hasMetaData)
+    {
+        otbMsgDebugMacro( <<"OSSIM MetaData not present ! ");
+    }
+    else
+    {
+        otbMsgDebugMacro( <<"OSSIM MetaData present ! ");
 
-		  otbMsgDevMacro( <<"Image keyword lists are :" << std::endl << geom_kwl);
+      otbMsgDevMacro( <<"Image keyword lists are :" << std::endl << geom_kwl);
 
-	      // Update otb Keywordlist
-		  ImageKeywordlist otb_kwl;
-		  otb_kwl.SetKeywordlist( geom_kwl );
+        // Update otb Keywordlist
+      ImageKeywordlist otb_kwl;
+      otb_kwl.SetKeywordlist( geom_kwl );
 
-	  	  // Update itk MetaData Dictionnary
-//		  otbMsgDebugMacro( <<"Start update ITK Dictionnary ? ");
+        // Update itk MetaData Dictionnary
+//      otbMsgDebugMacro( <<"Start update ITK Dictionnary ? ");
 
-		  otb_kwl.convertToOSSIMKeywordlist(tmp_kwl);
+      otb_kwl.convertToOSSIMKeywordlist(tmp_kwl);
 
-		  itk::MetaDataDictionary& dico = this->m_ImageIO->GetMetaDataDictionary();
+      itk::MetaDataDictionary& dico = this->m_ImageIO->GetMetaDataDictionary();
 
-//		  otbMsgDebugMacro( <<"Before write ITK Dictionnary ? ");
-	  	  itk::EncapsulateMetaData< ImageKeywordlist >(dico,
-	  											 MetaDataKey::OSSIMKeywordlistKey,
-												 otb_kwl);
+//      otbMsgDebugMacro( <<"Before write ITK Dictionnary ? ");
+        itk::EncapsulateMetaData< ImageKeywordlist >(dico,
+                           MetaDataKey::OSSIMKeywordlistKey,
+                         otb_kwl);
 
-//		  otbMsgDebugMacro( <<"After write ITK Dictionnary ? ");
-//		  itk::ExposeMetaData< ImageKeywordlist >(dico,
-//	  											 MetaDataKey::OSSIMKeywordlistKey,
-//												 otb_tmp);
-//		  otbMsgDebugMacro( <<"After read ITK Dictionnary ? ");
+//      otbMsgDebugMacro( <<"After write ITK Dictionnary ? ");
+//      itk::ExposeMetaData< ImageKeywordlist >(dico,
+//                           MetaDataKey::OSSIMKeywordlistKey,
+//                         otb_tmp);
+//      otbMsgDebugMacro( <<"After read ITK Dictionnary ? ");
 
-//		  otb_tmp.convertToOSSIMKeywordlist(tmp_kwl2);
-//		  otbMsgDebugMacro( << " DEBUT THOMAS : Ossim key word list copy : "<<tmp_kwl2<<std::endl);
+//      otb_tmp.convertToOSSIMKeywordlist(tmp_kwl2);
+//      otbMsgDebugMacro( << " DEBUT THOMAS : Ossim key word list copy : "<<tmp_kwl2<<std::endl);
 
-		 // otbMsgDebugMacro( <<"Image keyword lists in dictionnary are :" << std::endl << geom_tmp);
+     // otbMsgDebugMacro( <<"Image keyword lists in dictionnary are :" << std::endl << geom_tmp);
 
-	  }
-	  // Free memory
-	  otbMsgDevMacro( <<"OSSIM Free Memory ? ");
-	  delete handler;
-	  otbMsgDevMacro( <<"OSSIM Free Memory OK ! ");
+    }
+    // Free memory
+    otbMsgDevMacro( <<"OSSIM Free Memory ? ");
+    delete handler;
+    otbMsgDevMacro( <<"OSSIM Free Memory OK ! ");
   }
 
   //Copy MetaDataDictionary from instantiated reader to output image.
@@ -504,20 +504,20 @@ ImageFileReader<TOutputImage>
         if( listFileFind.empty() == false )
         {
                 unsigned int cpt(0);
-		while ( (cpt < listFileFind.size()) && (fic_trouve==false) )
+    while ( (cpt < listFileFind.size()) && (fic_trouve==false) )
                 {
-			str_FileName = std::string(listFileFind[cpt]);
+      str_FileName = std::string(listFileFind[cpt]);
                         for(unsigned int i = 0 ; i < listFileSearch.size() ; i++)
                         {
-         			if(str_FileName.compare(listFileSearch[i]) == 0)
-	        		{
+               if(str_FileName.compare(listFileSearch[i]) == 0)
+              {
                                          GdalFileName = std::string(filename)+str_FileName;//listFileSearch[i];
                                          fic_trouve=true;
-        			}
+              }
                         }
                         cpt++;
                 }
-	}
+  }
         else
         {
                 std::string strFileName(filename);
@@ -534,11 +534,11 @@ ImageFileReader<TOutputImage>
                         // Sinon le filename est le nom du fichier a ouvrir
                         GdalFileName = std::string(filename);
                 }
-		fic_trouve=true;
+    fic_trouve=true;
         }
-	otbMsgDevMacro(<<"lFileNameGdal : "<<GdalFileName.c_str());
-	otbMsgDevMacro(<<"fic_trouve : "<<fic_trouve);
-	return( fic_trouve );
+  otbMsgDevMacro(<<"lFileNameGdal : "<<GdalFileName.c_str());
+  otbMsgDevMacro(<<"fic_trouve : "<<fic_trouve);
+  return( fic_trouve );
 }
 
 

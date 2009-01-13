@@ -61,10 +61,10 @@ class ITK_EXPORT MRFEnergyEdgeFidelity : public MRFEnergy< TInput1, TInput2>
 
     double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)
       {
-	double val1 = static_cast<double>(value1);
-	double val2 = static_cast<double>(value2);
+  double val1 = static_cast<double>(value1);
+  double val2 = static_cast<double>(value2);
 
-	return M_SQUARE((val1 - val2))/(1+M_SQUARE(val1 - val2));
+  return M_SQUARE((val1 - val2))/(1+M_SQUARE(val1 - val2));
       }
 
 

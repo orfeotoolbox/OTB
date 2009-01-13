@@ -38,24 +38,24 @@ namespace otb
    *
    */
 class NonGaussianRBFKernelFunctor
-		: public GenericKernelFunctorBase
+    : public GenericKernelFunctorBase
 {
 public:
 
-	double operator() ( const svm_node * x, const svm_node * y,
-						const svm_parameter & param ) const;
+  double operator() ( const svm_node * x, const svm_node * y,
+            const svm_parameter & param ) const;
 
-	NonGaussianRBFKernelFunctor ();
-	virtual ~NonGaussianRBFKernelFunctor () { }
+  NonGaussianRBFKernelFunctor ();
+  virtual ~NonGaussianRBFKernelFunctor () { }
 
-	/** Specific implementation of \code Update \endcode to split m_MapParameters
-	 * into specific variables to speed up kernel evaluations */
-	void Update ();
+  /** Specific implementation of \code Update \endcode to split m_MapParameters
+   * into specific variables to speed up kernel evaluations */
+  void Update ();
 
 protected:
-	double m_Alpha;
-	double m_Beta;
-	double m_Gamma;
+  double m_Alpha;
+  double m_Beta;
+  double m_Gamma;
 };
 
 } // end of namespace otb

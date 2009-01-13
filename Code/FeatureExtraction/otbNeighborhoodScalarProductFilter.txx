@@ -81,85 +81,85 @@ NeighborhoodScalarProductFilter<TInputImage,TOutputModulus,TOutputDirection>
       outputDirIt.GoToBegin();
 
       while ((!neighInputIt.IsAtEnd()) && (!outputIt.IsAtEnd()) && (!outputDirIt.IsAtEnd()) )
-	{
-	  // local variable intialisation
-	  int neighborhoodNumberMax = 0;
-	  double scalarMaxValue= 0.0;
-	  int flagPosNegDirection = 0;
+  {
+    // local variable intialisation
+    int neighborhoodNumberMax = 0;
+    double scalarMaxValue= 0.0;
+    int flagPosNegDirection = 0;
 
-	  // walk through each case
-	  for (int neighborhoodNumber = 0;  neighborhoodNumber<4; ++neighborhoodNumber)
-	    {
-	    double scalarCurrentValue = 0.0;
-	    OffsetType offset1;
-	    OffsetType offset2;
-	    switch(neighborhoodNumber){
-	    case 0:
-	      offset1[0]=1;
-	      offset1[1]=-1;
-	      offset2[0]=-1;
-	      offset2[1]=1;
-	      break;
-	    case 1:
-	      offset1[0]=1;
-	      offset1[1]=0;
-	      offset2[0]=-1;
-	      offset2[1]=0;
-	      break;
-	    case 2:
-	      offset1[0]=1;
-	      offset1[1]=1;
-	      offset2[0]=-1;
-	      offset2[1]=-1;
-	      break;
-	    case 3:
-	      offset1[0]=0;
-	      offset1[1]=1;
-	      offset2[0]=0;
-	      offset2[1]=-1;
-	      break;
-	    }
-	    // Get the gradient values
-	    InputPixelType pixel1 = neighInputIt.GetPixel(offset1);
-	    InputPixelType pixel2 = neighInputIt.GetPixel(offset2);
+    // walk through each case
+    for (int neighborhoodNumber = 0;  neighborhoodNumber<4; ++neighborhoodNumber)
+      {
+      double scalarCurrentValue = 0.0;
+      OffsetType offset1;
+      OffsetType offset2;
+      switch(neighborhoodNumber){
+      case 0:
+        offset1[0]=1;
+        offset1[1]=-1;
+        offset2[0]=-1;
+        offset2[1]=1;
+        break;
+      case 1:
+        offset1[0]=1;
+        offset1[1]=0;
+        offset2[0]=-1;
+        offset2[1]=0;
+        break;
+      case 2:
+        offset1[0]=1;
+        offset1[1]=1;
+        offset2[0]=-1;
+        offset2[1]=-1;
+        break;
+      case 3:
+        offset1[0]=0;
+        offset1[1]=1;
+        offset2[0]=0;
+        offset2[1]=-1;
+        break;
+      }
+      // Get the gradient values
+      InputPixelType pixel1 = neighInputIt.GetPixel(offset1);
+      InputPixelType pixel2 = neighInputIt.GetPixel(offset2);
 
-	    // Compute the scalar product
-	    scalarCurrentValue = -(pixel1[0]*pixel2[0]+pixel1[1]*pixel2[1]);
+      // Compute the scalar product
+      scalarCurrentValue = -(pixel1[0]*pixel2[0]+pixel1[1]*pixel2[1]);
 
-	    // If the value is upper than the current max value
-	    if (scalarCurrentValue > scalarMaxValue)
-	      {
-		// keep this configuration
-		scalarMaxValue = scalarCurrentValue;
-		neighborhoodNumberMax = neighborhoodNumber;
+      // If the value is upper than the current max value
+      if (scalarCurrentValue > scalarMaxValue)
+        {
+    // keep this configuration
+    scalarMaxValue = scalarCurrentValue;
+    neighborhoodNumberMax = neighborhoodNumber;
 
-		// Also keep the direction
-		if (pixel1[0] <0)
-		  {
-		    flagPosNegDirection = 1;
-		  }
-		else
-		  {
-		  flagPosNegDirection = 0;
-		  }
+    // Also keep the direction
+    if (pixel1[0] <0)
+      {
+        flagPosNegDirection = 1;
+      }
+    else
+      {
+      flagPosNegDirection = 0;
+      }
 
-	      }
-	    }
-	  // Compute the direction
+        }
+      }
+    // Compute the direction
     double angle = (1+neighborhoodNumberMax) * M_PI_4;
-	  if (flagPosNegDirection)
-	    {
-	      angle -= M_PI;
-	    }
+    if (flagPosNegDirection)
+      {
+        angle -= M_PI;
+      }
 
-	  // Set the ouptut values
-	  outputIt.Set(scalarMaxValue);
-	  outputDirIt.Set(angle);
-	  ++neighInputIt;
-	  ++outputIt;
-	  ++outputDirIt;
-	  progress.CompletedPixel();
-	}
+    // Set the ouptut values
+    outputIt.Set(scalarMaxValue);
+    outputDirIt.Set(angle);
+    ++neighInputIt;
+    ++outputIt;
+    ++outputDirIt;
+    progress.CompletedPixel();
+  }
     }
 }
 /**

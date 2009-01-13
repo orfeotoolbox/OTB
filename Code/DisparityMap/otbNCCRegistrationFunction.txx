@@ -203,9 +203,9 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
       DeformationPixelType vec;
       vec.Fill(0);
       if(this->GetDeformationField()->GetBufferedRegion().IsInside(index))
-	{
-	  vec = this->GetDeformationField()->GetPixel(index);
-	}
+  {
+    vec = this->GetDeformationField()->GetPixel(index);
+  }
       // End Edited by OTB developpers
 
       for( j = 0; j < ImageDimension; j++ )

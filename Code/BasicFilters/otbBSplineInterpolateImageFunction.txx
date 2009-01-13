@@ -552,11 +552,11 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
       for (unsigned int k = 0; k <= splineOrder; k++)
         {
         // btw - Think about this couldn't this be replaced with a more elagent modulus method?
-	  evaluateIndex[n][k] = (evaluateIndex[n][k] < dataOffset) ? (dataOffset+(dataOffset-evaluateIndex[n][k])%dataLength)
+    evaluateIndex[n][k] = (evaluateIndex[n][k] < dataOffset) ? (dataOffset+(dataOffset-evaluateIndex[n][k])%dataLength)
           : (evaluateIndex[n][k]);
         if ((long) dataLength+dataOffset <= evaluateIndex[n][k])
           {
-	    evaluateIndex[n][k] = dataOffset + dataLength - (evaluateIndex[n][k]-dataOffset - dataLength)%dataLength;
+      evaluateIndex[n][k] = dataOffset + dataLength - (evaluateIndex[n][k]-dataOffset - dataLength)%dataLength;
           }
         }
 

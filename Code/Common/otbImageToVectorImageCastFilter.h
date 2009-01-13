@@ -36,25 +36,25 @@ namespace Functor
       class VectorCast
       {
       public:
-	typedef typename TOutput::ValueType OutputValueType;
-	VectorCast() {};
-	~VectorCast(){};
+  typedef typename TOutput::ValueType OutputValueType;
+  VectorCast() {};
+  ~VectorCast(){};
 
-	bool operator!=(const VectorCast&) const
-	  {
-	    return false;
-	  }
-	bool operator==(const VectorCast& other) const
-	  {
-	    return(*this != other);
-	  }
-	inline TOutput operator () (const TInput & A)
-	  {
-	    TOutput output;
-	    output.SetSize(1);
-	    output[0] = static_cast<OutputValueType>(A);
-	    return output;
-	  }
+  bool operator!=(const VectorCast&) const
+    {
+      return false;
+    }
+  bool operator==(const VectorCast& other) const
+    {
+      return(*this != other);
+    }
+  inline TOutput operator () (const TInput & A)
+    {
+      TOutput output;
+      output.SetSize(1);
+      output[0] = static_cast<OutputValueType>(A);
+      return output;
+    }
       };
   } // End namespace Functor
   /**
@@ -90,19 +90,19 @@ class ITK_EXPORT ImageToVectorImageCastFilter
     /// Additionnal output information for allocation
     virtual void GenerateOutputInformation(void)
       {
-	Superclass::GenerateOutputInformation();
-	this->GetOutput()->SetNumberOfComponentsPerPixel(1);
+  Superclass::GenerateOutputInformation();
+  this->GetOutput()->SetNumberOfComponentsPerPixel(1);
       }
     /// Copy output requested region to input requested region
     virtual void GenerateInputRequestedRegion(void)
       {
-	if(this->GetInput())
-	  {
-	    typename TInputImage::Pointer input = const_cast<TInputImage *>(this->GetInput());
-	    typename TInputImage::RegionType inputRegion;
-	    this->CallCopyOutputRegionToInputRegion(inputRegion,this->GetOutput()->GetRequestedRegion());
-	    input->SetRequestedRegion(inputRegion);
-	  }
+  if(this->GetInput())
+    {
+      typename TInputImage::Pointer input = const_cast<TInputImage *>(this->GetInput());
+      typename TInputImage::RegionType inputRegion;
+      this->CallCopyOutputRegionToInputRegion(inputRegion,this->GetOutput()->GetRequestedRegion());
+      input->SetRequestedRegion(inputRegion);
+    }
       }
 
   private:

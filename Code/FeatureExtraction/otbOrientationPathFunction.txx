@@ -48,7 +48,7 @@ OrientationPathFunction<TInputPath,TOutput>
   VertexType                          cindex;
   VertexType                          IndexOut;
   int                                 nbPath;
-  RealType  	     		      Theta;
+  RealType                   Theta;
 
   vertexList = path.GetVertexList();
   nbPath = vertexList->Size();

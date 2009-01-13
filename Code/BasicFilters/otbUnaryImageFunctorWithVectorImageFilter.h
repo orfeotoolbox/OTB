@@ -53,7 +53,7 @@ public:
   itkNewMacro(Self);
 
 
-  /** 	Extract input and output images dimensions.*/
+  /**   Extract input and output images dimensions.*/
   itkStaticConstMacro( InputImageDimension, unsigned int, TInputImage::ImageDimension);
   itkStaticConstMacro( OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 

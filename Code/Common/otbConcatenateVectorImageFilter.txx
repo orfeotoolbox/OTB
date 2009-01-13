@@ -103,7 +103,7 @@ namespace otb {
 
     if(region1!=region2)
       {
-	itkExceptionMacro(<<"InputImage1 and InputImage2 have different requested regions.");
+  itkExceptionMacro(<<"InputImage1 and InputImage2 have different requested regions.");
       }
 
     // Iterators typedefs
@@ -114,7 +114,7 @@ namespace otb {
     // Initialize output
     output->SetRegions(region1);
     output->SetNumberOfComponentsPerPixel(input1->GetNumberOfComponentsPerPixel()
-					  +input2->GetNumberOfComponentsPerPixel());
+            +input2->GetNumberOfComponentsPerPixel());
     output->Allocate();
 
     // Iterators declaration
@@ -128,34 +128,34 @@ namespace otb {
 
     // Iterate through the pixel
     while(!input1It.IsAtEnd()
-	  &&!input2It.IsAtEnd()
-	  &&!outputIt.IsAtEnd())
+    &&!input2It.IsAtEnd()
+    &&!outputIt.IsAtEnd())
       {
-	// define an output pixel
-	typename OutputImageType::PixelType output;
-	// Retrieve the size of each input pixel
-	unsigned int l1 = input1It.Get().GetSize();
-	unsigned int l2 = input2It.Get().GetSize();
-	// Set the output pixel size
-	output.SetSize(l1+l2);
-	// Loop through each band of the first image
-	for(unsigned int i=0;i<l1;i++)
-	  {
-	    // Fill the output pixel
-	    output[i]=static_cast<typename OutputImageType::InternalPixelType>(input1It.Get()[i]);
-	  }
-	// Loop though each band of the second image
-	for(unsigned int i = 0;i<l2;i++)
-	  {
-	    // Fill the output pixel
-	    output[i+l1]=static_cast<typename OutputImageType::InternalPixelType>(input2It.Get()[i]);
-	  }
-	// Set the output pixel
-	outputIt.Set(output);
-	// Increment the iterator
-	++input1It;
-	++input2It;
-	++outputIt;
+  // define an output pixel
+  typename OutputImageType::PixelType output;
+  // Retrieve the size of each input pixel
+  unsigned int l1 = input1It.Get().GetSize();
+  unsigned int l2 = input2It.Get().GetSize();
+  // Set the output pixel size
+  output.SetSize(l1+l2);
+  // Loop through each band of the first image
+  for(unsigned int i=0;i<l1;i++)
+    {
+      // Fill the output pixel
+      output[i]=static_cast<typename OutputImageType::InternalPixelType>(input1It.Get()[i]);
+    }
+  // Loop though each band of the second image
+  for(unsigned int i = 0;i<l2;i++)
+    {
+      // Fill the output pixel
+      output[i+l1]=static_cast<typename OutputImageType::InternalPixelType>(input2It.Get()[i]);
+    }
+  // Set the output pixel
+  outputIt.Set(output);
+  // Increment the iterator
+  ++input1It;
+  ++input2It;
+  ++outputIt;
       }
   }
   /**

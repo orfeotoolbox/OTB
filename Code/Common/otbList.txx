@@ -318,13 +318,13 @@ namespace otb
         os << indent << "List contains : " << std::endl;
         ConstIterator iter = this->Begin();
         while(iter!=this->End())
-	{
+  {
                 os << indent.GetNextIndent() << iter.Get().GetPointer() << std::endl;
                 os << indent.GetNextIndent() << iter.Get() << std::endl;
 //                iter.Get()->PrintSelf(os,indent.GetNextIndent());
 //                iter.Get()->Print(os,indent.GetNextIndent());
-	        ++iter;
-	}
+          ++iter;
+  }
   }
 } // end namespace otb
 

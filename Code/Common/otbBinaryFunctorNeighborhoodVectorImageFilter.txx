@@ -77,8 +77,8 @@ void
 BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1,TInputImage2,TOutputImage,TFunction>
 ::SetRadius( const unsigned char & min, const unsigned char & max )
 {
-	this->SetRadius( max );
-	GetFunctor().SetRadius( min, max );
+  this->SetRadius( max );
+  GetFunctor().SetRadius( min, max );
 }
 
 /**
@@ -147,32 +147,32 @@ BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1, TInputImage2, TOutputIm
 
   // Process each of the boundary faces.
   // Center first and then left, right, up, down borders
-	for ( fit1=faceList1.begin(), fit2=faceList2.begin();
-			fit1 != faceList1.end() && fit2 != faceList2.end();
-			++fit1, ++fit2 )
-	{
-		neighInputIt1 = itk::ConstNeighborhoodIterator<TInputImage1> ( r1, inputPtr1, *fit1 );
-		neighInputIt1.OverrideBoundaryCondition( &nbc1 );
-		neighInputIt1.GoToBegin();
+  for ( fit1=faceList1.begin(), fit2=faceList2.begin();
+      fit1 != faceList1.end() && fit2 != faceList2.end();
+      ++fit1, ++fit2 )
+  {
+    neighInputIt1 = itk::ConstNeighborhoodIterator<TInputImage1> ( r1, inputPtr1, *fit1 );
+    neighInputIt1.OverrideBoundaryCondition( &nbc1 );
+    neighInputIt1.GoToBegin();
 
-		neighInputIt2 = itk::ConstNeighborhoodIterator<TInputImage2> ( r2, inputPtr2, *fit2 );
-		neighInputIt2.OverrideBoundaryCondition( &nbc2 );
-		neighInputIt2.GoToBegin();
+    neighInputIt2 = itk::ConstNeighborhoodIterator<TInputImage2> ( r2, inputPtr2, *fit2 );
+    neighInputIt2.OverrideBoundaryCondition( &nbc2 );
+    neighInputIt2.GoToBegin();
 
-		outputIt = itk::ImageRegionIterator<TOutputImage> ( outputPtr, *fit1 );
-		outputIt.GoToBegin();
+    outputIt = itk::ImageRegionIterator<TOutputImage> ( outputPtr, *fit1 );
+    outputIt.GoToBegin();
 
-		while ( !outputIt.IsAtEnd() )
-		{
-			outputIt.Set( m_Functor( neighInputIt1, neighInputIt2 ) );
+    while ( !outputIt.IsAtEnd() )
+    {
+      outputIt.Set( m_Functor( neighInputIt1, neighInputIt2 ) );
 
-			++neighInputIt1;
-			++neighInputIt2;
-			++outputIt;
+      ++neighInputIt1;
+      ++neighInputIt2;
+      ++outputIt;
 
-			progress.CompletedPixel();
-		}
-	}
+      progress.CompletedPixel();
+    }
+  }
 }
 
 } // end namespace otb

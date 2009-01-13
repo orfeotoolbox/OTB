@@ -36,15 +36,15 @@ class ITK_EXPORT ThresholdImageToPointSetFilter :
 {
 public:
 
-  itkStaticConstMacro(		InputImageDimension,
-  				unsigned int,
-                      		TInputImage::ImageDimension);
+  itkStaticConstMacro(    InputImageDimension,
+          unsigned int,
+                          TInputImage::ImageDimension);
 
   typedef TInputImage     InputImageType;
 
   typedef ThresholdImageToPointSetFilter                             Self;
   typedef ImageToPointSetFilter< InputImageType, TOutputPointSet> Superclass;
-  typedef typename Superclass::OutputPointSetType             		OutputPointSetType;
+  typedef typename Superclass::OutputPointSetType                 OutputPointSetType;
   typedef itk::SmartPointer<Self>                                    Pointer;
   typedef itk::SmartPointer<const Self>                              ConstPointer;
 

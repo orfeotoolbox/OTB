@@ -79,27 +79,27 @@ BSplinesInterpolateTransformDeformationFieldGenerator<TPointSet, TDeformationFie
       tmpPointSet->Initialize();
       unsigned int pointDataCounter = 0;
       for(PointSetIteratorType it = this->GetPointSet()->GetPoints()->Begin();it!=this->GetPointSet()->GetPoints()->End();++it)
-	{
-	  if(vcl_abs(this->GetPointSet()->GetPointData()->GetElement(pointDataCounter)[0])>=this->GetMetricThreshold())
-	    {
-	      typename InternalPointSetType::PixelType V(0.0);
+  {
+    if(vcl_abs(this->GetPointSet()->GetPointData()->GetElement(pointDataCounter)[0])>=this->GetMetricThreshold())
+      {
+        typename InternalPointSetType::PixelType V(0.0);
 
-	       if(!IsAngular(paramIndex))
-		 {
-		   V[0] = this->GetPointSet()->GetPointData()->GetElement(pointDataCounter)[paramIndex+3];
-		   V[1] = this->GetPointSet()->GetPointData()->GetElement(pointDataCounter)[paramIndex+3];
-		 }
-	       else
-		 {
-		   V[0] = static_cast<ValueType>(vcl_cos(this->GetPointSet()->GetPointData()->GetElement(pointDataCounter)[paramIndex+3]));
-		   V[1] = static_cast<ValueType>(vcl_sin( this->GetPointSet()->GetPointData()->GetElement(pointDataCounter)[paramIndex+3]));
-		 }
-	       unsigned long nbPoints = tmpPointSet->GetNumberOfPoints();
-	       tmpPointSet->SetPoint( nbPoints, it.Value());
-	       tmpPointSet->SetPointData( nbPoints, V );
-	    }
-	  ++pointDataCounter;
-	}
+         if(!IsAngular(paramIndex))
+     {
+       V[0] = this->GetPointSet()->GetPointData()->GetElement(pointDataCounter)[paramIndex+3];
+       V[1] = this->GetPointSet()->GetPointData()->GetElement(pointDataCounter)[paramIndex+3];
+     }
+         else
+     {
+       V[0] = static_cast<ValueType>(vcl_cos(this->GetPointSet()->GetPointData()->GetElement(pointDataCounter)[paramIndex+3]));
+       V[1] = static_cast<ValueType>(vcl_sin( this->GetPointSet()->GetPointData()->GetElement(pointDataCounter)[paramIndex+3]));
+     }
+         unsigned long nbPoints = tmpPointSet->GetNumberOfPoints();
+         tmpPointSet->SetPoint( nbPoints, it.Value());
+         tmpPointSet->SetPointData( nbPoints, V );
+      }
+    ++pointDataCounter;
+  }
 
       // Set the interpolator parameters
       splineIntList->Back()->SetInput(tmpPointSet);
@@ -131,33 +131,33 @@ BSplinesInterpolateTransformDeformationFieldGenerator<TPointSet, TDeformationFie
       ParametersType params(this->GetTransform()->GetNumberOfParameters());
       // we iterate over the number of parameters of the transform
       for(unsigned int paramIndex = 0;paramIndex<this->GetTransform()->GetNumberOfParameters();++paramIndex)
-	{
-	  typename InternalPointSetType::PointType p;
-	  this->GetOutput()->TransformIndexToPhysicalPoint(index,p);
-	  typename InternalPointSetType::PixelType V(0.0);
-	  // For each parameter we use the associated spline interpolator
-	  if(!IsAngular(paramIndex))
-	    {
-	      splineIntList->GetNthElement(paramIndex)->EvaluateAtPoint(p,V);
-	      params[paramIndex]=V[0];
-	    }
-	  else
-	    {
-	      splineIntList->GetNthElement(paramIndex)->EvaluateAtPoint(p,V);
-	      params[paramIndex]=vcl_atan2(V[1],V[0]);
-	    }
-	  // We then compute the target point using the transform
-	  this->GetTransform()->SetParameters(params);
-	  PointType sourcePoint,targetPoint;
-	  outputPtr->TransformIndexToPhysicalPoint(index,sourcePoint);
-	  targetPoint = this->GetTransform()->TransformPoint(sourcePoint);
-	  // And the deformation
-	  PixelType pixel;
-	  pixel.SetSize(2);
-	  pixel[0] = static_cast<ValueType>(targetPoint[0]-sourcePoint[0]);
- 	  pixel[1] = static_cast<ValueType>(targetPoint[1]-sourcePoint[1]);
-	  outIt.Set(pixel);
-	}
+  {
+    typename InternalPointSetType::PointType p;
+    this->GetOutput()->TransformIndexToPhysicalPoint(index,p);
+    typename InternalPointSetType::PixelType V(0.0);
+    // For each parameter we use the associated spline interpolator
+    if(!IsAngular(paramIndex))
+      {
+        splineIntList->GetNthElement(paramIndex)->EvaluateAtPoint(p,V);
+        params[paramIndex]=V[0];
+      }
+    else
+      {
+        splineIntList->GetNthElement(paramIndex)->EvaluateAtPoint(p,V);
+        params[paramIndex]=vcl_atan2(V[1],V[0]);
+      }
+    // We then compute the target point using the transform
+    this->GetTransform()->SetParameters(params);
+    PointType sourcePoint,targetPoint;
+    outputPtr->TransformIndexToPhysicalPoint(index,sourcePoint);
+    targetPoint = this->GetTransform()->TransformPoint(sourcePoint);
+    // And the deformation
+    PixelType pixel;
+    pixel.SetSize(2);
+    pixel[0] = static_cast<ValueType>(targetPoint[0]-sourcePoint[0]);
+     pixel[1] = static_cast<ValueType>(targetPoint[1]-sourcePoint[1]);
+    outIt.Set(pixel);
+  }
     }
 }
 template <class TPointSet,class TDeformationField>

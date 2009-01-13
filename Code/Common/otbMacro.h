@@ -62,11 +62,11 @@
   #ifndef NDEBUG
     #define otbGenericMsgDebugMacro(x) \
     {  \
-     	if ( ::itk::Object::GetGlobalWarningDisplay())   \
+       if ( ::itk::Object::GetGlobalWarningDisplay())   \
         { ::itk::OStringStream itkmsg; \
           itkmsg << " Generic Msg Debug: " x << "\n"; \
           ::itk::OutputWindowDisplayDebugText(itkmsg.str().c_str());} \
-	}
+  }
   #else
     #define otbGenericMsgDebugMacro(x)
   #endif
@@ -74,8 +74,8 @@
 
 #define otbGenericMsgTestingMacro(x) \
     {  \
-     	std::cout x << std::endl; \
-		}
+       std::cout x << std::endl; \
+    }
 
 
 #if defined(OTB_LEAN_AND_MEAN) || defined(__BORLANDC__)
@@ -225,46 +225,46 @@
   { \
         std::cout<<"Line "<<__LINE__<<", testing widget "<<#button<<" of view "<<view->GetNameOfClass()<<" with value "<<#button_value<<": ";\
         if(view->button->active() && (view->button->callback()))\
-	{\
+  {\
           std::cout<<" active, triggering callback."<<std::endl;\
-	  view->button->value(button_value);\
-	  view->button->do_callback(view->button);\
-	  Fl::check();\
-	}\
-	else \
+    view->button->value(button_value);\
+    view->button->do_callback(view->button);\
+    Fl::check();\
+  }\
+  else \
         {\
-	  std::cout<<"inactive."<<std::endl; \
-	}\
+    std::cout<<"inactive."<<std::endl; \
+  }\
   }
 
 #define otbTestCallback(view,button)\
   { \
         std::cout<<"Line "<<__LINE__<<", testing widget "<<#button<<" of view "<<view->GetNameOfClass()<<": ";\
         if(view->button->active() && (view->button->callback()))\
-	{\
+  {\
           std::cout<<" active, triggering callback."<<std::endl;\
-	  view->button->do_callback(view->button);\
-	  Fl::check();\
-	}\
-	else \
+    view->button->do_callback(view->button);\
+    Fl::check();\
+  }\
+  else \
         {\
-	  std::cout<<"inactive."<<std::endl; \
-	}\
+    std::cout<<"inactive."<<std::endl; \
+  }\
   }
 
 #define otbTestMenuItemCallback(view,menubar,button)\
   { \
          std::cout<<"Line "<<__LINE__<<", testing menu item "<<#button<<" from menu bar "<<#menubar<<" of view "<< view->GetNameOfClass()<<": ";\
         if(view->button->active() && (view->button->callback()))\
-	{\
+  {\
           std::cout<<" active, triggering callback."<<std::endl;\
-	  view->button->do_callback(view->menubar);\
-	  Fl::check();\
-	}\
-	else \
+    view->button->do_callback(view->menubar);\
+    Fl::check();\
+  }\
+  else \
         {\
-       	  std::cout<<"inactive."<<std::endl; \
-	}\
+           std::cout<<"inactive."<<std::endl; \
+  }\
   }
 
 #else

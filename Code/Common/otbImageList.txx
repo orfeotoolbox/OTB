@@ -32,14 +32,14 @@ ImageList<TImage>
   for(ConstIterator it = this->Begin(); it!=this->End();++it)
     {
       if(it.Get()->GetUpdateMTime() < it.Get()->GetPipelineMTime()
-	|| it.Get()->GetDataReleased()
-	 || it.Get()->RequestedRegionIsOutsideOfTheBufferedRegion())
-	{
-	  if(it.Get()->GetSource())
-	    {
-	      it.Get()->GetSource()->UpdateOutputData(it.Get());
-	    }
-	}
+  || it.Get()->GetDataReleased()
+   || it.Get()->RequestedRegionIsOutsideOfTheBufferedRegion())
+  {
+    if(it.Get()->GetSource())
+      {
+        it.Get()->GetSource()->UpdateOutputData(it.Get());
+      }
+  }
     }
 }
 
@@ -52,14 +52,14 @@ ImageList<TImage>
   for(ConstIterator it = this->Begin(); it!=this->End();++it)
     {
       if(it.Get()->GetUpdateMTime() < it.Get()->GetPipelineMTime()
-	|| it.Get()->GetDataReleased()
-	 || it.Get()->RequestedRegionIsOutsideOfTheBufferedRegion())
-	{
-	  if(it.Get()->GetSource())
-	    {
-	      it.Get()->GetSource()->PropagateRequestedRegion(it.Get());
-	    }
-	}
+  || it.Get()->GetDataReleased()
+   || it.Get()->RequestedRegionIsOutsideOfTheBufferedRegion())
+  {
+    if(it.Get()->GetSource())
+      {
+        it.Get()->GetSource()->PropagateRequestedRegion(it.Get());
+      }
+  }
 
       // Check that the requested region lies within the largest possible region
       if ( ! it.Get()->VerifyRequestedRegion() )
@@ -90,9 +90,9 @@ ImageList<TImage>
   for(ConstIterator it = this->Begin(); it!=this->End();++it)
     {
       if(it.Get()->GetSource())
-	{
-	  it.Get()->GetSource()->UpdateOutputInformation();
-	}
+  {
+    it.Get()->GetSource()->UpdateOutputInformation();
+  }
     }
 }
 

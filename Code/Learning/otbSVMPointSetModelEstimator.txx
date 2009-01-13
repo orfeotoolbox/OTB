@@ -138,10 +138,10 @@ SVMPointSetModelEstimator<TInputPointSet,  TTrainingPointSet>
       typename TInputPointSet::PixelType::iterator pEnd = value.end();
 
       while(pIt!=pEnd)
-	{
-	v.push_back(*pIt);
-	++pIt;
-	}
+  {
+  v.push_back(*pIt);
+  ++pIt;
+  }
 
       this->m_Measures.push_back(v);
 

@@ -119,10 +119,10 @@ namespace otb
 class ITK_EXPORT CommandLineArgumentParseResult : public itk::ProcessObject
 {
 public:
-  typedef CommandLineArgumentParseResult      	Self;
-  typedef itk::ProcessObject                	Superclass;
-  typedef itk::SmartPointer<Self>        	Pointer;
-  typedef itk::SmartPointer<const Self>  	ConstPointer;
+  typedef CommandLineArgumentParseResult        Self;
+  typedef itk::ProcessObject                  Superclass;
+  typedef itk::SmartPointer<Self>          Pointer;
+  typedef itk::SmartPointer<const Self>    ConstPointer;
 
   itkNewMacro(Self);
   itkTypeMacro(CommandLineArgumentParseResult,itk::ProcessObject);
@@ -157,8 +157,8 @@ public:
   }
 
 
-	otbGetParameterMacro(Char,char);
-	otbGetParameterMacro(Short,short);
+  otbGetParameterMacro(Char,char);
+  otbGetParameterMacro(Short,short);
   otbGetParameterMacro(UShort,unsigned short);
   otbGetParameterMacro(Int,int);
   otbGetParameterMacro(UInt,unsigned int);
@@ -227,7 +227,7 @@ class ITK_EXPORT CommandLineArgumentParser : public itk::ProcessObject
 {
 public:
   typedef CommandLineArgumentParser      Self;
-  typedef itk::ProcessObject                	Superclass;
+  typedef itk::ProcessObject                  Superclass;
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -281,7 +281,7 @@ private:
     std::string Description;            // option description
     std::string Synonim;                // shortcut
     bool NumberOfParametersFixed;       // required number of values
-    int NumberOfParameters;	        // number of values
+    int NumberOfParameters;          // number of values
     bool Obligatory;                    // is the option mandatory ?
     bool Finded;                        // check if the option is present
     } OptionType;

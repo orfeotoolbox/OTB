@@ -73,7 +73,7 @@ public:
   typedef typename Superclass::OutputPathType        OutputPathType;
   typedef typename Superclass::OutputPathPointerType OutputPathPointerType;
 
-  typedef typename InputImageType::PixelType		 PixelType;
+  typedef typename InputImageType::PixelType     PixelType;
 
 
 

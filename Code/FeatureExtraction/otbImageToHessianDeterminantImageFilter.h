@@ -43,33 +43,33 @@ namespace otb
        * The Third  component is  : Dxy
        */
       template <class TInput, class TOutput>
-	class HessianDeterminant
-	{
-	public:
-	  HessianDeterminant(){};
-	  ~HessianDeterminant(){};
+  class HessianDeterminant
+  {
+  public:
+    HessianDeterminant(){};
+    ~HessianDeterminant(){};
 
-	  /*
-	   *
-	   * \param input : A symetric Hessian Matrix
-	   * \return  Determinant of the Hessian Matrix
-	   */
-	  inline TOutput operator()(const TInput& input)
-	    {
-	      return static_cast<TOutput>(input[0]*input[1] - input[2]*input[2]);
+    /*
+     *
+     * \param input : A symetric Hessian Matrix
+     * \return  Determinant of the Hessian Matrix
+     */
+    inline TOutput operator()(const TInput& input)
+      {
+        return static_cast<TOutput>(input[0]*input[1] - input[2]*input[2]);
 
-	    }
+      }
 
-	  bool operator !=(const HessianDeterminant) const
-	    {
-	      return false;
-	    }
+    bool operator !=(const HessianDeterminant) const
+      {
+        return false;
+      }
 
-	  bool operator==(const HessianDeterminant & other) const
-	    {
-	      return !(*this != other);
-	    }
-	};
+    bool operator==(const HessianDeterminant & other) const
+      {
+        return !(*this != other);
+      }
+  };
     }
   /** \class ImageToHessianDeterminantImageFilter
    *  \brief This class compute the Hessian determinant of each pixel of an input image

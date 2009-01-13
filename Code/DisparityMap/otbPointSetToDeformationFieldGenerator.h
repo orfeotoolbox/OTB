@@ -31,26 +31,26 @@ namespace Functor
     class DistanceComparisonFunctor
       {
       public:
-	DistanceComparisonFunctor(){};
-	~DistanceComparisonFunctor(){};
-	typedef std::vector<double> DistanceVectorType;
+  DistanceComparisonFunctor(){};
+  ~DistanceComparisonFunctor(){};
+  typedef std::vector<double> DistanceVectorType;
 
-	void SetDistanceVector(DistanceVectorType &vec)
-	  {
-	    m_DistanceVector = vec;
-	  }
-	DistanceVectorType GetDistanceVector(void)
-	  {
-	    return m_DistanceVector;
-	  }
-	inline bool operator()(const unsigned int a1, const unsigned int a2)
-	  {
-	    return m_DistanceVector[a1]<m_DistanceVector[a2];
-	  }
+  void SetDistanceVector(DistanceVectorType &vec)
+    {
+      m_DistanceVector = vec;
+    }
+  DistanceVectorType GetDistanceVector(void)
+    {
+      return m_DistanceVector;
+    }
+  inline bool operator()(const unsigned int a1, const unsigned int a2)
+    {
+      return m_DistanceVector[a1]<m_DistanceVector[a2];
+    }
 
       private:
-	DistanceVectorType m_DistanceVector;
-	  };
+  DistanceVectorType m_DistanceVector;
+    };
   }
 /** \class PointSetToDeformationFieldGenerator
  *  \brief Base class for filters generating a deformation field from a point set enriched with deformation and local transform information.

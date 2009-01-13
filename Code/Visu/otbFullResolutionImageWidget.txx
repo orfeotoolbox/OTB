@@ -64,12 +64,12 @@ FullResolutionImageWidget<TPixel>
     {
       Superclass::Init(x,y,w,h,l);
       if(this->GetImageOverlayVisible())
-	{
-	  if(!this->GetInputOverlay())
-	    {
-	      itkExceptionMacro("No input image overlay!");
-	    }
-	}
+  {
+    if(!this->GetInputOverlay())
+      {
+        itkExceptionMacro("No input image overlay!");
+      }
+  }
       this->label(l);
       this->resize(x, y, w, h);
     }
@@ -94,9 +94,9 @@ FullResolutionImageWidget<TPixel>
   this->SetViewedRegion(region);
   this->redraw();
   this->Fl_Gl_Window::resize(x,
-	       y,
-	       region.GetSize()[0],
-	       region.GetSize()[1]);
+         y,
+         region.GetSize()[0],
+         region.GetSize()[1]);
 
 }
 /**
@@ -114,9 +114,9 @@ FullResolutionImageWidget<TPixel>
   IndexType viewedRDCorner = viewed.GetIndex()+viewed.GetSize();
   IndexType bufferedRDCorner = buffered.GetIndex()+buffered.GetSize();
   return ( viewedULCorner[0]<bufferedULCorner[0]
-	   ||viewedULCorner[1]<bufferedULCorner[1]
-	   ||viewedRDCorner[0]>bufferedRDCorner[0]
-	   ||viewedRDCorner[1]>bufferedRDCorner[1]);
+     ||viewedULCorner[1]<bufferedULCorner[1]
+     ||viewedRDCorner[0]>bufferedRDCorner[0]
+     ||viewedRDCorner[1]>bufferedRDCorner[1]);
 }
 
 /**

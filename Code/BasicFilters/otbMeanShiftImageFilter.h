@@ -31,23 +31,23 @@ namespace otb
        *   This class handles buffer conversion when pixel type is scalar.
        **/
       class ScalarBufferConverter
-	{
-	public:
-	  /**
-	   * Fill the pixel with the float array values at index, using nbComp values scaled by scale.
-	   */
-	  template <class TPixel> static inline void FloatArrayToPixel(const float * data, unsigned int index, TPixel & pixel, const unsigned int nbComp, double scale)
-	    {
-	      pixel = static_cast<TPixel>(scale * data[index]);
-	    }
-	  /**
-	   * Fill the float array data with the pixel values at index, using nbComp values scaled by scale.
-	   */
-	  template <class TPixel> static inline void PixelToFloatArray(float * data, unsigned int index, const TPixel & pixel, double scale)
-	    {
-	      data[index]=static_cast<float>(scale * pixel);
-	    }
-	};
+  {
+  public:
+    /**
+     * Fill the pixel with the float array values at index, using nbComp values scaled by scale.
+     */
+    template <class TPixel> static inline void FloatArrayToPixel(const float * data, unsigned int index, TPixel & pixel, const unsigned int nbComp, double scale)
+      {
+        pixel = static_cast<TPixel>(scale * data[index]);
+      }
+    /**
+     * Fill the float array data with the pixel values at index, using nbComp values scaled by scale.
+     */
+    template <class TPixel> static inline void PixelToFloatArray(float * data, unsigned int index, const TPixel & pixel, double scale)
+      {
+        data[index]=static_cast<float>(scale * pixel);
+      }
+  };
     }
 
   /** \class MeanShiftImageFilter

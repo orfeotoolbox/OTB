@@ -33,7 +33,7 @@ namespace otb
  * Constructor
  */
 template < class TInputImage1, class TInputImage2,class TInputImage3,
-	   class TInputImage4, class TOutputImage, class TFunction  >
+     class TInputImage4, class TOutputImage, class TFunction  >
 QuaternaryFunctorImageFilter<TInputImage1,TInputImage2,TInputImage3,TInputImage4,TOutputImage,TFunction>
 ::QuaternaryFunctorImageFilter()
 {
@@ -45,7 +45,7 @@ QuaternaryFunctorImageFilter<TInputImage1,TInputImage2,TInputImage3,TInputImage4
  * Connect one of the operands for pixel-wise addition
  */
 template < class TInputImage1, class TInputImage2,class TInputImage3,
-	   class TInputImage4, class TOutputImage, class TFunction  >
+     class TInputImage4, class TOutputImage, class TFunction  >
 void
 QuaternaryFunctorImageFilter<TInputImage1,TInputImage2,TInputImage3,TInputImage4,TOutputImage,TFunction>
 ::SetInput1( const TInputImage1 *image1 )
@@ -59,7 +59,7 @@ QuaternaryFunctorImageFilter<TInputImage1,TInputImage2,TInputImage3,TInputImage4
  * Connect one of the operands for pixel-wise addition
  */
 template < class TInputImage1, class TInputImage2,class TInputImage3,
-	   class TInputImage4, class TOutputImage, class TFunction  >
+     class TInputImage4, class TOutputImage, class TFunction  >
 void
 QuaternaryFunctorImageFilter<TInputImage1,TInputImage2,TInputImage3,TInputImage4,TOutputImage,TFunction>
 ::SetInput2( const TInputImage2 *image2 )
@@ -74,7 +74,7 @@ QuaternaryFunctorImageFilter<TInputImage1,TInputImage2,TInputImage3,TInputImage4
  * Connect one of the operands for pixel-wise addition
  */
 template < class TInputImage1, class TInputImage2,class TInputImage3,
-	   class TInputImage4, class TOutputImage, class TFunction  >
+     class TInputImage4, class TOutputImage, class TFunction  >
 void
 QuaternaryFunctorImageFilter<TInputImage1,TInputImage2,TInputImage3,TInputImage4,TOutputImage,TFunction>
 ::SetInput3( const TInputImage3 *image3 )
@@ -88,7 +88,7 @@ QuaternaryFunctorImageFilter<TInputImage1,TInputImage2,TInputImage3,TInputImage4
  * Connect one of the operands for pixel-wise addition
  */
 template < class TInputImage1, class TInputImage2,class TInputImage3,
-	   class TInputImage4, class TOutputImage, class TFunction  >
+     class TInputImage4, class TOutputImage, class TFunction  >
 void
 QuaternaryFunctorImageFilter<TInputImage1,TInputImage2,TInputImage3,TInputImage4,TOutputImage,TFunction>
 ::SetInput4( const TInputImage4 *image4 )
@@ -101,7 +101,7 @@ QuaternaryFunctorImageFilter<TInputImage1,TInputImage2,TInputImage3,TInputImage4
  * BeforeThreadedGenerateData function. Validate inputs
  */
 template < class TInputImage1, class TInputImage2,class TInputImage3,
-	   class TInputImage4, class TOutputImage, class TFunction  >
+     class TInputImage4, class TOutputImage, class TFunction  >
 void
 QuaternaryFunctorImageFilter<TInputImage1,TInputImage2,TInputImage3,TInputImage4,TOutputImage,TFunction>
 ::BeforeThreadedGenerateData()
@@ -117,10 +117,10 @@ QuaternaryFunctorImageFilter<TInputImage1,TInputImage2,TInputImage3,TInputImage4
   if (inputPtr1.IsNull() || inputPtr2.IsNull() || inputPtr3.IsNull() ||inputPtr4.IsNull())
     {
       itkExceptionMacro(<< "At least one input is missing."
-			<< " Input1 is " << inputPtr1.GetPointer() << ", "
-			<< " Input2 is " << inputPtr2.GetPointer() << ", "
-			<< " Input3 is " << inputPtr3.GetPointer() << ", "
-			<< " Input4 is " << inputPtr4.GetPointer());
+      << " Input1 is " << inputPtr1.GetPointer() << ", "
+      << " Input2 is " << inputPtr2.GetPointer() << ", "
+      << " Input3 is " << inputPtr3.GetPointer() << ", "
+      << " Input4 is " << inputPtr4.GetPointer());
 
     }
 }
@@ -129,7 +129,7 @@ QuaternaryFunctorImageFilter<TInputImage1,TInputImage2,TInputImage3,TInputImage4
  * ThreadedGenerateData function. Performs the pixel-wise addition
  */
 template < class TInputImage1, class TInputImage2,class TInputImage3,
-	   class TInputImage4, class TOutputImage, class TFunction  >
+     class TInputImage4, class TOutputImage, class TFunction  >
 void
 QuaternaryFunctorImageFilter<TInputImage1,TInputImage2,TInputImage3,TInputImage4,TOutputImage,TFunction>
 ::ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread,

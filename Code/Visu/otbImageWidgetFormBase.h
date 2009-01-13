@@ -87,11 +87,11 @@ class ITK_EXPORT ImageWidgetFormBase
   /** Constructor. */
     ImageWidgetFormBase()
       {
-	m_Visible=true;
-	m_Color[0]=1;
-	m_Color[1]=0;
-	m_Color[2]=0;
-	m_Color[3]=1;
+  m_Visible=true;
+  m_Color[0]=1;
+  m_Color[1]=0;
+  m_Color[2]=0;
+  m_Color[3]=1;
       };
 
     /** Destructor. */

@@ -56,7 +56,7 @@ public:
   typedef   typename Superclass::OutputPointSetType     OutputPointSetType;
   typedef   typename Superclass::OutputPointSetPointer  OutputPointSetPointer;
 
-  typedef   itk::ProcessObject			    ProcessObjectType;
+  typedef   itk::ProcessObject          ProcessObjectType;
 
   /** Set the input image of this process object.  */
   void SetInput(unsigned int idx, const InputImageType *input);

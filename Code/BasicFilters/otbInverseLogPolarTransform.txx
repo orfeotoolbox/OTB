@@ -103,9 +103,9 @@ typename InverseLogPolarTransform<TScalarType>
       result[0]= result[0]>0. ? result[0] : result[0]+360.;
       // Avoiding asin indetermination
       if((point[0]-m_Center[0])>=0)
-	{
-	  result[0]=result[0]<90. ? result[0]+90. : result[0]-90.;
-	}
+  {
+    result[0]=result[0]<90. ? result[0]+90. : result[0]-90.;
+  }
       result[1]=(1./m_Scale[1])*vcl_log(rho);
       // otbMsgDebugMacro(<<vcl_log(vcl_pow(point[0]-m_Center[0],2)+vcl_pow(point[1]-m_Center[1],2)));
     }
@@ -139,9 +139,9 @@ InverseLogPolarTransform<TScalarType>
       result[0]= result[0]>0 ? result[0] : result[0]+360;
       // Avoiding asin indetermination
       if((vector[0]-m_Center[0])>=0)
-	{
-	  result[0]=result[0]<90 ? result[0]+90 : result[0]-90;
-	}
+  {
+    result[0]=result[0]<90 ? result[0]+90 : result[0]-90;
+  }
       result[1]=(1/m_Scale[1])*vcl_log(rho);
       // otbMsgDebugMacro(<<vcl_log(vcl_pow(vector[0]-m_Center[0],2)+vcl_pow(vector[1]-m_Center[1],2)));
     }
@@ -175,9 +175,9 @@ InverseLogPolarTransform<TScalarType>
       result[0]= result[0]>0 ? result[0] : result[0]+360;
       // Avoiding vcl_asin indetermination
       if((vector[0]-m_Center[0])>=0)
-	{
-	  result[0]=result[0]<90 ? result[0]+90 : result[0]-90;
-	}
+  {
+    result[0]=result[0]<90 ? result[0]+90 : result[0]-90;
+  }
       result[1]=(1/m_Scale[1])*vcl_log(rho);
       // otbMsgDebugMacro(<<log(vcl_pow(vector[0]-m_Center[0],2)+vcl_pow(vector[1]-m_Center[1],2)));
     }
