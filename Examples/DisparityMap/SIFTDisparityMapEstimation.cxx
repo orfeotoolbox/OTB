@@ -391,7 +391,7 @@ int main (int argc, char* argv[])
   // We pass the landmarks to the deformer and we run it.
   //
   // Software Guide : EndLatex
-
+// Software Guide : BeginCodeSnippet
   deformer->SetSourceLandmarks( sourceLandmarks.GetPointer() );
   deformer->SetTargetLandmarks( targetLandmarks.GetPointer() );
 
