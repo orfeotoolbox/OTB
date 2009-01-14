@@ -17,19 +17,19 @@ PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROISpot5.png}
-//    OUTPUTS: {ROISpot5SIFTFast.png}
-//    3
+//    OUTPUTS: {ROISpot5SURF.png}
+//    3 3
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
 //
-// This example illustrates the use of the \doxygen{otb}{SiftFastImageFilter}.
-// The Scale-Invariant Feature Transform (or SIFT) is an algorithm in
+// This example illustrates the use of the \doxygen{otb}{ImageToSURFKeyPointSetFilter}.
+// The Scale-Invariant Feature Transform (or SURF) is an algorithm in
 // computer vision to detect and describe local features in
 // images. The algorithm was published by David Lowe
-// \cite{LoweSIFT}. The detection and description of local image
+// \cite{LoweSURF}. The detection and description of local image
 // features can help in object recognition and image registration. The
-// SIFT features are local and based on the appearance of the object
+// SURF features are local and based on the appearance of the object
 // at particular interest points, and are invariant to image scale and
 // rotation. They are also robust to changes in illumination, noise,
 // occlusion and minor changes in viewpoint.
@@ -39,7 +39,7 @@ PURPOSE.  See the above copyright notices for more information.
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbSiftFastImageFilter.h"
+#include "otbImageToSURFKeyPointSetFilter.h"
 // Software Guide : EndCodeSnippet
 #include "otbImage.h"
 #include "otbImageFileReader.h"
@@ -55,16 +55,18 @@ PURPOSE.  See the above copyright notices for more information.
 
 int main(int argc, char * argv[])
 {
-    if (argc != 4)
+    if (argc != 5)
     {
     std::cerr << "Usage: " << argv[0] ;
-    std::cerr << " InputImage OutputImage scales" << std::endl;
+    std::cerr << " InputImage OutputImage octaves scales" << std::endl;
     return 1;
     }
   const char * infname = argv[1];
   const char * outputImageFilename = argv[2];
 
-  const unsigned int scales = atoi(argv[3]);
+  const unsigned int octaves = atoi(argv[3]);
+  const unsigned int scales = atoi(argv[4]);
+
 
 
   const unsigned int Dimension =2;
@@ -84,7 +86,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
-// The SIFT descriptors will be stored in a point set containing the
+// The SURF descriptors will be stored in a point set containing the
 // vector of features.
 //
 // Software Guide : EndLatex
@@ -95,14 +97,14 @@ int main(int argc, char * argv[])
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
-// The SIFT filter itself is templated over the input image and the
+// The SURF filter itself is templated over the input image and the
 // generated point set.
 //
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet    
-  typedef otb::SiftFastImageFilter<ImageType,PointSetType>
-                                ImageToFastSIFTKeyPointSetFilterType;
+  typedef otb::ImageToSURFKeyPointSetFilter<ImageType,PointSetType>
+                                ImageToFastSURFKeyPointSetFilterType;
 
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
@@ -125,13 +127,13 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet      
   
-  ImageToFastSIFTKeyPointSetFilterType::Pointer filter =
-                         ImageToFastSIFTKeyPointSetFilterType::New();
+  ImageToFastSURFKeyPointSetFilterType::Pointer filter =
+                         ImageToFastSURFKeyPointSetFilterType::New();
 
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
-// We plug the filter and set the number of scales for the SIFT
+// We plug the filter and set the number of scales for the SURF
 // computation. We can afterwards run the processing with the
 // \code{Update()} method.
 //
@@ -140,13 +142,14 @@ int main(int argc, char * argv[])
 // Software Guide : BeginCodeSnippet      
 
   filter->SetInput(reader->GetOutput());
-  filter->SetNumberOfScales(scales);
+  filter->SetOctavesNumber(octaves);
+  filter->SetScalesNumber(scales);
   filter->Update();
 
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
-// Once the SIFT are computed, we may want to draw them on top of the
+// Once the SURF are computed, we may want to draw them on top of the
 // input image. In order to do this, we will create the following RGB
 // image and the corresponding writer:
 //
@@ -193,7 +196,7 @@ int main(int argc, char * argv[])
 //
 // We can now proceed to copy the input image into the output one
 // using region iterators. The input image is a grey level one. The
-// output image will be made of color crosses for each SIFT on top of
+// output image will be made of color crosses for each SURF on top of
 // the grey level input image. So we start by copying the grey level
 // values on each of the 3 channels of the color image.
 //
@@ -223,7 +226,7 @@ int main(int argc, char * argv[])
 //
 // We are now going to plot color crosses on the output image. We will
 // need to define offsets (top, bottom, left and right) with respect
-// to the SIFT position in order to draw the cross segments.
+// to the SURF position in order to draw the cross segments.
 //
 // Software Guide : EndLatex
 
@@ -238,7 +241,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
-// Now, we are going to access the point set generated by the SIFT
+// Now, we are going to access the point set generated by the SURF
 // filter. The points are stored into a points container that we are
 // going to walk through using an iterator. These are the types needed
 // for this task:
@@ -278,7 +281,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
-// And we iterate through the SIFT set:
+// And we iterate through the SURF set:
 //
 // Software Guide : EndLatex
 
@@ -291,7 +294,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
-// We get the pixel coordinates for each SIFT by using the
+// We get the pixel coordinates for each SURF by using the
 // \code{Value()} method on the point set iterator. We use the
 // information about size and spacing in order to convert the physical
 // coordinates of the point into pixel coordinates.
@@ -328,7 +331,7 @@ int main(int argc, char * argv[])
 // Software Guide : BeginLatex
 //
 // We draw the crosses using the offsets and checking that we are
-// inside the image, since SIFTs on the image borders would cause an
+// inside the image, since SURFs on the image borders would cause an
 // out of bounds pixel access.
 //
 // Software Guide : EndLatex
@@ -372,16 +375,16 @@ int main(int argc, char * argv[])
 // Software Guide : EndCodeSnippet    
 
   //  Software Guide : BeginLatex
-  // Figure~\ref{fig:SIFTFast} shows the result of applying the SIFT
+  // Figure~\ref{fig:SURFFast} shows the result of applying the SURF
   // point detector to a small patch extracted from a Spot 5 image.
   // \begin{figure}
   // \center
   // \includegraphics[width=0.40\textwidth]{ROISpot5.eps}
-  // \includegraphics[width=0.40\textwidth]{ROISpot5SIFTFast.eps}
-  // \itkcaption[SIFT Application]{Result of applying the
-  // \doxygen{otb}{SiftFastImageFilter} to a Spot 5
+  // \includegraphics[width=0.40\textwidth]{ROISpot5SURF.eps}
+  // \itkcaption[SURF Application]{Result of applying the
+  // \doxygen{otb}{ImageToSURFKeyPointSetFilter} to a Spot 5
   // image.}
-  // \label{fig:SIFTFast}
+  // \label{fig:SURFFast}
   // \end{figure}
 
   return EXIT_SUCCESS;
