@@ -4,7 +4,7 @@
 FILE(GLOB OTBFeatureExtraction_SRCS "*.cxx" )
 
 ADD_LIBRARY(OTBFeatureExtraction ${OTBFeatureExtraction_SRCS})
-TARGET_LINK_LIBRARIES (OTBFeatureExtraction OTBCommon)
+TARGET_LINK_LIBRARIES (OTBFeatureExtraction OTBCommon otbsiftfast)
 
 INSTALL(TARGETS OTBFeatureExtraction
 RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries

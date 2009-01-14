@@ -463,6 +463,7 @@ kmlprettykml.cc
 kmlprintgeometry.cc
 kmlhellofeatures.cc
 kmlprint.cc
+siftfast.cpp
 )
 
 IF(OTB_COMPILE_JPEG2000)
@@ -498,7 +499,7 @@ IF(NOT BUILD_SHARED_LIBS)
 ENDIF(NOT BUILD_SHARED_LIBS)
 
 ADD_EXECUTABLE(otbUtilitiesTests otbUtilitiesTests.cxx ${UtilitiesTests_SRCS})
-TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon otbossim otbsvm otb6S tinyXML otbkml )
+TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon otbossim otbsvm otb6S tinyXML otbkml otbsiftfast)
 
 IF(OTB_COMPILE_JPEG2000)
   TARGET_LINK_LIBRARIES(otbUtilitiesTests otbopenjpeg)
@@ -515,7 +516,6 @@ ENDIF(NOT OTB_USE_EXTERNAL_EXPAT)
 IF(UNIX)
     TARGET_LINK_LIBRARIES (otbUtilitiesTests m)
 ENDIF(UNIX)
-
 
 # -------       CXX and EXECUTABLES files for GALIB Tests -----------------------------------
 #FOREACH(loop_var RANGE 1 27 1)

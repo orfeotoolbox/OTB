@@ -10,8 +10,6 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 
-SET(PROJECTIONS_EXAMPLES ${CXX_TEST_PATH}/otbProjectionsExamplesTests)
-
 ADD_EXECUTABLE(SensorModelExample SensorModelExample.cxx )
 TARGET_LINK_LIBRARIES(SensorModelExample OTBProjections OTBCommon OTBIO ITKCommon ITKIO)
 
@@ -22,8 +20,8 @@ ADD_EXECUTABLE(OrthoRectificationExample OrthoRectificationExample.cxx )
 TARGET_LINK_LIBRARIES(OrthoRectificationExample OTBProjections OTBCommon OTBIO ITKCommon ITKIO)
 
 IF( OTB_USE_CURL )
-ADD_EXECUTABLE(PlaceNameToLonLat PlaceNameToLonLat.cxx )
-TARGET_LINK_LIBRARIES(PlaceNameToLonLat OTBProjections OTBCommon OTBIO ITKCommon ITKIO ${CURL_LIBRARY} tinyXML)
+ADD_EXECUTABLE(PlaceNameToLonLatExample PlaceNameToLonLatExample.cxx )
+TARGET_LINK_LIBRARIES(PlaceNameToLonLatExample OTBProjections OTBCommon OTBIO ITKCommon ITKIO ${CURL_LIBRARY} tinyXML)
 ENDIF( OTB_USE_CURL )
 
 ADD_EXECUTABLE(VectorDataProjectionExample VectorDataProjectionExample.cxx )
@@ -33,7 +31,7 @@ IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Projections)
 
-SET(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 #Remote sensing images (large images )
 IF(OTB_DATA_USE_LARGEINPUT)
   SET(INPUTLARGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
@@ -83,7 +81,39 @@ ADD_TEST(OrthoRectificationExampleXSTest ${EXE_TESTS}
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
-ADD_EXECUTABLE(otbProjectionsExamplesTests otbProjectionsExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbProjectionsExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKNumerics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion OTBProjections)
+ADD_TEST(MapProjectionExampleTest ${EXE_TESTS}
+	--compare-ascii ${TOL}
+	${BASELINE}/mapProjectionExample.txt
+	${TEMP}/mapProjectionExample.txt
+    MapProjectionExampleTest
+    	${TEMP}/mapProjectionExample.txt
+)
+
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(VectorDataProjectionExampleTest ${EXE_TESTS}
+	--compare-binary
+	${BASELINE}/vectorDataProjectionExample.shp
+	${TEMP}/vectorDataProjectionExample.shp
+    VectorDataProjectionExampleTest
+        ${INPUTDATA}/Capitole-Shadows.kml
+        ${INPUTLARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+    	${TEMP}/vectorDataProjectionExample.shp
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+IF( OTB_USE_CURL )
+ADD_TEST(PlaceNameToLonLatExampleTest ${EXE_TESTS}
+    PlaceNameToLonLatExampleTest
+        Toulouse
+)
+ENDIF( OTB_USE_CURL )
+
+IF( OTB_USE_CURL )
+  ADD_EXECUTABLE(otbProjectionsExamplesTests otbProjectionsExamplesTests.cxx)
+  TARGET_LINK_LIBRARIES(otbProjectionsExamplesTests OTBCommon OTBIO OTBProjections ${CURL_LIBRARY} tinyXML)
+ELSE( OTB_USE_CURL )
+  ADD_EXECUTABLE(otbProjectionsExamplesTests otbProjectionsExamplesTests.cxx)
+  TARGET_LINK_LIBRARIES(otbProjectionsExamplesTests OTBCommon OTBIO OTBProjections)
+ENDIF( OTB_USE_CURL )
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

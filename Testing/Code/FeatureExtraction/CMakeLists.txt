@@ -869,6 +869,7 @@ ADD_TEST(feTvImageToSURFKeyPointSetFilterSceneOutputAscii ${FEATUREEXTRACTION_TE
 # -------            otb::ImageFittingPolygonListFilter   -------------
 ADD_TEST(feTuImageFittingPolygonListFilterNew ${FEATUREEXTRACTION_TESTS9} 
          otbImageFittingPolygonListFilterNew)
+
 ADD_TEST(feTvImageFittingPolygonListFilter ${FEATUREEXTRACTION_TESTS9}
 --compare-ascii ${EPS}
 		${BASELINE_FILES}/feTvImageFittingPolygonListFilter_Output.kml
@@ -880,8 +881,49 @@ ADD_TEST(feTvImageFittingPolygonListFilter ${FEATUREEXTRACTION_TESTS9}
 		5 10
 )
 
+# -------            otb::ImageToFastSIFTKeyPointSetFilter   -------------
+
+ADD_TEST(feTuImageToFastSIFTKeyPointSetFilterNew ${FEATUREEXTRACTION_TESTS9} 
+         otbImageToFastSIFTKeyPointSetFilterNew)
+
+ADD_TEST(feTvImageToFastSIFTKeyPointSetFilterSceneOutputImage ${FEATUREEXTRACTION_TESTS9} 
+--compare-image ${EPSILON}  
+		${BASELINE}/feTvImageToFastSIFTKeyPointSetFilterSceneImageOutput.png
+		${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneImageOutput.png
+         otbImageToFastSIFTKeyPointSetFilterOutputImage
+		${INPUTDATA}/scene.png
+		${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneImageOutput.png
+		6  
+)	
+
+ADD_TEST(feTvImageToFastSIFTKeyPointSetFilterSceneOutputAscii ${FEATUREEXTRACTION_TESTS9}
+--compare-ascii ${EPS}
+		${BASELINE_FILES}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutput.txt
+		${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutput.txt
+         otbImageToFastSIFTKeyPointSetFilterOutputAscii
+		${INPUTDATA}/scene.png
+		${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutput.txt
+		6  
+)
+
+
+
+# --------- MatchingFilter ----------------
+ADD_TEST(KeyPointSetsMatchingFilterNew ${FEATUREEXTRACTION_TESTS9} 
+	otbKeyPointSetsMatchingFilterNew)
+
+ADD_TEST(KeyPointSetsMatchingFilter ${FEATUREEXTRACTION_TESTS9}
+--compare-ascii ${EPS}				   
+	${BASELINE}/feTvKeyPointSetsMatchingFilterOutputAscii.txt
+	${TEMP}/feTvKeyPointSetsMatchingFilterOutputAscii.txt	
+    otbKeyPointSetsMatchingFilter
+	${TEMP}/feTvKeyPointSetsMatchingFilterOutputAscii.txt
+	0.6 0
+)
 	
-				     
+#--------- LandMark
+ADD_TEST(LandmarkNew ${FEATUREEXTRACTION_TESTS9} 
+	otbLandmarkNew)			     
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
@@ -992,6 +1034,12 @@ otbImageFittingPolygonListFilterNew.cxx
 otbImageToSURFKeyPointSetFilterNew.cxx	
 otbImageToSURFKeyPointSetFilterOutputImage.cxx
 otbImageToSURFKeyPointSetFilterOutputAscii.cxx
+otbImageToFastSIFTKeyPointSetFilterNew.cxx
+otbImageToFastSIFTKeyPointSetFilterOutputImage.cxx
+otbImageToFastSIFTKeyPointSetFilterOutputAscii.cxx
+otbKeyPointSetsMatchingFilterNew.cxx
+otbKeyPointSetsMatchingFilter.cxx
+otbLandmarkNew.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

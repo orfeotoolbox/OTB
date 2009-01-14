@@ -148,7 +148,6 @@ namespace otb
                "GDALOpen failed - %d\n%s\n",
                CPLGetLastErrorNo(), CPLGetLastErrorMsg() );
 
-      GDALDumpOpenDatasets( stderr );
       GDALDestroyDriverManager();
       CPLDumpSharedList( NULL );
       itkDebugMacro(<<"No dataset ");
