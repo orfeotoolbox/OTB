@@ -24,7 +24,7 @@
 #endif
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {ROI_IKO_PAN_LesHalles_pos_spacing.tif}, {ROI_IKO_PAN_LesHalles_warped_pos_spacing.tif}
+//    INPUTS: {ROISpot5.tif}, {ROISpot5Warped.png}
 //    OUTPUTS: {SIFTdeformationFieldOutput.png}
 //  Software Guide : EndCommandLineArgs
 
