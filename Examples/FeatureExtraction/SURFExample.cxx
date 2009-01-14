@@ -24,15 +24,10 @@ PURPOSE.  See the above copyright notices for more information.
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the \doxygen{otb}{ImageToSURFKeyPointSetFilter}.
-// The Scale-Invariant Feature Transform (or SURF) is an algorithm in
+// The Speed-Up Robust Features (or SURF) is an algorithm in
 // computer vision to detect and describe local features in
-// images. The algorithm was published by David Lowe
-// \cite{LoweSURF}. The detection and description of local image
-// features can help in object recognition and image registration. The
-// SURF features are local and based on the appearance of the object
-// at particular interest points, and are invariant to image scale and
-// rotation. They are also robust to changes in illumination, noise,
-// occlusion and minor changes in viewpoint.
+// images. The algorithm is detailed in \cite{SURF}. The applications
+// of SURF are the same as those for SIFT.
 //
 // The first step required to use this filter is to include its header file.
 //
