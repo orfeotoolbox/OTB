@@ -381,8 +381,6 @@ int main (int argc, char* argv[])
       sourceLandmarks->InsertElement( pointId, sourcePoint );
       targetLandmarks->InsertElement( pointId, targetPoint );
 
-      std::cout << sourcePoint << " " << targetPoint << std::endl;
-
       ++pointId;
     }
 
