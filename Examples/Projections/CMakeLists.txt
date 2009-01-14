@@ -20,8 +20,8 @@ ADD_EXECUTABLE(OrthoRectificationExample OrthoRectificationExample.cxx )
 TARGET_LINK_LIBRARIES(OrthoRectificationExample OTBProjections OTBCommon OTBIO ITKCommon ITKIO)
 
 IF( OTB_USE_CURL )
-ADD_EXECUTABLE(PlaceNameToLonLat PlaceNameToLonLat.cxx )
-TARGET_LINK_LIBRARIES(PlaceNameToLonLat OTBProjections OTBCommon OTBIO ITKCommon ITKIO ${CURL_LIBRARY} tinyXML)
+ADD_EXECUTABLE(PlaceNameToLonLatExample PlaceNameToLonLatExample.cxx )
+TARGET_LINK_LIBRARIES(PlaceNameToLonLatExample OTBProjections OTBCommon OTBIO ITKCommon ITKIO ${CURL_LIBRARY} tinyXML)
 ENDIF( OTB_USE_CURL )
 
 ADD_EXECUTABLE(VectorDataProjectionExample VectorDataProjectionExample.cxx )
