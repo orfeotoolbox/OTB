@@ -26,21 +26,10 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(OrthoRectificationExampleTest);
-  REGISTER_TEST(MapProjectionExampleTest);
-  REGISTER_TEST(VectorDataProjectionExampleTest);
+  REGISTER_TEST(PlaceNameToLonLatExampleTest);
 }
 
-#undef main
-#define main OrthoRectificationExampleTest
-#include "OrthoRectificationExample.cxx"
 
 #undef main
-#define main MapProjectionExampleTest
-#include "MapProjectionExample.cxx"
-
-#undef main
-#define main VectorDataProjectionExampleTest
-#include "VectorDataProjectionExample.cxx"
-
-
+#define main PlaceNameToLonLatExampleTest
+#include "PlaceNameToLonLatExample.cxx"

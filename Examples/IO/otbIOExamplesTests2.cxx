@@ -1,4 +1,3 @@
-
 /*=========================================================================
 
   Program:   ORFEO Toolbox
@@ -24,23 +23,13 @@
 #include <iostream>
 #include "otbTestMain.h"
 
+
 void RegisterTests()
 {
-  REGISTER_TEST(OrthoRectificationExampleTest);
-  REGISTER_TEST(MapProjectionExampleTest);
-  REGISTER_TEST(VectorDataProjectionExampleTest);
+REGISTER_TEST(TileMapImageIOExampleTest);
+
 }
 
 #undef main
-#define main OrthoRectificationExampleTest
-#include "OrthoRectificationExample.cxx"
-
-#undef main
-#define main MapProjectionExampleTest
-#include "MapProjectionExample.cxx"
-
-#undef main
-#define main VectorDataProjectionExampleTest
-#include "VectorDataProjectionExample.cxx"
-
-
+#define main TileMapImageIOExampleTest
+#include "TileMapImageIOExample.cxx"

@@ -243,7 +243,7 @@ namespace otb
     }
     bool lCanRead(false);
     lCanRead = imageIO->CanReadFile(filename.str().c_str());
-    std::cout << filename.str() << std::endl;
+    otbMsgDevMacro( << filename.str());
 
   //If we cannot read the file: retrieve and read
     if ( lCanRead == false)
@@ -331,7 +331,7 @@ namespace otb
     CURLcode res;
     curl = curl_easy_init();
 
-    std::cout << urlStream.str().data() << std::endl;
+    otbMsgDevMacro( << urlStream.str().data() );
 
 
     char url[200];
@@ -389,7 +389,7 @@ namespace otb
     CURLcode res;
     curl = curl_easy_init();
 
-    std::cout << urlStream.str().data() << std::endl;
+    otbMsgDevMacro(<< urlStream.str().data());
 
 
     char url[200];
@@ -448,7 +448,7 @@ namespace otb
     }
     std::getline(file, m_FileSuffix);
     std::getline(file, m_AddressMode);
-    std::cout << "File parameters: " << m_ServerName << " " << m_FileSuffix << " " << m_AddressMode << std::endl;
+    otbMsgDevMacro( << "File parameters: " << m_ServerName << " " << m_FileSuffix << " " << m_AddressMode);
   }
 
 
@@ -503,9 +503,9 @@ namespace otb
     int originSample = (int)this->GetOrigin(0);
     int nComponents = this->GetNumberOfComponents();
 
-    std::cout << "TileMapImageIO::Write: Size " << totLines << ", "<< totSamples << std::endl;
-    std::cout << "TileMapImageIO::Write: Index" << firstLine << ", "<< firstSample << std::endl;
-    std::cout << "TileMapImageIO::Write: Origin" << originLine << ", "<< originSample << std::endl;
+    otbMsgDevMacro( << "TileMapImageIO::Write: Size " << totLines << ", "<< totSamples);
+    otbMsgDevMacro( << "TileMapImageIO::Write: Index" << firstLine << ", "<< firstSample);
+    otbMsgDevMacro( << "TileMapImageIO::Write: Origin" << originLine << ", "<< originSample);
 
     otbMsgDevMacro( <<" TileMapImageIO::Read()  ");
     otbMsgDevMacro( <<" Image size  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
@@ -527,8 +527,8 @@ namespace otb
 
     double x = (originSample+firstSample)/((1 << m_Depth)*256.);
     double y = (originLine+firstLine)/((1 << m_Depth)*256.);
-    std::cout << x << std::endl;
-    std::cout << y << std::endl;
+    otbMsgDevMacro(<< x );
+    otbMsgDevMacro(<< y );
 
     int nTilesX = (int) ceil(totSamples/256.)+1;
     int nTilesY = (int) ceil(totLines/256.)+1;
@@ -599,8 +599,7 @@ namespace otb
   {
     std::ostringstream quad;
 
-    std::cout << x << ", " << y  << std::endl;
-    std::cout.flush();
+    otbMsgDevMacro( << x << ", " << y );
 
     XYToQuadTree2(x, y, quad);
 
@@ -620,7 +619,7 @@ namespace otb
 
     bool lCanWrite(false);
     lCanWrite = imageIO->CanWriteFile(filename.str().c_str());
-    std::cout << filename.str() << std::endl;
+    otbMsgDevMacro( << filename.str());
 
     if ( lCanWrite == true)
     {

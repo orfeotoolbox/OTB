@@ -40,6 +40,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
 SET(EXE_TESTS ${CXX_TEST_PATH}/otbProjectionsExamplesTests)
+SET(EXE_TESTS2 ${CXX_TEST_PATH}/otbProjectionsExamplesTests2)
 
 SET(TOL 0.0)
 
@@ -102,18 +103,21 @@ ADD_TEST(VectorDataProjectionExampleTest ${EXE_TESTS}
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 IF( OTB_USE_CURL )
-ADD_TEST(PlaceNameToLonLatExampleTest ${EXE_TESTS}
+ADD_TEST(PlaceNameToLonLatExampleTest ${EXE_TESTS2}
     PlaceNameToLonLatExampleTest
         Toulouse
 )
 ENDIF( OTB_USE_CURL )
 
+
+ADD_EXECUTABLE(otbProjectionsExamplesTests otbProjectionsExamplesTests.cxx)
+TARGET_LINK_LIBRARIES(otbProjectionsExamplesTests OTBCommon OTBIO OTBProjections)
+
 IF( OTB_USE_CURL )
-  ADD_EXECUTABLE(otbProjectionsExamplesTests otbProjectionsExamplesTests.cxx)
-  TARGET_LINK_LIBRARIES(otbProjectionsExamplesTests OTBCommon OTBIO OTBProjections ${CURL_LIBRARY} tinyXML)
-ELSE( OTB_USE_CURL )
-  ADD_EXECUTABLE(otbProjectionsExamplesTests otbProjectionsExamplesTests.cxx)
-  TARGET_LINK_LIBRARIES(otbProjectionsExamplesTests OTBCommon OTBIO OTBProjections)
+  ADD_EXECUTABLE(otbProjectionsExamplesTests2 otbProjectionsExamplesTests2.cxx)
+  TARGET_LINK_LIBRARIES(otbProjectionsExamplesTests2 OTBCommon OTBIO OTBProjections ${CURL_LIBRARY} tinyXML)
 ENDIF( OTB_USE_CURL )
+
+
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
