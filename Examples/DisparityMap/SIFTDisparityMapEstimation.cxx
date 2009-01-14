@@ -24,7 +24,7 @@
 #endif
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {ROISpot5.tif}, {ROISpot5Warped.png}
+//    INPUTS: {ROISpot5.png}, {ROISpot5Warped.png}
 //    OUTPUTS: {SIFTdeformationFieldOutput.png}
 //  Software Guide : EndCommandLineArgs
 
