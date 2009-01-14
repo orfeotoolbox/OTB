@@ -22,13 +22,13 @@
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {TO_core_last_zoom.las}
 //    OUTPUTS: {lidar-image-4.hdr}, {lidar-image-4-pretty.png}
-//    1.0 3 4
+//    1.0 5 4
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {TO_core_last_zoom.las}
 //    OUTPUTS: {lidar-image-8.hdr}, {lidar-image-8-pretty.png}
-//    1.0 3 8
+//    1.0 5 8
 //  Software Guide : EndCommandLineArgs
 
 
@@ -144,9 +144,9 @@ int main( int argc, char* argv[] )
 
   ImageType::SizeType  size;
   size[0]  = static_cast<long int >(
-         ceil((reader->GetMaxX()-reader->GetMinX()+1)/resolution))+1;
+         ceil((reader->GetMaxX()-reader->GetMinX()+1)/resolution))+2;
   size[1]  = static_cast<long int >(
-         ceil((reader->GetMaxY()-reader->GetMinY()+1)/resolution))+1;
+         ceil((reader->GetMaxY()-reader->GetMinY()+1)/resolution))+2;
 
   ImageType::PointType origin;
   origin[0] = reader->GetMinX();

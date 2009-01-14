@@ -69,6 +69,11 @@ ADD_EXECUTABLE(SIFTExample SIFTExample.cxx)
 TARGET_LINK_LIBRARIES(SIFTExample OTBIO OTBCommon OTBFeatureExtraction
 ITKCommon ITKBasicFilters)
 
+ADD_EXECUTABLE(SIFTFastExample SIFTFastExample.cxx)
+TARGET_LINK_LIBRARIES(SIFTFastExample OTBIO OTBCommon OTBFeatureExtraction
+ITKCommon ITKBasicFilters)
+
+
 ADD_EXECUTABLE(ParallelLineDetectionExample ParallelLineDetectionExample.cxx)
 TARGET_LINK_LIBRARIES(ParallelLineDetectionExample OTBIO OTBCommon OTBFeatureExtraction
 ITKCommon ITKBasicFilters)
