@@ -224,6 +224,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Projections/PlaceNameToLonLatExample.cxx
   ${OTB_SOURCE_DIR}/Examples/DisparityMap/SimpleDisparityMapEstimationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/DisparityMap/NCCRegistrationFilterExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/DisparityMap/SIFTDisparityMapEstimation.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/AlignmentsExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/RatioLineDetectorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/CorrelationLineDetectorExample.cxx
