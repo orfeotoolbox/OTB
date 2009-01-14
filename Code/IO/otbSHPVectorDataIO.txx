@@ -714,6 +714,10 @@ namespace otb
 
           if(ogrCollection == NULL)
           {
+            if(ogrFeatures.empty())
+            {
+                itkExceptionMacro(<<"Problem while creating FEATURE_POINT: ogrFeatures is not initialized.");
+            }
             ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbPoint);
             ogrFeatures.back()->SetGeometry(&ogrPoint);
           }
@@ -746,6 +750,10 @@ namespace otb
 
           if(ogrCollection == NULL)
           {
+            if(ogrFeatures.empty())
+            {
+                itkExceptionMacro(<<"Problem while creating FEATURE_LINE: ogrFeatures is not initialized.");
+            }
             ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbLineString);
             ogrFeatures.back()->SetGeometry(&ogrLine);
           }
@@ -805,6 +813,10 @@ namespace otb
           }
           if(ogrCollection == NULL)
           {
+            if(ogrFeatures.empty())
+            {
+                itkExceptionMacro(<<"Problem while creating FEATURE_POLYGON: ogrFeatures is not initialized.");
+            }
             ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbPolygon);
             ogrFeatures.back()->SetGeometry(ogrPolygon);
           }
