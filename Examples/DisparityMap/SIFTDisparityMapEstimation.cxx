@@ -341,7 +341,7 @@ int main (int argc, char* argv[])
   // matched SIFTs to the deformation field source.
   //
   // Software Guide : EndLatex
-
+  // Software Guide : BeginCodeSnippet
   typedef DeformationSourceType::LandmarkContainerPointer
                                               LandmarkContainerPointer;
   typedef DeformationSourceType::LandmarkContainer
