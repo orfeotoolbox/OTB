@@ -83,6 +83,17 @@ ADD_TEST(OrthoRectificationExampleXSTest ${EXE_TESTS}
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+ADD_TEST(MapProjectionExampleTest ${EXE_TESTS}
+	--compare-ascii ${TOL}
+	${BASELINE}/mapProjectionExample.tex
+	${TEMP}/mapProjectionExample.tex
+    MapProjectionExampleTest
+    	${TEMP}/mapProjectionExample.tex
+        1.4835345
+        43.55968261
+)
+
+
 ADD_EXECUTABLE(otbProjectionsExamplesTests otbProjectionsExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbProjectionsExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKNumerics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion OTBProjections)
 

@@ -27,9 +27,13 @@
 void RegisterTests()
 {
   REGISTER_TEST(OrthoRectificationExampleTest);
+  REGISTER_TEST(MapProjectionExampleTest);
 }
 
 #undef main
 #define main OrthoRectificationExampleTest
 #include "OrthoRectificationExample.cxx"
 
+#undef main
+#define main MapProjectionExampleTest
+#include "MapProjectionExample.cxx"
