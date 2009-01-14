@@ -449,8 +449,8 @@ int main (int argc, char* argv[])
   //
   // \begin{figure}
   // \center
-  // \includegraphics[width=0.40\textwidth]{ROI_IKO_PAN_LesHalles_pos_spacing.eps}
-  // \includegraphics[width=0.40\textwidth]{ROI_IKO_PAN_LesHalles_warped_pos_spacing.eps}
+  // \includegraphics[width=0.40\textwidth]{ROISpot5.eps}
+  // \includegraphics[width=0.40\textwidth]{ROISpot5Warped.eps}
   // \includegraphics[width=0.40\textwidth]{SIFTdeformationFieldOutput.eps}
   // \itkcaption[Deformation field from SIFT disparity map estimation]{From left
   // to right and top to bottom: fixed input image, moving image with a sinusoid deformation,
