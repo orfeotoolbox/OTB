@@ -91,7 +91,7 @@ ADD_TEST(MapProjectionExampleTest ${EXE_TESTS}
 
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(VectorDataProjectionExampleTest ${EXE_TESTS}
-	--compare-binary ${TOL}
+	--compare-binary
 	${BASELINE}/vectorDataProjectionExample.shp
 	${TEMP}/vectorDataProjectionExample.shp
     VectorDataProjectionExampleTest
