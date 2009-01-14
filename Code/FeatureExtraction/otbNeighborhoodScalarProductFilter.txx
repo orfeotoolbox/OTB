@@ -125,7 +125,7 @@ NeighborhoodScalarProductFilter<TInputImage,TOutputModulus,TOutputDirection>
 
       // Compute the scalar product
       scalarCurrentValue = -(pixel1[0]*pixel2[0]+pixel1[1]*pixel2[1]);
-
+      
       // If the value is upper than the current max value
       if (scalarCurrentValue > scalarMaxValue)
         {
@@ -146,7 +146,7 @@ NeighborhoodScalarProductFilter<TInputImage,TOutputModulus,TOutputDirection>
         }
       }
     // Compute the direction
-    double angle = (1+neighborhoodNumberMax) * M_PI_4;
+    double angle = static_cast<double>((1+neighborhoodNumberMax)) * static_cast<double>(M_PI_4);
     if (flagPosNegDirection)
       {
         angle -= M_PI;
