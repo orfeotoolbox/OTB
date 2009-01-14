@@ -101,7 +101,19 @@ ADD_TEST(VectorDataProjectionExampleTest ${EXE_TESTS}
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
-ADD_EXECUTABLE(otbProjectionsExamplesTests otbProjectionsExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbProjectionsExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKNumerics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion OTBProjections)
+IF( OTB_USE_CURL )
+ADD_TEST(PlaceNameToLonLatExampleTest ${EXE_TESTS}
+    PlaceNameToLonLatExampleTest
+        Toulouse
+)
+ENDIF( OTB_USE_CURL )
+
+IF( OTB_USE_CURL )
+  ADD_EXECUTABLE(otbProjectionsExamplesTests otbProjectionsExamplesTests.cxx)
+  TARGET_LINK_LIBRARIES(otbProjectionsExamplesTests OTBCommon OTBIO OTBProjections ${CURL_LIBRARY} tinyXML)
+ELSE( OTB_USE_CURL )
+  ADD_EXECUTABLE(otbProjectionsExamplesTests otbProjectionsExamplesTests.cxx)
+  TARGET_LINK_LIBRARIES(otbProjectionsExamplesTests OTBCommon OTBIO OTBProjections)
+ENDIF( OTB_USE_CURL )
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

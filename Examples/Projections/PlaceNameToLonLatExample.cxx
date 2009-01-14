@@ -42,11 +42,26 @@ int main( int argc, char* argv[] )
     return EXIT_FAILURE;
   }
 
+  // Software Guide : BeginLatex
+  //
+  // You instantiate the class and pass the name you want to look for as a
+  // std::string to the SetPlaceName method.
+  //
+  // The call to evaluate will trigger the retrival process.
+  //
+  // Software Guide : EndLatex
+
   // Software Guide : BeginCodeSnippet
   otb::PlaceNameToLonLat::Pointer pn2LL = otb::PlaceNameToLonLat::New();
   pn2LL->SetPlaceName(std::string(argv[1]));
   pn2LL->Evaluate();
   // Software Guide : EndCodeSnippet
+
+  // Software Guide : BeginLatex
+  //
+  // To get the data, you can simply call the GetLon and GetLat methods.
+  //
+  // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   double lon = pn2LL->GetLon();
@@ -55,6 +70,19 @@ int main( int argc, char* argv[] )
   std::cout << "Latitude: " << lat << std::endl;
   std::cout << "Longitude: " << lon << std::endl;
   // Software Guide : EndCodeSnippet
+
+
+  // Software Guide : BeginLatex
+  //
+  // If you tried with a string such as "Toulouse", you should obtain something
+  // like:
+  //
+  // \begin{verbatim}
+  // Latitude: 43.6044
+  // Longitude: 1.44295
+  // \end{verbatim}
+  //
+  // Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 

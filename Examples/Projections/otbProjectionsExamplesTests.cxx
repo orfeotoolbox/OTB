@@ -29,6 +29,7 @@ void RegisterTests()
   REGISTER_TEST(OrthoRectificationExampleTest);
   REGISTER_TEST(MapProjectionExampleTest);
   REGISTER_TEST(VectorDataProjectionExampleTest);
+  REGISTER_TEST(PlaceNameToLonLatExampleTest);
 }
 
 #undef main
@@ -42,3 +43,7 @@ void RegisterTests()
 #undef main
 #define main VectorDataProjectionExampleTest
 #include "VectorDataProjectionExample.cxx"
+
+#undef main
+#define main PlaceNameToLonLatExampleTest
+#include "PlaceNameToLonLatExample.cxx"
