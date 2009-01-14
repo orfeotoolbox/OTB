@@ -34,13 +34,13 @@
 
 // Software Guide : BeginLatex
 //
-// This example describes how to convert a point set obtained from some lidar data
-// to an image file. Lidar produce a point set which is irregular in terms of spatial
+// This example describes how to convert a point set obtained from lidar data
+// to an image file. A lidar produces a point set which is irregular in terms of spatial
 // sampling. To be able to generate an image, an interpolation is required.
 //
 // The interpolation is done using the
 // \doxygen{itk}{BSplineScatteredDataPointSetToImageFilter} which uses BSplines. The
-// method is fully describes in \cite{Tustison2005} and \cite{Lee1997}.
+// method is fully described in \cite{Tustison2005} and \cite{Lee1997}.
 //
 // The first step toward the use of these filters is to include the proper header files.
 //
