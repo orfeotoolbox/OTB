@@ -324,7 +324,7 @@ int main (int argc, char* argv[])
   // spacing of the images on which it is defined.
   //
   // Software Guide : EndLatex
-  
+    // Software Guide : BeginCodeSnippet
   ImageType::ConstPointer fixedImage = fixedReader->GetOutput();
 
 
