@@ -12,3 +12,22 @@ Let's see what we can do.
 \section{Name to coordinates}
 \label{sec:NamesToCoordinates}
 \input{PlaceNameToLonLatExample.tex}
+
+
+\section{Open street map}
+\label{sec:OpenStreetMap}
+
+The power of sharing which is a driving force in open source programs such
+as OTB can also be demonstrated for data collection. One good example is
+Open Street Map (\url{www.openstreetmap.org/}).
+
+In this project, thousands of users, upload GPS data and draw map of their
+surroundings. The coverage is impressive and this data is made freely available.
+
+It is possible of course to get the vector data (not covered yet by otb), but
+here we will focuss on retrieving some nice map for any place. The following
+example describe the method. This part is pretty experimental and the code is
+not as polished as the rest of the library. You've been warned!
+
+\input{TileMapImageIOExample.tex}
+
