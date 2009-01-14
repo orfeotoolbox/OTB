@@ -78,7 +78,7 @@ int main( int argc, char* argv[] )
     std::cout << argv[0] <<" <input_lidar_filename> <output_image_filename(double)>"
               << " <output_image_filename(unsigned char)>"
 	      << " <output_resolution> <spline_order>"
-              << " <number_of_level>"
+              << " <number_of_levels>"
 	      << std::endl;
     return EXIT_FAILURE;
   }
@@ -119,7 +119,7 @@ int main( int argc, char* argv[] )
   //
   // We can now prepare the parameters to pass to the interpolation filter:
   // you have to be aware that the origin of the image is on the upper left
-  // corner and thus correspond to the minimun easting but the maximum northing.
+  // corner and thus corresponds to the minimun easting but the maximum northing.
   //
   // Software Guide : EndLatex
 
