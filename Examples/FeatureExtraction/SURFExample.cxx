@@ -381,6 +381,6 @@ int main(int argc, char * argv[])
   // image.}
   // \label{fig:SURFFast}
   // \end{figure}
-
+// Software Guide : EndLatex
   return EXIT_SUCCESS;
 }

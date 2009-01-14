@@ -49,7 +49,8 @@
 // Software Guide : BeginCodeSnippet
 
 #include "otbKeyPointSetsMatchingFilter.h"
-#include "otbNearestPointDeformationFieldGenerator.h"
+#include "otbSiftFastImageFilter.h"
+#include "itkDeformationFieldSource.h"
 #include "itkWarpImageFilter.h"
 
 // Software Guide : EndCodeSnippet
@@ -59,7 +60,8 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkRescaleIntensityImageFilter.h"
-#include "otbMultiToMonoChannelExtractROI.h"
+#include "itkPointSet.h"
+
 
 int main (int argc, char* argv[])
 {
@@ -177,16 +179,36 @@ int main (int argc, char* argv[])
   movingReader->UpdateOutputInformation();
 
   // Software Guide : EndCodeSnippet
+  // Software Guide : BeginLatex
+  //
+  // We will now instantiate the 2 SIFT filters and the filter used
+  // for the matching of the points.
+  //
+  // Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
 
 
+  ImageToSIFTKeyPointSetFilterType::Pointer filter1 =
+                              ImageToSIFTKeyPointSetFilterType::New();
+  ImageToSIFTKeyPointSetFilterType::Pointer filter2 =
+                              ImageToSIFTKeyPointSetFilterType::New();
+  EuclideanDistanceMatchingFilterType::Pointer euclideanMatcher =
+                           EuclideanDistanceMatchingFilterType::New();
+  // Software Guide : EndCodeSnippet
+  // Software Guide : BeginLatex
+  //
+  // We plug the pipeline and set the parameters.
+  //
+  // Software Guide : EndLatex
 
+  // Software Guide : BeginCodeSnippet
 
-  ImageToSIFTKeyPointSetFilterType::Pointer filter1 = ImageToSIFTKeyPointSetFilterType::New();
-  ImageToSIFTKeyPointSetFilterType::Pointer filter2 = ImageToSIFTKeyPointSetFilterType::New();
-  EuclideanDistanceMatchingFilterType::Pointer euclideanMatcher = EuclideanDistanceMatchingFilterType::New();
+  double secondOrderThreshold = 0.5;
+  bool useBackMatching = 0;
 
-
-  
+  filter1->SetInput( fixedReader->GetOutput() );
+  filter2->SetInput( movingReader->GetOutput() );
   euclideanMatcher->SetInput1(filter1->GetOutput());
   euclideanMatcher->SetInput2(filter2->GetOutput());
   euclideanMatcher->SetDistanceThreshold(secondOrderThreshold);
@@ -197,7 +219,7 @@ int main (int argc, char* argv[])
 
           euclideanMatcher->Update();
 
-	    MatchVectorType trueSecondOrder;
+	  MatchVectorType trueSecondOrder;
 
   for(LandmarkListType::Iterator it = landmarkList->Begin(); it != landmarkList->End();++it)
     {
@@ -208,25 +230,22 @@ int main (int argc, char* argv[])
     }
 
     // Displaying the matches
-  typedef otb::PrintableImageFilter<VectorImageType> PrintableFilterType;
-  typedef PrintableFilterType::OutputImageType OutputImageType;
+  typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType>
+    PrintableFilterType;
 
   PrintableFilterType::Pointer printable1 = PrintableFilterType::New();
   PrintableFilterType::Pointer printable2 = PrintableFilterType::New();
     
-  printable1->SetInput(inputImage1);
-  printable1->SetChannel(3);
-  printable1->SetChannel(2);
-  printable1->SetChannel(1);
+  printable1->SetInput(fixedReader->GetOutput());
+  printable1->SetOutputMinimum(0);
+  printable1->SetOutputMaximum(255);
   printable1->Update();
 
-  printable2->SetInput(inputImage2);
-  printable2->SetChannel(3);
-  printable2->SetChannel(2);
-  printable2->SetChannel(1);
+  printable2->SetInput(movingReader->GetOutput());
+  printable2->SetOutputMinimum(0);
+  printable2->SetOutputMaximum(255);
   printable2->Update();
 
-  // Always the same VariableLenghtVector compatibility problem ...
 
   typedef otb::Image<itk::RGBPixel<unsigned char>,2> RGBImageType;
 
@@ -240,9 +259,9 @@ int main (int argc, char* argv[])
   while(!inIt1.IsAtEnd() && !outIt1.IsAtEnd())
     {
       itk::RGBPixel<unsigned char> pixel;
-      pixel.SetRed(inIt1.Get()[0]);
-      pixel.SetGreen(inIt1.Get()[1]);
-      pixel.SetBlue(inIt1.Get()[2]);
+      pixel.SetRed(inIt1.Get());
+      pixel.SetGreen(inIt1.Get());
+      pixel.SetBlue(inIt1.Get());
       outIt1.Set(pixel);
       ++inIt1;
       ++outIt1;
@@ -258,9 +277,9 @@ int main (int argc, char* argv[])
   while(!inIt2.IsAtEnd() && !outIt2.IsAtEnd())
     {
       itk::RGBPixel<unsigned char> pixel;
-      pixel.SetRed(inIt2.Get()[0]);
-      pixel.SetGreen(inIt2.Get()[1]);
-      pixel.SetBlue(inIt2.Get()[2]);
+      pixel.SetRed(inIt2.Get());
+      pixel.SetGreen(inIt2.Get());
+      pixel.SetBlue(inIt2.Get());
       outIt2.Set(pixel);
       ++inIt2;
       ++outIt2;
@@ -268,233 +287,129 @@ int main (int argc, char* argv[])
 
 
 
+  typedef   float          VectorComponentType;
+  typedef   itk::Vector< VectorComponentType, Dimension >    VectorType;
+  typedef   otb::Image< VectorType,  Dimension >   DeformationFieldType;
+
+  typedef itk::DeformationFieldSource<
+                                DeformationFieldType 
+                                             >  DeformationSourceType;
+
+  DeformationSourceType::Pointer deformer = DeformationSourceType::New();
+
+  ImageType::ConstPointer fixedImage = fixedReader->GetOutput();
+
+
+  deformer->SetOutputSpacing( fixedImage->GetSpacing() );
+  deformer->SetOutputOrigin(  fixedImage->GetOrigin() );
+  deformer->SetOutputRegion(  fixedImage->GetLargestPossibleRegion() );
+
+  typedef DeformationSourceType::LandmarkContainerPointer
+                                              LandmarkContainerPointer;
+  typedef DeformationSourceType::LandmarkContainer
+                                                 LandmarkContainerType;
+  typedef DeformationSourceType::LandmarkPointType          LandmarkPointType;
+
+  LandmarkContainerType::Pointer sourceLandmarks = LandmarkContainerType::New();
+  LandmarkContainerType::Pointer targetLandmarks = LandmarkContainerType::New();
+
+  LandmarkPointType sourcePoint;
+  LandmarkPointType targetPoint;
+
+  
+  unsigned int pointId = 0;
+
+
+    for(LandmarkListType::Iterator it = landmarkList->Begin(); it != landmarkList->End();++it)
+    {
+      PointType point1 = it.Get()->GetPoint1();
+      PointType point2 = it.Get()->GetPoint2();
+      
+      sourcePoint[0] = point1[0];
+      sourcePoint[1] = point1[1];
+
+
+
+      targetPoint[0] = point2[0];
+      targetPoint[1] = point2[1];
+    
+      sourceLandmarks->InsertElement( pointId, sourcePoint );
+      targetLandmarks->InsertElement( pointId, targetPoint );
+
+      ++pointId;
+    }
+
+
+  deformer->SetSourceLandmarks( sourceLandmarks.GetPointer() );
+  deformer->SetTargetLandmarks( targetLandmarks.GetPointer() );
+
+  try
+    {
+    deformer->UpdateLargestPossibleRegion();
+    }
+  catch( itk::ExceptionObject & excp )
+    {
+    std::cerr << "Exception thrown " << std::endl;
+    std::cerr << excp << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  DeformationFieldType::ConstPointer deformationField = deformer->GetOutput();
+
+  deformer->Update();
+
+  std::cout << "Image Resampling" << std::endl;
+  typedef itk::WarpImageFilter< ImageType, 
+                                ImageType, 
+                                DeformationFieldType  >  FilterType;
+
+  FilterType::Pointer warper = FilterType::New();
+
+  typedef itk::LinearInterpolateImageFunction< 
+                       ImageType, double >  InterpolatorType;
+
+  InterpolatorType::Pointer interpolator = InterpolatorType::New();
+
+  warper->SetInterpolator( interpolator );
+
+
+  warper->SetOutputSpacing( deformationField->GetSpacing() );
+  warper->SetOutputOrigin(  deformationField->GetOrigin() );
+
+  warper->SetDeformationField( deformationField );
+
+  warper->SetInput( movingReader->GetOutput() );
+
+
+  typedef otb::ImageFileWriter< ImageType > WriterType;
+  WriterType::Pointer movingWriter = WriterType::New();
+
+  movingWriter->SetFileName( argv[6] );
+  movingWriter->SetInput( warper->GetOutput() );
 
 
   
-  // Software Guide : BeginLatex
-  //
-  // Once the estimation has been performed by the \doxygen{otb}{DisparityMapEstimationMethod}, one can generate
-  // the associated deformation field (that means translation in first and second image direction).
-  // It will be represented as a \doxygen{otb}{VectorImage}.
-  //
-  // Software Guide : EndLatex
+  try
+    {
+    movingWriter->Update();
+    }
+  catch( itk::ExceptionObject & excp )
+    {
+    std::cerr << "Exception thrown " << std::endl;
+    std::cerr << excp << std::endl;
+    return EXIT_FAILURE;
+    }
 
-  // Software Guide : BeginCodeSnippet
+  typedef otb::ImageFileWriter< DeformationFieldType > DeformationWriterType;
 
-  typedef otb::VectorImage<PixelType,Dimension> DeformationFieldType;
+  DeformationWriterType::Pointer defWriter = DeformationWriterType::New();
 
-  // Software Guide : EndCodeSnippet
+  defWriter->SetFileName( "deformation.mhd" );
+  defWriter->SetInput( deformationField );
+  defWriter->Update();
+  
 
-  // Software Guide : BeginLatex
-  //
-  // For the deformation field estimation, we will use the \doxygen{otb}{NearestPointDeformationFieldGenerator}.
-  // This filter will perform a nearest neighbor interpolation on the deformation values in the point set data.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
-
-  typedef otb::NearestPointDeformationFieldGenerator<PointSetType,
-               DeformationFieldType> GeneratorType;
-
-  // Software GUide : EndCodeSnippet
-
-  // Software Guide : BeginLatex
-  //
-  // The disparity map estimation filter is instanciated.
-  //
-  // Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
-
-  GeneratorType::Pointer generator = GeneratorType::New();
-
-  // Software Guide : EndCodeSnippet
-
-  // Software Guide : BeginLatex
-  //
-  // We must then specify the input point set using the \code{SetPointSet()} method.
-  //
-  // Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
-
-  generator->SetPointSet(dmestimator->GetOutput());
-
-  // Software Guide : EndCodeSnippet
-
-  // Software Guide : BeginLatex
-  //
-  // One must also specify the origin, size and spacing of the output deformation field.
-  //
-  // Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
-
-  generator->SetOutputOrigin(fixedReader->GetOutput()->GetOrigin());
-  generator->SetOutputSpacing(fixedReader->GetOutput()->GetSpacing());
-  generator->SetOutputSize(fixedReader->GetOutput()
-			   ->GetLargestPossibleRegion().GetSize());
-
-  // Software Guide : EndCodeSnippet
-
-  // Software Guide : BeginLatex
-  //
-  // The local registration process can lead to wrong deformation values and transform parameters. To Select only
-  // points in point set for which the registration process was succesful, one can set a threshold on the final metric
-  // value : points for which the absolute final metric value is below this threshold will be discarded. This
-  // threshold can be set with the \code{SetMetricThreshold()} method.
-  //
-  // Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
-
-  generator->SetMetricThreshold(atof(argv[11]));
-
-  // Software Guide : EndCodeSnippet
-
-  // Software Guide : BeginLatex
-  //
-  // \relatedClasses
-  // \begin{itemize}
-  // \item \doxygen{otb}{NNearestPointsLinearInterpolateDeformationFieldGenerator}
-  // \item \doxygen{otb}{BSplinesInterpolateDeformationFieldGenerator}
-  // \item \doxygen{otb}{NearestTransformDeformationFieldGenerator}
-  // \item \doxygen{otb}{NNearestTransformsLinearInterpolateDeformationFieldGenerator}
-  // \item \doxygen{otb}{BSplinesInterpolateTransformDeformationFieldGenerator}
-  // \end{itemize}
-  //
-  // Software Guide : EndLatex
-
-  // Software Guide : BeginLatex
-  //
-  // Now we can warp our fixed image according to the estimated deformation field. This will be performed by the
-  // \doxygen{itk}{WarpImageFilter}. First, we define this filter.
-  //
-  // Software Guide : EndLatex
-
-  // Software Guide :  BeginCodeSnippet
-
-  typedef itk::WarpImageFilter<ImageType,ImageType,
-               DeformationFieldType> ImageWarperType;
-
-  // Software Guide : EndCodeSnippet
-
-  // Software Guide : BeginLatex
-  //
-  // Then we instantiate it.
-  //
-  // Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
-
-  ImageWarperType::Pointer warper = ImageWarperType::New();
-
-  // Software Guide : EndCodeSnippet
-
-  // Software Guide  : BeginLatex
-  //
-  // We set the input image to warp using the \code{SetInput()} method, and the deformation field
-  // using the \code{SetDeformationField()} method.
-  //
-  // Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
-
-  warper->SetInput(movingReader->GetOutput());
-  warper->SetDeformationField(generator->GetOutput());
-  warper->SetOutputOrigin(fixedReader->GetOutput()->GetOrigin());
-  warper->SetOutputSpacing(fixedReader->GetOutput()->GetSpacing());
-
-  // Software Guide : EndCodeSnippet
-
-  // Software Guide : BeginLatex
-  //
-  // In order to write the result to a PNG file, we will rescale it on a proper range.
-  //
-  // Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
-
-  typedef itk::RescaleIntensityImageFilter<ImageType,
-               OutputImageType> RescalerType;
-
-  RescalerType::Pointer outputRescaler = RescalerType::New();
-  outputRescaler->SetInput(warper->GetOutput());
-  outputRescaler->SetOutputMaximum(255);
-  outputRescaler->SetOutputMinimum(0);
-
-  // Software Guide : EndCodeSnippet
-
-  // Software Guide : BeginLatex
-  //
-  // We can now write the image to a file. The filters are executed by invoking
-  // the \code{Update()} method.
-  //
-  // Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
-
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
-
-  WriterType::Pointer outputWriter = WriterType::New();
-  outputWriter->SetInput(outputRescaler->GetOutput());
-  outputWriter->SetFileName(argv[4]);
-  outputWriter->Update();
-
-  // Software Guide : EndCodeSnippet
-
-  // Software Guide : BeginLatex
-  //
-  // We also want to write the deformation field along the first direction to a file.
-  // To achieve this we will use the \doxygen{otb}{MultiToMonoChannelExtractROI} filter.
-  //
-  // Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
-
-  typedef otb::MultiToMonoChannelExtractROI<PixelType,
-               PixelType> ChannelExtractionFilterType;
-
-  ChannelExtractionFilterType::Pointer channelExtractor
-    = ChannelExtractionFilterType::New();
-
-  channelExtractor->SetInput(generator->GetOutput());
-  channelExtractor->SetChannel(1);
-
-  RescalerType::Pointer fieldRescaler = RescalerType::New();
-  fieldRescaler->SetInput(channelExtractor->GetOutput());
-  fieldRescaler->SetOutputMaximum(255);
-  fieldRescaler->SetOutputMinimum(0);
-
-  WriterType::Pointer fieldWriter = WriterType::New();
-  fieldWriter->SetInput(fieldRescaler->GetOutput());
-  fieldWriter->SetFileName(argv[3]);
-  fieldWriter->Update();
-
-  // Software Guide : EndCodeSnippet
-
-  // Software Guide : BeginLatex
-  //
-  // Figure~\ref{fig:SIMPLEDISPARITYMAPESTIMATIONOUTPUT} shows the result of applying disparity map estimation on
-  // a regular point set, followed by deformation field estimation and fixed image resampling on an Ikonos image.
-  // The moving image is the fixed image warped with a sinusoidal deformation with a 3-pixels amplitude and a 170-pixels
-  // period. Please note that there are more efficient ways to interpolate the deformation field than nearest neighbor,
-  // including BSplines fitting.
-  //
-  // \begin{figure}
-  // \center
-  // \includegraphics[width=0.40\textwidth]{ROI_IKO_PAN_LesHalles_pos_spacing.eps}
-  // \includegraphics[width=0.40\textwidth]{ROI_IKO_PAN_LesHalles_warped_pos_spacing.eps}
-  // \includegraphics[width=0.40\textwidth]{SIFTdeformationFieldOutput.eps}
-  // \includegraphics[width=0.40\textwidth]{SIFTresampledMovingOutput.eps}
-  // \itkcaption[Deformation field and resampling from disparity map estimation]{From left
-  // to right and top to bottom: fixed input image, moving image with a sinusoid deformation,
-  // estimated deformation field in the horizontal direction, resampled moving image.}
-  // \label{fig:SIMPLEDISPARITYMAPESTIMATIONOUTPUT}
-  // \end{figure}
-  //
-  // Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

@@ -383,6 +383,7 @@ int main(int argc, char * argv[])
   // image.}
   // \label{fig:SIFTFast}
   // \end{figure}
+  // Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }
