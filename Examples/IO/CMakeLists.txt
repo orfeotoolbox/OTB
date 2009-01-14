@@ -69,6 +69,12 @@ IF(ITK_USE_REVIEW)
   TARGET_LINK_LIBRARIES(LidarToImageExample OTBIO OTBCommon ITKCommon ITKIO otbossim )
 ENDIF(ITK_USE_REVIEW)
 
+IF( OTB_USE_CURL )
+  ADD_EXECUTABLE(TileMapImageIOExample TileMapImageIOExample.cxx)
+  TARGET_LINK_LIBRARIES(TileMapImageIOExample OTBIO OTBCommon)
+ENDIF( OTB_USE_CURL )
+
+
 #ADD_EXECUTABLE(ImageReadExportVTK ImageReadExportVTK.cxx )
 #TARGET_LINK_LIBRARIES(ImageReadExportVTK ITKCommon ITKIO)
 
@@ -119,6 +125,7 @@ SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
 
 SET(EXE_TESTS1  ${CXX_TEST_PATH}/otbIOExamplesTests1)
+SET(EXE_TESTS2  ${CXX_TEST_PATH}/otbIOExamplesTests2)
 
 SET(TOL 0.0)
 
@@ -179,8 +186,27 @@ ADD_TEST(LidarToImageExample2Test ${EXE_TESTS1}
          )
 ENDIF(ITK_USE_REVIEW)
 
+IF( OTB_USE_CURL )
+ADD_TEST(TileMapImageIOExampleTest ${EXE_TESTS2}
+--compare-image ${TOL}  ${BASELINE}/openStreetMap.png
+                        ${TEMP}/openStreetMap.png
+         TileMapImageIOExampleTest
+         ${INPUTDATA}/osmfile.otb
+         ${TEMP}/openStreetMap.png
+         ${TEMP}
+         1.4835345
+         43.55968261
+         12
+         )
+ENDIF( OTB_USE_CURL )
+
+
 ADD_EXECUTABLE(otbIOExamplesTests1 otbIOExamplesTests1.cxx)
 TARGET_LINK_LIBRARIES(otbIOExamplesTests1 otbossim OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBProjections ITKIO ITKAlgorithms ITKStatistics ITKCommon  ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 
+IF( OTB_USE_CURL )
+  ADD_EXECUTABLE(otbIOExamplesTests2 otbIOExamplesTests2.cxx)
+  TARGET_LINK_LIBRARIES(otbIOExamplesTests2 OTBCommon OTBIO ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES} ${CURL_LIBRARY} )
+ENDIF( OTB_USE_CURL )
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
