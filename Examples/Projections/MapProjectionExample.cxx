@@ -20,26 +20,32 @@
 #endif
 
 //  Software Guide : BeginCommandLineArgs
-//    OUTPUTS: {mapProjectionExample.tex}
+//    OUTPUTS: {mapProjectionExample-output.txt}
+//    OUTPUTS: {dummy.png}
 //    1.4835345  43.55968261
 //  Software Guide : EndCommandLineArgs
+
+//These two dependencies are just to produce the dummy image
+#include "otbImage.h"
+#include "otbImageFileWriter.h"
 
 
 // Software Guide : BeginLatex
 //
 // Map projection is an important issue when working with satellite images. In the
 // orthorectification process, converting between geographic and cartographic
-// coordinate is a key step. In this process, everything is integrated and you
+// coordinates is a key step. In this process, everything is integrated and you
 // don't need to know the details.
 //
 // However, sometimes, you need to go hands-on and find out the nitty-gritty details.
-// This example show you how to play with map projection in OTB and how to convert
+// This example shows you how to play with map projections in OTB and how to convert
 // coordinates. In most cases, the underlying work is done by ossim.
 //
 // First, we start by including the otbMapProjections header. In this file, over 30
-// projections are defined and ready to use. It is easy to add new one. The
-// otbGenericMapProjection enable you to instanciate a map projection from a
-// WKT (well know text) string, which is popular with ORG for example.
+// projections are defined and ready to use. It is easy to add new one.
+//
+// The otbGenericMapProjection enables you to instanciate a map projection from a
+// WKT (Well Known Text) string, which is popular with OGR for example.
 //
 // Software Guide : EndLatex
 
@@ -50,9 +56,9 @@
 
 int main( int argc, char* argv[] )
 {
-  if(argc < 3  )
+  if(argc < 2  )
   {
-    std::cout << argv[0] <<" <outputfile> <lon> <lat> "  << std::endl;
+    std::cout << argv[0] <<" <outputfile> "  << std::endl;
 
     return EXIT_FAILURE;
   }
@@ -68,9 +74,11 @@ int main( int argc, char* argv[] )
   const char * outFileName = argv[1];
 
   itk::Point<double,2> point;
-  point[0]=atof(argv[2]);
-  point[1]=atof(argv[3]);
+  point[0]=1.4835345;
+  point[1]=43.55968261;
   // Software Guide : EndCodeSnippet
+
+
 
   // Software Guide : BeginLatex
   //
@@ -87,7 +95,7 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginLatex
   //
-  // We can now instanciate our first map projection. Here it is a UTM projection
+  // We can now instanciate our first map projection. Here, it is a UTM projection
   // we also need to provide the information concerning the zone and the hemisphere
   // for the projection. These are specific to UTM projection.
   //
@@ -102,7 +110,7 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginLatex
   //
-  // The TransformPoint() method return the coordinate of the point is the
+  // The TransformPoint() method return the coordinates of the point in the
   // new projection.
   //
   // Software Guide : EndLatex
@@ -139,8 +147,7 @@ int main( int argc, char* argv[] )
   // the program? It can depends on some input provided by the user (image, shapefile).
   //
   // In this situation, you can use the \doxygen{otb}{GenericMapProjection}. It will
-  // accept a string to set the projection. This string should be in the WKT format
-  // widely accepted by OGR.
+  // accept a string to set the projection. This string should be in the WKT format.
   //
   // For example:
   //
@@ -188,9 +195,36 @@ int main( int argc, char* argv[] )
   //
   // The final output of the program should be:
   //
-  // \input{mapProjectionExample.tex}
+  // \input{mapProjectionExample-output.txt}
+  //
+  // %\includegraphics[width=0.40\textwidth]{dummy.eps}
   //
   // Software Guide : EndLatex
+
+  //this is just to trigger the dependancy for the software guide, not
+  //directly related to this example
+  if( argc > 2 )
+  {
+
+    char * dummyfilename = argv[2];
+    typedef otb::Image< unsigned char, 2 > ImageType;
+    ImageType::Pointer image = ImageType::New();
+    ImageType::IndexType start;
+    start[0] = 0; start[1] = 0;
+    ImageType::SizeType  size;
+    size[0] = 1; size[1] = 1;
+    ImageType::RegionType region;
+    region.SetSize( size );
+    region.SetIndex( start );
+    image->SetRegions( region );
+    image->Allocate();
+
+    typedef otb::ImageFileWriter<ImageType> FileWriterType;
+    FileWriterType::Pointer writer = FileWriterType::New();
+    writer->SetFileName(dummyfilename);
+    writer->SetInput(image);
+    writer->Update();
+  }
 
   return EXIT_SUCCESS;
 }

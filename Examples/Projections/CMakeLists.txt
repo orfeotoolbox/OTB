@@ -10,8 +10,6 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 
-SET(PROJECTIONS_EXAMPLES ${CXX_TEST_PATH}/otbProjectionsExamplesTests)
-
 ADD_EXECUTABLE(SensorModelExample SensorModelExample.cxx )
 TARGET_LINK_LIBRARIES(SensorModelExample OTBProjections OTBCommon OTBIO ITKCommon ITKIO)
 
@@ -33,7 +31,7 @@ IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Projections)
 
-SET(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 #Remote sensing images (large images )
 IF(OTB_DATA_USE_LARGEINPUT)
   SET(INPUTLARGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
@@ -85,14 +83,23 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(MapProjectionExampleTest ${EXE_TESTS}
 	--compare-ascii ${TOL}
-	${BASELINE}/mapProjectionExample.tex
-	${TEMP}/mapProjectionExample.tex
+	${BASELINE}/mapProjectionExample.txt
+	${TEMP}/mapProjectionExample.txt
     MapProjectionExampleTest
-    	${TEMP}/mapProjectionExample.tex
-        1.4835345
-        43.55968261
+    	${TEMP}/mapProjectionExample.txt
 )
 
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(VectorDataProjectionExampleTest ${EXE_TESTS}
+	--compare-binary ${TOL}
+	${BASELINE}/vectorDataProjectionExample.shp
+	${TEMP}/vectorDataProjectionExample.shp
+    VectorDataProjectionExampleTest
+        ${INPUTDATA}/Capitole-Shadows.kml
+        ${INPUTLARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+    	${TEMP}/vectorDataProjectionExample.shp
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_EXECUTABLE(otbProjectionsExamplesTests otbProjectionsExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbProjectionsExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKNumerics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion OTBProjections)
