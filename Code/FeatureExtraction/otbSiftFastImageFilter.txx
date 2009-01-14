@@ -51,12 +51,6 @@ namespace otb
     rescaler->SetOutputMaximum(1);
     rescaler->Update();
 
-    typedef otb::ImageFileWriter<FloatImageType> WriterType;
-    WriterType::Pointer writer = WriterType::New();
-    writer->SetInput(rescaler->GetOutput());
-    writer->SetFileName("qb_RoadExtract.tif");
-    writer->Update();
-
     SiftFastImage siftInputImage = CreateImage(size[1],size[0]);
     itk::ImageRegionIterator<FloatImageType> inIt(rescaler->GetOutput(),rescaler->GetOutput()->GetLargestPossibleRegion());
 
