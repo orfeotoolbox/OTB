@@ -195,7 +195,7 @@ int main( int argc, char* argv[] )
   //
   // The final output of the program should be:
   //
-  // \input{mapProjectionExample-output.txt}
+  // \input{Art/Generated/mapProjectionExample-output.txt}
   //
   // %\includegraphics[width=0.40\textwidth]{dummy.eps}
   //
