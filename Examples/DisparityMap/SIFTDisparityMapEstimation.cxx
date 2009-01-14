@@ -112,7 +112,8 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
 
-  typedef otb::SiftFastImageFilter<ImageType,PointSetType> ImageToSIFTKeyPointSetFilterType;
+  typedef otb::SiftFastImageFilter<ImageType,PointSetType>
+                                    ImageToSIFTKeyPointSetFilterType;
 
   // Software Guide : EndCodeSnippet
  // Software Guide : BeginLatex
