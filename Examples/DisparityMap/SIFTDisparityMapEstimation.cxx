@@ -25,7 +25,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROI_IKO_PAN_LesHalles_pos_spacing.tif}, {ROI_IKO_PAN_LesHalles_warped_pos_spacing.tif}
-//    OUTPUTS: {SIFTdeformationFieldOutput.png},{SIFTresampledMovingOutput.png}
+//    OUTPUTS: {SIFTdeformationFieldOutput.png}
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
@@ -61,14 +61,14 @@
 #include "otbImageFileWriter.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkPointSet.h"
-
+#include "otbMultiToMonoChannelExtractROI.h"
 
 int main (int argc, char* argv[])
 {
-  if(argc!= 5)
+  if(argc!= 4)
     {
       std::cerr <<"Usage: "<<argv[0];
-      std::cerr<<"fixedFileName movingFileName fieldOutName imageOutName " << std::endl;
+      std::cerr<<"fixedFileName movingFileName fieldOutName" << std::endl;
       return EXIT_FAILURE;
     }
 
@@ -207,19 +207,31 @@ int main (int argc, char* argv[])
   double secondOrderThreshold = 0.5;
   bool useBackMatching = 0;
 
-  filter1->SetInput( fixedReader->GetOutput() );
-  filter2->SetInput( movingReader->GetOutput() );
+  filter1->SetInput(0, fixedReader->GetOutput() );
+  filter1->SetNumberOfScales(3);
+  filter2->SetInput(0, movingReader->GetOutput() );
+  filter2->SetNumberOfScales(3);
+
   euclideanMatcher->SetInput1(filter1->GetOutput());
   euclideanMatcher->SetInput2(filter2->GetOutput());
   euclideanMatcher->SetDistanceThreshold(secondOrderThreshold);
   euclideanMatcher->SetUseBackMatching(useBackMatching);
+  euclideanMatcher->Update();
 
+  // Software Guide : EndCodeSnippet
+  // Software Guide : BeginLatex
+  //
+  // The matched points will be stored into a landmark list.
+  //
+  // Software Guide : EndLatex
 
-    LandmarkListType::Pointer landmarkList;
+  // Software Guide : BeginCodeSnippet
 
-          euclideanMatcher->Update();
+  LandmarkListType::Pointer landmarkList;
+  landmarkList = euclideanMatcher->GetOutput();
 
-	  MatchVectorType trueSecondOrder;
+  // Software Guide : EndCodeSnippet
+  MatchVectorType trueSecondOrder;
 
   for(LandmarkListType::Iterator it = landmarkList->Begin(); it != landmarkList->End();++it)
     {
@@ -286,9 +298,17 @@ int main (int argc, char* argv[])
     }
 
 
+  // Software Guide : BeginLatex
+  //
+  // The landmarks are used for building a deformation field. The
+  // deformation field is an image of vectors created by the
+  // \doxygen{itk}{DeformationFieldSource} class.
+  //
+  // Software Guide : EndLatex
 
-  typedef   float          VectorComponentType;
-  typedef   itk::Vector< VectorComponentType, Dimension >    VectorType;
+  // Software Guide : BeginCodeSnippet
+
+  typedef   itk::Vector< RealType, Dimension >    VectorType;
   typedef   otb::Image< VectorType,  Dimension >   DeformationFieldType;
 
   typedef itk::DeformationFieldSource<
@@ -297,12 +317,29 @@ int main (int argc, char* argv[])
 
   DeformationSourceType::Pointer deformer = DeformationSourceType::New();
 
+  // Software Guide : EndCodeSnippet
+// Software Guide : BeginLatex
+  //
+  // The deformation field needs information about the extent and
+  // spacing of the images on which it is defined.
+  //
+  // Software Guide : EndLatex
+  
   ImageType::ConstPointer fixedImage = fixedReader->GetOutput();
 
 
   deformer->SetOutputSpacing( fixedImage->GetSpacing() );
   deformer->SetOutputOrigin(  fixedImage->GetOrigin() );
   deformer->SetOutputRegion(  fixedImage->GetLargestPossibleRegion() );
+
+  
+  // Software Guide : EndCodeSnippet
+// Software Guide : BeginLatex
+  //
+  // We will need some intermediate variables in order to pass the
+  // matched SIFTs to the deformation field source.
+  //
+  // Software Guide : EndLatex
 
   typedef DeformationSourceType::LandmarkContainerPointer
                                               LandmarkContainerPointer;
@@ -316,6 +353,14 @@ int main (int argc, char* argv[])
   LandmarkPointType sourcePoint;
   LandmarkPointType targetPoint;
 
+// Software Guide : EndCodeSnippet
+// Software Guide : BeginLatex
+  //
+  // We can now iterate through the list of matched points and store
+  // them in the intermediate landmark sets. 
+  //
+  // Software Guide : EndLatex
+  
   
   unsigned int pointId = 0;
 
@@ -336,79 +381,84 @@ int main (int argc, char* argv[])
       sourceLandmarks->InsertElement( pointId, sourcePoint );
       targetLandmarks->InsertElement( pointId, targetPoint );
 
+      std::cout << sourcePoint << " " << targetPoint << std::endl;
+
       ++pointId;
     }
 
+// Software Guide : EndCodeSnippet
+// Software Guide : BeginLatex
+  //
+  // We pass the landmarks to the deformer and we run it.
+  //
+  // Software Guide : EndLatex
 
   deformer->SetSourceLandmarks( sourceLandmarks.GetPointer() );
   deformer->SetTargetLandmarks( targetLandmarks.GetPointer() );
 
-  try
-    {
-    deformer->UpdateLargestPossibleRegion();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << "Exception thrown " << std::endl;
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
-
+  deformer->UpdateLargestPossibleRegion();
+  
   DeformationFieldType::ConstPointer deformationField = deformer->GetOutput();
 
   deformer->Update();
 
-  std::cout << "Image Resampling" << std::endl;
-  typedef itk::WarpImageFilter< ImageType, 
-                                ImageType, 
-                                DeformationFieldType  >  FilterType;
-
-  FilterType::Pointer warper = FilterType::New();
-
-  typedef itk::LinearInterpolateImageFunction< 
-                       ImageType, double >  InterpolatorType;
-
-  InterpolatorType::Pointer interpolator = InterpolatorType::New();
-
-  warper->SetInterpolator( interpolator );
-
-
-  warper->SetOutputSpacing( deformationField->GetSpacing() );
-  warper->SetOutputOrigin(  deformationField->GetOrigin() );
-
-  warper->SetDeformationField( deformationField );
-
-  warper->SetInput( movingReader->GetOutput() );
-
-
-  typedef otb::ImageFileWriter< ImageType > WriterType;
-  WriterType::Pointer movingWriter = WriterType::New();
-
-  movingWriter->SetFileName( argv[6] );
-  movingWriter->SetInput( warper->GetOutput() );
-
-
-  
-  try
-    {
-    movingWriter->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
-    std::cerr << "Exception thrown " << std::endl;
-    std::cerr << excp << std::endl;
-    return EXIT_FAILURE;
-    }
-
-  typedef otb::ImageFileWriter< DeformationFieldType > DeformationWriterType;
-
-  DeformationWriterType::Pointer defWriter = DeformationWriterType::New();
-
-  defWriter->SetFileName( "deformation.mhd" );
-  defWriter->SetInput( deformationField );
-  defWriter->Update();
+  // Software Guide : EndCodeSnippet
   
 
+  ImageType::Pointer outdf = ImageType::New();
+  outdf->SetRegions(fixedReader->GetOutput()->GetLargestPossibleRegion());
+  outdf->Allocate();
+  
+  itk::ImageRegionIterator<ImageType> outIt(outdf,outdf->GetLargestPossibleRegion());
+
+  itk::ImageRegionIterator<DeformationFieldType> inIt(deformer->GetOutput(),deformer->GetOutput()->GetLargestPossibleRegion());
+  outIt.GoToBegin();
+  inIt.GoToBegin();
+
+  while(!inIt.IsAtEnd() && !outIt.IsAtEnd())
+    {
+
+    std::cout << inIt.Get() << std::endl;
+    
+      outIt.Set(inIt.Get()[1]);
+
+      ++inIt;
+      ++outIt;
+    }
+
+  typedef itk::RescaleIntensityImageFilter< ImageType,
+                                         OutputImageType> RescaleType;
+
+  RescaleType::Pointer rescaler = RescaleType::New();
+  rescaler->SetInput( outdf );
+  rescaler->SetOutputMinimum(0);
+  rescaler->SetOutputMaximum(255);
+
+  typedef otb::ImageFileWriter< OutputImageType > WriterType;
+  WriterType::Pointer writer = WriterType::New();
+
+  writer->SetInput( rescaler->GetOutput() );
+  writer->SetFileName( argv[3] );
+  writer->Update();
+
+    // Software Guide : BeginLatex
+  //
+  // Figure~\ref{fig:SIFTDME} shows the result of applying the SIFT
+  // disparity map estimation. Only the horizontal component of the
+  // deformation is shown.
+  //
+  // \begin{figure}
+  // \center
+  // \includegraphics[width=0.40\textwidth]{ROI_IKO_PAN_LesHalles_pos_spacing.eps}
+  // \includegraphics[width=0.40\textwidth]{ROI_IKO_PAN_LesHalles_warped_pos_spacing.eps}
+  // \includegraphics[width=0.40\textwidth]{SIFTdeformationFieldOutput.eps}
+  // \itkcaption[Deformation field from SIFT disparity map estimation]{From left
+  // to right and top to bottom: fixed input image, moving image with a sinusoid deformation,
+  // estimated deformation field in the horizontal direction.}
+  // \label{fig:SIFTDME}
+  // \end{figure}
+  //
+  // Software Guide : EndLatex
 
 
   return EXIT_SUCCESS;
