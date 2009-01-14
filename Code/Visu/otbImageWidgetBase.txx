@@ -506,6 +506,11 @@ namespace otb
   ImageWidgetBase<TPixel>
   ::RebuildOpenGlImageOverlayBuffer(void)
   {
+    if(m_ImageOverlay->GetNumberOfComponentsPerPixel()<3)
+	{
+	  itkExceptionMacro(<<"Image overlay should have at least 3 channels.");
+  	}
+
     //otbMsgDebugMacro(<<"RebuildOpenGlImageOverlayBuffer");
     if(m_OpenGlImageOverlayBuffer != NULL)
       {
