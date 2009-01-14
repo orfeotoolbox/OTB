@@ -142,7 +142,7 @@ ADD_TEST(ExtractROITest ${EXE_TESTS1}
 ADD_TEST(DEMToImageGeneratorTest ${EXE_TESTS1}
 --compare-image ${TOL}  ${BASELINE}/DEMToImageGenerator.tif
                         ${TEMP}/DEMToImageGenerator.tif
-        DEMToImageGeneratorTest        
+        DEMToImageGeneratorTest
          ${TEMP}/DEMToImageGenerator.tif
 	 ${TEMP}/pretty_DEMToImageGenerator.png
          6.5
@@ -150,7 +150,7 @@ ADD_TEST(DEMToImageGeneratorTest ${EXE_TESTS1}
          500
          500
 	 0.002
-	 -0.002	
+	 -0.002
 	  ${INPUTDATA}/DEM_srtm
          )
 
@@ -165,6 +165,17 @@ ADD_TEST(LidarToImageExampleTest ${EXE_TESTS1}
          1.0
          5
          4
+         )
+ADD_TEST(LidarToImageExample2Test ${EXE_TESTS1}
+--compare-image ${TOL}  ${BASELINE}/lidar-image-8.hdr
+                        ${TEMP}/lidar-image-8.hdr
+         LidarToImageExampleTest
+         ${DATA}/TO_core_last_zoom.las
+         ${TEMP}/lidar-image-8.hdr
+	 ${TEMP}/lidar-image-8.png
+         1.0
+         5
+         8
          )
 ENDIF(ITK_USE_REVIEW)
 
