@@ -22,13 +22,13 @@
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {TO_core_last_zoom.las}
 //    OUTPUTS: {lidar-image-4.hdr}, {lidar-image-4-pretty.png}
-//    1.0 5 4
+//    1.0 3 4
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {TO_core_last_zoom.las}
 //    OUTPUTS: {lidar-image-8.hdr}, {lidar-image-8-pretty.png}
-//    1.0 5 8
+//    1.0 3 8
 //  Software Guide : EndCommandLineArgs
 
 
