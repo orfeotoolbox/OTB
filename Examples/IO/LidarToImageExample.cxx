@@ -87,7 +87,7 @@ int main( int argc, char* argv[] )
   //
   // Then, we declare the type of the data that we are going to use. As
   // lidar decribes the altitude of the point (often to centimeter accuracy),
-  // it is required to use real type to represent it.
+  // it is required to use a real type to represent it.
   //
   // Software Guide : EndLatex
 
@@ -103,7 +103,7 @@ int main( int argc, char* argv[] )
   //
   // Lidar data are read into a point set using the
   // \doxygen{otb}{PointSetFileReader}. Its usage is very similar to
-  // the \doxygen{otb}{ImagePointSetFileReader}:
+  // the \doxygen{otb}{ImageFileReader}:
   //
   // Software Guide : EndLatex
 
