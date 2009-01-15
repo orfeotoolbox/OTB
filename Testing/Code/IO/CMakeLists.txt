@@ -1574,7 +1574,7 @@ ADD_TEST(ioTvImageFileReaderRADCI22ENVI ${IO_TESTS16}
 	${BASELINE}/ioImageFileReaderRADCI22ENVI.hdr 
 	${TEMP}/ioImageFileReaderRADCI22ENVI.hdr 
         otbImageFileReaderRADComplexFloatExtract
-        /home3/mathieu/guillaume/CD_CNES/RAD_CI2/3017_HH.rad
+        ${LARGEDATA}/RAD_CI2/3017_HH.rad
         ${TEMP}/ioImageFileReaderRADCI22ENVI.hdr )
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
