@@ -904,7 +904,26 @@ ADD_TEST(bfTvMeanShiftImageFilter ${BASICFILTERS_TESTS9}
 	${TEMP}/bfMeanShiftImageFilterClusteredOutput.tif
 	${TEMP}/bfMeanShiftImageFilterLabeledClusteredOutput.tif
 	${TEMP}/bfMeanShiftImageFilterClusterBoundariesOutput.tif
-	16 16 10 1.0
+	16 16 10 1.0 1 1 
+	)
+
+ADD_TEST(bfTvMeanShiftImageFilterNotStreamedNotThreaded ${BASICFILTERS_TESTS9}
+--compare-n-images ${EPSILON} 4
+		${BASELINE}/bfMeanShiftImageFilterOutput.tif
+		${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedOutput.tif
+		${BASELINE}/bfMeanShiftImageFilterClusteredOutput.tif
+		${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedClusteredOutput.tif
+		${BASELINE}/bfMeanShiftImageFilterLabeledClusteredOutput.tif
+		${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedLabeledClusteredOutput.tif
+		${BASELINE}/bfMeanShiftImageFilterClusterBoundariesOutput.tif
+		${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedClusterBoundariesOutput.tif
+        otbMeanShiftImageFilter 
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedOutput.tif
+	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedClusteredOutput.tif
+	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedLabeledClusteredOutput.tif
+	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedClusterBoundariesOutput.tif
+	16 16 10 1.0 0 0
 	)
 
 ADD_TEST(bfTuMeanShiftVectorImageFilterNew ${BASICFILTERS_TESTS9}
@@ -926,8 +945,29 @@ ADD_TEST(bfTvMeanShiftVectorImageFilter ${BASICFILTERS_TESTS9}
 	${TEMP}/bfMeanShiftVectorImageFilterClusteredOutput.tif
 	${TEMP}/bfMeanShiftVectorImageFilterLabeledClusteredOutput.tif
 	${TEMP}/bfMeanShiftVectorImageFilterClusterBoundariesOutput.tif
-	16 16 10 1.0
+	16 16 10 1.0 1 1
 	)
+
+
+ADD_TEST(bfTvMeanShiftVectorImageFilterNotStreamedNotThreaded ${BASICFILTERS_TESTS9}
+--compare-n-images ${EPSILON} 4
+		${BASELINE}/bfMeanShiftVectorImageFilterOutput.tif
+		${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedOutput.tif
+		${BASELINE}/bfMeanShiftVectorImageFilterClusteredOutput.tif
+		${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedClusteredOutput.tif
+		${BASELINE}/bfMeanShiftVectorImageFilterLabeledClusteredOutput.tif
+		${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedLabeledClusteredOutput.tif
+		${BASELINE}/bfMeanShiftVectorImageFilterClusterBoundariesOutput.tif
+		${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedClusterBoundariesOutput.tif
+        otbMeanShiftVectorImageFilter 
+	${INPUTDATA}/qb_RoadExtract2sub200x200.tif
+	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedOutput.tif
+	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedClusteredOutput.tif
+	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedLabeledClusteredOutput.tif
+	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedClusterBoundariesOutput.tif
+	16 16 10 1.0 0 0s
+	)
+
 
 
 ADD_TEST(bfTvFunctionToImageFilterNew ${BASICFILTERS_TESTS9}
