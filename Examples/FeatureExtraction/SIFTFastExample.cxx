@@ -260,7 +260,8 @@ int main(int argc, char * argv[])
 
   ImageType::SpacingType spacing = reader->GetOutput()->GetSpacing();
   ImageType::PointType origin = reader->GetOutput()->GetOrigin();
-  OutputImageType::SizeType size = outputImage->GetLargestPossibleRegion().GetSize();
+  OutputImageType::SizeType size =
+                   outputImage->GetLargestPossibleRegion().GetSize();
 
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
