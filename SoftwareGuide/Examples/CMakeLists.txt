@@ -187,8 +187,8 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/IO/DXFReaderExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/VectorDataIOExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/DEMToImageGenerator.cxx
-  #${OTB_SOURCE_DIR}/Examples/IO/LidarReaderExample.cxx
-  #${OTB_SOURCE_DIR}/Examples/IO/LidarToImageExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/IO/LidarReaderExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/IO/LidarToImageExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/TileMapImageIOExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/BinaryThresholdImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/ThresholdImageFilter.cxx
