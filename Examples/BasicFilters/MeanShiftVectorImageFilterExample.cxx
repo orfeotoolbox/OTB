@@ -26,7 +26,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROI_QB_MUL_1.png}
-//    OUTPUTS: {MSFilteredOutput.tif}, {MSClusteredOutput.tif}, {MSLabelledOutput.tif}, {MSBoundariesOutput.tif}, {MSFilteredOutput-pretty.png}, {MSClusteredOutput-pretty.png}
+//    OUTPUTS: {MSFilteredOutput.tif}, {MSClusteredOutput.tif}, {MSLabeledOutput.tif}, {MSBoundariesOutput.tif}, {MSFilteredOutput-pretty.png}, {MSClusteredOutput-pretty.png}
 //  7 30 20 1.0
 //  Software Guide : EndCommandLineArgs
 
