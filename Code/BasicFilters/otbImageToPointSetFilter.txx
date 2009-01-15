@@ -63,6 +63,20 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
   this->ProcessObjectType::SetNthInput(idx,
                                    const_cast< InputImageType * >(input) );
 }
+/**
+ *
+ */
+template <class TInputImage, class TOutputPointSet>
+void
+ImageToPointSetFilter<TInputImage,TOutputPointSet>
+::SetInput(const InputImageType *input)
+{
+  // process object is not const-correct, the const_cast
+  // is required here.
+  this->ProcessObjectType::SetNthInput(0,
+                                   const_cast< InputImageType * >(input) );
+}
+
 
 
 /**
@@ -75,6 +89,18 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
 {
   return dynamic_cast<const InputImageType*>
     (this->ProcessObjectType::GetInput(idx));
+}
+
+/**
+ *
+ */
+template <class TInputImage, class TOutputPointSet>
+const typename ImageToPointSetFilter<TInputImage,TOutputPointSet>::InputImageType *
+ImageToPointSetFilter<TInputImage,TOutputPointSet>
+::GetInput()
+{
+  return dynamic_cast<const InputImageType*>
+    (this->ProcessObjectType::GetInput(0));
 }
 
 /**

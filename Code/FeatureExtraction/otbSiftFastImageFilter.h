@@ -26,9 +26,13 @@ namespace otb
 {
 
 
-  /** \class SiftFastImageFilter
-   *  \brief Generate the SIFT points of interest from an image
+  /** \class SiftFastImageFilter 
+   *  \brief This class extracts key points from an input image through a pyramidal decomposition
+   *   
+   * This class implements the SIFT key point detector proposed by David G. Lowe in proceedings of International
+   * Conference on Computer Vision, Corfu, september 1999.
    *
+   * \example FeatureExtraction/SIFTFastExample.cxx
    */
   template <class TInputImage, class TOutputPointSet>
     class ITK_EXPORT SiftFastImageFilter
@@ -48,8 +52,9 @@ namespace otb
       itkTypeMacro(SiftFastImageFilter,ImageToPointSetFilter);
 
       /** Template parameters typedefs */
-      typedef TInputImage InputImageType;
-      typedef typename TInputImage::Pointer InputImagePointerType;
+      
+      typedef TInputImage                     InputImageType;
+      typedef typename TInputImage::Pointer   InputImagePointerType;
       typedef typename TInputImage::PixelType PixelType;
 
       typedef TOutputPointSet OutputPointSetType;
@@ -65,7 +70,7 @@ namespace otb
 
       itkSetMacro(NumberOfScales,unsigned int);
       itkGetMacro(NumberOfScales,unsigned int);
-
+      
     protected:
       /** Actually process the input */
       virtual void GenerateData();

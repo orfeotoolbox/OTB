@@ -57,7 +57,7 @@ int otbImageToSIFTKeyPointSetFilterOutputImage(int argc, char * argv[])
   ImageToSIFTKeyPointSetFilterType::Pointer filter = ImageToSIFTKeyPointSetFilterType::New();
 
   reader->SetFileName(infname);
-  filter->SetInput(0,reader->GetOutput());
+  filter->SetInput(reader->GetOutput());
   filter->SetOctavesNumber(octaves);
   filter->SetScalesNumber(scales);
   filter->SetDoGThreshold(threshold);

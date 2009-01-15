@@ -53,7 +53,7 @@ int otbImageToFastSIFTKeyPointSetFilterOutputImage(int argc, char * argv[])
   ImageToFastSIFTKeyPointSetFilterType::Pointer filter = ImageToFastSIFTKeyPointSetFilterType::New();
 
   reader->SetFileName(infname);
-  filter->SetInput(0,reader->GetOutput());
+  filter->SetInput(reader->GetOutput());
   filter->SetNumberOfScales(scales);
   filter->Update();
 

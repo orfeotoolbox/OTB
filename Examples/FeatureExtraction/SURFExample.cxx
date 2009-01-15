@@ -136,7 +136,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-  filter->SetInput(0,reader->GetOutput());
+  filter->SetInput(reader->GetOutput());
   filter->SetOctavesNumber(octaves);
   filter->SetScalesNumber(scales);
   filter->Update();

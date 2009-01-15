@@ -134,7 +134,7 @@ int main(int argc, char * argv[])
   reader->SetFileName(infname);
 
 
-  filter->SetInput(0,reader->GetOutput());
+  filter->SetInput(reader->GetOutput());
 
 // Software Guide : EndCodeSnippet
 

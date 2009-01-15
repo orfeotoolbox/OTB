@@ -60,9 +60,11 @@ public:
 
   /** Set the input image of this process object.  */
   void SetInput(unsigned int idx, const InputImageType *input);
+  void SetInput( const InputImageType *input);
 
   /** Get the input image of this process object.  */
   const InputImageType * GetInput(unsigned int idx);
+  const InputImageType * GetInput();
 
   /** Prepare the output */
   void GenerateOutputInformation(void);

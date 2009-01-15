@@ -159,11 +159,11 @@ namespace otb
   ImageToSIFTKeyPointSetFilter<TInputImage,TOutputPointSet>
   ::InitializeInputImage()
   {
-    m_ExpandFilter->SetInput( this->GetInput(0));
+    m_ExpandFilter->SetInput( this->GetInput());
     m_ExpandFilter->SetExpandFactors(m_ExpandFactors);
     m_ExpandFilter->Update();
 
-    typename InputImageType::PointType origin0 = this->GetInput(0)->GetOrigin();
+    typename InputImageType::PointType origin0 = this->GetInput()->GetOrigin();
     typename InputImageType::PointType origin1;
     typename InputImageType::SpacingType spacing = m_ExpandFilter->GetOutput()->GetSpacing();
 
