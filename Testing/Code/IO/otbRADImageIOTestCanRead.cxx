@@ -30,7 +30,7 @@ int otbRADImageIOTestCanRead(int argc, char* argv[])
   bool lCanRead = lRADImageIO->CanReadFile(argv[1]);
   if ( lCanRead == false)
     {
-      std::cerr << "Erreur otb::RADImageIO : impossible d'ouvrir l'image : "<<argv[1]<<"."<<std::endl;
+      std::cerr << "Erreur otb::RADImageIO : impossible to read file: "<<argv[1]<<"."<<std::endl;
       return EXIT_FAILURE;
     }
 
