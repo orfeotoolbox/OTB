@@ -26,8 +26,8 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROI_QB_MUL_1.png}
-//    OUTPUTS: {MSFilteredOutput.png}, {MSClusteredOutput.png}, {MSLabelledOutput.png}, {MSBoundariesOutput.png}
-// 5 50 20
+//    OUTPUTS: {MSFilteredOutput.tif}, {MSClusteredOutput.tif}, {MSLabelledOutput.tif}, {MSBoundariesOutput.tif}, {MSFilteredOutput-pretty.png}, {MSClusteredOutput-pretty.png}
+//  16 16 10 1.0
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginLatex
@@ -201,10 +201,8 @@ int main(int argc, char * argv[])
   // \begin{figure}
   // \center
   // \includegraphics[width=0.40\textwidth]{ROI_QB_MUL_1.eps}
-  // \includegraphics[width=0.40\textwidth]{MSFilteredOutput.eps}
-  // \includegraphics[width=0.40\textwidth]{MSClusteredOutput.eps}
-  // \includegraphics[width=0.40\textwidth]{MSLabelledOutput.eps}
-  // \includegraphics[width=0.40\textwidth]{MSBoundariesOutput.eps}
+  // \includegraphics[width=0.40\textwidth]{MSFilteredOutput-pretty.eps}
+  // \includegraphics[width=0.40\textwidth]{MSClusteredOutput-pretty.eps}
   // \itkcaption[Mean Shift]{}
   // \label{figMeanShiftVectorImageFilter:}
   // \end{figure}
