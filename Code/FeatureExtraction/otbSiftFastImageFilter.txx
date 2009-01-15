@@ -10,11 +10,15 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
+#ifndef __otbSiftFastImageFilter_txx
+#define __otbSiftFastImageFilter_txx
+
 #include "otbSiftFastImageFilter.h"
 
 #include "siftfast.h"
@@ -32,7 +36,7 @@ namespace otb
   SiftFastImageFilter<TInputImage,TOutputPointSet>
   ::SiftFastImageFilter()
   {  }
-  
+
   template <class TInputImage, class TOutputPointSet>
   void
   SiftFastImageFilter<TInputImage,TOutputPointSet>
@@ -63,12 +67,12 @@ namespace otb
       }
 
     Keypoint keypts = GetKeypoints(siftInputImage,m_NumberOfScales);
-    
+
     Keypoint key = keypts;
 
     unsigned int numkeys = 0;
 
-    while(key) 
+    while(key)
       {
 	// Get the key location
 	itk::ContinuousIndex<float,2> keyContIndex;
@@ -77,14 +81,14 @@ namespace otb
 
 	OutputPointType point;
 	inputPtr->TransformContinuousIndexToPhysicalPoint(keyContIndex,point);
-	
+
 	// Get the key descriptor
 	OutputPixelType data;
 	data.SetSize(128);
-	for(int i = 0; i < 128; ++i) 
+	for(int i = 0; i < 128; ++i)
 	  {
 	    data[i]=key->descrip[i];
-	
+
 	  }
 	outputPointSet->SetPoint(numkeys,point);
 	outputPointSet->SetPointData(numkeys,data);
@@ -92,7 +96,7 @@ namespace otb
 	// go to next key
 	numkeys++;
 	key = key->next;
-      }  
+      }
     FreeKeypoints(keypts);
     DestroyAllResources();
   }
@@ -103,8 +107,10 @@ namespace otb
   void
   SiftFastImageFilter<TInputImage,TOutputPointSet>
   ::PrintSelf(std::ostream& os, itk::Indent indent) const
-  {          
+  {
     Superclass::PrintSelf(os, indent);
   }
 
 } // End namespace otb
+
+#endif
