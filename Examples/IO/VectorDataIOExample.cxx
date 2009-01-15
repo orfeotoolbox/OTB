@@ -18,8 +18,8 @@
 
 //  Software Guide : BeginLatex
 //
-//  Although specific vector data import approaches, as the one
-//  presented later in \ref{sec:ReadDXF}, can be useful, it is even more
+//  Although specific vector data IO approaches, as the one
+//  presented in section \ref{sec:ReadDXF}, can be useful, it is even more
 //  interesting to have available approaches which are independent of
 //  the input format. Unfortunately, many vector data formats do not
 //  share the models for the data they represent. However, in some
@@ -32,8 +32,8 @@
 //  are available in OTB, we designed a generic approach for the IO of
 //  this kind of data.
 //
-//  In \ref{sec:VectorDataProjection}, you will find more information on
-//  how projection work for the vector data and how you can export
+//  In section \ref{sec:VectorDataProjection}, you will find more information on
+//  how projections work for the vector data and how you can export
 //  the results obtained with OTB to the real world.
 //
 //  This example illustrates the use of OTB's vector data IO
@@ -104,7 +104,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
   //
-//  The vector data obtained from the reader wil provide a tree of
+//  The vector data obtained from the reader will provide a tree of
 //  nodes containing the actual objects of the scene. This tree will
 //  be accessed using an \doxygen{itk}{PreOrderTreeIterator}.
   //
@@ -153,7 +153,7 @@ int main(int argc, char * argv[])
   //
 //  We check that the current object is a polygon using the
 //  \code{IsPolygonFeature()} method and get its exterior ring in
-//  order to sore it into the list.
+//  order to store it into the list.
   //
 //  Software Guide : EndLatex
 
@@ -176,7 +176,7 @@ int main(int argc, char * argv[])
 //  Software Guide : BeginLatex
   //
 //  Before writing the polygons to the output file, we have to build
-//  the vector data structure. This structure will be build up of
+//  the vector data structure. This structure will be built up of
 //  nodes. We define the types needed for that.
   //
 //  Software Guide : EndLatex
@@ -243,7 +243,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
     //
-//  An finally we write the vector data to a file using a generic
+//  And finally we write the vector data to a file using a generic
 //  \doxygen{otb}{VectorDataFileWriter}.
     //
 //  Software Guide : EndLatex
