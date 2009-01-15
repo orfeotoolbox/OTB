@@ -124,14 +124,14 @@ source code and to the Software User's Guide.
 
 \subsection{How to get the latest bleeding-edge version?}\label{sec:FAQMercurial}
 
-You can get the current development version, as our repository is public, using mercurial (available at \url{http://www.selenic.com/mercurial}). Be aware that, even if the golden rule is {\em what is commited will compile}, this is not always the case. Changes are usually more than ten per day.
+You can get the current development version, as our repository is public, using Mercurial (available at \url{http://www.selenic.com/mercurial}). Be aware that, even if the golden rule is {\em what is commited will compile}, this is not always the case. Changes are usually more than ten per day.
 
 The first time, you can get the source code using:
 \begin{verbatim}
       hg clone http://hg.orfeo-toolbox.org/OTB
 \end{verbatim}
 
-Then you can build OTB as usual using this directory as the source (refer to build instruction).
+Then you can build OTB as usual using this directory as the source (refer to build instructions).
 
 Later if you want to update your source, from the OTB source directory, just do:
 \begin{verbatim}
@@ -157,7 +157,6 @@ the following platforms:
 
 Support for the following platforms is planned:
 \begin{itemize}
-  \item Windows with Microsoft Visual Studio C++ 6.0.
   \item Windows with Microsoft Visual Express 2005.
   \item Windows with Microsoft Visual Express 2008.
 \end{itemize}
@@ -177,11 +176,6 @@ given order):
 \begin{enumerate}
   \item Install CMake (binary packages are available for most platforms).
   \item Install GDAL (binary packages are available for most platforms).
-%   \item Install Fltk using the CMake scripts. Do not use the
-%   \texttt{configure} approach or the project files for Microsoft
-%   Visual Studio shipped with Fltk.
-%   \item Install ITK if you do not want to use the ITK version provided
-%   with OTB. Use CMake for the configuration.
   \item Install OTB using CMake for the configuration.
 \end{enumerate}
 
@@ -191,7 +185,6 @@ whatever you want. Make sure that you have downloaded the source code for:
   \begin{itemize}
   \item CMake (\url{http://www.cmake.org})
   \item GDAL (\url{http://www.gdal.org})
-%   \item Fltk (\url{http://www.fltk.org})
   \end{itemize}
 
 \subsubsection{Unix/Linux Platforms}
@@ -279,7 +272,7 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
   \end{verbatim}
 
   If you want a faster compilation and don't want the compilation of the examples, you
-  can set \texttt{BUILD\_EXAMPLES} to \texttt{OFF}. Some plateforms apparently
+  can set \texttt{BUILD\_EXAMPLES} to \texttt{OFF}. Some platforms apparently
   have more difficulties with shared libraries, if you experience any problem
   with that, you can set \texttt{BUILD\_SHARED\_LIBS} to \texttt{OFF} but the
   built size might reach 1~GB.
@@ -287,7 +280,7 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
   After these steps, you have the source of OTB in \texttt{INSTALL\_DIR/OrfeoToolbox-2.8.0}
   and the compiled binaries and libraries in \texttt{INSTALL\_DIR/OTB-Binary}. Keeping
   the sources is important as most programs you will designed will need an access
-  to the txx files during compilation. However, the binaries directory knows were
+  to the \texttt{.txx} files during compilation. However, the binaries directory knows were
   its sources are and you will need to point only to the \texttt{INSTALL\_DIR/OTB-Binary}
   when the \texttt{cmake} for your program will ask you where the OTB is.
 
@@ -321,11 +314,6 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 
 	More details can be found at \url{http://vterrain.org/Distrib/gdal.html}.
 
-% \item Install Fltk
-%
-% 	Use CMake on Windows to generate MSVC++ 7.1 project files from fltk sources.
-%
-% 	Open the solution and build the fltk project.
 
 \item Install OTB
 
@@ -365,11 +353,6 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
         More details about this install can be found at \url{http://www.gdal.org/gdal_building.html}.
 
 
-% \item Install Fltk
-%
-% 	Use CMake on Windows to generate MSVC++ 8.0 project files from fltk sources.
-%
-% 	Open the solution and build the fltk project.
 
 \item Install OTB
 
@@ -399,11 +382,6 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 \end{verbatim}
 	Then the usual make and make install.
 
-% \item Install Fltk
-%
-% 	Generate MSYS Makefiles with CMake (Windows version) from fltk sources.
-%
-% 	Then, under prompt, tape make and make install where you have generated Makefiles with CMake.
 
 \item Install OTB
 
@@ -426,9 +404,6 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 \end{verbatim}
 	Then the usual make and make install.
 
-% \item Install Fltk
-%
-% 	See Linux part for details (same procedure).
 
 \item Install OTB
 
@@ -560,7 +535,7 @@ More specific applications can be contributed to the OTB-Applications package.
 
 OTB is an ever changing library, it is quite active and have scores of changes per day from different people. It would be a headache to make sure that the brand new improvement that you introduced didn't break anything, if we didn't have automated tests. You also have to take into account differences in OS, compilers, options, versions of external libraries, etc.
 
-For each class, at minimum there is a test which tries to instantiate it and another one which uses the class. The output of each test (image, text file, binary file) is controlled against a baseline to make sure that the result hasn't change.
+For each class, at minimum there is a test which tries to instantiate it and another one which uses the class. The output of each test (image, text file, binary file) is controlled against a baseline to make sure that the result hasn't changed.
 
 All these test are available in the directory \texttt{Testing} and are also good examples on how to use the different classes.
 
@@ -568,15 +543,15 @@ All these test are available in the directory \texttt{Testing} and are also good
 
 There is more than 1000 tests for OTB and about 100 for the OTB-Applications and it takes from 20 minutes to 3 hours to run all the test, mainly depending on your compilation options (Release mode does make a difference) and of course your hardware.
 
-To run the test, you first have to make sure that you set the option \texttt{BUILD\_TESTING} to \texttt{ON} before building the library. If you want to modify it, just rerun ccmake, change the option, then make.
+To run the tests, you first have to make sure that you set the option \texttt{BUILD\_TESTING} to \texttt{ON} before building the library. If you want to modify it, just rerun ccmake, change the option, then make.
 
-For some of the test, you also need the test data and the baselines (see \ref{sec:FAQTestData}).
+For some of the tests, you also need the test data and the baselines (see \ref{sec:FAQTestData}).
 
 Once OTB is built with the tests, you just have to go to the binary directory where you built OTB and run \texttt{ctest -N} to have a list of all the tests. Just using \texttt{ctest} will run all the tests. To select a subset, you can do \texttt{ctest -R Kml} to run all tests related to kml files or \texttt{ctest -I 1,10} to run tests from 1 to 10.
 
 \subsection{How to get the test data?}\label{sec:FAQTestData}
 
-Tests data are also controlled by mercurial (see \ref{sec:FAQMercurial}).
+Tests data are also versioned using Mercurial (see \ref{sec:FAQMercurial}).
 
 You can get the base doing:
 \begin{verbatim}
@@ -589,11 +564,11 @@ This is about 1~GB of data, so it will take a while, but you have to do it only 
 \end{verbatim}
 will update you to the latest version of the repository.
 
-You can also easily synchronize the directory you retrieve between different computers on your network, so you don't have to get it several time from the main server. Check out Mercurial capabilities.
+You can also easily synchronize the directory you retrieve between different computers on your network, so you don't have to get it several times from the main server. Check out Mercurial capabilities.
 
 \subsection{How to submit the results?}
 
-Once you know how to run the test, you can also help us to detect the bugs or configuration problems specific to your configuration. As mentionned before, the possible combination between OS, compiler, option, external libraries version is too big to be tested completely, but the more the better.
+Once you know how to run the tests, you can also help us to detect the bugs or configuration problems specific to your configuration. As mentionned before, the possible combinations between OS, compiler, options, external libraries version is too big to be tested completely, but the more the better.
 
 You just have to launch ctest with the \texttt{-D Experimental} switch. Hence:
 \begin{verbatim}
