@@ -35,11 +35,11 @@
 //  This example demonstrates the use of the
 //  \doxygen{otb}{MeanShiftVectorImageFilter} class which implements
 //  filtering and clustering using the mean shift algorithm
-//  \cite{Comaniciu2002}.  // For a given pixel, the mean shift will
+//  \cite{Comaniciu2002}. For a given pixel, the mean shift will
 //  build a set of neighboring pixels within a given spatial radius
 //  and a color range. The spatial and color center of this set is
 //  then computed and the algorithm iterates with this new spatial and
-//  color center. The Mean shift can be used for edge-preserving
+//  color center. The Mean Shift can be used for edge-preserving
 //  smoothing, or for clustering.
 //
 //  Software Guide : EndLatex
@@ -54,7 +54,8 @@
 //
 //  Two implementations for the filter exist, one for scalar images
 //  (\doxygen{otb}{MeanShiftImageFilter}). And another one (the one
-//  presented in this example) for vector images. They have the same
+//  presented in this example) for vector images
+//  (\doxygen{otb}{MeanShiftVectorImageFilter}). They have the same
 //  interface, so they can be used in the same way. We start by
 //  including the needed header file.
 //
@@ -107,7 +108,7 @@ int main(int argc, char * argv[])
 //
 //  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet  
+// Software Guide : BeginCodeSnippet
   typedef otb::MeanShiftVectorImageFilter<ImageType,ImageType> FilterType;
   typedef FilterType::LabeledOutputType LabeledImageType;
   typedef otb::StreamingImageFileWriter<LabeledImageType> LabeledWriterType;
@@ -122,7 +123,7 @@ int main(int argc, char * argv[])
 //
 //  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet  
+// Software Guide : BeginCodeSnippet
   FilterType::Pointer filter = FilterType::New();
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer1 = WriterType::New();
@@ -138,7 +139,7 @@ int main(int argc, char * argv[])
 //
 //  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet  
+// Software Guide : BeginCodeSnippet
   reader->SetFileName(infname);
   writer1->SetFileName(filteredfname);
   writer2->SetFileName(clusteredfname);
@@ -156,7 +157,7 @@ int main(int argc, char * argv[])
 //
 //  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet    
+// Software Guide : BeginCodeSnippet
   filter->SetSpatialRadius(spatialRadius);
   filter->SetRangeRadius(rangeRadius);
   filter->SetMinimumRegionSize(minRegionSize);
@@ -165,11 +166,11 @@ int main(int argc, char * argv[])
 //
 //  OTB's implementation adds another parameter -- the scale -- which
 //  allows to stretch the image before processing. This is useful when
-//  pixel values are in the \[0-1\] range.
+//  pixel values are in the $[0-1]$ range.
 //
 //  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet      
+// Software Guide : BeginCodeSnippet
   filter->SetScale(scale);
     // Software Guide : EndCodeSnippet
   //  Software Guide : BeginLatex
@@ -178,7 +179,7 @@ int main(int argc, char * argv[])
 //
 //  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet        
+// Software Guide : BeginCodeSnippet
 
   filter->SetInput(reader->GetOutput());
   writer1->SetInput(filter->GetOutput());
@@ -192,6 +193,22 @@ int main(int argc, char * argv[])
   writer3->Update();
   writer4->Update();
   // Software Guide : EndCodeSnippet
+
+
+  //  Software Guide : BeginLatex
+  // Figure~\ref{fig:MeanShiftVectorImageFilter} shows the result of applying the mean shift
+  // to a Quickbird image.
+  // \begin{figure}
+  // \center
+  // \includegraphics[width=0.40\textwidth]{ROI_QB_MUL_1.eps}
+  // \includegraphics[width=0.40\textwidth]{MSFilteredOutput.eps}
+  // \includegraphics[width=0.40\textwidth]{MSClusteredOutput.eps}
+  // \includegraphics[width=0.40\textwidth]{MSLabelledOutput.eps}
+  // \includegraphics[width=0.40\textwidth]{MSBoundariesOutput.eps}
+  // \itkcaption[Mean Shift]{}
+  // \label{figMeanShiftVectorImageFilter:}
+  // \end{figure}
+  // Software Guide : EndLatex
 
   typedef otb::PrintableImageFilter< ImageType >   PrintableFilterType;
   PrintableFilterType::Pointer printableImageFilter = PrintableFilterType::New();
@@ -215,7 +232,7 @@ int main(int argc, char * argv[])
   prettyWriter->SetInput( printableImageFilter->GetOutput() );
   prettyWriter->Update();
 
-  
+
   return EXIT_SUCCESS;
 }
 
