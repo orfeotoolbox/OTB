@@ -106,6 +106,35 @@ ADD_TEST(IndexedToRGBExampleTest ${EXE_TESTS}
 	${TEMP}/buildingExtractionIndexed_scaled.png
 )
 
+ADD_TEST(MeanShiftVectorImageFilterExampleTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 6
+	${BASELINE}/MSFilteredOutput.tif
+	${TEMP}/MSFilteredOutput.tif
+	${BASELINE}/MSClusteredOutput.tif
+	${TEMP}/MSClusteredOutput.tif
+	${BASELINE}/MSLabelledOutput.tif
+	${TEMP}/MSLabelledOutput.tif
+	${BASELINE}/MSBoundariesOutput.tif
+	${TEMP}/MSBoundariesOutput.tif
+	${BASELINE}/MSFilteredOutput-pretty.png
+	${TEMP}/MSFilteredOutput-pretty.png
+	${BASELINE}/MSClusteredOutput-pretty.png
+	${TEMP}/MSClusteredOutput-pretty.png
+     MeanShiftVectorImageFilterExampleTest
+	${INPUTDATA}/ROI_QB_MUL_1.png
+        ${TEMP}/MSFilteredOutput.tif
+        ${TEMP}/MSClusteredOutput.tif
+        ${TEMP}/MSLabelledOutput.tif
+        ${TEMP}/MSBoundariesOutput.tif
+        ${TEMP}/MSFilteredOutput-pretty.png
+        ${TEMP}/MSClusteredOutput-pretty.png
+        16
+        16
+        10
+        1.0
+)
+
+
 ADD_EXECUTABLE(otbBasicFiltersExamplesTests otbBasicFiltersExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbBasicFiltersExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 
