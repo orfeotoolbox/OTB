@@ -87,7 +87,7 @@ int main(int argc, char * argv[])
   //  Software Guide : BeginLatex
 //
 //  We start by the classical \code{typedef}s needed for reading and
-//  writing the images. The EDISON code upon which OTB's
+//  writing the images. The EDISON \url{http://www.caip.rutgers.edu/riul/research/code/EDISON/index.html} code upon which OTB's
 //  implementation is based, uses float pixel precision, so we choose
 //  to work with a float pixel type.
 //
