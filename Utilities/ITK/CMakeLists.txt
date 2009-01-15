@@ -141,7 +141,7 @@ SET(ITK_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
 IF(NOT ITK_NO_LIBRARY_VERSION)
   # This setting of SOVERSION assumes that any API change
   # will increment either the minor or major version number of ITK.
-  SET(ITK_LIBRARY_PROPERTIES 
+  SET(ITK_LIBRARY_PROPERTIES
       VERSION   "${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}.${ITK_VERSION_PATCH}"
       SOVERSION "${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}"
      )
@@ -344,16 +344,16 @@ SET(ITK_DIR "${CMAKE_BINARY_DIR}" CACHE INTERNAL "ITK dir to be used by subproje
 # be particulary useful to distributed prebuilt ITK witk extended languages
 # support enable
 #
-INCLUDE(InstallRequiredSystemLibraries)
-SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Insight Toolkit")
-SET(CPACK_PACKAGE_VENDOR "ISC")
-SET(CPACK_PACKAGE_VERSION_MAJOR "${ITK_VERSION_MAJOR}")
-SET(CPACK_PACKAGE_VERSION_MINOR "${ITK_VERSION_MINOR}")
-SET(CPACK_PACKAGE_VERSION_PATCH "${ITK_VERSION_PATCH}")
-SET(CPACK_PACKAGE_INSTALL_DIRECTORY "InsightToolkit-${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}")
-# SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README")
-SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/Copyright/ITKCopyright.txt")
-INCLUDE(CPack)
+# INCLUDE(InstallRequiredSystemLibraries)
+# SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Insight Toolkit")
+# SET(CPACK_PACKAGE_VENDOR "ISC")
+# SET(CPACK_PACKAGE_VERSION_MAJOR "${ITK_VERSION_MAJOR}")
+# SET(CPACK_PACKAGE_VERSION_MINOR "${ITK_VERSION_MINOR}")
+# SET(CPACK_PACKAGE_VERSION_PATCH "${ITK_VERSION_PATCH}")
+# SET(CPACK_PACKAGE_INSTALL_DIRECTORY "InsightToolkit-${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}")
+# # SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README")
+# SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/Copyright/ITKCopyright.txt")
+# INCLUDE(CPack)
 
 
 #-----------------------------------------------------------------------------
@@ -439,15 +439,15 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
     # needed with gcc 3.3 and earlier.
     INCLUDE(${ITK_SOURCE_DIR}/CMake/itkCheckCXXAcceptsFlags.cmake)
     itkCHECK_CXX_ACCEPTS_FLAGS("-no-cpp-precomp" CXX_HAS_CPP_PRECOMP_FLAG)
-    IF(CXX_HAS_CPP_PRECOMP_FLAG)    
+    IF(CXX_HAS_CPP_PRECOMP_FLAG)
       SET(ITK_REQUIRED_C_FLAGS "${ITK_REQUIRED_C_FLAGS} -no-cpp-precomp")
       SET(ITK_REQUIRED_CXX_FLAGS "${ITK_REQUIRED_CXX_FLAGS} -no-cpp-precomp")
-    ENDIF(CXX_HAS_CPP_PRECOMP_FLAG)    
+    ENDIF(CXX_HAS_CPP_PRECOMP_FLAG)
     itkCHECK_CXX_ACCEPTS_FLAGS("-Wno-long-double" CXX_HAS_LONGDOUBLE_FLAG)
-    IF(CXX_HAS_LONGDOUBLE_FLAG)    
+    IF(CXX_HAS_LONGDOUBLE_FLAG)
       SET(ITK_REQUIRED_C_FLAGS "${ITK_REQUIRED_C_FLAGS} -Wno-long-double")
       SET(ITK_REQUIRED_CXX_FLAGS "${ITK_REQUIRED_CXX_FLAGS} -Wno-long-double")
-    ENDIF(CXX_HAS_LONGDOUBLE_FLAG)    
+    ENDIF(CXX_HAS_LONGDOUBLE_FLAG)
 
     OPTION(ITK_USE_64BITS_APPLE_TRUNCATION_WARNING "Turn on warnings on 64bits to 32bits truncations." OFF)
     MARK_AS_ADVANCED(ITK_USE_64BITS_APPLE_TRUNCATION_WARNING)
@@ -535,7 +535,7 @@ IF(MINGW)
 ENDIF(MINGW)
 
 #-----------------------------------------------------------------------------
-# Find platform-specific differences in the handling of IEEE floating point 
+# Find platform-specific differences in the handling of IEEE floating point
 # special values.
 INCLUDE(${ITK_SOURCE_DIR}/CMake/CheckBigBitfield.cmake)
 CHECK_BIG_BITFIELD(BIGBITFIELD_VALUE ${ITK_SOURCE_DIR}/CMake)
@@ -653,7 +653,7 @@ MARK_AS_ADVANCED(ITK_DATA_ROOT)
 #-----------------------------------------------------------------------------
 # Configure the default ITK_BRAINWEB_DATA_ROOT for the location of ITK Data.
 # When this data is available, additional 3D tests are enabled.
-FIND_PATH(ITK_BRAINWEB_DATA_ROOT brainweb165a10f17.mha 
+FIND_PATH(ITK_BRAINWEB_DATA_ROOT brainweb165a10f17.mha
   DOC "Directory with data taken from http://public.kitware.com/pub/itk/Data/BrainWeb/")
 MARK_AS_ADVANCED(ITK_BRAINWEB_DATA_ROOT)
 
@@ -668,12 +668,12 @@ MARK_AS_ADVANCED(ITK_MRI_UNC_DATABASE_DATA_ROOT)
 #-----------------------------------------------------------------------------
 # This flag is used in particular, to enable some tests that require large memory to run.
 # This probably can be discovered at configuration time by CMake. (Check with CMake developers).
-SET(ITK_COMPUTER_MEMORY_SIZE 1 CACHE STRING "Provide here the size of your RAM Memory in GigaBytes") 
+SET(ITK_COMPUTER_MEMORY_SIZE 1 CACHE STRING "Provide here the size of your RAM Memory in GigaBytes")
 MARK_AS_ADVANCED(ITK_COMPUTER_MEMORY_SIZE)
 
 #-----------------------------------------------------------------------------
 # Configure files with settings for use by the build.
-CONFIGURE_FILE(${ITK_SOURCE_DIR}/itkConfigure.h.in 
+CONFIGURE_FILE(${ITK_SOURCE_DIR}/itkConfigure.h.in
   ${ITK_BINARY_DIR}/itkConfigure.h)
 IF(NOT ITK_INSTALL_NO_DEVELOPMENT)
   INSTALL(FILES ${ITK_BINARY_DIR}/itkConfigure.h
@@ -699,7 +699,7 @@ INCLUDE_DIRECTORIES(
 
 #-----------------------------------------------------------------------------
 # ITK_USE_SYSTEM_GDCM is provided so that you can use an installed or external
-# version of gdcm. If its on, you must specify the variables 
+# version of gdcm. If its on, you must specify the variables
 # Important: INCLUDE(${GDCM_USE_FILE}) *has* to be set after the
 # INCLUDE_DIRECTORIES that sets all the include paths for ITK, otherwise
 # if GDCM was build with VTK support, including it will bring the VTK
