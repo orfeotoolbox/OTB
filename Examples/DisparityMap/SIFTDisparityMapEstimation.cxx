@@ -99,7 +99,7 @@ int main (int argc, char* argv[])
    // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  
+
   typedef itk::VariableLengthVector<RealType> RealVectorType;
   typedef itk::PointSet<RealVectorType,Dimension> PointSetType;
 
@@ -147,7 +147,7 @@ int main (int argc, char* argv[])
   typedef PointsContainerType::Iterator PointsIteratorType;
   typedef PointSetType::PointDataContainer PointDataContainerType;
   typedef PointDataContainerType::Iterator PointDataIteratorType;
-  
+
   // Software Guide : EndCodeSnippet
 
 
@@ -189,13 +189,13 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
 
-
   ImageToSIFTKeyPointSetFilterType::Pointer filter1 =
                               ImageToSIFTKeyPointSetFilterType::New();
   ImageToSIFTKeyPointSetFilterType::Pointer filter2 =
                               ImageToSIFTKeyPointSetFilterType::New();
   EuclideanDistanceMatchingFilterType::Pointer euclideanMatcher =
                            EuclideanDistanceMatchingFilterType::New();
+
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -242,13 +242,13 @@ int main (int argc, char* argv[])
       trueSecondOrder.push_back(MatchType(point1,point2));
     }
 
-    // Displaying the matches
+  // Displaying the matches
   typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType>
     PrintableFilterType;
 
   PrintableFilterType::Pointer printable1 = PrintableFilterType::New();
   PrintableFilterType::Pointer printable2 = PrintableFilterType::New();
-    
+
   printable1->SetInput(fixedReader->GetOutput());
   printable1->SetOutputMinimum(0);
   printable1->SetOutputMaximum(255);
@@ -283,8 +283,10 @@ int main (int argc, char* argv[])
   RGBImageType::Pointer rgbimage2 = RGBImageType::New();
   rgbimage2->SetRegions(printable2->GetOutput()->GetLargestPossibleRegion());
   rgbimage2->Allocate();
-  itk::ImageRegionIterator<RGBImageType> outIt2(rgbimage2,rgbimage2->GetLargestPossibleRegion());
-  itk::ImageRegionIterator<OutputImageType> inIt2(printable2->GetOutput(),printable2->GetOutput()->GetLargestPossibleRegion());
+  itk::ImageRegionIterator<RGBImageType>
+      outIt2(rgbimage2,rgbimage2->GetLargestPossibleRegion());
+  itk::ImageRegionIterator<OutputImageType>
+      inIt2(printable2->GetOutput(),printable2->GetOutput()->GetLargestPossibleRegion());
   outIt2.GoToBegin();
   inIt2.GoToBegin();
   while(!inIt2.IsAtEnd() && !outIt2.IsAtEnd())
@@ -313,13 +315,13 @@ int main (int argc, char* argv[])
   typedef   otb::Image< VectorType,  Dimension >   DeformationFieldType;
 
   typedef itk::DeformationFieldSource<
-                                DeformationFieldType 
+                                DeformationFieldType
                                              >  DeformationSourceType;
 
   DeformationSourceType::Pointer deformer = DeformationSourceType::New();
 
   // Software Guide : EndCodeSnippet
-// Software Guide : BeginLatex
+  // Software Guide : BeginLatex
   //
   // The deformation field needs information about the extent and
   // spacing of the images on which it is defined.
@@ -333,9 +335,9 @@ int main (int argc, char* argv[])
   deformer->SetOutputOrigin(  fixedImage->GetOrigin() );
   deformer->SetOutputRegion(  fixedImage->GetLargestPossibleRegion() );
 
-  
+
   // Software Guide : EndCodeSnippet
-// Software Guide : BeginLatex
+  // Software Guide : BeginLatex
   //
   // We will need some intermediate variables in order to pass the
   // matched SIFTs to the deformation field source.
@@ -358,32 +360,33 @@ int main (int argc, char* argv[])
 // Software Guide : BeginLatex
   //
   // We can now iterate through the list of matched points and store
-  // them in the intermediate landmark sets. 
+  // them in the intermediate landmark sets.
   //
   // Software Guide : EndLatex
-  
+
   // Software Guide : BeginCodeSnippet
   unsigned int pointId = 0;
 
 
-    for(LandmarkListType::Iterator it = landmarkList->Begin(); it != landmarkList->End();++it)
-    {
-      PointType point1 = it.Get()->GetPoint1();
-      PointType point2 = it.Get()->GetPoint2();
-      
-      sourcePoint[0] = point1[0];
-      sourcePoint[1] = point1[1];
+  for(LandmarkListType::Iterator it = landmarkList->Begin();
+      it != landmarkList->End(); ++it)
+  {
+    PointType point1 = it.Get()->GetPoint1();
+    PointType point2 = it.Get()->GetPoint2();
+
+    sourcePoint[0] = point1[0];
+    sourcePoint[1] = point1[1];
 
 
 
-      targetPoint[0] = point2[0];
-      targetPoint[1] = point2[1];
-    
-      sourceLandmarks->InsertElement( pointId, sourcePoint );
-      targetLandmarks->InsertElement( pointId, targetPoint );
+    targetPoint[0] = point2[0];
+    targetPoint[1] = point2[1];
 
-      ++pointId;
-    }
+    sourceLandmarks->InsertElement( pointId, sourcePoint );
+    targetLandmarks->InsertElement( pointId, targetPoint );
+
+    ++pointId;
+  }
 
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
@@ -396,18 +399,18 @@ int main (int argc, char* argv[])
   deformer->SetTargetLandmarks( targetLandmarks.GetPointer() );
 
   deformer->UpdateLargestPossibleRegion();
-  
+
   DeformationFieldType::ConstPointer deformationField = deformer->GetOutput();
 
   deformer->Update();
 
   // Software Guide : EndCodeSnippet
-  
+
 
   ImageType::Pointer outdf = ImageType::New();
   outdf->SetRegions(fixedReader->GetOutput()->GetLargestPossibleRegion());
   outdf->Allocate();
-  
+
   itk::ImageRegionIterator<ImageType> outIt(outdf,outdf->GetLargestPossibleRegion());
 
   itk::ImageRegionIterator<DeformationFieldType> inIt(deformer->GetOutput(),deformer->GetOutput()->GetLargestPossibleRegion());
@@ -415,15 +418,14 @@ int main (int argc, char* argv[])
   inIt.GoToBegin();
 
   while(!inIt.IsAtEnd() && !outIt.IsAtEnd())
-    {
-
+  {
     std::cout << inIt.Get() << std::endl;
-    
-      outIt.Set(inIt.Get()[1]);
 
-      ++inIt;
-      ++outIt;
-    }
+    outIt.Set(inIt.Get()[1]);
+
+    ++inIt;
+    ++outIt;
+  }
 
   typedef itk::RescaleIntensityImageFilter< ImageType,
                                          OutputImageType> RescaleType;
