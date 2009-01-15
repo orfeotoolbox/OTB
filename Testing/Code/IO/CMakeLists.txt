@@ -91,7 +91,7 @@ ADD_TEST(ioTvImageFileReaderERS ${IO_TESTS1}
          ${TEMP}/ioImageFileReaderERS_SLCI.tif)
 
 ADD_TEST(ioTvImageFileReaderRADARSAT ${IO_TESTS1}
-   --compare-image ${TOL} ${BASELINE}/ioImageFileReaderRADARSAT.png
+   --compare-image ${TOL} ${BASELINE}/ioImageFileReaderRADARSAT.tif
                            ${TEMP}/ioImageFileReaderRADARSAT.tif
          otbImageFileReaderERS
          ${LARGEDATA}/RADARSAT1/SCENE01/
