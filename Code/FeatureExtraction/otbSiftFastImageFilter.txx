@@ -37,14 +37,18 @@ namespace otb
   ::SiftFastImageFilter()
   {  }
 
+  
   template <class TInputImage, class TOutputPointSet>
   void
   SiftFastImageFilter<TInputImage,TOutputPointSet>
   ::GenerateData()
   {
     // Get the input image pointer
-    const InputImageType *     inputPtr       = this->GetInput(0);
+    const InputImageType *     inputPtr       = this->GetInput();
     OutputPointSetPointerType  outputPointSet = this->GetOutput();
+
+    
+
 
     typename InputImageType::SizeType size = inputPtr->GetLargestPossibleRegion().GetSize();
 

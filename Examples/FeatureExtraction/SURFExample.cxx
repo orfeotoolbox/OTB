@@ -23,11 +23,12 @@ PURPOSE.  See the above copyright notices for more information.
 
 // Software Guide : BeginLatex
 //
-// This example illustrates the use of the \doxygen{otb}{ImageToSURFKeyPointSetFilter}.
-// The Speed-Up Robust Features (or SURF) is an algorithm in
-// computer vision to detect and describe local features in
-// images. The algorithm is detailed in \cite{SURF}. The applications
-// of SURF are the same as those for SIFT.
+// This example illustrates the use of the
+// \doxygen{otb}{ImageToSURFKeyPointSetFilter}.  The Speed-Up Robust
+// Features (or SURF) is an algorithm in computer vision to detect and
+// describe local features in images. The algorithm is detailed in
+// \cite{SURF}. The applications of SURF are the same as those for
+// SIFT.
 //
 // The first step required to use this filter is to include its header file.
 //
@@ -136,7 +137,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-  filter->SetInput(0,reader->GetOutput());
+  filter->SetInput(reader->GetOutput());
   filter->SetOctavesNumber(octaves);
   filter->SetScalesNumber(scales);
   filter->Update();
@@ -164,7 +165,7 @@ int main(int argc, char * argv[])
 // Software Guide : BeginLatex
 //
 // We set the regions of the image by copying the information from the
-// input image and we allocate the memeory for the output image.
+// input image and we allocate the memory for the output image.
 //
 // Software Guide : EndLatex
 
@@ -258,7 +259,8 @@ int main(int argc, char * argv[])
 
   ImageType::SpacingType spacing = reader->GetOutput()->GetSpacing();
   ImageType::PointType origin = reader->GetOutput()->GetOrigin();
-  OutputImageType::SizeType size = outputImage->GetLargestPossibleRegion().GetSize();
+  OutputImageType::SizeType size =
+                   outputImage->GetLargestPossibleRegion().GetSize();
 
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex

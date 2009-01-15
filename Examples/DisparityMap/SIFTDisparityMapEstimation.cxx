@@ -35,13 +35,14 @@
 // estimation. The idea here is to match SIFTs extracted from both the
 // fixed and the moving images. The use of SIFTs is demonstrated in
 // section \ref{sec:SIFTDetector}. The
-// \doxygen{otb}{NearestPointDeformationFieldGenerator} will be used
-// to generate a deformation field by using nearest neighbor
+// \doxygen{itk}{DeformationFieldSource} will be used
+// to generate a deformation field by using 
 // interpolation on the deformation values from the point set. More
 // advanced methods for deformation field interpolation are also
 // available.
 //
-// The first step toward the use of these filters is to include the proper header files.
+// The first step toward the use of these filters is to include the
+// appropriate header files.
 //
 // Software Guide : EndLatex
 
@@ -77,7 +78,7 @@ int main (int argc, char* argv[])
    // Software Guide : BeginLatex
    //
    // Then we must decide what pixel type to use for the image. We choose to do
-   // all the computation in floating point precision and rescale the results
+   // all the computations in floating point precision and rescale the results
    // between 0 and 255 in order to export PNG images.
    //
    // Software Guide : EndLatex
@@ -141,7 +142,8 @@ int main (int argc, char* argv[])
   typedef PointSetType::PointType PointType;
   typedef std::pair<PointType,PointType> MatchType;
   typedef std::vector<MatchType> MatchVectorType;
-  typedef EuclideanDistanceMatchingFilterType::LandmarkListType LandmarkListType;
+  typedef EuclideanDistanceMatchingFilterType::LandmarkListType
+                                                         LandmarkListType;
 
   typedef PointSetType::PointsContainer PointsContainerType;
   typedef PointsContainerType::Iterator PointsIteratorType;
@@ -165,7 +167,8 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginLatex
   //
-  // Two readers are instantiated : one for the fixed image, and one for the moving image.
+  // Two readers are instantiated : one for the fixed image, and one
+  // for the moving image.
   //
   // Software Guide : EndLatex
 
@@ -234,7 +237,8 @@ int main (int argc, char* argv[])
   // Software Guide : EndCodeSnippet
   MatchVectorType trueSecondOrder;
 
-  for(LandmarkListType::Iterator it = landmarkList->Begin(); it != landmarkList->End();++it)
+  for(LandmarkListType::Iterator it = landmarkList->Begin();
+                                 it != landmarkList->End();++it)
     {
       PointType point1 = it.Get()->GetPoint1();
       PointType point2 = it.Get()->GetPoint2();
@@ -348,10 +352,12 @@ int main (int argc, char* argv[])
                                               LandmarkContainerPointer;
   typedef DeformationSourceType::LandmarkContainer
                                                  LandmarkContainerType;
-  typedef DeformationSourceType::LandmarkPointType          LandmarkPointType;
+  typedef DeformationSourceType::LandmarkPointType   LandmarkPointType;
 
-  LandmarkContainerType::Pointer sourceLandmarks = LandmarkContainerType::New();
-  LandmarkContainerType::Pointer targetLandmarks = LandmarkContainerType::New();
+  LandmarkContainerType::Pointer sourceLandmarks =
+                                          LandmarkContainerType::New();
+  LandmarkContainerType::Pointer targetLandmarks =
+                                          LandmarkContainerType::New();
 
   LandmarkPointType sourcePoint;
   LandmarkPointType targetPoint;
@@ -400,7 +406,8 @@ int main (int argc, char* argv[])
 
   deformer->UpdateLargestPossibleRegion();
 
-  DeformationFieldType::ConstPointer deformationField = deformer->GetOutput();
+  DeformationFieldType::ConstPointer deformationField =
+                                         deformer->GetOutput();
 
   deformer->Update();
 
@@ -454,7 +461,7 @@ int main (int argc, char* argv[])
   // \includegraphics[width=0.40\textwidth]{ROISpot5Warped.eps}
   // \includegraphics[width=0.40\textwidth]{SIFTdeformationFieldOutput.eps}
   // \itkcaption[Deformation field from SIFT disparity map estimation]{From left
-  // to right and top to bottom: fixed input image, moving image with a sinusoid deformation,
+  // to right and top to bottom: fixed input image, moving image with a deformation,
   // estimated deformation field in the horizontal direction.}
   // \label{fig:SIFTDME}
   // \end{figure}

@@ -27,8 +27,8 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {TO_core_last_zoom.las}
-//    OUTPUTS: {lidar-image-8.hdr}, {lidar-image-8-pretty.png}
-//    1.0 5 8
+//    OUTPUTS: {lidar-image-6.hdr}, {lidar-image-6-pretty.png}
+//    1.0 5 6
 //  Software Guide : EndCommandLineArgs
 
 
@@ -259,8 +259,8 @@ int main( int argc, char* argv[] )
   // \begin{figure}
   // \center
   // \includegraphics[width=0.40\textwidth]{lidar-image-4-pretty.eps}
-  // \includegraphics[width=0.40\textwidth]{lidar-image-8-pretty.eps}
-  // \itkcaption[Image from lidar data]{Image obtained with 4 level spline interpolation (left) and 8 levels (right)}
+  // \includegraphics[width=0.40\textwidth]{lidar-image-6-pretty.eps}
+  // \itkcaption[Image from lidar data]{Image obtained with 4 level spline interpolation (left) and 6 levels (right)}
   // \label{fig:LIDARTOIMAGEEXAMPLE}
   // \end{figure}
   //

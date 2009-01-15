@@ -84,14 +84,14 @@ namespace otb
       if(i>0) {
 
   m_ResampleFilter = ResampleFilterType::New();
-  m_ResampleFilter ->SetInput(this->GetInput(0));
+  m_ResampleFilter ->SetInput(this->GetInput());
 
-  SizeType size = this->GetInput(0)->GetLargestPossibleRegion().GetSize();
+  SizeType size = this->GetInput()->GetLargestPossibleRegion().GetSize();
   for (int k = 0; k < 2; ++k)
     size[k] = (unsigned int) floor(size[k]/std::pow(2.0,i) );
   m_ResampleFilter->SetSize( size );
 
-  SpacingType spacing = this->GetInput(0)->GetSpacing();
+  SpacingType spacing = this->GetInput()->GetSpacing();
   for (int k = 0; k < 2; ++k)
     spacing[k] = (spacing[k] * std::pow(2.0,i));
   m_ResampleFilter->SetOutputSpacing( spacing );
@@ -123,7 +123,7 @@ namespace otb
   /** Hessian Determinant Image */
   m_DetHessianFilter = ImageToDetHessianImageType::New();
 
-  if ( i == 0 )m_DetHessianFilter->SetInput(this->GetInput(0));
+  if ( i == 0 )m_DetHessianFilter->SetInput(this->GetInput());
     else m_DetHessianFilter->SetInput(m_determinantImage );
 
   m_DetHessianFilter->SetSigma(sigma_in);
@@ -182,8 +182,8 @@ namespace otb
       //keyPoint[2] =  sigma_in/pow(k,(double)jj)*pow(2.,(double)i);
       double sigmaDetected = sigma_in/pow(k,(double)jj)*pow(2.,(double)i);
 
-      radius.Fill(GetMin((int)(this->GetInput(0)->GetLargestPossibleRegion().GetSize()[0] - keyPoint[0]),
-             (int)(this->GetInput(0)->GetLargestPossibleRegion().GetSize()[1] - keyPoint[1]),
+      radius.Fill(GetMin((int)(this->GetInput()->GetLargestPossibleRegion().GetSize()[0] - keyPoint[0]),
+             (int)(this->GetInput()->GetLargestPossibleRegion().GetSize()[1] - keyPoint[1]),
              (int)(6*sigmaDetected) ) ) ; // changer le sigma detected par keypoint[2]
 
 
@@ -191,8 +191,8 @@ namespace otb
       /*
         Computing the orientation of the key point detected
       */
-      NeighborhoodIteratorType itNeighOrientation(radius,this->GetInput(0) ,
-                    this->GetInput(0)->GetLargestPossibleRegion());
+      NeighborhoodIteratorType itNeighOrientation(radius,this->GetInput() ,
+                    this->GetInput()->GetLargestPossibleRegion());
 
       itNeighOrientation.SetLocation(it.GetIndex());
 
@@ -208,12 +208,12 @@ namespace otb
       /*  Descriptor Computation                */
       /*----------------------------------------*/
 
-      radius.Fill(GetMin((int)(this->GetInput(0)->GetLargestPossibleRegion().GetSize()[0] - keyPoint[0]),
-             (int)(this->GetInput(0)->GetLargestPossibleRegion().GetSize()[1] - keyPoint[1]),
+      radius.Fill(GetMin((int)(this->GetInput()->GetLargestPossibleRegion().GetSize()[0] - keyPoint[0]),
+             (int)(this->GetInput()->GetLargestPossibleRegion().GetSize()[1] - keyPoint[1]),
              (int)(10*sigmaDetected))); // TODO a changer sigmaDetected par Keypoint[2]
 
-      NeighborhoodIteratorType itNeighDescriptor(radius,this->GetInput(0),
-                   this->GetInput(0)->GetLargestPossibleRegion());
+      NeighborhoodIteratorType itNeighDescriptor(radius,this->GetInput(),
+                   this->GetInput()->GetLargestPossibleRegion());
       itNeighDescriptor.SetLocation(it.GetIndex());
       VectorType descriptor;
       descriptor.resize(64);

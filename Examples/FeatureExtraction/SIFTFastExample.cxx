@@ -139,7 +139,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-  filter->SetInput(0,reader->GetOutput());
+  filter->SetInput(reader->GetOutput());
   filter->SetNumberOfScales(scales);
   filter->Update();
 
@@ -260,7 +260,8 @@ int main(int argc, char * argv[])
 
   ImageType::SpacingType spacing = reader->GetOutput()->GetSpacing();
   ImageType::PointType origin = reader->GetOutput()->GetOrigin();
-  OutputImageType::SizeType size = outputImage->GetLargestPossibleRegion().GetSize();
+  OutputImageType::SizeType size =
+                   outputImage->GetLargestPossibleRegion().GetSize();
 
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex

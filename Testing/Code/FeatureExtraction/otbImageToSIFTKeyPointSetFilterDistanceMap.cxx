@@ -64,7 +64,7 @@ OutputImageType::Pointer sift(ImageType::Pointer input,
   SiftFilterType::Pointer sift = SiftFilterType::New();
   PointSetFilterType::Pointer pointSetFilter = PointSetFilterType::New();
 
-  sift->SetInput(0,input);
+  sift->SetInput(input);
   sift->SetOctavesNumber(octaves);
   sift->SetScalesNumber(scales);
   sift->SetDoGThreshold(threshold);

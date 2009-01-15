@@ -56,7 +56,7 @@ int otbImageToSURFKeyPointSetFilterOutputImage(int argc, char * argv[])
   ImageToSURFKeyPointSetFilterType::Pointer filter = ImageToSURFKeyPointSetFilterType::New();
 
   reader->SetFileName(infname);
-  filter->SetInput(0,reader->GetOutput());
+  filter->SetInput(reader->GetOutput());
   filter->SetOctavesNumber(octaves);
   filter->SetScalesNumber(scales);
 
