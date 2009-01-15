@@ -26,8 +26,8 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROI_QB_MUL_1.png}
-//    OUTPUTS: {MSFilteredOutput.tif}, {MSClusteredOutput.tif}, {MSLabelledOutput.tif}, {MSBoundariesOutput.tif}, {MSFilteredOutput-pretty.png}, {MSClusteredOutput-pretty.png}
-//  16 16 10 1.0
+//    OUTPUTS: {MSFilteredOutput.tif}, {MSClusteredOutput.tif}, {MSLabeledOutput.tif}, {MSBoundariesOutput.tif}, {MSFilteredOutput-pretty.png}, {MSClusteredOutput-pretty.png}
+//  7 30 20 1.0
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginLatex
@@ -87,7 +87,7 @@ int main(int argc, char * argv[])
   //  Software Guide : BeginLatex
 //
 //  We start by the classical \code{typedef}s needed for reading and
-//  writing the images. The EDISON code upon which OTB's
+//  writing the images. The EDISON \url{http://www.caip.rutgers.edu/riul/research/code/EDISON/index.html} code upon which OTB's
 //  implementation is based, uses float pixel precision, so we choose
 //  to work with a float pixel type.
 //

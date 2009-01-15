@@ -90,8 +90,8 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginLatex
   //
-  // We now instanciate the reader. As some parameters need to be given to the
-  // IO which is an \doxygen{otb}{TileMapImageIO}, we need to manually create it also:
+  // We now instantiate the reader. As some parameters need to be given to the
+  // IO which is an \doxygen{otb}{TileMapImageIO}, we need to manually create it:
   //
   // Software Guide : EndLatex
 
@@ -112,12 +112,12 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginLatex
   //
-  // Now, we potentially have an image of several Peta-bytes covering the whole world
+  // Now, we potentially have an image of several Peta-Bytes covering the whole world
   // in the reader
   // that's why we don't want to do an update before extracting a specific
   // area.
   //
-  // The coordinates are refered with an origin at the north pole and the
+  // The coordinates are refered with an origin at the North Pole and the
   // change date meridian in Mercator projection. So we need to translate the latitude
   // and the longitude in this funny coordinate system:
   //
@@ -147,7 +147,7 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginLatex
   //
-  // This enable us to use the \doxygen{otb}{ExtractROI} to retrieve only
+  // This enables us to use the \doxygen{otb}{ExtractROI} to retrieve only
   // the area of interest and to avoid crashing our memory-limited computer.
   //
   // Software Guide : EndLatex
