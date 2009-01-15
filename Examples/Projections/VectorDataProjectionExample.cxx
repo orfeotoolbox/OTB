@@ -21,15 +21,15 @@
 
 // Software Guide : BeginLatex
 //
-// Let's assume that you have a KML file (hence in geographical coordinate)
+// Let's assume that you have a KML file (hence in geographical coordinates)
 // that you would like to superpose to some image with a specific map projection.
 // Of course, you could use the handy ogr2ogr tool to do that, but it won't
 // integrate so seamlessly into your OTB application.
 //
-// You can also supposed that the image on which you want to superpose the data
-// is not in a specific map projection but a raw image from a specific sensor.
-// Thanks to OTB, the same code below will be able to do the appropriate
-// conversion.
+// You can also suppose that the image on which you want to superpose
+// the data is not in a specific map projection but a raw image from a
+// particular sensor.  Thanks to OTB, the same code below will be able
+// to do the appropriate conversion.
 //
 // This example demonstrates the use of the
 // \doxygen{otb}{VectorDataProjectionFilter}.
@@ -56,7 +56,8 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginLatex
   //
-  // Declare the vector data type that you would like to use in your application
+  // Declare the vector data type that you would like to use in your
+  // application. 
   //
   // Software Guide : EndLatex
 
@@ -69,7 +70,7 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginLatex
   //
-  // Declare and instanciate the vector data reader:
+  // Declare and instantiate the vector data reader:
   // \doxygen{otb}{VectorDataFileReader}. The call to the
   // \code{UpdateOutputInformation()} method fill up the header information.
   //
@@ -87,9 +88,10 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginLatex
   //
-  // We need the image only to retrieve its projection information, i.e. map projection
-  // or sensor model parameters. Hence, the image pixels won't be read, only the header
-  // information using the \code{UpdateOutputInformation()} method.
+  // We need the image only to retrieve its projection information,
+  // i.e. map projection or sensor model parameters. Hence, the image
+  // pixels won't be read, only the header information using the
+  // \code{UpdateOutputInformation()} method.
   //
   // Software Guide : EndLatex
 
@@ -106,21 +108,25 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginLatex
   //
-  // The \doxygen{otb}{VectorDataProjectionFilter} will do the work of converting the vector
-  // data coordinates. It is usually a good idea to use it when you design applications
-  // reading or saving vector data.
+  // The \doxygen{otb}{VectorDataProjectionFilter} will do the work of
+  // converting the vector data coordinates. It is usually a good idea
+  // to use it when you design applications reading or saving vector
+  // data.
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::VectorDataProjectionFilter<InputVectorDataType,OutputVectorDataType> VectorDataFilterType;
-  VectorDataFilterType::Pointer vectorDataProjection = VectorDataFilterType::New();
+  typedef otb::VectorDataProjectionFilter<InputVectorDataType,
+                           OutputVectorDataType> VectorDataFilterType;
+  VectorDataFilterType::Pointer vectorDataProjection =
+                                          VectorDataFilterType::New();
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
   //
-  // Information concerning the original projection of the vector data will be automatically
-  // retrieved from the metadata. Nothing else is needed from you:
+  // Information concerning the original projection of the vector data
+  // will be automatically retrieved from the metadata. Nothing else
+  // is needed from you:
   //
   // Software Guide : EndLatex
 
@@ -131,26 +137,31 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginLatex
   //
-  // Information concerning the target projection are retrieved directly from
+  // Information about the target projection is retrieved directly from
   // the image:
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  vectorDataProjection->SetOutputKeywordList(imageReader->GetOutput()->GetImageKeywordlist());
-  vectorDataProjection->SetOutputOrigin(imageReader->GetOutput()->GetOrigin());
-  vectorDataProjection->SetOutputSpacing(imageReader->GetOutput()->GetSpacing());
-  vectorDataProjection->SetOutputProjectionRef(imageReader->GetOutput()->GetProjectionRef());
+  vectorDataProjection->SetOutputKeywordList(
+                         imageReader->GetOutput()->GetImageKeywordlist());
+  vectorDataProjection->SetOutputOrigin(
+                                   imageReader->GetOutput()->GetOrigin());
+  vectorDataProjection->SetOutputSpacing(
+                                  imageReader->GetOutput()->GetSpacing());
+  vectorDataProjection->SetOutputProjectionRef(
+                            imageReader->GetOutput()->GetProjectionRef());
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
   //
-  // Finally, the result is saved into a new vector file
+  // Finally, the result is saved into a new vector file.
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::VectorDataFileWriter<OutputVectorDataType> VectorDataFileWriterType;
+  typedef otb::VectorDataFileWriter<OutputVectorDataType>
+                                                  VectorDataFileWriterType;
   VectorDataFileWriterType::Pointer writer = VectorDataFileWriterType::New();
   writer->SetFileName(argv[3]);
   writer->SetInput(vectorDataProjection->GetOutput());
@@ -159,8 +170,9 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginLatex
   //
-  // It is worth noting that none of this code is specific to the vector data format. Whether
-  // you pass a shapefile, or a KML file, the correct driver will be automatically instanciated.
+  // It is worth noting that none of this code is specific to the
+  // vector data format. Whether you pass a shapefile, or a KML file,
+  // the correct driver will be automatically instantiated.
   //
   // Software Guide : EndLatex
 
