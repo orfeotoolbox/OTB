@@ -450,11 +450,9 @@ ADD_TEST(ioTuGDALImageIOCanRead_ENVI ${IO_TESTS5} otbGDALImageIOTestCanRead
 #        ${INPUTDATA}/poupees_1canal.c1.hdr )
         ${INPUTDATA}/poupees_1canal.c1 )
 
-ADD_TEST(ioTuGDALImageIOCanRead_PDS1 ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${INPUTDATA}/pdsImage1.img )
 
-ADD_TEST(ioTuGDALImageIOCanRead_PDS2 ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${INPUTDATA}/pdsImage2.img )
+ADD_TEST(ioTuGDALImageIOCanRead_PDS ${IO_TESTS5} otbGDALImageIOTestCanRead
+        ${INPUTDATA}/pdsImage.img )
 
 IF(OTB_DATA_USE_LARGEINPUT)
 
@@ -660,19 +658,12 @@ ADD_TEST(ioTvImageFileReaderENVI2PNG ${IO_TESTS8}
         ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1.hdr
         ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1_2.png )
 
-ADD_TEST(ioTvImageFileReaderPDS2TIFF1 ${IO_TESTS8}
-  --compare-image ${TOL}   ${INPUTDATA}/pdsImage1.img
-                           ${TEMP}/ioTvImageFileReaderPDS2TIFF1.tif
+ADD_TEST(ioTvImageFileReaderPDS2TIFF ${IO_TESTS8}
+  --compare-image ${TOL}   ${INPUTDATA}/pdsImage.img
+                           ${TEMP}/ioTvImageFileReaderPDS2TIFF.tif
         otbImageFileReaderTest
-        ${INPUTDATA}/pdsImage1.img
-        ${TEMP}/ioTvImageFileReaderPDS2TIFF1.tif)
-
-ADD_TEST(ioTvImageFileReaderPDS2TIFF2 ${IO_TESTS8}
-  --compare-image ${TOL}   ${INPUTDATA}/pdsImage2.img
-                           ${TEMP}/ioTvImageFileReaderPDS2TIFF2.tif
-        otbImageFileReaderTest
-        ${INPUTDATA}/pdsImage2.img
-        ${TEMP}/ioTvImageFileReaderPDS2TIFF2.tif)
+        ${INPUTDATA}/pdsImage.img
+        ${TEMP}/ioTvImageFileReaderPDS2TIFF.tif)
 # RGB
 
 ADD_TEST(ioTvImageFileWriterRGB_PNG2PNG ${IO_TESTS8}
