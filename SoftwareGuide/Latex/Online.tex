@@ -1,32 +1,33 @@
 \chapter{Online data}\label{sec:Online}
 
-With almost every computer connected to the internet, the amount
-of information online is growing. It is quite easy to retrieve some
-valuable information. OTB has a few experimental classes for this purpose.
+With almost every computer connected to the internet, the amount of
+inline information is steadily growing. It is quite easy to retrieve
+valuable information. OTB has a few experimental classes for this
+purpose.
 
 For these examples to work, you need to have OTB compiled with the
 \texttt{OTB\_USE\_CURL} option to \texttt{ON}.
 
 Let's see what we can do.
 
-\section{Name to coordinates}
+\section{Name to Coordinates}
 \label{sec:NamesToCoordinates}
 \input{PlaceNameToLonLatExample.tex}
 
 
-\section{Open street map}
+\section{Open Street Map}
 \label{sec:OpenStreetMap}
 
-The power of sharing which is a driving force in open source programs such
+The power of sharing which is a driving force in open source software such
 as OTB can also be demonstrated for data collection. One good example is
-Open Street Map (\url{www.openstreetmap.org/}).
+Open Street Map (\url{http://www.openstreetmap.org/}).
 
-In this project, thousands of users, upload GPS data and draw map of their
-surroundings. The coverage is impressive and this data is made freely available.
+In this project, thousands of users, upload GPS data and draw maps of their
+surroundings. The coverage is impressive and this data is freely available.
 
-It is possible of course to get the vector data (not covered yet by otb), but
-here we will focuss on retrieving some nice map for any place. The following
-example describe the method. This part is pretty experimental and the code is
+It is possible of course to get the vector data (not covered yet by OTB), but
+here we will focus on retrieving some nice maps for any place. The following
+example describes the method. This part is pretty experimental and the code is
 not as polished as the rest of the library. You've been warned!
 
 \input{TileMapImageIOExample.tex}
