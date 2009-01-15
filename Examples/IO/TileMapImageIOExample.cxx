@@ -22,13 +22,13 @@
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {osmfile.otb}
 //    OUTPUTS: {openStreetMap-Toulouse.png}
-//    ${GeneratedFolder} 1.4835345  43.55968261 13
+//    ${GeneratedFolder} 1.4835345 43.55968261 13
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {osmfile.otb}
 //    OUTPUTS: {openStreetMap-Singapore.png}
-//    ${GeneratedFolder} 103.819836 1.352083 13
+//    ${GeneratedFolder} 103.780646 1.297643 13
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
