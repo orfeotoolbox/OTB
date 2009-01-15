@@ -1,5 +1,26 @@
-OTB-v.2.8.0 - Changes since version 2.4.0 (2009/01/15)
+OTB-v.2.8.0 - Changes since version 2.6.0 (2009/01/15)
 -----------------------------------------
+
+* System
+	- ITK version updated to 3.10.1
+	- liblas library added
+	- ossim gdal plugin added
+	- change in OpenGL access for viewer
+	- Edison code from mean shift
+
+* Library
+	- Support for Lidat data
+	- SIFT and SURF implementation
+	- Mean Shift algorithm
+	- Conversion of vector data projection (kml, shapefiles)
+
+* Applications
+	- Object counting
+	- Fine Registration
+	- Road Extraction
+
+
+
 OTB-v.2.6.0 - Changes since version 2.4.0 (2008/10/31)
 -----------------------------------------
 
@@ -33,11 +54,11 @@ OTB-v.2.4.0 - Changes since version 2.2.0 (2008/07/24)
 -----------------------------------------
 
 	- Added OTB_DISABLE_CXX_EXAMPLES_TESTING : allows to generate or not only examples testing
-	- Added OTB_USE_JPEG2000 : experimental support for jpeg2000 files.	
+	- Added OTB_USE_JPEG2000 : experimental support for jpeg2000 files.
 
 *Common:
 
-	Extraction ROI Classes : 
+	Extraction ROI Classes :
 	- Lifting of the otbExtractionBase classe
 	- Correction of the SetExtractionRegion method
 
@@ -90,8 +111,8 @@ OTB-v.2.2.0 - Changes since version 2.0.0 (2008/05/29)
 -----------------------------------------
 
 
-*BasicFilters: 
-  
+*BasicFilters:
+
         Added classes for data importation:
         - otb::ImportImageFilter
         - otb::ImportVectorImageFilter
@@ -112,14 +133,14 @@ OTB-v.2.2.0 - Changes since version 2.0.0 (2008/05/29)
         - otb::LabelizeNeighborhoodConnectedImageFilter
 
 *Radiometry:
-	
+
         - Bug fixed on otb::DEMCaracteristicExtractor
 
 *Visu
 
         - Added histogram windows in otb::ImageViewer main class.
         - Added polygon drawing support in otb::ImageViewer main class
-        
+
 *IO:
 
         - Fixed bug in GDALImageIO to handle complex images
@@ -128,9 +149,9 @@ OTB-v.2.2.0 - Changes since version 2.0.0 (2008/05/29)
         - otb::VectorDataFileWriter
         - otb::VectorDataIOFactory
         - otb::VectorDataSource
-	
-*Common:	
-	
+
+*Common:
+
         Added classes to handle vector data:
         - otb::Polygon
         - otb::VectorData
@@ -145,7 +166,7 @@ OTB-v.2.2.0 - Changes since version 2.0.0 (2008/05/29)
         - Creation otb::SVMKernels containing a list a useful kernel for SVM
         - Correction in Kohonen	map classes
         - Added convenience methods in SVMModel class
-        
+
         Added classification filters (streamed and threaded):
         - otb::SVMImageClassificationFilter
         - otb::SOMImageClassificationFilter
@@ -169,11 +190,11 @@ OTB-v.2.2.0 - Changes since version 2.0.0 (2008/05/29)
         - otb::MultiScaleConvexOrConcaveClassificationFilter
         - otb::ProfileDerivativeToMultiScaleCharacteristicsFilter
         - otb::ProfileToProfileDerivativeFilter
- 
+
 *Utilities:
- 
+
         - Updated the internal version of ITK to 3.6.0
-        - Corrections on OSSIM integration 
+        - Corrections on OSSIM integration
         - SVM library: creation of otb::ComposedKernelFunctor allowing composed kernels
         - Added SAR models in OSSIM library:
                 . Radarsat 1 (SGX and SGF)
@@ -181,7 +202,7 @@ OTB-v.2.2.0 - Changes since version 2.0.0 (2008/05/29)
                 . ERS - SLC and PRI
                 . Terrasar X - SLC and PRI
                 . Cosmo-Skymed - SLC and PRI
-                . Radarsat 2 - SLC and PRI 
+                . Radarsat 2 - SLC and PRI
         - Bug fixed in CMake configuration
         - Added SIFT implementation in InsigthJournal
 
@@ -196,7 +217,7 @@ OTB-v.2.2.0 - Changes since version 2.0.0 (2008/05/29)
         - Added an unsupervised image classification application based on the SVM algorithm (otbSVMClassification)
         - Added an application to create a contiguous unsigned short labeled image from a colored labeled image (otbUnsignedShortRelabeling)
         - Added an application to create a colored labeled image from an unsigned short labeled image (otbRgbRelabeling)
-                
+
 *Examples:
         - Added SIFT example (otb)
         - Added SIFT example (ij)
@@ -226,7 +247,7 @@ OTB-v.2.0.0 - Changes since version 1.6.0 (2007/12/14)
         Added classes for atmospheric correction using the 6S Radiative Transfer Code:
         - Luminance estimation otb::ImageToLuminanceImageFilter
         - Reflectance estimation TOA: otb::LuminanceToReflectanceImageFilter
-        - Added Composite transform filter: otb::ImageToReflectanceImageFilter, 
+        - Added Composite transform filter: otb::ImageToReflectanceImageFilter,
           equivalent to the pipeline process ImageToLuminanceImageFilter and LuminanceToReflectanceImageFilter filters
         - Reflectance estimation TOC: otb::ReflectanceToSurfaceReflectanceImageFilter
         - 6S effect correction: otb::SurfaceAdjencyEffect6SCorrectionSchemeFilter
@@ -250,7 +271,7 @@ OTB-v.2.0.0 - Changes since version 1.6.0 (2007/12/14)
 
 *Utilities:
 
-        - Fixed memory allocation bug on svm.cxx file 
+        - Fixed memory allocation bug on svm.cxx file
         - 4 files from ITK 3.4.0 have been replaced by the cvs version to allow
         correct use of the itkDivideImageFilter.h with VectorImage. These files
         are:
@@ -274,54 +295,54 @@ OTB-v.2.0.0 - Changes since version 1.6.0 (2007/12/14)
 
 	- Fixed some problems under Visual and MinGW platforms.
 
-        
+
 
 OTB-v.1.6.0 - Changes since version 1.4.0 (2007/10/25)
 -----------------------------------------
 
 *BasicFilters:
 
-	- Added StreamingVectorStatisticsImageFilter to compute 
+	- Added StreamingVectorStatisticsImageFilter to compute
 	the second order stastics on a large vector image.
 
-	- Added the MatrixTransposeMatrixImageFilter to compute 
-	the product of the matrix of vector pixels from image 1 
-	in rowwith the the matrix of vector pixels from image 2 
-	columns for large vector image. 
+	- Added the MatrixTransposeMatrixImageFilter to compute
+	the product of the matrix of vector pixels from image 1
+	in rowwith the the matrix of vector pixels from image 2
+	columns for large vector image.
 
-       - Added the otb::VectorImageTo3DScalarImageFilter which transforms 
-       a vector image into a 3D scalar image where each band is represented 
+       - Added the otb::VectorImageTo3DScalarImageFilter which transforms
+       a vector image into a 3D scalar image where each band is represented
        in a layer of the 3rd dimension.
 
-       - Added the otb::ImageListToVectorImageFilter and 
-       otb::VectorImageToImageListFilter to convert a vector image 
+       - Added the otb::ImageListToVectorImageFilter and
+       otb::VectorImageToImageListFilter to convert a vector image
        from/to an image list.
 
-       - Added the otb::ImageListToImageListApplyFilter which applies a given 
+       - Added the otb::ImageListToImageListApplyFilter which applies a given
        scalar image filter to a list of images
 
-       - Added the otb::PerBandImageFilter, which applies a given scalar filter 
-       to each band of a VectorImage. This is not the optimal way for most 
-       processings but it allows the use of almost every scalar filter on 
+       - Added the otb::PerBandImageFilter, which applies a given scalar filter
+       to each band of a VectorImage. This is not the optimal way for most
+       processings but it allows the use of almost every scalar filter on
        vector images.
 
-       - Added the otb::StreamingResampleImageFilter, which is a streaming capable 
+       - Added the otb::StreamingResampleImageFilter, which is a streaming capable
        version of the itk::ResampleImageFilter.
 
 *ChangeDetection:
-	
-	- Added the otb::KullbackLeiblerDistanceImageFilter to compute the 
+
+	- Added the otb::KullbackLeiblerDistanceImageFilter to compute the
 	Kullback-Leibler distance between two images.
-	
-	- Added the otb::KullbackLeiblerProfileImageFilter to perform a 
+
+	- Added the otb::KullbackLeiblerProfileImageFilter to perform a
 	multi-scale change detection using the Kullback-Leibler distance.
 
 
 *Common:
-	
-	- Added an otb::Polygon, which represents a closed polyline on which 
+
+	- Added an otb::Polygon, which represents a closed polyline on which
 	intersection or point interiority can be tested.
-	
+
 *IO:
 
 	- Added an otb::DEMHandler to fetch the elevation value in SRTMor DTED
@@ -331,44 +352,44 @@ OTB-v.1.6.0 - Changes since version 1.4.0 (2007/10/25)
 
 	- Added a new tiling streaming mode.
 
-	- Added the otb::ImageGeometryHandler, which allows to handle seamlessly 
+	- Added the otb::ImageGeometryHandler, which allows to handle seamlessly
 	the image geometry information.
 
 	- Fixed a bug in the otb::MSTARImageIO.
-	
+
 *Learning:
 
-	- Added methods to access the alpha values, the number of support vectors, 
+	- Added methods to access the alpha values, the number of support vectors,
 	the support vectors themselves, the distance to the hyperplanes.
 
-	- Added the otb::SEMClassifier, implementing the Stochastic Expectation  
+	- Added the otb::SEMClassifier, implementing the Stochastic Expectation
 	Maximization algorithm to perform an estimation of a mixture model.
 
 *MultiScale:
 
-	- Various name changes and bugfixes in the morphological pyramid 
+	- Various name changes and bugfixes in the morphological pyramid
 	segmentation classes.
-	
+
 *Radiometry:
 
         - The 6S Transfer Radiative Code compiles within OTB.
-	- Added the Radiometry directory, containing everything that has to do 
+	- Added the Radiometry directory, containing everything that has to do
 	with image radiometry.
 	- Added the NDVI and ARVI (3 input bands) vegetation index filters.
 
 *Projections:
 
-	- Added the Projections directory, containing everything that has to do 
+	- Added the Projections directory, containing everything that has to do
 	with image projections.
-	
-	- Added an otb::DEMHandler to fetch the elevation value in SRTM/DTED 
+
+	- Added an otb::DEMHandler to fetch the elevation value in SRTM/DTED
           directories.
 
 	- Added an otb::DEMToImageGenerator to generate an elevation map.
 
-	- Added an otb::OrthoRectificationFilter to perform orthorectification of 
+	- Added an otb::OrthoRectificationFilter to perform orthorectification of
 	geo-referenced images.
-	
+
 	- Added the forward and inverse sensor model projection.
 
 	- Added several map projection transforms (Eckert4, LambertConformalConic,
@@ -378,15 +399,15 @@ OTB-v.1.6.0 - Changes since version 1.4.0 (2007/10/25)
 
 	- Added the Fusion directory, containing everything that has to do
 	with image fusion.
-	
-	- Added the otb::BayesianFusionImageFilter, a pan-sharpening filter which 
+
+	- Added the otb::BayesianFusionImageFilter, a pan-sharpening filter which
 	algoritm has been kindly contributed by Julien Radoux.
 
 
 *Documentation:
 
 	- Added various documented examples in the SoftwareGuide for the new classes.
-	
+
 	- Added a Tutorial section in the SoftwareGuide.
 
 *Utilities:
@@ -401,14 +422,14 @@ OTB-v.1.6.0 - Changes since version 1.4.0 (2007/10/25)
 
 *Applications:
 
-	- Added the otbImageViewerManager application which allows to open multiple images, 
+	- Added the otbImageViewerManager application which allows to open multiple images,
 	configure viewers and link displays.
 
 	- Added the otbRoadExtraction which demonstrates the road extraction algorithm
 	implemented in the FeatureExtraction module.
 
 	- Added the otbOrthoRectifAppli application which allows to ortho rectify images in
-	command line using the brand new Projections module of the Orfeo ToolBox. Old rigid 
+	command line using the brand new Projections module of the Orfeo ToolBox. Old rigid
 	orthoo rectification application has been moved to otbPseudoOrthoRectif.
 
 	- Added an option in CMakeLists.txt to use VTK or not (enable or disable the
@@ -420,8 +441,8 @@ OTB-v.1.6.0 - Changes since version 1.4.0 (2007/10/25)
 OTB-v.1.4.1 - Changes since version 1.4.0
 -----------------------------------------
 
-*Platforms: 
-	- Minor corrections of main ./CMakeLists.txt to support users applications using OTB 
+*Platforms:
+	- Minor corrections of main ./CMakeLists.txt to support users applications using OTB
 	  install directory when using internal ITK.
 
 OTB-v.1.4.0 - Changes since version 1.2.1
@@ -441,7 +462,7 @@ OTB-v.1.4.0 - Changes since version 1.2.1
 	  a polyline.
 
 	- DrawPathFilter and DrawPathListFilter can now use the internal scalar values of the path
-	  (if present) as a value to draw the path. 
+	  (if present) as a value to draw the path.
 
 	- Improved performances of the DrawPathFilter and DrawPathListFilter.
 
@@ -452,11 +473,11 @@ OTB-v.1.4.0 - Changes since version 1.2.1
 	- Added the ImportGeoInformationImageFilter providing a workaround for metadata handling
 	  in pipeline execution.
 
-	- Added a VectorRescaleIntensityImageFilter, which rescales a vector image on a per-band basis, 
+	- Added a VectorRescaleIntensityImageFilter, which rescales a vector image on a per-band basis,
 	  clamping a user-defined percent of the pixels lowest and highest values.
 
 	- Added a filter to compute spectral angle distance image with respect to a reference pixel.
- 	
+
 *FeatureExtraction:
 
 	- Added a set of image and path filters to perform road extraction.
@@ -464,13 +485,13 @@ OTB-v.1.4.0 - Changes since version 1.2.1
 	- Added a composite filter to perform road extraction.
 
 *ChangeDetection:
-  
+
     - Added the Kullback-Leibler distance change detector with optimized algorithm.
 
 	- Added a Kullback-Leibler multi-scale change profile image filter with optimized algorithm.
 
 *DisparityMap:
-        
+
 	- Added the DisparityMapEstimationMethod, performing local disparity estimation with respect
 	  to a given transform using the ITK registration framework.
 
@@ -489,10 +510,10 @@ OTB-v.1.4.0 - Changes since version 1.2.1
 
 	- InsightJournal code integration : ScatteredDataPointSetImageFilter.
 
-*Platforms: 
+*Platforms:
 
 	- Corrected runtime errors of the interactive change detection application under cygwin.
-	
+
 	- Workaround for ImageViewer on very specific mandrake version.
 
 
@@ -503,27 +524,27 @@ OTB-v.1.2.1 - Changes since version 1.2.0
 	- Improved support of geographic meta data handling in pipeline execution.
 
 *BasicFilters:
-    - Added a cast filter otb::ImageToVectorImageCastFilter to convert 
+    - Added a cast filter otb::ImageToVectorImageCastFilter to convert
           otb::Image (templated with scalar pixel types) to mono-channel otb::VectorImage.
 
 *FeatureExtraction:
     - Added a contour extraction filter otb::ImageToEdgePathFilter.
 
 *Visualization:
-    - Viewer accepts now otb::Image (templated with scalar pixel types) 
+    - Viewer accepts now otb::Image (templated with scalar pixel types)
           as well as otb::VectorImage.
-    - Added FlRun() method to the Viewer, which execute Show() method from 
+    - Added FlRun() method to the Viewer, which execute Show() method from
           the Viewer followed by the Fl::run() method from FLTK.
 
 *Platforms:
-	- Minor correction of otb::ObjectList and otb::List in order to support 
+	- Minor correction of otb::ObjectList and otb::List in order to support
 	      visual 7.0 compiler.
 
 *Experimental:
-    - Support for python binding compilation including itk binding 
+    - Support for python binding compilation including itk binding
           templated with OTB images, OTB IO and OTB Image viewer.
-    - OSSIM has been integrated in the OTB Utilities directory to 
-          prepare its future use in new geometric features. 
+    - OSSIM has been integrated in the OTB Utilities directory to
+          prepare its future use in new geometric features.
 
 
 OTB-v.1.2.0 - Changes since version 1.0.2
@@ -533,8 +554,8 @@ OTB-v.1.2.0 - Changes since version 1.0.2
 	- OTB can now been compiled on several new platforms :
 	  - SunOS 5.8 (32bits and 64bits).
 
-	- Improved robustness of 
-	  - the Microsoft Visual Studio .NET 2003 (7.1), .NET 2005 (8.0) 
+	- Improved robustness of
+	  - the Microsoft Visual Studio .NET 2003 (7.1), .NET 2005 (8.0)
 	  - the Cygwin and MinGW installation.
 
 *Common:
@@ -548,7 +569,7 @@ OTB-v.1.2.0 - Changes since version 1.0.2
           list to image filters, image list to image list filters.
 
 	- Precision for internal calculus has been tuned to double in
-          every filter. 
+          every filter.
 
 *Multiscale:
 
@@ -579,9 +600,9 @@ OTB-v.1.2.0 - Changes since version 1.0.2
            Gdal limitations).
 
 	- Bug fixes on memory management in the Reader.
-	
+
 	- Bug fixes related to the IO framework on MS Windows platforms.
-  
+
 *Learning:
 
 	- Added filters for learning, classification and activation
@@ -611,18 +632,18 @@ OTB-v.1.0.2 - Changes since version 1.0.1
 - OTB can now been compiled on several new platforms :
        - Microsoft Visual Studio .NET 2005 (8.0).
        - Cygwin.
-       - MinGW on Windows platform. 
+       - MinGW on Windows platform.
 
 - LUM and BSQ formats have been added.
 
 
-Note : On MS Windows platforms, if you have any problem related 
-       to using the OTB's internal version of ITK, you could try to use 
-       an external version of ITK (use ITK 2.6 or later) by setting 
-       OTB_USE_EXTERNAL_ITK to ON and ITK_DIR to the directory where 
+Note : On MS Windows platforms, if you have any problem related
+       to using the OTB's internal version of ITK, you could try to use
+       an external version of ITK (use ITK 2.6 or later) by setting
+       OTB_USE_EXTERNAL_ITK to ON and ITK_DIR to the directory where
        your ITK built resides.
 
-       
+
 OTB-v.1.0.1 - Changes since version 1.0.0
 -----------------------------------------
 
