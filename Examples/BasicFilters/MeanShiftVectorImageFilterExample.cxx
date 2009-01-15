@@ -203,8 +203,9 @@ int main(int argc, char * argv[])
   // \includegraphics[width=0.40\textwidth]{ROI_QB_MUL_1.eps}
   // \includegraphics[width=0.40\textwidth]{MSFilteredOutput-pretty.eps}
   // \includegraphics[width=0.40\textwidth]{MSClusteredOutput-pretty.eps}
-  // \itkcaption[Mean Shift]{}
-  // \label{figMeanShiftVectorImageFilter:}
+  // \itkcaption[Mean Shift]{From top to bottom and left to right: Original image, image filtered by
+  // mean shift and mean shift clustering.}
+  // \label{fig:MeanShiftVectorImageFilter}
   // \end{figure}
   // Software Guide : EndLatex
 
