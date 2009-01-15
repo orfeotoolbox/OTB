@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,7 +27,7 @@ namespace otb
 
 
   /** \class SiftFastImageFilter
-   *  \brief
+   *  \brief Generate the SIFT points of interest from an image
    *
    */
   template <class TInputImage, class TOutputPointSet>
@@ -40,13 +40,13 @@ namespace otb
       typedef ImageToPointSetFilter<TInputImage,TOutputPointSet> Superclass;
       typedef itk::SmartPointer<Self>                            Pointer;
       typedef itk::SmartPointer<const Self>                      ConstPointer;
-  
+
       /** Creation through object factory macro */
-      itkNewMacro(Self);  
+      itkNewMacro(Self);
 
       /** Type macro */
       itkTypeMacro(SiftFastImageFilter,ImageToPointSetFilter);
-  
+
       /** Template parameters typedefs */
       typedef TInputImage InputImageType;
       typedef typename TInputImage::Pointer InputImagePointerType;
@@ -57,9 +57,9 @@ namespace otb
       typedef typename TOutputPointSet::PixelType OutputPixelType;
       typedef typename TOutputPointSet::PointType OutputPointType;
       typedef typename TOutputPointSet::PointIdentifier OutputPointIdentifierType;
-      
+
       typedef otb::Image<float,2> FloatImageType;
-      
+
       // Used to rescale data in the [0,1] range
       typedef itk::RescaleIntensityImageFilter<InputImageType,FloatImageType> RescalerType;
 
@@ -69,13 +69,13 @@ namespace otb
     protected:
       /** Actually process the input */
       virtual void GenerateData();
-      
+
       /** Constructor */
       SiftFastImageFilter();
-      
+
       /** Destructor */
       virtual ~SiftFastImageFilter() {}
-      
+
       /** PrintSelf method */
       virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
