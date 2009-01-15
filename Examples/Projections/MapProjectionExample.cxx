@@ -25,20 +25,24 @@
 
 // Software Guide : BeginLatex
 //
-// Map projection is an important issue when working with satellite images. In the
-// orthorectification process, converting between geographic and cartographic
-// coordinates is a key step. In this process, everything is integrated and you
-// don't need to know the details.
+// Map projection is an important issue when working with satellite
+// images. In the orthorectification process, converting between
+// geographic and cartographic coordinates is a key step. In this
+// process, everything is integrated and you don't need to know the
+// details.
 //
-// However, sometimes, you need to go hands-on and find out the nitty-gritty details.
-// This example shows you how to play with map projections in OTB and how to convert
-// coordinates. In most cases, the underlying work is done by ossim.
+// However, sometimes, you need to go hands-on and find out the
+// nitty-gritty details.  This example shows you how to play with map
+// projections in OTB and how to convert coordinates. In most cases,
+// the underlying work is done by OSSIM.
 //
-// First, we start by including the otbMapProjections header. In this file, over 30
-// projections are defined and ready to use. It is easy to add new one.
+// First, we start by including the otbMapProjections header. In this
+// file, over 30 projections are defined and ready to use. It is easy
+// to add new one.
 //
-// The otbGenericMapProjection enables you to instanciate a map projection from a
-// WKT (Well Known Text) string, which is popular with OGR for example.
+// The otbGenericMapProjection enables you to instanciate a map
+// projection from a WKT (Well Known Text) string, which is popular
+// with OGR for example.
 //
 // Software Guide : EndLatex
 
@@ -58,8 +62,9 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginLatex
   //
-  // We retrieve the command line parameters and put them in the correct variables. The
-  // transforms are going to work with an \doxygen{itk}{Point}.
+  // We retrieve the command line parameters and put them in the
+  // correct variables. The transforms are going to work with an
+  // \doxygen{itk}{Point}.
   //
   // Software Guide : EndLatex
 
@@ -75,8 +80,8 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginLatex
   //
-  // The output of this program will be save in a text file. We also want
-  // to make sure the precision of the digit will be enough.
+  // The output of this program will be saved in a text file. We also want
+  // to make sure that the precision of the digits will be enough.
   //
   // Software Guide : EndLatex
 
@@ -88,23 +93,24 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginLatex
   //
-  // We can now instanciate our first map projection. Here, it is a UTM projection
-  // we also need to provide the information concerning the zone and the hemisphere
-  // for the projection. These are specific to UTM projection.
+  // We can now instantiate our first map projection. Here, it is a
+  // UTM projection. We also need to provide the information about
+  // the zone and the hemisphere for the projection. These are
+  // specific to the UTM projection.
   //
   // Software Guide : EndLatex
 
 
   // Software Guide : BeginCodeSnippet
   otb::UtmForwardProjection::Pointer utmProjection
-      = otb::UtmForwardProjection::New();
+                                  = otb::UtmForwardProjection::New();
   utmProjection->SetZone(31);
   utmProjection->SetHemisphere('N');
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
   //
-  // The TransformPoint() method return the coordinates of the point in the
+  // The TransformPoint() method returns the coordinates of the point in the
   // new projection.
   //
   // Software Guide : EndLatex
@@ -136,13 +142,16 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginLatex
   //
-  // If you follow carefully the previous examples, you've noticed that the target
-  // projection have been directly coded, which mean that they can't be changed at
-  // run-time. What happens if you don't know the target projection when you're writing
-  // the program? It can depends on some input provided by the user (image, shapefile).
+  // If you followed carefully the previous examples, you've noticed
+  // that the target projections have been directly coded, which means
+  // that they can't be changed at run-time. What happens if you don't
+  // know the target projection when you're writing the program? It
+  // can depend on some input provided by the user (image,
+  // shapefile).
   //
-  // In this situation, you can use the \doxygen{otb}{GenericMapProjection}. It will
-  // accept a string to set the projection. This string should be in the WKT format.
+  // In this situation, you can use the
+  // \doxygen{otb}{GenericMapProjection}. It will accept a string to
+  // set the projection. This string should be in the WKT format.
   //
   // For example:
   //
@@ -163,16 +172,18 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginLatex
   //
-  // This string is then passed to the projection using the SetWkt() method.
+  // This string is then passed to the projection using the
+  // \code{SetWkt()} method.
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::GenericMapProjection<otb::FORWARD> GenericMapProjection;
-  GenericMapProjection::Pointer genericMapProjection = GenericMapProjection::New();
+  GenericMapProjection::Pointer genericMapProjection =
+                                           GenericMapProjection::New();
   genericMapProjection->SetWkt(projectionRefWkt);
 
-  file << "Forward gerenic projection: " << std::endl;
+  file << "Forward generic projection: " << std::endl;
   file << point << " -> ";
   file << genericMapProjection ->TransformPoint(point);
   file << std::endl << std::endl;
