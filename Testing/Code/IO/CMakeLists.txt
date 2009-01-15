@@ -1411,20 +1411,6 @@ ENDIF(OTB_COMPILE_JPEG2000)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS14 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(ioTuOGRDriverTest ${IO_TESTS14}
-				otbOGRDriverTest
-				${LARGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_PRODUCT_SHAPE.shp
-				foo
-				)
-ENDIF(OTB_DATA_USE_LARGEINPUT)
-
-ADD_TEST(ioTuOGRDriver2Test ${IO_TESTS14}
-				otbOGRDriverTest
-				${INPUTDATA}/france_coastline.shp
-				foo
-				)
-
 ADD_TEST(ioTvGDALDriverDoubleWritingTest ${IO_TESTS14}
 		--compare-n-images ${TOL} 4
 			${INPUTDATA}/poupees.tif
@@ -1734,7 +1720,6 @@ ENDIF(OTB_COMPILE_JPEG2000)
 
 
 SET(BasicIO_SRCS14
-otbOGRDriverTest.cxx
 otbGDALDriverDoubleWritingTest.cxx
 otbReadingComplexDataIntoComplexImageTest.cxx
 otbWritingComplexDataWithComplexImageTest.cxx
