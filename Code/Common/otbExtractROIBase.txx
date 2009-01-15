@@ -177,6 +177,12 @@ ExtractROIBase<TInputImage,TOutputImage>
         // Si SizeX(Y) est nulle, alors SizeX(Y) est egale à la SizeX(Y) de l'image
         typename Superclass::InputImageConstPointer  inputPtr  = this->GetInput();
 
+	// Check if input exists or not before doing anything
+	if(!inputPtr)
+	  {
+	  return;
+	  }
+
         // Recupere Region de l'image d'entree
 //        const InputImageRegionType& inputRegion = inputPtr->GetRequestedRegion();
         const InputImageRegionType& inputRegion = inputPtr->GetLargestPossibleRegion();

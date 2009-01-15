@@ -1561,10 +1561,24 @@ ADD_TEST(ioTvKMLVectorDataIOFileReaderLines ${IO_TESTS15}
 
 # ---  RAD  ---
 
+IF(OTB_DATA_USE_LARGEINPUT)
+
 # Can read a RAD format (ci2)
 ADD_TEST(ioTuRADImageIOCanRead_RADCI2 ${IO_TESTS16}
         otbRADImageIOTestCanRead
-        ${INPUTDATA}/RADCI2_image_simu_poupees.rad )
+        ${LARGEDATA}/RAD_CI2/3017_HH.rad)
+
+# Convert a ci2.RAD file into ENVI format
+ADD_TEST(ioTvImageFileReaderRADCI22ENVI ${IO_TESTS16}
+--compare-image ${TOL}
+	${BASELINE}/ioImageFileReaderRADCI22ENVI.hdr 
+	${TEMP}/ioImageFileReaderRADCI22ENVI.hdr 
+        otbImageFileReaderRADComplexFloatExtract
+        /home3/mathieu/guillaume/CD_CNES/RAD_CI2/3017_HH.rad
+        ${TEMP}/ioImageFileReaderRADCI22ENVI.hdr )
+
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 
 # Can read a RAD format (cr4)
 ADD_TEST(ioTuRADImageIOCanRead_RADCR4sngl ${IO_TESTS16}
@@ -1575,14 +1589,6 @@ ADD_TEST(ioTuRADImageIOCanRead_RADCR4sngl ${IO_TESTS16}
 ADD_TEST(ioTuRADImageIOCanRead_RADCR4mult ${IO_TESTS16}
         otbRADImageIOTestCanRead
         ${INPUTDATA}/RADCR4_multimage.rad )
-
-
-
-# Convert a ci2.RAD file into ENVI format
-#ADD_TEST(ioTvImageFileReaderRADCI22ENVI ${IO_TESTS16}
-#        otbImageFileReaderRADComplexFloat
-#        /home3/mathieu/guillaume/CD_CNES/RAD_CI2/3017_HH.rad
-#        ${TEMP}/ioImageFileReaderRAD2ENVI.hdr )
 
 # Convert a cr4.RAD file into tif
 ADD_TEST(ioTvImageFileReaderRADCR42TIF ${IO_TESTS16}
@@ -1758,6 +1764,7 @@ otbImageFileReaderRADInt.cxx
 otbImageFileReaderRADFloat.cxx
 otbImageFileReaderRADComplexInt.cxx
 otbImageFileReaderRADComplexFloat.cxx
+otbImageFileReaderRADComplexFloatExtract.cxx
 otbImageFileReaderRADComplexDouble.cxx
 otbPointSetFileReaderNew.cxx
 otbPointSetFileReader.cxx
