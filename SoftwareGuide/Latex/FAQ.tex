@@ -24,6 +24,8 @@ image formats, meta-data access, simple visualization;
 Many of these functionalities are provided by ITK and have been tested
 and documented for the use with remote sensing data.
 
+You can get more information on OTB on the web at \url{http://www.orfeo-toolbox.org}.
+
 \subsection{What is ORFEO?}
 ORFEO stands for Optical and Radar Federated Earth Observation.  In
 2001 a cooperation program was set between France and Italy to develop
@@ -120,9 +122,9 @@ Go to \url{http://www.orfeo-toolbox.org}
  and follow the "download OTB" link. You will have access to the OTB
 source code and to the Software User's Guide.
 
-\subsection{How to get the latest bleeding-edge version}\label{sec:FAQMercurial}
+\subsection{How to get the latest bleeding-edge version?}\label{sec:FAQMercurial}
 
-You can get the current version as our repository is public using mercurial (available at \url{http://www.selenic.com/mercurial}). Be aware that, even if the golden rule is {\em what is commited will compile}, this is not always the case.
+You can get the current development version, as our repository is public, using mercurial (available at \url{http://www.selenic.com/mercurial}). Be aware that, even if the golden rule is {\em what is commited will compile}, this is not always the case. Changes are usually more than ten per day.
 
 The first time, you can get the source code using:
 \begin{verbatim}
@@ -141,7 +143,7 @@ A simple \texttt{make} in your OTB binary directory will be enough to update the
 
 \section{Installing OTB}
 \label{sec:FAQInstall}
-\subsection{Which platforms are supported}
+\subsection{Which platforms are supported?}
 OTB is a multi-platform library. It has successfully been installed on
 the following platforms:
 \begin{itemize}
@@ -156,6 +158,8 @@ the following platforms:
 Support for the following platforms is planned:
 \begin{itemize}
   \item Windows with Microsoft Visual Studio C++ 6.0.
+  \item Windows with Microsoft Visual Express 2005.
+  \item Windows with Microsoft Visual Express 2008.
 \end{itemize}
 
 \subsection{Which libraries/packages are needed before installing
@@ -164,7 +168,7 @@ Support for the following platforms is planned:
 \item CMake (\url{http://www.cmake.org})
 \item GDAL (\url{http://www.gdal.org})
 \item Optional (you may use the version included in OTB): Fltk (\url{http://www.fltk.org}) and ITK (\url{www.itk.org})
-\item Optional (OTB will compile but some small functionalities will be missing): cURL (\url{http://curl.haxx.se/}), FFTW (\url{www.fftw.org}).
+\item Optional (OTB will compile and work but some minor functionalities will be missing): cURL (\url{http://curl.haxx.se/}), FFTW (\url{www.fftw.org}).
 \end{itemize}
 
 \subsection{Main steps}
@@ -193,7 +197,7 @@ whatever you want. Make sure that you have downloaded the source code for:
 \subsubsection{Unix/Linux Platforms}
 
 \textbf{Important note}: on some Linux distributions (eg. Debian, Ubuntu, Fedora), you should use
-the official packages for CMake, GDAL and Fltk. Once you have installed these
+the official packages for CMake, GDAL and Fltk (including the development packages). Once you have installed these
 packages, you can skip to step 4.
 
 \begin{enumerate}
@@ -517,20 +521,20 @@ be downloaded at
 contains tenths of commented examples and a tutorial which should be a good starting
 point for any new OTB user. The code source for these examples is
 distributed with the toolbox. Another information source is the
-on-line API documentation which is available at \url{http://orfeo-toolbox.sourceforge.net/Doxygen}.
+on-line API documentation which is available at \url{http://www.orfeo-toolbox.org/doxygen}.
 
 \section{Contributing to OTB}\label{sec:contributing}
 
 \subsection{I want to contribute to OTB, where to begin?}
 
-First, you can send an email to otb@cnes.fr to let us know what functionality
+First, you can send an email to otb@cnes.fr or the the user mailing list to let us know what functionality
 you would like to introduce in OTB. If the functionality seems important for the
-OTB users, we will then discuss on how to send your code,
+OTB users, we will then discuss on how to retrieve your code,
 make the necessary adaptions, check with you that the results are correct and finally
 include it in the next release.
 
-You can also run the nightly tests so we have a wider range of plateforms to detect the
-bug faster. Look at section \ref{sec:runningTheTests}.
+You can also run the nightly tests so we have a wider range of plateforms to detect
+bugs earlier. Look at section \ref{sec:runningTheTests}.
 
 \subsection{What are the benefits of contributing to OTB?}
 
@@ -554,23 +558,23 @@ More specific applications can be contributed to the OTB-Applications package.
 
 \subsection{What are the tests?}
 
-OTB is an ever changing library, it is quite active and have scores of changes per day from different people. It would be a headache to make sure that the brand new improvement that you introduced didn't break anything without automated tests. You also have to take into account the different OS, compilers, options, versions of external libraries, etc.
+OTB is an ever changing library, it is quite active and have scores of changes per day from different people. It would be a headache to make sure that the brand new improvement that you introduced didn't break anything, if we didn't have automated tests. You also have to take into account differences in OS, compilers, options, versions of external libraries, etc.
 
 For each class, at minimum there is a test which tries to instantiate it and another one which uses the class. The output of each test (image, text file, binary file) is controlled against a baseline to make sure that the result hasn't change.
 
-All these test are available in the directory \texttt{Testing} and are also good examples on how to use the library.
+All these test are available in the directory \texttt{Testing} and are also good examples on how to use the different classes.
 
 \subsection{How to run the tests?}
 
-There is more than 1000 tests for OTB and about 100 for the applications and it takes from 20 minutes to 3 hours to run all the test, mainly depending on your compilation option (Release mode does make a difference) and of course your hardware.
+There is more than 1000 tests for OTB and about 100 for the OTB-Applications and it takes from 20 minutes to 3 hours to run all the test, mainly depending on your compilation options (Release mode does make a difference) and of course your hardware.
 
 To run the test, you first have to make sure that you set the option \texttt{BUILD\_TESTING} to \texttt{ON} before building the library. If you want to modify it, just rerun ccmake, change the option, then make.
 
-For some of the test, you also need the test data and the baselines (see below).
+For some of the test, you also need the test data and the baselines (see \ref{sec:FAQTestData}).
 
-Once OTB is built with the test, you just have to go to the binary directory where you built OTB and run \texttt{ctest -N} to have a list of all the tests. Just using \texttt{ctest} will run all the tests. To select a subset, you can do \texttt{ctest -R Kml} to run all tests related to kml files or \texttt{ctest -I 1,10} to run tests from 1 to 10.
+Once OTB is built with the tests, you just have to go to the binary directory where you built OTB and run \texttt{ctest -N} to have a list of all the tests. Just using \texttt{ctest} will run all the tests. To select a subset, you can do \texttt{ctest -R Kml} to run all tests related to kml files or \texttt{ctest -I 1,10} to run tests from 1 to 10.
 
-\subsection{How to get the test data?}
+\subsection{How to get the test data?}\label{sec:FAQTestData}
 
 Tests data are also controlled by mercurial (see \ref{sec:FAQMercurial}).
 
@@ -585,6 +589,7 @@ This is about 1~GB of data, so it will take a while, but you have to do it only 
 \end{verbatim}
 will update you to the latest version of the repository.
 
+You can also easily synchronize the directory you retrieve between different computers on your network, so you don't have to get it several time from the main server. Check out Mercurial capabilities.
 
 \subsection{How to submit the results?}
 
