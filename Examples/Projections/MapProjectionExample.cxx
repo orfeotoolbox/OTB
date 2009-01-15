@@ -21,14 +21,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    OUTPUTS: {mapProjectionExample-output.txt}
-//    OUTPUTS: {dummy.png}
-//    1.4835345  43.55968261
 //  Software Guide : EndCommandLineArgs
-
-//These two dependencies are just to produce the dummy image
-#include "otbImage.h"
-#include "otbImageFileWriter.h"
-
 
 // Software Guide : BeginLatex
 //
@@ -93,8 +86,6 @@ int main( int argc, char* argv[] )
   file << std::setprecision(15);
   // Software Guide : EndCodeSnippet
 
-  file << "\\begin{verbatim}" << std::endl;
-
   // Software Guide : BeginLatex
   //
   // We can now instanciate our first map projection. Here, it is a UTM projection
@@ -105,7 +96,8 @@ int main( int argc, char* argv[] )
 
 
   // Software Guide : BeginCodeSnippet
-  otb::UtmForwardProjection::Pointer utmProjection = otb::UtmForwardProjection::New();
+  otb::UtmForwardProjection::Pointer utmProjection
+      = otb::UtmForwardProjection::New();
   utmProjection->SetZone(31);
   utmProjection->SetHemisphere('N');
   // Software Guide : EndCodeSnippet
@@ -132,7 +124,8 @@ int main( int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  otb::Lambert93ForwardProjection::Pointer lambertProjection = otb::Lambert93ForwardProjection::New();
+  otb::Lambert93ForwardProjection::Pointer lambertProjection
+      = otb::Lambert93ForwardProjection::New();
 
   file << "Forward Lambert93 projection: " << std::endl;
   file << point << " -> ";
@@ -185,8 +178,6 @@ int main( int argc, char* argv[] )
   file << std::endl << std::endl;
   // Software Guide : EndCodeSnippet
 
-  file << "\\end{verbatim}" << std::endl;
-
   // Software Guide : BeginLatex
   //
   // And of course, we don't forget to close the file:
@@ -202,36 +193,18 @@ int main( int argc, char* argv[] )
   //
   // The final output of the program should be:
   //
-  // \input{Art/Generated/mapProjectionExample-output.txt}
+  //  \begin{verbatim}
+  //   Forward UTM projection:
+  //       [1.4835345, 43.55968261] -> [377522.448427013, 4824086.71129131]
   //
-  // %\includegraphics[width=0.40\textwidth]{dummy.eps}
+  //   Forward Lambert93 projection:
+  //      [1.4835345, 43.55968261] -> [577437.889798954, 6274578.791561]
+  //
+  //   Forward gerenic projection:
+  //      [1.4835345, 43.55968261] -> [377522.448427013, 4824086.71129131]
+  //   \end{verbatim}
   //
   // Software Guide : EndLatex
-
-  //this is just to trigger the dependancy for the software guide, not
-  //directly related to this example
-  if( argc > 2 )
-  {
-
-    char * dummyfilename = argv[2];
-    typedef otb::Image< unsigned char, 2 > ImageType;
-    ImageType::Pointer image = ImageType::New();
-    ImageType::IndexType start;
-    start[0] = 0; start[1] = 0;
-    ImageType::SizeType  size;
-    size[0] = 1; size[1] = 1;
-    ImageType::RegionType region;
-    region.SetSize( size );
-    region.SetIndex( start );
-    image->SetRegions( region );
-    image->Allocate();
-
-    typedef otb::ImageFileWriter<ImageType> FileWriterType;
-    FileWriterType::Pointer writer = FileWriterType::New();
-    writer->SetFileName(dummyfilename);
-    writer->SetInput(image);
-    writer->Update();
-  }
 
   return EXIT_SUCCESS;
 }
