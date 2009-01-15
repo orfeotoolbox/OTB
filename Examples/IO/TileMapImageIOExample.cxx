@@ -21,10 +21,15 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {osmfile.otb}
-//    OUTPUTS: {openStreetMap.png}
-//    ${GeneratedFolder} 1.4835345  43.55968261 12
+//    OUTPUTS: {openStreetMap-Toulouse.png}
+//    ${GeneratedFolder} 1.4835345  43.55968261 14
 //  Software Guide : EndCommandLineArgs
 
+//  Software Guide : BeginCommandLineArgs
+//    INPUTS: {osmfile.otb}
+//    OUTPUTS: {openStreetMap-Singapore.png}
+//    ${GeneratedFolder} 103.819836 1.352083 14
+//  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
 //
@@ -190,8 +195,9 @@ int main( int argc, char* argv[] )
   //
   // \begin{figure}
   // \center
-  // \includegraphics[width=0.70\textwidth]{openStreetMap.eps}
-  // \itkcaption[Open street map]{Map created from open street map at depth 12 near Toulouse}
+  // \includegraphics[width=0.45\textwidth]{openStreetMap-Toulouse.eps}
+  // \includegraphics[width=0.45\textwidth]{openStreetMap-Singapore.eps}
+  // \itkcaption[Open street map]{Map created from open street map showing the OTB headquaters}
   // \label{fig:TILEMAPIMAGEIOEXAMPLE}
   // \end{figure}
   //
