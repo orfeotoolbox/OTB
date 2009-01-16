@@ -96,8 +96,8 @@ int otbOrthoRectificationFilter( int argc, char* argv[] )
   orthoRectifFilter->SetAverageElevation(10);
 
   writer->SetInput(orthoRectifFilter->GetOutput());
-  writer->SetTilingStreamDivisions(10);
-  //writer->SetTilingStreamDivisions();
+
+  writer->SetTilingStreamDivisions();
 
   writer->Update();
 
