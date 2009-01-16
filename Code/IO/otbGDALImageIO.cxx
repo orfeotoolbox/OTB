@@ -142,7 +142,7 @@ namespace otb
 
   // Open file with GDAL
     m_poDataset = static_cast<GDALDataset *>(GDALOpen(lFileNameGdal.c_str(), GA_ReadOnly ));
-    otbMsgDevMacro(<<"  GCPCount (in CanReadFile): " << m_poDataset->GetGCPCount() );
+
     if(m_poDataset==NULL)
     {
       fprintf( stderr,
