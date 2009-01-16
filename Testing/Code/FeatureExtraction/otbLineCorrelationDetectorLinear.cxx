@@ -43,8 +43,8 @@ int otbLineCorrelationDetectorLinear( int argc, char* argv[] )
   unsigned int  LengthLine((unsigned int)::atoi(argv[5]));
 
   typedef unsigned char                                   InputPixelType;
-  typedef double		   	                        OutputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef double                                 OutputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
   typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
   typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
@@ -53,7 +53,7 @@ int otbLineCorrelationDetectorLinear( int argc, char* argv[] )
   typedef otb::ImageFileReader< InputImageType  >         ReaderType;
   typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
-  typedef itk::LinearInterpolateImageFunction< InputImageType, double >	InterpolatorType;
+  typedef itk::LinearInterpolateImageFunction< InputImageType, double >  InterpolatorType;
   typedef otb::LineCorrelationDetectorImageFilter< InputImageType, OutputImageType, OutputImageDirectionType, InterpolatorType >   FilterType;
 
   FilterType::Pointer FilterLineCorrelation = FilterType::New();

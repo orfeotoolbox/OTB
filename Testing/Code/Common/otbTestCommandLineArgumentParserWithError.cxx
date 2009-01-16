@@ -46,11 +46,11 @@ int otbTestCommandLineArgumentParserWithError( int argc, char * argv[] )
       unsigned int lEntier = parseResult->GetParameterUInt("-entier");
       std::cout << "Entier : "<<lEntier<<std::endl;
       if( parseResult->IsOptionPresent("-deuxentiers"))
-	{
-	  //unsigned int lEntierDeux = otb::GetParameter<unsigned int>(parseResult,"-deuxentiers",1);
-	  unsigned int lEntierDeux = parseResult->GetParameterUInt("-deuxentiers",1);
-	  std::cout << "Entier : "<<lEntierDeux<<std::endl;
-	}
+  {
+    //unsigned int lEntierDeux = otb::GetParameter<unsigned int>(parseResult,"-deuxentiers",1);
+    unsigned int lEntierDeux = parseResult->GetParameterUInt("-deuxentiers",1);
+    std::cout << "Entier : "<<lEntierDeux<<std::endl;
+  }
       //double lDouble = otb::GetParameter<double>(parseResult,"-double");
       double lDouble = parseResult->GetParameterDouble("-double");
       std::cout << "Double : "<<lDouble<<std::endl;

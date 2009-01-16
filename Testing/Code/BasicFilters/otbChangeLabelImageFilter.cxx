@@ -96,11 +96,11 @@ int otbChangeLabelImageFilterTest(int argc, char * argv[])
     std::cout <<  (double) input<<": ";
     for(unsigned int j=0; j<filter->GetNumberOfComponentsPerPixel(); j++)
       {
-	std::cout<< " " << (double)output[j];
-	if( (double)output[j] > (double)maxRemainingLabel )
-	  {
-	    pass = false;
-	  }
+  std::cout<< " " << (double)output[j];
+  if( (double)output[j] > (double)maxRemainingLabel )
+    {
+      pass = false;
+    }
       }
     std::cout<<std::endl;
 

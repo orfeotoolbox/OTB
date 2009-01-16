@@ -39,8 +39,8 @@ int otbLocalHough( int argc, char* argv[] )
   unsigned int  RadiusY((unsigned int)::atoi(argv[3]));
   unsigned int  NumberOfLines((unsigned int)::atoi(argv[4]));
 
-  typedef unsigned char	                                InputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef unsigned char                                  InputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
   typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
 
@@ -59,7 +59,7 @@ int otbLocalHough( int argc, char* argv[] )
   Radius[0] = RadiusX;
   Radius[1] = RadiusY;
 
-  typedef otb::LineSpatialObjectList			LinesListType;
+  typedef otb::LineSpatialObjectList      LinesListType;
   LinesListType::Pointer list = LinesListType::New();
 
   filter->SetRadius( Radius );

@@ -32,8 +32,8 @@
 
 int otbLocalHoughNew( int argc, char* argv[] )
 {
-  typedef unsigned char	                                InputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef unsigned char                                  InputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
   typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
 

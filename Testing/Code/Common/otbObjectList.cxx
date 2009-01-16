@@ -80,8 +80,8 @@ int otbObjectList(int argc, char * argv[])
   // Testing erase operation
   imageList->Erase(2);
   otbControlConditionTestMacro((imageList->Size()!=2)
-			       ||(imageList->GetNthElement(0)!=reader1->GetOutput())
-			       ||(imageList->GetNthElement(1)!=reader2->GetOutput()),"Erase(3)");
+             ||(imageList->GetNthElement(0)!=reader1->GetOutput())
+             ||(imageList->GetNthElement(1)!=reader2->GetOutput()),"Erase(3)");
 
   // Testing iterator
   ImageListType::Iterator iter = imageList->Begin();

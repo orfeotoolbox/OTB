@@ -80,9 +80,9 @@ int otbSVMClassifierImage(int argc, char* argv[] )
   typedef double                        InputPixelType;
   typedef std::vector<InputPixelType>   InputVectorType;
   typedef int                           LabelPixelType;
-  const   unsigned int        	  Dimension = 2;
+  const   unsigned int            Dimension = 2;
 
-  typedef otb::Image< itk::FixedArray<InputPixelType,3>,  Dimension >	InputImageType;
+  typedef otb::Image< itk::FixedArray<InputPixelType,3>,  Dimension >  InputImageType;
   typedef otb::ImageFileReader< InputImageType  >         ReaderType;
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -120,7 +120,7 @@ int otbSVMClassifierImage(int argc, char* argv[] )
   /* Build the class map */
   otbGenericMsgDebugMacro( << "Output image creation" );
 
-    typedef ClassifierType::ClassLabelType	          OutputPixelType;
+    typedef ClassifierType::ClassLabelType            OutputPixelType;
   typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
 
 
@@ -158,7 +158,7 @@ int otbSVMClassifierImage(int argc, char* argv[] )
     otbGenericMsgDebugMacro( << "Image iterator" );
     typedef itk::ImageRegionIterator< OutputImageType>  OutputIteratorType;
     OutputIteratorType  outIt( outputImage,
-			   outputImage->GetBufferedRegion() );
+         outputImage->GetBufferedRegion() );
 
     outIt.GoToBegin();
 

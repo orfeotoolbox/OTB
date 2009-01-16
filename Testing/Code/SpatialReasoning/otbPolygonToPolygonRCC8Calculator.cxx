@@ -103,51 +103,51 @@ int otbPolygonToPolygonRCC8Calculator(int argc, char* argv[])
   for(IteratorType it1=simplifier->GetOutput()->Begin();it1!=simplifier->GetOutput()->End();++it1)
     {
       for(IteratorType it2=simplifier->GetOutput()->Begin();it2!=simplifier->GetOutput()->End();++it2)
-	{
-	  std::cout << "Test: computing relation " << i << "," << j << std::endl;
-	  calc1=CalculatorType::New();
-	  calc1->SetPolygon1(it1.Get());
-	  calc1->SetPolygon2(it2.Get());
-	  calc1->Compute();
-	  out<<calc1->GetValue()<<"\t";
-	  std::cout << "Result without a priori knowledge " << calc1->GetValue() << std::endl;
+  {
+    std::cout << "Test: computing relation " << i << "," << j << std::endl;
+    calc1=CalculatorType::New();
+    calc1->SetPolygon1(it1.Get());
+    calc1->SetPolygon2(it2.Get());
+    calc1->Compute();
+    out<<calc1->GetValue()<<"\t";
+    std::cout << "Result without a priori knowledge " << calc1->GetValue() << std::endl;
 
-	  if(calc1->GetValue()<3
-	     ||calc1->GetValue()==4
-	     ||calc1->GetValue()==6)
-	    {
-	      calc2=CalculatorType::New();
-	      calc2->SetPolygon1(it1.Get());
-	      calc2->SetPolygon2(it2.Get());
-	      calc2->SetLevel1APrioriKnowledge(true);
-	      calc2->Compute();
-	      std::cout << "Result with level1 a priori knowledge " << calc2->GetValue() << std::endl;
-	      if(calc2->GetValue()!=calc1->GetValue())
-		{
-		  std::cout << "Test failed: Result with level1AprioriKnowledge ";
-		  std::cout << "different from result without a priori knowledge" << std::endl;
-		  std::cout << calc1->GetValue() << "!=" << calc2->GetValue() << std::endl;
-		  return EXIT_FAILURE;
-		}
-	    }
-	  if(calc1->GetValue()<4)
-	    {
-	      calc3=CalculatorType::New();
-	      calc3->SetPolygon1(it1.Get());
-	      calc3->SetPolygon2(it2.Get());
-	      calc3->SetLevel3APrioriKnowledge(true);
-	      calc3->Compute();
-	      std::cout << "Result with level3 a priori knowledge " << calc3->GetValue() << std::endl;
-	      if(calc3->GetValue()!=calc1->GetValue())
-		{
-		  std::cout << "Test failed: Result with level3AprioriKnowledge ";
-		  std::cout << "different from result without a priori knowledge" << std::endl;
-		  std::cout << calc1->GetValue() << "!=" << calc3->GetValue() << std::endl;
-		  return EXIT_FAILURE;
-		}
-	    }
-	  j++;
-	}
+    if(calc1->GetValue()<3
+       ||calc1->GetValue()==4
+       ||calc1->GetValue()==6)
+      {
+        calc2=CalculatorType::New();
+        calc2->SetPolygon1(it1.Get());
+        calc2->SetPolygon2(it2.Get());
+        calc2->SetLevel1APrioriKnowledge(true);
+        calc2->Compute();
+        std::cout << "Result with level1 a priori knowledge " << calc2->GetValue() << std::endl;
+        if(calc2->GetValue()!=calc1->GetValue())
+    {
+      std::cout << "Test failed: Result with level1AprioriKnowledge ";
+      std::cout << "different from result without a priori knowledge" << std::endl;
+      std::cout << calc1->GetValue() << "!=" << calc2->GetValue() << std::endl;
+      return EXIT_FAILURE;
+    }
+      }
+    if(calc1->GetValue()<4)
+      {
+        calc3=CalculatorType::New();
+        calc3->SetPolygon1(it1.Get());
+        calc3->SetPolygon2(it2.Get());
+        calc3->SetLevel3APrioriKnowledge(true);
+        calc3->Compute();
+        std::cout << "Result with level3 a priori knowledge " << calc3->GetValue() << std::endl;
+        if(calc3->GetValue()!=calc1->GetValue())
+    {
+      std::cout << "Test failed: Result with level3AprioriKnowledge ";
+      std::cout << "different from result without a priori knowledge" << std::endl;
+      std::cout << calc1->GetValue() << "!=" << calc3->GetValue() << std::endl;
+      return EXIT_FAILURE;
+    }
+      }
+    j++;
+  }
       j=1;
       i++;
       out<<std::endl;

@@ -38,9 +38,9 @@ int otbOSSIMImageMetaDataReaderTest (int argc, char* argv[])
   const char * outputAsciiFilenameOtbImage  = argv[2];
   const char * outputAsciiFilenameOtbVectorImage  = argv[3];
 
-  typedef unsigned char  	                                InputPixelType;
-  typedef unsigned char  	                                OutputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef unsigned char                                    InputPixelType;
+  typedef unsigned char                                    OutputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
   typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
   typedef otb::ImageFileReader< InputImageType  >         ImageReaderType;
@@ -56,9 +56,9 @@ int otbOSSIMImageMetaDataReaderTest (int argc, char* argv[])
   image_medianFilter->GetOutput()->UpdateOutputInformation();
 
   otb::ImageKeywordlist otb_tmp_image;
-  /*	itk::ExposeMetaData< otb::ImageKeywordlist >(image_medianFilter->GetOutput()->GetMetaDataDictionary(),
-	otb::MetaDataKey::OSSIMKeywordlistKey,
-	otb_tmp_image);*/
+  /*  itk::ExposeMetaData< otb::ImageKeywordlist >(image_medianFilter->GetOutput()->GetMetaDataDictionary(),
+  otb::MetaDataKey::OSSIMKeywordlistKey,
+  otb_tmp_image);*/
 
   otb_tmp_image = image_reader->GetOutput()->GetImageKeywordlist();
 
@@ -80,9 +80,9 @@ int otbOSSIMImageMetaDataReaderTest (int argc, char* argv[])
   vector_image_reader->SetFileName( inputFilename  );
   vector_image_reader->GenerateOutputInformation ();
 
-  /*	itk::ExposeMetaData< otb::ImageKeywordlist >(vector_image_reader->GetOutput()->GetMetaDataDictionary(),
-	otb::MetaDataKey::OSSIMKeywordlistKey,
-	otb_tmp_vector_image);*/
+  /*  itk::ExposeMetaData< otb::ImageKeywordlist >(vector_image_reader->GetOutput()->GetMetaDataDictionary(),
+  otb::MetaDataKey::OSSIMKeywordlistKey,
+  otb_tmp_vector_image);*/
   otb::ImageKeywordlist otb_tmp_vector_image;
   otb_tmp_vector_image = vector_image_reader->GetOutput()->GetImageKeywordlist();
 
@@ -91,7 +91,7 @@ int otbOSSIMImageMetaDataReaderTest (int argc, char* argv[])
 
   std::cout << " -> otbVectorImage Ossim key word list copy : "<<ossim_kwl_vector_image<<std::endl;
 
-  //	std::ofstream file;
+  //  std::ofstream file;
   file.open(outputAsciiFilenameOtbVectorImage);
   file << "--- OSSIM KEYWORDLIST ---" << std::endl;
   file << ossim_kwl_vector_image;

@@ -46,9 +46,9 @@ int otbLocalHoughDraw( int argc, char* argv[] )
   unsigned int  RadiusY((unsigned int)::atoi(argv[4]));
   unsigned int  NumberOfLines((unsigned int)::atoi(argv[5]));
 
-  typedef unsigned char	                                InputPixelType;
-  typedef unsigned char	   	                        OutputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef unsigned char                                  InputPixelType;
+  typedef unsigned char                               OutputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
   typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
   typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;

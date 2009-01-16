@@ -44,7 +44,7 @@ int otbHHnHVnVVPolarimetricSynthesisFilter( int argc, char * argv[] )
 
 
   typedef std::complex <double>                   InputPixelType;
-  typedef double    	                        OutputPixelType;
+  typedef double                              OutputPixelType;
   const   unsigned int                            Dimension = 2;
 
   typedef otb::Image< InputPixelType,  Dimension >  InputImageType;

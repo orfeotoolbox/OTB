@@ -30,8 +30,8 @@
 int otbLineRatioDetectorNew( int argc, char* argv[] )
 {
   typedef unsigned char                            InputPixelType;
-  typedef double		   	           OutputPixelType;
-  const   unsigned int        	                   Dimension = 2;
+  typedef double                    OutputPixelType;
+  const   unsigned int                             Dimension = 2;
 
   typedef itk::Image< InputPixelType,  Dimension > InputImageType;
   typedef itk::Image< OutputPixelType, Dimension > OutputImageType;

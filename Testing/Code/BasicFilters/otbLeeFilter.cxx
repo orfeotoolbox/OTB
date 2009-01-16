@@ -38,8 +38,8 @@ int otbLeeFilter( int argc, char * argv[] )
   double        NbLooks((double)::atof(argv[5]));
 
   typedef double                                   InputPixelType;
-  typedef double    	                        OutputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef double                              OutputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
   typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
   typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;

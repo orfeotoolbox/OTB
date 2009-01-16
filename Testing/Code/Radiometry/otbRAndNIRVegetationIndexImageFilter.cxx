@@ -68,35 +68,35 @@ int otbRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
   argc--;
   argv++;
   if ( strArgv == "NDVI" ) return( generic_RAndNIRVegetationIndexImageFilter<InputRImageType, InputNIRImageType, OutputImageType,
-				   otb::Functor::NDVI<     InputRImageType::PixelType,
-				   InputNIRImageType::PixelType,
-				   OutputImageType::PixelType> >
-				   (argc,argv) );
+           otb::Functor::NDVI<     InputRImageType::PixelType,
+           InputNIRImageType::PixelType,
+           OutputImageType::PixelType> >
+           (argc,argv) );
   else if ( strArgv == "RVI" ) return( generic_RAndNIRVegetationIndexImageFilter<InputRImageType, InputNIRImageType, OutputImageType,
-				       otb::Functor::RVI<     InputRImageType::PixelType,
-				       InputNIRImageType::PixelType,
-				       OutputImageType::PixelType> >
-				       (argc,argv) );
-  /*	else if ( strArgv == "PVI" ) return( generic_RAndNIRVegetationIndexImageFilter<InputRImageType, InputNIRImageType, OutputImageType,
-	otb::Functor::PVI<     InputRImageType::PixelType,
-	InputNIRImageType::PixelType,
-	OutputImageType::PixelType> >
-	(argc,argv) );*/
+               otb::Functor::RVI<     InputRImageType::PixelType,
+               InputNIRImageType::PixelType,
+               OutputImageType::PixelType> >
+               (argc,argv) );
+  /*  else if ( strArgv == "PVI" ) return( generic_RAndNIRVegetationIndexImageFilter<InputRImageType, InputNIRImageType, OutputImageType,
+  otb::Functor::PVI<     InputRImageType::PixelType,
+  InputNIRImageType::PixelType,
+  OutputImageType::PixelType> >
+  (argc,argv) );*/
   else if ( strArgv == "SAVI" ) return( generic_RAndNIRVegetationIndexImageFilter<InputRImageType, InputNIRImageType, OutputImageType,
-					otb::Functor::SAVI<     InputRImageType::PixelType,
-					InputNIRImageType::PixelType,
-					OutputImageType::PixelType> >
-					(argc,argv) );
-  /*	else if ( strArgv == "TSAVI" ) return( generic_RAndNIRVegetationIndexImageFilter<InputRImageType, InputNIRImageType, OutputImageType,
-	otb::Functor::TSAVI<     InputRImageType::PixelType,
-	InputNIRImageType::PixelType,
-	OutputImageType::PixelType> >
-	(argc,argv) );*/
+          otb::Functor::SAVI<     InputRImageType::PixelType,
+          InputNIRImageType::PixelType,
+          OutputImageType::PixelType> >
+          (argc,argv) );
+  /*  else if ( strArgv == "TSAVI" ) return( generic_RAndNIRVegetationIndexImageFilter<InputRImageType, InputNIRImageType, OutputImageType,
+  otb::Functor::TSAVI<     InputRImageType::PixelType,
+  InputNIRImageType::PixelType,
+  OutputImageType::PixelType> >
+  (argc,argv) );*/
   else if ( strArgv == "MSAVI" ) return( generic_RAndNIRVegetationIndexImageFilter<InputRImageType, InputNIRImageType, OutputImageType,
-					 otb::Functor::MSAVI<     InputRImageType::PixelType,
-					 InputNIRImageType::PixelType,
-					 OutputImageType::PixelType> >
-					 (argc,argv) );
+           otb::Functor::MSAVI<     InputRImageType::PixelType,
+           InputNIRImageType::PixelType,
+           OutputImageType::PixelType> >
+           (argc,argv) );
   else
     return EXIT_FAILURE;
   return EXIT_SUCCESS;

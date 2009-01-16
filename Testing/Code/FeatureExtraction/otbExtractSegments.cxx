@@ -37,7 +37,7 @@ int otbExtractSegments( int argc, char * argv[] )
   const char * outputFilename = argv[3];
 
   unsigned int  PixelSuppressionRadiusX((unsigned int)::atoi(argv[4]));
-  float	      PixelSuppressionAngularBeam((float)::atof(argv[5]));
+  float        PixelSuppressionAngularBeam((float)::atof(argv[5]));
 
   unsigned int  LocalHoughRadiusX((unsigned int)::atoi(argv[6]));
   unsigned int  LocalHoughRadiusY((unsigned int)::atoi(argv[7]));
@@ -46,9 +46,9 @@ int otbExtractSegments( int argc, char * argv[] )
   float  FillGapsRadius((float)::atof(argv[9]));
   float  FillGapsAngularBeam((float)::atof(argv[10]));
 
-  typedef double	                                        InputPixelType;
-  typedef double	   	                                OutputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef double                                          InputPixelType;
+  typedef double                                       OutputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
   typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
   typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;

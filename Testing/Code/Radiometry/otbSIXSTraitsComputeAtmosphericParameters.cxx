@@ -101,27 +101,27 @@ int otbSIXSTraitsComputeAtmosphericParametersTest(int argc, char * argv[])
   functionValues->SetUserStep(.0025);
 
   otb::SIXSTraits::ComputeAtmosphericParameters(
-						SolarZenithalAngle,
-						SolarAzimutalAngle,
-						ViewingZenithalAngle,
-						ViewingAzimutalAngle,
-						Month,
-						Day,
-						AtmosphericPressure,
-						WaterVaporAmount,
-						OzoneAmount,
-						AerosolModel,
-						AerosolOptical,
-						functionValues,
-						AtmosphericReflectance,
-						AtmosphericSphericalAlbedo,
-						TotalGaseousTransmission,
-						DownwardTransmittance,
-						UpwardTransmittance,
-						UpwardDiffuseTransmittance,
-						UpwardDirectTransmittance,
-						UpwardDiffuseTransmittanceForRayleigh,
-						UpwardDiffuseTransmittanceForAerosol );
+            SolarZenithalAngle,
+            SolarAzimutalAngle,
+            ViewingZenithalAngle,
+            ViewingAzimutalAngle,
+            Month,
+            Day,
+            AtmosphericPressure,
+            WaterVaporAmount,
+            OzoneAmount,
+            AerosolModel,
+            AerosolOptical,
+            functionValues,
+            AtmosphericReflectance,
+            AtmosphericSphericalAlbedo,
+            TotalGaseousTransmission,
+            DownwardTransmittance,
+            UpwardTransmittance,
+            UpwardDiffuseTransmittance,
+            UpwardDirectTransmittance,
+            UpwardDiffuseTransmittanceForRayleigh,
+            UpwardDiffuseTransmittanceForAerosol );
 
   fout.open(outname);
   fout <<" ---------------------------------------------------------"<<std::endl;

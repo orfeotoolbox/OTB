@@ -30,7 +30,7 @@ int otbSOMClassifierNew(int argc, char* argv[] )
 {
   typedef double                         InputPixelType;
   typedef int                            LabelPixelType;
-  const   unsigned int        	     Dimension = 2;
+  const   unsigned int               Dimension = 2;
 
   typedef itk::VariableLengthVector<InputPixelType> PixelType;
   typedef itk::Statistics::EuclideanDistance<PixelType> DistanceType;

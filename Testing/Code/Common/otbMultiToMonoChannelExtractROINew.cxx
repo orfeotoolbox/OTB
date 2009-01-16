@@ -22,11 +22,11 @@
 int otbMultiToMonoChannelExtractROINew ( int argc, char * argv[] )
 {
 
-  //        typedef unsigned char  	                                InputPixelType;
-  //        typedef unsigned char  	                                OutputPixelType;
+  //        typedef unsigned char                                    InputPixelType;
+  //        typedef unsigned char                                    OutputPixelType;
 
-  typedef std::complex<float>  	                                InputPixelType;
-  typedef std::complex<double>  	                                OutputPixelType;
+  typedef std::complex<float>                                    InputPixelType;
+  typedef std::complex<double>                                    OutputPixelType;
 
   typedef otb::MultiToMonoChannelExtractROI< InputPixelType,
     OutputPixelType >  ExtractROIFilterType;

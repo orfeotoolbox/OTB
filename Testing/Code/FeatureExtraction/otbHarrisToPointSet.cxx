@@ -38,7 +38,7 @@ int otbHarrisToPointSet( int argc, char * argv[] )
   double AlphaValue((double)::atof(argv[5]));
 
   typedef unsigned char                                   PixelType;
-  const   unsigned int        	                        Dimension = 2;
+  const   unsigned int                                  Dimension = 2;
 
   PixelType LowerThreshold((PixelType)::atoi(argv[6]));
   PixelType UpperThreshold((PixelType)::atoi(argv[7]));

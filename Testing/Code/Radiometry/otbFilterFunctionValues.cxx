@@ -47,8 +47,8 @@ int otbFilterFunctionValuesTest(int argc, char * argv[])
 
   // Call interpolate
   otb::SIXSTraits::ComputeWavelenghtSpectralBandValuesFor6S(
-							    SIXSStepOfWavelenghtSpectralBandValues,
-							    object);
+                  SIXSStepOfWavelenghtSpectralBandValues,
+                  object);
 
 
   // Writing output file

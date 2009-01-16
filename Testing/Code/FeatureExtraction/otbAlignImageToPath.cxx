@@ -46,15 +46,15 @@ int otbAlignImageToPath( int argc, char * argv[] )
   const char * outputFilename = argv[2];
 
 
-  typedef double                                   	InputPixelType;
-  typedef double   	                        	OutputPixelType;
-  typedef double						RealPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef double                                     InputPixelType;
+  typedef double                               OutputPixelType;
+  typedef double            RealPixelType;
+  const   unsigned int                                  Dimension = 2;
 
-  typedef itk::Image< InputPixelType,  Dimension >	InputImageType;
-  typedef itk::Image< RealPixelType,  Dimension >		RealImageType;
+  typedef itk::Image< InputPixelType,  Dimension >  InputImageType;
+  typedef itk::Image< RealPixelType,  Dimension >    RealImageType;
 
-  typedef itk::PolyLineParametricPath< Dimension >	PathType;
+  typedef itk::PolyLineParametricPath< Dimension >  PathType;
 
   typedef PathType::Pointer PathTypePointer;
   PathType::Pointer ltoto = PathType::New();

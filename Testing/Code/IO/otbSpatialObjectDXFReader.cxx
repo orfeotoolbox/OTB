@@ -64,19 +64,19 @@ int otbSpatialObjectDXFReader(int argc, char * argv[])
       minimum[1]=(*it)->GetBoundingBox()->GetMinimum()[1];
 
       while(it != end)
-	{
-	  (*it)->ComputeBoundingBox();
+  {
+    (*it)->ComputeBoundingBox();
 
-	  if ((*it)->GetBoundingBox()->GetMinimum()[0] < minimum[0])
-	    {
-	      minimum[0]=(*it)->GetBoundingBox()->GetMinimum()[0];
-	    }
-	  if ((*it)->GetBoundingBox()->GetMinimum()[1] < minimum[1])
-	    {
-	      minimum[1]=(*it)->GetBoundingBox()->GetMinimum()[1];
-	    }
-	  it++;
-	}
+    if ((*it)->GetBoundingBox()->GetMinimum()[0] < minimum[0])
+      {
+        minimum[0]=(*it)->GetBoundingBox()->GetMinimum()[0];
+      }
+    if ((*it)->GetBoundingBox()->GetMinimum()[1] < minimum[1])
+      {
+        minimum[1]=(*it)->GetBoundingBox()->GetMinimum()[1];
+      }
+    it++;
+  }
 
 
       ImageType::SizeType size;

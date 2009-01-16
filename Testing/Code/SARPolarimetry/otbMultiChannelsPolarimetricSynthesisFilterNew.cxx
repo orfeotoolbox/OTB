@@ -29,7 +29,7 @@
 int otbMultiChannelsPolarimetricSynthesisFilterNew( int argc, char * argv[] )
 {
   typedef double              InputPixelType;
-  typedef double    	    OutputPixelType;
+  typedef double          OutputPixelType;
   const   unsigned int        Dimension = 2;
 
   typedef otb::VectorImage< InputPixelType,  Dimension >        InputImageType;

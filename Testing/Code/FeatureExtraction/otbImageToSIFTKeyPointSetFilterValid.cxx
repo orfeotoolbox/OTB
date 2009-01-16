@@ -63,7 +63,7 @@ int otbImageToSIFTKeyPointSetFilterValid(int argc, char * argv[])
   outputImage->Allocate();
 
   itk::ImageRegionIterator<OutputImageType> iterOutput(outputImage,
-						       outputImage->GetRequestedRegion());
+                   outputImage->GetRequestedRegion());
 
   for (iterOutput.GoToBegin(); !iterOutput.IsAtEnd(); ++iterOutput)
     {
@@ -97,13 +97,13 @@ int otbImageToSIFTKeyPointSetFilterValid(int argc, char * argv[])
 
       outputImage->SetPixel(index, greenPixel);
       if (static_cast<unsigned int>(index[1]) < static_cast<unsigned int>(size[1]) )
-	outputImage->SetPixel(index+t,greenPixel);
+  outputImage->SetPixel(index+t,greenPixel);
       if (index[1] > 0)
-	outputImage->SetPixel(index+b,greenPixel);
+  outputImage->SetPixel(index+b,greenPixel);
       if (static_cast<unsigned int>(index[0]) < static_cast<unsigned int>(size[0]) )
-	outputImage->SetPixel(index+l,greenPixel);
+  outputImage->SetPixel(index+l,greenPixel);
       if (index[0] > 0)
-	outputImage->SetPixel(index+r,greenPixel);
+  outputImage->SetPixel(index+r,greenPixel);
 
     }
   desc.close();

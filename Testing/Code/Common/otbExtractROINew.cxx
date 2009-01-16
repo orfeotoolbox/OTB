@@ -26,8 +26,8 @@
 
 int otbExtractROINew( int argc, char * argv[] )
 {
-  typedef std::complex<float>  	                              InputPixelType;
-  typedef std::complex<double>  	                      OutputPixelType;
+  typedef std::complex<float>                                  InputPixelType;
+  typedef std::complex<double>                          OutputPixelType;
 
   typedef otb::ExtractROI< InputPixelType, OutputPixelType >  FilterType;
 

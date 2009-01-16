@@ -37,11 +37,11 @@ int otbHarrisImage( int argc, char * argv[] )
   double Alpha((double)::atof(argv[5]));
 
   typedef unsigned char                                   InputPixelType;
-  const   unsigned int        	                        Dimension = 2;
-  typedef unsigned char   	                        OutputPixelType;
+  const   unsigned int                                  Dimension = 2;
+  typedef unsigned char                             OutputPixelType;
 
-  typedef itk::Image< InputPixelType,  Dimension >	              InputImageType;
-  typedef itk::Image< OutputPixelType, Dimension >	              OutputImageType;
+  typedef itk::Image< InputPixelType,  Dimension >                InputImageType;
+  typedef itk::Image< OutputPixelType, Dimension >                OutputImageType;
   typedef otb::ImageFileReader< InputImageType  >                       ReaderType;
   typedef otb::HarrisImageFilter<InputImageType,OutputImageType>        FunctionType;
   typedef otb::ImageFileWriter< OutputImageType >                       WriterType;

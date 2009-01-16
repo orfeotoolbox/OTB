@@ -53,11 +53,11 @@ int otbPersistentVectorizationFilter(int argc, char * argv[])
       ++it)
     {
       for(unsigned int i = 0; i < it.Get()->GetVertexList()->Size();++i)
-	{
-	  f<<"[ "<<it.Get()->GetVertexList()->GetElement(i)[0]
-	   <<", "<<it.Get()->GetVertexList()->GetElement(i)[1]
-	   <<"] ";
-	}
+  {
+    f<<"[ "<<it.Get()->GetVertexList()->GetElement(i)[0]
+     <<", "<<it.Get()->GetVertexList()->GetElement(i)[1]
+     <<"] ";
+  }
       f<<std::endl;
     }
 

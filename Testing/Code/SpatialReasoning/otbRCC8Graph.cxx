@@ -91,68 +91,68 @@ int otbRCC8Graph(int argc, char* argv[])
   rcc8Graph->SetVertex(1,vertex2);
 
   otbControlConditionTestMacro(rcc8Graph->GetNumberOfVertices()!=nbVertices,
-			       "rcc8Graph->GetNumberOfVertices()!=nbVertices");
+             "rcc8Graph->GetNumberOfVertices()!=nbVertices");
   otbControlConditionTestMacro(rcc8Graph->GetVertex(0)->GetSegmentationLevel()!=vertex1SegLevel,
-			       "rcc8Graph->GetVertex(0)->GetSegmentationLevel()!=vertex1SegLevel");
+             "rcc8Graph->GetVertex(0)->GetSegmentationLevel()!=vertex1SegLevel");
   otbControlConditionTestMacro(rcc8Graph->GetVertex(0)->GetSegmentationType()!=vertex1SegType,
-			       "rcc8Graph->GetVertex(0)->GetSegmentationType()!=vertex1SegType");
+             "rcc8Graph->GetVertex(0)->GetSegmentationType()!=vertex1SegType");
   otbControlConditionTestMacro(rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(0)!=p1,
-			       "rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(0)!=p1");
+             "rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(0)!=p1");
   otbControlConditionTestMacro(rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(1)!=p2,
-			       "rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(1)!=p2");
+             "rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(1)!=p2");
   otbControlConditionTestMacro(rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(2)!=p3,
-			       "rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(2)!=p3");
+             "rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(2)!=p3");
   otbControlConditionTestMacro(rcc8Graph->GetVertex(1)->GetSegmentationLevel()!=vertex2SegLevel,
-			       "rcc8Graph->GetVertex(1)->GetSegmentationLevel()!=vertex2SegLevel");
+             "rcc8Graph->GetVertex(1)->GetSegmentationLevel()!=vertex2SegLevel");
   otbControlConditionTestMacro(rcc8Graph->GetVertex(1)->GetSegmentationType()!=vertex2SegType,
-			       "rcc8Graph->GetVertex(1)->GetObjectLabelInImgage()!=vertex2SegType");
+             "rcc8Graph->GetVertex(1)->GetObjectLabelInImgage()!=vertex2SegType");
   otbControlConditionTestMacro(rcc8Graph->GetVertex(1)->GetPath()->GetVertexList()->GetElement(0)!=p4,
-			       "rcc8Graph->GetVertex(1)->GetPath()->GetVertexList()->GetElement(0)!=p4");
+             "rcc8Graph->GetVertex(1)->GetPath()->GetVertexList()->GetElement(0)!=p4");
   otbControlConditionTestMacro(rcc8Graph->GetVertex(1)->GetPath()->GetVertexList()->GetElement(1)!=p5,
-			       "rcc8Graph->GetVertex(1)->GetPath()->GetVertexList()->GetElement(1)!=p5");
+             "rcc8Graph->GetVertex(1)->GetPath()->GetVertexList()->GetElement(1)!=p5");
   otbControlConditionTestMacro(rcc8Graph->GetVertex(1)->GetPath()->GetVertexList()->GetElement(2)!=p6,
-			       "rcc8Graph->GetVertex(1)->GetPath()->GetVertexList()->GetElement(2)!=p6");
+             "rcc8Graph->GetVertex(1)->GetPath()->GetVertexList()->GetElement(2)!=p6");
 
 
   VertexIteratorType v(rcc8Graph);
   v.GoToBegin();
   otbControlConditionTestMacro(v.Get()->GetSegmentationLevel()!=vertex1SegLevel,
-			       "v.Get()->GetSegmentationLevel()!=vertex1SegLevel");
+             "v.Get()->GetSegmentationLevel()!=vertex1SegLevel");
   otbControlConditionTestMacro(v.Get()->GetSegmentationType()!=vertex1SegType,
-			       "v.Get()->GetSegmentationType()!=vertex1SegType");
+             "v.Get()->GetSegmentationType()!=vertex1SegType");
   otbControlConditionTestMacro(v.Get()->GetPath()->GetVertexList()->GetElement(0)!=p1,
-			       "v.Get()->GetPath()->GetVertexList()->GetElement(0)!=p1");
+             "v.Get()->GetPath()->GetVertexList()->GetElement(0)!=p1");
   otbControlConditionTestMacro(v.Get()->GetPath()->GetVertexList()->GetElement(1)!=p2,
-			       "v.Get()->GetPath()->GetVertexList()->GetElement(1)!=p2");
+             "v.Get()->GetPath()->GetVertexList()->GetElement(1)!=p2");
   otbControlConditionTestMacro(v.Get()->GetPath()->GetVertexList()->GetElement(2)!=p3,
-			       "v.Get()->GetPath()->GetVertexList()->GetElement(2)!=p3");
+             "v.Get()->GetPath()->GetVertexList()->GetElement(2)!=p3");
   ++v;
   otbControlConditionTestMacro(v.Get()->GetSegmentationLevel()!=vertex2SegLevel,
-			       "v.Get()->GetSegmentationLevel()!=vertex2SegLevel");
+             "v.Get()->GetSegmentationLevel()!=vertex2SegLevel");
   otbControlConditionTestMacro(v.Get()->GetSegmentationType()!=vertex2SegType,
-			       "v.Get()->GetObjectLabelInImgage()!=vertex2SegType");
+             "v.Get()->GetObjectLabelInImgage()!=vertex2SegType");
   otbControlConditionTestMacro(v.Get()->GetPath()->GetVertexList()->GetElement(0)!=p4,
-			       "rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(0)!=p4");
+             "rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(0)!=p4");
   otbControlConditionTestMacro(v.Get()->GetPath()->GetVertexList()->GetElement(1)!=p5,
-			       "rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(1)!=p5");
+             "rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(1)!=p5");
   otbControlConditionTestMacro(v.Get()->GetPath()->GetVertexList()->GetElement(2)!=p6,
-			       "rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(2)!=p6");
+             "rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(2)!=p6");
 
 
   // Testing the edge iterator
   rcc8Graph->AddEdge(0,1,otb::OTB_RCC8_NTPPI);
 
   otbControlConditionTestMacro(rcc8Graph->GetNumberOfEdges()!=1,
-			       "rcc8Graph->GetNumberOfEdges()!=1");
+             "rcc8Graph->GetNumberOfEdges()!=1");
 
   EdgeIteratorType e(rcc8Graph);
   e.GoToBegin();
   otbControlConditionTestMacro(e.GetValue()!=otb::OTB_RCC8_NTPPI,
-			       "e.GetValue()!=otb::OTB_RCC8_NTPPI");
+             "e.GetValue()!=otb::OTB_RCC8_NTPPI");
   otbControlConditionTestMacro(e.GetSourceIndex()!=0,
-			       "e.GetSourceIndex()!=0");
+             "e.GetSourceIndex()!=0");
   otbControlConditionTestMacro(e.GetTargetIndex()!=1,
-			       "e.GetTargetIndex()!=1");
+             "e.GetTargetIndex()!=1");
 
 
   return EXIT_SUCCESS;

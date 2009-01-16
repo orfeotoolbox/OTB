@@ -36,9 +36,9 @@ int otbImageFileReaderONERAComplex(int argc, char* argv[])
   const char * outputRealFilename = argv[2];
   const char * outputImagFilename = argv[3];
 
-  typedef std::complex<float>  	                        InputPixelType;
-  typedef float                             		OutputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef std::complex<float>                            InputPixelType;
+  typedef float                                 OutputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
   typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
   typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;

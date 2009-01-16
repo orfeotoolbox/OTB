@@ -69,32 +69,32 @@ int otbGeodesicMorphologyIterativeDecompositionImageFilter(int argc, char * argv
       itk::OStringStream oss;
       // Writing the results images
       while((itAnalyse!=decomposition->GetOutput()->End())
-	    &&(itConvexMap!=decomposition->GetConvexOutput()->End())
-	    &&(itConcaveMap!=decomposition->GetConcaveOutput()->End())
-	    )
-	{
-	  oss<<outputFilenamePrefix<<"_leveling_"<<i<<"."<<outputFilenameSuffix;
-	  writer =  WriterType::New();
-	  writer->SetInput(itAnalyse.Get());
-	  writer->SetFileName(oss.str().c_str());
-	  writer->Update();
-	  oss.str("");
-	  oss<<outputFilenamePrefix<<"_convMap_"<<i<<"."<<outputFilenameSuffix;
-	  writer =  WriterType::New();
-	  writer->SetInput(itConvexMap.Get());
-	  writer->SetFileName(oss.str().c_str());
-	  writer->Update();
-	  oss.str("");
-	  oss<<outputFilenamePrefix<<"_concMap_"<<i<<"."<<outputFilenameSuffix;
-	  writer =  WriterType::New();
-	  writer->SetInput(itConcaveMap.Get());
-	  writer->SetFileName(oss.str().c_str());
-	  writer->Update();
-	  oss.str("");
-	  ++itAnalyse;
-	  ++itConvexMap;
-	  ++itConcaveMap;
-	  ++i;
-	}
+      &&(itConvexMap!=decomposition->GetConvexOutput()->End())
+      &&(itConcaveMap!=decomposition->GetConcaveOutput()->End())
+      )
+  {
+    oss<<outputFilenamePrefix<<"_leveling_"<<i<<"."<<outputFilenameSuffix;
+    writer =  WriterType::New();
+    writer->SetInput(itAnalyse.Get());
+    writer->SetFileName(oss.str().c_str());
+    writer->Update();
+    oss.str("");
+    oss<<outputFilenamePrefix<<"_convMap_"<<i<<"."<<outputFilenameSuffix;
+    writer =  WriterType::New();
+    writer->SetInput(itConvexMap.Get());
+    writer->SetFileName(oss.str().c_str());
+    writer->Update();
+    oss.str("");
+    oss<<outputFilenamePrefix<<"_concMap_"<<i<<"."<<outputFilenameSuffix;
+    writer =  WriterType::New();
+    writer->SetInput(itConcaveMap.Get());
+    writer->SetFileName(oss.str().c_str());
+    writer->Update();
+    oss.str("");
+    ++itAnalyse;
+    ++itConvexMap;
+    ++itConcaveMap;
+    ++i;
+  }
       return EXIT_SUCCESS;
     }

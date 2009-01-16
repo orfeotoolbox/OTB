@@ -61,7 +61,7 @@ int otbCreateInverseForwardSensorModel( int argc, char* argv[] )
   //Allocate pointer
   InverseModelType::Pointer               inverse_model= InverseModelType::New();
   ForwardModelType::Pointer               forward_model= ForwardModelType::New();
-  ReaderType::Pointer	                reader=ReaderType::New();
+  ReaderType::Pointer                  reader=ReaderType::New();
 
   // Set parameters ...
   reader->SetFileName(argv[1]);

@@ -79,10 +79,10 @@ int otbImageToSIFTKeyPointSetFilterOutputAscii(int argc, char * argv[])
 
       unsigned int lIterDesc=0;
       while (lIterDesc < pDataIt.Value().Size())
-	{
-	  outfile << std::setprecision(3) << pDataIt.Value()[lIterDesc] << " ";
-	  lIterDesc++;
-	}
+  {
+    outfile << std::setprecision(3) << pDataIt.Value()[lIterDesc] << " ";
+    lIterDesc++;
+  }
       outfile << "]" << std::endl;
       ++pIt;
       ++pDataIt;

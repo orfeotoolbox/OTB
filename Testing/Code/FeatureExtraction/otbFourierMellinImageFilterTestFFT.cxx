@@ -33,7 +33,7 @@ int otbFourierMellinImageFilterTestFFT(int argc, char* argv[])
   const char * outputFilename = argv[2];
   typedef double                                          InputPixelType;
   typedef std::complex<InputPixelType>                    OutputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  const   unsigned int                                  Dimension = 2;
 
   typedef itk::VnlFFTRealToComplexConjugateImageFilter<InputPixelType,Dimension> FourierImageFilterType;
 

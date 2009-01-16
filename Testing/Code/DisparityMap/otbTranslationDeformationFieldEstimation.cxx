@@ -139,11 +139,11 @@ int otbTranslationDeformationFieldEstimation(int argc, char* argv[])
   for(unsigned int x=0; x<NumberOfXNodes; x++)
     for(unsigned int y=0; y<NumberOfYNodes; y++)
       {
-	PointType p;
-	p[0] = firstNodeIndex[0]+x*step;     //  x coordinate
-	p[1] = firstNodeIndex[1]+y*step;     //  y coordinate
-	std::cout << "Id: " << nodeCounter << " ->  " <<  p << std::endl;
-	nodes->SetPoint( nodeCounter++, p );
+  PointType p;
+  p[0] = firstNodeIndex[0]+x*step;     //  x coordinate
+  p[1] = firstNodeIndex[1]+y*step;     //  y coordinate
+  std::cout << "Id: " << nodeCounter << " ->  " <<  p << std::endl;
+  nodes->SetPoint( nodeCounter++, p );
       }
 
   // Fix to avoid recomputing the disparity for each deformation field generation method.

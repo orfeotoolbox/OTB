@@ -36,14 +36,14 @@ int otbDrawPathDessinCarre( int argc, char * argv[] )
   const char * outputFilename = argv[2];
 
   typedef unsigned char                                   InputPixelType;
-  typedef unsigned char   	                        OutputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef unsigned char                             OutputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
-  typedef itk::Image< InputPixelType,  Dimension >	InputImageType;
+  typedef itk::Image< InputPixelType,  Dimension >  InputImageType;
   typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
   typedef InputImageType::PointType                       InputImagePointType;
 
-  typedef itk::PolyLineParametricPath< Dimension >	PathType;
+  typedef itk::PolyLineParametricPath< Dimension >  PathType;
 
   typedef otb::ImageFileReader< InputImageType  >         ReaderType;
   typedef itk::ImageFileWriter< OutputImageType >         WriterType;

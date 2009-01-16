@@ -45,11 +45,11 @@ int main( int argc, char ** argv )
 
 
   typedef unsigned char                                   InputPixelType;
-  typedef unsigned char   	                        OutputPixelType;
+  typedef unsigned char                             OutputPixelType;
 
-  const   unsigned int        	                        Dimension = 2;
+  const   unsigned int                                  Dimension = 2;
 
-  typedef otb::Image< InputPixelType,  Dimension >	InputImageType;
+  typedef otb::Image< InputPixelType,  Dimension >  InputImageType;
   typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
 
   typedef otb::ImageFileReader< InputImageType  >         ReaderType;
@@ -80,7 +80,7 @@ int main( int argc, char ** argv )
 
   std::cout << "Extraction ROI" << std::endl;
 
-  typedef itk::PolyLineParametricPath< Dimension >		  PathType;
+  typedef itk::PolyLineParametricPath< Dimension >      PathType;
   typedef otb::ImageToPathListAlignFilter<InputImageType,PathType> ListAlignFilterType;
 
   ListAlignFilterType::Pointer alignFilter = ListAlignFilterType::New();

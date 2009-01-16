@@ -32,9 +32,9 @@ int otbFlusserImage( int argc, char * argv[] )
   unsigned int  Number = 1;
 
   typedef unsigned char                                   InputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  const   unsigned int                                  Dimension = 2;
 
-  typedef itk::Image< InputPixelType,  Dimension >	              InputImageType;
+  typedef itk::Image< InputPixelType,  Dimension >                InputImageType;
   typedef otb::ImageFileReader< InputImageType  >                       ReaderType;
   typedef std::complex<float>                                           ComplexType;
   typedef float                                                        RealType;

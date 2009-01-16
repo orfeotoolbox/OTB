@@ -98,21 +98,21 @@ int otbSVMImageModelEstimatorModelAccessor( int argc, char* argv[] )
       f << "  SV["<<i<<"]:";
       const svm_node *p = SVs[i];
       /*        for(unsigned int j=0;j<nbSupportVector;j++)
-		{
+    {
                 f << "       SV["<<i<<"]["<<j<<"]:";*/
       if( svmEstimator->GetKernelType() == PRECOMPUTED)
-	{
-	  f << " "<<p->value;
+  {
+    f << " "<<p->value;
 
-	}
+  }
       else
-	{
-	  while(p->index != -1)
-	    {
-	      f << " ["<<p->index << ";"<<p->value<<"] ";
-	      p++;
-	    }
-	}
+  {
+    while(p->index != -1)
+      {
+        f << " ["<<p->index << ";"<<p->value<<"] ";
+        p++;
+      }
+  }
       f << std::endl;
       //        }
     }
@@ -144,7 +144,7 @@ int otbSVMImageModelEstimatorModelAccessor( int argc, char* argv[] )
       f << "     ";
       for(unsigned int j=0;j<nbSupportVector;j++)
         {
-	  f << "  " << alphas[i][j];
+    f << "  " << alphas[i][j];
         }
     }
   f << std::endl;

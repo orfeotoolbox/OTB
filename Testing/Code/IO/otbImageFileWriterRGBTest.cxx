@@ -36,7 +36,7 @@ int otbImageFileWriterRGBTest(int argc, char* argv[])
 
   typedef itk::RGBPixel<unsigned char>                    InputPixelType;
   typedef itk::RGBPixel<unsigned char>                    OutputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  const   unsigned int                                  Dimension = 2;
 
   typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
   typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;

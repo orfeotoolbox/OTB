@@ -36,11 +36,11 @@ int otbPixelSuppressionByDirection( int argc, char* argv[] )
   const char * outputFilename = argv[3];
 
   unsigned int  RadiusX((unsigned int)::atoi(argv[4]));
-  float	      AngularBeam((float)::atof(argv[5]));
+  float        AngularBeam((float)::atof(argv[5]));
 
-  typedef double		                                InputPixelType;
-  typedef double		   	                        OutputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef double                                    InputPixelType;
+  typedef double                                 OutputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
   typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
   typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;

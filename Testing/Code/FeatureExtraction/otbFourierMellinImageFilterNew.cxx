@@ -28,14 +28,14 @@ int otbFourierMellinImageFilterNew(int argc, char* argv[])
 {
 
   typedef double                                          PixelType;
-  const   unsigned int        	                          Dimension = 2;
+  const   unsigned int                                    Dimension = 2;
 
   typedef otb::Image< PixelType, Dimension >        InputImageType;
   typedef otb::Image< PixelType, Dimension >        OutputImageType;
 
-  typedef itk::LinearInterpolateImageFunction< InputImageType, double >		InterpolatorType;
+  typedef itk::LinearInterpolateImageFunction< InputImageType, double >    InterpolatorType;
   typedef otb::ForwardFourierMellinTransformImageFilter<PixelType,
-  				InterpolatorType,Dimension> 			FourierMellinTransformType;
+          InterpolatorType,Dimension>       FourierMellinTransformType;
 
   FourierMellinTransformType::Pointer fourierMellinTransform = FourierMellinTransformType::New();
 

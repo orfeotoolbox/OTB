@@ -45,9 +45,9 @@ int otbDrawLineSpatialObject( int argc, char* argv[] )
   double Vy((double)::atof(argv[6]));
 
 
-  typedef double		                                InputPixelType;
-  typedef unsigned char	   	                        OutputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef double                                    InputPixelType;
+  typedef unsigned char                               OutputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
   typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
   typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
@@ -67,7 +67,7 @@ int otbDrawLineSpatialObject( int argc, char* argv[] )
   writer->SetFileName( outputFilename );
 
   // Definition of the line
-  typedef itk::LineSpatialObject<2>	LineType;
+  typedef itk::LineSpatialObject<2>  LineType;
   LineType::PointListType list;
   LineType::LinePointType point;
 

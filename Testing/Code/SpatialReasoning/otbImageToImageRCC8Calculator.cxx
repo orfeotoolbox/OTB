@@ -56,48 +56,48 @@ int otbImageToImageRCC8Calculator(int argc, char* argv[])
   for(IteratorType it1=images->Begin();it1!=images->End();++it1)
     {
       for(IteratorType it2=images->Begin();it2!=images->End();++it2)
-	{
-	  std::cout << "Test: computing relation " << i <<","<< j << std::endl;
-	  calc=CalculatorType::New();
-	  calc->SetInput1(it1.Get());
-	  calc->SetInput2(it2.Get());
-	  calc->Update();
-	  out<<calc->GetValue()<<"\t";
+  {
+    std::cout << "Test: computing relation " << i <<","<< j << std::endl;
+    calc=CalculatorType::New();
+    calc->SetInput1(it1.Get());
+    calc->SetInput2(it2.Get());
+    calc->Update();
+    out<<calc->GetValue()<<"\t";
 
-	  if(calc->GetValue()<3
-	     ||calc->GetValue()==4
-	     ||calc->GetValue()==6)
-	    {
-	      calc1=CalculatorType::New();
-	      calc1->SetInput1(it1.Get());
-	      calc1->SetInput2(it2.Get());
-	      calc1->SetLevel1APrioriKnowledge(true);
-	      calc1->Update();
-	      if(calc1->GetValue()!=calc->GetValue())
-		{
-		  std::cout<<"Test failed: Result with level1AprioriKnowledge ";
-		  std::cout<<"different from result without a priori knowledge"<<std::endl;
-		  std::cout<<calc->GetValue()<<"!="<<calc1->GetValue()<<std::endl;
-		  return EXIT_FAILURE;
-		}
-	    }
-	  if(calc->GetValue()<4)
-	    {
-	      calc2=CalculatorType::New();
-	      calc2->SetInput1(it1.Get());
-	      calc2->SetInput2(it2.Get());
-	      calc2->SetLevel3APrioriKnowledge(true);
-	      calc2->Update();
-	      if(calc2->GetValue()!=calc->GetValue())
-		{
-		  std::cout<<"Test failed: Result with level3AprioriKnowledge ";
-		  std::cout<<"different from result without a priori knowledge"<<std::endl;
-		  std::cout<<calc->GetValue()<<"!="<<calc1->GetValue()<<std::endl;
-		  return EXIT_FAILURE;
-		}
-	    }
-	  j++;
-	}
+    if(calc->GetValue()<3
+       ||calc->GetValue()==4
+       ||calc->GetValue()==6)
+      {
+        calc1=CalculatorType::New();
+        calc1->SetInput1(it1.Get());
+        calc1->SetInput2(it2.Get());
+        calc1->SetLevel1APrioriKnowledge(true);
+        calc1->Update();
+        if(calc1->GetValue()!=calc->GetValue())
+    {
+      std::cout<<"Test failed: Result with level1AprioriKnowledge ";
+      std::cout<<"different from result without a priori knowledge"<<std::endl;
+      std::cout<<calc->GetValue()<<"!="<<calc1->GetValue()<<std::endl;
+      return EXIT_FAILURE;
+    }
+      }
+    if(calc->GetValue()<4)
+      {
+        calc2=CalculatorType::New();
+        calc2->SetInput1(it1.Get());
+        calc2->SetInput2(it2.Get());
+        calc2->SetLevel3APrioriKnowledge(true);
+        calc2->Update();
+        if(calc2->GetValue()!=calc->GetValue())
+    {
+      std::cout<<"Test failed: Result with level3AprioriKnowledge ";
+      std::cout<<"different from result without a priori knowledge"<<std::endl;
+      std::cout<<calc->GetValue()<<"!="<<calc1->GetValue()<<std::endl;
+      return EXIT_FAILURE;
+    }
+      }
+    j++;
+  }
       j=1;
       i++;
       out<<std::endl;

@@ -78,18 +78,18 @@ int otbRegionProjectionResampler( int argc, char* argv[] )
   typedef itk::TranslationTransform<double,2>                        TransformType;
   typedef otb::CompositeTransform<ModelType,TransformType>           CompositeType;
 
-  ImageType::IndexType  	start;
-  ImageType::SizeType  	size;
-  ImageType::SpacingType  	spacing;
-  ImageType::PointType	origin;
+  ImageType::IndexType    start;
+  ImageType::SizeType    size;
+  ImageType::SpacingType    spacing;
+  ImageType::PointType  origin;
   ImageType::RegionType     region;
 
   //Allocate pointer
   ModelType::Pointer         model        = ModelType::New();
-  ReaderType::Pointer	 reader       = ReaderType::New();
-  WriterType::Pointer	 writer       = WriterType::New();
-  InterpolatorType::Pointer	 interpolator = InterpolatorType::New();
-  RescalerType::Pointer	 rescaler     = RescalerType::New();
+  ReaderType::Pointer   reader       = ReaderType::New();
+  WriterType::Pointer   writer       = WriterType::New();
+  InterpolatorType::Pointer   interpolator = InterpolatorType::New();
+  RescalerType::Pointer   rescaler     = RescalerType::New();
   ResamplerType::Pointer     resampler    = ResamplerType::New();
 
   // Set parameters ...

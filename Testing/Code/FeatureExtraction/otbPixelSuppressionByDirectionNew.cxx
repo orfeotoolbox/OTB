@@ -31,9 +31,9 @@
 
 int otbPixelSuppressionByDirectionNew( int argc, char* argv[] )
 {
-  typedef double		                      InputPixelType;
-  typedef double		   	              OutputPixelType;
-  const   unsigned int        	                      Dimension = 2;
+  typedef double                          InputPixelType;
+  typedef double                       OutputPixelType;
+  const   unsigned int                                Dimension = 2;
 
   typedef itk::Image< InputPixelType,  Dimension >    InputImageType;
   typedef itk::Image< OutputPixelType, Dimension >    OutputImageType;

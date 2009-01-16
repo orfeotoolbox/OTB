@@ -80,8 +80,8 @@ int otbList(int argc, char * argv[])
   // Testing erase operation
   imageList->Erase(2);
   otbControlConditionTestMacro((imageList->Size()!=2)
-			       ||(imageList->GetNthElement(0)!=reader1->GetOutput())
-			       ||(imageList->GetNthElement(1)!=reader2->GetOutput()),"Erase(3)");
+             ||(imageList->GetNthElement(0)!=reader1->GetOutput())
+             ||(imageList->GetNthElement(1)!=reader2->GetOutput()),"Erase(3)");
 
   // Testing iterator
   ImageListType::Iterator iter = imageList->Begin();
@@ -101,14 +101,14 @@ int otbList(int argc, char * argv[])
   iter = imageList->Begin();
   index=0;
   otbControlConditionTestMacro(imageList->GetNthElement(0) != iter.Get(),
-			       "Iterator != GetNthElement(0)");
+             "Iterator != GetNthElement(0)");
   otbControlConditionTestMacro(imageList->GetNthElement(1) != (iter+1).Get(),
-			       "Iterator+1 != GetNthElement(1)");
+             "Iterator+1 != GetNthElement(1)");
   ++iter;
   otbControlConditionTestMacro(imageList->GetNthElement(1) != iter.Get(),
-			       "Iterator != GetNthElement(1)");
+             "Iterator != GetNthElement(1)");
   otbControlConditionTestMacro(imageList->GetNthElement(0) != (iter-1).Get(),
-			       "Iterator-1 != GetNthElement(0)");
+             "Iterator-1 != GetNthElement(0)");
 
   // Testing const iterator
   ImageListType::ConstIterator constIter = imageList->Begin();

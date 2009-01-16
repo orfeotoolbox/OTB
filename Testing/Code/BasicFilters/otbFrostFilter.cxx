@@ -39,8 +39,8 @@ int otbFrostFilter( int argc, char * argv[] )
   double        Deramp ((double)::atof(argv[5]));
 
   typedef double                                   InputPixelType;
-  typedef double     	                         OutputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef double                                OutputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
   typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
   typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;

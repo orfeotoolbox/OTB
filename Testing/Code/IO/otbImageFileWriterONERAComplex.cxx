@@ -33,8 +33,8 @@ int otbImageFileWriterONERAComplex(int argc, char* argv[])
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
-  typedef std::complex<float>  	                        PixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef std::complex<float>                            PixelType;
+  const   unsigned int                                  Dimension = 2;
 
   typedef otb::Image< PixelType,  Dimension >        ImageType;
 

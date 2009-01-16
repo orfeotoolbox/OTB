@@ -139,10 +139,10 @@ int otbSurfaceAdjencyEffect6SCorrectionSchemeFilter(int argc, char * argv[])
       fin >> maxSpectralValue;//wlsup;
 
       while (!fin.eof() && fin.good())
-	{
-	  fin >> value;
-	  vect.push_back(value);
-	}
+  {
+    fin >> value;
+    vect.push_back(value);
+  }
 
       fin.close();
       functionValues->SetFilterFunctionValues(vect);

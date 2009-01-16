@@ -49,7 +49,7 @@ int otbSVMClassifierPointSet(int argc, char* argv[] )
   typedef double InputPixelType;
   typedef int LabelPixelType;
   typedef std::vector<InputPixelType>                             InputVectorType;
-  const   unsigned int        	                    Dimension = 2;
+  const   unsigned int                              Dimension = 2;
 
   typedef itk::PointSet< InputVectorType,  Dimension >
     MeasurePointSetType;
@@ -142,10 +142,10 @@ int otbSVMClassifierPointSet(int argc, char* argv[] )
       mPSet->GetPointData(pointId, &measure);
 
       if(label != ((measure[0]+measure[1])>0) )
-	error++;
+  error++;
 
       std::cout << label << "/" <<
-	((measure[0]+measure[1])>0) << std::endl;
+  ((measure[0]+measure[1])>0) << std::endl;
 
 
       ++pointId;
