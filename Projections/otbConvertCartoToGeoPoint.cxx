@@ -64,7 +64,7 @@ int generic_main_carto_geo(TMapProjection* mapProjection, otb::CommandLineArgume
     if(!parseResult->IsOptionPresent("--OTBTesting"))
     {
       std::cout << std::setprecision(10) << "Cartographic Point  (x , y)  : (" << cartoPoint[0] << "," << cartoPoint[1] << ")" << std::endl;
-      std::cout << std::setprecision(10) << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," <<	geoPoint[0] << ")" << std::endl;
+      std::cout << std::setprecision(10) << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," <<  geoPoint[0] << ")" << std::endl;
     }
     else
     {
@@ -74,7 +74,7 @@ int generic_main_carto_geo(TMapProjection* mapProjection, otb::CommandLineArgume
       outputTestFile.open(outputTestFileName.c_str());
 
       outputTestFile << std::setprecision(10) << "Cartographic Point  (x , y)  : (" << cartoPoint[0] << "," << cartoPoint[1] << ")" << std::endl;
-      outputTestFile << std::setprecision(10) << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," <<	geoPoint[0] << ")" << std::endl;
+      outputTestFile << std::setprecision(10) << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," <<  geoPoint[0] << ")" << std::endl;
 
       outputTestFile.close();
     }
@@ -110,7 +110,7 @@ int main(int argc, char* argv[])
   {
     ossimInit::instance()->initialize(argc, argv);
 
-				// Parse command line parameters
+        // Parse command line parameters
     typedef otb::CommandLineArgumentParser ParserType;
     ParserType::Pointer parser = ParserType::New();
 
@@ -141,7 +141,7 @@ int main(int argc, char* argv[])
       return EXIT_FAILURE;
     }
 
-				// Code
+        // Code
 
     std::string typeMap = parseResult->GetParameterString("--MapProjectionType",0);
     int nbParams = parseResult->GetNumberOfParameters("--MapProjectionType");
