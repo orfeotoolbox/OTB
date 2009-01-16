@@ -42,7 +42,7 @@ namespace otb
   {
     if(!m_Instance)
       {
-	m_Instance = MsgReporter::New();
+  m_Instance = MsgReporter::New();
       }
     return m_Instance;
   }
