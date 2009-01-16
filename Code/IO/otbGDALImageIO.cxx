@@ -87,7 +87,7 @@ namespace otb
     if(m_poDataset != NULL)
     {
 
-      delete m_poDataset;
+      GDALClose(m_poDataset);
       m_poDataset = NULL;
     }
     if(m_poBands != NULL)
@@ -142,6 +142,7 @@ namespace otb
 
   // Open file with GDAL
     m_poDataset = static_cast<GDALDataset *>(GDALOpen(lFileNameGdal.c_str(), GA_ReadOnly ));
+    otbMsgDevMacro(<<"  GCPCount (in CanReadFile): " << m_poDataset->GetGCPCount() );
     if(m_poDataset==NULL)
     {
       fprintf( stderr,
@@ -156,8 +157,11 @@ namespace otb
     }
     else
     {
-      delete m_poDataset;
+      GDALClose(m_poDataset);
       m_poDataset = NULL;
+      GDALDestroyDriverManager();
+      CPLDumpSharedList( NULL );
+
       otbMsgDevMacro(<<"CanReadFile GDAL");
       return true;
     }
@@ -289,10 +293,13 @@ namespace otb
   // Get Dataset
     if(m_poDataset != NULL)
     {
-      delete m_poDataset;
+//       delete m_poDataset;
+      GDALClose(m_poDataset);
       m_poDataset = NULL;
     }
+    otbMsgDevMacro( <<" lFileNameGdal : " << lFileNameGdal);
     m_poDataset = static_cast<GDALDataset *>( GDALOpen(lFileNameGdal.c_str(), GA_ReadOnly ));
+    otbMsgDevMacro( <<"  GCPCount (original): " << m_poDataset->GetGCPCount());
     if(m_poDataset==NULL)
     {
       itkExceptionMacro(<<"Gdal dataset is null.");
@@ -517,7 +524,8 @@ namespace otb
                                           static_cast<std::string>( GDALGetDriverShortName( hDriver ) ) );
     itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::DriverLongNameKey,
                                           static_cast<std::string>( GDALGetDriverLongName( hDriver ) ) );
-
+    otbMsgDevMacro( <<"  GDAL Driver short name: " << GDALGetDriverShortName( hDriver ));
+    otbMsgDevMacro( <<"  GDAL Driver long name: " << GDALGetDriverLongName( hDriver ));
 
     /* -------------------------------------------------------------------- */
     /* Get the projection coordinate system of the image : ProjectionRef  */
@@ -570,11 +578,10 @@ namespace otb
       itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::GCPCountKey,gcpCount);
 
 
-
+      otbMsgDevMacro( <<"  GCPCount: " << m_poDataset->GetGCPCount());
       for( unsigned int cpt = 0; cpt < gcpCount; cpt++ )
       {
         const GDAL_GCP  *psGCP;
-
         psGCP = m_poDataset->GetGCPs() + cpt;
 
         OTB_GCP  pOtbGCP(psGCP);
@@ -931,7 +938,7 @@ namespace otb
 
     if(m_poDataset != NULL)
     {
-      delete m_poDataset;
+      GDALClose(m_poDataset);
       m_poDataset = NULL;
     }
     m_poDataset = m_hDriver->Create( realFileName.c_str(), m_Dimensions[0],m_Dimensions[1],m_NbBands,m_PxType, papszOptions );
