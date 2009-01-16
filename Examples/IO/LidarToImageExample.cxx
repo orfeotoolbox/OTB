@@ -144,9 +144,9 @@ int main( int argc, char* argv[] )
 
   ImageType::SizeType  size;
   size[0]  = static_cast<long int >(
-         ceil((reader->GetMaxX()-reader->GetMinX()+1)/resolution))+2;
+         ceil((reader->GetMaxX()-reader->GetMinX()+1)/resolution))+1;
   size[1]  = static_cast<long int >(
-         ceil((reader->GetMaxY()-reader->GetMinY()+1)/resolution))+2;
+         ceil((reader->GetMaxY()-reader->GetMinY()+1)/resolution))+1;
 
   ImageType::PointType origin;
   origin[0] = reader->GetMinX();
