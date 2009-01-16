@@ -149,7 +149,7 @@ int main(int argc, char* argv[] )
       }
     }
 
-    if (  	(extractROIFilter->GetSizeX() < 0) ||
+    if (    (extractROIFilter->GetSizeX() < 0) ||
                  (extractROIFilter->GetSizeY() < 0)   )
     {
       std::cout << " Size of ROI in x-direction and y -direction must be positive" << std::endl;
@@ -215,7 +215,7 @@ int main(int argc, char* argv[] )
     ResamplingFilter->SetShrinkFactor( Ratio );
     ResamplingFilter->GenerateOutputInformation();
     otbGenericMsgDebugMacro(<<ResamplingFilter->GetOutput()->GetLargestPossibleRegion());
-		//ResamplingFilter->Update();
+    //ResamplingFilter->Update();
     writer->SetInput(ResamplingFilter->GetOutput() );
     writer->Update();
 
