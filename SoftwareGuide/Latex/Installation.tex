@@ -43,7 +43,9 @@ The OTB depends on 3 libraries:
 download and install this library on your system.
 \item Fltk: this library is used for the visualization
   functionnalities. See \url{http://www.fltk.org/} for details about
-  dowloading and installing Fltk. OTB has been tested with version 1.1.7.
+  dowloading and installing Fltk. OTB has been tested with version 1.1.7
+  and 1.1.9. As for ITK, you also have the choice to use OTB's internal
+  version (which is 1.1.9) if you don't have FLTK already installed.
 \end{itemize}
 
 See section \ref{sec:FAQInstall} for quick installation guidelines.
@@ -52,7 +54,7 @@ See section \ref{sec:FAQInstall} for quick installation guidelines.
 \label{sec:ConfiguringOTB}
 
 \index{Configuration}
- 
+
 The challenge of supporting OTB across platforms has been solved through the
 use of CMake, a cross-platform, open-source build system. CMake is used to
 control the software compilation process using simple platform and compiler
@@ -72,12 +74,12 @@ the user.
 
 \subsection{Preparing CMake}
 \label{sec:CMakeforOTB}
- 
+
 \index{CMake}
 \index{CMake!downloading}
 
-CMake can be downloaded at no cost from 
-\begin{center} 
+CMake can be downloaded at no cost from
+\begin{center}
   \url{http://www.cmake.org}
 \end{center}
 
@@ -125,11 +127,11 @@ this point build files are generated for the current configuration.
 
 \subsection{Configuring OTB}
 \label{sec:ConfiguringOTBwithVTK}
-  
+
 \index{Configuration!with VTK}
 
 \begin{figure}[ht]
-\centering 
+\centering
 \includegraphics[width=0.8\textwidth]{ccmakeScreenShot.eps}
 \includegraphics[width=0.8\textwidth]{CMakeSetupScreenShot.eps}
 \itkcaption[Cmake user interface]{CMake interface. Top) \texttt{ccmake}, the UNIX
@@ -153,7 +155,7 @@ An additional resource is available in the \code{OTB-Applications} module,
 which contains applications incorporating GUIs and different levels
 of visualization.  However, building this module
 should be postponed until you are familiar with the basic structure of the
-toolbox and the building process. 
+toolbox and the building process.
 
 Begin running CMake by using
 ccmake on Unix, and CMakeSetup on
@@ -163,7 +165,7 @@ set the build variables in the GUI as necessary.  Most variables should have
 default values that are sensible. Each time you change a set of variables in
 CMake, it is necessary to proceed to another configuration step. In the
 Windows version this is done by clicking on the ``Configure'' button. In the
-UNIX version this is done in an interface using the 
+UNIX version this is done in an interface using the
 curses library, where you can configure by hitting the ``c'' key.
 
 When no new options appear in CMake, you can proceed to generate Makefiles or
@@ -190,7 +192,7 @@ CMake variable.
 
 \section{Getting Started With OTB }
 \label{sec:GettingStartedWithOTB}
- 
+
 The simplest way to create a new project with OTB is to create a new directory
 somewhere in your disk and create two files in it. The first one is a
 \code{CMakeLists.txt} file that will be used by CMake to generate a Makefile
@@ -214,7 +216,7 @@ directory will contain a file named \code{OTBConfig.cmake} generated during the
 configuration process at the time OTB was built.  From this file, CMake will
 recover all the information required to configure your new OTB project.
 
- 
+
 \subsection{Hello World !}
 \label{sec:HelloWorldOTB}
 
