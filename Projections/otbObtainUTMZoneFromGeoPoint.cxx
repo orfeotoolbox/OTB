@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
   {
     ossimInit::instance()->initialize(argc, argv);
 
-				// Parse command line parameters
+        // Parse command line parameters
     typedef otb::CommandLineArgumentParser ParserType;
     ParserType::Pointer parser = ParserType::New();
 
@@ -76,7 +76,7 @@ int main(int argc, char* argv[])
       return EXIT_FAILURE;
     }
 
-				// Code
+        // Code
 
     typedef otb::UtmForwardProjection UtmProjectionType;
     UtmProjectionType::Pointer utmProjection = UtmProjectionType::New();
@@ -90,7 +90,7 @@ int main(int argc, char* argv[])
     if(!parseResult->IsOptionPresent("--OTBTesting"))
     {
       std::cout << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," << geoPoint[0] << ")" << std::endl;
-      std::cout << "UTM Corresponding Zone       : ==> " << utmZone << " <=="	<< std::endl;
+      std::cout << "UTM Corresponding Zone       : ==> " << utmZone << " <=="  << std::endl;
     }
     else
     {
@@ -100,7 +100,7 @@ int main(int argc, char* argv[])
       outputTestFile.open(outputTestFileName.c_str());
 
       outputTestFile << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," << geoPoint[0] << ")" << std::endl;
-      outputTestFile << "UTM Corresponding Zone       : ==> " << utmZone << " <=="	<< std::endl;
+      outputTestFile << "UTM Corresponding Zone       : ==> " << utmZone << " <=="  << std::endl;
 
       outputTestFile.close();
     }
