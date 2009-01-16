@@ -1314,12 +1314,24 @@ ADD_TEST(ioTvossimElevManagerTest ${IO_TESTS12}
         otbOssimElevManagerTest
          ${INPUTDATA}/DEM/srtm_directory
          ${TEMP}/ioTvossimElevManagerTest.tif
-				 6.5
+	 6.5
          44.5
-				 0.002
-				 0.002
-				  500
-				  500
+	 0.002
+	 0.002
+	 500
+	 500
+         )
+
+ADD_TEST(ioTvossimElevManagerTest2 ${IO_TESTS12}
+--compare-ascii ${TOL}  ${BASELINE}/ioTvossimElevManagerTest2.txt
+                        ${TEMP}/ioTvossimElevManagerTest2.txt
+        otbOssimElevManagerTest2
+         ${INPUTDATA}/DEM/srtm_directory
+         ${TEMP}/ioTvossimElevManagerTest2.txt
+	6.5
+	44.5
+	0.002
+	500
          )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1557,8 +1569,8 @@ ADD_TEST(ioTuRADImageIOCanRead_RADCI2 ${IO_TESTS16}
 # Convert a ci2.RAD file into ENVI format
 ADD_TEST(ioTvImageFileReaderRADCI22ENVI ${IO_TESTS16}
 --compare-image ${TOL}
-	${BASELINE}/ioImageFileReaderRADCI22ENVI.hdr 
-	${TEMP}/ioImageFileReaderRADCI22ENVI.hdr 
+	${BASELINE}/ioImageFileReaderRADCI22ENVI.hdr
+	${TEMP}/ioImageFileReaderRADCI22ENVI.hdr
         otbImageFileReaderRADComplexFloatExtract
         ${LARGEDATA}/RAD_CI2/3017_HH.rad
         ${TEMP}/ioImageFileReaderRADCI22ENVI.hdr )
@@ -1708,6 +1720,7 @@ otbDEMToImageGeneratorNew.cxx
 otbDEMToImageGeneratorTest.cxx
 otbImageGeometryHandlerNew.cxx
 otbOssimElevManagerTest.cxx
+otbOssimElevManagerTest2.cxx
 )
 
 
