@@ -92,7 +92,7 @@ namespace otb
       itkExceptionMacro(<<"TransformPoint(): Invalid Model pointer m_Model == NULL !");
     }
 
-    this->m_Model->worldToLineSample(ossimGPoint, ossimDPoint); //"worldToLineSample" appelle la m�thode "lineSampleHeightToWorld" pour prendre en compte l'�l�vation.
+    this->m_Model->worldToLineSample(ossimGPoint, ossimDPoint); //"worldToLineSample" call "lineSampleHeightToWorld" method for take in care elevation information.
 
     OutputPointType outputPoint;
 
