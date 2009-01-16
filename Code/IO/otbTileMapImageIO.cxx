@@ -525,10 +525,11 @@ namespace otb
         //otbMsgDevMacro( <<" sizeof(off_type)      : "<<sizeof(off_type));
     otbMsgDevMacro( <<" sizeof(unsigned long) : "<<sizeof(unsigned long));
 
-    double x = (originSample+firstSample)/((1 << m_Depth)*256.);
+/*    double x = (originSample+firstSample)/((1 << m_Depth)*256.);
     double y = (originLine+firstLine)/((1 << m_Depth)*256.);
     otbMsgDevMacro(<< x );
     otbMsgDevMacro(<< y );
+*/
 
     int nTilesX = (int) ceil(totSamples/256.)+1;
     int nTilesY = (int) ceil(totLines/256.)+1;
