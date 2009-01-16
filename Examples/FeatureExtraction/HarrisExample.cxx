@@ -63,8 +63,8 @@ int main(int argc, char *argv[] )
     double Alpha((double)::atof(argv[5]));
 
     typedef float                                   InputPixelType;
-    const   unsigned int        	                        Dimension = 2;
-    typedef unsigned char   	                        OutputPixelType;
+    const   unsigned int                                  Dimension = 2;
+    typedef unsigned char                             OutputPixelType;
 
     typedef otb::Image< InputPixelType,  Dimension >   InputImageType;
     typedef otb::Image< OutputPixelType, Dimension >   OutputImageType;

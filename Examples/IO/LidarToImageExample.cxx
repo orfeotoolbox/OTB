@@ -77,9 +77,9 @@ int main( int argc, char* argv[] )
   {
     std::cout << argv[0] <<" <input_lidar_filename> <output_image_filename(double)>"
               << " <output_image_filename(unsigned char)>"
-	      << " <output_resolution> <spline_order>"
+        << " <output_resolution> <spline_order>"
               << " <number_of_levels>"
-	      << std::endl;
+        << std::endl;
     return EXIT_FAILURE;
   }
 

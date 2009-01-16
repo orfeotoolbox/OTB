@@ -78,7 +78,7 @@ int main( int argc, char * argv[] )
   typedef otb::Image< OutputPixelType,  2 >   OutputImageType;
   // Software Guide : EndCodeSnippet
 
-  typedef otb::LineSpatialObjectList	 LinesListType;
+  typedef otb::LineSpatialObjectList   LinesListType;
 
 
   //  Software Guide : BeginLatex
@@ -89,7 +89,7 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
 
-  typedef otb::LocalHoughFilter< InternalImageType >	      LocalHoughType;
+  typedef otb::LocalHoughFilter< InternalImageType >        LocalHoughType;
   typedef otb::DrawLineSpatialObjectListFilter< InternalImageType,
                                       OutputImageType >  DrawLineListType;
   // Software Guide : EndCodeSnippet
@@ -137,9 +137,9 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
   ReaderType::Pointer reader = ReaderType::New();
 
-  LocalHoughType::Pointer		localHough= LocalHoughType::New();
+  LocalHoughType::Pointer    localHough= LocalHoughType::New();
 
-  DrawLineListType::Pointer		drawLineList= DrawLineListType::New();
+  DrawLineListType::Pointer    drawLineList= DrawLineListType::New();
 
 
   // Software Guide : EndCodeSnippet

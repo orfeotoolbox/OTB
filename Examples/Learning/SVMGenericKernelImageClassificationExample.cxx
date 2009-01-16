@@ -60,7 +60,7 @@ int main(int argc, char* argv[] )
     if (argc != 4)
     {
       std::cout << "Usage : " << argv[0]
-	  			<< " inputImage outputImage modelFile " << std::endl ;
+          << " inputImage outputImage modelFile " << std::endl ;
       return EXIT_FAILURE;
     }
 
@@ -72,11 +72,11 @@ int main(int argc, char* argv[] )
     typedef std::vector<PixelType>          VectorType;
     typedef int                             LabelPixelType;
 
-    const   unsigned int        	         Dimension = 2;
+    const   unsigned int                   Dimension = 2;
 
 
     typedef otb::Image< itk::FixedArray<PixelType,3>,
-                              Dimension >	        InputImageType;
+                              Dimension >          InputImageType;
 
 
     typedef otb::ImageFileReader< InputImageType  >         ReaderType;
@@ -116,7 +116,7 @@ int main(int argc, char* argv[] )
 
 // Software Guide : BeginCodeSnippet
     otb::MixturePolyRBFKernelFunctor myKernel;
-	model->SetKernelFunctor( &myKernel );
+  model->SetKernelFunctor( &myKernel );
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -138,7 +138,7 @@ int main(int argc, char* argv[] )
     classifier->SetSample(sample.GetPointer()) ;
     classifier->Update() ;
 
-    typedef ClassifierType::ClassLabelType	            OutputPixelType;
+    typedef ClassifierType::ClassLabelType              OutputPixelType;
     typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
 
     OutputImageType::Pointer outputImage = OutputImageType::New();
@@ -171,7 +171,7 @@ int main(int argc, char* argv[] )
 
     typedef itk::ImageRegionIterator< OutputImageType>  OutputIteratorType;
     OutputIteratorType  outIt( outputImage,
-			   outputImage->GetBufferedRegion() );
+         outputImage->GetBufferedRegion() );
 
     outIt.GoToBegin();
 

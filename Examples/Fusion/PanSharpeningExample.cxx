@@ -116,8 +116,8 @@ int main( int argc, char* argv[] )
   typedef otb::VectorImage<unsigned short int, 2>     VectorIntImageType;
 
 
-  ReaderVectorType::Pointer     	readerXS=ReaderVectorType::New();
-  ReaderType::Pointer     	readerPAN=ReaderType::New();
+  ReaderVectorType::Pointer       readerXS=ReaderVectorType::New();
+  ReaderType::Pointer       readerPAN=ReaderType::New();
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -154,7 +154,7 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::StreamingImageFileWriter<VectorIntImageType>  WriterType;
-  WriterType::Pointer	    	writer=WriterType::New();
+  WriterType::Pointer        writer=WriterType::New();
   writer->SetFileName(argv[3]);
   writer->SetInput(fusion->GetOutput());
   writer->Update();

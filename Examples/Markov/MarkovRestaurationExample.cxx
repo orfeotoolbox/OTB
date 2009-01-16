@@ -140,7 +140,7 @@ int main(int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::MarkovRandomFieldFilter
-	  <InputImageType,LabelledImageType> MarkovRandomFieldFilterType;
+    <InputImageType,LabelledImageType> MarkovRandomFieldFilterType;
 
   typedef otb::MRFSamplerRandom< InputImageType, LabelledImageType> SamplerType;
 
@@ -157,9 +157,9 @@ int main(int argc, char* argv[] )
   // Software Guide : BeginCodeSnippet
 
   typedef otb::MRFEnergyEdgeFidelity
-		  <LabelledImageType, LabelledImageType>  EnergyRegularizationType;
+      <LabelledImageType, LabelledImageType>  EnergyRegularizationType;
   typedef otb::MRFEnergyGaussian
-		  <InputImageType, LabelledImageType>  EnergyFidelityType;
+      <InputImageType, LabelledImageType>  EnergyFidelityType;
 
   // Software Guide : EndCodeSnippet
 

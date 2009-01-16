@@ -220,7 +220,7 @@ int main( int argc, char * argv[] )
 
 
   unsigned int  PixelSuppressionRadiusX((unsigned int)::atoi(argv[5]));
-  float	      PixelSuppressionAngularBeam((float)::atof(argv[6]));
+  float        PixelSuppressionAngularBeam((float)::atof(argv[6]));
 
   unsigned int  LocalHoughRadiusX((unsigned int)::atoi(argv[7]));
   unsigned int  LocalHoughRadiusY((unsigned int)::atoi(argv[8]));

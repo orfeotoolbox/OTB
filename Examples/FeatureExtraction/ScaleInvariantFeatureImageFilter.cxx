@@ -63,7 +63,7 @@ int main( int argc, char *argv[])
     {
       std::cerr << "Usage: " << std::endl;
       std::cerr << argv[0] << "  inputImageFile   outputImageFile  " \
-		<< "scaleFactor  angle  cropFactor rotateMiddle" << std::endl;
+    << "scaleFactor  angle  cropFactor rotateMiddle" << std::endl;
       return EXIT_FAILURE;
     }
 
@@ -177,9 +177,9 @@ int main( int argc, char *argv[])
       std::cerr << "Rotation centred at middle of image." << std::endl;
       /* Cycle through each dimension and shift by half*/
       FixedImageType::SizeType size =
-	fixedImage->GetLargestPossibleRegion().GetSize();
+  fixedImage->GetLargestPossibleRegion().GetSize();
       for (unsigned int k = 0; k < Dimension; ++k)
-	translate_vector[k] = size[k]/2.0;
+  translate_vector[k] = size[k]/2.0;
       test_transform->SetCenter( translate_vector);
     } else {
       std::cerr << "Rotation centred at origin." << std::endl;
@@ -189,9 +189,9 @@ int main( int argc, char *argv[])
       std::cerr << "Rotation centred at middle of image." << std::endl;
       /* Cycle through each dimension and shift by half*/
       FixedImageType::SizeType size =
-	fixedImage->GetLargestPossibleRegion().GetSize();
+  fixedImage->GetLargestPossibleRegion().GetSize();
       for (unsigned int k = 0; k < Dimension; ++k)
-	translate_vector[k] = size[k]/2.0;
+  translate_vector[k] = size[k]/2.0;
       test_transform->Translate( translate_vector);
     } else {
       std::cerr << "Rotation centred at origin." << std::endl;
@@ -203,7 +203,7 @@ int main( int argc, char *argv[])
     if (rotate_middle) {
       /* Cycle through each dimension and shift back*/
       for (unsigned int k = 0; k < Dimension; ++k)
-	translate_vector[k] = -translate_vector[k];
+  translate_vector[k] = -translate_vector[k];
       test_transform->Translate( translate_vector);
     }
 #endif
@@ -216,9 +216,9 @@ int main( int argc, char *argv[])
       SiftFilterType::ResampleFilterType::Pointer scaler = SiftFilterType::ResampleFilterType::New();
       scaler->SetInput(fixedImage);
       FixedImageType::SizeType size =
-	fixedImage->GetLargestPossibleRegion().GetSize();
+  fixedImage->GetLargestPossibleRegion().GetSize();
       for (unsigned int k = 0; k < Dimension; ++k)
-	size[k] = (unsigned int) floor(size[k] * test_scale);
+  size[k] = (unsigned int) floor(size[k] * test_scale);
       scaler->SetSize( size );
       scaler->SetOutputSpacing(fixedImage->GetSpacing());
       scaler->SetTransform(test_transform);

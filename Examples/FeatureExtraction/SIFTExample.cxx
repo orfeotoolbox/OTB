@@ -219,7 +219,7 @@ int main(int argc, char * argv[])
   outputImage->Allocate();
 
   itk::ImageRegionIterator<OutputImageType> iterOutput(outputImage,
-						       reader->GetOutput()->GetLargestPossibleRegion());
+                   reader->GetOutput()->GetLargestPossibleRegion());
 
   for (iterOutput.GoToBegin(); !iterOutput.IsAtEnd(); ++iterOutput)
     {
@@ -244,12 +244,12 @@ int main(int argc, char * argv[])
       ImageType::IndexType index;
 
       index[0] = (unsigned int)
-	(vcl_floor
-	 ((double)((pIt.Value()[0]-origin[0])/spacing[0]+0.5)));
+  (vcl_floor
+   ((double)((pIt.Value()[0]-origin[0])/spacing[0]+0.5)));
 
       index[1] = (unsigned int)
-	(vcl_floor
-	 ((double)((pIt.Value()[1]-origin[1])/spacing[1]+0.5)));
+  (vcl_floor
+   ((double)((pIt.Value()[1]-origin[1])/spacing[1]+0.5)));
 
       OutputImageType::PixelType keyPixel;
       keyPixel.SetRed(0);
@@ -257,29 +257,29 @@ int main(int argc, char * argv[])
       keyPixel.SetBlue(0);
 
       if (
-	static_cast<unsigned int>(index[1]) <
-	static_cast<unsigned int>(size[1])
-	&& static_cast<unsigned int>(index[0]) <
-	static_cast<unsigned int>(size[0])
-	&& static_cast<unsigned int>(index[1]) >=
-	static_cast<unsigned int>(0)
-	&& static_cast<unsigned int>(index[0]) >=
-	static_cast<unsigned int>(0))
-	{
-	  outputImage->SetPixel(index,keyPixel);
+  static_cast<unsigned int>(index[1]) <
+  static_cast<unsigned int>(size[1])
+  && static_cast<unsigned int>(index[0]) <
+  static_cast<unsigned int>(size[0])
+  && static_cast<unsigned int>(index[1]) >=
+  static_cast<unsigned int>(0)
+  && static_cast<unsigned int>(index[0]) >=
+  static_cast<unsigned int>(0))
+  {
+    outputImage->SetPixel(index,keyPixel);
 
-	  if (static_cast<unsigned int>(index[1]) < static_cast<unsigned int>(size[1]-1) )
-	    outputImage->SetPixel(index+t,keyPixel);
+    if (static_cast<unsigned int>(index[1]) < static_cast<unsigned int>(size[1]-1) )
+      outputImage->SetPixel(index+t,keyPixel);
 
-	  if (index[1] > 0)
-	    outputImage->SetPixel(index+b,keyPixel);
+    if (index[1] > 0)
+      outputImage->SetPixel(index+b,keyPixel);
 
-	  if (static_cast<unsigned int>(index[0]) < static_cast<unsigned int>(size[0]-1) )
-	    outputImage->SetPixel(index+r,keyPixel);
+    if (static_cast<unsigned int>(index[0]) < static_cast<unsigned int>(size[0]-1) )
+      outputImage->SetPixel(index+r,keyPixel);
 
-	  if (index[0] > 0)
-	    outputImage->SetPixel(index+l,keyPixel);
-	}
+    if (index[0] > 0)
+      outputImage->SetPixel(index+l,keyPixel);
+  }
       ++pIt;
     }
 

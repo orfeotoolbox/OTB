@@ -99,9 +99,9 @@ int main( int argc, char* argv[] )
   typedef otb::StreamingImageFileWriter<VectorImageType>  WriterType;
 
 
-  ReaderType::Pointer     	readerPAN=ReaderType::New();
+  ReaderType::Pointer       readerPAN=ReaderType::New();
   VectorReaderType::Pointer     readerXS=VectorReaderType::New();
-  WriterType::Pointer	    	writer=WriterType::New();
+  WriterType::Pointer        writer=WriterType::New();
 
   readerPAN->SetFileName(argv[1]);
   readerXS->SetFileName(argv[2]);

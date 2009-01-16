@@ -40,7 +40,7 @@ int main( int argc, char* argv[] )
 
   typedef std::vector<InputPixelType>                             InputVectorType;
   typedef int                             LabelPixelType;
-  const   unsigned int        	                    Dimension = 2;
+  const   unsigned int                              Dimension = 2;
 
   typedef itk::PointSet< InputVectorType,  Dimension >    MeasurePointSetType;
 
@@ -215,14 +215,14 @@ int main( int argc, char* argv[] )
 
       ClassifierType::ClassLabelType expectedLabel;
       if(measure[0] < measure[1])
-	expectedLabel= 0;
+  expectedLabel= 0;
       else
-	expectedLabel = 1;
+  expectedLabel = 1;
 
       double dist = fabs(measure[0] - measure[1]);
 
       if(label != expectedLabel )
-	error++;
+  error++;
 
       std::cout << int(label) << "/" << int(expectedLabel) << " --- " << dist << std::endl;
 

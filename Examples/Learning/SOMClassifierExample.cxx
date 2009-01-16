@@ -61,7 +61,7 @@ int main(int argc, char* argv[] )
   if (argc != 4)
     {
     std::cout << "Usage : " << argv[0] << " inputImage modelFile outputImage"
-	      << std::endl ;
+        << std::endl ;
     return EXIT_FAILURE;
     }
 
@@ -71,7 +71,7 @@ int main(int argc, char* argv[] )
 
   typedef double                              InputPixelType;
   typedef unsigned char                       LabelPixelType;
-  const   unsigned int        	         Dimension = 2;
+  const   unsigned int                   Dimension = 2;
 
   typedef itk::VariableLengthVector<InputPixelType> PixelType;
 
@@ -167,8 +167,8 @@ int main(int argc, char* argv[] )
 
     while(!it.IsAtEnd())
       {
-	sample->PushBack(it.Get());
-	++it;
+  sample->PushBack(it.Get());
+  ++it;
       }
 
 // Software Guide : EndCodeSnippet

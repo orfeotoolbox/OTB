@@ -137,8 +137,8 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef  otb::Functor::ARVI< InputPixelType,
-  	                       InputPixelType,
-  		               InputPixelType,
+                           InputPixelType,
+                     InputPixelType,
                                OutputPixelType >        FunctorType;
    // Software Guide : EndCodeSnippet
 
@@ -154,9 +154,9 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter
-  		                                   <InputImageType,
-  		                                    OutputImageType,
-  		                                    FunctorType      >
+                                         <InputImageType,
+                                          OutputImageType,
+                                          FunctorType      >
                    MultiChannelRAndBAndNIRVegetationIndexImageFilterType;
 
   MultiChannelRAndBAndNIRVegetationIndexImageFilterType::Pointer

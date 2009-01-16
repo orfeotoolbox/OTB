@@ -190,7 +190,7 @@ int main( int argc, char *argv[])
 
 
     typedef otb::Image< itk::FixedArray<InputPixelType,3>,
-                             Dimension >	        ClassifyImageType;
+                             Dimension >          ClassifyImageType;
 
 
     typedef otb::ImageFileReader< ClassifyImageType  >         ClassifyReaderType;
@@ -314,7 +314,7 @@ int main( int argc, char *argv[])
 
 
 
-    typedef ClassifierType::ClassLabelType	            OutputPixelType;
+    typedef ClassifierType::ClassLabelType              OutputPixelType;
     typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
 
     OutputImageType::Pointer outputImage = OutputImageType::New();
@@ -372,7 +372,7 @@ int main( int argc, char *argv[])
 
     typedef itk::ImageRegionIterator< OutputImageType>  OutputIteratorType;
     OutputIteratorType  outIt( outputImage,
-			   outputImage->GetBufferedRegion() );
+         outputImage->GetBufferedRegion() );
 
     outIt.GoToBegin();
 

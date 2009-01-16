@@ -123,7 +123,7 @@ int main(int argc, char * argv[])
 
       //  Software Guide : BeginCodeSnippet
       typedef otb::KullbackLeiblerDistanceImageFilter<ImageType,
-	           ImageType,ImageType> FilterType;
+             ImageType,ImageType> FilterType;
       //  Software Guide : EndCodeSnippet
 
       //  Software Guide : BeginLatex

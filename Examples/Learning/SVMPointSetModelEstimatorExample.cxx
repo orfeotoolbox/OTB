@@ -60,7 +60,7 @@ int main( int argc, char* argv[] )
   typedef std::vector<PixelType>     VectorType;
   typedef int                        LabelPixelType;
 // Software Guide : EndCodeSnippet
-  const   unsigned int        	                    Dimension = 2;
+  const   unsigned int                              Dimension = 2;
 
 // Software Guide : BeginLatex
 //

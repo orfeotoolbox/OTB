@@ -101,7 +101,7 @@ int main(int argc, char* argv[] )
     typedef int                             LabelPixelType;
 
 // Software Guide : EndCodeSnippet
-    const   unsigned int        	         Dimension = 2;
+    const   unsigned int                   Dimension = 2;
 
 
 // Software Guide : BeginLatex
@@ -113,7 +113,7 @@ int main(int argc, char* argv[] )
 
 // Software Guide : BeginCodeSnippet
     typedef otb::Image< itk::FixedArray<PixelType,3>,
-                              Dimension >	        InputImageType;
+                              Dimension >          InputImageType;
 
 
     typedef otb::ImageFileReader< InputImageType  >         ReaderType;
@@ -252,7 +252,7 @@ int main(int argc, char* argv[] )
 
 
 
-    typedef ClassifierType::ClassLabelType	            OutputPixelType;
+    typedef ClassifierType::ClassLabelType              OutputPixelType;
     typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
 
     OutputImageType::Pointer outputImage = OutputImageType::New();
@@ -311,7 +311,7 @@ int main(int argc, char* argv[] )
 
     typedef itk::ImageRegionIterator< OutputImageType>  OutputIteratorType;
     OutputIteratorType  outIt( outputImage,
-			   outputImage->GetBufferedRegion() );
+         outputImage->GetBufferedRegion() );
 
     outIt.GoToBegin();
 

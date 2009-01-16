@@ -106,7 +106,7 @@ int main(int argc, char * argv[])
 // Software Guide : BeginCodeSnippet
 
       typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension>
-	                                           StructuringElementType;
+                                             StructuringElementType;
 
 // Software Guide : EndCodeSnippet
 
@@ -125,7 +125,7 @@ int main(int argc, char * argv[])
 
       typedef otb::OpeningClosingMorphologicalFilter<InputImageType,
                                    InputImageType,StructuringElementType>
-	                                         OpeningClosingFilterType;
+                                           OpeningClosingFilterType;
 
 // Software Guide : EndCodeSnippet
 
@@ -142,7 +142,7 @@ int main(int argc, char * argv[])
 
       typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,
                                 OutputImageType,OpeningClosingFilterType>
-	                                          PyramidAnalysisFilterType;
+                                            PyramidAnalysisFilterType;
 
 // Software Guide : EndCodeSnippet
 
@@ -159,7 +159,7 @@ int main(int argc, char * argv[])
 
       typedef otb::MorphologicalPyramidSynthesisFilter<InputImageType,
                                                         OutputImageType>
-	                                      PyramidSynthesisFilterType;
+                                        PyramidSynthesisFilterType;
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -191,7 +191,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
       PyramidAnalysisFilterType::Pointer pyramidAnalysis =
-	                        PyramidAnalysisFilterType::New();
+                          PyramidAnalysisFilterType::New();
       pyramidAnalysis->SetNumberOfLevels(numberOfLevels);
       pyramidAnalysis->SetDecimationRatio(decimationRatio);
       pyramidAnalysis->SetInput(reader->GetOutput());

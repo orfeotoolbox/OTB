@@ -126,7 +126,7 @@ int main(int argc, char * argv[])
 
       typedef otb::OpeningClosingMorphologicalFilter<InputImageType,
                                  InputImageType,StructuringElementType>
-	                                       OpeningClosingFilterType;
+                                         OpeningClosingFilterType;
 
 // Software Guide : EndCodeSnippet
 
@@ -143,7 +143,7 @@ int main(int argc, char * argv[])
 
       typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,
                               OutputImageType,OpeningClosingFilterType>
-	                                              PyramidFilterType;
+                                                PyramidFilterType;
 
 // Software Guide : EndCodeSnippet
 
@@ -158,7 +158,7 @@ int main(int argc, char * argv[])
 // Software Guide : BeginCodeSnippet
 
       typedef PyramidFilterType::OutputImageListType::Iterator
-	                                             ImageListIterator;
+                                               ImageListIterator;
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -247,34 +247,34 @@ int main(int argc, char * argv[])
       // Writing the results images
       std::cout<<(itAnalyse!=(pyramid->GetOutput()->End()))<<std::endl;
       while(itAnalyse!=pyramid->GetOutput()->End())
-	{
-	  writer->SetInput(itAnalyse.Get());
-	  writer->SetFileName(argv[0*4+i+1]);
-	  writer->Update();
+  {
+    writer->SetInput(itAnalyse.Get());
+    writer->SetFileName(argv[0*4+i+1]);
+    writer->Update();
 
-	  writer->SetInput(itSupFilter.Get());
-	  writer->SetFileName(argv[1*4+i+1]);
-	  writer->Update();
+    writer->SetInput(itSupFilter.Get());
+    writer->SetFileName(argv[1*4+i+1]);
+    writer->Update();
 
-	  writer->SetInput(itInfFilter.Get());
-	  writer->SetFileName(argv[2*4+i+1]);
-	  writer->Update();
+    writer->SetInput(itInfFilter.Get());
+    writer->SetFileName(argv[2*4+i+1]);
+    writer->Update();
 
-	  writer->SetInput(itInfDeci.Get());
-	  writer->SetFileName(argv[3*4+i+1]);
-	  writer->Update();
+    writer->SetInput(itInfDeci.Get());
+    writer->SetFileName(argv[3*4+i+1]);
+    writer->Update();
 
-	  writer->SetInput(itSupDeci.Get());
-	  writer->SetFileName(argv[4*4+i+1]);
-	  writer->Update();
+    writer->SetInput(itSupDeci.Get());
+    writer->SetFileName(argv[4*4+i+1]);
+    writer->Update();
 
-	  ++itAnalyse;
-	  ++itSupFilter;
-	  ++itInfFilter;
-	  ++itInfDeci;
-	  ++itSupDeci;
-	  ++i;
-	}
+    ++itAnalyse;
+    ++itSupFilter;
+    ++itInfFilter;
+    ++itInfDeci;
+    ++itSupDeci;
+    ++i;
+  }
 
 // Software Guide : EndCodeSnippet
 

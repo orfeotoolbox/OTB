@@ -61,7 +61,7 @@ int main( int argc, char* argv[] )
   if(argc!=11)
     {
       std::cout << argv[0] <<" <input_filename> <output_filename>  <utm zone> <hemisphere N/S> <x_ground_upper_left_corner> <y_ground_upper_left_corner> <x_Size> <y_Size> <x_groundSamplingDistance> <y_groundSamplingDistance> (should be negative since origin is upper left)>"
-	      << std::endl;
+        << std::endl;
 
     return EXIT_FAILURE;
     }
@@ -87,8 +87,8 @@ int main( int argc, char* argv[] )
   typedef otb::StreamingImageFileWriter<VectorImageType>  WriterType;
 
 
-  ReaderType::Pointer     	reader=ReaderType::New();
-  WriterType::Pointer	    	writer=WriterType::New();
+  ReaderType::Pointer       reader=ReaderType::New();
+  WriterType::Pointer        writer=WriterType::New();
 
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);

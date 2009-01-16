@@ -79,7 +79,7 @@ int main(int argc, char* argv[] )
 
   float scale = itk::NumericTraits< OutputPixelType >::max()/ 100.0;
     /*float(itk::NumericTraits< OutputPixelType >::max()+
-	  itk::NumericTraits< InternalPixelType >::min());*/
+    itk::NumericTraits< InternalPixelType >::min());*/
   rescaler->SetScale( scale );
 
 

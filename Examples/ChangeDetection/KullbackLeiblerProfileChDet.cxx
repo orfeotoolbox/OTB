@@ -59,11 +59,11 @@ int main(int argc, char * argv[])
   try
     {
       if(argc != 9)
-	{
-	  std::cerr<<"Detection de changements par mesure de Kullback-Leibler, optimisee par un developpement de Edgeworth\n";
-	  std::cerr << argv[0] << " imgAv imgAp imgResu winSizeMin winSizeMax outRedIndex outGreenIndex outBlueIndex\n";
-	  return 1;
-	}
+  {
+    std::cerr<<"Detection de changements par mesure de Kullback-Leibler, optimisee par un developpement de Edgeworth\n";
+    std::cerr << argv[0] << " imgAv imgAp imgResu winSizeMin winSizeMax outRedIndex outGreenIndex outBlueIndex\n";
+    return 1;
+  }
 
       char * fileName1 = argv[1];
       char * fileName2 = argv[2];
@@ -91,7 +91,7 @@ int main(int argc, char * argv[])
       typedef otb::Image<PixelType,Dimension> ImageType;
       typedef otb::VectorImage<PixelType,Dimension> VectorImageType;
       typedef otb::KullbackLeiblerProfileImageFilter<ImageType,
-	           ImageType,VectorImageType> FilterType;
+             ImageType,VectorImageType> FilterType;
       //  Software Guide : EndCodeSnippet
       
       typedef otb::VectorImage<OutPixelType,Dimension> OutVectorImageType;

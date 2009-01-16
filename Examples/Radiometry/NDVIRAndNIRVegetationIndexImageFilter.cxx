@@ -229,13 +229,13 @@ int main( int argc, char *argv[] )
     }
     catch( itk::ExceptionObject & excep )
       {
-	std::cerr << "Exception caught !" << std::endl;
-	std::cerr << excep << std::endl;
+  std::cerr << "Exception caught !" << std::endl;
+  std::cerr << excep << std::endl;
       }
     catch( ... )
       {
-	std::cout << "Unknown exception !" << std::endl;
-	return EXIT_FAILURE;
+  std::cout << "Unknown exception !" << std::endl;
+  return EXIT_FAILURE;
       }
 
 

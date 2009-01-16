@@ -96,7 +96,7 @@ int main( int argc, char * argv[] )
   typedef otb::Image< OutputPixelType,  2 >   OutputImageType;
   // Software Guide : EndCodeSnippet
 
-  typedef otb::LineSpatialObjectList	 LinesListType;
+  typedef otb::LineSpatialObjectList   LinesListType;
 
 
   //  Software Guide : BeginLatex
@@ -109,9 +109,9 @@ int main( int argc, char * argv[] )
   typedef otb::LineRatioDetectorImageFilter< InternalImageType,
                                     InternalImageType >  DetectorType;
   typedef otb::PixelSuppressionByDirectionImageFilter< InternalImageType,
-                       InternalImageType > 	PixelSuppressionType;
-  typedef otb::LocalHoughFilter< InternalImageType >	      LocalHoughType;
-  typedef otb::FillGapsFilter			     	FillGapsType;
+                       InternalImageType >   PixelSuppressionType;
+  typedef otb::LocalHoughFilter< InternalImageType >        LocalHoughType;
+  typedef otb::FillGapsFilter             FillGapsType;
   typedef otb::DrawLineSpatialObjectListFilter< InternalImageType,
                                       OutputImageType >  DrawLineListType;
   // Software Guide : EndCodeSnippet
@@ -154,10 +154,10 @@ int main( int argc, char * argv[] )
   ReaderType::Pointer reader = ReaderType::New();
   DetectorType::Pointer detector = DetectorType::New();
 
-  PixelSuppressionType::Pointer	pixelSuppression= PixelSuppressionType::New();
-  LocalHoughType::Pointer		localHough= LocalHoughType::New();
-  FillGapsType::Pointer		fillGaps= FillGapsType::New();
-  DrawLineListType::Pointer		drawLineList= DrawLineListType::New();
+  PixelSuppressionType::Pointer  pixelSuppression= PixelSuppressionType::New();
+  LocalHoughType::Pointer    localHough= LocalHoughType::New();
+  FillGapsType::Pointer    fillGaps= FillGapsType::New();
+  DrawLineListType::Pointer    drawLineList= DrawLineListType::New();
 
 
   // Software Guide : EndCodeSnippet
@@ -221,7 +221,7 @@ int main( int argc, char * argv[] )
 
 
   unsigned int  PixelSuppressionRadiusX((unsigned int)::atoi(argv[5]));
-  float	      PixelSuppressionAngularBeam((float)::atof(argv[6]));
+  float        PixelSuppressionAngularBeam((float)::atof(argv[6]));
 
   unsigned int  LocalHoughRadiusX((unsigned int)::atoi(argv[7]));
   unsigned int  LocalHoughRadiusY((unsigned int)::atoi(argv[8]));

@@ -448,7 +448,7 @@ int main( int argc, char *argv[] )
 
   ReflectanceToSurfaceReflectanceImageFilterType::Pointer
     filterReflectanceToSurfaceReflectanceImageFilter
-  	= ReflectanceToSurfaceReflectanceImageFilterType::New();
+    = ReflectanceToSurfaceReflectanceImageFilterType::New();
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex

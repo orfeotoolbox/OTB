@@ -181,7 +181,7 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-	// MODIFIED
+  // MODIFIED
   const unsigned int numberOfPixels =  size[0] * size[1];
   PixelType * localBuffer = new PixelType[ numberOfPixels ];
   // Software Guide : EndCodeSnippet
@@ -270,7 +270,7 @@ int main(int argc, char * argv[])
     {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << exp << std::endl;
-		return -1;
+    return -1;
     }
 
 
