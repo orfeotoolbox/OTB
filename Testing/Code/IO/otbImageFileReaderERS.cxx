@@ -31,7 +31,12 @@
 
 int otbImageFileReaderERS(int argc, char* argv[])
 {
-  // Verify the number of parameters in the command line
+  if(argc<3)
+  {
+    std::cout << argv[0] <<"<inputImage> <outputImage>"  << std::endl;
+    return EXIT_FAILURE;
+  }
+
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
