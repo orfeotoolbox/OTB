@@ -93,7 +93,6 @@ int otbOrthoRectificationFilter( int argc, char* argv[] )
   utmMapProjection->SetZone(atoi(argv[9]));
   utmMapProjection->SetHemisphere(argv[10][0]);
   orthoRectifFilter->SetMapProjection(utmMapProjection);
-  orthoRectifFilter->SetAverageElevation(10);
 
   writer->SetInput(orthoRectifFilter->GetOutput());
 
