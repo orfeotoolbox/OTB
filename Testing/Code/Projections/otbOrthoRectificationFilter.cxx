@@ -29,7 +29,6 @@
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
 #include "otbInverseSensorModel.h"
-#include "otbStreamingResampleImageFilter.h"
 
 #include "otbOrthoRectificationFilter.h"
 #include "otbMapProjections.h"
@@ -94,6 +93,7 @@ int otbOrthoRectificationFilter( int argc, char* argv[] )
   utmMapProjection->SetZone(atoi(argv[9]));
   utmMapProjection->SetHemisphere(argv[10][0]);
   orthoRectifFilter->SetMapProjection(utmMapProjection);
+  orthoRectifFilter->SetAverageElevation(10);
 
   writer->SetInput(orthoRectifFilter->GetOutput());
 
