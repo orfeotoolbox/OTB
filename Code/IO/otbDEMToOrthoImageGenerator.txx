@@ -103,14 +103,14 @@ namespace otb
 
       DEMImage->TransformIndexToPhysicalPoint(currentindex, cartoPoint);
 
-      otbMsgDevMacro(<< "CartoPoint : (" << cartoPoint[0] << "," << cartoPoint[1] << ")") ;
+      otbMsgDevMacro(<< "CartoPoint : (" << cartoPoint[0] << "," << cartoPoint[1] << ")");
 
       geoPoint = m_MapProjection->TransformPoint(cartoPoint);
 
-      otbMsgDevMacro(<< "CartoPoint : (" << geoPoint[0] << "," << geoPoint[1] << ")") ;
+      otbMsgDevMacro(<< "CartoPoint : (" << geoPoint[0] << "," << geoPoint[1] << ")");
 
       height=m_DEMHandler->GetHeightAboveMSL(geoPoint); // Altitude calculation
-      otbMsgDevMacro(<< "height" << height) ;
+      otbMsgDevMacro(<< "height" << height);
       // MNT sets a default value (-32768) at point where it doesn't have altitude information.
       // OSSIM has chosen to change this default value in OSSIM_DBL_NAN (-4.5036e15).
       if (!ossim::isnan(height))

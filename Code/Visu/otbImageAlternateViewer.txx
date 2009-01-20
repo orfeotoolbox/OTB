@@ -136,7 +136,7 @@ namespace otb
     m_DecompositionFilter->SetInput(m_Image);
     m_OldViewedRegionCenter = m_ViewedRegionCenter;
 
-    typename ImageListType::Pointer bandList = m_DecompositionFilter->GetOutput() ;
+    typename ImageListType::Pointer bandList = m_DecompositionFilter->GetOutput();
     bandList->UpdateOutputInformation();
     bandList->GetNthElement(m_RedChannelIndex)->SetRequestedRegion(m_RequestedRegion);
     
@@ -683,7 +683,7 @@ namespace otb
     result = new unsigned char[bufferLenght];
 
     filter.Start();
-    typename ImageListType::Pointer bandList = m_DecompositionFilter->GetOutput() ;
+    typename ImageListType::Pointer bandList = m_DecompositionFilter->GetOutput();
     bandList->UpdateOutputInformation();
 
     unsigned int index = 0;

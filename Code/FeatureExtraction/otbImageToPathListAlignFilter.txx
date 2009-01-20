@@ -250,8 +250,8 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
   typename InputImageType::IndexType idx;
 
   for (x=0;x<p;x++){
-     idx[0] = (n-1) ;
-     idx[1] = x ;
+     idx[0] = (n-1);
+     idx[1] = x;
 //     indice = (n-1)*p +x
      m_AngleImage->SetPixel(idx,static_cast<RealType>(-1000.0));
   }

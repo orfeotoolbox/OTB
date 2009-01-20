@@ -60,7 +60,7 @@ namespace otb
     typedef typename OutputImageType::Pointer     OutputImagePointer;
     typedef typename InputImageType::Pointer      InputImagePointer;
     typedef typename OutputImageType::RegionType  OutputImageRegionType;
-    typedef typename TInputImage::PixelType       PixelType ;
+    typedef typename TInputImage::PixelType       PixelType;
     typedef typename InputImageType::ConstPointer InputImageConstPointer;
     typedef typename OutputImageType::SizeType    SizeType;
     typedef typename OutputImageType::SpacingType SpacingType;

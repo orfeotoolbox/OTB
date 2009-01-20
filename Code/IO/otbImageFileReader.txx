@@ -256,7 +256,7 @@ ImageFileReader<TOutputImage>
   // Update FileName
   this->m_FileName = lFileName;
 
-  std::string lFileNameOssimKeywordlist = this->m_FileName ;
+  std::string lFileNameOssimKeywordlist = this->m_FileName;
 
 
   // Test if the file exist and if it can be open.
@@ -507,7 +507,7 @@ ImageFileReader<TOutputImage>
     while ( (cpt < listFileFind.size()) && (fic_trouve==false) )
                 {
       str_FileName = std::string(listFileFind[cpt]);
-                        for(unsigned int i = 0 ; i < listFileSearch.size() ; i++)
+                        for(unsigned int i = 0; i < listFileSearch.size(); i++)
                         {
                if(str_FileName.compare(listFileSearch[i]) == 0)
               {

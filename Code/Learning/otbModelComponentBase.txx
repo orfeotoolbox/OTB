@@ -35,10 +35,10 @@ template< class TSample >
 ModelComponentBase< TSample >
 ::ModelComponentBase()
 {
-  m_Sample = 0 ;
-  m_PdfFunction = 0 ;
-  m_CdfFunction = 0 ;
-  m_SampleModified = 0 ;
+  m_Sample = 0;
+  m_PdfFunction = 0;
+  m_CdfFunction = 0;
+  m_SampleModified = 0;
 }
 
 template< class TSample >
@@ -48,34 +48,34 @@ ModelComponentBase< TSample >
 {
   Superclass::PrintSelf(os,indent);
 
-  os << indent << "Sample: " ;
+  os << indent << "Sample: ";
   if ( m_Sample != 0 )
   {
     os << m_Sample << std::endl;
   }
   else
   {
-    os << "not set." << std::endl ;
+    os << "not set." << std::endl;
   }
 
-  os << indent << "Membership Function for pdf: " ;
+  os << indent << "Membership Function for pdf: ";
   if ( m_PdfFunction != 0 )
   {
     os << m_PdfFunction << std::endl;
   }
   else
   {
-    os << "not instantiated yet." << std::endl ;
+    os << "not instantiated yet." << std::endl;
   }
 
-  os << indent << "Membership Function for cdf: " ;
+  os << indent << "Membership Function for cdf: ";
   if ( m_CdfFunction != 0 )
   {
     os << m_CdfFunction << std::endl;
   }
   else
   {
-    os << "not instantiated yet." << std::endl ;
+    os << "not instantiated yet." << std::endl;
   }
 
   os << indent << "Sample are modified and parameters updated: ";
@@ -97,7 +97,7 @@ void
 ModelComponentBase< TSample >
 ::SetSample(const TSample* sample)
 {
-  m_Sample = sample ;
+  m_Sample = sample;
   m_SampleModified = 1;
 }
 
@@ -106,7 +106,7 @@ const TSample*
 ModelComponentBase< TSample >
 ::GetSample() const
 {
-  return m_Sample ;
+  return m_Sample;
 }
 
 template< class TSample >
@@ -115,7 +115,7 @@ ModelComponentBase< TSample >
 ::SetParameters(const ParametersType &parameters)
 {
   if ( m_Parameters != parameters )
-    m_Parameters = parameters ;
+    m_Parameters = parameters;
 }
 
 template< class TSample >
@@ -123,7 +123,7 @@ void
 ModelComponentBase< TSample >
 ::SetPdfMembershipFunction(MembershipFunctionType* function)
 {
-  m_PdfFunction = function ;
+  m_PdfFunction = function;
 }
 
 template< class TSample >
@@ -131,7 +131,7 @@ void
 ModelComponentBase< TSample >
 ::SetCdfMembershipFunction(MembershipFunctionType* function)
 {
-  m_CdfFunction = function ;
+  m_CdfFunction = function;
 }
 
 template< class TSample >
@@ -139,7 +139,7 @@ typename ModelComponentBase< TSample >::MembershipFunctionType*
 ModelComponentBase< TSample >
 ::GetPdfMembershipFunction()
 {
-  return m_PdfFunction ;
+  return m_PdfFunction;
 }
 
 template< class TSample >
@@ -147,7 +147,7 @@ typename ModelComponentBase< TSample >::MembershipFunctionType*
 ModelComponentBase< TSample >
 ::GetCdfMembershipFunction()
 {
-  return m_CdfFunction ;
+  return m_CdfFunction;
 }
 
 template< class TSample >
@@ -155,7 +155,7 @@ inline double
 ModelComponentBase< TSample >
 ::Pdf(MeasurementVectorType& measurements)
 {
-  return this->m_PdfFunction->Evaluate(measurements) ;
+  return this->m_PdfFunction->Evaluate(measurements);
 }
 
 template< class TSample >
@@ -163,7 +163,7 @@ inline double
 ModelComponentBase< TSample >
 ::Cdf(MeasurementVectorType& measurements)
 {
-  return m_CdfFunction->Evaluate(measurements) ;
+  return m_CdfFunction->Evaluate(measurements);
 }
 
 template < class TSample >

@@ -111,8 +111,8 @@ void MWImageIO::Read(void* buffer)
 
         int lNbLignes   = this->GetIORegion().GetSize()[1];
         int lNbColonnes = this->GetIORegion().GetSize()[0];
-        int lPremiereLigne   = this->GetIORegion().GetIndex()[1] ; // [1... ]
-        int lPremiereColonne = this->GetIORegion().GetIndex()[0] ; // [1... ]
+        int lPremiereLigne   = this->GetIORegion().GetIndex()[1]; // [1... ]
+        int lPremiereColonne = this->GetIORegion().GetIndex()[0]; // [1... ]
 
 otbMsgDevMacro( <<" MWImageIO::Read()  ");
 otbMsgDevMacro( <<" Dimensions de l'image  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
@@ -256,8 +256,8 @@ void MWImageIO::Write(const void* buffer)
 
         unsigned long lNbLignes   = this->GetIORegion().GetSize()[1];
         unsigned long lNbColonnes = this->GetIORegion().GetSize()[0];
-        unsigned long lPremiereLigne   = this->GetIORegion().GetIndex()[1] ; // [1... ]
-        int lPremiereColonne = this->GetIORegion().GetIndex()[0] ; // [1... ]
+        unsigned long lPremiereLigne   = this->GetIORegion().GetIndex()[1]; // [1... ]
+        int lPremiereColonne = this->GetIORegion().GetIndex()[0]; // [1... ]
 
   // Cas particuliers : on controle que si la r�gion � �crire est de la m�me dimension que l'image enti�re,
   // on commence l'offset � 0 (lorsque que l'on est pas en "Streaming")

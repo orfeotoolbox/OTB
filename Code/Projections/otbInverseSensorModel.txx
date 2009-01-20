@@ -70,10 +70,10 @@ namespace otb
 
     if (this->m_UseDEM)
     {
-//       otbMsgDevMacro(<< "USING DEM ! ") ;
+//       otbMsgDevMacro(<< "USING DEM ! ");
 //       otbMsgDevMacro(<< "Point : (" << point[1] << "," << point[0] << ")");
       double height = this->m_DEMHandler->GetHeightAboveMSL(point);
-//       otbMsgDevMacro(<< "height : " << height) ;
+//       otbMsgDevMacro(<< "height : " << height);
       ossimGPoint.height(height);
     }
     else

@@ -44,7 +44,7 @@ public:
   /** Standard class typedefs. */
   typedef ImageKeywordlist         Self;
 
-  typedef std::map<ossimString, ossimString> KeywordlistMap ;
+  typedef std::map<ossimString, ossimString> KeywordlistMap;
 
   void SetKeywordlist(const ossimKeywordlist& kwl)
   {
@@ -65,8 +65,8 @@ public:
 
   virtual void Print(std::ostream& os, itk::Indent indent=0) const;
 
-  ImageKeywordlist() ;
-  virtual ~ImageKeywordlist() ;
+  ImageKeywordlist();
+  virtual ~ImageKeywordlist();
 
   ImageKeywordlist(const Self&);
   void operator=(const Self&);

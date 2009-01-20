@@ -51,14 +51,14 @@ public:
 
  /** Standard macros */
   itkTypeMacro(SOMClassifier, itk::ProcessObject);
-  itkNewMacro(Self) ;
+  itkNewMacro(Self);
 
   /** typedefs from TSample object */
   typedef TSample SampleType;
   typedef typename SampleType::Pointer SamplePointerType;
-  typedef typename SampleType::MeasurementType MeasurementType ;
-  typedef typename SampleType::MeasurementVectorType MeasurementVectorType ;
-  typedef typename SampleType::MeasurementVectorType::ValueType InputPixelType ;
+  typedef typename SampleType::MeasurementType MeasurementType;
+  typedef typename SampleType::MeasurementVectorType MeasurementVectorType;
+  typedef typename SampleType::MeasurementVectorType::ValueType InputPixelType;
 
   /** SOM Map typedefs */
   typedef TSOMMap SOMMapType;
@@ -87,7 +87,7 @@ protected:
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Starts the classification process */
-  void GenerateData() ;
+  void GenerateData();
 
  private:
   /// The input sample
@@ -95,7 +95,7 @@ protected:
   /// The output membership sample.
   OutputPointerType m_Output;
 
-} ; // end of class
+}; // end of class
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

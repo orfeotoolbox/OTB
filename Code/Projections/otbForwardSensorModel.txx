@@ -91,7 +91,7 @@ template < class TScalarType,
     itk::Point<double, 2> point;
     int nbIter = 0;
 
-    otbMsgDevMacro(<< "USING DEM ! ") ;
+    otbMsgDevMacro(<< "USING DEM ! ");
 
     while ((diffHeight > m_Epsilon)  && (nbIter < m_NbIter))
     {
@@ -114,7 +114,7 @@ template < class TScalarType,
       {
         heightTmp = this->m_AverageElevation;
       }
-//       otbMsgDevMacro(<< "height : " << heightTmp) ;
+//       otbMsgDevMacro(<< "height : " << heightTmp);
 
       this->m_Model->lineSampleHeightToWorld(ossimPoint, heightTmp, ossimGPointRef);
 //       otbMsgDevMacro(<< "Point After iter :    (" << ossimGPointRef.lat << "," << ossimGPointRef.lon << ")");

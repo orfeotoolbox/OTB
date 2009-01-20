@@ -145,7 +145,7 @@ private:
   void TestFileExistanceAndReadability();
 
 
-} ;
+};
 
 } // end namespace otb
 

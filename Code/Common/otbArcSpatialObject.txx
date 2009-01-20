@@ -148,7 +148,7 @@ ArcSpatialObject< VDimension >
         PointType pntD;
 
         double alpha,longueur,largeur;
-        alpha=(m_Angle2-m_Angle1) ; // Difference between 2 angles.
+        alpha=(m_Angle2-m_Angle1); // Difference between 2 angles.
 
         if (alpha<=180)
                 {

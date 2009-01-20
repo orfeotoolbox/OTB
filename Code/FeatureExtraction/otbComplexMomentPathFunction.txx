@@ -104,7 +104,7 @@ ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
 
   if(nbPath >1)
      {
-     for(int i =0 ; i<nbPath-1 ;i++)
+     for(int i =0; i<nbPath-1;i++)
        {
        cindex = vertexList->GetElement(i);
        PrecisionType x1 = cindex[0];
@@ -119,7 +119,7 @@ ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
        Theta = vcl_atan2(y2-y1,x2-x1);
        Norm  = vcl_sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) );
 
-       for(RealType k = 0 ; k <=Norm ; k+=m_Step)
+       for(RealType k = 0; k <=Norm; k+=m_Step)
          {
    IndexOut[0] = x1 + k * vcl_cos(Theta);
    IndexOut[1] = y1 + k * vcl_sin(Theta);

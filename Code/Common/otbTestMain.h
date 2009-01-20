@@ -508,28 +508,28 @@ bool isMinusSign(int i)
 
 bool isNumeric(std::string str)
 {
-  int nbOfPoints = 0 ;
-  int nbOfNumbers = 0 ;
-  int number ;
-  unsigned int i = 0 ;
-  bool result = true ;
+  int nbOfPoints = 0;
+  int nbOfNumbers = 0;
+  int number;
+  unsigned int i = 0;
+  bool result = true;
 
   while ((i<str.size())&&(result==true))
   {
     number = str[i];
 
     if (isPoint(number))
-      nbOfPoints++ ;
+      nbOfPoints++;
     if (isNumber(number))
       nbOfNumbers++;
     if ((!isNumber(number)&&!isPoint(number)&&!isMinusSign(number))
           ||(isMinusSign(number)&&(i!=0)))
-      result = false ;
+      result = false;
 
     i++;
   }
   if ((str.size()==0)||(nbOfPoints > 1)/*||(nbOfNumbers==0)*/)
-    result = false ;
+    result = false;
 
   return result;
 }
@@ -652,10 +652,10 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 {
   std::ifstream fluxfiletest(testAsciiFileName);
   std::ifstream fluxfileref(baselineAsciiFileName);
-  enum TypeEtat { ETAT_NUM, ETAT_CHAR } ;
+  enum TypeEtat { ETAT_NUM, ETAT_CHAR };
 
   std::string diffAsciiFileName(testAsciiFileName);
-  diffAsciiFileName += ".diff.txt" ;
+  diffAsciiFileName += ".diff.txt";
   std::ofstream fluxfilediff;
   if( reportErrors )
   {
@@ -676,31 +676,31 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
     itkGenericExceptionMacro(<< "Impossible to open the baseline ASCII file <"<<baselineAsciiFileName<<">.");
   }
 
-  TypeEtat etatPrec(ETAT_NUM), etatCour(ETAT_NUM) ;
+  TypeEtat etatPrec(ETAT_NUM), etatCour(ETAT_NUM);
 
   std::vector<std::string> listStrDiffLineFileRef;
   std::vector<std::string> listStrDiffLineFileTest;
 
   while ( std::getline(fluxfileref,strfileref)!=0  )
   {
-    otb::StringStream buffstreamRef, buffstreamTest ;
-    buffstreamRef << strfileref ;
+    otb::StringStream buffstreamRef, buffstreamTest;
+    buffstreamRef << strfileref;
 
     //check if we've reach end of test file
     if (std::getline(fluxfiletest,strfiletest) == 0)
     {
       std::string strRef = "";
 
-      buffstreamRef >> strRef ;
+      buffstreamRef >> strRef;
       fluxfilediff << "Line missing in test file: " << numLine
           << " : " << strRef
-          << std::endl ;
+          << std::endl;
       nbdiff++;
     }
     else
     {
 
-      buffstreamTest << strfiletest ;
+      buffstreamTest << strfiletest;
       int nblinediff(0);
 
       while (buffstreamRef.peek() != EOF)
@@ -713,8 +713,8 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
         std::string strNumTest = "";
         std::string strCharTest = "";
 
-        buffstreamRef >> strRef ;
-        buffstreamTest >> strTest ;
+        buffstreamRef >> strRef;
+        buffstreamTest >> strTest;
 
         bool chgt= false;
         std::string charTmpRef = "";
@@ -730,7 +730,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
               if( reportErrors )
               {
                 fluxfilediff << "Diff at line " << numLine << " : compare numeric value with no numeric value ("<<strRef
-                    << strRef << " != " << strTest <<")"<< std::endl ;
+                    << strRef << " != " << strTest <<")"<< std::endl;
                 nblinediff++;
               }
               nbdiff++;
@@ -742,7 +742,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
               {
                 fluxfilediff << "Diff at line " << numLine << " : vcl_abs ( ("
                     << strRef << ") - (" << strTest
-                    << ") ) > " << epsilon << std::endl ;
+                    << ") ) > " << epsilon << std::endl;
                 nblinediff++;
               }
               nbdiff++;
@@ -777,7 +777,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
                   {
                     fluxfilediff << "Diff at line " << numLine
                         << " : " << strCharRef
-                        << " != " << strCharTest << std::endl ;
+                        << " != " << strCharTest << std::endl;
                     nblinediff++;
                   }
                   nbdiff++;
@@ -799,7 +799,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
                   {
                     fluxfilediff << "Diff at line " << numLine << " : vcl_abs ( ("
                         << strNumRef << ") - (" << strNumTest
-                        << ") ) > " << epsilon << std::endl ;
+                        << ") ) > " << epsilon << std::endl;
                     nblinediff++;
                   }
                   nbdiff++;
@@ -841,7 +841,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
                   {
                     fluxfilediff << "Diff at line " << numLine << " : vcl_abs( ("
                         << strRef << ") - (" << strTest
-                        << ") ) > " << epsilon << std::endl ;
+                        << ") ) > " << epsilon << std::endl;
                     nblinediff++;
                   }
                   nbdiff++;
@@ -855,7 +855,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
                   {
                     fluxfilediff << "Diff at line " << numLine
                         << " : " << strRef
-                        << " != " << strTest << std::endl ;
+                        << " != " << strTest << std::endl;
                     nblinediff++;
                   }
                   nbdiff++;
@@ -893,11 +893,11 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
     int nblinediff(0);
     otb::StringStream buffstreamTest;
     std::string strTest = "";
-    buffstreamTest << strfiletest ;
-    buffstreamTest >> strTest ;
+    buffstreamTest << strfiletest;
+    buffstreamTest >> strTest;
     fluxfilediff << "Additional line in test file: " << numLine
         << " : " << strTest
-        << std::endl ;
+        << std::endl;
     nblinediff++;
     nbdiff++;
     if ( nblinediff!=0 && reportErrors)
@@ -927,7 +927,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
     std::cout << "Tolerance value     : "<<epsilon << std::endl;
 
     std::cout << "Nb lines differents : "<<listStrDiffLineFileRef.size() << std::endl;
-    for( unsigned int i = 0 ; i  < listStrDiffLineFileRef.size() ; i++)
+    for( unsigned int i = 0; i  < listStrDiffLineFileRef.size(); i++)
     {
       std::cout << "   -------------------------------"<<std::endl;
       std::cout << "   Base << "<<listStrDiffLineFileRef[i]<<std::endl;

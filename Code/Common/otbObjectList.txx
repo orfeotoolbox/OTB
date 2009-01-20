@@ -97,7 +97,7 @@ namespace otb
   {
     if( index >= m_InternalContainer.size() )
     {
-        itkExceptionMacro(<<"Impossible to SetNthElement with the index element "<<index<<" ; this element don't exist, the size of the list is "<<m_InternalContainer.size()<<"." );
+        itkExceptionMacro(<<"Impossible to SetNthElement with the index element "<<index<<"; this element don't exist, the size of the list is "<<m_InternalContainer.size()<<"." );
     }
     m_InternalContainer[index]=element;
   }
@@ -113,7 +113,7 @@ namespace otb
   {
     if( index >= m_InternalContainer.size() )
     {
-        itkExceptionMacro(<<"Impossible to GetNthElement with the index element "<<index<<" ; this element don't exist, the size of the list is "<<m_InternalContainer.size()<<"." );
+        itkExceptionMacro(<<"Impossible to GetNthElement with the index element "<<index<<"; this element don't exist, the size of the list is "<<m_InternalContainer.size()<<"." );
     }
     return m_InternalContainer[index];
   }
@@ -151,7 +151,7 @@ namespace otb
   {
     if( index >= m_InternalContainer.size() )
     {
-        itkExceptionMacro(<<"Impossible to erase the index element "<<index<<" ; the size of the list is "<<m_InternalContainer.size()<<"." );
+        itkExceptionMacro(<<"Impossible to erase the index element "<<index<<"; the size of the list is "<<m_InternalContainer.size()<<"." );
     }
     m_InternalContainer.erase(m_InternalContainer.begin()+index);
   }

@@ -84,7 +84,7 @@ public:
   {
     std::string keyname;
     KeyType type;
-  } KeyTypeDef ;*/
+  } KeyTypeDef;*/
 
   struct KeyTypeDef
   {
@@ -98,7 +98,7 @@ public:
       type = _type;
     }
 
-  } ;
+  };
 
 
   KeyType GetKeyType(std::string name);

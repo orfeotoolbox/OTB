@@ -112,8 +112,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  AtmosphericRadiativeTermsSingleChannel(const Self&) ; //purposely not implemented
-  void operator=(const Self&) ; //purposely not implemented
+  AtmosphericRadiativeTermsSingleChannel(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
 
 
   /** The intrinsic atmospheric reflectance. */
@@ -246,8 +246,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  AtmosphericRadiativeTerms(const Self&) ; //purposely not implemented
-  void operator=(const Self&) ; //purposely not implemented
+  AtmosphericRadiativeTerms(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
 
   /** The vector containing each channel information. */
   VectorValueType m_Values;

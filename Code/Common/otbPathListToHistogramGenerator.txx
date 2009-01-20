@@ -39,7 +39,7 @@ void
 PathListToHistogramGenerator< TPath, TFunction >
 ::SetInput( PathListPointer path )
 {
-  m_PathList = path ;
+  m_PathList = path;
 }
 
 
@@ -68,7 +68,7 @@ PathListToHistogramGenerator< TPath, TFunction >
 
     typename TFunction::Pointer function = TFunction::New();
 
-    for(int noPathList = 0 ; noPathList < nbElementPathList; noPathList++ )
+    for(int noPathList = 0; noPathList < nbElementPathList; noPathList++ )
     {
        vertexList = (*m_PathList)[noPathList];
        function->SetInputPath( vertexList );
@@ -78,7 +78,7 @@ PathListToHistogramGenerator< TPath, TFunction >
 
     }
 
-    m_HistogramGenerator->SetListSample( ListSample ) ;
+    m_HistogramGenerator->SetListSample( ListSample );
     m_HistogramGenerator->Update();
 }
 

@@ -70,7 +70,7 @@ VectorImageToIntensityImageFilter<TInputImage,TOutputImage>
   {
     sum += pixel[i];
   }
-      sum /= pixel.Size() ;
+      sum /= pixel.Size();
 
 
     outputIt.Set(static_cast<OutputPixelType>(sum));

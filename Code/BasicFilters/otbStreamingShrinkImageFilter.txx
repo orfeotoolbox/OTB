@@ -72,7 +72,7 @@ StreamingShrinkImageFilter<TInputImage, TOutputImage>
   for (unsigned int i = 0; i < OutputImageType::ImageDimension; i++)
     {
       outputSpacing[i] = inputSpacing[i] * static_cast<double>( m_ShrinkFactor);
-      outputSize[i] = static_cast<int>( static_cast<double>(inputSize[i])/static_cast<double>( m_ShrinkFactor )) ;
+      outputSize[i] = static_cast<int>( static_cast<double>(inputSize[i])/static_cast<double>( m_ShrinkFactor ));
       //outputStartIndex[i] = inputStartIndex[i];
       outputStartIndex[i]=0;
     }

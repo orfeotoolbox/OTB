@@ -77,7 +77,7 @@ namespace otb
     }
     if( m_ChannelsFile !=  NULL)
     {
-      for(unsigned int numChannel = 0 ; numChannel< m_NbOfChannels ; numChannel++)
+      for(unsigned int numChannel = 0; numChannel< m_NbOfChannels; numChannel++)
       {
         if( m_ChannelsFile[numChannel].is_open() )
         {
@@ -134,8 +134,8 @@ namespace otb
 
     int lNbLines   = this->GetIORegion().GetSize()[1];
     int lNbColumns = this->GetIORegion().GetSize()[0];
-    int lFirstLine   = this->GetIORegion().GetIndex()[1] ; // [1... ]
-    int lFirstColumn = this->GetIORegion().GetIndex()[0] ; // [1... ]
+    int lFirstLine   = this->GetIORegion().GetIndex()[1]; // [1... ]
+    int lFirstColumn = this->GetIORegion().GetIndex()[0]; // [1... ]
 
     otbMsgDevMacro( <<" RADImageIO::Read()  ");
     otbMsgDevMacro( <<" Image size  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
@@ -168,7 +168,7 @@ namespace otb
     otbMsgDevMacro( <<" sizeof(size_t)        : "<<sizeof(size_t));
     otbMsgDevMacro( <<" sizeof(unsigned long) : "<<sizeof(unsigned long));
 
-    for (unsigned int numChannel = 0 ; numChannel < m_NbOfChannels ; numChannel++)
+    for (unsigned int numChannel = 0; numChannel < m_NbOfChannels; numChannel++)
     {
       cpt = (unsigned long )(numChannel)* (unsigned long)(m_NbOctetPixel);
                 //Read region of the channel
@@ -190,7 +190,7 @@ namespace otb
         {
           itkExceptionMacro(<<"RADImageIO::Read() Can Read the specified Region"); // read failed
         }
-        for ( std::streamsize  i=0 ; i < numberOfBytesToBeRead ; i = i+static_cast<std::streamsize>(m_NbOctetPixel) )
+        for ( std::streamsize  i=0; i < numberOfBytesToBeRead; i = i+static_cast<std::streamsize>(m_NbOctetPixel) )
         {
           memcpy((void*)(&(p[cpt])),(const void*)(&(value[i])),(size_t)(m_NbOctetPixel));
           cpt += step;
@@ -451,11 +451,11 @@ namespace otb
         // Read FileName information
     std::string lPathName = System::GetPathName( file_name );
     m_ChannelsFileName.clear();
-    for(unsigned int i=0 ; i<m_NbOfChannels ; i++)
+    for(unsigned int i=0; i<m_NbOfChannels; i++)
     {
       file >> lString;
         ::itk::OStringStream lStream;
-        lStream << lPathName <<"/"<< lString ;
+        lStream << lPathName <<"/"<< lString;
         m_ChannelsFileName.push_back(lStream.str());
 
     }
@@ -464,7 +464,7 @@ namespace otb
     m_ChannelsFile = new std::fstream[m_NbOfChannels];
 
         // Try to open channels file
-    for (unsigned int channels = 0 ; channels<m_ChannelsFileName.size() ; channels++)
+    for (unsigned int channels = 0; channels<m_ChannelsFileName.size(); channels++)
     {
 
       m_ChannelsFile[channels].open( m_ChannelsFileName[channels].c_str(), std::ios::in | std::ios::binary );
@@ -515,8 +515,8 @@ namespace otb
     unsigned long step = this->GetNumberOfComponents();
     unsigned int lNbLines   = this->GetIORegion().GetSize()[1];
     unsigned int lNbColumns = this->GetIORegion().GetSize()[0];
-    int lFirstLine   = this->GetIORegion().GetIndex()[1] ; // [1... ]
-    int lFirstColumn = this->GetIORegion().GetIndex()[0] ; // [1... ]
+    int lFirstLine   = this->GetIORegion().GetIndex()[1]; // [1... ]
+    int lFirstColumn = this->GetIORegion().GetIndex()[0]; // [1... ]
 
         // Special case : we control that if the region to write has the same dimension that the entire picture,
   // we start to the offset to 0 ( when ze4re not in "Streaming")
@@ -552,13 +552,13 @@ namespace otb
       return;
     }
 
-    for (unsigned int numChannel = 0 ; numChannel < m_NbOfChannels ; numChannel++)
+    for (unsigned int numChannel = 0; numChannel < m_NbOfChannels; numChannel++)
     {
       cpt = (unsigned long )(numChannel)* (unsigned long)(m_NbOctetPixel);
                 //Read region of the channel
       for(unsigned int LineNo = lFirstLine;LineNo <lFirstLine + lNbLines; LineNo++ )
       {
-        for ( std::streamsize  i=0 ; i < numberOfBytesToBeWrite ; i = i+static_cast<std::streamsize>(m_NbOctetPixel) )
+        for ( std::streamsize  i=0; i < numberOfBytesToBeWrite; i = i+static_cast<std::streamsize>(m_NbOctetPixel) )
         {
           memcpy((void*)(&(value[i])),(const void*)(&(p[cpt])),(size_t)(m_NbOctetPixel));
           cpt += step;
@@ -722,7 +722,7 @@ namespace otb
         //Define channels file name
     std::string lRootName = System::GetRootName( m_FileName );
     m_ChannelsFileName.clear();
-    for(unsigned int i=0 ; i<m_NbOfChannels ; i++)
+    for(unsigned int i=0; i<m_NbOfChannels; i++)
     {
         ::itk::OStringStream lStream;
         lStream << lRootName <<"_"<< i+1 << lExtension;
@@ -742,7 +742,7 @@ namespace otb
     m_ChannelsFile = new std::fstream[m_NbOfChannels];
 
         //Try to open channels file
-    for (unsigned int channels = 0 ; channels<m_ChannelsFileName.size() ; channels++)
+    for (unsigned int channels = 0; channels<m_ChannelsFileName.size(); channels++)
     {
       m_ChannelsFile[channels].open( m_ChannelsFileName[channels].c_str(),  std::ios::out | std::ios::trunc | std::ios::binary );
       if( m_ChannelsFile[channels].fail() )
@@ -757,11 +757,11 @@ namespace otb
     unsigned long numberOfBytesPerLines = m_NbOctetPixel * m_Dimensions[0];
     char* value = new char[numberOfBytesPerLines];
 
-    for (unsigned int channels = 0 ; channels<m_ChannelsFileName.size() ; channels++)
+    for (unsigned int channels = 0; channels<m_ChannelsFileName.size(); channels++)
     {
       m_ChannelsFile[channels].seekp(0, std::ios::beg );
                 //Write Header line and all file (whitout information)
-      for(unsigned int numLigne=0 ; numLigne<(m_Dimensions[1]) ; numLigne++)
+      for(unsigned int numLigne=0; numLigne<(m_Dimensions[1]); numLigne++)
       {
         m_ChannelsFile[channels].write(value,numberOfBytesPerLines);
       }

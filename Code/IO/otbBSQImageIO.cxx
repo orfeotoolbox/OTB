@@ -68,7 +68,7 @@ namespace otb
     }
     if( m_ChannelsFile !=  NULL)
     {
-      for(unsigned int numComponent = 0 ; numComponent<this->GetNumberOfComponents() ; numComponent++)
+      for(unsigned int numComponent = 0; numComponent<this->GetNumberOfComponents(); numComponent++)
       {
         if( m_ChannelsFile[numComponent].is_open() )
         {
@@ -129,8 +129,8 @@ namespace otb
 
     int lNbLines   = this->GetIORegion().GetSize()[1];
     int lNbColumns = this->GetIORegion().GetSize()[0];
-    int lFirstLine   = this->GetIORegion().GetIndex()[1] ; // [1... ]
-    int lFirstColumn = this->GetIORegion().GetIndex()[0] ; // [1... ]
+    int lFirstLine   = this->GetIORegion().GetIndex()[1]; // [1... ]
+    int lFirstColumn = this->GetIORegion().GetIndex()[0]; // [1... ]
 
     otbMsgDevMacro( <<" BSQImageIO::Read()  ");
     otbMsgDevMacro( <<" Image size  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
@@ -162,7 +162,7 @@ namespace otb
     otbMsgDevMacro( <<" sizeof(unsigned long) : "<<sizeof(unsigned long));
 
 
-    for (unsigned int nbComponents = 0 ; nbComponents < this->GetNumberOfComponents() ; nbComponents++)
+    for (unsigned int nbComponents = 0; nbComponents < this->GetNumberOfComponents(); nbComponents++)
     {
       cpt = (unsigned long )(nbComponents)* (unsigned long)(this->GetComponentSize());
                 //Read region of the channel
@@ -185,7 +185,7 @@ namespace otb
         }
 //                        cpt = (unsigned long )(nbComponents)* (unsigned long)(this->GetComponentSize()) + numberOfBytesToBeRead * this->GetNumberOfComponents() * LineNo;
 //                        cpt = (unsigned long )(nbComponents)* (unsigned long)(this->GetComponentSize()) + numberOfBytesToBeRead * this->GetNumberOfComponents();
-        for ( std::streamsize  i=0 ; i < numberOfBytesToBeRead ; i = i+static_cast<std::streamsize>(this->GetComponentSize()) )
+        for ( std::streamsize  i=0; i < numberOfBytesToBeRead; i = i+static_cast<std::streamsize>(this->GetComponentSize()) )
         {
           memcpy((void*)(&(p[cpt])),(const void*)(&(value[i])),(size_t)(this->GetComponentSize()));
           cpt += step;
@@ -427,7 +427,7 @@ namespace otb
         //Define channels file name
     std::string lRootName = System::GetRootName( file_name );
     m_ChannelsFileName.clear();
-    for(unsigned int i=0 ; i<this->GetNumberOfComponents() ; i++)
+    for(unsigned int i=0; i<this->GetNumberOfComponents(); i++)
     {
         ::itk::OStringStream lStream;
         lStream << lRootName << ".c" << i+1;
@@ -437,7 +437,7 @@ namespace otb
     m_ChannelsFile = new std::fstream[this->GetNumberOfComponents() ];
 
         //Try to open channels file
-    for (unsigned int channels = 0 ; channels<m_ChannelsFileName.size() ; channels++)
+    for (unsigned int channels = 0; channels<m_ChannelsFileName.size(); channels++)
     {
       m_ChannelsFile[channels].open( m_ChannelsFileName[channels].c_str(),  std::ios::in | std::ios::binary );
       if( m_ChannelsFile[channels].fail() )
@@ -494,8 +494,8 @@ namespace otb
     unsigned long step = this->GetNumberOfComponents();
     unsigned int lNbLines   = this->GetIORegion().GetSize()[1];
     unsigned int lNbColumns = this->GetIORegion().GetSize()[0];
-    int lFirstLine   = this->GetIORegion().GetIndex()[1] ; // [1... ]
-    int lFirstColumn = this->GetIORegion().GetIndex()[0] ; // [1... ]
+    int lFirstLine   = this->GetIORegion().GetIndex()[1]; // [1... ]
+    int lFirstColumn = this->GetIORegion().GetIndex()[0]; // [1... ]
 
   // Cas particuliers : on controle que si la r�gion � �crire est de la m�me dimension que l'image enti�re,
   // on commence l'offset � 0 (lorsque que l'on est pas en "Streaming")
@@ -529,13 +529,13 @@ namespace otb
       return;
     }
 
-    for (unsigned int nbComponents = 0 ; nbComponents < this->GetNumberOfComponents() ; nbComponents++)
+    for (unsigned int nbComponents = 0; nbComponents < this->GetNumberOfComponents(); nbComponents++)
     {
       cpt = (unsigned long )(nbComponents)* (unsigned long)(this->GetComponentSize());
                 //Read region of the channel
       for(unsigned int LineNo = lFirstLine;LineNo <lFirstLine + lNbLines; LineNo++ )
       {
-        for ( std::streamsize  i=0 ; i < numberOfBytesToBeWrite ; i = i+static_cast<std::streamsize>(this->GetComponentSize()) )
+        for ( std::streamsize  i=0; i < numberOfBytesToBeWrite; i = i+static_cast<std::streamsize>(this->GetComponentSize()) )
         {
           memcpy((void*)(&(value[i])),(const void*)(&(p[cpt])),(size_t)(this->GetComponentSize()));
           cpt += step;
@@ -633,7 +633,7 @@ namespace otb
         //Define channels file name
     std::string lRootName = System::GetRootName( m_FileName );
     m_ChannelsFileName.clear();
-    for(unsigned int i=0 ; i<this->GetNumberOfComponents() ; i++)
+    for(unsigned int i=0; i<this->GetNumberOfComponents(); i++)
     {
         ::itk::OStringStream lStream;
         lStream << lRootName << ".c" << i+1;
@@ -644,7 +644,7 @@ namespace otb
     m_ChannelsFile = new std::fstream[this->GetNumberOfComponents() ];
 
         //Try to open channels file
-    for (unsigned int channels = 0 ; channels<m_ChannelsFileName.size() ; channels++)
+    for (unsigned int channels = 0; channels<m_ChannelsFileName.size(); channels++)
     {
       m_ChannelsFile[channels].open( m_ChannelsFileName[channels].c_str(),  std::ios::out | std::ios::trunc | std::ios::binary );
       if( m_ChannelsFile[channels].fail() )
@@ -658,11 +658,11 @@ namespace otb
     unsigned long headerLength = this->GetComponentSize() * m_Dimensions[0];
     char* value = new char[headerLength];
 
-    for (unsigned int channels = 0 ; channels<m_ChannelsFileName.size() ; channels++)
+    for (unsigned int channels = 0; channels<m_ChannelsFileName.size(); channels++)
     {
       m_ChannelsFile[channels].seekp(0, std::ios::beg );
                 //Write Header line and all file (whitout information)
-      for(unsigned int numLigne=0 ; numLigne<(m_Dimensions[1]) ; numLigne++)
+      for(unsigned int numLigne=0; numLigne<(m_Dimensions[1]); numLigne++)
       {
         m_ChannelsFile[channels].write(value,headerLength);
       }

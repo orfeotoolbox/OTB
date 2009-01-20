@@ -79,7 +79,7 @@ namespace otb
       /** Template parameters typedefs*/
       typedef TInputImage InputImageType;
       typedef typename InputImageType::Pointer             InputImagePointerType;
-      typedef typename InputImageType::IndexType           PixelIndex ;
+      typedef typename InputImageType::IndexType           PixelIndex;
       typedef typename InputImageType::IndexType           IndexType;
       typedef typename InputImageType::PixelType           PixelValue;
       typedef typename InputImageType::SpacingType         SpacingType;
