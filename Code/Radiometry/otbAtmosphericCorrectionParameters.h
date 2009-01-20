@@ -92,8 +92,8 @@ namespace otb
 
 
     private:
-      FilterFunctionValues(const Self&) ; //purposely not implemented
-      void operator=(const Self&) ; //purposely not implemented
+      FilterFunctionValues(const Self&); //purposely not implemented
+      void operator=(const Self&); //purposely not implemented
 
 
       /** Vector that contains the filter function value. */
@@ -232,8 +232,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  AtmosphericCorrectionParameters(const Self&) ; //purposely not implemented
-  void operator=(const Self&) ; //purposely not implemented
+  AtmosphericCorrectionParameters(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
 
   /** The Solar zenithal angle */
   double m_SolarZenithalAngle;

@@ -153,7 +153,7 @@ void FrostImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(
     sum2 += dPixel * dPixel;
         }
       Mean   = sum  / double(neighborhoodSize);
-      Variance  = sum2 / double(neighborhoodSize) - Mean * Mean ;
+      Variance  = sum2 / double(neighborhoodSize) - Mean * Mean;
 
       if(Mean == 0)
   {
@@ -161,7 +161,7 @@ void FrostImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(
   }
       else
   {
-    Alpha = m_Deramp * Variance / (Mean * Mean) ;
+    Alpha = m_Deramp * Variance / (Mean * Mean);
   }
 
       NormFilter  = 0.0;

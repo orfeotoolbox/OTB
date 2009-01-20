@@ -86,7 +86,7 @@ FlusserImageFunction<TInput,TOutput,TPrecision,TCoordRep>
   function->SetP(1);
   function->SetQ(1);
   C11 = function->EvaluateAtIndex( index );
-        FlusserValue = C11.real() ;
+        FlusserValue = C11.real();
   }
   break;
     case 2:
@@ -99,7 +99,7 @@ FlusserImageFunction<TInput,TOutput,TPrecision,TCoordRep>
   function->SetQ(2);
   C12 = function->EvaluateAtIndex( index );
 
-  FlusserValue = vcl_abs( C21 * C12 ) ;
+  FlusserValue = vcl_abs( C21 * C12 );
   }
   break;
     case 3:
@@ -138,7 +138,7 @@ FlusserImageFunction<TInput,TOutput,TPrecision,TCoordRep>
   function->SetQ(2);
   C12 = function->EvaluateAtIndex( index );
 
-  FlusserValueComplex = C30 * vcl_pow(C12,3) ;
+  FlusserValueComplex = C30 * vcl_pow(C12,3);
   FlusserValue = FlusserValueComplex.real();
   }
   break;
@@ -152,7 +152,7 @@ FlusserImageFunction<TInput,TOutput,TPrecision,TCoordRep>
   function->SetQ(2);
   C12 = function->EvaluateAtIndex( index );
 
-  FlusserValueComplex = C30 * vcl_pow(C12,3) ;
+  FlusserValueComplex = C30 * vcl_pow(C12,3);
   FlusserValue = FlusserValueComplex.imag();
   }
   break;
@@ -162,7 +162,7 @@ FlusserImageFunction<TInput,TOutput,TPrecision,TCoordRep>
   function->SetP(2);
   function->SetQ(2);
   C22 = function->EvaluateAtIndex( index );
-        FlusserValue = C22.real() ;
+        FlusserValue = C22.real();
   }
   break;
     case 8:

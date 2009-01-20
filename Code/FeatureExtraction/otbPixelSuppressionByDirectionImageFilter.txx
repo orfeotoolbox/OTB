@@ -192,7 +192,7 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
 
 
   // Pixel Direction
-  double ThetaXcYc, Thetaxtyt ;
+  double ThetaXcYc, Thetaxtyt;
 
 
   //---------------------------------------------------------------------------

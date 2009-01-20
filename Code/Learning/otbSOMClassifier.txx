@@ -77,23 +77,23 @@ SOMClassifier< TSample, TSOMMap, TLabel >
 ::GenerateData()
 {
   typename OutputType::Pointer outputPtr = this->GetOutput();
-  outputPtr->SetSample(this->GetSample()) ;
-  outputPtr->Resize( this->GetSample()->Size()) ;
+  outputPtr->SetSample(this->GetSample());
+  outputPtr->Resize( this->GetSample()->Size());
  typename SOMMapType::SizeType size = this->GetMap()->GetLargestPossibleRegion().GetSize();
  unsigned int numberOfClasses = 1;
  for(unsigned int i=0; i<SOMMapType::ImageDimension;++i)
    {
      numberOfClasses*=size[i];
    }
-  outputPtr->SetNumberOfClasses(numberOfClasses) ;
+  outputPtr->SetNumberOfClasses(numberOfClasses);
 
-  typename TSample::Iterator iter = this->GetSample()->Begin() ;
-  typename TSample::Iterator end  = this->GetSample()->End() ;
+  typename TSample::Iterator iter = this->GetSample()->Begin();
+  typename TSample::Iterator end  = this->GetSample()->End();
 
 
-  typename OutputType::ConstIterator iterO = outputPtr->Begin() ;
-  typename OutputType::ConstIterator endO  = outputPtr->End() ;
-  typename TSample::MeasurementVectorType measurements ;
+  typename OutputType::ConstIterator iterO = outputPtr->Begin();
+  typename OutputType::ConstIterator endO  = outputPtr->End();
+  typename TSample::MeasurementVectorType measurements;
 
   typename SOMMapType::IndexType index;
 
@@ -103,10 +103,10 @@ SOMClassifier< TSample, TSOMMap, TLabel >
   while (iter != end && iterO != endO)
     {
 
-    measurements = iter.GetMeasurementVector() ;
+    measurements = iter.GetMeasurementVector();
     index = somMap->GetWinner(measurements);
     ClassLabelType classLabel = static_cast<ClassLabelType>((index[1]*size[1])+index[0]);
-    outputPtr->AddInstance(classLabel, iterO.GetInstanceIdentifier()) ;
+    outputPtr->AddInstance(classLabel, iterO.GetInstanceIdentifier());
     ++iter;
     ++iterO;
     }

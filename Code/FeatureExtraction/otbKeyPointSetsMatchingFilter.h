@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,13 +28,13 @@ namespace otb
   /** \class KeyPointSetsMatchingFilter
    *  \brief This class matches two point sets according to their associated data.
    *
-   *   The matching criteria is that the ratio between the distance to the first nearest neighbor and the 
+   *   The matching criteria is that the ratio between the distance to the first nearest neighbor and the
    *   second nearest neighbor is lower than the distance threshold. The distance used can be set via the TDistance
    *   template parameters. It has to implement the Evaluate() method (see \doxygen{EuclideanDistance} for more details).
    *
    *   By default, the algorithm tries to match points from pointset 1 to points from pointset 2. If back matching is activated,
    *   it will aslo try to match points from pointset 2 to points from pointset 2, and discard matches that do not appear both in
-   *   forward and backward matching. 
+   *   forward and backward matching.
    *
    *   Matches are stored in a landmark object containing both matched points and point data. The landmark data will hold the distance value
    *   between the data.
@@ -50,8 +50,8 @@ class ITK_EXPORT KeyPointSetsMatchingFilter
     public:
     /// standard class typedefs
     typedef KeyPointSetsMatchingFilter             Self;
-    typedef ObjectListSource<  ObjectList< 
-    Landmark< typename TPointSet::PointType, 
+    typedef ObjectListSource<  ObjectList<
+    Landmark< typename TPointSet::PointType,
     typename TPointSet::PixelType,double> > >      Superclass;
     typedef itk::SmartPointer<Self>                Pointer;
     typedef itk::SmartPointer<const Self>          ConstPointer;
@@ -67,7 +67,7 @@ class ITK_EXPORT KeyPointSetsMatchingFilter
     typedef typename PointDataContainerType::ConstIterator PointDataIteratorType;
     typedef TDistance                                      DistanceType;
     typedef typename DistanceType::Pointer                 DistancePointerType;
-    typedef Landmark< typename TPointSet::PointType, 
+    typedef Landmark< typename TPointSet::PointType,
     typename TPointSet::PixelType,double>                  LandmarkType;
     typedef typename LandmarkType::Pointer                 LandmarkPointerType;
     typedef ObjectList<LandmarkType>                       LandmarkListType;
@@ -84,13 +84,13 @@ class ITK_EXPORT KeyPointSetsMatchingFilter
     itkGetMacro(UseBackMatching,bool);
     itkSetMacro(DistanceThreshold,double);
     itkGetMacro(DistanceThreshold,double);
-    
+   
     /// Set the first pointset
-    void SetInput1(const PointSetType * pointset);    
+    void SetInput1(const PointSetType * pointset);   
     /// Get the first pointset
     const PointSetType * GetInput1();
     /// Set the second pointset
-    void SetInput2(const PointSetType * pointset);    
+    void SetInput2(const PointSetType * pointset);   
     /// Get the second pointset
     const PointSetType * GetInput2();
 
@@ -131,5 +131,5 @@ class ITK_EXPORT KeyPointSetsMatchingFilter
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbKeyPointSetsMatchingFilter.txx"
 #endif
-#endif 
+#endif
 

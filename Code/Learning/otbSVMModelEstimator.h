@@ -77,7 +77,7 @@ public:
   itkGetConstReferenceMacro(NumberOfClasses, unsigned int);
 
   /** Type definitions for the SVM Model. */
-  typedef std::vector< InputPixelType > MeasurementVectorType ;
+  typedef std::vector< InputPixelType > MeasurementVectorType;
   typedef SVMModel< InputPixelType, LabelPixelType >   SVMModelType;
   typedef typename SVMModelType::Pointer     SVMModelPointer;
 
@@ -90,7 +90,7 @@ public:
 
   /** Set/Get the Measures */
   void SetMeasures( TrainingMeasuresType measures ){ m_Measures = measures; };
-  TrainingMeasuresType GetMeasures() { return m_Measures ;};
+  TrainingMeasuresType GetMeasures() { return m_Measures;};
 
   /** Set/Get the Labels */
   void SetLabels( TrainingLabelsType labels ){ m_Labels = labels; };
@@ -287,7 +287,7 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Starts the modelling process */
-  void GenerateData() ;
+  void GenerateData();
 
   unsigned int         m_NumberOfClasses;
   TrainingMeasuresType m_Measures;

@@ -108,7 +108,7 @@ namespace otb
 //       //virtual void SetMatrix(double rotation,  const OutputPointType &scale, const OutputPointType &translation);
 //           void SetFalseEasting(double falseEasting);
 
-          virtual void PrintMap() const ;
+          virtual void PrintMap() const;
 
         protected:
           TileMapTransform();

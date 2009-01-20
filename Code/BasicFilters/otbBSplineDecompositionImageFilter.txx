@@ -338,7 +338,7 @@ BSplineDecompositionImageFilter<TInputImage, TOutputImage>
   unsigned long j = 0;
   while ( !Iter.IsAtEndOfLine() )
     {
-    m_Scratch[j] = static_cast<double>( Iter.Get() ) ;
+    m_Scratch[j] = static_cast<double>( Iter.Get() );
     ++Iter;
     ++j;
     }

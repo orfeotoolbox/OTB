@@ -195,7 +195,7 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
       << typeid(itk::ImageBase<InputImageDimension>*).name() );
     }
 
-  for( unsigned int channel = m_FirstChannel ; channel <= m_LastChannel ; channel ++ )
+  for( unsigned int channel = m_FirstChannel; channel <= m_LastChannel; channel ++ )
     {
       m_ChannelsWorks.push_back(channel);
     }
@@ -232,12 +232,12 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
       // Test if the asked channels index exists in the input image
       ChannelsType  m_BadChannels;
       m_BadChannels.clear();
-      for(unsigned int i=0 ; i < m_ChannelsWorks.size() ; i++)
+      for(unsigned int i=0; i < m_ChannelsWorks.size(); i++)
   {
     if( ( m_ChannelsWorks[i] < 1 )||(m_ChannelsWorks[i] > nbComponentsPerPixel) )
       {
         bool isInsideBadChannels = false;
-        for(unsigned int j=0 ; j < m_BadChannels.size() ; j++)
+        for(unsigned int j=0; j < m_BadChannels.size(); j++)
     {
       if ( m_BadChannels[j]==m_ChannelsWorks[i] )
         isInsideBadChannels = true;
@@ -252,7 +252,7 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
     itk::OStringStream oss;
     oss << "otb::ExtractImageFilter::GenerateOutputInformation : ";
     oss <<  "Channel(s) [ ";
-    for(unsigned int i=0 ; i < m_BadChannels.size() ; i++)
+    for(unsigned int i=0; i < m_BadChannels.size(); i++)
       {
         oss << m_BadChannels[i] << " ";
       }
@@ -323,7 +323,7 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
     pixelOutput.Reserve( outputPtr->GetVectorLength() );
     pixelInput = inIt.Get();
     channelOut = 0;
-    for ( nbChannels = 0 ; nbChannels < m_ChannelsWorks.size() ; nbChannels++)
+    for ( nbChannels = 0; nbChannels < m_ChannelsWorks.size(); nbChannels++)
       {
         channelIn = m_ChannelsWorks[nbChannels] - 1;
         pixelOutput[channelOut] = static_cast<OutputValueType>(pixelInput[channelIn]);

@@ -167,7 +167,7 @@
                 command;\
         } \
         catch( std::bad_alloc & err )     { throw err; } \
-        catch( itk::ExceptionObject & e ) { throw e ; } \
+        catch( itk::ExceptionObject & e ) { throw e; } \
         catch( const std::exception & stde)   { throw stde; } \
         catch( ... ) \
         { \
@@ -269,8 +269,8 @@
 
 #else
 
-#define otbFlRunMacro(condition) 
-#define otbRunningMacro() 
+#define otbFlRunMacro(condition)
+#define otbRunningMacro()
 #define otbTestCallbackWithValue(view,button,button_value)
 #define otbTestCallback(view,button)
 #define otbTestMenuItemCallback(view,menubar,button)

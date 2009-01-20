@@ -336,7 +336,7 @@ ImageBase::PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDiction
         case MetaDataKey::TVECTOR:
            itk::ExposeMetaData<VectorType>(dict2, keys[itkey], vvalue);
 
-           for(i = 0 ; i < vvalue.size() ; i++ )
+           for(i = 0; i < vvalue.size(); i++ )
         {
         os << indent << "---> " << keys[itkey] << "[" << i <<"] = "<< vvalue[i]<< std::endl;
         }

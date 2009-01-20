@@ -73,7 +73,7 @@ FlusserPathFunction<TInputPath, TOutput, TPrecision >
   function->SetP(1);
   function->SetQ(1);
   C11 = function->Evaluate( );
-        FlusserValue = C11.real() ;
+        FlusserValue = C11.real();
   }
   break;
     case 2:
@@ -86,7 +86,7 @@ FlusserPathFunction<TInputPath, TOutput, TPrecision >
   function->SetQ(2);
   C12 = function->Evaluate(  );
 
-  FlusserValue = vcl_abs( C21 * C12 ) ;
+  FlusserValue = vcl_abs( C21 * C12 );
   }
   break;
     case 3:
@@ -125,7 +125,7 @@ FlusserPathFunction<TInputPath, TOutput, TPrecision >
   function->SetQ(2);
   C12 = function->Evaluate( );
 
-  FlusserValueComplex = C30 * vcl_pow(C12,3) ;
+  FlusserValueComplex = C30 * vcl_pow(C12,3);
   FlusserValue = FlusserValueComplex.real();
   }
   break;
@@ -139,7 +139,7 @@ FlusserPathFunction<TInputPath, TOutput, TPrecision >
   function->SetQ(2);
   C12 = function->Evaluate( );
 
-  FlusserValueComplex = C30 * vcl_pow(C12,3) ;
+  FlusserValueComplex = C30 * vcl_pow(C12,3);
   FlusserValue = FlusserValueComplex.imag();
   }
   break;
@@ -149,7 +149,7 @@ FlusserPathFunction<TInputPath, TOutput, TPrecision >
   function->SetP(2);
   function->SetQ(2);
   C22 = function->Evaluate( );
-        FlusserValue = C22.real() ;
+        FlusserValue = C22.real();
   }
   break;
     case 8:

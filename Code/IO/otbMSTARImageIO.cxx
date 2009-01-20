@@ -475,13 +475,13 @@ namespace otb
 
         otbMsgDevMacro(<<"Writing MSTAR fullscene magnitude data to ["<<RAWname<<"].");
      //n = fwrite(FSCENEdata, sizeof(short), nchunks, RAWfp);
-        for ( int nbComponents = 0 ; nbComponents < 1 ; nbComponents++)
+        for ( int nbComponents = 0; nbComponents < 1; nbComponents++)
         {
   // Recopie dans le buffer
 
           unsigned long cpt(0);
           cpt = (unsigned long )(nbComponents)* (unsigned long)(m_NbOctetPixel);
-          for ( unsigned long  i=0 ; i < lTailleBuffer ; i = i+m_NbOctetPixel )
+          for ( unsigned long  i=0; i < lTailleBuffer; i = i+m_NbOctetPixel )
           {
             memcpy((void*)(&(p[cpt])),(const void*)(&(FSCENEdata[i])),(size_t)(m_NbOctetPixel));
             cpt += step;
@@ -517,13 +517,13 @@ namespace otb
 
         otbMsgDevMacro(<<"Writing MSTAR fullscene phase data to ["<<RAWname<<"].");
 //     n = fwrite(FSCENEdata, sizeof(short), nchunks, RAWfp);
-        for ( unsigned int nbComponents = 1 ; nbComponents < this->GetNumberOfComponents() ; nbComponents++)
+        for ( unsigned int nbComponents = 1; nbComponents < this->GetNumberOfComponents(); nbComponents++)
         {
   // Recopie dans le buffer
 
           unsigned long cpt(0);
           cpt = (unsigned long )(nbComponents)* (unsigned long)(m_NbOctetPixel);
-          for ( unsigned long  i=0 ; i < lTailleBuffer ; i = i+m_NbOctetPixel )
+          for ( unsigned long  i=0; i < lTailleBuffer; i = i+m_NbOctetPixel )
           {
             memcpy((void*)(&(p[cpt])),(const void*)(&(CHIPdata[i])),(size_t)(m_NbOctetPixel));
             cpt += step;

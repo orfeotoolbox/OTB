@@ -117,7 +117,7 @@ Neighborhood::print_neighborhood()
 {
   otbMsgDevMacro( << "pNeighborhood : " );
   otbMsgDevMacro( << " iNbPoints : " <<  iNbPoints );
-  for(int i= 0 ; i<=iNbPoints ; i++)
+  for(int i= 0; i<=iNbPoints; i++)
     {
     otbMsgDevMacro( << "tabPoints["<<i <<"] =" << tabPoints[i].value << " Position: (" <<  tabPoints[i].point.x << " , " <<  tabPoints[i].point.y << ")" );
     }

@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -91,7 +91,7 @@ KeyPointSetsMatchingFilter<TPointSet,TDistance>
   // Define iterators on points and point data.
   PointsIteratorType     pIt  = ps1->GetPoints()->Begin();
   PointDataIteratorType pdIt = ps1->GetPointData()->Begin();
-  
+ 
   // iterate on pointset 1
   while(pdIt!=ps1->GetPointData()->End()
 	&&pIt!=ps1->GetPoints()->End())
@@ -121,19 +121,19 @@ KeyPointSetsMatchingFilter<TPointSet,TDistance>
 	   {
 	     // Peform the back search
 	     NeighborSearchResultType searchResult2 = NearestNeighbor(dataMatch,ps1);
-	     
+	    
 	     // Test if back search finds the same match
 	     if(currentIndex == searchResult2.first)
 	       {
 		 matchFound = true;
-	       }	     
-	   } 
+	       }	    
+	   }
 	 else // else back matching
 	   {
 	     matchFound = true;
 	   }
        }
-     
+    
      // If we found a match, add the proper landmark
      if(matchFound)
        {
@@ -143,7 +143,7 @@ KeyPointSetsMatchingFilter<TPointSet,TDistance>
 	 landmark->SetPoint2(pointMatch);
 	 landmark->SetPointData2(dataMatch);
 	 landmark->SetLandmarkData(searchResult1.second);
-	 
+	
 	 // Add the new landmark to the landmark list
 	 landmarks->PushBack(landmark);
        }
@@ -153,7 +153,7 @@ KeyPointSetsMatchingFilter<TPointSet,TDistance>
 }
 
 template <class TPointSet, class TDistance>
-typename KeyPointSetsMatchingFilter<TPointSet,TDistance>::NeighborSearchResultType 
+typename KeyPointSetsMatchingFilter<TPointSet,TDistance>::NeighborSearchResultType
 KeyPointSetsMatchingFilter<TPointSet,TDistance>
 ::NearestNeighbor(const PointDataType& data1, const PointSetType * pointset)
 {
@@ -194,7 +194,7 @@ KeyPointSetsMatchingFilter<TPointSet,TDistance>
 	  secondNearestDistance = nearestDistance;
 	  nearestDistance = distanceValue;
 	  nearestIndex = pdIt.Index();
-	  
+	 
 	}
       // Else check if it is the second nearest neighbor
       else if(distanceValue < secondNearestDistance)
@@ -219,7 +219,7 @@ KeyPointSetsMatchingFilter<TPointSet,TDistance>
   return result;
 
 }
- 
+
 template <class TPointSet, class TDistance>
 void
 KeyPointSetsMatchingFilter<TPointSet,TDistance>
@@ -230,4 +230,4 @@ KeyPointSetsMatchingFilter<TPointSet,TDistance>
 
 } // end namespace otb
 
-#endif 
+#endif

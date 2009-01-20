@@ -28,7 +28,7 @@ namespace otb
   SVMClassifier< TSample, TLabel >
   ::SVMClassifier()
   {
-    m_Output = OutputType::New() ;
+    m_Output = OutputType::New();
     m_Model = SVMModelType::New();
   }
 
@@ -56,19 +56,19 @@ namespace otb
   ::GenerateData()
   {
 
-    m_Output->SetSample(this->GetSample()) ;
+    m_Output->SetSample(this->GetSample());
     otbMsgDevMacro(  << "m_Output " << m_Output );
 
-    m_Output->Resize( this->GetSample()->Size() ) ;
+    m_Output->Resize( this->GetSample()->Size() );
 
 
     otbMsgDevMacro(  << "Resize to " << this->GetSample()->Size() );
     otbMsgDevMacro(  << "Resize to " << m_Output->GetSample()->Size() );
 
-    unsigned int numberOfClasses = this->GetNumberOfClasses() ;
+    unsigned int numberOfClasses = this->GetNumberOfClasses();
     otbMsgDevMacro(  << "NbClass " << numberOfClasses );
 
-    m_Output->SetNumberOfClasses(numberOfClasses) ;
+    m_Output->SetNumberOfClasses(numberOfClasses);
 
 
     otbMsgDevMacro(  << "Do Classif "  );
@@ -82,7 +82,7 @@ namespace otb
   SVMClassifier< TSample, TLabel >
   ::GetOutput()
   {
-    return m_Output ;
+    return m_Output;
   }
 
   template< class TSample, class TLabel >
@@ -100,15 +100,15 @@ namespace otb
   ::DoClassification()
   {
 
-    typename TSample::ConstIterator iter = this->GetSample()->Begin() ;
-    typename TSample::ConstIterator end  = this->GetSample()->End() ;
+    typename TSample::ConstIterator iter = this->GetSample()->Begin();
+    typename TSample::ConstIterator end  = this->GetSample()->End();
 
-    typename OutputType::ConstIterator iterO = m_Output->Begin() ;
-    typename OutputType::ConstIterator endO  = m_Output->End() ;
-    typename TSample::MeasurementVectorType measurements ;
+    typename OutputType::ConstIterator iterO = m_Output->Begin();
+    typename OutputType::ConstIterator endO  = m_Output->End();
+    typename TSample::MeasurementVectorType measurements;
 
 
-    int numberOfComponentsPerSample  = iter.GetMeasurementVector().Size() ;
+    int numberOfComponentsPerSample  = iter.GetMeasurementVector().Size();
 
     struct svm_node *x;
     bool predict_probability = 1;
@@ -163,11 +163,11 @@ namespace otb
   int i = 0;
   double v;
 
-  measurements = iter.GetMeasurementVector() ;
+  measurements = iter.GetMeasurementVector();
   // otbMsgDevMacro(  << "Loop on components " << svm_type );
   for(i=0; i<numberOfComponentsPerSample; i++)
     {
-      x[i].index = i+1 ;
+      x[i].index = i+1;
       x[i].value = measurements[i];
 
     }
@@ -189,7 +189,7 @@ namespace otb
   // the AddInstance method wait for an unsigned int, so we cast it here.
   classLabel = static_cast<unsigned int>(v);
 
-  m_Output->AddInstance(classLabel, iterO.GetInstanceIdentifier()) ;
+  m_Output->AddInstance(classLabel, iterO.GetInstanceIdentifier());
 
   ++iter;
   ++iterO;

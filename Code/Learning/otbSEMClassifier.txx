@@ -21,7 +21,7 @@ template< class TInputImage, class TOutputImage >
 SEMClassifier< TInputImage, TOutputImage >
 ::SEMClassifier()
 {
-  m_TerminationCode = NOT_CONVERGED ;
+  m_TerminationCode = NOT_CONVERGED;
   m_ExternalLabels = 0;
   m_ComponentDeclared = 0;
   m_Sample = 0;
@@ -42,7 +42,7 @@ void
 SEMClassifier< TInputImage, TOutputImage >
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os, indent) ;
+  Superclass::PrintSelf(os, indent);
 
   for ( int componentIndex = 0; componentIndex < m_NbClasses; componentIndex++ )
   {
@@ -57,7 +57,7 @@ void
 SEMClassifier< TInputImage, TOutputImage >
 ::SetNeighborhood(int neighborhood)
 {
-  m_Neighborhood = 2*(neighborhood/2) + 1 ;
+  m_Neighborhood = 2*(neighborhood/2) + 1;
   if ( m_Neighborhood < 1 )
     m_Neighborhood = 1;
 }
@@ -67,7 +67,7 @@ int
 SEMClassifier< TInputImage, TOutputImage >
 ::GetNeighborhood()
 {
-  return m_Neighborhood ;
+  return m_Neighborhood;
 }
 
 template< class TInputImage, class TOutputImage >
@@ -75,7 +75,7 @@ void
 SEMClassifier< TInputImage, TOutputImage >
 ::SetInitialProportions(ProportionVectorType &proportions)
 {
-  m_InitialProportions = proportions ;
+  m_InitialProportions = proportions;
   m_ExternalLabels = 0;
 }
 
@@ -84,7 +84,7 @@ typename SEMClassifier< TInputImage, TOutputImage >::ProportionVectorType*
 SEMClassifier< TInputImage, TOutputImage >
 ::GetInitialProportions()
 {
-  return m_InitialProportions ;
+  return m_InitialProportions;
 }
 
 template< class TInputImage, class TOutputImage >
@@ -97,7 +97,7 @@ SEMClassifier< TInputImage, TOutputImage >
     m_ClassLabels.resize( labels->Size() );
 
     ClassLabelVectorType::iterator iterClassLabel = m_ClassLabels.begin();
-    typename OutputType::ConstIterator iterLabels = labels->Begin() ;
+    typename OutputType::ConstIterator iterLabels = labels->Begin();
     typename OutputType::InstanceIdentifier id = 0;
 
     do {
@@ -150,7 +150,7 @@ SEMClassifier< TInputImage, TOutputImage >
     imgLabelIter.GoToBegin();
     typename itk::ImageRegionIterator< TOutputImage > imgLabelIterEnd ( imgLabels,
         imgLabels->GetBufferedRegion() );
-    imgLabelIterEnd.GoToEnd() ;
+    imgLabelIterEnd.GoToEnd();
 
     ClassLabelVectorType::iterator iterClassLabel = m_ClassLabels.begin();
 
@@ -170,7 +170,7 @@ SEMClassifier< TInputImage, TOutputImage >
     imgLabelIter.GoToBegin();
     typename itk::ImageRegionIterator< TOutputImage > imgLabelIterEnd ( imgLabels,
         imgLabels->GetBufferedRegion() );
-    imgLabelIterEnd.GoToEnd() ;
+    imgLabelIterEnd.GoToEnd();
 
     ClassLabelVectorType::iterator iterClassLabel = m_ClassLabels.begin();
 
@@ -203,7 +203,7 @@ typename SEMClassifier< TInputImage, TOutputImage >::ProportionVectorType*
 SEMClassifier< TInputImage, TOutputImage >
 ::GetProportions()
 {
-  return &m_Proportions ;
+  return &m_Proportions;
 }
 
 template< class TInputImage, class TOutputImage >
@@ -211,7 +211,7 @@ void
 SEMClassifier< TInputImage, TOutputImage >
 ::SetSample ( const TInputImage* sample )
 {
-  m_Sample = sample ;
+  m_Sample = sample;
   m_NbSamples = 0;
   m_SampleList = SampleType::New();
   m_SampleList->SetMeasurementVectorSize( m_Sample->GetVectorLength() );
@@ -243,7 +243,7 @@ const TInputImage *
 SEMClassifier< TInputImage, TOutputImage >
 ::GetSample() const
 {
-  return m_Sample ;
+  return m_Sample;
 }
 
 template< class TInputImage, class TOutputImage >
@@ -251,7 +251,7 @@ typename SEMClassifier< TInputImage, TOutputImage >::SampleType *
 SEMClassifier< TInputImage, TOutputImage >
 ::GetSampleList() const
 {
-  return m_SampleList ;
+  return m_SampleList;
 }
 
 template< class TInputImage, class TOutputImage >
@@ -267,7 +267,7 @@ int
 SEMClassifier< TInputImage, TOutputImage >
 ::AddComponent(int id, ComponentType * component )
 {
-  m_ComponentVector[id] = component ;
+  m_ComponentVector[id] = component;
   m_ComponentDeclared = 1;
 
   return static_cast<int>( m_ComponentVector.size() );
@@ -468,8 +468,8 @@ SEMClassifier< TInputImage, TOutputImage >
   typename SampleType::ConstIterator iterSample = m_SampleList->Begin();
   typename SampleType::ConstIterator lastSample = m_SampleList->End();
 
-  ClassLabelVectorType::iterator iterLabel = m_ClassLabels.begin() ;
-  ClassLabelVectorType::iterator lastLabel = m_ClassLabels.end() ;
+  ClassLabelVectorType::iterator iterLabel = m_ClassLabels.begin();
+  ClassLabelVectorType::iterator lastLabel = m_ClassLabels.end();
 
   typename SampleType::InstanceIdentifier id = 0;
 
@@ -518,8 +518,8 @@ SEMClassifier< TInputImage, TOutputImage >
   std::vector< double > localWeight ( m_NbClasses );
   std::vector< double > localCount ( m_NbClasses );
 
-  typename SampleType::ConstIterator iterSample = m_SampleList->Begin() ;
-  typename SampleType::ConstIterator lastSample = m_SampleList->End() ;
+  typename SampleType::ConstIterator iterSample = m_SampleList->Begin();
+  typename SampleType::ConstIterator lastSample = m_SampleList->End();
   MeasurementVectorType measurementVector;
 
   typename SampleType::InstanceIdentifier id = 0;
@@ -578,9 +578,9 @@ SEMClassifier< TInputImage, TOutputImage >
 {
   // Class results initialisation
   m_Output = OutputType::New();
-  m_Output->SetSample( this->GetSampleList() ) ;
-  m_Output->Resize( this->GetSampleList()->Size() ) ;
-  m_Output->SetNumberOfClasses( m_NbClasses ) ;
+  m_Output->SetSample( this->GetSampleList() );
+  m_Output->Resize( this->GetSampleList()->Size() );
+  m_Output->SetNumberOfClasses( m_NbClasses );
 
   // Image results classification
   m_OutputImage = TOutputImage::New();
@@ -589,18 +589,18 @@ SEMClassifier< TInputImage, TOutputImage >
 
   int cluster, componentIndex;
 
-  typename SampleType::ConstIterator sampleIter = this->GetSampleList()->Begin() ;
-  typename SampleType::ConstIterator sampleIterEnd  = this->GetSampleList()->End() ;
+  typename SampleType::ConstIterator sampleIter = this->GetSampleList()->Begin();
+  typename SampleType::ConstIterator sampleIterEnd  = this->GetSampleList()->End();
 
-  typename OutputType::ConstIterator outputIter = m_Output->Begin() ;
-  typename OutputType::ConstIterator outputIterEnd  = m_Output->End() ;
+  typename OutputType::ConstIterator outputIter = m_Output->Begin();
+  typename OutputType::ConstIterator outputIterEnd  = m_Output->End();
 
   typename itk::ImageRegionIterator< TOutputImage > imgOutputIter ( m_OutputImage,
       m_OutputImage->GetBufferedRegion() );
   imgOutputIter.GoToBegin();
   typename itk::ImageRegionIterator< TOutputImage > imgOutputIterEnd ( m_OutputImage,
       m_OutputImage->GetBufferedRegion() );
-  imgOutputIterEnd.GoToEnd() ;
+  imgOutputIterEnd.GoToEnd();
 
 
   do {
@@ -612,7 +612,7 @@ SEMClassifier< TInputImage, TOutputImage >
         cluster = componentIndex;
     }
 
-    m_Output->AddInstance( cluster, sampleIter.GetInstanceIdentifier() ) ;
+    m_Output->AddInstance( cluster, sampleIter.GetInstanceIdentifier() );
     imgOutputIter.Set( cluster );
 
   } while ( ++sampleIter != sampleIterEnd
@@ -628,8 +628,8 @@ SEMClassifier< TInputImage, TOutputImage >
 
   InitParameters();
 
-  m_CurrentIteration = 0 ;
-  m_TerminationCode = NOT_CONVERGED ;
+  m_CurrentIteration = 0;
+  m_TerminationCode = NOT_CONVERGED;
 
   int oldNbChange = 0;
   double step;
@@ -637,7 +637,7 @@ SEMClassifier< TInputImage, TOutputImage >
   do {
     oldNbChange = m_NbChange;
 
-    PerformStochasticProcess() ;
+    PerformStochasticProcess();
     PerformExpectationProcess();
     PerformMaximizationProcess();
 

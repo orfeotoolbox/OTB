@@ -141,7 +141,7 @@ namespace otb
           ossimProjection * m_Model;
 
           /** Specify if DEM is used in Point Transformation */
-          bool m_UseDEM ;
+          bool m_UseDEM;
 
           /** Object that read and use DEM */
           DEMHandlerPointerType m_DEMHandler;
@@ -150,7 +150,7 @@ namespace otb
           TScalarType m_AverageElevation;
 
           /** Specify if DEM is loaded */
-          bool m_DEMIsLoaded ;
+          bool m_DEMIsLoaded;
 
         private :
           SensorModelBase(const Self&); //purposely not implemented

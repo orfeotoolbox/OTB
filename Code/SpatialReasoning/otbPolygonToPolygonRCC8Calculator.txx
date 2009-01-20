@@ -185,7 +185,7 @@ PolygonToPolygonRCC8Calculator<TInputPolygon>
   }
       current = it.Value();
       isInside  = nextIsInside;
-      isExterior = !isInside && !polygon2->IsOnEdge(current) ;
+      isExterior = !isInside && !polygon2->IsOnEdge(current);
       //std::cout<<current<<" is inside: "<<isInside<<std::endl;
       //std::cout<<current<<" is on edge: "<<polygon2->IsOnEdge(current)<<std::endl;
        if(isExterior)

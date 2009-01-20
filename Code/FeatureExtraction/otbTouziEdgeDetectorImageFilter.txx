@@ -159,9 +159,9 @@ TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
   double Theta[NB_DIR];
 
   Theta[0] = 0.;
-  Theta[1] = M_PI_4 ;
-  Theta[2] = M_PI_2 ;
-  Theta[3] = 3*M_PI / 4. ;
+  Theta[1] = M_PI_4;
+  Theta[2] = M_PI_2;
+  Theta[3] = 3*M_PI / 4.;
 
 
   // contains for the 4 directions the sum of the pixels belonging to each region

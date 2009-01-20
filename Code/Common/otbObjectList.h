@@ -153,7 +153,7 @@ public:
     Iterator& operator--(){
       --m_Iter;
       return *this;
-    } ;
+    };
     /**
        * Add
        */
@@ -503,8 +503,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  ObjectList(const Self&) ; //purposely not implemented
-  void operator=(const Self&) ; //purposely not implemented
+  ObjectList(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
   /** The internal std::vector object container */
   InternalContainerType m_InternalContainer;
 };

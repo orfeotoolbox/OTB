@@ -77,7 +77,7 @@ public:
    * in order to inform the pipeline execution model.
    * \sa ProcessObject::GenerateInputRequestedRegion()
    */
-  virtual void GenerateInputRequestedRegion() ;
+  virtual void GenerateInputRequestedRegion();
 
 protected:
   StreamingResampleImageFilter();

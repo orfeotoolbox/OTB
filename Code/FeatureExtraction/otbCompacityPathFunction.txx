@@ -58,7 +58,7 @@ CompacityPathFunction<TInputPath,TOutput>
 
   if(nbPath >2)
      {
-     for(int i =0 ; i<nbPath ;i++)
+     for(int i =0; i<nbPath;i++)
        {
        cindex = vertexList->GetElement(i);
        x1 = cindex[0];

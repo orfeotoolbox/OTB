@@ -128,8 +128,8 @@ namespace otb
 
     int lNbLines   = this->GetIORegion().GetSize()[1];
     int lNbColumns = this->GetIORegion().GetSize()[0];
-    int lFirstLine   = this->GetIORegion().GetIndex()[1] ; // [1... ]
-    int lFirstColumn = this->GetIORegion().GetIndex()[0] ; // [1... ]
+    int lFirstLine   = this->GetIORegion().GetIndex()[1]; // [1... ]
+    int lFirstColumn = this->GetIORegion().GetIndex()[0]; // [1... ]
 
     otbMsgDevMacro( <<" LUMImageIO::Read()  ");
     otbMsgDevMacro( <<" Image size  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
@@ -342,8 +342,8 @@ namespace otb
 
     unsigned long lNbLines   = this->GetIORegion().GetSize()[1];
     unsigned long lNbColumns = this->GetIORegion().GetSize()[0];
-    unsigned long lFirstLine   = this->GetIORegion().GetIndex()[1] ; // [1... ]
-    int lFirstColumn = this->GetIORegion().GetIndex()[0] ; // [1... ]
+    unsigned long lFirstLine   = this->GetIORegion().GetIndex()[1]; // [1... ]
+    int lFirstColumn = this->GetIORegion().GetIndex()[0]; // [1... ]
 
   // Cas particuliers : on controle que si la r�gion � �crire est de la m�me dimension que l'image enti�re,
   // on commence l'offset � 0 (lorsque que l'on est pas en "Streaming")
@@ -410,7 +410,7 @@ namespace otb
     m_File.seekp(0, std::ios::beg );
     char* value = new char[headerLength];
         //Write Header line and all file (whitout information)
-    for(unsigned int numLigne=0 ; numLigne<(m_Dimensions[1]+1) ; numLigne++)
+    for(unsigned int numLigne=0; numLigne<(m_Dimensions[1]+1); numLigne++)
     {
       m_File.write(value,headerLength);
     }
@@ -497,7 +497,7 @@ namespace otb
       if (ind < 4)
       {
         icr=sscanf(type_code,"%d",&nbbits);
-        if (icr ==0) nbbits=-1 ;
+        if (icr ==0) nbbits=-1;
         else
         {
           trouve =(int)(nbbits/8);

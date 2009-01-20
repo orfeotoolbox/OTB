@@ -84,7 +84,7 @@ protected:
    * This filters requires only a part of the input and of the deformation field to
    * produce its output. As such, we need to overload the GenerateInputRequestedRegion() method.
    */
-  virtual void GenerateInputRequestedRegion() ;
+  virtual void GenerateInputRequestedRegion();
 
 private:
   StreamingWarpImageFilter(const Self&); //purposely not implemented

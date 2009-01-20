@@ -34,8 +34,8 @@ namespace otb
   ::ContinuousMinimumMaximumImageCalculator()
   {
     m_Image = TInputImage::New();
-    m_Maximum = itk::NumericTraits<PixelType>::NonpositiveMin() ;
-    m_Minimum = itk::NumericTraits<PixelType>::max() ;
+    m_Maximum = itk::NumericTraits<PixelType>::NonpositiveMin();
+    m_Minimum = itk::NumericTraits<PixelType>::max();
     m_IndexOfMinimum.Fill(0);
     m_IndexOfMaximum.Fill(0);
     m_RegionSetByUser = false;
@@ -56,8 +56,8 @@ namespace otb
     }
 
     itk::ImageRegionConstIteratorWithIndex< TInputImage >  it( m_Image, m_Region );
-    m_Maximum = itk::NumericTraits<PixelType>::NonpositiveMin() ;
-    m_Minimum = itk::NumericTraits<PixelType>::max() ;
+    m_Maximum = itk::NumericTraits<PixelType>::NonpositiveMin();
+    m_Minimum = itk::NumericTraits<PixelType>::max();
 
 
     while( !it.IsAtEnd() )
@@ -156,7 +156,7 @@ namespace otb
       m_Region = m_Image->GetRequestedRegion();
     }
     itk::ImageRegionConstIteratorWithIndex< TInputImage >  it( m_Image,  m_Region );
-    m_Minimum = itk::NumericTraits<PixelType>::max() ;
+    m_Minimum = itk::NumericTraits<PixelType>::max();
 
     while( !it.IsAtEnd() )
     {
@@ -218,7 +218,7 @@ namespace otb
       m_Region = m_Image->GetRequestedRegion();
     }
     itk::ImageRegionConstIteratorWithIndex< TInputImage >  it( m_Image,  m_Region );
-    m_Maximum = itk::NumericTraits<PixelType>::NonpositiveMin() ;
+    m_Maximum = itk::NumericTraits<PixelType>::NonpositiveMin();
 
     while( !it.IsAtEnd() )
     {
