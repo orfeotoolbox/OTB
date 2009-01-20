@@ -37,7 +37,7 @@ namespace otb
   ::SiftFastImageFilter()
   {  }
 
-  
+ 
   template <class TInputImage, class TOutputPointSet>
   void
   SiftFastImageFilter<TInputImage,TOutputPointSet>
@@ -47,7 +47,7 @@ namespace otb
     const InputImageType *     inputPtr       = this->GetInput();
     OutputPointSetPointerType  outputPointSet = this->GetOutput();
 
-    
+   
 
 
     typename InputImageType::SizeType size = inputPtr->GetLargestPossibleRegion().GetSize();

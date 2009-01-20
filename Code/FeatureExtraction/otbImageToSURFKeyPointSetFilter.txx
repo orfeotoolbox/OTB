@@ -133,7 +133,7 @@ namespace otb
     if(i+j==0)
     {
      otbGenericMsgDebugMacro( <<"ImageToSURFKeyPointSetFilter:: Size of the image at the octave : "
-             << i << " is " 
+             << i << " is "
              <<m_determinantImage->GetLargestPossibleRegion().GetSize() );
     }
 

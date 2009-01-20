@@ -269,8 +269,8 @@
 
 #else
 
-#define otbFlRunMacro(condition) 
-#define otbRunningMacro() 
+#define otbFlRunMacro(condition)
+#define otbRunningMacro()
 #define otbTestCallbackWithValue(view,button,button_value)
 #define otbTestCallback(view,button)
 #define otbTestMenuItemCallback(view,menubar,button)

@@ -125,7 +125,7 @@ NeighborhoodScalarProductFilter<TInputImage,TOutputModulus,TOutputDirection>
 
       // Compute the scalar product
       scalarCurrentValue = -(pixel1[0]*pixel2[0]+pixel1[1]*pixel2[1]);
-      
+     
       // If the value is upper than the current max value
       if (scalarCurrentValue > scalarMaxValue)
         {
