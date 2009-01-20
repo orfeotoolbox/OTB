@@ -56,7 +56,7 @@ HuImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
   //typename InputType::SizeType        ImageSize;
-  RealType                         HuValue;
+  RealType                         HuValue = 0.;
   ComplexType                      HuValueComplex;
 
   typedef otb::ComplexMomentImageFunction<InputType,ComplexType>   CMType;

@@ -58,7 +58,7 @@ HuPathFunction<TInputPath, TOutput, TPrecision  >
   typedef ComplexMomentPathFunction<PathType>   FunctionType;
   typedef typename FunctionType::ComplexType    ComplexType;
 
-  RealType                         HuValue;
+  RealType                         HuValue = 0.;
   ComplexType                      HuValueComplex;
 
   typename FunctionType::Pointer function =FunctionType::New();

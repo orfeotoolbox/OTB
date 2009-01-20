@@ -37,8 +37,6 @@ int otbOssimElevManagerTest2(int argc,char* argv[])
   const char * outfname = argv[2];
 
   typedef double PixelType;
-  const unsigned int Dimension = 2;
-
 
   typedef itk::Point<double,2> PointType;
   PointType origin;
