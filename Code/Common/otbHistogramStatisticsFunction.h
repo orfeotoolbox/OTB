@@ -52,7 +52,7 @@ public:
 
   /**Standard Macros */
   itkTypeMacro(HistogramStatisticsFunction, HistogramAlgorithmsBase);
-  itkNewMacro(Self) ;
+  itkNewMacro(Self);
 
   /** Typedef for the output type */
   typedef std::vector<TOutput> OutputType;
@@ -71,15 +71,15 @@ public:
   {
       if ( m_InputHistogram != histogram )
       {
-        m_InputHistogram = histogram ;
-        this->Modified() ;
+        m_InputHistogram = histogram;
+        this->Modified();
   m_IsModified = true;
       }
   }
 
 protected:
 
-  HistogramStatisticsFunction() ;
+  HistogramStatisticsFunction();
   virtual ~HistogramStatisticsFunction() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -97,15 +97,15 @@ protected:
 
 private:
 
-  OutputType m_entropy ;
-  OutputType m_mean ;
-  OutputType m_covariance ;
+  OutputType m_entropy;
+  OutputType m_mean;
+  OutputType m_covariance;
   bool m_IsModified;
 
   /** Target histogram data pointer */
-  typename TInputHistogram::ConstPointer m_InputHistogram ;
+  typename TInputHistogram::ConstPointer m_InputHistogram;
 
-} ; // end of class
+}; // end of class
 
 } // end of namespace otb
 

@@ -56,7 +56,7 @@ SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList>
   // FIXME : print useful SVM information
 //   os << indent << "                   " << std::endl;
 //   os << indent << "Gaussian Models generated from the training data." << std::endl;
-//   os << indent << "TrainingSampleList: " ;
+//   os << indent << "TrainingSampleList: ";
 //   os << m_TrainingSampleList.GetPointer() << std::endl;
 //   os << indent << "Results printed in the superclass " << std::endl;
 //   os << indent << "                   " << std::endl;

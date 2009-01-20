@@ -67,7 +67,7 @@ PrintSelf(std::ostream& os, itk::Indent indent) const
   ossimKeywordlist kwl;
   convertToOSSIMKeywordlist(kwl);
   os << indent << " Ossim Keyword list:"<<std::endl;
-  os << indent << kwl ;
+  os << indent << kwl;
 }
 
 std::ostream &

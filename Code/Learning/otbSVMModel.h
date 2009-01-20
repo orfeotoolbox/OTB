@@ -128,7 +128,7 @@ public:
 
 //   /** Define a virtual function to perform model generation from the input data
 //    */
-//   void Update() ;
+//   void Update();
 
   /** Set the number of classes. */
 //  itkSetMacro(NumberOfClasses, unsigned int);
@@ -152,7 +152,7 @@ public:
   /** Gets the problem */
   struct svm_problem & GetProblem()
   {
-        return m_Problem ;
+        return m_Problem;
   }
 
   /** Sets the x space */

@@ -227,7 +227,7 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
     derivativeValue[n] = 0.0;
     for (unsigned int p = 0; p < m_MaxNumberInterpolationPoints; p++)
       {
-      tempValue = 1.0 ;
+      tempValue = 1.0;
       for (unsigned int n1 = 0; n1 < ImageDimension; n1++)
         {
         //coefficientIndex[n1] = EvaluateIndex[n1][sp];
@@ -243,7 +243,7 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
           tempValue *= weights[n1][ m_PointsToIndex[p][n1] ];
           }
         }
-      derivativeValue[n] += m_Coefficients->GetPixel(coefficientIndex) * tempValue ;
+      derivativeValue[n] += m_Coefficients->GetPixel(coefficientIndex) * tempValue;
       }
      derivativeValue[n] /= this->GetInputImage()->GetSpacing()[n];   // take spacing into account
     }

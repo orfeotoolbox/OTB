@@ -75,8 +75,8 @@ class ITK_EXPORT ImageList
       };
 
   private:
-    ImageList(const Self&) ; //purposely not implemented
-    void operator=(const Self&) ; //purposely not implemented
+    ImageList(const Self&); //purposely not implemented
+    void operator=(const Self&); //purposely not implemented
   };
 } // End namespace otb
 

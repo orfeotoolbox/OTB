@@ -547,8 +547,8 @@ class ITK_EXPORT List
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
  private:
-  List(const Self&) ; //purposely not implemented
-  void operator=(const Self&) ; //purposely not implemented
+  List(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
   /** The internal std::vector object container */
   InternalContainerType m_InternalContainer;
 };

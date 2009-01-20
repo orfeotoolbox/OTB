@@ -53,6 +53,9 @@ int otbHarrisToPointSet( int argc, char * argv[] )
   FunctionType::Pointer         harris    = FunctionType::New();
   OutputPointType               CoordPoint;
 
+  //Initialization 
+  CoordPoint.Fill(0);
+
   reader->SetFileName( inputFilename  );
 
   harris->SetInput( 0,reader->GetOutput() );

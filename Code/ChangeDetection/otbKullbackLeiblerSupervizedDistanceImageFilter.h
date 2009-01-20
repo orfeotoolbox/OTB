@@ -75,10 +75,10 @@ namespace Functor {
       /** performs the preprocess calculation on the training area */
       void Evaluate ( const typename TInput1::ImageType * img1,
               const typename TInput2::ImageType * img2,
-              const TInputROIImage * imgROI ) ;
+              const TInputROIImage * imgROI );
 
       /** The functor by itself */
-      TOutput operator () ( const TInput1 & it1, const TInput2 & it2 ) ;
+      TOutput operator () ( const TInput1 & it1, const TInput2 & it2 );
 
     protected :
       typedef ROIdataConversion<

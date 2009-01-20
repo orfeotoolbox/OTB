@@ -58,7 +58,7 @@ public:
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
-  virtual bool CanReadFile(const char*) ;
+  virtual bool CanReadFile(const char*);
 
   /** Determine the file type. Returns true if the ImageIO can stream read the specified file */
   virtual bool CanStreamRead(){  return true; };

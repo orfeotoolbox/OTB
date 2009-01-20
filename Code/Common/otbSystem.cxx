@@ -109,7 +109,7 @@ System::GetShortFileName( const std::string& filename )
 std::string System::SetToUpper( const std::string& str )
 {
         std::string lString(str);
-        for(unsigned int i=0 ; i<lString.size() ; i++)
+        for(unsigned int i=0; i<lString.size(); i++)
         {
                 lString[i]=toupper(lString[i]);
         }
@@ -120,7 +120,7 @@ std::string System::SetToUpper( const std::string& str )
 std::string System::SetToLower( const std::string& str )
 {
         std::string lString(str);
-        for(unsigned int i=0 ; i<lString.size() ; i++)
+        for(unsigned int i=0; i<lString.size(); i++)
         {
                 lString[i]=tolower(lString[i]);
         }

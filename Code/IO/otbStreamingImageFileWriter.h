@@ -41,7 +41,7 @@ namespace otb
  * output. This reduces the memory footprint for the application since
  * each filter does not have to process the entire dataset at once.
  * StreamingImageFileWriter will write directly the streaming buffer in the image file.
- * The output image is not completely allocated ; just streaming size,
+ * The output image is not completely allocated; just streaming size,
  * calculate whith the NumberOfStreamDivisions, is allocate.
  *
  * \sa ImageFileWriter

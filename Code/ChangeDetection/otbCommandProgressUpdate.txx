@@ -53,7 +53,7 @@ void CommandProgressUpdate<TFilter>::Execute(const itk::Object * object, const i
 
       if(val == factor)
   {
-  std::cout << ">" ;
+  std::cout << ">";
   std::cout.flush();
   }
     }

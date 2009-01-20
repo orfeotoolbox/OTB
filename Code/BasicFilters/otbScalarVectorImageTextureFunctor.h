@@ -84,7 +84,7 @@ class ScalarVectorImageTextureFunctor
       resultvalue.SetSize(m_FeatureIndex.size());
       resultvalue.AllocateElements(m_FeatureIndex.size());
 
-      for(unsigned int cpt=0 ; cpt < m_FeatureIndex.size() ; cpt++)
+      for(unsigned int cpt=0; cpt < m_FeatureIndex.size(); cpt++)
       {
         resultvalue[cpt] = textureFilter->GetFeatureMeans()->at(m_FeatureIndex[cpt]);
       }

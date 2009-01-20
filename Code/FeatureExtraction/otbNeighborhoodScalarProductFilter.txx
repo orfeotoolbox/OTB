@@ -45,7 +45,7 @@ NeighborhoodScalarProductFilter<TInputImage,TOutputModulus,TOutputDirection>
   typedef itk::ConstNeighborhoodIterator<InputImageType> NeighborhoodIteratorType;
   typedef typename NeighborhoodIteratorType::RadiusType RadiusType;
   typedef typename NeighborhoodIteratorType::OffsetType OffsetType;
-  typedef itk::ZeroFluxNeumannBoundaryCondition<InputImageType> BoundaryConditionType ;
+  typedef itk::ZeroFluxNeumannBoundaryCondition<InputImageType> BoundaryConditionType;
   typedef itk::ImageRegionIterator<OutputModulusType> OutputIteratorType;
   typedef itk::ImageRegionIterator<OutputDirectionType> OutputDirectionIteratorType;
   typedef itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType> BoundaryFacesCalculatorType;
@@ -125,7 +125,7 @@ NeighborhoodScalarProductFilter<TInputImage,TOutputModulus,TOutputDirection>
 
       // Compute the scalar product
       scalarCurrentValue = -(pixel1[0]*pixel2[0]+pixel1[1]*pixel2[1]);
-      
+     
       // If the value is upper than the current max value
       if (scalarCurrentValue > scalarMaxValue)
         {

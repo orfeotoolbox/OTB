@@ -38,7 +38,7 @@ namespace otb {
   ::StreamingResampleImageFilter()
   {
     // Default neighborhood interpolation radius is one pixel
-    m_InterpolatorNeighborhoodRadius = 1 ;
+    m_InterpolatorNeighborhoodRadius = 1;
     m_AddedRadius = 2;
   }
 
@@ -61,7 +61,7 @@ namespace otb {
       SizeType size = outputImage->GetRequestedRegion().GetSize();
 
       // Obtain coordinates of upperleft, upperright, lowerleft and lowerright points in the image
-      IndexType indexTmp ;
+      IndexType indexTmp;
       std::vector<IndexType> vPoints;
       typename std::vector<IndexType>::iterator it;
 

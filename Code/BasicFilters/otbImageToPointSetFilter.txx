@@ -87,7 +87,7 @@ const typename ImageToPointSetFilter<TInputImage,TOutputPointSet>::InputImageTyp
 ImageToPointSetFilter<TInputImage,TOutputPointSet>
 ::GetInput(unsigned int idx)
 {
-    
+   
   return dynamic_cast<const InputImageType*>
     (this->ProcessObjectType::GetInput(idx));
 }
@@ -102,7 +102,7 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
 {
   if(this->GetNumberOfInputs() < 1)
     return 0;
-  
+ 
   return dynamic_cast<const InputImageType*>
     (this->ProcessObjectType::GetInput(0));
 }

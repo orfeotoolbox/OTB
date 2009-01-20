@@ -9,7 +9,7 @@ Version:   $Revision$
 Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
-Copyright (c) Institut Telecom ; Telecom Bretagne. All right reserved.
+Copyright (c) Institut Telecom; Telecom Bretagne. All right reserved.
 See GETCopyright.txt for details.
 
 

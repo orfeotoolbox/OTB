@@ -79,7 +79,7 @@ void
 SVMModelEstimator<InputPixelType, LabelPixelType>
 ::Update()
 {
-  GenerateData() ;
+  GenerateData();
 }
 
 
