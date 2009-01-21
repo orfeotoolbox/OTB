@@ -70,7 +70,10 @@ namespace otb
    * you to get the smoothed image, whereas the
    * GetClusteredOuptut() methods returns the clustered output. The GetLabeledClusteredOutput() returns
    * a labeled clustered image, and the GetClusterBoundariesOutput()
-   * an image of the cluster boundaries.
+   * an image of the cluster boundaries. Last, the
+   * GetVectorizedClusterBoundariesOutput() returns a list of
+   * otb::Polygon representing the cluster boundaries, whose value is
+   * the corresponding mean-shift mode.
    *
    * The MinimumRegionSize parameter allows you to prune small clustered regions.
    *
@@ -78,7 +81,7 @@ namespace otb
    * not really noticeable, because the clustering step is really faster
    * than the filtering one).
    *
-   * Please note that if both parts are streamable, only the filtering part will ensure you to get the same
+   * Please also note that if both parts are streamable, only the filtering part will ensure you to get the same
    * results than without streaming. In the clustering results, you
    * might find region split due to tiling. Morover, the labeled output will not give consistent results when
    * streamed. The cluster boundaries might work though.
