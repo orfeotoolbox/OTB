@@ -36,4 +36,5 @@ REGISTER_TEST(otbLocalHoughNew);
 REGISTER_TEST(otbLocalHough);
 REGISTER_TEST(otbLocalHoughDraw);
 REGISTER_TEST(otbModulusAndDirectionImageFiltersNew);
+REGISTER_TEST(otbHoughTransform2DLinesImageTest);
 }

@@ -399,6 +399,17 @@ ADD_TEST(feTuFillGapsFilter ${FEATUREEXTRACTION_TESTS5}
 	       ${INPUTDATA}/ImageLine.bsq.hdr
 	       ${TEMP}/feTvFillGapfilter.png)
 
+# -------            otb::HoughTransform2DLinesImageTest ------------------------------    
+
+ADD_TEST(feTvHoughTransform2DLinesImage ${FEATUREEXTRACTION_TESTS5}  
+  --compare-image ${EPSILON}  
+		  ${BASELINE}/feFilterHoughTransformDraw.tif
+	          ${TEMP}/feFilterHoughTransformDraw.tif
+        otbHoughTransform2DLinesImageTest
+	${TEMP}/feFilterHoughTransformDraw.tif
+	) 
+
+
 # -------            otb::ImageToModulusAndDirectionImageFilter   ------------------------------
 # -------            otb::ModulusAndDirectionImageToImageFilter   ------------------------------
 
@@ -1002,6 +1013,7 @@ otbLocalHoughNew.cxx
 otbLocalHough.cxx
 otbLocalHoughDraw.cxx
 otbModulusAndDirectionImageFiltersNew.cxx
+otbHoughTransform2DLinesImageTest.cxx
 )
 SET(BasicFeatureExtraction_SRCS6
 otbExtractSegmentsNew.cxx
