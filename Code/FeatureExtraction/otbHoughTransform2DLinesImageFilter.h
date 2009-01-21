@@ -60,7 +60,7 @@ namespace otb
 
 template<typename TInputPixelType, typename TOutputPixelType>
 class ITK_EXPORT HoughTransform2DLinesImageFilter :
-    public itk::ImageToImageFilter< Image<TInputPixelType,2>, Image<TOutputPixelType,2> >
+    public itk::ImageToImageFilter< itk::Image<TInputPixelType,2>, itk::Image<TOutputPixelType,2> >
 {
 public:
    
@@ -68,12 +68,12 @@ public:
   typedef HoughTransform2DLinesImageFilter Self;
 
   /** Input Image typedef */
-  typedef Image<TInputPixelType,2> InputImageType;
+  typedef itk::Image<TInputPixelType,2> InputImageType;
   typedef typename InputImageType::Pointer InputImagePointer;
   typedef typename InputImageType::ConstPointer InputImageConstPointer;
   
   /** Output Image typedef */
-  typedef Image<TOutputPixelType,2> OutputImageType;
+  typedef itk::Image<TOutputPixelType,2> OutputImageType;
   typedef typename OutputImageType::Pointer OutputImagePointer;
 
   /** Smart pointer typedef support. */
@@ -214,15 +214,15 @@ protected:
   
 private:
 
-    unsigned int  m_AngleAxisSize;
-    double  m_AngleAxisMinimum;
-    double  m_AngleAxisMaximum;
-    double  m_AngleAxisIncrement;
-    unsigned int  m_DistanceAxisSize;
-    unsigned int  m_DistanceAxisMaximumSize;
-    double  m_DistanceAxisMinimum;
-    double  m_DistanceAxisMaximum;
-    double  m_DistanceAxisIncrement;
+  unsigned int  m_AngleAxisSize;
+  double  m_AngleAxisMinimum;
+  double  m_AngleAxisMaximum;
+  double  m_AngleAxisIncrement;
+  unsigned int  m_DistanceAxisSize;
+  unsigned int  m_DistanceAxisMaximumSize;
+  double  m_DistanceAxisMinimum;
+  double  m_DistanceAxisMaximum;
+  double  m_DistanceAxisIncrement;
   float m_Threshold;
   OutputImagePointer m_SimplifyAccumulator;
   LinesListType m_LinesList;
@@ -233,7 +233,7 @@ private:
   unsigned long m_OldNumberOfLines;
 };
 
-} // end namespace itk
+} // end namespace otb
 
 #ifndef ITK_MANUAL_INSTANTIATION
 #include "otbHoughTransform2DLinesImageFilter.txx"

@@ -56,7 +56,7 @@ HoughTransform2DLinesImageFilter< TInputPixelType, TOutputPixelType>
 template<typename TInputPixelType, typename TOutputPixelType>
 void 
 HoughTransform2DLinesImageFilter<TInputPixelType,TOutputPixelType>
-  ::EnlargeOutputRequestedRegion(itk::DataObject *output)
+::EnlargeOutputRequestedRegion(itk::DataObject *output)
 {
   // call the superclass' implementation of this method
   Superclass::EnlargeOutputRequestedRegion(output);
@@ -83,7 +83,7 @@ HoughTransform2DLinesImageFilter<TInputPixelType,TOutputPixelType>
     }
 
   // Compute the size of the output image
-  if (m_DistanceAxisSize == -1)
+  if (m_DistanceAxisSize +1 == 0)
   {
     double inputSize0 = input->GetLargestPossibleRegion().GetSize()[0];
     double inputSize1 = input->GetLargestPossibleRegion().GetSize()[1];
@@ -145,7 +145,7 @@ HoughTransform2DLinesImageFilter< TInputPixelType, TOutputPixelType>
   unsigned int nbAngles = static_cast<unsigned long int>(m_AngleAxisSize);
   double cosAngle[nbAngles];
   double sinAngle[nbAngles];
-  const double nPI = 4.0 * vcl_atan( 1.0 );
+  //const double nPI = 4.0 * vcl_atan( 1.0 ); Unused in this method
   for(unsigned int indexAngle = 0; indexAngle < nbAngles; indexAngle ++ )
     {  
       double angle = this->GetAngleValue(indexAngle);
@@ -267,7 +267,7 @@ HoughTransform2DLinesImageFilter< TInputPixelType, TOutputPixelType>
 
   /** Blur the accumulator in order to find the maximum */
   typedef float          InternalImagePixelType;
-  typedef Image< InternalImagePixelType,2 > InternalImageType;
+  typedef itk::Image< InternalImagePixelType,2 > InternalImageType;
 
   OutputImagePointer outputImage = this->GetOutput(0); 
 
