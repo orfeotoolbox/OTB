@@ -80,7 +80,7 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
 
   // Define the size of the region by the radius
   m_Radius[1] = static_cast<unsigned int>(3*(2*m_WidthLine+1) + 2);
-  m_Radius[0] = 2*m_LengthLine+1 ;
+  m_Radius[0] = 2*m_LengthLine+1;
 
   // Define the size of the facelist by taking into account the rotation of the region
   m_FaceList[0] = static_cast<unsigned int>( vcl_sqrt( static_cast<double>((m_Radius[0]*m_Radius[0]) + (m_Radius[1]*m_Radius[1]) ) ) + 1 );

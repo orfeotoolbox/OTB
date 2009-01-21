@@ -52,11 +52,11 @@
 int main( int argc, char* argv[] )
 {
 
-  	if ( argc != 4 )
-	{
-		std::cerr << "Usage : " << argv[0] << " inputImage mask modelFile\n";
-		return EXIT_FAILURE;
-	}
+    if ( argc != 4 )
+  {
+    std::cerr << "Usage : " << argv[0] << " inputImage mask modelFile\n";
+    return EXIT_FAILURE;
+  }
 
     const char* inputImageFileName = argv[1];
     const char* trainingImageFileName = argv[2];
@@ -122,13 +122,13 @@ int main( int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 //  Software Guide : BeginCodeSnippet
-	otb::MixturePolyRBFKernelFunctor myKernel;
-	myKernel.SetValue( "Mixture", 0.5 );
-	myKernel.SetValue( "GammaPoly", 1.0 );
-	myKernel.SetValue( "CoefPoly", 0.0 );
-	myKernel.SetValue( "DegreePoly", 1 );
-	myKernel.SetValue( "GammaRBF", 1.5 );
-	myKernel.Update();
+  otb::MixturePolyRBFKernelFunctor myKernel;
+  myKernel.SetValue( "Mixture", 0.5 );
+  myKernel.SetValue( "GammaPoly", 1.0 );
+  myKernel.SetValue( "CoefPoly", 0.0 );
+  myKernel.SetValue( "DegreePoly", 1 );
+  myKernel.SetValue( "GammaRBF", 1.5 );
+  myKernel.Update();
 //  Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
@@ -139,8 +139,8 @@ int main( int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 //  Software Guide : BeginCodeSnippet
-	svmEstimator->SetKernelFunctor( &myKernel );
-	svmEstimator->SetKernelType( GENERIC );
+  svmEstimator->SetKernelFunctor( &myKernel );
+  svmEstimator->SetKernelType( GENERIC );
 //  Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex

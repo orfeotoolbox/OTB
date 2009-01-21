@@ -33,7 +33,7 @@ int otbThresholdImageToPointSetTest( int argc, char * argv[] )
   const char * outputFilename = argv[2];
 
   typedef unsigned char                                        InputPixelType;
-  const   unsigned int        	                             Dimension = 2;
+  const   unsigned int                                       Dimension = 2;
 
   typedef otb::Image< InputPixelType,  Dimension>              InputImageType;
   typedef otb::ImageFileReader< InputImageType  >              ReaderType;
@@ -64,7 +64,10 @@ int otbThresholdImageToPointSetTest( int argc, char * argv[] )
   file << "NbPoints : " << NbPoints <<std::endl;
 
   PointType              CoordPoint;
-
+  
+  //Initialization 
+  CoordPoint.Fill(0);
+  
   for (unsigned long i = 0 ; i < NbPoints ; i++)
     {
       pointList->GetPoint(i,&CoordPoint);

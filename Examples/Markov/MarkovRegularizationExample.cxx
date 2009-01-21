@@ -94,16 +94,16 @@ int main(int argc, char* argv[] )
 
 
   typedef otb::MarkovRandomFieldFilter
-	  <LabelledImageType,LabelledImageType> MarkovRandomFieldFilterType;
+    <LabelledImageType,LabelledImageType> MarkovRandomFieldFilterType;
 
   typedef otb::MRFSamplerRandom< LabelledImageType, LabelledImageType> SamplerType;
 
   typedef otb::MRFOptimizerMetropolis OptimizerType;
 
   typedef otb::MRFEnergyPotts
-		  <LabelledImageType, LabelledImageType>  EnergyRegularizationType;
+      <LabelledImageType, LabelledImageType>  EnergyRegularizationType;
   typedef otb::MRFEnergyPotts
-		  <LabelledImageType, LabelledImageType>  EnergyFidelityType;
+      <LabelledImageType, LabelledImageType>  EnergyFidelityType;
 
 
   MarkovRandomFieldFilterType::Pointer markovFilter

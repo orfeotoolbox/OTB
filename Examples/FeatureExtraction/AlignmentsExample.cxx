@@ -89,11 +89,11 @@ int main( int argc, char *argv[] )
 
 
   typedef unsigned short                                   InputPixelType;
-  typedef unsigned short   	                        OutputPixelType;
+  typedef unsigned short                             OutputPixelType;
 
-  const   unsigned int        	                        Dimension = 2;
+  const   unsigned int                                  Dimension = 2;
 
-  typedef otb::Image< InputPixelType,  Dimension >	InputImageType;
+  typedef otb::Image< InputPixelType,  Dimension >  InputImageType;
   typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
 
   typedef otb::ImageFileReader< InputImageType  >         ReaderType;
@@ -116,7 +116,7 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::PolyLineParametricPath< Dimension >		  PathType;
+  typedef itk::PolyLineParametricPath< Dimension >      PathType;
   typedef otb::ImageToPathListAlignFilter<InputImageType,PathType>
                                                        ListAlignFilterType;
   // Software Guide : EndCodeSnippet

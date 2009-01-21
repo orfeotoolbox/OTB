@@ -306,7 +306,7 @@ ImageBase::PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDiction
   std::string svalue;
   unsigned int ivalue(0);
   VectorType vvalue;
-  double dvalue;
+  double dvalue = 0.;
   OTB_GCP gcpvalue;
   ImageKeywordlist ossimvalue;
   unsigned int i(0);
@@ -336,7 +336,7 @@ ImageBase::PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDiction
         case MetaDataKey::TVECTOR:
            itk::ExposeMetaData<VectorType>(dict2, keys[itkey], vvalue);
 
-           for(i = 0 ; i < vvalue.size() ; i++ )
+           for(i = 0; i < vvalue.size(); i++ )
         {
         os << indent << "---> " << keys[itkey] << "[" << i <<"] = "<< vvalue[i]<< std::endl;
         }

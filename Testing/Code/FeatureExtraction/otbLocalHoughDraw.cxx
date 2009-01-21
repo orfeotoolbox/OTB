@@ -36,6 +36,8 @@
 
 #include "otbImageToLineSpatialObjectListFilter.h"
 
+#include "itkRescaleIntensityImageFilter.h"
+
 
 int otbLocalHoughDraw( int argc, char* argv[] )
 {
@@ -46,9 +48,9 @@ int otbLocalHoughDraw( int argc, char* argv[] )
   unsigned int  RadiusY((unsigned int)::atoi(argv[4]));
   unsigned int  NumberOfLines((unsigned int)::atoi(argv[5]));
 
-  typedef unsigned char	                                InputPixelType;
-  typedef unsigned char	   	                        OutputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef unsigned char                                  InputPixelType;
+  typedef unsigned char                               OutputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
   typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
   typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
@@ -60,9 +62,12 @@ int otbLocalHoughDraw( int argc, char* argv[] )
 
   typedef otb::ImageFileReader< InputImageType  >         ReaderType;
   typedef otb::ImageFileWriter< OutputImageType >         WriterType;
-
+  
+  typedef itk::RescaleIntensityImageFilter<InputImageType> RescalerType;
+  
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
+  RescalerType::Pointer rescaler = RescalerType::New();
 
   reader->SetFileName( inputFilename  );
   reader->Update();
@@ -76,8 +81,9 @@ int otbLocalHoughDraw( int argc, char* argv[] )
 
   filter->SetRadius( Radius );
   filter->SetNumberOfLines( NumberOfLines );
-
-  filter->SetInput( reader->GetOutput() );
+  
+  rescaler->SetInput(reader->GetOutput());
+  filter->SetInput( rescaler->GetOutput() );
   filter->Update();
 
 

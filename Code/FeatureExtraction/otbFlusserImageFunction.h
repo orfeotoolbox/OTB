@@ -112,7 +112,7 @@ public:
     {
       IndexType index;
       this->ConvertContinuousIndexToNearestIndex( cindex, index );
-      return this->EvaluateAtIndex( index ) ;
+      return this->EvaluateAtIndex( index );
     }
 
 

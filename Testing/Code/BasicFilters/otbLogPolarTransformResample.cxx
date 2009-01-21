@@ -56,7 +56,7 @@ int otbLogPolarTransformResample(int argc, char* argv[])
   params[1]=0.5*static_cast<double>(reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]);
   params[2]=360./1024;
   params[3]=vcl_log(vcl_sqrt(vcl_pow(static_cast<double>(reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]),2)
-			     +vcl_pow(static_cast<double>(reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]),2))/2)/512;
+           +vcl_pow(static_cast<double>(reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]),2))/2)/512;
   transform->SetParameters(params);
 
   ImageType::SizeType size;

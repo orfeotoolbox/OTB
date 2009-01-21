@@ -33,9 +33,9 @@ int otbImageFileReaderTestFloat(int argc, char* argv[])
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
-  typedef float  	                                InputPixelType;
-  typedef float  	                                OutputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef float                                    InputPixelType;
+  typedef float                                    OutputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
   typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
   typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;

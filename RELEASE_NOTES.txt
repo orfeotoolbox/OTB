@@ -1,6 +1,6 @@
 OTB-v.2.8.0 - Changes since version 2.6.0 (2009/01/15)
 -----------------------------------------
-
+ 
 * System
 	- ITK version updated to 3.10.1
 	- liblas library added

@@ -55,7 +55,7 @@ SVMPointSetModelEstimator<TInputPointSet, TTrainingPointSet>
   // FIXME : print useful SVM information
 //   os << indent << "                   " << std::endl;
 //   os << indent << "Gaussian Models generated from the training data." << std::endl;
-//   os << indent << "TrainingPointSet: " ;
+//   os << indent << "TrainingPointSet: ";
 //   os << m_TrainingPointSet.GetPointer() << std::endl;
 //   os << indent << "Results printed in the superclass " << std::endl;
 //   os << indent << "                   " << std::endl;

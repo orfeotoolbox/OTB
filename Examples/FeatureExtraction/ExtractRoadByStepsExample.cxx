@@ -379,7 +379,7 @@ int main( int argc, char * argv[] )
 
   InternalImageType::Pointer output = InternalImageType::New();
   output->SetRegions(multispectralReader->GetOutput()
-		     ->GetLargestPossibleRegion());
+         ->GetLargestPossibleRegion());
   output->Allocate();
   output->FillBuffer(0.0);
 

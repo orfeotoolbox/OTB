@@ -102,7 +102,7 @@ Resampler<TInputImage,TOutputImage>
   typename OutputImageType::SpacingType spacing;
    for (i = 0; i < OutputImageType::ImageDimension; i++)
      {
-     outputStartIndex[i] =  inputStartIndex[i] ;
+     outputStartIndex[i] =  inputStartIndex[i];
      }
   // Affectation du spacing � l'image de sortie
   outputPtr->SetSpacing( inputSpacing );

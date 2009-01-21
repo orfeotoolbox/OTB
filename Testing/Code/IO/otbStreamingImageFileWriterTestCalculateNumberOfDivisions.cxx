@@ -36,10 +36,10 @@ int otbStreamingImageFileWriterTestCalculateNumberOfDivisions (int argc, char* a
   const char * outputFilename = argv[2];
   std::string MethodCalculateNumberOfStreamDivision(argv[3]);
 
-  typedef unsigned int  	                                PixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef unsigned int                                    PixelType;
+  const   unsigned int                                  Dimension = 2;
 
-  typedef otb::Image< PixelType,  Dimension >        		ImageType;
+  typedef otb::Image< PixelType,  Dimension >            ImageType;
   typedef otb::ImageFileReader< ImageType  >              ReaderType;
   typedef otb::StreamingImageFileWriter< ImageType>       StreamingWriterType;
 

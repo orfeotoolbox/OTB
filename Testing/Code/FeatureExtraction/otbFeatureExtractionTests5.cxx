@@ -31,8 +31,10 @@ REGISTER_TEST(otbHarrisToPointSet);
 REGISTER_TEST(otbPixelSuppressionByDirectionNew);
 REGISTER_TEST(otbPixelSuppressionByDirection);
 REGISTER_TEST(otbFillGapsFilterNew);
+REGISTER_TEST(otbFillGapsFilter);
 REGISTER_TEST(otbLocalHoughNew);
 REGISTER_TEST(otbLocalHough);
 REGISTER_TEST(otbLocalHoughDraw);
 REGISTER_TEST(otbModulusAndDirectionImageFiltersNew);
+REGISTER_TEST(otbHoughTransform2DLinesImageTest);
 }

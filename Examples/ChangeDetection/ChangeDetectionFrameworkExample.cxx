@@ -123,7 +123,7 @@ class ITK_EXPORT MyChangeDetectorImageFilter :
             MyChangeDetector<
                    typename itk::ConstNeighborhoodIterator<TInputImage1>,
                    typename itk::ConstNeighborhoodIterator<TInputImage2>,
-		   typename TOutputImage::PixelType>   >
+       typename TOutputImage::PixelType>   >
 {
 public:
   /** Standard class typedefs. */

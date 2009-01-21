@@ -40,7 +40,7 @@ int otbVectorMultiChannelsPolarimetricSynthesisFilter( int argc, char * argv[] )
   double  KhiR = strtod(argv[6],NULL);
 
   typedef std::complex <double>                           InputPixelType;
-  typedef double    	                                OutputPixelType;
+  typedef double                                      OutputPixelType;
   const   unsigned int                                    Dimension = 2;
   typedef otb::VectorImage< InputPixelType,  Dimension >  InputImageType;
   typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;

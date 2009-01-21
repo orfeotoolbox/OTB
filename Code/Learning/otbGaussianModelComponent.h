@@ -46,30 +46,30 @@ class ITK_EXPORT GaussianModelComponent :
 public:
   /**Standard class typedefs. */
   typedef GaussianModelComponent Self;
-  typedef ModelComponentBase< TSample > Superclass ;
+  typedef ModelComponentBase< TSample > Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /**Standard Macros */
-  itkNewMacro(Self) ;
+  itkNewMacro(Self);
   itkTypeMacro( GaussianModelComponent, ModelComponentBase );
 
   /** Typedefs from the superclass */
-  typedef typename Superclass::MeasurementVectorType MeasurementVectorType ;
+  typedef typename Superclass::MeasurementVectorType MeasurementVectorType;
   typedef typename Superclass::MeasurementVectorSizeType
-      MeasurementVectorSizeType ;
-  typedef typename Superclass::MembershipFunctionType MembershipFunctionType ;
-  typedef typename Superclass::ParametersType ParametersType ;
+      MeasurementVectorSizeType;
+  typedef typename Superclass::MembershipFunctionType MembershipFunctionType;
+  typedef typename Superclass::ParametersType ParametersType;
 
   /** Type of the membership function. Gaussian density function */
   typedef itk::Statistics::GaussianDensityFunction< MeasurementVectorType >
-      NativeMembershipFunctionType ;
+      NativeMembershipFunctionType;
 
   /** Types of the mean and the covariance calculator that will update
    *  this component's distribution parameters */
-  typedef itk::Statistics::MeanCalculator< TSample > MeanEstimatorType ;
+  typedef itk::Statistics::MeanCalculator< TSample > MeanEstimatorType;
   typedef itk::Statistics::CovarianceCalculator< TSample >
-      CovarianceEstimatorType ;
+      CovarianceEstimatorType;
 
   /** types of the mean and covariance to be used by
    *  NativeMembershipFunctionType */
@@ -77,32 +77,32 @@ public:
   typedef itk::VariableSizeMatrix< double > CovarianceType;
 
   /** Sets the input sample */
-  virtual void SetSample(const TSample* sample) ;
+  virtual void SetSample(const TSample* sample);
 
   /** Sets the component's distribution parameters.
    *  e.g. Then user can call directly Pdf( MeasurementVectorType & )  */
-  void SetParameters(const ParametersType &parameters) ;
+  void SetParameters(const ParametersType &parameters);
 
   /** Show the parameters in a minimal form in comparison to PrintSelf */
   virtual void ShowParameters ( std::ostream& os, itk::Indent indent) const;
 
 protected:
-  GaussianModelComponent() ;
+  GaussianModelComponent();
   virtual ~GaussianModelComponent() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   void GenerateData ();
 
 private:
-  typename NativeMembershipFunctionType::Pointer m_GaussianDensityFunction ;
+  typename NativeMembershipFunctionType::Pointer m_GaussianDensityFunction;
   // TODO ajouter un m_GaussianCumulativeFunction
-  typename MeanEstimatorType::Pointer m_MeanEstimator ;
-  typename CovarianceEstimatorType::Pointer m_CovarianceEstimator ;
+  typename MeanEstimatorType::Pointer m_MeanEstimator;
+  typename CovarianceEstimatorType::Pointer m_CovarianceEstimator;
 
   MeanType m_Mean;
   CovarianceType m_Covariance;
 
-} ; // end of class
+}; // end of class
 
 } // end of namespace Statistics
 } // end of namespace otb

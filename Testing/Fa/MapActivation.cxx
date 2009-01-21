@@ -89,13 +89,13 @@ int main(int argc, char* argv[] )
       MeasurementVectorType tab;
       tab.SetSize(nbcolonnes);
       for(int i=0;i<nbcolonnes;i++)
-	{
-	  tab[i] = vectTab[j][i];
-	}
+  {
+    tab[i] = vectTab[j][i];
+  }
       liste->PushBack(tab);
     }
-  // 	std::cout<<"liste: "<<liste->GetMeasurementVectorSize()<< " " << liste->GetMeasurementVector(1)
-  // 	<<" " <<liste->GetMeasurementVector(2)<< " " <<liste->GetMeasurementVector(3)<<std::endl;
+  //   std::cout<<"liste: "<<liste->GetMeasurementVectorSize()<< " " << liste->GetMeasurementVector(1)
+  //   <<" " <<liste->GetMeasurementVector(2)<< " " <<liste->GetMeasurementVector(3)<<std::endl;
 
 
   typedef itk::Statistics::EuclideanDistance<MeasurementVectorType> DistanceType;
@@ -157,26 +157,26 @@ int main(int argc, char* argv[] )
   classifier->Update() ;
 
   ClassifierType::OutputType* membershipSample = classifier->GetOutput();
-  // 	std::cout<<"liste: "<<membershipSample->GetMeasurementVectorSize()<< " " << membershipSample->GetMeasurementVector(1)<<std::endl;
+  //   std::cout<<"liste: "<<membershipSample->GetMeasurementVectorSize()<< " " << membershipSample->GetMeasurementVector(1)<<std::endl;
 
   ClassifierType::OutputType::ConstIterator m_iter =  membershipSample->Begin();
   ClassifierType::OutputType::ConstIterator m_last =  membershipSample->End();
 
   /*int count[16];
-	for(int i=0;i<16;i++)
-	{
-	count[i]=0;
-	}
+  for(int i=0;i<16;i++)
+  {
+  count[i]=0;
+  }
   */
   while (m_iter != m_last)
     {
 //      std::cout<<" classlabel : "<<m_iter.GetClassLabel()<<
-//	" ClassSize= "<< membershipSample->GetClassSampleSize(m_iter.GetClassLabel()) <<
-//	" instance id = " << m_iter.GetInstanceIdentifier() <<
-//	" measurement vector = " << m_iter.GetMeasurementVector() <<
+//  " ClassSize= "<< membershipSample->GetClassSampleSize(m_iter.GetClassLabel()) <<
+//  " instance id = " << m_iter.GetInstanceIdentifier() <<
+//  " measurement vector = " << m_iter.GetMeasurementVector() <<
 //
-//	" class sample: "<< membershipSample->GetClassSample(m_iter.GetClassLabel())<<
-//	std::endl;
+//  " class sample: "<< membershipSample->GetClassSample(m_iter.GetClassLabel())<<
+//  std::endl;
       //count[m_iter.GetClassLabel()]++;
       ++m_iter ;
     }
@@ -192,9 +192,9 @@ int main(int argc, char* argv[] )
   for (int i=0 ; i< nbclass ; i++)
     {
       if(membershipSample->GetInternalClassLabel(i)!=-1)
-  	{
+    {
           std::cout<<"classlabel= "<< i << "  classSize= "<< membershipSample->GetClassSampleSize(i) <<std::endl;
-	}
+  }
     }
 
 

@@ -29,8 +29,8 @@
 
 int otbImageToLineSpatialObjectListNew( int argc, char* argv[] )
 {
-  typedef unsigned char	                                InputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef unsigned char                                  InputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
   typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
 

@@ -68,7 +68,7 @@ int otbCreateProjectionWithOTB( int argc, char* argv[] )
 
   typedef otb::Image<unsigned int, 2>     ImageType;
   typedef otb::ImageFileReader<ImageType>  ReaderType;
-  ReaderType::Pointer	                 reader=ReaderType::New();
+  ReaderType::Pointer                   reader=ReaderType::New();
   reader->SetFileName(argv[1]);
 
   //Read meta data (ossimKeywordlist)

@@ -29,8 +29,8 @@
 int otbModulusAndDirectionImageFiltersNew( int argc, char* argv[] )
 {
   typedef unsigned char                              InputPixelType;
-  typedef double		   	             OutputPixelType;
-  const   unsigned int        	                     Dimension = 2;
+  typedef double                      OutputPixelType;
+  const   unsigned int                               Dimension = 2;
 
   typedef otb::Image< InputPixelType,  Dimension >   InputImageType;
   typedef otb::Image< OutputPixelType, Dimension >   InputImageDirectionType;

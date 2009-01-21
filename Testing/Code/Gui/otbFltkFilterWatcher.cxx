@@ -26,13 +26,13 @@ int otbFltkFilterWatcher(int argc, char * argv[])
 {
         const char * infname = argv[1];
         typedef otb::Image<char,2> ImageType;
-	typedef otb::ImageFileReader<ImageType> ReaderType;
-	typedef itk::GradientMagnitudeImageFilter<ImageType, ImageType> FilterType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef itk::GradientMagnitudeImageFilter<ImageType, ImageType> FilterType;
 
-	ReaderType::Pointer reader = ReaderType::New();
-	reader->SetFileName(infname);
-	FilterType::Pointer gradient = FilterType::New();
-	gradient->SetInput(reader->GetOutput());
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(infname);
+  FilterType::Pointer gradient = FilterType::New();
+  gradient->SetInput(reader->GetOutput());
         otb::FltkFilterWatcher watcher(gradient,0,0,200,20,"Gradient");
         gradient->Update();
         return EXIT_SUCCESS;

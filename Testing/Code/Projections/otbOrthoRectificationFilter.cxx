@@ -43,7 +43,7 @@ int otbOrthoRectificationFilter( int argc, char* argv[] )
   if(argc!=11)
     {
       std::cout << argv[0] <<" <input filename> <output filename> <origin easting> <origin northing> <x size> <y size> <x spacing> <y spacing> <UTM zone> <UTM hemisphere>"
-		<< std::endl;
+    << std::endl;
 
       return EXIT_FAILURE;
     }
@@ -93,7 +93,6 @@ int otbOrthoRectificationFilter( int argc, char* argv[] )
   utmMapProjection->SetZone(atoi(argv[9]));
   utmMapProjection->SetHemisphere(argv[10][0]);
   orthoRectifFilter->SetMapProjection(utmMapProjection);
-  orthoRectifFilter->SetAverageElevation(10);
 
   writer->SetInput(orthoRectifFilter->GetOutput());
 

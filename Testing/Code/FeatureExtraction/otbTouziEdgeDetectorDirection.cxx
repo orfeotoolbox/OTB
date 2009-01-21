@@ -38,8 +38,8 @@ int otbTouziEdgeDetectorDirection( int argc, char* argv[] )
   unsigned int  RadiusX((unsigned int)::atoi(argv[3]));
 
   typedef unsigned char                                   InputPixelType;
-  typedef double		   	                        OutputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef double                                 OutputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
   typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
   typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;

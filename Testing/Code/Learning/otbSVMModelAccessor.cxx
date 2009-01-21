@@ -32,7 +32,7 @@ int otbSVMModelAccessor( int argc, char* argv[] )
 {
   typedef unsigned char                                   InputPixelType;
   typedef unsigned char                                   LabelPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  const   unsigned int                                  Dimension = 2;
 
   typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
 
@@ -70,10 +70,10 @@ int otbSVMModelAccessor( int argc, char* argv[] )
       f << "  SV["<<i<<"]:";
       const svm_node *p = SVs[i];
       while(p->index != -1)
-	{
-	  f << " ["<<p->index << ";"<<p->value<<"] ";
-	  p++;
-	}
+  {
+    f << " ["<<p->index << ";"<<p->value<<"] ";
+    p++;
+  }
       f << std::endl;
     }
 
@@ -104,7 +104,7 @@ int otbSVMModelAccessor( int argc, char* argv[] )
       f << "     ";
       for(unsigned int j=0;j<nbSupportVector;j++)
         {
-	  f << "  " << alphas[i][j];
+    f << "  " << alphas[i][j];
         }
     }
   f << std::endl;

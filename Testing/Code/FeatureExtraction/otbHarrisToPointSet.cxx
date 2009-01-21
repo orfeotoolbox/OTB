@@ -38,7 +38,7 @@ int otbHarrisToPointSet( int argc, char * argv[] )
   double AlphaValue((double)::atof(argv[5]));
 
   typedef unsigned char                                   PixelType;
-  const   unsigned int        	                        Dimension = 2;
+  const   unsigned int                                  Dimension = 2;
 
   PixelType LowerThreshold((PixelType)::atoi(argv[6]));
   PixelType UpperThreshold((PixelType)::atoi(argv[7]));
@@ -52,6 +52,9 @@ int otbHarrisToPointSet( int argc, char * argv[] )
   ReaderType::Pointer           reader    = ReaderType::New();
   FunctionType::Pointer         harris    = FunctionType::New();
   OutputPointType               CoordPoint;
+
+  //Initialization 
+  CoordPoint.Fill(0);
 
   reader->SetFileName( inputFilename  );
 

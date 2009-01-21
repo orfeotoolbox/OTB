@@ -38,8 +38,8 @@ int otbVectorImageTest(int argc, char* argv[])
   const char * outputAsciiFilename  = argv[2];
   //  unsigned int  GCPnum((unsigned int)::atoi(argv[2]));
 
-  typedef unsigned char  	                                InputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef unsigned char                                    InputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
   std::ofstream file;
 

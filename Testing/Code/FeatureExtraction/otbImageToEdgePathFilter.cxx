@@ -55,9 +55,9 @@ int otbImageToEdgePathFilter(int argc, char * argv[])
 
   PathType * outputPath = pathFilter->GetOutput();
 
-  typedef PathType::VertexType 						VertexType;
-  typedef PathType::VertexListType  					VertexListType;
-  typedef PathType::VertexListType::ConstIterator		VertexListConstIterator;
+  typedef PathType::VertexType             VertexType;
+  typedef PathType::VertexListType            VertexListType;
+  typedef PathType::VertexListType::ConstIterator    VertexListConstIterator;
   typedef VertexListType::ConstPointer                VertexListTypePointer;
 
   VertexListTypePointer vertexList;
@@ -92,21 +92,21 @@ int otbImageToEdgePathFilter(int argc, char * argv[])
   writer->Update();
 
   /*        VertexListConstIterator iter=ptrVertexList->Begin();
-	    while( iter != ptrVertexList->End() )
+      while( iter != ptrVertexList->End() )
             {
-	    //            it.Set( 255 );
-	    std::cout <<" VERTEX : "<<(*iter).GetElement()<<std::endl;
+      //            it.Set( 255 );
+      std::cout <<" VERTEX : "<<(*iter).GetElement()<<std::endl;
             ++iter;
             }
   */
 
 
-  /*	   x1 = cindex[0];
-	   y1 = cindex[1];
-	   cindex = vertexList->GetElement(1);
-	   x2 = cindex[0];
-	   y2 = cindex[1];
-	   fprintf(file,"%8.4f %8.3f\n",x1,y1);
+  /*     x1 = cindex[0];
+     y1 = cindex[1];
+     cindex = vertexList->GetElement(1);
+     x2 = cindex[0];
+     y2 = cindex[1];
+     fprintf(file,"%8.4f %8.3f\n",x1,y1);
   */
 
 

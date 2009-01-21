@@ -33,8 +33,8 @@ int otbExtractROI( int argc, char * argv[] )
   unsigned int  sizeX((unsigned int)::atoi(argv[5]));
   unsigned int  sizeY((unsigned int)::atoi(argv[6]));
 
-  typedef unsigned char  	                                InputPixelType;
-  typedef unsigned char  	                                OutputPixelType;
+  typedef unsigned char                                    InputPixelType;
+  typedef unsigned char                                    OutputPixelType;
 
   typedef otb::ExtractROI< InputPixelType,
     OutputPixelType >   FilterType;

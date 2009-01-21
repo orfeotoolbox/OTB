@@ -36,14 +36,14 @@
 int otbAssymmetricFusionOfLineDetectorNew( int argc, char * argv[] )
 {
   typedef unsigned char                             InputPixelType;
-  typedef double		   	            OutputPixelType;
-  const   unsigned int        	                    Dimension = 2;
+  typedef double                     OutputPixelType;
+  const   unsigned int                              Dimension = 2;
 
   typedef itk::Image< InputPixelType,  Dimension >  InputImageType;
   typedef itk::Image< OutputPixelType, Dimension >  OutputImageType;
   typedef itk::Image< OutputPixelType, Dimension >  OutputImageDirectionType;
 
-  typedef itk::LinearInterpolateImageFunction< InputImageType, double >	InterpolatorType;
+  typedef itk::LinearInterpolateImageFunction< InputImageType, double >  InterpolatorType;
 
   typedef otb::AssymmetricFusionOfLineDetectorImageFilter< InputImageType, OutputImageType, OutputImageDirectionType, InterpolatorType >   FilterType;
 

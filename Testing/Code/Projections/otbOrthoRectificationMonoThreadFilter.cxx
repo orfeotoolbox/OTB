@@ -44,7 +44,7 @@ int otbOrthoRectificationMonoThreadFilter( int argc, char* argv[] )
   if(argc!=11)
     {
       std::cout << argv[0] <<" <input filename> <output filename> <origin easting> <origin northing> <x size> <y size> <x spacing> <y spacing> <UTM zone <UTM hemisphere>"
-		<< std::endl;
+    << std::endl;
 
       return EXIT_FAILURE;
     }

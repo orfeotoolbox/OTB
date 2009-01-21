@@ -161,13 +161,13 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
    Xmax = x1 > x2 ? x1 : x2;
 
      // Slope of the line y=slope*(x-x1)+y1
-     double Slope = (y2-y1) / (x2-x1) ;
+     double Slope = (y2-y1) / (x2-x1);
 
      // Set a point for each x value between xmin and xmax
      for ( double x = Xmin; x <= Xmax; x++)
         {
-  outputIndex[0] = static_cast<unsigned long>( x ) ;
-  outputIndex[1] = static_cast<unsigned long>( Slope*(x-x1) + y1 ) ;
+  outputIndex[0] = static_cast<unsigned long>( x );
+  outputIndex[1] = static_cast<unsigned long>( Slope*(x-x1) + y1 );
 
 
   // Set the point if the pixel index belongs to the output image
@@ -185,11 +185,11 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
       Ymin = y1 < y2 ? y1 : y2;
     Ymax = y1 > y2 ? y1 : y2;
 
-      double SlopeInv = (x2-x1) / (y2-y1) ;
+      double SlopeInv = (x2-x1) / (y2-y1);
 
       for ( double y = Ymin; y <= Ymax; y++)
          {
-   outputIndex[0] = static_cast<unsigned long>( SlopeInv * (y-y1) + x1 ) ;
+   outputIndex[0] = static_cast<unsigned long>( SlopeInv * (y-y1) + x1 );
    outputIndex[1] = static_cast<unsigned long>( y );
 
    if( region.IsInside( outputIndex ) )

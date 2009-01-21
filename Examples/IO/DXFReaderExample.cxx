@@ -47,8 +47,8 @@
 
 int main(int argc, char * argv[])
 {
-	  // Verify the number of parameters in the command line
- 	   if( argc < 5 )
+    // Verify the number of parameters in the command line
+      if( argc < 5 )
       {
       std::cerr << "Usage: " << std::endl;
       std::cerr << argv[0] << " inputFilename  LayerName outputSize outputFilename " << std::endl;
@@ -62,7 +62,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 
-	  char * inputFilename = argv[1];
+    char * inputFilename = argv[1];
       char * outputFilename = argv[4];
 
 
@@ -86,9 +86,9 @@ int main(int argc, char * argv[])
       typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
       typedef otb::ImageFileWriter<OutputImageType> WriterType;
       typedef otb::SpatialObjectDXFReader<GroupType>
-	                                  SpatialObjectDXFReaderType;
+                                    SpatialObjectDXFReaderType;
       typedef otb::SpatialObjectToImageDrawingFilter<GroupType,ImageType>
-	                       SpatialObjectToImageDrawingFilterType;
+                         SpatialObjectToImageDrawingFilterType;
       typedef itk::RescaleIntensityImageFilter< ImageType,
                                        OutputImageType >     CastFilterType;
       typedef itk::SpatialObject<Dimension> SpatialObjectType;
@@ -96,9 +96,9 @@ int main(int argc, char * argv[])
 
       // Instantiating object
       SpatialObjectDXFReaderType::Pointer reader =
-	                                   SpatialObjectDXFReaderType::New();
+                                     SpatialObjectDXFReaderType::New();
       SpatialObjectToImageDrawingFilterType::Pointer imageGenerator =
-	                        SpatialObjectToImageDrawingFilterType::New();
+                          SpatialObjectToImageDrawingFilterType::New();
       WriterType::Pointer writer = WriterType::New();
       CastFilterType::Pointer castFilter = CastFilterType::New();
 // Software Guide : EndCodeSnippet
@@ -134,30 +134,30 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
       if(group->GetNumberOfChildren() != 0)
-	{
-	 /** Writing image  **/
-	SpatialObjectType::ChildrenListType* children=group->GetChildren(0);
-	SpatialObjectType::ChildrenListType::iterator it = children->begin();
-	SpatialObjectType::ChildrenListType::iterator end = children->end();
-	double maximum[Dimension],minimum[Dimension];
-	(*it)->ComputeBoundingBox();
-	minimum[0]=(*it)->GetBoundingBox()->GetMinimum()[0];
-	minimum[1]=(*it)->GetBoundingBox()->GetMinimum()[1];
+  {
+   /** Writing image  **/
+  SpatialObjectType::ChildrenListType* children=group->GetChildren(0);
+  SpatialObjectType::ChildrenListType::iterator it = children->begin();
+  SpatialObjectType::ChildrenListType::iterator end = children->end();
+  double maximum[Dimension],minimum[Dimension];
+  (*it)->ComputeBoundingBox();
+  minimum[0]=(*it)->GetBoundingBox()->GetMinimum()[0];
+  minimum[1]=(*it)->GetBoundingBox()->GetMinimum()[1];
 
-	while(it != end)
-	{
-		(*it)->ComputeBoundingBox();
+  while(it != end)
+  {
+    (*it)->ComputeBoundingBox();
 
-	if ((*it)->GetBoundingBox()->GetMinimum()[0] < minimum[0])
-	{
-		minimum[0]=(*it)->GetBoundingBox()->GetMinimum()[0];
-	}
-	if ((*it)->GetBoundingBox()->GetMinimum()[1] < minimum[1])
-	{
-		minimum[1]=(*it)->GetBoundingBox()->GetMinimum()[1];
-	}
-	it++;
-	}
+  if ((*it)->GetBoundingBox()->GetMinimum()[0] < minimum[0])
+  {
+    minimum[0]=(*it)->GetBoundingBox()->GetMinimum()[0];
+  }
+  if ((*it)->GetBoundingBox()->GetMinimum()[1] < minimum[1])
+  {
+    minimum[1]=(*it)->GetBoundingBox()->GetMinimum()[1];
+  }
+  it++;
+  }
 // Software Guide : EndCodeSnippet
 
 
@@ -167,24 +167,24 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 
-	ImageType::SizeType size;
-	size[0]=outputSize;
-	size[1]=outputSize;
-	imageGenerator->SetSize(size);
-	ImageType::PointType origin;
-	origin[0]=(int) minimum[0];
-	origin[1]=(int) minimum[1];
-	imageGenerator->SetOrigin(origin);
+  ImageType::SizeType size;
+  size[0]=outputSize;
+  size[1]=outputSize;
+  imageGenerator->SetSize(size);
+  ImageType::PointType origin;
+  origin[0]=(int) minimum[0];
+  origin[1]=(int) minimum[1];
+  imageGenerator->SetOrigin(origin);
 
-	group->ComputeBoundingBox();
+  group->ComputeBoundingBox();
 
-	maximum[0]=group->GetBoundingBox()->GetMaximum()[0];
-	maximum[1]=group->GetBoundingBox()->GetMaximum()[1];
+  maximum[0]=group->GetBoundingBox()->GetMaximum()[0];
+  maximum[1]=group->GetBoundingBox()->GetMaximum()[1];
 // Software Guide : BeginCodeSnippet
-	ImageType::SpacingType spacing;
-	spacing[0]=(maximum[0]-origin[0])/size[0];
-	spacing[1]=(maximum[1]-origin[1])/size[1];
-	imageGenerator->SetSpacing(spacing);
+  ImageType::SpacingType spacing;
+  spacing[0]=(maximum[0]-origin[0])/size[0];
+  spacing[1]=(maximum[1]-origin[1])/size[1];
+  imageGenerator->SetSpacing(spacing);
 // Software Guide : EndCodeSnippet
 
 
@@ -193,28 +193,28 @@ int main(int argc, char * argv[])
 // The output image is created with previously specified origin, spacing and size.
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
-	imageGenerator->SetInput(group);
-	imageGenerator->Update();
+  imageGenerator->SetInput(group);
+  imageGenerator->Update();
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
 // The output image is written by calling the Update() method.
 // Software Guide : EndLatex
-	castFilter->SetOutputMinimum( 0 );
-	castFilter->SetOutputMaximum( 255 );
-	castFilter->SetInput( imageGenerator->GetOutput() );
-	writer->SetInput(castFilter->GetOutput());
+  castFilter->SetOutputMinimum( 0 );
+  castFilter->SetOutputMaximum( 255 );
+  castFilter->SetInput( imageGenerator->GetOutput() );
+  writer->SetInput(castFilter->GetOutput());
 
 // Software Guide : BeginCodeSnippet
-	writer->Update();
+  writer->Update();
 // Software Guide : EndCodeSnippet
-	}
+  }
       else
-	{
-	  std::cout<<"No objects detected."<<std::endl;
-	  return EXIT_FAILURE;
+  {
+    std::cout<<"No objects detected."<<std::endl;
+    return EXIT_FAILURE;
 
-	}
+  }
 //  Software Guide : BeginLatex
 //
 // \begin{figure}

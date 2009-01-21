@@ -76,7 +76,7 @@ ComplexMomentImageFunction<TInput,TOutput,TPrecision,TCoordRep>
      {
      ImageSize = this->GetInputImage()->GetBufferedRegion().GetSize();
 
-     indexPos[0] = ImageSize[0] / 2 ;
+     indexPos[0] = ImageSize[0] / 2;
      indexPos[1] = ImageSize[1] / 2;
 
      kernelSize[0] = indexPos[0];

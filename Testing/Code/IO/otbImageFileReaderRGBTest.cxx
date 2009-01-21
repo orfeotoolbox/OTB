@@ -37,7 +37,7 @@ int otbImageFileReaderRGBTest(int argc, char* argv[])
 
   typedef itk::RGBPixel<unsigned char>                    InputPixelType;
   typedef itk::RGBPixel<unsigned char>                    OutputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  const   unsigned int                                  Dimension = 2;
 
   typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
   typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;

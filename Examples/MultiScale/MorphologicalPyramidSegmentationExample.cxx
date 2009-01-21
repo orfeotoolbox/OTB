@@ -110,13 +110,13 @@ int main(int argc, char * argv[])
       typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
       typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension>
-	                                           StructuringElementType;
+                                             StructuringElementType;
       typedef otb::OpeningClosingMorphologicalFilter<InputImageType,
                                     InputImageType,StructuringElementType>
-	                                          OpeningClosingFilterType;
+                                            OpeningClosingFilterType;
       typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,
                                    InputImageType,OpeningClosingFilterType>
-	                                                  PyramidFilterType;
+                                                    PyramidFilterType;
 
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
@@ -130,7 +130,7 @@ int main(int argc, char * argv[])
 // Software Guide : BeginCodeSnippet
       typedef otb::MorphologicalPyramidSegmentationFilter<InputImageType,
                                                          OutputImageType>
-	                                           SegmentationFilterType;
+                                             SegmentationFilterType;
 
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
@@ -143,7 +143,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
       typedef SegmentationFilterType::OutputImageListIteratorType
-	                                           OutputListIteratorType;
+                                             OutputListIteratorType;
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -215,17 +215,17 @@ int main(int argc, char * argv[])
       int index = 1;
       std::stringstream oss;
       while(it!=segmentation->GetOutput()->End())
-	{
-	  oss<<outputFilenamePrefix<<index<<"."<<outputFilenameSuffix;
-	  writer = WriterType::New();
-	  writer->SetInput(it.Get());
-	  writer->SetFileName(oss.str().c_str());
-	  writer->Update();
-	  std::cout<<oss.str()<<" file written."<<std::endl;
-	  oss.str("");
-	  ++index;
-	  ++it;
-	}
+  {
+    oss<<outputFilenamePrefix<<index<<"."<<outputFilenameSuffix;
+    writer = WriterType::New();
+    writer->SetInput(it.Get());
+    writer->SetFileName(oss.str().c_str());
+    writer->Update();
+    std::cout<<oss.str()<<" file written."<<std::endl;
+    oss.str("");
+    ++index;
+    ++it;
+  }
 
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex

@@ -34,8 +34,8 @@ int otbShortImageIOTest(int argc, char* argv[])
   const char * outputFilename = argv[2];
 
   typedef short                                           InputPixelType;
-  typedef short     	                                OutputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef short                                       OutputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
   typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
   typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;

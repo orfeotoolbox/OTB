@@ -67,13 +67,13 @@ namespace otb
      * scalar used for the wifth of the gaussian
      */
     if(m_ScalesNumber > 1 )
-      k = (double)std::pow(2.0,(double)(1/(double)(m_ScalesNumber-1))) ;
+      k = (double)std::pow(2.0,(double)(1/(double)(m_ScalesNumber-1)));
     else
       k = 3;
 
 
      /* Computation loop over octaves*/
-    for (int i = 0; i < m_OctavesNumber ; i++ ){
+    for (int i = 0; i < m_OctavesNumber; i++ ){
 
       sigma_in = 2.;
       m_ImageList = ImageListType::New();
@@ -106,7 +106,7 @@ namespace otb
 
       }
 
-      for (int j = 0 ; j < m_ScalesNumber; j++ )
+      for (int j = 0; j < m_ScalesNumber; j++ )
       {
   /** Incrementation of the gaussian width
    *  the width of the gaussian have to be doubled for
@@ -128,12 +128,12 @@ namespace otb
 
   m_DetHessianFilter->SetSigma(sigma_in);
   m_DetHessianFilter->Update();
-  m_determinantImage = m_DetHessianFilter->GetOutput() ;
+  m_determinantImage = m_DetHessianFilter->GetOutput();
 
     if(i+j==0)
     {
      otbGenericMsgDebugMacro( <<"ImageToSURFKeyPointSetFilter:: Size of the image at the octave : "
-             << i << " is " 
+             << i << " is "
              <<m_determinantImage->GetLargestPossibleRegion().GetSize() );
     }
 
@@ -145,7 +145,7 @@ namespace otb
       /*           extremum  Search over octave's scales    */
       /*----------------------------------------------------*/
 
-      for (int jj = 1 ; jj < (int)(m_ImageList->Size() - 1 )  ; jj++)
+      for (int jj = 1; jj < (int)(m_ImageList->Size() - 1 ); jj++)
   {
     m_ImageCurrent = m_ImageList->GetNthElement(jj);
     m_ImageMovedPrev = m_ImageList->GetNthElement(jj-1);
@@ -184,7 +184,7 @@ namespace otb
 
       radius.Fill(GetMin((int)(this->GetInput()->GetLargestPossibleRegion().GetSize()[0] - keyPoint[0]),
              (int)(this->GetInput()->GetLargestPossibleRegion().GetSize()[1] - keyPoint[1]),
-             (int)(6*sigmaDetected) ) ) ; // changer le sigma detected par keypoint[2]
+             (int)(6*sigmaDetected) ) ); // changer le sigma detected par keypoint[2]
 
 
 
@@ -290,7 +290,7 @@ namespace otb
       ++i;
     }
 
-    return max || min ;
+    return max || min;
   }
 
   /*-----------------------------------------------------------
@@ -317,7 +317,7 @@ namespace otb
       ++i;
     }
 
-    return max || min ;
+    return max || min;
   }
 
   /*-----------------------------------------------------------
@@ -330,19 +330,19 @@ namespace otb
   ::AssignOrientation(const NeighborhoodType& neigh , double S)
   {
 
-    int i= 0 ;
-    int pas =( (i+S)-(int)(i+S) > 0.5 )?((int)S+1):(int)S  ;
+    int i= 0;
+    int pas =( (i+S)-(int)(i+S) > 0.5 )?((int)S+1):(int)S;
     int Largeur = 2*neigh.GetRadius()[0]+1;                // Width & length of a neighborhood
     int rayon = neigh.GetRadius()[0];                      // radius of the neigh
-    int col, raw ;
-    double dist ;
+    int col, raw;
+    double dist;
     double  w;                                             // weight of the circular gaussian
 
-    OutputPointType pt ;
+    OutputPointType pt;
 
     // Gradient orientation histogram
     double angle;
-    int bin        = 0 ;
+    int bin        = 0;
     int Pi         = 180;
     int LengthBin  = 60;
     int NbBins     = (2*Pi/LengthBin);
@@ -350,8 +350,8 @@ namespace otb
 
     while (i < (int)neigh.Size())
       {
-  col = i%Largeur - rayon ;
-  raw = i/Largeur - rayon ;
+  col = i%Largeur - rayon;
+  raw = i/Largeur - rayon;
   dist = vcl_sqrt(static_cast<double>(col *col  + raw * raw) );
   col +=rayon;
   raw +=rayon;                           // Backup to the image coordinate axes
@@ -363,7 +363,7 @@ namespace otb
     {
 
       w  = vcl_exp(-((col-rayon)*(col-rayon) + (raw-rayon)*(raw-rayon))/(2*2.5*2.5*S*S) );
-      pt[0] = (neigh[(col+pas) + raw * Largeur] - neigh[(col-pas) + raw *Largeur ]) * w ;
+      pt[0] = (neigh[(col+pas) + raw * Largeur] - neigh[(col-pas) + raw *Largeur ]) * w;
       pt[1] = (neigh[col + (raw+pas)* Largeur ] - neigh[col + (raw-pas)*Largeur]) * w;
 
       if (pt[0] + pt[1] != 0)
@@ -391,10 +391,10 @@ namespace otb
     double  length = 0;
 
     //Detection de l'orientation du point courant
-    for (int i = 0 ; i < NbBins*2  ; i = i+2){
+    for (int i = 0; i < NbBins*2; i = i+2){
       length = vcl_sqrt( tab[i]*tab[i] + tab[i+1]*tab[i+1] );
       if( length > max){
-  max = length ;
+  max = length;
   indice = i/2;
       }
     }
@@ -421,15 +421,15 @@ namespace otb
 
 
 
-    int i = 0,  col, raw  , Nbin, pas = 1 ;
+    int i = 0,  col, raw  , Nbin, pas = 1;
     double xx = 0, yy = 0;
-    double dx, dy , w ;
+    double dx, dy , w;
     int Largeur = 2*neigh.GetRadius()[0]+1;
-    double rayon =  static_cast<double>(Largeur)/4. ;
+    double rayon =  static_cast<double>(Largeur)/4.;
     double r = neigh.GetRadius()[0];
     double dist = 0;
-    double x0 = neigh.GetCenterNeighborhoodIndex()% Largeur ;
-    double y0 = neigh.GetCenterNeighborhoodIndex()/ Largeur ;
+    double x0 = neigh.GetCenterNeighborhoodIndex()% Largeur;
+    double y0 = neigh.GetCenterNeighborhoodIndex()/ Largeur;
 
     //std::cout << " x0 " << x0 << " y0 "  << y0 << angle << std::endl;
 
@@ -446,8 +446,8 @@ namespace otb
 
     while (i < (int)neigh.Size())
       {
-  col = i % Largeur ;
-  raw = i / Largeur ;
+  col = i % Largeur;
+  raw = i / Largeur;
 
   if (( col > pas && col < Largeur - pas ) && ( raw > pas && raw < Largeur - pas) )
     {
@@ -471,7 +471,7 @@ namespace otb
 
     xx = static_cast<int> (pSrc[1]/rayon);
     yy = static_cast<int> (pSrc[0]/rayon);
-    Nbin =  static_cast<int> (xx + 4*yy) ;
+    Nbin =  static_cast<int> (xx + 4*yy);
 
     if( Nbin < 16)           //because 64 descriptor length
       {
@@ -480,13 +480,13 @@ namespace otb
 
         w = vcl_exp(-( distanceXcompensee_2 + distanceYcompensee_2 ) / (2*3.3*3.3*S*S) );
 
-        dx = 0.5 * (neigh[(col+pas) + raw * Largeur] - neigh[(col-pas) + raw *Largeur]) * w ;
+        dx = 0.5 * (neigh[(col+pas) + raw * Largeur] - neigh[(col-pas) + raw *Largeur]) * w;
         dy = 0.5 * (neigh[col + (raw+ pas)* Largeur] - neigh[col + (raw-pas)*Largeur])  * w;
 
-        descriptorVector[4*Nbin  ] += dx ;
-        descriptorVector[4*Nbin+1] += dy ;
-        descriptorVector[4*Nbin+2] += vcl_abs(dx) ;
-        descriptorVector[4*Nbin+3] += vcl_abs(dy) ;
+        descriptorVector[4*Nbin  ] += dx;
+        descriptorVector[4*Nbin+1] += dy;
+        descriptorVector[4*Nbin+2] += vcl_abs(dx);
+        descriptorVector[4*Nbin+3] += vcl_abs(dy);
       }
         }
     }
@@ -494,11 +494,11 @@ namespace otb
       }
 
     double accu = 0;
-    for (int i = 0 ; i < 64 ;  i++)
+    for (int i = 0; i < 64;  i++)
       accu += descriptorVector[i]*descriptorVector[i];
 
-    for (int j = 0 ; j < 64 ;  j++)
-      descriptorVector[j] /= vcl_sqrt(accu) ;
+    for (int j = 0; j < 64;  j++)
+      descriptorVector[j] /= vcl_sqrt(accu);
 
     return descriptorVector;
 

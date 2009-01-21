@@ -31,16 +31,20 @@
 
 #include "otbLocalHoughFilter.h"
 
+#include <iostream>
+#include <fstream>
+
 
 int otbLocalHough( int argc, char* argv[] )
 {
   const char * inputFilename  = argv[1];
-  unsigned int  RadiusX((unsigned int)::atoi(argv[2]));
-  unsigned int  RadiusY((unsigned int)::atoi(argv[3]));
-  unsigned int  NumberOfLines((unsigned int)::atoi(argv[4]));
+  const char * outfname  = argv[2];
+  unsigned int  RadiusX((unsigned int)::atoi(argv[3]));
+  unsigned int  RadiusY((unsigned int)::atoi(argv[4]));
+  unsigned int  NumberOfLines((unsigned int)::atoi(argv[5]));
 
-  typedef unsigned char	                                InputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef unsigned char                                  InputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
   typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
 
@@ -59,7 +63,7 @@ int otbLocalHough( int argc, char* argv[] )
   Radius[0] = RadiusX;
   Radius[1] = RadiusY;
 
-  typedef otb::LineSpatialObjectList			LinesListType;
+  typedef otb::LineSpatialObjectList      LinesListType;
   LinesListType::Pointer list = LinesListType::New();
 
   filter->SetRadius( Radius );
@@ -70,8 +74,19 @@ int otbLocalHough( int argc, char* argv[] )
 
   list = filter->GetOutput();
 
-  std::cout<<list->size()<<std::endl;
+  LinesListType::const_iterator itList; 
+  
+  std::ofstream outfile(outfname);
+  outfile<< "size of the Line list " << list->size()<<std::endl;
 
+  for (itList=list->begin(); itList!=list->end(); itList++)
+    outfile << (*itList)->GetPoints()[0].GetPosition()  << " \t" << (*itList)->GetPoints()[1].GetPosition()   << std::endl;
+
+  outfile.close();
+  
+  
+  
+  
 
   return EXIT_SUCCESS;
 }

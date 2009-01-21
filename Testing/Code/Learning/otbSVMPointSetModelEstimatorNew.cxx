@@ -32,7 +32,7 @@ int otbSVMPointSetModelEstimatorNew( int argc, char* argv[] )
 {
   typedef std::vector<double>                           InputPixelType;
   typedef double                                        LabelPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  const   unsigned int                                  Dimension = 2;
 
   typedef itk::PointSet< InputPixelType,  Dimension >           MeasurePointSetType;
   typedef itk::PointSet< LabelPixelType,  Dimension >           LabelPointSetType;

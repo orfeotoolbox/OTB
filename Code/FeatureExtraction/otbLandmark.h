@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,7 +32,7 @@ namespace otb
    * The class TLandmarkData can be used to store any information on the matching.
    */
   template <class TPoint, class TPointData, class TLandmarkData=TPointData>
-    class ITK_EXPORT Landmark 
+    class ITK_EXPORT Landmark
     : public itk::DataObject
     {
       public:
@@ -45,12 +45,12 @@ namespace otb
       /// Standard macros
       itkNewMacro(Self);
       itkTypeMacro(Landmark,DataObject);
-    
-      /// template typedefs 
+   
+      /// template typedefs
       typedef TPoint        PointType;
       typedef TPointData    PointDataType;
       typedef TLandmarkData LandmarkDataType;
-      
+     
       /// Accessors
       itkSetMacro(Point1,PointType);
       itkGetConstReferenceMacro(Point1,PointType);
@@ -64,11 +64,11 @@ namespace otb
       itkGetConstReferenceMacro(LandmarkData,LandmarkDataType);
 
       protected:
-      /// Constructor 
+      /// Constructor
       Landmark(){}
-      /// Destructor 
+      /// Destructor
       ~Landmark(){}
-      /// PrintSelf method 
+      /// PrintSelf method
       virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
       {
 	Superclass::PrintSelf(os,indent);
@@ -78,7 +78,7 @@ namespace otb
       private:
       Landmark(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
-      
+     
       /// First landmark point
       PointType        m_Point1;
       /// Second landmark point

@@ -50,9 +50,9 @@ int main( int argc, char * argv[] )
     {
       std::cerr << "Usage: " << std::endl;
       std::cerr << argv[0] \
-		<< "  inputImageFile  outputImageFile  " \
-		<< "seedLowerThreshold seedUpperThreshold  "\
-		<< "deltaLower  deltaUpper  " << std::endl;
+    << "  inputImageFile  outputImageFile  " \
+    << "seedLowerThreshold seedUpperThreshold  "\
+    << "deltaLower  deltaUpper  " << std::endl;
 
       return EXIT_FAILURE;
     }

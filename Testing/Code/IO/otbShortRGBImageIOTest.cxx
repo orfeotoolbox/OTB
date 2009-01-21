@@ -37,7 +37,7 @@ int otbShortRGBImageIOTest(int argc, char* argv[])
 
   typedef itk::RGBPixel<short>                            InputPixelType;
   typedef itk::RGBPixel<short>                            OutputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  const   unsigned int                                  Dimension = 2;
 
   typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
   typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;

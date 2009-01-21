@@ -31,9 +31,9 @@
 
 int otbExtractSegmentsNew( int argc, char * argv[] )
 {
-  typedef double	                                        InputPixelType;
-  typedef unsigned char	   	                        OutputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef double                                          InputPixelType;
+  typedef unsigned char                               OutputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
   typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
   typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;

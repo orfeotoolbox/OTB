@@ -64,12 +64,12 @@ int otbSVMInverseCosSpectralAngleKernelFunctorImageModelEstimatorTest( int argc,
   svmEstimator->SetNumberOfClasses( 2 );
   svmEstimator->SetSVMType(ONE_CLASS);
 
-  	otb::InverseCosSAMKernelFunctor myKernel;
-	myKernel.SetValue( "Coef", 1.0 );
-	myKernel.Update();
+    otb::InverseCosSAMKernelFunctor myKernel;
+  myKernel.SetValue( "Coef", 1.0 );
+  myKernel.Update();
 
-	svmEstimator->SetKernelFunctor( &myKernel );
-	svmEstimator->SetKernelType( GENERIC );
+  svmEstimator->SetKernelFunctor( &myKernel );
+  svmEstimator->SetKernelType( GENERIC );
 
   
   svmEstimator->Update();

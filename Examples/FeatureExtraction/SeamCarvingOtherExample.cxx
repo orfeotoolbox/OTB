@@ -112,7 +112,7 @@ int main(int argc, char * argv[])
   CarvingFilterType::Pointer carvingFilter = CarvingFilterType::New();
 
   typedef otb::DrawPathFilter
-		  <ImageType, PathType, ImageType> DrawPathFilterType;
+      <ImageType, PathType, ImageType> DrawPathFilterType;
   DrawPathFilterType::Pointer drawPathFilter = DrawPathFilterType::New();
 
   typedef otb::RemoveCarvingPathFilter

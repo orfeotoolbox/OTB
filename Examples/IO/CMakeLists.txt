@@ -128,7 +128,7 @@ SET(EXE_TESTS1  ${CXX_TEST_PATH}/otbIOExamplesTests1)
 SET(EXE_TESTS2  ${CXX_TEST_PATH}/otbIOExamplesTests2)
 
 SET(TOL 0.0)
-
+SET(HIGHTOL 5000.0)
 
 # ------- ExtractROITest----------
 
@@ -188,7 +188,7 @@ ENDIF(ITK_USE_REVIEW)
 
 IF( OTB_USE_CURL )
 ADD_TEST(TileMapImageIOExampleTest ${EXE_TESTS2}
---compare-image ${TOL}  ${BASELINE}/openStreetMap.png
+--compare-image ${HIGHTOL}  ${BASELINE}/openStreetMap.png
                         ${TEMP}/openStreetMap.png
          TileMapImageIOExampleTest
          ${INPUTDATA}/osmfile.otb

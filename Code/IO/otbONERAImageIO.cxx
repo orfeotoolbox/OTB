@@ -178,8 +178,8 @@ namespace otb
 
     int lNbLines   = this->GetIORegion().GetSize()[1];
     int lNbColumns = this->GetIORegion().GetSize()[0];
-    int lFirstLine   = this->GetIORegion().GetIndex()[1] ; // [1... ]
-    int lFirstColumn = this->GetIORegion().GetIndex()[0] ; // [1... ]
+    int lFirstLine   = this->GetIORegion().GetIndex()[1]; // [1... ]
+    int lFirstColumn = this->GetIORegion().GetIndex()[0]; // [1... ]
 
     otbMsgDevMacro( <<" ONERAImageIO::Read()  ");
     otbMsgDevMacro( <<" Image size  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
@@ -496,8 +496,8 @@ namespace otb
 
     unsigned int lNbLines   = this->GetIORegion().GetSize()[1];
     unsigned int lNbColumns = this->GetIORegion().GetSize()[0];
-    int lFirstLine   = this->GetIORegion().GetIndex()[1] ; // [1... ]
-    int lFirstColumn = this->GetIORegion().GetIndex()[0] ; // [1... ]
+    int lFirstLine   = this->GetIORegion().GetIndex()[1]; // [1... ]
+    int lFirstColumn = this->GetIORegion().GetIndex()[0]; // [1... ]
 
     otbMsgDevMacro( <<" ONERAImageIO::Write()  ");
     otbMsgDevMacro( <<" Image size  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
@@ -584,7 +584,7 @@ namespace otb
     m_Datafile.write((char*)(&magicNumber),4);
 
     char * tab = new char[ByteSizeCol];
-    for( int i = 0 ; i < (NbRow + 1) ; i++)
+    for( int i = 0; i < (NbRow + 1); i++)
     {
       m_Datafile.write((char*)(tab),ByteSizeCol);
     }

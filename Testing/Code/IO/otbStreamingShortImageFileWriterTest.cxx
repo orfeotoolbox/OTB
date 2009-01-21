@@ -44,9 +44,9 @@ int otbStreamingShortImageFileWriterTest (int argc, char* argv[])
 
 
 
-  typedef unsigned short 	                                InputPixelType;
-  typedef unsigned short 	                                OutputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef unsigned short                                   InputPixelType;
+  typedef unsigned short                                   OutputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
   typedef otb::VectorImage< InputPixelType,  Dimension >        InputImageType;
   typedef otb::VectorImage< OutputPixelType, Dimension >        OutputImageType;

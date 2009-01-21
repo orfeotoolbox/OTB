@@ -45,16 +45,16 @@ int otbLinkPathListFilter(int argc, char * argv[])
     {
       if( argv[cpt][0] == '|' )
         {
-	  if( (ListPoints.size()%2) != 0 )
-	    {
-	      itkGenericExceptionMacro(<<"Missing point in parameters !");
-	    }
-	  MatricePoints.push_back(ListPoints);
-	  ListPoints.clear();
+    if( (ListPoints.size()%2) != 0 )
+      {
+        itkGenericExceptionMacro(<<"Missing point in parameters !");
+      }
+    MatricePoints.push_back(ListPoints);
+    ListPoints.clear();
         }
       else
         {
-	  ListPoints.push_back(static_cast<double>(::atof(argv[cpt])));
+    ListPoints.push_back(static_cast<double>(::atof(argv[cpt])));
         }
       cpt++;
     }
@@ -76,13 +76,13 @@ int otbLinkPathListFilter(int argc, char * argv[])
       //Generate PathList
       std::cout << "List "<<std::endl;
       for(PointsVectorType::iterator it=(*listpos).begin() ; it != (*listpos).end() ; ++it)
-	{
-	  cindex[0] = *it;
-	  ++it;
-	  cindex[1] = *it;
-	  std::cout << "Point Index :"<<cindex[0]<<";"<<cindex[1]<<std::endl;
-	  path->AddVertex(cindex);
-	}
+  {
+    cindex[0] = *it;
+    ++it;
+    cindex[1] = *it;
+    std::cout << "Point Index :"<<cindex[0]<<";"<<cindex[1]<<std::endl;
+    path->AddVertex(cindex);
+  }
       InputPathList->PushBack(path);
     }
   //Instantiating object
@@ -113,15 +113,15 @@ int otbLinkPathListFilter(int argc, char * argv[])
     {
       file<<"Path "<<counter<<": ";
       for(VertexIteratorType vIt = pathListIt.Get()->GetVertexList()->Begin();
-	  vIt!=pathListIt.Get()->GetVertexList()->End();
-	  ++vIt)
-	{
-	  if(vIt!=pathListIt.Get()->GetVertexList()->Begin())
-	    {
-	      file<<", ";
-	    }
-	  file<<vIt.Value();
-	}
+    vIt!=pathListIt.Get()->GetVertexList()->End();
+    ++vIt)
+  {
+    if(vIt!=pathListIt.Get()->GetVertexList()->Begin())
+      {
+        file<<", ";
+      }
+    file<<vIt.Value();
+  }
       file<<std::endl;
       ++pathListIt;
       ++counter;
@@ -133,15 +133,15 @@ int otbLinkPathListFilter(int argc, char * argv[])
     {
       file<<"Path "<<counter<<": ";
       for(VertexIteratorType vIt = pathListIt.Get()->GetVertexList()->Begin();
-	  vIt!=pathListIt.Get()->GetVertexList()->End();
-	  ++vIt)
-	{
-	  if(vIt!=pathListIt.Get()->GetVertexList()->Begin())
-	    {
-	      file<<", ";
-	    }
-	  file<<vIt.Value();
-	}
+    vIt!=pathListIt.Get()->GetVertexList()->End();
+    ++vIt)
+  {
+    if(vIt!=pathListIt.Get()->GetVertexList()->Begin())
+      {
+        file<<", ";
+      }
+    file<<vIt.Value();
+  }
       file<<std::endl;
       ++pathListIt;
       ++counter;

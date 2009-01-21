@@ -96,7 +96,7 @@ int main(int argc, char* argv[] )
   writer->SetFileName( outputFilename );
 
   typedef otb::MarkovRandomFieldFilter
-	  <InputImageType,LabelledImageType> MarkovRandomFieldFilterType;
+    <InputImageType,LabelledImageType> MarkovRandomFieldFilterType;
 
 
   //  Software Guide : BeginLatex
@@ -120,9 +120,9 @@ int main(int argc, char* argv[] )
   // Software Guide : EndCodeSnippet
 
   typedef otb::MRFEnergyPotts
-		  <LabelledImageType, LabelledImageType>  EnergyRegularizationType;
+      <LabelledImageType, LabelledImageType>  EnergyRegularizationType;
   typedef otb::MRFEnergyGaussianClassification
-		  <InputImageType, LabelledImageType>  EnergyFidelityType;
+      <InputImageType, LabelledImageType>  EnergyFidelityType;
 
   MarkovRandomFieldFilterType::Pointer markovFilter = MarkovRandomFieldFilterType::New();
   EnergyRegularizationType::Pointer energyRegularization = EnergyRegularizationType::New();

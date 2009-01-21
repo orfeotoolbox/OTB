@@ -254,12 +254,12 @@ int main (int argc, char* argv[])
   for(unsigned int x=0; x<NumberOfXNodes; x++)
     {
       for(unsigned int y=0; y<NumberOfYNodes; y++)
-	{
-	  PointType p;
-	  p[0] = firstNodeIndex[0]+x*atoi(argv[5]);
-	  p[1] = firstNodeIndex[1]+y*atoi(argv[6]);
-	  nodes->SetPoint( nodeCounter++,p);
-	}
+  {
+    PointType p;
+    p[0] = firstNodeIndex[0]+x*atoi(argv[5]);
+    p[1] = firstNodeIndex[1]+y*atoi(argv[6]);
+    nodes->SetPoint( nodeCounter++,p);
+  }
     }
   // Software Guide : EndCodeSnippet
 
@@ -422,7 +422,7 @@ int main (int argc, char* argv[])
   generator->SetOutputOrigin(fixedReader->GetOutput()->GetOrigin());
   generator->SetOutputSpacing(fixedReader->GetOutput()->GetSpacing());
   generator->SetOutputSize(fixedReader->GetOutput()
-			   ->GetLargestPossibleRegion().GetSize());
+         ->GetLargestPossibleRegion().GetSize());
 
   // Software Guide : EndCodeSnippet
 

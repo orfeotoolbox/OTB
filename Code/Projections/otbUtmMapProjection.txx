@@ -73,7 +73,7 @@ namespace otb
   {
     double latitude = geoPoint[1];
     char hemisphere;
-    int zone ;
+    int zone;
 
     if (latitude > 0.)
       hemisphere = 'N';
@@ -131,7 +131,7 @@ namespace otb
     // Each UTM zone is a narrow zone of 6 degrees in width
     // Zone 31 is between 0 and 6 degrees (lon)
     // There is 60 zones in each hemisphere
-    zone = ((static_cast<int>(floor(longitude/6))+30)%60+60)%60+1 ;
+    zone = ((static_cast<int>(floor(longitude/6))+30)%60+60)%60+1;
 
     return zone;
   }

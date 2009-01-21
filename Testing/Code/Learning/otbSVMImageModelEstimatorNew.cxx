@@ -32,7 +32,7 @@
 int otbSVMImageModelEstimatorNew( int argc, char* argv[] )
 {
   typedef double                               InputPixelType;
-  const   unsigned int        	                    Dimension = 2;
+  const   unsigned int                              Dimension = 2;
 
   typedef otb::VectorImage< InputPixelType,  Dimension >        InputImageType;
 

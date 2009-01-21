@@ -58,7 +58,7 @@ HuPathFunction<TInputPath, TOutput, TPrecision  >
   typedef ComplexMomentPathFunction<PathType>   FunctionType;
   typedef typename FunctionType::ComplexType    ComplexType;
 
-  RealType                         HuValue;
+  RealType                         HuValue = 0.;
   ComplexType                      HuValueComplex;
 
   typename FunctionType::Pointer function =FunctionType::New();
@@ -74,7 +74,7 @@ HuPathFunction<TInputPath, TOutput, TPrecision  >
   function->SetP(1);
   function->SetQ(1);
   C11 = function->Evaluate( );
-        HuValue = C11.real() ;
+        HuValue = C11.real();
   }
   break;
     case 2:
@@ -87,7 +87,7 @@ HuPathFunction<TInputPath, TOutput, TPrecision  >
   function->SetQ(2);
   C02 = function->Evaluate( );
 
-  HuValue = vcl_abs( C20 * C02 ) ;
+  HuValue = vcl_abs( C20 * C02 );
 
   }
   break;
@@ -128,7 +128,7 @@ HuPathFunction<TInputPath, TOutput, TPrecision  >
   function->SetQ(2);
   C12 = function->Evaluate( );
 
-  HuValueComplex = C30 * vcl_pow(C12,3) ;
+  HuValueComplex = C30 * vcl_pow(C12,3);
   HuValue = HuValueComplex.real();
   }
   break;

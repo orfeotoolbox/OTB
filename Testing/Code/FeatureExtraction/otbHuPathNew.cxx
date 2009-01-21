@@ -27,7 +27,7 @@
 int otbHuPathNew( int argc, char * argv[] )
 {
   const   unsigned int                                     Dimension = 2;
-  typedef itk::PolyLineParametricPath< Dimension >	 PathType;
+  typedef itk::PolyLineParametricPath< Dimension >   PathType;
   typedef otb::HuPathFunction<PathType>                    FunctionType;
   typedef FunctionType::RealType                           RealType;
 

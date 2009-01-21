@@ -77,11 +77,11 @@ int otbMorphologicalPyramidAnalysisFilter(int argc, char * argv[])
   itk::OStringStream oss;
   // Writing the results images
   while((itAnalyse!=pyramid->GetOutput()->End())
-	&&(itSupFilter!=pyramid->GetSupFilter()->End())
-	&&(itInfFilter!=pyramid->GetInfFilter()->End())
-	&&(itInfDeci!=pyramid->GetInfDeci()->End())
-	&&(itSupDeci!=pyramid->GetSupDeci()->End())
-	)
+  &&(itSupFilter!=pyramid->GetSupFilter()->End())
+  &&(itInfFilter!=pyramid->GetInfFilter()->End())
+  &&(itInfDeci!=pyramid->GetInfDeci()->End())
+  &&(itSupDeci!=pyramid->GetSupDeci()->End())
+  )
     {
       oss<<outputFilenamePrefix<<"_an_"<<i<<"."<<outputFilenameSuffix;
       writer->SetInput(itAnalyse.Get());

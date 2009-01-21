@@ -39,9 +39,9 @@ int otbDrawLineSpatialObjectList( int argc, char* argv[] )
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
-  typedef double		                                InputPixelType;
-  typedef unsigned char	   	                        OutputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef double                                    InputPixelType;
+  typedef unsigned char                               OutputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
   typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
   typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
@@ -60,8 +60,8 @@ int otbDrawLineSpatialObjectList( int argc, char* argv[] )
   reader->SetFileName( inputFilename  );
   writer->SetFileName( outputFilename );
 
-  typedef otb::LineSpatialObjectList			LinesListType;
-  typedef LinesListType::LineType	LineType;
+  typedef otb::LineSpatialObjectList      LinesListType;
+  typedef LinesListType::LineType  LineType;
   LinesListType::Pointer list = LinesListType::New();
 
   LineType::PointListType pointList;
@@ -127,10 +127,10 @@ int otbDrawLineSpatialObjectList( int argc, char* argv[] )
 
         list->push_back(line3);
 
-	/*        LinesListType::const_iterator it;
-		  std::cout<<list.size()<<std::endl;
-		  for (it=list.begin(); it!=list.end(); it++)
-		  std::cout<< (*it) <<std::endl;*/
+  /*        LinesListType::const_iterator it;
+      std::cout<<list.size()<<std::endl;
+      for (it=list.begin(); it!=list.end(); it++)
+      std::cout<< (*it) <<std::endl;*/
 
         filter->SetInputLineSpatialObjectList(list);
 
@@ -141,7 +141,7 @@ int otbDrawLineSpatialObjectList( int argc, char* argv[] )
 
 
 
-	return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }
 
 

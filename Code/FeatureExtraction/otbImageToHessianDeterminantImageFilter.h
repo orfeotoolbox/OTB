@@ -58,7 +58,7 @@ namespace otb
       {
 	      return static_cast<TOutput>(input[0]*input[1] - input[2]*input[2]);
       }
-    
+   
 
     bool operator !=(const HessianDeterminant) const
       {

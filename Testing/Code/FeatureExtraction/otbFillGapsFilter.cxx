@@ -33,9 +33,9 @@ int otbFillGapsFilter( int argc, char * argv[] )
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
-  typedef double		                                InputPixelType;
-  typedef unsigned char	   	                        OutputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef double                                    InputPixelType;
+  typedef unsigned char                               OutputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
   typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
   typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
@@ -43,8 +43,8 @@ int otbFillGapsFilter( int argc, char * argv[] )
   typedef otb::DrawLineSpatialObjectListFilter< InputImageType,OutputImageType >   FilterType;
 
   typedef otb::FillGapsFilter              FillGapsFilterType;
-  typedef otb::LineSpatialObjectList	 LinesListType;
-  typedef LinesListType::LineType	         LineType;
+  typedef otb::LineSpatialObjectList   LinesListType;
+  typedef LinesListType::LineType           LineType;
 
   FilterType::Pointer filter = FilterType::New();
 

@@ -91,16 +91,16 @@ int otbOssimElevManagerTest(int argc,char* argv[])
       ossimWorldPoint.lat=point[1];
       double height = elevManager->getHeightAboveMSL(ossimWorldPoint);
 
-	 if (!ossim::isnan(height))
-	  {
-	    // Fill the image
-	    it.Set(height);
-	  }
-	else
-	  {
-	    // Back to the MNT default value
-	    it.Set(0);
-	  }
+   if (!ossim::isnan(height))
+    {
+      // Fill the image
+      it.Set(height);
+    }
+  else
+    {
+      // Back to the MNT default value
+      it.Set(0);
+    }
     }
 
   WriterType::Pointer writer = WriterType::New();

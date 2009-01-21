@@ -46,16 +46,16 @@ class PathListToHistogramGenerator : public itk::Object
 {
 public:
   /** Standard typedefs */
-  typedef PathListToHistogramGenerator   Self ;
+  typedef PathListToHistogramGenerator   Self;
   typedef itk::Object                    Superclass;
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PathListToHistogramGenerator, itk::Object) ;
+  itkTypeMacro(PathListToHistogramGenerator, itk::Object);
 
   /** standard New() method support */
-  itkNewMacro(Self) ;
+  itkNewMacro(Self);
 
   typedef TPath                                       PathType;
   typedef typename PathType::Pointer                      PathPointer;
@@ -69,8 +69,8 @@ public:
   typedef typename TFunction::OutputType                  RealType;
 
   typedef RealType                                                 MeasurementType;
-  typedef itk::Vector< MeasurementType ,1 >                        ListSampleVectorType ;
-  typedef itk::Statistics::ListSample< ListSampleVectorType >      ListSampleType ;
+  typedef itk::Vector< MeasurementType ,1 >                        ListSampleVectorType;
+  typedef itk::Statistics::ListSample< ListSampleVectorType >      ListSampleType;
   typedef typename ListSampleType::Pointer                         ListSamplePointer;
   typedef typename ListSampleType::ConstPointer                    ListSampleConstPointer;
 

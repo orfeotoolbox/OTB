@@ -54,7 +54,7 @@ int otbOrthoRectificationFilterWithDEM( int argc, char* argv[] )
 
   if(argc!=12)
     {
-      std::cout << argv[0] <<" <input filename> <output filename>	<origin easting>	<origin northing> <x size> <y size>";
+      std::cout << argv[0] <<" <input filename> <output filename>  <origin easting>  <origin northing> <x size> <y size>";
       std::cout << "<x_spacing> <y_spacing> <UTM zone> <UTM hemisphere> <DEM directory>" << std::endl;
 
       return EXIT_FAILURE;
@@ -69,10 +69,10 @@ int otbOrthoRectificationFilterWithDEM( int argc, char* argv[] )
   typedef otb::OrthoRectificationFilter<ImageType, ImageType, UtmMapProjectionType> OrthoRectifFilterType ;
 
   //Allocate pointer
-  ReaderType::Pointer     	reader=ReaderType::New();
-  WriterType::Pointer	    	writer=WriterType::New();
+  ReaderType::Pointer       reader=ReaderType::New();
+  WriterType::Pointer        writer=WriterType::New();
 
-  OrthoRectifFilterType::Pointer     	orthoRectifFilter=OrthoRectifFilterType::New();
+  OrthoRectifFilterType::Pointer       orthoRectifFilter=OrthoRectifFilterType::New();
   UtmMapProjectionType::Pointer utmMapProjection = UtmMapProjectionType::New();
 
   // Set parameters ...
@@ -88,7 +88,7 @@ int otbOrthoRectificationFilterWithDEM( int argc, char* argv[] )
 
   ImageType::SizeType size;
   size[0]=atoi(argv[5]);      //X size.
-  size[1]=atoi(argv[6]);	    //Y size
+  size[1]=atoi(argv[6]);      //Y size
   orthoRectifFilter->SetSize(size);
 
   ImageType::SpacingType spacing;

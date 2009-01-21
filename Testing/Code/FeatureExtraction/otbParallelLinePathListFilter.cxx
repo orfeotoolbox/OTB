@@ -106,22 +106,22 @@ int otbParallelLinePathListFilter(int argc, char * argv[])
 
     PathType::VertexListType::ConstIterator pathIt = vertexList->Begin();
     PathType::VertexListType::ConstIterator parPathIt = parVertexList->Begin();
-	  // Loop over all the vertices in one path
-	  while (pathIt != vertexList->End() &&
-		           parPathIt != parVertexList->End())
-	  {
+    // Loop over all the vertices in one path
+    while (pathIt != vertexList->End() &&
+               parPathIt != parVertexList->End())
+    {
 
-	  if( pathIt.Value() != parPathIt.Value() )
-	    {
-	    std::cout << pathIt.Index() << pathIt.Value() << std::endl;
-	    return EXIT_FAILURE;
+    if( pathIt.Value() != parPathIt.Value() )
+      {
+      std::cout << pathIt.Index() << pathIt.Value() << std::endl;
+      return EXIT_FAILURE;
 
-	    }
-	  ++pathIt;
-	  ++parPathIt;
-	  }
-	  ++listIt;
-	  ++parListIt;
+      }
+    ++pathIt;
+    ++parPathIt;
+    }
+    ++listIt;
+    ++parListIt;
   }
 
 

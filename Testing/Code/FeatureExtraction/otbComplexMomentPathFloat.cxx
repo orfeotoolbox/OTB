@@ -32,7 +32,7 @@ int otbComplexMomentPathFloat( int argc, char * argv[] )
 
   const   unsigned int      Dimension = 2;
 
-  typedef itk::PolyLineParametricPath< Dimension >	        PathType;
+  typedef itk::PolyLineParametricPath< Dimension >          PathType;
   typedef std::complex<float>                                     ComplexType;
   typedef otb::ComplexMomentPathFunction< PathType,ComplexType >  CMType;
 

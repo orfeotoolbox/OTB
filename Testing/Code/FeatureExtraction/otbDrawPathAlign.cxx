@@ -39,13 +39,13 @@ int otbDrawPathAlign( int argc, char * argv[] )
 
 
   typedef unsigned char                                   InputPixelType;
-  typedef unsigned char   	                        OutputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef unsigned char                             OutputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
-  typedef itk::Image< InputPixelType,  Dimension >	InputImageType;
+  typedef itk::Image< InputPixelType,  Dimension >  InputImageType;
   typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
 
-  typedef itk::PolyLineParametricPath< Dimension >	PathType;
+  typedef itk::PolyLineParametricPath< Dimension >  PathType;
   typedef PathType::Pointer                               PathPointerType;
 
   typedef otb::ImageFileReader< InputImageType  >         ReaderType;

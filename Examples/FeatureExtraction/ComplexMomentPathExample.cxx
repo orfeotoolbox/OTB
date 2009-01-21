@@ -98,7 +98,7 @@ int main(int argc, char ** argv )
 
             // Draw a square:
 
- 	path->Initialize();
+   path->Initialize();
 
         cindex[0]=30;
         cindex[1]=30;

@@ -38,13 +38,13 @@ int otbFourierMellinImageFilter(int argc, char* argv[])
   const char * outputImaginaryFilename = argv[3];
   typedef double                                          InputPixelType;
   typedef std::complex<double>                            OutputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  const   unsigned int                                  Dimension = 2;
 
   typedef otb::Image< InputPixelType, Dimension >         InputImageType;
   typedef otb::ImageFileReader< InputImageType  >         ReaderType;
   typedef otb::ImageFileWriter< InputImageType> WriterType;
 
-  typedef itk::LinearInterpolateImageFunction< InputImageType, double >	InterpolatorType;
+  typedef itk::LinearInterpolateImageFunction< InputImageType, double >  InterpolatorType;
   typedef otb::ForwardFourierMellinTransformImageFilter<InputPixelType,InterpolatorType,Dimension> FourierMellinTransformType;
   typedef FourierMellinTransformType::OutputImageType OutputImageType;
   typedef itk::ComplexToRealImageFilter<OutputImageType,InputImageType> RealFilterType;

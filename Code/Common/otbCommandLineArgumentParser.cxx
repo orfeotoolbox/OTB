@@ -331,7 +331,7 @@ bool CommandLineArgumentParser::TryParseCommandLine(int argc, char *argv[],
   }
 
 // Check that all required arguments are specified
-  for(unsigned int cpt=0 ; cpt < m_OptionList.size() ; cpt++ )
+  for(unsigned int cpt=0; cpt < m_OptionList.size(); cpt++ )
   {
     if ( (m_OptionList[cpt].Obligatory == true) && (m_OptionList[cpt].Finded == false) )
     {
@@ -386,14 +386,14 @@ void CommandLineArgumentParser::PrintUsage(std::ostream& os)const
   int largeurmax(-1);
   unsigned int i;
 
-  for(i=0 ; i < m_OptionList.size() ; i++ )
+  for(i=0; i < m_OptionList.size(); i++ )
   {
     int largeur = m_OptionList[i].CommonName.size() + m_OptionList[i].Synonim.size();
     if ( largeur > largeurmax ) largeurmax = largeur;
   }
 
   // Check that all required arguments are present on the command line
-  for(i=0 ; i < m_OptionList.size() ; i++ )
+  for(i=0; i < m_OptionList.size(); i++ )
   {
     if (m_OptionList[i].CommonName != "--OTBTesting")
     {
@@ -401,7 +401,7 @@ void CommandLineArgumentParser::PrintUsage(std::ostream& os)const
       os << "      ";
       if ( m_OptionList[i].Obligatory == false ) os <<"[";
       else os << " ";
-      os << m_OptionList[i].CommonName ;
+      os << m_OptionList[i].CommonName;
       if (m_OptionList[i].Synonim.empty() == false )
       {
         os << "|"<<m_OptionList[i].Synonim;
@@ -409,7 +409,7 @@ void CommandLineArgumentParser::PrintUsage(std::ostream& os)const
       if ( m_OptionList[i].Obligatory == false ) os <<"]";
       else os << " ";
 //Align the text
-      for (int b=largeur ; b< largeurmax ; b++) os <<" ";
+      for (int b=largeur; b< largeurmax; b++) os <<" ";
       os <<   "  :  "<<m_OptionList[i].Description;
       if (m_OptionList[i].NumberOfParametersFixed == true )
       {

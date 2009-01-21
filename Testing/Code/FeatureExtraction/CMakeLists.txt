@@ -352,6 +352,15 @@ ADD_TEST(feTvPixelSuppressionByDirection ${FEATUREEXTRACTION_TESTS5}
 ADD_TEST(feTuLocalHoughNew ${FEATUREEXTRACTION_TESTS5}  
         otbLocalHoughNew)
 
+
+ADD_TEST(feTvLocalHough ${FEATUREEXTRACTION_TESTS5}  
+  --compare-ascii ${EPS}  ${BASELINE_FILES}/feTvLocaLHoughLinesDetected.txt
+                                ${TEMP}/feTvLocaLHoughLinesDetected.txt
+        otbLocalHough
+	${INPUTDATA}/ImageLine.bsq.hdr
+	${TEMP}/feTvLocaLHoughLinesDetected.txt
+	20 20 1)  
+
 ADD_TEST(feTvLocalHoughDraw ${FEATUREEXTRACTION_TESTS5}  
   --compare-image ${EPSILON}  ${BASELINE}/feFiltreLocalHoughDraw_ImageLine_20_20_2.hdr
                           ${TEMP}/feFiltreLocalHoughDraw_ImageLine_20_20_2.hdr
@@ -360,9 +369,18 @@ ADD_TEST(feTvLocalHoughDraw ${FEATUREEXTRACTION_TESTS5}
 	${TEMP}/feFiltreLocalHoughDraw_ImageLine_20_20_2.hdr
 	20 20 1)        
 
+ADD_TEST(feTvLocalHoughDraw2 ${FEATUREEXTRACTION_TESTS5}  
+  --compare-image ${EPSILON}  ${BASELINE}/feFilterLocalHoughDraw_amst_20_20_1.tif
+                          ${TEMP}/feFilterLocalHoughDraw_amst_20_20_1.png
+        otbLocalHoughDraw
+	${INPUTDATA}/amst.png
+	${TEMP}/feFilterLocalHoughDraw_amst_20_20_1.png
+	20 20 1) 
+
+
 ADD_TEST(feTvLocalHoughDrawBis ${FEATUREEXTRACTION_TESTS5}  
   --compare-image ${EPSILON}  ${BASELINE}/feFiltreLocalHoughDraw_Line_20_10_2.png
-                          ${TEMP}/feFiltreLocalHoughDraw_Line_20_10_2.png
+                   ${TEMP}/feFiltreLocalHoughDraw_Line_20_10_2.png
         otbLocalHoughDraw
 	${INPUTDATA}/Line.png
 	${TEMP}/feFiltreLocalHoughDraw_Line_20_10_2.png
@@ -373,10 +391,24 @@ ADD_TEST(feTvLocalHoughDrawBis ${FEATUREEXTRACTION_TESTS5}
 ADD_TEST(feTuFillGapsFilterNew ${FEATUREEXTRACTION_TESTS5}  
         otbFillGapsFilterNew)
         
-#ADD_TEST(feTuFillGapsFilter ${FEATUREEXTRACTION_TESTS5}  
-#        otbFillGapsFilter
-#	${INPUTDATA}/vide.png
-#	${TEMP}/feFillGaps.png)
+ADD_TEST(feTuFillGapsFilter ${FEATUREEXTRACTION_TESTS5}  
+	  --compare-image ${EPSILON}  
+	       ${BASELINE}/feTvFillGapfilter.png
+               ${TEMP}/feTvFillGapfilter.png
+        otbFillGapsFilter
+	       ${INPUTDATA}/ImageLine.bsq.hdr
+	       ${TEMP}/feTvFillGapfilter.png)
+
+# -------            otb::HoughTransform2DLinesImageTest ------------------------------    
+
+ADD_TEST(feTvHoughTransform2DLinesImage ${FEATUREEXTRACTION_TESTS5}  
+  --compare-image ${EPSILON}  
+		  ${BASELINE}/feFilterHoughTransformDraw.tif
+	          ${TEMP}/feFilterHoughTransformDraw.tif
+        otbHoughTransform2DLinesImageTest
+	${TEMP}/feFilterHoughTransformDraw.tif
+	) 
+
 
 # -------            otb::ImageToModulusAndDirectionImageFilter   ------------------------------
 # -------            otb::ModulusAndDirectionImageToImageFilter   ------------------------------
@@ -976,10 +1008,12 @@ otbHarrisToPointSet.cxx
 otbPixelSuppressionByDirectionNew.cxx
 otbPixelSuppressionByDirection.cxx
 otbFillGapsFilterNew.cxx
+otbFillGapsFilter.cxx
 otbLocalHoughNew.cxx
 otbLocalHough.cxx
 otbLocalHoughDraw.cxx
 otbModulusAndDirectionImageFiltersNew.cxx
+otbHoughTransform2DLinesImageTest.cxx
 )
 SET(BasicFeatureExtraction_SRCS6
 otbExtractSegmentsNew.cxx

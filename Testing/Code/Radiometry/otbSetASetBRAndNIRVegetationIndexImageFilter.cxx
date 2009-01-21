@@ -69,14 +69,14 @@ int otbSetASetBRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
   argc--;
   argv++;
   if ( strArgv == "PVI" ) generic_SetASetBRAndNIRVegetationIndexImageFilter<InputRImageType, InputNIRImageType, OutputImageType,
-			    otb::Functor::PVI<     InputRImageType::PixelType,
-			    InputNIRImageType::PixelType,
-			    OutputImageType::PixelType> >
-			    (argc,argv);
+          otb::Functor::PVI<     InputRImageType::PixelType,
+          InputNIRImageType::PixelType,
+          OutputImageType::PixelType> >
+          (argc,argv);
   else if ( strArgv == "TSAVI" ) generic_SetASetBRAndNIRVegetationIndexImageFilter<InputRImageType, InputNIRImageType, OutputImageType,
-				   otb::Functor::TSAVI<     InputRImageType::PixelType,
-				   InputNIRImageType::PixelType,
-				   OutputImageType::PixelType> >
-				   (argc,argv);
+           otb::Functor::TSAVI<     InputRImageType::PixelType,
+           InputNIRImageType::PixelType,
+           OutputImageType::PixelType> >
+           (argc,argv);
   return EXIT_SUCCESS;
 }

@@ -38,6 +38,7 @@ ExtractSegmentsImageFilter<TInputImage, TOutputImage>
   m_LocalHough      = LocalHoughType::New();
   m_FillGaps         = FillGapsType::New();
   m_DrawLineList         = DrawLineListType::New();
+  m_Rescaler             =RescaleType::New();
 }
 
 /**
@@ -216,8 +217,11 @@ ExtractSegmentsImageFilter<TInputImage, TOutputImage>
   m_PixelSuppression->SetInputImage( this->GetInputImage() );
   m_PixelSuppression->SetInputImageDirection( this->GetInputImageDirection() );
 
-  m_LocalHough->SetInput( m_PixelSuppression->GetOutput() );
-
+  m_Rescaler->SetInput( m_PixelSuppression->GetOutput());
+  
+  /*m_LocalHough->SetInput( m_PixelSuppression->GetOutput() );*/
+  m_LocalHough->SetInput(m_Rescaler->GetOutput() );
+   
   m_FillGaps->SetInput ( m_LocalHough->GetOutput() );
 
   m_DrawLineList->SetInput( this->GetInputImage() );

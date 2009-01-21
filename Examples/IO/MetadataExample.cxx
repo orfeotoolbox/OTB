@@ -65,8 +65,8 @@ int main(int argc, char* argv[])
 
 //  SoftwareGuide: BeginCodeSnippet
 
-  typedef unsigned char  	                        InputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef unsigned char                            InputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
 
   typedef otb::Image< InputPixelType,  Dimension >      InputImageType;
@@ -111,14 +111,14 @@ int main(int argc, char* argv[])
 //
 //  We can now call the different available methods for accessing the
 //  metadata. Useful methods are :
-//	\begin{itemize}
+//  \begin{itemize}
 //      \item \code{GetSpacing}: the sampling step;
 //      \item \code{GetOrigin}: the coordinates of the origin of the image;
 //      \item \code{GetProjectionRef}: the image projection reference;
 //      \item \code{GetGCPProjection}: the projection for the eventual
 //  ground control points;
 //      \item \code{GetGCPCount}: the number of GCPs available;
-//	\end{itemize}
+//  \end{itemize}
 //
 //  SoftwareGuide: EndLatex
 

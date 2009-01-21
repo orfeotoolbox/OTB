@@ -33,9 +33,9 @@ int otbComplexMomentImage( int argc, char * argv[] )
   unsigned int  q((unsigned int)::atoi(argv[3]));
 
   typedef unsigned char                                   InputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  const   unsigned int                                  Dimension = 2;
 
-  typedef itk::Image< InputPixelType,  Dimension >	              InputImageType;
+  typedef itk::Image< InputPixelType,  Dimension >                InputImageType;
   typedef otb::ImageFileReader< InputImageType  >                       ReaderType;
 
   typedef std::complex<float>                                           ComplexType;

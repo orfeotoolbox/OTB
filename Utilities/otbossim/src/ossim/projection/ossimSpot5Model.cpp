@@ -76,8 +76,6 @@ ossimSpot5Model::ossimSpot5Model()
    theRefImagingTime     (0.0),
    theRefImagingTimeLine (0.0),   
    theLineSamplingPeriod (0.0),
-   theSatToOrbRotation   (3, 3),
-   theOrbToEcfRotation   (3, 3),
    theRollOffset         (0.0),
    thePitchOffset        (0.0),
    theYawOffset          (0.0),
@@ -100,8 +98,6 @@ ossimSpot5Model::ossimSpot5Model(ossimSpotDimapSupportData* sd)
    theRefImagingTime     (0.0),
    theRefImagingTimeLine (0.0),   
    theLineSamplingPeriod (0.0),
-   theSatToOrbRotation   (3, 3),
-   theOrbToEcfRotation   (3, 3),
    theRollOffset         (0.0),
    thePitchOffset        (0.0),
    theYawOffset          (0.0),
@@ -168,7 +164,7 @@ ossimSpot5Model::ossimSpot5Model(const ossimSpot5Model& rhs)
 //*****************************************************************************
 //  METHOD
 //*****************************************************************************
-void ossimSpot5Model::computeSatToOrbRotation(ossim_float64 t)const
+NEWMAT::Matrix ossimSpot5Model::computeSatToOrbRotation(ossim_float64 t)const
 {
    if (traceExec())
    {
@@ -204,13 +200,14 @@ void ossimSpot5Model::computeSatToOrbRotation(ossim_float64 t)const
    //---
    // Populate rotation matrix:
    //---
-    theSatToOrbRotation = NEWMAT::Matrix(3,3);
-    theSatToOrbRotation << (cr*cy) << (-cr*sy) << (-sr)
+	NEWMAT::Matrix satToOrbRotation = NEWMAT::Matrix(3,3);
+    satToOrbRotation << (cr*cy) << (-cr*sy) << (-sr)
                         << (cp*sy+sp*sr*cy) << (cp*cy-sp*sr*sy) << (sp*cr)
                         << (-sp*sy+cp*sr*cy) << (-sp*cy-cp*sr*sy) <<  cp*cr;
     
    
     if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimSpot5Model::computeSatToOrbRotation(): returning..." << std::endl;
+	return satToOrbRotation;
 }
 
 //*****************************************************************************
@@ -544,13 +541,13 @@ void ossimSpot5Model::imagingRay(const ossimDpt& image_point,
    // 4. Transform vehicle LSR space look direction vector to orbital LSR space
    //    (S_orb):
    //
-    computeSatToOrbRotation(t_line);
+	NEWMAT::Matrix satToOrbRotation = computeSatToOrbRotation(t_line);
     
-    ossimColumnVector3d u_orb = (theSatToOrbRotation*u_sat).unit();
+    ossimColumnVector3d u_orb = (satToOrbRotation*u_sat).unit();
     if (traceDebug() || runtime_dbflag)
     {
        ossimNotify(ossimNotifyLevel_DEBUG)
-          << "DEBUG:\n\t theSatToOrbRotation = " << theSatToOrbRotation
+          << "DEBUG:\n\t satToOrbRotation = " << satToOrbRotation
           << "\n\t u_orb = " << u_orb << endl;
     }
 
@@ -571,17 +568,17 @@ void ossimSpot5Model::imagingRay(const ossimDpt& image_point,
                                                     V_ecf.z()).cross(Z_orb).unit();
     ossimColumnVector3d Y_orb = Z_orb.cross(X_orb);
 
-    theOrbToEcfRotation = NEWMAT::Matrix(3, 3);
-    theOrbToEcfRotation << X_orb[0] << Y_orb[0] << Z_orb[0]
+	NEWMAT::Matrix orbToEcfRotation = NEWMAT::Matrix(3, 3);
+    orbToEcfRotation << X_orb[0] << Y_orb[0] << Z_orb[0]
                         << X_orb[1] << Y_orb[1] << Z_orb[1]
                         << X_orb[2] << Y_orb[2] << Z_orb[2];
     
 
-   ossimColumnVector3d u_ecf  = (theOrbToEcfRotation*u_orb);
+   ossimColumnVector3d u_ecf  = (orbToEcfRotation*u_orb);
     if (traceDebug() || runtime_dbflag)
     {
        ossimNotify(ossimNotifyLevel_DEBUG)
-          << "DEBUG:\n\t theOrbToEcfRotation = " << theOrbToEcfRotation
+          << "DEBUG:\n\t orbToEcfRotation = " << orbToEcfRotation
           << "\n\t u_ecf = " << u_ecf << endl;
     }
    
@@ -714,8 +711,6 @@ ossimSpot5Model::initFromMetadata(ossimSpotDimapSupportData* sd)
    thePositionError      = 0.0;
    theRefImagingTime     = 0.0;
    theLineSamplingPeriod = 0.0;
-   theSatToOrbRotation   = 0.0; //matrix
-   theOrbToEcfRotation   = 0.0; //matrix
    theRollOffset         = 0.0;
    thePitchOffset        = 0.0;
    theYawOffset          = 0.0;

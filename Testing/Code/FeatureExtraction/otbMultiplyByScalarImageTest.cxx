@@ -115,13 +115,13 @@ int otbMultiplyByScalarImageFilterTest( int argc, char * argv[] )
       const OutputImageType::PixelType output = ot.Get();
       const OutputImageType::PixelType multiplyByScal  = 10.0* input;
       if( vcl_abs( multiplyByScal - output ) > epsilon )
-	{
-	  std::cerr << "Error in otbMultiplyScalarImageFilterTest " << std::endl;
-	  std::cerr << " 10.0 * " << input << ") = " << multiplyByScal << std::endl;
-	  std::cerr << " differs from " << output;
-	  std::cerr << " by more than " << epsilon << std::endl;
-	  return 1;
-	}
+  {
+    std::cerr << "Error in otbMultiplyScalarImageFilterTest " << std::endl;
+    std::cerr << " 10.0 * " << input << ") = " << multiplyByScal << std::endl;
+    std::cerr << " differs from " << output;
+    std::cerr << " by more than " << epsilon << std::endl;
+    return 1;
+  }
       ++ot;
       ++it;
     }

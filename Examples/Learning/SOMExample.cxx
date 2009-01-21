@@ -213,11 +213,11 @@ int main(int argc, char* argv[])
   sampleList->SetMeasurementVectorSize( reader->GetOutput()->GetVectorLength() );
 
   itk::ImageRegionIterator< ImageType > imgIter ( reader->GetOutput(),
-						  reader->GetOutput()->GetBufferedRegion() );
+              reader->GetOutput()->GetBufferedRegion() );
   imgIter.GoToBegin();
 
   itk::ImageRegionIterator< ImageType > imgIterEnd ( reader->GetOutput(),
-						     reader->GetOutput()->GetBufferedRegion() );
+                 reader->GetOutput()->GetBufferedRegion() );
   imgIterEnd.GoToEnd();
 
   do {

@@ -134,13 +134,13 @@ int main(int argc, char * argv[])
    for(unsigned int i = 0; i<nbClasses;++i)
      {
        for(unsigned int j = 0; j <
-	     reader->GetOutput()->GetNumberOfComponentsPerPixel();++j)
-	 {
-	   parameters[i*sampleSize+j]=
-	     atof(argv[4+i*
-		       reader->GetOutput()->GetNumberOfComponentsPerPixel()
-		       +j]);
-	 }
+       reader->GetOutput()->GetNumberOfComponentsPerPixel();++j)
+   {
+     parameters[i*sampleSize+j]=
+       atof(argv[4+i*
+           reader->GetOutput()->GetNumberOfComponentsPerPixel()
+           +j]);
+   }
      }
 
    std::cout<<"Parameters: "<<parameters<<std::endl;

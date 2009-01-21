@@ -87,7 +87,7 @@ namespace otb
     if(m_poDataset != NULL)
     {
 
-      delete m_poDataset;
+      GDALClose(m_poDataset);
       m_poDataset = NULL;
     }
     if(m_poBands != NULL)
@@ -142,6 +142,7 @@ namespace otb
 
   // Open file with GDAL
     m_poDataset = static_cast<GDALDataset *>(GDALOpen(lFileNameGdal.c_str(), GA_ReadOnly ));
+
     if(m_poDataset==NULL)
     {
       fprintf( stderr,
@@ -156,8 +157,11 @@ namespace otb
     }
     else
     {
-      delete m_poDataset;
+      GDALClose(m_poDataset);
       m_poDataset = NULL;
+      GDALDestroyDriverManager();
+      CPLDumpSharedList( NULL );
+
       otbMsgDevMacro(<<"CanReadFile GDAL");
       return true;
     }
@@ -233,7 +237,7 @@ namespace otb
         itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName.c_str()<<".");
       }
       cpt = 0;
-      for ( std::streamoff  i=0 ; i < lBufferSize ; i = i+static_cast<std::streamoff>(m_NbOctetPixel) )
+      for ( std::streamoff  i=0; i < lBufferSize; i = i+static_cast<std::streamoff>(m_NbOctetPixel) )
       {
         memcpy((void*)(&(p[cpt])),(const void*)(&(value[i])),(size_t)(m_NbOctetPixel));
         cpt += static_cast<std::streamoff>(m_NbOctetPixel);
@@ -244,16 +248,16 @@ namespace otb
           // Mise a jour du step
       step = step * static_cast<std::streamoff>(m_NbOctetPixel);
 
-      for (unsigned int nbComponents = 0 ; nbComponents < this->GetNumberOfComponents() ; nbComponents++)
+      for (unsigned int nbComponents = 0; nbComponents < this->GetNumberOfComponents(); nbComponents++)
       {
-        lCrGdal = m_poBands[nbComponents]->RasterIO( GF_Read,lFirstColumn,lFirstLine,lNbColumns, lNbLines, value , lNbColumns, lNbLines, m_PxType,0, 0 ) ;
+        lCrGdal = m_poBands[nbComponents]->RasterIO( GF_Read,lFirstColumn,lFirstLine,lNbColumns, lNbLines, value , lNbColumns, lNbLines, m_PxType,0, 0 );
         if (lCrGdal == CE_Failure)
         {
           itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName.c_str()<<".");
         }
                   // Recopie dans le buffer
         cpt = static_cast<std::streamoff>(nbComponents)*static_cast<std::streamoff>(m_NbOctetPixel);
-        for ( std::streamoff  i=0 ; i < lBufferSize ; i = i+static_cast<std::streamoff>(m_NbOctetPixel) )
+        for ( std::streamoff  i=0; i < lBufferSize; i = i+static_cast<std::streamoff>(m_NbOctetPixel) )
         {
           memcpy((void*)(&(p[cpt])),(const void*)(&(value[i])),(size_t)(m_NbOctetPixel));
           cpt += step;
@@ -289,10 +293,13 @@ namespace otb
   // Get Dataset
     if(m_poDataset != NULL)
     {
-      delete m_poDataset;
+//       delete m_poDataset;
+      GDALClose(m_poDataset);
       m_poDataset = NULL;
     }
+    otbMsgDevMacro( <<" lFileNameGdal : " << lFileNameGdal);
     m_poDataset = static_cast<GDALDataset *>( GDALOpen(lFileNameGdal.c_str(), GA_ReadOnly ));
+    otbMsgDevMacro( <<"  GCPCount (original): " << m_poDataset->GetGCPCount());
     if(m_poDataset==NULL)
     {
       itkExceptionMacro(<<"Gdal dataset is null.");
@@ -366,7 +373,7 @@ namespace otb
         itkExceptionMacro(<<"Memory allocation error for the 'rasterBands'");
         return;
       }
-      for(i=0 ; i<m_NbBands ; i++)
+      for(i=0; i<m_NbBands; i++)
         m_poBands[i] = m_poDataset->GetRasterBand(i+1);
 
     // Get Data Type
@@ -457,7 +464,7 @@ namespace otb
       if( GDALDataTypeIsComplex(m_PxType) )
       {
         otbMsgDevMacro(<<"SetPixelType(COMPLEX)");
-        m_NbOctetPixel = m_NbOctetPixel * 2 ;
+        m_NbOctetPixel = m_NbOctetPixel * 2;
         this->SetNumberOfComponents( 2 );
         this->SetPixelType(COMPLEX);
     // Is this necessary ?
@@ -517,7 +524,8 @@ namespace otb
                                           static_cast<std::string>( GDALGetDriverShortName( hDriver ) ) );
     itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::DriverLongNameKey,
                                           static_cast<std::string>( GDALGetDriverLongName( hDriver ) ) );
-
+    otbMsgDevMacro( <<"  GDAL Driver short name: " << GDALGetDriverShortName( hDriver ));
+    otbMsgDevMacro( <<"  GDAL Driver long name: " << GDALGetDriverLongName( hDriver ));
 
     /* -------------------------------------------------------------------- */
     /* Get the projection coordinate system of the image : ProjectionRef  */
@@ -570,11 +578,10 @@ namespace otb
       itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::GCPCountKey,gcpCount);
 
 
-
+      otbMsgDevMacro( <<"  GCPCount: " << m_poDataset->GetGCPCount());
       for( unsigned int cpt = 0; cpt < gcpCount; cpt++ )
       {
         const GDAL_GCP  *psGCP;
-
         psGCP = m_poDataset->GetGCPs() + cpt;
 
         OTB_GCP  pOtbGCP(psGCP);
@@ -601,7 +608,7 @@ namespace otb
 
     if( m_poDataset->GetGeoTransform( adfGeoTransform ) == CE_None )
     {
-      for(int cpt = 0 ; cpt < 6 ; cpt++ ) VadfGeoTransform.push_back(adfGeoTransform[cpt]);
+      for(int cpt = 0; cpt < 6; cpt++ ) VadfGeoTransform.push_back(adfGeoTransform[cpt]);
 
       itk::EncapsulateMetaData<VectorType>(dict, MetaDataKey::GeoTransformKey, VadfGeoTransform);
 
@@ -815,11 +822,11 @@ namespace otb
     CPLErr lCrGdal;
 
 
-    for (unsigned int nbComponents = 0 ; nbComponents < this->GetNumberOfComponents() ; nbComponents++)
+    for (unsigned int nbComponents = 0; nbComponents < this->GetNumberOfComponents(); nbComponents++)
     {
       cpt = static_cast<std::streamoff>(nbComponents)* static_cast<std::streamoff>(m_NbOctetPixel);
 
-      for ( std::streamoff i=0 ; i < lBufferSize ; i = i+static_cast<std::streamoff>(m_NbOctetPixel) )
+      for ( std::streamoff i=0; i < lBufferSize; i = i+static_cast<std::streamoff>(m_NbOctetPixel) )
       {
         memcpy((void*)(&(value[i])),(const void*)(&(p[cpt])),(size_t)(m_NbOctetPixel));
         cpt += step;
@@ -829,8 +836,8 @@ namespace otb
       otbMsgDevMacro( << "NbCol : " << lNbColumns << " NbLines : " << lNbLines);
       GDALRasterBand *poBand;
       poBand =  m_poBands[nbComponents]; //m_poDataset->GetRasterBand(nbComponents+1);
-//          lCrGdal = poBand->RasterIO(GF_Write,lFirstColumn,lFirstLine,lNbColumns, lNbLines, value , lNbColumns, lNbLines, m_PxType,0, 0 ) ;
-      lCrGdal = m_poBands[nbComponents]->RasterIO(GF_Write,lFirstColumn,lFirstLine,lNbColumns, lNbLines, value , lNbColumns, lNbLines, m_PxType,0, 0 ) ;
+//          lCrGdal = poBand->RasterIO(GF_Write,lFirstColumn,lFirstLine,lNbColumns, lNbLines, value , lNbColumns, lNbLines, m_PxType,0, 0 );
+      lCrGdal = m_poBands[nbComponents]->RasterIO(GF_Write,lFirstColumn,lFirstLine,lNbColumns, lNbLines, value , lNbColumns, lNbLines, m_PxType,0, 0 );
       if (lCrGdal == CE_Failure)
       {
         itkExceptionMacro(<< "Error while writing image (GDAL format) " << m_FileName.c_str()<<".");
@@ -931,7 +938,7 @@ namespace otb
 
     if(m_poDataset != NULL)
     {
-      delete m_poDataset;
+      GDALClose(m_poDataset);
       m_poDataset = NULL;
     }
     m_poDataset = m_hDriver->Create( realFileName.c_str(), m_Dimensions[0],m_Dimensions[1],m_NbBands,m_PxType, papszOptions );
@@ -947,7 +954,7 @@ namespace otb
     {
       itkExceptionMacro(<<"Memory allocation error for 'rasterBands'");
     }
-    for(int i=0 ; i<m_NbBands ; i++)
+    for(int i=0; i<m_NbBands; i++)
     {
       m_poBands[i] = m_poDataset->GetRasterBand(i+1);
     }

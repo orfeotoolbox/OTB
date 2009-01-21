@@ -38,7 +38,7 @@ int otbDEMHandlerTest(int argc, char * argv[])
   demHandler->OpenDEMDirectory(srtm_directory);
 
   typedef otb::UtmInverseProjection                      utmProjection;
-  typedef utmProjection::InputPointType	        InputPoint;
+  typedef utmProjection::InputPointType          InputPoint;
   InputPoint                                      geoPoint;
   geoPoint[0] = atof(argv[3]);//3.6999;
   geoPoint[1] = atof(argv[4]);//44.08;

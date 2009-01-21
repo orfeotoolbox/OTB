@@ -1243,7 +1243,7 @@ namespace itk
       FeatureType bestft;
       float bestdist = -1.0;
       float nextbestdist = -1.0;
-      unsigned int bestj;
+      unsigned int bestj = 0;
       for (unsigned int j = 0; j < numpoints1; ++j) {
 	PointType pp;
 	keypoints1->GetPoint(j, &pp);
@@ -1272,7 +1272,7 @@ namespace itk
       bestdist = -1.0;
       nextbestdist = -1.0;
       FeatureType bestft2;
-      unsigned int bestj2;
+      unsigned int bestj2 = 0;
 
       for (unsigned int j = 0; j < numpoints2; ++j) {
 	PointType pp;

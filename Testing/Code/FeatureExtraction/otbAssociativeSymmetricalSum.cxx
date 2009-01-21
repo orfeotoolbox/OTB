@@ -37,9 +37,9 @@ int otbAssociativeSymmetricalSum( int argc, char* argv[] )
   const char * outputFilename = argv[3];
 
 
-  typedef double		                                InputPixelType;
-  typedef double		   	                        OutputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef double                                    InputPixelType;
+  typedef double                                 OutputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
   typedef itk::Image< InputPixelType,  Dimension >        InputImageType1;
   typedef itk::Image< InputPixelType,  Dimension >        InputImageType2;

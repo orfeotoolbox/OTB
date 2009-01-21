@@ -71,15 +71,15 @@ int otbVectorizationPathListFilter(int argc, char * argv[])
     {
       file<<"Path "<<counter<<": ";
       for(VertexIteratorType vIt = pathListIt.Get()->GetVertexList()->Begin();
-	  vIt!=pathListIt.Get()->GetVertexList()->End();
-	  ++vIt)
-	{
-	  if(vIt!=pathListIt.Get()->GetVertexList()->Begin())
-	    {
-	      file<<", ";
-	    }
-	  file<<vIt.Value();
-	}
+    vIt!=pathListIt.Get()->GetVertexList()->End();
+    ++vIt)
+  {
+    if(vIt!=pathListIt.Get()->GetVertexList()->Begin())
+      {
+        file<<", ";
+      }
+    file<<vIt.Value();
+  }
       file<<std::endl;
       ++pathListIt;
       ++counter;

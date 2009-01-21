@@ -54,10 +54,10 @@ int otbVectorDataFileReader(int argc, char * argv[])
       itk::PreOrderTreeIterator<DataTreeType> itParent = it;
       bool goesOn = true;
       while(itParent.HasParent() && goesOn )
-	{
-	  fout<<indent;
-	  goesOn = itParent.GoToParent();
-	}
+  {
+    fout<<indent;
+    goesOn = itParent.GoToParent();
+  }
       fout<<"+"<<it.Get()->GetNodeTypeAsString()<<std::endl;
       ++it;
     }

@@ -34,8 +34,8 @@ int otbImageFileReaderRADInt(int argc, char* argv[])
   const char * outputFilename = argv[2];
 
   typedef int                          InputPixelType;
-  typedef int                 		OutputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef int                     OutputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
   typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
   typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;

@@ -56,7 +56,7 @@ HuImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
   //typename InputType::SizeType        ImageSize;
-  RealType                         HuValue;
+  RealType                         HuValue = 0.;
   ComplexType                      HuValueComplex;
 
   typedef otb::ComplexMomentImageFunction<InputType,ComplexType>   CMType;
@@ -88,7 +88,7 @@ HuImageFunction<TInput,TOutput,TPrecision,TCoordRep>
   function->SetP(1);
   function->SetQ(1);
   C11 = function->EvaluateAtIndex( index );
-        HuValue = C11.real() ;
+        HuValue = C11.real();
   }
   break;
     case 2:
@@ -101,7 +101,7 @@ HuImageFunction<TInput,TOutput,TPrecision,TCoordRep>
   function->SetQ(2);
   C02 = function->EvaluateAtIndex( index );
 
-  HuValue = vcl_abs( C20 * C02 ) ;
+  HuValue = vcl_abs( C20 * C02 );
 
   }
   break;
@@ -142,7 +142,7 @@ HuImageFunction<TInput,TOutput,TPrecision,TCoordRep>
   function->SetQ(2);
   C12 = function->EvaluateAtIndex( index );
 
-  HuValueComplex = C30 * vcl_pow(C12,3) ;
+  HuValueComplex = C30 * vcl_pow(C12,3);
   HuValue = HuValueComplex.real();
   }
   break;

@@ -30,10 +30,10 @@ int otbPathListToHistogramGenerator( int argc, char* argv[] )
 {
   unsigned int  NbOfBins((unsigned int)::atoi(argv[1]));
   unsigned int  NbOfPointsPerHistogram((unsigned int)::atoi(argv[2]));
-  const   unsigned int        	                       Dimension = 2;
+  const   unsigned int                                 Dimension = 2;
   typedef itk::PolyLineParametricPath< Dimension >       PathType;
   typedef PathType::Pointer                              PathPointer;
-  typedef std::vector< PathPointer >   		       PathListType;
+  typedef std::vector< PathPointer >              PathListType;
 
   typedef otb::OrientationPathFunction<PathType>         FunctionType;
 
@@ -83,10 +83,10 @@ int otbPathListToHistogramGenerator( int argc, char* argv[] )
   for( unsigned int bin=0; bin < histogramSize; bin++ )
     {
       if(histogram->GetFrequency( bin, 0 ) !=NbOfPointsPerHistogram)
-	{
-	  std::cout << "Error in histogram value !" << std::endl;
-	  return EXIT_FAILURE;
-	}
+  {
+    std::cout << "Error in histogram value !" << std::endl;
+    return EXIT_FAILURE;
+  }
       std::cout << "bin = " << bin << " frequency = ";
       std::cout << histogram->GetFrequency( bin, 0 ) << std::endl;
     }

@@ -31,7 +31,7 @@ int otbSVMModelLoad( int argc, char* argv[] )
 {
   typedef unsigned char                                   InputPixelType;
   typedef unsigned char                                   LabelPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  const   unsigned int                                  Dimension = 2;
 
   typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
 

@@ -75,8 +75,8 @@ HistogramStatisticsFunction< TInputHistogram, TOutput>
   typename TInputHistogram::ConstPointer histogram = m_InputHistogram;
 
 
-  typename TInputHistogram::ConstIterator iter = histogram->Begin() ;
-  typename TInputHistogram::ConstIterator end = histogram->End() ;
+  typename TInputHistogram::ConstIterator iter = histogram->Begin();
+  typename TInputHistogram::ConstIterator end = histogram->End();
 
   RealType entropy = itk::NumericTraits<RealType>::Zero;
   FrequencyType globalFrequency = histogram->GetTotalFrequency();
@@ -92,7 +92,7 @@ HistogramStatisticsFunction< TInputHistogram, TOutput>
       {
       entropy -=  Proba * vcl_log(Proba);
       }
-    ++iter ;
+    ++iter;
     }
   m_entropy.resize(1);
   m_entropy[0] = static_cast<TOutput>(entropy);

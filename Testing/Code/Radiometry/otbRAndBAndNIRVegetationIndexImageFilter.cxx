@@ -77,11 +77,11 @@ int otbRAndBAndNIRVegetationIndexImageFilter(int argc, char * argv[])
   argc--;
   argv++;
   if ( strArgv == "ARVI" ) return( generic_RAndBAndNIRVegetationIndexImageFilter<InputRImageType, InputBImageType, InputNIRImageType, OutputImageType,
-				   otb::Functor::ARVI<     InputRImageType::PixelType,
-				   InputBImageType::PixelType,
-				   InputNIRImageType::PixelType,
-				   OutputImageType::PixelType> >
-				   (argc,argv) );
+           otb::Functor::ARVI<     InputRImageType::PixelType,
+           InputBImageType::PixelType,
+           InputNIRImageType::PixelType,
+           OutputImageType::PixelType> >
+           (argc,argv) );
   else
     return EXIT_FAILURE;
   return EXIT_SUCCESS;

@@ -33,9 +33,9 @@ int otbImageMetadataFileWriterTest(int argc, char* argv[])
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
-  typedef unsigned char  	                                InputPixelType;
-  typedef unsigned char  	                                OutputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  typedef unsigned char                                    InputPixelType;
+  typedef unsigned char                                    OutputPixelType;
+  const   unsigned int                                  Dimension = 2;
 
   typedef otb::VectorImage< InputPixelType,  Dimension >        InputImageType;
   typedef otb::VectorImage< OutputPixelType, Dimension >        OutputImageType;

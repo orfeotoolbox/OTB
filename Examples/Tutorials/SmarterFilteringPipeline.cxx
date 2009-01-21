@@ -32,18 +32,18 @@
 // The derivative computation is performed by a
 // convolution with the derivative of a Gaussian kernel of
 // variance $\sigma_D$ (derivation scale) and
-// 		the smoothing of the image is performed by convolving with a
-// 		Gaussian kernel of variance $\sigma_I$ (integration
+//     the smoothing of the image is performed by convolving with a
+//     Gaussian kernel of variance $\sigma_I$ (integration
 // scale). This allows the computation of the following matrix:
 //
-// 	\[
-// 	\mu(\mathbf{x},\sigma_I,\sigma_D) = \sigma_D^2 g(\sigma_I)\star
-// 	\left[\begin{array}{cc} L_x^2(\mathbf{x},\sigma_D) &
-// 	L_xL_y^2(\mathbf{x},\sigma_D)\\ L_xL_y^2(\mathbf{x},\sigma_D)&
-// 	L_y^2(\mathbf{x},\sigma_D) \end{array}\right]
-// 	\]
+//   \[
+//   \mu(\mathbf{x},\sigma_I,\sigma_D) = \sigma_D^2 g(\sigma_I)\star
+//   \left[\begin{array}{cc} L_x^2(\mathbf{x},\sigma_D) &
+//   L_xL_y^2(\mathbf{x},\sigma_D)\\ L_xL_y^2(\mathbf{x},\sigma_D)&
+//   L_y^2(\mathbf{x},\sigma_D) \end{array}\right]
+//   \]
 //
-// 		The output of the detector is $\mathrm{det}(\mu) - \alpha
+//     The output of the detector is $\mathrm{det}(\mu) - \alpha
 // \mathrm{trace}^2(\mu)$.
 //
 // We want to set 3 parameters of this filter through the command line:

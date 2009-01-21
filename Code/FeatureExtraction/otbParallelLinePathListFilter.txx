@@ -261,7 +261,13 @@ ParallelLinePathListFilter<TPath>
   // the new coordinate system with line one (v1 and v2).
   // Compute the coordinates of the first and of the
   // second line in the new coordinate system.
-  VertexType tempv1, tempv2, tempv3, tempv4;
+  VertexType tempv1, tempv2 , tempv3, tempv4;
+  
+  //Initialization 
+  tempv1.Fill(0.);
+  tempv2.Fill(0.);
+  tempv3.Fill(0.);
+  tempv4.Fill(0.);
 
   if (v1[1] == v2[1])
   {

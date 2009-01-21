@@ -163,23 +163,23 @@ FillGapsFilter
   // Sort Points such as the radius of P2 and P3 is the smallest one.
   if(Rmin == R24 )
     {
-     xTemp = x3   ; yTemp = y3 ;
-     x3    = x4   ; y3    = y4;
+     xTemp = x3; yTemp = y3;
+     x3    = x4; y3    = y4;
        x4    = xTemp; y4    = yTemp;
     }
   if(Rmin == R13 )
     {
-     xTemp = x1   ; yTemp = y1 ;
-     x1    = x2   ; y1    = y2;
+     xTemp = x1; yTemp = y1;
+     x1    = x2; y1    = y2;
         x2    = xTemp; y2    = yTemp;
     }
   if(Rmin == R14 )
     {
-     xTemp = x3   ; yTemp = y3 ;
-     x3    = x4   ; y3    = y4;
+     xTemp = x3; yTemp = y3;
+     x3    = x4; y3    = y4;
      x4    = xTemp; y4    = yTemp;
-     xTemp = x1   ; yTemp = y1 ;
-     x1    = x2   ; y1    = y2;
+     xTemp = x1; yTemp = y1;
+     x1    = x2; y1    = y2;
      x2    = xTemp; y2    = yTemp;
     }
 

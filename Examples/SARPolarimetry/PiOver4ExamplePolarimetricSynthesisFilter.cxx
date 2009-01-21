@@ -49,7 +49,7 @@ int main( int argc, char* argv[] )
               <<" <input_filename_VH_channel>"
               <<" <input_filename_VV_channel>"
               <<" <output_filename>"
-	      << std::endl;
+        << std::endl;
 
     return EXIT_FAILURE;
     }
@@ -64,7 +64,7 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet
 
   typedef std::complex <double>                   InputPixelType;
-  typedef double    	                        OutputPixelType;
+  typedef double                              OutputPixelType;
   const   unsigned int                            Dimension = 2;
 
   typedef otb::Image< InputPixelType,  Dimension >  InputImageType;
