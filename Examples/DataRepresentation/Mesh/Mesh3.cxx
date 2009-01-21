@@ -178,7 +178,7 @@ int main(int, char *[])
   // Software Guide : BeginCodeSnippet
   for(unsigned int cellId=0; cellId<numberOfCells; cellId++)
     {
-    PixelType value;
+    PixelType value = itk::NumericTraits<PixelType>::Zero;
     mesh->GetCellData( cellId, &value );
     std::cout << "Cell " << cellId << " = " << value << std::endl;
     }
