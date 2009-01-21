@@ -134,7 +134,7 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
 template <class TInputImage,class TOutputImage, class TLabeledOutput, class TBufferConverter>
 typename  MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>::PolygonListType *
 MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
-::GetVectorizedClusterBoundariesOutput()const
+::GetVectorizedClusterBoundariesOutput()
 {
   if (this->GetNumberOfOutputs() < 5)
     {
@@ -408,7 +408,11 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
   for(LabelType label = 0; label < numRegions;++label)
     {
     PolygonPointerType newPolygon = PolygonType::New();
-    newPolygon->SetValue(modes[label]);
+    OutputPixelType pixel;
+    TBufferConverter::FloatArrayToPixel(modes,label*clusteredOutputPtr->GetNumberOfComponentsPerPixel(),
+					pixel,clusteredOutputPtr->GetNumberOfComponentsPerPixel(),invScale);
+
+    newPolygon->SetValue(pixel);
 
     regionIndeces = regionList->GetRegionIndeces(label);
     for(int  i = 0; i < regionList->GetRegionCount(label);++i)

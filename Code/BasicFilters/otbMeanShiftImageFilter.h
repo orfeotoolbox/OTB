@@ -137,7 +137,7 @@ namespace otb
       
       /** Typedefs for vectorized output */
       typedef otb::Polygon<InputPixelType>                 PolygonType;
-      typedef typename PolygonType                         PolygonPointerType;
+      typedef typename PolygonType::Pointer                PolygonPointerType;
       typedef otb::ObjectList<PolygonType>                 PolygonListType;
       typedef typename PolygonListType::Pointer            PolygonListPointerType;
 
@@ -164,7 +164,7 @@ namespace otb
       /** Return the cluster boundaries image output */
       LabeledOutputType * GetClusterBoundariesOutput();
       /** Return the const vectorized boundaries output */
-      const PolygonListType * GetVectorizationBoundariesOutput() const;
+      const PolygonListType * GetVectorizedClusterBoundariesOutput() const;
       /** Return the vectorized boundaries output */
       PolygonListType * GetVectorizedClusterBoundariesOutput();
 
