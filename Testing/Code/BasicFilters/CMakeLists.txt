@@ -1267,7 +1267,7 @@ ADD_EXECUTABLE(otbBasicFiltersTests2 otbBasicFiltersTests2.cxx ${BasicFilters_SR
 TARGET_LINK_LIBRARIES(otbBasicFiltersTests2  OTBBasicFilters  OTBIO )
 
 ADD_EXECUTABLE(otbBasicFiltersTests3 otbBasicFiltersTests3.cxx ${BasicFilters_SRCS3})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests3  OTBBasicFilters otbossim  OTBIO )
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests3  OTBBasicFilters  OTBIO )
 
 ADD_EXECUTABLE(otbBasicFiltersTests4 otbBasicFiltersTests4.cxx ${BasicFilters_SRCS4})
 TARGET_LINK_LIBRARIES(otbBasicFiltersTests4  OTBBasicFilters  OTBIO )
