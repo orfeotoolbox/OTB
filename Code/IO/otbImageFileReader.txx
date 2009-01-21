@@ -362,12 +362,12 @@ ImageFileReader<TOutputImage>
 
   if (!handler)
   {
-      otbMsgDebugMacro( <<"OSSIM Open Image FAILED ! ");
+      otbMsgDevMacro( <<"OSSIM Open Image FAILED ! ");
   }
 
   else
   {
-      otbMsgDebugMacro( <<"OSSIM Open Image SUCCESS ! ");
+      otbMsgDevMacro( <<"OSSIM Open Image SUCCESS ! ");
     ossimKeywordlist geom_kwl, tmp_kwl, tmp_kwl2;// = new ossimKeywordlist();
 
     // Read OSSIM Keyword List
