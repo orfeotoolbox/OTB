@@ -21,6 +21,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkImageToImageFilter.h"
 #include "itkVariableLengthVector.h"
 #include "otbImage.h"
+#include "otbObjectList.h"
+#include "otbPolygon.h"
 
 namespace otb
 {
@@ -132,6 +134,12 @@ namespace otb
       typedef TLabeledOutput                               LabeledOutputType;
       typedef typename LabeledOutputType::Pointer          LabeledOutputPointerType;
       typedef typename LabeledOutputType::PixelType        LabelType;
+      
+      /** Typedefs for vectorized output */
+      typedef otb::Polygon<InputPixelType>                 PolygonType;
+      typedef typename PolygonType                         PolygonPointerType;
+      typedef otb::ObjectList<PolygonType>                 PolygonListType;
+      typedef typename PolygonListType::Pointer            PolygonListPointerType;
 
       /** Setters / Getters */
       itkSetMacro(SpatialRadius,unsigned int);
@@ -143,17 +151,22 @@ namespace otb
       itkSetMacro(Scale,double);
       itkGetMacro(Scale,double);
 
-      /** Return the const output image direction */
+      /** Return the const clustered image output */
       const OutputImageType * GetClusteredOutput() const;
-      /** Return the output image direction */
+      /** Return the clustered image output */
       OutputImageType * GetClusteredOutput();
-
+      /** Return the const labeled clustered image output */
       const LabeledOutputType * GetLabeledClusteredOutput() const;
+      /** Return the labeled clustered image output */
       LabeledOutputType * GetLabeledClusteredOutput();
-
+      /** Return the const cluster boundaries image output */
       const LabeledOutputType * GetClusterBoundariesOutput() const;
-
+      /** Return the cluster boundaries image output */
       LabeledOutputType * GetClusterBoundariesOutput();
+      /** Return the const vectorized boundaries output */
+      const PolygonListType * GetVectorizationBoundariesOutput() const;
+      /** Return the vectorized boundaries output */
+      PolygonListType * GetVectorizedClusterBoundariesOutput();
 
       protected:
       /** This filters use a neighborhood around the pixel, so it needs to redfine the
