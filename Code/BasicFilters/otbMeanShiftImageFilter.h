@@ -163,7 +163,7 @@ namespace otb
       virtual void ThreadedGenerateData(const RegionType& outputRegionForThread,int threadId);
       /** After threaded generate data (handle the clustering part) */
       virtual void AfterThreadedGenerateData();
-      /** Allocate the outputs (need to be reimplemented since outputs have differents type */
+      /** Allocate the outputs (need to be reimplemented since outputs have differents type) */
       virtual void AllocateOutputs();
 
       /** Constructor */
