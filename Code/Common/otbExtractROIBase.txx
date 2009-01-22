@@ -139,11 +139,11 @@ ExtractROIBase<TInputImage,TOutputImage>
 
   if ( !inputPtr )
   {
-    itkExceptionMacro( << "Input image pointer NULL!");
+    return 0;
   }
   if ( !outputPtr )
   {
-    itkExceptionMacro( << "Output image pointer NULL!");
+    return 0;
   }
   InputImageRegionType requestedRegion = outputPtr->GetRequestedRegion();
   InputImageIndexType index = requestedRegion.GetIndex();
@@ -184,7 +184,7 @@ ExtractROIBase<TInputImage,TOutputImage>
   // Check if input exists or not before doing anything
   if(!inputPtr)
   {
-    itkExceptionMacro( << "Input image pointer NULL!");
+    return 0;
   }
 
   // Get the input image
@@ -222,11 +222,11 @@ ExtractROIBase<TInputImage,TOutputImage>
 
   if ( !inputPtr )
   {
-    itkExceptionMacro( << "Input image pointer NULL!");
+    return 0;
   }
   if ( !outputPtr )
   {
-    itkExceptionMacro( << "Output image pointer NULLd!");
+    return 0;
   }
 
   // Set the output image size to the same value as the extraction region.
