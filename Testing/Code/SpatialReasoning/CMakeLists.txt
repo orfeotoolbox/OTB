@@ -200,6 +200,25 @@ ADD_TEST(srTvMultiSegToRCC8GraphFilter2WithOpti ${SPATIALREASONING_TESTS2}
 			${INPUTDATA}/Seg5InputForRCC8Graph.tif
 )
 
+# -------        otb::PolygonListToRCC8GraphFilter   --------------------------
+
+ADD_TEST(srTuPolygonListToRCC8GraphFilterNew ${SPATIALREASONING_TESTS2} 
+         otbPolygonListToRCC8GraphFilterNew)
+
+
+	 
+ADD_TEST(srTvPolygonListToRCC8GraphFilter ${SPATIALREASONING_TESTS2} 
+	--compare-ascii ${TOL}
+		${BASELINE_FILES}/srTvPolygonListToRCC8GraphFilterOuptut.dot
+		${TEMP}/srTvPolygonListToRCC8GraphFilterOuptut.dot			  
+         otbPolygonListToRCC8GraphFilter
+	 4
+	 ${TEMP}/srTvPolygonListToRCC8GraphFilterOuptut.dot
+	 ${INPUTDATA}/rcc8_mire1.png
+	 ${INPUTDATA}/rcc8_mire2.png
+	 ${INPUTDATA}/rcc8_mire3.png
+	 ${INPUTDATA}/rcc8_mire4.png)
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbSPATIALREASONINGTests3 ~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -230,6 +249,8 @@ otbRCC8GraphIOEndToEnd.cxx
 otbImageListToRCC8GraphFilterNew.cxx
 otbImageMultiSegmentationToRCC8GraphFilterNew.cxx
 otbImageMultiSegmentationToRCC8GraphFilter.cxx
+otbPolygonListToRCC8GraphFilterNew.cxx
+otbPolygonListToRCC8GraphFilter.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

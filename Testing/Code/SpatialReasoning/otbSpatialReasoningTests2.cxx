@@ -35,4 +35,6 @@ REGISTER_TEST(otbRCC8GraphIOEndToEnd);
 REGISTER_TEST(otbImageListToRCC8GraphFilterNew);
 REGISTER_TEST(otbImageMultiSegmentationToRCC8GraphFilterNew);
 REGISTER_TEST(otbImageMultiSegmentationToRCC8GraphFilter);
+REGISTER_TEST(otbPolygonListToRCC8GraphFilterNew);
+REGISTER_TEST(otbPolygonListToRCC8GraphFilter);
 }
