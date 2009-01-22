@@ -72,6 +72,17 @@ elseif(MSVC)
   endif()
 endif()
 
+IF(CMAKE_COMPILER_IS_GNUCXX)
+      SET_SOURCE_FILES_PROPERTIES(libsiftfast.cpp PROPERTIES COMPILE_FLAGS -w)
+ELSE(CMAKE_COMPILER_IS_GNUCXX)
+  IF(WIN32)
+    IF (CMAKE_CXX_COMPILER MATCHES "^cl$")
+        SET_SOURCE_FILES_PROPERTIES( libsiftfast.cpp PROPERTIES COMPILE_FLAGS "/W0" )
+    ENDIF (CMAKE_CXX_COMPILER MATCHES "^cl$")
+  ENDIF(WIN32)
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+#-fstrict-aliasing
+
 add_library(otbsiftfast libsiftfast.cpp)
 
 # check for OpenMP
