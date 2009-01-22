@@ -10,6 +10,7 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 SET(TOL 0.0)
 SET(EPSILON 0.000000000001)
 SET(EPSILON_10e6 0.000001)
+SET(EPSILON_10e10 0.0000000001)
 SET(RADIOMETRY_TESTS1 ${CXX_TEST_PATH}/otbRadiometryTests1)
 SET(RADIOMETRY_TESTS2 ${CXX_TEST_PATH}/otbRadiometryTests2)
 SET(RADIOMETRY_TESTS3 ${CXX_TEST_PATH}/otbRadiometryTests3)
@@ -456,7 +457,7 @@ ADD_TEST(raTvAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms ${RADI
 )
 
 ADD_TEST(raTvAtmosphericCorrectionSequencementTest ${RADIOMETRY_TESTS4}  
-        --compare-image ${TOL}  
+        --compare-image ${EPSILON_10e10}  
 		${BASELINE}/raTvRomaniaAtmosphericCorrectionSequencement.tif
                 ${TEMP}/raTvRomaniaAtmosphericCorrectionSequencement.tif
         otbAtmosphericCorrectionSequencementTest
