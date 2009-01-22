@@ -56,8 +56,8 @@ FlusserImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
 
-  RealType                            FlusserValue = 0.;
-  ComplexType                         FlusserValueComplex;
+  RealType                            FlusserValue(itk::NumericTraits<RealType>::Zero);
+  ComplexType                         FlusserValueComplex(itk::NumericTraits<ComplexType>::Zero);
 
   typedef otb::ComplexMomentImageFunction<InputType,ComplexType>   CMType;
   typename CMType::Pointer function =CMType::New();

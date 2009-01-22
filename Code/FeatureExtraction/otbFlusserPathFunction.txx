@@ -57,8 +57,8 @@ FlusserPathFunction<TInputPath, TOutput, TPrecision >
   typedef ComplexMomentPathFunction<PathType>     FunctionType;
   typedef typename FunctionType::ComplexType      ComplexType;
 
-  RealType                            FlusserValue;
-  ComplexType                         FlusserValueComplex;
+  RealType                            FlusserValue(itk::NumericTraits<RealType>::Zero);
+  ComplexType                         FlusserValueComplex(itk::NumericTraits<ComplexType>::Zero);
 
   typename FunctionType::Pointer function =FunctionType::New();
 
