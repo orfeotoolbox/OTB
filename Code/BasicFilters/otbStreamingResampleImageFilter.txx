@@ -139,8 +139,8 @@ namespace otb {
       InputImageRegionType region;
       index[0] = static_cast<long int>(minX);
       index[1] = static_cast<long int>(minY);
-      size[0] = static_cast<long unsigned int>(maxX - minX);
-      size[1] = static_cast<long unsigned int>(maxY - minY);
+      size[0] = static_cast<long unsigned int>(vcl_ceil(maxX) - vcl_floor(minX));
+      size[1] = static_cast<long unsigned int>(vcl_ceil(maxY) - vcl_floor(minY));
 
       otbMsgDevMacro(<< "Index : (" << index[0] << "," << index[1] << ") Size : (" << size[0] << "," << size[1] << ")");
 
@@ -173,6 +173,7 @@ namespace otb {
         size[1]=0;
         region.SetIndex(index);
         region.SetSize(size);
+        itkExceptionMacro( << "Requested region not inside the largest possible region !");
       }
 
       inputImage->SetRequestedRegion(region);
