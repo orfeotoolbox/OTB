@@ -118,7 +118,7 @@ protected:
    
    void loadGeometry(FILE*);
    void loadSupportData();
-   void computeSatToOrbRotation(ossim_float64 t)const;
+   NEWMAT::Matrix computeSatToOrbRotation(ossim_float64 t)const;
 
 /*    virtual ossimDpt extrapolate (const ossimGpt& gp) const; */
 /*    virtual ossimGpt extrapolate (const ossimDpt& ip, */
@@ -140,8 +140,6 @@ protected:
    
    ossim_float64  theLineSamplingPeriod;
    ossimDpt       theSpotSubImageOffset;
-   mutable NEWMAT::Matrix theSatToOrbRotation;
-   mutable NEWMAT::Matrix theOrbToEcfRotation;
 
    //---
    // Adjustable parameters:

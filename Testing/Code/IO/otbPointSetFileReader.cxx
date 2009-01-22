@@ -18,6 +18,7 @@
 
 #include "otbPointSetFileReader.h"
 #include "itkPointSet.h"
+#include "itkNumericTraits.h"
 #include <fstream>
 
 int otbPointSetFileReader(int argc, char * argv[])
@@ -41,7 +42,7 @@ int otbPointSetFileReader(int argc, char * argv[])
     PointSetType::PointType point;
     data->GetPoint(i,&point);
     fout << point << " : ";
-    PointSetType::PixelType value;
+    PointSetType::PixelType value(itk::NumericTraits<PointSetType::PixelType>::Zero);
     data->GetPointData(i,&value);
     fout << value << std::endl;
   }

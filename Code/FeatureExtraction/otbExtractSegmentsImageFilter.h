@@ -24,6 +24,7 @@
 #include "otbLocalHoughFilter.h"
 #include "otbFillGapsFilter.h"
 #include "otbDrawLineSpatialObjectListFilter.h"
+#include "itkRescaleIntensityImageFilter.h"
 
 #include "otbLineSpatialObjectList.h"
 
@@ -137,7 +138,7 @@ protected:
   typedef LocalHoughFilter< InputImageType >            LocalHoughType;
   typedef FillGapsFilter                FillGapsType;
   typedef DrawLineSpatialObjectListFilter< InputImageType, OutputImageType >     DrawLineListType;
-
+  typedef  itk::RescaleIntensityImageFilter<TInputImage , TInputImage> RescaleType;
   virtual void GenerateData();
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
@@ -151,6 +152,7 @@ private:
   typename LocalHoughType::Pointer    m_LocalHough;
   typename FillGapsType::Pointer    m_FillGaps;
   typename DrawLineListType::Pointer    m_DrawLineList;
+  typename RescaleType::Pointer m_Rescaler;
 };
 } // end namespace otb
 

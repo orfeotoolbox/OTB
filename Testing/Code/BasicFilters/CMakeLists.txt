@@ -25,12 +25,13 @@ SET(BASICFILTERS_TESTS7 ${CXX_TEST_PATH}/otbBasicFiltersTests7)
 SET(BASICFILTERS_TESTS8 ${CXX_TEST_PATH}/otbBasicFiltersTests8)
 SET(BASICFILTERS_TESTS9 ${CXX_TEST_PATH}/otbBasicFiltersTests9)
 SET(BASICFILTERS_TESTS10 ${CXX_TEST_PATH}/otbBasicFiltersTests10)
+SET(BASICFILTERS_TESTS11 ${CXX_TEST_PATH}/otbBasicFiltersTests11)
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests1 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ADD_TEST(bfTvFiltreLee1CanalPoupees ${BASICFILTERS_TESTS1}  
+ADD_TEST(bfTvFiltreLee1CanalPoupees ${BASICFILTERS_TESTS1}
   --compare-image ${EPSILON}  ${BASELINE}/bfFiltreLee_05_05_04.tif
                           ${TEMP}/bfFiltreLee_05_05_04.tif
         otbLeeFilter
@@ -38,9 +39,9 @@ ADD_TEST(bfTvFiltreLee1CanalPoupees ${BASICFILTERS_TESTS1}
 	${TEMP}/bfFiltreLee_05_05_04.tif
 	05 05 4.0)
 
-ADD_TEST(bfTvFiltreLee ${BASICFILTERS_TESTS1}  
+ADD_TEST(bfTvFiltreLee ${BASICFILTERS_TESTS1}
   --compare-image ${EPSILON}  ${BASELINE}/bfFiltreLee_05_05_12.tif
-                           ${TEMP}/bfFiltreLee_05_05_12.tif  
+                           ${TEMP}/bfFiltreLee_05_05_12.tif
         otbLeeFilter
 	${INPUTDATA}/poupees.hdr
 	${TEMP}/bfFiltreLee_05_05_12.tif
@@ -49,8 +50,8 @@ ADD_TEST(bfTvFiltreLee ${BASICFILTERS_TESTS1}
 #
 # Filtre de FROST:
 #
-	
-ADD_TEST(bfTvFiltreFrost ${BASICFILTERS_TESTS1}  
+
+ADD_TEST(bfTvFiltreFrost ${BASICFILTERS_TESTS1}
   --compare-image ${EPSILON}  ${BASELINE}/bfFiltreFrost_poupees_05_05_01.tif
                           ${TEMP}/bfFiltreFrost_poupees_05_05_01.tif
         otbFrostFilter
@@ -60,12 +61,12 @@ ADD_TEST(bfTvFiltreFrost ${BASICFILTERS_TESTS1}
 
 # -------            otb::PointSetSource   ------------------------------
 
-ADD_TEST(bfTuImageToPointSetFilterTest ${BASICFILTERS_TESTS1} 
-         otbImageToPointSetFilterTest)  
+ADD_TEST(bfTuImageToPointSetFilterTest ${BASICFILTERS_TESTS1}
+         otbImageToPointSetFilterTest)
 
 # -------            otb::OpeningClosingMorphologicalFilter   ------------------------------
 
-ADD_TEST(bfTuOpeningClosingFilterNew ${BASICFILTERS_TESTS1}  
+ADD_TEST(bfTuOpeningClosingFilterNew ${BASICFILTERS_TESTS1}
         otbOpeningClosingMorphologicalFilterNew )
 
 ADD_TEST(bfTvOpeningClosingFilter ${BASICFILTERS_TESTS1}
@@ -78,7 +79,7 @@ ADD_TEST(bfTvOpeningClosingFilter ${BASICFILTERS_TESTS1}
 
 # -------            otb::ClosingOpeningMorphologicalFilter   ------------------------------
 
-ADD_TEST(bfTuClosingOpeningFilterNew ${BASICFILTERS_TESTS1}  
+ADD_TEST(bfTuClosingOpeningFilterNew ${BASICFILTERS_TESTS1}
         otbClosingOpeningMorphologicalFilterNew )
 
 ADD_TEST(bfTvClosingOpeningFilter ${BASICFILTERS_TESTS1}
@@ -92,7 +93,7 @@ ADD_TEST(bfTvClosingOpeningFilter ${BASICFILTERS_TESTS1}
 
 # -------            otb::BinaryImageMinimalBoundingRegionCalculator   ----------------------------
 
-ADD_TEST(bfTuBoundingRegionCalculatorNew ${BASICFILTERS_TESTS1}  
+ADD_TEST(bfTuBoundingRegionCalculatorNew ${BASICFILTERS_TESTS1}
          otbBinaryImageMinimalBoundingRegionCalculatorNew)
 
 
@@ -110,13 +111,13 @@ ADD_TEST(bfTvBoundingRegionCalculator ${BASICFILTERS_TESTS1}
 	${INPUTDATA}/rcc8_mire4.png
 	)
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests2 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # -------            otb::LogPolarTransform   ----------------------------
 
-ADD_TEST(bfTuLogPolarTransformNew ${BASICFILTERS_TESTS2}  
+ADD_TEST(bfTuLogPolarTransformNew ${BASICFILTERS_TESTS2}
          otbLogPolarTransformNew)
 
 ADD_TEST(bfTvLogPolarTransform ${BASICFILTERS_TESTS2}
@@ -124,12 +125,12 @@ ADD_TEST(bfTvLogPolarTransform ${BASICFILTERS_TESTS2}
  		   ${BASELINE_FILES}/bfLogPolarTransformResults.txt
  		   ${TEMP}/bfLogPolarTransformResults.txt
         otbLogPolarTransform
-	1 1 
+	1 1
 	${TEMP}/bfLogPolarTransformResults.txt
 	5 0 0 0 10 45 0 3.14 3.14 18 1
 	)
 
-ADD_TEST(bfTvLogPolarTransformResample ${BASICFILTERS_TESTS2}  
+ADD_TEST(bfTvLogPolarTransformResample ${BASICFILTERS_TESTS2}
   --compare-image ${EPSILON}  ${BASELINE}/bfLogPolarTransformResampleOutput.hdr
                           ${TEMP}/bfLogPolarTransformResampleOutput.hdr
         otbLogPolarTransformResample
@@ -140,7 +141,7 @@ ADD_TEST(bfTvLogPolarTransformResample ${BASICFILTERS_TESTS2}
 
 # -------            otb::InverseLogPolarTransform   ----------------------------
 
-ADD_TEST(bfTuInverseLogPolarTransformNew ${BASICFILTERS_TESTS2}  
+ADD_TEST(bfTuInverseLogPolarTransformNew ${BASICFILTERS_TESTS2}
          otbInverseLogPolarTransformNew)
 
 ADD_TEST(bfTvInverseLogPolarTransform ${BASICFILTERS_TESTS2}
@@ -148,12 +149,12 @@ ADD_TEST(bfTvInverseLogPolarTransform ${BASICFILTERS_TESTS2}
 		     ${BASELINE_FILES}/bfInverseLogPolarTransformResults.txt
 		     ${TEMP}/bfInverseLogPolarTransformResults.txt
         otbInverseLogPolarTransform
-	1. 1. 
-	${TEMP}/bfInverseLogPolarTransformResults.txt	
+	1. 1.
+	${TEMP}/bfInverseLogPolarTransformResults.txt
 	6 0 0 10 20 45 60 3.14 3.14 1 0 0 1
 	)
 
-ADD_TEST(bfTvInverseLogPolarTransformResample ${BASICFILTERS_TESTS2}  
+ADD_TEST(bfTvInverseLogPolarTransformResample ${BASICFILTERS_TESTS2}
 --compare-image ${TOL}  ${BASELINE}/bfInverseLogPolarTransformResampleOutput.hdr
                           ${TEMP}/bfInverseLogPolarTransformResampleOutput.hdr
         otbInverseLogPolarTransformResample
@@ -163,12 +164,12 @@ ADD_TEST(bfTvInverseLogPolarTransformResample ${BASICFILTERS_TESTS2}
 
 # -------            otb::StreamingShrinkImageFilter   ----------------------------
 
-  ADD_TEST(bfTuStreamingShrinkImageFilterNew ${BASICFILTERS_TESTS2}  
+  ADD_TEST(bfTuStreamingShrinkImageFilterNew ${BASICFILTERS_TESTS2}
          otbStreamingShrinkImageFilterNew)
 
 IF(OTB_DATA_USE_LARGEINPUT)
 
- ADD_TEST(bfTvStreamingShrinkImageFilterQBPAN ${BASICFILTERS_TESTS2}  
+ ADD_TEST(bfTvStreamingShrinkImageFilterQBPAN ${BASICFILTERS_TESTS2}
 --compare-image ${TOL}
 		${BASELINE}/bfTvStreamingShrinkImageFilterQBPANOutput.hdr
 		${TEMP}/bfTvStreamingShrinkImageFilterQBPANOutput.hdr
@@ -177,8 +178,8 @@ IF(OTB_DATA_USE_LARGEINPUT)
 	${TEMP}/bfTvStreamingShrinkImageFilterQBPANOutput.hdr
 	50
 )
-	
-ADD_TEST(bfTvStreamingShrinkImageFilterQBMUL ${BASICFILTERS_TESTS2}  
+
+ADD_TEST(bfTvStreamingShrinkImageFilterQBMUL ${BASICFILTERS_TESTS2}
 --compare-image ${TOL}
 		${BASELINE}/bfTvStreamingShrinkImageFilterQBMULOutput.hdr
 		${TEMP}/bfTvStreamingShrinkImageFilterQBMULOutput.hdr
@@ -191,11 +192,11 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # -------            otb::SpatialObjectToImageDrawingFilter   ----------------------------
 
-  ADD_TEST(bfTuSpatialObjectToImageDrawingFilterNew ${BASICFILTERS_TESTS2}  
+  ADD_TEST(bfTuSpatialObjectToImageDrawingFilterNew ${BASICFILTERS_TESTS2}
          otbSpatialObjectToImageDrawingFilterNew)
 
 
- ADD_TEST(bfTvSpatialObjectToImageDrawingFilterWithoutInputImage ${BASICFILTERS_TESTS2}  
+ ADD_TEST(bfTvSpatialObjectToImageDrawingFilterWithoutInputImage ${BASICFILTERS_TESTS2}
  --compare-image ${TOL}
 		${BASELINE}/bfTvSpatialObjectDrawingNoInput.png
 		${TEMP}/bfTvSpatialObjectDrawingNoInput.png
@@ -205,18 +206,18 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 	50
 )
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests3 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 # -------            otb::ImportGeoInformationImageFilter   ----------------------------
 
-  ADD_TEST(bfTuImportGeoInformationImageFilterNew ${BASICFILTERS_TESTS3}  
+  ADD_TEST(bfTuImportGeoInformationImageFilterNew ${BASICFILTERS_TESTS3}
          otbImportGeoInformationImageFilterNew)
 
 
- ADD_TEST(bfTvImportGeoInformationImageFilter ${BASICFILTERS_TESTS3}  
+ ADD_TEST(bfTvImportGeoInformationImageFilter ${BASICFILTERS_TESTS3}
  --compare-metadata ${TOL}
 		    ${INPUTDATA}/HFAGeoreferenced.img
 		    ${TEMP}/bfTvImportGeoInformationOutput.img
@@ -227,7 +228,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
 IF(OTB_DATA_USE_LARGEINPUT)
- ADD_TEST(bfTvImportGeoInformationImageFilterWithKeywordList ${BASICFILTERS_TESTS3}  
+ ADD_TEST(bfTvImportGeoInformationImageFilterWithKeywordList ${BASICFILTERS_TESTS3}
 --compare-ascii ${EPSILON}
 		${BASELINE_FILES}/ioOSSIMImageQuickbirdMetaDataReader.txt
                 ${TEMP}/bfTvImportGeoInformationKeywordListOutput.txt
@@ -239,11 +240,11 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # -------            otb::SpectralAngleDistanceImageFilter   ----------------------------
 
-  ADD_TEST(bfTuSpectralAngleDistanceImageFilterNew ${BASICFILTERS_TESTS3}  
+  ADD_TEST(bfTuSpectralAngleDistanceImageFilterNew ${BASICFILTERS_TESTS3}
          otbSpectralAngleDistanceImageFilterNew)
 
 
- ADD_TEST(bfTvSpectralAngleDistanceImageFilter ${BASICFILTERS_TESTS3} 
+ ADD_TEST(bfTvSpectralAngleDistanceImageFilter ${BASICFILTERS_TESTS3}
 		--compare-image ${EPSILON}
 		    ${BASELINE}/bfTvSpectralAngleDistanceOutput.hdr
 		    ${TEMP}/bfTvSpectralAngleDistanceOutput.hdr
@@ -253,7 +254,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 		    337 557 432 859
 )
 
- ADD_TEST(bfTvSpectralAngleDistanceImageFilterOneChannel ${BASICFILTERS_TESTS3} 
+ ADD_TEST(bfTvSpectralAngleDistanceImageFilterOneChannel ${BASICFILTERS_TESTS3}
 		    otbSpectralAngleDistanceImageFilter
 		    ${INPUTDATA}/DeuxCercles.hdr
 	            ${TEMP}/bfTvSpectralAngleDistanceOneChannelOutput.hdr
@@ -264,11 +265,11 @@ SET_TESTS_PROPERTIES(bfTvSpectralAngleDistanceImageFilterOneChannel PROPERTIES W
 
 # -------            otb::VectorRescaleIntensityImageFilter   ----------------------------
 
-ADD_TEST(bfTuVectorRescaleIntensityImageFilterNew ${BASICFILTERS_TESTS3}  
+ADD_TEST(bfTuVectorRescaleIntensityImageFilterNew ${BASICFILTERS_TESTS3}
          otbVectorRescaleIntensityImageFilterNew)
 
 
-ADD_TEST(bfTVectorRescaleIntensityImageFilter ${BASICFILTERS_TESTS3} 
+ADD_TEST(bfTVectorRescaleIntensityImageFilter ${BASICFILTERS_TESTS3}
 		--compare-image ${EPSILON}
 		    ${BASELINE}/bfTvVectorRescaleIntensityOutput.png
 		    ${TEMP}/bfTvVectorRescaleIntensityOutput.png
@@ -280,11 +281,11 @@ ADD_TEST(bfTVectorRescaleIntensityImageFilter ${BASICFILTERS_TESTS3}
 
 # -------            otb::VectorImageToImageListFilter   ----------------------------
 
-ADD_TEST(bfTuVectorImageToImageListFilterNew ${BASICFILTERS_TESTS3}  
+ADD_TEST(bfTuVectorImageToImageListFilterNew ${BASICFILTERS_TESTS3}
          otbVectorImageToImageListFilterNew)
 
 
-ADD_TEST(bfTvVectorImageToImageListFilter ${BASICFILTERS_TESTS3} 
+ADD_TEST(bfTvVectorImageToImageListFilter ${BASICFILTERS_TESTS3}
 		--compare-n-images ${EPSILON} 3
 		    ${BASELINE}/bfTvVectorImageToImageListFilterBand1.png
 		    ${TEMP}/bfTvVectorImageToImageListFilterBand1.png
@@ -302,12 +303,12 @@ ADD_TEST(bfTvVectorImageToImageListFilter ${BASICFILTERS_TESTS3}
 
 # -------            otb::ImageListToVectorImageFilter   ----------------------------
 
-ADD_TEST(bfTuImageListToVectorImageFilterNew ${BASICFILTERS_TESTS3}  
+ADD_TEST(bfTuImageListToVectorImageFilterNew ${BASICFILTERS_TESTS3}
          otbImageListToVectorImageFilterNew)
 
 
-ADD_TEST(bfTvImageListToVectorImageFilter ${BASICFILTERS_TESTS3} 
-		--compare-image ${EPSILON} 
+ADD_TEST(bfTvImageListToVectorImageFilter ${BASICFILTERS_TESTS3}
+		--compare-image ${EPSILON}
 		    ${BASELINE}/bfTvImageListToVectorImageFilter.png
 		    ${TEMP}/bfTvImageListToVectorImageFilter.png
 		    otbImageListToVectorImageFilter
@@ -318,18 +319,18 @@ ADD_TEST(bfTvImageListToVectorImageFilter ${BASICFILTERS_TESTS3}
 )
 
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests4 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 # -------            otb::ImageListToImageListApplyFilter   ----------------------------
 
-ADD_TEST(bfTuImageListToImageListApplyFilterNew ${BASICFILTERS_TESTS4}  
+ADD_TEST(bfTuImageListToImageListApplyFilterNew ${BASICFILTERS_TESTS4}
          otbImageListToImageListApplyFilterNew)
 
 
-ADD_TEST(bfTvImageListToImageListApplyFilter ${BASICFILTERS_TESTS4} 
+ADD_TEST(bfTvImageListToImageListApplyFilter ${BASICFILTERS_TESTS4}
 		--compare-n-images ${EPSILON} 3
 		    ${BASELINE}/bfTvImageListToImageListApplyFilterBand1.png
 		    ${TEMP}/bfTvImageListToImageListApplyFilterBand1.png
@@ -348,13 +349,13 @@ ADD_TEST(bfTvImageListToImageListApplyFilter ${BASICFILTERS_TESTS4}
 
 # -------            otb::PerBandVectorImageFilter   ----------------------------
 
-ADD_TEST(bfTuPerBandVectorImageFilterNew ${BASICFILTERS_TESTS4}  
+ADD_TEST(bfTuPerBandVectorImageFilterNew ${BASICFILTERS_TESTS4}
          otbPerBandVectorImageFilterNew)
 
 ADD_TEST(bfTvPerBandVectorImageFilterWithMeanFilter ${BASICFILTERS_TESTS4}
 	--compare-image ${EPSILON}
 			${BASELINE}/bfTvPerBandVectorImageFilterWithMeanFilterOutput.hdr
-			${TEMP}/bfTvPerBandVectorImageFilterWithMeanFilterOutput.hdr			
+			${TEMP}/bfTvPerBandVectorImageFilterWithMeanFilterOutput.hdr
 	otbPerBandVectorImageFilterWithMeanFilter
 			${INPUTDATA}/poupees.png
 			${TEMP}/bfTvPerBandVectorImageFilterWithMeanFilterOutput.hdr
@@ -363,7 +364,7 @@ ADD_TEST(bfTvPerBandVectorImageFilterWithMeanFilter ${BASICFILTERS_TESTS4}
 ADD_TEST(bfTvPerBandVectorImageFilterWithSobelFilter ${BASICFILTERS_TESTS4}
 	--compare-image ${EPSILON}
 			${BASELINE}/bfTvPerBandVectorImageFilterWithSobelFilterOutput.hdr
-			${TEMP}/bfTvPerBandVectorImageFilterWithSobelFilterOutput.hdr			
+			${TEMP}/bfTvPerBandVectorImageFilterWithSobelFilterOutput.hdr
 	otbPerBandVectorImageFilterWithSobelFilter
 			${INPUTDATA}/poupees.png
 			${TEMP}/bfTvPerBandVectorImageFilterWithSobelFilterOutput.hdr
@@ -372,10 +373,10 @@ ADD_TEST(bfTvPerBandVectorImageFilterWithSobelFilter ${BASICFILTERS_TESTS4}
 
 # -------            otb::StreamingStatisticsImageFilter   ----------------------------
 
-ADD_TEST(bfTuStreamingStatisticsImageFilterNew ${BASICFILTERS_TESTS4}  
+ADD_TEST(bfTuStreamingStatisticsImageFilterNew ${BASICFILTERS_TESTS4}
          otbStreamingStatisticsImageFilterNew)
 
-ADD_TEST(bfTvStreamingStatisticsImageFilter ${BASICFILTERS_TESTS4}  
+ADD_TEST(bfTvStreamingStatisticsImageFilter ${BASICFILTERS_TESTS4}
 	--compare-ascii ${TOL}
  		   ${BASELINE_FILES}/bfStreamingStatisticsImageFilterResults.txt
  		   ${TEMP}/bfStreamingStatisticsImageFilterResults.txt
@@ -386,10 +387,10 @@ ADD_TEST(bfTvStreamingStatisticsImageFilter ${BASICFILTERS_TESTS4}
 
 # -------            otb::VectorImageTo3DScalarImageFilter   ----------------------------
 
-ADD_TEST(bfTuVectorImageTo3DScalarImageFilterNew ${BASICFILTERS_TESTS4}  
+ADD_TEST(bfTuVectorImageTo3DScalarImageFilterNew ${BASICFILTERS_TESTS4}
          otbVectorImageTo3DScalarImageFilterNew)
 
-ADD_TEST(bfTvVectorImageTo3DScalarImageFilter ${BASICFILTERS_TESTS4}  
+ADD_TEST(bfTvVectorImageTo3DScalarImageFilter ${BASICFILTERS_TESTS4}
 	--compare-image ${TOL}
  		   ${BASELINE}/bfTvVectorImageTo3DScalarImageFilterOutput.png
  		   ${TEMP}/bfTvVectorImageTo3DScalarImageFilterOutput.png
@@ -398,25 +399,25 @@ ADD_TEST(bfTvVectorImageTo3DScalarImageFilter ${BASICFILTERS_TESTS4}
 		${TEMP}/bfTvVectorImageTo3DScalarImageFilterOutput.png
 )
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests5 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # -------            otb::StreamingResampleImageFilter   ----------------------------
 
-ADD_TEST(bfTuStreamingResampleImageFilterNew ${BASICFILTERS_TESTS5}  
+ADD_TEST(bfTuStreamingResampleImageFilterNew ${BASICFILTERS_TESTS5}
          otbStreamingResampleImageFilterNew)
-				 
-ADD_TEST(bfTvStreamingResampleImageFilter ${BASICFILTERS_TESTS5}  
+
+ADD_TEST(bfTvStreamingResampleImageFilter ${BASICFILTERS_TESTS5}
 				otbStreamingResampleImageFilter
 				${INPUTDATA}/poupees.tif
 				${TEMP}/bfTvStreamingResamplePoupeesTest.tif
 )
 
-ADD_TEST(bfTvStreamingResampleImageFilterCompareWithITK ${BASICFILTERS_TESTS5}  
+ADD_TEST(bfTvStreamingResampleImageFilterCompareWithITK ${BASICFILTERS_TESTS5}
 		--compare-image ${TOL}
 					${TEMP}/bfTvStreamingResamplePoupeesTestITK.tif
-					${TEMP}/bfTvStreamingResamplePoupeesTestOTB.tif		
+					${TEMP}/bfTvStreamingResamplePoupeesTestOTB.tif
 				otbStreamingResampleImageFilterCompareWithITK
 					${INPUTDATA}/poupees.tif
 					3000 3000
@@ -424,10 +425,10 @@ ADD_TEST(bfTvStreamingResampleImageFilterCompareWithITK ${BASICFILTERS_TESTS5}
 					${TEMP}/bfTvStreamingResamplePoupeesTestOTB.tif
 )
 
-#ADD_TEST(StreamingResampleImageFilterCompareWithITK ${BASICFILTERS_TESTS5}  
+#ADD_TEST(StreamingResampleImageFilterCompareWithITK ${BASICFILTERS_TESTS5}
 #		--compare-image ${TOL}
 #					${TEMP}/bfTvStreamingResampleSPOT5TestITK.tif
-#					${TEMP}/bfTvStreamingResampleSPOT5TestOTB.tif		
+#					${TEMP}/bfTvStreamingResampleSPOT5TestOTB.tif
 #				otbStreamingResampleImageFilterCompareWithITK
 #					${INPUTDATA}/spot5SubWithGcps.tif
 #					1100 1100
@@ -439,10 +440,10 @@ ADD_TEST(bfTvStreamingResampleImageFilterCompareWithITK ${BASICFILTERS_TESTS5}
 
 # -------            otb::StreamingStatisticsVectorImageFilter   ----------------------------
 
-ADD_TEST(bfTuStreamingStatisticsVectorImageFilterNew ${BASICFILTERS_TESTS5}  
+ADD_TEST(bfTuStreamingStatisticsVectorImageFilterNew ${BASICFILTERS_TESTS5}
          otbStreamingStatisticsVectorImageFilterNew)
 
-ADD_TEST(bfTvStreamingStatisticsVectorImageFilter ${BASICFILTERS_TESTS5}  
+ADD_TEST(bfTvStreamingStatisticsVectorImageFilter ${BASICFILTERS_TESTS5}
 	--compare-ascii ${TOL}
  		   ${BASELINE_FILES}/bfTvStreamingStatisticsVectorImageFilterResults.txt
  		   ${TEMP}/bfTvStreamingStatisticsVectorImageFilterResults.txt
@@ -451,14 +452,14 @@ ADD_TEST(bfTvStreamingStatisticsVectorImageFilter ${BASICFILTERS_TESTS5}
 		${INPUTDATA}/sbuv.png
 		${TEMP}/bfTvStreamingStatisticsVectorImageFilterResults.txt
 		)
-		
+
 
 # -------            otb::MatrixTransposeMatrixImageFilter   ----------------------------
 
-ADD_TEST(bfTuMatrixTransposeMatrixImageFilterNew ${BASICFILTERS_TESTS5}  
+ADD_TEST(bfTuMatrixTransposeMatrixImageFilterNew ${BASICFILTERS_TESTS5}
          otbMatrixTransposeMatrixImageFilterNew)
 
-ADD_TEST(bfTvMatrixTransposeMatrixImageFilter ${BASICFILTERS_TESTS5}  
+ADD_TEST(bfTvMatrixTransposeMatrixImageFilter ${BASICFILTERS_TESTS5}
 	--compare-ascii ${TOL}
  		   ${BASELINE_FILES}/bfTvMatrixTransposeMatrixImageFilterResults.txt
  		   ${TEMP}/bfTvMatrixTransposeMatrixImageFilterResults.txt
@@ -471,10 +472,10 @@ ADD_TEST(bfTvMatrixTransposeMatrixImageFilter ${BASICFILTERS_TESTS5}
 
 # -------            otb::UnaryImageFunctorWithVectorImageFilter   ----------------------------
 
-ADD_TEST(bfTuUnaryImageFunctorWithVectorImageFilterNew ${BASICFILTERS_TESTS5}  
+ADD_TEST(bfTuUnaryImageFunctorWithVectorImageFilterNew ${BASICFILTERS_TESTS5}
          otbUnaryImageFunctorWithVectorImageFilterNew)
 
-ADD_TEST(bfTvUnaryImageFunctorWithVectorImageFilter ${BASICFILTERS_TESTS5}  
+ADD_TEST(bfTvUnaryImageFunctorWithVectorImageFilter ${BASICFILTERS_TESTS5}
      --compare-image ${TOL}
      		     ${BASELINE}/bfTvUnaryImageFunctorWithVectorImageFilter.tif
 		     ${TEMP}/bfTvUnaryImageFunctorWithVectorImageFilter.tif
@@ -485,10 +486,10 @@ ADD_TEST(bfTvUnaryImageFunctorWithVectorImageFilter ${BASICFILTERS_TESTS5}
 
 # -------            otb::PrintableImageFilter   ------------------------------
 
-ADD_TEST(bfTuPrintableImageFilterNew ${BASICFILTERS_TESTS5}  
+ADD_TEST(bfTuPrintableImageFilterNew ${BASICFILTERS_TESTS5}
          otbPrintableImageFilterNew)
-         
-ADD_TEST(bfTvPrintableImageFilter ${BASICFILTERS_TESTS5}  
+
+ADD_TEST(bfTvPrintableImageFilter ${BASICFILTERS_TESTS5}
      --compare-image ${TOL}
      		     ${BASELINE}/bfTvPrintableImageFilter.png
 		     ${TEMP}/bfTvPrintableImageFilter.png
@@ -499,16 +500,16 @@ ADD_TEST(bfTvPrintableImageFilter ${BASICFILTERS_TESTS5}
 
 
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests6 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # -------            otb::BSplineDecompositionImageFilter  ------------------------------
 
-ADD_TEST(bfTuBSplineDecompositionImageFilterNew ${BASICFILTERS_TESTS6}  
+ADD_TEST(bfTuBSplineDecompositionImageFilterNew ${BASICFILTERS_TESTS6}
          otbBSplineDecompositionImageFilterNew)
-         
-ADD_TEST(bfTvBSplineDecompositionImageFilter ${BASICFILTERS_TESTS6}  
+
+ADD_TEST(bfTvBSplineDecompositionImageFilter ${BASICFILTERS_TESTS6}
      --compare-image ${EPSILON}
      		     ${BASELINE}/bfBSplineDecompositionImageFilterOutput.tif
 		     ${TEMP}/bfBSplineDecompositionImageFilterOutput.tif
@@ -519,10 +520,10 @@ ADD_TEST(bfTvBSplineDecompositionImageFilter ${BASICFILTERS_TESTS6}
 
 # -------            otb::BSplineInterpolateImageFunction  ------------------------------
 
-ADD_TEST(bfTuBSplineInterpolateImageFunctionNew ${BASICFILTERS_TESTS6}  
+ADD_TEST(bfTuBSplineInterpolateImageFunctionNew ${BASICFILTERS_TESTS6}
          otbBSplineInterpolateImageFunctionNew)
- 
-ADD_TEST(bfTvBSplineInterpolateImageFunction ${BASICFILTERS_TESTS6}  
+
+ADD_TEST(bfTvBSplineInterpolateImageFunction ${BASICFILTERS_TESTS6}
      --compare-ascii ${EPSILON}
      		     ${BASELINE_FILES}/bfBSplineInterpolateImageFunctionOutput.txt
 		     ${TEMP}/bfBSplineInterpolateImageFunctionOutput.txt
@@ -538,13 +539,13 @@ ADD_TEST(bfTvBSplineInterpolateImageFunction ${BASICFILTERS_TESTS6}
 		127.255 128.73
 		-1 -1
 		)
-        
+
 # -------            otb::ProlateInterpolateImageFunction  ------------------------------
 
-ADD_TEST(bfTuProlateInterpolateImageFunctionNew ${BASICFILTERS_TESTS6}  
+ADD_TEST(bfTuProlateInterpolateImageFunctionNew ${BASICFILTERS_TESTS6}
          otbProlateInterpolateImageFunctionNew)
 
-ADD_TEST(bfTvProlateInterpolateImageFunction ${BASICFILTERS_TESTS6}  
+ADD_TEST(bfTvProlateInterpolateImageFunction ${BASICFILTERS_TESTS6}
      --compare-ascii ${TOL}
      		     ${BASELINE_FILES}/bfProlateInterpolateImageFunctionOutput.txt
 		     ${TEMP}/bfProlateInterpolateImageFunctionOutput.txt
@@ -566,14 +567,14 @@ ADD_TEST(bfTvProlateInterpolateImageFunction ${BASICFILTERS_TESTS6}
 		)
 
 # -------            otb::WindowedSincInterpolateImageFunctionBase  ------------------------------
-ADD_TEST(bfTuWindowedSincInterpolateImageFunctionBaseNew ${BASICFILTERS_TESTS6}  
+ADD_TEST(bfTuWindowedSincInterpolateImageFunctionBaseNew ${BASICFILTERS_TESTS6}
          otbWindowedSincInterpolateImageFunctionBaseNew)
 
 # -------            otb::WindowedSincInterpolateImageGaussianFunction  ------------------------------
- ADD_TEST(bfTuWindowedSincInterpolateImageGaussianFunctionNew ${BASICFILTERS_TESTS6}  
+ ADD_TEST(bfTuWindowedSincInterpolateImageGaussianFunctionNew ${BASICFILTERS_TESTS6}
          otbWindowedSincInterpolateImageGaussianFunctionNew)
 
-ADD_TEST(bfTvWindowedSincInterpolateImageGaussianFunction ${BASICFILTERS_TESTS6}  
+ADD_TEST(bfTvWindowedSincInterpolateImageGaussianFunction ${BASICFILTERS_TESTS6}
      --compare-ascii ${TOL}
      		     ${BASELINE_FILES}/bfWindowedSincInterpolateImageGaussianFunctionOutput.txt
 		     ${TEMP}/bfWindowedSincInterpolateImageGaussianFunctionOutput.txt
@@ -593,10 +594,10 @@ ADD_TEST(bfTvWindowedSincInterpolateImageGaussianFunction ${BASICFILTERS_TESTS6}
 
 
 # -------            otb::WindowedSincInterpolateImageHammingFunction  ------------------------------
- ADD_TEST(bfTuWindowedSincInterpolateImageHammingFunctionNew ${BASICFILTERS_TESTS6}  
+ ADD_TEST(bfTuWindowedSincInterpolateImageHammingFunctionNew ${BASICFILTERS_TESTS6}
          otbWindowedSincInterpolateImageHammingFunctionNew)
 
-ADD_TEST(bfTvWindowedSincInterpolateImageHammingFunction ${BASICFILTERS_TESTS6}  
+ADD_TEST(bfTvWindowedSincInterpolateImageHammingFunction ${BASICFILTERS_TESTS6}
      --compare-ascii ${TOL}
      		     ${BASELINE_FILES}/bfWindowedSincInterpolateImageHammingFunctionOutput.txt
 		     ${TEMP}/bfWindowedSincInterpolateImageHammingFunctionOutput.txt
@@ -614,15 +615,15 @@ ADD_TEST(bfTvWindowedSincInterpolateImageHammingFunction ${BASICFILTERS_TESTS6}
 		-1 -1
 		)
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests7 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # -------            otb::WindowedSincInterpolateImageCosineFunction  ------------------------------
- ADD_TEST(bfTuWindowedSincInterpolateImageCosineFunctionNew ${BASICFILTERS_TESTS7}  
+ ADD_TEST(bfTuWindowedSincInterpolateImageCosineFunctionNew ${BASICFILTERS_TESTS7}
          otbWindowedSincInterpolateImageCosineFunctionNew)
 
-ADD_TEST(bfTvWindowedSincInterpolateImageCosineFunction ${BASICFILTERS_TESTS7}  
+ADD_TEST(bfTvWindowedSincInterpolateImageCosineFunction ${BASICFILTERS_TESTS7}
      --compare-ascii ${TOL}
      		     ${BASELINE_FILES}/bfWindowedSincInterpolateImageCosineFunctionOutput.txt
 		     ${TEMP}/bfWindowedSincInterpolateImageCosineFunctionOutput.txt
@@ -641,10 +642,10 @@ ADD_TEST(bfTvWindowedSincInterpolateImageCosineFunction ${BASICFILTERS_TESTS7}
 		)
 
 # -------            otb::WindowedSincInterpolateImageWelchFunction  ------------------------------
- ADD_TEST(bfTuWindowedSincInterpolateImageWelchFunctionNew ${BASICFILTERS_TESTS7}  
+ ADD_TEST(bfTuWindowedSincInterpolateImageWelchFunctionNew ${BASICFILTERS_TESTS7}
          otbWindowedSincInterpolateImageWelchFunctionNew)
 
-ADD_TEST(bfTvWindowedSincInterpolateImageWelchFunction ${BASICFILTERS_TESTS7}  
+ADD_TEST(bfTvWindowedSincInterpolateImageWelchFunction ${BASICFILTERS_TESTS7}
      --compare-ascii ${TOL}
      		     ${BASELINE_FILES}/bfWindowedSincInterpolateImageWelchFunctionOutput.txt
 		     ${TEMP}/bfWindowedSincInterpolateImageWelchFunctionOutput.txt
@@ -662,10 +663,10 @@ ADD_TEST(bfTvWindowedSincInterpolateImageWelchFunction ${BASICFILTERS_TESTS7}
 		-1 -1
 		)
 # -------            otb::WindowedSincInterpolateImageLanczosFunction  ------------------------------
- ADD_TEST(bfTuWindowedSincInterpolateImageLanczosFunctionNew ${BASICFILTERS_TESTS7}  
+ ADD_TEST(bfTuWindowedSincInterpolateImageLanczosFunctionNew ${BASICFILTERS_TESTS7}
          otbWindowedSincInterpolateImageLanczosFunctionNew)
 
-ADD_TEST(bfTvWindowedSincInterpolateImageLanczosFunction ${BASICFILTERS_TESTS7}  
+ADD_TEST(bfTvWindowedSincInterpolateImageLanczosFunction ${BASICFILTERS_TESTS7}
      --compare-ascii ${TOL}
      		     ${BASELINE_FILES}/bfWindowedSincInterpolateImageLanczosFunctionOutput.txt
 		     ${TEMP}/bfWindowedSincInterpolateImageLanczosFunctionOutput.txt
@@ -683,10 +684,10 @@ ADD_TEST(bfTvWindowedSincInterpolateImageLanczosFunction ${BASICFILTERS_TESTS7}
 		-1 -1
 		)
 # -------            otb::WindowedSincInterpolateImageBlackmanFunction  ------------------------------
- ADD_TEST(bfTuWindowedSincInterpolateImageBlackmanFunctionNew ${BASICFILTERS_TESTS7}  
+ ADD_TEST(bfTuWindowedSincInterpolateImageBlackmanFunctionNew ${BASICFILTERS_TESTS7}
          otbWindowedSincInterpolateImageBlackmanFunctionNew)
 
-ADD_TEST(bfTvWindowedSincInterpolateImageBlackmanFunction ${BASICFILTERS_TESTS7}  
+ADD_TEST(bfTvWindowedSincInterpolateImageBlackmanFunction ${BASICFILTERS_TESTS7}
      --compare-ascii ${TOL}
      		     ${BASELINE_FILES}/bfWindowedSincInterpolateImageBlackmanFunctionOutput.txt
 		     ${TEMP}/bfWindowedSincInterpolateImageBlackmanFunctionOutput.txt
@@ -704,7 +705,7 @@ ADD_TEST(bfTvWindowedSincInterpolateImageBlackmanFunction ${BASICFILTERS_TESTS7}
 		-1 -1
 		)
 
-ADD_TEST(bfTvProlateValidationTest ${BASICFILTERS_TESTS7}  
+ADD_TEST(bfTvProlateValidationTest ${BASICFILTERS_TESTS7}
   --compare-image ${EPSILON}
      		  ${BASELINE}/bfTvProlateValidationTest.tif
 		  ${TEMP}/bfTvProlateValidationTest.tif
@@ -713,7 +714,7 @@ ADD_TEST(bfTvProlateValidationTest ${BASICFILTERS_TESTS7}
 		${TEMP}/bfTvProlateValidationTest.tif
 		3 # radius
 		0.5 # factor
-		512 # size	
+		512 # size
 		${TEMP}/defaultprolatevalidationtest.tif # nearest neighborhood interpolator : NOT GENERATE IN THE TEST
 		)
 
@@ -765,11 +766,11 @@ ADD_TEST(bfTvRationalQuotientResampleImageFilter ${BASICFILTERS_TESTS7}
 
 # -------            otb::VectorImageToIntensityImageFilter   ----------------------------
 
-  ADD_TEST(bfTuVectorImageToIntensityImageFilterNew ${BASICFILTERS_TESTS7}  
+  ADD_TEST(bfTuVectorImageToIntensityImageFilterNew ${BASICFILTERS_TESTS7}
          otbVectorImageToIntensityImageFilterNew)
 
 
- ADD_TEST(bfTvVectorImageToIntensityImageFilter ${BASICFILTERS_TESTS7} 
+ ADD_TEST(bfTvVectorImageToIntensityImageFilter ${BASICFILTERS_TESTS7}
 		--compare-image ${EPSILON}
 		    ${BASELINE}/bfTvVectorImageToIntensityImageOutput.tif
 		    ${TEMP}/bfTvVectorImageToIntensityImageOutput.tif
@@ -783,7 +784,7 @@ ADD_TEST(bfTvRationalQuotientResampleImageFilter ${BASICFILTERS_TESTS7}
   ADD_TEST(bfTuLabelizeConnectedThresholdImageFilterNew ${BASICFILTERS_TESTS8}
          otbLabelizeConnectedThresholdImageFilterNew)
 
-  ADD_TEST(bfTvLabelizeConnectedThresholdImageFilter ${BASICFILTERS_TESTS8} 
+  ADD_TEST(bfTvLabelizeConnectedThresholdImageFilter ${BASICFILTERS_TESTS8}
 		--compare-image ${EPSILON}
 		    ${BASELINE}/bfTvLabelizeConnectedThresholdImageFilterOutput.png
 		    ${TEMP}/bfTvLabelizeConnectedThresholdImageFilterOutput.png
@@ -865,7 +866,7 @@ ADD_TEST(bfTvEuclideanDistanceWithMissingValue ${BASICFILTERS_TESTS8}
 
 
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests9 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ADD_TEST(bfTuChangeLabelImageFilterNew ${BASICFILTERS_TESTS9}
@@ -898,13 +899,14 @@ ADD_TEST(bfTvMeanShiftImageFilter ${BASICFILTERS_TESTS9}
 		${TEMP}/bfMeanShiftImageFilterLabeledClusteredOutput.tif
 		${BASELINE}/bfMeanShiftImageFilterClusterBoundariesOutput.tif
 		${TEMP}/bfMeanShiftImageFilterClusterBoundariesOutput.tif
-        otbMeanShiftImageFilter 
+        otbMeanShiftImageFilter
 	${INPUTDATA}/QB_Suburb.png
 	${TEMP}/bfMeanShiftImageFilterOutput.tif
 	${TEMP}/bfMeanShiftImageFilterClusteredOutput.tif
 	${TEMP}/bfMeanShiftImageFilterLabeledClusteredOutput.tif
 	${TEMP}/bfMeanShiftImageFilterClusterBoundariesOutput.tif
-	16 16 10 1.0 1 1 
+	${TEMP}/bfMeanShiftImageFilterVectorizedClusterBoundariesOutput.txt
+	16 16 10 1.0 1 1
 	)
 
 ADD_TEST(bfTvMeanShiftImageFilterNotStreamedNotThreaded ${BASICFILTERS_TESTS9}
@@ -917,12 +919,27 @@ ADD_TEST(bfTvMeanShiftImageFilterNotStreamedNotThreaded ${BASICFILTERS_TESTS9}
 		${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedLabeledClusteredOutput.tif
 		${BASELINE}/bfMeanShiftImageFilterClusterBoundariesOutput.tif
 		${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedClusterBoundariesOutput.tif
-        otbMeanShiftImageFilter 
+        otbMeanShiftImageFilter
 	${INPUTDATA}/QB_Suburb.png
 	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedOutput.tif
 	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedClusteredOutput.tif
 	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedLabeledClusteredOutput.tif
 	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedClusterBoundariesOutput.tif
+	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedVectorizedClusterBoundariesOutput.txt
+	16 16 10 1.0 0 0
+	)
+
+ADD_TEST(bfTvMeanShiftImageFilterNotStreamedNotThreadedVectorizedOutput ${BASICFILTERS_TESTS9}
+--compare-ascii ${TOL}
+		${BASELINE_FILES}/bfMeanShiftImageFilterVectorizedClusterBoundariesOutput.txt
+		${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedVectorizedClusterBoundariesOutput.txt
+        otbMeanShiftImageFilter
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedOutput.tif
+	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedClusteredOutput.tif
+	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedLabeledClusteredOutput.tif
+	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedClusterBoundariesOutput.tif
+	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedVectorizedClusterBoundariesOutput.txt
 	16 16 10 1.0 0 0
 	)
 
@@ -939,12 +956,13 @@ ADD_TEST(bfTvMeanShiftVectorImageFilter ${BASICFILTERS_TESTS9}
 		${TEMP}/bfMeanShiftVectorImageFilterLabeledClusteredOutput.tif
 		${BASELINE}/bfMeanShiftVectorImageFilterClusterBoundariesOutput.tif
 		${TEMP}/bfMeanShiftVectorImageFilterClusterBoundariesOutput.tif
-        otbMeanShiftVectorImageFilter 
+        otbMeanShiftVectorImageFilter
 	${INPUTDATA}/qb_RoadExtract2sub200x200.tif
 	${TEMP}/bfMeanShiftVectorImageFilterOutput.tif
 	${TEMP}/bfMeanShiftVectorImageFilterClusteredOutput.tif
 	${TEMP}/bfMeanShiftVectorImageFilterLabeledClusteredOutput.tif
 	${TEMP}/bfMeanShiftVectorImageFilterClusterBoundariesOutput.tif
+	${TEMP}/bfMeanShiftVectorImageFilterVectorizedClusterBoundariesOutput.txt
 	16 16 10 1.0 1 1
 	)
 
@@ -959,16 +977,29 @@ ADD_TEST(bfTvMeanShiftVectorImageFilterNotStreamedNotThreaded ${BASICFILTERS_TES
 		${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedLabeledClusteredOutput.tif
 		${BASELINE}/bfMeanShiftVectorImageFilterClusterBoundariesOutput.tif
 		${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedClusterBoundariesOutput.tif
-        otbMeanShiftVectorImageFilter 
+        otbMeanShiftVectorImageFilter
 	${INPUTDATA}/qb_RoadExtract2sub200x200.tif
 	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedOutput.tif
 	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedClusteredOutput.tif
 	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedLabeledClusteredOutput.tif
 	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedClusterBoundariesOutput.tif
-	16 16 10 1.0 0 0s
+	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedVectorizedClusterBoundariesOutput.txt
+	16 16 10 1.0 0 0
 	)
 
-
+ADD_TEST(bfTvMeanShiftVectorImageFilterNotStreamedNotThreadedVectorizedOutput ${BASICFILTERS_TESTS9}
+--compare-ascii ${TOL}
+		${BASELINE_FILES}/bfMeanShiftVectorImageFilterVectorizedClusterBoundariesOutput.txt
+		${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedVectorizedClusterBoundariesOutput.txt
+        otbMeanShiftVectorImageFilter
+	${INPUTDATA}/qb_RoadExtract2sub200x200.tif
+	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedOutput.tif
+	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedClusteredOutput.tif
+	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedLabeledClusteredOutput.tif
+	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedClusterBoundariesOutput.tif
+	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedVectorizedClusterBoundariesOutput.txt
+	16 16 10 1.0 0 0
+	)
 
 ADD_TEST(bfTvFunctionToImageFilterNew ${BASICFILTERS_TESTS9}
         otbFunctionToImageFilterNew
@@ -987,21 +1018,21 @@ ADD_TEST(bfTuFunctionToImageFilterTest ${BASICFILTERS_TESTS9}
 
 
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests10 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ADD_TEST(bfTuScalarImageTextureFunctorNew ${BASICFILTERS_TESTS10}
         otbScalarImageTextureFunctorNew )
 ADD_TEST(bfTvScalarImageTextureFunctor ${BASICFILTERS_TESTS10}
         --compare-image ${TOL}
             ${BASELINE}/bfScalarImageTextureFunctorTest.tif
             ${TEMP}/bfScalarImageTextureFunctorTest.tif
-        otbScalarImageTextureFunctor 
+        otbScalarImageTextureFunctor
 	    ${INPUTDATA}/small_poupees_1canal.hd
 	    ${TEMP}/bfScalarImageTextureFunctorTest.tif
 	    2 # radius
             0 # index feature
-)		   
+)
 ADD_TEST(bfTuScalarVectorImageTextureFunctorNew ${BASICFILTERS_TESTS10}
         otbScalarVectorImageTextureFunctorNew )
 
@@ -1009,7 +1040,7 @@ ADD_TEST(bfTvScalarVectorImageTextureFunctor ${BASICFILTERS_TESTS10}
         --compare-image ${TOL}
             ${BASELINE}/bfScalarImageTextureFunctorTest.tif # It the same of  bfTvScalarImageTextureFunctor test
             ${TEMP}/bfScalarVectorImageTextureFunctorTest.tif
-        otbScalarVectorImageTextureFunctor 
+        otbScalarVectorImageTextureFunctor
 	    ${INPUTDATA}/small_poupees_1canal.hd
 	    ${TEMP}/bfScalarVectorImageTextureFunctorTest.tif
 	    2 # radius
@@ -1055,7 +1086,7 @@ IF(USE_FFTWD)
 		--compare-image ${EPSILON}
 		    ${TEMP}/bfTvCompareConvolutionOutput.tif
 		    ${TEMP}/bfTvCompareOSConvolutionoutput.tif
-		    otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter	
+		    otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter
 		    ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
 		    ${TEMP}/bfTvCompareConvolutionOutput.tif
 		    ${TEMP}/bfTvCompareOSConvolutionoutput.tif
@@ -1095,6 +1126,27 @@ ADD_TEST(bfTvPersistentVectorizationImageFilter ${BASICFILTERS_TESTS10}
 	 ${TEMP}/bfTvPersistentVectorizationImageFilterOutput.txt
 )
 
+# -------     Combination ExtractROI and StremingResample   ----------------------------
+
+ADD_TEST(bfTvExtractROIResample ${BASICFILTERS_TESTS11}
+--compare-image ${TOL}
+	    ${BASELINE_FILES}/bfTvExtractROIResample.tif
+	    ${TEMP}/bfTvExtractROIResample.tif
+	 otbExtractROIResample
+	 ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+	 ${TEMP}/bfTvExtractROIResample.tif
+	 0
+)
+
+ADD_TEST(bfTvExtractROIResample2 ${BASICFILTERS_TESTS11}
+--compare-image ${TOL}
+	    ${BASELINE_FILES}/bfTvExtractROIResample2.tif
+	    ${TEMP}/bfTvExtractROIResample2.tif
+	 otbExtractROIResample
+	 ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+	 ${TEMP}/bfTvExtractROIResample2.tif
+	 1
+)
 
 
 # A enrichir
@@ -1246,7 +1298,6 @@ otbPersistentVectorizationFilterNew.cxx
 otbPersistentVectorizationFilter.cxx
 )
 
-
 IF(USE_FFTWD)
 SET(BasicFilters_SRCS10
 ${BasicFilters_SRCS10}
@@ -1256,6 +1307,9 @@ otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter.cxx
 )
 ENDIF(USE_FFTWD)
 
+SET(BasicFilters_SRCS11
+otbExtractROIResample.cxx
+)
 
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
@@ -1267,7 +1321,7 @@ ADD_EXECUTABLE(otbBasicFiltersTests2 otbBasicFiltersTests2.cxx ${BasicFilters_SR
 TARGET_LINK_LIBRARIES(otbBasicFiltersTests2  OTBBasicFilters  OTBIO )
 
 ADD_EXECUTABLE(otbBasicFiltersTests3 otbBasicFiltersTests3.cxx ${BasicFilters_SRCS3})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests3  OTBBasicFilters otbossim  OTBIO )
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests3  OTBBasicFilters  OTBIO )
 
 ADD_EXECUTABLE(otbBasicFiltersTests4 otbBasicFiltersTests4.cxx ${BasicFilters_SRCS4})
 TARGET_LINK_LIBRARIES(otbBasicFiltersTests4  OTBBasicFilters  OTBIO )
@@ -1288,6 +1342,9 @@ ADD_EXECUTABLE(otbBasicFiltersTests9 otbBasicFiltersTests9.cxx ${BasicFilters_SR
 TARGET_LINK_LIBRARIES(otbBasicFiltersTests9  OTBBasicFilters  OTBIO )
 
 ADD_EXECUTABLE(otbBasicFiltersTests10 otbBasicFiltersTests10.cxx ${BasicFilters_SRCS10})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests10  OTBBasicFilters  OTBIO ) 
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests10  OTBBasicFilters  OTBIO )
+
+ADD_EXECUTABLE(otbBasicFiltersTests11 otbBasicFiltersTests11.cxx ${BasicFilters_SRCS11})
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests11  OTBBasicFilters  OTBIO )
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

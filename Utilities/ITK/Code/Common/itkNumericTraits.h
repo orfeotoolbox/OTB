@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,7 +27,7 @@
   static ValueType min( ValueType ) { return vcl_numeric_limits<ValueType>::min(); } \
   static ValueType max( ValueType ) { return vcl_numeric_limits<ValueType>::max(); } \
 
- 
+
 #include "vcl_limits.h" // for vcl_numeric_limits
 #include <complex>
 
@@ -51,16 +51,16 @@ public:
   typedef vcl_numeric_limits<T> TraitsType;
 
   /** Return the type of this native type. */
-  typedef T ValueType; 
+  typedef T ValueType;
 
   /** Return the type that can be printed. */
-  typedef T PrintType; 
+  typedef T PrintType;
 
   /** Return value of vcl_abs(). */
-  typedef T AbsType; 
+  typedef T AbsType;
 
   /** Accumulation of addition and multiplication. */
-  typedef double AccumulateType; 
+  typedef double AccumulateType;
 
   // This primary template is never used but we need this definition
   // to avoid an ICE on VS 7.0.  This definition cannot be present for
@@ -115,7 +115,7 @@ public:
 
 /** \class NumericTraits<bool>
  * \brief Define traits for type bool.
- * 
+ *
  * \ingroup DataRepresentation
  */
 
@@ -371,7 +371,7 @@ public:
 
 /** \class NumericTraits<unsigned long>
  * \brief Define traits for type unsigned long.
- * \ingroup DataRepresentation 
+ * \ingroup DataRepresentation
  */
 template <>
 class NumericTraits<unsigned long> : public vcl_numeric_limits<unsigned long> {
@@ -425,7 +425,7 @@ public:
 
 /** \class NumericTraits<double>
  * \brief Define traits for type double.
- * \ingroup DataRepresentation 
+ * \ingroup DataRepresentation
  */
 template <>
 class NumericTraits<double> : public vcl_numeric_limits<double> {
@@ -452,7 +452,7 @@ public:
 
 /** \class NumericTraits<long double>
  * \brief Define traits for type long double.
- * \ingroup DataRepresentation 
+ * \ingroup DataRepresentation
  */
 template <>
 class NumericTraits<long double> : public vcl_numeric_limits<long double> {
@@ -479,7 +479,7 @@ public:
 
 /** \class NumericTraits< std::complex<float> >
  * \brief Define traits for type std::complex<float>.
- * \ingroup DataRepresentation 
+ * \ingroup DataRepresentation
  */
 template <>
 class NumericTraits< std::complex<float> >  {
@@ -495,9 +495,11 @@ public:
   static const TheType ITKCommon_EXPORT Zero;
   static const TheType ITKCommon_EXPORT One;
 
+  static TheType min() { return vcl_numeric_limits<ValueType>::min(); }
+  static TheType max() { return vcl_numeric_limits<ValueType>::max(); }
   static TheType min( TheType ) { return vcl_numeric_limits<ValueType>::min(); }
   static TheType max( TheType ) { return vcl_numeric_limits<ValueType>::max(); }
-  static TheType NonpositiveMin() { 
+  static TheType NonpositiveMin() {
     return TheType(-NumericTraits<float>::NonpositiveMin(),0.0f); }
   static bool IsPositive(TheType val) { return val.real() > 0.0; }
   static bool IsNonpositive(TheType val) { return val.real() <= 0.0; }
@@ -510,7 +512,7 @@ public:
 
 /** \class NumericTraits< std::complex<double> >
  * \brief Define traits for type std::complex<double>.
- * \ingroup DataRepresentation 
+ * \ingroup DataRepresentation
  */
 template <>
 class NumericTraits< std::complex<double> >  {
@@ -526,9 +528,11 @@ public:
   static const TheType ITKCommon_EXPORT Zero;
   static const TheType ITKCommon_EXPORT One;
 
+  static TheType min() { return vcl_numeric_limits<ValueType>::min(); }
+  static TheType max() { return vcl_numeric_limits<ValueType>::max(); }
   static TheType min( TheType ) { return vcl_numeric_limits<ValueType>::min(); }
   static TheType max( TheType ) { return vcl_numeric_limits<ValueType>::max(); }
-  static TheType NonpositiveMin() { 
+  static TheType NonpositiveMin() {
     return TheType(-NumericTraits<double>::NonpositiveMin(),0.0); }
   static bool IsPositive(TheType val) { return val.real() > 0.0; }
   static bool IsNonpositive(TheType val) { return val.real() <= 0.0; }

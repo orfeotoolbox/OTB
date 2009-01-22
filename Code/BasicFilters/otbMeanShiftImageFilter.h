@@ -21,6 +21,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkImageToImageFilter.h"
 #include "itkVariableLengthVector.h"
 #include "otbImage.h"
+#include "otbObjectList.h"
+#include "otbPolygon.h"
 
 namespace otb
 {
@@ -68,7 +70,10 @@ namespace otb
    * you to get the smoothed image, whereas the
    * GetClusteredOuptut() methods returns the clustered output. The GetLabeledClusteredOutput() returns
    * a labeled clustered image, and the GetClusterBoundariesOutput()
-   * an image of the cluster boundaries.
+   * an image of the cluster boundaries. Last, the
+   * GetVectorizedClusterBoundariesOutput() returns a list of
+   * otb::Polygon representing the cluster boundaries, whose value is
+   * the corresponding mean-shift mode.
    *
    * The MinimumRegionSize parameter allows you to prune small clustered regions.
    *
@@ -76,7 +81,7 @@ namespace otb
    * not really noticeable, because the clustering step is really faster
    * than the filtering one).
    *
-   * Please note that if both parts are streamable, only the filtering part will ensure you to get the same
+   * Please also note that if both parts are streamable, only the filtering part will ensure you to get the same
    * results than without streaming. In the clustering results, you
    * might find region split due to tiling. Morover, the labeled output will not give consistent results when
    * streamed. The cluster boundaries might work though.
@@ -132,6 +137,12 @@ namespace otb
       typedef TLabeledOutput                               LabeledOutputType;
       typedef typename LabeledOutputType::Pointer          LabeledOutputPointerType;
       typedef typename LabeledOutputType::PixelType        LabelType;
+      
+      /** Typedefs for vectorized output */
+      typedef otb::Polygon<InputPixelType>                 PolygonType;
+      typedef typename PolygonType::Pointer                PolygonPointerType;
+      typedef otb::ObjectList<PolygonType>                 PolygonListType;
+      typedef typename PolygonListType::Pointer            PolygonListPointerType;
 
       /** Setters / Getters */
       itkSetMacro(SpatialRadius,unsigned int);
@@ -143,17 +154,22 @@ namespace otb
       itkSetMacro(Scale,double);
       itkGetMacro(Scale,double);
 
-      /** Return the const output image direction */
+      /** Return the const clustered image output */
       const OutputImageType * GetClusteredOutput() const;
-      /** Return the output image direction */
+      /** Return the clustered image output */
       OutputImageType * GetClusteredOutput();
-
+      /** Return the const labeled clustered image output */
       const LabeledOutputType * GetLabeledClusteredOutput() const;
+      /** Return the labeled clustered image output */
       LabeledOutputType * GetLabeledClusteredOutput();
-
+      /** Return the const cluster boundaries image output */
       const LabeledOutputType * GetClusterBoundariesOutput() const;
-
+      /** Return the cluster boundaries image output */
       LabeledOutputType * GetClusterBoundariesOutput();
+      /** Return the const vectorized boundaries output */
+      const PolygonListType * GetVectorizedClusterBoundariesOutput() const;
+      /** Return the vectorized boundaries output */
+      PolygonListType * GetVectorizedClusterBoundariesOutput();
 
       protected:
       /** This filters use a neighborhood around the pixel, so it needs to redfine the
@@ -163,7 +179,7 @@ namespace otb
       virtual void ThreadedGenerateData(const RegionType& outputRegionForThread,int threadId);
       /** After threaded generate data (handle the clustering part) */
       virtual void AfterThreadedGenerateData();
-      /** Allocate the outputs (need to be reimplemented since outputs have differents type */
+      /** Allocate the outputs (need to be reimplemented since outputs have differents type) */
       virtual void AllocateOutputs();
 
       /** Constructor */

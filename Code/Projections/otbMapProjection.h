@@ -40,6 +40,9 @@ namespace otb
   /** \class MapProjection
    *  \brief This is the base class for all geographic projections (UTM, Lambert, ...)
    *
+   * The forward transformation will transform the coordinate for the geographic to the
+   * cartographic. The inverse model will transform from the cartographic to the geographic.
+   *
    * All derived class assume that the latitude and longitude are given according to the
    * WGS84 ellipsoid model.
    *

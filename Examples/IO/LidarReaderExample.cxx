@@ -89,7 +89,7 @@ int main(int argc, char * argv[])
     PointSetType::PointType point;
     data->GetPoint(i,&point);
     std::cout << point << " : ";
-    PointSetType::PixelType value;
+    PointSetType::PixelType value = itk::NumericTraits<PointSetType::PixelType>::Zero;
     data->GetPointData(i,&value);
     std::cout << value << std::endl;
   }

@@ -44,6 +44,7 @@
 #include "otbLocalHoughFilter.h"
 #include "otbFillGapsFilter.h"
 #include "otbDrawLineSpatialObjectListFilter.h"
+#include "itkRescaleIntensityImageFilter.h"
 
 #include "otbLineSpatialObjectList.h"
 
@@ -114,6 +115,8 @@ int main( int argc, char * argv[] )
   typedef otb::FillGapsFilter             FillGapsType;
   typedef otb::DrawLineSpatialObjectListFilter< InternalImageType,
                                       OutputImageType >  DrawLineListType;
+  
+  typedef itk::RescaleIntensityImageFilter<InternalImageType> RescalerType;
   // Software Guide : EndCodeSnippet
 
 
@@ -158,7 +161,7 @@ int main( int argc, char * argv[] )
   LocalHoughType::Pointer    localHough= LocalHoughType::New();
   FillGapsType::Pointer    fillGaps= FillGapsType::New();
   DrawLineListType::Pointer    drawLineList= DrawLineListType::New();
-
+  RescalerType::Pointer rescaler = RescalerType::New();
 
   // Software Guide : EndCodeSnippet
 
@@ -190,8 +193,10 @@ int main( int argc, char * argv[] )
   detector->SetInput( reader->GetOutput() );
   pixelSuppression->SetInputImage( detector->GetOutput() );
   pixelSuppression->SetInputImageDirection( detector->GetOutputDirection() );
-
-  localHough->SetInput( pixelSuppression->GetOutput() );
+  
+  rescaler->SetInput(pixelSuppression->GetOutput() );
+  
+  localHough->SetInput( rescaler->GetOutput() );
 
   fillGaps->SetInput ( localHough->GetOutput() );
 

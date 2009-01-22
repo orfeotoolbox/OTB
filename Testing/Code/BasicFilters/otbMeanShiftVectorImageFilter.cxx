@@ -24,9 +24,9 @@
 
 int otbMeanShiftVectorImageFilter(int argc, char * argv[])
 {
-if(argc != 12)
+if(argc != 13)
     {
-      std::cerr<<"Usage: "<<argv[0]<<" infname filteredfname clusteredfname labeledclusteredfname clusterboundariesfname spatialRadius rangeRadius minregionsize scale streamed threaded"<<std::endl;
+      std::cerr<<"Usage: "<<argv[0]<<" infname filteredfname clusteredfname labeledclusteredfname clusterboundariesfname vectclusterboundariesfname spatialRadius rangeRadius minregionsize scale streamed threaded"<<std::endl;
       return EXIT_FAILURE;
     }
 
@@ -35,12 +35,13 @@ if(argc != 12)
   const char *       clusteredfname         = argv[3];
   const char *       labeledclusteredfname  = argv[4];
   const char *       clusterboundariesfname = argv[5];
-  const unsigned int spatialRadius          = atoi(argv[6]);
-  const double       rangeRadius            = atof(argv[7]);
-  const unsigned int minRegionSize          = atoi(argv[8]);
-  const double       scale                  = atoi(argv[9]);
-  bool               streamed               = atoi(argv[10]);
-  bool               threaded               = atoi(argv[11]);
+  const char *       vectclusterboundariesfname = argv[6];
+  const unsigned int spatialRadius          = atoi(argv[7]);
+  const double       rangeRadius            = atof(argv[8]);
+  const unsigned int minRegionSize          = atoi(argv[9]);
+  const double       scale                  = atoi(argv[10]);
+  bool               streamed               = atoi(argv[11]);
+  bool               threaded               = atoi(argv[12]);
 
   const unsigned int Dimension = 2;
   typedef float PixelType;
@@ -52,6 +53,11 @@ if(argc != 12)
   typedef FilterType::LabeledOutputType                         LabeledImageType;
   typedef otb::StreamingImageFileWriter<LabeledImageType>       LabeledStreamingWriterType;
   typedef otb::ImageFileWriter<LabeledImageType>                LabeledWriterType;
+
+  typedef FilterType::PolygonListType                           PolygonListType;
+  typedef FilterType::PolygonType                               PolygonType;
+  typedef PolygonType::VertexListType                           VertexListType;
+  typedef PolygonType::VertexListType::ConstIterator            VertexListConstIterator;
 
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();
@@ -117,6 +123,28 @@ if(argc != 12)
     writer4->Update();
 
     }
+
+  std::ofstream f;
+  f.open(vectclusterboundariesfname);
+
+  unsigned int index = 0;
+
+  for(PolygonListType::Iterator it = filter->GetVectorizedClusterBoundariesOutput()->Begin();
+      it != filter->GetVectorizedClusterBoundariesOutput()->End();
+      ++it,++index)
+    {
+    f<<"Polygon: "<<index;
+    f<<" Mode: "<<it.Get()->GetValue();
+    f<<" Points: ";
+    VertexListType::ConstPointer ptrVertexList = it.Get()->GetVertexList();
+
+    for(unsigned int cpt=0 ; cpt<  ptrVertexList->Size() ; cpt++)
+      {
+      f << "["<<ptrVertexList->GetElement(cpt)[0]<<", "<<ptrVertexList->GetElement(cpt)[1]<<"] ";
+      }
+    f << std::endl;
+    }
+  f.close();
 
   return EXIT_SUCCESS;
 }
