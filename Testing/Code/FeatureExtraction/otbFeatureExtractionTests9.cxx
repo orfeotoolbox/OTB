@@ -29,6 +29,8 @@ void RegisterTests()
 {
 REGISTER_TEST(otbImageToSIFTKeyPointSetFilterNew);
 REGISTER_TEST(otbImageToSIFTKeyPointSetFilterDistanceMap);
+REGISTER_TEST(otbImageToSIFTKeyPointSetFilterOutputAscii);
+REGISTER_TEST(otbImageToSIFTKeyPointSetFilterOutputImage);
 REGISTER_TEST(otbImageToSIFTKeyPointSetFilterOutputInterestPointAscii);
 REGISTER_TEST(otbImageToSIFTKeyPointSetFilterOutputDescriptorAscii);
 // This test is only used to make validation image from sift code
