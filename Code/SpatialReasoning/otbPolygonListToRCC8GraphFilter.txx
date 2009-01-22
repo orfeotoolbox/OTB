@@ -19,10 +19,6 @@
 #define __otbPolygonListToRCC8GraphFilter_txx
 
 #include "otbPolygonListToRCC8GraphFilter.h"
-#include "otbPolygonToPolygonRCC8Calculator.h"
-#include "otbRCC8VertexIterator.h"
-#include "otbRCC8InEdgeIterator.h"
-#include "otbRCC8OutEdgeIterator.h"
 #include "itkProgressReporter.h"
 
 namespace otb
@@ -153,28 +149,49 @@ void
 PolygonListToRCC8GraphFilter<TPolygonList, TOutputGraph>
 ::GenerateData()
 {
- 
+  // Call a method that can be overridden by a subclass to perform
+  // some calculations prior to splitting the main computations into
+  // separate threads
+  this->BeforeThreadedGenerateData();
+  
+  // Set up the multithreaded processing
+  ThreadStruct str;
+  str.Filter = this;
+  
+  // // Initializing edges vectors per thread
+  EdgeMapType defaultEdgeMap;
+  m_EdgesPerThread = EdgeMapVectorType(this->GetNumberOfThreads(),defaultEdgeMap);
+
+  // Setting up multithreader
+  this->GetMultiThreader()->SetNumberOfThreads(this->GetNumberOfThreads());
+  this->GetMultiThreader()->SetSingleMethod(this->ThreaderCallback, &str);
+  
+  // multithread the execution
+  this->GetMultiThreader()->SingleMethodExecute();
+
+  // Call a method that can be overridden by a subclass to perform
+  // some calculations after all the threads have completed
+  this->AfterThreadedGenerateData();
+}
+
+
+template <class TPolygonList, class TOutputGraph>
+void
+PolygonListToRCC8GraphFilter<TPolygonList, TOutputGraph>
+::BeforeThreadedGenerateData()
+{
   // Ouptut graph pointer
   OutputGraphPointerType graph = this->GetOutput();
   PolygonListConstPointerType inputPtr = this->GetInput();
 
-
-  // invert value vector
-  RCC8ValueType invert[8]={OTB_RCC8_DC,OTB_RCC8_EC,OTB_RCC8_PO,OTB_RCC8_TPPI,
-			   OTB_RCC8_TPP,OTB_RCC8_NTPPI,OTB_RCC8_NTPP,OTB_RCC8_EQ};
-
-  typedef PolygonToPolygonRCC8Calculator<PolygonType> RCC8CalculatorType;
-  typedef RCC8VertexIterator<OutputGraphType>         VertexIteratorType;
-  typedef RCC8InEdgeIterator<OutputGraphType>         InEdgeIteratorType;
-  typedef RCC8OutEdgeIterator<OutputGraphType>        OutEdgeIteratorType;
-  typedef typename PolygonListType::ConstIterator     PolygonListConstIteratorType;
-
-  // Initializing output graph
+// Initializing output graph
   graph->SetNumberOfVertices(inputPtr->Size());
   graph->Build();
 
   // Vertex indexes
   unsigned int nbVertices = 0;
+
+  typedef typename PolygonListType::ConstIterator     PolygonListConstIteratorType;
 
   // Loads the polygons list to graph nodes
   for(PolygonListConstIteratorType it = inputPtr->Begin();
@@ -189,110 +206,214 @@ PolygonListToRCC8GraphFilter<TPolygonList, TOutputGraph>
     otbMsgDevMacro(<<"Adding vertex: " <<nbVertices);
     ++nbVertices;
     }
+}
 
-  itk::ProgressReporter progress(this,0,nbVertices*nbVertices);
+template <class TPolygonList, class TOutputGraph>
+void
+PolygonListToRCC8GraphFilter<TPolygonList, TOutputGraph>
+::ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex,int threadId)
+{
+  otbMsgDebugMacro(<<"Starting thread "<<threadId <<" to work on range ["<<startIndex<<", "<<stopIndex<<"]");
+
+  // Ouptut graph pointer
+  OutputGraphPointerType graph = this->GetOutput();
+  PolygonListConstPointerType inputPtr = this->GetInput();
+
+  // invert value vector
+  RCC8ValueType invert[8]={OTB_RCC8_DC,OTB_RCC8_EC,OTB_RCC8_PO,OTB_RCC8_TPPI,
+			   OTB_RCC8_TPP,OTB_RCC8_NTPPI,OTB_RCC8_NTPP,OTB_RCC8_EQ};
+
+  unsigned int nbVertices = graph->GetNumberOfVertices();
+  itk::ProgressReporter progress(this,threadId,((int)stopIndex-(int)startIndex)*nbVertices);
 
   otbMsgDevMacro(<<"Adjacency matrix size: "<<nbVertices*nbVertices);
 
   VertexIteratorType vIt1(graph);
   VertexIteratorType vIt2(graph);
+  
+  unsigned int count = 0;
 
   // For each couple of vertices
   for(vIt1.GoToBegin();!vIt1.IsAtEnd();++vIt1)
     {
-    for(vIt2.GoToBegin();!vIt2.IsAtEnd();++vIt2)
+    // TODO: this is not correct and should be replaced by a
+    // vIt1(graph, index1, index2), which does not exist for the moment
+    if(count>=startIndex && count<stopIndex)
       {
-      //We do not examine each couple because of the RCC8 symmetry
-      if(vIt1.GetIndex()<vIt2.GetIndex())
+      for(vIt2.GoToBegin();!vIt2.IsAtEnd();++vIt2)
 	{
-
-        // Compute the RCC8 relation
-        typename RCC8CalculatorType::Pointer calc = RCC8CalculatorType::New();
-        calc->SetPolygon1(vIt1.Get()->GetPath());
-        calc->SetPolygon2(vIt2.Get()->GetPath());
-        RCC8ValueType value=OTB_RCC8_DC;
-
-        // if the optimisations are activated
-        if(m_Optimisation)
+	//We do not examine each couple because of the RCC8 symmetry
+	if(vIt1.GetIndex()<vIt2.GetIndex())
 	  {
-	  //  otbMsgDebugMacro(<<"RCC8GraphFilter: Entering optimisation loop");
-	  InEdgeIteratorType inIt1(vIt1.GetIndex(),graph);
-	  InEdgeIteratorType inIt2(vIt2.GetIndex(),graph);
-	  // otbMsgDebugMacro(<<"Optimisation loop: iterators initialised");
-	  VertexDescriptorType betweenIndex;
-	  KnowledgeStateType know(NO_INFO,OTB_RCC8_DC);
-	  inIt1.GoToBegin();
 
-	  // Iterate through the edges going to the first vertex
-	  while(!inIt1.IsAtEnd()&&(know.first!=FULL))
+	  // Compute the RCC8 relation
+	  typename RCC8CalculatorType::Pointer calc = RCC8CalculatorType::New();
+	  calc->SetPolygon1(vIt1.Get()->GetPath());
+	  calc->SetPolygon2(vIt2.Get()->GetPath());
+	  RCC8ValueType value=OTB_RCC8_DC;
+
+	  // if the optimisations are activated
+	  if(m_Optimisation)
 	    {
-	    betweenIndex = inIt1.GetSourceIndex();
-	    inIt2.GoToBegin();
-	    bool edgeFound = false;
-	    while(!inIt2.IsAtEnd()&&(know.first!=FULL))
+	    //  otbMsgDebugMacro(<<"RCC8GraphFilter: Entering optimisation loop");
+	    InEdgeIteratorType inIt1(vIt1.GetIndex(),graph);
+	    InEdgeIteratorType inIt2(vIt2.GetIndex(),graph);
+	    // otbMsgDebugMacro(<<"Optimisation loop: iterators initialised");
+	    VertexDescriptorType betweenIndex;
+	    KnowledgeStateType know(NO_INFO,OTB_RCC8_DC);
+	    inIt1.GoToBegin();
+
+	    // Iterate through the edges going to the first vertex
+	    while(!inIt1.IsAtEnd()&&(know.first!=FULL))
 	      {
-	      // try to find an intermediate vertex between the two ones which
-	      // we vant to compute the relationship
-	      if(inIt2.GetSourceIndex()==betweenIndex)
+	      betweenIndex = inIt1.GetSourceIndex();
+	      inIt2.GoToBegin();
+	      bool edgeFound = false;
+	      while(!inIt2.IsAtEnd()&&(know.first!=FULL))
 		{
-		// if an intermediate vertex is found
-		edgeFound = true;
-		// otbMsgDebugMacro(<<"Optimisation loop: found an intermediary vertex:" <<betweenIndex);
-		// See if it brings some info on the RCCC8 value
-		know = GetKnowledge(invert[inIt1.GetValue()],inIt2.GetValue());
+		// try to find an intermediate vertex between the two ones which
+		// we vant to compute the relationship
+		if(inIt2.GetSourceIndex()==betweenIndex)
+		  {
+		  // if an intermediate vertex is found
+		  edgeFound = true;
+		  // otbMsgDebugMacro(<<"Optimisation loop: found an intermediary vertex:" <<betweenIndex);
+		  // See if it brings some info on the RCCC8 value
+		  know = GetKnowledge(invert[inIt1.GetValue()],inIt2.GetValue());
+		  calc->SetLevel1APrioriKnowledge(know.first==LEVEL_1);
+		  calc->SetLevel3APrioriKnowledge(know.first==LEVEL_3);
+		  //  otbMsgDebugMacro(<<"Optimisation loop: knowledge: "<<know.first<<","<<know.second);
+		  }
+		++inIt2;
+		}
+	      // If no intermediate was found
+	      if(!edgeFound)
+		{
+		//  otbMsgDebugMacro(<<"Optimisation loop: found an intermediary vertex:" <<betweenIndex);
+		// Try using a DC relationship
+		know = GetKnowledge(invert[inIt1.GetValue()],OTB_RCC8_DC);
 		calc->SetLevel1APrioriKnowledge(know.first==LEVEL_1);
 		calc->SetLevel3APrioriKnowledge(know.first==LEVEL_3);
-		//  otbMsgDebugMacro(<<"Optimisation loop: knowledge: "<<know.first<<","<<know.second);
+		// otbMsgDebugMacro(<<"Optimisation loop: knowledge: "<<know.first<<","<<know.second);
 		}
-	      ++inIt2;
+	      ++inIt1;
 	      }
-	    // If no intermediate was found
-	    if(!edgeFound)
+	    // If the search has fully determined the RCC8
+	    if(know.first==FULL)
 	      {
-	      //  otbMsgDebugMacro(<<"Optimisation loop: found an intermediary vertex:" <<betweenIndex);
-	      // Try using a DC relationship
-	      know = GetKnowledge(invert[inIt1.GetValue()],OTB_RCC8_DC);
-	      calc->SetLevel1APrioriKnowledge(know.first==LEVEL_1);
-	      calc->SetLevel3APrioriKnowledge(know.first==LEVEL_3);
-	      // otbMsgDebugMacro(<<"Optimisation loop: knowledge: "<<know.first<<","<<know.second);
+	      // Get the value
+	      value=know.second;
 	      }
-	    ++inIt1;
+	    else
+	      {
+	      // Else trigger the computation
+	      // (which will take the optimisation phase info into account)
+	      calc->Compute();
+	      value=calc->GetValue();
+	      }
+	    // otbMsgDebugMacro(<<"RCC8GraphFilter: Leaving optimisation loop");
 	    }
-	  // If the search has fully determined the RCC8
-	  if(know.first==FULL)
-	    {
-	    // Get the value
-	    value=know.second;
-	    }
+	  // If the optimisations are not activated
 	  else
 	    {
-	    // Else trigger the computation
-	    // (which will take the optimisation phase info into account)
 	    calc->Compute();
 	    value=calc->GetValue();
 	    }
-	  // otbMsgDebugMacro(<<"RCC8GraphFilter: Leaving optimisation loop");
+	  m_Accumulator[value]+=1;
+	  m_Accumulator[invert[value]]+=1;
+	  // If the vertices are connected
+	  if(value>OTB_RCC8_DC)
+	    {
+	    // Add the edge to the graph.
+	    otbMsgDevMacro(<<"Adding edge: "<<vIt1.GetIndex()<<" -> "<<vIt2.GetIndex()<<": "<<value);
+	    m_EdgesPerThread[threadId][EdgePairType(vIt1.GetIndex(),vIt2.GetIndex())]=value;
+	    }
 	  }
-        // If the optimisations are not activated
-        else
-	  {
-	  calc->Compute();
-	  value=calc->GetValue();
-	  }
-        m_Accumulator[value]+=1;
-        m_Accumulator[invert[value]]+=1;
-        // If the vertices are connected
-        if(value>OTB_RCC8_DC)
-	  {
-	  // Add the edge to the graph.
-	  otbMsgDevMacro(<<"Adding edge: "<<vIt1.GetIndex()<<" -> "<<vIt2.GetIndex()<<": "<<value);
-	  graph->AddEdge(vIt1.GetIndex(),vIt2.GetIndex(),value);
-	  }
+	progress.CompletedPixel();
+	progress.CompletedPixel();
 	}
-      progress.CompletedPixel();
-      progress.CompletedPixel();
+      }
+    ++count;
+    }
+  otbMsgDebugMacro(<<"End thread "<<threadId);
+}
+
+
+template <class TPolygonList, class TOutputGraph>
+void
+PolygonListToRCC8GraphFilter<TPolygonList, TOutputGraph>
+::AfterThreadedGenerateData()
+{
+  // in order to have the same output graph whatever the number of
+  // thread is, we use a map to sort the edges in lexicographical
+  // order  
+
+  OutputGraphPointerType graph = this->GetOutput();
+  EdgeMapType globalEdgeMap;
+  
+  // merge all edges
+  for(typename EdgeMapVectorType::iterator vIt = m_EdgesPerThread.begin();
+      vIt!=m_EdgesPerThread.end();++vIt)
+    {
+    for(typename EdgeMapType::iterator mIt = (*vIt).begin();
+	mIt != (*vIt).end();++mIt)
+      {
+      globalEdgeMap[mIt->first]=mIt->second;
       }
     }
+
+  // Report edges to the graph
+  for(typename EdgeMapType::iterator mIt = globalEdgeMap.begin();
+	mIt != globalEdgeMap.end();++mIt)
+      {
+      graph->AddEdge(mIt->first.first,mIt->first.second,mIt->second);
+      }
+}
+
+// Callback routine used by the threading library. This routine just calls
+// the ThreadedGenerateData method after setting the correct region for this
+// thread. 
+
+
+template <class TPolygonList, class TOutputGraph>
+ITK_THREAD_RETURN_TYPE 
+PolygonListToRCC8GraphFilter<TPolygonList, TOutputGraph>
+::ThreaderCallback( void *arg )
+{
+  ThreadStruct *str;
+  int threadId, threadCount;
+  unsigned int total,start, stop;
+
+  threadId = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->ThreadID;
+  threadCount = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->NumberOfThreads;
+  str = (ThreadStruct *)(((itk::MultiThreader::ThreadInfoStruct *)(arg))->UserData);
+
+  total = str->Filter->GetOutput()->GetNumberOfVertices();
+
+  if (threadId < static_cast<int>(total))
+    {
+    
+    // Split the adjacency matrix in strip of equal dimension
+    start = static_cast<unsigned int>(vcl_floor(total*vcl_sqrt(static_cast<double>(threadId)/static_cast<double>(threadCount))+0.5));
+    stop = static_cast<unsigned int>(vcl_floor(total*vcl_sqrt(static_cast<double>(threadId+1)/static_cast<double>(threadCount))+0.5));
+    if (stop > total)
+      stop = total;
+    
+    // For very small graphs it might occur that start = stop. In this
+    // case the vertex at that index will be processed in the next strip.
+    if(start!=stop)
+      {
+      str->Filter->ThreadedGenerateData(start, stop, threadId);
+      }
+    }
+  // else
+  //   {
+  //   otherwise don't use this thread. Sometimes the threads dont
+  //   break up very well and it is just as efficient to leave a 
+  //   few threads idle.
+  //   }
+  
+  return ITK_THREAD_RETURN_VALUE;
 }
 
 template <class TPolygonList, class TOutputGraph>

@@ -27,6 +27,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImageToEdgePathFilter.h"
 #include "otbRCC8GraphFileWriter.h"
 #include "otbSimplifyPathListFilter.h"
+#include "itkMinimumMaximumImageCalculator.h"
 
 int otbPolygonListToRCC8GraphFilter(int argc, char* argv[])
 {
@@ -43,10 +44,11 @@ int otbPolygonListToRCC8GraphFilter(int argc, char* argv[])
   typedef otb::PolygonListToRCC8GraphFilter<PolygonListType,RCC8GraphType> RCC8GraphFilterType;
   typedef otb::RCC8GraphFileWriter<RCC8GraphType> GraphWriterType;
 
-  typedef unsigned char PixelType;
+  typedef unsigned short PixelType;
   typedef otb::Image<PixelType,Dimension> ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageToEdgePathFilter<ImageType,PolygonType> EdgeExtractionFilterType;
+  typedef itk::MinimumMaximumImageCalculator<ImageType> MinMaxCalculatorType;
   typedef otb::SimplifyPathListFilter<PolygonType> SimplifyPathFilterType;
 
   PolygonListType::Pointer regions = PolygonListType::New();
@@ -56,11 +58,24 @@ int otbPolygonListToRCC8GraphFilter(int argc, char* argv[])
     {
     ReaderType::Pointer reader = ReaderType::New();
     reader->SetFileName(argv[2+cpt]);
-    EdgeExtractionFilterType::Pointer extraction = EdgeExtractionFilterType::New();
-    extraction->SetInput(reader->GetOutput());
-    extraction->SetForegroundValue(255);
-    extraction->Update();
-    regions->PushBack(extraction->GetOutput());
+    reader->Update();
+    MinMaxCalculatorType::Pointer minMax = MinMaxCalculatorType::New();
+    minMax->SetImage(reader->GetOutput());
+    minMax->Compute();
+    for(PixelType p = minMax->GetMinimum();p<=minMax->GetMaximum();++p)
+      {
+      if(p!=0)
+	{
+	EdgeExtractionFilterType::Pointer extraction = EdgeExtractionFilterType::New();
+	extraction->SetInput(reader->GetOutput());
+	extraction->SetForegroundValue(p);
+	extraction->Update();
+	if(extraction->GetOutput()->GetVertexList()->Size()>2)
+	  {
+	  regions->PushBack(extraction->GetOutput());
+	  }
+	}
+      }
     }
 
   // Simplifying regions
