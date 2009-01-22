@@ -19,7 +19,6 @@ PURPOSE.  See the above copyright notices for more information.
 #define __otbRCC8GraphSource_h
 
 #include "itkProcessObject.h"
-#include "otbImageList.h"
 
 namespace otb
 {

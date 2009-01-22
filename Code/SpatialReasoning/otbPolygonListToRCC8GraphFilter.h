@@ -18,7 +18,12 @@
 #ifndef __otbPolygonListToRCC8GraphFilter_h
 #define __otbPolygonListToRCC8GraphFilter_h
 
-#include "otbImageListToRCC8GraphFilter.h"
+#include "otbRCC8GraphSource.h"
+#include "otbPolygonToPolygonRCC8Calculator.h"
+#include "otbRCC8VertexIterator.h"
+#include "otbRCC8InEdgeIterator.h"
+#include "otbRCC8OutEdgeIterator.h"
+
 
 namespace otb
 {
@@ -55,10 +60,24 @@ public:
   typedef typename VertexType::Pointer VertexPointerType;
   typedef typename VertexType::PathType PathType;
   typedef typename OutputGraphType::VertexDescriptorType VertexDescriptorType;
+
   /** Knowledge enum typedef */
   typedef typename OutputGraphType::RCC8ValueType RCC8ValueType;
   typedef enum {NO_INFO,LEVEL_1,LEVEL_3,FULL} KnowledgeValueType;
   typedef std::pair<KnowledgeValueType,RCC8ValueType> KnowledgeStateType;
+
+  /** RCC8 calculator typedef */
+  typedef PolygonToPolygonRCC8Calculator<PolygonType> RCC8CalculatorType;
+  
+  /** Graph iterators typedefs */
+  typedef RCC8VertexIterator<OutputGraphType>         VertexIteratorType;
+  typedef RCC8InEdgeIterator<OutputGraphType>         InEdgeIteratorType;
+  typedef RCC8OutEdgeIterator<OutputGraphType>        OutEdgeIteratorType;
+
+  typedef std::pair<unsigned int, unsigned int>       EdgePairType;
+  typedef std::map<EdgePairType,RCC8ValueType>        EdgeMapType;
+  typedef std::vector<EdgeMapType>                    EdgeMapVectorType;
+
   /** Toogle optimisation flag */
   itkBooleanMacro(Optimisation);
   itkSetMacro(Optimisation,bool);
@@ -87,6 +106,31 @@ protected:
   ~PolygonListToRCC8GraphFilter();
   /** Main computation method */
   virtual void GenerateData();
+
+  /** Multi-threading implementation */
+
+  virtual void BeforeThreadedGenerateData();
+  
+  virtual void AfterThreadedGenerateData();
+
+  /** startIndex and stopIndex represent the indeces of the vertex to
+  examine in thread threadId */
+  virtual void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex,int threadId);
+
+  /** Static function used as a "callback" by the MultiThreader.  The threading
+   * library will call this routine for each thread, which will delegate the
+   * control to ThreadedGenerateData(). */
+  static ITK_THREAD_RETURN_TYPE ThreaderCallback( void *arg );
+
+  /** Internal structure used for passing image data into the threading library */
+  struct ThreadStruct
+  {
+    Pointer Filter;
+  };
+
+
+  /** End Multi-threading implementation */
+
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /**
@@ -101,6 +145,7 @@ private:
   /** Optimisation flag */
   bool m_Optimisation;
   unsigned int m_Accumulator[8];
+  EdgeMapVectorType m_EdgesPerThread;
 
 };
 } // End namespace otb
