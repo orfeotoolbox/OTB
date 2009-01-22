@@ -28,7 +28,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include <iostream>
 #include <fstream>
 
-int otbImageToSIFTKeyPointSetFilterOutputAscii(int argc, char * argv[])
+int otbImageToSIFTKeyPointSetFilterOutputInterestPointAscii(int argc, char * argv[])
 {
   const char * infname = argv[1];
   const char * outfname = argv[2];
@@ -66,26 +66,17 @@ int otbImageToSIFTKeyPointSetFilterOutputAscii(int argc, char * argv[])
   filter->Update();
 
   PointsIteratorType pIt = filter->GetOutput()->GetPoints()->Begin();
-  PointDataIteratorType pDataIt = filter->GetOutput()->GetPointData()->Begin();
 
   std::ofstream outfile(outfname);
 
   outfile << "Number of octaves: "<<octaves << std::endl;
   outfile << "Number of scales: "<<scales << std::endl;
   outfile << "Number of SIFT key points: " << filter->GetOutput()->GetNumberOfPoints() << std::endl;
+
   while( pIt!=filter->GetOutput()->GetPoints()->End() )
     {
-      outfile << "[" << std::fixed << std::setprecision(2) << pIt.Value()[0] << ", " << std::setprecision(2) << pIt.Value()[1] << "][";
-
-      unsigned int lIterDesc=0;
-      while (lIterDesc < pDataIt.Value().Size())
-  {
-    outfile << std::setprecision(3) << pDataIt.Value()[lIterDesc] << " ";
-    lIterDesc++;
-  }
-      outfile << "]" << std::endl;
+      outfile << "[" << std::fixed << std::setprecision(2) << pIt.Value()[0] << ", " << std::setprecision(2) << pIt.Value()[1] << "]" << std::endl;
       ++pIt;
-      ++pDataIt;
     }
 
   outfile.close();
