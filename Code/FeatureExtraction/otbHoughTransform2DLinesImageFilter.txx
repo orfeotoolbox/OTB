@@ -143,8 +143,9 @@ HoughTransform2DLinesImageFilter< TInputPixelType, TOutputPixelType>
 
 // Pre-computation of trigonometric lines
   unsigned int nbAngles = static_cast<unsigned long int>(m_AngleAxisSize);
-  double cosAngle[nbAngles];
-  double sinAngle[nbAngles];
+  std::vector<double> cosAngle(nbAngles,0.);
+  std::vector<double> sinAngle(nbAngles,0.);
+
   //const double nPI = 4.0 * vcl_atan( 1.0 ); Unused in this method
   for(unsigned int indexAngle = 0; indexAngle < nbAngles; indexAngle ++ )
     {  
