@@ -756,23 +756,25 @@ ADD_TEST(feTuImageToCarvingPathFilterNew ${FEATUREEXTRACTION_TESTS8}
 ADD_TEST(feTuImageToSIFTKeyPointSetFilterNew ${FEATUREEXTRACTION_TESTS9} 
          otbImageToSIFTKeyPointSetFilterNew)
 
-ADD_TEST(feTvImageToSIFTKeyPointSetFilterSceneOutputImage ${FEATUREEXTRACTION_TESTS9}
---compare-image ${EPSILON}  
-		${BASELINE}/feTvImageToSIFTKeyPointSetFilterSceneImageOutput.png
-		${TEMP}/feTvImageToSIFTKeyPointSetFilterSceneImageOutput.png
-         otbImageToSIFTKeyPointSetFilterOutputImage
+
+
+ADD_TEST(feTvImageToSIFTKeyPointSetFilterSceneOutputInterestPointAscii ${FEATUREEXTRACTION_TESTS9}
+--compare-ascii ${EPS}
+		${BASELINE_FILES}/feTvImageToSIFTKeyPointSetFilterSceneKeysOutputInterestPoint.txt
+		${TEMP}/feTvImageToSIFTKeyPointSetFilterSceneKeysOutputInterestPoint.txt
+         otbImageToSIFTKeyPointSetFilterOutputInterestPointAscii
 		${INPUTDATA}/scene.png
-		${TEMP}/feTvImageToSIFTKeyPointSetFilterSceneImageOutput.png
+		${TEMP}/feTvImageToSIFTKeyPointSetFilterSceneKeysOutputInterestPoint.txt
 		6 3 0.08 10.0 
 )
 
-ADD_TEST(feTvImageToSIFTKeyPointSetFilterSceneOutputAscii ${FEATUREEXTRACTION_TESTS9}
+ADD_TEST(feTvImageToSIFTKeyPointSetFilterSceneDescriptorAscii ${FEATUREEXTRACTION_TESTS9}
 --compare-ascii ${EPS}
-		${BASELINE_FILES}/feTvImageToSIFTKeyPointSetFilterSceneKeysOutput.txt
-		${TEMP}/feTvImageToSIFTKeyPointSetFilterSceneKeysOutput.txt
-         otbImageToSIFTKeyPointSetFilterOutputAscii
+		${BASELINE_FILES}/feTvImageToSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
+		${TEMP}/feTvImageToSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
+         otbImageToSIFTKeyPointSetFilterOutputDescriptorAscii
 		${INPUTDATA}/scene.png
-		${TEMP}/feTvImageToSIFTKeyPointSetFilterSceneKeysOutput.txt
+		${TEMP}/feTvImageToSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
 		6 3 0.08 10.0 
 )
 
@@ -878,23 +880,23 @@ ADD_TEST(feTuImageToSURFKeyPointSetFilterNew ${FEATUREEXTRACTION_TESTS9}
          otbImageToSURFKeyPointSetFilterNew)
 
 
-ADD_TEST(feTvImageToSURFKeyPointSetFilterSceneOutputImage ${FEATUREEXTRACTION_TESTS9}
---compare-image ${EPSILON}  
-		${BASELINE}/feTvImageToSURFKeyPointSetFilterSceneImageOutput.png
-		${TEMP}/feTvImageToSURFKeyPointSetFilterSceneImageOutput.png
-         otbImageToSURFKeyPointSetFilterOutputImage
+ADD_TEST(feTvImageToSURFKeyPointSetFilterSceneOutputInterestPointAscii ${FEATUREEXTRACTION_TESTS9}
+--compare-ascii ${EPS}
+		${BASELINE_FILES}/feTvImageToSURFKeyPointSetFilterSceneKeysOutputInterestPoint.txt
+		${TEMP}/feTvImageToSURFKeyPointSetFilterSceneKeysOutputInterestPoint.txt
+         otbImageToSURFKeyPointSetFilterOutputInterestPointAscii
 		${INPUTDATA}/scene.png
-		${TEMP}/feTvImageToSURFKeyPointSetFilterSceneImageOutput.png
+		${TEMP}/feTvImageToSURFKeyPointSetFilterSceneKeysOutputInterestPoint.txt
 		1 3 
 )
 
-ADD_TEST(feTvImageToSURFKeyPointSetFilterSceneOutputAscii ${FEATUREEXTRACTION_TESTS9}
+ADD_TEST(feTvImageToSURFKeyPointSetFilterSceneOutputDescriptorAscii ${FEATUREEXTRACTION_TESTS9}
 --compare-ascii ${EPS}
-		${BASELINE_FILES}/feTvImageToSURFKeyPointSetFilterSceneKeysOutput.txt
-		${TEMP}/feTvImageToSURFKeyPointSetFilterSceneKeysOutput.txt
-         otbImageToSURFKeyPointSetFilterOutputAscii
+		${BASELINE_FILES}/feTvImageToSURFKeyPointSetFilterSceneKeysOutputDescriptor.txt
+		${TEMP}/feTvImageToSURFKeyPointSetFilterSceneKeysOutputDescriptor.txt
+         otbImageToSURFKeyPointSetFilterOutputDescriptorAscii
 		${INPUTDATA}/scene.png
-		${TEMP}/feTvImageToSURFKeyPointSetFilterSceneKeysOutput.txt
+		${TEMP}/feTvImageToSURFKeyPointSetFilterSceneKeysOutputDescriptor.txt
 		1 3 
 )
 	 
@@ -1061,15 +1063,15 @@ SET(BasicFeatureExtraction_SRCS9
 otbImageToSIFTKeyPointSetFilterNew.cxx
 otbImageToSIFTKeyPointSetFilterValid.cxx
 otbImageToSIFTKeyPointSetFilterDistanceMap.cxx
-otbImageToSIFTKeyPointSetFilterOutputImage.cxx
-otbImageToSIFTKeyPointSetFilterOutputAscii.cxx
+otbImageToSIFTKeyPointSetFilterOutputInterestPointAscii.cxx
+otbImageToSIFTKeyPointSetFilterOutputDescriptorAscii.cxx
 otbImageToHessianDeterminantImageFilterNew.cxx
 otbImageToHessianDeterminantImageFilter.cxx
 otbImageFittingPolygonListFilter.cxx
 otbImageFittingPolygonListFilterNew.cxx
 otbImageToSURFKeyPointSetFilterNew.cxx	
-otbImageToSURFKeyPointSetFilterOutputImage.cxx
-otbImageToSURFKeyPointSetFilterOutputAscii.cxx
+otbImageToSURFKeyPointSetFilterOutputInterestPointAscii.cxx
+otbImageToSURFKeyPointSetFilterOutputDescriptorAscii.cxx
 otbImageToFastSIFTKeyPointSetFilterNew.cxx
 otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii.cxx
 otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii.cxx
