@@ -918,25 +918,27 @@ ADD_TEST(feTvImageFittingPolygonListFilter ${FEATUREEXTRACTION_TESTS9}
 ADD_TEST(feTuImageToFastSIFTKeyPointSetFilterNew ${FEATUREEXTRACTION_TESTS9} 
          otbImageToFastSIFTKeyPointSetFilterNew)
 
-ADD_TEST(feTvImageToFastSIFTKeyPointSetFilterSceneOutputImage ${FEATUREEXTRACTION_TESTS9} 
---compare-image ${EPSILON}  
-		${BASELINE}/feTvImageToFastSIFTKeyPointSetFilterSceneImageOutput.png
-		${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneImageOutput.png
-         otbImageToFastSIFTKeyPointSetFilterOutputImage
-		${INPUTDATA}/scene.png
-		${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneImageOutput.png
-		6  
-)	
-
-ADD_TEST(feTvImageToFastSIFTKeyPointSetFilterSceneOutputAscii ${FEATUREEXTRACTION_TESTS9}
+ADD_TEST(feTvImageToFastSIFTKeyPointSetFilterSceneOutputDescriptorAscii ${FEATUREEXTRACTION_TESTS9}
 --compare-ascii ${EPS}
-		${BASELINE_FILES}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutput.txt
-		${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutput.txt
-         otbImageToFastSIFTKeyPointSetFilterOutputAscii
-		${INPUTDATA}/scene.png
-		${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutput.txt
+		${BASELINE_FILES}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
+		${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
+         otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii
+		${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif 
+		${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
 		6  
 )
+
+ADD_TEST(feTvImageToFastSIFTKeyPointSetFilterSceneOutputInterestPointAscii ${FEATUREEXTRACTION_TESTS9}
+--compare-ascii ${EPS}
+		${BASELINE_FILES}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputInterestPoint.txt
+		${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputInterestPoint.txt
+         otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii
+		${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
+		${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputInterestPoint.txt
+		6  
+)
+
+
 
 
 
@@ -1069,8 +1071,8 @@ otbImageToSURFKeyPointSetFilterNew.cxx
 otbImageToSURFKeyPointSetFilterOutputImage.cxx
 otbImageToSURFKeyPointSetFilterOutputAscii.cxx
 otbImageToFastSIFTKeyPointSetFilterNew.cxx
-otbImageToFastSIFTKeyPointSetFilterOutputImage.cxx
-otbImageToFastSIFTKeyPointSetFilterOutputAscii.cxx
+otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii.cxx
+otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii.cxx
 otbKeyPointSetsMatchingFilterNew.cxx
 otbKeyPointSetsMatchingFilter.cxx
 otbLandmarkNew.cxx
