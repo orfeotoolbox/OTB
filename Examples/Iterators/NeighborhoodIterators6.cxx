@@ -120,6 +120,7 @@ int main( int argc, char *argv[] )
   noise->SetSize(size.m_Size);
   noise->SetMin(-.7);
   noise->SetMax(.8);
+  noise->SetNumberOfThreads(1);
   adder->SetInput1(noise->GetOutput());
   adder->SetInput2(fastMarching->GetOutput());
 
