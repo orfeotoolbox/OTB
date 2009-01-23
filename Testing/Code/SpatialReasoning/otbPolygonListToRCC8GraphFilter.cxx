@@ -52,10 +52,15 @@ int otbPolygonListToRCC8GraphFilter(int argc, char* argv[])
   typedef otb::SimplifyPathListFilter<PolygonType> SimplifyPathFilterType;
 
   PolygonListType::Pointer regions = PolygonListType::New();
+  
+  RCC8GraphFilterType::SegmentationRangesType ranges;
+
+  
 
   // Reading input images
   for(int cpt=1;cpt<=nbImages;++cpt)
     {
+    ranges.push_back(regions->Size());
     ReaderType::Pointer reader = ReaderType::New();
     reader->SetFileName(argv[2+cpt]);
     reader->Update();
@@ -88,6 +93,7 @@ int otbPolygonListToRCC8GraphFilter(int argc, char* argv[])
   RCC8GraphFilterType::Pointer filter = RCC8GraphFilterType::New();
   
   filter->SetInput(simplifier->GetOutput());
+  filter->SetSegmentationRanges(ranges);
  
   GraphWriterType::Pointer writer = GraphWriterType::New();
   writer->SetInput(filter->GetOutput());

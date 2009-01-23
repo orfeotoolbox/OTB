@@ -78,9 +78,21 @@ public:
   typedef std::map<EdgePairType,RCC8ValueType>        EdgeMapType;
   typedef std::vector<EdgeMapType>                    EdgeMapVectorType;
 
+  typedef std::vector<unsigned int>                   SegmentationRangesType;
+
   /** Toogle optimisation flag */
   itkBooleanMacro(Optimisation);
   itkSetMacro(Optimisation,bool);
+
+  void SetSegmentationRanges(SegmentationRangesType ranges)
+  {
+    m_SegmentationRanges = ranges;
+  }
+
+  const SegmentationRangesType& GetSegmentationRanges() const
+  {
+    return m_SegmentationRanges;
+  }
 
   /**
    * Get the number of occurences of the given value
@@ -147,6 +159,8 @@ private:
   unsigned int m_Accumulator[8];
   EdgeMapVectorType m_EdgesPerThread;
 
+  /** This array stores the indices corresponding to each segmentation */
+  SegmentationRangesType m_SegmentationRanges;
 };
 } // End namespace otb
 

@@ -201,6 +201,29 @@ PolygonListToRCC8GraphFilter<TPolygonList, TOutputGraph>
     VertexPointerType vertex = VertexType::New();
     // Set its properties
     vertex->SetPath(it.Get());
+    
+    // look for the appropriate segmentation index
+    
+    unsigned int segIndex = 1;
+
+    while(segIndex < m_SegmentationRanges.size() && nbVertices<m_SegmentationRanges[segIndex-1] || nbVertices >= m_SegmentationRanges[segIndex])
+      {
+      segIndex++;
+      }
+
+ //    while(candidateSegIndex+1< m_SegmentationRanges.size() && !found)
+//       {
+//       std::cout<<"Range: "<<m_SegmentationRanges[candidateSegIndex]<<", "<<m_SegmentationRanges[candidateSegIndex+1]<<std::endl;
+//       if(nbVertices>=m_SegmentationRanges[candidateSegIndex] && nbVertices<m_SegmentationRanges[candidateSegIndex+1])
+// 	{
+// 	segIndex = candidateSegIndex;
+// 	found = true;
+// 	std::cout<<"Found: "<<segIndex<<std::endl;
+// 	}
+//       ++candidateSegIndex;
+//       }
+    vertex->SetSegmentationLevel(segIndex-1);
+  
     // Put it in the graph
     graph->SetVertex(nbVertices,vertex);
     otbMsgDevMacro(<<"Adding vertex: " <<nbVertices);
