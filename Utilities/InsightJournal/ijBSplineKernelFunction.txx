@@ -153,7 +153,7 @@ BSplineKernelFunction<VSplineOrder>
   Superclass::PrintSelf( os, indent ); 
   os << indent  << "Spline Order: " << this->m_SplineOrder << std::endl;
   os << indent  << "Piecewise Polynomial Pieces: " << std::endl;  
-  RealType a, b;
+  RealType a(0.), b(0.);
   for ( unsigned int i = 0; i < this->m_BSplineShapeFunctions.rows(); i++ )
     {
     os << indent << indent;

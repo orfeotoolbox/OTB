@@ -601,6 +601,7 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
     {
     PointType point;
     PointDataType dataOut;
+    point.Fill(0);
 
     this->GetInput()->GetPoint( ItIn.Index(), &point );
     this->EvaluateAtPoint( point, dataOut );
