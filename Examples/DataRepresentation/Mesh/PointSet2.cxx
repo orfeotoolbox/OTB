@@ -37,7 +37,7 @@
 
 int main(int, char *[])
 {
-  typedef itk::PointSet< unsigned short, 3 > PointSetType;
+  typedef itk::PointSet< unsigned short, 2 > PointSetType;
 
   //  Software Guide : BeginLatex
   //

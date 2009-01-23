@@ -54,25 +54,24 @@ int otbExtractROIResample(int argc, char* argv[])
 
   typedef otb::ImageFileReader<ImageType> ReaderType;
 
-  ReaderType::Pointer filter = ReaderType::New();
+  ReaderType::Pointer reader = ReaderType::New();
 
-  filter->SetFileName(argv[1]);
-
-  filter->UpdateOutputInformation();
-
+  reader->SetFileName(argv[1]);
+  reader->UpdateOutputInformation();
+  
 
   typedef itk::IdentityTransform< double, 2 > IdentityTransformType;
   IdentityTransformType::Pointer transform = IdentityTransformType::New();
 
   typedef otb::StreamingResampleImageFilter<ImageType, ImageType, double> ResampleType;
   ResampleType::Pointer filterResample = ResampleType::New();
+  filterResample->SetInput(reader->GetOutput());
   filterResample->SetTransform(transform);
-  filterResample->SetInput(filter->GetOutput());
+  filterResample->SetSize(reader->GetOutput()->GetLargestPossibleRegion().GetSize());
 
   typedef otb::ExtractROI<PixelType, PixelType> ExtractROIType;
-
-
   ExtractROIType::Pointer filterResampleRoi = ExtractROIType::New();
+
   filterResampleRoi->SetStartX(startX);
   filterResampleRoi->SetStartY(startY);
   filterResampleRoi->SetSizeX(sizeX);
@@ -84,14 +83,15 @@ int otbExtractROIResample(int argc, char* argv[])
   }
   else
   {
-    filterResampleRoi->SetInput(filter->GetOutput());
+    filterResampleRoi->SetInput(reader->GetOutput());
   }
 
   typedef otb::StreamingImageFileWriter<ImageType> WriterType;
-  WriterType::Pointer filterResampleWriter = WriterType:: New();
-  filterResampleWriter->SetFileName(argv[2]);
-  filterResampleWriter->SetInput(filterResampleRoi->GetOutput());
-  filterResampleWriter->Update();
+  WriterType::Pointer streamingWriter = WriterType:: New();
+
+  streamingWriter->SetFileName(argv[2]);
+  streamingWriter->SetInput(filterResampleRoi->GetOutput());
+  streamingWriter->Update();
 
   return EXIT_SUCCESS;
 }
