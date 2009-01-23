@@ -78,9 +78,11 @@ ADD_TEST(leTvSVMModelKernelTypeGenericLoadSave ${LEARNING_TESTS1}
 ADD_TEST(leTuSVMImageModelEstimatorNew ${LEARNING_TESTS1}  
         otbSVMImageModelEstimatorNew)
 
+
 ADD_TEST(leTvSVMImageModelEstimatorTrain ${LEARNING_TESTS1}
 --compare-ascii ${EPSILON_10e3}  ${BASELINE_FILES}/leTvsvm_model_image 
-                        ${TEMP}/leTvsvm_model_image 
+                        ${TEMP}/leTvsvm_model_image
+--ignore-lines-with 2 probA probB 
         otbSVMImageModelEstimatorTrain
 	${INPUTDATA}/ROI_QB_MUL_4.tif
 	${INPUTDATA}/ROI_QB_MUL_4_train.c1.hdr
