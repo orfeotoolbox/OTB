@@ -6,6 +6,7 @@ include(CheckIncludeFile)
 include(CheckLibraryExists)
 include(CheckCXXSourceRuns)
 include(CheckCXXCompilerFlag)
+include(CheckCXXSourceCompiles)
 
 # check for SSE extensions
 if( CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX )
@@ -71,6 +72,46 @@ elseif(MSVC)
     add_definitions( "/arch:SSE2 /fp:fast -D__SSE__ -D__SSE2__" )
   endif()
 endif()
+
+# TRY  COMPILE libsiftfast.cpp (depend of gcc version)
+IF(CMAKE_COMPILER_IS_GNUCXX)
+    SET(IS_SIFTFAST_COMPILE 0)
+#    SET(OTB_DISABLE_FAST_FUNCTIONS_VALUE 0)
+#    CHECK_CXX_SOURCE_COMPILES(
+#            ${CMAKE_CURRENT_SOURCE_DIR}/test_try_compile_main_libsiftfast.cpp
+#            CMAKE_REQUIRED_FLAGS "-msse2 -mfpmath=sse"
+#            IS_SIFTFAST_COMPILE ) 
+#CMAKE_REQUIRED_DEFINITIONS
+    TRY_COMPILE(IS_SIFTFAST_COMPILE
+              ${CMAKE_CURRENT_BINARY_DIR}
+              ${CMAKE_CURRENT_SOURCE_DIR}/test_try_compile_libsiftfast.cpp
+              OUTPUT_VARIABLE OUTPUT)
+    IF(IS_SIFTFAST_COMPILE)
+        MESSAGE(STATUS "Try to compile libsiftfast.cpp -- yes.")
+    ELSE(IS_SIFTFAST_COMPILE)
+        MESSAGE(STATUS "Try to compile libsiftfast.cpp -- no.")
+        TRY_COMPILE(IS_SIFTFAST_COMPILE2
+              ${CMAKE_CURRENT_BINARY_DIR}
+              ${CMAKE_CURRENT_SOURCE_DIR}/test_try_compile_libsiftfast.cpp
+              COMPILE_DEFINITIONS -DOTB_DISABLE_FAST_FUNCTIONS
+              OUTPUT_VARIABLE OUTPUT)
+        IF(IS_SIFTFAST_COMPILE2)
+            MESSAGE(STATUS "Try to compile libsiftfast.cpp with disabling fast functions (add CFLAGS -DOTB_DISABLE_FAST_FUNCTIONS) -- yes.")
+        ELSE(IS_SIFTFAST_COMPILE2)
+            MESSAGE(STATUS "Try to compile libsiftfast.cpp with disabling fast functions (add CFLAGS -DOTB_DISABLE_FAST_FUNCTIONS) -- no.")
+            MESSAGE(FATAL_ERROR "Impossible to compile libsiftfast. Contact OTB development team")
+        ENDIF(IS_SIFTFAST_COMPILE2)
+        SET(OTB_DISABLE_FAST_FUNCTIONS_VALUE 1)
+    ELSE(NOT IS_SIFTFAST_COMPILE)
+        MESSAGE(STATUS "Try to compile libsiftfast.cpp done.")
+    ENDIF(IS_SIFTFAST_COMPILE)
+
+    IF(OTB_DISABLE_FAST_FUNCTIONS_VALUE)
+        ADD_DEFINITIONS(-DOTB_DISABLE_FAST_FUNCTIONS)
+    ENDIF(OTB_DISABLE_FAST_FUNCTIONS_VALUE)
+
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
       SET_SOURCE_FILES_PROPERTIES(libsiftfast.cpp PROPERTIES COMPILE_FLAGS -w)
