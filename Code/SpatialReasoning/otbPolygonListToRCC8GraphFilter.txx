@@ -261,7 +261,7 @@ PolygonListToRCC8GraphFilter<TPolygonList, TOutputGraph>
     {
     // TODO: this is not correct and should be replaced by a
     // vIt1(graph, index1, index2), which does not exist for the moment
-    if(count>=startIndex && count<stopIndex)
+      if((count>=startIndex) && (count<stopIndex))
       {
       for(vIt2.GoToBegin();!vIt2.IsAtEnd();++vIt2)
 	{
