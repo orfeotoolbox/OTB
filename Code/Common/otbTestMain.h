@@ -798,7 +798,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
               nbdiff++;
 
             }
-            else if (vcl_abs(atof(strRef.c_str())-atof(strTest.c_str())) > epsilon)
+            else if ( (strRef != strTest) && (vcl_abs(atof(strRef.c_str())-atof(strTest.c_str())) > epsilon) )
             {
               if( reportErrors )
               {
@@ -855,7 +855,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
               else if ((etatCour==ETAT_CHAR)&&(etatPrec==ETAT_NUM))
               {
 
-                if (vcl_abs(atof(strNumRef.c_str())-atof(strNumTest.c_str())) > epsilon)
+                if ( (strNumRef != strNumTest) && (vcl_abs(atof(strNumRef.c_str())-atof(strNumTest.c_str())) > epsilon) )
                 {
                   if( reportErrors )
                   {
@@ -897,7 +897,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
               if (isNumeric(strRef))
               {
 
-                if (vcl_abs(atof(strRef.c_str())-atof(strTest.c_str())) > epsilon)
+                if ( strRef != strTest) && (vcl_abs(atof(strRef.c_str())-atof(strTest.c_str())) > epsilon))
                 {
                   if( reportErrors )
                   {
