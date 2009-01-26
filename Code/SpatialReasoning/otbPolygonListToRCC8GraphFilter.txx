@@ -211,7 +211,7 @@ PolygonListToRCC8GraphFilter<TPolygonList, TOutputGraph>
       segIndex++;
       }
 
-    vertex->SetSegmentationLevel(segIndex);
+    vertex->SetSegmentationLevel(segIndex-1);
   
     // Put it in the graph
     graph->SetVertex(nbVertices,vertex);
