@@ -897,7 +897,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
               if (isNumeric(strRef))
               {
 
-                if ( strRef != strTest) && (vcl_abs(atof(strRef.c_str())-atof(strTest.c_str())) > epsilon))
+                if ( ( strRef != strTest) && (vcl_abs(atof(strRef.c_str())-atof(strTest.c_str())) > epsilon))
                 {
                   if( reportErrors )
                   {
