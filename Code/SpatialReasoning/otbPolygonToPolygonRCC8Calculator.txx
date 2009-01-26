@@ -130,11 +130,11 @@ PolygonToPolygonRCC8Calculator<TInputPolygon>
 {
   for(unsigned int dim = 0; dim<RegionType::ImageDimension;++dim)
     {
-    if(region1.GetIndex()[dim]+region1.GetSize()[dim]-1 < region2.GetIndex()[dim])
+    if(region1.GetIndex()[dim]+static_cast<int>(region1.GetSize()[dim]) < region2.GetIndex()[dim])
       {
       return true;
       }
-    else if(region2.GetIndex()[dim]+region2.GetSize()[dim]-1 < region1.GetIndex()[dim])
+    else if(region2.GetIndex()[dim]+static_cast<int>(region2.GetSize()[dim]) < region1.GetIndex()[dim])
       {
       return true;
       }
