@@ -116,7 +116,8 @@ ADD_TEST(leTuSVMPointSetModelEstimatorNew ${LEARNING_TESTS2}
 
 ADD_TEST(leTuSVMPointSetModelEstimatorTrain ${LEARNING_TESTS2}  
 --compare-ascii ${EPSILON_10e3}  ${BASELINE_FILES}/leTvsvm_model_pointset 
-                        ${TEMP}/leTvsvm_model_pointset 
+                        ${TEMP}/leTvsvm_model_pointset
+--ignore-lines-with 2 probA probB 
         otbSVMPointSetModelEstimatorTrain
 	${TEMP}/leTvsvm_model_pointset)
 	
