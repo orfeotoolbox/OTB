@@ -70,10 +70,7 @@ namespace otb
    * you to get the smoothed image, whereas the
    * GetClusteredOuptut() methods returns the clustered output. The GetLabeledClusteredOutput() returns
    * a labeled clustered image, and the GetClusterBoundariesOutput()
-   * an image of the cluster boundaries. Last, the
-   * GetVectorizedClusterBoundariesOutput() returns a list of
-   * otb::Polygon representing the cluster boundaries, whose value is
-   * the corresponding mean-shift mode.
+   * an image of the cluster boundaries.
    *
    * The MinimumRegionSize parameter allows you to prune small clustered regions.
    *
@@ -171,8 +168,6 @@ namespace otb
       LabeledOutputType * GetClusterBoundariesOutput();
       /** Return the const vectorized boundaries output */
       const PolygonListType * GetVectorizedClusterBoundariesOutput() const;
-      /** Return the vectorized boundaries output */
-      PolygonListType * GetVectorizedClusterBoundariesOutput();
       /** Return the mean-shift mode by label */
       const ModeMapType& GetModes()
       {

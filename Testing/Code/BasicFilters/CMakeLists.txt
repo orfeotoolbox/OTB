@@ -905,7 +905,6 @@ ADD_TEST(bfTvMeanShiftImageFilter ${BASICFILTERS_TESTS9}
 	${TEMP}/bfMeanShiftImageFilterClusteredOutput.tif
 	${TEMP}/bfMeanShiftImageFilterLabeledClusteredOutput.tif
 	${TEMP}/bfMeanShiftImageFilterClusterBoundariesOutput.tif
-	${TEMP}/bfMeanShiftImageFilterVectorizedClusterBoundariesOutput.txt
 	16 16 10 1.0 1 1
 	)
 
@@ -925,21 +924,6 @@ ADD_TEST(bfTvMeanShiftImageFilterNotStreamedNotThreaded ${BASICFILTERS_TESTS9}
 	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedClusteredOutput.tif
 	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedLabeledClusteredOutput.tif
 	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedClusterBoundariesOutput.tif
-	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedVectorizedClusterBoundariesOutput.txt
-	16 16 10 1.0 0 0
-	)
-
-ADD_TEST(bfTvMeanShiftImageFilterNotStreamedNotThreadedVectorizedOutput ${BASICFILTERS_TESTS9}
---compare-ascii ${TOL}
-		${BASELINE_FILES}/bfMeanShiftImageFilterVectorizedClusterBoundariesOutput.txt
-		${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedVectorizedClusterBoundariesOutput.txt
-        otbMeanShiftImageFilter
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedOutput.tif
-	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedClusteredOutput.tif
-	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedLabeledClusteredOutput.tif
-	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedClusterBoundariesOutput.tif
-	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedVectorizedClusterBoundariesOutput.txt
 	16 16 10 1.0 0 0
 	)
 
@@ -962,7 +946,6 @@ ADD_TEST(bfTvMeanShiftVectorImageFilter ${BASICFILTERS_TESTS9}
 	${TEMP}/bfMeanShiftVectorImageFilterClusteredOutput.tif
 	${TEMP}/bfMeanShiftVectorImageFilterLabeledClusteredOutput.tif
 	${TEMP}/bfMeanShiftVectorImageFilterClusterBoundariesOutput.tif
-	${TEMP}/bfMeanShiftVectorImageFilterVectorizedClusterBoundariesOutput.txt
 	16 16 10 1.0 1 1
 	)
 
@@ -983,21 +966,6 @@ ADD_TEST(bfTvMeanShiftVectorImageFilterNotStreamedNotThreaded ${BASICFILTERS_TES
 	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedClusteredOutput.tif
 	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedLabeledClusteredOutput.tif
 	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedClusterBoundariesOutput.tif
-	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedVectorizedClusterBoundariesOutput.txt
-	16 16 10 1.0 0 0
-	)
-
-ADD_TEST(bfTvMeanShiftVectorImageFilterNotStreamedNotThreadedVectorizedOutput ${BASICFILTERS_TESTS9}
---compare-ascii ${TOL}
-		${BASELINE_FILES}/bfMeanShiftVectorImageFilterVectorizedClusterBoundariesOutput.txt
-		${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedVectorizedClusterBoundariesOutput.txt
-        otbMeanShiftVectorImageFilter
-	${INPUTDATA}/qb_RoadExtract2sub200x200.tif
-	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedOutput.tif
-	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedClusteredOutput.tif
-	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedLabeledClusteredOutput.tif
-	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedClusterBoundariesOutput.tif
-	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedVectorizedClusterBoundariesOutput.txt
 	16 16 10 1.0 0 0
 	)
 
