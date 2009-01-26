@@ -411,14 +411,33 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
     OutputPixelType pixel;
     TBufferConverter::FloatArrayToPixel(modes,label*clusteredOutputPtr->GetNumberOfComponentsPerPixel(),
 					pixel,clusteredOutputPtr->GetNumberOfComponentsPerPixel(),invScale);
-
+    // Filling the modes map
+    m_Modes[label]=pixel;
     newPolygon->SetValue(pixel);
 
     regionIndeces = regionList->GetRegionIndeces(label);
-    for(int  i = 0; i < regionList->GetRegionCount(label);++i)
+    // points are given in a left-right / left right style, so we have
+    // to put them back in the right order.
+    unsigned int halfsize = regionList->GetRegionCount(label);
+
+    for(int i = 0; i<halfsize;++i)
       {
-      boundIndex[0]= regionIndeces[i] % clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0];
-      boundIndex[1]= regionIndeces[i] / clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0];
+      boundIndex[0]= regionIndeces[2*i] % clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0];
+      boundIndex[1]= regionIndeces[2*i] / clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0];
+      if(clusterBoudariesOutputPtr->GetBufferedRegion().IsInside(boundIndex))
+        {
+	clusterBoudariesOutputPtr->SetPixel(boundIndex,1);
+        }
+      typename PolygonType::ContinuousIndexType cindex;
+      cindex[0]=boundIndex[0];
+      cindex[1]=boundIndex[1];
+      newPolygon->AddVertex(cindex);
+      }
+    
+    for(int i = halfsize-1; i>=0;--i)
+      {
+      boundIndex[0]= regionIndeces[2*i+1] % clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0];
+      boundIndex[1]= regionIndeces[2*i+1] / clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0];
       if(clusterBoudariesOutputPtr->GetBufferedRegion().IsInside(boundIndex))
         {
 	clusterBoudariesOutputPtr->SetPixel(boundIndex,1);
