@@ -54,7 +54,7 @@ std::map<std::string,int> RegressionTestbaselines (char *);
 
 int RegressionTestImage (int, const char *, const char *, int, const double);
 int RegressionTestBinaryFile(const char *, const char *, int);
-int RegressionTestAsciiFile(const char *, const char *, int, const double);
+int RegressionTestAsciiFile(const char *, const char *, int, const double, std::vector<std::string> ignoredLines);
 int RegressionTestMetaData(const char *, const char *,int,const double);
 
 void RegisterTests();
@@ -86,7 +86,8 @@ int main(int ac, char* av[] )
   std::vector<std::string> testFilenamesImage;
   std::vector<std::string> baselineFilenamesAscii;
   std::vector<std::string> testFilenamesAscii;
-
+  std::vector<std::string> ignoredLines;
+  ignoredLines.clear();
 
 // On some sgi machines, threads and stl don't mix.
 #if defined(__sgi) && defined(_COMPILER_VERSION) && _COMPILER_VERSION <= 730
@@ -191,8 +192,30 @@ int main(int ac, char* av[] )
       testFilenamesAscii.reserve(1);
       baselineFilenamesAscii.push_back(av[3]);
       testFilenamesAscii.push_back(av[4]);
-      av += 4;
-      ac -= 4;
+
+      if( ac > 5 )
+      {
+        if (strcmp(av[5], "--ignore-lines-with") == 0)
+        {
+          unsigned int nbIgnoredLines=(unsigned int)(::atoi(av[6]));
+          for(unsigned int  i=0; i<nbIgnoredLines; i++ )
+          {
+            ignoredLines.push_back(av[7+i]);
+          }
+          av += 6+nbIgnoredLines;
+          ac -= 6+nbIgnoredLines;
+        }
+        else
+        {
+          av += 4;
+          ac -= 4;
+        }
+      }
+      else
+      {
+        av += 4;
+        ac -= 4;
+      }
     }
     else if (strcmp(av[1], "--compare-n-ascii") == 0)
     {
@@ -370,9 +393,23 @@ int main(int ac, char* av[] )
           // Non regression test for ascii files
           if ((baselineFilenamesAscii.size()>0) && (testFilenamesAscii.size()>0))
           {
+
             // Creates iterators on baseline filenames vector and test filenames vector
             std::vector<std::string>::iterator itbaselineFilenames = baselineFilenamesAscii.begin();
             std::vector<std::string>::iterator itTestFilenames = testFilenamesAscii.begin();
+            std::vector<std::string>::iterator itIgnoredLines = ignoredLines.begin();
+
+            // Warning message
+            if(ignoredLines.size() > 0 )
+            {
+                std::cout << "The lines containing the expressions ";
+                for(;itIgnoredLines!=ignoredLines.end();itIgnoredLines++)
+                {
+                    std::cout << (*itIgnoredLines) <<" ";
+                }
+                std::cout << "are not considered"<< std::endl;
+            }
+
             // For each couple of baseline and test file, do the comparison
             for(;(itbaselineFilenames != baselineFilenamesAscii.end())
                   &&(itTestFilenames != testFilenamesAscii.end());
@@ -391,7 +428,8 @@ int main(int ac, char* av[] )
                 baseline->second = RegressionTestAsciiFile(testFilenameAscii.c_str(),
                     (baseline->first).c_str(),
                      0,
-                     lEpsilon);
+                     lEpsilon,
+                     ignoredLines);
 
                 multiResult = baseline->second;
                 ++baseline;
@@ -403,7 +441,8 @@ int main(int ac, char* av[] )
                     = RegressionTestAsciiFile(testFilenameAscii.c_str(),
                                               (baseline->first).c_str(),
                                                1,
-                                               lEpsilon);
+                                               lEpsilon,
+                                               ignoredLines);
               }
               result += multiResult;
             }
@@ -648,7 +687,7 @@ std::string VectorToString(otb::ImageBase::VectorType vector)
   return oss.str();
 }
 
-int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselineAsciiFileName, int reportErrors, const double epsilon)
+int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselineAsciiFileName, int reportErrors, const double epsilon, std::vector<std::string> ignoredLines)
 {
   std::ifstream fluxfiletest(testAsciiFileName);
   std::ifstream fluxfileref(baselineAsciiFileName);
@@ -681,6 +720,8 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
   std::vector<std::string> listStrDiffLineFileRef;
   std::vector<std::string> listStrDiffLineFileTest;
 
+
+
   while ( std::getline(fluxfileref,strfileref)!=0  )
   {
     otb::StringStream buffstreamRef, buffstreamTest;
@@ -700,6 +741,27 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
     else
     {
 
+    bool foundexpr = false;
+    if(ignoredLines.size()>0)
+    {
+
+        std::vector<std::string>::iterator itIgnoredLines = ignoredLines.begin();
+
+        for(;(itIgnoredLines != ignoredLines.end()); ++itIgnoredLines)
+        {
+            std::string ignoredLinesAscii = (*itIgnoredLines);
+            std::string::size_type loc = strfileref.find(ignoredLinesAscii);
+            if( loc != std::string::npos )
+            {
+                foundexpr = true;
+            }
+
+        }
+
+    }
+
+    if( foundexpr == false )
+    {
       buffstreamTest << strfiletest;
       int nblinediff(0);
 
@@ -883,6 +945,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
         listStrDiffLineFileTest.push_back(strfiletest);
       }
 
+    }
     }
 
   }

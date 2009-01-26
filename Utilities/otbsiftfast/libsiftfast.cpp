@@ -882,7 +882,7 @@ Keypoint FindMaxMin(Image* imdiff, Image* imgaus, float fscale, Keypoint keypts,
 
     for( int index = 1; index < (int)nbScales+1; ++index) {
         
-#if !defined(__CYGWIN__) && !defined(_MSC_VER) && defined(__SSE__)
+#if !defined(OTB_DISABLE_FAST_FUNCTIONS) && !defined(_MSC_VER) && defined(__SSE__)
         GradOriImagesFast(imgaus[index],s_imgrad,s_imorient);
 #else
         GradOriImages(imgaus[index],s_imgrad,s_imorient);
@@ -976,7 +976,7 @@ void GradOriImages(Image image, Image imgrad, Image imorient)
     }
 }
 
-#if !defined(__CYGWIN__) && !defined(_MSC_VER) && defined(__SSE__)
+#if !defined(OTB_DISABLE_FAST_FUNCTIONS) && !defined(_MSC_VER) && defined(__SSE__)
 void GradOriImagesFast(Image image, Image imgrad, Image imorient)
 {
     DVSTARTPROFILE();
@@ -1677,7 +1677,7 @@ void DestroyAllResources()
     s_listKeypoints.clear();
 }
 
-#if !defined(__CYGWIN__) && !defined(_MSC_VER) && defined(__SSE__) && !defined(SIMDMATH_H) // copied from libsimdmath
+#if !defined(OTB_DISABLE_FAST_FUNCTIONS) && !defined(_MSC_VER) && defined(__SSE__) && !defined(SIMDMATH_H) // copied from libsimdmath
 
 #define DEF_CONST(a,b) static  const vec_float4 a = {b,b,b,b};
 #define DEI_CONST(a,b) static  const vec_int4   a = {b,b,b,b};
@@ -1746,7 +1746,7 @@ inline vec_float4 __attribute__((__always_inline__))
       /* make argument positive and save the sign */
       vec_int4 sign = _signf4( x );
       VEC_XOR(x, sign);
-      
+ 
       /* range reduction */
       a1 = VEC_GT (x , CF4_2414213562373095 );
       a2 = VEC_GT (x , CF4_04142135623730950 );
