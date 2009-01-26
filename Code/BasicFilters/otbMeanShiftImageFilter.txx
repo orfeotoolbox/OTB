@@ -38,11 +38,10 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
   m_MinimumRegionSize  = 10;
   m_Scale              = 100000.;
 
-  this->SetNumberOfOutputs(5);
+  this->SetNumberOfOutputs(4);
   this->SetNthOutput(1,OutputImageType::New());
   this->SetNthOutput(2,LabeledOutputType::New());
   this->SetNthOutput(3,LabeledOutputType::New());
-  this->itk::ProcessObject::SetNthOutput(4,PolygonListType::New());
 }
 
 template <class TInputImage,class TOutputImage, class TLabeledOutput, class TBufferConverter>
@@ -118,32 +117,6 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
     }
   return static_cast< LabeledOutputType * >(this->itk::ProcessObject::GetOutput(3));
 }
-
-template <class TInputImage,class TOutputImage, class TLabeledOutput, class TBufferConverter>
-const typename  MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>::PolygonListType *
-MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
-::GetVectorizedClusterBoundariesOutput()const
-{
-  if (this->GetNumberOfOutputs() < 5)
-    {
-    return 0;
-    }
-  return static_cast<const PolygonListType * >(this->itk::ProcessObject::GetOutput(4));
-}
-
-template <class TInputImage,class TOutputImage, class TLabeledOutput, class TBufferConverter>
-typename  MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>::PolygonListType *
-MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
-::GetVectorizedClusterBoundariesOutput()
-{
-  if (this->GetNumberOfOutputs() < 5)
-    {
-    return 0;
-    }
-  return static_cast< PolygonListType * >(this->itk::ProcessObject::GetOutput(4));
-}
-
-
 
 template <class TInputImage,class TOutputImage, class TLabeledOutput, class TBufferConverter>
 void
@@ -318,7 +291,6 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
   typename OutputImageType::Pointer clusteredOutputPtr = this->GetClusteredOutput();
   typename LabeledOutputType::Pointer labeledClusteredOutputPtr = this->GetLabeledClusteredOutput();
   typename LabeledOutputType::Pointer clusterBoudariesOutputPtr = this->GetClusterBoundariesOutput();
-  typename PolygonListType::Pointer   vectorizedBoundariesOutputPtr = this->GetVectorizedClusterBoundariesOutput();
 
   RegionType outputRequestedRegion = outputPtr->GetRequestedRegion();
 
@@ -407,14 +379,11 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
 
   for(LabelType label = 0; label < numRegions;++label)
     {
-    PolygonPointerType newPolygon = PolygonType::New();
     OutputPixelType pixel;
     TBufferConverter::FloatArrayToPixel(modes,label*clusteredOutputPtr->GetNumberOfComponentsPerPixel(),
 					pixel,clusteredOutputPtr->GetNumberOfComponentsPerPixel(),invScale);
     // Filling the modes map
     m_Modes[label]=pixel;
-    newPolygon->SetValue(pixel);
-
     regionIndeces = regionList->GetRegionIndeces(label);
     for(int i = 0; i<regionList->GetRegionCount(label); ++i)
       {
@@ -424,12 +393,7 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
         {
 	clusterBoudariesOutputPtr->SetPixel(boundIndex,1);
         }
-      typename PolygonType::ContinuousIndexType cindex;
-      cindex[0]=boundIndex[0];
-      cindex[1]=boundIndex[1];
-      newPolygon->AddVertex(cindex);
       }
-    vectorizedBoundariesOutputPtr->PushBack(newPolygon);
     }
 
   // Free memory
