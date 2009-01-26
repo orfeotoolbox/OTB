@@ -420,7 +420,7 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
     // to put them back in the right order.
     unsigned int halfsize = regionList->GetRegionCount(label);
 
-    for(int i = 0; i<halfsize;++i)
+    for(unsigned int i = 0; i<halfsize;++i)
       {
       boundIndex[0]= regionIndeces[2*i] % clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0];
       boundIndex[1]= regionIndeces[2*i] / clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0];
@@ -434,7 +434,7 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
       newPolygon->AddVertex(cindex);
       }
     
-    for(int i = halfsize-1; i>=0;--i)
+    for(unsigned int i = halfsize-1; i>=0;--i)
       {
       boundIndex[0]= regionIndeces[2*i+1] % clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0];
       boundIndex[1]= regionIndeces[2*i+1] / clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0];
