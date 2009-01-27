@@ -27,5 +27,6 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbExtractROIResample);
+REGISTER_TEST(otbExtractROIResample);
+REGISTER_TEST(otbCountImageFunctionNew); 
 }

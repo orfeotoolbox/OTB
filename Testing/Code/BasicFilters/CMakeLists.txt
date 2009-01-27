@@ -1115,6 +1115,11 @@ ADD_TEST(bfTvExtractROIResample2 ${BASICFILTERS_TESTS11}
 	 ${TEMP}/bfTvExtractROIResample2.tif
 	 1
 )
+# -------    otbCountImageFunction   ----------------------------
+ADD_TEST(bfTuCountImageFunctionNew ${BASICFILTERS_TESTS11}
+	 otbCountImageFunctionNew
+	 )
+
 
 
 # A enrichir
@@ -1277,6 +1282,7 @@ ENDIF(USE_FFTWD)
 
 SET(BasicFilters_SRCS11
 otbExtractROIResample.cxx
+otbCountImageFunctionNew.cxx
 )
 
 
@@ -1313,6 +1319,6 @@ ADD_EXECUTABLE(otbBasicFiltersTests10 otbBasicFiltersTests10.cxx ${BasicFilters_
 TARGET_LINK_LIBRARIES(otbBasicFiltersTests10  OTBBasicFilters  OTBIO )
 
 ADD_EXECUTABLE(otbBasicFiltersTests11 otbBasicFiltersTests11.cxx ${BasicFilters_SRCS11})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests11  OTBBasicFilters  OTBIO )
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests11  OTBBasicFilters  OTBIO OTBFeatureExtraction)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
