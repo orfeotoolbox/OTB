@@ -25,7 +25,8 @@ SET(FEATUREEXTRACTION_TESTS6 ${CXX_TEST_PATH}/otbFeatureExtractionTests6)
 SET(FEATUREEXTRACTION_TESTS7 ${CXX_TEST_PATH}/otbFeatureExtractionTests7)
 SET(FEATUREEXTRACTION_TESTS8 ${CXX_TEST_PATH}/otbFeatureExtractionTests8)
 SET(FEATUREEXTRACTION_TESTS9 ${CXX_TEST_PATH}/otbFeatureExtractionTests9)
-
+SET(FEATUREEXTRACTION_TESTS10 ${CXX_TEST_PATH}/otbFeatureExtractionTests10)
+SET(FEATUREEXTRACTION_TESTS11 ${CXX_TEST_PATH}/otbFeatureExtractionTests11)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests1 ~~~~~~~~~~~~~~~~~~~~~
@@ -874,13 +875,34 @@ ADD_TEST(feTvImageToHessianDeterminantImageFilter ${FEATUREEXTRACTION_TESTS9}
 	 1.5
 		 )
 
+
+# -------            otb::ImageFittingPolygonListFilter   -------------
+ADD_TEST(feTuImageFittingPolygonListFilterNew ${FEATUREEXTRACTION_TESTS9} 
+         otbImageFittingPolygonListFilterNew)
+
+ADD_TEST(feTvImageFittingPolygonListFilter ${FEATUREEXTRACTION_TESTS9}
+--compare-ascii ${EPS}
+        ${BASELINE_FILES}/feTvImageFittingPolygonListFilter_Output.kml
+        ${TEMP}/feTvImageFittingPolygonListFilter_Output.kml
+         otbImageFittingPolygonListFilter
+        ${INPUTDATA}/polygon.png
+        ${INPUTDATA}/polygon-start.kml
+        ${TEMP}/feTvImageFittingPolygonListFilter_Output.kml
+        5 10
+)
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests10 ~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
 # -------            otb::ImageToSURFKeyPointSetFilterNew   -------------
 
-ADD_TEST(feTuImageToSURFKeyPointSetFilterNew ${FEATUREEXTRACTION_TESTS9} 
+ADD_TEST(feTuImageToSURFKeyPointSetFilterNew ${FEATUREEXTRACTION_TESTS10} 
          otbImageToSURFKeyPointSetFilterNew)
 
 
-ADD_TEST(feTvImageToSURFKeyPointSetFilterSceneOutputInterestPointAscii ${FEATUREEXTRACTION_TESTS9}
+ADD_TEST(feTvImageToSURFKeyPointSetFilterSceneOutputInterestPointAscii ${FEATUREEXTRACTION_TESTS10}
 --compare-ascii ${EPS}
 		${BASELINE_FILES}/feTvImageToSURFKeyPointSetFilterSceneKeysOutputInterestPoint.txt
 		${TEMP}/feTvImageToSURFKeyPointSetFilterSceneKeysOutputInterestPoint.txt
@@ -890,7 +912,7 @@ ADD_TEST(feTvImageToSURFKeyPointSetFilterSceneOutputInterestPointAscii ${FEATURE
 		1 3 
 )
 
-ADD_TEST(feTvImageToSURFKeyPointSetFilterSceneOutputDescriptorAscii ${FEATUREEXTRACTION_TESTS9}
+ADD_TEST(feTvImageToSURFKeyPointSetFilterSceneOutputDescriptorAscii ${FEATUREEXTRACTION_TESTS10}
 --compare-ascii ${EPS}
 		${BASELINE_FILES}/feTvImageToSURFKeyPointSetFilterSceneKeysOutputDescriptor.txt
 		${TEMP}/feTvImageToSURFKeyPointSetFilterSceneKeysOutputDescriptor.txt
@@ -900,27 +922,14 @@ ADD_TEST(feTvImageToSURFKeyPointSetFilterSceneOutputDescriptorAscii ${FEATUREEXT
 		1 3 
 )
 	 
-# -------            otb::ImageFittingPolygonListFilter   -------------
-ADD_TEST(feTuImageFittingPolygonListFilterNew ${FEATUREEXTRACTION_TESTS9} 
-         otbImageFittingPolygonListFilterNew)
 
-ADD_TEST(feTvImageFittingPolygonListFilter ${FEATUREEXTRACTION_TESTS9}
---compare-ascii ${EPS}
-		${BASELINE_FILES}/feTvImageFittingPolygonListFilter_Output.kml
-		${TEMP}/feTvImageFittingPolygonListFilter_Output.kml
-         otbImageFittingPolygonListFilter
-		${INPUTDATA}/polygon.png
-		${INPUTDATA}/polygon-start.kml
-		${TEMP}/feTvImageFittingPolygonListFilter_Output.kml
-		5 10
-)
 
 # -------            otb::ImageToFastSIFTKeyPointSetFilter   -------------
 
-ADD_TEST(feTuImageToFastSIFTKeyPointSetFilterNew ${FEATUREEXTRACTION_TESTS9} 
+ADD_TEST(feTuImageToFastSIFTKeyPointSetFilterNew ${FEATUREEXTRACTION_TESTS10} 
          otbImageToFastSIFTKeyPointSetFilterNew)
 
-ADD_TEST(feTvImageToFastSIFTKeyPointSetFilterSceneOutputDescriptorAscii ${FEATUREEXTRACTION_TESTS9}
+ADD_TEST(feTvImageToFastSIFTKeyPointSetFilterSceneOutputDescriptorAscii ${FEATUREEXTRACTION_TESTS10}
 --compare-ascii ${EPS}
 		${BASELINE_FILES}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
 		${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
@@ -930,7 +939,7 @@ ADD_TEST(feTvImageToFastSIFTKeyPointSetFilterSceneOutputDescriptorAscii ${FEATUR
 		6  
 )
 
-ADD_TEST(feTvImageToFastSIFTKeyPointSetFilterSceneOutputInterestPointAscii ${FEATUREEXTRACTION_TESTS9}
+ADD_TEST(feTvImageToFastSIFTKeyPointSetFilterSceneOutputInterestPointAscii ${FEATUREEXTRACTION_TESTS10}
 --compare-ascii ${EPS}
 		${BASELINE_FILES}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputInterestPoint.txt
 		${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputInterestPoint.txt
@@ -942,13 +951,11 @@ ADD_TEST(feTvImageToFastSIFTKeyPointSetFilterSceneOutputInterestPointAscii ${FEA
 
 
 
-
-
 # --------- MatchingFilter ----------------
-ADD_TEST(KeyPointSetsMatchingFilterNew ${FEATUREEXTRACTION_TESTS9} 
+ADD_TEST(feTuKeyPointSetsMatchingFilterNew ${FEATUREEXTRACTION_TESTS10} 
 	otbKeyPointSetsMatchingFilterNew)
 
-ADD_TEST(KeyPointSetsMatchingFilter ${FEATUREEXTRACTION_TESTS9}
+ADD_TEST(feTvKeyPointSetsMatchingFilter ${FEATUREEXTRACTION_TESTS10}
 --compare-ascii ${EPS}				   
 	${BASELINE}/feTvKeyPointSetsMatchingFilterOutputAscii.txt
 	${TEMP}/feTvKeyPointSetsMatchingFilterOutputAscii.txt	
@@ -958,8 +965,32 @@ ADD_TEST(KeyPointSetsMatchingFilter ${FEATUREEXTRACTION_TESTS9}
 )
 	
 #--------- LandMark
-ADD_TEST(LandmarkNew ${FEATUREEXTRACTION_TESTS9} 
-	otbLandmarkNew)			     
+ADD_TEST(feTuLandmarkNew ${FEATUREEXTRACTION_TESTS10} 
+	otbLandmarkNew)
+
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests11 ~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
+
+# -------            otb::CloudDetectionFilterNew   -------------
+ADD_TEST(feTuCloudDetectionFilterNew ${FEATUREEXTRACTION_TESTS11} 
+    otbCloudDetectionFilterNew)
+
+ADD_TEST(feTvCloudDetectionFilter ${FEATUREEXTRACTION_TESTS11} 
+    otbCloudDetectionFilter
+    ${INPUTDATA}/ExtrZoneNuageuse.tif
+    ${TEMP}/feTvSpectralAngleOutput.tif
+    500
+    731
+    500
+    632
+    1    # variance
+    1000 # threshold
+)
+
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
@@ -1065,21 +1096,27 @@ otbImageToSIFTKeyPointSetFilterValid.cxx
 otbImageToSIFTKeyPointSetFilterDistanceMap.cxx
 otbImageToSIFTKeyPointSetFilterOutputInterestPointAscii.cxx
 otbImageToSIFTKeyPointSetFilterOutputDescriptorAscii.cxx
+otbImageToSIFTKeyPointSetFilterOutputAscii.cxx
+otbImageToSIFTKeyPointSetFilterOutputImage.cxx
 otbImageToHessianDeterminantImageFilterNew.cxx
 otbImageToHessianDeterminantImageFilter.cxx
 otbImageFittingPolygonListFilter.cxx
 otbImageFittingPolygonListFilterNew.cxx
-otbImageToSURFKeyPointSetFilterNew.cxx	
+)
+SET(BasicFeatureExtraction_SRCS10
+otbImageToSURFKeyPointSetFilterNew.cxx
 otbImageToSURFKeyPointSetFilterOutputInterestPointAscii.cxx
 otbImageToSURFKeyPointSetFilterOutputDescriptorAscii.cxx
 otbImageToFastSIFTKeyPointSetFilterNew.cxx
 otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii.cxx
 otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii.cxx
-otbImageToSIFTKeyPointSetFilterOutputAscii.cxx
-otbImageToSIFTKeyPointSetFilterOutputImage.cxx
 otbKeyPointSetsMatchingFilterNew.cxx
 otbKeyPointSetsMatchingFilter.cxx
 otbLandmarkNew.cxx
+)
+SET(BasicFeatureExtraction_SRCS11
+otbCloudDetectionFilterNew.cxx
+otbCloudDetectionFilter.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
@@ -1102,6 +1139,10 @@ ADD_EXECUTABLE(otbFeatureExtractionTests8 otbFeatureExtractionTests8.cxx ${Basic
 TARGET_LINK_LIBRARIES(otbFeatureExtractionTests8  OTBFeatureExtraction OTBIO)
 ADD_EXECUTABLE(otbFeatureExtractionTests9 otbFeatureExtractionTests9.cxx ${BasicFeatureExtraction_SRCS9})
 TARGET_LINK_LIBRARIES(otbFeatureExtractionTests9  OTBFeatureExtraction OTBIO)
+ADD_EXECUTABLE(otbFeatureExtractionTests10 otbFeatureExtractionTests10.cxx ${BasicFeatureExtraction_SRCS10})
+TARGET_LINK_LIBRARIES(otbFeatureExtractionTests10  OTBFeatureExtraction OTBIO)
+ADD_EXECUTABLE(otbFeatureExtractionTests11 otbFeatureExtractionTests11.cxx ${BasicFeatureExtraction_SRCS11})
+TARGET_LINK_LIBRARIES(otbFeatureExtractionTests11  OTBFeatureExtraction OTBIO)
 
 # ADD_EXECUTABLE(roadDetect roadDetect.cxx)
 # TARGET_LINK_LIBRARIES(roadDetect  OTBFeatureExtraction OTBIO)
