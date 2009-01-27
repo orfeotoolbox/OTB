@@ -1,16 +1,17 @@
 /*=========================================================================
 
-  Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: itkAcosImageFilter.h,v $
+  Program:   ORFEO Toolbox
   Language:  C++
-  Date:      $Date: 2008-10-07 14:09:10 $
-  Version:   $Revision: 1.24 $
+  Date:      $Date$
+  Version:   $Revision$
 
-  Copyright (c) Insight Software Consortium. All rights reserved.
-  See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -46,7 +47,7 @@ public:
     {
       
       int accu = 0;
-      float surface = 3.14*size*size;
+      double surface = M_PI*size*size;
 
       typedef typename TPointSet::PointsContainer::ConstIterator         iteratorType;
       
@@ -64,7 +65,7 @@ public:
 	  ++it;
 	}
             
-      return static_cast<float>(accu)/surface;
+      return static_cast<float>(accu/surface);
     }
 }; 
 
