@@ -985,6 +985,9 @@ ADD_TEST(feTuCloudDetectionFilterNew ${FEATUREEXTRACTION_TESTS11}
     otbCloudDetectionFilterNew)
 
 ADD_TEST(feTvCloudDetectionFilter ${FEATUREEXTRACTION_TESTS11} 
+--compare-image ${EPS}
+     ${BASELINE}/feTvSpectralAngleOutput.tif
+     ${TEMP}/feTvSpectralAngleOutput.tif
     otbCloudDetectionFilter
     ${INPUTDATA}/ExtrZoneNuageuse.tif
     ${TEMP}/feTvSpectralAngleOutput.tif
