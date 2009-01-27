@@ -1110,6 +1110,7 @@ otbImageToHessianDeterminantImageFilterNew.cxx
 otbImageToHessianDeterminantImageFilter.cxx
 otbImageFittingPolygonListFilter.cxx
 otbImageFittingPolygonListFilterNew.cxx
+otbSimplePointCountStrategyTest.cxx
 )
 SET(BasicFeatureExtraction_SRCS10
 otbImageToSURFKeyPointSetFilterNew.cxx
@@ -1121,7 +1122,6 @@ otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii.cxx
 otbKeyPointSetsMatchingFilterNew.cxx
 otbKeyPointSetsMatchingFilter.cxx
 otbLandmarkNew.cxx
-otbSimplePointCountStrategyTest.cxx
 )
 SET(BasicFeatureExtraction_SRCS11
 otbCloudDetectionFilterNew.cxx
