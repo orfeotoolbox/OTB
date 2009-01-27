@@ -63,6 +63,7 @@ public:
   typedef typename PolygonType::ConstPointer PolygonConstPointerType;
   typedef typename PolygonType::VertexListType    VertexListType;
   typedef typename PolygonType::ContinuousIndexType ContinuousIndexType;
+  typedef typename PolygonType::RegionType          RegionType;
   typedef typename VertexListType::ConstIterator VertexListConstIteratorType;
   typedef std::vector<bool> BoolVectorType;
 
@@ -97,6 +98,7 @@ public:
 
   virtual bool ComputeInterInter(PolygonPointerType path1, PolygonPointerType path2);
 
+  virtual bool RegionsIntersectionIsNull(const RegionType& region1, const RegionType& region2);
 
   protected:
   /** Constructor */

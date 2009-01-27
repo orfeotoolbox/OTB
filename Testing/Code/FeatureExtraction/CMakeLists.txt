@@ -891,6 +891,11 @@ ADD_TEST(feTvImageFittingPolygonListFilter ${FEATUREEXTRACTION_TESTS9}
         5 10
 )
 
+#--------- SimpleCountStrategy --------------
+
+ADD_TEST(otbSimplePointCountStrategyTest ${FEATUREEXTRACTION_TESTS9} 
+    otbSimplePointCountStrategyTest)
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests10 ~~~~~~~~~~~~~~~~~~~~~
@@ -990,6 +995,9 @@ ADD_TEST(feTvCloudDetectionFilter ${FEATUREEXTRACTION_TESTS11}
     1    # variance
     1000 # threshold
 )
+
+
+
 
 
 # A enrichir
@@ -1113,6 +1121,7 @@ otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii.cxx
 otbKeyPointSetsMatchingFilterNew.cxx
 otbKeyPointSetsMatchingFilter.cxx
 otbLandmarkNew.cxx
+otbSimplePointCountStrategyTest.cxx
 )
 SET(BasicFeatureExtraction_SRCS11
 otbCloudDetectionFilterNew.cxx

@@ -206,22 +206,11 @@ PolygonListToRCC8GraphFilter<TPolygonList, TOutputGraph>
     
     unsigned int segIndex = 1;
 
-    while(segIndex < m_SegmentationRanges.size() && nbVertices<m_SegmentationRanges[segIndex-1] || nbVertices >= m_SegmentationRanges[segIndex])
+    while(segIndex < m_SegmentationRanges.size() && (nbVertices<m_SegmentationRanges[segIndex-1] || nbVertices >= m_SegmentationRanges[segIndex]))
       {
       segIndex++;
       }
 
- //    while(candidateSegIndex+1< m_SegmentationRanges.size() && !found)
-//       {
-//       std::cout<<"Range: "<<m_SegmentationRanges[candidateSegIndex]<<", "<<m_SegmentationRanges[candidateSegIndex+1]<<std::endl;
-//       if(nbVertices>=m_SegmentationRanges[candidateSegIndex] && nbVertices<m_SegmentationRanges[candidateSegIndex+1])
-// 	{
-// 	segIndex = candidateSegIndex;
-// 	found = true;
-// 	std::cout<<"Found: "<<segIndex<<std::endl;
-// 	}
-//       ++candidateSegIndex;
-//       }
     vertex->SetSegmentationLevel(segIndex-1);
   
     // Put it in the graph
@@ -236,7 +225,7 @@ void
 PolygonListToRCC8GraphFilter<TPolygonList, TOutputGraph>
 ::ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex,int threadId)
 {
-  otbMsgDebugMacro(<<"Starting thread "<<threadId <<" to work on range ["<<startIndex<<", "<<stopIndex<<"]");
+  //std::cout<<"Starting thread "<<threadId <<" to work on range ["<<startIndex<<", "<<stopIndex<<"]"<<std::endl;
 
   // Ouptut graph pointer
   OutputGraphPointerType graph = this->GetOutput();

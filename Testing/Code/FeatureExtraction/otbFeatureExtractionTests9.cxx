@@ -39,4 +39,5 @@ REGISTER_TEST(otbImageToHessianDeterminantImageFilterNew);
 REGISTER_TEST(otbImageToHessianDeterminantImageFilter);
 REGISTER_TEST(otbImageFittingPolygonListFilter);
 REGISTER_TEST(otbImageFittingPolygonListFilterNew);
+REGISTER_TEST(otbSimplePointCountStrategyTest);
 }

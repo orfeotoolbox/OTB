@@ -905,7 +905,6 @@ ADD_TEST(bfTvMeanShiftImageFilter ${BASICFILTERS_TESTS9}
 	${TEMP}/bfMeanShiftImageFilterClusteredOutput.tif
 	${TEMP}/bfMeanShiftImageFilterLabeledClusteredOutput.tif
 	${TEMP}/bfMeanShiftImageFilterClusterBoundariesOutput.tif
-	${TEMP}/bfMeanShiftImageFilterVectorizedClusterBoundariesOutput.txt
 	16 16 10 1.0 1 1
 	)
 
@@ -925,21 +924,6 @@ ADD_TEST(bfTvMeanShiftImageFilterNotStreamedNotThreaded ${BASICFILTERS_TESTS9}
 	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedClusteredOutput.tif
 	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedLabeledClusteredOutput.tif
 	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedClusterBoundariesOutput.tif
-	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedVectorizedClusterBoundariesOutput.txt
-	16 16 10 1.0 0 0
-	)
-
-ADD_TEST(bfTvMeanShiftImageFilterNotStreamedNotThreadedVectorizedOutput ${BASICFILTERS_TESTS9}
---compare-ascii ${TOL}
-		${BASELINE_FILES}/bfMeanShiftImageFilterVectorizedClusterBoundariesOutput.txt
-		${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedVectorizedClusterBoundariesOutput.txt
-        otbMeanShiftImageFilter
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedOutput.tif
-	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedClusteredOutput.tif
-	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedLabeledClusteredOutput.tif
-	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedClusterBoundariesOutput.tif
-	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedVectorizedClusterBoundariesOutput.txt
 	16 16 10 1.0 0 0
 	)
 
@@ -962,7 +946,6 @@ ADD_TEST(bfTvMeanShiftVectorImageFilter ${BASICFILTERS_TESTS9}
 	${TEMP}/bfMeanShiftVectorImageFilterClusteredOutput.tif
 	${TEMP}/bfMeanShiftVectorImageFilterLabeledClusteredOutput.tif
 	${TEMP}/bfMeanShiftVectorImageFilterClusterBoundariesOutput.tif
-	${TEMP}/bfMeanShiftVectorImageFilterVectorizedClusterBoundariesOutput.txt
 	16 16 10 1.0 1 1
 	)
 
@@ -983,21 +966,6 @@ ADD_TEST(bfTvMeanShiftVectorImageFilterNotStreamedNotThreaded ${BASICFILTERS_TES
 	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedClusteredOutput.tif
 	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedLabeledClusteredOutput.tif
 	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedClusterBoundariesOutput.tif
-	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedVectorizedClusterBoundariesOutput.txt
-	16 16 10 1.0 0 0
-	)
-
-ADD_TEST(bfTvMeanShiftVectorImageFilterNotStreamedNotThreadedVectorizedOutput ${BASICFILTERS_TESTS9}
---compare-ascii ${TOL}
-		${BASELINE_FILES}/bfMeanShiftVectorImageFilterVectorizedClusterBoundariesOutput.txt
-		${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedVectorizedClusterBoundariesOutput.txt
-        otbMeanShiftVectorImageFilter
-	${INPUTDATA}/qb_RoadExtract2sub200x200.tif
-	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedOutput.tif
-	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedClusteredOutput.tif
-	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedLabeledClusteredOutput.tif
-	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedClusterBoundariesOutput.tif
-	${TEMP}/bfMeanShiftVectorImageFilterNotStreamedNotThreadedVectorizedClusterBoundariesOutput.txt
 	16 16 10 1.0 0 0
 	)
 
@@ -1147,7 +1115,20 @@ ADD_TEST(bfTvExtractROIResample2 ${BASICFILTERS_TESTS11}
 	 ${TEMP}/bfTvExtractROIResample2.tif
 	 1
 )
+# -------    otbCountImageFunction   ----------------------------
+ADD_TEST(bfTuCountImageFunctionNew ${BASICFILTERS_TESTS11}
+	 otbCountImageFunctionNew
+	 )
 
+ADD_TEST(bfTvCountImageFunction ${BASICFILTERS_TESTS11}
+--compare-ascii ${TOL}
+	    ${BASELINE_FILES}/bfTvCountImageFunctionOutputAscii.txt
+	    ${TEMP}/bfTvCountImageFunctionOutputAscii.txt
+	otbCountImageFunctionTest
+	 ${INPUTDATA}/QB_Suburb.png
+	 ${TEMP}/bfTvCountImageFunctionOutputAscii.txt
+	 5 2
+)
 
 # A enrichir
 SET(BasicFilters_SRCS1
@@ -1309,6 +1290,8 @@ ENDIF(USE_FFTWD)
 
 SET(BasicFilters_SRCS11
 otbExtractROIResample.cxx
+otbCountImageFunctionNew.cxx
+otbCountImageFunctionTest.cxx	
 )
 
 
@@ -1345,6 +1328,6 @@ ADD_EXECUTABLE(otbBasicFiltersTests10 otbBasicFiltersTests10.cxx ${BasicFilters_
 TARGET_LINK_LIBRARIES(otbBasicFiltersTests10  OTBBasicFilters  OTBIO )
 
 ADD_EXECUTABLE(otbBasicFiltersTests11 otbBasicFiltersTests11.cxx ${BasicFilters_SRCS11})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests11  OTBBasicFilters  OTBIO )
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests11  OTBBasicFilters  OTBIO OTBFeatureExtraction)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

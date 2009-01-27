@@ -104,10 +104,11 @@ RCC8GraphFileWriter<TInputGraph>
     itkExceptionMacro(<<"No filename was specified");
     }
 
-  if(input->GetSource())
-    {
-      input->GetSource()->UpdateOutputData(input);
-    }
+  // Pipeline updating sequence
+  input->UpdateOutputInformation();
+  input->PropagateRequestedRegion();
+  input->UpdateOutputData();
+  // GenerateData (actually write file)
   this->GenerateData();
 }
 /**

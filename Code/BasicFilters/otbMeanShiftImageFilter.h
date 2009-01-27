@@ -70,10 +70,7 @@ namespace otb
    * you to get the smoothed image, whereas the
    * GetClusteredOuptut() methods returns the clustered output. The GetLabeledClusteredOutput() returns
    * a labeled clustered image, and the GetClusterBoundariesOutput()
-   * an image of the cluster boundaries. Last, the
-   * GetVectorizedClusterBoundariesOutput() returns a list of
-   * otb::Polygon representing the cluster boundaries, whose value is
-   * the corresponding mean-shift mode.
+   * an image of the cluster boundaries.
    *
    * The MinimumRegionSize parameter allows you to prune small clustered regions.
    *
@@ -144,6 +141,9 @@ namespace otb
       typedef otb::ObjectList<PolygonType>                 PolygonListType;
       typedef typename PolygonListType::Pointer            PolygonListPointerType;
 
+      /** Typedef for mean-shift modes map */
+      typedef std::map<LabelType,InputPixelType>           ModeMapType;
+
       /** Setters / Getters */
       itkSetMacro(SpatialRadius,unsigned int);
       itkGetMacro(SpatialRadius,unsigned int);
@@ -168,8 +168,11 @@ namespace otb
       LabeledOutputType * GetClusterBoundariesOutput();
       /** Return the const vectorized boundaries output */
       const PolygonListType * GetVectorizedClusterBoundariesOutput() const;
-      /** Return the vectorized boundaries output */
-      PolygonListType * GetVectorizedClusterBoundariesOutput();
+      /** Return the mean-shift mode by label */
+      const ModeMapType& GetModes()
+      {
+	return m_Modes;
+      }
 
       protected:
       /** This filters use a neighborhood around the pixel, so it needs to redfine the
@@ -181,6 +184,12 @@ namespace otb
       virtual void AfterThreadedGenerateData();
       /** Allocate the outputs (need to be reimplemented since outputs have differents type) */
       virtual void AllocateOutputs();
+      /** If modified, we have to reset the list of modes */
+      virtual void Modified()
+      {
+	Superclass::Modified();
+	m_Modes.clear();
+      }
 
       /** Constructor */
       MeanShiftImageFilter();
@@ -202,6 +211,8 @@ namespace otb
       unsigned int m_MinimumRegionSize;
       /** Data scale (used to stretch data range) */
       double m_Scale;
+      /** A map of the different modes by segmented regions */
+      ModeMapType m_Modes;
     };
 }// end namespace otb
 
