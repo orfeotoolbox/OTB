@@ -1129,6 +1129,11 @@ ADD_TEST(bfTvCountImageFunction ${BASICFILTERS_TESTS11}
 	 ${TEMP}/bfTvCountImageFunctionOutputAscii.txt
 	 5 2
 )
+# -------    otbCountImageFilter   ----------------------------
+ADD_TEST(bfTuCountImageFilterNew ${BASICFILTERS_TESTS11}
+	 otbCountImageFilterNew
+	 )
+
 
 # A enrichir
 SET(BasicFilters_SRCS1
@@ -1292,6 +1297,7 @@ SET(BasicFilters_SRCS11
 otbExtractROIResample.cxx
 otbCountImageFunctionNew.cxx
 otbCountImageFunctionTest.cxx	
+otbCountImageFilterNew.cxx
 )
 
 

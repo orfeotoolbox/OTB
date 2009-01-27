@@ -29,7 +29,6 @@ namespace otb
  * \class CountImageFunction
  * \brief Calculate the density in the neighborhood of a pixel
  *
- *
  * \ingroup ImageFunctions
  */
 template <class TInputImage, class  TDetector, class  TCount >
