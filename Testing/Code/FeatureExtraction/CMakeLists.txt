@@ -961,6 +961,14 @@ ADD_TEST(KeyPointSetsMatchingFilter ${FEATUREEXTRACTION_TESTS9}
 ADD_TEST(LandmarkNew ${FEATUREEXTRACTION_TESTS9} 
 	otbLandmarkNew)			     
 
+
+#--------- SimpleCountStrategy --------------
+
+ADD_TEST(otbSimplePointCountStrategyTest ${FEATUREEXTRACTION_TESTS9} 
+	otbSimplePointCountStrategyTest)	
+
+
+
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
 otbAlignImageToPath.cxx
@@ -1080,6 +1088,7 @@ otbImageToSIFTKeyPointSetFilterOutputImage.cxx
 otbKeyPointSetsMatchingFilterNew.cxx
 otbKeyPointSetsMatchingFilter.cxx
 otbLandmarkNew.cxx
+otbSimplePointCountStrategyTest.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
