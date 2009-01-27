@@ -465,19 +465,6 @@ kmlprint.cc
 siftfast.cpp
 )
 
-# Suppress deprecated warning
-IF(CMAKE_COMPILER_IS_GNUCXX)
-      SET_SOURCE_FILES_PROPERTIES(ijBSplineScatteredDataPointSetToImageFilterTest.cxx PROPERTIES COMPILE_FLAGS -w)
-ELSE(CMAKE_COMPILER_IS_GNUCXX)
-  IF(WIN32)
-    IF (CMAKE_CXX_COMPILER MATCHES "^cl$")
-        SET_SOURCE_FILES_PROPERTIES( ijBSplineScatteredDataPointSetToImageFilterTest.cxx PROPERTIES COMPILE_FLAGS "/W0" )
-    ENDIF (CMAKE_CXX_COMPILER MATCHES "^cl$")
-  ENDIF(WIN32)
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
-
-
-
 IF(OTB_COMPILE_JPEG2000)
   SET(UtilitiesTests_SRCS ${UtilitiesTests_SRCS}  openJpegEncoder.cxx openJpegDecoder.cxx)
 ENDIF(OTB_COMPILE_JPEG2000)
@@ -495,11 +482,28 @@ IF(NOT OTB_USE_EXTERNAL_EXPAT)
         expatchardata.cxx
         expatminicheck.cxx
         expatruntests.cxx )
-  IF(CMAKE_COMPILER_IS_GNUCXX)
-        SET_SOURCE_FILES_PROPERTIES( expatchardata.cxx expatminicheck.cxx expatruntests.cxx PROPERTIES COMPILE_FLAGS -w )
-  ENDIF(CMAKE_COMPILER_IS_GNUCXX)
-
 ENDIF(NOT OTB_USE_EXTERNAL_EXPAT)
+
+
+# -------       Select sources files suppress warning  -----------------------------------
+SET(UtilitiesTests_DisableWarning_SRCS 
+    ijBSplineScatteredDataPointSetToImageFilterTest.cxx 
+    siftfast.cpp 
+    openthreadsWorkCrew.cpp
+    expatchardata.cxx 
+    expatminicheck.cxx 
+    expatruntests.cxx 
+)
+IF(CMAKE_COMPILER_IS_GNUCXX)
+      SET_SOURCE_FILES_PROPERTIES( ${UtilitiesTests_DisableWarning_SRCS} PROPERTIES COMPILE_FLAGS -w)
+ELSE(CMAKE_COMPILER_IS_GNUCXX)
+  IF(WIN32)
+    IF (CMAKE_CXX_COMPILER MATCHES "^cl$")
+        SET_SOURCE_FILES_PROPERTIES( ${UtilitiesTests_DisableWarning_SRCS} PROPERTIES COMPILE_FLAGS "/W0" )
+    ENDIF (CMAKE_CXX_COMPILER MATCHES "^cl$")
+  ENDIF(WIN32)
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
 
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

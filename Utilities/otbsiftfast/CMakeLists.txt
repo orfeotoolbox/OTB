@@ -73,18 +73,9 @@ elseif(MSVC)
   endif()
 endif()
 
-message(STATUS "SSE_FLAGS: ${SSE_FLAGS}")
-
 # TRY  COMPILE libsiftfast.cpp (depend of gcc version)
 IF(CMAKE_COMPILER_IS_GNUCXX)
     SET(IS_SIFTFAST_COMPILE 0)
-#    SET(OTB_DISABLE_FAST_FUNCTIONS_VALUE 0)
-#    CHECK_CXX_SOURCE_COMPILES(
-#            ${CMAKE_CURRENT_SOURCE_DIR}/test_try_compile_main_libsiftfast.cpp
-#            CMAKE_REQUIRED_FLAGS "-msse2 -mfpmath=sse"
-#            IS_SIFTFAST_COMPILE ) 
-#CMAKE_REQUIRED_DEFINITIONS
-
     TRY_COMPILE(IS_SIFTFAST_COMPILE
               ${CMAKE_CURRENT_BINARY_DIR}
               ${CMAKE_CURRENT_SOURCE_DIR}/test_try_compile_libsiftfast.cpp
