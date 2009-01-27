@@ -15,6 +15,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#pragma warning ( disable : 4996 )
+
 #include "otbDisparityMapEstimationMethod.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
