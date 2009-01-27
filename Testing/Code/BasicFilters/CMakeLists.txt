@@ -1120,7 +1120,15 @@ ADD_TEST(bfTuCountImageFunctionNew ${BASICFILTERS_TESTS11}
 	 otbCountImageFunctionNew
 	 )
 
-
+ADD_TEST(bfTvCountImageFunction ${BASICFILTERS_TESTS11}
+--compare-ascii ${TOL}
+	    ${BASELINE_FILES}/bfTvCountImageFunctionOutputAscii.txt
+	    ${TEMP}/bfTvCountImageFunctionOutputAscii.txt
+	otbCountImageFunctionTest
+	 ${INPUTDATA}/QB_Suburb.png
+	 ${TEMP}/bfTvCountImageFunctionOutputAscii.txt
+	 5 2
+)
 
 # A enrichir
 SET(BasicFilters_SRCS1
@@ -1283,6 +1291,7 @@ ENDIF(USE_FFTWD)
 SET(BasicFilters_SRCS11
 otbExtractROIResample.cxx
 otbCountImageFunctionNew.cxx
+otbCountImageFunctionTest.cxx	
 )
 
 

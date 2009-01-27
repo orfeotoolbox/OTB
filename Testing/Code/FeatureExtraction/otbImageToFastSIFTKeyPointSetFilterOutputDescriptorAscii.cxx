@@ -118,8 +118,5 @@ int otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii(int argc, char * ar
     }
   outfile.close(); 
 
-
-  outfile.close();
-
   return EXIT_SUCCESS;
 }

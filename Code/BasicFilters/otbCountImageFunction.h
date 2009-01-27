@@ -77,11 +77,12 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int,
                       InputImageType::ImageDimension);
 
+  /** Set the input image (reimplemented since we need to set the detector input) */
+  virtual void SetInputImage( const InputImageType * ptr );
 
-
-  /** Evalulate the function at specified index */
-  virtual RealType EvaluateAtIndex( const IndexType& index );
-   virtual RealType EvaluateAtIndex( const IndexType& index ) const;
+  /** Evalulate the function at specified index */ 
+  virtual RealType EvaluateAtIndex( const IndexType& index ) const;
+  
   /** Evaluate the function at non-integer positions */
   virtual RealType Evaluate( const PointType& point ) const
     { 
@@ -112,8 +113,6 @@ protected:
   CountImageFunction();
   ~CountImageFunction(){};
   
-  /**Update method*/
-  virtual void Modified();
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -127,7 +126,6 @@ private:
   DetectorPointerType m_Detector;
 
   unsigned int m_NeighborhoodRadius;
-  bool m_HasBeenGenerated;
 };
 
 } // end namespace otb

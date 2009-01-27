@@ -36,10 +36,17 @@ CountImageFunction<TInputImage,TDetector , TCount>
 {
   m_NeighborhoodRadius = 1;
   m_Detector = DetectorType::New();
-
-  m_HasBeenGenerated = false;
 }
 
+
+template <class TInputImage, class TDetector ,class TCount >
+void
+CountImageFunction< TInputImage, TDetector , TCount >
+::SetInputImage(const InputImageType * ptr)
+{
+  Superclass::SetInputImage(ptr);
+  m_Detector->SetInput(ptr);
+}
 
 /**
  *
@@ -61,30 +68,12 @@ template <class TInputImage, class TDetector ,class TCount >
 typename CountImageFunction< TInputImage, TDetector , TCount >
 ::RealType
 CountImageFunction<TInputImage,TDetector , TCount>
-::EvaluateAtIndex(const IndexType& index)
+::EvaluateAtIndex(const IndexType& index) const 
 {
-  // generate data again
-  if(!m_HasBeenGenerated)
-    {
-      m_Detector->SetInput(this->GetInputImage());
-      m_Detector->Update();
-      m_HasBeenGenerated = true;
-
-    }
-  // Call the const implementation
-  return this->EvaluateAtIndex(index);
-}
-
-template <class TInputImage, class TDetector ,class TCount >
-typename CountImageFunction< TInputImage, TDetector , TCount >
-::RealType
-CountImageFunction<TInputImage,TDetector , TCount>
-::EvaluateAtIndex(const IndexType& index) const
-{
+  m_Detector->Update();
   CountType  countDensity;
-  return countDensity(m_Detector->GetOutput(),this->GetNeighborhoodRadius(),index );
+  return countDensity(m_Detector->GetOutput(),m_NeighborhoodRadius,index );
 }
-
 /**
  * SetDetector method
  */
@@ -94,6 +83,10 @@ CountImageFunction<TInputImage,TDetector , TCount>
 ::SetDetector( DetectorType* detector)
 {
   m_Detector = detector;
+  if(this->GetInputImage())
+    {
+      m_Detector->SetInput(this->GetInputImage());
+    }
 }
 
 /**
@@ -107,23 +100,6 @@ CountImageFunction<TInputImage,TDetector , TCount>
 {
   return m_Detector;
 }
-
-// /**
-//  * Modified
-//  */
-template <class TInputImage, class TDetector ,class TCount >
-void
-CountImageFunction<TInputImage,TDetector , TCount>
-::Modified()
-{
-  m_HasBeenGenerated = false ;
-  Superclass::Modified();
-  m_Detector->Modified();
-}
-
-
-
-
 } // end namespace otb
 
 #endif
