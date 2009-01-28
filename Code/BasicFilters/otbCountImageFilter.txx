@@ -79,9 +79,7 @@ CountImageFilter<TInputImage, TDetector, TCount, TOutputImage >
     while(!itInput.IsAtEnd() && !itOutput.IsAtEnd())
       {
 	IndexType index = itInput.GetIndex();
-	//std::cout <<"Index "<< index <<std::endl;
-	float value = 0.;//m_CountImageFunction->EvaluateAtIndex(index); 
-	itOutput.Set(value);
+	itOutput.Set(m_CountImageFunction->EvaluateAtIndex(index));
 	
 	++itInput;
 	++itOutput;
