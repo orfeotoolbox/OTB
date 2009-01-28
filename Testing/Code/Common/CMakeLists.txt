@@ -549,6 +549,26 @@ ADD_TEST(coTvStandardWriterWatcher ${COMMON_TESTS7}
 	20
 )
 
+# ------ otb::UnaryFunctorNeighborhoodWithOffsetImageFilterNew  ----
+
+ADD_TEST(coTuUnaryFunctorNeighborhoodWithOffsetImageFilterNew ${COMMON_TESTS7}
+     otbUnaryFunctorNeighborhoodWithOffsetImageFilterNew
+)
+ADD_TEST(coTuUnaryFunctorNeighborhoodWithOffsetImageFilter ${COMMON_TESTS7}
+--compare-image ${TOL}
+	        ${INPUTDATA}/poupees.tif 
+                ${TEMP}/coTuUnaryFunctorNeighborhoodWithOffsetImageFilter.tif
+    otbUnaryFunctorNeighborhoodWithOffsetImageFilter
+        ${INPUTDATA}/poupees.tif
+	${TEMP}/coTuUnaryFunctorNeighborhoodWithOffsetImageFilter.tif
+	2 # radius
+	2 # offset[0]
+	2  #offset[1]
+)
+
+
+
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
 otbSystemTest.cxx
@@ -631,7 +651,10 @@ otbVectorData.cxx
 otbShiftScaleImageAdaptorNew.cxx
 otbShiftScaleImageAdaptor.cxx
 otbStandardWriterWatcher.cxx
+otbUnaryFunctorNeighborhoodWithOffsetImageFilterNew.cxx
+otbUnaryFunctorNeighborhoodWithOffsetImageFilter.cxx
 )
+
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 

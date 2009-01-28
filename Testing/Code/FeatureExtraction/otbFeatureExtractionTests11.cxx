@@ -29,4 +29,5 @@ void RegisterTests()
 {
 REGISTER_TEST(otbCloudDetectionFilterNew);
 REGISTER_TEST(otbCloudDetectionFilter);
+REGISTER_TEST(otbEnergyTextureFunctor);
 }
