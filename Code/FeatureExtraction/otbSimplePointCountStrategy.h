@@ -48,23 +48,27 @@ public:
       
       int accu = 0;
       double surface = M_PI*size*size;
-
-      typedef typename TPointSet::PointsContainer::ConstIterator         iteratorType;
       
-      iteratorType it = pointSet->GetPoints()->Begin();
-      
-      while( it != pointSet->GetPoints()->End())
+      if(pointSet->GetNumberOfPoints() != 0)
 	{
-	  float distX2 =( index[0]-it.Value()[0])*( index[0]-it.Value()[0]);
-	  float distY2 =( index[1]-it.Value()[1])*( index[1]-it.Value()[1]);
-	  float dist = vcl_sqrt(distX2 + distY2);
+	  typedef typename TPointSet::PointsContainer::ConstIterator     iteratorType;
+	  iteratorType it = pointSet->GetPoints()->Begin();
 	  
-	  if(dist <= size)
-	    accu++;
+	  while( it != pointSet->GetPoints()->End())
+	    {
+	      float distX2 =( index[0]-it.Value()[0])*( index[0]-it.Value()[0]);
+	      float distY2 =( index[1]-it.Value()[1])*( index[1]-it.Value()[1]);
+	      float dist = vcl_sqrt(distX2 + distY2);
+	      
+	      if(dist <= size)
+		accu++;
 	  
-	  ++it;
+	      ++it;
+	    }
 	}
-            
+      else
+	return 0.;
+
       return static_cast<float>(accu/surface);
     }
 }; 

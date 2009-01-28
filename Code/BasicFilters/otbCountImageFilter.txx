@@ -71,8 +71,6 @@ CountImageFilter<TInputImage, TDetector, TCount, TOutputImage >
     itk::ImageRegionIterator<OutputImageType> 
                        itOutput(outputImage, outputImage->GetLargestPossibleRegion());
     
-    CountMethodType    CountMethod;
-    
     itInput.GoToBegin();
     itOutput.GoToBegin();
     
