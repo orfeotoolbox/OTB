@@ -1134,6 +1134,15 @@ ADD_TEST(bfTuCountImageFilterNew ${BASICFILTERS_TESTS11}
 	 otbCountImageFilterNew
 	 )
 
+ADD_TEST(bfTvCountImageFilterOutputImage ${BASICFILTERS_TESTS11}
+--compare-image ${TOL}
+	    ${BASELINE_FILES}/bfTvCountImageFilterOutputImage.tif
+	    ${TEMP}/bfTvCountImageFilterOutputImage.tif
+	    otbCountImageFilterTest
+	 ${INPUTDATA}/QB_Suburb.png
+	 ${TEMP}/bfTvCountImageFilterOutputImage.tif
+	 5 2 
+)
 
 # A enrichir
 SET(BasicFilters_SRCS1
@@ -1298,6 +1307,7 @@ otbExtractROIResample.cxx
 otbCountImageFunctionNew.cxx
 otbCountImageFunctionTest.cxx	
 otbCountImageFilterNew.cxx
+otbCountImageFilterTest.cxx	
 )
 
 
