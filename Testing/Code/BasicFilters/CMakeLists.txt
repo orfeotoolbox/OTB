@@ -1115,34 +1115,35 @@ ADD_TEST(bfTvExtractROIResample2 ${BASICFILTERS_TESTS11}
 	 ${TEMP}/bfTvExtractROIResample2.tif
 	 1
 )
-# -------    otbCountImageFunction   ----------------------------
-ADD_TEST(bfTuCountImageFunctionNew ${BASICFILTERS_TESTS11}
-	 otbCountImageFunctionNew
+# -------    otbPointSetFunction   ----------------------------
+ADD_TEST(bfTuPointSetFunctionNew ${BASICFILTERS_TESTS11}
+	 otPointSetFunctionNew
 	 )
 
-ADD_TEST(bfTvCountImageFunction ${BASICFILTERS_TESTS11}
---compare-ascii ${TOL}
-	    ${BASELINE_FILES}/bfTvCountImageFunctionOutputAscii.txt
-	    ${TEMP}/bfTvCountImageFunctionOutputAscii.txt
-	otbCountImageFunctionTest
-	 ${INPUTDATA}/QB_Suburb.png
-	 ${TEMP}/bfTvCountImageFunctionOutputAscii.txt
-	 5 2
-)
+#
+#ADD_TEST(bfTvCountImageFunction ${BASICFILTERS_TESTS11}
+#--compare-ascii ${TOL}
+#	    ${BASELINE_FILES}/bfTvCountImageFunctionOutputAscii.txt
+#	    ${TEMP}/bfTvCountImageFunctionOutputAscii.txt
+#	otbCountImageFunctionTest
+#	 ${INPUTDATA}/QB_Suburb.png
+#	 ${TEMP}/bfTvCountImageFunctionOutputAscii.txt
+#	 5 2
+#)
 # -------    otbCountImageFilter   ----------------------------
-ADD_TEST(bfTuCountImageFilterNew ${BASICFILTERS_TESTS11}
-	 otbCountImageFilterNew
-	 )
+#ADD_TEST(bfTuCountImageFilterNew ${BASICFILTERS_TESTS11}
+#	 otbCountImageFilterNew
+#	 )
 
-ADD_TEST(bfTvCountImageFilterOutputImage ${BASICFILTERS_TESTS11}
---compare-image ${TOL}
-	    ${BASELINE_FILES}/bfTvCountImageFilterOutputImage.tif
-	    ${TEMP}/bfTvCountImageFilterOutputImage.tif
-	    otbCountImageFilterTest
-	 ${INPUTDATA}/QB_Suburb.png
-	 ${TEMP}/bfTvCountImageFilterOutputImage.tif
-	 5 2 
-)
+#ADD_TEST(bfTvCountImageFilterOutputImage ${BASICFILTERS_TESTS11}
+#--compare-image ${TOL}
+#	    ${BASELINE_FILES}/bfTvCountImageFilterOutputImage.tif
+#	    ${TEMP}/bfTvCountImageFilterOutputImage.tif
+#	    otbCountImageFilterTest
+#	 ${INPUTDATA}/QB_Suburb.png
+#	 ${TEMP}/bfTvCountImageFilterOutputImage.tif
+#	 5 2 
+#)
 
 # A enrichir
 SET(BasicFilters_SRCS1
@@ -1304,10 +1305,10 @@ ENDIF(USE_FFTWD)
 
 SET(BasicFilters_SRCS11
 otbExtractROIResample.cxx
-otbCountImageFunctionNew.cxx
-otbCountImageFunctionTest.cxx	
-otbCountImageFilterNew.cxx
-otbCountImageFilterTest.cxx	
+otbPointSetFunctionNew.cxx
+#otbCountImageFunctionTest.cxx	
+#otbCountImageFilterNew.cxx
+#otbCountImageFilterTest.cxx	
 )
 
 

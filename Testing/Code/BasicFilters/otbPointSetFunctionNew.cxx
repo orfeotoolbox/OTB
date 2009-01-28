@@ -18,32 +18,23 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include <stdio.h>
 
-#include "otbCountImageFunction.h"
-#include "otbSiftFastImageFilter.h"
-#include "otbSimplePointCountStrategy.h"
+#include "otbPointSetFunction.h"
 #include "itkPointSet.h"
 #include "itkVariableLengthVector.h"
-#include "otbImage.h"
 
-int otbCountImageFunctionNew(int, char* [] )
+
+int otbPointSetFunctionNew(int, char* [] )
 {
 
   const   unsigned int                                      Dimension = 2;
   typedef float                                             PixelType; 
 
-  typedef otb::Image< PixelType, Dimension >                ImageType;
-  typedef ImageType::IndexType                              IndexType;
   typedef itk::VariableLengthVector<PixelType>              RealVectorType;
   typedef itk::PointSet<RealVectorType,Dimension>           PointSetType;
-  typedef otb::SiftFastImageFilter<ImageType,PointSetType>  DetectorType;
-  
-  typedef otb::Count<PointSetType,unsigned int ,IndexType>  CounterType;
-  
-  typedef otb::CountImageFunction< ImageType,DetectorType,
-                                             CounterType>   FunctionType;
+  typedef otb::PointSetFunction <PointSetType,PixelType>   FunctionType;
   
   /**Instancitation of an object*/
-  FunctionType::Pointer    filter =     FunctionType::New();
+  FunctionType   filter();
 
   return EXIT_SUCCESS;
 }

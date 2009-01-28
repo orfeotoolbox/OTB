@@ -28,8 +28,8 @@
 void RegisterTests()
 {
 REGISTER_TEST(otbExtractROIResample);
-REGISTER_TEST(otbCountImageFunctionNew); 
-REGISTER_TEST(otbCountImageFunctionTest);
-REGISTER_TEST(otbCountImageFilterNew); 
-REGISTER_TEST(otbCountImageFilterTest);  
+REGISTER_TEST(otbPointSetFunctionNew); 
+//REGISTER_TEST(otbCountImageFunctionTest);
+//REGISTER_TEST(otbCountImageFilterNew); 
+//REGISTER_TEST(otbCountImageFilterTest);  
 }
