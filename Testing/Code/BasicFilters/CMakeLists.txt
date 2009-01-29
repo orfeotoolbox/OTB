@@ -1151,7 +1151,7 @@ ADD_TEST(bfTvPointSetToDensityImageFilterTest ${BASICFILTERS_TESTS11}
 	    otbPointSetToDensityImageFilterTest
 	 ${INPUTDATA}/QB_Suburb.png
 	 ${TEMP}/bfTvPointSetToDensityImageFilterOutputImage.tif
-	 5 2
+	 5 10
 )
 
 # -------    otbPCAShapeModelEstimatorTest   ----------------------------
