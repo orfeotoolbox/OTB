@@ -22,11 +22,13 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "gdal.h"
-#include "itkDataObject.h"
 #include <iostream>
 #include <string>
 #include <vector>
+
+#include "itkDataObject.h"
+#include "gdal.h"
+
 
 namespace otb
 {
