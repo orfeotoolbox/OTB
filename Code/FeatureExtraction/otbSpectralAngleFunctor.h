@@ -40,28 +40,29 @@ class SpectralAngleFunctor
   ~SpectralAngleFunctor(){};
   inline TOutputValue operator()(const TInput& inPix)
     {
-     TOutputValue out;
+      TOutputValue out;
 
       double dist=0.0;
       double scalarProd=0.0;
       double normProd=0.0;
       double normProd1=0.0;
+      double sqrtNormProd = 0.0;
       for (unsigned int i=0; i<std::min(inPix.Size(),m_ReferencePixel.Size()); i++)
-    {
-      scalarProd += inPix[i]*m_ReferencePixel[i];
-      normProd1 += inPix[i]*inPix[i];
-    }
+      {
+        scalarProd += inPix[i]*m_ReferencePixel[i];
+        normProd1 += inPix[i]*inPix[i];
+      }
       normProd = normProd1 * m_RefNorm*m_RefNorm;
-   
-      if ( normProd == 0.0)
-    {
-      dist = 0.0;
-    }
+      sqrtNormProd = vcl_sqrt(normProd);
+      if ( (sqrtNormProd == 0.0) || ( scalarProd / sqrtNormProd > 1) )
+      {
+        dist = 0.0;
+      }
       else
-    {
-      dist = vcl_acos(scalarProd/vcl_sqrt(normProd));
-    }
-     
+      {
+        dist = vcl_acos(scalarProd/sqrtNormProd);
+      }
+
       out = static_cast<TOutputValue>(dist);
       return out;
 
