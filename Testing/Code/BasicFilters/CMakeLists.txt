@@ -1120,6 +1120,18 @@ ADD_TEST(bfTuPointSetFunctionNew ${BASICFILTERS_TESTS11}
 	 otbPointSetFunctionNew
 	 )
 
+
+# -------    otbPCAShapeModelEstimatorTest   ----------------------------
+ADD_TEST(bfTvImagePCAShapeModelEstimatorTest ${BASICFILTERS_TESTS11}
+    otbImagePCAShapeModelEstimatorTest
+    ${INPUTDATA}/poupees_sub_c1.png
+    ${INPUTDATA}/poupees_sub_c2.png
+    ${INPUTDATA}/poupees_sub_c3.png
+    ${TEMP}/imagePCAShapeModelEstimatorTest_mean.tif
+    ${TEMP}/imagePCAShapeModelEstimatorTest_eigen_vectors1.tif
+    ${TEMP}/imagePCAShapeModelEstimatorTest_eigen_vectors2.tif
+    )
+
 #
 #ADD_TEST(bfTvCountImageFunction ${BASICFILTERS_TESTS11}
 #--compare-ascii ${TOL}
@@ -1309,6 +1321,7 @@ otbPointSetFunctionNew.cxx
 #otbCountImageFunctionTest.cxx	
 #otbCountImageFilterNew.cxx
 #otbCountImageFilterTest.cxx	
+otbImagePCAShapeModelEstimatorTest.cxx
 )
 
 

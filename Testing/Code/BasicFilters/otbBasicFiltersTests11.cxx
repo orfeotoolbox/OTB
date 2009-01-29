@@ -32,4 +32,5 @@ REGISTER_TEST(otbPointSetFunctionNew);
 //REGISTER_TEST(otbCountImageFunctionTest);
 //REGISTER_TEST(otbCountImageFilterNew); 
 //REGISTER_TEST(otbCountImageFilterTest);  
+REGISTER_TEST(otbImagePCAShapeModelEstimatorTest);
 }
