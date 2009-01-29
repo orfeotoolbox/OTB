@@ -43,13 +43,11 @@ namespace otb
   SiftFastImageFilter<TInputImage,TOutputPointSet>
   ::GenerateData()
   {
+    
     // Get the input image pointer
     const InputImageType *     inputPtr       = this->GetInput();
     OutputPointSetPointerType  outputPointSet = this->GetOutput();
-
-   
-
-
+    
     typename InputImageType::SizeType size = inputPtr->GetLargestPossibleRegion().GetSize();
 
     // Rescale data in the [0,1] range

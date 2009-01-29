@@ -61,8 +61,9 @@ namespace otb
       typedef typename InputImageType::IndexType           IndexType;
 
       /** OutputImageType typedef support*/
-      typedef TOutputImage                                 OutputImageType;
+      typedef typename Superclass::OutputImageType         OutputImageType;
       typedef typename OutputImageType::Pointer            OutputImagePointerType;
+      typedef typename OutputImageType::RegionType  OutputImageRegionType;
       typedef typename OutputImageType::PixelType          OutputPixelType; 
       
       typedef typename itk::NumericTraits< OutputPixelType>::RealType  OutputRealType;
@@ -105,8 +106,7 @@ namespace otb
       /**
        * Main computation method.
        */
-      virtual void  GenerateData();
-
+      virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId );
 
   private:
 

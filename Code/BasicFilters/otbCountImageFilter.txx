@@ -31,6 +31,7 @@ namespace otb
   CountImageFilter<TInputImage , TDetector, TCount, TOutputImage>
   ::CountImageFilter()
   {
+    this->SetNumberOfRequiredInputs( 1 );
     m_CountImageFunction = CountImageFunctionType::New();
     m_NeighborhoodRadius = 1;
   }
@@ -44,29 +45,31 @@ namespace otb
   ::~CountImageFilter()
   {}
 
- /*-------------------------------------------------------
-  * Generate Data
-  --------------------------------------------------------*/
+  /**
+   * threaded Generate Data
+   */
 
-  template <class TInputImage , class TDetector, class TCount, class TOutputImage>
-  void
-  CountImageFilter<TInputImage, TDetector, TCount, TOutputImage >
-  ::GenerateData(void)
-  {
-    InputImagePointerType ptr = const_cast<InputImageType *>(this->GetInput());
+  /**
+ * ThreadedGenerateData Performs the pixel-wise addition
+ */
+template <class TInputImage , class TDetector, class TCount, class TOutputImage>
+void
+CountImageFilter<TInputImage, TDetector, TCount, TOutputImage >
+::ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread, int threadId )
+{
+  typename Superclass::OutputImagePointer      outputImage = this->GetOutput();
+  InputImagePointerType ptr = const_cast<InputImageType *>(this->GetInput());
+
+      /** Update the radius for the CountImageFunction */
+    m_CountImageFunction->SetInputImage(ptr);
+    m_CountImageFunction->SetNeighborhoodRadius(m_NeighborhoodRadius);
     
-    OutputImagePointerType outputImage = this->GetOutput();
-    
-    /** Update the radius for the CountImageFunction */
-    m_CountImageFunction->SetNeighborhoodRadius(this->GetNeighborhoodRadius());
     
     itk::ImageRegionIterator<InputImageType> 
                        itInput(ptr, ptr->GetLargestPossibleRegion());
     
     itk::ImageRegionIterator<OutputImageType> 
                        itOutput(outputImage, outputImage->GetLargestPossibleRegion());
-    
-    CountMethodType CountMethod;
     
     itInput.GoToBegin();
     itOutput.GoToBegin();
@@ -79,10 +82,9 @@ namespace otb
 	++itInput;
 	++itOutput;
       }
-           
-
-  }/** End of GenerateData()*/
-
+  
+  
+}
 
 
   /**
