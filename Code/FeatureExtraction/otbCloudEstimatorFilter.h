@@ -15,26 +15,26 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCloudDetectionFilter_h
-#define __otbCloudDetectionFilter_h
+#ifndef __otbCloudEstimatorFilter_h
+#define __otbCloudEstimatorFilter_h
 
 #include "otbSpectralAngleFunctor.h"
 #include "itkUnaryFunctorImageFilter.h"
 
 namespace otb
 {
-/** \class CloudDetectionFilter
- * \brief Apply spectral angle functor to an image.
- * \brief Apply a threshold.
- * \brief Apply a color reversal.
+/** \class CloudEstimatorFilter
+ * \brief Applies spectral angle functor to an image.
+ * \brief Multiplies by a gaussian coefficient
+ * \brief Applies a color reversal.
  */
 template <class TInputImage, class TOutputImage, class TFunction = Functor::SpectralAngleFunctor< 
                                           ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
-class ITK_EXPORT CloudDetectionFilter : public itk::UnaryFunctorImageFilter< TInputImage, TOutputImage, TFunction >
+class ITK_EXPORT CloudEstimatorFilter : public itk::UnaryFunctorImageFilter< TInputImage, TOutputImage, TFunction >
 {
 public:
   /** Standard class typedefs. */
-  typedef CloudDetectionFilter                           Self;
+  typedef CloudEstimatorFilter                          Self;
   typedef typename itk::UnaryFunctorImageFilter < TInputImage, TOutputImage, TFunction > 
                                                         Superclass;
   typedef itk::SmartPointer<Self>                       Pointer;
@@ -44,7 +44,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(CloudDetectionFilter,UnaryFunctorImageFilter);
+  itkTypeMacro(CloudEstimatorFilter,UnaryFunctorImageFilter);
 
   /** Some convenient typedefs. */
   typedef          TInputImage                    InputImageType;
@@ -61,18 +61,17 @@ public:
   void SetVariance( double var );
   double GetVariance();
 
-
 protected:
-  CloudDetectionFilter();
+  CloudEstimatorFilter();
 
-  virtual ~CloudDetectionFilter(){};
+  virtual ~CloudEstimatorFilter(){};
 
   virtual void BeforeThreadedGenerateData();
 
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  CloudDetectionFilter(const Self&); //purposely not implemented
+  CloudEstimatorFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
 
@@ -81,7 +80,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbCloudDetectionFilter.txx"
+#include "otbCloudEstimatorFilter.txx"
 #endif
 
 #endif
