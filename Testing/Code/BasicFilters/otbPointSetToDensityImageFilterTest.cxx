@@ -23,7 +23,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkVariableLengthVector.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbSiftFastImageFilter.h"
+#include "otbImageToSIFTKeyPointSetFilter.h"
 
 
 int otbPointSetToDensityImageFilterTest(int argc, char* argv[] )
@@ -32,7 +32,9 @@ int otbPointSetToDensityImageFilterTest(int argc, char* argv[] )
   const char * infname = argv[1];
   const char * outfname = argv[2];
   const unsigned int scales = atoi(argv[3]);
-  const unsigned int radius = atoi(argv[4]);
+  const unsigned int octaves = atoi(argv[4]);
+  const unsigned int radius = atoi(argv[5]);
+
 
   const   unsigned int                                             Dimension = 2;
   typedef float                                                    PixelType; 
@@ -42,8 +44,8 @@ int otbPointSetToDensityImageFilterTest(int argc, char* argv[] )
   typedef otb::ImageFileWriter<ImageType>                          WriterType;
   typedef itk::VariableLengthVector<PixelType>                     RealVectorType;
   typedef itk::PointSet<RealVectorType,Dimension>                  PointSetType;
-  typedef otb::SiftFastImageFilter<ImageType,PointSetType>         DetectorType;
-  
+  typedef otb::ImageToSIFTKeyPointSetFilter<ImageType,PointSetType>    DetectorType;
+
   typedef otb::PointSetToDensityImageFilter <PointSetType,ImageType>    FunctionType;
  
   /**Instancitation of an object*/
@@ -54,8 +56,11 @@ int otbPointSetToDensityImageFilterTest(int argc, char* argv[] )
   reader->SetFileName(infname);
   reader->GenerateOutputInformation();
  
+
   detector->SetInput(reader->GetOutput());
-  detector->SetNumberOfScales(scales);
+  detector ->SetOctavesNumber(octaves);
+  detector->SetScalesNumber(scales);
+
   
   /** PointSetImageToDensity ImageFilter*/
   filter->SetInput(detector->GetOutput());
