@@ -59,7 +59,7 @@ ADD_TEST(bfTvFiltreFrost ${BASICFILTERS_TESTS1}
 	${TEMP}/bfFiltreFrost_poupees_05_05_01.tif
 	05 05 0.1)
 
-# -------            otb::PointSetSource   ------------------------------
+# -------            otb::PointSetFilter   ------------------------------
 
 ADD_TEST(bfTuImageToPointSetFilterTest ${BASICFILTERS_TESTS1}
          otbImageToPointSetFilterTest)
@@ -1117,7 +1117,7 @@ ADD_TEST(bfTvExtractROIResample2 ${BASICFILTERS_TESTS11}
 )
 # -------    otbPointSetFunction   ----------------------------
 ADD_TEST(bfTuPointSetFunctionNew ${BASICFILTERS_TESTS11}
-	 otPointSetFunctionNew
+	 otbPointSetFunctionNew
 	 )
 
 #
