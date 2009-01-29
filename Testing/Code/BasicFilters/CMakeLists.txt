@@ -1122,20 +1122,13 @@ ADD_TEST(bfTuPointSetFunctionNew ${BASICFILTERS_TESTS11}
 	 )
 
 
-
-#------------ otbPointSetDensityFunction ---------------------
-
-ADD_TEST(bfTuPointSetDensityFunctionNew ${BASICFILTERS_TESTS11}
-         otbPointSetDensityFunctionNew)
-
-
 ADD_TEST(bfTvPointSetDensityFunctionTest ${BASICFILTERS_TESTS11}
 --compare-ascii ${TOL}
-	    ${BASELINE_FILES}/bfTvPointSetDensityFunctionOutputAscii.txt
+	     ${BASELINE_FILES}/bfTvPointSetDensityFunctionOutputAscii.txt
 	    ${TEMP}/bfTvPointSetDensityFunctionOutputAscii.txt
 	 otbPointSetDensityFunctionTest
 	 ${TEMP}/bfTvPointSetDensityFunctionOutputAscii.txt
-)
+	 )
 
 #------------ otbPointSetToDensityImageFilter ---------------------
 
@@ -1144,7 +1137,16 @@ ADD_TEST(bfTuPointSetToDensityImageFilterNew ${BASICFILTERS_TESTS11}
 
 
 
-
+# -------    otbPCAShapeModelEstimatorTest   ----------------------------
+ADD_TEST(bfTvImagePCAShapeModelEstimatorTest ${BASICFILTERS_TESTS11}
+    otbImagePCAShapeModelEstimatorTest
+    ${INPUTDATA}/poupees_sub_c1.png
+    ${INPUTDATA}/poupees_sub_c2.png
+    ${INPUTDATA}/poupees_sub_c3.png
+    ${TEMP}/imagePCAShapeModelEstimatorTest_mean.tif
+    ${TEMP}/imagePCAShapeModelEstimatorTest_eigen_vectors1.tif
+    ${TEMP}/imagePCAShapeModelEstimatorTest_eigen_vectors2.tif
+)
 #
 #ADD_TEST(bfTvCountImageFunction ${BASICFILTERS_TESTS11}
 #--compare-ascii ${TOL}
@@ -1337,6 +1339,7 @@ otbPointSetToDensityImageFilterNew.cxx
 #otbCountImageFunctionTest.cxx	
 #otbCountImageFilterNew.cxx
 #otbCountImageFilterTest.cxx	
+otbImagePCAShapeModelEstimatorTest.cxx
 )
 
 
