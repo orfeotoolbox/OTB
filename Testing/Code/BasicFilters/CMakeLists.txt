@@ -1144,6 +1144,16 @@ ADD_TEST(bfTuPointSetToDensityImageFilterNew ${BASICFILTERS_TESTS11}
 
 
 
+ADD_TEST(bfTvPointSetToDensityImageFilterTest ${BASICFILTERS_TESTS11}
+--compare-image ${TOL}
+	    ${BASELINE_FILES}/bfTvPointSetToDensityImageFilterOutputImage.tif
+	    ${TEMP}/bfTvPointSetToDensityImageFilterOutputImage.tif
+	    otbPointSetToDensityImageFilterTest
+	 ${INPUTDATA}/QB_Suburb.png
+	 ${TEMP}/bfTvPointSetToDensityImageFilterOutputImage.tif
+	 5 2
+)
+
 # -------    otbPCAShapeModelEstimatorTest   ----------------------------
 ADD_TEST(bfTvImagePCAShapeModelEstimatorTest ${BASICFILTERS_TESTS11}
     otbImagePCAShapeModelEstimatorTest
@@ -1343,6 +1353,7 @@ otbPointSetFunctionNew.cxx
 otbPointSetDensityFunctionNew.cxx
 otbPointSetDensityFunctionTest.cxx
 otbPointSetToDensityImageFilterNew.cxx
+otbPointSetToDensityImageFilterTest.cxx	
 #otbCountImageFunctionTest.cxx	
 #otbCountImageFilterNew.cxx
 #otbCountImageFilterTest.cxx	

@@ -23,29 +23,11 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkProcessObject.h"
 #include "itkPointSet.h"
 #include "itkPointSetToImageFilter.h"
-
+#include "otbPointSetDensityFunction.h"
+#include "itkPoint.h"
 
 /** \class PointSetToDensityImageFilter
- *  \brief This class extracts key points from an image through a pyramidal gaussian based decomposition
  *
- * This class implements the SURF Key point detector proposed by Tuytelaars and Vangool from the university
- * of Leuven, 2005
- *
- * \li Gaussian Second order derivative Hessian images are computed in each
- *     level and each octave for the input image.
- * \li For each octave, an extremum search is launched on each 3 adjacent scales.
- * \li The Key points detected are the ones extremum in the current , previous and
- *     next scale of reserach. 3 scales are needed for the computation (NumberOfScales >=3).
- * \li Orientation and descriptors are computed for each key point detected.
- *
- * Selected Key Points are stored in an itk::PointSet structure.
- * Points contains the coordinate of the detected point.
- * DataPoints contain the values of the 64 element descriptor for each key point
- * detected through the pyramidal analysis.
- *
- * Orientation is expressed in degree in the range of [0,360]
- *
- *  \sa otb::ImageToDeterminantHessianImage
  */
 
 namespace otb
@@ -59,7 +41,7 @@ namespace otb
 
     /** Standard class typedefs. */
       typedef PointSetToDensityImageFilter                                Self;
-      typedef itk::PointSetToImageFilter<TInputPointSet, TOutputImage>   Superclass;
+      typedef itk::PointSetToImageFilter<TInputPointSet, TOutputImage>    Superclass;
       typedef itk::SmartPointer<Self>                                     Pointer;
       typedef itk::SmartPointer<const Self>                               ConstPointer;
 
@@ -68,12 +50,31 @@ namespace otb
 
       /** Run-time type information (and related methods). */
       itkTypeMacro(PointSetToDensityImageFilter,itk::PointSetToImageFilter);
+      
+      
 
+      /**   typedefs parameters support */
+      typedef TInputPointSet                          PointSetType;
+      
+      typedef TOutputImage                            OutputImageType;
+      typedef typename  OutputImageType::PixelType    PixelType;
+      typedef typename  OutputImageType::IndexType    IndexType;
 
-      /** Template parameters typedefs*/
+      /**   typedef filter support*/
+      typedef otb::PointSetDensityFunction<PointSetType , PixelType>   PointSetDensityFunctionType;
+      typedef typename PointSetDensityFunctionType::InputType          InputType;
+      typedef typename PointSetDensityFunctionType::Pointer            PointSetDensityFunctionPointerType;
+      
 
+      /** Set/Get Radius*/
+      itkGetMacro(Radius, unsigned int);
+      itkSetMacro(Radius, unsigned int);
+      
+      /** PointSet Set/Get*/
+      //     itkSetObjectMacro(PointSet,PointSetType);
+      //itkGetObjectMacro(PointSet,PointSetType);
 
-
+      
     protected:
 
       /**
@@ -92,12 +93,19 @@ namespace otb
        * Main computation method.
        */
       virtual void  GenerateData();
+            /**
+       * Main computation method.
+       */
+      virtual void  GenerateOutputInformation();
+      
 
   private:
 
       PointSetToDensityImageFilter(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
 
+      unsigned int m_Radius;
+      typename PointSetType::Pointer m_PointSet;
     };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
