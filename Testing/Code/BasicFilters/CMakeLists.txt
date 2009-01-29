@@ -1122,6 +1122,13 @@ ADD_TEST(bfTuPointSetFunctionNew ${BASICFILTERS_TESTS11}
 	 )
 
 
+
+# -------    otbPointSetDensityFunction   ----------------------------
+ADD_TEST(bfTuPointSetDensityFunctionNew ${BASICFILTERS_TESTS11}
+	 otbPointSetDensityFunctionNew
+	 )
+
+
 ADD_TEST(bfTvPointSetDensityFunctionTest ${BASICFILTERS_TESTS11}
 --compare-ascii ${TOL}
 	     ${BASELINE_FILES}/bfTvPointSetDensityFunctionOutputAscii.txt
