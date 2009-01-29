@@ -15,10 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPointSetFunction_h
-#define __otbPointSetFunction_h
+#ifndef __otbPointSetDensityFunction_h
+#define __otbPointSetDensityFunction_h
 
-#include "itkSpatialFunction.h"
+#include "otbPointSetFunction.h"
 #include "itkPoint.h"
 #include "itkProcessObject.h"
 
@@ -26,58 +26,62 @@ namespace otb
 {
 
 /**
- * \class PointSetFunction
+ * \class PointSetDensityFunction
  * \brief Calculate the density in the neighborhood of a pixel
  *
- * \ingroup SpatialFunctions
+ * \ingroup PointSetFunctions
  */
 template <class TPointSet, class  TOutput>
- class ITK_EXPORT PointSetFunction :
-  public itk::SpatialFunction< TOutput , 2/* TODO : change 2 by PointType::PointDimension*/, typename TPointSet::PointType >
+ class ITK_EXPORT PointSetDensityFunction : public PointSetFunction< TPointSet , TOutput >
 {
 public:
   /** Standard class typedefs. */
-typedef PointSetFunction                                       Self;
- typedef itk::SpatialFunction< TOutput, 2 ,  typename TPointSet::PointType >       Superclass;
-    
-  /** Run-time type information (and related methods). */
-  itkTypeMacro(PointSetFunction, itk::SpatialFunction);
+  typedef PointSetDensityFunction                    Self;
+  typedef PointSetFunction< TPointSet ,TOutput >     Superclass;
+  typedef itk::SmartPointer<Self>                    Pointer;
+  typedef itk::SmartPointer<const Self>              ConstPointer;
+
   
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(PointSetDensityFunction, PointSetFunction);
+  
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self); 
+
   /** PointSet Type typedef Support*/
   typedef TPointSet                            PointSetType;
+  typedef typename Superclass::InputType       InputType;
   typedef typename  PointSetType::Pointer      PointSetPointerType;
   
   /** TOutput typedef suppoty*/
-  typedef TOutput           OutputType;
-  
-  /** Set the input image (reimplemented since we need to set the detector input) */
-  itkGetConstObjectMacro(PointSet,PointSetType);
+  typedef TOutput                              OutputType;
 
-  void SetPointSet( PointSetType* PointSet)
-    {
-      m_PointSet = PointSet;
-    }
+  /** Set/Get the number of scales*/
+  itkSetMacro(Radius,unsigned int);
+  itkGetMacro(Radius,unsigned int);
+  
+  /** Evaluate Method */
+  virtual OutputType Evaluate(const InputType& input ) const;
  
 protected:
-  PointSetFunction();
-  ~PointSetFunction(){};
+  PointSetDensityFunction();
+  ~PointSetDensityFunction(){};
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   
 
 private:
-  PointSetFunction( const Self& ); //purposely not implemented
+  PointSetDensityFunction( const Self& ); //purposely not implemented
   void operator=( const Self& ); //purposely not implemented
-
-  PointSetPointerType  m_PointSet;
-
+ 
+  unsigned int m_Radius;
 };
 
 } // end namespace otb
 
 
 #ifndef OTB_MANUAL_INSTANTIATION 
-#include "otbPointSetFunction.txx"
+#include "otbPointSetDensityFunction.txx"
 #endif
 
 #endif

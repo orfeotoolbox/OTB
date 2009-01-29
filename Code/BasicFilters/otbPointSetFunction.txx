@@ -49,28 +49,29 @@ PointSetFunction< TPointSet,   TOutput>
  }
 
 
-/**
- * SetDetector method
- */
-template <class TPointSet, class  TOutput > 
-void
-PointSetFunction< TPointSet,   TOutput>
-::SetPointSet(PointSetType* PointSet)
-{
-  m_PointSet = PointSet;
-}
+// /**
+//  * SetDetector method
+//  */
+// template <class TPointSet, class  TOutput > 
+// void
+// PointSetFunction< TPointSet,   TOutput>
+// ::SetPointSet(PointSetType* PointSet) const
+// {
+//   m_PointSet = PointSet;
+// }
 
-/**
- * GetDetector method
- */
-template <class TPointSet, class  TOutput > 
-typename PointSetFunction< TPointSet,TOutput>
-::PointSetType *
-PointSetFunction< TPointSet,   TOutput>
-::GetPointSet() 
-{
-  return m_PointSet;
-}
+// /**
+//  * GetDetector method
+//  */
+// template <class TPointSet, class  TOutput > 
+// const
+// typename PointSetFunction< TPointSet,TOutput>
+// ::PointSetType *
+// PointSetFunction< TPointSet,   TOutput>
+// ::GetPointSet() const
+// {
+//   return m_PointSet;
+// }
 } // end namespace otb
 
 #endif

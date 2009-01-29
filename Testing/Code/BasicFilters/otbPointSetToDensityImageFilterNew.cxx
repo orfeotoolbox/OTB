@@ -17,24 +17,26 @@ PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
 #include <stdio.h>
-
-#include "otbPointSetFunction.h"
+#include "otbImage.h"
+#include "otbPointSetToDensityImageFilter.h"
 #include "itkPointSet.h"
 #include "itkVariableLengthVector.h"
 
 
-int otbPointSetFunctionNew(int, char* [] )
+int otbPointSetToDensityImageFilterNew(int, char* [] )
 {
 
-  const   unsigned int                                      Dimension = 2;
-  typedef float                                             PixelType; 
-
-  typedef itk::VariableLengthVector<PixelType>              RealVectorType;
-  typedef itk::PointSet<RealVectorType,Dimension>           PointSetType;
-  typedef otb::PointSetFunction <PointSetType,PixelType>    FunctionType;
+  const   unsigned int                                             Dimension = 2;
+  typedef float                                                    PixelType; 
+  
+  typedef otb::Image<PixelType , Dimension>                        ImageType;
+  typedef itk::VariableLengthVector<PixelType>                     RealVectorType;
+  typedef itk::PointSet<RealVectorType,Dimension>                  PointSetType;
+  typedef otb::PointSetToDensityImageFilter <PointSetType,ImageType>    FunctionType;
   
   /**Instancitation of an object*/
-  FunctionType   filter();
+
+  FunctionType::Pointer    filter = FunctionType::New();
 
   return EXIT_SUCCESS;
 }

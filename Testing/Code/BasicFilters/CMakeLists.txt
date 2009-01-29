@@ -64,6 +64,7 @@ ADD_TEST(bfTvFiltreFrost ${BASICFILTERS_TESTS1}
 ADD_TEST(bfTuImageToPointSetFilterTest ${BASICFILTERS_TESTS1}
          otbImageToPointSetFilterTest)
 
+
 # -------            otb::OpeningClosingMorphologicalFilter   ------------------------------
 
 ADD_TEST(bfTuOpeningClosingFilterNew ${BASICFILTERS_TESTS1}
@@ -1121,6 +1122,28 @@ ADD_TEST(bfTuPointSetFunctionNew ${BASICFILTERS_TESTS11}
 	 )
 
 
+
+# -------    otbPointSetDensityFunction   ----------------------------
+ADD_TEST(bfTuPointSetDensityFunctionNew ${BASICFILTERS_TESTS11}
+	 otbPointSetDensityFunctionNew
+	 )
+
+
+ADD_TEST(bfTvPointSetDensityFunctionTest ${BASICFILTERS_TESTS11}
+--compare-ascii ${TOL}
+	     ${BASELINE_FILES}/bfTvPointSetDensityFunctionOutputAscii.txt
+	    ${TEMP}/bfTvPointSetDensityFunctionOutputAscii.txt
+	 otbPointSetDensityFunctionTest
+	 ${TEMP}/bfTvPointSetDensityFunctionOutputAscii.txt
+	 )
+
+#------------ otbPointSetToDensityImageFilter ---------------------
+
+ADD_TEST(bfTuPointSetToDensityImageFilterNew ${BASICFILTERS_TESTS11}
+         otbPointSetToDensityImageFilterNew)
+
+
+
 # -------    otbPCAShapeModelEstimatorTest   ----------------------------
 ADD_TEST(bfTvImagePCAShapeModelEstimatorTest ${BASICFILTERS_TESTS11}
     otbImagePCAShapeModelEstimatorTest
@@ -1130,8 +1153,7 @@ ADD_TEST(bfTvImagePCAShapeModelEstimatorTest ${BASICFILTERS_TESTS11}
     ${TEMP}/imagePCAShapeModelEstimatorTest_mean.tif
     ${TEMP}/imagePCAShapeModelEstimatorTest_eigen_vectors1.tif
     ${TEMP}/imagePCAShapeModelEstimatorTest_eigen_vectors2.tif
-    )
-
+)
 #
 #ADD_TEST(bfTvCountImageFunction ${BASICFILTERS_TESTS11}
 #--compare-ascii ${TOL}
@@ -1318,6 +1340,9 @@ ENDIF(USE_FFTWD)
 SET(BasicFilters_SRCS11
 otbExtractROIResample.cxx
 otbPointSetFunctionNew.cxx
+otbPointSetDensityFunctionNew.cxx
+otbPointSetDensityFunctionTest.cxx
+otbPointSetToDensityImageFilterNew.cxx
 #otbCountImageFunctionTest.cxx	
 #otbCountImageFilterNew.cxx
 #otbCountImageFilterTest.cxx	
