@@ -1099,7 +1099,7 @@ ADD_TEST(bfTvPersistentVectorizationImageFilter ${BASICFILTERS_TESTS10}
 
 ADD_TEST(bfTvExtractROIResample ${BASICFILTERS_TESTS11}
 --compare-image ${TOL}
-	    ${BASELINE_FILES}/bfTvExtractROIResample.tif
+	    ${BASELINE}/bfTvExtractROIResample.tif
 	    ${TEMP}/bfTvExtractROIResample.tif
 	 otbExtractROIResample
 	 ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
