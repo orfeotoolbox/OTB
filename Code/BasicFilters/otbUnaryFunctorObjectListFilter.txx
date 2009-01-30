@@ -74,7 +74,7 @@ template <class TInputList, class TOutputList, class TFunction  >
 {
   // copy the lists to the output
   OutputListPointer outputPtr = this->GetOutput();
-  for (int i=0; i< this->m_ObjectListPerThread.size(); ++i)
+  for (unsigned int i=0; i< this->m_ObjectListPerThread.size(); ++i)
   {
     for(OutputListIterator it = this->m_ObjectListPerThread[i]->Begin();
         it != this->m_ObjectListPerThread[i]->End();
