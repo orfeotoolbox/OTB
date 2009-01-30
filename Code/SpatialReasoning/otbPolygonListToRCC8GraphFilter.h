@@ -83,7 +83,9 @@ public:
   /** Toogle optimisation flag */
   itkBooleanMacro(Optimisation);
   itkSetMacro(Optimisation,bool);
-
+  itkBooleanMacro(UseInverted);
+  itkSetMacro(UseInverted,bool);
+  
   void SetSegmentationRanges(SegmentationRangesType ranges)
   {
     m_SegmentationRanges = ranges;
@@ -161,6 +163,10 @@ private:
 
   /** This array stores the indices corresponding to each segmentation */
   SegmentationRangesType m_SegmentationRanges;
+
+  /** If set to true, the filter will also add the invert relationship
+    * between v2 and v1 */
+  bool m_UseInverted;
 };
 } // End namespace otb
 
