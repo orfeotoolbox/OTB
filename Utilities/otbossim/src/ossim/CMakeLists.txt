@@ -17,7 +17,7 @@ FILE(GLOB_RECURSE ossim_dll_main_SRCS "dll_main/*.cpp")
 REMOVE(ossim_support_data_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/support_data/ossimDemPoint.cpp")
 REMOVE(ossim_plugin_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/plugin/ossimSharedObjectBridge.cpp")
 REMOVE(ossim_base_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/base/ossimGzStream.cpp")
-REMOVE(ossim_base_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/ossimFactoryBaseTemplate.cpp")
+REMOVE(ossim_base_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/base/ossimFactoryBaseTemplate.cpp")
 
 # Adjust the compiler flags to avoid problems with ossim code.
 IF(CMAKE_COMPILER_IS_GNUCXX)
