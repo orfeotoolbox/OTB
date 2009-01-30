@@ -32,6 +32,7 @@ PolygonListToRCC8GraphFilter<TPolygonList, TOutputGraph>
 {
   this->SetNumberOfRequiredInputs(1);
   m_Optimisation=false;
+  m_UseInverted=false;
 }
 /**
  * Destructor.
@@ -341,7 +342,10 @@ PolygonListToRCC8GraphFilter<TPolygonList, TOutputGraph>
             // Add the edge to the graph.
             otbMsgDevMacro(<<"Adding edge: "<<vIt1.GetIndex()<<" -> "<<vIt2.GetIndex()<<": "<<value);
             m_EdgesPerThread[threadId][EdgePairType(vIt1.GetIndex(),vIt2.GetIndex())]=value;
-	    m_EdgesPerThread[threadId][EdgePairType(vIt2.GetIndex(),vIt1.GetIndex())]=invert[value];
+	    if(m_UseInverted)
+	      {
+	      m_EdgesPerThread[threadId][EdgePairType(vIt2.GetIndex(),vIt1.GetIndex())]=invert[value];
+	      }
           }
         }
         progress.CompletedPixel();
