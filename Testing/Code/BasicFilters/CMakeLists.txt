@@ -1109,7 +1109,7 @@ ADD_TEST(bfTvExtractROIResample ${BASICFILTERS_TESTS11}
 
 ADD_TEST(bfTvExtractROIResample2 ${BASICFILTERS_TESTS11}
 --compare-image ${TOL}
-	    ${BASELINE_FILES}/bfTvExtractROIResample2.tif
+	    ${BASELINE}/bfTvExtractROIResample2.tif
 	    ${TEMP}/bfTvExtractROIResample2.tif
 	 otbExtractROIResample
 	 ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
@@ -1146,12 +1146,12 @@ ADD_TEST(bfTuPointSetToDensityImageFilterNew ${BASICFILTERS_TESTS11}
 
 ADD_TEST(bfTvPointSetToDensityImageFilterTest ${BASICFILTERS_TESTS11}
 --compare-image ${TOL}
-	    ${BASELINE_FILES}/bfTvPointSetToDensityImageFilterOutputImage.tif
+	    ${BASELINE}/bfTvPointSetToDensityImageFilterOutputImage.tif
 	    ${TEMP}/bfTvPointSetToDensityImageFilterOutputImage.tif
 	    otbPointSetToDensityImageFilterTest
 	 ${INPUTDATA}/QB_Suburb.png
 	 ${TEMP}/bfTvPointSetToDensityImageFilterOutputImage.tif
-	 5 2
+	 3 5 10
 )
 
 # -------    otbPCAShapeModelEstimatorTest   ----------------------------
@@ -1170,15 +1170,15 @@ ADD_TEST(bfTuKeyPointDensityImageFilterNew ${BASICFILTERS_TESTS11}
 	 otbKeyPointDensityImageFilterNew
 	 )
 
-#ADD_TEST(bfTvCountImageFilterOutputImage ${BASICFILTERS_TESTS11}
-#--compare-image ${TOL}
-#	    ${BASELINE_FILES}/bfTvCountImageFilterOutputImage.tif
-#	    ${TEMP}/bfTvCountImageFilterOutputImage.tif
-#	    otbCountImageFilterTest
-#	 ${INPUTDATA}/QB_Suburb.png
-#	 ${TEMP}/bfTvCountImageFilterOutputImage.tif
-#	 5 2 
-#)
+ADD_TEST(bfTvKeyPointDensityImageFilterOutputImage ${BASICFILTERS_TESTS11}
+--compare-image ${TOL}
+	    ${BASELINE}/bfTvKeyPointDensityImageFilterOutputImage.tif
+	    ${TEMP}/bfTvKeyPointDensityImageFilterOutputImage.tif
+	    otbKeyPointDensityImageFilterTest 
+	 ${INPUTDATA}/QB_Suburb.png
+	 ${TEMP}/bfTvKeyPointDensityImageFilterOutputImage.tif
+	 3 5 10
+)
 
 ADD_TEST(bfTvFunctionWithNeighborhoodToImageFilterNew ${BASICFILTERS_TESTS11}
         otbFunctionWithNeighborhoodToImageFilterNew
@@ -1351,7 +1351,7 @@ otbPointSetDensityFunctionTest.cxx
 otbPointSetToDensityImageFilterNew.cxx
 otbPointSetToDensityImageFilterTest.cxx	
 otbKeyPointDensityImageFilterNew.cxx
-#otbCountImageFilterTest.cxx	
+otbKeyPointDensityImageFilterTest.cxx
 otbImagePCAShapeModelEstimatorTest.cxx
 otbFunctionWithNeighborhoodToImageFilterNew.cxx
 )
