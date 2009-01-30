@@ -37,7 +37,7 @@ int otbPointSetDensityFunctionTest(int argc, char* argv[] )
   typedef otb::PointSetDensityFunction <PointSetType,PixelType>    FunctionType;
 
   
-  /**Instancitation of an object*/
+  /**Instancitation ofa Smart Pointer*/
   PointSetType::Pointer pointSet = PointSetType::New();
   FunctionType::Pointer     filter = FunctionType::New();
   std::ofstream outfile(outfname);
