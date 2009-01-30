@@ -19,7 +19,7 @@
 
 #include "otbVectorImage.h"
 #include "otbImage.h"
-#include "otbSpectralAngleFunctor.h"
+#include "otbCloudDetectionFunctor.h"
 #include "otbCloudDetectionFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -32,7 +32,8 @@ int otbCloudDetectionFilter(int argc, char * argv[])
   typedef otb::VectorImage<PixelType,Dimension>                                  VectorImageType;
   typedef otb::Image<PixelType,Dimension>                                        ImageType;
   typedef VectorImageType::PixelType                                             VectorPixelType;
-  typedef otb::CloudDetectionFilter<VectorImageType,ImageType >                  CloudDetectionFilterType;
+  typedef otb::Functor::CloudDetectionFunctor<VectorPixelType,PixelType >        FunctorType;
+  typedef otb::CloudDetectionFilter<VectorImageType,ImageType,FunctorType >      CloudDetectionFilterType;
   typedef otb::ImageFileReader<VectorImageType>                                  ReaderType;
   typedef otb::ImageFileWriter<ImageType>                                        WriterType;
 
@@ -49,10 +50,10 @@ int otbCloudDetectionFilter(int argc, char * argv[])
   referencePixel[3] = (atof(argv[6]));
 
   const double variance = (atof(argv[7]));
-  const double threshold = ::atof(argv[8]);
+  const double minThreshold = (atof(argv[8]));
+  const double maxThreshold = (atof(argv[9]));
 
-
-  // Instantiating object
+ // Instantiating object
   ReaderType::Pointer reader = ReaderType::New();
   CloudDetectionFilterType::Pointer cloudDetection = CloudDetectionFilterType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -62,13 +63,15 @@ int otbCloudDetectionFilter(int argc, char * argv[])
 
   cloudDetection->SetInput(reader->GetOutput());
   cloudDetection->SetReferencePixel(referencePixel);
+  cloudDetection->SetMinThreshold(minThreshold);
+  cloudDetection->SetMaxThreshold(maxThreshold);
   cloudDetection->SetVariance(variance);
-  cloudDetection->SetThreshold(threshold);
+
 
   writer->SetFileName(outputFileName);
   writer->SetInput(cloudDetection->GetOutput());
   writer->Update();
 
-
   return EXIT_SUCCESS;
+
 }

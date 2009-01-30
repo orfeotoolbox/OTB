@@ -981,10 +981,10 @@ ADD_TEST(feTuLandmarkNew ${FEATUREEXTRACTION_TESTS10}
 
 
 # -------            otb::CloudEstimatorFilterNew   -------------
-ADD_TEST(feTuCloudEstimatorFilterNew ${FEATUREEXTRACTION_TESTS11}
+ADD_TEST(feTuCloudEstimatorFilterNew ${FEATUREEXTRACTION_TESTS11} 
     otbCloudEstimatorFilterNew)
 
-ADD_TEST(feTvCloudEstimatorDefaultFilter ${FEATUREEXTRACTION_TESTS11}
+ADD_TEST(feTvCloudEstimatorDefaultFilter ${FEATUREEXTRACTION_TESTS11} 
 --compare-image ${EPS}
      ${BASELINE}/feTvSpectralAngleOutput.tif
      ${TEMP}/feTvSpectralAngleOutput.tif
@@ -997,7 +997,7 @@ ADD_TEST(feTvCloudEstimatorDefaultFilter ${FEATUREEXTRACTION_TESTS11}
     632
 )
 
-ADD_TEST(feTvCloudEstimatorFilter ${FEATUREEXTRACTION_TESTS11}
+ADD_TEST(feTvCloudEstimatorFilter ${FEATUREEXTRACTION_TESTS11} 
 --compare-image ${EPS}
      ${BASELINE}/feTvCloudEstimatorOutput.tif
      ${TEMP}/feTvCloudEstimatorOutput.tif
@@ -1008,25 +1008,29 @@ ADD_TEST(feTvCloudEstimatorFilter ${FEATUREEXTRACTION_TESTS11}
     731
     500
     632
-    10    # variance
+    0.20    # variance
 )
 
 # -------            otb::CloudDetectionFilterNew   -------------
 
-# ADD_TEST(feTvCloudEstimatorFilter ${FEATUREEXTRACTION_TESTS11}
-# --compare-image ${EPS}
-#      ${BASELINE}/feTvCloudDetectionOutput.tif
-#      ${TEMP}/feTvCloudDetectionOutput.tif
-#     otbCloudDetectionFilter
-#     ${INPUTDATA}/ExtrZoneNuageuse.tif
-#     ${TEMP}/feTvCloudDetectionOutput.tif
-#     500
-#     731
-#     500
-#     632
-#     10    # variance
-#     10    # threshold
-# )
+ADD_TEST(feTuCloudDetectionFilterNew ${FEATUREEXTRACTION_TESTS11} 
+    otbCloudDetectionFilterNew)
+
+ADD_TEST(feTvCloudDetectionFilter ${FEATUREEXTRACTION_TESTS11} 
+ --compare-image ${EPS}
+      ${BASELINE}/feTvCloudDetectionOutput.tif
+      ${TEMP}/feTvCloudDetectionOutput.tif
+     otbCloudDetectionFilter
+     ${INPUTDATA}/ExtrZoneNuageuse.tif
+     ${TEMP}/feTvCloudDetectionOutput.tif
+     500
+     731
+     500
+     632
+     0.20   # variance
+     1.2    # minthreshold
+     2.0    # maxthreshold
+ )
 
 
 ADD_TEST(feTpSimplifyManyPathListFilter ${FEATUREEXTRACTION_TESTS11}
@@ -1193,8 +1197,8 @@ SET(BasicFeatureExtraction_SRCS11
 otbCloudEstimatorFilterNew.cxx
 otbCloudEstimatorDefaultFilter.cxx
 otbCloudEstimatorFilter.cxx
-#otbCloudDetectionFilterNew.cxx
-#otbCloudDetectionFilter.cxx
+otbCloudDetectionFilterNew.cxx
+otbCloudDetectionFilter.cxx
 otbSimplifyManyPathListFilter.cxx
 otbEnergyTextureFunctor.cxx
 otbEnergyTextureImageFunctionNew.cxx

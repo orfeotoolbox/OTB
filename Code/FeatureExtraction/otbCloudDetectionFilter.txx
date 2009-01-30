@@ -41,9 +41,7 @@ void
 CloudDetectionFilter<TInputImage,TOutputImage,TFunction>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-
   this->Superclass::PrintSelf(os,indent);
-
 }
 
 /**
@@ -54,7 +52,6 @@ void
 CloudDetectionFilter<TInputImage,TOutputImage,TFunction>
 ::BeforeThreadedGenerateData()
 {
-
   unsigned int ReferencePixelNumberOfBands = 0;
   ReferencePixelNumberOfBands = this->GetReferencePixel().GetSize();
 
@@ -62,7 +59,6 @@ CloudDetectionFilter<TInputImage,TOutputImage,TFunction>
   {
     itkExceptionMacro("The number of bands of the reference pixel is different from the number of bands of the input image. ");
   }
-
 }
 
 /**
@@ -107,6 +103,41 @@ CloudDetectionFilter<TInputImage,TOutputImage,TFunction>
 ::GetReferencePixel()
 {
   return this->GetFunctor().GetReferencePixel();
+}
+
+/**
+ * SetMinThreshold
+ */
+template <class TInputImage, class TOutputImage, class TFunction>
+void
+CloudDetectionFilter<TInputImage,TOutputImage,TFunction>
+::SetMinThreshold(double threshold){ this->GetFunctor().SetMinThreshold(threshold); }
+
+/**
+ * SetMaxThreshold
+ */
+template <class TInputImage, class TOutputImage, class TFunction>
+void
+CloudDetectionFilter<TInputImage,TOutputImage,TFunction>
+::SetMaxThreshold(double threshold){ this->GetFunctor().SetMaxThreshold(threshold); }
+
+/**
+ * GetMinThreshold
+ */
+template <class TInputImage, class TOutputImage, class TFunction>
+double
+CloudDetectionFilter<TInputImage,TOutputImage,TFunction>
+::GetMinThreshold(){  return this->GetFunctor().GetMinThreshold(); }
+
+/**
+ * GetMaxThreshold
+ */
+template <class TInputImage, class TOutputImage, class TFunction>
+double
+CloudDetectionFilter<TInputImage,TOutputImage,TFunction>
+::GetMaxThreshold()
+{
+  return this->GetFunctor().GetMaxThreshold();
 }
 
 }
