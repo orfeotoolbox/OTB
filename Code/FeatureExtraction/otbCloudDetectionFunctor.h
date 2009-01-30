@@ -37,7 +37,7 @@ class CloudDetectionFunctor
 
   CloudDetectionFunctor()
     {
-      m_MinThreshold = 1.0;
+      m_MinThreshold = 0.0;
       m_MaxThreshold = 1.0;
     };
 

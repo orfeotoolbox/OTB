@@ -1008,7 +1008,7 @@ ADD_TEST(feTvCloudEstimatorFilter ${FEATUREEXTRACTION_TESTS11}
     731
     500
     632
-    0.20    # variance
+    0.25    # variance
 )
 
 # -------            otb::CloudDetectionFilterNew   -------------
@@ -1027,9 +1027,9 @@ ADD_TEST(feTvCloudDetectionFilter ${FEATUREEXTRACTION_TESTS11}
      731
      500
      632
-     0.20   # variance
-     1.2    # minthreshold
-     2.0    # maxthreshold
+     0.25   # variance
+     0.95   # minthreshold
+     1.0    # maxthreshold
  )
 
 
