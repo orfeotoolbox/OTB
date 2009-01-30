@@ -55,7 +55,8 @@ namespace otb
 
 #define epsilon 0.01
 
-namespace Functor {
+namespace Functor
+{
 
 template< class TInput1, class TInput2, class TOutput>
 class LHMI
@@ -70,7 +71,7 @@ public:
   typedef double HistogramFrequencyType;
   typedef typename itk::Statistics::Histogram<HistogramFrequencyType, 2> HistogramType;
   typedef typename HistogramType::MeasurementVectorType
-                                           MeasurementVectorType;
+  MeasurementVectorType;
   typedef typename HistogramType::SizeType    HistogramSizeType;
   typedef typename HistogramType::Iterator    HistogramIteratorType;
 
@@ -100,58 +101,58 @@ public:
     TOutput maxB = itB.GetPixel(0);
     TOutput minB = itB.GetPixel(0);
 
-    for(unsigned long pos = 0; pos< itA.Size(); ++pos)
-      {
+    for (unsigned long pos = 0; pos< itA.Size(); ++pos)
+    {
 
       TOutput value = static_cast<TOutput>(itA.GetPixel(pos));
 
-      if(value > maxA)
-  maxA = value;
+      if (value > maxA)
+        maxA = value;
       else if (value < minA)
-  minA = value;
+        minA = value;
 
       value = static_cast<TOutput>(itB.GetPixel(pos));
 
-      if(value > maxB)
-  maxB = value;
+      if (value > maxB)
+        maxB = value;
       else if (value < minB)
-  minB = value;
+        minB = value;
 
 
-      }
+    }
 
 
-      // Initialize the upper and lower bounds of the histogram.
-  lowerBound[0] = minA;
-  lowerBound[1] = minB;
-  upperBound[0] =
-    maxA + (maxA - minA ) * upperBoundIncreaseFactor;
-  upperBound[1] =
-    maxB + (maxB - minB ) * upperBoundIncreaseFactor;
+    // Initialize the upper and lower bounds of the histogram.
+    lowerBound[0] = minA;
+    lowerBound[1] = minB;
+    upperBound[0] =
+      maxA + (maxA - minA ) * upperBoundIncreaseFactor;
+    upperBound[1] =
+      maxB + (maxB - minB ) * upperBoundIncreaseFactor;
 
 
-  histogram = HistogramType::New();
+    histogram = HistogramType::New();
 
-  histogram->Initialize(histogramSize, lowerBound, upperBound);
+    histogram->Initialize(histogramSize, lowerBound, upperBound);
 
-  for(unsigned long pos = 0; pos< itA.Size(); ++pos)
+    for (unsigned long pos = 0; pos< itA.Size(); ++pos)
     {
 
-        typename HistogramType::MeasurementVectorType sample;
-        sample[0] = itA.GetPixel(pos);
-        sample[1] = itB.GetPixel(pos);
-  /*if(sample[0]!=NumericTraits<TOutput>::Zero &&
-     sample[1]!=NumericTraits<TOutput>::Zero)*/
-    histogram->IncreaseFrequency(sample, 1);
+      typename HistogramType::MeasurementVectorType sample;
+      sample[0] = itA.GetPixel(pos);
+      sample[1] = itB.GetPixel(pos);
+      /*if(sample[0]!=NumericTraits<TOutput>::Zero &&
+         sample[1]!=NumericTraits<TOutput>::Zero)*/
+      histogram->IncreaseFrequency(sample, 1);
 
     }
 
 
 
-  TOutput entropyX = itk::NumericTraits<TOutput>::Zero;
-  TOutput entropyY = itk::NumericTraits<TOutput>::Zero;
-  TOutput jointEntropy = itk::NumericTraits<TOutput>::Zero;
-  HistogramFrequencyType totalFreq = histogram->GetTotalFrequency();
+    TOutput entropyX = itk::NumericTraits<TOutput>::Zero;
+    TOutput entropyY = itk::NumericTraits<TOutput>::Zero;
+    TOutput jointEntropy = itk::NumericTraits<TOutput>::Zero;
+    HistogramFrequencyType totalFreq = histogram->GetTotalFrequency();
 
     for (unsigned int i = 0; i < histogram->GetSize()[0]; i++)
     {
@@ -188,7 +189,7 @@ public:
     }
 
     jointEntropy = -jointEntropy/static_cast<TOutput>(totalFreq) +
-      vcl_log(totalFreq);
+                   vcl_log(totalFreq);
 
     return static_cast<TOutput>( jointEntropy/(entropyX + entropyY) );
   }
@@ -200,22 +201,22 @@ public:
 
 template <class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT LHMIChangeDetector :
-    public BinaryFunctorNeighborhoodImageFilter<
-            TInputImage1,TInputImage2,TOutputImage,
-            Functor::LHMI<
-                   ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
-                   ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
-       ITK_TYPENAME TOutputImage::PixelType>   >
+      public BinaryFunctorNeighborhoodImageFilter<
+      TInputImage1,TInputImage2,TOutputImage,
+      Functor::LHMI<
+      ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
+      ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
+      ITK_TYPENAME TOutputImage::PixelType>   >
 {
 public:
   /** Standard class typedefs. */
   typedef LHMIChangeDetector  Self;
   typedef BinaryFunctorNeighborhoodImageFilter<
-      TInputImage1,TInputImage2,TOutputImage,
-          Functor::LHMI<
-               ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
-               ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
-               ITK_TYPENAME TOutputImage::PixelType>
+  TInputImage1,TInputImage2,TOutputImage,
+  Functor::LHMI<
+  ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
+  ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
+  ITK_TYPENAME TOutputImage::PixelType>
   >  Superclass;
   typedef itk::SmartPointer<Self>   Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;

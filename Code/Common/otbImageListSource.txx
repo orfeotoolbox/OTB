@@ -41,10 +41,10 @@ typename ImageListSource<TOutputImage>::OutputImageListType *
 ImageListSource<TOutputImage>
 ::GetOutput(void)
 {
-  if(this->GetNumberOfOutputs()<1)
-    {
+  if (this->GetNumberOfOutputs()<1)
+  {
     return 0;
-    }
+  }
   return static_cast<OutputImageListType *> (this->ProcessObject::GetOutput(0));
 }
 /**

@@ -27,8 +27,10 @@
 #include "itkArray.h"
 #include "itkMembershipFunctionBase.h"
 
-namespace otb {
-namespace Statistics {
+namespace otb
+{
+namespace Statistics
+{
 
 /** \class ModelComponentBase
  * \brief base class for distribution representation that supports
@@ -57,7 +59,7 @@ namespace Statistics {
 
 template< class TSample >
 class ITK_EXPORT ModelComponentBase :
-    public itk::Object
+      public itk::Object
 {
 public:
   /**Standard class typedefs. */
@@ -75,7 +77,7 @@ public:
 
   /** typedef for the MembershipFunctionBase */
   typedef itk::Statistics::MembershipFunctionBase< MeasurementVectorType >
-    MembershipFunctionType;
+  MembershipFunctionType;
 
   typedef itk::Array< double > ParametersType;
 
@@ -101,7 +103,10 @@ public:
 
   /** Gets/Sets the parameter(s) required for the component */
   void SetParameters(const ParametersType &parameters);
-  ParametersType GetParameters() { return m_Parameters; }
+  ParametersType GetParameters()
+  {
+    return m_Parameters;
+  }
 
   /** returns the pdf of the "measurements" vector */
   double Evaluate ( MeasurementVectorType & measurements );

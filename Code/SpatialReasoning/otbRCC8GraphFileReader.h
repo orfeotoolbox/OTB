@@ -27,7 +27,7 @@ namespace otb
  * \brief Base exception class for IO problems during reading.
  */
 class ITK_EXPORT RCC8GraphFileReaderException
-  : public itk::ExceptionObject
+      : public itk::ExceptionObject
 {
 public:
   /** Run-time information. */
@@ -35,15 +35,15 @@ public:
 
   /** Constructor. */
   RCC8GraphFileReaderException(const char *file, unsigned int line,
-                           const char* message = "Error in IO",
-                           const char* loc = "Unknown" ) :
-    ExceptionObject(file, line, message, loc)
+                               const char* message = "Error in IO",
+                               const char* loc = "Unknown" ) :
+      ExceptionObject(file, line, message, loc)
   {}
   /** Constructor. */
   RCC8GraphFileReaderException(const std::string &file, unsigned int line,
-                           const char* message = "Error in IO",
-                           const char* loc = "Unknown" ) :
-    ExceptionObject(file, line, message, loc)
+                               const char* message = "Error in IO",
+                               const char* loc = "Unknown" ) :
+      ExceptionObject(file, line, message, loc)
   {}
 };
 /**
@@ -104,7 +104,7 @@ protected:
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
- private:
+private:
   /** File name */
   std::string m_FileName;
 };

@@ -23,7 +23,8 @@
 
 #include "otbSOM.h"
 
-namespace otb {
+namespace otb
+{
 
 /**
  * \class PeriodicSOM
@@ -52,17 +53,17 @@ namespace otb {
  * \sa CzihoSOMNeighborhoodBehaviorFunctor
  */
 template <class TListSample, class TMap,
-     class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
-     class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor >
+class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
+class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor >
 class ITK_EXPORT PeriodicSOM
-  : public SOM< TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor >
+      : public SOM< TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor >
 {
 public:
   /** Standard typedefs */
   typedef PeriodicSOM Self;
   typedef SOM< TListSample, TMap,
-          TSOMLearningBehaviorFunctor,
-          TSOMNeighborhoodBehaviorFunctor > Superclass;
+  TSOMLearningBehaviorFunctor,
+  TSOMNeighborhoodBehaviorFunctor > Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -88,14 +89,20 @@ protected:
   /** Destructor */
   virtual ~PeriodicSOM() {}
   /** Output information redefinition */
-  virtual void GenerateOutputInformation () {
-      Superclass::GenerateOutputInformation (); }
+  virtual void GenerateOutputInformation ()
+  {
+    Superclass::GenerateOutputInformation ();
+  }
   /** Output allocation redefinition */
-  virtual void AllocateOutputs() {
-      Superclass::AllocateOutputs(); }
+  virtual void AllocateOutputs()
+  {
+    Superclass::AllocateOutputs();
+  }
   /** Main computation method */
-  virtual void GenerateData(void) {
-    Superclass::GenerateData(); }
+  virtual void GenerateData(void)
+  {
+    Superclass::GenerateData();
+  }
   /**
   * Update the output map with a new sample.
   * \param sample The new sample to learn,
@@ -106,11 +113,15 @@ protected:
   /**
   * Step one iteration.
   */
-  virtual void Step(unsigned int currentIteration) {
-    Superclass::Step( currentIteration ); }
+  virtual void Step(unsigned int currentIteration)
+  {
+    Superclass::Step( currentIteration );
+  }
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const {
-    Superclass::PrintSelf(os,indent); }
+  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  {
+    Superclass::PrintSelf(os,indent);
+  }
 
 private:
   PeriodicSOM(const Self&); // purposely not implemented

@@ -41,11 +41,11 @@ namespace otb
  * \ingroup ImageFunctions
  */
 template <
-  class TImageType,
-  class TCoordRep = double,
-  class TCoefficientType = double >
+class TImageType,
+class TCoordRep = double,
+class TCoefficientType = double >
 class ITK_EXPORT BSplineInterpolateImageFunction :
-    public itk::InterpolateImageFunction<TImageType,TCoordRep>
+      public itk::InterpolateImageFunction<TImageType,TCoordRep>
 {
 public:
   /** Standard class typedefs. */
@@ -73,8 +73,8 @@ public:
   /** Index typedef support. */
   typedef typename Superclass::IndexType IndexType;
 
-/** Region typedef support */
-typedef typename InputImageType::RegionType RegionType;
+  /** Region typedef support */
+  typedef typename InputImageType::RegionType RegionType;
 
   /** ContinuousIndex typedef support. */
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
@@ -88,8 +88,8 @@ typedef typename InputImageType::RegionType RegionType;
   /** Internal Coefficient typedef support */
   typedef TCoefficientType CoefficientDataType;
   typedef itk::Image<CoefficientDataType,
-                     itkGetStaticConstMacro(ImageDimension)
-    > CoefficientImageType;
+  itkGetStaticConstMacro(ImageDimension)
+  > CoefficientImageType;
 
   /** Define filter for calculating the BSpline coefficients */
   typedef otb::BSplineDecompositionImageFilter<TImageType, CoefficientImageType>
@@ -109,8 +109,8 @@ typedef typename InputImageType::RegionType RegionType;
 
   /** Derivative typedef support */
   typedef itk::CovariantVector<OutputType,
-                          itkGetStaticConstMacro(ImageDimension)
-    > CovariantVectorType;
+  itkGetStaticConstMacro(ImageDimension)
+  > CovariantVectorType;
 
   CovariantVectorType EvaluateDerivative( const PointType & point ) const
   {
@@ -135,7 +135,7 @@ typedef typename InputImageType::RegionType RegionType;
 
   /** Update coefficients filter. Coefficient filter are computed over the buffered
    region of the input image. */
-virtual void UpdateCoefficientsFilter(void);
+  virtual void UpdateCoefficientsFilter(void);
 
 protected:
   BSplineInterpolateImageFunction();

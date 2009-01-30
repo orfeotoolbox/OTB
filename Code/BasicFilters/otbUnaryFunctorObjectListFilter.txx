@@ -20,6 +20,7 @@
 
 #include "otbUnaryFunctorObjectListFilter.h"
 #include "itkProgressReporter.h"
+#include "otbMath.h"
 
 namespace otb
 {
@@ -34,32 +35,57 @@ UnaryFunctorObjectListFilter<TInputList,TOutputList,TFunction>
 }
 
 
-
-/**
- * GenerateData apply the functor on each element of the list
- */
 template <class TInputList, class TOutputList, class TFunction  >
 void
 UnaryFunctorObjectListFilter<TInputList,TOutputList,TFunction>
-::GenerateData(void)
+::ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex,int threadId)
 {
-  this->AllocateOutputs();
 
   InputListPointer inputPtr = this->GetInput();
-  OutputListPointer outputPtr = this->GetOutput();
+  this->m_ObjectListPerThread[threadId] = OutputListType::New();
 
-  itk::ProgressReporter progress(this, 0, inputPtr->Size());
+  itk::ProgressReporter progress(this, threadId, stopIndex-startIndex);
 
   // Define the iterators
-  for(InputListIterator it = inputPtr->Begin(); it != inputPtr->End(); ++it)
+  InputListIterator it = inputPtr->Begin();
+  unsigned int count = 0;
+  while ((count < startIndex) && (it != inputPtr->End()))
   {
-    outputPtr->PushBack(m_Functor(it.Get()));
+    ++it;
+    ++count;
+  }
+
+  while ((count < stopIndex) && (it != inputPtr->End()))
+  {
+    this->m_ObjectListPerThread[threadId]->PushBack(m_Functor(it.Get()));
 
     progress.CompletedPixel();
-
+    ++it;
+    ++count;
   }
 
 }
+
+
+template <class TInputList, class TOutputList, class TFunction  >
+void
+UnaryFunctorObjectListFilter<TInputList,TOutputList,TFunction>
+::AfterThreadedGenerateData()
+{
+  // copy the lists to the output
+  OutputListPointer outputPtr = this->GetOutput();
+  for (unsigned int i=0; i< this->m_ObjectListPerThread.size(); ++i)
+  {
+    for (OutputListIterator it = this->m_ObjectListPerThread[i]->Begin();
+         it != this->m_ObjectListPerThread[i]->End();
+         ++it)
+    {
+      outputPtr->PushBack(it.Get());
+    }
+  }
+
+}
+
 
 } // end namespace otb
 

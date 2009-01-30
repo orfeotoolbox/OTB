@@ -25,15 +25,15 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  /**
-   * \class AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
-   * \brief This class computes the atmospheric radiative terms with 6S.
-   * \ingroup DataSources
-   */
+/**
+ * \class AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
+ * \brief This class computes the atmospheric radiative terms with 6S.
+ * \ingroup DataSources
+ */
 class ITK_EXPORT AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
-  : public itk::ProcessObject
+      : public itk::ProcessObject
 {
- public:
+public:
   /** Standard typedefs */
   typedef AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms Self;
   typedef itk::ProcessObject Superclass;
@@ -44,7 +44,7 @@ class ITK_EXPORT AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
 
   /** Runtime information */
   itkTypeMacro(AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms,itk::ProcessObject);
- /** Creation througth the object factory */
+  /** Creation througth the object factory */
   itkNewMacro(Self);
   /** Template parameters typedefs */
   typedef AtmosphericCorrectionParameters AtmosphericCorrectionParametersType;
@@ -70,7 +70,7 @@ class ITK_EXPORT AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
   /** Generate the output.*/
   virtual void GenerateData();
 
- protected:
+protected:
   /** Constructor */
   AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms();
   /** Destructor */

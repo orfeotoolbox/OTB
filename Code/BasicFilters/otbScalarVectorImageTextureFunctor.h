@@ -36,63 +36,69 @@ namespace Functor
 template <class TNeighIter, class TInputImage, class TOutput>
 class ScalarVectorImageTextureFunctor
 {
- public:
+public:
   ScalarVectorImageTextureFunctor()
-    {
-      m_FeatureIndex.clear();
-    };
+  {
+    m_FeatureIndex.clear();
+  };
   ~ScalarVectorImageTextureFunctor() { };
 
   typedef std::vector<int> IndexSelectFeaturesType;
   typedef TInputImage InputImageType;
   typedef typename itk::Statistics::ScalarImageTextureCalculator< InputImageType> TextureCalcType;
 
-  void SetFeatureIndex(const IndexSelectFeaturesType & listIndex){ m_FeatureIndex = listIndex;};
-  const IndexSelectFeaturesType & GetFeatureIndex(){ return m_FeatureIndex; };
+  void SetFeatureIndex(const IndexSelectFeaturesType & listIndex)
+  {
+    m_FeatureIndex = listIndex;
+  };
+  const IndexSelectFeaturesType & GetFeatureIndex()
+  {
+    return m_FeatureIndex;
+  };
 
   inline TOutput operator()(const TNeighIter & it)
-    {
-      unsigned int neighborhoodSize = it.Size();
-
-      typename TextureCalcType::Pointer textureFilter = TextureCalcType::New();
-      typename InputImageType::Pointer image = InputImageType::New();
-
-      typename InputImageType::IndexType index;
-      index.Fill(0);
-      typename InputImageType::RegionType region;
-
-      region = it.GetBoundingBoxAsImageRegion();
-      region.SetIndex(index);
-
-      image->SetRegions( region );
-      image->Allocate();
-
-      typedef itk::ImageRegionIterator< InputImageType > IteratorrrType;
-      IteratorrrType inputIt( image, image->GetLargestPossibleRegion() );
-      inputIt.GoToBegin();
-      for (unsigned int i = 0; i < neighborhoodSize; ++i)
   {
-    inputIt.Set(it.GetPixel(i));
-    ++inputIt;
-  }
+    unsigned int neighborhoodSize = it.Size();
 
-      textureFilter->FastCalculationsOn();
-      textureFilter->SetInput(image);
-      textureFilter->Compute();
+    typename TextureCalcType::Pointer textureFilter = TextureCalcType::New();
+    typename InputImageType::Pointer image = InputImageType::New();
 
-      TOutput resultvalue;
-      resultvalue.SetSize(m_FeatureIndex.size());
-      resultvalue.AllocateElements(m_FeatureIndex.size());
+    typename InputImageType::IndexType index;
+    index.Fill(0);
+    typename InputImageType::RegionType region;
 
-      for(unsigned int cpt=0; cpt < m_FeatureIndex.size(); cpt++)
-      {
-        resultvalue[cpt] = textureFilter->GetFeatureMeans()->at(m_FeatureIndex[cpt]);
-      }
+    region = it.GetBoundingBoxAsImageRegion();
+    region.SetIndex(index);
 
-      return (static_cast<TOutput>(resultvalue));
+    image->SetRegions( region );
+    image->Allocate();
 
+    typedef itk::ImageRegionIterator< InputImageType > IteratorrrType;
+    IteratorrrType inputIt( image, image->GetLargestPossibleRegion() );
+    inputIt.GoToBegin();
+    for (unsigned int i = 0; i < neighborhoodSize; ++i)
+    {
+      inputIt.Set(it.GetPixel(i));
+      ++inputIt;
     }
- private:
+
+    textureFilter->FastCalculationsOn();
+    textureFilter->SetInput(image);
+    textureFilter->Compute();
+
+    TOutput resultvalue;
+    resultvalue.SetSize(m_FeatureIndex.size());
+    resultvalue.AllocateElements(m_FeatureIndex.size());
+
+    for (unsigned int cpt=0; cpt < m_FeatureIndex.size(); cpt++)
+    {
+      resultvalue[cpt] = textureFilter->GetFeatureMeans()->at(m_FeatureIndex[cpt]);
+    }
+
+    return (static_cast<TOutput>(resultvalue));
+
+  }
+private:
   IndexSelectFeaturesType m_FeatureIndex;
 
 };

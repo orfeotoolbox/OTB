@@ -24,9 +24,11 @@
 
 #include "otbKullbackLeiblerSupervizedDistanceImageFilter.h"
 
-namespace otb {
+namespace otb
+{
 
-namespace Functor {
+namespace Functor
+{
 
 template < class TInput1, class TInput2, class TInputROIImage, class TOutput >
 KullbackLeiblerSupervizedDistance< TInput1, TInput2, TInputROIImage, TOutput >
@@ -51,14 +53,14 @@ template < class TInput1, class TInput2, class TInputROIImage, class TOutput >
 void
 KullbackLeiblerSupervizedDistance< TInput1, TInput2, TInputROIImage, TOutput >
 ::Evaluate ( const typename TInput1::ImageType * img1,
-        const typename TInput2::ImageType * img2,
-        const TInputROIImage * imgROI )
+             const typename TInput2::ImageType * img2,
+             const TInputROIImage * imgROI )
 {
   typedef ROIdataConversion< typename TInput1::ImageType, TInputROIImage >
-    ROIConversionType1;
+  ROIConversionType1;
 
   typedef itk::ConstNeighborhoodIterator<
-    typename ROIConversionType1::OutputImageType > ROIInputType1;
+  typename ROIConversionType1::OutputImageType > ROIInputType1;
 
   typename ROIConversionType1::Pointer convertion1 = ROIConversionType1::New();
   convertion1->SetInputImage( img1 );
@@ -71,10 +73,10 @@ KullbackLeiblerSupervizedDistance< TInput1, TInput2, TInputROIImage, TOutput >
   m_CumROI1 = new CumulantsForEdgeworth< ROIInputType1 > ( convertion1->GetOutput() );
 
   typedef ROIdataConversion< typename TInput2::ImageType, TInputROIImage >
-    ROIConversionType2;
+  ROIConversionType2;
 
   typedef itk::ConstNeighborhoodIterator<
-    typename ROIConversionType2::OutputImageType > ROIInputType2;
+  typename ROIConversionType2::OutputImageType > ROIInputType2;
 
   typename ROIConversionType2::Pointer convertion2 = ROIConversionType2::New();
   convertion2->SetInputImage( img2 );
@@ -95,7 +97,7 @@ KullbackLeiblerSupervizedDistance< TInput1, TInput2, TInputROIImage, TOutput >
   CumulantsForEdgeworth<TInput1> cum1 ( it1 );
   CumulantsForEdgeworth<TInput2> cum2 ( it2 );
   return static_cast<TOutput> ( m_CumROI1->Divergence( cum1 )
-                  + m_CumROI2->Divergence( cum2 ) );
+                                + m_CumROI2->Divergence( cum2 ) );
 }
 
 } // end of namespace Functor
@@ -121,11 +123,11 @@ KullbackLeiblerSupervizedDistanceImageFilter<TInputImage1,TInputImage2,TInputROI
 ::BeforeThreadedGenerateData(void)
 {
   typename TInputImage1::ConstPointer inputPtr1
-    = dynamic_cast<const TInputImage1*>( this->GetInput(0) );
+  = dynamic_cast<const TInputImage1*>( this->GetInput(0) );
   typename TInputImage2::ConstPointer inputPtr2
-    = dynamic_cast<const TInputImage2*>( this->GetInput(1) );
+  = dynamic_cast<const TInputImage2*>( this->GetInput(1) );
   typename TInputROIImage::ConstPointer trainingImage
-    = static_cast<const TInputROIImage *>( this->itk::ProcessObject::GetInput(2) );
+  = static_cast<const TInputROIImage *>( this->itk::ProcessObject::GetInput(2) );
 
   this->GetFunctor().Evaluate( inputPtr1, inputPtr2, trainingImage );
 }

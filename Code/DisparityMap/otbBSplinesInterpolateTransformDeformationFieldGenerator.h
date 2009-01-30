@@ -40,9 +40,9 @@ namespace otb
  */
 template <class TPointSet, class TDeformationField>
 class ITK_EXPORT BSplinesInterpolateTransformDeformationFieldGenerator
-  : public PointSetWithTransformToDeformationFieldGenerator<TPointSet, TDeformationField>
+      : public PointSetWithTransformToDeformationFieldGenerator<TPointSet, TDeformationField>
 {
- public:
+public:
   /** Standard typedefs */
   typedef BSplinesInterpolateTransformDeformationFieldGenerator Self;
   typedef PointSetWithTransformToDeformationFieldGenerator<TPointSet,TDeformationField> Superclass;
@@ -73,7 +73,7 @@ class ITK_EXPORT BSplinesInterpolateTransformDeformationFieldGenerator
   typedef otb::Image<PointSetDataType,DeformationFieldType::ImageDimension> InternalImageType;
   typedef itk::PointSet<PointSetDataType,PointSetType::PointDimension> InternalPointSetType;
   typedef ij::BSplineScatteredDataPointSetToImageFilter<InternalPointSetType,InternalImageType>
-    SPlineInterpolateFilterType;
+  SPlineInterpolateFilterType;
   typedef typename SPlineInterpolateFilterType::Pointer SPlineInterpolateFilterPointerType;
 
   /**
@@ -99,7 +99,7 @@ protected:
   BSplinesInterpolateTransformDeformationFieldGenerator();
   /** Destructor */
   virtual ~BSplinesInterpolateTransformDeformationFieldGenerator() {};
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Main computation method */
   virtual void GenerateData();

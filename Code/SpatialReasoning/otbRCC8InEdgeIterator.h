@@ -29,7 +29,7 @@ namespace otb
 template <class TGraph>
 class ITK_EXPORT RCC8InEdgeIterator
 {
- public:
+public:
   /** self typedef */
   typedef RCC8InEdgeIterator Self;
 
@@ -48,34 +48,34 @@ class ITK_EXPORT RCC8InEdgeIterator
 
   /** Constructor */
   RCC8InEdgeIterator();
-   /** Copy constructor */
-   RCC8InEdgeIterator(const Self& iter);
-   /**  Constructor with input graph */
-   RCC8InEdgeIterator(VertexDescriptorType vertex,GraphType * graph);
+  /** Copy constructor */
+  RCC8InEdgeIterator(const Self& iter);
+  /**  Constructor with input graph */
+  RCC8InEdgeIterator(VertexDescriptorType vertex,GraphType * graph);
   /**
    * Get the current edge value.
    * \return The value of the current edge pointed by the iterator.
    */
   RCC8ValueType GetValue(void);
- /**
-   * Return the source vertex of the current edge.
-   * \return The source edge.
-   */
+  /**
+    * Return the source vertex of the current edge.
+    * \return The source edge.
+    */
   VertexPointerType GetSourceVertex(void);
   /**
    * Return the source vertex index of the current edge.
    * \return The souce vertex index.
    */
   VertexDescriptorType GetSourceIndex(void);
-   /**
-    * Return true if the iterator is at the end.
-    * \return True if the iterator is at the end.
-    */
-   bool IsAtEnd(void);
-   /**
-    * Go to the beginning.
-    */
-   void GoToBegin(void);
+  /**
+   * Return true if the iterator is at the end.
+   * \return True if the iterator is at the end.
+   */
+  bool IsAtEnd(void);
+  /**
+   * Go to the beginning.
+   */
+  void GoToBegin(void);
   /**
    * Increment.
    */
@@ -105,7 +105,7 @@ class ITK_EXPORT RCC8InEdgeIterator
    * Instantiation operator.
    */
   Self& operator=(const Self& it);
- private:
+private:
   // End
   InternalIteratorType m_End;
   // Internal iterator.

@@ -61,8 +61,8 @@ void
 ExtractROI<TInputPixel, TOutputPixel>
 ::GenerateOutputInformation()
 {
-        // Call to the base class method
-        Superclass::GenerateOutputInformation();
+  // Call to the base class method
+  Superclass::GenerateOutputInformation();
 }
 
 template <class TInputPixel, class TOutputPixel>
@@ -92,14 +92,14 @@ ExtractROI<TInputPixel, TOutputPixel>
   InputIterator inIt(inputPtr, inputRegionForThread);
 
   // walk the output region, and sample the input image
-  while( !outIt.IsAtEnd() )
-    {
+  while ( !outIt.IsAtEnd() )
+  {
     // copy the input pixel to the output
     outIt.Set( inIt.Get());
     ++outIt;
     ++inIt;
     progress.CompletedPixel();
-    }
+  }
 }
 
 

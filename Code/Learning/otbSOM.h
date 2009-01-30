@@ -52,12 +52,12 @@ namespace otb
  * \sa CzihoSOMNeighborhoodBehaviorFunctor
  */
 template < class TListSample, class TMap,
-     class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
-     class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor >
+class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
+class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor >
 class ITK_EXPORT SOM
-: public itk::ImageSource<TMap>
+      : public itk::ImageSource<TMap>
 {
-  public:
+public:
   /** Standard typedefs */
   typedef SOM                           Self;
   typedef itk::ImageSource<TMap>        Superclass;
@@ -107,13 +107,17 @@ class ITK_EXPORT SOM
   itkGetObjectMacro(ListSample,ListSampleType);
   itkSetObjectMacro(ListSample,ListSampleType);
 
-  void SetBetaFunctor ( const SOMLearningBehaviorFunctorType & functor ) {
-    m_BetaFunctor = functor; }
+  void SetBetaFunctor ( const SOMLearningBehaviorFunctorType & functor )
+  {
+    m_BetaFunctor = functor;
+  }
 
-  void SetNeighborhoodSizeFunctor ( const SOMNeighborhoodBehaviorFunctorType & functor ) {
-    m_NeighborhoodSizeFunctor = functor; }
+  void SetNeighborhoodSizeFunctor ( const SOMNeighborhoodBehaviorFunctorType & functor )
+  {
+    m_NeighborhoodSizeFunctor = functor;
+  }
 
-  protected:
+protected:
   /** Constructor */
   SOM();
   /** Destructor */
@@ -138,7 +142,7 @@ class ITK_EXPORT SOM
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  private:
+private:
   SOM(const Self&); // purposely not implemented
   void operator=(const Self&); // purposely not implemented
   /** Size of the neurons map */

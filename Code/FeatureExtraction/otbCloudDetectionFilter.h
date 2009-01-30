@@ -28,17 +28,15 @@ namespace otb
  * \brief Apply a threshold.
  * \brief Apply a color reversal.
  */
-template <class TInputImage, class TOutputImage>
-class ITK_EXPORT CloudDetectionFilter :  public itk::UnaryFunctorImageFilter< TInputImage, TOutputImage,                                       /* TFunction =*/ Functor::SpectralAngleFunctor< ITK_TYPENAME TInputImage::PixelType, 
-                                                    ITK_TYPENAME TOutputImage::PixelType> >
+template <class TInputImage, class TOutputImage, class TFunction = Functor::SpectralAngleFunctor<
+ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
+class ITK_EXPORT CloudDetectionFilter : public itk::UnaryFunctorImageFilter< TInputImage, TOutputImage, TFunction >
 {
 public:
   /** Standard class typedefs. */
   typedef CloudDetectionFilter                           Self;
-  typedef typename itk::UnaryFunctorImageFilter < TInputImage,
-                                                  TOutputImage,
-                                                    Functor::SpectralAngleFunctor < typename TInputImage::PixelType, typename TOutputImage::PixelType > > Superclass;
-
+  typedef typename itk::UnaryFunctorImageFilter < TInputImage, TOutputImage, TFunction >
+  Superclass;
   typedef itk::SmartPointer<Self>                       Pointer;
   typedef itk::SmartPointer<const Self>                 ConstPointer;
 
@@ -57,23 +55,17 @@ public:
   typedef typename OutputImageType::RegionType    OutputImageRegionType;
   typedef typename OutputImageType::PixelType     OutputPixelType;
 
- 
-  itkSetMacro(Variance, double);
-  itkGetMacro(Variance, double);
-  itkSetMacro(Threshold, double);
-  itkGetMacro(Threshold, double);
+  /** Getters/Setters */
+  void SetReferencePixel( InputPixelType ref );
+  InputPixelType GetReferencePixel();
+  void SetVariance( double var );
+  double GetVariance();
 
-  void SetReferencePixel( InputPixelType ref ){ this->GetFunctor().SetReferencePixel( ref ); };
-  InputPixelType GetReferencePixel(){ return this->GetFunctor().GetReferencePixel(); };
-  
-/*  void SetVariance(double var){ this->GetFunctor().SetVariance( var ); };
-  double GetVariance(){ return this->GetFunctor().GetVariance();
-*/
 
 protected:
   CloudDetectionFilter();
 
-  virtual ~CloudDetectionFilter(){};
+  virtual ~CloudDetectionFilter() {};
 
   virtual void BeforeThreadedGenerateData();
 
@@ -83,11 +75,6 @@ private:
   CloudDetectionFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  /** Gaussian parameter */
-  double m_Variance;
-
-  /** Threshold for the binary image */
-  double m_Threshold;
 
 };
 

@@ -50,10 +50,10 @@ const typename KMeansImageClassificationFilter<TInputImage,TOutputImage,VMaxSamp
 KMeansImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskImage>
 ::GetInputMask()
 {
-  if(this->GetNumberOfInputs()<2)
-    {
-      return 0;
-    }
+  if (this->GetNumberOfInputs()<2)
+  {
+    return 0;
+  }
   return  static_cast<const MaskImageType *>(this->itk::ProcessObject::GetInput(1));
 }
 
@@ -65,17 +65,17 @@ KMeansImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMa
   unsigned int sample_size = MaxSampleDimension;
   unsigned int nb_classes = m_Centroids.Size()/sample_size;
 
-  for(LabelType label = 1;label<=static_cast<LabelType>(nb_classes);++label)
-    {
-      SampleType new_centroid;
-      new_centroid.Fill(0);
-      m_CentroidsMap[label]=new_centroid;
-
-      for(unsigned int i=0;i<MaxSampleDimension;++i)
+  for (LabelType label = 1;label<=static_cast<LabelType>(nb_classes);++label)
   {
-    m_CentroidsMap[label][i] = static_cast<ValueType>(m_Centroids[MaxSampleDimension*(static_cast<unsigned int>(label)-1)+i]);
-  }
+    SampleType new_centroid;
+    new_centroid.Fill(0);
+    m_CentroidsMap[label]=new_centroid;
+
+    for (unsigned int i=0;i<MaxSampleDimension;++i)
+    {
+      m_CentroidsMap[label][i] = static_cast<ValueType>(m_Centroids[MaxSampleDimension*(static_cast<unsigned int>(label)-1)+i]);
     }
+  }
 }
 
 template <class TInputImage, class TOutputImage, unsigned int VMaxSampleDimension, class TMaskImage>
@@ -95,63 +95,63 @@ KMeansImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMa
   OutputIteratorType outIt(outputPtr,outputRegionForThread);
 
   MaskIteratorType maskIt;
-  if(inputMaskPtr)
-    {
-      maskIt = MaskIteratorType(inputMaskPtr,outputRegionForThread);
-      maskIt.GoToBegin();
-    }
+  if (inputMaskPtr)
+  {
+    maskIt = MaskIteratorType(inputMaskPtr,outputRegionForThread);
+    maskIt.GoToBegin();
+  }
   unsigned int maxDimension = SampleType::Dimension;
   unsigned int sampleSize = std::min(inputPtr->GetNumberOfComponentsPerPixel(),
-            maxDimension);
+                                     maxDimension);
 
   bool validPoint = true;
 
-  while(!outIt.IsAtEnd())
-    {
-      outIt.Set(m_DefaultLabel);
-       ++outIt;
-    }
+  while (!outIt.IsAtEnd())
+  {
+    outIt.Set(m_DefaultLabel);
+    ++outIt;
+  }
 
   outIt.GoToBegin();
 
-   validPoint = true;
+  validPoint = true;
 
-   typename DistanceType::Pointer distance = DistanceType::New();
+  typename DistanceType::Pointer distance = DistanceType::New();
 
-   while(!outIt.IsAtEnd()&&(!inIt.IsAtEnd()))
-     {
-       if(inputMaskPtr)
-   {
-     validPoint = maskIt.Get()>0;
-     ++maskIt;
-   }
-       if(validPoint)
-   {
-     LabelType label =1;
-     LabelType current_label =1;
-     SampleType pixel;
-     pixel.Fill(0);
-     for(unsigned int i=0;i<sampleSize;++i)
-       {
-         pixel[i]=inIt.Get()[i];
-       }
+  while (!outIt.IsAtEnd()&&(!inIt.IsAtEnd()))
+  {
+    if (inputMaskPtr)
+    {
+      validPoint = maskIt.Get()>0;
+      ++maskIt;
+    }
+    if (validPoint)
+    {
+      LabelType label =1;
+      LabelType current_label =1;
+      SampleType pixel;
+      pixel.Fill(0);
+      for (unsigned int i=0;i<sampleSize;++i)
+      {
+        pixel[i]=inIt.Get()[i];
+      }
 
-     double current_distance = distance->Evaluate(pixel,m_CentroidsMap[label]);
+      double current_distance = distance->Evaluate(pixel,m_CentroidsMap[label]);
 
-     for(label=2;label<=static_cast<LabelType>(m_CentroidsMap.size());++label)
-       {
-         double tmp_dist = distance->Evaluate(pixel,m_CentroidsMap[label]);
-         if(tmp_dist<current_distance)
-     {
-       current_label = label;
-       current_distance = tmp_dist;
-     }
-       }
-     outIt.Set(current_label);
-   }
-       ++outIt;
-       ++inIt;
-     }
+      for (label=2;label<=static_cast<LabelType>(m_CentroidsMap.size());++label)
+      {
+        double tmp_dist = distance->Evaluate(pixel,m_CentroidsMap[label]);
+        if (tmp_dist<current_distance)
+        {
+          current_label = label;
+          current_distance = tmp_dist;
+        }
+      }
+      outIt.Set(current_label);
+    }
+    ++outIt;
+    ++inIt;
+  }
 }
 /**
  * PrintSelf Method

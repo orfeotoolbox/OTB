@@ -36,7 +36,7 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT BSplineDecompositionImageFilter :
-    public itk::ImageToImageFilter<TInputImage,TOutputImage>
+      public itk::ImageToImageFilter<TInputImage,TOutputImage>
 {
 public:
   /** Standard class typedefs. */

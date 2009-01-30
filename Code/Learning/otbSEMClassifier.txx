@@ -15,7 +15,8 @@
 
 #include "otbSEMClassifier.h"
 
-namespace otb {
+namespace otb
+{
 
 template< class TInputImage, class TOutputImage >
 SEMClassifier< TInputImage, TOutputImage >
@@ -100,12 +101,14 @@ SEMClassifier< TInputImage, TOutputImage >
     typename OutputType::ConstIterator iterLabels = labels->Begin();
     typename OutputType::InstanceIdentifier id = 0;
 
-    do {
+    do
+    {
       *iterClassLabel = iterLabels->GetClassLabel( id );
       ++iterLabels;
       ++iterClassLabel;
       id++;
-    } while ( iterLabels != labels->End() );
+    }
+    while ( iterLabels != labels->End() );
     m_ExternalLabels = 1;
   }
   else if ( labels.size() == m_NbSamples )
@@ -116,12 +119,14 @@ SEMClassifier< TInputImage, TOutputImage >
     typename OutputType::iterator iterLabels = labels->Begin();
     typename OutputType::InstanceIdentifier id = 0;
 
-    do {
+    do
+    {
       *iterClassLabel = iterLabels->GetClassLabel( id );
       ++iterLabels;
       ++iterClassLabel;
       id++;
-    } while ( iterLabels != labels->End() );
+    }
+    while ( iterLabels != labels->End() );
     m_ExternalLabels = 1;
   }
   else
@@ -154,11 +159,13 @@ SEMClassifier< TInputImage, TOutputImage >
 
     ClassLabelVectorType::iterator iterClassLabel = m_ClassLabels.begin();
 
-    do {
+    do
+    {
       *iterClassLabel = imgLabelIter.Get();
       ++imgLabelIter;
       ++iterClassLabel;
-    } while ( imgLabelIter != imgLabelIterEnd );
+    }
+    while ( imgLabelIter != imgLabelIterEnd );
     m_ExternalLabels = 1;
   }
   else if ( theSize == m_NbSamples )
@@ -174,11 +181,13 @@ SEMClassifier< TInputImage, TOutputImage >
 
     ClassLabelVectorType::iterator iterClassLabel = m_ClassLabels.begin();
 
-    do {
+    do
+    {
       *iterClassLabel = imgLabelIter.Get();
       ++imgLabelIter;
       ++iterClassLabel;
-    } while ( imgLabelIter != imgLabelIterEnd );
+    }
+    while ( imgLabelIter != imgLabelIterEnd );
     m_ExternalLabels = 1;
 
   }
@@ -217,24 +226,26 @@ SEMClassifier< TInputImage, TOutputImage >
   m_SampleList->SetMeasurementVectorSize( m_Sample->GetVectorLength() );
 
   itk::ImageRegionIterator< TInputImage > imgIter ( (TInputImage *) m_Sample,
-                          m_Sample->GetBufferedRegion() );
+      m_Sample->GetBufferedRegion() );
   imgIter.GoToBegin();
   itk::ImageRegionIterator< TInputImage > imgIterEnd ( (TInputImage *) m_Sample,
-                          m_Sample->GetBufferedRegion() );
+      m_Sample->GetBufferedRegion() );
   imgIterEnd.GoToEnd();
 
-  do {
+  do
+  {
     m_SampleList->PushBack( imgIter.Get() );
     ++m_NbSamples;
     ++imgIter;
-  } while ( imgIter != imgIterEnd );
+  }
+  while ( imgIter != imgIterEnd );
 
   if ( m_ExternalLabels )
   {
     typename TInputImage::SizeType size = m_Sample->GetBufferedRegion().GetSize();
     if ( ( size[0] * size[1] ) != m_ClassLabels.size() )
       throw itk::ExceptionObject( __FILE__, __LINE__,
-                    "Vector size missmatch", ITK_LOCATION );
+                                  "Vector size missmatch", ITK_LOCATION );
   }
 }
 
@@ -318,14 +329,14 @@ SEMClassifier< TInputImage, TOutputImage >
 ::InitParameters()
 {
   if ( !m_ExternalLabels )
-   {
+  {
     m_ClassLabels.resize( m_NbSamples );
     if ( static_cast<int>(m_InitialProportions.size()) != m_NbClasses )
     {
       int label;
       for ( typename ClassLabelVectorType::iterator labelIter = m_ClassLabels.begin();
-          labelIter != m_ClassLabels.end();
-          ++labelIter )
+            labelIter != m_ClassLabels.end();
+            ++labelIter )
       {
         //label = (int) floor( 0.5 + nbClassesDbl * ran / double(RAND_MAX+1) );
         label = rand() % m_NbClasses;
@@ -341,15 +352,17 @@ SEMClassifier< TInputImage, TOutputImage >
       // Be sure, the sum of intial proportion remains to 1
       double sumProportion = 0.0;
       typename ProportionVectorType::iterator iterProportion = m_InitialProportions.begin();
-      do {
+      do
+      {
         sumProportion += *iterProportion;
-      } while ( ++iterProportion != m_InitialProportions.end() );
+      }
+      while ( ++iterProportion != m_InitialProportions.end() );
 
       if ( sumProportion != 1.0 )
       {
         for ( iterProportion = m_InitialProportions.begin();
-            iterProportion != m_InitialProportions.end();
-            ++iterProportion )
+              iterProportion != m_InitialProportions.end();
+              ++iterProportion )
           *iterProportion /= sumProportion;
       }
 
@@ -357,8 +370,8 @@ SEMClassifier< TInputImage, TOutputImage >
       double sample;
       double cumulativeProportion;
       for ( typename ClassLabelVectorType::iterator labelIter = m_ClassLabels.begin();
-          labelIter != m_ClassLabels.end();
-          ++labelIter )
+            labelIter != m_ClassLabels.end();
+            ++labelIter )
       {
         cumulativeProportion = 0.0;
         sample = double( rand() ) / ( double( RAND_MAX) + 1.0 );
@@ -367,7 +380,7 @@ SEMClassifier< TInputImage, TOutputImage >
         for ( int componentIndex = 0; componentIndex < m_NbClasses; componentIndex++ )
         {
           if ( cumulativeProportion <= sample
-              && sample < cumulativeProportion + m_InitialProportions[componentIndex] )
+               && sample < cumulativeProportion + m_InitialProportions[componentIndex] )
           {
             *labelIter = componentIndex;
             break;
@@ -387,7 +400,7 @@ SEMClassifier< TInputImage, TOutputImage >
   if ( !m_ComponentDeclared )
   {
     otbMsgDebugMacro( << "default mixture initialisation with " << m_NbClasses
-        << " Gaussian components" );
+                      << " Gaussian components" );
     typedef otb::Statistics::GaussianModelComponent< ClassSampleType > GaussianType;
 
     for ( int componentIndex = 0; componentIndex < m_NbClasses; componentIndex++ )
@@ -412,8 +425,8 @@ SEMClassifier< TInputImage, TOutputImage >
 
   int posSample = 0;
   for ( typename ClassLabelVectorType::iterator iter = m_ClassLabels.begin();
-      iter != m_ClassLabels.end();
-      ++iter )
+        iter != m_ClassLabels.end();
+        ++iter )
   {
     x = double( rand() ) / ( double(RAND_MAX) + 1.0 );
     z = 0.0;
@@ -437,12 +450,13 @@ SEMClassifier< TInputImage, TOutputImage >
 
   switch ( GetCurrentIteration() )
   {
-    case 0 : case 1 :
-      otbMsgDebugMacro( << "Doing iteration " << GetCurrentIteration() );
-      break;
-    default :
-      otbMsgDebugMacro( << m_NbChange << " sample change at iteration "
-                << GetCurrentIteration() );
+  case 0 :
+  case 1 :
+    otbMsgDebugMacro( << "Doing iteration " << GetCurrentIteration() );
+    break;
+  default :
+    otbMsgDebugMacro( << m_NbChange << " sample change at iteration "
+                      << GetCurrentIteration() );
   }
 }
 
@@ -473,11 +487,13 @@ SEMClassifier< TInputImage, TOutputImage >
 
   typename SampleType::InstanceIdentifier id = 0;
 
-  do {
+  do
+  {
     coeffByClass[ *iterLabel ]->AddInstance( id );
     m_Proportions[ *iterLabel ] += 1.0;
     id++;
-  } while ( ++iterSample != lastSample && ++iterLabel != lastLabel );
+  }
+  while ( ++iterSample != lastSample && ++iterLabel != lastLabel );
 
   for ( componentIndex = 0; componentIndex < m_NbClasses; componentIndex++ )
   {
@@ -524,7 +540,8 @@ SEMClassifier< TInputImage, TOutputImage >
 
   typename SampleType::InstanceIdentifier id = 0;
 
-  do {
+  do
+  {
     id = iterSample.GetInstanceIdentifier();
 
     for ( componentIndex = 0; componentIndex < m_NbClasses; componentIndex++ )
@@ -547,14 +564,14 @@ SEMClassifier< TInputImage, TOutputImage >
 
     for ( componentIndex = 0; componentIndex < m_NbClasses; componentIndex++ )
       localWeight[ componentIndex ] = localCount[ componentIndex ]
-                        / neighborhoodWeight;
+                                      / neighborhoodWeight;
 
     sumPdf = 0.0;
     for ( componentIndex = 0; componentIndex < m_NbClasses; componentIndex++ )
     {
       measurementVector = iterSample.GetMeasurementVector();
       aPdf = localWeight[ componentIndex ]
-          * m_ComponentVector[componentIndex]->Pdf( measurementVector );
+             * m_ComponentVector[componentIndex]->Pdf( measurementVector );
       sumPdf += aPdf;
       pdf[componentIndex] = aPdf;
     }
@@ -565,10 +582,11 @@ SEMClassifier< TInputImage, TOutputImage >
         m_Proba[componentIndex][iterSample.GetInstanceIdentifier()] = 0.0;
       else
         m_Proba[componentIndex][iterSample.GetInstanceIdentifier()]
-            = pdf[componentIndex] / sumPdf;
+        = pdf[componentIndex] / sumPdf;
     }
 
-  } while ( ++iterSample != lastSample );
+  }
+  while ( ++iterSample != lastSample );
 }
 
 template < class TInputImage, class TOutputImage >
@@ -603,21 +621,23 @@ SEMClassifier< TInputImage, TOutputImage >
   imgOutputIterEnd.GoToEnd();
 
 
-  do {
+  do
+  {
     cluster = 0;
     for ( componentIndex = 1; componentIndex < m_NbClasses; componentIndex++ )
     {
       if ( m_Proba[componentIndex][sampleIter.GetInstanceIdentifier()]
-          > m_Proba[cluster][sampleIter.GetInstanceIdentifier()] )
+           > m_Proba[cluster][sampleIter.GetInstanceIdentifier()] )
         cluster = componentIndex;
     }
 
     m_Output->AddInstance( cluster, sampleIter.GetInstanceIdentifier() );
     imgOutputIter.Set( cluster );
 
-  } while ( ++sampleIter != sampleIterEnd
-        && ++outputIter != outputIterEnd
-        && ++imgOutputIter != imgOutputIterEnd );
+  }
+  while ( ++sampleIter != sampleIterEnd
+          && ++outputIter != outputIterEnd
+          && ++imgOutputIter != imgOutputIterEnd );
 }
 
 template< class TInputImage, class TOutputImage >
@@ -634,7 +654,8 @@ SEMClassifier< TInputImage, TOutputImage >
   int oldNbChange = 0;
   double step;
 
-  do {
+  do
+  {
     oldNbChange = m_NbChange;
 
     PerformStochasticProcess();
@@ -645,14 +666,15 @@ SEMClassifier< TInputImage, TOutputImage >
     if ( step >= 0.0 )
     {
       if ( ( step / static_cast<double>( m_NbSamples ) )
-          < GetTerminationThreshold() )
+           < GetTerminationThreshold() )
       {
         m_TerminationCode = CONVERGED;
         if ( oldNbChange != 0 )
           break;
       }
     }
-  } while (++m_CurrentIteration < m_MaximumIteration);
+  }
+  while (++m_CurrentIteration < m_MaximumIteration);
 
   GetMaximumAposterioriLabels();
 }

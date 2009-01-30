@@ -38,9 +38,9 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage, class TLabeledImage>
 class ITK_EXPORT ProfileDerivativeToMultiScaleCharacteristicsFilter
-  : public ImageListToImageFilter<TInputImage, TOutputImage>
+      : public ImageListToImageFilter<TInputImage, TOutputImage>
 {
- public:
+public:
   /** Standard typedefs */
   typedef ProfileDerivativeToMultiScaleCharacteristicsFilter  Self;
   typedef ImageListToImageFilter<TInputImage, TOutputImage> Superclass;
@@ -80,7 +80,7 @@ class ITK_EXPORT ProfileDerivativeToMultiScaleCharacteristicsFilter
   itkGetMacro(Step,LabeledPixelType);
 
 
- protected:
+protected:
   /** Main computation method */
   virtual void GenerateData(void);
 
@@ -100,7 +100,7 @@ class ITK_EXPORT ProfileDerivativeToMultiScaleCharacteristicsFilter
   ProfileDerivativeToMultiScaleCharacteristicsFilter();
   /** Destructor */
   virtual ~ProfileDerivativeToMultiScaleCharacteristicsFilter() {};
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

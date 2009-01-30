@@ -45,7 +45,7 @@ namespace otb
  * of regiosn, it is optimised : the decision is managed by a decision tree.
  */
 template <class TInputPolygon>
-  class ITK_EXPORT PolygonToPolygonRCC8Calculator : public itk::Object
+class ITK_EXPORT PolygonToPolygonRCC8Calculator : public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -100,7 +100,7 @@ public:
 
   virtual bool RegionsIntersectionIsNull(const RegionType& region1, const RegionType& region2);
 
-  protected:
+protected:
   /** Constructor */
   PolygonToPolygonRCC8Calculator();
   /** Destructor */
@@ -108,7 +108,7 @@ public:
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
- private:
+private:
   /** The RCC8 relation value */
   RCC8ValueType m_Value;
   /**  Decision tree Level 1 A priori knowledge */

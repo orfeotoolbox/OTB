@@ -30,24 +30,24 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  /** \class OrthoRectificationFilter
-   *
-   * \brief Class for Orthorectifying an image
-   *
-   * This class is used to apply map projection and sensor model transformation
-   * to orthorectify an image, with or without DEM.
-   *
-   * \ingroup Projection
-   *
-   * \example Projections/OrthoRectificationExample.cxx
-   *
-   */
+/** \class OrthoRectificationFilter
+ *
+ * \brief Class for Orthorectifying an image
+ *
+ * This class is used to apply map projection and sensor model transformation
+ * to orthorectify an image, with or without DEM.
+ *
+ * \ingroup Projection
+ *
+ * \example Projections/OrthoRectificationExample.cxx
+ *
+ */
 
 template <class TInputImage, class TOutputImage, class TMapProjection, class TInterpolatorPrecision=double>
 class ITK_EXPORT OrthoRectificationFilter :
-public StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
+      public StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
 {
-  public :
+public :
   /** Standard class typedefs */
   typedef StreamingResampleImageFilter<TInputImage,
   TOutputImage,
@@ -83,12 +83,12 @@ public StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrec
   virtual void SetMapProjection (MapProjectionType* _arg)
   {
     if (this->m_MapProjection != _arg)
-      {
-	this->m_MapProjection = _arg;
-	m_CompositeTransform->SetFirstTransform(_arg);
-	m_IsComputed = false;
-	this->Modified();
-      }
+    {
+      this->m_MapProjection = _arg;
+      m_CompositeTransform->SetFirstTransform(_arg);
+      m_IsComputed = false;
+      this->Modified();
+    }
   }
 
   itkGetObjectMacro(MapProjection, MapProjectionType);
@@ -125,15 +125,15 @@ public StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrec
 
 
 
-  protected:
+protected:
   OrthoRectificationFilter();
   ~OrthoRectificationFilter();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-   
+
   virtual void GenerateInputRequestedRegion();
   virtual void GenerateOutputInformation( void );
 
-  private:
+private:
   OrthoRectificationFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 

@@ -68,7 +68,7 @@ public:
 protected:
   FillGapsFilter();
 
-  virtual ~FillGapsFilter(){};
+  virtual ~FillGapsFilter() {};
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

@@ -45,18 +45,18 @@ namespace otb
  */
 template <class TInputImage,class TOutputImage, class TStructuringElement>
 class ITK_EXPORT MorphologicalOpeningProfileFilter
-  : public ImageToProfileFilter<TInputImage,TOutputImage,
-                                itk::OpeningByReconstructionImageFilter
-                                     <TInputImage, TOutputImage, TStructuringElement>,
-                                unsigned int>
+      : public ImageToProfileFilter<TInputImage,TOutputImage,
+      itk::OpeningByReconstructionImageFilter
+      <TInputImage, TOutputImage, TStructuringElement>,
+      unsigned int>
 {
- public:
+public:
   /** Standard typedefs */
   typedef MorphologicalOpeningProfileFilter  Self;
   typedef ImageToProfileFilter<TInputImage,TOutputImage,
-          itk::OpeningByReconstructionImageFilter
-          <TInputImage, TOutputImage, TStructuringElement>,
-          unsigned int> Superclass;
+  itk::OpeningByReconstructionImageFilter
+  <TInputImage, TOutputImage, TStructuringElement>,
+  unsigned int> Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
 
@@ -72,21 +72,21 @@ class ITK_EXPORT MorphologicalOpeningProfileFilter
 protected:
   /** Set the profile parameter */
   virtual void SetProfileParameter(ParameterType param)
-    {
-      StructuringElementType se;
-      se.SetRadius(param);
-      se.CreateStructuringElement();
-      this->GetFilter()->SetKernel(se);
-    };
+  {
+    StructuringElementType se;
+    se.SetRadius(param);
+    se.CreateStructuringElement();
+    this->GetFilter()->SetKernel(se);
+  };
   /** Constructor */
-  MorphologicalOpeningProfileFilter(){};
+  MorphologicalOpeningProfileFilter() {};
   /** Destructor */
-  virtual ~MorphologicalOpeningProfileFilter(){};
- /**PrintSelf method */
+  virtual ~MorphologicalOpeningProfileFilter() {};
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
-    {
-      Superclass::PrintSelf(os,indent);
-    };
+  {
+    Superclass::PrintSelf(os,indent);
+  };
 
 private:
   MorphologicalOpeningProfileFilter(const Self&); //purposely not implemented

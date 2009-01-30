@@ -59,51 +59,51 @@ namespace otb
  *
  */
 template <class TInputImage, class TOutputPath>
-  class ITK_EXPORT RoadExtractionFilter
-  : public ImageToPathListFilter<TInputImage,TOutputPath>
-  {
-    public :
-    /** Standard typedefs */
-    typedef RoadExtractionFilter                                Self;
-    typedef ImageToPathListFilter<TInputImage,TOutputPath>      Superclass;
-    typedef itk::SmartPointer<Self>                             Pointer;
-    typedef itk::SmartPointer<const Self>                       ConstPointer;
-    /** Creation through object factory macro */
-    itkNewMacro(Self);
-    /** Type macro */
-    itkTypeMacro(RoadExtractionFilter,ImageToPathListFilter);
-    /** Template parameters typedefs */
-    typedef typename Superclass::InputImageType                         InputImageType;
-    typedef typename Superclass::OutputPathType                         OutputPathType;
-    typedef typename Superclass::OutputPathListType                     OutputPathListType;
-    typedef typename InputImageType::PixelType         InputPixelType;
-    typedef double                                                      InternalPixelType;
+class ITK_EXPORT RoadExtractionFilter
+      : public ImageToPathListFilter<TInputImage,TOutputPath>
+{
+public :
+  /** Standard typedefs */
+  typedef RoadExtractionFilter                                Self;
+  typedef ImageToPathListFilter<TInputImage,TOutputPath>      Superclass;
+  typedef itk::SmartPointer<Self>                             Pointer;
+  typedef itk::SmartPointer<const Self>                       ConstPointer;
+  /** Creation through object factory macro */
+  itkNewMacro(Self);
+  /** Type macro */
+  itkTypeMacro(RoadExtractionFilter,ImageToPathListFilter);
+  /** Template parameters typedefs */
+  typedef typename Superclass::InputImageType                         InputImageType;
+  typedef typename Superclass::OutputPathType                         OutputPathType;
+  typedef typename Superclass::OutputPathListType                     OutputPathListType;
+  typedef typename InputImageType::PixelType         InputPixelType;
+  typedef double                                                      InternalPixelType;
 
-    typedef otb::VectorImage<InternalPixelType,InputImageType::ImageDimension>  VectorImageType;
-    typedef otb::Image<InternalPixelType,InputImageType::ImageDimension>        SpectralAngleType;
-    typedef otb::Image<InternalPixelType,InputImageType::ImageDimension>        ModulusType;
-    typedef otb::Image<InternalPixelType,InputImageType::ImageDimension>        DirectionType;
+  typedef otb::VectorImage<InternalPixelType,InputImageType::ImageDimension>  VectorImageType;
+  typedef otb::Image<InternalPixelType,InputImageType::ImageDimension>        SpectralAngleType;
+  typedef otb::Image<InternalPixelType,InputImageType::ImageDimension>        ModulusType;
+  typedef otb::Image<InternalPixelType,InputImageType::ImageDimension>        DirectionType;
 
-    typedef itk::CovariantVector<InternalPixelType,InputImageType::ImageDimension>
-                                                                        VectorPixelType;
-    typedef otb::Image<VectorPixelType,InputImageType::ImageDimension>  CovariantVectorImageType;
+  typedef itk::CovariantVector<InternalPixelType,InputImageType::ImageDimension>
+  VectorPixelType;
+  typedef otb::Image<VectorPixelType,InputImageType::ImageDimension>  CovariantVectorImageType;
 
-    /* Template parameters typedefs for composites filters */
-    typedef SpectralAngleDistanceImageFilter<
-                        InputImageType,
-                        SpectralAngleType>                      SpectralAngleDistanceImageFilterType;
+  /* Template parameters typedefs for composites filters */
+  typedef SpectralAngleDistanceImageFilter<
+  InputImageType,
+  SpectralAngleType>                      SpectralAngleDistanceImageFilterType;
 
-    typedef GenericRoadExtractionFilter<SpectralAngleType, OutputPathType>
-        GenericRoadExtractionFilterType;
+  typedef GenericRoadExtractionFilter<SpectralAngleType, OutputPathType>
+  GenericRoadExtractionFilterType;
 
 
-    /** Template parameters typedefs for internals filters */
-        typedef typename GenericRoadExtractionFilterType::SigmaType SigmaType;
-        typedef typename GenericRoadExtractionFilterType::AmplitudeThresholdType AmplitudeThresholdType;
-        typedef typename GenericRoadExtractionFilterType::ToleranceType ToleranceType;
-        typedef typename GenericRoadExtractionFilterType::MaxAngleType MaxAngleType;
-        typedef typename GenericRoadExtractionFilterType::MeanDistanceThresholdType MeanDistanceThresholdType;
-        typedef typename GenericRoadExtractionFilterType::LinkRealType LinkRealType;
+  /** Template parameters typedefs for internals filters */
+  typedef typename GenericRoadExtractionFilterType::SigmaType SigmaType;
+  typedef typename GenericRoadExtractionFilterType::AmplitudeThresholdType AmplitudeThresholdType;
+  typedef typename GenericRoadExtractionFilterType::ToleranceType ToleranceType;
+  typedef typename GenericRoadExtractionFilterType::MaxAngleType MaxAngleType;
+  typedef typename GenericRoadExtractionFilterType::MeanDistanceThresholdType MeanDistanceThresholdType;
+  typedef typename GenericRoadExtractionFilterType::LinkRealType LinkRealType;
 
   /** Get/Set the reference pixel (use by the SpectralAngleDistanceImageFilter)*/
   otbGetObjectMemberConstReferenceMacro(SpectralAngleDistanceImageFilter,ReferencePixel,InputPixelType);
@@ -138,32 +138,32 @@ template <class TInputImage, class TOutputPath>
   otbSetObjectMemberMacro(GenericRoadExtractionFilter,DistanceThreshold,LinkRealType);
   otbGetObjectMemberMacro(GenericRoadExtractionFilter,DistanceThreshold,LinkRealType);
 
-  protected:
-    /** Constructor */
-    RoadExtractionFilter();
-    /** Destructor */
-    ~RoadExtractionFilter() {};
+protected:
+  /** Constructor */
+  RoadExtractionFilter();
+  /** Destructor */
+  ~RoadExtractionFilter() {};
 
-    /** Prepare main computation method */
-    void BeforeGenerateData(void);
+  /** Prepare main computation method */
+  void BeforeGenerateData(void);
 
-    /** Main computation method */
-    void GenerateData(void);
-    /** PrintSelf method */
-    void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  /** Main computation method */
+  void GenerateData(void);
+  /** PrintSelf method */
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  private :
+private :
 
-    RoadExtractionFilter(const Self&); // purposely not implemented
-    void operator=(const Self&); // purposely not implemented
+  RoadExtractionFilter(const Self&); // purposely not implemented
+  void operator=(const Self&); // purposely not implemented
 
-    /** SpectralAngleDistanceImageFilter use by the composite filter */
-    typename SpectralAngleDistanceImageFilterType::Pointer      m_SpectralAngleDistanceImageFilter;
-    typename GenericRoadExtractionFilterType::Pointer m_GenericRoadExtractionFilter;
+  /** SpectralAngleDistanceImageFilter use by the composite filter */
+  typename SpectralAngleDistanceImageFilterType::Pointer      m_SpectralAngleDistanceImageFilter;
+  typename GenericRoadExtractionFilterType::Pointer m_GenericRoadExtractionFilter;
 
 
 
-  };
+};
 
 }// End namespace otb
 

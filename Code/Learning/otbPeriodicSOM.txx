@@ -27,7 +27,8 @@
 #include "otbPeriodicSOM.h"
 
 
-namespace otb {
+namespace otb
+{
 
 /**
  * Update the output map with a new sample.
@@ -36,8 +37,8 @@ namespace otb {
  * \param radius The radius of the neighbourhood.
  */
 template < class TListSample, class TMap,
-  class TSOMLearningBehaviorFunctor,
-  class TSOMNeighborhoodBehaviorFunctor >
+class TSOMLearningBehaviorFunctor,
+class TSOMNeighborhoodBehaviorFunctor >
 void
 PeriodicSOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor>
 ::UpdateMap(const NeuronType& sample, double beta, SizeType& radius)
@@ -74,7 +75,7 @@ PeriodicSOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehavio
     double theDistance = itk::NumericTraits< double >::Zero;
     for ( j = 0; j < MapType::ImageDimension; j++ )
       theDistance += pow( static_cast<double>( offset[j] ), 2.0 )
-              / pow( static_cast<double>( radius[j] ), 2.0 );
+                     / pow( static_cast<double>( radius[j] ), 2.0 );
 
     if ( theDistance <= 1.0 )
     {
@@ -82,8 +83,8 @@ PeriodicSOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehavio
       {
         int pos = offset[j] + position[j];
         positionToUpdate[j] = ( pos >= 0 ) ?
-          pos % mapSize[j] :
-          ( mapSize[j] - ( (-pos) % mapSize[j] ) ) % mapSize[j];
+                              pos % mapSize[j] :
+                              ( mapSize[j] - ( (-pos) % mapSize[j] ) ) % mapSize[j];
       }
 
       NeuronType tempNeuron = it.GetPixel(i);
@@ -92,10 +93,10 @@ PeriodicSOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehavio
       NeuronType newNeuron ( tempNeuron );
 
       double tempBeta = beta / ( 1.0 + theDistance );
-      for( j = 0; j < newNeuron.Size(); j++ )
+      for ( j = 0; j < newNeuron.Size(); j++ )
       {
         newNeuron[j] += static_cast<typename NeuronType::ValueType>(
-                  ( sample[j] - tempNeuron[j] ) * tempBeta );
+                          ( sample[j] - tempNeuron[j] ) * tempBeta );
       }
       map->SetPixel(positionToUpdate,newNeuron);
     }

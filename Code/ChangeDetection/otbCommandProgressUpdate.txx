@@ -28,35 +28,35 @@ namespace otb
 template <class TFilter>
 void CommandProgressUpdate<TFilter>::Execute(itk::Object *caller, const itk::EventObject & event)
 {
-      Execute( (const itk::Object *)caller, event);
-    }
+  Execute( (const itk::Object *)caller, event);
+}
 
 template <class TFilter>
 void CommandProgressUpdate<TFilter>::Execute(const itk::Object * object, const itk::EventObject & event)
 {
-      FilterPointer filter =
-        dynamic_cast< FilterPointer >( object );
-      if( typeid( event ) != typeid( itk::ProgressEvent ) )
-        {
-        return;
-        }
-
-      int factor = 160;
-
-      int val = int(filter->GetProgress()*factor);
-
-      if((val%2) == 0)
+  FilterPointer filter =
+    dynamic_cast< FilterPointer >( object );
+  if ( typeid( event ) != typeid( itk::ProgressEvent ) )
   {
-  std::cout << "|";
-  std::cout.flush();
+    return;
   }
 
-      if(val == factor)
+  int factor = 160;
+
+  int val = int(filter->GetProgress()*factor);
+
+  if ((val%2) == 0)
   {
-  std::cout << ">";
-  std::cout.flush();
+    std::cout << "|";
+    std::cout.flush();
   }
-    }
+
+  if (val == factor)
+  {
+    std::cout << ">";
+    std::cout.flush();
+  }
+}
 
 
 

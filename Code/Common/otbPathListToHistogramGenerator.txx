@@ -22,7 +22,8 @@
 #include "otbPathListToHistogramGenerator.h"
 
 
-namespace otb {
+namespace otb
+{
 
 
 template< class TPath,class TFunction >
@@ -59,27 +60,27 @@ PathListToHistogramGenerator< TPath, TFunction >
 ::Compute()
 {
 
-    PathPointer vertexList;
+  PathPointer vertexList;
 
-    ListSamplePointer  ListSample = ListSampleType::New();
-    int nbElementPathList = m_PathList->size();
+  ListSamplePointer  ListSample = ListSampleType::New();
+  int nbElementPathList = m_PathList->size();
 
-    ListSampleVectorType ResultFunction;
+  ListSampleVectorType ResultFunction;
 
-    typename TFunction::Pointer function = TFunction::New();
+  typename TFunction::Pointer function = TFunction::New();
 
-    for(int noPathList = 0; noPathList < nbElementPathList; noPathList++ )
-    {
-       vertexList = (*m_PathList)[noPathList];
-       function->SetInputPath( vertexList );
+  for (int noPathList = 0; noPathList < nbElementPathList; noPathList++ )
+  {
+    vertexList = (*m_PathList)[noPathList];
+    function->SetInputPath( vertexList );
 
-       ResultFunction[0] = static_cast<MeasurementType>( function->Evaluate() );
-       ListSample->PushBack(ResultFunction);
+    ResultFunction[0] = static_cast<MeasurementType>( function->Evaluate() );
+    ListSample->PushBack(ResultFunction);
 
-    }
+  }
 
-    m_HistogramGenerator->SetListSample( ListSample );
-    m_HistogramGenerator->Update();
+  m_HistogramGenerator->SetListSample( ListSample );
+  m_HistogramGenerator->Update();
 }
 
 

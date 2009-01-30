@@ -33,7 +33,7 @@ namespace otb
   * \ingroup ObjectListFilter
  */
 template <class TInputList, class TOutputList, class TFunction >
-    class ITK_EXPORT UnaryFunctorObjectListFilter : public otb::ObjectListToObjectListFilter<TInputList,TOutputList>
+class ITK_EXPORT UnaryFunctorObjectListFilter : public otb::ObjectListToObjectListFilter<TInputList,TOutputList>
 {
 public:
   /** Standard class typedefs. */
@@ -55,15 +55,21 @@ public:
   typedef typename TInputList::ConstPointer InputListPointer;
   typedef typename TOutputList::Pointer OutputListPointer;
   typedef typename TInputList::ConstIterator InputListIterator;
+  typedef typename TOutputList::ConstIterator OutputListIterator;
 
-//   typedef itk::DataObject::Pointer DataObjectPointer;
 
   /** Get the functor object.  The functor is returned by reference.
    * (Functors do not have to derive from itk::LightObject, so they do
    * not necessarily have a reference count. So we cannot return a
    * SmartPointer.) */
-  FunctorType& GetFunctor() { return m_Functor; };
-  const FunctorType& GetFunctor() const { return m_Functor; };
+  FunctorType& GetFunctor()
+  {
+    return m_Functor;
+  };
+  const FunctorType& GetFunctor() const
+  {
+    return m_Functor;
+  };
 
   /** Set the functor object.  This replaces the current Functor with a
    * copy of the specified Functor. This allows the user to specify a
@@ -74,10 +80,10 @@ public:
   void SetFunctor(const FunctorType& functor)
   {
     if (m_Functor != functor)
-      {
+    {
       m_Functor = functor;
       this->Modified();
-      }
+    }
   }
 
 
@@ -85,24 +91,30 @@ protected:
   UnaryFunctorObjectListFilter();
   virtual ~UnaryFunctorObjectListFilter() {};
 
+  /** Multi-threading implementation */
 
-  /** UnaryFunctorObjectListFilter can be implemented as a multithreaded filter.
-   * Therefore, this implementation provides a ThreadedGenerateData() routine
-   * which is called for each processing thread. The output image data is
-   * allocated automatically by the superclass prior to calling
-   * ThreadedGenerateData().  ThreadedGenerateData can only write to the
-   * portion of the output image specified by the parameter
-   * "outputRegionForThread"
-   *
-   * \sa ImageToImageFilter::ThreadedGenerateData(),
-   *     ImageToImageFilter::GenerateData()  */
-  void GenerateData(void);
+
+  virtual void AfterThreadedGenerateData();
+
+  /** startIndex and stopIndex represent the indices of the Objects to
+  examine in thread threadId */
+  virtual void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, int threadId);
+
+
+  /** Internal structure used for passing image data into the threading library */
+  struct ThreadStruct
+  {
+    Pointer Filter;
+  };
+
+  /** End Multi-threading implementation */
 
 private:
   UnaryFunctorObjectListFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   FunctorType m_Functor;
+
 };
 
 } // end namespace otb

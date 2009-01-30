@@ -50,10 +50,10 @@ const typename SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleD
 SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskImage>
 ::GetInputMask()
 {
-  if(this->GetNumberOfInputs()<2)
-    {
-      return 0;
-    }
+  if (this->GetNumberOfInputs()<2)
+  {
+    return 0;
+  }
   return  static_cast<const MaskImageType *>(this->itk::ProcessObject::GetInput(1));
 }
 
@@ -62,10 +62,10 @@ void
 SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskImage>
 ::BeforeThreadedGenerateData()
 {
-  if(!m_Model)
-    {
-      itkGenericExceptionMacro(<<"No model for classification");
-    }
+  if (!m_Model)
+  {
+    itkGenericExceptionMacro(<<"No model for classification");
+  }
 }
 
 template <class TInputImage, class TOutputImage, unsigned int VMaxSampleDimension, class TMaskImage>
@@ -86,35 +86,35 @@ SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskI
   InputIteratorType inIt(inputPtr,outputRegionForThread);
 
   MaskIteratorType maskIt;
-  if(inputMaskPtr)
-    {
-      maskIt = MaskIteratorType(inputMaskPtr,outputRegionForThread);
-      maskIt.GoToBegin();
-    }
+  if (inputMaskPtr)
+  {
+    maskIt = MaskIteratorType(inputMaskPtr,outputRegionForThread);
+    maskIt.GoToBegin();
+  }
 
   unsigned int sampleSize = std::min(inputPtr->GetNumberOfComponentsPerPixel(),
-             VMaxSampleDimension);
+                                     VMaxSampleDimension);
 
   bool validPoint = true;
 
-  for(inIt.GoToBegin();!inIt.IsAtEnd();++inIt)
+  for (inIt.GoToBegin();!inIt.IsAtEnd();++inIt)
+  {
+    if (inputMaskPtr)
     {
-      if(inputMaskPtr)
-  {
-    validPoint = maskIt.Get()>0;
-    ++maskIt;
-  }
-      if(validPoint)
-  {
-    MeasurementVectorType sample;
-    sample.Fill(itk::NumericTraits<ValueType>::ZeroValue());
-    for(unsigned int i=0;i<sampleSize;i++)
+      validPoint = maskIt.Get()>0;
+      ++maskIt;
+    }
+    if (validPoint)
+    {
+      MeasurementVectorType sample;
+      sample.Fill(itk::NumericTraits<ValueType>::ZeroValue());
+      for (unsigned int i=0;i<sampleSize;i++)
       {
         sample[i]=inIt.Get()[i];
       }
-    listSample->PushBack(sample);
-  }
+      listSample->PushBack(sample);
     }
+  }
   ClassifierPointerType classifier =ClassifierType::New();
   classifier->SetModel(m_Model);
   classifier->SetNumberOfClasses(m_Model->GetNumberOfClasses());
@@ -129,34 +129,34 @@ SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskI
 
   outIt.GoToBegin();
 
-  while(!outIt.IsAtEnd()&&(sampleIter!=sampleLast))
-    {
-      outIt.Set(m_DefaultLabel);
-       ++outIt;
-    }
+  while (!outIt.IsAtEnd()&&(sampleIter!=sampleLast))
+  {
+    outIt.Set(m_DefaultLabel);
+    ++outIt;
+  }
 
   outIt.GoToBegin();
 
-   if(inputMaskPtr)
-    {
-      maskIt.GoToBegin();
-    }
-   validPoint = true;
+  if (inputMaskPtr)
+  {
+    maskIt.GoToBegin();
+  }
+  validPoint = true;
 
-   while(!outIt.IsAtEnd()&&(sampleIter!=sampleLast))
-     {
-       if(inputMaskPtr)
-   {
-     validPoint = maskIt.Get()>0;
-     ++maskIt;
-   }
-       if(validPoint)
-   {
-     outIt.Set(sampleIter.GetClassLabel());
-     ++sampleIter;
-   }
-       ++outIt;
-     }
+  while (!outIt.IsAtEnd()&&(sampleIter!=sampleLast))
+  {
+    if (inputMaskPtr)
+    {
+      validPoint = maskIt.Get()>0;
+      ++maskIt;
+    }
+    if (validPoint)
+    {
+      outIt.Set(sampleIter.GetClassLabel());
+      ++sampleIter;
+    }
+    ++outIt;
+  }
 }
 /**
  * PrintSelf Method

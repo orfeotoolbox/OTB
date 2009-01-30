@@ -22,7 +22,8 @@
 #include "itkPDEDeformableRegistrationFilter.h"
 #include "itkMIRegistrationFunction.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class MIRegistrationFilter
  * \brief Deformably register two images using the PDEs and Mutual Information.
@@ -61,14 +62,14 @@ namespace otb {
  */
 template<class TFixedImage, class TMovingImage, class TDeformationField>
 class ITK_EXPORT MIRegistrationFilter :
-    public itk::PDEDeformableRegistrationFilter< TFixedImage, TMovingImage,
-                                            TDeformationField>
+      public itk::PDEDeformableRegistrationFilter< TFixedImage, TMovingImage,
+      TDeformationField>
 {
 public:
   /** Standard class typedefs. */
   typedef MIRegistrationFilter    Self;
   typedef itk::PDEDeformableRegistrationFilter<
-    TFixedImage, TMovingImage,TDeformationField>    Superclass;
+  TFixedImage, TMovingImage,TDeformationField>    Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -102,7 +103,7 @@ public:
 
   /** MIRegistrationFilterFunction type. */
   typedef itk::MIRegistrationFunction<FixedImageType,MovingImageType,
-                                     DeformationFieldType>  MIRegistrationFunctionType;
+  DeformationFieldType>  MIRegistrationFunctionType;
 
   typedef typename MIRegistrationFunctionType::RadiusType RadiusType;
 

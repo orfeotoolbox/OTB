@@ -31,7 +31,7 @@ namespace otb
  * Constructor
  */
 template <class TInputImageR, class TInputImageNIR,
-          class TOutputImage, class TFunction  >
+class TOutputImage, class TFunction  >
 RAndNIRVegetationIndexImageFilter<TInputImageR,TInputImageNIR,TOutputImage,TFunction>
 ::RAndNIRVegetationIndexImageFilter()
 {
@@ -42,7 +42,7 @@ RAndNIRVegetationIndexImageFilter<TInputImageR,TInputImageNIR,TOutputImage,TFunc
  * Connect one of the operands for pixel-wise addition
  */
 template <class TInputImageR, class TInputImageNIR,
-          class TOutputImage, class TFunction  >
+class TOutputImage, class TFunction  >
 void
 RAndNIRVegetationIndexImageFilter<TInputImageR,TInputImageNIR,TOutputImage,TFunction>
 ::SetInputR( const TInputImageR * image1 )
@@ -56,7 +56,7 @@ RAndNIRVegetationIndexImageFilter<TInputImageR,TInputImageNIR,TOutputImage,TFunc
  * Connect one of the operands for pixel-wise addition
  */
 template <class TInputImageR, class TInputImageNIR,
-          class TOutputImage, class TFunction  >
+class TOutputImage, class TFunction  >
 void
 RAndNIRVegetationIndexImageFilter<TInputImageR,TInputImageNIR,TOutputImage,TFunction>
 ::SetInputNIR( const TInputImageNIR * image2 )
@@ -115,7 +115,7 @@ void
 RAndNIRVegetationIndexImageFilter<TInputImageR, TInputImageNIR, TOutputImage, TFunction>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-        Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os,indent);
 }
 
 }

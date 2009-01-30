@@ -48,7 +48,7 @@ DifferenceImageFilter<TInputImage, TOutputImage>
   os << indent << "MeanDifference: " << m_MeanDifference << "\n";
   os << indent << "TotalDifference: " << m_TotalDifference << "\n";
   os << indent << "NumberOfPixelsWithDifferences: "
-               << m_NumberOfPixelsWithDifferences << "\n";
+  << m_NumberOfPixelsWithDifferences << "\n";
 }
 
 //----------------------------------------------------------------------------
@@ -76,10 +76,10 @@ DifferenceImageFilter<TInputImage, TOutputImage>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
-  if(this->GetInput(0)->GetNumberOfComponentsPerPixel()!=this->GetInput(1)->GetNumberOfComponentsPerPixel())
-    {
-      itkExceptionMacro(<<"Image 1 has "<<this->GetInput(0)->GetNumberOfComponentsPerPixel()<<" bands, whereas image 2 has "<<this->GetInput(1)->GetNumberOfComponentsPerPixel());
-    }
+  if (this->GetInput(0)->GetNumberOfComponentsPerPixel()!=this->GetInput(1)->GetNumberOfComponentsPerPixel())
+  {
+    itkExceptionMacro(<<"Image 1 has "<<this->GetInput(0)->GetNumberOfComponentsPerPixel()<<" bands, whereas image 2 has "<<this->GetInput(1)->GetNumberOfComponentsPerPixel());
+  }
   this->GetOutput()->SetNumberOfComponentsPerPixel(this->GetInput(0)->GetNumberOfComponentsPerPixel());
 }
 //----------------------------------------------------------------------------
@@ -103,11 +103,11 @@ DifferenceImageFilter<TInputImage, TOutputImage>
   m_ThreadNumberOfPixels.SetSize(numberOfThreads);
 
   // Initialize the temporaries
-  for(int i = 0;  i<numberOfThreads;++i)
-    {
-      m_ThreadDifferenceSum.push_back(m_TotalDifference);
-    }
-      m_ThreadNumberOfPixels.Fill(0);
+  for (int i = 0;  i<numberOfThreads;++i)
+  {
+    m_ThreadDifferenceSum.push_back(m_TotalDifference);
+  }
+  m_ThreadNumberOfPixels.Fill(0);
 }
 
 //----------------------------------------------------------------------------
@@ -135,7 +135,7 @@ DifferenceImageFilter<TInputImage, TOutputImage>
 
   // Create a radius of pixels.
   RadiusType radius;
-  if(m_ToleranceRadius > 0)
+  if (m_ToleranceRadius > 0)
   {
     radius.Fill(m_ToleranceRadius);
   }
@@ -159,9 +159,9 @@ DifferenceImageFilter<TInputImage, TOutputImage>
     OutputIterator out(outputPtr, *face);         // Iterate over output image.
     test.OverrideBoundaryCondition(&nbc);
 
-    for(valid.GoToBegin(), test.GoToBegin(), out.GoToBegin();
-        !valid.IsAtEnd();
-        ++valid, ++test, ++out)
+    for (valid.GoToBegin(), test.GoToBegin(), out.GoToBegin();
+         !valid.IsAtEnd();
+         ++valid, ++test, ++out)
     {
       // Get the current valid pixel.
       InputPixelType t = valid.Get();
@@ -176,15 +176,15 @@ DifferenceImageFilter<TInputImage, TOutputImage>
         // sign.
         RealType difference = static_cast<RealType>(t) - static_cast<RealType>(test.GetPixel(i));
 
-        for(unsigned int j = 0;j<difference.Size();++j)
+        for (unsigned int j = 0;j<difference.Size();++j)
         {
-          if(difference[j]<0)
+          if (difference[j]<0)
           {
             difference[j]*=-1;
           }
           ScalarRealType d = static_cast<ScalarRealType>(difference[j]);
 
-          if(d < minimumDifference[j])
+          if (d < minimumDifference[j])
           {
             minimumDifference[j] = d;
 //             std::cout << std::setprecision(16) << minimumDifference[j] << std::endl;
@@ -195,40 +195,40 @@ DifferenceImageFilter<TInputImage, TOutputImage>
         }
       }
 
-       //for complex and vector type. FIXME: module might be better
+      //for complex and vector type. FIXME: module might be better
 //        ScalarRealType tMax=vcl_abs(t[0]);
       ScalarRealType tMax=0.01;//Avoiding the 0 case for neighborhood computing
-  // NB: still more restrictive than before for small values.
+      // NB: still more restrictive than before for small values.
       for (unsigned int j = 0;j<t.Size();++j)
       {
         if (vcl_abs(t[j])>tMax) tMax = vcl_abs(t[j]);
       }
 
-  // Check if difference is above threshold
-  // the threshold is interpreted as relative to the value
+      // Check if difference is above threshold
+      // the threshold is interpreted as relative to the value
       bool isDifferent = false;
 
-      for(unsigned int j = 0;j<minimumDifference.Size();++j)
+      for (unsigned int j = 0;j<minimumDifference.Size();++j)
       {
-        if(minimumDifference[j] > m_DifferenceThreshold * tMax)
+        if (minimumDifference[j] > m_DifferenceThreshold * tMax)
         {
 //           std::cout << std::setprecision(16) << minimumDifference[j] << std::endl;
           isDifferent = true;
         }
       }
 
-      if(isDifferent)
+      if (isDifferent)
       {
-      // Store the minimum difference value in the output image.
+        // Store the minimum difference value in the output image.
         out.Set(minimumDifference);
 
-      // Update difference image statistics.
+        // Update difference image statistics.
         m_ThreadDifferenceSum[threadId] += minimumDifference;
         m_ThreadNumberOfPixels[threadId]++;
       }
       else
       {
-      // Difference is below threshold.
+        // Difference is below threshold.
         out.Set(itk::NumericTraits<OutputPixelType>::Zero(minimumDifference));
       }
 
@@ -245,11 +245,11 @@ DifferenceImageFilter<TInputImage, TOutputImage>
 {
   // Set statistics about difference image.
   int numberOfThreads = this->GetNumberOfThreads();
-  for(int i=0; i < numberOfThreads; ++i)
-    {
+  for (int i=0; i < numberOfThreads; ++i)
+  {
     m_TotalDifference += m_ThreadDifferenceSum[i];
     m_NumberOfPixelsWithDifferences += m_ThreadNumberOfPixels[i];
-    }
+  }
 
   // Get the total number of pixels processed in the region.
   // This is different from the m_TotalNumberOfPixels which
@@ -260,7 +260,7 @@ DifferenceImageFilter<TInputImage, TOutputImage>
 
   // Calculate the mean difference.
 
-      m_MeanDifference = m_TotalDifference / numberOfPixels;
+  m_MeanDifference = m_TotalDifference / numberOfPixels;
 }
 
 } // end namespace otb

@@ -40,9 +40,9 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ProfileToProfileDerivativeFilter
-  : public ImageListToImageListFilter<TInputImage,TOutputImage>
+      : public ImageListToImageListFilter<TInputImage,TOutputImage>
 {
- public:
+public:
   /** Standard typedefs */
   typedef ProfileToProfileDerivativeFilter            Self;
   typedef ImageListToImageListFilter<TInputImage,TOutputImage> Superclass;
@@ -84,7 +84,7 @@ protected:
   ProfileToProfileDerivativeFilter();
   /** Destructor */
   virtual ~ProfileToProfileDerivativeFilter() {};
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

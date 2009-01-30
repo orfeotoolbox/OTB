@@ -26,7 +26,8 @@
 #include "itkVector.h"
 #include "itkDenseFrequencyContainer.h"
 
-namespace otb {
+namespace otb
+{
 
 
 
@@ -78,9 +79,9 @@ public:
 
 
   typedef itk::Statistics::ListSampleToHistogramGenerator<
-                         ListSampleType,
-       MeasurementType,
-                         FrequencyContainerType,1>        GeneratorType;
+  ListSampleType,
+  MeasurementType,
+  FrequencyContainerType,1>        GeneratorType;
 
 
   typedef typename GeneratorType::Pointer                 GeneratorPointer;

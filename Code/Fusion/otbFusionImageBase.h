@@ -24,95 +24,104 @@
 
 namespace otb
 {
-  /** \class FusionImageBase
-   * Basic class for every Fusion classes.
-   * \sa TernaryFunctorImageFilter
-   */
-  template <class TInputMultiSpectralImage, class TInputMultiSpectralInterpImage, class TInputPanchroImage, class TOutputImage, class TFunctor>
-    class ITK_EXPORT FusionImageBase :  public itk::TernaryFunctorImageFilter<TInputMultiSpectralImage, TInputMultiSpectralInterpImage, TInputPanchroImage, TOutputImage, TFunctor>
-    {
-    public:
-      /**   Extract input and output images dimensions.*/
-      itkStaticConstMacro( InputImageDimension,unsigned int, TInputMultiSpectralImage::ImageDimension);
-      itkStaticConstMacro( OutputImageDimension,unsigned int, TOutputImage::ImageDimension);
+/** \class FusionImageBase
+ * Basic class for every Fusion classes.
+ * \sa TernaryFunctorImageFilter
+ */
+template <class TInputMultiSpectralImage, class TInputMultiSpectralInterpImage, class TInputPanchroImage, class TOutputImage, class TFunctor>
+class ITK_EXPORT FusionImageBase :  public itk::TernaryFunctorImageFilter<TInputMultiSpectralImage, TInputMultiSpectralInterpImage, TInputPanchroImage, TOutputImage, TFunctor>
+{
+public:
+  /**   Extract input and output images dimensions.*/
+  itkStaticConstMacro( InputImageDimension,unsigned int, TInputMultiSpectralImage::ImageDimension);
+  itkStaticConstMacro( OutputImageDimension,unsigned int, TOutputImage::ImageDimension);
 
-      /** "typedef" to simplify the variables definition and the declaration. */
-      typedef TInputMultiSpectralImage       InputMultiSpectralImageType;
-      typedef TInputMultiSpectralInterpImage InputMultiSpectralInterpImageType;
-      typedef TInputPanchroImage             InputPanchroImageType;
-      typedef TOutputImage                   OutputImageType;
-      typedef TFunctor                       FunctorType;
+  /** "typedef" to simplify the variables definition and the declaration. */
+  typedef TInputMultiSpectralImage       InputMultiSpectralImageType;
+  typedef TInputMultiSpectralInterpImage InputMultiSpectralInterpImageType;
+  typedef TInputPanchroImage             InputPanchroImageType;
+  typedef TOutputImage                   OutputImageType;
+  typedef TFunctor                       FunctorType;
 
-      /** "typedef" for standard classes. */
-      typedef FusionImageBase Self;
-      typedef itk::TernaryFunctorImageFilter< InputMultiSpectralImageType,
-                                        InputMultiSpectralInterpImageType,
-                                              InputPanchroImageType,
-                                              OutputImageType,
-                                              FunctorType> Superclass;
-      typedef itk::SmartPointer<Self> Pointer;
-      typedef itk::SmartPointer<const Self>  ConstPointer;
+  /** "typedef" for standard classes. */
+  typedef FusionImageBase Self;
+  typedef itk::TernaryFunctorImageFilter< InputMultiSpectralImageType,
+  InputMultiSpectralInterpImageType,
+  InputPanchroImageType,
+  OutputImageType,
+  FunctorType> Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
+  typedef itk::SmartPointer<const Self>  ConstPointer;
 
-      /** object factory method. */
-      itkNewMacro(Self);
+  /** object factory method. */
+  itkNewMacro(Self);
 
-      /** return class name. */
-      itkTypeMacro(FusionImageBase, TernaryFunctorImageFilter);
+  /** return class name. */
+  itkTypeMacro(FusionImageBase, TernaryFunctorImageFilter);
 
-      /** Supported images definition. */
-      typedef typename InputMultiSpectralImageType::PixelType       InputMultiSpectralPixelType;
-      typedef typename InputMultiSpectralInterpImageType::PixelType InputMultiSpectralInterpPixelType;
-      typedef typename InputPanchroImageType::PixelType             InputPanchroPixelType;
-      typedef typename OutputImageType::PixelType                   OutputPixelType;
-      /** Real class typedef definition. */
-      typedef typename itk::NumericTraits<InputMultiSpectralPixelType>::RealType        InputMultiSpectralRealType;
-      typedef typename itk::NumericTraits<InputMultiSpectralInterpPixelType>::RealType  InputMultiSpectralInterpRealType;
-      typedef typename itk::NumericTraits<InputPanchroPixelType>::RealType              InputPanchroRealType;
-      typedef typename InputMultiSpectralImageType::RegionType                          InputMultiSpectralImageRegionType;
-      typedef typename InputMultiSpectralInterpImageType::RegionType                    InputMultiSpectralInterpImageRegionType;
-      typedef typename InputPanchroImageType::RegionType                                InputPanchroImageRegionType;
-      typedef typename OutputImageType::RegionType                                      OutputImageRegionType;
+  /** Supported images definition. */
+  typedef typename InputMultiSpectralImageType::PixelType       InputMultiSpectralPixelType;
+  typedef typename InputMultiSpectralInterpImageType::PixelType InputMultiSpectralInterpPixelType;
+  typedef typename InputPanchroImageType::PixelType             InputPanchroPixelType;
+  typedef typename OutputImageType::PixelType                   OutputPixelType;
+  /** Real class typedef definition. */
+  typedef typename itk::NumericTraits<InputMultiSpectralPixelType>::RealType        InputMultiSpectralRealType;
+  typedef typename itk::NumericTraits<InputMultiSpectralInterpPixelType>::RealType  InputMultiSpectralInterpRealType;
+  typedef typename itk::NumericTraits<InputPanchroPixelType>::RealType              InputPanchroRealType;
+  typedef typename InputMultiSpectralImageType::RegionType                          InputMultiSpectralImageRegionType;
+  typedef typename InputMultiSpectralInterpImageType::RegionType                    InputMultiSpectralInterpImageRegionType;
+  typedef typename InputPanchroImageType::RegionType                                InputPanchroImageRegionType;
+  typedef typename OutputImageType::RegionType                                      OutputImageRegionType;
 
-      /** Image size "typedef" definition. */
-      typedef typename InputMultiSpectralImageType::SizeType SizeType;
+  /** Image size "typedef" definition. */
+  typedef typename InputMultiSpectralImageType::SizeType SizeType;
 
 
-      void SetMultiSpect(const InputMultiSpectralImageType *multiSpect){ this->SetInput1( multiSpect ); };
-      void SetMultiSpectInterp(const InputMultiSpectralInterpImageType *multiSpectInterp){ this->SetInput2( multiSpectInterp ); };
-      void SetPanchro(const InputPanchroImageType *panchro){ this->SetInput3( panchro ); };
-
-      const InputMultiSpectralImageType* GetMultiSpect()
+  void SetMultiSpect(const InputMultiSpectralImageType *multiSpect)
   {
-    if( this->GetNumberOfInputs() < 1 )
-      {
-        return 0;
-      }
+    this->SetInput1( multiSpect );
+  };
+  void SetMultiSpectInterp(const InputMultiSpectralInterpImageType *multiSpectInterp)
+  {
+    this->SetInput2( multiSpectInterp );
+  };
+  void SetPanchro(const InputPanchroImageType *panchro)
+  {
+    this->SetInput3( panchro );
+  };
+
+  const InputMultiSpectralImageType* GetMultiSpect()
+  {
+    if ( this->GetNumberOfInputs() < 1 )
+    {
+      return 0;
+    }
     else
       return( static_cast<const InputMultiSpectralImageType *>(this->itk::ProcessObject::GetInput(0)) );
   }
 
-      const InputMultiSpectralInterpImageType* GetMultiSpectInterp()
+  const InputMultiSpectralInterpImageType* GetMultiSpectInterp()
   {
-    if( this->GetNumberOfInputs() < 2 )
-      {
-        return 0;
-      }
+    if ( this->GetNumberOfInputs() < 2 )
+    {
+      return 0;
+    }
     else
       return( static_cast<const InputMultiSpectralInterpImageType *>(this->itk::ProcessObject::GetInput(1)) );
   }
 
-      const InputPanchroImageType* GetPanchro()
+  const InputPanchroImageType* GetPanchro()
   {
-    if( this->GetNumberOfInputs() < 3 )
-      {
-        return 0;
-      }
+    if ( this->GetNumberOfInputs() < 3 )
+    {
+      return 0;
+    }
     else
       return( static_cast<const InputPanchroImageType *>(this->itk::ProcessObject::GetInput(2)) );
   }
 
 
-    };
+};
 
 } // end namespace otb
 

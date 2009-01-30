@@ -41,15 +41,15 @@ namespace otb
 
 template <class TInputImage, class TOutputImage>
 class  ITK_EXPORT DrawLineSpatialObjectListFilter :
-public itk::ImageToImageFilter< TInputImage, TOutputImage >
+      public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
   /**   Extract dimensions as well of the images of entry of exit. */
   itkStaticConstMacro(    InputImageDimension,
-          unsigned int,
+                          unsigned int,
                           TInputImage::ImageDimension);
   itkStaticConstMacro(    OutputImageDimension,
-          unsigned int,
+                          unsigned int,
                           TOutputImage::ImageDimension);
 
 
@@ -71,7 +71,7 @@ public:
   typedef DrawLineSpatialObjectFilter< OutputImageType, OutputImageType > DrawLineType;
 
   typedef itk::RescaleIntensityImageFilter< InputImageType,
-                                            OutputImageType > RescalerType;
+  OutputImageType > RescalerType;
 
   typedef itk::ProcessObject ProcessObjectType;
 

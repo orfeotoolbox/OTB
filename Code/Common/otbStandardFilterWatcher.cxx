@@ -25,8 +25,8 @@ namespace otb
 
 StandardFilterWatcher
 ::StandardFilterWatcher(itk::ProcessObject* process,
-      const char *comment)
-  : FilterWatcherBase(process, comment)
+                        const char *comment)
+    : FilterWatcherBase(process, comment)
 {
   m_StarsCount = 50;
 }
@@ -51,12 +51,12 @@ StandardFilterWatcher
 ::ShowProgress()
 {
   if (m_Process)
-    {
-      int progressPercent = static_cast<int>(m_Process->GetProgress()*100);
-      std::string stars(static_cast<int>(m_Process->GetProgress()*m_StarsCount),'*');
-      std::string blanks(static_cast<int>(m_StarsCount - m_Process->GetProgress()*m_StarsCount),' ');
-      std::cout << "\rProcessing progress:" << progressPercent << "% [" << stars << blanks << "]" << std::flush;
-    }
+  {
+    int progressPercent = static_cast<int>(m_Process->GetProgress()*100);
+    std::string stars(static_cast<int>(m_Process->GetProgress()*m_StarsCount),'*');
+    std::string blanks(static_cast<int>(m_StarsCount - m_Process->GetProgress()*m_StarsCount),' ');
+    std::cout << "\rProcessing progress:" << progressPercent << "% [" << stars << blanks << "]" << std::flush;
+  }
 }
 
 void
@@ -65,7 +65,7 @@ StandardFilterWatcher
 {
   m_TimeProbe.Start();
   std::cout << (m_Process.GetPointer() ? m_Process->GetNameOfClass() : "None")
-      << " \"" << m_Comment << "\" " << std::endl;
+            << " \"" << m_Comment << "\" " << std::endl;
 }
 
 void
@@ -74,8 +74,8 @@ StandardFilterWatcher
 {
   m_TimeProbe.Stop();
   std::cout << std::endl << "Filter took "
-      << m_TimeProbe.GetMeanTime()
-      << " seconds." << std::endl;
+            << m_TimeProbe.GetMeanTime()
+            << " seconds." << std::endl;
 }
 
 } // end namespace otb

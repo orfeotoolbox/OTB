@@ -24,24 +24,26 @@
 #include "itkNumericTraits.h"
 #include "vnl/vnl_math.h"
 
-namespace otb {
+namespace otb
+{
 
-namespace Statistics {
+namespace Statistics
+{
 
 template< class TVector >
 inline double
 EuclideanDistanceWithMissingValue< TVector >
 ::Evaluate(const TVector &x1, const TVector &x2) const
 {
-  if( itk::MeasurementVectorTraits::GetLength( x1 ) !=
-    itk::MeasurementVectorTraits::GetLength( x2 ) )
+  if ( itk::MeasurementVectorTraits::GetLength( x1 ) !=
+       itk::MeasurementVectorTraits::GetLength( x2 ) )
   {
     itkExceptionMacro( << "Vector lengths must be equal." );
   }
 
   double temp, distance = itk::NumericTraits< double >::Zero;
 
-  for(unsigned int i = 0; i < x1.Size(); i++ )
+  for (unsigned int i = 0; i < x1.Size(); i++ )
   {
     if ( !IsMissingValue( x1[i] ) && !IsMissingValue( x2[i] ) )
     {
@@ -59,17 +61,17 @@ EuclideanDistanceWithMissingValue< TVector >
 ::Evaluate(const TVector &x) const
 {
   MeasurementVectorSizeType
-    measurementVectorSize = this->GetMeasurementVectorSize();
-  if(measurementVectorSize == 0)
+  measurementVectorSize = this->GetMeasurementVectorSize();
+  if (measurementVectorSize == 0)
   {
     itkExceptionMacro( << "Please set the MeasurementVectorSize first" );
   }
   itk::MeasurementVectorTraits::Assert( this->m_Origin, measurementVectorSize,
-    "EuclideanDistance::Evaluate Origin and input vector have different lengths");
+                                        "EuclideanDistance::Evaluate Origin and input vector have different lengths");
 
   double temp, distance = itk::NumericTraits< double >::Zero;
 
-  for(unsigned int i = 0; i < measurementVectorSize; i++ )
+  for (unsigned int i = 0; i < measurementVectorSize; i++ )
   {
     if ( !IsMissingValue( this->GetOrigin()[i] ) && !IsMissingValue( x[i] ) )
     {
@@ -107,7 +109,7 @@ void
 EuclideanDistanceWithMissingValue< TVector >
 ::SetToMissingValue ( ValueType & v )
 {
-        v = vcl_numeric_limits<ValueType>::quiet_NaN();
+  v = vcl_numeric_limits<ValueType>::quiet_NaN();
 }
 
 

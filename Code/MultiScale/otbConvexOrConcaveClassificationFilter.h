@@ -22,53 +22,53 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 namespace Functor
-  {
-    /** \class ConvexOrConcaveDecisionRule
-     *  \brief This functor labels the given pixel between three classes Convex, Concave and Flat.
-     *
-     * \par
-     * This algorithm is based on the following publication:
-     * \par
-     * Martino Pesaresi and Jon Alti Benediktsson, Member, IEEE:
-     * A new approach for the morphological segmentation of high resolution
-     * satellite imagery. IEEE Transactions on geoscience and remote sensing, vol. 39,
-     * NO. 2, February 2001, p. 309-320.
-     * \par
-     *
-     * This functor implements the following decision rule to classify a pixel between the three classes
-     * Convex, Concave and Flat. Let \f$f\f$ denote the input image and \f$\psi_{N}(f)\f$ the geodesic leveling
-     * of \f$f\f$ with a structuring element of size \f$N\f$. One can derive the following decision rule to
-     * classify \f$f\f$ into Convex (label \f$\stackrel{\smile}{k}\f$), Concave (label \f$\stackrel{\frown}{k}\f$)
-     * and Flat (label \f$\bar{k}\f$):
-     *
-     * \f[
-     * \phi_{N}^{\sigma}=\left\{\begin{array}{lcl}
-     * \stackrel{\smile}{k} &:& f-\psi_{N}(f)>\sigma\\
-     * \stackrel{\frown}{k} &:& \psi_{N}(f)-f>\sigma\\
-     *  \bar{k}&:&\mid f - \psi_{N}(f) \mid \leq \sigma
-     *  \end{array}\right.
-     * \f]
-     *
-     */
-    template<class TInput,class TOutput>
-      class ConvexOrConcaveDecisionRule
-      {
+{
+/** \class ConvexOrConcaveDecisionRule
+ *  \brief This functor labels the given pixel between three classes Convex, Concave and Flat.
+ *
+ * \par
+ * This algorithm is based on the following publication:
+ * \par
+ * Martino Pesaresi and Jon Alti Benediktsson, Member, IEEE:
+ * A new approach for the morphological segmentation of high resolution
+ * satellite imagery. IEEE Transactions on geoscience and remote sensing, vol. 39,
+ * NO. 2, February 2001, p. 309-320.
+ * \par
+ *
+ * This functor implements the following decision rule to classify a pixel between the three classes
+ * Convex, Concave and Flat. Let \f$f\f$ denote the input image and \f$\psi_{N}(f)\f$ the geodesic leveling
+ * of \f$f\f$ with a structuring element of size \f$N\f$. One can derive the following decision rule to
+ * classify \f$f\f$ into Convex (label \f$\stackrel{\smile}{k}\f$), Concave (label \f$\stackrel{\frown}{k}\f$)
+ * and Flat (label \f$\bar{k}\f$):
+ *
+ * \f[
+ * \phi_{N}^{\sigma}=\left\{\begin{array}{lcl}
+ * \stackrel{\smile}{k} &:& f-\psi_{N}(f)>\sigma\\
+ * \stackrel{\frown}{k} &:& \psi_{N}(f)-f>\sigma\\
+ *  \bar{k}&:&\mid f - \psi_{N}(f) \mid \leq \sigma
+ *  \end{array}\right.
+ * \f]
+ *
+ */
+template<class TInput,class TOutput>
+class ConvexOrConcaveDecisionRule
+{
 
-      public:
+public:
   /**
    * Constructor
    */
   ConvexOrConcaveDecisionRule()
-    {
-      m_ConvexLabel = 1;
-      m_ConcaveLabel = 2;
-      m_FlatLabel = 0;
-      m_Sigma = 0.0;
-    }
+  {
+    m_ConvexLabel = 1;
+    m_ConcaveLabel = 2;
+    m_FlatLabel = 0;
+    m_Sigma = 0.0;
+  }
   /**
    * Destructor
    */
-  ~ConvexOrConcaveDecisionRule(){};
+  ~ConvexOrConcaveDecisionRule() {};
   /**
    * Label the pixel to convex, concave or flat
    * \return The label of the pixel
@@ -76,84 +76,84 @@ namespace Functor
    * \param xlevel The leveling value
    */
   inline TOutput operator()(const TInput& x, const TInput& xlevel)
-    {
-      TOutput resp = m_FlatLabel;
+  {
+    TOutput resp = m_FlatLabel;
 
-      if(static_cast<double>(x-xlevel)>m_Sigma)
-        {
-    resp = m_ConvexLabel;
-        }
-      else if (static_cast<double>(xlevel-x)>m_Sigma)
-        {
-    resp = m_ConcaveLabel;
-        }
-      return resp;
+    if (static_cast<double>(x-xlevel)>m_Sigma)
+    {
+      resp = m_ConvexLabel;
     }
+    else if (static_cast<double>(xlevel-x)>m_Sigma)
+    {
+      resp = m_ConcaveLabel;
+    }
+    return resp;
+  }
   /**
    * Set the convex label
    * \param label the convex label
    */
   void SetConvexLabel(const TOutput& label)
-    {
-      m_ConvexLabel=label;
-    }
+  {
+    m_ConvexLabel=label;
+  }
   /**
    * Get the convex label
    * \return the convex label
    */
   TOutput GetConvexLabel(void)
-    {
-      return m_ConvexLabel;
-    }
+  {
+    return m_ConvexLabel;
+  }
   /**
    * Set the concave label
    * \param label the concave label
    */
   void SetConcaveLabel(const TOutput& label)
-    {
-      m_ConcaveLabel=label;
-    }
+  {
+    m_ConcaveLabel=label;
+  }
   /**
    * Get the concave label
    * \return the concave label
    */
   TOutput GetConcaveLabel(void)
-    {
-      return m_ConcaveLabel;
-    }
+  {
+    return m_ConcaveLabel;
+  }
   /**
    * Set the flat label
    * \param label the flat label
    */
   void SetFlatLabel(const TOutput& label)
-    {
-      m_FlatLabel=label;
-    }
+  {
+    m_FlatLabel=label;
+  }
   /**
    * Get the flat label
    * \return the flat label
    */
   TOutput GetFlatLabel(void)
-    {
-      return m_FlatLabel;
-    }
+  {
+    return m_FlatLabel;
+  }
   /**
    * Set the tolerance value
    * \param sigma the tolerance value
    */
   void SetSigma(const double & sigma)
-    {
-      m_Sigma = sigma;
-    }
+  {
+    m_Sigma = sigma;
+  }
   /**
    * Get the tolerance value
    * \return the tolerance value
    */
   double GetSigma(void)
-    {
-      return m_Sigma;
-    }
-      private:
+  {
+    return m_Sigma;
+  }
+private:
   /** Label of the convex class */
   TOutput m_ConvexLabel;
   /** Label of the concave class */
@@ -163,8 +163,8 @@ namespace Functor
   /** Sigma (tolerance) parameter */
   double m_Sigma;
 
-      };
-  } //end namespace Functor
+};
+} //end namespace Functor
 
 /** \class ConvexOrConcaveClassificationFilter
  *  \brief This filter apply the Convex, Concave and flat classification functor to the whole image.
@@ -176,16 +176,16 @@ namespace Functor
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ConvexOrConcaveClassificationFilter
-  : public itk::BinaryFunctorImageFilter<TInputImage,TInputImage, TOutputImage,
-    Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
-                                         typename TOutputImage::PixelType> >
+      : public itk::BinaryFunctorImageFilter<TInputImage,TInputImage, TOutputImage,
+      Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
+      typename TOutputImage::PixelType> >
 {
- public:
+public:
   /** Standard typedefs */
   typedef ConvexOrConcaveClassificationFilter Self;
   typedef itk::BinaryFunctorImageFilter<TInputImage,TInputImage, TOutputImage,
-   Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
-                                        typename TOutputImage::PixelType> > Superclass;
+  Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
+  typename TOutputImage::PixelType> > Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
 
@@ -200,25 +200,25 @@ class ITK_EXPORT ConvexOrConcaveClassificationFilter
   typedef TOutputImage OutputImageType;
   typedef typename OutputImageType::PixelType LabelType;
   typedef Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
-    typename TOutputImage::PixelType> DecisionFunctorType;
+  typename TOutputImage::PixelType> DecisionFunctorType;
   /**
    * Set the input image
    * \param image the input image
    *
    */
   void SetInput(const TInputImage * image)
-    {
-      this->SetInput1(image);
-    }
+  {
+    this->SetInput1(image);
+  }
   /**
    * Set the input leveling image
    * \param leveling the input leveling image
    *
    */
   void SetInputLeveling(const TInputImage * leveling)
-    {
-      this->SetInput2(leveling);
-    }
+  {
+    this->SetInput2(leveling);
+  }
   /** Set/Get the convex label */
   itkSetMacro(ConvexLabel,LabelType);
   itkGetMacro(ConvexLabel,LabelType);
@@ -234,33 +234,33 @@ class ITK_EXPORT ConvexOrConcaveClassificationFilter
 
   /** Set the functor parameters before calling the ThreadedGenerateData() */
   virtual void BeforeThreadedGenerateData(void)
-    {
-      this->GetFunctor().SetConvexLabel(m_ConvexLabel);
-      this->GetFunctor().SetConcaveLabel(m_ConcaveLabel);
-      this->GetFunctor().SetFlatLabel(m_FlatLabel);
-      this->GetFunctor().SetSigma(m_Sigma);
-    }
+  {
+    this->GetFunctor().SetConvexLabel(m_ConvexLabel);
+    this->GetFunctor().SetConcaveLabel(m_ConcaveLabel);
+    this->GetFunctor().SetFlatLabel(m_FlatLabel);
+    this->GetFunctor().SetSigma(m_Sigma);
+  }
 
 protected:
   /** Constructor */
   ConvexOrConcaveClassificationFilter()
-    {
-      m_ConvexLabel  = 1;
-      m_ConcaveLabel = 2;
-      m_FlatLabel    = 0;
-      m_Sigma        = 0.0;
-    };
+  {
+    m_ConvexLabel  = 1;
+    m_ConcaveLabel = 2;
+    m_FlatLabel    = 0;
+    m_Sigma        = 0.0;
+  };
   /** Destructor */
   virtual ~ConvexOrConcaveClassificationFilter() {};
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
-    {
-      Superclass::PrintSelf(os,indent);
-      os<<indent<<"ConvexLabel: "<<m_ConvexLabel<<std::endl;
-      os<<indent<<"ConcaveLabel: "<<m_ConcaveLabel<<std::endl;
-      os<<indent<<"FlatLabel: "<<m_FlatLabel<<std::endl;
-      os<<indent<<"Sigma: "<<m_Sigma<<std::endl;
-    }
+  {
+    Superclass::PrintSelf(os,indent);
+    os<<indent<<"ConvexLabel: "<<m_ConvexLabel<<std::endl;
+    os<<indent<<"ConcaveLabel: "<<m_ConcaveLabel<<std::endl;
+    os<<indent<<"FlatLabel: "<<m_FlatLabel<<std::endl;
+    os<<indent<<"Sigma: "<<m_Sigma<<std::endl;
+  }
 
 private:
   ConvexOrConcaveClassificationFilter(const Self&); //purposely not implemented

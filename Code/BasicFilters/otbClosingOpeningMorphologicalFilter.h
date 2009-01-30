@@ -20,7 +20,8 @@
 
 #include "itkImageToImageFilter.h"
 
-namespace otb {
+namespace otb
+{
 /**
  * \class ClosingOpeningMorphologicalFilter
  * \brief This filter implements an opening grayscale morphological operation
@@ -40,7 +41,7 @@ namespace otb {
  */
 template <class TInputImage, class TOutputImage, class TKernel>
 class  ITK_EXPORT ClosingOpeningMorphologicalFilter
-  : public itk::ImageToImageFilter<TInputImage,TOutputImage>
+      : public itk::ImageToImageFilter<TInputImage,TOutputImage>
 {
 public :
   /** Standard typedefs */

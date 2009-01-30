@@ -69,42 +69,42 @@ BSplineDecompositionImageFilter<TInputImage, TOutputImage>
   double c0 = 1.0;
 
   if (m_DataLength[m_IteratorDirection] == 1) //Required by mirror boundaries
-    {
+  {
     return false;
-    }
+  }
 
   // Compute overall gain
   for (int k = 0; k < m_NumberOfPoles; k++)
-    {
+  {
     // Note for cubic splines lambda = 6
     c0 = c0 * (1.0 - m_SplinePoles[k]) * (1.0 - 1.0 / m_SplinePoles[k]);
-    }
+  }
 
   // apply the gain
   for (unsigned int n = 0; n < m_DataLength[m_IteratorDirection]; n++)
-    {
+  {
     m_Scratch[n] *= c0;
-    }
+  }
 
   // loop over all poles
   for (int k = 0; k < m_NumberOfPoles; k++)
-    {
+  {
     // causal initialization
     this->SetInitialCausalCoefficient(m_SplinePoles[k]);
     // causal recursion
     for (unsigned int n = 1; n < m_DataLength[m_IteratorDirection]; n++)
-      {
+    {
       m_Scratch[n] += m_SplinePoles[k] * m_Scratch[n - 1];
-      }
+    }
 
     // anticausal initialization
     this->SetInitialAntiCausalCoefficient(m_SplinePoles[k]);
     // anticausal recursion
     for ( int n = m_DataLength[m_IteratorDirection] - 2; 0 <= n; n--)
-      {
+    {
       m_Scratch[n] = m_SplinePoles[k] * (m_Scratch[n + 1] - m_Scratch[n]);
-      }
     }
+  }
   return true;
 
 }
@@ -116,9 +116,9 @@ BSplineDecompositionImageFilter<TInputImage, TOutputImage>
 ::SetSplineOrder(unsigned int SplineOrder)
 {
   if (SplineOrder == m_SplineOrder)
-    {
+  {
     return;
-    }
+  }
   m_SplineOrder = SplineOrder;
   this->SetPoles();
   this->Modified();
@@ -135,41 +135,41 @@ BSplineDecompositionImageFilter<TInputImage, TOutputImage>
   // See also, Handbook of Medical Imaging, Processing and Analysis, Ed. Isaac N. Bankman,
   //  2000, pg. 416.
   switch (m_SplineOrder)
-    {
-    case 3:
-      m_NumberOfPoles = 1;
-      m_SplinePoles[0] = vcl_sqrt(3.0) - 2.0;
-      break;
-    case 0:
-      m_NumberOfPoles = 0;
-      break;
-    case 1:
-      m_NumberOfPoles = 0;
-      break;
-    case 2:
-      m_NumberOfPoles = 1;
-      m_SplinePoles[0] = vcl_sqrt(8.0) - 3.0;
-      break;
-    case 4:
-      m_NumberOfPoles = 2;
-      m_SplinePoles[0] = vcl_sqrt(664.0 - vcl_sqrt(438976.0)) + vcl_sqrt(304.0) - 19.0;
-      m_SplinePoles[1] = vcl_sqrt(664.0 + vcl_sqrt(438976.0)) - vcl_sqrt(304.0) - 19.0;
-      break;
-    case 5:
-      m_NumberOfPoles = 2;
-      m_SplinePoles[0] = vcl_sqrt(135.0 / 2.0 - vcl_sqrt(17745.0 / 4.0)) + vcl_sqrt(105.0 / 4.0)
-        - 13.0 / 2.0;
-      m_SplinePoles[1] = vcl_sqrt(135.0 / 2.0 + vcl_sqrt(17745.0 / 4.0)) - vcl_sqrt(105.0 / 4.0)
-        - 13.0 / 2.0;
-      break;
-    default:
-      // SplineOrder not implemented yet.
-      itk::ExceptionObject err(__FILE__, __LINE__);
-      err.SetLocation( ITK_LOCATION);
-      err.SetDescription( "SplineOrder must be between 0 and 5. Requested spline order has not been implemented yet." );
-      throw err;
-      break;
-    }
+  {
+  case 3:
+    m_NumberOfPoles = 1;
+    m_SplinePoles[0] = vcl_sqrt(3.0) - 2.0;
+    break;
+  case 0:
+    m_NumberOfPoles = 0;
+    break;
+  case 1:
+    m_NumberOfPoles = 0;
+    break;
+  case 2:
+    m_NumberOfPoles = 1;
+    m_SplinePoles[0] = vcl_sqrt(8.0) - 3.0;
+    break;
+  case 4:
+    m_NumberOfPoles = 2;
+    m_SplinePoles[0] = vcl_sqrt(664.0 - vcl_sqrt(438976.0)) + vcl_sqrt(304.0) - 19.0;
+    m_SplinePoles[1] = vcl_sqrt(664.0 + vcl_sqrt(438976.0)) - vcl_sqrt(304.0) - 19.0;
+    break;
+  case 5:
+    m_NumberOfPoles = 2;
+    m_SplinePoles[0] = vcl_sqrt(135.0 / 2.0 - vcl_sqrt(17745.0 / 4.0)) + vcl_sqrt(105.0 / 4.0)
+                       - 13.0 / 2.0;
+    m_SplinePoles[1] = vcl_sqrt(135.0 / 2.0 + vcl_sqrt(17745.0 / 4.0)) - vcl_sqrt(105.0 / 4.0)
+                       - 13.0 / 2.0;
+    break;
+  default:
+    // SplineOrder not implemented yet.
+    itk::ExceptionObject err(__FILE__, __LINE__);
+    err.SetLocation( ITK_LOCATION);
+    err.SetDescription( "SplineOrder must be between 0 and 5. Requested spline order has not been implemented yet." );
+    throw err;
+    break;
+  }
 }
 
 
@@ -188,33 +188,34 @@ BSplineDecompositionImageFilter<TInputImage, TOutputImage>
   horizon = m_DataLength[m_IteratorDirection];
   zn = z;
   if (m_Tolerance > 0.0)
-    {
+  {
     horizon = (long)vcl_ceil(log(m_Tolerance) / vcl_log(fabs(z)));
-    }
+  }
   if (horizon < m_DataLength[m_IteratorDirection])
-    {
+  {
     /* accelerated loop */
     sum = m_Scratch[0];   // verify this
     for (unsigned int n = 1; n < horizon; n++)
-      {
+    {
       sum += zn * m_Scratch[n];
       zn *= z;
-      }
+    }
     m_Scratch[0] = sum;
-    }
-  else {
-  /* full loop */
-  iz = 1.0 / z;
-  z2n = vcl_pow(z, (double)(m_DataLength[m_IteratorDirection] - 1L));
-  sum = m_Scratch[0] + z2n * m_Scratch[m_DataLength[m_IteratorDirection] - 1L];
-  z2n *= z2n * iz;
-  for (unsigned int n = 1; n <= (m_DataLength[m_IteratorDirection] - 2); n++)
+  }
+  else
+  {
+    /* full loop */
+    iz = 1.0 / z;
+    z2n = vcl_pow(z, (double)(m_DataLength[m_IteratorDirection] - 1L));
+    sum = m_Scratch[0] + z2n * m_Scratch[m_DataLength[m_IteratorDirection] - 1L];
+    z2n *= z2n * iz;
+    for (unsigned int n = 1; n <= (m_DataLength[m_IteratorDirection] - 2); n++)
     {
-    sum += (zn + z2n) * m_Scratch[n];
-    zn *= z;
-    z2n *= iz;
+      sum += (zn + z2n) * m_Scratch[n];
+      zn *= z;
+      z2n *= iz;
     }
-  m_Scratch[0] = sum / (1.0 - zn * zn);
+    m_Scratch[0] = sum / (1.0 - zn * zn);
   }
 }
 
@@ -250,7 +251,7 @@ BSplineDecompositionImageFilter<TInputImage, TOutputImage>
   this->CopyImageToImage();   // Coefficients are initialized to the input data
 
   for (unsigned int n=0; n < ImageDimension; n++)
-    {
+  {
     m_IteratorDirection = n;
     // Loop through each dimension
 
@@ -259,7 +260,7 @@ BSplineDecompositionImageFilter<TInputImage, TOutputImage>
     CIterator.SetDirection( m_IteratorDirection );
     // For each data vector
     while ( !CIterator.IsAtEnd() )
-      {
+    {
       // Copy coefficients to scratch
       this->CopyCoefficientsToScratch( CIterator );
 
@@ -273,8 +274,8 @@ BSplineDecompositionImageFilter<TInputImage, TOutputImage>
       this->CopyScratchToCoefficients( CIterator ); // m_Scratch = m_Image;
       CIterator.NextLine();
       progress.CompletedPixel();
-      }
     }
+  }
 }
 
 
@@ -298,11 +299,11 @@ BSplineDecompositionImageFilter<TInputImage, TOutputImage>
   outIt = outIt.Begin();
 
   while ( !outIt.IsAtEnd() )
-    {
+  {
     outIt.Set( static_cast<OutputPixelType>( inIt.Get() ) );
     ++inIt;
     ++outIt;
-    }
+  }
 
 }
 
@@ -318,11 +319,11 @@ BSplineDecompositionImageFilter<TInputImage, TOutputImage>
   typedef typename TOutputImage::PixelType OutputPixelType;
   unsigned long j = 0;
   while ( !Iter.IsAtEndOfLine() )
-    {
+  {
     Iter.Set( static_cast<OutputPixelType>( m_Scratch[j] ) );
     ++Iter;
     ++j;
-    }
+  }
 
 }
 
@@ -337,11 +338,11 @@ BSplineDecompositionImageFilter<TInputImage, TOutputImage>
 {
   unsigned long j = 0;
   while ( !Iter.IsAtEndOfLine() )
-    {
+  {
     m_Scratch[j] = static_cast<double>( Iter.Get() );
     ++Iter;
     ++j;
-    }
+  }
 }
 
 /**
@@ -359,12 +360,12 @@ BSplineDecompositionImageFilter<TInputImage, TOutputImage>
 
   unsigned long maxLength = 0;
   for ( unsigned int n = 0; n < ImageDimension; n++ )
-    {
+  {
     if ( m_DataLength[n] > maxLength )
-      {
+    {
       maxLength = m_DataLength[n];
-      }
     }
+  }
   m_Scratch.resize( maxLength );
 
   // Allocate memory for output image

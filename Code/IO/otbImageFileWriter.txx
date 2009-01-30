@@ -35,8 +35,8 @@ namespace otb
 template <class TInputImage, unsigned int toto>
 ImageFileWriter<TInputImage,toto>
 ::ImageFileWriter() : itk::ImageFileWriter<TInputImage>(),
-                                m_UserSpecifiedIORegion(false),
-                                m_FactorySpecifiedImageIO(false)
+    m_UserSpecifiedIORegion(false),
+    m_FactorySpecifiedImageIO(false)
 
 {
 }
@@ -63,64 +63,64 @@ ImageFileWriter<TInputImage,toto>
 
   // Make sure input is available
   if ( input == 0 )
-    {
+  {
     itkExceptionMacro(<< "No input to writer!");
-    }
+  }
 
   // Make sure that we can write the file given the name
   //
   std::string strFileName(this->GetFileName()); // this->GetFileName() return a const char *
   if ( strFileName == "" )
-    {
+  {
     itkExceptionMacro(<<"No filename was specified");
-    }
+  }
 
 //  if ( this->GetImageIO()->IsNull() ) //try creating via factory
   if ( this->GetImageIO() == 0 ) //try creating via factory
-    {
+  {
     itkDebugMacro(<<"Attempting factory creation of ImageIO for file: "
                   << this->GetFileName());
     this->SetImageIO( ImageIOFactory::CreateImageIO( this->GetFileName(),
-                                               itk::ImageIOFactory::WriteMode ) );
+                      itk::ImageIOFactory::WriteMode ) );
     m_FactorySpecifiedImageIO = true;
-    }
+  }
   else
+  {
+    if ( m_FactorySpecifiedImageIO && !this->GetImageIO()->CanWriteFile( this->GetFileName() ) )
     {
-    if( m_FactorySpecifiedImageIO && !this->GetImageIO()->CanWriteFile( this->GetFileName() ) )
-      {
       itkDebugMacro(<<"ImageIO exists but doesn't know how to write file:"
                     << this->GetFileName() );
       itkDebugMacro(<<"Attempting creation of ImageIO with a factory for file:"
                     << this->GetFileName());
       this->SetImageIO( ImageIOFactory::CreateImageIO( this->GetFileName(),
-                                                 itk::ImageIOFactory::WriteMode ) );
+                        itk::ImageIOFactory::WriteMode ) );
       m_FactorySpecifiedImageIO = true;
-      }
     }
+  }
 
 //  if ( this->GetImageIO()->IsNull() )
   if ( this->GetImageIO() == 0 )
-    {
+  {
     itk::ImageFileWriterException e(__FILE__, __LINE__);
     itk::OStringStream msg;
     msg << " Could not create IO object for file "
-        << this->GetFileName() << std::endl;
+    << this->GetFileName() << std::endl;
     msg << "  Tried to create one of the following:" << std::endl;
     std::list<itk::LightObject::Pointer> allobjects =
       itk::ObjectFactoryBase::CreateAllInstance("itkImageIOBase");
-    for(std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin();
-        i != allobjects.end(); ++i)
-      {
+    for (std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin();
+         i != allobjects.end(); ++i)
+    {
       itk::ImageIOBase* io = dynamic_cast<itk::ImageIOBase*>(i->GetPointer());
       msg << "    " << io->GetNameOfClass() << std::endl;
-      }
+    }
     msg << "  You probably failed to set a file suffix, or" << std::endl;
     msg << "    set the suffix to an unsupported type." << std::endl;
     e.SetDescription(msg.str().c_str());
     throw e;
     return;
-    }
-    // Notify start event observers
+  }
+  // Notify start event observers
   this->InvokeEvent( itk::StartEvent() );
 
   // NOTE: this const_cast<> is due to the lack of const-correctness
@@ -130,27 +130,27 @@ ImageFileWriter<TInputImage,toto>
   typedef typename TInputImage::RegionType   RegionType;
 
   if ( ! m_UserSpecifiedIORegion )
-    {
+  {
     // Make sure the data is up-to-date.
-    if( nonConstImage->GetSource() )
-      {
+    if ( nonConstImage->GetSource() )
+    {
       nonConstImage->GetSource()->UpdateLargestPossibleRegion();
-      }
+    }
     // Write the whole image
     itk::ImageIORegion ioRegion(TInputImage::ImageDimension);
     RegionType region = input->GetLargestPossibleRegion();
 
-    for(unsigned int i=0; i<TInputImage::ImageDimension; i++)
-      {
+    for (unsigned int i=0; i<TInputImage::ImageDimension; i++)
+    {
       ioRegion.SetSize(i,region.GetSize(i));
       ioRegion.SetIndex(i,region.GetIndex(i));
-      }
+    }
     this->SetIORegion( ioRegion ); //used by GenerateData
-    }
+  }
   else
-    {
+  {
     nonConstImage->Update();
-    }
+  }
 
   // Setup the ImageIO
   //
@@ -160,27 +160,27 @@ ImageFileWriter<TInputImage,toto>
   const typename TInputImage::PointType& origin = input->GetOrigin();
   const typename TInputImage::DirectionType& direction = input->GetDirection();
 
-  for(unsigned int i=0; i<TInputImage::ImageDimension; i++)
-    {
+  for (unsigned int i=0; i<TInputImage::ImageDimension; i++)
+  {
     this->GetImageIO()->SetDimensions(i,region.GetSize(i));
     this->GetImageIO()->SetSpacing(i,spacing[i]);
     this->GetImageIO()->SetOrigin(i,origin[i]);
     vnl_vector< double > axisDirection(TInputImage::ImageDimension);
 // Please note: direction cosines are stored as columns of the
 // direction matrix
-    for(unsigned int j=0; j<TInputImage::ImageDimension; j++)
-      {
+    for (unsigned int j=0; j<TInputImage::ImageDimension; j++)
+    {
       axisDirection[j] = direction[j][i];
-      }
-    this->GetImageIO()->SetDirection( i, axisDirection );
     }
+    this->GetImageIO()->SetDirection( i, axisDirection );
+  }
 
   this->GetImageIO()->SetUseCompression(this->GetUseCompression());
   this->GetImageIO()->SetIORegion(this->GetIORegion());
-  if( this->GetUseInputMetaDataDictionary() )
-    {
+  if ( this->GetUseInputMetaDataDictionary() )
+  {
     this->GetImageIO()->SetMetaDataDictionary(input->GetMetaDataDictionary());
-    }
+  }
 
 //otbMsgDevMacro( << this->GetFileName() );
 //  this->GetImageIO()->SetFileName( this->GetFileName() );
@@ -199,9 +199,9 @@ ImageFileWriter<TInputImage,toto>
 
   // Release upstream data if requested
   if ( input->ShouldIReleaseData() )
-    {
+  {
     nonConstImage->ReleaseData();
-    }
+  }
 }
 
 

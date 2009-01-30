@@ -43,11 +43,11 @@ ProfileDerivativeToMultiScaleCharacteristicsFilter<TInputImage,TOutputImage,TLab
 ::GetOutputCharacteristics(void)
 {
   if (this->GetNumberOfOutputs() < 2)
-    {
-      return 0;
-    }
+  {
+    return 0;
+  }
   return static_cast<LabeledImageType * >
-    (this->itk::ProcessObject::GetOutput(1) );
+         (this->itk::ProcessObject::GetOutput(1) );
 }
 /**
  * GenerateOutputInformation
@@ -60,12 +60,12 @@ ProfileDerivativeToMultiScaleCharacteristicsFilter<TInputImage,TOutputImage,TLab
   InputImageListPointerType inputPtr = this->GetInput();
   OutputImagePointerType outputPtr = this->GetOutput();
   LabeledImagePointerType outputLabeledPtr = this->GetOutputCharacteristics();
-  if(inputPtr->Size()>0)
-    {
-      typename InputImageListType::ConstIterator inputListIt = inputPtr->Begin();
-      outputPtr->CopyInformation(inputListIt.Get());
-      outputLabeledPtr->CopyInformation(inputListIt.Get());
-    }
+  if (inputPtr->Size()>0)
+  {
+    typename InputImageListType::ConstIterator inputListIt = inputPtr->Begin();
+    outputPtr->CopyInformation(inputListIt.Get());
+    outputLabeledPtr->CopyInformation(inputListIt.Get());
+  }
 }
 /**
  * GenerateInputRequestedRegion
@@ -85,49 +85,49 @@ ProfileDerivativeToMultiScaleCharacteristicsFilter<TInputImage,TOutputImage,TLab
    * Compute the appropriate requested region:
    * This is the smaller region containing the two output regions
    */
-  if(region1==this->GetOutput()->GetLargestPossibleRegion()
-     &&region2!=this->GetOutputCharacteristics()->GetLargestPossibleRegion())
-    {
-      region = region2;
-    }
-  else if(region1!=this->GetOutput()->GetLargestPossibleRegion()
-     &&region2==this->GetOutputCharacteristics()->GetLargestPossibleRegion())
-    {
-      region = region1;
-    }
+  if (region1==this->GetOutput()->GetLargestPossibleRegion()
+      &&region2!=this->GetOutputCharacteristics()->GetLargestPossibleRegion())
+  {
+    region = region2;
+  }
+  else if (region1!=this->GetOutput()->GetLargestPossibleRegion()
+           &&region2==this->GetOutputCharacteristics()->GetLargestPossibleRegion())
+  {
+    region = region1;
+  }
   else
-    {
-      int xul1 = region1.GetIndex()[0];
-      int xul2 = region2.GetIndex()[0];
-      int yul1 = region1.GetIndex()[1];
-      int yul2 = region2.GetIndex()[1];
-      int xlr1 = region1.GetIndex()[0]+region1.GetSize()[0];
-      int xlr2 = region2.GetIndex()[0]+region2.GetSize()[0];
-      int ylr1 = region1.GetIndex()[1]+region1.GetSize()[1];
-      int ylr2 = region2.GetIndex()[1]+region2.GetSize()[1];
+  {
+    int xul1 = region1.GetIndex()[0];
+    int xul2 = region2.GetIndex()[0];
+    int yul1 = region1.GetIndex()[1];
+    int yul2 = region2.GetIndex()[1];
+    int xlr1 = region1.GetIndex()[0]+region1.GetSize()[0];
+    int xlr2 = region2.GetIndex()[0]+region2.GetSize()[0];
+    int ylr1 = region1.GetIndex()[1]+region1.GetSize()[1];
+    int ylr2 = region2.GetIndex()[1]+region2.GetSize()[1];
 
-      int xul = std::min(xul1,xul2);
-      int yul = std::min(yul1,yul2);
-      int xlr = std::max(xlr1,xlr2);
-      int ylr = std::max(ylr1,ylr2);
+    int xul = std::min(xul1,xul2);
+    int yul = std::min(yul1,yul2);
+    int xlr = std::max(xlr1,xlr2);
+    int ylr = std::max(ylr1,ylr2);
 
-      typename RegionType::IndexType index;
-      index[0]=xul;
-      index[1]=yul;
+    typename RegionType::IndexType index;
+    index[0]=xul;
+    index[1]=yul;
 
-      typename RegionType::SizeType size;
-      size[0]=static_cast<unsigned int>(xlr-xul);
-      size[1]=static_cast<unsigned int>(ylr-yul);
+    typename RegionType::SizeType size;
+    size[0]=static_cast<unsigned int>(xlr-xul);
+    size[1]=static_cast<unsigned int>(ylr-yul);
 
-      region.SetIndex(index);
-      region.SetSize(size);
-    }
+    region.SetIndex(index);
+    region.SetSize(size);
+  }
 
-  while(inputListIt!=inputPtr->End())
-    {
-      inputListIt.Get()->SetRequestedRegion(region);
-      ++inputListIt;
-    }
+  while (inputListIt!=inputPtr->End())
+  {
+    inputListIt.Get()->SetRequestedRegion(region);
+    ++inputListIt;
+  }
 }
 /**
  * Main computation method
@@ -162,11 +162,11 @@ ProfileDerivativeToMultiScaleCharacteristicsFilter<TInputImage,TOutputImage,TLab
   InputIteratorListType inputIteratorList;
 
   // fills the vector of input iterators
-  for(;inputListIt!=inputPtr->End();++inputListIt)
-    {
-      inputIteratorList.push_back(InputIteratorType(inputListIt.Get(),inputListIt.Get()->GetRequestedRegion()));
-      inputIteratorList.back().GoToBegin();
-    }
+  for (;inputListIt!=inputPtr->End();++inputListIt)
+  {
+    inputIteratorList.push_back(InputIteratorType(inputListIt.Get(),inputListIt.Get()->GetRequestedRegion()));
+    inputIteratorList.back().GoToBegin();
+  }
 
   // walk through the output images
   OutputIteratorType outputIt(outputPtr,outputPtr->GetRequestedRegion());
@@ -175,41 +175,41 @@ ProfileDerivativeToMultiScaleCharacteristicsFilter<TInputImage,TOutputImage,TLab
   labeledIt.GoToBegin();
 
   bool inputIteratorsAtEnd = false;
-  for(typename InputIteratorListType::iterator it = inputIteratorList.begin();
-    it != inputIteratorList.end();++it)
+  for (typename InputIteratorListType::iterator it = inputIteratorList.begin();
+       it != inputIteratorList.end();++it)
   {
     inputIteratorsAtEnd = inputIteratorsAtEnd || it->IsAtEnd();
   }
 
 
-  while(!outputIt.IsAtEnd() && !labeledIt.IsAtEnd() && !inputIteratorsAtEnd)
-    {
-      unsigned int index = 0;
-      OutputPixelType outputPixel = 0;
-      LabeledPixelType outputChar = 0;
-
-       // for each input iterator, check the output and characteristics
-      for(typename InputIteratorListType::iterator it = inputIteratorList.begin();
-    it != inputIteratorList.end();++it)
+  while (!outputIt.IsAtEnd() && !labeledIt.IsAtEnd() && !inputIteratorsAtEnd)
   {
-    if(it->Get()>outputPixel)
+    unsigned int index = 0;
+    OutputPixelType outputPixel = 0;
+    LabeledPixelType outputChar = 0;
+
+    // for each input iterator, check the output and characteristics
+    for (typename InputIteratorListType::iterator it = inputIteratorList.begin();
+         it != inputIteratorList.end();++it)
+    {
+      if (it->Get()>outputPixel)
       {
         outputPixel = it->Get();
         outputChar = m_InitialValue+m_Step*(static_cast<LabeledPixelType>(index));
       }
-    ++index;
-  }
-      outputIt.Set(outputPixel);
-      labeledIt.Set(outputChar);
-      ++outputIt;
-      ++labeledIt;
-       for(typename InputIteratorListType::iterator it = inputIteratorList.begin();
-    it != inputIteratorList.end();++it)
-  {
-    ++(*it);
-    inputIteratorsAtEnd = inputIteratorsAtEnd || it->IsAtEnd();
-  }
+      ++index;
     }
+    outputIt.Set(outputPixel);
+    labeledIt.Set(outputChar);
+    ++outputIt;
+    ++labeledIt;
+    for (typename InputIteratorListType::iterator it = inputIteratorList.begin();
+         it != inputIteratorList.end();++it)
+    {
+      ++(*it);
+      inputIteratorsAtEnd = inputIteratorsAtEnd || it->IsAtEnd();
+    }
+  }
 }
 /**
  * PrintSelf Method

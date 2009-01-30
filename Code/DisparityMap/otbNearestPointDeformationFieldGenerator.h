@@ -30,9 +30,9 @@ namespace otb
  */
 template <class TPointSet, class TDeformationField>
 class ITK_EXPORT NearestPointDeformationFieldGenerator
-  : public PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
+      : public PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
 {
- public:
+public:
   /** Standard typedefs */
   typedef NearestPointDeformationFieldGenerator Self;
   typedef PointSetToDeformationFieldGenerator<TPointSet,TDeformationField> Superclass;
@@ -60,7 +60,7 @@ protected:
   NearestPointDeformationFieldGenerator() {};
   /** Destructor */
   virtual ~NearestPointDeformationFieldGenerator() {};
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Main computation method */
   virtual void GenerateData();

@@ -90,7 +90,11 @@
 
 /* For OpenJPEG */
 #cmakedefine OPJ_EXPORTS
+
+// OTB path: fixing redefinition warning
+#ifndef OPJ_STATIC
 #cmakedefine OPJ_STATIC
+#endif
 
 /*--------------------------------------------------------------------------*/
 /* GDCM Versioning                                                          */

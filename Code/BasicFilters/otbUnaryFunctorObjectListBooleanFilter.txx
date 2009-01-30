@@ -51,9 +51,9 @@ UnaryFunctorObjectListBooleanFilter<TInputList,TOutputList,TFunction>
   itk::ProgressReporter progress(this, 0, inputPtr->Size());
 
   // Define the iterators
-  for(InputListIterator it = inputPtr->Begin(); it != inputPtr->End(); ++it)
+  for (InputListIterator it = inputPtr->Begin(); it != inputPtr->End(); ++it)
   {
-    if(m_Functor(it.Get()))
+    if (m_Functor(it.Get()))
     {
       outputPtr->PushBack(it.Get());
     }

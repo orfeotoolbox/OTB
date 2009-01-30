@@ -59,17 +59,17 @@ void
 ImageOfVectorsToMonoChannelExtractROI<TInputImage,TOutputImage>
 ::GenerateOutputInformation()
 {
-        typename Superclass::InputImageConstPointer  inputPtr = this->GetInput();
-        // Analyse du canal traité
-        if ( (m_Channel <= 0) || (m_Channel > InputImagePixelType::Dimension ) )
-        {
-                        itkExceptionMacro(<< "otb::ExtractImImageOfVectorsToMonoChannelExtractROIageFilter::GenerateOutputInformation "
+  typename Superclass::InputImageConstPointer  inputPtr = this->GetInput();
+  // Analyse du canal traité
+  if ( (m_Channel <= 0) || (m_Channel > InputImagePixelType::Dimension ) )
+  {
+    itkExceptionMacro(<< "otb::ExtractImImageOfVectorsToMonoChannelExtractROIageFilter::GenerateOutputInformation "
                       << " Channel must be in the following range: [1;"<< InputImagePixelType::Dimension <<"] "
                       << typeid(itk::ImageBase<InputImageDimension>*).name() );
-        }
+  }
 
-        // Appel à la methode de la classe de base
-        Superclass::GenerateOutputInformation();
+  // Appel à la methode de la classe de base
+  Superclass::GenerateOutputInformation();
 }
 
 
@@ -103,15 +103,15 @@ ImageOfVectorsToMonoChannelExtractROI<TInputImage,TOutputImage>
   unsigned int channelIn(m_Channel-1);
 
   InputImagePixelType  pixelInput;
-  while( !outIt.IsAtEnd() )
+  while ( !outIt.IsAtEnd() )
   {
-                OutputImagePixelType pixelOutput;
-                pixelInput = inIt.Get();
-                pixelOutput = static_cast<OutputValueType>(pixelInput[channelIn]);
-                outIt.Set( pixelOutput );
-                ++outIt;
-                ++inIt;
-                progress.CompletedPixel();
+    OutputImagePixelType pixelOutput;
+    pixelInput = inIt.Get();
+    pixelOutput = static_cast<OutputValueType>(pixelInput[channelIn]);
+    outIt.Set( pixelOutput );
+    ++outIt;
+    ++inIt;
+    progress.CompletedPixel();
   }
 
 }

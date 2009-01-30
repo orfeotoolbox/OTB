@@ -33,15 +33,15 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  /** \class DXFToSpatialObjectGroupFilter
-   *  \brief
-   *
-   */
+/** \class DXFToSpatialObjectGroupFilter
+ *  \brief
+ *
+ */
 template <class TSpatialObject>
 class ITK_EXPORT DXFToSpatialObjectGroupFilter
-  : public DL_CreationAdapter, public SpatialObjectSource<TSpatialObject>
+      : public DL_CreationAdapter, public SpatialObjectSource<TSpatialObject>
 {
-  public:
+public:
   /** Standard typedefs */
   typedef DXFToSpatialObjectGroupFilter                              Self;
   typedef SpatialObjectSource< TSpatialObject > Superclass;
@@ -85,7 +85,7 @@ class ITK_EXPORT DXFToSpatialObjectGroupFilter
   /** Workaround while waiting for the SpatialObject bug to be fixed */
   virtual void Update(void);
 
-  protected:
+protected:
   /** Constructor */
   DXFToSpatialObjectGroupFilter();
   /** Destructor */
@@ -97,7 +97,7 @@ class ITK_EXPORT DXFToSpatialObjectGroupFilter
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  private:
+private:
   DXFToSpatialObjectGroupFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   int m_CurrentObjectType;

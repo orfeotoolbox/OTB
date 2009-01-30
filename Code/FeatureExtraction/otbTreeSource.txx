@@ -33,7 +33,7 @@ TreeSource<TOutputTree>
   // Create the output. We use static_cast<> here because we know the default
   // output must be of type TOutputMesh
   OutputTreePointer output
-    = static_cast<TOutputTree*>(this->MakeOutput(0).GetPointer());
+  = static_cast<TOutputTree*>(this->MakeOutput(0).GetPointer());
 
   this->itk::ProcessObject::SetNumberOfRequiredOutputs(1);
   this->itk::ProcessObject::SetNthOutput( 0, output.GetPointer() );
@@ -62,12 +62,12 @@ TreeSource<TOutputTree>
 ::GetOutput(void)
 {
   if (this->GetNumberOfOutputs() < 1)
-    {
+  {
     return 0;
-    }
+  }
 
   return static_cast<TOutputTree*>
-    (this->itk::ProcessObject::GetOutput(0));
+         (this->itk::ProcessObject::GetOutput(0));
 }
 
 
@@ -80,7 +80,7 @@ TreeSource<TOutputTree>
 ::GetOutput(unsigned int idx)
 {
   return static_cast<TOutputTree*>
-    (this->itk::ProcessObject::GetOutput(idx));
+         (this->itk::ProcessObject::GetOutput(idx));
 }
 
 
@@ -130,15 +130,15 @@ TreeSource<TOutputTree>
 ::GraftNthOutput(unsigned int idx, DataObject *graft)
 {
   if ( idx >= this->GetNumberOfOutputs() )
-    {
+  {
     itkExceptionMacro(<<"Requested to graft output " << idx <<
-        " but this filter only has " << this->GetNumberOfOutputs() << " Outputs.");
-    }
+                      " but this filter only has " << this->GetNumberOfOutputs() << " Outputs.");
+  }
 
   if ( !graft )
-    {
+  {
     itkExceptionMacro(<<"Requested to graft output that is a NULL pointer" );
-    }
+  }
 
   DataObject * output = this->GetOutput( idx );
 

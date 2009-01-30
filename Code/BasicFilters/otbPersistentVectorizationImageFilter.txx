@@ -25,7 +25,8 @@
 
 #include "itkProgressReporter.h"
 
-namespace otb {
+namespace otb
+{
 
 template<class TInputImage, class TOutputPath>
 PersistentVectorizationImageFilter<TInputImage, TOutputPath>
@@ -63,14 +64,14 @@ PersistentVectorizationImageFilter<TInputImage, TOutputPath>
 
 
 
-  for(PixelType label = m_MinMaxFilter->GetMinimum()+1; label<=m_MinMaxFilter->GetMaximum(); ++label)
-    {
-      ImageToEdgePathFilterPointerType edgeFilter = ImageToEdgePathFilterType::New();
-      edgeFilter->SetInput(m_MinMaxFilter->GetOutput());
-      edgeFilter->SetForegroundValue(label);
-      edgeFilter->Update();
-      m_PathList->PushBack(edgeFilter->GetOutput());
-    }
+  for (PixelType label = m_MinMaxFilter->GetMinimum()+1; label<=m_MinMaxFilter->GetMaximum(); ++label)
+  {
+    ImageToEdgePathFilterPointerType edgeFilter = ImageToEdgePathFilterType::New();
+    edgeFilter->SetInput(m_MinMaxFilter->GetOutput());
+    edgeFilter->SetForegroundValue(label);
+    edgeFilter->Update();
+    m_PathList->PushBack(edgeFilter->GetOutput());
+  }
 }
 
 template<class TInputImage, class TOutputPath>

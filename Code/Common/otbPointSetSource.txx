@@ -33,7 +33,7 @@ PointSetSource<TOutputPointSet>
   // Create the output. We use static_cast<> here because we know the default
   // output must be of type TOutputPointSet
   OutputPointSetPointer output
-    = static_cast<TOutputPointSet*>(this->MakeOutput(0).GetPointer());
+  = static_cast<TOutputPointSet*>(this->MakeOutput(0).GetPointer());
 
   this->ProcessObject::SetNumberOfRequiredOutputs(1);
   this->ProcessObject::SetNthOutput( 0, output.GetPointer() );
@@ -62,12 +62,12 @@ PointSetSource<TOutputPointSet>
 ::GetOutput(void)
 {
   if (this->GetNumberOfOutputs() < 1)
-    {
+  {
     return 0;
-    }
+  }
 
   return static_cast<TOutputPointSet*>
-    (this->ProcessObject::GetOutput(0));
+         (this->ProcessObject::GetOutput(0));
 }
 
 
@@ -80,7 +80,7 @@ PointSetSource<TOutputPointSet>
 ::GetOutput(unsigned int idx)
 {
   return static_cast<TOutputPointSet*>
-    (this->ProcessObject::GetOutput(idx));
+         (this->ProcessObject::GetOutput(idx));
 }
 
 
@@ -130,15 +130,15 @@ PointSetSource<TOutputPointSet>
 ::GraftNthOutput(unsigned int idx, itk::DataObject *graft)
 {
   if ( idx >= this->GetNumberOfOutputs() )
-    {
+  {
     itkExceptionMacro(<<"Requested to graft output " << idx <<
-        " but this filter only has " << this->GetNumberOfOutputs() << " Outputs.");
-    }
+                      " but this filter only has " << this->GetNumberOfOutputs() << " Outputs.");
+  }
 
   if ( !graft )
-    {
+  {
     itkExceptionMacro(<<"Requested to graft output that is a NULL pointer" );
-    }
+  }
 
   itk::DataObject * output = this->GetOutput( idx );
 

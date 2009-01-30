@@ -30,45 +30,45 @@ template <class TInputImage,class TOutputPath>
 GenericRoadExtractionFilter<TInputImage, TOutputPath>
 ::GenericRoadExtractionFilter()
 {
-        this->SetNumberOfRequiredInputs(1);
-        this->SetNumberOfRequiredOutputs(1);
+  this->SetNumberOfRequiredInputs(1);
+  this->SetNumberOfRequiredOutputs(1);
 
   m_SquareRootImageFilter = SquareRootImageFilterType::New();
-        m_GradientFilter = GradientFilterType::New();
-        m_NeighborhoodScalarProductFilter = NeighborhoodScalarProductFilterType::New();
-        m_RemoveIsolatedByDirectionFilter = RemoveIsolatedByDirectionFilterType::New();
-        m_RemoveWrongDirectionFilter = RemoveWrongDirectionFilterType::New();
-        m_NonMaxRemovalByDirectionFilter = NonMaxRemovalByDirectionFilterType::New();
-        m_VectorizationPathListFilter = VectorizationPathListFilterType::New();
-        m_FirstSimplifyPathListFilter = SimplifyPathListFilterType::New();
-        m_SecondSimplifyPathListFilter = SimplifyPathListFilterType::New();
-        m_BreakAngularPathListFilter = BreakAngularPathListFilterType::New();
-        m_FirstRemoveTortuousPathListFilter = RemoveTortuousPathListFilterType::New();
-        m_SecondRemoveTortuousPathListFilter = RemoveTortuousPathListFilterType::New();
-        m_LinkPathListFilter = LinkPathListFilterType::New();
-        m_LikelihoodPathListFilter = LikelihoodPathListFilterType::New();
+  m_GradientFilter = GradientFilterType::New();
+  m_NeighborhoodScalarProductFilter = NeighborhoodScalarProductFilterType::New();
+  m_RemoveIsolatedByDirectionFilter = RemoveIsolatedByDirectionFilterType::New();
+  m_RemoveWrongDirectionFilter = RemoveWrongDirectionFilterType::New();
+  m_NonMaxRemovalByDirectionFilter = NonMaxRemovalByDirectionFilterType::New();
+  m_VectorizationPathListFilter = VectorizationPathListFilterType::New();
+  m_FirstSimplifyPathListFilter = SimplifyPathListFilterType::New();
+  m_SecondSimplifyPathListFilter = SimplifyPathListFilterType::New();
+  m_BreakAngularPathListFilter = BreakAngularPathListFilterType::New();
+  m_FirstRemoveTortuousPathListFilter = RemoveTortuousPathListFilterType::New();
+  m_SecondRemoveTortuousPathListFilter = RemoveTortuousPathListFilterType::New();
+  m_LinkPathListFilter = LinkPathListFilterType::New();
+  m_LikelihoodPathListFilter = LikelihoodPathListFilterType::New();
 
-        /** Amplitude threshold to start following a path (use by the VectorizationPathListFilter)*/
-        m_AmplitudeThreshold = static_cast<AmplitudeThresholdType>(0.00005 );
-        /** Tolerance for segment consistency (tolerance in terms of distance) (use by the SimplifyPathFilter)*/
-        m_Tolerance = static_cast<ToleranceType>(1.);
-        /** Max angle (use bye the BreakAngularPathListFilter)*/
-        m_MaxAngle = static_cast<MaxAngleType>(M_PI/8.);
-        /** Tolerance for segment consistency (tolerance in terms of distance) (use by RemoveTortuousPathFilter)*/
-        m_FirstMeanDistanceThreshold = static_cast<MeanDistanceThresholdType>(1.);
-        m_SecondMeanDistanceThreshold = static_cast<MeanDistanceThresholdType>(10.);
-        /** The angular threshold (use by LinkPathFilter) */
-        m_AngularThreshold = static_cast<LinkRealType>(M_PI/8.);
+  /** Amplitude threshold to start following a path (use by the VectorizationPathListFilter)*/
+  m_AmplitudeThreshold = static_cast<AmplitudeThresholdType>(0.00005 );
+  /** Tolerance for segment consistency (tolerance in terms of distance) (use by the SimplifyPathFilter)*/
+  m_Tolerance = static_cast<ToleranceType>(1.);
+  /** Max angle (use bye the BreakAngularPathListFilter)*/
+  m_MaxAngle = static_cast<MaxAngleType>(M_PI/8.);
+  /** Tolerance for segment consistency (tolerance in terms of distance) (use by RemoveTortuousPathFilter)*/
+  m_FirstMeanDistanceThreshold = static_cast<MeanDistanceThresholdType>(1.);
+  m_SecondMeanDistanceThreshold = static_cast<MeanDistanceThresholdType>(10.);
+  /** The angular threshold (use by LinkPathFilter) */
+  m_AngularThreshold = static_cast<LinkRealType>(M_PI/8.);
 
-        /** The distance threshold (use by LinkPathFilter) */
-        m_DistanceThreshold = 25.;
+  /** The distance threshold (use by LinkPathFilter) */
+  m_DistanceThreshold = 25.;
 
-        /** Alpha value */
-        /** Use to calculate the sigma value use by the GradientRecursiveGaussianImageFilter */
-        m_Alpha = 1.0;
+  /** Alpha value */
+  /** Use to calculate the sigma value use by the GradientRecursiveGaussianImageFilter */
+  m_Alpha = 1.0;
 
-        /** Resolution of the image */
-        m_Resolution = 1.;
+  /** Resolution of the image */
+  m_Resolution = 1.;
 }
 /**
  * Prepare main computation method
@@ -82,10 +82,10 @@ GenericRoadExtractionFilter<TInputImage, TOutputPath>
   typename InputImageType::SpacingType spacing = this->GetInput()->GetSpacing();
   // Getting x Spacing for the resolution
   m_Resolution = static_cast<double>(spacing[0]);
-  if( m_Resolution == 0. )
+  if ( m_Resolution == 0. )
   {
-        itkWarningMacro(<< "The image spacing is zero. So the resolution used in the filter is forced to 1.");
-        m_Resolution = 1.;
+    itkWarningMacro(<< "The image spacing is zero. So the resolution used in the filter is forced to 1.");
+    m_Resolution = 1.;
   }
 
 }
@@ -99,8 +99,8 @@ GenericRoadExtractionFilter<TInputImage, TOutputPath>
 ::GenerateData()
 {
   // // Input images pointers
-   typename InputImageType::ConstPointer inputImage     = this->GetInput();
-   typename OutputPathListType::Pointer outputPathList  = this->GetOutput();
+  typename InputImageType::ConstPointer inputImage     = this->GetInput();
+  typename OutputPathListType::Pointer outputPathList  = this->GetOutput();
 
   ///////////////////////////////////////
   //// Algorithm for road extraction ////
@@ -156,13 +156,13 @@ GenericRoadExtractionFilter<TInputImage, TOutputPath>
   // m_LikelihoodPathListFilter->GraftOutput(this->GetOutput());
   m_LikelihoodPathListFilter->Update();
   // outputPathList =  m_LikelihoodPathListFilter->GetOutput();
-    for(typename LikelihoodPathListFilterType::PathListType::ConstIterator it
-    = m_LikelihoodPathListFilter->GetOutput()->Begin();
-      it!=m_LikelihoodPathListFilter->GetOutput()->End();
-      ++it)
-    {
-      outputPathList->PushBack(it.Get());
-    }
+  for (typename LikelihoodPathListFilterType::PathListType::ConstIterator it
+       = m_LikelihoodPathListFilter->GetOutput()->Begin();
+       it!=m_LikelihoodPathListFilter->GetOutput()->End();
+       ++it)
+  {
+    outputPathList->PushBack(it.Get());
+  }
 }
 /**
  * PrintSelf method

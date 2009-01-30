@@ -133,56 +133,56 @@ namespace otb
  */
 template<class TInputImage, class TWindowFunction, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep=double>
 class ITK_EXPORT WindowedSincInterpolateImageFunctionBase :
-public GenericInterpolateImageFunction< TInputImage,
-                                            TWindowFunction,
-                                            TBoundaryCondition,
-                                            TCoordRep >
-  {
-    public:
-    /** Standard class typedefs. */
-    typedef WindowedSincInterpolateImageFunctionBase                                                      Self;
-    typedef GenericInterpolateImageFunction<TInputImage, TWindowFunction, TBoundaryCondition, TCoordRep>  Superclass;
-    typedef itk::SmartPointer<Self>                                                                       Pointer;
-    typedef itk::SmartPointer<const Self>                                                                 ConstPointer;
+      public GenericInterpolateImageFunction< TInputImage,
+      TWindowFunction,
+      TBoundaryCondition,
+      TCoordRep >
+{
+public:
+  /** Standard class typedefs. */
+  typedef WindowedSincInterpolateImageFunctionBase                                                      Self;
+  typedef GenericInterpolateImageFunction<TInputImage, TWindowFunction, TBoundaryCondition, TCoordRep>  Superclass;
+  typedef itk::SmartPointer<Self>                                                                       Pointer;
+  typedef itk::SmartPointer<const Self>                                                                 ConstPointer;
 
-    /** Run-time type information (and related methods). */
-    itkTypeMacro(WindowedSincInterpolateImageFunctionBase, GenericInterpolateImageFunction);
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(WindowedSincInterpolateImageFunctionBase, GenericInterpolateImageFunction);
 
-    /** Method for creation through the object factory. */
-    itkNewMacro(Self);
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self);
 
-    /** Input and output images typedef definition. */
-    typedef typename Superclass::InputImageType InputImageType;
-    typedef typename Superclass::OutputType     OutputType;
+  /** Input and output images typedef definition. */
+  typedef typename Superclass::InputImageType InputImageType;
+  typedef typename Superclass::OutputType     OutputType;
 
-    /** Dimension underlying input image. */
-    itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
+  /** Dimension underlying input image. */
+  itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
 
-    /** Superclass typedef inheritance. */
-    typedef typename Superclass::IndexType                                             IndexType;
-    typedef typename Superclass::SizeType                                              SizeType;
-    typedef typename Superclass::RealType                                              RealType;
-    typedef typename Superclass::IteratorType                                          IteratorType;
-    typedef typename Superclass::ContinuousIndexType                                   ContinuousIndexType;
-    //typedef typename TWindowFunction                                                   FunctionType;
-    typedef typename Superclass::FunctionType                                          FunctionType;
-    typedef typename std::vector<double>                                               VectorType;
+  /** Superclass typedef inheritance. */
+  typedef typename Superclass::IndexType                                             IndexType;
+  typedef typename Superclass::SizeType                                              SizeType;
+  typedef typename Superclass::RealType                                              RealType;
+  typedef typename Superclass::IteratorType                                          IteratorType;
+  typedef typename Superclass::ContinuousIndexType                                   ContinuousIndexType;
+  //typedef typename TWindowFunction                                                   FunctionType;
+  typedef typename Superclass::FunctionType                                          FunctionType;
+  typedef typename std::vector<double>                                               VectorType;
 
-    /** Compute a resampled profil according to the window size.*/
-    void ComputeResampledWindowedSincProfil();
+  /** Compute a resampled profil according to the window size.*/
+  void ComputeResampledWindowedSincProfil();
 
-    /** Positionne le sigma de l'interpolateur */
-    void SetRadius(unsigned int sigma);
+  /** Positionne le sigma de l'interpolateur */
+  void SetRadius(unsigned int sigma);
 
-    protected:
-    WindowedSincInterpolateImageFunctionBase();
-    ~WindowedSincInterpolateImageFunctionBase();
-    void PrintSelf(std::ostream& os, itk::Indent indent) const;
+protected:
+  WindowedSincInterpolateImageFunctionBase();
+  ~WindowedSincInterpolateImageFunctionBase();
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-    private:
-    WindowedSincInterpolateImageFunctionBase(const Self&); //purposely not implemented
-    void operator=(const Self&); //purposely not implemented
-  };
+private:
+  WindowedSincInterpolateImageFunctionBase(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+};
 
 } // end namespace itk
 

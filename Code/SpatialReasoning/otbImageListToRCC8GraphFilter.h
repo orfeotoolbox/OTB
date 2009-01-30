@@ -28,7 +28,7 @@ namespace otb
  */
 template <class TInputImage, class TOutputGraph>
 class ITK_EXPORT ImageListToRCC8GraphFilter
-  : public RCC8GraphSource<TOutputGraph>
+      : public RCC8GraphSource<TOutputGraph>
 {
 public:
   /** Standard typedefs */
@@ -50,7 +50,7 @@ public:
   typedef ImageList<InputImageType>               InputImageListType;
   typedef typename InputImageListType::Pointer    InputImageListPointerType;
   typedef typename InputImageListType::ConstPointer InputImageListConstPointer;
- /** Template output parameters typedefs */
+  /** Template output parameters typedefs */
   typedef TOutputGraph OutputGraphType;
   typedef typename Superclass::OutputGraphPointerType OutputGraphPointerType;
   typedef typename OutputGraphType::VertexType VertexType;
@@ -67,7 +67,7 @@ protected:
   ImageListToRCC8GraphFilter();
   /** Destructor */
   virtual ~ImageListToRCC8GraphFilter() {};
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

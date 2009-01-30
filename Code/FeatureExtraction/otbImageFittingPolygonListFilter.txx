@@ -52,10 +52,10 @@ const typename ImageFittingPolygonListFilter<TPath, TImage>
 ImageFittingPolygonListFilter<TPath, TImage>
 ::GetInputImage(void)
 {
-  if(this->GetNumberOfInputs()<1)
-    {
-      return 0;
-    }
+  if (this->GetNumberOfInputs()<1)
+  {
+    return 0;
+  }
   return static_cast<const ImageType *>(this->itk::ProcessObject::GetInput(1));
 }
 
@@ -86,130 +86,130 @@ ImageFittingPolygonListFilter<TPath, TImage>
   typename ImageType::IndexType start;
 
   //go through all the polygons in the list
-  for(IteratorType it = inputPtr->Begin(); it != inputPtr->End(); ++it)
+  for (IteratorType it = inputPtr->Begin(); it != inputPtr->End(); ++it)
   {
     PathPointerType polygon = it.Get();
 
-    if(polygon->GetVertexList()->Size()>2)
+    if (polygon->GetVertexList()->Size()>2)
     {
       for (unsigned int iteration=0;iteration < m_NumberOfIterations;++iteration)
       {
         PathPointerType newPolygon = PathType::New();
-      VertexListConstIteratorType vertexIt = polygon->GetVertexList()->Begin();
-      //We are now going to go through all the vertex, we won't start to process
-      // first as we need to know the last one for that.
-      VertexType firstPoint = vertexIt.Value();
-      VertexType previousPoint = vertexIt.Value();
-      ++vertexIt;
-      VertexType currentPoint = vertexIt.Value();
-      ++vertexIt;
-      while (vertexIt != polygon->GetVertexList()->End())
-      {
-        VertexType nextPoint=vertexIt.Value();
+        VertexListConstIteratorType vertexIt = polygon->GetVertexList()->Begin();
+        //We are now going to go through all the vertex, we won't start to process
+        // first as we need to know the last one for that.
+        VertexType firstPoint = vertexIt.Value();
+        VertexType previousPoint = vertexIt.Value();
+        ++vertexIt;
+        VertexType currentPoint = vertexIt.Value();
+        ++vertexIt;
+        while (vertexIt != polygon->GetVertexList()->End())
+        {
+          VertexType nextPoint=vertexIt.Value();
 
+          /** try all the possible neighbor for the current point
+           * to factorize
+           * */
+          {
+
+            start[0] = static_cast<long int>(currentPoint[0]-m_Radius);
+            start[1] = static_cast<long int>(currentPoint[1]-m_Radius);
+            region.SetIndex(start);
+
+            NeighborhoodIteratorType nIt(inputImagePtr, region);
+            double maxValue=0.0;
+            VertexType maxPoint = currentPoint;
+            for (nIt.GoToBegin();!nIt.IsAtEnd();++nIt)
+            {
+              if (regionLargest.IsInside(nIt.GetIndex()))
+              {
+                VertexType middlePoint=static_cast<VertexType>(nIt.GetIndex());
+                double currentValue = computeValue(inputImagePtr, middlePoint, previousPoint, nextPoint);
+                if (currentValue > maxValue)
+                {
+                  maxValue=currentValue;
+                  maxPoint=middlePoint;
+                }
+              }
+            }
+            currentPoint=maxPoint;
+            newPolygon->AddVertex(maxPoint);
+          }
+          /** End 'to factorize' */
+
+          ++vertexIt;
+          previousPoint=currentPoint;
+          currentPoint=nextPoint;
+
+        }
+        //We now need to process the last and the first point
+
+        VertexType nextPoint = firstPoint;
         /** try all the possible neighbor for the current point
          * to factorize
          * */
         {
+          start[0] = static_cast<long int>(currentPoint[0]-m_Radius);
+          start[1] = static_cast<long int>(currentPoint[1]-m_Radius);
+          region.SetIndex(start);
 
-        start[0] = static_cast<long int>(currentPoint[0]-m_Radius);
-        start[1] = static_cast<long int>(currentPoint[1]-m_Radius);
-        region.SetIndex(start);
-
-        NeighborhoodIteratorType nIt(inputImagePtr, region);
-        double maxValue=0.0;
-        VertexType maxPoint = currentPoint;
-        for (nIt.GoToBegin();!nIt.IsAtEnd();++nIt)
-        {
-          if(regionLargest.IsInside(nIt.GetIndex()))
+          NeighborhoodIteratorType nIt(inputImagePtr, region);
+          double maxValue=0.0;
+          VertexType maxPoint = currentPoint;
+          for (nIt.GoToBegin();!nIt.IsAtEnd();++nIt)
           {
-            VertexType middlePoint=static_cast<VertexType>(nIt.GetIndex());
-            double currentValue = computeValue(inputImagePtr, middlePoint, previousPoint, nextPoint);
-            if (currentValue > maxValue)
+            if (regionLargest.IsInside(nIt.GetIndex()))
             {
-              maxValue=currentValue;
-              maxPoint=middlePoint;
+              VertexType middlePoint=static_cast<VertexType>(nIt.GetIndex());
+              double currentValue = computeValue(inputImagePtr, middlePoint, previousPoint, nextPoint);
+              if (currentValue > maxValue)
+              {
+                maxValue=currentValue;
+                maxPoint=middlePoint;
+              }
             }
           }
-        }
-        currentPoint=maxPoint;
-        newPolygon->AddVertex(maxPoint);
+          currentPoint=maxPoint;
+          newPolygon->AddVertex(maxPoint);
         }
         /** End 'to factorize' */
 
-        ++vertexIt;
-        previousPoint=currentPoint;
-        currentPoint=nextPoint;
+        previousPoint = currentPoint;
+        currentPoint= firstPoint;
+        vertexIt = newPolygon->GetVertexList()->Begin();
+        nextPoint=vertexIt.Value();
 
-      }
-      //We now need to process the last and the first point
-
-      VertexType nextPoint = firstPoint;
-      /** try all the possible neighbor for the current point
-       * to factorize
-       * */
-      {
-      start[0] = static_cast<long int>(currentPoint[0]-m_Radius);
-      start[1] = static_cast<long int>(currentPoint[1]-m_Radius);
-      region.SetIndex(start);
-
-      NeighborhoodIteratorType nIt(inputImagePtr, region);
-      double maxValue=0.0;
-      VertexType maxPoint = currentPoint;
-      for (nIt.GoToBegin();!nIt.IsAtEnd();++nIt)
-      {
-        if(regionLargest.IsInside(nIt.GetIndex()))
+        /** try all the possible neighbor for the current point
+        * to factorize
+        * */
         {
-          VertexType middlePoint=static_cast<VertexType>(nIt.GetIndex());
-          double currentValue = computeValue(inputImagePtr, middlePoint, previousPoint, nextPoint);
-          if (currentValue > maxValue)
+
+          start[0] = static_cast<long int>(currentPoint[0]-m_Radius);
+          start[1] = static_cast<long int>(currentPoint[1]-m_Radius);
+          region.SetIndex(start);
+
+          NeighborhoodIteratorType nIt(inputImagePtr, region);
+          double maxValue=0.0;
+          VertexType maxPoint = currentPoint;
+          for (nIt.GoToBegin();!nIt.IsAtEnd();++nIt)
           {
-            maxValue=currentValue;
-            maxPoint=middlePoint;
+            if (regionLargest.IsInside(nIt.GetIndex()))
+            {
+              VertexType middlePoint=static_cast<VertexType>(nIt.GetIndex());
+              double currentValue = computeValue(inputImagePtr, middlePoint, previousPoint, nextPoint);
+              if (currentValue > maxValue)
+              {
+                maxValue=currentValue;
+                maxPoint=middlePoint;
+              }
+            }
           }
+          currentPoint=maxPoint;
+          newPolygon->AddVertex(maxPoint);
         }
-      }
-      currentPoint=maxPoint;
-      newPolygon->AddVertex(maxPoint);
-      }
-      /** End 'to factorize' */
+        /** End 'to factorize' */
 
-      previousPoint = currentPoint;
-      currentPoint= firstPoint;
-      vertexIt = newPolygon->GetVertexList()->Begin();
-      nextPoint=vertexIt.Value();
-
-       /** try all the possible neighbor for the current point
-       * to factorize
-       * */
-      {
-
-      start[0] = static_cast<long int>(currentPoint[0]-m_Radius);
-      start[1] = static_cast<long int>(currentPoint[1]-m_Radius);
-      region.SetIndex(start);
-
-      NeighborhoodIteratorType nIt(inputImagePtr, region);
-      double maxValue=0.0;
-      VertexType maxPoint = currentPoint;
-      for (nIt.GoToBegin();!nIt.IsAtEnd();++nIt)
-      {
-        if(regionLargest.IsInside(nIt.GetIndex()))
-        {
-          VertexType middlePoint=static_cast<VertexType>(nIt.GetIndex());
-          double currentValue = computeValue(inputImagePtr, middlePoint, previousPoint, nextPoint);
-          if (currentValue > maxValue)
-          {
-            maxValue=currentValue;
-            maxPoint=middlePoint;
-          }
-        }
-      }
-      currentPoint=maxPoint;
-      newPolygon->AddVertex(maxPoint);
-      }
-      /** End 'to factorize' */
-
-      polygon = newPolygon;//prepare the next iteration
+        polygon = newPolygon;//prepare the next iteration
       }
     }
 
@@ -221,9 +221,9 @@ ImageFittingPolygonListFilter<TPath, TImage>
 }
 
 template <class TPath, class TImage>
-    double
-        ImageFittingPolygonListFilter<TPath, TImage>
-  ::computeValue(ImageConstPointerType image, VertexType middlePoint, VertexType previousPoint, VertexType nextPoint) const
+double
+ImageFittingPolygonListFilter<TPath, TImage>
+::computeValue(ImageConstPointerType image, VertexType middlePoint, VertexType previousPoint, VertexType nextPoint) const
 {
   typedef typename ImageType::IndexType IndexType;
   IndexType middleIndex;

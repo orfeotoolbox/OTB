@@ -57,10 +57,10 @@ namespace otb
  */
 
 template < class TInputPath,
-           class TOutput      = double,
-            class TPrecision   = double>
+class TOutput      = double,
+class TPrecision   = double>
 class ITK_EXPORT FlusserPathFunction :
-  public RealMomentPathFunction< TInputPath, TOutput, TPrecision >
+      public RealMomentPathFunction< TInputPath, TOutput, TPrecision >
 {
 public:
   /** Standard class typedefs. */
@@ -97,7 +97,7 @@ public:
 
 protected:
   FlusserPathFunction();
-  ~FlusserPathFunction(){};
+  ~FlusserPathFunction() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

@@ -58,7 +58,7 @@ SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
   typename InputImageType::Pointer inputPtr = const_cast< TInputImage * >( this->GetInput() );
   typename OutputImageType::Pointer outputPtr = const_cast< TOutputImage * >( this->GetOutput() );
 
-  if(!inputPtr || !outputPtr)
+  if (!inputPtr || !outputPtr)
     return;
   outputPtr->SetNumberOfComponentsPerPixel(inputPtr->GetNumberOfComponentsPerPixel());
 }
@@ -77,11 +77,11 @@ void
 SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
 ::BeforeThreadedGenerateData ()
 {
-  if(!m_ParametersHaveBeenComputed)
-    {
-      this->ComputeParameters();
-      m_ParametersHaveBeenComputed = true;
-    }
+  if (!m_ParametersHaveBeenComputed)
+  {
+    this->ComputeParameters();
+    m_ParametersHaveBeenComputed = true;
+  }
 }
 
 template <class TInputImage, class TOutputImage>
@@ -99,31 +99,31 @@ SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
 
   double center = static_cast<double>(m_WindowRadius);
 
-  for(unsigned int i = 0; i<m_WindowRadius+1; ++i)
-    {
-      for(unsigned int j = 0; j<m_WindowRadius+1; ++j)
+  for (unsigned int i = 0; i<m_WindowRadius+1; ++i)
   {
-    double id = static_cast<double>(i);
-    double jd = static_cast<double>(j);
-    double currentRadius = m_PixelSpacingInKilometers*vcl_sqrt(vcl_pow(id-center,2)+vcl_pow(jd-center,2));
-    radiusMatrix(i,j)=currentRadius;
-    radiusMatrix(2*m_WindowRadius-i,j)=currentRadius;
-    radiusMatrix(2*m_WindowRadius-i,2*m_WindowRadius-j)=currentRadius;
-    radiusMatrix(i,2*m_WindowRadius-j)=currentRadius;
-  }
+    for (unsigned int j = 0; j<m_WindowRadius+1; ++j)
+    {
+      double id = static_cast<double>(i);
+      double jd = static_cast<double>(j);
+      double currentRadius = m_PixelSpacingInKilometers*vcl_sqrt(vcl_pow(id-center,2)+vcl_pow(jd-center,2));
+      radiusMatrix(i,j)=currentRadius;
+      radiusMatrix(2*m_WindowRadius-i,j)=currentRadius;
+      radiusMatrix(2*m_WindowRadius-i,2*m_WindowRadius-j)=currentRadius;
+      radiusMatrix(i,2*m_WindowRadius-j)=currentRadius;
     }
+  }
 
-  for(unsigned int band = 0; band<inputPtr->GetNumberOfComponentsPerPixel();++band)
-    {
-      WeightingMatrixType currentWeightingMatrix(2*m_WindowRadius+1,2*m_WindowRadius+1);
-      double rayleigh = m_AtmosphericRadiativeTerms->GetUpwardDiffuseTransmittanceForRayleigh(band);
-      double aerosol =  m_AtmosphericRadiativeTerms->GetUpwardDiffuseTransmittanceForAerosol(band);
-
-      currentWeightingMatrix.Fill(0.);
-
-      for(unsigned int i = 0; i<2*m_WindowRadius+1; ++i)
+  for (unsigned int band = 0; band<inputPtr->GetNumberOfComponentsPerPixel();++band)
   {
-    for(unsigned int j = 0; j<2*m_WindowRadius+1; ++j)
+    WeightingMatrixType currentWeightingMatrix(2*m_WindowRadius+1,2*m_WindowRadius+1);
+    double rayleigh = m_AtmosphericRadiativeTerms->GetUpwardDiffuseTransmittanceForRayleigh(band);
+    double aerosol =  m_AtmosphericRadiativeTerms->GetUpwardDiffuseTransmittanceForAerosol(band);
+
+    currentWeightingMatrix.Fill(0.);
+
+    for (unsigned int i = 0; i<2*m_WindowRadius+1; ++i)
+    {
+      for (unsigned int j = 0; j<2*m_WindowRadius+1; ++j)
       {
         double notUsed1,notUsed2;
         double factor = 1;
@@ -131,18 +131,18 @@ SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
         SIXSTraits::ComputeEnvironmentalContribution(rayleigh,aerosol,radiusMatrix(i,j),palt,vcl_cos(m_ZenithalViewingAngle*M_PI/180.),notUsed1,notUsed2,factor); //Call to 6S
         currentWeightingMatrix(i,j)=factor;
       }
-  }
-      m_WeightingValues.push_back(currentWeightingMatrix);
     }
+    m_WeightingValues.push_back(currentWeightingMatrix);
+  }
 
 
   DoubleContainerType upwardTransmittanceRatio,diffuseRatio;
 
-  for(unsigned int band = 0; band<inputPtr->GetNumberOfComponentsPerPixel();++band)
-    {
-      upwardTransmittanceRatio.push_back(m_AtmosphericRadiativeTerms->GetUpwardTransmittance(band)/m_AtmosphericRadiativeTerms->GetUpwardDirectTransmittance(band));
-      diffuseRatio .push_back(m_AtmosphericRadiativeTerms->GetUpwardDiffuseTransmittance(band)/m_AtmosphericRadiativeTerms->GetUpwardDirectTransmittance(band));
-    }
+  for (unsigned int band = 0; band<inputPtr->GetNumberOfComponentsPerPixel();++band)
+  {
+    upwardTransmittanceRatio.push_back(m_AtmosphericRadiativeTerms->GetUpwardTransmittance(band)/m_AtmosphericRadiativeTerms->GetUpwardDirectTransmittance(band));
+    diffuseRatio .push_back(m_AtmosphericRadiativeTerms->GetUpwardDiffuseTransmittance(band)/m_AtmosphericRadiativeTerms->GetUpwardDirectTransmittance(band));
+  }
   this->GetFunctor().SetUpwardTransmittanceRatio(upwardTransmittanceRatio);
   this->GetFunctor().SetDiffuseRatio(diffuseRatio);
   this->GetFunctor().SetWeightingValues(m_WeightingValues);

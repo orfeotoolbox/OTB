@@ -18,7 +18,6 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbSiftFastImageFilter.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbImageFileWriter.h"
 #include "itkPointSet.h"
 #include "itkVariableLengthVector.h"
 #include "otbRationalQuotientResampleImageFilter.h"

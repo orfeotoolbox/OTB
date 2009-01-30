@@ -24,42 +24,42 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 namespace Functor
-  {
-    /** \class LevelingFunctor
-     * \brief This functor performs the pixel-wise leveling operation needed in the
-     * geodesic morphology decomposition filter. For more details, please refer to
-     * the documentation of this filter.
-     * \sa GeodesicMorphologyDecompositionImageFilter
-     */
-    template <class TInput, class TInputMap, class TOutput>
-      class LevelingFunctor
-      {
-      public:
+{
+/** \class LevelingFunctor
+ * \brief This functor performs the pixel-wise leveling operation needed in the
+ * geodesic morphology decomposition filter. For more details, please refer to
+ * the documentation of this filter.
+ * \sa GeodesicMorphologyDecompositionImageFilter
+ */
+template <class TInput, class TInputMap, class TOutput>
+class LevelingFunctor
+{
+public:
   /// Constructor
-  LevelingFunctor(){};
+  LevelingFunctor() {};
   /// Destructor
-  ~LevelingFunctor(){};
+  ~LevelingFunctor() {};
 
   inline TOutput operator()(const TInput& pixel, const TInputMap& convexPixel, const TInputMap& concavePixel)
-    {
-      TOutput result;
+  {
+    TOutput result;
 
-      if(convexPixel>concavePixel)
-        {
-    result = static_cast<TOutput>(pixel-convexPixel);
-        }
-      else if(convexPixel<concavePixel)
-        {
-    result = static_cast<TOutput>(concavePixel+pixel);
-        }
-      else
-        {
-    result = static_cast<TOutput>(pixel);
-        }
-      return result;
+    if (convexPixel>concavePixel)
+    {
+      result = static_cast<TOutput>(pixel-convexPixel);
     }
-      };
-  }// end namespace Functor
+    else if (convexPixel<concavePixel)
+    {
+      result = static_cast<TOutput>(concavePixel+pixel);
+    }
+    else
+    {
+      result = static_cast<TOutput>(pixel);
+    }
+    return result;
+  }
+};
+}// end namespace Functor
 
 /** \class GeodesicMorphologyLevelingFilter
  *  \brief This filter performs the leveling operation defined in the documentation of
@@ -70,20 +70,20 @@ namespace Functor
  */
 template <class TInputImage, class TInputMaps, class TOutputImage>
 class ITK_EXPORT GeodesicMorphologyLevelingFilter
-  : public itk::TernaryFunctorImageFilter<TInputImage,TInputImage,
-                                          TInputImage,TOutputImage,
-                                          Functor::LevelingFunctor<typename TInputImage::PixelType,
-                                                                   typename TInputMaps::PixelType,
-                                                                   typename TOutputImage::PixelType> >
+      : public itk::TernaryFunctorImageFilter<TInputImage,TInputImage,
+      TInputImage,TOutputImage,
+      Functor::LevelingFunctor<typename TInputImage::PixelType,
+      typename TInputMaps::PixelType,
+      typename TOutputImage::PixelType> >
 {
- public:
+public:
   /** Standard typedefs */
   typedef GeodesicMorphologyLevelingFilter            Self;
   typedef   itk::TernaryFunctorImageFilter<TInputImage,TInputImage,
-    TInputImage,TOutputImage,
-    Functor::LevelingFunctor<typename TInputImage::PixelType,
-                             typename TInputMaps::PixelType,
-                             typename TOutputImage::PixelType> >Superclass;
+  TInputImage,TOutputImage,
+  Functor::LevelingFunctor<typename TInputImage::PixelType,
+  typename TInputMaps::PixelType,
+  typename TOutputImage::PixelType> >Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
 
@@ -97,34 +97,34 @@ class ITK_EXPORT GeodesicMorphologyLevelingFilter
    * Set the convex membership image.
    */
   void SetInputConvexMap(const TInputMaps * convexMap)
-    {
-      this->SetInput2(convexMap);
-    }
+  {
+    this->SetInput2(convexMap);
+  }
   /**
    * Set the concave membership image.
    */
   void SetInputConcaveMap(const TInputMaps * concaveMap)
-    {
-      this->SetInput3(concaveMap);
-    }
+  {
+    this->SetInput3(concaveMap);
+  }
   /**
    * Set the original input image
    */
   void SetInput(const TInputImage * input)
-    {
-      this->SetInput1(input);
-    }
+  {
+    this->SetInput1(input);
+  }
 
 protected:
   /** Constructor */
-  GeodesicMorphologyLevelingFilter(){};
+  GeodesicMorphologyLevelingFilter() {};
   /** Destructor */
   virtual ~GeodesicMorphologyLevelingFilter() {};
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
-    {
-      Superclass::PrintSelf(os,indent);
-    }
+  {
+    Superclass::PrintSelf(os,indent);
+  }
 
 private:
   GeodesicMorphologyLevelingFilter(const Self&); //purposely not implemented

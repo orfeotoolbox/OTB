@@ -36,7 +36,7 @@ namespace otb
  */
 class ITK_EXPORT MRFOptimizerICM : public MRFOptimizer
 {
- public:
+public:
 
   typedef MRFOptimizerICM               Self;
   typedef MRFOptimizer                  Superclass;
@@ -49,19 +49,19 @@ class ITK_EXPORT MRFOptimizerICM : public MRFOptimizer
 
 
   inline bool Compute(double deltaEnergy)
+  {
+    if (deltaEnergy < 0)
     {
-      if (deltaEnergy < 0)
-  {
-    return true;
-  }
-      else
-  {
-    return false;
-  }
+      return true;
     }
+    else
+    {
+      return false;
+    }
+  }
 
 
- protected:
+protected:
   MRFOptimizerICM() {}
   virtual ~MRFOptimizerICM() {}
 

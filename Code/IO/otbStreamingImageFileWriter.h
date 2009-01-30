@@ -138,11 +138,11 @@ public:
    * \param filename the name of the file.
    */
   virtual void SetFileName(std::string filename)
-    {
-      m_FileName = filename;
-      m_ImageIO = NULL;
-      this->Modified();
-    }
+  {
+    m_FileName = filename;
+    m_ImageIO = NULL;
+    this->Modified();
+  }
 
 
   /** Specify the region to write. If left NULL, then the whole image
@@ -206,7 +206,7 @@ private:
 
   itk::ImageIORegion m_IORegion;
   bool m_UserSpecifiedIORegion; //
-                                //track whether the region is user specified
+  //track whether the region is user specified
   bool m_FactorySpecifiedImageIO; //track whether the factory mechanism set the ImageIO
   bool m_UseCompression;
   bool m_UseInputMetaDataDictionary; // whether to use the MetaDataDictionary from the input or not.

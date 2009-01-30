@@ -32,9 +32,9 @@ namespace otb
 
 template <class TInputImage, class TPointSet, class TOutputImage>
 class ITK_EXPORT PointSetBasedResamplingFilter
-  : public itk::ImageToImageFilter<TInputImage,TOutputImage>
+      : public itk::ImageToImageFilter<TInputImage,TOutputImage>
 {
- public:
+public:
   /** Standard typedefs */
   typedef PointSetBasedResamplingFilter  Self;
   typedef itk::ImageToImageFilter<TInputImage,TOutputImage> Superclass;
@@ -83,37 +83,37 @@ class ITK_EXPORT PointSetBasedResamplingFilter
    * Get the pointset containing the disparity.
    * \return The pointset containing the disparity.
    */
-   const TPointSet * GetPointSet(void);
+  const TPointSet * GetPointSet(void);
 
-   itkSetMacro(MetricThreshold,double);
-   itkGetMacro(MetricThreshold,double);
-   itkSetMacro(OutputSize,SizeType);
-   itkGetConstReferenceMacro(OutputSize,SizeType);
-   itkSetMacro(OutputSpacing,SpacingType);
-   itkGetConstReferenceMacro(OutputSpacing,SpacingType);
-   itkSetMacro(OutputOrigin,PointType);
-   itkGetConstReferenceMacro(OutputOrigin,PointType);
+  itkSetMacro(MetricThreshold,double);
+  itkGetMacro(MetricThreshold,double);
+  itkSetMacro(OutputSize,SizeType);
+  itkGetConstReferenceMacro(OutputSize,SizeType);
+  itkSetMacro(OutputSpacing,SpacingType);
+  itkGetConstReferenceMacro(OutputSpacing,SpacingType);
+  itkSetMacro(OutputOrigin,PointType);
+  itkGetConstReferenceMacro(OutputOrigin,PointType);
 
-   /** Set/Get the Transfrom. */
-   itkSetObjectMacro(Transform,TransformType);
-   itkGetObjectMacro(Transform,TransformType);
+  /** Set/Get the Transfrom. */
+  itkSetObjectMacro(Transform,TransformType);
+  itkGetObjectMacro(Transform,TransformType);
 
-   /** Set/Get the Interpolator. */
-   itkSetObjectMacro(Interpolator,InterpolatorType);
-   itkGetObjectMacro(Interpolator,InterpolatorType);
+  /** Set/Get the Interpolator. */
+  itkSetObjectMacro(Interpolator,InterpolatorType);
+  itkGetObjectMacro(Interpolator,InterpolatorType);
 
 protected:
   /** Constructor */
   PointSetBasedResamplingFilter();
   /** Destructor */
   virtual ~PointSetBasedResamplingFilter() {};
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Main computation method */
   virtual void GenerateData(void);
 
- /** Generate output information */
+  /** Generate output information */
   virtual void GenerateOutputInformation(void);
   /**
    * \return The parameters of the transform associated with the nearest suitable point in pointset.
@@ -137,9 +137,9 @@ private:
   /** Default value */
   OutputPixelType m_DefaultValue;
 
- /**
-   * The transform used for local registration.
-   */
+  /**
+    * The transform used for local registration.
+    */
   TransformPointerType    m_Transform;
   /**
    * The interpolator used for local registration.

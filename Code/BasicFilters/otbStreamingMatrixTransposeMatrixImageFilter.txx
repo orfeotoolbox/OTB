@@ -29,7 +29,8 @@
 #include "itkProgressReporter.h"
 
 
-namespace otb {
+namespace otb
+{
 
 template<class TInputImage, class TInputImage2>
 PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
@@ -64,18 +65,18 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 ::MakeOutput(unsigned int output)
 {
   switch (output)
-    {
-   case 0:
-     return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
-      break;
-    case 1:
-      return static_cast<itk::DataObject*>(MatrixObjectType::New().GetPointer());
-      break;
-    default:
-      // might as well make an image
-      return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
-      break;
-    }
+  {
+  case 0:
+    return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
+    break;
+  case 1:
+    return static_cast<itk::DataObject*>(MatrixObjectType::New().GetPointer());
+    break;
+  default:
+    // might as well make an image
+    return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
+    break;
+  }
 
 }
 template<class TInputImage, class TInputImage2>
@@ -103,12 +104,12 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
   Superclass::GenerateInputRequestedRegion();
 
   if ( this->GetFirstInput() && this->GetSecondInput() )
-    {
-      InputImagePointer image = const_cast< typename Superclass::InputImageType * >( this->GetFirstInput() );
-      InputImagePointer image2 = const_cast< typename Superclass::InputImageType * >( this->GetSecondInput() );
-      image->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
-      image2->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
-    }
+  {
+    InputImagePointer image = const_cast< typename Superclass::InputImageType * >( this->GetFirstInput() );
+    InputImagePointer image2 = const_cast< typename Superclass::InputImageType * >( this->GetSecondInput() );
+    image->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
+    image2->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
+  }
 }
 template<class TInputImage, class TInputImage2>
 void
@@ -117,15 +118,15 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 {
   Superclass::GenerateOutputInformation();
   if ( this->GetFirstInput() )
-    {
-      this->GetOutput()->CopyInformation(this->GetFirstInput());
-      this->GetOutput()->SetLargestPossibleRegion(this->GetFirstInput()->GetLargestPossibleRegion());
-    }
+  {
+    this->GetOutput()->CopyInformation(this->GetFirstInput());
+    this->GetOutput()->SetLargestPossibleRegion(this->GetFirstInput()->GetLargestPossibleRegion());
+  }
 
-  if(this->GetOutput()->GetRequestedRegion().GetNumberOfPixels()==0)
-    {
-      this->GetOutput()->SetRequestedRegion(this->GetOutput()->GetLargestPossibleRegion());
-    }
+  if (this->GetOutput()->GetRequestedRegion().GetNumberOfPixels()==0)
+  {
+    this->GetOutput()->SetRequestedRegion(this->GetOutput()->GetLargestPossibleRegion());
+  }
 }
 
 template<class TInputImage, class TInputImage2>
@@ -151,32 +152,32 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
   TInputImage2 * inputPtr2 = const_cast<TInputImage2 * >(this->GetSecondInput());
   inputPtr2->UpdateOutputInformation();
 
-  if(this->GetOutput()->GetRequestedRegion().GetNumberOfPixels()==0)
-    {
-      this->GetOutput()->SetRequestedRegion(this->GetOutput()->GetLargestPossibleRegion());
-    }
+  if (this->GetOutput()->GetRequestedRegion().GetNumberOfPixels()==0)
+  {
+    this->GetOutput()->SetRequestedRegion(this->GetOutput()->GetLargestPossibleRegion());
+  }
 
   if ( inputPtr1->GetLargestPossibleRegion().GetSize() !=  inputPtr2->GetLargestPossibleRegion().GetSize() )
-    {
-      itkExceptionMacro( <<" Can't multiply the transposed matrix of a "
-       << inputPtr1->GetLargestPossibleRegion().GetSize()
-       << " and a "
-       << inputPtr2->GetLargestPossibleRegion().GetSize()
-       << " matrix " );
-    }
+  {
+    itkExceptionMacro( <<" Can't multiply the transposed matrix of a "
+                       << inputPtr1->GetLargestPossibleRegion().GetSize()
+                       << " and a "
+                       << inputPtr2->GetLargestPossibleRegion().GetSize()
+                       << " matrix " );
+  }
 
   m_NumberOfComponents1 = inputPtr1->GetNumberOfComponentsPerPixel();
   m_NumberOfComponents2 = inputPtr2->GetNumberOfComponentsPerPixel();
   unsigned int numberOfThreads = this->GetNumberOfThreads();
 
   if ( m_UsePadFirstInput == true )
-    {
-      m_NumberOfComponents1++;
-    }
+  {
+    m_NumberOfComponents1++;
+  }
   if ( m_UsePadSecondInput == true )
-    {
-      m_NumberOfComponents2++;
-    }
+  {
+    m_NumberOfComponents2++;
+  }
 
   MatrixType tempMatrix, initMatrix;
   tempMatrix.SetSize(m_NumberOfComponents1, m_NumberOfComponents2);
@@ -202,21 +203,21 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
   resultMatrix.Fill(itk::NumericTraits<RealType>::Zero);
 
 
-  for( unsigned int thread = 0; thread < numberOfThreads; thread++)
-    {
-      /** TODO
-       * To modify using + method operator. If we use it now -> exceptionmacro (no GetClassName...)
-       * resultMatrix += m_ThreadSum[thread];
-       **/
-      for (unsigned int i=0; i<resultMatrix.Rows(); i++)
+  for ( unsigned int thread = 0; thread < numberOfThreads; thread++)
   {
-    for (unsigned int j=0; j<resultMatrix.Cols(); j++)
+    /** TODO
+     * To modify using + method operator. If we use it now -> exceptionmacro (no GetClassName...)
+     * resultMatrix += m_ThreadSum[thread];
+     **/
+    for (unsigned int i=0; i<resultMatrix.Rows(); i++)
+    {
+      for (unsigned int j=0; j<resultMatrix.Cols(); j++)
       {
         resultMatrix(i, j) += m_ThreadSum[thread](i, j);
       }
-  }
-      /********END TODO ******/
     }
+    /********END TODO ******/
+  }
   this->GetResultOutput()->Set( resultMatrix );
 }
 
@@ -247,49 +248,49 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 
   // loop the second image and get one pixel a time
   while (!it1.IsAtEnd())
-    {
-      PixelType vectorValue1 = it1.Get();
-      PixelType2 vectorValue2 = it2.Get();
-
-      // Add a first component to vectorValue2 and vectorValue1 filled with ones.
-      if (m_UsePadFirstInput == true)
   {
-    PixelType vectortemp1(vectorValue1.Size()+1);
-    vectortemp1[0] = 1;
-    for (unsigned int n=0; n<vectorValue1.Size(); n++)
+    PixelType vectorValue1 = it1.Get();
+    PixelType2 vectorValue2 = it2.Get();
+
+    // Add a first component to vectorValue2 and vectorValue1 filled with ones.
+    if (m_UsePadFirstInput == true)
+    {
+      PixelType vectortemp1(vectorValue1.Size()+1);
+      vectortemp1[0] = 1;
+      for (unsigned int n=0; n<vectorValue1.Size(); n++)
       {
-       vectortemp1[n+1] = vectorValue1[n];
+        vectortemp1[n+1] = vectorValue1[n];
 
       }
-    vectorValue1.SetSize(vectortemp1.Size());
-    vectorValue1 = vectortemp1;
-  }
+      vectorValue1.SetSize(vectortemp1.Size());
+      vectorValue1 = vectortemp1;
+    }
 
-      if (m_UsePadSecondInput == true)
-  {
-    PixelType2 vectortemp2(vectorValue2.Size()+1);
-    vectortemp2[0] = 1;
-    for (unsigned int m=0; m<vectorValue2.Size(); m++)
+    if (m_UsePadSecondInput == true)
+    {
+      PixelType2 vectortemp2(vectorValue2.Size()+1);
+      vectortemp2[0] = 1;
+      for (unsigned int m=0; m<vectorValue2.Size(); m++)
       {
         vectortemp2[m+1] = vectorValue2[m];
 
       }
-    vectorValue2.SetSize(vectortemp2.Size());
-    vectorValue2 = vectortemp2;
-  }
+      vectorValue2.SetSize(vectortemp2.Size());
+      vectorValue2 = vectortemp2;
+    }
 
-      for (unsigned int i=0; i<vectorValue1.Size(); i++)
-  {
-    for (unsigned int j=0; j<vectorValue2.Size(); j++)
+    for (unsigned int i=0; i<vectorValue1.Size(); i++)
+    {
+      for (unsigned int j=0; j<vectorValue2.Size(); j++)
       {
         m_ThreadSum[threadId](i, j) += static_cast<RealType>(vectorValue1[i])*static_cast<RealType>(vectorValue2[j]);
       }
 
-  }
-      ++it1;
-      ++it2;
-      progress.CompletedPixel();
     }
+    ++it1;
+    ++it2;
+    progress.CompletedPixel();
+  }
 }
 
 template<class TInputImage, class TInputImage2>

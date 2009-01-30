@@ -37,56 +37,56 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 
-  /** \class TileMapTransform
-   *  \brief to do
-   **/
+/** \class TileMapTransform
+ *  \brief to do
+ **/
 
 
-  template <InverseOrForwardTransformationEnum transform,
-  class TScalarType = double,
-  unsigned int NInputDimensions=2,
-  unsigned int NOutputDimensions=2>
-      class ITK_EXPORT TileMapTransform: public itk::Transform<TScalarType,       // Data type for scalars
+template <InverseOrForwardTransformationEnum transform,
+class TScalarType = double,
+unsigned int NInputDimensions=2,
+unsigned int NOutputDimensions=2>
+class ITK_EXPORT TileMapTransform: public itk::Transform<TScalarType,       // Data type for scalars
       NInputDimensions,  // Number of dimensions in the input space
       NOutputDimensions> // Number of dimensions in the output space
-      {
-        public :
-          /** Standard class typedefs. */
-          typedef itk::Transform< TScalarType,
-          NInputDimensions,
-          NOutputDimensions >       Superclass;
-          typedef TileMapTransform                              Self;
-          typedef itk::SmartPointer<Self>                   Pointer;
-          typedef itk::SmartPointer<const Self>             ConstPointer;
+{
+public :
+  /** Standard class typedefs. */
+  typedef itk::Transform< TScalarType,
+  NInputDimensions,
+  NOutputDimensions >       Superclass;
+  typedef TileMapTransform                              Self;
+  typedef itk::SmartPointer<Self>                   Pointer;
+  typedef itk::SmartPointer<const Self>             ConstPointer;
 
-          typedef typename Superclass::ScalarType           ScalarType;
-          typedef ossimTileMapModel  OssimTileMapTransformType;
-          typedef itk::Point<ScalarType,NInputDimensions >  InputPointType;
-          typedef itk::Point<ScalarType,NOutputDimensions > OutputPointType;
+  typedef typename Superclass::ScalarType           ScalarType;
+  typedef ossimTileMapModel  OssimTileMapTransformType;
+  typedef itk::Point<ScalarType,NInputDimensions >  InputPointType;
+  typedef itk::Point<ScalarType,NOutputDimensions > OutputPointType;
 
-          /** Method for creation through the object factory. */
-          itkNewMacro( Self );
+  /** Method for creation through the object factory. */
+  itkNewMacro( Self );
 
-          /** Run-time type information (and related methods). */
-          itkTypeMacro( TileMapTransform, Transform );
+  /** Run-time type information (and related methods). */
+  itkTypeMacro( TileMapTransform, Transform );
 
-          typedef InverseOrForwardTransformationEnum DirectionOfMappingEnumType;
+  typedef InverseOrForwardTransformationEnum DirectionOfMappingEnumType;
 
-          itkStaticConstMacro(DirectionOfMapping,DirectionOfMappingEnumType,transform);
-          itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
-          itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
-          itkStaticConstMacro(SpaceDimension, unsigned int, NInputDimensions);
-          itkStaticConstMacro(ParametersDimension, unsigned int,NInputDimensions*(NInputDimensions+1));
+  itkStaticConstMacro(DirectionOfMapping,DirectionOfMappingEnumType,transform);
+  itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
+  itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
+  itkStaticConstMacro(SpaceDimension, unsigned int, NInputDimensions);
+  itkStaticConstMacro(ParametersDimension, unsigned int,NInputDimensions*(NInputDimensions+1));
 
-          void SetLevel(unsigned char level);
+  void SetLevel(unsigned char level);
 
 //           virtual void SetEllipsoid ();
 //           void SetEllipsoid (const ossimEllipsoid &ellipsoid);
 //           void SetEllipsoid(std::string code);
 //           void SetEllipsoid(const double &major_axis, const double &minor_axis);
 
-          OutputPointType TransformPoint(const InputPointType &point) const;
-          virtual InputPointType Origin();
+  OutputPointType TransformPoint(const InputPointType &point) const;
+  virtual InputPointType Origin();
 //           virtual double GetFalseNorthing() const;
 //           virtual double GetFalseEasting() const;
 //           virtual double GetStandardParallel1() const;
@@ -108,17 +108,17 @@ namespace otb
 //       //virtual void SetMatrix(double rotation,  const OutputPointType &scale, const OutputPointType &translation);
 //           void SetFalseEasting(double falseEasting);
 
-          virtual void PrintMap() const;
+  virtual void PrintMap() const;
 
-        protected:
-          TileMapTransform();
-          virtual ~TileMapTransform();
-          OssimTileMapTransformType* m_TileMapTransform;
+protected:
+  TileMapTransform();
+  virtual ~TileMapTransform();
+  OssimTileMapTransformType* m_TileMapTransform;
 
-        private :
-          TileMapTransform(const Self&); //purposely not implemented
-          void operator=(const Self&); //purposely not implemented
-      };
+private :
+  TileMapTransform(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+};
 
 } // namespace otb
 

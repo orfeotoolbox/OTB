@@ -27,37 +27,31 @@ namespace otb
 /**
  * Constructor
  */
-template <class TInputImage,class TOutputImage>
-CloudDetectionFilter<TInputImage,TOutputImage>
+template <class TInputImage, class TOutputImage, class TFunction>
+CloudDetectionFilter<TInputImage,TOutputImage,TFunction>
 ::CloudDetectionFilter()
 {
-
-  this->SetThreshold(1000);
-  this->SetVariance(1);
-
 }
 
 /**
  * Printself
  */
-template <class TInputImage,class TOutputImage>
+template <class TInputImage, class TOutputImage, class TFunction>
 void
-CloudDetectionFilter<TInputImage,TOutputImage>
+CloudDetectionFilter<TInputImage,TOutputImage,TFunction>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
 
   this->Superclass::PrintSelf(os,indent);
-  os << indent << "Variance  : " << m_Variance  <<std::endl;
-  os << indent << "Threshold : " << m_Threshold <<std::endl;
 
 }
 
 /**
  * BeforeThreadedGenerateData
  */
-template <class TInputImage,class TOutputImage >
+template <class TInputImage, class TOutputImage, class TFunction>
 void
-CloudDetectionFilter<TInputImage,TOutputImage>
+CloudDetectionFilter<TInputImage,TOutputImage,TFunction>
 ::BeforeThreadedGenerateData()
 {
 
@@ -71,6 +65,49 @@ CloudDetectionFilter<TInputImage,TOutputImage>
 
 }
 
+/**
+ * SetVariance
+ */
+template <class TInputImage, class TOutputImage, class TFunction>
+void
+CloudDetectionFilter<TInputImage,TOutputImage,TFunction>
+::SetVariance(double var)
+{
+  this->GetFunctor().SetVariance( var );
+}
+
+/**
+ * GetVariance
+ */
+template <class TInputImage, class TOutputImage, class TFunction>
+double
+CloudDetectionFilter<TInputImage,TOutputImage,TFunction>
+::GetVariance()
+{
+  return this->GetFunctor().GetVariance();
+}
+
+/**
+ * SetReferencePixel
+ */
+template <class TInputImage, class TOutputImage, class TFunction>
+void
+CloudDetectionFilter<TInputImage,TOutputImage,TFunction>
+::SetReferencePixel(InputPixelType ref)
+{
+  this->GetFunctor().SetReferencePixel( ref );
+}
+
+/**
+ * GetReferencePixel
+ */
+template <class TInputImage, class TOutputImage, class TFunction>
+typename CloudDetectionFilter<TInputImage,TOutputImage,TFunction>::InputPixelType
+CloudDetectionFilter<TInputImage,TOutputImage,TFunction>
+::GetReferencePixel()
+{
+  return this->GetFunctor().GetReferencePixel();
+}
 
 }
 

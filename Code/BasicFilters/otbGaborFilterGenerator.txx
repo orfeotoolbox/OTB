@@ -44,10 +44,10 @@ const typename GaborFilterGenerator<TPrecision>
 GaborFilterGenerator<TPrecision>
 ::GetFilter()
 {
-  if(m_NeedToRegenerateFilter)
-    {
-      this->GenerateFilter();
-    }
+  if (m_NeedToRegenerateFilter)
+  {
+    this->GenerateFilter();
+  }
   return m_Filter;
 }
 
@@ -66,19 +66,19 @@ GaborFilterGenerator<TPrecision>
   sintheta = vcl_sin(m_Theta*M_PI/180.);
 
 
-  for(PrecisionType y = - static_cast<PrecisionType>(m_Radius[1]);
-      y<=static_cast<PrecisionType>(m_Radius[1]);y+=1)
-    {
-      for(PrecisionType x = - static_cast<PrecisionType>(m_Radius[0]);
-      x<=static_cast<PrecisionType>(m_Radius[0]);x+=1)
+  for (PrecisionType y = - static_cast<PrecisionType>(m_Radius[1]);
+       y<=static_cast<PrecisionType>(m_Radius[1]);y+=1)
   {
-    xr = x * costheta + y * sintheta;
-    yr = y * costheta - x * sintheta;
-    coef = vcl_exp(-M_PI*(vcl_pow(m_A*xr,2)+vcl_pow(m_B*yr,2)))*cos(2*M_PI*(m_U0*x+m_V0*y)+m_Phi);
-    m_Filter.SetElement(k,coef);
-    ++k;
-  }
+    for (PrecisionType x = - static_cast<PrecisionType>(m_Radius[0]);
+         x<=static_cast<PrecisionType>(m_Radius[0]);x+=1)
+    {
+      xr = x * costheta + y * sintheta;
+      yr = y * costheta - x * sintheta;
+      coef = vcl_exp(-M_PI*(vcl_pow(m_A*xr,2)+vcl_pow(m_B*yr,2)))*cos(2*M_PI*(m_U0*x+m_V0*y)+m_Phi);
+      m_Filter.SetElement(k,coef);
+      ++k;
     }
+  }
 }
 
 template <class TPrecision>

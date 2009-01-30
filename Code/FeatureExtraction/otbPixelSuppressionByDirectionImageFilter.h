@@ -53,10 +53,10 @@ class ITK_EXPORT PixelSuppressionByDirectionImageFilter :  public itk::ImageToIm
 public:
   /**   Extract input and output image dimensions */
   itkStaticConstMacro(    InputImageDimension,
-          unsigned int,
+                          unsigned int,
                           TInputImage::ImageDimension);
   itkStaticConstMacro(    OutputImageDimension,
-          unsigned int,
+                          unsigned int,
                           TOutputImage::ImageDimension);
 
 

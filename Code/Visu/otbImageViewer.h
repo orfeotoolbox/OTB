@@ -23,43 +23,43 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  /**
-   * \class ImageViewer
-   *
-   * \brief Simple image viewer.
-   *
-   * This class is a simple image viewer using fltk gui and opengl drawing.
-   * It is divided into four parts :
-   * - The full window that display a part of the image at full resolution,
-   * - If necessary, a scroll window to allow the user to navigate through the whole image,
-   * - A zoom window whose zoom can be adjusted with mouse scroll,
-   * - a Pixel/value window to display information about the pointed pixel.
-   *
-   * The viewer uses the StreamingShrinkImageFilter to generate a quicklook of possibly very large image
-   * without flooding the memory.
-   *
-   * Channel index and other various parameters can be set.
-   *
-   * To use the viewer, setup it with all your parameters, then call the Build(), Show() and the Update() methods.
-   * A call to Fl::run() is mandatory to hang the program execution until the viewer is closed.
-   *
-   * Unkike most OTB filters, ImageViewer is templated over the input pixel type and will take as input an otb::VectorImage<PixelType>.
-   * Be aware of that.
-   *
-   * \sa ImageViewerFullWidget, ImageViewerScrollWidget, ImageViewerZoomWidget
-   */
+/**
+ * \class ImageViewer
+ *
+ * \brief Simple image viewer.
+ *
+ * This class is a simple image viewer using fltk gui and opengl drawing.
+ * It is divided into four parts :
+ * - The full window that display a part of the image at full resolution,
+ * - If necessary, a scroll window to allow the user to navigate through the whole image,
+ * - A zoom window whose zoom can be adjusted with mouse scroll,
+ * - a Pixel/value window to display information about the pointed pixel.
+ *
+ * The viewer uses the StreamingShrinkImageFilter to generate a quicklook of possibly very large image
+ * without flooding the memory.
+ *
+ * Channel index and other various parameters can be set.
+ *
+ * To use the viewer, setup it with all your parameters, then call the Build(), Show() and the Update() methods.
+ * A call to Fl::run() is mandatory to hang the program execution until the viewer is closed.
+ *
+ * Unkike most OTB filters, ImageViewer is templated over the input pixel type and will take as input an otb::VectorImage<PixelType>.
+ * Be aware of that.
+ *
+ * \sa ImageViewerFullWidget, ImageViewerScrollWidget, ImageViewerZoomWidget
+ */
 template <class TPixel, class TLabel = double>
 class ITK_EXPORT ImageViewer
-  : public ImageViewerBase<TPixel,TLabel>
+      : public ImageViewerBase<TPixel,TLabel>
 {
- public:
+public:
   /** Standard class typedefs */
   typedef ImageViewer    Self;
   typedef ImageViewerBase<TPixel,TLabel>     Superclass;
   typedef itk::SmartPointer<Self>            Pointer;
   typedef itk::SmartPointer<const Self>      ConstPointer;
 
- typedef typename Superclass::ViewModelType ViewModelType;
+  typedef typename Superclass::ViewModelType ViewModelType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -68,20 +68,20 @@ class ITK_EXPORT ImageViewer
 
   /** Show the viewer */
   virtual void Show(void);
-   /** Hide all Image View Windows */
+  /** Hide all Image View Windows */
   virtual void Hide(void);
   /** Build the interfaces */
   virtual void Build(void);
   /** Update */
   virtual void Update(void);
 
-  protected:
+protected:
   /**Constructor */
   ImageViewer();
   /** Destructor */
   ~ImageViewer();
 
-  private:
+private:
   ImageViewer(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 

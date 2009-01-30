@@ -52,7 +52,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-   /** Run-time type information (and related methods). */
+  /** Run-time type information (and related methods). */
   itkTypeMacro(StreamingResampleImageFilter, itk::ResampleImageFilter);
 
   /** Type definitions */

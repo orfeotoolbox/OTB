@@ -29,7 +29,7 @@ namespace otb
 template<class TInputPixelType, class TOutputPixelType>
 MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType>
 ::MultiToMonoChannelExtractROI() :    ExtractROIBase< VectorImage<TInputPixelType,2> , Image<TOutputPixelType,2> >(),
-                                m_Channel(1)
+    m_Channel(1)
 {
 
 }
@@ -60,17 +60,17 @@ void
 MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType>
 ::GenerateOutputInformation()
 {
-        typename Superclass::InputImageConstPointer  inputPtr = this->GetInput();
-        // Bounds checking for the channel to process
-        if ( (m_Channel <= 0) || (m_Channel > inputPtr->GetVectorLength() ) )
-        {
-                        itkExceptionMacro(<< "otb::MultiToMonoChannelExtractROI::GenerateOutputInformation "
+  typename Superclass::InputImageConstPointer  inputPtr = this->GetInput();
+  // Bounds checking for the channel to process
+  if ( (m_Channel <= 0) || (m_Channel > inputPtr->GetVectorLength() ) )
+  {
+    itkExceptionMacro(<< "otb::MultiToMonoChannelExtractROI::GenerateOutputInformation "
                       << "The selected channel must in the range [1;"<<inputPtr->GetVectorLength()<<"] "
                       << typeid(itk::ImageBase<InputImageDimension>*).name() );
-        }
+  }
 
-        // Calling the superclass method
-        Superclass::GenerateOutputInformation();
+  // Calling the superclass method
+  Superclass::GenerateOutputInformation();
 }
 
 
@@ -104,15 +104,15 @@ MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType>
   unsigned int channelIn(m_Channel-1);
 
   InputImagePixelType  pixelInput;
-  while( !outIt.IsAtEnd() )
+  while ( !outIt.IsAtEnd() )
   {
-                OutputImagePixelType pixelOutput;
-                pixelInput = inIt.Get();
-                pixelOutput = static_cast<OutputValueType>(pixelInput[channelIn]);
-                outIt.Set( pixelOutput );
-                ++outIt;
-                ++inIt;
-                progress.CompletedPixel();
+    OutputImagePixelType pixelOutput;
+    pixelInput = inIt.Get();
+    pixelOutput = static_cast<OutputValueType>(pixelInput[channelIn]);
+    outIt.Set( pixelOutput );
+    ++outIt;
+    ++inIt;
+    progress.CompletedPixel();
   }
 
 }

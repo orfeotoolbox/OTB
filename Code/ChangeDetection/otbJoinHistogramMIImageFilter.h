@@ -48,7 +48,8 @@ namespace otb
  *
  * \ingroup IntensityImageFilters Multithreaded
  */
-namespace Functor {
+namespace Functor
+{
 
 template< class TInput1, class TInput2, class TOutput>
 class JoinHistogramMI
@@ -64,115 +65,115 @@ public:
     TOutput jointEntropy = itk::NumericTraits<TOutput>::Zero;
     HistogramFrequencyType totalFreq = histogram->GetTotalFrequency();
 
-/*    for(unsigned long pos = 0; pos< itA.Size(); ++pos)
-      {
-      double value = static_cast<double>(itA.GetPixel(pos));
+    /*    for(unsigned long pos = 0; pos< itA.Size(); ++pos)
+          {
+          double value = static_cast<double>(itA.GetPixel(pos));
 
-      unsigned int bin =
-      HistogramFrequencyType freq = histogram.GetFrequency(, 0);
-      if (freq > 0)
-      {
-        entropyX += freq*vcl_log(freq);
-      }
-    }
+          unsigned int bin =
+          HistogramFrequencyType freq = histogram.GetFrequency(, 0);
+          if (freq > 0)
+          {
+            entropyX += freq*vcl_log(freq);
+          }
+        }
 
-    entropyX = -entropyX/static_cast<TOutput>(totalFreq) + vcl_log(totalFreq);
+        entropyX = -entropyX/static_cast<TOutput>(totalFreq) + vcl_log(totalFreq);
 
-    for (unsigned int i = 0; i < this->GetHistogramSize()[1]; i++)
+        for (unsigned int i = 0; i < this->GetHistogramSize()[1]; i++)
+        {
+          HistogramFrequencyType freq = histogram.GetFrequency(i, 1);
+          if (freq > 0)
+          {
+            entropyY += freq*vcl_log(freq);
+          }
+        }
+
+        entropyY = -entropyY/static_cast<TOutput>(totalFreq) + vcl_log(totalFreq);
+
+        HistogramIteratorType it = histogram.Begin();
+        HistogramIteratorType end = histogram.End();
+        while (it != end)
+        {
+          HistogramFrequencyType freq = it.GetFrequency();
+          if (freq > 0)
+          {
+            jointEntropy += freq*vcl_log(freq);
+          }
+          ++it;
+        }
+
+        jointEntropy = -jointEntropy/static_cast<TOutput>(totalFreq) +
+          vcl_log(totalFreq);
+
+        return entropyX + entropyY - jointEntropy;*/
+
+
+    typename HistogramType::MeasurementVectorType sample;
+    for (unsigned long pos = 0; pos< itA.Size(); ++pos)
     {
-      HistogramFrequencyType freq = histogram.GetFrequency(i, 1);
-      if (freq > 0)
-      {
-        entropyY += freq*vcl_log(freq);
-      }
-    }
+      double valueA = static_cast<double>(itA.GetPixel(pos));
+      double valueB = static_cast<double>(itB.GetPixel(pos));
 
-    entropyY = -entropyY/static_cast<TOutput>(totalFreq) + vcl_log(totalFreq);
+      sample[0] = valueA;
+      sample[1] = valueB;
 
-    HistogramIteratorType it = histogram.Begin();
-    HistogramIteratorType end = histogram.End();
-    while (it != end)
-    {
-      HistogramFrequencyType freq = it.GetFrequency();
+
+      HistogramFrequencyType freq = histogram->GetFrequency(
+                                      histogram->GetIndex(sample));
       if (freq > 0)
       {
         jointEntropy += freq*vcl_log(freq);
       }
-      ++it;
+
     }
 
     jointEntropy = -jointEntropy/static_cast<TOutput>(totalFreq) +
-      vcl_log(totalFreq);
-
-    return entropyX + entropyY - jointEntropy;*/
-
-
-    typename HistogramType::MeasurementVectorType sample;
-    for(unsigned long pos = 0; pos< itA.Size(); ++pos)
-      {
-      double valueA = static_cast<double>(itA.GetPixel(pos));
-      double valueB = static_cast<double>(itB.GetPixel(pos));
-
-        sample[0] = valueA;
-        sample[1] = valueB;
-
-
-  HistogramFrequencyType freq = histogram->GetFrequency(
-                                 histogram->GetIndex(sample));
-  if (freq > 0)
-    {
-    jointEntropy += freq*vcl_log(freq);
-    }
-
-      }
-
-    jointEntropy = -jointEntropy/static_cast<TOutput>(totalFreq) +
-      vcl_log(totalFreq);
+                   vcl_log(totalFreq);
 
     return jointEntropy;
 
-/*    TOutput meanA = 0.0;
-    TOutput meanB = 0.0;
+    /*    TOutput meanA = 0.0;
+        TOutput meanB = 0.0;
 
-    for(unsigned long pos = 0; pos< itA.Size(); ++pos)
-      {
+        for(unsigned long pos = 0; pos< itA.Size(); ++pos)
+          {
 
-      meanA += static_cast<TOutput>(itA.GetPixel(pos));
-      meanB += static_cast<TOutput>(itB.GetPixel(pos));
+          meanA += static_cast<TOutput>(itA.GetPixel(pos));
+          meanB += static_cast<TOutput>(itB.GetPixel(pos));
 
 
-      }*/
+          }*/
     return static_cast<TOutput>( 0 );
   }
 
-/*  void SetHistogram(HistogramType* histo)
-  {
-    m_Histogram = histo;
-  }
+  /*  void SetHistogram(HistogramType* histo)
+    {
+      m_Histogram = histo;
+    }
 
-protected:
-  HistogramType::Pointer m_Histogram;*/
+  protected:
+    HistogramType::Pointer m_Histogram;*/
 };
 }
 
 template <class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT JoinHistogramMIImageFilter :
-    public BinaryFunctorNeighborhoodJoinHistogramImageFilter<
-            TInputImage1,TInputImage2,TOutputImage,
-            Functor::JoinHistogramMI<
-                   typename itk::ConstNeighborhoodIterator<TInputImage1>,
-                   typename itk::ConstNeighborhoodIterator<TInputImage2>,
-       typename TOutputImage::PixelType>   >
+      public BinaryFunctorNeighborhoodJoinHistogramImageFilter<
+      TInputImage1,TInputImage2,TOutputImage,
+      Functor::JoinHistogramMI<
+      typename itk::ConstNeighborhoodIterator<TInputImage1>,
+      typename itk::ConstNeighborhoodIterator<TInputImage2>,
+      typename TOutputImage::PixelType>   >
 {
 public:
   /** Standard class typedefs. */
   typedef JoinHistogramMIImageFilter  Self;
   typedef BinaryFunctorNeighborhoodJoinHistogramImageFilter<
-      TInputImage1,TInputImage2,TOutputImage,
-          Functor::JoinHistogramMI<
-               typename itk::ConstNeighborhoodIterator<TInputImage1>,
-               typename itk::ConstNeighborhoodIterator<TInputImage2>,
-               typename TOutputImage::PixelType>
+  TInputImage1,TInputImage2,TOutputImage,
+  Functor::JoinHistogramMI<
+  typename itk::ConstNeighborhoodIterator<TInputImage1>,
+  typename itk::ConstNeighborhoodIterator<TInputImage2>,
+  typename TOutputImage::PixelType>
   >  Superclass;
   typedef itk::SmartPointer<Self>   Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;

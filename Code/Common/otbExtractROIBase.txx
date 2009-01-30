@@ -35,10 +35,10 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 ExtractROIBase<TInputImage,TOutputImage>
 ::ExtractROIBase() : itk::ImageToImageFilter<TInputImage,TOutputImage>(),
-                                m_StartX(0),
-                                m_StartY(0),
-                                m_SizeX(0),
-                                m_SizeY(0)
+    m_StartX(0),
+    m_StartY(0),
+    m_SizeX(0),
+    m_SizeY(0)
 {
 }
 
@@ -69,9 +69,9 @@ ExtractROIBase<TInputImage,TOutputImage>
   OutputImageIndexType index = destRegion.GetIndex();
 
   for (unsigned int i = 0; i < InputImageDimension; ++i)
-    {
-      index[i]+=m_ExtractionRegion.GetIndex()[i];
-    }
+  {
+    index[i]+=m_ExtractionRegion.GetIndex()[i];
+  }
   destRegion.SetIndex(index);
 }
 
@@ -93,19 +93,19 @@ ExtractROIBase<TInputImage,TOutputImage>
    * matches the number of dimensions in the output image.
    **/
   for (unsigned int i = 0; i < InputImageDimension; ++i)
-    {
+  {
     if (inputSize[i])
-      {
+    {
       outputSize[nonzeroSizeCount] = inputSize[i];
       outputIndex[nonzeroSizeCount] =0;
       nonzeroSizeCount++;
-      }
     }
+  }
 
   if (nonzeroSizeCount != OutputImageDimension)
-    {
+  {
     itkExceptionMacro("Extraction Region not consistent with output image");
-    }
+  }
 
   m_OutputImageRegion.SetSize(outputSize);
   m_OutputImageRegion.SetIndex(outputIndex);
@@ -150,7 +150,7 @@ ExtractROIBase<TInputImage,TOutputImage>
   InputImageIndexType offset = m_ExtractionRegion.GetIndex();
 
   for (unsigned int i=0; i < InputImageDimension; ++i)
-        {
+  {
     index[i]+=offset[i];
   }
   requestedRegion.SetIndex(index);
@@ -182,7 +182,7 @@ ExtractROIBase<TInputImage,TOutputImage>
   typename Superclass::InputImageConstPointer  inputPtr  = this->GetInput();
 
   // Check if input exists or not before doing anything
-  if(!inputPtr)
+  if (!inputPtr)
   {
     return;
   }
@@ -236,7 +236,7 @@ ExtractROIBase<TInputImage,TOutputImage>
   const itk::ImageBase<InputImageDimension> *phyData;
 
   phyData
-      = dynamic_cast<const itk::ImageBase<InputImageDimension>*>(this->GetInput());
+  = dynamic_cast<const itk::ImageBase<InputImageDimension>*>(this->GetInput());
 
   if (phyData)
   {
@@ -245,11 +245,11 @@ ExtractROIBase<TInputImage,TOutputImage>
     // dimensions to copy
     unsigned int i;
     const typename InputImageType::SpacingType&
-        inputSpacing = inputPtr->GetSpacing();
+    inputSpacing = inputPtr->GetSpacing();
     const typename InputImageType::DirectionType&
-        inputDirection = inputPtr->GetDirection();
+    inputDirection = inputPtr->GetDirection();
     const typename InputImageType::PointType&
-        inputOrigin = inputPtr->GetOrigin();
+    inputOrigin = inputPtr->GetOrigin();
 
     typename OutputImageType::SpacingType outputSpacing;
     typename OutputImageType::DirectionType outputDirection;
@@ -293,7 +293,7 @@ ExtractROIBase<TInputImage,TOutputImage>
           for (unsigned int dim = 0; dim < OutputImageDimension; ++dim)
           {
             outputDirection[nonZeroCount][dim] =
-                inputDirection[nonZeroCount][dim];
+              inputDirection[nonZeroCount][dim];
           }
           nonZeroCount++;
         }
@@ -313,8 +313,8 @@ ExtractROIBase<TInputImage,TOutputImage>
   {
     // pointer could not be cast back down
     itkExceptionMacro(<< "otb::ExtractROIBase::GenerateOutputInformation "
-        << "cannot cast input to "
-        << typeid(itk::ImageBase<InputImageDimension>*).name() );
+                      << "cannot cast input to "
+                      << typeid(itk::ImageBase<InputImageDimension>*).name() );
   }
 
 

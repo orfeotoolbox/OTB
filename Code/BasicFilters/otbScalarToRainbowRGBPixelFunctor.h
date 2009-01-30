@@ -22,9 +22,11 @@
 #include "itkRGBPixel.h"
 #include "itkScalarToRGBPixelFunctor.h"
 
-namespace otb {
+namespace otb
+{
 
-namespace Functor {
+namespace Functor
+{
 
 /**
  * \class ScalarToRainbowRGBPixelFunctor
@@ -39,7 +41,7 @@ namespace Functor {
  */
 template< class TScalar >
 class ITK_EXPORT ScalarToRainbowRGBPixelFunctor :
-    public itk::Functor::ScalarToRGBPixelFunctor<TScalar>
+      public itk::Functor::ScalarToRGBPixelFunctor<TScalar>
 {
 public:
   ScalarToRainbowRGBPixelFunctor();
@@ -63,7 +65,7 @@ public:
     this->m_Minimum = min;
   }
 
-  protected:
+protected:
   RGBPixelType HSVToRGB(double h, double s, double v) const;
 
 private:

@@ -42,9 +42,9 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   m_ArchitectureType = PolarimetricData::New();
 }
 
- /**
-  * GenerateOutputInformation()
-  */
+/**
+ * GenerateOutputInformation()
+ */
 template <class TInputImage, class TOutputImage, class TFunction>
 void
 MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
@@ -58,9 +58,9 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   typename Superclass::InputImageConstPointer  inputPtr  = this->GetInput();
 
   if ( !outputPtr || !inputPtr)
-    {
+  {
     return;
-    }
+  }
 
   // Set the output image largest possible region.  Use a RegionCopier
   // so that the input and output images can be different dimensions.
@@ -73,20 +73,20 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   const itk::ImageBase<Superclass::InputImageDimension> *phyData;
 
   phyData
-    = dynamic_cast<const itk::ImageBase<Superclass::InputImageDimension>*>(this->GetInput());
+  = dynamic_cast<const itk::ImageBase<Superclass::InputImageDimension>*>(this->GetInput());
 
   if (phyData)
-    {
+  {
     // Copy what we can from the image from spacing and origin of the input
     // This logic needs to be augmented with logic that select which
     // dimensions to copy
     unsigned int i, j;
     const typename InputImageType::SpacingType&
-      inputSpacing = inputPtr->GetSpacing();
+    inputSpacing = inputPtr->GetSpacing();
     const typename InputImageType::PointType&
-      inputOrigin = inputPtr->GetOrigin();
+    inputOrigin = inputPtr->GetOrigin();
     const typename InputImageType::DirectionType&
-      inputDirection = inputPtr->GetDirection();
+    inputDirection = inputPtr->GetDirection();
 
     typename OutputImageType::SpacingType outputSpacing;
     typename OutputImageType::PointType outputOrigin;
@@ -95,51 +95,51 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
     // copy the input to the output and fill the rest of the
     // output with zeros.
     for (i=0; i < Superclass::InputImageDimension; ++i)
-      {
+    {
       outputSpacing[i] = inputSpacing[i];
       outputOrigin[i] = inputOrigin[i];
       for (j=0; j < Superclass::OutputImageDimension; j++)
-        {
+      {
         if (j < Superclass::InputImageDimension)
-          {
+        {
           outputDirection[j][i] = inputDirection[j][i];
-          }
+        }
         else
-          {
+        {
           outputDirection[j][i] = 0.0;
-          }
         }
       }
+    }
     for (; i < Superclass::OutputImageDimension; ++i)
-      {
+    {
       outputSpacing[i] = 1.0;
       outputOrigin[i] = 0.0;
       for (j=0; j < Superclass::OutputImageDimension; j++)
-        {
+      {
         if (j == i)
-          {
+        {
           outputDirection[j][i] = 1.0;
-          }
+        }
         else
-          {
+        {
           outputDirection[j][i] = 0.0;
-          }
         }
       }
+    }
 
     // set the spacing and origin
     outputPtr->SetSpacing( outputSpacing );
     outputPtr->SetOrigin( outputOrigin );
     outputPtr->SetDirection( outputDirection );
 
-    }
+  }
   else
-    {
+  {
     // pointer could not be cast back down
     itkExceptionMacro(<< "otb::MultiChannelsPolarimetricSynthesisFilter::GenerateOutputInformation "
                       << "cannot cast input to "
                       << typeid(itk::ImageBase<Superclass::InputImageDimension>*).name() );
-    }
+  }
 }
 
 
@@ -176,54 +176,54 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   // Computation with 4 channels
   switch (val)
   {
-          case HH_HV_VH_VV :
-                while( !inputIt.IsAtEnd() )
-                {
-                outputIt.Set( m_Gain * GetFunctor()( inputIt.Get()[0], inputIt.Get()[1],
-                                                     inputIt.Get()[2], inputIt.Get()[3] ) );
-                ++inputIt;
-                ++outputIt;
-                progress.CompletedPixel();  // potential exception thrown here
-                }
-              break;
+  case HH_HV_VH_VV :
+    while ( !inputIt.IsAtEnd() )
+    {
+      outputIt.Set( m_Gain * GetFunctor()( inputIt.Get()[0], inputIt.Get()[1],
+                                           inputIt.Get()[2], inputIt.Get()[3] ) );
+      ++inputIt;
+      ++outputIt;
+      progress.CompletedPixel();  // potential exception thrown here
+    }
+    break;
 
-          // With 3 channels : HH HV VV ou HH VH VV
-          case HH_HV_VV :
-                while( !inputIt.IsAtEnd() )
-                {
-                outputIt.Set( m_Gain * GetFunctor()( inputIt.Get()[0], inputIt.Get()[1],
-                                                     inputIt.Get()[1], inputIt.Get()[2] ) );
-                ++inputIt;
-                ++outputIt;
-                progress.CompletedPixel();  // potential exception thrown here
-                }
-              break;
+    // With 3 channels : HH HV VV ou HH VH VV
+  case HH_HV_VV :
+    while ( !inputIt.IsAtEnd() )
+    {
+      outputIt.Set( m_Gain * GetFunctor()( inputIt.Get()[0], inputIt.Get()[1],
+                                           inputIt.Get()[1], inputIt.Get()[2] ) );
+      ++inputIt;
+      ++outputIt;
+      progress.CompletedPixel();  // potential exception thrown here
+    }
+    break;
 
-          // Only HH and HV are present
-          case HH_HV :
-                while( !inputIt.IsAtEnd() )
-                {
-                outputIt.Set( m_Gain * GetFunctor()( inputIt.Get()[0], inputIt.Get()[1], 0, 0 ) );
-                ++inputIt;
-                ++outputIt;
-                progress.CompletedPixel();  // potential exception thrown here
-                }
-              break;
+    // Only HH and HV are present
+  case HH_HV :
+    while ( !inputIt.IsAtEnd() )
+    {
+      outputIt.Set( m_Gain * GetFunctor()( inputIt.Get()[0], inputIt.Get()[1], 0, 0 ) );
+      ++inputIt;
+      ++outputIt;
+      progress.CompletedPixel();  // potential exception thrown here
+    }
+    break;
 
-          // Only VH and VV are present
-          case VH_VV :
-                while( !inputIt.IsAtEnd() )
-                {
-                outputIt.Set( m_Gain * GetFunctor()( 0, 0, inputIt.Get()[2], inputIt.Get()[3] ) );
-                ++inputIt;
-                ++outputIt;
-                progress.CompletedPixel();  // potential exception thrown here
-                }
-              break;
+    // Only VH and VV are present
+  case VH_VV :
+    while ( !inputIt.IsAtEnd() )
+    {
+      outputIt.Set( m_Gain * GetFunctor()( 0, 0, inputIt.Get()[2], inputIt.Get()[3] ) );
+      ++inputIt;
+      ++outputIt;
+      progress.CompletedPixel();  // potential exception thrown here
+    }
+    break;
 
-          default :
-              itkExceptionMacro("Unknown architecture : Polarimetric synthesis is impossible !");
-              return;
+  default :
+    itkExceptionMacro("Unknown architecture : Polarimetric synthesis is impossible !");
+    return;
   }
 
 }
@@ -279,38 +279,38 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 
   ArchitectureType val = m_ArchitectureType->GetArchitectureType();
 
-  switch(val)
-    {
+  switch (val)
+  {
 
-          case HH_HV_VH_VV :
-                  break;
-          case HH_HV_VV :
-                  break;
-          case HH_VH_VV :
-                  break;
-          // Only HH and HV are present
-          case HH_HV :
+  case HH_HV_VH_VV :
+    break;
+  case HH_HV_VV :
+    break;
+  case HH_VH_VV :
+    break;
+    // Only HH and HV are present
+  case HH_HV :
 
-          // Forcing KhiI=0 PsiI=0
-                this->SetKhiI(0);
-                this->SetPsiI(0);
-                break;
+    // Forcing KhiI=0 PsiI=0
+    this->SetKhiI(0);
+    this->SetPsiI(0);
+    break;
 
-          // Only VH and VV are present
-          case VH_VV :
+    // Only VH and VV are present
+  case VH_VV :
 
-                // Forcing KhiI=0 PsiI=90
-                this->SetKhiI(0);
-                this->SetPsiI(90);
-                break;
+    // Forcing KhiI=0 PsiI=90
+    this->SetKhiI(0);
+    this->SetPsiI(90);
+    break;
 
-          default :
-                itkExceptionMacro("Unknown architecture : Polarimetric synthesis is impossible !!");
-                return;
-    }
+  default :
+    itkExceptionMacro("Unknown architecture : Polarimetric synthesis is impossible !!");
+    return;
+  }
 
-  if(GetMode()==1)ForceCoPolar();
-  else if(GetMode()==2)ForceCrossPolar();
+  if (GetMode()==1)ForceCoPolar();
+  else if (GetMode()==2)ForceCrossPolar();
 
 }
 
@@ -344,8 +344,8 @@ void
 MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 ::ForceCoPolar()
 {
-        SetPsiR(m_PsiI);
-        SetKhiR(m_KhiI);
+  SetPsiR(m_PsiI);
+  SetKhiR(m_KhiI);
 }
 
 /**
@@ -356,9 +356,9 @@ void
 MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
 ::ForceCrossPolar()
 {
-        SetPsiR(m_PsiI+90);
-        SetKhiR(-m_KhiI);
-        SetMode(2);
+  SetPsiR(m_PsiI+90);
+  SetKhiR(-m_KhiI);
+  SetMode(2);
 }
 
 /**

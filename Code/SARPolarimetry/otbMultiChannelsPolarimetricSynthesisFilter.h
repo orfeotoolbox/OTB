@@ -35,12 +35,12 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage,
-        class TFunction = Functor::PolarimetricSynthesisFunctor<
-                                                typename TInputImage::InternalPixelType,
-                                                typename TInputImage::InternalPixelType,
-                                                typename TInputImage::InternalPixelType,
-                                                typename TInputImage::InternalPixelType,
-                                                typename TOutputImage::PixelType>  >
+class TFunction = Functor::PolarimetricSynthesisFunctor<
+typename TInputImage::InternalPixelType,
+typename TInputImage::InternalPixelType,
+typename TInputImage::InternalPixelType,
+typename TInputImage::InternalPixelType,
+typename TOutputImage::PixelType>  >
 class ITK_EXPORT MultiChannelsPolarimetricSynthesisFilter : public itk::InPlaceImageFilter<TInputImage,TOutputImage>
 {
 public:
@@ -77,8 +77,14 @@ public:
    * (Functors do not have to derive from itk::LightObject, so they do
    * not necessarily have a reference count. So we cannot return a
    * SmartPointer.) */
-  FunctorType& GetFunctor() { return m_Functor; };
-  const FunctorType& GetFunctor() const { return m_Functor; };
+  FunctorType& GetFunctor()
+  {
+    return m_Functor;
+  };
+  const FunctorType& GetFunctor() const
+  {
+    return m_Functor;
+  };
 
 
   /** Set the functor object.  This replaces the current Functor with a
@@ -90,24 +96,24 @@ public:
   void SetFunctor(const FunctorType& functor)
   {
     if (m_Functor != functor)
-      {
+    {
       m_Functor = functor;
       this->Modified();
-      }
+    }
   }
   /** Set the Incident ElectroMagneticField */
   void SetEi(ComplexArrayType ei)
   {
-       m_Ei = ei;
-       this->GetFunctor().SetEi(ei);
-       this->Modified();
+    m_Ei = ei;
+    this->GetFunctor().SetEi(ei);
+    this->Modified();
   }
   /** Set the Reflected ElectroMagneticField */
   void SetEr(ComplexArrayType er)
   {
-       m_Er = er;
-       this->GetFunctor().SetEr(er);
-       this->Modified();
+    m_Er = er;
+    this->GetFunctor().SetEr(er);
+    this->Modified();
   }
 
   /** Set/Get PsiI */
@@ -144,7 +150,7 @@ protected:
   /** Constructor */
   MultiChannelsPolarimetricSynthesisFilter();
   /** Destructor */
-  virtual ~MultiChannelsPolarimetricSynthesisFilter(){};
+  virtual ~MultiChannelsPolarimetricSynthesisFilter() {};
 
   /** MultiChannelsPolarimetricSynthesisFilter can produce an image
    * which is a synthesis of channels HH, HV, VH and VV.

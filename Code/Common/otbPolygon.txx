@@ -22,11 +22,11 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  /**
-   * Check wether point is strictly inside the polygon.
-   * \param point The point to check.
-   * \return True if the point is inside the polygon.
-   */
+/**
+ * Check wether point is strictly inside the polygon.
+ * \param point The point to check.
+ * \return True if the point is inside the polygon.
+ */
 
 template<class TValue>
 bool
@@ -40,64 +40,64 @@ Polygon<TValue>
   double xa = it.Value()[0];
   double ya = it.Value()[1];
   ++it;
-  while(it != this->GetVertexList()->End())
+  while (it != this->GetVertexList()->End())
+  {
+    double xb = it.Value()[0];
+    double yb = it.Value()[1];
+    if (vcl_abs(xb-xa)<m_Epsilon)
     {
-      double xb = it.Value()[0];
-      double yb = it.Value()[1];
-      if(vcl_abs(xb-xa)<m_Epsilon)
-  {
-    if(ya>yb && xa>x && y>=yb && y<ya)
+      if (ya>yb && xa>x && y>=yb && y<ya)
       {
         ++crossingCount;
       }
-    else if (ya<yb && xa>x && y>=ya && y<yb)
-      {
-        ++crossingCount;
-      }
-  }
-      else if(vcl_abs(yb-ya)>=m_Epsilon)
-  {
-    double xcross = xa + (xb - xa)*(y - ya)/(yb-ya);
-
-    if(ya>yb && xcross>x && y >= yb && y < ya)
-      {
-        ++crossingCount;
-      }
-    else if(ya<yb && xcross>x && y >= ya && y < yb)
-      {
-        ++crossingCount;
-      }
-  }
-      xa = xb;
-      ya = yb;
-      ++it;
-    }
-  double xb = this->GetVertexList()->Begin().Value()[0];
-  double yb = this->GetVertexList()->Begin().Value()[1];
-  if(vcl_abs(xb-xa)< m_Epsilon)
-    {
-      if(ya>yb && xa>x && y>=yb && y<ya)
-  {
-    ++crossingCount;
-  }
       else if (ya<yb && xa>x && y>=ya && y<yb)
-  {
-    ++crossingCount;
-  }
+      {
+        ++crossingCount;
+      }
     }
-  else if(vcl_abs(yb-ya)>=m_Epsilon)
+    else if (vcl_abs(yb-ya)>=m_Epsilon)
     {
       double xcross = xa + (xb - xa)*(y - ya)/(yb-ya);
 
-      if(ya>yb && xcross>x && y >= yb && y < ya)
-  {
-    ++crossingCount;
-  }
-      else if(ya<yb && xcross>x && y >= ya && y < yb)
-  {
-    ++crossingCount;
-  }
+      if (ya>yb && xcross>x && y >= yb && y < ya)
+      {
+        ++crossingCount;
+      }
+      else if (ya<yb && xcross>x && y >= ya && y < yb)
+      {
+        ++crossingCount;
+      }
     }
+    xa = xb;
+    ya = yb;
+    ++it;
+  }
+  double xb = this->GetVertexList()->Begin().Value()[0];
+  double yb = this->GetVertexList()->Begin().Value()[1];
+  if (vcl_abs(xb-xa)< m_Epsilon)
+  {
+    if (ya>yb && xa>x && y>=yb && y<ya)
+    {
+      ++crossingCount;
+    }
+    else if (ya<yb && xa>x && y>=ya && y<yb)
+    {
+      ++crossingCount;
+    }
+  }
+  else if (vcl_abs(yb-ya)>=m_Epsilon)
+  {
+    double xcross = xa + (xb - xa)*(y - ya)/(yb-ya);
+
+    if (ya>yb && xcross>x && y >= yb && y < ya)
+    {
+      ++crossingCount;
+    }
+    else if (ya<yb && xcross>x && y >= ya && y < yb)
+    {
+      ++crossingCount;
+    }
+  }
   //std::cout<<"Crossing count: "<<crossingCount<<std::endl;
   return (crossingCount%2 == 1);
 }
@@ -123,69 +123,69 @@ Polygon<TValue>
   double xbegin = xa;
   double ybegin = ya;
   ++it;
-  while(!resp && it != this->GetVertexList()->End())
-    {
-      xb = it.Value()[0];
-      yb = it.Value()[1];
-      if(vcl_abs(xb-xa)>=m_Epsilon)
+  while (!resp && it != this->GetVertexList()->End())
   {
-    double cd = (yb - ya)/(xb - xa);
-    double oo = (ya - cd * xa);
-    double xmin = std::min(xa,xb);
-    double xmax = std::max(xa,xb);
-    if ((vcl_abs(y - cd * x - oo)<m_Epsilon)
-        && ( x <= xmax)
-        && ( x >= xmin))
-      {
-        //std::cout<<"Case 1: Point is on segment "<<xa<<", "<<ya<<" <-> "<<xb<<", "<<yb<<std::endl;
-        resp = true;
-      }
-  }
-      else
-  {
-    double ymin = std::min(ya,yb);
-    double ymax = std::max(ya,yb);
-    if((vcl_abs(x-xa)<m_Epsilon)
-       &&(y<=ymax)
-       &&(y>=ymin))
-      {
-        resp = true;
-        //std::cout<<"Case 2: Point is on segment "<<xa<<", "<<ya<<" <-> "<<xb<<", "<<yb<<std::endl;
-      }
-  }
-      xa = xb;
-      ya = yb;
-      ++it;
-    }
-  xb = xbegin;
-  yb = ybegin;
-  if(vcl_abs(xb-xa)>=m_Epsilon)
+    xb = it.Value()[0];
+    yb = it.Value()[1];
+    if (vcl_abs(xb-xa)>=m_Epsilon)
     {
       double cd = (yb - ya)/(xb - xa);
       double oo = (ya - cd * xa);
       double xmin = std::min(xa,xb);
       double xmax = std::max(xa,xb);
-
       if ((vcl_abs(y - cd * x - oo)<m_Epsilon)
-    && ( x <= xmax)
-    && ( x >= xmin))
-  {
-    resp = true;
-    //std::cout<<"Case 1: Point is on segment "<<xa<<", "<<ya<<" <-> "<<xb<<", "<<yb<<std::endl;
-  }
+          && ( x <= xmax)
+          && ( x >= xmin))
+      {
+        //std::cout<<"Case 1: Point is on segment "<<xa<<", "<<ya<<" <-> "<<xb<<", "<<yb<<std::endl;
+        resp = true;
+      }
     }
-  else
+    else
     {
       double ymin = std::min(ya,yb);
       double ymax = std::max(ya,yb);
-      if((vcl_abs(x-xa)<=m_Epsilon)
-   &&(y<=ymax)
-   &&(y>=ymin))
-  {
-    resp = true;
-    //std::cout<<"Case 2: Point is on segment "<<xa<<", "<<ya<<" <-> "<<xb<<", "<<yb<<std::endl;
-  }
+      if ((vcl_abs(x-xa)<m_Epsilon)
+          &&(y<=ymax)
+          &&(y>=ymin))
+      {
+        resp = true;
+        //std::cout<<"Case 2: Point is on segment "<<xa<<", "<<ya<<" <-> "<<xb<<", "<<yb<<std::endl;
+      }
     }
+    xa = xb;
+    ya = yb;
+    ++it;
+  }
+  xb = xbegin;
+  yb = ybegin;
+  if (vcl_abs(xb-xa)>=m_Epsilon)
+  {
+    double cd = (yb - ya)/(xb - xa);
+    double oo = (ya - cd * xa);
+    double xmin = std::min(xa,xb);
+    double xmax = std::max(xa,xb);
+
+    if ((vcl_abs(y - cd * x - oo)<m_Epsilon)
+        && ( x <= xmax)
+        && ( x >= xmin))
+    {
+      resp = true;
+      //std::cout<<"Case 1: Point is on segment "<<xa<<", "<<ya<<" <-> "<<xb<<", "<<yb<<std::endl;
+    }
+  }
+  else
+  {
+    double ymin = std::min(ya,yb);
+    double ymax = std::max(ya,yb);
+    if ((vcl_abs(x-xa)<=m_Epsilon)
+        &&(y<=ymax)
+        &&(y>=ymin))
+    {
+      resp = true;
+      //std::cout<<"Case 2: Point is on segment "<<xa<<", "<<ya<<" <-> "<<xb<<", "<<yb<<std::endl;
+    }
+  }
   //std::cout<<"Result: "<<resp<<std::endl;
   return resp;
 }
@@ -207,20 +207,20 @@ Polygon<TValue>
   VertexType first = current;
   ++it;
   while ( it != it_end)
+  {
+    //std::cout<<"Testing Is crossing "<<a<<" "<<b<<current<<it.Value()<<" = "<<IsCrossing(a,b,current,it.Value())<<std::endl;
+    if (IsCrossing(a,b,current,it.Value()))
     {
-      //std::cout<<"Testing Is crossing "<<a<<" "<<b<<current<<it.Value()<<" = "<<IsCrossing(a,b,current,it.Value())<<std::endl;
-      if(IsCrossing(a,b,current,it.Value()))
+      ++resp;
+    }
+    current = it.Value();
+    ++it;
+  }
+  //std::cout<<"Testing Is crossing "<<a<<" "<<b<<current<<first<<" = "<<IsCrossing(a,b,current,first)<<std::endl;
+  if (IsCrossing(a,b,current,first))
   {
     ++resp;
   }
-      current = it.Value();
-      ++it;
-    }
-  //std::cout<<"Testing Is crossing "<<a<<" "<<b<<current<<first<<" = "<<IsCrossing(a,b,current,first)<<std::endl;
-  if(IsCrossing(a,b,current,first))
-    {
-      ++resp;
-      }
   return resp;
 }
 /**
@@ -241,20 +241,20 @@ Polygon<TValue>
   VertexType first = current;
   ++it;
   while ( it != it_end)
-    {
-      //std::cout<<"IsTouching "<<a<<" "<<b<<", "<<current<<" "<<it.Value()<<" -> "<<IsTouching(a,b,current,it.Value())<<std::endl;
-      if (IsTouching(a,b,current,it.Value()))
   {
-    ++resp;
-  }
-      current = it.Value();
-      ++it;
-    }
-  //std::cout<<"IsTouching "<<a<<" "<<b<<", "<<current<<" "<<first<<" -> "<<IsTouching(a,b,current,first)<<std::endl;
-  if(IsTouching(a,b,current,first))
+    //std::cout<<"IsTouching "<<a<<" "<<b<<", "<<current<<" "<<it.Value()<<" -> "<<IsTouching(a,b,current,it.Value())<<std::endl;
+    if (IsTouching(a,b,current,it.Value()))
     {
       ++resp;
     }
+    current = it.Value();
+    ++it;
+  }
+  //std::cout<<"IsTouching "<<a<<" "<<b<<", "<<current<<" "<<first<<" -> "<<IsTouching(a,b,current,first)<<std::endl;
+  if (IsTouching(a,b,current,first))
+  {
+    ++resp;
+  }
   return resp;
 }
 /**
@@ -279,39 +279,39 @@ Polygon<TValue>
   double xamax = std::max(a1[0],a2[0]);
   double yamin = std::min(a1[1],a2[1]);
   double yamax = std::max(a1[1],a2[1]);
-  if(vcl_abs(a1[0]-a2[0])<m_Epsilon && vcl_abs(b1[0]-b2[0])<m_Epsilon)
-    {
-      resp = false;
-    }
-  else if(vcl_abs(a1[0]-a2[0])<m_Epsilon)
-    {
-      double cd2 = (b2[1] - b1[1]) / (b2[0] - b1[0]);
-      double oo2 = b1[1] - cd2 * b1[0];
-      double ycross = cd2 * a1[0] + oo2;
-      resp = ( xbmin < a1[0] && xbmax > a1[0]
-         && yamin < ycross && yamax > ycross);
-    }
-  else if(vcl_abs(b1[0]-b2[0])<m_Epsilon)
-    {
-      double cd1 = (a2[1] - a1[1]) / (a2[0] - a1[0]);
-      double oo1 = a1[1] - cd1 * a1[0];
-      double ycross = cd1 * b1[0] + oo1;
-      resp = ( xamin < b1[0] && xamax > b1[0]
-         && ybmin < ycross && ybmax > ycross);
-    }
-  else
-    {
-      double cd1 = (a2[1] - a1[1]) / (a2[0] - a1[0]);
-      double oo1 = a1[1] - cd1 * a1[0];
-      double cd2 = (b2[1] - b1[1]) / (b2[0] - b1[0]);
-      double oo2 = b1[1] - cd2 * b1[0];
-      if(cd1 != cd2)
+  if (vcl_abs(a1[0]-a2[0])<m_Epsilon && vcl_abs(b1[0]-b2[0])<m_Epsilon)
   {
-    double xcross = (oo2 - oo1) / (cd1 - cd2);
-    resp = (xamin < xcross  && xbmin < xcross
-      &&   xamax > xcross  && xbmax > xcross);
+    resp = false;
   }
+  else if (vcl_abs(a1[0]-a2[0])<m_Epsilon)
+  {
+    double cd2 = (b2[1] - b1[1]) / (b2[0] - b1[0]);
+    double oo2 = b1[1] - cd2 * b1[0];
+    double ycross = cd2 * a1[0] + oo2;
+    resp = ( xbmin < a1[0] && xbmax > a1[0]
+             && yamin < ycross && yamax > ycross);
+  }
+  else if (vcl_abs(b1[0]-b2[0])<m_Epsilon)
+  {
+    double cd1 = (a2[1] - a1[1]) / (a2[0] - a1[0]);
+    double oo1 = a1[1] - cd1 * a1[0];
+    double ycross = cd1 * b1[0] + oo1;
+    resp = ( xamin < b1[0] && xamax > b1[0]
+             && ybmin < ycross && ybmax > ycross);
+  }
+  else
+  {
+    double cd1 = (a2[1] - a1[1]) / (a2[0] - a1[0]);
+    double oo1 = a1[1] - cd1 * a1[0];
+    double cd2 = (b2[1] - b1[1]) / (b2[0] - b1[0]);
+    double oo2 = b1[1] - cd2 * b1[0];
+    if (cd1 != cd2)
+    {
+      double xcross = (oo2 - oo1) / (cd1 - cd2);
+      resp = (xamin < xcross  && xbmin < xcross
+              &&   xamax > xcross  && xbmax > xcross);
     }
+  }
   return resp;
 }
 /**
@@ -336,75 +336,75 @@ Polygon<TValue>
   double xamax = std::max(a1[0],a2[0]);
   double yamin = std::min(a1[1],a2[1]);
   double yamax = std::max(a1[1],a2[1]);
-  if(vcl_abs(a1[0]-a2[0])<m_Epsilon && vcl_abs(b1[0]-b2[0])<m_Epsilon)
-    {
-      resp = (vcl_abs(a1[0]-b1[0])<m_Epsilon)
-  && ((a1[1]<=ybmax && a1[1]>=ybmin)
-      ||  (a2[1]<=ybmax && a2[1]>=ybmin)
-      ||  (b1[1]<=yamax && b1[1]>=yamin)
-      ||  (b2[1]<=yamax && b2[1]>=yamin) );
-    }
-  else if(vcl_abs(a1[0]-a2[0])<m_Epsilon)
-    {
-      double cd2 = (b2[1] - b1[1]) / (b2[0] - b1[0]);
-      double oo2 = b1[1] - cd2 * b1[0];
+  if (vcl_abs(a1[0]-a2[0])<m_Epsilon && vcl_abs(b1[0]-b2[0])<m_Epsilon)
+  {
+    resp = (vcl_abs(a1[0]-b1[0])<m_Epsilon)
+           && ((a1[1]<=ybmax && a1[1]>=ybmin)
+               ||  (a2[1]<=ybmax && a2[1]>=ybmin)
+               ||  (b1[1]<=yamax && b1[1]>=yamin)
+               ||  (b2[1]<=yamax && b2[1]>=yamin) );
+  }
+  else if (vcl_abs(a1[0]-a2[0])<m_Epsilon)
+  {
+    double cd2 = (b2[1] - b1[1]) / (b2[0] - b1[0]);
+    double oo2 = b1[1] - cd2 * b1[0];
 
-      if(vcl_abs(a1[1]-cd2*a1[0]-oo2)<m_Epsilon)
-  {
-    resp = ( a1[0]>=xbmin && a1[0]<=xbmax);
-  }
-      else if(vcl_abs(a2[1]-cd2*a2[0]-oo2)<m_Epsilon)
-  {
-    resp = ( a2[0]>=xbmin && a2[0]<=xbmax);
-  }
-    }
-  else if(vcl_abs(b1[0]-b2[0])<m_Epsilon)
+    if (vcl_abs(a1[1]-cd2*a1[0]-oo2)<m_Epsilon)
     {
-      double cd1 = (a2[1] - a1[1]) / (a2[0] - a1[0]);
-      double oo1 = a1[1] - cd1 * a1[0];
-
-      if(vcl_abs(b1[1]-cd1*b1[0]-oo1)<m_Epsilon)
-  {
-    resp = ( b1[0]>=xamin && b1[0]<=xamax);
+      resp = ( a1[0]>=xbmin && a1[0]<=xbmax);
+    }
+    else if (vcl_abs(a2[1]-cd2*a2[0]-oo2)<m_Epsilon)
+    {
+      resp = ( a2[0]>=xbmin && a2[0]<=xbmax);
+    }
   }
-  else if(vcl_abs(b2[1]-cd1*b2[0]-oo1)<m_Epsilon)
+  else if (vcl_abs(b1[0]-b2[0])<m_Epsilon)
+  {
+    double cd1 = (a2[1] - a1[1]) / (a2[0] - a1[0]);
+    double oo1 = a1[1] - cd1 * a1[0];
+
+    if (vcl_abs(b1[1]-cd1*b1[0]-oo1)<m_Epsilon)
+    {
+      resp = ( b1[0]>=xamin && b1[0]<=xamax);
+    }
+    else if (vcl_abs(b2[1]-cd1*b2[0]-oo1)<m_Epsilon)
     {
       resp = ( b2[0]>=xamin && b2[0]<=xamax);
     }
-    }
-  else
-    {
-      double cd1 = (a2[1] - a1[1]) / (a2[0] - a1[0]);
-      double oo1 = a1[1] - cd1 * a1[0];
-      double cd2 = (b2[1] - b1[1]) / (b2[0] - b1[0]);
-      double oo2 = b1[1] - cd2 * b1[0];
-      if(vcl_abs(cd1-cd2)<m_Epsilon && vcl_abs(oo1-oo2)<m_Epsilon)
-  {
-    resp =((xamin <= xbmax && xamin >= xbmin)
-     ||   (xamax <= xbmax && xamax >= xbmin)
-     ||   (xbmin <= xamax && xbmin >= xamin)
-     ||   (xbmax <= xamax && xbmax >= xamin) );
   }
-      else
+  else
   {
-    if(vcl_abs(a1[1]-cd2*a1[0]-oo2)<m_Epsilon)
-        {
-    resp = ( a1[0]>=xbmin && a1[0]<=xbmax);
-        }
-    else if(vcl_abs(a2[1]-cd2*a2[0]-oo2)<m_Epsilon)
+    double cd1 = (a2[1] - a1[1]) / (a2[0] - a1[0]);
+    double oo1 = a1[1] - cd1 * a1[0];
+    double cd2 = (b2[1] - b1[1]) / (b2[0] - b1[0]);
+    double oo2 = b1[1] - cd2 * b1[0];
+    if (vcl_abs(cd1-cd2)<m_Epsilon && vcl_abs(oo1-oo2)<m_Epsilon)
+    {
+      resp =((xamin <= xbmax && xamin >= xbmin)
+             ||   (xamax <= xbmax && xamax >= xbmin)
+             ||   (xbmin <= xamax && xbmin >= xamin)
+             ||   (xbmax <= xamax && xbmax >= xamin) );
+    }
+    else
+    {
+      if (vcl_abs(a1[1]-cd2*a1[0]-oo2)<m_Epsilon)
       {
-    resp = ( a2[0]>=xbmin && a2[0]<=xbmax);
+        resp = ( a1[0]>=xbmin && a1[0]<=xbmax);
       }
-    if(vcl_abs(b1[1]-cd1*b1[0]-oo1)<m_Epsilon)
+      else if (vcl_abs(a2[1]-cd2*a2[0]-oo2)<m_Epsilon)
       {
-    resp = ( b1[0]>=xamin && b1[0]<=xamax);
+        resp = ( a2[0]>=xbmin && a2[0]<=xbmax);
       }
-    else if(vcl_abs(b2[1]-cd1*b2[0]-oo1)<m_Epsilon)
+      if (vcl_abs(b1[1]-cd1*b1[0]-oo1)<m_Epsilon)
+      {
+        resp = ( b1[0]>=xamin && b1[0]<=xamax);
+      }
+      else if (vcl_abs(b2[1]-cd1*b2[0]-oo1)<m_Epsilon)
       {
         resp = ( b2[0]>=xamin && b2[0]<=xamax);
       }
-  }
     }
+  }
   return resp;
 }
 
@@ -430,44 +430,44 @@ Polygon<TValue>
 
   long int x,y;
 
-  if(this->GetVertexList()->Size()>0)
-    {
-      x = static_cast<long int>(it.Value()[0]);
-      y = static_cast<long int>(it.Value()[1]);
-      index[0] = x;
-      index[1] = y;
-
-      ++it;
-      while(it != this->GetVertexList()->End())
+  if (this->GetVertexList()->Size()>0)
   {
     x = static_cast<long int>(it.Value()[0]);
     y = static_cast<long int>(it.Value()[1]);
+    index[0] = x;
+    index[1] = y;
 
-    // Index search
-    if ( x < index[0] )
+    ++it;
+    while (it != this->GetVertexList()->End())
+    {
+      x = static_cast<long int>(it.Value()[0]);
+      y = static_cast<long int>(it.Value()[1]);
+
+      // Index search
+      if ( x < index[0] )
       {
         index[0] = x;
       }
-    if ( y < index[1] )
+      if ( y < index[1] )
       {
         index[1] = y;
       }
-    // Max Id search for size computation
-    if ( x > maxId[0] )
+      // Max Id search for size computation
+      if ( x > maxId[0] )
       {
         maxId[0] = x;
       }
-    if ( y > maxId[1] )
+      if ( y > maxId[1] )
       {
         maxId[1] = y;
       }
 
-    ++it;
-  }
-
-      size[0] = maxId[0] - index[0];
-      size[1] = maxId[1] - index[1];
+      ++it;
     }
+
+    size[0] = maxId[0] - index[0];
+    size[1] = maxId[1] - index[1];
+  }
   region.SetSize(size);
   region.SetIndex(index);
   return region;
@@ -478,22 +478,22 @@ Polygon<TValue>
  * Surface computation (for non convex polygons as well)
  */
 template<class TValue>
-    double
-    Polygon<TValue>
-  ::GetSurface() const
+double
+Polygon<TValue>
+::GetSurface() const
 {
   double m_Surface;
   m_Surface = 0.0;
   VertexListConstIteratorType it =  this->GetVertexList()->Begin();
 
-  if(this->GetVertexList()->Size()>2)
+  if (this->GetVertexList()->Size()>2)
   {
     VertexType origin = it.Value();
     it++;
     VertexType pt1 = it.Value();
     VertexType pt2 = it.Value();
 
-    while(it != this->GetVertexList()->End())
+    while (it != this->GetVertexList()->End())
     {
       pt1=pt2;
       pt2 = it.Value();
@@ -521,15 +521,15 @@ template<class TValue>
 /**
  * Lenght computation (difference with path is in the last addition)
  */
- template < class TValue>
-     double Polygon<TValue>
-  ::GetLength() const
+template < class TValue>
+double Polygon<TValue>
+::GetLength() const
 {
   double length = 0.0;
   VertexListConstIteratorType it =  this->GetVertexList()->Begin();
 
   VertexType origin = it.Value();
-  if(this->GetVertexList()->Size()>1)
+  if (this->GetVertexList()->Size()>1)
   {
 
 
@@ -537,7 +537,7 @@ template<class TValue>
     VertexType pt2 = it.Value();
 
     it++;
-    while(it != this->GetVertexList()->End())
+    while (it != this->GetVertexList()->End())
     {
       pt1=pt2;
       pt2 = it.Value();

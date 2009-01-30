@@ -33,9 +33,9 @@ namespace otb
  */
 template <class TPath, class TImage>
 class ITK_EXPORT ImageFittingPolygonListFilter
-  : public PathListToPathListFilter<TPath>
+      : public PathListToPathListFilter<TPath>
 {
- public:
+public:
   /** Standard typedefs */
   typedef ImageFittingPolygonListFilter                Self;
   typedef PathListToPathListFilter<TPath>       Superclass;

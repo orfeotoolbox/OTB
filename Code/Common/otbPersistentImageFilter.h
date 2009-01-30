@@ -40,9 +40,9 @@ namespace otb
  */
 template <class TInputImage,class TOutputImage>
 class ITK_EXPORT PersistentImageFilter
-  : public itk::ImageToImageFilter<TInputImage,TOutputImage>
+      : public itk::ImageToImageFilter<TInputImage,TOutputImage>
 {
- public:
+public:
   /** Standard typedefs */
   typedef PersistentImageFilter                             Self;
   typedef itk::ImageToImageFilter<TInputImage,TOutputImage> Superclass;
@@ -66,14 +66,14 @@ class ITK_EXPORT PersistentImageFilter
 
 protected:
   /** Constructor */
-  PersistentImageFilter(){};
+  PersistentImageFilter() {};
   /** Destructor */
-  virtual ~PersistentImageFilter(){};
- /**PrintSelf method */
+  virtual ~PersistentImageFilter() {};
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
-    {
-      Superclass::PrintSelf(os,indent);
-    };
+  {
+    Superclass::PrintSelf(os,indent);
+  };
 
 private:
   PersistentImageFilter(const Self&); //purposely not implemented

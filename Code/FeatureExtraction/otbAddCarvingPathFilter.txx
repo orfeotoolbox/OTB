@@ -69,7 +69,7 @@ AddCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
   InputIteratorType inputIterator(inputImage,
                                   inputImage->GetLargestPossibleRegion());
   OutputIteratorType outputIterator(outputImage,
-                                  outputImage->GetLargestPossibleRegion());
+                                    outputImage->GetLargestPossibleRegion());
 
   unsigned int dir0;
   unsigned int dir1;
@@ -104,7 +104,7 @@ AddCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
 
   //go to the end of the path
   pathIterator = vertexList->Begin();
-  while(pathIterator != vertexList->End())
+  while (pathIterator != vertexList->End())
   {
     ++pathIterator;
   }
@@ -115,21 +115,21 @@ AddCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
     while (!outputIterator.IsAtEndOfSlice())
     {
       bool flag = false;
-      while(!outputIterator.IsAtEndOfLine())
+      while (!outputIterator.IsAtEndOfLine())
       {
         index = outputIterator.GetIndex();
 
-        if(index[dir1] != line)
+        if (index[dir1] != line)
         {
           line = index[dir1];
           typename InputImageType::PointType tmpIndex;
           inputImage->TransformContinuousIndexToPhysicalPoint(pathIterator.Value(),tmpIndex);
           inputImage->TransformPhysicalPointToIndex(tmpIndex,indexToAdd);
-          if(pathIterator != vertexList->Begin())
+          if (pathIterator != vertexList->Begin())
           {
             --pathIterator;
           }
-          if(index[dir1] != indexToAdd[dir1])
+          if (index[dir1] != indexToAdd[dir1])
           {
             itkExceptionMacro(<< "Error : " << index[dir1] << " , " << indexToAdd[dir1]);
           }
@@ -154,7 +154,7 @@ AddCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
 
       }
 
-      if((outputIterator.GetIndex())[dir0] != (inputIterator.GetIndex())[dir0]+1)
+      if ((outputIterator.GetIndex())[dir0] != (inputIterator.GetIndex())[dir0]+1)
       {
         itkExceptionMacro(<< "Error 2: "<< (outputIterator.GetIndex())[dir0] <<  " , " << (inputIterator.GetIndex())[dir0]);
       }
@@ -184,9 +184,9 @@ AddCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
 
 
 template <class TInputImage, class TInputPath,class TOutputImage>
-    void
-        AddCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
-  ::GenerateOutputInformation()
+void
+AddCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
+::GenerateOutputInformation()
 {
   // call the superclass' implementation of this method
   Superclass::GenerateOutputInformation();
@@ -212,11 +212,11 @@ template <class TInputImage, class TInputPath,class TOutputImage>
   // we need to compute the output spacing, the output image size, and the
   // output image start index
   const typename TInputImage::SpacingType&
-      inputSpacing = inputPtr->GetSpacing();
+  inputSpacing = inputPtr->GetSpacing();
   const typename TInputImage::SizeType&   inputSize
-      = inputPtr->GetLargestPossibleRegion().GetSize();
+  = inputPtr->GetLargestPossibleRegion().GetSize();
   const typename TInputImage::IndexType&  inputStartIndex
-      = inputPtr->GetLargestPossibleRegion().GetIndex();
+  = inputPtr->GetLargestPossibleRegion().GetIndex();
 
   typename TOutputImage::SpacingType      outputSpacing;
   typename TOutputImage::SizeType         outputSize;
@@ -242,15 +242,15 @@ template <class TInputImage, class TInputPath,class TOutputImage>
 }
 
 template <class TInputImage, class TInputPath,class TOutputImage>
-    void
-        AddCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
-  ::GenerateInputRequestedRegion()
+void
+AddCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
+::GenerateInputRequestedRegion()
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
   // get pointers to the input and output
   InputImagePointer  inputPtr =
-  const_cast< InputImageType * >( this->GetInput() );
+    const_cast< InputImageType * >( this->GetInput() );
   if ( !inputPtr )
   {
     itkExceptionMacro( << "Input has not been set." );

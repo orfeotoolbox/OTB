@@ -59,7 +59,7 @@ public:
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
-    /** Method for management of the "object factory". */
+  /** Method for management of the "object factory". */
   itkNewMacro(Self);
 
   /** Return the name of the class. */
@@ -78,16 +78,16 @@ public:
 
   /**   Extract dimensions as well of the images of entry of exit. */
   itkStaticConstMacro(    InputImageDimension,
-          unsigned int,
+                          unsigned int,
                           TInputImage::ImageDimension);
 
 
   typedef TInputImage InputImageType;
 
   //------------------------------------------------------------
-   typedef  unsigned char    OutputPixelType;
-   typedef  otb::Image< OutputPixelType, 2 > OutputImageType;
-   //-----------------------------------------------
+  typedef  unsigned char    OutputPixelType;
+  typedef  otb::Image< OutputPixelType, 2 > OutputImageType;
+  //-----------------------------------------------
 
   /** Definition of the pixel type of the input and output images */
   typedef typename InputImageType::PixelType   InputPixelType;
@@ -172,7 +172,7 @@ private:
   /** Threshold abouve which a pixel is consedered as valid */
   float m_Threshold;
 
- LinePointer LinePointResearch(LineIterator itLines, InputImageType *localImage, IndexType origin);
+  LinePointer LinePointResearch(LineIterator itLines, InputImageType *localImage, IndexType origin);
 
 
 };

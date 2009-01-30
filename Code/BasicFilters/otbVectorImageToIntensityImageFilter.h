@@ -45,9 +45,9 @@ namespace otb
  */
 template <class TInputImage,class TOutputImage>
 class ITK_EXPORT VectorImageToIntensityImageFilter
-  : public itk::ImageToImageFilter<TInputImage,TOutputImage>
+      : public itk::ImageToImageFilter<TInputImage,TOutputImage>
 {
- public:
+public:
   /** Standard typedefs */
   typedef VectorImageToIntensityImageFilter            Self;
   typedef itk::ImageToImageFilter<TInputImage,TOutputImage> Superclass;
@@ -76,7 +76,7 @@ protected:
   VectorImageToIntensityImageFilter();
   /** Destructor */
   virtual ~VectorImageToIntensityImageFilter() {};
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** VectorImageToIntensityImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine

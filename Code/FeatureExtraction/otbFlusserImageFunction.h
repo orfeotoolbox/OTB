@@ -60,11 +60,11 @@ namespace otb
  */
 
 template < class TInput,
-           class TOutput    = double,
-           class TPrecision = double,
-     class TCoordRep  = float >
+class TOutput    = double,
+class TPrecision = double,
+class TCoordRep  = float >
 class ITK_EXPORT FlusserImageFunction :
-  public RealMomentImageFunction< TInput, TOutput, TPrecision, TCoordRep >
+      public RealMomentImageFunction< TInput, TOutput, TPrecision, TCoordRep >
 {
 public:
   /** Standard class typedefs. */
@@ -102,18 +102,18 @@ public:
 
   /** Evaluate the function at non-integer positions */
   virtual RealType Evaluate( const PointType& point ) const
-    {
-      IndexType index;
-      this->ConvertPointToNearestIndex( point, index );
-      return this->EvaluateAtIndex( index );
-    }
+  {
+    IndexType index;
+    this->ConvertPointToNearestIndex( point, index );
+    return this->EvaluateAtIndex( index );
+  }
   virtual RealType EvaluateAtContinuousIndex(
     const ContinuousIndexType& cindex ) const
-    {
-      IndexType index;
-      this->ConvertContinuousIndexToNearestIndex( cindex, index );
-      return this->EvaluateAtIndex( index );
-    }
+  {
+    IndexType index;
+    this->ConvertContinuousIndexToNearestIndex( cindex, index );
+    return this->EvaluateAtIndex( index );
+  }
 
 
   /** Get/Set the radius of the neighborhood over which the
@@ -123,7 +123,7 @@ public:
 
 protected:
   FlusserImageFunction();
-  ~FlusserImageFunction(){};
+  ~FlusserImageFunction() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

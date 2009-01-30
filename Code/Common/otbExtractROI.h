@@ -35,7 +35,7 @@ namespace otb
  */
 template <class TInputPixel, class TOutputPixel>
 class ITK_EXPORT ExtractROI:
-    public ExtractROIBase<Image<TInputPixel,2> , Image<TOutputPixel,2> >
+      public ExtractROIBase<Image<TInputPixel,2> , Image<TOutputPixel,2> >
 {
 public:
   /** Standard class typedefs. */

@@ -25,7 +25,8 @@
 #include "itkExceptionObject.h"
 #include "vnl/vnl_math.h"
 
-namespace otb {
+namespace otb
+{
 
 /*
  * Default constructor
@@ -37,10 +38,10 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
 
   RadiusType r;
   unsigned int j;
-  for( j = 0; j < ImageDimension; j++ )
-    {
+  for ( j = 0; j < ImageDimension; j++ )
+  {
     r[j] = 1;
-    }
+  }
   this->SetRadius(r);
   m_MetricTotal=0.0;
 
@@ -57,7 +58,7 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
     DefaultInterpolatorType::New();
 
   m_MovingImageInterpolator = static_cast<InterpolatorType*>(
-    interp.GetPointer() );
+                                interp.GetPointer() );
 
 
 }
@@ -73,16 +74,16 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
 {
 
   Superclass::PrintSelf(os, indent);
-/*
-  os << indent << "MovingImageIterpolator: ";
-  os << m_MovingImageInterpolator.GetPointer() << std::endl;
-  os << indent << "FixedImageGradientCalculator: ";
-  os << m_FixedImageGradientCalculator.GetPointer() << std::endl;
-  os << indent << "DenominatorThreshold: ";
-  os << m_DenominatorThreshold << std::endl;
-  os << indent << "IntensityDifferenceThreshold: ";
-  os << m_IntensityDifferenceThreshold << std::endl;
-*/
+  /*
+    os << indent << "MovingImageIterpolator: ";
+    os << m_MovingImageInterpolator.GetPointer() << std::endl;
+    os << indent << "FixedImageGradientCalculator: ";
+    os << m_FixedImageGradientCalculator.GetPointer() << std::endl;
+    os << indent << "DenominatorThreshold: ";
+    os << m_DenominatorThreshold << std::endl;
+    os << indent << "IntensityDifferenceThreshold: ";
+    os << m_IntensityDifferenceThreshold << std::endl;
+  */
 }
 
 
@@ -94,10 +95,10 @@ void
 NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
 ::InitializeIteration()
 {
-  if( !this->m_MovingImage || !this->m_FixedImage || !m_MovingImageInterpolator )
-    {
+  if ( !this->m_MovingImage || !this->m_FixedImage || !m_MovingImageInterpolator )
+  {
     itkExceptionMacro( << "MovingImage, FixedImage and/or Interpolator not set" );
-    }
+  }
 
   // cache fixed image information
   m_FixedImageSpacing    = this->m_FixedImage->GetSpacing();
@@ -111,8 +112,8 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
 
 
   std::cout << " total metric " << m_MetricTotal << " field size " <<
-    this->GetDeformationField()->GetLargestPossibleRegion().GetSize()<< " image size " <<
-    this->m_FixedImage->GetLargestPossibleRegion().GetSize() << std::endl;
+            this->GetDeformationField()->GetLargestPossibleRegion().GetSize()<< " image size " <<
+            this->m_FixedImage->GetLargestPossibleRegion().GetSize() << std::endl;
   m_MetricTotal=0.0;
 
 }
@@ -143,7 +144,7 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
 
 
   itk::NeighborhoodIterator<FixedImageType>
-    hoodIt( hradius , img, img->GetRequestedRegion());
+  hoodIt( hradius , img, img->GetRequestedRegion());
   hoodIt.SetLocation(oindex);
 
   double sff=0.0;
@@ -154,7 +155,8 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
 
   double derivativeF[ImageDimension];
   double derivativeM[ImageDimension];
-  for (j=0; j<ImageDimension;j++){
+  for (j=0; j<ImageDimension;j++)
+  {
     derivativeF[j]=0;
     derivativeM[j]=0;
   }
@@ -162,7 +164,7 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
   unsigned int indct;
   unsigned int hoodlen=hoodIt.Size();
 
-  for(indct=0; indct<hoodlen-1; indct++)
+  for (indct=0; indct<hoodlen-1; indct++)
   {
 
     IndexType index=hoodIt.GetIndex(indct);
@@ -178,7 +180,7 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
     {
 
 
-        // Get fixed image related information
+      // Get fixed image related information
 
       CovariantVectorType fixedGradient;
       double fixedGradientSquaredMagnitude = 0;
@@ -188,7 +190,7 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
       fixedValue = (double) this->m_FixedImage->GetPixel( index );
 
       fixedGradient = m_FixedImageGradientCalculator->EvaluateAtIndex( index );
-      for( j = 0; j < ImageDimension; j++ )
+      for ( j = 0; j < ImageDimension; j++ )
       {
         fixedGradientSquaredMagnitude += vnl_math_sqr( fixedGradient[j] ) * m_FixedImageSpacing[j];
       }
@@ -202,32 +204,32 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
       // Edited by OTB developpers
       DeformationPixelType vec;
       vec.Fill(0);
-      if(this->GetDeformationField()->GetBufferedRegion().IsInside(index))
-  {
-    vec = this->GetDeformationField()->GetPixel(index);
-  }
+      if (this->GetDeformationField()->GetBufferedRegion().IsInside(index))
+      {
+        vec = this->GetDeformationField()->GetPixel(index);
+      }
       // End Edited by OTB developpers
 
-      for( j = 0; j < ImageDimension; j++ )
-        {
+      for ( j = 0; j < ImageDimension; j++ )
+      {
         mappedPoint[j] = double( index[j] ) * m_FixedImageSpacing[j] +
-        m_FixedImageOrigin[j];
+                         m_FixedImageOrigin[j];
         mappedPoint[j] += vec[j];
-        }
-      if( m_MovingImageInterpolator->IsInsideBuffer( mappedPoint ) )
-        {
+      }
+      if ( m_MovingImageInterpolator->IsInsideBuffer( mappedPoint ) )
+      {
         movingValue = m_MovingImageInterpolator->Evaluate( mappedPoint );
-        }
+      }
       else
-        {
+      {
         movingValue = 0.0;
-        }
+      }
 
       sff+=fixedValue*fixedValue;
       smm+=movingValue*movingValue;
       sfm+=fixedValue*movingValue;
 
-      for(unsigned int dim=0; dim<ImageDimension; dim++)
+      for (unsigned int dim=0; dim<ImageDimension; dim++)
       {
         double differential = fixedGradient[dim];
         derivativeF[dim]+= fixedValue  * differential;
@@ -238,10 +240,10 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
   }
 
   double updatenorm=0.0;
-  if( (sff*smm) != 0.0)
+  if ( (sff*smm) != 0.0)
   {
     double factor = 1.0 / vcl_sqrt(sff * smm );
-    for(unsigned int i=0; i<ImageDimension; i++)
+    for (unsigned int i=0; i<ImageDimension; i++)
     {
       update[i] = factor * ( derivativeF[i] - (sfm/smm)*derivativeM[i]);
       updatenorm+=(update[i]*update[i]);
@@ -252,7 +254,7 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
   }
   else
   {
-    for(unsigned int i=0; i<ImageDimension; i++)
+    for (unsigned int i=0; i<ImageDimension; i++)
     {
       update[i] = 0.0;
     }

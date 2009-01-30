@@ -28,9 +28,9 @@ namespace otb
  */
 template <class TPath>
 class ITK_EXPORT PathListToPathListFilter
-  : public ObjectListToObjectListFilter<ObjectList<TPath>, ObjectList<TPath> >
+      : public ObjectListToObjectListFilter<ObjectList<TPath>, ObjectList<TPath> >
 {
- public:
+public:
   /** Standard typedefs */
   typedef PathListToPathListFilter      Self;
   typedef ObjectListToObjectListFilter<ObjectList<TPath>, ObjectList<TPath> >         Superclass;
@@ -56,7 +56,7 @@ class ITK_EXPORT PathListToPathListFilter
 
 protected:
   /** Constructor */
-  PathListToPathListFilter(){};
+  PathListToPathListFilter() {};
   /** Destructor */
   virtual ~PathListToPathListFilter() {};
 

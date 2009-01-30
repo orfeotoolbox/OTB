@@ -51,24 +51,24 @@ ThresholdImageToPointSetFilter<TInputImage, TOutputPointSet>
   InputIterator  inIt(inputPtr, inputPtr->GetRequestedRegion() );
 
   // walk the regions, threshold each pixel
-  while( !inIt.IsAtEnd() )
-    {
+  while ( !inIt.IsAtEnd() )
+  {
 
     const InputPixelType value = inIt.Get();
     const IndexType index = inIt.GetIndex();
 
     if ((value >= m_LowerThreshold) && (value <= m_UpperThreshold))
-      {
-       position[0] = index[0];
-       position[1] = index[1];
+    {
+      position[0] = index[0];
+      position[1] = index[1];
 
-       outputPtr->SetPoint(pointId,position);
+      outputPtr->SetPoint(pointId,position);
 
-       pointId++;
+      pointId++;
 
-      }
-    ++inIt;
     }
+    ++inIt;
+  }
 }
 
 /**

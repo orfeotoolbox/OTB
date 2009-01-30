@@ -67,9 +67,9 @@ public:
   itkSetMacro(TotalGaseousTransmission,double);
   itkGetMacro(TotalGaseousTransmission,double);
 
-   /**
-   * Set/Get the downward transmittance of the atmosphere.
-   */
+  /**
+  * Set/Get the downward transmittance of the atmosphere.
+  */
   itkSetMacro(DownwardTransmittance,double);
   itkGetMacro(DownwardTransmittance,double);
 
@@ -105,9 +105,9 @@ public:
 
 protected:
   /** Constructor */
-  AtmosphericRadiativeTermsSingleChannel(){};
+  AtmosphericRadiativeTermsSingleChannel() {};
   /** Destructor */
-  ~AtmosphericRadiativeTermsSingleChannel(){};
+  ~AtmosphericRadiativeTermsSingleChannel() {};
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -128,19 +128,19 @@ private:
   /** The downward transmittance. */
   double m_DownwardTransmittance;
 
- /** The upward transmittance. */
+  /** The upward transmittance. */
   double m_UpwardTransmittance;
 
- /** The upward diffuse transmittance. */
+  /** The upward diffuse transmittance. */
   double m_UpwardDiffuseTransmittance;
 
- /** The upward direct transmittance. */
+  /** The upward direct transmittance. */
   double m_UpwardDirectTransmittance;
 
- /** The upward diffuse transmittance for rayleigh. */
+  /** The upward diffuse transmittance for rayleigh. */
   double m_UpwardDiffuseTransmittanceForRayleigh;
 
- /** The upward diffuse transmittance for aerosols. */
+  /** The upward diffuse transmittance for aerosols. */
   double m_UpwardDiffuseTransmittanceForAerosol;
 
 };
@@ -176,12 +176,18 @@ public:
    * Set/Get the values.
    */
   void SetValues( const VectorValueType & val)
-    {
-      m_Values = val;
-      this->Modified();
-    };
-  VectorValueType & GetValues() { return m_Values; };
-  const VectorValueType & GetValues() const { return m_Values; };
+  {
+    m_Values = val;
+    this->Modified();
+  };
+  VectorValueType & GetValues()
+  {
+    return m_Values;
+  };
+  const VectorValueType & GetValues() const
+  {
+    return m_Values;
+  };
 
   /** Set/Get the data classified by channel. */
   /** Set methods with vectors. */
@@ -221,7 +227,7 @@ public:
   DataVectorType GetUpwardDiffuseTransmittancesForRayleigh();
   DataVectorType GetUpwardDiffuseTransmittancesForAerosol();
 
- /** Get methods with index. */
+  /** Get methods with index. */
   double GetIntrinsicAtmosphericReflectance(unsigned int id);
   double GetSphericalAlbedo(unsigned int id);
   double GetTotalGaseousTransmission(unsigned int id);
@@ -241,7 +247,7 @@ protected:
   /** Constructor */
   AtmosphericRadiativeTerms();
   /** Destructor */
-  ~AtmosphericRadiativeTerms(){};
+  ~AtmosphericRadiativeTerms() {};
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

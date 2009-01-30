@@ -36,9 +36,9 @@ VectorData<TPrecision,VDimension,TValuePrecision>
 }
 
 template<class TPrecision, unsigned int VDimension, class TValuePrecision>
-    void
-        VectorData<TPrecision,VDimension,TValuePrecision>
-  ::SetProjectionRef(std::string projectionRef)
+void
+VectorData<TPrecision,VDimension,TValuePrecision>
+::SetProjectionRef(std::string projectionRef)
 {
   itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
 
@@ -47,9 +47,9 @@ template<class TPrecision, unsigned int VDimension, class TValuePrecision>
 }
 
 template<class TPrecision, unsigned int VDimension, class TValuePrecision>
-    std::string
-        VectorData<TPrecision,VDimension,TValuePrecision>
-  ::GetProjectionRef() const
+std::string
+VectorData<TPrecision,VDimension,TValuePrecision>
+::GetProjectionRef() const
 {
   const itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
 
@@ -68,9 +68,9 @@ VectorData<TPrecision,VDimension,TValuePrecision>
 }
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
-    int
-        VectorData<TPrecision,VDimension,TValuePrecision>
-  ::Size() const
+int
+VectorData<TPrecision,VDimension,TValuePrecision>
+::Size() const
 {
   return m_DataTree->Count();
 }
@@ -86,18 +86,18 @@ VectorData<TPrecision,VDimension,TValuePrecision>
   itk::PreOrderTreeIterator<DataTreeType> it(m_DataTree);
   it.GoToBegin();
 
-  while(!it.IsAtEnd())
-    {
-      itk::PreOrderTreeIterator<DataTreeType> itParent = it;
-      bool goesOn = true;
-      while(itParent.HasParent() && goesOn )
+  while (!it.IsAtEnd())
   {
-    os<<indent;
-    goesOn = itParent.GoToParent();
-  }
-      os<<"+"<<it.Get()->GetNodeTypeAsString()<<std::endl;
-      ++it;
+    itk::PreOrderTreeIterator<DataTreeType> itParent = it;
+    bool goesOn = true;
+    while (itParent.HasParent() && goesOn )
+    {
+      os<<indent;
+      goesOn = itParent.GoToParent();
     }
+    os<<"+"<<it.Get()->GetNodeTypeAsString()<<std::endl;
+    ++it;
+  }
 }
 } // end namespace otb
 

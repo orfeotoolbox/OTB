@@ -24,7 +24,8 @@
 #include "itkGrayscaleMorphologicalClosingImageFilter.h"
 #include "itkProgressAccumulator.h"
 
-namespace otb {
+namespace otb
+{
 /**
  * Constructor
  */

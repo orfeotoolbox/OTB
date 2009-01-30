@@ -42,8 +42,8 @@ namespace otb
  */
 template <class TData>
 class ITK_EXPORT KMLVectorDataIO
-  : public VectorDataIOBase<TData>
-  {
+      : public VectorDataIOBase<TData>
+{
 public:
 
   /** Standard class typedefs. */
@@ -89,10 +89,13 @@ public:
   virtual bool CanReadFile(const char*);
 
   /** Determine the file type. Returns true if the VectorDataIO can stream read the specified file */
-  virtual bool CanStreamRead(){  return false; };
+  virtual bool CanStreamRead()
+  {
+    return false;
+  };
 
-/*   /\** Set the spacing and dimention information for the set filename. *\/ */
-/*   virtual void ReadVectorDataInformation(); */
+  /*   /\** Set the spacing and dimention information for the set filename. *\/ */
+  /*   virtual void ReadVectorDataInformation(); */
 
   /** Reads the data from disk into the data structure provided. */
   virtual void Read(VectorDataPointerType data);
@@ -104,11 +107,14 @@ public:
   virtual bool CanWriteFile(const char*);
 
   /** Determine the file type. Returns true if the VectorDataIO can stream write the specified file */
-  virtual bool CanStreamWrite() { return false; };
+  virtual bool CanStreamWrite()
+  {
+    return false;
+  };
 
-/*   /\** Writes the spacing and dimentions of the image. */
-/*    * Assumes SetFileName has been called with a valid file name. *\/ */
-/*   virtual void WriteVectorDataInformation(); */
+  /*   /\** Writes the spacing and dimentions of the image. */
+  /*    * Assumes SetFileName has been called with a valid file name. *\/ */
+  /*   virtual void WriteVectorDataInformation(); */
 
   /** Writes the data to disk from the data structure provided */
   virtual void Write(VectorDataConstPointerType data);

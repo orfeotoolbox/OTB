@@ -48,7 +48,7 @@ template <class TInputImage, class TOutputImage>
 void ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 ::SetInputImage( const InputImageType *image)
 {
-   this->SetInput(0,image);
+  this->SetInput(0,image);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -57,7 +57,7 @@ ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 ::GetInputImage(void)
 {
   return static_cast<const InputImageType * >
-    (this->GetInput(0) );
+         (this->GetInput(0) );
 }
 
 /**
@@ -67,7 +67,7 @@ template <class TInputImage, class TOutputImage>
 void ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 ::SetInputImageDirection( const InputImageType *image)
 {
-   this->SetInput(1,image);
+  this->SetInput(1,image);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -76,7 +76,7 @@ ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 ::GetInputImageDirection(void)
 {
   return static_cast<const InputImageType * >
-    (this->GetInput(1) );
+         (this->GetInput(1) );
 }
 
 /**
@@ -86,7 +86,7 @@ template <class TInputImage, class TOutputImage>
 void ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 ::SetPixelSuppressionRadius(SizeType Radius)
 {
-   m_PixelSuppression->SetRadius(Radius);
+  m_PixelSuppression->SetRadius(Radius);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -101,7 +101,7 @@ template <class TInputImage, class TOutputImage>
 void ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 ::SetPixelSuppressionAngularBeam(float AngularBeam)
 {
-   m_PixelSuppression->SetAngularBeam(AngularBeam);
+  m_PixelSuppression->SetAngularBeam(AngularBeam);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -119,7 +119,7 @@ template <class TInputImage, class TOutputImage>
 void ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 ::SetLocalHoughRadius(SizeType Radius)
 {
-   m_LocalHough->SetRadius(Radius);
+  m_LocalHough->SetRadius(Radius);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -134,7 +134,7 @@ template <class TInputImage, class TOutputImage>
 void ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 ::SetLocalHoughNumberOfLines(unsigned int NumberOfLines)
 {
-   m_LocalHough->SetNumberOfLines(NumberOfLines);
+  m_LocalHough->SetNumberOfLines(NumberOfLines);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -149,7 +149,7 @@ template <class TInputImage, class TOutputImage>
 void ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 ::SetLocalHoughDiscRadius(float DiscRadius)
 {
-   m_LocalHough->SetDiscRadius(DiscRadius);
+  m_LocalHough->SetDiscRadius(DiscRadius);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -164,7 +164,7 @@ template <class TInputImage, class TOutputImage>
 void ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 ::SetLocalHoughVariance(float Variance)
 {
-   m_LocalHough->SetVariance(Variance);
+  m_LocalHough->SetVariance(Variance);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -182,7 +182,7 @@ template <class TInputImage, class TOutputImage>
 void ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 ::SetFillGapsRadius(float Radius)
 {
-   m_FillGaps->SetRadius(Radius);
+  m_FillGaps->SetRadius(Radius);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -197,7 +197,7 @@ template <class TInputImage, class TOutputImage>
 void ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 ::SetFillGapsAngularBeam(float AngularBeam)
 {
-   m_FillGaps->SetAngularBeam(AngularBeam);
+  m_FillGaps->SetAngularBeam(AngularBeam);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -218,10 +218,10 @@ ExtractSegmentsImageFilter<TInputImage, TOutputImage>
   m_PixelSuppression->SetInputImageDirection( this->GetInputImageDirection() );
 
   m_Rescaler->SetInput( m_PixelSuppression->GetOutput());
-  
+
   /*m_LocalHough->SetInput( m_PixelSuppression->GetOutput() );*/
   m_LocalHough->SetInput(m_Rescaler->GetOutput() );
-   
+
   m_FillGaps->SetInput ( m_LocalHough->GetOutput() );
 
   m_DrawLineList->SetInput( this->GetInputImage() );
@@ -243,8 +243,8 @@ ExtractSegmentsImageFilter<TInputImage, TOutput>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
-/*  os << indent << "Length: " << m_LengthLine << std::endl;
-  os << indent << "Width: " << m_WidthLine << std::endl;*/
+  /*  os << indent << "Length: " << m_LengthLine << std::endl;
+    os << indent << "Width: " << m_WidthLine << std::endl;*/
 
 }
 

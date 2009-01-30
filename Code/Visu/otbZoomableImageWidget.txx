@@ -49,20 +49,20 @@ void
 ZoomableImageWidget<TPixel>
 ::Init(int x, int y, int w, int h, const char * l)
 {
-  if(!this->GetInput())
-    {
-      itkExceptionMacro("No input image!");
-    }
+  if (!this->GetInput())
+  {
+    itkExceptionMacro("No input image!");
+  }
   else
-    {
-      Superclass::Init(x,y,w,h,l);
+  {
+    Superclass::Init(x,y,w,h,l);
 //       if(this->GetImageOverlayVisible())
 //   {
 //     this->GetInputOverlay()->Update();
 //   }
-      this->label(l);
-      this->resize(x, y, w, h);
-    }
+    this->label(l);
+    this->resize(x, y, w, h);
+  }
 }
 /**
  * Resize the widget.
@@ -98,7 +98,7 @@ ZoomableImageWidget<TPixel>
   IndexType bufferedULCorner = buffered.GetIndex();
   IndexType viewedRDCorner = viewed.GetIndex()+viewed.GetSize();
   IndexType bufferedRDCorner = buffered.GetIndex()+buffered.GetSize();
- //  return ( viewedULCorner[0]<bufferedULCorner[0]
+//  return ( viewedULCorner[0]<bufferedULCorner[0]
 //       ||viewedULCorner[1]<bufferedULCorner[1]
 //       ||viewedRDCorner[0]>bufferedRDCorner[0]
 //       ||viewedRDCorner[1]>bufferedRDCorner[1]);
@@ -125,7 +125,7 @@ void
 ZoomableImageWidget<TPixel>
 ::SetZoomFactor(double zoomFactor)
 {
-  if(zoomFactor<1)
+  if (zoomFactor<1)
     itkExceptionMacro(<<"Zoom factor must be >1 !");
 
   RegionType region = this->GetViewedRegion();
@@ -139,11 +139,11 @@ ZoomableImageWidget<TPixel>
   newRegion.SetIndex(m_ZoomUpperLeftCorner);
   newRegion.SetSize(newSize);
   /// Bug correction, segfault zooming out too much
-  if(this->GetInput() && this->GetInput()->GetLargestPossibleRegion().IsInside(newRegion))
-    {
-      this->SetViewedRegion(newRegion);
-      this->SetOpenGlIsotropicZoom(zoomFactor);
-    }
+  if (this->GetInput() && this->GetInput()->GetLargestPossibleRegion().IsInside(newRegion))
+  {
+    this->SetViewedRegion(newRegion);
+    this->SetOpenGlIsotropicZoom(zoomFactor);
+  }
 }
 /**
  * Set a new zoom factor (>1).

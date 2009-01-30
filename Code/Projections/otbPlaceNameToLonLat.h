@@ -61,7 +61,7 @@ public:
 
 protected:
   PlaceNameToLonLat();
-  ~PlaceNameToLonLat(){};
+  ~PlaceNameToLonLat() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   void RetrieveXML(std::ostringstream& urlStream);
   void ParseXMLYahoo();

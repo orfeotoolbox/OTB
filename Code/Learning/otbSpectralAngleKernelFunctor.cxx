@@ -22,7 +22,8 @@
 
 #include "otbSpectralAngleKernelFunctor.h"
 
-namespace otb {
+namespace otb
+{
 
 SpectralAngleKernelFunctor
 ::SpectralAngleKernelFunctor ()
@@ -43,7 +44,7 @@ SpectralAngleKernelFunctor
 double
 SpectralAngleKernelFunctor
 ::operator()( const svm_node * x, const svm_node * y,
-        const svm_parameter & param ) const
+              const svm_parameter & param ) const
 {
   double mq = m_Coef + SAM( x, y );
 

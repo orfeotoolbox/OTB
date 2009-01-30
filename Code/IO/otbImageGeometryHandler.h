@@ -64,21 +64,21 @@ public :
 
   static Pointer New()
   {
-        Pointer n = new Self;
-        n->UnRegister();
-        return n;
+    Pointer n = new Self;
+    n->UnRegister();
+    return n;
   }
 
-itkTypeMacro( ImageGeometryHandler, Object);
+  itkTypeMacro( ImageGeometryHandler, Object);
 
-/***********************************/
-/*   Déclaration des méthodes      */
-/***********************************/
+  /***********************************/
+  /*   Déclaration des méthodes      */
+  /***********************************/
 //Ouverture d'une image à partir d'un nom de fichier
-void SetFileName(char *src);
+  void SetFileName(char *src);
 
 //Récupération de la keywordlist de l'image:
-ossimKeywordlist GetGeometryKeywordlist();
+  ossimKeywordlist GetGeometryKeywordlist();
 
 // //Récupération du model de projection(spécifique à AdjMapModel):
 // const ossimMapProjection* ImageGeometryHandler::GetProjection() const;
@@ -95,13 +95,13 @@ ossimKeywordlist GetGeometryKeywordlist();
 // //Récupération du SpotDimapSupportData:
 
 protected:
-ImageGeometryHandler();
+  ImageGeometryHandler();
 //ImageGeometryHandler(const char *src);
-virtual ~ImageGeometryHandler();
+  virtual ~ImageGeometryHandler();
 
-ossimImageHandler *handler;
-ossimKeywordlist m_geom_kwl;
-ossimFilename m_filename;
+  ossimImageHandler *handler;
+  ossimKeywordlist m_geom_kwl;
+  ossimFilename m_filename;
 };//Fin définition de la classe
 
 }//fin namespace

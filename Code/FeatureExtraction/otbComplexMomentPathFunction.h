@@ -46,12 +46,12 @@ namespace otb
  * \ingroup ImageFunctions
  */
 template < class TInputPath,
-           class TOutput = std::complex<double>,
-           class TPrecision = double>
+class TOutput = std::complex<double>,
+class TPrecision = double>
 class ITK_EXPORT ComplexMomentPathFunction :
-    public GeometricMomentPathFunction< TInputPath,
-          TOutput,
-                                        TPrecision >
+      public GeometricMomentPathFunction< TInputPath,
+      TOutput,
+      TPrecision >
 {
 public:
   /** Standard class typedefs. */
@@ -100,7 +100,7 @@ public:
 
 protected:
   ComplexMomentPathFunction();
-  ~ComplexMomentPathFunction(){};
+  ~ComplexMomentPathFunction() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

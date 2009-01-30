@@ -53,9 +53,9 @@ UnaryFunctorNeighborhoodImageFilter<TInputImage,TOutputImage,TFunction>
   typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
 
   if ( !inputPtr || !outputPtr )
-    {
+  {
     return;
-    }
+  }
   // get a copy of the input requested region (should equal the output
   // requested region)
   typename TInputImage::RegionType inputRequestedRegion;
@@ -66,12 +66,12 @@ UnaryFunctorNeighborhoodImageFilter<TInputImage,TOutputImage,TFunction>
 
   // crop the input requested region at the input's largest possible region
   if ( inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
-    {
+  {
     inputPtr->SetRequestedRegion( inputRequestedRegion );
     return;
-    }
+  }
   else
-    {
+  {
     // Couldn't crop the region (requested region is outside the largest
     // possible region).  Throw an exception.
 
@@ -82,12 +82,12 @@ UnaryFunctorNeighborhoodImageFilter<TInputImage,TOutputImage,TFunction>
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
     itk::OStringStream msg;
     msg << this->GetNameOfClass()
-        << "::GenerateInputRequestedRegion()";
+    << "::GenerateInputRequestedRegion()";
     e.SetLocation(msg.str().c_str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
     e.SetDataObject(inputPtr);
     throw e;
-    }
+  }
 }
 
 /**
@@ -104,7 +104,7 @@ UnaryFunctorNeighborhoodImageFilter<TInputImage, TOutputImage, TFunction>
   // ImageToImageFilter::GetInput(int) always returns a pointer to a
   // TInputImage so it cannot be used for the second input.
   InputImagePointer inputPtr
-    = dynamic_cast<const TInputImage*>(ProcessObjectType::GetInput(0));
+  = dynamic_cast<const TInputImage*>(ProcessObjectType::GetInput(0));
   OutputImagePointer outputPtr = this->GetOutput(0);
 
   RadiusType r;
@@ -128,7 +128,7 @@ UnaryFunctorNeighborhoodImageFilter<TInputImage, TOutputImage, TFunction>
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
   for (fit=faceList.begin(); fit != faceList.end(); ++fit)
-    {
+  {
     neighInputIt = itk::ConstNeighborhoodIterator<TInputImage>(r, inputPtr, *fit);
 
     outputIt = itk::ImageRegionIterator<TOutputImage>(outputPtr, *fit);
@@ -136,15 +136,15 @@ UnaryFunctorNeighborhoodImageFilter<TInputImage, TOutputImage, TFunction>
     neighInputIt.GoToBegin();
 
     while ( ! outputIt.IsAtEnd() )
-      {
+    {
 
       outputIt.Set( m_Functor( neighInputIt) );
 
       ++neighInputIt;
       ++outputIt;
       progress.CompletedPixel();
-      }
     }
+  }
 }
 
 } // end namespace otb

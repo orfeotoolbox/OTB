@@ -56,168 +56,168 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  template <class TInputImage , class TOutputPointSet>
-    class ITK_EXPORT ImageToSURFKeyPointSetFilter
-    : public ImageToPointSetFilter<TInputImage, TOutputPointSet>
-    {
+template <class TInputImage , class TOutputPointSet>
+class ITK_EXPORT ImageToSURFKeyPointSetFilter
+      : public ImageToPointSetFilter<TInputImage, TOutputPointSet>
+{
 
-    public:
+public:
 
-    /** Standard class typedefs. */
-      typedef ImageToSURFKeyPointSetFilter                                Self;
-      typedef ImageToPointSetFilter<TInputImage,TOutputPointSet>          Superclass;
-      typedef itk::SmartPointer<Self>                                     Pointer;
-      typedef itk::SmartPointer<const Self>                               ConstPointer;
+  /** Standard class typedefs. */
+  typedef ImageToSURFKeyPointSetFilter                                Self;
+  typedef ImageToPointSetFilter<TInputImage,TOutputPointSet>          Superclass;
+  typedef itk::SmartPointer<Self>                                     Pointer;
+  typedef itk::SmartPointer<const Self>                               ConstPointer;
 
-      /** Method for creation through the object factory. */
-      itkNewMacro(Self);
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self);
 
-      /** Run-time type information (and related methods). */
-      itkTypeMacro(ImageToSURFKeyPointSetFilter,ImageToPointSetFilter);
-
-
-      /** Template parameters typedefs*/
-      typedef TInputImage InputImageType;
-      typedef typename InputImageType::Pointer             InputImagePointerType;
-      typedef typename InputImageType::IndexType           PixelIndex;
-      typedef typename InputImageType::IndexType           IndexType;
-      typedef typename InputImageType::PixelType           PixelValue;
-      typedef typename InputImageType::SpacingType         SpacingType;
-      typedef typename InputImageType::SizeType            SizeType;
-      typedef typename InputImageType::PointType           PointImageType;
-
-      typedef TOutputPointSet OutputPointSetType;
-      typedef typename TOutputPointSet::Pointer            OutputPointSetPointerType;
-      typedef typename TOutputPointSet::PixelType          OutputPixelType;
-      typedef typename TOutputPointSet::PointType          OutputPointType;
-      typedef typename TOutputPointSet::PointIdentifier    OutputPointIdentifierType;
-
-      /** Set/Get the number of Octaves */
-      itkSetMacro(OctavesNumber,int);
-      itkGetMacro(OctavesNumber,int);
-
-      /** Set/Get the number of scales*/
-      itkSetMacro(ScalesNumber,int);
-      itkGetMacro(ScalesNumber,int);
-
-      /** Get the number of KeyPoints detected*/
-      itkGetMacro(NumberOfPoints,int);
-
-      /** Internal filters typedefs */
-      typedef itk::ConstNeighborhoodIterator<InputImageType> NeighborhoodIteratorType;
-      typedef typename NeighborhoodIteratorType::NeighborhoodType NeighborhoodType;
-
-      typedef otb::ImageToHessianDeterminantImageFilter<InputImageType ,InputImageType > ImageToDetHessianImageType;
-      typedef typename ImageToDetHessianImageType::Pointer DetHessianPointerFilter;
-
-      /** Filter for  resampling images for the multi-scale analysis */
-      typedef itk::ResampleImageFilter<InputImageType,InputImageType> ResampleFilterType;
-      typedef typename ResampleFilterType::Pointer ResampleFilterPointerType;
-
-      /** ImageList  to store the Hessian determinant image at each scale (sigma width)*/
-      typedef otb::ImageList< InputImageType > ImageListType;
-      typedef typename ImageListType::Pointer ImageListTypePointer;
-
-      /** */
-      typedef std::vector<double> VectorType;
-
-    protected:
-
-      /**
-       * Constructor.
-       */
-      ImageToSURFKeyPointSetFilter();
-      /**
-       * Destructor.
-       */
-      virtual ~ImageToSURFKeyPointSetFilter();
-      /**
-       * Standard PrintSelf method.
-       */
-      virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-      /**
-       * Main computation method.
-       */
-      virtual void  GenerateData();
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(ImageToSURFKeyPointSetFilter,ImageToPointSetFilter);
 
 
+  /** Template parameters typedefs*/
+  typedef TInputImage InputImageType;
+  typedef typename InputImageType::Pointer             InputImagePointerType;
+  typedef typename InputImageType::IndexType           PixelIndex;
+  typedef typename InputImageType::IndexType           IndexType;
+  typedef typename InputImageType::PixelType           PixelValue;
+  typedef typename InputImageType::SpacingType         SpacingType;
+  typedef typename InputImageType::SizeType            SizeType;
+  typedef typename InputImageType::PointType           PointImageType;
 
-      /** Check local extremum for 8 neighbors (current)
-       *
-       *  \param currentScale
-       *
-       *  \return true if the Central pixel is extremum
-       */
-      virtual bool IsLocalExtremum(const NeighborhoodType& neigh);
+  typedef TOutputPointSet OutputPointSetType;
+  typedef typename TOutputPointSet::Pointer            OutputPointSetPointerType;
+  typedef typename TOutputPointSet::PixelType          OutputPixelType;
+  typedef typename TOutputPointSet::PointType          OutputPointType;
+  typedef typename TOutputPointSet::PointIdentifier    OutputPointIdentifierType;
+
+  /** Set/Get the number of Octaves */
+  itkSetMacro(OctavesNumber,int);
+  itkGetMacro(OctavesNumber,int);
+
+  /** Set/Get the number of scales*/
+  itkSetMacro(ScalesNumber,int);
+  itkGetMacro(ScalesNumber,int);
+
+  /** Get the number of KeyPoints detected*/
+  itkGetMacro(NumberOfPoints,int);
+
+  /** Internal filters typedefs */
+  typedef itk::ConstNeighborhoodIterator<InputImageType> NeighborhoodIteratorType;
+  typedef typename NeighborhoodIteratorType::NeighborhoodType NeighborhoodType;
+
+  typedef otb::ImageToHessianDeterminantImageFilter<InputImageType ,InputImageType > ImageToDetHessianImageType;
+  typedef typename ImageToDetHessianImageType::Pointer DetHessianPointerFilter;
+
+  /** Filter for  resampling images for the multi-scale analysis */
+  typedef itk::ResampleImageFilter<InputImageType,InputImageType> ResampleFilterType;
+  typedef typename ResampleFilterType::Pointer ResampleFilterPointerType;
+
+  /** ImageList  to store the Hessian determinant image at each scale (sigma width)*/
+  typedef otb::ImageList< InputImageType > ImageListType;
+  typedef typename ImageListType::Pointer ImageListTypePointer;
+
+  /** */
+  typedef std::vector<double> VectorType;
+
+protected:
+
+  /**
+   * Constructor.
+   */
+  ImageToSURFKeyPointSetFilter();
+  /**
+   * Destructor.
+   */
+  virtual ~ImageToSURFKeyPointSetFilter();
+  /**
+   * Standard PrintSelf method.
+   */
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  /**
+   * Main computation method.
+   */
+  virtual void  GenerateData();
 
 
 
-      /** Check local extremum for 8 neighbors (Previous or Scale)
-       *
-       *  \param neigh
-       *  \paramCenterValue
-       *
-       *  \return true if the Central pixel is extremum
-       */
-      virtual bool IsLocalExtremumAround(const NeighborhoodType& neigh,
-           double CenterValue);
+  /** Check local extremum for 8 neighbors (current)
+   *
+   *  \param currentScale
+   *
+   *  \return true if the Central pixel is extremum
+   */
+  virtual bool IsLocalExtremum(const NeighborhoodType& neigh);
 
 
-      /** AssignOrientation
-       *
-       * \param currentScale neighborhood
-       * \param scale affected to the keypoint
-       *
-       * \return  key point orientation
-       */
-      virtual double AssignOrientation(const NeighborhoodType& neigh,
-               double S);
 
-      /** ComputeDescriptor
-       *
-       * \param currentScale Neighboorhood
-       * \param orientation assigned to the key point
-       * \param scale
-       *
-       * \return hsitogram descriptor
-       */
-      virtual VectorType ComputeDescriptor(const NeighborhoodType& neigh,
-             double O,
-             double S);
-      /**
-       * Compute min a b c
-       */
-      virtual int GetMin( int a , int b , int c);
+  /** Check local extremum for 8 neighbors (Previous or Scale)
+   *
+   *  \param neigh
+   *  \paramCenterValue
+   *
+   *  \return true if the Central pixel is extremum
+   */
+  virtual bool IsLocalExtremumAround(const NeighborhoodType& neigh,
+                                     double CenterValue);
 
-  private:
 
-      ImageToSURFKeyPointSetFilter(const Self&); //purposely not implemented
-      void operator=(const Self&); //purposely not implemented
+  /** AssignOrientation
+   *
+   * \param currentScale neighborhood
+   * \param scale affected to the keypoint
+   *
+   * \return  key point orientation
+   */
+  virtual double AssignOrientation(const NeighborhoodType& neigh,
+                                   double S);
 
-      /** Number of octaves */
-      int m_OctavesNumber;
+  /** ComputeDescriptor
+   *
+   * \param currentScale Neighboorhood
+   * \param orientation assigned to the key point
+   * \param scale
+   *
+   * \return hsitogram descriptor
+   */
+  virtual VectorType ComputeDescriptor(const NeighborhoodType& neigh,
+                                       double O,
+                                       double S);
+  /**
+   * Compute min a b c
+   */
+  virtual int GetMin( int a , int b , int c);
 
-      /** Number of scale for each octave */
-      int m_ScalesNumber;
+private:
 
-      /** Number of key points detected */
-      int m_NumberOfPoints;
+  ImageToSURFKeyPointSetFilter(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
 
-      /** Those images */
-      InputImagePointerType m_determinantImage;
-      InputImagePointerType m_ImageCurrent;
-      InputImagePointerType m_ImageMovedPrev;
-      InputImagePointerType m_ImageMovedNext;
+  /** Number of octaves */
+  int m_OctavesNumber;
 
-      /** ImageToDeterminantHessianFilter filter */
-      DetHessianPointerFilter m_DetHessianFilter;
+  /** Number of scale for each octave */
+  int m_ScalesNumber;
 
-      /*Resample Filter*/
-      ResampleFilterPointerType m_ResampleFilter;
+  /** Number of key points detected */
+  int m_NumberOfPoints;
 
-      /** ImageList*/
-      ImageListTypePointer m_ImageList;
-    };
+  /** Those images */
+  InputImagePointerType m_determinantImage;
+  InputImagePointerType m_ImageCurrent;
+  InputImagePointerType m_ImageMovedPrev;
+  InputImagePointerType m_ImageMovedNext;
+
+  /** ImageToDeterminantHessianFilter filter */
+  DetHessianPointerFilter m_DetHessianFilter;
+
+  /*Resample Filter*/
+  ResampleFilterPointerType m_ResampleFilter;
+
+  /** ImageList*/
+  ImageListTypePointer m_ImageList;
+};
 }
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbImageToSURFKeyPointSetFilter.txx"
