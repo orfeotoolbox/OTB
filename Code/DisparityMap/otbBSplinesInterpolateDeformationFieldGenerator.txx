@@ -19,7 +19,16 @@ PURPOSE.  See the above copyright notices for more information.
 #define __otbBSplinesInterpolateDeformationFieldGenerator_txx
 
 #include "otbBSplinesInterpolateDeformationFieldGenerator.h"
+// Disabling deprecation warning if on visual
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable:4996)
+#endif
 #include "itkDeformationFieldSource.h"
+// Enabling remaining deprecation warning
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 #include "otbMacro.h"
 #include "otbImage.h"
 #include "itkImageRegionIterator.h"

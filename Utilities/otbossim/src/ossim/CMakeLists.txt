@@ -13,6 +13,12 @@ FILE(GLOB_RECURSE ossim_init_SRCS "init/*.cpp" "init/*.c")
 FILE(GLOB_RECURSE ossim_kbool_SRCS "kbool/*.cpp" "kbool/*.c")
 FILE(GLOB_RECURSE ossim_dll_main_SRCS "dll_main/*.cpp")
 
+# Removing empty source file causing compilation warning on visual
+REMOVE(ossim_support_data_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/support_data/ossimDemPoint.cpp")
+REMOVE(ossim_plugin_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/plugin/ossimSharedObjectBridge.cpp")
+REMOVE(ossim_base_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/base/ossimGzStream.cpp")
+REMOVE(ossim_base_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/ossimFactoryBaseTemplate.cpp")
+
 # Adjust the compiler flags to avoid problems with ossim code.
 IF(CMAKE_COMPILER_IS_GNUCXX)
   FOREACH(f      ${ossim_base_SRCS} ${ossim_elevation_SRCS} ${ossim_font_SRCS} ${ossim_imaging_SRCS} ${ossim_matrix_SRCS} 
