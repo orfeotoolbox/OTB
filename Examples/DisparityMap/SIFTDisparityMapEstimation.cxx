@@ -51,7 +51,17 @@
 
 #include "otbKeyPointSetsMatchingFilter.h"
 #include "otbSiftFastImageFilter.h"
+// Disabling deprecation warning if on visual
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable:4996)
+#endif
 #include "itkDeformationFieldSource.h"
+// Enabling remaining deprecation warning
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
+
 #include "itkWarpImageFilter.h"
 
 // Software Guide : EndCodeSnippet
