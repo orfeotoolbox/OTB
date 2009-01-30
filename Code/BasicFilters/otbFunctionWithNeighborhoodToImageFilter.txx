@@ -36,6 +36,7 @@ FunctionWithNeighborhoodToImageFilter<TInputImage,TOutputImage,TFunction>
 {
   m_Radius.Fill(0);
   m_Offset.Fill(0);
+  //m_FunctionVector.clear();
 }
 
 
@@ -47,7 +48,16 @@ FunctionWithNeighborhoodToImageFilter<TInputImage,TOutputImage,TFunction>
   Superclass::BeforeThreadedGenerateData();
 
   m_Radius = this->GetFunction()->GetRadius();
-  m_Offset = this->GetFunction()->GetOffset(); 
+  m_Offset = this->GetFunction()->GetOffset();
+  /*
+  for(unsigned int i =0; i<this->GetNumberOfThreads(); i++)
+    {
+      FunctionType * func;
+      func = (this->GetFunction());
+      m_FunctionVector.push_back(func);
+      std::cout<<func<<std::endl;
+    }
+  */
 }
 
 template <class TInputImage, class TOutputImage, class TFunction  >

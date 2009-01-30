@@ -39,7 +39,22 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage,TOutputImage,TFunction
   this->SetNumberOfRequiredInputs( 1 );
   m_Radius = 1;
   m_Offset.Fill(1);
+  m_FunctorList.clear();
 }
+
+
+template <class TInputImage, class TOutputImage, class TFunction  >
+void
+UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage,TOutputImage,TFunction>
+::BeforeThreadedGenerateData()
+{
+  Superclass::BeforeThreadedGenerateData();
+
+  for(unsigned int i =0; i<this->GetNumberOfThreads(); i++)
+    {
+      m_FunctorList.push_back(m_Functor);
+    }
+ }
 
 
 template <class TInputImage, class TOutputImage, class TFunction  >
@@ -103,7 +118,7 @@ template <class TInputImage, class TOutputImage, class TFunction >
 void
 UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFunction>
 ::ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread, int threadId)
-{ 
+{ std::cout<<"threadId : "<<threadId<<std::endl;
   itk::ZeroFluxNeumannBoundaryCondition<TInputImage> nbc;
   itk::ZeroFluxNeumannBoundaryCondition<TInputImage> nbcOff;
   // We use dynamic_cast since inputs are stored as DataObjects.  The
@@ -159,7 +174,7 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFuncti
       while ( ! outputIt.IsAtEnd() )
 	{
 
-	  outputIt.Set( m_Functor( neighInputIt, neighInputOffIt) );
+	  outputIt.Set( m_FunctorList[threadId]( neighInputIt, neighInputOffIt) );
 
 	  ++neighInputIt;
 	  ++neighInputOffIt;
@@ -169,6 +184,7 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFuncti
       ++fit;
       ++fitOff;
     }
+std::cout<<"threadIdFIN : "<<threadId<<std::endl;
 }
 
 } // end namespace otb

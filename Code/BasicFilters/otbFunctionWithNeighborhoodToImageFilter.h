@@ -134,6 +134,7 @@ private:
 
   InputImageSizeType m_Radius;
   InputImageOffsetType m_Offset;
+  //std::vector<FunctionType*> m_FunctionVector;
 };
 
 } // end namespace otb

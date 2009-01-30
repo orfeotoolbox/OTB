@@ -120,6 +120,8 @@ protected:
    */
   virtual ~UnaryFunctorNeighborhoodWithOffsetImageFilter() {};
 
+  virtual void BeforeThreadedGenerateData();
+
   /** UnaryFunctorNeighborhoodWithOffsetImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
    * which is called for each processing thread. The output image data is
@@ -136,6 +138,7 @@ protected:
    * Pad the input requested region by radius
    */
   virtual void GenerateInputRequestedRegion(void);
+  std::vector<FunctorType> m_FunctorList;
 
 private:
   UnaryFunctorNeighborhoodWithOffsetImageFilter(const Self&); //purposely not implemented
@@ -144,6 +147,7 @@ private:
   unsigned int m_Radius;
   
   FunctorType m_Functor;
+  
 
   InputImageOffsetType m_Offset;
 };

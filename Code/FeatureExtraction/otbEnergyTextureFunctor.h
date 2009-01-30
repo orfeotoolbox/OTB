@@ -82,7 +82,6 @@ class EnergyTextureFunctor
 	     {
 	       offsetOff[0]++;
 	       offsetOff[1] = offsetOffInit[1];
-	      
 	       offset[0] = l;
 	       ll = l*l;
 	       for( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
@@ -90,7 +89,7 @@ class EnergyTextureFunctor
 		   offsetOff[1]++;
 		   offset[1] = k;
 		   norm = vcl_pow(static_cast<double>(itOff.GetPixel(offsetOff)[i]-itOff.GetCenterPixel()[i]), 2);
-			   temp += norm;
+		   temp += norm;
 		 }
 	       temp /= area;
 	       outPix[i] = static_cast<OutputPixelType>( vcl_pow(temp, 2) );

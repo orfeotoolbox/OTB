@@ -1052,6 +1052,18 @@ ADD_TEST(feTvEnergyTextureFunctor ${FEATUREEXTRACTION_TESTS11}
     2    # offset[1]	
 )
 
+# -------        otb::EntropyTextureFunctor   -------------
+ADD_TEST(feTvEntropyTextureFunctor ${FEATUREEXTRACTION_TESTS11} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvEntropyTextureFunctor.tif
+                ${TEMP}/feTvEntropyTextureFunctor.tif
+  otbEntropyTextureFunctor
+    ${INPUTDATA}/poupees.tif
+    ${TEMP}/feTvEntropyTextureFunctor.tif
+    5    # radius
+    -2   # offset[0]
+    2    # offset[1]	
+)
 
 # -------        otb::EnergyTextureImageFunction   -------------
 ADD_TEST(feTvEnergyTextureImageFunctionNew ${FEATUREEXTRACTION_TESTS11} 
@@ -1203,6 +1215,7 @@ otbSimplifyManyPathListFilter.cxx
 otbEnergyTextureFunctor.cxx
 otbEnergyTextureImageFunctionNew.cxx
 otbEnergyTextureImageFunction.cxx
+otbEntropyTextureFunctor.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
