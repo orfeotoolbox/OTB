@@ -27,13 +27,13 @@ namespace otb
 {
 
 template < class TScalarType,
-           unsigned int NInputDimensions,
-           unsigned int NOutputDimensions,
-           unsigned int NParametersDimensions >
+unsigned int NInputDimensions,
+unsigned int NOutputDimensions,
+unsigned int NParametersDimensions >
 ForwardSensorModel< TScalarType,
-                    NInputDimensions,
-                    NOutputDimensions,
-                    NParametersDimensions>
+NInputDimensions,
+NOutputDimensions,
+NParametersDimensions>
 ::ForwardSensorModel()
 {
   m_Epsilon = 0.0001;
@@ -41,31 +41,31 @@ ForwardSensorModel< TScalarType,
 }
 
 template < class TScalarType,
-           unsigned int NInputDimensions,
-           unsigned int NOutputDimensions,
-           unsigned int NParametersDimensions >
+unsigned int NInputDimensions,
+unsigned int NOutputDimensions,
+unsigned int NParametersDimensions >
 ForwardSensorModel< TScalarType,
-                    NInputDimensions,
-                    NOutputDimensions,
-                    NParametersDimensions>
+NInputDimensions,
+NOutputDimensions,
+NParametersDimensions>
 ::~ForwardSensorModel()
 {
 }
 
 
 template < class TScalarType,
-           unsigned int NInputDimensions,
-           unsigned int NOutputDimensions,
-           unsigned int NParametersDimensions >
-               typename ForwardSensorModel< TScalarType,
-               NInputDimensions,
-               NOutputDimensions,
-               NParametersDimensions>::OutputPointType
-                   ForwardSensorModel< TScalarType,
-                   NInputDimensions,
-                   NOutputDimensions,
-                   NParametersDimensions>
-  ::TransformPoint(const InputPointType &point) const
+unsigned int NInputDimensions,
+unsigned int NOutputDimensions,
+unsigned int NParametersDimensions >
+typename ForwardSensorModel< TScalarType,
+NInputDimensions,
+NOutputDimensions,
+NParametersDimensions>::OutputPointType
+ForwardSensorModel< TScalarType,
+NInputDimensions,
+NOutputDimensions,
+NParametersDimensions>
+::TransformPoint(const InputPointType &point) const
 {
 //   otbMsgDevMacro(<< "Point in sensor geometry: (" << point[0] << "," <<  point[1] << ")");
 
@@ -75,7 +75,7 @@ template < class TScalarType,
   // Calculation
   ossimGpt ossimGPoint;
 
-  if( this->m_Model == NULL)
+  if ( this->m_Model == NULL)
   {
     itkExceptionMacro(<<"TransformPoint(): Invalid Model pointer m_Model == NULL !");
   }
@@ -138,15 +138,15 @@ template < class TScalarType,
 }
 
 template < class TScalarType,
-           unsigned int NInputDimensions,
-           unsigned int NOutputDimensions,
-           unsigned int NParametersDimensions >
-               void
-               ForwardSensorModel< TScalarType,
-               NInputDimensions,
-               NOutputDimensions,
-               NParametersDimensions>
-  ::PrintSelf(std::ostream& os, itk::Indent indent) const
+unsigned int NInputDimensions,
+unsigned int NOutputDimensions,
+unsigned int NParametersDimensions >
+void
+ForwardSensorModel< TScalarType,
+NInputDimensions,
+NOutputDimensions,
+NParametersDimensions>
+::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
 }

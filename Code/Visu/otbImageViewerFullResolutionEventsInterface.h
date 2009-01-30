@@ -25,9 +25,9 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 class ImageViewerFullResolutionEventsInterface
-: public itk::Object
+      : public itk::Object
 {
- public:
+public:
   /** Standard class typedefs */
   typedef ImageViewerFullResolutionEventsInterface Self;
   typedef itk::Object                      Superclass;
@@ -44,20 +44,20 @@ class ImageViewerFullResolutionEventsInterface
   itkGetMacro(ForwardEvents,bool);
 
   /** Users actions */
-  virtual void RegionSelected(const RegionType & region){};
-  virtual void ViewedRegionChanged(){};
-  virtual void PixelClicked(const IndexType& index){};
+  virtual void RegionSelected(const RegionType & region) {};
+  virtual void ViewedRegionChanged() {};
+  virtual void PixelClicked(const IndexType& index) {};
 
- protected:
+protected:
   /** Constructor */
   ImageViewerFullResolutionEventsInterface()
-    {
-      m_ForwardEvents = false;
-    }
+  {
+    m_ForwardEvents = false;
+  }
   /** Destructor */
-  ~ImageViewerFullResolutionEventsInterface(){}
+  ~ImageViewerFullResolutionEventsInterface() {}
 
- private:
+private:
   ImageViewerFullResolutionEventsInterface(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 

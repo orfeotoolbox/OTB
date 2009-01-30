@@ -69,12 +69,12 @@ public:
   /** Stores the histogram pointer */
   void SetInputHistogram( const TInputHistogram * histogram )
   {
-      if ( m_InputHistogram != histogram )
-      {
-        m_InputHistogram = histogram;
-        this->Modified();
-  m_IsModified = true;
-      }
+    if ( m_InputHistogram != histogram )
+    {
+      m_InputHistogram = histogram;
+      this->Modified();
+      m_IsModified = true;
+    }
   }
 
 protected:

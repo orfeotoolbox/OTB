@@ -41,9 +41,9 @@ namespace otb
  */
 template <class TInputModulus, class TInputDirection, class TOutputPath>
 class ITK_EXPORT VectorizationPathListFilter
-  : public PathListSource<TOutputPath>
+      : public PathListSource<TOutputPath>
 {
- public:
+public:
   /** Standard typedefs */
   typedef VectorizationPathListFilter    Self;
   typedef PathListSource<TOutputPath>    Superclass;
@@ -114,7 +114,7 @@ protected:
   VectorizationPathListFilter();
   /** Destructor */
   virtual ~VectorizationPathListFilter() {};
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Main computation method */
   virtual void GenerateData(void);

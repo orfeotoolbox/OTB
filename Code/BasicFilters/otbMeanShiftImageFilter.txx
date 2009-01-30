@@ -50,9 +50,9 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
 ::GetClusteredOutput()const
 {
   if (this->GetNumberOfOutputs() < 2)
-    {
+  {
     return 0;
-    }
+  }
   return static_cast<const OutputImageType * >(this->itk::ProcessObject::GetOutput(1));
 }
 
@@ -62,9 +62,9 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
 ::GetClusteredOutput()
 {
   if (this->GetNumberOfOutputs() < 2)
-    {
+  {
     return 0;
-    }
+  }
   return static_cast< OutputImageType * >(this->itk::ProcessObject::GetOutput(1));
 }
 
@@ -75,9 +75,9 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
 ::GetLabeledClusteredOutput()const
 {
   if (this->GetNumberOfOutputs() < 3)
-    {
+  {
     return 0;
-    }
+  }
   return static_cast<const LabeledOutputType * >(this->itk::ProcessObject::GetOutput(2));
 }
 
@@ -87,9 +87,9 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
 ::GetLabeledClusteredOutput()
 {
   if (this->GetNumberOfOutputs() < 3)
-    {
+  {
     return 0;
-    }
+  }
   return static_cast< LabeledOutputType * >(this->itk::ProcessObject::GetOutput(2));
 }
 
@@ -100,9 +100,9 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
 ::GetClusterBoundariesOutput()const
 {
   if (this->GetNumberOfOutputs() < 4)
-    {
+  {
     return 0;
-    }
+  }
   return static_cast<const LabeledOutputType * >(this->itk::ProcessObject::GetOutput(3));
 }
 
@@ -112,9 +112,9 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
 ::GetClusterBoundariesOutput()
 {
   if (this->GetNumberOfOutputs() < 4)
-    {
+  {
     return 0;
-    }
+  }
   return static_cast< LabeledOutputType * >(this->itk::ProcessObject::GetOutput(3));
 }
 
@@ -155,9 +155,9 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
   typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
 
   if ( !inputPtr || !outputPtr )
-    {
+  {
     return;
-    }
+  }
 
   // get a copy of the input requested region (should equal the output
   // requested region)
@@ -169,12 +169,12 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
 
   // crop the input requested region at the input's largest possible region
   if ( inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
-    {
+  {
     inputPtr->SetRequestedRegion( inputRequestedRegion );
     return;
-    }
+  }
   else
-    {
+  {
     // Couldn't crop the region (requested region is outside the largest
     // possible region).  Throw an exception.
 
@@ -187,7 +187,7 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
     e.SetDataObject(inputPtr);
     throw e;
-    }
+  }
 }
 
 template <class TInputImage,class TOutputImage, class TLabeledOutput, class TBufferConverter>
@@ -219,11 +219,11 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
 
   unsigned int index = 0;
 
-  for(inputIt.GoToBegin();!inputIt.IsAtEnd();++inputIt)
-    {
+  for (inputIt.GoToBegin();!inputIt.IsAtEnd();++inputIt)
+  {
     TBufferConverter::PixelToFloatArray(data,index,inputIt.Get(),m_Scale);
     index+=inputPtr->GetNumberOfComponentsPerPixel();
-    }
+  }
 
   edisonProcessor.DefineLInput(data,inputRequestedRegion.GetSize()[1],inputRequestedRegion.GetSize()[0],inputPtr->GetNumberOfComponentsPerPixel());
 
@@ -236,10 +236,10 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
 
   edisonProcessor.Filter(m_SpatialRadius,m_RangeRadius*m_Scale,MED_SPEEDUP);
 
-  if(edisonProcessor.ErrorStatus)
-    {
+  if (edisonProcessor.ErrorStatus)
+  {
     itkExceptionMacro(<<"Error while running edison!");
-    }
+  }
 
 
   typename OutputImageType::Pointer tmpOutput = OutputImageType::New();
@@ -251,31 +251,31 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
 
   edisonProcessor.GetRawData(data);
 
-  if(edisonProcessor.ErrorStatus)
-    {
+  if (edisonProcessor.ErrorStatus)
+  {
     itkExceptionMacro(<<"Error while running edison!");
-    }
+  }
 
 
   index = 0;
-  for(tmpIt.GoToBegin();!tmpIt.IsAtEnd();++tmpIt)
-    {
+  for (tmpIt.GoToBegin();!tmpIt.IsAtEnd();++tmpIt)
+  {
     OutputPixelType pixel;
 
     TBufferConverter::FloatArrayToPixel(data,index,pixel,outputPtr->GetNumberOfComponentsPerPixel(),invScale);
     tmpIt.Set(pixel);
     index+=outputPtr->GetNumberOfComponentsPerPixel();
-    }
+  }
 
   tmp2It.GoToBegin();
   outputIt.GoToBegin();
 
-  while(!tmp2It.IsAtEnd() && !outputIt.IsAtEnd())
-    {
+  while (!tmp2It.IsAtEnd() && !outputIt.IsAtEnd())
+  {
     outputIt.Set(tmp2It.Get());
     ++tmp2It;
     ++outputIt;
-    }
+  }
 
   delete [] data;
 }
@@ -305,11 +305,11 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
 
   unsigned int index = 0;
 
-  for(outputIt.GoToBegin();!outputIt.IsAtEnd();++outputIt)
-    {
+  for (outputIt.GoToBegin();!outputIt.IsAtEnd();++outputIt)
+  {
     TBufferConverter::PixelToFloatArray(data,index,outputIt.Get(),m_Scale);
     index+=outputPtr->GetNumberOfComponentsPerPixel();
-    }
+  }
 
   edisonProcessor.DefineLInput(data,outputRequestedRegion.GetSize()[1],outputRequestedRegion.GetSize()[0],outputPtr->GetNumberOfComponentsPerPixel());
 
@@ -322,26 +322,26 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
 
   edisonProcessor.FuseRegions(m_RangeRadius*m_Scale,m_MinimumRegionSize);
 
-  if(edisonProcessor.ErrorStatus)
-    {
+  if (edisonProcessor.ErrorStatus)
+  {
     itkExceptionMacro(<<"Error while running edison!");
-    }
+  }
 
   edisonProcessor.GetRawData(data);
 
-  if(edisonProcessor.ErrorStatus)
-    {
+  if (edisonProcessor.ErrorStatus)
+  {
     itkExceptionMacro(<<"Error while running edison!");
-    }
+  }
 
   index = 0;
-  for(clusteredOutputIt.GoToBegin();!clusteredOutputIt.IsAtEnd();++clusteredOutputIt)
-    {
+  for (clusteredOutputIt.GoToBegin();!clusteredOutputIt.IsAtEnd();++clusteredOutputIt)
+  {
     OutputPixelType pixel;
     TBufferConverter::FloatArrayToPixel(data,index,pixel,clusteredOutputPtr->GetNumberOfComponentsPerPixel(),invScale);
     clusteredOutputIt.Set(pixel);
     index+=clusteredOutputPtr->GetNumberOfComponentsPerPixel();
-    }
+  }
 
   delete [] data;
 
@@ -351,10 +351,10 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
 
   edisonProcessor.GetRegions(&labels,&modes,&modesPointsCount);
 
-  if(edisonProcessor.ErrorStatus)
-    {
+  if (edisonProcessor.ErrorStatus)
+  {
     itkExceptionMacro(<<"Error while running edison!");
-    }
+  }
 
   itk::ImageRegionIteratorWithIndex<LabeledOutputType> lcIt(labeledClusteredOutputPtr,labeledClusteredOutputPtr->GetRequestedRegion());
 
@@ -362,11 +362,11 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
 
   labeledClusteredOutputPtr->FillBuffer(0);
 
-  for(lcIt.GoToBegin();!lcIt.IsAtEnd();++lcIt)
-    {
+  for (lcIt.GoToBegin();!lcIt.IsAtEnd();++lcIt)
+  {
     lcIt.Set(static_cast<LabelType>(labels[index]));
     ++index;
-    }
+  }
 
   clusterBoudariesOutputPtr->FillBuffer(0);
 
@@ -377,24 +377,24 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
 
   typename LabeledOutputType::IndexType boundIndex;
 
-  for(LabelType label = 0; label < numRegions;++label)
-    {
+  for (LabelType label = 0; label < numRegions;++label)
+  {
     OutputPixelType pixel;
     TBufferConverter::FloatArrayToPixel(modes,label*clusteredOutputPtr->GetNumberOfComponentsPerPixel(),
-					pixel,clusteredOutputPtr->GetNumberOfComponentsPerPixel(),invScale);
+                                        pixel,clusteredOutputPtr->GetNumberOfComponentsPerPixel(),invScale);
     // Filling the modes map
     m_Modes[label]=pixel;
     regionIndeces = regionList->GetRegionIndeces(label);
-    for(int i = 0; i<regionList->GetRegionCount(label); ++i)
-      {
+    for (int i = 0; i<regionList->GetRegionCount(label); ++i)
+    {
       boundIndex[0]= regionIndeces[i] % clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0];
       boundIndex[1]= regionIndeces[i] / clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0];
-      if(clusterBoudariesOutputPtr->GetBufferedRegion().IsInside(boundIndex))
-        {
-	clusterBoudariesOutputPtr->SetPixel(boundIndex,1);
-        }
+      if (clusterBoudariesOutputPtr->GetBufferedRegion().IsInside(boundIndex))
+      {
+        clusterBoudariesOutputPtr->SetPixel(boundIndex,1);
       }
     }
+  }
 
   // Free memory
   delete [] labels;

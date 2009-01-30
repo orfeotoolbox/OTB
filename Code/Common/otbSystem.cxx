@@ -26,17 +26,17 @@
 /*=====================================================================
                    WIN32 / MSVC++ implementation
  *====================================================================*/
-        #ifndef WIN32CE
-                #  include <io.h>
-        #else
-                #  include <wce_io.h>
-        #endif
+#ifndef WIN32CE
+#  include <io.h>
+#else
+#  include <wce_io.h>
+#endif
 #else
 /*=====================================================================
                       POSIX (Unix) implementation
  *====================================================================*/
-        #include <sys/types.h>
-        #include <dirent.h>
+#include <sys/types.h>
+#include <dirent.h>
 #endif
 
 
@@ -69,19 +69,19 @@ System::GetRootName( const std::string& filename )
 
   // Create a base filename
   // i.e Image.ent --> Image
-  if( fileExt.length() > 0 )
-    {
+  if ( fileExt.length() > 0 )
+  {
     const std::string::size_type it = filename.find_last_of( fileExt );
     std::string baseName( filename, 0, it-fileExt.length() );
     return( baseName );
-    }
+  }
   //Default to return same as input when the extension is nothing (Analyze)
   return( filename );
 }
 
 bool System::IsAFileName(const std::string& pszPath)
 {
-        return( ! IsADirName(pszPath) );
+  return( ! IsADirName(pszPath) );
 }
 
 
@@ -108,23 +108,23 @@ System::GetShortFileName( const std::string& filename )
 // Set to upper a string
 std::string System::SetToUpper( const std::string& str )
 {
-        std::string lString(str);
-        for(unsigned int i=0; i<lString.size(); i++)
-        {
-                lString[i]=toupper(lString[i]);
-        }
-        return(lString);
+  std::string lString(str);
+  for (unsigned int i=0; i<lString.size(); i++)
+  {
+    lString[i]=toupper(lString[i]);
+  }
+  return(lString);
 }
 
 // Set to lower a string
 std::string System::SetToLower( const std::string& str )
 {
-        std::string lString(str);
-        for(unsigned int i=0; i<lString.size(); i++)
-        {
-                lString[i]=tolower(lString[i]);
-        }
-        return(lString);
+  std::string lString(str);
+  for (unsigned int i=0; i<lString.size(); i++)
+  {
+    lString[i]=tolower(lString[i]);
+  }
+  return(lString);
 }
 
 
@@ -137,54 +137,55 @@ std::string System::SetToLower( const std::string& str )
 
 bool System::IsADirName(const std::string&  pszPath)
 {
-    struct _finddata_t c_file;
-    long    hFile;
-    bool isADir(false);
-    std::string  pszFileSpec;
-    std::string path(pszPath);
+  struct _finddata_t c_file;
+  long    hFile;
+  bool isADir(false);
+  std::string  pszFileSpec;
+  std::string path(pszPath);
 
-    if (pszPath.empty() == true)
-        path = ".";
+  if (pszPath.empty() == true)
+    path = ".";
 
-    pszFileSpec = path + "\\*.*";
+  pszFileSpec = path + "\\*.*";
 
-    if ( (hFile = _findfirst( pszFileSpec.c_str(), &c_file )) != -1L )
-    {
-        isADir = true;
-        _findclose( hFile );
-    }
-    else
-    {
-        isADir = false;
-    }
+  if ( (hFile = _findfirst( pszFileSpec.c_str(), &c_file )) != -1L )
+  {
+    isADir = true;
+    _findclose( hFile );
+  }
+  else
+  {
+    isADir = false;
+  }
 
-    return isADir;
+  return isADir;
 }
 
 std::vector<std::string> System::Readdir(const std::string&  pszPath)
 {
-    struct _finddata_t c_file;
-    long    hFile;
-    std::vector<std::string>  listFileFind;
-    std::string  pszFileSpec;
-    std::string path(pszPath);
+  struct _finddata_t c_file;
+  long    hFile;
+  std::vector<std::string>  listFileFind;
+  std::string  pszFileSpec;
+  std::string path(pszPath);
 
-    if (pszPath.empty() == true)
-        path = ".";
+  if (pszPath.empty() == true)
+    path = ".";
 
-    pszFileSpec = path + "\\*.*";
+  pszFileSpec = path + "\\*.*";
 
-    if ( (hFile = _findfirst( pszFileSpec.c_str(), &c_file )) != -1L )
+  if ( (hFile = _findfirst( pszFileSpec.c_str(), &c_file )) != -1L )
+  {
+    do
     {
-        do
-        {
-            listFileFind.push_back(c_file.name);
-        } while( _findnext( hFile, &c_file ) == 0 );
-
-        _findclose( hFile );
+      listFileFind.push_back(c_file.name);
     }
+    while ( _findnext( hFile, &c_file ) == 0 );
 
-    return listFileFind;
+    _findclose( hFile );
+  }
+
+  return listFileFind;
 }
 
 #else
@@ -195,24 +196,24 @@ std::vector<std::string> System::Readdir(const std::string&  pszPath)
 
 bool System::IsADirName(const std::string&  pszPath)
 {
-    bool isADir(false);
-    DIR           *hDir;
-    std::string path(pszPath);
+  bool isADir(false);
+  DIR           *hDir;
+  std::string path(pszPath);
 
-    if (pszPath.empty() == true)
-        path = ".";
+  if (pszPath.empty() == true)
+    path = ".";
 
-    if ( (hDir = opendir(path.c_str())) != NULL )
-    {
-        isADir = true;
-        closedir( hDir );
-    }
-    else
-    {
-        isADir = false;
-    }
+  if ( (hDir = opendir(path.c_str())) != NULL )
+  {
+    isADir = true;
+    closedir( hDir );
+  }
+  else
+  {
+    isADir = false;
+  }
 
-    return isADir;
+  return isADir;
 }
 
 /**
@@ -233,24 +234,24 @@ bool System::IsADirName(const std::string&  pszPath)
 
 std::vector<std::string> System::Readdir(const std::string& pszPath)
 {
-    DIR           *hDir;
-    std::vector<std::string>  listFileFind;
-    struct dirent *psDirEntry;
-    std::string path(pszPath);
+  DIR           *hDir;
+  std::vector<std::string>  listFileFind;
+  struct dirent *psDirEntry;
+  std::string path(pszPath);
 
-    if (pszPath.empty() == true)
-        path = ".";
+  if (pszPath.empty() == true)
+    path = ".";
 
-    if ( (hDir = opendir(path.c_str())) != NULL )
+  if ( (hDir = opendir(path.c_str())) != NULL )
+  {
+    while ( (psDirEntry = readdir(hDir)) != NULL )
     {
-        while( (psDirEntry = readdir(hDir)) != NULL )
-        {
-            listFileFind.push_back(psDirEntry->d_name);
-        }
-
-        closedir( hDir );
+      listFileFind.push_back(psDirEntry->d_name);
     }
-    return listFileFind;
+
+    closedir( hDir );
+  }
+  return listFileFind;
 }
 
 #endif

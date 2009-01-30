@@ -67,9 +67,9 @@ template <class TPath,class TPrecision>
 void
 RCC8VertexWithCompacity<TPath,TPrecision>
 ::PrintSelf( std::ostream& os,itk::Indent indent ) const
-  {
-    Superclass::PrintSelf(os,indent);
-    os<<indent<<"Compacity: "<<m_Compacity<<std::endl;
-  }
+{
+  Superclass::PrintSelf(os,indent);
+  os<<indent<<"Compacity: "<<m_Compacity<<std::endl;
+}
 } // end namespace otb
 #endif

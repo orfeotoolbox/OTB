@@ -23,21 +23,21 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  namespace Functor
-    {
-      template < class TInput, class TOutput>
-  class VectorToAmplitudeFunctor
-  {
-  public:
-    VectorToAmplitudeFunctor(){};
-    ~VectorToAmplitudeFunctor(){};
+namespace Functor
+{
+template < class TInput, class TOutput>
+class VectorToAmplitudeFunctor
+{
+public:
+  VectorToAmplitudeFunctor() {};
+  ~VectorToAmplitudeFunctor() {};
 
-    inline TOutput operator()(const TInput & A)
-      {
-        return static_cast<TOutput>(vcl_sqrt(A.GetSquaredNorm()));
-      }
-  }; // end namespace Functor
-    }
+  inline TOutput operator()(const TInput & A)
+  {
+    return static_cast<TOutput>(vcl_sqrt(A.GetSquaredNorm()));
+  }
+}; // end namespace Functor
+}
 
 
 /** \class VectorImageToAmplitudeImageFilter
@@ -48,10 +48,10 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT VectorImageToAmplitudeImageFilter
-  : public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,Functor::VectorToAmplitudeFunctor<
-  typename TInputImage::PixelType, typename TOutputImage::PixelType> >
+      : public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,Functor::VectorToAmplitudeFunctor<
+      typename TInputImage::PixelType, typename TOutputImage::PixelType> >
 {
- public:
+public:
   /** Standard typedefs */
   typedef VectorImageToAmplitudeImageFilter            Self;
   typedef itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,Functor::VectorToAmplitudeFunctor<
@@ -67,14 +67,14 @@ class ITK_EXPORT VectorImageToAmplitudeImageFilter
 
 protected:
   /** Constructor */
-  VectorImageToAmplitudeImageFilter(){};
+  VectorImageToAmplitudeImageFilter() {};
   /** Destructor */
   virtual ~VectorImageToAmplitudeImageFilter() {};
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
-    {
-      Superclass::PrintSelf(os,indent);
-    };
+  {
+    Superclass::PrintSelf(os,indent);
+  };
 
 private:
   VectorImageToAmplitudeImageFilter(const Self&); //purposely not implemented

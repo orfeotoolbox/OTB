@@ -34,9 +34,9 @@ namespace otb
  */
 template <class THistogram, class TPixel>
 class ITK_EXPORT HistogramAndTransferFunctionWidget
-  : public Fl_Gl_Window, public itk::ProcessObject
+      : public Fl_Gl_Window, public itk::ProcessObject
 {
- public:
+public:
   /** Standard typedefs */
   typedef HistogramAndTransferFunctionWidget Self;
   typedef itk::ProcessObject                  Superclass;
@@ -68,10 +68,10 @@ class ITK_EXPORT HistogramAndTransferFunctionWidget
   itkGetMacro(TransferFunction,TransferFunctionPointerType);
 
   virtual void SetTransferFunction(TransferFunctionType * function)
-    {
-      m_TransferFunction = function;
-      this->Modified();
-    }
+  {
+    m_TransferFunction = function;
+    this->Modified();
+  }
 
   itkSetMacro(HistogramColor,ColorType);
   itkGetMacro(HistogramColor,ColorType);
@@ -106,7 +106,7 @@ protected:
   HistogramAndTransferFunctionWidget();
   /** Destructor */
   virtual ~HistogramAndTransferFunctionWidget() {};
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Draw the histogram */
@@ -161,7 +161,7 @@ private:
   bool m_Updating;
   /** Label of the histogram */
   std::string m_Label;
-/** Label of the histogram */
+  /** Label of the histogram */
   std::string m_TransferFunctionLabel;
 
 };

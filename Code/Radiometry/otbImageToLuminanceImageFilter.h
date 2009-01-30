@@ -32,57 +32,69 @@
 
 namespace otb
 {
-  namespace Functor
-    {
-      /** Functor::ImageToLuminanceImageFunctor
-       *  Add beta to the quotient Input over alpha.
-       *
-       * \ingroup Functor
-       */
+namespace Functor
+{
+/** Functor::ImageToLuminanceImageFunctor
+ *  Add beta to the quotient Input over alpha.
+ *
+ * \ingroup Functor
+ */
 
-      template <class TInput, class TOutput>
-  class ImageToLuminanceImageFunctor
+template <class TInput, class TOutput>
+class ImageToLuminanceImageFunctor
+{
+public:
+  ImageToLuminanceImageFunctor()
   {
-  public:
-    ImageToLuminanceImageFunctor()
-      {
-        m_Alpha = 1.;
-        m_Beta = 0.;
-      };
-    ~ImageToLuminanceImageFunctor() {};
-
-     void SetAlpha(double alpha){ m_Alpha = alpha;};
-     void SetBeta(double beta){ m_Beta = beta;};
-     double GetAlpha(){ return m_Alpha;};
-     double GetBeta(){ return m_Beta;};
-
-
-    inline TOutput operator() (const TInput & inPixel)
-      {
-        TOutput outPixel;
-        double temp;
-         temp = static_cast<double>(inPixel)/m_Alpha + m_Beta;
-        outPixel = static_cast<TOutput>(temp);
-        return outPixel;
-      }
-
-  private:
-    double m_Alpha;
-    double m_Beta;
+    m_Alpha = 1.;
+    m_Beta = 0.;
   };
-    }
+  ~ImageToLuminanceImageFunctor() {};
 
-  /** \class ImageToLuminanceImageFilter
-   *  \brief Transform a classical image into the luminance image. For this it uses the functor ImageToLuminanceImageFunctor calling for each component of each pixel.
-   *
-   * \ingroup ImageToLuminanceImageFunctor
-   */
+  void SetAlpha(double alpha)
+  {
+    m_Alpha = alpha;
+  };
+  void SetBeta(double beta)
+  {
+    m_Beta = beta;
+  };
+  double GetAlpha()
+  {
+    return m_Alpha;
+  };
+  double GetBeta()
+  {
+    return m_Beta;
+  };
+
+
+  inline TOutput operator() (const TInput & inPixel)
+  {
+    TOutput outPixel;
+    double temp;
+    temp = static_cast<double>(inPixel)/m_Alpha + m_Beta;
+    outPixel = static_cast<TOutput>(temp);
+    return outPixel;
+  }
+
+private:
+  double m_Alpha;
+  double m_Beta;
+};
+}
+
+/** \class ImageToLuminanceImageFilter
+ *  \brief Transform a classical image into the luminance image. For this it uses the functor ImageToLuminanceImageFunctor calling for each component of each pixel.
+ *
+ * \ingroup ImageToLuminanceImageFunctor
+ */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ImageToLuminanceImageFilter :
-public UnaryImageFunctorWithVectorImageFilter< TInputImage,
-                                               TOutputImage,
-                                               ITK_TYPENAME Functor::ImageToLuminanceImageFunctor< ITK_TYPENAME TInputImage::InternalPixelType,
-                                                                                                   ITK_TYPENAME TOutputImage::InternalPixelType > >
+      public UnaryImageFunctorWithVectorImageFilter< TInputImage,
+      TOutputImage,
+      ITK_TYPENAME Functor::ImageToLuminanceImageFunctor< ITK_TYPENAME TInputImage::InternalPixelType,
+      ITK_TYPENAME TOutputImage::InternalPixelType > >
 {
 public:
   /**   Extract input and output images dimensions.*/
@@ -93,7 +105,7 @@ public:
   typedef TInputImage         InputImageType;
   typedef TOutputImage        OutputImageType;
   typedef typename Functor::ImageToLuminanceImageFunctor<ITK_TYPENAME InputImageType::InternalPixelType,
-                                                         ITK_TYPENAME OutputImageType::InternalPixelType> FunctorType;
+  ITK_TYPENAME OutputImageType::InternalPixelType> FunctorType;
 
 
   /** "typedef" for standard classes. */
@@ -122,7 +134,7 @@ public:
   /** Image size "typedef" definition. */
   typedef typename InputImageType::SizeType SizeType;
 
-   /** Set the absolute calibration gains. */
+  /** Set the absolute calibration gains. */
   itkSetMacro(Alpha, VectorType);
   /** Give the absolute calibration gains. */
   itkGetConstReferenceMacro(Alpha, VectorType);
@@ -133,7 +145,7 @@ public:
   itkGetConstReferenceMacro(Beta, VectorType);
 
 
- protected:
+protected:
 
   ImageToLuminanceImageFilter()
   {
@@ -142,19 +154,19 @@ public:
     m_Alpha.Fill(1);
     m_Beta.Fill(0);
   };
-  virtual ~ImageToLuminanceImageFilter(){};
+  virtual ~ImageToLuminanceImageFilter() {};
 
   virtual void BeforeThreadedGenerateData(void)
-    {
-      this->GetFunctorVector().clear();
-      for(unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
   {
-    FunctorType functor;
-    functor.SetAlpha(m_Alpha[i]);
-    functor.SetBeta(m_Beta[i]);
-    this->GetFunctorVector().push_back(functor);
-  }
+    this->GetFunctorVector().clear();
+    for (unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
+    {
+      FunctorType functor;
+      functor.SetAlpha(m_Alpha[i]);
+      functor.SetBeta(m_Beta[i]);
+      this->GetFunctorVector().push_back(functor);
     }
+  }
 
 
 private:

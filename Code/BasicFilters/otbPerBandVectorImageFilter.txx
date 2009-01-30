@@ -38,17 +38,17 @@ void
 PerBandVectorImageFilter<TInputImage,TOutputImage,TFilter>
 ::GenerateOutputInformation()
 {
-  if(this->GetInput())
-    {
-      // Create a false monoband image
-      typename InputImageType::Pointer dummyInputImage = InputImageType::New();
-      dummyInputImage->CopyInformation(this->GetInput());
-      dummyInputImage->SetNumberOfComponentsPerPixel(1);
-      m_Filter->SetInput(dummyInputImage);
-      m_Filter->UpdateOutputInformation();
-      this->GetOutput()->CopyInformation(m_Filter->GetOutput(m_OutputIndex));
-      this->GetOutput()->SetNumberOfComponentsPerPixel(this->GetInput()->GetNumberOfComponentsPerPixel());
-    }
+  if (this->GetInput())
+  {
+    // Create a false monoband image
+    typename InputImageType::Pointer dummyInputImage = InputImageType::New();
+    dummyInputImage->CopyInformation(this->GetInput());
+    dummyInputImage->SetNumberOfComponentsPerPixel(1);
+    m_Filter->SetInput(dummyInputImage);
+    m_Filter->UpdateOutputInformation();
+    this->GetOutput()->CopyInformation(m_Filter->GetOutput(m_OutputIndex));
+    this->GetOutput()->SetNumberOfComponentsPerPixel(this->GetInput()->GetNumberOfComponentsPerPixel());
+  }
 }
 
 template <class TInputImage, class TOutputImage, class TFilter>

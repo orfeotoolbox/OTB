@@ -29,9 +29,9 @@ namespace otb
  *
  */
 class ImageWidgetBoxForm
-  : public ImageWidgetFormBase
+      : public ImageWidgetFormBase
 {
- public:
+public:
   /** Standard class typedefs */
   typedef ImageWidgetBoxForm Self;
   typedef ImageWidgetFormBase Superclass;
@@ -54,45 +54,45 @@ class ImageWidgetBoxForm
   itkGetMacro(Index,IndexType);
 
   void Draw(double openGlZoom, unsigned int originx, unsigned int originy, unsigned int windowh, unsigned int ss_rate)
-    {
-      if(this->GetVisible())
   {
-    double xul = static_cast<double>((static_cast<double>(m_Index[0])-static_cast<double>(originx))*openGlZoom*(1/static_cast<double>(ss_rate)));
-          double xlr = static_cast<double>((static_cast<double>(m_Index[0]+m_Size[0])-static_cast<double>(originx))*openGlZoom*(1/static_cast<double>(ss_rate)));
+    if (this->GetVisible())
+    {
+      double xul = static_cast<double>((static_cast<double>(m_Index[0])-static_cast<double>(originx))*openGlZoom*(1/static_cast<double>(ss_rate)));
+      double xlr = static_cast<double>((static_cast<double>(m_Index[0]+m_Size[0])-static_cast<double>(originx))*openGlZoom*(1/static_cast<double>(ss_rate)));
 
-          double yul = static_cast<double>(static_cast<double>(windowh)+(static_cast<double>(originy)-static_cast<double>(m_Index[1]))*openGlZoom*(1/static_cast<double>(ss_rate)));
+      double yul = static_cast<double>(static_cast<double>(windowh)+(static_cast<double>(originy)-static_cast<double>(m_Index[1]))*openGlZoom*(1/static_cast<double>(ss_rate)));
 
-          double ylr = static_cast<double>(static_cast<double>(windowh)+(static_cast<double>(originy)-static_cast<double>(m_Size[1]+m_Index[1]))*openGlZoom*(1/static_cast<double>(ss_rate)));
+      double ylr = static_cast<double>(static_cast<double>(windowh)+(static_cast<double>(originy)-static_cast<double>(m_Size[1]+m_Index[1]))*openGlZoom*(1/static_cast<double>(ss_rate)));
 
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glColor4f(m_Color[0],m_Color[1],m_Color[2],m_Color[3]);
-    glBegin(GL_LINE_LOOP);
-    glVertex2d(xul,yul);
-    glVertex2d(xul,ylr);
-    glVertex2d(xlr,ylr);
-    glVertex2d(xlr,yul);
-    glEnd();
-    glDisable(GL_BLEND);
-  }
-    };
- protected:
+      glEnable(GL_BLEND);
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      glColor4f(m_Color[0],m_Color[1],m_Color[2],m_Color[3]);
+      glBegin(GL_LINE_LOOP);
+      glVertex2d(xul,yul);
+      glVertex2d(xul,ylr);
+      glVertex2d(xlr,ylr);
+      glVertex2d(xlr,yul);
+      glEnd();
+      glDisable(GL_BLEND);
+    }
+  };
+protected:
   /** Constructor. */
   ImageWidgetBoxForm()
-      {
-  m_Index.Fill(0);
-  m_Size.Fill(0);
-      };
-    /** Destructor. */
-    ~ImageWidgetBoxForm(){};
+  {
+    m_Index.Fill(0);
+    m_Size.Fill(0);
+  };
+  /** Destructor. */
+  ~ImageWidgetBoxForm() {};
 
- private:
-    ImageWidgetBoxForm(const Self&);// purposely not implemented
-    void operator=(const Self&);// purposely not implemented
+private:
+  ImageWidgetBoxForm(const Self&);// purposely not implemented
+  void operator=(const Self&);// purposely not implemented
 
-    IndexType m_Index;
-    SizeType m_Size;
+  IndexType m_Index;
+  SizeType m_Size;
 
 };
 } // end namespace otb

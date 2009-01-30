@@ -49,10 +49,10 @@ const typename LikelihoodPathListFilter<TPath, TImage>
 LikelihoodPathListFilter<TPath, TImage>
 ::GetInputImage(void)
 {
-  if(this->GetNumberOfInputs()<1)
-    {
-      return 0;
-    }
+  if (this->GetNumberOfInputs()<1)
+  {
+    return 0;
+  }
   return static_cast<const ImageType *>(this->itk::ProcessObject::GetInput(1));
 }
 
@@ -68,13 +68,13 @@ LikelihoodPathListFilter<TPath, TImage>
 
   typedef otb::PolyLineImageConstIterator<ImageType,PathType> ImageIteratorType;
 
-  for(IteratorType it = inputPtr->Begin(); it != inputPtr->End(); ++it)
+  for (IteratorType it = inputPtr->Begin(); it != inputPtr->End(); ++it)
   {
     PathPointerType path = it.Get();
     ImageIteratorType imageIt(inputImagePtr,path);
     double cumulatedValues = 0.0;
     double nbPoints = 0.0;
-    for(imageIt.GoToBegin();!imageIt.IsAtEnd();++imageIt,++nbPoints)
+    for (imageIt.GoToBegin();!imageIt.IsAtEnd();++imageIt,++nbPoints)
     {
       cumulatedValues+=static_cast<double>(imageIt.Get());
     }

@@ -30,9 +30,9 @@ namespace otb
  */
 
 template <class TInputImageR, class TInputImageNIR, class TOutputImage,
-          class TFunction = Functor::NDVI<              typename TInputImageR::PixelType,
-                                                        typename TInputImageNIR::PixelType,
-                                                        typename TOutputImage::PixelType > >
+class TFunction = Functor::NDVI<              typename TInputImageR::PixelType,
+typename TInputImageNIR::PixelType,
+typename TOutputImage::PixelType > >
 class ITK_EXPORT RAndNIRVegetationIndexImageFilter :  public itk::BinaryFunctorImageFilter< TInputImageR, TInputImageNIR, TOutputImage, TFunction >
 {
 public:
@@ -68,9 +68,9 @@ protected:
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-/*  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId );
-*/
+  /*  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                              int threadId );
+  */
 private:
   RAndNIRVegetationIndexImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

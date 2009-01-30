@@ -27,13 +27,17 @@ namespace otb
  *
  */
 
-namespace Functor {
+namespace Functor
+{
 
 template< class TInput, class TOutput >
 class HessianToScalar
 {
 public:
-  HessianToScalar() {m_Alpha = 1.0;}
+  HessianToScalar()
+  {
+    m_Alpha = 1.0;
+  }
   ~HessianToScalar() {};
   inline TOutput operator()( const TInput & Hessian )
   {
@@ -66,21 +70,21 @@ private:
 
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT HessianToScalarImageFilter :
-    public itk::UnaryFunctorImageFilter<
-            TInputImage,TOutputImage,
-            Functor::HessianToScalar<
-                   ITK_TYPENAME TInputImage::PixelType,
-       ITK_TYPENAME TOutputImage::PixelType>   >
+      public itk::UnaryFunctorImageFilter<
+      TInputImage,TOutputImage,
+      Functor::HessianToScalar<
+      ITK_TYPENAME TInputImage::PixelType,
+      ITK_TYPENAME TOutputImage::PixelType>   >
 {
 public:
   /** Standard class typedefs. */
   typedef HessianToScalarImageFilter                                      Self;
   typedef typename itk::UnaryFunctorImageFilter<
-                             TInputImage,
-                 TOutputImage,
-                             Functor::HessianToScalar<
-               ITK_TYPENAME TInputImage::PixelType,
-                           ITK_TYPENAME TOutputImage::PixelType> > Superclass;
+  TInputImage,
+  TOutputImage,
+  Functor::HessianToScalar<
+  ITK_TYPENAME TInputImage::PixelType,
+  ITK_TYPENAME TOutputImage::PixelType> > Superclass;
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -89,12 +93,12 @@ public:
 
   void SetAlpha(double Alpha)
   {
-  this->GetFunctor().SetAlpha( Alpha );
-        this->Modified();
+    this->GetFunctor().SetAlpha( Alpha );
+    this->Modified();
   }
   double GetAlpha(void)const
   {
-  return( this->GetFunctor().GetAlpha() );
+    return( this->GetFunctor().GetAlpha() );
   }
 protected:
   HessianToScalarImageFilter() {}

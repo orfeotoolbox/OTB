@@ -64,15 +64,15 @@ SOMActivationBuilder<TInputImage,TInputMap,TOutputImage>
   OutputIteratorType outIt(output,output->GetLargestPossibleRegion());
 
   // For each vector in the set
-  for(typename ListSampleType::Iterator it = m_ListSample->Begin();
-      it!=m_ListSample->End();++it)
-    {
-      // Retrieve the index of the winner
-      index = map->GetWinner(it.GetMeasurementVector());
-      // increment the activation map
-      outIt.SetIndex(index);
-      outIt.Set(outIt.Get()+1);
-    }
+  for (typename ListSampleType::Iterator it = m_ListSample->Begin();
+       it!=m_ListSample->End();++it)
+  {
+    // Retrieve the index of the winner
+    index = map->GetWinner(it.GetMeasurementVector());
+    // increment the activation map
+    outIt.SetIndex(index);
+    outIt.Set(outIt.Get()+1);
+  }
 }
 /**
  *PrintSelf method

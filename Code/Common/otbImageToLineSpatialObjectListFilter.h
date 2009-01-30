@@ -44,7 +44,7 @@ public:
 
   /**   Extract dimensions as well of the images of entry of exit. */
   itkStaticConstMacro(    InputImageDimension,
-          unsigned int,
+                          unsigned int,
                           TInputImage::ImageDimension);
 
 

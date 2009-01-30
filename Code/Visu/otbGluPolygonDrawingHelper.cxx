@@ -26,31 +26,31 @@ PURPOSE.  See the above copyright notices for more information.
 // There are function prototype conflits under cygwin between standard w32 API
 // and standard C ones
 #ifndef CALLBACK
-  #if defined(__CYGWIN__)
-    #define CALLBACK __stdcall
-        #else
-    #define CALLBACK
-        #endif
+#if defined(__CYGWIN__)
+#define CALLBACK __stdcall
+#else
+#define CALLBACK
+#endif
 #endif
 
 extern "C"
 {
- typedef void (CALLBACK * FunctionPointerType)();
+  typedef void (CALLBACK * FunctionPointerType)();
 
- void CombineCallback(GLdouble coords[3],GLdouble * data[4], GLfloat weights[4],GLdouble **dataOut)
-{
-  GLdouble * vertex = new GLdouble[3];
-  vertex[0] = coords[0];
-  vertex[1] = coords[1];
-  vertex[2] = coords[2];
-  *dataOut = vertex;
-}
+  void CombineCallback(GLdouble coords[3],GLdouble * data[4], GLfloat weights[4],GLdouble **dataOut)
+  {
+    GLdouble * vertex = new GLdouble[3];
+    vertex[0] = coords[0];
+    vertex[1] = coords[1];
+    vertex[2] = coords[2];
+    *dataOut = vertex;
+  }
 
- void ErrorCallback(GLenum errorCode)
-{
-  const GLubyte * estring = gluErrorString(errorCode);
-  std::cout<<"Glu Tesselation error: "<<estring<<std::endl;
-}
+  void ErrorCallback(GLenum errorCode)
+  {
+    const GLubyte * estring = gluErrorString(errorCode);
+    std::cout<<"Glu Tesselation error: "<<estring<<std::endl;
+  }
 } // end extern C
 
 namespace otb
@@ -77,17 +77,17 @@ GluPolygonDrawingHelper::GluPolygonDrawingHelper()
 
 GluPolygonDrawingHelper::~GluPolygonDrawingHelper()
 {
-    gluDeleteTess(m_GluTesselator);
+  gluDeleteTess(m_GluTesselator);
 }
 
 void  GluPolygonDrawingHelper::SetWindingRule(GLdouble windingRule)
 {
-   gluTessProperty(m_GluTesselator,GLU_TESS_WINDING_RULE,windingRule);
+  gluTessProperty(m_GluTesselator,GLU_TESS_WINDING_RULE,windingRule);
 }
 
 void GluPolygonDrawingHelper::SetBoundaryOnly(GLdouble boundaryOnly)
 {
-   gluTessProperty(m_GluTesselator,GLU_TESS_BOUNDARY_ONLY,boundaryOnly);
+  gluTessProperty(m_GluTesselator,GLU_TESS_BOUNDARY_ONLY,boundaryOnly);
 }
 
 void GluPolygonDrawingHelper::Color3d(double r, double g, double b)
@@ -118,11 +118,11 @@ void GluPolygonDrawingHelper::Vertex2d(double x, double y)
 
 void GluPolygonDrawingHelper::Vertex3d(double x, double y, double z)
 {
-   PointType p;
-   p[0]=x;
-   p[1]=y;
-   p[2]=z;
-   m_PointVector.push_back(p);
+  PointType p;
+  p[0]=x;
+  p[1]=y;
+  p[2]=z;
+  m_PointVector.push_back(p);
 }
 
 void GluPolygonDrawingHelper::RenderPolygon()
@@ -131,29 +131,29 @@ void GluPolygonDrawingHelper::RenderPolygon()
   GLdouble ** data = new GLdouble*[m_PointVector.size()];
   unsigned int i = 0;
   PointVectorType::iterator it;
-  for(it = m_PointVector.begin();it!=m_PointVector.end();++i,++it)
-    {
-      data[i]= new GLdouble[3];
-      data[i][0]=(*it)[0];
-      data[i][1]=(*it)[1];
-      data[i][2]=(*it)[2];
-    }
+  for (it = m_PointVector.begin();it!=m_PointVector.end();++i,++it)
+  {
+    data[i]= new GLdouble[3];
+    data[i][0]=(*it)[0];
+    data[i][1]=(*it)[1];
+    data[i][2]=(*it)[2];
+  }
   // Set the color
   glColor4d(m_Color[0],m_Color[1],m_Color[2],m_Color[3]);
   gluTessBeginPolygon(m_GluTesselator, NULL);
   gluTessBeginContour(m_GluTesselator);
 
-  for(i=0;i<m_PointVector.size();++i)
-    {
-      gluTessVertex(m_GluTesselator,data[i],data[i]);
-    }
+  for (i=0;i<m_PointVector.size();++i)
+  {
+    gluTessVertex(m_GluTesselator,data[i],data[i]);
+  }
   gluTessEndContour(m_GluTesselator);
   gluTessEndPolygon(m_GluTesselator);
 
-  for(i=0;i<m_PointVector.size();++i)
-    {
-      delete []data[i];
-    }
+  for (i=0;i<m_PointVector.size();++i)
+  {
+    delete []data[i];
+  }
   delete []data;
 
   m_PointVector.clear();

@@ -47,9 +47,9 @@ namespace otb
  */
 template <class TInputImage, class TOutputModulus, class TOutputDirection>
 class ITK_EXPORT NeighborhoodScalarProductFilter
-  : public ImageToModulusAndDirectionImageFilter<TInputImage,TOutputModulus,TOutputDirection>
+      : public ImageToModulusAndDirectionImageFilter<TInputImage,TOutputModulus,TOutputDirection>
 {
- public:
+public:
   /** Standard typedefs */
   typedef NeighborhoodScalarProductFilter                                                    Self;
   typedef ImageToModulusAndDirectionImageFilter<TInputImage,TOutputModulus,TOutputDirection> Superclass;
@@ -80,7 +80,7 @@ protected:
   NeighborhoodScalarProductFilter();
   /** Destructor */
   virtual ~NeighborhoodScalarProductFilter() {};
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** NeighborhoodScalarProductImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine

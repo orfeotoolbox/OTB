@@ -48,16 +48,16 @@ namespace otb
  * \ingroup ClassificationFilters
  */
 template <class TInputPointSet,
-          class TTrainingPointSet>
+class TTrainingPointSet>
 class ITK_EXPORT SVMPointSetModelEstimator:
-    public SVMModelEstimator<typename TInputPointSet::PixelType::value_type, typename TTrainingPointSet::PixelType>
+      public SVMModelEstimator<typename TInputPointSet::PixelType::value_type, typename TTrainingPointSet::PixelType>
 {
 public:
   /** Standard class typedefs. */
   typedef SVMPointSetModelEstimator   Self;
   typedef SVMModelEstimator<typename TInputPointSet::PixelType::value_type,
-          typename TTrainingPointSet::PixelType>
-                            Superclass;
+  typename TTrainingPointSet::PixelType>
+  Superclass;
 
   typedef itk::SmartPointer<Self>  Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
@@ -69,7 +69,7 @@ public:
   itkTypeMacro(SVMPointSetModelEstimator, SVMModelEstimator);
 
   /** Type definition for the input image. */
-    /** Type definitions for the training image. */
+  /** Type definitions for the training image. */
   typedef typename TInputPointSet::Pointer   InputPointSetPointer;
 
   /** Type definitions for the training image. */

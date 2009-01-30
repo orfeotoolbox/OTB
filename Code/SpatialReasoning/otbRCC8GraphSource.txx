@@ -41,10 +41,10 @@ typename RCC8GraphSource<TOutputGraph>::OutputGraphType *
 RCC8GraphSource<TOutputGraph>
 ::GetOutput(void)
 {
-  if(this->GetNumberOfOutputs()<1)
-    {
+  if (this->GetNumberOfOutputs()<1)
+  {
     return 0;
-    }
+  }
   return static_cast<OutputGraphType *> (this->ProcessObject::GetOutput(0));
 }
 /**

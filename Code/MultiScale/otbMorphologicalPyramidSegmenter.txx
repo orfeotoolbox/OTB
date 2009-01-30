@@ -60,12 +60,12 @@ void
 Segmenter<TInputImage, TOutputImage>
 ::SetDetailsImage(const InputImageType * detailsImage)
 {
-this->SetNthInput(0,const_cast<TInputImage *>(detailsImage));
+  this->SetNthInput(0,const_cast<TInputImage *>(detailsImage));
 }
-  /**
-   * Set the details image.
-   * \return detailsImage The input details image.
-   */
+/**
+ * Set the details image.
+ * \return detailsImage The input details image.
+ */
 template <class TInputImage,class TOutputImage>
 typename Segmenter<TInputImage, TOutputImage>::InputImageType *
 Segmenter<TInputImage, TOutputImage>
@@ -73,10 +73,10 @@ Segmenter<TInputImage, TOutputImage>
 {
   return const_cast<InputImageType *>(this->GetInput(0));
 }
- /**
-   * Set the original image.
-   * \param originalImage The original image to segment.
-   */
+/**
+  * Set the original image.
+  * \param originalImage The original image to segment.
+  */
 template <class TInputImage,class TOutputImage>
 void
 Segmenter<TInputImage, TOutputImage>
@@ -114,9 +114,9 @@ Segmenter<TInputImage, TOutputImage>
     const_cast< InputImageType * >( this->GetInput(1) );
 
   if ( !detailsPtr || !origPtr )
-    {
+  {
     return;
-    }
+  }
 
   // We need to
   // configure the inputs such that all the data is available.
@@ -132,7 +132,7 @@ Segmenter<TInputImage, TOutputImage>
 ::EnlargeOutputRequestedRegion(void)
 {
   this->GetOutput()
-    ->SetRequestedRegion( this->GetOutput()->GetLargestPossibleRegion() );
+  ->SetRequestedRegion( this->GetOutput()->GetLargestPossibleRegion() );
 }
 
 /**
@@ -190,17 +190,17 @@ Segmenter<TInputImage, TOutputImage>
 
 
   // If we want to segment darker detail, the original image must have its itensity inverted
-  if(m_SegmentDarkDetailsBool)
-    {
-      invert = InvertFilterType::New();
-      invert->SetInput(original);
-      invert->SetMaximum(minMax->GetMaximum());
-      cast2->SetInput(invert->GetOutput());
-    }
+  if (m_SegmentDarkDetailsBool)
+  {
+    invert = InvertFilterType::New();
+    invert->SetInput(original);
+    invert->SetMaximum(minMax->GetMaximum());
+    cast2->SetInput(invert->GetOutput());
+  }
   else
-    {
-      cast2->SetInput(original);
-    }
+  {
+    cast2->SetInput(original);
+  }
   mult->SetInput1(cast1->GetOutput());
   mult->SetInput2(cast2->GetOutput());
   mult->Update();
@@ -252,14 +252,14 @@ Segmenter<TInputImage, TOutputImage>
   connectedThreshold->ClearSeeds();
   connectedThreshold->SetInput(mult->GetOutput());
   PointSetIteratorType it = pointSetFilter->GetOutput()->GetPoints()->Begin();
-  while(it!=pointSetFilter->GetOutput()->GetPoints()->End())
-    {
-      typename OutputImageType::IndexType index;
-      index[0]=static_cast<long int>(it.Value()[0]);
-      index[1]=static_cast<long int>(it.Value()[1]);
-      connectedThreshold->AddSeed(index);
-      it++;
-    }
+  while (it!=pointSetFilter->GetOutput()->GetPoints()->End())
+  {
+    typename OutputImageType::IndexType index;
+    index[0]=static_cast<long int>(it.Value()[0]);
+    index[1]=static_cast<long int>(it.Value()[1]);
+    connectedThreshold->AddSeed(index);
+    it++;
+  }
 
   // segmentation
   connectedThreshold->SetLower(connectedThresholdValue);
@@ -277,23 +277,23 @@ Segmenter<TInputImage, TOutputImage>
   threshold = ThresholdFilterType::New();
   threshold->SetInput(relabeler->GetOutput());
   OutputPixelType num = 0;
-  if(relabeler->GetNumberOfObjects()==1)
+  if (relabeler->GetNumberOfObjects()==1)
+  {
+    unsigned int surface = mult->GetOutput()->GetLargestPossibleRegion().GetSize()[0]
+                           *mult->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
+    if (relabeler->GetSizeOfObjectsInPixels()[0]==surface)
     {
-      unsigned int surface = mult->GetOutput()->GetLargestPossibleRegion().GetSize()[0]
-  *mult->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
-      if(relabeler->GetSizeOfObjectsInPixels()[0]==surface)
-  {
-    num = 0;
-  }
-      else
-  {
-    num=1;
-  }
+      num = 0;
     }
+    else
+    {
+      num=1;
+    }
+  }
   else
-    {
-      num= static_cast<OutputPixelType>(relabeler->GetNumberOfObjects());
-    }
+  {
+    num= static_cast<OutputPixelType>(relabeler->GetNumberOfObjects());
+  }
   threshold->ThresholdOutside(0,num);
 
   // Output connection

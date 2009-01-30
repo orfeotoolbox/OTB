@@ -34,9 +34,9 @@ namespace otb
  */
 template <class TPath, class TImage>
 class ITK_EXPORT LikelihoodPathListFilter
-  : public PathListToPathListFilter<TPath>
+      : public PathListToPathListFilter<TPath>
 {
- public:
+public:
   /** Standard typedefs */
   typedef LikelihoodPathListFilter                Self;
   typedef PathListToPathListFilter<TPath>       Superclass;

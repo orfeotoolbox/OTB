@@ -40,7 +40,7 @@ namespace otb
 template <class TImage, class TPath>
 class ITK_EXPORT PolyLineImageConstIterator
 {
- public:
+public:
   /** Standard typedefs */
   typedef PolyLineImageConstIterator  Self;
 
@@ -73,25 +73,25 @@ class ITK_EXPORT PolyLineImageConstIterator
 
   /** Get the dimension (size) of the index. */
   static unsigned int GetImageIteratorDimension()
-    {
+  {
     return TImage::ImageDimension;
-    }
+  }
   /** Get the index. This provides a read only reference to the index. */
   const IndexType GetIndex()
-    {
-      return m_InternalImageIterator.GetIndex();
-    }
+  {
+    return m_InternalImageIterator.GetIndex();
+  }
   /** Get the pixel value */
   const PixelType & Get(void) const
-    {
+  {
     return m_InternalImageIterator.Get();
-    }
+  }
   /** Is the iterator at the end of the line? */
   bool IsAtEnd()
-    {
+  {
     return (m_InternalVertexIterator == m_Path->GetVertexList()->End())
-      && m_InternalImageIterator.IsAtEnd();
-    }
+           && m_InternalImageIterator.IsAtEnd();
+  }
   /** Move an iterator to the beginning of the line. */
   void GoToBegin();
   /** Walk forward along the line to the next index in the image. */

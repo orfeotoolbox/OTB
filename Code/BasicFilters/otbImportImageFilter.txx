@@ -37,10 +37,10 @@ ImportImageFilter<TOutputImage>
   unsigned int idx;
 
   for (idx = 0; idx < TOutputImage::ImageDimension; ++idx)
-    {
+  {
     m_Spacing[idx] = 1.0;
     m_Origin[idx] = 0.0;
-    }
+  }
   m_Direction.SetIdentity();
 
   m_ImportPointer = 0;
@@ -56,9 +56,9 @@ ImportImageFilter<TOutputImage>
 ::~ImportImageFilter()
 {
   if (m_ImportPointer && m_FilterManageMemory)
-    {
+  {
     delete [] m_ImportPointer;
-    }
+  }
 }
 
 
@@ -75,29 +75,29 @@ ImportImageFilter<TOutputImage>
   Superclass::PrintSelf(os,indent);
 
   if (m_ImportPointer)
-    {
+  {
     os << indent << "Imported pointer: (" << m_ImportPointer  << ")" << std::endl;
-    }
+  }
   else
-    {
+  {
     os << indent << "Imported pointer: (None)" << std::endl;
-    }
+  }
   os << indent << "Import buffer size: " << m_Size << std::endl;
   os << indent << "Import buffer size: " << m_Size << std::endl;
   os << indent << "Filter manages memory: " << (m_FilterManageMemory ? "true" : "false") << std::endl;
 
   os << indent << "Spacing: [";
   for (i=0; i < static_cast<int>(TOutputImage::ImageDimension) - 1; i++)
-    {
+  {
     os << m_Spacing[i] << ", ";
-    }
+  }
   os << m_Spacing[i] << "]" << std::endl;
 
   os << indent << "Origin: [";
   for (i=0; i < static_cast<int>(TOutputImage::ImageDimension) - 1; i++)
-    {
+  {
     os << m_Origin[i] << ", ";
-    }
+  }
   os << m_Origin[i] << "]" << std::endl;
   os << indent << "Direction: " << std::endl << this->GetDirection() << std::endl;
 }
@@ -112,14 +112,14 @@ ImportImageFilter<TOutputImage>
 ::SetImportPointer(TPixel *ptr, unsigned long num, bool LetFilterManageMemory)
 {
   if (ptr != m_ImportPointer)
-    {
+  {
     if (m_ImportPointer && m_FilterManageMemory)
-      {
+    {
       delete [] m_ImportPointer;
-      }
+    }
     m_ImportPointer = ptr;
     this->Modified();
-    }
+  }
   m_FilterManageMemory = LetFilterManageMemory;
   m_Size = num;
 }
@@ -205,7 +205,7 @@ ImportImageFilter<TOutputImage>
   // memory itself.  This filter will properly manage the memory (as
   // opposed to the container) if the user wants it to.
   outputPtr->GetPixelContainer()->SetImportPointer( m_ImportPointer,
-                                                    m_Size, false );
+      m_Size, false );
 }
 
 
@@ -218,10 +218,10 @@ ImportImageFilter<TOutputImage>
 ::SetSpacing( const SpacingType & spacing )
 {
   double dspacing[TOutputImage::ImageDimension];
-  for(unsigned int i=0; i<TOutputImage::ImageDimension; i++)
-    {
+  for (unsigned int i=0; i<TOutputImage::ImageDimension; i++)
+  {
     dspacing[i] = spacing[i];
-    }
+  }
   this->SetSpacing( dspacing );
 }
 
@@ -235,10 +235,10 @@ ImportImageFilter<TOutputImage>
 ::SetOrigin( const OriginType & origin )
 {
   double dorigin[TOutputImage::ImageDimension];
-  for(unsigned int i=0; i<TOutputImage::ImageDimension; i++)
-    {
+  for (unsigned int i=0; i<TOutputImage::ImageDimension; i++)
+  {
     dorigin[i] = origin[i];
-    }
+  }
   this->SetOrigin( dorigin );
 }
 
@@ -250,20 +250,20 @@ ImportImageFilter<TOutputImage>
 {
   bool modified = false;
   for (unsigned int r = 0; r < TOutputImage::ImageDimension; r++)
-    {
+  {
     for (unsigned int c = 0; c < TOutputImage::ImageDimension; c++)
-      {
+    {
       if (m_Direction[r][c] != direction[r][c])
-        {
+      {
         m_Direction[r][c] = direction[r][c];
         modified = true;
-        }
       }
     }
+  }
   if (modified)
-    {
+  {
     this->Modified();
-    }
+  }
 }
 
 

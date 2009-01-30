@@ -32,135 +32,135 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  /** \class SensorModelBase
-   *  \brief Base class for the sensor model projection classes.
-   *  This class allows to transform a geographic point in (lat,long) to a point in the sensor geometry.
-   *  (lat,lon) -> (i,j) ou (lat,lon,h) -> (i,j)
-   *
-   * \ingroup Projection
-   *
-   */
-  template <class TScalarType,
-  unsigned int NInputDimensions=3,
-  unsigned int NOutputDimensions=2,
-  unsigned int NParametersDimensions=3>
-      class ITK_EXPORT SensorModelBase : public itk::Transform<TScalarType,
+/** \class SensorModelBase
+ *  \brief Base class for the sensor model projection classes.
+ *  This class allows to transform a geographic point in (lat,long) to a point in the sensor geometry.
+ *  (lat,lon) -> (i,j) ou (lat,lon,h) -> (i,j)
+ *
+ * \ingroup Projection
+ *
+ */
+template <class TScalarType,
+unsigned int NInputDimensions=3,
+unsigned int NOutputDimensions=2,
+unsigned int NParametersDimensions=3>
+class ITK_EXPORT SensorModelBase : public itk::Transform<TScalarType,
       NInputDimensions,
       NOutputDimensions>
-      {
+{
 
-        public :
+public :
 
-          /** Standard class typedefs. */
-          typedef SensorModelBase                             Self;
-          typedef itk::Transform< TScalarType,
-          NInputDimensions,
-          NOutputDimensions >         Superclass;
-          typedef itk::SmartPointer<Self>                     Pointer;
-          typedef itk::SmartPointer<const Self>               ConstPointer;
+  /** Standard class typedefs. */
+  typedef SensorModelBase                             Self;
+  typedef itk::Transform< TScalarType,
+  NInputDimensions,
+  NOutputDimensions >         Superclass;
+  typedef itk::SmartPointer<Self>                     Pointer;
+  typedef itk::SmartPointer<const Self>               ConstPointer;
 
-          typedef itk::Point<TScalarType, NInputDimensions >  InputPointType;
-          typedef itk::Point<TScalarType, NOutputDimensions > OutputPointType;
+  typedef itk::Point<TScalarType, NInputDimensions >  InputPointType;
+  typedef itk::Point<TScalarType, NOutputDimensions > OutputPointType;
 
-          typedef DEMHandler         DEMHandlerType;
-          typedef typename DEMHandlerType::Pointer     DEMHandlerPointerType;
+  typedef DEMHandler         DEMHandlerType;
+  typedef typename DEMHandlerType::Pointer     DEMHandlerPointerType;
 
-          /** Method for creation through the object factory. */
-          itkNewMacro( Self );
+  /** Method for creation through the object factory. */
+  itkNewMacro( Self );
 
-          /** Run-time type information (and related methods). */
-          itkTypeMacro( SensorModelBase, Transform );
+  /** Run-time type information (and related methods). */
+  itkTypeMacro( SensorModelBase, Transform );
 
-          itkStaticConstMacro(InputSpaceDimension,  unsigned int, NInputDimensions);
-          itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
-          itkStaticConstMacro(ParametersDimension,  unsigned int, NParametersDimensions); //A voir!!
+  itkStaticConstMacro(InputSpaceDimension,  unsigned int, NInputDimensions);
+  itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
+  itkStaticConstMacro(ParametersDimension,  unsigned int, NParametersDimensions); //A voir!!
 
-          /* Get the ImageKeywordlist */
-          ImageKeywordlist GetImageGeometryKeywordlist(void) const;
-          /* Get an ossimKeywordlist */
-          ossimKeywordlist GetOssimKeywordlist(void);
-          /* Get an ossimModel */
-          ossimProjection* GetOssimModel(void);
+  /* Get the ImageKeywordlist */
+  ImageKeywordlist GetImageGeometryKeywordlist(void) const;
+  /* Get an ossimKeywordlist */
+  ossimKeywordlist GetOssimKeywordlist(void);
+  /* Get an ossimModel */
+  ossimProjection* GetOssimModel(void);
 
-          /* Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
-          virtual void SetImageGeometry(const ImageKeywordlist image_kwl);
+  /* Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
+  virtual void SetImageGeometry(const ImageKeywordlist image_kwl);
 
-          /* Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
-          virtual void SetImageGeometry(const ossimKeywordlist &geom_kwl);
+  /* Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
+  virtual void SetImageGeometry(const ossimKeywordlist &geom_kwl);
 
 
 //      itkGetObjectMacro(DEMHandler, DEMHandlerType);
 
-/*      virtual void SetDEMHandler(DEMHandlerType* _arg)
-          {
-          if (this->m_DEMHandler != _arg)
-          {
-          this->m_DEMHandler = _arg;
-          this->Modified();
-          this->UseDEM(true);
-      }
-      }*/
-
-          /** Set/Get the average elevation if the DEM is not used*/
-          itkSetMacro(AverageElevation, TScalarType);
-          itkGetMacro(AverageElevation, TScalarType);
-
-          virtual void SetDEMDirectory(const std::string& directory)
-          {
-            m_DEMHandler->OpenDEMDirectory(directory.c_str());
-            m_DEMIsLoaded=true;
-            this->EnableDEM();
-          }
-
-          virtual void DisableDEM()
-          {
-            m_UseDEM = false;
+  /*      virtual void SetDEMHandler(DEMHandlerType* _arg)
+            {
+            if (this->m_DEMHandler != _arg)
+            {
+            this->m_DEMHandler = _arg;
             this->Modified();
-          }
+            this->UseDEM(true);
+        }
+        }*/
 
-          virtual void EnableDEM()
-          {
-            if (m_DEMIsLoaded)
-              m_UseDEM = true;
-            this->Modified();
-          }
+  /** Set/Get the average elevation if the DEM is not used*/
+  itkSetMacro(AverageElevation, TScalarType);
+  itkGetMacro(AverageElevation, TScalarType);
 
-        protected:
-          SensorModelBase();
-          virtual ~SensorModelBase();
+  virtual void SetDEMDirectory(const std::string& directory)
+  {
+    m_DEMHandler->OpenDEMDirectory(directory.c_str());
+    m_DEMIsLoaded=true;
+    this->EnableDEM();
+  }
 
-          /** Create the projection ( m_Model). Called by the SetImageGeometry methods */
-          void CreateProjection(const ImageKeywordlist & image_kwl);
+  virtual void DisableDEM()
+  {
+    m_UseDEM = false;
+    this->Modified();
+  }
 
-          /** PrintSelf method */
-          void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  virtual void EnableDEM()
+  {
+    if (m_DEMIsLoaded)
+      m_UseDEM = true;
+    this->Modified();
+  }
 
-          /** ImageKeywordlist */
-          ImageKeywordlist m_ImageKeywordlist;
-          /** Pointer on an ossim projection (created with the keywordlist) */
-          ossimProjection * m_Model;
+protected:
+  SensorModelBase();
+  virtual ~SensorModelBase();
 
-          /** Specify if DEM is used in Point Transformation */
-          bool m_UseDEM;
+  /** Create the projection ( m_Model). Called by the SetImageGeometry methods */
+  void CreateProjection(const ImageKeywordlist & image_kwl);
 
-          /** Object that read and use DEM */
-          DEMHandlerPointerType m_DEMHandler;
+  /** PrintSelf method */
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-          /** Specify an average elevation to use */
-          TScalarType m_AverageElevation;
+  /** ImageKeywordlist */
+  ImageKeywordlist m_ImageKeywordlist;
+  /** Pointer on an ossim projection (created with the keywordlist) */
+  ossimProjection * m_Model;
 
-          /** Specify if DEM is loaded */
-          bool m_DEMIsLoaded;
+  /** Specify if DEM is used in Point Transformation */
+  bool m_UseDEM;
 
-        private :
-          SensorModelBase(const Self&); //purposely not implemented
-          void operator=(const Self&); //purposely not implemented
+  /** Object that read and use DEM */
+  DEMHandlerPointerType m_DEMHandler;
+
+  /** Specify an average elevation to use */
+  TScalarType m_AverageElevation;
+
+  /** Specify if DEM is loaded */
+  bool m_DEMIsLoaded;
+
+private :
+  SensorModelBase(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
 
 
 
 
 
-      };
+};
 
 } // namespace otb
 

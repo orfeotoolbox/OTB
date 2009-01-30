@@ -61,7 +61,10 @@ public:
   virtual bool CanReadFile(const char*);
 
   /** Determine the file type. Returns true if the ImageIO can stream read the specified file */
-  virtual bool CanStreamRead(){  return true; };
+  virtual bool CanStreamRead()
+  {
+    return true;
+  };
 
   /** Set the spacing and dimention information for the set filename. */
   virtual void ReadImageInformation();
@@ -79,7 +82,10 @@ public:
   virtual bool CanWriteFile(const char*);
 
   /** Determine the file type. Returns true if the ImageIO can stream write the specified file */
-  virtual bool CanStreamWrite() { return true; };
+  virtual bool CanStreamWrite()
+  {
+    return true;
+  };
 
   /** Writes the spacing and dimentions of the image.
    * Assumes SetFileName has been called with a valid file name. */
@@ -114,9 +120,9 @@ private:
   bool InternalReadHeaderInformation(std::fstream & file, const bool reportError);
   /** This method get the LUM type */
   int CaiGetTypeLum(                            const   char *          type_code,
-                                                std::string &   str_sens_code,
-                                                int &           inbbits,
-                  std::string &   str_cod_pix);
+      std::string &   str_sens_code,
+      int &           inbbits,
+      std::string &   str_cod_pix);
 
 
 #define otbSwappFileOrderToSystemOrderMacro(StrongType, buffer, buffer_size) \

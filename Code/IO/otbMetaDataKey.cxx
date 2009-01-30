@@ -75,25 +75,25 @@ const std::string MetaDataKey::OSSIMKeywordlistDelimiterKey = "OSSIMKeywordlistD
 
   }; */
 const MetaDataKey::KeyTypeDef Types[] =
-  {
-    MetaDataKey::KeyTypeDef(MetaDataKey::DriverShortNameKey,    MetaDataKey::TSTRING),
-    MetaDataKey::KeyTypeDef(MetaDataKey::DriverLongNameKey,     MetaDataKey::TSTRING),
-    MetaDataKey::KeyTypeDef(MetaDataKey::ProjectionRefKey,     MetaDataKey::TSTRING),
-    MetaDataKey::KeyTypeDef(MetaDataKey::GCPProjectionKey,     MetaDataKey::TSTRING),
-    MetaDataKey::KeyTypeDef(MetaDataKey::GCPParametersKey ,       MetaDataKey::TOTB_GCP),
-    MetaDataKey::KeyTypeDef(MetaDataKey::GCPCountKey,          MetaDataKey::TENTIER),
-    MetaDataKey::KeyTypeDef(MetaDataKey::GeoTransformKey,        MetaDataKey::TSTRING),
-    MetaDataKey::KeyTypeDef(MetaDataKey::MetadataKey,          MetaDataKey::TSTRING),
-    MetaDataKey::KeyTypeDef(MetaDataKey::UpperLeftCornerKey,      MetaDataKey::TVECTOR),
-    MetaDataKey::KeyTypeDef(MetaDataKey::UpperRightCornerKey,      MetaDataKey::TVECTOR),
-    MetaDataKey::KeyTypeDef(MetaDataKey::LowerLeftCornerKey,      MetaDataKey::TVECTOR),
-    MetaDataKey::KeyTypeDef(MetaDataKey::LowerRightCornerKey,      MetaDataKey::TVECTOR),
-    MetaDataKey::KeyTypeDef(MetaDataKey::ColorTableNameKey,      MetaDataKey::TSTRING),
-    MetaDataKey::KeyTypeDef(MetaDataKey::ColorEntryCountKey,     MetaDataKey::TENTIER),
-    MetaDataKey::KeyTypeDef(MetaDataKey::ColorEntryAsRGBKey,      MetaDataKey::TVECTOR),
-    MetaDataKey::KeyTypeDef(MetaDataKey::OSSIMKeywordlistKey,    MetaDataKey::TOSSIMKEYWORDLIST),
-    MetaDataKey::KeyTypeDef(MetaDataKey::OSSIMKeywordlistDelimiterKey,MetaDataKey::TSTRING)
-  };
+{
+  MetaDataKey::KeyTypeDef(MetaDataKey::DriverShortNameKey,    MetaDataKey::TSTRING),
+  MetaDataKey::KeyTypeDef(MetaDataKey::DriverLongNameKey,     MetaDataKey::TSTRING),
+  MetaDataKey::KeyTypeDef(MetaDataKey::ProjectionRefKey,     MetaDataKey::TSTRING),
+  MetaDataKey::KeyTypeDef(MetaDataKey::GCPProjectionKey,     MetaDataKey::TSTRING),
+  MetaDataKey::KeyTypeDef(MetaDataKey::GCPParametersKey ,       MetaDataKey::TOTB_GCP),
+  MetaDataKey::KeyTypeDef(MetaDataKey::GCPCountKey,          MetaDataKey::TENTIER),
+  MetaDataKey::KeyTypeDef(MetaDataKey::GeoTransformKey,        MetaDataKey::TSTRING),
+  MetaDataKey::KeyTypeDef(MetaDataKey::MetadataKey,          MetaDataKey::TSTRING),
+  MetaDataKey::KeyTypeDef(MetaDataKey::UpperLeftCornerKey,      MetaDataKey::TVECTOR),
+  MetaDataKey::KeyTypeDef(MetaDataKey::UpperRightCornerKey,      MetaDataKey::TVECTOR),
+  MetaDataKey::KeyTypeDef(MetaDataKey::LowerLeftCornerKey,      MetaDataKey::TVECTOR),
+  MetaDataKey::KeyTypeDef(MetaDataKey::LowerRightCornerKey,      MetaDataKey::TVECTOR),
+  MetaDataKey::KeyTypeDef(MetaDataKey::ColorTableNameKey,      MetaDataKey::TSTRING),
+  MetaDataKey::KeyTypeDef(MetaDataKey::ColorEntryCountKey,     MetaDataKey::TENTIER),
+  MetaDataKey::KeyTypeDef(MetaDataKey::ColorEntryAsRGBKey,      MetaDataKey::TVECTOR),
+  MetaDataKey::KeyTypeDef(MetaDataKey::OSSIMKeywordlistKey,    MetaDataKey::TOSSIMKEYWORDLIST),
+  MetaDataKey::KeyTypeDef(MetaDataKey::OSSIMKeywordlistDelimiterKey,MetaDataKey::TSTRING)
+};
 
 
 MetaDataKey::KeyType MetaDataKey::GetKeyType(std::string name)
@@ -106,7 +106,7 @@ MetaDataKey::KeyType MetaDataKey::GetKeyType(std::string name)
 
 
     if ( (name.find(Types[i].keyname) >= 0 ) &&
-          (name.find(Types[i].keyname) <= name.size() ) )
+         (name.find(Types[i].keyname) <= name.size() ) )
     {
       ktype = Types[i].type;
       break;

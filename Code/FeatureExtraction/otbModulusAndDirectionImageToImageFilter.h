@@ -35,17 +35,17 @@ namespace otb
  *
  */
 template <class TInputImage,
-  class TInputImageDirection,
-  class TOutputImage >
+class TInputImageDirection,
+class TOutputImage >
 class ITK_EXPORT ModulusAndDirectionImageToImageFilter :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
   /**   Extract dimensions as well of the images of entry of exit. */
   itkStaticConstMacro(    InputImageDimension,
-          unsigned int,
+                          unsigned int,
                           TInputImage::ImageDimension);
   itkStaticConstMacro(    OutputImageDimension,
-          unsigned int,
+                          unsigned int,
                           TOutputImage::ImageDimension);
 
   /** typedef for the classes standards. */

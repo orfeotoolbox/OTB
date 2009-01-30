@@ -37,7 +37,7 @@ namespace otb
  */
 template <class TInputImage>
 class ITK_EXPORT BinaryImageMinimalBoundingRegionCalculator
-  : public itk::ImageToImageFilter<TInputImage,TInputImage>
+      : public itk::ImageToImageFilter<TInputImage,TInputImage>
 {
 public:
   /** Standard typedefs */

@@ -42,9 +42,9 @@ namespace otb
  */
 template <class TVertex>
 class ITK_EXPORT RCC8Graph  :
-    public itk::DataObject
+      public itk::DataObject
 {
-  public:
+public:
   /** Standard class typedefs. */
   typedef RCC8Graph                              Self;
   typedef itk::DataObject                        Superclass;
@@ -64,7 +64,7 @@ class ITK_EXPORT RCC8Graph  :
   /** Typedef for the boost graph representation */
   typedef boost::adjacency_list
   <boost::vecS,boost::vecS,boost::bidirectionalS,
-   VertexPointerType,EdgePointerType> InternalGraphType;
+  VertexPointerType,EdgePointerType> InternalGraphType;
   /** Edges and vertices descriptors typedefs (boost objects)*/
   typedef typename InternalGraphType::vertex_descriptor  VertexDescriptorType;
   typedef typename InternalGraphType::edge_descriptor    EdgeDescriptorType;
@@ -77,7 +77,10 @@ class ITK_EXPORT RCC8Graph  :
    *  Return the internal boost graph object.
    *  \return The internal boost graph object
    */
-  InternalGraphType * GetGraph(void){return &m_Graph;};
+  InternalGraphType * GetGraph(void)
+  {
+    return &m_Graph;
+  };
   /**
    * Since the number of vertices is mandatory to instantiate the
    * internal boost representation, the build method has to be called
@@ -113,14 +116,14 @@ protected:
   /** Constructor */
   RCC8Graph();
   /** Destructor */
-    ~RCC8Graph(){};
-    /** PrintSelf method */
-    void PrintSelf(std::ostream& os, itk::Indent indent) const;
-    /**
-     * Initialize a range of vertex.
-     * \param num The index of the last vertices to intialize.
-     */
-    void Initialize( unsigned int num);
+  ~RCC8Graph() {};
+  /** PrintSelf method */
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  /**
+   * Initialize a range of vertex.
+   * \param num The index of the last vertices to intialize.
+   */
+  void Initialize( unsigned int num);
 
 
 

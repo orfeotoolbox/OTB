@@ -35,8 +35,8 @@ namespace otb
  * \ingroup IntensityImageFilters   Multithreaded
  */
 template <class TInputImage1, class TInputImage2,
-          class TOutputImage, class TFunction    >
-  class ITK_EXPORT BinaryFunctorNeighborhoodImageFilter : public itk::ImageToImageFilter<TInputImage1,TOutputImage>
+class TOutputImage, class TFunction    >
+class ITK_EXPORT BinaryFunctorNeighborhoodImageFilter : public itk::ImageToImageFilter<TInputImage1,TOutputImage>
 {
 public:
   /** Standard class typedefs. */
@@ -86,7 +86,10 @@ public:
    * (Functors do not have to derive from itk::LightObject, so they do
    * not necessarily have a reference count. So we cannot return a
    * SmartPointer.) */
-  FunctorType& GetFunctor() { return m_Functor; };
+  FunctorType& GetFunctor()
+  {
+    return m_Functor;
+  };
 
   /** Set the functor object.  This replaces the current Functor with a
    * copy of the specified Functor. This allows the user to specify a
@@ -103,9 +106,9 @@ public:
 
 
   typedef itk::ConstNeighborhoodIterator<TInputImage1>
-                                         NeighborhoodIteratorType1;
+  NeighborhoodIteratorType1;
   typedef itk::ConstNeighborhoodIterator<TInputImage2>
-                                         NeighborhoodIteratorType2;
+  NeighborhoodIteratorType2;
 
   typedef typename NeighborhoodIteratorType1::RadiusType  RadiusType1;
   typedef typename NeighborhoodIteratorType2::RadiusType  RadiusType2;
@@ -129,7 +132,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId );
+                                    int threadId );
 
   /**
    * Pad the inputs requested regions by radius

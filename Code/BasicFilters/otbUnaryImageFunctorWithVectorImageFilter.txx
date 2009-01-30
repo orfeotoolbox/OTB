@@ -59,19 +59,19 @@ UnaryImageFunctorWithVectorImageFilter<TInputImage,TOutputImage,TFunction>
   typename Superclass::InputImageConstPointer  inputPtr  = this->GetInput();
 
   if ( !outputPtr || !inputPtr)
-    {
+  {
     return;
-    }
-    outputPtr->SetNumberOfComponentsPerPixel( // propagate vector length info
-        inputPtr->GetNumberOfComponentsPerPixel());
+  }
+  outputPtr->SetNumberOfComponentsPerPixel( // propagate vector length info
+    inputPtr->GetNumberOfComponentsPerPixel());
 
-    // TODO: Check this
-    // The Functor vector is not initialised !
-    for(unsigned int i = 0;i<inputPtr->GetNumberOfComponentsPerPixel();++i)
-    {
-      FunctorType functor;
-      m_FunctorVector.push_back(functor);
-    }
+  // TODO: Check this
+  // The Functor vector is not initialised !
+  for (unsigned int i = 0;i<inputPtr->GetNumberOfComponentsPerPixel();++i)
+  {
+    FunctorType functor;
+    m_FunctorVector.push_back(functor);
+  }
 }
 
 /**
@@ -99,25 +99,25 @@ UnaryImageFunctorWithVectorImageFilter<TInputImage,TOutputImage,TFunction>
   nullPixel.SetSize( inputPtr->GetNumberOfComponentsPerPixel() );
   nullPixel.Fill(itk::NumericTraits<OutputInternalPixelType>::Zero);
 
-  while( !inputIt.IsAtEnd() )
+  while ( !inputIt.IsAtEnd() )
+  {
+    InputPixelType inPixel = inputIt.Get();
+    OutputPixelType outPixel;
+    outPixel.SetSize( inputPtr->GetNumberOfComponentsPerPixel() );
+    outPixel.Fill(itk::NumericTraits<OutputInternalPixelType>::Zero);
+    // if the input pixel in null, the output is considered as null ( no sensor informations )
+    if ( inPixel!= nullPixel)
     {
-      InputPixelType inPixel = inputIt.Get();
-      OutputPixelType outPixel;
-      outPixel.SetSize( inputPtr->GetNumberOfComponentsPerPixel() );
-      outPixel.Fill(itk::NumericTraits<OutputInternalPixelType>::Zero);
-      // if the input pixel in null, the output is considered as null ( no sensor informations )
-      if( inPixel!= nullPixel)
-  {
       for (unsigned int j=0; j<inputPtr->GetNumberOfComponentsPerPixel(); j++)
-  {
-    outPixel[j] = m_FunctorVector[j]( inPixel[j] );
-  }
-  }
-      outputIt.Set(outPixel);
-      ++inputIt;
-      ++outputIt;
-      progress.CompletedPixel();  // potential exception thrown here
+      {
+        outPixel[j] = m_FunctorVector[j]( inPixel[j] );
+      }
     }
+    outputIt.Set(outPixel);
+    ++inputIt;
+    ++outputIt;
+    progress.CompletedPixel();  // potential exception thrown here
+  }
 }
 
 template <class TInputImage, class TOutputImage, class TFunction>

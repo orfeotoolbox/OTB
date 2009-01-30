@@ -25,7 +25,7 @@ namespace otb
 
 MixturePolyRBFKernelFunctor
 ::MixturePolyRBFKernelFunctor ()
-  : GenericKernelFunctorBase ()
+    : GenericKernelFunctorBase ()
 {
   m_Mixture = 0.5;
   m_GammaPoly = 1.0;
@@ -43,12 +43,12 @@ MixturePolyRBFKernelFunctor
 double
 MixturePolyRBFKernelFunctor
 ::operator() ( const svm_node * x, const svm_node * y,
-        const svm_parameter & param ) const
+               const svm_parameter & param ) const
 {
   double kernel_poly = 0.0;
   if ( m_Mixture > 0.0 )
     kernel_poly = powi( m_GammaPoly * this->dot( x, y ) + m_CoefPoly,
-              m_DegreePoly );
+                        m_DegreePoly );
 
   double kernel_rbf = 0.0;
   if ( m_Mixture < 1.0 )
@@ -113,9 +113,9 @@ MixturePolyRBFKernelFunctor
 {
   double tmp = base, ret = 1.0;
 
-  for(int t=times; t>0; t/=2)
+  for (int t=times; t>0; t/=2)
   {
-    if(t%2==1) ret*=tmp;
+    if (t%2==1) ret*=tmp;
     tmp = tmp * tmp;
   }
   return ret;

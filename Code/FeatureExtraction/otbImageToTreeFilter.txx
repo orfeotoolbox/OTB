@@ -34,7 +34,7 @@ ImageToTreeFilter<TInputImage,TOutputTree>
   this->itk::ProcessObject::SetNumberOfRequiredInputs(1);
 
   OutputTreePointer output
-    = dynamic_cast<OutputTreeType*>(this->MakeOutput(0).GetPointer());
+  = dynamic_cast<OutputTreeType*>(this->MakeOutput(0).GetPointer());
 
   this->itk::ProcessObject::SetNumberOfRequiredOutputs(1);
   this->itk::ProcessObject::SetNthOutput(0, output.GetPointer());
@@ -77,7 +77,7 @@ ImageToTreeFilter<TInputImage,TOutputTree>
   // process object is not const-correct, the const_cast
   // is required here.
   this->itk::ProcessObject::SetNthInput(0,
-                                   const_cast< InputImageType * >(input) );
+                                        const_cast< InputImageType * >(input) );
 }
 
 
@@ -91,7 +91,7 @@ ImageToTreeFilter<TInputImage,TOutputTree>
 ::GetInput(void)
 {
   return dynamic_cast<const InputImageType*>
-    (this->itk::ProcessObject::GetInput(0));
+         (this->itk::ProcessObject::GetInput(0));
 }
 
 
@@ -104,7 +104,7 @@ ImageToTreeFilter<TInputImage,TOutputTree>
 ::GetOutput(void)
 {
   return dynamic_cast<OutputTreeType*>
-    (this->itk::ProcessObject::GetOutput(0));
+         (this->itk::ProcessObject::GetOutput(0));
 }
 
 

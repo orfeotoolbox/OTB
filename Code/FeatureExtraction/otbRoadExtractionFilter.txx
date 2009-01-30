@@ -30,11 +30,11 @@ template <class TInputImage,class TOutputPath>
 RoadExtractionFilter<TInputImage, TOutputPath>
 ::RoadExtractionFilter()
 {
-        this->SetNumberOfRequiredInputs(1);
-        this->SetNumberOfRequiredOutputs(1);
+  this->SetNumberOfRequiredInputs(1);
+  this->SetNumberOfRequiredOutputs(1);
 
-        m_SpectralAngleDistanceImageFilter = SpectralAngleDistanceImageFilterType::New();
-        m_GenericRoadExtractionFilter = GenericRoadExtractionFilterType::New();
+  m_SpectralAngleDistanceImageFilter = SpectralAngleDistanceImageFilterType::New();
+  m_GenericRoadExtractionFilter = GenericRoadExtractionFilterType::New();
 
 }
 
@@ -48,21 +48,21 @@ RoadExtractionFilter<TInputImage, TOutputPath>
 ::GenerateData()
 {
   // Input images pointers
-   typename InputImageType::ConstPointer inputImage     = this->GetInput();
-   typename OutputPathListType::Pointer outputPathList  = this->GetOutput();
+  typename InputImageType::ConstPointer inputImage     = this->GetInput();
+  typename OutputPathListType::Pointer outputPathList  = this->GetOutput();
 
   m_SpectralAngleDistanceImageFilter->SetInput(inputImage);
 
   m_GenericRoadExtractionFilter->SetInput(m_SpectralAngleDistanceImageFilter->GetOutput());
 
   m_GenericRoadExtractionFilter->Update();
-  for(typename GenericRoadExtractionFilterType::OutputPathListType::ConstIterator it
-        = m_GenericRoadExtractionFilter->GetOutput()->Begin();
-        it!=m_GenericRoadExtractionFilter->GetOutput()->End();
-      ++it)
-    {
-      outputPathList->PushBack(it.Get());
-    }
+  for (typename GenericRoadExtractionFilterType::OutputPathListType::ConstIterator it
+       = m_GenericRoadExtractionFilter->GetOutput()->Begin();
+       it!=m_GenericRoadExtractionFilter->GetOutput()->End();
+       ++it)
+  {
+    outputPathList->PushBack(it.Get());
+  }
 }
 /**
  * PrintSelf method

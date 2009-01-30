@@ -46,14 +46,14 @@ namespace otb
  */
 
 template < class TPixel,
-           class TInterpol,
-     unsigned int  Dimension = 2 >
+class TInterpol,
+unsigned int  Dimension = 2 >
 
 class ITK_EXPORT ForwardFourierMellinTransformImageFilter :
-    public itk::ImageToImageFilter<Image< TPixel , Dimension >,
-                                   itk::Image< std::complex<TPixel> , Dimension > >
+      public itk::ImageToImageFilter<Image< TPixel , Dimension >,
+      itk::Image< std::complex<TPixel> , Dimension > >
 {
-  public:
+public:
 
   //typedef TPixel                 PixelType;
   typedef Image< TPixel , Dimension >                           InputImageType;
@@ -117,8 +117,8 @@ class ITK_EXPORT ForwardFourierMellinTransformImageFilter :
   itkGetMacro(OutputSize,OutputSizeType);
 
   /** Set/Get the Sigma value for the Log-polar resampler  */
-   itkSetMacro(Sigma,double);
-   itkGetMacro(Sigma,double);
+  itkSetMacro(Sigma,double);
+  itkGetMacro(Sigma,double);
 
   /** Set/Get the Default pixel value for the Log-polar resampler  */
   itkSetMacro(DefaultPixelValue, PixelType);
@@ -133,7 +133,7 @@ class ITK_EXPORT ForwardFourierMellinTransformImageFilter :
 
 protected:
   ForwardFourierMellinTransformImageFilter();
-  ~ForwardFourierMellinTransformImageFilter(){};
+  ~ForwardFourierMellinTransformImageFilter() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Main Computation Method */
   void GenerateData();

@@ -36,7 +36,7 @@ PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
   m_OutputSpacing.Fill(1.);
   m_OutputOrigin.Fill(0.);
   m_DefaultValue = 0;
- //  m_NearestPoints = PointSetType::New();
+//  m_NearestPoints = PointSetType::New();
 }
 /**
  * Set the pointset containing the disparity.
@@ -100,21 +100,21 @@ PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
   typedef typename PointSetType::PointsContainer::ConstIterator PointSetIteratorType;
   typedef typename PointSetType::PointsContainer PointsContainerType;
   PointSetIteratorType it = this->GetPointSet()->GetPoints()->Begin();
-  for(;it!=this->GetPointSet()->GetPoints()->End();++it)
-    {
-      PointType p;
-      p[0]=it.Value()[0];
-      p[1]=it.Value()[1];
-      if(vcl_abs(this->GetPointSet()->GetPointData()->GetElement(j)[0])>=m_MetricThreshold)
+  for (;it!=this->GetPointSet()->GetPoints()->End();++it)
   {
+    PointType p;
+    p[0]=it.Value()[0];
+    p[1]=it.Value()[1];
+    if (vcl_abs(this->GetPointSet()->GetPointData()->GetElement(j)[0])>=m_MetricThreshold)
+    {
 
-    distanceVector.push_back(EuclideanDistance(index,p));
-    sortVector.push_back(i);
-    indexVector.push_back(j);
-    ++i;
-  }
-      ++j;
+      distanceVector.push_back(EuclideanDistance(index,p));
+      sortVector.push_back(i);
+      indexVector.push_back(j);
+      ++i;
     }
+    ++j;
+  }
 
   ComparisonFunctorType comp;
   comp.SetDistanceVector(distanceVector);
@@ -123,10 +123,10 @@ PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
   // building output vector
   unsigned int nbElements = (n<indexVector.size() ? n : indexVector.size());
   IndexVectorType output;
-  for(i=0;i<nbElements;i++)
-    {
-      output.push_back(indexVector[sortVector[i]]);
-    }
+  for (i=0;i<nbElements;i++)
+  {
+    output.push_back(indexVector[sortVector[i]]);
+  }
   return output;
 }
 

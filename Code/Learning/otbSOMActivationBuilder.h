@@ -34,9 +34,9 @@ namespace otb
  */
 template <class TListSample, class TInputMap, class TOutputImage>
 class ITK_EXPORT SOMActivationBuilder
-  : public itk::ImageToImageFilter<TInputMap,TOutputImage>
+      : public itk::ImageToImageFilter<TInputMap,TOutputImage>
 {
- public:
+public:
   /** Standard typedefs */
   typedef SOMActivationBuilder Self;
   typedef itk::ImageToImageFilter<TInputMap,TOutputImage> Superclass;
@@ -65,7 +65,7 @@ class ITK_EXPORT SOMActivationBuilder
   itkSetObjectMacro(ListSample,ListSampleType);
   itkGetObjectMacro(ListSample,ListSampleType);
 
- protected:
+protected:
   /** Constructor */
   SOMActivationBuilder();
   /** Destructor */
@@ -75,7 +75,7 @@ class ITK_EXPORT SOMActivationBuilder
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
- private:
+private:
   SOMActivationBuilder(const Self&); // purposely not implemented
   void operator=(const Self&);// purposely not implemented
   /** ListSample object */

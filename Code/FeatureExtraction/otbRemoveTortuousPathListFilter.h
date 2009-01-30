@@ -49,13 +49,13 @@ namespace otb
  */
 
 //   template <class TPath>
-  template <class TPath>
-      class ITK_EXPORT RemoveTortuousPathListFilter :
+template <class TPath>
+class ITK_EXPORT RemoveTortuousPathListFilter :
       public UnaryFunctorObjectListBooleanFilter<
-       ObjectList<TPath>,
-       ObjectList<TPath>,
-       PathMeanDistanceFunctor<typename TPath::Pointer> >
-       {};
+      ObjectList<TPath>,
+      ObjectList<TPath>,
+      PathMeanDistanceFunctor<typename TPath::Pointer> >
+  {};
 
 }// End namespace otb
 

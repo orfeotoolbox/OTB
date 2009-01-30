@@ -32,11 +32,11 @@ namespace otb
  */
 
 template < class TInput,
-           class TOutput = float,
-           class TPrecision = double,
-     class TCoordRep = float >
+class TOutput = float,
+class TPrecision = double,
+class TCoordRep = float >
 class ITK_EXPORT RealMomentImageFunction :
-  public GeometricMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep >
+      public GeometricMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep >
 {
 public:
   /** Standard class typedefs. */
@@ -66,11 +66,11 @@ public:
 
 protected:
   RealMomentImageFunction() {};
-  ~RealMomentImageFunction(){};
+  ~RealMomentImageFunction() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const
-     {
-      Superclass::PrintSelf( os, indent );
-     }
+  {
+    Superclass::PrintSelf( os, indent );
+  }
 
 private:
   RealMomentImageFunction( const Self& ); //purposely not implemented

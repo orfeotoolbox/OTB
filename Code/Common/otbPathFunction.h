@@ -41,9 +41,9 @@ namespace otb
  * \ingroup PathFunction
  */
 template <class TInputPath,
-          class TOutput>
+class TOutput>
 class ITK_EXPORT PathFunction :
-    public itk::FunctionBase< TInputPath, TOutput >
+      public itk::FunctionBase< TInputPath, TOutput >
 {
 public:
 
@@ -70,7 +70,9 @@ public:
 
   /** Get the input path. */
   const InputPathType * GetInputPath() const
-    { return m_Path.GetPointer(); }
+  {
+    return m_Path.GetPointer();
+  }
 
 protected:
   PathFunction();

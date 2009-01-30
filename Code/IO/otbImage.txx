@@ -33,97 +33,97 @@ Image<TPixel,VImageDimension>::Image()
 }
 
 template <class TPixel, unsigned int VImageDimension>
-    std::string Image<TPixel, VImageDimension>::GetProjectionRef( void ) const
+std::string Image<TPixel, VImageDimension>::GetProjectionRef( void ) const
 {
-   return ( this->ImageBase::GetProjectionRef( this->GetMetaDataDictionary() ) );
+  return ( this->ImageBase::GetProjectionRef( this->GetMetaDataDictionary() ) );
 }
 
 template <class TPixel, unsigned int VImageDimension>
-    std::string Image<TPixel, VImageDimension>::GetGCPProjection( void ) const
+std::string Image<TPixel, VImageDimension>::GetGCPProjection( void ) const
 {
   return ( this->ImageBase::GetGCPProjection( this->GetMetaDataDictionary() ) );
 }
 
 template <class TPixel, unsigned int VImageDimension>
-    unsigned int Image<TPixel, VImageDimension>::GetGCPCount( void  ) const
+unsigned int Image<TPixel, VImageDimension>::GetGCPCount( void  ) const
 {
   return ( this->ImageBase::GetGCPCount( this->GetMetaDataDictionary() ) );
 }
 
 template <class TPixel, unsigned int VImageDimension>
-    OTB_GCP & Image<TPixel, VImageDimension>::GetGCPs ( unsigned int GCPnum )
+OTB_GCP & Image<TPixel, VImageDimension>::GetGCPs ( unsigned int GCPnum )
 {
-   return (this->ImageBase::GetGCPs( this->GetMetaDataDictionary(), GCPnum ) );
+  return (this->ImageBase::GetGCPs( this->GetMetaDataDictionary(), GCPnum ) );
 }
 
 template <class TPixel, unsigned int VImageDimension>
-    std::string Image<TPixel, VImageDimension>::GetGCPId( unsigned int GCPnum  ) const
+std::string Image<TPixel, VImageDimension>::GetGCPId( unsigned int GCPnum  ) const
 {
   return ( this->ImageBase::GetGCPId( this->GetMetaDataDictionary(), GCPnum ) );
 }
 
 template <class TPixel, unsigned int VImageDimension>
-    std::string Image<TPixel, VImageDimension>::GetGCPInfo( unsigned int GCPnum ) const
+std::string Image<TPixel, VImageDimension>::GetGCPInfo( unsigned int GCPnum ) const
 {
   return ( this->ImageBase::GetGCPInfo( this->GetMetaDataDictionary(), GCPnum ) );
 }
 
 template <class TPixel, unsigned int VImageDimension>
-    double Image<TPixel, VImageDimension>::GetGCPRow( unsigned int GCPnum ) const
+double Image<TPixel, VImageDimension>::GetGCPRow( unsigned int GCPnum ) const
 {
   return ( this->ImageBase::GetGCPRow( this->GetMetaDataDictionary(), GCPnum ) );
 }
 
 template <class TPixel, unsigned int VImageDimension>
-    double Image<TPixel, VImageDimension>::GetGCPCol( unsigned int GCPnum ) const
+double Image<TPixel, VImageDimension>::GetGCPCol( unsigned int GCPnum ) const
 {
   return ( this->ImageBase::GetGCPCol( this->GetMetaDataDictionary(), GCPnum ) );
 }
 
 template <class TPixel, unsigned int VImageDimension>
-    double Image<TPixel, VImageDimension>::GetGCPX( unsigned int GCPnum ) const
+double Image<TPixel, VImageDimension>::GetGCPX( unsigned int GCPnum ) const
 {
   return ( this->ImageBase::GetGCPX( this->GetMetaDataDictionary(), GCPnum ) );
 }
 
 template <class TPixel, unsigned int VImageDimension>
-    double Image<TPixel, VImageDimension>::GetGCPY( unsigned int GCPnum ) const
+double Image<TPixel, VImageDimension>::GetGCPY( unsigned int GCPnum ) const
 {
   return ( this->ImageBase::GetGCPY( this->GetMetaDataDictionary(), GCPnum ) );
 }
 
 template <class TPixel, unsigned int VImageDimension>
-    double Image<TPixel, VImageDimension>::GetGCPZ( unsigned int GCPnum ) const
+double Image<TPixel, VImageDimension>::GetGCPZ( unsigned int GCPnum ) const
 {
   return ( this->ImageBase::GetGCPZ( this->GetMetaDataDictionary(), GCPnum ) );
 }
 
 template <class TPixel, unsigned int VImageDimension>
-    ImageBase::VectorType Image<TPixel, VImageDimension>::GetGeoTransform( void ) const
+ImageBase::VectorType Image<TPixel, VImageDimension>::GetGeoTransform( void ) const
 {
   return ( this->ImageBase::GetGeoTransform( this->GetMetaDataDictionary() ) );
 }
 
 template <class TPixel, unsigned int VImageDimension>
-    ImageBase::VectorType Image<TPixel, VImageDimension>::GetUpperLeftCorner( void ) const
+ImageBase::VectorType Image<TPixel, VImageDimension>::GetUpperLeftCorner( void ) const
 {
   return ( this->ImageBase::GetUpperLeftCorner( this->GetMetaDataDictionary() ) );
 }
 
 template <class TPixel, unsigned int VImageDimension>
-    ImageBase::VectorType Image<TPixel, VImageDimension>::GetUpperRightCorner( void ) const
+ImageBase::VectorType Image<TPixel, VImageDimension>::GetUpperRightCorner( void ) const
 {
   return ( this->ImageBase::GetUpperRightCorner( this->GetMetaDataDictionary() ) );
 }
 
 template <class TPixel, unsigned int VImageDimension>
-    ImageBase::VectorType Image<TPixel, VImageDimension>::GetLowerLeftCorner( void ) const
+ImageBase::VectorType Image<TPixel, VImageDimension>::GetLowerLeftCorner( void ) const
 {
   return ( this->ImageBase::GetLowerLeftCorner( this->GetMetaDataDictionary() ) );
 }
 
 template <class TPixel, unsigned int VImageDimension>
-    ImageBase::VectorType Image<TPixel, VImageDimension>::GetLowerRightCorner( void ) const
+ImageBase::VectorType Image<TPixel, VImageDimension>::GetLowerRightCorner( void ) const
 {
   return ( this->ImageBase::GetLowerRightCorner( this->GetMetaDataDictionary() ) );
 }
@@ -135,7 +135,7 @@ ImageBase::ImageKeywordlistType Image<TPixel, VImageDimension>::GetImageKeywordl
 }
 
 template <class TPixel, unsigned int VImageDimension>
-   const ImageBase::ImageKeywordlistType Image<TPixel, VImageDimension>::GetImageKeywordlist( void ) const
+const ImageBase::ImageKeywordlistType Image<TPixel, VImageDimension>::GetImageKeywordlist( void ) const
 {
   return ( this->ImageBase::GetImageKeywordlist( this->GetMetaDataDictionary() ) );
 }

@@ -79,9 +79,9 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage, class TStructuringElement>
 class ITK_EXPORT GeodesicMorphologyDecompositionImageFilter
-  : public itk::ImageToImageFilter<TInputImage,TOutputImage>
+      : public itk::ImageToImageFilter<TInputImage,TOutputImage>
 {
- public:
+public:
   /** Standard typedefs */
   typedef GeodesicMorphologyDecompositionImageFilter            Self;
   typedef itk::ImageToImageFilter<TInputImage,TOutputImage> Superclass;
@@ -143,7 +143,7 @@ protected:
   GeodesicMorphologyDecompositionImageFilter();
   /** Destructor */
   virtual ~GeodesicMorphologyDecompositionImageFilter() {};
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

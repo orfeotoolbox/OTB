@@ -25,40 +25,40 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-   /** \class SVY21MapProjection
-   * \brief This class implements the SVY21 map projection (Singapore geodesic system).
-   * It converts coordinates in longitude,latitude (WGS84) to SVY21 map coordinates.
-   *
-    */
-  template <InverseOrForwardTransformationEnum transform>
-      class ITK_EXPORT SVY21MapProjection : public TransMercatorMapProjection<transform>
-  {
-    public :
-      /** Standard class typedefs. */
-      typedef SVY21MapProjection                  Self;
-      typedef TransMercatorMapProjection<transform>   Superclass;
-      typedef itk::SmartPointer<Self>                          Pointer;
-      typedef itk::SmartPointer<const Self>                    ConstPointer;
+/** \class SVY21MapProjection
+* \brief This class implements the SVY21 map projection (Singapore geodesic system).
+* It converts coordinates in longitude,latitude (WGS84) to SVY21 map coordinates.
+*
+ */
+template <InverseOrForwardTransformationEnum transform>
+class ITK_EXPORT SVY21MapProjection : public TransMercatorMapProjection<transform>
+{
+public :
+  /** Standard class typedefs. */
+  typedef SVY21MapProjection                  Self;
+  typedef TransMercatorMapProjection<transform>   Superclass;
+  typedef itk::SmartPointer<Self>                          Pointer;
+  typedef itk::SmartPointer<const Self>                    ConstPointer;
 
-      typedef typename Superclass::ScalarType                 ScalarType;
-      typedef itk::Point<ScalarType,2 >                       InputPointType;
-      typedef itk::Point<ScalarType,2 >                        OutputPointType;
+  typedef typename Superclass::ScalarType                 ScalarType;
+  typedef itk::Point<ScalarType,2 >                       InputPointType;
+  typedef itk::Point<ScalarType,2 >                        OutputPointType;
 
-      /** Method for creation through the object factory. */
-      itkNewMacro( Self );
+  /** Method for creation through the object factory. */
+  itkNewMacro( Self );
 
-      /** Run-time type information (and related methods). */
-      itkTypeMacro( SVY21MapProjection, TransMercatorMapProjection );
+  /** Run-time type information (and related methods). */
+  itkTypeMacro( SVY21MapProjection, TransMercatorMapProjection );
 
 
-    protected:
-      SVY21MapProjection();
-      virtual ~SVY21MapProjection();
+protected:
+  SVY21MapProjection();
+  virtual ~SVY21MapProjection();
 
-    private :
-      SVY21MapProjection(const Self&); //purposely not implemented
-      void operator=(const Self&);                       //purposely not implemented
-  };
+private :
+  SVY21MapProjection(const Self&); //purposely not implemented
+  void operator=(const Self&);                       //purposely not implemented
+};
 
 } // namespace otb
 

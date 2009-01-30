@@ -33,10 +33,10 @@ namespace otb
  */
 
 template < class TInputPath,
-           class TOutput      = double,
-            class TPrecision   = double>
+class TOutput      = double,
+class TPrecision   = double>
 class ITK_EXPORT RealMomentPathFunction :
-  public GeometricMomentPathFunction< TInputPath, TOutput, TPrecision>
+      public GeometricMomentPathFunction< TInputPath, TOutput, TPrecision>
 {
 public:
   /** Standard class typedefs. */
@@ -66,12 +66,15 @@ public:
   itkGetConstReferenceMacro(Step, float);
 
 protected:
-  RealMomentPathFunction() {m_Step = 1.0;}
-  ~RealMomentPathFunction(){};
+  RealMomentPathFunction()
+  {
+    m_Step = 1.0;
+  }
+  ~RealMomentPathFunction() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const
-     {
-      Superclass::PrintSelf( os, indent );
-     }
+  {
+    Superclass::PrintSelf( os, indent );
+  }
 
 private:
   RealMomentPathFunction( const Self& ); //purposely not implemented

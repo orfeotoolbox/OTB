@@ -43,10 +43,10 @@ Shape*
 Shape::mw_get_not_removed_shape(Shape *sh)
 {
   Shape *NotSup = NULL;
-  if((sh == NULL) || (!sh->removed))
+  if ((sh == NULL) || (!sh->removed))
     return(sh);
-  for(sh = sh->child; sh != NULL; sh = sh->next_sibling)
-    if((NotSup = mw_get_not_removed_shape(sh)) != NULL)
+  for (sh = sh->child; sh != NULL; sh = sh->next_sibling)
+    if ((NotSup = mw_get_not_removed_shape(sh)) != NULL)
       break;
   return(NotSup);
 }
@@ -56,21 +56,21 @@ Shape::mw_get_not_removed_shape(Shape *sh)
 Shape*
 Shape::mw_get_parent_shape(Shape *sh)
 {
-  if(sh == NULL)
-    {
-      std::cerr <<"[mw_get_parent_shape] input shape structure is NULL" << std::endl;
-      return(NULL);
-    }
-  if(sh->parent == NULL) /* It is the root of the shape */
+  if (sh == NULL)
+  {
+    std::cerr <<"[mw_get_parent_shape] input shape structure is NULL" << std::endl;
+    return(NULL);
+  }
+  if (sh->parent == NULL) /* It is the root of the shape */
     return(NULL);
 
   do
-    if((sh = sh->parent) == NULL)
-      {
-  std::cerr << "[mw_get_parent_shape] the root of the shapes is removed" << std::endl;
-  return(NULL);
-      }
-  while(sh->removed);
+    if ((sh = sh->parent) == NULL)
+    {
+      std::cerr << "[mw_get_parent_shape] the root of the shapes is removed" << std::endl;
+      return(NULL);
+    }
+  while (sh->removed);
   return(sh);
 }
 
@@ -80,13 +80,13 @@ Shape*
 Shape::mw_get_first_child_shape(Shape *sh)
 {
   Shape *NotSup = NULL;
-  if(sh == NULL)
-    {
-      std::cerr << "[mw_get_first_child_shape] input shape is NULL" << std::endl;
-      return(NULL);
-    }
-  for(sh = sh->child; sh != NULL; sh = sh->next_sibling)
-    if((NotSup = mw_get_not_removed_shape(sh)) != NULL)
+  if (sh == NULL)
+  {
+    std::cerr << "[mw_get_first_child_shape] input shape is NULL" << std::endl;
+    return(NULL);
+  }
+  for (sh = sh->child; sh != NULL; sh = sh->next_sibling)
+    if ((NotSup = mw_get_not_removed_shape(sh)) != NULL)
       break;
   return(NotSup);
 }
@@ -99,26 +99,27 @@ Shape::mw_get_next_sibling_shape(Shape *sh)
 {
   Shape *sh1 = NULL;
   Shape *sh2 = NULL;
-  if(sh == NULL)
-    {
-      std::cerr <<"[mw_get_next_sibling_shape] input shape is NULL";
-      return(NULL);
-    }
+  if (sh == NULL)
+  {
+    std::cerr <<"[mw_get_next_sibling_shape] input shape is NULL";
+    return(NULL);
+  }
   /* First look at the siblings in the original tree */
-  for(sh1 = sh->next_sibling; sh1 != NULL; sh1 = sh1->next_sibling)
-    if((sh2 = mw_get_not_removed_shape(sh1)) != NULL)
+  for (sh1 = sh->next_sibling; sh1 != NULL; sh1 = sh1->next_sibling)
+    if ((sh2 = mw_get_not_removed_shape(sh1)) != NULL)
       return(sh2);
-  if(sh->parent == NULL || ! sh->parent->removed)
+  if (sh->parent == NULL || ! sh->parent->removed)
     return(NULL); /* The parent in the original tree is also the parent in the true tree, nothing more to do */
   /* If not found, find the node in the original tree just before the true parent */
   do
-    {
-      sh = sh->parent;
-      /* Look at the siblings of this node */
-      for(sh1 = sh->next_sibling; sh1 != NULL; sh1 = sh1->next_sibling)
-  if((sh2 = mw_get_not_removed_shape(sh1)) != NULL)
-    return(sh2);
-    }   while(sh->parent->removed);
+  {
+    sh = sh->parent;
+    /* Look at the siblings of this node */
+    for (sh1 = sh->next_sibling; sh1 != NULL; sh1 = sh1->next_sibling)
+      if ((sh2 = mw_get_not_removed_shape(sh1)) != NULL)
+        return(sh2);
+  }
+  while (sh->parent->removed);
   return(NULL);
 }
 
@@ -138,19 +139,19 @@ Shapes::mw_alloc_shapes( int inrow, int  incol, float value)
 
   size = inrow*incol;
   if (size <= 0)
-    {
-      std::cerr << "[mw_alloc_shapes] Attempts to alloc shapes with null size" << std::endl;
-    }
+  {
+    std::cerr << "[mw_alloc_shapes] Attempts to alloc shapes with null size" << std::endl;
+  }
   if ((the_shapes!=NULL)||(smallest_shape!=NULL))
-    {
-      std::cerr << "[mw_alloc_shapes] Attempts to alloc root which is already allocated" << std::endl;
-    }
+  {
+    std::cerr << "[mw_alloc_shapes] Attempts to alloc root which is already allocated" << std::endl;
+  }
 
   root = the_shapes = new Shape[size+1];
   if (root==NULL)
-    {
-      std::cerr <<"[mw_alloc_shapes] Not enough memory" <<std::endl;
-    }
+  {
+    std::cerr <<"[mw_alloc_shapes] Not enough memory" <<std::endl;
+  }
   root->inferior_type = 1;
   root->value         = value;
   root->open          = 1;
@@ -169,10 +170,10 @@ Shapes::mw_alloc_shapes( int inrow, int  incol, float value)
   typedef Shape* ShapePtr;
   smallest_shape = new ShapePtr[size];
   if (smallest_shape==NULL)
-    {
-      std::cerr <<"[mw_alloc_shapes] Not enough memory" << std::endl;
-      delete root;
-    }
+  {
+    std::cerr <<"[mw_alloc_shapes] Not enough memory" << std::endl;
+    delete root;
+  }
   for (i=size-1; i>=0; i--) smallest_shape[i] = root;
 }
 
@@ -188,10 +189,10 @@ Shapes::mw_change_shapes(int inrow,int incol,float value)
   otbMsgDevMacro( << "mw_change_shapes () " );
   otbMsgDevMacro( << "  nb shapes  : " <<this->nb_shapes);
   otbMsgDevMacro( << "  the shapes : " <<the_shapes );
-  if((the_shapes != NULL) && (nb_shapes > 0))
+  if ((the_shapes != NULL) && (nb_shapes > 0))
     delete[] the_shapes[0].pixels;
   if (the_shapes != NULL) delete[] the_shapes;
- if (smallest_shape != NULL) delete[] smallest_shape;
+  if (smallest_shape != NULL) delete[] smallest_shape;
 
   mw_alloc_shapes(inrow, incol, value);
 }
@@ -207,11 +208,11 @@ Shapes::mw_get_smallest_shape(int iX,int iY)
 
   sh = smallest_shape[iY*ncol+iX];
   if (sh == NULL)
-    {
-      std::cerr << "[mw_get_smallest_shape] smallest shape is NULL" << std::endl;
-      return(NULL);
-    }
-  if(sh->removed)
+  {
+    std::cerr << "[mw_get_smallest_shape] smallest shape is NULL" << std::endl;
+    return(NULL);
+  }
+  if (sh->removed)
     sh = sh->mw_get_parent_shape(sh);
   return(sh);
 }
@@ -226,11 +227,11 @@ Shapes::compute_proper_pixels(int *tabNbOfProperPixels)
   /* 1) Initialize by the area */
   pShape = the_shapes + nb_shapes-1;
   pNbOfProperPixels = tabNbOfProperPixels + nb_shapes-1;
-  for(i = nb_shapes-1; i >= 0; i--)
+  for (i = nb_shapes-1; i >= 0; i--)
     *pNbOfProperPixels-- = (pShape--)->area;
   /* 2) For each shape, substract its area to its parent */
   pShape = the_shapes + nb_shapes-1;
-  for(i = nb_shapes-1; i > 0; i--, pShape--)
+  for (i = nb_shapes-1; i > 0; i--, pShape--)
     tabNbOfProperPixels[pShape->parent - the_shapes] -= pShape->area;
 
 }
@@ -247,27 +248,30 @@ Shapes::allocate_pixels(int* tabNbOfProperPixels)
 
   /* 1) Memory allocation */
   tabPixelsOfRoot = the_shapes[0].pixels = new Point_plane[nrow*ncol];
-  if(tabPixelsOfRoot == NULL)
+  if (tabPixelsOfRoot == NULL)
     std::cerr << "allocate_pixels --> Allocation of pixels"<<std::endl;
   tabpShapesOfStack = new Shape*[nb_shapes];
-  if(tabpShapesOfStack == NULL)
+  if (tabpShapesOfStack == NULL)
     std::cerr << "allocate_pixels --> Allocation of stack"<< std::endl;
 
   /* 2) Enumeration of the tree in preorder, using the stack */
   pShape = &the_shapes[0];
   iSizeOfStack = 0;
   i = 0;
-  while(1)
-    if(pShape != NULL) {
+  while (1)
+    if (pShape != NULL)
+    {
       /* Write pixels of pShape */
       pShape->pixels = &tabPixelsOfRoot[i];
       iIndex = pShape - the_shapes;
       i += tabNbOfProperPixels[iIndex];
       tabpShapesOfStack[iSizeOfStack++] = pShape; /* Push */
       pShape = pShape->child;
-    } else {
-      if(iSizeOfStack == 0)
-  break;
+    }
+    else
+    {
+      if (iSizeOfStack == 0)
+        break;
       pShape = tabpShapesOfStack[--iSizeOfStack]->next_sibling; /* Pop */
     }
   delete[] tabpShapesOfStack;
@@ -287,7 +291,7 @@ Shapes::flst_pixels()
 
   /* 1) Compute nb of proper pixels in each shape */
   tabNbOfProperPixels = new int[nb_shapes];
-  if(tabNbOfProperPixels ==NULL)
+  if (tabNbOfProperPixels ==NULL)
     std::cerr << "Allocation of array error" << std::endl;
   compute_proper_pixels(tabNbOfProperPixels);
 
@@ -297,13 +301,14 @@ Shapes::flst_pixels()
 
   /* 3) Fill the array */
   ppShape = smallest_shape + ncol*nrow-1;
-  for(i = nrow-1; i >= 0; i--)
-    for(j = ncol-1; j >= 0; j--, ppShape--)
-      {
-  iIndex = (*ppShape) - the_shapes;
-  pCurrentPoint = &(*ppShape)->pixels[--tabNbOfProperPixels[iIndex]];
-  pCurrentPoint->x = j; pCurrentPoint->y = i;
-      }
+  for (i = nrow-1; i >= 0; i--)
+    for (j = ncol-1; j >= 0; j--, ppShape--)
+    {
+      iIndex = (*ppShape) - the_shapes;
+      pCurrentPoint = &(*ppShape)->pixels[--tabNbOfProperPixels[iIndex]];
+      pCurrentPoint->x = j;
+      pCurrentPoint->y = i;
+    }
 
   delete[] tabNbOfProperPixels;
 }
@@ -319,13 +324,13 @@ const int Shapes::SOUTH  = 3;
 void
 Shapes::TURN_LEFT(int *dir)
 {
- *dir = (*dir==NORTH ? WEST :(*dir==WEST ? SOUTH :(*dir==SOUTH ? EAST : NORTH)));
+  *dir = (*dir==NORTH ? WEST :(*dir==WEST ? SOUTH :(*dir==SOUTH ? EAST : NORTH)));
 }
 
 void
 Shapes::TURN_RIGHT(int *dir)
 {
- *dir = (*dir==NORTH ? EAST :(*dir==EAST ? SOUTH :(*dir==SOUTH ? WEST : NORTH)));
+  *dir = (*dir==NORTH ? EAST :(*dir==EAST ? SOUTH :(*dir==SOUTH ? WEST : NORTH)));
 }
 
 
@@ -337,12 +342,12 @@ Shapes::point_in_shape(int x,int y,Shape *pShape)
 
   Shape *pShapePoint = smallest_shape[y*ncol+x];
   result = (pShape->pixels <= pShapePoint->pixels &&
-    pShapePoint->pixels < pShape->pixels+pShape->area);
+            pShapePoint->pixels < pShape->pixels+pShape->area);
 
   otbMsgDevMacro( << "PointInShape() -->"<<x<<" "<<y<<" " << pShape->value << " Result : "<< int(result));
 
   return (pShape->pixels <= pShapePoint->pixels &&
-    pShapePoint->pixels < pShape->pixels+pShape->area);
+          pShapePoint->pixels < pShape->pixels+pShape->area);
 }
 
 /* Find the dual point following pDualPoint as we follow the shape boundary */
@@ -353,16 +358,20 @@ Shapes::find_next_dual_point(Point_plane *pDualPoint,int *cDirection,Shape *pSha
   otbMsgDevMacro( << "Shapes::find_next_dual_point()" );
   otbMsgDevMacro( << " pDualPoint : ( "<<pDualPoint->x << " , " << pDualPoint->y << " Direction :" << cDirection );
 
-  switch(*cDirection) {
+  switch (*cDirection)
+  {
   case NORTH:
     bLeftIn  = point_in_shape(pDualPoint->x-1, pDualPoint->y-1, pShape);
     bRightIn = point_in_shape(pDualPoint->x,   pDualPoint->y-1, pShape);
-    if(bLeftIn && ! bRightIn)
+    if (bLeftIn && ! bRightIn)
       -- pDualPoint->y;
-    else if(! bLeftIn && (! bRightIn || pShape->inferior_type)) {
+    else if (! bLeftIn && (! bRightIn || pShape->inferior_type))
+    {
       -- pDualPoint->x;
       TURN_LEFT(cDirection);
-    } else {
+    }
+    else
+    {
       ++ pDualPoint->x;
       TURN_RIGHT(cDirection);
     }
@@ -370,12 +379,15 @@ Shapes::find_next_dual_point(Point_plane *pDualPoint,int *cDirection,Shape *pSha
   case WEST:
     bLeftIn  = point_in_shape(pDualPoint->x-1, pDualPoint->y,   pShape);
     bRightIn = point_in_shape(pDualPoint->x-1, pDualPoint->y-1, pShape);
-    if(bLeftIn && ! bRightIn)
+    if (bLeftIn && ! bRightIn)
       -- pDualPoint->x;
-    else if(! bLeftIn && (! bRightIn || pShape->inferior_type)) {
+    else if (! bLeftIn && (! bRightIn || pShape->inferior_type))
+    {
       ++ pDualPoint->y;
       TURN_LEFT(cDirection);
-    } else {
+    }
+    else
+    {
       -- pDualPoint->y;
       TURN_RIGHT(cDirection);
     }
@@ -383,12 +395,15 @@ Shapes::find_next_dual_point(Point_plane *pDualPoint,int *cDirection,Shape *pSha
   case SOUTH:
     bLeftIn  = point_in_shape(pDualPoint->x,   pDualPoint->y, pShape);
     bRightIn = point_in_shape(pDualPoint->x-1, pDualPoint->y, pShape);
-    if(bLeftIn && ! bRightIn)
+    if (bLeftIn && ! bRightIn)
       ++ pDualPoint->y;
-    else if(! bLeftIn && (! bRightIn || pShape->inferior_type)) {
+    else if (! bLeftIn && (! bRightIn || pShape->inferior_type))
+    {
       ++ pDualPoint->x;
       TURN_LEFT(cDirection);
-    } else {
+    }
+    else
+    {
       -- pDualPoint->x;
       TURN_RIGHT(cDirection);
     }
@@ -396,12 +411,15 @@ Shapes::find_next_dual_point(Point_plane *pDualPoint,int *cDirection,Shape *pSha
   case EAST:
     bLeftIn  = point_in_shape(pDualPoint->x, pDualPoint->y-1, pShape);
     bRightIn = point_in_shape(pDualPoint->x, pDualPoint->y,   pShape);
-    if(bLeftIn && ! bRightIn)
+    if (bLeftIn && ! bRightIn)
       ++ pDualPoint->x;
-    else if(! bLeftIn && (! bRightIn || pShape->inferior_type)) {
+    else if (! bLeftIn && (! bRightIn || pShape->inferior_type))
+    {
       -- pDualPoint->y;
       TURN_LEFT(cDirection);
-    } else {
+    }
+    else
+    {
       ++ pDualPoint->y;
       TURN_RIGHT(cDirection);
     }
@@ -431,22 +449,24 @@ Shapes::find_closed_boundary(Shape *pShape,PathPointer pBoundary)
   otbMsgDevMacro( << " find_closed_boundary 1" );
 
   do ++ dualPoint.x;
-  while(point_in_shape(dualPoint.x, dualPoint.y, pShape));
+  while (point_in_shape(dualPoint.x, dualPoint.y, pShape));
 
   otbMsgDevMacro( << " find_closed_boundary 2" );
 
   /* 2) Follow the boundary */
   x0 = dualPoint.x;
   y0 = dualPoint.y;
-  do {
-      otbMsgDevMacro( << " find_closed_boundary 3" );
-      cindex[0] = dualPoint.x;
-      cindex[1] = dualPoint.y;
+  do
+  {
+    otbMsgDevMacro( << " find_closed_boundary 3" );
+    cindex[0] = dualPoint.x;
+    cindex[1] = dualPoint.y;
 
-      pBoundary->AddVertex(cindex);
+    pBoundary->AddVertex(cindex);
 
-      find_next_dual_point(&dualPoint,&cDirection, pShape);
-  } while(dualPoint.x != x0 || dualPoint.y != y0 || cDirection != NORTH);
+    find_next_dual_point(&dualPoint,&cDirection, pShape);
+  }
+  while (dualPoint.x != x0 || dualPoint.y != y0 || cDirection != NORTH);
   /* Close the boundary */
 
   cindex[0] = dualPoint.x;
@@ -475,11 +495,12 @@ Shapes::initial_point_border(Point_plane *pDualPoint,int *cDirection,Shape *pSha
   otbMsgDevMacro( << " Direction  (WEST) :" << int(*cDirection)  );
   x = iWidth-1;
   y = 0;
-  if(point_in_shape(x, y++, pShape))
-    while(y < iHeight && point_in_shape(x, y++, pShape));
-  while(y < iHeight && ! point_in_shape(x, y, pShape))
+  if (point_in_shape(x, y++, pShape))
+    while (y < iHeight && point_in_shape(x, y++, pShape));
+  while (y < iHeight && ! point_in_shape(x, y, pShape))
     ++ y;
-  if(y < iHeight) {
+  if (y < iHeight)
+  {
     pDualPoint->x = iWidth;
     pDualPoint->y = y;
     return;
@@ -488,11 +509,12 @@ Shapes::initial_point_border(Point_plane *pDualPoint,int *cDirection,Shape *pSha
   *cDirection = SOUTH;
   x = 0;
   y = 0;
-  if(point_in_shape(x++, y, pShape))
-    while(x < iWidth && point_in_shape(x++, y, pShape));
-  while(x < iWidth && ! point_in_shape(x, y, pShape))
+  if (point_in_shape(x++, y, pShape))
+    while (x < iWidth && point_in_shape(x++, y, pShape));
+  while (x < iWidth && ! point_in_shape(x, y, pShape))
     ++ x;
-  if(x < iWidth) {
+  if (x < iWidth)
+  {
     pDualPoint->x = x;
     pDualPoint->y = 0;
     return;
@@ -501,11 +523,12 @@ Shapes::initial_point_border(Point_plane *pDualPoint,int *cDirection,Shape *pSha
   *cDirection = EAST;
   x = 0;
   y = iHeight-1;
-  if(point_in_shape(x, y--, pShape))
-    while(y >= 0 && point_in_shape(x, y--, pShape));
-  while(y >= 0 && ! point_in_shape(x, y, pShape))
+  if (point_in_shape(x, y--, pShape))
+    while (y >= 0 && point_in_shape(x, y--, pShape));
+  while (y >= 0 && ! point_in_shape(x, y, pShape))
     -- y;
-  if(y >= 0) {
+  if (y >= 0)
+  {
     pDualPoint->x = 0;
     pDualPoint->y = y+1;
     return;
@@ -514,11 +537,12 @@ Shapes::initial_point_border(Point_plane *pDualPoint,int *cDirection,Shape *pSha
   *cDirection = NORTH;
   x = iWidth-1;
   y = iHeight-1;
-  if(point_in_shape(x--, y, pShape))
-    while(x >= 0 && point_in_shape(x--, y, pShape));
-  while(x >= 0 && ! point_in_shape(x, y, pShape))
+  if (point_in_shape(x--, y, pShape))
+    while (x >= 0 && point_in_shape(x--, y, pShape));
+  while (x >= 0 && ! point_in_shape(x, y, pShape))
     -- x;
-  if(x >= 0) {
+  if (x >= 0)
+  {
     pDualPoint->x = x+1;
     pDualPoint->y = iHeight;
     return;
@@ -539,18 +563,20 @@ Shapes::find_open_boundary(Shape *pShape,PathPointer pBoundary)
 
   otbMsgDevMacro( << "Shapes::find_open_boundary()" );
   initial_point_border(&dualPoint,&cDirection, pShape);
-  do {
-      cindex[0] = dualPoint.x;
-      cindex[1] = dualPoint.y;
+  do
+  {
+    cindex[0] = dualPoint.x;
+    cindex[1] = dualPoint.y;
 
-      pBoundary->AddVertex(cindex);
+    pBoundary->AddVertex(cindex);
 
     otbMsgDevMacro( << "Shapes::find_open_boundary() DO WHILE" );
     find_next_dual_point(&dualPoint, &cDirection,pShape);
-  } while(0 < dualPoint.x && dualPoint.x < iWidth &&
-    0 < dualPoint.y && dualPoint.y < iHeight);
+  }
+  while (0 < dualPoint.x && dualPoint.x < iWidth &&
+         0 < dualPoint.y && dualPoint.y < iHeight);
 
- /* We store the exit */
+  /* We store the exit */
 
   cindex[0] = dualPoint.x;
   cindex[1] = dualPoint.y;
@@ -573,7 +599,7 @@ Shapes::flst_shape_boundary(Shape *pShape)
 
   otbMsgDevMacro( << " FLST Shape Boundary ....New" );
 
-  if(the_shapes[0].pixels == NULL)
+  if (the_shapes[0].pixels == NULL)
     flst_pixels();
   otbMsgDevMacro( << " FLST Shape Boundary ....Pixel" );
 
@@ -581,7 +607,7 @@ Shapes::flst_shape_boundary(Shape *pShape)
 
   pBoundary->Initialize();
 
-  if(pShape->open)
+  if (pShape->open)
     find_open_boundary( pShape, pBoundary);
   else
     find_closed_boundary(pShape, pBoundary);

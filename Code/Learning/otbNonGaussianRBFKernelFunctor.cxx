@@ -20,11 +20,12 @@
 #include <cmath>
 #include "otbNonGaussianRBFKernelFunctor.h"
 
-namespace otb {
+namespace otb
+{
 
 NonGaussianRBFKernelFunctor
 ::NonGaussianRBFKernelFunctor ()
-  : GenericKernelFunctorBase ()
+    : GenericKernelFunctorBase ()
 {
   m_Alpha = 1.0;
   m_Beta = 2.0;
@@ -38,7 +39,7 @@ NonGaussianRBFKernelFunctor
 double
 NonGaussianRBFKernelFunctor
 ::operator() ( const svm_node * x, const svm_node * y,
-        const svm_parameter & param ) const
+               const svm_parameter & param ) const
 {
   double pr_x, pr_y, diff, sum = 0.0;
 

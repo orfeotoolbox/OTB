@@ -35,7 +35,7 @@ namespace otb
  *         on pipeline filtering execution
  *
  */
-  class ITK_EXPORT FltkWriterWatcher : public WriterWatcherBase
+class ITK_EXPORT FltkWriterWatcher : public WriterWatcherBase
 {
 public:
   /** Classes that need access to filter's private data */
@@ -44,13 +44,13 @@ public:
   /** Constructor. Takes a ProcessObject to monitor and an optional
    * comment string that is prepended to each event message. */
   FltkWriterWatcher(itk::ProcessObject* process,
-        int x, int y, int w,int h,
-        const char *comment="");
+                    int x, int y, int w,int h,
+                    const char *comment="");
 
   FltkWriterWatcher(itk::ProcessObject* process,
-        itk::ProcessObject * source,
-        int x, int y, int w,int h,
-        const char *comment="");
+                    itk::ProcessObject * source,
+                    int x, int y, int w,int h,
+                    const char *comment="");
 
 
   /** Destructor. */
@@ -72,20 +72,20 @@ protected:
   virtual void ShowFilterProgress()
   {
     if (m_SourceProcess)
-      {
-  m_FilterProgress->value(m_SourceProcess->GetProgress());
-  Fl::check();
-      }
+    {
+      m_FilterProgress->value(m_SourceProcess->GetProgress());
+      Fl::check();
+    }
   }
 
- /** Callback method to show the ProgressEvent */
+  /** Callback method to show the ProgressEvent */
   virtual void ShowWriterProgress()
   {
     if (m_Process)
-      {
-  m_WriterProgress->value(m_Process->GetProgress());
-  Fl::check();
-      }
+    {
+      m_WriterProgress->value(m_Process->GetProgress());
+      Fl::check();
+    }
   }
 
   /** Callback method to show the StartEvent */
@@ -98,7 +98,7 @@ protected:
   }
 
 
- /** Callback method to show the StartEvent */
+  /** Callback method to show the StartEvent */
   virtual void StartFilter()
   {
     m_Window->show();

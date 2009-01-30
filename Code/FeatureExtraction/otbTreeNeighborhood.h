@@ -66,13 +66,28 @@ public:
 
   void print_neighborhood();
 
-  int ORDER_MAX(int k,int l)  { return (tabPoints[k].value > tabPoints[l].value); };
-  int ORDER_MIN(int k,int l)  { return (tabPoints[k].value < tabPoints[l].value); };
-  int ORDER_MAX2(int k,int l) { return (tabPoints[k].value >= tabPoints[l].value); };
-  int ORDER_MIN2(int k,int l) { return (tabPoints[k].value <= tabPoints[l].value); };
-  void SWAP(int k,int l){ tabPoints[0] = tabPoints[k];
-                          tabPoints[k] = tabPoints[l];
-        tabPoints[l] = tabPoints[0]; };
+  int ORDER_MAX(int k,int l)
+  {
+    return (tabPoints[k].value > tabPoints[l].value);
+  };
+  int ORDER_MIN(int k,int l)
+  {
+    return (tabPoints[k].value < tabPoints[l].value);
+  };
+  int ORDER_MAX2(int k,int l)
+  {
+    return (tabPoints[k].value >= tabPoints[l].value);
+  };
+  int ORDER_MIN2(int k,int l)
+  {
+    return (tabPoints[k].value <= tabPoints[l].value);
+  };
+  void SWAP(int k,int l)
+  {
+    tabPoints[0] = tabPoints[k];
+    tabPoints[k] = tabPoints[l];
+    tabPoints[l] = tabPoints[0];
+  };
 
   void fix_up();
   void fix_down();

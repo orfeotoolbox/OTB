@@ -28,8 +28,8 @@
 namespace otb
 
 {     /***************************/
-      /*     Constructeurs       */
-      /***************************/
+/*     Constructeurs       */
+/***************************/
 
 // Constructeur par default
 ImageGeometryHandler::ImageGeometryHandler()
@@ -47,37 +47,37 @@ ImageGeometryHandler::ImageGeometryHandler()
 //       }
 //  }
 
-      /***************************/
-      /*     Destructeurs        */
-      /***************************/
+/***************************/
+/*     Destructeurs        */
+/***************************/
 ImageGeometryHandler::~ImageGeometryHandler()
 {
 //Not needed since we use the instance method
 //delete handler;
 }
 
-      /***************************/
-      /*     Methodes            */
-      /***************************/
+/***************************/
+/*     Methodes            */
+/***************************/
 //Ouvrir le fichier: On specifie le nom de l'image en parametres
 //Encapsulation de la methode "open"
 void ImageGeometryHandler::SetFileName(char *src)
 {
   otbDebugMacro(<<"Creation handler... ");
-   handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(src));
-    if(!handler)
-    {
+  handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(src));
+  if (!handler)
+  {
     itkExceptionMacro(<< "Unable to open input image: " << src);
-    }
+  }
 }
 
 // Recuperation de la geometrie de l'image:
 //Encapsulation de la methode "getImageGeometry"
 ossimKeywordlist ImageGeometryHandler::GetGeometryKeywordlist()
 {
-otbDebugMacro( << "Get geometry handler " );
-handler->getImageGeometry(m_geom_kwl);
-return m_geom_kwl;
+  otbDebugMacro( << "Get geometry handler " );
+  handler->getImageGeometry(m_geom_kwl);
+  return m_geom_kwl;
 }
 
 }//fin namespace

@@ -110,10 +110,10 @@ DisparityMapEstimationMethod<TFixedImage,TMovingImage,TPointSet>
 {
   this->itk::ProcessObject::SetNthInput(2,const_cast<MovingImageType *>(image));
 }
- /**
-  * Get the fixed image.
-  * \return The fixed image.
-  **/
+/**
+ * Get the fixed image.
+ * \return The fixed image.
+ **/
 template < class TFixedImage, class TMovingImage, class TPointSet >
 const TMovingImage *
 DisparityMapEstimationMethod<TFixedImage,TMovingImage,TPointSet>
@@ -155,8 +155,8 @@ DisparityMapEstimationMethod<TFixedImage,TMovingImage,TPointSet>
   otbMsgDevMacro(<<"Starting registration");
 
   /// Iterate through the point set
-  while(pointIterator!= end)
-    {
+  while (pointIterator!= end)
+  {
     typename PointSetType::PointType p = pointIterator.Value();   // access the point
 
     // Extract the needed sub-images
@@ -253,10 +253,10 @@ DisparityMapEstimationMethod<TFixedImage,TMovingImage,TPointSet>
     data[1] = outputPoint[0]-inputPoint[0];
     data[2] = outputPoint[1]-inputPoint[1];
 
-    for(unsigned int i = 0;i<finalParameters.GetSize();++i)
-      {
-  data[i+3] = finalParameters[i];
-      }
+    for (unsigned int i = 0;i<finalParameters.GetSize();++i)
+    {
+      data[i+3] = finalParameters[i];
+    }
 
     // Set the parameters value in the point set data container.
     output->SetPoint(dataId,p);
@@ -264,16 +264,16 @@ DisparityMapEstimationMethod<TFixedImage,TMovingImage,TPointSet>
     // otbMsgDevMacro(<<"Point "<<dataId<<": "<<finalParameters);
     ++pointIterator;// advance to next point
     ++dataId;
-    }
+  }
 }
 template < class TFixedImage, class TMovingImage, class TPointSet >
 void
 DisparityMapEstimationMethod<TFixedImage,TMovingImage,TPointSet>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
-  {
-    Superclass::PrintSelf(os, indent);
-    os << indent << "Window size: " << m_WinSize << std::endl;
-    os << indent << "Exploration size: " << m_ExploSize << std::endl;
-  }
+{
+  Superclass::PrintSelf(os, indent);
+  os << indent << "Window size: " << m_WinSize << std::endl;
+  os << indent << "Exploration size: " << m_ExploSize << std::endl;
+}
 }
 #endif

@@ -48,14 +48,14 @@ ChangeProfileKernelFunctor
 double
 ChangeProfileKernelFunctor
 ::operator() ( const svm_node * x, const svm_node * y,
-        const svm_parameter & param ) const
+               const svm_parameter & param ) const
 {
   double theMax(0.);
   double theCur(0.);
 
-  while(x->index != -1 && y->index != -1)
+  while (x->index != -1 && y->index != -1)
   {
-    if(x->index == y->index)
+    if (x->index == y->index)
     {
       theCur = fabs( x->value - y->value );
       ++x;
@@ -63,7 +63,7 @@ ChangeProfileKernelFunctor
     }
     else
     {
-      if(x->index > y->index)
+      if (x->index > y->index)
         ++y;
       else
         ++x;

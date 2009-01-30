@@ -28,9 +28,9 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ChangeLabelImageFilter
-  : public itk::ChangeLabelImageFilter<TInputImage,TOutputImage>
+      : public itk::ChangeLabelImageFilter<TInputImage,TOutputImage>
 {
- public:
+public:
   /** Standard typedefs */
   typedef ChangeLabelImageFilter            Self;
   typedef itk::ChangeLabelImageFilter<TInputImage,TOutputImage> Superclass;
@@ -51,24 +51,24 @@ class ITK_EXPORT ChangeLabelImageFilter
 protected:
   /** Constructor */
   ChangeLabelImageFilter()
-    {
-      m_NumberOfComponentsPerPixel = 1;
-    }
+  {
+    m_NumberOfComponentsPerPixel = 1;
+  }
   /** Generate the output information missing */
   void GenerateOutputInformation()
-    {
-      Superclass::GenerateOutputInformation();
+  {
+    Superclass::GenerateOutputInformation();
 
-      this->GetOutput()->SetNumberOfComponentsPerPixel(m_NumberOfComponentsPerPixel);
-    }
+    this->GetOutput()->SetNumberOfComponentsPerPixel(m_NumberOfComponentsPerPixel);
+  }
   /** Destructor */
   virtual ~ChangeLabelImageFilter() {};
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
-    {
-      Superclass::PrintSelf(os,indent);
-      os<<indent<<"Number of components per pixel: "<<m_NumberOfComponentsPerPixel;
-    }
+  {
+    Superclass::PrintSelf(os,indent);
+    os<<indent<<"Number of components per pixel: "<<m_NumberOfComponentsPerPixel;
+  }
 
 private:
   ChangeLabelImageFilter(const Self&); //purposely not implemented

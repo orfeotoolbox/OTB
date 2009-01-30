@@ -36,27 +36,27 @@ public:
 
   /** Constructor. */
   VectorDataFileWriterException(const char *file, unsigned int line,
-                           const char* message = "Error in IO",
-                           const char* loc = "Unknown" ) :
-    ExceptionObject(file, line, message, loc)
+                                const char* message = "Error in IO",
+                                const char* loc = "Unknown" ) :
+      ExceptionObject(file, line, message, loc)
   {
   }
 
   /** Constructor. */
   VectorDataFileWriterException(const std::string &file, unsigned int line,
-                           const char* message = "Error in IO",
-                           const char* loc = "Unknown" ) :
-    ExceptionObject(file, line, message, loc)
+                                const char* message = "Error in IO",
+                                const char* loc = "Unknown" ) :
+      ExceptionObject(file, line, message, loc)
   {
   }
 };
 
 
-  /** \class VectorDataFileWriter
-   *  \brief This class writes vector data file format (shapefile and KML)
-   *
-   *  \ingroup IO
-   */
+/** \class VectorDataFileWriter
+ *  \brief This class writes vector data file format (shapefile and KML)
+ *
+ *  \ingroup IO
+ */
 
 template <class TInputVectorData>
 class ITK_EXPORT VectorDataFileWriter : public itk::ProcessObject
@@ -89,7 +89,10 @@ public :
 
   virtual void GenerateData();
 
-  virtual void Update()  {  this->Write(); }
+  virtual void Update()
+  {
+    this->Write();
+  }
 
 
   /** Specify the name of the output shapefile to write. */

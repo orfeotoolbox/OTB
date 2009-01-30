@@ -46,7 +46,7 @@ namespace otb
  * \sa PersistentImageStreamingDecorator.
  */
 template <class TInputImage>
-  class ITK_EXPORT StreamingImageVirtualWriter : public itk::ImageToImageFilter<TInputImage,TInputImage>
+class ITK_EXPORT StreamingImageVirtualWriter : public itk::ImageToImageFilter<TInputImage,TInputImage>
 {
 public:
   /** Standard class typedefs. */

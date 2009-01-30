@@ -139,7 +139,7 @@ protected:
   SpatialObjectToImageDrawingFilter();
   ~SpatialObjectToImageDrawingFilter();
 
-  virtual void GenerateOutputInformation(){}; // do nothing
+  virtual void GenerateOutputInformation() {}; // do nothing
   virtual void GenerateData();
 
 

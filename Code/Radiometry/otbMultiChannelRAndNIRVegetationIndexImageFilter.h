@@ -34,9 +34,9 @@ namespace otb
  *
  */
 template <class TInputImage, class TOutputImage,
-        class TFunction = Functor::NDVI<        typename TInputImage::InternalPixelType,
-                                                typename TInputImage::InternalPixelType,
-                                                typename TOutputImage::PixelType>  >
+class TFunction = Functor::NDVI<        typename TInputImage::InternalPixelType,
+typename TInputImage::InternalPixelType,
+typename TOutputImage::PixelType>  >
 class ITK_EXPORT MultiChannelRAndNIRVegetationIndexImageFilter : public itk::InPlaceImageFilter<TInputImage,TOutputImage>
 {
 public:
@@ -67,8 +67,14 @@ public:
    * (Functors do not have to derive from itk::LightObject, so they do
    * not necessarily have a reference count. So we cannot return a
    * SmartPointer.) */
-  FunctorType& GetFunctor() { return m_Functor; };
-  const FunctorType& GetFunctor() const { return m_Functor; };
+  FunctorType& GetFunctor()
+  {
+    return m_Functor;
+  };
+  const FunctorType& GetFunctor() const
+  {
+    return m_Functor;
+  };
 
   /** Set the functor object.  This replaces the current Functor with a
    * copy of the specified Functor. This allows the user to specify a
@@ -79,10 +85,10 @@ public:
   void SetFunctor(const FunctorType& functor)
   {
     if (m_Functor != functor)
-      {
+    {
       m_Functor = functor;
       this->Modified();
-      }
+    }
   }
 
   /** Set/Get the red channel index. Value must be in [1...[ */

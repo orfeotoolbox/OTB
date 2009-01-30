@@ -65,20 +65,20 @@ typename VectorDataSource<TOutputVectorData>::OutputVectorDataType *
 VectorDataSource<TOutputVectorData>
 ::GetOutput(void)
 {
-  if(this->GetNumberOfOutputs()<1)
-    {
+  if (this->GetNumberOfOutputs()<1)
+  {
     return 0;
-    }
+  }
   return static_cast<OutputVectorDataType *> (this->ProcessObject::GetOutput(0));
 }
 
 template <class TOutputVectorData>
-    typename VectorDataSource<TOutputVectorData>::OutputVectorDataType *
-    VectorDataSource<TOutputVectorData>
-  ::GetOutput(unsigned int idx)
+typename VectorDataSource<TOutputVectorData>::OutputVectorDataType *
+VectorDataSource<TOutputVectorData>
+::GetOutput(unsigned int idx)
 {
   return static_cast<OutputVectorDataType*>
-      (this->Superclass::GetOutput(idx));
+         (this->Superclass::GetOutput(idx));
 }
 
 /**

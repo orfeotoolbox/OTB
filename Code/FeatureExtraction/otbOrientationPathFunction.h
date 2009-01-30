@@ -33,9 +33,9 @@ namespace otb
  */
 
 template < class TInputPath,
-           class TOutput      = double>
+class TOutput      = double>
 class ITK_EXPORT OrientationPathFunction :
-  public PathFunction< TInputPath, TOutput >
+      public PathFunction< TInputPath, TOutput >
 {
 public:
   /** Standard class typedefs. */
@@ -66,8 +66,8 @@ public:
   virtual OutputType Evaluate( ) const;
 
 protected:
-  OrientationPathFunction(){};
-  ~OrientationPathFunction(){};
+  OrientationPathFunction() {};
+  ~OrientationPathFunction() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

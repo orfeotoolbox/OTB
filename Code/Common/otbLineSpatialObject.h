@@ -32,7 +32,7 @@ namespace otb
  */
 template < unsigned int VDimension = 3 >
 class ITK_EXPORT LineSpatialObject
-  : public itk::PointBasedSpatialObject<VDimension>
+      : public itk::PointBasedSpatialObject<VDimension>
 {
 public:
   /** Standard typedefs */
@@ -44,7 +44,7 @@ public:
   /** Type macro */
   itkNewMacro(Self);
 
- /** Method for creation through the object factory. */
+  /** Method for creation through the object factory. */
   itkTypeMacro( LineSpatialObject, PointBasedSpatialObject );
 
   /** Superclass typedefs */
@@ -67,13 +67,22 @@ public:
   void SetPoints( PointListType & newPoints );
 
   /** Return a point in the list given the index */
-  const SpatialObjectPointType* GetPoint(unsigned long id) const {return &(m_Points[id]);}
+  const SpatialObjectPointType* GetPoint(unsigned long id) const
+  {
+    return &(m_Points[id]);
+  }
 
   /** Return a point in the list given the index */
-  SpatialObjectPointType* GetPoint(unsigned long id) {return &(m_Points[id]);}
+  SpatialObjectPointType* GetPoint(unsigned long id)
+  {
+    return &(m_Points[id]);
+  }
 
   /** Return the number of points in the list */
-  unsigned long GetNumberOfPoints(void) const {return m_Points.size();}
+  unsigned long GetNumberOfPoints(void) const
+  {
+    return m_Points.size();
+  }
 
   /** Returns true if the line is evaluable at the requested point,
    *  false otherwise. */

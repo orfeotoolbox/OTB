@@ -57,11 +57,11 @@ StreamingShrinkImageFilter<TInputImage, TOutputImage>
   // we need to compute the output spacing, the output image size, and the
   // output image start index
   const typename InputImageType::SpacingType&
-    inputSpacing = inputPtr->GetSpacing();
+  inputSpacing = inputPtr->GetSpacing();
   const typename InputImageType::SizeType&   inputSize
-    = inputPtr->GetLargestPossibleRegion().GetSize();
+  = inputPtr->GetLargestPossibleRegion().GetSize();
   const typename InputImageType::IndexType&  inputStartIndex
-    = inputPtr->GetLargestPossibleRegion().GetIndex();
+  = inputPtr->GetLargestPossibleRegion().GetIndex();
   otbMsgDebugMacro(<<"Input index "<<inputStartIndex);
   otbMsgDebugMacro(<<"Input size: "<<inputSize);
 
@@ -70,12 +70,12 @@ StreamingShrinkImageFilter<TInputImage, TOutputImage>
   typename OutputImageType::IndexType        outputStartIndex;
 
   for (unsigned int i = 0; i < OutputImageType::ImageDimension; i++)
-    {
-      outputSpacing[i] = inputSpacing[i] * static_cast<double>( m_ShrinkFactor);
-      outputSize[i] = static_cast<int>( static_cast<double>(inputSize[i])/static_cast<double>( m_ShrinkFactor ));
-      //outputStartIndex[i] = inputStartIndex[i];
-      outputStartIndex[i]=0;
-    }
+  {
+    outputSpacing[i] = inputSpacing[i] * static_cast<double>( m_ShrinkFactor);
+    outputSize[i] = static_cast<int>( static_cast<double>(inputSize[i])/static_cast<double>( m_ShrinkFactor ));
+    //outputStartIndex[i] = inputStartIndex[i];
+    outputStartIndex[i]=0;
+  }
   outputPtr->SetSpacing( outputSpacing );
   typename OutputImageType::RegionType outputLargestPossibleRegion;
   outputLargestPossibleRegion.SetSize( outputSize );
@@ -92,15 +92,15 @@ StreamingShrinkImageFilter<TInputImage, TOutputImage>
   // otbMsgDebugMacro(<<"Call to GenerateInputRequestedRegion");
   // if(this->GetInput())
 //     {
-      InputImagePointerType inputPtr =  const_cast<InputImageType * >( this->GetInput(0) );
-      // otbMsgDebugMacro(<<"Input largest possible region: "<<inputPtr->GetLargestPossibleRegion());
-      typename InputImageType::IndexType index = inputPtr->GetLargestPossibleRegion().GetIndex();
-      typename InputImageType::SizeType size;
-      size.Fill(0);
-      typename InputImageType::RegionType region;
-      region.SetSize(size);
-      region.SetIndex(index);
-      inputPtr->SetRequestedRegion(region);
+  InputImagePointerType inputPtr =  const_cast<InputImageType * >( this->GetInput(0) );
+  // otbMsgDebugMacro(<<"Input largest possible region: "<<inputPtr->GetLargestPossibleRegion());
+  typename InputImageType::IndexType index = inputPtr->GetLargestPossibleRegion().GetIndex();
+  typename InputImageType::SizeType size;
+  size.Fill(0);
+  typename InputImageType::RegionType region;
+  region.SetSize(size);
+  region.SetIndex(index);
+  inputPtr->SetRequestedRegion(region);
 //     }
 }
 
@@ -115,9 +115,9 @@ StreamingShrinkImageFilter<TInputImage, TOutputImage>
    * prevent chasing our tail
    */
   if (this->m_Updating)
-    {
+  {
     return;
-    }
+  }
   /**
    * Prepare all the outputs. This may deallocate previous bulk data.
    */
@@ -128,10 +128,10 @@ StreamingShrinkImageFilter<TInputImage, TOutputImage>
    */
   unsigned int ninputs = this->GetNumberOfValidRequiredInputs();
   if (ninputs < 1)
-    {
+  {
     itkExceptionMacro(<< "At least 1  input is required but only " << ninputs << " are specified.");
     return;
-    }
+  }
   this->SetAbortGenerateData(0);
   this->SetProgress(0.0);
   this->m_Updating = true;
@@ -163,7 +163,7 @@ StreamingShrinkImageFilter<TInputImage, TOutputImage>
 
   typename OutputImageType::SizeType size = outputRegion.GetSize();
 
-  for(unsigned int i=0;i<size[1]&&!it.IsAtEnd();++i)
+  for (unsigned int i=0;i<size[1]&&!it.IsAtEnd();++i)
   {
     typename InputImageType::IndexType readIndex;
     readIndex[0] = origin[0];
@@ -181,14 +181,14 @@ StreamingShrinkImageFilter<TInputImage, TOutputImage>
     inputPtr->UpdateOutputData();
     InputIteratorType readIt(inputPtr,readRegion);
     unsigned int count=0;
-    for(readIt.GoToBegin();!readIt.IsAtEnd()&&!it.IsAtEnd();++readIt,++count)
-      {
-        if(count%m_ShrinkFactor==0)
+    for (readIt.GoToBegin();!readIt.IsAtEnd()&&!it.IsAtEnd();++readIt,++count)
     {
-      it.Set(readIt.Get());
-      ++it;
-    }
+      if (count%m_ShrinkFactor==0)
+      {
+        it.Set(readIt.Get());
+        ++it;
       }
+    }
     this->UpdateProgress(static_cast<float>(i)/ static_cast<float>(size[1]));
   }
   /**
@@ -196,9 +196,9 @@ StreamingShrinkImageFilter<TInputImage, TOutputImage>
    * it probably didn't end there)
    */
   if ( !this->GetAbortGenerateData() )
-    {
+  {
     this->UpdateProgress(1.0);
-    }
+  }
 
   // Notify end event observers
   this->InvokeEvent(itk::EndEvent() );
@@ -207,9 +207,9 @@ StreamingShrinkImageFilter<TInputImage, TOutputImage>
    * Now we have to mark the data as up to data.
    */
   if (this->GetOutput(0))
-      {
-  this->GetOutput(0)->DataHasBeenGenerated();
-      }
+  {
+    this->GetOutput(0)->DataHasBeenGenerated();
+  }
   /**
    * Release any inputs if marked for release
    */
@@ -226,7 +226,7 @@ StreamingShrinkImageFilter<TInputImage, TOutputImage>
 {
   Superclass::PrintSelf(os,indent);
   os << indent << "Shrink factor: " << m_ShrinkFactor
-     << std::endl;
+  << std::endl;
 }
 } // End namespace otb
 #endif

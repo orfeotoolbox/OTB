@@ -980,35 +980,91 @@ ADD_TEST(feTuLandmarkNew ${FEATUREEXTRACTION_TESTS10}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-# -------            otb::CloudDetectionFilterNew   -------------
-ADD_TEST(feTuCloudDetectionFilterNew ${FEATUREEXTRACTION_TESTS11}
-    otbCloudDetectionFilterNew)
+# -------            otb::CloudEstimatorFilterNew   -------------
+ADD_TEST(feTuCloudEstimatorFilterNew ${FEATUREEXTRACTION_TESTS11}
+    otbCloudEstimatorFilterNew)
 
-ADD_TEST(feTvCloudDetectionFilter ${FEATUREEXTRACTION_TESTS11}
+ADD_TEST(feTvCloudEstimatorDefaultFilter ${FEATUREEXTRACTION_TESTS11}
 --compare-image ${EPS}
      ${BASELINE}/feTvSpectralAngleOutput.tif
      ${TEMP}/feTvSpectralAngleOutput.tif
-    otbCloudDetectionFilter
+    otbCloudEstimatorDefaultFilter
     ${INPUTDATA}/ExtrZoneNuageuse.tif
     ${TEMP}/feTvSpectralAngleOutput.tif
     500
     731
     500
     632
-    1    # variance
-    1000 # threshold
 )
 
+ADD_TEST(feTvCloudEstimatorFilter ${FEATUREEXTRACTION_TESTS11}
+--compare-image ${EPS}
+     ${BASELINE}/feTvCloudEstimatorOutput.tif
+     ${TEMP}/feTvCloudEstimatorOutput.tif
+    otbCloudEstimatorFilter
+    ${INPUTDATA}/ExtrZoneNuageuse.tif
+    ${TEMP}/feTvCloudEstimatorOutput.tif
+    500
+    731
+    500
+    632
+    10    # variance
+)
 
-ADD_TEST(feTvSimplifyManyPathListFilter ${FEATUREEXTRACTION_TESTS11}
---compare-ascii ${EPS}
-		${BASELINE_FILES}/feTvSimplifyManyPathOutput.txt
-		${TEMP}/feTvSimplifyManyPathOutput.txt
+# -------            otb::CloudDetectionFilterNew   -------------
+
+# ADD_TEST(feTvCloudEstimatorFilter ${FEATUREEXTRACTION_TESTS11}
+# --compare-image ${EPS}
+#      ${BASELINE}/feTvCloudDetectionOutput.tif
+#      ${TEMP}/feTvCloudDetectionOutput.tif
+#     otbCloudDetectionFilter
+#     ${INPUTDATA}/ExtrZoneNuageuse.tif
+#     ${TEMP}/feTvCloudDetectionOutput.tif
+#     500
+#     731
+#     500
+#     632
+#     10    # variance
+#     10    # threshold
+# )
+
+
+ADD_TEST(feTpSimplifyManyPathListFilter ${FEATUREEXTRACTION_TESTS11}
         otbSimplifyManyPathListFilter
 	${TEMP}/feTvSimplifyManyPathOutput.txt
          1.0
         )
 
+# -------        otb::EnergyTextureFunctor   -------------
+ADD_TEST(feTvEnergyTextureFunctor ${FEATUREEXTRACTION_TESTS11} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvEnergyTextureFunctor.tif
+                ${TEMP}/feTvEnergyTextureFunctor.tif
+  otbEnergyTextureFunctor
+    ${INPUTDATA}/poupees.tif
+    ${TEMP}/feTvEnergyTextureFunctor.tif
+    5    # radius
+    -2   # offset[0]
+    2    # offset[1]	
+)
+
+
+# -------        otb::EnergyTextureImageFunction   -------------
+ADD_TEST(feTvEnergyTextureImageFunctionNew ${FEATUREEXTRACTION_TESTS11} 
+    otbEnergyTextureImageFunctionNew
+)
+ADD_TEST(feTvEnergyTextureImageFunction ${FEATUREEXTRACTION_TESTS11} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvEnergyTextureImageFunction.tif
+                ${TEMP}/feTvEnergyTextureImageFunction.tif
+   otbEnergyTextureImageFunction
+    ${INPUTDATA}/poupees_1canal.c1.hdr
+    ${TEMP}/feTvEnergyTextureImageFunction.tif
+    5    # radius[0]
+    5    # radius[1]
+    -2   # offset[0]
+    2    # offset[1]	
+)
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
@@ -1134,9 +1190,15 @@ otbKeyPointSetsMatchingFilter.cxx
 otbLandmarkNew.cxx
 )
 SET(BasicFeatureExtraction_SRCS11
-otbCloudDetectionFilterNew.cxx
-otbCloudDetectionFilter.cxx
+otbCloudEstimatorFilterNew.cxx
+otbCloudEstimatorDefaultFilter.cxx
+otbCloudEstimatorFilter.cxx
+#otbCloudDetectionFilterNew.cxx
+#otbCloudDetectionFilter.cxx
 otbSimplifyManyPathListFilter.cxx
+otbEnergyTextureFunctor.cxx
+otbEnergyTextureImageFunctionNew.cxx
+otbEnergyTextureImageFunction.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

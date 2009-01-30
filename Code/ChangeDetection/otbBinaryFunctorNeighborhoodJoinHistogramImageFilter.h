@@ -36,7 +36,7 @@ namespace otb
  * \ingroup IntensityImageFilters   Multithreaded
  */
 template <class TInputImage1, class TInputImage2,
-          class TOutputImage, class TFunction    >
+class TOutputImage, class TFunction    >
 class ITK_EXPORT BinaryFunctorNeighborhoodJoinHistogramImageFilter : public itk::ImageToImageFilter<TInputImage1,TOutputImage>
 {
 public:
@@ -86,7 +86,10 @@ public:
    * (Functors do not have to derive from itk::LightObject, so they do
    * not necessarily have a reference count. So we cannot return a
    * SmartPointer.) */
-  FunctorType& GetFunctor() { return m_Functor; };
+  FunctorType& GetFunctor()
+  {
+    return m_Functor;
+  };
 
   /** Set the functor object.  This replaces the current Functor with a
    * copy of the specified Functor. This allows the user to specify a
@@ -103,9 +106,9 @@ public:
 
 
   typedef itk::ConstNeighborhoodIterator<TInputImage1>
-                                         NeighborhoodIteratorType1;
+  NeighborhoodIteratorType1;
   typedef itk::ConstNeighborhoodIterator<TInputImage2>
-                                         NeighborhoodIteratorType2;
+  NeighborhoodIteratorType2;
 
   typedef typename NeighborhoodIteratorType1::RadiusType  RadiusType1;
   typedef typename NeighborhoodIteratorType2::RadiusType  RadiusType2;
@@ -121,8 +124,8 @@ public:
   typedef typename HistogramType::MeasurementVectorType  MeasurementVectorType;
   typedef typename HistogramType::SizeType               HistogramSizeType;
 
-    /** Sets the histogram size. Note this function must be called before
-      \c Initialize(). */
+  /** Sets the histogram size. Note this function must be called before
+    \c Initialize(). */
   itkSetMacro( HistogramSize, HistogramSizeType );
 
   /** Gets the histogram size. */
@@ -161,7 +164,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId );
+                                    int threadId );
 
   /**
    * Pad the inputs requested regions by radius
@@ -172,7 +175,7 @@ protected:
 
   HistogramType::Pointer m_Histogram;
 
-    /** The histogram size. */
+  /** The histogram size. */
   HistogramSizeType m_HistogramSize;
   /** The lower bound for samples in the histogram. */
   mutable MeasurementVectorType m_LowerBound;
@@ -187,7 +190,7 @@ private:
 
   FunctorType m_Functor;
 
-    /** The padding value. */
+  /** The padding value. */
   Input1ImagePixelType m_PaddingValue;
 
   /** True if those pixels in the fixed image with the same value as the

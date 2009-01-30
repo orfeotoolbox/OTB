@@ -54,39 +54,39 @@ MorphologicalPyramidSynthesisFilter<TInputImage,TOutputImage>
 {
   this->SetNthInput(1,const_cast<InputImageListType *>(imageList));
 }
-  /**
-   * Set The InfFilter details
-   * \param imageList The darker details extracted from the filtering operation.
-   */
+/**
+ * Set The InfFilter details
+ * \param imageList The darker details extracted from the filtering operation.
+ */
 template <class TInputImage, class TOutputImage>
 void
 MorphologicalPyramidSynthesisFilter<TInputImage,TOutputImage>
 ::SetInfFilter(InputImageListType * imageList)
 {
-this->SetNthInput(2,const_cast<InputImageListType *>(imageList));
+  this->SetNthInput(2,const_cast<InputImageListType *>(imageList));
 }
 
- /**
-   * Set The SupDeci details
-   * \param imageList The brighter details extracted from the filtering operation.
-   */
+/**
+  * Set The SupDeci details
+  * \param imageList The brighter details extracted from the filtering operation.
+  */
 template <class TInputImage, class TOutputImage>
 void
 MorphologicalPyramidSynthesisFilter<TInputImage,TOutputImage>
 ::SetSupDeci(InputImageListType * imageList)
 {
-this->SetNthInput(3,const_cast<InputImageListType *>(imageList));
+  this->SetNthInput(3,const_cast<InputImageListType *>(imageList));
 }
-  /**
-   * Set The InfDeci details
-   * \param imageList The darker details extracted from the filtering operation.
-   */
+/**
+ * Set The InfDeci details
+ * \param imageList The darker details extracted from the filtering operation.
+ */
 template <class TInputImage, class TOutputImage>
 void
 MorphologicalPyramidSynthesisFilter<TInputImage,TOutputImage>
 ::SetInfDeci(InputImageListType * imageList)
 {
-this->SetNthInput(4,const_cast<InputImageListType *>(imageList));
+  this->SetNthInput(4,const_cast<InputImageListType *>(imageList));
 }
 
 /**
@@ -182,11 +182,11 @@ MorphologicalPyramidSynthesisFilter<TInputImage,TOutputImage>
 
   ImageListIterator it = supFilter->Begin();
 
-  while(it!=supFilter->End())
-    {
-      size.push_back(it.Get()->GetLargestPossibleRegion().GetSize());
-      ++it;
-    }
+  while (it!=supFilter->End())
+  {
+    size.push_back(it.Get()->GetLargestPossibleRegion().GetSize());
+    ++it;
+  }
   otbMsgDevMacro(<<"MorphologicalPyramidSynthesisFilter : Size vector computation OK");
 
   // Iterators definition
@@ -197,18 +197,18 @@ MorphologicalPyramidSynthesisFilter<TInputImage,TOutputImage>
   SizeReverseIterator itSize = size.rbegin();
 
   int i =1;
- //--------------------------------------------------------//
+//--------------------------------------------------------//
   //                      Main loop                         //
   //--------------------------------------------------------//
-  while(   itinfFilter!=infFilter->ReverseEnd()
-  && itsupFilter!=supFilter->ReverseEnd()
-  && itinfDeci!=infDeci->ReverseEnd()
-  && itsupDeci!=supDeci->ReverseEnd()
-  && itSize!=size.rend())
-    {
+  while (   itinfFilter!=infFilter->ReverseEnd()
+            && itsupFilter!=supFilter->ReverseEnd()
+            && itinfDeci!=infDeci->ReverseEnd()
+            && itsupDeci!=supDeci->ReverseEnd()
+            && itSize!=size.rend())
+  {
 
-      ++i;
-      // Upsampling current image
+    ++i;
+    // Upsampling current image
     resampler = ResamplerType::New();
     resampler->SetSize(*itSize);
     resampler->SetInput(currentImage);
@@ -243,9 +243,9 @@ MorphologicalPyramidSynthesisFilter<TInputImage,TOutputImage>
     ++itsupDeci;
     ++itinfDeci;
     ++itSize;
-    }
-  otbMsgDevMacro(<<"MorphologicalPyramidSynthesisFilter: Exiting main method.");
   }
+  otbMsgDevMacro(<<"MorphologicalPyramidSynthesisFilter: Exiting main method.");
+}
 /**
  * PrintSelf method
  */

@@ -80,10 +80,10 @@ KeyPointSetsMatchingFilter<TPointSet,TDistance>
   const PointSetType * ps2 =  this->GetInput2();
 
   // Check if one of the pointsets is empty
-  if( ps1->GetNumberOfPoints() == 0 || ps2->GetNumberOfPoints() == 0 )
-    {
-      itkExceptionMacro(<<"Empty input pointset !");
-    }
+  if ( ps1->GetNumberOfPoints() == 0 || ps2->GetNumberOfPoints() == 0 )
+  {
+    itkExceptionMacro(<<"Empty input pointset !");
+  }
 
   // Get the output pointer
   LandmarkListPointerType landmarks = this->GetOutput();
@@ -91,65 +91,65 @@ KeyPointSetsMatchingFilter<TPointSet,TDistance>
   // Define iterators on points and point data.
   PointsIteratorType     pIt  = ps1->GetPoints()->Begin();
   PointDataIteratorType pdIt = ps1->GetPointData()->Begin();
- 
+
   // iterate on pointset 1
-  while(pdIt!=ps1->GetPointData()->End()
-	&&pIt!=ps1->GetPoints()->End())
+  while (pdIt!=ps1->GetPointData()->End()
+         &&pIt!=ps1->GetPoints()->End())
+  {
+    // Get point and point data at current location
+    bool matchFound = false;
+    unsigned int currentIndex = pIt.Index();
+    PointDataType data = pdIt.Value();
+    PointType     point = pIt.Value();
+
+    // These variables will hold the matched point and point data
+    PointDataType dataMatch;
+    PointType pointMatch;
+
+    // call to the matching routine
+    NeighborSearchResultType searchResult1 = NearestNeighbor(data,ps2);
+
+    // Check if the neighbor distance is lower than the threshold
+    if (searchResult1.second < m_DistanceThreshold)
     {
-      // Get point and point data at current location
-      bool matchFound = false;
-      unsigned int currentIndex = pIt.Index();
-      PointDataType data = pdIt.Value();
-      PointType     point = pIt.Value();
+      // Get the matched point and point data
+      dataMatch = ps2->GetPointData()->GetElement(searchResult1.first);
+      pointMatch = ps2->GetPoints()->GetElement(searchResult1.first);
 
-      // These variables will hold the matched point and point data
-      PointDataType dataMatch;
-      PointType pointMatch;
+      // If the back matching option is on
+      if (m_UseBackMatching)
+      {
+        // Peform the back search
+        NeighborSearchResultType searchResult2 = NearestNeighbor(dataMatch,ps1);
 
-      // call to the matching routine
-      NeighborSearchResultType searchResult1 = NearestNeighbor(data,ps2);
-
-     // Check if the neighbor distance is lower than the threshold
-     if(searchResult1.second < m_DistanceThreshold)
-       {
-	 // Get the matched point and point data
-	 dataMatch = ps2->GetPointData()->GetElement(searchResult1.first);
-	 pointMatch = ps2->GetPoints()->GetElement(searchResult1.first);
-
-	 // If the back matching option is on
-	 if(m_UseBackMatching)
-	   {
-	     // Peform the back search
-	     NeighborSearchResultType searchResult2 = NearestNeighbor(dataMatch,ps1);
-	    
-	     // Test if back search finds the same match
-	     if(currentIndex == searchResult2.first)
-	       {
-		 matchFound = true;
-	       }	    
-	   }
-	 else // else back matching
-	   {
-	     matchFound = true;
-	   }
-       }
-    
-     // If we found a match, add the proper landmark
-     if(matchFound)
-       {
-	 LandmarkPointerType landmark = LandmarkType::New();
-	 landmark->SetPoint1(point);
-	 landmark->SetPointData1(data);
-	 landmark->SetPoint2(pointMatch);
-	 landmark->SetPointData2(dataMatch);
-	 landmark->SetLandmarkData(searchResult1.second);
-	
-	 // Add the new landmark to the landmark list
-	 landmarks->PushBack(landmark);
-       }
-     ++pdIt;
-     ++pIt;
+        // Test if back search finds the same match
+        if (currentIndex == searchResult2.first)
+        {
+          matchFound = true;
+        }
+      }
+      else // else back matching
+      {
+        matchFound = true;
+      }
     }
+
+    // If we found a match, add the proper landmark
+    if (matchFound)
+    {
+      LandmarkPointerType landmark = LandmarkType::New();
+      landmark->SetPoint1(point);
+      landmark->SetPointData1(data);
+      landmark->SetPoint2(pointMatch);
+      landmark->SetPointData2(dataMatch);
+      landmark->SetLandmarkData(searchResult1.second);
+
+      // Add the new landmark to the landmark list
+      landmarks->PushBack(landmark);
+    }
+    ++pdIt;
+    ++pIt;
+  }
 }
 
 template <class TPointSet, class TDistance>
@@ -171,49 +171,49 @@ KeyPointSetsMatchingFilter<TPointSet,TDistance>
   double d2 = m_DistanceCalculator->Evaluate(data1,pdIt.Value());
   ++pdIt;
 
-  if(d1>d2)
-    {
-      nearestIndex = 1;
-    }
+  if (d1>d2)
+  {
+    nearestIndex = 1;
+  }
   // Initialize distances
   double nearestDistance = std::min(d1,d2);
   double secondNearestDistance = std::max(d1,d2);
   double distanceValue;
 
   // iterate on the pointset
-  while( pdIt != pointset->GetPointData()->End() )
-    {
-      // Evaluate the distance
-      distanceValue = m_DistanceCalculator->Evaluate(data1,pdIt.Value());
+  while ( pdIt != pointset->GetPointData()->End() )
+  {
+    // Evaluate the distance
+    distanceValue = m_DistanceCalculator->Evaluate(data1,pdIt.Value());
 
 //       std::cout<<nearestIndex<<" "<<nearestDistance<<" "<<secondNearestDistance<<std::endl;
 
-      // Check if this point is the nearest neighbor
-      if(distanceValue < nearestDistance)
-	{
-	  secondNearestDistance = nearestDistance;
-	  nearestDistance = distanceValue;
-	  nearestIndex = pdIt.Index();
-	 
-	}
-      // Else check if it is the second nearest neighbor
-      else if(distanceValue < secondNearestDistance)
-	{
-	  secondNearestDistance = distanceValue;
-	}
-      ++pdIt;
+    // Check if this point is the nearest neighbor
+    if (distanceValue < nearestDistance)
+    {
+      secondNearestDistance = nearestDistance;
+      nearestDistance = distanceValue;
+      nearestIndex = pdIt.Index();
+
     }
+    // Else check if it is the second nearest neighbor
+    else if (distanceValue < secondNearestDistance)
+    {
+      secondNearestDistance = distanceValue;
+    }
+    ++pdIt;
+  }
 
   // Fill results
   result.first = nearestIndex;
-  if(secondNearestDistance == 0)
-    {
-      result.second = 1;
-    }
+  if (secondNearestDistance == 0)
+  {
+    result.second = 1;
+  }
   else
-    {
-      result.second = nearestDistance/secondNearestDistance;
-    }
+  {
+    result.second = nearestDistance/secondNearestDistance;
+  }
 
   // return the result
   return result;

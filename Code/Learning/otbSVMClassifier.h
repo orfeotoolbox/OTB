@@ -57,7 +57,7 @@ public:
   typedef itk::SmartPointer< Self > Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
- /** Standard macros */
+  /** Standard macros */
   itkTypeMacro(SVMClassifier, itk::Statistics::SampleClassifier);
   itkNewMacro(Self);
 
@@ -73,13 +73,13 @@ public:
 
   /** typedefs from Superclass */
   typedef typename Superclass::MembershipFunctionPointerVector
-    MembershipFunctionPointerVector;
+  MembershipFunctionPointerVector;
 
   /** typedef for label type */
   typedef TLabel ClassLabelType;
 
 
-   /** Returns the classification result */
+  /** Returns the classification result */
   OutputType* GetOutput();
   void SetOutput(OutputType* output);
 

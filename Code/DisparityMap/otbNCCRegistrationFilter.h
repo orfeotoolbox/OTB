@@ -21,7 +21,8 @@
 #include "itkPDEDeformableRegistrationFilter.h"
 #include "otbNCCRegistrationFunction.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class NCCRegistrationFilter
  * \brief Deformably register two images using the PDEs and NCC.
@@ -64,14 +65,14 @@ namespace otb {
  */
 template<class TFixedImage, class TMovingImage, class TDeformationField>
 class ITK_EXPORT NCCRegistrationFilter :
-    public itk::PDEDeformableRegistrationFilter< TFixedImage, TMovingImage,
-                                            TDeformationField>
+      public itk::PDEDeformableRegistrationFilter< TFixedImage, TMovingImage,
+      TDeformationField>
 {
 public:
   /** Standard class typedefs. */
   typedef NCCRegistrationFilter    Self;
   typedef itk::PDEDeformableRegistrationFilter<
-    TFixedImage, TMovingImage,TDeformationField>    Superclass;
+  TFixedImage, TMovingImage,TDeformationField>    Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -105,7 +106,7 @@ public:
 
   /** NCCRegistrationFilterFunction type. */
   typedef NCCRegistrationFunction<FixedImageType,MovingImageType,
-                                     DeformationFieldType>  NCCRegistrationFunctionType;
+  DeformationFieldType>  NCCRegistrationFunctionType;
 
   typedef typename NCCRegistrationFunctionType::RadiusType RadiusType;
 

@@ -29,7 +29,7 @@ namespace otb
  */
 template<class TInputImage1,class TInputImage2,class TOutputImage>
 class ITK_EXPORT ConcatenateVectorImageFilter
-: public itk::ImageToImageFilter<TInputImage1,TOutputImage>
+      : public itk::ImageToImageFilter<TInputImage1,TOutputImage>
 {
 public:
   /** Standard class typedefs. */
@@ -79,7 +79,7 @@ public:
   itkStaticConstMacro(InputImage2Dimension, unsigned int, TInputImage2::ImageDimension);
   itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
- protected:
+protected:
   /** Constructor. */
   ConcatenateVectorImageFilter();
   /** Destructor. */

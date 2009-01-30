@@ -47,39 +47,40 @@ namespace otb
 
 template< class TInput1, class TInput2>
 class ITK_EXPORT MRFEnergyGaussian:public MRFEnergy< TInput1, TInput2>
+{
+public:
+  typedef MRFEnergyGaussian                Self;
+  typedef MRFEnergy< TInput1, TInput2>  Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
+  typedef TInput1                               InputImageType;
+  typedef TInput2                               LabelledImageType;
+  typedef typename InputImageType::PixelType    InputImagePixelType;
+  typedef typename LabelledImageType::PixelType LabelledImagePixelType;
+
+  typedef itk::Array< double >                  ParametersType;
+
+  itkTypeMacro(MRFEnergyGaussian, MRFEnergy);
+
+  itkNewMacro(Self);
+
+  double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)
   {
-  public:
-    typedef MRFEnergyGaussian                Self;
-    typedef MRFEnergy< TInput1, TInput2>  Superclass;
-    typedef itk::SmartPointer<Self>       Pointer;
-    typedef itk::SmartPointer<const Self> ConstPointer;
+    return M_SQUARE((static_cast<double>(value1))
+                    - (static_cast<double>(value2)) );
+  }
 
-    typedef TInput1                               InputImageType;
-    typedef TInput2                               LabelledImageType;
-    typedef typename InputImageType::PixelType    InputImagePixelType;
-    typedef typename LabelledImageType::PixelType LabelledImagePixelType;
-
-    typedef itk::Array< double >                  ParametersType;
-
-    itkTypeMacro(MRFEnergyGaussian, MRFEnergy);
-
-    itkNewMacro(Self);
-
-    double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)
-      {
-          return M_SQUARE((static_cast<double>(value1))
-              - (static_cast<double>(value2)) );
-      }
-
-  protected:
-    // The constructor and destructor.
-    MRFEnergyGaussian() {
-      this->m_NumberOfParameters = 0;
-      this->m_Parameters.SetSize(this->m_NumberOfParameters);
-    };
-    virtual ~MRFEnergyGaussian() {};
-
+protected:
+  // The constructor and destructor.
+  MRFEnergyGaussian()
+  {
+    this->m_NumberOfParameters = 0;
+    this->m_Parameters.SetSize(this->m_NumberOfParameters);
   };
+  virtual ~MRFEnergyGaussian() {};
+
+};
 }
 
 #endif

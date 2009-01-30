@@ -22,41 +22,43 @@ PURPOSE.  See the above copyright notices for more information.
 #define __otbSOMLearningBehaviorFunctor_h
 
 
-namespace otb {
+namespace otb
+{
 
-namespace Functor {
+namespace Functor
+{
 
-  /** \class SOMLearningBehaviorFunctor
-  * \brief Classical Beta behavior over SOM training phase
-  *
-  *  This class implements an standart evolution of the \f$ \beta \f$ weightening
-  *  coefficient over the SOM training.
-  *
-  *  \f[
-    \beta = \beta_0 + \left( \beta_{\textrm{end}} - \beta_0 \right)
-      \frac{t}{t_{\textrm{end}}}
-    \f]
-  *
-  *  \sa SOM
-  */
-  class SOMLearningBehaviorFunctor
+/** \class SOMLearningBehaviorFunctor
+* \brief Classical Beta behavior over SOM training phase
+*
+*  This class implements an standart evolution of the \f$ \beta \f$ weightening
+*  coefficient over the SOM training.
+*
+*  \f[
+  \beta = \beta_0 + \left( \beta_{\textrm{end}} - \beta_0 \right)
+    \frac{t}{t_{\textrm{end}}}
+  \f]
+*
+*  \sa SOM
+*/
+class SOMLearningBehaviorFunctor
+{
+public :
+  /** Empty constructor / descructor */
+  CzihoSOMLearningBehaviorFunctor () { }
+  virtual ~CzihoSOMLearningBehaviorFunctor() { }
+
+  /** Functor */
+  virtual double operator() ( unsigned int currentIteration,
+                              unsigned int numberOfIterations,
+                              double betaInit, double betaEnd )
   {
-    public :
-      /** Empty constructor / descructor */
-      CzihoSOMLearningBehaviorFunctor () { }
-      virtual ~CzihoSOMLearningBehaviorFunctor() { }
+    return betaInit + ( betaEnd - betaInit )
+           * static_cast<double>( currentIteration )
+           / static_cast<double>(  numberOfIterations );
+  }
 
-      /** Functor */
-      virtual double operator() ( unsigned int currentIteration,
-                    unsigned int numberOfIterations,
-                    double betaInit, double betaEnd )
-      {
-        return betaInit + ( betaEnd - betaInit )
-              * static_cast<double>( currentIteration )
-              / static_cast<double>(  numberOfIterations );
-      }
-
-  }; // end of class SOMLearningBehaviorFunctor
+}; // end of class SOMLearningBehaviorFunctor
 
 } // end namespace Functor
 

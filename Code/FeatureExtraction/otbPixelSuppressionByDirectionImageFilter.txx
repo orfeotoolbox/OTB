@@ -69,12 +69,12 @@ PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>
 ::GetInputImage(void)
 {
   if (this->GetNumberOfInputs() < 1)
-    {
+  {
     return 0;
-    }
+  }
 
   return static_cast<const TInputImage * >
-    (this->GetInput(0) );
+         (this->GetInput(0) );
 }
 
 template <class TInputImage, class TOutputImage>
@@ -84,12 +84,12 @@ PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>
 ::GetInputImageDirection(void)
 {
   if (this->GetNumberOfInputs() < 1)
-    {
+  {
     return 0;
-    }
+  }
 
   return static_cast<const TInputImage * >
-    (this->GetInput(1) );
+         (this->GetInput(1) );
 }
 
 template <class TInputImage, class TOutputImage>
@@ -103,9 +103,9 @@ void PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>::Generate
   typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
 
   if ( !inputPtr || !outputPtr )
-    {
+  {
     return;
-    }
+  }
 
   // get a copy of the input requested region (should equal the output
   // requested region)
@@ -117,12 +117,12 @@ void PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>::Generate
 
   // crop the input requested region at the input's largest possible region
   if ( inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
-    {
+  {
     inputPtr->SetRequestedRegion( inputRequestedRegion );
     return;
-    }
+  }
   else
-    {
+  {
     // Couldn't crop the region (requested region is outside the largest
     // possible region).  Throw an exception.
 
@@ -133,20 +133,20 @@ void PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>::Generate
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
     itk::OStringStream msg;
     msg << static_cast<const char *>(this->GetNameOfClass())
-        << "::GenerateInputRequestedRegion()";
+    << "::GenerateInputRequestedRegion()";
     e.SetLocation(msg.str().c_str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
     e.SetDataObject(inputPtr);
     throw e;
-    }
+  }
 }
 
 
 template< class TInputImage, class TOutputImage>
 void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(
-      const   OutputImageRegionType&     outputRegionForThread,
-                         int   threadId
-        )
+  const   OutputImageRegionType&     outputRegionForThread,
+  int   threadId
+)
 {
 
   itk::ConstantBoundaryCondition<InputImageType>     cbc;
@@ -200,7 +200,7 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
   for (fit=faceList.begin(); fit != faceList.end(); ++fit)
-    {
+  {
     bit = itk::ConstNeighborhoodIterator<InputImageType>(m_Radius, inputDirection, *fit);
 
     itin = itk::ImageRegionConstIterator<InputImageType>(input, *fit);
@@ -211,14 +211,14 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
 
 
     while ( ! bit.IsAtEnd() )
-      {
+    {
 
       /*// Location of the central pixel of the region in the input image
       bitIndex = bit.GetIndex();
 
       Xc = bitIndex[0];
       Yc = bitIndex[1];
-    */
+      */
       // Get Pixel Direction from the image of directions
       ThetaXcYc = static_cast<double>( bit.GetCenterPixel() );
 
@@ -230,61 +230,61 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
       typename itk::ConstNeighborhoodIterator<InputImageType>::OffsetType  off;
       // Loop on the region
       for (unsigned int i = 0; i < 2*m_Radius[0]+1; ++i)
-  for (unsigned int j = 0; j < 2*m_Radius[1]+1; ++j)
+        for (unsigned int j = 0; j < 2*m_Radius[1]+1; ++j)
         {
 
-  off[0]=i-m_Radius[0];
-  off[1]=j-m_Radius[1];
+          off[0]=i-m_Radius[0];
+          off[1]=j-m_Radius[1];
 
-        x = off[0];
-        y = off[1];
+          x = off[0];
+          y = off[1];
 
 
-        // No calculation on the central pixel
-        if (( x == 0 ) && ( y == 0 ))
-           continue;
+          // No calculation on the central pixel
+          if (( x == 0 ) && ( y == 0 ))
+            continue;
 
-  Thetaxtyt = vcl_atan2( static_cast<double>(y), static_cast<double>(x) ); //result is [-PI,PI]
-  while(Thetaxtyt < 0)
-    Thetaxtyt = M_PI + Thetaxtyt; // Theta is now [0,PI] as is
+          Thetaxtyt = vcl_atan2( static_cast<double>(y), static_cast<double>(x) ); //result is [-PI,PI]
+          while (Thetaxtyt < 0)
+            Thetaxtyt = M_PI + Thetaxtyt; // Theta is now [0,PI] as is
           // the result of detectors
-  while(Thetaxtyt > M_PI/2.0)
-    Thetaxtyt = Thetaxtyt-M_PI; // Theta is now [-PI/2,PI/2]
+          while (Thetaxtyt > M_PI/2.0)
+            Thetaxtyt = Thetaxtyt-M_PI; // Theta is now [-PI/2,PI/2]
 
 
-  if( (vcl_abs(vcl_cos(Thetaxtyt-ThetaXcYc)) >= vcl_cos(m_AngularBeam)) // this
-                   // pixel
-                   // is
-                   // in
-                   // the
-                   // angular beam
-      && (vcl_abs(vcl_cos(bit.GetPixel(off)-ThetaXcYc)) >= vcl_cos(m_AngularBeam)) ) //and
-                    //its
-                    //direction
-                    //is
-                    //also
-                    //in
-                    //the beam
-    {
-    IsLine = true;
-    continue;
-    }
+          if ( (vcl_abs(vcl_cos(Thetaxtyt-ThetaXcYc)) >= vcl_cos(m_AngularBeam)) // this
+               // pixel
+               // is
+               // in
+               // the
+               // angular beam
+               && (vcl_abs(vcl_cos(bit.GetPixel(off)-ThetaXcYc)) >= vcl_cos(m_AngularBeam)) ) //and
+            //its
+            //direction
+            //is
+            //also
+            //in
+            //the beam
+          {
+            IsLine = true;
+            continue;
+          }
 
 
-  }
+        }
 
       // end of the loop on the pixels of the region
 
 
       // Assignment of this value to the output pixel
       if (IsLine == true)
-  {
-  itout.Set( static_cast<OutputPixelType>(PixelValue) );
-  }
+      {
+        itout.Set( static_cast<OutputPixelType>(PixelValue) );
+      }
       else
-  {
-  itout.Set( static_cast<OutputPixelType>(0.) );
-  }
+      {
+        itout.Set( static_cast<OutputPixelType>(0.) );
+      }
 
 
       ++bit;
@@ -292,9 +292,9 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
       ++itout;
       progress.CompletedPixel();
 
-      }
-
     }
+
+  }
 }
 
 /**

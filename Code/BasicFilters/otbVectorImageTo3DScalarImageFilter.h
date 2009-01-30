@@ -38,9 +38,9 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT VectorImageTo3DScalarImageFilter
-  : public itk::ImageToImageFilter<TInputImage,TOutputImage>
+      : public itk::ImageToImageFilter<TInputImage,TOutputImage>
 {
- public:
+public:
   /** Standard typedefs */
   typedef VectorImageTo3DScalarImageFilter                  Self;
   typedef itk::ImageToImageFilter<TInputImage,TOutputImage> Superclass;
@@ -84,7 +84,7 @@ protected:
   VectorImageTo3DScalarImageFilter();
   /** Destructor */
   virtual ~VectorImageTo3DScalarImageFilter() {};
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

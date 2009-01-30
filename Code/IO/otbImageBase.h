@@ -118,7 +118,7 @@ public:
 
 protected:
   ImageBase();
-  virtual ~ImageBase(){};
+  virtual ~ImageBase() {};
 
 private:
   ImageBase(const Self&); //purposely not implemented

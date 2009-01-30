@@ -105,7 +105,7 @@ StreamingImageVirtualWriter<TInputImage>
 ::SetAutomaticNumberOfStreamDivisions(void)
 {
   m_CalculationDivision = SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS;
-        this->Modified();
+  this->Modified();
 }
 
 /**
@@ -139,7 +139,7 @@ StreamingImageVirtualWriter<TInputImage>
 {
   // ProcessObject is not const_correct so this cast is required here.
   this->itk::ProcessObject::SetNthInput(0,
-                                   const_cast<TInputImage *>(input ) );
+                                        const_cast<TInputImage *>(input ) );
 }
 
 
@@ -150,12 +150,12 @@ StreamingImageVirtualWriter<TInputImage>
 ::GetInput(void)
 {
   if (this->GetNumberOfInputs() < 1)
-    {
+  {
     return 0;
-    }
+  }
 
   return static_cast<TInputImage*>
-    (this->itk::ProcessObject::GetInput(0));
+         (this->itk::ProcessObject::GetInput(0));
 }
 
 
@@ -197,13 +197,13 @@ StreamingImageVirtualWriter<TInputImage>
 ::CalculateNumberOfStreamDivisions(void)
 {
   return StreamingTraitsType
-    ::CalculateNumberOfStreamDivisions(this->GetInput(),
-               this->GetInput()->GetLargestPossibleRegion(),
-                                       m_RegionSplitter,
-               m_CalculationDivision,
-               m_NumberOfStreamDivisions,
-               m_BufferMemorySize,
-               m_BufferNumberOfLinesDivisions);
+         ::CalculateNumberOfStreamDivisions(this->GetInput(),
+                                            this->GetInput()->GetLargestPossibleRegion(),
+                                            m_RegionSplitter,
+                                            m_CalculationDivision,
+                                            m_NumberOfStreamDivisions,
+                                            m_BufferMemorySize,
+                                            m_BufferNumberOfLinesDivisions);
 }
 /**
  *
@@ -225,15 +225,15 @@ StreamingImageVirtualWriter<TInputImage>
 {
   Superclass::PrintSelf(os,indent);
   os << indent << "Number of stream divisions: " << m_NumberOfStreamDivisions
-     << std::endl;
+  << std::endl;
   if (m_RegionSplitter)
-    {
+  {
     os << indent << "Region splitter:" << m_RegionSplitter << std::endl;
-    }
+  }
   else
-    {
+  {
     os << indent << "Region splitter: (none)" << std::endl;
-    }
+  }
 }
 template<class TInputImage>
 void
@@ -273,21 +273,21 @@ StreamingImageVirtualWriter<TInputImage>
   for (piece = 0;
        piece < numDivisions && !this->GetAbortGenerateData();
        piece++)
-    {
-      streamRegion = m_RegionSplitter->GetSplit(piece, numDivisions,outputRegion);
-      inputPtr->ReleaseData();
-      inputPtr->SetRequestedRegion(streamRegion);
-      inputPtr->Update();
-      this->UpdateProgress((float) piece / numDivisions );
-    }
+  {
+    streamRegion = m_RegionSplitter->GetSplit(piece, numDivisions,outputRegion);
+    inputPtr->ReleaseData();
+    inputPtr->SetRequestedRegion(streamRegion);
+    inputPtr->Update();
+    this->UpdateProgress((float) piece / numDivisions );
+  }
   /**
    * If we ended due to aborting, push the progress up to 1.0 (since
    * it probably didn't end there)
    */
   if ( !this->GetAbortGenerateData() )
-    {
+  {
     this->UpdateProgress(1.0);
-    }
+  }
 
   // Notify end event observers
   this->InvokeEvent( itk::EndEvent() );
@@ -296,12 +296,12 @@ StreamingImageVirtualWriter<TInputImage>
    * Now we have to mark the data as up to data.
    */
   for (unsigned int idx = 0; idx < this->GetNumberOfOutputs(); ++idx)
-    {
+  {
     if (this->GetOutput(idx))
-      {
+    {
       this->GetOutput(idx)->DataHasBeenGenerated();
-      }
     }
+  }
   /**
    * Release any inputs if marked for release
    */

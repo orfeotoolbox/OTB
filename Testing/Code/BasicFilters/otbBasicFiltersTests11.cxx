@@ -36,4 +36,5 @@ REGISTER_TEST(otbPointSetToDensityImageFilterTest);
 REGISTER_TEST(otbKeyPointDensityImageFilterNew); 
 //REGISTER_TEST(otbCountImageFilterTest);  
 REGISTER_TEST(otbImagePCAShapeModelEstimatorTest);
+REGISTER_TEST(otbFunctionWithNeighborhoodToImageFilterNew);
 }

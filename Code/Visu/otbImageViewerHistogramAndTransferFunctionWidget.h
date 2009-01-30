@@ -36,9 +36,9 @@ template <class TPixel, class TLabel> class ImageViewerBase;
  */
 template <class THistogram, class TPixel, class TLabel>
 class ITK_EXPORT ImageViewerHistogramAndTransferFunctionWidget
-  : public HistogramAndTransferFunctionWidget<THistogram,TPixel>
-  {
-    public:
+      : public HistogramAndTransferFunctionWidget<THistogram,TPixel>
+{
+public:
   /** Standard typedefs */
   typedef ImageViewerHistogramAndTransferFunctionWidget         Self;
   typedef HistogramAndTransferFunctionWidget<THistogram,TPixel> Superclass;
@@ -71,33 +71,33 @@ class ITK_EXPORT ImageViewerHistogramAndTransferFunctionWidget
   itkSetMacro(Parent,ParentPointerType);
   itkGetMacro(Parent,ParentPointerType);
 
-  protected:
+protected:
   // event handling
   virtual int handle(int event)
-    {
-      double factor = (this->GetHistogram()->Quantile(0,1.)-this->GetHistogram()->Quantile(0,0.))
-  /(static_cast<double>(this->w())-2*this->GetMarginX()-this->GetOutputHistogramMargin()*static_cast<double>(this->w()));
-      double xupper = this->GetMarginX() + static_cast<double>(this->GetTransferFunction()->GetUpperBound()-this->GetHistogram()->Quantile(0,0.))/factor;
-      double xlower = this->GetMarginX() + static_cast<double>(this->GetTransferFunction()->GetLowerBound()-this->GetHistogram()->Quantile(0,0.))/factor;
-      switch(event)
   {
-  case FL_PUSH:
+    double factor = (this->GetHistogram()->Quantile(0,1.)-this->GetHistogram()->Quantile(0,0.))
+                    /(static_cast<double>(this->w())-2*this->GetMarginX()-this->GetOutputHistogramMargin()*static_cast<double>(this->w()));
+    double xupper = this->GetMarginX() + static_cast<double>(this->GetTransferFunction()->GetUpperBound()-this->GetHistogram()->Quantile(0,0.))/factor;
+    double xlower = this->GetMarginX() + static_cast<double>(this->GetTransferFunction()->GetLowerBound()-this->GetHistogram()->Quantile(0,0.))/factor;
+    switch (event)
+    {
+    case FL_PUSH:
     {
       double x = Fl::event_x();
-      if((vcl_abs(x-xlower)<50) || (vcl_abs(x-xupper)<50))
+      if ((vcl_abs(x-xlower)<50) || (vcl_abs(x-xupper)<50))
+      {
+        if (vcl_abs(x-xlower)<vcl_abs(x-xupper))
         {
-    if(vcl_abs(x-xlower)<vcl_abs(x-xupper))
-      {
-        m_ModifyLower = true;
-      }
-    else
-      {
-        m_ModifyUpper = true;
-      }
+          m_ModifyLower = true;
         }
+        else
+        {
+          m_ModifyUpper = true;
+        }
+      }
       return 1;
     }
-  case FL_RELEASE:
+    case FL_RELEASE:
     {
       m_ModifyLower = false;
       m_ModifyUpper = false;
@@ -105,56 +105,56 @@ class ITK_EXPORT ImageViewerHistogramAndTransferFunctionWidget
       m_Parent->Update();
       return 1;
     }
-  case FL_DRAG:
+    case FL_DRAG:
     {
       double x = Fl::event_x();
 
-      if(m_ModifyLower && (x>this->GetMarginX()) && (x<static_cast<double>(this->w())-this->GetMarginX()-this->GetOutputHistogramMargin()*static_cast<double>(this->w())))
-        {
-    x = (x>xupper ? xupper : x);
-    this->GetTransferFunction()->SetLowerBound(static_cast<PixelType>(this->GetHistogram()->Quantile(0,0.)+(x-this->GetMarginX())*factor));
-    this->redraw();
-        }
-      else if(m_ModifyUpper && (x<static_cast<double>(this->w())-this->GetMarginX()-this->GetOutputHistogramMargin()*static_cast<double>(this->w())))
-        {
-    x = (x<xlower ? xlower : x);
-    this->GetTransferFunction()->SetUpperBound(static_cast<PixelType>(this->GetHistogram()->Quantile(0,0.)+(x-this->GetMarginX())*factor));
-    this->redraw();
-        }
+      if (m_ModifyLower && (x>this->GetMarginX()) && (x<static_cast<double>(this->w())-this->GetMarginX()-this->GetOutputHistogramMargin()*static_cast<double>(this->w())))
+      {
+        x = (x>xupper ? xupper : x);
+        this->GetTransferFunction()->SetLowerBound(static_cast<PixelType>(this->GetHistogram()->Quantile(0,0.)+(x-this->GetMarginX())*factor));
+        this->redraw();
+      }
+      else if (m_ModifyUpper && (x<static_cast<double>(this->w())-this->GetMarginX()-this->GetOutputHistogramMargin()*static_cast<double>(this->w())))
+      {
+        x = (x<xlower ? xlower : x);
+        this->GetTransferFunction()->SetUpperBound(static_cast<PixelType>(this->GetHistogram()->Quantile(0,0.)+(x-this->GetMarginX())*factor));
+        this->redraw();
+      }
       return 1;
     }
-  case FL_MOUSEWHEEL:
+    case FL_MOUSEWHEEL:
     {
       int dy = Fl::event_dy();
-      if(dy>0)
-        {
-    m_TransferFunctionCode++;
-        }
+      if (dy>0)
+      {
+        m_TransferFunctionCode++;
+      }
       else
-        {
-    m_TransferFunctionCode--;
-        }
+      {
+        m_TransferFunctionCode--;
+      }
       m_TransferFunctionCode = vcl_abs(m_TransferFunctionCode%4);
       TransferFunctionPointerType newFunction;
-      switch(m_TransferFunctionCode)
-        {
-        case 0:
-    newFunction = AffineTransferFunctionType::New();
-    this->SetTransferFunctionLabel("Affine");
-    break;
-        case 1:
-    newFunction = SquareRootTransferFunctionType::New();
-    this->SetTransferFunctionLabel("Square Root");
-    break;
-        case 2:
-    newFunction = LogTransferFunctionType::New();
-    this->SetTransferFunctionLabel("Logarithmic");
-    break;
-        case 3:
-    newFunction = SquareonentialTransferFunctionType::New();
-    this->SetTransferFunctionLabel("Square");
-    break;
-        }
+      switch (m_TransferFunctionCode)
+      {
+      case 0:
+        newFunction = AffineTransferFunctionType::New();
+        this->SetTransferFunctionLabel("Affine");
+        break;
+      case 1:
+        newFunction = SquareRootTransferFunctionType::New();
+        this->SetTransferFunctionLabel("Square Root");
+        break;
+      case 2:
+        newFunction = LogTransferFunctionType::New();
+        this->SetTransferFunctionLabel("Logarithmic");
+        break;
+      case 3:
+        newFunction = SquareonentialTransferFunctionType::New();
+        this->SetTransferFunctionLabel("Square");
+        break;
+      }
       newFunction->SetLowerBound(this->GetTransferFunction()->GetLowerBound());
       newFunction->SetUpperBound(this->GetTransferFunction()->GetUpperBound());
       this->SetTransferFunction(newFunction);
@@ -163,27 +163,27 @@ class ITK_EXPORT ImageViewerHistogramAndTransferFunctionWidget
       return 1;
 
     }
-  }
-      return 0;
     }
+    return 0;
+  }
   /** Constructor */
   ImageViewerHistogramAndTransferFunctionWidget()
-    {
-      m_ModifyLower = false;
-      m_ModifyUpper = false;
-      m_TransferFunctionCode = 0;
-    }
+  {
+    m_ModifyLower = false;
+    m_ModifyUpper = false;
+    m_TransferFunctionCode = 0;
+  }
   /** Destructor */
   virtual ~ImageViewerHistogramAndTransferFunctionWidget()
-    {
-      m_Parent = NULL;
-    }
- /**PrintSelf method */
+  {
+    m_Parent = NULL;
+  }
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
-    {
-      Superclass::PrintSelf(os,indent);
-    }
-  private:
+  {
+    Superclass::PrintSelf(os,indent);
+  }
+private:
   ImageViewerHistogramAndTransferFunctionWidget(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   /** Modify lower/upper threshold flag */
@@ -191,7 +191,7 @@ class ITK_EXPORT ImageViewerHistogramAndTransferFunctionWidget
   bool m_ModifyUpper;
   int m_TransferFunctionCode;
   ParentPointerType m_Parent;
-  };
+};
 
 } // end namespace otb
 

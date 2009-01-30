@@ -1151,7 +1151,7 @@ ADD_TEST(bfTvPointSetToDensityImageFilterTest ${BASICFILTERS_TESTS11}
 	    otbPointSetToDensityImageFilterTest
 	 ${INPUTDATA}/QB_Suburb.png
 	 ${TEMP}/bfTvPointSetToDensityImageFilterOutputImage.tif
-	 3 5 10
+	 5 2
 )
 
 # -------    otbPCAShapeModelEstimatorTest   ----------------------------
@@ -1179,6 +1179,11 @@ ADD_TEST(bfTuKeyPointDensityImageFilterNew ${BASICFILTERS_TESTS11}
 #	 ${TEMP}/bfTvCountImageFilterOutputImage.tif
 #	 5 2 
 #)
+
+ADD_TEST(bfTvFunctionWithNeighborhoodToImageFilterNew ${BASICFILTERS_TESTS11}
+        otbFunctionWithNeighborhoodToImageFilterNew
+)
+
 
 # A enrichir
 SET(BasicFilters_SRCS1
@@ -1348,6 +1353,7 @@ otbPointSetToDensityImageFilterTest.cxx
 otbKeyPointDensityImageFilterNew.cxx
 #otbCountImageFilterTest.cxx	
 otbImagePCAShapeModelEstimatorTest.cxx
+otbFunctionWithNeighborhoodToImageFilterNew.cxx
 )
 
 

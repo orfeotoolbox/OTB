@@ -121,7 +121,7 @@ protected:
   ImageToPathListAlignFilter();
   ~ImageToPathListAlignFilter();
 
-  virtual void GenerateOutputInformation(){}; // do nothing
+  virtual void GenerateOutputInformation() {}; // do nothing
   virtual void GenerateData();
   virtual std::vector<double> tab(int n,double p,double m);
   virtual void AngleCalculate( const InputImageType*  InputImageIn);

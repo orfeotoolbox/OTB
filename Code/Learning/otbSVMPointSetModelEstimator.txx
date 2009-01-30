@@ -25,7 +25,7 @@
 namespace otb
 {
 template<class TInputPointSet,
-         class TTrainingPointSet>
+class TTrainingPointSet>
 SVMPointSetModelEstimator<TInputPointSet, TTrainingPointSet>
 ::SVMPointSetModelEstimator(void):  SVMModelEstimator<ITK_TYPENAME TInputPointSet::PixelType::value_type,
     ITK_TYPENAME TTrainingPointSet::PixelType>()
@@ -37,7 +37,7 @@ SVMPointSetModelEstimator<TInputPointSet, TTrainingPointSet>
 
 
 template<class TInputPointSet,
-         class TTrainingPointSet>
+class TTrainingPointSet>
 SVMPointSetModelEstimator<TInputPointSet, TTrainingPointSet>
 ::~SVMPointSetModelEstimator(void)
 {
@@ -47,7 +47,7 @@ SVMPointSetModelEstimator<TInputPointSet, TTrainingPointSet>
  * PrintSelf
  */
 template<class TInputPointSet,
-         class TTrainingPointSet>
+class TTrainingPointSet>
 void
 SVMPointSetModelEstimator<TInputPointSet, TTrainingPointSet>
 ::PrintSelf( std::ostream& os, itk::Indent indent ) const
@@ -71,28 +71,28 @@ SVMPointSetModelEstimator<TInputPointSet, TTrainingPointSet>
 
 
 template<class TInputPointSet,
-         class TTrainingPointSet>
+class TTrainingPointSet>
 void
 SVMPointSetModelEstimator<TInputPointSet,  TTrainingPointSet>
 ::BuildProblem()
 {
 
-    //Do some error checking
+  //Do some error checking
   InputPointSetPointer  inputPointSet = this->GetInputPointSet();
   TrainingPointSetPointer  trainingPointSet = this->GetTrainingPointSet();
 
   // Check if the training and input image dimensions are same
-  if( (int)(TInputPointSet::PointType::Dimension) != (int)(TTrainingPointSet::PointType::Dimension) )
-    {
+  if ( (int)(TInputPointSet::PointType::Dimension) != (int)(TTrainingPointSet::PointType::Dimension) )
+  {
     throw itk::ExceptionObject(__FILE__, __LINE__,"Training and input pointsets dimensions are not the same.",ITK_LOCATION);
-    }
+  }
 
   int  inputPointSetSize = inputPointSet->GetNumberOfPoints();
 
   int trainingPointSetSize = trainingPointSet->GetNumberOfPoints();
 
   // Check if size of the two inputs are same
-  if( inputPointSetSize != trainingPointSetSize ) throw itk::ExceptionObject(__FILE__, __LINE__,"Input pointset size is not the same as the training pointset size.",ITK_LOCATION);
+  if ( inputPointSetSize != trainingPointSetSize ) throw itk::ExceptionObject(__FILE__, __LINE__,"Input pointset size is not the same as the training pointset size.",ITK_LOCATION);
 
 
   // Declaration of the iterators on the input and training images
@@ -118,8 +118,8 @@ SVMPointSetModelEstimator<TInputPointSet,  TTrainingPointSet>
   otbMsgDevMacro(  << " Before while " );
 
   unsigned int dataId = 0;
-  while(inIt!=inEnd && trIt!=trEnd)
-    {
+  while (inIt!=inEnd && trIt!=trEnd)
+  {
 
     // If label != 0
 
@@ -127,28 +127,28 @@ SVMPointSetModelEstimator<TInputPointSet,  TTrainingPointSet>
     trainingPointSet->GetPointData( dataId, & label );
     this->m_Labels.push_back(label);
 
-      otbMsgDevMacro(  << " Label " << label );
+    otbMsgDevMacro(  << " Label " << label );
 
-      typename TInputPointSet::PixelType value;
-      inputPointSet->GetPointData( dataId, & value );
+    typename TInputPointSet::PixelType value;
+    inputPointSet->GetPointData( dataId, & value );
 
-      typename Superclass::MeasurementVectorType v;
+    typename Superclass::MeasurementVectorType v;
 
-      typename TInputPointSet::PixelType::iterator pIt = value.begin();
-      typename TInputPointSet::PixelType::iterator pEnd = value.end();
+    typename TInputPointSet::PixelType::iterator pIt = value.begin();
+    typename TInputPointSet::PixelType::iterator pEnd = value.end();
 
-      while(pIt!=pEnd)
-  {
-  v.push_back(*pIt);
-  ++pIt;
-  }
+    while (pIt!=pEnd)
+    {
+      v.push_back(*pIt);
+      ++pIt;
+    }
 
-      this->m_Measures.push_back(v);
+    this->m_Measures.push_back(v);
 
     ++inIt;
     ++trIt;
     ++dataId;
-    }
+  }
 
   otbMsgDevMacro(  << " Before prepare data " );
   this->PrepareData();

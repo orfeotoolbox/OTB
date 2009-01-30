@@ -28,9 +28,9 @@ namespace otb
  */
 template <class TPixel>
 class ZoomableImageWidget
-  : public ImageWidgetBase<TPixel>
+      : public ImageWidgetBase<TPixel>
 {
- public:
+public:
   /** Standard class typedefs */
   typedef ZoomableImageWidget Self;
   typedef ImageWidgetBase<TPixel> Superclass;
@@ -70,17 +70,17 @@ class ZoomableImageWidget
   void SetZoomUpperLeftCorner(IndexType index);
   itkGetMacro(ZoomUpperLeftCorner,IndexType);
 
- protected:
+protected:
   /** Constructor. */
-    ZoomableImageWidget();
-    /** Destructor. */
-    ~ZoomableImageWidget();
+  ZoomableImageWidget();
+  /** Destructor. */
+  ~ZoomableImageWidget();
 
- private:
-    ZoomableImageWidget(const Self&);// purposely not implemented
-    void operator=(const Self&);// purposely not implemented
+private:
+  ZoomableImageWidget(const Self&);// purposely not implemented
+  void operator=(const Self&);// purposely not implemented
 
-    IndexType m_ZoomUpperLeftCorner;
+  IndexType m_ZoomUpperLeftCorner;
 };
 } // end namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

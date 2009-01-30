@@ -26,9 +26,9 @@
 
 
 #ifdef _WIN
-      #define OTB_FILE_SEPARATOR '\\'
+#define OTB_FILE_SEPARATOR '\\'
 #else
-     #define OTB_FILE_SEPARATOR '/'
+#define OTB_FILE_SEPARATOR '/'
 #endif
 
 namespace otb

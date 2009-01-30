@@ -47,7 +47,7 @@ SetInput( const InputImageType *input)
 {
   // Process object is not const-correct so the const_cast is required here
   this->itk::ProcessObject::SetNthInput(0,
-                                   const_cast< InputImageType * >( input ) );
+                                        const_cast< InputImageType * >( input ) );
 }
 
 template <class TInputImage, class TInputImageDirection, class TOutputImage >
@@ -57,7 +57,7 @@ SetInputDirection( const InputImageDirectionType *direction)
 {
   // Process object is not const-correct so the const_cast is required here
   this->itk::ProcessObject::SetNthInput(1,
-                                   const_cast< InputImageDirectionType * >( direction ) );
+                                        const_cast< InputImageDirectionType * >( direction ) );
 }
 
 /** Return the input image modulus */
@@ -67,12 +67,12 @@ ModulusAndDirectionImageToImageFilter<TInputImage, TInputImageDirection, TOutput
 GetInput(void)
 {
   if (this->GetNumberOfInputs() < 1)
-    {
+  {
     return 0;
-    }
+  }
 
   return static_cast<const TInputImage * >
-    (this->itk::ProcessObject::GetInput(0) );
+         (this->itk::ProcessObject::GetInput(0) );
 }
 
 /** Return the intput image direction */
@@ -82,12 +82,12 @@ ModulusAndDirectionImageToImageFilter<TInputImage, TInputImageDirection, TOutput
 GetInputDirection(void)
 {
   if (this->GetNumberOfInputs() < 2)
-    {
+  {
     return 0;
-    }
+  }
 
   return static_cast<const TInputImageDirection * >
-    (this->itk::ProcessObject::GetInput(1) );
+         (this->itk::ProcessObject::GetInput(1) );
 
 }
 

@@ -26,7 +26,8 @@
 
 #include "otbMacro.h"
 
-namespace otb {
+namespace otb
+{
 
 /* *******************************************************************
  *  CumulantsForEdgeworth
@@ -96,11 +97,11 @@ CumulantsForEdgeworth< TInput >
 
   double tmp = cum1 - tilde_cum1 + sqrt_cum2;
   double resu = cum3_2 / ( 12.0 * cum2_3 )
-      + ( log( tilde_cum2 / cum2 )
-          - 1.0 + tmp * tmp / tilde_cum2 ) / 2.0
-      - ( tilde_cum3 * a1 / 6.0 + tilde_cum4 * a2 / 24.0 + tilde_cum3_2 * a3 / 72.0 )
-      - tilde_cum3_2 * ( c6 - 6.0 * c4 / cum2 + 9.0 * c2 / tilde_cum2_2 ) / 72.0
-      - 10.0 * cum3 * tilde_cum3 * ( cum1 - tilde_cum1 ) * ( cum2 - tilde_cum2 ) / tilde_cum2_6;
+                + ( log( tilde_cum2 / cum2 )
+                    - 1.0 + tmp * tmp / tilde_cum2 ) / 2.0
+                - ( tilde_cum3 * a1 / 6.0 + tilde_cum4 * a2 / 24.0 + tilde_cum3_2 * a3 / 72.0 )
+                - tilde_cum3_2 * ( c6 - 6.0 * c4 / cum2 + 9.0 * c2 / tilde_cum2_2 ) / 72.0
+                - 10.0 * cum3 * tilde_cum3 * ( cum1 - tilde_cum1 ) * ( cum2 - tilde_cum2 ) / tilde_cum2_6;
 
   return resu < 0.0 ? 0.0 : resu;
 }

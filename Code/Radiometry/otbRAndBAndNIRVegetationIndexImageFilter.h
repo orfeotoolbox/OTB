@@ -30,10 +30,10 @@ namespace otb
  */
 
 template <class TInputImageR, class TInputImageB, class TInputImageNIR, class TOutputImage,
-          class TFunction = Functor::ARVI<              typename TInputImageR::PixelType,
-                                                        typename TInputImageB::PixelType,
-                                                        typename TInputImageNIR::PixelType,
-                                                        typename TOutputImage::PixelType > >
+class TFunction = Functor::ARVI<              typename TInputImageR::PixelType,
+typename TInputImageB::PixelType,
+typename TInputImageNIR::PixelType,
+typename TOutputImage::PixelType > >
 class ITK_EXPORT RAndBAndNIRVegetationIndexImageFilter :  public itk::TernaryFunctorImageFilter< TInputImageR, TInputImageB, TInputImageNIR, TOutputImage, TFunction >
 {
 public:

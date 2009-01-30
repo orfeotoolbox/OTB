@@ -44,11 +44,11 @@ VectorImageTo3DScalarImageFilter<TInputImage, TOutputImage>
   InputImageRegionType inputLargestRegion = this->GetInput()->GetLargestPossibleRegion();
   OutputImageSizeType size;
   OutputImageIndexType index;
-  for(unsigned int i = 0;i<InputImageType::ImageDimension;++i)
-    {
-      size[i] = inputLargestRegion.GetSize()[i];
-      index[i]= inputLargestRegion.GetIndex()[i];
-    }
+  for (unsigned int i = 0;i<InputImageType::ImageDimension;++i)
+  {
+    size[i] = inputLargestRegion.GetSize()[i];
+    index[i]= inputLargestRegion.GetIndex()[i];
+  }
   size[OutputImageType::ImageDimension-1]=inputPtr->GetNumberOfComponentsPerPixel();
   index[OutputImageType::ImageDimension-1]=0;
 
@@ -71,11 +71,11 @@ VectorImageTo3DScalarImageFilter<TInputImage, TOutputImage>
   InputImageSizeType size;
   InputImageIndexType index;
 
-  for(unsigned int i = 0;i<InputImageType::ImageDimension;++i)
-    {
-      size[i]=requestedRegion.GetSize()[i];
-      index[i]=requestedRegion.GetIndex()[i];
-    }
+  for (unsigned int i = 0;i<InputImageType::ImageDimension;++i)
+  {
+    size[i]=requestedRegion.GetSize()[i];
+    index[i]=requestedRegion.GetIndex()[i];
+  }
   inputRequestedRegion.SetSize(size);
   inputRequestedRegion.SetIndex(index);
   inputPtr->SetRequestedRegion(inputRequestedRegion);
@@ -84,7 +84,7 @@ template <class TInputImage, class TOutputImage>
 void
 VectorImageTo3DScalarImageFilter<TInputImage, TOutputImage>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId )
+                       int threadId )
 {
   const InputImageType* inputPtr = this->GetInput();
   OutputImageType* outputPtr = this->GetOutput();
@@ -96,11 +96,11 @@ VectorImageTo3DScalarImageFilter<TInputImage, TOutputImage>
   InputImageSizeType size;
   InputImageIndexType index;
 
-  for(unsigned int i = 0;i<InputImageType::ImageDimension;++i)
-    {
-      size[i]=outputRegionForThread.GetSize()[i];
-      index[i]=outputRegionForThread.GetIndex()[i];
-    }
+  for (unsigned int i = 0;i<InputImageType::ImageDimension;++i)
+  {
+    size[i]=outputRegionForThread.GetSize()[i];
+    index[i]=outputRegionForThread.GetIndex()[i];
+  }
   inputRegion.SetSize(size);
   inputRegion.SetIndex(index);
 
@@ -113,24 +113,24 @@ VectorImageTo3DScalarImageFilter<TInputImage, TOutputImage>
   outIt.GoToBegin();
   inIt.GoToBegin();
 
-  while(!outIt.IsAtEnd())
+  while (!outIt.IsAtEnd())
+  {
+    outIt.Set(static_cast<OutputPixelType>(inIt.Get()[outIt.GetIndex()[InputImageType::ImageDimension]]));
+    ++inIt;
+    if (inIt.IsAtEnd())
     {
-      outIt.Set(static_cast<OutputPixelType>(inIt.Get()[outIt.GetIndex()[InputImageType::ImageDimension]]));
-      ++inIt;
-      if(inIt.IsAtEnd())
-      {
-       inIt.GoToBegin();
-      }
-      ++outIt;
-      if(outIt.IsAtEndOfLine())
-      {
-      outIt.NextLine();
-      }
-      if(outIt.IsAtEndOfSlice())
-      {
-        outIt.NextSlice();
-      }
+      inIt.GoToBegin();
     }
+    ++outIt;
+    if (outIt.IsAtEndOfLine())
+    {
+      outIt.NextLine();
+    }
+    if (outIt.IsAtEndOfSlice())
+    {
+      outIt.NextSlice();
+    }
+  }
 }
 /**
  * PrintSelf Method

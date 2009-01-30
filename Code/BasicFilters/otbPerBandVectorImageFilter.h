@@ -42,9 +42,9 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage, class TFilter>
 class ITK_EXPORT PerBandVectorImageFilter
-  : public itk::ImageToImageFilter<TInputImage,TOutputImage>
+      : public itk::ImageToImageFilter<TInputImage,TOutputImage>
 {
- public:
+public:
   /** Standard typedefs */
   typedef PerBandVectorImageFilter            Self;
   typedef itk::ImageToImageFilter<TInputImage,TOutputImage> Superclass;
@@ -77,7 +77,7 @@ class ITK_EXPORT PerBandVectorImageFilter
   typedef VectorImageToImageListFilter<InputVectorImageType,InputImageListType> DecompositionFilterType;
   typedef typename DecompositionFilterType::Pointer DecompositionFilterPointerType;
   typedef ImageListToImageListApplyFilter<InputImageListType,OutputImageListType,FilterType>
-    ProcessingFilterType;
+  ProcessingFilterType;
   typedef typename ProcessingFilterType::Pointer ProcessingFilterPointerType;
   typedef ImageListToVectorImageFilter<OutputImageListType,OutputVectorImageType> RecompositionFilterType;
   typedef typename RecompositionFilterType::Pointer RecompositionFilterPointerType;
@@ -100,7 +100,7 @@ protected:
   PerBandVectorImageFilter();
   /** Destructor */
   virtual ~PerBandVectorImageFilter() {};
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

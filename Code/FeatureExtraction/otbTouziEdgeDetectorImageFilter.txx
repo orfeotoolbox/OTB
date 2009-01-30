@@ -54,9 +54,9 @@ void TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirecti
   typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
 
   if ( !inputPtr || !outputPtr )
-    {
+  {
     return;
-    }
+  }
 
   // get a copy of the input requested region (should equal the output
   // requested region)
@@ -68,12 +68,12 @@ void TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirecti
 
   // crop the input requested region at the input's largest possible region
   if ( inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
-    {
+  {
     inputPtr->SetRequestedRegion( inputRequestedRegion );
     return;
-    }
+  }
   else
-    {
+  {
     // Couldn't crop the region (requested region is outside the largest
     // possible region).  Throw an exception.
 
@@ -84,12 +84,12 @@ void TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirecti
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
     itk::OStringStream msg;
     msg << static_cast<const char *>(this->GetNameOfClass())
-        << "::GenerateInputRequestedRegion()";
+    << "::GenerateInputRequestedRegion()";
     e.SetLocation(msg.str().c_str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
     e.SetDataObject(inputPtr);
     throw e;
-    }
+  }
 }
 
 /**
@@ -120,9 +120,9 @@ template <class TInputImage, class TOutputImage, class TOutputImageDirection >
 void
 TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
 ::ThreadedGenerateData(
-      const   OutputImageRegionType&     outputRegionForThread,
-                         int   threadId
-           )
+  const   OutputImageRegionType&     outputRegionForThread,
+  int   threadId
+)
 {
   unsigned int i;
   itk::ZeroFluxNeumannBoundaryCondition<InputImageType>   nbc;
@@ -187,14 +187,14 @@ TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
   int xc;
   int yc;
 
- int cpt=0;
+  int cpt=0;
 
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
   for (fit=faceList.begin(); fit != faceList.end(); ++fit)
-    {
+  {
 
-   cpt += 1;
+    cpt += 1;
 
     bit = itk::ConstNeighborhoodIterator<InputImageType>(m_Radius, input, *fit);
     unsigned int neighborhoodSize = bit.Size();
@@ -207,7 +207,7 @@ TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
 
 
     while ( ! bit.IsAtEnd() )
-      {
+    {
 
       // Location of the pixel central
       bitIndex = bit.GetIndex();
@@ -217,10 +217,10 @@ TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
 
       // Initializations
       for (int dir=0; dir<NB_DIR; dir++)
-        {
+      {
         for (int m=0; m<NB_REGION; m++)
           Sum[dir][m] = 0.;
-        }
+      }
 
       R_contour = -1;
       Dir_contour = 0.;
@@ -229,7 +229,7 @@ TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
 
       // Loop on pixels of the filter
       for (i = 0; i < neighborhoodSize; ++i)
-        {
+      {
 
         bitIndex = bit.GetIndex(i);
         x = bitIndex[0];
@@ -237,7 +237,7 @@ TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
 
         // We determine for each direction with which region the pixel belongs.
 
-         // Horizontal direction
+        // Horizontal direction
         if ( y < yc )
           Sum[0][0] += static_cast<double>(bit.GetPixel(i));
         else if ( y > yc )
@@ -263,12 +263,12 @@ TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
 
 
 
-        } // end of the loop on pixels of the filter
+      } // end of the loop on pixels of the filter
 
 
       // Loop on the 4 directions
       for ( int dir=0; dir<NB_DIR; dir++ )
-        {
+      {
         // Calculation of the mean of the 2 regions
         M1 = Sum[dir][0] / static_cast<double>(m_Radius[0]*(2*m_Radius[0]+1));
         M2 = Sum[dir][1] / static_cast<double>(m_Radius[0]*(2*m_Radius[0]+1));
@@ -277,9 +277,9 @@ TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
         if (( M1 != 0 ) && (M2 != 0))
           R_theta[dir] = static_cast<double>( 1 - MINI( (M1/M2), (M2/M1) ) );
         else
-    R_theta[dir] = 0.;
+          R_theta[dir] = 0.;
 
-  // Determination of the maximum intensity of the contour
+        // Determination of the maximum intensity of the contour
         R_contour = static_cast<double>( MAXI( R_contour, R_theta[dir] ) );
 
         // Determination of the sign of contour
@@ -292,10 +292,10 @@ TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
         Sum_R_theta += R_theta[dir];
 
 
-        } // end of the loop on the directions
+      } // end of the loop on the directions
 
 
-       // Assignment of this value to the output pixel
+      // Assignment of this value to the output pixel
       it.Set( static_cast<OutputPixelType>(R_contour) );
 
       // Determination of the direction of the contour
@@ -311,9 +311,9 @@ TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
       ++it_dir;
       progress.CompletedPixel();
 
-      }
-
     }
+
+  }
 }
 
 /**

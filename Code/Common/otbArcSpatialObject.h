@@ -30,7 +30,7 @@ namespace otb
  */
 template <unsigned int VDimension = 2>
 class ITK_EXPORT ArcSpatialObject
-  : public itk::SpatialObject<VDimension>
+      : public itk::SpatialObject<VDimension>
 {
 public:
   /** Standard typedefs */
@@ -62,7 +62,7 @@ public:
    */
   itkSetMacro(Radius,double);
   itkGetConstReferenceMacro(Radius,double);
-   /// Set the Start Angle
+  /// Set the Start Angle
   itkSetMacro(Angle1,double);
   itkGetMacro(Angle1,double);
 
@@ -111,7 +111,7 @@ protected:
   ArcSpatialObject();
   /** Destructor */
   virtual ~ArcSpatialObject() {};
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

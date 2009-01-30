@@ -55,7 +55,8 @@ namespace otb
 
 #define epsilon 0.01
 
-namespace Functor {
+namespace Functor
+{
 
 template< class TInput1, class TInput2, class TOutput>
 class CBAMI
@@ -76,13 +77,13 @@ public:
     VectorType vecA;
     VectorType vecB;
 
-    for(unsigned long pos = 0; pos< itA.Size(); ++pos)
-      {
+    for (unsigned long pos = 0; pos< itA.Size(); ++pos)
+    {
 
       vecA.push_back(static_cast<TOutput>(itA.GetPixel(pos)));
       vecB.push_back(static_cast<TOutput>(itB.GetPixel(pos)));
 
-      }
+    }
 
     normalizeInPlace(vecA);
     normalizeInPlace(vecB);
@@ -99,30 +100,31 @@ protected:
 
     IteratorType itx;
 
-    for( itx = vx.begin(); itx < vx.end(); itx++)
-      {
+    for ( itx = vx.begin(); itx < vx.end(); itx++)
+    {
       Ex  += (*itx);
-      }
+    }
 
     Ex /= (vx.size());
 
     TOutput Vx = 0.0;
 
-    for( itx = vx.begin(); itx < vx.end(); itx++)
-      {
-        Vx  += vcl_pow((*itx)-Ex,2);
-      }
+    for ( itx = vx.begin(); itx < vx.end(); itx++)
+    {
+      Vx  += vcl_pow((*itx)-Ex,2);
+    }
 
     Vx /= (vx.size());
 
-    for( itx = vx.begin(); itx < vx.end(); itx++)
-      {
+    for ( itx = vx.begin(); itx < vx.end(); itx++)
+    {
       (*itx) = ((*itx)-Ex)/vcl_sqrt(Vx);
-      }
+    }
 
 
   }
-  inline TOutput Exyc(VectorType vx, VectorType vy){
+  inline TOutput Exyc(VectorType vx, VectorType vy)
+  {
 
     TOutput Exy = 0.0;
     TOutput Ex = 0.0;
@@ -131,13 +133,13 @@ protected:
     IteratorType itx;
     IteratorType ity;
 
-    for( itx = vx.begin(), ity = vy.begin(); itx < vx.end(); itx++, ity++)
-      {
+    for ( itx = vx.begin(), ity = vy.begin(); itx < vx.end(); itx++, ity++)
+    {
       //Ex  += (*itx);
       //Ey  += (*ity);
       Exy  += (*itx)*(*ity);
 
-      }
+    }
 
     //Ex /= (vx.size());
     //Ey /= (vy.size());
@@ -146,7 +148,8 @@ protected:
     return Exy-Ex*Ey;
   }
 
-  inline TOutput Exyztc(VectorType vx, VectorType vy, VectorType vz, VectorType vt){
+  inline TOutput Exyztc(VectorType vx, VectorType vy, VectorType vz, VectorType vt)
+  {
 
     TOutput Exyzt = 0.0;
 
@@ -173,16 +176,16 @@ protected:
     IteratorType itz;
     IteratorType itt;
 
-    for( itx = vx.begin(),
-     ity = vy.begin(),
-     itz = vz.begin(),
-     itt = vt.begin();
-   itx < vx.end();
-   itx++,
-     ity++,
-     itz++,
-     itt++)
-      {
+    for ( itx = vx.begin(),
+          ity = vy.begin(),
+          itz = vz.begin(),
+          itt = vt.begin();
+          itx < vx.end();
+          itx++,
+          ity++,
+          itz++,
+          itt++)
+    {
       //Ex  += (*itx);
       //Ey  += (*ity);
       //Ez  += (*itz);
@@ -202,7 +205,7 @@ protected:
 
       Exyzt += (*itx)*(*ity)*(*itz)*(*itt);
 
-      }
+    }
 
     /*Ex  /= (vx.size());
     Ey  /= (vx.size());
@@ -223,8 +226,8 @@ protected:
 
 
     TOutput result = Exyzt - Exyz*Et- Exyt*Ez- Exzt*Ey- Eyzt*Ex +
-      Exy*Ez*Et + Exz*Et*Ey + Ext*Ey*Ez + Eyz*Et*Ex + Eyt*Ex*Ez + Ezt*Ex*Ey -
-      3*Ex*Ey*Ez*Et;
+                     Exy*Ez*Et + Exz*Et*Ey + Ext*Ey*Ez + Eyz*Et*Ex + Eyt*Ex*Ez + Ezt*Ex*Ey -
+                     3*Ex*Ey*Ez*Et;
 
     return result;
   }
@@ -277,19 +280,19 @@ protected:
     TOutput termeR = 0.0;
     TOutput termeQ = 0.0;
 
-    for( iti = donnees.begin(); iti < donnees.end(); iti++ )
-      for( itj = donnees.begin(); itj < donnees.end(); itj++ )
-  {
-  if(iti != itj)
-    termeR += vcl_pow(Rxy((*iti),(*itj)),2);
-
-  for( itk = donnees.begin(); itk < donnees.end(); itk++ )
-    for( itl = donnees.begin(); itl < donnees.end(); itl++ )
+    for ( iti = donnees.begin(); iti < donnees.end(); iti++ )
+      for ( itj = donnees.begin(); itj < donnees.end(); itj++ )
       {
-      if((iti != itj) || (iti != itk) || (iti != itl))
-        termeQ += vcl_pow( Qxijkl((*iti),(*itj),(*itk),(*itl)),2);
+        if (iti != itj)
+          termeR += vcl_pow(Rxy((*iti),(*itj)),2);
+
+        for ( itk = donnees.begin(); itk < donnees.end(); itk++ )
+          for ( itl = donnees.begin(); itl < donnees.end(); itl++ )
+          {
+            if ((iti != itj) || (iti != itk) || (iti != itl))
+              termeQ += vcl_pow( Qxijkl((*iti),(*itj),(*itk),(*itl)),2);
+          }
       }
-  }
 
 
     return 1.0/4.0*termeR + 1.0/48.0*termeQ;
@@ -301,22 +304,22 @@ protected:
 
 template <class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT CBAMIChangeDetector :
-    public BinaryFunctorNeighborhoodImageFilter<
-            TInputImage1,TInputImage2,TOutputImage,
-            Functor::CBAMI<
-                   ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
-                   ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
-       ITK_TYPENAME TOutputImage::PixelType>   >
+      public BinaryFunctorNeighborhoodImageFilter<
+      TInputImage1,TInputImage2,TOutputImage,
+      Functor::CBAMI<
+      ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
+      ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
+      ITK_TYPENAME TOutputImage::PixelType>   >
 {
 public:
   /** Standard class typedefs. */
   typedef CBAMIChangeDetector  Self;
   typedef BinaryFunctorNeighborhoodImageFilter<
-      TInputImage1,TInputImage2,TOutputImage,
-          Functor::CBAMI<
-               ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
-               ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
-               ITK_TYPENAME TOutputImage::PixelType>
+  TInputImage1,TInputImage2,TOutputImage,
+  Functor::CBAMI<
+  ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
+  ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
+  ITK_TYPENAME TOutputImage::PixelType>
   >  Superclass;
   typedef itk::SmartPointer<Self>   Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;

@@ -70,11 +70,11 @@ LineSpatialObject< VDimension >
   typename PointListType::iterator it,end;
   it = points.begin();
   end = points.end();
-  while(it != end)
-    {
+  while (it != end)
+  {
     m_Points.push_back(*it);
     it++;
-    }
+  }
 
   this->ComputeBoundingBox();
   this->Modified();
@@ -99,38 +99,38 @@ LineSpatialObject< VDimension >
 ::ComputeLocalBoundingBox() const
 {
   // tbMsgDevMacro( "Computing tube bounding box" );
-  if( this->GetBoundingBoxChildrenName().empty()
-        || strstr(typeid(Self).name(), this->GetBoundingBoxChildrenName().c_str()) )
+  if ( this->GetBoundingBoxChildrenName().empty()
+       || strstr(typeid(Self).name(), this->GetBoundingBoxChildrenName().c_str()) )
+  {
+    typename PointListType::const_iterator it  = m_Points.begin();
+    typename PointListType::const_iterator end = m_Points.end();
+
+    if (it == end)
+    {
+      return false;
+    }
+    else
+    {
+      PointType pt = this->GetIndexToWorldTransform()->TransformPoint((*it).GetPosition());
+      PointType ptmin;
+      PointType ptmax;
+      ptmin[0]=pt[0]-1;
+      ptmin[1]=pt[1]-1;
+      ptmax[0]=pt[0]+1;
+      ptmax[1]=pt[1]+1;
+      const_cast<BoundingBoxType *>(this->GetBounds())->SetMinimum(ptmin);
+      const_cast<BoundingBoxType *>(this->GetBounds())->SetMaximum(ptmax);
+      it++;
+      while (it!= end)
       {
-      typename PointListType::const_iterator it  = m_Points.begin();
-      typename PointListType::const_iterator end = m_Points.end();
 
-      if(it == end)
-        {
-        return false;
-        }
-      else
-        {
-                PointType pt = this->GetIndexToWorldTransform()->TransformPoint((*it).GetPosition());
-                PointType ptmin;
-                PointType ptmax;
-                ptmin[0]=pt[0]-1;
-                ptmin[1]=pt[1]-1;
-                ptmax[0]=pt[0]+1;
-                ptmax[1]=pt[1]+1;
-        const_cast<BoundingBoxType *>(this->GetBounds())->SetMinimum(ptmin);
-        const_cast<BoundingBoxType *>(this->GetBounds())->SetMaximum(ptmax);
+        PointType pt = this->GetIndexToWorldTransform()->TransformPoint((*it).GetPosition());
+        const_cast<BoundingBoxType *>(this->GetBounds())->ConsiderPoint(pt);
         it++;
-                while(it!= end)
-          {
-
-          PointType pt = this->GetIndexToWorldTransform()->TransformPoint((*it).GetPosition());
-          const_cast<BoundingBoxType *>(this->GetBounds())->ConsiderPoint(pt);
-          it++;
-          }
-
-        }
       }
+
+    }
+  }
 
   return true;
 }
@@ -147,50 +147,50 @@ LineSpatialObject< VDimension >
   typename PointListType::const_iterator it1 = m_Points.begin();
   typename PointListType::const_iterator end = m_Points.end();
   typename PointListType::const_iterator it2 = it1+1;
-  if(!this->GetIndexToWorldTransform()->GetInverse(const_cast<TransformType *>(this->GetInternalInverseTransform())))
-    {
+  if (!this->GetIndexToWorldTransform()->GetInverse(const_cast<TransformType *>(this->GetInternalInverseTransform())))
+  {
     return false;
-    }
+  }
 
   PointType transformedPoint = this->GetInternalInverseTransform()->TransformPoint(point);
 
-  if( this->GetBounds()->IsInside(transformedPoint) )
+  if ( this->GetBounds()->IsInside(transformedPoint) )
+  {
+    while (it2 != end)
     {
-    while(it2 != end)
+      if ((*it1).GetPosition()[0] < (*it2).GetPosition()[0])
       {
-                if((*it1).GetPosition()[0] < (*it2).GetPosition()[0])
-                {
-                        if( transformedPoint[1]==(int) ((*it1).GetPosition()[1]+(((*it2).GetPosition()[1]-(*it1).GetPosition()[1])/((*it2).GetPosition()[0]-(*it1).GetPosition()[0]))*(transformedPoint[0]-(*it1).GetPosition()[0])) && transformedPoint[0]>=(*it1).GetPosition()[0] && transformedPoint[0]<=(*it2).GetPosition()[0])
-                        {
-                                return true;
-                        }
-                }
-                else
-                {
-                        if(transformedPoint[1]==(int) ((((*it2).GetPosition()[1]-(*it1).GetPosition()[1])/((*it1).GetPosition()[0]-(*it2).GetPosition()[0]))*((*it1).GetPosition()[0]-transformedPoint[0])+(*it1).GetPosition()[1]) && transformedPoint[0]>=(*it2).GetPosition()[0] && transformedPoint[0]<=(*it1).GetPosition()[0])
-                        {
-                                return true;
-                        }
-                }
-                if((*it1).GetPosition()[1]<(*it2).GetPosition()[1])
-                {
-                        if(transformedPoint[0]==(int) ((((*it2).GetPosition()[0]-(*it1).GetPosition()[0])/((*it2).GetPosition()[1]-(*it1).GetPosition()[1]))*(transformedPoint[1]-(*it1).GetPosition()[1])+(*it1).GetPosition()[0]) && transformedPoint[1]>=(*it1).GetPosition()[1] && transformedPoint[1]<=(*it2).GetPosition()[1])
-                        {
-                                return true;
-                        }
-                }
-                else
-                {
-                        if(transformedPoint[0]==(int) ((((*it2).GetPosition()[0]-(*it1).GetPosition()[0])/((*it1).GetPosition()[1]-(*it2).GetPosition()[1]))*((*it1).GetPosition()[1]-transformedPoint[1])+(*it1).GetPosition()[0]) && transformedPoint[1]>=(*it2).GetPosition()[1] && transformedPoint[1]<=(*it1).GetPosition()[1])
-                        {
-                                return true;
-                        }
-                }
-          it1++;
-          it2++;
-          }
-
+        if ( transformedPoint[1]==(int) ((*it1).GetPosition()[1]+(((*it2).GetPosition()[1]-(*it1).GetPosition()[1])/((*it2).GetPosition()[0]-(*it1).GetPosition()[0]))*(transformedPoint[0]-(*it1).GetPosition()[0])) && transformedPoint[0]>=(*it1).GetPosition()[0] && transformedPoint[0]<=(*it2).GetPosition()[0])
+        {
+          return true;
         }
+      }
+      else
+      {
+        if (transformedPoint[1]==(int) ((((*it2).GetPosition()[1]-(*it1).GetPosition()[1])/((*it1).GetPosition()[0]-(*it2).GetPosition()[0]))*((*it1).GetPosition()[0]-transformedPoint[0])+(*it1).GetPosition()[1]) && transformedPoint[0]>=(*it2).GetPosition()[0] && transformedPoint[0]<=(*it1).GetPosition()[0])
+        {
+          return true;
+        }
+      }
+      if ((*it1).GetPosition()[1]<(*it2).GetPosition()[1])
+      {
+        if (transformedPoint[0]==(int) ((((*it2).GetPosition()[0]-(*it1).GetPosition()[0])/((*it2).GetPosition()[1]-(*it1).GetPosition()[1]))*(transformedPoint[1]-(*it1).GetPosition()[1])+(*it1).GetPosition()[0]) && transformedPoint[1]>=(*it1).GetPosition()[1] && transformedPoint[1]<=(*it2).GetPosition()[1])
+        {
+          return true;
+        }
+      }
+      else
+      {
+        if (transformedPoint[0]==(int) ((((*it2).GetPosition()[0]-(*it1).GetPosition()[0])/((*it1).GetPosition()[1]-(*it2).GetPosition()[1]))*((*it1).GetPosition()[1]-transformedPoint[1])+(*it1).GetPosition()[0]) && transformedPoint[1]>=(*it2).GetPosition()[1] && transformedPoint[1]<=(*it1).GetPosition()[1])
+        {
+          return true;
+        }
+      }
+      it1++;
+      it2++;
+    }
+
+  }
   return false;
 }
 
@@ -203,20 +203,20 @@ LineSpatialObject< VDimension >
 {
   // otbMsgDevMacro( "Checking the point [" << point << "] is on the Line" );
 
-  if(name == NULL)
+  if (name == NULL)
+  {
+    if (IsInside(point))
     {
-    if(IsInside(point))
-      {
       return true;
-      }
     }
-  else if(strstr(typeid(Self).name(), name))
+  }
+  else if (strstr(typeid(Self).name(), name))
+  {
+    if (IsInside(point))
     {
-    if(IsInside(point))
-      {
       return true;
-      }
     }
+  }
   return Superclass::IsInside(point, depth, name);
 }
 
@@ -243,24 +243,24 @@ LineSpatialObject< VDimension >
 {
   // otbMsgDevMacro( "Getting the value of the tube at " << point );
 
-  if( IsInside(point, 0, name) )
-    {
+  if ( IsInside(point, 0, name) )
+  {
     value = this->GetDefaultInsideValue();
     return true;
-    }
+  }
   else
+  {
+    if ( Superclass::IsEvaluableAt(point, depth, name) )
     {
-    if( Superclass::IsEvaluableAt(point, depth, name) )
-      {
       Superclass::ValueAt(point, value, depth, name);
       return true;
-      }
+    }
     else
-      {
+    {
       value = this->GetDefaultOutsideValue();
       return false;
-      }
     }
+  }
   return false;
 }
 } // end namespace otb

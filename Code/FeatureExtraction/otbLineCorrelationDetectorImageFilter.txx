@@ -66,8 +66,8 @@ LineCorrelationDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirect
   std::vector<double>::iterator m3It = m3->begin();
   std::vector<double>::iterator m3End = m3->end();
 
-  while( m1It!=m1End && m2It!=m2End && m3It!=m3End )
-    {
+  while ( m1It!=m1End && m2It!=m2End && m3It!=m3End )
+  {
 
     M1 += (*m1It);
     ++m1It;
@@ -78,7 +78,7 @@ LineCorrelationDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirect
     M3 += (*m3It);
     ++m3It;
 
-    }
+  }
 
   M1 /= m1->size();
   M2 /= m2->size();
@@ -93,8 +93,8 @@ LineCorrelationDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirect
   m3It = m3->begin();
 
 
-  while( m1It!=m1End && m2It!=m2End && m3It!=m3End )
-    {
+  while ( m1It!=m1End && m2It!=m2End && m3It!=m3End )
+  {
 
     sigma1 += vcl_pow((*m1It)-M1,2);
     ++m1It;
@@ -106,17 +106,17 @@ LineCorrelationDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirect
     ++m3It;
 
 
-    }
+  }
 
   sigma1 /= m1->size();
   sigma2 /= m2->size();
   sigma3 /= m3->size();
 
   // Actually, we use the variance
-/*  sigma1 = vcl_sqrt(sigma1);
-  sigma2 = vcl_sqrt(sigma2);
-  sigma3 = vcl_sqrt(sigma3);
-  */
+  /*  sigma1 = vcl_sqrt(sigma1);
+    sigma2 = vcl_sqrt(sigma2);
+    sigma3 = vcl_sqrt(sigma3);
+    */
 
 
   // Calculation of the cross correlation coefficient
@@ -130,31 +130,31 @@ LineCorrelationDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirect
 
   // rho12
   if ( M2 != 0. )
-    {
+  {
     d1 = sigma1/vcl_pow(M2,2)*m1->size();
     d2 = sigma2/vcl_pow(M2,2)*m2->size();
 
     d3 = vcl_pow(((M1/M2)-1.),2)*(m1->size()*m2->size());
 
-        if ( ( d3 != 0. ) )
-          rho12 = static_cast<double>( 1. / ( 1. + ( (m1->size()+m2->size())*(d1+d2)/d3 ) ) );
-        else
-          rho12 = 0.;
+    if ( ( d3 != 0. ) )
+      rho12 = static_cast<double>( 1. / ( 1. + ( (m1->size()+m2->size())*(d1+d2)/d3 ) ) );
+    else
+      rho12 = 0.;
 
-    }
+  }
   if ( M3 != 0. )
-    {
+  {
     d1 = sigma1/vcl_pow(M3,2)*m1->size();
     d2 = sigma3/vcl_pow(M3,2)*m2->size();
 
     d3 = vcl_pow(((M1/M3)-1.),2)*(m1->size()*m2->size());
 
-        if ( ( d3 != 0. ) )
-          rho13 = static_cast<double>( 1. / ( 1. + ( (m1->size()+m2->size())*(d1+d2)/d3 ) ) );
-        else
-          rho13 = 0.;
+    if ( ( d3 != 0. ) )
+      rho13 = static_cast<double>( 1. / ( 1. + ( (m1->size()+m2->size())*(d1+d2)/d3 ) ) );
+    else
+      rho13 = 0.;
 
-    }
+  }
 
   rho12 = vcl_sqrt(rho12);
   rho13 = vcl_sqrt(rho13);

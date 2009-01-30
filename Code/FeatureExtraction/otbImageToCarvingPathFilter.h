@@ -21,7 +21,8 @@
 #include "otbImageToPathFilter.h"
 #include "itkImageSliceConstIteratorWithIndex.h"
 
-namespace otb {
+namespace otb
+{
 /**
  * \class ImageToCarvingPathFilter
  * \brief This filter find the minimum energy path of an image.
@@ -53,7 +54,7 @@ namespace otb {
 
 template <class TInputImage, class TOutputPath>
 class ITK_EXPORT ImageToCarvingPathFilter
-  : public ImageToPathFilter<TInputImage, TOutputPath>
+      : public ImageToPathFilter<TInputImage, TOutputPath>
 {
 public:
   /** standards typedefs */
@@ -90,7 +91,7 @@ public:
 
 protected:
   ImageToCarvingPathFilter();
-  virtual ~ImageToCarvingPathFilter(){};
+  virtual ~ImageToCarvingPathFilter() {};
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
   virtual void GenerateOutputInformation() {}; //does nothing
   virtual void GenerateData();

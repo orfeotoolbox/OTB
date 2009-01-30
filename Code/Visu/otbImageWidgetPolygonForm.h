@@ -36,9 +36,9 @@ namespace otb
  */
 template<class TValue = double>
 class ITK_EXPORT ImageWidgetPolygonForm
-  : public ImageWidgetFormBase
+      : public ImageWidgetFormBase
 {
-  public:
+public:
   /** Standard class typedefs */
   typedef ImageWidgetPolygonForm        Self;
   typedef ImageWidgetFormBase           Superclass;
@@ -74,15 +74,15 @@ class ITK_EXPORT ImageWidgetPolygonForm
   void Draw(double openGlZoom, unsigned int originx, unsigned int originy, unsigned int windowh, unsigned int ss_rate);
 
 
-  protected:
+protected:
   /** Constructor. */
   ImageWidgetPolygonForm();
   /** Destructor. */
   ~ImageWidgetPolygonForm();
 
-  private:
+private:
   ImageWidgetPolygonForm(const Self&);// purposely not implemented
-    void operator=(const Self&);// purposely not implemented
+  void operator=(const Self&);// purposely not implemented
 
   /** Internal pointer to the otb::Polygon data structure */
   PolygonPointerType m_Polygon;

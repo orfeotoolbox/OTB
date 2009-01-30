@@ -54,7 +54,7 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT MorphologicalPyramidSegmentationFilter
-  : public ImageListToImageListFilter<TInputImage,TOutputImage>
+      : public ImageListToImageListFilter<TInputImage,TOutputImage>
 {
 public:
   /** Standard typedefs */
@@ -137,12 +137,12 @@ protected:
   MorphologicalPyramidSegmentationFilter();
   /** Destructor */
   ~MorphologicalPyramidSegmentationFilter();
-  virtual void GenerateOutputInformation(){}; // does nothing
+  virtual void GenerateOutputInformation() {}; // does nothing
   /** Main computation method */
   virtual void GenerateData();
   /** Printself method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
- private:
+private:
   unsigned long  m_MinimumObjectSize;
   /** Quantile for seeds determination */
   double m_SeedsQuantile;

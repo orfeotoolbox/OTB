@@ -37,9 +37,9 @@ namespace otb
  */
 
 template < class TInputPath,
-           class TOutput      = double>
+class TOutput      = double>
 class ITK_EXPORT CompacityPathFunction :
-  public PathFunction< TInputPath, TOutput >
+      public PathFunction< TInputPath, TOutput >
 {
 public:
   /** Standard class typedefs. */
@@ -70,8 +70,8 @@ public:
   virtual OutputType Evaluate( ) const;
 
 protected:
-  CompacityPathFunction(){};
-  ~CompacityPathFunction(){};
+  CompacityPathFunction() {};
+  ~CompacityPathFunction() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

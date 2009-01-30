@@ -29,9 +29,9 @@ namespace otb
  *
  */
 class ITK_EXPORT ImageWidgetCircleForm
-  : public ImageWidgetFormBase
+      : public ImageWidgetFormBase
 {
-  public:
+public:
   /** Standard class typedefs */
   typedef ImageWidgetCircleForm        Self;
   typedef ImageWidgetFormBase           Superclass;
@@ -60,15 +60,15 @@ class ITK_EXPORT ImageWidgetCircleForm
   void Draw(double openGlZoom, unsigned int originx, unsigned int originy, unsigned int windowh, unsigned int ss_rate);
 
 
-  protected:
+protected:
   /** Constructor. */
   ImageWidgetCircleForm();
   /** Destructor. */
   ~ImageWidgetCircleForm();
 
-  private:
+private:
   ImageWidgetCircleForm(const Self&);// purposely not implemented
-    void operator=(const Self&);// purposely not implemented
+  void operator=(const Self&);// purposely not implemented
 
   /// true if needed to draw a solid polygon
   bool m_Solid;

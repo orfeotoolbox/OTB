@@ -31,7 +31,7 @@ namespace otb
  * Constructor
  */
 template <class TInputImage1, class TInputImage2,
-          class TOutputImage, class TFunction  >
+class TOutputImage, class TFunction  >
 BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1,TInputImage2,TOutputImage,TFunction>
 ::BinaryFunctorNeighborhoodVectorImageFilter()
 {
@@ -45,7 +45,7 @@ BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1,TInputImage2,TOutputImag
  * Connect one of the operands for neighborhood-wise operation
  */
 template <class TInputImage1, class TInputImage2,
-          class TOutputImage, class TFunction  >
+class TOutputImage, class TFunction  >
 void
 BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1,TInputImage2,TOutputImage,TFunction>
 ::SetInput1( const TInputImage1 * image1 )
@@ -59,7 +59,7 @@ BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1,TInputImage2,TOutputImag
  * Connect one of the operands for neighborhood-wise operation
  */
 template <class TInputImage1, class TInputImage2,
-          class TOutputImage, class TFunction  >
+class TOutputImage, class TFunction  >
 void
 BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1,TInputImage2,TOutputImage,TFunction>
 ::SetInput2( const TInputImage2 * image2 )
@@ -72,7 +72,7 @@ BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1,TInputImage2,TOutputImag
  * Connect the interval of radius
  */
 template <class TInputImage1, class TInputImage2,
-          class TOutputImage, class TFunction  >
+class TOutputImage, class TFunction  >
 void
 BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1,TInputImage2,TOutputImage,TFunction>
 ::SetRadius( const unsigned char & min, const unsigned char & max )
@@ -92,7 +92,7 @@ BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1, TInputImage2, TOutputIm
   Superclass::GenerateOutputInformation();
 
   int nbComponents = static_cast<int>(m_Functor.GetRadiusMax())+1
-    - static_cast<int>(m_Functor.GetRadiusMin());
+                     - static_cast<int>(m_Functor.GetRadiusMin());
 
   this->GetOutput()->SetNumberOfComponentsPerPixel(nbComponents);
 }
@@ -148,8 +148,8 @@ BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1, TInputImage2, TOutputIm
   // Process each of the boundary faces.
   // Center first and then left, right, up, down borders
   for ( fit1=faceList1.begin(), fit2=faceList2.begin();
-      fit1 != faceList1.end() && fit2 != faceList2.end();
-      ++fit1, ++fit2 )
+        fit1 != faceList1.end() && fit2 != faceList2.end();
+        ++fit1, ++fit2 )
   {
     neighInputIt1 = itk::ConstNeighborhoodIterator<TInputImage1> ( r1, inputPtr1, *fit1 );
     neighInputIt1.OverrideBoundaryCondition( &nbc1 );

@@ -51,7 +51,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
 ::SetInputLineSpatialObjectList(const LinesListType * list)
 {
   this->ProcessObjectType::SetNthInput(1,
-                                   const_cast< LinesListType * >( list ) );
+                                       const_cast< LinesListType * >( list ) );
 
 }
 
@@ -61,9 +61,9 @@ typename DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>::LinesListTy
 DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
 ::GetInputLineSpatialObjectList(void)
 {
-    //ROMAIN
+  //ROMAIN
   return static_cast</*const */LinesListType *>
-    (this->ProcessObjectType::GetInput(1) );
+         (this->ProcessObjectType::GetInput(1) );
 }
 
 template <class TInputImage, class TOutputImage>
@@ -100,16 +100,16 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
 
 
   // Draw each line of the list
-  while( itList != list->end() )
-     {
+  while ( itList != list->end() )
+  {
 
-     m_DrawLineFilter->SetInputImage( this->GetOutput() );
-     m_DrawLineFilter->SetInputLine( *itList );
-     m_DrawLineFilter->Update();
+    m_DrawLineFilter->SetInputImage( this->GetOutput() );
+    m_DrawLineFilter->SetInputLine( *itList );
+    m_DrawLineFilter->Update();
 
-     ++itList;
+    ++itList;
 
-     }
+  }
 
   this->GraftOutput( m_DrawLineFilter->GetOutput() );
 

@@ -34,9 +34,9 @@ namespace otb
  */
 template <class TPath>
 class ITK_EXPORT RCC8VertexBase
-: public itk::DataObject
+      : public itk::DataObject
 {
- public:
+public:
   /** Standard class typedefs */
   typedef RCC8VertexBase Self;
   typedef itk::DataObject  Superclass;
@@ -57,7 +57,7 @@ class ITK_EXPORT RCC8VertexBase
   /** Segmentation image index accessors */
   itkGetMacro(SegmentationLevel,unsigned int);
   itkSetMacro(SegmentationLevel,unsigned int);
- itkGetMacro(SegmentationType,bool);
+  itkGetMacro(SegmentationType,bool);
   itkSetMacro(SegmentationType,bool);
   /** Object label in image accessor */
   itkGetObjectMacro(Path,PathType);
@@ -77,11 +77,11 @@ protected:
   /** Constructor */
   RCC8VertexBase();
   /** Desctructor */
-  ~RCC8VertexBase(){};
-/** PrintSelf method */
+  ~RCC8VertexBase() {};
+  /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
- private:
+private:
   /** The segmentation level */
   unsigned int m_SegmentationLevel;
   /** True if bright details, false otherwise */

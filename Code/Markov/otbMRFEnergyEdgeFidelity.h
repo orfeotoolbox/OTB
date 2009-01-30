@@ -44,35 +44,35 @@ namespace otb
 
 template< class TInput1, class TInput2>
 class ITK_EXPORT MRFEnergyEdgeFidelity : public MRFEnergy< TInput1, TInput2>
+{
+public:
+  typedef MRFEnergyEdgeFidelity         Self;
+  typedef MRFEnergy< TInput1, TInput2>                    Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
+  typedef itk::ConstNeighborhoodIterator< TInput1 >  NeighborhoodIterator;
+  typedef typename TInput1::PixelType                InputImagePixelType;
+  typedef typename TInput2::PixelType                LabelledImagePixelType;
+
+  itkNewMacro(Self);
+
+  itkTypeMacro(MRFEnergyEdgeFidelity, MRFEnergy);
+
+  double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)
   {
-  public:
-    typedef MRFEnergyEdgeFidelity         Self;
-    typedef MRFEnergy< TInput1, TInput2>                    Superclass;
-    typedef itk::SmartPointer<Self>       Pointer;
-    typedef itk::SmartPointer<const Self> ConstPointer;
+    double val1 = static_cast<double>(value1);
+    double val2 = static_cast<double>(value2);
 
-    typedef itk::ConstNeighborhoodIterator< TInput1 >  NeighborhoodIterator;
-    typedef typename TInput1::PixelType                InputImagePixelType;
-    typedef typename TInput2::PixelType                LabelledImagePixelType;
-
-    itkNewMacro(Self);
-
-    itkTypeMacro(MRFEnergyEdgeFidelity, MRFEnergy);
-
-    double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)
-      {
-  double val1 = static_cast<double>(value1);
-  double val2 = static_cast<double>(value2);
-
-  return M_SQUARE((val1 - val2))/(1+M_SQUARE(val1 - val2));
-      }
+    return M_SQUARE((val1 - val2))/(1+M_SQUARE(val1 - val2));
+  }
 
 
-  protected:
-    // The constructor and destructor.
-    MRFEnergyEdgeFidelity() {};
-    virtual ~MRFEnergyEdgeFidelity() {};
-  };
+protected:
+  // The constructor and destructor.
+  MRFEnergyEdgeFidelity() {};
+  virtual ~MRFEnergyEdgeFidelity() {};
+};
 }
 
 #endif

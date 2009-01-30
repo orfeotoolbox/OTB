@@ -79,7 +79,7 @@ void
 MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
 ::SetDarkerDetails(InputImageListType * imageList)
 {
-this->SetNthInput(2,const_cast<InputImageListType *>(imageList));
+  this->SetNthInput(2,const_cast<InputImageListType *>(imageList));
 }
 /**
  * Get the reference image
@@ -166,35 +166,35 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
   // Segmentation filter definition
   typename InputImageListType::Iterator it;
   // Segment the supFilter details
-  for(it= brighter->Begin();it!=brighter->End();++it)
-    {
-      typename SegmenterType::Pointer segmenter = SegmenterType::New();
-      segmenter->SetMinimumObjectSize(m_MinimumObjectSize);
-      segmenter->SetSeedsQuantile(m_SeedsQuantile);
-      segmenter->SetConnectedThresholdQuantile(m_ConnectedThresholdQuantile);
-      segmenter->SetOriginalImage(referenceImage);
-      segmenter->SetDetailsImage(it.Get());
-      segmenter->Update();
-      m_NumberOfObjectsVector.push_back(segmenter->GetNumberOfObjects());
-      outputList->PushBack(segmenter->GetOutput());
-    }
+  for (it= brighter->Begin();it!=brighter->End();++it)
+  {
+    typename SegmenterType::Pointer segmenter = SegmenterType::New();
+    segmenter->SetMinimumObjectSize(m_MinimumObjectSize);
+    segmenter->SetSeedsQuantile(m_SeedsQuantile);
+    segmenter->SetConnectedThresholdQuantile(m_ConnectedThresholdQuantile);
+    segmenter->SetOriginalImage(referenceImage);
+    segmenter->SetDetailsImage(it.Get());
+    segmenter->Update();
+    m_NumberOfObjectsVector.push_back(segmenter->GetNumberOfObjects());
+    outputList->PushBack(segmenter->GetOutput());
+  }
 
 
   // Segment the infFilter details
-  for(it= darker->Begin();it!= darker->End();++it)
-    {
-      typename SegmenterType::Pointer segmenter = SegmenterType::New();
-      segmenter->SetMinimumObjectSize(m_MinimumObjectSize);
-      segmenter->SetSeedsQuantile(m_SeedsQuantile);
-      segmenter->SetConnectedThresholdQuantile(m_ConnectedThresholdQuantile);
-      segmenter->SetOriginalImage(referenceImage);
-      segmenter->SetSegmentDarkDetailsBool(true);
+  for (it= darker->Begin();it!= darker->End();++it)
+  {
+    typename SegmenterType::Pointer segmenter = SegmenterType::New();
+    segmenter->SetMinimumObjectSize(m_MinimumObjectSize);
+    segmenter->SetSeedsQuantile(m_SeedsQuantile);
+    segmenter->SetConnectedThresholdQuantile(m_ConnectedThresholdQuantile);
+    segmenter->SetOriginalImage(referenceImage);
+    segmenter->SetSegmentDarkDetailsBool(true);
 
-      segmenter->SetDetailsImage(it.Get());
-      segmenter->Update();
-      m_NumberOfObjectsVector.push_back(segmenter->GetNumberOfObjects());
-      outputList->PushBack(segmenter->GetOutput());
-    }
+    segmenter->SetDetailsImage(it.Get());
+    segmenter->Update();
+    m_NumberOfObjectsVector.push_back(segmenter->GetNumberOfObjects());
+    outputList->PushBack(segmenter->GetOutput());
+  }
 }
 /**
  * PrintSelf method

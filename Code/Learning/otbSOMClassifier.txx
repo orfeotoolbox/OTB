@@ -79,12 +79,12 @@ SOMClassifier< TSample, TSOMMap, TLabel >
   typename OutputType::Pointer outputPtr = this->GetOutput();
   outputPtr->SetSample(this->GetSample());
   outputPtr->Resize( this->GetSample()->Size());
- typename SOMMapType::SizeType size = this->GetMap()->GetLargestPossibleRegion().GetSize();
- unsigned int numberOfClasses = 1;
- for(unsigned int i=0; i<SOMMapType::ImageDimension;++i)
-   {
-     numberOfClasses*=size[i];
-   }
+  typename SOMMapType::SizeType size = this->GetMap()->GetLargestPossibleRegion().GetSize();
+  unsigned int numberOfClasses = 1;
+  for (unsigned int i=0; i<SOMMapType::ImageDimension;++i)
+  {
+    numberOfClasses*=size[i];
+  }
   outputPtr->SetNumberOfClasses(numberOfClasses);
 
   typename TSample::Iterator iter = this->GetSample()->Begin();
@@ -99,9 +99,9 @@ SOMClassifier< TSample, TSOMMap, TLabel >
 
   SOMMapPointerType somMap = this->GetMap();
 
-   otbMsgDebugMacro(  << "Starting iterations " );
+  otbMsgDebugMacro(  << "Starting iterations " );
   while (iter != end && iterO != endO)
-    {
+  {
 
     measurements = iter.GetMeasurementVector();
     index = somMap->GetWinner(measurements);
@@ -109,7 +109,7 @@ SOMClassifier< TSample, TSOMMap, TLabel >
     outputPtr->AddInstance(classLabel, iterO.GetInstanceIdentifier());
     ++iter;
     ++iterO;
-    }
+  }
 }
 } // end of namespace otb
 

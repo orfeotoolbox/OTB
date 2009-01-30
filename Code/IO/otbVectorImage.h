@@ -40,7 +40,7 @@ namespace otb
  */
 template <class TPixel, unsigned int VImageDimension=2>
 class ITK_EXPORT VectorImage : public itk::VectorImage<TPixel, VImageDimension>,
-       public ImageBase
+      public ImageBase
 {
 public:
 
@@ -75,8 +75,8 @@ public:
 
   typedef typename Superclass::IOPixelType IOPixelType;
 
-   /** Accessor type that convert data between internal and external
-   *  representations.  */
+  /** Accessor type that convert data between internal and external
+  *  representations.  */
   typedef itk::DefaultVectorPixelAccessor< InternalPixelType > AccessorType;
 
   /** Functor to provide a common API between DefaultPixelAccessor and
@@ -85,7 +85,7 @@ public:
 
   /** Tyepdef for the functor used to access a neighborhood of pixel pointers.*/
   typedef itk::VectorImageNeighborhoodAccessorFunctor<
-                          Self >              NeighborhoodAccessorFunctorType;
+  Self >              NeighborhoodAccessorFunctorType;
 
   /** Dimension of the image.  This constant is used by functions that are
    * templated over image type (as opposed to being templated over pixel type
@@ -158,23 +158,31 @@ public:
 
   /** Return the Pixel Accessor object */
   AccessorType GetPixelAccessor( void )
-    { return AccessorType( this->GetNumberOfComponentsPerPixel() ); }
+  {
+    return AccessorType( this->GetNumberOfComponentsPerPixel() );
+  }
 
   /** Return the Pixel Accesor object */
   const AccessorType GetPixelAccessor( void ) const
-    { return AccessorType( this->GetNumberOfComponentsPerPixel() ); }
+  {
+    return AccessorType( this->GetNumberOfComponentsPerPixel() );
+  }
 
   /** Return the NeighborhoodAccessor functor */
   NeighborhoodAccessorFunctorType GetNeighborhoodAccessor()
-    { return NeighborhoodAccessorFunctorType( this->GetNumberOfComponentsPerPixel() ); }
+  {
+    return NeighborhoodAccessorFunctorType( this->GetNumberOfComponentsPerPixel() );
+  }
 
   /** Return the NeighborhoodAccessor functor */
   const NeighborhoodAccessorFunctorType GetNeighborhoodAccessor() const
-    { return NeighborhoodAccessorFunctorType(this->GetNumberOfComponentsPerPixel()); }
+  {
+    return NeighborhoodAccessorFunctorType(this->GetNumberOfComponentsPerPixel());
+  }
 
 protected:
   VectorImage();
-  virtual ~VectorImage(){};
+  virtual ~VectorImage() {};
 
 private:
   VectorImage(const Self&); //purposely not implemented

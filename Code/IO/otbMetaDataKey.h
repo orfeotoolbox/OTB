@@ -44,8 +44,8 @@ public:
 
   typedef MetaDataKey Self;
 
-  MetaDataKey(){};
-  virtual ~MetaDataKey(){};
+  MetaDataKey() {};
+  virtual ~MetaDataKey() {};
 
   static const std::string DriverShortNameKey;
   static const std::string DriverLongNameKey;
@@ -73,7 +73,8 @@ public:
   static const std::string OSSIMKeywordlistKey;
   static const std::string OSSIMKeywordlistDelimiterKey;
 
-  enum  KeyType {
+  enum  KeyType
+  {
     TSTRING,
     TENTIER,
     TDOUBLE,
@@ -123,73 +124,73 @@ private:
  */
 class ITK_EXPORT OTB_GCP
 {
-  public:
+public:
 
 
-    /** Unique identifier, often numeric */
-    std::string m_Id;
+  /** Unique identifier, often numeric */
+  std::string m_Id;
 
-    /** Informational message or "" */
-    std::string m_Info;
+  /** Informational message or "" */
+  std::string m_Info;
 
-    /** Pixel (x) location of GCP on raster */
-    double      m_GCPCol;
+  /** Pixel (x) location of GCP on raster */
+  double      m_GCPCol;
 
-    /** Line (y) location of GCP on raster */
-    double      m_GCPRow;
+  /** Line (y) location of GCP on raster */
+  double      m_GCPRow;
 
-    /** X position of GCP in georeferenced space */
-    double      m_GCPX;
+  /** X position of GCP in georeferenced space */
+  double      m_GCPX;
 
-    /** Y position of GCP in georeferenced space */
-    double      m_GCPY;
+  /** Y position of GCP in georeferenced space */
+  double      m_GCPY;
 
-    /** Elevation of GCP, or zero if not known */
-    double      m_GCPZ;
+  /** Elevation of GCP, or zero if not known */
+  double      m_GCPZ;
 
 
-    OTB_GCP(){};
-    OTB_GCP( const GDAL_GCP * psGCP )
-    {
-      m_Id = std::string(psGCP->pszId);
-      m_Info = std::string(psGCP->pszInfo);
-      m_GCPRow = psGCP->dfGCPLine;
-      m_GCPCol = psGCP->dfGCPPixel;
-      m_GCPX = psGCP->dfGCPX;
-      m_GCPY = psGCP->dfGCPY;
-      m_GCPZ = psGCP->dfGCPZ;
-    }
-    virtual ~OTB_GCP(){};
+  OTB_GCP() {};
+  OTB_GCP( const GDAL_GCP * psGCP )
+  {
+    m_Id = std::string(psGCP->pszId);
+    m_Info = std::string(psGCP->pszInfo);
+    m_GCPRow = psGCP->dfGCPLine;
+    m_GCPCol = psGCP->dfGCPPixel;
+    m_GCPX = psGCP->dfGCPX;
+    m_GCPY = psGCP->dfGCPY;
+    m_GCPZ = psGCP->dfGCPZ;
+  }
+  virtual ~OTB_GCP() {};
 
-    OTB_GCP(const OTB_GCP& pGcp)
-    {
-      m_Id = pGcp.m_Id;
-      m_Info = pGcp.m_Info;
-      m_GCPCol = pGcp.m_GCPCol;
-      m_GCPRow = pGcp.m_GCPRow;
-      m_GCPX = pGcp.m_GCPX;
-      m_GCPY = pGcp.m_GCPY;
-      m_GCPZ = pGcp.m_GCPZ;
-    }
+  OTB_GCP(const OTB_GCP& pGcp)
+  {
+    m_Id = pGcp.m_Id;
+    m_Info = pGcp.m_Info;
+    m_GCPCol = pGcp.m_GCPCol;
+    m_GCPRow = pGcp.m_GCPRow;
+    m_GCPX = pGcp.m_GCPX;
+    m_GCPY = pGcp.m_GCPY;
+    m_GCPZ = pGcp.m_GCPZ;
+  }
 
-    void operator=(const OTB_GCP& pGcp)
-    {
-      m_Id = pGcp.m_Id;
-      m_Info = pGcp.m_Info;
-      m_GCPCol = pGcp.m_GCPCol;
-      m_GCPRow = pGcp.m_GCPRow;
-      m_GCPX = pGcp.m_GCPX;
-      m_GCPY = pGcp.m_GCPY;
-      m_GCPZ = pGcp.m_GCPZ;
-    }
+  void operator=(const OTB_GCP& pGcp)
+  {
+    m_Id = pGcp.m_Id;
+    m_Info = pGcp.m_Info;
+    m_GCPCol = pGcp.m_GCPCol;
+    m_GCPRow = pGcp.m_GCPRow;
+    m_GCPX = pGcp.m_GCPX;
+    m_GCPY = pGcp.m_GCPY;
+    m_GCPZ = pGcp.m_GCPZ;
+  }
 
-    void Print(std::ostream& os)const
-    {
-      os << "   GCP Id = " << this->m_Id << std::endl;
-      os << "   GCP Info =  " << this->m_Info << std::endl;
-      os << "   GCP (Row,Col) = (" << this->m_GCPRow << "," << this->m_GCPCol << ")" << std::endl;
-      os << "   GCP (X,Y,Z) = (" << this->m_GCPX << "," << this->m_GCPY << "," << this->m_GCPZ << ")" << std::endl;
-    }
+  void Print(std::ostream& os)const
+  {
+    os << "   GCP Id = " << this->m_Id << std::endl;
+    os << "   GCP Info =  " << this->m_Info << std::endl;
+    os << "   GCP (Row,Col) = (" << this->m_GCPRow << "," << this->m_GCPCol << ")" << std::endl;
+    os << "   GCP (X,Y,Z) = (" << this->m_GCPX << "," << this->m_GCPY << "," << this->m_GCPZ << ")" << std::endl;
+  }
 
 };
 

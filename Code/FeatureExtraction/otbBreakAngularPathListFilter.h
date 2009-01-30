@@ -31,9 +31,9 @@ namespace otb
  */
 template <class TPath>
 class ITK_EXPORT BreakAngularPathListFilter
-  : public PathListToPathListFilter<TPath>
+      : public PathListToPathListFilter<TPath>
 {
- public:
+public:
   /** Standard typedefs */
   typedef BreakAngularPathListFilter            Self;
   typedef PathListToPathListFilter<TPath>       Superclass;

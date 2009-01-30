@@ -24,52 +24,52 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  /** \class UtmMapProjection
-   *  \brief This class implements the UTM map projection.
-   * It converts coordinates in longitude,latitude (WGS84) to UTM map coordinates.
-   */
-  template <InverseOrForwardTransformationEnum transform>
-      class ITK_EXPORT UtmMapProjection : public MapProjection<ossimUtmProjection,transform>
-  {
-    public :
+/** \class UtmMapProjection
+ *  \brief This class implements the UTM map projection.
+ * It converts coordinates in longitude,latitude (WGS84) to UTM map coordinates.
+ */
+template <InverseOrForwardTransformationEnum transform>
+class ITK_EXPORT UtmMapProjection : public MapProjection<ossimUtmProjection,transform>
+{
+public :
 
-      /** Standard class typedefs. */
-      typedef UtmMapProjection                Self;
-      typedef MapProjection<ossimUtmProjection,transform> Superclass;
-      typedef itk::SmartPointer<Self>           Pointer;
-      typedef itk::SmartPointer<const Self>     ConstPointer;
+  /** Standard class typedefs. */
+  typedef UtmMapProjection                Self;
+  typedef MapProjection<ossimUtmProjection,transform> Superclass;
+  typedef itk::SmartPointer<Self>           Pointer;
+  typedef itk::SmartPointer<const Self>     ConstPointer;
 
-      typedef typename Superclass::ScalarType     ScalarType;
-      typedef itk::Point<ScalarType,2>     InputPointType;
-      typedef itk::Point<ScalarType,2>    OutputPointType;
+  typedef typename Superclass::ScalarType     ScalarType;
+  typedef itk::Point<ScalarType,2>     InputPointType;
+  typedef itk::Point<ScalarType,2>    OutputPointType;
 
-      /** Method for creation through the object factory. */
-      itkNewMacro( Self );
+  /** Method for creation through the object factory. */
+  itkNewMacro( Self );
 
-      /** Run-time type information (and related methods). */
-      itkTypeMacro( UtmMapProjection, MapProjection );
+  /** Run-time type information (and related methods). */
+  itkTypeMacro( UtmMapProjection, MapProjection );
 
-      virtual void SetZone(long zone);
-      virtual void SetZone(const InputPointType &ground);
-      virtual void SetHemisphere(char hemisphere);
-      virtual long GetZone();
-      virtual const char GetHemisphere() const;
+  virtual void SetZone(long zone);
+  virtual void SetZone(const InputPointType &ground);
+  virtual void SetHemisphere(char hemisphere);
+  virtual long GetZone();
+  virtual const char GetHemisphere() const;
 
-      virtual void SetZoneAndHemisphereFromGeoPoint(const InputPointType &geoPoint);
+  virtual void SetZoneAndHemisphereFromGeoPoint(const InputPointType &geoPoint);
 //      virtual void SetZoneAndHemisphereFromCartoPoint(const OutputPointType &cartoPoint);
-      virtual int GetZoneFromGeoPoint(const InputPointType& geoPoint);
+  virtual int GetZoneFromGeoPoint(const InputPointType& geoPoint);
 
 //      virtual void Initialize(const InputPointType& middlePoint);
 
-    protected:
-      UtmMapProjection();
-      virtual ~UtmMapProjection();
+protected:
+  UtmMapProjection();
+  virtual ~UtmMapProjection();
 
 
-    private:
-      UtmMapProjection(const Self&); //purposely not implemented
-      void operator=(const Self&);   //purposely not implemented
-  };
+private:
+  UtmMapProjection(const Self&); //purposely not implemented
+  void operator=(const Self&);   //purposely not implemented
+};
 
 } // namespace otb
 

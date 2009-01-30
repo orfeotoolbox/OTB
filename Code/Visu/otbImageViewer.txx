@@ -21,75 +21,75 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  /// Constructor
-  template <class TPixel, class TLabel>
-  ImageViewer<TPixel,TLabel>
-  ::ImageViewer()
+/// Constructor
+template <class TPixel, class TLabel>
+ImageViewer<TPixel,TLabel>
+::ImageViewer()
+{
+  m_FullWindow=NULL;
+  m_ZoomWindow=NULL;
+  m_ScrollWindow=NULL;
+  m_HistogramWindow=NULL;
+  m_PixLocWindow=NULL;
+  m_PixLocOutput=NULL;
+}
+/// Destructor
+template <class TPixel, class TLabel>
+ImageViewer<TPixel,TLabel>
+::~ImageViewer()
+{
+  if (m_HistogramWindow!=NULL)
   {
-    m_FullWindow=NULL;
-    m_ZoomWindow=NULL;
-    m_ScrollWindow=NULL;
-    m_HistogramWindow=NULL;
-    m_PixLocWindow=NULL;
-    m_PixLocOutput=NULL;
-  }
-  /// Destructor
-  template <class TPixel, class TLabel>
-  ImageViewer<TPixel,TLabel>
-  ::~ImageViewer()
-  {
-    if(m_HistogramWindow!=NULL)
-      {
-  m_HistogramWindow->remove(this->GetRedHistogramWidget());
-  if(this->GetFullWidget()->GetViewModel() == Superclass::ScrollWidgetType::RGB)
+    m_HistogramWindow->remove(this->GetRedHistogramWidget());
+    if (this->GetFullWidget()->GetViewModel() == Superclass::ScrollWidgetType::RGB)
     {
       m_HistogramWindow->remove(this->GetGreenHistogramWidget());
       m_HistogramWindow->remove(this->GetBlueHistogramWidget());
     }
-  delete m_HistogramWindow;
-  m_HistogramWindow = NULL;
-      }
-
-    if (m_FullWindow!=NULL)
-      {
-  m_FullWindow->remove(this->GetFullWidget());
-  delete m_FullWindow;
-  m_FullWindow = NULL;
-      }
-    if(m_ZoomWindow!=NULL)
-      {
-  m_ZoomWindow->remove(this->GetZoomWidget());
-  delete m_ZoomWindow;
-  m_ZoomWindow = NULL;
-      }
-    if(m_ScrollWindow!=NULL)
-      {
-  m_ScrollWindow->remove(this->GetScrollWidget());
-  delete m_ScrollWindow;
-  m_ScrollWindow = NULL;
-      }
-
-    if(m_PixLocWindow!=NULL)
-      {
-  m_PixLocWindow->remove(m_PixLocOutput);
-  delete m_PixLocWindow;
-  m_PixLocWindow = NULL;
-      }
-    if(m_PixLocOutput!=NULL)
-      {
-  delete m_PixLocOutput;
-  m_PixLocOutput = NULL;
-      }
+    delete m_HistogramWindow;
+    m_HistogramWindow = NULL;
   }
 
-  /// Build the HMI
-  template <class TPixel, class TLabel>
-  void
-  ImageViewer<TPixel,TLabel>
-  ::Build(void)
+  if (m_FullWindow!=NULL)
   {
-    Superclass::Build();
-    itk::OStringStream oss;
+    m_FullWindow->remove(this->GetFullWidget());
+    delete m_FullWindow;
+    m_FullWindow = NULL;
+  }
+  if (m_ZoomWindow!=NULL)
+  {
+    m_ZoomWindow->remove(this->GetZoomWidget());
+    delete m_ZoomWindow;
+    m_ZoomWindow = NULL;
+  }
+  if (m_ScrollWindow!=NULL)
+  {
+    m_ScrollWindow->remove(this->GetScrollWidget());
+    delete m_ScrollWindow;
+    m_ScrollWindow = NULL;
+  }
+
+  if (m_PixLocWindow!=NULL)
+  {
+    m_PixLocWindow->remove(m_PixLocOutput);
+    delete m_PixLocWindow;
+    m_PixLocWindow = NULL;
+  }
+  if (m_PixLocOutput!=NULL)
+  {
+    delete m_PixLocOutput;
+    m_PixLocOutput = NULL;
+  }
+}
+
+/// Build the HMI
+template <class TPixel, class TLabel>
+void
+ImageViewer<TPixel,TLabel>
+::Build(void)
+{
+  Superclass::Build();
+  itk::OStringStream oss;
 
   int wfull = this->GetFullWidget()->w();
   int hfull = this->GetFullWidget()->h();
@@ -105,20 +105,20 @@ namespace otb
 
   oss.str("");
   oss<<this->GetLabel()<<" - Histograms and transfer functions";
-  if(this->GetViewModel() == Superclass::ScrollWidgetType::RGB)
+  if (this->GetViewModel() == Superclass::ScrollWidgetType::RGB)
   {
     m_HistogramWindow = new Fl_Window(0,hfull,3*this->GetRedHistogramWidget()->w(),this->GetRedHistogramWidget()->h());
     m_HistogramWindow->add(this->GetRedHistogramWidget());
     m_HistogramWindow->add(this->GetGreenHistogramWidget());
     m_HistogramWindow->add(this->GetBlueHistogramWidget());
     this->GetGreenHistogramWidget()->resize(this->GetRedHistogramWidget()->w(),
-              0,
-              this->GetGreenHistogramWidget()->w(),
-              this->GetGreenHistogramWidget()->h());
+                                            0,
+                                            this->GetGreenHistogramWidget()->w(),
+                                            this->GetGreenHistogramWidget()->h());
     this->GetBlueHistogramWidget()->resize(2*this->GetRedHistogramWidget()->w(),
-             0,
-             this->GetBlueHistogramWidget()->w(),
-             this->GetBlueHistogramWidget()->h());
+                                           0,
+                                           this->GetBlueHistogramWidget()->w(),
+                                           this->GetBlueHistogramWidget()->h());
     m_HistogramWindow->resizable(m_HistogramWindow);
     m_HistogramWindow->end();
 
@@ -136,7 +136,7 @@ namespace otb
   int hscroll = 0;
   int wscroll = 0;
 
-  if(this->GetUseScroll())
+  if (this->GetUseScroll())
   {
 
     // Create the scroll windows
@@ -171,7 +171,7 @@ namespace otb
   m_PixLocOutput->box(FL_EMBOSSED_BOX );
   m_PixLocWindow->end();
   this->SetPixLocOutput(m_PixLocOutput);
-  }
+}
 
 /// Show the app
 template <class TPixel, class TLabel>
@@ -179,14 +179,14 @@ void
 ImageViewer<TPixel,TLabel>
 ::Show(void)
 {
-  if(!this->GetBuilt())
-    {
-      this->Build();
-    }
-  if(this->GetUseScroll())
-    {
-      m_ScrollWindow->show();
-    }
+  if (!this->GetBuilt())
+  {
+    this->Build();
+  }
+  if (this->GetUseScroll())
+  {
+    m_ScrollWindow->show();
+  }
   m_FullWindow->show();
   m_ZoomWindow->show();
   m_PixLocWindow->show();
@@ -203,10 +203,10 @@ ImageViewer<TPixel,TLabel>
 ::Hide(void)
 {
   Superclass::Hide();
-  if(this->GetUseScroll())
-    {
-      m_ScrollWindow->hide();
-    }
+  if (this->GetUseScroll())
+  {
+    m_ScrollWindow->hide();
+  }
   m_FullWindow->hide();
   m_ZoomWindow->hide();
   m_PixLocWindow->hide();
@@ -222,10 +222,10 @@ ImageViewer<TPixel,TLabel>
 {
   itk::OStringStream oss;
   oss<<this->GetLabel()<<" - Zoom Window (X"<<this->GetZoomWidget()->GetOpenGlIsotropicZoom()<<")";
-  if(oss.good())
-    {
-      m_ZoomWindow->copy_label(oss.str().c_str());
-    }
+  if (oss.good())
+  {
+    m_ZoomWindow->copy_label(oss.str().c_str());
+  }
   m_ZoomWindow->redraw();
   Superclass::Update();
 }

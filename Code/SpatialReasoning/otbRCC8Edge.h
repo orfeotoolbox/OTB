@@ -31,7 +31,7 @@ namespace otb
  */
 class ITK_EXPORT RCC8Edge : public itk::DataObject
 {
- public:
+public:
   /** Standard class typedefs */
   typedef RCC8Edge Self;
   typedef itk::DataObject  Superclass;
@@ -42,7 +42,7 @@ class ITK_EXPORT RCC8Edge : public itk::DataObject
   /** Run-time type information (and related methods). */
   itkTypeMacro(RCC8Edge,DataObject);
   /** RCC8 values typedef */
- typedef RCC8Value RCC8ValueType;
+  typedef RCC8Value RCC8ValueType;
   /** RCC8 relation value accessors */
   itkGetMacro(Value,RCC8ValueType);
   itkSetMacro(Value,RCC8ValueType);
@@ -51,11 +51,11 @@ protected:
   /** Constructor */
   RCC8Edge();
   /** Desctructor */
-  ~RCC8Edge(){};
-/** PrintSelf method */
+  ~RCC8Edge() {};
+  /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
- private:
+private:
   /** The RCC8 value */
   RCC8ValueType m_Value;
 };

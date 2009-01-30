@@ -25,35 +25,35 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 namespace Functor
-  {
-    /** \class RemoveWrongDirectionFunctor
-     *  \brief This functor is used by the RemoveWrongDirectionFilter
-     *
-     *  \sa RemoveWrongDirectionFilter
-     *  \ingroup Functor
-     *
-     * \example FeatureExtraction/ExtractRoadByStepsExample.cxx
-     *
-     */
-    template <class TInput1, class TInput2, class TOutput>
-      class RemoveWrongDirectionFunctor
-      {
-      public:
+{
+/** \class RemoveWrongDirectionFunctor
+ *  \brief This functor is used by the RemoveWrongDirectionFilter
+ *
+ *  \sa RemoveWrongDirectionFilter
+ *  \ingroup Functor
+ *
+ * \example FeatureExtraction/ExtractRoadByStepsExample.cxx
+ *
+ */
+template <class TInput1, class TInput2, class TOutput>
+class RemoveWrongDirectionFunctor
+{
+public:
   RemoveWrongDirectionFunctor() {};
   ~RemoveWrongDirectionFunctor() {};
   inline TOutput operator()(const TInput1 &A, const TInput2 &B)
+  {
+    if (B < M_PI/8)
     {
-      if(B < M_PI/8)
-        {
-    return 0;
-        }
-      else
-        {
-    return A;
-        }
+      return 0;
     }
-      };
+    else
+    {
+      return A;
+    }
   }
+};
+}
 /** \class RemoveWrongDirectionFilter
  *  \brief This filter removes (sets to null intensity) pixels with wrong direction.
  *
@@ -70,9 +70,9 @@ namespace Functor
  */
 template <class TInputModulus, class TInputDirection, class TOutputImage>
 class ITK_EXPORT RemoveWrongDirectionFilter
-  : public ModulusAndDirectionImageToImageFilter<TInputModulus, TInputDirection, TOutputImage>
+      : public ModulusAndDirectionImageToImageFilter<TInputModulus, TInputDirection, TOutputImage>
 {
- public:
+public:
   /** Standard typedefs */
   typedef RemoveWrongDirectionFilter                                                     Self;
   typedef ModulusAndDirectionImageToImageFilter<TInputModulus, TInputDirection, TOutputImage> Superclass;
@@ -88,31 +88,31 @@ class ITK_EXPORT RemoveWrongDirectionFilter
   /** typedef of the computing filter (this allows us to derive from ModulusAndDirectionToImageFilter as well as
       using the BinaryFunctorImageFilter, which is appropriate here */
   typedef Functor::RemoveWrongDirectionFunctor<
-    typename TInputModulus::PixelType,
-    typename TInputDirection::PixelType,
-    typename TOutputImage::PixelType>  FunctorType;
+  typename TInputModulus::PixelType,
+  typename TInputDirection::PixelType,
+  typename TOutputImage::PixelType>  FunctorType;
   typedef itk::BinaryFunctorImageFilter<TInputModulus, TInputDirection,TOutputImage,FunctorType> ComputingFilterType;
 
 protected:
   /** Constructor */
-  RemoveWrongDirectionFilter(){};
+  RemoveWrongDirectionFilter() {};
   /** Destructor */
   virtual ~RemoveWrongDirectionFilter() {};
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
-    {
-      Superclass::PrintSelf(os,indent);
-    };
+  {
+    Superclass::PrintSelf(os,indent);
+  };
   /** Main computation method */
   virtual void GenerateData(void)
-    {
-      typename ComputingFilterType::Pointer filter = ComputingFilterType::New();
-      filter->SetInput1(this->GetInput());
-      filter->SetInput2(this->GetInputDirection());
-      filter->GraftOutput(this->GetOutput());
-      filter->Update();
-      this->GraftOutput(filter->GetOutput());
-    }
+  {
+    typename ComputingFilterType::Pointer filter = ComputingFilterType::New();
+    filter->SetInput1(this->GetInput());
+    filter->SetInput2(this->GetInputDirection());
+    filter->GraftOutput(this->GetOutput());
+    filter->Update();
+    this->GraftOutput(filter->GetOutput());
+  }
 
 private:
   RemoveWrongDirectionFilter(const Self&); //purposely not implemented

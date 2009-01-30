@@ -20,7 +20,8 @@
 
 #include "otbImageToPathFilter.h"
 
-namespace otb {
+namespace otb
+{
 /**
  * \class ImageToEdgePathFilter
  * \brief This filter compute the closed edge path of  a labelled object
@@ -51,7 +52,7 @@ namespace otb {
 
 template <class TInputImage, class TOutputPath>
 class ITK_EXPORT ImageToEdgePathFilter
-  : public ImageToPathFilter<TInputImage, TOutputPath>
+      : public ImageToPathFilter<TInputImage, TOutputPath>
 {
 public:
   /** standards typedefs */
@@ -80,7 +81,7 @@ public:
 
 protected:
   ImageToEdgePathFilter();
-  virtual ~ImageToEdgePathFilter(){};
+  virtual ~ImageToEdgePathFilter() {};
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
   virtual void GenerateOutputInformation() {}; //does nothing
   virtual void GenerateData();

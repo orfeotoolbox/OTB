@@ -36,17 +36,17 @@ public:
 
   /** Constructor. */
   VectorDataFileReaderException(const char *file, unsigned int line,
-                           const char* message = "Error in IO",
-                           const char* loc = "Unknown") :
-    itk::ExceptionObject(file, line, message, loc)
+                                const char* message = "Error in IO",
+                                const char* loc = "Unknown") :
+      itk::ExceptionObject(file, line, message, loc)
   {
   }
 
   /** Constructor. */
   VectorDataFileReaderException(const std::string &file, unsigned int line,
-                           const char* message = "Error in IO",
-                           const char* loc = "Unknown") :
-    itk::ExceptionObject(file, line, message, loc)
+                                const char* message = "Error in IO",
+                                const char* loc = "Unknown") :
+      itk::ExceptionObject(file, line, message, loc)
   {
   }
 };

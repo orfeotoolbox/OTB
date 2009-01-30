@@ -59,13 +59,13 @@ namespace otb
    *
  */
 
-  template <class TPath>
-      class ITK_EXPORT  SimplifyPathListFilter:
+template <class TPath>
+class ITK_EXPORT  SimplifyPathListFilter:
       public UnaryFunctorObjectListFilter<
       ObjectList<TPath>,
       ObjectList<TPath>,
       SimplifyPathFunctor<typename TPath::Pointer, typename TPath::Pointer> >
-      {};
+  {};
 
 }// End namespace otb
 

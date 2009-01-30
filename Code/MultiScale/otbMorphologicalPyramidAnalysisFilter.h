@@ -48,7 +48,7 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage, class TMorphoFilter>
 class ITK_EXPORT MorphologicalPyramidAnalysisFilter
-  : public ImageToImageListFilter<TInputImage,TOutputImage>
+      : public ImageToImageListFilter<TInputImage,TOutputImage>
 {
 public:
   /** Standard typedefs */
@@ -115,13 +115,13 @@ protected:
   MorphologicalPyramidAnalysisFilter();
   /** Destructor */
   ~MorphologicalPyramidAnalysisFilter();
-  virtual void GenerateOutputInformation(){}; // does nothing
+  virtual void GenerateOutputInformation() {}; // does nothing
   /** Main computation method */
   virtual void GenerateData();
   /** Printself method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
- private:
+private:
   /** Number of levels of the algorithm */
   int m_NumberOfLevels;
   /** Subsampling scale used */
