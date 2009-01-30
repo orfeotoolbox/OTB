@@ -72,7 +72,6 @@ FunctionToImageFilter<TInputImage,TOutputImage,TFunction>
       << " Input is missing :" << inputPtr.GetPointer();)
 
     }
-
    m_PixelFunction->SetInputImage(inputPtr);
 }
 

@@ -1135,6 +1135,13 @@ ADD_TEST(bfTuCountImageFilterNew ${BASICFILTERS_TESTS11}
 	 )
 
 
+
+ADD_TEST(bfTvFunctionWithNeighborhoodToImageFilterNew ${BASICFILTERS_TESTS11}
+        otbFunctionWithNeighborhoodToImageFilterNew
+)
+
+
+
 # A enrichir
 SET(BasicFilters_SRCS1
 otbLeeFilter.cxx
@@ -1298,6 +1305,7 @@ otbExtractROIResample.cxx
 otbCountImageFunctionNew.cxx
 otbCountImageFunctionTest.cxx	
 otbCountImageFilterNew.cxx
+otbFunctionWithNeighborhoodToImageFilterNew.cxx
 )
 
 

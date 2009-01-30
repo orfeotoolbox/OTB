@@ -30,5 +30,6 @@ void RegisterTests()
 REGISTER_TEST(otbExtractROIResample);
 REGISTER_TEST(otbCountImageFunctionNew); 
 REGISTER_TEST(otbCountImageFunctionTest);
-REGISTER_TEST(otbCountImageFilterNew); 
+REGISTER_TEST(otbCountImageFilterNew);
+REGISTER_TEST(otbFunctionWithNeighborhoodToImageFilterNew);
 }

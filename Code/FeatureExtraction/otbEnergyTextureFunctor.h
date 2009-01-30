@@ -73,12 +73,9 @@ class EnergyTextureFunctor
  
        double temp = 0.;
        int ll = 0;
-       //double dist = 0.;
        double norm = 0.;
-       //std::cout<<"START : "<<offsetOff<<std::endl;
        for( unsigned int i=0; i<nbComp; i++ )
 	 {
-	   //std::cout<<"NEEEEEEEEEEEEW :"<<std::endl;
 	   offsetOff = offsetOffInit;
 	   temp = 0.;
 	   for( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
@@ -92,12 +89,8 @@ class EnergyTextureFunctor
 		 {
 		   offsetOff[1]++;
 		   offset[1] = k;
-		   //std::cout<<"k="<<k<<" : "<<offset<<" -> "<<offsetOff<<std::endl;
-		   //dist = 1.;
-	
 		   norm = vcl_pow(static_cast<double>(itOff.GetPixel(offsetOff)[i]-itOff.GetCenterPixel()[i]), 2);
-
-		   temp += norm;
+			   temp += norm;
 		 }
 	       temp /= area;
 	       outPix[i] = static_cast<OutputPixelType>( vcl_pow(temp, 2) );
@@ -109,10 +102,12 @@ class EnergyTextureFunctor
      }
 
  private:
-   OffsetType m_Offset;;
+   OffsetType m_Offset;
 
  };
  
+
+
 
   } // namespace Functor
 } // namespace otb

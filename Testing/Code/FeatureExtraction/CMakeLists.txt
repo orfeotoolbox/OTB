@@ -1002,10 +1002,10 @@ ADD_TEST(feTvCloudDetectionFilter ${FEATUREEXTRACTION_TESTS11}
 
 # -------        otb::EnergyTextureFunctor   -------------
 ADD_TEST(feTvEnergyTextureFunctor ${FEATUREEXTRACTION_TESTS11} 
-    otbEnergyTextureFunctor
 --compare-image ${EPS}
                 ${BASELINE}/feTvEnergyTextureFunctor.tif
                 ${TEMP}/feTvEnergyTextureFunctor.tif
+  otbEnergyTextureFunctor
     ${INPUTDATA}/poupees.tif
     ${TEMP}/feTvEnergyTextureFunctor.tif
     5    # radius
@@ -1013,6 +1013,23 @@ ADD_TEST(feTvEnergyTextureFunctor ${FEATUREEXTRACTION_TESTS11}
     2    # offset[1]	
 )
 
+
+# -------        otb::EnergyTextureImageFunction   -------------
+ADD_TEST(feTvEnergyTextureImageFunctionNew ${FEATUREEXTRACTION_TESTS11} 
+    otbEnergyTextureImageFunctionNew
+)
+ADD_TEST(feTvEnergyTextureImageFunction ${FEATUREEXTRACTION_TESTS11} 
+#--compare-image ${EPS}
+#                ${BASELINE}/feTvEnergyTextureImageFunction.tif
+#                ${TEMP}/feTvEnergyTextureImageFunction.tif
+   otbEnergyTextureImageFunction
+    ${INPUTDATA}/poupees_1canal.c1.hdr
+    ${TEMP}/feTvEnergyTextureImageFunction.tif
+    5    # radius[0]
+    5    # radius[1]
+    -2   # offset[0]
+    2    # offset[1]	
+)
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
@@ -1141,6 +1158,8 @@ SET(BasicFeatureExtraction_SRCS11
 otbCloudDetectionFilterNew.cxx
 otbCloudDetectionFilter.cxx
 otbEnergyTextureFunctor.cxx
+otbEnergyTextureImageFunctionNew.cxx
+otbEnergyTextureImageFunction.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
