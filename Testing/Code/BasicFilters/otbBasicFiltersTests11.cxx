@@ -28,8 +28,14 @@
 void RegisterTests()
 {
 REGISTER_TEST(otbExtractROIResample);
-REGISTER_TEST(otbCountImageFunctionNew); 
-REGISTER_TEST(otbCountImageFunctionTest);
-REGISTER_TEST(otbCountImageFilterNew);
+REGISTER_TEST(otbPointSetFunctionNew); 
+REGISTER_TEST(otbPointSetDensityFunctionNew); 
+REGISTER_TEST(otbPointSetDensityFunctionTest);
+REGISTER_TEST(otbPointSetToDensityImageFilterNew);
+REGISTER_TEST(otbPointSetToDensityImageFilterTest); 
+//REGISTER_TEST(otbCountImageFunctionTest);
+//REGISTER_TEST(otbCountImageFilterNew); 
+//REGISTER_TEST(otbCountImageFilterTest);  
+REGISTER_TEST(otbImagePCAShapeModelEstimatorTest);
 REGISTER_TEST(otbFunctionWithNeighborhoodToImageFilterNew);
 }
