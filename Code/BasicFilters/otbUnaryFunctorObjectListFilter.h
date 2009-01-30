@@ -57,9 +57,6 @@ public:
   typedef typename TInputList::ConstIterator InputListIterator;
   typedef typename TOutputList::ConstIterator OutputListIterator;
 
-  typedef std::vector<OutputListPointer> OutputListForThreadType;
-
-//   typedef itk::DataObject::Pointer DataObjectPointer;
 
   /** Get the functor object.  The functor is returned by reference.
    * (Functors do not have to derive from itk::LightObject, so they do
@@ -88,22 +85,15 @@ protected:
   UnaryFunctorObjectListFilter();
   virtual ~UnaryFunctorObjectListFilter() {};
 
-  void GenerateData(void);
-
   /** Multi-threading implementation */
 
-  virtual void BeforeThreadedGenerateData();
 
   virtual void AfterThreadedGenerateData();
 
   /** startIndex and stopIndex represent the indices of the Objects to
   examine in thread threadId */
-  virtual void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex,int threadId);
+  virtual void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, int threadId);
 
-  /** Static function used as a "callback" by the MultiThreader.  The threading
-   * library will call this routine for each thread, which will delegate the
-   * control to ThreadedGenerateData(). */
-  static ITK_THREAD_RETURN_TYPE ThreaderCallback( void *arg );
 
   /** Internal structure used for passing image data into the threading library */
   struct ThreadStruct
@@ -118,7 +108,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   FunctorType m_Functor;
-  OutputListForThreadType m_ObjectListPerThread;
+
 };
 
 } // end namespace otb

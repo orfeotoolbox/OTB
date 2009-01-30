@@ -64,6 +64,7 @@ namespace otb
 
           typedef itk::DataObject::Pointer DataObjectPointer;
 
+          typedef std::vector<OutputListPointer> OutputListForThreadType;
 
           virtual void SetInput( const InputListType *input);
           const InputListType * GetInput(void);
@@ -76,6 +77,35 @@ namespace otb
           virtual ~ObjectListToObjectListFilter() {};
           /**PrintSelf method */
           virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
+          virtual void GenerateData(void);
+
+          /** Multi-threading implementation */
+
+          virtual void BeforeThreadedGenerateData();
+
+          virtual void AfterThreadedGenerateData() {};
+
+          virtual int SplitRequestedRegion(int threadId, int threadCount, unsigned int requestedElements, unsigned int& startIndex, unsigned int& stopIndex);
+
+          /** startIndex and stopIndex represent the indices of the Objects
+           * to examine in thread threadId */
+          virtual void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, int threadId);
+
+          /** Static function used as a "callback" by the MultiThreader.  The threading
+           * library will call this routine for each thread, which will delegate the
+           * control to ThreadedGenerateData(). */
+          static ITK_THREAD_RETURN_TYPE ThreaderCallback( void *arg );
+
+          /** Internal structure used for passing image data into the threading library */
+          struct ThreadStruct
+          {
+            Pointer Filter;
+          };
+
+          /** End Multi-threading implementation */
+
+          OutputListForThreadType m_ObjectListPerThread;
 
         private:
           ObjectListToObjectListFilter(const Self&); //purposely not implemented

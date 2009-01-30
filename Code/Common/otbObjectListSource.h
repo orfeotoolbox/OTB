@@ -174,7 +174,7 @@ namespace otb
           /** Ensure that the output lists are cleared before processing */
           virtual void  AllocateOutputs();
 
-  /** ObjectListSource can be implemented as a multithreaded filter.
+          /** ObjectListSource can be implemented as a multithreaded filter.
            * Therefore, this implementation provides a ThreadedGenerateData() routine
            * which is called for each processing thread. The output image data is
            * allocated automatically by the superclass prior to calling
@@ -183,8 +183,9 @@ namespace otb
            * "outputRegionForThread"
            *
            * \sa ImageToImageFilter::ThreadedGenerateData(),
-   *     ImageToImageFilter::GenerateData()  */
+           *     ImageToImageFilter::GenerateData()  */
           virtual void GenerateData(void);
+
 
         private:
           ObjectListSource(const Self&); //purposely not implemented

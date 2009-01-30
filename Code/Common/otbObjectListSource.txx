@@ -20,6 +20,7 @@
 
 #include "otbObjectListSource.h"
 #include "itkProgressReporter.h"
+#include "otbMath.h"
 
 namespace otb
 {
@@ -143,6 +144,7 @@ namespace otb
   {
     itkExceptionMacro("subclass should override this method!!!");
   }
+
 
 /**
    * PrintSelf Method
