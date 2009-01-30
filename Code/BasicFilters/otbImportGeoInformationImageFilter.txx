@@ -53,7 +53,7 @@ ImportGeoInformationImageFilter<TImage,TSourceImage>
 
 template <class TImage, class TSourceImage>
 void
- ImportGeoInformationImageFilter<TImage,TSourceImage>
+ImportGeoInformationImageFilter<TImage,TSourceImage>
 ::GenerateInputRequestedRegion(void)
 {
   Superclass::GenerateInputRequestedRegion();
@@ -73,7 +73,7 @@ void
 
 template <class TImage, class TSourceImage>
 void
- ImportGeoInformationImageFilter<TImage,TSourceImage>
+ImportGeoInformationImageFilter<TImage,TSourceImage>
 ::GenerateOutputInformation(void)
 {
   Superclass::GenerateOutputInformation();

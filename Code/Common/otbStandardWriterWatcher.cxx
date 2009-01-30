@@ -25,16 +25,16 @@ namespace otb
 
 StandardWriterWatcher
 ::StandardWriterWatcher(itk::ProcessObject* process,
-      const char *comment)
-  : WriterWatcherBase(process, comment)
+                        const char *comment)
+    : WriterWatcherBase(process, comment)
 {
   m_StarsCount = 50;
 }
 
 StandardWriterWatcher
 ::StandardWriterWatcher(itk::ProcessObject* process,itk::ProcessObject * source,
-      const char *comment)
-  : WriterWatcherBase(process,source,comment)
+                        const char *comment)
+    : WriterWatcherBase(process,source,comment)
 {
   m_StarsCount = 50;
 }
@@ -77,40 +77,40 @@ StandardWriterWatcher
   oss<<"\r";
 
   if (m_SourceProcess)
+  {
+    double progress = m_SourceProcess->GetProgress();
+    int progressPercent = static_cast<int>(progress*100);
+    std::string stars(static_cast<int>(progress*m_StarsCount),'*');
+    std::string blanks(m_StarsCount - stars.length(),' ');
+    oss << "Current Tile: ";
+    if (progressPercent<10)
     {
-      double progress = m_SourceProcess->GetProgress();
-      int progressPercent = static_cast<int>(progress*100);
-      std::string stars(static_cast<int>(progress*m_StarsCount),'*');
-      std::string blanks(m_StarsCount - stars.length(),' ');
-      oss << "Current Tile: ";
-      if(progressPercent<10)
-  {
-    oss<<" ";
-  }
-      if(progressPercent<100)
-  {
-    oss<<" ";
-  }
-      oss<<progressPercent << "% [" << stars << blanks << "]  ";
+      oss<<" ";
     }
+    if (progressPercent<100)
+    {
+      oss<<" ";
+    }
+    oss<<progressPercent << "% [" << stars << blanks << "]  ";
+  }
 
   if (m_Process)
+  {
+    double progress = m_Process->GetProgress();
+    int progressPercent = static_cast<int>(progress*100);
+    std::string stars(static_cast<int>(progress*m_StarsCount),'*');
+    std::string blanks(m_StarsCount - stars.length(),' ');
+    oss << "Writing: ";
+    if (progressPercent<10)
     {
-      double progress = m_Process->GetProgress();
-      int progressPercent = static_cast<int>(progress*100);
-      std::string stars(static_cast<int>(progress*m_StarsCount),'*');
-      std::string blanks(m_StarsCount - stars.length(),' ');
-      oss << "Writing: ";
-      if(progressPercent<10)
-  {
-    oss<<" ";
-  }
-      if(progressPercent<100)
-  {
-    oss<<" ";
-  }
-      oss<< progressPercent << "% [" << stars << blanks << "]" << std::flush;
+      oss<<" ";
     }
+    if (progressPercent<100)
+    {
+      oss<<" ";
+    }
+    oss<< progressPercent << "% [" << stars << blanks << "]" << std::flush;
+  }
   std::cout<<oss.str();
 }
 
@@ -132,8 +132,8 @@ StandardWriterWatcher
 {
   m_TimeProbe.Stop();
   std::cout << std::endl << "Writing task took "
-      << m_TimeProbe.GetMeanTime()
-      << " seconds." << std::endl;
+            << m_TimeProbe.GetMeanTime()
+            << " seconds." << std::endl;
 }
 
 } // end namespace otb

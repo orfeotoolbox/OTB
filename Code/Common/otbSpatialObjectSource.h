@@ -23,16 +23,16 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  /**
-   * \class SpatialObjectSource
-   * \brief Base class for filters producing a SpatialObject as output.
-   * \ingroup DataSources
-   */
+/**
+ * \class SpatialObjectSource
+ * \brief Base class for filters producing a SpatialObject as output.
+ * \ingroup DataSources
+ */
 template <class TSpatialObject>
 class ITK_EXPORT SpatialObjectSource
-  : public itk::ProcessObject
+      : public itk::ProcessObject
 {
- public:
+public:
   /** Standard typedefs */
   typedef SpatialObjectSource Self;
   typedef itk::ProcessObject Superclass;
@@ -59,7 +59,7 @@ class ITK_EXPORT SpatialObjectSource
   virtual SpatialObjectType * GetOutput(void);
 
 
- protected:
+protected:
   /** Constructor */
   SpatialObjectSource();
   /** Destructor */

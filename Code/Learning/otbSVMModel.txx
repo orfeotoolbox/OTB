@@ -76,7 +76,7 @@ SVMModel<TInputPixel, TLabel>::~SVMModel()
   delete [] m_XSpace;//
   otbMsgDevMacro(  << "SVMModel destructor - m_XSpace done" );
   //free(m_XSpace);
-*/
+  */
 
   //svm_destroy_model(m_Model);
 
@@ -86,34 +86,34 @@ template <class TInputPixel, class TLabel >
 void
 SVMModel<TInputPixel, TLabel>
 ::AllocateProblem(int l, long int elements)
- {
-   otbMsgDevMacro(  << "SVMModel::AllocateProblem - enter" );
-   otbMsgDevMacro(  << "SVMModel::AllocateProblem - l = " << l );
-   otbMsgDevMacro(  << "SVMModel::AllocateProblem - elements = " << elements );
-   otbMsgDevMacro(  << "SVMModel::AllocateProblem - m_Problem.l = " << m_Problem.l );
-   m_Problem.l = l;
-   otbMsgDevMacro(  << "SVMModel::AllocateProblem - m_Problem.l = " <<  m_Problem.l );
-   otbMsgDevMacro(  << "SVMModel::AllocateProblem - l done" );
-   delete [] m_Problem.y;
-   m_Problem.y = new double[l];//Malloc(double,l);
-   otbMsgDevMacro(  << "SVMModel::AllocateProblem - y done" );
-   delete [] m_Problem.x;
-   m_Problem.x = new struct svm_node*[l];//Malloc(struct svm_node* ,l);
-   otbMsgDevMacro(  << "SVMModel::AllocateProblem - x done" );
-   delete [] m_XSpace;
-   m_XSpace = new struct svm_node[elements];
+{
+  otbMsgDevMacro(  << "SVMModel::AllocateProblem - enter" );
+  otbMsgDevMacro(  << "SVMModel::AllocateProblem - l = " << l );
+  otbMsgDevMacro(  << "SVMModel::AllocateProblem - elements = " << elements );
+  otbMsgDevMacro(  << "SVMModel::AllocateProblem - m_Problem.l = " << m_Problem.l );
+  m_Problem.l = l;
+  otbMsgDevMacro(  << "SVMModel::AllocateProblem - m_Problem.l = " <<  m_Problem.l );
+  otbMsgDevMacro(  << "SVMModel::AllocateProblem - l done" );
+  delete [] m_Problem.y;
+  m_Problem.y = new double[l];//Malloc(double,l);
+  otbMsgDevMacro(  << "SVMModel::AllocateProblem - y done" );
+  delete [] m_Problem.x;
+  m_Problem.x = new struct svm_node*[l];//Malloc(struct svm_node* ,l);
+  otbMsgDevMacro(  << "SVMModel::AllocateProblem - x done" );
+  delete [] m_XSpace;
+  m_XSpace = new struct svm_node[elements];
 
-   for(long int i = 0;i<elements;++i)
-     {
-       m_XSpace[i].value = 0;
-       m_XSpace[i].index = -1;
-     }
+  for (long int i = 0;i<elements;++i)
+  {
+    m_XSpace[i].value = 0;
+    m_XSpace[i].index = -1;
+  }
 
-   //free(m_XSpace);
-   //m_XSpace = Malloc(struct svm_node,elements);
-   //otbMsgDevMacro(  << "SVMModel::AllocateProblem - m_XSpace done" );
+  //free(m_XSpace);
+  //m_XSpace = Malloc(struct svm_node,elements);
+  //otbMsgDevMacro(  << "SVMModel::AllocateProblem - m_XSpace done" );
 
- }
+}
 
 
 template <class TInputPixel, class TLabel >
@@ -155,11 +155,11 @@ void
 SVMModel<TInputPixel, TLabel>
 ::SaveModel(const char* model_file_name)
 {
-  if(svm_save_model(model_file_name, m_Model)!=0)
-    {
-      itkExceptionMacro( << "Problem while saving SVM model "
-       << std::string(model_file_name) );
-    }
+  if (svm_save_model(model_file_name, m_Model)!=0)
+  {
+    itkExceptionMacro( << "Problem while saving SVM model "
+                       << std::string(model_file_name) );
+  }
 }
 
 template <class TInputPixel, class TLabel >
@@ -169,11 +169,11 @@ SVMModel<TInputPixel, TLabel>
 {
   //m_Model = svm_load_model(model_file_name,m_Parameters.kernel_generic/*m_GenericKernelFunctor*/);
   m_Model = svm_load_model(model_file_name, m_Model->param.kernel_generic/*m_GenericKernelFunctor*/);
-  if(m_Model == 0)
-    {
-      itkExceptionMacro( << "Problem while loading SVM model "
-       << std::string(model_file_name) );
-    }
+  if (m_Model == 0)
+  {
+    itkExceptionMacro( << "Problem while loading SVM model "
+                       << std::string(model_file_name) );
+  }
 }
 
 template <class TInputPixel, class TLabel >
@@ -228,10 +228,10 @@ SVMModel<TInputPixel, TLabel>
   // delete just the first element, it destoyes the whole pointers (cf SV filling with x_space)
   delete [] (m_Model->SV[0]);
 
-  for(int n = 0; n<m_Model->l; n++)
-    {
-      m_Model->SV[n] = NULL;
-    }
+  for (int n = 0; n<m_Model->l; n++)
+  {
+    m_Model->SV[n] = NULL;
+  }
   delete[] (m_Model->SV);
   m_Model->SV = NULL;
 
@@ -244,43 +244,43 @@ SVMModel<TInputPixel, TLabel>
   // Compute the total number of SV elements.
   unsigned int elements = 0;
   for (int p=0; p<nbOfSupportVector; p++)
-    {
-      std::cout<<p<<"  ";
-      const svm_node *tempNode = sv[p];
-      std::cout<<p<<"  ";
-      while(tempNode->index != -1)
   {
-    tempNode++;
-    elements++;
-  }
-      elements++;// for -1 values
+    std::cout<<p<<"  ";
+    const svm_node *tempNode = sv[p];
+    std::cout<<p<<"  ";
+    while (tempNode->index != -1)
+    {
+      tempNode++;
+      elements++;
     }
+    elements++;// for -1 values
+  }
 
-  if(m_Model->l>0)
-      {
-        SV[0] = Malloc(svm_node,elements);
-  memcpy( SV[0],sv[0],sizeof(svm_node*)*elements);
-      }
+  if (m_Model->l>0)
+  {
+    SV[0] = Malloc(svm_node,elements);
+    memcpy( SV[0],sv[0],sizeof(svm_node*)*elements);
+  }
   svm_node *x_space =  SV[0];
 
   int j = 0;
-  for(int i=0; i<m_Model->l; i++)
-    {
-      // SV
-      SV[i] = &x_space[j];
-      const svm_node *p = sv[i];
-      svm_node *pCpy = SV[i];
-      while(p->index != -1)
+  for (int i=0; i<m_Model->l; i++)
   {
-    pCpy->index = p->index;
-    pCpy->value = p->value;
-    p++;
-    pCpy++;
-    j++;
-  }
-      pCpy->index = -1;
+    // SV
+    SV[i] = &x_space[j];
+    const svm_node *p = sv[i];
+    svm_node *pCpy = SV[i];
+    while (p->index != -1)
+    {
+      pCpy->index = p->index;
+      pCpy->value = p->value;
+      p++;
+      pCpy++;
       j++;
     }
+    pCpy->index = -1;
+    j++;
+  }
   this->Modified();
 }
 
@@ -290,28 +290,28 @@ SVMModel<TInputPixel, TLabel>
 ::SetAlpha( double ** alpha, int nbOfSupportVector )
 {
   // Erase the old sv_coef
-  for(int i=0; i<m_Model->nr_class-1; i++)
-    {
-      delete[] m_Model->sv_coef[i];
-    }
+  for (int i=0; i<m_Model->nr_class-1; i++)
+  {
+    delete[] m_Model->sv_coef[i];
+  }
   delete [] m_Model->sv_coef;
 
   this->SetNumberOfSupportVectors(nbOfSupportVector);
 
   // copy new sv_coef values
   m_Model->sv_coef = Malloc(double *,m_Model->nr_class-1);
-  for(int i=0; i<m_Model->nr_class-1; i++)
+  for (int i=0; i<m_Model->nr_class-1; i++)
     m_Model->sv_coef[i] = Malloc(double,m_Model->l);
 
-  for(int i=0; i<m_Model->l; i++)
-    {
-      // sv_coef
-      for(int k=0; k<m_Model->nr_class-1; k++)
+  for (int i=0; i<m_Model->l; i++)
   {
-    m_Model->sv_coef[k][i] = alpha[k][i];
-  }
+    // sv_coef
+    for (int k=0; k<m_Model->nr_class-1; k++)
+    {
+      m_Model->sv_coef[k][i] = alpha[k][i];
     }
-   this->Modified();
+  }
+  this->Modified();
 }
 
 

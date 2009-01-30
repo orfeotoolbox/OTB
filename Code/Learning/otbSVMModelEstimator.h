@@ -70,7 +70,7 @@ public:
   itkNewMacro(Self);
 
 
-    /** Set the number of classes. */
+  /** Set the number of classes. */
   itkSetMacro(NumberOfClasses, unsigned int);
 
   /** Get the number of classes. */
@@ -89,12 +89,24 @@ public:
   itkGetMacro(Model, SVMModelPointer);
 
   /** Set/Get the Measures */
-  void SetMeasures( TrainingMeasuresType measures ){ m_Measures = measures; };
-  TrainingMeasuresType GetMeasures() { return m_Measures;};
+  void SetMeasures( TrainingMeasuresType measures )
+  {
+    m_Measures = measures;
+  };
+  TrainingMeasuresType GetMeasures()
+  {
+    return m_Measures;
+  };
 
   /** Set/Get the Labels */
-  void SetLabels( TrainingLabelsType labels ){ m_Labels = labels; };
-  TrainingLabelsType GetLabels(){ return m_Labels; };
+  void SetLabels( TrainingLabelsType labels )
+  {
+    m_Labels = labels;
+  };
+  TrainingLabelsType GetLabels()
+  {
+    return m_Labels;
+  };
 
   /** Get the number of classes. */
   itkGetConstReferenceMacro(Model, SVMModelPointer);
@@ -126,8 +138,8 @@ public:
     this->Modified();
   }
 
- /** Get the kernel type */
- int GetKernelType(void)
+  /** Get the kernel type */
+  int GetKernelType(void)
   {
     return m_Model->GetKernelType();
   }
@@ -152,7 +164,7 @@ public:
     m_Model->SetKernelGamma(gamma);
     this->Modified();
   }
- /** Get the gamma parameter for poly/rbf/sigmoid kernels */
+  /** Get the gamma parameter for poly/rbf/sigmoid kernels */
   double GetKernelGamma(void)
   {
     return m_Model->GetKernelGamma();
@@ -180,9 +192,9 @@ public:
 
   /** Set the Nu parameter for the training */
   double GetNu(void)
-    {
-      return m_Model->GetNu();
-    }
+  {
+    return m_Model->GetNu();
+  }
 
   /** Set the cache size in MB for the training */
   void SetCacheSize(int cSize)
@@ -204,7 +216,7 @@ public:
     this->Modified();
   }
 
-/** Get the C parameter for the training for C_SVC, EPSILON_SVR and NU_SVR */
+  /** Get the C parameter for the training for C_SVC, EPSILON_SVR and NU_SVR */
   double GetC(void)
   {
     return m_Model->GetC();
@@ -217,7 +229,7 @@ public:
     this->Modified();
   }
 
-/** Get the tolerance for the stopping criterion for the training*/
+  /** Get the tolerance for the stopping criterion for the training*/
   double GetEpsilon(void)
   {
     return m_Model->GetEpsilon();
@@ -271,7 +283,7 @@ public:
   /** Get/Set methods for generic kernel functor */
   virtual GenericKernelFunctorBase * GetKernelFunctor(void)const
   {
-        return m_Model->GetKernelFunctor();
+    return m_Model->GetKernelFunctor();
   }
   virtual void SetKernelFunctor(GenericKernelFunctorBase* pGenericKernelFunctor)
   {

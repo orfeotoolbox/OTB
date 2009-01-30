@@ -81,12 +81,12 @@ bool PlaceNameToLonLat::Evaluate()
   }
 
   if ((m_Lat == -1000.0) && (m_Lon == -1000.0))
-    {
+  {
     std::cout << "Search Error: fallback on the origin" << std::endl;
     m_Lat = 43.560204;
     m_Lon = 1.480736;
     return false;
-    }
+  }
   return true;
 }
 
@@ -125,7 +125,8 @@ void PlaceNameToLonLat::RetrieveXML(std::ostringstream& urlStream)
   strcpy(url,urlStream.str().data());
 
 //   std::cout << url << std::endl;
-  if(curl) {
+  if (curl)
+  {
     std::vector<char> chunk;
     curl_easy_setopt(curl, CURLOPT_URL, url);
     /*

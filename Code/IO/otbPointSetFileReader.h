@@ -24,74 +24,74 @@
 
 namespace otb
 {
-  /** \class PointSetFileReader
-   * \brief Read a point set from a lidar file.
-   *
-   * \sa PointSetSource
-   *
-   * \ingroup IOFilters
-   *
-   */
+/** \class PointSetFileReader
+ * \brief Read a point set from a lidar file.
+ *
+ * \sa PointSetSource
+ *
+ * \ingroup IOFilters
+ *
+ */
 
 template<class TOutputPointSet>
-    class ITK_EXPORT PointSetFileReader: public otb::PointSetSource< TOutputPointSet >
+class ITK_EXPORT PointSetFileReader: public otb::PointSetSource< TOutputPointSet >
 {
-  public:
-    /** Standard class typedefs. */
-    typedef PointSetFileReader         Self;
-    typedef otb::PointSetSource<TOutputPointSet>  Superclass;
-    typedef itk::SmartPointer<Self>  Pointer;
+public:
+  /** Standard class typedefs. */
+  typedef PointSetFileReader         Self;
+  typedef otb::PointSetSource<TOutputPointSet>  Superclass;
+  typedef itk::SmartPointer<Self>  Pointer;
 
-    /** Method for creation through the object factory. */
-    itkNewMacro(Self);
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self);
 
-    /** Run-time type information (and related methods). */
-    itkTypeMacro(PointSetFileReader, PointSetSource);
-
-
-
-    /** Typedef */
-    typedef TOutputPointSet PointSetType;
-    typedef typename PointSetType::PointType PointType;
-    typedef typename PointSetType::PixelType PixelType;
-
-    /** Specify the file to read. This is forwarded to the IO instance. */
-    itkSetStringMacro(FileName);
-    itkGetStringMacro(FileName);
-
-    /** Get Macro*/
-    itkGetMacro( NumberOfPoints, long int );
-    itkGetMacro( MinX, double );
-    itkGetMacro( MaxX, double );
-    itkGetMacro( MinY, double );
-    itkGetMacro( MaxY, double );
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(PointSetFileReader, PointSetSource);
 
 
-    virtual void GenerateOutputInformation(void);
 
-    /** Does the real work. */
-    virtual void GenerateData();
+  /** Typedef */
+  typedef TOutputPointSet PointSetType;
+  typedef typename PointSetType::PointType PointType;
+  typedef typename PointSetType::PixelType PixelType;
+
+  /** Specify the file to read. This is forwarded to the IO instance. */
+  itkSetStringMacro(FileName);
+  itkGetStringMacro(FileName);
+
+  /** Get Macro*/
+  itkGetMacro( NumberOfPoints, long int );
+  itkGetMacro( MinX, double );
+  itkGetMacro( MaxX, double );
+  itkGetMacro( MinY, double );
+  itkGetMacro( MaxY, double );
 
 
-  protected:
-    PointSetFileReader();
-    ~PointSetFileReader();
-    void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  virtual void GenerateOutputInformation(void);
 
-    void TestFileExistanceAndReadability();
+  /** Does the real work. */
+  virtual void GenerateData();
 
-    std::string m_FileName; // The file to be read
-    long int m_NumberOfPoints;
-    double m_MinX;
-    double m_MaxX;
-    double m_MinY;
-    double m_MaxY;
 
-  private:
-    PointSetFileReader(const Self&); //purposely not implemented
-    void operator=(const Self&); //purposely not implemented
+protected:
+  PointSetFileReader();
+  ~PointSetFileReader();
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-    std::string m_ExceptionMessage;
+  void TestFileExistanceAndReadability();
+
+  std::string m_FileName; // The file to be read
+  long int m_NumberOfPoints;
+  double m_MinX;
+  double m_MaxX;
+  double m_MinY;
+  double m_MaxY;
+
+private:
+  PointSetFileReader(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+
+  std::string m_ExceptionMessage;
 
 };
 

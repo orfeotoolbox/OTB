@@ -29,7 +29,7 @@ namespace otb
  */
 template <class TInputImage, class TOutputPath>
 class ITK_EXPORT ImageToPathFilter
-  : public itk::PathSource<TOutputPath>
+      : public itk::PathSource<TOutputPath>
 {
 public:
   /// Standard class typedefs
@@ -55,7 +55,7 @@ public:
 
 protected:
   ImageToPathFilter();
-  virtual ~ImageToPathFilter(){};
+  virtual ~ImageToPathFilter() {};
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

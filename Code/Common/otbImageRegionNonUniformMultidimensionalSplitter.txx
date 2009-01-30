@@ -55,7 +55,7 @@ ImageRegionNonUniformMultidimensionalSplitter<VImageDimension>
       splitsPerDimension[j-1]=numberOfPiecesLeft;
     }
     numberOfPiecesLeft = (unsigned int)
-      ::ceil(numberOfPiecesLeft/splitsPerDimension[j-1]);
+                         ::ceil(numberOfPiecesLeft/splitsPerDimension[j-1]);
     numPieces *= (unsigned int) splitsPerDimension[j-1];
   }
 
@@ -117,7 +117,7 @@ ImageRegionNonUniformMultidimensionalSplitter<VImageDimension>
       splitsPerDimension[j-1]=numberOfPiecesLeft;
     }
     numberOfPiecesLeft = (unsigned int)
-      ::ceil(numberOfPiecesLeft/splitsPerDimension[j-1]);
+                         ::ceil(numberOfPiecesLeft/splitsPerDimension[j-1]);
   }
 
   // if a given dimension has fewer pixels that splitsPerDimension, then
@@ -128,46 +128,46 @@ ImageRegionNonUniformMultidimensionalSplitter<VImageDimension>
   unsigned int offsetTable[VImageDimension];
   numPieces = 1;
   for (j=0; j < VImageDimension; ++j)
-    {
+  {
     offsetTable[j] = numPieces;
     if (regionSize[j] < splitsPerDimension[j])
-      {
+    {
       splits[j] = regionSize[j];
       pixelsPerSplit[j] = 1;
       numPieces *= regionSize[j];
-      }
+    }
     else
-      {
+    {
       splits[j] = (unsigned int) splitsPerDimension[j];
       pixelsPerSplit[j] = (unsigned int) ::ceil(regionSize[j]
-                                              / (double) splits[j]);
+                          / (double) splits[j]);
       numPieces *= (unsigned int) splitsPerDimension[j];
-      }
     }
+  }
 
   // determine which split we are in
   unsigned int offset = i;
   for (j=VImageDimension-1; j > 0; j--)
-    {
+  {
     ijk[j] = offset / offsetTable[j];
     offset -= (ijk[j] * offsetTable[j]);
-    }
+  }
   ijk[0] = offset;
 
   // compute the split
   for (j=0; j < VImageDimension; j++)
-    {
+  {
     splitIndex[j] += ijk[j]*pixelsPerSplit[j];
     if (ijk[j] < splits[j] - 1)
-      {
+    {
       splitSize[j] = pixelsPerSplit[j];
-      }
+    }
     else
-      {
+    {
       // this dimension is falling off the edge of the image
       splitSize[j] = splitSize[j] - ijk[j]*pixelsPerSplit[j];
-      }
     }
+  }
 
   // set the split region ivars
   splitRegion.SetIndex( splitIndex );

@@ -36,140 +36,176 @@
 namespace otb
 {
 
-  namespace Functor
-    {
-      /** \class BayesianFunctor
-       * \brief Functor for the bayesian fusion filter. Please refer to BayesianFusionFilter.
-       *
-       */
-      template <class TInputMultiSpectral,
-          class TInputMultiSpectralInterp,
-          class TInputPanchro,
-          class TOutput>
-  class BayesianFunctor
+namespace Functor
+{
+/** \class BayesianFunctor
+ * \brief Functor for the bayesian fusion filter. Please refer to BayesianFusionFilter.
+ *
+ */
+template <class TInputMultiSpectral,
+class TInputMultiSpectralInterp,
+class TInputPanchro,
+class TOutput>
+class BayesianFunctor
+{
+public:
+  BayesianFunctor() {};
+  ~BayesianFunctor() {};
+  typedef typename TInputMultiSpectral::RealValueType  RealType;
+  typedef typename itk::VariableSizeMatrix<RealType>   MatrixType;
+
+  void SetLambda(float lambda)
   {
-  public:
-    BayesianFunctor() {};
-    ~BayesianFunctor() {};
-     typedef typename TInputMultiSpectral::RealValueType  RealType;
-     typedef typename itk::VariableSizeMatrix<RealType>   MatrixType;
+    m_Lambda = lambda;
+  };
+  void SetS(float S)
+  {
+    m_S = S;
+  };
+  void SetAlpha(float alpha)
+  {
+    m_Alpha = alpha;
+  };
+  void SetBeta(MatrixType matrix)
+  {
+    m_Beta = matrix;
+  };
+  void SetCovarianceInvMatrix(MatrixType matrix)
+  {
+    m_CovarianceInvMatrix = matrix;
+  };
+  void SetVcondopt(MatrixType matrix)
+  {
+    m_Vcondopt = matrix;
+  };
+  float GetLambda()
+  {
+    return m_Lambda;
+  };
+  float GetAlpha()
+  {
+    return m_Alpha;
+  };
+  float GetS()
+  {
+    return m_S;
+  };
+  MatrixType GetBeta()
+  {
+    return m_Beta;
+  };
+  MatrixType GetCovarianceInvMatrix()
+  {
+    return m_CovarianceInvMatrix;
+  };
+  MatrixType GetVcondopt()
+  {
+    return m_Vcondopt;
+  };
 
-     void SetLambda(float lambda){ m_Lambda = lambda;};
-     void SetS(float S){ m_S = S;};
-     void SetAlpha(float alpha){ m_Alpha = alpha;};
-     void SetBeta(MatrixType matrix){ m_Beta = matrix;};
-     void SetCovarianceInvMatrix(MatrixType matrix){ m_CovarianceInvMatrix = matrix;};
-     void SetVcondopt(MatrixType matrix){ m_Vcondopt = matrix;};
-     float GetLambda(){ return m_Lambda;};
-     float GetAlpha(){ return m_Alpha;};
-     float GetS(){ return m_S;};
-     MatrixType GetBeta(){ return m_Beta;};
-     MatrixType GetCovarianceInvMatrix(){ return m_CovarianceInvMatrix;};
-     MatrixType GetVcondopt(){ return m_Vcondopt;};
 
 
-
-    inline TOutput operator() (const TInputMultiSpectral & ms, const TInputMultiSpectralInterp & msi, const TInputPanchro & p)
-      {
-        TOutput obs;
-        obs.SetSize(msi.GetSize());
-        MatrixType obsMat, msiVect;
-        obsMat.SetSize(1, obs.GetSize());
-        msiVect.SetSize(1, msi.GetSize());
-        for (unsigned int i=0; i<msi.GetSize();i++)
+  inline TOutput operator() (const TInputMultiSpectral & ms, const TInputMultiSpectralInterp & msi, const TInputPanchro & p)
+  {
+    TOutput obs;
+    obs.SetSize(msi.GetSize());
+    MatrixType obsMat, msiVect;
+    obsMat.SetSize(1, obs.GetSize());
+    msiVect.SetSize(1, msi.GetSize());
+    for (unsigned int i=0; i<msi.GetSize();i++)
     {
       msiVect(0, i) = msi[i];
     }
-        obsMat = msiVect*m_CovarianceInvMatrix;
-        obsMat *= 2*(1-m_Lambda);
-        MatrixType PanVect;
-        PanVect = m_Beta.GetTranspose();
-        PanVect *= (p-m_Alpha);
-        PanVect /= m_S;
-        PanVect *= 2*m_Lambda;
+    obsMat = msiVect*m_CovarianceInvMatrix;
+    obsMat *= 2*(1-m_Lambda);
+    MatrixType PanVect;
+    PanVect = m_Beta.GetTranspose();
+    PanVect *= (p-m_Alpha);
+    PanVect /= m_S;
+    PanVect *= 2*m_Lambda;
 
-        /** TODO
-         *  To modify using + method operator. If we use it now -> exceptionmacro (no GetClassName...)
-         * obsMat += PanVect;
-         **/
-        if( (obsMat.Cols() != PanVect.Cols()) || (obsMat.Rows() != PanVect.Rows()) )
+    /** TODO
+     *  To modify using + method operator. If we use it now -> exceptionmacro (no GetClassName...)
+     * obsMat += PanVect;
+     **/
+    if ( (obsMat.Cols() != PanVect.Cols()) || (obsMat.Rows() != PanVect.Rows()) )
     {
       itkGenericExceptionMacro( << "Matrix with size (" << obsMat.Rows() << "," <<
-             obsMat.Cols() << ") cannot be subtracted from matrix with size (" <<
-             PanVect.Rows() << "," << PanVect.Cols() << " )" );
+                                obsMat.Cols() << ") cannot be subtracted from matrix with size (" <<
+                                PanVect.Rows() << "," << PanVect.Cols() << " )" );
     }
 
-        for( unsigned int r=0; r<obsMat.Rows(); r++)
+    for ( unsigned int r=0; r<obsMat.Rows(); r++)
     {
-      for( unsigned int c=0; c<obsMat.Cols(); c++ )
-        {
-          obsMat(r,c) += PanVect(r,c);
-        }
+      for ( unsigned int c=0; c<obsMat.Cols(); c++ )
+      {
+        obsMat(r,c) += PanVect(r,c);
+      }
     }
-        //**** END TODO ****/
-        obsMat *= m_Vcondopt;
-        for (unsigned int i=0; i<obs.GetSize();i++)
+    //**** END TODO ****/
+    obsMat *= m_Vcondopt;
+    for (unsigned int i=0; i<obs.GetSize();i++)
     {
       obs[i] = static_cast<typename TOutput::ValueType>(obsMat(0U,i));
     }
-        return obs;
-      }
+    return obs;
+  }
 
-  private:
-    float m_Lambda;
-    float m_S;
-    float m_Alpha;
-    MatrixType m_CovarianceInvMatrix;
-    MatrixType m_Beta;
-    MatrixType m_Vcondopt;
-  };
-    }
+private:
+  float m_Lambda;
+  float m_S;
+  float m_Alpha;
+  MatrixType m_CovarianceInvMatrix;
+  MatrixType m_Beta;
+  MatrixType m_Vcondopt;
+};
+}
 
-  /***** TODO ***
-   * Complete the description with J. Radoux text
-   */
-   /***** END TODO ***/
+/***** TODO ***
+ * Complete the description with J. Radoux text
+ */
+/***** END TODO ***/
 
 
-  /** \class BayesianFusionFilter
-   * \brief Bayesian fusion filter. Contribution of Julien Radoux
-   *
-   * Please refer to D. Fasbender, J. Radoux and P. Bogaert,
-   * Bayesian Data Fusion for Adaptable Image Pansharpening,
-   * Transactions on Geoscience and Remote Sensing,
-   * vol. 46, n. 6, 2007, pp 1847-1857
-   *
-   * \sa FusionImageBase
-   * \sa MatrixTransposeMatrix
-   * \sa StreamingStatisticsVectorImageFilter
-   * \ingroup Streamed
-   * \ingroup Multithreaded
-   * \ingroup MathematicalStatisticsImageFilters
-   *
-   * \ingroup Fusion
-   *
-   *
-   * \example Fusion/BayesianFusionImageFilter.cxx
-   *
-   *
-   */
+/** \class BayesianFusionFilter
+ * \brief Bayesian fusion filter. Contribution of Julien Radoux
+ *
+ * Please refer to D. Fasbender, J. Radoux and P. Bogaert,
+ * Bayesian Data Fusion for Adaptable Image Pansharpening,
+ * Transactions on Geoscience and Remote Sensing,
+ * vol. 46, n. 6, 2007, pp 1847-1857
+ *
+ * \sa FusionImageBase
+ * \sa MatrixTransposeMatrix
+ * \sa StreamingStatisticsVectorImageFilter
+ * \ingroup Streamed
+ * \ingroup Multithreaded
+ * \ingroup MathematicalStatisticsImageFilters
+ *
+ * \ingroup Fusion
+ *
+ *
+ * \example Fusion/BayesianFusionImageFilter.cxx
+ *
+ *
+ */
 
 template <class TInputMultiSpectralImage,
-          class TInputMultiSpectralInterpImage,
-          class TInputPanchroImage,
-          class TOutputImage>
+class TInputMultiSpectralInterpImage,
+class TInputPanchroImage,
+class TOutputImage>
 class ITK_EXPORT BayesianFusionFilter
-  :  public FusionImageBase<TInputMultiSpectralImage,
-                                 TInputMultiSpectralInterpImage,
-                                 TInputPanchroImage,
-                                 TOutputImage,
-                                 Functor::BayesianFunctor<ITK_TYPENAME TInputMultiSpectralImage::PixelType,
-                                                     ITK_TYPENAME TInputMultiSpectralInterpImage::PixelType,
-                                                    ITK_TYPENAME TInputPanchroImage::PixelType,
-                                                    ITK_TYPENAME TOutputImage::PixelType>                    >
+      :  public FusionImageBase<TInputMultiSpectralImage,
+      TInputMultiSpectralInterpImage,
+      TInputPanchroImage,
+      TOutputImage,
+      Functor::BayesianFunctor<ITK_TYPENAME TInputMultiSpectralImage::PixelType,
+      ITK_TYPENAME TInputMultiSpectralInterpImage::PixelType,
+      ITK_TYPENAME TInputPanchroImage::PixelType,
+      ITK_TYPENAME TOutputImage::PixelType>                    >
 {
 public:
-/**   Extract input and output images dimensions.*/
+  /**   Extract input and output images dimensions.*/
   itkStaticConstMacro( InputImageDimension, unsigned int, TInputMultiSpectralImage::ImageDimension);
   itkStaticConstMacro( OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
@@ -184,13 +220,13 @@ public:
   /** "typedef" for standard classes. */
   typedef BayesianFusionFilter Self;
   typedef FusionImageBase< InputMultiSpectralImageType,
-                           InputMultiSpectralInterpImageType,
-                           InputPanchroImageType,
-                           OutputImageType,
-                           Functor::BayesianFunctor<ITK_TYPENAME InputMultiSpectralImageType::PixelType,
-                                               ITK_TYPENAME InputMultiSpectralInterpImageType::PixelType,
-                                              ITK_TYPENAME InputPanchroImageType::PixelType,
-                                              ITK_TYPENAME OutputImageType::PixelType> > Superclass;
+  InputMultiSpectralInterpImageType,
+  InputPanchroImageType,
+  OutputImageType,
+  Functor::BayesianFunctor<ITK_TYPENAME InputMultiSpectralImageType::PixelType,
+  ITK_TYPENAME InputMultiSpectralInterpImageType::PixelType,
+  ITK_TYPENAME InputPanchroImageType::PixelType,
+  ITK_TYPENAME OutputImageType::PixelType> > Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 

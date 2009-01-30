@@ -34,7 +34,7 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
   this->ProcessObjectType::SetNumberOfRequiredInputs(1);
 
   OutputPointSetPointer output
-    = dynamic_cast<OutputPointSetType*>(this->MakeOutput(0).GetPointer());
+  = dynamic_cast<OutputPointSetType*>(this->MakeOutput(0).GetPointer());
 
   ProcessObjectType::SetNumberOfRequiredOutputs(1);
   ProcessObjectType::SetNthOutput(0, output.GetPointer());
@@ -61,7 +61,7 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
   // process object is not const-correct, the const_cast
   // is required here.
   this->ProcessObjectType::SetNthInput(idx,
-                                   const_cast< InputImageType * >(input) );
+                                       const_cast< InputImageType * >(input) );
 }
 /**
  *
@@ -74,7 +74,7 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
   // process object is not const-correct, the const_cast
   // is required here.
   this->ProcessObjectType::SetNthInput(0,
-                                   const_cast< InputImageType * >(input) );
+                                       const_cast< InputImageType * >(input) );
 }
 
 
@@ -87,9 +87,9 @@ const typename ImageToPointSetFilter<TInputImage,TOutputPointSet>::InputImageTyp
 ImageToPointSetFilter<TInputImage,TOutputPointSet>
 ::GetInput(unsigned int idx)
 {
-   
+
   return dynamic_cast<const InputImageType*>
-    (this->ProcessObjectType::GetInput(idx));
+         (this->ProcessObjectType::GetInput(idx));
 }
 
 /**
@@ -100,11 +100,11 @@ const typename ImageToPointSetFilter<TInputImage,TOutputPointSet>::InputImageTyp
 ImageToPointSetFilter<TInputImage,TOutputPointSet>
 ::GetInput(void)
 {
-  if(this->GetNumberOfInputs() < 1)
+  if (this->GetNumberOfInputs() < 1)
     return 0;
- 
+
   return dynamic_cast<const InputImageType*>
-    (this->ProcessObjectType::GetInput(0));
+         (this->ProcessObjectType::GetInput(0));
 }
 
 /**

@@ -28,7 +28,7 @@ namespace otb
  * \brief Base exception class for IO problems during writing.
  */
 class ITK_EXPORT RCC8GraphFileWriterException
-  : public itk::ExceptionObject
+      : public itk::ExceptionObject
 {
 public:
   /** Run-time information. */
@@ -36,15 +36,15 @@ public:
 
   /** Constructor. */
   RCC8GraphFileWriterException(const char *file, unsigned int line,
-                           const char* message = "Error in IO",
-                           const char* loc = "Unknown" ) :
-    ExceptionObject(file, line, message, loc)
+                               const char* message = "Error in IO",
+                               const char* loc = "Unknown" ) :
+      ExceptionObject(file, line, message, loc)
   {}
   /** Constructor. */
   RCC8GraphFileWriterException(const std::string &file, unsigned int line,
-                           const char* message = "Error in IO",
-                           const char* loc = "Unknown" ) :
-    ExceptionObject(file, line, message, loc)
+                               const char* message = "Error in IO",
+                               const char* loc = "Unknown" ) :
+      ExceptionObject(file, line, message, loc)
   {}
 };
 /**
@@ -62,7 +62,7 @@ public:
  */
 template <class TInputGraph>
 class ITK_EXPORT RCC8GraphFileWriter
-  : public itk::ProcessObject
+      : public itk::ProcessObject
 {
 public:
   /** Standards typedefs */
@@ -111,10 +111,10 @@ protected:
    * Main computation method.
    */
   virtual void GenerateData(void);
- /**
-  * Write Method.
-  * Performs checkings and invoke GenerateData().
-  */
+  /**
+   * Write Method.
+   * Performs checkings and invoke GenerateData().
+   */
   virtual void Write(void);
   /**
    * Write an edge to file.
@@ -124,7 +124,7 @@ protected:
    * \param value  The value of the edge.
    */
   void WriteEdge(std::ofstream& of,VertexDescriptorType source,
-     VertexDescriptorType target, RCC8ValueType value);
+                 VertexDescriptorType target, RCC8ValueType value);
   /**
    * Write a vertex to file.
    * \param of The output file stream.
@@ -132,7 +132,7 @@ protected:
    * \param vertex The pointer to the vertex object.
   */
   void WriteVertex(std::ofstream& of, VertexDescriptorType index,
-       VertexPointerType vertex);
+                   VertexPointerType vertex);
   /**
    * PrintSelf method
    */

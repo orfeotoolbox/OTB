@@ -39,19 +39,19 @@ namespace otb
  */
 
 template <class TInputImage,
-    class TOutputImage,
-          class TOutputImageDirection = TOutputImage,
-    class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
+class TOutputImage,
+class TOutputImageDirection = TOutputImage,
+class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
 class ITK_EXPORT AssymmetricFusionOfLineDetectorImageFilter :
-    public LineDetectorImageFilterBase< TInputImage, TOutputImage, TOutputImageDirection, TInterpolator >
+      public LineDetectorImageFilterBase< TInputImage, TOutputImage, TOutputImageDirection, TInterpolator >
 {
 public:
 
   itkStaticConstMacro(    InputImageDimension,
-          unsigned int,
+                          unsigned int,
                           TInputImage::ImageDimension);
   itkStaticConstMacro(    OutputImageDimension,
-          unsigned int,
+                          unsigned int,
                           TOutputImage::ImageDimension);
 
   typedef AssymmetricFusionOfLineDetectorImageFilter Self;

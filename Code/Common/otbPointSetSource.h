@@ -138,7 +138,7 @@ private:
    * by the execute method. Set in the GenerateInputRequestedRegion method. */
   int m_GenerateDataRegion;
   int m_GenerateDataNumberOfRegions;
-  };
+};
 
 
 } // end namespace otb

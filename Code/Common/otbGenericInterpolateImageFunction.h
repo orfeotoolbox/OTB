@@ -34,117 +34,120 @@ namespace otb
  */
 template <class TInputImage, class TFunction, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep = double>
 class ITK_EXPORT GenericInterpolateImageFunction :
-public itk::InterpolateImageFunction<TInputImage,TCoordRep>
+      public itk::InterpolateImageFunction<TInputImage,TCoordRep>
+{
+public:
+  /** Standard class typedefs. */
+  typedef GenericInterpolateImageFunction Self;
+  typedef itk::InterpolateImageFunction<TInputImage,TCoordRep> Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
+  typedef itk::SmartPointer<const Self>  ConstPointer;
+
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(GenericInterpolateImageFunction, itk::InterpolateImageFunction);
+
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self);
+
+  /** Input and output images typedef definition. */
+  typedef typename Superclass::OutputType     OutputType;
+  typedef typename Superclass::InputImageType InputImageType;
+
+  /** Dimension underlying input image. */
+  //itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
+
+  /** Index and typedef support. */
+  typedef typename Superclass::IndexType                                 IndexType;
+  typedef typename InputImageType::SizeType                              SizeType;
+  typedef typename Superclass::RealType                                  RealType;
+  typedef TFunction                                                      FunctionType;
+  typedef itk::ConstNeighborhoodIterator< InputImageType, TBoundaryCondition> IteratorType;
+
+  /** ContinuousIndex typedef support. */
+  typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
+
+  /** Dimension underlying input image. */
+  itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
+
+  virtual void SetInputImage(const InputImageType *image);
+
+  /** Evaluate the function at a ContinuousIndex position
+   *
+   * Returns the interpolated image intensity at a
+   * specified point position. No bounds checking is done.
+   * The point is assume to lie within the image buffer.
+   *
+   * ImageFunction::IsInsideBuffer() can be used to check bounds before
+   * calling the method. */
+  virtual OutputType EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const;
+
+
+  /** Set/Get the window radius*/
+  void SetRadius(unsigned int rad);
+  unsigned int GetRadius() const
   {
-    public:
-    /** Standard class typedefs. */
-    typedef GenericInterpolateImageFunction Self;
-    typedef itk::InterpolateImageFunction<TInputImage,TCoordRep> Superclass;
-    typedef itk::SmartPointer<Self> Pointer;
-    typedef itk::SmartPointer<const Self>  ConstPointer;
+    return m_Function.GetRadius();
+  };
+  //unsigned int GetRadius() { return this->GetFunction().GetRadius();};
 
-    /** Run-time type information (and related methods). */
-    itkTypeMacro(GenericInterpolateImageFunction, itk::InterpolateImageFunction);
+  /** Set/Get the window radius*/
+  // Don't have to be used here, just declared for the inheritance classes.
+  //virtual void SetWindowSize(unsigned int win){ m_WindowSize = win; };
 
-    /** Method for creation through the object factory. */
-    itkNewMacro(Self);
+  /** Get the functor list */
+  FunctionType& GetFunction(void)
+  {
+    return m_Function;
+  }
 
-    /** Input and output images typedef definition. */
-    typedef typename Superclass::OutputType     OutputType;
-    typedef typename Superclass::InputImageType InputImageType;
+  /** Delete tables.*/
+  void ResetOffsetTable() const;
+  /** Initialize used tables*/
+  void InitializeTables() const;
+  /** Fill the weight offset table*/
+  void FillWeightOffsetTable() const;
 
-    /** Dimension underlying input image. */
-    //itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
+  /** Weights normalization accessors*/
+  itkSetMacro(NormalizeWeight, bool);
+  itkGetMacro(NormalizeWeight, bool);
 
-    /** Index and typedef support. */
-    typedef typename Superclass::IndexType                                 IndexType;
-    typedef typename InputImageType::SizeType                              SizeType;
-    typedef typename Superclass::RealType                                  RealType;
-    typedef TFunction                                                      FunctionType;
-    typedef itk::ConstNeighborhoodIterator< InputImageType, TBoundaryCondition> IteratorType;
+protected:
+  GenericInterpolateImageFunction();
+  ~GenericInterpolateImageFunction();
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-    /** ContinuousIndex typedef support. */
-    typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
+  /** Call the superclass implementation and set the TablesHaveBeenGenerated
+   * flag to false */
+  virtual void Modified(void);
 
-    /** Dimension underlying input image. */
-    itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
+private:
+  GenericInterpolateImageFunction(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+  /** Store the window radius. */
+  //unsigned int m_Radius;
+  // Constant to store twice the radius
+  unsigned int m_WindowSize;
 
-    virtual void SetInputImage(const InputImageType *image);
+  /** Used function */
+  FunctionType m_Function;
+  /** Store the image dimension.*/
+  unsigned int m_ImageDimension;
 
-    /** Evaluate the function at a ContinuousIndex position
-     *
-     * Returns the interpolated image intensity at a
-     * specified point position. No bounds checking is done.
-     * The point is assume to lie within the image buffer.
-     *
-     * ImageFunction::IsInsideBuffer() can be used to check bounds before
-     * calling the method. */
-    virtual OutputType EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const;
-
-
-    /** Set/Get the window radius*/
-    void SetRadius(unsigned int rad);
-    unsigned int GetRadius() const { return m_Function.GetRadius(); };
-    //unsigned int GetRadius() { return this->GetFunction().GetRadius();};
-
-    /** Set/Get the window radius*/
-    // Don't have to be used here, just declared for the inheritance classes.
-    //virtual void SetWindowSize(unsigned int win){ m_WindowSize = win; };
-
-    /** Get the functor list */
-    FunctionType& GetFunction(void)
-    {
-      return m_Function;
-    }
-
-    /** Delete tables.*/
-    void ResetOffsetTable() const;
-    /** Initialize used tables*/
-    void InitializeTables() const;
-    /** Fill the weight offset table*/
-    void FillWeightOffsetTable() const;
-
-    /** Weights normalization accessors*/
-    itkSetMacro(NormalizeWeight, bool);
-    itkGetMacro(NormalizeWeight, bool);
-
-    protected:
-    GenericInterpolateImageFunction();
-    ~GenericInterpolateImageFunction();
-    void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
-    /** Call the superclass implementation and set the TablesHaveBeenGenerated
-     * flag to false */
-    virtual void Modified(void);
-
-    private:
-    GenericInterpolateImageFunction(const Self&); //purposely not implemented
-    void operator=(const Self&); //purposely not implemented
-    /** Store the window radius. */
-    //unsigned int m_Radius;
-    // Constant to store twice the radius
-    unsigned int m_WindowSize;
-
-    /** Used function */
-    FunctionType m_Function;
-    /** Store the image dimension.*/
-    unsigned int m_ImageDimension;
-
-    /** These members are declared mutable so that they can be
+  /** These members are declared mutable so that they can be
   regenerated seamlessly inside the EvaluateAtContinuousIndex method if
   they need to */
-    /** Size of the offset table */
-    mutable unsigned int m_OffsetTableSize;
-    /** The offset array, used to keep a list of relevant
-     * offsets in the neihborhoodIterator */
-    mutable unsigned int *m_OffsetTable;
-    /** Index into the weights array for each offset */
-    mutable unsigned int **m_WeightOffsetTable;
-    /** True if internal statistics have been generated */
-    mutable bool m_TablesHaveBeenGenerated;
-    /** Weights normalization */
-    bool m_NormalizeWeight;
-  };
+  /** Size of the offset table */
+  mutable unsigned int m_OffsetTableSize;
+  /** The offset array, used to keep a list of relevant
+   * offsets in the neihborhoodIterator */
+  mutable unsigned int *m_OffsetTable;
+  /** Index into the weights array for each offset */
+  mutable unsigned int **m_WeightOffsetTable;
+  /** True if internal statistics have been generated */
+  mutable bool m_TablesHaveBeenGenerated;
+  /** Weights normalization */
+  bool m_NormalizeWeight;
+};
 
 } // end namespace itk
 

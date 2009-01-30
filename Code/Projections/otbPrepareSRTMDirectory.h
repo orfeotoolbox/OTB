@@ -39,54 +39,54 @@ namespace otb
  */
 
 
-  class ITK_EXPORT PrepareSRTMDirectory : public itk::Object
-  {
-    public:
-      /** Standard class typedefs. */
-      typedef PrepareSRTMDirectory                                      Self;
-      typedef itk::SmartPointer<Self>                                Pointer;
-      typedef itk::SmartPointer<const Self>                          ConstPointer;
+class ITK_EXPORT PrepareSRTMDirectory : public itk::Object
+{
+public:
+  /** Standard class typedefs. */
+  typedef PrepareSRTMDirectory                                      Self;
+  typedef itk::SmartPointer<Self>                                Pointer;
+  typedef itk::SmartPointer<const Self>                          ConstPointer;
 
 
-      typedef itk::Object Superclass;
+  typedef itk::Object Superclass;
 
-      itkTypeMacro(PrepareSRTMDirectory, Object);
-      /** Method for creation through the object factory. */
-      itkNewMacro(Self);
+  itkTypeMacro(PrepareSRTMDirectory, Object);
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self);
 
-      itkGetMacro( ULLon, double );
-      itkGetMacro( ULLat, double );
-      itkGetMacro( LRLon, double );
-      itkGetMacro( LRLat, double );
-      itkGetMacro( FullDEMDirectoryPath, string );
-      itkGetMacro( DEMDirectoryPath, string );
+  itkGetMacro( ULLon, double );
+  itkGetMacro( ULLat, double );
+  itkGetMacro( LRLon, double );
+  itkGetMacro( LRLat, double );
+  itkGetMacro( FullDEMDirectoryPath, string );
+  itkGetMacro( DEMDirectoryPath, string );
 
-      itkSetMacro( ULLon, double );
-      itkSetMacro( ULLat, double );
-      itkSetMacro( LRLon, double );
-      itkSetMacro( LRLat, double );
-      itkSetMacro( FullDEMDirectoryPath, string );
-      itkSetMacro( DEMDirectoryPath, string );
+  itkSetMacro( ULLon, double );
+  itkSetMacro( ULLat, double );
+  itkSetMacro( LRLon, double );
+  itkSetMacro( LRLat, double );
+  itkSetMacro( FullDEMDirectoryPath, string );
+  itkSetMacro( DEMDirectoryPath, string );
 
 
-      virtual bool Evaluate();
+  virtual bool Evaluate();
 
-    protected:
-      PrepareSRTMDirectory();
-      ~PrepareSRTMDirectory(){};
-      void PrintSelf(std::ostream& os, itk::Indent indent) const;
+protected:
+  PrepareSRTMDirectory();
+  ~PrepareSRTMDirectory() {};
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-    private:
-      PrepareSRTMDirectory( const Self& ); //purposely not implemented
-      void operator=( const Self& ); //purposely not implemented
+private:
+  PrepareSRTMDirectory( const Self& ); //purposely not implemented
+  void operator=( const Self& ); //purposely not implemented
 
-      double m_ULLon;
-      double m_ULLat;
-      double m_LRLon;
-      double m_LRLat;
-      string m_FullDEMDirectoryPath;
-      string m_DEMDirectoryPath;
-  };
+  double m_ULLon;
+  double m_ULLat;
+  double m_LRLon;
+  double m_LRLat;
+  string m_FullDEMDirectoryPath;
+  string m_DEMDirectoryPath;
+};
 
 } // namespace otb
 

@@ -32,7 +32,7 @@ namespace otb
  * \ingroup PointSetFunctions
  */
 template <class TPointSet, class  TOutput>
- class ITK_EXPORT PointSetDensityFunction : public PointSetFunction< TPointSet , TOutput >
+class ITK_EXPORT PointSetDensityFunction : public PointSetFunction< TPointSet , TOutput >
 {
 public:
   /** Standard class typedefs. */
@@ -41,46 +41,46 @@ public:
   typedef itk::SmartPointer<Self>                    Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
 
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(PointSetDensityFunction, PointSetFunction);
-  
+
   /** Method for creation through the object factory. */
-  itkNewMacro(Self); 
+  itkNewMacro(Self);
 
   /** PointSet Type typedef Support*/
   typedef TPointSet                            PointSetType;
   typedef typename Superclass::InputType       InputType;
   typedef typename  PointSetType::Pointer      PointSetPointerType;
-  
+
   /** TOutput typedef suppoty*/
   typedef TOutput                              OutputType;
 
   /** Set/Get the number of scales*/
   itkSetMacro(Radius,unsigned int);
   itkGetMacro(Radius,unsigned int);
-  
+
   /** Evaluate Method */
   virtual OutputType Evaluate(const InputType& input ) const;
- 
+
 protected:
   PointSetDensityFunction();
-  ~PointSetDensityFunction(){};
+  ~PointSetDensityFunction() {};
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  
+
 
 private:
   PointSetDensityFunction( const Self& ); //purposely not implemented
   void operator=( const Self& ); //purposely not implemented
- 
+
   unsigned int m_Radius;
 };
 
 } // end namespace otb
 
 
-#ifndef OTB_MANUAL_INSTANTIATION 
+#ifndef OTB_MANUAL_INSTANTIATION
 #include "otbPointSetDensityFunction.txx"
 #endif
 

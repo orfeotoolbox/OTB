@@ -11,7 +11,8 @@
 
 
 
-namespace otb {
+namespace otb
+{
 
 /** \class SEMClassifier
    *  \brief This class implements the Stochastic Expectation
@@ -42,7 +43,7 @@ namespace otb {
  */
 template< class TInputImage, class TOutputImage >
 class ITK_EXPORT SEMClassifier
-  : public itk::Statistics::SampleClassifier<
+      : public itk::Statistics::SampleClassifier<
       typename itk::Statistics::ListSample< typename TInputImage::PixelType > >
 {
 public:
@@ -50,8 +51,8 @@ public:
   typedef SEMClassifier Self;
   //typedef itk::Object Superclass;
   typedef itk::Statistics::SampleClassifier<
-      typename itk::Statistics::ListSample< typename TInputImage::PixelType > >
-      Superclass;
+  typename itk::Statistics::ListSample< typename TInputImage::PixelType > >
+  Superclass;
   typedef itk::SmartPointer< Self > Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -161,7 +162,7 @@ public:
   /* Return the classification result (as an image) */
   TOutputImage * GetOutputImage();
 
-  protected:
+protected:
   SEMClassifier();
   virtual ~SEMClassifier() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;

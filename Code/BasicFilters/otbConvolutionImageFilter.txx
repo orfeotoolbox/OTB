@@ -54,9 +54,9 @@ ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
   typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
 
   if ( !inputPtr || !outputPtr )
-    {
+  {
     return;
-    }
+  }
 
   // get a copy of the input requested region (should equal the output
   // requested region)
@@ -68,12 +68,12 @@ ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
 
   // crop the input requested region at the input's largest possible region
   if ( inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
-    {
+  {
     inputPtr->SetRequestedRegion( inputRequestedRegion );
     return;
-    }
+  }
   else
-    {
+  {
     // Couldn't crop the region (requested region is outside the largest
     // possible region).  Throw an exception.
 
@@ -86,7 +86,7 @@ ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
     e.SetDataObject(inputPtr);
     throw e;
-    }
+  }
 }
 
 
@@ -124,7 +124,7 @@ ConvolutionImageFilter< TInputImage, TOutputImage, TBoundaryCondition>
   for (fit=faceList.begin(); fit != faceList.end(); ++fit)
   {
     bit = itk::ConstNeighborhoodIterator<InputImageType>(m_Radius,
-        input, *fit);
+          input, *fit);
 
     it = itk::ImageRegionIterator<OutputImageType>(output, *fit);
     bit.OverrideBoundaryCondition(&nbc);

@@ -33,7 +33,7 @@ namespace otb
   * \ingroup ObjectListFilter
  */
 template <class TInputList, class TOutputList, class TFunction >
-    class ITK_EXPORT UnaryFunctorObjectListFilter : public otb::ObjectListToObjectListFilter<TInputList,TOutputList>
+class ITK_EXPORT UnaryFunctorObjectListFilter : public otb::ObjectListToObjectListFilter<TInputList,TOutputList>
 {
 public:
   /** Standard class typedefs. */
@@ -62,8 +62,14 @@ public:
    * (Functors do not have to derive from itk::LightObject, so they do
    * not necessarily have a reference count. So we cannot return a
    * SmartPointer.) */
-  FunctorType& GetFunctor() { return m_Functor; };
-  const FunctorType& GetFunctor() const { return m_Functor; };
+  FunctorType& GetFunctor()
+  {
+    return m_Functor;
+  };
+  const FunctorType& GetFunctor() const
+  {
+    return m_Functor;
+  };
 
   /** Set the functor object.  This replaces the current Functor with a
    * copy of the specified Functor. This allows the user to specify a
@@ -74,10 +80,10 @@ public:
   void SetFunctor(const FunctorType& functor)
   {
     if (m_Functor != functor)
-      {
+    {
       m_Functor = functor;
       this->Modified();
-      }
+    }
   }
 
 

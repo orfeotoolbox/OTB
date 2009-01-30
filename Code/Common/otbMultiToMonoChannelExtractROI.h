@@ -39,7 +39,7 @@ namespace otb
 template <class TInputPixelType, class TOutputPixelType>
 class ITK_EXPORT MultiToMonoChannelExtractROI:
 //    public ExtractROIBase< itk::VectorImage<TInputPixelType,2> , itk::Image<TOutputPixelType,2> >
-    public ExtractROIBase< VectorImage<TInputPixelType,2> , Image<TOutputPixelType,2> >
+      public ExtractROIBase< VectorImage<TInputPixelType,2> , Image<TOutputPixelType,2> >
 {
 public:
   /** Standard class typedefs. */

@@ -36,9 +36,9 @@ namespace otb
  */
 template <class TImage, class TSourceImage>
 class ITK_EXPORT ImportGeoInformationImageFilter
-  : public itk::CastImageFilter<TImage,TImage>
+      : public itk::CastImageFilter<TImage,TImage>
 {
- public:
+public:
   /** Standard typedefs */
   typedef ImportGeoInformationImageFilter Self;
   typedef itk::CastImageFilter<TImage,TImage> Superclass;
@@ -74,14 +74,14 @@ protected:
   ImportGeoInformationImageFilter();
   /** Destructor */
   virtual ~ImportGeoInformationImageFilter() {};
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Generate input requested region */
   virtual void GenerateInputRequestedRegion(void);
   /** Generate output information */
   virtual void GenerateOutputInformation(void);
-/*   /\** Generate data *\/ */
-/*   virtual void GenerateData(void); */
+  /*   /\** Generate data *\/ */
+  /*   virtual void GenerateData(void); */
 private:
   ImportGeoInformationImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

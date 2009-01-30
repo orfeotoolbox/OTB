@@ -42,9 +42,9 @@ namespace otb
  */
 template <class TPath>
 class ITK_EXPORT LinkPathListFilter
-  : public PathListToPathListFilter<TPath>
+      : public PathListToPathListFilter<TPath>
 {
- public:
+public:
   /** Standard typedefs */
   typedef LinkPathListFilter            Self;
   typedef PathListToPathListFilter<TPath>       Superclass;

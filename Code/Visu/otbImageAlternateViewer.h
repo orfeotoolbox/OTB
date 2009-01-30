@@ -40,9 +40,9 @@ namespace otb
  */
 template <class TPixel>
 class ITK_EXPORT ImageAlternateViewer
-  : public Fl_Gl_Window, public itk::Object
+      : public Fl_Gl_Window, public itk::Object
 {
- public:
+public:
   /** Standard typedefs */
   typedef ImageAlternateViewer            Self;
   typedef itk::Object                     Superclass;
@@ -56,95 +56,95 @@ class ITK_EXPORT ImageAlternateViewer
   itkTypeMacro(ImageAlternateViewer,Object);
 
   /** Template related typedef */
-    typedef TPixel     PixelType;
-    typedef otb::VectorImage<PixelType,2> ImageType;
-    typedef otb::Image<PixelType,2> SingleImageType;
-    typedef typename ImageType::PixelType VectorPixelType;
-    typedef typename ImageType::Pointer ImagePointerType;
-    typedef typename ImageType::SizeType SizeType;
-    typedef typename ImageType::IndexType IndexType;
-    typedef typename ImageType::RegionType RegionType;
-    typedef typename ImageType::SpacingType SpacingType;
-    typedef typename ImageType::PointType PointType;
+  typedef TPixel     PixelType;
+  typedef otb::VectorImage<PixelType,2> ImageType;
+  typedef otb::Image<PixelType,2> SingleImageType;
+  typedef typename ImageType::PixelType VectorPixelType;
+  typedef typename ImageType::Pointer ImagePointerType;
+  typedef typename ImageType::SizeType SizeType;
+  typedef typename ImageType::IndexType IndexType;
+  typedef typename ImageType::RegionType RegionType;
+  typedef typename ImageType::SpacingType SpacingType;
+  typedef typename ImageType::PointType PointType;
 
-    typedef otb::ImageList<SingleImageType> ImageListType;
-    typedef otb::VectorImageToImageListFilter<ImageType,ImageListType> VectorImageDecompositionFilterType;
-    typedef typename VectorImageDecompositionFilterType::Pointer VectorImageDecompositionFilterPointerType;
+  typedef otb::ImageList<SingleImageType> ImageListType;
+  typedef otb::VectorImageToImageListFilter<ImageType,ImageListType> VectorImageDecompositionFilterType;
+  typedef typename VectorImageDecompositionFilterType::Pointer VectorImageDecompositionFilterPointerType;
 
-    typedef itk::InterpolateImageFunction<SingleImageType,double> InterpolatorType;
-    typedef typename InterpolatorType::Pointer InterpolatorPointerType;
-    typedef itk::LinearInterpolateImageFunction<SingleImageType,double> DefaultInterpolatorType;
+  typedef itk::InterpolateImageFunction<SingleImageType,double> InterpolatorType;
+  typedef typename InterpolatorType::Pointer InterpolatorPointerType;
+  typedef itk::LinearInterpolateImageFunction<SingleImageType,double> DefaultInterpolatorType;
 
-    typedef itk::ImageRegionSplitter<2>  SplitterType;
-    typedef typename SplitterType::Pointer SplitterPointerType;
+  typedef itk::ImageRegionSplitter<2>  SplitterType;
+  typedef typename SplitterType::Pointer SplitterPointerType;
 
-    itkSetMacro(RedChannelIndex,unsigned int);
-    itkGetMacro(RedChannelIndex,unsigned int);
+  itkSetMacro(RedChannelIndex,unsigned int);
+  itkGetMacro(RedChannelIndex,unsigned int);
 
-    itkSetMacro(GreenChannelIndex,unsigned int);
-    itkGetMacro(GreenChannelIndex,unsigned int);
+  itkSetMacro(GreenChannelIndex,unsigned int);
+  itkGetMacro(GreenChannelIndex,unsigned int);
 
-    itkSetMacro(BlueChannelIndex,unsigned int);
-    itkGetMacro(BlueChannelIndex,unsigned int);
+  itkSetMacro(BlueChannelIndex,unsigned int);
+  itkGetMacro(BlueChannelIndex,unsigned int);
 
-    itkSetMacro(MaxComponentValues,VectorPixelType);
-    itkGetMacro(MaxComponentValues,VectorPixelType);
+  itkSetMacro(MaxComponentValues,VectorPixelType);
+  itkGetMacro(MaxComponentValues,VectorPixelType);
 
-    itkSetMacro(MinComponentValues,VectorPixelType);
-    itkGetMacro(MinComponentValues,VectorPixelType);
+  itkSetMacro(MinComponentValues,VectorPixelType);
+  itkGetMacro(MinComponentValues,VectorPixelType);
 
-    itkSetMacro(SpacingZoomFactor,double);
-    itkGetMacro(SpacingZoomFactor,double);
+  itkSetMacro(SpacingZoomFactor,double);
+  itkGetMacro(SpacingZoomFactor,double);
 
-    itkSetMacro(OpenGlIsotropicZoom,double);
-    itkGetMacro(OpenGlIsotropicZoom,double);
+  itkSetMacro(OpenGlIsotropicZoom,double);
+  itkGetMacro(OpenGlIsotropicZoom,double);
 
-    void SetViewedRegionCenter(const IndexType & index);
-    itkGetMacro(ViewedRegionCenter,IndexType);
+  void SetViewedRegionCenter(const IndexType & index);
+  itkGetMacro(ViewedRegionCenter,IndexType);
 
-    itkSetObjectMacro(Image,ImageType);
-    itkGetObjectMacro(Image,ImageType);
+  itkSetObjectMacro(Image,ImageType);
+  itkGetObjectMacro(Image,ImageType);
 
-    itkSetObjectMacro(SecondImage,ImageType);
-    itkGetObjectMacro(SecondImage,ImageType);
+  itkSetObjectMacro(SecondImage,ImageType);
+  itkGetObjectMacro(SecondImage,ImageType);
 
 
-    itkSetMacro(DisplayExtent,RegionType);
-    itkGetMacro(DisplayExtent,RegionType);
+  itkSetMacro(DisplayExtent,RegionType);
+  itkGetMacro(DisplayExtent,RegionType);
 
-    itkGetObjectMacro(ZoomInInterpolator,InterpolatorType);
-    itkSetObjectMacro(ZoomInInterpolator,InterpolatorType);
-    itkGetObjectMacro(ZoomOutInterpolator,InterpolatorType);
-    itkSetObjectMacro(ZoomOutInterpolator,InterpolatorType);
+  itkGetObjectMacro(ZoomInInterpolator,InterpolatorType);
+  itkSetObjectMacro(ZoomInInterpolator,InterpolatorType);
+  itkGetObjectMacro(ZoomOutInterpolator,InterpolatorType);
+  itkSetObjectMacro(ZoomOutInterpolator,InterpolatorType);
 
-    /**
-     * Set view mode to RGB.
-     */
-    void SetViewModelToRGB(void);
-    /**
-     * Set view mode to Grayscale.
-     */
-    void SetViewModelToGrayscale(void);
+  /**
+   * Set view mode to RGB.
+   */
+  void SetViewModelToRGB(void);
+  /**
+   * Set view mode to Grayscale.
+   */
+  void SetViewModelToGrayscale(void);
 
-    /**
-     * Set insight view model to RGB
-     */
-    void SetInsightViewModelToRGB(void);
+  /**
+   * Set insight view model to RGB
+   */
+  void SetInsightViewModelToRGB(void);
 
-    /**
-     * Set insight view model to grayscale
-     */
-    void SetInsightViewModelToGrayscale(void);
+  /**
+   * Set insight view model to grayscale
+   */
+  void SetInsightViewModelToGrayscale(void);
 
-    /** Normalization function */
-    unsigned char Normalize(PixelType value, unsigned int channelIndex);
+  /** Normalization function */
+  unsigned char Normalize(PixelType value, unsigned int channelIndex);
 
-    void Show(void);
+  void Show(void);
 
-    void Reset(void);
+  void Reset(void);
 
-    /** Initialize the widget */
-    virtual void Init(int x, int y, int w, int h, const char * l);
+  /** Initialize the widget */
+  virtual void Init(int x, int y, int w, int h, const char * l);
 
   /** Resize the widget */
   virtual void resize(int x, int y, int w, int h);
@@ -167,8 +167,8 @@ protected:
   /** Handle */
   virtual int  handle(int event);
 
- /*  /\** Rebuild opengl buffer *\/ */
-/*   virtual void RebuildOpenGlBuffer(void); */
+  /*  /\** Rebuild opengl buffer *\/ */
+  /*   virtual void RebuildOpenGlBuffer(void); */
 
 
 
@@ -179,7 +179,7 @@ protected:
   unsigned char * CreateAdditionalBuffer(RegionType region,ImagePointerType image,bool rgb);
 
   virtual void MergeBuffersAndFreeMemory(std::vector<unsigned char *> bufferList,
-           std::vector<RegionType> bufferRegionList);
+                                         std::vector<RegionType> bufferRegionList);
 
   virtual void AdditionalRedraw(void);
 
@@ -190,7 +190,7 @@ protected:
   virtual long IndexInOldGrid(PointType point, PointType oldUpperLeft, SpacingType spacing, SizeType size);
 
   RegionType ComputeRequestedRegion(RegionType &region);
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
@@ -269,7 +269,7 @@ private:
   RegionType m_SubWindowRegion;
   /** subwindow mode switch */
   bool m_SubWindowMode;
-/** subwindow mode switch */
+  /** subwindow mode switch */
   bool m_SubWindowMove;
 
 };

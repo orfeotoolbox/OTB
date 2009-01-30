@@ -55,7 +55,7 @@ UnaryFunctorObjectListFilter<TInputList,TOutputList,TFunction>
     ++count;
   }
 
-  while((count < stopIndex) && (it != inputPtr->End()))
+  while ((count < stopIndex) && (it != inputPtr->End()))
   {
     this->m_ObjectListPerThread[threadId]->PushBack(m_Functor(it.Get()));
 
@@ -68,17 +68,17 @@ UnaryFunctorObjectListFilter<TInputList,TOutputList,TFunction>
 
 
 template <class TInputList, class TOutputList, class TFunction  >
-    void
-        UnaryFunctorObjectListFilter<TInputList,TOutputList,TFunction>
-  ::AfterThreadedGenerateData()
+void
+UnaryFunctorObjectListFilter<TInputList,TOutputList,TFunction>
+::AfterThreadedGenerateData()
 {
   // copy the lists to the output
   OutputListPointer outputPtr = this->GetOutput();
   for (unsigned int i=0; i< this->m_ObjectListPerThread.size(); ++i)
   {
-    for(OutputListIterator it = this->m_ObjectListPerThread[i]->Begin();
-        it != this->m_ObjectListPerThread[i]->End();
-        ++it)
+    for (OutputListIterator it = this->m_ObjectListPerThread[i]->Begin();
+         it != this->m_ObjectListPerThread[i]->End();
+         ++it)
     {
       outputPtr->PushBack(it.Get());
     }

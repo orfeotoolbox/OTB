@@ -29,7 +29,7 @@ namespace otb
  */
 template <class TInputImage, class TOutputGraph>
 class ITK_EXPORT ImageMultiSegmentationToRCC8GraphFilter
-  : public ImageListToRCC8GraphFilter<TInputImage,TOutputGraph>
+      : public ImageListToRCC8GraphFilter<TInputImage,TOutputGraph>
 {
 public:
   /** Standard class typedefs. */

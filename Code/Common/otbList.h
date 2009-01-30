@@ -32,9 +32,9 @@ namespace otb
  */
 template <class TObject>
 class ITK_EXPORT List
-  : public itk::DataObject
+      : public itk::DataObject
 {
- public:
+public:
   /** Standard typedefs */
   typedef List Self;
   typedef itk::DataObject Superclass;
@@ -109,10 +109,10 @@ class ITK_EXPORT List
   }
 
 
-   /**
-   * Return the first element of the list.
-   * \return The first element of the list.
-   */
+  /**
+  * Return the first element of the list.
+  * \return The first element of the list.
+  */
   ObjectType* Front(void);
   /**
    * Return the first element of the const list.
@@ -146,351 +146,351 @@ class ITK_EXPORT List
    *  \brief Iterator of the object list.
    */
   class Iterator
+  {
+  public:
+    friend class List;
+    friend class ConstIterator;
+    /** typedef of the internal iterator */
+    typedef typename InternalContainerType::iterator InternalIteratorType;
+    /** Constructor */
+    Iterator() {};
+    /** Constructor with iternal iterator parameter */
+    Iterator(InternalIteratorType iter)
     {
-    public:
-      friend class List;
-      friend class ConstIterator;
-      /** typedef of the internal iterator */
-      typedef typename InternalContainerType::iterator InternalIteratorType;
-      /** Constructor */
-      Iterator(){};
-      /** Constructor with iternal iterator parameter */
-      Iterator(InternalIteratorType iter)
-      {
-        m_Iter=iter;
-      }
-      /**
-       * Get the current object.
-       * \return The current object pointed by the iterator.
-       */
-      ObjectPointerType Get(void)
-      {
-        return (*m_Iter);
-      }
-      /**
-       * Increment.
-       */
-      Iterator& operator++()
-      {
-        ++m_Iter;
+      m_Iter=iter;
+    }
+    /**
+     * Get the current object.
+     * \return The current object pointed by the iterator.
+     */
+    ObjectPointerType Get(void)
+    {
+      return (*m_Iter);
+    }
+    /**
+     * Increment.
+     */
+    Iterator& operator++()
+    {
+      ++m_Iter;
       return *this;
-      }
-      /**
-       * Decrement.
-       */
-      Iterator& operator--()
-      {
-        --m_Iter;
+    }
+    /**
+     * Decrement.
+     */
+    Iterator& operator--()
+    {
+      --m_Iter;
       return *this;
-      }
-      /**
-       * Add
-       */
-      Iterator operator+(int i)
-      {
-  Iterator lIter(m_Iter+1);
+    }
+    /**
+     * Add
+     */
+    Iterator operator+(int i)
+    {
+      Iterator lIter(m_Iter+1);
       return lIter;
-      }
+    }
 
-      /**
-       * Remove
-       */
-      Iterator operator-(int i)
-      {
-  Iterator lIter(m_Iter-i);
+    /**
+     * Remove
+     */
+    Iterator operator-(int i)
+    {
+      Iterator lIter(m_Iter-i);
       return lIter;
-      }
-      /**
-       * Difference comparison operator.
-       */
-      bool operator!=(const Iterator &it)
-      {
-        return (m_Iter != it.m_Iter);
-      }
-      /**
-       * Equality comparison operator.
-       */
-      bool operator==(const Iterator &it)
-      {
-        return (m_Iter == it.m_Iter);
-      }
-      /**
-       * Instantiation operator.
-       */
-      Iterator& operator=(const Iterator &it)
-      {
-        m_Iter = it.m_Iter;
+    }
+    /**
+     * Difference comparison operator.
+     */
+    bool operator!=(const Iterator &it)
+    {
+      return (m_Iter != it.m_Iter);
+    }
+    /**
+     * Equality comparison operator.
+     */
+    bool operator==(const Iterator &it)
+    {
+      return (m_Iter == it.m_Iter);
+    }
+    /**
+     * Instantiation operator.
+     */
+    Iterator& operator=(const Iterator &it)
+    {
+      m_Iter = it.m_Iter;
       return *this;
-      }
-      /**
-       * Copy operator.
-       */
-      Iterator(const Iterator &it)
-      {
-        m_Iter=it.m_Iter;
-      }
+    }
+    /**
+     * Copy operator.
+     */
+    Iterator(const Iterator &it)
+    {
+      m_Iter=it.m_Iter;
+    }
 
     /**
       * Get the current internal iterator
     */
     InternalIteratorType & GetIter(void)
     {
-    return(m_Iter);
+      return(m_Iter);
     }
-    private:
-      // Internal iterator.
-      InternalIteratorType m_Iter;
-    };
+  private:
+    // Internal iterator.
+    InternalIteratorType m_Iter;
+  };
   /** \class ConstIterator
    *  \brief ConstIterator of the object list.
    */
   class ConstIterator
+  {
+  public:
+    /** typedef of the internal iterator */
+    typedef typename InternalContainerType::const_iterator InternalConstIteratorType;
+    /** Constructor */
+    ConstIterator() {};
+    /** Constructor with iternal iterator parameter */
+    ConstIterator(InternalConstIteratorType iter)
     {
-    public:
-      /** typedef of the internal iterator */
-      typedef typename InternalContainerType::const_iterator InternalConstIteratorType;
-      /** Constructor */
-      ConstIterator(){};
-      /** Constructor with iternal iterator parameter */
-      ConstIterator(InternalConstIteratorType iter)
-      {
-        m_Iter=iter;
-      }
-      /**
-       * Get the current object.
-       * \return The current object pointed by the iterator.
-       */
-      ObjectPointerType Get(void)
-      {
-        return (*m_Iter);
-      }
-      /**
-       * Increment.
-       */
-      ConstIterator& operator++()
-      {
-        ++m_Iter;
+      m_Iter=iter;
+    }
+    /**
+     * Get the current object.
+     * \return The current object pointed by the iterator.
+     */
+    ObjectPointerType Get(void)
+    {
+      return (*m_Iter);
+    }
+    /**
+     * Increment.
+     */
+    ConstIterator& operator++()
+    {
+      ++m_Iter;
       return *this;
-      }
-      /**
-       * Decrement.
-       */
-      ConstIterator& operator--()
-      {
-        --m_Iter;
+    }
+    /**
+     * Decrement.
+     */
+    ConstIterator& operator--()
+    {
+      --m_Iter;
       return *this;
-      }
-      /**
-       * Difference comparison operator.
-       */
-      bool operator!=(const ConstIterator &it)
-      {
-        return (m_Iter != it.m_Iter);
-      }
-      /**
-       * Equality comparison operator.
-       */
-      bool operator==(const ConstIterator &it)
-      {
-        return (m_Iter == it.m_Iter);
-      }
-      /**
-       * Instantiation operator.
-       */
-      ConstIterator& operator=(const ConstIterator &it)
-      {
-        m_Iter = it.m_Iter;
+    }
+    /**
+     * Difference comparison operator.
+     */
+    bool operator!=(const ConstIterator &it)
+    {
+      return (m_Iter != it.m_Iter);
+    }
+    /**
+     * Equality comparison operator.
+     */
+    bool operator==(const ConstIterator &it)
+    {
+      return (m_Iter == it.m_Iter);
+    }
+    /**
+     * Instantiation operator.
+     */
+    ConstIterator& operator=(const ConstIterator &it)
+    {
+      m_Iter = it.m_Iter;
       return *this;
-      }
-      /**
-       * Instantiation operator.
-       */
-      ConstIterator& operator=(const Iterator &it)
-      {
-        m_Iter = it.m_Iter;
+    }
+    /**
+     * Instantiation operator.
+     */
+    ConstIterator& operator=(const Iterator &it)
+    {
+      m_Iter = it.m_Iter;
       return *this;
-      }
-      /**
-       * Copy operator.
-       */
-      ConstIterator(const ConstIterator &it)
-      {
-        m_Iter=it.m_Iter;
-      }
-      /**
-       * Copy operator.
-       */
-      ConstIterator(const Iterator &it)
-      {
-        m_Iter=it.m_Iter;
-      }
+    }
+    /**
+     * Copy operator.
+     */
+    ConstIterator(const ConstIterator &it)
+    {
+      m_Iter=it.m_Iter;
+    }
+    /**
+     * Copy operator.
+     */
+    ConstIterator(const Iterator &it)
+    {
+      m_Iter=it.m_Iter;
+    }
 
-    private:
-      // Internal iterator.
-      InternalConstIteratorType m_Iter;
-    };
+  private:
+    // Internal iterator.
+    InternalConstIteratorType m_Iter;
+  };
   /** \class ReverseIterator
    *  \brief ReverseIterator of the object list.
    */
   class ReverseIterator
+  {
+  public:
+    friend class ReverseConstIterator;
+    /** typedef of the internal iterator */
+    typedef typename InternalContainerType::reverse_iterator InternalReverseIteratorType;
+    /** Constructor */
+    ReverseIterator() {};
+    /** Constructor with iternal iterator parameter */
+    ReverseIterator(InternalReverseIteratorType iter)
     {
-    public:
-      friend class ReverseConstIterator;
-      /** typedef of the internal iterator */
-      typedef typename InternalContainerType::reverse_iterator InternalReverseIteratorType;
-      /** Constructor */
-      ReverseIterator(){};
-      /** Constructor with iternal iterator parameter */
-      ReverseIterator(InternalReverseIteratorType iter)
-      {
-        m_Iter=iter;
-      }
-      /**
-       * Get the current object.
-       * \return The current object pointed by the iterator.
-       */
-      ObjectPointerType Get(void)
-      {
-        return (*m_Iter);
-      }
-      /**
-       * Increment.
-       */
-      ReverseIterator& operator++()
-      {
-        ++m_Iter;
+      m_Iter=iter;
+    }
+    /**
+     * Get the current object.
+     * \return The current object pointed by the iterator.
+     */
+    ObjectPointerType Get(void)
+    {
+      return (*m_Iter);
+    }
+    /**
+     * Increment.
+     */
+    ReverseIterator& operator++()
+    {
+      ++m_Iter;
       return *this;
-      }
-      /**
-       * Decrement.
-       */
-      ReverseIterator& operator--()
-      {
-        --m_Iter;
+    }
+    /**
+     * Decrement.
+     */
+    ReverseIterator& operator--()
+    {
+      --m_Iter;
       return *this;
-      }
-      /**
-       * Difference comparison operator.
-       */
-      bool operator!=(const ReverseIterator &it)
-      {
-        return (m_Iter != it.m_Iter);
-      }
-      /**
-       * Equality comparison operator.
-       */
-      bool operator==(const ReverseIterator &it)
-      {
-        return (m_Iter == it.m_Iter);
-      }
-      /**
-       * Instantiation operator.
-       */
-      ReverseIterator& operator=(const ReverseIterator &it)
-      {
-        m_Iter = it.m_Iter;
+    }
+    /**
+     * Difference comparison operator.
+     */
+    bool operator!=(const ReverseIterator &it)
+    {
+      return (m_Iter != it.m_Iter);
+    }
+    /**
+     * Equality comparison operator.
+     */
+    bool operator==(const ReverseIterator &it)
+    {
+      return (m_Iter == it.m_Iter);
+    }
+    /**
+     * Instantiation operator.
+     */
+    ReverseIterator& operator=(const ReverseIterator &it)
+    {
+      m_Iter = it.m_Iter;
       return *this;
-      }
-      /**
-       * Copy operator.
-       */
-      ReverseIterator(const ReverseIterator &it)
-      {
-        m_Iter=it.m_Iter;
-      }
+    }
+    /**
+     * Copy operator.
+     */
+    ReverseIterator(const ReverseIterator &it)
+    {
+      m_Iter=it.m_Iter;
+    }
 
-    private:
-      // Internal iterator.
-      InternalReverseIteratorType m_Iter;
-    };
+  private:
+    // Internal iterator.
+    InternalReverseIteratorType m_Iter;
+  };
   /** \class ReverseConstIterator
    *  \brief ReverseConstIterator of the object list.
    */
   class ReverseConstIterator
+  {
+  public:
+    /** typedef of the internal iterator */
+    typedef typename InternalContainerType::reverse_iterator InternalReverseConstIteratorType;
+    /** Constructor */
+    ReverseConstIterator() {};
+    /** Constructor with iternal iterator parameter */
+    ReverseConstIterator(InternalReverseConstIteratorType iter)
     {
-    public:
-      /** typedef of the internal iterator */
-      typedef typename InternalContainerType::reverse_iterator InternalReverseConstIteratorType;
-      /** Constructor */
-      ReverseConstIterator(){};
-      /** Constructor with iternal iterator parameter */
-      ReverseConstIterator(InternalReverseConstIteratorType iter)
-      {
-        m_Iter=iter;
-      }
-      /**
-       * Get the current object.
-       * \return The current object pointed by the iterator.
-       */
-      ObjectPointerType Get(void)
-      {
-        return (*m_Iter);
-      }
-      /**
-       * Increment.
-       */
-      ReverseConstIterator& operator++()
-      {
-        ++m_Iter;
+      m_Iter=iter;
+    }
+    /**
+     * Get the current object.
+     * \return The current object pointed by the iterator.
+     */
+    ObjectPointerType Get(void)
+    {
+      return (*m_Iter);
+    }
+    /**
+     * Increment.
+     */
+    ReverseConstIterator& operator++()
+    {
+      ++m_Iter;
       return *this;
-      }
-      /**
-       * Decrement.
-       */
-      ReverseConstIterator& operator--()
-      {
-        --m_Iter;
+    }
+    /**
+     * Decrement.
+     */
+    ReverseConstIterator& operator--()
+    {
+      --m_Iter;
       return *this;
-      }
-      /**
-       * Difference comparison operator.
-       */
-      bool operator!=(const ReverseConstIterator &it)
-      {
-        return (m_Iter != it.m_Iter);
-      }
-      /**
-       * Equality comparison operator.
-       */
-      bool operator==(const ReverseConstIterator &it)
-      {
-        return (m_Iter == it.m_Iter);
-      }
-      /**
-       * Instantiation operator.
-       */
-      ReverseConstIterator& operator=(const ReverseConstIterator &it)
-      {
-        m_Iter = it.m_Iter;
+    }
+    /**
+     * Difference comparison operator.
+     */
+    bool operator!=(const ReverseConstIterator &it)
+    {
+      return (m_Iter != it.m_Iter);
+    }
+    /**
+     * Equality comparison operator.
+     */
+    bool operator==(const ReverseConstIterator &it)
+    {
+      return (m_Iter == it.m_Iter);
+    }
+    /**
+     * Instantiation operator.
+     */
+    ReverseConstIterator& operator=(const ReverseConstIterator &it)
+    {
+      m_Iter = it.m_Iter;
       return *this;
-      }
-      /**
-       * Instantiation operator.
-       */
-      ReverseConstIterator& operator=(const ReverseIterator &it)
-      {
-        m_Iter = it.m_Iter;
+    }
+    /**
+     * Instantiation operator.
+     */
+    ReverseConstIterator& operator=(const ReverseIterator &it)
+    {
+      m_Iter = it.m_Iter;
       return *this;
-      }
-      /**
-       * Copy operator.
-       */
-      ReverseConstIterator(const ReverseConstIterator &it)
-      {
-        m_Iter=it.m_Iter;
-      }
-      /**
-       * Copy operator.
-       */
-      ReverseConstIterator(const ReverseIterator &it)
-      {
-        m_Iter=it.m_Iter;
-      }
+    }
+    /**
+     * Copy operator.
+     */
+    ReverseConstIterator(const ReverseConstIterator &it)
+    {
+      m_Iter=it.m_Iter;
+    }
+    /**
+     * Copy operator.
+     */
+    ReverseConstIterator(const ReverseIterator &it)
+    {
+      m_Iter=it.m_Iter;
+    }
 
-    private:
-      // Internal iterator.
-      InternalReverseConstIteratorType m_Iter;
-    };
+  private:
+    // Internal iterator.
+    InternalReverseConstIteratorType m_Iter;
+  };
   /**
    * Get an Iterator that points to the beginning of the container.
    * \return The iterator.
@@ -511,10 +511,10 @@ class ITK_EXPORT List
    * \return The iterator.
    */
   ReverseConstIterator ReverseBegin(void) const;
- /**
-   * Get an Iterator that points past-the-end of the container.
-   * \return The iterator.
-   */
+  /**
+    * Get an Iterator that points past-the-end of the container.
+    * \return The iterator.
+    */
   Iterator End(void);
   /**
    * Get a ConstIterator that points past-the-end of the container.
@@ -538,15 +538,15 @@ class ITK_EXPORT List
    */
   void Erase(Iterator begin, Iterator end);
 
- protected:
+protected:
   /** Constructor */
   List();
   /** Destructor */
-  ~List(){};
+  ~List() {};
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
- private:
+private:
   List(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   /** The internal std::vector object container */

@@ -42,10 +42,10 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT MorphologicalPyramidSynthesisFilter
-  : public ImageToImageListFilter<TInputImage,TOutputImage>
+      : public ImageToImageListFilter<TInputImage,TOutputImage>
 {
 public:
-/** Standard typedefs */
+  /** Standard typedefs */
   typedef MorphologicalPyramidSynthesisFilter                  Self;
   typedef ImageToImageListFilter<TInputImage,TOutputImage>     Superclass;
   typedef itk::SmartPointer<Self>                              Pointer;
@@ -124,7 +124,7 @@ protected:
   MorphologicalPyramidSynthesisFilter();
   /** Destructor */
   ~MorphologicalPyramidSynthesisFilter();
-  virtual void GenerateOutputInformation(){}; // does nothing
+  virtual void GenerateOutputInformation() {}; // does nothing
   /** Main computation method */
   virtual void GenerateData();
   /** Printself method */

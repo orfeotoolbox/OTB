@@ -35,8 +35,8 @@ namespace otb
  * Constructor
  */
 template < class TListSample, class TMap,
-  class TSOMLearningBehaviorFunctor,
-  class TSOMNeighborhoodBehaviorFunctor >
+class TSOMLearningBehaviorFunctor,
+class TSOMNeighborhoodBehaviorFunctor >
 SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor>
 ::SOM()
 {
@@ -57,8 +57,8 @@ SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor
  * Destructor
  */
 template < class TListSample, class TMap,
-  class TSOMLearningBehaviorFunctor,
-  class TSOMNeighborhoodBehaviorFunctor >
+class TSOMLearningBehaviorFunctor,
+class TSOMNeighborhoodBehaviorFunctor >
 SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor>
 ::~SOM()
 {
@@ -70,8 +70,8 @@ SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor
  * \param radius The radius of the nieghbourhood.
  */
 template < class TListSample, class TMap,
-  class TSOMLearningBehaviorFunctor,
-  class TSOMNeighborhoodBehaviorFunctor >
+class TSOMLearningBehaviorFunctor,
+class TSOMNeighborhoodBehaviorFunctor >
 void
 SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor>
 ::UpdateMap( const NeuronType& sample, double beta, SizeType& radius )
@@ -93,7 +93,7 @@ SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor
   RegionType localRegion;
   IndexType  localIndex = position-radius;
   SizeType   localSize;
-  for(unsigned int i=0;i<MapType::ImageDimension;++i)
+  for (unsigned int i=0;i<MapType::ImageDimension;++i)
   {
     localSize[i]= 2*radius[i]+1;
   }
@@ -104,20 +104,20 @@ SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor
 
   // Walk through the map, and evolve each neuron depending on its
   // distance to the winner.
-  for(it.GoToBegin();!it.IsAtEnd();++it)
+  for (it.GoToBegin();!it.IsAtEnd();++it)
   {
     NeuronType tempNeuron = it.Get();
     NeuronType newNeuron ( tempNeuron.Size() );
     double tempBeta = beta
-            / ( 1 +
-              distance->Evaluate( ContinuousIndexType(position),
-                        ContinuousIndexType(it.GetIndex()) ) );
+                      / ( 1 +
+                          distance->Evaluate( ContinuousIndexType(position),
+                                              ContinuousIndexType(it.GetIndex()) ) );
 
-    for(unsigned int i = 0; i < newNeuron.Size();++i)
+    for (unsigned int i = 0; i < newNeuron.Size();++i)
     {
       newNeuron[i] = tempNeuron[i]
-              +static_cast<typename NeuronType::ValueType>(
-                    ( sample[i] - tempNeuron[i] ) * tempBeta );
+                     +static_cast<typename NeuronType::ValueType>(
+                       ( sample[i] - tempNeuron[i] ) * tempBeta );
     }
 
     it.Set(newNeuron);
@@ -127,25 +127,25 @@ SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor
  * Step one iteration.
  */
 template < class TListSample, class TMap,
-  class TSOMLearningBehaviorFunctor,
-  class TSOMNeighborhoodBehaviorFunctor >
+class TSOMLearningBehaviorFunctor,
+class TSOMNeighborhoodBehaviorFunctor >
 void
 SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor>
 ::Step(unsigned int currentIteration)
 {
   // Compute the new learning coefficient
   double newBeta = m_BetaFunctor(
-            currentIteration, m_NumberOfIterations, m_BetaInit, m_BetaEnd );
+                     currentIteration, m_NumberOfIterations, m_BetaInit, m_BetaEnd );
 
   // Compute the new neighborhood size
   SizeType newSize = m_NeighborhoodSizeFunctor(
-            currentIteration, m_NumberOfIterations, m_NeighborhoodSizeInit );
+                       currentIteration, m_NumberOfIterations, m_NeighborhoodSizeInit );
 
   // update the neurons map with each example of the training set.
   otbMsgDebugMacro(<<"Beta: "<<newBeta<<", radius: "<<newSize);
   for ( typename ListSampleType::Iterator it = m_ListSample->Begin();
-      it != m_ListSample->End();
-      ++it )
+        it != m_ListSample->End();
+        ++it )
   {
     UpdateMap( it.GetMeasurementVector(), newBeta, newSize );
   }
@@ -154,8 +154,8 @@ SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor
  *  Output information redefinition
  */
 template < class TListSample, class TMap,
-  class TSOMLearningBehaviorFunctor,
-  class TSOMNeighborhoodBehaviorFunctor >
+class TSOMLearningBehaviorFunctor,
+class TSOMNeighborhoodBehaviorFunctor >
 void
 SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor>
 ::GenerateOutputInformation ()
@@ -177,8 +177,8 @@ SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor
  *  Output redefinition
  */
 template < class TListSample, class TMap,
-  class TSOMLearningBehaviorFunctor,
-  class TSOMNeighborhoodBehaviorFunctor >
+class TSOMLearningBehaviorFunctor,
+class TSOMNeighborhoodBehaviorFunctor >
 void
 SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor>
 ::AllocateOutputs()
@@ -195,8 +195,8 @@ SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor
  * Main computation method
  */
 template < class TListSample, class TMap,
-  class TSOMLearningBehaviorFunctor,
-  class TSOMNeighborhoodBehaviorFunctor >
+class TSOMLearningBehaviorFunctor,
+class TSOMNeighborhoodBehaviorFunctor >
 void
 SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor>
 ::GenerateData(void)
@@ -218,11 +218,11 @@ SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor
 
     for ( it.GoToBegin(); !it.IsAtEnd(); ++it )
     {
-      for(unsigned int i=0;i< neuronInit.Size();++i)
+      for (unsigned int i=0;i< neuronInit.Size();++i)
       {
         neuronInit[i]=static_cast<typename NeuronType::ValueType>(
-                generator->GetUniformVariate(static_cast<double>(m_MinWeight),
-                              static_cast<double>(m_MaxWeight)) );
+                        generator->GetUniformVariate(static_cast<double>(m_MinWeight),
+                                                     static_cast<double>(m_MaxWeight)) );
       }
       it.Set(neuronInit);
     }
@@ -235,7 +235,7 @@ SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor
   }
 
   // Step through the iterations
-  for(unsigned int i = 0;i<m_NumberOfIterations;++i)
+  for (unsigned int i = 0;i<m_NumberOfIterations;++i)
   {
     //otbMsgDebugMacro(<<"Step "<<i+1<<" / "<<m_NumberOfIterations);
     std::cerr << "Step "<< i+1 <<" / "<<m_NumberOfIterations << "                         \r";
@@ -248,8 +248,8 @@ SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor
  *PrintSelf method
  */
 template < class TListSample, class TMap,
-  class TSOMLearningBehaviorFunctor,
-  class TSOMNeighborhoodBehaviorFunctor >
+class TSOMLearningBehaviorFunctor,
+class TSOMNeighborhoodBehaviorFunctor >
 void
 SOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehaviorFunctor>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const

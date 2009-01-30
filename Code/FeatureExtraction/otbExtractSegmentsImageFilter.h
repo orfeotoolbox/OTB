@@ -43,17 +43,17 @@ namespace otb
  */
 
 template <class TInputImage,
-    class TOutputImage>
+class TOutputImage>
 class ITK_EXPORT ExtractSegmentsImageFilter :
-public itk::ImageToImageFilter< TInputImage, TOutputImage >
+      public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
 
   itkStaticConstMacro(    InputImageDimension,
-          unsigned int,
+                          unsigned int,
                           TInputImage::ImageDimension);
   itkStaticConstMacro(    OutputImageDimension,
-          unsigned int,
+                          unsigned int,
                           TOutputImage::ImageDimension);
 
   typedef TInputImage InputImageType;

@@ -72,10 +72,10 @@ template <class TLabel,class TPrecision>
 void
 RCC8VertexWithRegionCenter<TLabel,TPrecision>
 ::PrintSelf( std::ostream& os,itk::Indent indent ) const
-  {
-    Superclass::PrintSelf(os,indent);
-    os<<indent<<"RegionCenterXCoordinate: "<<m_RegionCenterXCoordinate<<std::endl;
-    os<<indent<<"RegionCenterXCoordinate: "<<m_RegionCenterYCoordinate<<std::endl;
-  }
+{
+  Superclass::PrintSelf(os,indent);
+  os<<indent<<"RegionCenterXCoordinate: "<<m_RegionCenterXCoordinate<<std::endl;
+  os<<indent<<"RegionCenterXCoordinate: "<<m_RegionCenterYCoordinate<<std::endl;
+}
 } // end namespace otb
 #endif

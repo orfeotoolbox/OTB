@@ -53,7 +53,7 @@ namespace otb
 
 template <class TInputImage, class TOutputImage,class TFunction    >
 class ITK_EXPORT FunctionToImageFilter :
-    public itk::InPlaceImageFilter<TInputImage,TOutputImage>
+      public itk::InPlaceImageFilter<TInputImage,TOutputImage>
 {
 public:
   /** Standard class typedefs. */
@@ -86,9 +86,16 @@ public:
   /** Connect one of the operands for pixel-wise addition. */
   //void SetInput( const TInputImage *image);
 
-/** Set the internal spatial function. */
-  void SetFunction( FunctionType* PixelFunction ) {m_PixelFunction = PixelFunction; this->Modified(); };
-  FunctionType* GetFunction() { return m_PixelFunction; };
+  /** Set the internal spatial function. */
+  void SetFunction( FunctionType* PixelFunction )
+  {
+    m_PixelFunction = PixelFunction;
+    this->Modified();
+  };
+  FunctionType* GetFunction()
+  {
+    return m_PixelFunction;
+  };
 
   /** Image dimensions */
   itkStaticConstMacro(InputImageDimension, unsigned int,

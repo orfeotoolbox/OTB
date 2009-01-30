@@ -49,10 +49,10 @@ StreamingWarpImageFilter<TInputImage,TOutputImage,TDeformationField>
   DeformationFieldType * deformationPtr = const_cast<DeformationFieldType*>(this->GetDeformationField());
 
   // Check if the input and the deformation field exist
-  if(!inputPtr || !deformationPtr)
-    {
-      return;
-    }
+  if (!inputPtr || !deformationPtr)
+  {
+    return;
+  }
 
   // Compute the security margin radius
   typename InputImageType::SizeType radius;
@@ -62,10 +62,10 @@ StreamingWarpImageFilter<TInputImage,TOutputImage,TDeformationField>
   unsigned int interpolatorRadius = StreamingTraits<typename Superclass::InputImageType>::CalculateNeededRadiusForInterpolator(this->GetInterpolator());
 
   // Compute the margin due to the maximum deformation value and interpolator radius
-  for(unsigned int i = 0; i<InputImageType::ImageDimension;++i)
-    {
-      radius[i]= interpolatorRadius + static_cast<unsigned int>(vcl_ceil(m_MaximumDeformation[i]/vcl_abs(spacing[i])));
-    }
+  for (unsigned int i = 0; i<InputImageType::ImageDimension;++i)
+  {
+    radius[i]= interpolatorRadius + static_cast<unsigned int>(vcl_ceil(m_MaximumDeformation[i]/vcl_abs(spacing[i])));
+  }
 
   otbMsgDevMacro(<<"WarpImageFilter: MaximumDeformation: "<<m_MaximumDeformation<<", interpolator radius: "<<interpolatorRadius<<", total radius:  "<<radius);
 
@@ -79,12 +79,12 @@ StreamingWarpImageFilter<TInputImage,TOutputImage,TDeformationField>
 
   // crop the input requested region at the input's largest possible region
   if ( inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
-    {
+  {
     inputPtr->SetRequestedRegion( inputRequestedRegion );
     return;
-    }
+  }
   else
-    {
+  {
     // Couldn't crop the region (requested region is outside the largest
     // possible region).  Throw an exception.
 
@@ -97,7 +97,7 @@ StreamingWarpImageFilter<TInputImage,TOutputImage,TDeformationField>
     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
     e.SetDataObject(inputPtr);
     throw e;
-    }
+  }
 }
 
 template<class TInputImage, class TOutputImage, class TDeformationField>

@@ -62,22 +62,22 @@ VectorImageToIntensityImageFilter<TInputImage,TOutputImage>
   inputIt.GoToBegin();
   outputIt.GoToBegin();
 
-  while(!inputIt.IsAtEnd() && !outputIt.IsAtEnd())
-    {
-      double sum=0.0;
-      InputPixelType pixel = inputIt.Get();
-      for (unsigned int i=0; i<pixel.Size(); i++)
+  while (!inputIt.IsAtEnd() && !outputIt.IsAtEnd())
   {
-    sum += pixel[i];
-  }
-      sum /= pixel.Size();
+    double sum=0.0;
+    InputPixelType pixel = inputIt.Get();
+    for (unsigned int i=0; i<pixel.Size(); i++)
+    {
+      sum += pixel[i];
+    }
+    sum /= pixel.Size();
 
 
     outputIt.Set(static_cast<OutputPixelType>(sum));
     ++inputIt;
     ++outputIt;
     progress.CompletedPixel();  // potential exception thrown here
-    }
+  }
 }
 /**
  * PrintSelf Method

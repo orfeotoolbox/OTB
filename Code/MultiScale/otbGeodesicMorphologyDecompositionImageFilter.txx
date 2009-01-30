@@ -99,11 +99,11 @@ GeodesicMorphologyDecompositionImageFilter<TInputImage,TOutputImage,TStructuring
 ::GetConvexMap()
 {
   if (this->GetNumberOfOutputs() < 2)
-    {
-      return 0;
-    }
+  {
+    return 0;
+  }
   return static_cast<OutputImageType * >
-    (this->itk::ProcessObject::GetOutput(1));
+         (this->itk::ProcessObject::GetOutput(1));
 }
 
 /**
@@ -115,11 +115,11 @@ GeodesicMorphologyDecompositionImageFilter<TInputImage,TOutputImage,TStructuring
 ::GetConcaveMap()
 {
   if (this->GetNumberOfOutputs() < 3)
-    {
-      return 0;
-    }
+  {
+    return 0;
+  }
   return static_cast<OutputImageType * >
-    (this->itk::ProcessObject::GetOutput(2));
+         (this->itk::ProcessObject::GetOutput(2));
 }
 
 /**

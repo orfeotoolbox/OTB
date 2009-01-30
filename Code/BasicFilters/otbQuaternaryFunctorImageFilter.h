@@ -39,10 +39,10 @@ namespace otb
  * \ingroup IntensityImageFilters Multithreaded
  */
 template <class TInputImage1, class TInputImage2,
-          class TInputImage3, class TInputImage4,
-          class TOutputImage, class TFunction    >
+class TInputImage3, class TInputImage4,
+class TOutputImage, class TFunction    >
 class ITK_EXPORT QuaternaryFunctorImageFilter :
-    public itk::InPlaceImageFilter<TInputImage1,TOutputImage>
+      public itk::InPlaceImageFilter<TInputImage1,TOutputImage>
 {
 public:
   /** Standard class typedefs. */
@@ -96,16 +96,19 @@ public:
    * (Functors do not have to derive from itk::LightObject, so they do
    * not necessarily have a reference count. So we cannot return a
    * SmartPointer). */
-  FunctorType& GetFunctor(void) { return m_Functor; };
+  FunctorType& GetFunctor(void)
+  {
+    return m_Functor;
+  };
 
   /** Get the functor object.  The functor is returned by reference.
    * (Functors do not have to derive from itk::LightObject, so they do
    * not necessarily have a reference count. So we cannot return a
    * SmartPointer.) */
   const FunctorType& GetFunctor() const
-    {
+  {
     return m_Functor;
-    };
+  };
 
   /** Set the functor object.  This replaces the current Functor with a
    * copy of the specified Functor. This allows the user to specify a
@@ -114,13 +117,13 @@ public:
    * (or the compiler's default implementation of operator==() being
    * appropriate). */
   void SetFunctor(const FunctorType& functor)
+  {
+    if (! (functor == m_Functor) )
     {
-      if (! (functor == m_Functor) )
-        {
-        m_Functor = functor;
-        this->Modified();
-        }
+      m_Functor = functor;
+      this->Modified();
     }
+  }
 
   /** Image dimensions */
   itkStaticConstMacro(Input1ImageDimension, unsigned int,

@@ -24,40 +24,40 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  /**
-   * Constructor
-   */
-  template  <class TInputImage, class TOutputImage>
-  LabelizeConfidenceConnectedImageFilter<TInputImage, TOutputImage>
-  ::LabelizeConfidenceConnectedImageFilter()
-  {
-    m_ReplaceValue = itk::NumericTraits<OutputPixelType>::One;
-  }
+/**
+ * Constructor
+ */
+template  <class TInputImage, class TOutputImage>
+LabelizeConfidenceConnectedImageFilter<TInputImage, TOutputImage>
+::LabelizeConfidenceConnectedImageFilter()
+{
+  m_ReplaceValue = itk::NumericTraits<OutputPixelType>::One;
+}
 
-  /** Region growing
-   *
-   */
-  template <class TInputImage, class TOutputImage>
-  void
-  LabelizeConfidenceConnectedImageFilter<TInputImage, TOutputImage>
-  ::RegionGrowing( const IndexType indexSeed )
-  {
-    this->m_RegionGrowingFilter->SetReplaceValue(m_ReplaceValue);
-    this->m_RegionGrowingFilter->SetSeed(indexSeed);
-    m_ReplaceValue++;
-  }
+/** Region growing
+ *
+ */
+template <class TInputImage, class TOutputImage>
+void
+LabelizeConfidenceConnectedImageFilter<TInputImage, TOutputImage>
+::RegionGrowing( const IndexType indexSeed )
+{
+  this->m_RegionGrowingFilter->SetReplaceValue(m_ReplaceValue);
+  this->m_RegionGrowingFilter->SetSeed(indexSeed);
+  m_ReplaceValue++;
+}
 
-  /** PrintSelf Method
-   *
-   */
-  template <class TInputImage, class TOutputImage>
-  void
-  LabelizeConfidenceConnectedImageFilter<TInputImage, TOutputImage>
-  ::PrintSelf(std::ostream& os, itk::Indent indent) const
-  {
-    Superclass::PrintSelf(os, indent);
-    os << indent << "ReplaceValue: " << m_ReplaceValue << std::endl;
-  }
+/** PrintSelf Method
+ *
+ */
+template <class TInputImage, class TOutputImage>
+void
+LabelizeConfidenceConnectedImageFilter<TInputImage, TOutputImage>
+::PrintSelf(std::ostream& os, itk::Indent indent) const
+{
+  Superclass::PrintSelf(os, indent);
+  os << indent << "ReplaceValue: " << m_ReplaceValue << std::endl;
+}
 } // end namespace otb
 
 #endif

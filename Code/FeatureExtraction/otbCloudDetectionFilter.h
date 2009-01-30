@@ -28,15 +28,15 @@ namespace otb
  * \brief Apply a threshold.
  * \brief Apply a color reversal.
  */
-template <class TInputImage, class TOutputImage, class TFunction = Functor::SpectralAngleFunctor< 
-                                          ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
+template <class TInputImage, class TOutputImage, class TFunction = Functor::SpectralAngleFunctor<
+ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
 class ITK_EXPORT CloudDetectionFilter : public itk::UnaryFunctorImageFilter< TInputImage, TOutputImage, TFunction >
 {
 public:
   /** Standard class typedefs. */
   typedef CloudDetectionFilter                           Self;
-  typedef typename itk::UnaryFunctorImageFilter < TInputImage, TOutputImage, TFunction > 
-                                                        Superclass;
+  typedef typename itk::UnaryFunctorImageFilter < TInputImage, TOutputImage, TFunction >
+  Superclass;
   typedef itk::SmartPointer<Self>                       Pointer;
   typedef itk::SmartPointer<const Self>                 ConstPointer;
 
@@ -65,7 +65,7 @@ public:
 protected:
   CloudDetectionFilter();
 
-  virtual ~CloudDetectionFilter(){};
+  virtual ~CloudDetectionFilter() {};
 
   virtual void BeforeThreadedGenerateData();
 

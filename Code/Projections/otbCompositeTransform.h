@@ -29,113 +29,114 @@ namespace otb
 {
 
 
-  /** \class CompositeTransform
+/** \class CompositeTransform
 
-  * \brief Class which compose two itk::Transform to obtain one itk::Transform
-  *    T1    T2      T3
-  * (x,y) -> (x',y') -> (x'',y'')   =>    (x,y) -> (x'',y'')
-  *
-   *
-  * \ingroup Transform
-  */
+* \brief Class which compose two itk::Transform to obtain one itk::Transform
+*    T1    T2      T3
+* (x,y) -> (x',y') -> (x'',y'')   =>    (x,y) -> (x'',y'')
+*
+ *
+* \ingroup Transform
+*/
 
-  typedef enum {
-    PROJDEFAULT=0,
-    PROJIDENTITY=1,
-    PROJMAPFORWARD=2,
-    PROJMAPINVERSE=3,
-    PROJSENSORFORWARD=4,
-    PROJSENSORINVERSE=5
-    } ProjectionTypeEnum;
+typedef enum
+{
+  PROJDEFAULT=0,
+  PROJIDENTITY=1,
+  PROJMAPFORWARD=2,
+  PROJMAPINVERSE=3,
+  PROJSENSORFORWARD=4,
+  PROJSENSORINVERSE=5
+} ProjectionTypeEnum;
 
-  template <class TFirstTransform,
-            class TSecondTransform,
-            class TScalarType=double,
-            unsigned int NInputDimensions=2,
-            unsigned int NOutputDimensions=2>
-    class ITK_EXPORT CompositeTransform: public itk::Transform<TScalarType,  // Data type for scalars
-                                                     NInputDimensions,       // Number of dimensions in the input space
-                                                     NOutputDimensions>      // Number of dimensions in the output space
-    {
-      public :
-
-
-      /** Standard class typedefs */
-      typedef itk::Transform< TScalarType,
-      NInputDimensions,
-      NOutputDimensions >         Superclass;
-      typedef CompositeTransform                 Self;
-      typedef itk::SmartPointer<Self>            Pointer;
-      typedef itk::SmartPointer<const Self>      ConstPointer;
-
-      typedef TFirstTransform       FirstTransformType;
-      typedef typename TFirstTransform::Pointer  FirstTransformPointerType;
-      typedef TSecondTransform       SecondTransformType;
-      typedef typename TSecondTransform::Pointer SecondTransformPointerType;
-
-      /** Standard vector type for this class. */
-      //  typedef typename TFirstTransform::InputVectorType  FirstTransformInputVectorType;
-      //  typedef typename TFirstTransform::OutputVectorType FirstTransformOutputVectorType;
-
-      /** Standard covariant vector type for this class */
-      //  typedef typename TFirstTransform::InputCovariantVectorType FirstTransformInputCovariantVectorType;
-      //  typedef typename TFirstTransform::OutputCovariantVectorType FirstTransformOutputCovariantVectorType;
-
-      /** Standard vnl_vector type for this class. */
-      //  typedef typename TFirstTransform::InputVnlVectorType FirstTransformInputVnlVectorType;
-      //  typedef typename TFirstTransform::OutputVnlVectorType FirstTransformOutputVnlVectorType;
-
-      /** Standard coordinate point type for this class */
-      typedef typename Superclass::InputPointType       FirstTransformInputPointType;
-      typedef typename TFirstTransform::OutputPointType FirstTransformOutputPointType;
-      /** TSecondTransform::InputPointType is purposely not defined
-       *  It contrains user to choose First Transform Output compatible
-       *  with Second Transform Input */
-      typedef typename Superclass::OutputPointType      SecondTransformOutputPointType;
-
-      /** Method for creation through the object factory. */
-      itkNewMacro( Self );
-
-      /** Run-time type information (and related methods). */
-      itkTypeMacro( CompositeTransform, itk::Transform );
-
-      itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
-      itkStaticConstMacro(OutputSpaceDimension,unsigned int, NOutputDimensions);
-      itkStaticConstMacro(SpaceDimension,      unsigned int, NInputDimensions);
-      itkStaticConstMacro(ParametersDimension, unsigned int, NInputDimensions*(NInputDimensions+1));
-
-      /** Set first transformation */
-      itkSetObjectMacro(FirstTransform,FirstTransformType);
-
-      /** Set second transformation */
-      itkSetObjectMacro(SecondTransform,SecondTransformType);
+template <class TFirstTransform,
+class TSecondTransform,
+class TScalarType=double,
+unsigned int NInputDimensions=2,
+unsigned int NOutputDimensions=2>
+class ITK_EXPORT CompositeTransform: public itk::Transform<TScalarType,  // Data type for scalars
+      NInputDimensions,       // Number of dimensions in the input space
+      NOutputDimensions>      // Number of dimensions in the output space
+{
+public :
 
 
+  /** Standard class typedefs */
+  typedef itk::Transform< TScalarType,
+  NInputDimensions,
+  NOutputDimensions >         Superclass;
+  typedef CompositeTransform                 Self;
+  typedef itk::SmartPointer<Self>            Pointer;
+  typedef itk::SmartPointer<const Self>      ConstPointer;
 
-      /**  Method to transform a point. */
-      virtual SecondTransformOutputPointType TransformPoint(const FirstTransformInputPointType  & ) const;
+  typedef TFirstTransform       FirstTransformType;
+  typedef typename TFirstTransform::Pointer  FirstTransformPointerType;
+  typedef TSecondTransform       SecondTransformType;
+  typedef typename TSecondTransform::Pointer SecondTransformPointerType;
 
-      /**  Method to transform a vector. */
-      //  virtual OutputVectorType TransformVector(const InputVectorType &) const;
+  /** Standard vector type for this class. */
+  //  typedef typename TFirstTransform::InputVectorType  FirstTransformInputVectorType;
+  //  typedef typename TFirstTransform::OutputVectorType FirstTransformOutputVectorType;
 
-      /**  Method to transform a vnl_vector. */
-      //  virtual OutputVnlVectorType TransformVector(const InputVnlVectorType &) const;
+  /** Standard covariant vector type for this class */
+  //  typedef typename TFirstTransform::InputCovariantVectorType FirstTransformInputCovariantVectorType;
+  //  typedef typename TFirstTransform::OutputCovariantVectorType FirstTransformOutputCovariantVectorType;
 
-      /**  Method to transform a CovariantVector. */
-      //  virtual OutputCovariantVectorType TransformCovariantVector(const InputCovariantVectorType &) const;
+  /** Standard vnl_vector type for this class. */
+  //  typedef typename TFirstTransform::InputVnlVectorType FirstTransformInputVnlVectorType;
+  //  typedef typename TFirstTransform::OutputVnlVectorType FirstTransformOutputVnlVectorType;
 
-      protected:
-      CompositeTransform();
-      ~CompositeTransform();
+  /** Standard coordinate point type for this class */
+  typedef typename Superclass::InputPointType       FirstTransformInputPointType;
+  typedef typename TFirstTransform::OutputPointType FirstTransformOutputPointType;
+  /** TSecondTransform::InputPointType is purposely not defined
+   *  It contrains user to choose First Transform Output compatible
+   *  with Second Transform Input */
+  typedef typename Superclass::OutputPointType      SecondTransformOutputPointType;
 
-      FirstTransformPointerType  m_FirstTransform;
-      SecondTransformPointerType m_SecondTransform;
+  /** Method for creation through the object factory. */
+  itkNewMacro( Self );
 
-      private:
-      CompositeTransform(const Self&); //purposely not implemented
-      void operator=(const Self&); //purposely not implemented
+  /** Run-time type information (and related methods). */
+  itkTypeMacro( CompositeTransform, itk::Transform );
 
-    };
+  itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
+  itkStaticConstMacro(OutputSpaceDimension,unsigned int, NOutputDimensions);
+  itkStaticConstMacro(SpaceDimension,      unsigned int, NInputDimensions);
+  itkStaticConstMacro(ParametersDimension, unsigned int, NInputDimensions*(NInputDimensions+1));
+
+  /** Set first transformation */
+  itkSetObjectMacro(FirstTransform,FirstTransformType);
+
+  /** Set second transformation */
+  itkSetObjectMacro(SecondTransform,SecondTransformType);
+
+
+
+  /**  Method to transform a point. */
+  virtual SecondTransformOutputPointType TransformPoint(const FirstTransformInputPointType  & ) const;
+
+  /**  Method to transform a vector. */
+  //  virtual OutputVectorType TransformVector(const InputVectorType &) const;
+
+  /**  Method to transform a vnl_vector. */
+  //  virtual OutputVnlVectorType TransformVector(const InputVnlVectorType &) const;
+
+  /**  Method to transform a CovariantVector. */
+  //  virtual OutputCovariantVectorType TransformCovariantVector(const InputCovariantVectorType &) const;
+
+protected:
+  CompositeTransform();
+  ~CompositeTransform();
+
+  FirstTransformPointerType  m_FirstTransform;
+  SecondTransformPointerType m_SecondTransform;
+
+private:
+  CompositeTransform(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+
+};
 
 } // namespace otb
 

@@ -41,10 +41,10 @@ typename SpatialObjectSource<TSpatialObject>::SpatialObjectType *
 SpatialObjectSource<TSpatialObject>
 ::GetOutput(void)
 {
-  if(this->GetNumberOfOutputs()<1)
-    {
-      return 0;
-    }
+  if (this->GetNumberOfOutputs()<1)
+  {
+    return 0;
+  }
   return static_cast<SpatialObjectType *> (this->ProcessObject::GetOutput(0));
 }
 /**

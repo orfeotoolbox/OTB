@@ -33,7 +33,7 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ImageOfVectorsToMonoChannelExtractROI:
-    public ExtractROIBase< TInputImage , TOutputImage >
+      public ExtractROIBase< TInputImage , TOutputImage >
 {
 public:
   /** Standard class typedefs. */

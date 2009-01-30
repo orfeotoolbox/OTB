@@ -59,21 +59,21 @@ namespace otb
  */
 
 template <class TInputImageHH,class TInputImageHV,class TInputImageVH,class TInputImageVV,class TOutputImage,
-          class TFunction = Functor::PolarimetricSynthesisFunctor<
-                                                        typename TInputImageHH::PixelType,
-                                                        typename TInputImageHV::PixelType,
-                                                        typename TInputImageVH::PixelType,
-                                                        typename TInputImageVV::PixelType,
-                                                        typename TOutputImage::PixelType > >
+class TFunction = Functor::PolarimetricSynthesisFunctor<
+typename TInputImageHH::PixelType,
+typename TInputImageHV::PixelType,
+typename TInputImageVH::PixelType,
+typename TInputImageVV::PixelType,
+typename TOutputImage::PixelType > >
 class ITK_EXPORT PolarimetricSynthesisFilter :  public otb::QuaternaryFunctorImageFilter< TInputImageHH,
-                        TInputImageHV, TInputImageVH, TInputImageVV, TOutputImage, TFunction >
+      TInputImageHV, TInputImageVH, TInputImageVV, TOutputImage, TFunction >
 {
 public:
 
   /** Standard typedefs */
   typedef PolarimetricSynthesisFilter       Self;
   typedef otb::QuaternaryFunctorImageFilter< TInputImageHH, TInputImageHV,
-                TInputImageVH, TInputImageVV, TOutputImage, TFunction >  Superclass;
+  TInputImageVH, TInputImageVV, TOutputImage, TFunction >  Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
 
@@ -126,16 +126,16 @@ public:
   /** Set the ElectroMagneticField Incident */
   void SetEi(ComplexArrayType ei)
   {
-       m_Ei = ei;
-       this->GetFunctor().SetEi(ei);
-       this->Modified();
+    m_Ei = ei;
+    this->GetFunctor().SetEi(ei);
+    this->Modified();
   }
   /** Set the ElectroMagneticField Reflected */
   void SetEr(ComplexArrayType er)
   {
-       m_Er = er;
-       this->GetFunctor().SetEr(er);
-       this->Modified();
+    m_Er = er;
+    this->GetFunctor().SetEr(er);
+    this->Modified();
   }
   /** Force the copolar mode */
   void ForceCoPolar();
@@ -159,7 +159,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId );
+                                    int threadId );
 
   /** Computation of the electromagnetic fields Ei Er */
   void ComputeElectromagneticFields();

@@ -23,63 +23,78 @@
 #include "itkVariableLengthVector.h"
 #include "otbBinaryFunctorNeighborhoodImageFilter.h"
 
-namespace otb {
+namespace otb
+{
 
-  /** \class CumulantsForEdgeworth
-   * \brief Helper class for KullbackLeiblerDistanceImageFilter. Please refer to KullbackLeiblerDistanceImageFilter.
-   *
-   */
+/** \class CumulantsForEdgeworth
+ * \brief Helper class for KullbackLeiblerDistanceImageFilter. Please refer to KullbackLeiblerDistanceImageFilter.
+ *
+ */
 template < class TInput >
 class CumulantsForEdgeworth
 {
-  public :
-    CumulantsForEdgeworth ( const TInput & input );
-    CumulantsForEdgeworth ( const itk::Image< typename TInput::ImageType::PixelType, 1 > * input );
-    virtual ~CumulantsForEdgeworth () { }
+public :
+  CumulantsForEdgeworth ( const TInput & input );
+  CumulantsForEdgeworth ( const itk::Image< typename TInput::ImageType::PixelType, 1 > * input );
+  virtual ~CumulantsForEdgeworth () { }
 
-    /** KL Divergence calculation */
-    template <class TInput2>
-    double Divergence ( const CumulantsForEdgeworth<TInput2> & cumulants );
+  /** KL Divergence calculation */
+  template <class TInput2>
+  double Divergence ( const CumulantsForEdgeworth<TInput2> & cumulants );
 
-    inline  double  GetMean ()  const  { return this->fMean; }
-    inline  double  GetVariance  ()  const  { return this->fVariance; }
-    inline  double  GetSkewness  ()  const  { return this->fSkewness; }
-    inline  double  GetKurtosis  ()  const  { return this->fKurtosis; }
+  inline  double  GetMean ()  const
+  {
+    return this->fMean;
+  }
+  inline  double  GetVariance  ()  const
+  {
+    return this->fVariance;
+  }
+  inline  double  GetSkewness  ()  const
+  {
+    return this->fSkewness;
+  }
+  inline  double  GetKurtosis  ()  const
+  {
+    return this->fKurtosis;
+  }
 
-  protected :
+protected :
 
-    /** Moment estimation from intial neighborhood */
-    int  MakeSumAndMoments  ( const TInput & input );
-    /** Moment estimation from raw data */
-    int  MakeSumAndMoments  ( const itk::Image< typename TInput::ImageType::PixelType, 1 > * input );
-    /** transformation moment -> cumulants (for Edgeworth) */
-    int MakeCumulants();
+  /** Moment estimation from intial neighborhood */
+  int  MakeSumAndMoments  ( const TInput & input );
+  /** Moment estimation from raw data */
+  int  MakeSumAndMoments  ( const itk::Image< typename TInput::ImageType::PixelType, 1 > * input );
+  /** transformation moment -> cumulants (for Edgeworth) */
+  int MakeCumulants();
 
-    double  fSum0, fSum1, fSum2, fSum3, fSum4;
-    double  fMu1, fMu2, fMu3, fMu4;
-    double  fMean, fVariance, fSkewness, fKurtosis;
+  double  fSum0, fSum1, fSum2, fSum3, fSum4;
+  double  fMu1, fMu2, fMu3, fMu4;
+  double  fMean, fVariance, fSkewness, fKurtosis;
 };
 
 
 
-namespace Functor {
-  /** \class KullbackLeiblerDistance
-   * \brief Functor for KullbackLeiblerDistanceImageFilter. Please refer to KullbackLeiblerDistanceImageFilter.
-   *
-   */
-  template < class TInput1, class TInput2, class TOutput >
-  class KullbackLeiblerDistance
+namespace Functor
+{
+/** \class KullbackLeiblerDistance
+ * \brief Functor for KullbackLeiblerDistanceImageFilter. Please refer to KullbackLeiblerDistanceImageFilter.
+ *
+ */
+template < class TInput1, class TInput2, class TOutput >
+class KullbackLeiblerDistance
+{
+public :
+  KullbackLeiblerDistance () { }
+  virtual ~KullbackLeiblerDistance () { }
+  TOutput operator () ( const TInput1 & it1, const TInput2 & it2 )
   {
-    public :
-      KullbackLeiblerDistance () { }
-      virtual ~KullbackLeiblerDistance () { }
-      TOutput operator () ( const TInput1 & it1, const TInput2 & it2 ) {
-        CumulantsForEdgeworth<TInput1> cum1 ( it1 );
-        CumulantsForEdgeworth<TInput2> cum2 ( it2 );
-        return static_cast<TOutput> ( cum1.Divergence( cum2 )
-                        + cum2.Divergence( cum1 ) );
-      }
-  };
+    CumulantsForEdgeworth<TInput1> cum1 ( it1 );
+    CumulantsForEdgeworth<TInput2> cum2 ( it2 );
+    return static_cast<TOutput> ( cum1.Divergence( cum2 )
+                                  + cum2.Divergence( cum1 ) );
+  }
+};
 
 } // Functor
 
@@ -114,36 +129,36 @@ namespace Functor {
  */
 template <class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT KullbackLeiblerDistanceImageFilter :
-  public otb::BinaryFunctorNeighborhoodImageFilter<
+      public otb::BinaryFunctorNeighborhoodImageFilter<
       TInputImage1,TInputImage2,TOutputImage,
       Functor::KullbackLeiblerDistance<
-        typename itk::ConstNeighborhoodIterator<TInputImage1>,
-        typename itk::ConstNeighborhoodIterator<TInputImage2>,
-        typename TOutputImage::PixelType> >
+      typename itk::ConstNeighborhoodIterator<TInputImage1>,
+      typename itk::ConstNeighborhoodIterator<TInputImage2>,
+      typename TOutputImage::PixelType> >
 {
-  public:
-    /** Standard class typedefs. */
-    typedef KullbackLeiblerDistanceImageFilter Self;
-    typedef otb::BinaryFunctorNeighborhoodImageFilter<
-                TInputImage1,TInputImage2,TOutputImage,
-                Functor::KullbackLeiblerDistance<
-                  typename itk::ConstNeighborhoodIterator<TInputImage1>,
-                  typename itk::ConstNeighborhoodIterator<TInputImage2>,
-                  typename TOutputImage::PixelType>
-                >  Superclass;
-    typedef itk::SmartPointer<Self> Pointer;
-    typedef itk::SmartPointer<const Self> ConstPointer;
+public:
+  /** Standard class typedefs. */
+  typedef KullbackLeiblerDistanceImageFilter Self;
+  typedef otb::BinaryFunctorNeighborhoodImageFilter<
+  TInputImage1,TInputImage2,TOutputImage,
+  Functor::KullbackLeiblerDistance<
+  typename itk::ConstNeighborhoodIterator<TInputImage1>,
+  typename itk::ConstNeighborhoodIterator<TInputImage2>,
+  typename TOutputImage::PixelType>
+  >  Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-    /** Method for creation through the object factory. */
-    itkNewMacro(Self);
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self);
 
-  protected:
-    KullbackLeiblerDistanceImageFilter() {}
-    virtual ~KullbackLeiblerDistanceImageFilter() {}
+protected:
+  KullbackLeiblerDistanceImageFilter() {}
+  virtual ~KullbackLeiblerDistanceImageFilter() {}
 
-  private:
-    KullbackLeiblerDistanceImageFilter(const Self&); //purposely not implemented
-    void operator=(const Self&); //purposely not implemented
+private:
+  KullbackLeiblerDistanceImageFilter(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
 
 };
 

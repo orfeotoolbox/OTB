@@ -28,7 +28,8 @@
 #include "itkLinearInterpolateImageFunction.h"
 #include "itkCentralDifferenceImageFunction.h"
 
-namespace otb {
+namespace otb
+{
 
 /**
  * \class NCCRegistrationFunction
@@ -45,14 +46,14 @@ namespace otb {
  */
 template<class TFixedImage, class TMovingImage, class TDeformationField>
 class ITK_EXPORT NCCRegistrationFunction :
-  public itk::PDEDeformableRegistrationFunction< TFixedImage,
-    TMovingImage, TDeformationField>
+      public itk::PDEDeformableRegistrationFunction< TFixedImage,
+      TMovingImage, TDeformationField>
 {
 public:
   /** Standard class typedefs. */
   typedef NCCRegistrationFunction    Self;
   typedef itk::PDEDeformableRegistrationFunction< TFixedImage,
-    TMovingImage, TDeformationField >    Superclass;
+  TMovingImage, TDeformationField >    Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -61,7 +62,7 @@ public:
 
   /** Run-time type information (and related methods). */
   itkTypeMacro( NCCRegistrationFunction,
-    PDEDeformableRegistrationFunction );
+                PDEDeformableRegistrationFunction );
 
   /** MovingImage image type. */
   typedef typename Superclass::MovingImageType     MovingImageType;
@@ -77,7 +78,7 @@ public:
   /** Deformation field type. */
   typedef typename Superclass::DeformationFieldType    DeformationFieldType;
   typedef typename Superclass::DeformationFieldTypePointer
-    DeformationFieldTypePointer;
+  DeformationFieldTypePointer;
 
   /** Inherit some enums from the superclass. */
   itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
@@ -96,7 +97,7 @@ public:
   typedef typename InterpolatorType::Pointer         InterpolatorPointer;
   typedef typename InterpolatorType::PointType       PointType;
   typedef itk::LinearInterpolateImageFunction<MovingImageType,CoordRepType>
-    DefaultInterpolatorType;
+  DefaultInterpolatorType;
 
   /** Covariant vector type. */
   typedef itk::CovariantVector<double,itkGetStaticConstMacro(ImageDimension)> CovariantVectorType;
@@ -107,27 +108,35 @@ public:
 
   /** Set the moving image interpolator. */
   void SetMovingImageInterpolator( InterpolatorType * ptr )
-    { m_MovingImageInterpolator = ptr; }
+  {
+    m_MovingImageInterpolator = ptr;
+  }
 
   /** Get the moving image interpolator. */
   InterpolatorType * GetMovingImageInterpolator(void)
-    { return m_MovingImageInterpolator; }
+  {
+    return m_MovingImageInterpolator;
+  }
 
   /** This class uses a constant timestep of 1. */
   virtual TimeStepType ComputeGlobalTimeStep(void * itkNotUsed(GlobalData)) const
-    { return m_TimeStep; }
+  {
+    return m_TimeStep;
+  }
 
   /** Return a pointer to a global data structure that is passed to
    * this object from the solver at each calculation.  */
   virtual void *GetGlobalDataPointer() const
-    {
+  {
     GlobalDataStruct *global = new GlobalDataStruct();
     return global;
-    }
+  }
 
   /** Release memory for global data structure. */
   virtual void ReleaseGlobalDataPointer( void *GlobalData ) const
-    { delete (GlobalDataStruct *) GlobalData;  }
+  {
+    delete (GlobalDataStruct *) GlobalData;
+  }
 
   /** Set the object's state before each iteration. */
   virtual void InitializeIteration();
@@ -135,8 +144,8 @@ public:
   /** This method is called by a finite difference solver image filter at
    * each pixel that does not lie on a data set boundary */
   virtual PixelType  ComputeUpdate(const NeighborhoodType &neighborhood,
-                     void *globalData,
-                     const FloatOffsetType &offset = FloatOffsetType(0.0));
+                                   void *globalData,
+                                   const FloatOffsetType &offset = FloatOffsetType(0.0));
 
 protected:
   NCCRegistrationFunction();
@@ -149,9 +158,9 @@ protected:
   /** A global data type for this class of equation. Used to store
    * iterators for the fixed image. */
   struct GlobalDataStruct
-   {
-   FixedImageNeighborhoodIteratorType   m_FixedImageIterator;
-   };
+  {
+    FixedImageNeighborhoodIteratorType   m_FixedImageIterator;
+  };
 
 
 private:

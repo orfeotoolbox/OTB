@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,38 +32,38 @@ namespace otb
  * \class HoughTransform2DLinesImageFilter
  * \brief Performs the Hough Transform to find 2D straight lines
  *        in a 2D image.
- *  
+ *
  * This filter derives from ImageToImageFilter
  * The input is an image, and all pixels above some threshold are those
  * to be extracted. The output is the image of the accumulator.
  * GetLines() returns a list of LinesSpatialObjects
  *
  * Lines are parameterized in the form: R = x*vcl_cos(Teta)+y*vcl_sin(Teta)
- * where R is the perpendicular distance from the origin and Teta 
+ * where R is the perpendicular distance from the origin and Teta
  * the angle with the normal.
  *
  * The output is the accumulator array:
- *    -The first dimension (X) represents the distance R from the origin 
+ *    -The first dimension (X) represents the distance R from the origin
  *     to the line. This is the distance axis. Its size depends on the size
  *     of the diagonal of the input image.
- * 
+ *
  *    -The second dimension (Y) represents the angle between the X axis
  *     and the normal to the line. This is the angle axis. Its size depends
  *     on the AngleAxisSize parameter (500 by default) and its bounds can be
  *     set with the AngleAxisMinimum and AngleAxisMaximum parameters
  *     (-PI and +PI by default).
  *
- * \ingroup ImageFeatureExtraction 
+ * \ingroup ImageFeatureExtraction
  * \sa LineSpatialObject
  *
  * */
 
 template<typename TInputPixelType, typename TOutputPixelType>
 class ITK_EXPORT HoughTransform2DLinesImageFilter :
-    public itk::ImageToImageFilter< itk::Image<TInputPixelType,2>, itk::Image<TOutputPixelType,2> >
+      public itk::ImageToImageFilter< itk::Image<TInputPixelType,2>, itk::Image<TOutputPixelType,2> >
 {
 public:
-   
+
   /** Standard "Self" typedef. */
   typedef HoughTransform2DLinesImageFilter Self;
 
@@ -71,7 +71,7 @@ public:
   typedef itk::Image<TInputPixelType,2> InputImageType;
   typedef typename InputImageType::Pointer InputImagePointer;
   typedef typename InputImageType::ConstPointer InputImageConstPointer;
-  
+
   /** Output Image typedef */
   typedef itk::Image<TOutputPixelType,2> OutputImageType;
   typedef typename OutputImageType::Pointer OutputImagePointer;
@@ -102,7 +102,7 @@ public:
   itkTypeMacro( HoughTransform2DLinesImageFilter, ImageToImageFilter );
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
 
   /** Method for evaluating the implicit function over the image. */
   void GenerateData();
@@ -205,13 +205,13 @@ protected:
   void EnlargeOutputRequestedRegion(itk::DataObject *output);
 
   int GetAngleIndex(double);
-  
+
   double GetAngleValue(int);
-  
+
   int GetDistanceIndex(double);
-  
+
   double GetDistanceValue(int);
-  
+
 private:
 
   unsigned int  m_AngleAxisSize;

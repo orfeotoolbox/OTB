@@ -28,7 +28,7 @@ namespace otb
  */
 template <class TOutputGraph>
 class ITK_EXPORT RCC8GraphSource
-  : public itk::ProcessObject
+      : public itk::ProcessObject
 {
 public:
   /** Standard typedefs */
@@ -45,7 +45,7 @@ public:
   /** Template parameter typedef*/
   typedef TOutputGraph                               OutputGraphType;
   typedef typename OutputGraphType::Pointer          OutputGraphPointerType;
-   /** Overiding of the GetOutput() method */
+  /** Overiding of the GetOutput() method */
   virtual OutputGraphType * GetOutput(void);
 
 protected:

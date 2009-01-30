@@ -32,63 +32,75 @@
 
 namespace otb
 {
-  namespace Functor
-    {
-      /** Functor::LuminanceToReflectanceImageFunctor
-       *  Multiply by Pi and by an illumination correction coefficient the quotient between the input and the given solar illumination.
-       *
-       * \ingroup Functor
-       */
-      template <class TInput, class TOutput>
-  class LuminanceToReflectanceImageFunctor
-  {
-  public:
-    LuminanceToReflectanceImageFunctor()
-      {
-        m_SolarIllumination = 1.;
-        m_IlluminationCorrectionCoefficient = 1.;
-      };
-    ~LuminanceToReflectanceImageFunctor() {};
-
-    void SetSolarIllumination(double solarIllumination){ m_SolarIllumination = solarIllumination;};
-    void SetIlluminationCorrectionCoefficient(double coef){ m_IlluminationCorrectionCoefficient = coef;};
-
-    double GetSolarIllumination(){ return m_SolarIllumination;};
-    double GetIlluminationCorrectionCoefficient(){ return m_IlluminationCorrectionCoefficient;};
-
-    inline TOutput operator() (const TInput & inPixel)
-      {
-        TOutput outPixel;
-        double temp;
-         temp = static_cast<double>(inPixel)
-             * static_cast<double>(M_PI)
-                         * m_IlluminationCorrectionCoefficient
-             / m_SolarIllumination;
-        outPixel = static_cast<TOutput>(temp);
-        return outPixel;
-      }
-
-  private:
-    double m_SolarIllumination;
-    double m_IlluminationCorrectionCoefficient;
-  };
-    }
-
-  /** \class LuminanceToReflectanceImageFilter
-   *  \brief Transform a luminance image into the reflectance. For this it uses the functor LuminanceToReflectanceImageFunctor
-   *   calling for each component of each pixel.
-   *
-   * \ingroup ImageToLuminanceImageFunctor
-   */
-template <class TInputImage, class TOutputImage>
-class ITK_EXPORT LuminanceToReflectanceImageFilter :
-public UnaryImageFunctorWithVectorImageFilter< TInputImage,
-                                               TOutputImage,
-                                               ITK_TYPENAME Functor::LuminanceToReflectanceImageFunctor< ITK_TYPENAME TInputImage::InternalPixelType,
-                                                                                                   ITK_TYPENAME TOutputImage::InternalPixelType > >
+namespace Functor
+{
+/** Functor::LuminanceToReflectanceImageFunctor
+ *  Multiply by Pi and by an illumination correction coefficient the quotient between the input and the given solar illumination.
+ *
+ * \ingroup Functor
+ */
+template <class TInput, class TOutput>
+class LuminanceToReflectanceImageFunctor
 {
 public:
-/**   Extract input and output images dimensions.*/
+  LuminanceToReflectanceImageFunctor()
+  {
+    m_SolarIllumination = 1.;
+    m_IlluminationCorrectionCoefficient = 1.;
+  };
+  ~LuminanceToReflectanceImageFunctor() {};
+
+  void SetSolarIllumination(double solarIllumination)
+  {
+    m_SolarIllumination = solarIllumination;
+  };
+  void SetIlluminationCorrectionCoefficient(double coef)
+  {
+    m_IlluminationCorrectionCoefficient = coef;
+  };
+
+  double GetSolarIllumination()
+  {
+    return m_SolarIllumination;
+  };
+  double GetIlluminationCorrectionCoefficient()
+  {
+    return m_IlluminationCorrectionCoefficient;
+  };
+
+  inline TOutput operator() (const TInput & inPixel)
+  {
+    TOutput outPixel;
+    double temp;
+    temp = static_cast<double>(inPixel)
+           * static_cast<double>(M_PI)
+           * m_IlluminationCorrectionCoefficient
+           / m_SolarIllumination;
+    outPixel = static_cast<TOutput>(temp);
+    return outPixel;
+  }
+
+private:
+  double m_SolarIllumination;
+  double m_IlluminationCorrectionCoefficient;
+};
+}
+
+/** \class LuminanceToReflectanceImageFilter
+ *  \brief Transform a luminance image into the reflectance. For this it uses the functor LuminanceToReflectanceImageFunctor
+ *   calling for each component of each pixel.
+ *
+ * \ingroup ImageToLuminanceImageFunctor
+ */
+template <class TInputImage, class TOutputImage>
+class ITK_EXPORT LuminanceToReflectanceImageFilter :
+      public UnaryImageFunctorWithVectorImageFilter< TInputImage,
+      TOutputImage,
+      ITK_TYPENAME Functor::LuminanceToReflectanceImageFunctor< ITK_TYPENAME TInputImage::InternalPixelType,
+      ITK_TYPENAME TOutputImage::InternalPixelType > >
+{
+public:
+  /**   Extract input and output images dimensions.*/
   itkStaticConstMacro( InputImageDimension, unsigned int, TInputImage::ImageDimension);
   itkStaticConstMacro( OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
@@ -96,7 +108,7 @@ public:
   typedef TInputImage         InputImageType;
   typedef TOutputImage        OutputImageType;
   typedef typename Functor::LuminanceToReflectanceImageFunctor<ITK_TYPENAME InputImageType::InternalPixelType,
-                                                         ITK_TYPENAME OutputImageType::InternalPixelType> FunctorType;
+  ITK_TYPENAME OutputImageType::InternalPixelType> FunctorType;
 
 
   /** "typedef" for standard classes. */
@@ -125,7 +137,7 @@ public:
   /** Image size "typedef" definition. */
   typedef typename InputImageType::SizeType SizeType;
 
-   /** Set the solar illumination value. */
+  /** Set the solar illumination value. */
   itkSetMacro(SolarIllumination, VectorType);
   /** Give the solar illumination value. */
   itkGetConstReferenceMacro(SolarIllumination, VectorType);
@@ -135,23 +147,23 @@ public:
   /** Give the zenithal solar angle. */
   itkGetConstReferenceMacro(ZenithalSolarAngle, double);
 
- /** Set the day. */
+  /** Set the day. */
   itkSetClampMacro(Day, int, 1, 31);
   /** Give the day. */
   itkGetConstReferenceMacro(Day, int);
 
- /** Set the mounth. */
+  /** Set the mounth. */
   itkSetClampMacro(Month, int, 1, 12);
   /** Give the mounth. */
   itkGetConstReferenceMacro(Month, int);
 
-    /** Set the flux normalization coefficient. */
+  /** Set the flux normalization coefficient. */
   void SetFluxNormalizationCoefficient(double coef)
-    {
-      m_FluxNormalizationCoefficient = coef;
-      m_IsSetFluxNormalizationCoefficient = true;
-      this->Modified();
-    };
+  {
+    m_FluxNormalizationCoefficient = coef;
+    m_IsSetFluxNormalizationCoefficient = true;
+    this->Modified();
+  };
   /** Give the flux normalization coefficient. */
   itkGetConstReferenceMacro(FluxNormalizationCoefficient, double);
 
@@ -160,10 +172,10 @@ public:
   /** Give the IsSetFluxNormalizationCoefficient boolean. */
   itkGetConstReferenceMacro(IsSetFluxNormalizationCoefficient, bool);
 
- protected:
+protected:
   /** Constructor */
   LuminanceToReflectanceImageFilter()
-    {
+  {
     m_ZenithalSolarAngle = 1.;
     m_FluxNormalizationCoefficient = 1.;
     m_SolarIllumination.SetSize(1);
@@ -171,45 +183,45 @@ public:
     m_Month = 1;
     m_Day = 1;
     m_IsSetFluxNormalizationCoefficient = false;
-    };
+  };
   /** Destructor */
-  virtual ~LuminanceToReflectanceImageFilter(){};
+  virtual ~LuminanceToReflectanceImageFilter() {};
 
   /** Update the functor list */
   virtual void BeforeThreadedGenerateData(void)
-    {
-      this->GetFunctorVector().clear();
-
-      for(unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
   {
-    FunctorType functor;
-    double coefTemp = 0.;
-    if (!m_IsSetFluxNormalizationCoefficient)
+    this->GetFunctorVector().clear();
+
+    for (unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
+    {
+      FunctorType functor;
+      double coefTemp = 0.;
+      if (!m_IsSetFluxNormalizationCoefficient)
       {
         if (m_Day*m_Month != 0 && m_Day<32 && m_Month<13)
-    {
-      otb_6s_doublereal dsol = 0.;
-      otb_6s_integer day = static_cast<otb_6s_integer>(m_Day);
-      otb_6s_integer month = static_cast<otb_6s_integer>(m_Month);
-      int cr(0);
-      cr = otb_6s_varsol_(&day, &month, &dsol);
-      coefTemp = vcl_cos(m_ZenithalSolarAngle*M_PI/180.)*static_cast<double>(dsol);
-    }
+        {
+          otb_6s_doublereal dsol = 0.;
+          otb_6s_integer day = static_cast<otb_6s_integer>(m_Day);
+          otb_6s_integer month = static_cast<otb_6s_integer>(m_Month);
+          int cr(0);
+          cr = otb_6s_varsol_(&day, &month, &dsol);
+          coefTemp = vcl_cos(m_ZenithalSolarAngle*M_PI/180.)*static_cast<double>(dsol);
+        }
         else
-    {
-      itkExceptionMacro( << "Day has to be included between 1 and 31, Month beetween 1 and 12.");
-    }
+        {
+          itkExceptionMacro( << "Day has to be included between 1 and 31, Month beetween 1 and 12.");
+        }
       }
-    else
+      else
       {
         coefTemp = vcl_cos(m_ZenithalSolarAngle*M_PI/180.)*m_FluxNormalizationCoefficient*m_FluxNormalizationCoefficient;
       }
-    functor.SetIlluminationCorrectionCoefficient(1. / coefTemp);
-    functor.SetSolarIllumination(static_cast<double>(m_SolarIllumination[i]));
+      functor.SetIlluminationCorrectionCoefficient(1. / coefTemp);
+      functor.SetSolarIllumination(static_cast<double>(m_SolarIllumination[i]));
 
-    this->GetFunctorVector().push_back(functor);
-  }
+      this->GetFunctorVector().push_back(functor);
     }
+  }
 
 private:
 

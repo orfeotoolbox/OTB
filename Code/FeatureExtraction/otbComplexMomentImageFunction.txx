@@ -66,29 +66,29 @@ ComplexMomentImageFunction<TInput,TOutput,TPrecision,TCoordRep>
   IndexType                           indexPos = index;
   typename TInput::SizeType           kernelSize;
 
-  if( !this->GetInputImage() )
-    {
+  if ( !this->GetInputImage() )
+  {
     otbMsgDevMacro( << "Pb with GetInputImage" );
-  return ( ComplexType(itk::NumericTraits<PrecisionType>::Zero, itk::NumericTraits<PrecisionType>::Zero ) );
-    }
+    return ( ComplexType(itk::NumericTraits<PrecisionType>::Zero, itk::NumericTraits<PrecisionType>::Zero ) );
+  }
 
-   if(this->GetNeighborhoodRadius()<0)
-     {
-     ImageSize = this->GetInputImage()->GetBufferedRegion().GetSize();
+  if (this->GetNeighborhoodRadius()<0)
+  {
+    ImageSize = this->GetInputImage()->GetBufferedRegion().GetSize();
 
-     indexPos[0] = ImageSize[0] / 2;
-     indexPos[1] = ImageSize[1] / 2;
+    indexPos[0] = ImageSize[0] / 2;
+    indexPos[1] = ImageSize[1] / 2;
 
-     kernelSize[0] = indexPos[0];
-     kernelSize[1] = indexPos[1];
-     }
-     else
-     {
-       kernelSize.Fill( this->GetNeighborhoodRadius() );
-     }
+    kernelSize[0] = indexPos[0];
+    kernelSize[1] = indexPos[1];
+  }
+  else
+  {
+    kernelSize.Fill( this->GetNeighborhoodRadius() );
+  }
 
-   itk::ConstNeighborhoodIterator<TInput>
-    it(kernelSize, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
+  itk::ConstNeighborhoodIterator<TInput>
+  it(kernelSize, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
 
 
   // Set the iterator at the desired location
@@ -102,17 +102,17 @@ ComplexMomentImageFunction<TInput,TOutput,TPrecision,TCoordRep>
     ValP = ComplexPrecisionType(1.0,0.0);
     ValQ = ComplexPrecisionType(1.0,0.0);
     unsigned int p  = m_P;
-    while(p>0)
-     {
+    while (p>0)
+    {
       ValP *= ComplexPrecisionType(IndexValue[0], IndexValue[1]);
       --p;
-     }
+    }
     unsigned int q  = m_Q;
-    while(q>0)
-     {
+    while (q>0)
+    {
       ValQ *= ComplexPrecisionType(IndexValue[0], -IndexValue[1]);
       --q;
-     }
+    }
 
     Sum += ( ValP * ValQ * ComplexPrecisionType(static_cast<PrecisionType>(it.GetPixel(i)),0.0) );
 

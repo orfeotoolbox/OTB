@@ -40,7 +40,7 @@ namespace otb
  */
 template<class TImage>
 class ITK_EXPORT  MirrorBoundaryCondition
-  : public itk::ImageBoundaryCondition<TImage>
+      : public itk::ImageBoundaryCondition<TImage>
 {
 public:
   /** Standard class typedefs. */
@@ -55,7 +55,7 @@ public:
   typedef typename Superclass::NeighborhoodType NeighborhoodType;
 
   typedef typename Superclass::NeighborhoodAccessorFunctorType
-                                 NeighborhoodAccessorFunctorType;
+  NeighborhoodAccessorFunctorType;
 
   /** Extract information from the image type. */
   itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
@@ -72,10 +72,10 @@ public:
   /** Computes and returns the appropriate pixel value from
    * neighborhood iterator data, using the functor. */
   virtual PixelType operator()(
-      const OffsetType& point_index,
-      const OffsetType& boundary_offset,
-      const NeighborhoodType *data,
-      const NeighborhoodAccessorFunctorType &neighborhoodAccessorFunctor) const;
+    const OffsetType& point_index,
+    const OffsetType& boundary_offset,
+    const NeighborhoodType *data,
+    const NeighborhoodAccessorFunctorType &neighborhoodAccessorFunctor) const;
 };
 
 } // end namespace itk

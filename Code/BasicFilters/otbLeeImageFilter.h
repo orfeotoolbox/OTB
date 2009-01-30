@@ -45,10 +45,10 @@ class ITK_EXPORT LeeImageFilter :  public itk::ImageToImageFilter< TInputImage, 
 public:
   /**   Extract input and output image dimension */
   itkStaticConstMacro(    InputImageDimension,
-          unsigned int,
+                          unsigned int,
                           TInputImage::ImageDimension);
   itkStaticConstMacro(    OutputImageDimension,
-          unsigned int,
+                          unsigned int,
                           TOutputImage::ImageDimension);
 
 

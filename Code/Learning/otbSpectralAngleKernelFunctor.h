@@ -25,32 +25,32 @@
 namespace otb
 {
 
-  /** \class SpectralAngleKernelFunctor
-   * \brief Spectral Angle Kernel
-   *
-   * Performs an inverse multiquadric kernel evaluation that suits
-   * spectral data.
-   *
-   * It is of kind:
-   *
-   * \f$ frac{1}{\sqrt{ c_0 + \cos\textrm{SAM(x,y)} }} \f$ where \f$ \textrm{SAM(x,y)} \f$ is
-   * Spectral Angle Measure:
-   * \f$ \textrm{SAM}(x,y) = \acos\left( \frac{x \cdot y}{\|x\| \|y\|} \right) \f$.
-   *
-   * The only parameter \f$ c_0 \f$ is to be fixed by the \code SetValue \endcode
-   * interface with keyword Coef (def 2.0).
-   *
-   */
+/** \class SpectralAngleKernelFunctor
+ * \brief Spectral Angle Kernel
+ *
+ * Performs an inverse multiquadric kernel evaluation that suits
+ * spectral data.
+ *
+ * It is of kind:
+ *
+ * \f$ frac{1}{\sqrt{ c_0 + \cos\textrm{SAM(x,y)} }} \f$ where \f$ \textrm{SAM(x,y)} \f$ is
+ * Spectral Angle Measure:
+ * \f$ \textrm{SAM}(x,y) = \acos\left( \frac{x \cdot y}{\|x\| \|y\|} \right) \f$.
+ *
+ * The only parameter \f$ c_0 \f$ is to be fixed by the \code SetValue \endcode
+ * interface with keyword Coef (def 2.0).
+ *
+ */
 
 
 class SpectralAngleKernelFunctor
-    : public GenericKernelFunctorBase
+      : public GenericKernelFunctorBase
 {
 public:
 
 
   double operator() ( const svm_node * x, const svm_node * y,
-            const svm_parameter & param ) const;
+                      const svm_parameter & param ) const;
 
   SpectralAngleKernelFunctor ();
   virtual ~SpectralAngleKernelFunctor () { }

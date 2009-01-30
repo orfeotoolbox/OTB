@@ -66,15 +66,15 @@ SOMMap<TNeuron,TDistance,VMapDimension>
   double minDistance = activation->Evaluate(sample,it.Get());
 
   // Iterate through the map to get the minimum distance position
-  for(;!it.IsAtEnd();++it)
-    {
-      double tempDistance = activation->Evaluate(sample,it.Get());
-      if(tempDistance<=minDistance)
+  for (;!it.IsAtEnd();++it)
   {
-    minDistance = tempDistance;
-    minPos = it.GetIndex();
-  }
+    double tempDistance = activation->Evaluate(sample,it.Get());
+    if (tempDistance<=minDistance)
+    {
+      minDistance = tempDistance;
+      minPos = it.GetIndex();
     }
+  }
   // Return the index of the winner
   return minPos;
 }

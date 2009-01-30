@@ -27,13 +27,17 @@ namespace otb
  *
  */
 
-namespace Functor {
+namespace Functor
+{
 
 template< class TInput, class TOutput >
 class MultiplyByScalar
 {
 public:
-  MultiplyByScalar() {m_Coef = 1.0;}
+  MultiplyByScalar()
+  {
+    m_Coef = 1.0;
+  }
   ~MultiplyByScalar() {};
   inline TOutput operator()( const TInput & value )
   {
@@ -60,21 +64,21 @@ private:
 
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT MultiplyByScalarImageFilter :
-    public itk::UnaryFunctorImageFilter<
-            TInputImage,TOutputImage,
-            Functor::MultiplyByScalar<
-                   ITK_TYPENAME TInputImage::PixelType,
-       ITK_TYPENAME TOutputImage::PixelType>   >
+      public itk::UnaryFunctorImageFilter<
+      TInputImage,TOutputImage,
+      Functor::MultiplyByScalar<
+      ITK_TYPENAME TInputImage::PixelType,
+      ITK_TYPENAME TOutputImage::PixelType>   >
 {
 public:
   /** Standard class typedefs. */
   typedef MultiplyByScalarImageFilter                                      Self;
   typedef typename itk::UnaryFunctorImageFilter<
-                             TInputImage,
-                 TOutputImage,
-                             Functor::MultiplyByScalar<
-               ITK_TYPENAME TInputImage::PixelType,
-                           ITK_TYPENAME TOutputImage::PixelType> > Superclass;
+  TInputImage,
+  TOutputImage,
+  Functor::MultiplyByScalar<
+  ITK_TYPENAME TInputImage::PixelType,
+  ITK_TYPENAME TOutputImage::PixelType> > Superclass;
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -83,12 +87,12 @@ public:
 
   void SetCoef(double Coef)
   {
-  this->GetFunctor().SetCoef( Coef );
-  this->Modified();
+    this->GetFunctor().SetCoef( Coef );
+    this->Modified();
   }
   double GetCoef(void)const
   {
-  return( this->GetFunctor().GetCoef() );
+    return( this->GetFunctor().GetCoef() );
   }
 protected:
   MultiplyByScalarImageFilter() {}

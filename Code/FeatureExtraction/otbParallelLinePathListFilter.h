@@ -47,9 +47,9 @@ namespace otb
  */
 template <class TPath>
 class ITK_EXPORT ParallelLinePathListFilter
-  : public PathListToPathListFilter<TPath>
+      : public PathListToPathListFilter<TPath>
 {
- public:
+public:
   /** Standard typedefs */
   typedef ParallelLinePathListFilter            Self;
   typedef PathListToPathListFilter<TPath>       Superclass;
@@ -92,45 +92,45 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /**
- * Verify the angular condition to find parallel lines.
- * This function verifies if two lines are parallel by
- * computing the angle in relation to the y-axis.
- * First line segment: v1 is the first vertex, v2 the second one
- * (not necessarily the path ending).
- * Second line segment: v3 is the first vertex, v4 the second one
- * (not necessarily the path ending).
- * Return true if the condition is verified.
- *
- * This is the first criteria to be fullfilled.
- **/
+  * Verify the angular condition to find parallel lines.
+  * This function verifies if two lines are parallel by
+  * computing the angle in relation to the y-axis.
+  * First line segment: v1 is the first vertex, v2 the second one
+  * (not necessarily the path ending).
+  * Second line segment: v3 is the first vertex, v4 the second one
+  * (not necessarily the path ending).
+  * Return true if the condition is verified.
+  *
+  * This is the first criteria to be fullfilled.
+  **/
   bool VerifyAngularCondition(VertexType v1, VertexType v2, VertexType v3, VertexType v4);
 
   /**
- * Verify the maximum distance condition to find parallel lines.
- * The orthogonal distance between two parallel lines is calculated.
- * First line segment: v1 is the first vertex, v2 the second one
- * (not necessarily the path ending).
- * Second line segment: v3 is the first vertex, v4 the second one
- * (not necessarily the path ending).
- * Return true if the condition is verified.
- *
- * This is the second criteria to be fullfilled.
- **/
+  * Verify the maximum distance condition to find parallel lines.
+  * The orthogonal distance between two parallel lines is calculated.
+  * First line segment: v1 is the first vertex, v2 the second one
+  * (not necessarily the path ending).
+  * Second line segment: v3 is the first vertex, v4 the second one
+  * (not necessarily the path ending).
+  * Return true if the condition is verified.
+  *
+  * This is the second criteria to be fullfilled.
+  **/
   bool VerifyMaxDistanceCondition(VertexType v1, VertexType v2, VertexType v3, VertexType v4);
 
- /**
- * Verify the common distance condition to find parallel lines.
- * The overlapping part of the parallel lines is computed. In case
- * no overlapping part exists or the value is below the specified
- * threshold, false is returned.
- * First line segment: v1 is the first vertex, v2 the second one
- * (not necessarily the path ending).
- * Second line segment: v3 is the first vertex, v4 the second one
- * (not necessarily the path ending).
- * Return true if the condition is verified.
- *
- * This is the third criteria to be fullfilled.
- **/
+  /**
+  * Verify the common distance condition to find parallel lines.
+  * The overlapping part of the parallel lines is computed. In case
+  * no overlapping part exists or the value is below the specified
+  * threshold, false is returned.
+  * First line segment: v1 is the first vertex, v2 the second one
+  * (not necessarily the path ending).
+  * Second line segment: v3 is the first vertex, v4 the second one
+  * (not necessarily the path ending).
+  * Return true if the condition is verified.
+  *
+  * This is the third criteria to be fullfilled.
+  **/
   bool VerifyCommonDistanceCondition(VertexType v1, VertexType v2, VertexType v3, VertexType v4);
 
   /**

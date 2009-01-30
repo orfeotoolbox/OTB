@@ -26,8 +26,10 @@
 
 #include "otbModelComponentBase.h"
 
-namespace otb {
-namespace Statistics {
+namespace otb
+{
+namespace Statistics
+{
 
 /** \class GaussianModelComponent
  * \brief is a component (derived from ModelComponentBase) for
@@ -41,7 +43,7 @@ namespace Statistics {
 
 template< class TSample >
 class ITK_EXPORT GaussianModelComponent :
-    public ModelComponentBase< TSample >
+      public ModelComponentBase< TSample >
 {
 public:
   /**Standard class typedefs. */
@@ -57,19 +59,19 @@ public:
   /** Typedefs from the superclass */
   typedef typename Superclass::MeasurementVectorType MeasurementVectorType;
   typedef typename Superclass::MeasurementVectorSizeType
-      MeasurementVectorSizeType;
+  MeasurementVectorSizeType;
   typedef typename Superclass::MembershipFunctionType MembershipFunctionType;
   typedef typename Superclass::ParametersType ParametersType;
 
   /** Type of the membership function. Gaussian density function */
   typedef itk::Statistics::GaussianDensityFunction< MeasurementVectorType >
-      NativeMembershipFunctionType;
+  NativeMembershipFunctionType;
 
   /** Types of the mean and the covariance calculator that will update
    *  this component's distribution parameters */
   typedef itk::Statistics::MeanCalculator< TSample > MeanEstimatorType;
   typedef itk::Statistics::CovarianceCalculator< TSample >
-      CovarianceEstimatorType;
+  CovarianceEstimatorType;
 
   /** types of the mean and covariance to be used by
    *  NativeMembershipFunctionType */

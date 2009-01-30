@@ -86,7 +86,7 @@ public:
 
   /** Tyepdef for the functor used to access a neighborhood of pixel pointers.*/
   typedef itk::NeighborhoodAccessorFunctor< Self >
-                                            NeighborhoodAccessorFunctorType;
+  NeighborhoodAccessorFunctorType;
 
 
   /** Dimension of the image.  This constant is used by functions that are
@@ -130,19 +130,27 @@ public:
 
   /** Return the Pixel Accessor object */
   AccessorType GetPixelAccessor( void )
-    { return AccessorType(); }
+  {
+    return AccessorType();
+  }
 
   /** Return the Pixel Accesor object */
   const AccessorType GetPixelAccessor( void ) const
-    { return AccessorType(); }
+  {
+    return AccessorType();
+  }
 
   /** Return the NeighborhoodAccessor functor */
   NeighborhoodAccessorFunctorType GetNeighborhoodAccessor()
-    { return NeighborhoodAccessorFunctorType(); }
+  {
+    return NeighborhoodAccessorFunctorType();
+  }
 
   /** Return the NeighborhoodAccessor functor */
   const NeighborhoodAccessorFunctorType GetNeighborhoodAccessor() const
-    { return NeighborhoodAccessorFunctorType(); }
+  {
+    return NeighborhoodAccessorFunctorType();
+  }
 
 
 
@@ -180,11 +188,11 @@ public:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 /// Copy metadata from a DataObject
-virtual void CopyInformation(const itk::DataObject *);
+  virtual void CopyInformation(const itk::DataObject *);
 
 protected:
   Image();
-  virtual ~Image(){};
+  virtual ~Image() {};
 
 
 private:

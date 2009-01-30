@@ -41,31 +41,31 @@ void
 ImageWidgetCircleForm
 ::Draw(double openGlZoom, unsigned int originx, unsigned int originy, unsigned int windowh,unsigned ss_rate)
 {
-  if(this->GetVisible())
-    {
-      glEnable(GL_BLEND);
-      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glColor4f(m_Color[0],m_Color[1],m_Color[2],m_Color[3]);
-      }
-      if(m_Solid)
-      {
-        glBegin(GL_POLYGON);
-      }
-      else
-      {
-        glBegin(GL_LINE_LOOP);
-      }
-        for(double angle = 0;angle <= 2*M_PI;angle+=0.01/static_cast<double>(m_Radius))
-        {
-          double xi = m_Center[0]+static_cast<double>(m_Radius)*vcl_sin(angle);
-          double yi = m_Center[1]+static_cast<double>(m_Radius)*vcl_cos(angle);
+  if (this->GetVisible())
+  {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glColor4f(m_Color[0],m_Color[1],m_Color[2],m_Color[3]);
+  }
+  if (m_Solid)
+  {
+    glBegin(GL_POLYGON);
+  }
+  else
+  {
+    glBegin(GL_LINE_LOOP);
+  }
+  for (double angle = 0;angle <= 2*M_PI;angle+=0.01/static_cast<double>(m_Radius))
+  {
+    double xi = m_Center[0]+static_cast<double>(m_Radius)*vcl_sin(angle);
+    double yi = m_Center[1]+static_cast<double>(m_Radius)*vcl_cos(angle);
 
-          double xd = (xi-originx)*openGlZoom*(1/static_cast<double>(ss_rate));
-          double yd = windowh+(originy-yi)*openGlZoom*(1/static_cast<double>(ss_rate));
-          glVertex2d(xd,yd);
-        }
-      glEnd();
-      glDisable(GL_BLEND);
+    double xd = (xi-originx)*openGlZoom*(1/static_cast<double>(ss_rate));
+    double yd = windowh+(originy-yi)*openGlZoom*(1/static_cast<double>(ss_rate));
+    glVertex2d(xd,yd);
+  }
+  glEnd();
+  glDisable(GL_BLEND);
 }
 
 } // end namespace otb

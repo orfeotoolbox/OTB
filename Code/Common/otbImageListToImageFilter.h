@@ -33,7 +33,7 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ImageListToImageFilter
-  : public itk::ImageSource<TOutputImage>
+      : public itk::ImageSource<TOutputImage>
 {
 public:
   /** Standard typedefs */
@@ -70,7 +70,7 @@ protected:
   ImageListToImageFilter();
   /** Destructor */
   virtual ~ImageListToImageFilter() {};
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

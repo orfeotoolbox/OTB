@@ -36,27 +36,27 @@ VectorImageToImageListFilter<TVectorImageType,TImageList>
   OutputImageListPointerType outputPtr = this->GetOutput();
   InputVectorImagePointerType inputPtr = this->GetInput();
 
-  if(inputPtr)
-    {
-      if(outputPtr->Size()!=inputPtr->GetNumberOfComponentsPerPixel())
+  if (inputPtr)
   {
-    // if the number of components does not match, clear the list
-    outputPtr->Clear();
-    for(unsigned int i=0;i<inputPtr->GetNumberOfComponentsPerPixel();++i)
+    if (outputPtr->Size()!=inputPtr->GetNumberOfComponentsPerPixel())
+    {
+      // if the number of components does not match, clear the list
+      outputPtr->Clear();
+      for (unsigned int i=0;i<inputPtr->GetNumberOfComponentsPerPixel();++i)
       {
         typename  OutputImageType::Pointer tmpImagePtr = OutputImageType::New();
         this->AddOutput(tmpImagePtr);
         outputPtr->PushBack(tmpImagePtr);
       }
-  }
-      for(unsigned int i=0;i<inputPtr->GetNumberOfComponentsPerPixel();++i)
-  {
-    typename  OutputImageType::Pointer tmpImagePtr = outputPtr->GetNthElement(i);
-    tmpImagePtr->CopyInformation(inputPtr);
-    tmpImagePtr->SetLargestPossibleRegion(inputPtr->GetLargestPossibleRegion());
-    tmpImagePtr->SetRequestedRegion(inputPtr->GetLargestPossibleRegion());
-  }
     }
+    for (unsigned int i=0;i<inputPtr->GetNumberOfComponentsPerPixel();++i)
+    {
+      typename  OutputImageType::Pointer tmpImagePtr = outputPtr->GetNthElement(i);
+      tmpImagePtr->CopyInformation(inputPtr);
+      tmpImagePtr->SetLargestPossibleRegion(inputPtr->GetLargestPossibleRegion());
+      tmpImagePtr->SetRequestedRegion(inputPtr->GetLargestPossibleRegion());
+    }
+  }
 }
 /** Generate the output information by building the output list. */
 template <class TVectorImageType, class TImageList>
@@ -67,13 +67,13 @@ VectorImageToImageListFilter<TVectorImageType,TImageList>
   OutputImageListPointerType outputPtr = this->GetOutput();
   InputVectorImagePointerType inputPtr = this->GetInput();
 
-  if(inputPtr)
-    {
-      if(outputPtr->Size()>0)
+  if (inputPtr)
   {
-    inputPtr->SetRequestedRegion(outputPtr->GetNthElement(0)->GetRequestedRegion());
-  }
+    if (outputPtr->Size()>0)
+    {
+      inputPtr->SetRequestedRegion(outputPtr->GetNthElement(0)->GetRequestedRegion());
     }
+  }
 }
 /**
  * Main computation method
@@ -91,41 +91,41 @@ VectorImageToImageListFilter<TVectorImageType,TImageList>
 
   std::vector<OutputIteratorType> outputIteratorList;
 
- typename OutputImageListType::ConstIterator outputListIt = outputPtr->Begin();
-  for(;outputListIt!=outputPtr->End();++outputListIt)
-    {
-      outputListIt.Get()->SetBufferedRegion(outputListIt.Get()->GetRequestedRegion());
-      outputListIt.Get()->Allocate();
-      OutputIteratorType tmpIt = OutputIteratorType(outputListIt.Get(),outputListIt.Get()->GetRequestedRegion());
-      tmpIt.GoToBegin();
-      outputIteratorList.push_back(tmpIt);
-    }
+  typename OutputImageListType::ConstIterator outputListIt = outputPtr->Begin();
+  for (;outputListIt!=outputPtr->End();++outputListIt)
+  {
+    outputListIt.Get()->SetBufferedRegion(outputListIt.Get()->GetRequestedRegion());
+    outputListIt.Get()->Allocate();
+    OutputIteratorType tmpIt = OutputIteratorType(outputListIt.Get(),outputListIt.Get()->GetRequestedRegion());
+    tmpIt.GoToBegin();
+    outputIteratorList.push_back(tmpIt);
+  }
 
   InputIteratorType inputIt(inputPtr,outputPtr->GetNthElement(0)->GetRequestedRegion());
 
   itk::ProgressReporter progress(this,0,outputPtr->GetNthElement(0)->GetRequestedRegion().GetNumberOfPixels());
 
   inputIt.GoToBegin();
-  while(!inputIt.IsAtEnd())
-    {
-      unsigned int counter = 0;
-      for(typename std::vector<OutputIteratorType>::iterator it = outputIteratorList.begin();
-    it!=outputIteratorList.end();++it)
+  while (!inputIt.IsAtEnd())
   {
-    if(!(*it).IsAtEnd())
+    unsigned int counter = 0;
+    for (typename std::vector<OutputIteratorType>::iterator it = outputIteratorList.begin();
+         it!=outputIteratorList.end();++it)
+    {
+      if (!(*it).IsAtEnd())
       {
         (*it).Set(static_cast<typename OutputImageType::PixelType>(inputIt.Get()[counter]));
         ++(*it);
         ++counter;
       }
-    else
+      else
       {
         itkGenericExceptionMacro("End of image for band "<<counter<<" at index "<<(*it).GetIndex()<<" !");
       }
-  }
-      progress.CompletedPixel();
-      ++inputIt;
     }
+    progress.CompletedPixel();
+    ++inputIt;
+  }
 }
 /**
  * PrintSelf Method

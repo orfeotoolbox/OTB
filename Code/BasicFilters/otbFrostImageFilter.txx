@@ -54,9 +54,9 @@ void FrostImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
   typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
 
   if ( !inputPtr || !outputPtr )
-    {
+  {
     return;
-    }
+  }
 
   // get a copy of the input requested region (should equal the output
   // requested region)
@@ -68,12 +68,12 @@ void FrostImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
 
   // crop the input requested region at the input's largest possible region
   if ( inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
-    {
+  {
     inputPtr->SetRequestedRegion( inputRequestedRegion );
     return;
-    }
+  }
   else
-    {
+  {
     // Couldn't crop the region (requested region is outside the largest
     // possible region).  Throw an exception.
 
@@ -84,20 +84,20 @@ void FrostImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
     itk::OStringStream msg;
     msg << static_cast<const char *>(this->GetNameOfClass())
-        << "::GenerateInputRequestedRegion()";
+    << "::GenerateInputRequestedRegion()";
     e.SetLocation(msg.str().c_str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
     e.SetDataObject(inputPtr);
     throw e;
-    }
+  }
 }
 
 
 template< class TInputImage, class TOutputImage>
 void FrostImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(
-      const   OutputImageRegionType&     outputRegionForThread,
-                         int   threadId
-        )
+  const   OutputImageRegionType&     outputRegionForThread,
+  int   threadId
+)
 {
   unsigned int i;
   itk::ZeroFluxNeumannBoundaryCondition<InputImageType>   nbc;
@@ -135,7 +135,7 @@ void FrostImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
   for (fit=faceList.begin(); fit != faceList.end(); ++fit)
-    {
+  {
     bit = itk::ConstNeighborhoodIterator<InputImageType>(m_Radius, input, *fit);
     unsigned int neighborhoodSize = bit.Size();
     it = itk::ImageRegionIterator<OutputImageType>(output, *fit);
@@ -143,26 +143,26 @@ void FrostImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(
     bit.GoToBegin();
 
     while ( ! bit.IsAtEnd() )
-      {
+    {
       sum  = itk::NumericTraits<InputRealType>::Zero;
       sum2 = itk::NumericTraits<InputRealType>::Zero;
       for (i = 0; i < neighborhoodSize; ++i)
-        {
-          dPixel = static_cast<double>( bit.GetPixel(i) );
-    sum += dPixel;
-    sum2 += dPixel * dPixel;
-        }
+      {
+        dPixel = static_cast<double>( bit.GetPixel(i) );
+        sum += dPixel;
+        sum2 += dPixel * dPixel;
+      }
       Mean   = sum  / double(neighborhoodSize);
       Variance  = sum2 / double(neighborhoodSize) - Mean * Mean;
 
-      if(Mean == 0)
-  {
-    Alpha = 0;
-  }
+      if (Mean == 0)
+      {
+        Alpha = 0;
+      }
       else
-  {
-    Alpha = m_Deramp * Variance / (Mean * Mean);
-  }
+      {
+        Alpha = m_Deramp * Variance / (Mean * Mean);
+      }
 
       NormFilter  = 0.0;
       FrostFilter = 0.0;
@@ -171,26 +171,26 @@ void FrostImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(
       const double rad_y = static_cast<double>(m_Radius[1]);
 
       for (double x = -rad_x; x<= rad_x; x++)
+      {
+        for (double y = -rad_y; y <= rad_y; y++)
         {
-         for (double y = -rad_y; y <= rad_y; y++)
-    {
-    double Dist = double(vcl_sqrt(x*x+y*y));
-    off[0]= static_cast<int>(x);
-    off[1]= static_cast<int>(y);
+          double Dist = double(vcl_sqrt(x*x+y*y));
+          off[0]= static_cast<int>(x);
+          off[1]= static_cast<int>(y);
 //    i = (unsigned int)((y+rad_y)*(2*rad_y+1)+(x+rad_x));
-    dPixel= static_cast<double>( bit.GetPixel(off));
+          dPixel= static_cast<double>( bit.GetPixel(off));
 //    dPixel= static_cast<double>( bit.GetPixel(i));
-    CoefFilter = Alpha * vcl_exp(-Alpha *Dist);
-    NormFilter  = NormFilter  + CoefFilter;
-    FrostFilter = FrostFilter + (CoefFilter * dPixel);
-    }
+          CoefFilter = Alpha * vcl_exp(-Alpha *Dist);
+          NormFilter  = NormFilter  + CoefFilter;
+          FrostFilter = FrostFilter + (CoefFilter * dPixel);
         }
+      }
 
 
-    if (NormFilter==0.)
+      if (NormFilter==0.)
         dPixel=0.;
-    else
-      dPixel=FrostFilter/NormFilter;
+      else
+        dPixel=FrostFilter/NormFilter;
 
       it.Set( static_cast<OutputPixelType>( dPixel ) );
 
@@ -198,8 +198,8 @@ void FrostImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(
       ++it;
       progress.CompletedPixel();
 
-      }
     }
+  }
 }
 
 /**

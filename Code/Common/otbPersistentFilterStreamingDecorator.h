@@ -40,9 +40,9 @@ namespace otb
  */
 template <class TFilter>
 class ITK_EXPORT PersistentFilterStreamingDecorator
-  : public itk::ProcessObject
+      : public itk::ProcessObject
 {
- public:
+public:
   /** Standard typedefs */
   typedef PersistentFilterStreamingDecorator          Self;
   typedef itk::ProcessObject                Superclass;
@@ -74,12 +74,12 @@ class ITK_EXPORT PersistentFilterStreamingDecorator
 
   virtual void Update(void);
 
- protected:
+protected:
   /** Constructor */
   PersistentFilterStreamingDecorator();
   /** Destructor */
   virtual ~PersistentFilterStreamingDecorator() {};
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   virtual void GenerateData(void);

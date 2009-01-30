@@ -39,43 +39,43 @@ PolarimetricData
 
   // With all the channels
   if ( IsPresent[0] && IsPresent[1] && IsPresent[2] && IsPresent[3] )
+  {
+    SetArchitectureType(HH_HV_VH_VV);
+  }
+  else
+    // With 3 channels : HH HV VV
+    if ( IsPresent[0] && IsPresent[1] && !IsPresent[2] && IsPresent[3] )
     {
-        SetArchitectureType(HH_HV_VH_VV);
+      SetArchitectureType(HH_HV_VV);
     }
-  else
-  // With 3 channels : HH HV VV
-  if ( IsPresent[0] && IsPresent[1] && !IsPresent[2] && IsPresent[3] )
-  {
-        SetArchitectureType(HH_HV_VV);
-  }
-  else
-  // With 3 channels : HH VH VV
-  if ( IsPresent[0] && !IsPresent[1] && IsPresent[2] && IsPresent[3] )
-  {
+    else
+      // With 3 channels : HH VH VV
+      if ( IsPresent[0] && !IsPresent[1] && IsPresent[2] && IsPresent[3] )
+      {
         SetArchitectureType(HH_VH_VV);
-  }
-  else
-  // Only HH and HV are present
-  if ( IsPresent[0] && IsPresent[1] && !IsPresent[2] && !IsPresent[3] )
-    {
-        SetArchitectureType(HH_HV);
-  }
-  else
-  // Only VH and VV are present
-  if ( !IsPresent[0] && !IsPresent[1] && IsPresent[2] && IsPresent[3] )
-  {
-        SetArchitectureType(VH_VV);
-  }
-  else
-  // Only HH and VV are present
-  if ( IsPresent[0] && !IsPresent[1] && !IsPresent[2] && IsPresent[3] )
-  {
-       SetArchitectureType(HH_VV);
-  }
-  else
-  {
-       SetArchitectureType(UNKNOWN);
-  }
+      }
+      else
+        // Only HH and HV are present
+        if ( IsPresent[0] && IsPresent[1] && !IsPresent[2] && !IsPresent[3] )
+        {
+          SetArchitectureType(HH_HV);
+        }
+        else
+          // Only VH and VV are present
+          if ( !IsPresent[0] && !IsPresent[1] && IsPresent[2] && IsPresent[3] )
+          {
+            SetArchitectureType(VH_VV);
+          }
+          else
+            // Only HH and VV are present
+            if ( IsPresent[0] && !IsPresent[1] && !IsPresent[2] && IsPresent[3] )
+            {
+              SetArchitectureType(HH_VV);
+            }
+            else
+            {
+              SetArchitectureType(UNKNOWN);
+            }
 }
 
 void
@@ -83,32 +83,32 @@ PolarimetricData
 ::DetermineArchitecture(int NumberOfImages, bool EmissionH,bool EmissionV)
 {
 
-  switch(NumberOfImages)
+  switch (NumberOfImages)
+  {
+  case 4 :
+    SetArchitectureType(HH_HV_VH_VV);
+    break;
+
+  case 3:
+    SetArchitectureType(HH_HV_VV);
+    break;
+
+  case 2 :
+
+    if (EmissionH && !EmissionV )
     {
-      case 4 :
-        SetArchitectureType(HH_HV_VH_VV);
-        break;
-
-      case 3:
-        SetArchitectureType(HH_HV_VV);
-        break;
-
-      case 2 :
-
-        if (EmissionH && !EmissionV )
-          {
-            SetArchitectureType(HH_HV);
-          }
-        else if (!EmissionH && EmissionV )
-          {
-            SetArchitectureType(VH_VV);
-          }
-        break;
-
-      default:
-        itkExceptionMacro("Unknown architecture !");
-        return;
+      SetArchitectureType(HH_HV);
     }
+    else if (!EmissionH && EmissionV )
+    {
+      SetArchitectureType(VH_VV);
+    }
+    break;
+
+  default:
+    itkExceptionMacro("Unknown architecture !");
+    return;
+  }
 }
 
 
@@ -117,7 +117,7 @@ void
 PolarimetricData
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-    os << indent << "ArchitectureType "<< m_ArchitectureType<< " : "<< std::endl;
+  os << indent << "ArchitectureType "<< m_ArchitectureType<< " : "<< std::endl;
 }
 
 } // end namespace otb

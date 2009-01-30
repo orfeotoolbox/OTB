@@ -32,10 +32,10 @@ namespace otb
  */
 
 template < class TInputPath,
-           class TOutput,
-            class TPrecision = double>
+class TOutput,
+class TPrecision = double>
 class ITK_EXPORT GeometricMomentPathFunction :
-  public PathFunction< TInputPath, TOutput>
+      public PathFunction< TInputPath, TOutput>
 {
 public:
   /** Standard class typedefs. */
@@ -61,11 +61,11 @@ public:
 
 protected:
   GeometricMomentPathFunction() {};
-  ~GeometricMomentPathFunction(){};
+  ~GeometricMomentPathFunction() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const
-     {
-      Superclass::PrintSelf( os, indent );
-     }
+  {
+    Superclass::PrintSelf( os, indent );
+  }
 
 private:
   GeometricMomentPathFunction( const Self& ); //purposely not implemented

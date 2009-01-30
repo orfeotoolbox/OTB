@@ -51,7 +51,7 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
 ::SetInputLine(const InputLineType *line)
 {
   this->ProcessObjectType::SetNthInput(0,
-                                   const_cast< InputLineType * >( line ) );
+                                       const_cast< InputLineType * >( line ) );
 }
 
 
@@ -60,8 +60,8 @@ typename DrawLineSpatialObjectFilter<TInputImage, TOutputImage>::InputLineType *
 DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
 ::GetInput(void)
 {
-    return static_cast<InputLineType *>
-    (this->ProcessObjectType::GetInput(0) );
+  return static_cast<InputLineType *>
+         (this->ProcessObjectType::GetInput(0) );
 }
 
 
@@ -71,7 +71,7 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
 ::SetInputImage(const InputImageType *image)
 {
   this->ProcessObjectType::SetNthInput(1,
-                                   const_cast< InputImageType * >( image ) );
+                                       const_cast< InputImageType * >( image ) );
 }
 
 
@@ -81,12 +81,12 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
 ::GetInputImage(void)
 {
   if (this->GetNumberOfInputs() < 2)
-    {
+  {
     return 0;
-    }
+  }
 
   return static_cast<const InputImageType *>
-    (this->ProcessObjectType::GetInput(1) );
+         (this->ProcessObjectType::GetInput(1) );
 }
 
 template <class TInputImage, class TOutputImage>
@@ -98,7 +98,7 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
   typename InputImageType::ConstPointer   input  = this->GetInputImage();
   typename OutputImageType::Pointer      output = this->GetOutput();
 
-    // Get the region
+  // Get the region
   typename OutputImageType::RegionType region;
 
 
@@ -120,7 +120,7 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
 
   // Copy the input image in the output image
   for ( outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt,++inputIt)
-     outputIt.Set( static_cast<OutputPixelType>(inputIt.Get()) );
+    outputIt.Set( static_cast<OutputPixelType>(inputIt.Get()) );
 
   // Get the LineSpatialObject
   InputLineType * inputLine = this->GetInput();
@@ -153,59 +153,59 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
   // of pixels between the two points is most important
 
   if ( (DeltaX >= DeltaY) && (DeltaX > 0.) )
-     {
-     double Xmin, Xmax;
-     /*Xmin = std::min(x1,x2);
-     Xmax = std::max(x1,x2);*/
-   Xmin = x1 < x2 ? x1 : x2;
-   Xmax = x1 > x2 ? x1 : x2;
+  {
+    double Xmin, Xmax;
+    /*Xmin = std::min(x1,x2);
+    Xmax = std::max(x1,x2);*/
+    Xmin = x1 < x2 ? x1 : x2;
+    Xmax = x1 > x2 ? x1 : x2;
 
-     // Slope of the line y=slope*(x-x1)+y1
-     double Slope = (y2-y1) / (x2-x1);
+    // Slope of the line y=slope*(x-x1)+y1
+    double Slope = (y2-y1) / (x2-x1);
 
-     // Set a point for each x value between xmin and xmax
-     for ( double x = Xmin; x <= Xmax; x++)
-        {
-  outputIndex[0] = static_cast<unsigned long>( x );
-  outputIndex[1] = static_cast<unsigned long>( Slope*(x-x1) + y1 );
+    // Set a point for each x value between xmin and xmax
+    for ( double x = Xmin; x <= Xmax; x++)
+    {
+      outputIndex[0] = static_cast<unsigned long>( x );
+      outputIndex[1] = static_cast<unsigned long>( Slope*(x-x1) + y1 );
 
 
-  // Set the point if the pixel index belongs to the output image
-  if( region.IsInside( outputIndex ) )
-     output->SetPixel( outputIndex, m_Value);
+      // Set the point if the pixel index belongs to the output image
+      if ( region.IsInside( outputIndex ) )
+        output->SetPixel( outputIndex, m_Value);
+
+    }
 
   }
-
-      }
-   else if ( DeltaX < DeltaY )
-      {
-      double Ymin, Ymax;
-      /*Ymin = std::min(y1,y2);
-      Ymax = std::max(y1,y2);*/
-      Ymin = y1 < y2 ? y1 : y2;
+  else if ( DeltaX < DeltaY )
+  {
+    double Ymin, Ymax;
+    /*Ymin = std::min(y1,y2);
+    Ymax = std::max(y1,y2);*/
+    Ymin = y1 < y2 ? y1 : y2;
     Ymax = y1 > y2 ? y1 : y2;
 
-      double SlopeInv = (x2-x1) / (y2-y1);
+    double SlopeInv = (x2-x1) / (y2-y1);
 
-      for ( double y = Ymin; y <= Ymax; y++)
-         {
-   outputIndex[0] = static_cast<unsigned long>( SlopeInv * (y-y1) + x1 );
-   outputIndex[1] = static_cast<unsigned long>( y );
+    for ( double y = Ymin; y <= Ymax; y++)
+    {
+      outputIndex[0] = static_cast<unsigned long>( SlopeInv * (y-y1) + x1 );
+      outputIndex[1] = static_cast<unsigned long>( y );
 
-   if( region.IsInside( outputIndex ) )
-      output->SetPixel( outputIndex, m_Value);
+      if ( region.IsInside( outputIndex ) )
+        output->SetPixel( outputIndex, m_Value);
 
 
-   }
-      }
+    }
+  }
 
-   // Exception
-/*   else
-      {
-      itkExceptionMacro(<< "otb::DrawLineSpatialObjectFilter::GenerateData : "
-                        << "the line is defined by one point : deltaX = deltaY = 0.");
-      }
-  */
+  // Exception
+  /*   else
+        {
+        itkExceptionMacro(<< "otb::DrawLineSpatialObjectFilter::GenerateData : "
+                          << "the line is defined by one point : deltaX = deltaY = 0.");
+        }
+    */
 }
 
 /**

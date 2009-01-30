@@ -40,7 +40,7 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT VarianceImageFilter :
-    public itk::ImageToImageFilter< TInputImage, TOutputImage >
+      public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
   /** Extract dimension from input and output image. */

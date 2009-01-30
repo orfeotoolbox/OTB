@@ -26,8 +26,10 @@
 #include "otbMacro.h"
 #include "otbGaussianModelComponent.h"
 
-namespace otb {
-namespace Statistics {
+namespace otb
+{
+namespace Statistics
+{
 
 template< class TSample >
 GaussianModelComponent< TSample >
@@ -78,10 +80,10 @@ GaussianModelComponent< TSample >
   Superclass::SetSample(sample);
 
   const MeasurementVectorSizeType measurementVectorLength
-      = sample->GetMeasurementVectorSize();
+  = sample->GetMeasurementVectorSize();
 
   this->m_Parameters.SetSize( measurementVectorLength
-              * ( 1 + measurementVectorLength ) );
+                              * ( 1 + measurementVectorLength ) );
 
   m_Mean.SetSize( measurementVectorLength );
 
@@ -90,7 +92,7 @@ GaussianModelComponent< TSample >
   //m_MeanEstimator->Update();
 
   m_Covariance.SetSize( measurementVectorLength,
-              measurementVectorLength );
+                        measurementVectorLength );
 
   m_CovarianceEstimator = CovarianceEstimatorType::New();
   m_CovarianceEstimator->SetInputSample(sample);
@@ -100,9 +102,9 @@ GaussianModelComponent< TSample >
   m_GaussianDensityFunction = NativeMembershipFunctionType::New();
   this->m_PdfFunction = (MembershipFunctionType *) m_GaussianDensityFunction;
   m_GaussianDensityFunction->SetMeasurementVectorSize(
-      measurementVectorLength );
+    measurementVectorLength );
   this->SetPdfMembershipFunction( (MembershipFunctionType *)
-      m_GaussianDensityFunction.GetPointer() );
+                                  m_GaussianDensityFunction.GetPointer() );
 
 }
 
@@ -117,7 +119,7 @@ GaussianModelComponent< TSample >
   unsigned int i, j;
 
   MeasurementVectorSizeType measurementVectorSize
-    = this->GetSample()->GetMeasurementVectorSize();
+  = this->GetSample()->GetMeasurementVectorSize();
 
   m_Mean.SetSize ( measurementVectorSize );
   for ( i = 0; i < measurementVectorSize; i++)
@@ -148,7 +150,7 @@ GaussianModelComponent< TSample >
     return;
 
   MeasurementVectorSizeType measurementVectorSize
-    = this->GetSample()->GetMeasurementVectorSize();
+  = this->GetSample()->GetMeasurementVectorSize();
 
   unsigned int i, j;
   int paramIndex  = 0;
@@ -174,7 +176,7 @@ GaussianModelComponent< TSample >
     for ( j = 0; j < measurementVectorSize; j++ )
     {
       this->m_Parameters[paramIndex]
-        = m_Covariance(i,j)
+      = m_Covariance(i,j)
         = covariance->GetVnlMatrix().get(i, j);
       ++paramIndex;
     }

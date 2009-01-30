@@ -41,7 +41,7 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ExtractROIBase:
-    public itk::ImageToImageFilter<TInputImage,TOutputImage>
+      public itk::ImageToImageFilter<TInputImage,TOutputImage>
 {
 public:
   /** Standard class typedefs. */
@@ -82,9 +82,9 @@ public:
 
   typedef
   itk::ImageToImageFilterDetail::ExtractImageFilterRegionCopier<itkGetStaticConstMacro(InputImageDimension),
-                                                           itkGetStaticConstMacro(OutputImageDimension)> ExtractROIBaseRegionCopierType;
+  itkGetStaticConstMacro(OutputImageDimension)> ExtractROIBaseRegionCopierType;
 
-   itkGetMacro(ExtractionRegion, InputImageRegionType);
+  itkGetMacro(ExtractionRegion, InputImageRegionType);
 
   /** Give the region to extract, same effect as given m_StartX/Y and m_SizeX/Y*/
   void SetExtractionRegion(InputImageRegionType roi);
@@ -132,7 +132,7 @@ protected:
    *
    * \sa ImageToImageFilter::CallCopyRegion() */
   virtual void CallCopyOutputRegionToInputRegion(InputImageRegionType &destRegion,
-                                                 const OutputImageRegionType &srcRegion);
+      const OutputImageRegionType &srcRegion);
 
   /** ExtractROIBase can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData()
@@ -149,15 +149,15 @@ protected:
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                             int threadId )
 
-      {
+  {
 
-      };
+  };
 
- /** Set/Get the output image region.
-  *  If any of the ExtractionRegion.Size = 0 for any particular dimension dim,
-  *  we have to collapse dimension dim.  This means the output image will have
-  *  'c' dimensions less than the input image, where c = # of
-  *  ExtractionRegion.Size = 0. */
+  /** Set/Get the output image region.
+   *  If any of the ExtractionRegion.Size = 0 for any particular dimension dim,
+   *  we have to collapse dimension dim.  This means the output image will have
+   *  'c' dimensions less than the input image, where c = # of
+   *  ExtractionRegion.Size = 0. */
   void SetInternalExtractionRegion(InputImageRegionType extractRegion);
 
 

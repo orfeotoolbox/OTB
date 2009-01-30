@@ -56,25 +56,25 @@ BSplinesInterpolateDeformationFieldGenerator<TPointSet, TDeformationField>
 
   PointDataIterator  pointDataIterator = this->GetPointSet()->GetPointData()->Begin();
 
-  while( pointIterator != end )
-    {
-      typename PointDataContainer::Element valueAndDeformations = pointDataIterator.Value();
-
-      if(vcl_abs(valueAndDeformations[0])>=this->GetMetricThreshold())
+  while ( pointIterator != end )
   {
-    typename PointSetType::PointType p = pointIterator.Value();   // access the point
-    sourcePoint[0] = p[0];
-    sourcePoint[1] = p[1];
-    targetPoint[0] = p[0] - valueAndDeformations[1];
-    targetPoint[1] = p[1] - valueAndDeformations[2];
-    otbMsgDebugMacro(<<"Adding landmark "<<pointId<<", source point: "<<sourcePoint<<", targetpoint: "<<targetPoint);
-    sourceLandmarks->InsertElement( pointId, sourcePoint );
-    targetLandmarks->InsertElement( pointId, targetPoint );
-    ++pointId;
-  }
-      ++pointIterator;
-      ++pointDataIterator;
+    typename PointDataContainer::Element valueAndDeformations = pointDataIterator.Value();
+
+    if (vcl_abs(valueAndDeformations[0])>=this->GetMetricThreshold())
+    {
+      typename PointSetType::PointType p = pointIterator.Value();   // access the point
+      sourcePoint[0] = p[0];
+      sourcePoint[1] = p[1];
+      targetPoint[0] = p[0] - valueAndDeformations[1];
+      targetPoint[1] = p[1] - valueAndDeformations[2];
+      otbMsgDebugMacro(<<"Adding landmark "<<pointId<<", source point: "<<sourcePoint<<", targetpoint: "<<targetPoint);
+      sourceLandmarks->InsertElement( pointId, sourcePoint );
+      targetLandmarks->InsertElement( pointId, targetPoint );
+      ++pointId;
     }
+    ++pointIterator;
+    ++pointDataIterator;
+  }
 
   typename DeformationFieldSourceType::Pointer deformer = DeformationFieldSourceType::New();
   deformer->SetOutputSpacing(this->GetOutputSpacing());
@@ -96,16 +96,16 @@ BSplinesInterpolateDeformationFieldGenerator<TPointSet, TDeformationField>
   OutputIteratorType outIt(outputPtr,outputPtr->GetRequestedRegion());
   int i=0;
   // Casting otb::Image<itt::Vector<ValueType,2>,2> to otb::VectorImage<ValueType,2>
-  for(inIt.GoToBegin(),outIt.GoToBegin();(!inIt.IsAtEnd())&&(!outIt.IsAtEnd());++inIt,++outIt,++i)
-    {
-      typename ImageType::PixelType inPixel;
-      inPixel = inIt.Get();
-      PixelType outPixel;
-      outPixel.SetSize(2);
-      outPixel[0]=-inPixel[0];
-      outPixel[1]=-inPixel[1];
-      outIt.Set(outPixel);
-    }
+  for (inIt.GoToBegin(),outIt.GoToBegin();(!inIt.IsAtEnd())&&(!outIt.IsAtEnd());++inIt,++outIt,++i)
+  {
+    typename ImageType::PixelType inPixel;
+    inPixel = inIt.Get();
+    PixelType outPixel;
+    outPixel.SetSize(2);
+    outPixel[0]=-inPixel[0];
+    outPixel[1]=-inPixel[1];
+    outIt.Set(outPixel);
+  }
 }
 /**
  * PrintSelf Method

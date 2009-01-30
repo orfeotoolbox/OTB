@@ -32,9 +32,9 @@ namespace otb
  */
 template <class TPointSet, class TDeformationField>
 class ITK_EXPORT PointSetWithTransformToDeformationFieldGenerator
-  : public PointSetToDeformationFieldGenerator<TPointSet,TDeformationField>
+      : public PointSetToDeformationFieldGenerator<TPointSet,TDeformationField>
 {
- public:
+public:
   /** Standard typedefs */
   typedef PointSetWithTransformToDeformationFieldGenerator Self;
   typedef PointSetToDeformationFieldGenerator<TPointSet,TDeformationField> Superclass;
@@ -77,7 +77,7 @@ protected:
   PointSetWithTransformToDeformationFieldGenerator();
   /** Destructor */
   virtual ~PointSetWithTransformToDeformationFieldGenerator() {};
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

@@ -47,9 +47,9 @@ namespace otb
  */
 template <class TInputImage,class TOutputImage>
 class ITK_EXPORT SpectralAngleDistanceImageFilter
-  : public itk::ImageToImageFilter<TInputImage,TOutputImage>
+      : public itk::ImageToImageFilter<TInputImage,TOutputImage>
 {
- public:
+public:
   /** Standard typedefs */
   typedef SpectralAngleDistanceImageFilter            Self;
   typedef itk::ImageToImageFilter<TInputImage,TOutputImage> Superclass;
@@ -80,7 +80,7 @@ protected:
   SpectralAngleDistanceImageFilter();
   /** Destructor */
   virtual ~SpectralAngleDistanceImageFilter() {};
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** SpectralAngleDistanceImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine

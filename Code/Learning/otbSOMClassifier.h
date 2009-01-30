@@ -49,7 +49,7 @@ public:
   typedef itk::SmartPointer< Self > Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
- /** Standard macros */
+  /** Standard macros */
   itkTypeMacro(SOMClassifier, itk::ProcessObject);
   itkNewMacro(Self);
 
@@ -89,7 +89,7 @@ protected:
   /** Starts the classification process */
   void GenerateData();
 
- private:
+private:
   /// The input sample
   SamplePointerType m_Sample;
   /// The output membership sample.

@@ -55,15 +55,15 @@ const typename ImageToPathListFilter<TInputImage,TOutputPath>::InputImageType *
 ImageToPathListFilter<TInputImage,TOutputPath>
 ::GetInput(void)
 {
-  
-  
+
+
   if (this->GetNumberOfInputs() < 1)
-    {
+  {
     return 0;
-    }
+  }
 
   return static_cast<const TInputImage * >
-    (this->ProcessObjectType::GetInput(0) );
+         (this->ProcessObjectType::GetInput(0) );
 }
 
 /**

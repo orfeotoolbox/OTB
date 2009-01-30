@@ -32,7 +32,7 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
   // Create the output. We use static_cast<> here because we know the default
   // output must be of type TOutputPointSet
   AtmosphericRadiativeTermsPointer output
-    = static_cast<AtmosphericRadiativeTermsType*>(this->MakeOutput(0).GetPointer());
+  = static_cast<AtmosphericRadiativeTermsType*>(this->MakeOutput(0).GetPointer());
 
   this->ProcessObject::SetNthOutput( 0, output.GetPointer() );
 
@@ -66,15 +66,15 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
 ::GraftNthOutput(unsigned int idx, itk::DataObject *graft)
 {
   if ( idx >= this->GetNumberOfOutputs() )
-    {
+  {
     itkExceptionMacro(<<"Requested to graft output " << idx <<
-        " but this filter only has " << this->GetNumberOfOutputs() << " Outputs.");
-    }
+                      " but this filter only has " << this->GetNumberOfOutputs() << " Outputs.");
+  }
 
   if ( !graft )
-    {
+  {
     itkExceptionMacro(<<"Requested to graft output that is a NULL pointer" );
-    }
+  }
 
   itk::DataObject * output = this->GetOutput( idx );
 
@@ -91,10 +91,10 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms::AtmosphericRadiati
 AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
 ::GetOutput(void)
 {
-  if(this->GetNumberOfOutputs()<1)
-    {
-      return 0;
-    }
+  if (this->GetNumberOfOutputs()<1)
+  {
+    return 0;
+  }
   return static_cast<AtmosphericRadiativeTermsType *> (this->ProcessObject::GetOutput(0));
 }
 
@@ -106,7 +106,7 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
 ::GetOutput(unsigned int idx)
 {
   return static_cast<AtmosphericRadiativeTermsType*>
-    (this->itk::ProcessObject::GetOutput(idx));
+         (this->itk::ProcessObject::GetOutput(idx));
 }
 
 
@@ -124,13 +124,13 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
 {
   // If there is no input
   if (this->GetNumberOfInputs()!=1)
-    {
+  {
     // exit
     return 0;
-    }
+  }
   // else return the first input
   return static_cast<AtmosphericCorrectionParametersType * >
-    (this->itk::ProcessObject::GetInput(0) );
+         (this->itk::ProcessObject::GetInput(0) );
 }
 
 
@@ -156,53 +156,53 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
   double upwardDiffuseTransmittanceForRayleigh(0.);
   double upwardDiffuseTransmittanceForAerosol(0.);
 
-  for(unsigned int i=0; i<NbBand; i++)
-    {
-      atmosphericReflectance = 0.;
-      atmosphericSphericalAlbedo = 0.;
-      totalGaseousTransmission = 0.;
-      downwardTransmittance = 0.;
-      upwardTransmittance = 0.;
-      upwardDiffuseTransmittance = 0.;
-      upwardDirectTransmittance = 0.;
-      upwardDiffuseTransmittanceForRayleigh = 0.;
-      upwardDiffuseTransmittanceForAerosol = 0.;
-      SIXSTraits::ComputeAtmosphericParameters(
-           input->GetSolarZenithalAngle(),                  /** The Solar zenithal angle */
-           input->GetSolarAzimutalAngle(),                  /** The Solar azimutal angle */
-           input->GetViewingZenithalAngle(),                /** The Viewing zenithal angle */
-           input->GetViewingAzimutalAngle(),                /** The Viewing azimutal angle */
-           input->GetMonth(),                               /** The Month */
-           input->GetDay(),                                 /** The Day (in the month) */
-           input->GetAtmosphericPressure(),                 /** The Atmospheric pressure */
-           input->GetWaterVaporAmount(),                    /** The Water vapor amount (Total water vapor content over vertical atmospheric column) */
-           input->GetOzoneAmount(),                         /** The Ozone amount (Stratospheric ozone layer content) */
-           input->GetAerosolModel(),                        /** The Aerosol model */
-           input->GetAerosolOptical(),                      /** The Aerosol optical (radiative impact of aerosol for the reference wavelenght 550-nm) */
-           input->GetWavelenghtSpectralBand()[i],           /** Wavelenght for the spectral band definition */
-                                                            /** Note : The Max wavelenght spectral band value must be updated ! */
-           atmosphericReflectance,                          /** Atmospheric reflectance */
-           atmosphericSphericalAlbedo,                      /** atmospheric spherical albedo */
-           totalGaseousTransmission,                        /** Total gaseous transmission */
-           downwardTransmittance,                           /** downward transmittance */
-           upwardTransmittance,                             /** upward transmittance */
-                       upwardDiffuseTransmittance,                      /** Upward diffuse transmittance */
-                       upwardDirectTransmittance,                       /** Upward direct transmittance */
-                       upwardDiffuseTransmittanceForRayleigh,           /** Upward diffuse transmittance for rayleigh */
-                       upwardDiffuseTransmittanceForAerosol             /** Upward diffuse transmittance for aerosols */
-                       );
+  for (unsigned int i=0; i<NbBand; i++)
+  {
+    atmosphericReflectance = 0.;
+    atmosphericSphericalAlbedo = 0.;
+    totalGaseousTransmission = 0.;
+    downwardTransmittance = 0.;
+    upwardTransmittance = 0.;
+    upwardDiffuseTransmittance = 0.;
+    upwardDirectTransmittance = 0.;
+    upwardDiffuseTransmittanceForRayleigh = 0.;
+    upwardDiffuseTransmittanceForAerosol = 0.;
+    SIXSTraits::ComputeAtmosphericParameters(
+      input->GetSolarZenithalAngle(),                  /** The Solar zenithal angle */
+      input->GetSolarAzimutalAngle(),                  /** The Solar azimutal angle */
+      input->GetViewingZenithalAngle(),                /** The Viewing zenithal angle */
+      input->GetViewingAzimutalAngle(),                /** The Viewing azimutal angle */
+      input->GetMonth(),                               /** The Month */
+      input->GetDay(),                                 /** The Day (in the month) */
+      input->GetAtmosphericPressure(),                 /** The Atmospheric pressure */
+      input->GetWaterVaporAmount(),                    /** The Water vapor amount (Total water vapor content over vertical atmospheric column) */
+      input->GetOzoneAmount(),                         /** The Ozone amount (Stratospheric ozone layer content) */
+      input->GetAerosolModel(),                        /** The Aerosol model */
+      input->GetAerosolOptical(),                      /** The Aerosol optical (radiative impact of aerosol for the reference wavelenght 550-nm) */
+      input->GetWavelenghtSpectralBand()[i],           /** Wavelenght for the spectral band definition */
+      /** Note : The Max wavelenght spectral band value must be updated ! */
+      atmosphericReflectance,                          /** Atmospheric reflectance */
+      atmosphericSphericalAlbedo,                      /** atmospheric spherical albedo */
+      totalGaseousTransmission,                        /** Total gaseous transmission */
+      downwardTransmittance,                           /** downward transmittance */
+      upwardTransmittance,                             /** upward transmittance */
+      upwardDiffuseTransmittance,                      /** Upward diffuse transmittance */
+      upwardDirectTransmittance,                       /** Upward direct transmittance */
+      upwardDiffuseTransmittanceForRayleigh,           /** Upward diffuse transmittance for rayleigh */
+      upwardDiffuseTransmittanceForAerosol             /** Upward diffuse transmittance for aerosols */
+    );
 
-      output->SetIntrinsicAtmosphericReflectance(i, atmosphericReflectance);
-      output->SetSphericalAlbedo(i, atmosphericSphericalAlbedo);
-      output->SetTotalGaseousTransmission(i, totalGaseousTransmission);
-      output->SetDownwardTransmittance(i, downwardTransmittance);
-      output->SetUpwardTransmittance(i, upwardTransmittance);
-      output->SetUpwardDiffuseTransmittance(i, upwardDiffuseTransmittance );
-      output->SetUpwardDirectTransmittance(i, upwardDirectTransmittance);
-      output->SetUpwardDiffuseTransmittanceForRayleigh(i,upwardDiffuseTransmittanceForRayleigh );
-      output->SetUpwardDiffuseTransmittanceForAerosol(i, upwardDiffuseTransmittanceForAerosol);
+    output->SetIntrinsicAtmosphericReflectance(i, atmosphericReflectance);
+    output->SetSphericalAlbedo(i, atmosphericSphericalAlbedo);
+    output->SetTotalGaseousTransmission(i, totalGaseousTransmission);
+    output->SetDownwardTransmittance(i, downwardTransmittance);
+    output->SetUpwardTransmittance(i, upwardTransmittance);
+    output->SetUpwardDiffuseTransmittance(i, upwardDiffuseTransmittance );
+    output->SetUpwardDirectTransmittance(i, upwardDirectTransmittance);
+    output->SetUpwardDiffuseTransmittanceForRayleigh(i,upwardDiffuseTransmittanceForRayleigh );
+    output->SetUpwardDiffuseTransmittanceForAerosol(i, upwardDiffuseTransmittanceForAerosol);
 
-    }
+  }
 }
 
 /**

@@ -27,26 +27,28 @@ namespace otb
 /**
  * This enumeration describes the different architectures we can find in polarimetry.
  */
- typedef enum {
- HH_HV_VH_VV=0,
- HH_HV_VV=1,
- HH_VH_VV=2,
- HH_HV=3,
- VH_VV=4,
- HH_VV=5,
- UNKNOWN=6} ArchitectureType;
+typedef enum
+{
+  HH_HV_VH_VV=0,
+  HH_HV_VV=1,
+  HH_VH_VV=2,
+  HH_HV=3,
+  VH_VV=4,
+  HH_VV=5,
+  UNKNOWN=6
+} ArchitectureType;
 
 
- /** \class PolarimetricData
- *  \brief This class allows to determine the type of architecture we get.
- *
- *
- * \sa
- */
+/** \class PolarimetricData
+*  \brief This class allows to determine the type of architecture we get.
+*
+*
+* \sa
+*/
 
 class ITK_EXPORT PolarimetricData : public itk::DataObject
 {
-  public:
+public:
 
   /** Standard typedefs */
   typedef PolarimetricData                           Self;
@@ -68,16 +70,16 @@ class ITK_EXPORT PolarimetricData : public itk::DataObject
   itkSetMacro(ArchitectureType,ArchitectureType);
   itkGetMacro(ArchitectureType,ArchitectureType);
 
-  protected:
+protected:
   /** Constructor */
   PolarimetricData();
   /** Destructor */
-  ~PolarimetricData(){};
+  ~PolarimetricData() {};
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 
-  private:
+private:
   PolarimetricData(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 

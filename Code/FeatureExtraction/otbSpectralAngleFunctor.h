@@ -22,65 +22,68 @@
 
 namespace otb
 {
-  /** \class SpectralAngleFunctor
-   *  \brief This functor computes the spectral angle according to a reference pixel.
-   */
+/** \class SpectralAngleFunctor
+ *  \brief This functor computes the spectral angle according to a reference pixel.
+ */
 namespace Functor
 {
 template<class TInput,class TOutputValue>
 class SpectralAngleFunctor
 {
- public:
+public:
   SpectralAngleFunctor()
-    { 
-      m_ReferencePixel.SetSize(4);
-      m_ReferencePixel.Fill(1);
-    };
+  {
+    m_ReferencePixel.SetSize(4);
+    m_ReferencePixel.Fill(1);
+  };
 
-  ~SpectralAngleFunctor(){};
+  ~SpectralAngleFunctor() {};
   inline TOutputValue operator()(const TInput& inPix)
+  {
+    TOutputValue out;
+
+    double dist=0.0;
+    double scalarProd=0.0;
+    double normProd=0.0;
+    double normProd1=0.0;
+    double sqrtNormProd = 0.0;
+    for (unsigned int i=0; i<std::min(inPix.Size(),m_ReferencePixel.Size()); i++)
     {
-      TOutputValue out;
-
-      double dist=0.0;
-      double scalarProd=0.0;
-      double normProd=0.0;
-      double normProd1=0.0;
-      double sqrtNormProd = 0.0;
-      for (unsigned int i=0; i<std::min(inPix.Size(),m_ReferencePixel.Size()); i++)
-      {
-        scalarProd += inPix[i]*m_ReferencePixel[i];
-        normProd1 += inPix[i]*inPix[i];
-      }
-      normProd = normProd1 * m_RefNorm*m_RefNorm;
-      sqrtNormProd = vcl_sqrt(normProd);
-      if ( (sqrtNormProd == 0.0) || ( scalarProd / sqrtNormProd > 1) )
-      {
-        dist = 0.0;
-      }
-      else
-      {
-        dist = vcl_acos(scalarProd/sqrtNormProd);
-      }
-
-      out = static_cast<TOutputValue>(dist);
-      return out;
-
+      scalarProd += inPix[i]*m_ReferencePixel[i];
+      normProd1 += inPix[i]*inPix[i];
     }
-  
+    normProd = normProd1 * m_RefNorm*m_RefNorm;
+    sqrtNormProd = vcl_sqrt(normProd);
+    if ( (sqrtNormProd == 0.0) || ( scalarProd / sqrtNormProd > 1) )
+    {
+      dist = 0.0;
+    }
+    else
+    {
+      dist = vcl_acos(scalarProd/sqrtNormProd);
+    }
+
+    out = static_cast<TOutputValue>(dist);
+    return out;
+
+  }
+
   void SetReferencePixel( TInput ref )
-    { 
-      m_ReferencePixel = ref;
-      m_RefNorm = 0.0;
-      for(unsigned int i = 0; i<ref.Size(); i++)
+  {
+    m_ReferencePixel = ref;
+    m_RefNorm = 0.0;
+    for (unsigned int i = 0; i<ref.Size(); i++)
     {
       m_RefNorm += ref[i]*ref[i];
     }
-      m_RefNorm = vcl_sqrt(static_cast<double>(m_RefNorm)); 
-    };
-  TInput GetReferencePixel(){ return m_ReferencePixel; };
-  
- protected:
+    m_RefNorm = vcl_sqrt(static_cast<double>(m_RefNorm));
+  };
+  TInput GetReferencePixel()
+  {
+    return m_ReferencePixel;
+  };
+
+protected:
   TInput m_ReferencePixel;
   double m_RefNorm;
 };

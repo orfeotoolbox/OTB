@@ -46,11 +46,11 @@ namespace otb
  * \ingroup ImageFunctions
  */
 template < class TInput,
-           class TOutput = std::complex<double>,
-           class TPrecision = double,
-     class TCoordRep = float >
+class TOutput = std::complex<double>,
+class TPrecision = double,
+class TCoordRep = float >
 class ITK_EXPORT ComplexMomentImageFunction :
-    public GeometricMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep>
+      public GeometricMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep>
 {
 public:
   /** Standard class typedefs. */
@@ -84,18 +84,18 @@ public:
 
   /** Evaluate the function at non-integer positions */
   virtual ComplexType Evaluate( const PointType& point ) const
-    {
-      IndexType index;
-      this->ConvertPointToNearestIndex( point, index );
-      return this->EvaluateAtIndex( index );
-    }
+  {
+    IndexType index;
+    this->ConvertPointToNearestIndex( point, index );
+    return this->EvaluateAtIndex( index );
+  }
   virtual ComplexType EvaluateAtContinuousIndex(
     const ContinuousIndexType& cindex ) const
-    {
-      IndexType index;
-      this->ConvertContinuousIndexToNearestIndex( cindex, index );
-      return this->EvaluateAtIndex( index );
-    }
+  {
+    IndexType index;
+    this->ConvertContinuousIndexToNearestIndex( cindex, index );
+    return this->EvaluateAtIndex( index );
+  }
 
   itkSetMacro(P, unsigned int);
   itkGetConstReferenceMacro(P, unsigned int);
@@ -105,7 +105,7 @@ public:
 
 protected:
   ComplexMomentImageFunction();
-  ~ComplexMomentImageFunction(){};
+  ~ComplexMomentImageFunction() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

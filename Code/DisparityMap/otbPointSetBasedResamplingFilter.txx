@@ -92,28 +92,28 @@ PointSetBasedResamplingFilter<TInputImage, TPointSet, TOutputImage>
   typedef itk::ImageRegionIteratorWithIndex<OutputImageType> IteratorType;
   IteratorType outputIt(outputPtr,outputPtr->GetRequestedRegion());
 
-  for(outputIt.GoToBegin();!outputIt.IsAtEnd();++outputIt)
+  for (outputIt.GoToBegin();!outputIt.IsAtEnd();++outputIt)
+  {
+    PointType outputPoint,inputPoint;
+    IndexType index;
+    typename TransformType::Pointer inverseTransform;
+
+    index = outputIt.GetIndex();
+    m_Transform->SetParameters(this->GetNearestPointTransformParameters(index));
+    m_Transform->GetInverse(inverseTransform);
+    outputPtr->TransformIndexToPhysicalPoint(index,outputPoint);
+    inputPoint = inverseTransform->TransformPoint(outputPoint);
+    otbMsgDevMacro(<<"back point: "<<inputPoint<<"(inverse trasform param: "<<inverseTransform->GetParameters()<<")");
+
+    if (m_Interpolator->IsInsideBuffer(inputPoint))
     {
-      PointType outputPoint,inputPoint;
-      IndexType index;
-      typename TransformType::Pointer inverseTransform;
-
-      index = outputIt.GetIndex();
-      m_Transform->SetParameters(this->GetNearestPointTransformParameters(index));
-      m_Transform->GetInverse(inverseTransform);
-      outputPtr->TransformIndexToPhysicalPoint(index,outputPoint);
-      inputPoint = inverseTransform->TransformPoint(outputPoint);
-      otbMsgDevMacro(<<"back point: "<<inputPoint<<"(inverse trasform param: "<<inverseTransform->GetParameters()<<")");
-
-      if(m_Interpolator->IsInsideBuffer(inputPoint))
-  {
-    outputIt.Set(m_Interpolator->Evaluate(inputPoint));
-  }
-      else
-  {
-    outputIt.Set(m_DefaultValue);
-  }
+      outputIt.Set(m_Interpolator->Evaluate(inputPoint));
     }
+    else
+    {
+      outputIt.Set(m_DefaultValue);
+    }
+  }
 }
 /**
  * \return The parameters of the transform associated with the nearest suitable point in pointset.
@@ -138,33 +138,33 @@ PointSetBasedResamplingFilter<TInputImage, TPointSet, TOutputImage>
   PointType indexPoint;
   outputPtr->TransformIndexToPhysicalPoint(index,indexPoint);
 
-  for(;it!=this->GetPointSet()->GetPoints()->End()&&itData!=this->GetPointSet()->GetPointData()->End();++it,++itData)
-    {
-      // If the point has a sufficient score
-      if(vcl_abs(itData.Value()[0])>m_MetricThreshold)
+  for (;it!=this->GetPointSet()->GetPoints()->End()&&itData!=this->GetPointSet()->GetPointData()->End();++it,++itData)
   {
-    ParametersType tmpParameters(m_Transform->GetNumberOfParameters());
-    PointType inputPoint, outputPoint;
+    // If the point has a sufficient score
+    if (vcl_abs(itData.Value()[0])>m_MetricThreshold)
+    {
+      ParametersType tmpParameters(m_Transform->GetNumberOfParameters());
+      PointType inputPoint, outputPoint;
 
-    for(unsigned int i = 0; i<m_Transform->GetNumberOfParameters();++i)
+      for (unsigned int i = 0; i<m_Transform->GetNumberOfParameters();++i)
       {
         tmpParameters[i]=itData.Value()[i+1];
       }
-    inputPoint[0] = it.Value()[0];
-    inputPoint[1] = it.Value()[1];
+      inputPoint[0] = it.Value()[0];
+      inputPoint[1] = it.Value()[1];
 
-    m_Transform->SetParameters(tmpParameters);
-    outputPoint = m_Transform->TransformPoint(inputPoint);
-    // compute the distance to current point
-    double d = vcl_pow(outputPoint[0]-indexPoint[0],2) + vcl_pow(outputPoint[1]-indexPoint[1],2);
+      m_Transform->SetParameters(tmpParameters);
+      outputPoint = m_Transform->TransformPoint(inputPoint);
+      // compute the distance to current point
+      double d = vcl_pow(outputPoint[0]-indexPoint[0],2) + vcl_pow(outputPoint[1]-indexPoint[1],2);
 
-    if(distance<0||distance>d)
+      if (distance<0||distance>d)
       {
         distance = d;
         parameters = tmpParameters;
       }
-  }
     }
+  }
   return parameters;
 }
 

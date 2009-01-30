@@ -37,81 +37,81 @@ namespace otb
    *
    * \ingroup ObjectListFilter
  */
-  template <class TInputList, class TOutputList >
-      class ITK_EXPORT ObjectListToObjectListFilter : public otb::ObjectListSource<TOutputList>
-      {
-        public:
-          /** Standard class typedefs. */
-          typedef ObjectListToObjectListFilter  Self;
-          typedef otb::ObjectListSource<TOutputList>  Superclass;
-          typedef itk::SmartPointer<Self>   Pointer;
-          typedef itk::SmartPointer<const Self>  ConstPointer;
+template <class TInputList, class TOutputList >
+class ITK_EXPORT ObjectListToObjectListFilter : public otb::ObjectListSource<TOutputList>
+{
+public:
+  /** Standard class typedefs. */
+  typedef ObjectListToObjectListFilter  Self;
+  typedef otb::ObjectListSource<TOutputList>  Superclass;
+  typedef itk::SmartPointer<Self>   Pointer;
+  typedef itk::SmartPointer<const Self>  ConstPointer;
 
-          /** Method for creation through the object factory. */
-          itkNewMacro(Self);
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self);
 
-          /** Run-time type information (and related methods). */
-          itkTypeMacro(ObjectListToObjectListFilter, ObjectListSource);
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(ObjectListToObjectListFilter, ObjectListSource);
 
-          /** Some typedefs. */
-          typedef TInputList InputListType;
-          typedef TOutputList OutputListType;
-          typedef typename TInputList::ConstPointer InputListPointer;
-          typedef typename TOutputList::Pointer OutputListPointer;
-          typedef typename TInputList::ConstIterator InputListIterator;
-          typedef typename InputListType::ObjectType InputObjectType;
-          typedef typename OutputListType::ObjectType OutputObjectType;
+  /** Some typedefs. */
+  typedef TInputList InputListType;
+  typedef TOutputList OutputListType;
+  typedef typename TInputList::ConstPointer InputListPointer;
+  typedef typename TOutputList::Pointer OutputListPointer;
+  typedef typename TInputList::ConstIterator InputListIterator;
+  typedef typename InputListType::ObjectType InputObjectType;
+  typedef typename OutputListType::ObjectType OutputObjectType;
 
-          typedef itk::DataObject::Pointer DataObjectPointer;
+  typedef itk::DataObject::Pointer DataObjectPointer;
 
-          typedef std::vector<OutputListPointer> OutputListForThreadType;
+  typedef std::vector<OutputListPointer> OutputListForThreadType;
 
-          virtual void SetInput( const InputListType *input);
-          const InputListType * GetInput(void);
+  virtual void SetInput( const InputListType *input);
+  const InputListType * GetInput(void);
 
 
-        protected:
-          /** Constructor */
-          ObjectListToObjectListFilter();
-          /** Destructor */
-          virtual ~ObjectListToObjectListFilter() {};
-          /**PrintSelf method */
-          virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+protected:
+  /** Constructor */
+  ObjectListToObjectListFilter();
+  /** Destructor */
+  virtual ~ObjectListToObjectListFilter() {};
+  /**PrintSelf method */
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-          virtual void GenerateData(void);
+  virtual void GenerateData(void);
 
-          /** Multi-threading implementation */
+  /** Multi-threading implementation */
 
-          virtual void BeforeThreadedGenerateData();
+  virtual void BeforeThreadedGenerateData();
 
-          virtual void AfterThreadedGenerateData() {};
+  virtual void AfterThreadedGenerateData() {};
 
-          virtual int SplitRequestedRegion(int threadId, int threadCount, unsigned int requestedElements, unsigned int& startIndex, unsigned int& stopIndex);
+  virtual int SplitRequestedRegion(int threadId, int threadCount, unsigned int requestedElements, unsigned int& startIndex, unsigned int& stopIndex);
 
-          /** startIndex and stopIndex represent the indices of the Objects
-           * to examine in thread threadId */
-          virtual void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, int threadId);
+  /** startIndex and stopIndex represent the indices of the Objects
+   * to examine in thread threadId */
+  virtual void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, int threadId);
 
-          /** Static function used as a "callback" by the MultiThreader.  The threading
-           * library will call this routine for each thread, which will delegate the
-           * control to ThreadedGenerateData(). */
-          static ITK_THREAD_RETURN_TYPE ThreaderCallback( void *arg );
+  /** Static function used as a "callback" by the MultiThreader.  The threading
+   * library will call this routine for each thread, which will delegate the
+   * control to ThreadedGenerateData(). */
+  static ITK_THREAD_RETURN_TYPE ThreaderCallback( void *arg );
 
-          /** Internal structure used for passing image data into the threading library */
-          struct ThreadStruct
-          {
-            Pointer Filter;
-          };
+  /** Internal structure used for passing image data into the threading library */
+  struct ThreadStruct
+  {
+    Pointer Filter;
+  };
 
-          /** End Multi-threading implementation */
+  /** End Multi-threading implementation */
 
-          OutputListForThreadType m_ObjectListPerThread;
+  OutputListForThreadType m_ObjectListPerThread;
 
-        private:
-          ObjectListToObjectListFilter(const Self&); //purposely not implemented
-          void operator=(const Self&); //purposely not implemented
+private:
+  ObjectListToObjectListFilter(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
 
-      };
+};
 
 } // end namespace otb
 

@@ -24,7 +24,8 @@
 #include "itkGrayscaleMorphologicalClosingImageFilter.h"
 #include "itkProgressAccumulator.h"
 
-namespace otb {
+namespace otb
+{
 /**
  * Constructor
  */
@@ -32,8 +33,8 @@ template <class TInputImage,class TOutputImage, class TKernel>
 ClosingOpeningMorphologicalFilter<TInputImage, TOutputImage, TKernel>
 ::ClosingOpeningMorphologicalFilter()
 {
-m_Kernel.SetRadius(1);
-m_Kernel.CreateStructuringElement();
+  m_Kernel.SetRadius(1);
+  m_Kernel.CreateStructuringElement();
 }
 /**
  * Main computation method

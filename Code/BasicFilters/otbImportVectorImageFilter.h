@@ -40,7 +40,7 @@ namespace otb
 
 template <typename TOutputImageType>
 class ITK_EXPORT ImportVectorImageFilter:
-    public itk::ImageSource< TOutputImageType >
+      public itk::ImageSource< TOutputImageType >
 {
 public:
   /** Typedef for the output image.   */
@@ -88,21 +88,29 @@ public:
    * data.  If "LetFilterManageMemory" is true, then this class
    * will free the memory when this object is destroyed. */
   virtual void SetImportPointer(TPixel *ptr, unsigned long num,
-                        bool LetFilterManageMemory);
+                                bool LetFilterManageMemory);
 
   /** Set the region object that defines the size and starting index
    * for the imported image. This will serve as the LargestPossibleRegion,
    * the BufferedRegion, and the RequestedRegion.
    * \sa ImageRegion */
   void SetRegion(const RegionType &region)
-  { if (m_Region != region) {m_Region = region; this->Modified();} };
+  {
+    if (m_Region != region)
+    {
+      m_Region = region;
+      this->Modified();
+    }
+  };
 
   /** Get the region object that defines the size and starting index
    * for the imported image. This will serve as the LargestPossibleRegion,
    * the BufferedRegion, and the RequestedRegion.
    * \sa ImageRegion */
   const RegionType& GetRegion() const
-  { return m_Region;};
+  {
+    return m_Region;
+  };
 
   /** Set the spacing (size of a pixel) of the image.
    * \sa GetSpacing() */

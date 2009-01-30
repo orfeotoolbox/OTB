@@ -24,42 +24,42 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 namespace Functor
-  {
-    /** \class RemoveIsolatedByDirectionFunctor
-     *  \brief Binary neighborhood functor to remove isolated pixels by direction.
-     *  Used by the RemoveIsolatedByDirectionFilter.
-     *  \sa RemoveIsolatedByDirectionFilter
-     *  \ingroup Functor
-     */
-    template <class TInput1, class TInput2, class TOutput>
-      class RemoveIsolatedByDirectionFunctor
-      {
-      public:
+{
+/** \class RemoveIsolatedByDirectionFunctor
+ *  \brief Binary neighborhood functor to remove isolated pixels by direction.
+ *  Used by the RemoveIsolatedByDirectionFilter.
+ *  \sa RemoveIsolatedByDirectionFilter
+ *  \ingroup Functor
+ */
+template <class TInput1, class TInput2, class TOutput>
+class RemoveIsolatedByDirectionFunctor
+{
+public:
   RemoveIsolatedByDirectionFunctor() {};
   ~RemoveIsolatedByDirectionFunctor() {};
   inline TOutput operator()(const TInput1 & itA, const TInput2 &itB)
+  {
+    double currentDirection = itB.GetCenterPixel();
+    int nEqualNeighbors = 0;
+    for (int neighborhoodIndex=0; neighborhoodIndex < 9; ++neighborhoodIndex)
     {
-      double currentDirection = itB.GetCenterPixel();
-      int nEqualNeighbors = 0;
-           for (int neighborhoodIndex=0; neighborhoodIndex < 9; ++neighborhoodIndex)
-       {
-             if (itB.GetPixel(neighborhoodIndex) == currentDirection)
-         {
-               ++nEqualNeighbors;
-         }
-       }
-           if (nEqualNeighbors <= 1)
-       {
-         //should never be 0 as it is at least equal to itself
-         return 0;
-       }
-     else
-       {
-         return static_cast<TOutput>(itA.GetCenterPixel());
-       }
+      if (itB.GetPixel(neighborhoodIndex) == currentDirection)
+      {
+        ++nEqualNeighbors;
+      }
     }
-      };
+    if (nEqualNeighbors <= 1)
+    {
+      //should never be 0 as it is at least equal to itself
+      return 0;
+    }
+    else
+    {
+      return static_cast<TOutput>(itA.GetCenterPixel());
+    }
   }
+};
+}
 /** \class RemoveIsolatedByDirectionFilter
  *  \brief This filter removes (sets to null intensity) pixels isolated by direction.
  *
@@ -74,9 +74,9 @@ namespace Functor
  */
 template <class TInputModulus, class TInputDirection, class TOutputImage>
 class ITK_EXPORT RemoveIsolatedByDirectionFilter
-  : public ModulusAndDirectionImageToImageFilter<TInputModulus, TInputDirection, TOutputImage>
+      : public ModulusAndDirectionImageToImageFilter<TInputModulus, TInputDirection, TOutputImage>
 {
- public:
+public:
   /** Standard typedefs */
   typedef RemoveIsolatedByDirectionFilter                                                     Self;
   typedef ModulusAndDirectionImageToImageFilter<TInputModulus, TInputDirection, TOutputImage> Superclass;
@@ -92,31 +92,31 @@ class ITK_EXPORT RemoveIsolatedByDirectionFilter
   /** typedef of the computing filter (this allows us to derive from ModulusAndDirectionToImageFilter as well as
       using the BinaryFunctorNeighBorhoodImageFilter, which is appropriate here */
   typedef Functor::RemoveIsolatedByDirectionFunctor<
-    typename itk::ConstNeighborhoodIterator<TInputModulus>,
-    typename itk::ConstNeighborhoodIterator<TInputDirection>,
-    typename TOutputImage::PixelType>  FunctorType;
+  typename itk::ConstNeighborhoodIterator<TInputModulus>,
+  typename itk::ConstNeighborhoodIterator<TInputDirection>,
+  typename TOutputImage::PixelType>  FunctorType;
   typedef otb::BinaryFunctorNeighborhoodImageFilter<TInputModulus, TInputDirection,TOutputImage,FunctorType> ComputingFilterType;
 
 protected:
   /** Constructor */
-  RemoveIsolatedByDirectionFilter(){};
+  RemoveIsolatedByDirectionFilter() {};
   /** Destructor */
   virtual ~RemoveIsolatedByDirectionFilter() {};
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
-    {
-      Superclass::PrintSelf(os,indent);
-    };
+  {
+    Superclass::PrintSelf(os,indent);
+  };
   /** Main computation method */
   virtual void GenerateData(void)
-    {
-      typename ComputingFilterType::Pointer filter = ComputingFilterType::New();
-      filter->SetInput1(this->GetInput());
-      filter->SetInput2(this->GetInputDirection());
-      filter->GraftOutput(this->GetOutput());
-      filter->Update();
-      this->GraftOutput(filter->GetOutput());
-    }
+  {
+    typename ComputingFilterType::Pointer filter = ComputingFilterType::New();
+    filter->SetInput1(this->GetInput());
+    filter->SetInput2(this->GetInputDirection());
+    filter->GraftOutput(this->GetOutput());
+    filter->Update();
+    this->GraftOutput(filter->GetOutput());
+  }
 
 private:
   RemoveIsolatedByDirectionFilter(const Self&); //purposely not implemented

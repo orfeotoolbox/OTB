@@ -41,15 +41,15 @@ namespace otb
 /**
  * this enum defines the different streaming mode available in OTB.
    */
-  typedef enum
-    {
-        SET_NUMBER_OF_STREAM_DIVISIONS = 1,
-        SET_BUFFER_MEMORY_SIZE = 2,
-        SET_BUFFER_NUMBER_OF_LINES = 3,
-        SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS = 4,
-        SET_TILING_WITH_SET_NUMBER_OF_STREAM_DIVISIONS = 5,
-        SET_TILING_WITH_SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS = 6
-    } StreamingMode;
+typedef enum
+{
+  SET_NUMBER_OF_STREAM_DIVISIONS = 1,
+  SET_BUFFER_MEMORY_SIZE = 2,
+  SET_BUFFER_NUMBER_OF_LINES = 3,
+  SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS = 4,
+  SET_TILING_WITH_SET_NUMBER_OF_STREAM_DIVISIONS = 5,
+  SET_TILING_WITH_SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS = 6
+} StreamingMode;
 
 /** \class StreamingTraits
  *  \brief This class is a helper class for terminal streaming filter implementation.
@@ -75,7 +75,7 @@ public:
                       ImageType::ImageDimension);
 
   typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(ImageDimension)>  SplitterType;
-   // ITK Interpolators
+  // ITK Interpolators
   typedef itk::InterpolateImageFunction<TImage,double>                      InterpolationType;
   typedef itk::BSplineInterpolateImageFunction<TImage,double>               BSplineInterpolationType;
   typedef itk::LinearInterpolateImageFunction<TImage,double>                LinearInterpolationType;
@@ -111,12 +111,12 @@ public:
    * \return The number of streaming divisions.
    */
   static unsigned long CalculateNumberOfStreamDivisions(const TImage * image,
-                                                        RegionType region,
-                                                        SplitterType * splitter,
-                                                        StreamingModeType mode,
-                                                        unsigned long numberOfStreamDivision,
-                                                        unsigned long bufferMemorySize,
-                                                        unsigned long bufferNumberOfLinesDivisions);
+      RegionType region,
+      SplitterType * splitter,
+      StreamingModeType mode,
+      unsigned long numberOfStreamDivision,
+      unsigned long bufferMemorySize,
+      unsigned long bufferNumberOfLinesDivisions);
 
 
   static unsigned int CalculateNeededRadiusForInterpolator(const InterpolationType* interpolator);

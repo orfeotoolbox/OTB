@@ -54,13 +54,13 @@ ImageToImageListFilter<TInputImage,TOutputImage>
 {
   // If there is no input
   if (this->GetNumberOfInputs()<1)
-    {
+  {
     // exit
     return 0;
-    }
+  }
   // else return the first input
   return static_cast<TInputImage * >
-    (this->itk::ProcessObject::GetInput(0) );
+         (this->itk::ProcessObject::GetInput(0) );
 }
 /**
  * PrintSelf Method

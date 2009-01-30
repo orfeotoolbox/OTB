@@ -62,10 +62,10 @@ class  ITK_EXPORT TouziEdgeDetectorImageFilter :  public ImageToModulusAndDirect
 public:
   /** Extract input and output images sizes. */
   itkStaticConstMacro(    InputImageDimension,
-          unsigned int,
+                          unsigned int,
                           TInputImage::ImageDimension);
   itkStaticConstMacro(    OutputImageDimension,
-          unsigned int,
+                          unsigned int,
                           TOutputImage::ImageDimension);
 
   /** typedef for the classes standards. */

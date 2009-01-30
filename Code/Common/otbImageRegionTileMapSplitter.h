@@ -67,39 +67,41 @@ namespace otb
    * \ingroup DataProcessing
  */
 
-  template <unsigned int VImageDimension>
-      class ITK_EXPORT ImageRegionTileMapSplitter: public itk::ImageRegionSplitter<VImageDimension>
+template <unsigned int VImageDimension>
+class ITK_EXPORT ImageRegionTileMapSplitter: public itk::ImageRegionSplitter<VImageDimension>
+{
+public:
+  /** Standard class typedefs. */
+  typedef ImageRegionTileMapSplitter              Self;
+  typedef itk::ImageRegionSplitter<VImageDimension>  Superclass;
+  typedef itk::SmartPointer<Self>  Pointer;
+  typedef itk::SmartPointer<const Self>  ConstPointer;
+
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self);
+
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(ImageRegionTileMapSplitter,itk::Object);
+
+  /** Dimension of the image available at compile time. */
+  itkStaticConstMacro(ImageDimension, unsigned int, VImageDimension);
+
+  /** Dimension of the image available at run time. */
+  static unsigned int GetImageDimension()
   {
-    public:
-      /** Standard class typedefs. */
-      typedef ImageRegionTileMapSplitter              Self;
-      typedef itk::ImageRegionSplitter<VImageDimension>  Superclass;
-      typedef itk::SmartPointer<Self>  Pointer;
-      typedef itk::SmartPointer<const Self>  ConstPointer;
+    return VImageDimension;
+  }
 
-      /** Method for creation through the object factory. */
-      itkNewMacro(Self);
+  /** Index typedef support. An index is used to access pixel values. */
+  typedef itk::Index<VImageDimension>  IndexType;
+  typedef typename IndexType::IndexValueType  IndexValueType;
 
-      /** Run-time type information (and related methods). */
-      itkTypeMacro(ImageRegionTileMapSplitter,itk::Object);
+  /** Size typedef support. A size is used to define region bounds. */
+  typedef itk::Size<VImageDimension>  SizeType;
+  typedef typename SizeType::SizeValueType  SizeValueType;
 
-      /** Dimension of the image available at compile time. */
-      itkStaticConstMacro(ImageDimension, unsigned int, VImageDimension);
-
-      /** Dimension of the image available at run time. */
-      static unsigned int GetImageDimension()
-      { return VImageDimension; }
-
-      /** Index typedef support. An index is used to access pixel values. */
-      typedef itk::Index<VImageDimension>  IndexType;
-      typedef typename IndexType::IndexValueType  IndexValueType;
-
-      /** Size typedef support. A size is used to define region bounds. */
-      typedef itk::Size<VImageDimension>  SizeType;
-      typedef typename SizeType::SizeValueType  SizeValueType;
-
-      /** Region typedef support.   */
-      typedef itk::ImageRegion<VImageDimension> RegionType;
+  /** Region typedef support.   */
+  typedef itk::ImageRegion<VImageDimension> RegionType;
 
   /** How many pieces can the specifed region be split? A given region
        * cannot always be divided into the requested number of pieces.  For
@@ -107,25 +109,25 @@ namespace otb
        * a certain dimensions, then some splits will not be possible. This
        * method returns a number less than or equal to the requested number
    * of pieces. */
-      virtual unsigned int GetNumberOfSplits(const RegionType &region,
-                                             unsigned int requestedNumber);
+  virtual unsigned int GetNumberOfSplits(const RegionType &region,
+                                         unsigned int requestedNumber);
 
   /** Get a region definition that represents the ith piece a specified region.
        * The "numberOfPieces" specified should be less than or equal to what
    * GetNumberOfSplits() returns. */
-      virtual RegionType GetSplit(unsigned int i, unsigned int numberOfPieces,
-                                  const RegionType &region);
+  virtual RegionType GetSplit(unsigned int i, unsigned int numberOfPieces,
+                              const RegionType &region);
 
-    protected:
-      ImageRegionTileMapSplitter() {}
-      ~ImageRegionTileMapSplitter() {}
-      void PrintSelf(std::ostream& os, itk::Indent indent) const;
+protected:
+  ImageRegionTileMapSplitter() {}
+  ~ImageRegionTileMapSplitter() {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-    private:
-      ImageRegionTileMapSplitter(const ImageRegionTileMapSplitter&); //purposely not implemented
-      void operator=(const ImageRegionTileMapSplitter&); //purposely not implemented
+private:
+  ImageRegionTileMapSplitter(const ImageRegionTileMapSplitter&); //purposely not implemented
+  void operator=(const ImageRegionTileMapSplitter&); //purposely not implemented
 
-  };
+};
 
 
 } // end namespace itk

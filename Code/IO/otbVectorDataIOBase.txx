@@ -28,7 +28,7 @@ namespace otb
 template <class TData>
 VectorDataIOBase<TData>
 ::VectorDataIOBase() :
-  m_ByteOrder(OrderNotApplicable)
+    m_ByteOrder(OrderNotApplicable)
 {
   Reset(false);
 }
@@ -55,16 +55,16 @@ VectorDataIOBase<TData>
 ::GetByteOrderAsString(ByteOrder t) const
 {
   std::string s;
-  switch(t)
-    {
-    case BigEndian:
-      return s = "BigEndian";
-    case LittleEndian:
-      return s = "LittleEndian";
-    case OrderNotApplicable:
-    default:
-      return s = "OrderNotApplicable";
-    }
+  switch (t)
+  {
+  case BigEndian:
+    return s = "BigEndian";
+  case LittleEndian:
+    return s = "LittleEndian";
+  case OrderNotApplicable:
+  default:
+    return s = "OrderNotApplicable";
+  }
   return s="OrderNotApplicable";
 }
 

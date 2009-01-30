@@ -33,9 +33,9 @@ namespace otb
  */
 template < class TValue,unsigned int VDimension=2>
 class ITK_EXPORT PolyLineParametricPathWithValue
-  : public itk::PolyLineParametricPath<VDimension>
+      : public itk::PolyLineParametricPath<VDimension>
 {
- public:
+public:
   /** Standard typedefs */
   typedef PolyLineParametricPathWithValue          Self;
   typedef itk::PolyLineParametricPath<VDimension>  Superclass;
@@ -49,53 +49,53 @@ class ITK_EXPORT PolyLineParametricPathWithValue
   itkTypeMacro(PolyLineParametricPath, MySuperclass);
 
   /** Template parameters typedefs */
- typedef TValue ValueType;
+  typedef TValue ValueType;
 
- /** Derived typedefs */
- typedef typename Superclass::VertexType VertexType;
- typedef typename Superclass::VertexListType VertexListType;
- typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
- typedef typename VertexListType::ConstIterator   VertexListConstIteratorType;
+  /** Derived typedefs */
+  typedef typename Superclass::VertexType VertexType;
+  typedef typename Superclass::VertexListType VertexListType;
+  typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
+  typedef typename VertexListType::ConstIterator   VertexListConstIteratorType;
 
- itkGetMacro(Key,std::string);
+  itkGetMacro(Key,std::string);
 
- void SetValue(ValueType value)
- {
-   itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
-   itk::EncapsulateMetaData<ValueType>(dict,m_Key,value);
- }
+  void SetValue(ValueType value)
+  {
+    itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
+    itk::EncapsulateMetaData<ValueType>(dict,m_Key,value);
+  }
 
- ValueType GetValue(void) const
- {
-   ValueType resp(0);
-   const itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
-   if(dict.HasKey(m_Key))
-   {
-     itk::ExposeMetaData<ValueType>(dict,m_Key,resp);
-   }
-   else
-   {
-     itkGenericExceptionMacro(<<"Key "<<m_Key<<" not found in metadata dictionary !");
-   }
-   return resp;
- }
+  ValueType GetValue(void) const
+  {
+    ValueType resp(0);
+    const itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
+    if (dict.HasKey(m_Key))
+    {
+      itk::ExposeMetaData<ValueType>(dict,m_Key,resp);
+    }
+    else
+    {
+      itkGenericExceptionMacro(<<"Key "<<m_Key<<" not found in metadata dictionary !");
+    }
+    return resp;
+  }
 
- /**
-  * Return the path length (perimeter).
-  * \return The length.
-  */
- virtual double GetLength() const;
+  /**
+   * Return the path length (perimeter).
+   * \return The length.
+   */
+  virtual double GetLength() const;
 
 protected:
   /** Constructor */
   PolyLineParametricPathWithValue();
   /** Destructor */
   virtual ~PolyLineParametricPathWithValue()
- { }
- /**PrintSelf method */
+  { }
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
- private:
+private:
   PolyLineParametricPathWithValue(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   std::string m_Key;

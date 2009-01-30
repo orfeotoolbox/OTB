@@ -25,7 +25,8 @@
 #include <iostream>
 #include <string>
 
-namespace otb {
+namespace otb
+{
 /**
  * Constructor
  */
@@ -61,7 +62,7 @@ RCC8GraphFileReader<TOutputGraph>
   typename std::string::size_type pos5 = line.find_first_of("\" ",pos4+1);
   RCC8ValueType value =static_cast<RCC8ValueType>(atoi(line.substr(pos4+1,pos5-pos4-1).c_str()));
   otbMsgDevMacro(<<"RCC8GraphFileReader: Edge line parsed: "<<source<<" -> "
-       <<target<<" "<<value);
+                 <<target<<" "<<value);
   this->GetOutput()->AddEdge(source,target,value);
 }
 /**
@@ -82,7 +83,7 @@ RCC8GraphFileReader<TOutputGraph>
   midPos=line.find_first_of("\"",pos+2);
   nextPos=line.find_first_of("\"",midPos+1);
   std::string key,value;
-  while((midPos!=std::string::npos)&&(nextPos!=std::string::npos))
+  while ((midPos!=std::string::npos)&&(nextPos!=std::string::npos))
   {
     key = line.substr(pos+2,midPos-pos-3);
     value = line.substr(midPos+1,nextPos-midPos-1);
@@ -112,32 +113,32 @@ RCC8GraphFileReader<TOutputGraph>
   fin.open(m_FileName.c_str());
 
   // Test if the file has been opened correctly
-  if(!fin)
-    {
-      RCC8GraphFileReaderException e(__FILE__, __LINE__);
-      itk::OStringStream msg;
-      msg << " Could not create IO object for file ";
-      msg<<m_FileName<<"."<<std::endl;
-      e.SetDescription(msg.str().c_str());
-      throw e;
-      return;
-    }
+  if (!fin)
+  {
+    RCC8GraphFileReaderException e(__FILE__, __LINE__);
+    itk::OStringStream msg;
+    msg << " Could not create IO object for file ";
+    msg<<m_FileName<<"."<<std::endl;
+    e.SetDescription(msg.str().c_str());
+    throw e;
+    return;
+  }
 
   // if so, parse it
-  while(!fin.eof())
+  while (!fin.eof())
+  {
+    std::getline(fin,line);
+    if (line.find("->")!=std::string::npos)
     {
-      std::getline(fin,line);
-      if(line.find("->")!=std::string::npos)
-  {
-    // edge line
-    this->ParseEdge(line);
-  }
-      else if(line.find("[")!=std::string::npos)
-  {
-    // vertex line
-    this->ParseVertex(line);
-  }
+      // edge line
+      this->ParseEdge(line);
     }
+    else if (line.find("[")!=std::string::npos)
+    {
+      // vertex line
+      this->ParseVertex(line);
+    }
+  }
   fin.close();
 }
 /**

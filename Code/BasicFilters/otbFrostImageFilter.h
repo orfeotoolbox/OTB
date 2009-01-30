@@ -49,10 +49,10 @@ class ITK_EXPORT FrostImageFilter :  public itk::ImageToImageFilter< TInputImage
 public:
   /** Extract input and output images sizes. */
   itkStaticConstMacro(    InputImageDimension,
-          unsigned int,
+                          unsigned int,
                           TInputImage::ImageDimension);
   itkStaticConstMacro(    OutputImageDimension,
-          unsigned int,
+                          unsigned int,
                           TOutputImage::ImageDimension);
 
   /** typedef to simplify variables definition and declaration. */

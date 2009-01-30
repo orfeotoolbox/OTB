@@ -23,24 +23,24 @@
 
 namespace otb
 {
-  /** \class StreamingShrinkImageFilter
-   *  \brief This class performs a streaming isotropic shrinking operation without smoothing.
-   *
-   * It is intended to be used where a fast quicklook generation is needed for huge images
-   * (for instance for visualization applications).
-   *
-   * It computes the size of the output according to the size of the input image, a read only
-   * the strip of the input image needed to build a line of the output image. In this strip,
-   * the pixel are directly selected and passed to the output image.
-   *
-   * For example, with a 6000X6000 image and a 10 shrinkFactor, it will read 600 lines of 5990 pixels
-   * instead of the whole image.
-   */
+/** \class StreamingShrinkImageFilter
+ *  \brief This class performs a streaming isotropic shrinking operation without smoothing.
+ *
+ * It is intended to be used where a fast quicklook generation is needed for huge images
+ * (for instance for visualization applications).
+ *
+ * It computes the size of the output according to the size of the input image, a read only
+ * the strip of the input image needed to build a line of the output image. In this strip,
+ * the pixel are directly selected and passed to the output image.
+ *
+ * For example, with a 6000X6000 image and a 10 shrinkFactor, it will read 600 lines of 5990 pixels
+ * instead of the whole image.
+ */
 template <class TInputImage,class TOutputImage>
 class ITK_EXPORT StreamingShrinkImageFilter
-: public itk::ImageToImageFilter<TInputImage,TOutputImage>
+      : public itk::ImageToImageFilter<TInputImage,TOutputImage>
 {
- public:
+public:
   /** Standard typedefs */
   typedef StreamingShrinkImageFilter               Self;
   typedef itk::ImageToImageFilter<TInputImage,TOutputImage>   Superclass;
@@ -74,7 +74,7 @@ class ITK_EXPORT StreamingShrinkImageFilter
   /** Main computation method */
   virtual void UpdateOutputData(itk::DataObject *itkNotUsed(output));
 
- protected:
+protected:
   /** Constructor */
   StreamingShrinkImageFilter();
   /** Destructor */
@@ -82,14 +82,14 @@ class ITK_EXPORT StreamingShrinkImageFilter
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
- private:
+private:
   StreamingShrinkImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   /** The shrink factor */
   unsigned int m_ShrinkFactor;
 
-  };
+};
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

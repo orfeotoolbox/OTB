@@ -36,10 +36,10 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
   m_Size.Fill(0);
 
   for (unsigned int i = 0; i < OutputImageDimension; i++)
-    {
+  {
     m_Spacing[i] = 1.0;
     m_Origin[i] = 0.;
-    }
+  }
 
   m_InsideValue = 0;
   m_OutsideValue = 0;
@@ -63,7 +63,7 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
 
   // Process object is not const-correct so the const_cast is required here
   this->itk::ProcessObject::SetNthInput(0,
-                                   const_cast< InputSpatialObjectType * >( input ) );
+                                        const_cast< InputSpatialObjectType * >( input ) );
 }
 
 
@@ -75,7 +75,7 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
 {
   // Process object is not const-correct so the const_cast is required here
   this->itk::ProcessObject::SetNthInput(index,
-                                   const_cast< TInputSpatialObject *>( object ) );
+                                        const_cast< TInputSpatialObject *>( object ) );
 }
 
 
@@ -87,12 +87,12 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
 ::GetInput(void)
 {
   if (this->GetNumberOfInputs() < 1)
-    {
+  {
     return 0;
-    }
+  }
 
   return static_cast<const TInputSpatialObject * >
-    (this->itk::ProcessObject::GetInput(0) );
+         (this->itk::ProcessObject::GetInput(0) );
 }
 
 /** Get the input Spatial Object */
@@ -102,7 +102,7 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
 ::GetInput(unsigned int idx)
 {
   return static_cast< const TInputSpatialObject * >
-    (this->itk::ProcessObject::GetInput(idx));
+         (this->itk::ProcessObject::GetInput(idx));
 }
 
 
@@ -114,20 +114,20 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
 {
   unsigned int i;
   for (i=0; i<TOutputImage::ImageDimension; i++)
-    {
+  {
     if ( (double)spacing[i] != m_Spacing[i] )
-      {
-      break;
-      }
-    }
-  if ( i < TOutputImage::ImageDimension )
     {
-    for (i=0; i<TOutputImage::ImageDimension; i++)
-      {
-      m_Spacing[i] = spacing[i];
-      }
-    this->Modified();
+      break;
     }
+  }
+  if ( i < TOutputImage::ImageDimension )
+  {
+    for (i=0; i<TOutputImage::ImageDimension; i++)
+    {
+      m_Spacing[i] = spacing[i];
+    }
+    this->Modified();
+  }
 }
 
 //----------------------------------------------------------------------------
@@ -138,19 +138,19 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
 {
   unsigned int i;
   for (i=0; i<OutputImageDimension; i++)
-    {
+  {
     if ( spacing[i] != m_Spacing[i] )
-      {
-      break;
-      }
-    }
-  if ( i < OutputImageDimension )
     {
-    for (i=0; i<OutputImageDimension; i++)
-      {
-      m_Spacing[i] = spacing[i];
-      }
+      break;
     }
+  }
+  if ( i < OutputImageDimension )
+  {
+    for (i=0; i<OutputImageDimension; i++)
+    {
+      m_Spacing[i] = spacing[i];
+    }
+  }
 }
 
 template <class TInputSpatialObject, class TOutputImage>
@@ -160,19 +160,19 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
 {
   unsigned int i;
   for (i=0; i<OutputImageDimension; i++)
-    {
+  {
     if ( (double)spacing[i] != m_Spacing[i] )
-      {
-      break;
-      }
-    }
-  if ( i < OutputImageDimension )
     {
-    for (i=0; i<OutputImageDimension; i++)
-      {
-      m_Spacing[i] = spacing[i];
-      }
+      break;
     }
+  }
+  if ( i < OutputImageDimension )
+  {
+    for (i=0; i<OutputImageDimension; i++)
+    {
+      m_Spacing[i] = spacing[i];
+    }
+  }
 }
 
 template <class TInputSpatialObject, class TOutputImage>
@@ -192,20 +192,20 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
 {
   unsigned int i;
   for (i=0; i<TOutputImage::ImageDimension; i++)
-    {
+  {
     if ( (double)origin[i] != m_Origin[i] )
-      {
-      break;
-      }
-    }
-  if ( i < TOutputImage::ImageDimension )
     {
-    for (i=0; i<TOutputImage::ImageDimension; i++)
-      {
-      m_Origin[i] = origin[i];
-      }
-    this->Modified();
+      break;
     }
+  }
+  if ( i < TOutputImage::ImageDimension )
+  {
+    for (i=0; i<TOutputImage::ImageDimension; i++)
+    {
+      m_Origin[i] = origin[i];
+    }
+    this->Modified();
+  }
 }
 
 //----------------------------------------------------------------------------
@@ -216,20 +216,20 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
 {
   unsigned int i;
   for (i=0; i<OutputImageDimension; i++)
-    {
+  {
     if ( origin[i] != m_Origin[i] )
-      {
-      break;
-      }
-    }
-  if ( i < OutputImageDimension )
     {
-    for (i=0; i<OutputImageDimension; i++)
-      {
-      m_Origin[i] = origin[i];
-      }
-    this->Modified();
+      break;
     }
+  }
+  if ( i < OutputImageDimension )
+  {
+    for (i=0; i<OutputImageDimension; i++)
+    {
+      m_Origin[i] = origin[i];
+    }
+    this->Modified();
+  }
 }
 
 template <class TInputSpatialObject, class TOutputImage>
@@ -239,20 +239,20 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
 {
   unsigned int i;
   for (i=0; i<OutputImageDimension; i++)
-    {
+  {
     if ( (double)origin[i] != m_Origin[i] )
-      {
-      break;
-      }
-    }
-  if ( i < OutputImageDimension )
     {
-    for (i=0; i<OutputImageDimension; i++)
-      {
-      m_Origin[i] = origin[i];
-      }
-    this->Modified();
+      break;
     }
+  }
+  if ( i < OutputImageDimension )
+  {
+    for (i=0; i<OutputImageDimension; i++)
+    {
+      m_Origin[i] = origin[i];
+    }
+    this->Modified();
+  }
 }
 
 template <class TInputSpatialObject, class TOutputImage>
@@ -279,59 +279,59 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
   OutputImagePointer   OutputImage = this->GetOutput();
 
   // Generate the image
-        SizeType size;
-        double origine[ObjectDimension];
-        InputObject->ComputeBoundingBox();
-        bool originspecified = false;
-        if (!strcmp(InputObject->GetNameOfClass(),"GroupSpatialObject"))
-        {
+  SizeType size;
+  double origine[ObjectDimension];
+  InputObject->ComputeBoundingBox();
+  bool originspecified = false;
+  if (!strcmp(InputObject->GetNameOfClass(),"GroupSpatialObject"))
+  {
 
-        ChildrenType children;
-        children=InputObject->GetChildren(0);
-        IteratorType iter = children->begin();
-        IteratorType end = children->end();
-        double minimum[ObjectDimension];
+    ChildrenType children;
+    children=InputObject->GetChildren(0);
+    IteratorType iter = children->begin();
+    IteratorType end = children->end();
+    double minimum[ObjectDimension];
 
-        (*iter)->ComputeBoundingBox();
-        for(i=0;i<ObjectDimension;i++)
-        {
-                minimum[i]=(*iter)->GetBoundingBox()->GetMinimum()[i];
-        }
-
-        while(iter != end)
-        {
-                (*iter)->ComputeBoundingBox();
-                for(i=0;i<ObjectDimension;i++)
-                {
-                        if ((*iter)->GetBoundingBox()->GetMinimum()[i] < minimum[i])
-                        {
-                                minimum[i]=(*iter)->GetBoundingBox()->GetMinimum()[i];
-                        }
-                }
-                iter++;
-        }
-
-        for(i=0;i<ObjectDimension;i++)
+    (*iter)->ComputeBoundingBox();
+    for (i=0;i<ObjectDimension;i++)
     {
-        size[i] = (long unsigned int) (InputObject->GetBoundingBox()->GetMaximum()[i] - minimum[i])+1;
-                origine[i]=(long int) minimum[i];
-                originspecified=true;
+      minimum[i]=(*iter)->GetBoundingBox()->GetMinimum()[i];
+    }
 
+    while (iter != end)
+    {
+      (*iter)->ComputeBoundingBox();
+      for (i=0;i<ObjectDimension;i++)
+      {
+        if ((*iter)->GetBoundingBox()->GetMinimum()[i] < minimum[i])
+        {
+          minimum[i]=(*iter)->GetBoundingBox()->GetMinimum()[i];
         }
+      }
+      iter++;
+    }
+
+    for (i=0;i<ObjectDimension;i++)
+    {
+      size[i] = (long unsigned int) (InputObject->GetBoundingBox()->GetMaximum()[i] - minimum[i])+1;
+      origine[i]=(long int) minimum[i];
+      originspecified=true;
+
+    }
 
 
-                printf("minx= %6.3f,miny= %6.3f,maxx= %6.3f,maxy= %6.3f \n",minimum[0],minimum[1],InputObject->GetBoundingBox()->GetMaximum()[0],InputObject->GetBoundingBox()->GetMaximum()[1]);
+    printf("minx= %6.3f,miny= %6.3f,maxx= %6.3f,maxy= %6.3f \n",minimum[0],minimum[1],InputObject->GetBoundingBox()->GetMaximum()[0],InputObject->GetBoundingBox()->GetMaximum()[1]);
 
 
   }
   else
   {
 
-        for(i=0;i<ObjectDimension;i++)
-        {
-        size[i] = (long int)(InputObject->GetBoundingBox()->GetMaximum()[i]
-                                  - InputObject->GetBoundingBox()->GetMinimum()[i]);
-        }
+    for (i=0;i<ObjectDimension;i++)
+    {
+      size[i] = (long int)(InputObject->GetBoundingBox()->GetMaximum()[i]
+                           - InputObject->GetBoundingBox()->GetMinimum()[i]);
+    }
 
   }
 
@@ -345,22 +345,22 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
 
   bool specified = false;
   for (i = 0; i < OutputImageDimension; i++)
-    {
+  {
     if (m_Size[i] != 0)
-      {
+    {
       specified = true;
       break;
-      }
     }
+  }
 
   if (specified)
-    {
+  {
     region.SetSize( m_Size );
-    }
+  }
   else
-    {
+  {
     region.SetSize ( size );
-    }
+  }
   region.SetIndex( index );
 
   OutputImage->SetLargestPossibleRegion( region);     //
@@ -372,26 +372,26 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
 
   specified = false;
   for (i = 0; i < OutputImageDimension; i++)
-    {
+  {
     if (m_Spacing[i] != 0)
-      {
+    {
       specified = true;
       break;
-      }
     }
+  }
 
   if (specified)
-    {
+  {
     OutputImage->SetSpacing(this->m_Spacing);         // set spacing
-    }
+  }
   else
-    {
+  {
     OutputImage->SetSpacing(InputObject->GetIndexToObjectTransform()->GetScaleComponent());   // set spacing
-    }
+  }
 
   if (originspecified)
   {
-        OutputImage->SetOrigin(origine);   //   and origin
+    OutputImage->SetOrigin(origine);   //   and origin
   }
   else OutputImage->SetOrigin(m_Origin);
 
@@ -403,42 +403,42 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
 
   itk::Point<double,ObjectDimension> point;
 
-  while(!it.IsAtEnd())
-    {
+  while (!it.IsAtEnd())
+  {
 
     // ValueAt requires the point to be in physical coordinate i.e
-    for(unsigned int i=0;i<ObjectDimension;i++)
-      {
+    for (unsigned int i=0;i<ObjectDimension;i++)
+    {
       point[i]=(int) (it.GetIndex()[i]*m_Spacing[i])+m_Origin[i];
-      }
+    }
     double val =0;
 
     InputObject->ValueAt(point,val,99999);
-    if(   m_InsideValue != 0
-          ||  m_OutsideValue != 0 )
+    if (   m_InsideValue != 0
+           ||  m_OutsideValue != 0 )
+    {
+      if ( val)
       {
-      if( val)
+        if (m_UseObjectValue)
         {
-        if(m_UseObjectValue)
-          {
           it.Set(static_cast<ValueType>(val));
-          }
+        }
         else
-          {
-          it.Set(m_InsideValue);
-          }
-        }
-      else
         {
-        it.Set(m_OutsideValue);
+          it.Set(m_InsideValue);
         }
       }
-    else
+      else
       {
-      it.Set(static_cast<ValueType>(val));
+        it.Set(m_OutsideValue);
       }
-    ++it;
     }
+    else
+    {
+      it.Set(static_cast<ValueType>(val));
+    }
+    ++it;
+  }
 
   itkDebugMacro(<< "SpatialObjectToImageDrawingFilter::Update() finished");
 
@@ -455,14 +455,14 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
   os << indent << "Children depth : " << m_ChildrenDepth << std::endl;
   os << indent << "Inside Value : " << m_InsideValue << std::endl;
   os << indent << "Outside Value : " << m_OutsideValue << std::endl;
-  if(m_UseObjectValue)
-    {
+  if (m_UseObjectValue)
+  {
     os << indent << "Using Object Value : ON" << std::endl;
-    }
+  }
   else
-    {
+  {
     os << indent << "Using Object Value : OFF" << std::endl;
-    }
+  }
 }
 
 

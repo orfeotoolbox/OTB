@@ -48,16 +48,16 @@ namespace otb
  * \ingroup ClassificationFilters
  */
 template <class TInputSampleList,
-          class TTrainingSampleList>
+class TTrainingSampleList>
 class ITK_EXPORT SVMSampleListModelEstimator:
-    public SVMModelEstimator<typename TInputSampleList::MeasurementType, typename TTrainingSampleList::MeasurementType>
+      public SVMModelEstimator<typename TInputSampleList::MeasurementType, typename TTrainingSampleList::MeasurementType>
 {
 public:
   /** Standard class typedefs. */
   typedef SVMSampleListModelEstimator   Self;
   typedef SVMModelEstimator<typename TInputSampleList::MeasurementType,
-          typename TTrainingSampleList::MeasurementType>
-                            Superclass;
+  typename TTrainingSampleList::MeasurementType>
+  Superclass;
 
   typedef itk::SmartPointer<Self>  Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
@@ -69,7 +69,7 @@ public:
   itkTypeMacro(SVMSampleListModelEstimator, SVMModelEstimator);
 
   /** Type definition for the input image. */
-    /** Type definitions for the training image. */
+  /** Type definitions for the training image. */
   typedef typename TInputSampleList::Pointer   InputSampleListPointer;
 
   /** Type definitions for the training image. */

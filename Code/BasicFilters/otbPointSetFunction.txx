@@ -40,19 +40,19 @@ PointSetFunction< TPointSet,   TOutput>
 /**
  *
  */
-template <class TPointSet, class  TOutput > 
+template <class TPointSet, class  TOutput >
 void
 PointSetFunction< TPointSet,   TOutput>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os,indent);
- }
+}
 
 
 // /**
 //  * SetDetector method
 //  */
-// template <class TPointSet, class  TOutput > 
+// template <class TPointSet, class  TOutput >
 // void
 // PointSetFunction< TPointSet,   TOutput>
 // ::SetPointSet(PointSetType* PointSet) const
@@ -63,7 +63,7 @@ PointSetFunction< TPointSet,   TOutput>
 // /**
 //  * GetDetector method
 //  */
-// template <class TPointSet, class  TOutput > 
+// template <class TPointSet, class  TOutput >
 // const
 // typename PointSetFunction< TPointSet,TOutput>
 // ::PointSetType *

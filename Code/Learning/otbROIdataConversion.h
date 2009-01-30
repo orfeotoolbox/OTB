@@ -25,7 +25,8 @@
 #include <otbImage.h>
 #include <itkImageToImageFilter.h>
 
-namespace otb {
+namespace otb
+{
 
 /** \class ROIdataConversion
  * \brief image data to vector conversion.
@@ -35,7 +36,7 @@ namespace otb {
  */
 template < class TInputImage, class TInputROIImage >
 class ROIdataConversion
-  : public itk::ImageToImageFilter< TInputImage, otb::Image<typename TInputImage::PixelType, 1> >
+      : public itk::ImageToImageFilter< TInputImage, otb::Image<typename TInputImage::PixelType, 1> >
 {
 public:
   typedef ROIdataConversion Self;
@@ -57,18 +58,22 @@ public:
   typedef typename OutputImageType::SizeType::SizeValueType SizeValueType;
 
   /** Gets/Sets the input image */
-  const InputImageType * GetInputImage () {
+  const InputImageType * GetInputImage ()
+  {
     return this->Superclass::GetInput();
   }
-  void SetInputImage ( const InputImageType * img ) {
+  void SetInputImage ( const InputImageType * img )
+  {
     this->Superclass::SetInput(img);
   }
 
   /** Gets/Sets the ROI image */
-  InputROIImageType * GetROIImage () {
+  InputROIImageType * GetROIImage ()
+  {
     return static_cast< InputROIImageType *> (this->itk::ProcessObject::GetInput(1));
   }
-  void SetROIImage ( const InputROIImageType * img ) {
+  void SetROIImage ( const InputROIImageType * img )
+  {
     this->itk::ProcessObject::SetNthInput( 1, const_cast<InputROIImageType *>(img) );
   }
 
@@ -77,7 +82,8 @@ protected:
   virtual ~ROIdataConversion() { }
   virtual void GenerateOutputInformation();
   virtual void GenerateInputRequestedRegion();
-  void PrintSelf(std::ostream& os, itk::Indent indent) const {
+  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  {
     Superclass::PrintSelf( os, indent );
   }
 

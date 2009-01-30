@@ -36,8 +36,8 @@ ImageToCarvingPathFilter<TInputImage, TOutputPath>
 ::ImageToCarvingPathFilter()
 {
   m_ForegroundValue = PixelType(255);
-        m_Direction = 0;
-        m_EnergyPerPix = 0.0;
+  m_Direction = 0;
+  m_EnergyPerPix = 0.0;
 }
 /**
  * Main computation method.
@@ -52,12 +52,12 @@ ImageToCarvingPathFilter<TInputImage, TOutputPath>
   OutputPathType * outputPath       = this->GetOutput();
 
   typedef itk::ImageSliceConstIteratorWithIndex
-      <InputImageType> IteratorType;
+  <InputImageType> IteratorType;
   typedef itk::NeighborhoodIterator< InputImageType >
-      NeighborhoodIteratorType;
+  NeighborhoodIteratorType;
 
   IteratorType it(inputImage,
-           inputImage->GetLargestPossibleRegion());
+                  inputImage->GetLargestPossibleRegion());
   it.GoToBegin();
 
   PixelType maxValue = itk::NumericTraits< PixelType >::max();
@@ -81,14 +81,14 @@ ImageToCarvingPathFilter<TInputImage, TOutputPath>
   typename IteratorType::OffsetType NEXT;
 
 
-    const typename IteratorType::OffsetType LEFT   ={{-1,0}};
-    const typename IteratorType::OffsetType RIGHT  ={{1,0}};
-    const typename IteratorType::OffsetType UP     ={{0,-1}};
-    const typename IteratorType::OffsetType DOWN   ={{0,1}};
-    const typename IteratorType::OffsetType LEFTUP   ={{-1,-1}};
+  const typename IteratorType::OffsetType LEFT   ={{-1,0}};
+  const typename IteratorType::OffsetType RIGHT  ={{1,0}};
+  const typename IteratorType::OffsetType UP     ={{0,-1}};
+  const typename IteratorType::OffsetType DOWN   ={{0,1}};
+  const typename IteratorType::OffsetType LEFTUP   ={{-1,-1}};
 //    const typename IteratorType::OffsetType RIGHTDOWN ={{1,1}};
-    const typename IteratorType::OffsetType RIGHTUP  ={{1,-1}};
-    const typename IteratorType::OffsetType LEFTDOWN ={{-1,1}};
+  const typename IteratorType::OffsetType RIGHTUP  ={{1,-1}};
+  const typename IteratorType::OffsetType LEFTDOWN ={{-1,1}};
 //    const typename IteratorType::OffsetType CENTER ={{0,0}};
 
   if (m_Direction == 0)
@@ -114,12 +114,13 @@ ImageToCarvingPathFilter<TInputImage, TOutputPath>
    * with cumulative energy (dynamic programming first step) */
   it.SetFirstDirection( dir0 );
   it.SetSecondDirection( dir1 );
-  it.GoToBegin(); neighIt.GoToBegin();
+  it.GoToBegin();
+  neighIt.GoToBegin();
   while (!it.IsAtEnd())
   {
     while (!it.IsAtEndOfSlice())
     {
-      while(!it.IsAtEndOfLine())
+      while (!it.IsAtEndOfLine())
       {
         neighIt.SetLocation(it.GetIndex());//TODO bad for performances... find a better option
         // this is really about 20% of total processing time !!!
@@ -171,24 +172,24 @@ ImageToCarvingPathFilter<TInputImage, TOutputPath>
 
 
 
-    /** Follow the minima bottom-up or right-left
-     * (dynamic programming second step) */
+  /** Follow the minima bottom-up or right-left
+   * (dynamic programming second step) */
 
   //find the starting point to follow on the last line
   typedef itk::ImageLinearConstIteratorWithIndex< InputImageType >
-      LinearIteratorType;
+  LinearIteratorType;
 
   LinearIteratorType LinIt(energyImage,
-                  energyImage->GetLargestPossibleRegion());
+                           energyImage->GetLargestPossibleRegion());
   LinIt.SetDirection(dir0);
   LinIt.GoToReverseBegin();
   typedef typename InputImageType::IndexType IndexType;
 
   PixelType min = maxValue;
   IndexType indexToAdd;
-  while(!LinIt.IsAtReverseEndOfLine())
+  while (!LinIt.IsAtReverseEndOfLine())
   {
-    if(LinIt.Get()<min)
+    if (LinIt.Get()<min)
     {
       min=LinIt.Get();
       indexToAdd=LinIt.GetIndex();

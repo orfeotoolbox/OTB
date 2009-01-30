@@ -26,61 +26,67 @@
 namespace otb
 {
 
-  /** \class StandardFilterWatcher
-   *  \brief This class shows the percentage progress execution
-   *         of the pipeline filtering process
-   *
-   *  This class is based on oberservers desgin patter
-   *  Abstract class ProcessObject is the subject
-   *  Event are oberservers
-   *
-   *  Usage example:
-   *
-   *  \code
-   *  typedef itk::BinaryThresholdImageFilter<ImageType> FilterType;
-   *  FilterType::Pointer thresholdFilter = FilterType::New();
-   *
-   *  StandardFilterWatcher watcher(thresholdFilter, "Threshold");
-   *  \endcode
-   *
-   *  \see itk::SimpleFilterWatcher
-   *  \see otb::fltkFilterWatcher
-   */
-  class /*ITK_EXPORT*/ StandardFilterWatcher : public FilterWatcherBase
-    {
-    public:
+/** \class StandardFilterWatcher
+ *  \brief This class shows the percentage progress execution
+ *         of the pipeline filtering process
+ *
+ *  This class is based on oberservers desgin patter
+ *  Abstract class ProcessObject is the subject
+ *  Event are oberservers
+ *
+ *  Usage example:
+ *
+ *  \code
+ *  typedef itk::BinaryThresholdImageFilter<ImageType> FilterType;
+ *  FilterType::Pointer thresholdFilter = FilterType::New();
+ *
+ *  StandardFilterWatcher watcher(thresholdFilter, "Threshold");
+ *  \endcode
+ *
+ *  \see itk::SimpleFilterWatcher
+ *  \see otb::fltkFilterWatcher
+ */
+class /*ITK_EXPORT*/ StandardFilterWatcher : public FilterWatcherBase
+{
+public:
 
-      /** Constructor. Takes a ProcessObject to monitor and an optional
-       * comment string that is prepended to each event message. */
-      StandardFilterWatcher(itk::ProcessObject* process,
-          const char *comment="");
+  /** Constructor. Takes a ProcessObject to monitor and an optional
+   * comment string that is prepended to each event message. */
+  StandardFilterWatcher(itk::ProcessObject* process,
+                        const char *comment="");
 
-      /** Copy constructor */
-      StandardFilterWatcher(const StandardFilterWatcher&);
+  /** Copy constructor */
+  StandardFilterWatcher(const StandardFilterWatcher&);
 
-      /** operator=  */
-      void operator=(const StandardFilterWatcher& );
+  /** operator=  */
+  void operator=(const StandardFilterWatcher& );
 
-      /** Get/Set number of stars */
-      void SetStars( int count ) { m_StarsCount = count;}
-      const int& GetStars() const { return m_StarsCount;}
+  /** Get/Set number of stars */
+  void SetStars( int count )
+  {
+    m_StarsCount = count;
+  }
+  const int& GetStars() const
+  {
+    return m_StarsCount;
+  }
 
-    protected:
+protected:
 
-      /** Callback method to show the ProgressEvent */
-      virtual void ShowProgress();
+  /** Callback method to show the ProgressEvent */
+  virtual void ShowProgress();
 
-      /** Callback method to show the StartEvent */
-      virtual void StartFilter();
+  /** Callback method to show the StartEvent */
+  virtual void StartFilter();
 
-      /** Callback method to show the EndEvent */
-      virtual void EndFilter();
+  /** Callback method to show the EndEvent */
+  virtual void EndFilter();
 
-    private:
+private:
 
-      /** Stars coutning */
-      int m_StarsCount;
-    };
+  /** Stars coutning */
+  int m_StarsCount;
+};
 
 } // end namespace otb
 

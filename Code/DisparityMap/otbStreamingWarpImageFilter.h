@@ -45,7 +45,7 @@ namespace otb
 
 template <class TInputImage, class TOutputImage, class TDeformationField>
 class ITK_EXPORT StreamingWarpImageFilter
-  :  public itk::WarpImageFilter< TInputImage, TOutputImage, TDeformationField >
+      :  public itk::WarpImageFilter< TInputImage, TOutputImage, TDeformationField >
 {
 public:
   /** Standard class typedefs. */
@@ -57,7 +57,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-   /** Run-time type information (and related methods). */
+  /** Run-time type information (and related methods). */
   itkTypeMacro(StreamingWarpImageFilter, itk::WarpImageFilter);
 
   /** template parameters typedef */

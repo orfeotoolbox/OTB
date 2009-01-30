@@ -62,7 +62,7 @@ namespace otb
  */
 template <class TImage, class TStructuringElement>
 class ITK_EXPORT GeodesicMorphologyIterativeDecompositionImageFilter
-  : public ImageToImageListFilter<TImage,TImage>
+      : public ImageToImageListFilter<TImage,TImage>
 {
 public:
   /** Standard typedefs */
@@ -125,7 +125,7 @@ protected:
   /** Constructor */
   GeodesicMorphologyIterativeDecompositionImageFilter();
   /** Destructor */
-  ~GeodesicMorphologyIterativeDecompositionImageFilter(){};
+  ~GeodesicMorphologyIterativeDecompositionImageFilter() {};
   /** Generate output information */
   virtual void GenerateOutputInformation();
   /** Generate input requested region */
@@ -135,7 +135,7 @@ protected:
   /** Printself method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
- private:
+private:
   /** The step for the scale analysis */
   unsigned int m_Step;
   /** The initial value for the scale */

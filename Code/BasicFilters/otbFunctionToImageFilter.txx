@@ -65,15 +65,15 @@ FunctionToImageFilter<TInputImage,TOutputImage,TFunction>
 ::BeforeThreadedGenerateData()
 {
   InputImagePointer inputPtr
-    = dynamic_cast<const TInputImage*>((itk::ProcessObject::GetInput(0)));
+  = dynamic_cast<const TInputImage*>((itk::ProcessObject::GetInput(0)));
   if (inputPtr.IsNull())
-    {
-      itkExceptionMacro(<< "At least one input is missing."
-      << " Input is missing :" << inputPtr.GetPointer();)
+  {
+    itkExceptionMacro(<< "At least one input is missing."
+                      << " Input is missing :" << inputPtr.GetPointer();)
 
-    }
+  }
 
-   m_PixelFunction->SetInputImage(inputPtr);
+  m_PixelFunction->SetInputImage(inputPtr);
 }
 
 /**
@@ -88,7 +88,7 @@ FunctionToImageFilter<TInputImage,TOutputImage,TFunction>
 
   // We use dynamic_cast since inputs are stored as DataObjects.
   InputImagePointer inputPtr
-    = dynamic_cast<const TInputImage*>((itk::ProcessObject::GetInput(0)));
+  = dynamic_cast<const TInputImage*>((itk::ProcessObject::GetInput(0)));
 
   OutputImagePointer outputPtr = this->GetOutput(0);
 
@@ -100,14 +100,14 @@ FunctionToImageFilter<TInputImage,TOutputImage,TFunction>
   inputIt.GoToBegin();
   outputIt.GoToBegin();
 
-  while( !inputIt.IsAtEnd() )
-    {
-      outputIt.Set( static_cast<OutputImagePixelType>(m_PixelFunction->EvaluateAtIndex(inputIt.GetIndex())) );
-      ++inputIt;
-      ++outputIt;
+  while ( !inputIt.IsAtEnd() )
+  {
+    outputIt.Set( static_cast<OutputImagePixelType>(m_PixelFunction->EvaluateAtIndex(inputIt.GetIndex())) );
+    ++inputIt;
+    ++outputIt;
 
-      progress.CompletedPixel(); // potential exception thrown here
-    }
+    progress.CompletedPixel(); // potential exception thrown here
+  }
 }
 } // end namespace otb
 

@@ -24,46 +24,46 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  /** \class Exckert4MapProjection
-   *  \brief This class implements the Eckert4 map projection.
-   * It converts coordinates in longitude,latitude (WGS84) to Eckert4 map coordinates.
-   */
-  template <InverseOrForwardTransformationEnum transform>
-      class ITK_EXPORT Eckert4MapProjection : public MapProjection<ossimEckert4Projection,transform>
-  {
-    public :
+/** \class Exckert4MapProjection
+ *  \brief This class implements the Eckert4 map projection.
+ * It converts coordinates in longitude,latitude (WGS84) to Eckert4 map coordinates.
+ */
+template <InverseOrForwardTransformationEnum transform>
+class ITK_EXPORT Eckert4MapProjection : public MapProjection<ossimEckert4Projection,transform>
+{
+public :
 
-      /** Standard class typedefs. */
-      typedef Eckert4MapProjection                   Self;
-      typedef MapProjection<ossimEckert4Projection,transform>    Superclass;
-      typedef itk::SmartPointer<Self>                  Pointer;
-      typedef itk::SmartPointer<const Self>            ConstPointer;
+  /** Standard class typedefs. */
+  typedef Eckert4MapProjection                   Self;
+  typedef MapProjection<ossimEckert4Projection,transform>    Superclass;
+  typedef itk::SmartPointer<Self>                  Pointer;
+  typedef itk::SmartPointer<const Self>            ConstPointer;
 
-      typedef typename Superclass::ScalarType       ScalarType;
-      typedef itk::Point<ScalarType,2 >             InputPointType;
-      typedef itk::Point<ScalarType,2 >            OutputPointType;
+  typedef typename Superclass::ScalarType       ScalarType;
+  typedef itk::Point<ScalarType,2 >             InputPointType;
+  typedef itk::Point<ScalarType,2 >            OutputPointType;
 
-      /** Method for creation through the object factory. */
-      itkNewMacro( Self );
+  /** Method for creation through the object factory. */
+  itkNewMacro( Self );
 
-      /** Run-time type information (and related methods). */
-      itkTypeMacro( Eckert4MapProjection, MapProjection );
-      virtual void SetFalseEasting(double falseEasting);
-      virtual void SetFalseNorthing(double falseNorthing);
-      virtual double GetFalseNorthing() const;
-      virtual double GetFalseEasting() const;
-      virtual void SetParameters(double falseEasting,double falseNorthing);
-      virtual void SetDefaults();
+  /** Run-time type information (and related methods). */
+  itkTypeMacro( Eckert4MapProjection, MapProjection );
+  virtual void SetFalseEasting(double falseEasting);
+  virtual void SetFalseNorthing(double falseNorthing);
+  virtual double GetFalseNorthing() const;
+  virtual double GetFalseEasting() const;
+  virtual void SetParameters(double falseEasting,double falseNorthing);
+  virtual void SetDefaults();
 
-    protected :
-      Eckert4MapProjection();
-      virtual ~Eckert4MapProjection();
+protected :
+  Eckert4MapProjection();
+  virtual ~Eckert4MapProjection();
 
-    private :
-      Eckert4MapProjection(const Self&); //purposely not implemented
-      void operator=(const Self&); //purposely not implemented
+private :
+  Eckert4MapProjection(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
 
-  };
+};
 
 } // namespace otb
 

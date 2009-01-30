@@ -59,17 +59,17 @@
 #if defined(OTB_LEAN_AND_MEAN) || defined(__BORLANDC__)
 #define otbGenericMsgDebugMacro(x)
 #else
-  #ifndef NDEBUG
-    #define otbGenericMsgDebugMacro(x) \
+#ifndef NDEBUG
+#define otbGenericMsgDebugMacro(x) \
     {  \
        if ( ::itk::Object::GetGlobalWarningDisplay())   \
         { ::itk::OStringStream itkmsg; \
           itkmsg << " Generic Msg Debug: " x << "\n"; \
           ::itk::OutputWindowDisplayDebugText(itkmsg.str().c_str());} \
   }
-  #else
-    #define otbGenericMsgDebugMacro(x)
-  #endif
+#else
+#define otbGenericMsgDebugMacro(x)
+#endif
 #endif
 
 #define otbGenericMsgTestingMacro(x) \
@@ -81,15 +81,15 @@
 #if defined(OTB_LEAN_AND_MEAN) || defined(__BORLANDC__)
 #define otbMsgDevMacro(x)
 #else
-  #ifdef OTB_SHOW_ALL_MSG_DEBUG
-    #define otbMsgDevMacro(x) \
+#ifdef OTB_SHOW_ALL_MSG_DEBUG
+#define otbMsgDevMacro(x) \
     { { ::itk::OStringStream itkmsg; \
       itkmsg << " Msg Dev: " x << "\n"; \
       ::itk::OutputWindowDisplayDebugText(itkmsg.str().c_str());} \
      }
-  #else
-     #define otbMsgDevMacro(x)
-  #endif
+#else
+#define otbMsgDevMacro(x)
+#endif
 #endif
 
 
@@ -301,15 +301,18 @@ private:
 #else
 namespace StringStreamDetail
 {
-  class Cleanup
+class Cleanup
+{
+public:
+  Cleanup(std::strstream& ostr): m_StrStream(ostr) {}
+  ~Cleanup()
   {
-  public:
-    Cleanup(std::strstream& ostr): m_StrStream(ostr) {}
-    ~Cleanup() { m_StrStream.rdbuf()->freeze(0); }
-    static void IgnoreUnusedVariable(const Cleanup&) {}
-  protected:
-    std::strstream& m_StrStream;
-  };
+    m_StrStream.rdbuf()->freeze(0);
+  }
+  static void IgnoreUnusedVariable(const Cleanup&) {}
+protected:
+  std::strstream& m_StrStream;
+};
 }//namespace OStringStreamDetail
 
 class StringStream: public std::strstream
@@ -318,13 +321,13 @@ public:
   typedef std::strstream Superclass;
   StringStream() {}
   std::string str()
-    {
-      StringStreamDetail::Cleanup cleanup(*this);
-      StringStreamDetail::Cleanup::IgnoreUnusedVariable(cleanup);
-      int pcount = this->pcount();
-      const char* ptr = this->Superclass::str();
-      return std::string(ptr?ptr:"", pcount);
-    }
+  {
+    StringStreamDetail::Cleanup cleanup(*this);
+    StringStreamDetail::Cleanup::IgnoreUnusedVariable(cleanup);
+    int pcount = this->pcount();
+    const char* ptr = this->Superclass::str();
+    return std::string(ptr?ptr:"", pcount);
+  }
 private:
   StringStream(const StringStream&);
   void operator=(const StringStream&);

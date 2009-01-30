@@ -32,11 +32,11 @@ namespace otb
  */
 
 template < class TInput,
-           class TOutput = float,
-     class TPrecision = double,
-           class TCoordRep = float >
+class TOutput = float,
+class TPrecision = double,
+class TCoordRep = float >
 class ITK_EXPORT GeometricMomentImageFunction :
-  public itk::ImageFunction<TInput, TOutput,TCoordRep >
+      public itk::ImageFunction<TInput, TOutput,TCoordRep >
 {
 public:
   /** Standard class typedefs. */
@@ -66,16 +66,16 @@ public:
 
 protected:
   GeometricMomentImageFunction()
-    {
-  m_NeighborhoodRadius = -1;
+  {
+    m_NeighborhoodRadius = -1;
   };
 
-  ~GeometricMomentImageFunction(){};
+  ~GeometricMomentImageFunction() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const
-     {
-      Superclass::PrintSelf( os, indent );
-      os << indent << " m_NeighborhoodRadius: "  << m_NeighborhoodRadius << std::endl;
-     }
+  {
+    Superclass::PrintSelf( os, indent );
+    os << indent << " m_NeighborhoodRadius: "  << m_NeighborhoodRadius << std::endl;
+  }
 
 private:
   GeometricMomentImageFunction( const Self& ); //purposely not implemented

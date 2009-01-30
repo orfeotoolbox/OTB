@@ -28,128 +28,137 @@
 namespace otb
 {
 
-  /** \class WriterWatcherBase
-   *  \brief This class is an abstract class
-   *         Provides an interface to progress task mechanic
-   *
-   *  Implement your callbacks
-   *  \li ShowWriterProgress : callback called for each completed tile
-   *  \li StartWriter        : callback called at the begin of tile writing
-   *  \li EndWriter          : callback called at the end of tile writing
-   *  \li ShowFilterProgress : callback called for each completed pixel
-   *  \li StartFilter        : callback called at the begin of filter execution for a given tile
-   *  \li EndFilter          : callback called at the end of filter execution for a given tile
-   *
-   */
-  class /*ITK_EXPORT*/ WriterWatcherBase
-    {
-    public:
+/** \class WriterWatcherBase
+ *  \brief This class is an abstract class
+ *         Provides an interface to progress task mechanic
+ *
+ *  Implement your callbacks
+ *  \li ShowWriterProgress : callback called for each completed tile
+ *  \li StartWriter        : callback called at the begin of tile writing
+ *  \li EndWriter          : callback called at the end of tile writing
+ *  \li ShowFilterProgress : callback called for each completed pixel
+ *  \li StartFilter        : callback called at the begin of filter execution for a given tile
+ *  \li EndFilter          : callback called at the end of filter execution for a given tile
+ *
+ */
+class /*ITK_EXPORT*/ WriterWatcherBase
+{
+public:
 
-      /** Constructor. Takes a ProcessObject to monitor and an optional
-       * comment string that is prepended to each event message. */
-      WriterWatcherBase(itk::ProcessObject* process,
-      const char *comment="");
+  /** Constructor. Takes a ProcessObject to monitor and an optional
+   * comment string that is prepended to each event message. */
+  WriterWatcherBase(itk::ProcessObject* process,
+                    const char *comment="");
 
-      /** This other constructor is provided so that the user can set a different processing filter than the one
-    just before process in the pipeline */
-      WriterWatcherBase(itk::ProcessObject* process, itk::ProcessObject * source,const char *comment="");
+  /** This other constructor is provided so that the user can set a different processing filter than the one
+  just before process in the pipeline */
+  WriterWatcherBase(itk::ProcessObject* process, itk::ProcessObject * source,const char *comment="");
 
-      /** Default constructor */
-      WriterWatcherBase();
+  /** Default constructor */
+  WriterWatcherBase();
 
-      /** Copy constructor */
-      WriterWatcherBase(const WriterWatcherBase&);
+  /** Copy constructor */
+  WriterWatcherBase(const WriterWatcherBase&);
 
-      /** operator=  */
-      void operator=(const WriterWatcherBase& );
+  /** operator=  */
+  void operator=(const WriterWatcherBase& );
 
-      /** Destructor. */
-      virtual ~WriterWatcherBase();
+  /** Destructor. */
+  virtual ~WriterWatcherBase();
 
-      /** Methods to access member data */
-      /** Get a pointer to the process object being watched. */
-      itk::ProcessObject *GetProcess () {return m_Process.GetPointer();}
+  /** Methods to access member data */
+  /** Get a pointer to the process object being watched. */
+  itk::ProcessObject *GetProcess ()
+  {
+    return m_Process.GetPointer();
+  }
 
-      /** Get the comment for the watcher. */
-      std::string GetComment() {return m_Comment;}
+  /** Get the comment for the watcher. */
+  std::string GetComment()
+  {
+    return m_Comment;
+  }
 
-      /** Get a reference to the TimeProbe */
-      itk::TimeProbe &GetTimeProbe() {return m_TimeProbe;}
+  /** Get a reference to the TimeProbe */
+  itk::TimeProbe &GetTimeProbe()
+  {
+    return m_TimeProbe;
+  }
 
-    protected:
+protected:
 
-      /** Callback method to show the ProgressEvent from the writer */
-      virtual void ShowWriterProgress() = 0;
+  /** Callback method to show the ProgressEvent from the writer */
+  virtual void ShowWriterProgress() = 0;
 
-      /** Callback method to show the StartEvent from the writer*/
-      virtual void StartWriter() = 0;
+  /** Callback method to show the StartEvent from the writer*/
+  virtual void StartWriter() = 0;
 
-      /** Callback method to show the EndEvent from the writer*/
-      virtual void EndWriter() = 0;
+  /** Callback method to show the EndEvent from the writer*/
+  virtual void EndWriter() = 0;
 
-      /** Callback method to show the ProgressEvent from the filter */
-      virtual void ShowFilterProgress() = 0;
+  /** Callback method to show the ProgressEvent from the filter */
+  virtual void ShowFilterProgress() = 0;
 
-      /** Callback method to show the StartEvent from the filter*/
-      virtual void StartFilter() = 0;
+  /** Callback method to show the StartEvent from the filter*/
+  virtual void StartFilter() = 0;
 
-      /** Callback method to show the EndEvent from the filter*/
-      virtual void EndFilter() = 0;
+  /** Callback method to show the EndEvent from the filter*/
+  virtual void EndFilter() = 0;
 
-      /** Computing time */
-      itk::TimeProbe m_TimeProbe;
+  /** Computing time */
+  itk::TimeProbe m_TimeProbe;
 
-      /** Associated comment */
-      std::string m_Comment;
+  /** Associated comment */
+  std::string m_Comment;
 
-      /** Abstract process object */
-      itk::ProcessObject::Pointer m_Process;
+  /** Abstract process object */
+  itk::ProcessObject::Pointer m_Process;
 
-      /** Second abstract process object representing the source */
-      itk::ProcessObject::Pointer m_SourceProcess;
+  /** Second abstract process object representing the source */
+  itk::ProcessObject::Pointer m_SourceProcess;
 
-      /** Internal type */
-      typedef itk::SimpleMemberCommand<WriterWatcherBase> CommandType;
+  /** Internal type */
+  typedef itk::SimpleMemberCommand<WriterWatcherBase> CommandType;
 
-      /** Start writer callback */
-      CommandType::Pointer m_StartWriterCommand;
+  /** Start writer callback */
+  CommandType::Pointer m_StartWriterCommand;
 
-      /** End writer callback */
-      CommandType::Pointer m_EndWriterCommand;
+  /** End writer callback */
+  CommandType::Pointer m_EndWriterCommand;
 
-      /** Progress writer callback */
-      CommandType::Pointer m_ProgressWriterCommand;
+  /** Progress writer callback */
+  CommandType::Pointer m_ProgressWriterCommand;
 
-      /** Start filter callback */
-      CommandType::Pointer m_StartFilterCommand;
+  /** Start filter callback */
+  CommandType::Pointer m_StartFilterCommand;
 
-      /** End writer callback */
-      CommandType::Pointer m_EndFilterCommand;
+  /** End writer callback */
+  CommandType::Pointer m_EndFilterCommand;
 
-      /** Progress writer callback */
-      CommandType::Pointer m_ProgressFilterCommand;
+  /** Progress writer callback */
+  CommandType::Pointer m_ProgressFilterCommand;
 
-      /** Start oberserver */
-      unsigned long m_StartWriterTag;
+  /** Start oberserver */
+  unsigned long m_StartWriterTag;
 
-      /** End observer */
-      unsigned long m_EndWriterTag;
+  /** End observer */
+  unsigned long m_EndWriterTag;
 
-      /** Progress observer */
-      unsigned long m_ProgressWriterTag;
+  /** Progress observer */
+  unsigned long m_ProgressWriterTag;
 
-      /** Start oberserver */
-      unsigned long m_StartFilterTag;
+  /** Start oberserver */
+  unsigned long m_StartFilterTag;
 
-      /** End observer */
-      unsigned long m_EndFilterTag;
+  /** End observer */
+  unsigned long m_EndFilterTag;
 
-      /** Progress observer */
-      unsigned long m_ProgressFilterTag;
+  /** Progress observer */
+  unsigned long m_ProgressFilterTag;
 
-    private:
+private:
 
-    };
+};
 
 } // end namespace otb
 

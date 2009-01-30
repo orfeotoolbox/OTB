@@ -36,46 +36,46 @@ namespace otb
  */
 
 class ITK_EXPORT MRFOptimizer : public itk::Object
+{
+public:
+  typedef MRFOptimizer                  Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::Array< double >          ParametersType;
+
+  itkTypeMacro(MRFOptimizer, itk::Object);
+
+  itkGetConstMacro(NumberOfParameters, unsigned int);
+
+  // Get the parameters
+  const ParametersType& GetParameters( void ) const
   {
-  public:
-    typedef MRFOptimizer                  Self;
-    typedef itk::Object                   Superclass;
-    typedef itk::SmartPointer<Self>       Pointer;
-    typedef itk::SmartPointer<const Self> ConstPointer;
-    typedef itk::Array< double >          ParametersType;
-
-    itkTypeMacro(MRFOptimizer, itk::Object);
-
-    itkGetConstMacro(NumberOfParameters, unsigned int);
-
-    // Get the parameters
-    const ParametersType& GetParameters( void ) const
-    {
-      return this->m_Parameters;
-    }
-
-    virtual void SetParameters( const ParametersType & parameters )
-    {
-      if( parameters.GetSize() != m_NumberOfParameters )
-  {
-    itkExceptionMacro(<<"Invalid number of parameters ("<<parameters.GetSize()<<" , "<<m_NumberOfParameters<<")");
+    return this->m_Parameters;
   }
-      m_Parameters = parameters;
-      this->Modified();
-    }
 
-    virtual bool Compute(double deltaEnergy) = 0;
-
-  protected:
-    MRFOptimizer()
+  virtual void SetParameters( const ParametersType & parameters )
+  {
+    if ( parameters.GetSize() != m_NumberOfParameters )
     {
-      m_Parameters=1;
+      itkExceptionMacro(<<"Invalid number of parameters ("<<parameters.GetSize()<<" , "<<m_NumberOfParameters<<")");
     }
-    virtual ~MRFOptimizer() {}
-    unsigned int m_NumberOfParameters;
-    ParametersType m_Parameters;
+    m_Parameters = parameters;
+    this->Modified();
+  }
 
-  };
+  virtual bool Compute(double deltaEnergy) = 0;
+
+protected:
+  MRFOptimizer()
+  {
+    m_Parameters=1;
+  }
+  virtual ~MRFOptimizer() {}
+  unsigned int m_NumberOfParameters;
+  ParametersType m_Parameters;
+
+};
 }
 
 #endif

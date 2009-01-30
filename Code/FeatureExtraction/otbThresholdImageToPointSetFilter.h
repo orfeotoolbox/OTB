@@ -30,14 +30,14 @@ namespace otb
 
 template <class TInputImage,
 //          class TOutputPointSet>
-         class TOutputPointSet = itk::PointSet<ITK_TYPENAME TInputImage::PixelType,2> >
+class TOutputPointSet = itk::PointSet<ITK_TYPENAME TInputImage::PixelType,2> >
 class ITK_EXPORT ThresholdImageToPointSetFilter :
-           public ImageToPointSetFilter< TInputImage,TOutputPointSet >
+      public ImageToPointSetFilter< TInputImage,TOutputPointSet >
 {
 public:
 
   itkStaticConstMacro(    InputImageDimension,
-          unsigned int,
+                          unsigned int,
                           TInputImage::ImageDimension);
 
   typedef TInputImage     InputImageType;

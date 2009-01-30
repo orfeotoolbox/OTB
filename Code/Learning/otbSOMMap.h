@@ -46,12 +46,12 @@ namespace otb
  * \sa SOMActivationBuilder
  */
 template <class TNeuron=itk::VariableLengthVector<double>,
-          class TDistance=itk::Statistics::EuclideanDistance<TNeuron>,
-      unsigned int VMapDimension=2>
+class TDistance=itk::Statistics::EuclideanDistance<TNeuron>,
+unsigned int VMapDimension=2>
 class ITK_EXPORT SOMMap
-: public otb::VectorImage<typename TNeuron::ComponentType,VMapDimension>
+      : public otb::VectorImage<typename TNeuron::ComponentType,VMapDimension>
 {
-  public:
+public:
   /** Standard typedefs */
   typedef SOMMap  Self;
   typedef otb::VectorImage<typename TNeuron::ComponentType,VMapDimension>  Superclass;
@@ -85,7 +85,7 @@ class ITK_EXPORT SOMMap
    */
   IndexType GetWinner(const NeuronType& sample);
 
-  protected:
+protected:
   /** Constructor */
   SOMMap();
   /** Destructor */
@@ -93,7 +93,7 @@ class ITK_EXPORT SOMMap
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  private:
+private:
   SOMMap(const Self&); // purposely not implemented
   void operator=(const Self&); // purposely not implemented
 };

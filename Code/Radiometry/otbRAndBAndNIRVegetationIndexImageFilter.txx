@@ -27,7 +27,7 @@ namespace otb
  * Constructor
  */
 template <class TInputImageR, class TInputImageB, class TInputImageNIR,
-          class TOutputImage, class TFunction  >
+class TOutputImage, class TFunction  >
 RAndBAndNIRVegetationIndexImageFilter<TInputImageR,TInputImageB,TInputImageNIR,TOutputImage,TFunction>
 ::RAndBAndNIRVegetationIndexImageFilter()
 {
@@ -38,7 +38,7 @@ RAndBAndNIRVegetationIndexImageFilter<TInputImageR,TInputImageB,TInputImageNIR,T
  * Connect one of the operands for pixel-wise addition
  */
 template <class TInputImageR, class TInputImageB, class TInputImageNIR,
-          class TOutputImage, class TFunction  >
+class TOutputImage, class TFunction  >
 void
 RAndBAndNIRVegetationIndexImageFilter<TInputImageR,TInputImageB,TInputImageNIR,TOutputImage,TFunction>
 ::SetInputR( const TInputImageR * image )
@@ -52,7 +52,7 @@ RAndBAndNIRVegetationIndexImageFilter<TInputImageR,TInputImageB,TInputImageNIR,T
  * Connect one of the operands for pixel-wise addition
  */
 template <class TInputImageR, class TInputImageB, class TInputImageNIR,
-          class TOutputImage, class TFunction  >
+class TOutputImage, class TFunction  >
 void
 RAndBAndNIRVegetationIndexImageFilter<TInputImageR,TInputImageB,TInputImageNIR,TOutputImage,TFunction>
 ::SetInputB( const TInputImageB * image )
@@ -64,7 +64,7 @@ RAndBAndNIRVegetationIndexImageFilter<TInputImageR,TInputImageB,TInputImageNIR,T
  * Connect one of the operands for pixel-wise addition
  */
 template <class TInputImageR, class TInputImageB, class TInputImageNIR,
-          class TOutputImage, class TFunction  >
+class TOutputImage, class TFunction  >
 void
 RAndBAndNIRVegetationIndexImageFilter<TInputImageR,TInputImageB,TInputImageNIR,TOutputImage,TFunction>
 ::SetInputNIR( const TInputImageNIR * image )
@@ -77,7 +77,7 @@ void
 RAndBAndNIRVegetationIndexImageFilter<TInputImageR, TInputImageB, TInputImageNIR, TOutputImage, TFunction>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-        Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os,indent);
 }
 
 }

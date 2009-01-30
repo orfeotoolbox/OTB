@@ -30,7 +30,7 @@ namespace otb
 template <class TScalarType>
 LogPolarTransform<TScalarType>
 ::LogPolarTransform()
-  :Superclass(2,4)
+    :Superclass(2,4)
 {
   m_Center[0]=0.0;
   m_Center[1]=0.0;
@@ -87,7 +87,7 @@ LogPolarTransform<TScalarType>
 template <class TScalarType>
 typename LogPolarTransform<TScalarType>
 ::OutputPointType
- LogPolarTransform<TScalarType>
+LogPolarTransform<TScalarType>
 ::TransformPoint(const InputPointType &point) const
 {
   OutputPointType result;
@@ -132,7 +132,7 @@ LogPolarTransform<TScalarType>
 ::TransformVector(const InputVnlVectorType &vector) const
 {
   OutputVnlVectorType result;
-double theta = vector[0]*m_Scale[0]*M_PI/180.0;
+  double theta = vector[0]*m_Scale[0]*M_PI/180.0;
   double logRho   = vector[1]*m_Scale[1];
   result[0]=0.;
   result[1]=0.;

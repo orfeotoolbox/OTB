@@ -33,7 +33,7 @@ namespace otb
  */
 template <class TOutputImage>
 class ITK_EXPORT ImageListSource
-  : public itk::ProcessObject
+      : public itk::ProcessObject
 {
 public:
   /** Standard typedefs */

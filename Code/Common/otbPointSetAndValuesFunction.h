@@ -27,86 +27,88 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  /** \class PointSetAndValuesFunction
-   *  \brief Base class for function needing a point set and a set of associated value to compute the output.
+/** \class PointSetAndValuesFunction
+ *  \brief Base class for function needing a point set and a set of associated value to compute the output.
+ */
+template <class TPointSet, class TValue, class TCoordRep=double>
+class ITK_EXPORT PointSetAndValuesFunction
+      : public itk::FunctionBase<itk::Point<TCoordRep,::itk::GetPointSetDimension<TPointSet>::PointDimension>,TValue>
+{
+public:
+  /** Standard typedefs */
+  typedef PointSetAndValuesFunction            Self;
+  typedef itk::FunctionBase<itk::Point<TCoordRep,::itk::GetPointSetDimension<TPointSet>::PointDimension>,TValue> Superclass;
+  typedef itk::SmartPointer<Self>           Pointer;
+  typedef itk::SmartPointer<const Self>     ConstPointer;
+
+  /** New macro */
+  itkNewMacro(Self);
+
+  /** Creation through object factory macro */
+  itkTypeMacro(PointSetAndValuesFunction, FunctionBase);
+
+  typedef TPointSet PointSetType;
+  typedef typename PointSetType::ConstPointer PointSetConstPointerType;
+  typedef TValue ValueType;
+  typedef TCoordRep CoordRepType;
+  typedef typename PointSetType::PointType PointType;
+
+  typedef itk::Index<PointType::PointDimension> IndexType;
+  typedef itk::ContinuousIndex<CoordRepType,PointType::PointDimension> ContinuousIndexType;
+
+  typedef itk::VectorContainer<unsigned long,ValueType> ValueVectorType;
+  typedef typename ValueVectorType::ConstPointer ValueVectorPointerType;
+
+  itkSetObjectMacro(ValueVector,ValueVectorType);
+  itkGetObjectMacro(ValueVector,ValueVectorType);
+
+  /**
+   * Set the point set.
+   * \param the point set
    */
-  template <class TPointSet, class TValue, class TCoordRep=double>
-    class ITK_EXPORT PointSetAndValuesFunction
-    : public itk::FunctionBase<itk::Point<TCoordRep,::itk::GetPointSetDimension<TPointSet>::PointDimension>,TValue>
-    {
-      public:
-      /** Standard typedefs */
-      typedef PointSetAndValuesFunction            Self;
-      typedef itk::FunctionBase<itk::Point<TCoordRep,::itk::GetPointSetDimension<TPointSet>::PointDimension>,TValue> Superclass;
-      typedef itk::SmartPointer<Self>           Pointer;
-      typedef itk::SmartPointer<const Self>     ConstPointer;
+  virtual void SetPointSet( const PointSetType * ptr );
+  /**
+   * Get the point set.
+   * \return the point set
+   */
+  const PointSetType * GetPointSe() const
+  {
+    return m_PointSet.GetPointer();
+  }
 
-      /** New macro */
-      itkNewMacro(Self);
+  /** Evaluate the function at specified Point position.
+   * Subclasses must provide this method. */
+  virtual TValue Evaluate( const PointType& point ) const = 0;
 
-      /** Creation through object factory macro */
-      itkTypeMacro(PointSetAndValuesFunction, FunctionBase);
+  /** Evaluate the function at specified Index position.
+   * Subclasses must provide this method. */
+  virtual TValue EvaluateAtIndex( const IndexType & index ) const = 0;
 
-      typedef TPointSet PointSetType;
-      typedef typename PointSetType::ConstPointer PointSetConstPointerType;
-      typedef TValue ValueType;
-      typedef TCoordRep CoordRepType;
-      typedef typename PointSetType::PointType PointType;
+  /** Evaluate the function at specified ContinousIndex position.
+   * Subclasses must provide this method. */
+  virtual TValue EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const = 0;
 
-      typedef itk::Index<PointType::PointDimension> IndexType;
-      typedef itk::ContinuousIndex<CoordRepType,PointType::PointDimension> ContinuousIndexType;
+protected:
+  /** Constructor */
+  PointSetAndValuesFunction()
+  {
+    m_PointSet = PointSetType::New();
+    m_ValueVector = ValueVectorType::New();
 
-      typedef itk::VectorContainer<unsigned long,ValueType> ValueVectorType;
-      typedef typename ValueVectorType::ConstPointer ValueVectorPointerType;
+  }
+  /** Destructor */
+  virtual ~PointSetAndValuesFunction() {};
+  /**PrintSelf method */
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-      itkSetObjectMacro(ValueVector,ValueVectorType);
-      itkGetObjectMacro(ValueVector,ValueVectorType);
+private:
+  PointSetAndValuesFunction(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
 
-      /**
-       * Set the point set.
-       * \param the point set
-       */
-      virtual void SetPointSet( const PointSetType * ptr );
-      /**
-       * Get the point set.
-       * \return the point set
-       */
-      const PointSetType * GetPointSe() const
-      { return m_PointSet.GetPointer(); }
-
-      /** Evaluate the function at specified Point position.
-       * Subclasses must provide this method. */
-      virtual TValue Evaluate( const PointType& point ) const = 0;
-
-      /** Evaluate the function at specified Index position.
-       * Subclasses must provide this method. */
-      virtual TValue EvaluateAtIndex( const IndexType & index ) const = 0;
-
-      /** Evaluate the function at specified ContinousIndex position.
-       * Subclasses must provide this method. */
-      virtual TValue EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const = 0;
-
-      protected:
-      /** Constructor */
-      PointSetAndValuesFunction()
-      {
-  m_PointSet = PointSetType::New();
-  m_ValueVector = ValueVectorType::New();
-
-      }
-      /** Destructor */
-      virtual ~PointSetAndValuesFunction() {};
-      /**PrintSelf method */
-      virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
-      private:
-      PointSetAndValuesFunction(const Self&); //purposely not implemented
-      void operator=(const Self&); //purposely not implemented
-
-      /** PointSet */
-      PointSetConstPointerType m_PointSet;
-      /** value vector */
-      ValueVectorPointerType m_ValueVector;
-    };
+  /** PointSet */
+  PointSetConstPointerType m_PointSet;
+  /** value vector */
+  ValueVectorPointerType m_ValueVector;
+};
 }// End namespace otb
 #endif

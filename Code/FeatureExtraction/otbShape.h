@@ -45,7 +45,7 @@ public:
   short y;
 
   Point_plane()
-       {
+  {
     x = -1;
     y = -1;
   }
@@ -83,7 +83,7 @@ public:
   Shape* mw_get_next_sibling_shape(Shape *sh);
 
   Shape()
-    {
+  {
     inferior_type = 0;
     value         = 0.0;
     open          = 0;
@@ -93,14 +93,14 @@ public:
     parent        = NULL;
     next_sibling  = NULL;
     child         = NULL;
-    }
+  }
 
   ~Shape()
-    {
+  {
     if (pixels != NULL)  delete[] pixels;
     pixels = NULL;
     area   = 0;
-    }
+  }
 
 
 protected:
@@ -138,18 +138,18 @@ public:
   Shape* mw_get_smallest_shape(int iX,int iY);
 
 
-/* For each shape, find its number of proper pixels */
+  /* For each shape, find its number of proper pixels */
   void compute_proper_pixels(int *tabNbOfProperPixels);
 
-/* Allocate the array of pixels of each shape. Thanks to the tree structure,
-we allocate only memory for the pixels of the root, and other arrays are
-just pointers */
+  /* Allocate the array of pixels of each shape. Thanks to the tree structure,
+  we allocate only memory for the pixels of the root, and other arrays are
+  just pointers */
   void  allocate_pixels(int* tabNbOfProperPixels);
 
-/* Associate to each shape its array of pixels. Fills the field PIXELS of
-the tree structure. From the command line, this function has no interest,
-since that field is not saved to the file. It is meant to be called from
-another module, when this field is needed */
+  /* Associate to each shape its array of pixels. Fills the field PIXELS of
+  the tree structure. From the command line, this function has no interest,
+  since that field is not saved to the file. It is meant to be called from
+  another module, when this field is needed */
   void  flst_pixels();
 
 
@@ -160,35 +160,35 @@ another module, when this field is needed */
 
   void TURN_LEFT(int *dir);
   void TURN_RIGHT(int *dir);
-/* Is the point in the shape? */
+  /* Is the point in the shape? */
   char point_in_shape(int x,int y,Shape *pShape);
   void find_next_dual_point(Point_plane *pDualPoint,
                             int *cDirection,
-          Shape *pShape);
+                            Shape *pShape);
   int find_closed_boundary(Shape *pShape,PathPointer pBoundary);
-/* Find an initial point (to follow the boundary) at the border of the image */
+  /* Find an initial point (to follow the boundary) at the border of the image */
   void initial_point_border(Point_plane *pDualPoint,
-             int *cDirection,Shape *pShape);
-/* Find an open boundary */
+                            int *cDirection,Shape *pShape);
+  /* Find an open boundary */
   void find_open_boundary(Shape *pShape,PathPointer pBoundary);
   PathPointer flst_shape_boundary(Shape *pShape);
   Shapes()
-    {
+  {
     the_shapes     = NULL;
     smallest_shape = NULL;
     nb_shapes      = 0;
     nrow           = 0;
     ncol           = 0;
     interpolation  = 0;
-    }
+  }
 
   ~Shapes()
-    {
-     if((the_shapes != NULL) && (nb_shapes > 0))
-         delete[] (the_shapes[0].pixels);
-     if (the_shapes != NULL) delete[] the_shapes;
-     if (smallest_shape != NULL) delete[] smallest_shape;
-    }
+  {
+    if ((the_shapes != NULL) && (nb_shapes > 0))
+      delete[] (the_shapes[0].pixels);
+    if (the_shapes != NULL) delete[] the_shapes;
+    if (smallest_shape != NULL) delete[] smallest_shape;
+  }
 
 protected:
 

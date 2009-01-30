@@ -28,87 +28,93 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  /** \class FilterFunctionValues
-   *  \brief This class contains the values of the filter function for the processed spectral band.
-   *
-   *  The step between 2 values is 0.0025µm. The class contains the min and the max value.Those value can be directly read from the image metadatas.
-   */
-  class ITK_EXPORT FilterFunctionValues : public itk::DataObject
-    {
-    public:
-      /** Standard typedefs */
-      typedef FilterFunctionValues          Self;
-      typedef itk::DataObject               Superclass;
-      typedef itk::SmartPointer<Self>       Pointer;
-      typedef itk::SmartPointer<const Self> ConstPointer;
+/** \class FilterFunctionValues
+ *  \brief This class contains the values of the filter function for the processed spectral band.
+ *
+ *  The step between 2 values is 0.0025µm. The class contains the min and the max value.Those value can be directly read from the image metadatas.
+ */
+class ITK_EXPORT FilterFunctionValues : public itk::DataObject
+{
+public:
+  /** Standard typedefs */
+  typedef FilterFunctionValues          Self;
+  typedef itk::DataObject               Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-      /** Type macro */
-      itkTypeMacro(FilterFunctionValues,DataObject);
+  /** Type macro */
+  itkTypeMacro(FilterFunctionValues,DataObject);
 
-      /** Creation through object factory macro */
-      itkNewMacro(Self);
+  /** Creation through object factory macro */
+  itkNewMacro(Self);
 
-      typedef double WavelenghtSpectralBandType;
-      typedef std::vector<WavelenghtSpectralBandType>    ValuesVectorType;
+  typedef double WavelenghtSpectralBandType;
+  typedef std::vector<WavelenghtSpectralBandType>    ValuesVectorType;
 
-      /** Set vector that contains the filter function value. */
-      void SetFilterFunctionValues(const ValuesVectorType & vect)
+  /** Set vector that contains the filter function value. */
+  void SetFilterFunctionValues(const ValuesVectorType & vect)
   {
     m_FilterFunctionValues = vect;
     this->Modified();
   };
-      /** Get vector that contains the filter function value. */
-      const ValuesVectorType & GetFilterFunctionValues() const { return m_FilterFunctionValues; };
-      /** Get vector that contains the filter function value 6S. */
-      void SetFilterFunctionValues6S(const ValuesVectorType & vect)
-      {
-          m_FilterFunctionValues6S = vect;
+  /** Get vector that contains the filter function value. */
+  const ValuesVectorType & GetFilterFunctionValues() const
+  {
+    return m_FilterFunctionValues;
+  };
+  /** Get vector that contains the filter function value 6S. */
+  void SetFilterFunctionValues6S(const ValuesVectorType & vect)
+  {
+    m_FilterFunctionValues6S = vect;
     this->Modified();
-      };
-      /** Get vector that contains the filter function value 6S. */
-      const ValuesVectorType & GetFilterFunctionValues6S() const { return m_FilterFunctionValues6S; };
+  };
+  /** Get vector that contains the filter function value 6S. */
+  const ValuesVectorType & GetFilterFunctionValues6S() const
+  {
+    return m_FilterFunctionValues6S;
+  };
 
-      /** Set minimum spectral value. */
-      itkSetMacro(MinSpectralValue,WavelenghtSpectralBandType);
-      /** Get minimum spectral value. */
-      itkGetMacro(MinSpectralValue,WavelenghtSpectralBandType);
-      /** Set maximum spectral value. This value is automatically computed.*/
-      itkSetMacro(MaxSpectralValue,WavelenghtSpectralBandType);
-      /** Get maximum spectral value. This value is automatically computed.*/
-      itkGetMacro(MaxSpectralValue,WavelenghtSpectralBandType);
-      /** Set user step between each wavelenght spectral band values. */
-      itkSetMacro(UserStep,WavelenghtSpectralBandType);
-      /** Get user step between each wavelenght spectral band values. */
-      itkGetMacro(UserStep,WavelenghtSpectralBandType);
+  /** Set minimum spectral value. */
+  itkSetMacro(MinSpectralValue,WavelenghtSpectralBandType);
+  /** Get minimum spectral value. */
+  itkGetMacro(MinSpectralValue,WavelenghtSpectralBandType);
+  /** Set maximum spectral value. This value is automatically computed.*/
+  itkSetMacro(MaxSpectralValue,WavelenghtSpectralBandType);
+  /** Get maximum spectral value. This value is automatically computed.*/
+  itkGetMacro(MaxSpectralValue,WavelenghtSpectralBandType);
+  /** Set user step between each wavelenght spectral band values. */
+  itkSetMacro(UserStep,WavelenghtSpectralBandType);
+  /** Get user step between each wavelenght spectral band values. */
+  itkGetMacro(UserStep,WavelenghtSpectralBandType);
 
-    protected:
-      /** Constructor */
-      FilterFunctionValues();
-      /** Destructor */
-      ~FilterFunctionValues(){};
+protected:
+  /** Constructor */
+  FilterFunctionValues();
+  /** Destructor */
+  ~FilterFunctionValues() {};
 
-      /** PrintSelf method */
-      void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
-
-    private:
-      FilterFunctionValues(const Self&); //purposely not implemented
-      void operator=(const Self&); //purposely not implemented
+  /** PrintSelf method */
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 
-      /** Vector that contains the filter function value. */
-      ValuesVectorType m_FilterFunctionValues;
-      /** Vector that contains the filter function value in 6S format (step of 0.0025µm).
-        * There values a computed by 6S. If the UserStep is 0.0025µm, then m_FilterFunctionValues is identical as m_FilterFunctionValues6S
-        */
-      ValuesVectorType m_FilterFunctionValues6S;
-      /** Minimum spectral value (in µm). */
-      WavelenghtSpectralBandType m_MinSpectralValue;
-      /** Maximum spectral value (in µm). */
-      WavelenghtSpectralBandType m_MaxSpectralValue;
-      /** User step between each wavelenght spectral band values. (in µm) */
-      WavelenghtSpectralBandType m_UserStep;
-    };
+private:
+  FilterFunctionValues(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+
+
+  /** Vector that contains the filter function value. */
+  ValuesVectorType m_FilterFunctionValues;
+  /** Vector that contains the filter function value in 6S format (step of 0.0025µm).
+    * There values a computed by 6S. If the UserStep is 0.0025µm, then m_FilterFunctionValues is identical as m_FilterFunctionValues6S
+    */
+  ValuesVectorType m_FilterFunctionValues6S;
+  /** Minimum spectral value (in µm). */
+  WavelenghtSpectralBandType m_MinSpectralValue;
+  /** Maximum spectral value (in µm). */
+  WavelenghtSpectralBandType m_MaxSpectralValue;
+  /** User step between each wavelenght spectral band values. (in µm) */
+  WavelenghtSpectralBandType m_UserStep;
+};
 
 
 
@@ -205,26 +211,35 @@ public:
   /**
    * Set/Get the wavelenght spectral band.
    */
-  void SetWavelenghtSpectralBand( const WavelenghtSpectralBandVectorType & waveband){ m_WavelenghtSpectralBand = waveband; };
-  void SetWavelenghtSpectralBandWithIndex( unsigned int id, const FilterFunctionValues::Pointer & function)
-    {
-      if (m_WavelenghtSpectralBand.size() <  id+1)
+  void SetWavelenghtSpectralBand( const WavelenghtSpectralBandVectorType & waveband)
   {
-    for(unsigned int j=0; j<(id+1-m_WavelenghtSpectralBand.size());j++)
+    m_WavelenghtSpectralBand = waveband;
+  };
+  void SetWavelenghtSpectralBandWithIndex( unsigned int id, const FilterFunctionValues::Pointer & function)
+  {
+    if (m_WavelenghtSpectralBand.size() <  id+1)
+    {
+      for (unsigned int j=0; j<(id+1-m_WavelenghtSpectralBand.size());j++)
       {
         FilterFunctionValues::Pointer temp;
         m_WavelenghtSpectralBand.push_back(temp);
       }
-  }
-      m_WavelenghtSpectralBand[id] = function;
-    };
-  WavelenghtSpectralBandVectorType GetWavelenghtSpectralBand(){ return m_WavelenghtSpectralBand; };
-  WavelenghtSpectralBandVectorType * GetWavelenghtSpectralBandRef(){ return &m_WavelenghtSpectralBand; };
+    }
+    m_WavelenghtSpectralBand[id] = function;
+  };
+  WavelenghtSpectralBandVectorType GetWavelenghtSpectralBand()
+  {
+    return m_WavelenghtSpectralBand;
+  };
+  WavelenghtSpectralBandVectorType * GetWavelenghtSpectralBandRef()
+  {
+    return &m_WavelenghtSpectralBand;
+  };
 
   /** Constructor */
   AtmosphericCorrectionParameters();
   /** Destructor */
-  ~AtmosphericCorrectionParameters(){};
+  ~AtmosphericCorrectionParameters() {};
 
 protected:
 

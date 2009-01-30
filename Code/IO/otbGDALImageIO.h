@@ -54,7 +54,7 @@ namespace otb
  *
  */
 class ITK_EXPORT GDALImageIO : public itk::ImageIOBase,
-             public MetaDataKey
+      public MetaDataKey
 {
 public:
 
@@ -83,7 +83,10 @@ public:
   virtual bool CanReadFile(const char*);
 
   /** Determine the file type. Returns true if the ImageIO can stream read the specified file */
-  virtual bool CanStreamRead(){  return true; };
+  virtual bool CanStreamRead()
+  {
+    return true;
+  };
 
   /** Set the spacing and dimention information for the set filename. */
   virtual void ReadImageInformation();
@@ -102,7 +105,10 @@ public:
 
   /** Determine the file type. Returns true if the ImageIO can stream write the specified file */
 //THOMAS
-  virtual bool CanStreamWrite() { return true; };
+  virtual bool CanStreamWrite()
+  {
+    return true;
+  };
 
   /** Writes the spacing and dimentions of the image.
    * Assumes SetFileName has been called with a valid file name. */
@@ -159,7 +165,7 @@ private:
   int           m_NbOctetPixel;
 
   bool GDALInfoReportCorner( const char * corner_name, double x, double y,
-                           double &dfGeoX, double &dfGeoY);
+                             double &dfGeoX, double &dfGeoY);
 
   bool m_FlagWriteImageInformation;
 

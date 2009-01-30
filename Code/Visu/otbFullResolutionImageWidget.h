@@ -28,9 +28,9 @@ namespace otb
  */
 template <class TPixel>
 class FullResolutionImageWidget
-  : public ImageWidgetBase<TPixel>
+      : public ImageWidgetBase<TPixel>
 {
- public:
+public:
   /** Standard class typedefs */
   typedef FullResolutionImageWidget Self;
   typedef ImageWidgetBase<TPixel> Superclass;
@@ -65,17 +65,17 @@ class FullResolutionImageWidget
   virtual void SetUpperLeftCorner(IndexType index);
   itkGetMacro(UpperLeftCorner,IndexType);
 
- protected:
+protected:
   /** Constructor. */
-    FullResolutionImageWidget();
-    /** Destructor. */
-    ~FullResolutionImageWidget();
+  FullResolutionImageWidget();
+  /** Destructor. */
+  ~FullResolutionImageWidget();
 
- private:
-    FullResolutionImageWidget(const Self&);// purposely not implemented
-    void operator=(const Self&);// purposely not implemented
+private:
+  FullResolutionImageWidget(const Self&);// purposely not implemented
+  void operator=(const Self&);// purposely not implemented
 
-    IndexType m_UpperLeftCorner;
+  IndexType m_UpperLeftCorner;
 };
 } // end namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

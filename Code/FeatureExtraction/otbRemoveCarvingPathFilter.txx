@@ -71,7 +71,7 @@ RemoveCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
   InputIteratorType inputIterator(inputImage,
                                   inputImage->GetLargestPossibleRegion());
   OutputIteratorType outputIterator(outputImage,
-                                  outputImage->GetLargestPossibleRegion());
+                                    outputImage->GetLargestPossibleRegion());
 
   unsigned int dir0;
   unsigned int dir1;
@@ -102,7 +102,7 @@ RemoveCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
 
   //go to the end of the path
   pathIterator = vertexList->Begin();
-  while(pathIterator != vertexList->End())
+  while (pathIterator != vertexList->End())
   {
     ++pathIterator;
   }
@@ -112,22 +112,22 @@ RemoveCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
   {
     while (!inputIterator.IsAtEndOfSlice())
     {
-      while(!inputIterator.IsAtEndOfLine())
+      while (!inputIterator.IsAtEndOfLine())
       {
         index = inputIterator.GetIndex();
 
-        if(index[dir1] != line)
+        if (index[dir1] != line)
         {
           line = index[dir1];
           typename InputImageType::PointType tmpIndex;
           inputImage->TransformContinuousIndexToPhysicalPoint(pathIterator.Value(),tmpIndex);
           inputImage->TransformPhysicalPointToIndex(tmpIndex,indexToRemove);
 
-          if(pathIterator!=vertexList->Begin())
+          if (pathIterator!=vertexList->Begin())
           {
             --pathIterator;
           }
-          if(index[dir1] != indexToRemove[dir1])
+          if (index[dir1] != indexToRemove[dir1])
           {
             itkExceptionMacro(<< "Error!!!");
           }
@@ -163,9 +163,9 @@ RemoveCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
 }
 
 template <class TInputImage, class TInputPath,class TOutputImage>
-    void
-        RemoveCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
-  ::GenerateOutputInformation()
+void
+RemoveCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
+::GenerateOutputInformation()
 {
   // call the superclass' implementation of this method
   Superclass::GenerateOutputInformation();
@@ -191,11 +191,11 @@ template <class TInputImage, class TInputPath,class TOutputImage>
   // we need to compute the output spacing, the output image size, and the
   // output image start index
   const typename TInputImage::SpacingType&
-      inputSpacing = inputPtr->GetSpacing();
+  inputSpacing = inputPtr->GetSpacing();
   const typename TInputImage::SizeType&   inputSize
-      = inputPtr->GetLargestPossibleRegion().GetSize();
+  = inputPtr->GetLargestPossibleRegion().GetSize();
   const typename TInputImage::IndexType&  inputStartIndex
-      = inputPtr->GetLargestPossibleRegion().GetIndex();
+  = inputPtr->GetLargestPossibleRegion().GetIndex();
 
   typename TOutputImage::SpacingType      outputSpacing;
   typename TOutputImage::SizeType         outputSize;

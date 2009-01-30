@@ -37,14 +37,14 @@ template <class TInputImage,class TOutputImage>
 Resampler<TInputImage, TOutputImage>
 ::Resampler()
 {
-  for(int i=0;i<InputImageType::ImageDimension;++i)
+  for (int i=0;i<InputImageType::ImageDimension;++i)
   {
-     m_Size[i]=0;
+    m_Size[i]=0;
   }
 }
-  /**
-   * Configure input requested region to be the largest possible region.
-   */
+/**
+ * Configure input requested region to be the largest possible region.
+ */
 template <class TInputImage,class TOutputImage>
 void
 Resampler<TInputImage, TOutputImage>
@@ -57,10 +57,10 @@ Resampler<TInputImage, TOutputImage>
   OutputImagePointer outputPtr = this->GetOutput();
   // If the pointers are not correct
   if ( !inputPtr || !outputPtr )
-    {
+  {
     // exit
     return;
-    }
+  }
   // else
   // Configure input requested region to be the largest possible region
   inputPtr->SetRequestedRegion( inputPtr->GetLargestPossibleRegion());
@@ -88,22 +88,22 @@ Resampler<TInputImage,TOutputImage>
   // Input and output image pointers retrieval
   InputImageConstPointer  inputPtr  = this->GetInput();
   OutputImagePointer      outputPtr = this->GetOutput();
-    // If the pointers are not correct
+  // If the pointers are not correct
   if ( !inputPtr || !outputPtr )
-    {
+  {
     // exit
     return;
-    }
+  }
   unsigned int i;
   // Computing output spacing, size and index from input data
   const typename InputImageType::SpacingType& inputSpacing    = inputPtr->GetSpacing();
   const typename InputImageType::IndexType&   inputStartIndex = inputPtr->GetLargestPossibleRegion().GetIndex();
   typename OutputImageType::IndexType   outputStartIndex;
   typename OutputImageType::SpacingType spacing;
-   for (i = 0; i < OutputImageType::ImageDimension; i++)
-     {
-     outputStartIndex[i] =  inputStartIndex[i];
-     }
+  for (i = 0; i < OutputImageType::ImageDimension; i++)
+  {
+    outputStartIndex[i] =  inputStartIndex[i];
+  }
   // Affectation du spacing � l'image de sortie
   outputPtr->SetSpacing( inputSpacing );
   // G�n�ration de la r�gion de l'image de sortie

@@ -44,7 +44,8 @@ namespace otb
  *
  * \ingroup IntensityImageFilters Multithreaded
  */
-namespace Functor {
+namespace Functor
+{
 
 template< class TInput1, class TInput2, class TOutput>
 class MeanRatio
@@ -59,21 +60,21 @@ public:
     TOutput meanA = 0.0;
     TOutput meanB = 0.0;
 
-    for(unsigned long pos = 0; pos< itA.Size(); ++pos)
-      {
+    for (unsigned long pos = 0; pos< itA.Size(); ++pos)
+    {
 
       meanA += static_cast<TOutput>(itA.GetPixel(pos));
       meanB += static_cast<TOutput>(itB.GetPixel(pos));
 
 
-      }
+    }
 
     meanA /= itA.Size();
     meanB /= itB.Size();
 
     TOutput ratio;
 
-    if(meanA>meanB)
+    if (meanA>meanB)
       ratio = static_cast<TOutput>(1.0 - meanB/meanA);
     else ratio = static_cast<TOutput>(1.0 - meanA/meanB);
 
@@ -84,22 +85,22 @@ public:
 
 template <class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT MeanRatioImageFilter :
-    public BinaryFunctorNeighborhoodImageFilter<
-            TInputImage1,TInputImage2,TOutputImage,
-            Functor::MeanRatio<
-                   ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
-                   ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
-       ITK_TYPENAME TOutputImage::PixelType>   >
+      public BinaryFunctorNeighborhoodImageFilter<
+      TInputImage1,TInputImage2,TOutputImage,
+      Functor::MeanRatio<
+      ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
+      ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
+      ITK_TYPENAME TOutputImage::PixelType>   >
 {
 public:
   /** Standard class typedefs. */
   typedef MeanRatioImageFilter  Self;
   typedef BinaryFunctorNeighborhoodImageFilter<
-      TInputImage1,TInputImage2,TOutputImage,
-          Functor::MeanRatio<
-               ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
-               ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
-               ITK_TYPENAME TOutputImage::PixelType>
+  TInputImage1,TInputImage2,TOutputImage,
+  Functor::MeanRatio<
+  ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
+  ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
+  ITK_TYPENAME TOutputImage::PixelType>
   >  Superclass;
   typedef itk::SmartPointer<Self>   Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;

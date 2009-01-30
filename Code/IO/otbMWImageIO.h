@@ -61,7 +61,10 @@ public:
   virtual bool CanReadFile(const char*);
 
   /** Determine the file type. Returns true if the ImageIO can stream read the specified file */
-  virtual bool CanStreamRead(){  return true; };
+  virtual bool CanStreamRead()
+  {
+    return true;
+  };
 
   /** Set the spacing and dimention information for the set filename. */
   virtual void ReadImageInformation();
@@ -79,7 +82,10 @@ public:
   virtual bool CanWriteFile(const char*);
 
   /** Determine the file type. Returns true if the ImageIO can stream write the specified file */
-  virtual bool CanStreamWrite() { return true; };
+  virtual bool CanStreamWrite()
+  {
+    return true;
+  };
 
   /** Writes the spacing and dimentions of the image.
    * Assumes SetFileName has been called with a valid file name. */
@@ -116,7 +122,8 @@ private:
 
   /** Internal method to read header informations */
   bool InternalReadHeaderInformation(std::fstream & file, const bool reportError);
-  inline void ByteSplitting(unsigned short a, unsigned short &low, unsigned short &high){
+  inline void ByteSplitting(unsigned short a, unsigned short &low, unsigned short &high)
+  {
     unsigned short b = 255;
     low = a & b;
     high = (a>>8) & b;

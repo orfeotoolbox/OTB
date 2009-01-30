@@ -34,7 +34,7 @@ namespace otb
  */
 template <class TPolygonList, class TOutputGraph>
 class ITK_EXPORT PolygonListToRCC8GraphFilter
-  : public RCC8GraphSource<TOutputGraph>
+      : public RCC8GraphSource<TOutputGraph>
 {
 public:
   /** Standard class typedefs. */
@@ -46,7 +46,7 @@ public:
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
   itkTypeMacro(PolygonListToRCC8GraphFilter,RCC8GraphSource);
- 
+
   /** Input related typedef */
   typedef TPolygonList                           PolygonListType;
   typedef typename PolygonListType::ConstPointer PolygonListConstPointerType;
@@ -68,7 +68,7 @@ public:
 
   /** RCC8 calculator typedef */
   typedef PolygonToPolygonRCC8Calculator<PolygonType> RCC8CalculatorType;
-  
+
   /** Graph iterators typedefs */
   typedef RCC8VertexIterator<OutputGraphType>         VertexIteratorType;
   typedef RCC8InEdgeIterator<OutputGraphType>         InEdgeIteratorType;
@@ -122,7 +122,7 @@ protected:
   /** Multi-threading implementation */
 
   virtual void BeforeThreadedGenerateData();
-  
+
   virtual void AfterThreadedGenerateData();
 
   /** startIndex and stopIndex represent the indeces of the vertex to

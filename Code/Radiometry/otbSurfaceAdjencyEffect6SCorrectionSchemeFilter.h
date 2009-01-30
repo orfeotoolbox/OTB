@@ -1,22 +1,22 @@
- /*=========================================================================
+/*=========================================================================
 
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
-
-
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
+ Program:   ORFEO Toolbox
+ Language:  C++
+ Date:      $Date$
+ Version:   $Revision$
 
 
-  Some parts of this code are derived from ITK. See ITKCopyright.txt
-  for details.
+ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+ See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
+ Some parts of this code are derived from ITK. See ITKCopyright.txt
+ for details.
+
+
+    This software is distributed WITHOUT ANY WARRANTY; without even
+    the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+    PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #ifndef __otbSurfaceAdjencyEffect6SCorrectionSchemeFilter_h
@@ -31,101 +31,119 @@
 
 namespace otb
 {
- namespace Functor
-    {
-       /** \class ComputeNeighborhoodContributionFunctor
-       *  \brief Unary neighborhood functor to compute the value of a pixel which is a sum
-       *   of the surrounding pixels value ponderated by a coefficient.
-       *
-       *  \ingroup Functor
-       */
-      template <class TNeighIter, class TOutput>
-  class ComputeNeighborhoodContributionFunctor
+namespace Functor
+{
+/** \class ComputeNeighborhoodContributionFunctor
+*  \brief Unary neighborhood functor to compute the value of a pixel which is a sum
+*   of the surrounding pixels value ponderated by a coefficient.
+*
+*  \ingroup Functor
+*/
+template <class TNeighIter, class TOutput>
+class ComputeNeighborhoodContributionFunctor
+{
+public:
+  ComputeNeighborhoodContributionFunctor() {};
+  ~ComputeNeighborhoodContributionFunctor() {};
+
+  typedef itk::VariableSizeMatrix<double>             WeightingMatrixType;
+  typedef typename std::vector<WeightingMatrixType>   WeightingValuesContainerType;
+  typedef typename TOutput::RealValueType             RealValueType;
+  typedef std::vector<double>                         DoubleContainerType;
+
+  void SetWeightingValues(const WeightingValuesContainerType & cont)
   {
-  public:
-    ComputeNeighborhoodContributionFunctor() {};
-    ~ComputeNeighborhoodContributionFunctor() {};
+    m_WeightingValues = cont;
+  };
+  void SetUpwardTransmittanceRatio(DoubleContainerType upwardTransmittanceRatio)
+  {
+    m_UpwardTransmittanceRatio = upwardTransmittanceRatio;
+  };
+  void SetDiffuseRatio(DoubleContainerType diffuseRatio)
+  {
+    m_DiffuseRatio = diffuseRatio;
+  };
+  WeightingValuesContainerType GetWeightingValues()
+  {
+    return m_WeightingValues;
+  };
+  DoubleContainerType GetUpwardTransmittanceRatio()
+  {
+    return m_UpwardTransmittanceRatio;
+  };
+  DoubleContainerType GetDiffuseRatio()
+  {
+    return m_DiffuseRatio;
+  };
 
-    typedef itk::VariableSizeMatrix<double>             WeightingMatrixType;
-    typedef typename std::vector<WeightingMatrixType>   WeightingValuesContainerType;
-    typedef typename TOutput::RealValueType             RealValueType;
-    typedef std::vector<double>                         DoubleContainerType;
+  inline TOutput operator()(const TNeighIter & it)
+  {
+    unsigned int neighborhoodSize = it.Size();
+    double contribution = 0.;
+    TOutput outPixel;
+    outPixel.SetSize(it.GetCenterPixel().Size());
 
-    void SetWeightingValues(const WeightingValuesContainerType & cont){ m_WeightingValues = cont; };
-    void SetUpwardTransmittanceRatio(DoubleContainerType upwardTransmittanceRatio){ m_UpwardTransmittanceRatio = upwardTransmittanceRatio;};
-    void SetDiffuseRatio(DoubleContainerType diffuseRatio){ m_DiffuseRatio = diffuseRatio;};
-    WeightingValuesContainerType GetWeightingValues(){ return m_WeightingValues;};
-    DoubleContainerType GetUpwardTransmittanceRatio(){ return m_UpwardTransmittanceRatio;};
-    DoubleContainerType GetDiffuseRatio(){ return m_DiffuseRatio;};
-
-    inline TOutput operator()(const TNeighIter & it)
-      {
-        unsigned int neighborhoodSize = it.Size();
-        double contribution = 0.;
-        TOutput outPixel;
-        outPixel.SetSize(it.GetCenterPixel().Size());
-
-        // Loop over each component
-        for (unsigned int j=0; j<outPixel.GetSize(); j++)
+    // Loop over each component
+    for (unsigned int j=0; j<outPixel.GetSize(); j++)
     {
       contribution = 0;
       // Load the current channel ponderation value matrix
       WeightingMatrixType TempChannelWeighting = m_WeightingValues[j];
       // Loop over the neighborhood
       for (unsigned int i = 0; i < neighborhoodSize; ++i)
+      {
+        // Current neighborhood pixel index calculation
+        unsigned int RowIdx = 0;
+        unsigned int ColIdx = 0;
+        RowIdx = i/TempChannelWeighting.Cols();
+        if (RowIdx != 0)
         {
-          // Current neighborhood pixel index calculation
-          unsigned int RowIdx = 0;
-          unsigned int ColIdx = 0;
-          RowIdx = i/TempChannelWeighting.Cols();
-          if(RowIdx != 0)
-      {
-        ColIdx = (i+1)-RowIdx*TempChannelWeighting.Cols()-1;
-      }
-          else
-      {
-        ColIdx = i;
-      }
-          // Extract the current neighborhood pixel ponderation
-          double idVal = TempChannelWeighting(RowIdx, ColIdx);
-          // Extract the current neighborhood pixel value
-          TOutput tempPix = it.GetPixel(i);
-
-          contribution += static_cast<double>( tempPix[j] )*idVal;
-
+          ColIdx = (i+1)-RowIdx*TempChannelWeighting.Cols()-1;
         }
+        else
+        {
+          ColIdx = i;
+        }
+        // Extract the current neighborhood pixel ponderation
+        double idVal = TempChannelWeighting(RowIdx, ColIdx);
+        // Extract the current neighborhood pixel value
+        TOutput tempPix = it.GetPixel(i);
+
+        contribution += static_cast<double>( tempPix[j] )*idVal;
+
+      }
       outPixel[j] = static_cast<RealValueType>(it.GetCenterPixel()[j])*m_UpwardTransmittanceRatio[j] + contribution*m_DiffuseRatio[j];
     }
-        return outPixel;
-      }
+    return outPixel;
+  }
 
-  private:
-    WeightingValuesContainerType m_WeightingValues;
-    DoubleContainerType m_UpwardTransmittanceRatio;
-    DoubleContainerType m_DiffuseRatio;
-  };
+private:
+  WeightingValuesContainerType m_WeightingValues;
+  DoubleContainerType m_UpwardTransmittanceRatio;
+  DoubleContainerType m_DiffuseRatio;
+};
 
-    }
+}
 
-  /** \class SurfaceAdjencyEffect6SCorrectionSchemeFilter
-   *  \brief Correct the scheme taking care of the surrounding pixels.
-   *
-   *   The SurfaceAdjencyEffect6SCorrectionSchemeFilter class allows to introduce a neighbor correction to the
-   *   reflectance estimation. The satelite signal is considered as to be a combinaison of the signal coming from
-   *   the target pixel and a weighting of the siganls coming from the neighbor pixels.
-   *
-   */
+/** \class SurfaceAdjencyEffect6SCorrectionSchemeFilter
+ *  \brief Correct the scheme taking care of the surrounding pixels.
+ *
+ *   The SurfaceAdjencyEffect6SCorrectionSchemeFilter class allows to introduce a neighbor correction to the
+ *   reflectance estimation. The satelite signal is considered as to be a combinaison of the signal coming from
+ *   the target pixel and a weighting of the siganls coming from the neighbor pixels.
+ *
+ */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT SurfaceAdjencyEffect6SCorrectionSchemeFilter :
- public UnaryFunctorNeighborhoodImageFilter< TInputImage,
-                                             TOutputImage,
-                                             ITK_TYPENAME Functor::ComputeNeighborhoodContributionFunctor< itk::ConstNeighborhoodIterator<TInputImage>,
-                                                                                                                 ITK_TYPENAME TOutputImage::PixelType >       >
+      public UnaryFunctorNeighborhoodImageFilter< TInputImage,
+      TOutputImage,
+      ITK_TYPENAME Functor::ComputeNeighborhoodContributionFunctor< itk::ConstNeighborhoodIterator<TInputImage>,
+      ITK_TYPENAME TOutputImage::PixelType >       >
 {
 public:
   /** "typedef" to simplify the variables definition and the declaration. */
   typedef Functor::ComputeNeighborhoodContributionFunctor<itk::ConstNeighborhoodIterator<TInputImage>,
-                                                                   ITK_TYPENAME TOutputImage::PixelType> FunctorType;
+  ITK_TYPENAME TOutputImage::PixelType> FunctorType;
 
   /** "typedef" for standard classes. */
   typedef SurfaceAdjencyEffect6SCorrectionSchemeFilter                                           Self;
@@ -143,7 +161,7 @@ public:
   /** return class name. */
   itkTypeMacro(SurfaceAdjencyEffect6SCorrectionSchemeFilter, UnaryFunctorNeighborhoodImageFilter);
 
-/**   Extract input and output images dimensions.*/
+  /**   Extract input and output images dimensions.*/
   itkStaticConstMacro( InputImageDimension, unsigned int, TInputImage::ImageDimension);
   itkStaticConstMacro( OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
@@ -166,13 +184,13 @@ public:
   /** typedef for calculation*/
   typedef typename itk::ConstNeighborhoodIterator<InputImageType>          NeighborIterType;
 
-   /** Set/Get the Size of the neighbor window. */
+  /** Set/Get the Size of the neighbor window. */
   void SetWindowRadius(unsigned int rad)
-    {
-      this->SetRadius(rad);
-      m_WindowRadius = rad;
-      this->Modified();
-    }
+  {
+    this->SetRadius(rad);
+    m_WindowRadius = rad;
+    this->Modified();
+  }
   itkGetConstReferenceMacro(WindowRadius, unsigned int);
 
   /** Set/Get the pixel spacing in kilometers */
@@ -184,23 +202,23 @@ public:
 
   /** Get/Set Atmospheric Radiative Terms. */
   void SetAtmosphericRadiativeTerms(AtmosphericRadiativeTermsPointerType atmo)
-    {
-      m_AtmosphericRadiativeTerms = atmo;
-      this->SetNthInput(1, m_AtmosphericRadiativeTerms);
-      this->Modified();
-    }
+  {
+    m_AtmosphericRadiativeTerms = atmo;
+    this->SetNthInput(1, m_AtmosphericRadiativeTerms);
+    this->Modified();
+  }
   AtmosphericRadiativeTermsPointerType GetAtmosphericRadiativeTerms()
-    {
-      return m_AtmosphericRadiativeTerms;
-    }
+  {
+    return m_AtmosphericRadiativeTerms;
+  }
 
   /** Compute the functor parameters */
   void ComputeParameters();
 
 
- protected:
+protected:
   SurfaceAdjencyEffect6SCorrectionSchemeFilter();
-  virtual ~SurfaceAdjencyEffect6SCorrectionSchemeFilter(){};
+  virtual ~SurfaceAdjencyEffect6SCorrectionSchemeFilter() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** GenerateOutputInformation method */

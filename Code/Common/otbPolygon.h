@@ -38,9 +38,9 @@ namespace otb
  */
 template<class TValue=double>
 class ITK_EXPORT Polygon
-  : public PolyLineParametricPathWithValue<TValue,2>
+      : public PolyLineParametricPathWithValue<TValue,2>
 {
-  public:
+public:
   /** Standard typedefs */
   typedef Polygon                                   Self;
   typedef PolyLineParametricPathWithValue<TValue,2> Superclass;
@@ -63,8 +63,8 @@ class ITK_EXPORT Polygon
   typedef typename RegionType::SizeType            SizeType;
   typedef typename RegionType::IndexType           IndexType;
 
- itkSetMacro(Epsilon,double);
- itkGetMacro(Epsilon,double);
+  itkSetMacro(Epsilon,double);
+  itkGetMacro(Epsilon,double);
 
   /**
    * Check wether point is strictly inside the polygon.
@@ -114,37 +114,37 @@ class ITK_EXPORT Polygon
    * \param a1 Second point of the second segment.
    * \return True if the two segments are touching without crossing.
    */
-   bool IsTouching(VertexType a1, VertexType a2, VertexType b1, VertexType b2) const;
+  bool IsTouching(VertexType a1, VertexType a2, VertexType b1, VertexType b2) const;
 
- /**
-  * Compute the polygon bounding region.
-  * \return The region.
-  */
- RegionType GetBoundingRegion(void);
+  /**
+   * Compute the polygon bounding region.
+   * \return The region.
+   */
+  RegionType GetBoundingRegion(void);
 
   /**
   * Return the polygon surface.
   * \return The surface.
   */
- double GetSurface() const;
+  double GetSurface() const;
 
   /**
   * Return the polygon length (perimeter).
   * \return The length.
   */
- virtual double GetLength() const;
+  virtual double GetLength() const;
 
 protected:
   /** Constructor */
   Polygon()
-    {
-      m_Epsilon = 0.000001;
-    };
+  {
+    m_Epsilon = 0.000001;
+  };
 
   /** Destructor */
   virtual ~Polygon() {};
 
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 

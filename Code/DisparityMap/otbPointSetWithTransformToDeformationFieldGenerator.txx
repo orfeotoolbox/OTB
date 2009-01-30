@@ -31,7 +31,7 @@ template <class TPointSet, class TDeformationField>
 PointSetWithTransformToDeformationFieldGenerator<TPointSet, TDeformationField>
 ::PointSetWithTransformToDeformationFieldGenerator()
 {
- m_Transform = 0;    // has to be provided by the user
+  m_Transform = 0;    // has to be provided by the user
 }
 /**
  * PrintSelf Method

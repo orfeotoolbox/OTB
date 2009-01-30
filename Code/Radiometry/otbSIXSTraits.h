@@ -45,29 +45,29 @@ public:
 
   /** Call 6S main function */
   static void ComputeAtmosphericParameters(
-        const   double                  SolarZenithalAngle,                     /** The Solar zenithal angle */
-        const   double                  SolarAzimutalAngle,                     /** The Solar azimutal angle */
-        const   double                  ViewingZenithalAngle,                   /** The Viewing zenithal angle */
-        const   double                  ViewingAzimutalAngle,                   /** The Viewing azimutal angle */
-        const   unsigned int            Month,                                  /** The Month */
-        const   unsigned int            Day,                                    /** The Day (in the month) */
-        const   double                  AtmosphericPressure,                    /** The Atmospheric pressure */
-        const   double                  WaterVaporAmount,                       /** The Water vapor amount (Total water vapor content over vertical atmospheric column) */
-        const   double                  OzoneAmount,                            /** The Ozone amount (Stratospheric ozone layer content) */
-        const   AerosolModelType &      AerosolModel,                           /** The Aerosol model */
-        const   double                  AerosolOptical,                         /** The Aerosol optical (radiative impact of aerosol for the reference wavelenght 550-nm) */
-                WavelenghtSpectralType* WavelenghtSpectralBand,                 /** Wavelenght for the spectral band definition */
-                                                                                /** Note : The Max wavelenght spectral band value must be updated ! */
-                double &                AtmosphericReflectance,                 /** Atmospheric reflectance */
-                double &                AtmosphericSphericalAlbedo,             /** atmospheric spherical albedo */
-                double &                TotalGaseousTransmission,               /** Total gaseous transmission */
-                double &                DownwardTransmittance,                  /** downward transmittance */
-                double &                UpwardTransmittance,                    /** upward transmittance */
-                double &                UpwardDiffuseTransmittance,             /** upward diffuse transmittance */
-                double &                UpwardDirectTransmittance,              /** Upward direct transmittance */
-                double &                UpwardDiffuseTransmittanceForRayleigh,  /** upward diffuse transmittance for rayleigh */
-                double &                UpwardDiffuseTransmittanceForAerosol    /** upward diffuse transmittance for aerosols */
-        );
+    const   double                  SolarZenithalAngle,                     /** The Solar zenithal angle */
+    const   double                  SolarAzimutalAngle,                     /** The Solar azimutal angle */
+    const   double                  ViewingZenithalAngle,                   /** The Viewing zenithal angle */
+    const   double                  ViewingAzimutalAngle,                   /** The Viewing azimutal angle */
+    const   unsigned int            Month,                                  /** The Month */
+    const   unsigned int            Day,                                    /** The Day (in the month) */
+    const   double                  AtmosphericPressure,                    /** The Atmospheric pressure */
+    const   double                  WaterVaporAmount,                       /** The Water vapor amount (Total water vapor content over vertical atmospheric column) */
+    const   double                  OzoneAmount,                            /** The Ozone amount (Stratospheric ozone layer content) */
+    const   AerosolModelType &      AerosolModel,                           /** The Aerosol model */
+    const   double                  AerosolOptical,                         /** The Aerosol optical (radiative impact of aerosol for the reference wavelenght 550-nm) */
+    WavelenghtSpectralType* WavelenghtSpectralBand,                 /** Wavelenght for the spectral band definition */
+    /** Note : The Max wavelenght spectral band value must be updated ! */
+    double &                AtmosphericReflectance,                 /** Atmospheric reflectance */
+    double &                AtmosphericSphericalAlbedo,             /** atmospheric spherical albedo */
+    double &                TotalGaseousTransmission,               /** Total gaseous transmission */
+    double &                DownwardTransmittance,                  /** downward transmittance */
+    double &                UpwardTransmittance,                    /** upward transmittance */
+    double &                UpwardDiffuseTransmittance,             /** upward diffuse transmittance */
+    double &                UpwardDirectTransmittance,              /** Upward direct transmittance */
+    double &                UpwardDiffuseTransmittanceForRayleigh,  /** upward diffuse transmittance for rayleigh */
+    double &                UpwardDiffuseTransmittanceForAerosol    /** upward diffuse transmittance for aerosols */
+  );
 
   /**
   * Check the correpondance between the vector value size and
@@ -78,18 +78,18 @@ public:
   *
   */
   static void ComputeWavelenghtSpectralBandValuesFor6S(
-        const   double                  SIXSStepOfWavelenghtSpectralBandValues,
-                WavelenghtSpectralType* WavelenghtSpectralBand
-        );
+    const   double                  SIXSStepOfWavelenghtSpectralBandValues,
+    WavelenghtSpectralType* WavelenghtSpectralBand
+  );
 
   static void ComputeEnvironmentalContribution(const double diffuseTransmittanceForRayleighScattering,
-                 const double diffuseTransmittanceForAerosolScattering,
-                 const double radiusInKilometers,
-                 const double altitude,
-                 const double cosineOfViewingAngle,
-                 double & rayleighEstimation,
-                 double & aerosolEstimation,
-                 double & globalEstimation);
+      const double diffuseTransmittanceForAerosolScattering,
+      const double radiusInKilometers,
+      const double altitude,
+      const double cosineOfViewingAngle,
+      double & rayleighEstimation,
+      double & aerosolEstimation,
+      double & globalEstimation);
 };
 
 } // namespace otb

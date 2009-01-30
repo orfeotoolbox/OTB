@@ -28,21 +28,21 @@ namespace otb
 template<class InputPixelType, class LabelPixelType>
 SVMModelEstimator<InputPixelType, LabelPixelType>
 ::SVMModelEstimator(void):
-m_NumberOfClasses( 0 )
+    m_NumberOfClasses( 0 )
 {
   // FIXME initialize SVMModel
 
-        m_Model = SVMModelType::New();
+  m_Model = SVMModelType::New();
 
-        m_Done = 0;
-        // default values
+  m_Done = 0;
+  // default values
 
-        m_Model->SetSVMType(C_SVC);
+  m_Model->SetSVMType(C_SVC);
   m_Model->SetKernelType(LINEAR);
   m_Model->SetPolynomialKernelDegree(3);
   m_Model->SetKernelGamma(0.);  // 1/k
   m_Model->SetKernelCoef0(0);
-        m_Model->SetKernelFunctor(NULL);
+  m_Model->SetKernelFunctor(NULL);
   m_Model->SetNu(0.5);
   m_Model->SetCacheSize(40);
   m_Model->SetC(1);
@@ -58,7 +58,7 @@ template<class InputPixelType, class LabelPixelType>
 SVMModelEstimator<InputPixelType, LabelPixelType>
 ::~SVMModelEstimator(void)
 {
-   svm_destroy_param(&m_Model->GetParameters());
+  svm_destroy_param(&m_Model->GetParameters());
 }
 
 /*
@@ -91,29 +91,29 @@ void
 SVMModelEstimator<InputPixelType, LabelPixelType>
 ::GenerateData( )
 {
-  if(m_NumberOfClasses<2)
-    {
-      itkExceptionMacro(<<"Can not do SVM estimation with less than 2 classes");
-    }
-
-  if(m_Model->GetSVMType() == ONE_CLASS)
-    {
-      if(m_NumberOfClasses>2)
+  if (m_NumberOfClasses<2)
   {
-    itkExceptionMacro(<<"Can not do ONE_CLASS SVM estimation with more than 2 classes");
+    itkExceptionMacro(<<"Can not do SVM estimation with less than 2 classes");
   }
-      if(m_Model->GetDoProbabilityEstimates())
-  {
-    otbMsgDebugMacro(<<"Disabling SVM probability estimates for ONE_CLASS SVM type.");
-    m_Model->DoProbabilityEstimates(false);
-  }
-    }
 
-  if(!m_Done)
+  if (m_Model->GetSVMType() == ONE_CLASS)
+  {
+    if (m_NumberOfClasses>2)
     {
+      itkExceptionMacro(<<"Can not do ONE_CLASS SVM estimation with more than 2 classes");
+    }
+    if (m_Model->GetDoProbabilityEstimates())
+    {
+      otbMsgDebugMacro(<<"Disabling SVM probability estimates for ONE_CLASS SVM type.");
+      m_Model->DoProbabilityEstimates(false);
+    }
+  }
+
+  if (!m_Done)
+  {
     m_Done = 1;
     this->EstimateModels();
-    }
+  }
 }// end Generate data
 
 
@@ -134,10 +134,10 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
 
   const char* error_msg = svm_check_parameter(&m_Model->GetProblem(),&m_Model->GetParameters());
 
-  if(error_msg)
-    {
+  if (error_msg)
+  {
     throw itk::ExceptionObject(__FILE__, __LINE__,error_msg,ITK_LOCATION);
-    }
+  }
 
   otbMsgDebugMacro(  << "Starting training" );
 
@@ -166,9 +166,9 @@ SVMModelEstimator< InputPixelType, LabelPixelType >
   struct svm_problem & prob = m_Model->GetProblem();
   struct svm_node *x_space = m_Model->GetXSpace();
 
-   otbMsgDebugMacro(  << "x_space " <<  x_space );
-   otbMsgDebugMacro(  << "prob = " << &prob );
-   otbMsgDebugMacro(  << "prob.l = " << prob.l );
+  otbMsgDebugMacro(  << "x_space " <<  x_space );
+  otbMsgDebugMacro(  << "prob = " << &prob );
+  otbMsgDebugMacro(  << "prob.l = " << prob.l );
 
   long int j=0;
   long int i=0;
@@ -180,41 +180,41 @@ SVMModelEstimator< InputPixelType, LabelPixelType >
   typename TrainingLabelsType::iterator labelsEnd = m_Labels.end();
 
 
-  while(measIt!=measEnd && labelsIt!=labelsEnd)
-    {
-
-      double label = static_cast<double>(*labelsIt);
-      prob.x[i] = &x_space[j];
-      prob.y[i] = label;
-
-      typename MeasurementVectorType::iterator compIt = (*measIt).begin();
-      typename MeasurementVectorType::iterator compEnd = (*measIt).end();
-
-      int k=0;
-
-      while(compIt!=compEnd)
+  while (measIt!=measEnd && labelsIt!=labelsEnd)
   {
 
-  x_space[j].index = k+1;
-  x_space[j].value = (*compIt);
-  ++j;
-  ++k;
-  ++compIt;
-  }
-      if(j>=1 && x_space[j-1].index > max_index)
-  max_index = x_space[j-1].index;
-      x_space[j++].index = -1;
-      ++i;
+    double label = static_cast<double>(*labelsIt);
+    prob.x[i] = &x_space[j];
+    prob.y[i] = label;
 
-      ++measIt;
-      ++labelsIt;
+    typename MeasurementVectorType::iterator compIt = (*measIt).begin();
+    typename MeasurementVectorType::iterator compEnd = (*measIt).end();
 
+    int k=0;
 
+    while (compIt!=compEnd)
+    {
+
+      x_space[j].index = k+1;
+      x_space[j].value = (*compIt);
+      ++j;
+      ++k;
+      ++compIt;
     }
+    if (j>=1 && x_space[j-1].index > max_index)
+      max_index = x_space[j-1].index;
+    x_space[j++].index = -1;
+    ++i;
+
+    ++measIt;
+    ++labelsIt;
+
+
+  }
 
   otbMsgDebugMacro(  << "Processed " << i << " examples" );
 
-  if(m_Model->GetKernelGamma() == 0 && m_Model->GetParameters().kernel_type != COMPOSED && m_Model->GetParameters().kernel_type != GENERIC)
+  if (m_Model->GetKernelGamma() == 0 && m_Model->GetParameters().kernel_type != COMPOSED && m_Model->GetParameters().kernel_type != GENERIC)
     m_Model->SetKernelGamma(1.0/static_cast<double>(max_index));
 }
 
@@ -222,9 +222,9 @@ template<class InputPixelType, class LabelPixelType >
 void
 SVMModelEstimator<InputPixelType, LabelPixelType>
 ::SaveModel(const char* model_file_name)
-  {
-    m_Model->SaveModel(model_file_name);
-  }
+{
+  m_Model->SaveModel(model_file_name);
+}
 
 
 }//End namespace OTB

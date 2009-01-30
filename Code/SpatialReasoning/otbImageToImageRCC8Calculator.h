@@ -47,7 +47,7 @@ namespace otb
  * to the smallest set needed to determine the relation.
  */
 template <class TInputImage>
-  class ITK_EXPORT ImageToImageRCC8Calculator : public itk::ImageToImageFilter<TInputImage,TInputImage>
+class ITK_EXPORT ImageToImageRCC8Calculator : public itk::ImageToImageFilter<TInputImage,TInputImage>
 {
 public:
   /** Standard class typedefs. */
@@ -104,12 +104,12 @@ public:
   /** Set/Get the inside value of the region of image 2*/
   itkSetMacro(InsideValue2,PixelType);
   itkGetMacro(InsideValue2,PixelType);
-/** Set external knowledge to help the decision process */
+  /** Set external knowledge to help the decision process */
   itkSetMacro(Level1APrioriKnowledge,bool);
   itkSetMacro(Level3APrioriKnowledge,bool);
   itkGetMacro(Level1APrioriKnowledge,bool);
   itkGetMacro(Level3APrioriKnowledge,bool);
- protected:
+protected:
   /** Constructor */
   ImageToImageRCC8Calculator();
   /** Destructor */
@@ -172,7 +172,7 @@ public:
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
- private:
+private:
   /** The RCC8 relation value */
   RCC8ValueType m_Value;
   /** The minimal ROI needed to compute the relation value */

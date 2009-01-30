@@ -59,17 +59,17 @@ FixedSizeFullImageWidget<TPixel>
 {
   m_ImageLoaded=false;
   m_ImageOverlayLoaded=false;
-  if(!this->GetInput())
-    {
-      itkExceptionMacro("No input image!");
-    }
+  if (!this->GetInput())
+  {
+    itkExceptionMacro("No input image!");
+  }
   else
-    {
-      Superclass::Init(x,y,w,h,l);
-      this->SetViewedRegion(this->GetInput()->GetLargestPossibleRegion());
-      this->label(l);
-      this->resize(x, y, w, h);
-    }
+  {
+    Superclass::Init(x,y,w,h,l);
+    this->SetViewedRegion(this->GetInput()->GetLargestPossibleRegion());
+    this->label(l);
+    this->resize(x, y, w, h);
+  }
 }
 
 /**
@@ -102,15 +102,15 @@ bool
 FixedSizeFullImageWidget<TPixel>
 ::UpdateOpenGlBufferedRegionRequested(void)
 {
-  if(m_ImageLoaded && this->GetBufferedRegion().GetNumberOfPixels()!=0)
-    {
-      return false;
-    }
+  if (m_ImageLoaded && this->GetBufferedRegion().GetNumberOfPixels()!=0)
+  {
+    return false;
+  }
   else
-    {
-      m_ImageLoaded=true;
-      return true;
-    }
+  {
+    m_ImageLoaded=true;
+    return true;
+  }
 }
 /**
  * Update OpenGlBuffer.

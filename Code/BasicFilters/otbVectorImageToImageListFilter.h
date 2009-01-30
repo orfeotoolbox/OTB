@@ -34,13 +34,13 @@ namespace otb
  */
 template <class TVectorImageType, class TImageList>
 class ITK_EXPORT VectorImageToImageListFilter
-  : public ImageToImageListFilter<TVectorImageType,typename TImageList::ImageType>
+      : public ImageToImageListFilter<TVectorImageType,typename TImageList::ImageType>
 {
- public:
+public:
   /** Standard typedefs */
   typedef VectorImageToImageListFilter      Self;
   typedef ImageToImageListFilter<TVectorImageType,
-    typename TImageList::ImageType>         Superclass;
+  typename TImageList::ImageType>         Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
 
@@ -73,7 +73,7 @@ protected:
   VectorImageToImageListFilter() {};
   /** Destructor */
   virtual ~VectorImageToImageListFilter() {};
- /**PrintSelf method */
+  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
