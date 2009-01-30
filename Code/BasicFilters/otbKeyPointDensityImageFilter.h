@@ -17,33 +17,33 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCountImageFilter_h
-#define __otbCountImageFilter_h
+#ifndef __otbKeyPointDensityImageFilter_h
+#define __otbKeyPointDensityImageFilter_h
 
 
 #include "itkImageToImageFilter.h"
 #include "itkProcessObject.h"
-#include "otbCountImageFunction.h"
+#include "otbPointSetToDensityImageFilter.h"
 #include "itkNumericTraits.h"
 
 
-/** \class CountImageFilter
- *  \brief This class extracts key points from an image through a pyramidal gaussian based decomposition
+/** \class KeyPointDensityImageFilter
+ *  \brief 
 
  *
  */
 
 namespace otb
 {
-  template <class TInputImage , class TDetector, class TCount, class TOutputImage>
-    class ITK_EXPORT CountImageFilter
+  template <class TInputImage , class TDetector, class TOutputImage>
+    class ITK_EXPORT KeyPointDensityImageFilter
     : public itk::ImageToImageFilter<TInputImage, TOutputImage>
     {
 
     public:
 
     /** Standard class typedefs. */
-      typedef CountImageFilter                                            Self;
+      typedef KeyPointDensityImageFilter                                            Self;
       typedef itk::ImageToImageFilter<TInputImage,TOutputImage>           Superclass ;
       typedef itk::SmartPointer<Self>                                     Pointer;
       typedef itk::SmartPointer<const Self>                               ConstPointer;
@@ -52,32 +52,25 @@ namespace otb
       itkNewMacro(Self);
 
       /** Run-time type information (and related methods). */
-      itkTypeMacro(CountImageFilter,itk::ImageToImageFilter);
+      itkTypeMacro(KeyPointDensityImageFilter,itk::ImageToImageFilter);
 
 
       /** Template parameters typedefs*/
       typedef TInputImage                                  InputImageType;
       typedef typename InputImageType::Pointer             InputImagePointerType;
-      typedef typename InputImageType::IndexType           IndexType;
-
+  
       /** OutputImageType typedef support*/
-      typedef typename Superclass::OutputImageType         OutputImageType;
+      typedef TOutputImage                                 OutputImageType;
       typedef typename OutputImageType::Pointer            OutputImagePointerType;
-      typedef typename OutputImageType::RegionType  OutputImageRegionType;
-      typedef typename OutputImageType::PixelType          OutputPixelType; 
-      
-      typedef typename itk::NumericTraits< OutputPixelType>::RealType  OutputRealType;
-
+  
       /** Detector typedef Support*/
-      typedef TDetector                                    DetectorType;
+      typedef TDetector                                      DetectorType;
+      typedef typename DetectorType::OutputPointSetType      PointSetType;
+      typedef typename DetectorType::Pointer                 DetectorPointerType;
       
-      /** Count Function typedef Support*/
-      typedef TCount                                       CountMethodType;
-      
-      /** CountImageFunction support*/
-      typedef otb::CountImageFunction<InputImageType,DetectorType, 
-	            CountMethodType >                     CountImageFunctionType;
-      typedef typename CountImageFunctionType::Pointer    CountImageFunctionTypePointer;
+      /** PointSetToDensityImageFilter support*/
+      typedef otb::PointSetToDensityImageFilter<PointSetType, OutputImageType> PointSetToDensityImageType;
+      typedef typename PointSetToDensityImageType::Pointer                     PointSetToDensityImagePointerType;
       
       /** Get/Set the radius of the neighborhood over which the
 	  statistics are evaluated */
@@ -94,11 +87,11 @@ namespace otb
       /**
        * Constructor.
        */
-      CountImageFilter();
+      KeyPointDensityImageFilter();
       /**
        * Destructor.
        */
-      virtual ~CountImageFilter();
+      virtual ~KeyPointDensityImageFilter();
       /**
        * Standard PrintSelf method.
        */
@@ -106,20 +99,21 @@ namespace otb
       /**
        * Main computation method.
        */
-      virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId );
-
+      //virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId );
+      virtual void GenerateData( );
+	    
   private:
 
-      CountImageFilter(const Self&); //purposely not implemented
+      KeyPointDensityImageFilter(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
       
-      CountImageFunctionTypePointer m_CountImageFunction;
-
-      unsigned int m_NeighborhoodRadius;
+      DetectorPointerType                m_Detector;
+      PointSetToDensityImagePointerType  m_PointSetToDensityImageFilter;
+      unsigned int                       m_NeighborhoodRadius;
     };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbCountImageFilter.txx"
+#include "otbKeyPointDensityImageFilter.txx"
 #endif
 
 #endif
