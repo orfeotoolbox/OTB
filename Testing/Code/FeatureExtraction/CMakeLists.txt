@@ -1054,9 +1054,9 @@ ADD_TEST(feTvEnergyTextureImageFunctionNew ${FEATUREEXTRACTION_TESTS11}
     otbEnergyTextureImageFunctionNew
 )
 ADD_TEST(feTvEnergyTextureImageFunction ${FEATUREEXTRACTION_TESTS11} 
-#--compare-image ${EPS}
-#                ${BASELINE}/feTvEnergyTextureImageFunction.tif
-#                ${TEMP}/feTvEnergyTextureImageFunction.tif
+--compare-image ${EPS}
+                ${BASELINE}/feTvEnergyTextureImageFunction.tif
+                ${TEMP}/feTvEnergyTextureImageFunction.tif
    otbEnergyTextureImageFunction
     ${INPUTDATA}/poupees_1canal.c1.hdr
     ${TEMP}/feTvEnergyTextureImageFunction.tif
