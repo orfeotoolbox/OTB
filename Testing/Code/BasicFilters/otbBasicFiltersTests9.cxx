@@ -27,14 +27,14 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbChangeLabelImageFilterNew);
-REGISTER_TEST(otbChangeLabelImageFilterTest);
-REGISTER_TEST(otbContinuousMinimumMaximumImageCalculatorNew);
-REGISTER_TEST(otbContinuousMinimumMaximumImageCalculatorTest);
-REGISTER_TEST(otbMeanShiftImageFilterNew);
-REGISTER_TEST(otbMeanShiftImageFilter);
-REGISTER_TEST(otbMeanShiftVectorImageFilterNew);
-REGISTER_TEST(otbMeanShiftVectorImageFilter);
-REGISTER_TEST(otbFunctionToImageFilterNew);
-REGISTER_TEST(otbFunctionToImageFilter);
+  REGISTER_TEST(otbChangeLabelImageFilterNew);
+  REGISTER_TEST(otbChangeLabelImageFilterTest);
+  REGISTER_TEST(otbContinuousMinimumMaximumImageCalculatorNew);
+  REGISTER_TEST(otbContinuousMinimumMaximumImageCalculatorTest);
+  REGISTER_TEST(otbMeanShiftImageFilterNew);
+  REGISTER_TEST(otbMeanShiftImageFilter);
+  REGISTER_TEST(otbMeanShiftVectorImageFilterNew);
+  REGISTER_TEST(otbMeanShiftVectorImageFilter);
+  REGISTER_TEST(otbFunctionToImageFilterNew);
+  REGISTER_TEST(otbFunctionToImageFilter);
 }

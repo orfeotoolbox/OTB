@@ -29,7 +29,7 @@ int otbMultiChannelExtractROINew ( int argc, char * argv[] )
   typedef std::complex<double>                      OutputPixelType;
 
   typedef otb::MultiChannelExtractROI< InputPixelType,
-                                       OutputPixelType >  ExtractROIFilterType;
+  OutputPixelType >  ExtractROIFilterType;
 
 
   ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();

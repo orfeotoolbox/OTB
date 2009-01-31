@@ -76,15 +76,15 @@ int otbImageToEdgePathFilter(int argc, char * argv[])
   // Create one iterator for the Input Image (this is a light object)
   IteratorType it( outputImage, outputImage->GetBufferedRegion() );
 
-  for(unsigned int cpt=0 ; cpt<  ptrVertexList->Size() ; cpt++)
-    {
-      std::cout <<" Point "<<cpt<<" : "<< ptrVertexList->GetElement(cpt)<<std::endl;
-      IndexType pos;
-      pos[0] = static_cast<unsigned long>(ptrVertexList->GetElement(cpt)[0]);
-      pos[1] = static_cast<unsigned long>(ptrVertexList->GetElement(cpt)[1]);
-      outputImage->SetPixel(pos,0);
+  for (unsigned int cpt=0 ; cpt<  ptrVertexList->Size() ; cpt++)
+  {
+    std::cout <<" Point "<<cpt<<" : "<< ptrVertexList->GetElement(cpt)<<std::endl;
+    IndexType pos;
+    pos[0] = static_cast<unsigned long>(ptrVertexList->GetElement(cpt)[0]);
+    pos[1] = static_cast<unsigned long>(ptrVertexList->GetElement(cpt)[1]);
+    outputImage->SetPixel(pos,0);
 
-    }
+  }
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(outputImage);

@@ -41,7 +41,7 @@ int otbSimpleRcsPanSharpeningFusionImageFilter( int argc, char * argv[] )
   typedef otb::ImageFileReader<PanchroImageType> ImageReaderType;
   typedef otb::StreamingImageFileWriter<VectorImageType>  VectorImageWriterType;
   typedef otb::SimpleRcsPanSharpeningFusionImageFilter
-    <PanchroImageType, VectorImageType,  VectorImageType> FilterType;
+  <PanchroImageType, VectorImageType,  VectorImageType> FilterType;
 
   VectorReaderType::Pointer multiSpectReader = VectorReaderType::New();
   ImageReaderType::Pointer  panchroReader = ImageReaderType::New();

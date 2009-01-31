@@ -69,10 +69,10 @@ int otbImageFittingPolygonListFilter(int argc, char * argv[])
   TreeIteratorType it(readerVector->GetOutput()->GetDataTree());
   it.GoToBegin();
 
-  while(!it.IsAtEnd())
+  while (!it.IsAtEnd())
   {
     DataNodePointerType dataNode = it.Get();
-    if(dataNode->IsPolygonFeature())
+    if (dataNode->IsPolygonFeature())
     {
       polygonList->PushBack(dataNode->GetPolygonExteriorRing());
     }
@@ -109,7 +109,7 @@ int otbImageFittingPolygonListFilter(int argc, char * argv[])
 
   typedef PolygonListType::ConstIterator ListIteratorType;
   ListIteratorType listIt = fittingPolygon->GetOutput()->Begin();
-  while(listIt  != fittingPolygon->GetOutput()->End())
+  while (listIt  != fittingPolygon->GetOutput()->End())
   {
     DataNodeType::Pointer polygon = DataNodeType::New();
     polygon->SetNodeType(otb::FEATURE_POLYGON);

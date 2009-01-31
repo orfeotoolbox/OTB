@@ -31,7 +31,7 @@ int otbImageListToImageListApplyFilterNew(int argc, char * argv[])
   typedef itk::MeanImageFilter<ImageType,ImageType> MeanFilterType;
 
   typedef otb::ImageListToImageListApplyFilter<ImageListType,ImageListType,MeanFilterType>
-    ImageListToImageListApplyFilterType;
+  ImageListToImageListApplyFilterType;
 
   // Instantiating object
   ImageListToImageListApplyFilterType::Pointer object = ImageListToImageListApplyFilterType::New();

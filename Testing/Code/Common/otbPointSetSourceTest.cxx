@@ -40,7 +40,7 @@ int otbPointSetSourceTest(int argc, char* argv[] )
 
   // Declare the type for PointsContainerPointer
   typedef PointSetType::PointsContainerPointer
-                                        PointsContainerPointer;
+  PointsContainerPointer;
   // Declare the type for Points
   typedef PointSetType::PointType           PointType;
 
@@ -54,21 +54,24 @@ int otbPointSetSourceTest(int argc, char* argv[] )
   int n = 1;  // let's start with a few of them
   PointsContainerType::ElementIdentifier  count = 0; // count them
 
-  for(int x= -n; x <= n; x++)
+  for (int x= -n; x <= n; x++)
+  {
+    for (int y= -n; y <= n; y++)
     {
-    for(int y= -n; y <= n; y++)
-      {
-        PointType p;
-        p[0] = x;
-        p[1] = y;
-        std::cout << "Inserting point # ";
-        std::cout.width( 3); std::cout << count << "  = ";
-        std::cout.width( 4); std::cout << p[0] << ", ";
-        std::cout.width( 4); std::cout << p[1] << std::endl;
-        points->InsertElement( count, p );
-        count++;
-      }
+      PointType p;
+      p[0] = x;
+      p[1] = y;
+      std::cout << "Inserting point # ";
+      std::cout.width( 3);
+      std::cout << count << "  = ";
+      std::cout.width( 4);
+      std::cout << p[0] << ", ";
+      std::cout.width( 4);
+      std::cout << p[1] << std::endl;
+      points->InsertElement( count, p );
+      count++;
     }
+  }
 
   std::cout << "Input PointSet has " << inputPointSet->GetNumberOfPoints();
   std::cout << "   points " << std::endl;

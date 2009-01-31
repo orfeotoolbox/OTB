@@ -27,16 +27,16 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbDEMCaracteristicsExtractorNew);
-REGISTER_TEST(otbDEMCaracteristicsExtractor);
-REGISTER_TEST(otbAtmosphericCorrectionParametersNew);
-REGISTER_TEST(otbFilterFunctionValuesTest);
-REGISTER_TEST(otbSIXSTraitsComputeAtmosphericParametersTest);
-REGISTER_TEST(otbAtmosphericRadiativeTermsNew);
-REGISTER_TEST(otbReflectanceToSurfaceReflectanceImageFilterNew);
-REGISTER_TEST(otbReflectanceToSurfaceReflectanceImageFilter);
-REGISTER_TEST(otbSurfaceAdjencyEffect6SCorrectionSchemeFilterNew);
-REGISTER_TEST(otbSurfaceAdjencyEffect6SCorrectionSchemeFilter);
-REGISTER_TEST(otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter);
+  REGISTER_TEST(otbDEMCaracteristicsExtractorNew);
+  REGISTER_TEST(otbDEMCaracteristicsExtractor);
+  REGISTER_TEST(otbAtmosphericCorrectionParametersNew);
+  REGISTER_TEST(otbFilterFunctionValuesTest);
+  REGISTER_TEST(otbSIXSTraitsComputeAtmosphericParametersTest);
+  REGISTER_TEST(otbAtmosphericRadiativeTermsNew);
+  REGISTER_TEST(otbReflectanceToSurfaceReflectanceImageFilterNew);
+  REGISTER_TEST(otbReflectanceToSurfaceReflectanceImageFilter);
+  REGISTER_TEST(otbSurfaceAdjencyEffect6SCorrectionSchemeFilterNew);
+  REGISTER_TEST(otbSurfaceAdjencyEffect6SCorrectionSchemeFilter);
+  REGISTER_TEST(otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter);
 }
 

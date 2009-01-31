@@ -38,17 +38,17 @@ int otbCompacityPathRectangle( int argc, char * argv[] )
   PathType::ContinuousIndexType cindex;
   PathType::Pointer pathElt = PathType::New();
 
-  if(A<0)
-    {
-      std::cout << "retangle must be greater than 0.0 !" << std::endl;
-      return EXIT_FAILURE;
-    }
+  if (A<0)
+  {
+    std::cout << "retangle must be greater than 0.0 !" << std::endl;
+    return EXIT_FAILURE;
+  }
 
-  if(B<0)
-    {
-      std::cout << "rectangle must be greater than 0.0 !" << std::endl;
-      return EXIT_FAILURE;
-    }
+  if (B<0)
+  {
+    std::cout << "rectangle must be greater than 0.0 !" << std::endl;
+    return EXIT_FAILURE;
+  }
 
   pathElt->Initialize();
 
@@ -75,11 +75,11 @@ int otbCompacityPathRectangle( int argc, char * argv[] )
   RealType Error;
   Error = vcl_abs(Result - static_cast<RealType>(M_PI * A*B / (A+B) / (A+B)) );
 
-  if(  Error > 1.E-9)
-    {
-      std::cout << "Error in estimation !" << std::endl;
-      return EXIT_FAILURE;
-    }
+  if (  Error > 1.E-9)
+  {
+    std::cout << "Error in estimation !" << std::endl;
+    return EXIT_FAILURE;
+  }
 
 
   return EXIT_SUCCESS;

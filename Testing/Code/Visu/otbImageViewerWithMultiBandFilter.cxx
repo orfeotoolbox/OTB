@@ -35,7 +35,7 @@ int otbImageViewerWithMultiBandFilter( int argc, char * argv[] )
   typedef ImageViewerType::SingleImageType ImageType;
   typedef itk::SobelEdgeDetectionImageFilter<ImageType,ImageType> FilterType;
   typedef otb::PerBandVectorImageFilter<VectorImageType,VectorImageType,FilterType>
-    PerBandFilterType;
+  PerBandFilterType;
   typedef otb::ImageFileReader<VectorImageType> ReaderType;
 
   // instantiation

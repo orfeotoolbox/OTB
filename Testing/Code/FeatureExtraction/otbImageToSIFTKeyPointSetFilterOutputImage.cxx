@@ -94,21 +94,21 @@ int otbImageToSIFTKeyPointSetFilterOutputImage(int argc, char * argv[])
   outputImage->Allocate();
 
   itk::ImageRegionIterator<OutputImageType> iterOutput(outputImage,
-                   outputImage->GetLargestPossibleRegion());
+      outputImage->GetLargestPossibleRegion());
   itk::ImageRegionIterator<ImageType> iterInput(reader->GetOutput(),
-            reader->GetOutput()->GetLargestPossibleRegion());
+      reader->GetOutput()->GetLargestPossibleRegion());
 
   for (iterOutput.GoToBegin(), iterInput.GoToBegin();
        !iterOutput.IsAtEnd();
        ++iterOutput, ++iterInput)
-    {
-      OutputImageType::PixelType rgbPixel;
-      rgbPixel.SetRed( static_cast<PixelType>(iterInput.Get()) );
-      rgbPixel.SetGreen( static_cast<PixelType>(iterInput.Get()) );
-      rgbPixel.SetBlue( static_cast<PixelType>(iterInput.Get()) );
+  {
+    OutputImageType::PixelType rgbPixel;
+    rgbPixel.SetRed( static_cast<PixelType>(iterInput.Get()) );
+    rgbPixel.SetGreen( static_cast<PixelType>(iterInput.Get()) );
+    rgbPixel.SetBlue( static_cast<PixelType>(iterInput.Get()) );
 
-      iterOutput.Set(rgbPixel);
-    }
+    iterOutput.Set(rgbPixel);
+  }
 
   WriterType::Pointer writerTmp = WriterType::New();
   writerTmp->SetFileName(outputImageFilename);
@@ -122,41 +122,41 @@ int otbImageToSIFTKeyPointSetFilterOutputImage(int argc, char * argv[])
   ImageType::PointType origin = reader->GetOutput()->GetOrigin();
   OutputImageType::SizeType size = outputImage->GetLargestPossibleRegion().GetSize();
 
-  while( pIt != filter->GetOutput()->GetPoints()->End() )
-    {
-      ImageType::IndexType index;
-
-      index[0] = (unsigned int)
-  (vcl_floor
-   ((double)((pIt.Value()[0]-origin[0])/spacing[0]+0.5)));
-
-      index[1] = (unsigned int)
-  (vcl_floor
-   ((double)((pIt.Value()[1]-origin[1])/spacing[1]+0.5)));
-
-      OutputImageType::PixelType keyPixel;
-      keyPixel.SetRed(0);
-      keyPixel.SetGreen(255);
-      keyPixel.SetBlue(0);
-
-      if (outputImage->GetLargestPossibleRegion().IsInside(index))
+  while ( pIt != filter->GetOutput()->GetPoints()->End() )
   {
-    outputImage->SetPixel(index,keyPixel);
+    ImageType::IndexType index;
 
-    if (outputImage->GetLargestPossibleRegion().IsInside(index+t))
-      outputImage->SetPixel(index+t,keyPixel);
+    index[0] = (unsigned int)
+               (vcl_floor
+                ((double)((pIt.Value()[0]-origin[0])/spacing[0]+0.5)));
 
-    if (outputImage->GetLargestPossibleRegion().IsInside(index+b))
-      outputImage->SetPixel(index+b,keyPixel);
+    index[1] = (unsigned int)
+               (vcl_floor
+                ((double)((pIt.Value()[1]-origin[1])/spacing[1]+0.5)));
 
-    if (outputImage->GetLargestPossibleRegion().IsInside(index+l))
-      outputImage->SetPixel(index+l,keyPixel);
+    OutputImageType::PixelType keyPixel;
+    keyPixel.SetRed(0);
+    keyPixel.SetGreen(255);
+    keyPixel.SetBlue(0);
 
-    if (outputImage->GetLargestPossibleRegion().IsInside(index+r))
-      outputImage->SetPixel(index+r,keyPixel);
-  }
-      ++pIt;
+    if (outputImage->GetLargestPossibleRegion().IsInside(index))
+    {
+      outputImage->SetPixel(index,keyPixel);
+
+      if (outputImage->GetLargestPossibleRegion().IsInside(index+t))
+        outputImage->SetPixel(index+t,keyPixel);
+
+      if (outputImage->GetLargestPossibleRegion().IsInside(index+b))
+        outputImage->SetPixel(index+b,keyPixel);
+
+      if (outputImage->GetLargestPossibleRegion().IsInside(index+l))
+        outputImage->SetPixel(index+l,keyPixel);
+
+      if (outputImage->GetLargestPossibleRegion().IsInside(index+r))
+        outputImage->SetPixel(index+r,keyPixel);
     }
+    ++pIt;
+  }
 
   std::cout << "Copy sift key" << std::endl;
 

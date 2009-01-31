@@ -59,12 +59,12 @@ int otbRegionProjectionResampler( int argc, char* argv[] )
 {
   ossimInit::instance()->initialize(argc, argv);
 
-  if(argc!=10)
-    {
-      std::cout << argv[0] <<" <input filename> <output filename> <latitude de l'origine> <longitude de l'origine> <taille_x> <taille_y> <NumberOfstreamDivisions>" << std::endl;
+  if (argc!=10)
+  {
+    std::cout << argv[0] <<" <input filename> <output filename> <latitude de l'origine> <longitude de l'origine> <taille_x> <taille_y> <NumberOfstreamDivisions>" << std::endl;
 
-      return EXIT_FAILURE;
-    }
+    return EXIT_FAILURE;
+  }
 
 
   typedef otb::Image<unsigned char, 2>                               CharImageType;

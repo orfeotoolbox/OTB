@@ -44,18 +44,18 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
   typedef InterpolatorType::ContinuousIndexType            ContinuousIndexType;
   typedef otb::ImageFileReader<ImageType>                  ReaderType;
 
-   unsigned int i = 7;
+  unsigned int i = 7;
 
-   std::vector<ContinuousIndexType> indicesList;
-  while(i<static_cast<unsigned int>(argc) && (i+1)<static_cast<unsigned int>(argc))
-    {
-      ContinuousIndexType idx;
-      idx[0]=atof(argv[i]);
-      idx[1]=atof(argv[i+1]);
-      indicesList.push_back(idx);
+  std::vector<ContinuousIndexType> indicesList;
+  while (i<static_cast<unsigned int>(argc) && (i+1)<static_cast<unsigned int>(argc))
+  {
+    ContinuousIndexType idx;
+    idx[0]=atof(argv[i]);
+    idx[1]=atof(argv[i+1]);
+    indicesList.push_back(idx);
 
-      i+=2;
-    }
+    i+=2;
+  }
 
   // Instantiating object
   InterpolatorType::Pointer prolate = InterpolatorType::New();
@@ -69,10 +69,10 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
   file.open(outfname);
 
 
-  for(std::vector<ContinuousIndexType>::iterator it = indicesList.begin();it!=indicesList.end();++it)
-    {
-      file<<(*it)<<" -> "<<prolate->EvaluateAtContinuousIndex((*it))<<std::endl;
-    }
+  for (std::vector<ContinuousIndexType>::iterator it = indicesList.begin();it!=indicesList.end();++it)
+  {
+    file<<(*it)<<" -> "<<prolate->EvaluateAtContinuousIndex((*it))<<std::endl;
+  }
   file.close();
 
   /**********************************************************/
@@ -87,7 +87,7 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
   proresampler->SetInput(reader->GetOutput());
   pro->SetRadius(atoi(argv[6]));
   proresampler->SetInterpolator(pro);
- StreamingResampleImageFilterType::SizeType size;
+  StreamingResampleImageFilterType::SizeType size;
   size[0]=512;
   size[1]=512;
   double tutu = 1;
@@ -96,34 +96,34 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
   // Result of resampler is written
   prowriter->SetInput(proresampler->GetOutput());
   //prowriter->SetNumberOfStreamDivisions(1);
- prowriter->SetFileName(profname);
- prowriter->Update();
+  prowriter->SetFileName(profname);
+  prowriter->Update();
 
- typedef otb::WindowedSincInterpolateImageCosineFunction<ImageType>          CosInterpolatorType;
- typedef itk::Function::CosineWindowFunction<1, double, double>              itkCosType;
- typedef itk::WindowedSincInterpolateImageFunction<ImageType, 1, itkCosType> itkCosInterpolatorType;
+  typedef otb::WindowedSincInterpolateImageCosineFunction<ImageType>          CosInterpolatorType;
+  typedef itk::Function::CosineWindowFunction<1, double, double>              itkCosType;
+  typedef itk::WindowedSincInterpolateImageFunction<ImageType, 1, itkCosType> itkCosInterpolatorType;
 
- WriterType::Pointer itkcoswriter  = WriterType::New();
- WriterType::Pointer coswriter = WriterType::New();
- StreamingResampleImageFilterType::Pointer cosresampler = StreamingResampleImageFilterType::New();
- StreamingResampleImageFilterType::Pointer itkcosresampler = StreamingResampleImageFilterType::New();
- CosInterpolatorType::Pointer     cos     = CosInterpolatorType::New();
- itkCosInterpolatorType::Pointer  itkcos  = itkCosInterpolatorType::New();
- cosresampler->SetSize(size);
- cosresampler->SetOutputSpacing(tutu);
- itkcosresampler->SetSize(size);
- itkcosresampler->SetOutputSpacing(tutu);
- cosresampler->SetInput(reader->GetOutput());
- cos->SetRadius(atoi(argv[6]));
- cosresampler->SetInterpolator(cos);
- itkcosresampler->SetInput(reader->GetOutput());
- itkcosresampler->SetInterpolator(itkcos);
- coswriter->SetInput(cosresampler->GetOutput());
- coswriter->SetFileName(cosfname);
- itkcoswriter->SetInput(itkcosresampler->GetOutput());
- itkcoswriter->SetFileName(itkcosfname);
- coswriter->Update();
- itkcoswriter->Update();
+  WriterType::Pointer itkcoswriter  = WriterType::New();
+  WriterType::Pointer coswriter = WriterType::New();
+  StreamingResampleImageFilterType::Pointer cosresampler = StreamingResampleImageFilterType::New();
+  StreamingResampleImageFilterType::Pointer itkcosresampler = StreamingResampleImageFilterType::New();
+  CosInterpolatorType::Pointer     cos     = CosInterpolatorType::New();
+  itkCosInterpolatorType::Pointer  itkcos  = itkCosInterpolatorType::New();
+  cosresampler->SetSize(size);
+  cosresampler->SetOutputSpacing(tutu);
+  itkcosresampler->SetSize(size);
+  itkcosresampler->SetOutputSpacing(tutu);
+  cosresampler->SetInput(reader->GetOutput());
+  cos->SetRadius(atoi(argv[6]));
+  cosresampler->SetInterpolator(cos);
+  itkcosresampler->SetInput(reader->GetOutput());
+  itkcosresampler->SetInterpolator(itkcos);
+  coswriter->SetInput(cosresampler->GetOutput());
+  coswriter->SetFileName(cosfname);
+  itkcoswriter->SetInput(itkcosresampler->GetOutput());
+  itkcoswriter->SetFileName(itkcosfname);
+  coswriter->Update();
+  itkcoswriter->Update();
 
 
   return EXIT_SUCCESS;

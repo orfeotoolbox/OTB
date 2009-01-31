@@ -24,11 +24,11 @@
 
 int otbMeanShiftImageFilter(int argc, char * argv[])
 {
-  if(argc != 12)
-    {
-      std::cerr<<"Usage: "<<argv[0]<<" infname filteredfname clusteredfname labeledclusteredfname clusterboundariesfname spatialRadius rangeRadius minregionsize scale streamed threaded"<<std::endl;
-      return EXIT_FAILURE;
-    }
+  if (argc != 12)
+  {
+    std::cerr<<"Usage: "<<argv[0]<<" infname filteredfname clusteredfname labeledclusteredfname clusterboundariesfname spatialRadius rangeRadius minregionsize scale streamed threaded"<<std::endl;
+    return EXIT_FAILURE;
+  }
 
   const char *       infname                = argv[1];
   const char *       filteredfname          = argv[2];
@@ -56,26 +56,26 @@ int otbMeanShiftImageFilter(int argc, char * argv[])
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();
   ReaderType::Pointer reader = ReaderType::New();
-  
+
 
 
   reader->SetFileName(infname);
-  
+
 
   filter->SetSpatialRadius(spatialRadius);
   filter->SetRangeRadius(rangeRadius);
   filter->SetMinimumRegionSize(minRegionSize);
   filter->SetScale(scale);
 
-  if(!threaded)
-    {
+  if (!threaded)
+  {
     filter->SetNumberOfThreads(1);
-    }
+  }
 
   filter->SetInput(reader->GetOutput());
 
-  if(streamed)
-    {
+  if (streamed)
+  {
 
     StreamingWriterType::Pointer writer1 = StreamingWriterType::New();
     StreamingWriterType::Pointer writer2 = StreamingWriterType::New();
@@ -94,10 +94,10 @@ int otbMeanShiftImageFilter(int argc, char * argv[])
     writer3->Update();
     writer4->Update();
 
-    }
+  }
 
   else
-    {
+  {
 
     WriterType::Pointer writer1 = WriterType::New();
     WriterType::Pointer writer2 = WriterType::New();
@@ -116,7 +116,7 @@ int otbMeanShiftImageFilter(int argc, char * argv[])
     writer3->Update();
     writer4->Update();
 
-    }
+  }
 
   return EXIT_SUCCESS;
 }

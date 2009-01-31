@@ -31,7 +31,7 @@
 
 int otbImageFileReaderERS(int argc, char* argv[])
 {
-  if(argc<3)
+  if (argc<3)
   {
     std::cout << argv[0] <<"<inputImage> <outputImage>"  << std::endl;
     return EXIT_FAILURE;
@@ -56,7 +56,7 @@ int otbImageFileReaderERS(int argc, char* argv[])
   complexReader->SetFileName( inputFilename  );
 
   typedef otb::MultiChannelExtractROI< InputPixelType,
-    OutputPixelType >  ExtractROIFilterType;
+  OutputPixelType >  ExtractROIFilterType;
 
   ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
 

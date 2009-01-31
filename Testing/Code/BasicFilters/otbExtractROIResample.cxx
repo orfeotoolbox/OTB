@@ -32,7 +32,7 @@
 
 int otbExtractROIResample(int argc, char* argv[])
 {
-  if( argc < 4 )
+  if ( argc < 4 )
   {
     std::cout << argv[0] <<" <input filename> <output filename> <use resample>"  << std::endl;
     return EXIT_FAILURE;
@@ -58,7 +58,7 @@ int otbExtractROIResample(int argc, char* argv[])
 
   reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
-  
+
 
   typedef itk::IdentityTransform< double, 2 > IdentityTransformType;
   IdentityTransformType::Pointer transform = IdentityTransformType::New();

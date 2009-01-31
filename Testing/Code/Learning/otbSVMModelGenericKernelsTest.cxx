@@ -70,15 +70,15 @@ int otbSVMModelGenericKernelsTest( int argc, char* argv[] )
   model->l = 5;
   model->sv_coef = Malloc(double *,model->nr_class-1);
 
-  for(int i=0; i<model->nr_class-1; i++)
+  for (int i=0; i<model->nr_class-1; i++)
     model->sv_coef[i] = Malloc(double,model->l);
   model->SV = Malloc(svm_node*,model->l);
-  for(int n = 0; n<model->l; ++n)
-    {
-      model->SV[n]=Malloc(svm_node,1);
-      model->SV[n]->index = -1;
-      model->SV[n]->value = 0.;
-    }
+  for (int n = 0; n<model->l; ++n)
+  {
+    model->SV[n]=Malloc(svm_node,1);
+    model->SV[n]->index = -1;
+    model->SV[n]->value = 0.;
+  }
 
   model->sv_coef[0][0] = 0.125641;
   model->sv_coef[0][1] = 1;
@@ -98,11 +98,11 @@ int otbSVMModelGenericKernelsTest( int argc, char* argv[] )
   model->param.degree = 2;
 
   struct svm_node *p =  Malloc(struct svm_node,20);
-  for(unsigned int n = 0;n<20;++n)
-    {
-      p[n].index = -1;
-      p[n].value = 0.;
-    }
+  for (unsigned int n = 0;n<20;++n)
+  {
+    p[n].index = -1;
+    p[n].value = 0.;
+  }
   model->SV[0] = &p[0];
   model->SV[1] = &p[4];
   model->SV[2] = &p[8];
@@ -114,35 +114,35 @@ int otbSVMModelGenericKernelsTest( int argc, char* argv[] )
   p[1].value = 123;
   p[2].index = 3;
   p[2].value = 134;
-p[3].index = -1;
+  p[3].index = -1;
   p[4].index = 1;
   p[4].value = 80;
   p[5].index = 2;
   p[5].value = 113;
   p[6].index = 3;
   p[6].value = 120;
-p[7].index = -1;
+  p[7].index = -1;
   p[8].index = 1;
   p[8].value = 75;
   p[9].index = 2;
   p[9].value = 108;
   p[10].index = 3;
   p[10].value = 105;
-p[11].index = -1;
+  p[11].index = -1;
   p[12].index = 1;
   p[12].value = 34;
   p[13].index = 2;
   p[13].value = 60;
   p[14].index = 3;
   p[14].value = 67;
-p[15].index = -1;
+  p[15].index = -1;
   p[16].index = 1;
   p[16].value = 208;
   p[17].index = 2;
   p[17].value = 255;
   p[18].index = 1;
   p[18].value = 255;
-p[19].index = -1;
+  p[19].index = -1;
 
   model->label = Malloc(int,2);
   model->label[0] = 1;

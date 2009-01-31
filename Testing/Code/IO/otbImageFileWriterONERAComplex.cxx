@@ -46,7 +46,7 @@ int otbImageFileWriterONERAComplex(int argc, char* argv[])
   complexReader->SetFileName( inputFilename  );
 
   typedef otb::ExtractROI< PixelType,
-    PixelType >  ExtractROIFilterType;
+  PixelType >  ExtractROIFilterType;
 
   ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
 

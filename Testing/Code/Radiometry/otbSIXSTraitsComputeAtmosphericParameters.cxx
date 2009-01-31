@@ -89,10 +89,10 @@ int otbSIXSTraitsComputeAtmosphericParametersTest(int argc, char * argv[])
   fin >> MaxSpectralValue;//wlsup;
 
   while (!fin.eof() && fin.good())
-    {
-      fin >> value;
-      vect.push_back(value);
-    }
+  {
+    fin >> value;
+    vect.push_back(value);
+  }
   fin.close();
 
   functionValues->SetFilterFunctionValues(vect);
@@ -101,27 +101,27 @@ int otbSIXSTraitsComputeAtmosphericParametersTest(int argc, char * argv[])
   functionValues->SetUserStep(.0025);
 
   otb::SIXSTraits::ComputeAtmosphericParameters(
-            SolarZenithalAngle,
-            SolarAzimutalAngle,
-            ViewingZenithalAngle,
-            ViewingAzimutalAngle,
-            Month,
-            Day,
-            AtmosphericPressure,
-            WaterVaporAmount,
-            OzoneAmount,
-            AerosolModel,
-            AerosolOptical,
-            functionValues,
-            AtmosphericReflectance,
-            AtmosphericSphericalAlbedo,
-            TotalGaseousTransmission,
-            DownwardTransmittance,
-            UpwardTransmittance,
-            UpwardDiffuseTransmittance,
-            UpwardDirectTransmittance,
-            UpwardDiffuseTransmittanceForRayleigh,
-            UpwardDiffuseTransmittanceForAerosol );
+    SolarZenithalAngle,
+    SolarAzimutalAngle,
+    ViewingZenithalAngle,
+    ViewingAzimutalAngle,
+    Month,
+    Day,
+    AtmosphericPressure,
+    WaterVaporAmount,
+    OzoneAmount,
+    AerosolModel,
+    AerosolOptical,
+    functionValues,
+    AtmosphericReflectance,
+    AtmosphericSphericalAlbedo,
+    TotalGaseousTransmission,
+    DownwardTransmittance,
+    UpwardTransmittance,
+    UpwardDiffuseTransmittance,
+    UpwardDirectTransmittance,
+    UpwardDiffuseTransmittanceForRayleigh,
+    UpwardDiffuseTransmittanceForAerosol );
 
   fout.open(outname);
   fout <<" ---------------------------------------------------------"<<std::endl;
@@ -156,15 +156,15 @@ int otbSIXSTraitsComputeAtmosphericParametersTest(int argc, char * argv[])
   fout <<" ---------------------------------------------------------"<<std::endl;
   fout<<"Input wavelenght band values ["<<functionValues->GetFilterFunctionValues().size()<<"]:"<<std::endl;
   for (unsigned int i=0; i<functionValues->GetFilterFunctionValues().size(); i++)
-    {
-      fout<< "    "<<functionValues->GetFilterFunctionValues()[i] <<std::endl;
-    }
+  {
+    fout<< "    "<<functionValues->GetFilterFunctionValues()[i] <<std::endl;
+  }
   fout <<" ---------------------------------------------------------"<<std::endl;
   fout<<"Output wavelenght band values 6S ["<<functionValues->GetFilterFunctionValues6S().size()<<"]:"<<std::endl;
   for (unsigned int i=0; i<functionValues->GetFilterFunctionValues6S().size(); i++)
-    {
-      fout<< "    "<<functionValues->GetFilterFunctionValues6S()[i] <<std::endl;
-    }
+  {
+    fout<< "    "<<functionValues->GetFilterFunctionValues6S()[i] <<std::endl;
+  }
   fout<<std::endl;
   fout.close();
   return EXIT_SUCCESS;

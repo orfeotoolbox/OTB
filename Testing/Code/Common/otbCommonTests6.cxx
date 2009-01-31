@@ -26,15 +26,15 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbDrawPathListFilterNew);
-REGISTER_TEST(otbDrawPathListFilter);
-REGISTER_TEST(otbDrawPathListFilterWithValue);
-REGISTER_TEST(otbPolyLineParametricPathWithValueNew);
-REGISTER_TEST(otbPolyLineImageIterator);
-REGISTER_TEST(otbDrawPathFilterNew);
-REGISTER_TEST(otbDrawPathFilter);
-REGISTER_TEST(otbPolygonNew);
-REGISTER_TEST(otbPolygon);
-REGISTER_TEST(otbUnaryFunctorNeighborhoodImageFilterNew);
-REGISTER_TEST(otbUnaryFunctorNeighborhoodImageFilter);
+  REGISTER_TEST(otbDrawPathListFilterNew);
+  REGISTER_TEST(otbDrawPathListFilter);
+  REGISTER_TEST(otbDrawPathListFilterWithValue);
+  REGISTER_TEST(otbPolyLineParametricPathWithValueNew);
+  REGISTER_TEST(otbPolyLineImageIterator);
+  REGISTER_TEST(otbDrawPathFilterNew);
+  REGISTER_TEST(otbDrawPathFilter);
+  REGISTER_TEST(otbPolygonNew);
+  REGISTER_TEST(otbPolygon);
+  REGISTER_TEST(otbUnaryFunctorNeighborhoodImageFilterNew);
+  REGISTER_TEST(otbUnaryFunctorNeighborhoodImageFilter);
 }

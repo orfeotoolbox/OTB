@@ -52,11 +52,11 @@ typedef otb::ImageFileWriter<OutputImageType> WriterType;
 typedef otb::ImageFileWriter<ImageType> WriterInputType;
 
 OutputImageType::Pointer sift(ImageType::Pointer input,
-            const unsigned int octaves,
-            const unsigned int scales,
-            const float threshold,
-            const float ratio,
-            const char* siftFileName)
+                              const unsigned int octaves,
+                              const unsigned int scales,
+                              const float threshold,
+                              const float ratio,
+                              const char* siftFileName)
 {
   typedef otb::ImageToSIFTKeyPointSetFilter<ImageType,PointSetType> SiftFilterType;
   typedef itk::PointSetToImageFilter<PointSetType, OutputImageType> PointSetFilterType;
@@ -87,7 +87,7 @@ OutputImageType::Pointer sift(ImageType::Pointer input,
 }
 
 OutputImageType::Pointer ddm( OutputImageType::Pointer input,
-            const char* ddmFileName)
+                              const char* ddmFileName)
 {
   typedef itk::DanielssonDistanceMapImageFilter <OutputImageType, OutputImageType> DDMFilterType;
   DDMFilterType::Pointer ddmFilter = DDMFilterType::New();
@@ -105,11 +105,11 @@ OutputImageType::Pointer ddm( OutputImageType::Pointer input,
 }
 
 ImageType::Pointer rotate( ImageType::Pointer input,
-         const unsigned int rotation)
+                           const unsigned int rotation)
 {
   typedef itk::AffineTransform<double, 2> TransformType;
   typedef itk::ResampleImageFilter<ImageType, ImageType>
-    ResampleFilterType;
+  ResampleFilterType;
   ResampleFilterType::Pointer resampler = ResampleFilterType::New();
 
   TransformType::Pointer transform = TransformType::New();
@@ -144,11 +144,11 @@ ImageType::Pointer rotate( ImageType::Pointer input,
 }
 
 OutputImageType::Pointer invRotate(OutputImageType::Pointer input,
-           const unsigned int rotation)
+                                   const unsigned int rotation)
 {
   typedef itk::AffineTransform<double, 2> TransformType;
   typedef itk::ResampleImageFilter<OutputImageType, OutputImageType>
-    ResampleFilterType;
+  ResampleFilterType;
   ResampleFilterType::Pointer resampler = ResampleFilterType::New();
 
   TransformType::Pointer transform = TransformType::New();
@@ -184,7 +184,7 @@ OutputImageType::Pointer invRotate(OutputImageType::Pointer input,
 }
 
 ImageType::Pointer zoom( ImageType::Pointer input,
-       const unsigned int zoomFactor)
+                         const unsigned int zoomFactor)
 {
   typedef itk::ShrinkImageFilter<ImageType, ImageType> ShrinkFilterType;
   ShrinkFilterType::Pointer shrink = ShrinkFilterType::New();
@@ -197,7 +197,7 @@ ImageType::Pointer zoom( ImageType::Pointer input,
 }
 
 OutputImageType::Pointer invZoom( OutputImageType::Pointer input,
-          const unsigned int zoomFactor)
+                                  const unsigned int zoomFactor)
 {
   typedef itk::ExpandImageFilter<OutputImageType, OutputImageType> ExpandFilterType;
   ExpandFilterType::Pointer expand = ExpandFilterType::New();
@@ -210,8 +210,8 @@ OutputImageType::Pointer invZoom( OutputImageType::Pointer input,
 }
 
 ImageType::Pointer contrast(ImageType::Pointer input,
-          const unsigned int contrastMin,
-          const unsigned int contrastMax)
+                            const unsigned int contrastMin,
+                            const unsigned int contrastMax)
 {
   typedef itk::RescaleIntensityImageFilter<ImageType, ImageType> RescaleFilterType;
   RescaleFilterType::Pointer rescaler= RescaleFilterType::New();
@@ -224,15 +224,15 @@ ImageType::Pointer contrast(ImageType::Pointer input,
 }
 
 OutputImageType::Pointer invContrast( OutputImageType::Pointer input,
-              const unsigned int contrastMin,
-              const unsigned int contrastMax)
+                                      const unsigned int contrastMin,
+                                      const unsigned int contrastMax)
 {
   return input;
 }
 
 void subtract(OutputImageType::Pointer image1,
-        OutputImageType::Pointer image2,
-        const char* subtractFileName)
+              OutputImageType::Pointer image2,
+              const char* subtractFileName)
 {
   typedef itk::SubtractImageFilter<OutputImageType, OutputImageType, ImageType> SubtractFilterType;
   typedef itk::MinimumMaximumImageCalculator<ImageType> MaximumCalculatorType;
@@ -334,16 +334,16 @@ int otbImageToSIFTKeyPointSetFilterDistanceMap(int argc, char * argv[])
   OutputImageType::Pointer ddm_combined = ddm(sift_combined, "ddm_combined.png");
 
   subtract(ddm_base, ddm_rotated,
-     "subtract_rotated.png");
+           "subtract_rotated.png");
 
   subtract(ddm_base, ddm_zoomed,
-     "subtract_zoomed.png");
+           "subtract_zoomed.png");
 
   subtract(ddm_base, ddm_contrasted,
-     "subtract_contrasted.png");
+           "subtract_contrasted.png");
 
   subtract(ddm_base, ddm_combined,
-     "subtract_combined.png");
+           "subtract_combined.png");
 
   return EXIT_SUCCESS;
 }

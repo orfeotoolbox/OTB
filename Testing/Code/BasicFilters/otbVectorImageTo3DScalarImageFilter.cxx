@@ -67,12 +67,12 @@ int otbVectorImageTo3DScalarImageFilter(int argc, char * argv[])
 
   outIt.GoToBegin();
 
-  while(!outIt.IsAtEnd()&&!inIt.IsAtEndOfSlice())
-    {
-      outIt.Set(inIt.Get());
-      ++inIt;
-      ++outIt;
-    }
+  while (!outIt.IsAtEnd()&&!inIt.IsAtEndOfSlice())
+  {
+    outIt.Set(inIt.Get());
+    ++inIt;
+    ++outIt;
+  }
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outfname);

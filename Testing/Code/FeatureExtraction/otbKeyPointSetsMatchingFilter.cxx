@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,7 +33,7 @@ int otbKeyPointSetsMatchingFilter(int argc, char* argv[])
   const char * outfname = argv[1];
   const double thresh        = atof(argv[2]);
   const bool useBackMatching = atoi(argv[3]);
-  
+
   typedef itk::VariableLengthVector<double> PointDataType;
   typedef itk::PointSet<PointDataType,2>    PointSetType;
   typedef PointSetType::PointType           PointType;
@@ -50,9 +50,9 @@ int otbKeyPointSetsMatchingFilter(int argc, char* argv[])
   // Building two pointsets
   PointSetType::Pointer ps1 = PointSetType::New();
   PointSetType::Pointer ps2 = PointSetType::New();
-  
+
   PointType p1,p2,p3;
-  
+
   p1.Fill(1);
   p2.Fill(2);
   p3.Fill(3);
@@ -77,7 +77,7 @@ int otbKeyPointSetsMatchingFilter(int argc, char* argv[])
   ps2->SetPoint(0,p1);
   ps2->SetPoint(1,p2);
   ps2->SetPoint(2,p3);
-  
+
   ps1->SetPointData(0,d1);
   ps1->SetPointData(1,d2);
   ps1->SetPointData(2,d3);
@@ -88,19 +88,19 @@ int otbKeyPointSetsMatchingFilter(int argc, char* argv[])
 
   filter->SetInput1(ps1);
   filter->SetInput2(ps2);
-  
+
   filter->Update();
 
   LandmarkListType * matching = filter->GetOutput();
-  
+
   std::ofstream outfile(outfname);
   outfile <<"Matches: "<<std::endl;
-  
-  for(LandmarkListType::Iterator it = matching->Begin(); it != matching->End();++it)
-    {
-      outfile<<"Matching: "<<it.Get()->GetPoint1()<< " " << it.Get()->GetPointData1()<< " <- "<<it.Get()->GetLandmarkData() << " -> "<<it.Get()->GetPoint2()<< " " << it.Get()->GetPointData2() << std::endl;
-    }
-  
+
+  for (LandmarkListType::Iterator it = matching->Begin(); it != matching->End();++it)
+  {
+    outfile<<"Matching: "<<it.Get()->GetPoint1()<< " " << it.Get()->GetPointData1()<< " <- "<<it.Get()->GetLandmarkData() << " -> "<<it.Get()->GetPoint2()<< " " << it.Get()->GetPointData2() << std::endl;
+  }
+
   outfile.close();
 
   return EXIT_SUCCESS;

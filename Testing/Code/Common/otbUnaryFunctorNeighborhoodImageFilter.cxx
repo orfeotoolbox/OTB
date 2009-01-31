@@ -25,19 +25,19 @@
 
 namespace Functor
 {
-  template <class TIter, class TOutput>
-  class UnaryFunctorNeighborhoodImageFilterTest
+template <class TIter, class TOutput>
+class UnaryFunctorNeighborhoodImageFilterTest
+{
+public:
+  UnaryFunctorNeighborhoodImageFilterTest() {};
+  ~UnaryFunctorNeighborhoodImageFilterTest() {};
+
+  inline TOutput operator() (const TIter & it)
   {
-  public:
-    UnaryFunctorNeighborhoodImageFilterTest() {};
-    ~UnaryFunctorNeighborhoodImageFilterTest() {};
+    return(static_cast<TOutput>(it.GetCenterPixel()));
 
-    inline TOutput operator() (const TIter & it)
-    {
-      return(static_cast<TOutput>(it.GetCenterPixel()));
-
-    }
-  };
+  }
+};
 }
 
 

@@ -28,7 +28,7 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbGDALDriverDoubleWritingTest);
-REGISTER_TEST(otbReadingComplexDataIntoComplexImageTest);
-REGISTER_TEST(otbWritingComplexDataWithComplexImageTest);
+  REGISTER_TEST(otbGDALDriverDoubleWritingTest);
+  REGISTER_TEST(otbReadingComplexDataIntoComplexImageTest);
+  REGISTER_TEST(otbWritingComplexDataWithComplexImageTest);
 }

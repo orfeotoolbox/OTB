@@ -24,7 +24,7 @@
 int otbVectorDataProjectionFilterFromMapToGeo(int argc, char * argv[])
 {
 
-  if(argc < 2  )
+  if (argc < 2  )
   {
     std::cout << argv[0] <<" <input vector filename> <output vector filename> "  << std::endl;
 

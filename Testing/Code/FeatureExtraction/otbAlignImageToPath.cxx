@@ -89,7 +89,8 @@ int otbAlignImageToPath( int argc, char * argv[] )
   otbGenericMsgDebugMacro(<< "Writing :");
 
   FILE *file = fopen(outputFilename,"w");
-  if (file == NULL) {
+  if (file == NULL)
+  {
     fprintf(stderr,"Error, can't open file");
     exit(-1);
   }
@@ -103,7 +104,8 @@ int otbAlignImageToPath( int argc, char * argv[] )
   int nbPath = sortiePath->Size();
   otbGenericMsgDebugMacro(<< "NbSegment: "<<nbPath);
   fprintf(file,"Nb Segment: %d\n",nbPath);
-  for (int i =0 ; i<nbPath ;i++){
+  for (int i =0 ; i<nbPath ;i++)
+  {
     vertexList = sortiePath->GetNthElement(i)->GetVertexList();
     cindex = vertexList->GetElement(0);
     x1 = cindex[0];

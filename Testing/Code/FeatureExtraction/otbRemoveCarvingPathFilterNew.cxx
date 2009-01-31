@@ -34,7 +34,7 @@ int otbRemoveCarvingPathFilterNew(int argc, char* argv[])
   typedef itk::PolyLineParametricPath<Dimension> PathType;
 
   typedef otb::RemoveCarvingPathFilter<InputImageType, PathType,
-                  OutputImageType>   RemoveCarvingPathFilterType;
+  OutputImageType>   RemoveCarvingPathFilterType;
 
   RemoveCarvingPathFilterType::Pointer addCarvingPathFilter = RemoveCarvingPathFilterType::New();
 

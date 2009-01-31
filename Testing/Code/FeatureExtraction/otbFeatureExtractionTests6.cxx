@@ -27,13 +27,13 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbExtractSegmentsNew);
-REGISTER_TEST(otbExtractSegments);
+  REGISTER_TEST(otbExtractSegmentsNew);
+  REGISTER_TEST(otbExtractSegments);
 //REGISTER_TEST(otbFourierMellinImageFilterNew);
 //REGISTER_TEST(otbFourierMellinImageFilterTestFFT);
-REGISTER_TEST(otbFourierMellinImageFilter);
-REGISTER_TEST(otbImageToEdgePathFilterNew);
-REGISTER_TEST(otbImageToEdgePathFilter);
-REGISTER_TEST(otbNeighborhoodScalarProductFilterNew);
-REGISTER_TEST(otbNeighborhoodScalarProductFilter);
+  REGISTER_TEST(otbFourierMellinImageFilter);
+  REGISTER_TEST(otbImageToEdgePathFilterNew);
+  REGISTER_TEST(otbImageToEdgePathFilter);
+  REGISTER_TEST(otbNeighborhoodScalarProductFilterNew);
+  REGISTER_TEST(otbNeighborhoodScalarProductFilter);
 }

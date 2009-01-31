@@ -28,17 +28,17 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbSVMPointSetModelEstimatorNew);
-REGISTER_TEST(otbSVMPointSetModelEstimatorTrain);
-REGISTER_TEST(otbSVMClassifierNew);
-REGISTER_TEST(otbSVMClassifierImage);
-REGISTER_TEST(otbSVMClassifierPointSet);
-REGISTER_TEST(otbSOMMapNew);
-REGISTER_TEST(otbSOMMap);
-REGISTER_TEST(otbSOMNew);
-REGISTER_TEST(otbSOM);
-REGISTER_TEST(otbPeriodicSOMNew);
-REGISTER_TEST(otbPeriodicSOM);
-REGISTER_TEST(otbSOMActivationBuilderNew);
-REGISTER_TEST(otbSOMActivationBuilder);
+  REGISTER_TEST(otbSVMPointSetModelEstimatorNew);
+  REGISTER_TEST(otbSVMPointSetModelEstimatorTrain);
+  REGISTER_TEST(otbSVMClassifierNew);
+  REGISTER_TEST(otbSVMClassifierImage);
+  REGISTER_TEST(otbSVMClassifierPointSet);
+  REGISTER_TEST(otbSOMMapNew);
+  REGISTER_TEST(otbSOMMap);
+  REGISTER_TEST(otbSOMNew);
+  REGISTER_TEST(otbSOM);
+  REGISTER_TEST(otbPeriodicSOMNew);
+  REGISTER_TEST(otbPeriodicSOM);
+  REGISTER_TEST(otbSOMActivationBuilderNew);
+  REGISTER_TEST(otbSOMActivationBuilder);
 }

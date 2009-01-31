@@ -40,7 +40,7 @@ int otbEnergyTextureImageFunctionNew(int argc, char * argv[])
   //  typedef itk::ConstNeighborhoodIterator<ImageType>   IterType;;
   //  typedef otb::Functor::EnergyTextureFunctor<IterType, IterType, PixelType>  FunctorType;
   typedef otb::EnergyTextureImageFunction<ImageType> EnergyTextureImageFunctionType;
-  
+
   EnergyTextureImageFunctionType::Pointer energy = EnergyTextureImageFunctionType::New();
 
   // Instantiating object

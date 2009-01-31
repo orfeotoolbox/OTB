@@ -81,10 +81,10 @@ int otbImageFileReaderMSTAR(int argc, char* argv[])
   const InternalImageType::PointType& inputOrigin = reader->GetOutput()->GetOrigin();
   double   outputOrigin[ InputDimension ];
 
-  for(unsigned int i=0; i< InputDimension; i++)
-    {
+  for (unsigned int i=0; i< InputDimension; i++)
+  {
     outputOrigin[i] = inputOrigin[i] + spacing[i] * inputStart[i];
-    }
+  }
 
   magnitude->SetSpacing( spacing );
   magnitude->SetOrigin(  outputOrigin );
@@ -96,15 +96,15 @@ int otbImageFileReaderMSTAR(int argc, char* argv[])
 
   for ( inputIt.GoToBegin(), outputIt.GoToBegin(); !inputIt.IsAtEnd();
         ++inputIt, ++outputIt)
-    {
+  {
     outputIt.Set(  inputIt.Get()[0]  );
 //    std::cout << inputIt.Get()[0] << " - " << inputIt.Get()[1] << std::endl;
-    }
+  }
 
 
 
   typedef itk::RescaleIntensityImageFilter< InternalImageType,
-                                             OutputImageType > RescalerType;
+  OutputImageType > RescalerType;
 
   RescalerType::Pointer rescaler = RescalerType::New();
   rescaler->SetOutputMinimum( itk::NumericTraits< OutputPixelType >::min());

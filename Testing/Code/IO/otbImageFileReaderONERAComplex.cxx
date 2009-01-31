@@ -51,7 +51,7 @@ int otbImageFileReaderONERAComplex(int argc, char* argv[])
   Reader->SetFileName( inputFilename  );
 
   typedef otb::ExtractROI< InputPixelType,
-    InputPixelType >  ExtractROIFilterType;
+  InputPixelType >  ExtractROIFilterType;
 
   ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
 
@@ -62,9 +62,9 @@ int otbImageFileReaderONERAComplex(int argc, char* argv[])
   extractROIFilter->SetInput( Reader->GetOutput() );
 
   typedef itk::ComplexToRealImageFilter<
-    InputImageType, OutputImageType > RealFilterType;
+  InputImageType, OutputImageType > RealFilterType;
   typedef itk::ComplexToImaginaryImageFilter<
-    InputImageType, OutputImageType > ImagFilterType;
+  InputImageType, OutputImageType > ImagFilterType;
 
   RealFilterType::Pointer realFilter = RealFilterType::New();
   realFilter->SetInput( extractROIFilter->GetOutput() );

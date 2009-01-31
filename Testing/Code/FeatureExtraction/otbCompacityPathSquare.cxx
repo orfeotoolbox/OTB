@@ -37,11 +37,11 @@ int otbCompacityPathSquare( int argc, char * argv[] )
   PathType::ContinuousIndexType cindex;
   PathType::Pointer pathElt = PathType::New();
 
-  if(A<0)
-    {
-      std::cout << "square must be greater than 0.0 !" << std::endl;
-      return EXIT_FAILURE;
-    }
+  if (A<0)
+  {
+    std::cout << "square must be greater than 0.0 !" << std::endl;
+    return EXIT_FAILURE;
+  }
 
 
   pathElt->Initialize();
@@ -69,11 +69,11 @@ int otbCompacityPathSquare( int argc, char * argv[] )
   RealType Error;
   Error = vcl_abs(Result - static_cast<RealType>(M_PI_4) );
 
-  if(  Error > 1.E-9)
-    {
-      std::cout << "Error in Theta estimation :" << std::endl;
-      return EXIT_FAILURE;
-    }
+  if (  Error > 1.E-9)
+  {
+    std::cout << "Error in Theta estimation :" << std::endl;
+    return EXIT_FAILURE;
+  }
 
 
   return EXIT_SUCCESS;

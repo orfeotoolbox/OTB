@@ -64,10 +64,10 @@ int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int argc, char *
 
   reader->GenerateOutputInformation();
   unsigned int nbChannel = reader->GetOutput()->GetNumberOfComponentsPerPixel();
-  for(unsigned int i=0; i<nbChannel; i++)
-    {
-      wavelenghFiles.push_back( argv[i+4] );
-    }
+  for (unsigned int i=0; i<nbChannel; i++)
+  {
+    wavelenghFiles.push_back( argv[i+4] );
+  }
 
   ValueType val = 0.0025;
 
@@ -115,35 +115,35 @@ int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int argc, char *
 
 
   ValuesVectorType vect;
-  for(unsigned int j=0; j<nbChannel; j++)
-    {
-      functionValues = FilterFunctionValuesType::New();
-      vect.clear();
-
-      // Filter function values initialization
-      float minSpectralValue(0.);
-      float maxSpectralValue(0.);
-      float value(0.);
-
-      std::ifstream fin;
-      //Read input file parameters
-      fin.open(wavelenghFiles[j]);
-      fin >> minSpectralValue;//wlinf;
-      fin >> maxSpectralValue;//wlsup;
-
-      while (!fin.eof() && fin.good())
+  for (unsigned int j=0; j<nbChannel; j++)
   {
-    fin >> value;
-    vect.push_back(value);
-  }
-      fin.close();
-      functionValues->SetFilterFunctionValues(vect);
-      functionValues->SetMinSpectralValue(minSpectralValue);
-      functionValues->SetMaxSpectralValue(maxSpectralValue);
-      functionValues->SetUserStep( val );
+    functionValues = FilterFunctionValuesType::New();
+    vect.clear();
 
-      param->SetWavelenghtSpectralBandWithIndex(j, functionValues);
+    // Filter function values initialization
+    float minSpectralValue(0.);
+    float maxSpectralValue(0.);
+    float value(0.);
+
+    std::ifstream fin;
+    //Read input file parameters
+    fin.open(wavelenghFiles[j]);
+    fin >> minSpectralValue;//wlinf;
+    fin >> maxSpectralValue;//wlsup;
+
+    while (!fin.eof() && fin.good())
+    {
+      fin >> value;
+      vect.push_back(value);
     }
+    fin.close();
+    functionValues->SetFilterFunctionValues(vect);
+    functionValues->SetMinSpectralValue(minSpectralValue);
+    functionValues->SetMaxSpectralValue(maxSpectralValue);
+    functionValues->SetUserStep( val );
+
+    param->SetWavelenghtSpectralBandWithIndex(j, functionValues);
+  }
 
   corrToRadia->SetInput( param );
 

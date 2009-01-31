@@ -37,7 +37,7 @@ int otbSVMPointSetModelEstimatorNew( int argc, char* argv[] )
   typedef itk::PointSet< InputPixelType,  Dimension >           MeasurePointSetType;
   typedef itk::PointSet< LabelPixelType,  Dimension >           LabelPointSetType;
   typedef otb::SVMPointSetModelEstimator< MeasurePointSetType,
-                                          LabelPointSetType >   EstimatorType;
+  LabelPointSetType >   EstimatorType;
 
 
   EstimatorType::Pointer estimator = EstimatorType::New();

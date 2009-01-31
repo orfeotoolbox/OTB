@@ -27,16 +27,16 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbRemoveIsolatedByDirectionFilterNew);
-REGISTER_TEST(otbRemoveIsolatedByDirectionFilter);
-REGISTER_TEST(otbRemoveWrongDirectionFilterNew);
-REGISTER_TEST(otbRemoveWrongDirectionFilter);
-REGISTER_TEST(otbNonMaxRemovalByDirectionFilterNew);
-REGISTER_TEST(otbNonMaxRemovalByDirectionFilter);
-REGISTER_TEST(otbVectorizationPathListFilterNew);
-REGISTER_TEST(otbVectorizationPathListFilter);
-REGISTER_TEST(otbSimplifyPathListFilterNew);
-REGISTER_TEST(otbSimplifyPathListFilter);
-REGISTER_TEST(otbBreakAngularPathListFilterNew);
-REGISTER_TEST(otbBreakAngularPathListFilter);
+  REGISTER_TEST(otbRemoveIsolatedByDirectionFilterNew);
+  REGISTER_TEST(otbRemoveIsolatedByDirectionFilter);
+  REGISTER_TEST(otbRemoveWrongDirectionFilterNew);
+  REGISTER_TEST(otbRemoveWrongDirectionFilter);
+  REGISTER_TEST(otbNonMaxRemovalByDirectionFilterNew);
+  REGISTER_TEST(otbNonMaxRemovalByDirectionFilter);
+  REGISTER_TEST(otbVectorizationPathListFilterNew);
+  REGISTER_TEST(otbVectorizationPathListFilter);
+  REGISTER_TEST(otbSimplifyPathListFilterNew);
+  REGISTER_TEST(otbSimplifyPathListFilter);
+  REGISTER_TEST(otbBreakAngularPathListFilterNew);
+  REGISTER_TEST(otbBreakAngularPathListFilter);
 }

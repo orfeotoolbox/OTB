@@ -33,7 +33,7 @@ int main ( int argc, char * argv[] )
   typedef unsigned char  OutputPixelType;
 
   typedef otb::MultiChannelExtractROI< InputPixelType,
-    OutputPixelType >  ExtractROIFilterType;
+  OutputPixelType >  ExtractROIFilterType;
 
   ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
 

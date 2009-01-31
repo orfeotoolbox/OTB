@@ -37,7 +37,7 @@ int otbPointSetFileReader(int argc, char * argv[])
   unsigned long nPoints = data->GetNumberOfPoints();
   fout << std::setprecision(15) << "Number of points: " << nPoints << std::endl;
 
-  for(unsigned long i=0; i < nPoints; ++i)
+  for (unsigned long i=0; i < nPoints; ++i)
   {
     PointSetType::PointType point;
     data->GetPoint(i,&point);

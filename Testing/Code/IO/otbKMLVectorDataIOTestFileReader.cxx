@@ -32,9 +32,9 @@ int otbKMLVectorDataIOTestFileReader(int argc, char* argv[])
 
 
   bool lCanRead = object->CanReadFile(argv[1]);
-  if(lCanRead==false)
+  if (lCanRead==false)
   {
-        return EXIT_FAILURE;
+    return EXIT_FAILURE;
   }
 
   object->SetFileName(argv[1]);
@@ -42,15 +42,15 @@ int otbKMLVectorDataIOTestFileReader(int argc, char* argv[])
 
   VectorDataType::ConstPointer constData = static_cast<const VectorDataType *>(data);
 
-  if(argc>2)
+  if (argc>2)
   {
-     bool lCanWrite = object->CanWriteFile(argv[2]);
-     if(lCanWrite==false)
-     {
-        return EXIT_FAILURE;
-     }
-     object->SetFileName(argv[2]);
-     object->Write(constData);
+    bool lCanWrite = object->CanWriteFile(argv[2]);
+    if (lCanWrite==false)
+    {
+      return EXIT_FAILURE;
+    }
+    object->SetFileName(argv[2]);
+    object->Write(constData);
   }
 
   return EXIT_SUCCESS;

@@ -43,7 +43,7 @@ int otbSVMImageModelEstimatorTrain( int argc, char* argv[] )
   typedef otb::Image< int,  Dimension >                    TrainingImageType;
   typedef std::vector<double>                              VectorType;
   typedef otb::SVMImageModelEstimator< InputImageType,
-                                       TrainingImageType > EstimatorType;
+  TrainingImageType > EstimatorType;
   typedef otb::ImageFileReader< InputImageType >           InputReaderType;
   typedef otb::ImageFileReader< TrainingImageType >        TrainingReaderType;
 

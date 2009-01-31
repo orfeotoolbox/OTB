@@ -44,10 +44,10 @@ int otbImageFileReaderRADChar(int argc, char* argv[])
 
   typedef otb::ImageFileReader< InputImageType  >         ReaderType;
   typedef otb::ImageFileWriter< OutputImageType >         WriterType;
-/*
-  typedef otb::VectorImage< InputPixelType,  Dimension >     InputImageType;
-  typedef otb::VectorImage< OutputPixelType, Dimension >     OutputImageType;
-*/
+  /*
+    typedef otb::VectorImage< InputPixelType,  Dimension >     InputImageType;
+    typedef otb::VectorImage< OutputPixelType, Dimension >     OutputImageType;
+  */
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 

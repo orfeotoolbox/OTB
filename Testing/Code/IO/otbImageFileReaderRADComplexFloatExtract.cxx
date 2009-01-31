@@ -51,7 +51,7 @@ int otbImageFileReaderRADComplexFloatExtract(int argc, char* argv[])
 
 
   typedef otb::ExtractROI< InputPixelType,
-    OutputPixelType >  ExtractROIFilterType;
+  OutputPixelType >  ExtractROIFilterType;
 
   ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
 

@@ -43,7 +43,7 @@ otbContinuousMinimumMaximumImageCalculatorTest(int ,char *[] )
 
   std::cout << "Testing Minimum and Maximum Image Calculator:\n";
 
-    // Allocate a simple test image
+  // Allocate a simple test image
   ImageType::Pointer image = ImageType::New();
   ImageType::RegionType region;
   region.SetSize(size);
@@ -52,7 +52,7 @@ otbContinuousMinimumMaximumImageCalculatorTest(int ,char *[] )
   image->SetBufferedRegion(region);
   image->Allocate();
 
-    // Set origin and spacing of physical coordinates
+  // Set origin and spacing of physical coordinates
   image->SetOrigin(origin);
   image->SetSpacing(spacing);
 
@@ -60,18 +60,20 @@ otbContinuousMinimumMaximumImageCalculatorTest(int ,char *[] )
   PixelType maximum = 103;
 
 
-    // Initialize the image contents with the minimum value
+  // Initialize the image contents with the minimum value
   itk::Index<2> index;
-  for (int row = 0; row <20; row++) {
+  for (int row = 0; row <20; row++)
+  {
     index[1] = row;
-    for (int col = 0; col < 20; col++) {
+    for (int col = 0; col < 20; col++)
+    {
       index[0] = col;
       image->SetPixel(index, minimum);
     }
   }
 
 
-    // Set voxel (10,10) to maximum value
+  // Set voxel (10,10) to maximum value
   index[0] = 10;
   index[1] = 10;
   image->SetPixel(index, maximum);
@@ -81,29 +83,29 @@ otbContinuousMinimumMaximumImageCalculatorTest(int ,char *[] )
   image->SetPixel(index, 41);
 
 
-    // Create and initialize the calculator
+  // Create and initialize the calculator
   MinMaxCalculatorType::Pointer calculator = MinMaxCalculatorType::New();
   calculator->SetImage( image );
   calculator->Compute();
 
-    // Return minimum of intensity
+  // Return minimum of intensity
   PixelType minimumResult = calculator->GetMinimum();
   std::cout << "The Minimum intensity value is : " << minimumResult << std::endl;
   std::cout << "Its index position is : " << calculator->GetContinuousIndexOfMinimum() << std::endl;
 
-  if(minimumResult != minimum)
+  if (minimumResult != minimum)
   {
     std::cout << "Minimum Value is wrong : " << minimumResult ;
     std::cout << " != " << minimum << std::endl;
     flag = 1;
   }
 
-    // Return maximum of intensity
+  // Return maximum of intensity
   PixelType maximumResult = calculator->GetMaximum();
   std::cout << "The Maximum intensity value is : " << maximumResult << std::endl;
   std::cout << "Its index position is : " << calculator->GetContinuousIndexOfMaximum() << std::endl;
 
-  if(maximumResult != maximum)
+  if (maximumResult != maximum)
   {
     std::cout << "Maximum Value is wrong : " << maximumResult ;
     std::cout << " != " << maximum << std::endl;
@@ -111,17 +113,17 @@ otbContinuousMinimumMaximumImageCalculatorTest(int ,char *[] )
   }
 
 
-    // Return results of test
+  // Return results of test
   if (flag != 0)
-    {
-      std::cout << "*** Some tests failed" << std::endl;
-      return flag;
-    }
+  {
+    std::cout << "*** Some tests failed" << std::endl;
+    return flag;
+  }
   else
-    {
-      std::cout << "All tests successfully passed" << std::endl;
-      return EXIT_SUCCESS;
-    }
+  {
+    std::cout << "All tests successfully passed" << std::endl;
+    return EXIT_SUCCESS;
+  }
 
   return EXIT_SUCCESS;
 }

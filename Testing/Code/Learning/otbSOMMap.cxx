@@ -60,11 +60,11 @@ int otbSOMMap(int argc, char* argv[])
 
   // Test of the GetWinner method
   SOMMapType::IndexType winnerIndex = somMap->GetWinner(winner);
-  if(winnerIndex!=index)
-    {
-      std::cout<<"Bad GetWinner function return."<<std::endl;
-      return EXIT_FAILURE;
-    }
+  if (winnerIndex!=index)
+  {
+    std::cout<<"Bad GetWinner function return."<<std::endl;
+    return EXIT_FAILURE;
+  }
 
 
   return EXIT_SUCCESS;

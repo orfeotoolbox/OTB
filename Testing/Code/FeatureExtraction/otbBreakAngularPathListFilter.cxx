@@ -38,30 +38,30 @@ int otbBreakAngularPathListFilter(int argc, char * argv[])
 
   ListMaxAngle.clear();
   while ( argv[cpt][0] != '|' )
-    {
-      ListMaxAngle.push_back(static_cast<double>(::atof(argv[cpt])));
-      cpt++;
-    }
+  {
+    ListMaxAngle.push_back(static_cast<double>(::atof(argv[cpt])));
+    cpt++;
+  }
   cpt++;
   ListPoints.clear();
 
   while ( argv[cpt] != NULL )
+  {
+    if ( argv[cpt][0] == '|' )
     {
-      if( argv[cpt][0] == '|' )
-        {
-    if( (ListPoints.size()%2) != 0 )
+      if ( (ListPoints.size()%2) != 0 )
       {
         itkGenericExceptionMacro(<<"Missing point in parameters !");
       }
-    MatricePoints.push_back(ListPoints);
-    ListPoints.clear();
-        }
-      else
-        {
-    ListPoints.push_back(static_cast<double>(::atof(argv[cpt])));
-        }
-      cpt++;
+      MatricePoints.push_back(ListPoints);
+      ListPoints.clear();
     }
+    else
+    {
+      ListPoints.push_back(static_cast<double>(::atof(argv[cpt])));
+    }
+    cpt++;
+  }
   MatricePoints.push_back(ListPoints);
 
 
@@ -76,21 +76,21 @@ int otbBreakAngularPathListFilter(int argc, char * argv[])
   PathListType::Pointer InputPathList = PathListType::New();
 
   //Generate PathList
-  for(PointsMatrixType::iterator listpos=MatricePoints.begin() ; listpos != MatricePoints.end() ; ++listpos)
-    {
-      PathType::Pointer path = PathType::New();
-      //Generate PathList
-      std::cout << "List "<<std::endl;
-      for(PointsVectorType::iterator it=(*listpos).begin() ; it != (*listpos).end() ; ++it)
+  for (PointsMatrixType::iterator listpos=MatricePoints.begin() ; listpos != MatricePoints.end() ; ++listpos)
   {
-    cindex[0] = *it;
-    ++it;
-    cindex[1] = *it;
-    std::cout << "Point Index :"<<cindex[0]<<";"<<cindex[1]<<std::endl;
-    path->AddVertex(cindex);
-  }
-      InputPathList->PushBack(path);
+    PathType::Pointer path = PathType::New();
+    //Generate PathList
+    std::cout << "List "<<std::endl;
+    for (PointsVectorType::iterator it=(*listpos).begin() ; it != (*listpos).end() ; ++it)
+    {
+      cindex[0] = *it;
+      ++it;
+      cindex[1] = *it;
+      std::cout << "Point Index :"<<cindex[0]<<";"<<cindex[1]<<std::endl;
+      path->AddVertex(cindex);
     }
+    InputPathList->PushBack(path);
+  }
 
 
   // Instantiating object
@@ -100,66 +100,66 @@ int otbBreakAngularPathListFilter(int argc, char * argv[])
   std::ofstream file;
   file.open(outfname);
 
-  for(PointsVectorType::iterator itAngle=ListMaxAngle.begin() ; itAngle != ListMaxAngle.end() ; ++itAngle)
-    {
-
-
-      breakAngularFilter->SetMaxAngle((*itAngle)*M_PI/180.);
-      breakAngularFilter->Update();
-
-
-      PathListType::Pointer OutputPathList = breakAngularFilter->GetOutput();
-
-      typedef PathListType::ConstIterator PathListIteratorType;
-      typedef PathType::VertexListType VertexListType;
-      typedef VertexListType::ConstIterator VertexIteratorType;
-
-      unsigned int counter = 1;
-      PathListIteratorType pathListIt = InputPathList->Begin();
-
-      file<<"--------------------------------------------------------------------------"<<std::endl;
-      file<<"MAX ANGULAR :"<<breakAngularFilter->GetMaxAngle()<< "("<<(*itAngle)<<" deg.)"<<std::endl;
-      file<<"INPUT list of Path "<<": "<<std::endl;
-      while(pathListIt!=InputPathList->End())
+  for (PointsVectorType::iterator itAngle=ListMaxAngle.begin() ; itAngle != ListMaxAngle.end() ; ++itAngle)
   {
-    file<<"Path "<<counter<<": ";
-    for(VertexIteratorType vIt = pathListIt.Get()->GetVertexList()->Begin();
-        vIt!=pathListIt.Get()->GetVertexList()->End();
-        ++vIt)
-      {
-        if(vIt!=pathListIt.Get()->GetVertexList()->Begin())
+
+
+    breakAngularFilter->SetMaxAngle((*itAngle)*M_PI/180.);
+    breakAngularFilter->Update();
+
+
+    PathListType::Pointer OutputPathList = breakAngularFilter->GetOutput();
+
+    typedef PathListType::ConstIterator PathListIteratorType;
+    typedef PathType::VertexListType VertexListType;
+    typedef VertexListType::ConstIterator VertexIteratorType;
+
+    unsigned int counter = 1;
+    PathListIteratorType pathListIt = InputPathList->Begin();
+
+    file<<"--------------------------------------------------------------------------"<<std::endl;
+    file<<"MAX ANGULAR :"<<breakAngularFilter->GetMaxAngle()<< "("<<(*itAngle)<<" deg.)"<<std::endl;
+    file<<"INPUT list of Path "<<": "<<std::endl;
+    while (pathListIt!=InputPathList->End())
     {
-      file<<", ";
-    }
+      file<<"Path "<<counter<<": ";
+      for (VertexIteratorType vIt = pathListIt.Get()->GetVertexList()->Begin();
+           vIt!=pathListIt.Get()->GetVertexList()->End();
+           ++vIt)
+      {
+        if (vIt!=pathListIt.Get()->GetVertexList()->Begin())
+        {
+          file<<", ";
+        }
         file<<vIt.Value();
       }
-    file<<std::endl;
-    ++pathListIt;
-    ++counter;
-  }
-
-      counter = 1;
-      pathListIt = OutputPathList->Begin();
-      file<<"OUTPUT list of Path "<<": "<<std::endl;
-      while(pathListIt!=OutputPathList->End())
-  {
-    file<<"Path "<<counter<<": ";
-    for(VertexIteratorType vIt = pathListIt.Get()->GetVertexList()->Begin();
-        vIt!=pathListIt.Get()->GetVertexList()->End();
-        ++vIt)
-      {
-        if(vIt!=pathListIt.Get()->GetVertexList()->Begin())
-    {
-      file<<", ";
+      file<<std::endl;
+      ++pathListIt;
+      ++counter;
     }
+
+    counter = 1;
+    pathListIt = OutputPathList->Begin();
+    file<<"OUTPUT list of Path "<<": "<<std::endl;
+    while (pathListIt!=OutputPathList->End())
+    {
+      file<<"Path "<<counter<<": ";
+      for (VertexIteratorType vIt = pathListIt.Get()->GetVertexList()->Begin();
+           vIt!=pathListIt.Get()->GetVertexList()->End();
+           ++vIt)
+      {
+        if (vIt!=pathListIt.Get()->GetVertexList()->Begin())
+        {
+          file<<", ";
+        }
         file<<vIt.Value();
       }
-    file<<std::endl;
-    ++pathListIt;
-    ++counter;
-  }
+      file<<std::endl;
+      ++pathListIt;
+      ++counter;
+    }
 
-    } //Enf for angle
+  } //Enf for angle
   file.close();
 
 

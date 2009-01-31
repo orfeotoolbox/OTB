@@ -35,7 +35,7 @@ int otbFourierMellinImageFilterNew(int argc, char* argv[])
 
   typedef itk::LinearInterpolateImageFunction< InputImageType, double >    InterpolatorType;
   typedef otb::ForwardFourierMellinTransformImageFilter<PixelType,
-          InterpolatorType,Dimension>       FourierMellinTransformType;
+  InterpolatorType,Dimension>       FourierMellinTransformType;
 
   FourierMellinTransformType::Pointer fourierMellinTransform = FourierMellinTransformType::New();
 

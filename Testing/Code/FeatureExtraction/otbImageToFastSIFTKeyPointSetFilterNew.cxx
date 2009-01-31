@@ -29,9 +29,9 @@ int otbImageToFastSIFTKeyPointSetFilterNew(int argc, char * argv[])
   typedef itk::VariableLengthVector<RealType> RealVectorType;
   typedef itk::PointSet<RealVectorType,Dimension> PointSetType;
   typedef otb::SiftFastImageFilter<ImageType,PointSetType> ImageToFastSIFTKeyPointSetFilterType;
-  
+
   // Instantiating object
   ImageToFastSIFTKeyPointSetFilterType::Pointer object = ImageToFastSIFTKeyPointSetFilterType::New();
-  
+
   return EXIT_SUCCESS;
 }

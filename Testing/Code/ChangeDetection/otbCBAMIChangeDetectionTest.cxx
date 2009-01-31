@@ -27,12 +27,12 @@
 int otbCBAMIChangeDetectionTest(int argc, char* argv[] )
 {
 
-  if( argc < 5 )
-    {
+  if ( argc < 5 )
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " inputImageFile1 inputImageFile2  radius outputImageFile " << std::endl;
     return -1;
-    }
+  }
 
   // Define the dimension of the images
   const unsigned int Dimension = 2;
@@ -49,15 +49,15 @@ int otbCBAMIChangeDetectionTest(int argc, char* argv[] )
   typedef itk::ImageFileReader< InputImageType2 >  ReaderType2;
   typedef itk::ImageFileWriter< OutputImageType >  WriterType;
   typedef itk::RescaleIntensityImageFilter< ChangeImageType,
-                                            OutputImageType > RescalerType;
+  OutputImageType > RescalerType;
 
 
 
   // Declare the type for the filter
   typedef otb::CBAMIChangeDetector<
-                                InputImageType1,
-                                InputImageType2,
-                                ChangeImageType  >       FilterType;
+  InputImageType1,
+  InputImageType2,
+  ChangeImageType  >       FilterType;
 
 
   ReaderType1::Pointer reader1 = ReaderType1::New();

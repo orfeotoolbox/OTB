@@ -59,12 +59,12 @@ int otbFlusserPath( int argc, char * argv[] )
   RealType Result;
 
   for (Number = 1 ;Number<12;Number++)
-    {
-      //OTB-FA-00024-CS
-      function->SetMomentNumber(Number);
-      Result = function->Evaluate( );
-      std::cout << "Flusser("<<Number<<") = "<< Result <<std::endl;
-    }
+  {
+    //OTB-FA-00024-CS
+    function->SetMomentNumber(Number);
+    Result = function->Evaluate( );
+    std::cout << "Flusser("<<Number<<") = "<< Result <<std::endl;
+  }
 
 
   return EXIT_SUCCESS;

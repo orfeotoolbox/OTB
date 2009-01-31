@@ -36,7 +36,7 @@ int otbPerBandVectorImageFilterWithSobelFilter(int argc, char * argv[])
   typedef itk::SobelEdgeDetectionImageFilter<ImageType,ImageType> SobelFilterType;
 
   typedef otb::PerBandVectorImageFilter<VectorImageType,VectorImageType,SobelFilterType>
-    PerBandVectorImageFilterType;
+  PerBandVectorImageFilterType;
 
   typedef otb::ImageFileReader<VectorImageType> ReaderType;
   typedef otb::ImageFileWriter<VectorImageType> WriterType;

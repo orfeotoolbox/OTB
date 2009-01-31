@@ -28,5 +28,5 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbGDALImageIOTestCanRead);
+  REGISTER_TEST(otbGDALImageIOTestCanRead);
 }

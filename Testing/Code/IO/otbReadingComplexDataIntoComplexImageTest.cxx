@@ -63,12 +63,12 @@ int otbReadingComplexDataIntoComplexImageTest(int argc,char * argv[])
 
   VectorImageType::PixelType vectorValue = reader2->GetOutput()->GetPixel(index);
 
-   std::cout<<"Image value (complex): "<<complexValue<<std::endl;
-   std::cout<<"Image value (vector ): "<<vectorValue<<std::endl;
+  std::cout<<"Image value (complex): "<<complexValue<<std::endl;
+  std::cout<<"Image value (vector ): "<<vectorValue<<std::endl;
 
-   otbControlConditionTestMacro(vectorValue.Size()<2,"VectorImage has less than 2 components. No input complex data.");
-   otbControlConditionTestMacro(complexValue.real()!=vectorValue[0],"The real part is not read properly. Have a look at the file itk::ConvertPixelBuffer, the problem might be there.");
-   otbControlConditionTestMacro(complexValue.imag()!=vectorValue[1],"The imaginary part is not read properly. Have a look at the file itk::ConvertPixelBuffer, the problem might be there.");
+  otbControlConditionTestMacro(vectorValue.Size()<2,"VectorImage has less than 2 components. No input complex data.");
+  otbControlConditionTestMacro(complexValue.real()!=vectorValue[0],"The real part is not read properly. Have a look at the file itk::ConvertPixelBuffer, the problem might be there.");
+  otbControlConditionTestMacro(complexValue.imag()!=vectorValue[1],"The imaginary part is not read properly. Have a look at the file itk::ConvertPixelBuffer, the problem might be there.");
 
   return EXIT_SUCCESS;
 }

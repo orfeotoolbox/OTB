@@ -26,16 +26,16 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbImageToImageRCC8CalculatorNew);
-REGISTER_TEST(otbImageToImageRCC8Calculator);
-REGISTER_TEST(otbPolygonToPolygonRCC8CalculatorNew);
-REGISTER_TEST(otbPolygonToPolygonRCC8Calculator);
-REGISTER_TEST(otbRCC8VertexBaseNew);
-REGISTER_TEST(otbRCC8VertexBase);
-REGISTER_TEST(otbRCC8VertexWithCompacityNew);
-REGISTER_TEST(otbRCC8VertexWithCompacity);
-REGISTER_TEST(otbRCC8EdgeNew);
-REGISTER_TEST(otbRCC8Edge);
-REGISTER_TEST(otbRCC8GraphNew);
-REGISTER_TEST(otbRCC8Graph);
+  REGISTER_TEST(otbImageToImageRCC8CalculatorNew);
+  REGISTER_TEST(otbImageToImageRCC8Calculator);
+  REGISTER_TEST(otbPolygonToPolygonRCC8CalculatorNew);
+  REGISTER_TEST(otbPolygonToPolygonRCC8Calculator);
+  REGISTER_TEST(otbRCC8VertexBaseNew);
+  REGISTER_TEST(otbRCC8VertexBase);
+  REGISTER_TEST(otbRCC8VertexWithCompacityNew);
+  REGISTER_TEST(otbRCC8VertexWithCompacity);
+  REGISTER_TEST(otbRCC8EdgeNew);
+  REGISTER_TEST(otbRCC8Edge);
+  REGISTER_TEST(otbRCC8GraphNew);
+  REGISTER_TEST(otbRCC8Graph);
 }

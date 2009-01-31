@@ -31,7 +31,7 @@ int generic_MultiChannelRAndBAndNIRVegetationIndexImageFilter(int argc, char * a
   typedef otb::ImageFileWriter<TOutputImage> WriterType;
 
   typedef otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter<TInputImage,TOutputImage,TFunction>
-    MultiChannelRAndBAndNIRVegetationIndexImageFilterType;
+  MultiChannelRAndBAndNIRVegetationIndexImageFilterType;
 
   // Instantiating object
   typename MultiChannelRAndBAndNIRVegetationIndexImageFilterType::Pointer filter = MultiChannelRAndBAndNIRVegetationIndexImageFilterType::New();
@@ -68,11 +68,11 @@ int otbMultiChannelRAndBAndNIRVegetationIndexImageFilter(int argc, char * argv[]
   argc--;
   argv++;
   if ( strArgv == "ARVI" ) return( generic_MultiChannelRAndBAndNIRVegetationIndexImageFilter<InputImageType, OutputImageType,
-           otb::Functor::ARVI<     InputImageType::InternalPixelType,
-           InputImageType::InternalPixelType,
-           InputImageType::InternalPixelType,
-                                                                        OutputImageType::PixelType> >
-           (argc,argv) );
+                                     otb::Functor::ARVI<     InputImageType::InternalPixelType,
+                                     InputImageType::InternalPixelType,
+                                     InputImageType::InternalPixelType,
+                                     OutputImageType::PixelType> >
+                                     (argc,argv) );
   else
     return EXIT_FAILURE;
 

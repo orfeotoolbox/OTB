@@ -25,29 +25,35 @@
 
 namespace Functor
 {
-  template <class TIter1, class TIter2, class TOutput>
-  class UnaryFunctorNeighborhoodWithOffseImageFilterTest
+template <class TIter1, class TIter2, class TOutput>
+class UnaryFunctorNeighborhoodWithOffseImageFilterTest
+{
+public:
+  UnaryFunctorNeighborhoodWithOffseImageFilterTest() {};
+  ~UnaryFunctorNeighborhoodWithOffseImageFilterTest() {};
+
+  typedef TIter1 IterType1;
+  typedef typename IterType1::OffsetType OffsetType;
+  typedef TIter2 IterType2;
+
+
+  void SetOffset(OffsetType off)
   {
-  public:
-    UnaryFunctorNeighborhoodWithOffseImageFilterTest() {};
-    ~UnaryFunctorNeighborhoodWithOffseImageFilterTest() {};
-
-    typedef TIter1 IterType1;
-    typedef typename IterType1::OffsetType OffsetType;
-    typedef TIter2 IterType2;
-    
-
-    void SetOffset(OffsetType off){ m_Offset=off; };
-    OffsetType GetOffset(){ return m_Offset; };
-
-    inline TOutput operator() (const TIter1 & it1, const TIter2 & it2)
-    {
-      return(static_cast<TOutput>(it1.GetCenterPixel()));
-
-    }
-  private:
-    OffsetType m_Offset;
+    m_Offset=off;
   };
+  OffsetType GetOffset()
+  {
+    return m_Offset;
+  };
+
+  inline TOutput operator() (const TIter1 & it1, const TIter2 & it2)
+  {
+    return(static_cast<TOutput>(it1.GetCenterPixel()));
+
+  }
+private:
+  OffsetType m_Offset;
+};
 }
 
 

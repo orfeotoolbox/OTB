@@ -32,7 +32,7 @@ int otbSVMClassifierNew(int argc, char* argv[] )
   typedef itk::PointSet< InputPixelType, 2 > PointSetType ;
 
   typedef itk::Statistics::PointSetToListAdaptor< PointSetType >
-    DataSampleType;
+  DataSampleType;
 
 
   typedef otb::SVMClassifier< DataSampleType, LabelPixelType > ClassifierType ;

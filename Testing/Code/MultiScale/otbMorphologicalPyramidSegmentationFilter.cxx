@@ -47,11 +47,11 @@ int otbMorphologicalPyramidSegmentationFilter(int argc, char * argv[])
 
   typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
   typedef otb::OpeningClosingMorphologicalFilter<InputImageType,InputImageType,StructuringElementType>
-    OpeningClosingFilterType;
+  OpeningClosingFilterType;
   typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,InputImageType,OpeningClosingFilterType>
-    PyramidFilterType;
+  PyramidFilterType;
   typedef otb::MorphologicalPyramidSegmentationFilter<InputImageType,OutputImageType>
-    SegmentationFilterType;
+  SegmentationFilterType;
   typedef SegmentationFilterType::OutputImageListIteratorType OutputListIteratorType;
 
   // Input images reading
@@ -79,18 +79,18 @@ int otbMorphologicalPyramidSegmentationFilter(int argc, char * argv[])
   WriterType::Pointer writer;
   int index = 1;
   std::stringstream oss;
-  while(it!=segmentation->GetOutput()->End())
-    {
-      oss<<outputFilenamePrefix<<index<<"."<<outputFilenameSuffix;
-      writer = WriterType::New();
-      writer->SetInput(it.Get());
-      writer->SetFileName(oss.str().c_str());
-      writer->Update();
-      std::cout<<oss.str()<<" file written."<<std::endl;
-      oss.str("");
-      ++index;
-      ++it;
-    }
+  while (it!=segmentation->GetOutput()->End())
+  {
+    oss<<outputFilenamePrefix<<index<<"."<<outputFilenameSuffix;
+    writer = WriterType::New();
+    writer->SetInput(it.Get());
+    writer->SetFileName(oss.str().c_str());
+    writer->Update();
+    std::cout<<oss.str()<<" file written."<<std::endl;
+    oss.str("");
+    ++index;
+    ++it;
+  }
 
 
   return EXIT_SUCCESS;

@@ -52,14 +52,14 @@ int otbPolygonListToRCC8GraphFilter(int argc, char* argv[])
   typedef otb::SimplifyPathListFilter<PolygonType> SimplifyPathFilterType;
 
   PolygonListType::Pointer regions = PolygonListType::New();
-  
+
   RCC8GraphFilterType::SegmentationRangesType ranges;
 
-  
+
 
   // Reading input images
-  for(int cpt=1;cpt<=nbImages;++cpt)
-    {
+  for (int cpt=1;cpt<=nbImages;++cpt)
+  {
     ranges.push_back(regions->Size());
     ReaderType::Pointer reader = ReaderType::New();
     reader->SetFileName(argv[2+cpt]);
@@ -67,21 +67,21 @@ int otbPolygonListToRCC8GraphFilter(int argc, char* argv[])
     MinMaxCalculatorType::Pointer minMax = MinMaxCalculatorType::New();
     minMax->SetImage(reader->GetOutput());
     minMax->Compute();
-    for(PixelType p = minMax->GetMinimum();p<=minMax->GetMaximum();++p)
+    for (PixelType p = minMax->GetMinimum();p<=minMax->GetMaximum();++p)
+    {
+      if (p!=0)
       {
-      if(p!=0)
-	{
-	EdgeExtractionFilterType::Pointer extraction = EdgeExtractionFilterType::New();
-	extraction->SetInput(reader->GetOutput());
-	extraction->SetForegroundValue(p);
-	extraction->Update();
-	if(extraction->GetOutput()->GetVertexList()->Size()>2)
-	  {
-	  regions->PushBack(extraction->GetOutput());
-	  }
-	}
+        EdgeExtractionFilterType::Pointer extraction = EdgeExtractionFilterType::New();
+        extraction->SetInput(reader->GetOutput());
+        extraction->SetForegroundValue(p);
+        extraction->Update();
+        if (extraction->GetOutput()->GetVertexList()->Size()>2)
+        {
+          regions->PushBack(extraction->GetOutput());
+        }
       }
     }
+  }
 
   // Simplifying regions
   SimplifyPathFilterType::Pointer simplifier = SimplifyPathFilterType::New();
@@ -91,14 +91,14 @@ int otbPolygonListToRCC8GraphFilter(int argc, char* argv[])
 
   // Filter instantiation
   RCC8GraphFilterType::Pointer filter = RCC8GraphFilterType::New();
-  
+
   filter->SetInput(simplifier->GetOutput());
   filter->SetSegmentationRanges(ranges);
- 
+
   GraphWriterType::Pointer writer = GraphWriterType::New();
   writer->SetInput(filter->GetOutput());
   writer->SetFileName(outfile);
   writer->Update();
-  
+
   return EXIT_SUCCESS;
 }

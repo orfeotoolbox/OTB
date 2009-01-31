@@ -29,9 +29,9 @@ int otbJPEG2000ImageIOTestCanRead(int argc, char* argv[])
   otb::JPEG2000ImageIO::Pointer lJPEG2000ImageIO = otb::JPEG2000ImageIO::New();
   bool lCanRead = lJPEG2000ImageIO->CanReadFile(argv[1]);
   if ( lCanRead == false)
-    {
-      std::cerr << "Erreur otb::JPEG2000ImageIO : impossible to open the image file JPEG2000 "<<argv[1]<<"."<<std::endl;
-      return EXIT_FAILURE;
-    }
+  {
+    std::cerr << "Erreur otb::JPEG2000ImageIO : impossible to open the image file JPEG2000 "<<argv[1]<<"."<<std::endl;
+    return EXIT_FAILURE;
+  }
   return EXIT_SUCCESS;
 }

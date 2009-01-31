@@ -26,13 +26,13 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbNearestTransformDeformationFieldGeneratorNew);
-REGISTER_TEST(otbNearestTransformDeformationFieldGenerator);
-REGISTER_TEST(otbNNearestTransformsLinearInterpolateDeformationFieldGeneratorNew);
-REGISTER_TEST(otbNNearestTransformsLinearInterpolateDeformationFieldGenerator);
-REGISTER_TEST(otbBSplinesInterpolateTransformDeformationFieldGeneratorNew);
-REGISTER_TEST(otbBSplinesInterpolateTransformDeformationFieldGenerator);
-REGISTER_TEST(otbTranslationDeformationFieldEstimation);
-REGISTER_TEST(otbEuler2DDeformationFieldEstimation);
-REGISTER_TEST(otbCenteredRigidDeformationFieldEstimation);
+  REGISTER_TEST(otbNearestTransformDeformationFieldGeneratorNew);
+  REGISTER_TEST(otbNearestTransformDeformationFieldGenerator);
+  REGISTER_TEST(otbNNearestTransformsLinearInterpolateDeformationFieldGeneratorNew);
+  REGISTER_TEST(otbNNearestTransformsLinearInterpolateDeformationFieldGenerator);
+  REGISTER_TEST(otbBSplinesInterpolateTransformDeformationFieldGeneratorNew);
+  REGISTER_TEST(otbBSplinesInterpolateTransformDeformationFieldGenerator);
+  REGISTER_TEST(otbTranslationDeformationFieldEstimation);
+  REGISTER_TEST(otbEuler2DDeformationFieldEstimation);
+  REGISTER_TEST(otbCenteredRigidDeformationFieldEstimation);
 }

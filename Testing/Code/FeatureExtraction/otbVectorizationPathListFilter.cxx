@@ -67,23 +67,23 @@ int otbVectorizationPathListFilter(int argc, char * argv[])
   file.open(outfname);
   unsigned int counter = 0;
 
-  while(pathListIt!=pathList->End())
-    {
-      file<<"Path "<<counter<<": ";
-      for(VertexIteratorType vIt = pathListIt.Get()->GetVertexList()->Begin();
-    vIt!=pathListIt.Get()->GetVertexList()->End();
-    ++vIt)
+  while (pathListIt!=pathList->End())
   {
-    if(vIt!=pathListIt.Get()->GetVertexList()->Begin())
+    file<<"Path "<<counter<<": ";
+    for (VertexIteratorType vIt = pathListIt.Get()->GetVertexList()->Begin();
+         vIt!=pathListIt.Get()->GetVertexList()->End();
+         ++vIt)
+    {
+      if (vIt!=pathListIt.Get()->GetVertexList()->Begin())
       {
         file<<", ";
       }
-    file<<vIt.Value();
-  }
-      file<<std::endl;
-      ++pathListIt;
-      ++counter;
+      file<<vIt.Value();
     }
+    file<<std::endl;
+    ++pathListIt;
+    ++counter;
+  }
   file.close();
 
   OutputImageType::Pointer output = OutputImageType::New();

@@ -60,65 +60,65 @@ int otbRCC8VertexWithCompacity(int argc, char* argv[])
   vertex1->SetCompacity(compacity);
 
   otbControlConditionTestMacro(vertex1->GetSegmentationLevel()!=imageLevel,
-             "Test failed: vertex1->GetSegmentationLevel()!=imageLevel");
+                               "Test failed: vertex1->GetSegmentationLevel()!=imageLevel");
   otbControlConditionTestMacro( vertex1->GetSegmentationType()!=imageType,
-        "Test failed: vertex1->GetSegmentationType()!=imageType");
+                                "Test failed: vertex1->GetSegmentationType()!=imageType");
 
   otbControlConditionTestMacro(vertex1->GetPath()->GetVertexList()->GetElement(0)!=p1,
-             "Test failed:vertex1->GetPath()->GetVertexList()->GetElement(0)!=p1");
+                               "Test failed:vertex1->GetPath()->GetVertexList()->GetElement(0)!=p1");
   otbControlConditionTestMacro(vertex1->GetPath()->GetVertexList()->GetElement(1)!=p2,
-             "Test failed:vertex1->GetPath()->GetVertexList()->GetElement(1)!=p2");
+                               "Test failed:vertex1->GetPath()->GetVertexList()->GetElement(1)!=p2");
   otbControlConditionTestMacro(vertex1->GetPath()->GetVertexList()->GetElement(2)!=p3,
-             "Test failed:vertex1->GetPath()->GetVertexList()->GetElement(2)!=p3");
+                               "Test failed:vertex1->GetPath()->GetVertexList()->GetElement(2)!=p3");
   otbControlConditionTestMacro(vertex1->GetCompacity()!=compacity,
-             "Test failed: vertex1->GetSegmentationImageIndex()!=imageIndex");
+                               "Test failed: vertex1->GetSegmentationImageIndex()!=imageIndex");
   // attributes vector set test
   AttributesMapType attr1 = vertex1->GetAttributesMap();
 
   itk::OStringStream oss;
   oss<<p1[0];
   otbControlConditionTestMacro( attr1["P0x"].compare(oss.str())!=0,
-        "Test failed:attr1[\"P0x\"].compare(std::string(p1[0]))!=0");
+                                "Test failed:attr1[\"P0x\"].compare(std::string(p1[0]))!=0");
   oss.str("");
   oss<<p1[1];
   otbControlConditionTestMacro( attr1["P0y"].compare(oss.str())!=0,
-        "Test failed:attr1[\"P0y\"].compare(std::string(p1[1]))!=0");
+                                "Test failed:attr1[\"P0y\"].compare(std::string(p1[1]))!=0");
   oss.str("");
   oss<<p2[0];
   otbControlConditionTestMacro( attr1["P1x"].compare(oss.str())!=0,
-        "Test failed:attr1[\"P1x\"].compare(std::string(p2[0]))!=0");
+                                "Test failed:attr1[\"P1x\"].compare(std::string(p2[0]))!=0");
   oss.str("");
   oss<<p2[1];
   otbControlConditionTestMacro( attr1["P1y"].compare(oss.str())!=0,
-        "Test failed:attr1[\"P1y\"].compare(std::string(p2[1]))!=0");
+                                "Test failed:attr1[\"P1y\"].compare(std::string(p2[1]))!=0");
   oss.str("");
   oss<<p3[0];
   otbControlConditionTestMacro( attr1["P2x"].compare(oss.str())!=0,
-        "Test failed:attr1[\"P2x\"].compare(std::string(p3[0]))!=0");
+                                "Test failed:attr1[\"P2x\"].compare(std::string(p3[0]))!=0");
   oss.str("");
   oss<<p3[1];
   otbControlConditionTestMacro( attr1["P2y"].compare(oss.str())!=0,
-        "Test failed:attr1[\"P2y\"].compare(std::string(p3[1]))!=0");
+                                "Test failed:attr1[\"P2y\"].compare(std::string(p3[1]))!=0");
 
 
   otbControlConditionTestMacro(attr1["Compacity"].compare(std::string(argv[3]))!=0,
-             "Test failed: vertex1->GetAttributesMap()[\"Compacity\"]!=std::string(argv[2])");
+                               "Test failed: vertex1->GetAttributesMap()[\"Compacity\"]!=std::string(argv[2])");
   // attributes vector get test
   RCC8VertexType::Pointer vertex2 = RCC8VertexType::New();
   vertex2->SetAttributesMap(attr1);
   otbControlConditionTestMacro(vertex1->GetSegmentationLevel()!=vertex2->GetSegmentationLevel(),
-             "Test failed: vertex1->GetSegmentationLevel()!=vertex2->GetSegmentationLevel()");
+                               "Test failed: vertex1->GetSegmentationLevel()!=vertex2->GetSegmentationLevel()");
   otbControlConditionTestMacro(vertex1->GetSegmentationType()!=vertex2->GetSegmentationType(),
-             "Test failed: vertex1->GetSegmentationType()!=vertex2->GetSegmentationType()");
+                               "Test failed: vertex1->GetSegmentationType()!=vertex2->GetSegmentationType()");
 
   otbControlConditionTestMacro(vertex2->GetPath()->GetVertexList()->GetElement(0)!=p1,
-             "Test failed:vertex2->GetPath()->GetVertexList()->GetElement(0)!=p1");
+                               "Test failed:vertex2->GetPath()->GetVertexList()->GetElement(0)!=p1");
   otbControlConditionTestMacro(vertex2->GetPath()->GetVertexList()->GetElement(1)!=p2,
-             "Test failed:vertex2->GetPath()->GetVertexList()->GetElement(1)!=p2");
+                               "Test failed:vertex2->GetPath()->GetVertexList()->GetElement(1)!=p2");
   otbControlConditionTestMacro(vertex2->GetPath()->GetVertexList()->GetElement(2)!=p3,
-             "Test failed:vertex2->GetPath()->GetVertexList()->GetElement(2)!=p3");
+                               "Test failed:vertex2->GetPath()->GetVertexList()->GetElement(2)!=p3");
   otbControlConditionTestMacro(vertex1->GetCompacity()!=vertex2->GetCompacity(),
-             "Test failed: vertex1->GetCompacity()!=vertex2->GetCompacity()");
+                               "Test failed: vertex1->GetCompacity()!=vertex2->GetCompacity()");
 
 
   return EXIT_SUCCESS;

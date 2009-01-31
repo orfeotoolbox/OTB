@@ -41,7 +41,7 @@ int otbZoomableImageWidget( int argc, char * argv[] )
   WidgetType::Pointer widget = WidgetType::New();
   window.resizable(widget.GetPointer());
   widget->SetInput(reader->GetOutput());
-  if(reader->GetOutput()->GetNumberOfComponentsPerPixel()>=3)
+  if (reader->GetOutput()->GetNumberOfComponentsPerPixel()>=3)
     widget->SetViewModel(WidgetType::RGB);
   else
     widget->SetViewModel(WidgetType::GRAYSCALE);
@@ -54,30 +54,30 @@ int otbZoomableImageWidget( int argc, char * argv[] )
   widget->redraw();
   Fl::check();
 
-  for(double zoom  = 1.0;zoom<10.;zoom++)
-    {
-      Fl::check();
+  for (double zoom  = 1.0;zoom<10.;zoom++)
+  {
+    Fl::check();
 
-      index[0]=size[0]/2-static_cast<int>(static_cast<double>(size[0]/2)/zoom+0.5);
-      index[1]=size[1]/2-static_cast<int>(static_cast<double>(size[1]/2)/zoom+0.5);
-      widget->SetZoomUpperLeftCorner(index);
-      widget->SetZoomFactor(zoom);
-      widget->redraw();
-      Fl::wait(0.2);
-      Fl::check();
-    }
+    index[0]=size[0]/2-static_cast<int>(static_cast<double>(size[0]/2)/zoom+0.5);
+    index[1]=size[1]/2-static_cast<int>(static_cast<double>(size[1]/2)/zoom+0.5);
+    widget->SetZoomUpperLeftCorner(index);
+    widget->SetZoomFactor(zoom);
+    widget->redraw();
+    Fl::wait(0.2);
+    Fl::check();
+  }
 
-  for(double zoom=10.;zoom>=1.;zoom--)
-    {
-      Fl::check();
-      index[0]=size[0]/2-static_cast<int>(static_cast<double>(size[0])/(2*zoom)+0.5);
-      index[1]=size[1]/2-static_cast<int>(static_cast<double>(size[1])/(2*zoom)+0.5);
-      widget->SetZoomUpperLeftCorner(index);
-      widget->SetZoomFactor(zoom);
-      widget->redraw();
-      Fl::wait(0.2);
-      Fl::check();
-    }
+  for (double zoom=10.;zoom>=1.;zoom--)
+  {
+    Fl::check();
+    index[0]=size[0]/2-static_cast<int>(static_cast<double>(size[0])/(2*zoom)+0.5);
+    index[1]=size[1]/2-static_cast<int>(static_cast<double>(size[1])/(2*zoom)+0.5);
+    widget->SetZoomUpperLeftCorner(index);
+    widget->SetZoomFactor(zoom);
+    widget->redraw();
+    Fl::wait(0.2);
+    Fl::check();
+  }
 
   // suppres child, without delete memory.
   // delete memory is ITK respoability, since WidgetType::New()

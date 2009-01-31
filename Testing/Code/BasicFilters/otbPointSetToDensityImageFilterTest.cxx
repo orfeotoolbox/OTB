@@ -37,8 +37,8 @@ int otbPointSetToDensityImageFilterTest(int argc, char* argv[] )
 
 
   const   unsigned int                                             Dimension = 2;
-  typedef float                                                    PixelType; 
-  
+  typedef float                                                    PixelType;
+
   typedef otb::Image<PixelType , Dimension>                        ImageType;
   typedef otb::ImageFileReader<ImageType>                          ReaderType;
   typedef otb::ImageFileWriter<ImageType>                          WriterType;
@@ -47,34 +47,34 @@ int otbPointSetToDensityImageFilterTest(int argc, char* argv[] )
   typedef otb::ImageToSIFTKeyPointSetFilter<ImageType,PointSetType>    DetectorType;
 
   typedef otb::PointSetToDensityImageFilter <PointSetType,ImageType>    FunctionType;
- 
+
   /**Instancitation of an object*/
   FunctionType::Pointer    filter = FunctionType::New();
   DetectorType::Pointer    detector = DetectorType::New();
   ReaderType::Pointer      reader = ReaderType::New();
-   
+
   reader->SetFileName(infname);
   reader->GenerateOutputInformation();
- 
+
 
   detector->SetInput(reader->GetOutput());
   detector ->SetOctavesNumber(octaves);
   detector->SetScalesNumber(scales);
 
-  
+
   /** PointSetImageToDensity ImageFilter*/
   filter->SetInput(detector->GetOutput());
   filter->SetRadius(radius);
   filter->SetSpacing(reader->GetOutput()->GetSpacing());
   filter->SetSize(reader->GetOutput()->GetLargestPossibleRegion().GetSize());
   filter->SetOrigin(reader->GetOutput()->GetOrigin());
-  
+
   /** Writing the densty Image*/
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outfname);
   writer->SetInput(filter->GetOutput());
   writer->Update();
-  
+
   return EXIT_SUCCESS;
 }
 

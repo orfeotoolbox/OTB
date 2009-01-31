@@ -27,12 +27,12 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbAssociativeSymmetricalSumNew);
-REGISTER_TEST(otbAssociativeSymmetricalSum);
-REGISTER_TEST(otbAssymmetricFusionOfLineDetectorNew);
-REGISTER_TEST(otbAssymmetricFusionOfLineDetector);
-REGISTER_TEST(otbHarrisImage);
-REGISTER_TEST(otbMultiplyByScalarImageFilterTest);
-REGISTER_TEST(otbThresholdImageToPointSetFilterNew);
-REGISTER_TEST(otbThresholdImageToPointSetTest);
+  REGISTER_TEST(otbAssociativeSymmetricalSumNew);
+  REGISTER_TEST(otbAssociativeSymmetricalSum);
+  REGISTER_TEST(otbAssymmetricFusionOfLineDetectorNew);
+  REGISTER_TEST(otbAssymmetricFusionOfLineDetector);
+  REGISTER_TEST(otbHarrisImage);
+  REGISTER_TEST(otbMultiplyByScalarImageFilterTest);
+  REGISTER_TEST(otbThresholdImageToPointSetFilterNew);
+  REGISTER_TEST(otbThresholdImageToPointSetTest);
 }

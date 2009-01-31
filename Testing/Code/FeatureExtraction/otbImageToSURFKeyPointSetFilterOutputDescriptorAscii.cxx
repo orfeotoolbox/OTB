@@ -33,7 +33,7 @@ PURPOSE.  See the above copyright notices for more information.
 int otbImageToSURFKeyPointSetFilterOutputDescriptorAscii(int argc, char * argv[])
 {
 
-  if(argc < 5 )
+  if (argc < 5 )
   {
     std::cout << " Usage : otbSURFTest imageName FileOutName Octave[int] Level[int]" << std::endl;
     return EXIT_FAILURE;
@@ -80,19 +80,19 @@ int otbImageToSURFKeyPointSetFilterOutputDescriptorAscii(int argc, char * argv[]
   outfile << "Number of scales: "<<scales << std::endl;
   outfile << "Number of SURF key points: " << filter->GetNumberOfPoints() << std::endl;
 
-  while( pIt!=filter->GetOutput()->GetPoints()->End() )
+  while ( pIt!=filter->GetOutput()->GetPoints()->End() )
+  {
+    outfile << "[" ;
+    unsigned int lIterDesc=0;
+    while (lIterDesc < pDataIt.Value().Size())
     {
-      outfile << "[" ;
-      unsigned int lIterDesc=0;
-      while (lIterDesc < pDataIt.Value().Size())
-	{
-	  outfile  <<std::setprecision(3) << pDataIt.Value()[lIterDesc] << " ";
-	  lIterDesc++;
-	}
-      outfile << "]" << std::endl;
-      ++pIt;
-      ++pDataIt;
+      outfile  <<std::setprecision(3) << pDataIt.Value()[lIterDesc] << " ";
+      lIterDesc++;
     }
+    outfile << "]" << std::endl;
+    ++pIt;
+    ++pDataIt;
+  }
 
   outfile.close();
 

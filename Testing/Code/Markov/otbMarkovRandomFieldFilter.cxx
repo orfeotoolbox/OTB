@@ -103,7 +103,7 @@ int otbMarkovRandomFieldFilter(int argc, char* argv[] )
   markovFilter->SetInput(reader->GetOutput());
 
   typedef itk::RescaleIntensityImageFilter
-      < LabelledImageType, LabelledImageType > RescaleType;
+  < LabelledImageType, LabelledImageType > RescaleType;
   RescaleType::Pointer rescaleFilter = RescaleType::New();
   rescaleFilter->SetOutputMinimum(0);
   rescaleFilter->SetOutputMaximum(255);

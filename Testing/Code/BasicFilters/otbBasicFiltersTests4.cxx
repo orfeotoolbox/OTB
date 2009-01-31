@@ -27,13 +27,13 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbImageListToImageListApplyFilterNew);
-REGISTER_TEST(otbImageListToImageListApplyFilter);
-REGISTER_TEST(otbPerBandVectorImageFilterNew);
-REGISTER_TEST(otbPerBandVectorImageFilterWithMeanFilter);
-REGISTER_TEST(otbPerBandVectorImageFilterWithSobelFilter);
-REGISTER_TEST(otbStreamingStatisticsImageFilterNew);
-REGISTER_TEST(otbStreamingStatisticsImageFilter);
-REGISTER_TEST(otbVectorImageTo3DScalarImageFilterNew);
-REGISTER_TEST(otbVectorImageTo3DScalarImageFilter);
+  REGISTER_TEST(otbImageListToImageListApplyFilterNew);
+  REGISTER_TEST(otbImageListToImageListApplyFilter);
+  REGISTER_TEST(otbPerBandVectorImageFilterNew);
+  REGISTER_TEST(otbPerBandVectorImageFilterWithMeanFilter);
+  REGISTER_TEST(otbPerBandVectorImageFilterWithSobelFilter);
+  REGISTER_TEST(otbStreamingStatisticsImageFilterNew);
+  REGISTER_TEST(otbStreamingStatisticsImageFilter);
+  REGISTER_TEST(otbVectorImageTo3DScalarImageFilterNew);
+  REGISTER_TEST(otbVectorImageTo3DScalarImageFilter);
 }

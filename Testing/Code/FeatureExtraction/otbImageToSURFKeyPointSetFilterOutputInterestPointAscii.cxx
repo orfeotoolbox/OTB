@@ -33,7 +33,7 @@ PURPOSE.  See the above copyright notices for more information.
 int otbImageToSURFKeyPointSetFilterOutputInterestPointAscii(int argc, char * argv[])
 {
 
-  if(argc < 5 )
+  if (argc < 5 )
   {
     std::cout << " Usage : otbSURFTest imageName FileOutName Octave[int] Level[int]" << std::endl;
     return EXIT_FAILURE;
@@ -80,11 +80,11 @@ int otbImageToSURFKeyPointSetFilterOutputInterestPointAscii(int argc, char * arg
   outfile << "Number of scales: "<<scales << std::endl;
   outfile << "Number of SURF key points: " << filter->GetNumberOfPoints() << std::endl;
 
-  while( pIt!=filter->GetOutput()->GetPoints()->End() )
-    {
-      outfile << "[" << std::fixed << std::setprecision(2) << pIt.Value()[0] << ", " << std::setprecision(2) << pIt.Value()[1] << "]" << std::endl;
-      ++pIt;
-    }
+  while ( pIt!=filter->GetOutput()->GetPoints()->End() )
+  {
+    outfile << "[" << std::fixed << std::setprecision(2) << pIt.Value()[0] << ", " << std::setprecision(2) << pIt.Value()[1] << "]" << std::endl;
+    ++pIt;
+  }
 
   outfile.close();
 

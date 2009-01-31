@@ -26,14 +26,14 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbImageListToImageListFilterNew);
-REGISTER_TEST(otbConcatenateVectorImageFilterNew);
-REGISTER_TEST(otbConcatenateVectorImageFilter);
-REGISTER_TEST(otbImageToVectorImageCastFilterNew);
-REGISTER_TEST(otbImageToVectorImageCastFilter);
-REGISTER_TEST(otbImageToPathFilterNew);
-REGISTER_TEST(otbSpatialObjectSourceNew);
-REGISTER_TEST(otbLineSpatialObjectNew);
-REGISTER_TEST(otbArcSpatialObjectNew);
-REGISTER_TEST(otbPathListToPathListFilterNew);
+  REGISTER_TEST(otbImageListToImageListFilterNew);
+  REGISTER_TEST(otbConcatenateVectorImageFilterNew);
+  REGISTER_TEST(otbConcatenateVectorImageFilter);
+  REGISTER_TEST(otbImageToVectorImageCastFilterNew);
+  REGISTER_TEST(otbImageToVectorImageCastFilter);
+  REGISTER_TEST(otbImageToPathFilterNew);
+  REGISTER_TEST(otbSpatialObjectSourceNew);
+  REGISTER_TEST(otbLineSpatialObjectNew);
+  REGISTER_TEST(otbArcSpatialObjectNew);
+  REGISTER_TEST(otbPathListToPathListFilterNew);
 }

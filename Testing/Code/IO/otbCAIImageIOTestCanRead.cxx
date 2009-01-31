@@ -29,10 +29,10 @@ int otbCAIImageIOTestCanRead(int argc, char* argv[])
   otb::CAIImageIO::Pointer lCAIImageIO = otb::CAIImageIO::New();
   bool lCanRead = lCAIImageIO->CanReadFile(argv[1]);
   if ( lCanRead == false)
-    {
-      std::cerr << "Erreur otb::CAIImageIO : impossible d'ouvrir l'image "<<argv[1]<<"."<<std::endl;
-      return EXIT_FAILURE;
-    }
+  {
+    std::cerr << "Erreur otb::CAIImageIO : impossible d'ouvrir l'image "<<argv[1]<<"."<<std::endl;
+    return EXIT_FAILURE;
+  }
 
 
   return EXIT_SUCCESS;

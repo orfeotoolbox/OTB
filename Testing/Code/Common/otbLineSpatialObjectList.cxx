@@ -29,20 +29,20 @@ int otbLineSpatialObjectList( int argc, char * argv[] )
   typedef LineSpatialObjectListType::const_iterator                       LineSpatialObjectListConstIterator;
 
   LineSpatialObjectListType::Pointer listLines = LineSpatialObjectListType::New();
-  for( int i = 0 ; i < 10 ; i++ )
-    {
-      LineSpatialObjecType::Pointer lLine = LineSpatialObjecType::New();
-      listLines->push_back( lLine );
-    }
+  for ( int i = 0 ; i < 10 ; i++ )
+  {
+    LineSpatialObjecType::Pointer lLine = LineSpatialObjecType::New();
+    listLines->push_back( lLine );
+  }
 
   LineSpatialObjectListConstIterator lIter;
   lIter = listLines->begin();
-  while( lIter != listLines->end() )
-    {
-      LineSpatialObjecType::Pointer lLine = (*lIter);
-      PointListType lPoints = lLine->GetPoints();
-      lIter++;
-    }
+  while ( lIter != listLines->end() )
+  {
+    LineSpatialObjecType::Pointer lLine = (*lIter);
+    PointListType lPoints = lLine->GetPoints();
+    lIter++;
+  }
 
 
   return EXIT_SUCCESS;

@@ -34,22 +34,22 @@ int otbSystemTest( int argc, char* argv[] )
   const char * inputDirName   = argv[2];
   itk::OStringStream msg;
 
-  if( otb::System::IsAFileName( inputFileName ) == false )
-    {
-      itkGenericExceptionMacro( <<"System::IsAFileName() error : the filename "<<inputFileName<<" is not detected.");
-    }
-  if( otb::System::IsADirName( inputFileName ) == true )
-    {
-      itkGenericExceptionMacro( <<"System::IsADirName() error : the filename "<<inputFileName<<" is detected.");
-    }
-  if( otb::System::IsAFileName( inputDirName ) == true )
-    {
-      itkGenericExceptionMacro(<< "System::IsAFileName() error : the dirname "<<inputDirName<<" is detected!!");
-    }
-  if( otb::System::IsADirName( inputDirName ) == false )
-    {
-      itkGenericExceptionMacro(<< "System::IsADirName() error : the dirname "<<inputDirName<<" is not detected!!");
-    }
+  if ( otb::System::IsAFileName( inputFileName ) == false )
+  {
+    itkGenericExceptionMacro( <<"System::IsAFileName() error : the filename "<<inputFileName<<" is not detected.");
+  }
+  if ( otb::System::IsADirName( inputFileName ) == true )
+  {
+    itkGenericExceptionMacro( <<"System::IsADirName() error : the filename "<<inputFileName<<" is detected.");
+  }
+  if ( otb::System::IsAFileName( inputDirName ) == true )
+  {
+    itkGenericExceptionMacro(<< "System::IsAFileName() error : the dirname "<<inputDirName<<" is detected!!");
+  }
+  if ( otb::System::IsADirName( inputDirName ) == false )
+  {
+    itkGenericExceptionMacro(<< "System::IsADirName() error : the dirname "<<inputDirName<<" is not detected!!");
+  }
 
 
 

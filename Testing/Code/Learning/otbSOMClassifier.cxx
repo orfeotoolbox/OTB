@@ -33,11 +33,11 @@
 int otbSOMClassifier(int argc, char* argv[] )
 {
   if (argc != 4)
-    {
-      std::cout << "Usage : " << argv[0] << " inputImage modelFile outputImage"
-                << std::endl ;
-      return EXIT_FAILURE;
-    }
+  {
+    std::cout << "Usage : " << argv[0] << " inputImage modelFile outputImage"
+              << std::endl ;
+    return EXIT_FAILURE;
+  }
 
   const char * imageFilename  = argv[1];
   const char * mapFilename  = argv[2];
@@ -75,11 +75,11 @@ int otbSOMClassifier(int argc, char* argv[] )
 
   it.GoToBegin();
 
-  while(!it.IsAtEnd())
-    {
-      listSample->PushBack(it.Get());
-      ++it;
-    }
+  while (!it.IsAtEnd())
+  {
+    listSample->PushBack(it.Get());
+    ++it;
+  }
 
   ClassifierType::Pointer classifier = ClassifierType::New() ;
   classifier->SetSample(listSample.GetPointer());
@@ -98,11 +98,11 @@ int otbSOMClassifier(int argc, char* argv[] )
   outIt.GoToBegin();
 
   while (m_iter != m_last && !outIt.IsAtEnd())
-    {
-      outIt.Set(m_iter.GetClassLabel());
-      ++m_iter ;
-      ++outIt;
-    }
+  {
+    outIt.Set(m_iter.GetClassLabel());
+    ++m_iter ;
+    ++outIt;
+  }
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputFilename);

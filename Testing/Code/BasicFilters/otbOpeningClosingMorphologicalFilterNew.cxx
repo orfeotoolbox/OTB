@@ -30,7 +30,7 @@ int otbOpeningClosingMorphologicalFilterNew(int argc, char * argv[])
   typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
   typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
   typedef otb::OpeningClosingMorphologicalFilter<InputImageType,OutputImageType,
-    StructuringElementType> OpeningClosingFilterType;
+  StructuringElementType> OpeningClosingFilterType;
 
   // instantiating the opening closing filter
   OpeningClosingFilterType::Pointer openingClosing = OpeningClosingFilterType::New();

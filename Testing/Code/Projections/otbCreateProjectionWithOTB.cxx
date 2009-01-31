@@ -59,12 +59,12 @@ int otbCreateProjectionWithOTB( int argc, char* argv[] )
 {
   ossimInit::instance()->initialize(argc, argv);
 
-  if(argc!=2)
-    {
-      std::cout << argv[0] <<" <input filename> " << std::endl;
+  if (argc!=2)
+  {
+    std::cout << argv[0] <<" <input filename> " << std::endl;
 
-      return EXIT_FAILURE;
-    }
+    return EXIT_FAILURE;
+  }
 
   typedef otb::Image<unsigned int, 2>     ImageType;
   typedef otb::ImageFileReader<ImageType>  ReaderType;
@@ -98,17 +98,17 @@ int otbCreateProjectionWithOTB( int argc, char* argv[] )
   ossimProjection * model = NULL;
   otbGenericMsgDebugMacro(<< "Creating projection..." );
   model = ossimProjectionFactoryRegistry::instance()->createProjection(geom);
-  if( model == NULL)
-    {
-      itkGenericExceptionMacro(<<"Invalid Model * == NULL !");
-    }
+  if ( model == NULL)
+  {
+    itkGenericExceptionMacro(<<"Invalid Model * == NULL !");
+  }
 
   otbGenericMsgDebugMacro(<< "Creating RefPtr of projection..." );
   ossimRefPtr<ossimProjection> ptrmodel = model;
-  if( ptrmodel.valid() == false )
-    {
-      itkGenericExceptionMacro(<<"Invalid Model pointer .valid() == false !");
-    }
+  if ( ptrmodel.valid() == false )
+  {
+    itkGenericExceptionMacro(<<"Invalid Model pointer .valid() == false !");
+  }
 
 
   return EXIT_SUCCESS;

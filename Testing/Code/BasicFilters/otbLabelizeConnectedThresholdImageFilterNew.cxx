@@ -32,7 +32,7 @@ int otbLabelizeConnectedThresholdImageFilterNew( int argc, char * argv[] )
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
   typedef otb::LabelizeConnectedThresholdImageFilter
-    <InputImageType, OutputImageType> LabelizeFilterType;
+  <InputImageType, OutputImageType> LabelizeFilterType;
   typedef LabelizeFilterType::Pointer LabelizeFilterPointerType;
 
   LabelizeFilterPointerType filter = LabelizeFilterType::New();

@@ -47,11 +47,11 @@ int otbCreateInverseForwardSensorModel( int argc, char* argv[] )
 {
   ossimInit::instance()->initialize(argc, argv);
 
-  if(argc!=2)
-    {
-      std::cout << argv[0] <<" <input filename>" << std::endl;
-      return EXIT_FAILURE;
-    }
+  if (argc!=2)
+  {
+    std::cout << argv[0] <<" <input filename>" << std::endl;
+    return EXIT_FAILURE;
+  }
 
   typedef otb::Image<unsigned int, 2>     ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;

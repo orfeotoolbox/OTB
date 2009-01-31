@@ -27,12 +27,12 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbFlusserPathNew);
-REGISTER_TEST(otbFlusserPath);
-REGISTER_TEST(otbOrientationPathNew);
-REGISTER_TEST(otbOrientationPath);
-REGISTER_TEST(otbCompacityPathNew);
-REGISTER_TEST(otbCompacityPathCircle);
-REGISTER_TEST(otbCompacityPathSquare);
-REGISTER_TEST(otbCompacityPathRectangle);
+  REGISTER_TEST(otbFlusserPathNew);
+  REGISTER_TEST(otbFlusserPath);
+  REGISTER_TEST(otbOrientationPathNew);
+  REGISTER_TEST(otbOrientationPath);
+  REGISTER_TEST(otbCompacityPathNew);
+  REGISTER_TEST(otbCompacityPathCircle);
+  REGISTER_TEST(otbCompacityPathSquare);
+  REGISTER_TEST(otbCompacityPathRectangle);
 }

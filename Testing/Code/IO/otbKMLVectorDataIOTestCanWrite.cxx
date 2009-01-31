@@ -27,10 +27,10 @@ int otbKMLVectorDataIOTestCanWrite(int argc, char* argv[])
   KMLVectorDataIOType::Pointer object = KMLVectorDataIOType::New();
   bool lCanRead = object->CanWriteFile(argv[1]);
   if ( lCanRead == false)
-    {
-      std::cerr << "Erreur otb::KMLVectorDataIO : impossible to create the file "<<argv[1]<<"."<<std::endl;
-      return EXIT_FAILURE;
-    }
+  {
+    std::cerr << "Erreur otb::KMLVectorDataIO : impossible to create the file "<<argv[1]<<"."<<std::endl;
+    return EXIT_FAILURE;
+  }
 
   return EXIT_SUCCESS;
 }

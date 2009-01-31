@@ -20,24 +20,24 @@ PURPOSE.  See the above copyright notices for more information.
 int otbZoomableImageWidgetNew( int argc, char * argv[] )
 {
   try
-    {
-      typedef float PixelType;
-      typedef otb::ZoomableImageWidget<PixelType> WidgetType;
+  {
+    typedef float PixelType;
+    typedef otb::ZoomableImageWidget<PixelType> WidgetType;
 
-      WidgetType::Pointer widget = WidgetType::New();
-    }
+    WidgetType::Pointer widget = WidgetType::New();
+  }
 
-  catch( itk::ExceptionObject & err )
-    {
-      std::cout << "Exception itk::ExceptionObject levee !" << std::endl;
-      std::cout << err << std::endl;
-      return EXIT_FAILURE;
-    }
-  catch( ... )
-    {
-      std::cout << "Exception levee inconnue !" << std::endl;
-      return EXIT_FAILURE;
-    }
+  catch ( itk::ExceptionObject & err )
+  {
+    std::cout << "Exception itk::ExceptionObject levee !" << std::endl;
+    std::cout << err << std::endl;
+    return EXIT_FAILURE;
+  }
+  catch ( ... )
+  {
+    std::cout << "Exception levee inconnue !" << std::endl;
+    return EXIT_FAILURE;
+  }
 
 
   return EXIT_SUCCESS;

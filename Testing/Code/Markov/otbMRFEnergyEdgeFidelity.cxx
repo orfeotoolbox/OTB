@@ -25,7 +25,7 @@
 
 int otbMRFEnergyEdgeFidelity(int argc, char * argv[])
 {
-   const char * outputFile = argv[1];
+  const char * outputFile = argv[1];
 
   typedef double                                       PixelTypeInput;
   typedef int                                          PixelTypeLabel;

@@ -29,7 +29,7 @@ int otbMorphologicalPyramidSegmentationFilterNew(int argc, char * argv[])
   typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
 
   typedef otb::MorphologicalPyramidSegmentationFilter<InputImageType,OutputImageType>
-    SegmentationFilterType;
+  SegmentationFilterType;
 
   // Instantiation
   SegmentationFilterType::Pointer segmentation = SegmentationFilterType::New();

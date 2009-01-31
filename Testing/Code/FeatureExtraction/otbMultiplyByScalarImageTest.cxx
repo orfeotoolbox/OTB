@@ -35,10 +35,10 @@ int otbMultiplyByScalarImageFilterTest( int argc, char * argv[] )
 
   // Declare Iterator types apropriated for each image
   typedef itk::ImageRegionIteratorWithIndex<
-    InputImageType>  InputIteratorType;
+  InputImageType>  InputIteratorType;
 
   typedef itk::ImageRegionIteratorWithIndex<
-    OutputImageType>  OutputIteratorType;
+  OutputImageType>  OutputIteratorType;
 
   // Declare the type of the index to access images
   typedef itk::Index<ImageDimension>         IndexType;
@@ -76,12 +76,12 @@ int otbMultiplyByScalarImageFilterTest( int argc, char * argv[] )
   const double value = pi / 6.0;
   std::cout << "Content of the Input " << std::endl;
   it.GoToBegin();
-  while( !it.IsAtEnd() )
-    {
-      it.Set( value );
-      std::cout << it.Get() << std::endl;
-      ++it;
-    }
+  while ( !it.IsAtEnd() )
+  {
+    it.Set( value );
+    std::cout << it.Get() << std::endl;
+    ++it;
+  }
 
   // Declare the type for the Acos filter
   typedef otb::MultiplyByScalarImageFilter< InputImageType, OutputImageType>  FilterType;
@@ -107,24 +107,24 @@ int otbMultiplyByScalarImageFilterTest( int argc, char * argv[] )
   const OutputImageType::PixelType epsilon = 1e-6;
   ot.GoToBegin();
   it.GoToBegin();
-  while( !ot.IsAtEnd() )
-    {
-      std::cout <<  ot.Get() << " = ";
-      std::cout <<  10.0 * ( it.Get() )  << std::endl;
-      const InputImageType::PixelType  input  = it.Get();
-      const OutputImageType::PixelType output = ot.Get();
-      const OutputImageType::PixelType multiplyByScal  = 10.0* input;
-      if( vcl_abs( multiplyByScal - output ) > epsilon )
+  while ( !ot.IsAtEnd() )
   {
-    std::cerr << "Error in otbMultiplyScalarImageFilterTest " << std::endl;
-    std::cerr << " 10.0 * " << input << ") = " << multiplyByScal << std::endl;
-    std::cerr << " differs from " << output;
-    std::cerr << " by more than " << epsilon << std::endl;
-    return 1;
-  }
-      ++ot;
-      ++it;
+    std::cout <<  ot.Get() << " = ";
+    std::cout <<  10.0 * ( it.Get() )  << std::endl;
+    const InputImageType::PixelType  input  = it.Get();
+    const OutputImageType::PixelType output = ot.Get();
+    const OutputImageType::PixelType multiplyByScal  = 10.0* input;
+    if ( vcl_abs( multiplyByScal - output ) > epsilon )
+    {
+      std::cerr << "Error in otbMultiplyScalarImageFilterTest " << std::endl;
+      std::cerr << " 10.0 * " << input << ") = " << multiplyByScal << std::endl;
+      std::cerr << " differs from " << output;
+      std::cerr << " by more than " << epsilon << std::endl;
+      return 1;
     }
+    ++ot;
+    ++it;
+  }
 
 
   return EXIT_SUCCESS;

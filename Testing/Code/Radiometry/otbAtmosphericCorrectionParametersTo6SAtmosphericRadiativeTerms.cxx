@@ -92,10 +92,10 @@ int otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms(int argc, ch
 
   //fin.open(wavelenghFiles[i]);
   while (!fin.eof() && fin.good())
-    {
-      fin >> value;
-      vect.push_back(value);
-    }
+  {
+    fin >> value;
+    vect.push_back(value);
+  }
 
   fin.close();
   functionValues->SetFilterFunctionValues(vect);
@@ -157,15 +157,15 @@ int otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms(int argc, ch
   fout <<" ---------------------------------------------------------"<<std::endl;
   fout<<"Input wavelenght band values ["<<functionValues->GetFilterFunctionValues().size()<<"]:"<<std::endl;
   for (unsigned int i=0; i<functionValues->GetFilterFunctionValues().size(); i++)
-    {
-      fout<< "    "<<functionValues->GetFilterFunctionValues()[i] <<std::endl;
-    }
+  {
+    fout<< "    "<<functionValues->GetFilterFunctionValues()[i] <<std::endl;
+  }
   fout <<" ---------------------------------------------------------"<<std::endl;
   fout<<"Output wavelenght band values 6S ["<<functionValues->GetFilterFunctionValues6S().size()<<"]:"<<std::endl;
   for (unsigned int i=0; i<functionValues->GetFilterFunctionValues6S().size(); i++)
-    {
-      fout<< "            "<<functionValues->GetFilterFunctionValues6S()[i] <<std::endl;
-    }
+  {
+    fout<< "            "<<functionValues->GetFilterFunctionValues6S()[i] <<std::endl;
+  }
   fout<<std::endl;
   fout.close();
   return EXIT_SUCCESS;

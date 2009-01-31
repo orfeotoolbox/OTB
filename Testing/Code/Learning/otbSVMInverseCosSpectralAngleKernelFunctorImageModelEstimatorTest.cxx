@@ -46,7 +46,7 @@ int otbSVMInverseCosSpectralAngleKernelFunctorImageModelEstimatorTest( int argc,
   typedef otb::Image< int,  Dimension >                    TrainingImageType;
   typedef std::vector<double>                              VectorType;
   typedef otb::SVMImageModelEstimator< InputImageType,
-                                       TrainingImageType > EstimatorType;
+  TrainingImageType > EstimatorType;
   typedef otb::ImageFileReader< InputImageType >           InputReaderType;
   typedef otb::ImageFileReader< TrainingImageType >        TrainingReaderType;
 
@@ -64,14 +64,14 @@ int otbSVMInverseCosSpectralAngleKernelFunctorImageModelEstimatorTest( int argc,
   svmEstimator->SetNumberOfClasses( 2 );
   svmEstimator->SetSVMType(ONE_CLASS);
 
-    otb::InverseCosSAMKernelFunctor myKernel;
+  otb::InverseCosSAMKernelFunctor myKernel;
   myKernel.SetValue( "Coef", 1.0 );
   myKernel.Update();
 
   svmEstimator->SetKernelFunctor( &myKernel );
   svmEstimator->SetKernelType( GENERIC );
 
-  
+
   svmEstimator->Update();
 
   otbGenericMsgDebugMacro(<<"Saving model");

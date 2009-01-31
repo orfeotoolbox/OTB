@@ -65,29 +65,29 @@ int otbFrostFilterTest( int argc, char * argv[] )
 
   itk::ImageRegionIterator<FloatImage2DType> it;
   it = itk::ImageRegionIterator<FloatImage2DType>(random->GetOutput(),
-                               random->GetOutput()->GetBufferedRegion());
+       random->GetOutput()->GetBufferedRegion());
   std::cout << "Input image" << std::endl;
   unsigned int i;
   for (i=1; !it.IsAtEnd(); ++i, ++it)
-    {
+  {
     std::cout << "\t" << it.Get();
     if ((i % 8) == 0)
-      {
+    {
       std::cout << std::endl;
-      }
     }
+  }
 
   std::cout << "Output image" << std::endl;
   it = itk::ImageRegionIterator<FloatImage2DType>(frost->GetOutput(),
-                               frost->GetOutput()->GetBufferedRegion());
+       frost->GetOutput()->GetBufferedRegion());
   for (i=1; !it.IsAtEnd(); ++i, ++it)
-    {
+  {
     std::cout << "\t" << it.Get();
     if ((i % 8) == 0)
-      {
+    {
       std::cout << std::endl;
-      }
     }
+  }
 
   // Test the itkGetConstReferenceMacro
   const FloatImage2DType::SizeType & radius = frost->GetRadius();

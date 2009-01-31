@@ -29,7 +29,7 @@ int otbKeyPointSetsMatchingFilterNew(int argc, char * argv[])
   typedef otb::KeyPointSetsMatchingFilter<PointSetType> EuclideanDistanceMatchingFilterType;
 
   // Instantiating object
-   EuclideanDistanceMatchingFilterType::Pointer object = EuclideanDistanceMatchingFilterType::New();
-  
+  EuclideanDistanceMatchingFilterType::Pointer object = EuclideanDistanceMatchingFilterType::New();
+
   return EXIT_SUCCESS;
 }

@@ -51,7 +51,7 @@ int otbCloudEstimatorFilter(int argc, char * argv[])
 
   const double variance = (atof(argv[7]));
 
- // Instantiating object
+// Instantiating object
   ReaderType::Pointer reader = ReaderType::New();
   CloudEstimatorFilterType::Pointer cloudEstimator = CloudEstimatorFilterType::New();
   WriterType::Pointer writer = WriterType::New();

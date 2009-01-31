@@ -34,9 +34,9 @@ int otbKeyPointDensityImageFilterTest(int argc, char* argv[] )
   const unsigned int scales = atoi(argv[3]);
   const unsigned int octaves = atoi(argv[4]);
   const unsigned int radius = atoi(argv[5]);
-  
+
   const   unsigned int                                      Dimension = 2;
-  typedef float                                             PixelType; 
+  typedef float                                             PixelType;
 
   typedef otb::Image< PixelType, Dimension >                                    ImageType;
   typedef ImageType::IndexType                                                  IndexType;
@@ -45,34 +45,34 @@ int otbKeyPointDensityImageFilterTest(int argc, char* argv[] )
   typedef itk::VariableLengthVector<PixelType>                                  RealVectorType;
   typedef itk::PointSet<RealVectorType,Dimension>                               PointSetType;
   typedef otb::ImageToSIFTKeyPointSetFilter<ImageType,PointSetType>             DetectorType;
-  
+
   typedef otb::KeyPointDensityImageFilter< ImageType,DetectorType, ImageType>   FilterType;
-  
-  
+
+
   /**Instancitation of an object*/
   FilterType::Pointer    filter =     FilterType::New();
   DetectorType::Pointer  detector = DetectorType::New();
   ReaderType::Pointer      reader = ReaderType::New();
-  
+
   reader->SetFileName(infname);
   reader->GenerateOutputInformation();
-  
+
   filter->SetInput(reader->GetOutput());
   detector = filter->GetDetector();
   detector ->SetOctavesNumber(octaves);
   detector->SetScalesNumber(scales);
 
-  
+
   filter->SetDetector(detector);
   filter->SetNeighborhoodRadius(radius);
-  
+
   /** Writing the densty Image*/
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outfname);
   writer->SetInput(filter->GetOutput());
   writer->Update();
-  
-  
+
+
 
   return EXIT_SUCCESS;
 }

@@ -46,9 +46,9 @@ int otbMorphologicalPyramidAnalysisFilter(int argc, char * argv[])
 
   typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
   typedef otb::OpeningClosingMorphologicalFilter<InputImageType,InputImageType,StructuringElementType>
-    OpeningClosingFilterType;
+  OpeningClosingFilterType;
   typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,OutputImageType,OpeningClosingFilterType>
-    PyramidFilterType;
+  PyramidFilterType;
   typedef PyramidFilterType::OutputImageListType::Iterator ImageListIterator;
 
   // Reading input image
@@ -76,46 +76,46 @@ int otbMorphologicalPyramidAnalysisFilter(int argc, char * argv[])
   //      std::stringstream oss;
   itk::OStringStream oss;
   // Writing the results images
-  while((itAnalyse!=pyramid->GetOutput()->End())
-  &&(itSupFilter!=pyramid->GetSupFilter()->End())
-  &&(itInfFilter!=pyramid->GetInfFilter()->End())
-  &&(itInfDeci!=pyramid->GetInfDeci()->End())
-  &&(itSupDeci!=pyramid->GetSupDeci()->End())
-  )
-    {
-      oss<<outputFilenamePrefix<<"_an_"<<i<<"."<<outputFilenameSuffix;
-      writer->SetInput(itAnalyse.Get());
-      writer->SetFileName(oss.str().c_str());
-      writer->Update();
-      oss.str("");
-      oss<<outputFilenamePrefix<<"_sf_"<<i<<"."<<outputFilenameSuffix;
-      writer->SetInput(itSupFilter.Get());
-      writer->SetFileName(oss.str().c_str());
-      writer->Update();
-      oss.str("");
-      oss<<outputFilenamePrefix<<"_if_"<<i<<"."<<outputFilenameSuffix;
-      writer->SetInput(itInfFilter.Get());
-      writer->SetFileName(oss.str().c_str());
-      writer->Update();
-      oss.str("");
-      oss<<outputFilenamePrefix<<"_id_"<<i<<"."<<outputFilenameSuffix;
-      writer->SetInput(itInfDeci.Get());
-      writer->SetFileName(oss.str().c_str());
-      writer->Update();
-      std::cout<<"File "<<oss<<" written"<<std::endl;
-      oss.str("");
-      oss<<outputFilenamePrefix<<"_sd_"<<i<<"."<<outputFilenameSuffix;
-      writer->SetInput(itSupDeci.Get());
-      writer->SetFileName(oss.str().c_str());
-      writer->Update();
-      oss.str("");
-      ++itAnalyse;
-      ++itSupFilter;
-      ++itInfFilter;
-      ++itInfDeci;
-      ++itSupDeci;
-      ++i;
-    }
+  while ((itAnalyse!=pyramid->GetOutput()->End())
+         &&(itSupFilter!=pyramid->GetSupFilter()->End())
+         &&(itInfFilter!=pyramid->GetInfFilter()->End())
+         &&(itInfDeci!=pyramid->GetInfDeci()->End())
+         &&(itSupDeci!=pyramid->GetSupDeci()->End())
+        )
+  {
+    oss<<outputFilenamePrefix<<"_an_"<<i<<"."<<outputFilenameSuffix;
+    writer->SetInput(itAnalyse.Get());
+    writer->SetFileName(oss.str().c_str());
+    writer->Update();
+    oss.str("");
+    oss<<outputFilenamePrefix<<"_sf_"<<i<<"."<<outputFilenameSuffix;
+    writer->SetInput(itSupFilter.Get());
+    writer->SetFileName(oss.str().c_str());
+    writer->Update();
+    oss.str("");
+    oss<<outputFilenamePrefix<<"_if_"<<i<<"."<<outputFilenameSuffix;
+    writer->SetInput(itInfFilter.Get());
+    writer->SetFileName(oss.str().c_str());
+    writer->Update();
+    oss.str("");
+    oss<<outputFilenamePrefix<<"_id_"<<i<<"."<<outputFilenameSuffix;
+    writer->SetInput(itInfDeci.Get());
+    writer->SetFileName(oss.str().c_str());
+    writer->Update();
+    std::cout<<"File "<<oss<<" written"<<std::endl;
+    oss.str("");
+    oss<<outputFilenamePrefix<<"_sd_"<<i<<"."<<outputFilenameSuffix;
+    writer->SetInput(itSupDeci.Get());
+    writer->SetFileName(oss.str().c_str());
+    writer->Update();
+    oss.str("");
+    ++itAnalyse;
+    ++itSupFilter;
+    ++itInfFilter;
+    ++itInfDeci;
+    ++itSupDeci;
+    ++i;
+  }
 
   return EXIT_SUCCESS;
 }

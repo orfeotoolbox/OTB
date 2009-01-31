@@ -31,7 +31,7 @@ int otbPerBandVectorImageFilterNew(int argc, char * argv[])
   typedef itk::MeanImageFilter<ImageType,ImageType> MeanFilterType;
 
   typedef otb::PerBandVectorImageFilter<VectorImageType,VectorImageType,MeanFilterType>
-    PerBandVectorImageFilterType;
+  PerBandVectorImageFilterType;
 
   // Instantiating object
   PerBandVectorImageFilterType::Pointer object = PerBandVectorImageFilterType::New();

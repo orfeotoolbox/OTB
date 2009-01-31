@@ -111,20 +111,20 @@ int otbMultiChannelsPolarimetricSynthesisFilter( int argc, char * argv[] )
   inputIt3.GoToBegin();
   outputIt.GoToBegin();
 
-  while( !inputIt1.IsAtEnd() )
-    {
-      InputVectorImageType::PixelType pix;
-      pix.SetSize(4);
-      pix[0]=inputIt1.Get();
-      pix[1]=inputIt2.Get();
-      pix[2]=inputIt3.Get();
+  while ( !inputIt1.IsAtEnd() )
+  {
+    InputVectorImageType::PixelType pix;
+    pix.SetSize(4);
+    pix[0]=inputIt1.Get();
+    pix[1]=inputIt2.Get();
+    pix[2]=inputIt3.Get();
 
-      outputIt.Set( pix );
-      ++inputIt1;
-      ++inputIt2;
-      ++inputIt3;
-      ++outputIt;
-    }
+    outputIt.Set( pix );
+    ++inputIt1;
+    ++inputIt2;
+    ++inputIt3;
+    ++outputIt;
+  }
 
   polarimetricSynthesis->SetInput(outputPtr);
   writer->SetInput( polarimetricSynthesis->GetOutput() );

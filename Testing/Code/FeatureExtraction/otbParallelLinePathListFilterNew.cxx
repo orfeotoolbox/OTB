@@ -30,7 +30,7 @@ int otbParallelLinePathListFilterNew(int argc, char * argv[])
 
   // Instantiating object
   ParallelLinePathType::Pointer parallelLinePathListFilter =
-                                              ParallelLinePathType::New();
+    ParallelLinePathType::New();
 
   return EXIT_SUCCESS;
 }

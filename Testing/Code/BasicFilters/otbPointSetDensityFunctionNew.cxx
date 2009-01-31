@@ -27,12 +27,12 @@ int otbPointSetDensityFunctionNew(int, char* [] )
 {
 
   const   unsigned int                                             Dimension = 2;
-  typedef float                                                    PixelType; 
+  typedef float                                                    PixelType;
 
   typedef itk::VariableLengthVector<PixelType>                     RealVectorType;
   typedef itk::PointSet<RealVectorType,Dimension>                  PointSetType;
   typedef otb::PointSetDensityFunction <PointSetType,PixelType>    FunctionType;
-  
+
   /**Instancitation of a Smart Pointer*/
   FunctionType::Pointer     filter = FunctionType::New();
 

@@ -71,10 +71,10 @@ int otbSurfaceAdjencyEffect6SCorrectionSchemeFilter(int argc, char * argv[])
   reader->GenerateOutputInformation();
   std::vector<const char *> wavelenghFiles;
   unsigned int nbChannel = reader->GetOutput()->GetNumberOfComponentsPerPixel();
-  for(unsigned int i=0; i<nbChannel; i++)
-    {
-      wavelenghFiles.push_back( argv[i+6] );
-    }
+  for (unsigned int i=0; i<nbChannel; i++)
+  {
+    wavelenghFiles.push_back( argv[i+6] );
+  }
 
   ValueType val = 0.0025;
 
@@ -122,36 +122,36 @@ int otbSurfaceAdjencyEffect6SCorrectionSchemeFilter(int argc, char * argv[])
   param->SetAerosolOptical(static_cast<double>(aerosolOptical));
 
   ValuesVectorType vect;
-  for(unsigned int j=0; j<nbChannel; j++)
-    {
-      functionValues = FilterFunctionValuesType::New();
-      vect.clear();
-
-      // Filter function values initialization
-      float minSpectralValue(0.);
-      float maxSpectralValue(0.);
-      float value(0.);
-
-      std::ifstream fin;
-      //Read input file parameters
-      fin.open(wavelenghFiles[j]);
-      fin >> minSpectralValue;//wlinf;
-      fin >> maxSpectralValue;//wlsup;
-
-      while (!fin.eof() && fin.good())
+  for (unsigned int j=0; j<nbChannel; j++)
   {
-    fin >> value;
-    vect.push_back(value);
-  }
+    functionValues = FilterFunctionValuesType::New();
+    vect.clear();
 
-      fin.close();
-      functionValues->SetFilterFunctionValues(vect);
-      functionValues->SetMinSpectralValue(minSpectralValue);
-      functionValues->SetMaxSpectralValue(maxSpectralValue);
-      functionValues->SetUserStep( val );
+    // Filter function values initialization
+    float minSpectralValue(0.);
+    float maxSpectralValue(0.);
+    float value(0.);
 
-      param->SetWavelenghtSpectralBandWithIndex(j, functionValues);
+    std::ifstream fin;
+    //Read input file parameters
+    fin.open(wavelenghFiles[j]);
+    fin >> minSpectralValue;//wlinf;
+    fin >> maxSpectralValue;//wlsup;
+
+    while (!fin.eof() && fin.good())
+    {
+      fin >> value;
+      vect.push_back(value);
     }
+
+    fin.close();
+    functionValues->SetFilterFunctionValues(vect);
+    functionValues->SetMinSpectralValue(minSpectralValue);
+    functionValues->SetMaxSpectralValue(maxSpectralValue);
+    functionValues->SetUserStep( val );
+
+    param->SetWavelenghtSpectralBandWithIndex(j, functionValues);
+  }
 
   corrToRadia->SetInput( param );
 

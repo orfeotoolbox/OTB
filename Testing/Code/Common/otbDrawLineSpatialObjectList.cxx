@@ -81,63 +81,63 @@ int otbDrawLineSpatialObjectList( int argc, char* argv[] )
 
   LineType::Pointer line = LineType::New();
   line->SetId(0);
-    line->SetPoints( pointList );
-    line->ComputeBoundingBox();
+  line->SetPoints( pointList );
+  line->ComputeBoundingBox();
 
-    list->push_back(line);
+  list->push_back(line);
 
-    pointList.clear();
+  pointList.clear();
 
-    // Definition of a second line
-    Ux = 8.;
-    Uy = 7.;
-    Vx = 8.;
-    Vy = 46.;
+  // Definition of a second line
+  Ux = 8.;
+  Uy = 7.;
+  Vx = 8.;
+  Vy = 46.;
 
-    point.SetPosition(Ux,Uy);
-    pointList.push_back(point);
-    point.SetPosition(Vx,Vy);
-    pointList.push_back(point);
+  point.SetPosition(Ux,Uy);
+  pointList.push_back(point);
+  point.SetPosition(Vx,Vy);
+  pointList.push_back(point);
 
 
-    LineType::Pointer line2 = LineType::New();
-    line2->SetId(0);
-      line2->SetPoints( pointList );
-      line2->ComputeBoundingBox();
+  LineType::Pointer line2 = LineType::New();
+  line2->SetId(0);
+  line2->SetPoints( pointList );
+  line2->ComputeBoundingBox();
 
-      list->push_back(line2);
+  list->push_back(line2);
 
-      pointList.clear();
+  pointList.clear();
 
-      // Definition of a third line
-      Ux = 52.;
-      Uy = 15.;
-      Vx = 22.;
-      Vy = 38.;
+  // Definition of a third line
+  Ux = 52.;
+  Uy = 15.;
+  Vx = 22.;
+  Vy = 38.;
 
-      point.SetPosition(Ux,Uy);
-      pointList.push_back(point);
-      point.SetPosition(Vx,Vy);
-      pointList.push_back(point);
+  point.SetPosition(Ux,Uy);
+  pointList.push_back(point);
+  point.SetPosition(Vx,Vy);
+  pointList.push_back(point);
 
-      LineType::Pointer line3 = LineType::New();
-      line3->SetId(0);
-        line3->SetPoints( pointList );
-        line3->ComputeBoundingBox();
+  LineType::Pointer line3 = LineType::New();
+  line3->SetId(0);
+  line3->SetPoints( pointList );
+  line3->ComputeBoundingBox();
 
-        list->push_back(line3);
+  list->push_back(line3);
 
   /*        LinesListType::const_iterator it;
       std::cout<<list.size()<<std::endl;
       for (it=list.begin(); it!=list.end(); it++)
       std::cout<< (*it) <<std::endl;*/
 
-        filter->SetInputLineSpatialObjectList(list);
+  filter->SetInputLineSpatialObjectList(list);
 
-        filter->SetInput( reader->GetOutput() );
-        writer->SetInput( filter->GetOutput() );
+  filter->SetInput( reader->GetOutput() );
+  writer->SetInput( filter->GetOutput() );
 
-        writer->Update();
+  writer->Update();
 
 
 

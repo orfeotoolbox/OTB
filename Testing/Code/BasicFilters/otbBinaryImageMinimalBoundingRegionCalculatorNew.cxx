@@ -26,7 +26,7 @@ int otbBinaryImageMinimalBoundingRegionCalculatorNew(int argc, char* argv[])
   typedef unsigned char PixelType;
   typedef otb::Image<PixelType,Dimension> ImageType;
   typedef otb::BinaryImageMinimalBoundingRegionCalculator<ImageType>
-    BoundingRegionCalculatorType;
+  BoundingRegionCalculatorType;
 
   //Instantiation
   BoundingRegionCalculatorType::Pointer brct = BoundingRegionCalculatorType::New();

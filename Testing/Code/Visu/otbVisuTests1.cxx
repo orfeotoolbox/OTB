@@ -26,15 +26,15 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbImageWidgetBaseNew);
-REGISTER_TEST(otbFixedSizeFullImageWidgetNew);
-REGISTER_TEST(otbFixedSizeFullImageWidget);
-REGISTER_TEST(otbFullResolutionImageWidgetNew);
-REGISTER_TEST(otbFullResolutionImageWidget);
-REGISTER_TEST(otbZoomableImageWidgetNew);
-REGISTER_TEST(otbZoomableImageWidget);
-REGISTER_TEST(otbImageViewer);
-REGISTER_TEST(otbImageViewerWithOtbImage);
-REGISTER_TEST(otbImageViewerNew);
+  REGISTER_TEST(otbImageWidgetBaseNew);
+  REGISTER_TEST(otbFixedSizeFullImageWidgetNew);
+  REGISTER_TEST(otbFixedSizeFullImageWidget);
+  REGISTER_TEST(otbFullResolutionImageWidgetNew);
+  REGISTER_TEST(otbFullResolutionImageWidget);
+  REGISTER_TEST(otbZoomableImageWidgetNew);
+  REGISTER_TEST(otbZoomableImageWidget);
+  REGISTER_TEST(otbImageViewer);
+  REGISTER_TEST(otbImageViewerWithOtbImage);
+  REGISTER_TEST(otbImageViewerNew);
 
 }

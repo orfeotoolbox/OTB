@@ -56,9 +56,9 @@ int otbChangeLabelImageFilterTest(int argc, char * argv[])
   background.Fill(1);
   InputPixelType maxRemainingLabel = 2;
   for (InputPixelType i = maxRemainingLabel; i <= upper; i++)
-    {
-      filter->SetChange( i, background );
-    }
+  {
+    filter->SetChange( i, background );
+  }
 
   filter->Print( std::cout );
   filter->SetInput( source->GetOutput() );
@@ -71,7 +71,7 @@ int otbChangeLabelImageFilterTest(int argc, char * argv[])
     filter->Update();
     filter->SetFunctor(filter->GetFunctor());
   }
-  catch(...)
+  catch (...)
   {
     std::cerr << "Caught an unexpected exception. " << std::endl;
     std::cerr << "Test failed. " << std::endl;
@@ -89,30 +89,30 @@ int otbChangeLabelImageFilterTest(int argc, char * argv[])
 
   ot.GoToBegin();
   it.GoToBegin();
-  while( !ot.IsAtEnd() )
+  while ( !ot.IsAtEnd() )
   {
     const InputPixelType  input  = it.Get();
     const OutputPixelType output = ot.Get();
     std::cout <<  (double) input<<": ";
-    for(unsigned int j=0; j<filter->GetNumberOfComponentsPerPixel(); j++)
-      {
-  std::cout<< " " << (double)output[j];
-  if( (double)output[j] > (double)maxRemainingLabel )
+    for (unsigned int j=0; j<filter->GetNumberOfComponentsPerPixel(); j++)
     {
-      pass = false;
-    }
+      std::cout<< " " << (double)output[j];
+      if ( (double)output[j] > (double)maxRemainingLabel )
+      {
+        pass = false;
       }
+    }
     std::cout<<std::endl;
 
     if ( !pass )
-      {
-        std::cerr << "Error in otbChangeLabelImageFilterTest " << std::endl;
-        std::cerr << " input = " << input;
-        std::cerr << " output = " << output;
-        std::cerr << std::endl;
+    {
+      std::cerr << "Error in otbChangeLabelImageFilterTest " << std::endl;
+      std::cerr << " input = " << input;
+      std::cerr << " output = " << output;
+      std::cerr << std::endl;
 
-        return EXIT_FAILURE;
-      }
+      return EXIT_FAILURE;
+    }
 
     ++ot;
     ++it;

@@ -59,54 +59,54 @@ int otbSVMModelAccessor( int argc, char* argv[] )
 
   f << " - GetSupportVectors() [nb support vector][]"<<std::endl;
   svm_node ** SVs = ptrModel->GetSupportVectors();
-  if( SVs == NULL )
-    {
-      itkGenericExceptionMacro(<<"SVs NULL");
-    }
-  for(unsigned int i=0;i<nbSupportVector;i++)
-    {
-      if( SVs[i] == NULL ) itkGenericExceptionMacro(<<"SVs "<<i<<" NULL");
-      f << std::endl;
-      f << "  SV["<<i<<"]:";
-      const svm_node *p = SVs[i];
-      while(p->index != -1)
+  if ( SVs == NULL )
   {
-    f << " ["<<p->index << ";"<<p->value<<"] ";
-    p++;
+    itkGenericExceptionMacro(<<"SVs NULL");
   }
-      f << std::endl;
+  for (unsigned int i=0;i<nbSupportVector;i++)
+  {
+    if ( SVs[i] == NULL ) itkGenericExceptionMacro(<<"SVs "<<i<<" NULL");
+    f << std::endl;
+    f << "  SV["<<i<<"]:";
+    const svm_node *p = SVs[i];
+    while (p->index != -1)
+    {
+      f << " ["<<p->index << ";"<<p->value<<"] ";
+      p++;
     }
+    f << std::endl;
+  }
 
   f << " - GetRho() [nr_class*(nr_class-1)/2]"<<std::endl;
   unsigned int taille = nbClass*(nbClass-1)/2;
   double * rhos = ptrModel->GetRho();
-  if( rhos == NULL )
-    {
-      itkGenericExceptionMacro(<<"rhos NULL");
-    }
+  if ( rhos == NULL )
+  {
+    itkGenericExceptionMacro(<<"rhos NULL");
+  }
   f << "      ";
-  for(unsigned int i=0;i<taille;i++)
-    {
-      f << " " << rhos[i];
-    }
+  for (unsigned int i=0;i<taille;i++)
+  {
+    f << " " << rhos[i];
+  }
 
 
   f << std::endl;
   f << " - GetAlpha() [nb class-1][nb support vector]"<<std::endl;
   double ** alphas = ptrModel->GetAlpha();
-  if( alphas == NULL )
+  if ( alphas == NULL )
+  {
+    itkGenericExceptionMacro(<<"alphas NULL");
+  }
+  for (unsigned int i=0;i<nbClass-1;i++)
+  {
+    if ( alphas[i] == NULL ) itkGenericExceptionMacro(<<"alphas "<<i<<" NULL");
+    f << "     ";
+    for (unsigned int j=0;j<nbSupportVector;j++)
     {
-      itkGenericExceptionMacro(<<"alphas NULL");
+      f << "  " << alphas[i][j];
     }
-  for(unsigned int i=0;i<nbClass-1;i++)
-    {
-      if( alphas[i] == NULL ) itkGenericExceptionMacro(<<"alphas "<<i<<" NULL");
-      f << "     ";
-      for(unsigned int j=0;j<nbSupportVector;j++)
-        {
-    f << "  " << alphas[i][j];
-        }
-    }
+  }
   f << std::endl;
   f << " - Evaluate() (double) -> "<<ptrModel->Evaluate()<<std::endl;
 
@@ -115,10 +115,10 @@ int otbSVMModelAccessor( int argc, char* argv[] )
   _evaluateHyperplaneDistance = ptrModel->EvaluateHyperplaneDistance();
 
   f << " - EvaluateHyperplaneDistance() VariableLenghtVector() nb value(s): "<<_evaluateHyperplaneDistance.Size()<<std::endl;
-  for(unsigned int i=0;i<_evaluateHyperplaneDistance.Size();i++)
-    {
-      f << "     "<<_evaluateHyperplaneDistance[i]<<std::endl;
-    }
+  for (unsigned int i=0;i<_evaluateHyperplaneDistance.Size();i++)
+  {
+    f << "     "<<_evaluateHyperplaneDistance[i]<<std::endl;
+  }
   f << "end"<<std::endl;
   f.close();
 

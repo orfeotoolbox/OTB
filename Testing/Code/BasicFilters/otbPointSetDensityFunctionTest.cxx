@@ -26,51 +26,53 @@ PURPOSE.  See the above copyright notices for more information.
 
 int otbPointSetDensityFunctionTest(int argc, char* argv[] )
 {
-  
+
   const char * outfname = argv[1];
-  
+
   const   unsigned int                                             Dimension = 2;
-  typedef float                                                    PixelType; 
+  typedef float                                                    PixelType;
 
   typedef itk::VariableLengthVector<PixelType>                     RealVectorType;
   typedef itk::PointSet<RealVectorType,Dimension>                  PointSetType;
   typedef otb::PointSetDensityFunction <PointSetType,PixelType>    FunctionType;
 
-  
+
   /**Instancitation ofa Smart Pointer*/
   PointSetType::Pointer pointSet = PointSetType::New();
   FunctionType::Pointer     filter = FunctionType::New();
   std::ofstream outfile(outfname);
-  
+
   /** Construction of the pointSet */
   PointSetType::PointIdentifier count = 0;
-  
+
   PointSetType::PointType  pDst ,pSrc;
-  pDst[0] = 12.78 ; 
+  pDst[0] = 12.78 ;
   pDst[1] = 18.76 ;
   pointSet->SetPoint(count++,pDst);
 
-  pDst[0] = 15.78 ; 
+  pDst[0] = 15.78 ;
   pDst[1] = 23.76 ;
   pointSet->SetPoint(count++,pDst);
-  
-  pDst[0] = 9.78 ; 
+
+  pDst[0] = 9.78 ;
   pDst[1] = 5.76 ;
   pointSet->SetPoint(count++,pDst);
-  
-  
+
+
   filter->SetPointSet(pointSet);
   filter->SetRadius(2);
-  
+
   /**Point we serach around*/
-  pDst[0] = 14.9; pDst[1] = 24;
+  pDst[0] = 14.9;
+  pDst[1] = 24;
   outfile << "Density computed for the point : " << pDst << " is "<< filter->Evaluate(pDst) << std::endl;
 
-  pDst[0] = 9; pDst[1] = 5;
+  pDst[0] = 9;
+  pDst[1] = 5;
   outfile << "Density computed for the point : " << pDst << " is "<< filter->Evaluate(pDst) << std::endl;
 
   outfile.close();
-  
+
   return EXIT_SUCCESS;
 }
 

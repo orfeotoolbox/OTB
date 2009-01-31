@@ -74,8 +74,8 @@ int otbLocalHough( int argc, char* argv[] )
 
   list = filter->GetOutput();
 
-  LinesListType::const_iterator itList; 
-  
+  LinesListType::const_iterator itList;
+
   std::ofstream outfile(outfname);
   outfile<< "size of the Line list " << list->size()<<std::endl;
 
@@ -83,10 +83,10 @@ int otbLocalHough( int argc, char* argv[] )
     outfile << (*itList)->GetPoints()[0].GetPosition()  << " \t" << (*itList)->GetPoints()[1].GetPosition()   << std::endl;
 
   outfile.close();
-  
-  
-  
-  
+
+
+
+
 
   return EXIT_SUCCESS;
 }

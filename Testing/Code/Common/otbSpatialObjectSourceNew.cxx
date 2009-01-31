@@ -30,5 +30,5 @@ int otbSpatialObjectSourceNew(int argc, char* argv[])
   SpatialObjectSourceType::Pointer source = SpatialObjectSourceType::New();
 
 
- return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }

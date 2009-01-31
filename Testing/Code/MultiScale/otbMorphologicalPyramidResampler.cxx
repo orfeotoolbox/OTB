@@ -40,7 +40,7 @@ int otbMorphologicalPyramidResampler(int argc, char * argv[])
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   typedef otb::MorphologicalPyramid::Resampler<InputImageType,OutputImageType>
-    ResamplerType;
+  ResamplerType;
 
   // Input image reading
   ReaderType::Pointer reader = ReaderType::New();

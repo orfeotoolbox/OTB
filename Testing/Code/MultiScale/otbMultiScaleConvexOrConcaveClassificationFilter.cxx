@@ -51,12 +51,12 @@ int otbMultiScaleConvexOrConcaveClassificationFilter(int argc, char * argv[])
 
   typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
   typedef otb::MorphologicalOpeningProfileFilter<InputImageType,InputImageType,StructuringElementType>
-    OpeningProfileFilterType;
+  OpeningProfileFilterType;
   typedef otb::MorphologicalClosingProfileFilter<InputImageType,InputImageType,StructuringElementType>
-    ClosingProfileFilterType;
+  ClosingProfileFilterType;
   typedef otb::ProfileToProfileDerivativeFilter<InputImageType,InputImageType> DerivativeFilterType;
   typedef otb::ProfileDerivativeToMultiScaleCharacteristicsFilter<InputImageType,OutputImageType,LabeledImageType>
-    MultiScaleCharacteristicsFilterType;
+  MultiScaleCharacteristicsFilterType;
   typedef otb::MultiScaleConvexOrConcaveClassificationFilter<InputImageType,LabeledImageType> MultiScaleClassificationFilterType;
 
 

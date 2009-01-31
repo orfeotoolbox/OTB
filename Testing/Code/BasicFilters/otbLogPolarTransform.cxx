@@ -40,14 +40,14 @@ int otbLogPolarTransform(int argc, char* argv[])
   file << "input points retrieval : "<<std::endl;
   // input points retrieval
   PointsVectorType vect;
-  for(unsigned int i=0;i<nbPoints;++i)
-    {
-      PointType p;
-      p[0]=atof(argv[5+2*i]);
-      p[1]=atof(argv[6+2*i]);
-      file<<"Adding point "<<p<<"."<<std::endl;
-      vect.push_back(p);
-    }
+  for (unsigned int i=0;i<nbPoints;++i)
+  {
+    PointType p;
+    p[0]=atof(argv[5+2*i]);
+    p[1]=atof(argv[6+2*i]);
+    file<<"Adding point "<<p<<"."<<std::endl;
+    vect.push_back(p);
+  }
 
   // Instantiation
   LogPolarTransformType::Pointer transform = LogPolarTransformType::New();
@@ -59,21 +59,21 @@ int otbLogPolarTransform(int argc, char* argv[])
   transform->SetParameters(params);
 
   file << "Transform calculation ... :" <<std::endl;
-  for(PointsVectorType::iterator it=vect.begin();it!=vect.end();++it)
-    {
-      PointType p = transform->TransformPoint(*it);
+  for (PointsVectorType::iterator it=vect.begin();it!=vect.end();++it)
+  {
+    PointType p = transform->TransformPoint(*it);
 
-      PointType pprime;
+    PointType pprime;
 
-      double theta = (*it)[0]*angularStep*M_PI/180.0;
-      double logRho   = (*it)[1]*radialStep;
+    double theta = (*it)[0]*angularStep*M_PI/180.0;
+    double logRho   = (*it)[1]*radialStep;
 
-      file <<"Rho: "<<logRho<<", Theta: "<<theta<<std::endl;
-      pprime[0]=vcl_exp(logRho) * vcl_cos(theta);
-      pprime[1]=vcl_exp(logRho) * vcl_sin(theta);
+    file <<"Rho: "<<logRho<<", Theta: "<<theta<<std::endl;
+    pprime[0]=vcl_exp(logRho) * vcl_cos(theta);
+    pprime[1]=vcl_exp(logRho) * vcl_sin(theta);
 
-      file <<"Original Point: "<<(*it)<<", Reference point: "<<pprime<<", Transformed point: "<<p<<std::endl<<std::endl;
-    }
+    file <<"Original Point: "<<(*it)<<", Reference point: "<<pprime<<", Transformed point: "<<p<<std::endl<<std::endl;
+  }
 
   file.close();
 

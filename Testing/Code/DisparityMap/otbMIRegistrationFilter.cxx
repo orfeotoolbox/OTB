@@ -25,7 +25,7 @@
 int otbMIRegistrationFilter(int argc, char* argv [])
 {
 
-  if(argc!= 7)
+  if (argc!= 7)
   {
     std::cerr <<"Usage: "<<argv[0];
     std::cerr<<" fixedFileName movingFileName fieldOutName";
@@ -44,7 +44,7 @@ int otbMIRegistrationFilter(int argc, char* argv [])
   typedef otb::Image<PixelType,ImageDimension>       MovingImageType;
   typedef otb::Image<PixelType,ImageDimension>       FixedImageType;
   typedef otb::Image<DeformationPixelType,
-                               ImageDimension>       DeformationFieldType;
+  ImageDimension>       DeformationFieldType;
 
   typedef otb::ImageFileReader< FixedImageType > FixedReaderType;
   FixedReaderType::Pointer fReader = FixedReaderType::New();
@@ -55,23 +55,23 @@ int otbMIRegistrationFilter(int argc, char* argv [])
   mReader->SetFileName(argv[2]);
 
   typedef itk::RecursiveGaussianImageFilter< FixedImageType,
-    FixedImageType > FixedBlurType;
+  FixedImageType > FixedBlurType;
 
   FixedBlurType::Pointer fBlur = FixedBlurType::New();
   fBlur->SetInput( fReader->GetOutput() );
   fBlur->SetSigma( atof(argv[5]) );
 
   typedef itk::RecursiveGaussianImageFilter< MovingImageType,
-    MovingImageType > MovingBlurType;
+  MovingImageType > MovingBlurType;
 
   MovingBlurType::Pointer mBlur = MovingBlurType::New();
   mBlur->SetInput( mReader->GetOutput() );
   mBlur->SetSigma(atof(argv[5]) );
 
   typedef otb::MIRegistrationFilter< FixedImageType,
-                                       MovingImageType,
-                                       DeformationFieldType >
-                                           RegistrationFilterType;
+  MovingImageType,
+  DeformationFieldType >
+  RegistrationFilterType;
 
   RegistrationFilterType::Pointer registrator = RegistrationFilterType::New();
 

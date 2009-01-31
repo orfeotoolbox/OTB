@@ -69,14 +69,14 @@ int otbFlusserImage( int argc, char * argv[] )
   RealType Result;
 
   for (Number = 1 ;Number<12;Number++)
-    {
-      //OTB-FA-00024-CS
-      function->SetMomentNumber(Number);
-      //OTB-FA-00025-CS
-      function->SetNeighborhoodRadius(3);
-      Result = function->EvaluateAtIndex( index );
-      std::cout << "Flusser("<<Number<<") = "<< Result <<std::endl;
-    }
+  {
+    //OTB-FA-00024-CS
+    function->SetMomentNumber(Number);
+    //OTB-FA-00025-CS
+    function->SetNeighborhoodRadius(3);
+    Result = function->EvaluateAtIndex( index );
+    std::cout << "Flusser("<<Number<<") = "<< Result <<std::endl;
+  }
 
 
 

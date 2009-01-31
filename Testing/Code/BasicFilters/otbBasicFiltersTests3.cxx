@@ -27,15 +27,15 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbImportGeoInformationImageFilterNew);
-REGISTER_TEST(otbImportGeoInformationImageFilter);
-REGISTER_TEST(otbImportGeoInformationImageFilterWithKeywordList);
-REGISTER_TEST(otbSpectralAngleDistanceImageFilterNew);
-REGISTER_TEST(otbSpectralAngleDistanceImageFilter);
-REGISTER_TEST(otbVectorRescaleIntensityImageFilterNew);
-REGISTER_TEST(otbVectorRescaleIntensityImageFilter);
-REGISTER_TEST(otbVectorImageToImageListFilterNew);
-REGISTER_TEST(otbVectorImageToImageListFilter);
-REGISTER_TEST(otbImageListToVectorImageFilterNew);
-REGISTER_TEST(otbImageListToVectorImageFilter);
+  REGISTER_TEST(otbImportGeoInformationImageFilterNew);
+  REGISTER_TEST(otbImportGeoInformationImageFilter);
+  REGISTER_TEST(otbImportGeoInformationImageFilterWithKeywordList);
+  REGISTER_TEST(otbSpectralAngleDistanceImageFilterNew);
+  REGISTER_TEST(otbSpectralAngleDistanceImageFilter);
+  REGISTER_TEST(otbVectorRescaleIntensityImageFilterNew);
+  REGISTER_TEST(otbVectorRescaleIntensityImageFilter);
+  REGISTER_TEST(otbVectorImageToImageListFilterNew);
+  REGISTER_TEST(otbVectorImageToImageListFilter);
+  REGISTER_TEST(otbImageListToVectorImageFilterNew);
+  REGISTER_TEST(otbImageListToVectorImageFilter);
 }

@@ -33,7 +33,7 @@ int generic_RAndBAndNIRVegetationIndexImageFilter(int argc, char * argv[])
   typedef otb::ImageFileWriter<TOutputImage> WriterType;
 
   typedef otb::RAndBAndNIRVegetationIndexImageFilter<TInputRImage,TInputBImage,TInputNIRImage,TOutputImage,TFunction>
-    RAndBAndNIRVegetationIndexImageFilterType;
+  RAndBAndNIRVegetationIndexImageFilterType;
 
   // Instantiating object
   typename RAndBAndNIRVegetationIndexImageFilterType::Pointer filter = RAndBAndNIRVegetationIndexImageFilterType::New();
@@ -77,11 +77,11 @@ int otbRAndBAndNIRVegetationIndexImageFilter(int argc, char * argv[])
   argc--;
   argv++;
   if ( strArgv == "ARVI" ) return( generic_RAndBAndNIRVegetationIndexImageFilter<InputRImageType, InputBImageType, InputNIRImageType, OutputImageType,
-           otb::Functor::ARVI<     InputRImageType::PixelType,
-           InputBImageType::PixelType,
-           InputNIRImageType::PixelType,
-           OutputImageType::PixelType> >
-           (argc,argv) );
+                                     otb::Functor::ARVI<     InputRImageType::PixelType,
+                                     InputBImageType::PixelType,
+                                     InputNIRImageType::PixelType,
+                                     OutputImageType::PixelType> >
+                                     (argc,argv) );
   else
     return EXIT_FAILURE;
   return EXIT_SUCCESS;

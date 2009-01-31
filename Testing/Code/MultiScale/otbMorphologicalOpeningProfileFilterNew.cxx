@@ -32,7 +32,7 @@ int otbMorphologicalOpeningProfileFilterNew(int argc, char * argv[])
 
   typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
   typedef otb::MorphologicalOpeningProfileFilter<InputImageType,InputImageType,StructuringElementType>
-    OpeningProfileFilterType;
+  OpeningProfileFilterType;
 
   // Instantiation
   OpeningProfileFilterType::Pointer profileFilter = OpeningProfileFilterType::New();

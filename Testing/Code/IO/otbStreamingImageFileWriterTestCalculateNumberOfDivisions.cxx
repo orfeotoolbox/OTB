@@ -51,39 +51,39 @@ int otbStreamingImageFileWriterTestCalculateNumberOfDivisions (int argc, char* a
   writer->SetFileName( outputFilename );
   writer->SetInput( reader->GetOutput() );
 
-  if( MethodCalculateNumberOfStreamDivision == "AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS" )
-    {
-      writer->SetAutomaticNumberOfStreamDivisions();
-    }
-  else if( MethodCalculateNumberOfStreamDivision == "NUMBER_OF_STREAM_DIVISIONS" )
-    {
-      writer->SetNumberOfStreamDivisions(::atoi(argv[4]));
-    }
-  else if( MethodCalculateNumberOfStreamDivision == "BUFFER_MEMORY_SIZE" )
-    {
-      writer->SetBufferMemorySize(::atoi(argv[4]));
-    }
-  else if( MethodCalculateNumberOfStreamDivision == "BUFFER_NUMBER_OF_LINES" )
-    {
-      writer->SetBufferNumberOfLinesDivisions(::atoi(argv[4]));
-    }
-  else if( MethodCalculateNumberOfStreamDivision == "TILING_STREAM_DIVISIONS" )
-    {
-      writer->SetTilingStreamDivisions();
-    }
-  else if( MethodCalculateNumberOfStreamDivision == "TILING_NUMBER_OF_STREAM_DIVISIONS" )
-    {
-      std::cout << "Number : " << ::atoi(argv[4]) << std::endl;
-      writer->SetTilingStreamDivisions(::atoi(argv[4]));
-    }
-  else if( MethodCalculateNumberOfStreamDivision == "DEFAULT" )
-    {
+  if ( MethodCalculateNumberOfStreamDivision == "AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS" )
+  {
+    writer->SetAutomaticNumberOfStreamDivisions();
+  }
+  else if ( MethodCalculateNumberOfStreamDivision == "NUMBER_OF_STREAM_DIVISIONS" )
+  {
+    writer->SetNumberOfStreamDivisions(::atoi(argv[4]));
+  }
+  else if ( MethodCalculateNumberOfStreamDivision == "BUFFER_MEMORY_SIZE" )
+  {
+    writer->SetBufferMemorySize(::atoi(argv[4]));
+  }
+  else if ( MethodCalculateNumberOfStreamDivision == "BUFFER_NUMBER_OF_LINES" )
+  {
+    writer->SetBufferNumberOfLinesDivisions(::atoi(argv[4]));
+  }
+  else if ( MethodCalculateNumberOfStreamDivision == "TILING_STREAM_DIVISIONS" )
+  {
+    writer->SetTilingStreamDivisions();
+  }
+  else if ( MethodCalculateNumberOfStreamDivision == "TILING_NUMBER_OF_STREAM_DIVISIONS" )
+  {
+    std::cout << "Number : " << ::atoi(argv[4]) << std::endl;
+    writer->SetTilingStreamDivisions(::atoi(argv[4]));
+  }
+  else if ( MethodCalculateNumberOfStreamDivision == "DEFAULT" )
+  {
 
-    }
+  }
   else
-    {
-      itkGenericExceptionMacro(<<"Parameter value not authorized !!!");
-    }
+  {
+    itkGenericExceptionMacro(<<"Parameter value not authorized !!!");
+  }
   writer->Update();
 
 

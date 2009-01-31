@@ -36,7 +36,7 @@ int otbPerBandVectorImageFilterWithMeanFilter(int argc, char * argv[])
   typedef itk::MeanImageFilter<ImageType,ImageType> MeanFilterType;
 
   typedef otb::PerBandVectorImageFilter<VectorImageType,VectorImageType,MeanFilterType>
-    PerBandVectorImageFilterType;
+  PerBandVectorImageFilterType;
 
   typedef otb::ImageFileReader<VectorImageType> ReaderType;
   typedef otb::ImageFileWriter<VectorImageType> WriterType;

@@ -90,11 +90,11 @@ int otbRCC8GraphFileWriter(int argc, char* argv[])
 
   // Instantiation
   RCC8GraphFileWriterType::Pointer rcc8GraphWriter
-    = RCC8GraphFileWriterType::New();
+  = RCC8GraphFileWriterType::New();
   rcc8GraphWriter->SetFileName(outputFile);
   rcc8GraphWriter->SetInput(rcc8Graph);
   rcc8GraphWriter->Update();
 
- return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }
 

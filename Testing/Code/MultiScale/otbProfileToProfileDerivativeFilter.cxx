@@ -46,7 +46,7 @@ int otbProfileToProfileDerivativeFilter(int argc, char * argv[])
 
   typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
   typedef otb::MorphologicalOpeningProfileFilter<InputImageType,InputImageType,StructuringElementType>
-    OpeningProfileFilterType;
+  OpeningProfileFilterType;
   typedef otb::ProfileToProfileDerivativeFilter<InputImageType,OutputImageType> DerivativeFilterType;
 
   // Reading input image
@@ -69,15 +69,15 @@ int otbProfileToProfileDerivativeFilter(int argc, char * argv[])
   // std::stringstream oss;
   itk::OStringStream oss;
   // Writing the results images
-  for(unsigned int i = 1;i<profileSize;++i)
-    {
-      writer =  WriterType::New();
-      oss<<outputFilenamePrefix<<i<<"."<<outputFilenameSuffix;
-      writer->SetInput(derivativeFilter->GetOutput()->GetNthElement(i-1));
-      writer->SetFileName(oss.str().c_str());
-      writer->Update();
-      oss.str("");
-    }
+  for (unsigned int i = 1;i<profileSize;++i)
+  {
+    writer =  WriterType::New();
+    oss<<outputFilenamePrefix<<i<<"."<<outputFilenameSuffix;
+    writer->SetInput(derivativeFilter->GetOutput()->GetNthElement(i-1));
+    writer->SetFileName(oss.str().c_str());
+    writer->Update();
+    oss.str("");
+  }
 
   return EXIT_SUCCESS;
 }

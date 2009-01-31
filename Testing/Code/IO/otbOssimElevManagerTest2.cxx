@@ -26,7 +26,7 @@
 int otbOssimElevManagerTest2(int argc,char* argv[])
 {
 
-  if(argc!=7)
+  if (argc!=7)
   {
     std::cout<<"Usage: "<<std::endl;
     std::cout<<argv[0]<<" srtmDir outfname originX originY spacingX sizeX "<<std::endl;
@@ -57,7 +57,7 @@ int otbOssimElevManagerTest2(int argc,char* argv[])
   std::ofstream file;
   file.open(outfname);
 
-  for(int i = 0; i<size; i++)
+  for (int i = 0; i<size; i++)
   {
     PointType point;
     point[0] = origin[0] + i*spacing;

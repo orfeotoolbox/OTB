@@ -24,19 +24,19 @@
 
 namespace Functor
 {
-  template <class TInputMultiSpectral, class TInputMultiSpectralInterp, class TInputPanchro, class TOutput>
-  class NewFunctorTest
+template <class TInputMultiSpectral, class TInputMultiSpectralInterp, class TInputPanchro, class TOutput>
+class NewFunctorTest
+{
+public:
+  NewFunctorTest() {};
+  ~NewFunctorTest() {};
+
+  inline TOutput operator() (const TInputMultiSpectral & A, const TInputMultiSpectralInterp & B, const TInputPanchro & C)
   {
-  public:
-    NewFunctorTest() {};
-    ~NewFunctorTest() {};
+    return(static_cast<TOutput>(A[0]) + static_cast<TOutput>(B[0]) + static_cast<TOutput>(C));
 
-    inline TOutput operator() (const TInputMultiSpectral & A, const TInputMultiSpectralInterp & B, const TInputPanchro & C)
-    {
-      return(static_cast<TOutput>(A[0]) + static_cast<TOutput>(B[0]) + static_cast<TOutput>(C));
-
-    }
-  };
+  }
+};
 }
 
 int otbFusionImageBaseNew( int argc, char * argv[] )
@@ -51,14 +51,14 @@ int otbFusionImageBaseNew( int argc, char * argv[] )
   typedef otb::Image<OutputPixelType,Dimension>      OutputImageType;
 
   typedef otb::FusionImageBase<InputMultiSpectralImageType,
-    InputMultiSpectralInterpImageType,
-    InputPanchroImageType,
-    OutputImageType,
-    Functor::NewFunctorTest<InputMultiSpectralImageType::PixelType,
-    InputMultiSpectralInterpImageType::PixelType,
-    InputPanchroImageType::PixelType,
-    OutputImageType::PixelType>
-    >  FusionImageBaseType;
+  InputMultiSpectralInterpImageType,
+  InputPanchroImageType,
+  OutputImageType,
+  Functor::NewFunctorTest<InputMultiSpectralImageType::PixelType,
+  InputMultiSpectralInterpImageType::PixelType,
+  InputPanchroImageType::PixelType,
+  OutputImageType::PixelType>
+  >  FusionImageBaseType;
 
   // Instantiation
   FusionImageBaseType::Pointer base = FusionImageBaseType::New();

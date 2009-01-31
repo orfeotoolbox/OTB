@@ -27,13 +27,13 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbImageToSURFKeyPointSetFilterNew);
-REGISTER_TEST(otbImageToSURFKeyPointSetFilterOutputInterestPointAscii);
-REGISTER_TEST(otbImageToSURFKeyPointSetFilterOutputDescriptorAscii);
-REGISTER_TEST(otbImageToFastSIFTKeyPointSetFilterNew);
-REGISTER_TEST(otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii);
-REGISTER_TEST(otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii);
-REGISTER_TEST(otbKeyPointSetsMatchingFilterNew);
-REGISTER_TEST(otbKeyPointSetsMatchingFilter);
-REGISTER_TEST(otbLandmarkNew);
+  REGISTER_TEST(otbImageToSURFKeyPointSetFilterNew);
+  REGISTER_TEST(otbImageToSURFKeyPointSetFilterOutputInterestPointAscii);
+  REGISTER_TEST(otbImageToSURFKeyPointSetFilterOutputDescriptorAscii);
+  REGISTER_TEST(otbImageToFastSIFTKeyPointSetFilterNew);
+  REGISTER_TEST(otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii);
+  REGISTER_TEST(otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii);
+  REGISTER_TEST(otbKeyPointSetsMatchingFilterNew);
+  REGISTER_TEST(otbKeyPointSetsMatchingFilter);
+  REGISTER_TEST(otbLandmarkNew);
 }

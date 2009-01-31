@@ -39,7 +39,7 @@ int otbImageMultiSegmentationToRCC8GraphFilter(int argc, char* argv[])
   typedef otb::RCC8VertexBase<PolygonType> VertexType;
   typedef otb::RCC8Graph<VertexType> RCC8GraphType;
   typedef otb::ImageMultiSegmentationToRCC8GraphFilter<LabelImageType,RCC8GraphType>
-    RCC8GraphFilterType;
+  RCC8GraphFilterType;
   typedef otb::ImageList<LabelImageType> ImageListType;
   typedef otb::ImageFileReader<LabelImageType> ReaderType;
   typedef otb::RCC8GraphFileWriter<RCC8GraphType> GraphWriterType;
@@ -47,13 +47,13 @@ int otbImageMultiSegmentationToRCC8GraphFilter(int argc, char* argv[])
   ImageListType::Pointer inputList = ImageListType::New();
 
   // Reading input images
-  for(unsigned int i=0;i<nbImages;i++)
-    {
-      ReaderType::Pointer reader = ReaderType::New();
-      reader->SetFileName(argv[4+i]);
-      reader->Update();
-      inputList->PushBack(reader->GetOutput());
-    }
+  for (unsigned int i=0;i<nbImages;i++)
+  {
+    ReaderType::Pointer reader = ReaderType::New();
+    reader->SetFileName(argv[4+i]);
+    reader->Update();
+    inputList->PushBack(reader->GetOutput());
+  }
   std::cout<<"Input image loaded into images list."<<std::endl;
   // Instanatiation
   RCC8GraphFilterType::Pointer filter = RCC8GraphFilterType::New();

@@ -27,17 +27,17 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbRemoveTortuousPathListFilterNew);
-REGISTER_TEST(otbRemoveTortuousPathListFilter);
-REGISTER_TEST(otbLinkPathListFilterNew);
-REGISTER_TEST(otbLinkPathListFilter);
-REGISTER_TEST(otbLikelihoodPathListFilterNew);
-REGISTER_TEST(otbLikelihoodPathListFilter);
-REGISTER_TEST(otbParallelLinePathListFilterNew);
-REGISTER_TEST(otbParallelLinePathListFilter);
-REGISTER_TEST(otbRoadExtractionFilterNew);
-REGISTER_TEST(otbRoadExtractionFilter);
-REGISTER_TEST(otbAddCarvingPathFilterNew);
-REGISTER_TEST(otbRemoveCarvingPathFilterNew);
-REGISTER_TEST(otbImageToCarvingPathFilterNew);
+  REGISTER_TEST(otbRemoveTortuousPathListFilterNew);
+  REGISTER_TEST(otbRemoveTortuousPathListFilter);
+  REGISTER_TEST(otbLinkPathListFilterNew);
+  REGISTER_TEST(otbLinkPathListFilter);
+  REGISTER_TEST(otbLikelihoodPathListFilterNew);
+  REGISTER_TEST(otbLikelihoodPathListFilter);
+  REGISTER_TEST(otbParallelLinePathListFilterNew);
+  REGISTER_TEST(otbParallelLinePathListFilter);
+  REGISTER_TEST(otbRoadExtractionFilterNew);
+  REGISTER_TEST(otbRoadExtractionFilter);
+  REGISTER_TEST(otbAddCarvingPathFilterNew);
+  REGISTER_TEST(otbRemoveCarvingPathFilterNew);
+  REGISTER_TEST(otbImageToCarvingPathFilterNew);
 }

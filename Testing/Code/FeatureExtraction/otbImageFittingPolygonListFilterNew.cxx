@@ -30,7 +30,7 @@ int otbImageFittingPolygonListFilterNew(int argc, char * argv[])
 
   typedef otb::ImageFittingPolygonListFilter<PolygonType,ImageType> FittingPolygonType;
 
-    // Instantiating object
+  // Instantiating object
   FittingPolygonType::Pointer fittingPolygon = FittingPolygonType::New();
 
   return EXIT_SUCCESS;

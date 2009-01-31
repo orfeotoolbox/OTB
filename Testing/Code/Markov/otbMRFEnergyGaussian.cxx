@@ -39,24 +39,24 @@ int otbMRFEnergyGaussian(int argc, char * argv[])
   InputImagePixelType    inPix = 10;
   LabelledImagePixelType inLab = 5;
 
-  if( object->GetSingleValue(inPix, inLab) != 25 )
-    {
-      return EXIT_FAILURE;
-    }
+  if ( object->GetSingleValue(inPix, inLab) != 25 )
+  {
+    return EXIT_FAILURE;
+  }
 
   inPix = 5;
   inLab = 10;
-  if( object->GetSingleValue(inPix, inLab) != 25 )
-    {
-      return EXIT_FAILURE;
-    }
+  if ( object->GetSingleValue(inPix, inLab) != 25 )
+  {
+    return EXIT_FAILURE;
+  }
 
   inPix = 0;
   inLab = 0;
-  if( object->GetSingleValue(inPix, inLab) != 0 )
-    {
-      return EXIT_FAILURE;
-    }
+  if ( object->GetSingleValue(inPix, inLab) != 0 )
+  {
+    return EXIT_FAILURE;
+  }
 
 
   return EXIT_SUCCESS;

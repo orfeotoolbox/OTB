@@ -43,7 +43,7 @@ int otbEnergyTextureImageFunction(int argc, char * argv[])
 
   FunctionType::Pointer energyFunction = FunctionType::New();
   FilterType::Pointer filter = FilterType::New();
-  
+
 
   // Instantiating object
   ReaderType::Pointer reader  = ReaderType::New();
@@ -66,7 +66,7 @@ int otbEnergyTextureImageFunction(int argc, char * argv[])
   writer->SetInput(filter->GetOutput());
   writer->SetNumberOfStreamDivisions(1);
   writer->Update();
-  
+
 
   return EXIT_SUCCESS;
 }

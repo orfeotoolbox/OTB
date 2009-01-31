@@ -21,13 +21,13 @@
 #include "otbPolygon.h"
 #include "otbPersistentVectorizationImageFilter.h"
 #include "otbImageFileReader.h"
-#include <fstream> 
+#include <fstream>
 
 int otbPersistentVectorizationFilter(int argc, char * argv[])
 {
   const char * infname  = argv[1];
   const char * outfname = argv[2];
-  
+
   const unsigned int ImageDimension = 2;
   typedef unsigned short LabelType;
 
@@ -48,18 +48,18 @@ int otbPersistentVectorizationFilter(int argc, char * argv[])
   std::ofstream f;
   f.open(outfname);
 
-  for(PathListType::Iterator it = filter->GetPathList()->Begin();
-      it != filter->GetPathList()->End();
-      ++it)
-    {
-      for(unsigned int i = 0; i < it.Get()->GetVertexList()->Size();++i)
+  for (PathListType::Iterator it = filter->GetPathList()->Begin();
+       it != filter->GetPathList()->End();
+       ++it)
   {
-    f<<"[ "<<it.Get()->GetVertexList()->GetElement(i)[0]
-     <<", "<<it.Get()->GetVertexList()->GetElement(i)[1]
-     <<"] ";
-  }
-      f<<std::endl;
+    for (unsigned int i = 0; i < it.Get()->GetVertexList()->Size();++i)
+    {
+      f<<"[ "<<it.Get()->GetVertexList()->GetElement(i)[0]
+      <<", "<<it.Get()->GetVertexList()->GetElement(i)[1]
+      <<"] ";
     }
+    f<<std::endl;
+  }
 
   f.close();
 

@@ -63,19 +63,19 @@ int otbImageToSIFTKeyPointSetFilterValid(int argc, char * argv[])
   outputImage->Allocate();
 
   itk::ImageRegionIterator<OutputImageType> iterOutput(outputImage,
-                   outputImage->GetRequestedRegion());
+      outputImage->GetRequestedRegion());
 
   for (iterOutput.GoToBegin(); !iterOutput.IsAtEnd(); ++iterOutput)
-    {
-      ImageType::IndexType index = iterOutput.GetIndex();
-      ImageType::PixelType grayPix = reader->GetOutput()->GetPixel(index);
-      OutputImageType::PixelType rgbPixel;
-      rgbPixel.SetRed( static_cast<unsigned char>(grayPix) );
-      rgbPixel.SetGreen( static_cast<unsigned char>(grayPix) );
-      rgbPixel.SetBlue( static_cast<unsigned char>(grayPix) );
+  {
+    ImageType::IndexType index = iterOutput.GetIndex();
+    ImageType::PixelType grayPix = reader->GetOutput()->GetPixel(index);
+    OutputImageType::PixelType rgbPixel;
+    rgbPixel.SetRed( static_cast<unsigned char>(grayPix) );
+    rgbPixel.SetGreen( static_cast<unsigned char>(grayPix) );
+    rgbPixel.SetBlue( static_cast<unsigned char>(grayPix) );
 
-      iterOutput.Set(rgbPixel);
-    }
+    iterOutput.Set(rgbPixel);
+  }
 
   OutputImageType::PixelType greenPixel;
   OutputImageType::SizeType size = outputImage->GetLargestPossibleRegion().GetSize();
@@ -85,27 +85,27 @@ int otbImageToSIFTKeyPointSetFilterValid(int argc, char * argv[])
   greenPixel.SetBlue(0);
 
   std::ifstream desc(inputKeysFileName);
-  while(!desc.eof())
-    {
-      OutputImageType::IndexType index;
-      OutputImageType::PointType point;
-      std::string line;
-      desc >> point[0] >> point[1];
-      std::getline(desc,line);
+  while (!desc.eof())
+  {
+    OutputImageType::IndexType index;
+    OutputImageType::PointType point;
+    std::string line;
+    desc >> point[0] >> point[1];
+    std::getline(desc,line);
 
-      outputImage->TransformPhysicalPointToIndex(point, index);
+    outputImage->TransformPhysicalPointToIndex(point, index);
 
-      outputImage->SetPixel(index, greenPixel);
-      if (static_cast<unsigned int>(index[1]) < static_cast<unsigned int>(size[1]) )
-  outputImage->SetPixel(index+t,greenPixel);
-      if (index[1] > 0)
-  outputImage->SetPixel(index+b,greenPixel);
-      if (static_cast<unsigned int>(index[0]) < static_cast<unsigned int>(size[0]) )
-  outputImage->SetPixel(index+l,greenPixel);
-      if (index[0] > 0)
-  outputImage->SetPixel(index+r,greenPixel);
+    outputImage->SetPixel(index, greenPixel);
+    if (static_cast<unsigned int>(index[1]) < static_cast<unsigned int>(size[1]) )
+      outputImage->SetPixel(index+t,greenPixel);
+    if (index[1] > 0)
+      outputImage->SetPixel(index+b,greenPixel);
+    if (static_cast<unsigned int>(index[0]) < static_cast<unsigned int>(size[0]) )
+      outputImage->SetPixel(index+l,greenPixel);
+    if (index[0] > 0)
+      outputImage->SetPixel(index+r,greenPixel);
 
-    }
+  }
   desc.close();
 
   typedef otb::ImageFileWriter<OutputImageType> WriterType;

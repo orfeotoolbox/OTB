@@ -42,34 +42,34 @@ int otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii(int argc, char *
 
   const char * infname = argv[1];
   const char * outfname = argv[2];
-  
+
   const unsigned int scales = atoi(argv[3]);
   typedef float RealType;
   const unsigned int Dimension =2;
- 
+
   typedef otb::Image<RealType,Dimension> ImageType;
   typedef itk::VariableLengthVector<RealType> RealVectorType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef itk::PointSet<RealVectorType,Dimension> PointSetType;
 
   typedef otb::SiftFastImageFilter<ImageType,PointSetType> ImageToFastSIFTKeyPointSetFilterType;
-  
+
   // PointSet iterator types
   typedef PointSetType::PointsContainer PointsContainerType;
   typedef PointsContainerType::Iterator PointsIteratorType;
   typedef PointSetType::PointDataContainer PointDataContainerType;
   typedef PointDataContainerType::Iterator PointDataIteratorType;
 
-  typedef std::vector<float> siftDataVector; 
+  typedef std::vector<float> siftDataVector;
   typedef std::vector<siftDataVector> ImageDataType;   //Kind of PointSet with vectors
-  
+
   // Instantiating object
   ReaderType::Pointer reader = ReaderType::New();
   ImageToFastSIFTKeyPointSetFilterType::Pointer filter = ImageToFastSIFTKeyPointSetFilterType::New();
-  
+
   //Instanciation of std::vector for lexicographiacal sorting
   ImageDataType  imageData;
-   
+
   reader->SetFileName(infname);
   filter->SetInput(reader->GetOutput());
   filter->SetNumberOfScales(scales);
@@ -82,42 +82,42 @@ int otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii(int argc, char *
 
   outfile << "Number of scales: "<<scales << std::endl;
   outfile << "Number of SIFT key points: " << filter->GetOutput()->GetNumberOfPoints() << std::endl;
-  
+
 
   // Copy the PointSet to std::vector< std::vector >
-  while( pIt!=filter->GetOutput()->GetPoints()->End() )
-    {
-      siftDataVector siftData;
-      
-      siftData.push_back(pIt.Value()[0]);
-      siftData.push_back(pIt.Value()[1]);
-      
-      unsigned int lIterDesc=0;
-      while (lIterDesc < pDataIt.Value().Size())
-	{
-	  siftData.push_back(pDataIt.Value()[lIterDesc]);
-	  lIterDesc++;
-	}
+  while ( pIt!=filter->GetOutput()->GetPoints()->End() )
+  {
+    siftDataVector siftData;
 
-      imageData.push_back(siftData);
-      ++pIt;
-      ++pDataIt;
+    siftData.push_back(pIt.Value()[0]);
+    siftData.push_back(pIt.Value()[1]);
+
+    unsigned int lIterDesc=0;
+    while (lIterDesc < pDataIt.Value().Size())
+    {
+      siftData.push_back(pDataIt.Value()[lIterDesc]);
+      lIterDesc++;
     }
 
-  //Sorting the vectors 
+    imageData.push_back(siftData);
+    ++pIt;
+    ++pDataIt;
+  }
+
+  //Sorting the vectors
   ImageDataType::iterator itData ;
   sort(imageData.begin() , imageData.end(),CMP);
-  
+
   itData = imageData.begin();
-  
+
   while (  itData != imageData.end()   )
-    {
-      outfile << "[" << std::fixed << std::setprecision(1) << (*itData)[0] << ", " << std::setprecision(1) << (*itData)[1] << "]" << endl;
-	    
-      ++itData;
-    }
-  outfile.close(); 
-  
+  {
+    outfile << "[" << std::fixed << std::setprecision(1) << (*itData)[0] << ", " << std::setprecision(1) << (*itData)[1] << "]" << endl;
+
+    ++itData;
+  }
+  outfile.close();
+
   return EXIT_SUCCESS;
 }
 

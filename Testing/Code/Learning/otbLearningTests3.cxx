@@ -28,19 +28,19 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbSOMClassifierNew);
-REGISTER_TEST(otbSOMClassifier);
-REGISTER_TEST(otbSOMImageClassificationFilterNew);
-REGISTER_TEST(otbSOMImageClassificationFilter);
-REGISTER_TEST(otbSEMClassifierNew);
-REGISTER_TEST(otbSVMImageClassificationFilterNew);
-REGISTER_TEST(otbSVMImageClassificationFilter);
-REGISTER_TEST(otbSVMModelGenericKernelsTest);
-REGISTER_TEST(otbSVMModelCopyTest);
-REGISTER_TEST(otbSVMModelCopyGenericKernelTest);
-REGISTER_TEST(otbSVMModelCopyComposedKernelTest);
-REGISTER_TEST(otbKMeansImageClassificationFilterNew);
-REGISTER_TEST(otbKMeansImageClassificationFilter);
-REGISTER_TEST(otbSVMInverseCosSpectralAngleKernelFunctorImageModelEstimatorTest);
- REGISTER_TEST(otbSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest); 
+  REGISTER_TEST(otbSOMClassifierNew);
+  REGISTER_TEST(otbSOMClassifier);
+  REGISTER_TEST(otbSOMImageClassificationFilterNew);
+  REGISTER_TEST(otbSOMImageClassificationFilter);
+  REGISTER_TEST(otbSEMClassifierNew);
+  REGISTER_TEST(otbSVMImageClassificationFilterNew);
+  REGISTER_TEST(otbSVMImageClassificationFilter);
+  REGISTER_TEST(otbSVMModelGenericKernelsTest);
+  REGISTER_TEST(otbSVMModelCopyTest);
+  REGISTER_TEST(otbSVMModelCopyGenericKernelTest);
+  REGISTER_TEST(otbSVMModelCopyComposedKernelTest);
+  REGISTER_TEST(otbKMeansImageClassificationFilterNew);
+  REGISTER_TEST(otbKMeansImageClassificationFilter);
+  REGISTER_TEST(otbSVMInverseCosSpectralAngleKernelFunctorImageModelEstimatorTest);
+  REGISTER_TEST(otbSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest);
 }

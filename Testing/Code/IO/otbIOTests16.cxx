@@ -28,14 +28,14 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbRADImageIOTestCanRead);
-REGISTER_TEST(otbImageFileReaderRADChar);
-REGISTER_TEST(otbImageFileReaderRADInt);
-REGISTER_TEST(otbImageFileReaderRADFloat);
-REGISTER_TEST(otbImageFileReaderRADComplexDouble);
-REGISTER_TEST(otbImageFileReaderRADComplexFloat);
-REGISTER_TEST(otbImageFileReaderRADComplexFloatExtract);
-REGISTER_TEST(otbImageFileReaderRADComplexInt);
-REGISTER_TEST(otbPointSetFileReaderNew);
-REGISTER_TEST(otbPointSetFileReader);
+  REGISTER_TEST(otbRADImageIOTestCanRead);
+  REGISTER_TEST(otbImageFileReaderRADChar);
+  REGISTER_TEST(otbImageFileReaderRADInt);
+  REGISTER_TEST(otbImageFileReaderRADFloat);
+  REGISTER_TEST(otbImageFileReaderRADComplexDouble);
+  REGISTER_TEST(otbImageFileReaderRADComplexFloat);
+  REGISTER_TEST(otbImageFileReaderRADComplexFloatExtract);
+  REGISTER_TEST(otbImageFileReaderRADComplexInt);
+  REGISTER_TEST(otbPointSetFileReaderNew);
+  REGISTER_TEST(otbPointSetFileReader);
 }

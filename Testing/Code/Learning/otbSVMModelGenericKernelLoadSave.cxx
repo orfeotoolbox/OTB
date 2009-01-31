@@ -36,9 +36,9 @@ public:
   virtual ~LinearKernelFunctor() {};
 
   virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const
-    {
-      return this->dot(x,y);
-    }
+  {
+    return this->dot(x,y);
+  }
 };
 
 }

@@ -52,13 +52,13 @@ int otbOrthoRectificationFilterWithDEM( int argc, char* argv[] )
 {
   ossimInit::instance()->initialize(argc, argv);
 
-  if(argc!=12)
-    {
-      std::cout << argv[0] <<" <input filename> <output filename>  <origin easting>  <origin northing> <x size> <y size>";
-      std::cout << "<x_spacing> <y_spacing> <UTM zone> <UTM hemisphere> <DEM directory>" << std::endl;
+  if (argc!=12)
+  {
+    std::cout << argv[0] <<" <input filename> <output filename>  <origin easting>  <origin northing> <x size> <y size>";
+    std::cout << "<x_spacing> <y_spacing> <UTM zone> <UTM hemisphere> <DEM directory>" << std::endl;
 
-      return EXIT_FAILURE;
-    }
+    return EXIT_FAILURE;
+  }
 
 
   typedef otb::Image<double, 2>     ImageType;

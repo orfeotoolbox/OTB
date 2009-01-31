@@ -35,11 +35,11 @@ int otbSVMClassifierPointSet(int argc, char* argv[] )
   namespace stat = itk::Statistics ;
 
   if (argc != 2)
-    {
-      std::cout << "Usage : " << argv[0] << " modelFile"
-                << std::endl ;
-      return EXIT_FAILURE;
-    }
+  {
+    std::cout << "Usage : " << argv[0] << " modelFile"
+              << std::endl ;
+    return EXIT_FAILURE;
+  }
 
   const char * modelFilename  = argv[1];
 
@@ -52,7 +52,7 @@ int otbSVMClassifierPointSet(int argc, char* argv[] )
   const   unsigned int                              Dimension = 2;
 
   typedef itk::PointSet< InputVectorType,  Dimension >
-    MeasurePointSetType;
+  MeasurePointSetType;
 
 
   MeasurePointSetType::Pointer mPSet = MeasurePointSetType::New();
@@ -65,33 +65,33 @@ int otbSVMClassifierPointSet(int argc, char* argv[] )
 
   unsigned int pointId;
 
-  for(pointId = 0; pointId<20; pointId++)
-    {
+  for (pointId = 0; pointId<20; pointId++)
+  {
 
-      MeasurePointType mP;
+    MeasurePointType mP;
 
-      mP[0] = pointId;
-      mP[1] = pointId;
-
-
-      InputVectorType measure;
-      //measure.push_back(vcl_pow(pointId,2.0));
-      measure.push_back(double(2.0*pointId));
-      measure.push_back(double(-10));
+    mP[0] = pointId;
+    mP[1] = pointId;
 
 
-      mCont->InsertElement( pointId , mP );
-      mPSet->SetPointData( pointId, measure );
+    InputVectorType measure;
+    //measure.push_back(vcl_pow(pointId,2.0));
+    measure.push_back(double(2.0*pointId));
+    measure.push_back(double(-10));
 
 
-    }
+    mCont->InsertElement( pointId , mP );
+    mPSet->SetPointData( pointId, measure );
+
+
+  }
 
   mPSet->SetPoints( mCont );
 
   std::cout << "PointSet built" << std::endl;
 
   typedef itk::Statistics::PointSetToListAdaptor< MeasurePointSetType >
-    SampleType;
+  SampleType;
   SampleType::Pointer sample = SampleType::New();
   sample->SetPointSet( mPSet );
 
@@ -134,23 +134,23 @@ int otbSVMClassifierPointSet(int argc, char* argv[] )
   double error = 0.0;
   pointId = 0;
   while (m_iter != m_last)
-    {
-      ClassifierType::ClassLabelType label = m_iter.GetClassLabel();
+  {
+    ClassifierType::ClassLabelType label = m_iter.GetClassLabel();
 
-      InputVectorType measure;
+    InputVectorType measure;
 
-      mPSet->GetPointData(pointId, &measure);
+    mPSet->GetPointData(pointId, &measure);
 
-      if(label != ((measure[0]+measure[1])>0) )
-  error++;
+    if (label != ((measure[0]+measure[1])>0) )
+      error++;
 
-      std::cout << label << "/" <<
-  ((measure[0]+measure[1])>0) << std::endl;
+    std::cout << label << "/" <<
+              ((measure[0]+measure[1])>0) << std::endl;
 
 
-      ++pointId;
-      ++m_iter ;
-    }
+    ++pointId;
+    ++m_iter ;
+  }
 
   std::cout << "Error = " << error/pointId << std::endl;
 

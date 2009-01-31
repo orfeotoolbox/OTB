@@ -27,15 +27,15 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbStreamingResampleImageFilterNew);
-REGISTER_TEST(otbStreamingResampleImageFilter);
-REGISTER_TEST(otbStreamingResampleImageFilterCompareWithITK);
-REGISTER_TEST(otbStreamingStatisticsVectorImageFilterNew);
-REGISTER_TEST(otbStreamingStatisticsVectorImageFilter);
-REGISTER_TEST(otbMatrixTransposeMatrixImageFilterNew);
-REGISTER_TEST(otbMatrixTransposeMatrixImageFilter);
-REGISTER_TEST(otbUnaryImageFunctorWithVectorImageFilterNew);
-REGISTER_TEST(otbUnaryImageFunctorWithVectorImageFilter);
-REGISTER_TEST(otbPrintableImageFilterNew);
-REGISTER_TEST(otbPrintableImageFilter);
+  REGISTER_TEST(otbStreamingResampleImageFilterNew);
+  REGISTER_TEST(otbStreamingResampleImageFilter);
+  REGISTER_TEST(otbStreamingResampleImageFilterCompareWithITK);
+  REGISTER_TEST(otbStreamingStatisticsVectorImageFilterNew);
+  REGISTER_TEST(otbStreamingStatisticsVectorImageFilter);
+  REGISTER_TEST(otbMatrixTransposeMatrixImageFilterNew);
+  REGISTER_TEST(otbMatrixTransposeMatrixImageFilter);
+  REGISTER_TEST(otbUnaryImageFunctorWithVectorImageFilterNew);
+  REGISTER_TEST(otbUnaryImageFunctorWithVectorImageFilter);
+  REGISTER_TEST(otbPrintableImageFilterNew);
+  REGISTER_TEST(otbPrintableImageFilter);
 }

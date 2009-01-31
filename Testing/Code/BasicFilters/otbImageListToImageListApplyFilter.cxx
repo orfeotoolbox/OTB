@@ -44,7 +44,7 @@ int otbImageListToImageListApplyFilter(int argc, char * argv[])
   typedef otb::ImageFileWriter<ImageType> WriterType;
 
   typedef otb::ImageListToImageListApplyFilter<ImageListType,ImageListType,MeanFilterType>
-    ImageListToImageListApplyFilterType;
+  ImageListToImageListApplyFilterType;
 
   // Instantiating object
   ImageListToImageListApplyFilterType::Pointer filter = ImageListToImageListApplyFilterType::New();

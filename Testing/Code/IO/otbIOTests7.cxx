@@ -28,6 +28,6 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbImageFileReaderTest);
-REGISTER_TEST(otbImageFileReaderRGBTest);
+  REGISTER_TEST(otbImageFileReaderTest);
+  REGISTER_TEST(otbImageFileReaderRGBTest);
 }

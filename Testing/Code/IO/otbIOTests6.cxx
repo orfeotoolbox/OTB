@@ -28,12 +28,12 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbGDALImageIOTestCanWrite);
-REGISTER_TEST(otbONERAImageIOTestCanRead);
-REGISTER_TEST(otbImageFileReaderONERATest);
-REGISTER_TEST(otbImageFileReaderONERAComplex);
-REGISTER_TEST(otbImageFileWriterONERAComplex);
-REGISTER_TEST(otbImageFileWriterStreamingONERAComplex);
-REGISTER_TEST(otbMSTARImageIOTestCanRead);
-REGISTER_TEST(otbImageFileReaderMSTAR);
+  REGISTER_TEST(otbGDALImageIOTestCanWrite);
+  REGISTER_TEST(otbONERAImageIOTestCanRead);
+  REGISTER_TEST(otbImageFileReaderONERATest);
+  REGISTER_TEST(otbImageFileReaderONERAComplex);
+  REGISTER_TEST(otbImageFileWriterONERAComplex);
+  REGISTER_TEST(otbImageFileWriterStreamingONERAComplex);
+  REGISTER_TEST(otbMSTARImageIOTestCanRead);
+  REGISTER_TEST(otbImageFileReaderMSTAR);
 }

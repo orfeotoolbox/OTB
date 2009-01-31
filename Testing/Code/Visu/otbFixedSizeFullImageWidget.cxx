@@ -45,14 +45,14 @@ int otbFixedSizeFullImageWidget( int argc, char * argv[] )
   WidgetType::Pointer widget = WidgetType::New();
   window.resizable(widget.GetPointer());
   widget->SetInput(reader->GetOutput());
-  if(reader->GetOutput()->GetNumberOfComponentsPerPixel()>=3)
-    {
-      widget->SetViewModel(WidgetType::RGB);
-    }
+  if (reader->GetOutput()->GetNumberOfComponentsPerPixel()>=3)
+  {
+    widget->SetViewModel(WidgetType::RGB);
+  }
   else
-    {
-      widget->SetViewModel(WidgetType::GRAYSCALE);
-    }
+  {
+    widget->SetViewModel(WidgetType::GRAYSCALE);
+  }
   widget->Init(0,0,size[0],size[1],"Test Full Image Widget");
   widget->redraw();
   window.end();
@@ -62,21 +62,21 @@ int otbFixedSizeFullImageWidget( int argc, char * argv[] )
   widget->redraw();
   Fl::check();
 
-  for(int i = 0;i<=400;i+=40)
-    {
-      Fl::check();
-      window.resize(0,0,i,i);
-      Fl::wait(0.2);
-      Fl::check();
-    }
+  for (int i = 0;i<=400;i+=40)
+  {
+    Fl::check();
+    window.resize(0,0,i,i);
+    Fl::wait(0.2);
+    Fl::check();
+  }
 
-  for(int i = 400;i>=0;i-=40)
-    {
-      Fl::check();
-      window.resize(0,0,i,i);
-      Fl::wait(0.2);
-      Fl::check();
-    }
+  for (int i = 400;i>=0;i-=40)
+  {
+    Fl::check();
+    window.resize(0,0,i,i);
+    Fl::wait(0.2);
+    Fl::check();
+  }
   // suppres child, without delete memory.
   // delete memory is ITK respoability, since WidgetType::New()
   window.remove(widget.GetPointer());

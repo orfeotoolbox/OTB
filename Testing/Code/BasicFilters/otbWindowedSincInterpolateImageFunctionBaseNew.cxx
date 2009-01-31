@@ -22,17 +22,24 @@
 #include "otbImage.h"
 
 
-namespace Function {
+namespace Function
+{
 template< class TInput=double, class TOutput=double >
 class SameFunction
 {
 public:
-  void SetRadius(unsigned int rad){ m_Radius = rad; };
-  unsigned int GetRadius() const { return m_Radius; };
+  void SetRadius(unsigned int rad)
+  {
+    m_Radius = rad;
+  };
+  unsigned int GetRadius() const
+  {
+    return m_Radius;
+  };
   inline TOutput operator()( const TInput & A ) const
-    {
-      return static_cast<TOutput>(A);
-    }
+  {
+    return static_cast<TOutput>(A);
+  }
   unsigned int m_Radius;
 };
 

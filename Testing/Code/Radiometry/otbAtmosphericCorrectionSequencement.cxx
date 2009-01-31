@@ -40,18 +40,18 @@
 
 int otbAtmosphericCorrectionSequencementTest( int argc, char *argv[] )
 {
-  if( argc != 19 )
-    {
-      std::cerr << "Missing Parameters " << std::endl;
-      std::cerr << "Usage: " << argv[0];
-      std::cerr << "    inputImage , outputImage,"  << std::endl;
-      std::cerr << "    alphaBetaFileName , solarZenithalAngle , day, month , solarIlluminationFileName,"  << std::endl;
-      std::cerr << "    solarAzimutalAngle , viewingZenithalAngle , viewingAzimutalAngle,"  << std::endl;
-      std::cerr << "    atmosphericPressure , waterVaporAmount , ozoneAmount , aerosolModel , AerosolOptical,"  << std::endl;
-      std::cerr << "    wavelenghtSpectralBandFileName , adjencyEffect6SCorrectionWindowRadius, pixelSpacingInKilometers" << std::endl;
-      std::cerr << std::endl;
-      return 1;
-    }
+  if ( argc != 19 )
+  {
+    std::cerr << "Missing Parameters " << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << "    inputImage , outputImage,"  << std::endl;
+    std::cerr << "    alphaBetaFileName , solarZenithalAngle , day, month , solarIlluminationFileName,"  << std::endl;
+    std::cerr << "    solarAzimutalAngle , viewingZenithalAngle , viewingAzimutalAngle,"  << std::endl;
+    std::cerr << "    atmosphericPressure , waterVaporAmount , ozoneAmount , aerosolModel , AerosolOptical,"  << std::endl;
+    std::cerr << "    wavelenghtSpectralBandFileName , adjencyEffect6SCorrectionWindowRadius, pixelSpacingInKilometers" << std::endl;
+    std::cerr << std::endl;
+    return 1;
+  }
 
   const unsigned int                                    Dimension = 2;
   typedef double                                        PixelType;
@@ -71,7 +71,7 @@ int otbAtmosphericCorrectionSequencementTest( int argc, char *argv[] )
 //-------------------------------
 
   typedef otb::ImageToLuminanceImageFilter<ImageType,ImageType>
-                                ImageToLuminanceImageFilterType;
+  ImageToLuminanceImageFilterType;
   typedef ImageToLuminanceImageFilterType::VectorType VectorType;
 
   VectorType alpha(nbOfComponent);
@@ -82,12 +82,12 @@ int otbAtmosphericCorrectionSequencementTest( int argc, char *argv[] )
   std::ifstream fin;
   fin.open(argv[3]);
   double dalpha(0.), dbeta(0.);
-  for( unsigned int i=0 ; i < nbOfComponent ; i++)
+  for ( unsigned int i=0 ; i < nbOfComponent ; i++)
   {
-        fin >> dalpha;
-        fin >> dbeta;
-        alpha[i] = dalpha;
-        beta[i] = dbeta;
+    fin >> dalpha;
+    fin >> dbeta;
+    alpha[i] = dalpha;
+    beta[i] = dbeta;
   }
   fin.close();
 
@@ -99,7 +99,7 @@ int otbAtmosphericCorrectionSequencementTest( int argc, char *argv[] )
 
 //-------------------------------
   typedef otb::LuminanceToReflectanceImageFilter<ImageType,ImageType>
-                                LuminanceToReflectanceImageFilterType;
+  LuminanceToReflectanceImageFilterType;
 
   typedef LuminanceToReflectanceImageFilterType::VectorType VectorType;
 
@@ -108,10 +108,10 @@ int otbAtmosphericCorrectionSequencementTest( int argc, char *argv[] )
 
   fin.open(argv[7]);
   double dsolarIllumination(0.);
-  for( unsigned int i=0 ; i < nbOfComponent ; i++)
+  for ( unsigned int i=0 ; i < nbOfComponent ; i++)
   {
-        fin >> dsolarIllumination;
-        solarIllumination[i] = dsolarIllumination;
+    fin >> dsolarIllumination;
+    solarIllumination[i] = dsolarIllumination;
   }
   fin.close();
 
@@ -128,18 +128,18 @@ int otbAtmosphericCorrectionSequencementTest( int argc, char *argv[] )
 
 //-------------------------------
   typedef otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
-                                AtmosphericCorrectionParametersTo6SRadiativeTermsType;
+  AtmosphericCorrectionParametersTo6SRadiativeTermsType;
   typedef otb::AtmosphericCorrectionParameters
-                                AtmosphericCorrectionParametersType;
+  AtmosphericCorrectionParametersType;
   typedef otb::AtmosphericRadiativeTerms
-                                AtmosphericRadiativeTermsType;
+  AtmosphericRadiativeTermsType;
   typedef AtmosphericCorrectionParametersType::AerosolModelType
-                                AerosolModelType;
+  AerosolModelType;
 
   typedef otb::FilterFunctionValues
-                                FilterFunctionValuesType;
+  FilterFunctionValuesType;
   typedef FilterFunctionValuesType::ValuesVectorType
-                                ValuesVectorType;
+  ValuesVectorType;
 
 
   AtmosphericCorrectionParametersType::Pointer dataAtmosphericCorrectionParameters = AtmosphericCorrectionParametersType::New();
@@ -157,25 +157,25 @@ int otbAtmosphericCorrectionSequencementTest( int argc, char *argv[] )
 
   fin.open(argv[16]);
   fin >> nbBands;
-  for(unsigned int i=0 ; i<nbBands ; i++)
+  for (unsigned int i=0 ; i<nbBands ; i++)
   {
-        valuesVector.clear();
-        fin >> sString;
-        fin >> minSpectralValue;
-        fin >> maxSpectralValue;
-        fin >> userStep;
-        fin >> nbValuesPerBand;
-        for( unsigned int j=0 ; j < nbValuesPerBand ; j++)
-        {
-                fin >> value;
-                valuesVector.push_back(value);
-        }
-        FilterFunctionValuesType::Pointer functionValues = FilterFunctionValuesType::New();
-        functionValues->SetFilterFunctionValues(valuesVector);
-        functionValues->SetMinSpectralValue(minSpectralValue);
-        functionValues->SetMaxSpectralValue(maxSpectralValue);
-        functionValues->SetUserStep( userStep );
-        dataAtmosphericCorrectionParameters->SetWavelenghtSpectralBandWithIndex(i, functionValues);
+    valuesVector.clear();
+    fin >> sString;
+    fin >> minSpectralValue;
+    fin >> maxSpectralValue;
+    fin >> userStep;
+    fin >> nbValuesPerBand;
+    for ( unsigned int j=0 ; j < nbValuesPerBand ; j++)
+    {
+      fin >> value;
+      valuesVector.push_back(value);
+    }
+    FilterFunctionValuesType::Pointer functionValues = FilterFunctionValuesType::New();
+    functionValues->SetFilterFunctionValues(valuesVector);
+    functionValues->SetMinSpectralValue(minSpectralValue);
+    functionValues->SetMaxSpectralValue(maxSpectralValue);
+    functionValues->SetUserStep( userStep );
+    dataAtmosphericCorrectionParameters->SetWavelenghtSpectralBandWithIndex(i, functionValues);
   }
 
   fin.close();

@@ -40,7 +40,7 @@ int otbPolygon(int argc, char * argv[])
   bool first = true;
   while ( argv[cpt] != NULL && argv[cpt+1]!= NULL)
   {
-    if(argv[cpt][0]=='n')
+    if (argv[cpt][0]=='n')
     {
       first = false;
       ++cpt;
@@ -50,7 +50,7 @@ int otbPolygon(int argc, char * argv[])
       ContinuousIndexType newVertex;
       newVertex[0]=atof(argv[cpt]);
       newVertex[1]=atof(argv[cpt+1]);
-      if(first)
+      if (first)
         polygon1->AddVertex(newVertex);
       else
         polygon2->AddVertex(newVertex);
@@ -70,7 +70,7 @@ int otbPolygon(int argc, char * argv[])
   std::ofstream file;
   file.open(outfile);
 
-  for(it=begin1;it!=end1;++it)
+  for (it=begin1;it!=end1;++it)
   {
     file<<"polygon1->IsInside("<<it.Value()<<") = "<<polygon1->IsInside(it.Value())<<std::endl;
     file<<"polygon1->IsOnEdge("<<it.Value()<<") = "<<polygon1->IsOnEdge(it.Value())<<std::endl;
@@ -78,7 +78,7 @@ int otbPolygon(int argc, char * argv[])
     file<<"polygon2->IsOnEdge("<<it.Value()<<") = "<<polygon2->IsOnEdge(it.Value())<<std::endl;
   }
   file<<std::endl<<std::endl;
-  for(it=begin2;it!=end2;++it)
+  for (it=begin2;it!=end2;++it)
   {
     file<<"polygon1->IsInside("<<it.Value()<<") = "<<polygon1->IsInside(it.Value())<<std::endl;
     file<<"polygon1->IsOnEdge("<<it.Value()<<") = "<<polygon1->IsOnEdge(it.Value())<<std::endl;
@@ -90,7 +90,7 @@ int otbPolygon(int argc, char * argv[])
   current = begin1.Value();
   firstVertex=current;
   ++begin1;
-  for(it=begin1;it!=end1;++it)
+  for (it=begin1;it!=end1;++it)
   {
     file<<"polygon1->NbCrossing("<<current<<", "<<it.Value()<<") = "<<polygon1->NbCrossing(current,it.Value())<<std::endl;
     file<<"polygon1->NbTouching("<<current<<", "<<it.Value()<<") = "<<polygon1->NbTouching(current,it.Value())<<std::endl;
@@ -108,7 +108,7 @@ int otbPolygon(int argc, char * argv[])
   current = begin2.Value();
   firstVertex=current;
   ++begin2;
-  for(it=begin2;it!=end2;++it)
+  for (it=begin2;it!=end2;++it)
   {
     file<<"polygon1->NbCrossing("<<current<<", "<<it.Value()<<") = "<<polygon1->NbCrossing(current,it.Value())<<std::endl;
     file<<"polygon1->NbTouching("<<current<<", "<<it.Value()<<") = "<<polygon1->NbTouching(current,it.Value())<<std::endl;

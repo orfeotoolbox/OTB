@@ -30,9 +30,9 @@ int otbDisparityMapEstimationMethodNew(int argc, char* argv[])
   typedef itk::PointSet<ParametersType,Dimension> PointSetType;
   typedef otb::DisparityMapEstimationMethod<ImageType,ImageType,PointSetType> DMEstimationType;
 
-    // Instantiation
+  // Instantiation
   DMEstimationType::Pointer dmestimator = DMEstimationType::New();
 
 
- return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }

@@ -31,7 +31,7 @@ int otbImageListToRCC8GraphFilterNew(int argc, char* argv[])
   typedef otb::RCC8VertexBase<PathType> VertexType;
   typedef otb::RCC8Graph<VertexType> RCC8GraphType;
   typedef otb::ImageListToRCC8GraphFilter<LabelImageType,RCC8GraphType>
-    ImageListToRCC8GraphFilterType;
+  ImageListToRCC8GraphFilterType;
 
   // Instanatiation
   ImageListToRCC8GraphFilterType::Pointer filter = ImageListToRCC8GraphFilterType::New();

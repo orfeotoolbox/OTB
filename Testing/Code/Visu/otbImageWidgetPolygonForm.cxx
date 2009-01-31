@@ -43,14 +43,14 @@ int otbImageWidgetPolygonForm( int argc, char * argv[] )
   int cpt = 2;
 
   while ( argv[cpt] != NULL && argv[cpt+1]!= NULL)
-    {
-      ContinuousIndexType newVertex;
-      newVertex[0]=atof(argv[cpt]);
-      newVertex[1]=atof(argv[cpt+1]);
-      wigdetpolyForm->GetPolygon()->AddVertex(newVertex);
-      ++cpt;
-      ++cpt;
-    }
+  {
+    ContinuousIndexType newVertex;
+    newVertex[0]=atof(argv[cpt]);
+    newVertex[1]=atof(argv[cpt+1]);
+    wigdetpolyForm->GetPolygon()->AddVertex(newVertex);
+    ++cpt;
+    ++cpt;
+  }
 
   ImageType::SizeType size;
   ImageType::IndexType index;
@@ -71,14 +71,14 @@ int otbImageWidgetPolygonForm( int argc, char * argv[] )
   widget->GetFormList()->PushBack( wigdetpolyForm );
   widget->SetFormOverlayVisible(true);
 
-  if(reader->GetOutput()->GetNumberOfComponentsPerPixel()>=3)
-    {
-      widget->SetViewModel(WidgetType::RGB);
-    }
+  if (reader->GetOutput()->GetNumberOfComponentsPerPixel()>=3)
+  {
+    widget->SetViewModel(WidgetType::RGB);
+  }
   else
-    {
-      widget->SetViewModel(WidgetType::GRAYSCALE);
-    }
+  {
+    widget->SetViewModel(WidgetType::GRAYSCALE);
+  }
 
   widget->SetUpperLeftCorner(index);
   widget->Init(0,0,size[0],size[1],"Test Full Resolution Widget");

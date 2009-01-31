@@ -26,12 +26,12 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbProfileToProfileDerivativeFilterNew);
-REGISTER_TEST(otbProfileToProfileDerivativeFilter);
-REGISTER_TEST(otbProfileDerivativeToMultiScaleCharacteristicsFilterNew);
-REGISTER_TEST(otbProfileDerivativeToMultiScaleCharacteristicsFilter);
-REGISTER_TEST(otbMultiScaleConvexOrConcaveClassificationFilterNew);
-REGISTER_TEST(otbMultiScaleConvexOrConcaveClassificationFilter);
-REGISTER_TEST(otbGeodesicMorphologyIterativeDecompositionImageFilterNew);
-REGISTER_TEST(otbGeodesicMorphologyIterativeDecompositionImageFilter);
+  REGISTER_TEST(otbProfileToProfileDerivativeFilterNew);
+  REGISTER_TEST(otbProfileToProfileDerivativeFilter);
+  REGISTER_TEST(otbProfileDerivativeToMultiScaleCharacteristicsFilterNew);
+  REGISTER_TEST(otbProfileDerivativeToMultiScaleCharacteristicsFilter);
+  REGISTER_TEST(otbMultiScaleConvexOrConcaveClassificationFilterNew);
+  REGISTER_TEST(otbMultiScaleConvexOrConcaveClassificationFilter);
+  REGISTER_TEST(otbGeodesicMorphologyIterativeDecompositionImageFilterNew);
+  REGISTER_TEST(otbGeodesicMorphologyIterativeDecompositionImageFilter);
 }

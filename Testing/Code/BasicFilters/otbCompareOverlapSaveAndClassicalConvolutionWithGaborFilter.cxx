@@ -21,11 +21,11 @@
 
 int otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter( int argc, char *argv[])
 {
-  if(argc!=12)
-    {
-      std::cerr<<"Usage: "<<argv[0]<<" infname outfname1 outfname2 xradius yradius a b theta u0 v0 phi"<<std::endl;
-      return EXIT_FAILURE;
-    }
+  if (argc!=12)
+  {
+    std::cerr<<"Usage: "<<argv[0]<<" infname outfname1 outfname2 xradius yradius a b theta u0 v0 phi"<<std::endl;
+    return EXIT_FAILURE;
+  }
 
   const char * infname =  argv[1];
   const char * outfname1 = argv[2];

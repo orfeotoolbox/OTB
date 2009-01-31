@@ -44,11 +44,11 @@ int otbMorphologicalPyramidSynthesisFilter(int argc, char * argv[])
 
   typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
   typedef otb::OpeningClosingMorphologicalFilter<InputImageType,InputImageType,StructuringElementType>
-    OpeningClosingFilterType;
+  OpeningClosingFilterType;
   typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,OutputImageType,OpeningClosingFilterType>
-    PyramidAnalysisFilterType;
+  PyramidAnalysisFilterType;
   typedef otb::MorphologicalPyramidSynthesisFilter<InputImageType,OutputImageType>
-    PyramidSynthesisFilterType;
+  PyramidSynthesisFilterType;
 
   // Reading input image
   ReaderType::Pointer reader = ReaderType::New();

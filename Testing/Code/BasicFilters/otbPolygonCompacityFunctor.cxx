@@ -35,12 +35,12 @@
 int otbPolygonCompacityFunctor( int argc, char * argv[] )
 {
 
-  if(argc !=3 )
-    {
+  if (argc !=3 )
+  {
     std::cout << "Usage: " << argv[0] ;
     std::cout << " inputImage outputFile" << std::endl;
     return 1;
-    }
+  }
 
   typedef unsigned char  InputPixelType;
   typedef unsigned short LabelPixelType;//FIXME doesn't seem to work with long int (64 bits problem ?)
@@ -67,8 +67,8 @@ int otbPolygonCompacityFunctor( int argc, char * argv[] )
 
   PolygonListType::Pointer polygonList = PolygonListType::New();
 
-  for(LabelPixelType label = 1; label<=connectedComponentsFilter->GetObjectCount();++label)
-    {
+  for (LabelPixelType label = 1; label<=connectedComponentsFilter->GetObjectCount();++label)
+  {
     std::cerr << ".";
     PolygonFilterType::Pointer polygonFilter = PolygonFilterType::New();
     polygonFilter->SetInput(connectedComponentsFilter->GetOutput());
@@ -76,7 +76,7 @@ int otbPolygonCompacityFunctor( int argc, char * argv[] )
     polygonFilter->Update();
 
     polygonList->PushBack(polygonFilter->GetOutput());
-    }
+  }
 
   typedef otb::PolygonCompacityFunctor<PolygonType::Pointer> CompatityFunctorType;
   typedef otb::UnaryFunctorObjectListBooleanFilter<PolygonListType,PolygonListType,CompatityFunctorType> CompatityFilterType;
@@ -93,19 +93,19 @@ int otbPolygonCompacityFunctor( int argc, char * argv[] )
 
   typedef  PolygonListType::ConstIterator PolygonListIteratorType;
 
-  for(PolygonListIteratorType pIt = compacityFilter->GetOutput()->Begin();
-      pIt!=compacityFilter->GetOutput()->End();
-      ++pIt)
-    {
+  for (PolygonListIteratorType pIt = compacityFilter->GetOutput()->Begin();
+       pIt!=compacityFilter->GetOutput()->End();
+       ++pIt)
+  {
     file<< "--- New Polygon ---" << std::endl;
     PolygonType::Pointer polygon=pIt.Get();
     IteratorType it;
-    for(it=polygon->GetVertexList()->Begin();it!=polygon->GetVertexList()->End();++it)
-      {
+    for (it=polygon->GetVertexList()->Begin();it!=polygon->GetVertexList()->End();++it)
+    {
       file<<it.Value()<<std::endl;
 
-      }
     }
+  }
 
   file.close();
 

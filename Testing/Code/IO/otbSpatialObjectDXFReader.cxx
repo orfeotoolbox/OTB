@@ -52,73 +52,73 @@ int otbSpatialObjectDXFReader(int argc, char * argv[])
   reader->Update();
   GroupType::Pointer group = reader->GetOutput();
 
-  if(group->GetNumberOfChildren() != 0)
-    {
-      /** Writing image  **/
-      SpatialObjectType::ChildrenListType* children=group->GetChildren(0);
-      SpatialObjectType::ChildrenListType::iterator it = children->begin();
-      SpatialObjectType::ChildrenListType::iterator end = children->end();
-      double maximum[Dimension],minimum[Dimension];
-      (*it)->ComputeBoundingBox();
-      minimum[0]=(*it)->GetBoundingBox()->GetMinimum()[0];
-      minimum[1]=(*it)->GetBoundingBox()->GetMinimum()[1];
-
-      while(it != end)
+  if (group->GetNumberOfChildren() != 0)
   {
+    /** Writing image  **/
+    SpatialObjectType::ChildrenListType* children=group->GetChildren(0);
+    SpatialObjectType::ChildrenListType::iterator it = children->begin();
+    SpatialObjectType::ChildrenListType::iterator end = children->end();
+    double maximum[Dimension],minimum[Dimension];
     (*it)->ComputeBoundingBox();
+    minimum[0]=(*it)->GetBoundingBox()->GetMinimum()[0];
+    minimum[1]=(*it)->GetBoundingBox()->GetMinimum()[1];
 
-    if ((*it)->GetBoundingBox()->GetMinimum()[0] < minimum[0])
+    while (it != end)
+    {
+      (*it)->ComputeBoundingBox();
+
+      if ((*it)->GetBoundingBox()->GetMinimum()[0] < minimum[0])
       {
         minimum[0]=(*it)->GetBoundingBox()->GetMinimum()[0];
       }
-    if ((*it)->GetBoundingBox()->GetMinimum()[1] < minimum[1])
+      if ((*it)->GetBoundingBox()->GetMinimum()[1] < minimum[1])
       {
         minimum[1]=(*it)->GetBoundingBox()->GetMinimum()[1];
       }
-    it++;
+      it++;
+    }
+
+
+    ImageType::SizeType size;
+    size[0]=outputSize;
+    size[1]=outputSize;
+    imageGenerator->SetSize(size);
+    ImageType::PointType origin;
+    origin[0]=(int) minimum[0];
+    origin[1]=(int) minimum[1];
+    imageGenerator->SetOrigin(origin);
+
+    group->ComputeBoundingBox();
+
+    maximum[0]=group->GetBoundingBox()->GetMaximum()[0];
+    maximum[1]=group->GetBoundingBox()->GetMaximum()[1];
+
+    ImageType::SpacingType spacing;
+    spacing[0]=(maximum[0]-origin[0])/size[0];
+    spacing[1]=(maximum[1]-origin[1])/size[1];
+    imageGenerator->SetSpacing(spacing);
+
+
+    imageGenerator->SetInput(group);
+
+
+
+    imageGenerator->Update();
+
+    castFilter->SetOutputMinimum( 0 );
+    castFilter->SetOutputMaximum( 255 );
+    castFilter->SetInput( imageGenerator->GetOutput() );
+    writer->SetInput(castFilter->GetOutput());
+
+    writer->SetFileName(outputFilename);
+    writer->Update();
   }
-
-
-      ImageType::SizeType size;
-      size[0]=outputSize;
-      size[1]=outputSize;
-      imageGenerator->SetSize(size);
-      ImageType::PointType origin;
-      origin[0]=(int) minimum[0];
-      origin[1]=(int) minimum[1];
-      imageGenerator->SetOrigin(origin);
-
-      group->ComputeBoundingBox();
-
-      maximum[0]=group->GetBoundingBox()->GetMaximum()[0];
-      maximum[1]=group->GetBoundingBox()->GetMaximum()[1];
-
-      ImageType::SpacingType spacing;
-      spacing[0]=(maximum[0]-origin[0])/size[0];
-      spacing[1]=(maximum[1]-origin[1])/size[1];
-      imageGenerator->SetSpacing(spacing);
-
-
-      imageGenerator->SetInput(group);
-
-
-
-      imageGenerator->Update();
-
-      castFilter->SetOutputMinimum( 0 );
-      castFilter->SetOutputMaximum( 255 );
-      castFilter->SetInput( imageGenerator->GetOutput() );
-      writer->SetInput(castFilter->GetOutput());
-
-      writer->SetFileName(outputFilename);
-      writer->Update();
-    }
   else
-    {
-      std::cout<<"No objects detected."<<std::endl;
-      return EXIT_FAILURE;
+  {
+    std::cout<<"No objects detected."<<std::endl;
+    return EXIT_FAILURE;
 
-    }
+  }
 
 
   return EXIT_SUCCESS;

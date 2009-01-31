@@ -31,7 +31,7 @@ int otbMorphologicalPyramidSynthesisFilterNew(int argc, char * argv[])
   typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
 
   typedef otb::MorphologicalPyramidSynthesisFilter<InputImageType,OutputImageType>
-    PyramidSynthesisFilterType;
+  PyramidSynthesisFilterType;
 
   // Instantiation
   PyramidSynthesisFilterType::Pointer pyramidSynthesis = PyramidSynthesisFilterType::New();

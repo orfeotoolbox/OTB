@@ -42,7 +42,7 @@ int otbClosingOpeningMorphologicalFilter(int argc, char * argv[])
 
   typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
   typedef otb::ClosingOpeningMorphologicalFilter<InputImageType,OutputImageType,
-    StructuringElementType> ClosingOpeningFilterType;
+  StructuringElementType> ClosingOpeningFilterType;
 
   // Reading input image
   ReaderType::Pointer reader = ReaderType::New();

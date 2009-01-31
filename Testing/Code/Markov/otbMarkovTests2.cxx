@@ -27,12 +27,12 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbMRFOptimizerMetropolisNew);
-REGISTER_TEST(otbMRFOptimizerMetropolis);
-REGISTER_TEST(otbMRFSamplerMAPNew);
-REGISTER_TEST(otbMRFSamplerMAP);
-REGISTER_TEST(otbMRFSamplerRandomNew);
-REGISTER_TEST(otbMRFSamplerRandom);
-REGISTER_TEST(otbMRFSamplerRandomMAPNew);
-REGISTER_TEST(otbMRFSamplerRandomMAP);
+  REGISTER_TEST(otbMRFOptimizerMetropolisNew);
+  REGISTER_TEST(otbMRFOptimizerMetropolis);
+  REGISTER_TEST(otbMRFSamplerMAPNew);
+  REGISTER_TEST(otbMRFSamplerMAP);
+  REGISTER_TEST(otbMRFSamplerRandomNew);
+  REGISTER_TEST(otbMRFSamplerRandom);
+  REGISTER_TEST(otbMRFSamplerRandomMAPNew);
+  REGISTER_TEST(otbMRFSamplerRandomMAP);
 }

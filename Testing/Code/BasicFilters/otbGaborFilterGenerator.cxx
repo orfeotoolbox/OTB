@@ -22,11 +22,11 @@
 
 int otbGaborFilterGenerator(int argc, char * argv[])
 {
-  if(argc!=10)
-    {
-      std::cerr<<"Usage: "<<argv[0]<<"outfname xradius yradius a b theta u0 v0 phi"<<std::endl;
-      return EXIT_FAILURE;
-    }
+  if (argc!=10)
+  {
+    std::cerr<<"Usage: "<<argv[0]<<"outfname xradius yradius a b theta u0 v0 phi"<<std::endl;
+    return EXIT_FAILURE;
+  }
 
   const char * outfname = argv[1];
   const unsigned int xradius = atoi(argv[2]);
@@ -78,10 +78,10 @@ int otbGaborFilterGenerator(int argc, char * argv[])
   itk::ImageRegionIterator<ImageType> it(image,region);
   unsigned int k = 0;
 
-  for(it.GoToBegin();!it.IsAtEnd();++it,++k)
-    {
-      it.Set(filter[k]);
-    }
+  for (it.GoToBegin();!it.IsAtEnd();++it,++k)
+  {
+    it.Set(filter[k]);
+  }
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outfname);

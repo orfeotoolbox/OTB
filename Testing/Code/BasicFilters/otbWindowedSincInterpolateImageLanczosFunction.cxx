@@ -41,15 +41,15 @@ int otbWindowedSincInterpolateImageLanczosFunction(int argc, char * argv[])
 
   std::vector<ContinuousIndexType>    indicesList;
 
-  while(i<static_cast<unsigned int>(argc) && (i+1)<static_cast<unsigned int>(argc))
-    {
-      ContinuousIndexType idx1;
-      idx1[0]=atof(argv[i]);
-      idx1[1]=atof(argv[i+1]);
-      indicesList.push_back(idx1);
+  while (i<static_cast<unsigned int>(argc) && (i+1)<static_cast<unsigned int>(argc))
+  {
+    ContinuousIndexType idx1;
+    idx1[0]=atof(argv[i]);
+    idx1[1]=atof(argv[i+1]);
+    indicesList.push_back(idx1);
 
-      i+=2;
-    }
+    i+=2;
+  }
 
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -63,10 +63,10 @@ int otbWindowedSincInterpolateImageLanczosFunction(int argc, char * argv[])
   file.open(outfname);
 
   file << "Lanczos Window Function"<<std::endl;
-  for(std::vector<ContinuousIndexType>::iterator it = indicesList.begin();it!=indicesList.end();++it)
-    {
-      file<<(*it)<<" -> "<<interp->EvaluateAtContinuousIndex((*it))<<std::endl;
-    }
+  for (std::vector<ContinuousIndexType>::iterator it = indicesList.begin();it!=indicesList.end();++it)
+  {
+    file<<(*it)<<" -> "<<interp->EvaluateAtContinuousIndex((*it))<<std::endl;
+  }
   file << std::endl;
 
   file.close();

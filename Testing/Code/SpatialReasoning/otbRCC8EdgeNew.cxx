@@ -27,5 +27,5 @@ int otbRCC8EdgeNew(int argc, char* argv[])
   RCC8EdgeType::Pointer rcc8= RCC8EdgeType::New();
 
 
- return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }

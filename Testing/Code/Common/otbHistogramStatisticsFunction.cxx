@@ -44,9 +44,9 @@ int otbHistogramStatisticsFunction(int argc, char* argv[])
 
   // create histogram with same value for each frequency
   for (HistogramType::Iterator iter = histogram->Begin(); iter != histogram->End(); ++iter)
-    {
-        iter.SetFrequency(1.0);
-    }
+  {
+    iter.SetFrequency(1.0);
+  }
 
   typedef otb::HistogramStatisticsFunction<HistogramType,MeasurementType>  HistogramStatisticsFunctionType;
   HistogramStatisticsFunctionType::Pointer HistogramStatisticsFunction = HistogramStatisticsFunctionType::New();
@@ -65,70 +65,70 @@ int otbHistogramStatisticsFunction(int argc, char* argv[])
   Entropy = HistogramStatisticsFunction->GetEntropy()[0];
   std::cout << "Entropy 1 : " << Entropy << std::endl;
 
-  if(vcl_abs(Entropy-vcl_log(static_cast<double>(NbOfBins)))>0.00001 )
+  if (vcl_abs(Entropy-vcl_log(static_cast<double>(NbOfBins)))>0.00001 )
   {
     std::cout << "Error in entropy estimation" << std::endl;
-  return EXIT_FAILURE;
+    return EXIT_FAILURE;
   }
 
   Mean = HistogramStatisticsFunction->GetMean()[0];
   std::cout << "Mean 1 : " << Mean << std::endl;
 
-  if( Mean != NbOfBins/2. )
+  if ( Mean != NbOfBins/2. )
   {
     std::cout << "Error in mean estimation" << std::endl;
-  return EXIT_FAILURE;
+    return EXIT_FAILURE;
   }
 
   Covariance = HistogramStatisticsFunction->GetCovariance()[0];
   std::cout << "Covariance 1 : " << Covariance << std::endl;
 
-  if( Covariance != 0 )
+  if ( Covariance != 0 )
   {
     std::cout << "Error in covariance estimation" << std::endl;
-  return EXIT_FAILURE;
+    return EXIT_FAILURE;
   }
 
   // create histogram just all value equal to zero except the first one
   for (HistogramType::Iterator iter = histogram->Begin(); iter != histogram->End(); ++iter)
+  {
+    if (iter == histogram->Begin())
     {
-        if(iter == histogram->Begin())
-  {
-    iter.SetFrequency(1.0);
-  }
-  else
-  {
-    iter.SetFrequency(0.0);
-  }
+      iter.SetFrequency(1.0);
     }
+    else
+    {
+      iter.SetFrequency(0.0);
+    }
+  }
 
   HistogramStatisticsFunction->Update();
 
   Entropy = HistogramStatisticsFunction->GetEntropy()[0];
   std::cout << "Entropy 2 : " << Entropy << std::endl;
 
-  if( Entropy!=0.0 )
+  if ( Entropy!=0.0 )
   {
     std::cout << "Error in entropy estimation" << std::endl;
-  return EXIT_FAILURE;
+    return EXIT_FAILURE;
   }
 
   Mean = HistogramStatisticsFunction->GetMean()[0];
   std::cout << "Mean 2 : " << Mean << std::endl;
 
-  if( Mean != 0.5 )
+  if ( Mean != 0.5 )
   {
     std::cout << "Error in mean estimation" << std::endl;
-  return EXIT_FAILURE;
+    return EXIT_FAILURE;
   }
 
   Covariance = HistogramStatisticsFunction->GetCovariance()[0];
   std::cout << "Covariance 2 : " << Covariance << std::endl;
 
-  if( Covariance != 0 )
+  if ( Covariance != 0 )
   {
     std::cout << "Error in covariance estimation" << std::endl;
-  return EXIT_FAILURE;
+    return EXIT_FAILURE;
   }
 
   return EXIT_SUCCESS;

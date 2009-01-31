@@ -26,14 +26,14 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbCBAMIChangeDetectionTest );
-REGISTER_TEST(otbCorrelChangeDetectionTest );
-REGISTER_TEST(otbMeanDiffChangeDetectionTest );
-REGISTER_TEST(otbMeanRatioChangeDetectionTest );
-REGISTER_TEST(otbLHMIChangeDetectionTest );
-REGISTER_TEST(otbJHMIChangeDetectionTest );
-REGISTER_TEST(otbKullbackLeiblerDistanceImageFilterNew);
-REGISTER_TEST(otbKullbackLeiblerDistanceImageFilter);
-REGISTER_TEST(otbKullbackLeiblerProfileImageFilterNew);
-REGISTER_TEST(otbKullbackLeiblerProfileImageFilter);
+  REGISTER_TEST(otbCBAMIChangeDetectionTest );
+  REGISTER_TEST(otbCorrelChangeDetectionTest );
+  REGISTER_TEST(otbMeanDiffChangeDetectionTest );
+  REGISTER_TEST(otbMeanRatioChangeDetectionTest );
+  REGISTER_TEST(otbLHMIChangeDetectionTest );
+  REGISTER_TEST(otbJHMIChangeDetectionTest );
+  REGISTER_TEST(otbKullbackLeiblerDistanceImageFilterNew);
+  REGISTER_TEST(otbKullbackLeiblerDistanceImageFilter);
+  REGISTER_TEST(otbKullbackLeiblerProfileImageFilterNew);
+  REGISTER_TEST(otbKullbackLeiblerProfileImageFilter);
 }

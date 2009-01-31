@@ -34,14 +34,14 @@ int otbLuminanceToReflectanceImageFilter(int argc, char * argv[])
   int month = 1;
 
   if (argc==9)
-    {
-      flux = static_cast<double>(atof(argv[8]));
-    }
+  {
+    flux = static_cast<double>(atof(argv[8]));
+  }
   else
-    {
-      day = atoi(argv[8]);
-      month = atoi(argv[9]);
-    }
+  {
+    day = atoi(argv[8]);
+    month = atoi(argv[9]);
+  }
 
   const unsigned int Dimension = 2;
   typedef double PixelType;
@@ -74,14 +74,14 @@ int otbLuminanceToReflectanceImageFilter(int argc, char * argv[])
   filter->SetZenithalSolarAngle(angle);
   filter->SetSolarIllumination(solarIllumination);
   if (argc==9)
-    {
-      filter->SetFluxNormalizationCoefficient(flux);
-    }
+  {
+    filter->SetFluxNormalizationCoefficient(flux);
+  }
   else
-    {
-      filter->SetDay(day);
-      filter->SetMonth(month);
-    }
+  {
+    filter->SetDay(day);
+    filter->SetMonth(month);
+  }
 
   filter->SetInput(reader->GetOutput());
   writer->SetInput(filter->GetOutput());

@@ -46,21 +46,21 @@ int otbPathListToHistogramGenerator( int argc, char* argv[] )
   PathListType*  PathList = new PathListType;
   PathList->clear();
 
-  for(int i = 0 ; i <NbAngle ; i++)
-    {
-      PathPointer pathElt = PathType::New();
-      pathElt->Initialize();
-      cindex[0]=30;
-      cindex[1]=30;
-      pathElt->AddVertex(cindex);
+  for (int i = 0 ; i <NbAngle ; i++)
+  {
+    PathPointer pathElt = PathType::New();
+    pathElt->Initialize();
+    cindex[0]=30;
+    cindex[1]=30;
+    pathElt->AddVertex(cindex);
 
-      float Theta = 2.0*static_cast<float>(M_PI)*static_cast<float>(i)/static_cast<float>(NbAngle);
-      cindex[0]= 30 + vcl_cos(Theta);
-      cindex[1]= 30 + vcl_sin(Theta);
-      pathElt->AddVertex(cindex);
+    float Theta = 2.0*static_cast<float>(M_PI)*static_cast<float>(i)/static_cast<float>(NbAngle);
+    cindex[0]= 30 + vcl_cos(Theta);
+    cindex[1]= 30 + vcl_sin(Theta);
+    pathElt->AddVertex(cindex);
 
-      PathList->push_back(pathElt);
-    }
+    PathList->push_back(pathElt);
+  }
 
   HistogramGeneratorType::Pointer histogramGenerator = HistogramGeneratorType::New();
 
@@ -80,16 +80,16 @@ int otbPathListToHistogramGenerator( int argc, char* argv[] )
   std::cout << "Histogram size " << histogramSize << std::endl;
 
 
-  for( unsigned int bin=0; bin < histogramSize; bin++ )
-    {
-      if(histogram->GetFrequency( bin, 0 ) !=NbOfPointsPerHistogram)
+  for ( unsigned int bin=0; bin < histogramSize; bin++ )
   {
-    std::cout << "Error in histogram value !" << std::endl;
-    return EXIT_FAILURE;
-  }
-      std::cout << "bin = " << bin << " frequency = ";
-      std::cout << histogram->GetFrequency( bin, 0 ) << std::endl;
+    if (histogram->GetFrequency( bin, 0 ) !=NbOfPointsPerHistogram)
+    {
+      std::cout << "Error in histogram value !" << std::endl;
+      return EXIT_FAILURE;
     }
+    std::cout << "bin = " << bin << " frequency = ";
+    std::cout << histogram->GetFrequency( bin, 0 ) << std::endl;
+  }
 
 
 

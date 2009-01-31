@@ -31,16 +31,16 @@ int otbMIRegistrationFilterNew(int argc, char* argv[])
   typedef otb::Image<PixelType,ImageDimension>         MovingImageType;
   typedef otb::Image<PixelType,ImageDimension>         FixedImageType;
   typedef otb::Image<DeformationPixelType,
-                               ImageDimension>         DeformationFieldType;
+  ImageDimension>         DeformationFieldType;
 
   //Create the filter
   typedef otb::MIRegistrationFilter< FixedImageType,
-                                       MovingImageType,
-                                       DeformationFieldType >
-                                           RegistrationFilterType;
+  MovingImageType,
+  DeformationFieldType >
+  RegistrationFilterType;
 
   // Instantiation
   RegistrationFilterType::Pointer registrator = RegistrationFilterType::New();
 
- return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }

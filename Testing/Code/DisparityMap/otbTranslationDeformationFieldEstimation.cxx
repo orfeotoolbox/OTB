@@ -37,11 +37,11 @@
 
 int otbTranslationDeformationFieldEstimation(int argc, char* argv[])
 {
-  if(argc!=11)
-    {
-      std::cout<<"usage: "<<argv[0]<<" fixedFileName movingFileName outputFileName explorationSize windowSize learningRate numberOfIterations metricThreshold nbPointToInterpolate pontsetStep"<<std::endl;
-      return EXIT_SUCCESS;
-    }
+  if (argc!=11)
+  {
+    std::cout<<"usage: "<<argv[0]<<" fixedFileName movingFileName outputFileName explorationSize windowSize learningRate numberOfIterations metricThreshold nbPointToInterpolate pontsetStep"<<std::endl;
+    return EXIT_SUCCESS;
+  }
 
   // Input parameters
   const char* fixedFileName = argv[1];
@@ -136,15 +136,15 @@ int otbTranslationDeformationFieldEstimation(int argc, char* argv[])
   unsigned int nodeCounter = 0;
 
   std::cout << "Node coordinates : " << std::endl;
-  for(unsigned int x=0; x<NumberOfXNodes; x++)
-    for(unsigned int y=0; y<NumberOfYNodes; y++)
-      {
-  PointType p;
-  p[0] = firstNodeIndex[0]+x*step;     //  x coordinate
-  p[1] = firstNodeIndex[1]+y*step;     //  y coordinate
-  std::cout << "Id: " << nodeCounter << " ->  " <<  p << std::endl;
-  nodes->SetPoint( nodeCounter++, p );
-      }
+  for (unsigned int x=0; x<NumberOfXNodes; x++)
+    for (unsigned int y=0; y<NumberOfYNodes; y++)
+    {
+      PointType p;
+      p[0] = firstNodeIndex[0]+x*step;     //  x coordinate
+      p[1] = firstNodeIndex[1]+y*step;     //  y coordinate
+      std::cout << "Id: " << nodeCounter << " ->  " <<  p << std::endl;
+      nodes->SetPoint( nodeCounter++, p );
+    }
 
   // Fix to avoid recomputing the disparity for each deformation field generation method.
   nodes->SetBufferedRegion(0);

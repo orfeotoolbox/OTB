@@ -28,16 +28,16 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbVectorDataSourceNew);
-REGISTER_TEST(otbVectorDataFileReaderNew);
-REGISTER_TEST(otbVectorDataFileReader);
-REGISTER_TEST(otbVectorDataFileWriterNew);
-REGISTER_TEST(otbVectorDataFileWriter);
-REGISTER_TEST(otbVectorDataFileReaderWriter);
-REGISTER_TEST(otbVectorDataFileGeoReaderWriter);
-REGISTER_TEST(otbSHPVectorDataIONew);
-REGISTER_TEST(otbKMLVectorDataIONew);
-REGISTER_TEST(otbKMLVectorDataIOTestCanRead);
-REGISTER_TEST(otbKMLVectorDataIOTestCanWrite);
-REGISTER_TEST(otbKMLVectorDataIOTestFileReader);
+  REGISTER_TEST(otbVectorDataSourceNew);
+  REGISTER_TEST(otbVectorDataFileReaderNew);
+  REGISTER_TEST(otbVectorDataFileReader);
+  REGISTER_TEST(otbVectorDataFileWriterNew);
+  REGISTER_TEST(otbVectorDataFileWriter);
+  REGISTER_TEST(otbVectorDataFileReaderWriter);
+  REGISTER_TEST(otbVectorDataFileGeoReaderWriter);
+  REGISTER_TEST(otbSHPVectorDataIONew);
+  REGISTER_TEST(otbKMLVectorDataIONew);
+  REGISTER_TEST(otbKMLVectorDataIOTestCanRead);
+  REGISTER_TEST(otbKMLVectorDataIOTestCanWrite);
+  REGISTER_TEST(otbKMLVectorDataIOTestFileReader);
 }

@@ -27,13 +27,13 @@ int otbPointSetToDensityImageFilterNew(int, char* [] )
 {
 
   const   unsigned int                                             Dimension = 2;
-  typedef float                                                    PixelType; 
-  
+  typedef float                                                    PixelType;
+
   typedef otb::Image<PixelType , Dimension>                        ImageType;
   typedef itk::VariableLengthVector<PixelType>                     RealVectorType;
   typedef itk::PointSet<RealVectorType,Dimension>                  PointSetType;
   typedef otb::PointSetToDensityImageFilter <PointSetType,ImageType>    FunctionType;
-  
+
   /**Instancitation of an object*/
 
   FunctionType::Pointer    filter = FunctionType::New();

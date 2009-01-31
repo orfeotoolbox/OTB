@@ -58,12 +58,12 @@ int otbHuPath( int argc, char * argv[] )
   function->SetInputPath( pathElt );
 
   for (Number = 1 ;Number<8;Number++)
-    {
-      //OTB-FA-00024-CS
-      function->SetMomentNumber(Number);
-      Result = function->Evaluate();
-      std::cout << "Hu("<<Number<<") = "<< Result <<std::endl;
-    }
+  {
+    //OTB-FA-00024-CS
+    function->SetMomentNumber(Number);
+    Result = function->Evaluate();
+    std::cout << "Hu("<<Number<<") = "<< Result <<std::endl;
+  }
 
   return EXIT_SUCCESS;
 }

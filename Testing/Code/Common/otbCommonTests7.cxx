@@ -26,15 +26,15 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbGenericInterpolateImageFunctionNew);
-REGISTER_TEST(otbMirrorBoundaryConditionTest);
-REGISTER_TEST(otbStandardFilterWatcherNew);
-REGISTER_TEST(otbDataNodeTest);
-REGISTER_TEST(otbVectorDataNew);
-REGISTER_TEST(otbVectorData);
-REGISTER_TEST(otbShiftScaleImageAdaptorNew);
-REGISTER_TEST(otbShiftScaleImageAdaptor);
-REGISTER_TEST(otbStandardWriterWatcher);
-REGISTER_TEST(otbUnaryFunctorNeighborhoodWithOffsetImageFilterNew);
-REGISTER_TEST(otbUnaryFunctorNeighborhoodWithOffsetImageFilter);
+  REGISTER_TEST(otbGenericInterpolateImageFunctionNew);
+  REGISTER_TEST(otbMirrorBoundaryConditionTest);
+  REGISTER_TEST(otbStandardFilterWatcherNew);
+  REGISTER_TEST(otbDataNodeTest);
+  REGISTER_TEST(otbVectorDataNew);
+  REGISTER_TEST(otbVectorData);
+  REGISTER_TEST(otbShiftScaleImageAdaptorNew);
+  REGISTER_TEST(otbShiftScaleImageAdaptor);
+  REGISTER_TEST(otbStandardWriterWatcher);
+  REGISTER_TEST(otbUnaryFunctorNeighborhoodWithOffsetImageFilterNew);
+  REGISTER_TEST(otbUnaryFunctorNeighborhoodWithOffsetImageFilter);
 }

@@ -27,8 +27,8 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew);
-REGISTER_TEST(otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms);
-REGISTER_TEST(otbAtmosphericCorrectionSequencementTest);
+  REGISTER_TEST(otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew);
+  REGISTER_TEST(otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms);
+  REGISTER_TEST(otbAtmosphericCorrectionSequencementTest);
 }
 

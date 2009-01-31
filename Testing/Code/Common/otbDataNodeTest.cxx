@@ -52,7 +52,7 @@ int otbDataNodeTest(int argc, char * argv[])
   PointType p;
   p.Fill(5);
 
- point->SetPoint(p);;
+  point->SetPoint(p);;
 
   LineType::Pointer l = LineType::New();
   line->SetLine(l);

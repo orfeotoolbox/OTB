@@ -62,11 +62,11 @@ int otbSOM(int argc, char* argv[])
 
   it.GoToBegin();
 
-  while(!it.IsAtEnd())
-    {
-      listSample->PushBack(it.Get());
-      ++it;
-    }
+  while (!it.IsAtEnd())
+  {
+    listSample->PushBack(it.Get());
+    ++it;
+  }
 
   std::cout<<"LIST SAMPLE SIZE: "<<listSample->GetMeasurementVectorSize()<<std::endl;
 

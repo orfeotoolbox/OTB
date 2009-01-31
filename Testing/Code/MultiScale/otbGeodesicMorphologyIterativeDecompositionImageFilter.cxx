@@ -27,51 +27,51 @@ PURPOSE.  See the above copyright notices for more information.
 
 int otbGeodesicMorphologyIterativeDecompositionImageFilter(int argc, char * argv[])
 {
-      const char * inputFilename = argv[1];
-      const char * outputFilenamePrefix = argv[2];
-      const char * outputFilenameSuffix = argv[3];
-      const unsigned int numberOfLevels = atoi(argv[4]);
-      const unsigned int step = atoi(argv[5]);
-      const unsigned int initValue = atoi(argv[6]);
+  const char * inputFilename = argv[1];
+  const char * outputFilenamePrefix = argv[2];
+  const char * outputFilenameSuffix = argv[3];
+  const unsigned int numberOfLevels = atoi(argv[4]);
+  const unsigned int step = atoi(argv[5]);
+  const unsigned int initValue = atoi(argv[6]);
 
-      const unsigned int Dimension = 2;
-      typedef double InputPixelType;
+  const unsigned int Dimension = 2;
+  typedef double InputPixelType;
 
-      typedef otb::Image<InputPixelType,Dimension> InputImageType;
-      typedef otb::ImageFileReader<InputImageType> ReaderType;
-      typedef otb::ImageFileWriter<InputImageType> WriterType;
+  typedef otb::Image<InputPixelType,Dimension> InputImageType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileWriter<InputImageType> WriterType;
 
-      typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
-      typedef otb::GeodesicMorphologyIterativeDecompositionImageFilter<InputImageType,StructuringElementType> DecompositionImageFilterType;
-      typedef DecompositionImageFilterType::OutputImageListType::Iterator ImageListIterator;
+  typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
+  typedef otb::GeodesicMorphologyIterativeDecompositionImageFilter<InputImageType,StructuringElementType> DecompositionImageFilterType;
+  typedef DecompositionImageFilterType::OutputImageListType::Iterator ImageListIterator;
 
-      // Reading input image
-      ReaderType::Pointer reader = ReaderType::New();
-      reader->SetFileName(inputFilename);
+  // Reading input image
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(inputFilename);
 
-      // Instantiation
-      DecompositionImageFilterType::Pointer decomposition = DecompositionImageFilterType::New();
-      decomposition->SetNumberOfIterations(numberOfLevels);
-      decomposition->SetStep(step);
-      decomposition->SetInitialValue(initValue);
-      decomposition->SetInput(reader->GetOutput());
-      decomposition->Update();
+  // Instantiation
+  DecompositionImageFilterType::Pointer decomposition = DecompositionImageFilterType::New();
+  decomposition->SetNumberOfIterations(numberOfLevels);
+  decomposition->SetStep(step);
+  decomposition->SetInitialValue(initValue);
+  decomposition->SetInput(reader->GetOutput());
+  decomposition->Update();
 
 
-      // Retrieving iterators on the results images
-      ImageListIterator itAnalyse = decomposition->GetOutput()->Begin();
-      ImageListIterator itConvexMap = decomposition->GetConvexOutput()->Begin();
-      ImageListIterator itConcaveMap = decomposition->GetConcaveOutput()->Begin();
+  // Retrieving iterators on the results images
+  ImageListIterator itAnalyse = decomposition->GetOutput()->Begin();
+  ImageListIterator itConvexMap = decomposition->GetConvexOutput()->Begin();
+  ImageListIterator itConcaveMap = decomposition->GetConcaveOutput()->Begin();
 
-      WriterType::Pointer writer;
+  WriterType::Pointer writer;
 
-      int i=1;
-      itk::OStringStream oss;
-      // Writing the results images
-      while((itAnalyse!=decomposition->GetOutput()->End())
-      &&(itConvexMap!=decomposition->GetConvexOutput()->End())
-      &&(itConcaveMap!=decomposition->GetConcaveOutput()->End())
-      )
+  int i=1;
+  itk::OStringStream oss;
+  // Writing the results images
+  while ((itAnalyse!=decomposition->GetOutput()->End())
+         &&(itConvexMap!=decomposition->GetConvexOutput()->End())
+         &&(itConcaveMap!=decomposition->GetConcaveOutput()->End())
+        )
   {
     oss<<outputFilenamePrefix<<"_leveling_"<<i<<"."<<outputFilenameSuffix;
     writer =  WriterType::New();
@@ -96,5 +96,5 @@ int otbGeodesicMorphologyIterativeDecompositionImageFilter(int argc, char * argv
     ++itConcaveMap;
     ++i;
   }
-      return EXIT_SUCCESS;
-    }
+  return EXIT_SUCCESS;
+}

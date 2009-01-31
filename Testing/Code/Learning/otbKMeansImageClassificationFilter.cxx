@@ -48,20 +48,20 @@ int otbKMeansImageClassificationFilter(int argc, char * argv[])
 
   const unsigned int sampleSize = ClassificationFilterType::MaxSampleDimension;
   const unsigned int parameterSize = nbClasses * sampleSize;
-   KMeansParametersType parameters;
+  KMeansParametersType parameters;
 
-   parameters.SetSize(parameterSize);
-   parameters.Fill(0);
+  parameters.SetSize(parameterSize);
+  parameters.Fill(0);
 
-   for(unsigned int i = 0; i<nbClasses;++i)
-     {
-       for(unsigned int j = 0; j < reader->GetOutput()->GetNumberOfComponentsPerPixel();++j)
-   {
-     parameters[i*sampleSize+j]=atof(argv[4+i*reader->GetOutput()->GetNumberOfComponentsPerPixel()+j]);
-   }
-     }
+  for (unsigned int i = 0; i<nbClasses;++i)
+  {
+    for (unsigned int j = 0; j < reader->GetOutput()->GetNumberOfComponentsPerPixel();++j)
+    {
+      parameters[i*sampleSize+j]=atof(argv[4+i*reader->GetOutput()->GetNumberOfComponentsPerPixel()+j]);
+    }
+  }
 
-   std::cout<<"Parameters: "<<parameters<<std::endl;
+  std::cout<<"Parameters: "<<parameters<<std::endl;
 
   filter->SetCentroids(parameters);
   filter->SetInput(reader->GetOutput());

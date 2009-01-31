@@ -27,10 +27,10 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbOrthoRectificationFilterNew);
-REGISTER_TEST(otbOrthoRectificationFilter);
-REGISTER_TEST(otbOrthoRectificationFilterWithDEM);
- REGISTER_TEST(otbOrthoRectificationMonoThreadFilter);
+  REGISTER_TEST(otbOrthoRectificationFilterNew);
+  REGISTER_TEST(otbOrthoRectificationFilter);
+  REGISTER_TEST(otbOrthoRectificationFilterWithDEM);
+  REGISTER_TEST(otbOrthoRectificationMonoThreadFilter);
 //REGISTER_TEST(otbSensorImageToCarto);
 //REGISTER_TEST(otbSensorImageDEMToCarto);
 }

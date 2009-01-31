@@ -36,30 +36,30 @@ int otbTestCommandLineArgumentParserWithError( int argc, char * argv[] )
   ParserResultType::Pointer  parseResult = ParserResultType::New();
 
   try
-    {
-
-      parser->ParseCommandLine(argc,argv,parseResult) ;
-
-
-      std::cout << "Image : "<<parseResult->GetParameterString("-image")<<std::endl;
-      //unsigned int lEntier = otb::GetParameter<unsigned int>(parseResult,"-entier");
-      unsigned int lEntier = parseResult->GetParameterUInt("-entier");
-      std::cout << "Entier : "<<lEntier<<std::endl;
-      if( parseResult->IsOptionPresent("-deuxentiers"))
   {
-    //unsigned int lEntierDeux = otb::GetParameter<unsigned int>(parseResult,"-deuxentiers",1);
-    unsigned int lEntierDeux = parseResult->GetParameterUInt("-deuxentiers",1);
-    std::cout << "Entier : "<<lEntierDeux<<std::endl;
-  }
-      //double lDouble = otb::GetParameter<double>(parseResult,"-double");
-      double lDouble = parseResult->GetParameterDouble("-double");
-      std::cout << "Double : "<<lDouble<<std::endl;
-    }
-  catch(CommandLineArgumentParserArgumentErrorException & err)
+
+    parser->ParseCommandLine(argc,argv,parseResult) ;
+
+
+    std::cout << "Image : "<<parseResult->GetParameterString("-image")<<std::endl;
+    //unsigned int lEntier = otb::GetParameter<unsigned int>(parseResult,"-entier");
+    unsigned int lEntier = parseResult->GetParameterUInt("-entier");
+    std::cout << "Entier : "<<lEntier<<std::endl;
+    if ( parseResult->IsOptionPresent("-deuxentiers"))
     {
-      std::cerr<<err;
-      return EXIT_SUCCESS;
+      //unsigned int lEntierDeux = otb::GetParameter<unsigned int>(parseResult,"-deuxentiers",1);
+      unsigned int lEntierDeux = parseResult->GetParameterUInt("-deuxentiers",1);
+      std::cout << "Entier : "<<lEntierDeux<<std::endl;
     }
+    //double lDouble = otb::GetParameter<double>(parseResult,"-double");
+    double lDouble = parseResult->GetParameterDouble("-double");
+    std::cout << "Double : "<<lDouble<<std::endl;
+  }
+  catch (CommandLineArgumentParserArgumentErrorException & err)
+  {
+    std::cerr<<err;
+    return EXIT_SUCCESS;
+  }
   return EXIT_FAILURE;
 }
 

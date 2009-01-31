@@ -38,7 +38,7 @@ int otbDrawLineSpatialObject( int argc, char* argv[] )
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
-  // two points to represent a straight line 
+  // two points to represent a straight line
   double Ux((double)::atof(argv[3]));
   double Uy((double)::atof(argv[4]));
   double Vx((double)::atof(argv[5]));
@@ -78,21 +78,21 @@ int otbDrawLineSpatialObject( int argc, char* argv[] )
 
   LineType::Pointer line = LineType::New();
   line->SetId(0);
-    line->SetPoints( list );
-    line->ComputeBoundingBox();
+  line->SetPoints( list );
+  line->ComputeBoundingBox();
 
 
-    filter->SetValue( static_cast<OutputPixelType>(245) );
-    filter->SetInput( line );
+  filter->SetValue( static_cast<OutputPixelType>(245) );
+  filter->SetInput( line );
 
-    filter->SetInputImage( reader->GetOutput() );
-    writer->SetInput( filter->GetOutput() );
+  filter->SetInputImage( reader->GetOutput() );
+  writer->SetInput( filter->GetOutput() );
 
-    writer->Update();
+  writer->Update();
 
 
 
-    return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }
 
 

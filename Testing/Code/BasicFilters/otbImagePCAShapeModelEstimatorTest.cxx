@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,7 +31,7 @@
 
 #include "itkImagePCAShapeModelEstimator.h"
 
-//Data definitions 
+//Data definitions
 #define   IMGWIDTH            2
 #define   IMGHEIGHT           2
 #define   NDIMENSION          2
@@ -45,30 +45,34 @@ class ShowProgressObject
 {
 public:
   ShowProgressObject(itk::LightProcessObject * o)
-    {m_Process = o;}
+  {
+    m_Process = o;
+  }
   void ShowProgress()
-    {std::cout << "Progress " << m_Process->GetProgress() << std::endl;}
+  {
+    std::cout << "Progress " << m_Process->GetProgress() << std::endl;
+  }
   itk::LightProcessObject::Pointer m_Process;
 };
 
 
 int otbImagePCAShapeModelEstimatorTest(int argc, char* argv[] )
 {
-/*    const unsigned int numberOfPrincipalComponentsRequired(atoi(argv[1]));
-    const unsigned int numberOfTrainingImages(atoi(argv[2]));
-    std::vector<std::string> imagesfilenames;
-    std::vector<std::string> outputimagesfilenames;
-    int cpt(3);
-    for(; cpt<(numberOfTrainingImages+3) ; cpt++)
-    {
-        imagesfilenames.push_back(argv[cpt]);
-    }
-    int cpt2(cpt);
-    for(; cpt<(numberOfPrincipalComponentsRequired+cpt2) ; cpt++)
-    {
-        outputimagesfilenames.push_back(argv[cpt]);
-    }
-*/    
+  /*    const unsigned int numberOfPrincipalComponentsRequired(atoi(argv[1]));
+      const unsigned int numberOfTrainingImages(atoi(argv[2]));
+      std::vector<std::string> imagesfilenames;
+      std::vector<std::string> outputimagesfilenames;
+      int cpt(3);
+      for(; cpt<(numberOfTrainingImages+3) ; cpt++)
+      {
+          imagesfilenames.push_back(argv[cpt]);
+      }
+      int cpt2(cpt);
+      for(; cpt<(numberOfPrincipalComponentsRequired+cpt2) ; cpt++)
+      {
+          outputimagesfilenames.push_back(argv[cpt]);
+      }
+  */
 
 
   itk::OutputWindow::SetInstance(itk::TextOutput::New().GetPointer());
@@ -77,13 +81,13 @@ int otbImagePCAShapeModelEstimatorTest(int argc, char* argv[] )
   //------------------------------------------------------
   //Create 3 simple test images with
   //------------------------------------------------------
-  typedef itk::Image<double,NDIMENSION> InputImageType; 
-  typedef itk::Image<double,NDIMENSION> OutputImageType; 
+  typedef itk::Image<double,NDIMENSION> InputImageType;
+  typedef itk::Image<double,NDIMENSION> OutputImageType;
   typedef
-    itk::ImageRegionIterator< InputImageType > InputImageIterator;
+  itk::ImageRegionIterator< InputImageType > InputImageIterator;
 
   typedef
-    itk::ImageRegionIterator< OutputImageType > OutputImageIterator;
+  itk::ImageRegionIterator< OutputImageType > OutputImageIterator;
 
   typedef otb::ImageFileReader<InputImageType> ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
@@ -112,11 +116,11 @@ int otbImagePCAShapeModelEstimatorTest(int argc, char* argv[] )
   //----------------------------------------------------------------------
   //Set the image model estimator
   //----------------------------------------------------------------------
-  typedef itk::ImagePCAShapeModelEstimator<InputImageType, OutputImageType> 
-    ImagePCAShapeModelEstimatorType;
+  typedef itk::ImagePCAShapeModelEstimator<InputImageType, OutputImageType>
+  ImagePCAShapeModelEstimatorType;
 
-  ImagePCAShapeModelEstimatorType::Pointer 
-    applyPCAShapeEstimator = ImagePCAShapeModelEstimatorType::New();
+  ImagePCAShapeModelEstimatorType::Pointer
+  applyPCAShapeEstimator = ImagePCAShapeModelEstimatorType::New();
 
   //----------------------------------------------------------------------
   //Set the parameters of the clusterer
@@ -144,62 +148,62 @@ int otbImagePCAShapeModelEstimatorTest(int argc, char* argv[] )
   typedef ImagePCAShapeModelEstimatorType::Superclass GenericEstimatorType;
   std::cout << applyPCAShapeEstimator->GenericEstimatorType::GetNameOfClass() << std::endl;
 
-  //Print out the number of training images and the number of principal 
+  //Print out the number of training images and the number of principal
   //components
   std::cout << "The number of training images are: " <<
-    applyPCAShapeEstimator->GetNumberOfTrainingImages() << std::endl;
+            applyPCAShapeEstimator->GetNumberOfTrainingImages() << std::endl;
 
   std::cout << "The number of principal components desired are: " <<
-    applyPCAShapeEstimator->GetNumberOfPrincipalComponentsRequired() << std::endl;
+            applyPCAShapeEstimator->GetNumberOfPrincipalComponentsRequired() << std::endl;
 
   //Print the eigen vectors
-  vnl_vector<double> eigenValues = 
+  vnl_vector<double> eigenValues =
     applyPCAShapeEstimator->GetEigenValues();
   unsigned int numEigVal =  eigenValues.size();
   std::cout << "Number of returned eign-values: " << numEigVal << std::endl;
 
-  std::cout << "The " << 
-    applyPCAShapeEstimator->GetNumberOfPrincipalComponentsRequired() << 
-    " largest eigen values are:" << std::endl;
+  std::cout << "The " <<
+            applyPCAShapeEstimator->GetNumberOfPrincipalComponentsRequired() <<
+            " largest eigen values are:" << std::endl;
 
-  for(unsigned int i= 0; i< vnl_math_min( numEigVal, (unsigned int)NUMLARGESTPC ); i++ )
-    {
-    std::cout << eigenValues[ i ] << std::endl; 
-    }  
+  for (unsigned int i= 0; i< vnl_math_min( numEigVal, (unsigned int)NUMLARGESTPC ); i++ )
+  {
+    std::cout << eigenValues[ i ] << std::endl;
+  }
   std::cout << "" << std::endl;
   std::cout << "" << std::endl;
 
-  
+
   //Print the MeanImage
   OutputImageType::Pointer outImage = applyPCAShapeEstimator->GetOutput( 0 );
   OutputImageIterator outImageIt( outImage, outImage->GetBufferedRegion() );
   outImageIt.GoToBegin();
 
   std::cout << "The mean image is:" << std::endl;
-  while(!outImageIt.IsAtEnd() )
-    {
-    std::cout << (double)(outImageIt.Get()) << ";"  << std::endl;  
-    ++outImageIt; 
-    } 
+  while (!outImageIt.IsAtEnd() )
+  {
+    std::cout << (double)(outImageIt.Get()) << ";"  << std::endl;
+    ++outImageIt;
+  }
   std::cout << "  " << std::endl;
 
   //Print the largest two eigen vectors
   for (unsigned int j=1; j< NUMLARGESTPC + 1; j++ )
-    {
+  {
     OutputImageType::Pointer outImage2 = applyPCAShapeEstimator->GetOutput( j );
     OutputImageIterator outImage2It( outImage2, outImage2->GetBufferedRegion() );
     outImage2It.GoToBegin();
 
     std::cout << "" << std::endl;
     std::cout << "The eigen vector number: " << j << " is:" << std::endl;
-    while(!outImage2It.IsAtEnd() )
-      {
-      std::cout << (double) (outImage2It.Get()) << ";"  << std::endl;  
-      ++outImage2It; 
-      } 
+    while (!outImage2It.IsAtEnd() )
+    {
+      std::cout << (double) (outImage2It.Get()) << ";"  << std::endl;
+      ++outImage2It;
+    }
     std::cout << "  " << std::endl;
 
-    }
+  }
 
   return EXIT_SUCCESS;
 }

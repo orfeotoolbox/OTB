@@ -51,15 +51,15 @@ int otbSimplifyManyPathListFilter(int argc, char * argv[])
   unsigned long int numberOfPaths = 10000;
   srand(123456);
 
-  for(unsigned long int i=0; i<numberOfPaths; ++i)
+  for (unsigned long int i=0; i<numberOfPaths; ++i)
   {
     PathType::Pointer path = PathType::New();
-      //Generate PathList
+    //Generate PathList
     unsigned int numberOfPoints=static_cast<int>((rand()/(RAND_MAX+1.0))*90) + 10;
 //     std::cout << "List :" << numberOfPoints << " points" << std::endl;
     cindex[0]=0;
     cindex[1]=0;
-    for(unsigned int j = 0; j<numberOfPoints; ++j)
+    for (unsigned int j = 0; j<numberOfPoints; ++j)
     {
       cindex[0] += (rand()/(RAND_MAX+1.0))*100 - 50;
       cindex[1] += (rand()/(RAND_MAX+1.0))*100 - 50;;
@@ -90,14 +90,14 @@ int otbSimplifyManyPathListFilter(int argc, char * argv[])
 
   pathListIt = OutputPathList->Begin();
   file<<"OUTPUT list of Path "<<": "<<std::endl;
-  while(pathListIt!=OutputPathList->End())
+  while (pathListIt!=OutputPathList->End())
   {
     file<<"Path "<<counter<<": ";
-    for(VertexIteratorType vIt = pathListIt.Get()->GetVertexList()->Begin();
-        vIt!=pathListIt.Get()->GetVertexList()->End();
-        ++vIt)
+    for (VertexIteratorType vIt = pathListIt.Get()->GetVertexList()->Begin();
+         vIt!=pathListIt.Get()->GetVertexList()->End();
+         ++vIt)
     {
-      if(vIt!=pathListIt.Get()->GetVertexList()->Begin())
+      if (vIt!=pathListIt.Get()->GetVertexList()->Begin())
       {
         file<<", ";
       }

@@ -53,7 +53,7 @@ int otbCloudDetectionFilter(int argc, char * argv[])
   const double minThreshold = (atof(argv[8]));
   const double maxThreshold = (atof(argv[9]));
 
- // Instantiating object
+// Instantiating object
   ReaderType::Pointer reader = ReaderType::New();
   CloudDetectionFilterType::Pointer cloudDetection = CloudDetectionFilterType::New();
   WriterType::Pointer writer = WriterType::New();

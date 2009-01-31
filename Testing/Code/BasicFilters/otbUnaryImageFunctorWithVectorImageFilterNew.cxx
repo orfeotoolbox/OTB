@@ -30,8 +30,8 @@ int otbUnaryImageFunctorWithVectorImageFilterNew(int argc, char * argv[])
   typedef InputImageType::InternalPixelType                              InternalPixelType;
   typedef itk::Functor::Cos<InternalPixelType,InternalPixelType>         FunctorType;
   typedef otb::UnaryImageFunctorWithVectorImageFilter<InputImageType,
-    InputImageType,
-    FunctorType     >  UnaryImageFunctorWithVectorImageFilterType;
+  InputImageType,
+  FunctorType     >  UnaryImageFunctorWithVectorImageFilterType;
 
   // Instantiating object
   UnaryImageFunctorWithVectorImageFilterType::Pointer filter = UnaryImageFunctorWithVectorImageFilterType::New();

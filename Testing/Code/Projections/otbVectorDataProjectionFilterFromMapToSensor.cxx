@@ -27,10 +27,10 @@
 int otbVectorDataProjectionFilterFromMapToSensor(int argc, char * argv[])
 {
 
-  if(argc < 3  )
+  if (argc < 3  )
   {
     std::cout << argv[0] <<" <input vector filename> <input image filename>"
-        << " <output vector filename> "  << std::endl;
+              << " <output vector filename> "  << std::endl;
 
     return EXIT_FAILURE;
   }

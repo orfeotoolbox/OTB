@@ -53,7 +53,7 @@ int otbHarrisToPointSet( int argc, char * argv[] )
   FunctionType::Pointer         harris    = FunctionType::New();
   OutputPointType               CoordPoint;
 
-  //Initialization 
+  //Initialization
   CoordPoint.Fill(0);
 
   reader->SetFileName( inputFilename  );
@@ -76,11 +76,11 @@ int otbHarrisToPointSet( int argc, char * argv[] )
   file << "NbPoints : " << NbPoints <<std::endl;
 
   for (unsigned long i = 0 ; i < NbPoints ; i++)
-    {
-      pointList->GetPoint(i,&CoordPoint);
-      file << i+1 <<" / " << NbPoints << " : " ;
-      file << CoordPoint[0]<<" , "<< CoordPoint[1] << std::endl;
-    }
+  {
+    pointList->GetPoint(i,&CoordPoint);
+    file << i+1 <<" / " << NbPoints << " : " ;
+    file << CoordPoint[0]<<" , "<< CoordPoint[1] << std::endl;
+  }
 
   file.close();
 

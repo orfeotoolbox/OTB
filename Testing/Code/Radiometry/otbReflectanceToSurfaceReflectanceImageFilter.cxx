@@ -55,14 +55,14 @@ int otbReflectanceToSurfaceReflectanceImageFilter(int argc, char * argv[])
   DataVectorType upTrans;
 
   std::cout<<nbChannel<<std::endl;
-  for( unsigned int j=0; j<nbChannel; j++)
-    {
-      intrinsic.push_back(static_cast<double>(atof(argv[3+j])));
-      albedo.push_back(static_cast<double>(atof(argv[3+j+nbChannel])));
-      gaseous.push_back(static_cast<double>(atof(argv[3+j+2*nbChannel])));
-      downTrans.push_back(static_cast<double>(atof(argv[3+j+3*nbChannel])));
-      upTrans.push_back(static_cast<double>(atof(argv[3+j+4*nbChannel])));
-    }
+  for ( unsigned int j=0; j<nbChannel; j++)
+  {
+    intrinsic.push_back(static_cast<double>(atof(argv[3+j])));
+    albedo.push_back(static_cast<double>(atof(argv[3+j+nbChannel])));
+    gaseous.push_back(static_cast<double>(atof(argv[3+j+2*nbChannel])));
+    downTrans.push_back(static_cast<double>(atof(argv[3+j+3*nbChannel])));
+    upTrans.push_back(static_cast<double>(atof(argv[3+j+4*nbChannel])));
+  }
 
   atmo->SetIntrinsicAtmosphericReflectances(intrinsic);
   atmo->SetSphericalAlbedos(albedo);

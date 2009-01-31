@@ -38,8 +38,8 @@ int otbUnaryImageFunctorWithVectorImageFilter(int argc, char * argv[])
   typedef otb::ImageFileReader<InputImageType>                            ReaderType;
   typedef otb::ImageFileWriter<OutputImageType>                           WriterType;
   typedef otb::UnaryImageFunctorWithVectorImageFilter<InputImageType,
-                                                      InputImageType,
-                                                      FunctorType    >    UnaryImageFunctorWithVectorImageFilterType;
+  InputImageType,
+  FunctorType    >    UnaryImageFunctorWithVectorImageFilterType;
 
   // Instantiating object
   UnaryImageFunctorWithVectorImageFilterType::Pointer filter = UnaryImageFunctorWithVectorImageFilterType::New();

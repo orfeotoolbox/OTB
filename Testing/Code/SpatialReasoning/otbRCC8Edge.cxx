@@ -30,11 +30,11 @@ int otbRCC8Edge(int argc, char* argv[])
   edge->SetValue(value);
 
 
-  if(edge->GetValue()!=value)
-    {
-      std::cout<<"Test failed: edge->GetValue()!=value"<<std::endl;
-      return EXIT_FAILURE;
-    }
+  if (edge->GetValue()!=value)
+  {
+    std::cout<<"Test failed: edge->GetValue()!=value"<<std::endl;
+    return EXIT_FAILURE;
+  }
 
   return EXIT_SUCCESS;
 }

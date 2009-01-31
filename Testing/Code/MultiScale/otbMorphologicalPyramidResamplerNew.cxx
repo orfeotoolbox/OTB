@@ -29,7 +29,7 @@ int otbMorphologicalPyramidResamplerNew(int argc, char * argv[])
   typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
 
   typedef otb::MorphologicalPyramid::Resampler<InputImageType,OutputImageType>
-    ResamplerType;
+  ResamplerType;
 
   // Instantiation
   ResamplerType::Pointer resampler = ResamplerType::New();

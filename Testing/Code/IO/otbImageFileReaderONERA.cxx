@@ -47,7 +47,7 @@ int otbImageFileReaderONERATest(int argc, char* argv[])
   ReaderType::Pointer Reader = ReaderType::New();
 
   typedef otb::MultiChannelExtractROI< OutputPixelType,
-    OutputPixelType >  ExtractROIFilterType;
+  OutputPixelType >  ExtractROIFilterType;
 
   ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
 

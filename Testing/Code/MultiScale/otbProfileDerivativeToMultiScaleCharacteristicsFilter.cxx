@@ -50,10 +50,10 @@ int otbProfileDerivativeToMultiScaleCharacteristicsFilter(int argc, char * argv[
 
   typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
   typedef otb::MorphologicalOpeningProfileFilter<InputImageType,InputImageType,StructuringElementType>
-    OpeningProfileFilterType;
+  OpeningProfileFilterType;
   typedef otb::ProfileToProfileDerivativeFilter<InputImageType,InputImageType> DerivativeFilterType;
   typedef otb::ProfileDerivativeToMultiScaleCharacteristicsFilter<InputImageType,OutputImageType,LabeledImageType>
-    MultiScaleCharacteristicsFilterType;
+  MultiScaleCharacteristicsFilterType;
 
   // Reading input image
   ReaderType::Pointer reader = ReaderType::New();

@@ -36,7 +36,7 @@ int otbSimpleRcsPanSharpeningFusionImageFilterNew( int argc, char * argv[] )
   typedef otb::ImageFileReader<VectorImageType>  VectorReaderType;
   typedef otb::ImageFileReader<PanchroImageType> ImageReaderType;
   typedef otb::SimpleRcsPanSharpeningFusionImageFilter
-    <PanchroImageType, VectorImageType, VectorImageType> FilterType;
+  <PanchroImageType, VectorImageType, VectorImageType> FilterType;
 
   FilterType::Pointer       filter = FilterType::New();
 

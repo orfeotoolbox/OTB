@@ -26,17 +26,17 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbHistogramStatisticsFunction);
-REGISTER_TEST(otbListNew);
-REGISTER_TEST(otbList);
-REGISTER_TEST(otbObjectListNew);
-REGISTER_TEST(otbObjectList);
-REGISTER_TEST(otbObjectList2);
-REGISTER_TEST(otbImageListNew);
-REGISTER_TEST(otbImageList);
-REGISTER_TEST(otbImageListSourceNew);
-REGISTER_TEST(otbImageToImageListFilterNew);
-REGISTER_TEST(otbImageListToImageFilterNew);
-REGISTER_TEST(otbObjectListToObjectListFilterNew);
-REGISTER_TEST(otbVectorDataToVectorDataFilterNew);
+  REGISTER_TEST(otbHistogramStatisticsFunction);
+  REGISTER_TEST(otbListNew);
+  REGISTER_TEST(otbList);
+  REGISTER_TEST(otbObjectListNew);
+  REGISTER_TEST(otbObjectList);
+  REGISTER_TEST(otbObjectList2);
+  REGISTER_TEST(otbImageListNew);
+  REGISTER_TEST(otbImageList);
+  REGISTER_TEST(otbImageListSourceNew);
+  REGISTER_TEST(otbImageToImageListFilterNew);
+  REGISTER_TEST(otbImageListToImageFilterNew);
+  REGISTER_TEST(otbObjectListToObjectListFilterNew);
+  REGISTER_TEST(otbVectorDataToVectorDataFilterNew);
 }

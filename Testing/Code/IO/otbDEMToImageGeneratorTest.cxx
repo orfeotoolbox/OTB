@@ -23,11 +23,11 @@
 
 int otbDEMToImageGeneratorTest(int argc, char * argv[])
 {
-  if(argc<9)
-    {
-      std::cout << argv[0] <<" folder path , output filename , Longitude Output Orign point , Latitude Output Origin point , X Output Size, Y Output size , X Spacing , Y Spacing"  << std::endl;
-      return EXIT_FAILURE;
-    }
+  if (argc<9)
+  {
+    std::cout << argv[0] <<" folder path , output filename , Longitude Output Orign point , Latitude Output Origin point , X Output Size, Y Output size , X Spacing , Y Spacing"  << std::endl;
+    return EXIT_FAILURE;
+  }
 
   char * folderPath = argv[1];
   char * outputName = argv[2];

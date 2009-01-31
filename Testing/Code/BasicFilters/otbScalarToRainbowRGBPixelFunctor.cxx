@@ -49,9 +49,9 @@ int otbScalarToRainbowRGBPixelFunctor(int argc, char * argv[])
 
 
   typedef otb::Functor::ScalarToRainbowRGBPixelFunctor<PixelType>
-    ColorMapFunctorType;
+  ColorMapFunctorType;
   typedef itk::UnaryFunctorImageFilter<ImageType,
-    RGBImageType, ColorMapFunctorType> ColorMapFilterType;
+  RGBImageType, ColorMapFunctorType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
   colormapper->GetFunctor().SetMaximum(150);
   colormapper->GetFunctor().SetMinimum(70);

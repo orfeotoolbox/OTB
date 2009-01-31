@@ -62,9 +62,9 @@ int otbLocalHoughDraw( int argc, char* argv[] )
 
   typedef otb::ImageFileReader< InputImageType  >         ReaderType;
   typedef otb::ImageFileWriter< OutputImageType >         WriterType;
-  
+
   typedef itk::RescaleIntensityImageFilter<InputImageType> RescalerType;
-  
+
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
   RescalerType::Pointer rescaler = RescalerType::New();
@@ -81,7 +81,7 @@ int otbLocalHoughDraw( int argc, char* argv[] )
 
   filter->SetRadius( Radius );
   filter->SetNumberOfLines( NumberOfLines );
-  
+
   rescaler->SetInput(reader->GetOutput());
   filter->SetInput( rescaler->GetOutput() );
   filter->Update();

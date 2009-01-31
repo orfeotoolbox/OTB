@@ -27,7 +27,7 @@ int otbImageListSourceNew(int argc, char * argv[])
   typedef otb::Image<InputPixelType,Dimension> InputImageType;
   typedef otb::ImageListSource<InputImageType> ImageListSourceType;
 
-      // Instantiating ImageListSource object
+  // Instantiating ImageListSource object
   ImageListSourceType::Pointer imageList = ImageListSourceType::New();
 
 

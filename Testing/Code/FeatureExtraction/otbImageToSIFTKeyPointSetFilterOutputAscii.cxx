@@ -73,20 +73,20 @@ int otbImageToSIFTKeyPointSetFilterOutputAscii(int argc, char * argv[])
   outfile << "Number of octaves: "<<octaves << std::endl;
   outfile << "Number of scales: "<<scales << std::endl;
   outfile << "Number of SIFT key points: " << filter->GetOutput()->GetNumberOfPoints() << std::endl;
-  while( pIt!=filter->GetOutput()->GetPoints()->End() )
-    {
-      outfile << "[" << std::fixed << std::setprecision(2) << pIt.Value()[0] << ", " << std::setprecision(2) << pIt.Value()[1] << "][";
-
-      unsigned int lIterDesc=0;
-      while (lIterDesc < pDataIt.Value().Size())
+  while ( pIt!=filter->GetOutput()->GetPoints()->End() )
   {
-    outfile << std::setprecision(3) << pDataIt.Value()[lIterDesc] << " ";
-    lIterDesc++;
-  }
-      outfile << "]" << std::endl;
-      ++pIt;
-      ++pDataIt;
+    outfile << "[" << std::fixed << std::setprecision(2) << pIt.Value()[0] << ", " << std::setprecision(2) << pIt.Value()[1] << "][";
+
+    unsigned int lIterDesc=0;
+    while (lIterDesc < pDataIt.Value().Size())
+    {
+      outfile << std::setprecision(3) << pDataIt.Value()[lIterDesc] << " ";
+      lIterDesc++;
     }
+    outfile << "]" << std::endl;
+    ++pIt;
+    ++pDataIt;
+  }
 
   outfile.close();
 

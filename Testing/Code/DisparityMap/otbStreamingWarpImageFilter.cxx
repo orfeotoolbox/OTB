@@ -24,11 +24,11 @@
 
 int otbStreamingWarpImageFilter(int argc, char* argv[])
 {
-  if(argc!=5)
-    {
-      std::cout<<"usage: "<<argv[0]<<"infname deffname outfname radius"<<std::endl;
-      return EXIT_SUCCESS;
-    }
+  if (argc!=5)
+  {
+    std::cout<<"usage: "<<argv[0]<<"infname deffname outfname radius"<<std::endl;
+    return EXIT_SUCCESS;
+  }
 
   // Input parameters
   const char * infname = argv[1];

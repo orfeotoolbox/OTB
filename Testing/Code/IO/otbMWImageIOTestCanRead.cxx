@@ -29,10 +29,10 @@ int otbMWImageIOTestCanRead(int argc, char* argv[])
   otb::MWImageIO::Pointer lMWImageIO = otb::MWImageIO::New();
   bool lCanRead = lMWImageIO->CanReadFile(argv[1]);
   if ( lCanRead == false)
-    {
-      std::cerr << "Error otb::MWImageIO : impossible to read MW image "<<argv[1]<<"."<<std::endl;
-      return EXIT_FAILURE;
-    }
+  {
+    std::cerr << "Error otb::MWImageIO : impossible to read MW image "<<argv[1]<<"."<<std::endl;
+    return EXIT_FAILURE;
+  }
 
 
   return EXIT_SUCCESS;

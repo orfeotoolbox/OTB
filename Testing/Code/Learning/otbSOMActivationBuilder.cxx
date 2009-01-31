@@ -61,11 +61,11 @@ int otbSOMActivationBuilder(int argc, char* argv[])
 
   it.GoToBegin();
 
-  while(!it.IsAtEnd())
-    {
-      listSample->PushBack(it.Get());
-      ++it;
-    }
+  while (!it.IsAtEnd())
+  {
+    listSample->PushBack(it.Get());
+    ++it;
+  }
 
   MapReaderType::Pointer mapReader = MapReaderType::New();
   mapReader->SetFileName(mapFileName);
