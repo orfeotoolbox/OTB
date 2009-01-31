@@ -25,15 +25,15 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(SVMImageClassificationExampleTest);
-REGISTER_TEST(SVMImageEstimatorClassificationMultiExampleTest);
-REGISTER_TEST(GenerateTrainingImageExampleTest);
-REGISTER_TEST(SVMImageModelEstimatorExampleTest);
-REGISTER_TEST(SOMExampleTest);
-REGISTER_TEST(SOMClassifierExampleTest);
-REGISTER_TEST(SEMModelEstimatorExampleTest);
-REGISTER_TEST(SVMGenericKernelImageModelEstimatorExampleTest);
-REGISTER_TEST(SVMGenericKernelImageClassificationExampleTest);
+  REGISTER_TEST(SVMImageClassificationExampleTest);
+  REGISTER_TEST(SVMImageEstimatorClassificationMultiExampleTest);
+  REGISTER_TEST(GenerateTrainingImageExampleTest);
+  REGISTER_TEST(SVMImageModelEstimatorExampleTest);
+  REGISTER_TEST(SOMExampleTest);
+  REGISTER_TEST(SOMClassifierExampleTest);
+  REGISTER_TEST(SEMModelEstimatorExampleTest);
+  REGISTER_TEST(SVMGenericKernelImageModelEstimatorExampleTest);
+  REGISTER_TEST(SVMGenericKernelImageClassificationExampleTest);
 }
 
 #undef main

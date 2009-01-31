@@ -107,14 +107,14 @@ int main( int argc, char *argv[] )
 {
   // Verify the number of parameters on the command line.
   if ( argc < 3 )
-    {
+  {
     std::cerr << "Missing parameters. " << std::endl;
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0]
               << " inputImageFile outputImageFile"
               << std::endl;
     return -1;
-    }
+  }
 
 // Software Guide : BeginLatex
 //
@@ -141,16 +141,16 @@ int main( int argc, char *argv[] )
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( argv[1] );
   try
-    {
+  {
     reader->Update();
     inputImage = reader->GetOutput();
-    }
+  }
   catch ( itk::ExceptionObject &err)
-    {
+  {
     std::cout << "ExceptionObject caught a !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-    }
+  }
 
 // Software Guide : BeginLatex
 //
@@ -193,32 +193,32 @@ int main( int argc, char *argv[] )
 // Software Guide : BeginCodeSnippet
   for ( inputIt.GoToBegin(),  outputIt.GoToBegin(); ! inputIt.IsAtEnd();
         outputIt.NextLine(),  inputIt.NextLine())
-    {
+  {
     inputIt.GoToBeginOfLine();
     outputIt.GoToEndOfLine();
     --outputIt;
     while ( ! inputIt.IsAtEndOfLine() )
-      {
+    {
       outputIt.Set( inputIt.Get() );
       ++inputIt;
       --outputIt;
-      }
     }
+  }
 // Software Guide : EndCodeSnippet
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName( argv[2] );
   writer->SetInput(outputImage);
   try
-    {
+  {
     writer->Update();
-    }
+  }
   catch ( itk::ExceptionObject &err)
-    {
+  {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-    }
+  }
 
 // Software Guide : BeginLatex
 //

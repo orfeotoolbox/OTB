@@ -83,7 +83,7 @@ int main(int argc, char * argv[])
 
   typedef otb::SOMMap<ImageType::PixelType> SOMMapType;
   typedef otb::SOMImageClassificationFilter<ImageType,
-               LabeledImageType,SOMMapType> ClassificationFilterType;
+  LabeledImageType,SOMMapType> ClassificationFilterType;
 
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex

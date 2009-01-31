@@ -66,11 +66,11 @@
 // Software Guide : EndCodeSnippet
 int main(int argc, char * argv[])
 {
-   if(argc != 12)
-    {
-      std::cerr<<"Usage: "<<argv[0]<<" infname filteredfname clusteredfname labeledclusteredfname clusterboundariesfname filteredPretty clusteredPretty spatialRadius rangeRadius minregionsize scale"<<std::endl;
-      return EXIT_FAILURE;
-    }
+  if (argc != 12)
+  {
+    std::cerr<<"Usage: "<<argv[0]<<" infname filteredfname clusteredfname labeledclusteredfname clusterboundariesfname filteredPretty clusteredPretty spatialRadius rangeRadius minregionsize scale"<<std::endl;
+    return EXIT_FAILURE;
+  }
 
   const char *       infname                = argv[1];
   const char *       filteredfname          = argv[2];
@@ -172,7 +172,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   filter->SetScale(scale);
-    // Software Guide : EndCodeSnippet
+  // Software Guide : EndCodeSnippet
   //  Software Guide : BeginLatex
 //
 //  We can now plug the pipeline and run it.
@@ -218,7 +218,7 @@ int main(int argc, char * argv[])
 
   typedef PrintableFilterType::OutputImageType OutputImageType;
   typedef otb::StreamingImageFileWriter< OutputImageType >
-                                              PrettyWriterType;
+  PrettyWriterType;
   PrettyWriterType::Pointer prettyWriter = PrettyWriterType::New();
 
   printableImageFilter->SetInput( filter->GetOutput() );

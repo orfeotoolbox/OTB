@@ -47,7 +47,7 @@
 int main( int argc, char* argv[] )
 {
 
-  if(argc < 3  )
+  if (argc < 3  )
   {
     std::cout << argv[0] <<" <input vector filename> <input image name> <output vector filename> "  << std::endl;
 
@@ -57,7 +57,7 @@ int main( int argc, char* argv[] )
   // Software Guide : BeginLatex
   //
   // Declare the vector data type that you would like to use in your
-  // application. 
+  // application.
   //
   // Software Guide : EndLatex
 
@@ -95,7 +95,7 @@ int main( int argc, char* argv[] )
   //
   // Software Guide : EndLatex
 
-   // Software Guide : BeginCodeSnippet
+  // Software Guide : BeginCodeSnippet
 
   typedef otb::Image<unsigned short int, 2> ImageType;
   typedef otb::ImageFileReader<ImageType> ImageReaderType;
@@ -117,9 +117,9 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::VectorDataProjectionFilter<InputVectorDataType,
-                           OutputVectorDataType> VectorDataFilterType;
+  OutputVectorDataType> VectorDataFilterType;
   VectorDataFilterType::Pointer vectorDataProjection =
-                                          VectorDataFilterType::New();
+    VectorDataFilterType::New();
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -144,13 +144,13 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   vectorDataProjection->SetOutputKeywordList(
-                         imageReader->GetOutput()->GetImageKeywordlist());
+    imageReader->GetOutput()->GetImageKeywordlist());
   vectorDataProjection->SetOutputOrigin(
-                                   imageReader->GetOutput()->GetOrigin());
+    imageReader->GetOutput()->GetOrigin());
   vectorDataProjection->SetOutputSpacing(
-                                  imageReader->GetOutput()->GetSpacing());
+    imageReader->GetOutput()->GetSpacing());
   vectorDataProjection->SetOutputProjectionRef(
-                            imageReader->GetOutput()->GetProjectionRef());
+    imageReader->GetOutput()->GetProjectionRef());
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -161,7 +161,7 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::VectorDataFileWriter<OutputVectorDataType>
-                                                  VectorDataFileWriterType;
+  VectorDataFileWriterType;
   VectorDataFileWriterType::Pointer writer = VectorDataFileWriterType::New();
   writer->SetFileName(argv[3]);
   writer->SetInput(vectorDataProjection->GetOutput());

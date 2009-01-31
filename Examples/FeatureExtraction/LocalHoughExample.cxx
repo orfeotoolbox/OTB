@@ -45,13 +45,13 @@
 int main( int argc, char * argv[] )
 {
 
-  if( argc != 7 )
-    {
+  if ( argc != 7 )
+  {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " outputImageFile  LocalHoughRadius LocalHoughOverlap LocalHoughNumberOfLines LocalHoughThreshold" << std::endl;
 
     return EXIT_FAILURE;
-    }
+  }
 
 
   //  Software Guide : BeginLatex
@@ -91,11 +91,11 @@ int main( int argc, char * argv[] )
 
   typedef otb::LocalHoughFilter< InternalImageType >        LocalHoughType;
   typedef otb::DrawLineSpatialObjectListFilter< InternalImageType,
-                                      OutputImageType >  DrawLineListType;
+  OutputImageType >  DrawLineListType;
   // Software Guide : EndCodeSnippet
 
   typedef itk::RescaleIntensityImageFilter< InternalImageType,
-                                            OutputImageType > RescalerType;
+  OutputImageType > RescalerType;
 
   RescalerType::Pointer rescaler = RescalerType::New();
 
@@ -203,7 +203,7 @@ int main( int argc, char * argv[] )
   writer->Update();
 
 
- // Software Guide : EndCodeSnippet
+// Software Guide : EndCodeSnippet
 
 
 

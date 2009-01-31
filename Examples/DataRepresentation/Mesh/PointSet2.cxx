@@ -93,8 +93,10 @@ int main(int, char *[])
   typedef PointSetType::PointType   PointType;
   PointType p0;
   PointType p1;
-  p0[0] = -1.0; p0[1] = 0.0;  // Point 0 = {-1,0 }
-  p1[0] =  1.0; p1[1] = 0.0;  // Point 1 = { 1,0 }
+  p0[0] = -1.0;
+  p0[1] = 0.0;  // Point 0 = {-1,0 }
+  p1[0] =  1.0;
+  p1[1] = 0.0;  // Point 1 = { 1,0 }
   // Software Guide : EndCodeSnippet
 
 
@@ -204,12 +206,12 @@ int main(int, char *[])
 
   // Software Guide : BeginCodeSnippet
   PointsIterator end = points->End();
-  while( pointIterator != end )
-    {
+  while ( pointIterator != end )
+  {
     PointType p = pointIterator.Value();   // access the point
     std::cout << p << std::endl;           // print the point
     ++pointIterator;                       // advance to next point
-    }
+  }
   // Software Guide : EndCodeSnippet
 
 

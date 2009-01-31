@@ -58,13 +58,13 @@
 int main( int argc, char* argv[] )
 {
 
-  if(argc!=11)
-    {
-      std::cout << argv[0] <<" <input_filename> <output_filename>  <utm zone> <hemisphere N/S> <x_ground_upper_left_corner> <y_ground_upper_left_corner> <x_Size> <y_Size> <x_groundSamplingDistance> <y_groundSamplingDistance> (should be negative since origin is upper left)>"
-        << std::endl;
+  if (argc!=11)
+  {
+    std::cout << argv[0] <<" <input_filename> <output_filename>  <utm zone> <hemisphere N/S> <x_ground_upper_left_corner> <y_ground_upper_left_corner> <x_Size> <y_Size> <x_groundSamplingDistance> <y_groundSamplingDistance> (should be negative since origin is upper left)>"
+              << std::endl;
 
     return EXIT_FAILURE;
-    }
+  }
 
 // Software Guide : BeginLatex
 //
@@ -113,11 +113,11 @@ int main( int argc, char* argv[] )
 
   typedef otb::UtmInverseProjection utmMapProjectionType ;
   typedef otb::OrthoRectificationFilter<ImageType, ImageType,
-                              utmMapProjectionType> OrthoRectifFilterType ;
+  utmMapProjectionType> OrthoRectifFilterType ;
 
 
   OrthoRectifFilterType::Pointer  orthoRectifFilter =
-                                              OrthoRectifFilterType::New();
+    OrthoRectifFilterType::New();
 
 // Software Guide : EndCodeSnippet
 
@@ -132,7 +132,7 @@ int main( int argc, char* argv[] )
 
 // Software Guide : BeginCodeSnippet
   utmMapProjectionType::Pointer utmMapProjection =
-                                              utmMapProjectionType::New();
+    utmMapProjectionType::New();
   utmMapProjection->SetZone(atoi(argv[3]));
   utmMapProjection->SetHemisphere(*(argv[4]));
   orthoRectifFilter->SetMapProjection(utmMapProjection);
@@ -148,7 +148,7 @@ int main( int argc, char* argv[] )
 
 // Software Guide : BeginCodeSnippet
   typedef otb::PerBandVectorImageFilter<VectorImageType,
-          VectorImageType, OrthoRectifFilterType> PerBandFilterType;
+  VectorImageType, OrthoRectifFilterType> PerBandFilterType;
   PerBandFilterType::Pointer perBandFilter=PerBandFilterType::New();
   perBandFilter->SetFilter(orthoRectifFilter);
   perBandFilter->SetInput(reader->GetOutput());

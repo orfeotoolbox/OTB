@@ -57,14 +57,14 @@ int main( int argc, char *argv[] )
 {
   // Verify the number of parameters on the command line.
   if ( argc < 3 )
-    {
+  {
     std::cerr << "Missing parameters. " << std::endl;
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0]
               << " inputImageFile numberOfSamples"
               << std::endl;
-      return -1;
-    }
+    return -1;
+  }
 
 // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
@@ -80,16 +80,16 @@ int main( int argc, char *argv[] )
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( argv[1] );
   try
-    {
+  {
     reader->Update();
     inputImage = reader->GetOutput();
-    }
+  }
   catch ( itk::ExceptionObject &err)
-    {
+  {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-    }
+  }
 
 // Software Guide : BeginLatex
 //
@@ -117,9 +117,9 @@ int main( int argc, char *argv[] )
 // Software Guide : BeginCodeSnippet
   float mean = 0.0f;
   for ( inputIt.GoToBegin(); ! inputIt.IsAtEnd(); ++inputIt)
-    {
+  {
     mean += static_cast<float>( inputIt.Get() );
-    }
+  }
   mean = mean / ::atof( argv[2] );
 
 // Software Guide : EndCodeSnippet

@@ -70,7 +70,8 @@
 
 int main ( int argc, char * argv[] )
 {
-  try {
+  try
+  {
 
     if ( argc != 6 )
     {
@@ -171,7 +172,7 @@ int main ( int argc, char * argv[] )
 //  Software Guide : BeginCodeSnippet
     typedef ClassifType::ClassSampleType ClassSampleType;
     typedef otb::Statistics::GaussianModelComponent< ClassSampleType >
-        GaussianType;
+    GaussianType;
 
     for ( int i = 0; i < numberOfClasses; i++ )
       classifier->AddComponent( i, GaussianType::New() );
@@ -184,7 +185,8 @@ int main ( int argc, char * argv[] )
 //  Software Guide : EndLatex
 
 //  Software Guide : BeginCodeSnippet
-    try {
+    try
+    {
       classifier->Update() ;
     }
 //  Software Guide : EndCodeSnippet
@@ -213,7 +215,7 @@ int main ( int argc, char * argv[] )
 
 //  Software Guide : BeginCodeSnippet
     typedef itk::RescaleIntensityImageFilter< OutputImageType,
-      OutputImageType > RescalerType;
+    OutputImageType > RescalerType;
     RescalerType::Pointer rescaler = RescalerType::New();
 
     rescaler->SetOutputMinimum( itk::NumericTraits< unsigned char >::min());
@@ -265,13 +267,13 @@ int main ( int argc, char * argv[] )
     classifier->Print( std::cerr );
 //  Software Guide : EndCodeSnippet
   }
-  catch( itk::ExceptionObject & err )
+  catch ( itk::ExceptionObject & err )
   {
     std::cerr << "Exception itk::ExceptionObject thrown !\n";
     std::cerr << err << std::endl;
     return EXIT_FAILURE;
   }
-  catch( ... )
+  catch ( ... )
   {
     std::cerr << "Unknown exception thrown !\n";
     return EXIT_FAILURE;

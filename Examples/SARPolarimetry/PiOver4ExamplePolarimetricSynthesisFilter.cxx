@@ -41,18 +41,18 @@
 int main( int argc, char* argv[] )
 {
 
-  if(argc!=6)
-    {
+  if (argc!=6)
+  {
     std::cout << argv[0]
               <<" <input_filename_HH_channel>"
               <<" <input_filename_HV_channel>"
               <<" <input_filename_VH_channel>"
               <<" <input_filename_VV_channel>"
               <<" <output_filename>"
-        << std::endl;
+              << std::endl;
 
     return EXIT_FAILURE;
-    }
+  }
 
 // Software Guide : BeginLatex
 //

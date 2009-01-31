@@ -23,9 +23,9 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(ImageRegistration1ExampleTest);
-REGISTER_TEST(ImageRegistration2ExampleTest);
-REGISTER_TEST(ImageRegistration5ExampleTest);
+  REGISTER_TEST(ImageRegistration1ExampleTest);
+  REGISTER_TEST(ImageRegistration2ExampleTest);
+  REGISTER_TEST(ImageRegistration5ExampleTest);
 }
 
 #undef main

@@ -97,10 +97,10 @@ int main(int, char *[])
   // Software Guide : BeginCodeSnippet
 
   const bool found = pointSet->GetPointData( dataId, & value );
-  if( found )
-    {
+  if ( found )
+  {
     std::cout << "Pixel value = " << value << std::endl;
-    }
+  }
   // Software Guide : EndCodeSnippet
 
 
@@ -250,12 +250,12 @@ int main(int, char *[])
 
   // Software Guide : BeginCodeSnippet
   PointDataIterator end = pointData2->End();
-  while( pointDataIterator != end )
-    {
+  while ( pointDataIterator != end )
+  {
     PixelType p = pointDataIterator.Value();  // access the pixel data
     std::cout << p << std::endl;              // print the pixel data
     ++pointDataIterator;                      // advance to next pixel/point
-    }
+  }
   // Software Guide : EndCodeSnippet
 
 

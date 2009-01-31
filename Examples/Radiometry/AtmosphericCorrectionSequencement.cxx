@@ -87,14 +87,14 @@
 
 int main( int argc, char *argv[] )
 {
-  if( argc != 19 )
-    {
-      std::cerr << "Missing Parameters " << std::endl;
-      std::cerr << "Usage: " << argv[0]<< std::endl;
-      std::cerr << " inputImage outputImage atmosphericCorrectionSequencement_alpha_beta.txt atmosphericCorrectionSequencement_solar_illumination.txt atmosphericCorrectionSequencement_wavelenght_spectral_bands_spot4_1.txt azimuth day month AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms (9 parameters) SurfaceAdjencyEffect6SCorrectionSchemeFilter (2 parameters                )"<< std::endl;
-      std::cerr << std::endl;
-      return 1;
-    }
+  if ( argc != 19 )
+  {
+    std::cerr << "Missing Parameters " << std::endl;
+    std::cerr << "Usage: " << argv[0]<< std::endl;
+    std::cerr << " inputImage outputImage atmosphericCorrectionSequencement_alpha_beta.txt atmosphericCorrectionSequencement_solar_illumination.txt atmosphericCorrectionSequencement_wavelenght_spectral_bands_spot4_1.txt azimuth day month AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms (9 parameters) SurfaceAdjencyEffect6SCorrectionSchemeFilter (2 parameters                )"<< std::endl;
+    std::cerr << std::endl;
+    return 1;
+  }
 
   //  Software Guide : BeginLatex
   //
@@ -129,20 +129,20 @@ int main( int argc, char *argv[] )
   // Software Guide : BeginCodeSnippet
   reader->SetFileName(argv[1]);
   try
-    {
-      reader->GenerateOutputInformation();
-    }
-  catch( itk::ExceptionObject & excep )
-    {
-      std::cerr << "Exception caught !" << std::endl;
-      std::cerr << excep << std::endl;
-    }
+  {
+    reader->GenerateOutputInformation();
+  }
+  catch ( itk::ExceptionObject & excep )
+  {
+    std::cerr << "Exception caught !" << std::endl;
+    std::cerr << excep << std::endl;
+  }
   // Software Guide : EndCodeSnippet
-  catch( ... )
-    {
-      std::cout << "Unknown exception !" << std::endl;
-      return EXIT_FAILURE;
-    }
+  catch ( ... )
+  {
+    std::cout << "Unknown exception !" << std::endl;
+    return EXIT_FAILURE;
+  }
 
   unsigned int nbOfComponent = reader->GetOutput()->GetNumberOfComponentsPerPixel();
 
@@ -170,12 +170,12 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ImageToLuminanceImageFilter<ImageType,ImageType>
-    ImageToLuminanceImageFilterType;
+  ImageToLuminanceImageFilterType;
 
   ImageToLuminanceImageFilterType::Pointer filterImageToLuminance
-    = ImageToLuminanceImageFilterType::New();
+  = ImageToLuminanceImageFilterType::New();
 
- // Software Guide : EndCodeSnippet
+// Software Guide : EndCodeSnippet
   typedef ImageToLuminanceImageFilterType::VectorType VectorType;
   VectorType alpha(nbOfComponent);
   VectorType beta(nbOfComponent);
@@ -184,13 +184,13 @@ int main( int argc, char *argv[] )
   std::ifstream fin;
   fin.open(argv[3]);
   double dalpha(0.), dbeta(0.);
-  for( unsigned int i=0 ; i < nbOfComponent ; i++)
-    {
-      fin >> dalpha;
-      fin >> dbeta;
-      alpha[i] = dalpha;
-      beta[i] = dbeta;
-    }
+  for ( unsigned int i=0 ; i < nbOfComponent ; i++)
+  {
+    fin >> dalpha;
+    fin >> dbeta;
+    alpha[i] = dalpha;
+    beta[i] = dbeta;
+  }
   fin.close();
 
   // Software Guide : BeginLatex
@@ -198,7 +198,7 @@ int main( int argc, char *argv[] )
   // stored in a vector and passed to the class.
   // Software Guide : EndLatex
 
-   // Software Guide : BeginCodeSnippet
+  // Software Guide : BeginCodeSnippet
   filterImageToLuminance->SetAlpha(alpha);
   filterImageToLuminance->SetBeta(beta);
   // Software Guide : EndCodeSnippet
@@ -232,10 +232,10 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::LuminanceToReflectanceImageFilter<ImageType,ImageType>
-                                LuminanceToReflectanceImageFilterType;
+  LuminanceToReflectanceImageFilterType;
   LuminanceToReflectanceImageFilterType::Pointer filterLuminanceToReflectance
-    = LuminanceToReflectanceImageFilterType::New();
- // Software Guide : EndCodeSnippet
+  = LuminanceToReflectanceImageFilterType::New();
+// Software Guide : EndCodeSnippet
 
   typedef LuminanceToReflectanceImageFilterType::VectorType VectorType;
 
@@ -244,10 +244,10 @@ int main( int argc, char *argv[] )
 
   fin.open(argv[4]);
   double dsolarIllumination(0.);
-  for( unsigned int i=0 ; i < nbOfComponent ; i++)
+  for ( unsigned int i=0 ; i < nbOfComponent ; i++)
   {
-        fin >> dsolarIllumination;
-        solarIllumination[i] = dsolarIllumination;
+    fin >> dsolarIllumination;
+    solarIllumination[i] = dsolarIllumination;
   }
   fin.close();
 
@@ -287,20 +287,20 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
-                       AtmosphericCorrectionParametersTo6SRadiativeTermsType;
+  AtmosphericCorrectionParametersTo6SRadiativeTermsType;
 
   typedef otb::AtmosphericCorrectionParameters
-                                         AtmosphericCorrectionParametersType;
+  AtmosphericCorrectionParametersType;
 
   typedef otb::AtmosphericRadiativeTerms
-                                               AtmosphericRadiativeTermsType;
+  AtmosphericRadiativeTermsType;
   // Software Guide : EndCodeSnippet
   typedef AtmosphericCorrectionParametersType::AerosolModelType
-                                AerosolModelType;
+  AerosolModelType;
   typedef otb::FilterFunctionValues
-                                FilterFunctionValuesType;
+  FilterFunctionValuesType;
   typedef FilterFunctionValuesType::ValuesVectorType
-                                ValuesVectorType;
+  ValuesVectorType;
 
 
   AtmosphericCorrectionParametersType::Pointer dataAtmosphericCorrectionParameters = AtmosphericCorrectionParametersType::New();
@@ -318,25 +318,25 @@ int main( int argc, char *argv[] )
 
   fin.open(argv[5]);
   fin >> nbBands;
-  for(unsigned int i=0 ; i<nbBands ; i++)
+  for (unsigned int i=0 ; i<nbBands ; i++)
   {
-        vector.clear();
-        fin >> sString;
-        fin >> minSpectralValue;
-        fin >> maxSpectralValue;
-        fin >> userStep;
-        fin >> nbValuesPerBand;
-        for( unsigned int j=0 ; j < nbValuesPerBand ; j++)
-        {
-                fin >> value;
-                vector.push_back(value);
-        }
-        FilterFunctionValuesType::Pointer functionValues = FilterFunctionValuesType::New();
-        functionValues->SetFilterFunctionValues(vector);
-        functionValues->SetMinSpectralValue(minSpectralValue);
-        functionValues->SetMaxSpectralValue(maxSpectralValue);
-        functionValues->SetUserStep( userStep );
-        dataAtmosphericCorrectionParameters->SetWavelenghtSpectralBandWithIndex(i, functionValues);
+    vector.clear();
+    fin >> sString;
+    fin >> minSpectralValue;
+    fin >> maxSpectralValue;
+    fin >> userStep;
+    fin >> nbValuesPerBand;
+    for ( unsigned int j=0 ; j < nbValuesPerBand ; j++)
+    {
+      fin >> value;
+      vector.push_back(value);
+    }
+    FilterFunctionValuesType::Pointer functionValues = FilterFunctionValuesType::New();
+    functionValues->SetFilterFunctionValues(vector);
+    functionValues->SetMinSpectralValue(minSpectralValue);
+    functionValues->SetMaxSpectralValue(maxSpectralValue);
+    functionValues->SetUserStep( userStep );
+    dataAtmosphericCorrectionParameters->SetWavelenghtSpectralBandWithIndex(i, functionValues);
   }
 
   fin.close();
@@ -412,9 +412,9 @@ int main( int argc, char *argv[] )
   //
   // Software Guide : EndLatex
 
- // Software Guide : BeginCodeSnippet
+// Software Guide : BeginCodeSnippet
   AtmosphericCorrectionParametersTo6SRadiativeTermsType::Pointer
-    filterAtmosphericCorrectionParametersTo6SRadiativeTerms =
+  filterAtmosphericCorrectionParametersTo6SRadiativeTerms =
     AtmosphericCorrectionParametersTo6SRadiativeTermsType::New();
 
   filterAtmosphericCorrectionParametersTo6SRadiativeTerms->SetInput(
@@ -444,11 +444,11 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ReflectanceToSurfaceReflectanceImageFilter<ImageType,
-    ImageType> ReflectanceToSurfaceReflectanceImageFilterType;
+  ImageType> ReflectanceToSurfaceReflectanceImageFilterType;
 
   ReflectanceToSurfaceReflectanceImageFilterType::Pointer
-    filterReflectanceToSurfaceReflectanceImageFilter
-    = ReflectanceToSurfaceReflectanceImageFilterType::New();
+  filterReflectanceToSurfaceReflectanceImageFilter
+  = ReflectanceToSurfaceReflectanceImageFilterType::New();
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -483,8 +483,8 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   filterReflectanceToSurfaceReflectanceImageFilter->
-    SetAtmosphericRadiativeTerms(
-      filterAtmosphericCorrectionParametersTo6SRadiativeTerms->GetOutput() );
+  SetAtmosphericRadiativeTerms(
+    filterAtmosphericCorrectionParametersTo6SRadiativeTerms->GetOutput() );
   // Software Guide : EndCodeSnippet
 
 
@@ -527,10 +527,10 @@ int main( int argc, char *argv[] )
 
   //  Software Guide : BeginCodeSnippet
   typedef otb::SurfaceAdjencyEffect6SCorrectionSchemeFilter<ImageType,
-    ImageType>  SurfaceAdjencyEffect6SCorrectionSchemeFilterType;
+  ImageType>  SurfaceAdjencyEffect6SCorrectionSchemeFilterType;
   SurfaceAdjencyEffect6SCorrectionSchemeFilterType::Pointer
-    filterSurfaceAdjencyEffect6SCorrectionSchemeFilter
-    = SurfaceAdjencyEffect6SCorrectionSchemeFilterType::New();
+  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter
+  = SurfaceAdjencyEffect6SCorrectionSchemeFilterType::New();
   //  Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -572,9 +572,9 @@ int main( int argc, char *argv[] )
 
   writer->SetInput(
     filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->GetOutput());
- // Software Guide : EndCodeSnippet
+// Software Guide : EndCodeSnippet
 
- //  Software Guide : BeginLatex
+//  Software Guide : BeginLatex
   //
   //  The invocation of the \code{Update()} method on the writer triggers the
   //  execution of the pipeline.  It is recommended to place this call in a
@@ -583,20 +583,20 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
   try
-    {
-      writer->Update();
-    }
-  catch( itk::ExceptionObject & excep )
-    {
-      std::cerr << "Exception caught !" << std::endl;
-      std::cerr << excep << std::endl;
-    }
+  {
+    writer->Update();
+  }
+  catch ( itk::ExceptionObject & excep )
+  {
+    std::cerr << "Exception caught !" << std::endl;
+    std::cerr << excep << std::endl;
+  }
   // Software Guide : EndCodeSnippet
-  catch( ... )
-    {
-      std::cout << "Unknown exception !" << std::endl;
-      return EXIT_FAILURE;
-    }
+  catch ( ... )
+  {
+    std::cout << "Unknown exception !" << std::endl;
+    return EXIT_FAILURE;
+  }
 
   return EXIT_SUCCESS;
 }

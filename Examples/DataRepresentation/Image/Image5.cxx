@@ -57,12 +57,12 @@
 
 int main(int argc, char * argv[])
 {
-  if( argc < 2 )
-    {
+  if ( argc < 2 )
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << "  outputImageFile" << std::endl;
     return 1;
-    }
+  }
 
   // Software Guide : BeginLatex
   //
@@ -204,16 +204,16 @@ int main(int argc, char * argv[])
   const double radius2 = radius * radius;
   PixelType * it = localBuffer;
 
-  for(unsigned int y=0; y < size[1]; y++)
-    {
+  for (unsigned int y=0; y < size[1]; y++)
+  {
     const double dy = static_cast<double>( y ) - static_cast<double>(size[1])/2.0;
-    for(unsigned int x=0; x < size[0]; x++)
-      {
+    for (unsigned int x=0; x < size[0]; x++)
+    {
       const double dx = static_cast<double>( x ) - static_cast<double>(size[0])/2.0;
       const double d2 = dx*dx + dy*dy ;
       *it++ = ( d2 < radius2 ) ? 255 : 0;
-      }
     }
+  }
 
   // Software Guide : EndCodeSnippet
 
@@ -263,15 +263,15 @@ int main(int argc, char * argv[])
 
 
   try
-    {
+  {
     writer->Update();
-    }
-  catch( itk::ExceptionObject & exp )
-    {
+  }
+  catch ( itk::ExceptionObject & exp )
+  {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << exp << std::endl;
     return -1;
-    }
+  }
 
 
   //  Software Guide : BeginLatex

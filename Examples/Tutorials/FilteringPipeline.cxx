@@ -75,7 +75,7 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::GradientMagnitudeImageFilter
-      <ImageType,ImageType> FilterType;
+  <ImageType,ImageType> FilterType;
   FilterType::Pointer filter = FilterType::New();
   // Software Guide : EndCodeSnippet
 

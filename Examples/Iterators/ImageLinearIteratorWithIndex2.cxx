@@ -43,14 +43,14 @@ int main( int argc, char *argv[] )
 {
   // Verify the number of parameters on the command line.
   if ( argc < 3 )
-    {
+  {
     std::cerr << "Missing parameters. " << std::endl;
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0]
               << " input4DImageFile output3DImageFile"
               << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
 // Software Guide : BeginLatex
 //
@@ -71,15 +71,15 @@ int main( int argc, char *argv[] )
   reader4D->SetFileName( argv[1] );
 
   try
-    {
+  {
     reader4D->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
+  }
+  catch ( itk::ExceptionObject & excp )
+  {
     std::cerr << "Error writing the image" << std::endl;
     std::cerr << excp << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
 
 
@@ -110,13 +110,13 @@ int main( int argc, char *argv[] )
   Spacing4DType     spacing4D = image4D->GetSpacing();
   Origin4DType      origin4D  = image4D->GetOrigin();
 
-  for( unsigned int i=0; i < 3; i++)
-    {
+  for ( unsigned int i=0; i < 3; i++)
+  {
     size3D[i]    = size4D[i];
     index3D[i]   = index4D[i];
     spacing3D[i] = spacing4D[i];
     origin3D[i]  = origin4D[i];
-    }
+  }
 
   image3D->SetSpacing( spacing3D );
   image3D->SetOrigin(  origin3D  );
@@ -135,21 +135,21 @@ int main( int argc, char *argv[] )
   const unsigned int timeLength = region4D.GetSize()[3];
 
   typedef itk::ImageLinearConstIteratorWithIndex<
-                                  Image4DType > IteratorType;
+  Image4DType > IteratorType;
 
   IteratorType it( image4D, region4D );
   it.SetDirection( 3 ); // Walk along time dimension
   it.GoToBegin();
-  while( !it.IsAtEnd() )
-    {
+  while ( !it.IsAtEnd() )
+  {
     SumType sum = itk::NumericTraits< SumType >::Zero;
     it.GoToBeginOfLine();
     index4D = it.GetIndex();
-    while( !it.IsAtEndOfLine() )
-      {
-       sum += it.Get();
-       ++it;
-      }
+    while ( !it.IsAtEndOfLine() )
+    {
+      sum += it.Get();
+      ++it;
+    }
     MeanType mean = static_cast< MeanType >( sum ) /
                     static_cast< MeanType >( timeLength );
 
@@ -159,7 +159,7 @@ int main( int argc, char *argv[] )
 
     image3D->SetPixel( index3D, static_cast< PixelType >( mean ) );
     it.NextLine();
-    }
+  }
 
 
 // Software Guide : EndCodeSnippet
@@ -187,15 +187,15 @@ int main( int argc, char *argv[] )
   writer3D->SetInput( image3D );
 
   try
-    {
+  {
     writer3D->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
+  }
+  catch ( itk::ExceptionObject & excp )
+  {
     std::cerr << "Error writing the image" << std::endl;
     std::cerr << excp << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

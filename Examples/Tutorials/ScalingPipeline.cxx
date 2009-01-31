@@ -91,9 +91,9 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-   // Software Guide : BeginCodeSnippet
+  // Software Guide : BeginCodeSnippet
   typedef itk::CannyEdgeDetectionImageFilter
-      <ImageType,ImageType> FilterType;
+  <ImageType,ImageType> FilterType;
   FilterType::Pointer filter = FilterType::New();
   // Software Guide : EndCodeSnippet
 
@@ -116,12 +116,12 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::RescaleIntensityImageFilter
-      <ImageType,OutputImageType> RescalerType;
+  <ImageType,OutputImageType> RescalerType;
   RescalerType::Pointer rescaler = RescalerType::New();
 
   rescaler->SetOutputMinimum(0);
   rescaler->SetOutputMaximum(255);
-   // Software Guide : EndCodeSnippet
+  // Software Guide : EndCodeSnippet
 
 
   //  Software Guide : BeginLatex

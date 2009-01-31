@@ -177,14 +177,14 @@
 
 int main( int argc, char *argv[] )
 {
-  if( argc < 10 )
-    {
+  if ( argc < 10 )
+  {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImage  outputImage seedX seedY";
     std::cerr << " Sigma SigmoidAlpha SigmoidBeta TimeThreshold StoppingValue" << std::endl;
     return 1;
-    }
+  }
 
 
   //  Software Guide : BeginLatex
@@ -225,7 +225,7 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::BinaryThresholdImageFilter< InternalImageType,
-                        OutputImageType    >    ThresholdingFilterType;
+  OutputImageType    >    ThresholdingFilterType;
   ThresholdingFilterType::Pointer thresholder = ThresholdingFilterType::New();
   // Software Guide : EndCodeSnippet
 
@@ -271,8 +271,8 @@ int main( int argc, char *argv[] )
   //  renormalize image before sending them to writers.
   //
   typedef itk::RescaleIntensityImageFilter<
-                               InternalImageType,
-                               OutputImageType >   CastFilterType;
+  InternalImageType,
+  OutputImageType >   CastFilterType;
 
   //  Software Guide : BeginLatex
   //
@@ -283,8 +283,8 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef   itk::CurvatureAnisotropicDiffusionImageFilter<
-                               InternalImageType,
-                               InternalImageType >  SmoothingFilterType;
+  InternalImageType,
+  InternalImageType >  SmoothingFilterType;
   // Software Guide : EndCodeSnippet
 
 
@@ -311,12 +311,12 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef   itk::GradientMagnitudeRecursiveGaussianImageFilter<
-                               InternalImageType,
-                               InternalImageType >  GradientFilterType;
+  InternalImageType,
+  InternalImageType >  GradientFilterType;
 
   typedef   itk::SigmoidImageFilter<
-                               InternalImageType,
-                               InternalImageType >  SigmoidFilterType;
+  InternalImageType,
+  InternalImageType >  SigmoidFilterType;
   // Software Guide : EndCodeSnippet
 
 
@@ -359,7 +359,7 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef  itk::FastMarchingImageFilter< InternalImageType,
-                              InternalImageType >    FastMarchingFilterType;
+  InternalImageType >    FastMarchingFilterType;
   // Software Guide : EndCodeSnippet
 
 
@@ -614,7 +614,7 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   fastMarching->SetOutputSize(
-           reader->GetOutput()->GetBufferedRegion().GetSize() );
+    reader->GetOutput()->GetBufferedRegion().GetSize() );
   // Software Guide : EndCodeSnippet
 
 
@@ -649,14 +649,14 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   try
-    {
+  {
     writer->Update();
-    }
-  catch( itk::ExceptionObject & excep )
-    {
+  }
+  catch ( itk::ExceptionObject & excep )
+  {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-    }
+  }
   // Software Guide : EndCodeSnippet
 
 

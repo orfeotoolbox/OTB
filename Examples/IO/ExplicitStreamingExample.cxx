@@ -48,12 +48,12 @@
 int main(int argc, char * argv[])
 {
 
-  if( argc != 3 )
-    {
+  if ( argc != 3 )
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " inputImageFile nbLinesForStreaming " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
 
   const char * infname = argv[1];
@@ -187,7 +187,7 @@ int main(int argc, char * argv[])
     IteratorType it(reader->GetOutput(),streamingRegion);
     it.GoToBegin();
 
-    while(!it.IsAtEnd())
+    while (!it.IsAtEnd())
     {
       std::cout << it.Get() << std::endl;
       ++it;
@@ -195,5 +195,5 @@ int main(int argc, char * argv[])
 
 // Software Guide : EndCodeSnippet
   }
-    return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }

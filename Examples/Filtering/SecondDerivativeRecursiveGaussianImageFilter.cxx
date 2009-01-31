@@ -47,12 +47,12 @@
 int main(int argc, char * argv [] )
 {
 
-  if( argc < 3 )
-    {
+  if ( argc < 3 )
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " inputImage outputPrefix  [sigma] " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   typedef float            PixelType;
   typedef float            OutputPixelType;
@@ -68,8 +68,8 @@ int main(int argc, char * argv [] )
   typedef itk::ImageDuplicator< OutputImageType >   DuplicatorType;
 
   typedef itk::RecursiveGaussianImageFilter<
-                                      ImageType,
-                                      ImageType >  FilterType;
+  ImageType,
+  ImageType >  FilterType;
 
   ReaderType::Pointer  reader  = ReaderType::New();
   WriterType::Pointer  writer  = WriterType::New();
@@ -82,15 +82,15 @@ int main(int argc, char * argv [] )
   std::string outputFileName;
 
   try
-    {
+  {
     reader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
+  }
+  catch ( itk::ExceptionObject & excp )
+  {
     std::cerr << "Problem reading the input file" << std::endl;
     std::cerr << excp << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   FilterType::Pointer ga = FilterType::New();
   FilterType::Pointer gb = FilterType::New();
@@ -100,13 +100,13 @@ int main(int argc, char * argv [] )
   gb->SetDirection( 1 );
   gc->SetDirection( 2 );
 
-  if( argc > 3 )
-    {
+  if ( argc > 3 )
+  {
     const float sigma = atof( argv[3] );
     ga->SetSigma( sigma );
     gb->SetSigma( sigma );
     gc->SetSigma( sigma );
-    }
+  }
 
   ga->SetZeroOrder();
   gb->SetZeroOrder();
@@ -216,7 +216,7 @@ int main(int argc, char * argv [] )
 
   // Software Guide : EndCodeSnippet
 
-return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }
 
 

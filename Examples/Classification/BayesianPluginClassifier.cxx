@@ -123,15 +123,15 @@ int main( int,  char *[])
   typedef itk::Statistics::ListSample< MeasurementVectorType > SampleType;
   SampleType::Pointer sample = SampleType::New();
   sample->SetMeasurementVectorSize( 1 ); // length of measurement vectors
-                                         // in the sample.
+  // in the sample.
 
   typedef itk::Statistics::Subsample< SampleType > ClassSampleType;
   std::vector< ClassSampleType::Pointer > classSamples;
   for ( unsigned int i = 0 ; i < 2 ; ++i )
-    {
+  {
     classSamples.push_back( ClassSampleType::New() );
     classSamples[i]->SetSample( sample );
-    }
+  }
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -164,23 +164,23 @@ int main( int,  char *[])
   double standardDeviation = 30;
   SampleType::InstanceIdentifier id = 0UL;
   for ( unsigned int i = 0 ; i < 100 ; ++i )
-    {
+  {
     mv.Fill( (normalGenerator->GetVariate() * standardDeviation ) + mean);
     sample->PushBack( mv );
     classSamples[0]->AddInstance( id );
     ++id;
-    }
+  }
 
   normalGenerator->Initialize( 3024 );
   mean = 200;
   standardDeviation = 30;
   for ( unsigned int i = 0 ; i < 100 ; ++i )
-    {
+  {
     mv.Fill( (normalGenerator->GetVariate() * standardDeviation ) + mean);
     sample->PushBack( mv );
     classSamples[1]->AddInstance( id );
     ++id;
-    }
+  }
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -196,13 +196,13 @@ int main( int,  char *[])
   // Software Guide : BeginCodeSnippet
   typedef itk::Statistics::MeanCalculator< ClassSampleType > MeanEstimatorType;
   typedef itk::Statistics::CovarianceCalculator< ClassSampleType >
-    CovarianceEstimatorType;
+  CovarianceEstimatorType;
 
   std::vector< MeanEstimatorType::Pointer > meanEstimators;
   std::vector< CovarianceEstimatorType::Pointer > covarianceEstimators;
 
   for ( unsigned int i = 0 ; i < 2 ; ++i )
-    {
+  {
     meanEstimators.push_back( MeanEstimatorType::New() );
     meanEstimators[i]->SetInputSample( classSamples[i] );
     meanEstimators[i]->Update();
@@ -211,7 +211,7 @@ int main( int,  char *[])
     covarianceEstimators[i]->SetInputSample( classSamples[i] );
     covarianceEstimators[i]->SetMean( meanEstimators[i]->GetOutput() );
     covarianceEstimators[i]->Update();
-    }
+  }
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -222,13 +222,13 @@ int main( int,  char *[])
 
   // Software Guide : BeginCodeSnippet
   for ( unsigned int i = 0 ; i < 2 ; ++i )
-    {
+  {
     std::cout << "class[" << i << "] " << std::endl;
     std::cout << "    estimated mean : "
               << *(meanEstimators[i]->GetOutput())
               << "    covariance matrix : "
               << *(covarianceEstimators[i]->GetOutput()) << std::endl;
-    }
+  }
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -261,7 +261,7 @@ int main( int,  char *[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::Statistics::GaussianDensityFunction< MeasurementVectorType >
-    MembershipFunctionType;
+  MembershipFunctionType;
   typedef itk::MaximumRatioDecisionRule DecisionRuleType;
   DecisionRuleType::Pointer decisionRule = DecisionRuleType::New();
 
@@ -304,13 +304,13 @@ int main( int,  char *[])
   // Software Guide : BeginCodeSnippet
   std::vector< MembershipFunctionType::Pointer > membershipFunctions;
   for ( unsigned int i = 0 ; i < 2 ; i++ )
-    {
+  {
     membershipFunctions.push_back(MembershipFunctionType::New());
     membershipFunctions[i]->SetMean( meanEstimators[i]->GetOutput() );
     membershipFunctions[i]->
-      SetCovariance( covarianceEstimators[i]->GetOutput() );
+    SetCovariance( covarianceEstimators[i]->GetOutput() );
     classifier->AddMembershipFunction(membershipFunctions[i].GetPointer());
-    }
+  }
 
   classifier->Update();
   // Software Guide : EndCodeSnippet
@@ -327,11 +327,11 @@ int main( int,  char *[])
   ClassifierType::OutputType::ConstIterator iter = membershipSample->Begin();
 
   while ( iter != membershipSample->End() )
-    {
+  {
     std::cout << "measurement vector = " << iter.GetMeasurementVector()
               << "class label = " << iter.GetClassLabel() << std::endl;
     ++iter;
-    }
+  }
   // Software Guide : EndCodeSnippet
 
   return EXIT_SUCCESS;

@@ -25,7 +25,7 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(PiOver4ExamplePolarimetricSynthesisFilter);
+  REGISTER_TEST(PiOver4ExamplePolarimetricSynthesisFilter);
 }
 
 #undef main

@@ -96,11 +96,11 @@ int main(int, char* [])
 // Software Guide : BeginCodeSnippet
   itk::LevelOrderTreeIterator<TreeType> levelIt(tree,10,tree->GetNode(2));
   levelIt.GoToBegin();
-  while(!levelIt.IsAtEnd())
-    {
+  while (!levelIt.IsAtEnd())
+  {
     std::cout << levelIt.Get() << " ("<< levelIt.GetLevel() << ")" << std::endl;;
     ++levelIt;
-    }
+  }
   std::cout << std::endl;
 // Software Guide : EndCodeSnippet
   levelIt.GoToBegin();
@@ -125,11 +125,11 @@ int main(int, char* [])
 // Software Guide : BeginCodeSnippet
   itk::ChildTreeIterator<TreeType> childIt(tree);
   childIt.GoToBegin();
-  while(!childIt.IsAtEnd())
-    {
+  while (!childIt.IsAtEnd())
+  {
     std::cout << childIt.Get() << std::endl;;
     ++childIt;
-    }
+  }
   std::cout << std::endl;
 // Software Guide : EndCodeSnippet
   childIt.GoToBegin();
@@ -139,11 +139,11 @@ int main(int, char* [])
 // PREORDER, INORDER, POSTORDER, LEVELORDER, CHILD, ROOT and LEAF.
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
-  if(childIt.GetType() != itk::TreeIteratorBase<TreeType>::CHILD)
-    {
+  if (childIt.GetType() != itk::TreeIteratorBase<TreeType>::CHILD)
+  {
     std::cout << "[FAILURE]" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 // Every TreeIterator has a \code{Clone()} function which returns
@@ -162,11 +162,11 @@ int main(int, char* [])
 // Software Guide : BeginCodeSnippet
   itk::LeafTreeIterator<TreeType> leafIt(tree);
   leafIt.GoToBegin();
-  while(!leafIt.IsAtEnd())
-    {
+  while (!leafIt.IsAtEnd())
+  {
     std::cout << leafIt.Get() << std::endl;;
     ++leafIt;
-    }
+  }
   std::cout << std::endl;
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
@@ -177,11 +177,11 @@ int main(int, char* [])
 // Software Guide : BeginCodeSnippet
   itk::InOrderTreeIterator<TreeType> InOrderIt(tree);
   InOrderIt.GoToBegin();
-  while(!InOrderIt.IsAtEnd())
-    {
+  while (!InOrderIt.IsAtEnd())
+  {
     std::cout << InOrderIt.Get() << std::endl;;
     ++InOrderIt;
-    }
+  }
   std::cout << std::endl;
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
@@ -192,11 +192,11 @@ int main(int, char* [])
 // Software Guide : BeginCodeSnippet
   itk::PreOrderTreeIterator<TreeType> PreOrderIt(tree);
   PreOrderIt.GoToBegin();
-  while(!PreOrderIt.IsAtEnd())
-    {
+  while (!PreOrderIt.IsAtEnd())
+  {
     std::cout << PreOrderIt.Get() << std::endl;;
     ++PreOrderIt;
-    }
+  }
   std::cout << std::endl;
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
@@ -207,11 +207,11 @@ int main(int, char* [])
 // Software Guide : BeginCodeSnippet
   itk::PostOrderTreeIterator<TreeType> PostOrderIt(tree);
   PostOrderIt.GoToBegin();
-  while(!PostOrderIt.IsAtEnd())
-    {
+  while (!PostOrderIt.IsAtEnd())
+  {
     std::cout << PostOrderIt.Get() << std::endl;;
     ++PostOrderIt;
-    }
+  }
   std::cout << std::endl;
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
@@ -223,11 +223,11 @@ int main(int, char* [])
 // Software Guide : BeginCodeSnippet
   itk::RootTreeIterator<TreeType> RootIt(tree,tree->GetNode(6));
   RootIt.GoToBegin();
-  while(!RootIt.IsAtEnd())
-    {
+  while (!RootIt.IsAtEnd())
+  {
     std::cout << RootIt.Get() << std::endl;;
     ++RootIt;
-    }
+  }
   std::cout << std::endl;
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex

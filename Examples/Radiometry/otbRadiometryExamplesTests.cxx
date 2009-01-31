@@ -25,9 +25,9 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilterTest);
-REGISTER_TEST(NDVIRAndNIRVegetationIndexImageFilterTest);
-REGISTER_TEST(AtmosphericCorrectionSequencementTest);
+  REGISTER_TEST(ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilterTest);
+  REGISTER_TEST(NDVIRAndNIRVegetationIndexImageFilterTest);
+  REGISTER_TEST(AtmosphericCorrectionSequencementTest);
 }
 
 #undef main

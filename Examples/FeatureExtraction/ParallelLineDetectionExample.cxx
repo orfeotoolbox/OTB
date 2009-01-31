@@ -47,14 +47,14 @@
 
 int main( int argc, char * argv[] )
 {
-  if( argc !=6 )
-    {
+  if ( argc !=6 )
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " outputImage ";
     std::cerr << " outputParallelLineImage ";
     std::cerr << " distThreshParallel angThreshParallel commonDistThreshParallel"<< std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   double distThreshParallel = atof(argv[3]);
   double angThreshParallel = atof(argv[4]);
@@ -153,7 +153,7 @@ int main( int argc, char * argv[] )
 
   lineList->PushBack( aLine );
 
-    /*-----*/
+  /*-----*/
   aLine = PathType::New();
   aLine->Initialize();
   cindex[0] = 254;
@@ -166,7 +166,7 @@ int main( int argc, char * argv[] )
 
   lineList->PushBack( aLine );
 
-    /*-----*/
+  /*-----*/
   aLine = PathType::New();
   aLine->Initialize();
   cindex[0] = 270;
@@ -179,7 +179,7 @@ int main( int argc, char * argv[] )
 
   lineList->PushBack( aLine );
 
-    /*-----*/
+  /*-----*/
   aLine = PathType::New();
   aLine->Initialize();
   cindex[0] = 355;
@@ -192,7 +192,7 @@ int main( int argc, char * argv[] )
 
   lineList->PushBack( aLine );
 
-    /*-----*/
+  /*-----*/
   aLine = PathType::New();
   aLine->Initialize();
   cindex[0] = 437;

@@ -48,13 +48,13 @@
 
 int main( int argc, char * argv[] )
 {
-  if( argc < 5 )
-    {
+  if ( argc < 5 )
+  {
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImageFile outputImageFile ";
     std::cerr << " insideValue    outsideValue   "  << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   //  Software Guide : BeginLatex
   //
@@ -91,7 +91,7 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::OtsuThresholdImageFilter<
-               InputImageType, OutputImageType >  FilterType;
+  InputImageType, OutputImageType >  FilterType;
   // Software Guide : EndCodeSnippet
 
 

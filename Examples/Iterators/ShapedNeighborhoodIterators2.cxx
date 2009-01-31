@@ -35,14 +35,14 @@
 int main( int argc, char *argv[] )
 {
   if ( argc < 4 )
-    {
+  {
     std::cerr << "Missing parameters. " << std::endl;
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0]
               << " inputImageFile outputImageFile element_radius"
               << std::endl;
     return -1;
-    }
+  }
 
   typedef unsigned char PixelType;
   typedef otb::Image< PixelType, 2 >  ImageType;
@@ -57,15 +57,15 @@ int main( int argc, char *argv[] )
   unsigned int element_radius = ::atoi( argv[3] );
 
   try
-    {
+  {
     reader->Update();
-    }
+  }
   catch ( itk::ExceptionObject &err)
-    {
+  {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-    }
+  }
 
   ImageType::Pointer output = ImageType::New();
   output->SetRegions(reader->GetOutput()->GetRequestedRegion());
@@ -89,27 +89,27 @@ int main( int argc, char *argv[] )
   const PixelType foreground_value = 255;
 
   for ( fit=faceList.begin(); fit != faceList.end(); ++fit)
-    {
+  {
     ShapedNeighborhoodIteratorType it( radius, reader->GetOutput(), *fit );
     out = IteratorType( output, *fit );
 
     // Creates a circular structuring element by activating all the pixels less
     // than radius distance from the center of the neighborhood.
     for (float y = -rad; y <= rad; y++)
-      {
+    {
       for (float x = -rad; x <= rad; x++)
-        {
+      {
         ShapedNeighborhoodIteratorType::OffsetType off;
 
         float dis = ::sqrt( x*x + y*y );
         if (dis <= rad)
-          {
+        {
           off[0] = static_cast<int>(x);
           off[1] = static_cast<int>(y);
           it.ActivateOffset(off);
-          }
         }
       }
+    }
 
 // Software Guide : BeginLatex
 //
@@ -122,28 +122,28 @@ int main( int argc, char *argv[] )
 // Software Guide : BeginCodeSnippet
     // Implements dilation
     for (it.GoToBegin(), out.GoToBegin(); !it.IsAtEnd(); ++it, ++out)
-      {
+    {
       ShapedNeighborhoodIteratorType::ConstIterator ci;
 
       bool flag = false;
       for (ci = it.Begin(); ci != it.End(); ci++)
-        {
+      {
         if (ci.Get() != background_value)
-          {
+        {
           flag = true;
           break;
-          }
-        }
-      if (flag == true)
-        {
-        out.Set(foreground_value);
-        }
-      else
-        {
-        out.Set(background_value);
         }
       }
+      if (flag == true)
+      {
+        out.Set(foreground_value);
+      }
+      else
+      {
+        out.Set(background_value);
+      }
     }
+  }
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -174,15 +174,15 @@ int main( int argc, char *argv[] )
   writer->SetFileName( argv[2] );
   writer->SetInput( output );
   try
-    {
+  {
     writer->Update();
-    }
+  }
   catch ( itk::ExceptionObject &err)
-    {
+  {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

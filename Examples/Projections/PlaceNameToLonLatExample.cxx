@@ -34,10 +34,10 @@
 int main( int argc, char* argv[] )
 {
 
-  if(argc!=2)
+  if (argc!=2)
   {
     std::cout << argv[0] <<" <place name> "
-        << std::endl;
+              << std::endl;
 
     return EXIT_FAILURE;
   }

@@ -26,12 +26,12 @@
 int main(int argc, char* argv[] )
 {
 
-  if( argc < 5 )
-    {
+  if ( argc < 5 )
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " inputImageFile1 inputImageFile2  radius outputImageFile " << std::endl;
     return -1;
-    }
+  }
 
   // Define the dimension of the images
   const unsigned int Dimension = 2;
@@ -49,15 +49,15 @@ int main(int argc, char* argv[] )
   typedef otb::StreamingImageFileWriter< OutputImageType >  WriterType;
 
   typedef itk::ShiftScaleImageFilter< ChangeImageType,
-                                            OutputImageType > RescalerType;
+  OutputImageType > RescalerType;
 
 
 
   // Declare the type for the filter
   typedef otb::JoinHistogramMIImageFilter<
-                                InputImageType1,
-                                InputImageType2,
-                                ChangeImageType  >       FilterType;
+  InputImageType1,
+  InputImageType2,
+  ChangeImageType  >       FilterType;
 
 
   ReaderType1::Pointer reader1 = ReaderType1::New();
@@ -78,8 +78,8 @@ int main(int argc, char* argv[] )
   rescaler->SetShift( itk::NumericTraits< InternalPixelType >::min());
 
   float scale = itk::NumericTraits< OutputPixelType >::max()/ 100.0;
-    /*float(itk::NumericTraits< OutputPixelType >::max()+
-    itk::NumericTraits< InternalPixelType >::min());*/
+  /*float(itk::NumericTraits< OutputPixelType >::max()+
+  itk::NumericTraits< InternalPixelType >::min());*/
   rescaler->SetScale( scale );
 
 
@@ -101,15 +101,15 @@ int main(int argc, char* argv[] )
 
 
   try
-    {
+  {
     writer->Update();
-    }
-  catch( itk::ExceptionObject & err )
-    {
+  }
+  catch ( itk::ExceptionObject & err )
+  {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-    }
+  }
 
 
   return EXIT_SUCCESS;

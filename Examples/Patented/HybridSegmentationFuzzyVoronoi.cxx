@@ -57,15 +57,15 @@
 
 int main( int argc, char *argv[] )
 {
-  if( argc < 9 )
-    {
+  if ( argc < 9 )
+  {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImage  outputImage seedX seedY " << std::endl;
     std::cerr << " estimateMean estimateVariance (used by FuzzySegmentation) " << std::endl;
     std::cerr << " meanTolerance standardDeviationTolerance (used by VoronoiSegmentation) " << std::endl;
     return 1;
-    }
+  }
 
 
   //  Software Guide : BeginLatex
@@ -111,9 +111,9 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef   itk::SimpleFuzzyConnectednessScalarImageFilter<
-                                               InputImageType,
-                                               BinaryImageType
-                                                  >  FuzzySegmentationFilterType;
+  InputImageType,
+  BinaryImageType
+  >  FuzzySegmentationFilterType;
   // Software Guide : EndCodeSnippet
 
 
@@ -130,7 +130,7 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   FuzzySegmentationFilterType::Pointer fuzzysegmenter =
-                                         FuzzySegmentationFilterType::New();
+    FuzzySegmentationFilterType::New();
   // Software Guide : EndCodeSnippet
 
 
@@ -164,13 +164,13 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef  itk::VoronoiSegmentationImageFilter<
-                                      InputImageType,
-                                      OutputImageType,
-                                      BinaryImageType>
-                                           VoronoiSegmentationFilterType;
+  InputImageType,
+  OutputImageType,
+  BinaryImageType>
+  VoronoiSegmentationFilterType;
 
   VoronoiSegmentationFilterType::Pointer voronoisegmenter =
-                                     VoronoiSegmentationFilterType::New();
+    VoronoiSegmentationFilterType::New();
   // Software Guide : EndCodeSnippet
 
 
@@ -341,7 +341,7 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::RescaleIntensityImageFilter< OutputImageType,OutputImageType >
-    ScalerFilterType;
+  ScalerFilterType;
   ScalerFilterType::Pointer scaler = ScalerFilterType::New();
 
   scaler->SetOutputMinimum(   0 );

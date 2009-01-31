@@ -84,7 +84,7 @@ int main(int argc, char * argv[])
   typedef otb::ImageFileReader< ImageType > ReaderType;
   typedef otb::ImageFileWriter< OutputImageType > WriterType;
   typedef itk::RescaleIntensityImageFilter
-                         <ImageType, OutputImageType> RescalerType;
+  <ImageType, OutputImageType> RescalerType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -112,15 +112,15 @@ int main(int argc, char * argv[])
   CarvingFilterType::Pointer carvingFilter = CarvingFilterType::New();
 
   typedef otb::DrawPathFilter
-      <ImageType, PathType, ImageType> DrawPathFilterType;
+  <ImageType, PathType, ImageType> DrawPathFilterType;
   DrawPathFilterType::Pointer drawPathFilter = DrawPathFilterType::New();
 
   typedef otb::RemoveCarvingPathFilter
-      <ImageType, PathType, ImageType> RemoveCarvingPathFilterType;
+  <ImageType, PathType, ImageType> RemoveCarvingPathFilterType;
   RemoveCarvingPathFilterType::Pointer removeCarvingPath = RemoveCarvingPathFilterType::New();
 
   typedef otb::AddCarvingPathFilter
-      <ImageType, PathType, ImageType> AddCarvingPathFilterType;
+  <ImageType, PathType, ImageType> AddCarvingPathFilterType;
   AddCarvingPathFilterType::Pointer addCarvingPath = AddCarvingPathFilterType::New();
 
 
@@ -176,7 +176,7 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  for(int i=iteration-1; i>=0; i--)
+  for (int i=iteration-1; i>=0; i--)
   {
 
     addCarvingPath->SetInput( duplicator->GetOutput() );
@@ -222,6 +222,6 @@ int main(int argc, char * argv[])
   //
   // Software Guide : EndLatex
 
-   return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }
 

@@ -78,11 +78,11 @@ PURPOSE.  See the above copyright notices for more information.
 int main(int argc, char * argv[])
 {
   if (argc != 8)
-    {
+  {
     std::cerr << "Usage: " << argv[0] ;
     std::cerr << " InputImage OutputImage OutputSIFTFile octaves scales threshold ratio" << std::endl;
     return 1;
-    }
+  }
   const char * infname = argv[1];
   const char * outfname = argv[3];
   const char * outputImageFilename = argv[2];
@@ -175,7 +175,7 @@ int main(int argc, char * argv[])
   // 1 and 2 respectively.}
   // \label{fig:SIFT}
   // \end{figure}
-    // Figure~\ref{fig:SIFT2} shows the result of applying the SIFT
+  // Figure~\ref{fig:SIFT2} shows the result of applying the SIFT
   // point detector to a small patch extracted from a Spot 5 image
   // using different threshold values.
   // \begin{figure}
@@ -219,19 +219,19 @@ int main(int argc, char * argv[])
   outputImage->Allocate();
 
   itk::ImageRegionIterator<OutputImageType> iterOutput(outputImage,
-                   reader->GetOutput()->GetLargestPossibleRegion());
+      reader->GetOutput()->GetLargestPossibleRegion());
 
   for (iterOutput.GoToBegin(); !iterOutput.IsAtEnd(); ++iterOutput)
-    {
-      ImageType::IndexType index = iterOutput.GetIndex();
-      ImageType::PixelType grayPix = reader->GetOutput()->GetPixel(index);
-      OutputImageType::PixelType rgbPixel;
-      rgbPixel.SetRed( static_cast<unsigned char>(grayPix) );
-      rgbPixel.SetGreen( static_cast<unsigned char>(grayPix) );
-      rgbPixel.SetBlue( static_cast<unsigned char>(grayPix) );
+  {
+    ImageType::IndexType index = iterOutput.GetIndex();
+    ImageType::PixelType grayPix = reader->GetOutput()->GetPixel(index);
+    OutputImageType::PixelType rgbPixel;
+    rgbPixel.SetRed( static_cast<unsigned char>(grayPix) );
+    rgbPixel.SetGreen( static_cast<unsigned char>(grayPix) );
+    rgbPixel.SetBlue( static_cast<unsigned char>(grayPix) );
 
-      iterOutput.Set(rgbPixel);
-    }
+    iterOutput.Set(rgbPixel);
+  }
 
   PointsIteratorType pIt = filter->GetOutput()->GetPoints()->Begin();
   ImageType::SpacingType spacing = reader->GetOutput()->GetSpacing();
@@ -239,49 +239,49 @@ int main(int argc, char * argv[])
   OutputImageType::SizeType size = outputImage->GetLargestPossibleRegion().GetSize();
 
 
-  while( pIt!=filter->GetOutput()->GetPoints()->End() )
-    {
-      ImageType::IndexType index;
-
-      index[0] = (unsigned int)
-  (vcl_floor
-   ((double)((pIt.Value()[0]-origin[0])/spacing[0]+0.5)));
-
-      index[1] = (unsigned int)
-  (vcl_floor
-   ((double)((pIt.Value()[1]-origin[1])/spacing[1]+0.5)));
-
-      OutputImageType::PixelType keyPixel;
-      keyPixel.SetRed(0);
-      keyPixel.SetGreen(255);
-      keyPixel.SetBlue(0);
-
-      if (
-  static_cast<unsigned int>(index[1]) <
-  static_cast<unsigned int>(size[1])
-  && static_cast<unsigned int>(index[0]) <
-  static_cast<unsigned int>(size[0])
-  && static_cast<unsigned int>(index[1]) >=
-  static_cast<unsigned int>(0)
-  && static_cast<unsigned int>(index[0]) >=
-  static_cast<unsigned int>(0))
+  while ( pIt!=filter->GetOutput()->GetPoints()->End() )
   {
-    outputImage->SetPixel(index,keyPixel);
+    ImageType::IndexType index;
 
-    if (static_cast<unsigned int>(index[1]) < static_cast<unsigned int>(size[1]-1) )
-      outputImage->SetPixel(index+t,keyPixel);
+    index[0] = (unsigned int)
+               (vcl_floor
+                ((double)((pIt.Value()[0]-origin[0])/spacing[0]+0.5)));
 
-    if (index[1] > 0)
-      outputImage->SetPixel(index+b,keyPixel);
+    index[1] = (unsigned int)
+               (vcl_floor
+                ((double)((pIt.Value()[1]-origin[1])/spacing[1]+0.5)));
 
-    if (static_cast<unsigned int>(index[0]) < static_cast<unsigned int>(size[0]-1) )
-      outputImage->SetPixel(index+r,keyPixel);
+    OutputImageType::PixelType keyPixel;
+    keyPixel.SetRed(0);
+    keyPixel.SetGreen(255);
+    keyPixel.SetBlue(0);
 
-    if (index[0] > 0)
-      outputImage->SetPixel(index+l,keyPixel);
-  }
-      ++pIt;
+    if (
+      static_cast<unsigned int>(index[1]) <
+      static_cast<unsigned int>(size[1])
+      && static_cast<unsigned int>(index[0]) <
+      static_cast<unsigned int>(size[0])
+      && static_cast<unsigned int>(index[1]) >=
+      static_cast<unsigned int>(0)
+      && static_cast<unsigned int>(index[0]) >=
+      static_cast<unsigned int>(0))
+    {
+      outputImage->SetPixel(index,keyPixel);
+
+      if (static_cast<unsigned int>(index[1]) < static_cast<unsigned int>(size[1]-1) )
+        outputImage->SetPixel(index+t,keyPixel);
+
+      if (index[1] > 0)
+        outputImage->SetPixel(index+b,keyPixel);
+
+      if (static_cast<unsigned int>(index[0]) < static_cast<unsigned int>(size[0]-1) )
+        outputImage->SetPixel(index+r,keyPixel);
+
+      if (index[0] > 0)
+        outputImage->SetPixel(index+l,keyPixel);
     }
+    ++pIt;
+  }
 
   std::ofstream outfile(outfname);
   outfile << filter;

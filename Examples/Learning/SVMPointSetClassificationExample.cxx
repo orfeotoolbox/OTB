@@ -134,8 +134,8 @@ int main( int argc, char* argv[] )
   int lowest = 0;
   int range = 1000;
 
-  for(pointId = 0; pointId<100; pointId++)
-    {
+  for (pointId = 0; pointId<100; pointId++)
+  {
 
     MeasurePointType tP;
 
@@ -176,7 +176,7 @@ int main( int argc, char* argv[] )
     tCont->InsertElement( pointId , tP );
     tPSet->SetPointData( pointId, measure );
 
-    }
+  }
 
 // Software Guide : EndCodeSnippet
 
@@ -206,8 +206,8 @@ int main( int argc, char* argv[] )
 
 
   typedef itk::Statistics::PointSetToListAdaptor< MeasurePointSetType >
-    SampleType;
-    SampleType::Pointer sample = SampleType::New();
+  SampleType;
+  SampleType::Pointer sample = SampleType::New();
 
 // Software Guide : EndCodeSnippet
 
@@ -220,7 +220,7 @@ int main( int argc, char* argv[] )
 
 // Software Guide : BeginCodeSnippet
 
-    sample->SetPointSet( tPSet );
+  sample->SetPointSet( tPSet );
 
 // Software Guide : EndCodeSnippet
 
@@ -235,10 +235,10 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet
 
 
-    typedef otb::SVMModel< SampleType::MeasurementVectorType::ValueType,
-                                                 LabelPixelType > ModelType;
+  typedef otb::SVMModel< SampleType::MeasurementVectorType::ValueType,
+  LabelPixelType > ModelType;
 
-    ModelType::Pointer model = ModelType::New();
+  ModelType::Pointer model = ModelType::New();
 
 // Software Guide : EndCodeSnippet
 
@@ -252,7 +252,7 @@ int main( int argc, char* argv[] )
 
 // Software Guide : BeginCodeSnippet
 
-    model->LoadModel(argv[1]);
+  model->LoadModel(argv[1]);
 
 // Software Guide : EndCodeSnippet
 
@@ -268,9 +268,9 @@ int main( int argc, char* argv[] )
 
 
 
-    typedef otb::SVMClassifier< SampleType, LabelPixelType > ClassifierType ;
+  typedef otb::SVMClassifier< SampleType, LabelPixelType > ClassifierType ;
 
-    ClassifierType::Pointer classifier = ClassifierType::New() ;
+  ClassifierType::Pointer classifier = ClassifierType::New() ;
 
 // Software Guide : EndCodeSnippet
 
@@ -284,11 +284,11 @@ int main( int argc, char* argv[] )
 
 // Software Guide : BeginCodeSnippet
 
-    int numberOfClasses = model->GetNumberOfClasses();
-    classifier->SetNumberOfClasses(numberOfClasses) ;
-    classifier->SetModel( model );
-    classifier->SetSample(sample.GetPointer()) ;
-    classifier->Update() ;
+  int numberOfClasses = model->GetNumberOfClasses();
+  classifier->SetNumberOfClasses(numberOfClasses) ;
+  classifier->SetModel( model );
+  classifier->SetSample(sample.GetPointer()) ;
+  classifier->Update() ;
 
 // Software Guide : EndCodeSnippet
 
@@ -304,13 +304,13 @@ int main( int argc, char* argv[] )
 
 
 
-    ClassifierType::OutputType* membershipSample =
-      classifier->GetOutput() ;
+  ClassifierType::OutputType* membershipSample =
+    classifier->GetOutput() ;
 
-    ClassifierType::OutputType::ConstIterator m_iter =
-      membershipSample->Begin() ;
-    ClassifierType::OutputType::ConstIterator m_last =
-      membershipSample->End() ;
+  ClassifierType::OutputType::ConstIterator m_iter =
+    membershipSample->Begin() ;
+  ClassifierType::OutputType::ConstIterator m_last =
+    membershipSample->End() ;
 
 // Software Guide : EndCodeSnippet
 
@@ -324,10 +324,10 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet
 
 
-    double error = 0.0;
-    pointId = 0;
-    while (m_iter != m_last)
-      {
+  double error = 0.0;
+  pointId = 0;
+  while (m_iter != m_last)
+  {
 
 // Software Guide : EndCodeSnippet
 
@@ -339,7 +339,7 @@ int main( int argc, char* argv[] )
 
 // Software Guide : BeginCodeSnippet
 
-      ClassifierType::ClassLabelType label = m_iter.GetClassLabel();
+    ClassifierType::ClassLabelType label = m_iter.GetClassLabel();
 
 // Software Guide : EndCodeSnippet
 
@@ -351,29 +351,29 @@ int main( int argc, char* argv[] )
 
 // Software Guide : BeginCodeSnippet
 
-      InputVectorType measure;
+    InputVectorType measure;
 
-      tPSet->GetPointData(pointId, &measure);
+    tPSet->GetPointData(pointId, &measure);
 
-      ClassifierType::ClassLabelType expectedLabel;
-      if(measure[0] < measure[1])
-  expectedLabel= -1;
-      else
-  expectedLabel = 1;
+    ClassifierType::ClassLabelType expectedLabel;
+    if (measure[0] < measure[1])
+      expectedLabel= -1;
+    else
+      expectedLabel = 1;
 
-      double dist = fabs(measure[0] - measure[1]);
+    double dist = fabs(measure[0] - measure[1]);
 
-      if(label != expectedLabel )
-  error++;
+    if (label != expectedLabel )
+      error++;
 
-      std::cout << int(label) << "/" << int(expectedLabel) << " --- " << dist << std::endl;
+    std::cout << int(label) << "/" << int(expectedLabel) << " --- " << dist << std::endl;
 
 
-      ++pointId;
-      ++m_iter ;
-      }
+    ++pointId;
+    ++m_iter ;
+  }
 
-    std::cout << "Error = " << error/pointId << " % " << std::endl;
+  std::cout << "Error = " << error/pointId << " % " << std::endl;
 
 // Software Guide : EndCodeSnippet
 

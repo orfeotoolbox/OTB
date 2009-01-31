@@ -274,13 +274,13 @@ int main(int, char *[])
   bool isInside = image->TransformPhysicalPointToIndex( point, pixelIndex );
 
   if ( isInside )
-    {
+  {
     ImageType::PixelType pixelValue = image->GetPixel( pixelIndex );
 
     pixelValue += 5;
 
     image->SetPixel( pixelIndex, pixelValue );
-    }
+  }
   // Software Guide : EndCodeSnippet
 
 

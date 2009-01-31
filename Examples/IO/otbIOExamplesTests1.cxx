@@ -26,10 +26,10 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(ExtractROITest);
-REGISTER_TEST(DEMToImageGeneratorTest);
+  REGISTER_TEST(ExtractROITest);
+  REGISTER_TEST(DEMToImageGeneratorTest);
 #if defined(ITK_USE_REVIEW)
-REGISTER_TEST(LidarToImageExampleTest);
+  REGISTER_TEST(LidarToImageExampleTest);
 #endif
 }
 

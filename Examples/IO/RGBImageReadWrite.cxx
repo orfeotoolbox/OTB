@@ -50,12 +50,12 @@
 int main( int argc, char ** argv )
 {
   // Verify the number of parameters in the command line
-  if( argc < 3 )
-    {
+  if ( argc < 3 )
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " inputRGBImageFile  outputRGBImageFile " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
 
   // Software Guide : BeginLatex

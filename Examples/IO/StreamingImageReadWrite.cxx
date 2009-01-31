@@ -70,12 +70,12 @@
 int main( int argc, char ** argv )
 {
   // Verify the number of parameters in the command line
-  if( argc < 3 )
-    {
+  if ( argc < 3 )
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " inputImageFile  outputImageFile " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
 
   //  Software Guide : BeginLatex
@@ -180,17 +180,17 @@ int main( int argc, char ** argv )
 
 
   try
-    {
+  {
     // Software Guide : BeginCodeSnippet
     writer->Update();
-      // Software Guide : EndCodeSnippet
-    }
-  catch( itk::ExceptionObject & err )
-    {
+    // Software Guide : EndCodeSnippet
+  }
+  catch ( itk::ExceptionObject & err )
+  {
     std::cerr << "ExceptionObject caught !" << std::endl;
     std::cerr << err << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   //  Software Guide : BeginLatex
   //

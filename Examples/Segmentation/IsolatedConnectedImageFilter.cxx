@@ -75,14 +75,14 @@
 
 int main( int argc, char *argv[] )
 {
-  if( argc < 7 )
-    {
+  if ( argc < 7 )
+  {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImage  outputImage seedX1 seedY1";
     std::cerr << " lowerThreshold seedX2 seedY2" << std::endl;
     return 1;
-    }
+  }
 
 
   //  Software Guide : BeginLatex
@@ -102,7 +102,7 @@ int main( int argc, char *argv[] )
   typedef unsigned char OutputPixelType;
   typedef otb::Image< OutputPixelType, Dimension > OutputImageType;
   typedef itk::CastImageFilter< InternalImageType, OutputImageType >
-    CastingFilterType;
+  CastingFilterType;
 
   CastingFilterType::Pointer caster = CastingFilterType::New();
 
@@ -120,9 +120,9 @@ int main( int argc, char *argv[] )
 
 
   typedef itk::CurvatureFlowImageFilter< InternalImageType, InternalImageType >
-    CurvatureFlowImageFilterType;
+  CurvatureFlowImageFilterType;
   CurvatureFlowImageFilterType::Pointer smoothing =
-                         CurvatureFlowImageFilterType::New();
+    CurvatureFlowImageFilterType::New();
 
 
   //  Software Guide : BeginLatex
@@ -133,7 +133,7 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::IsolatedConnectedImageFilter<InternalImageType, InternalImageType>
-    ConnectedFilterType;
+  ConnectedFilterType;
   // Software Guide : EndCodeSnippet
 
 
@@ -224,14 +224,14 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   try
-    {
+  {
     writer->Update();
-    }
-  catch( itk::ExceptionObject & excep )
-    {
+  }
+  catch ( itk::ExceptionObject & excep )
+  {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-    }
+  }
   // Software Guide : EndCodeSnippet
 
 

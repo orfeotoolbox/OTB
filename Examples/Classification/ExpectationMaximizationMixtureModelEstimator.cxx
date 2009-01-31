@@ -129,7 +129,7 @@ int main()
   typedef itk::Statistics::ListSample< MeasurementVectorType > SampleType;
   SampleType::Pointer sample = SampleType::New();
   sample->SetMeasurementVectorSize( 1 ); // length of measurement vectors
-                                         // in the sample.
+  // in the sample.
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -161,19 +161,19 @@ int main()
   double mean = 100;
   double standardDeviation = 30;
   for ( unsigned int i = 0 ; i < 100 ; ++i )
-    {
+  {
     mv[0] = ( normalGenerator->GetVariate() * standardDeviation ) + mean;
     sample->PushBack( mv );
-    }
+  }
 
   normalGenerator->Initialize( 3024 );
   mean = 200;
   standardDeviation = 30;
   for ( unsigned int i = 0 ; i < 100 ; ++i )
-    {
+  {
     mv[0] = ( normalGenerator->GetVariate() * standardDeviation ) + mean;
     sample->PushBack( mv );
-    }
+  }
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -200,15 +200,15 @@ int main()
   initialParameters[1] = params;
 
   typedef itk::Statistics::GaussianMixtureModelComponent< SampleType >
-    ComponentType;
+  ComponentType;
 
   std::vector< ComponentType::Pointer > components;
   for ( unsigned int i = 0 ; i < numberOfClasses ; i++ )
-    {
+  {
     components.push_back( ComponentType::New() );
     (components[i])->SetSample( sample );
     (components[i])->SetParameters( initialParameters[i] );
-    }
+  }
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -219,7 +219,7 @@ int main()
 
   // Software Guide : BeginCodeSnippet
   typedef itk::Statistics::ExpectationMaximizationMixtureModelEstimator<
-                           SampleType > EstimatorType;
+  SampleType > EstimatorType;
   EstimatorType::Pointer estimator = EstimatorType::New();
 
   estimator->SetSample( sample );
@@ -232,10 +232,10 @@ int main()
   estimator->SetInitialProportions( initialProportions );
 
   for ( unsigned int i = 0 ; i < numberOfClasses ; i++)
-    {
+  {
     estimator->AddComponent( (ComponentType::Superclass*)
                              (components[i]).GetPointer() );
-    }
+  }
 
   estimator->Update();
   // Software Guide : EndCodeSnippet
@@ -248,14 +248,14 @@ int main()
 
   // Software Guide : BeginCodeSnippet
   for ( unsigned int i = 0 ; i < numberOfClasses ; i++ )
-    {
+  {
     std::cout << "Cluster[" << i << "]" << std::endl;
     std::cout << "    Parameters:" << std::endl;
     std::cout << "         " << (components[i])->GetFullParameters()
               << std::endl;
     std::cout << "    Proportion: ";
     std::cout << "         " << (*estimator->GetProportions())[i] << std::endl;
-    }
+  }
   // Software Guide : EndCodeSnippet
 
   return EXIT_SUCCESS;

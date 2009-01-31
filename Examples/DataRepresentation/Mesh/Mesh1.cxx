@@ -131,10 +131,14 @@ int main(int, char *[])
   MeshType::PointType p2;
   MeshType::PointType p3;
 
-  p0[0]= -1.0; p0[1]= -1.0; // first  point ( -1, -1 )
-  p1[0]=  1.0; p1[1]= -1.0; // second point (  1, -1 )
-  p2[0]=  1.0; p2[1]=  1.0; // third  point (  1,  1 )
-  p3[0]= -1.0; p3[1]=  1.0; // fourth point ( -1,  1 )
+  p0[0]= -1.0;
+  p0[1]= -1.0; // first  point ( -1, -1 )
+  p1[0]=  1.0;
+  p1[1]= -1.0; // second point (  1, -1 )
+  p2[0]=  1.0;
+  p2[1]=  1.0; // third  point (  1,  1 )
+  p3[0]= -1.0;
+  p3[1]=  1.0; // fourth point ( -1,  1 )
   // Software Guide : EndCodeSnippet
 
 
@@ -220,12 +224,12 @@ int main(int, char *[])
 
   // Software Guide : BeginCodeSnippet
   PointsIterator end = mesh->GetPoints()->End();
-  while( pointIterator != end )
-    {
+  while ( pointIterator != end )
+  {
     MeshType::PointType p = pointIterator.Value();  // access the point
     std::cout << p << std::endl;                    // print the point
     ++pointIterator;                                // advance to next point
-    }
+  }
   // Software Guide : EndCodeSnippet
 
   return EXIT_SUCCESS;

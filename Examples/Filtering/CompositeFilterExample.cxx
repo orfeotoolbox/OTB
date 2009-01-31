@@ -68,11 +68,12 @@
 //  Software Guide : EndLatex
 
 //  Software Guide : BeginCodeSnippet
-namespace otb {
+namespace otb
+{
 
 template <class TImageType>
 class ITK_EXPORT CompositeExampleImageFilter :
-    public itk::ImageToImageFilter<TImageType, TImageType>
+      public itk::ImageToImageFilter<TImageType, TImageType>
 {
 public:
 //  Software Guide : EndCodeSnippet
@@ -133,12 +134,12 @@ protected:
 
   typedef itk::ThresholdImageFilter< TImageType > ThresholdType;
   typedef itk::GradientMagnitudeImageFilter< TImageType, TImageType >
-                                                             GradientType;
+  GradientType;
   typedef itk::RescaleIntensityImageFilter< TImageType, TImageType >
-                                                             RescalerType;
+  RescalerType;
 //  Software Guide : EndCodeSnippet
 
-    void GenerateData();
+  void GenerateData();
 
 private:
 
@@ -190,7 +191,7 @@ CompositeExampleImageFilter<TImageType>
   m_Threshold = 1;
 
   m_RescaleFilter->SetOutputMinimum(
-                     itk::NumericTraits<PixelType>::NonpositiveMin());
+    itk::NumericTraits<PixelType>::NonpositiveMin());
   m_RescaleFilter->SetOutputMaximum(itk::NumericTraits<PixelType>::max());
 }
 //  Software Guide : EndCodeSnippet
@@ -243,8 +244,8 @@ PrintSelf( std::ostream& os, itk::Indent indent ) const
   Superclass::PrintSelf(os,indent);
 
   os
-    << indent << "Threshold:" << this->m_Threshold
-    << std::endl;
+  << indent << "Threshold:" << this->m_Threshold
+  << std::endl;
 }
 
 } /* end namespace otb */
@@ -269,12 +270,12 @@ PrintSelf( std::ostream& os, itk::Indent indent ) const
 
 int main( int argc, char* argv[] )
 {
-  if( argc < 3 )
-    {
+  if ( argc < 3 )
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << "  inputImageFile  outputImageFile" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   typedef otb::Image<short, 2>                        ImageType;
   typedef otb::ImageFileReader<ImageType>             ReaderType;
@@ -293,13 +294,13 @@ int main( int argc, char* argv[] )
   writer->SetFileName( argv[2] );
 
   try
-    {
+  {
     writer->Update();
-    }
+  }
   catch ( itk::ExceptionObject e )
-    {
+  {
     std::cerr << "Error: " << e << std::endl;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

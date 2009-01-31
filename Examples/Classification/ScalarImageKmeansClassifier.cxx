@@ -49,14 +49,14 @@
 
 int main( int argc, char * argv [] )
 {
-  if( argc < 5 )
-    {
+  if ( argc < 5 )
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0];
     std::cerr << " inputScalarImage outputLabeledImage contiguousLabels";
     std::cerr << " numberOfClasses mean1 mean2... meanN " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   const char * inputImageFileName = argv[1];
 
@@ -131,15 +131,15 @@ int main( int argc, char * argv [] )
 
   const unsigned int argoffset = 5;
 
-  if( static_cast<unsigned int>(argc) <
-      numberOfInitialClasses + argoffset )
-    {
+  if ( static_cast<unsigned int>(argc) <
+       numberOfInitialClasses + argoffset )
+  {
     std::cerr << "Error: " << std::endl;
     std::cerr << numberOfInitialClasses << " classes has been specified ";
     std::cerr << "but no enough means have been provided in the command ";
     std::cerr << "line arguments " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
 
 // Software Guide : BeginLatex
@@ -154,11 +154,11 @@ int main( int argc, char * argv [] )
 
 
 // Software Guide : BeginCodeSnippet
-  for( unsigned k=0; k < numberOfInitialClasses; k++ )
-    {
+  for ( unsigned k=0; k < numberOfInitialClasses; k++ )
+  {
     const double userProvidedInitialMean = atof( argv[k+argoffset] );
     kmeansFilter->AddClassWithInitialMean( userProvidedInitialMean );
-    }
+  }
 // Software Guide : EndCodeSnippet
 
 
@@ -202,16 +202,16 @@ int main( int argc, char * argv [] )
 
 // Software Guide : BeginCodeSnippet
   try
-    {
+  {
     writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
+  }
+  catch ( itk::ExceptionObject & excp )
+  {
     std::cerr << "Problem encountered while writing ";
     std::cerr << " image file : " << argv[2] << std::endl;
     std::cerr << excp << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 // Software Guide : EndCodeSnippet
 
 
@@ -227,15 +227,15 @@ int main( int argc, char * argv [] )
 
 // Software Guide : BeginCodeSnippet
   KMeansFilterType::ParametersType estimatedMeans =
-                                            kmeansFilter->GetFinalMeans();
+    kmeansFilter->GetFinalMeans();
 
   const unsigned int numberOfClasses = estimatedMeans.Size();
 
   for ( unsigned int i = 0 ; i < numberOfClasses ; ++i )
-    {
+  {
     std::cout << "cluster[" << i << "] ";
     std::cout << "    estimated mean : " << estimatedMeans[i] << std::endl;
-    }
+  }
 
 // Software Guide : EndCodeSnippet
 

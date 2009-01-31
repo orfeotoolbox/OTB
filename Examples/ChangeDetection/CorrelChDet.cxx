@@ -57,12 +57,12 @@
 int main(int argc, char* argv[] )
 {
 
-  if( argc < 5 )
-    {
+  if ( argc < 5 )
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " inputImageFile1 inputImageFile2  outputImageFile radius" << std::endl;
     return -1;
-    }
+  }
 
   // Define the dimension of the images
   const unsigned int Dimension = 2;
@@ -110,7 +110,7 @@ int main(int argc, char* argv[] )
 
   //  Software Guide : BeginCodeSnippet
   typedef itk::ShiftScaleImageFilter< ChangeImageType,
-                                            OutputImageType > RescalerType;
+  OutputImageType > RescalerType;
   //  Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -123,9 +123,9 @@ int main(int argc, char* argv[] )
 
   //  Software Guide : BeginCodeSnippet
   typedef otb::CorrelationChangeDetector<
-                                InputImageType1,
-                                InputImageType2,
-                                ChangeImageType  >       FilterType;
+  InputImageType1,
+  InputImageType2,
+  ChangeImageType  >       FilterType;
   //  Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -202,15 +202,15 @@ int main(int argc, char* argv[] )
 
 
   try
-    {
+  {
     writer->Update();
-    }
-  catch( itk::ExceptionObject & err )
-    {
+  }
+  catch ( itk::ExceptionObject & err )
+  {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-    }
+  }
 
 //  Software Guide : BeginLatex
 // Figure \ref{fig:RESCORRCHDET} shows the result of the change

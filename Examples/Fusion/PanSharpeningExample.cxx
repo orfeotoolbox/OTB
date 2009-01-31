@@ -91,7 +91,7 @@ int main( int argc, char* argv[] )
 {
 // Software Guide : EndCodeSnippet
 
-  if( argc < 4 )
+  if ( argc < 4 )
   {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
@@ -139,7 +139,7 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::SimpleRcsPanSharpeningFusionImageFilter
-      <ImageType,VectorImageType,VectorIntImageType> FusionFilterType;
+  <ImageType,VectorImageType,VectorIntImageType> FusionFilterType;
   FusionFilterType::Pointer fusion = FusionFilterType::New();
   fusion->SetPanInput(readerPAN->GetOutput());
   fusion->SetXsInput(readerXS->GetOutput());

@@ -47,8 +47,8 @@
 int main(int argc, char * argv[])
 {
 
-      const char * inputFilename = argv[1];
-      const char * outputFilename = argv[2];
+  const char * inputFilename = argv[1];
+  const char * outputFilename = argv[2];
 
 // Software Guide : BeginLatex
 //
@@ -59,11 +59,11 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-      const unsigned int Dimension = 2;
-      typedef unsigned char InputPixelType;
-      typedef otb::Image< InputPixelType, Dimension > InputImageType;
-      typedef otb::ImageFileReader< InputImageType > ReaderType;
-      typedef otb::ImageFileWriter< InputImageType > WriterType;
+  const unsigned int Dimension = 2;
+  typedef unsigned char InputPixelType;
+  typedef otb::Image< InputPixelType, Dimension > InputImageType;
+  typedef otb::ImageFileReader< InputImageType > ReaderType;
+  typedef otb::ImageFileWriter< InputImageType > WriterType;
 
 // Software Guide : EndCodeSnippet
 
@@ -79,7 +79,7 @@ int main(int argc, char * argv[])
 // Software Guide : BeginCodeSnippet
 
 
-      typedef otb::ImageList< InputImageType > ImageListType;
+  typedef otb::ImageList< InputImageType > ImageListType;
 
 // Software Guide : EndCodeSnippet
 
@@ -94,9 +94,9 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-      ReaderType::Pointer reader = ReaderType::New();
-      reader->SetFileName(inputFilename);
-      reader->Update();
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(inputFilename);
+  reader->Update();
 
 // Software Guide : EndCodeSnippet
 
@@ -108,7 +108,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-      ImageListType::Pointer imageList = ImageListType::New();
+  ImageListType::Pointer imageList = ImageListType::New();
 
 // Software Guide : EndCodeSnippet
 
@@ -121,7 +121,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-      imageList->PushBack(reader->GetOutput());
+  imageList->PushBack(reader->GetOutput());
 
 // Software Guide : EndCodeSnippet
 
@@ -137,11 +137,11 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-      // Getting the image from the list and writing it to file
-      WriterType::Pointer writer = WriterType::New();
-      writer->SetFileName(outputFilename);
-      writer->SetInput(imageList->Back());
-      writer->Update();
+  // Getting the image from the list and writing it to file
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetFileName(outputFilename);
+  writer->SetInput(imageList->Back());
+  writer->Update();
 
 // Software Guide : EndCodeSnippet
 

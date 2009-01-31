@@ -59,11 +59,11 @@ int main(int argc, char* argv[] )
 {
 
   if (argc != 4)
-    {
+  {
     std::cout << "Usage : " << argv[0] << " inputImage modelFile outputImage"
-        << std::endl ;
+              << std::endl ;
     return EXIT_FAILURE;
-    }
+  }
 
   const char * imageFilename  = argv[1];
   const char * mapFilename  = argv[2];
@@ -114,7 +114,7 @@ int main(int argc, char* argv[] )
 
   typedef itk::Statistics::ListSample< PixelType> SampleType;
   typedef otb::SOMClassifier<SampleType,SOMMapType,LabelPixelType>
-                                                            ClassifierType;
+  ClassifierType;
 
 // Software Guide : EndCodeSnippet
 //
@@ -163,13 +163,13 @@ int main(int argc, char* argv[] )
 
   itk::ImageRegionIterator<InputImageType> it(reader->GetOutput(),reader->GetOutput()->GetLargestPossibleRegion());
 
-    it.GoToBegin();
+  it.GoToBegin();
 
-    while(!it.IsAtEnd())
-      {
-  sample->PushBack(it.Get());
-  ++it;
-      }
+  while (!it.IsAtEnd())
+  {
+    sample->PushBack(it.Get());
+    ++it;
+  }
 
 // Software Guide : EndCodeSnippet
 //
@@ -262,11 +262,11 @@ int main(int argc, char* argv[] )
   outIt.GoToBegin();
 
   while (m_iter != m_last && !outIt.IsAtEnd())
-    {
+  {
     outIt.Set(m_iter.GetClassLabel());
     ++m_iter ;
     ++outIt;
-    }
+  }
 
 // Software Guide : EndCodeSnippet
 //

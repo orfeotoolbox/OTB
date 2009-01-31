@@ -25,7 +25,7 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(SimpleDisparityMapEstimationExampleTest);
+  REGISTER_TEST(SimpleDisparityMapEstimationExampleTest);
 }
 
 #undef main

@@ -70,14 +70,14 @@
 
 int main( int argc, char * argv[] )
 {
-  if( argc < 7 )
-    {
+  if ( argc < 7 )
+  {
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImageFile outputImageFile ";
     std::cerr << " lowerThreshold upperThreshold ";
     std::cerr << " outsideValue insideValue   "  << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   //  Software Guide : BeginLatex
   //
@@ -114,7 +114,7 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::BinaryThresholdImageFilter<
-               InputImageType, OutputImageType >  FilterType;
+  InputImageType, OutputImageType >  FilterType;
   // Software Guide : EndCodeSnippet
 
 

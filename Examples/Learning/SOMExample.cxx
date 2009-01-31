@@ -180,12 +180,12 @@ int main(int argc, char* argv[])
 // Software Guide : BeginCodeSnippet
 
   typedef otb::Functor::CzihoSOMLearningBehaviorFunctor
-                                                          LearningBehaviorFunctorType;
+  LearningBehaviorFunctorType;
   typedef otb::Functor::CzihoSOMNeighborhoodBehaviorFunctor
-                                                      NeighborhoodBehaviorFunctorType;
+  NeighborhoodBehaviorFunctorType;
   typedef otb::SOM< SampleListType, MapType,
-                       LearningBehaviorFunctorType, NeighborhoodBehaviorFunctorType >
-                                                                              SOMType;
+  LearningBehaviorFunctorType, NeighborhoodBehaviorFunctorType >
+  SOMType;
 
 // Software Guide : EndCodeSnippet
 //
@@ -213,17 +213,19 @@ int main(int argc, char* argv[])
   sampleList->SetMeasurementVectorSize( reader->GetOutput()->GetVectorLength() );
 
   itk::ImageRegionIterator< ImageType > imgIter ( reader->GetOutput(),
-              reader->GetOutput()->GetBufferedRegion() );
+      reader->GetOutput()->GetBufferedRegion() );
   imgIter.GoToBegin();
 
   itk::ImageRegionIterator< ImageType > imgIterEnd ( reader->GetOutput(),
-                 reader->GetOutput()->GetBufferedRegion() );
+      reader->GetOutput()->GetBufferedRegion() );
   imgIterEnd.GoToEnd();
 
-  do {
+  do
+  {
     sampleList->PushBack( imgIter.Get() );
     ++imgIter;
-  } while ( imgIter != imgIterEnd );
+  }
+  while ( imgIter != imgIterEnd );
 
 
 // Software Guide : EndCodeSnippet
@@ -324,7 +326,7 @@ int main(int argc, char* argv[])
   typedef itk::ExpandImageFilter< SingleImageType, SingleImageType >    ExpandType;
   typedef otb::PerBandVectorImageFilter<MapType,MapType,ExpandType>     VectorExpandType;
   typedef itk::NearestNeighborInterpolateImageFunction< SingleImageType,
-    double >        InterpolatorType;
+  double >        InterpolatorType;
   typedef otb::PrintableImageFilter<MapType>                            PrintableFilterType;
   typedef otb::ImageFileWriter<PrintableFilterType::OutputImageType>    PrintableWriterType;
 
@@ -410,7 +412,7 @@ int main(int argc, char* argv[])
 // Software Guide : BeginCodeSnippet
 
   typedef otb::SOMActivationBuilder< SampleListType, MapType,
-                                              OutputImageType> SOMActivationBuilderType;
+  OutputImageType> SOMActivationBuilderType;
 
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
@@ -423,7 +425,7 @@ int main(int argc, char* argv[])
 // Software Guide : BeginCodeSnippet
 
   SOMActivationBuilderType::Pointer somAct
-                                       = SOMActivationBuilderType::New();
+  = SOMActivationBuilderType::New();
   somAct->SetInput(som->GetOutput());
   somAct->SetListSample( sampleList );
   somAct->Update();
@@ -438,9 +440,9 @@ int main(int argc, char* argv[])
 // Software Guide : BeginCodeSnippet
 
   if ( actMapFileName != NULL )
-    {
-      ActivationWriterType::Pointer actWriter = ActivationWriterType::New();
-      actWriter->SetFileName(actMapFileName);
+  {
+    ActivationWriterType::Pointer actWriter = ActivationWriterType::New();
+    actWriter->SetFileName(actMapFileName);
 
 // Software Guide : EndCodeSnippet
 
@@ -450,26 +452,26 @@ int main(int argc, char* argv[])
 //
 //  Software Guide : EndLatex
 
-      //Just for visualization purposes, we zoom the image.
-      typedef itk::ExpandImageFilter< OutputImageType, OutputImageType > ExpandType2;
-      typedef itk::NearestNeighborInterpolateImageFunction< OutputImageType,double > InterpolatorType2;
+    //Just for visualization purposes, we zoom the image.
+    typedef itk::ExpandImageFilter< OutputImageType, OutputImageType > ExpandType2;
+    typedef itk::NearestNeighborInterpolateImageFunction< OutputImageType,double > InterpolatorType2;
 
-      InterpolatorType2::Pointer interpolator2 = InterpolatorType2::New();
-      ExpandType2::Pointer expand2 = ExpandType2::New();
-      expand2->SetInput(somAct->GetOutput());
-      expand2->SetExpandFactors( 20 );
-      expand2->SetInterpolator( interpolator2 );
-      expand2->SetEdgePaddingValue(255);
-      expand2->UpdateOutputInformation();
+    InterpolatorType2::Pointer interpolator2 = InterpolatorType2::New();
+    ExpandType2::Pointer expand2 = ExpandType2::New();
+    expand2->SetInput(somAct->GetOutput());
+    expand2->SetExpandFactors( 20 );
+    expand2->SetInterpolator( interpolator2 );
+    expand2->SetEdgePaddingValue(255);
+    expand2->UpdateOutputInformation();
 
-      actWriter->SetInput(expand2->GetOutput());
-      actWriter->Update();
-      }
+    actWriter->SetInput(expand2->GetOutput());
+    actWriter->Update();
+  }
   else
-    {
-      std::cerr << "The activation map file name is null" << std::endl;
-      return EXIT_FAILURE;
-    }
+  {
+    std::cerr << "The activation map file name is null" << std::endl;
+    return EXIT_FAILURE;
+  }
 
   return EXIT_SUCCESS;
 

@@ -51,9 +51,9 @@
 int main( int argc, char * argv[] )
 {
 
-  if( argc != 12 )
-    {
-    for(int i=0; i<argc; i++)
+  if ( argc != 12 )
+  {
+    for (int i=0; i<argc; i++)
       std::cerr << argv[i] << std::endl;
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " outputSegmentsImageFile length width ";
@@ -63,7 +63,7 @@ int main( int argc, char * argv[] )
     std::cerr << " FillGapsRadius FillGapsAngularBeam" << std::endl;
 
     return EXIT_FAILURE;
-    }
+  }
 
 
   //  Software Guide : BeginLatex
@@ -135,7 +135,7 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::RescaleIntensityImageFilter< InternalImageType,
-                                            OutputImageType > RescalerType;
+  OutputImageType > RescalerType;
 
   // Software Guide : EndCodeSnippet
 

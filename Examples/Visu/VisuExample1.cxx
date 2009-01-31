@@ -23,13 +23,13 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 
-  // Software Guide : BeginLatex
-  //
-  // This example shows the use of the \doxygen{otb}{ImageViewer}
-  // class for image visualization. As usual, we start by
-  // including the header file for the class.
-  //
-  // Software Guide : EndLatex
+// Software Guide : BeginLatex
+//
+// This example shows the use of the \doxygen{otb}{ImageViewer}
+// class for image visualization. As usual, we start by
+// including the header file for the class.
+//
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "otbImageViewer.h"
@@ -40,10 +40,10 @@ int main( int argc, char ** argv )
 
 
 
-  if( argc != 2)
-    {
+  if ( argc != 2)
+  {
     std::cout <<" Usage : InputImage"<<std::endl;
-    }
+  }
 
 
   const char * inputFilename  = argv[1];

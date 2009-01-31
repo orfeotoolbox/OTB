@@ -25,15 +25,15 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(CorrelationLineDetectorExampleTest);
-REGISTER_TEST(LocalHoughExampleTest);
-REGISTER_TEST(HarrisExampleTest);
-REGISTER_TEST(TouziEdgeDetectorExampleTest);
-REGISTER_TEST(ExtractSegmentsByStepsExampleTest);
-REGISTER_TEST(AssymmetricFusionOfLineDetectorExampleTest);
-REGISTER_TEST(ExtractSegmentsExampleTest);
-REGISTER_TEST(RatioLineDetectorExampleTest);
-REGISTER_TEST(AlignmentsExampleTest);
+  REGISTER_TEST(CorrelationLineDetectorExampleTest);
+  REGISTER_TEST(LocalHoughExampleTest);
+  REGISTER_TEST(HarrisExampleTest);
+  REGISTER_TEST(TouziEdgeDetectorExampleTest);
+  REGISTER_TEST(ExtractSegmentsByStepsExampleTest);
+  REGISTER_TEST(AssymmetricFusionOfLineDetectorExampleTest);
+  REGISTER_TEST(ExtractSegmentsExampleTest);
+  REGISTER_TEST(RatioLineDetectorExampleTest);
+  REGISTER_TEST(AlignmentsExampleTest);
 }
 
 #undef main

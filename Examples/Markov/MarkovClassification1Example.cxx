@@ -70,7 +70,7 @@
 int main(int argc, char* argv[] )
 {
 
-  if( argc != 7 )
+  if ( argc != 7 )
   {
     std::cerr << "Missing Parameters "<< argc << std::endl;
     std::cerr << "Usage: " << argv[0];
@@ -136,7 +136,7 @@ int main(int argc, char* argv[] )
   // Software Guide : BeginCodeSnippet
 
   typedef otb::MarkovRandomFieldFilter
-    <InputImageType,LabelledImageType> MarkovRandomFieldFilterType;
+  <InputImageType,LabelledImageType> MarkovRandomFieldFilterType;
 
   // Software Guide : EndCodeSnippet
 
@@ -187,18 +187,18 @@ int main(int argc, char* argv[] )
   // Software Guide : BeginCodeSnippet
 
   typedef otb::MRFEnergyPotts
-      <LabelledImageType, LabelledImageType>  EnergyRegularizationType;
+  <LabelledImageType, LabelledImageType>  EnergyRegularizationType;
   typedef otb::MRFEnergyGaussianClassification
-      <InputImageType, LabelledImageType>  EnergyFidelityType;
+  <InputImageType, LabelledImageType>  EnergyFidelityType;
 
   // Software Guide : EndCodeSnippet
 
-   // Software Guide : BeginLatex
-   //
-   // The different filters composing our pipeline are created by invoking their
-   // \code{New()} methods, assigning the results to smart pointers.
-   //
-   // Software Guide : EndLatex
+  // Software Guide : BeginLatex
+  //
+  // The different filters composing our pipeline are created by invoking their
+  // \code{New()} methods, assigning the results to smart pointers.
+  //
+  // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
 
@@ -218,12 +218,12 @@ int main(int argc, char* argv[] )
   // Software Guide : EndLatex
 
   if ((bool)(atoi(argv[6])) == true)
-    {
-      // Overpass random calculation(for test only):
-      sampler->InitializeSeed(0);
-      optimizer->InitializeSeed(1);
-      markovFilter->InitializeSeed(2);
-    }
+  {
+    // Overpass random calculation(for test only):
+    sampler->InitializeSeed(0);
+    optimizer->InitializeSeed(1);
+    markovFilter->InitializeSeed(2);
+  }
 
   // Software Guide : BeginCodeSnippet
 
@@ -281,7 +281,7 @@ int main(int argc, char* argv[] )
   markovFilter->SetInput(reader->GetOutput());
 
   typedef itk::RescaleIntensityImageFilter
-      < LabelledImageType, LabelledImageType > RescaleType;
+  < LabelledImageType, LabelledImageType > RescaleType;
   RescaleType::Pointer rescaleFilter = RescaleType::New();
   rescaleFilter->SetOutputMinimum(0);
   rescaleFilter->SetOutputMaximum(255);

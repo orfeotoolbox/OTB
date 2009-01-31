@@ -61,7 +61,7 @@
 int main(int argc, char ** argv)
 {
 
-  if( argc < 3 )
+  if ( argc < 3 )
   {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " lowerThreshold upperThreshold" << std::endl;
@@ -121,7 +121,7 @@ int main(int argc, char ** argv)
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ThresholdImageToPointSetFilter
-      < ImageType, PointSetType > FilterThresholdType;
+  < ImageType, PointSetType > FilterThresholdType;
   FilterThresholdType::Pointer filterThreshold = FilterThresholdType::New();
   filterThreshold->SetLowerThreshold( lowerThreshold );
   filterThreshold->SetUpperThreshold( upperThreshold );
@@ -167,7 +167,7 @@ int main(int argc, char ** argv)
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  while( itList != pointsContainer->End() )
+  while ( itList != pointsContainer->End() )
   {
     std::cout << itList.Value() << std::endl;
     ++itList;

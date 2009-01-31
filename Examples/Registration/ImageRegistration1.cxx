@@ -95,12 +95,12 @@ public:
   void Execute(const itk::Object * object, const itk::EventObject & event)
   {
     OptimizerPointer optimizer =
-                         dynamic_cast< OptimizerPointer >( object );
+      dynamic_cast< OptimizerPointer >( object );
 
-    if( ! itk::IterationEvent().CheckEvent( &event ) )
-      {
+    if ( ! itk::IterationEvent().CheckEvent( &event ) )
+    {
       return;
-      }
+    }
 
     std::cout << optimizer->GetCurrentIteration() << " = ";
     std::cout << optimizer->GetValue() << " : ";
@@ -112,15 +112,15 @@ public:
 
 int main( int argc, char *argv[] )
 {
-  if( argc < 4 )
-    {
+  if ( argc < 4 )
+  {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " fixedImageFile  movingImageFile ";
     std::cerr << "outputImagefile [differenceImageAfter]";
     std::cerr << "[differenceImageBefore]" << std::endl;
     return 1;
-    }
+  }
 
 
   // Software Guide : BeginLatex
@@ -182,8 +182,8 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::MeanSquaresImageToImageMetric<
-                                    FixedImageType,
-                                    MovingImageType >    MetricType;
+  FixedImageType,
+  MovingImageType >    MetricType;
   // Software Guide : EndCodeSnippet
 
 
@@ -197,8 +197,8 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk:: LinearInterpolateImageFunction<
-                                    MovingImageType,
-                                    double          >    InterpolatorType;
+  MovingImageType,
+  double          >    InterpolatorType;
   // Software Guide : EndCodeSnippet
 
 
@@ -212,8 +212,8 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::ImageRegistrationMethod<
-                                    FixedImageType,
-                                    MovingImageType >    RegistrationType;
+  FixedImageType,
+  MovingImageType >    RegistrationType;
   // Software Guide : EndCodeSnippet
 
 
@@ -274,10 +274,10 @@ int main( int argc, char *argv[] )
   // Software Guide : BeginCodeSnippet
 
   typedef itk::MeanImageFilter<
-               FixedImageType, FixedImageType >  FixedFilterType;
+  FixedImageType, FixedImageType >  FixedFilterType;
 
   typedef itk::MeanImageFilter<
-               MovingImageType, MovingImageType >  MovingFilterType;
+  MovingImageType, MovingImageType >  MovingFilterType;
 
 
 
@@ -336,7 +336,7 @@ int main( int argc, char *argv[] )
   // Software Guide : BeginCodeSnippet
   fixedFilter->Update();
   registration->SetFixedImageRegion(
-                    fixedFilter->GetOutput()->GetBufferedRegion() );
+    fixedFilter->GetOutput()->GetBufferedRegion() );
   // Software Guide : EndCodeSnippet
 
 
@@ -439,15 +439,15 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   try
-    {
+  {
     registration->Update();
-    }
-  catch( itk::ExceptionObject & err )
-    {
+  }
+  catch ( itk::ExceptionObject & err )
+  {
     std::cerr << "ExceptionObject caught !" << std::endl;
     std::cerr << err << std::endl;
     return -1;
-    }
+  }
   // Software Guide : EndCodeSnippet
 
 
@@ -576,8 +576,8 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::ResampleImageFilter<
-                            MovingImageType,
-                            FixedImageType >    ResampleFilterType;
+  MovingImageType,
+  FixedImageType >    ResampleFilterType;
   // Software Guide : EndCodeSnippet
 
 
@@ -668,8 +668,8 @@ int main( int argc, char *argv[] )
   typedef unsigned char OutputPixelType;
   typedef otb::Image< OutputPixelType, Dimension > OutputImageType;
   typedef itk::CastImageFilter<
-                        FixedImageType,
-                        OutputImageType > CastFilterType;
+  FixedImageType,
+  OutputImageType > CastFilterType;
   typedef otb::ImageFileWriter< OutputImageType >  WriterType;
   // Software Guide : EndCodeSnippet
 
@@ -728,9 +728,9 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::SubtractImageFilter<
-                                  FixedImageType,
-                                  FixedImageType,
-                                  FixedImageType > DifferenceFilterType;
+  FixedImageType,
+  FixedImageType,
+  FixedImageType > DifferenceFilterType;
 
   DifferenceFilterType::Pointer difference = DifferenceFilterType::New();
 
@@ -766,8 +766,8 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::RescaleIntensityImageFilter<
-                                  FixedImageType,
-                                  OutputImageType >   RescalerType;
+  FixedImageType,
+  OutputImageType >   RescalerType;
 
   RescalerType::Pointer intensityRescaler = RescalerType::New();
 
@@ -791,11 +791,11 @@ int main( int argc, char *argv[] )
   // Software Guide : EndCodeSnippet
 
 
-  if( argc > 4 )
-    {
+  if ( argc > 4 )
+  {
     writer2->SetFileName( argv[4] );
     writer2->Update();
-    }
+  }
 
 
 
@@ -819,11 +819,11 @@ int main( int argc, char *argv[] )
   // Software Guide : EndCodeSnippet
 
 
-  if( argc > 5 )
-    {
+  if ( argc > 5 )
+  {
     writer2->SetFileName( argv[5] );
     writer2->Update();
-    }
+  }
 
 
 

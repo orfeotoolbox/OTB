@@ -25,8 +25,8 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(BayesianFusionImageFilterTest);
-REGISTER_TEST(PanSharpeningExampleTest);
+  REGISTER_TEST(BayesianFusionImageFilterTest);
+  REGISTER_TEST(PanSharpeningExampleTest);
 }
 
 #undef main

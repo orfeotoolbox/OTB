@@ -25,15 +25,15 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(IsolatedConnectedImageFilterTest);
-REGISTER_TEST(FastMarchingImageFilterTest);
-REGISTER_TEST(OtsuThresholdImageFilterTest);
-REGISTER_TEST(ConfidenceConnectedTest);
-REGISTER_TEST(NeighborhoodConnectedImageFilterTest);
-REGISTER_TEST(WatershedSegmentationTest);
-REGISTER_TEST(ConnectedThresholdImageFilterTest);
-REGISTER_TEST(OtsuMultipleThresholdImageFilterTest);
-REGISTER_TEST(LabelizeNeighborhoodConnectedImageFilterTest);
+  REGISTER_TEST(IsolatedConnectedImageFilterTest);
+  REGISTER_TEST(FastMarchingImageFilterTest);
+  REGISTER_TEST(OtsuThresholdImageFilterTest);
+  REGISTER_TEST(ConfidenceConnectedTest);
+  REGISTER_TEST(NeighborhoodConnectedImageFilterTest);
+  REGISTER_TEST(WatershedSegmentationTest);
+  REGISTER_TEST(ConnectedThresholdImageFilterTest);
+  REGISTER_TEST(OtsuMultipleThresholdImageFilterTest);
+  REGISTER_TEST(LabelizeNeighborhoodConnectedImageFilterTest);
 }
 
 #undef main

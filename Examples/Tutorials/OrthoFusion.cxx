@@ -69,15 +69,15 @@ int main( int argc, char* argv[] )
 
 // Software Guide : BeginCodeSnippet
 
-  if(argc!=12)
+  if (argc!=12)
   {
-  std::cout << argv[0] <<" <input_pan_filename> <input_xs_filename> ";
-  std::cout << "<output_filename> <utm zone> <hemisphere N/S>  ";
-  std::cout << "<x_ground_upper_left_corner> <y_ground_upper_left_corner> ";
-  std::cout << "<x_Size> <y_Size> ";
-  std::cout << "<x_groundSamplingDistance> ";
-  std::cout << "<y_groundSamplingDistance (negative since origin is upper left)>"
-        << std::endl;
+    std::cout << argv[0] <<" <input_pan_filename> <input_xs_filename> ";
+    std::cout << "<output_filename> <utm zone> <hemisphere N/S>  ";
+    std::cout << "<x_ground_upper_left_corner> <y_ground_upper_left_corner> ";
+    std::cout << "<x_Size> <y_Size> ";
+    std::cout << "<x_groundSamplingDistance> ";
+    std::cout << "<y_groundSamplingDistance (negative since origin is upper left)>"
+              << std::endl;
 
     return EXIT_FAILURE;
   }
@@ -125,7 +125,7 @@ int main( int argc, char* argv[] )
 
   typedef otb::UtmInverseProjection utmMapProjectionType ;
   utmMapProjectionType::Pointer utmMapProjection =
-      utmMapProjectionType::New();
+    utmMapProjectionType::New();
   utmMapProjection->SetZone(atoi(argv[4]));
   utmMapProjection->SetHemisphere(*(argv[5]));
 
@@ -154,7 +154,7 @@ int main( int argc, char* argv[] )
   ImageType::PointType origin;
   origin[0]=strtod(argv[6], NULL);
   origin[1]=strtod(argv[7], NULL);
-   // Software Guide : EndCodeSnippet
+  // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
   //
@@ -168,7 +168,7 @@ int main( int argc, char* argv[] )
   utmMapProjectionType> OrthoRectifFilterType ;
 
   OrthoRectifFilterType::Pointer  orthoRectifPAN =
-      OrthoRectifFilterType::New();
+    OrthoRectifFilterType::New();
   orthoRectifPAN->SetMapProjection(utmMapProjection);
 
   orthoRectifPAN->SetInput(readerPAN->GetOutput());
@@ -177,7 +177,7 @@ int main( int argc, char* argv[] )
   orthoRectifPAN->SetSize(size);
   orthoRectifPAN->SetOutputSpacing(spacing);
   orthoRectifPAN->SetOutputOrigin(origin);
-   // Software Guide : EndCodeSnippet
+  // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
   // Now we are able to have the orthorectified area from the PAN image. We just
@@ -192,13 +192,13 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::PerBandVectorImageFilter<VectorImageType,
-    DoubleVectorImageType, OrthoRectifFilterType> VectorOrthoRectifFilterType;
+  DoubleVectorImageType, OrthoRectifFilterType> VectorOrthoRectifFilterType;
 
 
   OrthoRectifFilterType::Pointer  orthoRectifXS =
-      OrthoRectifFilterType::New();
+    OrthoRectifFilterType::New();
   VectorOrthoRectifFilterType::Pointer  orthoRectifXSVector =
-      VectorOrthoRectifFilterType::New();
+    VectorOrthoRectifFilterType::New();
   orthoRectifXSVector->SetFilter(orthoRectifXS);
   // Software Guide : EndCodeSnippet
 
@@ -230,7 +230,7 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet
 
   typedef otb::SimpleRcsPanSharpeningFusionImageFilter
-      <DoubleImageType,DoubleVectorImageType,VectorImageType> FusionFilterType;
+  <DoubleImageType,DoubleVectorImageType,VectorImageType> FusionFilterType;
   FusionFilterType::Pointer fusion = FusionFilterType::New();
   fusion->SetPanInput(orthoRectifPAN->GetOutput());
   fusion->SetXsInput(orthoRectifXSVector->GetOutput());
@@ -260,5 +260,5 @@ int main( int argc, char* argv[] )
   return EXIT_SUCCESS;
 
 }
-    // Software Guide : EndCodeSnippet
+// Software Guide : EndCodeSnippet
 

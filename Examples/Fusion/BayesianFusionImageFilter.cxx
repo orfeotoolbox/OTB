@@ -91,13 +91,13 @@
 
 int main( int argc, char *argv[] )
 {
-  if( argc < 10 )
-    {
+  if ( argc < 10 )
+  {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputMultiSpectralImage inputMultiSpectralInterpolatedImage inputPanchromatiqueImage outputImage outputImagePrinted msPrinted msiPrinted panchroPrinted lambda" << std::endl;
     return 1;
-    }
+  }
 
   //  Software Guide : BeginLatex
   //
@@ -144,9 +144,9 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::BayesianFusionFilter< MultiSpecImageType,
-                                         MultiSpecImageType,
-                                     PanchroImageType,
-                                     OutputImageType     >    BayesianFusionFilterType;
+  MultiSpecImageType,
+  PanchroImageType,
+  OutputImageType     >    BayesianFusionFilterType;
   // Software Guide : EndCodeSnippet
 
 
@@ -203,25 +203,25 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   try
-    {
+  {
     writer->Update();
-    }
-  catch( itk::ExceptionObject & excep )
-    {
+  }
+  catch ( itk::ExceptionObject & excep )
+  {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-    }
-   // Software Guide : EndCodeSnippet
+  }
+  // Software Guide : EndCodeSnippet
 
 
-   // Create an 3 band images for the software guide
+  // Create an 3 band images for the software guide
   typedef unsigned char                                                            OutputPixelType2;
   typedef otb::VectorImage<OutputPixelType2, Dimension>                            OutputVectorImageType;
   typedef otb::ImageFileWriter<OutputVectorImageType>                              VectorWriterType;
   typedef otb::VectorRescaleIntensityImageFilter<MultiSpecImageType,
-                                                 OutputVectorImageType>            VectorRescalerType;
+  OutputVectorImageType>            VectorRescalerType;
   typedef otb::VectorRescaleIntensityImageFilter<OutputImageType,
-                                                 OutputVectorImageType>            VectorRescalerBayesianType;
+  OutputVectorImageType>            VectorRescalerBayesianType;
   typedef otb::Image< OutputPixelType2, Dimension >                                PanchroOutputImageType;
   typedef otb::ImageToVectorImageCastFilter<PanchroImageType, MultiSpecImageType>  CasterType;
   typedef otb::MultiChannelExtractROI<OutputPixelType2,OutputPixelType2>           ChannelExtractorType;
@@ -273,13 +273,13 @@ int main( int argc, char *argv[] )
   ChannelExtractorType::Pointer selecterf = ChannelExtractorType::New();
 
   selecterms->SetInput(vrms->GetOutput());
- // selecterms->SetExtractionRegion(multiSpectReader->GetOutput()->GetLargestPossibleRegion());
+// selecterms->SetExtractionRegion(multiSpectReader->GetOutput()->GetLargestPossibleRegion());
   selecterms->SetChannel(2);
   selecterms->SetChannel(3);
   selecterms->SetChannel(4);
 
   selectermsi->SetInput(vrmsi->GetOutput());
- // selectermsi->SetExtractionRegion(multiSpectInterpReader->GetOutput()->GetLargestPossibleRegion());
+// selectermsi->SetExtractionRegion(multiSpectInterpReader->GetOutput()->GetLargestPossibleRegion());
   selectermsi->SetChannel(2);
   selectermsi->SetChannel(3);
   selectermsi->SetChannel(4);
@@ -308,22 +308,22 @@ int main( int argc, char *argv[] )
 
 
   try
-    {
+  {
     vectWriterms->Update();
     vectWritermsi->Update();
     vectWriterf->Update();
     vectWriterp->Update();
-    }
-  catch( itk::ExceptionObject & excep )
-    {
+  }
+  catch ( itk::ExceptionObject & excep )
+  {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-    }
-  catch( ... )
-    {
-      std::cout << "Unknown exception !" << std::endl;
-      return EXIT_FAILURE;
-    }
+  }
+  catch ( ... )
+  {
+    std::cout << "Unknown exception !" << std::endl;
+    return EXIT_FAILURE;
+  }
 
 
 

@@ -45,103 +45,103 @@
 
 int main(int argc, char ** argv )
 {
-    if( argc != 4 )
-    {
+  if ( argc != 4 )
+  {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " p q" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-    const char * inputFilename  = argv[1];
+  const char * inputFilename  = argv[1];
 
-    unsigned int P((unsigned char)::atoi(argv[2]));
-    unsigned int Q((unsigned char)::atoi(argv[3]));
-
-
-    typedef unsigned char     InputPixelType;
-    const   unsigned int      Dimension = 2;
-    typedef otb::Image< InputPixelType,  Dimension >   InputImageType;
-
-    typedef otb::ImageFileReader< InputImageType  >    ReaderType;
-
-    ReaderType::Pointer reader = ReaderType::New();
-
-    reader->SetFileName(inputFilename);
-
-    //  Software Guide : BeginLatex
-    //
-    //  The \doxygen{otb}{ComplexMomentImageFunction} is templated over the
-    //  input image type and the output complex type value, so we start by
-    //  defining:
-    //
-    //  Software Guide : EndLatex
-
-    // Software Guide : BeginCodeSnippet
-    typedef std::complex<float>                             ComplexType;
-    typedef otb::ComplexMomentImageFunction<InputImageType,ComplexType>   CMType;
-
-    CMType::Pointer cmFunction =CMType::New();
-
-    // Software Guide : EndCodeSnippet
+  unsigned int P((unsigned char)::atoi(argv[2]));
+  unsigned int Q((unsigned char)::atoi(argv[3]));
 
 
+  typedef unsigned char     InputPixelType;
+  const   unsigned int      Dimension = 2;
+  typedef otb::Image< InputPixelType,  Dimension >   InputImageType;
 
-    //  Software Guide : BeginLatex
-    //
-    // Next, we plug the input image into the complex moment fucntion
-    // and we set its parameters.
-    //
-    //  Software Guide : EndLatex
+  typedef otb::ImageFileReader< InputImageType  >    ReaderType;
 
-    // Software Guide : BeginCodeSnippet
+  ReaderType::Pointer reader = ReaderType::New();
 
-    reader->Update();
-    cmFunction->SetInputImage( reader->GetOutput() );
-    cmFunction->SetQ(Q);
-    cmFunction->SetP(P);
+  reader->SetFileName(inputFilename);
 
-    // Software Guide : EndCodeSnippet
+  //  Software Guide : BeginLatex
+  //
+  //  The \doxygen{otb}{ComplexMomentImageFunction} is templated over the
+  //  input image type and the output complex type value, so we start by
+  //  defining:
+  //
+  //  Software Guide : EndLatex
 
-    //  Software Guide : BeginLatex
-    // We can chose the pixel of the image which will used as center
-    // for the moment computation
-    //
-    //  Software Guide : EndLatex
+  // Software Guide : BeginCodeSnippet
+  typedef std::complex<float>                             ComplexType;
+  typedef otb::ComplexMomentImageFunction<InputImageType,ComplexType>   CMType;
 
-    // Software Guide : BeginCodeSnippet
+  CMType::Pointer cmFunction =CMType::New();
 
-
-    InputImageType::IndexType center;
-    center[0]=50;
-    center[1]=50;
-
-    // Software Guide : EndCodeSnippet
-
-    //  Software Guide : BeginLatex
-    // We can also choose the size of the neighborhood around the
-    // center pixel for the moment computation.
-    //
-    //  Software Guide : EndLatex
-
-
-    cmFunction->SetNeighborhoodRadius( 15 );
+  // Software Guide : EndCodeSnippet
 
 
 
-    //  Software Guide : BeginLatex
-    // In order to get the value of the moment, we call the
-    // \code{EvaluateAtIndex} method.
-    //
-    //  Software Guide : EndLatex
+  //  Software Guide : BeginLatex
+  //
+  // Next, we plug the input image into the complex moment fucntion
+  // and we set its parameters.
+  //
+  //  Software Guide : EndLatex
 
-    // Software Guide : BeginCodeSnippet
+  // Software Guide : BeginCodeSnippet
 
-    ComplexType Result = cmFunction->EvaluateAtIndex(center);
+  reader->Update();
+  cmFunction->SetInputImage( reader->GetOutput() );
+  cmFunction->SetQ(Q);
+  cmFunction->SetP(P);
 
-    std::cout << "The moment of order (" << P << "," << Q <<
-                       ") is equal to " << Result << std:: endl;
+  // Software Guide : EndCodeSnippet
 
-    // Software Guide : EndCodeSnippet
+  //  Software Guide : BeginLatex
+  // We can chose the pixel of the image which will used as center
+  // for the moment computation
+  //
+  //  Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
+
+
+  InputImageType::IndexType center;
+  center[0]=50;
+  center[1]=50;
+
+  // Software Guide : EndCodeSnippet
+
+  //  Software Guide : BeginLatex
+  // We can also choose the size of the neighborhood around the
+  // center pixel for the moment computation.
+  //
+  //  Software Guide : EndLatex
+
+
+  cmFunction->SetNeighborhoodRadius( 15 );
+
+
+
+  //  Software Guide : BeginLatex
+  // In order to get the value of the moment, we call the
+  // \code{EvaluateAtIndex} method.
+  //
+  //  Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
+
+  ComplexType Result = cmFunction->EvaluateAtIndex(center);
+
+  std::cout << "The moment of order (" << P << "," << Q <<
+            ") is equal to " << Result << std:: endl;
+
+  // Software Guide : EndCodeSnippet
 
 
 

@@ -62,16 +62,16 @@ PURPOSE.  See the above copyright notices for more information.
 int main(int argc, char * argv[])
 {
 
-    if( argc != 24)
-    {
+  if ( argc != 24)
+  {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " outputImagePrefix iterations decimationRatio" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-      const char * inputFilename = argv[1];
-      const unsigned int numberOfLevels = atoi(argv[22]);
-      const float decimationRatio = atof(argv[23]);
+  const char * inputFilename = argv[1];
+  const unsigned int numberOfLevels = atoi(argv[22]);
+  const float decimationRatio = atof(argv[23]);
 
 // Software Guide : BeginLatex
 //
@@ -82,15 +82,15 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-      const unsigned int Dimension = 2;
-      typedef unsigned char InputPixelType;
-      typedef unsigned char OutputPixelType;
+  const unsigned int Dimension = 2;
+  typedef unsigned char InputPixelType;
+  typedef unsigned char OutputPixelType;
 
-      typedef otb::Image<InputPixelType,Dimension> InputImageType;
-      typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
+  typedef otb::Image<InputPixelType,Dimension> InputImageType;
+  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
 
-      typedef otb::ImageFileReader<InputImageType> ReaderType;
-      typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -106,8 +106,8 @@ int main(int argc, char * argv[])
 // Software Guide : BeginCodeSnippet
 
 
-      typedef itk::BinaryBallStructuringElement<InputPixelType,
-                                   Dimension> StructuringElementType;
+  typedef itk::BinaryBallStructuringElement<InputPixelType,
+  Dimension> StructuringElementType;
 
 // Software Guide : EndCodeSnippet
 
@@ -124,9 +124,9 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-      typedef otb::OpeningClosingMorphologicalFilter<InputImageType,
-                                 InputImageType,StructuringElementType>
-                                         OpeningClosingFilterType;
+  typedef otb::OpeningClosingMorphologicalFilter<InputImageType,
+  InputImageType,StructuringElementType>
+  OpeningClosingFilterType;
 
 // Software Guide : EndCodeSnippet
 
@@ -141,9 +141,9 @@ int main(int argc, char * argv[])
 // Software Guide : BeginCodeSnippet
 
 
-      typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,
-                              OutputImageType,OpeningClosingFilterType>
-                                                PyramidFilterType;
+  typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,
+  OutputImageType,OpeningClosingFilterType>
+  PyramidFilterType;
 
 // Software Guide : EndCodeSnippet
 
@@ -157,8 +157,8 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-      typedef PyramidFilterType::OutputImageListType::Iterator
-                                               ImageListIterator;
+  typedef PyramidFilterType::OutputImageListType::Iterator
+  ImageListIterator;
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -170,8 +170,8 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-      ReaderType::Pointer reader = ReaderType::New();
-      reader->SetFileName(inputFilename);
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(inputFilename);
 
 // Software Guide : EndCodeSnippet
 
@@ -189,11 +189,11 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-      PyramidFilterType::Pointer pyramid = PyramidFilterType::New();
-      pyramid->SetNumberOfLevels(numberOfLevels);
-      pyramid->SetDecimationRatio(decimationRatio);
-      pyramid->SetInput(reader->GetOutput());
-      pyramid->Update();
+  PyramidFilterType::Pointer pyramid = PyramidFilterType::New();
+  pyramid->SetNumberOfLevels(numberOfLevels);
+  pyramid->SetDecimationRatio(decimationRatio);
+  pyramid->SetInput(reader->GetOutput());
+  pyramid->Update();
 
 // Software Guide : EndCodeSnippet
 
@@ -223,11 +223,11 @@ int main(int argc, char * argv[])
 // Software Guide : BeginCodeSnippet
 
 
-      ImageListIterator itAnalyse = pyramid->GetOutput()->Begin();
-      ImageListIterator itSupFilter = pyramid->GetSupFilter()->Begin();
-      ImageListIterator itInfFilter = pyramid->GetInfFilter()->Begin();
-      ImageListIterator itInfDeci = pyramid->GetSupDeci()->Begin();
-      ImageListIterator itSupDeci =  pyramid->GetInfDeci()->Begin();
+  ImageListIterator itAnalyse = pyramid->GetOutput()->Begin();
+  ImageListIterator itSupFilter = pyramid->GetSupFilter()->Begin();
+  ImageListIterator itInfFilter = pyramid->GetInfFilter()->Begin();
+  ImageListIterator itInfDeci = pyramid->GetSupDeci()->Begin();
+  ImageListIterator itSupDeci =  pyramid->GetInfDeci()->Begin();
 
 // Software Guide : EndCodeSnippet
 
@@ -240,13 +240,13 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-      WriterType::Pointer writer =  WriterType::New();
+  WriterType::Pointer writer =  WriterType::New();
 
-      int i=1;
+  int i=1;
 
-      // Writing the results images
-      std::cout<<(itAnalyse!=(pyramid->GetOutput()->End()))<<std::endl;
-      while(itAnalyse!=pyramid->GetOutput()->End())
+  // Writing the results images
+  std::cout<<(itAnalyse!=(pyramid->GetOutput()->End()))<<std::endl;
+  while (itAnalyse!=pyramid->GetOutput()->End())
   {
     writer->SetInput(itAnalyse.Get());
     writer->SetFileName(argv[0*4+i+1]);
@@ -350,5 +350,5 @@ int main(int argc, char * argv[])
 
 
 
-      return EXIT_SUCCESS;
-    }
+  return EXIT_SUCCESS;
+}

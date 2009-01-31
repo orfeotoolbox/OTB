@@ -67,7 +67,7 @@
 int main(int argc, char* argv[] )
 {
 
-  if( argc != 6 )
+  if ( argc != 6 )
   {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
@@ -96,7 +96,7 @@ int main(int argc, char* argv[] )
   writer->SetFileName( outputFilename );
 
   typedef otb::MarkovRandomFieldFilter
-    <InputImageType,LabelledImageType> MarkovRandomFieldFilterType;
+  <InputImageType,LabelledImageType> MarkovRandomFieldFilterType;
 
 
   //  Software Guide : BeginLatex
@@ -120,9 +120,9 @@ int main(int argc, char* argv[] )
   // Software Guide : EndCodeSnippet
 
   typedef otb::MRFEnergyPotts
-      <LabelledImageType, LabelledImageType>  EnergyRegularizationType;
+  <LabelledImageType, LabelledImageType>  EnergyRegularizationType;
   typedef otb::MRFEnergyGaussianClassification
-      <InputImageType, LabelledImageType>  EnergyFidelityType;
+  <InputImageType, LabelledImageType>  EnergyFidelityType;
 
   MarkovRandomFieldFilterType::Pointer markovFilter = MarkovRandomFieldFilterType::New();
   EnergyRegularizationType::Pointer energyRegularization = EnergyRegularizationType::New();
@@ -131,11 +131,11 @@ int main(int argc, char* argv[] )
   SamplerType::Pointer sampler = SamplerType::New();
 
   if ((bool)(atoi(argv[5])) == true)
-    {
-      // Overpass random calculation(for test only):
-      sampler->InitializeSeed(0);
-      markovFilter->InitializeSeed(1);
-    }
+  {
+    // Overpass random calculation(for test only):
+    sampler->InitializeSeed(0);
+    markovFilter->InitializeSeed(1);
+  }
 
   unsigned int nClass = 4;
   energyFidelity->SetNumberOfParameters(2*nClass);
@@ -173,7 +173,7 @@ int main(int argc, char* argv[] )
   markovFilter->SetInput(reader->GetOutput());
 
   typedef itk::RescaleIntensityImageFilter
-      < LabelledImageType, LabelledImageType > RescaleType;
+  < LabelledImageType, LabelledImageType > RescaleType;
   RescaleType::Pointer rescaleFilter = RescaleType::New();
   rescaleFilter->SetOutputMinimum(0);
   rescaleFilter->SetOutputMaximum(255);

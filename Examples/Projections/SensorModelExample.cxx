@@ -52,15 +52,15 @@ int main( int argc, char* argv[] )
 {
 
 
-  if(argc!=8)
-    {
+  if (argc!=8)
+  {
     std::cout << argv[0] <<" <input_filename> <output_filename>"
-        << " <upper_left_corner_longitude> <upper_left_corner_latitude>"
+              << " <upper_left_corner_longitude> <upper_left_corner_latitude>"
               << " <size_x> <sizee_y> <number_of_stream_divisions>"
-        << std::endl;
+              << std::endl;
 
     return EXIT_FAILURE;
-    }
+  }
 
 
 
@@ -105,7 +105,7 @@ int main( int argc, char* argv[] )
   reader->GenerateOutputInformation();
 
   std::cout << "Original input imagine spacing: "<<
-    reader->GetOutput()->GetSpacing() << std::endl;;
+            reader->GetOutput()->GetSpacing() << std::endl;;
 
 // Software Guide : EndCodeSnippet
 
@@ -151,11 +151,11 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet
 
 
-  if(!model)
-    {
+  if (!model)
+  {
     std::cerr << "Unable to create a model" << std::endl;
     return 1;
-    }
+  }
 
 // Software Guide : EndCodeSnippet
 
@@ -263,7 +263,7 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet
 
   typedef itk::LinearInterpolateImageFunction<ImageType, double>
-                                                    InterpolatorType;
+  InterpolatorType;
   InterpolatorType::Pointer  interpolator=InterpolatorType::New();
 
 
@@ -298,7 +298,7 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet
 
   typedef itk::RescaleIntensityImageFilter<ImageType,CharImageType>
-                                                         RescalerType;
+  RescalerType;
   RescalerType::Pointer                   rescaler=RescalerType::New();
   rescaler->SetOutputMinimum(10);
   rescaler->SetOutputMaximum(255);
@@ -325,13 +325,13 @@ int main( int argc, char* argv[] )
 
   unsigned int NumberOfStreamDivisions;
   if (atoi(argv[7])==0)
-    {
+  {
     NumberOfStreamDivisions=10;
-    }
+  }
   else
-    {
+  {
     NumberOfStreamDivisions=atoi(argv[7]);
-    }
+  }
 
 
   unsigned int count=0;
@@ -349,21 +349,21 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
 
-  for(count=0;count<NumberOfStreamDivisions;count++)
-    {
+  for (count=0;count<NumberOfStreamDivisions;count++)
+  {
     iteratorRegionSize[0]=atoi(argv[5]);
     if (count==NumberOfStreamDivisions-1)
-      {
+    {
       iteratorRegionSize[1]=(atoi(argv[6]))-((int)(((atoi(argv[6]))/
-            NumberOfStreamDivisions)+0.5))*(count);
+                                             NumberOfStreamDivisions)+0.5))*(count);
       iterationRegionStart[1]=(atoi(argv[5]))-(iteratorRegionSize[1]);
-      }
+    }
     else
-      {
+    {
       iteratorRegionSize[1]=(int)(((atoi(argv[6]))/
-           NumberOfStreamDivisions)+0.5);
+                                   NumberOfStreamDivisions)+0.5);
       iterationRegionStart[1]=count*iteratorRegionSize[1];
-      }
+    }
     iterationRegionStart[0]=0;
     iteratorRegion.SetSize(iteratorRegionSize);
     iteratorRegion.SetIndex(iterationRegionStart);
@@ -392,7 +392,7 @@ int main( int argc, char* argv[] )
 
     It=0;
     for (outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt)
-      {
+    {
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -434,7 +434,7 @@ int main( int argc, char* argv[] )
       currentIndexArray[It+1]=static_cast<int>(currentIndex[1]);
 
       It=It+2;
-      }
+    }
 
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
@@ -454,12 +454,24 @@ int main( int argc, char* argv[] )
 
 
     for (j=0;j<It;j++)
+    {
+      if (j%2==0 && pixelIndexArray[j]>max_x)
       {
-      if(j%2==0 && pixelIndexArray[j]>max_x){max_x=pixelIndexArray[j];}
-      if(j%2==0 && pixelIndexArray[j]<min_x){min_x=pixelIndexArray[j];}
-      if(j%2!=0 && pixelIndexArray[j]>max_y){max_y=pixelIndexArray[j];}
-      if(j%2!=0 && pixelIndexArray[j]<min_y){min_y=pixelIndexArray[j];}
+        max_x=pixelIndexArray[j];
       }
+      if (j%2==0 && pixelIndexArray[j]<min_x)
+      {
+        min_x=pixelIndexArray[j];
+      }
+      if (j%2!=0 && pixelIndexArray[j]>max_y)
+      {
+        max_y=pixelIndexArray[j];
+      }
+      if (j%2!=0 && pixelIndexArray[j]<min_y)
+      {
+        min_y=pixelIndexArray[j];
+      }
+    }
 
 
 // Software Guide : EndCodeSnippet
@@ -477,16 +489,16 @@ int main( int argc, char* argv[] )
     ImageType::IndexType          extractStart;
 
     if (min_x<10 && min_y<10)
-      {
+    {
       extractStart[0]=0;
       extractStart[1]=0;
-      }
+    }
 
     else
-      {
+    {
       extractStart[0]=min_x-10;
       extractStart[1]=min_y-10;
-      }
+    }
 
     ImageType::SizeType          extractSize;
 
@@ -512,27 +524,27 @@ int main( int argc, char* argv[] )
     interpolator->SetInputImage(extract->GetOutput());
 
     for ( k=0; k<It/2; k++)
-      {
+    {
       pixelIndexBis[0]= pixelIndexArray[2*k];
       pixelIndexBis[1]= pixelIndexArray[2*k+1];
       currentIndexBis[0]= currentIndexArray[2*k];
       currentIndexBis[1]= currentIndexArray[2*k+1];
 
       if (interpolator->IsInsideBuffer(pixelIndexBis))
-  {
-  pixelValue=int (interpolator->EvaluateAtIndex(pixelIndexBis));
-  }
+      {
+        pixelValue=int (interpolator->EvaluateAtIndex(pixelIndexBis));
+      }
       else
-  {
-  pixelValue=0;
-  }
+      {
+        pixelValue=0;
+      }
 
       outputImage->SetPixel(currentIndexBis,pixelValue);
-      }
+    }
     delete pixelIndexArray;
     delete currentIndexArray;
 
-    }
+  }
 
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex

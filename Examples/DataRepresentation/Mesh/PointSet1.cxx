@@ -200,10 +200,10 @@ int main(int, char *[])
   PointType pp;
   bool pointExists =  pointsSet->GetPoint( 1, & pp );
 
-  if( pointExists )
-    {
+  if ( pointExists )
+  {
     std::cout << "Point is = " << pp << std::endl;
-    }
+  }
   // Software Guide : EndCodeSnippet
 
 

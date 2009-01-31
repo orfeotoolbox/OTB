@@ -52,11 +52,11 @@
 int main( int argc, char* argv[] )
 {
 
-  if(argc!=7)
+  if (argc!=7)
   {
     std::cout << argv[0] <<" <inputFilename> <outputFilename> "
-        << "<cacheDirectory> <lon> <lat> <depth>"
-        << std::endl;
+              << "<cacheDirectory> <lon> <lat> <depth>"
+              << std::endl;
 
     return EXIT_FAILURE;
   }
@@ -129,7 +129,7 @@ int main( int argc, char* argv[] )
 
   model->SetImageGeometry(readerTile->GetOutput()->GetImageKeywordlist());
   dynamic_cast<ossimTileMapModel*>(model->GetOssimModel())->setDepth(depth);
-  if(!model)
+  if (!model)
   {
     std::cerr << "Unable to create a model" << std::endl;
     return 1;

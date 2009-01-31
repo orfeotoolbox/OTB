@@ -25,13 +25,13 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(LeeImageFilterTest);
-REGISTER_TEST(DEMToRainbowExampleTest);
-REGISTER_TEST(ScalingFilterExampleTest);
-REGISTER_TEST(PrintableImageFilterExample1Test);
-REGISTER_TEST(PrintableImageFilterExample2Test);
-REGISTER_TEST(IndexedToRGBExampleTest);
-REGISTER_TEST(MeanShiftVectorImageFilterExampleTest);
+  REGISTER_TEST(LeeImageFilterTest);
+  REGISTER_TEST(DEMToRainbowExampleTest);
+  REGISTER_TEST(ScalingFilterExampleTest);
+  REGISTER_TEST(PrintableImageFilterExample1Test);
+  REGISTER_TEST(PrintableImageFilterExample2Test);
+  REGISTER_TEST(IndexedToRGBExampleTest);
+  REGISTER_TEST(MeanShiftVectorImageFilterExampleTest);
 }
 
 #undef main

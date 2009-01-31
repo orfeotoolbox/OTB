@@ -64,7 +64,7 @@
 int main(int argc, char* argv[] )
 {
 
-  if( argc != 8 )
+  if ( argc != 8 )
   {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
@@ -94,34 +94,34 @@ int main(int argc, char* argv[] )
 
 
   typedef otb::MarkovRandomFieldFilter
-    <LabelledImageType,LabelledImageType> MarkovRandomFieldFilterType;
+  <LabelledImageType,LabelledImageType> MarkovRandomFieldFilterType;
 
   typedef otb::MRFSamplerRandom< LabelledImageType, LabelledImageType> SamplerType;
 
   typedef otb::MRFOptimizerMetropolis OptimizerType;
 
   typedef otb::MRFEnergyPotts
-      <LabelledImageType, LabelledImageType>  EnergyRegularizationType;
+  <LabelledImageType, LabelledImageType>  EnergyRegularizationType;
   typedef otb::MRFEnergyPotts
-      <LabelledImageType, LabelledImageType>  EnergyFidelityType;
+  <LabelledImageType, LabelledImageType>  EnergyFidelityType;
 
 
   MarkovRandomFieldFilterType::Pointer markovFilter
-      = MarkovRandomFieldFilterType::New();
+  = MarkovRandomFieldFilterType::New();
   EnergyRegularizationType::Pointer energyRegularization
-      = EnergyRegularizationType::New();
+  = EnergyRegularizationType::New();
   EnergyFidelityType::Pointer energyFidelity = EnergyFidelityType::New();
   OptimizerType::Pointer optimizer = OptimizerType::New();
   SamplerType::Pointer sampler = SamplerType::New();
 
 
-   if ((bool)(atoi(argv[7])) == true)
-    {
-      // Overpass random calculation(for test only):
-      sampler->InitializeSeed(0);
-      optimizer->InitializeSeed(1);
-      markovFilter->InitializeSeed(2);
-    }
+  if ((bool)(atoi(argv[7])) == true)
+  {
+    // Overpass random calculation(for test only):
+    sampler->InitializeSeed(0);
+    optimizer->InitializeSeed(1);
+    markovFilter->InitializeSeed(2);
+  }
 
 
   // Software Guide : BeginLatex
@@ -136,7 +136,7 @@ int main(int argc, char* argv[] )
   // Software Guide : BeginCodeSnippet
 
   typedef itk::LabelStatisticsImageFilter
-      <LabelledImageType, LabelledImageType> LabelledStatType;
+  <LabelledImageType, LabelledImageType> LabelledStatType;
   LabelledStatType::Pointer labelledStat = LabelledStatType::New();
   labelledStat->SetInput(reader->GetOutput());
   labelledStat->SetLabelInput(reader->GetOutput());
@@ -167,7 +167,7 @@ int main(int argc, char* argv[] )
   writer->Update();
 
   typedef itk::RescaleIntensityImageFilter
-      < LabelledImageType, LabelledImageType > RescaleType;
+  < LabelledImageType, LabelledImageType > RescaleType;
   RescaleType::Pointer rescaleFilter = RescaleType::New();
   rescaleFilter->SetOutputMinimum(0);
   rescaleFilter->SetOutputMaximum(255);
@@ -180,7 +180,7 @@ int main(int argc, char* argv[] )
 
   writer->Update();
 
-    // Software Guide : BeginLatex
+  // Software Guide : BeginLatex
   //
   // Figure~\ref{fig:MRF_REGULARIZATION} shows the output of the Markov Random
   // Field regularization on the classification output of another method.

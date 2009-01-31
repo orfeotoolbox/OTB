@@ -117,8 +117,8 @@ int main( int argc, char* argv[] )
   int lowest = 0;
   int range = 1000;
 
-  for(unsigned int pointId = 0; pointId<500; pointId++)
-    {
+  for (unsigned int pointId = 0; pointId<500; pointId++)
+  {
 
     FeaturePointType fP;
     LabelPointType lP;
@@ -168,7 +168,7 @@ int main( int argc, char* argv[] )
 
     LabelPixelType label;
 
-    if(x_coord < y_coord)
+    if (x_coord < y_coord)
       label= -1;
     else
       label = 1;
@@ -192,7 +192,7 @@ int main( int argc, char* argv[] )
     lPSet->SetPointData( pointId, label );
 
 
-    }
+  }
 
 // Software Guide : EndCodeSnippet
 
@@ -220,7 +220,7 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet
 
   typedef otb::SVMPointSetModelEstimator< FeaturePointSetType,
-                                       LabelPointSetType >   EstimatorType;
+  LabelPointSetType >   EstimatorType;
 
 
   EstimatorType::Pointer estimator = EstimatorType::New();

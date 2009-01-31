@@ -73,13 +73,13 @@ int main( int argc, char* argv[] )
 {
 
 
-  if(argc!=7)
+  if (argc!=7)
   {
     std::cout << argv[0] <<" <input_lidar_filename> <output_image_filename(double)>"
               << " <output_image_filename(unsigned char)>"
-        << " <output_resolution> <spline_order>"
+              << " <output_resolution> <spline_order>"
               << " <number_of_levels>"
-        << std::endl;
+              << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -144,11 +144,11 @@ int main( int argc, char* argv[] )
 
   ImageType::SizeType  size;
   size[0]  = static_cast<long int >(ceil(
-                      (vcl_ceil(reader->GetMaxX())-vcl_floor(reader->GetMinX())+1) / resolution
-                                        ))+1;
+                                      (vcl_ceil(reader->GetMaxX())-vcl_floor(reader->GetMinX())+1) / resolution
+                                    ))+1;
   size[1]  = static_cast<long int >(ceil(
-                      (vcl_ceil(reader->GetMaxY())-vcl_floor(reader->GetMinY())+1) / resolution
-                                        ))+1;
+                                      (vcl_ceil(reader->GetMaxY())-vcl_floor(reader->GetMinY())+1) / resolution
+                                    ))+1;
 
   ImageType::PointType origin;
   origin[0] = reader->GetMinX();
@@ -170,8 +170,8 @@ int main( int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-   typedef itk::BSplineScatteredDataPointSetToImageFilter
-      <PointSetType, VectorImageType> FilterType;
+  typedef itk::BSplineScatteredDataPointSetToImageFilter
+  <PointSetType, VectorImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 
@@ -201,9 +201,9 @@ int main( int argc, char* argv[] )
   // Software Guide : EndLatex
 
   //TODO ImageOfVectorsToVectorImage needed !
-    // Write the output to an image.
+  // Write the output to an image.
 
-   // Software Guide : BeginCodeSnippet
+  // Software Guide : BeginCodeSnippet
   typedef otb::Image<RealType, 2> RealImageType;
   RealImageType::Pointer image = RealImageType::New();
   ImageType::RegionType region;
@@ -212,7 +212,7 @@ int main( int argc, char* argv[] )
   image->SetRegions( region );
   image->Allocate();
   itk::ImageRegionIteratorWithIndex<RealImageType>
-      Itt( image, image->GetLargestPossibleRegion() );
+  Itt( image, image->GetLargestPossibleRegion() );
 
   for ( Itt.GoToBegin(); !Itt.IsAtEnd(); ++Itt )
   {
@@ -237,7 +237,7 @@ int main( int argc, char* argv[] )
 
   typedef otb::Image<unsigned char, 2> UCharImageType;
   typedef itk::RescaleIntensityImageFilter<ImageType,
-               UCharImageType> RescalerType;
+  UCharImageType> RescalerType;
   RescalerType::Pointer rescaler = RescalerType::New();
   rescaler->SetInput(image);
   rescaler->SetOutputMaximum(255);
@@ -253,7 +253,7 @@ int main( int argc, char* argv[] )
 
 
 
-    // Software Guide : BeginLatex
+  // Software Guide : BeginLatex
   //
   // Figure~\ref{fig:LIDARTOIMAGEEXAMPLE} shows the output images with two sets of parameters
   //

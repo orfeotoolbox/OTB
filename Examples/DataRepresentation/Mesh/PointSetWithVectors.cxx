@@ -104,8 +104,8 @@ int main(int, char *[])
   unsigned int pointId =  0;
   const double radius = 300.0;
 
-  for(unsigned int i=0; i<360; i++)
-    {
+  for (unsigned int i=0; i<360; i++)
+  {
     const double angle = i * atan(1.0) / 45.0;
     point[0] = radius * sin( angle );
     point[1] = radius * cos( angle );
@@ -114,7 +114,7 @@ int main(int, char *[])
     pointSet->SetPoint( pointId, point );
     pointSet->SetPointData( pointId, tangent );
     pointId++;
-    }
+  }
   // Software Guide : EndCodeSnippet
 
 
@@ -140,12 +140,12 @@ int main(int, char *[])
   PointIterator pointIterator = pointSet->GetPoints()->Begin();
   PointIterator pointEnd      = pointSet->GetPoints()->End();
 
-  while( pixelIterator != pixelEnd  && pointIterator != pointEnd )
-    {
+  while ( pixelIterator != pixelEnd  && pointIterator != pointEnd )
+  {
     pointIterator.Value() = pointIterator.Value() + pixelIterator.Value();
     ++pixelIterator;
     ++pointIterator;
-    }
+  }
   // Software Guide : EndCodeSnippet
 
 
@@ -178,11 +178,11 @@ int main(int, char *[])
   // Software Guide : BeginCodeSnippet
   pointIterator = pointSet->GetPoints()->Begin();
   pointEnd      = pointSet->GetPoints()->End();
-  while( pointIterator != pointEnd )
-    {
+  while ( pointIterator != pointEnd )
+  {
     std::cout << pointIterator.Value() << std::endl;
     ++pointIterator;
-    }
+  }
   // Software Guide : EndCodeSnippet
 
 

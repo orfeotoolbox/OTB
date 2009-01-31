@@ -54,14 +54,14 @@
 int main( int argc, char *argv[] )
 {
   if ( argc < 3 )
-    {
+  {
     std::cerr << "Missing parameters. " << std::endl;
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0]
               << " inputImageFile outputImageFile"
               << std::endl;
     return -1;
-    }
+  }
 
 // Software Guide : BeginLatex
 //
@@ -101,15 +101,15 @@ int main( int argc, char *argv[] )
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( argv[1] );
   try
-    {
+  {
     reader->Update();
-    }
+  }
   catch ( itk::ExceptionObject &err)
-    {
+  {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-    }
+  }
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -185,13 +185,13 @@ int main( int argc, char *argv[] )
 
 // Software Guide : BeginCodeSnippet
   for (it.GoToBegin(), out.GoToBegin(); !it.IsAtEnd(); ++it, ++out)
-    {
+  {
     float sum;
     sum = it.GetPixel(offset2) - it.GetPixel(offset1);
     sum += 2.0 * it.GetPixel(offset4) - 2.0 * it.GetPixel(offset3);
     sum += it.GetPixel(offset6) - it.GetPixel(offset5);
     out.Set(sum);
-    }
+  }
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -209,7 +209,7 @@ int main( int argc, char *argv[] )
   typedef otb::ImageFileWriter< WriteImageType > WriterType;
 
   typedef itk::RescaleIntensityImageFilter<
-               ImageType, WriteImageType > RescaleFilterType;
+  ImageType, WriteImageType > RescaleFilterType;
 
   RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
 
@@ -221,15 +221,15 @@ int main( int argc, char *argv[] )
   writer->SetFileName( argv[2] );
   writer->SetInput(rescaler->GetOutput());
   try
-    {
+  {
     writer->Update();
-    }
+  }
   catch ( itk::ExceptionObject &err)
-    {
+  {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-    }
+  }
 // Software Guide : EndCodeSnippet
 
 

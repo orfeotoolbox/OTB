@@ -57,14 +57,14 @@ int main( int argc, char *argv[] )
 {
   // Verify the number of parameters on the command line.
   if ( argc < 7 )
-    {
-      std::cerr << "Missing parameters. " << std::endl;
-      std::cerr << "Usage: " << std::endl;
-      std::cerr << argv[0]
-                << " inputImageFile outputImageFile startX startY sizeX sizeY"
-                << std::endl;
-      return -1;
-    }
+  {
+    std::cerr << "Missing parameters. " << std::endl;
+    std::cerr << "Usage: " << std::endl;
+    std::cerr << argv[0]
+              << " inputImageFile outputImageFile startX startY sizeX sizeY"
+              << std::endl;
+    return -1;
+  }
 
 // Software Guide : BeginLatex
 //
@@ -135,24 +135,24 @@ int main( int argc, char *argv[] )
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( argv[1] );
   try
-    {
+  {
     reader->Update();
-    }
+  }
   catch ( itk::ExceptionObject &err)
-    {
+  {
     std::cerr << "ExceptionObject caught !" << std::endl;
     std::cerr << err << std::endl;
     return -1;
-    }
+  }
 
   // Check that the region is contained within the input image.
   if ( ! reader->GetOutput()->GetRequestedRegion().IsInside( inputRegion ) )
-    {
+  {
     std::cerr << "Error" << std::endl;
     std::cerr << "The region " << inputRegion << "is not contained within the input image region "
               << reader->GetOutput()->GetRequestedRegion() << std::endl;
     return -1;
-    }
+  }
 
 // Software Guide : BeginLatex
 //
@@ -175,10 +175,10 @@ int main( int argc, char *argv[] )
   const ImageType::PointType& inputOrigin = reader->GetOutput()->GetOrigin();
   double   outputOrigin[ Dimension ];
 
-  for(unsigned int i=0; i< Dimension; i++)
-    {
+  for (unsigned int i=0; i< Dimension; i++)
+  {
     outputOrigin[i] = inputOrigin[i] + spacing[i] * inputStart[i];
-    }
+  }
 
   outputImage->SetSpacing( spacing );
   outputImage->SetOrigin(  outputOrigin );
@@ -204,9 +204,9 @@ int main( int argc, char *argv[] )
 
   for ( inputIt.GoToBegin(), outputIt.GoToBegin(); !inputIt.IsAtEnd();
         ++inputIt, ++outputIt)
-    {
+  {
     outputIt.Set(  inputIt.Get()  );
-    }
+  }
 // Software Guide : EndCodeSnippet
 
 
@@ -226,15 +226,15 @@ int main( int argc, char *argv[] )
   writer->SetInput( outputImage );
 
   try
-    {
+  {
     writer->Update();
-    }
+  }
   catch ( itk::ExceptionObject &err)
-    {
+  {
     std::cerr << "ExceptionObject caught !" << std::endl;
     std::cerr << err << std::endl;
     return -1;
-    }
+  }
 
 // Software Guide : BeginLatex
 //

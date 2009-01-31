@@ -112,14 +112,14 @@ int main( int argc, char *argv[] )
 {
   //   Verify the number of parameters on the command line.
   if ( argc < 4 )
-    {
+  {
     std::cerr << "Missing parameters. " << std::endl;
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0]
               << " inputImageFile outputImageFile projectionDirection"
               << std::endl;
     return -1;
-    }
+  }
 
 // Software Guide : BeginLatex
 //
@@ -153,16 +153,16 @@ int main( int argc, char *argv[] )
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( argv[1] );
   try
-    {
+  {
     reader->Update();
     inputImage = reader->GetOutput();
-    }
+  }
   catch ( itk::ExceptionObject &err)
-    {
+  {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-    }
+  }
 
 // Software Guide : BeginLatex
 //
@@ -180,13 +180,13 @@ int main( int argc, char *argv[] )
   unsigned int i, j;
   unsigned int direction[2];
   for (i = 0, j = 0; i < 3; ++i )
-    {
+  {
     if (i != projectionDirection)
-      {
+    {
       direction[j] = i;
       j++;
-      }
     }
+  }
 // Software Guide : EndCodeSnippet
 
 
@@ -257,50 +257,50 @@ int main( int argc, char *argv[] )
 // Software Guide : BeginCodeSnippet
   outputIt.GoToBegin();
   while ( ! outputIt.IsAtEnd() )
-    {
+  {
     while ( ! outputIt.IsAtEndOfLine() )
-      {
+    {
       outputIt.Set( itk::NumericTraits<unsigned short>::NonpositiveMin() );
       ++outputIt;
-      }
-    outputIt.NextLine();
     }
+    outputIt.NextLine();
+  }
 
   inputIt.GoToBegin();
   outputIt.GoToBegin();
 
-  while( !inputIt.IsAtEnd() )
-    {
+  while ( !inputIt.IsAtEnd() )
+  {
     while ( !inputIt.IsAtEndOfSlice() )
-      {
+    {
       while ( !inputIt.IsAtEndOfLine() )
-        {
+      {
         outputIt.Set( vnl_math_max( outputIt.Get(), inputIt.Get() ));
         ++inputIt;
         ++outputIt;
-        }
+      }
       outputIt.NextLine();
       inputIt.NextLine();
 
-      }
+    }
     outputIt.GoToBegin();
     inputIt.NextSlice();
-    }
+  }
   // Software Guide : EndCodeSnippet
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName( argv[2] );
   writer->SetInput(outputImage);
   try
-    {
+  {
     writer->Update();
-    }
+  }
   catch ( itk::ExceptionObject &err)
-    {
+  {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-    }
+  }
 
 // Software Guide : BeginLatex
 //

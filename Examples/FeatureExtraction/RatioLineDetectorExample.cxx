@@ -54,12 +54,12 @@
 int main( int argc, char * argv[] )
 {
 
-  if( argc != 6 )
-    {
+  if ( argc != 6 )
+  {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " outputEdgesImageFile outputDirectionsImageFile length width" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   //  Software Guide : BeginLatex
   //
@@ -129,7 +129,7 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::RescaleIntensityImageFilter< InternalImageType,
-                                            OutputImageType > RescalerType;
+  OutputImageType > RescalerType;
 
   // Software Guide : EndCodeSnippet
 

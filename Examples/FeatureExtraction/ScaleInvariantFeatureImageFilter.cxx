@@ -59,13 +59,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 int main( int argc, char *argv[])
 {
-  if( argc < 6 )
-    {
-      std::cerr << "Usage: " << std::endl;
-      std::cerr << argv[0] << "  inputImageFile   outputImageFile  " \
-    << "scaleFactor  angle  cropFactor rotateMiddle" << std::endl;
-      return EXIT_FAILURE;
-    }
+  if ( argc < 6 )
+  {
+    std::cerr << "Usage: " << std::endl;
+    std::cerr << argv[0] << "  inputImageFile   outputImageFile  " \
+              << "scaleFactor  angle  cropFactor rotateMiddle" << std::endl;
+    return EXIT_FAILURE;
+  }
 
   const unsigned int Dimension = 2;
 
@@ -124,7 +124,8 @@ int main( int argc, char *argv[])
   cropper->SetInput(fixedImageReader->GetOutput());
   FixedImageType::SizeType cropsize =
     fixedImageReader->GetOutput()->GetLargestPossibleRegion().GetSize();
-  for (unsigned int k = 0; k < Dimension; ++k) {
+  for (unsigned int k = 0; k < Dimension; ++k)
+  {
     if (k < 4)
       cropsize[k] = (int) (cropsize[k] * test_crop);
   }
@@ -163,7 +164,8 @@ int main( int argc, char *argv[])
   TestTransformType::Pointer inv_test_transform;
 
   // Synthetic test image
-  if (mode=='s') {
+  if (mode=='s')
+  {
     std::cerr << std::endl << "Synthetic image mode\n";
     TestTransformType::Pointer test_transform = TestTransformType::New();
 
@@ -173,37 +175,44 @@ int main( int argc, char *argv[])
 
     test_transform->SetIdentity();
     test_transform->Scale( 1.0 / test_scale);
-    if (rotate_middle) {
+    if (rotate_middle)
+    {
       std::cerr << "Rotation centred at middle of image." << std::endl;
       /* Cycle through each dimension and shift by half*/
       FixedImageType::SizeType size =
-  fixedImage->GetLargestPossibleRegion().GetSize();
+        fixedImage->GetLargestPossibleRegion().GetSize();
       for (unsigned int k = 0; k < Dimension; ++k)
-  translate_vector[k] = size[k]/2.0;
+        translate_vector[k] = size[k]/2.0;
       test_transform->SetCenter( translate_vector);
-    } else {
+    }
+    else
+    {
       std::cerr << "Rotation centred at origin." << std::endl;
     }
 #if 0
-    if (rotate_middle) {
+    if (rotate_middle)
+    {
       std::cerr << "Rotation centred at middle of image." << std::endl;
       /* Cycle through each dimension and shift by half*/
       FixedImageType::SizeType size =
-  fixedImage->GetLargestPossibleRegion().GetSize();
+        fixedImage->GetLargestPossibleRegion().GetSize();
       for (unsigned int k = 0; k < Dimension; ++k)
-  translate_vector[k] = size[k]/2.0;
+        translate_vector[k] = size[k]/2.0;
       test_transform->Translate( translate_vector);
-    } else {
+    }
+    else
+    {
       std::cerr << "Rotation centred at origin." << std::endl;
     }
 #endif
 
     test_transform->Rotate(0,1,test_rotate);
 #if 0
-    if (rotate_middle) {
+    if (rotate_middle)
+    {
       /* Cycle through each dimension and shift back*/
       for (unsigned int k = 0; k < Dimension; ++k)
-  translate_vector[k] = -translate_vector[k];
+        translate_vector[k] = -translate_vector[k];
       test_transform->Translate( translate_vector);
     }
 #endif
@@ -216,9 +225,9 @@ int main( int argc, char *argv[])
       SiftFilterType::ResampleFilterType::Pointer scaler = SiftFilterType::ResampleFilterType::New();
       scaler->SetInput(fixedImage);
       FixedImageType::SizeType size =
-  fixedImage->GetLargestPossibleRegion().GetSize();
+        fixedImage->GetLargestPossibleRegion().GetSize();
       for (unsigned int k = 0; k < Dimension; ++k)
-  size[k] = (unsigned int) floor(size[k] * test_scale);
+        size[k] = (unsigned int) floor(size[k] * test_scale);
       scaler->SetSize( size );
       scaler->SetOutputSpacing(fixedImage->GetSpacing());
       scaler->SetTransform(test_transform);

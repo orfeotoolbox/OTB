@@ -59,11 +59,11 @@
 int main(int argc, char * argv[])
 {
 
-  if(argc<9)
+  if (argc<9)
   {
     std::cout << argv[0] <<" <output_filename> <Longitude Output Orign point>";
-        std::cout << " <Latitude Output Origin point> <X Output Size> <Y Output size>";
-        std::cout << " <X Spacing> <Y Spacing> <DEM folder path>"  << std::endl;
+    std::cout << " <Latitude Output Origin point> <X Output Size> <Y Output size>";
+    std::cout << " <X Spacing> <Y Spacing> <DEM folder path>"  << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -119,7 +119,7 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   typedef otb::Functor::ScalarToRainbowRGBPixelFunctor<PixelType> ColorMapFunctorType;
   typedef itk::UnaryFunctorImageFilter<ImageType,
-    RGBImageType, ColorMapFunctorType> ColorMapFilterType;
+  RGBImageType, ColorMapFunctorType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
   colormapper->GetFunctor().SetMaximum(4000);
   colormapper->GetFunctor().SetMinimum(0);
@@ -135,23 +135,23 @@ int main(int argc, char * argv[])
   {
     writer->Update();
   }
-  catch( itk::ExceptionObject & excep )
+  catch ( itk::ExceptionObject & excep )
   {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
   }
-  catch( ... )
+  catch ( ... )
   {
     std::cout << "Unknown exception !" << std::endl;
     return EXIT_FAILURE;
   }
 
-   // Software Guide : BeginLatex
+  // Software Guide : BeginLatex
   //
   // Figure~\ref{fig:RAINBOW_FILTER} shows effect of applying the filter to
   // a gray level image.
   //
- // \begin{figure}
+// \begin{figure}
   // \center
   // \includegraphics[width=0.44\textwidth]{pretty_DEMToImageGenerator.eps}
   // \includegraphics[width=0.44\textwidth]{DEMToRainbowImageGenerator.eps}
@@ -159,7 +159,7 @@ int main(int argc, char * argv[])
   // data (left) and the same area in color representation.}
   // \label{fig:RAINBOW_FILTER}
   // \end{figure}
-   //  Software Guide : EndLatex
+  //  Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

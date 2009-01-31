@@ -62,9 +62,9 @@ public:
   typedef               float    ExternalType;
 
   static ExternalType Get( const InternalType & input )
-    {
-      return static_cast<ExternalType>( input.GetRed() );
-    }
+  {
+    return static_cast<ExternalType>( input.GetRed() );
+  }
 };
 // Software Guide : EndCodeSnippet
 
@@ -85,12 +85,12 @@ public:
 
 int main( int argc, char *argv[] )
 {
-  if( argc < 3 )
-    {
+  if ( argc < 3 )
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << "ImageAdaptor2   inputRGBFileName outputRedChannelFileName" << std::endl;
     return -1;
-    }
+  }
 
 
 //  Software Guide : BeginLatex
@@ -111,7 +111,7 @@ int main( int argc, char *argv[] )
   typedef otb::Image< InputPixelType, Dimension >   ImageType;
 
   typedef itk::ImageAdaptor<  ImageType,
-                              RedChannelPixelAccessor > ImageAdaptorType;
+  RedChannelPixelAccessor > ImageAdaptorType;
 
   ImageAdaptorType::Pointer adaptor = ImageAdaptorType::New();
 // Software Guide : EndCodeSnippet
@@ -152,8 +152,8 @@ int main( int argc, char *argv[] )
 // Software Guide : BeginCodeSnippet
   typedef otb::Image< unsigned char, Dimension >   OutputImageType;
   typedef itk::RescaleIntensityImageFilter< ImageAdaptorType,
-                                            OutputImageType
-                                               >   RescalerType;
+  OutputImageType
+  >   RescalerType;
 
   RescalerType::Pointer rescaler = RescalerType::New();
   typedef otb::ImageFileWriter< OutputImageType >   WriterType;
@@ -190,14 +190,14 @@ int main( int argc, char *argv[] )
 
 // Software Guide : BeginCodeSnippet
   try
-    {
+  {
     writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
+  }
+  catch ( itk::ExceptionObject & excp )
+  {
     std::cerr << "Exception caught " << excp << std::endl;
     return 1;
-    }
+  }
 // Software Guide : EndCodeSnippet
 
 
@@ -223,9 +223,9 @@ int main( int argc, char *argv[] )
     typedef               float    ExternalType;
 
     static ExternalType Get( const InternalType & input )
-      {
-        return static_cast<ExternalType>( input.GetGreen() );
-      }
+    {
+      return static_cast<ExternalType>( input.GetGreen() );
+    }
   };
 // Software Guide : EndCodeSnippet
 
@@ -248,9 +248,9 @@ int main( int argc, char *argv[] )
     typedef               float    ExternalType;
 
     static ExternalType Get( const InternalType & input )
-      {
-        return static_cast<ExternalType>( input.GetBlue() );
-      }
+    {
+      return static_cast<ExternalType>( input.GetBlue() );
+    }
   };
 // Software Guide : EndCodeSnippet
 

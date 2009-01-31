@@ -67,12 +67,12 @@ int main( int argc, char * argv[] )
 {
 
   // R\'ecuperation de arguments
-  if( argc < 7 )
-    {
+  if ( argc < 7 )
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << "  inputImageFile outputImageFileRGB outputImageFileLastBand startX startY sizeX sizeY" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
 //  Software Guide : BeginLatex
 //
@@ -118,7 +118,7 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::MultiChannelExtractROI< InputPixelType,
-                                             OutputPixelType >  ExtractROIFilterType;
+  OutputPixelType >  ExtractROIFilterType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -224,7 +224,7 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::MultiToMonoChannelExtractROI< InputPixelType,
-                                             OutputPixelType >  ExtractROIMonoFilterType;
+  OutputPixelType >  ExtractROIMonoFilterType;
   // Software Guide : EndCodeSnippet
 
   ExtractROIMonoFilterType::Pointer extractROIMonoFilter = ExtractROIMonoFilterType::New();

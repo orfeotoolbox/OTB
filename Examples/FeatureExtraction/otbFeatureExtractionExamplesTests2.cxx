@@ -25,12 +25,12 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(ExtractRoadByStepsExampleTest);
-REGISTER_TEST(ExtractRoadExampleTest);
-REGISTER_TEST(SeamCarvingExampleTest);
-REGISTER_TEST(SeamCarvingOtherExampleTest);
+  REGISTER_TEST(ExtractRoadByStepsExampleTest);
+  REGISTER_TEST(ExtractRoadExampleTest);
+  REGISTER_TEST(SeamCarvingExampleTest);
+  REGISTER_TEST(SeamCarvingOtherExampleTest);
 //REGISTER_TEST(ImageToSIFTKeyPointSetFilterTest);
-REGISTER_TEST(ScaleInvariantFeatureImageFilterTest);
+  REGISTER_TEST(ScaleInvariantFeatureImageFilterTest);
 }
 
 #undef main

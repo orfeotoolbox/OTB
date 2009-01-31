@@ -50,12 +50,12 @@
 int main( int argc, char * argv[] )
 {
 
-  if( argc != 5)
-    {
+  if ( argc != 5)
+  {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " outputEdgesImageFile length width" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   //  Software Guide : BeginLatex
   //
@@ -90,7 +90,7 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::AssymmetricFusionOfLineDetectorImageFilter< InternalImageType,
-                                               InternalImageType >  FilterType;
+  InternalImageType >  FilterType;
   // Software Guide : EndCodeSnippet
 
 
@@ -126,7 +126,7 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::RescaleIntensityImageFilter< InternalImageType,
-                                            OutputImageType > RescalerType;
+  OutputImageType > RescalerType;
 
   // Software Guide : EndCodeSnippet
 

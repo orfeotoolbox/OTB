@@ -59,11 +59,11 @@
 
 int main(int argc, char * argv[])
 {
-  if(argc<10)
-    {
-      std::cout << argv[0] <<" output filename , pretty output filename , Easting Output Orign point , Northing Output Origin point , X Output Size, Y Output size , X Spacing , Y Spacing, DEM folder path"  << std::endl;
-      return EXIT_FAILURE;
-    }
+  if (argc<10)
+  {
+    std::cout << argv[0] <<" output filename , pretty output filename , Easting Output Orign point , Northing Output Origin point , X Output Size, Y Output size , X Spacing , Y Spacing, DEM folder path"  << std::endl;
+    return EXIT_FAILURE;
+  }
   //  Software Guide : BeginLatex
   //
   // The image type is now defined using pixel type and
@@ -73,7 +73,7 @@ int main(int argc, char * argv[])
 
   char * folderPath = argv[9];
   char * outputName = argv[1];
-   // Software Guide : BeginCodeSnippet
+  // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
   typedef otb::Image<double , Dimension>           ImageType;
   // Software Guide : EndCodeSnippet
@@ -124,7 +124,7 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
   object->SetDEMDirectoryPath(folderPath);
- // Software Guide : EndCodeSnippet
+// Software Guide : EndCodeSnippet
 
 
 
@@ -169,9 +169,9 @@ int main(int argc, char * argv[])
   //
   //  Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
- SpacingType spacing;
- spacing[0] = ::atof(argv[7]);
- spacing[1] = ::atof(argv[8]);
+  SpacingType spacing;
+  spacing[0] = ::atof(argv[7]);
+  spacing[1] = ::atof(argv[8]);
 
   object->SetOutputSpacing(spacing);
   // Software Guide : EndCodeSnippet
@@ -198,77 +198,77 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-   try
-    {
-      writer->Update();
-    }
+  try
+  {
+    writer->Update();
+  }
 
-  catch( itk::ExceptionObject & err )
-    {
-      std::cout << "Exception itk::ExceptionObject thrown !" << std::endl;
-      std::cout << err << std::endl;
+  catch ( itk::ExceptionObject & err )
+  {
+    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl;
+    std::cout << err << std::endl;
     return EXIT_FAILURE;
-    }
-   // Software Guide : EndCodeSnippet
-  catch( ... )
-    {
-      std::cout << "Unknown exception thrown !" << std::endl;
-      return EXIT_FAILURE;
-    }
+  }
+  // Software Guide : EndCodeSnippet
+  catch ( ... )
+  {
+    std::cout << "Unknown exception thrown !" << std::endl;
+    return EXIT_FAILURE;
+  }
 
 
-   // Pretty image creation for the printing
-   typedef otb::Image<unsigned char, Dimension>                                  OutputPrettyImageType;
-   typedef otb::ImageFileWriter<OutputPrettyImageType>                           WriterPrettyType;
-   typedef itk::RescaleIntensityImageFilter< ImageType, OutputPrettyImageType>   RescalerType;
-   typedef itk::ThresholdImageFilter< ImageType >                                ThresholderType;
+  // Pretty image creation for the printing
+  typedef otb::Image<unsigned char, Dimension>                                  OutputPrettyImageType;
+  typedef otb::ImageFileWriter<OutputPrettyImageType>                           WriterPrettyType;
+  typedef itk::RescaleIntensityImageFilter< ImageType, OutputPrettyImageType>   RescalerType;
+  typedef itk::ThresholdImageFilter< ImageType >                                ThresholderType;
 
-   ThresholderType::Pointer  thresholder  = ThresholderType::New();
-   RescalerType::Pointer     rescaler     = RescalerType::New();
-   WriterPrettyType::Pointer prettyWriter = WriterPrettyType::New();
+  ThresholderType::Pointer  thresholder  = ThresholderType::New();
+  RescalerType::Pointer     rescaler     = RescalerType::New();
+  WriterPrettyType::Pointer prettyWriter = WriterPrettyType::New();
 
-   thresholder->SetInput(  object->GetOutput() );
-   thresholder->SetOutsideValue( 0.0 );
-   thresholder->ThresholdBelow( 0.0 );
-   thresholder->Update();
+  thresholder->SetInput(  object->GetOutput() );
+  thresholder->SetOutsideValue( 0.0 );
+  thresholder->ThresholdBelow( 0.0 );
+  thresholder->Update();
 
-   rescaler->SetInput( thresholder->GetOutput() );
-   rescaler->SetOutputMinimum(0);
-   rescaler->SetOutputMaximum(255);
-   prettyWriter->SetFileName( argv[2] );
+  rescaler->SetInput( thresholder->GetOutput() );
+  rescaler->SetOutputMinimum(0);
+  rescaler->SetOutputMaximum(255);
+  prettyWriter->SetFileName( argv[2] );
 
-   prettyWriter->SetInput( rescaler->GetOutput() );
-   try
-     {
-       prettyWriter->Update();
-     }
-   catch( itk::ExceptionObject & excep )
-     {
-       std::cerr << "Exception caught !" << std::endl;
-       std::cerr << excep << std::endl;
-     }
-   catch( ... )
-     {
-       std::cout << "Unknown exception !" << std::endl;
-       return EXIT_FAILURE;
-     }
+  prettyWriter->SetInput( rescaler->GetOutput() );
+  try
+  {
+    prettyWriter->Update();
+  }
+  catch ( itk::ExceptionObject & excep )
+  {
+    std::cerr << "Exception caught !" << std::endl;
+    std::cerr << excep << std::endl;
+  }
+  catch ( ... )
+  {
+    std::cout << "Unknown exception !" << std::endl;
+    return EXIT_FAILURE;
+  }
 
-   return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 
-   // Software Guide : BeginLatex
-   //
-   // Let's now run this example using as input the SRTM data contained in
-   // \code{DEM\_srtm} folder. Figure \ref{fig:DEMToOrthoImageGenerator}
-   // shows the obtained DEM. Invalid data values -- hidden areas due
-   // to SAR shadowing -- are set to zero.
-   //
-   //
-   // \begin{figure} \center
-   // \includegraphics[width=0.24\textwidth]{pretty_DEMToOrthoImageGenerator.eps}
-   // \itkcaption[ARVI Example]{DEMToOrthoImageGenerator image.}
-   // \label{fig:DEMToOrthoImageGenerator}
-   // \end{figure}
-   //
-   //  Software Guide : EndLatex
+  // Software Guide : BeginLatex
+  //
+  // Let's now run this example using as input the SRTM data contained in
+  // \code{DEM\_srtm} folder. Figure \ref{fig:DEMToOrthoImageGenerator}
+  // shows the obtained DEM. Invalid data values -- hidden areas due
+  // to SAR shadowing -- are set to zero.
+  //
+  //
+  // \begin{figure} \center
+  // \includegraphics[width=0.24\textwidth]{pretty_DEMToOrthoImageGenerator.eps}
+  // \itkcaption[ARVI Example]{DEMToOrthoImageGenerator image.}
+  // \label{fig:DEMToOrthoImageGenerator}
+  // \end{figure}
+  //
+  //  Software Guide : EndLatex
 
 }

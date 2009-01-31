@@ -53,13 +53,13 @@ PURPOSE.  See the above copyright notices for more information.
 int main(int argc, char * argv[])
 {
 
-      const char* inputFilename = argv[1];
-      const char* originalFilename = argv[2];
-      const char* outputFilename1 = argv[3];
-      const bool segmentDark = atoi(argv[4]);
-      const float seedsQuantile = atof(argv[5]);
-      const float segmentationQuantile = atof(argv[6]);
-      const unsigned int minObjectSize = atoi(argv[7]);
+  const char* inputFilename = argv[1];
+  const char* originalFilename = argv[2];
+  const char* outputFilename1 = argv[3];
+  const bool segmentDark = atoi(argv[4]);
+  const float seedsQuantile = atof(argv[5]);
+  const float segmentationQuantile = atof(argv[6]);
+  const unsigned int minObjectSize = atoi(argv[7]);
 
 // Software Guide : BeginLatex
 //
@@ -72,18 +72,18 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-      const unsigned int Dimension = 2;
-      typedef double InputPixelType;
-      typedef unsigned short LabelPixelType;
-      typedef itk::RGBPixel<unsigned char>   RGBPixelType;
+  const unsigned int Dimension = 2;
+  typedef double InputPixelType;
+  typedef unsigned short LabelPixelType;
+  typedef itk::RGBPixel<unsigned char>   RGBPixelType;
 
 
-      typedef otb::Image<InputPixelType,Dimension> InputImageType;
-      typedef otb::Image<LabelPixelType,Dimension> LabelImageType;
-      typedef otb::Image<RGBPixelType, 2>    RGBImageType;
+  typedef otb::Image<InputPixelType,Dimension> InputImageType;
+  typedef otb::Image<LabelPixelType,Dimension> LabelImageType;
+  typedef otb::Image<RGBPixelType, 2>    RGBImageType;
 
-      typedef otb::ImageFileReader<InputImageType> ReaderType;
-      typedef otb::ImageFileWriter<RGBImageType> WriterType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileWriter<RGBImageType> WriterType;
 
 // Software Guide : EndCodeSnippet
 
@@ -96,9 +96,9 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-      typedef otb::MorphologicalPyramid::Segmenter<InputImageType,
-                                                      LabelImageType>
-                                                  SegmenterType;
+  typedef otb::MorphologicalPyramid::Segmenter<InputImageType,
+  LabelImageType>
+  SegmenterType;
 
 // Software Guide : EndCodeSnippet
 
@@ -113,10 +113,10 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-      ReaderType::Pointer reader = ReaderType::New();
-      reader->SetFileName(inputFilename);
-      ReaderType::Pointer reader2 = ReaderType::New();
-      reader2->SetFileName(originalFilename);
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(inputFilename);
+  ReaderType::Pointer reader2 = ReaderType::New();
+  reader2->SetFileName(originalFilename);
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -134,13 +134,13 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-      SegmenterType::Pointer segmenter = SegmenterType::New();
-      segmenter->SetDetailsImage(reader->GetOutput());
-      segmenter->SetOriginalImage(reader2->GetOutput());
-      segmenter->SetSegmentDarkDetailsBool(segmentDark);
-      segmenter->SetSeedsQuantile(seedsQuantile);
-      segmenter->SetConnectedThresholdQuantile(segmentationQuantile);
-      segmenter->SetMinimumObjectSize(minObjectSize);
+  SegmenterType::Pointer segmenter = SegmenterType::New();
+  segmenter->SetDetailsImage(reader->GetOutput());
+  segmenter->SetOriginalImage(reader2->GetOutput());
+  segmenter->SetSegmentDarkDetailsBool(segmentDark);
+  segmenter->SetSeedsQuantile(seedsQuantile);
+  segmenter->SetConnectedThresholdQuantile(segmentationQuantile);
+  segmenter->SetMinimumObjectSize(minObjectSize);
 // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -161,9 +161,9 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef itk::Functor::ScalarToRGBPixelFunctor<LabelPixelType>
-                                                         ColorMapFunctorType;
+  ColorMapFunctorType;
   typedef itk::UnaryFunctorImageFilter<LabelImageType,
-                      RGBImageType, ColorMapFunctorType> ColorMapFilterType;
+  RGBImageType, ColorMapFunctorType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
   // Software Guide : EndCodeSnippet
 
@@ -205,5 +205,5 @@ int main(int argc, char * argv[])
 
 
 
-      return EXIT_SUCCESS;
-    }
+  return EXIT_SUCCESS;
+}

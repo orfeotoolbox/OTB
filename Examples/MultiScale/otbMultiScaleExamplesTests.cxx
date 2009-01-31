@@ -25,9 +25,9 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(MorphologicalPyramidAnalysisFilterExampleTest);
-REGISTER_TEST(MorphologicalPyramidSynthesisFilterExampleTest);
-REGISTER_TEST(MorphologicalPyramidSegmenterExampleTest);
+  REGISTER_TEST(MorphologicalPyramidAnalysisFilterExampleTest);
+  REGISTER_TEST(MorphologicalPyramidSynthesisFilterExampleTest);
+  REGISTER_TEST(MorphologicalPyramidSegmenterExampleTest);
 }
 
 #undef main

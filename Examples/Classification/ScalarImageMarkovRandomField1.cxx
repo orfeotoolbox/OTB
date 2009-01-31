@@ -74,8 +74,8 @@
 
 int main( int argc, char * argv [] )
 {
-  if( argc < 5 )
-    {
+  if ( argc < 5 )
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0];
     std::cerr << " inputScalarImage inputLabeledImage";
@@ -83,7 +83,7 @@ int main( int argc, char * argv [] )
     std::cerr << " smoothingFactor numberOfClasses";
     std::cerr << " mean1 mean2 ... meanN " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   const char * inputImageFileName      = argv[1];
   const char * inputLabelImageFileName = argv[2];
@@ -95,15 +95,15 @@ int main( int argc, char * argv [] )
 
   const unsigned int numberOfArgumentsBeforeMeans = 7;
 
-  if( static_cast<unsigned int>(argc) <
-      numberOfClasses + numberOfArgumentsBeforeMeans )
-    {
+  if ( static_cast<unsigned int>(argc) <
+       numberOfClasses + numberOfArgumentsBeforeMeans )
+  {
     std::cerr << "Error: " << std::endl;
     std::cerr << numberOfClasses << " classes has been specified ";
     std::cerr << "but no enough means have been provided in the command ";
     std::cerr << "line arguments " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
 
 
@@ -168,10 +168,10 @@ int main( int argc, char * argv [] )
   typedef otb::Image< ArrayPixelType, Dimension > ArrayImageType;
 
   typedef itk::ScalarToArrayCastImageFilter<
-                     ImageType, ArrayImageType > ScalarToArrayFilterType;
+  ImageType, ArrayImageType > ScalarToArrayFilterType;
 
   ScalarToArrayFilterType::Pointer
-    scalarToArrayFilter = ScalarToArrayFilterType::New();
+  scalarToArrayFilter = ScalarToArrayFilterType::New();
   scalarToArrayFilter->SetInput( reader->GetOutput() );
 // Software Guide : EndCodeSnippet
 
@@ -242,11 +242,11 @@ int main( int argc, char * argv [] )
 
 // Software Guide : BeginCodeSnippet
   typedef itk::ImageClassifierBase<
-                              ArrayImageType,
-                              LabelImageType >   SupervisedClassifierType;
+  ArrayImageType,
+  LabelImageType >   SupervisedClassifierType;
 
   SupervisedClassifierType::Pointer classifier =
-                                         SupervisedClassifierType::New();
+    SupervisedClassifierType::New();
 // Software Guide : EndCodeSnippet
 
 
@@ -282,18 +282,18 @@ int main( int argc, char * argv [] )
 
 // Software Guide : BeginCodeSnippet
   typedef itk::Statistics::DistanceToCentroidMembershipFunction<
-                                                    ArrayPixelType >
-                                                       MembershipFunctionType;
+  ArrayPixelType >
+  MembershipFunctionType;
 
   typedef MembershipFunctionType::Pointer MembershipFunctionPointer;
 
 
   double meanDistance = 0;
   vnl_vector<double> centroid(1);
-  for( unsigned int i=0; i < numberOfClasses; i++ )
-    {
+  for ( unsigned int i=0; i < numberOfClasses; i++ )
+  {
     MembershipFunctionPointer membershipFunction =
-                                         MembershipFunctionType::New();
+      MembershipFunctionType::New();
 
     centroid[0] = atof( argv[i+numberOfArgumentsBeforeMeans] );
 
@@ -301,7 +301,7 @@ int main( int argc, char * argv [] )
 
     classifier->AddMembershipFunction( membershipFunction );
     meanDistance += static_cast< double > (centroid[0]);
-    }
+  }
   meanDistance /= numberOfClasses;
 // Software Guide : EndCodeSnippet
 
@@ -363,16 +363,16 @@ int main( int argc, char * argv [] )
 
 // Software Guide : BeginCodeSnippet
   double totalWeight = 0;
-  for(std::vector< double >::const_iterator wcIt = weights.begin();
-      wcIt != weights.end(); ++wcIt )
-    {
+  for (std::vector< double >::const_iterator wcIt = weights.begin();
+       wcIt != weights.end(); ++wcIt )
+  {
     totalWeight += *wcIt;
-    }
-  for(std::vector< double >::iterator wIt = weights.begin();
-      wIt != weights.end(); wIt++ )
-    {
+  }
+  for (std::vector< double >::iterator wIt = weights.begin();
+       wIt != weights.end(); wIt++ )
+  {
     *wIt = static_cast< double > ( (*wIt) * meanDistance / (2 * totalWeight));
-    }
+  }
 
   mrfFilter->SetMRFNeighborhoodWeight( weights );
 // Software Guide : EndCodeSnippet
@@ -410,7 +410,7 @@ int main( int argc, char * argv [] )
   // Rescale outputs to the dynamic range of the display
   typedef otb::Image< unsigned char, Dimension > RescaledOutputImageType;
   typedef itk::RescaleIntensityImageFilter<
-             OutputImageType, RescaledOutputImageType >   RescalerType;
+  OutputImageType, RescaledOutputImageType >   RescalerType;
 
   RescalerType::Pointer intensityRescaler = RescalerType::New();
   intensityRescaler->SetOutputMinimum(   0 );
@@ -441,16 +441,16 @@ int main( int argc, char * argv [] )
 
 // Software Guide : BeginCodeSnippet
   try
-    {
+  {
     writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
+  }
+  catch ( itk::ExceptionObject & excp )
+  {
     std::cerr << "Problem encountered while writing ";
     std::cerr << " image file : " << argv[2] << std::endl;
     std::cerr << excp << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 // Software Guide : EndCodeSnippet
 
   std::cout << "Number of Iterations : ";

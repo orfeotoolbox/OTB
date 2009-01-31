@@ -102,29 +102,29 @@ public:
   typedef   const OptimizerType   *    OptimizerPointer;
 
   void Execute(itk::Object *caller, const itk::EventObject & event)
-    {
-      Execute( (const itk::Object *)caller, event);
-    }
+  {
+    Execute( (const itk::Object *)caller, event);
+  }
 
   void Execute(const itk::Object * object, const itk::EventObject & event)
+  {
+    OptimizerPointer optimizer =
+      dynamic_cast< OptimizerPointer >( object );
+    if ( ! itk::IterationEvent().CheckEvent( &event ) )
     {
-      OptimizerPointer optimizer =
-        dynamic_cast< OptimizerPointer >( object );
-      if( ! itk::IterationEvent().CheckEvent( &event ) )
-        {
-        return;
-        }
-      std::cout << optimizer->GetCurrentIteration() << "   ";
-      std::cout << optimizer->GetValue() << "   ";
-      std::cout << optimizer->GetCurrentPosition() << std::endl;
+      return;
     }
+    std::cout << optimizer->GetCurrentIteration() << "   ";
+    std::cout << optimizer->GetValue() << "   ";
+    std::cout << optimizer->GetCurrentPosition() << std::endl;
+  }
 };
 
 
 int main( int argc, char *argv[] )
 {
-  if( argc < 4 )
-    {
+  if ( argc < 4 )
+  {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " fixedImageFile  movingImageFile ";
@@ -132,7 +132,7 @@ int main( int argc, char *argv[] )
     std::cerr << " [differenceBeforeRegistration] ";
     std::cerr << " [initialStepLength] "<< std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   const    unsigned int    Dimension = 2;
   typedef  unsigned char   PixelType;
@@ -158,14 +158,14 @@ int main( int argc, char *argv[] )
 
   typedef itk::RegularStepGradientDescentOptimizer       OptimizerType;
   typedef itk::MeanSquaresImageToImageMetric<
-                                    FixedImageType,
-                                    MovingImageType >    MetricType;
+  FixedImageType,
+  MovingImageType >    MetricType;
   typedef itk:: LinearInterpolateImageFunction<
-                                    MovingImageType,
-                                    double          >    InterpolatorType;
+  MovingImageType,
+  double          >    InterpolatorType;
   typedef itk::ImageRegistrationMethod<
-                                    FixedImageType,
-                                    MovingImageType >    RegistrationType;
+  FixedImageType,
+  MovingImageType >    RegistrationType;
 
   MetricType::Pointer         metric        = MetricType::New();
   OptimizerType::Pointer      optimizer     = OptimizerType::New();
@@ -203,7 +203,7 @@ int main( int argc, char *argv[] )
   fixedImageReader->SetFileName(  argv[1] );
   movingImageReader->SetFileName( argv[2] );
 
-    //  Software Guide : BeginLatex
+  //  Software Guide : BeginLatex
   //
   //  Since we are working with high resolution images and expected
   //  shifts are larger than the resolution, we will need to smooth
@@ -215,10 +215,10 @@ int main( int argc, char *argv[] )
   // Software Guide : BeginCodeSnippet
 
   typedef itk::MeanImageFilter<
-               FixedImageType, FixedImageType >  FixedFilterType;
+  FixedImageType, FixedImageType >  FixedFilterType;
 
   typedef itk::MeanImageFilter<
-               MovingImageType, MovingImageType >  MovingFilterType;
+  MovingImageType, MovingImageType >  MovingFilterType;
 
 
 
@@ -258,7 +258,7 @@ int main( int argc, char *argv[] )
   fixedImageReader->Update();
 
   registration->SetFixedImageRegion(
-     fixedImageReader->GetOutput()->GetBufferedRegion() );
+    fixedImageReader->GetOutput()->GetBufferedRegion() );
 
 
   //  Software Guide : BeginLatex
@@ -415,10 +415,10 @@ int main( int argc, char *argv[] )
   double initialStepLength = 0.1;
   // Software Guide : EndCodeSnippet
 
-  if( argc > 6 )
-    {
+  if ( argc > 6 )
+  {
     initialStepLength = atof( argv[6] );
-    }
+  }
 
   // Software Guide : BeginCodeSnippet
   optimizer->SetRelaxationFactor( 0.6 );
@@ -434,18 +434,18 @@ int main( int argc, char *argv[] )
   optimizer->AddObserver( itk::IterationEvent(), observer );
 
   try
-    {
+  {
     registration->Update();
-    }
-  catch( itk::ExceptionObject & err )
-    {
+  }
+  catch ( itk::ExceptionObject & err )
+  {
     std::cerr << "ExceptionObject caught !" << std::endl;
     std::cerr << err << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   OptimizerType::ParametersType finalParameters =
-                    registration->GetLastTransformParameters();
+    registration->GetLastTransformParameters();
 
   const double finalAngle           = finalParameters[0];
   const double finalRotationCenterX = finalParameters[1];
@@ -540,8 +540,8 @@ int main( int argc, char *argv[] )
 
 
   typedef itk::ResampleImageFilter<
-                            MovingImageType,
-                            FixedImageType >    ResampleFilterType;
+  MovingImageType,
+  FixedImageType >    ResampleFilterType;
 
   TransformType::Pointer finalTransform = TransformType::New();
 
@@ -566,24 +566,24 @@ int main( int argc, char *argv[] )
   writer->SetInput( resample->GetOutput()   );
 
   try
-    {
+  {
     writer->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
+  }
+  catch ( itk::ExceptionObject & excp )
+  {
     std::cerr << "ExceptionObject while writing the resampled image !" << std::endl;
     std::cerr << excp << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
 
 
   typedef itk::Image< float, Dimension > DifferenceImageType;
 
   typedef itk::SubtractImageFilter<
-                           FixedImageType,
-                           FixedImageType,
-                           DifferenceImageType > DifferenceFilterType;
+  FixedImageType,
+  FixedImageType,
+  DifferenceImageType > DifferenceFilterType;
 
   DifferenceFilterType::Pointer difference = DifferenceFilterType::New();
 
@@ -592,8 +592,8 @@ int main( int argc, char *argv[] )
   typedef itk::Image< OutputPixelType, Dimension > OutputImageType;
 
   typedef itk::RescaleIntensityImageFilter<
-                                  DifferenceImageType,
-                                  OutputImageType >   RescalerType;
+  DifferenceImageType,
+  OutputImageType >   RescalerType;
 
   RescalerType::Pointer intensityRescaler = RescalerType::New();
 
@@ -615,32 +615,32 @@ int main( int argc, char *argv[] )
 
 
   try
-    {
+  {
     // Compute the difference image between the
     // fixed and moving image after registration.
-    if( argc > 4 )
-      {
+    if ( argc > 4 )
+    {
       writer2->SetFileName( argv[4] );
       writer2->Update();
-      }
+    }
 
     // Compute the difference image between the
     // fixed and resampled moving image after registration.
     TransformType::Pointer identityTransform = TransformType::New();
     identityTransform->SetIdentity();
     resample->SetTransform( identityTransform );
-    if( argc > 5 )
-      {
+    if ( argc > 5 )
+    {
       writer2->SetFileName( argv[5] );
       writer2->Update();
-      }
     }
-  catch( itk::ExceptionObject & excp )
-    {
+  }
+  catch ( itk::ExceptionObject & excp )
+  {
     std::cerr << "Error while writing difference images" << std::endl;
     std::cerr << excp << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
 
 

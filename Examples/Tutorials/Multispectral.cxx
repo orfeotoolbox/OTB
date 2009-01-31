@@ -83,7 +83,7 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
 
   typedef otb::MultiToMonoChannelExtractROI<PixelType, PixelType>
-      ExtractChannelType;
+  ExtractChannelType;
   ExtractChannelType::Pointer extractChannel = ExtractChannelType::New();
 
   // Software Guide : EndCodeSnippet
@@ -107,7 +107,7 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
   reader->UpdateOutputInformation();
   extractChannel->SetExtractionRegion(
-                   reader->GetOutput()->GetLargestPossibleRegion());
+    reader->GetOutput()->GetLargestPossibleRegion());
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -189,7 +189,7 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::PerBandVectorImageFilter
-      <VectorImageType, VectorImageType, ShiftScaleType> VectorFilterType;
+  <VectorImageType, VectorImageType, ShiftScaleType> VectorFilterType;
   VectorFilterType::Pointer vectorFilter = VectorFilterType::New();
   vectorFilter->SetFilter(shiftScale);
 

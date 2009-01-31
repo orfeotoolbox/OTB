@@ -61,15 +61,15 @@
 
 int main( int argc, char * argv[] )
 {
-  if( argc < 5 )
-    {
+  if ( argc < 5 )
+  {
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImageFile outputDistanceMapImageFile ";
     std::cerr << " outputVoronoiMapImageFilter ";
     std::cerr << " outputVectorMapImageFilter ";
     std::cerr << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   //  Software Guide : BeginLatex
   //
@@ -104,13 +104,13 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::DanielssonDistanceMapImageFilter<
-               InputImageType, OutputImageType >  FilterType;
+  InputImageType, OutputImageType >  FilterType;
   FilterType::Pointer filter = FilterType::New();
   // Software Guide : EndCodeSnippet
 
 
   typedef itk::RescaleIntensityImageFilter<
-                   OutputImageType, OutputImageType > RescalerType;
+  OutputImageType, OutputImageType > RescalerType;
   RescalerType::Pointer scaler = RescalerType::New();
 
   //
@@ -260,14 +260,14 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   try
-    {
+  {
     offsetWriter->Update();
-    }
-  catch( itk::ExceptionObject exp )
-    {
+  }
+  catch ( itk::ExceptionObject exp )
+  {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr <<     exp    << std::endl;
-    }
+  }
   // Software Guide : EndCodeSnippet
 
 

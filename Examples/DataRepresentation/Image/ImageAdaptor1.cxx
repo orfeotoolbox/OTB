@@ -69,14 +69,14 @@ public:
   typedef float         ExternalType;
 
   static void Set(InternalType & output, const ExternalType & input)
-    {
-      output = static_cast<InternalType>( input );
-    }
+  {
+    output = static_cast<InternalType>( input );
+  }
 
   static ExternalType Get( const InternalType & input )
-    {
-      return static_cast<ExternalType>( input );
-    }
+  {
+    return static_cast<ExternalType>( input );
+  }
 };
 // Software Guide : EndCodeSnippet
 
@@ -89,12 +89,12 @@ public:
 
 int main( int argc, char *argv[] )
 {
-  if( argc < 2 )
-    {
+  if ( argc < 2 )
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << "ImageAdaptor1   inputFileName" << std::endl;
     return -1;
-    }
+  }
 
 
 //  Software Guide : BeginLatex
@@ -162,16 +162,16 @@ int main( int argc, char *argv[] )
 
   double sum = 0.0;
   it.GoToBegin();
-  while( !it.IsAtEnd() )
-    {
+  while ( !it.IsAtEnd() )
+  {
     float value = it.Get();
     sum += value;
     ++it;
-    }
+  }
 // Software Guide : EndCodeSnippet
 
 
-std::cout << "Sum of pixels is: " << sum << std::endl;
+  std::cout << "Sum of pixels is: " << sum << std::endl;
 
 
 //  Software Guide : BeginLatex

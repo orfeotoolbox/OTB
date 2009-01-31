@@ -66,7 +66,7 @@
 int main(int argc, char * argv[])
 {
 
-  if( argc != 3 )
+  if ( argc != 3 )
   {
     std::cerr << "Usage: " << argv[0] ;
     std::cerr << "inputFile outputFile" << std::endl;
@@ -86,7 +86,7 @@ int main(int argc, char * argv[])
   typedef otb::VectorData<PixelType,2>           VectorDataType;
 
   typedef otb::VectorDataFileReader<VectorDataType>
-      VectorDataFileReaderType;
+  VectorDataFileReaderType;
 
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
@@ -159,9 +159,9 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-  while(!it.IsAtEnd())
+  while (!it.IsAtEnd())
   {
-    if(it.Get()->IsPolygonFeature())
+    if (it.Get()->IsPolygonFeature())
     {
       polygonList->PushBack(it.Get()->GetPolygonExteriorRing());
     }
@@ -198,66 +198,66 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-    DataNodeType::Pointer document = DataNodeType::New();
-    document->SetNodeType(otb::DOCUMENT);
-    document->SetNodeId("polygon");
-    DataNodeType::Pointer folder = DataNodeType::New();
-    folder->SetNodeType(otb::FOLDER);
-    DataNodeType::Pointer multiPolygon = DataNodeType::New();
-    multiPolygon->SetNodeType(otb::FEATURE_MULTIPOLYGON);
+  DataNodeType::Pointer document = DataNodeType::New();
+  document->SetNodeType(otb::DOCUMENT);
+  document->SetNodeId("polygon");
+  DataNodeType::Pointer folder = DataNodeType::New();
+  folder->SetNodeType(otb::FOLDER);
+  DataNodeType::Pointer multiPolygon = DataNodeType::New();
+  multiPolygon->SetNodeType(otb::FEATURE_MULTIPOLYGON);
 
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
-    //
+  //
 //  We assign these objects to the data tree stored by the vector data object.
-    //
+  //
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 
-    DataTreeType::Pointer tree = outVectorData->GetDataTree();
-    DataNodeType::Pointer root = tree->GetRoot()->Get();
+  DataTreeType::Pointer tree = outVectorData->GetDataTree();
+  DataNodeType::Pointer root = tree->GetRoot()->Get();
 
-    tree->Add(document,root);
-    tree->Add(folder,document);
-    tree->Add(multiPolygon,folder);
+  tree->Add(document,root);
+  tree->Add(folder,document);
+  tree->Add(multiPolygon,folder);
 
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
-    //
+  //
 //  We can now iterate through the polygon list and fill the vector
 //  data structure.
-    //
+  //
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 
-    for(PolygonListType::Iterator it = polygonList->Begin();
-        it != polygonList->End(); ++it)
-    {
-      DataNodeType::Pointer newPolygon = DataNodeType::New();
-      newPolygon->SetPolygonExteriorRing(it.Get());
-      tree->Add(newPolygon,multiPolygon);
-    }
+  for (PolygonListType::Iterator it = polygonList->Begin();
+       it != polygonList->End(); ++it)
+  {
+    DataNodeType::Pointer newPolygon = DataNodeType::New();
+    newPolygon->SetPolygonExteriorRing(it.Get());
+    tree->Add(newPolygon,multiPolygon);
+  }
 
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
-    //
+  //
 //  And finally we write the vector data to a file using a generic
 //  \doxygen{otb}{VectorDataFileWriter}.
-    //
+  //
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 
-    typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
+  typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
 
-    WriterType::Pointer writer = WriterType::New();
-    writer->SetInput(outVectorData);
-    writer->SetFileName(argv[2]);
-    writer->Update();
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetInput(outVectorData);
+  writer->SetFileName(argv[2]);
+  writer->Update();
 
 // Software Guide : EndCodeSnippet
 
-    return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }

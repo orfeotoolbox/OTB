@@ -64,13 +64,13 @@
 
 int main( int argc, char * argv[] )
 {
-  if( argc < 6 )
-    {
+  if ( argc < 6 )
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << "  inputImageFile   outputImageFile  normalizedOutputImageFile ";
     std::cerr << " derivativeOrder direction" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
 
   //  Software Guide : BeginLatex
@@ -115,7 +115,7 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::DerivativeImageFilter<
-               InputImageType, OutputImageType >  FilterType;
+  InputImageType, OutputImageType >  FilterType;
 
   FilterType::Pointer filter = FilterType::New();
   // Software Guide : EndCodeSnippet
@@ -180,8 +180,8 @@ int main( int argc, char * argv[] )
   typedef otb::Image< unsigned char, Dimension >  WriteImageType;
 
   typedef itk::RescaleIntensityImageFilter<
-                                  OutputImageType,
-                                  WriteImageType >    NormalizeFilterType;
+  OutputImageType,
+  WriteImageType >    NormalizeFilterType;
 
   typedef otb::ImageFileWriter< WriteImageType >       NormalizedWriterType;
 

@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -40,7 +40,7 @@
 //
 //  The following header files will be needed:
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
 // Software Guide : BeginCodeSnippet
@@ -56,33 +56,33 @@
 
 int main(int argc, char** argv)
 {
-  if(argc < 4 )
-    {
+  if (argc < 4 )
+  {
     std::cerr << "Usage: " << argv[0] ;
     std::cerr << "outputImage image1 image2 ... " << std::endl;
-    }
+  }
 
   const unsigned int NbImages = argc-2;
 
   std::cout << "Concat of " << NbImages << " images into a multi-band image " <<
-    std::endl;
+            std::endl;
 
 //  Software Guide : BeginLatex
 //
 //  We will start by defining the types for the input images and the
 //  associated readers.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
 // Software Guide : BeginCodeSnippet
   typedef unsigned short int PixelType;
   const unsigned int Dimension = 2;
-  
+
   typedef otb::Image< PixelType, Dimension > InputImageType;
 
   typedef otb::ImageFileReader< InputImageType > ImageReaderType;
-// Software Guide : EndCodeSnippet  
+// Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
 //
@@ -91,15 +91,15 @@ int main(int argc, char** argv)
 //  \doxygen{otb}{ObjectList} object and we template it over the type
 //  of the readers.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
-// Software Guide : BeginCodeSnippet  
+// Software Guide : BeginCodeSnippet
   typedef otb::ObjectList< ImageReaderType > ReaderListType;
 
   ReaderListType::Pointer readerList = ReaderListType::New();
 
-// Software Guide : EndCodeSnippet  
+// Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
 //
@@ -108,27 +108,27 @@ int main(int argc, char** argv)
 //  us to build a pipeline without really reading the images and using
 //  lots of RAM. The \doxygen{otb}{ImageList} object will be used.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
-// Software Guide : BeginCodeSnippet    
+// Software Guide : BeginCodeSnippet
   typedef otb::ImageList< InputImageType > ImageListType;
 
   ImageListType::Pointer imageList = ImageListType::New();
 
-// Software Guide : EndCodeSnippet  
+// Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
 //
 //  We can now loop over the input image list in order to populate the
 //  reader list and the input image list.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
-// Software Guide : BeginCodeSnippet      
-  for(unsigned int i = 0; i<NbImages; i++)
-    {
+// Software Guide : BeginCodeSnippet
+  for (unsigned int i = 0; i<NbImages; i++)
+  {
 
     ImageReaderType::Pointer imageReader = ImageReaderType::New();
 
@@ -139,12 +139,12 @@ int main(int argc, char** argv)
     imageReader->UpdateOutputInformation();
 
     imageList->PushBack( imageReader->GetOutput() );
-    
-    readerList->PushBack( imageReader );
-    
-    }
 
-// Software Guide : EndCodeSnippet  
+    readerList->PushBack( imageReader );
+
+  }
+
+// Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
 //
@@ -153,19 +153,19 @@ int main(int argc, char** argv)
 //  \doxygen{otb}{ImageListToVectorImageFilter} which is templated
 //  over the input image list type and the output vector image type.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
-// Software Guide : BeginCodeSnippet        
+// Software Guide : BeginCodeSnippet
   typedef otb::VectorImage< PixelType, Dimension > VectorImageType;
 
   typedef otb::ImageListToVectorImageFilter< ImageListType, VectorImageType >
-    ImageListToVectorImageFilterType;
+  ImageListToVectorImageFilterType;
 
   ImageListToVectorImageFilterType::Pointer iL2VI =
     ImageListToVectorImageFilterType::New();
 
-// Software Guide : EndCodeSnippet  
+// Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
 //
@@ -174,10 +174,10 @@ int main(int argc, char** argv)
 //  to a file, so that the streaming capabilities of all the readers
 //  and the filter are used.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
-// Software Guide : BeginCodeSnippet        
+// Software Guide : BeginCodeSnippet
   iL2VI->SetInput( imageList );
 
   typedef otb::StreamingImageFileWriter< VectorImageType > ImageWriterType;
@@ -186,7 +186,7 @@ int main(int argc, char** argv)
 
   imageWriter->SetFileName( argv[1] );
 
-// Software Guide : EndCodeSnippet  
+// Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
 //
@@ -194,13 +194,13 @@ int main(int argc, char** argv)
 //  number of input images, so that the total memory footprint of the
 //  pipeline is constant for any execution of the program.
 //
-//  Software Guide : EndLatex 
+//  Software Guide : EndLatex
 
 
-// Software Guide : BeginCodeSnippet          
-  
+// Software Guide : BeginCodeSnippet
+
   unsigned long size = (10000 * 10000 * sizeof(PixelType)) / NbImages;
-  
+
   std::cout<<"Streaming size: "<<size<<std::endl;
 
   imageWriter->SetBufferMemorySize(size);
@@ -209,8 +209,8 @@ int main(int argc, char** argv)
 
   imageWriter->Update();
 
-// Software Guide : EndCodeSnippet    
-  
-  
+// Software Guide : EndCodeSnippet
+
+
   return EXIT_SUCCESS;
 }

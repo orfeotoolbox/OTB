@@ -66,14 +66,14 @@
 
 int main( int argc, char *argv[] )
 {
-  if( argc < 7 )
-    {
+  if ( argc < 7 )
+  {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImage outputImage outputAffinityMap " << std::endl;
     std::cerr << " seedX seedY multiplier " << std::endl;
     return 1;
-    }
+  }
 
 
   //  Software Guide : BeginLatex
@@ -114,12 +114,12 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::ConfidenceConnectedImageFilter<
-                                                  InputImageType,
-                                                  BinaryImageType
-                                                    >  ConfidenceConnectedFilterType;
+  InputImageType,
+  BinaryImageType
+  >  ConfidenceConnectedFilterType;
 
   ConfidenceConnectedFilterType::Pointer confidenceConnectedFilter =
-                                                 ConfidenceConnectedFilterType::New();
+    ConfidenceConnectedFilterType::New();
   // Software Guide : EndCodeSnippet
 
 
@@ -134,9 +134,9 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::SimpleFuzzyConnectednessScalarImageFilter<
-                                                  InputImageType,
-                                                  BinaryImageType
-                                                    >  FuzzySegmentationFilterType;
+  InputImageType,
+  BinaryImageType
+  >  FuzzySegmentationFilterType;
   // Software Guide : EndCodeSnippet
 
 
@@ -153,7 +153,7 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   FuzzySegmentationFilterType::Pointer fuzzysegmenter =
-                                         FuzzySegmentationFilterType::New();
+    FuzzySegmentationFilterType::New();
   // Software Guide : EndCodeSnippet
 
 

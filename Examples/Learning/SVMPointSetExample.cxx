@@ -68,8 +68,8 @@ int main( int argc, char* argv[] )
 
   unsigned int pointId;
 
-  for(pointId = 0; pointId<500; pointId++)
-    {
+  for (pointId = 0; pointId<500; pointId++)
+  {
 
     MeasurePointType mP;
     LabelPointType lP;
@@ -91,7 +91,7 @@ int main( int argc, char* argv[] )
 
     LabelPixelType label;
 
-    if(x_coord < y_coord)
+    if (x_coord < y_coord)
       label = 0;
     else
       label = 1;
@@ -107,13 +107,13 @@ int main( int argc, char* argv[] )
     lPSet->SetPointData( pointId, label );
 
 
-    }
+  }
 
   mPSet->SetPoints( mCont );
   lPSet->SetPoints( lCont );
 
   typedef otb::SVMPointSetModelEstimator< MeasurePointSetType,
-    LabelPointSetType >   EstimatorType;
+  LabelPointSetType >   EstimatorType;
 
 
   EstimatorType::Pointer estimator = EstimatorType::New();
@@ -134,8 +134,8 @@ int main( int argc, char* argv[] )
   MeasurePointSetType::Pointer tPSet = MeasurePointSetType::New();
   MeasurePointsContainer::Pointer tCont = MeasurePointsContainer::New();
 
-  for(pointId = 0; pointId<100; pointId++)
-    {
+  for (pointId = 0; pointId<100; pointId++)
+  {
 
     MeasurePointType tP;
 
@@ -157,81 +157,81 @@ int main( int argc, char* argv[] )
     tCont->InsertElement( pointId , tP );
     tPSet->SetPointData( pointId, measure );
 
-    }
+  }
 
   tPSet->SetPoints( tCont );
 
   // Classify
 
   typedef itk::Statistics::PointSetToListAdaptor< MeasurePointSetType >
-    SampleType;
-    SampleType::Pointer sample = SampleType::New();
-    sample->SetPointSet( tPSet );
+  SampleType;
+  SampleType::Pointer sample = SampleType::New();
+  sample->SetPointSet( tPSet );
 
-    std::cout << "Sample set to Adaptor" << std::endl;
-
-
-    /** preparing classifier and decision rule object */
-    typedef otb::SVMModel< SampleType::MeasurementVectorType::ValueType, LabelPixelType > ModelType;
-
-    ModelType::Pointer model = estimator->GetModel();
-
-    int numberOfClasses = model->GetNumberOfClasses();
-
-    std::cout << "Classification for " << numberOfClasses << " classes " << std::endl;
-
-    typedef otb::SVMClassifier< SampleType, LabelPixelType > ClassifierType ;
-
-    ClassifierType::Pointer classifier = ClassifierType::New() ;
-
-    classifier->SetNumberOfClasses(numberOfClasses) ;
-    classifier->SetModel( model );
-    classifier->SetSample(sample.GetPointer()) ;
-    classifier->Update() ;
-
-    /* Build the class map */
-    std::cout << "Output image creation" << std::endl;
+  std::cout << "Sample set to Adaptor" << std::endl;
 
 
-    std::cout << "classifier get output" << std::endl;
-    ClassifierType::OutputType* membershipSample =
-      classifier->GetOutput() ;
-    std::cout << "Sample iterators" << std::endl;
-    ClassifierType::OutputType::ConstIterator m_iter =
-      membershipSample->Begin() ;
-    ClassifierType::OutputType::ConstIterator m_last =
-      membershipSample->End() ;
+  /** preparing classifier and decision rule object */
+  typedef otb::SVMModel< SampleType::MeasurementVectorType::ValueType, LabelPixelType > ModelType;
+
+  ModelType::Pointer model = estimator->GetModel();
+
+  int numberOfClasses = model->GetNumberOfClasses();
+
+  std::cout << "Classification for " << numberOfClasses << " classes " << std::endl;
+
+  typedef otb::SVMClassifier< SampleType, LabelPixelType > ClassifierType ;
+
+  ClassifierType::Pointer classifier = ClassifierType::New() ;
+
+  classifier->SetNumberOfClasses(numberOfClasses) ;
+  classifier->SetModel( model );
+  classifier->SetSample(sample.GetPointer()) ;
+  classifier->Update() ;
+
+  /* Build the class map */
+  std::cout << "Output image creation" << std::endl;
 
 
-    double error = 0.0;
-    pointId = 0;
-    while (m_iter != m_last)
-      {
-      ClassifierType::ClassLabelType label = m_iter.GetClassLabel();
-
-      InputVectorType measure;
-
-      tPSet->GetPointData(pointId, &measure);
-
-      ClassifierType::ClassLabelType expectedLabel;
-      if(measure[0] < measure[1])
-  expectedLabel= 0;
-      else
-  expectedLabel = 1;
-
-      double dist = fabs(measure[0] - measure[1]);
-
-      if(label != expectedLabel )
-  error++;
-
-      std::cout << int(label) << "/" << int(expectedLabel) << " --- " << dist << std::endl;
+  std::cout << "classifier get output" << std::endl;
+  ClassifierType::OutputType* membershipSample =
+    classifier->GetOutput() ;
+  std::cout << "Sample iterators" << std::endl;
+  ClassifierType::OutputType::ConstIterator m_iter =
+    membershipSample->Begin() ;
+  ClassifierType::OutputType::ConstIterator m_last =
+    membershipSample->End() ;
 
 
-      ++pointId;
-      ++m_iter ;
-      }
+  double error = 0.0;
+  pointId = 0;
+  while (m_iter != m_last)
+  {
+    ClassifierType::ClassLabelType label = m_iter.GetClassLabel();
 
-    std::cout << "Error = " << error/pointId << std::endl;
+    InputVectorType measure;
+
+    tPSet->GetPointData(pointId, &measure);
+
+    ClassifierType::ClassLabelType expectedLabel;
+    if (measure[0] < measure[1])
+      expectedLabel= 0;
+    else
+      expectedLabel = 1;
+
+    double dist = fabs(measure[0] - measure[1]);
+
+    if (label != expectedLabel )
+      error++;
+
+    std::cout << int(label) << "/" << int(expectedLabel) << " --- " << dist << std::endl;
+
+
+    ++pointId;
+    ++m_iter ;
+  }
+
+  std::cout << "Error = " << error/pointId << std::endl;
 
 
 

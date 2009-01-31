@@ -55,12 +55,12 @@
 int main( int argc, char * argv [] )
 {
 
-  if( argc < 2 )
-    {
+  if ( argc < 2 )
+  {
     std::cerr << "Missing command line arguments" << std::endl;
     std::cerr << "Usage :  " << argv[0] << "  inputImageFileName " << std::endl;
     return -1;
-    }
+  }
 
 
   typedef unsigned char       PixelType;
@@ -75,15 +75,15 @@ int main( int argc, char * argv [] )
   reader->SetFileName( argv[1] );
 
   try
-    {
+  {
     reader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
+  }
+  catch ( itk::ExceptionObject & excp )
+  {
     std::cerr << "Problem encoutered while reading image file : " << argv[1] << std::endl;
     std::cerr << excp << std::endl;
     return -1;
-    }
+  }
 
 
 
@@ -104,8 +104,8 @@ int main( int argc, char * argv [] )
 
   // Create the K-d tree structure
   typedef itk::Statistics::WeightedCentroidKdTreeGenerator<
-                                                      AdaptorType >
-                                                              TreeGeneratorType;
+  AdaptorType >
+  TreeGeneratorType;
 
   TreeGeneratorType::Pointer treeGenerator = TreeGeneratorType::New();
 
@@ -137,10 +137,10 @@ int main( int argc, char * argv [] )
   EstimatorType::ParametersType estimatedMeans = estimator->GetParameters();
 
   for ( unsigned int i = 0 ; i < numberOfClasses ; ++i )
-    {
+  {
     std::cout << "cluster[" << i << "] " << std::endl;
     std::cout << "    estimated mean : " << estimatedMeans[i] << std::endl;
-    }
+  }
 
 // Software Guide : EndCodeSnippet
 

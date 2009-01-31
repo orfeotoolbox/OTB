@@ -64,13 +64,13 @@
 int main( int argc, char ** argv )
 {
   // Verify the number of parameters in the command line
-  if( argc < 7 )
-    {
+  if ( argc < 7 )
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " inputImageFile  outputImageFile " << std::endl;
     std::cerr << " startX startY sizeX sizeY" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
 
   //  Software Guide : BeginLatex
@@ -116,7 +116,7 @@ int main( int argc, char ** argv )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ExtractROI< InputImageType::PixelType,
-                           OutputImageType::PixelType > FilterType;
+  OutputImageType::PixelType > FilterType;
 
   FilterType::Pointer filter = FilterType::New();
   // Software Guide : EndCodeSnippet
@@ -211,15 +211,15 @@ int main( int argc, char ** argv )
 
   // Software Guide : BeginCodeSnippet
   try
-    {
+  {
     writer->Update();
-    }
-  catch( itk::ExceptionObject & err )
-    {
+  }
+  catch ( itk::ExceptionObject & err )
+  {
     std::cerr << "ExceptionObject caught !" << std::endl;
     std::cerr << err << std::endl;
     return EXIT_FAILURE;
-    }
+  }
   // Software Guide : EndCodeSnippet
 
 

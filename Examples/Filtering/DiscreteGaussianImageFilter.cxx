@@ -79,12 +79,12 @@
 
 int main( int argc, char * argv[] )
 {
-  if( argc < 5 )
-    {
+  if ( argc < 5 )
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << "  inputImageFile  outputImageFile  variance  maxKernelWidth " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
 
   //  Software Guide : BeginLatex
@@ -119,7 +119,7 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::DiscreteGaussianImageFilter<
-                 InputImageType, OutputImageType >  FilterType;
+  InputImageType, OutputImageType >  FilterType;
 
   FilterType::Pointer filter = FilterType::New();
   // Software Guide : EndCodeSnippet
@@ -192,7 +192,7 @@ int main( int argc, char * argv[] )
   typedef unsigned char WritePixelType;
   typedef otb::Image< WritePixelType, 2 > WriteImageType;
   typedef itk::RescaleIntensityImageFilter<
-               OutputImageType, WriteImageType > RescaleFilterType;
+  OutputImageType, WriteImageType > RescaleFilterType;
   RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
 
   rescaler->SetOutputMinimum(   0 );

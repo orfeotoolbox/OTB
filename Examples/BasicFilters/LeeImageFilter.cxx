@@ -54,12 +54,12 @@
 int main( int argc, char * argv[] )
 {
 
-  if( argc != 5 )
-    {
+  if ( argc != 5 )
+  {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " outputImageFile radius NbLooks" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   //  Software Guide : BeginLatex
   //

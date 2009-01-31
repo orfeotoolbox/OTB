@@ -68,21 +68,21 @@
 
 int main(int argc, char* argv[])
 {
-  if( argc < 3 )
-    {
+  if ( argc < 3 )
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " inputImage outputImage [variance]" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
   float variance = 2.0;
 
-  if( argc > 3 )
-    {
+  if ( argc > 3 )
+  {
     variance = atof( argv[3] );
-    }
+  }
 
   typedef unsigned char    CharPixelType;  //  IO
   typedef double           RealPixelType;  //  Operations
@@ -143,15 +143,15 @@ int main(int argc, char* argv[])
   writer->SetInput( rescale->GetOutput() );
 
   try
-    {
+  {
     writer->Update();
-    }
-  catch( itk::ExceptionObject & err )
-    {
+  }
+  catch ( itk::ExceptionObject & err )
+  {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   //  Software Guide : BeginLatex
   //

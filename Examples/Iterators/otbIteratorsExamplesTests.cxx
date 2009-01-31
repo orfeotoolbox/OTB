@@ -25,12 +25,12 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(ImageRegionIteratorWithIndexTest);
-REGISTER_TEST(NeighborhoodIterators1Test);
-REGISTER_TEST(NeighborhoodIterators4Test);
-REGISTER_TEST(NeighborhoodIterators6Test);
-REGISTER_TEST(ImageRegionIteratorTest);
-REGISTER_TEST(ShapedNeighborhoodIterators2Test);
+  REGISTER_TEST(ImageRegionIteratorWithIndexTest);
+  REGISTER_TEST(NeighborhoodIterators1Test);
+  REGISTER_TEST(NeighborhoodIterators4Test);
+  REGISTER_TEST(NeighborhoodIterators6Test);
+  REGISTER_TEST(ImageRegionIteratorTest);
+  REGISTER_TEST(ShapedNeighborhoodIterators2Test);
 }
 
 #undef main

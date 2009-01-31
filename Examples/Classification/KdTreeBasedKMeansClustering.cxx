@@ -210,7 +210,7 @@ int main()
 
   // Software Guide : BeginCodeSnippet
   typedef itk::Statistics::WeightedCentroidKdTreeGenerator< SampleType >
-      TreeGeneratorType;
+  TreeGeneratorType;
   TreeGeneratorType::Pointer treeGenerator = TreeGeneratorType::New();
 
   treeGenerator->SetSample( sample );
@@ -301,7 +301,7 @@ int main()
 
   // Software Guide : BeginCodeSnippet
   typedef itk::Statistics::EuclideanDistance< MeasurementVectorType >
-      MembershipFunctionType;
+  MembershipFunctionType;
   typedef itk::MinimumDecisionRule DecisionRuleType;
   DecisionRuleType::Pointer decisionRule = DecisionRuleType::New();
 
@@ -367,8 +367,8 @@ int main()
   while ( iter != membershipSample->End() )
   {
     std::cout << "measurement vector = " << iter.GetMeasurementVector()
-        << "class label = " << iter.GetClassLabel()
-        << std::endl;
+              << "class label = " << iter.GetClassLabel()
+              << std::endl;
     ++iter;
   }
   // Software Guide : EndCodeSnippet

@@ -68,9 +68,9 @@ int main( int argc, char* argv[] )
 {
 
 
-    const char* inputImageFileName = argv[1];
-    const char* trainingImageFileName = argv[2];
-    const char* outputModelFileName = argv[3];
+  const char* inputImageFileName = argv[1];
+  const char* trainingImageFileName = argv[2];
+  const char* outputModelFileName = argv[3];
 
 //  Software Guide : BeginLatex
 //
@@ -81,12 +81,12 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 //  Software Guide : BeginCodeSnippet
-    typedef unsigned char      InputPixelType;
-    const   unsigned int       Dimension = 2;
+  typedef unsigned char      InputPixelType;
+  const   unsigned int       Dimension = 2;
 
-    typedef otb::VectorImage< InputPixelType,  Dimension >        InputImageType;
+  typedef otb::VectorImage< InputPixelType,  Dimension >        InputImageType;
 
-    typedef otb::Image< InputPixelType,  Dimension >     TrainingImageType;
+  typedef otb::Image< InputPixelType,  Dimension >     TrainingImageType;
 //  Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
@@ -96,8 +96,8 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 //  Software Guide : BeginCodeSnippet
-    typedef otb::SVMImageModelEstimator< InputImageType,
-                                  TrainingImageType >   EstimatorType;
+  typedef otb::SVMImageModelEstimator< InputImageType,
+  TrainingImageType >   EstimatorType;
 
 //  Software Guide : EndCodeSnippet
 
@@ -107,11 +107,11 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 //  Software Guide : BeginCodeSnippet
-    typedef otb::ImageFileReader< InputImageType > InputReaderType;
-    typedef otb::ImageFileReader< TrainingImageType > TrainingReaderType;
+  typedef otb::ImageFileReader< InputImageType > InputReaderType;
+  typedef otb::ImageFileReader< TrainingImageType > TrainingReaderType;
 
-    InputReaderType::Pointer inputReader = InputReaderType::New();
-    TrainingReaderType::Pointer trainingReader = TrainingReaderType::New();
+  InputReaderType::Pointer inputReader = InputReaderType::New();
+  TrainingReaderType::Pointer trainingReader = TrainingReaderType::New();
 
 //  Software Guide : EndCodeSnippet
 
@@ -124,11 +124,11 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 //  Software Guide : BeginCodeSnippet
-    inputReader->SetFileName( inputImageFileName );
-    trainingReader->SetFileName( trainingImageFileName );
+  inputReader->SetFileName( inputImageFileName );
+  trainingReader->SetFileName( trainingImageFileName );
 
-    inputReader->Update();
-    trainingReader->Update();
+  inputReader->Update();
+  trainingReader->Update();
 
 //  Software Guide : EndCodeSnippet
 
@@ -138,11 +138,11 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 //  Software Guide : BeginCodeSnippet
-    EstimatorType::Pointer svmEstimator = EstimatorType::New();
+  EstimatorType::Pointer svmEstimator = EstimatorType::New();
 
-    svmEstimator->SetInputImage( inputReader->GetOutput() );
-    svmEstimator->SetTrainingImage( trainingReader->GetOutput() );
-    svmEstimator->SetNumberOfClasses( 2 );
+  svmEstimator->SetInputImage( inputReader->GetOutput() );
+  svmEstimator->SetTrainingImage( trainingReader->GetOutput() );
+  svmEstimator->SetNumberOfClasses( 2 );
 
 //  Software Guide : EndCodeSnippet
 
@@ -154,7 +154,7 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 //  Software Guide : BeginCodeSnippet
 
-    svmEstimator->Update();
+  svmEstimator->Update();
 
 //  Software Guide : EndCodeSnippet
 
@@ -165,7 +165,7 @@ int main( int argc, char* argv[] )
 //  Software Guide : EndLatex
 //  Software Guide : BeginCodeSnippet
 
-    svmEstimator->SaveModel(outputModelFileName);
+  svmEstimator->SaveModel(outputModelFileName);
 
 //  Software Guide : EndCodeSnippet
 

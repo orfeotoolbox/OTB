@@ -69,18 +69,18 @@ public:
   typedef unsigned char      ExternalType;
 
   ExternalType Get( const InternalType & input ) const
-    {
-      return (input > m_Threshold) ? 1 : 0;
-    }
+  {
+    return (input > m_Threshold) ? 1 : 0;
+  }
   void SetThreshold( const InternalType threshold )
-    {
-      m_Threshold = threshold;
-    }
+  {
+    m_Threshold = threshold;
+  }
 
   void operator=( const ThresholdingPixelAccessor & vpa )
-    {
-      m_Threshold = vpa.m_Threshold;
-    }
+  {
+    m_Threshold = vpa.m_Threshold;
+  }
 private:
   InternalType m_Threshold;
 };
@@ -105,13 +105,13 @@ private:
 
 int main( int argc, char *argv[] )
 {
-  if( argc < 4 )
-    {
+  if ( argc < 4 )
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << "ImageAdaptor4   inputFileName outputBinaryFileName ";
     std::cerr << " thresholdValue" << std::endl;
     return -1;
-    }
+  }
 
 
 //  Software Guide : BeginLatex
@@ -141,7 +141,7 @@ int main( int argc, char *argv[] )
 
 // Software Guide : BeginCodeSnippet
   typedef itk::ImageAdaptor<  ImageType,
-                              ThresholdingPixelAccessor > ImageAdaptorType;
+  ThresholdingPixelAccessor > ImageAdaptorType;
 
   ImageAdaptorType::Pointer adaptor = ImageAdaptorType::New();
 // Software Guide : EndCodeSnippet
@@ -182,7 +182,7 @@ int main( int argc, char *argv[] )
 
 
   typedef itk::RescaleIntensityImageFilter< ImageAdaptorType,
-                                            ImageType > RescalerType;
+  ImageType > RescalerType;
 
   RescalerType::Pointer rescaler = RescalerType::New();
   typedef otb::ImageFileWriter< ImageType >   WriterType;

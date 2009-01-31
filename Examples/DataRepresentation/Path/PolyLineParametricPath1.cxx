@@ -50,12 +50,12 @@
 int main(int argc, char * argv [] )
 {
 
-  if( argc < 2 )
-    {
+  if ( argc < 2 )
+  {
     std::cerr << "Missing arguments" << std::endl;
     std::cerr << "Usage: PolyLineParametricPath  inputImageFileName" << std::endl;
     return -1;
-    }
+  }
 
   // Software Guide : BeginLatex
   //
@@ -78,15 +78,15 @@ int main(int argc, char * argv [] )
   reader->SetFileName( argv[1] );
 
   try
-    {
+  {
     reader->Update();
-    }
-  catch( itk::ExceptionObject & excp )
-    {
+  }
+  catch ( itk::ExceptionObject & excp )
+  {
     std::cout << "Problem reading the input image " << std::endl;
     std::cout << excp << std::endl;
     return -1;
-    }
+  }
 
 
 

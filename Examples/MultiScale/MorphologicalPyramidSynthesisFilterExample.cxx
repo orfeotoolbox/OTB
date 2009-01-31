@@ -60,17 +60,17 @@ PURPOSE.  See the above copyright notices for more information.
 int main(int argc, char * argv[])
 {
 
-  if( argc != 5)
-    {
+  if ( argc != 5)
+  {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " outputImageFile iterations decimationRatio" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-      const char * inputFilename = argv[1];
-      const char * outputFilename = argv[2];
-      const unsigned int numberOfLevels = atoi(argv[3]);
-      const float decimationRatio = atof(argv[4]);
+  const char * inputFilename = argv[1];
+  const char * outputFilename = argv[2];
+  const unsigned int numberOfLevels = atoi(argv[3]);
+  const float decimationRatio = atof(argv[4]);
 
 // Software Guide : BeginLatex
 //
@@ -81,15 +81,15 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-      const unsigned int Dimension = 2;
-      typedef unsigned char InputPixelType;
-      typedef unsigned char OutputPixelType;
+  const unsigned int Dimension = 2;
+  typedef unsigned char InputPixelType;
+  typedef unsigned char OutputPixelType;
 
-      typedef otb::Image<InputPixelType,Dimension> InputImageType;
-      typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
+  typedef otb::Image<InputPixelType,Dimension> InputImageType;
+  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
 
-      typedef otb::ImageFileReader<InputImageType> ReaderType;
-      typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
 // Software Guide : EndCodeSnippet
 
@@ -105,8 +105,8 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-      typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension>
-                                             StructuringElementType;
+  typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension>
+  StructuringElementType;
 
 // Software Guide : EndCodeSnippet
 
@@ -123,9 +123,9 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-      typedef otb::OpeningClosingMorphologicalFilter<InputImageType,
-                                   InputImageType,StructuringElementType>
-                                           OpeningClosingFilterType;
+  typedef otb::OpeningClosingMorphologicalFilter<InputImageType,
+  InputImageType,StructuringElementType>
+  OpeningClosingFilterType;
 
 // Software Guide : EndCodeSnippet
 
@@ -140,9 +140,9 @@ int main(int argc, char * argv[])
 // Software Guide : BeginCodeSnippet
 
 
-      typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,
-                                OutputImageType,OpeningClosingFilterType>
-                                            PyramidAnalysisFilterType;
+  typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,
+  OutputImageType,OpeningClosingFilterType>
+  PyramidAnalysisFilterType;
 
 // Software Guide : EndCodeSnippet
 
@@ -157,9 +157,9 @@ int main(int argc, char * argv[])
 // Software Guide : BeginCodeSnippet
 
 
-      typedef otb::MorphologicalPyramidSynthesisFilter<InputImageType,
-                                                        OutputImageType>
-                                        PyramidSynthesisFilterType;
+  typedef otb::MorphologicalPyramidSynthesisFilter<InputImageType,
+  OutputImageType>
+  PyramidSynthesisFilterType;
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -171,8 +171,8 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-      ReaderType::Pointer reader = ReaderType::New();
-      reader->SetFileName(inputFilename);
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(inputFilename);
 
 // Software Guide : EndCodeSnippet
 
@@ -190,12 +190,12 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-      PyramidAnalysisFilterType::Pointer pyramidAnalysis =
-                          PyramidAnalysisFilterType::New();
-      pyramidAnalysis->SetNumberOfLevels(numberOfLevels);
-      pyramidAnalysis->SetDecimationRatio(decimationRatio);
-      pyramidAnalysis->SetInput(reader->GetOutput());
-      pyramidAnalysis->Update();
+  PyramidAnalysisFilterType::Pointer pyramidAnalysis =
+    PyramidAnalysisFilterType::New();
+  pyramidAnalysis->SetNumberOfLevels(numberOfLevels);
+  pyramidAnalysis->SetDecimationRatio(decimationRatio);
+  pyramidAnalysis->SetInput(reader->GetOutput());
+  pyramidAnalysis->Update();
 
 // Software Guide : EndCodeSnippet
 
@@ -225,12 +225,12 @@ int main(int argc, char * argv[])
 // Software Guide : BeginCodeSnippet
 
 
-      PyramidSynthesisFilterType::Pointer pyramidSynthesis = PyramidSynthesisFilterType::New();
-      pyramidSynthesis->SetInput(pyramidAnalysis->GetOutput()->Back());
-      pyramidSynthesis->SetSupFilter(pyramidAnalysis->GetSupFilter());
-      pyramidSynthesis->SetSupDeci(pyramidAnalysis->GetSupDeci());
-      pyramidSynthesis->SetInfFilter(pyramidAnalysis->GetInfFilter());
-      pyramidSynthesis->SetInfDeci(pyramidAnalysis->GetInfDeci());
+  PyramidSynthesisFilterType::Pointer pyramidSynthesis = PyramidSynthesisFilterType::New();
+  pyramidSynthesis->SetInput(pyramidAnalysis->GetOutput()->Back());
+  pyramidSynthesis->SetSupFilter(pyramidAnalysis->GetSupFilter());
+  pyramidSynthesis->SetSupDeci(pyramidAnalysis->GetSupDeci());
+  pyramidSynthesis->SetInfFilter(pyramidAnalysis->GetInfFilter());
+  pyramidSynthesis->SetInfDeci(pyramidAnalysis->GetInfDeci());
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -242,7 +242,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-      pyramidSynthesis->Update();
+  pyramidSynthesis->Update();
 
 // Software Guide : EndCodeSnippet
 
@@ -256,10 +256,10 @@ int main(int argc, char * argv[])
 // Software Guide : BeginCodeSnippet
 
 
-      WriterType::Pointer writer = WriterType::New();
-      writer->SetFileName(outputFilename);
-      writer->SetInput(pyramidSynthesis->GetOutput()->Back());
-      writer->Update();
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetFileName(outputFilename);
+  writer->SetInput(pyramidSynthesis->GetOutput()->Back());
+  writer->Update();
 
 // Software Guide : EndCodeSnippet
 
@@ -286,5 +286,5 @@ int main(int argc, char * argv[])
 
 
 
-      return EXIT_SUCCESS;
-    }
+  return EXIT_SUCCESS;
+}

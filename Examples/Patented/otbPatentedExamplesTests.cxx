@@ -25,7 +25,7 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(HybridSegmentationFuzzyVoronoiTest);
+  REGISTER_TEST(HybridSegmentationFuzzyVoronoiTest);
 }
 
 #undef main

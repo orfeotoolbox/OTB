@@ -25,8 +25,8 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(ScalarImageMarkovRandomField1Test);
-REGISTER_TEST(ScalarImageKmeansClassifierTest);
+  REGISTER_TEST(ScalarImageMarkovRandomField1Test);
+  REGISTER_TEST(ScalarImageKmeansClassifierTest);
 }
 
 #undef main

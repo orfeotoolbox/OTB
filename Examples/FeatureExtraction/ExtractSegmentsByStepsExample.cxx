@@ -58,9 +58,9 @@
 int main( int argc, char * argv[] )
 {
 
-  if( argc != 12 )
-    {
-    for(int i=0; i<argc; i++)
+  if ( argc != 12 )
+  {
+    for (int i=0; i<argc; i++)
       std::cerr << argv[i] << std::endl;
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " outputSegmentsImageFile length width ";
@@ -70,7 +70,7 @@ int main( int argc, char * argv[] )
     std::cerr << " FillGapsRadius FillGapsAngularBeam" << std::endl;
 
     return EXIT_FAILURE;
-    }
+  }
 
 
   //  Software Guide : BeginLatex
@@ -108,14 +108,14 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::LineRatioDetectorImageFilter< InternalImageType,
-                                    InternalImageType >  DetectorType;
+  InternalImageType >  DetectorType;
   typedef otb::PixelSuppressionByDirectionImageFilter< InternalImageType,
-                       InternalImageType >   PixelSuppressionType;
+  InternalImageType >   PixelSuppressionType;
   typedef otb::LocalHoughFilter< InternalImageType >        LocalHoughType;
   typedef otb::FillGapsFilter             FillGapsType;
   typedef otb::DrawLineSpatialObjectListFilter< InternalImageType,
-                                      OutputImageType >  DrawLineListType;
-  
+  OutputImageType >  DrawLineListType;
+
   typedef itk::RescaleIntensityImageFilter<InternalImageType> RescalerType;
   // Software Guide : EndCodeSnippet
 
@@ -193,9 +193,9 @@ int main( int argc, char * argv[] )
   detector->SetInput( reader->GetOutput() );
   pixelSuppression->SetInputImage( detector->GetOutput() );
   pixelSuppression->SetInputImageDirection( detector->GetOutputDirection() );
-  
+
   rescaler->SetInput(pixelSuppression->GetOutput() );
-  
+
   localHough->SetInput( rescaler->GetOutput() );
 
   fillGaps->SetInput ( localHough->GetOutput() );

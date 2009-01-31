@@ -71,7 +71,7 @@ int main(int argc, char * argv[])
   typedef otb::ImageFileReader< ImageType > ReaderType;
   typedef otb::ImageFileWriter< OutputImageType > WriterType;
   typedef itk::RescaleIntensityImageFilter
-                          <ImageType, OutputImageType> RescalerType;
+  <ImageType, OutputImageType> RescalerType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -111,7 +111,7 @@ int main(int argc, char * argv[])
   CarvingFilterType::Pointer carvingFilterHor = CarvingFilterType::New();
   // Software Guide : EndCodeSnippet
 
-    //  Software Guide : BeginLatex
+  //  Software Guide : BeginLatex
   //
   // The \doxygen{otb}{RemoveCarvingPathFilter} will really resize the image
   // deleting the path.
@@ -120,9 +120,9 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::RemoveCarvingPathFilter
-      <ImageType, PathType, ImageType> RemoveCarvingPathFilterType;
+  <ImageType, PathType, ImageType> RemoveCarvingPathFilterType;
   RemoveCarvingPathFilterType::Pointer removeCarvingPath =
-                           RemoveCarvingPathFilterType::New();
+    RemoveCarvingPathFilterType::New();
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -156,7 +156,7 @@ int main(int argc, char * argv[])
   {
 
     gradient->SetInput( duplicator->GetOutput() );
-     // Software Guide : EndCodeSnippet
+    // Software Guide : EndCodeSnippet
 
 
     //  Software Guide : BeginLatex
@@ -210,7 +210,7 @@ int main(int argc, char * argv[])
     //
     //  Software Guide : EndLatex
 
-     // Software Guide : BeginCodeSnippet
+    // Software Guide : BeginCodeSnippet
     duplicator->SetInputImage(removeCarvingPath->GetOutput());
     duplicator->Update();
 

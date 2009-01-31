@@ -71,7 +71,7 @@
 int main( int argc, char * argv[] )
 {
 
-  if( argc != 6 )
+  if ( argc != 6 )
   {
     std::cerr << "Usage: " << argv[0] << " <inputImageFile> ";
     std::cerr << " <outputImageFile> <RedBand> <GreenBand> <BlueBand>" << std::endl;
@@ -110,7 +110,7 @@ int main( int argc, char * argv[] )
   printableImageFilter->SetChannel(redChannelNumber);
   printableImageFilter->SetChannel(greenChannelNumber);
   printableImageFilter->SetChannel(blueChannelNumber);
-   // Software Guide : EndCodeSnippet
+  // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
   //
@@ -119,7 +119,7 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-   // Software Guide : BeginCodeSnippet
+  // Software Guide : BeginCodeSnippet
   typedef PrintableFilterType::OutputImageType OutputImageType;
   typedef otb::StreamingImageFileWriter< OutputImageType >         WriterType;
   // Software Guide : EndCodeSnippet

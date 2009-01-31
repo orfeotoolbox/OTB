@@ -89,12 +89,12 @@
 
 int main( int argc, char * argv[] )
 {
-  if( argc < 3 )
-    {
+  if ( argc < 3 )
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << "  inputImageFile   outputImageFile" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
 
   //  Software Guide : BeginLatex
@@ -135,7 +135,7 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::MeanImageFilter<
-               InputImageType, OutputImageType >  FilterType;
+  InputImageType, OutputImageType >  FilterType;
 
   FilterType::Pointer filter = FilterType::New();
   // Software Guide : EndCodeSnippet

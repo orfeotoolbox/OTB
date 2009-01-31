@@ -60,14 +60,14 @@
 
 int main( int argc, char * argv[] )
 {
-  if( argc < 6 )
-    {
+  if ( argc < 6 )
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << "  inputImageFile  ";
     std::cerr << " outputImageFileErosion  outputImageFileDilation";
     std::cerr << " lowerThreshold upperThreshold " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
 
   //  Software Guide : BeginLatex
@@ -114,8 +114,8 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::BinaryBallStructuringElement<
-                      InputPixelType,
-                      Dimension  >             StructuringElementType;
+  InputPixelType,
+  Dimension  >             StructuringElementType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -128,14 +128,14 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::BinaryErodeImageFilter<
-                            InputImageType,
-                            OutputImageType,
-                            StructuringElementType >  ErodeFilterType;
+  InputImageType,
+  OutputImageType,
+  StructuringElementType >  ErodeFilterType;
 
   typedef itk::BinaryDilateImageFilter<
-                            InputImageType,
-                            OutputImageType,
-                            StructuringElementType >  DilateFilterType;
+  InputImageType,
+  OutputImageType,
+  StructuringElementType >  DilateFilterType;
   // Software Guide : EndCodeSnippet
 
 

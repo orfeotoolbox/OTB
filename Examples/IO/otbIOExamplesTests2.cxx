@@ -26,7 +26,7 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(TileMapImageIOExampleTest);
+  REGISTER_TEST(TileMapImageIOExampleTest);
 
 }
 

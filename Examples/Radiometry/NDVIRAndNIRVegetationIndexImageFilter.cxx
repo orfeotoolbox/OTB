@@ -68,13 +68,13 @@
 
 int main( int argc, char *argv[] )
 {
-  if( argc < 6 )
-    {
-      std::cerr << "Missing Parameters " << std::endl;
-      std::cerr << "Usage: " << argv[0];
-      std::cerr << " inputImage1 , inputImage2 , outputImage , prettyinputImage1 , prettyinputImage2 , prettyOutput" << std::endl;
-      return 1;
-    }
+  if ( argc < 6 )
+  {
+    std::cerr << "Missing Parameters " << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " inputImage1 , inputImage2 , outputImage , prettyinputImage1 , prettyinputImage2 , prettyOutput" << std::endl;
+    return 1;
+  }
 
   //  Software Guide : BeginLatex
   //
@@ -108,8 +108,8 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::Functor::NDVI< InputPixelType,
-                              InputPixelType,
-                              OutputPixelType>   FunctorType;
+  InputPixelType,
+  OutputPixelType>   FunctorType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -121,10 +121,10 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::RAndNIRVegetationIndexImageFilter<InputRImageType,
-                                                 InputNIRImageType,
-                                                 OutputImageType,
-                                                 FunctorType>
-                                RAndNIRVegetationIndexImageFilterType;
+  InputNIRImageType,
+  OutputImageType,
+  FunctorType>
+  RAndNIRVegetationIndexImageFilterType;
   // Software Guide : EndCodeSnippet
 
 
@@ -173,20 +173,20 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   try
-    {
-      writer->Update();
-    }
-  catch( itk::ExceptionObject & excep )
-    {
-      std::cerr << "Exception caught !" << std::endl;
-      std::cerr << excep << std::endl;
-    }
+  {
+    writer->Update();
+  }
+  catch ( itk::ExceptionObject & excep )
+  {
+    std::cerr << "Exception caught !" << std::endl;
+    std::cerr << excep << std::endl;
+  }
   // Software Guide : EndCodeSnippet
-  catch( ... )
-    {
-      std::cout << "Unknown exception !" << std::endl;
-      return EXIT_FAILURE;
-    }
+  catch ( ... )
+  {
+    std::cout << "Unknown exception !" << std::endl;
+    return EXIT_FAILURE;
+  }
 
   // Pretty image creation for the printing
   typedef otb::Image<unsigned char, Dimension>                                                  OutputPrettyImageType;
@@ -221,41 +221,41 @@ int main( int argc, char *argv[] )
   prettyWriterNIR->SetInput( rescalerNIR->GetOutput() );
 
 
-    try
-    {
-      prettyWriter->Update();
-      prettyWriterNIR->Update();
-      prettyWriterR->Update();
-    }
-    catch( itk::ExceptionObject & excep )
-      {
-  std::cerr << "Exception caught !" << std::endl;
-  std::cerr << excep << std::endl;
-      }
-    catch( ... )
-      {
-  std::cout << "Unknown exception !" << std::endl;
-  return EXIT_FAILURE;
-      }
+  try
+  {
+    prettyWriter->Update();
+    prettyWriterNIR->Update();
+    prettyWriterR->Update();
+  }
+  catch ( itk::ExceptionObject & excep )
+  {
+    std::cerr << "Exception caught !" << std::endl;
+    std::cerr << excep << std::endl;
+  }
+  catch ( ... )
+  {
+    std::cout << "Unknown exception !" << std::endl;
+    return EXIT_FAILURE;
+  }
 
 
-    // Software Guide : BeginLatex
-    //
-    // Let's now run this example using as input the images
-    // \code{NDVI\_3.hdr} and  \code{NDVI\_4.hdr} (images kindly and free of charge given by SISA and CNES)
-    // provided in the directory \code{Examples/Data}.
-    //
-    //
-    // \begin{figure} \center
-    // \includegraphics[width=0.24\textwidth]{pretty_Red.eps}
-    // \includegraphics[width=0.24\textwidth]{pretty_NIR.eps}
-    // \includegraphics[width=0.24\textwidth]{pretty_NDVIRAndNIRVegetationIndex.eps}
-    // \itkcaption[ARVI Example]{NDVI input images on the left (Red channel and NIR channel), on the right the result of the algorithm.}
-    // \label{fig:NDVIRAndNIRVegetationIndex}
-    // \end{figure}
-    //
-    // Software Guide : EndLatex
+  // Software Guide : BeginLatex
+  //
+  // Let's now run this example using as input the images
+  // \code{NDVI\_3.hdr} and  \code{NDVI\_4.hdr} (images kindly and free of charge given by SISA and CNES)
+  // provided in the directory \code{Examples/Data}.
+  //
+  //
+  // \begin{figure} \center
+  // \includegraphics[width=0.24\textwidth]{pretty_Red.eps}
+  // \includegraphics[width=0.24\textwidth]{pretty_NIR.eps}
+  // \includegraphics[width=0.24\textwidth]{pretty_NDVIRAndNIRVegetationIndex.eps}
+  // \itkcaption[ARVI Example]{NDVI input images on the left (Red channel and NIR channel), on the right the result of the algorithm.}
+  // \label{fig:NDVIRAndNIRVegetationIndex}
+  // \end{figure}
+  //
+  // Software Guide : EndLatex
 
-    return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }
 

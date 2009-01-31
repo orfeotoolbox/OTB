@@ -60,14 +60,14 @@
 int main( int argc, char ** argv )
 {
   if ( argc < 4 )
-    {
-      std::cerr << "Missing parameters. " << std::endl;
-      std::cerr << "Usage: " << std::endl;
-      std::cerr << argv[0]
-                << " inputImageFile outputImageFile direction"
-                << std::endl;
-      return -1;
-    }
+  {
+    std::cerr << "Missing parameters. " << std::endl;
+    std::cerr << "Usage: " << std::endl;
+    std::cerr << argv[0]
+              << " inputImageFile outputImageFile direction"
+              << std::endl;
+    return -1;
+  }
 
   typedef float PixelType;
   typedef otb::Image< PixelType, 2 >  ImageType;
@@ -79,15 +79,15 @@ int main( int argc, char ** argv )
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( argv[1] );
   try
-    {
+  {
     reader->Update();
-    }
+  }
   catch ( itk::ExceptionObject &err)
-    {
+  {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-    }
+  }
 
   ImageType::Pointer output = ImageType::New();
   output->SetRegions(reader->GetOutput()->GetRequestedRegion());
@@ -145,9 +145,9 @@ int main( int argc, char ** argv )
 
 // Software Guide : BeginCodeSnippet
   for (it.GoToBegin(), out.GoToBegin(); !it.IsAtEnd(); ++it, ++out)
-    {
+  {
     out.Set( innerProduct( it, sobelOperator ) );
-    }
+  }
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -164,7 +164,7 @@ int main( int argc, char ** argv )
   typedef otb::ImageFileWriter< WriteImageType > WriterType;
 
   typedef itk::RescaleIntensityImageFilter<
-               ImageType, WriteImageType > RescaleFilterType;
+  ImageType, WriteImageType > RescaleFilterType;
 
   RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
 
@@ -176,15 +176,15 @@ int main( int argc, char ** argv )
   writer->SetFileName( argv[2] );
   writer->SetInput(rescaler->GetOutput());
   try
-    {
+  {
     writer->Update();
-    }
+  }
   catch ( itk::ExceptionObject &err)
-    {
+  {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

@@ -61,11 +61,11 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-    // Software Guide : BeginCodeSnippet
+  // Software Guide : BeginCodeSnippet
   typedef itk::GradientMagnitudeImageFilter
-      <ImageType,ImageType> FilterType;
+  <ImageType,ImageType> FilterType;
   FilterType::Pointer filter = FilterType::New();
-    // Software Guide : EndCodeSnippet
+  // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
   //
@@ -75,10 +75,10 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-    // Software Guide : BeginCodeSnippet
+  // Software Guide : BeginCodeSnippet
   typedef otb::ImageViewer<PixelType> ViewerType;
   ViewerType::Pointer viewer = ViewerType::New();
-    // Software Guide : EndCodeSnippet
+  // Software Guide : EndCodeSnippet
 
 
   //  Software Guide : BeginLatex

@@ -80,14 +80,14 @@ PURPOSE.  See the above copyright notices for more information.
 int main(int argc, char * argv[])
 {
 
-      const char* inputFilename = argv[1];
-      const char* outputFilenamePrefix = argv[2];
-      const char * outputFilenameSuffix = argv[3];
-      const unsigned int numberOfLevels = atoi(argv[4]);
-      const double decimationRatio = atof(argv[5]);
-      const float seedsQuantile = atof(argv[6]);
-      const float segmentationQuantile = atof(argv[7]);
-      const unsigned int minObjectSize = atoi(argv[8]);
+  const char* inputFilename = argv[1];
+  const char* outputFilenamePrefix = argv[2];
+  const char * outputFilenameSuffix = argv[3];
+  const unsigned int numberOfLevels = atoi(argv[4]);
+  const double decimationRatio = atof(argv[5]);
+  const float seedsQuantile = atof(argv[6]);
+  const float segmentationQuantile = atof(argv[7]);
+  const unsigned int minObjectSize = atoi(argv[8]);
 
 // Software Guide : BeginLatex
 //
@@ -99,24 +99,24 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-      const unsigned int Dimension = 2;
-      typedef unsigned char InputPixelType;
-      typedef unsigned short OutputPixelType;
+  const unsigned int Dimension = 2;
+  typedef unsigned char InputPixelType;
+  typedef unsigned short OutputPixelType;
 
-      typedef otb::Image<InputPixelType,Dimension> InputImageType;
-      typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
+  typedef otb::Image<InputPixelType,Dimension> InputImageType;
+  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
 
-      typedef otb::ImageFileReader<InputImageType> ReaderType;
-      typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
-      typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension>
-                                             StructuringElementType;
-      typedef otb::OpeningClosingMorphologicalFilter<InputImageType,
-                                    InputImageType,StructuringElementType>
-                                            OpeningClosingFilterType;
-      typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,
-                                   InputImageType,OpeningClosingFilterType>
-                                                    PyramidFilterType;
+  typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension>
+  StructuringElementType;
+  typedef otb::OpeningClosingMorphologicalFilter<InputImageType,
+  InputImageType,StructuringElementType>
+  OpeningClosingFilterType;
+  typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,
+  InputImageType,OpeningClosingFilterType>
+  PyramidFilterType;
 
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
@@ -128,9 +128,9 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-      typedef otb::MorphologicalPyramidSegmentationFilter<InputImageType,
-                                                         OutputImageType>
-                                             SegmentationFilterType;
+  typedef otb::MorphologicalPyramidSegmentationFilter<InputImageType,
+  OutputImageType>
+  SegmentationFilterType;
 
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
@@ -142,8 +142,8 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-      typedef SegmentationFilterType::OutputImageListIteratorType
-                                             OutputListIteratorType;
+  typedef SegmentationFilterType::OutputImageListIteratorType
+  OutputListIteratorType;
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -154,13 +154,13 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-      ReaderType::Pointer reader = ReaderType::New();
-      reader->SetFileName(inputFilename);
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(inputFilename);
 
-      PyramidFilterType::Pointer pyramid = PyramidFilterType::New();
-      pyramid->SetNumberOfLevels(numberOfLevels);
-      pyramid->SetDecimationRatio(decimationRatio);
-      pyramid->SetInput(reader->GetOutput());
+  PyramidFilterType::Pointer pyramid = PyramidFilterType::New();
+  pyramid->SetNumberOfLevels(numberOfLevels);
+  pyramid->SetDecimationRatio(decimationRatio);
+  pyramid->SetInput(reader->GetOutput());
 
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
@@ -180,13 +180,13 @@ int main(int argc, char * argv[])
 // Software Guide : BeginCodeSnippet
 
 
-      SegmentationFilterType::Pointer segmentation = SegmentationFilterType::New();
-      segmentation->SetReferenceImage(reader->GetOutput());
-      segmentation->SetBrighterDetails(pyramid->GetSupFilter());
-      segmentation->SetDarkerDetails(pyramid->GetInfFilter());
-      segmentation->SetSeedsQuantile(seedsQuantile);
-      segmentation->SetConnectedThresholdQuantile(segmentationQuantile);
-      segmentation->SetMinimumObjectSize(minObjectSize);
+  SegmentationFilterType::Pointer segmentation = SegmentationFilterType::New();
+  segmentation->SetReferenceImage(reader->GetOutput());
+  segmentation->SetBrighterDetails(pyramid->GetSupFilter());
+  segmentation->SetDarkerDetails(pyramid->GetInfFilter());
+  segmentation->SetSeedsQuantile(seedsQuantile);
+  segmentation->SetConnectedThresholdQuantile(segmentationQuantile);
+  segmentation->SetMinimumObjectSize(minObjectSize);
 
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
@@ -197,7 +197,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-      segmentation->Update();
+  segmentation->Update();
 
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
@@ -210,11 +210,11 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-      OutputListIteratorType it = segmentation->GetOutput()->Begin();
-      WriterType::Pointer writer;
-      int index = 1;
-      std::stringstream oss;
-      while(it!=segmentation->GetOutput()->End())
+  OutputListIteratorType it = segmentation->GetOutput()->Begin();
+  WriterType::Pointer writer;
+  int index = 1;
+  std::stringstream oss;
+  while (it!=segmentation->GetOutput()->End())
   {
     oss<<outputFilenamePrefix<<index<<"."<<outputFilenameSuffix;
     writer = WriterType::New();
@@ -237,5 +237,5 @@ int main(int argc, char * argv[])
 //
 // Software Guide : EndLatex
 
-      return EXIT_SUCCESS;
-    }
+  return EXIT_SUCCESS;
+}

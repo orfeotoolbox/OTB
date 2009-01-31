@@ -38,12 +38,12 @@ PURPOSE.  See the above copyright notices for more information.
 int main(int argc, char* argv[])
 {
 
-  if( argc < 5 )
-    {
-      std::cerr << "Usage: " << argv[0] << " inputImageFile ";
-      std::cerr << " outputImageFile expandFactor shrinkFactor" << std::endl;
-      return EXIT_FAILURE;
-    }
+  if ( argc < 5 )
+  {
+    std::cerr << "Usage: " << argv[0] << " inputImageFile ";
+    std::cerr << " outputImageFile expandFactor shrinkFactor" << std::endl;
+    return EXIT_FAILURE;
+  }
 
   const char* inputName = argv[1];
   const char* outputName = argv[2];

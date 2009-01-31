@@ -150,9 +150,12 @@ int main(int, char *[])
   MeshType::PointType p1;
   MeshType::PointType p2;
 
-  p0[0] = -1.0; p0[1] = 0.0;
-  p1[0] =  1.0; p1[1] = 0.0;
-  p2[0] =  1.0; p2[1] = 1.0;
+  p0[0] = -1.0;
+  p0[1] = 0.0;
+  p1[0] =  1.0;
+  p1[1] = 0.0;
+  p2[0] =  1.0;
+  p2[1] = 1.0;
 
   mesh->SetPoint( 0, p0 );
   mesh->SetPoint( 1, p1 );
@@ -318,13 +321,13 @@ int main(int, char *[])
 
 
   // Software Guide : BeginCodeSnippet
-  while( cellIterator != end )
-    {
+  while ( cellIterator != end )
+  {
     MeshType::CellType * cellptr = cellIterator.Value();
     LineType * line = dynamic_cast<LineType *>( cellptr );
     std::cout << line->GetNumberOfPoints() << std::endl;
     ++cellIterator;
-    }
+  }
   // Software Guide : EndCodeSnippet
 
   return EXIT_SUCCESS;

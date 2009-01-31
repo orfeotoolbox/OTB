@@ -82,12 +82,12 @@
 int main( int argc, char *argv[] )
 {
   if (argc < 8 )
-    {
+  {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImage outputImage conductanceTerm diffusionIterations lowerThreshold outputScaleLevel gradientMode " << std::endl;
     return 1;
-    }
+  }
 
   // Software Guide : BeginLatex
   //
@@ -122,11 +122,11 @@ int main( int argc, char *argv[] )
   // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader<RGBImageType> FileReaderType;
   typedef itk::VectorCastImageFilter<RGBImageType, VectorImageType>
-    CastFilterType;
+  CastFilterType;
   typedef itk::VectorGradientAnisotropicDiffusionImageFilter<VectorImageType,
-    VectorImageType>  DiffusionFilterType;
+  VectorImageType>  DiffusionFilterType;
   typedef itk::VectorGradientMagnitudeImageFilter<VectorImageType,float,ScalarImageType>
-    GradientMagnitudeFilterType;
+  GradientMagnitudeFilterType;
   typedef itk::WatershedImageFilter<ScalarImageType> WatershedFilterType;
   // Software Guide : EndCodeSnippet
 
@@ -168,7 +168,7 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   GradientMagnitudeFilterType::Pointer
-    gradient = GradientMagnitudeFilterType::New();
+  gradient = GradientMagnitudeFilterType::New();
   gradient->SetUsePrincipleComponents(atoi(argv[7]));
   // Software Guide : EndCodeSnippet
 
@@ -206,9 +206,9 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long>
-    ColorMapFunctorType;
+  ColorMapFunctorType;
   typedef itk::UnaryFunctorImageFilter<LabeledImageType,
-    RGBImageType, ColorMapFunctorType> ColorMapFilterType;
+  RGBImageType, ColorMapFunctorType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
   // Software Guide : EndCodeSnippet
 
@@ -233,13 +233,13 @@ int main( int argc, char *argv[] )
   // Software Guide : EndCodeSnippet
 
   try
-    {
+  {
     writer->Update();
-    }
+  }
   catch (itk::ExceptionObject &e)
-    {
+  {
     std::cerr << e << std::endl;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

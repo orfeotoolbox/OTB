@@ -61,7 +61,7 @@
 int main(int argc, char** argv )
 {
 
-  if(argc!= 9)
+  if (argc!= 9)
   {
     std::cerr <<"Usage: "<<argv[0];
     std::cerr<<" fixedFileName movingFileName fieldOutNameHorizontal fieldOutNameVertical imageOutName ";
@@ -80,19 +80,19 @@ int main(int argc, char** argv )
   typedef unsigned char                         OutputPixelType;
   typedef otb::Image<OutputPixelType,ImageDimension> OutputImageType;
 
-    // Software Guide : BeginLatex
+  // Software Guide : BeginLatex
   //
-   // Several type of \doxygen{otb}{Image} are required to represent the reference image (fixed)
+  // Several type of \doxygen{otb}{Image} are required to represent the reference image (fixed)
   // the image we want to register (moving) and the deformation field.
   //
-   // Software Guide : EndLatex
+  // Software Guide : EndLatex
 
   //Allocate Images
   // Software Guide : BeginCodeSnippet
   typedef otb::Image<PixelType,ImageDimension>         MovingImageType;
   typedef otb::Image<PixelType,ImageDimension>         FixedImageType;
   typedef otb::Image<DeformationPixelType,
-                               ImageDimension>         DeformationFieldType;
+  ImageDimension>         DeformationFieldType;
   // Software Guide : EndCodeSnippet
 
   typedef otb::ImageFileReader< FixedImageType > FixedReaderType;
@@ -116,7 +116,7 @@ int main(int argc, char** argv )
   //Blur input images
   // Software Guide : BeginCodeSnippet
   typedef itk::RecursiveGaussianImageFilter< FixedImageType,
-    FixedImageType > FixedBlurType;
+  FixedImageType > FixedBlurType;
 
   FixedBlurType::Pointer fBlur = FixedBlurType::New();
   fBlur->SetInput( fReader->GetOutput() );
@@ -124,7 +124,7 @@ int main(int argc, char** argv )
 
 
   typedef itk::RecursiveGaussianImageFilter< MovingImageType,
-    MovingImageType > MovingBlurType;
+  MovingImageType > MovingBlurType;
 
   MovingBlurType::Pointer mBlur = MovingBlurType::New();
   mBlur->SetInput( mReader->GetOutput() );
@@ -140,9 +140,9 @@ int main(int argc, char** argv )
   //Create the filter
   // Software Guide : BeginCodeSnippet
   typedef otb::NCCRegistrationFilter< FixedImageType,
-                                       MovingImageType,
-                                       DeformationFieldType >
-                                           RegistrationFilterType;
+  MovingImageType,
+  DeformationFieldType >
+  RegistrationFilterType;
 
   RegistrationFilterType::Pointer registrator = RegistrationFilterType::New();
 
@@ -177,7 +177,7 @@ int main(int argc, char** argv )
   //
   // Software Guide : EndLatex
 
-   // Software Guide : BeginCodeSnippet
+  // Software Guide : BeginCodeSnippet
   registrator->SetNumberOfIterations( atoi(argv[8]) );
 // Software Guide : EndCodeSnippet
   // registrator->GetDeformationField();

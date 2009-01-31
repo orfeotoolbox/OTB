@@ -87,12 +87,12 @@
 
 int main( int argc, char * argv[] )
 {
-  if( argc < 4 )
-    {
+  if ( argc < 4 )
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << "  inputImageFile   outputImageFile   sigma" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
 
   //  Software Guide : BeginLatex
@@ -134,7 +134,7 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::GradientMagnitudeRecursiveGaussianImageFilter<
-                        InputImageType, OutputImageType >  FilterType;
+  InputImageType, OutputImageType >  FilterType;
   // Software Guide : EndCodeSnippet
 
 
@@ -213,7 +213,7 @@ int main( int argc, char * argv[] )
   typedef otb::Image< WritePixelType, 2 >    WriteImageType;
 
   typedef itk::RescaleIntensityImageFilter<
-                   OutputImageType, WriteImageType > RescaleFilterType;
+  OutputImageType, WriteImageType > RescaleFilterType;
 
   RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
 

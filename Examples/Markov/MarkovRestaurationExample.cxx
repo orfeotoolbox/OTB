@@ -80,7 +80,7 @@
 int main(int argc, char* argv[] )
 {
 
-  if( argc != 8 )
+  if ( argc != 8 )
   {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
@@ -90,13 +90,13 @@ int main(int argc, char* argv[] )
   }
 
 
- //  Software Guide : BeginLatex
+//  Software Guide : BeginLatex
   //
   //  We declare the usual types:
   //
   //  Software Guide : EndLatex
 
-   // Software Guide : BeginCodeSnippet
+  // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
 
   typedef double InternalPixelType;
@@ -140,7 +140,7 @@ int main(int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::MarkovRandomFieldFilter
-    <InputImageType,LabelledImageType> MarkovRandomFieldFilterType;
+  <InputImageType,LabelledImageType> MarkovRandomFieldFilterType;
 
   typedef otb::MRFSamplerRandom< InputImageType, LabelledImageType> SamplerType;
 
@@ -157,13 +157,13 @@ int main(int argc, char* argv[] )
   // Software Guide : BeginCodeSnippet
 
   typedef otb::MRFEnergyEdgeFidelity
-      <LabelledImageType, LabelledImageType>  EnergyRegularizationType;
+  <LabelledImageType, LabelledImageType>  EnergyRegularizationType;
   typedef otb::MRFEnergyGaussian
-      <InputImageType, LabelledImageType>  EnergyFidelityType;
+  <InputImageType, LabelledImageType>  EnergyFidelityType;
 
   // Software Guide : EndCodeSnippet
 
- // Software Guide : BeginCodeSnippet
+// Software Guide : BeginCodeSnippet
   MarkovRandomFieldFilterType::Pointer markovFilter = MarkovRandomFieldFilterType::New();
 
   EnergyRegularizationType::Pointer energyRegularization = EnergyRegularizationType::New();
@@ -173,13 +173,13 @@ int main(int argc, char* argv[] )
   SamplerType::Pointer sampler = SamplerType::New();
   // Software Guide : EndCodeSnippet
 
-   if ((bool)(atoi(argv[7])) == true)
-    {
-      // Overpass random calculation(for test only):
-      sampler->InitializeSeed(0);
-      optimizer->InitializeSeed(1);
-      markovFilter->InitializeSeed(2);
-    }
+  if ((bool)(atoi(argv[7])) == true)
+  {
+    // Overpass random calculation(for test only):
+    sampler->InitializeSeed(0);
+    optimizer->InitializeSeed(1);
+    markovFilter->InitializeSeed(2);
+  }
 
   // Software Guide : BeginLatex
   //
@@ -216,7 +216,7 @@ int main(int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   markovFilter->SetTrainingInput(reader2->GetOutput());
- // Software Guide : EndCodeSnippet
+// Software Guide : EndCodeSnippet
 
 
   // Software Guide : BeginLatex
@@ -229,7 +229,7 @@ int main(int argc, char* argv[] )
   markovFilter->SetInput(reader->GetOutput());
 
   typedef itk::RescaleIntensityImageFilter
-      < LabelledImageType, LabelledImageType > RescaleType;
+  < LabelledImageType, LabelledImageType > RescaleType;
   RescaleType::Pointer rescaleFilter = RescaleType::New();
   rescaleFilter->SetOutputMinimum(0);
   rescaleFilter->SetOutputMaximum(255);

@@ -72,12 +72,12 @@
 
 int main( int argc, char * argv[] )
 {
-  if( argc < 4 )
-    {
+  if ( argc < 4 )
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << "  inputImageFile  outputImageFile  sigma [RescaledOutputImageFile] " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
 
   //  Software Guide : BeginLatex
@@ -118,7 +118,7 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::LaplacianRecursiveGaussianImageFilter<
-                        InputImageType, OutputImageType >  FilterType;
+  InputImageType, OutputImageType >  FilterType;
   // Software Guide : EndCodeSnippet
 
 
@@ -199,15 +199,15 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   try
-    {
+  {
     laplacian->Update();
-    }
-  catch( itk::ExceptionObject & err )
-    {
+  }
+  catch ( itk::ExceptionObject & err )
+  {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return EXIT_FAILURE;
-    }
+  }
   // Software Guide : EndCodeSnippet
 
 
@@ -253,11 +253,11 @@ int main( int argc, char * argv[] )
   // Rescale float outputs to png for inclusion in the Software guide
   //
   if (argc > 4)
-    {
+  {
     typedef unsigned char    CharPixelType;
     typedef otb::Image<CharPixelType, 2>    CharImageType;
     typedef itk::RescaleIntensityImageFilter< OutputImageType, CharImageType>
-                                                            RescaleFilterType;
+    RescaleFilterType;
     RescaleFilterType::Pointer rescale = RescaleFilterType::New();
     rescale->SetInput( laplacian->GetOutput() );
     rescale->SetOutputMinimum(   0 );
@@ -267,7 +267,7 @@ int main( int argc, char * argv[] )
     charWriter->SetFileName( argv[4] );
     charWriter->SetInput( rescale->GetOutput() );
     charWriter->Update();
-    }
+  }
 
   return EXIT_SUCCESS;
 }

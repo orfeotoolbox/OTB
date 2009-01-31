@@ -92,17 +92,17 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
   try
   {
-  // Software Guide : EndCodeSnippet
+    // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
-  // Now, we can declare the \doxygen{otb}{CommandLineArgumentParser} which is
-  // going to parse the command line, select the proper variables, handle the
-  // missing compulsory arguments and print an error message if necessary.
-  //
-  // Let's declare the parser:
-  //
-  //  Software Guide : EndLatex
+    //  Software Guide : BeginLatex
+    //
+    // Now, we can declare the \doxygen{otb}{CommandLineArgumentParser} which is
+    // going to parse the command line, select the proper variables, handle the
+    // missing compulsory arguments and print an error message if necessary.
+    //
+    // Let's declare the parser:
+    //
+    //  Software Guide : EndLatex
 
     // Software Guide : BeginCodeSnippet
     typedef otb::CommandLineArgumentParser ParserType;
@@ -129,7 +129,7 @@ int main( int argc, char * argv[] )
 
     // Software Guide : BeginCodeSnippet
     parser->SetProgramDescription(
-              "This program applies a Harris detector on the input image");
+      "This program applies a Harris detector on the input image");
     parser->AddInputImage();
     parser->AddOutputImage();
     parser->AddOption("--SigmaD",
@@ -157,19 +157,19 @@ int main( int argc, char * argv[] )
       parser->ParseCommandLine(argc,argv,parseResult);
     }
 
-    catch( itk::ExceptionObject & err )
+    catch ( itk::ExceptionObject & err )
     {
       std::string descriptionException = err.GetDescription();
-      if(descriptionException.find("ParseCommandLine(): Help Parser")
-         != std::string::npos)
-        {
-          return EXIT_SUCCESS;
-        }
-      if(descriptionException.find("ParseCommandLine(): Version Parser")
-         != std::string::npos)
-        {
-          return EXIT_SUCCESS;
-        }
+      if (descriptionException.find("ParseCommandLine(): Help Parser")
+          != std::string::npos)
+      {
+        return EXIT_SUCCESS;
+      }
+      if (descriptionException.find("ParseCommandLine(): Version Parser")
+          != std::string::npos)
+      {
+        return EXIT_SUCCESS;
+      }
       return EXIT_FAILURE;
     }
     // Software Guide : EndCodeSnippet
@@ -219,7 +219,7 @@ int main( int argc, char * argv[] )
 
     // Software Guide : BeginCodeSnippet
     typedef otb::HarrisImageFilter
-        <ImageType,ImageType> FilterType;
+    <ImageType,ImageType> FilterType;
     FilterType::Pointer filter = FilterType::New();
     // Software Guide : EndCodeSnippet
 
@@ -232,15 +232,15 @@ int main( int argc, char * argv[] )
     //  Software Guide : EndLatex
 
     // Software Guide : BeginCodeSnippet
-    if(parseResult->IsOptionPresent("--SigmaD"))
+    if (parseResult->IsOptionPresent("--SigmaD"))
       filter->SetSigmaD(parseResult->GetParameterDouble("--SigmaD"));
 
-    if(parseResult->IsOptionPresent("--SigmaI"))
+    if (parseResult->IsOptionPresent("--SigmaI"))
       filter->SetSigmaI(parseResult->GetParameterDouble("--SigmaI"));
 
-    if(parseResult->IsOptionPresent("--Alpha"))
+    if (parseResult->IsOptionPresent("--Alpha"))
       filter->SetAlpha(parseResult->GetParameterDouble("--Alpha"));
-     // Software Guide : EndCodeSnippet
+    // Software Guide : EndCodeSnippet
 
     //  Software Guide : BeginLatex
     //
@@ -250,7 +250,7 @@ int main( int argc, char * argv[] )
 
     // Software Guide : BeginCodeSnippet
     typedef itk::RescaleIntensityImageFilter
-      <ImageType,OutputImageType> RescalerType;
+    <ImageType,OutputImageType> RescalerType;
     RescalerType::Pointer rescaler = RescalerType::New();
 
     rescaler->SetOutputMinimum(0);
@@ -289,22 +289,22 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  catch( itk::ExceptionObject & err )
-    {
+  catch ( itk::ExceptionObject & err )
+  {
     std::cout << "Following otbException catch :" << std::endl;
     std::cout << err << std::endl;
     return EXIT_FAILURE;
-    }
-  catch( std::bad_alloc & err )
-    {
+  }
+  catch ( std::bad_alloc & err )
+  {
     std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl;
     return EXIT_FAILURE;
-    }
-  catch( ... )
-    {
+  }
+  catch ( ... )
+  {
     std::cout << "Unknown Exception found !" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
   return EXIT_SUCCESS;
 }
 // Software Guide : EndCodeSnippet

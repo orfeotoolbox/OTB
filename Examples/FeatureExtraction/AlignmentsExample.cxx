@@ -76,13 +76,13 @@
 
 int main( int argc, char *argv[] )
 {
-  if(argc!=4)
-    {
+  if (argc!=4)
+  {
 
     std::cout << "Usage : " << argv[0] << " inputImage outputImage epsilon" << std::endl;
     return EXIT_FAILURE;
 
-    }
+  }
 
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
@@ -118,7 +118,7 @@ int main( int argc, char *argv[] )
   // Software Guide : BeginCodeSnippet
   typedef itk::PolyLineParametricPath< Dimension >      PathType;
   typedef otb::ImageToPathListAlignFilter<InputImageType,PathType>
-                                                       ListAlignFilterType;
+  ListAlignFilterType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -158,7 +158,7 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::DrawPathFilter< InputImageType, PathType,
-                                   OutputImageType >  DrawPathFilterType;
+  OutputImageType >  DrawPathFilterType;
 
 
   // Software Guide : EndCodeSnippet
@@ -195,8 +195,8 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  while( listIt != pathList->End())
-    {
+  while ( listIt != pathList->End())
+  {
 
     DrawPathFilterType::Pointer drawPathFilter = DrawPathFilterType::New();
     drawPathFilter->SetImageInput( backgroundImage );
@@ -209,7 +209,7 @@ int main( int argc, char *argv[] )
 
     ++listIt;
 
-    }
+  }
 
   writer->SetInput( backgroundImage );
   // Software Guide : EndCodeSnippet

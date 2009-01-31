@@ -76,17 +76,17 @@ public:
   typedef                      float      ExternalType;
 
   void operator=( const VectorPixelAccessor & vpa )
-    {
-      m_Index = vpa.m_Index;
-    }
+  {
+    m_Index = vpa.m_Index;
+  }
   ExternalType Get( const InternalType & input ) const
-    {
-      return static_cast<ExternalType>( input[ m_Index ] );
-    }
+  {
+    return static_cast<ExternalType>( input[ m_Index ] );
+  }
   void SetIndex( unsigned int index )
-    {
-      m_Index = index;
-    }
+  {
+    m_Index = index;
+  }
 private:
   unsigned int m_Index;
 };
@@ -111,13 +111,13 @@ private:
 
 int main( int argc, char *argv[] )
 {
-  if( argc < 4 )
-    {
+  if ( argc < 4 )
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << "ImageAdaptor3   inputFileName outputComponentFileName ";
     std::cerr << " indexOfComponentToExtract" << std::endl;
     return -1;
-    }
+  }
 
 
 //  Software Guide : BeginLatex
@@ -138,7 +138,7 @@ int main( int argc, char *argv[] )
   typedef itk::CovariantVector< float, Dimension  >   VectorPixelType;
   typedef otb::Image< VectorPixelType, Dimension  >   VectorImageType;
   typedef itk::GradientRecursiveGaussianImageFilter< InputImageType,
-                                        VectorImageType> GradientFilterType;
+  VectorImageType> GradientFilterType;
 
   GradientFilterType::Pointer gradient = GradientFilterType::New();
 // Software Guide : EndCodeSnippet
@@ -156,7 +156,7 @@ int main( int argc, char *argv[] )
 
 // Software Guide : BeginCodeSnippet
   typedef itk::ImageAdaptor<  VectorImageType,
-                              VectorPixelAccessor > ImageAdaptorType;
+  VectorPixelAccessor > ImageAdaptorType;
 
   ImageAdaptorType::Pointer adaptor = ImageAdaptorType::New();
 // Software Guide : EndCodeSnippet
@@ -213,7 +213,7 @@ int main( int argc, char *argv[] )
 
   typedef otb::Image< unsigned char, Dimension >   OutputImageType;
   typedef itk::RescaleIntensityImageFilter< ImageAdaptorType, OutputImageType>
-    RescalerType;
+  RescalerType;
   RescalerType::Pointer rescaler = RescalerType::New();
   typedef otb::ImageFileWriter< OutputImageType >   WriterType;
   WriterType::Pointer writer = WriterType::New();

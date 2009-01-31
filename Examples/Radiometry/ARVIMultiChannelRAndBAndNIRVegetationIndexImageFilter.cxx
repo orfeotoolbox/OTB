@@ -100,13 +100,13 @@
 
 int main( int argc, char *argv[] )
 {
-  if( argc < 8 )
-    {
-      std::cerr << "Missing Parameters " << std::endl;
-      std::cerr << "Usage: " << argv[0];
-      std::cerr << " inputImage , outputImage , prettyInput , prettyOutput , redChannel , blueChannel , nirChannel , gama" << std::endl;
-      return 1;
-    }
+  if ( argc < 8 )
+  {
+    std::cerr << "Missing Parameters " << std::endl;
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " inputImage , outputImage , prettyInput , prettyOutput , redChannel , blueChannel , nirChannel , gama" << std::endl;
+    return 1;
+  }
 
   //  Software Guide : BeginLatex
   //
@@ -137,10 +137,10 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef  otb::Functor::ARVI< InputPixelType,
-                           InputPixelType,
-                     InputPixelType,
-                               OutputPixelType >        FunctorType;
-   // Software Guide : EndCodeSnippet
+  InputPixelType,
+  InputPixelType,
+  OutputPixelType >        FunctorType;
+  // Software Guide : EndCodeSnippet
 
 
   //  Software Guide : BeginLatex
@@ -154,13 +154,13 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter
-                                         <InputImageType,
-                                          OutputImageType,
-                                          FunctorType      >
-                   MultiChannelRAndBAndNIRVegetationIndexImageFilterType;
+  <InputImageType,
+  OutputImageType,
+  FunctorType      >
+  MultiChannelRAndBAndNIRVegetationIndexImageFilterType;
 
   MultiChannelRAndBAndNIRVegetationIndexImageFilterType::Pointer
-    filter = MultiChannelRAndBAndNIRVegetationIndexImageFilterType::New();
+  filter = MultiChannelRAndBAndNIRVegetationIndexImageFilterType::New();
   // Software Guide : EndCodeSnippet
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -225,20 +225,20 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   try
-    {
-      writer->Update();
-    }
-  catch( itk::ExceptionObject & excep )
-    {
-      std::cerr << "Exception caught !" << std::endl;
-      std::cerr << excep << std::endl;
-    }
+  {
+    writer->Update();
+  }
+  catch ( itk::ExceptionObject & excep )
+  {
+    std::cerr << "Exception caught !" << std::endl;
+    std::cerr << excep << std::endl;
+  }
   // Software Guide : EndCodeSnippet
-  catch( ... )
-    {
-      std::cout << "Unknown exception !" << std::endl;
-      return EXIT_FAILURE;
-    }
+  catch ( ... )
+  {
+    std::cout << "Unknown exception !" << std::endl;
+    return EXIT_FAILURE;
+  }
 
 
   // Pretty image creation for the printing
@@ -291,20 +291,20 @@ int main( int argc, char *argv[] )
   prettyWriter->SetInput( rescaler->GetOutput() );
 
   try
-    {
-      prettyWriter->Update();
-      vectPrettyWriter->Update();
-    }
-  catch( itk::ExceptionObject & excep )
-    {
-      std::cerr << "Exception caught !" << std::endl;
-      std::cerr << excep << std::endl;
-    }
-  catch( ... )
-    {
-      std::cout << "Unknown exception !" << std::endl;
-      return EXIT_FAILURE;
-    }
+  {
+    prettyWriter->Update();
+    vectPrettyWriter->Update();
+  }
+  catch ( itk::ExceptionObject & excep )
+  {
+    std::cerr << "Exception caught !" << std::endl;
+    std::cerr << excep << std::endl;
+  }
+  catch ( ... )
+  {
+    std::cout << "Unknown exception !" << std::endl;
+    return EXIT_FAILURE;
+  }
 
   return EXIT_SUCCESS;
 

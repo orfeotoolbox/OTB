@@ -46,16 +46,16 @@
 
 int main( int argc, char * argv[] )
 {
-  if( argc < 7 )
-    {
-      std::cerr << "Usage: " << std::endl;
-      std::cerr << argv[0] \
-    << "  inputImageFile  outputImageFile  " \
-    << "seedLowerThreshold seedUpperThreshold  "\
-    << "deltaLower  deltaUpper  " << std::endl;
+  if ( argc < 7 )
+  {
+    std::cerr << "Usage: " << std::endl;
+    std::cerr << argv[0] \
+              << "  inputImageFile  outputImageFile  " \
+              << "seedLowerThreshold seedUpperThreshold  "\
+              << "deltaLower  deltaUpper  " << std::endl;
 
-      return EXIT_FAILURE;
-    }
+    return EXIT_FAILURE;
+  }
 
   // Arguments
   char* inputImageName = argv[1];

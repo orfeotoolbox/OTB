@@ -66,26 +66,26 @@
 
 int main (int argc, char* argv[])
 {
-  if(argc!= 12)
-    {
-      std::cerr <<"Usage: "<<argv[0];
-      std::cerr<<"fixedFileName movingFileName fieldOutName imageOutName ";
-      std::cerr<<"pointSetStepX pointSetStepY explorationSize windowSize learningRate ";
-      std::cerr<<"nbIterations metricThreshold";
+  if (argc!= 12)
+  {
+    std::cerr <<"Usage: "<<argv[0];
+    std::cerr<<"fixedFileName movingFileName fieldOutName imageOutName ";
+    std::cerr<<"pointSetStepX pointSetStepY explorationSize windowSize learningRate ";
+    std::cerr<<"nbIterations metricThreshold";
 
 
-      return EXIT_FAILURE;
-    }
+    return EXIT_FAILURE;
+  }
 
   const unsigned int Dimension = 2;
 
-   // Software Guide : BeginLatex
-   //
-   // Then we must decide what pixel type to use for the image. We choose to do
-   // all the computation in floating point precision and rescale the results
-   // between 0 and 255 in order to export PNG images.
-   //
-   // Software Guide : EndLatex
+  // Software Guide : BeginLatex
+  //
+  // Then we must decide what pixel type to use for the image. We choose to do
+  // all the computation in floating point precision and rescale the results
+  // between 0 and 255 in order to export PNG images.
+  //
+  // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
 
@@ -134,7 +134,7 @@ int main (int argc, char* argv[])
   // Software Guide : BeginCodeSnippet
 
   typedef itk::NormalizedCorrelationImageToImageMetric<ImageType,
-               ImageType> MetricType;
+  ImageType> MetricType;
 
   // Software Guide : EndCodeSnippet
 
@@ -150,7 +150,7 @@ int main (int argc, char* argv[])
   typedef itk::Function::HammingWindowFunction<3> WindowFunctionType;
   typedef itk::ZeroFluxNeumannBoundaryCondition<ImageType> ConditionType;
   typedef itk::WindowedSincInterpolateImageFunction<ImageType,3,
-               WindowFunctionType,ConditionType ,double> InterpolatorType;
+  WindowFunctionType,ConditionType ,double> InterpolatorType;
 
   // Software Guide : EndCodeSnippet
 
@@ -194,7 +194,7 @@ int main (int argc, char* argv[])
   // Software Guide : BeginCodeSnippet
 
   typedef otb::DisparityMapEstimationMethod<ImageType,
-               ImageType,PointSetType> DMEstimationType;
+  ImageType,PointSetType> DMEstimationType;
   typedef DMEstimationType::SizeType SizeType;
 
   // Software Guide : EndCodeSnippet
@@ -240,9 +240,9 @@ int main (int argc, char* argv[])
   SizeType fixedSize =
     fixedReader->GetOutput()->GetLargestPossibleRegion().GetSize();
   unsigned int NumberOfXNodes = (fixedSize[0]-2*atoi(argv[7])-1)
-    /atoi(argv[5]);
+                                /atoi(argv[5]);
   unsigned int NumberOfYNodes = (fixedSize[1]-2*atoi(argv[7])-1)
-    /atoi(argv[6]);
+                                /atoi(argv[6]);
 
   ImageType::IndexType firstNodeIndex;
   firstNodeIndex[0] = atoi(argv[7]);
@@ -251,16 +251,16 @@ int main (int argc, char* argv[])
   PointSetType::Pointer  nodes = PointSetType::New();
   unsigned int nodeCounter = 0;
 
-  for(unsigned int x=0; x<NumberOfXNodes; x++)
-    {
-      for(unsigned int y=0; y<NumberOfYNodes; y++)
+  for (unsigned int x=0; x<NumberOfXNodes; x++)
   {
-    PointType p;
-    p[0] = firstNodeIndex[0]+x*atoi(argv[5]);
-    p[1] = firstNodeIndex[1]+y*atoi(argv[6]);
-    nodes->SetPoint( nodeCounter++,p);
-  }
+    for (unsigned int y=0; y<NumberOfYNodes; y++)
+    {
+      PointType p;
+      p[0] = firstNodeIndex[0]+x*atoi(argv[5]);
+      p[1] = firstNodeIndex[1]+y*atoi(argv[6]);
+      nodes->SetPoint( nodeCounter++,p);
     }
+  }
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -337,7 +337,7 @@ int main (int argc, char* argv[])
   // Software Guide : BeginCodeSnippet
 
   DMEstimationType::ParametersType
-    initialParameters(transform->GetNumberOfParameters() );
+  initialParameters(transform->GetNumberOfParameters() );
   initialParameters[0] = 0.0;
   initialParameters[1] = 0.0;
   dmestimator->SetInitialTransformParameters(initialParameters);
@@ -383,7 +383,7 @@ int main (int argc, char* argv[])
   // Software Guide : BeginCodeSnippet
 
   typedef otb::NearestPointDeformationFieldGenerator<PointSetType,
-               DeformationFieldType> GeneratorType;
+  DeformationFieldType> GeneratorType;
 
   // Software GUide : EndCodeSnippet
 
@@ -422,7 +422,7 @@ int main (int argc, char* argv[])
   generator->SetOutputOrigin(fixedReader->GetOutput()->GetOrigin());
   generator->SetOutputSpacing(fixedReader->GetOutput()->GetSpacing());
   generator->SetOutputSize(fixedReader->GetOutput()
-         ->GetLargestPossibleRegion().GetSize());
+                           ->GetLargestPossibleRegion().GetSize());
 
   // Software Guide : EndCodeSnippet
 
@@ -464,7 +464,7 @@ int main (int argc, char* argv[])
   // Software Guide :  BeginCodeSnippet
 
   typedef itk::WarpImageFilter<ImageType,ImageType,
-               DeformationFieldType> ImageWarperType;
+  DeformationFieldType> ImageWarperType;
 
   // Software Guide : EndCodeSnippet
 
@@ -505,7 +505,7 @@ int main (int argc, char* argv[])
   // Software Guide : BeginCodeSnippet
 
   typedef itk::RescaleIntensityImageFilter<ImageType,
-               OutputImageType> RescalerType;
+  OutputImageType> RescalerType;
 
   RescalerType::Pointer outputRescaler = RescalerType::New();
   outputRescaler->SetInput(warper->GetOutput());
@@ -542,10 +542,10 @@ int main (int argc, char* argv[])
   // Software Guide : BeginCodeSnippet
 
   typedef otb::MultiToMonoChannelExtractROI<PixelType,
-               PixelType> ChannelExtractionFilterType;
+  PixelType> ChannelExtractionFilterType;
 
   ChannelExtractionFilterType::Pointer channelExtractor
-    = ChannelExtractionFilterType::New();
+  = ChannelExtractionFilterType::New();
 
   channelExtractor->SetInput(generator->GetOutput());
   channelExtractor->SetChannel(1);

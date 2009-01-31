@@ -85,13 +85,13 @@ public:
 
     TOutput result = 0.0;
 
-    for(unsigned long pos = 0; pos< itA.Size(); ++pos)
-      {
+    for (unsigned long pos = 0; pos< itA.Size(); ++pos)
+    {
 
       result += static_cast<TOutput>(itA.GetPixel(pos)-itB.GetPixel(pos));
 
 
-      }
+    }
     return static_cast<TOutput>( result/itA.Size() );
   }
 };
@@ -118,22 +118,22 @@ public:
 // Software Guide : BeginCodeSnippet
 template <class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT MyChangeDetectorImageFilter :
-    public otb::BinaryFunctorNeighborhoodImageFilter<
-            TInputImage1,TInputImage2,TOutputImage,
-            MyChangeDetector<
-                   typename itk::ConstNeighborhoodIterator<TInputImage1>,
-                   typename itk::ConstNeighborhoodIterator<TInputImage2>,
-       typename TOutputImage::PixelType>   >
+      public otb::BinaryFunctorNeighborhoodImageFilter<
+      TInputImage1,TInputImage2,TOutputImage,
+      MyChangeDetector<
+      typename itk::ConstNeighborhoodIterator<TInputImage1>,
+      typename itk::ConstNeighborhoodIterator<TInputImage2>,
+      typename TOutputImage::PixelType>   >
 {
 public:
   /** Standard class typedefs. */
   typedef MyChangeDetectorImageFilter  Self;
   typedef typename otb::BinaryFunctorNeighborhoodImageFilter<
-      TInputImage1,TInputImage2,TOutputImage,
-          MyChangeDetector<
-               typename itk::ConstNeighborhoodIterator<TInputImage1>,
-               typename itk::ConstNeighborhoodIterator<TInputImage2>,
-               typename TOutputImage::PixelType>
+  TInputImage1,TInputImage2,TOutputImage,
+  MyChangeDetector<
+  typename itk::ConstNeighborhoodIterator<TInputImage1>,
+  typename itk::ConstNeighborhoodIterator<TInputImage2>,
+  typename TOutputImage::PixelType>
   >  Superclass;
   typedef itk::SmartPointer<Self>   Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
@@ -167,12 +167,12 @@ private:
 int main(int argc, char* argv[] )
 {
 
-  if( argc < 5 )
-    {
+  if ( argc < 5 )
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " inputImageFile1 inputImageFile2  radius outputImageFile " << std::endl;
     return -1;
-    }
+  }
 
   // Define the dimension of the images
   const unsigned int Dimension = 2;
@@ -208,7 +208,7 @@ int main(int argc, char* argv[] )
   typedef otb::ImageFileReader< InputImageType2 >  ReaderType2;
   typedef otb::ImageFileWriter< OutputImageType >  WriterType;
   typedef itk::RescaleIntensityImageFilter< ChangeImageType,
-                                            OutputImageType > RescalerType;
+  OutputImageType > RescalerType;
   // Software Guide : EndCodeSnippet
 
 
@@ -220,9 +220,9 @@ int main(int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef MyChangeDetectorImageFilter<
-                                InputImageType1,
-                                InputImageType2,
-                                ChangeImageType  >       FilterType;
+  InputImageType1,
+  InputImageType2,
+  ChangeImageType  >       FilterType;
 
   // Software Guide : EndCodeSnippet
 
@@ -266,15 +266,15 @@ int main(int argc, char* argv[] )
 
 
   try
-    {
+  {
     writer->Update();
-    }
-  catch( itk::ExceptionObject & err )
-    {
+  }
+  catch ( itk::ExceptionObject & err )
+  {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-    }
+  }
 
   // Software Guide : BeginLatex
   //

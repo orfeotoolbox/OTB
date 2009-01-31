@@ -82,7 +82,7 @@ int main(int argc, char * argv[])
 // Software Guide : BeginCodeSnippet
 
   typedef otb::SVMImageClassificationFilter<ImageType,LabeledImageType>
-                                                ClassificationFilterType;
+  ClassificationFilterType;
   typedef ClassificationFilterType::ModelType ModelType;
 
 // Software Guide : EndCodeSnippet

@@ -55,7 +55,7 @@
 
 int main(int argc, char * argv[])
 {
-  if( argc != 4 )
+  if ( argc != 4 )
   {
     std::cerr << "Usage: " << argv[0] << " <inputImageFile> ";
     std::cerr << " <outputRGBImageFile> <outputScaledImageFile>" << std::endl;

@@ -92,13 +92,13 @@
 
 int main( int argc, char *argv[] )
 {
-  if( argc < 7 )
-    {
+  if ( argc < 7 )
+  {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImage  outputImage seedX seedY lowerThreshold upperThreshold" << std::endl;
     return 1;
-    }
+  }
 
 
   //  Software Guide : BeginLatex
@@ -119,7 +119,7 @@ int main( int argc, char *argv[] )
   typedef otb::Image< OutputPixelType, Dimension > OutputImageType;
 
   typedef itk::CastImageFilter< InternalImageType, OutputImageType >
-    CastingFilterType;
+  CastingFilterType;
   CastingFilterType::Pointer caster = CastingFilterType::New();
 
 
@@ -144,7 +144,7 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef   itk::CurvatureFlowImageFilter<InternalImageType, InternalImageType>
-    CurvatureFlowImageFilterType;
+  CurvatureFlowImageFilterType;
   // Software Guide : EndCodeSnippet
 
 
@@ -157,7 +157,7 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   CurvatureFlowImageFilterType::Pointer smoothing =
-                         CurvatureFlowImageFilterType::New();
+    CurvatureFlowImageFilterType::New();
   // Software Guide : EndCodeSnippet
 
 
@@ -170,7 +170,7 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::NeighborhoodConnectedImageFilter<InternalImageType,
-                                    InternalImageType > ConnectedFilterType;
+  InternalImageType > ConnectedFilterType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -293,18 +293,18 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   try
-    {
+  {
     writer->Update();
-    }
-  catch( itk::ExceptionObject & excep )
-    {
+  }
+  catch ( itk::ExceptionObject & excep )
+  {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-    }
+  }
   // Software Guide : EndCodeSnippet
 
 
-    //  Software Guide : BeginLatex
+  //  Software Guide : BeginLatex
   //
   //  Let's run this example using as input the image
   //  \code{QB\_Suburb.png} provided in the directory

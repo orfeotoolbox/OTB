@@ -48,13 +48,13 @@
 
 int main( int argc, char *argv[] )
 {
-  if(argc!=4)
-    {
+  if (argc!=4)
+  {
 
     std::cout << "Usage : " << argv[0] << " inputImage roiFile outputTrainingImage" << std::endl;
     return EXIT_FAILURE;
 
-    }
+  }
 
   const char * imageFilename  = argv[1];
   const char * roiFilename  = argv[2];
@@ -83,7 +83,7 @@ int main( int argc, char *argv[] )
   // We allocate the output image
   OutputImageType::Pointer trainingImage = OutputImageType::New();
 
-    // Declare the type of the index to access images
+  // Declare the type of the index to access images
   typedef itk::Index<Dimension>         myIndexType;
 
   // Declare the type of the size
@@ -131,8 +131,8 @@ int main( int argc, char *argv[] )
   std::cout << "Nb of ROIS " << int(nbRois) << std::endl;
 
 
-  while( !roisFile.fail() && (nbRois > 0))
-    {
+  while ( !roisFile.fail() && (nbRois > 0))
+  {
 
     --nbRois;
     OutputPixelType label = 0;
@@ -169,8 +169,8 @@ int main( int argc, char *argv[] )
     it.GoToBegin();
 
     // Iteration and pixel value assignment
-    while(!it.IsAtEnd())
-      {
+    while (!it.IsAtEnd())
+    {
 
 
       it.Set(static_cast<OutputPixelType>(label));
@@ -179,10 +179,10 @@ int main( int argc, char *argv[] )
       //std::cout << (int)it.Get() << std::endl;
       ++it;
 
-      }
-
-
     }
+
+
+  }
 
 
 
