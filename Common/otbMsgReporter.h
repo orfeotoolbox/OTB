@@ -27,16 +27,16 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  /** \class MsgReporter
-   * \brief This class implements an message reporter windows. It's used by alls graphicals applications wants to report message 
-   *
-   * Use FLTK gui.
-   *
-   */
+/** \class MsgReporter
+ * \brief This class implements an message reporter windows. It's used by alls graphicals applications wants to report message
+ *
+ * Use FLTK gui.
+ *
+ */
 class MsgReporter
-  : public MsgReporterGUI , public itk::Object
+      : public MsgReporterGUI , public itk::Object
 {
- public:
+public:
   /** Standard class typedefs */
   typedef MsgReporter    Self;
   typedef itk::Object                 Superclass;
@@ -51,12 +51,12 @@ class MsgReporter
 
   /** Get the unique instance of the model */
   static Pointer GetInstance();
-  
+
   /** Show the viewer (Update) */
   virtual void Show();
   /** Hide the window */
   virtual void Hide();
-  
+
   /** Set the title of the window */
   virtual void SetTitle(const std::string & title);
   /** Send a new message in the edit area */
@@ -67,9 +67,9 @@ class MsgReporter
 protected:
   // Constructor and destructor
   MsgReporter();
-  ~MsgReporter(){};
+  ~MsgReporter() {};
 
- private:
+private:
   MsgReporter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 

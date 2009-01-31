@@ -21,76 +21,76 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  /** Initialize the singleton */
-  MsgReporter::Pointer MsgReporter::m_Instance = NULL;
+/** Initialize the singleton */
+MsgReporter::Pointer MsgReporter::m_Instance = NULL;
 
-  /// Constructor
-  MsgReporter
-  ::MsgReporter()
-  {
-        this->Build();
-        wMainWindow->show();
-        Fl_Text_Buffer * buffer = new Fl_Text_Buffer();
-        this->textArea->buffer(buffer);
-  }
+/// Constructor
+MsgReporter
+::MsgReporter()
+{
+  this->Build();
+  wMainWindow->show();
+  Fl_Text_Buffer * buffer = new Fl_Text_Buffer();
+  this->textArea->buffer(buffer);
+}
 
 
-  /** Manage the singleton */
-  MsgReporter::Pointer
-  MsgReporter
-  ::GetInstance()
+/** Manage the singleton */
+MsgReporter::Pointer
+MsgReporter
+::GetInstance()
+{
+  if (!m_Instance)
   {
-    if(!m_Instance)
-      {
-  m_Instance = MsgReporter::New();
-      }
-    return m_Instance;
+    m_Instance = MsgReporter::New();
   }
-  //Show
-  void
-  MsgReporter
-  ::Show()
-  {
-        this->wMainWindow->show();
-  }
-  //Hide
-  void
-  MsgReporter
-  ::Hide()
-  {
-        this->wMainWindow->hide();
-  }
-  //Set title
-  void
-  MsgReporter
-  ::SetTitle(const std::string & title)
-  {
-        std::string str(title);
-        str = str + " message reporter window";
-        this->wMainWindow->label(str.c_str());
-  }
-  //Send Msg
-  void
-  MsgReporter
-  ::SendMsg(const std::string & msg)
-  {
-        this->textArea->insert(msg.c_str());
-        this->textArea->insert("\n");
-        this->textArea->show_insert_position();
-        Fl::check();
-  }
+  return m_Instance;
+}
+//Show
+void
+MsgReporter
+::Show()
+{
+  this->wMainWindow->show();
+}
+//Hide
+void
+MsgReporter
+::Hide()
+{
+  this->wMainWindow->hide();
+}
+//Set title
+void
+MsgReporter
+::SetTitle(const std::string & title)
+{
+  std::string str(title);
+  str = str + " message reporter window";
+  this->wMainWindow->label(str.c_str());
+}
+//Send Msg
+void
+MsgReporter
+::SendMsg(const std::string & msg)
+{
+  this->textArea->insert(msg.c_str());
+  this->textArea->insert("\n");
+  this->textArea->show_insert_position();
+  Fl::check();
+}
 
-  //Send Error
-  void
-  MsgReporter
-  ::SendError(const std::string & msg)
-  {
-        this->textArea->insert("ERROR: ");
-        this->textArea->insert(msg.c_str());
-        this->textArea->insert("\n");
-        this->textArea->show_insert_position();
-        this->Show();
-        Fl::check();
-  }
+//Send Error
+void
+MsgReporter
+::SendError(const std::string & msg)
+{
+  this->textArea->insert("ERROR: ");
+  this->textArea->insert(msg.c_str());
+  this->textArea->insert("\n");
+  this->textArea->show_insert_position();
+  this->Show();
+  Fl::check();
+}
 
 }
