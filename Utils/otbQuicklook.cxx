@@ -54,7 +54,7 @@ int main(int argc, char* argv[] )
     ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
 
 
-        // Parse command line parameters
+    // Parse command line parameters
     typedef otb::CommandLineArgumentParser ParserType;
     ParserType::Pointer parser = ParserType::New();
 
@@ -80,14 +80,14 @@ int main(int argc, char* argv[] )
     {
       parser->ParseCommandLine(argc,argv,parseResult);
     }
-    catch( itk::ExceptionObject & err )
+    catch ( itk::ExceptionObject & err )
     {
       std::string descriptionException = err.GetDescription();
-      if(descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos)
+      if (descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos)
       {
         return EXIT_SUCCESS;
       }
-      if(descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos)
+      if (descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos)
       {
         std::cout << "If --SamplingRatio parameter is selected, ";
         std::cout << "SizeX and SizeY parameters  are not used " << std::endl;
@@ -98,7 +98,7 @@ int main(int argc, char* argv[] )
       return EXIT_FAILURE;
     }
 
-        // Defining the IO filename
+    // Defining the IO filename
     typedef otb::ImageFileReader< ExtractROIFilterType::InputImageType >    ReaderType;
     typedef otb::ImageFileWriter< ExtractROIFilterType::OutputImageType>    WriterType;
 
@@ -108,19 +108,19 @@ int main(int argc, char* argv[] )
     reader->SetFileName( parseResult->GetInputImage().c_str()  );
     writer->SetFileName( parseResult->GetOutputImage().c_str() );
 
-        // Setting the ROIFilter parameters
-        //Determine if using streaming
+    // Setting the ROIFilter parameters
+    //Determine if using streaming
     reader->GenerateOutputInformation();
 
     unsigned long regionROI[2];
 
-    if( parseResult->IsOptionPresent("--ROIStartX") )
+    if ( parseResult->IsOptionPresent("--ROIStartX") )
       extractROIFilter->SetStartX(parseResult->GetParameterULong("--ROIStartX"));
 
-    if( parseResult->IsOptionPresent("--ROIStartY") )
+    if ( parseResult->IsOptionPresent("--ROIStartY") )
       extractROIFilter->SetStartY(parseResult->GetParameterULong("--ROIStartY"));
 
-    if( parseResult->IsOptionPresent("--ROISizeX") )
+    if ( parseResult->IsOptionPresent("--ROISizeX") )
     {
       regionROI[0] = parseResult->GetParameterULong("--ROISizeX");
       extractROIFilter->SetSizeX(regionROI[0]);
@@ -129,7 +129,7 @@ int main(int argc, char* argv[] )
     {
       regionROI[0] = reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0];
     }
-    if( parseResult->IsOptionPresent("--ROISizeY") )
+    if ( parseResult->IsOptionPresent("--ROISizeY") )
     {
       regionROI[1] = parseResult->GetParameterULong("--ROISizeY");
       extractROIFilter->SetSizeY(regionROI[1]);
@@ -139,10 +139,10 @@ int main(int argc, char* argv[] )
       regionROI[1] = reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
     }
 
-    if( parseResult->IsOptionPresent("--ChannelList") )
+    if ( parseResult->IsOptionPresent("--ChannelList") )
     {
       int NumberOfChannel = parseResult->GetNumberOfParameters("--ChannelList");
-      for(int i = 0 ; i < NumberOfChannel ; i++)
+      for (int i = 0 ; i < NumberOfChannel ; i++)
       {
         unsigned int ChannelNumber = parseResult->GetParameterUInt("--ChannelList",i);
         extractROIFilter->SetChannel(ChannelNumber);
@@ -150,7 +150,7 @@ int main(int argc, char* argv[] )
     }
 
     if (    (extractROIFilter->GetSizeX() < 0) ||
-                 (extractROIFilter->GetSizeY() < 0)   )
+            (extractROIFilter->GetSizeY() < 0)   )
     {
       std::cout << " Size of ROI in x-direction and y -direction must be positive" << std::endl;
       return EXIT_SUCCESS;
@@ -167,7 +167,7 @@ int main(int argc, char* argv[] )
     double SamplingRatioX =1.0;
     double SamplingRatioY =1.0;
 
-    if( parseResult->IsOptionPresent("--SamplingRatio") )
+    if ( parseResult->IsOptionPresent("--SamplingRatio") )
     {
       Ratio = static_cast<unsigned int>(parseResult->GetParameterDouble("--SamplingRatio"));
       if (Ratio <=1 )
@@ -178,7 +178,7 @@ int main(int argc, char* argv[] )
     }
     else
     {
-      if( parseResult->IsOptionPresent("--SizeX") && parseResult->IsOptionPresent("--SizeY") )
+      if ( parseResult->IsOptionPresent("--SizeX") && parseResult->IsOptionPresent("--SizeY") )
       {
         SamplingRatioX =  ROISizeX / parseResult->GetParameterDouble("--SizeX");
         SamplingRatioY =  ROISizeY / parseResult->GetParameterDouble("--SizeY");
@@ -187,17 +187,17 @@ int main(int argc, char* argv[] )
       }
       else
       {
-        if( parseResult->IsOptionPresent("--SizeX") )
+        if ( parseResult->IsOptionPresent("--SizeX") )
         {
           Ratio =  static_cast<unsigned int>(ROISizeX / parseResult->GetParameterDouble("--SizeX"));
         }
 
-        if( parseResult->IsOptionPresent("--SizeY") )
+        if ( parseResult->IsOptionPresent("--SizeY") )
         {
           Ratio =  static_cast<unsigned int>(ROISizeY / parseResult->GetParameterDouble("--SizeY"));
         }
       }
-      if( Ratio <= 1.)
+      if ( Ratio <= 1.)
       {
         std::cout << "Error in SizeX and/or SizeY : values must be greater than 1." << std::endl;
         return EXIT_FAILURE;
@@ -205,9 +205,9 @@ int main(int argc, char* argv[] )
     }
 
 
-        // Setting the ShrinkImageFilter parameters
-/*        typedef itk::ShrinkImageFilter< ExtractROIFilterType::OutputImageType,
-    ExtractROIFilterType::OutputImageType >  ShrinkImageFilterType;*/
+    // Setting the ShrinkImageFilter parameters
+    /*        typedef itk::ShrinkImageFilter< ExtractROIFilterType::OutputImageType,
+        ExtractROIFilterType::OutputImageType >  ShrinkImageFilterType;*/
     typedef otb::StreamingShrinkImageFilter<ExtractROIFilterType::OutputImageType,ExtractROIFilterType::OutputImageType> ShrinkImageFilterType;
 
     ShrinkImageFilterType::Pointer ResamplingFilter = ShrinkImageFilterType::New();
@@ -222,18 +222,18 @@ int main(int argc, char* argv[] )
 
 
   }
-  catch( itk::ExceptionObject & err )
+  catch ( itk::ExceptionObject & err )
   {
     std::cout << "Following otbException catch :" << std::endl;
     std::cout << err << std::endl;
     return EXIT_FAILURE;
   }
-  catch( std::bad_alloc & err )
+  catch ( std::bad_alloc & err )
   {
     std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl;
     return EXIT_FAILURE;
   }
-  catch( ... )
+  catch ( ... )
   {
     std::cout << "Unknown Exception found !" << std::endl;
     return EXIT_FAILURE;
