@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
   {
     ossimInit::instance()->initialize(argc, argv);
 
-        // Parse command line parameters
+    // Parse command line parameters
     typedef otb::CommandLineArgumentParser ParserType;
     ParserType::Pointer parser = ParserType::New();
 
@@ -61,22 +61,22 @@ int main(int argc, char* argv[])
     {
       parser->ParseCommandLine(argc,argv,parseResult);
     }
-    catch( itk::ExceptionObject & err )
+    catch ( itk::ExceptionObject & err )
     {
       std::string descriptionException = err.GetDescription();
-      if(descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos)
+      if (descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos)
       {
         std::cout << "WARNING : output file pixels are converted in 'unsigned char'" << std::endl;
         return EXIT_SUCCESS;
       }
-      if(descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos)
+      if (descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos)
       {
         return EXIT_SUCCESS;
       }
       return EXIT_FAILURE;
     }
 
-        // Code
+    // Code
 
     typedef otb::UtmForwardProjection UtmProjectionType;
     UtmProjectionType::Pointer utmProjection = UtmProjectionType::New();
@@ -87,7 +87,7 @@ int main(int argc, char* argv[])
 
     int utmZone = utmProjection->GetZoneFromGeoPoint(geoPoint);
 
-    if(!parseResult->IsOptionPresent("--OTBTesting"))
+    if (!parseResult->IsOptionPresent("--OTBTesting"))
     {
       std::cout << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," << geoPoint[0] << ")" << std::endl;
       std::cout << "UTM Corresponding Zone       : ==> " << utmZone << " <=="  << std::endl;
@@ -107,18 +107,18 @@ int main(int argc, char* argv[])
 
 
   }
-  catch( itk::ExceptionObject & err )
+  catch ( itk::ExceptionObject & err )
   {
     std::cout << "Exception itk::ExceptionObject raised !" << std::endl;
     std::cout << err << std::endl;
     return EXIT_FAILURE;
   }
-  catch( std::bad_alloc & err )
+  catch ( std::bad_alloc & err )
   {
     std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl;
     return EXIT_FAILURE;
   }
-  catch( ... )
+  catch ( ... )
   {
     std::cout << "Unknown exception raised !" << std::endl;
     return EXIT_FAILURE;
