@@ -61,7 +61,7 @@ int generic_main_carto_geo(TMapProjection* mapProjection, otb::CommandLineArgume
 
     geoPoint = mapProjection->TransformPoint(cartoPoint);
 
-    if(!parseResult->IsOptionPresent("--OTBTesting"))
+    if (!parseResult->IsOptionPresent("--OTBTesting"))
     {
       std::cout << std::setprecision(10) << "Cartographic Point  (x , y)  : (" << cartoPoint[0] << "," << cartoPoint[1] << ")" << std::endl;
       std::cout << std::setprecision(10) << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," <<  geoPoint[0] << ")" << std::endl;
@@ -81,18 +81,18 @@ int generic_main_carto_geo(TMapProjection* mapProjection, otb::CommandLineArgume
 
 
   }
-  catch( itk::ExceptionObject & err )
+  catch ( itk::ExceptionObject & err )
   {
     std::cout << "Exception itk::ExceptionObject raised !" << std::endl;
     std::cout << err << std::endl;
     return EXIT_FAILURE;
   }
-  catch( std::bad_alloc & err )
+  catch ( std::bad_alloc & err )
   {
     std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl;
     return EXIT_FAILURE;
   }
-  catch( ... )
+  catch ( ... )
   {
     std::cout << "Unknown exception raised !" << std::endl;
     return EXIT_FAILURE;
@@ -110,7 +110,7 @@ int main(int argc, char* argv[])
   {
     ossimInit::instance()->initialize(argc, argv);
 
-        // Parse command line parameters
+    // Parse command line parameters
     typedef otb::CommandLineArgumentParser ParserType;
     ParserType::Pointer parser = ParserType::New();
 
@@ -126,22 +126,22 @@ int main(int argc, char* argv[])
     {
       parser->ParseCommandLine(argc,argv,parseResult);
     }
-    catch( itk::ExceptionObject & err )
+    catch ( itk::ExceptionObject & err )
     {
       std::string descriptionException = err.GetDescription();
-      if(descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos)
+      if (descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos)
       {
         std::cout << "WARNING : output file pixels are converted in 'unsigned char'" << std::endl;
         return EXIT_SUCCESS;
       }
-      if(descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos)
+      if (descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos)
       {
         return EXIT_SUCCESS;
       }
       return EXIT_FAILURE;
     }
 
-        // Code
+    // Code
 
     std::string typeMap = parseResult->GetParameterString("--MapProjectionType",0);
     int nbParams = parseResult->GetNumberOfParameters("--MapProjectionType");
@@ -244,18 +244,18 @@ int main(int argc, char* argv[])
 
 
   }
-  catch( itk::ExceptionObject & err )
+  catch ( itk::ExceptionObject & err )
   {
     std::cout << "Exception itk::ExceptionObject raised !" << std::endl;
     std::cout << err << std::endl;
     return EXIT_FAILURE;
   }
-  catch( std::bad_alloc & err )
+  catch ( std::bad_alloc & err )
   {
     std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl;
     return EXIT_FAILURE;
   }
-  catch( ... )
+  catch ( ... )
   {
     std::cout << "Unknown exception raised !" << std::endl;
     return EXIT_FAILURE;
