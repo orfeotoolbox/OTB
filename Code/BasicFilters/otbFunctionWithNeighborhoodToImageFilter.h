@@ -51,7 +51,7 @@ namespace otb
 
 template <class TInputImage, class TOutputImage,class TFunction    >
 class ITK_EXPORT FunctionWithNeighborhoodToImageFilter :
-    public FunctionToImageFilter<TInputImage,TOutputImage,TFunction>
+      public FunctionToImageFilter<TInputImage,TOutputImage,TFunction>
 {
 public:
   /** Standard class typedefs. */
@@ -87,14 +87,14 @@ public:
   /** Connect one of the operands for pixel-wise addition. */
   //void SetInput( const TInputImage *image);
 
-/** Set the internal spatial function. */
-  void SetFunction( FunctionType* PixelFunction ) 
-    {
-      Superclass::SetFunction( PixelFunction ); 
-      //m_Radius = this->GetFunction()->GetRadius();
-      //m_Offset = this->GetFunction()->GetOffset();
-      this->Modified(); 
-    };
+  /** Set the internal spatial function. */
+  void SetFunction( FunctionType* PixelFunction )
+  {
+    Superclass::SetFunction( PixelFunction );
+    //m_Radius = this->GetFunction()->GetRadius();
+    //m_Offset = this->GetFunction()->GetOffset();
+    this->Modified();
+  };
 
   /** Image dimensions */
   itkStaticConstMacro(InputImageDimension, unsigned int,

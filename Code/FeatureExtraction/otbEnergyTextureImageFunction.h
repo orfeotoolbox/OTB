@@ -29,23 +29,23 @@ namespace otb
  * \class EnergyImageFunction
  * \brief Calculate the energy in the neighborhood of a pixel
  *
- * This class is templated over the input image type and the 
+ * This class is templated over the input image type and the
  * coordinate representation type (e.g. float or double ).
  *
  * \ingroup ImageFunctions
  */
 template <class TInputImage, class TCoordRep = float >
 class ITK_EXPORT EnergyTextureImageFunction :
-  public itk::ImageFunction< TInputImage, ITK_TYPENAME itk::NumericTraits<typename TInputImage::PixelType>::RealType, TCoordRep >
+      public itk::ImageFunction< TInputImage, ITK_TYPENAME itk::NumericTraits<typename TInputImage::PixelType>::RealType, TCoordRep >
 {
-  public:
+public:
   /** Standard class typedefs. */
   typedef EnergyTextureImageFunction Self;
   typedef itk::ImageFunction<TInputImage, ITK_TYPENAME itk::NumericTraits<typename TInputImage::PixelType>::RealType,
   TCoordRep > Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(EnergyTextureImageFunction, itk::ImageFunction);
 
@@ -66,24 +66,24 @@ class ITK_EXPORT EnergyTextureImageFunction :
   /** Dimension of the underlying image. */
   itkStaticConstMacro(ImageDimension, unsigned int,InputImageType::ImageDimension);
 
-  
+
   /** Evalulate the function at specified index */
   virtual RealType EvaluateAtIndex( const IndexType& index ) const;
-  
+
   /** Evaluate the function at non-integer positions */
   virtual RealType Evaluate( const PointType& point ) const
-    { 
-      IndexType index;
-      this->ConvertPointToNearestIndex( point, index );
-      return this->EvaluateAtIndex( index ); 
-    }
-  virtual RealType EvaluateAtContinuousIndex( 
+  {
+    IndexType index;
+    this->ConvertPointToNearestIndex( point, index );
+    return this->EvaluateAtIndex( index );
+  }
+  virtual RealType EvaluateAtContinuousIndex(
     const ContinuousIndexType& cindex ) const
-    { 
-      IndexType index;
-      this->ConvertContinuousIndexToNearestIndex( cindex, index );
-      return this->EvaluateAtIndex( index ) ; 
-    }
+  {
+    IndexType index;
+    this->ConvertContinuousIndexToNearestIndex( cindex, index );
+    return this->EvaluateAtIndex( index ) ;
+  }
 
   /** Get/Set the radius of the neighborhood over which the
       statistics are evaluated */
@@ -91,10 +91,10 @@ class ITK_EXPORT EnergyTextureImageFunction :
   itkGetMacro( Radius, SizeType);
   itkSetMacro( Offset, OffsetType);
   itkGetMacro( Offset, OffsetType );
- 
+
 protected:
   EnergyTextureImageFunction();
-  ~EnergyTextureImageFunction(){};
+  ~EnergyTextureImageFunction() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

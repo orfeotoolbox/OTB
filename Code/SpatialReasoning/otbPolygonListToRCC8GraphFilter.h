@@ -85,7 +85,7 @@ public:
   itkSetMacro(Optimisation,bool);
   itkBooleanMacro(UseInverted);
   itkSetMacro(UseInverted,bool);
-  
+
   void SetSegmentationRanges(SegmentationRangesType ranges)
   {
     m_SegmentationRanges = ranges;

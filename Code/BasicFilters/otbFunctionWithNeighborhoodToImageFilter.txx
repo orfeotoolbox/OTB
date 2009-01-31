@@ -64,7 +64,7 @@ template <class TInputImage, class TOutputImage, class TFunction  >
 void
 FunctionWithNeighborhoodToImageFilter<TInputImage,TOutputImage,TFunction>
 ::GenerateInputRequestedRegion()
-{ 
+{
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
 
@@ -73,9 +73,9 @@ FunctionWithNeighborhoodToImageFilter<TInputImage,TOutputImage,TFunction>
   OutputImagePointer outputPtr = this->GetOutput();
 
   if ( !inputPtr || !outputPtr )
-    {
+  {
     return;
-    }
+  }
   // get a copy of the input requested region (should equal the output
   // requested region)
   InputImageRegionType inputRequestedRegion = inputPtr->GetRequestedRegion();
@@ -83,17 +83,17 @@ FunctionWithNeighborhoodToImageFilter<TInputImage,TOutputImage,TFunction>
   // pad the input requested region by the operator radius
   InputImageSizeType maxRad;
   maxRad[0] = m_Radius[0] + vcl_abs(m_Offset[0]);
-  maxRad[1] = m_Radius[0] + vcl_abs(m_Offset[1]); 
+  maxRad[1] = m_Radius[0] + vcl_abs(m_Offset[1]);
   inputRequestedRegion.PadByRadius( maxRad );
 
   // crop the input requested region at the input's largest possible region
   if ( inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
-    {
+  {
     inputPtr->SetRequestedRegion( inputRequestedRegion );
     return;
-    }
+  }
   else
-    {
+  {
     // Couldn't crop the region (requested region is outside the largest
     // possible region).  Throw an exception.
 
@@ -104,12 +104,12 @@ FunctionWithNeighborhoodToImageFilter<TInputImage,TOutputImage,TFunction>
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
     itk::OStringStream msg;
     msg << this->GetNameOfClass()
-        << "::GenerateInputRequestedRegion()";
+    << "::GenerateInputRequestedRegion()";
     e.SetLocation(msg.str().c_str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
     e.SetDataObject(inputPtr);
     throw e;
-    }
+  }
 }
 
 
@@ -135,15 +135,15 @@ FunctionWithNeighborhoodToImageFilter<TInputImage,TOutputImage,TFunction>
   inputIt.GoToBegin();
   outputIt.GoToBegin();
 
-  while( !inputIt.IsAtEnd() )
-    {
-      //std::cout<<"MOTHER "<<threadId<<" : "<<inputIt.GetIndex()<<" "<<inputIt.Get()<<std::endl;
-      outputIt.Set( static_cast<OutputImagePixelType>(this->GetFunction()->EvaluateAtIndex(inputIt.GetIndex())) );
-      ++inputIt;
-      ++outputIt;
+  while ( !inputIt.IsAtEnd() )
+  {
+    //std::cout<<"MOTHER "<<threadId<<" : "<<inputIt.GetIndex()<<" "<<inputIt.Get()<<std::endl;
+    outputIt.Set( static_cast<OutputImagePixelType>(this->GetFunction()->EvaluateAtIndex(inputIt.GetIndex())) );
+    ++inputIt;
+    ++outputIt;
 
-      progress.CompletedPixel(); // potential exception thrown here
-    }
+    progress.CompletedPixel(); // potential exception thrown here
+  }
 }
 } // end namespace otb
 

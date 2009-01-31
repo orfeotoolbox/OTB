@@ -76,13 +76,13 @@ UnaryFunctorObjectListFilter<TInputList,TOutputList,TFunction>
   OutputListPointer outputPtr = this->GetOutput();
   for (unsigned int i=0; i< this->m_ObjectListPerThread.size(); ++i)
   {
-  if(this->m_ObjectListPerThread[i].IsNotNull())
+    if (this->m_ObjectListPerThread[i].IsNotNull())
     {
-    for (OutputListIterator it = this->m_ObjectListPerThread[i]->Begin();
-         it != this->m_ObjectListPerThread[i]->End();
-         ++it)
+      for (OutputListIterator it = this->m_ObjectListPerThread[i]->Begin();
+           it != this->m_ObjectListPerThread[i]->End();
+           ++it)
       {
-      outputPtr->PushBack(it.Get());
+        outputPtr->PushBack(it.Get());
       }
     }
   }

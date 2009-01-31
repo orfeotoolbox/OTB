@@ -23,48 +23,72 @@
 
 namespace otb
 {
-  /** \class CloudDetectionFunctor
-   *  \brief This functor first uses CloudEstimatorFunctor
-   *  \brief And then binarise the image with two thresholds
-   */
+/** \class CloudDetectionFunctor
+ *  \brief This functor first uses CloudEstimatorFunctor
+ *  \brief And then binarise the image with two thresholds
+ */
 namespace Functor
 {
 template<class TInput,class TOutputValue>
 class CloudDetectionFunctor
 {
- public:
+public:
   typedef CloudEstimatorFunctor<TInput, TOutputValue> CloudEstimatorFunctorType;
 
   CloudDetectionFunctor()
-    {
-      m_MinThreshold = 0.0;
-      m_MaxThreshold = 1.0;
-    };
+  {
+    m_MinThreshold = 0.0;
+    m_MaxThreshold = 1.0;
+  };
 
-  ~CloudDetectionFunctor(){};
+  ~CloudDetectionFunctor() {};
   inline TOutputValue operator()(const TInput& inPix)
+  {
+    if ( (m_CloudEstimatorFunctor(inPix)>m_MinThreshold) && (m_CloudEstimatorFunctor(inPix)<m_MaxThreshold) )
     {
-      if( (m_CloudEstimatorFunctor(inPix)>m_MinThreshold) && (m_CloudEstimatorFunctor(inPix)<m_MaxThreshold) )
-      {
-        return 1;
-      }
-      else 
-      {
-        return 0;
-      }
+      return 1;
     }
+    else
+    {
+      return 0;
+    }
+  }
 
-  void SetReferencePixel( TInput ref ){ m_CloudEstimatorFunctor.SetReferencePixel(ref); };
-  void SetVariance(double variance){ m_CloudEstimatorFunctor.SetVariance(variance); };
-  void SetMinThreshold(double threshold){ m_MinThreshold = threshold; };
-  void SetMaxThreshold(double threshold){ m_MaxThreshold = threshold; };
-  double GetMinThreshold(){ return m_MinThreshold; };
-  double GetMaxThreshold(){ return m_MaxThreshold; };
-  double GetVariance(){ return m_CloudEstimatorFunctor.GetVariance(); };
-  TInput GetReferencePixel(){ return m_CloudEstimatorFunctor.GetReferencePixel(); };
+  void SetReferencePixel( TInput ref )
+  {
+    m_CloudEstimatorFunctor.SetReferencePixel(ref);
+  };
+  void SetVariance(double variance)
+  {
+    m_CloudEstimatorFunctor.SetVariance(variance);
+  };
+  void SetMinThreshold(double threshold)
+  {
+    m_MinThreshold = threshold;
+  };
+  void SetMaxThreshold(double threshold)
+  {
+    m_MaxThreshold = threshold;
+  };
+  double GetMinThreshold()
+  {
+    return m_MinThreshold;
+  };
+  double GetMaxThreshold()
+  {
+    return m_MaxThreshold;
+  };
+  double GetVariance()
+  {
+    return m_CloudEstimatorFunctor.GetVariance();
+  };
+  TInput GetReferencePixel()
+  {
+    return m_CloudEstimatorFunctor.GetReferencePixel();
+  };
 
 
- protected:
+protected:
   CloudEstimatorFunctorType m_CloudEstimatorFunctor;
   double m_MinThreshold;
   double m_MaxThreshold;

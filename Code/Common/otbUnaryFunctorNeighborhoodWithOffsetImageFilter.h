@@ -23,7 +23,8 @@
 #include "itkConstNeighborhoodIterator.h"
 #include "itkProcessObject.h"
 
-namespace otb {
+namespace otb
+{
 /** \class UnaryFunctorNeighborhoodWithOffsetImageFilter
  * \brief Implements neighborhood-wise generic operation on image
  *
@@ -35,7 +36,7 @@ namespace otb {
  */
 template <class TInputImage, class TOutputImage, class TFunction >
 class ITK_EXPORT UnaryFunctorNeighborhoodWithOffsetImageFilter
-  : public itk::ImageToImageFilter<TInputImage,TOutputImage>
+      : public itk::ImageToImageFilter<TInputImage,TOutputImage>
 {
 public:
   /** Standard class typedefs. */
@@ -71,11 +72,11 @@ public:
   itkGetMacro(Radius,unsigned int);
   /** Set/Get the offset */
   void SetOffset(InputImageOffsetType off)
-    {
-      m_Offset = off;
-      this->GetFunctor().SetOffset(off);
-      this->Modified();
-    };
+  {
+    m_Offset = off;
+    this->GetFunctor().SetOffset(off);
+    this->Modified();
+  };
   itkGetMacro(Offset,InputImageOffsetType);
 
   /** Get the functor object.  The functor is returned by reference.
@@ -84,15 +85,18 @@ public:
    * SmartPointer.) */
   FunctorType& GetFunctor()
   {
-        this->Modified();
-        return m_Functor;
+    this->Modified();
+    return m_Functor;
   }
 
   /** Get the functor object.  The functor is returned by reference.
    * (Functors do not have to derive from itk::LightObject, so they do
    * not necessarily have a reference count. So we cannot return a
    * SmartPointer.) */
-  const FunctorType& GetFunctor() const { return m_Functor; };
+  const FunctorType& GetFunctor() const
+  {
+    return m_Functor;
+  };
 
   /** Set the functor object.  This replaces the current Functor with a
    * copy of the specified Functor. This allows the user to specify a
@@ -145,9 +149,9 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   unsigned int m_Radius;
-  
+
   FunctorType m_Functor;
-  
+
 
   InputImageOffsetType m_Offset;
 };

@@ -50,7 +50,7 @@ PointSetDensityFunction< TPointSet,   TOutput>
   typename otb::Image<OutputType,2>::IndexType  index;
   index[0] = static_cast<long int>(input[0]);
   index[1] = static_cast<long int>(input[1]);
-  
+
   int accu = 0;
   double surface = M_PI*vcl_pow(2.,static_cast<double>(m_Radius));
 

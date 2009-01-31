@@ -111,7 +111,10 @@ CloudDetectionFilter<TInputImage,TOutputImage,TFunction>
 template <class TInputImage, class TOutputImage, class TFunction>
 void
 CloudDetectionFilter<TInputImage,TOutputImage,TFunction>
-::SetMinThreshold(double threshold){ this->GetFunctor().SetMinThreshold(threshold); }
+::SetMinThreshold(double threshold)
+{
+  this->GetFunctor().SetMinThreshold(threshold);
+}
 
 /**
  * SetMaxThreshold
@@ -119,7 +122,10 @@ CloudDetectionFilter<TInputImage,TOutputImage,TFunction>
 template <class TInputImage, class TOutputImage, class TFunction>
 void
 CloudDetectionFilter<TInputImage,TOutputImage,TFunction>
-::SetMaxThreshold(double threshold){ this->GetFunctor().SetMaxThreshold(threshold); }
+::SetMaxThreshold(double threshold)
+{
+  this->GetFunctor().SetMaxThreshold(threshold);
+}
 
 /**
  * GetMinThreshold
@@ -127,7 +133,10 @@ CloudDetectionFilter<TInputImage,TOutputImage,TFunction>
 template <class TInputImage, class TOutputImage, class TFunction>
 double
 CloudDetectionFilter<TInputImage,TOutputImage,TFunction>
-::GetMinThreshold(){  return this->GetFunctor().GetMinThreshold(); }
+::GetMinThreshold()
+{
+  return this->GetFunctor().GetMinThreshold();
+}
 
 /**
  * GetMaxThreshold
