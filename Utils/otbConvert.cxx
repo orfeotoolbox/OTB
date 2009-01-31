@@ -48,7 +48,7 @@ int generic_main_convert(otb::CommandLineArgumentParseResult* parseResult)
 
   writer->SetFileName(parseResult->GetOutputImage().c_str());
 
-  if(parseResult->IsOptionPresent("--UseRescale"))
+  if (parseResult->IsOptionPresent("--UseRescale"))
   {
     typedef otb::ImageFileReader<InputImageType> ReaderType;
     typename ReaderType::Pointer reader=ReaderType::New();
@@ -111,15 +111,15 @@ int main(int argc, char * argv[])
     {
       parser->ParseCommandLine(argc,argv,parseResult);
     }
-    catch( itk::ExceptionObject & err )
+    catch ( itk::ExceptionObject & err )
     {
       std::string descriptionException = err.GetDescription();
-      if(descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos)
+      if (descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos)
       {
         std::cout << "WARNING : output file pixels are converted in 'unsigned char'" << std::endl;
         return EXIT_SUCCESS;
       }
-      if(descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos)
+      if (descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos)
       {
         return EXIT_SUCCESS;
       }
@@ -127,54 +127,54 @@ int main(int argc, char * argv[])
     }
 
     unsigned int type=1;
-    if(parseResult->IsOptionPresent("--OutputPixelType"))
+    if (parseResult->IsOptionPresent("--OutputPixelType"))
     {
       type=parseResult->GetParameterUInt("--OutputPixelType");
     }
 
 
-    switch(type)
+    switch (type)
     {
-      case 1:
-        generic_main_convert<unsigned char>(parseResult);
-        break;
-      case 2:
-        generic_main_convert<short int>(parseResult);
-        break;
-      case 3:
-        generic_main_convert<int>(parseResult);
-        break;
-      case 4:
-        generic_main_convert<float>(parseResult);
-        break;
-      case 5:
-        generic_main_convert<double>(parseResult);
-        break;
-      case 12:
-        generic_main_convert<unsigned short int>(parseResult);
-        break;
-      case 13:
-        generic_main_convert<unsigned int>(parseResult);
-        break;
-      default:
-        generic_main_convert<unsigned char>(parseResult);
-        break;
+    case 1:
+      generic_main_convert<unsigned char>(parseResult);
+      break;
+    case 2:
+      generic_main_convert<short int>(parseResult);
+      break;
+    case 3:
+      generic_main_convert<int>(parseResult);
+      break;
+    case 4:
+      generic_main_convert<float>(parseResult);
+      break;
+    case 5:
+      generic_main_convert<double>(parseResult);
+      break;
+    case 12:
+      generic_main_convert<unsigned short int>(parseResult);
+      break;
+    case 13:
+      generic_main_convert<unsigned int>(parseResult);
+      break;
+    default:
+      generic_main_convert<unsigned char>(parseResult);
+      break;
     }
 
 
   }
-  catch( itk::ExceptionObject & err )
+  catch ( itk::ExceptionObject & err )
   {
     std::cout << "Exception itk::ExceptionObject raised !" << std::endl;
     std::cout << err << std::endl;
     return EXIT_FAILURE;
   }
-  catch( std::bad_alloc & err )
+  catch ( std::bad_alloc & err )
   {
     std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl;
     return EXIT_FAILURE;
   }
-  catch( ... )
+  catch ( ... )
   {
     std::cout << "Unknow exception raised !" << std::endl;
     return EXIT_FAILURE;
