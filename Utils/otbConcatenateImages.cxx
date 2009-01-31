@@ -23,27 +23,27 @@ int main(int argc, char* argv[] )
   ParserResultType::Pointer  parseResult = ParserResultType::New();
 
   try
+  {
+    parser->ParseCommandLine(argc,argv,parseResult);
+  }
+  catch ( itk::ExceptionObject & err )
+  {
+    std::string descriptionException = err.GetDescription();
+    if (descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos)
     {
-      parser->ParseCommandLine(argc,argv,parseResult);
+      return EXIT_SUCCESS;
     }
-  catch( itk::ExceptionObject & err )
+    if (descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos)
     {
-      std::string descriptionException = err.GetDescription();
-      if(descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos)
-      {
-        return EXIT_SUCCESS;
-      }
-      if(descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos)
-      {
-        return EXIT_SUCCESS;
-      }
-      return EXIT_FAILURE;
+      return EXIT_SUCCESS;
     }
+    return EXIT_FAILURE;
+  }
 
   const unsigned int NbImages = argc-4;
 
   std::cout << "Concat of " << NbImages << " images into a multi-band image " <<
-    std::endl;
+            std::endl;
 
   typedef unsigned short int PixelType;
   const unsigned int Dimension = 2;
@@ -60,8 +60,8 @@ int main(int argc, char* argv[] )
 
   ImageListType::Pointer imageList = ImageListType::New();
 
-  for(unsigned int i = 0; i<NbImages; i++)
-    {
+  for (unsigned int i = 0; i<NbImages; i++)
+  {
 
     ImageReaderType::Pointer imageReader = ImageReaderType::New();
 
@@ -75,12 +75,12 @@ int main(int argc, char* argv[] )
 
     readerList->PushBack( imageReader );
 
-    }
+  }
 
   typedef otb::VectorImage< PixelType, Dimension > VectorImageType;
 
   typedef otb::ImageListToVectorImageFilter< ImageListType, VectorImageType >
-    ImageListToVectorImageFilterType;
+  ImageListToVectorImageFilterType;
 
   ImageListToVectorImageFilterType::Pointer iL2VI =
     ImageListToVectorImageFilterType::New();
