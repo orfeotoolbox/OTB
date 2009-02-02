@@ -18,6 +18,8 @@
 #ifndef __otbOverlapSaveConvolutionImageFilter_txx
 #define __otbOverlapSaveConvolutionImageFilter_txx
 
+#include "itkConfigure.h"
+
 #include "otbOverlapSaveConvolutionImageFilter.h"
 
 #include "itkConstNeighborhoodIterator.h"
@@ -93,6 +95,9 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage>
     e.SetDataObject(inputPtr);
     throw e;
   }
+#else
+  itkGenericExceptionMacro(<<"The OverlapSaveConvolutionImageFilter can not operate without the FFTW library (double implementation). Please install it and set it up in the  cmake configuration.");
+#endif
 }
 
 template< class TInputImage, class TOutputImage>
@@ -102,6 +107,7 @@ OverlapSaveConvolutionImageFilter< TInputImage, TOutputImage>
  * ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,int threadId) */
 ::GenerateData()
 {
+#if defined USE_FFTWD
   // Input/Output pointers
   typename OutputImageType::Pointer output = this->GetOutput();
   typename InputImageType::ConstPointer input = this->GetInput();
