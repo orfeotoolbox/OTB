@@ -54,7 +54,7 @@ public:
   typedef typename OutputType::ValueType OutputPixelType;
   typedef std::vector<double>            DoubleVectorType;
   typedef std::vector<int>               IntVectorType;
-   typedef std::vector<IntVectorType>     IntVectorVectorType;
+  typedef std::vector<IntVectorType>     IntVectorVectorType;
 
   void SetOffset(OffsetType off)
   {
@@ -88,8 +88,8 @@ public:
 
     offsetOffInit[0] = -radius[0]+m_Offset[0]-1;
     offsetOffInit[1] = -radius[1]+m_Offset[1]-1;
-    IntVectorType mean;
-    IntVectorType meanOff;
+    DoubleVectorType mean;
+    DoubleVectorType meanOff;
     for ( unsigned int i=0; i<nbComp; i++ )
     {
       offsetOff = offsetOffInit;
@@ -191,36 +191,36 @@ public:
 
       offsetOff = offsetOffInit;
       for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
-	     {
-        offsetOff[0]++;
-        offsetOff[1] = offsetOffInit[1];
-        offset[0] = l;
-        for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
-        {
-          offsetOff[1]++;
-          offset[1] = k;
-          if ( binsLength[1][i] != 0)
-            histoIdX = static_cast<int>(vcl_floor( (itOff.GetPixel(offsetOff)[i]-m_MiniOff[i]) / binsLength[1][i] ));
-          else
-            histoIdX = 0;
-          if ( binsLength[0][i] !=0 )
-            histoIdY = static_cast<int>(vcl_floor( (it.GetPixel(offset)[i]-m_Mini[i]) / binsLength[0][i] ));
-          else
-            histoIdY = 0;
-          histo[histoIdX][histoIdY]++;
-
-        }
-      }
+	{
+	  offsetOff[0]++;
+	  offsetOff[1] = offsetOffInit[1];
+	  offset[0] = l;
+	  for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
+	    {
+	      offsetOff[1]++;
+	      offset[1] = k;
+	      if ( binsLength[1][i] != 0)
+		histoIdX = static_cast<int>(vcl_floor( (itOff.GetPixel(offsetOff)[i]-m_MiniOff[i]) / binsLength[1][i] ));
+	      else
+		histoIdX = 0;
+	      if ( binsLength[0][i] !=0 )
+		histoIdY = static_cast<int>(vcl_floor( (it.GetPixel(offset)[i]-m_Mini[i]) / binsLength[0][i] ));
+	      else
+		histoIdY = 0;
+	      histo[histoIdX][histoIdY]++;
+	      
+	    }
+	}
       for (unsigned r = 0; r<binsLength.size(); r++)
-      {
-        for (unsigned s = 0; s<binsLength[r].size(); s++)
-        {
-          double p = binsLength[r][s] * areaInv;
-          if (p != 0)
-            outPix[i] += static_cast<OutputPixelType>(p * vcl_log(p));
-        }
-      }
-
+	{
+	  for (unsigned s = 0; s<binsLength[r].size(); s++)
+	    {
+	      double p = binsLength[r][s] * areaInv;
+	      if (p != 0)
+		outPix[i] += static_cast<OutputPixelType>(p * vcl_log(p));
+	    }
+	}
+      
     }
 
     return outPix;
