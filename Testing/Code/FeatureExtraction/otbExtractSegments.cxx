@@ -90,7 +90,7 @@ int otbExtractSegments( int argc, char * argv[] )
   RescalerType::Pointer rescaler = RescalerType::New();
 
   rescaler->SetOutputMinimum(0);
-  rescaler->SetOutputMaximum(1);
+  rescaler->SetOutputMaximum(255);
 
   reader1->SetFileName( inputFilename1  );
   reader2->SetFileName( inputFilename2  );

@@ -256,7 +256,7 @@ public:
  *
  *  This vegetation index use three inputs channels
  *
- *  [Yoram J. Kaufman and Didier Tanré, 1992]
+ *  [Yoram J. Kaufman and Didier Tanrï¿½, 1992]
  *
  *  \ingroup Functor
  */
@@ -293,6 +293,85 @@ private:
 
   /** Gamma parameter */
   double  m_Gamma;
+};
+
+/** \class EVI
+ *  \brief This functor calculate the Enhanced Vegetation Index (EVI)
+ *
+ *  This vegetation index use three inputs channels
+ *
+ *  [Huete, Justice, & Liu, 1994; Huete, Liu, Batchily, & van Leeuwen, 1997]
+ *
+ *  \ingroup Functor
+ */
+template <class TInput1, class TInput2, class TInput3, class TOutput>
+class EVI
+{
+public:
+  EVI() : m_G(2.5), m_C1(6.0), m_C2(7.5), m_L(1.0) {};
+  ~EVI() {};
+  inline TOutput operator()(const TInput1 &r, const TInput2 &b, const TInput3 &nir)
+  {
+    double dr = static_cast<double>(r);
+    double db = static_cast<double>(b);
+    double dnir = static_cast<double>(nir);
+    double denominator = dnir + m_C1*dr - m_C2*db + m_L;
+    if ( denominator == 0. )
+    {
+      return static_cast<TOutput>(0.);
+    }
+    return ( static_cast<TOutput>( m_G * (dnir - dr)/denominator ) );
+  }
+  /** Set/Get G parameter */
+  void SetG(const double g)
+  {
+    m_G = g;
+  }
+  double GetG(void)const
+  {
+    return (m_G);
+  }
+  /** Set/Get C1 parameter */
+  void SetC1(const double c1)
+  {
+    m_C1 = c1;
+  }
+  double GetC1(void)const
+  {
+    return (m_C1);
+  }
+  /** Set/Get C2 parameter */
+  void SetC2(const double c2)
+  {
+    m_C2 = c2;
+  }
+  double GetC2(void)const
+  {
+    return (m_C2);
+  }
+  /** Set/Get L parameter */
+  void SetL(const double l)
+  {
+    m_L = l;
+  }
+  double GetL(void)const
+  {
+    return (m_L);
+  }
+
+private:
+
+  /** Gain factor */
+  double  m_G;
+
+  /** Coefficient of the aerosol resistance term */
+  double  m_C1;
+
+  /** Coefficient of the aerosol resistance term */
+  double  m_C2;
+
+  /** Canopy background adjustment */
+  double  m_L;
 };
 
 } // namespace Functor

@@ -434,7 +434,7 @@ ADD_TEST(feTvExtractSegments ${FEATUREEXTRACTION_TESTS6}
 	${INPUTDATA}/ImageLine_hd.bsq.hdr
 	${INPUTDATA}/ImageLineDir.bsq.hdr
 	${TEMP}/feFiltreExtractSegments_ImageLine.hdr
-	2 0.3 20 20 2 10 0.5)
+	10  0.3 10 10 3 10 0.5)
 
 # -------            otb::ForwardFourierMellinTransformImageFilter   -------------
 
