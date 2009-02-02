@@ -487,6 +487,40 @@ ADD_TEST(raTvAtmosphericCorrectionSequencementTest ${RADIOMETRY_TESTS4}
         )
 
 
+# -------            otb::RAndBAndNIRVegetationIndexImageFilter   ------------------------------
+ADD_TEST(raTvEVIRAndBAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS4}  
+ #--compare-image ${EPSILON}   ${BASELINE}/raRAndBAndNIRVegetationIndex_EVI_poupees_subc1c2c3.tif
+ #                  ${TEMP}/raRAndBAndNIRVegetationIndex_EVI_poupees_subc1c2c3.tif
+        otbEVIRAndBAndNIRVegetationIndexImageFilter
+        EVI
+        ${INPUTDATA}/poupees_sub_c1.png
+        ${INPUTDATA}/poupees_sub_c2.png
+        ${INPUTDATA}/poupees_sub_c3.png
+        ${TEMP}/raRAndBAndNIRVegetationIndex_EVI_poupees_subc1c2c3.tif
+        2.5
+        6.0
+        7.5
+        1.0
+)
+
+# -------            otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter   ------------------------------
+ADD_TEST(raTvEVIMultiChannelRAndBAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS4}  
+ #--compare-image ${EPSILON}   ${BASELINE}/raRAndBAndNIRVegetationIndex_EVI_poupees_subc1c2c3.tif
+ #                  ${TEMP}/raRAndBAndNIRVegetationIndex_EVI_poupees_subc1c2c3.tif
+        otbEVIMultiChannelRAndBAndNIRVegetationIndexImageFilter
+        EVI
+        ${INPUTDATA}/qb_RoadExtract.img.hdr
+        ${TEMP}/raRAndBAndNIRVegetationIndex_EVI_qb_RoadExtract.tif
+        3   # red
+        1   # blue
+        4   # nir
+        2.5   # gain factor
+        6.0   # coefficient of the aerosol resistance term
+        7.5   # coefficient of the aerosol resistance term
+        1.0   # canopy  background adjustment
+)
+
+
 
 # A enrichir
 SET(Radiometry_SRCS1
@@ -526,6 +560,8 @@ SET(Radiometry_SRCS4
 otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew.cxx
 otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.cxx
 otbAtmosphericCorrectionSequencement.cxx
+otbEVIRAndBAndNIRVegetationIndexImageFilter.cxx
+otbEVIMultiChannelRAndBAndNIRVegetationIndexImageFilter.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
