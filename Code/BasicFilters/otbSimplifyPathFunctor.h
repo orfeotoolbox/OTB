@@ -95,6 +95,7 @@ public:
       newPath->AddVertex(endIt.Value());
       beginIt=endIt;
     }
+    newPath->SetMetaDataDictionary(input->GetMetaDataDictionary());
     return newPath;
 
   }
