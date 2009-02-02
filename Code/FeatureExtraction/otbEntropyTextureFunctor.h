@@ -25,10 +25,12 @@ namespace otb
 namespace Functor
 {
 /** \class EntropyTextureFunctor
- *  \brief This functor calculates the local energy of an image
+ *  \brief This functor calculates the local entropy of an image
  *
- *   Computes the sqaure gradient which is computed using offset and
- *   angle pixel of the neighborhood.
+ *   Computes joint histogram (neighborhood and offset neighborhood) 
+ *   which bins are computing using Scott formula.
+ *   Computes the probabiltiy p for each pair of pixel.
+ *   Entropy  is the sum p.log(p) over the neighborhood.
  *   TIterInput is an ietrator, TOutput is a PixelType.
  *
  *  \ingroup Functor
@@ -41,7 +43,6 @@ public:
   EntropyTextureFunctor()
   {
     m_Offset.Fill(1);
-    //m_BinLength = IntVectyorType(0, 1);
   };
   ~EntropyTextureFunctor() {};
 
@@ -53,7 +54,7 @@ public:
   typedef typename OutputType::ValueType OutputPixelType;
   typedef std::vector<double>            DoubleVectorType;
   typedef std::vector<int>               IntVectorType;
-  typedef std::vector<IntVectorType>    IntVectorVectorType;
+   typedef std::vector<IntVectorType>     IntVectorVectorType;
 
   void SetOffset(OffsetType off)
   {
@@ -64,6 +65,7 @@ public:
     return m_Offset;
   };
 
+   /** Computes the histogram bins using Scott formula, plus min/max. */
   IntVectorVectorType StatComputation(const TIterInput1 &it, const TIterInput2 &itOff)
   {
     IntVectorVectorType output;
@@ -77,6 +79,7 @@ public:
     m_MaxiOff = DoubleVectorType(nbComp, itk::NumericTraits<double>::NonpositiveMin());
     double area = static_cast<double>(radius[0]*radius[1]);
     double areaInv = 1/area;
+    double scottCoef =  3.5 /(vcl_pow(area, 1/3) );
 
     OffsetType offset;
     offset.Fill(0);
@@ -99,7 +102,6 @@ public:
         offset[0] = l;
         for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
         {
-          //std::cout<<it.GetPixel(offset)[i]<<std::endl;
           offsetOff[1]++;
           offset[1] = k;
           meanCh += static_cast<double>(it.GetPixel(offset)[i]);
@@ -120,37 +122,38 @@ public:
       offsetOff = offsetOffInit;
       double stdCh = 0.;
       double stdChOff = 0.;
-      for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
-      {
-        offsetOff[0]++;
-        offsetOff[1] = offsetOffInit[1];
-        offset[0] = l;
-        for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
-        {
-          offsetOff[1]++;
-          offset[1] = k;
-          stdCh += vcl_pow( (mean[i]-static_cast<double>(it.GetPixel(offset)[i])), 2);
-          stdChOff += vcl_pow( (meanOff[i]-static_cast<double>(itOff.GetPixel(offsetOff)[i])), 2);
-        }
-      }
+      
+      for( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
+	{
+	  offsetOff[0]++;
+	  offsetOff[1] = offsetOffInit[1];  
+	  offset[0] = l;
+	  for( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
+	    {
+	      offsetOff[1]++;
+	      offset[1] = k;
+	      stdCh += vcl_pow( (mean[i]-static_cast<double>(it.GetPixel(offset)[i])), 2);
+	      stdChOff += vcl_pow( (meanOff[i]-static_cast<double>(itOff.GetPixel(offsetOff)[i])), 2);
+	    }
+	}
+      
       stdCh *= areaInv;
       stdCh = vcl_sqrt( stdCh );
       stdChOff *= areaInv;
       stdChOff = vcl_sqrt( stdChOff );
-      binLength.push_back( (3.5*stdCh) /(vcl_pow(area, 1/3) ) );
-      binLengthOff.push_back( (3.5*stdChOff) /(vcl_pow(area, 1/3) ) );
+      binLength.push_back( scottCoef*stdCh );
+      binLengthOff.push_back( scottCoef*stdChOff );		
+      
     }
-
     output.push_back(binLength);
     output.push_back(binLengthOff);
-
+    
     return output;
   }
 
 
   inline TOutput operator()(const TIterInput1 &it, const TIterInput2 &itOff)
   {
-    //std::cout<<"operator"<<std::endl;
     IntVectorVectorType binsLength = this->StatComputation(it, itOff);
 
     RadiusType radius = it.GetRadius();
@@ -175,8 +178,6 @@ public:
 
     for ( unsigned int i=0; i<nbComp; i++ )
     {
-      //std::cout<<"i :"<<i<<" "<<std::endl;
-
       IntVectorType histoTemp;
       IntVectorVectorType histo;
       if (binsLength[0][i] != 0)
@@ -188,19 +189,14 @@ public:
       else
         histo = IntVectorVectorType( 1, histoTemp );
 
-      //std::cout<<"m_Maxi[i]-m_Mini[i]  "<<m_Maxi[i]<<"  "<<m_Mini[i]<<std::endl;
-      //std::cout<<"binsLength[0][i] "<<binsLength[0][i]<<std::endl;
-      //std::cout<<histoTemp.size()<<"   "<<histo.size()<<std::endl;
-
       offsetOff = offsetOffInit;
       for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
-      { //std::cout<<"i :"<<i<<" "<<l<<std::endl;
+	     {
         offsetOff[0]++;
         offsetOff[1] = offsetOffInit[1];
         offset[0] = l;
         for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
         {
-          //std::cout<<i<<" "<<l<<" "<<k<<std::endl;
           offsetOff[1]++;
           offset[1] = k;
           if ( binsLength[1][i] != 0)
@@ -227,23 +223,24 @@ public:
 
     }
 
-    //std::cout<<"operator FIN"<<std::endl;
     return outPix;
 
   }
 
 private:
   OffsetType m_Offset;
+   /** Stores min/max neighborhood area values */
   DoubleVectorType m_Mini;
-  DoubleVectorType m_MiniOff;
-  DoubleVectorType m_Maxi;
+   DoubleVectorType m_Maxi;
+   /** Stores min/max neighborhood+offset values */
+   DoubleVectorType m_MiniOff;
   DoubleVectorType m_MaxiOff;
 };
 
 
 
 
-} // namespace Functor
+  } // namespace Functor
 } // namespace otb
 
 #endif
