@@ -50,7 +50,7 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage,TOutputImage,TFunction
 {
   Superclass::BeforeThreadedGenerateData();
 
-  for (unsigned int i =0; i<this->GetNumberOfThreads(); i++)
+  for (unsigned int i =0; i<static_cast<unsigned int>(this->GetNumberOfThreads()); i++)
   {
     m_FunctorList.push_back(m_Functor);
   }

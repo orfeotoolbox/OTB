@@ -180,11 +180,11 @@ public:
       IntVectorType histoTemp;
       IntVectorVectorType histo;
       if (binsLength[0][i] != 0)
-        histoTemp = IntVectorType( vcl_floor((m_Maxi[i]-m_Mini[i])/binsLength[0][i])+1, 0 );
+        histoTemp = IntVectorType( vcl_floor( static_cast<double>(m_Maxi[i]-m_Mini[i])/binsLength[0][i])+1., 0);
       else
         histoTemp = IntVectorType( 1, 0 );
       if (binsLength[1][i] != 0)
-        histo = IntVectorVectorType( vcl_floor((m_MaxiOff[i]-m_MiniOff[i])/binsLength[1][i])+1, histoTemp );
+        histo = IntVectorVectorType( vcl_floor(static_cast<double>(m_MaxiOff[i]-m_MiniOff[i])/binsLength[1][i])+1., histoTemp );
       else
         histo = IntVectorVectorType( 1, histoTemp );
 
@@ -204,11 +204,11 @@ public:
           offsetOff[1]++;
           offset[1] = k;
           if ( binsLength[1][i] != 0)
-            histoIdX = vcl_floor( (itOff.GetPixel(offsetOff)[i]-m_MiniOff[i]) / binsLength[1][i] );
+            histoIdX = static_cast<int>(vcl_floor( (itOff.GetPixel(offsetOff)[i]-m_MiniOff[i]) / binsLength[1][i] ));
           else
             histoIdX = 0;
           if ( binsLength[0][i] !=0 )
-            histoIdY = vcl_floor( (it.GetPixel(offset)[i]-m_Mini[i]) / binsLength[0][i] );
+            histoIdY = static_cast<int>(vcl_floor( (it.GetPixel(offset)[i]-m_Mini[i]) / binsLength[0][i] ));
           else
             histoIdY = 0;
           histo[histoIdX][histoIdY]++;
