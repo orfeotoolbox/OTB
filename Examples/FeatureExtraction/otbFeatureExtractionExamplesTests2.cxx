@@ -31,6 +31,7 @@ void RegisterTests()
   REGISTER_TEST(SeamCarvingOtherExampleTest);
 //REGISTER_TEST(ImageToSIFTKeyPointSetFilterTest);
   REGISTER_TEST(ScaleInvariantFeatureImageFilterTest);
+  REGISTER_TEST(CloudDetectionExampleTest);
 }
 
 #undef main
@@ -56,3 +57,8 @@ void RegisterTests()
 #undef main
 #define main ScaleInvariantFeatureImageFilterTest
 #include "ScaleInvariantFeatureImageFilter.cxx"
+
+#undef main
+#define main CloudDetectionExampleTest
+#include "CloudDetectionExample.cxx"
+

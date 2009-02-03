@@ -321,6 +321,7 @@ public:
       return static_cast<TOutput>(0.);
     }
     return ( static_cast<TOutput>( m_G * (dnir - dr)/denominator ) );
+//return ( static_cast<TOutput>( dnir ) );
   }
   /** Set/Get G parameter */
   void SetG(const double g)
