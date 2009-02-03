@@ -55,6 +55,11 @@ void
 SVMClassifier< TSample, TLabel >
 ::GenerateData()
 {
+  if(m_Model->GetNumberOfSupportVectors() == 0)
+    {
+    itkExceptionMacro(<<"SVM model does not contain any support vector, can not perform classification.");
+    }
+
 
   m_Output->SetSample(this->GetSample());
   otbMsgDevMacro(  << "m_Output " << m_Output );
