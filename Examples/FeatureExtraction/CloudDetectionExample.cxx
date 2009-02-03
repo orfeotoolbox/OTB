@@ -24,22 +24,22 @@
 #endif
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {CloudsOnReunion.tif}
-//    OUTPUTS: {CloudDetectionOutput.png}
-//    553 467 734 581 0.25 0.8 1.0
+//    INPUT: {CloudsOnReunion.tif}
+//    OUTPUT: {CloudDetectionOutput.png}
+//    553 467 734 581 0.4 0.6 1.0
 //  Software Guide : EndCommandLineArgs
 
 
 // Software Guide : BeginLatex
 //
-// The easiest way to use the road extraction filter provided by OTB is to use the composite
-// filter. If a modification in the pipeline is required to adapt to a particular situation,
-// the step by step example, described in the next section can be adapted.
+// The cloud detection functor is a processing chain composed by the computation of a spectral angle (with SpectralAngleFunctor).
+// The result is multiplied by a gaussian factor (with CloudEstimatorFunctor) and finally thresholded to obtain 
+// a binary image (with CloudDetectionFilter). 
+// However, modifications can be added in the pipeline to adapt to a particular situation.
 //
-// This example demonstrates the use of the \doxygen{otb}{RoadExtractionFilter}.
-// This filter is a composite filter achieving road extraction according to the algorithm
-// adapted by E. Christophe and J. Inglada \cite{Christophe2007} from an original method
-// proposed in \cite{Lacroix1998}.
+// This example demonstrates the use of the \doxygen{otb}{CloudDetectionFilter}.
+// This filter uses the spectral angle principle to measure the radiometric gap between a reference pixel
+// and the other pixels of the image.
 //
 // The first step toward the use of this filter is the inclusion of the proper header files.
 //
@@ -75,7 +75,7 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginLatex
   //
   // Then we must decide what pixel type to use for the image. We choose to do
-  // all the computation in floating point precision and rescale the results
+  // all the computation in double precision and rescale the results
   // between 0 and 255 in order to export PNG images.
   //
   // Software Guide : EndLatex
@@ -104,10 +104,8 @@ int main( int argc, char * argv[] )
 
   //  Software Guide : BeginLatex
   //
-  // We define the type of the polyline that the filter produces. We use the
-  // \doxygen{otb}{PolyLineParametricPathWithValue}, which allows the filter to produce
-  // a likehood value along with each polyline. The filter is able to produce
-  // \doxygen{itk}{PolyLineParametricPath} as well.
+  // We define the functor type that the filter will use. We use the
+  // \doxygen{otb}{CloudDetectionFunctor}.
   //
   //  Software Guide : EndLatex
 
@@ -119,8 +117,8 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginLatex
   //
-  // Now we can define the \doxygen{otb}{RoadExtractionFilter} that takes a multi-spectral
-  // image as input and produces a list of polylines.
+  // Now we can define the \doxygen{otb}{CloudDetectionFilter} that takes a multi-spectral
+  // image as input and produces a binary image.
   //
   // Software Guide : EndLatex
 
@@ -130,12 +128,13 @@ int main( int argc, char * argv[] )
 
   // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
+  //  Software Guide : BeginLatex
   //
-  // We also define an \doxygen{otb}{DrawPathListFilter} to draw the output
-  // polylines on an image, taking their likehood values into account.
+  //  An \doxygen{otb}{ImageFileReader} class is also instantiated in order to read
+  //  image data from a file. Then, an \doxygen{otb}{ImageFileWriter} is instantiated in order 
+  //  to write the output image to a file.
   //
-  // Software Guide : EndLatex
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
 
@@ -164,8 +163,8 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginLatex
   //
-  // The \doxygen{otb}{RoadExtractionFilter} needs to have a reference pixel
-  // corresponding to the spectral content likely to represent a road. This is done
+  // The \doxygen{otb}{CloudDetectionFilter} needs to have a reference pixel
+  // corresponding to the spectral content likely to represent a cloud. This is done
   // by passing a pixel to the filter. Here we suppose that the input image
   // has four spectral bands.
   //
@@ -186,8 +185,8 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginLatex
   //
-  // We must also set the  alpha parameter of the filter which allows us to tune the width of the roads
-  // we want to extract. Typical value is $1.0$ and should be working in most situations.
+  // We must also set the variance parameter of the filter and the parameter of the gaussian functor.
+  // The bigger the value, the more tolerant the detector will be.
   //
   // Software Guide : EndLatex
 
@@ -199,11 +198,8 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginLatex
   //
-  // All other parameter should not influence the results too much in most situation and can
-  // be kept at the default value.
-  //
-  // The amplitude threshold parameter tunes the sensitivity of the vectorization step. A typical
-  // value is $5 \cdot 10^{-5}$.
+  // The minimum and maximum thresholds are set to binarise the final result.
+  // These values have to be between 0 and 1.
   //
   // Software Guide : EndLatex
 
@@ -213,13 +209,6 @@ int main( int argc, char * argv[] )
   cloudDetection->SetMaxThreshold(atof(argv[9]));
 
   // Software Guide : EndCodeSnippet
-
-  // Software Guide : BeginLatex
-  //
-  // The tolerance threshold tunes the sensitivity of the path simplification step.
-  // Typical value is $1.0$.
-  //
-  // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
 
@@ -231,17 +220,14 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginLatex
   //
-  // Figure~\ref{fig:ROADEXTRACTION_FILTER} shows the result of applying
-  // the road extraction filter to a fusionned Quickbird image.
+  // Figure~\ref{fig:CLOUDDETECTION_FILTER} shows the result of applying
+  // the cloud detection filter to a cloudy image.
   // \begin{figure}
   // \center
-  // \includegraphics[width=0.44\textwidth]{qb_ExtractRoad_pretty.eps}
-  // \includegraphics[width=0.44\textwidth]{ExtractRoadOutput.eps}
-  // \itkcaption[Road extraction filter application]{Result of applying
-  // the \doxygen{otb}{RoadExtractionFilter} to a fusionned Quickbird
-  // image. From left to right : original image, extracted road with their
-  // likehood values (color are inverted for display).}
-  // \label{fig:ROADEXTRACTION_FILTER}
+  // \includegraphics[width=0.44\textwidth]{CloudsOnReunion.eps}
+  // \includegraphics[width=0.44\textwidth]{CloudDetectionOutput.eps}
+  // From left to right : original image, mask cloud resulting from processing.}
+  // \label{fig:CLOUDDETECTION_FILTER}
   // \end{figure}
   //
   // Software Guide : EndLatex
