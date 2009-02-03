@@ -436,7 +436,7 @@ ADD_TEST(prTvVectorDataProjectionFilterFromMapToGeo ${PROJECTIONS_TESTS3}
         ${TEMP}/prTvVectorDataProjectionFilterFromMapToGeo.kml
 )
 
-
+ADD_TEST(prTuGeocentricTransformNew ${PROJECTIONS_TESTS3}  otbGeocentricTransformNew )
 
 #=======================================================================================
 SET(Projections_SRCS1
@@ -467,6 +467,7 @@ otbVectorDataProjectionFilterNew.cxx
 otbVectorDataProjectionFilter.cxx
 otbVectorDataProjectionFilterFromMapToSensor.cxx
 otbVectorDataProjectionFilterFromMapToGeo.cxx
+otbGeocentricTransformNew.cxx
 )
 
 

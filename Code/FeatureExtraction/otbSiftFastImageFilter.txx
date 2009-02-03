@@ -25,8 +25,6 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkContinuousIndex.h"
 #include "itkImageRegionIterator.h"
 
-#include "otbImageFileWriter.h"
-
 namespace otb
 {
 /**

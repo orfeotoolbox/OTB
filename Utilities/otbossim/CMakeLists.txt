@@ -15,7 +15,7 @@ CHECK_INCLUDE_FILE("dbmalloc.h" CMAKE_HAVE_DBMALLOC_H)
 CHECK_INCLUDE_FILE("malloc.h" CMAKE_HAVE_MALLOC_H)
 CHECK_INCLUDE_FILE("dlfcn.h" CMAKE_HAVE_DLFCN_H)
 
-# itkjpeg headers are not generated and put into the include dir automatically. 
+# itkjpeg headers are not generated and put into the include dir automatically.
 # Therefore we have to do it ourselves.
 
 IF(OTB_USE_EXTERNAL_ITK)
@@ -58,24 +58,31 @@ CONFIGURE_FILE(${OTB_SOURCE_DIR}/Utilities/otbossim/include/ossim/ossimConfig.h.
 	       ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimConfig.h)
 
 # Run ossim/version-config.cpp taht will generate ossim/ossimVersion.h file nedeed to compile OSSIM
-SET(INCLUDES_OSSIM_TRY_RUN "-DINCLUDE_DIRECTORIES:STRING=${OTB_BINARY_DIR}/Utilities/otbossim/include" )
-TRY_RUN(RUN_RESULT_VAR COMPILE_RESULT_VAR
-        ${OTB_BINARY_DIR}
-        ${OTB_SOURCE_DIR}/Utilities/otbossim/src/ossim/version-config.cpp
-        CMAKE_FLAGS "${INCLUDES_OSSIM_TRY_RUN}"
-        OUTPUT_VARIABLE output
-        ARGS "${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h"
-)
-          
-IF(NOT COMPILE_RESULT_VAR)
-    MESSAGE(FATAL_ERROR "OSSIM : cannot compile version-config.cpp")
-ENDIF(NOT COMPILE_RESULT_VAR)
+# SET(INCLUDES_OSSIM_TRY_RUN "-DINCLUDE_DIRECTORIES:STRING=${OTB_BINARY_DIR}/Utilities/otbossim/include" )
+# TRY_RUN(RUN_RESULT_VAR COMPILE_RESULT_VAR
+#         ${OTB_BINARY_DIR}
+#         ${OTB_SOURCE_DIR}/Utilities/otbossim/src/ossim/version-config.cpp
+#         CMAKE_FLAGS "${INCLUDES_OSSIM_TRY_RUN}"
+#         OUTPUT_VARIABLE output
+#         ARGS "${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h"
+# )
+ADD_EXECUTABLE(version-config ${OTB_SOURCE_DIR}/Utilities/otbossim/src/ossim/version-config.cpp)
+ADD_CUSTOM_COMMAND(
+  OUTPUT ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h
+  DEPENDS version-config
+  COMMAND version-config
+  ARGS "${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h"
+  )
 
-IF(RUN_RESULT_VAR)
-    MESSAGE(FATAL_ERROR "OSSIM : cannot create ossimVersion.h file")
-ENDIF(RUN_RESULT_VAR)       
+# IF(NOT COMPILE_RESULT_VAR)
+#     MESSAGE(FATAL_ERROR "OSSIM : cannot compile version-config.cpp")
+# ENDIF(NOT COMPILE_RESULT_VAR)
 
-       
+# IF(RUN_RESULT_VAR)
+#     MESSAGE(FATAL_ERROR "OSSIM : cannot create ossimVersion.h file")
+# ENDIF(RUN_RESULT_VAR)
+
+
 SUBDIRS(include)
 # ADDED BY OTB DEVELOPPERS TO AVOID INTENSIVE RECOMPILATION
 IF(NOT OTB_DISABLE_UTILITIES_COMPILATION)

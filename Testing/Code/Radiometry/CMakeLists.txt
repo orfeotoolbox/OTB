@@ -505,8 +505,8 @@ ADD_TEST(raTvEVIRAndBAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS4}
 
 # -------            otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter   ------------------------------
 ADD_TEST(raTvEVIMultiChannelRAndBAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS4}  
- #--compare-image ${EPSILON}   ${BASELINE}/raRAndBAndNIRVegetationIndex_EVI_poupees_subc1c2c3.tif
- #                  ${TEMP}/raRAndBAndNIRVegetationIndex_EVI_poupees_subc1c2c3.tif
+ --compare-image ${EPSILON}   ${BASELINE}/raRAndBAndNIRVegetationIndex_EVI_qb_RoadExtract.tif
+                   ${TEMP}/raRAndBAndNIRVegetationIndex_EVI_qb_RoadExtract.tif
         otbEVIMultiChannelRAndBAndNIRVegetationIndexImageFilter
         EVI
         ${INPUTDATA}/qb_RoadExtract.img.hdr
@@ -514,11 +514,12 @@ ADD_TEST(raTvEVIMultiChannelRAndBAndNIRVegetationIndexImageFilter ${RADIOMETRY_T
         3   # red
         1   # blue
         4   # nir
-        2.5   # gain factor
-        6.0   # coefficient of the aerosol resistance term
-        7.5   # coefficient of the aerosol resistance term
-        1.0   # canopy  background adjustment
+        10.0    # gain factor
+        30.0    # coefficient of the aerosol resistance term
+        7.5     # coefficient of the aerosol resistance term
+        400.0   # canopy  background adjustment
 )
+
 
 
 

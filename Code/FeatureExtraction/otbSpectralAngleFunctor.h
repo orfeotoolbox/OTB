@@ -19,6 +19,7 @@
 #define __otbSpectralAngleFunctor_h
 
 #include "otbMath.h"
+#include <algorithm>
 
 namespace otb
 {
