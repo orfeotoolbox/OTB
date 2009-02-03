@@ -44,7 +44,7 @@ public:
   ~CloudDetectionFunctor() {};
   inline TOutputValue operator()(const TInput& inPix)
   {
-    if ( (m_CloudEstimatorFunctor(inPix)>m_MinThreshold) && (m_CloudEstimatorFunctor(inPix)<m_MaxThreshold) )
+    if ( (m_CloudEstimatorFunctor(inPix)>m_MinThreshold) && (m_CloudEstimatorFunctor(inPix)<=m_MaxThreshold) )
     {
       return 1;
     }

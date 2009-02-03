@@ -82,6 +82,9 @@ ADD_EXECUTABLE(ParallelLineDetectionExample ParallelLineDetectionExample.cxx)
 TARGET_LINK_LIBRARIES(ParallelLineDetectionExample OTBIO OTBCommon OTBFeatureExtraction
 ITKCommon ITKBasicFilters)
 
+ADD_EXECUTABLE(CloudDetectionExample CloudDetectionExample.cxx)
+TARGET_LINK_LIBRARIES(CloudDetectionExample OTBIO OTBCommon OTBFeatureExtraction
+ITKCommon ITKBasicFilters)
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
@@ -291,6 +294,18 @@ ADD_TEST(ScaleInvariantFeatureImageFilterTest ${EXE_TESTS2}
         ${TEMP}/ScaleInvariantFeatureImageFilterOutputKeys1.png
         ${TEMP}/ScaleInvariantFeatureImageFilterOutputKeys2.png	
 	1 10 0.5 0
+)
+
+# ------- CloudDetectionExampleTest----------
+
+ADD_TEST(CloudDetectionExampleTest ${EXE_TESTS2}
+        --compare-image ${TOL}
+        ${BASELINE}/CloudDetectionOutput.png
+        ${TEMP}/CloudDetectionOutput.png
+        CloudDetectionExampleTest
+        ${INPUTDATA}/CloudsOnReunion.tif
+        ${TEMP}/CloudDetectionOutput.png
+        553 467 734 581 0.4 0.6 1.0
 )
 
 ADD_EXECUTABLE(otbFeatureExtractionExamplesTests1 otbFeatureExtractionExamplesTests1.cxx)

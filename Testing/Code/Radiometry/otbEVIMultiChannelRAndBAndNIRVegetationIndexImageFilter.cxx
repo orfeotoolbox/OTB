@@ -45,6 +45,7 @@ int generic_EVIMultiChannelRAndBAndNIRVegetationIndexImageFilter(int argc, char 
   unsigned int redChannel(::atoi(argv[3]));
   unsigned int blueChannel(::atoi(argv[4]));
   unsigned int nirChannel(::atoi(argv[5]));
+std::cout << "ORDER : "<<redChannel<<" "<<blueChannel<<" "<<nirChannel<<std::endl;
 
   double g(::atof(argv[6]));
   double c1(::atof(argv[7]));
