@@ -66,8 +66,8 @@ CONFIGURE_FILE(${OTB_SOURCE_DIR}/Utilities/otbossim/include/ossim/ossimConfig.h.
 #         OUTPUT_VARIABLE output
 #         ARGS "${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h"
 # )
-add_executable(version-config ${OTB_SOURCE_DIR}/Utilities/otbossim/src/ossim/version-config.cpp)
-add_custom_command(
+ADD_EXECUTABLE(version-config ${OTB_SOURCE_DIR}/Utilities/otbossim/src/ossim/version-config.cpp)
+ADD_CUSTOM_COMMAND(
   OUTPUT ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h
   DEPENDS version-config
   COMMAND version-config
