@@ -16,7 +16,7 @@
 
 =========================================================================*/
 #ifndef __otbEntropyTextureFunctor_h
-#define __ootbEntropyTextureFunctor_h
+#define __otbEntropyTextureFunctor_h
 
 #include "otbTextureFunctorBase.h"
 
@@ -63,82 +63,87 @@ public:
   typedef std::vector<IntVectorType>            IntVectorVectorType;
 
 
-   /** Computes the histogram bins using Scott formula, plus min/max. */
+  double GetMaxi(){ return m_Maxi; };
+  double GetMini(){ return m_Mini; };
+  double GetMaxiOff(){ return m_MaxiOff; };
+  double GetMiniOff(){ return m_MiniOff; };
+  
+  /** Computes the histogram bins using Scott formula, plus min/max. */
   DoubleVectorType StatComputation(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
-  {
-    DoubleVectorType output;
-    double binLength    = 0;
-    double binLengthOff =0;
-    double mean    = 0.;
-    double meanOff = 0.;
-    RadiusType radius = neigh.GetRadius();
-    m_Mini = itk::NumericTraits<double>::max();
-    m_MiniOff = itk::NumericTraits<double>::max();
-    m_Maxi = itk::NumericTraits<double>::NonpositiveMin();
-    m_MaxiOff = itk::NumericTraits<double>::NonpositiveMin();
-    double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
-    double areaInv = 1/area;
-    double scottCoef =  3.5 /(vcl_pow(area, 1/3) );
-
-    OffsetType offset;
-    offset.Fill(0);
-    OffsetType offsetOff;
-    OffsetType offsetOffInit;
-
-    offsetOffInit[0] = -radius[0]+this->GetOffset()[0]-1;
-    offsetOffInit[1] = -radius[1]+this->GetOffset()[1]-1;
-
-    offsetOff = offsetOffInit;
-    for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
-      {
-        offsetOff[0]++;
-        offsetOff[1] = offsetOffInit[1];
-        offset[0] = l;
-        for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
-	  {
-	    offsetOff[1]++;
-	    offset[1] = k;
-	    mean += static_cast<double>(neigh[offset]);
-	    meanOff += static_cast<double>(neighOff[offsetOff]);
+    {
+      DoubleVectorType output;
+      double binLength    = 0;
+      double binLengthOff =0;
+      double mean    = 0.;
+      double meanOff = 0.;
+      RadiusType radius = neigh.GetRadius();
+      m_Mini = itk::NumericTraits<double>::max();
+      m_MiniOff = itk::NumericTraits<double>::max();
+      m_Maxi = itk::NumericTraits<double>::NonpositiveMin();
+      m_MaxiOff = itk::NumericTraits<double>::NonpositiveMin();
+      double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
+      double areaInv = 1/area;
+      double scottCoef =  3.5 /(vcl_pow(area, 1/3) );
+      
+      OffsetType offset;
+      offset.Fill(0);
+      OffsetType offsetOff;
+      OffsetType offsetOffInit;
+      
+      offsetOffInit[0] = -radius[0]+this->GetOffset()[0]-1;
+      offsetOffInit[1] = -radius[1]+this->GetOffset()[1]-1;
+      
+      offsetOff = offsetOffInit;
+      for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
+	{
+	  offsetOff[0]++;
+	  offsetOff[1] = offsetOffInit[1];
+	  offset[0] = l;
+	  for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
+	    {
+	      offsetOff[1]++;
+	      offset[1] = k;
+	      mean += static_cast<double>(neigh[offset]);
+	      meanOff += static_cast<double>(neighOff[offsetOff]);
 	    
-	    m_Mini    = std::min(static_cast<double>(neigh[offset]),      m_Mini);
-	    m_Maxi    = std::max(static_cast<double>(neigh[offset]),      m_Maxi);
-	    m_MiniOff = std::min(static_cast<double>(neighOff[offsetOff]),m_MiniOff);
-	    m_MaxiOff = std::max(static_cast<double>(neighOff[offsetOff]),m_MaxiOff);
-	  }
-      }
-    mean *= areaInv;
-    meanOff *= areaInv;
+	      m_Mini    = std::min(static_cast<double>(neigh[offset]),      m_Mini);
+	      m_Maxi    = std::max(static_cast<double>(neigh[offset]),      m_Maxi);
+	      m_MiniOff = std::min(static_cast<double>(neighOff[offsetOff]),m_MiniOff);
+	      m_MaxiOff = std::max(static_cast<double>(neighOff[offsetOff]),m_MaxiOff);
+	    }
+	}
+      mean *= areaInv;
+      meanOff *= areaInv;
     
-    offsetOff = offsetOffInit;
+      offsetOff = offsetOffInit;
  
-    for( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
-      {
-	offsetOff[0]++;
-	offsetOff[1] = offsetOffInit[1];  
-	offset[0] = l;
-	for( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
-	  {
-	    offsetOff[1]++;
-	    offset[1] = k;
-	    binLength += vcl_pow( (mean-static_cast<double>(neigh[offset])), 2);
-	    binLengthOff += vcl_pow( (meanOff-static_cast<double>(neighOff[offsetOff])), 2);
-	  }
-      }
+      for( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
+	{
+	  offsetOff[0]++;
+	  offsetOff[1] = offsetOffInit[1];  
+	  offset[0] = l;
+	  for( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
+	    {
+	      offsetOff[1]++;
+	      offset[1] = k;
+	      binLength += vcl_pow( (mean-static_cast<double>(neigh[offset])), 2);
+	      binLengthOff += vcl_pow( (meanOff-static_cast<double>(neighOff[offsetOff])), 2);
+	    }
+	}
     
-    binLength *= areaInv;
-    binLength = vcl_sqrt( binLength );
-    binLengthOff *= areaInv;
-    binLengthOff = vcl_sqrt( binLengthOff );
+      binLength *= areaInv;
+      binLength = vcl_sqrt( binLength );
+      binLengthOff *= areaInv;
+      binLengthOff = vcl_sqrt( binLengthOff );
     
-    output.push_back( scottCoef*binLength );
-    output.push_back( scottCoef*binLengthOff );
+      output.push_back( scottCoef*binLength );
+      output.push_back( scottCoef*binLengthOff );
 
-    return output;
-  }
+      return output;
+    }
 
 
- double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
+  virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {
     DoubleVectorType binsLength = this->StatComputation(neigh, neighOff);
 
@@ -203,74 +208,6 @@ public:
 	out = -(out);
 
       return out;
-
-    /*
-    IntVectorVectorType binsLength = this->StatComputation(it, itOff);
-
-    RadiusType radius = it.GetRadius();
-    double area = static_cast<double>(radius[0]*radius[1]);
-    double areaInv = 1/area;
- 
-    OffsetType offset;
-    offset.Fill(0);
-    OffsetType offsetOff;
-    OffsetType offsetOffInit;
-
-    offsetOffInit[0] = -radius[0]+m_Offset[0]-1;
-    offsetOffInit[1] = -radius[1]+m_Offset[1]-1;
-
-    int histoIdX = 0;
-    int histoIdY = 0;
-
-    //for ( unsigned int i=0; i<nbComp; i++ )
-    //{
-      IntVectorType histoTemp;
-      IntVectorVectorType histo;
-      if (binsLength[0][i] != 0)
-        histoTemp = IntVectorType( vcl_floor( static_cast<double>(m_Maxi[i]-m_Mini[i])/binsLength[0][i])+1., 0);
-      else
-        histoTemp = IntVectorType( 1, 0 );
-      if (binsLength[1][i] != 0)
-        histo = IntVectorVectorType( vcl_floor(static_cast<double>(m_MaxiOff[i]-m_MiniOff[i])/binsLength[1][i])+1., histoTemp );
-      else
-        histo = IntVectorVectorType( 1, histoTemp );
-
-      offsetOff = offsetOffInit;
-      for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
-	{
-	  offsetOff[0]++;
-	  offsetOff[1] = offsetOffInit[1];
-	  offset[0] = l;
-	  for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
-	    {
-	      offsetOff[1]++;
-	      offset[1] = k;
-	      if ( binsLength[1][i] != 0)
-		histoIdX = static_cast<int>(vcl_floor( (itOff.GetPixel(offsetOff)[i]-m_MiniOff[i]) / binsLength[1][i] ));
-	      else
-		histoIdX = 0;
-	      if ( binsLength[0][i] !=0 )
-		histoIdY = static_cast<int>(vcl_floor( (it.GetPixel(offset)[i]-m_Mini[i]) / binsLength[0][i] ));
-	      else
-		histoIdY = 0;
-	      histo[histoIdX][histoIdY]++;
-	      
-	    }
-	}
-      for (unsigned r = 0; r<binsLength.size(); r++)
-	{
-	  for (unsigned s = 0; s<binsLength[r].size(); s++)
-	    {
-	      double p = binsLength[r][s] * areaInv;
-	      if (p != 0)
-		outPix[i] += static_cast<OutputPixelType>(p * vcl_log(p));
-	    }
-	}
-      
-      //}
-
-    return outPix;
-*/
   }
 
 
