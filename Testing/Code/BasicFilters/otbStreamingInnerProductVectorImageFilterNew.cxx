@@ -15,25 +15,20 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "itkExceptionObject.h"
+#include "otbStreamingInnerProductVectorImageFilter.h"
+#include "otbVectorImage.h"
 
-
-#include "otbEntropyTextureImageFunction.h"
-#include "otbImage.h"
-
-
-int otbEntropyTextureImageFunctionNew(int argc, char * argv[])
+int otbStreamingInnerProductVectorImageFilterNew( int argc, char* argv[] )
 {
-  //const char * inputFileName  = argv[1];
-  //const char * outputFileName = argv[2];
+  typedef double PixelType;
+  const unsigned int Dimension = 2;
 
-  typedef double                               InputPixelType;
-  const int Dimension = 2;
-  typedef otb::Image<InputPixelType,Dimension> ImageType;
-  typedef otb::EntropyTextureImageFunction<ImageType> EntropyTextureImageFunctionType;
+  // Typedef 
+  typedef otb::VectorImage<PixelType,Dimension> ImageType;
+  typedef otb::StreamingInnerProductVectorImageFilter<ImageType> FilterType;
 
-  EntropyTextureImageFunctionType::Pointer entropy = EntropyTextureImageFunctionType::New();
-
+  // Instanciation object
+  FilterType::Pointer filter = FilterType::New();
 
   return EXIT_SUCCESS;
 }

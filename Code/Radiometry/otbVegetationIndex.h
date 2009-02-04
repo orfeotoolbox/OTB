@@ -449,6 +449,84 @@ private:
   double  m_Gamma;
 };
 
+/** \class TSARVI
+ *  \brief This functor calculate the Transformed Soil Atmospherical Resistant Vegetation Index (TSARVI)
+ *
+ *  [Yoram J. Kaufman and Didier Tanré, 1992]
+ *
+ *  \ingroup Functor
+ */
+template <class TInput1, class TInput2, class TInput3, class TOutput>
+class TSARVI: public RBAndNIRIndexBase<TInput1,TInput2,TInput3,TOutput>
+{
+public:
+  TSARVI() : m_X(0.08), m_Gamma(0.5) {};
+  ~TSARVI() {};
+  
+  /** Set/Get A and B parameters */
+  void SetA(const double A)
+  {
+    m_A = A;
+  }
+  double GetA(void)const
+  {
+    return (m_A);
+  }
+  void SetB(const double B)
+  {
+    m_B = B;
+  }
+  double GetB(void)const
+  {
+    return (m_B);
+  }
+  /** Set/Get X parameter */
+  void SetX(const double X)
+  {
+    m_X = X;
+  }
+  double GetX(void)const
+  {
+    return (m_X);
+  }
+  /** Set/Get the gamma parameter */
+  void SetGamma(const double gamma)
+  {
+    m_Gamma = gamma;
+  }
+  double GetGamma(void)const
+  {
+    return (m_Gamma);
+  }
+
+protected:
+  inline TOutput Evaluate(const TInput1 &r, const TInput2 &b, const TInput3 &nir) const
+  {
+    double dr = static_cast<double>(r);
+    double db = static_cast<double>(b);
+    double dnir = static_cast<double>(nir);
+    double dRB = dr - m_Gamma*(db - dr);
+    double denominator = dRB + m_A*dnir - m_A*m_B + m_X*(1.+m_A*m_A);
+    if ( denominator == 0. )
+    {
+      return static_cast<TOutput>(0.);
+    }
+    return ( static_cast<TOutput>(  (m_A*(dnir - m_A*dRB - m_B))/denominator ) );
+  }
+  
+private:
+
+  /** A and B parameters */
+  double  m_A;
+  double  m_B;
+  /** X parameter */
+  double  m_X;
+  /** Gamma parameter */
+  double  m_Gamma;
+
+};
+
+
 /** \class EVI
  *  \brief This functor calculate the Enhanced Vegetation Index (EVI)
  *
