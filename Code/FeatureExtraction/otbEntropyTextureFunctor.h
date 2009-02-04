@@ -199,8 +199,10 @@ public:
 		out += (p * vcl_log(p));
 	    }
 	}
-      
-    return out;
+      if (out != 0.)
+	out = -(out);
+
+      return out;
 
     /*
     IntVectorVectorType binsLength = this->StatComputation(it, itOff);
