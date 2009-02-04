@@ -19,11 +19,148 @@
 #define __otbVegetationIndex_h
 
 #include "otbMath.h"
+#include "itkVariableLengthVector.h"
 
 namespace otb
 {
 namespace Functor
 {
+/** Base class for R And NIR based Index
+*  Implement operators for UnaryFunctorImageFilter templated with a
+*  VectorImage and BinaryFunctorImageFilter templated with single
+*  images.
+*  Subclasses should NOT overload operators, they must  re-implement 
+*  the Evaluate() method.
+*/
+template<class TInput1, class TInput2, class TOutput>
+class RAndNIRIndexBase
+{
+public:
+  /// Vector pixel type used to support both vector images and multiple
+  /// input images
+  typedef itk::VariableLengthVector<TInput1> InputVectorType;
+  
+  // Operator on vector pixel type
+  inline TOutput operator()(const InputVectorType & inputVector)
+  {
+    return this->Evaluate(inputVector[m_RedIndex-1],static_cast<TInput2>(inputVector[m_NIRIndex-1])); 
+  }
+
+  // Binary operator
+  inline TOutput operator()(const TInput1 &r, const TInput2 &nir) 
+  {
+    return this->Evaluate(r,nir);
+  };
+  /// Constructor
+  RAndNIRIndexBase() : m_RedIndex(3), m_NIRIndex(4) {};
+  /// Desctructor
+  ~RAndNIRIndexBase() {};
+  
+  /// Set Red Index
+  void SetRedIndex(unsigned int channel)
+  {
+    m_RedIndex = channel;
+  }
+  /// Get Red Index
+  unsigned int GetRedIndex()
+  {
+    return m_RedIndex;
+  }
+  /// Set NIR Index
+  void SetNIRIndex(unsigned int channel)
+  {
+    m_NIRIndex = channel;
+  }
+  /// Get NIR Index
+  unsigned int GetNIRIndex()
+  {
+    return m_NIRIndex;
+  }
+protected:
+  // This method must be reimplemented in subclasses to actually
+  // compute the index value
+  virtual TOutput Evaluate(const TInput1 & r, const TInput2 & nir) const = 0;
+
+private:
+  unsigned int m_RedIndex;
+  unsigned int m_NIRIndex;
+};
+
+/** base class for R, B And NIR based Index
+*  Implement operators for UnaryFunctorImageFilter templated with a
+*  VectorImage and BinaryFunctorImageFilter templated with single
+*  images.
+*  Subclasses should NOT overload operators, they must  re-implement 
+*  the Evaluate() method.
+*/
+template<class TInput1, class TInput2, class TInput3, class TOutput>
+class RBAndNIRIndexBase
+{
+public:
+  /// Vector pixel type used to support both vector images and multiple
+  /// input images
+  typedef itk::VariableLengthVector<TInput1> InputVectorType;
+  
+  // Operator on vector pixel type
+  inline TOutput operator()(const InputVectorType & inputVector)
+  {
+    return this->Evaluate(inputVector[m_RedIndex-1],static_cast<TInput2>(inputVector[m_BlueIndex-1]), static_cast<TInput3>(inputVector[m_NIRIndex-1])); 
+  }
+
+  // Binary operator
+  inline TOutput operator()(const TInput1 &r, const TInput2 &b, const TInput2 &nir) 
+  {
+    return this->Evaluate(r,b,nir);
+  };
+  /// Constructor
+  RBAndNIRIndexBase() : m_RedIndex(3), m_BlueIndex(1), m_NIRIndex(4) {};
+  /// Desctructor
+  ~RBAndNIRIndexBase() {};
+  
+  /// Set Red Index
+  void SetRedIndex(unsigned int channel)
+  {
+    m_RedIndex = channel;
+  }
+  /// Get Red Index
+  unsigned int GetRedIndex()
+  {
+    return m_RedIndex;
+  }
+  /// Set Blue Index
+  void SetBlueIndex(unsigned int channel)
+  {
+    m_BlueIndex = channel;
+  }
+  /// Get Blue Index
+  unsigned int GetBlueIndex()
+  {
+    return m_BlueIndex;
+  }
+
+  /// Set NIR Index
+  void SetNIRIndex(unsigned int channel)
+  {
+    m_NIRIndex = channel;
+  }
+  /// Get NIR Index
+  unsigned int GetNIRIndex()
+  {
+    return m_NIRIndex;
+  }
+protected:
+  // This method must be reimplemented in subclasses to actually
+  // compute the index value
+  virtual TOutput Evaluate(const TInput1 & r, const TInput2& b, const TInput3 & nir) const = 0;
+
+private:
+  unsigned int m_RedIndex;
+  unsigned int m_BlueIndex;
+  unsigned int m_NIRIndex;
+};
+
+
+
 /** \class NDVI
  *  \brief This functor calculate the NormalizeD Vegetation Index (NDVI)
  *
@@ -32,19 +169,23 @@ namespace Functor
  *  \ingroup Functor
  */
 template <class TInput1, class TInput2, class TOutput>
-class NDVI
+class NDVI : public RAndNIRIndexBase<TInput1,TInput2,TOutput>
 {
 public:
+  /// Constructor
   NDVI() {};
+  /// Desctructor
   ~NDVI() {};
-  inline TOutput operator()(const TInput1 &r, const TInput2 &nir)
+  // Operator on r and nir single pixel values
+protected:
+  inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
   {
     double dr = static_cast<double>(r);
     double dnir = static_cast<double>(nir);
     if ( (nir + r) == 0 )
-    {
+      {
       return static_cast<TOutput>(0.);
-    }
+      }
 
     return ( static_cast<TOutput>((dnir-dr)/(dnir+dr)));
   }
@@ -58,19 +199,20 @@ public:
  *  \ingroup Functor
  */
 template <class TInput1, class TInput2, class TOutput>
-class RVI
+class RVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   RVI() {};
   ~RVI() {};
-  inline TOutput operator()(const TInput1 &r, const TInput2 &nir)
+protected:
+  inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
   {
     double dr = static_cast<double>(r);
     double dnir = static_cast<double>(nir);
     if ( r == 0 )
-    {
+      {
       return static_cast<TOutput>(0.);
-    }
+      }
     return ( static_cast<TOutput>(dnir/dr));
   }
 };
@@ -82,17 +224,11 @@ public:
  *  \ingroup Functor2
  */
 template <class TInput1, class TInput2, class TOutput>
-class PVI
+class PVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   PVI() {};
   ~PVI() {};
-  inline TOutput operator()(const TInput1 &r, const TInput2 &nir)
-  {
-    double dnir = static_cast<double>(nir);
-    double dr = static_cast<double>(r);
-    return ( static_cast<TOutput>(  (dnir - m_A*dr - m_B)*m_Coeff) );
-  }
   /** Set/Get A and B parameters */
   void SetA(const double A)
   {
@@ -111,7 +247,14 @@ public:
   {
     return (  m_B );
   }
-
+protected:
+  inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
+  {
+    double dnir = static_cast<double>(nir);
+    double dr = static_cast<double>(r);
+    return ( static_cast<TOutput>(  (dnir - m_A*dr - m_B)*m_Coeff) );
+  }
+ 
 private:
 
   /** A and B parameters */
@@ -131,22 +274,12 @@ private:
  *  \ingroup Functor
  */
 template <class TInput1, class TInput2, class TOutput>
-class SAVI
+class SAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   SAVI() : m_L(0.5) {};
   ~SAVI() {};
-  inline TOutput operator()(const TInput1 &r, const TInput2 &nir)
-  {
-    double dnir = static_cast<double>(nir);
-    double dr = static_cast<double>(r);
-    double denominator = dnir + dr + m_L;
-    if ( denominator == 0. )
-    {
-      return static_cast<TOutput>(0.);
-    }
-    return ( static_cast<TOutput>(  ((dnir-dr)*(1+m_L))/denominator ) );
-  }
+
   /** Set/Get L correction */
   void SetL(const double L)
   {
@@ -155,6 +288,19 @@ public:
   double GetL(void)const
   {
     return (  m_L );
+  }
+
+protected:
+  inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
+  {
+    double dnir = static_cast<double>(nir);
+    double dr = static_cast<double>(r);
+    double denominator = dnir + dr + m_L;
+    if ( denominator == 0. )
+      {
+      return static_cast<TOutput>(0.);
+      }
+    return ( static_cast<TOutput>(  ((dnir-dr)*(1+m_L))/denominator ) );
   }
 
 private:
@@ -171,22 +317,12 @@ private:
  *  \ingroup Functor
  */
 template <class TInput1, class TInput2, class TOutput>
-class TSAVI
+class TSAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   TSAVI() : m_X(0.08) {};
   ~TSAVI() {};
-  inline TOutput operator()(const TInput1 &r, const TInput2 &nir)
-  {
-    double dnir = static_cast<double>(nir);
-    double dr = static_cast<double>(r);
-    double denominator = m_A*dnir + dr + m_X*(1.+m_A*m_A);
-    if ( denominator == 0. )
-    {
-      return static_cast<TOutput>(0.);
-    }
-    return ( static_cast<TOutput>(  (m_A*(dnir - m_A*dr - m_B))/denominator ) );
-  }
+  
   /** Set/Get A and B parameters */
   void SetA(const double A)
   {
@@ -214,6 +350,19 @@ public:
     return (m_X);
   }
 
+protected:
+  inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
+  {
+    double dnir = static_cast<double>(nir);
+    double dr = static_cast<double>(r);
+    double denominator = m_A*dnir + dr + m_X*(1.+m_A*m_A);
+    if ( denominator == 0. )
+      {
+      return static_cast<TOutput>(0.);
+      }
+    return ( static_cast<TOutput>(  (m_A*(dnir - m_A*dr - m_B))/denominator ) );
+  }
+  
 private:
 
   /** A and B parameters */
@@ -232,20 +381,22 @@ private:
  *  \ingroup Functor
  */
 template <class TInput1, class TInput2, class TOutput>
-class MSAVI
+class MSAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   MSAVI() {};
   ~MSAVI() {};
-  inline TOutput operator()(const TInput1 &r, const TInput2 &nir)
+
+protected:
+  inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
   {
     double dnir = static_cast<double>(nir);
     double dr = static_cast<double>(r);
     double sqrt_value = (2*dnir+1)*(2*dnir+1) - 8*(dnir-dr);
     if ( sqrt_value < 0. )
-    {
+      {
       return static_cast<TOutput>(0.);
-    }
+      }
     return ( static_cast<TOutput>(  (2*dnir + 1 - vcl_sqrt(sqrt_value))/2. ) );
   }
 
@@ -256,29 +407,17 @@ public:
  *
  *  This vegetation index use three inputs channels
  *
- *  [Yoram J. Kaufman and Didier Tanr�, 1992]
+ *  [Yoram J. Kaufman and Didier Tanre, 1992]
  *
  *  \ingroup Functor
  */
 template <class TInput1, class TInput2, class TInput3, class TOutput>
-class ARVI
+class ARVI : public RBAndNIRIndexBase<TInput1,TInput2,TInput3,TOutput>
 {
 public:
   ARVI() : m_Gamma(0.5) {};
   ~ARVI() {};
-  inline TOutput operator()(const TInput1 &r, const TInput2 &b, const TInput3 &nir)
-  {
-    double dr = static_cast<double>(r);
-    double db = static_cast<double>(b);
-    double dnir = static_cast<double>(nir);
-    double RHOrb = dr - m_Gamma*(db - dr);
-    double denominator = dnir + RHOrb;
-    if ( denominator == 0. )
-    {
-      return static_cast<TOutput>(0.);
-    }
-    return ( static_cast<TOutput>(  (dnir - RHOrb)/denominator ) );
-  }
+
   /** Set/Get Gamma parameter */
   void SetGamma(const double gamma)
   {
@@ -287,6 +426,21 @@ public:
   double GetGamma(void)const
   {
     return (m_Gamma);
+  }
+
+protected:
+  inline TOutput Evaluate(const TInput1 &r, const TInput2 &b, const TInput3 &nir) const
+  {
+    double dr = static_cast<double>(r);
+    double db = static_cast<double>(b);
+    double dnir = static_cast<double>(nir);
+    double RHOrb = dr - m_Gamma*(db - dr);
+    double denominator = dnir + RHOrb;
+    if ( denominator == 0. )
+      {
+      return static_cast<TOutput>(0.);
+      }
+    return ( static_cast<TOutput>(  (dnir - RHOrb)/denominator ) );
   }
 
 private:
@@ -305,25 +459,12 @@ private:
  *  \ingroup Functor
  */
 template <class TInput1, class TInput2, class TInput3, class TOutput>
-class EVI
+class EVI : public RBAndNIRIndexBase<TInput1,TInput2,TInput3,TOutput>
 {
 public:
   EVI() : m_G(2.5), m_C1(6.0), m_C2(7.5), m_L(1.0) {};
   ~EVI() {};
-  inline TOutput operator()(const TInput1 &r, const TInput2 &b, const TInput3 &nir)
-  {
-    double dr = static_cast<double>(r);
-    double db = static_cast<double>(b);
-    double dnir = static_cast<double>(nir);
-    double denominator = dnir + m_C1*dr - m_C2*db + m_L;
-    if ( denominator == 0. )
-    {
-      return static_cast<TOutput>(0.);
-    }
-    return ( static_cast<TOutput>( m_G * (dnir - dr)/denominator ) );
-//return ( static_cast<TOutput>( dnir ) );
-  }
-  /** Set/Get G parameter */
+/** Set/Get G parameter */
   void SetG(const double g)
   {
     m_G = g;
@@ -359,7 +500,20 @@ public:
   {
     return (m_L);
   }
-
+protected:
+  inline TOutput Evaluate(const TInput1 &r, const TInput2 &b, const TInput3 &nir) const
+  {
+    double dr = static_cast<double>(r);
+    double db = static_cast<double>(b);
+    double dnir = static_cast<double>(nir);
+    double denominator = dnir + m_C1*dr - m_C2*db + m_L;
+    if ( denominator == 0. )
+      {
+      return static_cast<TOutput>(0.);
+      }
+    return ( static_cast<TOutput>( m_G * (dnir - dr)/denominator ) );
+  }
+  
 private:
 
   /** Gain factor */
