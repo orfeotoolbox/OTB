@@ -1184,6 +1184,17 @@ ADD_TEST(bfTvFunctionWithNeighborhoodToImageFilterNew ${BASICFILTERS_TESTS11}
         otbFunctionWithNeighborhoodToImageFilterNew
 )
 
+ADD_TEST(bfTuStreamingInnerProductVectorImageFilterNew ${BASICFILTERS_TESTS11}
+        otbStreamingInnerProductVectorImageFilterNew
+)
+
+ADD_TEST(bfTvStreamingInnerProductVectorImageFilter ${BASICFILTERS_TESTS11}
+        otbStreamingInnerProductVectorImageFilter
+        ${INPUTDATA}/poupees_sub.png
+        ${TEMP}/bfTvStreamingInnerProductVectorImageFilterResults.txt
+)
+
+
 
 # A enrichir
 SET(BasicFilters_SRCS1
@@ -1354,6 +1365,8 @@ otbKeyPointDensityImageFilterNew.cxx
 otbKeyPointDensityImageFilterTest.cxx
 otbImagePCAShapeModelEstimatorTest.cxx
 otbFunctionWithNeighborhoodToImageFilterNew.cxx
+otbStreamingInnerProductVectorImageFilterNew.cxx
+otbStreamingInnerProductVectorImageFilter.cxx
 )
 
 

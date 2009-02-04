@@ -32,5 +32,7 @@ void RegisterTests()
   REGISTER_TEST(otbAtmosphericCorrectionSequencementTest);
   REGISTER_TEST(otbEVIRAndBAndNIRVegetationIndexImageFilter);
   REGISTER_TEST(otbEVIMultiChannelRAndBAndNIRVegetationIndexImageFilter);
+  REGISTER_TEST(otbTSARVIRAndBAndNIRVegetationIndexImageFilter);
+  REGISTER_TEST(otbTSARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter);
 }
 
