@@ -537,7 +537,7 @@ ADD_TEST(raTvTSARVIRAndBAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS4}
 
 # -------            TSARVI MultiChannelRAndBAndNIRVegetationIndexImageFilter   ------------------------------
 ADD_TEST(raTvTSARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS4}  
- --compare-image ${EPSILON}   ${BASELINE}/raRAndBAndNIRVegetationIndex_EVI_qb_RoadExtract.tif
+ --compare-image ${EPSILON}   ${BASELINE}/raRAndBAndNIRVegetationIndex_TSARVI_qb_RoadExtract.tif
                    ${TEMP}/raRAndBAndNIRVegetationIndex_TSARVI_qb_RoadExtract.tif
         otbTSARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter
         ${INPUTDATA}/qb_RoadExtract.img.hdr
