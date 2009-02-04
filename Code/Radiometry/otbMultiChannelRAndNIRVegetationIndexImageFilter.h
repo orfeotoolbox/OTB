@@ -18,7 +18,7 @@
 #ifndef __otbMultiChannelRAndNIRVegetationIndexImageFilter_h
 #define __otbMultiChannelRAndNIRVegetationIndexImageFilter_h
 
-#include "itkInPlaceImageFilter.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "otbVegetationIndex.h"
 
@@ -26,71 +26,37 @@ namespace otb
 {
 
 /** \class MultiChannelRAndNIRVegetationIndexImageFilter
- * \brief Implements mutli channel R and NIR vegetation index operation, pixel-wise generic vegetation index operation on one vector image.
+ * \brief Implements mutli channel R and NIR  pixel-wise generic vegetation index operation on one vector image.
  *
  * This class is parameterized over the type of the input image and
  * the type of the output image.  It is also parameterized by the
  * operation to be applied, using a Functor style.
- *
+ * 
+ * \sa UnaryFunctorImageFilter
  */
 template <class TInputImage, class TOutputImage,
-class TFunction = Functor::NDVI<        typename TInputImage::InternalPixelType,
-typename TInputImage::InternalPixelType,
-typename TOutputImage::PixelType>  >
-class ITK_EXPORT MultiChannelRAndNIRVegetationIndexImageFilter : public itk::InPlaceImageFilter<TInputImage,TOutputImage>
+	  class TFunction = Functor::NDVI< typename TInputImage::InternalPixelType,
+					   typename TInputImage::InternalPixelType,
+					   typename TOutputImage::PixelType>  >
+class ITK_EXPORT MultiChannelRAndNIRVegetationIndexImageFilter 
+  : public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction>
 {
 public:
   /** Standard class typedefs. */
-  typedef MultiChannelRAndNIRVegetationIndexImageFilter  Self;
-  typedef itk::InPlaceImageFilter<TInputImage,TOutputImage>  Superclass;
-  typedef itk::SmartPointer<Self>   Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef MultiChannelRAndNIRVegetationIndexImageFilter                     Self;
+  typedef itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction> Superclass;
+  typedef itk::SmartPointer<Self>                                           Pointer;
+  typedef itk::SmartPointer<const Self>                                     ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MultiChannelRAndNIRVegetationIndexImageFilter, InPlaceImageFilter);
+  itkTypeMacro(MultiChannelRAndNIRVegetationIndexImageFilter, UnaryFunctorImageFilter);
 
   /** Some typedefs. */
   typedef TFunction   FunctorType;
-  typedef TInputImage InputImageType;
-  typedef typename    InputImageType::ConstPointer    InputImagePointer;
-  typedef typename    InputImageType::RegionType InputImageRegionType;
-  typedef typename    InputImageType::PixelType  InputImagePixelType;
-  typedef TOutputImage OutputImageType;
-  typedef typename     OutputImageType::Pointer    OutputImagePointer;
-  typedef typename     OutputImageType::RegionType OutputImageRegionType;
-  typedef typename     OutputImageType::PixelType  OutputImagePixelType;
-
-  /** Get the functor object.  The functor is returned by reference.
-   * (Functors do not have to derive from itk::LightObject, so they do
-   * not necessarily have a reference count. So we cannot return a
-   * SmartPointer.) */
-  FunctorType& GetFunctor()
-  {
-    return m_Functor;
-  };
-  const FunctorType& GetFunctor() const
-  {
-    return m_Functor;
-  };
-
-  /** Set the functor object.  This replaces the current Functor with a
-   * copy of the specified Functor. This allows the user to specify a
-   * functor that has ivars set differently than the default functor.
-   * This method requires an operator!=() be defined on the functor
-   * (or the compiler's default implementation of operator!=() being
-   * appropriate). */
-  void SetFunctor(const FunctorType& functor)
-  {
-    if (m_Functor != functor)
-    {
-      m_Functor = functor;
-      this->Modified();
-    }
-  }
-
+ 
   /** Set/Get the red channel index. Value must be in [1...[ */
   itkSetMacro(RedIndex,unsigned int);
   itkGetMacro(RedIndex,unsigned int);
@@ -99,49 +65,35 @@ public:
   itkGetMacro(NIRIndex,unsigned int);
 
 protected:
-  MultiChannelRAndNIRVegetationIndexImageFilter();
+  /// Constructor
+  MultiChannelRAndNIRVegetationIndexImageFilter(): m_RedIndex(3), m_NIRIndex(4) {};
+  /// Destructor
   virtual ~MultiChannelRAndNIRVegetationIndexImageFilter() {};
-
-  /** MultiChannelRAndNIRVegetationIndexImageFilter can produce an image which is a different
-   * resolution than its input image.  As such, MultiChannelRAndNIRVegetationIndexImageFilter
-   * needs to provide an implementation for
-   * GenerateOutputInformation() in order to inform the pipeline
-   * execution model.  The original documentation of this method is
-   * below.
-   *
-   * \sa ProcessObject::GenerateOutputInformaton()  */
-  virtual void GenerateOutputInformation();
-
-  /** MultiChannelRAndNIRVegetationIndexImageFilter can be implemented as a multithreaded filter.
-   * Therefore, this implementation provides a ThreadedGenerateData() routine
-   * which is called for each processing thread. The output image data is
-   * allocated automatically by the superclass prior to calling
-   * ThreadedGenerateData().  ThreadedGenerateData can only write to the
-   * portion of the output image specified by the parameter
-   * "outputRegionForThread"
-   *
-   * \sa ImageToImageFilter::ThreadedGenerateData(),
-   *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId );
-
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
+  /// Before generating data, set functor parameters
+  virtual void BeforeThreadedGenerateData()
+  {
+    if(m_RedIndex < 1 || m_NIRIndex < 1)
+      {
+      itkExceptionMacro(<<"Channel indices must belong to range [1, ...[");
+      }
+    this->GetFunctor().SetRedIndex(m_RedIndex);
+    this->GetFunctor().SetNIRIndex(m_NIRIndex);
+  }
+  /// PrintSelf Method
+  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  {
+    this->Superclass::PrintSelf(os,indent);
+    os << indent << "Red index: "<<m_RedIndex<<std::endl;
+    os << indent << "NIR index: "<<m_NIRIndex<<std::endl;
+  }
 private:
   MultiChannelRAndNIRVegetationIndexImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
   /** Red channel index */
   unsigned int m_RedIndex;
   /** NIR channel index */
   unsigned int m_NIRIndex;
-  FunctorType m_Functor;
 };
-
 } // end namespace otb
-
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMultiChannelRAndNIRVegetationIndexImageFilter.txx"
-#endif
 
 #endif
