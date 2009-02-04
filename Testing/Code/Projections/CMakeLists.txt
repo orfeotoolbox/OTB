@@ -438,6 +438,14 @@ ADD_TEST(prTvVectorDataProjectionFilterFromMapToGeo ${PROJECTIONS_TESTS3}
 
 ADD_TEST(prTuGeocentricTransformNew ${PROJECTIONS_TESTS3}  otbGeocentricTransformNew )
 
+
+ADD_TEST(prTuGeocentricTransform ${PROJECTIONS_TESTS3}
+         --compare-ascii ${EPSILON} ${BASELINE_FILES}/prTvGeocentricTransform.txt
+        ${TEMP}/prTvGeocentricTransform.txt
+        otbGeocentricTransform
+        ${TEMP}/prTvGeocentricTransform.txt
+)
+
 #=======================================================================================
 SET(Projections_SRCS1
 otbProjectionBaseNew.cxx
@@ -468,6 +476,7 @@ otbVectorDataProjectionFilter.cxx
 otbVectorDataProjectionFilterFromMapToSensor.cxx
 otbVectorDataProjectionFilterFromMapToGeo.cxx
 otbGeocentricTransformNew.cxx
+otbGeocentricTransform.cxx
 )
 
 
