@@ -36,5 +36,6 @@ REGISTER_TEST(otbSimplifyManyPathListFilter);
 REGISTER_TEST(otbEnergyTextureFunctor);
 REGISTER_TEST(otbEntropyTextureFunctor);
 REGISTER_TEST(otbInverseDifferenceMomentTextureFunctor);
+REGISTER_TEST(otbAngularSecondMomentumTextureFunctor);
 REGISTER_TEST(otbTextureImageFunction);
 }

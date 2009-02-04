@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbInverseDifferenceMomentTextureFunctor_h
-#define __otbInverseDifferenceMomentTextureFunctor_h
+#ifndef __otbAngularSecondMomentumTextureFunctor_h
+#define __otbAngularSecondMomentumTextureFunctor_h
 
 #include "otbEntropyTextureFunctor.h"
 
@@ -24,13 +24,13 @@ namespace otb
 {
 namespace Functor
 {
-/** \class InverseDifferenceMomentTextureFunctor
+/** \class AngularSecondMomentumTextureFunctor
  *  \brief This functor calculates the inverse difference moment of an image
  *
  *   Computes joint histogram (neighborhood and offset neighborhood) 
  *   which bins are computing using Scott formula.
  *   Computes the probabiltiy p for each pair of pixel.
- *   InverseDifferenceMoment  is the sum 1/(1+(pi-poff)²)*p over the neighborhood.
+ *   AngularSecondMomentum  is the sum 1/(1+(pi-poff)²)*p over the neighborhood.
  *   TIterInput is an ietrator, TOutput is a PixelType.
  *
  *  \ingroup Functor
@@ -38,12 +38,12 @@ namespace Functor
  *  \ingroup Statistics
  */
 template <class TIterInput1, class TIterInput2, class TOutput>
-class ITK_EXPORT InverseDifferenceMomentTextureFunctor : 
+class ITK_EXPORT AngularSecondMomentumTextureFunctor : 
 public EntropyTextureFunctor<TIterInput1, TIterInput2, TOutput>
 {
 public:
-  InverseDifferenceMomentTextureFunctor(){};
-  ~InverseDifferenceMomentTextureFunctor(){};
+  AngularSecondMomentumTextureFunctor(){};
+  ~AngularSecondMomentumTextureFunctor(){};
 
   typedef TIterInput1                           IterType1;
   typedef TIterInput2                           IterType2;
@@ -117,9 +117,7 @@ public:
 	  for (unsigned s = 0; s<histo[r].size(); s++)
 	    {
 	      double p = histo[r][s] * areaInv;
-	      double dist = vcl_pow( ( (static_cast<double>(r)+0.5)*binsLength[1])-((static_cast<double>(s)+0.5)*binsLength[0]), 2);
-	      
-	      out += ((1/(1+dist)) * p);
+	      out += vcl_pow( p, 2 );
 	    }
 	}
       return out;  

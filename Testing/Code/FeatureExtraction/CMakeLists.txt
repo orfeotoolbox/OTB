@@ -1078,6 +1078,19 @@ ADD_TEST(feTvInverseDifferenceMomentTextureFunctor ${FEATUREEXTRACTION_TESTS11}
     2    # offset[1]	
 )
 
+# -------   otb::AngularSecondMomentumTextureFunctor  -------------
+ADD_TEST(feTvAngularSecondMomentumTextureFunctor ${FEATUREEXTRACTION_TESTS11} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvAngularSecondMomentumTextureFunctor.tif
+                ${TEMP}/feTvAngularSecondMomentumTextureFunctor.tif
+  otbAngularSecondMomentumTextureFunctor
+    ${INPUTDATA}/poupees_sub.png
+    ${TEMP}/feTvAngularSecondMomentumTextureFunctor.tif
+    5    # radius
+    -2   # offset[0]
+    2    # offset[1]	
+)
+
 
 # -------        otb::EnergyTextureImageFunction   -------------
 ADD_TEST(feTvEnergyTextureImageFunction ${FEATUREEXTRACTION_TESTS11} 
@@ -1126,6 +1139,20 @@ ADD_TEST(feTvInverseDifferenceMomentTextureImageFunction ${FEATUREEXTRACTION_TES
     2    # offset[1]	
 )
 
+# -------        otb::AngularSecondMomentumTextureImageFunction   -------------
+ADD_TEST(feTvAngularSecondMomentumTextureImageFunction ${FEATUREEXTRACTION_TESTS11} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvAngularSecondMomentumTextureImageFunction.tif
+                ${TEMP}/feTvAngularSecondMomentumTextureImageFunction.tif
+   otbTextureImageFunction
+    ASM #angular second moment
+    ${INPUTDATA}/poupees_sub_c1.png
+    ${TEMP}/feTvAngularSecondMomentumTextureImageFunction.tif
+    5    # radius[0]
+    5    # radius[1]
+    -2   # offset[0]
+    2    # offset[1]	
+)
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
@@ -1260,6 +1287,7 @@ otbSimplifyManyPathListFilter.cxx
 otbEnergyTextureFunctor.cxx
 otbEntropyTextureFunctor.cxx
 otbInverseDifferenceMomentTextureFunctor.cxx
+otbAngularSecondMomentumTextureFunctor.cxx
 otbTextureImageFunction.cxx
 )
 
