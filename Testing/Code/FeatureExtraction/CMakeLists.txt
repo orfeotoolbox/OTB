@@ -1066,14 +1066,12 @@ ADD_TEST(feTvEntropyTextureFunctor ${FEATUREEXTRACTION_TESTS11}
 )
 
 # -------        otb::EnergyTextureImageFunction   -------------
-ADD_TEST(feTvEnergyTextureImageFunctionNew ${FEATUREEXTRACTION_TESTS11} 
-    otbEnergyTextureImageFunctionNew
-)
 ADD_TEST(feTvEnergyTextureImageFunction ${FEATUREEXTRACTION_TESTS11} 
 --compare-image ${EPS}
                 ${BASELINE}/feTvEnergyTextureImageFunction.tif
                 ${TEMP}/feTvEnergyTextureImageFunction.tif
-   otbEnergyTextureImageFunction
+   otbTextureImageFunction
+    ENJ #energy
     ${INPUTDATA}/poupees_1canal.c1.hdr
     ${TEMP}/feTvEnergyTextureImageFunction.tif
     5    # radius[0]
@@ -1084,14 +1082,12 @@ ADD_TEST(feTvEnergyTextureImageFunction ${FEATUREEXTRACTION_TESTS11}
 
 
 # -------        otb::EntropyTextureImageFunction   -------------
-ADD_TEST(feTuEntropyTextureImageFunctionNew ${FEATUREEXTRACTION_TESTS11} 
-    otbEntropyTextureImageFunctionNew
-)
 ADD_TEST(feTvEntropyTextureImageFunction ${FEATUREEXTRACTION_TESTS11} 
 --compare-image ${EPS}
                 ${BASELINE}/feTvEntropyTextureImageFunction.tif
                 ${TEMP}/feTvEntropyTextureImageFunction.tif
-   otbEntropyTextureImageFunction
+   otbTextureImageFunction
+    ENT #entropy
     ${INPUTDATA}/poupees_1canal.c1.hdr
     ${TEMP}/feTvEntropyTextureImageFunction.tif
     5    # radius[0]
@@ -1231,11 +1227,8 @@ otbCloudDetectionFilterNew.cxx
 otbCloudDetectionFilter.cxx
 otbSimplifyManyPathListFilter.cxx
 otbEnergyTextureFunctor.cxx
-otbEnergyTextureImageFunctionNew.cxx
-otbEnergyTextureImageFunction.cxx
 otbEntropyTextureFunctor.cxx
-otbEntropyTextureImageFunctionNew.cxx
-otbEntropyTextureImageFunction.cxx
+otbTextureImageFunction.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

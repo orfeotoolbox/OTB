@@ -34,9 +34,6 @@ REGISTER_TEST(otbCloudDetectionFilterNew);
 REGISTER_TEST(otbCloudDetectionFilter);
 REGISTER_TEST(otbSimplifyManyPathListFilter);
 REGISTER_TEST(otbEnergyTextureFunctor);
-REGISTER_TEST(otbEnergyTextureImageFunctionNew);
-REGISTER_TEST(otbEnergyTextureImageFunction);
 REGISTER_TEST(otbEntropyTextureFunctor);
-REGISTER_TEST(otbEntropyTextureImageFunctionNew);
-REGISTER_TEST(otbEntropyTextureImageFunction);
+REGISTER_TEST(otbTextureImageFunction);
 }
