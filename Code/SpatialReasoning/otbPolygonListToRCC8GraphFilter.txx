@@ -341,18 +341,7 @@ PolygonListToRCC8GraphFilter<TPolygonList, TOutputGraph>
           {
             // Add the edge to the graph.
             otbMsgDevMacro(<<"Adding edge: "<<vIt1.GetIndex()<<" -> "<<vIt2.GetIndex()<<": "<<value);
-	    if(value==OTB_RCC8_NTPPI)
-	      {
-	      m_EdgesPerThread[threadId][EdgePairType(vIt2.GetIndex(),vIt1.GetIndex())]=OTB_RCC8_NTPP;
-	      }
-	    else if(value == OTB_RCC8_TPPI)
-	      {
-	      m_EdgesPerThread[threadId][EdgePairType(vIt2.GetIndex(),vIt1.GetIndex())]=OTB_RCC8_TPP;
-	      }
-	    else
-	      {
-	      m_EdgesPerThread[threadId][EdgePairType(vIt1.GetIndex(),vIt2.GetIndex())]=value;
-	      }
+            m_EdgesPerThread[threadId][EdgePairType(vIt1.GetIndex(),vIt2.GetIndex())]=value;
             if (m_UseInverted)
             {
               m_EdgesPerThread[threadId][EdgePairType(vIt2.GetIndex(),vIt1.GetIndex())]=invert[value];
