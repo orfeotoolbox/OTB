@@ -16,9 +16,11 @@
 
 =========================================================================*/
 #ifndef __otbEnergyTextureFunctor_h
-#define __ootbEnergyTextureFunctor_h
+#define __otbEnergyTextureFunctor_h
 
-#include "otbMath.h"
+
+#include "otbTextureFunctorBase.h"
+
 
 namespace otb
 {
@@ -29,92 +31,65 @@ namespace Functor
  *
  *   Computes the sqaure gradient which is computed using offset and
  *   angle pixel of the neighborhood.
- *   TIterInput is an ietrator, TOutput is a PixelType.
+ *
  *
  *  \ingroup Functor
+ *  \ingroup TextureFunctorBase
  *  \ingroup Statistics
  */
 template <class TIterInput1, class TIterInput2, class TOutput>
-class EnergyTextureFunctor
+class ITK_EXPORT EnergyTextureFunctor : 
+public TextureFunctorBase<TIterInput1, TIterInput2, TOutput>
 {
 public:
-  EnergyTextureFunctor()
-  {
-    m_Offset.Fill(1);
-  };
-  ~EnergyTextureFunctor() {};
+  EnergyTextureFunctor(){};
+  ~EnergyTextureFunctor(){};
 
-  typedef TIterInput1                    IterType1;
-  typedef TIterInput2                    IterType2;
-  typedef TOutput                        OutputType;
-  typedef typename IterType1::OffsetType OffsetType;
-  typedef typename IterType1::RadiusType RadiusType;
-  typedef typename OutputType::ValueType OutputPixelType;
+  typedef TIterInput1                           IterType1;
+  typedef TIterInput2                           IterType2;
+  typedef TOutput                               OutputType;
+  typedef typename IterType1::OffsetType        OffsetType;
+  typedef typename IterType1::RadiusType        RadiusType;
+  typedef typename IterType1::InternalPixelType InternalPixelType;
+  typedef typename IterType1::ImageType         ImageType;
+  typedef itk::Neighborhood<InternalPixelType,::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
 
-  void SetOffset(OffsetType off)
+  double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {
-    m_Offset=off;
-  };
-  OffsetType GetOffset()
-  {
-    return m_Offset;
-  };
-
-  inline TOutput operator()(const TIterInput1 &it, const TIterInput2 &itOff)
-  {
-    RadiusType radius = it.GetRadius();
-    unsigned int nbComp = it.GetCenterPixel().GetSize();
-    double area = static_cast<double>(radius[0]*radius[1]);
-    OutputType outPix;
-    outPix.SetSize( nbComp );
-    outPix.Fill(0);
-
+    RadiusType radius = neigh.GetRadius();
+    double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
 
     OffsetType offset;
     offset.Fill(0);
     OffsetType offsetOff;
     OffsetType offsetOffInit;
 
-    offsetOffInit[0] = -radius[0]+m_Offset[0]-1;
-    offsetOffInit[1] = -radius[1]+m_Offset[1]-1;
-
-    //std::cout<<offsetOffInit<<std::endl;
+    offsetOffInit[0] = -radius[0]+this->GetOffset()[0]-1;
+    offsetOffInit[1] = -radius[1]+this->GetOffset()[1]-1;
 
     double temp = 0.;
-    int ll = 0;
     double norm = 0.;
-    for ( unsigned int i=0; i<nbComp; i++ )
-    {
-      offsetOff = offsetOffInit;
-      temp = 0.;
-      for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
+    double output = 0.;
+
+    offsetOff = offsetOffInit;
+    for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
       {
         offsetOff[0]++;
         offsetOff[1] = offsetOffInit[1];
         offset[0] = l;
-        ll = l*l;
         for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
-        {
-          offsetOff[1]++;
-          offset[1] = k;
-          norm = vcl_pow(static_cast<double>(itOff.GetPixel(offsetOff)[i]-itOff.GetCenterPixel()[i]), 2);
-          temp += norm;
-        }
-        temp /= area;
-        outPix[i] = static_cast<OutputPixelType>( vcl_pow(temp, 2) );
+	  {
+	    offsetOff[1]++;
+	    offset[1] = k;
+	    norm = vcl_pow(static_cast<double>( ( neigh[offset] - neighOff[neighOff.GetCenterNeighborhoodIndex()] ) ), 2);
+	    temp += norm;
+	  }
       }
-    }
-
-
-    return outPix;
+    temp /= area; 
+    return vcl_pow(temp, 2);
   }
 
-private:
-  OffsetType m_Offset;
-
 };
-
-
 
 
 } // namespace Functor

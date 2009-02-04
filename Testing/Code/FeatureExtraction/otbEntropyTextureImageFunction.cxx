@@ -18,13 +18,13 @@
 #include "itkExceptionObject.h"
 
 #include "otbFunctionWithNeighborhoodToImageFilter.h"
-#include "otbEntropyTextureImageFunction.h"
+#include "otbEnergyTextureImageFunction.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
 
 
-int otbEntropyTextureImageFunction(int argc, char * argv[])
+int otbEnergyTextureImageFunction(int argc, char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];
@@ -38,7 +38,7 @@ int otbEntropyTextureImageFunction(int argc, char * argv[])
   typedef otb::ImageFileReader<ImageType>  ReaderType;
   typedef otb::StreamingImageFileWriter<ImageType> WriterType;
 
-  typedef otb::EntropyTextureImageFunction<ImageType> FunctionType;
+  typedef otb::EnergyTextureImageFunction<ImageType> FunctionType;
   typedef otb::FunctionWithNeighborhoodToImageFilter<ImageType, ImageType, FunctionType> FilterType;
 
   FunctionType::Pointer energyFunction = FunctionType::New();

@@ -17,22 +17,27 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-
-#include "otbEntropyTextureImageFunction.h"
+//#include "otbFunctionWithNeighborhoodToImageFilter.h"
+#include "otbEnergyTextureImageFunction.h"
 #include "otbImage.h"
+//#include "otbImageFileReader.h"
+//#include "otbImageFileWriter.h"
 
 
-int otbEntropyTextureImageFunctionNew(int argc, char * argv[])
+int otbEnergyTextureImageFunctionNew(int argc, char * argv[])
 {
   //const char * inputFileName  = argv[1];
   //const char * outputFileName = argv[2];
 
-  typedef double                               InputPixelType;
+  typedef double InputPixelType;
   const int Dimension = 2;
   typedef otb::Image<InputPixelType,Dimension> ImageType;
-  typedef otb::EntropyTextureImageFunction<ImageType> EntropyTextureImageFunctionType;
+  typedef ImageType::PixelType PixelType;
+  typedef ImageType::OffsetType OffsetType;
 
-  EntropyTextureImageFunctionType::Pointer entropy = EntropyTextureImageFunctionType::New();
+  typedef otb::EnergyTextureImageFunction<ImageType> EnergyTextureImageFunctionType;
+
+  EnergyTextureImageFunctionType::Pointer energy = EnergyTextureImageFunctionType::New();
 
 
   return EXIT_SUCCESS;

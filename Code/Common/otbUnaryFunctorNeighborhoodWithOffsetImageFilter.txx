@@ -119,7 +119,6 @@ void
 UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFunction>
 ::ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread, int threadId)
 {
-  std::cout<<"threadId : "<<threadId<<std::endl;
   itk::ZeroFluxNeumannBoundaryCondition<TInputImage> nbc;
   itk::ZeroFluxNeumannBoundaryCondition<TInputImage> nbcOff;
   // We use dynamic_cast since inputs are stored as DataObjects.  The
@@ -185,7 +184,6 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFuncti
     ++fit;
     ++fitOff;
   }
-  std::cout<<"threadIdFIN : "<<threadId<<std::endl;
 }
 
 } // end namespace otb

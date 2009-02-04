@@ -1082,6 +1082,24 @@ ADD_TEST(feTvEnergyTextureImageFunction ${FEATUREEXTRACTION_TESTS11}
     2    # offset[1]	
 )
 
+
+# -------        otb::EntropyTextureImageFunction   -------------
+ADD_TEST(feTuEntropyTextureImageFunctionNew ${FEATUREEXTRACTION_TESTS11} 
+    otbEntropyTextureImageFunctionNew
+)
+ADD_TEST(feTvEntropyTextureImageFunction ${FEATUREEXTRACTION_TESTS11} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvEntropyTextureImageFunction.tif
+                ${TEMP}/feTvEntropyTextureImageFunction.tif
+   otbEntropyTextureImageFunction
+    ${INPUTDATA}/poupees_1canal.c1.hdr
+    ${TEMP}/feTvEntropyTextureImageFunction.tif
+    5    # radius[0]
+    5    # radius[1]
+    -2   # offset[0]
+    2    # offset[1]	
+)
+
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
 otbAlignImageToPath.cxx
@@ -1216,6 +1234,8 @@ otbEnergyTextureFunctor.cxx
 otbEnergyTextureImageFunctionNew.cxx
 otbEnergyTextureImageFunction.cxx
 otbEntropyTextureFunctor.cxx
+otbEntropyTextureImageFunctionNew.cxx
+otbEntropyTextureImageFunction.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

@@ -15,12 +15,12 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbEnergyTextureImageFunction_txx
-#define __otbEnergyTextureImageFunction_txx
+#ifndef __otbEntropyTextureImageFunction_txx
+#define __otbEntropyTextureImageFunction_txx
 
-#include "otbEnergyTextureImageFunction.h"
+#include "otbEntropyTextureImageFunction.h"
 #include "itkConstNeighborhoodIterator.h"
-#include "otbEnergyTextureFunctor.h"
+#include "otbEntropyTextureFunctor.h"
 #include "itkVariableLengthVector.h"
 
 namespace otb
@@ -30,8 +30,8 @@ namespace otb
  * Constructor
  */
 template <class TInputImage, class TCoordRep>
-EnergyTextureImageFunction<TInputImage,TCoordRep>
-::EnergyTextureImageFunction()
+EntropyTextureImageFunction<TInputImage,TCoordRep>
+::EntropyTextureImageFunction()
 {
   m_Radius.Fill(0);
   m_Offset.Fill(0);
@@ -43,7 +43,7 @@ EnergyTextureImageFunction<TInputImage,TCoordRep>
  */
 template <class TInputImage, class TCoordRep>
 void
-EnergyTextureImageFunction<TInputImage,TCoordRep>
+EntropyTextureImageFunction<TInputImage,TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os,indent);
@@ -56,9 +56,9 @@ EnergyTextureImageFunction<TInputImage,TCoordRep>
  *
  */
 template <class TInputImage, class TCoordRep>
-typename EnergyTextureImageFunction<TInputImage,TCoordRep>
+typename EntropyTextureImageFunction<TInputImage,TCoordRep>
 ::RealType
-EnergyTextureImageFunction<TInputImage,TCoordRep>
+EntropyTextureImageFunction<TInputImage,TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
   if ( !this->GetInputImage() )
@@ -81,13 +81,14 @@ EnergyTextureImageFunction<TInputImage,TCoordRep>
   IterType itOff(radiusOff, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
   itOff.SetLocation(index);
 
-  // false third template... : double has no type ValueType but no impact
+  // false third template.. but no impact
   typedef itk::VariableLengthVector<double> VecType;
-  typedef typename Functor::EnergyTextureFunctor<IterType, IterType, VecType/*RealType*/> FunctType;
+  typedef typename Functor::EntropyTextureFunctor<IterType, IterType, VecType /*RealType*/> FunctType;
   FunctType funct;
-  funct.SetOffset(m_Offset);
-  
+  funct.SetOffset(m_Offset); 
+
   return static_cast<RealType>(funct.ComputeOverSingleChannel( it.GetNeighborhood(), itOff.GetNeighborhood()) );
+
 }
 
 

@@ -49,15 +49,6 @@ FunctionWithNeighborhoodToImageFilter<TInputImage,TOutputImage,TFunction>
 
   m_Radius = this->GetFunction()->GetRadius();
   m_Offset = this->GetFunction()->GetOffset();
-  /*
-  for(unsigned int i =0; i<this->GetNumberOfThreads(); i++)
-    {
-      FunctionType * func;
-      func = (this->GetFunction());
-      m_FunctionVector.push_back(func);
-      std::cout<<func<<std::endl;
-    }
-  */
 }
 
 template <class TInputImage, class TOutputImage, class TFunction  >
@@ -137,7 +128,6 @@ FunctionWithNeighborhoodToImageFilter<TInputImage,TOutputImage,TFunction>
 
   while ( !inputIt.IsAtEnd() )
   {
-    //std::cout<<"MOTHER "<<threadId<<" : "<<inputIt.GetIndex()<<" "<<inputIt.Get()<<std::endl;
     outputIt.Set( static_cast<OutputImagePixelType>(this->GetFunction()->EvaluateAtIndex(inputIt.GetIndex())) );
     ++inputIt;
     ++outputIt;
