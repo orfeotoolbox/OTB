@@ -489,8 +489,8 @@ ADD_TEST(raTvAtmosphericCorrectionSequencementTest ${RADIOMETRY_TESTS4}
 
 # -------            otb::RAndBAndNIRVegetationIndexImageFilter   ------------------------------
 ADD_TEST(raTvEVIRAndBAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS4}  
- #--compare-image ${EPSILON}   ${BASELINE}/raRAndBAndNIRVegetationIndex_EVI_poupees_subc1c2c3.tif
- #                  ${TEMP}/raRAndBAndNIRVegetationIndex_EVI_poupees_subc1c2c3.tif
+ --compare-image ${EPSILON}   ${BASELINE}/raRAndBAndNIRVegetationIndex_EVI_poupees_subc1c2c3.tif
+                   ${TEMP}/raRAndBAndNIRVegetationIndex_EVI_poupees_subc1c2c3.tif
         otbEVIRAndBAndNIRVegetationIndexImageFilter
         EVI
         ${INPUTDATA}/poupees_sub_c1.png

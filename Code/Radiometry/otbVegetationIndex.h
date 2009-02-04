@@ -241,12 +241,12 @@ public:
   {
     double dnir = static_cast<double>(nir);
     double dr = static_cast<double>(r);
-    double sqrt_value = (2*dr+1)*(2*dr+1) - 8*(dr-dnir);
+    double sqrt_value = (2*dnir+1)*(2*dnir+1) - 8*(dnir-dr);
     if ( sqrt_value < 0. )
     {
       return static_cast<TOutput>(0.);
     }
-    return ( static_cast<TOutput>(  (2*dr + 1 - vcl_sqrt(sqrt_value))/2. ) );
+    return ( static_cast<TOutput>(  (2*dnir + 1 - vcl_sqrt(sqrt_value))/2. ) );
   }
 
 };
