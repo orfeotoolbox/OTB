@@ -29,6 +29,8 @@
 // Functors list
 #include "otbEnergyTextureFunctor.h"
 #include "otbEntropyTextureFunctor.h"
+#include "otbInverseDifferenceMomentTextureFunctor.h"
+
 
 template<class TInputImage, class TOutputImage, class TFunctor>
 int generic_TextureImageFunction(int argc, char * argv[])
@@ -97,6 +99,11 @@ int otbTextureImageFunction(int argc, char * argv[])
   else if ( strArgv == "ENT" )
     {
       typedef otb::Functor::EntropyTextureFunctor<IteratorType, IteratorType, VectorType> FunctorType;
+      return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
+    }
+  else if ( strArgv == "IMD" )
+    {
+      typedef otb::Functor::InverseDifferenceMomentTextureFunctor<IteratorType, IteratorType, VectorType> FunctorType;
       return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
     }
   else

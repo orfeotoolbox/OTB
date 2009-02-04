@@ -1045,7 +1045,7 @@ ADD_TEST(feTvEnergyTextureFunctor ${FEATUREEXTRACTION_TESTS11}
                 ${BASELINE}/feTvEnergyTextureFunctor.tif
                 ${TEMP}/feTvEnergyTextureFunctor.tif
   otbEnergyTextureFunctor
-    ${INPUTDATA}/poupees.tif
+    ${INPUTDATA}/poupees_sub.png
     ${TEMP}/feTvEnergyTextureFunctor.tif
     5    # radius
     -2   # offset[0]
@@ -1058,12 +1058,26 @@ ADD_TEST(feTvEntropyTextureFunctor ${FEATUREEXTRACTION_TESTS11}
                 ${BASELINE}/feTvEntropyTextureFunctor.tif
                 ${TEMP}/feTvEntropyTextureFunctor.tif
   otbEntropyTextureFunctor
-    ${INPUTDATA}/poupees.tif
+    ${INPUTDATA}/poupees_sub.png
     ${TEMP}/feTvEntropyTextureFunctor.tif
     5    # radius
     -2   # offset[0]
     2    # offset[1]	
 )
+
+# -------   otb::InverseDifferenceMomentTextureFunctor  -------------
+ADD_TEST(feTvInverseDifferenceMomentTextureFunctor ${FEATUREEXTRACTION_TESTS11} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvInverseDifferenceMomentTextureFunctor.tif
+                ${TEMP}/feTvInverseDifferenceMomentTextureFunctor.tif
+  otbInverseDifferenceMomentTextureFunctor
+    ${INPUTDATA}/poupees_sub.png
+    ${TEMP}/feTvInverseDifferenceMomentTextureFunctor.tif
+    5    # radius
+    -2   # offset[0]
+    2    # offset[1]	
+)
+
 
 # -------        otb::EnergyTextureImageFunction   -------------
 ADD_TEST(feTvEnergyTextureImageFunction ${FEATUREEXTRACTION_TESTS11} 
@@ -1072,7 +1086,7 @@ ADD_TEST(feTvEnergyTextureImageFunction ${FEATUREEXTRACTION_TESTS11}
                 ${TEMP}/feTvEnergyTextureImageFunction.tif
    otbTextureImageFunction
     ENJ #energy
-    ${INPUTDATA}/poupees_1canal.c1.hdr
+    ${INPUTDATA}/poupees_sub_c1.png
     ${TEMP}/feTvEnergyTextureImageFunction.tif
     5    # radius[0]
     5    # radius[1]
@@ -1088,13 +1102,30 @@ ADD_TEST(feTvEntropyTextureImageFunction ${FEATUREEXTRACTION_TESTS11}
                 ${TEMP}/feTvEntropyTextureImageFunction.tif
    otbTextureImageFunction
     ENT #entropy
-    ${INPUTDATA}/poupees_1canal.c1.hdr
+    ${INPUTDATA}/poupees_sub_c1.png
     ${TEMP}/feTvEntropyTextureImageFunction.tif
     5    # radius[0]
     5    # radius[1]
     -2   # offset[0]
     2    # offset[1]	
 )
+
+
+# -------        otb::InverseDifferenceMomentTextureImageFunction   -------------
+ADD_TEST(feTvInverseDifferenceMomentTextureImageFunction ${FEATUREEXTRACTION_TESTS11} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvInverseDifferenceMomentTextureImageFunction.tif
+                ${TEMP}/feTvInverseDifferenceMomentTextureImageFunction.tif
+   otbTextureImageFunction
+    IMD #inverse difference momentent
+    ${INPUTDATA}/poupees_sub_c1.png
+    ${TEMP}/feTvInverseDifferenceMomentTextureImageFunction.tif
+    5    # radius[0]
+    5    # radius[1]
+    -2   # offset[0]
+    2    # offset[1]	
+)
+
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
@@ -1228,6 +1259,7 @@ otbCloudDetectionFilter.cxx
 otbSimplifyManyPathListFilter.cxx
 otbEnergyTextureFunctor.cxx
 otbEntropyTextureFunctor.cxx
+otbInverseDifferenceMomentTextureFunctor.cxx
 otbTextureImageFunction.cxx
 )
 
